@@ -2,117 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BC5322B4A
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 14:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B55322C6F
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 15:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbhBWNOk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Feb 2021 08:14:40 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:21109 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbhBWNOj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 08:14:39 -0500
-Date:   Tue, 23 Feb 2021 13:13:54 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1614086036; bh=fVREGtDZlRjjJkL9uhXE3RDAzTG8hC2fglNi1DMvQA4=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=BAYhGg3SzAYoUUg1nZmClD4ia7Y7W1Nl3XHD1ohq5b+ciOFfTCwP57Ch3mubKf+cx
-         AaFFP0n1bV52v+DYyCUt7EWqKKUEdl/LialUGEkIiZ8yTHbcI3sb8z1eS9T/t2bsnO
-         NyCqW2LrRMsYFkoNet48VbpnvvViEz3BRZpkKmSuIsV3msyK8zusFw13lBti9puvVW
-         Xxi0Km7t0CSshNUy4JGW2VhheT5mDafC4ezWFoxopa7LadRHoHeVzpPL2hdbgFaaom
-         Covu3GXw/217Jc35ik8nY3IjOKFGJ5SLZTb1BnBiXsobnO2n6WCmuperKcroF/R0sQ
-         4viw4pVMNVTEA==
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Kees Cook <keescook@chromium.org>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH mips-fixes] vmlinux.lds.h: catch even more instrumentation symbols into .data
-Message-ID: <20210223131327.218285-1-alobakin@pm.me>
-In-Reply-To: <20210223122144.GA7765@alpha.franken.de>
-References: <20210223113600.7009-1-alobakin@pm.me> <20210223113600.7009-2-alobakin@pm.me> <20210223122144.GA7765@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+        id S232881AbhBWOf0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Feb 2021 09:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231838AbhBWOf0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 09:35:26 -0500
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54FEC06174A
+        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 06:34:45 -0800 (PST)
+Received: by mail-qt1-x849.google.com with SMTP id z3so10119481qtv.20
+        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 06:34:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=Q8hQJDMeUJlqSjrNYnPafLaJX5CJRNsJS+XYHF26pcU=;
+        b=PJnNVGeDqB/jzzRFb43n6pABAUatJLV3VpoQVilcEqdrryJp08zjPufvVz5cFPnSEY
+         t/li1aI0RjRwp7z2bUQbnWYCBL0UM2aSKop0ae9s2DpamNAajkWv+hxDEW2W9qIUp36d
+         PAkr+ieLWes8nDdQ/+SEvLNzI2fhbLggfEVRl9YrCoom2ez47kSRP4/0+WUFn/kOA6Dt
+         tTkwHtzevwds9t+smuh8yccupDpw+dh//SW88nsBdvQXbwTAsE8g1S7IxFZI03HwubvC
+         rBVvVUVzattE0GWgZFrJETMXyA15a2rVhKdtnp2DazMEJEX4XDqEecySE72Fjn1RZ8Z0
+         L2rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=Q8hQJDMeUJlqSjrNYnPafLaJX5CJRNsJS+XYHF26pcU=;
+        b=C4NotffZKtObESX4/xzBWIAJtXTO7+Gc8BsAcip76GmXZXFRBcL5Hi9EddYxeM+Q4O
+         EhGTCt21SUZmN/CywwzjHN61SapmsnRK1FX8K4Bicb4RwSN85uFve+CMjMncQJyLY8Rm
+         mJRqGov4O3RW45LlqtR5dalR1eE3tDjQAje3HRapX9sLzhBAsmsVfIm+9laUihZsUs8A
+         Cqor1dJBQjGesu7Ia+JX77PcJhj26Utd1yeUhCV1uKcXYM1qou6VTNrMnRPQz1Oc4+xq
+         ZPTWHqMdXobBJFb7y4l0LA7nbB3eMZcawroJbCgAu0Qp3oTtLIfJNF26WhHpl1gheuZ+
+         0CcA==
+X-Gm-Message-State: AOAM533pHOwVXzSq7eOqWYNrGubfYMxd1BK2h14KXF9MlTk1jTlMQJXT
+        OO/7HgS9UnWlUEQb54xQTBUpx23rtQ==
+X-Google-Smtp-Source: ABdhPJwIekUA4sFfcyjccindFCcQp2ep8MthgqSzW3N3MtGLmm1PZlc40koEqgpP+XoOBcmnN/Qv1jzPlw==
+Sender: "elver via sendgmr" <elver@elver.muc.corp.google.com>
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:855b:f924:6e71:3d5d])
+ (user=elver job=sendgmr) by 2002:a0c:a8cf:: with SMTP id h15mr25576657qvc.20.1614090884790;
+ Tue, 23 Feb 2021 06:34:44 -0800 (PST)
+Date:   Tue, 23 Feb 2021 15:34:22 +0100
+Message-Id: <20210223143426.2412737-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
+Subject: [PATCH RFC 0/4] Add support for synchronous signals on perf events
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, peterz@infradead.org,
+        alexander.shishkin@linux.intel.com, acme@kernel.org,
+        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
+        namhyung@kernel.org, tglx@linutronix.de
+Cc:     glider@google.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
+        christian@brauner.io, dvyukov@google.com, jannh@google.com,
+        axboe@kernel.dk, mascasa@google.com, pcc@google.com,
+        irogers@google.com, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date: Tue, 23 Feb 2021 13:21:44 +0100
+The perf subsystem today unifies various tracing and monitoring
+features, from both software and hardware. One benefit of the perf
+subsystem is automatically inheriting events to child tasks, which
+enables process-wide events monitoring with low overheads. By default
+perf events are non-intrusive, not affecting behaviour of the tasks
+being monitored.
 
-> On Tue, Feb 23, 2021 at 11:36:41AM +0000, Alexander Lobakin wrote:
-> > > LKP caught another bunch of orphaned instrumentation symbols [0]:
-> > >
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/main.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/main.o' being placed in section `.data.$LPBX0'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/do_mounts.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/do_mounts.o' being placed in section `.data.$LPBX0'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/do_mounts_initrd.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/do_mounts_initrd.o' being placed in section `.data.$LPBX0'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/initramfs.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/initramfs.o' being placed in section `.data.$LPBX0'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX1' from
-> > > `init/calibrate.o' being placed in section `.data.$LPBX1'
-> > > mipsel-linux-ld: warning: orphan section `.data.$LPBX0' from
-> > > `init/calibrate.o' being placed in section `.data.$LPBX0'
-> > >
-> > > [...]
-> > >
-> > > Soften the wildcard to .data.$L* to grab these ones into .data too.
-> > >
-> > > [0] https://lore.kernel.org/lkml/202102231519.lWPLPveV-lkp@intel.com
-> > >
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> > > ---
-> > >  include/asm-generic/vmlinux.lds.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > Hi Thomas,
-> >
-> > This applies on top of mips-next or Linus' tree, so you may need to
-> > rebase mips-fixes before taking it.
-> > It's not for mips-next as it should go into this cycle as a [hot]fix.
-> > I haven't added any "Fixes:" tag since these warnings is a result
-> > of merging several sets and of certain build configurations that
-> > almost couldn't be tested separately.
->
-> no worries, mips-fixes is defunct during merge windows. I'll send another
-> pull request to Linus and will add this patch to it.
+For certain use-cases, however, it makes sense to leverage the
+generality of the perf events subsystem and optionally allow the tasks
+being monitored to receive signals on events they are interested in.
+This patch series adds the option to synchronously signal user space on
+events.
 
-Ah, thank you!
+The discussion at [1] led to the changes proposed in this series. The
+approach taken in patch 3/4 to use 'event_limit' to trigger the signal
+was kindly suggested by Peter Zijlstra in [2].
 
-> Thomas.
+[1] https://lore.kernel.org/lkml/CACT4Y+YPrXGw+AtESxAgPyZ84TYkNZdP0xpocX2jwVAbZD=-XQ@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/YBv3rAT566k+6zjg@hirez.programming.kicks-ass.net/ 
 
-Al
+Motivation and example uses:
 
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+1. 	Our immediate motivation is low-overhead sampling-based race
+	detection for user-space [3]. By using perf_event_open() at
+	process initialization, we can create hardware
+	breakpoint/watchpoint events that are propagated automatically
+	to all threads in a process. As far as we are aware, today no
+	existing kernel facility (such as ptrace) allows us to set up
+	process-wide watchpoints with minimal overheads (that are
+	comparable to mprotect() of whole pages).
+
+	[3] https://llvm.org/devmtg/2020-09/slides/Morehouse-GWP-Tsan.pdf 
+
+2.	Other low-overhead error detectors that rely on detecting
+	accesses to certain memory locations or code, process-wide and
+	also only in a specific set of subtasks or threads.
+
+Other example use-cases we found potentially interesting:
+
+3.	Code hot patching without full stop-the-world. Specifically, by
+	setting a code breakpoint to entry to the patched routine, then
+	send signals to threads and check that they are not in the
+	routine, but without stopping them further. If any of the
+	threads will enter the routine, it will receive SIGTRAP and
+	pause.
+
+4. 	Safepoints without mprotect(). Some Java implementations use
+	"load from a known memory location" as a safepoint. When threads
+	need to be stopped, the page containing the location is
+	mprotect()ed and threads get a signal. This can be replaced with
+	a watchpoint, which does not require a whole page nor DTLB
+	shootdowns.
+
+5.	Tracking data flow globally.
+
+6.	Threads receiving signals on performance events to
+	throttle/unthrottle themselves.
+
+
+Marco Elver (4):
+  perf/core: Apply PERF_EVENT_IOC_MODIFY_ATTRIBUTES to children
+  signal: Introduce TRAP_PERF si_code and si_perf to siginfo
+  perf/core: Add support for SIGTRAP on perf events
+  perf/core: Add breakpoint information to siginfo on SIGTRAP
+
+ arch/m68k/kernel/signal.c          |  3 ++
+ arch/x86/kernel/signal_compat.c    |  5 ++-
+ fs/signalfd.c                      |  4 +++
+ include/linux/compat.h             |  2 ++
+ include/linux/signal.h             |  1 +
+ include/uapi/asm-generic/siginfo.h |  6 +++-
+ include/uapi/linux/perf_event.h    |  3 +-
+ include/uapi/linux/signalfd.h      |  4 ++-
+ kernel/events/core.c               | 54 +++++++++++++++++++++++++++++-
+ kernel/signal.c                    | 11 ++++++
+ 10 files changed, 88 insertions(+), 5 deletions(-)
+
+-- 
+2.30.0.617.g56c4b15f3c-goog
 
