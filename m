@@ -2,118 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC417323587
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Feb 2021 03:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7537C3236D8
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Feb 2021 06:28:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbhBXB66 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Feb 2021 20:58:58 -0500
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:19425 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbhBXB65 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 20:58:57 -0500
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 11O1vhIv021809;
-        Wed, 24 Feb 2021 10:57:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 11O1vhIv021809
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1614131863;
-        bh=oN7IRg3W9fn8dx2VR7makKAXxb9/wBxnTjP722qMAhs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YWBPty69kNzqLAcSjQa1GPIfQfK32pxy29IBm4KOe8RC5Nb7SLeag76l7NMP+p8db
-         I+VXHZZHA14rS63qq5ELg7GVb6nx8ZqatFwPTJMFeFudXkyIzzY5vitaXdemFO+1nF
-         yfTVWsFvYJtQ4/3mXMKZurd/IMHrLpJpRPny95AWoGLjgR/VJW79AyMl14VqY3JXdJ
-         8JFlLUoQsS62/zAuoT7ZPWHBltG/24DfpKBseG6N1LXsacpMWnGxGDkOBOa+ydfMgR
-         HCljnx669LZ0Alwb50A1XHmd1P1qUJNk/YBb0JpNjXm0nqmm8UUHJ7AMs3a3xA31ya
-         19vDostmEl5PQ==
-X-Nifty-SrcIP: [209.85.210.181]
-Received: by mail-pf1-f181.google.com with SMTP id w18so256378pfu.9;
-        Tue, 23 Feb 2021 17:57:43 -0800 (PST)
-X-Gm-Message-State: AOAM53133ncd2P+RhbNk+9HAaIBRh0IXfIr65mxwfbQxYNWyY9KA2Vb+
-        NSHtULX3SezH88NicCdvllj+0s4hI9d127n1Ttc=
-X-Google-Smtp-Source: ABdhPJxBLzZD/EqFNt8nWh1YRvGLep1V38fK34L+ZqltgGaCRgYaOq/PDzT//qBb8G/NRBK4h6ZlUdtsJ3fr3TbufHs=
-X-Received: by 2002:a63:cc4f:: with SMTP id q15mr11813294pgi.47.1614131862821;
- Tue, 23 Feb 2021 17:57:42 -0800 (PST)
+        id S233929AbhBXF22 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Feb 2021 00:28:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233806AbhBXF21 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Feb 2021 00:28:27 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C71C061574;
+        Tue, 23 Feb 2021 21:27:47 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id q85so1118520qke.8;
+        Tue, 23 Feb 2021 21:27:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aw/UR5s2IwQPzSQ407eWj98h5EXFMZRfL8iJNo841y4=;
+        b=Zo/TLZUriQC1JcSj0ZK1KudC5T/rV0z51TalrrECdksS/wvnLachxYf/kEUxQ1jIZv
+         veZQlyebujp5Rz3SR8SGVZAAxW3kps1Mmk8qG8C/Xyxg8G56/U/PkZqGesNyr219j2Uk
+         e/DiuwDcAGKcgvKNXcsc+EewxzAMpmelOD5PQeIaIxPWW2IOmhd3fqvF4JYS/IkXrKME
+         02ZrR5GCJWsQ4/7Bn0mF3Bh8q5N/mIb693SpgDTNzE/KZnpcZgF++y9CPCPUCqx2ShF8
+         +ipDvNuim7jAGitwzsslxHE0pwhiVdeOuNRHTjkcYaA5gm2oEbgB5f5hZO2xMOhHyBmt
+         T50g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aw/UR5s2IwQPzSQ407eWj98h5EXFMZRfL8iJNo841y4=;
+        b=Glps2qBM3yuM2KoFSTG/u/FmvVdOiJLajZorJ90ZLKRdvTlKt8cFW/C/Mcg3+CCsUJ
+         tpfSjK8CzopOcl4eDKoDG/CQD5UDJoG+sOd5ccz4xqfN120q0ccz5ZvMqHEyNTjqxBKu
+         l93QbSgQ7l8CwKTOPhm6lGiUikcpjuVGERTTz/MJ91gstgKp6g6/Vu0oVAel369pANuj
+         5bRCUH7ZyZkQ9Kno0JrKu7hBbtWu7sYeIH49XBTqKYsa+9r9js/beKwTTTXHaiyub3Xe
+         vqFlY+FWpjwSIgSvb5uX4eyTZjBsIBA56szDPAynzXUpgbQwcymqAMWZLans00E3wajs
+         fUOA==
+X-Gm-Message-State: AOAM5320ntTvgYqlFAM0QjXMccNI8XXPLHX80EKCXjSyXebd+l/v6vd0
+        GWCC2yVvrii97lZfYZ8HnvI=
+X-Google-Smtp-Source: ABdhPJx39bkgG69E4mrnlUr3nUMK+9eV9c6HxdyY8sMqYv6jTsxP9WRvHfhPzPoeMF1fdlClPjsefA==
+X-Received: by 2002:a37:a654:: with SMTP id p81mr29167625qke.354.1614144466099;
+        Tue, 23 Feb 2021 21:27:46 -0800 (PST)
+Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
+        by smtp.gmail.com with ESMTPSA id r17sm620719qta.78.2021.02.23.21.27.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Feb 2021 21:27:45 -0800 (PST)
+Date:   Tue, 23 Feb 2021 21:27:44 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, Alexey Klimov <aklimov@redhat.com>
+Subject: Re: [PATCH] arm64: enable GENERIC_FIND_FIRST_BIT
+Message-ID: <20210224052744.GA1168363@yury-ThinkPad>
+References: <20201205165406.108990-1-yury.norov@gmail.com>
+ <20201207112530.GB4379@willie-the-truck>
+ <CAAH8bW-fb0wPwwvo8P8VW33zV=Wi_LPWxdJH8y2wdGGqPE+3nA@mail.gmail.com>
+ <20201208103549.GA5887@willie-the-truck>
 MIME-Version: 1.0
-References: <20210223100619.798698-1-masahiroy@kernel.org> <CAK8P3a1b5Tr8Gt_DcUq9JQj4G6O5ZHf44P2ZdYZRGQY8iPs43Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a1b5Tr8Gt_DcUq9JQj4G6O5ZHf44P2ZdYZRGQY8iPs43Q@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 24 Feb 2021 10:57:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ3bYfo03i=LBv8S6dyTTAYw17gGht7TR2AWofNn0VP_A@mail.gmail.com>
-Message-ID: <CAK7LNAQ3bYfo03i=LBv8S6dyTTAYw17gGht7TR2AWofNn0VP_A@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic/ioctl.h: use BUILD_BUG_ON_ZERO() for type check
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201208103549.GA5887@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 5:04 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Tue, Feb 23, 2021 at 11:06 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> >
-> > -#ifdef __CHECKER__
-> > -#define _IOC_TYPECHECK(t) (sizeof(t))
-> > -#else
-> >  /* provoke compile error for invalid uses of size argument */
-> > -extern unsigned int __invalid_size_argument_for_IOC;
-> > +#undef _IOC_TYPECHECK
-> >  #define _IOC_TYPECHECK(t) \
-> > -       ((sizeof(t) == sizeof(t[1]) && \
-> > -         sizeof(t) < (1 << _IOC_SIZEBITS)) ? \
-> > -         sizeof(t) : __invalid_size_argument_for_IOC)
-> > -#endif
-> > +       BUILD_BUG_ON_ZERO(sizeof(t) != sizeof(t[1]) || \
-> > +                         sizeof(t) >= (1 << _IOC_SIZEBITS))
->
-> Using BUILD_BUG_ON_ZERO sounds like a good idea
->
-> >  #endif /* _ASM_GENERIC_IOCTL_H */
-> > diff --git a/include/uapi/asm-generic/ioctl.h b/include/uapi/asm-generic/ioctl.h
-> > index a84f4db8a250..d50bd39ec3e3 100644
-> > --- a/include/uapi/asm-generic/ioctl.h
-> > +++ b/include/uapi/asm-generic/ioctl.h
-> > @@ -72,9 +72,8 @@
-> >          ((nr)   << _IOC_NRSHIFT) | \
-> >          ((size) << _IOC_SIZESHIFT))
-> >
-> > -#ifndef __KERNEL__
-> > -#define _IOC_TYPECHECK(t) (sizeof(t))
-> > -#endif
-> > +#define _IOC_TYPECHECK(t)      0
-> > +#define _IOC_SIZE_WITH_TYPECHECK(t)    (sizeof(t) + _IOC_TYPECHECK(t))
->
-> But I think replacing the #ifndef with an #undef in the other file makes it
-> harder to understand when reading through it and trying to understand
-> what it would do when this gets included from kernel and user space.
->
->         Arnd
+On Tue, Dec 08, 2020 at 10:35:50AM +0000, Will Deacon wrote:
+> On Mon, Dec 07, 2020 at 05:59:16PM -0800, Yury Norov wrote:
+> > (CC: Alexey Klimov)
+> > 
+> > On Mon, Dec 7, 2020 at 3:25 AM Will Deacon <will@kernel.org> wrote:
+> > >
+> > > On Sat, Dec 05, 2020 at 08:54:06AM -0800, Yury Norov wrote:
+> > > > ARM64 doesn't implement find_first_{zero}_bit in arch code and doesn't
+> > > > enable it in config. It leads to using find_next_bit() which is less
+> > > > efficient:
+> > >
+> > > [...]
+> > >
+> > > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > > > index 1515f6f153a0..2b90ef1f548e 100644
+> > > > --- a/arch/arm64/Kconfig
+> > > > +++ b/arch/arm64/Kconfig
+> > > > @@ -106,6 +106,7 @@ config ARM64
+> > > >       select GENERIC_CPU_AUTOPROBE
+> > > >       select GENERIC_CPU_VULNERABILITIES
+> > > >       select GENERIC_EARLY_IOREMAP
+> > > > +     select GENERIC_FIND_FIRST_BIT
+> > >
+> > > Does this actually make any measurable difference? The disassembly with
+> > > or without this is _very_ similar for me (clang 11).
+> > >
+> > > Will
+> > 
+> > On A-53 find_first_bit() is almost twice faster than find_next_bit(),
+> > according to
+> > lib/find_bit_benchmark. (Thanks to Alexey for testing.)
+> 
+> I guess it's more compiler dependent than anything else, and it's a pity
+> that find_next_bit() isn't implemented in terms of the generic
+> find_first_bit() tbh, but if the numbers are as you suggest then I don't
+> have a problem selecting this on arm64.
 
+Ping?
 
-My intention is to improve the UAPI/KAPI decoupling
-to decrease the task of scripts/headers_install.sh
-
-Ideally, we could export UAPI headers with
-almost no modification.
-
-It is true that scripts/unifdef can remove #ifndef __KERNEL__
-blocks, but having the kernel-space code in UAPI headers
-does not make sense. Otherwise, our initial motivation
-"separate them by directory structure" would be lost.
-
-So, I believe redefining _IOC_TYPECHECK is the right direction.
-I can add comments if this is not clear.
-
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
