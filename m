@@ -2,187 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 939293233B1
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 23:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC417323587
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Feb 2021 03:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbhBWW2U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Feb 2021 17:28:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbhBWW1Z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 17:27:25 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E92C06178A
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 14:26:44 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id d9so223427ote.12
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 14:26:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fZxhrFPoVeuINwqWYDTQrRIMFcJNq/iX5+xBlXUPDIw=;
-        b=Lkb/fePhnB3TeXO8nhWGUpDpvuWHlvarKeD0HrVivi0T+3SB/3s96S+TLlJRZWdu/7
-         LzAu9w42VS6gqUKOAyRRnlVvojownec1/CLyOEfqurejaYCCK5tVfresc04+Dl2XW/iN
-         UGuZwMWXTPugvWndL9KLxaN5dLQR0IdCP9yjKf5/5tcsEkL84nOowVAysLLEnAfcg3cS
-         z28cIFKTN5FIt0IiQWX+cbneyBitwyKBKVvCyjrF08Xt9Exkv3ZXlzFYa0UB2Km3buwT
-         44bJM65RqceFOuvwN2cfOXlSaBbfpqTbw3rXZXWhefF7OsdNuGkVpewdqnJ/XW/wWUWS
-         blkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fZxhrFPoVeuINwqWYDTQrRIMFcJNq/iX5+xBlXUPDIw=;
-        b=AQ5B5tVGDT8Na0Spp+0NOVT8rXiVEEPrjxtIVnGWgeXWSeKU2w4u5EkYchVff9P64O
-         EEnKAVPmRs2NzbB9srmqDRlZrnA9cBjaeHQ7JTfd0xlGPC2p7nbXX6vwkOd+kk/cS9Au
-         THTw6SVDCzuVDfDQw0L8mbsKcGclI3NzNY5VdwEFD2ZljCumOeX4qQvdNZvBK5o5wShM
-         CDd2lA5YPwG/YZOfY2R5hqrErHVg17yYsVQsflBoAZf7UsLkn2Ik4NiAJAi4bDLfSPtW
-         rKGR4E9QKilMnSRsVF/TUx7vVeR77mYd9oozqy2jblx0M9J5r7q8LzhXzEx7qWjT+wzi
-         jpdg==
-X-Gm-Message-State: AOAM530ZRl4CG97BkS8l17oL+DYHtQ2ww+Mq+8Sgu3QTZzKR+7rmqJrr
-        GWVqJa2RDnhO6jdDXhRSK6Eg7Q3JXBBC3lzepvgPqA==
-X-Google-Smtp-Source: ABdhPJyKcJ1a+AjtPRO339TGkeeBUE+Uf/ejrr6lZnvFhmNcPW5GEY4o7F+DMHaSBgv4mLYXaBM1l4zKLP8jkuBLUWw=
-X-Received: by 2002:a9d:5a05:: with SMTP id v5mr22397134oth.17.1614119201352;
- Tue, 23 Feb 2021 14:26:41 -0800 (PST)
+        id S232139AbhBXB66 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Feb 2021 20:58:58 -0500
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:19425 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231787AbhBXB65 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 20:58:57 -0500
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 11O1vhIv021809;
+        Wed, 24 Feb 2021 10:57:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 11O1vhIv021809
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1614131863;
+        bh=oN7IRg3W9fn8dx2VR7makKAXxb9/wBxnTjP722qMAhs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YWBPty69kNzqLAcSjQa1GPIfQfK32pxy29IBm4KOe8RC5Nb7SLeag76l7NMP+p8db
+         I+VXHZZHA14rS63qq5ELg7GVb6nx8ZqatFwPTJMFeFudXkyIzzY5vitaXdemFO+1nF
+         yfTVWsFvYJtQ4/3mXMKZurd/IMHrLpJpRPny95AWoGLjgR/VJW79AyMl14VqY3JXdJ
+         8JFlLUoQsS62/zAuoT7ZPWHBltG/24DfpKBseG6N1LXsacpMWnGxGDkOBOa+ydfMgR
+         HCljnx669LZ0Alwb50A1XHmd1P1qUJNk/YBb0JpNjXm0nqmm8UUHJ7AMs3a3xA31ya
+         19vDostmEl5PQ==
+X-Nifty-SrcIP: [209.85.210.181]
+Received: by mail-pf1-f181.google.com with SMTP id w18so256378pfu.9;
+        Tue, 23 Feb 2021 17:57:43 -0800 (PST)
+X-Gm-Message-State: AOAM53133ncd2P+RhbNk+9HAaIBRh0IXfIr65mxwfbQxYNWyY9KA2Vb+
+        NSHtULX3SezH88NicCdvllj+0s4hI9d127n1Ttc=
+X-Google-Smtp-Source: ABdhPJxBLzZD/EqFNt8nWh1YRvGLep1V38fK34L+ZqltgGaCRgYaOq/PDzT//qBb8G/NRBK4h6ZlUdtsJ3fr3TbufHs=
+X-Received: by 2002:a63:cc4f:: with SMTP id q15mr11813294pgi.47.1614131862821;
+ Tue, 23 Feb 2021 17:57:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20210223143426.2412737-1-elver@google.com> <3D507285-835F-4C83-8343-2888835971B4@amacapital.net>
-In-Reply-To: <3D507285-835F-4C83-8343-2888835971B4@amacapital.net>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 23 Feb 2021 23:26:29 +0100
-Message-ID: <CANpmjNOpq27pDnoPaNON7a_gi7Ls=7xQXBH5-BSe9jwiFE763A@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/4] Add support for synchronous signals on perf events
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+References: <20210223100619.798698-1-masahiroy@kernel.org> <CAK8P3a1b5Tr8Gt_DcUq9JQj4G6O5ZHf44P2ZdYZRGQY8iPs43Q@mail.gmail.com>
+In-Reply-To: <CAK8P3a1b5Tr8Gt_DcUq9JQj4G6O5ZHf44P2ZdYZRGQY8iPs43Q@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 24 Feb 2021 10:57:05 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ3bYfo03i=LBv8S6dyTTAYw17gGht7TR2AWofNn0VP_A@mail.gmail.com>
+Message-ID: <CAK7LNAQ3bYfo03i=LBv8S6dyTTAYw17gGht7TR2AWofNn0VP_A@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic/ioctl.h: use BUILD_BUG_ON_ZERO() for type check
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-m68k@lists.linux-m68k.org,
-        "the arch/x86 maintainers" <x86@kernel.org>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 23 Feb 2021 at 21:27, Andy Lutomirski <luto@amacapital.net> wrote:
-> > On Feb 23, 2021, at 6:34 AM, Marco Elver <elver@google.com> wrote:
-> >
-> > =EF=BB=BFThe perf subsystem today unifies various tracing and monitorin=
-g
-> > features, from both software and hardware. One benefit of the perf
-> > subsystem is automatically inheriting events to child tasks, which
-> > enables process-wide events monitoring with low overheads. By default
-> > perf events are non-intrusive, not affecting behaviour of the tasks
-> > being monitored.
-> >
-> > For certain use-cases, however, it makes sense to leverage the
-> > generality of the perf events subsystem and optionally allow the tasks
-> > being monitored to receive signals on events they are interested in.
-> > This patch series adds the option to synchronously signal user space on
-> > events.
+On Wed, Feb 24, 2021 at 5:04 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> Unless I missed some machinations, which is entirely possible, you can=E2=
-=80=99t call force_sig_info() from NMI context. Not only am I not convinced=
- that the core signal code is NMI safe, but at least x86 can=E2=80=99t corr=
-ectly deliver signals on NMI return. You probably need an IPI-to-self.
-
-force_sig_info() is called from an irq_work only: perf_pending_event
--> perf_pending_event_disable -> perf_sigtrap -> force_sig_info. What
-did I miss?
-
-> > The discussion at [1] led to the changes proposed in this series. The
-> > approach taken in patch 3/4 to use 'event_limit' to trigger the signal
-> > was kindly suggested by Peter Zijlstra in [2].
-> >
-> > [1] https://lore.kernel.org/lkml/CACT4Y+YPrXGw+AtESxAgPyZ84TYkNZdP0xpoc=
-X2jwVAbZD=3D-XQ@mail.gmail.com/
-> > [2] https://lore.kernel.org/lkml/YBv3rAT566k+6zjg@hirez.programming.kic=
-ks-ass.net/
-> >
-> > Motivation and example uses:
-> >
-> > 1.    Our immediate motivation is low-overhead sampling-based race
-> >    detection for user-space [3]. By using perf_event_open() at
-> >    process initialization, we can create hardware
-> >    breakpoint/watchpoint events that are propagated automatically
-> >    to all threads in a process. As far as we are aware, today no
-> >    existing kernel facility (such as ptrace) allows us to set up
-> >    process-wide watchpoints with minimal overheads (that are
-> >    comparable to mprotect() of whole pages).
->
-> This would be doable much more simply with an API to set a breakpoint.  A=
-ll the machinery exists except the actual user API.
-
-Isn't perf_event_open() that API?
-
-A new user API implementation will either be a thin wrapper around
-perf events or reinvent half of perf events to deal with managing
-watchpoints across a set of tasks (process-wide or some subset).
-
-It's not just breakpoints though.
-
-> >    [3] https://llvm.org/devmtg/2020-09/slides/Morehouse-GWP-Tsan.pdf
-> >
-> > 2.    Other low-overhead error detectors that rely on detecting
-> >    accesses to certain memory locations or code, process-wide and
-> >    also only in a specific set of subtasks or threads.
-> >
-> > Other example use-cases we found potentially interesting:
-> >
-> > 3.    Code hot patching without full stop-the-world. Specifically, by
-> >    setting a code breakpoint to entry to the patched routine, then
-> >    send signals to threads and check that they are not in the
-> >    routine, but without stopping them further. If any of the
-> >    threads will enter the routine, it will receive SIGTRAP and
-> >    pause.
->
-> Cute.
+> On Tue, Feb 23, 2021 at 11:06 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
 > >
-> > 4.    Safepoints without mprotect(). Some Java implementations use
-> >    "load from a known memory location" as a safepoint. When threads
-> >    need to be stopped, the page containing the location is
-> >    mprotect()ed and threads get a signal. This can be replaced with
-> >    a watchpoint, which does not require a whole page nor DTLB
-> >    shootdowns.
+> > -#ifdef __CHECKER__
+> > -#define _IOC_TYPECHECK(t) (sizeof(t))
+> > -#else
+> >  /* provoke compile error for invalid uses of size argument */
+> > -extern unsigned int __invalid_size_argument_for_IOC;
+> > +#undef _IOC_TYPECHECK
+> >  #define _IOC_TYPECHECK(t) \
+> > -       ((sizeof(t) == sizeof(t[1]) && \
+> > -         sizeof(t) < (1 << _IOC_SIZEBITS)) ? \
+> > -         sizeof(t) : __invalid_size_argument_for_IOC)
+> > -#endif
+> > +       BUILD_BUG_ON_ZERO(sizeof(t) != sizeof(t[1]) || \
+> > +                         sizeof(t) >= (1 << _IOC_SIZEBITS))
 >
-> I=E2=80=99m skeptical. Propagating a hardware breakpoint to all threads i=
-nvolves IPIs and horribly slow writes to DR1 (or 2, 3, or 4) and DR7.  A TL=
-B flush can be accelerated using paravirt or hypothetical future hardware. =
-Or real live hardware on ARM64.
+> Using BUILD_BUG_ON_ZERO sounds like a good idea
 >
-> (The hypothetical future hardware is almost present on Zen 3.  A bit of w=
-ork is needed on the hardware end to make it useful.)
-
-Fair enough. Although watchpoints can be much more fine-grained than
-an mprotect() which then also has downsides (checking if the accessed
-memory was actually the bytes we're interested in). Maybe we should
-also ask CPU vendors to give us better watchpoints (perhaps start with
-more of them, and easier to set in batch)? We still need a user space
-API...
-
-Thanks,
--- Marco
-
-
-
+> >  #endif /* _ASM_GENERIC_IOCTL_H */
+> > diff --git a/include/uapi/asm-generic/ioctl.h b/include/uapi/asm-generic/ioctl.h
+> > index a84f4db8a250..d50bd39ec3e3 100644
+> > --- a/include/uapi/asm-generic/ioctl.h
+> > +++ b/include/uapi/asm-generic/ioctl.h
+> > @@ -72,9 +72,8 @@
+> >          ((nr)   << _IOC_NRSHIFT) | \
+> >          ((size) << _IOC_SIZESHIFT))
 > >
-> > 5.    Tracking data flow globally.
-> >
-> > 6.    Threads receiving signals on performance events to
-> >    throttle/unthrottle themselves.
+> > -#ifndef __KERNEL__
+> > -#define _IOC_TYPECHECK(t) (sizeof(t))
+> > -#endif
+> > +#define _IOC_TYPECHECK(t)      0
+> > +#define _IOC_SIZE_WITH_TYPECHECK(t)    (sizeof(t) + _IOC_TYPECHECK(t))
+>
+> But I think replacing the #ifndef with an #undef in the other file makes it
+> harder to understand when reading through it and trying to understand
+> what it would do when this gets included from kernel and user space.
+>
+>         Arnd
+
+
+My intention is to improve the UAPI/KAPI decoupling
+to decrease the task of scripts/headers_install.sh
+
+Ideally, we could export UAPI headers with
+almost no modification.
+
+It is true that scripts/unifdef can remove #ifndef __KERNEL__
+blocks, but having the kernel-space code in UAPI headers
+does not make sense. Otherwise, our initial motivation
+"separate them by directory structure" would be lost.
+
+So, I believe redefining _IOC_TYPECHECK is the right direction.
+I can add comments if this is not clear.
+
+
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
