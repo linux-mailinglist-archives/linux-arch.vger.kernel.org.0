@@ -2,37 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C0E3244BC
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Feb 2021 20:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46803244C9
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Feb 2021 20:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbhBXTms (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Feb 2021 14:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234302AbhBXTmr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Feb 2021 14:42:47 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A083DC061574;
-        Wed, 24 Feb 2021 11:42:07 -0800 (PST)
-Received: from zn.tnic (p200300ec2f0d180087c1c74682a645c2.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:1800:87c1:c746:82a6:45c2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F109E1EC0328;
-        Wed, 24 Feb 2021 20:42:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1614195726;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=9ezgUQlQbbX7408pbcJrxnn71TdUJUjIpNkknyJCDRw=;
-        b=VnSrIXBlqTORmrkgznFXrhpvc+CB1vlkNwYoJMdpewn99QaGbXEvOBOK/lD/XS+//KalF3
-        c5zTEwyImAn3425u7nHBNlLBjwHhiHsMhAQYE1oG76/9ve5NBLA6qumhCn4GNT7MOfmydT
-        zHNMzYp6o5Qbh5hqT78fY22+8M/YJ5g=
-Date:   Wed, 24 Feb 2021 20:42:04 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        id S234654AbhBXTxR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Feb 2021 14:53:17 -0500
+Received: from mga11.intel.com ([192.55.52.93]:56215 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232392AbhBXTxQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Feb 2021 14:53:16 -0500
+IronPort-SDR: DT67NmJxOc44P4KRo695ALANGfG2/Bi+mPFp3Ienf2hc5iGT7zgL6V0kfqZDgABtxDoT5zYWrP
+ +fBQKfoyMjaA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9905"; a="181865671"
+X-IronPort-AV: E=Sophos;i="5.81,203,1610438400"; 
+   d="scan'208";a="181865671"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2021 11:52:34 -0800
+IronPort-SDR: yXEcVzW98djE749wmWJeznbw7y/eWDKIg2JFChUy2uVPACaW3lKFTSPh+w1NRB+Semm7HIGoQg
+ 1PmH0DR7BcFQ==
+X-IronPort-AV: E=Sophos;i="5.81,203,1610438400"; 
+   d="scan'208";a="431800681"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.35.50]) ([10.212.35.50])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2021 11:52:33 -0800
+Subject: Re: [PATCH v21 06/26] x86/cet: Add control-protection fault handler
+To:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>
+Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -61,8 +55,6 @@ Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, X86 ML <x86@kernel.org>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>,
         Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [PATCH v21 06/26] x86/cet: Add control-protection fault handler
-Message-ID: <20210224194204.GI20344@zn.tnic>
 References: <20210217222730.15819-1-yu-cheng.yu@intel.com>
  <20210217222730.15819-7-yu-cheng.yu@intel.com>
  <20210224161343.GE20344@zn.tnic>
@@ -71,41 +63,56 @@ References: <20210217222730.15819-1-yu-cheng.yu@intel.com>
  <db493c76-2a67-5f53-29a0-8333facac0f5@intel.com>
  <20210224192044.GH20344@zn.tnic>
  <CALCETrXKteS9K=OOgsCvBU4in_3zcYccqF9hh2=OdCJPknvB8Q@mail.gmail.com>
+ <20210224194204.GI20344@zn.tnic>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <c8077be0-f61f-d84d-fcd1-13c5ba482a38@intel.com>
+Date:   Wed, 24 Feb 2021 11:52:33 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALCETrXKteS9K=OOgsCvBU4in_3zcYccqF9hh2=OdCJPknvB8Q@mail.gmail.com>
+In-Reply-To: <20210224194204.GI20344@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 11:30:34AM -0800, Andy Lutomirski wrote:
-> On Wed, Feb 24, 2021 at 11:20 AM Borislav Petkov <bp@alien8.de> wrote:
-> >
-> > On Wed, Feb 24, 2021 at 09:56:13AM -0800, Yu, Yu-cheng wrote:
-> > > No.  Maybe I am doing too much.  The GP fault sets si_addr to zero, for
-> > > example.  So maybe do the same here?
-> >
-> > No, you're looking at this from the wrong angle. This is going to be
-> > user-visible and the moment it gets upstream, it is cast in stone.
-> >
-> > So the whole use case of what luserspace needs to do or is going to do
-> > or wants to do on a SEGV_CPERR, needs to be described, agreed upon by
-> > people etc before it goes out. And thus clarified whether the address
-> > gets copied out or not.
+On 2/24/2021 11:42 AM, Borislav Petkov wrote:
+> On Wed, Feb 24, 2021 at 11:30:34AM -0800, Andy Lutomirski wrote:
+>> On Wed, Feb 24, 2021 at 11:20 AM Borislav Petkov <bp@alien8.de> wrote:
+>>>
+>>> On Wed, Feb 24, 2021 at 09:56:13AM -0800, Yu, Yu-cheng wrote:
+>>>> No.  Maybe I am doing too much.  The GP fault sets si_addr to zero, for
+>>>> example.  So maybe do the same here?
+>>>
+>>> No, you're looking at this from the wrong angle. This is going to be
+>>> user-visible and the moment it gets upstream, it is cast in stone.
+>>>
+>>> So the whole use case of what luserspace needs to do or is going to do
+>>> or wants to do on a SEGV_CPERR, needs to be described, agreed upon by
+>>> people etc before it goes out. And thus clarified whether the address
+>>> gets copied out or not.
+>>
+>> I vote 0.  The address is in ucontext->gregs[REG_RIP] [0] regardless.
+>> Why do we need to stick a copy somewhere else?
+>>
+>> [0] or however it's spelled.  i can never remember.
 > 
-> I vote 0.  The address is in ucontext->gregs[REG_RIP] [0] regardless.
-> Why do we need to stick a copy somewhere else?
+> Fine with me. Let's have this documented in the manpage and then we can
+> move forward with this.
 > 
-> [0] or however it's spelled.  i can never remember.
+> Thx.
+> 
 
-Fine with me. Let's have this documented in the manpage and then we can
-move forward with this.
+The man page at https://man7.org/linux/man-pages/man2/sigaction.2.html says,
 
-Thx.
+SIGILL, SIGFPE, SIGSEGV, SIGBUS, and SIGTRAP fill in si_addr with the 
+address of the fault.
 
--- 
-Regards/Gruss,
-    Boris.
+But it is not entirely true.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+I will send a patch to update it, and another patch for the si_code.
+
+--
+Yu-cheng
