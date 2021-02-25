@@ -2,71 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D04324F90
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 12:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE7832510C
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 14:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbhBYL5G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Feb 2021 06:57:06 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:41931 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbhBYL5G (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Feb 2021 06:57:06 -0500
-Received: from [192.168.43.237] (35.161.185.81.rev.sfr.net [81.185.161.35])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 85E2B200008;
-        Thu, 25 Feb 2021 11:56:12 +0000 (UTC)
-Subject: Re: [PATCH 2/3] Documentation: riscv: Add documentation that
- describes the VM layout
-To:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20210225080453.1314-1-alex@ghiti.fr>
- <20210225080453.1314-3-alex@ghiti.fr>
- <5279e97c-3841-717c-2a16-c249a61573f9@redhat.com>
-From:   Alex Ghiti <alex@ghiti.fr>
-Message-ID: <7d9036d9-488b-47cc-4673-1b10c11baad0@ghiti.fr>
-Date:   Thu, 25 Feb 2021 06:56:11 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S231414AbhBYN5u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Feb 2021 08:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231154AbhBYN5q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Feb 2021 08:57:46 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA58C061574;
+        Thu, 25 Feb 2021 05:57:05 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id d20so4637313qkc.2;
+        Thu, 25 Feb 2021 05:57:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z3S2/9NZCW9QVmXj9grkY/k8GsyFK+D3WBEzfAOeLxE=;
+        b=t8MF1Qs6um/IJ27dP+R/8X4j9JbeDhG8huigp8RFGSkisQlib3Mo8fn57x+8dJcdNU
+         W6TcJ464L4jl1tTsSZmo7gZl5evuv0MhrdiaTslyYzYZeFAQY3GJfBOr/apKSlgJjYBQ
+         tVAjmhxY9tDT7iV/GXthJrdvGKnemSzBf6BWqjOM6yiYYF92UClaLANNgWh0CP1TWH2x
+         pAiImpczPp/Aqium3UsM3oOpkJkL6Rjojp00UPK87lSDlgtB85W1u/S5xSgsolYaEEH9
+         OYYkXgNuvTmOgKGGYY3LhKDZ/XwKl/36t7PYV6Tf2xOzBMXN2Y/gPOf+aDeu0WxV+KEO
+         mX1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z3S2/9NZCW9QVmXj9grkY/k8GsyFK+D3WBEzfAOeLxE=;
+        b=ab0NkD6IRST1qW6gqpjqOxd2ioOC0CTcvdZ3yxXAd38pZPFkcB2ytRSNgxCok2HJrF
+         IL8o1Xjkx+rmL49h3Qoi2V0X/9yBscKlAd8L3rJNODZx92C1njVuCNrkozTghtik1/ry
+         E4/gDT81gzN9IlPt5L4ZWZ7B/AC/pt4KS5OKtoJbvD6T/bcTUoCrNaoEYreF6JZC460x
+         ojNfevrtRFDbTsBaW+TIAq386xdPXV2KC7IurnLh93PtJUjwNFaLSxcd2IJDGP2C7e9R
+         Y+AtzGmK2F0GeLrNpz6pyqYAWJwNqEpeXvOdFzeOXiH+Y8M3Efz3Ac30QWpxLwU4EFEO
+         HGLQ==
+X-Gm-Message-State: AOAM532antRK+J0j372IMMRA9mzr6kpdqbImPCci+74b9nXUNmk0ep+N
+        0T8KoDUBUBrLWbkhdne/tvw=
+X-Google-Smtp-Source: ABdhPJwIoLmbkEdUBaV0j20N2p4kQqMq8twl/L7Q+AGbL1IVJRZjPNmoUaQsgWzi794pb71fOrP1Ag==
+X-Received: by 2002:a37:a28e:: with SMTP id l136mr1183634qke.172.1614261424402;
+        Thu, 25 Feb 2021 05:57:04 -0800 (PST)
+Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
+        by smtp.gmail.com with ESMTPSA id b65sm3913576qkd.120.2021.02.25.05.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Feb 2021 05:57:04 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH 0/2] arch: enable GENERIC_FIND_FIRST_BIT for MIPS and ARM64
+Date:   Thu, 25 Feb 2021 05:56:58 -0800
+Message-Id: <20210225135700.1381396-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <5279e97c-3841-717c-2a16-c249a61573f9@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Le 2/25/21 à 5:34 AM, David Hildenbrand a écrit :
->                   |            |                  |         |> + 
-> ffffffc000000000 | -256    GB | ffffffc7ffffffff |   32 GB | kasan
->> +   ffffffcefee00000 | -196    GB | ffffffcefeffffff |    2 MB | fixmap
->> +   ffffffceff000000 | -196    GB | ffffffceffffffff |   16 MB | PCI io
->> +   ffffffcf00000000 | -196    GB | ffffffcfffffffff |    4 GB | vmemmap
->> +   ffffffd000000000 | -192    GB | ffffffdfffffffff |   64 GB | 
->> vmalloc/ioremap space
->> +   ffffffe000000000 | -128    GB | ffffffff7fffffff |  126 GB | 
->> direct mapping of all physical memory
-> 
-> ^ So you could never ever have more than 126 GB, correct?
-> 
-> I assume that's nothing new.
-> 
+MIPS and ARM64 don't implement find_first_{zero}_bit in arch code and
+don't enable it in config. It leads to using find_next_bit() which is
+less efficient:
 
-Before this patch, the limit was 128GB, so in my sense, there is nothing 
-new. If ever we want to increase that limit, we'll just have to lower 
-PAGE_OFFSET, there is still some unused virtual addresses after kasan 
-for example.
+It's beneficial to enable GENERIC_FIND_FIRST_BIT as this functionality
+is not new at all and well-tested. It provides more optimized code and
+saves .text memory:
 
-Thanks,
+Alexander Lobakin (1):
+  MIPS: enable GENERIC_FIND_FIRST_BIT
 
-Alex
+Yury Norov (1):
+  arm64: enable GENERIC_FIND_FIRST_BIT
+
+ arch/arm64/Kconfig | 1 +
+ arch/mips/Kconfig  | 1 +
+ 2 files changed, 2 insertions(+)
+
+-- 
+2.25.1
+
