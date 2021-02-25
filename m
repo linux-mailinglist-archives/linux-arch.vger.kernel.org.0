@@ -2,224 +2,162 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34675325684
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 20:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23193256A3
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 20:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234468AbhBYTQ6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Feb 2021 14:16:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233844AbhBYTOz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Feb 2021 14:14:55 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3FAC061574;
-        Thu, 25 Feb 2021 11:13:51 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id u8so7035633ior.13;
-        Thu, 25 Feb 2021 11:13:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=2TSVfMnhT7SJL8aJySBCB2X+rytLQ5KjriPICMJNCuA=;
-        b=L4cnc+ZL13Np3eVNmMr9LItYPGw5JCmepuSDo9PwLnhfwfxrwGCs7PX4tOv7Dturej
-         uraF4K/l/D873gFVKtLo2901A9oLB5uAI1z+s/52ADTXEEbwI2MQxYzLzZLhClEBXxAt
-         5vnDufgeuyChh/+FXDYK9QUa9+EzFoDnkbgB6RI81FN2Xb9YHIBcvcxTSSfp5WcxpeO9
-         QiKEgjm3Xm7vu6kEYIWFwybaMFgsyeXqBV5K81b+GWYHagE361Lg7JGIe2GjDp+X0fFg
-         AcVwxIlQnmpg7q1sAsU0ejqXBbf73UJcEQPjhRv8qFK9PmP42Q4zDOJFzSNzR8/bLxnI
-         iQZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=2TSVfMnhT7SJL8aJySBCB2X+rytLQ5KjriPICMJNCuA=;
-        b=erQEzmRPN7k9/p39aJuucf2tRz7NRJmdGsQv1xi7pv6v6lbflxSxc2Rw+3MnAKMxFg
-         xGcen++iKer4BSOR5DaOnKM2Cl1shvdWYRGOOOehrMIc88D4jBtNBjVzHAo8nVAKWC8E
-         lXdAqETo8JIB4tWGBPsleWlEVnDDX/zFJIj37crMStnPc6gEpzQHaMUSoCLpyJ1yiEsD
-         mJVwvJZl/qQVAZaz3ikxBci44Ag2vPQuvBWj+j98DfBsJ6EC14j3tDEACEKRIBs5TMoj
-         E4chSMg7fUGTM4fNPu6fNBXY4K9E7EKIf8yqzW7eFu2IJ2shYO4AsClIhJG/ovGSwCb+
-         POTw==
-X-Gm-Message-State: AOAM532R0NOD2fLLvOMQZYQLjILm3ypC9ja2QXzv9ev3zkOwY/2Exl7d
-        t1qPh3IzoTxFRiqJGqCq1btvP2S1OB48nPAZUZ5gUCpar0KW+Q==
-X-Google-Smtp-Source: ABdhPJwrYXJjs33T4TojfbQp76hLJz5njsBp8ZBlufhyWurJJOFCwaE4Kzu11MTJ2tkgPurhBf1Rk432U4lVrEwH2LQ=
-X-Received: by 2002:a5e:c10b:: with SMTP id v11mr3939134iol.75.1614280431094;
- Thu, 25 Feb 2021 11:13:51 -0800 (PST)
+        id S234583AbhBYT16 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Feb 2021 14:27:58 -0500
+Received: from pb-smtp1.pobox.com ([64.147.108.70]:54574 "EHLO
+        pb-smtp1.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230371AbhBYTZh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Feb 2021 14:25:37 -0500
+Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
+        by pb-smtp1.pobox.com (Postfix) with ESMTP id 9D580B0DA2;
+        Thu, 25 Feb 2021 14:24:47 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
+        :cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=uSGDWbeu4QMXFL3jz4yLuixZbF0=; b=tXx7qX
+        BARdHwAJ75iVXzgZlY6u4vpDfGdSZ6r5bPhjtks4bGNrErpsxE8fj2AyvWEqCuIb
+        4d3jL41jhETZ4N7zRJeVZV+J3J0D86r5cyMRB/yhLlhUfKiH1q5prStUh74QR3w3
+        XPCvDl1iVEbJtRBA/1rq+K6rgVJ1g8drG0nCU=
+Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp1.pobox.com (Postfix) with ESMTP id 921DEB0DA1;
+        Thu, 25 Feb 2021 14:24:47 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=Ysam7wogkyEXkA86e6mQ/AkpZlWP1KiBxHidywtJQ1U=; b=fe30QbMoPbpvOPzZjlkywaicUYMfC2C4XrgufMymzkfdY8ANd6Kns/Obkc/IjnZJ8EqmuA30/aPhWzVPKbeLATRRRZ7wI2KgmBFVB/fEXDco209bZHneRrIbFO3A2Lg2cVaengsq2mJ7GzPBEewFFANRVg24I6SOsRya7lwi2YE=
+Received: from yoda.home (unknown [24.203.50.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id 088CFB0DA0;
+        Thu, 25 Feb 2021 14:24:47 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu.home [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 12C962DA0082;
+        Thu, 25 Feb 2021 14:24:46 -0500 (EST)
+Date:   Thu, 25 Feb 2021 14:24:45 -0500 (EST)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 0/4] kbuild: build speed improvment of
+ CONFIG_TRIM_UNUSED_KSYMS
+In-Reply-To: <CAK7LNAQeL7jQt1RJjLbU7MUj7XGAwEAhtTvMocQw85uJj9NA9g@mail.gmail.com>
+Message-ID: <46506ns0-1477-n7nq-9qq4-9pn48634oq4@syhkavp.arg>
+References: <20210225160247.2959903-1-masahiroy@kernel.org> <r3584n3-sq21-qo49-9sp5-r3qp6o611s55@syhkavp.arg> <CAK7LNAQeL7jQt1RJjLbU7MUj7XGAwEAhtTvMocQw85uJj9NA9g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210205202220.2748551-1-ndesaulniers@google.com>
-In-Reply-To: <20210205202220.2748551-1-ndesaulniers@google.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Thu, 25 Feb 2021 20:13:39 +0100
-Message-ID: <CA+icZUWDCz-7ZqqXWBq4K+EcKaqbThDD2XAUOhkGwUFVnfWd3w@mail.gmail.com>
-Subject: Re: [PATCH v9 0/3] Kbuild: DWARF v5 support
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Chris Murphy <bugzilla@colorremedies.com>,
-        Mark Wielaard <mark@klomp.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID: 1F1ECEFE-779F-11EB-BCD7-D152C8D8090B-78420484!pb-smtp1.pobox.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 9:22 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> DWARF v5 is the latest standard of the DWARF debug info format.
->
-> DWARF5 wins significantly in terms of size and especially so when mixed
-> with compression (CONFIG_DEBUG_INFO_COMPRESSED).
->
-> Link: http://www.dwarfstd.org/doc/DWARF5.pdf
->
+On Fri, 26 Feb 2021, Masahiro Yamada wrote:
 
-Accepted into mainline via kbuild-v5.12.
+> On Fri, Feb 26, 2021 at 2:20 AM Nicolas Pitre <nico@fluxnic.net> wrote:
+> >
+> > On Fri, 26 Feb 2021, Masahiro Yamada wrote:
+> >
+> > >
+> > > Now CONFIG_TRIM_UNUSED_KSYMS is revived, but Linus is still unhappy
+> > > about the build speed.
+> > >
+> > > I re-implemented this feature, and the build time cost is now
+> > > almost unnoticeable level.
+> > >
+> > > I hope this makes Linus happy.
+> >
+> > :-)
+> >
+> > I'm surprised to see that Linus is using this feature. When disabled
+> > (the default) this should have had no impact on the build time.
+> 
+> Linus is not using this feature, but does build tests.
+> After pulling the module subsystem pull request in this merge window,
+> CONFIG_TRIM_UNUSED_KSYMS was enabled by allmodconfig.
 
-- Sedat -
+If CONFIG_TRIM_UNUSED_KSYMS is enabled then build time willincrease. 
+That comes with the feature.
 
-[1] https://git.kernel.org/linus/6fbd6cf85a3be127454a1ad58525a3adcf8612ab
+> > This feature provides a nice security advantage by significantly
+> > reducing the kernel input surface. And people are using that also to
+> > better what third party vendor can and cannot do with a distro kernel,
+> > etc. But that's not the reason why I implemented this feature in the
+> > first place.
+> >
+> > My primary goal was to efficiently reduce the kernel binary size using
+> > LTO even with kernel modules enabled.
+> 
+> 
+> Clang LTO landed in this MW.
+> 
+> Do you think it will reduce the kernel binary size?
+> No, opposite.
 
-> Patch 1 places the DWARF v5 sections explicitly in the kernel linker
-> script.
-> Patch 2 modifies Kconfig for DEBUG_INFO_DWARF4 to be used as a fallback.
-> Patch 3 adds an explicit Kconfig for DWARF v5 for clang and older GCC
-> where the implicit default DWARF version is not 5.
->
-> Changes from v8:
-> * Separate out the linker script changes (from v7 0002). Put those
->   first. Carry Reviewed by and tested by tags.  Least contentious part
->   of the series. Tagged for stable; otherwise users upgrading to GCC 11
->   may find orphan section warnings from the implicit default DWARF
->   version changing and generating the new debug info sections.
-> * Add CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT in 0002, make it the
->   default rather than CONFIG_DEBUG_INFO_DWARF4, as per Mark, Jakub,
->   Arvind.
-> * Drop reviewed by and tested by tags for 0002 and 0003; sorry
->   reviewers/testers, but I view that as a big change. I will buy you
->   beers if you're fatigued, AND for the help so far. I appreciate you.
-> * Rework commit one lines, and commit messages somewhat.
-> * Remove Kconfig help text about v4 being "bigger."
-> * I didn't touch the BTF config from v8, but suggest the BTF folks
->   consider
->   https://lore.kernel.org/bpf/20210111180609.713998-1-natechancellor@gmail.com/
->   that way we can express via Kconfig that older version of pahole are
->   in conflict with other Kconfig options.
->
-> Changes from v7:
-> (Strictly commit message changes)
-> * Pick up Nathan's reviewed by tags for both patches.
-> * Add note about only modifying compiler dwarf info, not assembler dwarf
->   info, as per Nathan.
-> * Add link to Red Hat bug report and Chris' reported by on patch 2.
-> * Add more info from Jakub on patch 2 commit message.
-> * Reorder info about validating version, noting the tree is not "clean"
->   in the sense that parts mess up existing CFLAGS, or don't use
->   DEBUG_CFLAGS. I will not be adding such cleanups to this series. They
->   can be done AFTER.
-> * Update note about 2.35.2 (rather than include the full text Jakub
->   wrote on it in https://patchwork.kernel.org/project/linux-kbuild/patch/20201022012106.1875129-1-ndesaulniers@google.com/#23727667).
-> * Add note that GCC 11 has changed the implicit default version.
->
-> Changes from v6:
-> * Reorder sections from linker script to match order from BFD's internal
->   linker script.
-> * Add .debug_names section, as per Fangrui.
-> * Drop CONFIG_DEBUG_INFO_DWARF2. Patch 0001 becomes a menu with 1
->   choice. GCC's implicit default version of DWARF has been DWARF v4
->   since ~4.8.
-> * Modify the test script to check for the presence of
->   https://sourceware.org/bugzilla/show_bug.cgi?id=27195.
-> * Drop the clang without integrated assembler block in
->   0002. Bumps the version requirement for GAS to 2.35.2, which isn't
->   released yet (but should be released soon).  Folks looking to test
->   with clang but without the integrated assembler should fetch
->   binutils-gdb, build it from source, add a symlink to
->   binutils-gdb/gas/as-new to binutils-gdb/gas/as, then prefix
->   binutils-gdb/gas/as to their $PATH when building the kernel.
->
-> Changes from v5:
-> * Drop previous patch 1, it has been accepted into kbuild:
->   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?h=kbuild&id=3f4d8ce271c7082be75bacbcbd2048aa78ce2b44
-> * Trying to set -Wa,-gdwarf-4 in the earlier patch was the source of
->   additional complexity. Drop it that part of the patch. We can revisit
->   clang without the integrated assembler setting -Wa,-gdwarf-4 later.
->   That is a separate problem from generally supporting DWARF v5.
-> * Rework the final patch for clang without the integrated assembler.
->   -Wa,-gdwarf-5 is required for DWARF5 in that case otherwise GAS will
->   not accept the assembler directives clang produces from C code when
->   generating asm.
->
-> Changes from v4:
-> * drop set -e from script as per Nathan.
-> * add dependency on !CONFIG_DEBUG_INFO_BTF for DWARF v5 as per Sedat.
-> * Move LLVM_IAS=1 complexity from patch 2 to patch 3 as per Arvind and
->   Masahiro. Sorry it took me a few tries to understand the point (I
->   might still not), but it looks much cleaner this way. Sorry Nathan, I
->   did not carry forward your previous reviews as a result, but I would
->   appreciate if you could look again.
-> * Add Nathan's reviewed by tag to patch 1.
-> * Reword commit message for patch 3 to mention LLVM_IAS=1 and -gdwarf-5
->   binutils addition later, and BTF issue.
-> * I still happen to see a pahole related error spew for the combination
->   of:
->   * LLVM=1
->   * LLVM_IAS=1
->   * CONFIG_DEBUG_INFO_DWARF4
->   * CONFIG_DEBUG_INFO_BTF
->   Though they're non-fatal to the build. I'm not sure yet why removing
->   any one of the above prevents the warning spew. Maybe we'll need a v6.
->
-> Changes from v3:
->
-> Changes as per Arvind:
-> * only add -Wa,-gdwarf-5 for (LLVM=1|CC=clang)+LLVM_IAS=0 builds.
-> * add -gdwarf-5 to Kconfig shell script.
-> * only run Kconfig shell script for Clang.
->
-> Apologies to Sedat and Nathan; I appreciate previous testing/review, but
-> I did no carry forward your Tested-by and Reviewed-by tags, as the
-> patches have changed too much IMO.
->
-> Changes from v2:
-> * Drop two of the earlier patches that have been accepted already.
-> * Add measurements with GCC 10.2 to commit message.
-> * Update help text as per Arvind with help from Caroline.
-> * Improve case/wording between DWARF Versions as per Masahiro.
->
-> Changes from the RFC:
-> * split patch in 3 patch series, include Fangrui's patch, too.
-> * prefer `DWARF vX` format, as per Fangrui.
-> * use spaces between assignment in Makefile as per Masahiro.
-> * simplify setting dwarf-version-y as per Masahiro.
-> * indent `prompt` in Kconfig change as per Masahiro.
-> * remove explicit default in Kconfig as per Masahiro.
-> * add comments to test_dwarf5_support.sh.
-> * change echo in test_dwarf5_support.sh as per Masahiro.
-> * remove -u from test_dwarf5_support.sh as per Masahiro.
-> * add a -gdwarf-5 cc-option check to Kconfig as per Jakub.
->
-> Nick Desaulniers (3):
->   vmlinux.lds.h: add DWARF v5 sections
->   Kbuild: make DWARF version a choice
->   Kconfig: allow explicit opt in to DWARF v5
->
->  Makefile                          |  6 ++--
->  include/asm-generic/vmlinux.lds.h |  7 ++++-
->  lib/Kconfig.debug                 | 48 +++++++++++++++++++++++++++----
->  scripts/test_dwarf5_support.sh    |  8 ++++++
->  4 files changed, 61 insertions(+), 8 deletions(-)
->  create mode 100755 scripts/test_dwarf5_support.sh
->
-> --
-> 2.30.0.365.g02bc693789-goog
->
+LTO ought to reduce binary size. It is rather broken otherwise.
+Having a global view before optimizing allows for the compiler to do 
+project wide constant propagation and dead code elimination.
+
+> CONFIG_LTO_CLANG cannot trim any code even if it
+> is obviously unused.
+> Hence, it never reduces the kernel binary size.
+> Rather, it produces a bigger kernel.
+
+Then what's the point?
+
+> The reason is Clang LTO was implemented against
+> relocatable ELF (vmlinux.o) .
+
+That's not true LTO then.
+
+> I pointed out this flaw in the review process, but
+> it was dismissed.
+> 
+> This is the main reason why I did not give any Ack
+> (but it was merged via Kees Cook's tree).
+
+> So, the help text of this option should be revised:
+> 
+>           This option allows for unused exported symbols to be dropped from
+>           the build. In turn, this provides the compiler more opportunities
+>           (especially when using LTO) for optimizing the code and reducing
+>           binary size.  This might have some security advantages as well.
+> 
+> Clang LTO is opposite to your expectation.
+
+Then Clang LTO is a misnomer. That is the option to revise not this one.
+
+> > Each EXPORT_SYMBOL() created a
+> > symbol dependency that prevented LTO from optimizing out the related
+> > code even though a tiny fraction of those exported symbols were needed.
+> >
+> > The idea behind the recursion was to catch those cases where disabling
+> > an exported symbol within a module would optimize out references to more
+> > exported symbols that, in turn, could be disabled and possibly trigger
+> > yet more code elimination. There is no way that can be achieved without
+> > extra compiler passes in a recursive manner.
+> 
+> I do not understand.
+> 
+> Modules are relocatable ELF.
+> Clang LTO cannot eliminate any code.
+> GCC LTO does not work with relocatable ELF
+> in the first place.
+
+I don't think I follow you here. What relocatable ELF has to do with LTO?
+
+I've successfully used gcc LTO on the kernel quite a while ago.
+
+For a reference about binary size reduction with LTO and 
+CONFIG_TRIM_UNUSED_KSYMS please read this article:
+
+https://lwn.net/Articles/746780/
+
+
+Nicolas
