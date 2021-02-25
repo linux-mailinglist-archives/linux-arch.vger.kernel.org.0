@@ -2,92 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16576325478
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 18:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5CD3254A0
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 18:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbhBYRUV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Feb 2021 12:20:21 -0500
-Received: from pb-smtp2.pobox.com ([64.147.108.71]:50724 "EHLO
-        pb-smtp2.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbhBYRUV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Feb 2021 12:20:21 -0500
-Received: from pb-smtp2.pobox.com (unknown [127.0.0.1])
-        by pb-smtp2.pobox.com (Postfix) with ESMTP id 6399C9E9D8;
-        Thu, 25 Feb 2021 12:19:38 -0500 (EST)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
-        :cc:subject:in-reply-to:message-id:references:mime-version
-        :content-type; s=sasl; bh=23dtnOUfzLyDX+KW1V2mmBc/9V0=; b=H4Brws
-        TZSHzddWSKivCGfqVGCqQ88W3DJggqpWSJQLjEH8HQsMhD2So5e5QmQkCPYj8iCy
-        iFnpbqKYcjtW7Kdz12+s0V3KoFN+LrWYhWM7Qyc++gTHWp5Rl0StNAGNuyX4GYzr
-        LBaQOjTiXI6bMum7/n32YuGBTJP4WakTEyfEk=
-Received: from pb-smtp2.nyi.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp2.pobox.com (Postfix) with ESMTP id 5C07A9E9D6;
-        Thu, 25 Feb 2021 12:19:38 -0500 (EST)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=n8NygWpegxhLZX877LB3tSwxmKQuyH4sXRAP1vuz7oQ=; b=hh7xvP+hjmn279jUavnDgocmjN/Z3vnhifsJ+CMWWGXDAT6HUHjaX48/Z22fz89en00mXpoHOTRL70JxhT0wCrJT7XPEuQQSs1plC8SJ+ytH0T/AOC8/qLuOkW6UtVssSfvn3qx6jhQndnDdLLjsPHjR8ZrhjxcyY3YEyhRzpDE=
-Received: from yoda.home (unknown [24.203.50.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pb-smtp2.pobox.com (Postfix) with ESMTPSA id C11A89E9D5;
-        Thu, 25 Feb 2021 12:19:37 -0500 (EST)
-        (envelope-from nico@fluxnic.net)
-Received: from xanadu.home (xanadu.home [192.168.2.2])
-        by yoda.home (Postfix) with ESMTPSA id C5C622DA0082;
-        Thu, 25 Feb 2021 12:19:36 -0500 (EST)
-Date:   Thu, 25 Feb 2021 12:19:36 -0500 (EST)
-From:   Nicolas Pitre <nico@fluxnic.net>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-cc:     linux-kbuild@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 0/4] kbuild: build speed improvment of
- CONFIG_TRIM_UNUSED_KSYMS
-In-Reply-To: <20210225160247.2959903-1-masahiroy@kernel.org>
-Message-ID: <r3584n3-sq21-qo49-9sp5-r3qp6o611s55@syhkavp.arg>
-References: <20210225160247.2959903-1-masahiroy@kernel.org>
+        id S230459AbhBYRlo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Feb 2021 12:41:44 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:45787 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229613AbhBYRlo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Feb 2021 12:41:44 -0500
+Received: from 1-171-225-221.dynamic-ip.hinet.net ([1.171.225.221] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1lFKdJ-0007hu-1X; Thu, 25 Feb 2021 17:41:01 +0000
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     bhelgaas@google.com
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Aaron Ma <aaron.ma@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list),
+        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
+Subject: [PATCH 1/3] PCI: Introduce quirk hook after driver shutdown callback
+Date:   Fri, 26 Feb 2021 01:40:38 +0800
+Message-Id: <20210225174041.405739-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Pobox-Relay-ID: A343518A-778D-11EB-8355-74DE23BA3BAF-78420484!pb-smtp2.pobox.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 26 Feb 2021, Masahiro Yamada wrote:
+It can be useful to apply quirk after device shutdown callback, like
+putting device into a different power state.
 
-> 
-> Now CONFIG_TRIM_UNUSED_KSYMS is revived, but Linus is still unhappy
-> about the build speed.
-> 
-> I re-implemented this feature, and the build time cost is now
-> almost unnoticeable level.
-> 
-> I hope this makes Linus happy.
+This will be used by later patches.
 
-:-)
+Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/pci/pci-driver.c          | 2 ++
+ drivers/pci/quirks.c              | 7 +++++++
+ include/asm-generic/vmlinux.lds.h | 3 +++
+ include/linux/pci.h               | 4 ++++
+ 4 files changed, 16 insertions(+)
 
-I'm surprised to see that Linus is using this feature. When disabled 
-(the default) this should have had no impact on the build time.
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index ec44a79e951a..7941f6190815 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -498,6 +498,8 @@ static void pci_device_shutdown(struct device *dev)
+ 	 */
+ 	if (kexec_in_progress && (pci_dev->current_state <= PCI_D3hot))
+ 		pci_clear_master(pci_dev);
++
++	pci_fixup_device(pci_fixup_shutdown, pci_dev);
+ }
+ 
+ #ifdef CONFIG_PM
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 653660e3ba9e..1f94fafc6920 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -93,6 +93,8 @@ extern struct pci_fixup __start_pci_fixups_suspend[];
+ extern struct pci_fixup __end_pci_fixups_suspend[];
+ extern struct pci_fixup __start_pci_fixups_suspend_late[];
+ extern struct pci_fixup __end_pci_fixups_suspend_late[];
++extern struct pci_fixup __start_pci_fixups_shutdown[];
++extern struct pci_fixup __end_pci_fixups_shutdown[];
+ 
+ static bool pci_apply_fixup_final_quirks;
+ 
+@@ -143,6 +145,11 @@ void pci_fixup_device(enum pci_fixup_pass pass, struct pci_dev *dev)
+ 		end = __end_pci_fixups_suspend_late;
+ 		break;
+ 
++	case pci_fixup_shutdown:
++		start = __start_pci_fixups_shutdown;
++		end = __end_pci_fixups_shutdown;
++		break;
++
+ 	default:
+ 		/* stupid compiler warning, you would think with an enum... */
+ 		return;
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index c54adce8f6f6..aba43fc2f7b1 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -472,6 +472,9 @@
+ 		__start_pci_fixups_suspend_late = .;			\
+ 		KEEP(*(.pci_fixup_suspend_late))			\
+ 		__end_pci_fixups_suspend_late = .;			\
++		__start_pci_fixups_shutdown = .;			\
++		KEEP(*(.pci_fixup_shutdown))				\
++		__end_pci_fixups_shutdown = .;				\
+ 	}								\
+ 									\
+ 	/* Built-in firmware blobs */					\
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 86c799c97b77..7cbe9b21e049 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1923,6 +1923,7 @@ enum pci_fixup_pass {
+ 	pci_fixup_suspend,	/* pci_device_suspend() */
+ 	pci_fixup_resume_early, /* pci_device_resume_early() */
+ 	pci_fixup_suspend_late,	/* pci_device_suspend_late() */
++	pci_fixup_shutdown,	/* pci_device_shutdown() */
+ };
+ 
+ #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+@@ -2028,6 +2029,9 @@ enum pci_fixup_pass {
+ #define DECLARE_PCI_FIXUP_SUSPEND_LATE(vendor, device, hook)		\
+ 	DECLARE_PCI_FIXUP_SECTION(.pci_fixup_suspend_late,		\
+ 		suspend_late##hook, vendor, device, PCI_ANY_ID, 0, hook)
++#define DECLARE_PCI_FIXUP_SHUTDOWN(vendor, device, hook)		\
++	DECLARE_PCI_FIXUP_SECTION(.pci_fixup_shutdown,			\
++		shutdown##hook, vendor, device, PCI_ANY_ID, 0, hook)
+ 
+ #ifdef CONFIG_PCI_QUIRKS
+ void pci_fixup_device(enum pci_fixup_pass pass, struct pci_dev *dev);
+-- 
+2.30.0
 
-This feature provides a nice security advantage by significantly 
-reducing the kernel input surface. And people are using that also to 
-better what third party vendor can and cannot do with a distro kernel, 
-etc. But that's not the reason why I implemented this feature in the 
-first place.
-
-My primary goal was to efficiently reduce the kernel binary size using 
-LTO even with kernel modules enabled. Each EXPORT_SYMBOL() created a 
-symbol dependency that prevented LTO from optimizing out the related 
-code even though a tiny fraction of those exported symbols were needed.
-
-The idea behind the recursion was to catch those cases where disabling 
-an exported symbol within a module would optimize out references to more 
-exported symbols that, in turn, could be disabled and possibly trigger 
-yet more code elimination. There is no way that can be achieved without 
-extra compiler passes in a recursive manner.
-
-
-Nicolas
