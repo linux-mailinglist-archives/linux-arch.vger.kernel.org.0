@@ -2,65 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F03E325129
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 15:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5883252FE
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 17:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbhBYOC7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Feb 2021 09:02:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44572 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229845AbhBYOCx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 25 Feb 2021 09:02:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BB72664F11;
-        Thu, 25 Feb 2021 14:02:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614261732;
-        bh=218syAtxT4zx3HGAu9Wl85gzsByTob2ufpdJw7lYcrg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ec68jktne3YuJIrm7fi+NhV7SBpTe13byIL7GY/2iuClUrX7kSUgcEYz34SdnnTCP
-         7Y7nF04RLJloZp1nmg+uITKuUHzw4yDw37IDQuVDKO1PTr2CZjVVIZOhd0HA4CRCTW
-         3sHtd+W6UC8pN8EfCctI7Y3Py3QKGsADTqvXrwGOI9FhTFNtXWzpILIO8Ey2Z3giWD
-         mN/kGEOs8TAea0rUxGibeo+gJdjwSWJYvU9lfjaLtH3epvBr3hGf+xrZdAZiWi69m9
-         hReIb1+wMoi+EcrbYSlHJ7qHSKn1IJEYZPtSKaKUswk+5OVsxs8u6iJaUnyw1/Omn3
-         Kz4FV4lXDGl3Q==
-Date:   Thu, 25 Feb 2021 14:02:06 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [RESEND PATCH 1/2] ARM64: enable GENERIC_FIND_FIRST_BIT
-Message-ID: <20210225140205.GA13297@willie-the-truck>
-References: <20210225135700.1381396-1-yury.norov@gmail.com>
- <20210225135700.1381396-2-yury.norov@gmail.com>
+        id S229845AbhBYQEd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Feb 2021 11:04:33 -0500
+Received: from conuserg-12.nifty.com ([210.131.2.79]:52885 "EHLO
+        conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232250AbhBYQEc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Feb 2021 11:04:32 -0500
+Received: from oscar.flets-west.jp (softbank126026090165.bbtec.net [126.26.90.165]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 11PG2sqG028425;
+        Fri, 26 Feb 2021 01:02:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 11PG2sqG028425
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1614268975;
+        bh=CyZEsWmAevBFT9uBiZTERrN13bxEczDUCNEzhGbHOzw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DlM/+BpyVY2m+7PwxVhe+quQX6BE8hBWSc38TQmFzHGNM1Q02dfXiddtW0BXsvSp1
+         lqRydQAIG3D9xnQcSKkSKDhxhmLKZGPurVt+OMYaZzAIi7Th2zypKbyZAxGQvbj3JP
+         Me5ipOaVfzwljva+bUhGnXX2aau6g4LyIDcUTGOyHMVTdSTt5M2057NrBNxHUJKGPV
+         BRIA0wDDmI8Qt7uliXvzbrWZYmucnEa/fB6Dqo2y3srEyZc5qJ3Bc+oZxvLTMwjKsj
+         ik3I2uh7/DN+gFuFhCYXrNVmiXOxnYaw9EfSmxTOvTt7wUISiCXFBPwqFcYVNvgI2l
+         VYSOo08v7ITwQ==
+X-Nifty-SrcIP: [126.26.90.165]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jessica Yu <jeyu@kernel.org>, Nicolas Pitre <nico@fluxnic.net>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 0/4] kbuild: build speed improvment of CONFIG_TRIM_UNUSED_KSYMS
+Date:   Fri, 26 Feb 2021 01:02:42 +0900
+Message-Id: <20210225160247.2959903-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210225135700.1381396-2-yury.norov@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 25, 2021 at 05:56:59AM -0800, Yury Norov wrote:
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 31bd885b79eb..5596eab04092 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -108,6 +108,7 @@ config ARM64
->  	select GENERIC_CPU_AUTOPROBE
->  	select GENERIC_CPU_VULNERABILITIES
->  	select GENERIC_EARLY_IOREMAP
-> +	select GENERIC_FIND_FIRST_BIT
->  	select GENERIC_IDLE_POLL_SETUP
->  	select GENERIC_IRQ_IPI
->  	select GENERIC_IRQ_MULTI_HANDLER
 
-Acked-by: Will Deacon <will@kernel.org>
+Now CONFIG_TRIM_UNUSED_KSYMS is revived, but Linus is still unhappy
+about the build speed.
 
-Catalin can pick this up later in the cycle.
+I re-implemented this feature, and the build time cost is now
+almost unnoticeable level.
 
-Will
+I hope this makes Linus happy.
+
+
+
+Masahiro Yamada (4):
+  kbuild: fix UNUSED_KSYMS_WHITELIST for Clang LTO
+  export.h: make __ksymtab_strings per-symbol section
+  kbuild: separate out vmlinux.lds generation
+  kbuild: re-implement CONFIG_TRIM_UNUSED_KSYMS to make it work in
+    one-pass
+
+ Makefile                          | 34 ++++++------
+ arch/alpha/kernel/Makefile        |  3 +-
+ arch/arc/kernel/Makefile          |  3 +-
+ arch/arm/kernel/Makefile          |  3 +-
+ arch/arm64/kernel/Makefile        |  3 +-
+ arch/csky/kernel/Makefile         |  3 +-
+ arch/h8300/kernel/Makefile        |  2 +-
+ arch/hexagon/kernel/Makefile      |  3 +-
+ arch/ia64/kernel/Makefile         |  3 +-
+ arch/m68k/kernel/Makefile         |  2 +-
+ arch/microblaze/kernel/Makefile   |  3 +-
+ arch/mips/kernel/Makefile         |  3 +-
+ arch/nds32/kernel/Makefile        |  3 +-
+ arch/nios2/kernel/Makefile        |  2 +-
+ arch/openrisc/kernel/Makefile     |  3 +-
+ arch/parisc/kernel/Makefile       |  3 +-
+ arch/powerpc/kernel/Makefile      |  2 +-
+ arch/riscv/kernel/Makefile        |  2 +-
+ arch/s390/kernel/Makefile         |  3 +-
+ arch/sh/kernel/Makefile           |  3 +-
+ arch/sparc/kernel/Makefile        |  2 +-
+ arch/um/kernel/Makefile           |  2 +-
+ arch/x86/kernel/Makefile          |  2 +-
+ arch/xtensa/kernel/Makefile       |  3 +-
+ include/asm-generic/export.h      | 25 +--------
+ include/asm-generic/vmlinux.lds.h | 29 +++++++++--
+ include/linux/export.h            | 56 +++++---------------
+ init/Kconfig                      |  4 +-
+ scripts/Makefile.build            |  7 +--
+ scripts/adjust_autoksyms.sh       | 76 ---------------------------
+ scripts/gen-keep-ksyms.sh         | 86 +++++++++++++++++++++++++++++++
+ scripts/gen_autoksyms.sh          | 55 --------------------
+ scripts/gen_ksymdeps.sh           | 25 ---------
+ scripts/lto-used-symbollist.txt   |  5 --
+ scripts/module.lds.S              | 38 ++++++++++----
+ 35 files changed, 210 insertions(+), 291 deletions(-)
+ delete mode 100755 scripts/adjust_autoksyms.sh
+ create mode 100755 scripts/gen-keep-ksyms.sh
+ delete mode 100755 scripts/gen_autoksyms.sh
+ delete mode 100755 scripts/gen_ksymdeps.sh
+ delete mode 100644 scripts/lto-used-symbollist.txt
+
+-- 
+2.27.0
+
