@@ -2,172 +2,239 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D05CB3255F3
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 19:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825CF32562F
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Feb 2021 20:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbhBYS7P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Feb 2021 13:59:15 -0500
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:19621 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbhBYS7I (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Feb 2021 13:59:08 -0500
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 11PIw0du009804;
-        Fri, 26 Feb 2021 03:58:00 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 11PIw0du009804
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1614279480;
-        bh=YWSVUhATietGB4YUQJPH19+jt11VEF3gBJH/ogv8kWA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iMvGIKa4zfgDP+r0/PrtqApwL6YlvoyvFLW26423kkWMcgTnni+saZjamGtzZ1RaM
-         Zx8iPj6EQFPBVxBnSvKoN1kNSfzQOdFLf0AoZes3BP+38OMbwfw9uV4GVsd0FLVMvD
-         uAauAcrJkJ9np3/O9rrXDKr9DQ0j9DQ9Q/uHnU6m7UC+AqTj08WjQ6LG9PqVlc74XV
-         H0MOYFOekChztAhJ7HIZA877Yw9Gs2pf51S6hcLovX+qQFQbkIp+GEwNXfxYpD8sEx
-         Esf97FrNdqOkaq4R59Wj0K/0kZ9PAGY3zTBc3BxYnmzg12tbMXZl2bA9SRUbIceWZg
-         ZIRXk47HyoHDg==
-X-Nifty-SrcIP: [209.85.216.43]
-Received: by mail-pj1-f43.google.com with SMTP id t5so5453704pjd.0;
-        Thu, 25 Feb 2021 10:58:00 -0800 (PST)
-X-Gm-Message-State: AOAM532p6Ja4n06+tsDKZjvP4pvSGDWIuTUDaJzslljx4qlB8vUL4sk9
-        RiYxgzxBtrLZsDN2cC2HK2O19DkeJoW9lu4vWRA=
-X-Google-Smtp-Source: ABdhPJzVBtNm5MiPch2M96LutE7a6ihODnGlhjBUxfFu/spqTqt7AHfG1oyc0UWWG3pV0Y5GImsFew+sF+e/2+aP1Fw=
-X-Received: by 2002:a17:90a:5510:: with SMTP id b16mr4654264pji.87.1614279479596;
- Thu, 25 Feb 2021 10:57:59 -0800 (PST)
+        id S233660AbhBYTIR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Feb 2021 14:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233791AbhBYTHq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Feb 2021 14:07:46 -0500
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBE4C06178B
+        for <linux-arch@vger.kernel.org>; Thu, 25 Feb 2021 11:04:57 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Dmj050g39zMq2cw;
+        Thu, 25 Feb 2021 20:04:53 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Dmj034Nw9zlh8T3;
+        Thu, 25 Feb 2021 20:04:51 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v29 00/12] Landlock LSM
+Date:   Thu, 25 Feb 2021 20:06:02 +0100
+Message-Id: <20210225190614.2181147-1-mic@digikod.net>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20210225160247.2959903-1-masahiroy@kernel.org> <r3584n3-sq21-qo49-9sp5-r3qp6o611s55@syhkavp.arg>
-In-Reply-To: <r3584n3-sq21-qo49-9sp5-r3qp6o611s55@syhkavp.arg>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 26 Feb 2021 03:57:22 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQeL7jQt1RJjLbU7MUj7XGAwEAhtTvMocQw85uJj9NA9g@mail.gmail.com>
-Message-ID: <CAK7LNAQeL7jQt1RJjLbU7MUj7XGAwEAhtTvMocQw85uJj9NA9g@mail.gmail.com>
-Subject: Re: [PATCH 0/4] kbuild: build speed improvment of CONFIG_TRIM_UNUSED_KSYMS
-To:     Nicolas Pitre <nico@fluxnic.net>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 26, 2021 at 2:20 AM Nicolas Pitre <nico@fluxnic.net> wrote:
->
-> On Fri, 26 Feb 2021, Masahiro Yamada wrote:
->
-> >
-> > Now CONFIG_TRIM_UNUSED_KSYMS is revived, but Linus is still unhappy
-> > about the build speed.
-> >
-> > I re-implemented this feature, and the build time cost is now
-> > almost unnoticeable level.
-> >
-> > I hope this makes Linus happy.
->
-> :-)
->
-> I'm surprised to see that Linus is using this feature. When disabled
-> (the default) this should have had no impact on the build time.
+Hi,
 
-Linus is not using this feature, but does build tests.
-After pulling the module subsystem pull request in this merge window,
-CONFIG_TRIM_UNUSED_KSYMS was enabled by allmodconfig.
+This patch series mainly fixes race condition issues, explains specific
+lock rules and improves code related to concurrent calls of
+hook_sb_delete() and release_inode().  I exploited these races to
+validate the fixes.  Userspace tests are also improved along with some
+commit messages and comments.  Serge Hallyn's review is taken into
+account and his Acked-by are added to the corresponding patches.
 
+The SLOC count is 1328 for security/landlock/ and 2539 for
+tools/testing/selftest/landlock/ .  Test coverage for security/landlock/
+is 93.6% of lines.  The code not covered only deals with internal kernel
+errors (e.g. memory allocation) and race conditions.  This series is
+being fuzzed by syzkaller (which may cover internal kernel errors), and
+patches are on their way: https://github.com/google/syzkaller/pull/2380
 
-> This feature provides a nice security advantage by significantly
-> reducing the kernel input surface. And people are using that also to
-> better what third party vendor can and cannot do with a distro kernel,
-> etc. But that's not the reason why I implemented this feature in the
-> first place.
->
-> My primary goal was to efficiently reduce the kernel binary size using
-> LTO even with kernel modules enabled.
+The compiled documentation is available here:
+https://landlock.io/linux-doc/landlock-v29/userspace-api/landlock.html
+
+This series can be applied on top of v5.11-7592-g1a3a9ffb27bb (Linus's
+master branch from Sunday).  This can be tested with
+CONFIG_SECURITY_LANDLOCK, CONFIG_SAMPLE_LANDLOCK and by prepending
+"landlock," to CONFIG_LSM.  This patch series can be found in a Git
+repository here:
+https://github.com/landlock-lsm/linux/commits/landlock-v29
+This patch series seems ready for upstream and I would really appreciate
+final reviews.
 
 
-Clang LTO landed in this MW.
+# Landlock LSM
 
-Do you think it will reduce the kernel binary size?
-No, opposite.
+The goal of Landlock is to enable to restrict ambient rights (e.g.
+global filesystem access) for a set of processes.  Because Landlock is a
+stackable LSM [1], it makes possible to create safe security sandboxes
+as new security layers in addition to the existing system-wide
+access-controls. This kind of sandbox is expected to help mitigate the
+security impact of bugs or unexpected/malicious behaviors in user-space
+applications. Landlock empowers any process, including unprivileged
+ones, to securely restrict themselves.
 
-CONFIG_LTO_CLANG cannot trim any code even if it
-is obviously unused.
-Hence, it never reduces the kernel binary size.
-Rather, it produces a bigger kernel.
+Landlock is inspired by seccomp-bpf but instead of filtering syscalls
+and their raw arguments, a Landlock rule can restrict the use of kernel
+objects like file hierarchies, according to the kernel semantic.
+Landlock also takes inspiration from other OS sandbox mechanisms: XNU
+Sandbox, FreeBSD Capsicum or OpenBSD Pledge/Unveil.
 
-The reason is Clang LTO was implemented against
-relocatable ELF (vmlinux.o) .
+In this current form, Landlock misses some access-control features.
+This enables to minimize this patch series and ease review.  This series
+still addresses multiple use cases, especially with the combined use of
+seccomp-bpf: applications with built-in sandboxing, init systems,
+security sandbox tools and security-oriented APIs [2].
 
-I pointed out this flaw in the review process, but
-it was dismissed.
+Previous version:
+https://lore.kernel.org/lkml/20210202162710.657398-1-mic@digikod.net/
 
-This is the main reason why I did not give any Ack
-(but it was merged via Kees Cook's tree).
-
-
-So, the help text of this option should be revised:
-
-          This option allows for unused exported symbols to be dropped from
-          the build. In turn, this provides the compiler more opportunities
-          (especially when using LTO) for optimizing the code and reducing
-          binary size.  This might have some security advantages as well.
-
-Clang LTO is opposite to your expectation.
-
-
-
-> Each EXPORT_SYMBOL() created a
-> symbol dependency that prevented LTO from optimizing out the related
-> code even though a tiny fraction of those exported symbols were needed.
->
-> The idea behind the recursion was to catch those cases where disabling
-> an exported symbol within a module would optimize out references to more
-> exported symbols that, in turn, could be disabled and possibly trigger
-> yet more code elimination. There is no way that can be achieved without
-> extra compiler passes in a recursive manner.
-
-I do not understand.
-
-Modules are relocatable ELF.
-Clang LTO cannot eliminate any code.
-GCC LTO does not work with relocatable ELF
-in the first place.
+[1] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
+[2] https://lore.kernel.org/lkml/f646e1c7-33cf-333f-070c-0a40ad0468cd@digikod.net/
 
 
-Are you talking about a story in a perfect world?
-But, I do not know how LTO can eliminate dead code
-from relocatable ELF.
+Casey Schaufler (1):
+  LSM: Infrastructure management of the superblock
+
+Mickaël Salaün (11):
+  landlock: Add object management
+  landlock: Add ruleset and domain management
+  landlock: Set up the security framework and manage credentials
+  landlock: Add ptrace restrictions
+  fs,security: Add sb_delete hook
+  landlock: Support filesystem access-control
+  landlock: Add syscall implementations
+  arch: Wire up Landlock syscalls
+  selftests/landlock: Add user space tests
+  samples/landlock: Add a sandbox manager example
+  landlock: Add user and kernel documentation
+
+ Documentation/security/index.rst              |    1 +
+ Documentation/security/landlock.rst           |   79 +
+ Documentation/userspace-api/index.rst         |    1 +
+ Documentation/userspace-api/landlock.rst      |  307 ++
+ MAINTAINERS                                   |   15 +
+ arch/Kconfig                                  |    7 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |    3 +
+ arch/arm/tools/syscall.tbl                    |    3 +
+ arch/arm64/include/asm/unistd.h               |    2 +-
+ arch/arm64/include/asm/unistd32.h             |    6 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |    3 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |    3 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |    3 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |    3 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |    3 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |    3 +
+ arch/s390/kernel/syscalls/syscall.tbl         |    3 +
+ arch/sh/kernel/syscalls/syscall.tbl           |    3 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |    3 +
+ arch/um/Kconfig                               |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    3 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    3 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |    3 +
+ fs/super.c                                    |    1 +
+ include/linux/lsm_hook_defs.h                 |    1 +
+ include/linux/lsm_hooks.h                     |    4 +
+ include/linux/security.h                      |    4 +
+ include/linux/syscalls.h                      |    7 +
+ include/uapi/asm-generic/unistd.h             |    8 +-
+ include/uapi/linux/landlock.h                 |  128 +
+ kernel/sys_ni.c                               |    5 +
+ samples/Kconfig                               |    7 +
+ samples/Makefile                              |    1 +
+ samples/landlock/.gitignore                   |    1 +
+ samples/landlock/Makefile                     |   13 +
+ samples/landlock/sandboxer.c                  |  238 ++
+ security/Kconfig                              |   11 +-
+ security/Makefile                             |    2 +
+ security/landlock/Kconfig                     |   21 +
+ security/landlock/Makefile                    |    4 +
+ security/landlock/common.h                    |   20 +
+ security/landlock/cred.c                      |   46 +
+ security/landlock/cred.h                      |   58 +
+ security/landlock/fs.c                        |  686 +++++
+ security/landlock/fs.h                        |   56 +
+ security/landlock/limits.h                    |   21 +
+ security/landlock/object.c                    |   67 +
+ security/landlock/object.h                    |   91 +
+ security/landlock/ptrace.c                    |  120 +
+ security/landlock/ptrace.h                    |   14 +
+ security/landlock/ruleset.c                   |  473 +++
+ security/landlock/ruleset.h                   |  165 +
+ security/landlock/setup.c                     |   40 +
+ security/landlock/setup.h                     |   18 +
+ security/landlock/syscalls.c                  |  445 +++
+ security/security.c                           |   51 +-
+ security/selinux/hooks.c                      |   58 +-
+ security/selinux/include/objsec.h             |    6 +
+ security/selinux/ss/services.c                |    3 +-
+ security/smack/smack.h                        |    6 +
+ security/smack/smack_lsm.c                    |   35 +-
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/landlock/.gitignore   |    2 +
+ tools/testing/selftests/landlock/Makefile     |   24 +
+ tools/testing/selftests/landlock/base_test.c  |  219 ++
+ tools/testing/selftests/landlock/common.h     |  183 ++
+ tools/testing/selftests/landlock/config       |    7 +
+ tools/testing/selftests/landlock/fs_test.c    | 2724 +++++++++++++++++
+ .../testing/selftests/landlock/ptrace_test.c  |  337 ++
+ tools/testing/selftests/landlock/true.c       |    5 +
+ 72 files changed, 6827 insertions(+), 77 deletions(-)
+ create mode 100644 Documentation/security/landlock.rst
+ create mode 100644 Documentation/userspace-api/landlock.rst
+ create mode 100644 include/uapi/linux/landlock.h
+ create mode 100644 samples/landlock/.gitignore
+ create mode 100644 samples/landlock/Makefile
+ create mode 100644 samples/landlock/sandboxer.c
+ create mode 100644 security/landlock/Kconfig
+ create mode 100644 security/landlock/Makefile
+ create mode 100644 security/landlock/common.h
+ create mode 100644 security/landlock/cred.c
+ create mode 100644 security/landlock/cred.h
+ create mode 100644 security/landlock/fs.c
+ create mode 100644 security/landlock/fs.h
+ create mode 100644 security/landlock/limits.h
+ create mode 100644 security/landlock/object.c
+ create mode 100644 security/landlock/object.h
+ create mode 100644 security/landlock/ptrace.c
+ create mode 100644 security/landlock/ptrace.h
+ create mode 100644 security/landlock/ruleset.c
+ create mode 100644 security/landlock/ruleset.h
+ create mode 100644 security/landlock/setup.c
+ create mode 100644 security/landlock/setup.h
+ create mode 100644 security/landlock/syscalls.c
+ create mode 100644 tools/testing/selftests/landlock/.gitignore
+ create mode 100644 tools/testing/selftests/landlock/Makefile
+ create mode 100644 tools/testing/selftests/landlock/base_test.c
+ create mode 100644 tools/testing/selftests/landlock/common.h
+ create mode 100644 tools/testing/selftests/landlock/config
+ create mode 100644 tools/testing/selftests/landlock/fs_test.c
+ create mode 100644 tools/testing/selftests/landlock/ptrace_test.c
+ create mode 100644 tools/testing/selftests/landlock/true.c
 
 
+base-commit: 31caf8b2a847214be856f843e251fc2ed2cd1075
+-- 
+2.30.0
 
-
-- Current implementation
-
-  CLANG LTO works against vmlinux.o,
-  so it is completely useless for the purpose of
-  eliminating dead code.
-
-  So, this case is don't care.
-  TRIM_UNUSED_KSYMS removes only the meta data of EXPORT_SYMBOL,
-  but no further optimization anyway.
-
-
-- What if Clang LTO had been implemented in the final link?
-   (this means LTO runs 3 times if KALLSYMS_ALL is enabled)
-
-  With proper linker script input with /DISCARD/,
-  the meta-data of EXPORT_SYMBOL() will be dropped,
-  and LTO should be able to do further dead code elimination.
-  So, I guess we do not need to no-op EXPORT_SYMBOL by CPP
-  (unless I am missing something).
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
