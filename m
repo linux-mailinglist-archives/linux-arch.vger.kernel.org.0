@@ -2,119 +2,149 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B11326BFC
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Feb 2021 07:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B82326D0C
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Feb 2021 13:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbhB0GbG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Feb 2021 01:31:06 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:51920 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229554AbhB0GbF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 27 Feb 2021 01:31:05 -0500
-Received: from localhost.localdomain (unknown [182.149.162.140])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax+dXl5jlg_owQAA--.5046S2;
-        Sat, 27 Feb 2021 14:30:11 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH] MIPS: loongson64: alloc pglist_data at run time
-Date:   Sat, 27 Feb 2021 06:29:57 +0000
-Message-Id: <20210227062957.269156-1-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        id S229912AbhB0Ma1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Feb 2021 07:30:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40310 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229864AbhB0Ma0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 27 Feb 2021 07:30:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C693664F30;
+        Sat, 27 Feb 2021 12:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614428985;
+        bh=MCaTtkyFYXAFPxtrnr47vRHXHJOy/Gg2Vrr9l/na0sg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CKh7xfyclyllhRVu4I19vTdJumgCcMnWUTj3YuPPr6n9s0ZwarhwYKwvaXpA5zsPk
+         kjheqrihhZX9hTum3WvSGTgeoJ+xzL2a3tFIsYwPT2DYFkGsXFLtNbH1AQK/XE65Jy
+         7ODttEw7Aw819AV+g2vrIBapd68nJgXEHkuKup43oUbNS75BcOG8PU3kGIxYTIuFgQ
+         kr35RilkrLGxVzsCHpKSv01urnc5s8IaN23UnTsVMsNuL7dS7f4/3rJ0+OEmb9edTe
+         Rtl9QZ0TJZHHGxSEkkTDznfomkTSjXewIxRsLTOFSbgxtuT0PJqfh5Jv+XXd6TpuEJ
+         1sL6oERHBuDBw==
+Received: by mail-oi1-f177.google.com with SMTP id x20so12785028oie.11;
+        Sat, 27 Feb 2021 04:29:45 -0800 (PST)
+X-Gm-Message-State: AOAM533i8A+rD3h+bo9ws+Wa0rIPTxAqePfEVrYQfFPSXmVbG2eCnjqk
+        B94bvBk6hamp9YFzsm4pizn4fBbZj1IfOXjn+nM=
+X-Google-Smtp-Source: ABdhPJw+sS31kUMuqqG7Xvzrc/bl5nZf4IXDxtaoqR1oc3oCESkxd/Uqpt93xGp+rerEKCpBIjcnLJNsJvd5DN5hCDI=
+X-Received: by 2002:aca:4fd3:: with SMTP id d202mr5148843oib.11.1614428984716;
+ Sat, 27 Feb 2021 04:29:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Ax+dXl5jlg_owQAA--.5046S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFyDKFWUtFyrXF1rZF4rGrg_yoW8uF1rpr
-        yak3WrGay5tw1a9rySqFW8ZrySvw10ka1xtFW2gFy7ZayDWr92qF12kFyY9345trW8ZF1U
-        Ars8tF17WFs7JFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-        628vn2kIc2xKxwCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUea0PDUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+References: <tencent_30362DDFFEE04E6CDACB6F803734A8DC7B06@qq.com>
+In-Reply-To: <tencent_30362DDFFEE04E6CDACB6F803734A8DC7B06@qq.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 27 Feb 2021 13:29:28 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3UOpW_m=_VfxzmC_FxRnG4yYKRXnkP8k4HeNtuu7dVcg@mail.gmail.com>
+Message-ID: <CAK8P3a3UOpW_m=_VfxzmC_FxRnG4yYKRXnkP8k4HeNtuu7dVcg@mail.gmail.com>
+Subject: Re: [PATCH] ipc/msg: add msgsnd_timed and msgrcv_timed syscall for
+ system V message queue
+To:     Eric Gao <eric.tech@foxmail.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-It can make some metadata of MM, like pglist_data and zone
-NUMA-aware
+On Sat, Feb 27, 2021 at 7:52 AM Eric Gao <eric.tech@foxmail.com> wrote:
+>
+> sometimes, we need the msgsnd or msgrcv syscall can return after a limited
+> time, so that the business thread do not be blocked here all the time. In
+> this case, I add the msgsnd_timed and msgrcv_timed syscall that with time
+> parameter, which has a unit of ms.
+>
+> Signed-off-by: Eric Gao <eric.tech@foxmail.com>
 
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/loongson64/numa.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+I have no opinion on whether we want or need this, but I'll have a look
+at the implementation, to see if the ABI makes sense.
 
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index cf9459f79f9b..5912b2e7b10c 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -26,7 +26,6 @@
- #include <asm/wbflush.h>
- #include <boot_param.h>
- 
--static struct pglist_data prealloc__node_data[MAX_NUMNODES];
- unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
- EXPORT_SYMBOL(__node_distances);
- struct pglist_data *__node_data[MAX_NUMNODES];
-@@ -151,8 +150,12 @@ static void __init szmem(unsigned int node)
- 
- static void __init node_mem_init(unsigned int node)
- {
-+	struct pglist_data *nd;
- 	unsigned long node_addrspace_offset;
- 	unsigned long start_pfn, end_pfn;
-+	unsigned long nd_pa;
-+	int tnid;
-+	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
- 
- 	node_addrspace_offset = nid_to_addrbase(node);
- 	pr_info("Node%d's addrspace_offset is 0x%lx\n",
-@@ -162,8 +165,16 @@ static void __init node_mem_init(unsigned int node)
- 	pr_info("Node%d: start_pfn=0x%lx, end_pfn=0x%lx\n",
- 		node, start_pfn, end_pfn);
- 
--	__node_data[node] = prealloc__node_data + node;
--
-+	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, node);
-+	if (!nd_pa)
-+		panic("Cannot allocate %zu bytes for node %d data\n",
-+		      nd_size, node);
-+	nd = __va(nd_pa);
-+	memset(nd, 0, sizeof(struct pglist_data));
-+	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
-+	if (tnid != node)
-+		pr_info("NODE_DATA(%d) on node %d\n", node, tnid);
-+	__node_data[node] = nd;
- 	NODE_DATA(node)->node_start_pfn = start_pfn;
- 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
- 
-@@ -183,6 +194,7 @@ static void __init node_mem_init(unsigned int node)
- 			memblock_reserve((node_addrspace_offset | 0xfe000000),
- 					 32 << 20);
- 	}
-+
- }
- 
- static __init void prom_meminit(void)
--- 
-2.25.1
+> index 8fd8c17..42b7db5 100644
+> --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
+> +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+> @@ -381,3 +381,5 @@
+>  440    n32     process_madvise                 sys_process_madvise
+>  441    n32     epoll_pwait2                    compat_sys_epoll_pwait2
+>  442    n32     mount_setattr                   sys_mount_setattr
+> +443    n32     msgrcv_timed                    sys_msgrcv_timed
+> +444    n32     msgsnd_timed                    sys_msgsnd_timed
+> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+> index 090d29c..0f1f6ee 100644
+> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
+> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+> @@ -430,3 +430,5 @@
+>  440    o32     process_madvise                 sys_process_madvise
+>  441    o32     epoll_pwait2                    sys_epoll_pwait2                compat_sys_epoll_pwait2
+>  442    o32     mount_setattr                   sys_mount_setattr
+> +443    o32     msgrcv_timed                    sys_msgrcv_timed
+> +444    o32     msgsnd_timed                    sys_msgsnd_timed
 
+I think mips n32 and o32 both need to use the compat version when running on
+a 64-bit kernel, while your patch makes them use the native version.
+
+> @@ -905,7 +906,15 @@ static long do_msgsnd(int msqid, long mtype, void __user *mtext,
+>
+>                 ipc_unlock_object(&msq->q_perm);
+>                 rcu_read_unlock();
+> -               schedule();
+> +
+> +               /* sometimes, we need msgsnd syscall return after a given time */
+> +               if (timeoutms <= 0) {
+> +                       schedule();
+> +               } else {
+> +                       timeoutms = schedule_timeout(timeoutms);
+> +                       if (timeoutms == 0)
+> +                               timeoutflag = true;
+> +               }
+
+I wonder if this should be schedule_timeout_interruptible() or at least
+schedule_timeout_killable() instead of schedule_timeout(). If it should,
+this should probably be done as a separate change.
+
+> +COMPAT_SYSCALL_DEFINE5(msgsnd_timed, int, msqid, compat_uptr_t, msgp,
+> +                      compat_ssize_t, msgsz, int, msgflg, compat_long_t, timeoutms)
+> +{
+> +       struct compat_msgbuf __user *up = compat_ptr(msgp);
+> +       compat_long_t mtype;
+> +
+> +       timeoutms = (timeoutms + 9) / 10;
+> +
+> +       if (get_user(mtype, &up->mtype))
+> +               return -EFAULT;
+> +
+> +       return do_msgsnd(msqid, mtype, up->mtext, (ssize_t)msgsz, msgflg, (long)timeoutms);
+> +}
+
+My preference would be to simplify both the timed and non-timed version by
+moving the get_user() into do_msgsnd() and using in_compat_task() to pick
+the right type. Same for the receive side of course. If you do this,
+watch out for
+x32 support, which uses the 64-bit version.
+
+       Arnd
