@@ -2,126 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACE632730D
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Feb 2021 16:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C4A327386
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Feb 2021 18:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbhB1PjK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 28 Feb 2021 10:39:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44422 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229982AbhB1PjG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 28 Feb 2021 10:39:06 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6714464EB7;
-        Sun, 28 Feb 2021 15:38:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614526705;
-        bh=E7HgKVhlosJg15hIUr/EmO0wWkQU1/oxAJWlN6Q9ekM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=P/8fQw14UgAojURnnhC1qXm5JxqAzrfnquPYekrFh3NAi4sK8qPbRlZmylRuamaTn
-         KfLWltggn3KgBBpTilaItC7vEIrcZ1dBInjGsp5OYSDZSDZ5KqXMTsRvkhnWuJk1zl
-         KWgAK2/3qAeitl9qzLmyxnBVdvgHgf98EvD6uuSIAjdHhXj/FsuJ8GVPviW8cCwl1y
-         JcmNwBaXDm7ggax1X5Rro8TqH0aBFlyL7qTaMRAipOJg8/VtiA8OGEQKxQhQvLPond
-         p/kATJFWq5nYiF+oDCePPfKNjVlAS/2AcUqFUQk9oJCZ9SGx4GNQfAJ8DxKlQ+6E0q
-         XWjvlMgcu3ZaA==
-Received: by mail-ua1-f44.google.com with SMTP id g24so4226478uaw.0;
-        Sun, 28 Feb 2021 07:38:25 -0800 (PST)
-X-Gm-Message-State: AOAM531Ma/Ltz5nkEPc6D4l0J8bKm/qU6g/pXksP0FU4Ux/Y+ETcT9qX
-        Ibu5lWfdSKF29PRMTsDag/T6311ugxqWSjRR+yM=
-X-Google-Smtp-Source: ABdhPJxIQFrXRMPgAQLkjAn4SwEcmufhxK1dfoMeqRrCI4qZ9f8WFoUQND4s8J3n6XGf/JxsJujuXs0YyGVtEJ38ahY=
-X-Received: by 2002:a9d:7f11:: with SMTP id j17mr10493539otq.251.1614526704026;
- Sun, 28 Feb 2021 07:38:24 -0800 (PST)
+        id S231299AbhB1RMn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 28 Feb 2021 12:12:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230461AbhB1RMj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Feb 2021 12:12:39 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10048C06174A;
+        Sun, 28 Feb 2021 09:11:58 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id g5so23843438ejt.2;
+        Sun, 28 Feb 2021 09:11:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dfQ46OGWItLgoKPUR/Czwfd0qqTUSj25+jf5yrElG/4=;
+        b=GzeA/aDB2UBhnNVhm++I/Jk3Up7Sjll8FWko6UUVrR8GbwUj6tdWvj7U7T3p1JnaWE
+         tuDT5n8KyfWwgonEFcDAlbP9Wnm/lzI5ynLZd5zXrmZLcqy0e5qJFV+Ury6tgPUdhcIC
+         ZnUpySrUVv3A0oExsLsVOkNej6wDTO/NVed1e1lRxfeovoJIixufVCuML3LKRgEXHaK6
+         AQIpA41ncR2vIctG/YIpRBR7PPh4Vs9caRlig7rCLuPUPKUXlteysI6kNYwN/3Yc//ci
+         tD2NQsug/MYd9mQ+dWSVvw0ZV+w1YK/V6hQL8df04yN35+nWGaht76tutf0kiQ1Fxgq5
+         E6Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dfQ46OGWItLgoKPUR/Czwfd0qqTUSj25+jf5yrElG/4=;
+        b=DFk3PQk4Tg5+x/JyUn1GIB9WRKbs4ZjvCjYZr9JKO8621MT6/JMbxVEVcdDoUwHVL+
+         For3KnKO03QZ25kxJo4JrfZHSkIeuz8ttxAxFkjgF2q6WYdlaegFsyL7pwebxMCJOuh/
+         NrMre9pjnYhb6I4oOeQe6UNOpaC6IPz2m13QnfLeVZ2YZGlmr1DYxmPi+bvVPkKasB7e
+         u9RBjICZzwxg7kg714yWmesb+O+Rtbcpc99VRzJxNj+AhqwCvcU1kFYQqrqosKdGeMu3
+         qv1KRTCKEbd/EDeY1ITs68EsyfQGwPqrqB4AdfJhZ2zoof+PofoZAtTFpktFx3ZcE2nA
+         XTjg==
+X-Gm-Message-State: AOAM5304vRkhWj/qH8naxa3syBxpk1crx5yAp/FsV3b7mRkxQxwuuOcN
+        4SYwXjH8z05UBhk34i8rBvOfdoP18tGg
+X-Google-Smtp-Source: ABdhPJw5sLbCUCcgxkhNvC6IgO3vmNaTgOeasYPBEho60Poa4WNRXoZ/cPiXNkLCHgbgyBJUziViqw==
+X-Received: by 2002:a17:906:acb:: with SMTP id z11mr3855755ejf.193.1614532316774;
+        Sun, 28 Feb 2021 09:11:56 -0800 (PST)
+Received: from localhost.localdomain ([46.53.249.223])
+        by smtp.gmail.com with ESMTPSA id fw3sm6654338ejb.82.2021.02.28.09.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Feb 2021 09:11:56 -0800 (PST)
+Date:   Sun, 28 Feb 2021 20:11:54 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, linux-arch@vger.kernel.org
+Subject: [PATCH 12/11] pragma once: scripted treewide conversion
+Message-ID: <YDvO2kmidKZaK26j@localhost.localdomain>
+References: <YDvLYzsGu+l1pQ2y@localhost.localdomain>
 MIME-Version: 1.0
-References: <tencent_2CB9BD7D4063DE3F6845F79176B2D29A7E09@qq.com>
-In-Reply-To: <tencent_2CB9BD7D4063DE3F6845F79176B2D29A7E09@qq.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sun, 28 Feb 2021 16:38:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2TEc4CzE5Wg7pNy9Oq2p=HKNO7k2y2SmeD1mamqJ3Z9w@mail.gmail.com>
-Message-ID: <CAK8P3a2TEc4CzE5Wg7pNy9Oq2p=HKNO7k2y2SmeD1mamqJ3Z9w@mail.gmail.com>
-Subject: Re: [PATCH] ipc/msg: add msgsnd_timed and msgrcv_timed syscall for
- system V message queue
-To:     Eric Gao <eric.tech@foxmail.com>
-Cc:     "catalin.marinas" <catalin.marinas@arm.com>,
-        will <will@kernel.org>, geert <geert@linux-m68k.org>,
-        monstr <monstr@monstr.eu>, tsbogend <tsbogend@alpha.franken.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        deller <deller@gmx.de>, mpe <mpe@ellerman.id.au>,
-        hca <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
-        borntraeger <borntraeger@de.ibm.com>,
-        ysato <ysato@users.sourceforge.jp>, dalias <dalias@libc.org>,
-        davem <davem@davemloft.net>, luto <luto@kernel.org>,
-        tglx <tglx@linutronix.de>, mingo <mingo@redhat.com>,
-        bp <bp@alien8.de>, chris <chris@zankel.net>,
-        jcmvbkbc <jcmvbkbc@gmail.com>, arnd <arnd@arndb.de>,
-        benh <benh@kernel.crashing.org>, paulus <paulus@samba.org>,
-        hpa <hpa@zytor.com>, linux-alpha <linux-alpha@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-api <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YDvLYzsGu+l1pQ2y@localhost.localdomain>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Feb 28, 2021 at 4:16 PM Eric Gao <eric.tech@foxmail.com> wrote:
->
-> Hi Arnd:
->
->             Thanks for your kindly reply.
->
->             I want to prove you and all of others that these syscalls are very useful and necessary. Actually,  I add these syscalls
->
->     when I try to implement the local rpc by system v message queue (some people might think I am crazy to using message
->
->     queue, but it's truly a very efficient method than socket except it don't have a time-controlled msgrcv syscall).
+[  Bcc a lot of lists so that people understand what's this is all         ]
+[  about without creating uber-cc-thread.                                  ]
+[  Apologies if I missed your subsystem                                    ]
+[  Please see [PATCH 11/11: pragma once: conversion script (in Python 2)]  ]
 
-(note: please don't reply in html)
+Hi, Linus.
 
->             In addition,  msgrcv_timed is also necessary in usual bidirection communication.  For example:
-> A send a message to B, and try to receive a reply  from B  by msgrcv syscall.  But A need to do
-> something else in case of  that B has terminated. So
->
->     we need the msgrcv syscall return after a preset time. The similar syscall can be found in
-> posix message queue(mq_timedreceive)  and in z/OS system of
->  IBM(https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.2.0/com.ibm.zos.v2r2.bpxbd00/msgrcvt.htm).
->
->   And when I search the web, I can find that many people need such like syscall in their
-> applications. so I hope this patch can be merged into the mainline, Thanks a lot.
+Please run the script below from top-level directory, it will convert
+most kernel headers to #pragma once directive advancing them into
+21-st century.
 
-It might help to add some explanation on why you need to add the timeout
-to the old sysv message queues, when the more modern posix message
-queues already support this.
+The advantages are:
 
-Is there something that mq_timedsend/mq_timedreceive cannot do that
-you need? Would it be possible to add that feature to the posix message
-queues instead?
+* less LOC
 
-> +COMPAT_SYSCALL_DEFINE5(msgsnd_timed, int, msqid, compat_uptr_t, msgp,
-> +                      compat_ssize_t, msgsz, int, msgflg, compat_long_t, timeoutms)
-> +{
-> +       struct compat_msgbuf __user *up = compat_ptr(msgp);
-> +       compat_long_t mtype;
-> +
-> +       timeoutms = (timeoutms + 9) / 10;
-> +
-> +       if (get_user(mtype, &up->mtype))
-> +               return -EFAULT;
-> +
-> +       return do_msgsnd(msqid, mtype, up->mtext, (ssize_t)msgsz, msgflg, (long)timeoutms);
-> +}
->
-> My preference would be to simplify both the timed and non-timed version by
-> moving the get_user() into do_msgsnd() and using in_compat_task() to pick
-> the right type. Same for the receive side of course. If you do this,
-> watch out for x32 support, which uses the 64-bit version.
->
->     Actually, the timed and non-timed version have different number of
->  parameter(timed version have timeoutms), so I don't
-> think they can be combine together,  and I don't want to impact the
-> applications which  have been using the old style msgrcv syscall.
+	18087 files changed, 18878 insertions(+), 99804 deletions(-)
+	= -81 kLOC (give or take)
 
-What I meant was combining the implementation of the native and
-compat versions, not combining the timed and non-timed versions,
-which you already do to the degree possible.
+* less mental tax on developers forced to name things which aren't even
+  real code
 
-           Arnd
+* less junk in preprocessor hashtables and editors/IDEs autocompletion
+  lists
+
+There are two bit exceptions: UAPI headers and ACPICA.
+Given ubiquity of #pragma once, I personally think even these subsystems
+should be converted in the future.
+
+Compile tested on alpha, arc, arm, arm64, h8300, ia64, m68k, microblaze,
+mips, nios2, parisc, powerpc, riscv, s390, sh, sparc, um-i386, um-x86_64,
+i386, x86_64, xtensa (allnoconfig, all defconfigs, allmodconfig with or
+without SMP/DEBUG_KERNEL + misc stuff).
+
+Not compile tested on csky, hexagon, nds32, openrisc. 
+
+Love,
+	Alexey
+
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+
+
+
+#!/bin/sh -x
+find . -type f -name '*.h' -print	|\
+LC_ALL=C sort				|\
+sed -e 's#^./##g'			|\
+xargs ./scripts/pragma-once.py
+
+find . -type d -name 'uapi' | xargs git checkout -f
+git checkout -f arch/alpha/include/asm/cmpxchg.h
+git checkout -f arch/arm/mach-imx/hardware.h
+git checkout -f arch/arm/mach-ixp4xx/include/mach/hardware.h
+git checkout -f arch/arm/mach-sa1100/include/mach/hardware.h
+git checkout -f arch/mips/include/asm/mips-cps.h
+git checkout -f arch/x86/boot/boot.h
+git checkout -f arch/x86/boot/ctype.h
+git checkout -f arch/x86/include/asm/cpufeatures.h
+git checkout -f arch/x86/include/asm/disabled-features.h
+git checkout -f arch/x86/include/asm/required-features.h
+git checkout -f arch/x86/include/asm/vmxfeatures.h
+git checkout -f arch/x86/include/asm/vvar.h
+git checkout -f drivers/acpi/acpica/
+git checkout -f drivers/gpu/drm/amd/pm/inc/vega10_ppsmc.h
+git checkout -f drivers/gpu/drm/amd/pm/powerplay/ppsmc.h
+git checkout -f drivers/input/misc/yealink.h
+git checkout -f drivers/media/usb/dvb-usb-v2/mxl111sf-demod.h
+git checkout -f drivers/media/usb/dvb-usb-v2/mxl111sf-tuner.h
+git checkout -f drivers/pcmcia/yenta_socket.h
+git checkout -f drivers/staging/rtl8723bs/include/hal_com_h2c.h
+git checkout -f include/linux/acpi.h
+git checkout -f include/linux/bitops.h
+git checkout -f include/linux/compiler_types.h
+git checkout -f include/linux/device.h
+git checkout -f include/linux/kbuild.h
+git checkout -f include/linux/libfdt_env.h
+git checkout -f include/linux/local_lock.h
+git checkout -f include/linux/spinlock.h
+git checkout -f include/linux/spinlock_api_smp.h
+git checkout -f include/linux/spinlock_types.h
+git checkout -f include/linux/tracepoint.h
+git checkout -f mm/gup_test.h
+git checkout -f net/batman-adv/main.h
+git checkout -f scripts/dtc/
+git checkout -f tools/include/linux/bitops.h
+git checkout -f tools/include/linux/compiler.h
+git checkout -f tools/testing/selftests/clone3/clone3_selftests.h
+git checkout -f tools/testing/selftests/futex/include/atomic.h
+git checkout -f tools/testing/selftests/futex/include/futextest.h
+git checkout -f tools/testing/selftests/futex/include/logging.h
+git checkout -f tools/testing/selftests/kselftest.h
+git checkout -f tools/testing/selftests/kselftest_harness.h
+git checkout -f tools/testing/selftests/pidfd/pidfd.h
+git checkout -f tools/testing/selftests/x86/helpers.h
