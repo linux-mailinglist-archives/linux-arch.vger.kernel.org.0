@@ -2,237 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D024432702E
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Feb 2021 04:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843523271A1
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Feb 2021 09:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbhB1Dns (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Feb 2021 22:43:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48996 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230090AbhB1Dnq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 27 Feb 2021 22:43:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 833BB64E38;
-        Sun, 28 Feb 2021 03:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614483784;
-        bh=iSYg3PQmQzHSmYCsrbphy/ikk+I0jqnR2OgkaYvOyfE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=V/sAaOkZGP6CBQSb9z9KVyt3Pa1ismuXdj7pOH4ZIcUnooVQScqbMcwCmynAi6J1j
-         jcssNeJkKWOe0e7+AQH3Gelpfn3GVsZETp0uKfQTuHJuNob6mLc7tqas6Pk7IoM4kK
-         9bnVEZr3+4/rI3vdR6xu6A7v6NR7NMPMieQb3eCdBIHXX0LTbeUxjfXohTLfvr8034
-         u2Eh663Nsqb640guioaCqMT9qcVv38oZoj1Z/XAMuL7Mdg8dN4PBU+m0V+3RW6afio
-         lhGCN/1dajrRBqc9INUs/V+CYmNge5pwJNuzRXCEN9Xjf4/1pcjhsogq/RrC1bSuBb
-         f3TsTA0iYthVQ==
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky changes for v5.12-rc1
-Date:   Sun, 28 Feb 2021 11:43:00 +0800
-Message-Id: <20210228034300.1090149-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        id S230423AbhB1Inx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 28 Feb 2021 03:43:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230390AbhB1Inv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Feb 2021 03:43:51 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CB1C06174A;
+        Sun, 28 Feb 2021 00:43:10 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id k9so649560lfo.12;
+        Sun, 28 Feb 2021 00:43:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OFyGOtSWzDrjV/94yIkSczgXO+fv1Av7VC7qHGGIZTc=;
+        b=YJ1sEPS/er2MDdeZGD6TNU/9C7bWuBe8s2GkkQLn4EDUvQ+YG8Q+GfJ/o/ANy+JHJs
+         myBz+norrZcGBMBR9dHibEl2jwat1MkebmMh7lmxgkNdsBZ1XvIRXaoVztZfmfaHOcH9
+         n4SPv5zyzzZm00bkBdSeVuvUhrAjhurilfbnnSqKnYOHeUnrt/2Ahx85rFRHS4aH2w9l
+         65jad1z5Hqii4YrdlRgwOcTrBfJM2lDyE7ni/4VRxDV5qOf8IOUROpvsx3l5OsOlD4o0
+         Q80SRCtQNFLs0akX1M/DQmvEi1VteQ1Uiia9iKuAGmuaIK/QY83ykPw+eYqnbTGCLOKi
+         UBRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=OFyGOtSWzDrjV/94yIkSczgXO+fv1Av7VC7qHGGIZTc=;
+        b=S40t6l7aVDMwMlF35oZPkutfIvEsUJTz5R+yHAqeSFf6/JbvifHpTQpn7uK00hrJuK
+         pgfVQO2qzHzfkMRC6Zbo9vsbn+qYPTXOddmu+DQw50KpB5VN+9AKnx56PHwfUq/BVqt2
+         l4akQBM60RfwikUp53+UInoiQ1GaGghf7U5rj7Wa+jo7NY4kP/Zk30UvpFTe51HtDEDj
+         fhVfSFmeyrCtMVoYpqXk0PM5KTRf1oKK+RixQCDBTGUyeZ+V7k3hqggghbc5PRjtMpDv
+         xicXxf+3KprI3FsoRIJLdEbIpXnUBKSfhmNVSRVCKruYRJUSlIxwLLHReRIevC/D+0NQ
+         i7NQ==
+X-Gm-Message-State: AOAM531Lge2NnpvDL7U1KA2K/YkQGhNC4XXwNmClJfJW4VH6V4EBityM
+        g83RRnM0gyKmv3ejBJF+d7n+YwtGXbNE9w==
+X-Google-Smtp-Source: ABdhPJzyTfCWiZYth3RfZ0g3RViHE993pYqXeg3HFbdSb9OKcXrbSaqZM1T33df8b++dh625MLQL1A==
+X-Received: by 2002:a05:6512:208:: with SMTP id a8mr6028858lfo.397.1614501788683;
+        Sun, 28 Feb 2021 00:43:08 -0800 (PST)
+Received: from [192.168.1.100] ([31.173.86.90])
+        by smtp.gmail.com with ESMTPSA id s3sm2021193ljp.23.2021.02.28.00.43.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Feb 2021 00:43:08 -0800 (PST)
+Subject: Re: [PATCH] MIPS: loongson64: alloc pglist_data at run time
+To:     Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+References: <20210227062957.269156-1-huangpei@loongson.cn>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <a56885eb-a6dc-75dc-8061-491de73ab462@gmail.com>
+Date:   Sun, 28 Feb 2021 11:43:04 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210227062957.269156-1-huangpei@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+Hello!
 
-The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
+On 27.02.2021 9:29, Huang Pei wrote:
 
-  Linux 5.11-rc3 (2021-01-10 14:34:50 -0800)
+> It can make some metadata of MM, like pglist_data and zone
+> NUMA-aware
+> 
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> ---
+>   arch/mips/loongson64/numa.c | 18 +++++++++++++++---
+>   1 file changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+> index cf9459f79f9b..5912b2e7b10c 100644
+> --- a/arch/mips/loongson64/numa.c
+> +++ b/arch/mips/loongson64/numa.c
+[...]
+> @@ -183,6 +194,7 @@ static void __init node_mem_init(unsigned int node)
+>   			memblock_reserve((node_addrspace_offset | 0xfe000000),
+>   					 32 << 20);
+>   	}
+> +
 
-are available in the Git repository at:
+    Unrelated whitespace change?
 
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.12-rc1
+>   }
+>   
+>   static __init void prom_meminit(void)
 
-for you to fetch changes up to 6607aa6f6b68fc9b5955755f1b1be125cf2a9d03:
-
-  csky: Fixup compile error (2021-02-27 22:04:14 +0800)
-
-----------------------------------------------------------------
-arch/csky patches for 5.12-rc1
-
-Features:
- - Add new memory layout 2.5G(user):1.5G(kernel)
- - Add kmemleak support
- - Reconstruct VDSO framework
-   Add VDSO with GENERIC_GETTIMEOFDAY,
-   GENERIC_TIME_VSYSCALL, HAVE_GENERIC_VDSO
- - Add faulthandler_disabled() check
- - Support(Fixup) swapon
- - Add(Fixup) _PAGE_ACCESSED for default pgprot
- - abort uaccess retries upon fatal signal (From arm)
-
-Fixup & Optimization:
- - Fixup perf probe failed
- - Fixup show_regs doesn't contain regs->usp
- - Remove custom asm/atomic.h implementation
- - Fixup barrier design
- - Fixup futex SMP implementation
- - Fixup asm/cmpxchg.h with correct ordering barrier
- - Cleanup asm/spinlock.h
- - Fixup PTE global for 2.5:1.5 virtual memory
- - Remove prologue of page fault handler in entry.S
- - Fix TLB maintenance synchronization problem
- - Add show_tlb for CPU_CK860 debug
- - Fixup FAULT_FLAG_XXX param for handle_mm_fault
- - Fixup update_mmu_cache called with user io mapping
- - Fixup do_page_fault parent irq status
- - Fix a size determination in gpr_get()
- - pgtable.h: Coding convention
- - kprobe: Fixup code in simulate without 'long'
- - Fixup pfn_valid error with wrong max_mapnr
- - use free_initmem_default() in free_initmem()
- - Fixup compile error
-
-----------------------------------------------------------------
-David Hildenbrand (1):
-      csky: use free_initmem_default() in free_initmem()
-
-Guo Ren (27):
-      csky: Add memory layout 2.5G(user):1.5G(kernel)
-      csky: Fixup perf probe failed
-      csky: Fixup show_regs doesn't contain regs->usp
-      csky: Remove custom asm/atomic.h implementation
-      csky: Fixup barrier design
-      csky: Fixup futex SMP implementation
-      csky: Fixup asm/cmpxchg.h with correct ordering barrier
-      csky: Cleanup asm/spinlock.h
-      csky: Fixup PTE global for 2.5:1.5 virtual memory
-      csky: Remove prologue of page fault handler in entry.S
-      csky: Add kmemleak support
-      csky: Fix TLB maintenance synchronization problem
-      csky: Add show_tlb for CPU_CK860 debug
-      csky: Fixup FAULT_FLAG_XXX param for handle_mm_fault
-      csky: Fixup update_mmu_cache called with user io mapping
-      csky: Add faulthandler_disabled() check
-      csky: Fixup do_page_fault parent irq status
-      csky: Sync riscv mm/fault.c for easy maintenance
-      csky: mm: abort uaccess retries upon fatal signal
-      csky: Reconstruct VDSO framework
-      csky: Fixup _PAGE_ACCESSED for default pgprot
-      csky: pgtable.h: Coding convention
-      csky: Fixup swapon
-      csky: kprobe: Fixup code in simulate without 'long'
-      csky: Add VDSO with GENERIC_GETTIMEOFDAY, GENERIC_TIME_VSYSCALL, HAVE_GENERIC_VDSO
-      csky: Fixup pfn_valid error with wrong max_mapnr
-      csky: Fixup compile error
-
-Tian Tao (1):
-      csky: remove unused including <linux/version.h>
-
-Zhenzhong Duan (1):
-      csky: Fix a size determination in gpr_get()
-
- arch/csky/Kconfig                         |  24 +-
- arch/csky/abiv1/inc/abi/cacheflush.h      |   1 -
- arch/csky/abiv1/inc/abi/ckmmu.h           |  10 +-
- arch/csky/abiv1/inc/abi/entry.h           |   1 -
- arch/csky/abiv1/inc/abi/page.h            |   1 -
- arch/csky/abiv1/inc/abi/pgtable-bits.h    |  40 +--
- arch/csky/abiv1/inc/abi/reg_ops.h         |   1 -
- arch/csky/abiv1/inc/abi/regdef.h          |   6 +-
- arch/csky/abiv1/inc/abi/string.h          |   1 -
- arch/csky/abiv1/inc/abi/switch_context.h  |   1 -
- arch/csky/abiv1/inc/abi/vdso.h            |  18 +-
- arch/csky/abiv2/cacheflush.c              |   3 +
- arch/csky/abiv2/inc/abi/ckmmu.h           |  44 +++-
- arch/csky/abiv2/inc/abi/entry.h           |  20 +-
- arch/csky/abiv2/inc/abi/fpu.h             |   1 -
- arch/csky/abiv2/inc/abi/page.h            |   1 -
- arch/csky/abiv2/inc/abi/pgtable-bits.h    |  37 ++-
- arch/csky/abiv2/inc/abi/reg_ops.h         |   1 -
- arch/csky/abiv2/inc/abi/regdef.h          |   6 +-
- arch/csky/abiv2/inc/abi/switch_context.h  |   1 -
- arch/csky/abiv2/inc/abi/vdso.h            |  20 +-
- arch/csky/abiv2/sysdep.h                  |   1 -
- arch/csky/include/asm/addrspace.h         |   1 -
- arch/csky/include/asm/atomic.h            | 212 ----------------
- arch/csky/include/asm/barrier.h           |  83 +++++--
- arch/csky/include/asm/bitops.h            |   1 -
- arch/csky/include/asm/bug.h               |   3 +-
- arch/csky/include/asm/cacheflush.h        |   1 -
- arch/csky/include/asm/checksum.h          |   1 -
- arch/csky/include/asm/clocksource.h       |   8 +
- arch/csky/include/asm/cmpxchg.h           |  27 ++-
- arch/csky/include/asm/elf.h               |   1 -
- arch/csky/include/asm/fixmap.h            |   1 -
- arch/csky/include/asm/ftrace.h            |   1 -
- arch/csky/include/asm/futex.h             | 121 ++++++++++
- arch/csky/include/asm/highmem.h           |   1 -
- arch/csky/include/asm/io.h                |   1 -
- arch/csky/include/asm/memory.h            |   2 +-
- arch/csky/include/asm/mmu.h               |   1 -
- arch/csky/include/asm/mmu_context.h       |  10 +-
- arch/csky/include/asm/page.h              |   2 +-
- arch/csky/include/asm/perf_event.h        |   1 -
- arch/csky/include/asm/pgalloc.h           |   3 +-
- arch/csky/include/asm/pgtable.h           |  80 +++---
- arch/csky/include/asm/processor.h         |   3 +-
- arch/csky/include/asm/ptrace.h            |   1 -
- arch/csky/include/asm/segment.h           |   3 +-
- arch/csky/include/asm/shmparam.h          |   1 -
- arch/csky/include/asm/spinlock.h          | 167 -------------
- arch/csky/include/asm/spinlock_types.h    |  10 -
- arch/csky/include/asm/string.h            |   1 -
- arch/csky/include/asm/switch_to.h         |   1 -
- arch/csky/include/asm/syscalls.h          |   1 -
- arch/csky/include/asm/thread_info.h       |   2 -
- arch/csky/include/asm/tlb.h               |   1 -
- arch/csky/include/asm/tlbflush.h          |   1 -
- arch/csky/include/asm/traps.h             |   1 -
- arch/csky/include/asm/uaccess.h           |   1 -
- arch/csky/include/asm/unistd.h            |   1 -
- arch/csky/include/asm/vdso.h              |  21 +-
- arch/csky/include/asm/vdso/clocksource.h  |   9 +
- arch/csky/include/asm/vdso/gettimeofday.h | 114 +++++++++
- arch/csky/include/asm/vdso/processor.h    |  12 +
- arch/csky/include/asm/vdso/vsyscall.h     |  22 ++
- arch/csky/include/uapi/asm/byteorder.h    |   1 -
- arch/csky/include/uapi/asm/perf_regs.h    |   1 -
- arch/csky/include/uapi/asm/ptrace.h       |   1 -
- arch/csky/include/uapi/asm/sigcontext.h   |   1 -
- arch/csky/include/uapi/asm/unistd.h       |   1 -
- arch/csky/kernel/Makefile                 |   2 +-
- arch/csky/kernel/atomic.S                 |  24 +-
- arch/csky/kernel/entry.S                  | 106 +-------
- arch/csky/kernel/head.S                   |  10 +-
- arch/csky/kernel/perf_event.c             |   4 +-
- arch/csky/kernel/probes/simulate-insn.c   |  22 +-
- arch/csky/kernel/ptrace.c                 | 128 +++++++++-
- arch/csky/kernel/setup.c                  |  18 +-
- arch/csky/kernel/signal.c                 |   4 +-
- arch/csky/kernel/smp.c                    |   7 +-
- arch/csky/kernel/traps.c                  |  10 +-
- arch/csky/kernel/vdso.c                   | 127 ++++++----
- arch/csky/kernel/vdso/.gitignore          |   4 +
- arch/csky/kernel/vdso/Makefile            |  72 ++++++
- arch/csky/kernel/vdso/note.S              |  12 +
- arch/csky/kernel/vdso/rt_sigreturn.S      |  14 ++
- arch/csky/kernel/vdso/so2s.sh             |   5 +
- arch/csky/kernel/vdso/vdso.S              |  16 ++
- arch/csky/kernel/vdso/vdso.lds.S          |  58 +++++
- arch/csky/kernel/vdso/vgettimeofday.c     |  28 +++
- arch/csky/kernel/vmlinux.lds.S            |   2 +-
- arch/csky/mm/fault.c                      | 388 ++++++++++++++++++------------
- arch/csky/mm/init.c                       |  56 +++--
- arch/csky/mm/tlb.c                        |  42 +++-
- include/linux/cpuhotplug.h                |   1 +
- 94 files changed, 1347 insertions(+), 992 deletions(-)
- delete mode 100644 arch/csky/include/asm/atomic.h
- create mode 100644 arch/csky/include/asm/clocksource.h
- create mode 100644 arch/csky/include/asm/futex.h
- create mode 100644 arch/csky/include/asm/vdso/clocksource.h
- create mode 100644 arch/csky/include/asm/vdso/gettimeofday.h
- create mode 100644 arch/csky/include/asm/vdso/processor.h
- create mode 100644 arch/csky/include/asm/vdso/vsyscall.h
- create mode 100644 arch/csky/kernel/vdso/.gitignore
- create mode 100644 arch/csky/kernel/vdso/Makefile
- create mode 100644 arch/csky/kernel/vdso/note.S
- create mode 100644 arch/csky/kernel/vdso/rt_sigreturn.S
- create mode 100755 arch/csky/kernel/vdso/so2s.sh
- create mode 100644 arch/csky/kernel/vdso/vdso.S
- create mode 100644 arch/csky/kernel/vdso/vdso.lds.S
- create mode 100644 arch/csky/kernel/vdso/vgettimeofday.c
+MBR, Sergei
