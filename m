@@ -2,110 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 843523271A1
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Feb 2021 09:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3B13272B5
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Feb 2021 16:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbhB1Inx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 28 Feb 2021 03:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
+        id S230445AbhB1PFA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 28 Feb 2021 10:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbhB1Inv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Feb 2021 03:43:51 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CB1C06174A;
-        Sun, 28 Feb 2021 00:43:10 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id k9so649560lfo.12;
-        Sun, 28 Feb 2021 00:43:10 -0800 (PST)
+        with ESMTP id S230413AbhB1PEy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Feb 2021 10:04:54 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB63C06174A;
+        Sun, 28 Feb 2021 07:04:12 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id u18so2055505plc.12;
+        Sun, 28 Feb 2021 07:04:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OFyGOtSWzDrjV/94yIkSczgXO+fv1Av7VC7qHGGIZTc=;
-        b=YJ1sEPS/er2MDdeZGD6TNU/9C7bWuBe8s2GkkQLn4EDUvQ+YG8Q+GfJ/o/ANy+JHJs
-         myBz+norrZcGBMBR9dHibEl2jwat1MkebmMh7lmxgkNdsBZ1XvIRXaoVztZfmfaHOcH9
-         n4SPv5zyzzZm00bkBdSeVuvUhrAjhurilfbnnSqKnYOHeUnrt/2Ahx85rFRHS4aH2w9l
-         65jad1z5Hqii4YrdlRgwOcTrBfJM2lDyE7ni/4VRxDV5qOf8IOUROpvsx3l5OsOlD4o0
-         Q80SRCtQNFLs0akX1M/DQmvEi1VteQ1Uiia9iKuAGmuaIK/QY83ykPw+eYqnbTGCLOKi
-         UBRQ==
+        bh=dvx8sVFIDRwA8HVv8xs6M9vOFGJJY4qZU9vG5iVcN/Y=;
+        b=YsLAgDSNMyIOu25iL5HDcBHtEXYrJHnLmdyiqj1AARPg/PfsaJRNxva/ZmUaVRdoHv
+         rLkWgBcdz1Yrs/KlgNnltALdC4XAmlJUO2eW3dZuSTOvJgoo7TutGtB7KMtcvhKlkk4D
+         YAi7rWCAedue4X5LMIe/VeMgG1eKG5toeZARu1a6Cov0xPzJlSFtI+7JlZGwqxWjk7UO
+         /9Y4RXC1tJZQ6aH44tBe4XGScQbMLQJyWuVd15aQ58fCSXCqGm0XH4w79CcNAG2EJkJV
+         SQpQK5Z9SyaL1SCQOI78U01EW4Q3Myc/0sx6HjYIAR12WdeSidWSmehInifKRV7ROz4p
+         u3Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=OFyGOtSWzDrjV/94yIkSczgXO+fv1Av7VC7qHGGIZTc=;
-        b=S40t6l7aVDMwMlF35oZPkutfIvEsUJTz5R+yHAqeSFf6/JbvifHpTQpn7uK00hrJuK
-         pgfVQO2qzHzfkMRC6Zbo9vsbn+qYPTXOddmu+DQw50KpB5VN+9AKnx56PHwfUq/BVqt2
-         l4akQBM60RfwikUp53+UInoiQ1GaGghf7U5rj7Wa+jo7NY4kP/Zk30UvpFTe51HtDEDj
-         fhVfSFmeyrCtMVoYpqXk0PM5KTRf1oKK+RixQCDBTGUyeZ+V7k3hqggghbc5PRjtMpDv
-         xicXxf+3KprI3FsoRIJLdEbIpXnUBKSfhmNVSRVCKruYRJUSlIxwLLHReRIevC/D+0NQ
-         i7NQ==
-X-Gm-Message-State: AOAM531Lge2NnpvDL7U1KA2K/YkQGhNC4XXwNmClJfJW4VH6V4EBityM
-        g83RRnM0gyKmv3ejBJF+d7n+YwtGXbNE9w==
-X-Google-Smtp-Source: ABdhPJzyTfCWiZYth3RfZ0g3RViHE993pYqXeg3HFbdSb9OKcXrbSaqZM1T33df8b++dh625MLQL1A==
-X-Received: by 2002:a05:6512:208:: with SMTP id a8mr6028858lfo.397.1614501788683;
-        Sun, 28 Feb 2021 00:43:08 -0800 (PST)
-Received: from [192.168.1.100] ([31.173.86.90])
-        by smtp.gmail.com with ESMTPSA id s3sm2021193ljp.23.2021.02.28.00.43.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Feb 2021 00:43:08 -0800 (PST)
-Subject: Re: [PATCH] MIPS: loongson64: alloc pglist_data at run time
-To:     Huang Pei <huangpei@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>
-References: <20210227062957.269156-1-huangpei@loongson.cn>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <a56885eb-a6dc-75dc-8061-491de73ab462@gmail.com>
-Date:   Sun, 28 Feb 2021 11:43:04 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dvx8sVFIDRwA8HVv8xs6M9vOFGJJY4qZU9vG5iVcN/Y=;
+        b=OOfBU7ePH+U0995OjVNzGlfeWgsDPrCg27Hhu/peuniZLuwExuh3s/+oCWMm7jI1u+
+         WFYwkbkBeSkBsbMbpZaqlhe53AYNx/V5VfGyNMaXbj2kg7BvS7w8W6bIySCMHyRahwit
+         +AZeMcx49u/OPtlawECwFAdf6u4qWn5uchGeO1eTWtrfgRRyFY0OHQcuPuMMJnm+XZQo
+         s6E74pjYLOHwpkvl0QMQb6OhTPy1/aSOgEzQN0jzSlTPF2NIrA0N1JiuXyDDrNFhtueJ
+         XVrRR/LqjwBzXDsr2oHTscy+fqd5S/G1me4JUlFXDNKkzuXkbM8gSkg/ikzV1R1m5myD
+         pZbQ==
+X-Gm-Message-State: AOAM532A7l62AJ+pBvlKGh3N5+KrfsFwAm1tXtrtTfOkXEe+q8Kl4gqs
+        9vwJN62DXCwmqBIbUZyJexo=
+X-Google-Smtp-Source: ABdhPJx9/Zp+U49TtzTJQxCqHd5e6WrN5zxO4e73fPvqhTp4oeAJQVgJ5GrOQDMc7rVs1BQ0aBf5RA==
+X-Received: by 2002:a17:90a:8a8b:: with SMTP id x11mr11255886pjn.151.1614524651791;
+        Sun, 28 Feb 2021 07:04:11 -0800 (PST)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:0:561f:afde:af07:8820])
+        by smtp.gmail.com with ESMTPSA id 142sm8391331pfz.196.2021.02.28.07.04.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Feb 2021 07:04:11 -0800 (PST)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com, davem@davemloft.net,
+        kuba@kernel.org, gregkh@linuxfoundation.org, arnd@arndb.de,
+        akpm@linux-foundation.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com,
+        sunilmut@microsoft.com
+Subject: [RFC PATCH 00/12] x86/Hyper-V: Add Hyper-V Isolation VM support    
+Date:   Sun, 28 Feb 2021 10:03:03 -0500
+Message-Id: <20210228150315.2552437-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210227062957.269156-1-huangpei@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello!
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-On 27.02.2021 9:29, Huang Pei wrote:
+Hyper-V provides two kinds of Isolation VMs. VBS(Virtualization-based
+security) and AMD SEV-SNP unenlightened Isolation VMs. This patchset
+is to add support for these Isolation VM support in Linux.
 
-> It can make some metadata of MM, like pglist_data and zone
-> NUMA-aware
-> 
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->   arch/mips/loongson64/numa.c | 18 +++++++++++++++---
->   1 file changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-> index cf9459f79f9b..5912b2e7b10c 100644
-> --- a/arch/mips/loongson64/numa.c
-> +++ b/arch/mips/loongson64/numa.c
-[...]
-> @@ -183,6 +194,7 @@ static void __init node_mem_init(unsigned int node)
->   			memblock_reserve((node_addrspace_offset | 0xfe000000),
->   					 32 << 20);
->   	}
-> +
+The memory of these vms are encrypted and host can't access guest
+memory directly. Hyper-V provides new host visibility hvcall and
+the guest needs to call new hvcall to mark memory visible to host
+before sharing memory with host. For security, all network/storage
+stack memory should not be shared with host and so there is bounce
+buffer requests.
 
-    Unrelated whitespace change?
+Vmbus channel ring buffer already plays bounce buffer role because
+all data from/to host needs to copy from/to between the ring buffer
+and IO stack memory. So mark vmbus channel ring buffer visible.
 
->   }
->   
->   static __init void prom_meminit(void)
+There are two exceptions - packets sent by vmbus_sendpacket_
+pagebuffer() and vmbus_sendpacket_mpb_desc(). These packets
+contains IO stack memory address and host will access these memory.
+So add allocation bounce buffer support in vmbus for these packets.
 
-MBR, Sergei
+For SNP isolation VM, guest needs to access the shared memory via
+extra address space which is specified by Hyper-V CPUID HYPERV_CPUID_
+ISOLATION_CONFIG. The access physical address of the shared memory
+should be bounce buffer memory GPA plus with shared_gpa_boundary
+reported by CPUID.
+
+Tianyu Lan (12):
+  x86/Hyper-V: Add visibility parameter for vmbus_establish_gpadl()
+  x86/Hyper-V: Add new hvcall guest address host visibility support
+  x86/HV: Initialize GHCB page and shared memory boundary
+  HV: Add Write/Read MSR registers via ghcb
+  HV: Add ghcb hvcall support for SNP VM
+  HV/Vmbus: Add SNP support for VMbus channel initiate message
+  hv/vmbus: Initialize VMbus ring buffer for Isolation VM
+  x86/Hyper-V: Initialize bounce buffer page cache and list
+  x86/Hyper-V: Add new parameter for
+    vmbus_sendpacket_pagebuffer()/mpb_desc()
+  HV: Add bounce buffer support for Isolation VM
+  HV/Netvsc: Add Isolation VM support for netvsc driver
+  HV/Storvsc: Add bounce buffer support for Storvsc
+
+ arch/x86/hyperv/Makefile           |   2 +-
+ arch/x86/hyperv/hv_init.c          |  70 +++-
+ arch/x86/hyperv/ivm.c              | 257 ++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h |  22 +
+ arch/x86/include/asm/mshyperv.h    |  26 +-
+ arch/x86/kernel/cpu/mshyperv.c     |   2 +
+ drivers/hv/Makefile                |   2 +-
+ drivers/hv/channel.c               | 103 ++++-
+ drivers/hv/channel_mgmt.c          |  30 +-
+ drivers/hv/connection.c            |  68 +++-
+ drivers/hv/hv.c                    | 196 ++++++---
+ drivers/hv/hv_bounce.c             | 619 +++++++++++++++++++++++++++++
+ drivers/hv/hyperv_vmbus.h          |  42 ++
+ drivers/hv/ring_buffer.c           |  83 +++-
+ drivers/net/hyperv/hyperv_net.h    |   5 +
+ drivers/net/hyperv/netvsc.c        | 111 +++++-
+ drivers/scsi/storvsc_drv.c         |  46 ++-
+ drivers/uio/uio_hv_generic.c       |  13 +-
+ include/asm-generic/hyperv-tlfs.h  |   1 +
+ include/asm-generic/mshyperv.h     |  24 +-
+ include/linux/hyperv.h             |  46 ++-
+ mm/ioremap.c                       |   1 +
+ mm/vmalloc.c                       |   1 +
+ 23 files changed, 1614 insertions(+), 156 deletions(-)
+ create mode 100644 arch/x86/hyperv/ivm.c
+ create mode 100644 drivers/hv/hv_bounce.c
+
+-- 
+2.25.1
+
