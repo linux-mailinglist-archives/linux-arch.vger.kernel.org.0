@@ -2,148 +2,196 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B122A328BD3
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Mar 2021 19:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F010328C52
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Mar 2021 19:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbhCASjm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Mar 2021 13:39:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48304 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240156AbhCASg1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 1 Mar 2021 13:36:27 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 70A9964E83;
-        Mon,  1 Mar 2021 17:35:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614620125;
-        bh=21ajb7RL24sMUQlOTeS5tC0PZRuFySmPWuPvKCCEiqs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LrWMdDUaBd2/wZVxXY+25zmlBBaAGP5mlFmV5XFGa4qGXiBuhOSKkz3SBxkrER9q7
-         JvEVgqrE2oFAbSNODVg7WU/CvXcR2ee2dl99HrYL4yfy5Dd/Ww+kK/A7s6QvCuwcot
-         2+WZ8nrqj5HChHx6EERixfkhC6EZ3PSChb/4FRcVTJT7B/lJjnr7IQohsE22/CdB9X
-         rkKkg25WJB57MMT83Ga2ctzwQXLej3ET1ODt+l9IfyjYDRiJ2rtg663RN9zVE1yjlF
-         jFoPQk+1ZZ32uKfzCFQE4iw2n+cdxLeNXPB08LnnvDpUXs3jiMvJFvvpX/sJyb132d
-         +eSdyDf2/0HDg==
-Date:   Mon, 1 Mar 2021 09:35:25 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 12/11] pragma once: scripted treewide conversion
-Message-ID: <20210301173525.GF7272@magnolia>
-References: <YDvLYzsGu+l1pQ2y@localhost.localdomain>
- <YDvO2kmidKZaK26j@localhost.localdomain>
+        id S235231AbhCAStV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Mar 2021 13:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240273AbhCASp3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Mar 2021 13:45:29 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7C1C06178A
+        for <linux-arch@vger.kernel.org>; Mon,  1 Mar 2021 10:44:43 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m1so220793wml.2
+        for <linux-arch@vger.kernel.org>; Mon, 01 Mar 2021 10:44:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iiJdRDjWUFbp3m7znHMOgxB7I0EJzPWYd34O1BbcPEg=;
+        b=AgPf59Bnpu82d0gde43PZP43b+zjJ6cOmOUtiBQlKXV7J8FMsvu5MJ0IB/4qhvr6+U
+         V0ytDEsg75YZ6tjJwzG/kNCj2kcYmdOojaL/iXwJmURqMbsqxQunb67gJXOOX4IkOCri
+         OI5rBl09tnYy+K/rsTR6/ioA7/2aBg1mKfu07JnDJcX6jZuQo+LwBDxZCteT2ITRGpVV
+         WqoDXixpDH6ir6NV6bWH3sdZ3StdleWjF3s5HlSY2zWynOqSaLtb8xCRIkXPDPVQ+w8L
+         fja7CFDh+GdxyYYmvbzA5TsWUJFh5HHsAjR5X8yV930vi1vlpZMoGaM55G9+TgZd+s3o
+         hc7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iiJdRDjWUFbp3m7znHMOgxB7I0EJzPWYd34O1BbcPEg=;
+        b=F1Mb3t3P6MRNFxq0b7ntVHneB9ZG8ggSpG9hQN9zaJgAlX4uq38eTtVGhCA4wuKW8n
+         RruwVOeTqvduOb/Iv+wfjpkbLKm1FuLBsJaCIUC/VYQnTZzJFIUIYREgp5g9p9yAJoLn
+         709dprmHlDicxegIjgzSNSIMHdKDzV4UyPV8eiRYvWSeaXjGthvqFkzrZbI0GwNf3XE/
+         4K1273T6uFomBcEtTL5Ysb6dABWXHf/uNhe4M3m9yCpkQqCTnhB12CaFIne9wSPHevkk
+         cKK+23UOYlTImpxcjgrC666qqx5JMnQbmY1YrO+LODYo4NT2sfmpNUGbafCXpUOOP3Xl
+         wOUg==
+X-Gm-Message-State: AOAM532sQN7K5XzUyFfY0z3NjqIS/SC4yF4Y3L2To2FAgFAy7xzJQhGU
+        b1BuTHqX5vsUxke9Ti2P3jHOQE4PF+y87Q==
+X-Google-Smtp-Source: ABdhPJzxOFSWK0My0Zl9EB1Bd1pzqlb0aS0lxIYWo5GQwaneUzKtXMvCBOSqeAgmwxFEJRpktg1iOw==
+X-Received: by 2002:a1c:1fc6:: with SMTP id f189mr274467wmf.68.1614624282168;
+        Mon, 01 Mar 2021 10:44:42 -0800 (PST)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-144-192.adsl.proxad.net. [82.252.144.192])
+        by smtp.googlemail.com with ESMTPSA id p16sm13286308wrt.54.2021.03.01.10.44.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Mar 2021 10:44:41 -0800 (PST)
+Subject: Re: [PATCH v2 10/10] clocksource/drivers/hyper-v: Move handling of
+ STIMER0 interrupts
+To:     Michael Kelley <mikelley@microsoft.com>, sthemmin@microsoft.com,
+        kys@microsoft.com, wei.liu@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, arnd@arndb.de,
+        linux-hyperv@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-arch@vger.kernel.org
+References: <1614561332-2523-1-git-send-email-mikelley@microsoft.com>
+ <1614561332-2523-11-git-send-email-mikelley@microsoft.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <cb190ed5-66f3-bdf7-aa97-b1fe0c49e282@linaro.org>
+Date:   Mon, 1 Mar 2021 19:44:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YDvO2kmidKZaK26j@localhost.localdomain>
+In-Reply-To: <1614561332-2523-11-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Feb 28, 2021 at 08:11:54PM +0300, Alexey Dobriyan wrote:
-> [  Bcc a lot of lists so that people understand what's this is all         ]
-> [  about without creating uber-cc-thread.                                  ]
-> [  Apologies if I missed your subsystem                                    ]
-> [  Please see [PATCH 11/11: pragma once: conversion script (in Python 2)]  ]
+On 01/03/2021 02:15, Michael Kelley wrote:
+> STIMER0 interrupts are most naturally modeled as per-cpu IRQs. But
+> because x86/x64 doesn't have per-cpu IRQs, the core STIMER0 interrupt
+> handling machinery is done in code under arch/x86 and Linux IRQs are
+> not used. Adding support for ARM64 means adding equivalent code
+> using per-cpu IRQs under arch/arm64.
 > 
-> Hi, Linus.
+> A better model is to treat per-cpu IRQs as the normal path (which it is
+> for modern architectures), and the x86/x64 path as the exception. Do this
+> by incorporating standard Linux per-cpu IRQ allocation into the main
+> SITMER0 driver code, and bypass it in the x86/x64 exception case. For
+> x86/x64, special case code is retained under arch/x86, but no STIMER0
+> interrupt handling code is needed under arch/arm64.
 > 
-> Please run the script below from top-level directory, it will convert
-> most kernel headers to #pragma once directive advancing them into
-> 21-st century.
+> No functional change.
 > 
-> The advantages are:
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>  arch/x86/hyperv/hv_init.c          |   2 +-
+>  arch/x86/include/asm/mshyperv.h    |   4 -
+>  arch/x86/kernel/cpu/mshyperv.c     |  10 +--
+>  drivers/clocksource/hyperv_timer.c | 180 ++++++++++++++++++++++++++-----------
+>  include/asm-generic/mshyperv.h     |   5 --
+>  include/clocksource/hyperv_timer.h |   3 +-
+>  6 files changed, 132 insertions(+), 72 deletions(-)
 > 
-> * less LOC
-> 
-> 	18087 files changed, 18878 insertions(+), 99804 deletions(-)
-> 	= -81 kLOC (give or take)
-> 
-> * less mental tax on developers forced to name things which aren't even
->   real code
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 9af4f8a..9d10025 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -327,7 +327,7 @@ static void __init hv_stimer_setup_percpu_clockev(void)
+>  	 * Ignore any errors in setting up stimer clockevents
+>  	 * as we can run with the LAPIC timer as a fallback.
+>  	 */
+> -	(void)hv_stimer_alloc();
+> +	(void)hv_stimer_alloc(false);
+>  
+>  	/*
+>  	 * Still register the LAPIC timer, because the direct-mode STIMER is
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index 5433312..6d4891b 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -31,10 +31,6 @@ static inline u64 hv_get_register(unsigned int reg)
+>  
+>  void hyperv_vector_handler(struct pt_regs *regs);
+>  
+> -static inline void hv_enable_stimer0_percpu_irq(int irq) {}
+> -static inline void hv_disable_stimer0_percpu_irq(int irq) {}
+> -
+> -
+>  #if IS_ENABLED(CONFIG_HYPERV)
+>  extern int hyperv_init_cpuhp;
+>  
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index 41fd84a..cebed53 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -90,21 +90,17 @@ void hv_remove_vmbus_handler(void)
+>  	set_irq_regs(old_regs);
+>  }
+>  
+> -int hv_setup_stimer0_irq(int *irq, int *vector, void (*handler)(void))
+> +/* For x86/x64, override weak placeholders in hyperv_timer.c */
+> +void hv_setup_stimer0_handler(void (*handler)(void))
+>  {
+> -	*vector = HYPERV_STIMER0_VECTOR;
+> -	*irq = -1;   /* Unused on x86/x64 */
+>  	hv_stimer0_handler = handler;
+> -	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(hv_setup_stimer0_irq);
+>  
+> -void hv_remove_stimer0_irq(int irq)
+> +void hv_remove_stimer0_handler(void)
+>  {
+>  	/* We have no way to deallocate the interrupt gate */
+>  	hv_stimer0_handler = NULL;
+>  }
+> -EXPORT_SYMBOL_GPL(hv_remove_stimer0_irq);
+>  
+>  void hv_setup_kexec_handler(void (*handler)(void))
+>  {
+> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+> index cdb8e0c..b2bf5e5 100644
+> --- a/drivers/clocksource/hyperv_timer.c
+> +++ b/drivers/clocksource/hyperv_timer.c
+> @@ -18,6 +18,9 @@
+>  #include <linux/sched_clock.h>
+>  #include <linux/mm.h>
+>  #include <linux/cpuhotplug.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/acpi.h>
+>  #include <clocksource/hyperv_timer.h>
+>  #include <asm/hyperv-tlfs.h>
+>  #include <asm/mshyperv.h>
+> @@ -43,14 +46,13 @@
+>   */
+>  static bool direct_mode_enabled;
+>  
+> -static int stimer0_irq;
+> -static int stimer0_vector;
+> +static int stimer0_irq = -1;
+> +static long __percpu *stimer0_evt;
 
-I don't find include guards to be much of a mental tax, but it sure
-would be nice to see exactly what the changes would look like...
+Why not
 
-> * less junk in preprocessor hashtables and editors/IDEs autocompletion
->   lists
-> 
-> There are two bit exceptions: UAPI headers and ACPICA.
-> Given ubiquity of #pragma once, I personally think even these subsystems
-> should be converted in the future.
-> 
-> Compile tested on alpha, arc, arm, arm64, h8300, ia64, m68k, microblaze,
-> mips, nios2, parisc, powerpc, riscv, s390, sh, sparc, um-i386, um-x86_64,
-> i386, x86_64, xtensa (allnoconfig, all defconfigs, allmodconfig with or
-> without SMP/DEBUG_KERNEL + misc stuff).
-> 
-> Not compile tested on csky, hexagon, nds32, openrisc. 
-> 
-> Love,
-> 	Alexey
-> 
-> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
-> 
-> 
-> 
-> #!/bin/sh -x
-> find . -type f -name '*.h' -print	|\
-> LC_ALL=C sort				|\
-> sed -e 's#^./##g'			|\
-> xargs ./scripts/pragma-once.py
+static DEFINE_PER_CPU(long, stimer0_evt);
 
-...because I can't find this script in upstream git, so I can't really
-tell for myself what the changes to xfs would look like.  The thing I
-need to know is, what will changes to fs/xfs/libxfs/ look like when we
-port that to userspace?
+no need of allocation /free ?
 
-Does this introduce any minimum compiler version requirements?
 
---D
 
-> 
-> find . -type d -name 'uapi' | xargs git checkout -f
-> git checkout -f arch/alpha/include/asm/cmpxchg.h
-> git checkout -f arch/arm/mach-imx/hardware.h
-> git checkout -f arch/arm/mach-ixp4xx/include/mach/hardware.h
-> git checkout -f arch/arm/mach-sa1100/include/mach/hardware.h
-> git checkout -f arch/mips/include/asm/mips-cps.h
-> git checkout -f arch/x86/boot/boot.h
-> git checkout -f arch/x86/boot/ctype.h
-> git checkout -f arch/x86/include/asm/cpufeatures.h
-> git checkout -f arch/x86/include/asm/disabled-features.h
-> git checkout -f arch/x86/include/asm/required-features.h
-> git checkout -f arch/x86/include/asm/vmxfeatures.h
-> git checkout -f arch/x86/include/asm/vvar.h
-> git checkout -f drivers/acpi/acpica/
-> git checkout -f drivers/gpu/drm/amd/pm/inc/vega10_ppsmc.h
-> git checkout -f drivers/gpu/drm/amd/pm/powerplay/ppsmc.h
-> git checkout -f drivers/input/misc/yealink.h
-> git checkout -f drivers/media/usb/dvb-usb-v2/mxl111sf-demod.h
-> git checkout -f drivers/media/usb/dvb-usb-v2/mxl111sf-tuner.h
-> git checkout -f drivers/pcmcia/yenta_socket.h
-> git checkout -f drivers/staging/rtl8723bs/include/hal_com_h2c.h
-> git checkout -f include/linux/acpi.h
-> git checkout -f include/linux/bitops.h
-> git checkout -f include/linux/compiler_types.h
-> git checkout -f include/linux/device.h
-> git checkout -f include/linux/kbuild.h
-> git checkout -f include/linux/libfdt_env.h
-> git checkout -f include/linux/local_lock.h
-> git checkout -f include/linux/spinlock.h
-> git checkout -f include/linux/spinlock_api_smp.h
-> git checkout -f include/linux/spinlock_types.h
-> git checkout -f include/linux/tracepoint.h
-> git checkout -f mm/gup_test.h
-> git checkout -f net/batman-adv/main.h
-> git checkout -f scripts/dtc/
-> git checkout -f tools/include/linux/bitops.h
-> git checkout -f tools/include/linux/compiler.h
-> git checkout -f tools/testing/selftests/clone3/clone3_selftests.h
-> git checkout -f tools/testing/selftests/futex/include/atomic.h
-> git checkout -f tools/testing/selftests/futex/include/futextest.h
-> git checkout -f tools/testing/selftests/futex/include/logging.h
-> git checkout -f tools/testing/selftests/kselftest.h
-> git checkout -f tools/testing/selftests/kselftest_harness.h
-> git checkout -f tools/testing/selftests/pidfd/pidfd.h
-> git checkout -f tools/testing/selftests/x86/helpers.h
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
