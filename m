@@ -2,106 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECA93282BA
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Mar 2021 16:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6186F3282D7
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Mar 2021 16:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237422AbhCAPmy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Mar 2021 10:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237405AbhCAPmu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Mar 2021 10:42:50 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D34C06178A
-        for <linux-arch@vger.kernel.org>; Mon,  1 Mar 2021 07:42:07 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id u187so11994350wmg.4
-        for <linux-arch@vger.kernel.org>; Mon, 01 Mar 2021 07:42:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TuyEPq+OKYhM5djtv+OIrlO0NdrnxuMD/gDW97dakUc=;
-        b=vw0/US/Oqmu9LDZDKsgb9Nrq7hDcRFD6Do0/UJSayXej4KkjsuUZSWfLKHOWMEC2MN
-         YuafppUR4rWrR3e1a/dOgdw8MUd8wSD5nCw+Nj6Q/OfAiVlmKT137vpr+DpVVDebfr67
-         cWjzAb8H8xkpkeXtHHPeetzhRjaS1+JrLxwqRHcmtIkGBnJxkfQL8Q49HbJYJo99YHIS
-         NzVAj/xnd0jKuXDCHdZEQTGBuj9M1DFKpFmRVXM4snN7D1D03Mi5kstG3CKJV8JGFglg
-         1TgDdSU8QnDex9lFiQ/ky1SVF+vo0vdh2eUZJfCL6dNgYMkMADR0wQfWbLc04CUCMYB3
-         YEyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TuyEPq+OKYhM5djtv+OIrlO0NdrnxuMD/gDW97dakUc=;
-        b=RPKd9xIiyAoXnBZFLzq0ByJdwB0CTD7bLrpEW5Z+3f2TO4QbnDvScBw+EVMKkZm9kp
-         w6mXQ2f9DcsKX/kmK0iWEdsg5z6MvuS8GnK2L0BAPg9IK5eUjamuTo1nmajhy6xzxCB7
-         PqXw0+IXu59Ydi5Ezww9Q2HYv8LcbYYyTa2HH8Ii+3CZIaDiAm5qTd2V2NrZkvFfw4N/
-         J2niyUkTeoop0cqQsu3rRo5al71OEmnh8YZPMwIXAeWs8eoFXYk1UcykVVb1Z3HDBGUj
-         Jdx+Hs3wsvKuCq/C/uItRSBxmQ8wmviuXf/fY5G4oK8JzSjbXWj+CF1XuxjHKDxcWb57
-         YUaA==
-X-Gm-Message-State: AOAM533lKFzDs1XXlDe8nvJBimgcGofW5nWc+Y6OdF5IkcghuWC0vr/Z
-        j0rHvD//hsy9nQKEDO0LvOEY6pUTEOI/gA==
-X-Google-Smtp-Source: ABdhPJzwJLYKHuwJLPr1iYEZbIkNeXbm9Pe8LUYKejti/ummafqwZBzHeTxRzdRMk+vqU5bD3eL6bA==
-X-Received: by 2002:a1c:f409:: with SMTP id z9mr16239716wma.141.1614613326166;
-        Mon, 01 Mar 2021 07:42:06 -0800 (PST)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-144-192.adsl.proxad.net. [82.252.144.192])
-        by smtp.googlemail.com with ESMTPSA id a6sm7572577wmm.0.2021.03.01.07.42.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Mar 2021 07:42:05 -0800 (PST)
-Subject: Re: [PATCH v2 09/10] clocksource/drivers/hyper-v: Set clocksource
- rating based on Hyper-V feature
-To:     Michael Kelley <mikelley@microsoft.com>, sthemmin@microsoft.com,
-        kys@microsoft.com, wei.liu@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, arnd@arndb.de,
-        linux-hyperv@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-arch@vger.kernel.org
-References: <1614561332-2523-1-git-send-email-mikelley@microsoft.com>
- <1614561332-2523-10-git-send-email-mikelley@microsoft.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <e6e2f860-d109-25c7-5892-ef9b06daaa7d@linaro.org>
-Date:   Mon, 1 Mar 2021 16:42:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S237462AbhCAPxa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Mar 2021 10:53:30 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:44432 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237394AbhCAPx3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 1 Mar 2021 10:53:29 -0500
+Received: from zn.tnic (p200300ec2f03de000c49bde6bf5f8ea0.dip0.t-ipconnect.de [IPv6:2003:ec:2f03:de00:c49:bde6:bf5f:8ea0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 89E871EC0105;
+        Mon,  1 Mar 2021 16:52:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1614613963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=a4oJdFpxQg9VwC++9PZ/n66EH9Uyg5uXgGcU17/8q6g=;
+        b=P2oo+rDN9qTQYwJH3/qzEiUUhEZuT5Y2oGLpKajp7d9lOdwBvDV86OTX1BSAcVyL/bZ1Jb
+        z4xpMqdSczHw4fudawj7lpdSOAH1N9atj52HxDhaTyftc+XA2ELNMoXMa8aCjo0PWqBeO4
+        N6kITEOCjeOLapteI23oeWqaRg1tXXM=
+Date:   Mon, 1 Mar 2021 16:52:34 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+Subject: Re: [PATCH v21 08/26] x86/mm: Introduce _PAGE_COW
+Message-ID: <20210301155234.GF6699@zn.tnic>
+References: <20210217222730.15819-1-yu-cheng.yu@intel.com>
+ <20210217222730.15819-9-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <1614561332-2523-10-git-send-email-mikelley@microsoft.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <20210217222730.15819-9-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 01/03/2021 02:15, Michael Kelley wrote:
-> On x86/x64, the TSC clocksource is available in a Hyper-V VM only if
-> Hyper-V provides the TSC_INVARIANT flag. The rating on the Hyper-V
-> Reference TSC page clocksource is currently set so that it will not
-> override the TSC clocksource in this case.  Alternatively, if the TSC
-> clocksource is not available, then the Hyper-V clocksource is used.
-> 
-> But on ARM64, the Hyper-V Reference TSC page clocksource should
-> override the ARM arch counter, since the Hyper-V clocksource provides
-> scaling and offsetting during live migrations that is not provided
-> for the ARM arch counter.
-> 
-> To get the needed behavior for both x86/x64 and ARM64, tweak the
-> logic by defaulting the Hyper-V Reference TSC page clocksource
-> rating to a large value that will always override.  If the Hyper-V
-> TSC_INVARIANT flag is set, then reduce the rating so that it will not
-> override the TSC.
-> 
-> While the logic for getting there is slightly different, the net
-> result in the normal cases is no functional change.
-> 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+On Wed, Feb 17, 2021 at 02:27:12PM -0800, Yu-cheng Yu wrote:
+> @@ -182,7 +206,7 @@ static inline int pud_young(pud_t pud)
+>  
+>  static inline int pte_write(pte_t pte)
+>  {
+> -	return pte_flags(pte) & _PAGE_RW;
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Put here a comment along the lines of:
 
-[ ... ]
+	/*
+	 * Shadow stack pages are always writable - but not by normal
+	 * instructions but only by shadow stack operations. Therefore, the
+	 * W=0, D=1 test.
+	 */
+
+to make it clear what this means.
+
+> +	return (pte_flags(pte) & _PAGE_RW) || pte_shstk(pte);
+>  }
+>  
+>  static inline int pte_huge(pte_t pte)
+> @@ -314,6 +338,24 @@ static inline pte_t pte_clear_flags(pte_t pte, pteval_t clear)
+>  	return native_make_pte(v & ~clear);
+>  }
+>  
+> +static inline pte_t pte_make_cow(pte_t pte)
+
+pte_mkcow like the rest of the "pte_mkX" functions.
+
+And below too, for the other newly added pXd_make_* helpers.
+
+
+>  static inline pmd_t pmd_mkdirty(pmd_t pmd)
+>  {
+> -	return pmd_set_flags(pmd, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
+> +	pmdval_t dirty = _PAGE_DIRTY;
+> +
+> +	/* Avoid creating (HW)Dirty=1, Write=0 PMDs */
+> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && !(pmd_flags(pmd) & _PAGE_RW))
+
+						      !(pmd_write(pmd))
+
+> +		dirty = _PAGE_COW;
+> +
+> +	return pmd_set_flags(pmd, dirty | _PAGE_SOFT_DIRTY);
+> +}
+
+...
+
+>  static inline pud_t pud_mkdirty(pud_t pud)
+>  {
+> -	return pud_set_flags(pud, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
+> +	pudval_t dirty = _PAGE_DIRTY;
+> +
+> +	/* Avoid creating (HW)Dirty=1, Write=0 PUDs */
+> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && !(pud_flags(pud) & _PAGE_RW))
+
+						      !(pud_write(pud))
+
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Regards/Gruss,
+    Boris.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+https://people.kernel.org/tglx/notes-about-netiquette
