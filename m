@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 520BB3275D6
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Mar 2021 02:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A79693275D3
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Mar 2021 02:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbhCABSY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 28 Feb 2021 20:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
+        id S231626AbhCABSX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 28 Feb 2021 20:18:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbhCABSQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Feb 2021 20:18:16 -0500
+        with ESMTP id S231684AbhCABSP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Feb 2021 20:18:15 -0500
 Received: from NAM04-CO1-obe.outbound.protection.outlook.com (mail-co1nam04on0714.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe4d::714])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAABC061793;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84785C061794;
         Sun, 28 Feb 2021 17:16:42 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hjDFbOY9SsXU4w6RdJw5e4LYVCNTkPEi6gTwXEVYLT1BWfiUcmRkUIIQy84oIhKLP2ie/m8x8dh5vs0XDSTBt8bT9RyyVfVeumLk84JyVMmLvuEx9ia6kiUYUwnrFQl/mxJZWlvm1xrILffiinxJLQIiM5LkIAbMVq++girPwDvlT+XzKxwQ2hMA4q7D6RFiNBQIitdogCC4pjrahcN0ogh8L7oM1M4+t9n9MErfiChZW/eht8IIcvOHuZi8xfYwIeU+2g5aXHsSZmkqNezl5qJ76Rhb18933Pedqz4SdtzyNOGJuojSCHLovTmuZdik4wF04FzcGLGfP99Zxrjq6A==
+ b=PXAyK/ct+NYPwgcooyL6oZbbM4Aq9Oti5RnwMTapHmg3rvN7hKhP7H+8eZc1h5QZBbNSzgBTBvEP72/06uuwSA3r/h9EapxjM/poO/NhARd3q1gQKnE5mxLGaBbuRWE1+gqEcfo+ImZ/bF8Drf2DTzXTvj3zQ/EbHOXxMCRXaTwsnwNz0MJmIm8LkY/7sZAMXIUMsm1M52GTC3YqKkK2h553tm/asJpeDMTsAG4q5fOfNjqxlWe0mlPajv6EY1JZQAelQ/VlmzyzNijnDFOBBkc2BPlTtWNm1NNbtu7aeWY7Et7FGL5UAHwgi+0N8UZo4OQfq0ThjE8LUJoEB482Pg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k0ozTz048cRw8Hyea+HwzPzXDk/7LsbWPV5fDuzPtG8=;
- b=XpShUsr0MnvMG2jiVseKux7hqAFYnUYGb7G22tlp62YrxTTeDwcoo5wuan6cmYq8r6bKTt8RhkCrD2z1DcxyXc4dNqcRaYIIZrr5VGlRPDzXSNbWQMlnrd+h8LHpKAnqhZ/CB+pyViVBsYKwo+fc48dqWcAUbKkruUFP476QUZMXo1JS7VrhsclCR0+YNoDqpurSBNi31eWWRebr+dcpnv8bQKVfI37GcomUCKTW3+Myi6hNO5fFjzJhU8VmEg7lyXjSM1N5DeWHGbGg8C0ikmyyOQFu3sWFOHs2xy7akAf6+Jvi59dfCbsMSJo+3MbciNCHcSemNtEdxyf7ZOmQRA==
+ bh=ULO+QYtcsebUvBDTMCD70czNMdhcUsWza55xHHtuzIg=;
+ b=KHb7peB5/ikF9vAiNxvnlp0QZidFt5xyU3z/cJ/7eNS8HJyMd22tM/wjObqHT7YkJ7fbcuiZYMCGujyUzmlqAnfvhLsb82VN0c3vym+rgyul0lFLmZh+44s3hgoi2OLZ8Y3mwrSK/X6vE1nthm2YNmVbTpu9D1IhZHHmO8K8UxTzgY/BRSdCV3OHVAZn/gIaFGSi+joulxVB9QP/GPT24d/Zzk0dqS9GL7mZ6f42ofBtpIJb3WNIPaQ4qC2OdElTJuwpo802TBpzPOzwt4XhaVB9lJqapZV6Au8svrxKq+f3hd15RtR1Spn8W7zkn2wBpQSagA8UeBiBxaCzKvtilA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k0ozTz048cRw8Hyea+HwzPzXDk/7LsbWPV5fDuzPtG8=;
- b=AUNBjEEJxz9DpfsFZ9y0TvbsslL0ZT4R5ZRqkBXCADwpoM1FWpxbnlTijhW5GYqKs2qRl7NIrWoWUtkzPHcbcDySBcwJCsCUb25zKixOVRMFiQyIlxRe5evgiasS/sper62wO3kYw73zqpuHvSrSwgWUtEPLgqLu6QHPA6llGLg=
+ bh=ULO+QYtcsebUvBDTMCD70czNMdhcUsWza55xHHtuzIg=;
+ b=MP3z8xtN7OOo68Y11IR1T4+LTMU3L60rsv7DQhmgc7hITO/8o+DEZYkgZPc8WBMwG8GgsV280X8ndl6acLoFfOEttLwhvbpSU0DhA7VFqfa0dMl3CZoTb5WLCfP87KpHsR8x72487obm+T/HegqYbSdaKEhQOTDOkRuI2M1NjJI=
 Authentication-Results: microsoft.com; dkim=none (message not signed)
  header.d=none;microsoft.com; dmarc=none action=none
  header.from=microsoft.com;
@@ -36,11 +36,11 @@ Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
  by DM5PR2101MB0981.namprd21.prod.outlook.com (2603:10b6:4:a8::27) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.4; Mon, 1 Mar
- 2021 01:16:10 +0000
+ 2021 01:16:11 +0000
 Received: from DM6PR21MB1514.namprd21.prod.outlook.com
  ([fe80::1c32:e52a:6a36:3ff]) by DM6PR21MB1514.namprd21.prod.outlook.com
  ([fe80::1c32:e52a:6a36:3ff%4]) with mapi id 15.20.3912.016; Mon, 1 Mar 2021
- 01:16:10 +0000
+ 01:16:11 +0000
 From:   Michael Kelley <mikelley@microsoft.com>
 To:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
@@ -48,9 +48,9 @@ To:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
         linux-hyperv@vger.kernel.org
 Cc:     mikelley@microsoft.com, linux-kernel@vger.kernel.org,
         x86@kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH v2 09/10] clocksource/drivers/hyper-v: Set clocksource rating based on Hyper-V feature
-Date:   Sun, 28 Feb 2021 17:15:31 -0800
-Message-Id: <1614561332-2523-10-git-send-email-mikelley@microsoft.com>
+Subject: [PATCH v2 10/10] clocksource/drivers/hyper-v: Move handling of STIMER0 interrupts
+Date:   Sun, 28 Feb 2021 17:15:32 -0800
+Message-Id: <1614561332-2523-11-git-send-email-mikelley@microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1614561332-2523-1-git-send-email-mikelley@microsoft.com>
 References: <1614561332-2523-1-git-send-email-mikelley@microsoft.com>
@@ -61,136 +61,432 @@ X-ClientProxiedBy: MWHPR14CA0008.namprd14.prod.outlook.com
  (2603:10b6:5:22d::11)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mhkdev.corp.microsoft.com (131.107.159.144) by MWHPR14CA0008.namprd14.prod.outlook.com (2603:10b6:300:ae::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.25 via Frontend Transport; Mon, 1 Mar 2021 01:16:09 +0000
+Received: from mhkdev.corp.microsoft.com (131.107.159.144) by MWHPR14CA0008.namprd14.prod.outlook.com (2603:10b6:300:ae::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.25 via Frontend Transport; Mon, 1 Mar 2021 01:16:10 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 24043296-5622-4af4-e79b-08d8dc4f990c
+X-MS-Office365-Filtering-Correlation-Id: c788e6fb-e877-44a9-8c65-08d8dc4f99ae
 X-MS-TrafficTypeDiagnostic: DM5PR2101MB0981:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM5PR2101MB0981242CF012BAFF02E2B9ACD79A9@DM5PR2101MB0981.namprd21.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Microsoft-Antispam-PRVS: <DM5PR2101MB098194A84A7092E599639933D79A9@DM5PR2101MB0981.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nYMt6GGmz60Tu3bUrL6RCqfn2uf9TpYuPMGPEPuHvw2fv+GZaeu0BCyPuqmINVdieV0yDUPB7SbdZ9J5Mqo9Uoa/SP8ZNO0p/StXO+xXbznqIWRGkXfX7/eSWOJpNRpLGGOX17UwFj/X4fcyw7CovfYJRlhnGucxwf6WwfhJPqKeJh7L1xKycoLGSJuWHT8++DemKehOYUdUQPJcRWXxKsswgdicVvxnCeJ81YcVWCEC5K9mqQGmBQig/MEWBRm+CoO14Dny3kg/ji/9LhPEbWeXVgSqIKItq8vy/QID1tuKoeu/Qs+8kzxVGepQFTCqw4VZxEDIOCYengoC+npmSUxlILGr/p7A1ByXwm8Ta87lDkkdM8Ebus3hqvr65G41Znxq6LfAp0pFWskQ4QwDYj5o+R6plf8vNL6XThSMZosx6gIh4Cp88oDaQoLhSEHpsfYUUqgrKHTqDo9G6s6sfLb49lMBLjq7dMq5r7xkxrFE9X4rCUswtYEbSoVCqYTiT1X8+Kw5RuHftYKHsBvw7zIATTO7bZFYKjFFa17e1LtL3Ot/ch6StIHt+jE0nMiO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(396003)(39860400002)(366004)(83380400001)(8676002)(186003)(4326008)(66946007)(956004)(86362001)(52116002)(921005)(26005)(2906002)(82960400001)(478600001)(66476007)(16526019)(6666004)(66556008)(6486002)(8936002)(316002)(7416002)(10290500003)(2616005)(7696005)(82950400001)(36756003)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?kKeLy9TBXp1hENUZZuk/Q/OMOUKcT1c76cBsEwHo/LmXQT+eYpa/336LFwto?=
- =?us-ascii?Q?Wm8eGVlhWFVE4SiQAvoHekb7PhBcc5Ud36PtE6Grs0VFGnW4HN+FE3l3Xq0L?=
- =?us-ascii?Q?a0sunf3B1ffjmaJKk5ogPQ5VPIfQ994Pru7QSUuRFu5pNed0b5z3tRy2aatI?=
- =?us-ascii?Q?3Dv2OTmMYTU4KAlbDiyR03PThxBgp0IgsJjDRHDY9axYo3qoRQ5mRxQiMCpe?=
- =?us-ascii?Q?Dde6dwv2BNNX/Ztm69pvNrmZYJo/FSEFjxDnDVK85VDdWwqGua3Ab0beMQh5?=
- =?us-ascii?Q?SY7w0C1j4843AdfMfS6jXF8JMoQQuyAYAPB+8Jl4I851qFVYiWmnWl81NUsi?=
- =?us-ascii?Q?0kcW3o5zAy16Rs/nLZ/JS+Do2iWVGQYerOs18ZfQg7mcRGKXJaVSlGJvVVAP?=
- =?us-ascii?Q?t81V8jFLsd70jhXLjZYrFoWpesYLAEjKYtDevhh2cScNukHk6u8JAm6wHKeH?=
- =?us-ascii?Q?TTWaxa3aRHkzbuKk22EAfcYZi+3c7h2PmPfCpOXvnAcfTtfs6DMAx98WOWiY?=
- =?us-ascii?Q?V/3vaUr0eHrS+3wtHj6uYYoKlvWEcbJ6qvQ0Ug7Ww4o172rS2Ly0RyYEDrbj?=
- =?us-ascii?Q?OSgVLsSc3d1MD0zJvFHGf3VFYv1Ycu7rHha4dOK8YNvhk24CHQeP7nBpZkFD?=
- =?us-ascii?Q?C227HDY2WkEbUFE2WOaknbfhMPI9G4rzXJJe7yJHwx8vgTBMkSpqR9DEytSh?=
- =?us-ascii?Q?MjWtGwpN+c88gkj2IyN0BWfSz+hYW64Rcg6ylnGy87LaN46dDX/QdXSfMuhp?=
- =?us-ascii?Q?LMYTjnLsueeMlNNBj09JIZ6NQyNxeXnsYLw8yFLLdv2wgFROMUV7MXdy4hgu?=
- =?us-ascii?Q?H/O7Fv6BUjD4awk1nGvZkTbftg6cWnIZ0QDuPpN3KJjk+2M9Zz0GPF4PnTRS?=
- =?us-ascii?Q?hat/JYdhysx2b6mW5voM37H0sbzytWcsZyXEJXOctVAYoCog11G/8dYPoYCq?=
- =?us-ascii?Q?YC5GRqJMdRkwZFwUYUL5Bz+Qw1yE+XnE76zTSwGfTNtNFK8SbRZwbY9jxdIi?=
- =?us-ascii?Q?f+0To6gupnU93P9l2qfOUJctEV4nRdWQSTBAVr3xVYX6min93Gka2569EovW?=
- =?us-ascii?Q?1Ii1GhMOb+5lyLl6SBf0/eyjxs2KXsJ7fCrTAMYnVMfmqsXy4Uvl599PHfj/?=
- =?us-ascii?Q?OFLW5383X1ABNym6guERnkFQnPnZcS60G11SxgR8o3s8Vf5ohv/d3dI+8PQu?=
- =?us-ascii?Q?hrDTpcU6KJw6AZ114oE4inplnNjMZ8UXBWQS24Q8xGNPpKucH/ayX6doetxU?=
- =?us-ascii?Q?aKwaLDGm8DdvbM+yjKRQBQvRAyJzcVxVVsH4bS3cZkCUcjrC06TL9Xd3PYcp?=
- =?us-ascii?Q?Kx/+xRhIpA6T8nM7OWBVmVYt?=
+X-Microsoft-Antispam-Message-Info: 80lLdD7Kh+Rn2oozAJ19t5FoYRLfQDN6RFKFCl0hXX7rv+WbT48U5pzRhi7ej9WqqmAUr9lOW1pCTg1l3dlOejL1P2iJAyDQEX/2KRWgf3phCLgZ9/sR+y897teoWwoyNBgz90sUt690rJsl2xWLkaBD6GKxqinaliQb1fjKyvsM+kq9ANv0VKb+2C9B9X/O8norIIctA+E8sbIoK9nLpO8ww7Xz8HitF9/A1KWCyGAudI4dyT1zHdFPMQ8oI9qKq9xnTzUCxarhSYegiyUvke2pKh+L3VGzr/6yepzNw4jkO5DUb5rSdnO6ILtxei3fjYGlajMeZSLdXHI0PIvhHbpo/DmtuCCFkkpLCVNKIFYNcsB20m0QrssuW2L5ykdf/IFgBDEAYRrAgAyqXjRDLs68bfBefrD/qPBUgKvojyAw1clM6w0TqqJE1pctXOO7xu/mdJrFwGPlEXvS9Y5/4qby6fkWyopmibs3X0DyQ5dLc1Bspp+Qn66OMIEkMY5yq3Qa3wQ+gBMEVpCVLmu94SbC8ipcY0eCX2shPM9VsG2jB8r9C2uwJSrN3nUsST0J
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(396003)(39860400002)(366004)(83380400001)(8676002)(186003)(4326008)(66946007)(956004)(86362001)(52116002)(921005)(30864003)(26005)(2906002)(82960400001)(478600001)(66476007)(16526019)(6666004)(66556008)(6486002)(8936002)(316002)(7416002)(10290500003)(2616005)(7696005)(82950400001)(36756003)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?PzqIEc2/6WVRmXm8/b88PYjTnjUpN4+6LquLNA9wwJr6OC2+xxT4yFbi3VNt?=
+ =?us-ascii?Q?JnKcG1YOY1qEY0GQPd16zf05BtMcPDL0fDsJbsa0TQnWPk32XXn4Hr//Tvvp?=
+ =?us-ascii?Q?5O91qTroi6CG207jdBIupYkLl4nhIqBgpTGwUr0IYF82uBOjB/p5W11IIdMF?=
+ =?us-ascii?Q?MvZwtl02j9V20sdo+N3PQNmvBgqdH3TcYZ7iqjzShxaONIWgOPcq2N8yCqe+?=
+ =?us-ascii?Q?UeQR0OzhqnJ94U76fT+aHtzpDLD3BmPX7O+VEZxGaGiZ74gKUe4wuOYrdAAm?=
+ =?us-ascii?Q?282MZap0HIfoAyNuNvfmnvIhaJJ0ml6VsrzCv/Mq0OYdKFl0mGFI/L/cEgsX?=
+ =?us-ascii?Q?9aLUHVcjYM1E2nHluF/1W04Xqdm+l0Oy996jhXCKTJmP2e4BcWJJJvkSu9Tk?=
+ =?us-ascii?Q?2cOgnwA2wef659Vf/2ejXcOM9FGvX+oKOPtBi84qxyUmDdX7OnFNS7r4UWmF?=
+ =?us-ascii?Q?/rhAs1nl+UCoIQZB7U1cxNZKHws7ydOahWwLFUQ0GFyVXI18KoZwAsyhUL9L?=
+ =?us-ascii?Q?N9ZnlOeArZCHqz7oWCf2HwPgPQhOxgkhP6bUmhZRyCWNYSNdCR9Qf+vpCyeB?=
+ =?us-ascii?Q?Oi8Z148T8AbvrR1rM513ZQ5eXqFkSl5UIM1/Kxph5bpJxhB9il/8w0A3K9is?=
+ =?us-ascii?Q?BQY1KiJfhs1wKXEiJIFqEkz7OTnr92pxCHtEdxWhZgyijvktY27o7w47T/h+?=
+ =?us-ascii?Q?1xSVCgoSvEZeLwwYNU8NmiqHrIihUeeQ00ZDH9vqFsn25NU+Ofu1bYwg07UF?=
+ =?us-ascii?Q?KRo6OHorHECpQgiu2c1Ofn+W3psYtzmKZtck1BBIrO4C5PGkXiojgjFpFqyq?=
+ =?us-ascii?Q?vhKNzsBHp2BhRYcBg+8epWYAmLdne/Og11pyjGh9w/Fc38Y8j1E4fDoLDNEx?=
+ =?us-ascii?Q?Ah5KtB+jG3IaQ8FN5AOsVrzSBM14fA6msTG6NmzNuxuRvJBGoHVsHW1xX02s?=
+ =?us-ascii?Q?w+gSQ0Zxop+6yKjFW3nNLTdT8a/CM+sgED5vXYuTSRHdR1sR2UEq9nN0ycbA?=
+ =?us-ascii?Q?h7OFO+kvprmJE1WsoftydQHmMiZe2g9HjssBp1c6d8fDHNG1/iGDg63SRm/8?=
+ =?us-ascii?Q?GJubKuqQehjxYv1fCa7zOn54ELqjEo464scKrC++eGetpL940afRZNXWSGED?=
+ =?us-ascii?Q?uyry3oyKUP6WuesZVOTUY/8dYyJXR3VaXnCgbsHRdG9A38OlQGqYkcwK0+H0?=
+ =?us-ascii?Q?IxCRW0ZcDepR+LbdrsJE/gCdCu54//pUn5gJiYurxGLexWzR5Z86EYtA2a2H?=
+ =?us-ascii?Q?7JC4z+//XEC+xoKfi8JOGVcK5CFluKxO3EZ3NO0ogiL90J+/Z0BbitYv9u/j?=
+ =?us-ascii?Q?ddqoEL7opSPStzlhS8ujH1m8?=
 X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24043296-5622-4af4-e79b-08d8dc4f990c
+X-MS-Exchange-CrossTenant-Network-Message-Id: c788e6fb-e877-44a9-8c65-08d8dc4f99ae
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2021 01:16:10.2715
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2021 01:16:11.2970
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IFzXbVyQFLl3P/q6Ddg5zzMMR3UfV+1oReFG5Mv3eFOs8dt/l5bkyiE9dxvQNNPLTDN0r/JiQSTsQLYFnbXXSg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: kfoKTMHFIiGnc9A2J90AYwBVmrdVBTsyHIvS2T5OrN/JRDYR5GNAb1oHChHNt916Ylsn6z1TYCbBnYZ+ZUKI5Q==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR2101MB0981
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On x86/x64, the TSC clocksource is available in a Hyper-V VM only if
-Hyper-V provides the TSC_INVARIANT flag. The rating on the Hyper-V
-Reference TSC page clocksource is currently set so that it will not
-override the TSC clocksource in this case.  Alternatively, if the TSC
-clocksource is not available, then the Hyper-V clocksource is used.
+STIMER0 interrupts are most naturally modeled as per-cpu IRQs. But
+because x86/x64 doesn't have per-cpu IRQs, the core STIMER0 interrupt
+handling machinery is done in code under arch/x86 and Linux IRQs are
+not used. Adding support for ARM64 means adding equivalent code
+using per-cpu IRQs under arch/arm64.
 
-But on ARM64, the Hyper-V Reference TSC page clocksource should
-override the ARM arch counter, since the Hyper-V clocksource provides
-scaling and offsetting during live migrations that is not provided
-for the ARM arch counter.
+A better model is to treat per-cpu IRQs as the normal path (which it is
+for modern architectures), and the x86/x64 path as the exception. Do this
+by incorporating standard Linux per-cpu IRQ allocation into the main
+SITMER0 driver code, and bypass it in the x86/x64 exception case. For
+x86/x64, special case code is retained under arch/x86, but no STIMER0
+interrupt handling code is needed under arch/arm64.
 
-To get the needed behavior for both x86/x64 and ARM64, tweak the
-logic by defaulting the Hyper-V Reference TSC page clocksource
-rating to a large value that will always override.  If the Hyper-V
-TSC_INVARIANT flag is set, then reduce the rating so that it will not
-override the TSC.
-
-While the logic for getting there is slightly different, the net
-result in the normal cases is no functional change.
+No functional change.
 
 Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 ---
- drivers/clocksource/hyperv_timer.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ arch/x86/hyperv/hv_init.c          |   2 +-
+ arch/x86/include/asm/mshyperv.h    |   4 -
+ arch/x86/kernel/cpu/mshyperv.c     |  10 +--
+ drivers/clocksource/hyperv_timer.c | 180 ++++++++++++++++++++++++++-----------
+ include/asm-generic/mshyperv.h     |   5 --
+ include/clocksource/hyperv_timer.h |   3 +-
+ 6 files changed, 132 insertions(+), 72 deletions(-)
 
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 9af4f8a..9d10025 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -327,7 +327,7 @@ static void __init hv_stimer_setup_percpu_clockev(void)
+ 	 * Ignore any errors in setting up stimer clockevents
+ 	 * as we can run with the LAPIC timer as a fallback.
+ 	 */
+-	(void)hv_stimer_alloc();
++	(void)hv_stimer_alloc(false);
+ 
+ 	/*
+ 	 * Still register the LAPIC timer, because the direct-mode STIMER is
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index 5433312..6d4891b 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -31,10 +31,6 @@ static inline u64 hv_get_register(unsigned int reg)
+ 
+ void hyperv_vector_handler(struct pt_regs *regs);
+ 
+-static inline void hv_enable_stimer0_percpu_irq(int irq) {}
+-static inline void hv_disable_stimer0_percpu_irq(int irq) {}
+-
+-
+ #if IS_ENABLED(CONFIG_HYPERV)
+ extern int hyperv_init_cpuhp;
+ 
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 41fd84a..cebed53 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -90,21 +90,17 @@ void hv_remove_vmbus_handler(void)
+ 	set_irq_regs(old_regs);
+ }
+ 
+-int hv_setup_stimer0_irq(int *irq, int *vector, void (*handler)(void))
++/* For x86/x64, override weak placeholders in hyperv_timer.c */
++void hv_setup_stimer0_handler(void (*handler)(void))
+ {
+-	*vector = HYPERV_STIMER0_VECTOR;
+-	*irq = -1;   /* Unused on x86/x64 */
+ 	hv_stimer0_handler = handler;
+-	return 0;
+ }
+-EXPORT_SYMBOL_GPL(hv_setup_stimer0_irq);
+ 
+-void hv_remove_stimer0_irq(int irq)
++void hv_remove_stimer0_handler(void)
+ {
+ 	/* We have no way to deallocate the interrupt gate */
+ 	hv_stimer0_handler = NULL;
+ }
+-EXPORT_SYMBOL_GPL(hv_remove_stimer0_irq);
+ 
+ void hv_setup_kexec_handler(void (*handler)(void))
+ {
 diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-index 38fb396..cdb8e0c 100644
+index cdb8e0c..b2bf5e5 100644
 --- a/drivers/clocksource/hyperv_timer.c
 +++ b/drivers/clocksource/hyperv_timer.c
-@@ -302,14 +302,6 @@ void hv_stimer_global_cleanup(void)
-  * the other that uses the TSC reference page feature as defined in the
-  * TLFS.  The MSR version is for compatibility with old versions of
-  * Hyper-V and 32-bit x86.  The TSC reference page version is preferred.
-- *
-- * The Hyper-V clocksource ratings of 250 are chosen to be below the
-- * TSC clocksource rating of 300.  In configurations where Hyper-V offers
-- * an InvariantTSC, the TSC is not marked "unstable", so the TSC clocksource
-- * is available and preferred.  With the higher rating, it will be the
-- * default.  On older hardware and Hyper-V versions, the TSC is marked
-- * "unstable", so no TSC clocksource is created and the selected Hyper-V
-- * clocksource will be the default.
+@@ -18,6 +18,9 @@
+ #include <linux/sched_clock.h>
+ #include <linux/mm.h>
+ #include <linux/cpuhotplug.h>
++#include <linux/interrupt.h>
++#include <linux/irq.h>
++#include <linux/acpi.h>
+ #include <clocksource/hyperv_timer.h>
+ #include <asm/hyperv-tlfs.h>
+ #include <asm/mshyperv.h>
+@@ -43,14 +46,13 @@
   */
+ static bool direct_mode_enabled;
  
- u64 (*hv_read_reference_counter)(void);
-@@ -380,7 +372,7 @@ static int hv_cs_enable(struct clocksource *cs)
+-static int stimer0_irq;
+-static int stimer0_vector;
++static int stimer0_irq = -1;
++static long __percpu *stimer0_evt;
+ static int stimer0_message_sint;
  
- static struct clocksource hyperv_cs_tsc = {
- 	.name	= "hyperv_clocksource_tsc_page",
--	.rating	= 250,
-+	.rating	= 500,
- 	.read	= read_hv_clock_tsc_cs,
- 	.mask	= CLOCKSOURCE_MASK(64),
- 	.flags	= CLOCK_SOURCE_IS_CONTINUOUS,
-@@ -417,7 +409,7 @@ static u64 notrace read_hv_sched_clock_msr(void)
+ /*
+- * ISR for when stimer0 is operating in Direct Mode.  Direct Mode
+- * does not use VMbus or any VMbus messages, so process here and not
+- * in the VMbus driver code.
++ * Common code for stimer0 interrupts coming via Direct Mode or
++ * as a VMbus message.
+  */
+ void hv_stimer0_isr(void)
+ {
+@@ -61,6 +63,16 @@ void hv_stimer0_isr(void)
+ }
+ EXPORT_SYMBOL_GPL(hv_stimer0_isr);
  
- static struct clocksource hyperv_cs_msr = {
- 	.name	= "hyperv_clocksource_msr",
--	.rating	= 250,
-+	.rating	= 500,
- 	.read	= read_hv_clock_msr_cs,
- 	.mask	= CLOCKSOURCE_MASK(64),
- 	.flags	= CLOCK_SOURCE_IS_CONTINUOUS,
-@@ -455,6 +447,17 @@ static bool __init hv_init_tsc_clocksource(void)
- 	if (hv_root_partition)
- 		return false;
- 
-+	/*
-+	 * If Hyper-V offers TSC_INVARIANT, then the virtualized TSC correctly
-+	 * handles frequency and offset changes due to live migration,
-+	 * pause/resume, and other VM management operations.  So lower the
-+	 * Hyper-V Reference TSC rating, causing the generic TSC to be used.
-+	 * TSC_INVARIANT is not offered on ARM64, so the Hyper-V Reference
-+	 * TSC will be preferred over the virtualized ARM64 arch counter.
-+	 */
-+	if (ms_hyperv.features & HV_ACCESS_TSC_INVARIANT)
-+		hyperv_cs_tsc.rating = 250;
++/*
++ * stimer0 interrupt handler for architectures that support
++ * per-cpu interrupts, which also implies Direct Mode.
++ */
++static irqreturn_t hv_stimer0_percpu_isr(int irq, void *dev_id)
++{
++	hv_stimer0_isr();
++	return IRQ_HANDLED;
++}
 +
+ static int hv_ce_set_next_event(unsigned long delta,
+ 				struct clock_event_device *evt)
+ {
+@@ -76,8 +88,8 @@ static int hv_ce_shutdown(struct clock_event_device *evt)
+ {
+ 	hv_set_register(HV_REGISTER_STIMER0_COUNT, 0);
+ 	hv_set_register(HV_REGISTER_STIMER0_CONFIG, 0);
+-	if (direct_mode_enabled)
+-		hv_disable_stimer0_percpu_irq(stimer0_irq);
++	if (direct_mode_enabled && stimer0_irq >= 0)
++		disable_percpu_irq(stimer0_irq);
+ 
+ 	return 0;
+ }
+@@ -95,8 +107,9 @@ static int hv_ce_set_oneshot(struct clock_event_device *evt)
+ 		 * on the specified hardware vector/IRQ.
+ 		 */
+ 		timer_cfg.direct_mode = 1;
+-		timer_cfg.apic_vector = stimer0_vector;
+-		hv_enable_stimer0_percpu_irq(stimer0_irq);
++		timer_cfg.apic_vector = HYPERV_STIMER0_VECTOR;
++		if (stimer0_irq >= 0)
++			enable_percpu_irq(stimer0_irq, IRQ_TYPE_NONE);
+ 	} else {
+ 		/*
+ 		 * When it expires, the timer will generate a VMbus message,
+@@ -169,10 +182,70 @@ int hv_stimer_cleanup(unsigned int cpu)
+ }
+ EXPORT_SYMBOL_GPL(hv_stimer_cleanup);
+ 
++/*
++ * These placeholders are overridden by arch specific code on
++ * architectures that need special setup of the stimer0 IRQ because
++ * they don't support per-cpu IRQs (such as x86/x64).
++ */
++void __weak hv_setup_stimer0_handler(void (*handler)(void))
++{
++};
++
++void __weak hv_remove_stimer0_handler(void)
++{
++};
++
++/* Called only on architectures with per-cpu IRQs (i.e., not x86/x64) */
++static int hv_setup_stimer0_irq(void)
++{
++	int ret;
++
++	ret = acpi_register_gsi(NULL, HYPERV_STIMER0_VECTOR,
++			ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_HIGH);
++	if (ret < 0) {
++		pr_err("Can't register Hyper-V stimer0 GSI. Error %d", ret);
++		return ret;
++	}
++	stimer0_irq = ret;
++
++	stimer0_evt = alloc_percpu(long);
++	if (!stimer0_evt) {
++		ret = -ENOMEM;
++		goto unregister_gsi;
++	}
++	ret = request_percpu_irq(stimer0_irq, hv_stimer0_percpu_isr,
++		"Hyper-V stimer0", stimer0_evt);
++	if (ret) {
++		pr_err("Can't request Hyper-V stimer0 IRQ %d. Error %d",
++			stimer0_irq, ret);
++		goto free_stimer0_evt;
++	}
++	return ret;
++
++free_stimer0_evt:
++	free_percpu(stimer0_evt);
++unregister_gsi:
++	acpi_unregister_gsi(stimer0_irq);
++	stimer0_irq = -1;
++	return ret;
++}
++
++static void hv_remove_stimer0_irq(void)
++{
++	if (stimer0_irq == -1) {
++		hv_remove_stimer0_handler();
++	} else {
++		free_percpu_irq(stimer0_irq, stimer0_evt);
++		free_percpu(stimer0_evt);
++		acpi_unregister_gsi(stimer0_irq);
++		stimer0_irq = -1;
++	}
++}
++
+ /* hv_stimer_alloc - Global initialization of the clockevent and stimer0 */
+-int hv_stimer_alloc(void)
++int hv_stimer_alloc(bool have_percpu_irqs)
+ {
+-	int ret = 0;
++	int ret;
+ 
+ 	/*
+ 	 * Synthetic timers are always available except on old versions of
+@@ -188,29 +261,37 @@ int hv_stimer_alloc(void)
+ 
+ 	direct_mode_enabled = ms_hyperv.misc_features &
+ 			HV_STIMER_DIRECT_MODE_AVAILABLE;
+-	if (direct_mode_enabled) {
+-		ret = hv_setup_stimer0_irq(&stimer0_irq, &stimer0_vector,
+-				hv_stimer0_isr);
++
++	/*
++	 * If Direct Mode isn't enabled, the remainder of the initialization
++	 * is done later by hv_stimer_legacy_init()
++	 */
++	if (!direct_mode_enabled)
++		return 0;
++
++	if (have_percpu_irqs) {
++		ret = hv_setup_stimer0_irq();
+ 		if (ret)
+-			goto free_percpu;
++			goto free_clock_event;
++	} else {
++		hv_setup_stimer0_handler(hv_stimer0_isr);
++	}
+ 
+-		/*
+-		 * Since we are in Direct Mode, stimer initialization
+-		 * can be done now with a CPUHP value in the same range
+-		 * as other clockevent devices.
+-		 */
+-		ret = cpuhp_setup_state(CPUHP_AP_HYPERV_TIMER_STARTING,
+-				"clockevents/hyperv/stimer:starting",
+-				hv_stimer_init, hv_stimer_cleanup);
+-		if (ret < 0)
+-			goto free_stimer0_irq;
++	/*
++	 * Since we are in Direct Mode, stimer initialization
++	 * can be done now with a CPUHP value in the same range
++	 * as other clockevent devices.
++	 */
++	ret = cpuhp_setup_state(CPUHP_AP_HYPERV_TIMER_STARTING,
++			"clockevents/hyperv/stimer:starting",
++			hv_stimer_init, hv_stimer_cleanup);
++	if (ret < 0) {
++		hv_remove_stimer0_irq();
++		goto free_clock_event;
+ 	}
+ 	return ret;
+ 
+-free_stimer0_irq:
+-	hv_remove_stimer0_irq(stimer0_irq);
+-	stimer0_irq = 0;
+-free_percpu:
++free_clock_event:
+ 	free_percpu(hv_clock_event);
+ 	hv_clock_event = NULL;
+ 	return ret;
+@@ -254,23 +335,6 @@ void hv_stimer_legacy_cleanup(unsigned int cpu)
+ }
+ EXPORT_SYMBOL_GPL(hv_stimer_legacy_cleanup);
+ 
+-
+-/* hv_stimer_free - Free global resources allocated by hv_stimer_alloc() */
+-void hv_stimer_free(void)
+-{
+-	if (!hv_clock_event)
+-		return;
+-
+-	if (direct_mode_enabled) {
+-		cpuhp_remove_state(CPUHP_AP_HYPERV_TIMER_STARTING);
+-		hv_remove_stimer0_irq(stimer0_irq);
+-		stimer0_irq = 0;
+-	}
+-	free_percpu(hv_clock_event);
+-	hv_clock_event = NULL;
+-}
+-EXPORT_SYMBOL_GPL(hv_stimer_free);
+-
+ /*
+  * Do a global cleanup of clockevents for the cases of kexec and
+  * vmbus exit
+@@ -287,12 +351,17 @@ void hv_stimer_global_cleanup(void)
+ 		hv_stimer_legacy_cleanup(cpu);
+ 	}
+ 
+-	/*
+-	 * If Direct Mode is enabled, the cpuhp teardown callback
+-	 * (hv_stimer_cleanup) will be run on all CPUs to stop the
+-	 * stimers.
+-	 */
+-	hv_stimer_free();
++	if (!hv_clock_event)
++		return;
++
++	if (direct_mode_enabled) {
++		cpuhp_remove_state(CPUHP_AP_HYPERV_TIMER_STARTING);
++		hv_remove_stimer0_irq();
++		stimer0_irq = -1;
++	}
++	free_percpu(hv_clock_event);
++	hv_clock_event = NULL;
++
+ }
+ EXPORT_SYMBOL_GPL(hv_stimer_global_cleanup);
+ 
+@@ -454,9 +523,14 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	 * Hyper-V Reference TSC rating, causing the generic TSC to be used.
+ 	 * TSC_INVARIANT is not offered on ARM64, so the Hyper-V Reference
+ 	 * TSC will be preferred over the virtualized ARM64 arch counter.
++	 * While the Hyper-V MSR clocksource won't be used since the
++	 * Reference TSC clocksource is present, change its rating as
++	 * well for consistency.
+ 	 */
+-	if (ms_hyperv.features & HV_ACCESS_TSC_INVARIANT)
++	if (ms_hyperv.features & HV_ACCESS_TSC_INVARIANT) {
+ 		hyperv_cs_tsc.rating = 250;
++		hyperv_cs_msr.rating = 250;
++	}
+ 
  	hv_read_reference_counter = read_hv_clock_tsc;
  	phys_addr = virt_to_phys(hv_get_tsc_page());
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 43dc371..69e7fe0 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -183,9 +183,4 @@ static inline int cpumask_to_vpset(struct hv_vpset *vpset,
+ static inline void hyperv_cleanup(void) {}
+ #endif /* CONFIG_HYPERV */
  
+-#if IS_ENABLED(CONFIG_HYPERV)
+-extern int hv_setup_stimer0_irq(int *irq, int *vector, void (*handler)(void));
+-extern void hv_remove_stimer0_irq(int irq);
+-#endif
+-
+ #endif
+diff --git a/include/clocksource/hyperv_timer.h b/include/clocksource/hyperv_timer.h
+index 34eef083..b6774aa 100644
+--- a/include/clocksource/hyperv_timer.h
++++ b/include/clocksource/hyperv_timer.h
+@@ -21,8 +21,7 @@
+ #define HV_MIN_DELTA_TICKS 1
+ 
+ /* Routines called by the VMbus driver */
+-extern int hv_stimer_alloc(void);
+-extern void hv_stimer_free(void);
++extern int hv_stimer_alloc(bool have_percpu_irqs);
+ extern int hv_stimer_cleanup(unsigned int cpu);
+ extern void hv_stimer_legacy_init(unsigned int cpu, int sint);
+ extern void hv_stimer_legacy_cleanup(unsigned int cpu);
 -- 
 1.8.3.1
 
