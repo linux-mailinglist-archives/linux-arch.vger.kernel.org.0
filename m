@@ -2,222 +2,162 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD44932B4A3
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Mar 2021 06:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809C232B4A6
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Mar 2021 06:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233559AbhCCFXR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Mar 2021 00:23:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28967 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350865AbhCBM7H (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Mar 2021 07:59:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614689824;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OEF+iB48cTNiKP+ZNMz7BjR6LuPsBJJOqmuhL+aZPXo=;
-        b=JxeY/sU0JVUw0XQWQGMgGV68V3ogYqPOHH3nouxBfmTjmXGdOhkFqTzyA1Z6eXPytSI5//
-        XTe20PwLRmig02sl5/2lUXhTv59pGtj4DrV21bLGR455JWbzo4pdekQ6a14t2Fnsrs26BE
-        WCsNmbiRaEj4PLFREw7mLOkovQLu6xY=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-495-bfXnoWHcMzuXJljtJA4GkA-1; Tue, 02 Mar 2021 07:57:03 -0500
-X-MC-Unique: bfXnoWHcMzuXJljtJA4GkA-1
-Received: by mail-ej1-f72.google.com with SMTP id gv58so2208303ejc.6
-        for <linux-arch@vger.kernel.org>; Tue, 02 Mar 2021 04:57:02 -0800 (PST)
+        id S236033AbhCCFYC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Mar 2021 00:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351022AbhCBNCk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Mar 2021 08:02:40 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A81C06178C
+        for <linux-arch@vger.kernel.org>; Tue,  2 Mar 2021 05:01:27 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id u14so19779794wri.3
+        for <linux-arch@vger.kernel.org>; Tue, 02 Mar 2021 05:01:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=P88OLgbTkZUMP2F6RxCTDa3UqTL0DvJ/H4h2928AGS0=;
+        b=cWjTZIrPmgrzCItY3GJ2Ad5+F80d27tfXG3ciPRPzu5yFPVx0DuMOJ37cHpyYZ6hJY
+         bDEVAFAwTwf7RBXKlXP9N39xkM0HBhEDsLYqDtJHJG2P1tVspg4k6Ae4+Pbv5B6Inz5D
+         0Qzy7aC3jLZtaOhaanSYazYjwRPcpLkbE33gFT6FhRPqhKsIgIeFzEawFp8gn5B775DU
+         jWnUFkFXK8E1HGlAV+DVB4yXG7JKf0PdINk5QN1sBDFRrBmvtg69qPBc0vdxqeeh19IQ
+         cRKtfemz2MsMUmQ0cueUIaghph4L+iiOg/wlhM2WPPOoEeWqh45c0GM6IK+McsGFomTA
+         2Psg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=OEF+iB48cTNiKP+ZNMz7BjR6LuPsBJJOqmuhL+aZPXo=;
-        b=j+e9rFhqlTrtD0YQnaXyDVqnBXTOxQXzGayBQfX1wSF7PLsVxfBDOQpTYcp77Yjcw+
-         h7tJ0nAX/MVDqfMx5i0cFt2O3QM81XhUz1HgYbHP9pmwlgRWhk9VFPFO0LEmYl3RwcuD
-         pRX4m8Bnk80Q6wZ0J8wwLv06ycsMFDMldm145yOvwX0A2WTgP+Ck4INbN9ZaV/od+hbX
-         LXgR8vJY6MfJtLPmR7L0iNPD8ssiSGfLWecPnuuvQ+1Wsng2hpEpdlyYGsq6/rJ+eXfr
-         6q0abmqJ1MWFkkM+qo3TFoFgpjyTHLyo80FVZvVVcsFvAl2vki/ZK4tUZf4DXLyoCZuQ
-         LCXQ==
-X-Gm-Message-State: AOAM533s6Z7xBlUjQu6TY5z2gRdzjuP06Z+RmQHxXboB9e7yYEzMWLfY
-        9tPHbhbwGkSAiZZVJPQRkVPMKdqlF/9KusckAj0itJ2jAk/0A1EipSr82taljWuW+RizjLx1a3W
-        hwKLEqNFi2a6GlV+xnh3vRg==
-X-Received: by 2002:aa7:c403:: with SMTP id j3mr20422770edq.137.1614689821920;
-        Tue, 02 Mar 2021 04:57:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzG88ql2RFUHF/MFuqHfbe5TvkqJOeJQQ1KRkXPoJOvtrX/awvU92pp8hadPNxU4p+haIk9Ag==
-X-Received: by 2002:aa7:c403:: with SMTP id j3mr20422757edq.137.1614689821763;
-        Tue, 02 Mar 2021 04:57:01 -0800 (PST)
-Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id k27sm18623879eje.67.2021.03.02.04.57.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Mar 2021 04:57:01 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arch@vger.kernel.org, sthemmin@microsoft.com,
-        kys@microsoft.com, wei.liu@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        daniel.lezcano@linaro.org, arnd@arndb.de,
-        linux-hyperv@vger.kernel.org
-Subject: Re: ** POTENTIAL FRAUD ALERT - RED HAT ** [PATCH v2 01/10] Drivers:
- hv: vmbus: Move Hyper-V page allocator to arch neutral code
-In-Reply-To: <1614561332-2523-2-git-send-email-mikelley@microsoft.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=P88OLgbTkZUMP2F6RxCTDa3UqTL0DvJ/H4h2928AGS0=;
+        b=hJTAEn29jzk60Qi4VFHt4Sf/TxFXiHzADxqI6LHbLOphnmD1uXC+kOkIK9vzOOVVeW
+         h2zAbD+oDi/hQMOgyH4o8k0T4kgTujAqyzcHPgPYopLFddatsZMauvipMq81WcHa6gjJ
+         vm/QCOmG5GBXAln2+etNn2Tre4T37QzC/z34ZDaWYa1J078wsF7qe554OJgLiHtclWOC
+         GpWL191qWU1eyZnuBLePkiT/fyWp9Dxk8bfkC1bd9ZAqMpqB+C5KXeKx0UaRRm9trKzu
+         7ED6i+QWTwzNUD8huZ25MghTYXuEu1afdmOuVb9lM/iK0TS9s2D50wl7h+mBL+qZ/Z1H
+         XMTg==
+X-Gm-Message-State: AOAM532uy5QWA3Qark/jXhrJcYHaDaxo4WTLbUY5u24uqkjJ9aXtuvDr
+        AtXO4wvy4ZAe/KL6m3h9ItWbGFr2O/d/lA==
+X-Google-Smtp-Source: ABdhPJzcyra0YjUAPO03uOeDAoSsXQjMzgxxaxB1srNOV9k4reCns8wKKgldcU0WpK4ycDHxpC0Kgw==
+X-Received: by 2002:adf:eec5:: with SMTP id a5mr6833415wrp.303.1614690086136;
+        Tue, 02 Mar 2021 05:01:26 -0800 (PST)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-144-192.adsl.proxad.net. [82.252.144.192])
+        by smtp.googlemail.com with ESMTPSA id 91sm5782778wrl.20.2021.03.02.05.01.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Mar 2021 05:01:25 -0800 (PST)
+Subject: Re: [PATCH v2 07/10] clocksource/drivers/hyper-v: Handle vDSO
+ differences inline
+To:     Michael Kelley <mikelley@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
 References: <1614561332-2523-1-git-send-email-mikelley@microsoft.com>
- <1614561332-2523-2-git-send-email-mikelley@microsoft.com>
-Date:   Tue, 02 Mar 2021 13:57:00 +0100
-Message-ID: <87r1kxemsj.fsf@vitty.brq.redhat.com>
+ <1614561332-2523-8-git-send-email-mikelley@microsoft.com>
+ <42dc252a-b09a-afeb-6792-9b77669c16e9@linaro.org>
+ <MWHPR21MB15930DD833E49415610C021DD7999@MWHPR21MB1593.namprd21.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <f09da965-aeda-7edf-722c-dbc9d7daab38@linaro.org>
+Date:   Tue, 2 Mar 2021 14:01:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <MWHPR21MB15930DD833E49415610C021DD7999@MWHPR21MB1593.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Michael Kelley <mikelley@microsoft.com> writes:
+On 02/03/2021 02:29, Michael Kelley wrote:
+> From: Daniel Lezcano <daniel.lezcano@linaro.org> Sent: Monday, March 1, 2021 4:22 AM
+>>
+>> On 01/03/2021 02:15, Michael Kelley wrote:
+>>> While the driver for the Hyper-V Reference TSC and STIMERs is architecture
+>>> neutral, vDSO is implemented for x86/x64, but not for ARM64.  Current code
+>>> calls into utility functions under arch/x86 (and coming, under arch/arm64)
+>>> to handle the difference.
+>>>
+>>> Change this approach to handle the difference inline based on whether
+>>> VDSO_CLOCK_MODE_HVCLOCK is present.  The new approach removes code under
+>>> arch/* since the difference is tied more to the specifics of the Linux
+>>> implementation than to the architecture.
+>>>
+>>> No functional change.
+>>
+>> A suggestion below
+>>
+>>
+>>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+>>> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+>>> ---
+>>>  arch/x86/include/asm/mshyperv.h    |  4 ----
+>>>  drivers/clocksource/hyperv_timer.c | 10 ++++++++--
+>>>  2 files changed, 8 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+>>> index c73c127..5e5e08aa 100644
+>>> --- a/drivers/clocksource/hyperv_timer.c
+>>> +++ b/drivers/clocksource/hyperv_timer.c
+>>> @@ -372,7 +372,9 @@ static void resume_hv_clock_tsc(struct clocksource *arg)
+>>>
+>>>  static int hv_cs_enable(struct clocksource *cs)
+>>
+>> static __maybe_unused int hv_cs_enable(struct clocksource *cs)
+>>
+>>>  {
+>>> -	hv_enable_vdso_clocksource();
+>>> +#ifdef VDSO_CLOCKMODE_HVCLOCK
+>>> +	vclocks_set_used(VDSO_CLOCKMODE_HVCLOCK);
+>>> +#endif
+>>>  	return 0;
+>>>  }
+>>>
+>>> @@ -385,6 +387,11 @@ static int hv_cs_enable(struct clocksource *cs)
+>>>  	.suspend= suspend_hv_clock_tsc,
+>>>  	.resume	= resume_hv_clock_tsc,
+>>>  	.enable = hv_cs_enable,
+>>> +#ifdef VDSO_CLOCKMODE_HVCLOCK
+>>> +	.vdso_clock_mode = VDSO_CLOCKMODE_HVCLOCK,
+>>> +#else
+>>> +	.vdso_clock_mode = VDSO_CLOCKMODE_NONE,
+>>> +#endif
+>>
+>> #ifdef VDSO_CLOCKMODE_HVCLOCK
+>> 	.enable = hv_cs_enable,
+>> 	.vdso_clock_mode = VDSO_CLOCKMODE_HVCLOCK,
+>> #else
+>> 	.vdso_clock_mode = VDSO_CLOCKMODE_NONE,
+>> #endif
+>>
+> 
+> Is there any particular benefit (that I might not be recognizing)
+> to having the .enable function be NULL vs. a function that
+> does nothing?  I can see the handful of places where the
+> .enable function is invoked, and there doesn't seem to be
+> much difference.
+> 
+> In any case, I have no problem with making the change in
+> a v3 of the patch set.
 
-> The Hyper-V page allocator functions are implemented in an architecture
-> neutral way.  Move them into the architecture neutral VMbus module so
-> a separate implementation for ARM64 is not needed.
->
-> No functional change.
->
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->  arch/x86/hyperv/hv_init.c       | 22 ----------------------
->  arch/x86/include/asm/mshyperv.h |  5 -----
->  drivers/hv/hv.c                 | 36 ++++++++++++++++++++++++++++++++++++
->  include/asm-generic/mshyperv.h  |  4 ++++
->  4 files changed, 40 insertions(+), 27 deletions(-)
->
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index b81047d..4bdb344 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -54,28 +54,6 @@
->  u32 hv_max_vp_index;
->  EXPORT_SYMBOL_GPL(hv_max_vp_index);
->  
-> -void *hv_alloc_hyperv_page(void)
-> -{
-> -	BUILD_BUG_ON(PAGE_SIZE != HV_HYP_PAGE_SIZE);
-> -
-> -	return (void *)__get_free_page(GFP_KERNEL);
-> -}
-> -EXPORT_SYMBOL_GPL(hv_alloc_hyperv_page);
-> -
-> -void *hv_alloc_hyperv_zeroed_page(void)
-> -{
-> -        BUILD_BUG_ON(PAGE_SIZE != HV_HYP_PAGE_SIZE);
-> -
-> -        return (void *)__get_free_page(GFP_KERNEL | __GFP_ZERO);
-> -}
-> -EXPORT_SYMBOL_GPL(hv_alloc_hyperv_zeroed_page);
-> -
-> -void hv_free_hyperv_page(unsigned long addr)
-> -{
-> -	free_page(addr);
-> -}
-> -EXPORT_SYMBOL_GPL(hv_free_hyperv_page);
-> -
->  static int hv_cpu_init(unsigned int cpu)
->  {
->  	u64 msr_vp_index;
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> index ccf60a8..ef6e968 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -233,9 +233,6 @@ static inline struct hv_vp_assist_page *hv_get_vp_assist_page(unsigned int cpu)
->  
->  void __init hyperv_init(void);
->  void hyperv_setup_mmu_ops(void);
-> -void *hv_alloc_hyperv_page(void);
-> -void *hv_alloc_hyperv_zeroed_page(void);
-> -void hv_free_hyperv_page(unsigned long addr);
->  void set_hv_tscchange_cb(void (*cb)(void));
->  void clear_hv_tscchange_cb(void);
->  void hyperv_stop_tsc_emulation(void);
-> @@ -272,8 +269,6 @@ int hv_map_ioapic_interrupt(int ioapic_id, bool level, int vcpu, int vector,
->  #else /* CONFIG_HYPERV */
->  static inline void hyperv_init(void) {}
->  static inline void hyperv_setup_mmu_ops(void) {}
-> -static inline void *hv_alloc_hyperv_page(void) { return NULL; }
-> -static inline void hv_free_hyperv_page(unsigned long addr) {}
->  static inline void set_hv_tscchange_cb(void (*cb)(void)) {}
->  static inline void clear_hv_tscchange_cb(void) {}
->  static inline void hyperv_stop_tsc_emulation(void) {};
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index f202ac7..cca8d5e 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -37,6 +37,42 @@ int hv_init(void)
->  }
->  
->  /*
-> + * Functions for allocating and freeing memory with size and
-> + * alignment HV_HYP_PAGE_SIZE. These functions are needed because
-> + * the guest page size may not be the same as the Hyper-V page
-> + * size. We depend upon kmalloc() aligning power-of-two size
-> + * allocations to the allocation size boundary, so that the
-> + * allocated memory appears to Hyper-V as a page of the size
-> + * it expects.
-> + */
-> +
-> +void *hv_alloc_hyperv_page(void)
-> +{
-> +	BUILD_BUG_ON(PAGE_SIZE <  HV_HYP_PAGE_SIZE);
-> +
-> +	if (PAGE_SIZE == HV_HYP_PAGE_SIZE)
-> +		return (void *)__get_free_page(GFP_KERNEL);
-> +	else
-> +		return kmalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
+It is just coding style, it allows to remove a #ifdef in the code.
 
-PAGE_SIZE and HV_HYP_PAGE_SIZE are known compile-time and in case this
-won't change in the future we can probably write this as
 
-#if PAGE_SIZE == HV_HYP_PAGE_SIZE
-       return (void *)__get_free_page(GFP_KERNEL);
-#else
-       return kmalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
-#endif
-
-(not sure if the output is going to be any different with e.g. gcc's '-O2')
-
-> +}
-> +
-> +void *hv_alloc_hyperv_zeroed_page(void)
-> +{
-> +	if (PAGE_SIZE == HV_HYP_PAGE_SIZE)
-> +		return (void *)__get_free_page(GFP_KERNEL | __GFP_ZERO);
-> +	else
-> +		return kzalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
-> +}
-> +
-> +void hv_free_hyperv_page(unsigned long addr)
-> +{
-> +	if (PAGE_SIZE == HV_HYP_PAGE_SIZE)
-> +		free_page(addr);
-> +	else
-> +		kfree((void *)addr);
-> +}
-> +
-> +/*
->   * hv_post_message - Post a message using the hypervisor message IPC.
->   *
->   * This involves a hypercall.
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-> index dff58a3..694b5bc 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -117,6 +117,10 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
->  /* Sentinel value for an uninitialized entry in hv_vp_index array */
->  #define VP_INVAL	U32_MAX
->  
-> +void *hv_alloc_hyperv_page(void);
-> +void *hv_alloc_hyperv_zeroed_page(void);
-> +void hv_free_hyperv_page(unsigned long addr);
-> +
->  /**
->   * hv_cpu_number_to_vp_number() - Map CPU to VP.
->   * @cpu_number: CPU number in Linux terms
 
 -- 
-Vitaly
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
