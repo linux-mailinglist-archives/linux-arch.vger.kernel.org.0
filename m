@@ -2,481 +2,439 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC6532C85E
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 02:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A248632C85F
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 02:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238992AbhCDAtP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Mar 2021 19:49:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50512 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346460AbhCCQ0n (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 3 Mar 2021 11:26:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8804664EFD;
-        Wed,  3 Mar 2021 16:24:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614788651;
-        bh=4leNaCIZ1xcR/mkizNz8otv7a82Efwmo44tjJNIZIk4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JX+/9tLtUvIiDi7SFCqpWGhmAdreFxjmliUzXlVRwklzZTk4DPUwOSPZK9pwvWYD5
-         Ca308y9JA8UPmjRGSejqUIC8kF5wNup7qArHASl6egrzZtmLdpGXV/IY8XCH1jd/Uv
-         nKJMwPe04B4fCU+0jwUhaZtSAnKLIBUhF77TydDo8AtOLgchSuMhe5GzsFY0dzL5oT
-         sM0rWnwCWoGXKirD+9vHn1jE2/h2x7ew8QbbdZYzKOxMMWUROMkU0CRyKBx3/v04kq
-         9vg4tuPv2qegjZoZr9epw0w3+AFpfG3YdN5BeLeS2z2/mb0T3AWHqyIMb27IZdbBfo
-         DFuxxEQOzpUyA==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: [PATCH v18 9/9] secretmem: test: add basic selftest for memfd_secret(2)
-Date:   Wed,  3 Mar 2021 18:22:09 +0200
-Message-Id: <20210303162209.8609-10-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210303162209.8609-1-rppt@kernel.org>
-References: <20210303162209.8609-1-rppt@kernel.org>
+        id S239705AbhCDAtQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Mar 2021 19:49:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:60911 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233405AbhCCRA0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Mar 2021 12:00:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1614790724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YVxuue7y4Ed4LzXK8LsDrSNeQPTV4aHY0EceDjIx7oo=;
+        b=N549gedJaC7I/X7tZetIZxYsotUq1B5PZ+tYas7AKlfad8rbNyNt4B2azflk3+Kje+QGy9
+        I65G8sgt3V3XpUvvBI2Fmq06uPhObEZD3ZdIOq9cQkBNZpGeVVdX7nyu7jOYyK8UX3293r
+        WzCnyoQUIsqjkd7PVCulMGbXXMC/lIc=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-142-iTq4_ZchPK-on3j8GWIIfQ-1; Wed, 03 Mar 2021 11:58:43 -0500
+X-MC-Unique: iTq4_ZchPK-on3j8GWIIfQ-1
+Received: by mail-ed1-f71.google.com with SMTP id k8so4269484edn.19
+        for <linux-arch@vger.kernel.org>; Wed, 03 Mar 2021 08:58:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=YVxuue7y4Ed4LzXK8LsDrSNeQPTV4aHY0EceDjIx7oo=;
+        b=jyx9AmaZxJXdMxPPUwjmZ2QpHL2bo76bln0agKM8X7fKqvW/80H8lM8U4IG3rReiiY
+         fAP5cvHKtttypPp0ER3TAVeQuiVCGtlg/Ezdq0cIXsZps/mFO/iKNlq6vZLmcTiFiO3g
+         6sLpJf/j3DSs0WJtKTIGCTyAjUiFmYuavknqcFU5ENAVRgJvztSMqBu21aHdcgm+cCNg
+         /yRNXmoLdhB6asnEbuYKT9QTqHSaqmKaLJJXKRCqK6NteLKLREKd/VGXSl1XktoA+FKM
+         SwtQ1OP43I3+bv0dT77b6SCldm11Flyo/x1DQalyAbHKKZTLJEupBQMuqYvXjZz3yMQM
+         C8YQ==
+X-Gm-Message-State: AOAM530yU9Ode+OEGbiqwKbXo+uhsf5vOTZ1NSjoVWr8t3OE8t/Zdfmn
+        TZyKqIyEYjZPlIsdZuVkJ8VHBNriodubVgY3mkYezAtvf//Vt51duNe3EiqrS65AGKhAfVQYZuF
+        Z/idOumT8m6PCExh3mekWXw==
+X-Received: by 2002:a05:6402:5211:: with SMTP id s17mr159791edd.327.1614790721754;
+        Wed, 03 Mar 2021 08:58:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxY/SU0N9MgWd3KZ2ViJPUSomlejFErx+B7XNAbgw2BkwjxXMu2kBtsPZ5IfYmOkvBRaZ0h+Q==
+X-Received: by 2002:a05:6402:5211:: with SMTP id s17mr159754edd.327.1614790721408;
+        Wed, 03 Mar 2021 08:58:41 -0800 (PST)
+Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id d5sm22361912edu.12.2021.03.03.08.58.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Mar 2021 08:58:40 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com,
+        sunilmut@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        sthemmin@microsoft.com, wei.liu@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        davem@davemloft.net, kuba@kernel.org, gregkh@linuxfoundation.org,
+        arnd@arndb.de
+Subject: Re: [RFC PATCH 2/12] x86/Hyper-V: Add new hvcall guest address host
+ visibility support
+In-Reply-To: <20210228150315.2552437-3-ltykernel@gmail.com>
+References: <20210228150315.2552437-1-ltykernel@gmail.com>
+ <20210228150315.2552437-3-ltykernel@gmail.com>
+Date:   Wed, 03 Mar 2021 17:58:39 +0100
+Message-ID: <87v9a8cgxs.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+Tianyu Lan <ltykernel@gmail.com> writes:
 
-The test verifies that file descriptor created with memfd_secret does not
-allow read/write operations, that secret memory mappings respect
-RLIMIT_MEMLOCK and that remote accesses with process_vm_read() and
-ptrace() to the secret memory fail.
+> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>
+> Add new hvcall guest address host visibility support. Mark vmbus
+> ring buffer visible to host when create gpadl buffer and mark back
+> to not visible when tear down gpadl buffer.
+>
+> Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> Co-Developed-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h | 13 ++++++++
+>  arch/x86/include/asm/mshyperv.h    |  4 +--
+>  arch/x86/kernel/cpu/mshyperv.c     | 46 ++++++++++++++++++++++++++
+>  drivers/hv/channel.c               | 53 ++++++++++++++++++++++++++++--
+>  drivers/net/hyperv/hyperv_net.h    |  1 +
+>  drivers/net/hyperv/netvsc.c        |  9 +++--
+>  drivers/uio/uio_hv_generic.c       |  6 ++--
+>  include/asm-generic/hyperv-tlfs.h  |  1 +
+>  include/linux/hyperv.h             |  3 +-
+>  9 files changed, 126 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index fb1893a4c32b..d22b1c3f425a 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -573,4 +573,17 @@ enum hv_interrupt_type {
+>  
+>  #include <asm-generic/hyperv-tlfs.h>
+>  
+> +/* All input parameters should be in single page. */
+> +#define HV_MAX_MODIFY_GPA_REP_COUNT		\
+> +	((PAGE_SIZE - 2 * sizeof(u64)) / (sizeof(u64)))
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Christopher Lameter <cl@linux.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Elena Reshetova <elena.reshetova@intel.com>
-Cc: Hagen Paul Pfeifer <hagen@jauu.net>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tycho Andersen <tycho@tycho.ws>
-Cc: Will Deacon <will@kernel.org>
----
- tools/testing/selftests/vm/.gitignore     |   1 +
- tools/testing/selftests/vm/Makefile       |   3 +-
- tools/testing/selftests/vm/memfd_secret.c | 296 ++++++++++++++++++++++
- tools/testing/selftests/vm/run_vmtests.sh |  17 ++
- 4 files changed, 316 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/vm/memfd_secret.c
+Would it be easier to express this as '((PAGE_SIZE / sizeof(u64)) - 2' ?
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 9a35c3f6a557..c8deddc81e7a 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -21,4 +21,5 @@ va_128TBswitch
- map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
-+memfd_secret
- local_config.*
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index d42115e4284d..0200fb61646c 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -34,6 +34,7 @@ TEST_GEN_FILES += khugepaged
- TEST_GEN_FILES += map_fixed_noreplace
- TEST_GEN_FILES += map_hugetlb
- TEST_GEN_FILES += map_populate
-+TEST_GEN_FILES += memfd_secret
- TEST_GEN_FILES += mlock-random-test
- TEST_GEN_FILES += mlock2-tests
- TEST_GEN_FILES += mremap_dontunmap
-@@ -133,7 +134,7 @@ warn_32bit_failure:
- endif
- endif
- 
--$(OUTPUT)/mlock-random-test: LDLIBS += -lcap
-+$(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
- 
- $(OUTPUT)/gup_test: ../../../../mm/gup_test.h
- 
-diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
-new file mode 100644
-index 000000000000..c878c2b841fc
---- /dev/null
-+++ b/tools/testing/selftests/vm/memfd_secret.c
-@@ -0,0 +1,296 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright IBM Corporation, 2020
-+ *
-+ * Author: Mike Rapoport <rppt@linux.ibm.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <sys/uio.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <sys/types.h>
-+#include <sys/ptrace.h>
-+#include <sys/syscall.h>
-+#include <sys/resource.h>
-+#include <sys/capability.h>
-+
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <stdio.h>
-+
-+#include "../kselftest.h"
-+
-+#define fail(fmt, ...) ksft_test_result_fail(fmt, ##__VA_ARGS__)
-+#define pass(fmt, ...) ksft_test_result_pass(fmt, ##__VA_ARGS__)
-+#define skip(fmt, ...) ksft_test_result_skip(fmt, ##__VA_ARGS__)
-+
-+#ifdef __NR_memfd_secret
-+
-+#define PATTERN	0x55
-+
-+static const int prot = PROT_READ | PROT_WRITE;
-+static const int mode = MAP_SHARED;
-+
-+static unsigned long page_size;
-+static unsigned long mlock_limit_cur;
-+static unsigned long mlock_limit_max;
-+
-+static int memfd_secret(unsigned long flags)
-+{
-+	return syscall(__NR_memfd_secret, flags);
-+}
-+
-+static void test_file_apis(int fd)
-+{
-+	char buf[64];
-+
-+	if ((read(fd, buf, sizeof(buf)) >= 0) ||
-+	    (write(fd, buf, sizeof(buf)) >= 0) ||
-+	    (pread(fd, buf, sizeof(buf), 0) >= 0) ||
-+	    (pwrite(fd, buf, sizeof(buf), 0) >= 0))
-+		fail("unexpected file IO\n");
-+	else
-+		pass("file IO is blocked as expected\n");
-+}
-+
-+static void test_mlock_limit(int fd)
-+{
-+	size_t len;
-+	char *mem;
-+
-+	len = mlock_limit_cur;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("unable to mmap secret memory\n");
-+		return;
-+	}
-+	munmap(mem, len);
-+
-+	len = mlock_limit_max * 2;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem != MAP_FAILED) {
-+		fail("unexpected mlock limit violation\n");
-+		munmap(mem, len);
-+		return;
-+	}
-+
-+	pass("mlock limit is respected\n");
-+}
-+
-+static void try_process_vm_read(int fd, int pipefd[2])
-+{
-+	struct iovec liov, riov;
-+	char buf[64];
-+	char *mem;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		exit(KSFT_FAIL);
-+	}
-+
-+	liov.iov_len = riov.iov_len = sizeof(buf);
-+	liov.iov_base = buf;
-+	riov.iov_base = mem;
-+
-+	if (process_vm_readv(getppid(), &liov, 1, &riov, 1, 0) < 0) {
-+		if (errno == ENOSYS)
-+			exit(KSFT_SKIP);
-+		exit(KSFT_PASS);
-+	}
-+
-+	exit(KSFT_FAIL);
-+}
-+
-+static void try_ptrace(int fd, int pipefd[2])
-+{
-+	pid_t ppid = getppid();
-+	int status;
-+	char *mem;
-+	long ret;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		perror("pipe write");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = ptrace(PTRACE_ATTACH, ppid, 0, 0);
-+	if (ret) {
-+		perror("ptrace_attach");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = waitpid(ppid, &status, WUNTRACED);
-+	if ((ret != ppid) || !(WIFSTOPPED(status))) {
-+		fprintf(stderr, "weird waitppid result %ld stat %x\n",
-+			ret, status);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0))
-+		exit(KSFT_PASS);
-+
-+	exit(KSFT_FAIL);
-+}
-+
-+static void check_child_status(pid_t pid, const char *name)
-+{
-+	int status;
-+
-+	waitpid(pid, &status, 0);
-+
-+	if (WIFEXITED(status) && WEXITSTATUS(status) == KSFT_SKIP) {
-+		skip("%s is not supported\n", name);
-+		return;
-+	}
-+
-+	if ((WIFEXITED(status) && WEXITSTATUS(status) == KSFT_PASS) ||
-+	    WIFSIGNALED(status)) {
-+		pass("%s is blocked as expected\n", name);
-+		return;
-+	}
-+
-+	fail("%s: unexpected memory access\n", name);
-+}
-+
-+static void test_remote_access(int fd, const char *name,
-+			       void (*func)(int fd, int pipefd[2]))
-+{
-+	int pipefd[2];
-+	pid_t pid;
-+	char *mem;
-+
-+	if (pipe(pipefd)) {
-+		fail("pipe failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		fail("fork failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	if (pid == 0) {
-+		func(fd, pipefd);
-+		return;
-+	}
-+
-+	mem = mmap(NULL, page_size, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("Unable to mmap secret memory\n");
-+		return;
-+	}
-+
-+	ftruncate(fd, page_size);
-+	memset(mem, PATTERN, page_size);
-+
-+	if (write(pipefd[1], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	check_child_status(pid, name);
-+}
-+
-+static void test_process_vm_read(int fd)
-+{
-+	test_remote_access(fd, "process_vm_read", try_process_vm_read);
-+}
-+
-+static void test_ptrace(int fd)
-+{
-+	test_remote_access(fd, "ptrace", try_ptrace);
-+}
-+
-+static int set_cap_limits(rlim_t max)
-+{
-+	struct rlimit new;
-+	cap_t cap = cap_init();
-+
-+	new.rlim_cur = max;
-+	new.rlim_max = max;
-+	if (setrlimit(RLIMIT_MEMLOCK, &new)) {
-+		perror("setrlimit() returns error");
-+		return -1;
-+	}
-+
-+	/* drop capabilities including CAP_IPC_LOCK */
-+	if (cap_set_proc(cap)) {
-+		perror("cap_set_proc() returns error");
-+		return -2;
-+	}
-+
-+	return 0;
-+}
-+
-+static void prepare(void)
-+{
-+	struct rlimit rlim;
-+
-+	page_size = sysconf(_SC_PAGE_SIZE);
-+	if (!page_size)
-+		ksft_exit_fail_msg("Failed to get page size %s\n",
-+				   strerror(errno));
-+
-+	if (getrlimit(RLIMIT_MEMLOCK, &rlim))
-+		ksft_exit_fail_msg("Unable to detect mlock limit: %s\n",
-+				   strerror(errno));
-+
-+	mlock_limit_cur = rlim.rlim_cur;
-+	mlock_limit_max = rlim.rlim_max;
-+
-+	printf("page_size: %ld, mlock.soft: %ld, mlock.hard: %ld\n",
-+	       page_size, mlock_limit_cur, mlock_limit_max);
-+
-+	if (page_size > mlock_limit_cur)
-+		mlock_limit_cur = page_size;
-+	if (page_size > mlock_limit_max)
-+		mlock_limit_max = page_size;
-+
-+	if (set_cap_limits(mlock_limit_max))
-+		ksft_exit_fail_msg("Unable to set mlock limit: %s\n",
-+				   strerror(errno));
-+}
-+
-+#define NUM_TESTS 4
-+
-+int main(int argc, char *argv[])
-+{
-+	int fd;
-+
-+	prepare();
-+
-+	ksft_print_header();
-+	ksft_set_plan(NUM_TESTS);
-+
-+	fd = memfd_secret(0);
-+	if (fd < 0) {
-+		if (errno == ENOSYS)
-+			ksft_exit_skip("memfd_secret is not supported\n");
-+		else
-+			ksft_exit_fail_msg("memfd_secret failed: %s\n",
-+					   strerror(errno));
-+	}
-+
-+	test_mlock_limit(fd);
-+	test_file_apis(fd);
-+	test_process_vm_read(fd);
-+	test_ptrace(fd);
-+
-+	close(fd);
-+
-+	ksft_exit(!ksft_get_fail_cnt());
-+}
-+
-+#else /* __NR_memfd_secret */
-+
-+int main(int argc, char *argv[])
-+{
-+	printf("skip: skipping memfd_secret test (missing __NR_memfd_secret)\n");
-+	return KSFT_SKIP;
-+}
-+
-+#endif /* __NR_memfd_secret */
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index e953f3cd9664..95a67382f132 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -346,4 +346,21 @@ else
- 	exitcode=1
- fi
- 
-+echo "running memfd_secret test"
-+echo "------------------------------------"
-+./memfd_secret
-+ret_val=$?
-+
-+if [ $ret_val -eq 0 ]; then
-+	echo "[PASS]"
-+elif [ $ret_val -eq $ksft_skip ]; then
-+	echo "[SKIP]"
-+	exitcode=$ksft_skip
-+else
-+	echo "[FAIL]"
-+	exitcode=1
-+fi
-+
-+exit $exitcode
-+
- exit $exitcode
+> +
+> +/* HvCallModifySparseGpaPageHostVisibility hypercall */
+> +struct hv_input_modify_sparse_gpa_page_host_visibility {
+> +	u64 partition_id;
+> +	u32 host_visibility:2;
+> +	u32 reserved0:30;
+> +	u32 reserved1;
+> +	u64 gpa_page_list[HV_MAX_MODIFY_GPA_REP_COUNT];
+> +} __packed;
+> +
+>  #endif
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index ccf60a809a17..1e8275d35c1f 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -262,13 +262,13 @@ static inline void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+>  	msi_entry->address.as_uint32 = msi_desc->msg.address_lo;
+>  	msi_entry->data.as_uint32 = msi_desc->msg.data;
+>  }
+> -
+
+stray change
+
+>  struct irq_domain *hv_create_pci_msi_domain(void);
+>  
+>  int hv_map_ioapic_interrupt(int ioapic_id, bool level, int vcpu, int vector,
+>  		struct hv_interrupt_entry *entry);
+>  int hv_unmap_ioapic_interrupt(int ioapic_id, struct hv_interrupt_entry *entry);
+> -
+> +int hv_set_mem_host_visibility(void *kbuffer, u32 size, u32 visibility);
+> +int hv_mark_gpa_visibility(u16 count, const u64 pfn[], u32 visibility);
+>  #else /* CONFIG_HYPERV */
+>  static inline void hyperv_init(void) {}
+>  static inline void hyperv_setup_mmu_ops(void) {}
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index e88bc296afca..347c32eac8fd 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -37,6 +37,8 @@
+>  bool hv_root_partition;
+>  EXPORT_SYMBOL_GPL(hv_root_partition);
+>  
+> +#define HV_PARTITION_ID_SELF ((u64)-1)
+> +
+
+We seem to have this already:
+
+include/asm-generic/hyperv-tlfs.h:#define HV_PARTITION_ID_SELF          ((u64)-1)
+
+>  struct ms_hyperv_info ms_hyperv;
+>  EXPORT_SYMBOL_GPL(ms_hyperv);
+>  
+> @@ -477,3 +479,47 @@ const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
+>  	.init.msi_ext_dest_id	= ms_hyperv_msi_ext_dest_id,
+>  	.init.init_platform	= ms_hyperv_init_platform,
+>  };
+> +
+> +int hv_mark_gpa_visibility(u16 count, const u64 pfn[], u32 visibility)
+> +{
+> +	struct hv_input_modify_sparse_gpa_page_host_visibility **input_pcpu;
+> +	struct hv_input_modify_sparse_gpa_page_host_visibility *input;
+> +	u16 pages_processed;
+> +	u64 hv_status;
+> +	unsigned long flags;
+> +
+> +	/* no-op if partition isolation is not enabled */
+> +	if (!hv_is_isolation_supported())
+> +		return 0;
+> +
+> +	if (count > HV_MAX_MODIFY_GPA_REP_COUNT) {
+> +		pr_err("Hyper-V: GPA count:%d exceeds supported:%lu\n", count,
+> +			HV_MAX_MODIFY_GPA_REP_COUNT);
+> +		return -EINVAL;
+> +	}
+> +
+> +	local_irq_save(flags);
+> +	input_pcpu = (struct hv_input_modify_sparse_gpa_page_host_visibility **)
+> +			this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	input = *input_pcpu;
+> +	if (unlikely(!input)) {
+> +		local_irq_restore(flags);
+> +		return -1;
+
+-EFAULT/-ENOMEM/... maybe ?
+
+> +	}
+> +
+> +	input->partition_id = HV_PARTITION_ID_SELF;
+> +	input->host_visibility = visibility;
+> +	input->reserved0 = 0;
+> +	input->reserved1 = 0;
+> +	memcpy((void *)input->gpa_page_list, pfn, count * sizeof(*pfn));
+> +	hv_status = hv_do_rep_hypercall(
+> +			HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY, count,
+> +			0, input, &pages_processed);
+> +	local_irq_restore(flags);
+> +
+> +	if (!(hv_status & HV_HYPERCALL_RESULT_MASK))
+> +		return 0;
+> +
+> +	return -EFAULT;
+
+Could we just propagate "hv_status & HV_HYPERCALL_RESULT_MASK" maybe?
+
+> +}
+> +EXPORT_SYMBOL(hv_mark_gpa_visibility);
+> diff --git a/drivers/hv/channel.c b/drivers/hv/channel.c
+> index daa21cc72beb..204e6f3598a5 100644
+> --- a/drivers/hv/channel.c
+> +++ b/drivers/hv/channel.c
+> @@ -237,6 +237,38 @@ int vmbus_send_modifychannel(u32 child_relid, u32 target_vp)
+>  }
+>  EXPORT_SYMBOL_GPL(vmbus_send_modifychannel);
+>  
+> +/*
+> + * hv_set_mem_host_visibility - Set host visibility for specified memory.
+> + */
+> +int hv_set_mem_host_visibility(void *kbuffer, u32 size, u32 visibility)
+> +{
+> +	int i, pfn;
+> +	int pagecount = size >> HV_HYP_PAGE_SHIFT;
+> +	u64 *pfn_array;
+> +	int ret = 0;
+> +
+> +	if (!hv_isolation_type_snp())
+> +		return 0;
+> +
+> +	pfn_array = vzalloc(HV_HYP_PAGE_SIZE);
+> +	if (!pfn_array)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0, pfn = 0; i < pagecount; i++) {
+> +		pfn_array[pfn] = virt_to_hvpfn(kbuffer + i * HV_HYP_PAGE_SIZE);
+> +		pfn++;
+> +
+> +		if (pfn == HV_MAX_MODIFY_GPA_REP_COUNT || i == pagecount - 1) {
+> +			ret |= hv_mark_gpa_visibility(pfn, pfn_array, visibility);
+> +			pfn = 0;
+
+hv_mark_gpa_visibility() return different error codes and aggregating
+them with 
+
+ ret |= ...
+
+will have an unpredictable result. I'd suggest bail immediately instead:
+
+ if (ret)
+     goto err_free_pfn_array;
+
+> +		}
+> +	}
+> +
+
+err_free_pfn_array:
+
+> +	vfree(pfn_array);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(hv_set_mem_host_visibility);
+> +
+>  /*
+>   * create_gpadl_header - Creates a gpadl for the specified buffer
+>   */
+> @@ -410,6 +442,12 @@ static int __vmbus_establish_gpadl(struct vmbus_channel *channel,
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = hv_set_mem_host_visibility(kbuffer, size, visibility);
+> +	if (ret) {
+> +		pr_warn("Failed to set host visibility.\n");
+> +		return ret;
+> +	}
+> +
+>  	init_completion(&msginfo->waitevent);
+>  	msginfo->waiting_channel = channel;
+>  
+> @@ -693,7 +731,9 @@ static int __vmbus_open(struct vmbus_channel *newchannel,
+>  error_free_info:
+>  	kfree(open_info);
+>  error_free_gpadl:
+> -	vmbus_teardown_gpadl(newchannel, newchannel->ringbuffer_gpadlhandle);
+> +	vmbus_teardown_gpadl(newchannel, newchannel->ringbuffer_gpadlhandle,
+> +			     page_address(newchannel->ringbuffer_page),
+> +			     newchannel->ringbuffer_pagecount << PAGE_SHIFT);
+
+Instead of modifying vmbus_teardown_gpadl() interface and all its call
+sites, could we just keep track of all established gpadls and then get 
+the required data from there? I.e. make vmbus_establish_gpadl() save
+kbuffer/size to some internal structure associated with 'gpadl_handle'.
+
+>  	newchannel->ringbuffer_gpadlhandle = 0;
+>  error_clean_ring:
+>  	hv_ringbuffer_cleanup(&newchannel->outbound);
+> @@ -740,7 +780,8 @@ EXPORT_SYMBOL_GPL(vmbus_open);
+>  /*
+>   * vmbus_teardown_gpadl -Teardown the specified GPADL handle
+>   */
+> -int vmbus_teardown_gpadl(struct vmbus_channel *channel, u32 gpadl_handle)
+> +int vmbus_teardown_gpadl(struct vmbus_channel *channel, u32 gpadl_handle,
+> +			 void *kbuffer, u32 size)
+
+This probably doesn't matter but why not 'u64 size'?
+
+>  {
+>  	struct vmbus_channel_gpadl_teardown *msg;
+>  	struct vmbus_channel_msginfo *info;
+> @@ -793,6 +834,10 @@ int vmbus_teardown_gpadl(struct vmbus_channel *channel, u32 gpadl_handle)
+>  	spin_unlock_irqrestore(&vmbus_connection.channelmsg_lock, flags);
+>  
+>  	kfree(info);
+> +
+> +	if (hv_set_mem_host_visibility(kbuffer, size, VMBUS_PAGE_NOT_VISIBLE))
+> +		pr_warn("Fail to set mem host visibility.\n");
+
+pr_err() maybe?
+
+> +
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(vmbus_teardown_gpadl);
+> @@ -869,7 +914,9 @@ static int vmbus_close_internal(struct vmbus_channel *channel)
+>  	/* Tear down the gpadl for the channel's ring buffer */
+>  	else if (channel->ringbuffer_gpadlhandle) {
+>  		ret = vmbus_teardown_gpadl(channel,
+> -					   channel->ringbuffer_gpadlhandle);
+> +					   channel->ringbuffer_gpadlhandle,
+> +					   page_address(channel->ringbuffer_page),
+> +					   channel->ringbuffer_pagecount << PAGE_SHIFT);
+>  		if (ret) {
+>  			pr_err("Close failed: teardown gpadl return %d\n", ret);
+>  			/*
+> diff --git a/drivers/net/hyperv/hyperv_net.h b/drivers/net/hyperv/hyperv_net.h
+> index 2a87cfa27ac0..b3a43c4ec8ab 100644
+> --- a/drivers/net/hyperv/hyperv_net.h
+> +++ b/drivers/net/hyperv/hyperv_net.h
+> @@ -1034,6 +1034,7 @@ struct netvsc_device {
+>  
+>  	/* Send buffer allocated by us */
+>  	void *send_buf;
+> +	u32 send_buf_size;
+>  	u32 send_buf_gpadl_handle;
+>  	u32 send_section_cnt;
+>  	u32 send_section_size;
+> diff --git a/drivers/net/hyperv/netvsc.c b/drivers/net/hyperv/netvsc.c
+> index bb72c7578330..08d73401bb28 100644
+> --- a/drivers/net/hyperv/netvsc.c
+> +++ b/drivers/net/hyperv/netvsc.c
+> @@ -245,7 +245,9 @@ static void netvsc_teardown_recv_gpadl(struct hv_device *device,
+>  
+>  	if (net_device->recv_buf_gpadl_handle) {
+>  		ret = vmbus_teardown_gpadl(device->channel,
+> -					   net_device->recv_buf_gpadl_handle);
+> +					   net_device->recv_buf_gpadl_handle,
+> +					   net_device->recv_buf,
+> +					   net_device->recv_buf_size);
+>  
+>  		/* If we failed here, we might as well return and have a leak
+>  		 * rather than continue and a bugchk
+> @@ -267,7 +269,9 @@ static void netvsc_teardown_send_gpadl(struct hv_device *device,
+>  
+>  	if (net_device->send_buf_gpadl_handle) {
+>  		ret = vmbus_teardown_gpadl(device->channel,
+> -					   net_device->send_buf_gpadl_handle);
+> +					   net_device->send_buf_gpadl_handle,
+> +					   net_device->send_buf,
+> +					   net_device->send_buf_size);
+>  
+>  		/* If we failed here, we might as well return and have a leak
+>  		 * rather than continue and a bugchk
+> @@ -419,6 +423,7 @@ static int netvsc_init_buf(struct hv_device *device,
+>  		ret = -ENOMEM;
+>  		goto cleanup;
+>  	}
+> +	net_device->send_buf_size = buf_size;
+>  
+>  	/* Establish the gpadl handle for this buffer on this
+>  	 * channel.  Note: This call uses the vmbus connection rather
+> diff --git a/drivers/uio/uio_hv_generic.c b/drivers/uio/uio_hv_generic.c
+> index 813a7bee5139..c8d4704fc90c 100644
+> --- a/drivers/uio/uio_hv_generic.c
+> +++ b/drivers/uio/uio_hv_generic.c
+> @@ -181,13 +181,15 @@ static void
+>  hv_uio_cleanup(struct hv_device *dev, struct hv_uio_private_data *pdata)
+>  {
+>  	if (pdata->send_gpadl) {
+> -		vmbus_teardown_gpadl(dev->channel, pdata->send_gpadl);
+> +		vmbus_teardown_gpadl(dev->channel, pdata->send_gpadl,
+> +				     pdata->send_buf, SEND_BUFFER_SIZE);
+>  		pdata->send_gpadl = 0;
+>  		vfree(pdata->send_buf);
+>  	}
+>  
+>  	if (pdata->recv_gpadl) {
+> -		vmbus_teardown_gpadl(dev->channel, pdata->recv_gpadl);
+> +		vmbus_teardown_gpadl(dev->channel, pdata->recv_gpadl,
+> +				     pdata->recv_buf, RECV_BUFFER_SIZE);
+>  		pdata->recv_gpadl = 0;
+>  		vfree(pdata->recv_buf);
+>  	}
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index 83448e837ded..ad19f4199f90 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -158,6 +158,7 @@ struct ms_hyperv_tsc_page {
+>  #define HVCALL_RETARGET_INTERRUPT		0x007e
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+> +#define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
+>  
+>  #define HV_FLUSH_ALL_PROCESSORS			BIT(0)
+>  #define HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES	BIT(1)
+> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+> index 016fdca20d6e..41cbaa2db567 100644
+> --- a/include/linux/hyperv.h
+> +++ b/include/linux/hyperv.h
+> @@ -1183,7 +1183,8 @@ extern int vmbus_establish_gpadl(struct vmbus_channel *channel,
+>  				      u32 visibility);
+>  
+>  extern int vmbus_teardown_gpadl(struct vmbus_channel *channel,
+> -				     u32 gpadl_handle);
+> +				u32 gpadl_handle,
+> +				void *kbuffer, u32 size);
+>  
+>  void vmbus_reset_channel_cb(struct vmbus_channel *channel);
+
 -- 
-2.28.0
+Vitaly
 
