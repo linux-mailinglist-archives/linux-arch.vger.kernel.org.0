@@ -2,175 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A7632C866
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 02:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0C932C868
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 02:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240041AbhCDAtS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S240140AbhCDAtS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Wed, 3 Mar 2021 19:49:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37982 "EHLO mail.kernel.org"
+Received: from pegase1.c-s.fr ([93.17.236.30]:31744 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1381444AbhCCR6p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 3 Mar 2021 12:58:45 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E84F664EF3;
-        Wed,  3 Mar 2021 17:57:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614794273;
-        bh=XiWtpvFdZtLasbYDnPMoaZrCEvuZWPwRJJFIHcVSAgI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oUNo++Truj2opgcatZeFPggIi0sEc4hm48HzynYHr4Tb1dQSG/rMPpJCFh1F7mP1A
-         jm1WGw3A90IbuKwhndDReALRE/vt2Fi9mL8L80RYG3xwBoT3eo527n/A94oWV9yBi6
-         CyZDO2YLDH50+Xh678C08XKF/KCebqKndgOZXxH1XMasvkgX0xfXrZqsfXaL0ZeX85
-         JzsvLXbmZwus5a9gzm2whJem5b08bJvZZO8+pk5OnzthZojefUFQFlZgfxhomvISFJ
-         tar+2wSsspQ8x3Jo5d85R99ALZZTaE4wc4w80RPvPPP7ox9yW2R6BjVysoHHwjMhAu
-         LqpIZrYE5Lj9g==
-Date:   Wed, 3 Mar 2021 17:57:47 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+        id S237847AbhCCSIl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 3 Mar 2021 13:08:41 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4DrMRT2KJHz9twsP;
+        Wed,  3 Mar 2021 19:07:49 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id Oezy_9lCxP9I; Wed,  3 Mar 2021 19:07:49 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4DrMRT1Nrpz9twsB;
+        Wed,  3 Mar 2021 19:07:49 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6D9A88B7E6;
+        Wed,  3 Mar 2021 19:07:49 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id mppgCCIWAOu2; Wed,  3 Mar 2021 19:07:49 +0100 (CET)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A8E2F8B7DB;
+        Wed,  3 Mar 2021 19:07:48 +0100 (CET)
+Subject: Re: [PATCH v2 0/7] Improve boot command line handling
+To:     Daniel Walker <danielwa@cisco.com>, Rob Herring <robh@kernel.org>
 Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, danielwa@cisco.com,
-        robh@kernel.org, daniel@gimpelevich.san-francisco.ca.us,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arch@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] cmdline: Gives architectures opportunity to use
- generically defined boot cmdline manipulation
-Message-ID: <20210303175747.GD19713@willie-the-truck>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>, devicetree@vger.kernel.org,
+        Will Deacon <will@kernel.org>
 References: <cover.1614705851.git.christophe.leroy@csgroup.eu>
- <2eb6fad3470256fff5c9f33cd876f344abb1628b.1614705851.git.christophe.leroy@csgroup.eu>
+ <20210302173523.GE109100@zorba>
+ <CAL_JsqJ7U8QAbJe3zkZiFPJN4PveHz5TZoPk2S8qQWB6cm5e5Q@mail.gmail.com>
+ <20210303173908.GG109100@zorba>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <59b054e8-d85b-fd87-c94d-691af748a2f5@csgroup.eu>
+Date:   Wed, 3 Mar 2021 19:07:45 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2eb6fad3470256fff5c9f33cd876f344abb1628b.1614705851.git.christophe.leroy@csgroup.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210303173908.GG109100@zorba>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 05:25:22PM +0000, Christophe Leroy wrote:
-> Most architectures have similar boot command line manipulation
-> options. This patchs adds the definition in init/Kconfig, gated by
-> CONFIG_HAVE_CMDLINE that the architectures can select to use them.
+
+
+Le 03/03/2021 à 18:39, Daniel Walker a écrit :
+> On Tue, Mar 02, 2021 at 08:01:01PM -0600, Rob Herring wrote:
+>> +Will D
+>>
+>> On Tue, Mar 2, 2021 at 11:36 AM Daniel Walker <danielwa@cisco.com> wrote:
+>>>
+>>> On Tue, Mar 02, 2021 at 05:25:16PM +0000, Christophe Leroy wrote:
+>>>> The purpose of this series is to improve and enhance the
+>>>> handling of kernel boot arguments.
+>>>>
+>>>> It is first focussed on powerpc but also extends the capability
+>>>> for other arches.
+>>>>
+>>>> This is based on suggestion from Daniel Walker <danielwa@cisco.com>
+>>>>
+>>>
+>>>
+>>> I don't see a point in your changes at this time. My changes are much more
+>>> mature, and you changes don't really make improvements.
+>>
+>> Not really a helpful comment. What we merge here will be from whomever
+>> is persistent and timely in their efforts. But please, work together
+>> on a common solution.
+>>
+>> This one meets my requirements of moving the kconfig and code out of
+>> the arches, supports prepend/append, and is up to date.
 > 
-> In order to use this, a few architectures will have to change their
-> CONFIG options:
-> - riscv has to replace CMDLINE_FALLBACK by CMDLINE_FROM_BOOTLOADER
-> - architectures using CONFIG_CMDLINE_OVERRIDE or
-> CONFIG_CMDLINE_OVERWRITE have to replace them by CONFIG_CMDLINE_FORCE.
 > 
-> Architectures also have to define CONFIG_DEFAULT_CMDLINE.
+> Maintainers are capable of merging whatever they want to merge. However, I
+> wouldn't make hasty choices. The changes I've been submitting have been deployed
+> on millions of router instances and are more feature rich.
 > 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  init/Kconfig | 56 ++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
+> I believe I worked with you on this change, or something like it,
 > 
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 22946fe5ded9..a0f2ad9467df 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -117,6 +117,62 @@ config INIT_ENV_ARG_LIMIT
->  	  Maximum of each of the number of arguments and environment
->  	  variables passed to init from the kernel command line.
->  
-> +config HAVE_CMDLINE
-> +	bool
-> +
-> +config CMDLINE_BOOL
-> +	bool "Default bootloader kernel arguments"
-> +	depends on HAVE_CMDLINE
-> +	help
-> +	  On some platforms, there is currently no way for the boot loader to
-> +	  pass arguments to the kernel. For these platforms, you can supply
-> +	  some command-line options at build time by entering them here.  In
-> +	  most cases you will need to specify the root device here.
+> https://lkml.org/lkml/2019/3/19/970
+> 
+> I don't think Christophe has even addressed this.
 
-Why is this needed as well as CMDLINE_FROM_BOOTLOADER? IIUC, the latter
-will use CONFIG_CMDLINE if it fails to get anything from the bootloader,
-which sounds like the same scenario.
+I thing I have, see 
+https://patchwork.ozlabs.org/project/linuxppc-dev/patch/3b4291271ce4af4941a771e5af5cbba3c8fa1b2a.1614705851.git.christophe.leroy@csgroup.eu/
 
-> +config CMDLINE
-> +	string "Initial kernel command string"
+If you see something missing in that patch, can you tell me.
 
-s/Initial/Default
+> I've converted many
+> architectures, and Cisco uses my changes on at least 4 different
+> architecture. With products deployed and tested.
 
-which is then consistent with the rest of the text here.
+As far as we know, only powerpc was converted in the last series you submitted, see 
+https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=98106&state=*
 
-> +	depends on CMDLINE_BOOL
+> 
+> I will resubmit my changes as soon as I can.
+> 
 
-Ah, so this is a bit different and I don't think lines-up with the
-CMDLINE_BOOL help text.
-
-> +	default DEFAULT_CMDLINE
-> +	help
-> +	  On some platforms, there is currently no way for the boot loader to
-> +	  pass arguments to the kernel. For these platforms, you can supply
-> +	  some command-line options at build time by entering them here.  In
-> +	  most cases you will need to specify the root device here.
-
-(same stale text)
-
-> +choice
-> +	prompt "Kernel command line type" if CMDLINE != ""
-> +	default CMDLINE_FROM_BOOTLOADER
-> +	help
-> +	  Selects the way you want to use the default kernel arguments.
-
-How about:
-
-"Determines how the default kernel arguments are combined with any
- arguments passed by the bootloader"
-
-> +config CMDLINE_FROM_BOOTLOADER
-> +	bool "Use bootloader kernel arguments if available"
-> +	help
-> +	  Uses the command-line options passed by the boot loader. If
-> +	  the boot loader doesn't provide any, the default kernel command
-> +	  string provided in CMDLINE will be used.
-> +
-> +config CMDLINE_EXTEND
-
-Can we rename this to CMDLINE_APPEND, please? There is code in the tree
-which disagrees about what CMDLINE_EXTEND means, so that will need be
-to be updated to be consistent (e.g. the EFI stub parsing order). Having
-the generic option with a different name means we won't accidentally end
-up with the same inconsistent behaviours.
-
-> +	bool "Extend bootloader kernel arguments"
-
-"Append to the bootloader kernel arguments"
-
-> +	help
-> +	  The default kernel command string will be appended to the
-> +	  command-line arguments provided during boot.
-
-s/provided during boot/provided by the bootloader/
-
-> +
-> +config CMDLINE_PREPEND
-> +	bool "Prepend bootloader kernel arguments"
-
-"Prepend to the bootloader kernel arguments"
-
-> +	help
-> +	  The default kernel command string will be prepend to the
-> +	  command-line arguments provided during boot.
-
-s/prepend/prepended/
-s/provided during boot/provided by the bootloader/
-
-> +
-> +config CMDLINE_FORCE
-> +	bool "Always use the default kernel command string"
-> +	help
-> +	  Always use the default kernel command string, even if the boot
-> +	  loader passes other arguments to the kernel.
-> +	  This is useful if you cannot or don't want to change the
-> +	  command-line options your boot loader passes to the kernel.
-
-I find the "This is useful if ..." sentence really confusing, perhaps just
-remove it? I'd then tweak it to be:
-
-  "Always use the default kernel command string, ignoring any arguments
-   provided by the bootloader."
-
-Will
+Christophe
