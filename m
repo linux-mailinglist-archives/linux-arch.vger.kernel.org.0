@@ -2,118 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0C932C868
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 02:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E4B32C86A
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 02:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240140AbhCDAtS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Mar 2021 19:49:18 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:31744 "EHLO pegase1.c-s.fr"
+        id S240190AbhCDAtU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Mar 2021 19:49:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51594 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237847AbhCCSIl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 3 Mar 2021 13:08:41 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4DrMRT2KJHz9twsP;
-        Wed,  3 Mar 2021 19:07:49 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id Oezy_9lCxP9I; Wed,  3 Mar 2021 19:07:49 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4DrMRT1Nrpz9twsB;
-        Wed,  3 Mar 2021 19:07:49 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6D9A88B7E6;
-        Wed,  3 Mar 2021 19:07:49 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id mppgCCIWAOu2; Wed,  3 Mar 2021 19:07:49 +0100 (CET)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A8E2F8B7DB;
-        Wed,  3 Mar 2021 19:07:48 +0100 (CET)
-Subject: Re: [PATCH v2 0/7] Improve boot command line handling
-To:     Daniel Walker <danielwa@cisco.com>, Rob Herring <robh@kernel.org>
+        id S1578569AbhCCSRi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 3 Mar 2021 13:17:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6ABCE64EE4;
+        Wed,  3 Mar 2021 18:16:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614795417;
+        bh=AOrfOeNzmKqgCV3QhzN1PwHQin34TBisdVgEG/rfN5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JU0c7LsMblIR5/z1TFN8se4jRW7FE3kakg1n9P4kbsLBCFjGXqHV6ug4bTktO4RZq
+         w4tNa3+4oSkml+MAwznFMbaNrrXyikantXWv7d0WndnhfhbVFat2dEfWC1yyU+Th5T
+         ynPRtt+JonwZAS21aGAn2OcTP4nOnvkC9KVlGBBKE88ckH7DJf6zkriAFHeM8ELNmp
+         MoxKjCIj/TEE7Rk18Z1fdbqXYEHy3TbfZGGq3uepxhxCjyOapHMi1sKuWjMelOiwEX
+         r51wZO44eldb++Q7itPvHz8IdYnuyt1fC7oPCkvnXp1nEcLPTvV2AHwnAAcfr6Qm18
+         JbEPWkrwnqRYQ==
+Date:   Wed, 3 Mar 2021 18:16:52 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>, devicetree@vger.kernel.org,
-        Will Deacon <will@kernel.org>
+        Michael Ellerman <mpe@ellerman.id.au>, danielwa@cisco.com,
+        robh@kernel.org, daniel@gimpelevich.san-francisco.ca.us,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arch@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] cmdline: Add generic function to build command
+ line.
+Message-ID: <20210303181651.GE19713@willie-the-truck>
 References: <cover.1614705851.git.christophe.leroy@csgroup.eu>
- <20210302173523.GE109100@zorba>
- <CAL_JsqJ7U8QAbJe3zkZiFPJN4PveHz5TZoPk2S8qQWB6cm5e5Q@mail.gmail.com>
- <20210303173908.GG109100@zorba>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <59b054e8-d85b-fd87-c94d-691af748a2f5@csgroup.eu>
-Date:   Wed, 3 Mar 2021 19:07:45 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+ <d8cf7979ad986de45301b39a757c268d9df19f35.1614705851.git.christophe.leroy@csgroup.eu>
+ <20210303172810.GA19713@willie-the-truck>
+ <a0cfef11-efba-2e5c-6f58-ed63a2c3bfa0@csgroup.eu>
+ <20210303174627.GC19713@willie-the-truck>
+ <dc6576ac-44ff-7db4-d718-7565b83f50b8@csgroup.eu>
 MIME-Version: 1.0
-In-Reply-To: <20210303173908.GG109100@zorba>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <dc6576ac-44ff-7db4-d718-7565b83f50b8@csgroup.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 03/03/2021 Ã  18:39, Daniel Walker a Ã©critÂ :
-> On Tue, Mar 02, 2021 at 08:01:01PM -0600, Rob Herring wrote:
->> +Will D
->>
->> On Tue, Mar 2, 2021 at 11:36 AM Daniel Walker <danielwa@cisco.com> wrote:
->>>
->>> On Tue, Mar 02, 2021 at 05:25:16PM +0000, Christophe Leroy wrote:
->>>> The purpose of this series is to improve and enhance the
->>>> handling of kernel boot arguments.
->>>>
->>>> It is first focussed on powerpc but also extends the capability
->>>> for other arches.
->>>>
->>>> This is based on suggestion from Daniel Walker <danielwa@cisco.com>
->>>>
->>>
->>>
->>> I don't see a point in your changes at this time. My changes are much more
->>> mature, and you changes don't really make improvements.
->>
->> Not really a helpful comment. What we merge here will be from whomever
->> is persistent and timely in their efforts. But please, work together
->> on a common solution.
->>
->> This one meets my requirements of moving the kconfig and code out of
->> the arches, supports prepend/append, and is up to date.
+On Wed, Mar 03, 2021 at 06:57:09PM +0100, Christophe Leroy wrote:
+> Le 03/03/2021 à 18:46, Will Deacon a écrit :
+> > On Wed, Mar 03, 2021 at 06:38:16PM +0100, Christophe Leroy wrote:
+> > > Le 03/03/2021 à 18:28, Will Deacon a écrit :
+> > > > On Tue, Mar 02, 2021 at 05:25:17PM +0000, Christophe Leroy wrote:
+> > > > > This code provides architectures with a way to build command line
+> > > > > based on what is built in the kernel and what is handed over by the
+> > > > > bootloader, based on selected compile-time options.
+> > > > > 
+> > > > > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > > > > ---
+> > > > >    include/linux/cmdline.h | 62 +++++++++++++++++++++++++++++++++++++++++
+> > > > >    1 file changed, 62 insertions(+)
+> > > > >    create mode 100644 include/linux/cmdline.h
+> > > > > 
+> > > > > diff --git a/include/linux/cmdline.h b/include/linux/cmdline.h
+> > > > > new file mode 100644
+> > > > > index 000000000000..ae3610bb0ee2
+> > > > > --- /dev/null
+> > > > > +++ b/include/linux/cmdline.h
+> > > > > @@ -0,0 +1,62 @@
+> > > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > > +#ifndef _LINUX_CMDLINE_H
+> > > > > +#define _LINUX_CMDLINE_H
+> > > > > +
+> > > > > +static __always_inline size_t cmdline_strlen(const char *s)
+> > > > > +{
+> > > > > +	const char *sc;
+> > > > > +
+> > > > > +	for (sc = s; *sc != '\0'; ++sc)
+> > > > > +		; /* nothing */
+> > > > > +	return sc - s;
+> > > > > +}
+> > > > > +
+> > > > > +static __always_inline size_t cmdline_strlcat(char *dest, const char *src, size_t count)
+> > > > > +{
+> > > > > +	size_t dsize = cmdline_strlen(dest);
+> > > > > +	size_t len = cmdline_strlen(src);
+> > > > > +	size_t res = dsize + len;
+> > > > > +
+> > > > > +	/* This would be a bug */
+> > > > > +	if (dsize >= count)
+> > > > > +		return count;
+> > > > > +
+> > > > > +	dest += dsize;
+> > > > > +	count -= dsize;
+> > > > > +	if (len >= count)
+> > > > > +		len = count - 1;
+> > > > > +	memcpy(dest, src, len);
+> > > > > +	dest[len] = 0;
+> > > > > +	return res;
+> > > > > +}
+> > > > 
+> > > > Why are these needed instead of using strlen and strlcat directly?
+> > > 
+> > > Because on powerpc (at least), it will be used in prom_init, it is very
+> > > early in the boot and KASAN shadow memory is not set up yet so calling
+> > > generic string functions would crash the board.
+> > 
+> > Hmm. We deliberately setup a _really_ early shadow on arm64 for this, can
+> > you not do something similar? Failing that, I think it would be better to
+> > offer the option for an arch to implement cmdline_*, but have then point to
+> > the normal library routines by default.
 > 
+> I don't think it is possible to setup an earlier early shadow.
 > 
-> Maintainers are capable of merging whatever they want to merge. However, I
-> wouldn't make hasty choices. The changes I've been submitting have been deployed
-> on millions of router instances and are more feature rich.
-> 
-> I believe I worked with you on this change, or something like it,
-> 
-> https://lkml.org/lkml/2019/3/19/970
-> 
-> I don't think Christophe has even addressed this.
+> At the point we are in prom_init, the code is not yet relocated at the
+> address it was linked for, and it is running with the MMU set by the
+> bootloader, I can't imagine being able to setup MMU entries for the early
+> shadow KASAN yet without breaking everything.
 
-I thing I have, see 
-https://patchwork.ozlabs.org/project/linuxppc-dev/patch/3b4291271ce4af4941a771e5af5cbba3c8fa1b2a.1614705851.git.christophe.leroy@csgroup.eu/
+That's very similar to us; we're not relocated, although we are at least
+in control of the MMU (which is using a temporary set of page-tables).
 
-If you see something missing in that patch, can you tell me.
+> Is it really worth trying to point to the normal library routines by default
+> ? It is really only a few lines of code hence only not many bytes, and
+> anyway they are in __init section so they get discarded at the end.
 
-> I've converted many
-> architectures, and Cisco uses my changes on at least 4 different
-> architecture. With products deployed and tested.
+I would prefer to use the normal routines by default and allow architectures
+to override them based on their needs, otherwise we'll end up trying to
+maintain a "lowest-common-dominator" set of string routines that can be
+safely run in whatever different constraints different architectures have.
 
-As far as we know, only powerpc was converted in the last series you submitted, see 
-https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=98106&state=*
-
-> 
-> I will resubmit my changes as soon as I can.
-> 
-
-Christophe
+Will
