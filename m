@@ -2,81 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D5932B4E9
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Mar 2021 06:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 012E232B4EA
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Mar 2021 06:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450174AbhCCFbE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Mar 2021 00:31:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58740 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233929AbhCCCC0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 2 Mar 2021 21:02:26 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B83964E60;
-        Wed,  3 Mar 2021 02:01:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614736875;
-        bh=Jur4X8HCTuoWSA6SEQnGoXAlbGc8RXGw8vUAl2IcNgk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=snvXgvysI7rw8itAuWcYvlRITi6A+0NIbX8esoK8IaCyrNTFTyAbwuZCYkHAbT6VF
-         ocPA8ZJck2sD6BHLLwgMKUUdGu41SeNph2a62PxRRJNOrC3I60us+Z7gWH4NBZHxFK
-         6OObxv4SlUoxjAuEAyLCEgxKF29+Bdzs+0i8mzbl0xwoE/UeDQRIrsvYYOfhwWy+dz
-         rKCDVPd5i8/kHaad9ppohdz9xOz6SrndhaclIDLEM6eMwD1ZqOo6zITLRQdd5IS75y
-         HtKDDDwj228Rtly0KGdbu9XX6wxjhV/4OiCJPgw4YlC7F/I1Nl1uGNYr9dZBt6mC4V
-         kcjCkKFDHldJg==
-Received: by mail-ej1-f44.google.com with SMTP id w1so39165545ejf.11;
-        Tue, 02 Mar 2021 18:01:14 -0800 (PST)
-X-Gm-Message-State: AOAM532YmkIqCHyrNxjSMkupIv9m0J6EU8EkBvk79/eAl9wW3xv6ddp7
-        3PAYdh3/vtwoY6ffA9GFdvBcVvpzlKd9ABIyFg==
-X-Google-Smtp-Source: ABdhPJxohvRCbrznJ/X8kN7mfJ5VeQer8Ncx3QZ8RwevKVFlLbwvKN2msIpiGUN46C0KJZPy2hIRCxqonbPI/JR/Ecs=
-X-Received: by 2002:a17:906:2312:: with SMTP id l18mr24122920eja.468.1614736873011;
- Tue, 02 Mar 2021 18:01:13 -0800 (PST)
+        id S1450179AbhCCFbG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Mar 2021 00:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244513AbhCCDFs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Mar 2021 22:05:48 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69ACBC06178B;
+        Tue,  2 Mar 2021 19:05:03 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id u18so7044746plc.12;
+        Tue, 02 Mar 2021 19:05:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gcDXOeJl1Bem2ZtS8JCfREQKUq+Fi3Bp1vnSda8faiw=;
+        b=SBm0DGdw0c5Aso4p80+GkGzC46UmVgpV5tv689DfZENQGtp1Nut5gDBjTGmYcIXF2I
+         6IZm1hUJIf/rsfHwxTC+HeIKoENFy0AHf98QN8mDnG/ziVBNUt5QtTth/9bZtNOsjNus
+         jS3eEiiXFBmpdAWCOllNSCeJhMPrPkKDOFIyJb4Zm3k3AmQEhsU+0hmVgLS1Q9WSbuwW
+         l0+NzGFMvxrDxkrjmmYX/gxWjpEEaej+YkwQkyyiRHdc3WWCDPVczRFZoGhXnx6MRzWE
+         fGtMtMaAx5ZNmnUhYsshCA6iku+21kxPqo6N6ab5PU7GIJzL07egyawZ7p9Ip55JFUEg
+         mczA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gcDXOeJl1Bem2ZtS8JCfREQKUq+Fi3Bp1vnSda8faiw=;
+        b=h3STmQ2LTCfyl/lNb+ta5DhpzpJgf+0/cR4zHxtTz3zJHtEvCPipxp2d98rinjpeZB
+         V9dTa+hKDsORTDY3FyEc5tnhm5f20o1lq5RTbf/ME0GKcki5RrfYUrcLZKW77+fPbfeM
+         AfyA/Hz1oRcScrjEWepca1b+eW8upm5mW2ME/luowm8IktLfy5THBQ0TuUXOiaChOxv5
+         7dtZ8MkeyjHlYlM/DM50B5VYMbuhUHhI0zjnIrX1kJBwfh0W2VG7TJBmjh067dY9hYm/
+         EU12YfF5mekyECm9k3Nyz4t2RBpZJ29QDyo5tlRLV+GJqTRTFm1Cnsfg88KZkwRhyLEC
+         QLQQ==
+X-Gm-Message-State: AOAM531gkNuAIUAEfqhj6oHKjLe6sWOuyKh6UmjQ6uxxdrwcfsgltmiB
+        +Mb4uaBBKnikgRHdOdCdhYEXalpZyOM=
+X-Google-Smtp-Source: ABdhPJxxD/KqODJAIA/VkE1x16bXwlrSpU7lyw9Oeo2QP8aL54Mx96MCiKf+qws6xmxeDc04TxgNWQ==
+X-Received: by 2002:a17:90a:7d05:: with SMTP id g5mr7231132pjl.173.1614740702798;
+        Tue, 02 Mar 2021 19:05:02 -0800 (PST)
+Received: from localhost.localdomain ([178.236.46.205])
+        by smtp.gmail.com with ESMTPSA id s27sm20599135pgk.77.2021.03.02.19.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Mar 2021 19:05:02 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: zhang.yunkai@zte.com.cn
+To:     will@kernel.org
+Cc:     aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
+        npiggin@gmail.com, peterz@infradead.org, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Zhang Yunkai <zhang.yunkai@zte.com.cn>
+Subject: [PATCH] module: remove extra spaces in include/asm-generic/tlb.h
+Date:   Tue,  2 Mar 2021 19:04:43 -0800
+Message-Id: <20210303030443.176174-1-zhang.yunkai@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1614705851.git.christophe.leroy@csgroup.eu> <20210302173523.GE109100@zorba>
-In-Reply-To: <20210302173523.GE109100@zorba>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 2 Mar 2021 20:01:01 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ7U8QAbJe3zkZiFPJN4PveHz5TZoPk2S8qQWB6cm5e5Q@mail.gmail.com>
-Message-ID: <CAL_JsqJ7U8QAbJe3zkZiFPJN4PveHz5TZoPk2S8qQWB6cm5e5Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] Improve boot command line handling
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>, devicetree@vger.kernel.org,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+Will D
+From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
 
-On Tue, Mar 2, 2021 at 11:36 AM Daniel Walker <danielwa@cisco.com> wrote:
->
-> On Tue, Mar 02, 2021 at 05:25:16PM +0000, Christophe Leroy wrote:
-> > The purpose of this series is to improve and enhance the
-> > handling of kernel boot arguments.
-> >
-> > It is first focussed on powerpc but also extends the capability
-> > for other arches.
-> >
-> > This is based on suggestion from Daniel Walker <danielwa@cisco.com>
-> >
->
->
-> I don't see a point in your changes at this time. My changes are much more
-> mature, and you changes don't really make improvements.
+Some typos are found out by codespell tool:
 
-Not really a helpful comment. What we merge here will be from whomever
-is persistent and timely in their efforts. But please, work together
-on a common solution.
+"# define" should be "#define".
 
-This one meets my requirements of moving the kconfig and code out of
-the arches, supports prepend/append, and is up to date.
+Signed-off-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+---
+ include/asm-generic/tlb.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Rob
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index 2c68a545ffa7..5be89d9ba362 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -23,7 +23,7 @@
+  * the loaded mm.
+  */
+ #ifndef nmi_uaccess_okay
+-# define nmi_uaccess_okay() true
++#define nmi_uaccess_okay() true
+ #endif
+ 
+ #ifdef CONFIG_MMU
+-- 
+2.25.1
+
