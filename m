@@ -2,22 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C05332DC97
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 22:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4058832DC8F
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 22:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241142AbhCDVrz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Mar 2021 16:47:55 -0500
-Received: from marcansoft.com ([212.63.210.85]:36224 "EHLO mail.marcansoft.com"
+        id S241116AbhCDVry (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Mar 2021 16:47:54 -0500
+Received: from marcansoft.com ([212.63.210.85]:36204 "EHLO mail.marcansoft.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241064AbhCDVrk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 4 Mar 2021 16:47:40 -0500
+        id S231640AbhCDVri (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 4 Mar 2021 16:47:38 -0500
+X-Greylist: delayed 448 seconds by postgrey-1.27 at vger.kernel.org; Thu, 04 Mar 2021 16:47:38 EST
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id B2DB24257B;
-        Thu,  4 Mar 2021 21:39:55 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id CE7DE425B1;
+        Thu,  4 Mar 2021 21:40:02 +0000 (UTC)
 From:   Hector Martin <marcan@marcan.st>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
@@ -41,9 +42,9 @@ Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
         devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFT PATCH v3 05/27] arm64: cputype: Add CPU implementor & types for the Apple M1 cores
-Date:   Fri,  5 Mar 2021 06:38:40 +0900
-Message-Id: <20210304213902.83903-6-marcan@marcan.st>
+Subject: [RFT PATCH v3 06/27] dt-bindings: timer: arm,arch_timer: Add interrupt-names support
+Date:   Fri,  5 Mar 2021 06:38:41 +0900
+Message-Id: <20210304213902.83903-7-marcan@marcan.st>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210304213902.83903-1-marcan@marcan.st>
 References: <20210304213902.83903-1-marcan@marcan.st>
@@ -53,47 +54,50 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The implementor will be used to condition the FIQ support quirk.
+Not all platforms provide the same set of timers/interrupts, and Linux
+only needs one (plus kvm/guest ones); some platforms are working around
+this by using dummy fake interrupts. Implementing interrupt-names allows
+the devicetree to specify an arbitrary set of available interrupts, so
+the timer code can pick the right one.
 
-The specific CPU types are not used at the moment, but let's add them
-for documentation purposes.
+This also adds the hyp-virt timer/interrupt, which was previously not
+expressed in the fixed 4-interrupt form.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- arch/arm64/include/asm/cputype.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../devicetree/bindings/timer/arm,arch_timer.yaml  | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
-index ef5b040dee44..6231e1f0abe7 100644
---- a/arch/arm64/include/asm/cputype.h
-+++ b/arch/arm64/include/asm/cputype.h
-@@ -59,6 +59,7 @@
- #define ARM_CPU_IMP_NVIDIA		0x4E
- #define ARM_CPU_IMP_FUJITSU		0x46
- #define ARM_CPU_IMP_HISI		0x48
-+#define ARM_CPU_IMP_APPLE		0x61
+diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+index 2c75105c1398..ebe9b0bebe41 100644
+--- a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
++++ b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+@@ -34,11 +34,25 @@ properties:
+               - arm,armv8-timer
  
- #define ARM_CPU_PART_AEM_V8		0xD0F
- #define ARM_CPU_PART_FOUNDATION		0xD00
-@@ -99,6 +100,9 @@
- 
- #define HISI_CPU_PART_TSV110		0xD01
- 
-+#define APPLE_CPU_PART_M1_ICESTORM	0x022
-+#define APPLE_CPU_PART_M1_FIRESTORM	0x023
+   interrupts:
++    minItems: 1
++    maxItems: 5
+     items:
+       - description: secure timer irq
+       - description: non-secure timer irq
+       - description: virtual timer irq
+       - description: hypervisor timer irq
++      - description: hypervisor virtual timer irq
 +
- #define MIDR_CORTEX_A53 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A53)
- #define MIDR_CORTEX_A57 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A57)
- #define MIDR_CORTEX_A72 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A72)
-@@ -127,6 +131,8 @@
- #define MIDR_NVIDIA_CARMEL MIDR_CPU_MODEL(ARM_CPU_IMP_NVIDIA, NVIDIA_CPU_PART_CARMEL)
- #define MIDR_FUJITSU_A64FX MIDR_CPU_MODEL(ARM_CPU_IMP_FUJITSU, FUJITSU_CPU_PART_A64FX)
- #define MIDR_HISI_TSV110 MIDR_CPU_MODEL(ARM_CPU_IMP_HISI, HISI_CPU_PART_TSV110)
-+#define MIDR_APPLE_M1_ICESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM)
-+#define MIDR_APPLE_M1_FIRESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM)
++  interrupt-names:
++    minItems: 1
++    maxItems: 5
++    items:
++      enum:
++        - phys-secure
++        - phys
++        - virt
++        - hyp-phys
++        - hyp-virt
  
- /* Fujitsu Erratum 010001 affects A64FX 1.0 and 1.1, (v0r0 and v1r0) */
- #define MIDR_FUJITSU_ERRATUM_010001		MIDR_FUJITSU_A64FX
+   clock-frequency:
+     description: The frequency of the main counter, in Hz. Should be present
 -- 
 2.30.0
 
