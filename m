@@ -2,65 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D02232C86E
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 02:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B98EA32C871
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 02:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239842AbhCDAtX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Mar 2021 19:49:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43574 "EHLO mail.kernel.org"
+        id S240391AbhCDAtZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Mar 2021 19:49:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44330 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1453090AbhCDApT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 3 Mar 2021 19:45:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CA19D64E56;
-        Thu,  4 Mar 2021 00:44:38 +0000 (UTC)
+        id S1453108AbhCDAqZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 3 Mar 2021 19:46:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21EAB64E46;
+        Thu,  4 Mar 2021 00:45:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614818678;
-        bh=8wUvzvMV9XoVLQ9s0QU1nWZT0dd0CJC4pPcE0vc7trM=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=m8qrEh7xqoIYY6TjnJNQ7ZbWIo1Kg/RgdA872Sx4xSw3erYLxdIayemAOBHQlp3E5
-         DMWjn4xVnWUDcfmJ7ovzxu1+vZpQ4hc5+O20Zh+fAIAr/qcygPOZHhBy6w8ALNeFpE
-         TZbfysXoDDyw8EM6C4sYeMftcfjd0a8SZFVuX7Fl6Z4gWYQQ050rfgehENApz8yOFc
-         d2FuXHZmaRH1dCQYLe0qRney71YDfvFPkyU4v+Zj3ZQ0fs9ceuBn3kQZGy0E7TqsEA
-         /j44JFY7YmLKvsCBNzktW+3YYYO0A/zOnvjVg1BvZ9CBrZfk8yC+D+c2vbmxigXoGh
-         fB/hikz2W6MHA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 780663522591; Wed,  3 Mar 2021 16:44:38 -0800 (PST)
-Date:   Wed, 3 Mar 2021 16:44:38 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        s=k20201202; t=1614818745;
+        bh=vY63ALyHnCU3yIchUivHVRlQm2FBgsf0ZMsWNzYWYNg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HsuCQnuBa9AAyugWDPWEuZzkaHeYsQ9oiZqT/mJYbooy8kNXR4c7rRgMosXIyYD0X
+         a332T0F0ftDDKXqjJ9kHvmbf/M6Rl1D8Xmf5UyV42X/YqIIreoGkYFjYb6yR2RFrB6
+         4HsN5v2vdsLAEZs+JDlWp4wIRHkzrho8N+xaA0s4QwdHrKg039z0GArhR8SptfMxhO
+         cCmdxUCEdueq/ww2ZmNAXL8AIxWcmYwucVgJT4t7yN8BvOFSRhVgfCkR/Bbcocx9MN
+         pvsamwe4/IMPGjhjVCKCJOwPGka7AGB9VgGnT0aj8jpoVrhaPlr0bYRSLLTl4MOuXt
+         8uKFboUwt/ouw==
+From:   paulmck@kernel.org
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
         peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
         dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com
-Subject: [PATCH memory-model 0/3] LKMM updates for v5.13
-Message-ID: <20210304004438.GA25271@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        akiyks@gmail.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH memory-model 1/3] doc: Update rcu_dereference.rst reference
+Date:   Wed,  3 Mar 2021 16:45:41 -0800
+Message-Id: <20210304004543.25364-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.9.5
+In-Reply-To: <20210304004438.GA25271@paulmck-ThinkPad-P72>
+References: <20210304004438.GA25271@paulmck-ThinkPad-P72>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello!
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-This series contains LKMM updates:
+Changeset b00aedf978aa ("doc: Convert to rcu_dereference.txt to rcu_dereference.rst")
+renamed: Documentation/RCU/rcu_dereference.txt
+to: Documentation/RCU/rcu_dereference.rst.
 
-1.	Update rcu_dereference.rst reference, courtesy of Mauro Carvalho
-	Chehab.
+Update its cross-reference accordingly.
 
-2.	tools/memory-model: Remove reference to atomic_ops.rst, courtesy
-	of Akira Yokosawa.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ tools/memory-model/Documentation/glossary.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-3.	tools/memory-model: Add access-marking documentation.
+diff --git a/tools/memory-model/Documentation/glossary.txt b/tools/memory-model/Documentation/glossary.txt
+index b2da636..6f3d16d 100644
+--- a/tools/memory-model/Documentation/glossary.txt
++++ b/tools/memory-model/Documentation/glossary.txt
+@@ -19,7 +19,7 @@ Address Dependency:  When the address of a later memory access is computed
+ 	 from the value returned by the rcu_dereference() on line 2, the
+ 	 address dependency extends from that rcu_dereference() to that
+ 	 "p->a".  In rare cases, optimizing compilers can destroy address
+-	 dependencies.	Please see Documentation/RCU/rcu_dereference.txt
++	 dependencies.	Please see Documentation/RCU/rcu_dereference.rst
+ 	 for more information.
+ 
+ 	 See also "Control Dependency" and "Data Dependency".
+-- 
+2.9.5
 
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
- access-marking.txt |  474 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- glossary.txt       |    2 
- simple.txt         |    1 
- 3 files changed, 475 insertions(+), 2 deletions(-)
