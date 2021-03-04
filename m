@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C07B232DC0E
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 22:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA3B32DC30
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 22:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239851AbhCDVl7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Mar 2021 16:41:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
+        id S240635AbhCDVmb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Mar 2021 16:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240384AbhCDVls (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Mar 2021 16:41:48 -0500
+        with ESMTP id S240616AbhCDVmN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Mar 2021 16:42:13 -0500
 Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3820AC061756;
-        Thu,  4 Mar 2021 13:41:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14E7C061764;
+        Thu,  4 Mar 2021 13:41:32 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 305BA426F3;
-        Thu,  4 Mar 2021 21:40:59 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 4B5C6426F5;
+        Thu,  4 Mar 2021 21:41:07 +0000 (UTC)
 From:   Hector Martin <marcan@marcan.st>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
@@ -44,9 +44,9 @@ Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
         devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFT PATCH v3 14/27] arm64: move ICH_ sysreg bits from arm-gic-v3.h to sysreg.h
-Date:   Fri,  5 Mar 2021 06:38:49 +0900
-Message-Id: <20210304213902.83903-15-marcan@marcan.st>
+Subject: [RFT PATCH v3 15/27] dt-bindings: interrupt-controller: Add DT bindings for apple-aic
+Date:   Fri,  5 Mar 2021 06:38:50 +0900
+Message-Id: <20210304213902.83903-16-marcan@marcan.st>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210304213902.83903-1-marcan@marcan.st>
 References: <20210304213902.83903-1-marcan@marcan.st>
@@ -56,160 +56,146 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-These definitions are in arm-gic-v3.h for historical reasons which no
-longer apply. Move them to sysreg.h so the AIC driver can use them, as
-it needs to peek into vGIC registers to deal with the GIC maintentance
-interrupt.
+AIC is the Apple Interrupt Controller found on Apple ARM SoCs, such as
+the M1.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm64/include/asm/sysreg.h    | 60 ++++++++++++++++++++++++++++++
- include/linux/irqchip/arm-gic-v3.h | 56 ----------------------------
- 2 files changed, 60 insertions(+), 56 deletions(-)
+ .../interrupt-controller/apple,aic.yaml       | 88 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ .../interrupt-controller/apple-aic.h          | 15 ++++
+ 3 files changed, 104 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+ create mode 100644 include/dt-bindings/interrupt-controller/apple-aic.h
 
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index dfd4edbfe360..645926490ada 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -1024,6 +1024,66 @@
- #define TRFCR_ELx_ExTRE			BIT(1)
- #define TRFCR_ELx_E0TRE			BIT(0)
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+new file mode 100644
+index 000000000000..cf6c091a07b1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+@@ -0,0 +1,88 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/apple,aic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Apple Interrupt Controller
++
++maintainers:
++  - Hector Martin <marcan@marcan.st>
++
++description: |
++  The Apple Interrupt Controller is a simple interrupt controller present on
++  Apple ARM SoC platforms, including various iPhone and iPad devices and the
++  "Apple Silicon" Macs.
++
++  It provides the following features:
++
++  - Level-triggered hardware IRQs wired to SoC blocks
++    - Single mask bit per IRQ
++    - Per-IRQ affinity setting
++    - Automatic masking on event delivery (auto-ack)
++    - Software triggering (ORed with hw line)
++  - 2 per-CPU IPIs (meant as "self" and "other", but they are interchangeable
++    if not symmetric)
++  - Automatic prioritization (single event/ack register per CPU, lower IRQs =
++    higher priority)
++  - Automatic masking on ack
++  - Default "this CPU" register view and explicit per-CPU views
++
++  This device also represents the FIQ interrupt sources on platforms using AIC,
++  which do not go through a discrete interrupt controller.
++
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
++
++properties:
++  compatible:
++    items:
++      - const: apple,t8103-aic
++      - const: apple,aic
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 3
++    description: |
++      The 1st cell contains the interrupt type:
++        - 0: Hardware IRQ
++        - 1: FIQ
++
++      The 2nd cell contains the interrupt number.
++        - HW IRQs: interrupt number
++        - FIQs:
++          - 0: physical HV timer
++          - 1: virtual HV timer
++          - 2: physical guest timer
++          - 3: virtual guest timer
++
++      The 3rd cell contains the interrupt flags. This is normally
++      IRQ_TYPE_LEVEL_HIGH (4).
++
++  reg:
++    description: |
++      Specifies base physical address and size of the AIC registers.
++    maxItems: 1
++
++required:
++  - compatible
++  - '#interrupt-cells'
++  - interrupt-controller
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        aic: interrupt-controller@23b100000 {
++            compatible = "apple,t8103-aic", "apple,aic";
++            #interrupt-cells = <3>;
++            interrupt-controller;
++            reg = <0x2 0x3b100000 0x0 0x8000>;
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3a352c687d4b..744e086d28cd 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1646,6 +1646,7 @@ B:	https://github.com/AsahiLinux/linux/issues
+ C:	irc://chat.freenode.net/asahi-dev
+ T:	git https://github.com/AsahiLinux/linux.git
+ F:	Documentation/devicetree/bindings/arm/apple.yaml
++F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+ F:	arch/arm64/include/asm/sysreg_apple.h
  
+ ARM/ARTPEC MACHINE SUPPORT
+diff --git a/include/dt-bindings/interrupt-controller/apple-aic.h b/include/dt-bindings/interrupt-controller/apple-aic.h
+new file mode 100644
+index 000000000000..9ac56a7e6d3f
+--- /dev/null
++++ b/include/dt-bindings/interrupt-controller/apple-aic.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
++#ifndef _DT_BINDINGS_INTERRUPT_CONTROLLER_APPLE_AIC_H
++#define _DT_BINDINGS_INTERRUPT_CONTROLLER_APPLE_AIC_H
 +
-+/* GIC Hypervisor interface registers */
-+/* ICH_MISR_EL2 bit definitions */
-+#define ICH_MISR_EOI		(1 << 0)
-+#define ICH_MISR_U		(1 << 1)
++#include <dt-bindings/interrupt-controller/irq.h>
 +
-+/* ICH_LR*_EL2 bit definitions */
-+#define ICH_LR_VIRTUAL_ID_MASK	((1ULL << 32) - 1)
++#define AIC_IRQ	0
++#define AIC_FIQ	1
 +
-+#define ICH_LR_EOI		(1ULL << 41)
-+#define ICH_LR_GROUP		(1ULL << 60)
-+#define ICH_LR_HW		(1ULL << 61)
-+#define ICH_LR_STATE		(3ULL << 62)
-+#define ICH_LR_PENDING_BIT	(1ULL << 62)
-+#define ICH_LR_ACTIVE_BIT	(1ULL << 63)
-+#define ICH_LR_PHYS_ID_SHIFT	32
-+#define ICH_LR_PHYS_ID_MASK	(0x3ffULL << ICH_LR_PHYS_ID_SHIFT)
-+#define ICH_LR_PRIORITY_SHIFT	48
-+#define ICH_LR_PRIORITY_MASK	(0xffULL << ICH_LR_PRIORITY_SHIFT)
++#define AIC_TMR_HV_PHYS		0
++#define AIC_TMR_HV_VIRT		1
++#define AIC_TMR_GUEST_PHYS	2
++#define AIC_TMR_GUEST_VIRT	3
 +
-+/* ICH_HCR_EL2 bit definitions */
-+#define ICH_HCR_EN		(1 << 0)
-+#define ICH_HCR_UIE		(1 << 1)
-+#define ICH_HCR_NPIE		(1 << 3)
-+#define ICH_HCR_TC		(1 << 10)
-+#define ICH_HCR_TALL0		(1 << 11)
-+#define ICH_HCR_TALL1		(1 << 12)
-+#define ICH_HCR_EOIcount_SHIFT	27
-+#define ICH_HCR_EOIcount_MASK	(0x1f << ICH_HCR_EOIcount_SHIFT)
-+
-+/* ICH_VMCR_EL2 bit definitions */
-+#define ICH_VMCR_ACK_CTL_SHIFT	2
-+#define ICH_VMCR_ACK_CTL_MASK	(1 << ICH_VMCR_ACK_CTL_SHIFT)
-+#define ICH_VMCR_FIQ_EN_SHIFT	3
-+#define ICH_VMCR_FIQ_EN_MASK	(1 << ICH_VMCR_FIQ_EN_SHIFT)
-+#define ICH_VMCR_CBPR_SHIFT	4
-+#define ICH_VMCR_CBPR_MASK	(1 << ICH_VMCR_CBPR_SHIFT)
-+#define ICH_VMCR_EOIM_SHIFT	9
-+#define ICH_VMCR_EOIM_MASK	(1 << ICH_VMCR_EOIM_SHIFT)
-+#define ICH_VMCR_BPR1_SHIFT	18
-+#define ICH_VMCR_BPR1_MASK	(7 << ICH_VMCR_BPR1_SHIFT)
-+#define ICH_VMCR_BPR0_SHIFT	21
-+#define ICH_VMCR_BPR0_MASK	(7 << ICH_VMCR_BPR0_SHIFT)
-+#define ICH_VMCR_PMR_SHIFT	24
-+#define ICH_VMCR_PMR_MASK	(0xffUL << ICH_VMCR_PMR_SHIFT)
-+#define ICH_VMCR_ENG0_SHIFT	0
-+#define ICH_VMCR_ENG0_MASK	(1 << ICH_VMCR_ENG0_SHIFT)
-+#define ICH_VMCR_ENG1_SHIFT	1
-+#define ICH_VMCR_ENG1_MASK	(1 << ICH_VMCR_ENG1_SHIFT)
-+
-+/* ICH_VTR_EL2 bit definitions */
-+#define ICH_VTR_PRI_BITS_SHIFT	29
-+#define ICH_VTR_PRI_BITS_MASK	(7 << ICH_VTR_PRI_BITS_SHIFT)
-+#define ICH_VTR_ID_BITS_SHIFT	23
-+#define ICH_VTR_ID_BITS_MASK	(7 << ICH_VTR_ID_BITS_SHIFT)
-+#define ICH_VTR_SEIS_SHIFT	22
-+#define ICH_VTR_SEIS_MASK	(1 << ICH_VTR_SEIS_SHIFT)
-+#define ICH_VTR_A3V_SHIFT	21
-+#define ICH_VTR_A3V_MASK	(1 << ICH_VTR_A3V_SHIFT)
-+
- #ifdef __ASSEMBLY__
- 
- 	.irp	num,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
-diff --git a/include/linux/irqchip/arm-gic-v3.h b/include/linux/irqchip/arm-gic-v3.h
-index f6d092fdb93d..81cbf85f73de 100644
---- a/include/linux/irqchip/arm-gic-v3.h
-+++ b/include/linux/irqchip/arm-gic-v3.h
-@@ -575,67 +575,11 @@
- #define ICC_SRE_EL1_DFB			(1U << 1)
- #define ICC_SRE_EL1_SRE			(1U << 0)
- 
--/*
-- * Hypervisor interface registers (SRE only)
-- */
--#define ICH_LR_VIRTUAL_ID_MASK		((1ULL << 32) - 1)
--
--#define ICH_LR_EOI			(1ULL << 41)
--#define ICH_LR_GROUP			(1ULL << 60)
--#define ICH_LR_HW			(1ULL << 61)
--#define ICH_LR_STATE			(3ULL << 62)
--#define ICH_LR_PENDING_BIT		(1ULL << 62)
--#define ICH_LR_ACTIVE_BIT		(1ULL << 63)
--#define ICH_LR_PHYS_ID_SHIFT		32
--#define ICH_LR_PHYS_ID_MASK		(0x3ffULL << ICH_LR_PHYS_ID_SHIFT)
--#define ICH_LR_PRIORITY_SHIFT		48
--#define ICH_LR_PRIORITY_MASK		(0xffULL << ICH_LR_PRIORITY_SHIFT)
--
- /* These are for GICv2 emulation only */
- #define GICH_LR_VIRTUALID		(0x3ffUL << 0)
- #define GICH_LR_PHYSID_CPUID_SHIFT	(10)
- #define GICH_LR_PHYSID_CPUID		(7UL << GICH_LR_PHYSID_CPUID_SHIFT)
- 
--#define ICH_MISR_EOI			(1 << 0)
--#define ICH_MISR_U			(1 << 1)
--
--#define ICH_HCR_EN			(1 << 0)
--#define ICH_HCR_UIE			(1 << 1)
--#define ICH_HCR_NPIE			(1 << 3)
--#define ICH_HCR_TC			(1 << 10)
--#define ICH_HCR_TALL0			(1 << 11)
--#define ICH_HCR_TALL1			(1 << 12)
--#define ICH_HCR_EOIcount_SHIFT		27
--#define ICH_HCR_EOIcount_MASK		(0x1f << ICH_HCR_EOIcount_SHIFT)
--
--#define ICH_VMCR_ACK_CTL_SHIFT		2
--#define ICH_VMCR_ACK_CTL_MASK		(1 << ICH_VMCR_ACK_CTL_SHIFT)
--#define ICH_VMCR_FIQ_EN_SHIFT		3
--#define ICH_VMCR_FIQ_EN_MASK		(1 << ICH_VMCR_FIQ_EN_SHIFT)
--#define ICH_VMCR_CBPR_SHIFT		4
--#define ICH_VMCR_CBPR_MASK		(1 << ICH_VMCR_CBPR_SHIFT)
--#define ICH_VMCR_EOIM_SHIFT		9
--#define ICH_VMCR_EOIM_MASK		(1 << ICH_VMCR_EOIM_SHIFT)
--#define ICH_VMCR_BPR1_SHIFT		18
--#define ICH_VMCR_BPR1_MASK		(7 << ICH_VMCR_BPR1_SHIFT)
--#define ICH_VMCR_BPR0_SHIFT		21
--#define ICH_VMCR_BPR0_MASK		(7 << ICH_VMCR_BPR0_SHIFT)
--#define ICH_VMCR_PMR_SHIFT		24
--#define ICH_VMCR_PMR_MASK		(0xffUL << ICH_VMCR_PMR_SHIFT)
--#define ICH_VMCR_ENG0_SHIFT		0
--#define ICH_VMCR_ENG0_MASK		(1 << ICH_VMCR_ENG0_SHIFT)
--#define ICH_VMCR_ENG1_SHIFT		1
--#define ICH_VMCR_ENG1_MASK		(1 << ICH_VMCR_ENG1_SHIFT)
--
--#define ICH_VTR_PRI_BITS_SHIFT		29
--#define ICH_VTR_PRI_BITS_MASK		(7 << ICH_VTR_PRI_BITS_SHIFT)
--#define ICH_VTR_ID_BITS_SHIFT		23
--#define ICH_VTR_ID_BITS_MASK		(7 << ICH_VTR_ID_BITS_SHIFT)
--#define ICH_VTR_SEIS_SHIFT		22
--#define ICH_VTR_SEIS_MASK		(1 << ICH_VTR_SEIS_SHIFT)
--#define ICH_VTR_A3V_SHIFT		21
--#define ICH_VTR_A3V_MASK		(1 << ICH_VTR_A3V_SHIFT)
--
- #define ICC_IAR1_EL1_SPURIOUS		0x3ff
- 
- #define ICC_SRE_EL2_SRE			(1 << 0)
++#endif
 -- 
 2.30.0
 
