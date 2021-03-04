@@ -2,60 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CFF32CD7B
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 08:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5417032D40B
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 14:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236184AbhCDHVB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Mar 2021 02:21:01 -0500
-Received: from mail.jvpinto.com ([65.49.11.60]:4541 "EHLO mail.JVPinto.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236164AbhCDHUo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 4 Mar 2021 02:20:44 -0500
-Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
- RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Wed, 3 Mar 2021 23:18:53 -0800
-Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
- Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Wed, 3 Mar 2021
- 23:18:38 -0800
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <johnpinto@jvpinto.com>
-Subject: Re:reply
-Date:   Thu, 4 Mar 2021 07:18:52 +0000
+        id S233075AbhCDNVY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Mar 2021 08:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232942AbhCDNVJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Mar 2021 08:21:09 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31A2C06175F;
+        Thu,  4 Mar 2021 05:20:29 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id jx13so6569208pjb.1;
+        Thu, 04 Mar 2021 05:20:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7TuebsGZ7PfFLh+7VtFFI1adnwVCzaRy+r3d2bkdQFc=;
+        b=ezgmgckKXwMf1XnQDpICKsBKNtIMTaEjBtWq2osVrPLrJBXdavfge9eoYCtdZCCzSa
+         MCH+ayceOvwj0c2+KGgjKphFRufEr1GqkU5H20NTxwuLtZcMQ19p7e8t+y1oL4SyqoFk
+         /Werxajx3XgBNvxdAJH+WqIlW5wuRAZ8f8owXo3hBvLGqQ6wnJc5lQeEH1m3yCyvGDAY
+         0QnpMK0qOJJivxyCm8QrYhlVrFg3bt5spfQsoEZGavewM5F4hOPsIZa+8ipbGxUsZmq4
+         Asfb0undkcPDPe916S51XllzdpWRW9av5aTC/zC/vz2idEcyEdOCZ2T4nTBsWlo30r6c
+         4/6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7TuebsGZ7PfFLh+7VtFFI1adnwVCzaRy+r3d2bkdQFc=;
+        b=X12+b5l5ox1mlljXQM1GTP8xD6/r2Yvw9FGWHISnWK6OPel/K7Um+4ulQM+UT7nl0T
+         NNDUbRuT+YDMTGMLs3jFCAK0ZDxWKdcFMyFGyOtfs6QT9o7kfmp759YhMEX+238cQlq2
+         fFpdIJQsTMP44q7IraoaxDC7dNHbIXUPjKnjFgaeRJUvZK8c4N1TGDkY2DZZVeglTOC0
+         /xI2xmOeX+NwE+QIkJXObWnkaH230DUlaU44zSLW9PCChpN1xuKdH3OQyvJpMr4jwPTA
+         Q6eSntJgIgDD5rDMUp0ANv4atyiQvl5oB1VRLN6xhEOofH6TVj1NAtk0QieK7xzSDtta
+         DhAQ==
+X-Gm-Message-State: AOAM53392WLCEjyMORQ3NJYOp7tskhf+ePAN7Jp1txU5XEyAx+ZthulX
+        puJ6H4BmZ1fD6AaYCxSdSC8=
+X-Google-Smtp-Source: ABdhPJw5mop7Q05iwGPVDPv/TV7muVAYEl+QpfM+dzp7wGwLuxJ9xrmHLzyFf9+5Z90KHfNnJQiWeA==
+X-Received: by 2002:a17:902:ea09:b029:e3:a720:b83 with SMTP id s9-20020a170902ea09b02900e3a7200b83mr4023689plg.51.1614864028293;
+        Thu, 04 Mar 2021 05:20:28 -0800 (PST)
+Received: from localhost.localdomain ([178.236.46.205])
+        by smtp.gmail.com with ESMTPSA id u9sm26809374pgc.59.2021.03.04.05.20.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Mar 2021 05:20:27 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: zhang.yunkai@zte.com.cn
+To:     aneesh.kumar@linux.ibm.com
+Cc:     will@kernel.org, akpm@linux-foundation.org, npiggin@gmail.com,
+        peterz@infradead.org, ysato@users.sourceforge.jp, dalias@libc.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Yunkai <zhang.yunkai@zte.com.cn>
+Subject: [PATCH] sh: remove duplicate include in tlb.h
+Date:   Thu,  4 Mar 2021 05:20:20 -0800
+Message-Id: <20210304132020.196811-1-zhang.yunkai@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <d74200991bc34511a10fbe63c80607f6@RW-EXC1.JVPinto.com>
-To:     Undisclosed recipients:;
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
+From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+'asm-generic/tlb.h' included in 'asm/tlb.h' is duplicated.
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
+Signed-off-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+---
+ arch/sh/include/asm/tlb.h | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
+diff --git a/arch/sh/include/asm/tlb.h b/arch/sh/include/asm/tlb.h
+index 360f713d009b..aeb8915e9254 100644
+--- a/arch/sh/include/asm/tlb.h
++++ b/arch/sh/include/asm/tlb.h
+@@ -4,12 +4,11 @@
+ 
+ #ifndef __ASSEMBLY__
+ #include <linux/pagemap.h>
++#include <asm-generic/tlb.h>
+ 
+ #ifdef CONFIG_MMU
+ #include <linux/swap.h>
+ 
+-#include <asm-generic/tlb.h>
+-
+ #if defined(CONFIG_CPU_SH4)
+ extern void tlb_wire_entry(struct vm_area_struct *, unsigned long, pte_t);
+ extern void tlb_unwire_entry(void);
+@@ -24,12 +23,7 @@ static inline void tlb_unwire_entry(void)
+ {
+ 	BUG();
+ }
+-#endif
+-
+-#else /* CONFIG_MMU */
+-
+-#include <asm-generic/tlb.h>
+-
++#endif /* CONFIG_CPU_SH4 */
+ #endif /* CONFIG_MMU */
+ #endif /* __ASSEMBLY__ */
+ #endif /* __ASM_SH_TLB_H */
+-- 
+2.25.1
 
-Regards,
-Ms. Reem.
