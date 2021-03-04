@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A2232DC61
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 22:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C58A332DC68
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Mar 2021 22:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240970AbhCDVnf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Mar 2021 16:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S240979AbhCDVng (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Mar 2021 16:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240923AbhCDVnY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Mar 2021 16:43:24 -0500
+        with ESMTP id S240929AbhCDVn1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Mar 2021 16:43:27 -0500
 Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FE3C061756;
-        Thu,  4 Mar 2021 13:42:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597AFC061761;
+        Thu,  4 Mar 2021 13:42:47 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 0C02E426FC;
-        Thu,  4 Mar 2021 21:41:49 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 28BE042709;
+        Thu,  4 Mar 2021 21:41:56 +0000 (UTC)
 From:   Hector Martin <marcan@marcan.st>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
@@ -44,9 +44,9 @@ Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
         devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFT PATCH v3 21/27] tty: serial: samsung_tty: IRQ rework
-Date:   Fri,  5 Mar 2021 06:38:56 +0900
-Message-Id: <20210304213902.83903-22-marcan@marcan.st>
+Subject: [RFT PATCH v3 22/27] tty: serial: samsung_tty: Use devm_ioremap_resource
+Date:   Fri,  5 Mar 2021 06:38:57 +0900
+Message-Id: <20210304213902.83903-23-marcan@marcan.st>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210304213902.83903-1-marcan@marcan.st>
 References: <20210304213902.83903-1-marcan@marcan.st>
@@ -56,131 +56,79 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Split out s3c24xx_serial_tx_chars from s3c24xx_serial_tx_irq,
-  where only the latter acquires the port lock. This will be necessary
-  on platforms which have edge-triggered IRQs, as we need to call
-  s3c24xx_serial_tx_chars to kick off transmission from outside IRQ
-  context, with the port lock held.
+This picks up the non-posted I/O mode needed for Apple platforms to
+work properly.
 
-* Rename s3c24xx_serial_rx_chars to s3c24xx_serial_rx_irq for
-  consistency with the above. All it does now is call two other
-  functions anyway.
+This removes the request/release functions, which are no longer
+necessary, since devm_ioremap_resource takes care of that already. Most
+other drivers already do it this way, anyway.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- drivers/tty/serial/samsung_tty.c | 34 +++++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 14 deletions(-)
+ drivers/tty/serial/samsung_tty.c | 25 +++----------------------
+ 1 file changed, 3 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index 39b2eb165bdc..7106eb238d8c 100644
+index 7106eb238d8c..26cb05992e9f 100644
 --- a/drivers/tty/serial/samsung_tty.c
 +++ b/drivers/tty/serial/samsung_tty.c
-@@ -827,7 +827,7 @@ static irqreturn_t s3c24xx_serial_rx_chars_pio(void *dev_id)
- 	return IRQ_HANDLED;
+@@ -1573,26 +1573,11 @@ static const char *s3c24xx_serial_type(struct uart_port *port)
+ 	}
  }
  
--static irqreturn_t s3c24xx_serial_rx_chars(int irq, void *dev_id)
-+static irqreturn_t s3c24xx_serial_rx_irq(int irq, void *dev_id)
- {
- 	struct s3c24xx_uart_port *ourport = dev_id;
- 
-@@ -836,16 +836,12 @@ static irqreturn_t s3c24xx_serial_rx_chars(int irq, void *dev_id)
- 	return s3c24xx_serial_rx_chars_pio(dev_id);
- }
- 
--static irqreturn_t s3c24xx_serial_tx_chars(int irq, void *id)
-+static void s3c24xx_serial_tx_chars(struct s3c24xx_uart_port *ourport)
- {
--	struct s3c24xx_uart_port *ourport = id;
- 	struct uart_port *port = &ourport->port;
- 	struct circ_buf *xmit = &port->state->xmit;
--	unsigned long flags;
- 	int count, dma_count = 0;
- 
--	spin_lock_irqsave(&port->lock, flags);
+-#define MAP_SIZE (0x100)
 -
- 	count = CIRC_CNT_TO_END(xmit->head, xmit->tail, UART_XMIT_SIZE);
+-static void s3c24xx_serial_release_port(struct uart_port *port)
+-{
+-	release_mem_region(port->mapbase, MAP_SIZE);
+-}
+-
+-static int s3c24xx_serial_request_port(struct uart_port *port)
+-{
+-	const char *name = s3c24xx_serial_portname(port);
+-
+-	return request_mem_region(port->mapbase, MAP_SIZE, name) ? 0 : -EBUSY;
+-}
+-
+ static void s3c24xx_serial_config_port(struct uart_port *port, int flags)
+ {
+ 	struct s3c24xx_uart_info *info = s3c24xx_port_to_info(port);
  
- 	if (ourport->dma && ourport->dma->tx_chan &&
-@@ -862,7 +858,7 @@ static irqreturn_t s3c24xx_serial_tx_chars(int irq, void *id)
- 		wr_reg(port, S3C2410_UTXH, port->x_char);
- 		port->icount.tx++;
- 		port->x_char = 0;
--		goto out;
-+		return;
- 	}
- 
- 	/* if there isn't anything more to transmit, or the uart is now
-@@ -871,7 +867,7 @@ static irqreturn_t s3c24xx_serial_tx_chars(int irq, void *id)
- 
- 	if (uart_circ_empty(xmit) || uart_tx_stopped(port)) {
- 		s3c24xx_serial_stop_tx(port);
--		goto out;
-+		return;
- 	}
- 
- 	/* try and drain the buffer... */
-@@ -893,7 +889,7 @@ static irqreturn_t s3c24xx_serial_tx_chars(int irq, void *id)
- 
- 	if (!count && dma_count) {
- 		s3c24xx_serial_start_tx_dma(ourport, dma_count);
--		goto out;
-+		return;
- 	}
- 
- 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS) {
-@@ -904,8 +900,18 @@ static irqreturn_t s3c24xx_serial_tx_chars(int irq, void *id)
- 
- 	if (uart_circ_empty(xmit))
- 		s3c24xx_serial_stop_tx(port);
-+}
-+
-+static irqreturn_t s3c24xx_serial_tx_irq(int irq, void *id)
-+{
-+	struct s3c24xx_uart_port *ourport = id;
-+	struct uart_port *port = &ourport->port;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+
-+	s3c24xx_serial_tx_chars(ourport);
- 
--out:
- 	spin_unlock_irqrestore(&port->lock, flags);
- 	return IRQ_HANDLED;
+-	if (flags & UART_CONFIG_TYPE &&
+-	    s3c24xx_serial_request_port(port) == 0)
++	if (flags & UART_CONFIG_TYPE)
+ 		port->type = info->port_type;
  }
-@@ -919,11 +925,11 @@ static irqreturn_t s3c64xx_serial_handle_irq(int irq, void *id)
- 	irqreturn_t ret = IRQ_HANDLED;
  
- 	if (pend & S3C64XX_UINTM_RXD_MSK) {
--		ret = s3c24xx_serial_rx_chars(irq, id);
-+		ret = s3c24xx_serial_rx_irq(irq, id);
- 		wr_regl(port, S3C64XX_UINTP, S3C64XX_UINTM_RXD_MSK);
+@@ -1645,8 +1630,6 @@ static const struct uart_ops s3c24xx_serial_ops = {
+ 	.shutdown	= s3c24xx_serial_shutdown,
+ 	.set_termios	= s3c24xx_serial_set_termios,
+ 	.type		= s3c24xx_serial_type,
+-	.release_port	= s3c24xx_serial_release_port,
+-	.request_port	= s3c24xx_serial_request_port,
+ 	.config_port	= s3c24xx_serial_config_port,
+ 	.verify_port	= s3c24xx_serial_verify_port,
+ #if defined(CONFIG_SERIAL_SAMSUNG_CONSOLE) && defined(CONFIG_CONSOLE_POLL)
+@@ -1668,8 +1651,6 @@ static const struct uart_ops s3c64xx_serial_ops = {
+ 	.shutdown	= s3c64xx_serial_shutdown,
+ 	.set_termios	= s3c24xx_serial_set_termios,
+ 	.type		= s3c24xx_serial_type,
+-	.release_port	= s3c24xx_serial_release_port,
+-	.request_port	= s3c24xx_serial_request_port,
+ 	.config_port	= s3c24xx_serial_config_port,
+ 	.verify_port	= s3c24xx_serial_verify_port,
+ #if defined(CONFIG_SERIAL_SAMSUNG_CONSOLE) && defined(CONFIG_CONSOLE_POLL)
+@@ -1927,8 +1908,8 @@ static int s3c24xx_serial_init_port(struct s3c24xx_uart_port *ourport,
+ 
+ 	dev_dbg(port->dev, "resource %pR)\n", res);
+ 
+-	port->membase = devm_ioremap(port->dev, res->start, resource_size(res));
+-	if (!port->membase) {
++	port->membase = devm_ioremap_resource(port->dev, res);
++	if (IS_ERR(port->membase)) {
+ 		dev_err(port->dev, "failed to remap controller address\n");
+ 		return -EBUSY;
  	}
- 	if (pend & S3C64XX_UINTM_TXD_MSK) {
--		ret = s3c24xx_serial_tx_chars(irq, id);
-+		ret = s3c24xx_serial_tx_irq(irq, id);
- 		wr_regl(port, S3C64XX_UINTP, S3C64XX_UINTM_TXD_MSK);
- 	}
- 	return ret;
-@@ -1155,7 +1161,7 @@ static int s3c24xx_serial_startup(struct uart_port *port)
- 
- 	ourport->rx_enabled = 1;
- 
--	ret = request_irq(ourport->rx_irq, s3c24xx_serial_rx_chars, 0,
-+	ret = request_irq(ourport->rx_irq, s3c24xx_serial_rx_irq, 0,
- 			  s3c24xx_serial_portname(port), ourport);
- 
- 	if (ret != 0) {
-@@ -1169,7 +1175,7 @@ static int s3c24xx_serial_startup(struct uart_port *port)
- 
- 	ourport->tx_enabled = 1;
- 
--	ret = request_irq(ourport->tx_irq, s3c24xx_serial_tx_chars, 0,
-+	ret = request_irq(ourport->tx_irq, s3c24xx_serial_tx_irq, 0,
- 			  s3c24xx_serial_portname(port), ourport);
- 
- 	if (ret) {
 -- 
 2.30.0
 
