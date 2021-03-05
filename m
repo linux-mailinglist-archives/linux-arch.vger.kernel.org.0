@@ -2,119 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFAE32F24B
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 19:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6161C32F276
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 19:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbhCESSs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Mar 2021 13:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbhCESS2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Mar 2021 13:18:28 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF153C061574;
-        Fri,  5 Mar 2021 10:18:27 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 44CF842037;
-        Fri,  5 Mar 2021 18:18:18 +0000 (UTC)
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
+        id S229687AbhCES0y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Mar 2021 13:26:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49310 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229526AbhCES0u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 5 Mar 2021 13:26:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F40D6509F;
+        Fri,  5 Mar 2021 18:26:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614968810;
+        bh=A3PkStTTXlj6BCOB8jvhdJl283IF9fvcmU9TsaiUi/M=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FXiFp8+DmQ579azbC1TyUDKF2IPvDY+JLH7j/FxbaaRv+T7076SKqZ4axcADR/oYD
+         sK9rY0PTNI3yQwgJ0Itj8tpZS2TlaHTgDPF7wcPPZHS7PqTLeuYDp8Z7cTTjwVPbhD
+         XEHBX0d4LAE4qse0K64mlfwDk7R4ZbjR+Z8SxK44FeFGQh9I3oyxZiXKD6ELMGq4zz
+         IbboEWQ7sG272SK6poJBkoMa02jX13psyyd7r22u+FVJG6/kjkzxz1Qy6kQQgZIxsB
+         UD4+7L1e2Jgv/hzyWOlKvXuVFZw6KaHWPPgg0XQSTK3NK/dOoBO0F8WBnDSSB5zRzB
+         r67v6VuOi9U0w==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 1434E3523946; Fri,  5 Mar 2021 10:26:50 -0800 (PST)
+Date:   Fri, 5 Mar 2021 10:26:50 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrea Parri <parri.andrea@gmail.com>,
         Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210304213902.83903-1-marcan@marcan.st>
- <20210304213902.83903-13-marcan@marcan.st>
- <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
- MMIO as non-posted
-Message-ID: <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st>
-Date:   Sat, 6 Mar 2021 03:18:16 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH] tools/memory-model: Fix smp_mb__after_spinlock() spelling
+Message-ID: <20210305182650.GA2713@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20210305102823.415900-1-bjorn.topel@gmail.com>
+ <20210305153655.GC38200@rowland.harvard.edu>
+ <e90fee12-a29e-cddb-5db3-24d92d4e03f8@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <e90fee12-a29e-cddb-5db3-24d92d4e03f8@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06/03/2021 02.39, Rob Herring wrote:
-> I'm still a little hesitant to add these properties and having some
-> default. I worry about a similar situation as 'dma-coherent' where the
-> assumed default on non-coherent on Arm doesn't work for PowerPC which
-> defaults coherent. More below on this.
-
-The intent of the default here is that it matches what ioremap() does on 
-other platforms already (where it does not make any claims of being 
-posted, though it could be on some platforms). It could be per-platform 
-what that means... but either way it should be what drivers get today 
-without asking for anything special.
-
->> -       return ioremap(res.start, resource_size(&res));
->> +       if (res.flags & IORESOURCE_MEM_NONPOSTED)
->> +               return ioremap_np(res.start, resource_size(&res));
->> +       else
->> +               return ioremap(res.start, resource_size(&res));
+On Fri, Mar 05, 2021 at 04:41:49PM +0100, Björn Töpel wrote:
+> On 2021-03-05 16:36, Alan Stern wrote:
+> > On Fri, Mar 05, 2021 at 11:28:23AM +0100, Björn Töpel wrote:
+> > > From: Björn Töpel <bjorn.topel@intel.com>
+> > > 
+> > > A misspelled invokation of git-grep, revealed that
+> > -------------------^
+> > 
+> > Smetimes my brain is a little slow...  Do you confirm that this is a
+> > joke?
+> > 
 > 
-> This and the devm variants all scream for a ioremap_extended()
-> function. IOW, it would be better if the ioremap flavor was a
-> parameter. Unless we could implement that just for arm64 first, that's
-> a lot of refactoring...
-
-I agree, but yeah... that's one big refactor to try to do now...
-
-> What's the code path using these functions on the M1 where we need to
-> return 'posted'? It's just downstream PCI mappings (PCI memory space),
-> right? Those would never hit these paths because they don't have a DT
-> node or if they do the memory space is not part of it. So can't the
-> check just be:
+> I wish, Alan. I wish.
 > 
-> bool of_mmio_is_nonposted(struct device_node *np)
-> {
->      return np && of_machine_is_compatible("apple,arm-platform");
-> }
+> Looks like I can only spel function names correctly.
 
-Yes; the implementation was trying to be generic, but AIUI we don't need 
-this on M1 because the PCI mappings don't go through this codepath, and 
-nothing else needs posted mode. My first hack was something not too 
-unlike this, then I was going to get rid of apple,arm-platform and just 
-have this be a generic mechanism with the properties, but then we added 
-the optimization to not do the lookups on other platforms, and now we're 
-coming full circle... :-)
+Heh!  I missed that one completely.  Please see below for a wortschmied
+commit.
 
-If you prefer to handle it this way for now I can do it like this. I 
-think we should still have the DT bindings and properties though (even 
-if not used), as they do describe the hardware properly, and in the 
-future we might want to use them instead of having a quirk.
+							Thanx, Paul
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+------------------------------------------------------------------------
+
+commit 1c737ce34715db9431f6b034f92dbf09d954126d
+Author: Björn Töpel <bjorn.topel@intel.com>
+Date:   Fri Mar 5 11:28:23 2021 +0100
+
+    tools/memory-model: Fix smp_mb__after_spinlock() spelling
+    
+    A misspelled git-grep regex revealed that smp_mb__after_spinlock()
+    was misspelled in explanation.txt.
+    
+    This commit adds the missing "_" to smp_mb__after_spinlock().
+    
+    Fixes: 1c27b644c0fd ("Automate memory-barriers.txt; provide Linux-kernel memory model")
+    [ paulmck: Apply Alan Stern commit-log feedback. ]
+    Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index f9d610d..5d72f31 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -2510,7 +2510,7 @@ they behave as follows:
+ 	smp_mb__after_atomic() orders po-earlier atomic updates and
+ 	the events preceding them against all po-later events;
+ 
+-	smp_mb_after_spinlock() orders po-earlier lock acquisition
++	smp_mb__after_spinlock() orders po-earlier lock acquisition
+ 	events and the events preceding them against all po-later
+ 	events.
+ 
