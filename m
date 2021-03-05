@@ -2,101 +2,267 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C3F32E614
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 11:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B0D32E623
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 11:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbhCEKTf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Mar 2021 05:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbhCEKTA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Mar 2021 05:19:00 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F644C061762
-        for <linux-arch@vger.kernel.org>; Fri,  5 Mar 2021 02:18:59 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id f1so2739016lfu.3
-        for <linux-arch@vger.kernel.org>; Fri, 05 Mar 2021 02:18:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xwNLb2P2LVN8VWnFdZc+rwNuJ+QqAA27JjkB8JsHwdE=;
-        b=ASt1IVQLPzb9L80bE8m9f6kqqabCk7u0JOhy1MzrBL/Y2CJ0Dk+b11puVpKMC0/6Ns
-         ie9feACUA5VpTHep8VxEOVnrNzCWCNw0ghuzbPl2o2TA6BQKPyu2TvpIsSl+n7WOXxhJ
-         GnbpuvsdvzZ3lgB/WInil0/rAKCDEgOYM/BQIW1fnTNNKCc9Fub2YSSwCjDghaAsgXLx
-         evXri9xJW+v/yVU6UBVsQBMa4XNp4xWamt9MADq5BSFM8ZPLmV2Xkc7NScHS74SmE1hH
-         NVzcQFja3IFFj/naH4Ke4fa2zCfotjNhZsI0D7r4QpvMHpkV+H8RGn9fq5IQFSj0RD1D
-         yI4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xwNLb2P2LVN8VWnFdZc+rwNuJ+QqAA27JjkB8JsHwdE=;
-        b=s2Utni/Z8I7i0Z3Z7UyNBp9n4vMZWnu8f8oHlzI6a3PFxp1Dmc+UzS/1zOjyPGhjTO
-         yvU027NAWQyVHhnEjCLVu9rhcGvfvdeJTOO6gy2M97/ly7JB35pAO5rBlydgrNCAZEdF
-         YPgCHIbH9OkhQ8EZCFGk2ivtETtucSII2Ssiy1WbGz3bJQSg7teaTTVjxvfPPj9gbpNV
-         9fjk2Op+wX4KnbuH7+F7ZprV4TC5kR929fsfmamYB8R1jOXoLvijrjZfaPb3xsfWAFZR
-         RsE/4CVMKzvQ+OozX9hS414uTrGnzW+LuuABTMmTXGKC0k4RPVCL9OEYp7cy4iSDxuP+
-         aowA==
-X-Gm-Message-State: AOAM532O79m0gfcUrOq+iAcwrhiMEMxptVIUbggZ540DDoUTFE31Vy4l
-        gdcWehABJUw87CUnTAXlqN31eDK23Ccbs7ewiIsC+w==
-X-Google-Smtp-Source: ABdhPJxA/IN9FI+YATqXHoTLFT+UsL1VJiDBv807dBmpi79MIpih6Nv69+jErWGhJ3E/idF9JDF05vISQLysXpmYRtw=
-X-Received: by 2002:a19:6b13:: with SMTP id d19mr5000896lfa.291.1614939537603;
- Fri, 05 Mar 2021 02:18:57 -0800 (PST)
+        id S229861AbhCEKUk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Mar 2021 05:20:40 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:49264 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229709AbhCEKUX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 5 Mar 2021 05:20:23 -0500
+Received: from localhost.localdomain (unknown [182.149.161.105])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9fCBUJgPcwUAA--.6604S2;
+        Fri, 05 Mar 2021 18:19:51 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [RFC]: MIPS: new ftrace implementation
+Date:   Fri,  5 Mar 2021 18:19:29 +0800
+Message-Id: <20210305101933.9799-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-7-marcan@marcan.st>
-In-Reply-To: <20210304213902.83903-7-marcan@marcan.st>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 5 Mar 2021 11:18:46 +0100
-Message-ID: <CACRpkdYZX81vEivv331OOsaRUr65aLza3-Au-by5OL+w1D0RPA@mail.gmail.com>
-Subject: Re: [RFT PATCH v3 06/27] dt-bindings: timer: arm,arch_timer: Add
- interrupt-names support
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxr9fCBUJgPcwUAA--.6604S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF4UWw1rKF4fuFyfZF4kCrg_yoW5Zw1DpF
+        W3XwnFqr48X3yqkr1jv3y5Zr1Sgry5CrZ7uFn5Gw1rJ3Z8CF4Sya48Wa18X347Gr9xArWj
+        vF1j9ryUuFW5Kw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE14v_Gw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUFg4SDUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 4, 2021 at 10:40 PM Hector Martin <marcan@marcan.st> wrote:
+This series add DYNAMC_FTRACE_WITH_REGS support without depending _mcount
+and -pg, and try to address following issue
 
-> Not all platforms provide the same set of timers/interrupts, and Linux
-> only needs one (plus kvm/guest ones); some platforms are working around
-> this by using dummy fake interrupts. Implementing interrupt-names allows
-> the devicetree to specify an arbitrary set of available interrupts, so
-> the timer code can pick the right one.
->
-> This also adds the hyp-virt timer/interrupt, which was previously not
-> expressed in the fixed 4-interrupt form.
->
-> Signed-off-by: Hector Martin <marcan@marcan.st>
++. _mcount stub size is 3 insns in vmlinux  and  4 insns in .ko, too much
 
-This looks good to me.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
++. complex handing MIPS32 and MIPS64 in _mcount, especially sp pointer in
+MIPS32
 
-Yours,
-Linus Walleij
++. _mcount is called with sp adjusted in Callee(the traced function), which
+is hard for livepatch to restore the sp pointer
+
+
+GCC
+#########
+
++. gcc 8 add -fpatchable-function-entry=N[, M] support to insert N 
+nops before real start, for more info, see gcc 8 manual
+
++. gcc/mips has two bug: 93242 (fixed in gcc 10), 99217 (with a fix, but
+not accepted) about this option. With fixes applyed in gcc 8.3, vmlinux is OK
+
+
+Design
+#########
+
++. Caller A calls Callee B, with -fpatchable-function-entry=3, B has 
+three nops at its entry
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+
+		B:
+			nop
+			nop
+			nop
+
+		#B: real start 
+			INSN_B_first
+
++. With ftrace initialized or module loaded, this three nop got
+replaced,
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			nop
+			li	t0, 0
+
+		#B: real start 
+			INSN_B_first
+
+Obviously, ftrace_regs_caller is 64KB aligned, thanks He Jinyang
+<hejinyang@loongson.cn>
+	
++. To enable tracing , take nop into "jalr at, at“,
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			jalr	at, at
+			li	t0, 0
+
+		#B: real start 
+			INSN_B_first
+	
+
++. To disable tracing, take "jalr at, at" into nop
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			nop
+			li	t0, 0
+
+		#B: real start 
+			INSN_B_first
+	
++. when tracing without regs, replace "li t0, 0' with "li t0, 1"
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			jalr	at, at
+			li	t0, 1
+		#B: real start 
+			INSN_B_first
+
+With only one instruction modified, it is atomic and no sync needed (
+_mcount need sync between two writes) on both MIPS32 and MIPS64, I got 
+this from ARM64.
+
+we need transfrom from tracing disabled into tracing without regs, first
+replace "li t0, 0" with "li t0, 1", then "nop" with "jalr at, at", still
+no sync between
+
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			jalr	at, at
+			li	t0, 1
+
+		#B: real start 
+			INSN_B_first
+
++. When B is ok to be patched, replace first four instruction with new 
+function B'
+
+------------
+	::
+
+		A:
+
+			jal	B
+			nop
+		......
+		B:
+			lui	at, %hi(B')	// second, fill new B'high
+			addiu	at, %lo(B')	// first, fill nop
+						// third, fill new B' low
+			jr	at		// at last, fill jr
+		#B: real start 
+			nop			//forth, fill nop
+						//Watch Out! 
+						//first instruction 
+						// clobbered. we
+						//need to save it somewhere
+						//or we must use four nops
+
+if tracing enabled, we need to disable tracing first, and we need sync 
+before fill "jr"
+	
+Patches
+###########
+
+Patch 1 - Patch 3 
+
+This make new MIPS/ftrace with DYNAMIC_FTRACE_WITH_REGS in parallel with 
+old MIPS/Ftrace 
+
+Patch 4
+
+Add DYNAMC_FTRACE_WITH_REGS support 
+
+Remaining Issues
+################
+
++. reserve three nops or four nops for <= MIPS R5 ?
+
+Without direct call, three nops is enough. With direct call, we need to 
+hack ftrace to save the first instruction somewhere. Four nops is enough 
+for all cases
+
+MIPS R6 only need three nops without hacking, but this version does not
+support MIPS R6
+
++. MIPS32 support, working on it
+
++. checking for gcc version, can previous two bug back porting to gcc 8.5?
+We should check gcc's version
+
++. stack backstrace
+
+
