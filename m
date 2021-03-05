@@ -2,94 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D418832ED22
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 15:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E635B32ED63
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 15:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbhCEO34 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Mar 2021 09:29:56 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:49364 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230415AbhCEO3s (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 5 Mar 2021 09:29:48 -0500
-Received: from zn.tnic (p200300ec2f0b9500a5847b5a228c2b11.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:9500:a584:7b5a:228c:2b11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 378C51EC0521;
-        Fri,  5 Mar 2021 15:29:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1614954586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=756DJLydScKg6OQ7shRw8IU5LHdGM90c3wF/c6DK94s=;
-        b=hB7qolct0HXVDkhC+NG1uce7LdVUT17tmjPoMVViUOt2acE0eZclGgP6iTc6kLwqmWh5zz
-        WXVbm2MGRnH4V8aBErUPvI2qeTMbqEQUFgpMTGb/KqMEER4gscnxIleMXQj/axZ83IpEqn
-        6P/a5HbB25LXW8wJeDLnwpqgIgh3j4k=
-Date:   Fri, 5 Mar 2021 15:29:40 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v21 10/26] x86/mm: Update pte_modify for _PAGE_COW
-Message-ID: <20210305142940.GC2685@zn.tnic>
-References: <20210217222730.15819-1-yu-cheng.yu@intel.com>
- <20210217222730.15819-11-yu-cheng.yu@intel.com>
+        id S229589AbhCEOqd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Mar 2021 09:46:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229578AbhCEOqK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Mar 2021 09:46:10 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1198C061574;
+        Fri,  5 Mar 2021 06:46:09 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id fu20so1994750pjb.2;
+        Fri, 05 Mar 2021 06:46:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SLYTD0kAvjqxy4t6HYU1DX6C4LCII/OyaiVaeCrW9qM=;
+        b=ukIyLWd7IPrGz9FmT55xeMgIjS0mmGxYHjvHsblVSvKp5DH+2v6c1csGjb8bjvqpKP
+         6jd95CW7LyETGi+XP/VoNTtJ7cSHj5EU7NQ2C3CsL2hRV102BUM5CmUjGiXeAIjnya0R
+         uvCpCzW+CMQi/sEkyfgtYPgLPK/9TnxDx6U9w9TRkMHKwSYBX+ubyuVgPOubpU62azrO
+         Ap8ZLiSMWMpP9qijIog4MyARVO3i+Te3juTjZTuch5RCT5iKDnbTMJUurMN3dWSTlPpe
+         rM84CWmNWYc/zecadzic8UHPKKOIU/6BHSQfX5MtKZAaz8GepkfJGAsESZs93jl2574K
+         cCTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SLYTD0kAvjqxy4t6HYU1DX6C4LCII/OyaiVaeCrW9qM=;
+        b=pBi5F3bVIaKBNI0bz6R5pNR8F3uM8pX+wVqI4ZZhwA6817cK44+sWUFfPsisH19w/C
+         QE8IDHrnVGifHIteIKv7cLjAIX2tTfCCqf8jpXphrGrOioFsYpMfmJim1QShn91/hnb2
+         GeolswU4RXO/6RhCGhq2DphoyuF/C7c/NDIZRC5IUfmOEsgHxI/MkESHHETNcLgWILxJ
+         8J7cV1AuH0jSc9dWeSErNiZZccIyrx/1CErlIXztJT9RZCtaGsjFGL9w/wxq2KnNCdao
+         RpOM5hiEPDDMdl1F+F1McS2J0V7oCnqtKu/XPMhnO5v+2U/PXbxI1ndDqysMObsEr8VY
+         n5UQ==
+X-Gm-Message-State: AOAM533LQIvsbtPDEcRddPhdiQF3ZRVkZpu0bYXTZHxchpKeN992RF90
+        vbs7YhCCMhlbS/81Ait6u2iXIfdVoNCQi9fgUNE=
+X-Google-Smtp-Source: ABdhPJy1hcFeT7++NM/FsF4zGG36/dA0n6KUzt61a1Rr+S1F6UUjFavqe8V/stSRz3GNxaBc6EYTzdQVZaZ3LMDXf+g=
+X-Received: by 2002:a17:90a:c84:: with SMTP id v4mr10807897pja.228.1614955569419;
+ Fri, 05 Mar 2021 06:46:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210217222730.15819-11-yu-cheng.yu@intel.com>
+References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-9-marcan@marcan.st>
+In-Reply-To: <20210304213902.83903-9-marcan@marcan.st>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 5 Mar 2021 16:45:53 +0200
+Message-ID: <CAHp75Ven4piceFaBhn1kc=vtwM4o-GXmz3eAZoNhU8w+iP5qxQ@mail.gmail.com>
+Subject: Re: [RFT PATCH v3 08/27] asm-generic/io.h: Add a non-posted variant
+ of ioremap()
+To:     Hector Martin <marcan@marcan.st>
+Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
+        Will Deacon <will@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 17, 2021 at 02:27:14PM -0800, Yu-cheng Yu wrote:
-> @@ -787,16 +802,34 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->  	 */
->  	val &= _PAGE_CHG_MASK;
->  	val |= check_pgprot(newprot) & ~_PAGE_CHG_MASK;
-> +	val = fixup_dirty_pte(val);
+On Thu, Mar 4, 2021 at 11:40 PM Hector Martin <marcan@marcan.st> wrote:
+>
+> ARM64 currently defaults to posted MMIO (nGnRnE), but some devices
+> require the use of non-posted MMIO (nGnRE). Introduce a new ioremap()
+> variant to handle this case. ioremap_np() is aliased to ioremap() by
+> default on arches that do not implement this variant.
 
-Do I see it correctly that you can do here and below:
+Hmm... But isn't it basically a requirement to those device drivers to
+use readX()/writeX() instead of readX_relaxed() / writeX_relaxed()?
 
-	/*
-	 * Fix up potential shadow stack page flags because the RO, Dirty PTE is
-	 * special.
-	 */
-	if (pte_dirty()) {
-		pte_mkclean();
-		pte_mkdirty();
-	}
+...
 
-?
+>  #define IORESOURCE_MEM_32BIT           (3<<3)
+>  #define IORESOURCE_MEM_SHADOWABLE      (1<<5)  /* dup: IORESOURCE_SHADOWABLE */
+>  #define IORESOURCE_MEM_EXPANSIONROM    (1<<6)
+> +#define IORESOURCE_MEM_NONPOSTED       (1<<7)
 
-That fixup thing looks grafted and not like a normal flow to me.
+Not sure it's the right location (in a bit field) for this flag.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+With Best Regards,
+Andy Shevchenko
