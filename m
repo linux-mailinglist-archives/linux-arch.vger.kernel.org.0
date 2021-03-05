@@ -2,85 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F0532E70F
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 12:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AF932E722
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 12:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbhCELO0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Mar 2021 06:14:26 -0500
-Received: from marcansoft.com ([212.63.210.85]:52272 "EHLO mail.marcansoft.com"
+        id S229558AbhCELVA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Mar 2021 06:21:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44684 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229576AbhCELOX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 5 Mar 2021 06:14:23 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 714C03FA1B;
-        Fri,  5 Mar 2021 11:14:12 +0000 (UTC)
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210304213902.83903-1-marcan@marcan.st>
- <20210304213902.83903-28-marcan@marcan.st>
- <e45c15ae-ee81-139c-5da1-a6759e39fd71@canonical.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [RFT PATCH v3 27/27] arm64: apple: Add initial Apple Mac mini
- (M1, 2020) devicetree
-Message-ID: <2a4c461a-51d1-60b7-b698-edb3c0bfb243@marcan.st>
-Date:   Fri, 5 Mar 2021 20:14:10 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S229494AbhCELUy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 5 Mar 2021 06:20:54 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5E8B65015;
+        Fri,  5 Mar 2021 11:20:52 +0000 (UTC)
+Date:   Fri, 5 Mar 2021 11:20:49 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [RESEND PATCH 1/2] ARM64: enable GENERIC_FIND_FIRST_BIT
+Message-ID: <20210305112049.GB23855@arm.com>
+References: <20210225135700.1381396-1-yury.norov@gmail.com>
+ <20210225135700.1381396-2-yury.norov@gmail.com>
+ <20210225140205.GA13297@willie-the-truck>
+ <20210303221741.GA2013084@yury-ThinkPad>
 MIME-Version: 1.0
-In-Reply-To: <e45c15ae-ee81-139c-5da1-a6759e39fd71@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210303221741.GA2013084@yury-ThinkPad>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 05/03/2021 20.03, Krzysztof Kozlowski wrote:
->> +	memory@800000000 {
->> +		device_type = "memory";
->> +		reg = <0x8 0 0x2 0>; /* To be filled by loader */
+On Wed, Mar 03, 2021 at 02:17:41PM -0800, Yury Norov wrote:
+> On Thu, Feb 25, 2021 at 02:02:06PM +0000, Will Deacon wrote:
+> > On Thu, Feb 25, 2021 at 05:56:59AM -0800, Yury Norov wrote:
+> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > > index 31bd885b79eb..5596eab04092 100644
+> > > --- a/arch/arm64/Kconfig
+> > > +++ b/arch/arm64/Kconfig
+> > > @@ -108,6 +108,7 @@ config ARM64
+> > >  	select GENERIC_CPU_AUTOPROBE
+> > >  	select GENERIC_CPU_VULNERABILITIES
+> > >  	select GENERIC_EARLY_IOREMAP
+> > > +	select GENERIC_FIND_FIRST_BIT
+> > >  	select GENERIC_IDLE_POLL_SETUP
+> > >  	select GENERIC_IRQ_IPI
+> > >  	select GENERIC_IRQ_MULTI_HANDLER
+> > 
+> > Acked-by: Will Deacon <will@kernel.org>
+> > 
+> > Catalin can pick this up later in the cycle.
+> > 
+> > Will
 > 
-> Shouldn't this be 0x800000000 with ~0x80000000 length (or whatever is
-> more common)? Or did I miss some ranges?
+> Ping?
 
-The base model has 8GB of RAM, and RAM always starts at 0x800000000, 
-hence that reg property.
+It's on my list for 5.13 but I'll only start queuing patches after -rc3.
 
-It's not actually useful to try to boot Linux like this, because it'll 
-step all over device carveouts on both ends and break, but since those 
-are potentially dynamic it doesn't really make sense to use a more 
-specific example for the dts.
-
-E.g. on my system, with my current firmware version, this ends up 
-getting patched to:
-
-reg = <0x8 0x0134c000 0x1 0xda294000>
-
-Thanks,
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Catalin
