@@ -2,102 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9CC32E75F
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 12:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C50932E781
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 12:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbhCELqE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Mar 2021 06:46:04 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:52461 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbhCELp6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Mar 2021 06:45:58 -0500
-Received: from mail-ed1-f69.google.com ([209.85.208.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lI8u4-0004Ka-Eo
-        for linux-arch@vger.kernel.org; Fri, 05 Mar 2021 11:45:56 +0000
-Received: by mail-ed1-f69.google.com with SMTP id cq11so792204edb.14
-        for <linux-arch@vger.kernel.org>; Fri, 05 Mar 2021 03:45:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2TleSw0QiCwuJ7skQQModBnCrT+uYovU4V6hKBAXhss=;
-        b=lAf4WEMpcgrVAhUmTnDM/m1zcKNa/S0inhCBkMdj8cASwgGjGuRad1mNDIN2Y3gioh
-         SoebVnJPSGbg5JMYNZqLOQuVK4So+eniw47k8S9/VNVlwVQ72AYr8475uYQ7Q5bBuAEj
-         S2FwOF2JP/pRkyi18dR4NoOhN8LqQbY6O5ZNk9JwU23jU4n56kvWVneYHMik/ZoFhfto
-         4xZ8gfcgLx0Zx0agGPLdWhliIuzZuyhdeZvtu+ERmtvJ1xbAwBs/zOw+VnetviFo8FS5
-         XuoXXdHB7LFBbZTjofUNOuqe/dy3Gp+jpVTGjlHBMpN67nmdfsV8wMRrUPJbabIw5iJw
-         nlbw==
-X-Gm-Message-State: AOAM533zDDxqYfAvSb5wwPCkCiPiPPHmFflbEqv0Gs/8IEg+um+WoVrd
-        2hTLcPcLq4/6KWpuKTtq86tTJ9Po46OeWR24o48/KGCvkvWL1EJyMh8td1IDw1E2gYDHeTkdrdl
-        pA+ad9M9qIwmJ+AgK+FrahvSX0U/ApsLFw3E26b4=
-X-Received: by 2002:a50:da8b:: with SMTP id q11mr8953738edj.352.1614944756171;
-        Fri, 05 Mar 2021 03:45:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxKeo3Q/o1g2HQg4LFqmEh5BntZBVMe2z8slgQtUV9JbA5vQAZ8ZZGavMyBJMDCCXlKF5n8Tw==
-X-Received: by 2002:a50:da8b:: with SMTP id q11mr8953731edj.352.1614944756036;
-        Fri, 05 Mar 2021 03:45:56 -0800 (PST)
-Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id s2sm1431854edt.35.2021.03.05.03.45.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Mar 2021 03:45:55 -0800 (PST)
-Subject: Re: [RFT PATCH v3 27/27] arm64: apple: Add initial Apple Mac mini
- (M1, 2020) devicetree
-To:     Hector Martin <marcan@marcan.st>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210304213902.83903-1-marcan@marcan.st>
- <20210304213902.83903-28-marcan@marcan.st>
- <e45c15ae-ee81-139c-5da1-a6759e39fd71@canonical.com>
- <2a4c461a-51d1-60b7-b698-edb3c0bfb243@marcan.st>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <32c136df-f4d4-4fbe-6605-5366b06d9f0a@canonical.com>
-Date:   Fri, 5 Mar 2021 12:45:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S229563AbhCEL6c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Mar 2021 06:58:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229517AbhCEL6I (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Mar 2021 06:58:08 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81468C061574;
+        Fri,  5 Mar 2021 03:58:08 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DsR7v2SyLz9sR4;
+        Fri,  5 Mar 2021 22:58:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1614945485;
+        bh=L1NC9GV9BQ+E9+ry/jR63z+hknnTIJGa4fWZ4Daa1hY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=RRhqKWCT2ZGCNhqG7CWrydw8rsBkf55ZdiKxlD9W92jlG0zCxTPsjRAO+SZ3/E+Qz
+         G1JbEu/m4uxOYAFEVULj86D/q25BtbKfPyyBlJIxG/8j9YdVvjqILwbvttYoAmVss3
+         0GkVDCWjLkBPqQiHJaJGzkfJ7Jl7qsPoR0tkpnrF5csXtnnAWzDwcf+6M9nJmDDegx
+         dVRI9i5n5TyDn6OQHYmMOW/EgmjAkpeMFmDVRrfd4RvhQk2g6CBiWaJoAqZ6BNcMNd
+         ROEx0HJ0zfDvX3FrIFKqtNHBdNylyCFhYy1m+CgFne2H6kkRZ7pPs0pj1d1OeUpazv
+         sRtB9CzGrGiKg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, danielwa@cisco.com,
+        robh@kernel.org, daniel@gimpelevich.san-francisco.ca.us,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arch@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] cmdline: Add generic function to build command
+ line.
+In-Reply-To: <20210303181651.GE19713@willie-the-truck>
+References: <cover.1614705851.git.christophe.leroy@csgroup.eu>
+ <d8cf7979ad986de45301b39a757c268d9df19f35.1614705851.git.christophe.leroy@csgroup.eu>
+ <20210303172810.GA19713@willie-the-truck>
+ <a0cfef11-efba-2e5c-6f58-ed63a2c3bfa0@csgroup.eu>
+ <20210303174627.GC19713@willie-the-truck>
+ <dc6576ac-44ff-7db4-d718-7565b83f50b8@csgroup.eu>
+ <20210303181651.GE19713@willie-the-truck>
+Date:   Fri, 05 Mar 2021 22:58:02 +1100
+Message-ID: <87sg59rewl.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-In-Reply-To: <2a4c461a-51d1-60b7-b698-edb3c0bfb243@marcan.st>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 05/03/2021 12:14, Hector Martin wrote:
-> On 05/03/2021 20.03, Krzysztof Kozlowski wrote:
->>> +	memory@800000000 {
->>> +		device_type = "memory";
->>> +		reg = <0x8 0 0x2 0>; /* To be filled by loader */
->>
->> Shouldn't this be 0x800000000 with ~0x80000000 length (or whatever is
->> more common)? Or did I miss some ranges?
-> 
-> The base model has 8GB of RAM, and RAM always starts at 0x800000000, 
-> hence that reg property.
+Will Deacon <will@kernel.org> writes:
+> On Wed, Mar 03, 2021 at 06:57:09PM +0100, Christophe Leroy wrote:
+>> Le 03/03/2021 =C3=A0 18:46, Will Deacon a =C3=A9crit=C2=A0:
+>> > On Wed, Mar 03, 2021 at 06:38:16PM +0100, Christophe Leroy wrote:
+>> > > Le 03/03/2021 =C3=A0 18:28, Will Deacon a =C3=A9crit=C2=A0:
+>> > > > On Tue, Mar 02, 2021 at 05:25:17PM +0000, Christophe Leroy wrote:
+>> > > > > This code provides architectures with a way to build command line
+>> > > > > based on what is built in the kernel and what is handed over by =
+the
+>> > > > > bootloader, based on selected compile-time options.
+>> > > > >=20
+>> > > > > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> > > > > ---
+>> > > > >    include/linux/cmdline.h | 62 ++++++++++++++++++++++++++++++++=
++++++++++
+>> > > > >    1 file changed, 62 insertions(+)
+>> > > > >    create mode 100644 include/linux/cmdline.h
+>> > > > >=20
+>> > > > > diff --git a/include/linux/cmdline.h b/include/linux/cmdline.h
+>> > > > > new file mode 100644
+>> > > > > index 000000000000..ae3610bb0ee2
+>> > > > > --- /dev/null
+>> > > > > +++ b/include/linux/cmdline.h
+>> > > > > @@ -0,0 +1,62 @@
+>> > > > > +/* SPDX-License-Identifier: GPL-2.0 */
+>> > > > > +#ifndef _LINUX_CMDLINE_H
+>> > > > > +#define _LINUX_CMDLINE_H
+>> > > > > +
+>> > > > > +static __always_inline size_t cmdline_strlen(const char *s)
+>> > > > > +{
+>> > > > > +	const char *sc;
+>> > > > > +
+>> > > > > +	for (sc =3D s; *sc !=3D '\0'; ++sc)
+>> > > > > +		; /* nothing */
+>> > > > > +	return sc - s;
+>> > > > > +}
+>> > > > > +
+>> > > > > +static __always_inline size_t cmdline_strlcat(char *dest, const=
+ char *src, size_t count)
+>> > > > > +{
+>> > > > > +	size_t dsize =3D cmdline_strlen(dest);
+>> > > > > +	size_t len =3D cmdline_strlen(src);
+>> > > > > +	size_t res =3D dsize + len;
+>> > > > > +
+>> > > > > +	/* This would be a bug */
+>> > > > > +	if (dsize >=3D count)
+>> > > > > +		return count;
+>> > > > > +
+>> > > > > +	dest +=3D dsize;
+>> > > > > +	count -=3D dsize;
+>> > > > > +	if (len >=3D count)
+>> > > > > +		len =3D count - 1;
+>> > > > > +	memcpy(dest, src, len);
+>> > > > > +	dest[len] =3D 0;
+>> > > > > +	return res;
+>> > > > > +}
+>> > > >=20
+>> > > > Why are these needed instead of using strlen and strlcat directly?
+>> > >=20
+>> > > Because on powerpc (at least), it will be used in prom_init, it is v=
+ery
+>> > > early in the boot and KASAN shadow memory is not set up yet so calli=
+ng
+>> > > generic string functions would crash the board.
+>> >=20
+>> > Hmm. We deliberately setup a _really_ early shadow on arm64 for this, =
+can
+>> > you not do something similar? Failing that, I think it would be better=
+ to
+>> > offer the option for an arch to implement cmdline_*, but have then poi=
+nt to
+>> > the normal library routines by default.
+>>=20
+>> I don't think it is possible to setup an earlier early shadow.
+>>=20
+>> At the point we are in prom_init, the code is not yet relocated at the
+>> address it was linked for, and it is running with the MMU set by the
+>> bootloader, I can't imagine being able to setup MMU entries for the early
+>> shadow KASAN yet without breaking everything.
+>
+> That's very similar to us; we're not relocated, although we are at least
+> in control of the MMU (which is using a temporary set of page-tables).
 
-Ah, I messed up the unit addressing and number of zeros... it's OK.
+prom_init runs as an OF client, with the MMU off (except on some Apple
+machines), and we don't own the MMU. So there's really nothing we can do :)
 
-Best regards,
-Krzysztof
+Though now that I look at it, I don't think we should be doing this
+level of commandline handling in prom_init. It should just grab the
+value from firmware and pass it to the kernel proper, and then all the
+prepend/append/force etc. logic should happen there.
+
+cheers
