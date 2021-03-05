@@ -2,61 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F5032F2FF
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 19:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B5C32F359
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 20:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbhCESm6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Mar 2021 13:42:58 -0500
-Received: from gate.crashing.org ([63.228.1.57]:49841 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229716AbhCESmr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 5 Mar 2021 13:42:47 -0500
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 125IZHLo027274;
-        Fri, 5 Mar 2021 12:35:17 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 125IZGLm027273;
-        Fri, 5 Mar 2021 12:35:16 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 5 Mar 2021 12:35:16 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        robh@kernel.org, daniel@gimpelevich.san-francisco.ca.us,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org, danielwa@cisco.com
-Subject: Re: [PATCH v2 1/7] cmdline: Add generic function to build command line.
-Message-ID: <20210305183516.GY29191@gate.crashing.org>
-References: <cover.1614705851.git.christophe.leroy@csgroup.eu> <d8cf7979ad986de45301b39a757c268d9df19f35.1614705851.git.christophe.leroy@csgroup.eu> <20210303172810.GA19713@willie-the-truck> <a0cfef11-efba-2e5c-6f58-ed63a2c3bfa0@csgroup.eu> <20210303174627.GC19713@willie-the-truck> <dc6576ac-44ff-7db4-d718-7565b83f50b8@csgroup.eu> <20210303181651.GE19713@willie-the-truck> <87sg59rewl.fsf@mpe.ellerman.id.au> <11d7af27-28cb-0eed-0f33-6669cbf7f1bb@csgroup.eu>
-Mime-Version: 1.0
+        id S229512AbhCES7v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Mar 2021 13:59:51 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:43749 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229687AbhCES7Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Mar 2021 13:59:25 -0500
+Received: (qmail 48402 invoked by uid 1000); 5 Mar 2021 13:59:24 -0500
+Date:   Fri, 5 Mar 2021 13:59:24 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH] tools/memory-model: Fix smp_mb__after_spinlock() spelling
+Message-ID: <20210305185924.GA48113@rowland.harvard.edu>
+References: <20210305102823.415900-1-bjorn.topel@gmail.com>
+ <20210305153655.GC38200@rowland.harvard.edu>
+ <e90fee12-a29e-cddb-5db3-24d92d4e03f8@intel.com>
+ <20210305182650.GA2713@paulmck-ThinkPad-P72>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <11d7af27-28cb-0eed-0f33-6669cbf7f1bb@csgroup.eu>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <20210305182650.GA2713@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 05, 2021 at 01:49:03PM +0100, Christophe Leroy wrote:
-> Le 05/03/2021 à 12:58, Michael Ellerman a écrit :
-> >prom_init runs as an OF client, with the MMU off (except on some Apple
-> >machines), and we don't own the MMU. So there's really nothing we can do :)
-> >
-> >Though now that I look at it, I don't think we should be doing this
-> >level of commandline handling in prom_init. It should just grab the
-> >value from firmware and pass it to the kernel proper, and then all the
-> >prepend/append/force etc. logic should happen there.
+On Fri, Mar 05, 2021 at 10:26:50AM -0800, Paul E. McKenney wrote:
+> On Fri, Mar 05, 2021 at 04:41:49PM +0100, Björn Töpel wrote:
+> > On 2021-03-05 16:36, Alan Stern wrote:
+> > > On Fri, Mar 05, 2021 at 11:28:23AM +0100, Björn Töpel wrote:
+> > > > From: Björn Töpel <bjorn.topel@intel.com>
+> > > > 
+> > > > A misspelled invokation of git-grep, revealed that
+> > > -------------------^
+> > > 
+> > > Smetimes my brain is a little slow...  Do you confirm that this is a
+> > > joke?
+> > > 
+> > 
+> > I wish, Alan. I wish.
+> > 
+> > Looks like I can only spel function names correctly.
 > 
-> But then, how do you handle the command line parameters that are needed by 
-> prom_init ?
+> Heh!  I missed that one completely.  Please see below for a wortschmied
+> commit.
 > 
-> For instance, prom_init_mem() use 'prom_memory_limit', which comes from the 
-> "mem=" option in the command line.
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> commit 1c737ce34715db9431f6b034f92dbf09d954126d
+> Author: Björn Töpel <bjorn.topel@intel.com>
+> Date:   Fri Mar 5 11:28:23 2021 +0100
+> 
+>     tools/memory-model: Fix smp_mb__after_spinlock() spelling
+>     
+>     A misspelled git-grep regex revealed that smp_mb__after_spinlock()
+>     was misspelled in explanation.txt.
+>     
+>     This commit adds the missing "_" to smp_mb__after_spinlock().
 
-*Reading* it is easy, much easier than modifying it.
+Strictly speaking, the commit adds a missing "_" to 
+smp_mb_after_spinlock().  If it added anything to 
+smp_mb__after_spinlock(), the result would be incorrect.
 
+How about just:
 
-Segher
+    A misspelled git-grep regex revealed that smp_mb__after_spinlock()
+    was misspelled in explanation.txt.  This commit adds the missing "_".
+
+Alan
