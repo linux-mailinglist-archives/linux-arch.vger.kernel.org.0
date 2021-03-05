@@ -2,131 +2,215 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B65BB32E683
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 11:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C23F32E697
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Mar 2021 11:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbhCEKes (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Mar 2021 05:34:48 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:50154 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbhCEKel (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Mar 2021 05:34:41 -0500
-Received: from mail-wr1-f71.google.com ([209.85.221.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lI7n5-0007Z4-3S
-        for linux-arch@vger.kernel.org; Fri, 05 Mar 2021 10:34:39 +0000
-Received: by mail-wr1-f71.google.com with SMTP id g5so855968wrd.22
-        for <linux-arch@vger.kernel.org>; Fri, 05 Mar 2021 02:34:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RWwbwcqn7+V68bGLU4ZDn1q+MKGqnLhOEC9uAVuE8zc=;
-        b=EH76myOUGaiQV1SmI0E8ahBJ9ZcfOdV9dSwxmz+9pTVD4dMXP3ZLksk2jBoCEsr0q3
-         Ex9+cMmYzb5jYDJiNFKS+H8jwEzeZnMped6yOm50Mf/CgSl+eEDg3NqHzZEhFst28qrL
-         mUV5xMEeTMe2nQOeEgHvflyUXdhs93epetZZnFMCuTGupMfCReaWoz8svQIOjIHCuU1K
-         cqVypiZFj1f//sujLw5/G3nBX0RhKJxuPN80BX90OcnjdUTdgGrzFMeqiNMtZHi0qBKg
-         fJBVhzzoj/o8eimFjNXNAkbpC6qsD9sVhamqxecMOCq/QY9bJfwW1REmzre3FkO8Bun6
-         nSiQ==
-X-Gm-Message-State: AOAM5315jceMgJg/Eg7tRpXl8jYXpMnPuq9Soo3zliG+/004dcRaigri
-        UdhVD/PeQvdOj0sPWVOkNStMf9ukoad92T41nzdVLgbwT6BjxHGPHBU6UTItIFJBQ9EwR6hrZco
-        om47QfOc1Ceg25OLp3qMlPuvr5Hk0bIakDMICSlY=
-X-Received: by 2002:adf:fe01:: with SMTP id n1mr8647726wrr.341.1614940478802;
-        Fri, 05 Mar 2021 02:34:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxL/xW+AO3OBrJBdGRjyMx7XXgn/DcEVAjw6nrX4rZjq/i98eqo/Tr07xkBjjsbwJ/68iC9lg==
-X-Received: by 2002:adf:fe01:: with SMTP id n1mr8647714wrr.341.1614940478678;
-        Fri, 05 Mar 2021 02:34:38 -0800 (PST)
-Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id p6sm3759537wru.2.2021.03.05.02.34.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Mar 2021 02:34:38 -0800 (PST)
-Subject: Re: [RFT PATCH v3 19/27] tty: serial: samsung_tty: Add ucon_mask
- parameter
-To:     Hector Martin <marcan@marcan.st>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210304213902.83903-1-marcan@marcan.st>
- <20210304213902.83903-20-marcan@marcan.st>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <1e665346-15eb-3a9f-6dc3-7494a8050972@canonical.com>
-Date:   Fri, 5 Mar 2021 11:34:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S229497AbhCEKoJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Mar 2021 05:44:09 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53584 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229493AbhCEKnj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 5 Mar 2021 05:43:39 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id EDAD5AF24;
+        Fri,  5 Mar 2021 10:43:37 +0000 (UTC)
+Date:   Fri, 5 Mar 2021 11:43:25 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
+        x86@kernel.org, len.brown@intel.com, dave.hansen@intel.com,
+        hjl.tools@gmail.com, Dave.Martin@arm.com, jannh@google.com,
+        mpe@ellerman.id.au, carlos@redhat.com, tony.luck@intel.com,
+        ravi.v.shankar@intel.com, libc-alpha@sourceware.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 3/6] x86/elf: Support a new ELF aux vector
+ AT_MINSIGSTKSZ
+Message-ID: <20210305104325.GA2896@zn.tnic>
+References: <20210227165911.32757-1-chang.seok.bae@intel.com>
+ <20210227165911.32757-4-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210304213902.83903-20-marcan@marcan.st>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210227165911.32757-4-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 04/03/2021 22:38, Hector Martin wrote:
-> This simplifies the code by removing the only distinction between the
-> S3C2410 and S3C2440 codepaths.
+On Sat, Feb 27, 2021 at 08:59:08AM -0800, Chang S. Bae wrote:
+> Historically, signal.h defines MINSIGSTKSZ (2KB) and SIGSTKSZ (8KB), for
+> use by all architectures with sigaltstack(2). Over time, the hardware state
+> size grew, but these constants did not evolve. Today, literal use of these
+> constants on several architectures may result in signal stack overflow, and
+> thus user data corruption.
 > 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+> A few years ago, the ARM team addressed this issue by establishing
+> getauxval(AT_MINSIGSTKSZ). This enables the kernel to supply at runtime
+> value that is an appropriate replacement on the current and future
+> hardware.
+> 
+> Add getauxval(AT_MINSIGSTKSZ) support to x86, analogous to the support
+> added for ARM in commit 94b07c1f8c39 ("arm64: signal: Report signal frame
+> size to userspace via auxv").
+> 
+> Also, include a documentation to describe x86-specific auxiliary vectors.
+> 
+> Reported-by: Florian Weimer <fweimer@redhat.com>
+> Fixes: c2bc11f10a39 ("x86, AVX-512: Enable AVX-512 States Context Switch")
+
+Right, so this has a Fixes: tag and points to bugzilla entry which talks
+about signal stack corruption with AVX-512F.
+
+But if this is going to be backported to stable, then the patch(es)
+should be minimal and not contain documentation. And if so, one will
+need all three to be backported, which means, a cc:stable should contain
+a comment explaining that.
+
+Or am I misreading and they should not need to be backported to stable
+because some <non-obvious reason>?
+
+Also, I'm not sure backporting a patch to stable which changes ABI is
+ok. It probably is but I don't know.
+
+So what's the deal here?
+
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Cc: H.J. Lu <hjl.tools@gmail.com>
+> Cc: Fenghua Yu <fenghua.yu@intel.com>
+> Cc: Dave Martin <Dave.Martin@arm.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: x86@kernel.org
+> Cc: libc-alpha@sourceware.org
+> Cc: linux-arch@vger.kernel.org
+> Cc: linux-api@vger.kernel.org
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=153531
 > ---
->  drivers/tty/serial/samsung_tty.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
+> Changes from v5:
+> * Added a documentation.
+> ---
+>  Documentation/x86/elf_auxvec.rst   | 56 ++++++++++++++++++++++++++++++
+>  arch/x86/include/asm/elf.h         |  4 +++
+>  arch/x86/include/uapi/asm/auxvec.h |  4 +--
+>  arch/x86/kernel/signal.c           |  5 +++
+>  4 files changed, 67 insertions(+), 2 deletions(-)
+
+You also need:
+
+diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
+index 4693e192b447..d58614d5cde6 100644
+--- a/Documentation/x86/index.rst
++++ b/Documentation/x86/index.rst
+@@ -35,3 +35,4 @@ x86-specific Documentation
+    sva
+    sgx
+    features
++   elf_auxvec
+
+to add this to the TOC.
+
+>  create mode 100644 Documentation/x86/elf_auxvec.rst
 > 
-> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-> index 78dc6e9240fb..33b421dbeb83 100644
-> --- a/drivers/tty/serial/samsung_tty.c
-> +++ b/drivers/tty/serial/samsung_tty.c
-> @@ -70,6 +70,7 @@ struct s3c24xx_uart_info {
->  	unsigned long		num_clks;
->  	unsigned long		clksel_mask;
->  	unsigned long		clksel_shift;
-> +	unsigned long		ucon_mask;
->  
->  	/* uart port features */
->  
-> @@ -1736,14 +1737,9 @@ static void s3c24xx_serial_resetport(struct uart_port *port,
->  {
->  	struct s3c24xx_uart_info *info = s3c24xx_port_to_info(port);
->  	unsigned long ucon = rd_regl(port, S3C2410_UCON);
-> -	unsigned int ucon_mask;
->  
-> -	ucon_mask = info->clksel_mask;
-> -	if (info->type == PORT_S3C2440)
-> -		ucon_mask |= S3C2440_UCON0_DIVMASK;
-> -
-> -	ucon &= ucon_mask;
-> -	wr_regl(port, S3C2410_UCON,  ucon | cfg->ucon);
-> +	ucon &= (info->clksel_mask | info->ucon_mask);
-> +	wr_regl(port, S3C2410_UCON, ucon | cfg->ucon);
+> diff --git a/Documentation/x86/elf_auxvec.rst b/Documentation/x86/elf_auxvec.rst
+> new file mode 100644
+> index 000000000000..751c552c4048
+> --- /dev/null
+> +++ b/Documentation/x86/elf_auxvec.rst
+> @@ -0,0 +1,56 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +==================================
+> +x86-specific ELF Auxiliary Vectors
+> +==================================
+> +
+> +This document describes the semantics of the x86 auxiliary vectors.
+> +
+> +1. Introduction
+> +---------------
+> +
+> +ELF Auxiliary vectors enable the kernel to efficiently provide
+> +configuration specific parameters to userspace. In this example, a program
+> +allocates an alternate stack based on the kernel-provided size.
+> +
+> +   #include <sys/auxv.h>
+> +   #include <elf.h>
+> +
+> +   #ifndef AT_MINSIGSTKSZ
+> +   #define AT_MINSIGSTKSZ	51
+> +   #endif
+> +
+> +   stack_t ss;
+> +   int err;
+> +
+> +   ss.ss_size = getauxval(AT_MINSIGSTKSZ) + SIGSTKSZ;
+> +   ss.ss_sp = malloc(ss.ss_size);
+> +   ...
+> +
+> +   err = sigaltstack(&ss, NULL);
+> +   ...
 
-This line (wr_regl()) is not related, please split it to separate
-white-space cleanups.
+That source code needs some special markup to look like source code -
+currently, the result looks bad.
 
-With the change:
+> +
+> +
+> +2. The exposed auxiliary vectors
+> +---------------------------------
+> +
+> +AT_SYSINFO
+> +    The entry point to the system call function the virtual Dynamic Shared
+> +    Object (vDSO), not exported on 64-bit.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Tested-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+I can't parse that sentence.
+
+> +
+> +AT_SYSINFO_EHDR
+> +    The start address of the page containing vDSO.
+						^
+						the
 
 
-Best regards,
-Krzysztof
+> +
+> +AT_MINSIGSTKSZ
+> +    The minimum stack size required to deliver a signal. It is a calculated
+> +    sigframe size based on the largest possible user context. When programs
+> +    use sigaltstack() to provide alternate signal stack, that stack must be
+> +    at least the size to function properly on this hardware. Note that this
+> +    is a minimum of the kernel to correctly get to the signal handler.
+
+I get what this is trying to say but it reads weird. Simplify pls.
+
+> +    Additional space must be added to handle objects pushed onto the stack
+> +    by the signal handlers, as well as for nested signal delivery.
+> +
+> +    The purpose of this parameter is to accommodate the different stack
+> +    sizes required by different hardware configuration. E.g., the x86
+> +    system supporting the Advanced Vector Extension needs at least 8KB more
+> +    than the one without it.
+
+That could be simplified too.
+
+> diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
+> index 66bdfe838d61..cd10795c178e 100644
+> --- a/arch/x86/include/asm/elf.h
+> +++ b/arch/x86/include/asm/elf.h
+> @@ -312,6 +312,7 @@ do {									\
+>  		NEW_AUX_ENT(AT_SYSINFO,	VDSO_ENTRY);			\
+>  		NEW_AUX_ENT(AT_SYSINFO_EHDR, VDSO_CURRENT_BASE);	\
+>  	}								\
+> +	NEW_AUX_ENT(AT_MINSIGSTKSZ, get_sigframe_size());			\
+
+Check vertical alignment of the '\'
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
