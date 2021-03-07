@@ -2,140 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9773032FE58
-	for <lists+linux-arch@lfdr.de>; Sun,  7 Mar 2021 02:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B570832FE74
+	for <lists+linux-arch@lfdr.de>; Sun,  7 Mar 2021 03:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbhCGBhG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Sat, 6 Mar 2021 20:37:06 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:46620 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229788AbhCGBgh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 6 Mar 2021 20:36:37 -0500
-Received: from [127.0.0.1] (unknown [101.206.168.69])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9cQLkRgpMcVAA--.6957S2;
-        Sun, 07 Mar 2021 09:36:20 +0800 (CST)
-Content-Type: text/plain; charset="utf-8"
+        id S230052AbhCGCZl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 6 Mar 2021 21:25:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37972 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229957AbhCGCZK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 6 Mar 2021 21:25:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2295F65056;
+        Sun,  7 Mar 2021 02:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615083910;
+        bh=WhlbkUebwc1GJfXvE/1rpEg/Mf21MpRw1uus7X8kdhM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P/PmwbHZ6rBXncMvOhHWf1UeeMdm+EzqFTqXWkT46ndkYAfO1qnLQxRFvfotu3sJY
+         Kh5z/TnOtYx6WabQsMWEtpP5NJtcFjN9r9dSYGTnJTR8TziqKn0M45t2L73ISLmSSw
+         8DJVqyWu6l4pssJWUlB2uAn4XSept9KW85JTvRzM0joP4Aal2p2RvdOI+Bx2koToGu
+         Jkew5iPqShZCoORlTR9AwEYJqPKBz23lIfW6nDs7TrTkx/sL/jfKTIhJjam+DJJb1B
+         6a7qVm1pZEvrAU51xaXZoFodiLSwNiuf5JDqNfxfjo10vqlIz7G5Mx70WXjz4D6Hve
+         5Wtbn7puahsJQ==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH 1/2] csky: Enable generic clockevent broadcast
+Date:   Sun,  7 Mar 2021 10:24:45 +0800
+Message-Id: <20210307022446.63732-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-Mailer: BlackBerry Email (10.3.3.3216)
-Message-ID: <20210307013618.5783639.28921.9491@loongson.cn>
-Date:   Sun, 07 Mar 2021 09:36:18 +0800
-Subject: Re: [PATCH 1/3] MIPS: sync arrangement of pt_regs with user_pt_regs and regoffset_table
-From:   =?utf-8?b?6buE5rKb?= <huangpei@loongson.cn>
-In-Reply-To: <20210306074711.GA4744@alpha.franken.de>
-References: <20210305100310.26627-1-huangpei@loongson.cn>
- <20210305100310.26627-2-huangpei@loongson.cn>
- <20210306074711.GA4744@alpha.franken.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxr9cQLkRgpMcVAA--.6957S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1DZr1fWrWDurWUXr18Zrb_yoW8uFy5pF
-        srCa1DKF4Ig348K3y7urZ5uryUJr1DG392gFZrt340qa4Yv3WfWrWSyw1DJr48ArWvqa48
-        Cayavwn8CrZFva7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8JV
-        W8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUChFxUUUUU=
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-What about other two patches? 
+From: Guo Ren <guoren@linux.alibaba.com>
 
+When percpu-timers are stopped by deep power saving mode, we need
+system timer help to broadcast IPI_TIMER.
 
-Current ftrace implementation is not safe on MIPS/SMP,
+This is first introduced by broken x86 hardware, where the local apic
+timer stops in C3 state. But many other architectures(powerpc, mips,
+arm, hexagon, openrisc, sh) have supported the infrastructure to
+deal with Power Management issues.
 
-When disabling  tracing, we need to change 
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ arch/csky/Kconfig      |  2 ++
+ arch/csky/kernel/smp.c | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+)
 
-Jal 
-Addiu sp,sp,-offset
-
-Into 
-
-Nop
-Nop
-
-Atomically, but mips issue two writes, no 
-matter ‎ in what order these writes are seen by
-other cpu, ‎ it is wrecked in  these two case
-
-Jal 
-Nop
-
-Or,
-
-Nop
-‎addiu sp,sp, _offset
-
-‎Huang Pei
-
-
-  Original Message  
-From: Thomas Bogendoerfer
-Sent: 2021年3月6日星期六 16:06
-To: Huang Pei
-Cc: ambrosehua@gmail.com; Bibo Mao; Andrew Morton; linux-mips@vger.kernel.org; linux-arch@vger.kernel.org; linux-mm@kvack.org; Jiaxun Yang; Paul Burton; Li Xuefeng; Yang Tiezhu; Gao Juxin; Huacai Chen; Jinyang He
-Subject: Re: [PATCH 1/3] MIPS: sync arrangement of pt_regs with user_pt_regs and regoffset_table
-
-On Fri, Mar 05, 2021 at 06:03:08PM +0800, Huang Pei wrote:
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
-> arch/mips/include/asm/ptrace.h | 10 +++++-----
-> arch/mips/kernel/asm-offsets.c | 6 +++---
-> arch/mips/kernel/ptrace.c | 10 +++++-----
-> 3 files changed, 13 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
-> index 1e76774b36dd..e51691f2b7af 100644
-> --- a/arch/mips/include/asm/ptrace.h
-> +++ b/arch/mips/include/asm/ptrace.h
-> @@ -34,16 +34,16 @@ struct pt_regs {
-> /* Saved main processor registers. */
-> unsigned long regs[32];
-> 
-> +	unsigned long lo;
-> +	unsigned long hi;
-> /* Saved special registers. */
-> +	unsigned long cp0_epc;
-> +	unsigned long cp0_badvaddr;
-> unsigned long cp0_status;
-> -	unsigned long hi;
-> -	unsigned long lo;
-> +	unsigned long cp0_cause;
-> #ifdef CONFIG_CPU_HAS_SMARTMIPS
-> unsigned long acx;
-> #endif
-> -	unsigned long cp0_badvaddr;
-> -	unsigned long cp0_cause;
-> -	unsigned long cp0_epc;
-> #ifdef CONFIG_CPU_CAVIUM_OCTEON
-> unsigned long long mpl[6]; /* MTM{0-5} */
-> unsigned long long mtp[6]; /* MTP{0-5} */
-
-sorry this is pointless, I'm not taking this.
-
-Thomas.
-
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 34e91224adc3..4328511ac050 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -6,6 +6,7 @@ config CSKY
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
++	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610
+@@ -19,6 +20,7 @@ config CSKY
+ 	select IRQ_DOMAIN
+ 	select HANDLE_DOMAIN_IRQ
+ 	select DW_APB_TIMER_OF
++	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
+ 	select GENERIC_IOREMAP
+ 	select GENERIC_LIB_ASHLDI3
+ 	select GENERIC_LIB_ASHRDI3
+diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
+index 0f9f5eef9338..76d38d84da70 100644
+--- a/arch/csky/kernel/smp.c
++++ b/arch/csky/kernel/smp.c
+@@ -8,6 +8,7 @@
+ #include <linux/kernel_stat.h>
+ #include <linux/notifier.h>
+ #include <linux/cpu.h>
++#include <linux/clockchips.h>
+ #include <linux/percpu.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+@@ -32,6 +33,7 @@ enum ipi_message_type {
+ 	IPI_RESCHEDULE,
+ 	IPI_CALL_FUNC,
+ 	IPI_IRQ_WORK,
++	IPI_TIMER,
+ 	IPI_MAX
+ };
+ 
+@@ -67,6 +69,13 @@ static irqreturn_t handle_ipi(int irq, void *dev)
+ 			irq_work_run();
+ 		}
+ 
++#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
++		if (ops & (1 << IPI_TIMER)) {
++			stats[IPI_TIMER]++;
++			tick_receive_broadcast();
++		}
++#endif
++
+ 		BUG_ON((ops >> IPI_MAX) != 0);
+ 	}
+ 
+@@ -102,6 +111,7 @@ static const char * const ipi_names[] = {
+ 	[IPI_RESCHEDULE]	= "Rescheduling interrupts",
+ 	[IPI_CALL_FUNC]		= "Function call interrupts",
+ 	[IPI_IRQ_WORK]		= "Irq work interrupts",
++	[IPI_TIMER]		= "Timer broadcast interrupts",
+ };
+ 
+ int arch_show_interrupts(struct seq_file *p, int prec)
+@@ -130,6 +140,13 @@ void arch_send_call_function_single_ipi(int cpu)
+ 	send_ipi_message(cpumask_of(cpu), IPI_CALL_FUNC);
+ }
+ 
++#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
++void tick_broadcast(const struct cpumask *mask)
++{
++	send_ipi_message(mask, IPI_TIMER);
++}
++#endif
++
+ static void ipi_stop(void *unused)
+ {
+ 	while (1);
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea. [ RFC1925, 2.3 ]
+2.25.1
 
