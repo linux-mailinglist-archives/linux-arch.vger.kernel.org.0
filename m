@@ -2,60 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6794330D0A
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 13:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C75330F2D
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 14:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbhCHMCz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Mar 2021 07:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbhCHMCr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Mar 2021 07:02:47 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124C1C06174A;
-        Mon,  8 Mar 2021 04:02:47 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id y67so7073083pfb.2;
-        Mon, 08 Mar 2021 04:02:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jlusgLjbLKUTAaP82nwfxxVRLneDG0S3dn7MKQ5uqQM=;
-        b=AC/7yM68lti9c3ma6GRYkZHCqxY18TVJx6TlAzforETOsZcAandJdLTzfFeIB6R0Rh
-         SxAm7dXNu3QrnjZrpk+AWTZ7GbZ33D6VxUDP+yDUTrBy9Nk16ZlYp+rpb8eAi4+eELQF
-         1etohEM3QB5MVgkpxQUh6HRyZTF6XbpOXmz/8HuhF/vJMYsJVQ+L6yeA+er1fMzMph34
-         ncdkbKHGZIhvxyhLuTth5LyqOZswcZbXFl8J7asTlFnPh9x+SoxUTnCWEaLiXpeZL3lS
-         q4YoZgTM5g7iv8y8FdU/VMjzze3TFl2Ic9Vrbj02f515mzYjHNTqxNn58hC8apYYJ8FF
-         Iy6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jlusgLjbLKUTAaP82nwfxxVRLneDG0S3dn7MKQ5uqQM=;
-        b=rDHntY2Mev8f+5fm2CAqtUh1EnYcmDJpUpeqzYBLjrEGav6tQlfPz4El8rTUXy49w9
-         SFi1cC1imTosCDSEDAOgCe0rhSO0h68n0Q4ww+yQhddF1jTL9gvoEqdtdLmu0H147tK6
-         CQafEJPM/a/UE/GPKva3qwwA8qNLIVQD7nCy8xjOVBgPqKVxx1F8FMze8GUVMFWW9GIo
-         fdHhY16zyY4I4WbLMFKUcFBtrZqwvJv2fptcILBAFS0Uxgq4GQ0vwuLe1zFhYuFSYSPR
-         xr0s6L8fubTlqrcXgEPnLSLE97yBgUfRmVjLnNMrvoT5/n3QCAX9RTw2OFstWfpo3chY
-         PK4w==
-X-Gm-Message-State: AOAM531kvEjGhxDpN8ACbpb15LZTUpdm9FhNtojTtCN9VrX4g9sF/DhI
-        78tsm7k/xZ/x2w7FGHUaFpW/BvXVoNwlLxVq8lc=
-X-Google-Smtp-Source: ABdhPJykVLNhDhqQhXCcqXCmdA5Au+rowhNnrtIiQx35C+rH8rgT4Wo9r/DwSPnYYy9FT7AFGX87SD/h3Lz7e6itYyY=
-X-Received: by 2002:a62:7c43:0:b029:1ef:20ce:ba36 with SMTP id
- x64-20020a627c430000b02901ef20ceba36mr19910116pfc.40.1615204966584; Mon, 08
- Mar 2021 04:02:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-17-marcan@marcan.st>
- <CAHp75Vco_rcjHJ4THLZ8CJP=yX2fesfAo_tOY8zohfSmTLEVgw@mail.gmail.com> <875z21zwy2.wl-maz@kernel.org>
-In-Reply-To: <875z21zwy2.wl-maz@kernel.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 8 Mar 2021 14:02:29 +0200
-Message-ID: <CAHp75Vcgy1rB0LHHb+=mruAc-M-rGdfS0UnMh4xU1xkLxOycFA@mail.gmail.com>
-Subject: Re: [RFT PATCH v3 16/27] irqchip/apple-aic: Add support for the Apple
- Interrupt Controller
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        id S229938AbhCHNbV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Mar 2021 08:31:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57666 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229591AbhCHNbE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 8 Mar 2021 08:31:04 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B7206651C2;
+        Mon,  8 Mar 2021 13:31:03 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lJFyP-000L8E-P9; Mon, 08 Mar 2021 13:31:01 +0000
+Date:   Mon, 08 Mar 2021 13:31:00 +0000
+Message-ID: <874khlzsa3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     linux-arm-kernel@lists.infradead.org,
         Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
         Olof Johansson <olof@lixom.net>,
         Krzysztof Kozlowski <krzk@kernel.org>,
@@ -67,59 +37,148 @@ Cc:     Hector Martin <marcan@marcan.st>,
         Will Deacon <will@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Christoph Hellwig <hch@infradead.org>,
         "David S. Miller" <davem@davemloft.net>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFT PATCH v3 16/27] irqchip/apple-aic: Add support for the Apple Interrupt Controller
+In-Reply-To: <20210304213902.83903-17-marcan@marcan.st>
+References: <20210304213902.83903-1-marcan@marcan.st>
+        <20210304213902.83903-17-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: marcan@marcan.st, linux-arm-kernel@lists.infradead.org, robh@kernel.org, arnd@kernel.org, olof@lixom.net, krzk@kernel.org, mark.kettenis@xs4all.nl, tony@atomide.com, mohamed.mediouni@caramail.com, stan@corellium.com, graf@amazon.com, will@kernel.org, linus.walleij@linaro.org, mark.rutland@arm.com, andy.shevchenko@gmail.com, gregkh@linuxfoundation.org, corbet@lwn.net, catalin.marinas@arm.com, hch@infradead.org, davem@davemloft.net, devicetree@vger.kernel.org, linux-serial@vger.kernel.org, linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 1:50 PM Marc Zyngier <maz@kernel.org> wrote:
-> On Fri, 05 Mar 2021 15:05:08 +0000,
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-
-...
-
-> > > +#define TIMER_FIRING(x)                                                        \
-> > > +       (((x) & (ARCH_TIMER_CTRL_ENABLE | ARCH_TIMER_CTRL_IT_MASK |            \
-> > > +                ARCH_TIMER_CTRL_IT_STAT)) ==                                  \
-> > > +        (ARCH_TIMER_CTRL_ENABLE | ARCH_TIMER_CTRL_IT_STAT))
-> >
-> > It's a bit hard to read. Perhaps
-> >
-> > #define FOO_MASK  (_ENABLE | _STAT)
-> > #define _FIRING ... (FOO_MASK | _MASK == FOO_MASK)
+On Thu, 04 Mar 2021 21:38:51 +0000,
+Hector Martin <marcan@marcan.st> wrote:
+> 
+> This is the root interrupt controller used on Apple ARM SoCs such as the
+> M1. This irqchip driver performs multiple functions:
+> 
+> * Handles both IRQs and FIQs
+> 
+> * Drives the AIC peripheral itself (which handles IRQs)
+> 
+> * Dispatches FIQs to downstream hard-wired clients (currently the ARM
+>   timer).
+> 
+> * Implements a virtual IPI multiplexer to funnel multiple Linux IPIs
+>   into a single hardware IPI
 >
-> The expression above is a direct translation of the architecture
-> reference manual, and I'd rather not have that hidden behind a bunch
-> of obscure macros.
 
-OK!
+[...]
 
-...
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> +static void __exception_irq_entry aic_handle_irq(struct pt_regs *regs)
+> +{
+> +	struct aic_irq_chip *ic = aic_irqc;
+> +	u32 event, type, irq;
+> +
+> +	do {
+> +		/*
+> +		 * We cannot use a relaxed read here, as DMA needs to be
+> +		 * ordered with respect to the IRQ firing.
+> +		 */
+> +		event = readl(ic->base + AIC_EVENT);
+> +		type = FIELD_GET(AIC_EVENT_TYPE, event);
+> +		irq = FIELD_GET(AIC_EVENT_NUM, event);
+> +
+> +		if (type == AIC_EVENT_TYPE_HW)
+> +			handle_domain_irq(aic_irqc->hw_domain, irq, regs);
+> +		else if (type == AIC_EVENT_TYPE_IPI && irq == 1)
+> +			aic_handle_ipi(regs);
+> +		else if (event != 0)
+> +			pr_err("Unknown IRQ event %d, %d\n", type, irq);
+> +	} while (event);
+> +
+> +	/*
+> +	 * vGIC maintenance interrupts end up here too, so we need to check
+> +	 * for them separately. Just report and disable vGIC for now, until
+> +	 * we implement this properly.
+> +	 */
+> +	if ((read_sysreg_s(SYS_ICH_HCR_EL2) & ICH_HCR_EN) &&
+> +		read_sysreg_s(SYS_ICH_MISR_EL2) != 0) {
+> +		pr_err("vGIC IRQ fired, disabling.\n");
 
-> > > +       irqc->hw_domain = irq_domain_create_linear(of_node_to_fwnode(node),
-> > > +                                                  irqc->nr_hw + AIC_NR_FIQ,
-> > > +                                                  &aic_irq_domain_ops, irqc);
-> >
-> > If you are sure it will be always OF-only, why not to use
-> > irq_domain_add_linear()?
->
-> The OF-only API is deprecated, and there is no point in using it for
-> *new* code, specially when things like IPI allocation require the use
-> of the modern API. For arm64 root controllers, that's the way to go.
+Please add a _ratelimited here. Whilst debugging KVM on this machine,
+I ended up with this firing at such a rate that it was impossible to
+do anything useful. Ratelimiting it allowed me to pinpoint the
+problem.
 
-Good to know, thanks!
+[...]
+
+> +/*
+> + * FIQ irqchip
+> + */
+> +
+> +static void aic_fiq_mask(struct irq_data *d)
+> +{
+> +	/* Only the guest timers have real mask bits, unfortunately. */
+> +	switch (d->hwirq) {
+> +	case AIC_TMR_GUEST_PHYS:
+> +		sysreg_clear_set_s(SYS_APL_VM_TMR_FIQ_ENA_EL1, VM_TMR_FIQ_ENABLE_P, 0);
+> +		break;
+> +	case AIC_TMR_GUEST_VIRT:
+> +		sysreg_clear_set_s(SYS_APL_VM_TMR_FIQ_ENA_EL1, VM_TMR_FIQ_ENABLE_V, 0);
+> +		break;
+> +	}
+> +}
+> +
+> +static void aic_fiq_unmask(struct irq_data *d)
+> +{
+> +	switch (d->hwirq) {
+> +	case AIC_TMR_GUEST_PHYS:
+> +		sysreg_clear_set_s(SYS_APL_VM_TMR_FIQ_ENA_EL1, 0, VM_TMR_FIQ_ENABLE_P);
+> +		break;
+> +	case AIC_TMR_GUEST_VIRT:
+> +		sysreg_clear_set_s(SYS_APL_VM_TMR_FIQ_ENA_EL1, 0, VM_TMR_FIQ_ENABLE_V);
+> +		break;
+> +	}
+> +}
+> +
+> +static void aic_fiq_eoi(struct irq_data *d)
+> +{
+> +	/* We mask to ack (where we can), so we need to unmask at EOI. */
+> +	if (!irqd_irq_disabled(d) && !irqd_irq_masked(d))
+
+Ah, be careful here: irqd_irq_masked() doesn't do what you think it
+does for per-CPU interrupts. It's been on my list to fix for the rVIC
+implementation, but I never got around to doing it, and all decent ICs
+hide this from SW by having a HW-managed mask, similar to what is on
+the IRQ side.
+
+I can see two possibilities:
+
+- you can track the masked state directly and use that instead of
+  these predicates
+
+- you can just drop the masking altogether as this is only useful to a
+  hosted hypervisor (KVM), which will have to do its own masking
+  behind the scenes anyway
+
+> +		aic_fiq_unmask(d);
+> +}
+> +
+
+The rest looks good to me.
+
+Thanks,
+
+	M.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Without deviation from the norm, progress is not possible.
