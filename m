@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54384330C3E
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 12:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA17330C93
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 12:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbhCHLX3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Mar 2021 06:23:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48738 "EHLO mail.kernel.org"
+        id S229972AbhCHLjg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Mar 2021 06:39:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231484AbhCHLXA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 8 Mar 2021 06:23:00 -0500
+        id S229813AbhCHLjY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 8 Mar 2021 06:39:24 -0500
 Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 55A6865105;
-        Mon,  8 Mar 2021 11:22:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C47766024A;
+        Mon,  8 Mar 2021 11:39:23 +0000 (UTC)
 Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94)
         (envelope-from <maz@kernel.org>)
-        id 1lJDyR-000JaA-RE; Mon, 08 Mar 2021 11:22:55 +0000
-Date:   Mon, 08 Mar 2021 11:22:54 +0000
-Message-ID: <878s6xzy7l.wl-maz@kernel.org>
+        id 1lJEEL-000Jnd-KI; Mon, 08 Mar 2021 11:39:21 +0000
+Date:   Mon, 08 Mar 2021 11:39:20 +0000
+Message-ID: <877dmhzxg7.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Hector Martin <marcan@marcan.st>
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -46,10 +46,10 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFT PATCH v3 11/27] arm64: Implement ioremap_np() to map MMIO as nGnRnE
-In-Reply-To: <20210304213902.83903-12-marcan@marcan.st>
+Subject: Re: [RFT PATCH v3 14/27] arm64: move ICH_ sysreg bits from arm-gic-v3.h to sysreg.h
+In-Reply-To: <20210304213902.83903-15-marcan@marcan.st>
 References: <20210304213902.83903-1-marcan@marcan.st>
-        <20210304213902.83903-12-marcan@marcan.st>
+        <20210304213902.83903-15-marcan@marcan.st>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -63,11 +63,13 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 04 Mar 2021 21:38:46 +0000,
+On Thu, 04 Mar 2021 21:38:49 +0000,
 Hector Martin <marcan@marcan.st> wrote:
 > 
-> This is used on Apple ARM platforms, which require most MMIO
-> (except PCI devices) to be mapped as nGnRnE.
+> These definitions are in arm-gic-v3.h for historical reasons which no
+> longer apply. Move them to sysreg.h so the AIC driver can use them, as
+> it needs to peek into vGIC registers to deal with the GIC maintentance
+> interrupt.
 > 
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 
