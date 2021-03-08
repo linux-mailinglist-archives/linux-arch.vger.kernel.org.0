@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C652330C0E
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 12:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746EE330C2B
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 12:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbhCHLNb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Mar 2021 06:13:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46988 "EHLO mail.kernel.org"
+        id S231789AbhCHLVT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Mar 2021 06:21:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48394 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229627AbhCHLNW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 8 Mar 2021 06:13:22 -0500
+        id S231784AbhCHLVC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 8 Mar 2021 06:21:02 -0500
 Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34045651CD;
-        Mon,  8 Mar 2021 11:13:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7BCA0650F2;
+        Mon,  8 Mar 2021 11:21:01 +0000 (UTC)
 Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94)
         (envelope-from <maz@kernel.org>)
-        id 1lJDpA-000JV7-4r; Mon, 08 Mar 2021 11:13:20 +0000
-Date:   Mon, 08 Mar 2021 11:13:18 +0000
-Message-ID: <87blbtzynl.wl-maz@kernel.org>
+        id 1lJDwY-000JZJ-8b; Mon, 08 Mar 2021 11:20:58 +0000
+Date:   Mon, 08 Mar 2021 11:20:57 +0000
+Message-ID: <87a6rdzyau.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Hector Martin <marcan@marcan.st>
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -46,10 +46,10 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFT PATCH v3 07/27] arm64: arch_timer: implement support for interrupt-names
-In-Reply-To: <20210304213902.83903-8-marcan@marcan.st>
+Subject: Re: [RFT PATCH v3 08/27] asm-generic/io.h:  Add a non-posted variant of ioremap()
+In-Reply-To: <20210304213902.83903-9-marcan@marcan.st>
 References: <20210304213902.83903-1-marcan@marcan.st>
-        <20210304213902.83903-8-marcan@marcan.st>
+        <20210304213902.83903-9-marcan@marcan.st>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -63,22 +63,30 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 04 Mar 2021 21:38:42 +0000,
+On Thu, 04 Mar 2021 21:38:43 +0000,
 Hector Martin <marcan@marcan.st> wrote:
 > 
-> This allows the devicetree to correctly represent the available set of
-> timers, which varies from device to device, without the need for fake
-> dummy interrupts for unavailable slots.
+> ARM64 currently defaults to posted MMIO (nGnRnE), but some devices
+> require the use of non-posted MMIO (nGnRE). Introduce a new ioremap()
+> variant to handle this case. ioremap_np() is aliased to ioremap() by
+> default on arches that do not implement this variant.
 > 
-> Also add the hyp-virt timer/PPI, which is not currently used, but worth
-> representing.
+> sparc64 is the only architecture that needs to be touched directly,
+> because it includes neither of the generic io.h or iomap.h headers.
+> 
+> This adds the IORESOURCE_MEM_NONPOSTED flag, which maps to this
+> variant and marks a given resource as requiring non-posted mappings.
+> This is implemented in the resource system because it is a SoC-level
+> requirement, so existing drivers do not need special-case code to pick
+> this ioremap variant.
+> 
+> Then this is implemented in devres by introducing devm_ioremap_np(),
+> and making devm_ioremap_resource() automatically select this variant
+> when the resource has the IORESOURCE_MEM_NONPOSTED flag set.
 > 
 > Signed-off-by: Hector Martin <marcan@marcan.st>
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
 
-Reviewed-by: Marc Zyngier <maz@kernel.org>
-
-Thanks,
+Acked-by: Marc Zyngier <maz@kernel.org>
 
 	M.
 
