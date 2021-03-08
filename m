@@ -2,50 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D425331898
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 21:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108D63318B7
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 21:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbhCHUa0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Mar 2021 15:30:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60880 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229756AbhCHUaM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 8 Mar 2021 15:30:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ABF3D65299;
-        Mon,  8 Mar 2021 20:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615235411;
-        bh=Z575lVGPBfuAgtfOeWzz+Rq41DmqJRD8p6ieml212ZA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=heqU6iuJLSb0g+w8KLlZ9xvGIF9oBxx+DcX4J0DzvHhPncWb2BQmQurE7aNISIwhs
-         N72WR5vUIpIGl3Nfy7B3qgXNqHYy1TLZPJHFm02b3LtJ+tc0Azy5Nsc/iZssBOqVnb
-         txc15IGC3J7LBZGXBRcvRc60E4QkBRZUfaLjQML5+o6mW9FcPKLVGHq27v2kf+JKsW
-         oxhEc1UcYvRSz8Kdkb7Kj2/mI0lEHAG7V4FuFOC6mMR3M6s6uyldZqn4Nnl5A9AXvg
-         JzYz7DYErCJ5u8H5qpVxmJgedM0FRJY3D+esnrOBt1m74k6bdfuU0+HlrTyTq45+B+
-         Hc3pc12kAFHCw==
-Received: by mail-ot1-f52.google.com with SMTP id f33so10513123otf.11;
-        Mon, 08 Mar 2021 12:30:11 -0800 (PST)
-X-Gm-Message-State: AOAM5306y9w49tG5o09xf6Q+vSzwGyM0kxusEAVTNUwsfE1vX8hQ7Bem
-        aoXAWCAi0fBh9Cz1UQjf9n5qB0Ah/H1B70vWc3w=
-X-Google-Smtp-Source: ABdhPJy6rWkrMOdlTTTDQyrPIoB4JKQiF6S833KGy3zJtRbzvfqY9DZfdUJofhvQHvdvpSg5Bctz65fFVfhKR+P6FmA=
-X-Received: by 2002:a05:6830:148c:: with SMTP id s12mr3633116otq.251.1615235410953;
- Mon, 08 Mar 2021 12:30:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-13-marcan@marcan.st>
- <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
- <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st> <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
- <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
-In-Reply-To: <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 8 Mar 2021 21:29:54 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
-Message-ID: <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
-Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
- MMIO as non-posted
-To:     Rob Herring <robh@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
+        id S229815AbhCHUjF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Mar 2021 15:39:05 -0500
+Received: from mail-io1-f53.google.com ([209.85.166.53]:45658 "EHLO
+        mail-io1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229471AbhCHUir (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Mar 2021 15:38:47 -0500
+Received: by mail-io1-f53.google.com with SMTP id a7so11406204iok.12;
+        Mon, 08 Mar 2021 12:38:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9lLfeCs1Tc8ddEaiXHzDtmEpQP9gGHowCs7DuxfnmRE=;
+        b=V49zdQtIBvLb6HwUxPEQD22SVJN5av5W81Q9px9ylJFglJV6RRwil7zSg4hHTkWO0S
+         oznzqb2kTi6QWySFgrLqot3EDays8lTCq1gusJOXGm5TjcKi/76IHpML1L/sw+8n05bq
+         P1ZQQKtpRy8aIY375TXOx6n5fR0sAqPGbSryKCJIjyF/NeTBjqab54o2SciARXOxeVWT
+         2uLJyz8bg9fBqm93dsw0D53y3KtxVx+srr+XxBlOdKHTjdG/Cv10jkBLLLsidibAlwey
+         ngw6vRjin6R65JbAfdlyP0HSiXPMHk6gosC+jBRUtRhfJqzibSDrzlrLcOzFJQqa6PuN
+         2n6w==
+X-Gm-Message-State: AOAM532eOZ+p4EpVEYatuiCq2X/WpB5ejqUzgRn6C1CRMp0JO59P4jta
+        9iARogE+ffYNHBHQ6tFzZQ==
+X-Google-Smtp-Source: ABdhPJz6/b0HXPf5UbrLJ8rHp/ABrKIy46sXafa7ZkfydealL7GIC6LpxZTvxSGmls2DzSoW84uFgw==
+X-Received: by 2002:a02:cc1a:: with SMTP id n26mr25539390jap.21.1615235926457;
+        Mon, 08 Mar 2021 12:38:46 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id h128sm6553100ioa.32.2021.03.08.12.38.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Mar 2021 12:38:45 -0800 (PST)
+Received: (nullmailer pid 2920550 invoked by uid 1000);
+        Mon, 08 Mar 2021 20:38:41 -0000
+Date:   Mon, 8 Mar 2021 13:38:41 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Mark Kettenis <mark.kettenis@xs4all.nl>,
         Tony Lindgren <tony@atomide.com>,
@@ -61,75 +56,71 @@ Cc:     Hector Martin <marcan@marcan.st>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Christoph Hellwig <hch@infradead.org>,
         "David S. Miller" <davem@davemloft.net>,
-        DTML <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFT PATCH v3 06/27] dt-bindings: timer: arm,arch_timer: Add
+ interrupt-names support
+Message-ID: <20210308203841.GA2906683@robh.at.kernel.org>
+References: <20210304213902.83903-1-marcan@marcan.st>
+ <20210304213902.83903-7-marcan@marcan.st>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210304213902.83903-7-marcan@marcan.st>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 4:56 PM Rob Herring <robh@kernel.org> wrote:
-> On Fri, Mar 5, 2021 at 2:17 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > On Fri, Mar 5, 2021 at 7:18 PM Hector Martin <marcan@marcan.st> wrote:
->
-> > > > What's the code path using these functions on the M1 where we need to
-> > > > return 'posted'? It's just downstream PCI mappings (PCI memory space),
-> > > > right? Those would never hit these paths because they don't have a DT
-> > > > node or if they do the memory space is not part of it. So can't the
-> > > > check just be:
-> > > >
-> > > > bool of_mmio_is_nonposted(struct device_node *np)
-> > > > {
-> > > >      return np && of_machine_is_compatible("apple,arm-platform");
-> > > > }
-> > >
-> > > Yes; the implementation was trying to be generic, but AIUI we don't need
-> > > this on M1 because the PCI mappings don't go through this codepath, and
-> > > nothing else needs posted mode. My first hack was something not too
-> > > unlike this, then I was going to get rid of apple,arm-platform and just
-> > > have this be a generic mechanism with the properties, but then we added
-> > > the optimization to not do the lookups on other platforms, and now we're
-> > > coming full circle... :-)
-> >
-> > I never liked the idea of having a list of platforms that need a
-> > special hack, please let's not go back to that.
->
-> I'm a fan of generic solutions as much as anyone, but not when there's
-> a single user. Yes, there could be more, but we haven't seen any yet
-> and Apple seems to have a knack for doing special things. I'm pretty
-> sure posted vs. non-posted has been a possibility with AXI buses from
-> the start, so it's not like this is a new thing we're going to see
-> frequently on new platforms.
+On Fri, Mar 05, 2021 at 06:38:41AM +0900, Hector Martin wrote:
+> Not all platforms provide the same set of timers/interrupts, and Linux
+> only needs one (plus kvm/guest ones); some platforms are working around
+> this by using dummy fake interrupts. Implementing interrupt-names allows
+> the devicetree to specify an arbitrary set of available interrupts, so
+> the timer code can pick the right one.
+> 
+> This also adds the hyp-virt timer/interrupt, which was previously not
+> expressed in the fixed 4-interrupt form.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  .../devicetree/bindings/timer/arm,arch_timer.yaml  | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+> index 2c75105c1398..ebe9b0bebe41 100644
+> --- a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+> +++ b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+> @@ -34,11 +34,25 @@ properties:
+>                - arm,armv8-timer
+>  
+>    interrupts:
+> +    minItems: 1
+> +    maxItems: 5
+>      items:
+>        - description: secure timer irq
+>        - description: non-secure timer irq
+>        - description: virtual timer irq
+>        - description: hypervisor timer irq
+> +      - description: hypervisor virtual timer irq
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    maxItems: 5
+> +    items:
+> +      enum:
+> +        - phys-secure
+> +        - phys
+> +        - virt
+> +        - hyp-phys
+> +        - hyp-virt
 
-Ok, but if we make it a platform specific bit, I would prefer not
-to do the IORESOURCE_MEM_NONPOSTED flag either but
-instead keep the logic in the device drivers that call ioremap().
+phys-secure and hyp-phys is not very consistent. secure-phys or sec-phys 
+instead?
 
-This is obviously more work for the drivers, but at least it keeps
-the common code free of the hack while also allowing drivers to
-use ioremap_np() intentionally on other platforms.
+This allows any order which is not ideal (unfortunately json-schema 
+doesn't have a way to define order with optional entries in the middle). 
+How many possible combinations are there which make sense? If that's a 
+reasonable number, I'd rather see them listed out.
 
-> The other situation I worry about here is another arch has implicitly
-> defaulted to non-posted instead of posted. It could just be non-posted
-> was what worked everywhere and Linux couldn't distinguish. Now someone
-> sees we have this new posted vs. non-posted handling and can optimize
-> some mappings on their platform and we have to have per arch defaults
-> (like 'dma-coherent' now).
-
-I think one of the dark secrets of MMIO is that a lot of drivers
-get the posted behavior wrong by assuming that a writel() before
-a spin_unlock() is protected by that unlock. This may in fact work
-on many architectures but is broken on PCI and on local devices
-for ARM.
-
-Having a properly working (on non-PCI) ioremap_np() interface
-would be nice here, as it could be used to document when drivers
-rely on non-posted behavior, and cause the ioremap to fail when
-running on architectures that don't support nonposted maps.
-
-       Arnd
+Rob
