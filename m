@@ -2,51 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E0B3319D4
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 22:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51E1331A5B
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Mar 2021 23:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbhCHV4w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Mar 2021 16:56:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52656 "EHLO mail.kernel.org"
+        id S231246AbhCHWnC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Mar 2021 17:43:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59702 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231162AbhCHV4c (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 8 Mar 2021 16:56:32 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6EFF46523D;
-        Mon,  8 Mar 2021 21:56:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615240591;
-        bh=KMmCb7U2ujabFxkud2d3urqwhs41+pBgCpeNG3URuos=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=shvsBQVFvq7E6xYk01gjriusngocJaMunvCLQ1nZ2LiXr6HqZOsptcBgfuD3VnmGQ
-         lpR36R70KqunemCgUFKzSpM8nXZG9o+7SnvsH3etABbswOk8zvD1Jo6+NlENDYyuDv
-         WHUkA/e27cC4Op9IiestvSkydSylG6nR3t3ydutKz9Ra7HIfaNpRpEAarKULQCPz0y
-         HwGY0uGH/E0gNZpl4WoKEcHc+b5uG9TBZyx5/VUfepz2hYvce+XbA8NwqEme724qfI
-         nkZLjsPL3MRnRThwG4OyccapQkYCwO+hCZcs6cyHrBsPIInBcJZ5luwlt5QNA1ebUN
-         2vTINTUt18Etw==
-Received: by mail-ot1-f47.google.com with SMTP id a17so10813292oto.5;
-        Mon, 08 Mar 2021 13:56:31 -0800 (PST)
-X-Gm-Message-State: AOAM5330bCAV2lyNzY7YYDF5EzM0OxV1ZYawXJBJ0eLLM8Fcarqas2zd
-        q5IGPKvb/lqZg+Uh4zOKvUp8hiOtB4F6U3saUW0=
-X-Google-Smtp-Source: ABdhPJxa7+3TXf8xLA/E0HpUEZafsO9uyBdTJcygHPn2QO83SDsdS9V8PUzozL+D9A/4nZHqTIXj7Xx+nWGOPifP+7w=
-X-Received: by 2002:a9d:6341:: with SMTP id y1mr6301932otk.210.1615240590795;
- Mon, 08 Mar 2021 13:56:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-13-marcan@marcan.st>
- <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
- <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st> <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
- <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
- <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com> <20210308211306.GA2920998@robh.at.kernel.org>
-In-Reply-To: <20210308211306.GA2920998@robh.at.kernel.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 8 Mar 2021 22:56:14 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2GfzUevuQNZeQarJ4GNFsuDj0g7oFuN940Hdaw06YJbA@mail.gmail.com>
-Message-ID: <CAK8P3a2GfzUevuQNZeQarJ4GNFsuDj0g7oFuN940Hdaw06YJbA@mail.gmail.com>
-Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
- MMIO as non-posted
+        id S230343AbhCHWmv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 8 Mar 2021 17:42:51 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B728465287;
+        Mon,  8 Mar 2021 22:42:50 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lJOaO-000R26-JZ; Mon, 08 Mar 2021 22:42:48 +0000
+Date:   Mon, 08 Mar 2021 22:42:47 +0000
+Message-ID: <87zgzdqnbs.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
 To:     Rob Herring <robh@kernel.org>
 Cc:     Hector Martin <marcan@marcan.st>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
+        linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Mark Kettenis <mark.kettenis@xs4all.nl>,
         Tony Lindgren <tony@atomide.com>,
@@ -62,30 +44,128 @@ Cc:     Hector Martin <marcan@marcan.st>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Christoph Hellwig <hch@infradead.org>,
         "David S. Miller" <davem@davemloft.net>,
-        DTML <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFT PATCH v3 06/27] dt-bindings: timer: arm,arch_timer: Add interrupt-names support
+In-Reply-To: <20210308203841.GA2906683@robh.at.kernel.org>
+References: <20210304213902.83903-1-marcan@marcan.st>
+        <20210304213902.83903-7-marcan@marcan.st>
+        <20210308203841.GA2906683@robh.at.kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: robh@kernel.org, marcan@marcan.st, linux-arm-kernel@lists.infradead.org, arnd@kernel.org, olof@lixom.net, krzk@kernel.org, mark.kettenis@xs4all.nl, tony@atomide.com, mohamed.mediouni@caramail.com, stan@corellium.com, graf@amazon.com, will@kernel.org, linus.walleij@linaro.org, mark.rutland@arm.com, andy.shevchenko@gmail.com, gregkh@linuxfoundation.org, corbet@lwn.net, catalin.marinas@arm.com, hch@infradead.org, davem@davemloft.net, devicetree@vger.kernel.org, linux-serial@vger.kernel.org, linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 10:14 PM Rob Herring <robh@kernel.org> wrote:
-> On Mon, Mar 08, 2021 at 09:29:54PM +0100, Arnd Bergmann wrote:
-> > On Mon, Mar 8, 2021 at 4:56 PM Rob Herring <robh@kernel.org> wrote:
->
-> Let's just stick with 'nonposted-mmio', but drop 'posted-mmio'. I'd
-> rather know if and when we need 'posted-mmio'. It does need to be added
-> to the DT spec[1] and schema[2] though (GH PRs are fine for both).
+On Mon, 08 Mar 2021 20:38:41 +0000,
+Rob Herring <robh@kernel.org> wrote:
+> 
+> On Fri, Mar 05, 2021 at 06:38:41AM +0900, Hector Martin wrote:
+> > Not all platforms provide the same set of timers/interrupts, and Linux
+> > only needs one (plus kvm/guest ones); some platforms are working around
+> > this by using dummy fake interrupts. Implementing interrupt-names allows
+> > the devicetree to specify an arbitrary set of available interrupts, so
+> > the timer code can pick the right one.
+> > 
+> > This also adds the hyp-virt timer/interrupt, which was previously not
+> > expressed in the fixed 4-interrupt form.
+> > 
+> > Signed-off-by: Hector Martin <marcan@marcan.st>
+> > ---
+> >  .../devicetree/bindings/timer/arm,arch_timer.yaml  | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+> > index 2c75105c1398..ebe9b0bebe41 100644
+> > --- a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+> > +++ b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+> > @@ -34,11 +34,25 @@ properties:
+> >                - arm,armv8-timer
+> >  
+> >    interrupts:
+> > +    minItems: 1
+> > +    maxItems: 5
+> >      items:
+> >        - description: secure timer irq
+> >        - description: non-secure timer irq
+> >        - description: virtual timer irq
+> >        - description: hypervisor timer irq
+> > +      - description: hypervisor virtual timer irq
+> > +
+> > +  interrupt-names:
+> > +    minItems: 1
+> > +    maxItems: 5
+> > +    items:
+> > +      enum:
+> > +        - phys-secure
+> > +        - phys
+> > +        - virt
+> > +        - hyp-phys
+> > +        - hyp-virt
+> 
+> phys-secure and hyp-phys is not very consistent. secure-phys or sec-phys 
+> instead?
+> 
+> This allows any order which is not ideal (unfortunately json-schema 
+> doesn't have a way to define order with optional entries in the middle). 
+> How many possible combinations are there which make sense? If that's a 
+> reasonable number, I'd rather see them listed out.
 
-I think the reason for having "posted-mmio" is that you cannot properly
-define the PCI host controller nodes on the M1 without that: Since
-nonposted-mmio applies to all child nodes, this would mean the PCI
-memory space gets declared as nonposted by the DT, but the hardware
-requires it to be mapped as posted.
+The available of interrupts are a function of the number of security
+states, privileged exception levels and architecture revisions, as
+described in D11.1.1:
 
-       Arnd
+<quote>
+- An EL1 physical timer.
+- A Non-secure EL2 physical timer.
+- An EL3 physical timer.
+- An EL1 virtual timer.
+- A Non-secure EL2 virtual timer.
+- A Secure EL2 virtual timer.
+- A Secure EL2 physical timer.
+</quote>
+
+* Single security state, EL1 only, ARMv7 & ARMv8.0+ (assumed NS):
+  - physical, virtual
+
+* Single security state, EL1 + EL2, ARMv7 & ARMv8.0 (assumed NS)
+  - physical, virtual, hyp physical
+
+* Single security state, EL1 + EL2, ARMv8.1+ (assumed NS)
+  - physical, virtual, hyp physical, hyp virtual
+
+* Two security states, EL1 + EL3, ARMv7 & ARMv8.0+:
+  - secure physical, physical, virtual
+
+* Two security states, EL1 + EL2 + EL3, ARMv7 & ARMv8.0
+  - secure physical, physical, virtual, hyp physical
+
+* Two security states, EL1 + EL2 + EL3, ARMv8.1+
+  - secure physical, physical, virtual, hyp physical, hyp virtual
+
+* Two security states, EL1 + EL2 + S-EL2 + EL3, ARMv8.4+
+  - secure physical, physical, virtual, hyp physical, hyp virtual,
+    secure hyp physical, secure hyp virtual
+
+Nobody has seen the last combination in the wild (that is, outside of
+a SW model).
+
+I'm really not convinced we want to express this kind of complexity in
+the binding (each of the 7 cases), specially given that we don't
+encode the underlying HW architecture level or number of exception
+levels anywhere, and have ho way to validate such information.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
