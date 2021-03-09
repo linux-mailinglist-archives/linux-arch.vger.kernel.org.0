@@ -2,61 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E930A3323BA
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Mar 2021 12:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC4C33259C
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Mar 2021 13:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbhCILPC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Mar 2021 06:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbhCILOk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Mar 2021 06:14:40 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B96C06175F
-        for <linux-arch@vger.kernel.org>; Tue,  9 Mar 2021 03:14:36 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id a17so20131967ljq.2
-        for <linux-arch@vger.kernel.org>; Tue, 09 Mar 2021 03:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cKjwO43AjsBJoUH6JaO2Y5XWi3uHramUf/9ys8jvzbs=;
-        b=IUkDYmdXyRJ+5eqh5KaFAAav9I7fgeq5aJkWK2UclTqJ3DaNd+VsjtR5q06fui9WXK
-         vf1b4BTQklr/p9t2OGjzoduMVlfBvwaj3ZUXvEqaVil5eQ58ERriPFCI1276Lsm6E6Qs
-         znM0/daP+ANcymrxL2HJMHsf3oYJryKxg26zlCQD+Kc2UQQmxQgGPEgsVc9cbkWUrJM5
-         OY1THL0sfTB7KwJoDZEP4MEuBBMsFX/hYfnG4jbPcM1l0OR8uWhn+3csn+h8lstYLR97
-         aVaZd1sB5lMIEo3EID8BZM1zBgsfWLRilssJzwaU/hlIgt7TkVBHy9cXXDdV2y5bNAzU
-         5P0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cKjwO43AjsBJoUH6JaO2Y5XWi3uHramUf/9ys8jvzbs=;
-        b=peVSUohiuDlKKsL5hzWvJw5E8bRklffIXMjwLSQH7sn7LCkgJh/QXTaJZ/WU9rcJR0
-         fMdan7ElYF/wEXNxX2xtp6kp1kIiqgvFNEAw3WSj6mmt6sO5LarJZfpPqlW11TiC+Nwj
-         Ibw8kzy6820xf3ZLa4UpD/ROzWNhde7UCfDY8+MaZlfLgRxsEdH3KAUxE0NXMoHiFEsM
-         g9NQLPQ1Wf4ZJ0dslcAgVcCZv81KO0ci52T4ed78PJcCo9ZZME7KDR1vtM6CSvqVrYPf
-         wlngCk7512F2iMw6sP0p0h0FgMd+FmP97pt77J4AWauU+uU4bH8CCgg9W9rKzk3+gvKt
-         L3sw==
-X-Gm-Message-State: AOAM531BFfHnWMzSC5P+f5SFZhSiKsKqOroLu/NJdOY+yUteRg3HbGJ2
-        Y1NPJNyYQrIhF6jKxEJSBE34ENJjiOdXrQ1QbkjFew==
-X-Google-Smtp-Source: ABdhPJxUU43eMEhovgOv2iI7axC0yDatB6+NKL+zAY6DqrP12n8/hW5rse6yj9rlUf5G+F44LP2/X+q/+bxXKVOpV4k=
-X-Received: by 2002:a2e:7001:: with SMTP id l1mr16537048ljc.200.1615288474745;
- Tue, 09 Mar 2021 03:14:34 -0800 (PST)
+        id S229544AbhCIMlv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Mar 2021 07:41:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37536 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229688AbhCIMlg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 9 Mar 2021 07:41:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B0B36529E;
+        Tue,  9 Mar 2021 12:41:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615293696;
+        bh=54A2A0Kb1ZFFWRRdx3zNsT+EhwC/DJL9erZDIQNN0Tc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=f5aSC4o+8v3PrI4iPCVnAWgNaDDZGLK9h4Bzg7X/GabHGW4e1KC9vwMc4XJjnbjpz
+         10APnc66VtVVqBKuhZD0l45AjY5/Amgeyb9EVjU3GuYvzrKdRAbui8CFkiOlmlXcTq
+         Hwd/rAArocNDoY8MTTTyVLTSKEYdbZgTSBnJhIawwXoFxP22IEOfD9jiHVOmAoXizI
+         mH/cUOKNXyeXuTqirGA5U/o13O/xTZ7MLZiehSwFLD4LOEsDcgKmxKnEX3Th7l4Lag
+         Nofue4Gm+YIbMEpcGWDYnPOhxBjVs4KoB2CEbu/ttjT4NEa/GqK81zZ3KsvJ1oP7gk
+         aL4o0jzyws89g==
+Received: by mail-oi1-f169.google.com with SMTP id f3so14719832oiw.13;
+        Tue, 09 Mar 2021 04:41:36 -0800 (PST)
+X-Gm-Message-State: AOAM532ZJggCknAe8xDN/05dshkh5/PaXRDerObcFqKqg3y2O4JPP/px
+        4nWXbrMoRTuMb3iCEOUIX/ulMk3bJ97qYGiD/ME=
+X-Google-Smtp-Source: ABdhPJy6VatYtJ/swndVE4EQRIBHgRqbTjvCoS5T8FjJaiD4ljz4scReuWAj47J+nxN5H5qwFFajcOJ21lkxpBHFnHE=
+X-Received: by 2002:aca:5e85:: with SMTP id s127mr2704125oib.67.1615293695537;
+ Tue, 09 Mar 2021 04:41:35 -0800 (PST)
 MIME-Version: 1.0
 References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-13-marcan@marcan.st>
  <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
  <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st> <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
  <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
- <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com> <20210308211306.GA2920998@robh.at.kernel.org>
-In-Reply-To: <20210308211306.GA2920998@robh.at.kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 9 Mar 2021 12:14:23 +0100
-Message-ID: <CACRpkdZd_PU-W37szfGL7J2RYWhZzXdX342vt93H7mWXdh5iHA@mail.gmail.com>
+ <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
+ <20210308211306.GA2920998@robh.at.kernel.org> <CACRpkdZd_PU-W37szfGL7J2RYWhZzXdX342vt93H7mWXdh5iHA@mail.gmail.com>
+In-Reply-To: <CACRpkdZd_PU-W37szfGL7J2RYWhZzXdX342vt93H7mWXdh5iHA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 9 Mar 2021 13:41:19 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a104VXhPHuWaJVEw3uMEp3rSEHsFJ6w2sW4FhNjiQ2VQQ@mail.gmail.com>
+Message-ID: <CAK8P3a104VXhPHuWaJVEw3uMEp3rSEHsFJ6w2sW4FhNjiQ2VQQ@mail.gmail.com>
 Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
  MMIO as non-posted
-To:     Rob Herring <robh@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Hector Martin <marcan@marcan.st>,
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>, Hector Martin <marcan@marcan.st>,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
         Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
         Krzysztof Kozlowski <krzk@kernel.org>,
@@ -81,51 +70,68 @@ Cc:     Arnd Bergmann <arnd@kernel.org>, Hector Martin <marcan@marcan.st>,
         <linux-arch@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 10:13 PM Rob Herring <robh@kernel.org> wrote:
-> On Mon, Mar 08, 2021 at 09:29:54PM +0100, Arnd Bergmann wrote:
-
-> > This is obviously more work for the drivers, but at least it keeps
-> > the common code free of the hack while also allowing drivers to
-> > use ioremap_np() intentionally on other platforms.
+On Tue, Mar 9, 2021 at 12:14 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> I don't agree. The problem is within the interconnect. The device and
-> its driver are unaware of this.
+> On Mon, Mar 8, 2021 at 10:13 PM Rob Herring <robh@kernel.org> wrote:
+> > On Mon, Mar 08, 2021 at 09:29:54PM +0100, Arnd Bergmann wrote:
+>
+> > > This is obviously more work for the drivers, but at least it keeps
+> > > the common code free of the hack while also allowing drivers to
+> > > use ioremap_np() intentionally on other platforms.
+> >
+> > I don't agree. The problem is within the interconnect. The device and
+> > its driver are unaware of this.
+>
+> If it is possible that a driver needs to use posted access on one
+> SoC and nonposted on another SoC then clearly the nature
+> of the access need to be part of the memory access abstraction,
+> obviously ioremap() one way or another.
 
-If it is possible that a driver needs to use posted access on one
-SoC and nonposted on another SoC then clearly the nature
-of the access need to be part of the memory access abstraction,
-obviously ioremap() one way or another.
+There are two possible scenarios:
 
-Having the driver conditionally use different ioremap_*
-functions depending on SoC seems awkward. We had different
-execution paths for OF and ACPI drivers and have been working
-hard to create fwnode to abstract this away for drivers used with
-both abstractions for example. If we can hide it from drivers
-from day 1 I think we can save maintenance costs in the long
-run.
+- drivers that we already know are shared between apple and
+  other vendors (s3c-serial, pasemi i2c) would need to use
+  nonposted mmio on Apple but can use either one on other
+  platforms. On non-ARM CPUs, the ioremap_np() function
+  might fail when the hardware only supports posted writes.
 
-Given that the Apple silicon through it's heritage from Samsung
-S3C (the genealogy is unclear to me) already share drivers with
-this platform, this seems to already be the case so it's not a
-theoretical use case.
+- A driver writer may want to choose between posted and
+  nonposted mmio based on performance considerations:
+  if writes are never serialized, posted writes should always
+  be faster. However, if the driver uses a spinlock to serialize
+  writes, then a nonposted write is likely faster than a posted
+  write followed by a read that serializes the spin_unlock.
+  In this case we want the driver to explicitly pick one over
+  the other, and not have rely on bus specific magic.
 
-The core argument here seems to be "will this become common
-practice or is it an Apple-ism?"
+> Having the driver conditionally use different ioremap_*
+> functions depending on SoC seems awkward. We had different
+> execution paths for OF and ACPI drivers and have been working
+> hard to create fwnode to abstract this away for drivers used with
+> both abstractions for example. If we can hide it from drivers
+> from day 1 I think we can save maintenance costs in the long
+> run.
+>
+> Given that the Apple silicon through it's heritage from Samsung
+> S3C (the genealogy is unclear to me) already share drivers with
+> this platform, this seems to already be the case so it's not a
+> theoretical use case.
 
-That is a question to someone who is deep down there
-synthesizing SoCs. It appears the market for custom silicon
-laptops has just begun. There are people that can answer this
-question but I doubt that we have access to them or that they
-would tell us. What is an educated guess? It seems Arnds
-position is that it's an Apple-ism and I kind of trust him on this.
-At the same time I know that in emerging markets, what
-copycats are likely to do is say "give me exactly what Apple
-has, exactly that thing".
+As far as I can tell, there are only a handful of soc specific drivers
+that are actually shared with other platforms. Aside from serial
+and i2c, these are the ones that I can see being shared:
 
-Just my =E2=82=AC0.01
-Linus Walleij
+- there is an on-chip nvme host controller that is not PCI. So far,
+  nobody else does this, but it can clearly happen in the future
+
+- I think one of the USB controllers is a standard designware
+  part, while the others are PCI devices.
+
+- The PCI host bridge may be close enough to the standard
+   that we can use the generic driver for config space access.
+
+        Arnd
