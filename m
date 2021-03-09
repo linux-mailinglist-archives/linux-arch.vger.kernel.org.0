@@ -2,114 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD1E33202B
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Mar 2021 09:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16075332097
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Mar 2021 09:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbhCIICg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Mar 2021 03:02:36 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:60976 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229599AbhCIIC2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 9 Mar 2021 03:02:28 -0500
-Received: from localhost.localdomain (unknown [222.209.9.50])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxTeyEK0dgyU0XAA--.7938S4;
-        Tue, 09 Mar 2021 16:02:21 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: [PATCH 2/2] MIPS: loongson64: alloc pglist_data at run time
-Date:   Tue,  9 Mar 2021 16:02:10 +0800
-Message-Id: <20210309080210.25561-3-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210309080210.25561-1-huangpei@loongson.cn>
-References: <20210309080210.25561-1-huangpei@loongson.cn>
-X-CM-TRANSID: AQAAf9BxTeyEK0dgyU0XAA--.7938S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFyfXFykZr18JFy3Zw4rGrg_yoW8ur43pr
-        y3A3Wrtay5tr1S9FySqFW8ZrySyw18Ca1xtFW29FyxZa9rWryIgFy7KFy0g3y5tFWkZF15
-        JrZ0qF17WFs7JFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPG14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-        xKxwCY02Avz4vE14v_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
-        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
-        x2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIF
-        yTuYvjfUe7KIDUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        id S230035AbhCIIcI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Mar 2021 03:32:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:27386 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229555AbhCIIbi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Mar 2021 03:31:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615278698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GfRwAlMZCg89ixlFNqb8ULyiVLWTEnJ0ZTo2SVvckic=;
+        b=CH+i4QPkunJX/NZXYNqQi4Ubq96hhT7rM+LYoka3gH0+in8L9h386UxGMiw48WNKcTZstj
+        sm7tvwHV+B8TIIUQg1ej5OMweDxFO2aFxwB9fSU0nk00/t/AoRRh174tJ/56+pHKKwg2I+
+        PqL9ef12+fAGVx/Ce+zIS020+LIErNs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-564-MC5HpSYcPlGBNWdwQsIzjw-1; Tue, 09 Mar 2021 03:31:34 -0500
+X-MC-Unique: MC5HpSYcPlGBNWdwQsIzjw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1B8C580432D;
+        Tue,  9 Mar 2021 08:31:30 +0000 (UTC)
+Received: from [10.36.114.143] (ovpn-114-143.ams2.redhat.com [10.36.114.143])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0D1BF6062F;
+        Tue,  9 Mar 2021 08:31:14 +0000 (UTC)
+Subject: Re: [PATCH RFCv2] mm/madvise: introduce MADV_POPULATE_(READ|WRITE) to
+ prefault/prealloc memory
+To:     Rolf Eike Beer <eike-kernel@sf-tec.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>
+References: <20210308164520.18323-1-david@redhat.com>
+ <6ecd754406fffe851be6543025203b6b@sf-tec.de>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Message-ID: <00fcfc37-e288-8ffe-a443-c2f5054deee9@redhat.com>
+Date:   Tue, 9 Mar 2021 09:31:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
+MIME-Version: 1.0
+In-Reply-To: <6ecd754406fffe851be6543025203b6b@sf-tec.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Loongson64 allocates arrays of pglist_data statically and is located
-at Node 0, and cpu from Nodes other than 0 need remote access to
-pglist_data and zone info.
+On 09.03.21 08:35, Rolf Eike Beer wrote:
+>> diff --git a/mm/internal.h b/mm/internal.h
+>> index 9902648f2206..a5c4ed23b1db 100644
+>> --- a/mm/internal.h
+>> +++ b/mm/internal.h
+>> @@ -340,6 +340,9 @@ void __vma_unlink_list(struct mm_struct *mm,
+>> struct vm_area_struct *vma);
+>>   #ifdef CONFIG_MMU
+>>   extern long populate_vma_page_range(struct vm_area_struct *vma,
+>>   		unsigned long start, unsigned long end, int *nonblocking);
+>> +extern long faultin_vma_page_range(struct vm_area_struct *vma,
+>> +				   unsigned long start, unsigned long end,
+>> +				   bool write, int *nonblocking);
+>>   extern void munlock_vma_pages_range(struct vm_area_struct *vma,
+>>   			unsigned long start, unsigned long end);
+>>   static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
+> 
+> The parameter name does not match the one in the implementation.
+> 
+> Otherwise the implementation looks fine AFAICT.
 
-Delay pglist_data allocation till run time, and make it NUMA-aware
+Hehe, you can tell how I copy-pasted from populate_vma_page_range(), 
+because there, the variable names are messed up, too :)
 
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/loongson64/numa.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Will fix (most probably populate_vma_page_range() as well in a cleanup 
+patch), thanks!
 
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index cf9459f79f9b..afafd367cb38 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -26,7 +26,6 @@
- #include <asm/wbflush.h>
- #include <boot_param.h>
- 
--static struct pglist_data prealloc__node_data[MAX_NUMNODES];
- unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
- EXPORT_SYMBOL(__node_distances);
- struct pglist_data *__node_data[MAX_NUMNODES];
-@@ -151,8 +150,12 @@ static void __init szmem(unsigned int node)
- 
- static void __init node_mem_init(unsigned int node)
- {
-+	struct pglist_data *nd;
- 	unsigned long node_addrspace_offset;
- 	unsigned long start_pfn, end_pfn;
-+	unsigned long nd_pa;
-+	int tnid;
-+	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
- 
- 	node_addrspace_offset = nid_to_addrbase(node);
- 	pr_info("Node%d's addrspace_offset is 0x%lx\n",
-@@ -162,8 +165,16 @@ static void __init node_mem_init(unsigned int node)
- 	pr_info("Node%d: start_pfn=0x%lx, end_pfn=0x%lx\n",
- 		node, start_pfn, end_pfn);
- 
--	__node_data[node] = prealloc__node_data + node;
--
-+	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, node);
-+	if (!nd_pa)
-+		panic("Cannot allocate %zu bytes for node %d data\n",
-+		      nd_size, node);
-+	nd = __va(nd_pa);
-+	memset(nd, 0, sizeof(struct pglist_data));
-+	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
-+	if (tnid != node)
-+		pr_info("NODE_DATA(%d) on node %d\n", node, tnid);
-+	__node_data[node] = nd;
- 	NODE_DATA(node)->node_start_pfn = start_pfn;
- 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
- 
 -- 
-2.17.1
+Thanks,
+
+David / dhildenb
 
