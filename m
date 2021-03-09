@@ -2,113 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16075332097
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Mar 2021 09:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E930A3323BA
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Mar 2021 12:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbhCIIcI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Mar 2021 03:32:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:27386 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229555AbhCIIbi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Mar 2021 03:31:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615278698;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GfRwAlMZCg89ixlFNqb8ULyiVLWTEnJ0ZTo2SVvckic=;
-        b=CH+i4QPkunJX/NZXYNqQi4Ubq96hhT7rM+LYoka3gH0+in8L9h386UxGMiw48WNKcTZstj
-        sm7tvwHV+B8TIIUQg1ej5OMweDxFO2aFxwB9fSU0nk00/t/AoRRh174tJ/56+pHKKwg2I+
-        PqL9ef12+fAGVx/Ce+zIS020+LIErNs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-564-MC5HpSYcPlGBNWdwQsIzjw-1; Tue, 09 Mar 2021 03:31:34 -0500
-X-MC-Unique: MC5HpSYcPlGBNWdwQsIzjw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1B8C580432D;
-        Tue,  9 Mar 2021 08:31:30 +0000 (UTC)
-Received: from [10.36.114.143] (ovpn-114-143.ams2.redhat.com [10.36.114.143])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0D1BF6062F;
-        Tue,  9 Mar 2021 08:31:14 +0000 (UTC)
-Subject: Re: [PATCH RFCv2] mm/madvise: introduce MADV_POPULATE_(READ|WRITE) to
- prefault/prealloc memory
-To:     Rolf Eike Beer <eike-kernel@sf-tec.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>
-References: <20210308164520.18323-1-david@redhat.com>
- <6ecd754406fffe851be6543025203b6b@sf-tec.de>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <00fcfc37-e288-8ffe-a443-c2f5054deee9@redhat.com>
-Date:   Tue, 9 Mar 2021 09:31:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S229656AbhCILPC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Mar 2021 06:15:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229881AbhCILOk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Mar 2021 06:14:40 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B96C06175F
+        for <linux-arch@vger.kernel.org>; Tue,  9 Mar 2021 03:14:36 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id a17so20131967ljq.2
+        for <linux-arch@vger.kernel.org>; Tue, 09 Mar 2021 03:14:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cKjwO43AjsBJoUH6JaO2Y5XWi3uHramUf/9ys8jvzbs=;
+        b=IUkDYmdXyRJ+5eqh5KaFAAav9I7fgeq5aJkWK2UclTqJ3DaNd+VsjtR5q06fui9WXK
+         vf1b4BTQklr/p9t2OGjzoduMVlfBvwaj3ZUXvEqaVil5eQ58ERriPFCI1276Lsm6E6Qs
+         znM0/daP+ANcymrxL2HJMHsf3oYJryKxg26zlCQD+Kc2UQQmxQgGPEgsVc9cbkWUrJM5
+         OY1THL0sfTB7KwJoDZEP4MEuBBMsFX/hYfnG4jbPcM1l0OR8uWhn+3csn+h8lstYLR97
+         aVaZd1sB5lMIEo3EID8BZM1zBgsfWLRilssJzwaU/hlIgt7TkVBHy9cXXDdV2y5bNAzU
+         5P0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cKjwO43AjsBJoUH6JaO2Y5XWi3uHramUf/9ys8jvzbs=;
+        b=peVSUohiuDlKKsL5hzWvJw5E8bRklffIXMjwLSQH7sn7LCkgJh/QXTaJZ/WU9rcJR0
+         fMdan7ElYF/wEXNxX2xtp6kp1kIiqgvFNEAw3WSj6mmt6sO5LarJZfpPqlW11TiC+Nwj
+         Ibw8kzy6820xf3ZLa4UpD/ROzWNhde7UCfDY8+MaZlfLgRxsEdH3KAUxE0NXMoHiFEsM
+         g9NQLPQ1Wf4ZJ0dslcAgVcCZv81KO0ci52T4ed78PJcCo9ZZME7KDR1vtM6CSvqVrYPf
+         wlngCk7512F2iMw6sP0p0h0FgMd+FmP97pt77J4AWauU+uU4bH8CCgg9W9rKzk3+gvKt
+         L3sw==
+X-Gm-Message-State: AOAM531BFfHnWMzSC5P+f5SFZhSiKsKqOroLu/NJdOY+yUteRg3HbGJ2
+        Y1NPJNyYQrIhF6jKxEJSBE34ENJjiOdXrQ1QbkjFew==
+X-Google-Smtp-Source: ABdhPJxUU43eMEhovgOv2iI7axC0yDatB6+NKL+zAY6DqrP12n8/hW5rse6yj9rlUf5G+F44LP2/X+q/+bxXKVOpV4k=
+X-Received: by 2002:a2e:7001:: with SMTP id l1mr16537048ljc.200.1615288474745;
+ Tue, 09 Mar 2021 03:14:34 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <6ecd754406fffe851be6543025203b6b@sf-tec.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-13-marcan@marcan.st>
+ <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
+ <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st> <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
+ <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
+ <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com> <20210308211306.GA2920998@robh.at.kernel.org>
+In-Reply-To: <20210308211306.GA2920998@robh.at.kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 9 Mar 2021 12:14:23 +0100
+Message-ID: <CACRpkdZd_PU-W37szfGL7J2RYWhZzXdX342vt93H7mWXdh5iHA@mail.gmail.com>
+Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
+ MMIO as non-posted
+To:     Rob Herring <robh@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Hector Martin <marcan@marcan.st>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        DTML <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 09.03.21 08:35, Rolf Eike Beer wrote:
->> diff --git a/mm/internal.h b/mm/internal.h
->> index 9902648f2206..a5c4ed23b1db 100644
->> --- a/mm/internal.h
->> +++ b/mm/internal.h
->> @@ -340,6 +340,9 @@ void __vma_unlink_list(struct mm_struct *mm,
->> struct vm_area_struct *vma);
->>   #ifdef CONFIG_MMU
->>   extern long populate_vma_page_range(struct vm_area_struct *vma,
->>   		unsigned long start, unsigned long end, int *nonblocking);
->> +extern long faultin_vma_page_range(struct vm_area_struct *vma,
->> +				   unsigned long start, unsigned long end,
->> +				   bool write, int *nonblocking);
->>   extern void munlock_vma_pages_range(struct vm_area_struct *vma,
->>   			unsigned long start, unsigned long end);
->>   static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
-> 
-> The parameter name does not match the one in the implementation.
-> 
-> Otherwise the implementation looks fine AFAICT.
+On Mon, Mar 8, 2021 at 10:13 PM Rob Herring <robh@kernel.org> wrote:
+> On Mon, Mar 08, 2021 at 09:29:54PM +0100, Arnd Bergmann wrote:
 
-Hehe, you can tell how I copy-pasted from populate_vma_page_range(), 
-because there, the variable names are messed up, too :)
+> > This is obviously more work for the drivers, but at least it keeps
+> > the common code free of the hack while also allowing drivers to
+> > use ioremap_np() intentionally on other platforms.
+>
+> I don't agree. The problem is within the interconnect. The device and
+> its driver are unaware of this.
 
-Will fix (most probably populate_vma_page_range() as well in a cleanup 
-patch), thanks!
+If it is possible that a driver needs to use posted access on one
+SoC and nonposted on another SoC then clearly the nature
+of the access need to be part of the memory access abstraction,
+obviously ioremap() one way or another.
 
--- 
-Thanks,
+Having the driver conditionally use different ioremap_*
+functions depending on SoC seems awkward. We had different
+execution paths for OF and ACPI drivers and have been working
+hard to create fwnode to abstract this away for drivers used with
+both abstractions for example. If we can hide it from drivers
+from day 1 I think we can save maintenance costs in the long
+run.
 
-David / dhildenb
+Given that the Apple silicon through it's heritage from Samsung
+S3C (the genealogy is unclear to me) already share drivers with
+this platform, this seems to already be the case so it's not a
+theoretical use case.
 
+The core argument here seems to be "will this become common
+practice or is it an Apple-ism?"
+
+That is a question to someone who is deep down there
+synthesizing SoCs. It appears the market for custom silicon
+laptops has just begun. There are people that can answer this
+question but I doubt that we have access to them or that they
+would tell us. What is an educated guess? It seems Arnds
+position is that it's an Apple-ism and I kind of trust him on this.
+At the same time I know that in emerging markets, what
+copycats are likely to do is say "give me exactly what Apple
+has, exactly that thing".
+
+Just my =E2=82=AC0.01
+Linus Walleij
