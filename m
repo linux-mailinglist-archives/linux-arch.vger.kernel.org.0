@@ -2,97 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 008D4332D5A
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Mar 2021 18:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC57332DED
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Mar 2021 19:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbhCIRgS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Mar 2021 12:36:18 -0500
-Received: from pb-smtp1.pobox.com ([64.147.108.70]:52345 "EHLO
-        pb-smtp1.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbhCIRgS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Mar 2021 12:36:18 -0500
-Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id EDE84AA116;
-        Tue,  9 Mar 2021 12:36:16 -0500 (EST)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
-        :cc:subject:in-reply-to:message-id:references:mime-version
-        :content-type; s=sasl; bh=Q5bTVZkC+LzcSiiWD+vXAhphew4=; b=Q6DrNA
-        YYGURgXv6Uca99oe6ghQ1nckzyPBv7KKfjpV95WIn4SI0P/7zhal3p9eKTUudfuw
-        U6DuI0KHCQJh+yzMXiC/NnOk4k9u3SEApnI8YeYizcBqw7La/ETU8UOy6reSJ3La
-        MMgXyyUO+G9DlMmwqRjTsvDmHm0HxjrV2y/GQ=
-Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id E4892AA115;
-        Tue,  9 Mar 2021 12:36:16 -0500 (EST)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=DdhtRSv6lLEXu3vP9THOvIdQg+N3RK8guLnDMEzAdlA=; b=qGHNc3tCviaiGK1DTsFSW8Jad23GqNat6z+AFXE7Xm0tuDn+nc6igjzClCsrf0Pm+xtu7+LKkKcigufcSTfICY53MJ2uz+oZ4QXugjWgTup4pjDezdE4FHfpsXFUrTGx8i/XKzpDEGGrlVx9bR+a/9oKcpiiBALUHRJqLPpAbtk=
-Received: from yoda.home (unknown [24.203.50.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id 66A89AA114;
-        Tue,  9 Mar 2021 12:36:16 -0500 (EST)
-        (envelope-from nico@fluxnic.net)
-Received: from xanadu.home (xanadu.home [192.168.2.2])
-        by yoda.home (Postfix) with ESMTPSA id 856AB2DA017E;
-        Tue,  9 Mar 2021 12:36:15 -0500 (EST)
-Date:   Tue, 9 Mar 2021 12:36:15 -0500 (EST)
-From:   Nicolas Pitre <nico@fluxnic.net>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-cc:     linux-kbuild@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
+        id S231688AbhCISMo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Mar 2021 13:12:44 -0500
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:20721 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231852AbhCISMY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Mar 2021 13:12:24 -0500
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 129IC3KQ006389;
+        Wed, 10 Mar 2021 03:12:03 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 129IC3KQ006389
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1615313524;
+        bh=ZUPoUl+tC2lTFpMNgXSXMzOjClyf1MCW12Qo/lD0z2g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=zhbphs8TIo+Y6zeLOkkcrF42F0Ka9psfSrdVDAtX8MB4EYAhLH0fI2z9TGC2W7TC5
+         /sejuYgEdYYPVVUkChm/txlw5fbU0ekUO1J8pKVRDmZhZnGf557oJFI0xRHq5mslfa
+         xEu3aSeGvrsf2leHVAnE/1CuSlgsibisArAwUfYj/aA79e7O1faj/Zcv78INtrA0jF
+         TeuUkTI1tEBU7wswjaI5q7HMWVzTy4qKTNDbAWAzIpgMgub5v6KrL/bNS+RMT09KCp
+         6xaq0yW7iOfkmkzoTcYq1NKv2sAmzUNDGRAPXj5nGzw6un15O2cRuFYJDPeYOJDJsb
+         R/BTTOV/H8tJA==
+X-Nifty-SrcIP: [209.85.216.47]
+Received: by mail-pj1-f47.google.com with SMTP id nh23-20020a17090b3657b02900c0d5e235a8so5646271pjb.0;
+        Tue, 09 Mar 2021 10:12:03 -0800 (PST)
+X-Gm-Message-State: AOAM530XzaBNtchBD5ScjfP1uvUVXUn2/tSnt5JZH9cEFbOjJgFOMIYb
+        BQIczoS1KFBXfrwM/f96GPoI1DuP9VlUWoATrwY=
+X-Google-Smtp-Source: ABdhPJzCqaUEZwPYSQuKendomz65iaWonVPdxwyZQKGk2EXnT24LZfVPw0mM6kLgmskLjuAk+pm7VsXBFbGtVXbYLHA=
+X-Received: by 2002:a17:90a:dc08:: with SMTP id i8mr5668771pjv.153.1615313522797;
+ Tue, 09 Mar 2021 10:12:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20210309151737.345722-1-masahiroy@kernel.org> <20210309151737.345722-4-masahiroy@kernel.org>
+ <354sr3np-67o8-oss9-813s-p2qoro06p4o@syhkavp.arg>
+In-Reply-To: <354sr3np-67o8-oss9-813s-p2qoro06p4o@syhkavp.arg>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 10 Mar 2021 03:11:24 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS97kTsOW_RSy1ZL2P5Q+5Hh05qvE4KwSVkvrhkzb3Shg@mail.gmail.com>
+Message-ID: <CAK7LNAS97kTsOW_RSy1ZL2P5Q+5Hh05qvE4KwSVkvrhkzb3Shg@mail.gmail.com>
 Subject: Re: [PATCH v2 3/4] kbuild: re-implement CONFIG_TRIM_UNUSED_KSYMS to
  make it work in one-pass
-In-Reply-To: <20210309151737.345722-4-masahiroy@kernel.org>
-Message-ID: <354sr3np-67o8-oss9-813s-p2qoro06p4o@syhkavp.arg>
-References: <20210309151737.345722-1-masahiroy@kernel.org> <20210309151737.345722-4-masahiroy@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Pobox-Relay-ID: F372C0B8-80FD-11EB-B49F-D152C8D8090B-78420484!pb-smtp1.pobox.com
+To:     Nicolas Pitre <nico@fluxnic.net>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 10 Mar 2021, Masahiro Yamada wrote:
+On Wed, Mar 10, 2021 at 2:36 AM Nicolas Pitre <nico@fluxnic.net> wrote:
+>
+> On Wed, 10 Mar 2021, Masahiro Yamada wrote:
+>
+> > Commit a555bdd0c58c ("Kbuild: enable TRIM_UNUSED_KSYMS again, with some
+> > guarding") re-enabled this feature, but Linus is still unhappy about
+> > the build time.
+> >
+> > The reason of the slowness is the recursion - this basically works in
+> > two loops.
+> >
+> > In the first loop, Kbuild builds the entire tree based on the temporary
+> > autoksyms.h, which contains macro defines to control whether their
+> > corresponding EXPORT_SYMBOL() is enabled or not, and also gathers all
+> > symbols required by modules. After the tree traverse, Kbuild updates
+> > autoksyms.h and triggers the second loop to rebuild source files whose
+> > EXPORT_SYMBOL() needs flipping.
+> >
+> > This commit re-implements CONFIG_TRIM_UNUSED_KSYMS to make it work in
+> > one pass. In the new design, unneeded EXPORT_SYMBOL() instances are
+> > trimmed by the linker instead of the preprocessor.
+> >
+> > After the tree traverse, a linker script snippet <generated/keep-ksyms.h>
+> > is generated. It feeds the list of necessary sections to vmlinus.lds.S
+> > and modules.lds.S. The other sections fall into /DISCARD/.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> I'm not sure I do understand every detail here, especially since it is
+> so far away from the version that I originally contributed. But the
+> concept looks good.
+>
+> I still think that there is no way around a recursive approach to get
+> the maximum effect with LTO, but given that true LTO still isn't applied
+> to mainline after all those years, the recursive approach brings
+> nothing. Maybe that could be revisited if true LTO ever makes it into
+> mainline, and the desire to reduce the binary size is still relevant
+> enough to justify it.
 
-> Commit a555bdd0c58c ("Kbuild: enable TRIM_UNUSED_KSYMS again, with some
-> guarding") re-enabled this feature, but Linus is still unhappy about
-> the build time.
-> 
-> The reason of the slowness is the recursion - this basically works in
-> two loops.
-> 
-> In the first loop, Kbuild builds the entire tree based on the temporary
-> autoksyms.h, which contains macro defines to control whether their
-> corresponding EXPORT_SYMBOL() is enabled or not, and also gathers all
-> symbols required by modules. After the tree traverse, Kbuild updates
-> autoksyms.h and triggers the second loop to rebuild source files whose
-> EXPORT_SYMBOL() needs flipping.
-> 
-> This commit re-implements CONFIG_TRIM_UNUSED_KSYMS to make it work in
-> one pass. In the new design, unneeded EXPORT_SYMBOL() instances are
-> trimmed by the linker instead of the preprocessor.
-> 
-> After the tree traverse, a linker script snippet <generated/keep-ksyms.h>
-> is generated. It feeds the list of necessary sections to vmlinus.lds.S
-> and modules.lds.S. The other sections fall into /DISCARD/.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Hmm, I am confused.
 
-I'm not sure I do understand every detail here, especially since it is 
-so far away from the version that I originally contributed. But the 
-concept looks good.
-
-I still think that there is no way around a recursive approach to get 
-the maximum effect with LTO, but given that true LTO still isn't applied 
-to mainline after all those years, the recursive approach brings 
-nothing. Maybe that could be revisited if true LTO ever makes it into 
-mainline, and the desire to reduce the binary size is still relevant 
-enough to justify it.
-
-Acked-by: Nicolas Pitre <nico@fluxnic.net>
+Does this patch change the behavior in the
+combination with the "true LTO"?
 
 
-Nicolas
+Please let me borrow this sentence from your article:
+"But what LTO does is more like getting rid of branches that simply
+float in the air without being connected to anything or which have
+become loose due to optimization."
+(https://lwn.net/Articles/746780/)
+
+
+This patch throws unneeded EXPORT_SYMBOL metadata
+into the /DISCARD/ section of the linker script.
+
+The approach is different (preprocessor vs linker), but
+we will still get the same result; the unneeded
+EXPORT_SYMBOLs are disconnected from the main trunk.
+
+Then, the true LTO will remove branches floating in the air,
+right?
+
+So, what will be lost by this patch?
+
+
+
+>
+> Acked-by: Nicolas Pitre <nico@fluxnic.net>
+>
+>
+> Nicolas
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
