@@ -2,103 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BEC334C3E
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Mar 2021 00:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9604334C57
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Mar 2021 00:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbhCJXMG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Mar 2021 18:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
+        id S232181AbhCJXSE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Mar 2021 18:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbhCJXLf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Mar 2021 18:11:35 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B33C061761
-        for <linux-arch@vger.kernel.org>; Wed, 10 Mar 2021 15:11:34 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id h4so27896832ljl.0
-        for <linux-arch@vger.kernel.org>; Wed, 10 Mar 2021 15:11:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fsUvZGKYC5fgx4oei9Q5/ic2uEIxVNyjDNMh2AgyO6I=;
-        b=YFJ7SMDaL74sPgY4t2M2TveLoai2GpxFH7T+w02cY0yAPfz4d7STzMXwN2LMQ2iEoZ
-         AC3wFDsX/B+jYJXVNzs+y4D9tGf/wEA3njzRA4m7PPgqfVi486jFs5jC4rjhpItvLjMl
-         feX0SL4sSjFQxxMpaHtUG3m/yP5ZsWGY2bHZ1JzjeRWLuH3LgTM/weeATOW14t4za+lM
-         0oejehpKlmlwaemoSaXKHgvkv/wgRR/MCed4z76h2TRaPLDfBO1rpazJRuqEpn9HXUuZ
-         gZsRlyCIDNbKHWfuIFLOxVswPmSPuq2apnjiVRCSHJ7mbVzB2AtDRB2jPCfVazu7Yozu
-         i7/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fsUvZGKYC5fgx4oei9Q5/ic2uEIxVNyjDNMh2AgyO6I=;
-        b=jF0Iw6xMRV9/SFtPmBh//GBa/o0tOqxRjrf+ziOXkaQPZ/wiCAwm0p7GIcatElbi5+
-         B+LzMPyPqWD55tJV3UYar3GwvtHtmwJP1kE17Y0kJ1g08AQsV6MW8hQ09X6p0jB5Q0iW
-         fbzXFLma2HPAGlYi4y8icCDUeU90tdBo6VXcVnp7bEpJXHKMoFPaXoyLN5j15o9hix1y
-         nT/2S7HuaQyR675LibxrOXUkTR+b/ZoWB+pnxYl3K78FY9zW3hvAkF38s/IXZHhtGruM
-         GfsvNrnMBIBnRQosvT4bxF5F+LFpJSrSAmWfm8mB8QU7AE0f6ESGeVnUiriOgt4ZQJX8
-         Q+JQ==
-X-Gm-Message-State: AOAM5301ST1+v2NYANBRUCEY0FNHK2l6CHepAODLhNe/zEk2a7ciis2H
-        ZWs9W/1ftPZ97Ju7IbJFSBgNv7hzRa4CHQppPW9zSQ==
-X-Google-Smtp-Source: ABdhPJzmo5G8NylnSmgEyDfdbat9eWDptGx3+8/H3Ywrq5Z5I67GtCUd0mY3fRoJZXOwQZI5bSexUvc4wSg5BOhWX4M=
-X-Received: by 2002:a2e:7001:: with SMTP id l1mr3125411ljc.200.1615417892988;
- Wed, 10 Mar 2021 15:11:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-26-marcan@marcan.st>
-In-Reply-To: <20210304213902.83903-26-marcan@marcan.st>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 Mar 2021 00:11:22 +0100
-Message-ID: <CACRpkdZrFfP3nx=eU-hKKVUfxHHX2J2-__6tjV8hTPgX3qtBDA@mail.gmail.com>
-Subject: Re: [RFT PATCH v3 25/27] tty: serial: samsung_tty: Add earlycon
- support for Apple UARTs
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S231880AbhCJXRj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Mar 2021 18:17:39 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982C9C061574;
+        Wed, 10 Mar 2021 15:17:39 -0800 (PST)
+Received: from zn.tnic (p200300ec2f0a9900a924d5d6558379cc.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:9900:a924:d5d6:5583:79cc])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 189CE1EC0324;
+        Thu, 11 Mar 2021 00:17:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1615418258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=vdW4jHtU0yP5nIiN9iN5QIKuVvJT42tBZF1aEM+pmEU=;
+        b=OIreb/Q1GnNA6DuKQAQYJMdcbxOaH0NUHkN7M6Kf7IKhYmFJauv7y+XrlTqSsWEr8X4gRT
+        tGYSQZjwQOLCA3nRyXqewrox7hN5tB5czxuo3XLI+/sA+g7CQ21vsIeygf++0qYcRxtQY3
+        jrI28tGi2TEAPSYH5No08OdnBG/xI+8=
+Date:   Thu, 11 Mar 2021 00:17:31 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+Subject: Re: [PATCH v22 8/8] x86/vdso: Add ENDBR64 to __vdso_sgx_enter_enclave
+Message-ID: <20210310231731.GK23521@zn.tnic>
+References: <20210310220519.16811-1-yu-cheng.yu@intel.com>
+ <20210310220519.16811-9-yu-cheng.yu@intel.com>
+ <YElKjT2v628tidE/@kernel.org>
+ <8b8efe44-b79f-ce29-ee28-066f88c93840@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8b8efe44-b79f-ce29-ee28-066f88c93840@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 4, 2021 at 10:42 PM Hector Martin <marcan@marcan.st> wrote:
+On Wed, Mar 10, 2021 at 02:55:55PM -0800, Yu, Yu-cheng wrote:
+> > > @@ -27,6 +27,9 @@
+> > >   SYM_FUNC_START(__vdso_sgx_enter_enclave)
+> > >   	/* Prolog */
+> > >   	.cfi_startproc
+> > > +#ifdef CONFIG_X86_CET
+> > > +	endbr64
+> > > +#endif
 
-> Earlycon support is identical to S3C2410, but Apple SoCs also need
-> MMIO mapped as nGnRnE. This is handled generically for normal drivers
-> including the normal UART path here, but earlycon uses fixmap and
-> runs before that scaffolding is ready.
->
-> Since this is the only case where we need this fix, it makes more
-> sense to do it here in the UART driver instead of introducing a
-> whole fdt nonposted-mmio resolver just for earlycon/fixmap.
->
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+You can hide this ifdeffery in a macro and have
 
-This is as elegant as it gets!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+	ENDBR64
 
-Yours,
-Linus Walleij
+at the callsite and define
+
+.macro ENDBR64
+#ifdef CONFIG_X86_CET
+	endbr64
+#endif
+.endm
+
+or so, perhaps. Ditto for endbr32.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
