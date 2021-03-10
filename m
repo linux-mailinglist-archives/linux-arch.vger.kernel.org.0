@@ -2,594 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A90233427D
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Mar 2021 17:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57839334313
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Mar 2021 17:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbhCJQIS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Mar 2021 11:08:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32597 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231366AbhCJQHx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 10 Mar 2021 11:07:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615392472;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wwqCL6H+HM08BHCgZ4DC+BceT0Qg6nOXC1UpDSTMfWw=;
-        b=JgWhbdMTGOLU4QL40QVc6yG3kePepaATNYpG7bx5db8Jv4VR3OBEpRXjU1M7ForATjyXJu
-        c/oqzITFFSpn2FAAgtKyLAxeyfmyVX4sEX4K7SiixQJglf8Liy5QTd8/m6KPzYU+/mE5Mv
-        0+svPEvD9R+XZ/NZkQjOyXF3oydsXao=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-437-7UM2jHn1PfyXuzufMal6dw-1; Wed, 10 Mar 2021 11:07:46 -0500
-X-MC-Unique: 7UM2jHn1PfyXuzufMal6dw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 940AB100B3A3;
-        Wed, 10 Mar 2021 16:07:40 +0000 (UTC)
-Received: from [10.36.112.107] (ovpn-112-107.ams2.redhat.com [10.36.112.107])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 489415C1A1;
-        Wed, 10 Mar 2021 16:07:26 +0000 (UTC)
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
-References: <20210308164520.18323-1-david@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Subject: Re: [PATCH RFCv2] mm/madvise: introduce MADV_POPULATE_(READ|WRITE) to
- prefault/prealloc memory
-Message-ID: <468358b0-0e79-13e6-ad8b-2b002aec9793@redhat.com>
-Date:   Wed, 10 Mar 2021 17:07:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
-MIME-Version: 1.0
-In-Reply-To: <20210308164520.18323-1-david@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S231496AbhCJQbp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Mar 2021 11:31:45 -0500
+Received: from mga02.intel.com ([134.134.136.20]:45617 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229929AbhCJQbO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 10 Mar 2021 11:31:14 -0500
+IronPort-SDR: O+2BDfhOaY7LywffPWYNpgu2tMmA4pbKlhFf58iOxIlm0u7GlzS5G0PYLMyO48LbnGfQrZdOSf
+ HTsOk6OKVzYQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="175610436"
+X-IronPort-AV: E=Sophos;i="5.81,237,1610438400"; 
+   d="scan'208";a="175610436"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 08:31:12 -0800
+IronPort-SDR: ipDL9XX35VKOh4+Lhm8L7k1nDMppJNh3MBeQ3WlpL5xuG97wsMmGGAK77PRHyjShX4DMseODnm
+ dK3zDEWEoPEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,237,1610438400"; 
+   d="scan'208";a="403738730"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Mar 2021 08:31:12 -0800
+Received: from orsmsx606.amr.corp.intel.com (10.22.229.19) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Wed, 10 Mar 2021 08:31:11 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2
+ via Frontend Transport; Wed, 10 Mar 2021 08:31:11 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2106.2; Wed, 10 Mar 2021 08:31:10 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RaFrWkImRfprdxiko8cCEHSYrqGZENhUGbaLTbKkkZvPOTZ4Vzlmc+y9K4Gysb4VadABcPg5R/FhE2QaXogodDIPPazPFKL195vclp3TjYRF/ufNfapq69j8mt6O+de7UwgVHU0Tz4nY2U8ObrSMXCeLSQtlk3KeZmw7lagLfdjMk3cEIrWOJsK37rMnzdo1zclZRxYvZvHN/bDsaSDpU19ExilghSqDFSOfeneHTxUfF5BQqq/ERH2u9fNjMGrJegV9oXmUqNCOkZD3MJVmGvkcPRA5FS3R6gEDIMZphCOE8OYUJAAlq5JmRN+ihQdAMlHnfx7atORSWp3urz5NYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NXWQIcDm4DWuLOSplYrhE6SsPuVEiTIWJO/5Z7rxLwM=;
+ b=NEIMvv3Y9rQ0JfRlE0AtdO7WT/FHx7/Rhkmf/5hYfsgvOpzTwZ/pkA0r1R+Sbp3AeMxKFnDjnP6ksDjIzG1+c40Yhnc2jQXBuALVaWn3Vtb10VIo5E3A9tM1ORQ5yG4VeaWdlDRTvzyZZw0SAkGFyzZfSlqBSy3JipwQsWhg+X3z7Uf/eLSBsS1pcvchjKeorUNeeji6bbi+3f/3yTXjI0p9yUn9+LbYJzFNWe5O76D/ZtDifBcrOnDdR3xGIQhRDpYpkiD4CnF2CPeunybfl5TjVI7rwbSbTfVBG2wQSANwKLLJ2mshbpw/BG85odO/cx62DwTaVQnAxWaO89MFww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NXWQIcDm4DWuLOSplYrhE6SsPuVEiTIWJO/5Z7rxLwM=;
+ b=xPi5vvoow9oJZXHdukWJrfLyN6nXuetT/wL0n/9f4hjmcY1YP5FOK0ZaNva7a/N/oQC5ZjHVHCutinSH5aEgqINhq4V+5s7ugZ/LxEgnx2lat0wLNEo4TySzeOuUot0JmgLEAGFdthm4gTVw38WNJQhwAUbCYvgYu6bXGneloMI=
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by PH0PR11MB5205.namprd11.prod.outlook.com (2603:10b6:510:3d::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.19; Wed, 10 Mar
+ 2021 16:31:07 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::78e6:b455:ce90:fcb0]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::78e6:b455:ce90:fcb0%6]) with mapi id 15.20.3912.029; Wed, 10 Mar 2021
+ 16:31:07 +0000
+From:   "Bae, Chang Seok" <chang.seok.bae@intel.com>
+To:     Borislav Petkov <bp@suse.de>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Dave Martin <Dave.Martin@arm.com>,
+        Jann Horn <jannh@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "carlos@redhat.com" <carlos@redhat.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v6 1/6] uapi: Define the aux vector AT_MINSIGSTKSZ
+Thread-Topic: [PATCH v6 1/6] uapi: Define the aux vector AT_MINSIGSTKSZ
+Thread-Index: AQHXDSqNBLUvGhvL40KOmwSMZEutdKpvgmGAgA340wA=
+Date:   Wed, 10 Mar 2021 16:31:07 +0000
+Message-ID: <96967F18-2856-46AE-A2AB-A36BBBCD999C@intel.com>
+References: <20210227165911.32757-1-chang.seok.bae@intel.com>
+ <20210227165911.32757-2-chang.seok.bae@intel.com>
+ <20210301190909.GF32622@zn.tnic>
+In-Reply-To: <20210301190909.GF32622@zn.tnic>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3608.120.23.2.4)
+authentication-results: suse.de; dkim=none (message not signed)
+ header.d=none;suse.de; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [73.189.248.82]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fb518002-1018-4b01-ff2c-08d8e3e1e82e
+x-ms-traffictypediagnostic: PH0PR11MB5205:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <PH0PR11MB520507918657639227879CC5D8919@PH0PR11MB5205.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GPObIGWuyOtY5ADKbXLoaVAwOFY0wFlmSqoslZH/TYaPHbG8ye0rR6mSN6Stg7V6djLEgXH/cIk4ijeP146R4LpG2c0inQR5Z/hp3iYoTVEQi3zh+KT7CpVqM6qk7P1oeJAq9gRFAQ8qlZNZhp/r1IVbeynyJidG1xlrBgsqTaQ2VwEp6IlbGScaePVk4yGtHXqFe+PXzrRLBN7ho1k2qAmvQbVGtqBxmk2nvRpg4+MoD0lKLIZAJh56Aq7NOR9Yqi5N50RvtHxZOTz0GrSsUxyf+5/LPf5a7EpEY8qZAvppELRgQHU8DNkd++ErsbPV6ihjmGwKuKTD/p5PgqRY2iSzW7JIIG+yybGvnC54rq3VRfPLe6kuaJSqCpOuQQ59RpA1ZqKCOD4eJ8UNBt6qAiDCMNGKuB3FSVEo8b/rTVM3jv//m8xKz+0Y5d6OSmu7pptOzUpInmsPoZRnl3PF2wwMzwNaueHAcPXuF6e+8HNictL25bjn2W5Dp7S2F11VHEg2Fhni7tz3d1rJoXzGwye1Qctasq3Y6ajGGnn+2O9X0RMXT9JdL7QwmiKRO7Hprm9dLiZCtMmnOl1XSuswEQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39860400002)(396003)(366004)(136003)(376002)(7416002)(53546011)(186003)(6512007)(316002)(33656002)(36756003)(26005)(71200400001)(66556008)(64756008)(76116006)(66446008)(2906002)(4326008)(8676002)(66476007)(6486002)(54906003)(66946007)(8936002)(478600001)(5660300002)(6506007)(6916009)(4744005)(86362001)(2616005)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?NzZKR21CZFRxcXdIbmVlbnFhN0Q0YkloY2pQL2doenR5QjJaL2dacHhtNENw?=
+ =?utf-8?B?NU5zTVRBWmtLa3ZKR1lSMEtRMjB0Ym5xeDVTVGoyenlrY0JyTE10ZnF6SmQ4?=
+ =?utf-8?B?SnV0YTBadHdvdGx2eWhGeVlXT2tSQzVFb01zcjUzK3V2MlRSRVJNbDZoZEp2?=
+ =?utf-8?B?OEJkb2ttR2NkTGM1L0ZXQ1huUzhwOGwwb214OFYzVU5laVlRYXhPdkJTSElw?=
+ =?utf-8?B?Mm4vclhudTFCdnMyV0pvaUl3WkhRc1p2eVpaZ1dabjZwUnpIQ2xSTk9iTjFV?=
+ =?utf-8?B?TVRUTXN3OC9LNUR3aTJxN2I1bjBpVWdteklIelRjY05CTE5RU2FTUTBuMys3?=
+ =?utf-8?B?RDJMdXVSZXp4WkFSV05uTDFTZ29KVVlIVWdoMEVpSlJyTEZtcGxBK3hwTSth?=
+ =?utf-8?B?aUVyWWNRMnhUVGhkcUt2dHF0Y3d4SThQYm1tL2R4MWdVbHR0SkRsdCtsTEhW?=
+ =?utf-8?B?eDU1Wk9jZERxcHZiYUZTNEZndXd0Q2FTaHZtaTB0TWJLVVQ0WWxqT2EzTUls?=
+ =?utf-8?B?KzdiWkdvRk9xeUtnNlhtUjdiUzY4Yyt2eUI1QWZ4SEYvRGtPcHYvL01uTklz?=
+ =?utf-8?B?WWNqQWdRL1M1MlJkb25ab3FtS3lyeVhDelVsaTVua085c05TRHlVZmNCSkNa?=
+ =?utf-8?B?TUhabUorVVJ6dzZvdE9XYWNyUkNNRDVEdUdoaXc1QlkvTGVhbkZEMkxLcXJz?=
+ =?utf-8?B?QllVUHg1SjJ3Rm5Fa1MvYy9MZ21hczBmVERzRVFVUktKK0NiUkRtb3BhOXI5?=
+ =?utf-8?B?dFVPQWwzQUF6SVhNTlNpOTdydXlxdk5qekZOV2hnWFQzMmNaK1RhMndqVnFR?=
+ =?utf-8?B?cmIvWEhhT09uU3FpMlBmNlNSOStOTnhjRFRlaGROeXFPWGpUZlpVd3ljcUtl?=
+ =?utf-8?B?eGtidlF4YjhseGZhdGJkYXhYS3Y0aXZJOTBNNmUrS1JjdmN5eTBPazR6UFMy?=
+ =?utf-8?B?T24xTVU3YS8zaDI3Wm93c3NSS1Z0NmtNVTJBNjRwcE5ETndnSHhLaW5sMXBv?=
+ =?utf-8?B?Q0RtV0tWM2VWb3pXcER5ZkROemp5SHo2dmNJRE1TTjZrdjgyN0VBRi81Qlpn?=
+ =?utf-8?B?bjMzOUZOaXUzREQvVEl6eEJZR04zTFF4OUMzRHd4OG5TMTZNb0ZLYTVIZXRT?=
+ =?utf-8?B?cmNSbFVOTHlYbGFOUE9XOUpZR0ROeTdpanZXUE9uZm9pV0V2LzNLc0dYZVdV?=
+ =?utf-8?B?QWpEUkdYSTlCL1FhR3dkOWZBOW1LbE12RTM3NU5aQ3REVG45Q0FWanlETFZW?=
+ =?utf-8?B?cFNrYXo2RkdkNDExYUF6WDBRUXhYSmZkckw2V2dqL2FabnZtUXQveDNZb2c1?=
+ =?utf-8?B?Um1KZVNuYmltRmhyTE1uR05Kdnh2L0o2NU9EZmtIV05raVg4ODlaUGdYcTZF?=
+ =?utf-8?B?ek4yaStkMGhFNEorY2tCeCtHOEJFMzU5K2JaVDVDTm5ucUsva1lFVVhINkVr?=
+ =?utf-8?B?cVJhWmpHZG0vZ285L0tzbVZqNUc4a29WVmZvdm01Y05yS1RKYy9SajJmREhV?=
+ =?utf-8?B?SUxxckhvelY4bGl1ZjdpYytTUklzZm1iRExlUGVvQ1BvQkFQaHVPY29uc2R4?=
+ =?utf-8?B?cTc3NjdZSzhVcWFXVzJGczN0eHdjcDk5QXg4azJNUW8rdU8wZVdJaFhRZlBt?=
+ =?utf-8?B?WFZqVkJQdEU2eTNnUEQwbEJrQVJWUWxPL2w1eEYzUU9MeDlBbjNCdmlCd2Fh?=
+ =?utf-8?B?T0llQXRTWFRQSWpQcUJFYlJOTk8wbzZDZFhNbFVQMFFYRWthaUFnNHcwRS8r?=
+ =?utf-8?Q?MyAfz/Lz67vyVzjbi1VH0OvtOqvEwlWydqy4QVP?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <736B0DA35C39D149A198CC07660B2446@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb518002-1018-4b01-ff2c-08d8e3e1e82e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2021 16:31:07.3355
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2huCZJ87xIM/9EjXeE+NTwoXfg6msLz1v+2ePtpx/w7DrbR4i8AvJ1MmZh+wyvy4tPexwUJgr1C+Dv5uweTMW1AiLGNwAKtO3AAflAwe6Uw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5205
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 08.03.21 17:45, David Hildenbrand wrote:
-> I. Background: Sparse Memory Mappings
-> 
-> When we manage sparse memory mappings dynamically in user space - also
-> sometimes involving MAP_NORESERVE - we want to dynamically populate/
-> discard memory inside such a sparse memory region. Example users are
-> hypervisors (especially implementing memory ballooning or similar
-> technologies like virtio-mem) and memory allocators. In addition, we want
-> to fail in a nice way (instead of generating SIGBUS) if populating does not
-> succeed because we are out of backend memory (which can happen easily with
-> file-based mappings, especially tmpfs and hugetlbfs).
-> 
-> While MADV_DONTNEED, MADV_REMOVE and FALLOC_FL_PUNCH_HOLE allow for
-> reliably discarding memory, there is no generic approach to populate
-> page tables and preallocate memory.
-> 
-> Although mmap() supports MAP_POPULATE, it is not applicable to the concept
-> of sparse memory mappings, where we want to do populate/discard
-> dynamically and avoid expensive/problematic remappings. In addition,
-> we never actually report errors during the final populate phase - it is
-> best-effort only.
-> 
-> fallocate() can be used to preallocate file-based memory and fail in a safe
-> way. However, it cannot really be used for any private mappings on
-> anonymous files via memfd due to COW semantics. In addition, fallocate()
-> does not actually populate page tables, so we still always get
-> pagefaults on first access - which is sometimes undesired (i.e., real-time
-> workloads) and requires real prefaulting of page tables, not just a
-> preallocation of backend storage. There might be interesting use cases
-> for sparse memory regions along with mlockall(MCL_ONFAULT) which
-> fallocate() cannot satisfy as it does not prefault page tables.
-> 
-> II. On preallcoation/prefaulting from user space
-> 
-> Because we don't have a proper interface, what applications
-> (like QEMU and databases) end up doing is touching (i.e., reading+writing
-> one byte to not overwrite existing data) all individual pages.
-> 
-> However, that approach
-> 1) Can result in wear on storage backing, because we end up writing
->     and thereby dirtying each page --- i.e., disks or pmem.
-> 2) Can result in mmap_sem contention when prefaulting via multiple
->     threads.
-> 3) Requires expensive signal handling, especially to catch SIGBUS in case
->     of hugetlbfs/shmem/file-backed memory. For example, this is
->     problematic in hypervisors like QEMU where SIGBUS handlers might already
->     be used by other subsystems concurrently to e.g, handle hardware errors.
->     "Simply" doing preallocation concurrently from other thread is not that
->     easy.
-> 
-> III. On MADV_WILLNEED
-> 
-> Extending MADV_WILLNEED is not an option because
-> 1. It would change the semantics: "Expect access in the near future." and
->     "might be a good idea to read some pages" vs. "Definitely populate/
->     preallocate all memory and definitely fail on errors.".
-> 2. Existing users (like virtio-balloon in QEMU when deflating the balloon)
->     don't want populate/prealloc semantics. They treat this rather as a hint
->     to give a little performance boost without too much overhead - and don't
->     expect that a lot of memory might get consumed or a lot of time
->     might be spent.
-> 
-> IV. MADV_POPULATE_READ and MADV_POPULATE_WRITE
-> 
-> Let's introduce MADV_POPULATE_READ and MADV_POPULATE_WRITE with the
-> following semantics:
-> 1. MADV_POPULATE_READ can be used to preallocate backend memory and
->     prefault page tables just like manually reading each individual page.
->     This will not break any COW mappings -- e.g., it will populate the
->     shared zeropage when applicable.
-> 2. If MADV_POPULATE_READ succeeds, all page tables have been populated
->     (prefaulted) readable once.
-> 3. MADV_POPULATE_WRITE can be used to preallocate backend memory and
->     prefault page tables just like manually writing (or
->     reading+writing) each individual page. This will break any COW
->     mappings -- e.g., the shared zeropage is never populated.
-> 4. If MADV_POPULATE_WRITE succeeds, all page tables have been populated
->     (prefaulted) writable once.
-> 5. MADV_POPULATE_READ and MADV_POPULATE_WRITE cannot be applied to special
->     mappings marked with VM_PFNMAP and VM_IO. Also, proper access
->     permissions (e.g., PROT_READ, PROT_WRITE) are required. If any such
->     mapping is encountered, madvise() fails with -EINVAL.
-> 6. If MADV_POPULATE_READ or MADV_POPULATE_WRITE fails, some page tables
->     might have been populated. In that case, madvise() fails with
->     -ENOMEM.
-> 7. MADV_POPULATE_READ and MADV_POPULATE_WRITE will ignore any poisoned
->     pages in the range.
-> 8. Similar to MAP_POPULATE, MADV_POPULATE_READ and MADV_POPULATE_WRITE
->      cannot protect from the OOM (Out Of Memory) handler killing the
->      process.
-> 
-> While the use case for MADV_POPULATE_WRITE is fairly obvious (i.e.,
-> preallocate memory and prefault page tables for VMs), there are valid use
-> cases for MADV_POPULATE_READ:
-> 1. Efficiently populate page tables with zero pages (i.e., shared
->     zeropage). This is necessary when using userfaultfd() WP (Write-Protect
->     to properly catch all modifications within a mapping: for
->     write-protection to be effective for a virtual address, there has to be
->     a page already mapped -- even if it's the shared zeropage.
-> 2. Pre-read a whole mapping from backend storage without marking it
->     dirty, such that eviction won't have to write it back. If no backend
->     memory has been allocated yet, allocate the backend memory. Helpful
->     when preallocating/prefaulting a file stored on disk without having
->     to writeback each and every page on eviction.
-> 
-> Although sparse memory mappings are the primary use case, this will
-> also be useful for ordinary preallocations where MAP_POPULATE is not
-> desired especially in QEMU, where users can trigger preallocation of
-> guest RAM after the mapping was created.
-> 
-> Looking at the history, MADV_POPULATE was already proposed in 2013 [1],
-> however, the main motivation back than was performance improvements
-> (which should also still be the case, but it is a secondary concern).
-> 
-> V. Single-threaded performance comparison
-> 
-> There is a performance benefit when using POPULATE_READ / POPULATE_WRITE
-> already when only using a single thread to do prefaulting/preallocation. As
-> we have less pagefaults for huge pages, the performance benefit is
-> negligible with small mappings.
-> 
-> Using fallocate() to preallocate shared files is the fastest approach,
-> however as discussed, we get pagefaults at runtime on actual access
-> which might or might not be relevant depending on the actual use case.
-> 
-> Average across 10 iterations each:
-> ==================================================
-> 2 MiB MAP_PRIVATE:
-> **************************************************
-> Anon 4 KiB     : Read           :     0.117 ms
-> Anon 4 KiB     : Write          :     0.240 ms
-> Anon 4 KiB     : Read+Write     :     0.386 ms
-> Anon 4 KiB     : POPULATE_READ  :     0.063 ms
-> Anon 4 KiB     : POPULATE_WRITE :     0.163 ms
-> Memfd 4 KiB    : Read           :     0.077 ms
-> Memfd 4 KiB    : Write          :     0.375 ms
-> Memfd 4 KiB    : Read+Write     :     0.464 ms
-> Memfd 4 KiB    : POPULATE_READ  :     0.080 ms
-> Memfd 4 KiB    : POPULATE_WRITE :     0.301 ms
-> Memfd 2 MiB    : Read           :     0.042 ms
-> Memfd 2 MiB    : Write          :     0.032 ms
-> Memfd 2 MiB    : Read+Write     :     0.032 ms
-> Memfd 2 MiB    : POPULATE_READ  :     0.031 ms
-> Memfd 2 MiB    : POPULATE_WRITE :     0.032 ms
-> tmpfs          : Read           :     0.086 ms
-> tmpfs          : Write          :     0.351 ms
-> tmpfs          : Read+Write     :     0.427 ms
-> tmpfs          : POPULATE_READ  :     0.041 ms
-> tmpfs          : POPULATE_WRITE :     0.298 ms
-> file           : Read           :     0.077 ms
-> file           : Write          :     0.368 ms
-> file           : Read+Write     :     0.466 ms
-> file           : POPULATE_READ  :     0.079 ms
-> file           : POPULATE_WRITE :     0.303 ms
-> **************************************************
-> 2 MiB MAP_SHARED:
-> **************************************************
-> Memfd 4 KiB    : Read           :     0.418 ms
-> Memfd 4 KiB    : Write          :     0.367 ms
-> Memfd 4 KiB    : Read+Write     :     0.428 ms
-> Memfd 4 KiB    : POPULATE_READ  :     0.347 ms
-> Memfd 4 KiB    : POPULATE_WRITE :     0.286 ms
-> Memfd 4 KiB    : FALLOCATE      :     0.140 ms
-> Memfd 2 MiB    : Read           :     0.031 ms
-> Memfd 2 MiB    : Write          :     0.030 ms
-> Memfd 2 MiB    : Read+Write     :     0.030 ms
-> Memfd 2 MiB    : POPULATE_READ  :     0.030 ms
-> Memfd 2 MiB    : POPULATE_WRITE :     0.030 ms
-> Memfd 2 MiB    : FALLOCATE      :     0.030 ms
-> tmpfs          : Read           :     0.434 ms
-> tmpfs          : Write          :     0.367 ms
-> tmpfs          : Read+Write     :     0.435 ms
-> tmpfs          : POPULATE_READ  :     0.349 ms
-> tmpfs          : POPULATE_WRITE :     0.291 ms
-> tmpfs          : FALLOCATE      :     0.144 ms
-> file           : Read           :     0.423 ms
-> file           : Write          :     0.367 ms
-> file           : Read+Write     :     0.432 ms
-> file           : POPULATE_READ  :     0.351 ms
-> file           : POPULATE_WRITE :     0.290 ms
-> file           : FALLOCATE      :     0.144 ms
-> hugetlbfs      : Read           :     0.032 ms
-> hugetlbfs      : Write          :     0.030 ms
-> hugetlbfs      : Read+Write     :     0.031 ms
-> hugetlbfs      : POPULATE_READ  :     0.030 ms
-> hugetlbfs      : POPULATE_WRITE :     0.030 ms
-> hugetlbfs      : FALLOCATE      :     0.030 ms
-> **************************************************
-> 4096 MiB MAP_PRIVATE:
-> **************************************************
-> Anon 4 KiB     : Read           :   237.099 ms
-> Anon 4 KiB     : Write          :   708.062 ms
-> Anon 4 KiB     : Read+Write     :  1057.147 ms
-> Anon 4 KiB     : POPULATE_READ  :   124.942 ms
-> Anon 4 KiB     : POPULATE_WRITE :   575.082 ms
-> Memfd 4 KiB    : Read           :   237.593 ms
-> Memfd 4 KiB    : Write          :   984.245 ms
-> Memfd 4 KiB    : Read+Write     :  1149.859 ms
-> Memfd 4 KiB    : POPULATE_READ  :   166.066 ms
-> Memfd 4 KiB    : POPULATE_WRITE :   856.914 ms
-> Memfd 2 MiB    : Read           :   352.202 ms
-> Memfd 2 MiB    : Write          :   352.029 ms
-> Memfd 2 MiB    : Read+Write     :   352.198 ms
-> Memfd 2 MiB    : POPULATE_READ  :   351.033 ms
-> Memfd 2 MiB    : POPULATE_WRITE :   351.181 ms
-> tmpfs          : Read           :   230.796 ms
-> tmpfs          : Write          :   936.138 ms
-> tmpfs          : Read+Write     :  1065.565 ms
-> tmpfs          : POPULATE_READ  :    80.823 ms
-> tmpfs          : POPULATE_WRITE :   803.829 ms
-> file           : Read           :   231.055 ms
-> file           : Write          :   980.575 ms
-> file           : Read+Write     :  1208.742 ms
-> file           : POPULATE_READ  :   167.808 ms
-> file           : POPULATE_WRITE :   859.270 ms
-> **************************************************
-> 4096 MiB MAP_SHARED:
-> **************************************************
-> Memfd 4 KiB    : Read           :  1095.979 ms
-> Memfd 4 KiB    : Write          :   958.777 ms
-> Memfd 4 KiB    : Read+Write     :  1120.127 ms
-> Memfd 4 KiB    : POPULATE_READ  :   937.689 ms
-> Memfd 4 KiB    : POPULATE_WRITE :   811.594 ms
-> Memfd 4 KiB    : FALLOCATE      :   309.438 ms
-> Memfd 2 MiB    : Read           :   353.045 ms
-> Memfd 2 MiB    : Write          :   353.356 ms
-> Memfd 2 MiB    : Read+Write     :   352.829 ms
-> Memfd 2 MiB    : POPULATE_READ  :   351.954 ms
-> Memfd 2 MiB    : POPULATE_WRITE :   351.840 ms
-> Memfd 2 MiB    : FALLOCATE      :   351.274 ms
-> tmpfs          : Read           :  1096.222 ms
-> tmpfs          : Write          :   980.651 ms
-> tmpfs          : Read+Write     :  1114.757 ms
-> tmpfs          : POPULATE_READ  :   939.181 ms
-> tmpfs          : POPULATE_WRITE :   817.255 ms
-> tmpfs          : FALLOCATE      :   312.521 ms
-> file           : Read           :  1112.135 ms
-> file           : Write          :   967.688 ms
-> file           : Read+Write     :  1111.620 ms
-> file           : POPULATE_READ  :   951.175 ms
-> file           : POPULATE_WRITE :   818.380 ms
-> file           : FALLOCATE      :   313.008 ms
-> hugetlbfs      : Read           :   353.710 ms
-> hugetlbfs      : Write          :   353.309 ms
-> hugetlbfs      : Read+Write     :   353.280 ms
-> hugetlbfs      : POPULATE_READ  :   353.138 ms
-> hugetlbfs      : POPULATE_WRITE :   352.620 ms
-> hugetlbfs      : FALLOCATE      :   352.204 ms
-> **************************************************
-> 
-> [1] https://lkml.org/lkml/2013/6/27/698
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Minchan Kim <minchan@kernel.org>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Dave Hansen <dave.hansen@intel.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Rik van Riel <riel@surriel.com>
-> Cc: Michael S. Tsirkin <mst@redhat.com>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Richard Henderson <rth@twiddle.net>
-> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> Cc: Matt Turner <mattst88@gmail.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Rolf Eike Beer <eike-kernel@sf-tec.de>
-> Cc: linux-alpha@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linux-xtensa@linux-xtensa.org
-> Cc: linux-arch@vger.kernel.org
-> Cc: Linux API <linux-api@vger.kernel.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
-> 
-> RFC -> RFCv2:
-> - Fix re-locking (-> set "locked = 1;")
-> - Don't mimic MAP_POPULATE semantics:
-> --> Explicit READ/WRITE request instead of selecting it automatically,
->      which makes it more generic and better suited for some use cases (e.g., we
->      usually want to prefault shmem writable)
-> --> Require proper access permissions
-> - Introduce and use faultin_vma_page_range()
-> --> Properly handle HWPOISON pages (FOLL_HWPOISON)
-> --> Require proper access permissions (!FOLL_FORCE)
-> - Let faultin_vma_page_range() check for compatible mappings/permissions
-> - Extend patch description and add some performance numbers
-> 
-> ---
->   arch/alpha/include/uapi/asm/mman.h     |  3 ++
->   arch/mips/include/uapi/asm/mman.h      |  3 ++
->   arch/parisc/include/uapi/asm/mman.h    |  3 ++
->   arch/xtensa/include/uapi/asm/mman.h    |  3 ++
->   include/uapi/asm-generic/mman-common.h |  3 ++
->   mm/gup.c                               | 54 ++++++++++++++++++++
->   mm/internal.h                          |  3 ++
->   mm/madvise.c                           | 70 ++++++++++++++++++++++++++
->   8 files changed, 142 insertions(+)
-> 
-> diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/asm/mman.h
-> index a18ec7f63888..56b4ee5a6c9e 100644
-> --- a/arch/alpha/include/uapi/asm/mman.h
-> +++ b/arch/alpha/include/uapi/asm/mman.h
-> @@ -71,6 +71,9 @@
->   #define MADV_COLD	20		/* deactivate these pages */
->   #define MADV_PAGEOUT	21		/* reclaim these pages */
->   
-> +#define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
-> +#define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
-> +
->   /* compatibility flags */
->   #define MAP_FILE	0
->   
-> diff --git a/arch/mips/include/uapi/asm/mman.h b/arch/mips/include/uapi/asm/mman.h
-> index 57dc2ac4f8bd..40b210c65a5a 100644
-> --- a/arch/mips/include/uapi/asm/mman.h
-> +++ b/arch/mips/include/uapi/asm/mman.h
-> @@ -98,6 +98,9 @@
->   #define MADV_COLD	20		/* deactivate these pages */
->   #define MADV_PAGEOUT	21		/* reclaim these pages */
->   
-> +#define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
-> +#define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
-> +
->   /* compatibility flags */
->   #define MAP_FILE	0
->   
-> diff --git a/arch/parisc/include/uapi/asm/mman.h b/arch/parisc/include/uapi/asm/mman.h
-> index ab78cba446ed..9e3c010c0f61 100644
-> --- a/arch/parisc/include/uapi/asm/mman.h
-> +++ b/arch/parisc/include/uapi/asm/mman.h
-> @@ -52,6 +52,9 @@
->   #define MADV_COLD	20		/* deactivate these pages */
->   #define MADV_PAGEOUT	21		/* reclaim these pages */
->   
-> +#define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
-> +#define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
-> +
->   #define MADV_MERGEABLE   65		/* KSM may merge identical pages */
->   #define MADV_UNMERGEABLE 66		/* KSM may not merge identical pages */
->   
-> diff --git a/arch/xtensa/include/uapi/asm/mman.h b/arch/xtensa/include/uapi/asm/mman.h
-> index e5e643752947..b3a22095371b 100644
-> --- a/arch/xtensa/include/uapi/asm/mman.h
-> +++ b/arch/xtensa/include/uapi/asm/mman.h
-> @@ -106,6 +106,9 @@
->   #define MADV_COLD	20		/* deactivate these pages */
->   #define MADV_PAGEOUT	21		/* reclaim these pages */
->   
-> +#define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
-> +#define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
-> +
->   /* compatibility flags */
->   #define MAP_FILE	0
->   
-> diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-> index f94f65d429be..1567a3294c3d 100644
-> --- a/include/uapi/asm-generic/mman-common.h
-> +++ b/include/uapi/asm-generic/mman-common.h
-> @@ -72,6 +72,9 @@
->   #define MADV_COLD	20		/* deactivate these pages */
->   #define MADV_PAGEOUT	21		/* reclaim these pages */
->   
-> +#define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
-> +#define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
-> +
->   /* compatibility flags */
->   #define MAP_FILE	0
->   
-> diff --git a/mm/gup.c b/mm/gup.c
-> index e40579624f10..80fad8578066 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -1403,6 +1403,60 @@ long populate_vma_page_range(struct vm_area_struct *vma,
->   				NULL, NULL, locked);
->   }
->   
-> +/*
-> + * faultin_vma_page_range() - populate (prefault) page tables inside the
-> + *			      given VMA range readable/writable
-> + *
-> + * This takes care of mlocking the pages, too, if VM_LOCKED is set.
-> + *
-> + * @vma: target vma
-> + * @start: start address
-> + * @end: end address
-> + * @write: whether to prefault readable or writable
-> + * @locked: whether the mmap_lock is still held
-> + *
-> + * Returns either number of processed pages in the vma, or a negative error
-> + * code on error (see __get_user_pages()).
-> + *
-> + * vma->vm_mm->mmap_lock must be held. The range must be page-aligned and
-> + * covered by the VMA.
-> + *
-> + * If @locked is NULL, it may be held for read or write and will be unperturbed.
-> + *
-> + * If @locked is non-NULL, it must held for read only and may be released.  If
-> + * it's released, *@locked will be set to 0.
-> + */
-> +long faultin_vma_page_range(struct vm_area_struct *vma, unsigned long start,
-> +			    unsigned long end, bool write, int *locked)
-> +{
-> +	struct mm_struct *mm = vma->vm_mm;
-> +	unsigned long nr_pages = (end - start) / PAGE_SIZE;
-> +	int gup_flags;
-> +
-> +	VM_BUG_ON(!PAGE_ALIGNED(start));
-> +	VM_BUG_ON(!PAGE_ALIGNED(end));
-> +	VM_BUG_ON_VMA(start < vma->vm_start, vma);
-> +	VM_BUG_ON_VMA(end > vma->vm_end, vma);
-> +	mmap_assert_locked(mm);
-> +
-> +	/*
-> +	 * FOLL_HWPOISON: Return -EHWPOISON instead of -EFAULT when we hit
-> +	 *		  a poisoned page.
-> +	 * FOLL_POPULATE: Always populate memory with VM_LOCKONFAULT.
-> +	 * !FOLL_FORCE: Require proper access permissions.
-> +	 */
-> +	gup_flags = FOLL_TOUCH | FOLL_POPULATE | FOLL_MLOCK | FOLL_HWPOISON;
-> +	if (write)
-> +		gup_flags |= FOLL_WRITE;
-> +
-> +	/*
-> +	 * See check_vma_flags(): Will return -EFAULT on incompatible mappings
-> +	 * or with insufficient permissions.
-> +	 */
-> +	return __get_user_pages(mm, start, nr_pages, gup_flags,
-> +				NULL, NULL, locked);
-> +}
-> +
->   /*
->    * __mm_populate - populate and/or mlock pages within a range of address space.
->    *
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 9902648f2206..a5c4ed23b1db 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -340,6 +340,9 @@ void __vma_unlink_list(struct mm_struct *mm, struct vm_area_struct *vma);
->   #ifdef CONFIG_MMU
->   extern long populate_vma_page_range(struct vm_area_struct *vma,
->   		unsigned long start, unsigned long end, int *nonblocking);
-> +extern long faultin_vma_page_range(struct vm_area_struct *vma,
-> +				   unsigned long start, unsigned long end,
-> +				   bool write, int *nonblocking);
->   extern void munlock_vma_pages_range(struct vm_area_struct *vma,
->   			unsigned long start, unsigned long end);
->   static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index df692d2e35d4..fbb5e10b5550 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -53,6 +53,8 @@ static int madvise_need_mmap_write(int behavior)
->   	case MADV_COLD:
->   	case MADV_PAGEOUT:
->   	case MADV_FREE:
-> +	case MADV_POPULATE_READ:
-> +	case MADV_POPULATE_WRITE:
->   		return 0;
->   	default:
->   		/* be safe, default to 1. list exceptions explicitly */
-> @@ -822,6 +824,65 @@ static long madvise_dontneed_free(struct vm_area_struct *vma,
->   		return -EINVAL;
->   }
->   
-> +static long madvise_populate(struct vm_area_struct *vma,
-> +			     struct vm_area_struct **prev,
-> +			     unsigned long start, unsigned long end,
-> +			     int behavior)
-> +{
-> +	const bool write = behavior == MADV_POPULATE_WRITE;
-> +	struct mm_struct *mm = vma->vm_mm;
-> +	unsigned long tmp_end;
-> +	int locked = 1;
-> +	long pages;
-> +
-> +	*prev = vma;
-> +
-> +	while (start < end) {
-> +		/*
-> +		 * We might have temporarily dropped the lock. For example,
-> +		 * our VMA might have been split.
-> +		 */
-> +		if (!vma || start >= vma->vm_end) {
-> +			vma = find_vma(mm, start);
-> +			if (!vma)
-> +				return -ENOMEM;
-
-Looking again, I think I'll have to do
-
-"if (!vma || start < vma->vm_start)"
-
-here to properly catch all holes.
-
-Will do more testing with different mmap layouts.
-
--- 
-Thanks,
-
-David / dhildenb
-
+T24gTWFyIDEsIDIwMjEsIGF0IDExOjA5LCBCb3Jpc2xhdiBQZXRrb3YgPGJwQHN1c2UuZGU+IHdy
+b3RlOg0KPiBPbiBTYXQsIEZlYiAyNywgMjAyMSBhdCAwODo1OTowNkFNIC0wODAwLCBDaGFuZyBT
+LiBCYWUgd3JvdGU6DQo+PiANCj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL3VhcGkvbGludXgvYXV4
+dmVjLmggYi9pbmNsdWRlL3VhcGkvbGludXgvYXV4dmVjLmgNCj4+IGluZGV4IGFiZTVmMmI2NTgx
+Yi4uMTViZTk4Yzc1MTc0IDEwMDY0NA0KPj4gLS0tIGEvaW5jbHVkZS91YXBpL2xpbnV4L2F1eHZl
+Yy5oDQo+PiArKysgYi9pbmNsdWRlL3VhcGkvbGludXgvYXV4dmVjLmgNCj4+IEBAIC0zMyw1ICsz
+Myw4IEBADQo+PiANCj4+ICNkZWZpbmUgQVRfRVhFQ0ZOICAzMQkvKiBmaWxlbmFtZSBvZiBwcm9n
+cmFtICovDQo+PiANCj4+ICsjaWZuZGVmIEFUX01JTlNJR1NUS1NaDQo+PiArI2RlZmluZSBBVF9N
+SU5TSUdTVEtTWgk1MQkvKiBzdGFjayBuZWVkZWQgZm9yIHNpZ25hbCBkZWxpdmVyeSAgKi8NCj4g
+DQo+IEkga25vdyBnbGliYydzIGNvbW1lbnQgc2F5cyBhIHNpbWlsYXIgdGhpbmcgYnV0IHRoZSBj
+b3JyZWN0IHRoaW5nIHRvIHNheQ0KPiBoZXJlIHNob3VsZCBiZSAibWluaW1hbCBzdGFjayBzaXpl
+IGZvciBzaWduYWwgZGVsaXZlcnkiIG9yIHNvLiBFdmVuIHRoZQ0KPiB2YXJpYWJsZSBuYW1lIGFs
+bHVkZXMgdG8gdGhhdCB0b28uDQoNClllYWgsIHlvdeKAmXJlIHJpZ2h0Lg0KDQpUaGFua3MsDQpD
+aGFuZw==
