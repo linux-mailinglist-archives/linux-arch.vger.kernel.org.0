@@ -2,113 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5540833335F
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Mar 2021 03:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A691933373E
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Mar 2021 09:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbhCJCyw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Mar 2021 21:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S229544AbhCJI1h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Mar 2021 03:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbhCJCyl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Mar 2021 21:54:41 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6201FC061760
-        for <linux-arch@vger.kernel.org>; Tue,  9 Mar 2021 18:54:30 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id j12so10931705pfj.12
-        for <linux-arch@vger.kernel.org>; Tue, 09 Mar 2021 18:54:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YBxARwCSnvP/MPs48fuZLZiuQ0mo/90Nc+1kxldAXvY=;
-        b=mgPjitELPEW/P5qmpcLVfVoA0D6sHZbihRmkHn2T6K9SBG4Ha/LJO/otu10peacMhr
-         LuL0fRZdQLwP7M9wEDrTpBtLj8K8tudZNldX6kZxxwpgoOUxKITkywSl2jzbDDQ+LlzB
-         pAfWpubnARGarXUbdueVAOGEZZwgdwg38kjUrvpm8UlRyhUcHqhOLh/KTMLubon7Kb4n
-         SDBddPEB0kPjpJ49JkLLyjwoA35CMpN5HTgdd0VAg06YzUz21lg3gZ8E6/aU6kC48WxF
-         Iv+Fz7wjENWwmVReUBuT2iyV4vRqfYBaKfQMpvTe0Mkt1040FtnGxaGlyV9nF1Rgq6o4
-         4rKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=YBxARwCSnvP/MPs48fuZLZiuQ0mo/90Nc+1kxldAXvY=;
-        b=tNnG0Rf6LJ2+8kcumzD13SEz0WrJnFkfz0WavtXUV0KNQvdf+Yb1nLnRplnxKwncDC
-         9fcFwxBiu5NZRzf1mGYk59Czv+7Gzi1+ED38wV8Foa3ZdVWyEyCNFLi81Vm/avXh5kXp
-         1uupV9ztejZUXDZdnphwb7GVd8P5+oX7R/bQ1Ny9zW6ZofP7bxIQ4/iYmjzOefG3xz7Y
-         ral+H8btfxufEd0LQ/HDAAp0CBS2sV5C2qUVKc6ZaIURnwkMsYC7H1NsuQTLPFP+IXKY
-         Mq0+r+uoQtL5FbjYoTui+iz5uKClTILYMacisOvM1AU/47QwgA5QjBw3IgoZo46lREGv
-         46NQ==
-X-Gm-Message-State: AOAM532BbTvOjNU5UmmnRolgyRN1syLF6WpkVaprH7dfqL1aVTQwGc2j
-        fLvmafOXa/+JPbaCeUPtzLedRg==
-X-Google-Smtp-Source: ABdhPJw9djyUJKGf+CL7k+IvlqXvhXmzFMbBeiDmFCthoAskqXlsDt4pmgMsgrh8nJwik7OuxQCByg==
-X-Received: by 2002:a62:b410:0:b029:1a4:7868:7e4e with SMTP id h16-20020a62b4100000b02901a478687e4emr891769pfn.62.1615344869693;
-        Tue, 09 Mar 2021 18:54:29 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id v1sm4250210pjt.1.2021.03.09.18.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Mar 2021 18:54:28 -0800 (PST)
-Date:   Tue, 09 Mar 2021 18:54:28 -0800 (PST)
-X-Google-Original-Date: Tue, 09 Mar 2021 18:54:03 PST (-0800)
-Subject:     Re: [PATCH 0/3] Move kernel mapping outside the linear mapping
-In-Reply-To: <20210225080453.1314-1-alex@ghiti.fr>
-CC:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        aryabinin@virtuozzo.com, glider@google.com, dvyukov@google.com,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org, alex@ghiti.fr
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     alex@ghiti.fr
-Message-ID: <mhng-cf5d29ec-e941-4579-8c42-2c11799a8f2f@penguin>
-Mime-Version: 1.0 (MHng)
+        with ESMTP id S229516AbhCJI1F (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Mar 2021 03:27:05 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCC2C06174A;
+        Wed, 10 Mar 2021 00:27:05 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 1091B3FA1B;
+        Wed, 10 Mar 2021 08:26:56 +0000 (UTC)
+Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
+ MMIO as non-posted
+To:     Rob Herring <robh@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
+        Will Deacon <will@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        DTML <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210304213902.83903-1-marcan@marcan.st>
+ <20210304213902.83903-13-marcan@marcan.st>
+ <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
+ <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st>
+ <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
+ <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
+ <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
+ <20210308211306.GA2920998@robh.at.kernel.org>
+ <CAK8P3a2GfzUevuQNZeQarJ4GNFsuDj0g7oFuN940Hdaw06YJbA@mail.gmail.com>
+ <CAL_JsqK8FagJyQVyG5DAocUjLGZT91b6NzDm_DNMW1hdCz51Xg@mail.gmail.com>
+ <c5693760-3b18-e8f1-18b6-bae42c05d329@marcan.st>
+ <CAL_Jsq+VLLPa98iaTvOkK-tjuBH4qY7FNEGtufYGv7rXAbwegQ@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <332c0b9a-dcfd-4c3b-9038-47cbda90eb3f@marcan.st>
+Date:   Wed, 10 Mar 2021 17:26:54 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAL_Jsq+VLLPa98iaTvOkK-tjuBH4qY7FNEGtufYGv7rXAbwegQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 25 Feb 2021 00:04:50 PST (-0800), alex@ghiti.fr wrote:
-> I decided to split sv48 support in small series to ease the review.
->
-> This patchset pushes the kernel mapping (modules and BPF too) to the last
-> 4GB of the 64bit address space, this allows to:
-> - implement relocatable kernel (that will come later in another
->   patchset) that requires to move the kernel mapping out of the linear
->   mapping to avoid to copy the kernel at a different physical address.
-> - have a single kernel that is not relocatable (and then that avoids the
->   performance penalty imposed by PIC kernel) for both sv39 and sv48.
->
-> The first patch implements this behaviour, the second patch introduces a
-> documentation that describes the virtual address space layout of the 64bit
-> kernel and the last patch is taken from my sv48 series where I simply added
-> the dump of the modules/kernel/BPF mapping.
->
-> I removed the Reviewed-by on the first patch since it changed enough from
-> last time and deserves a second look.
->
-> Alexandre Ghiti (3):
->   riscv: Move kernel mapping outside of linear mapping
->   Documentation: riscv: Add documentation that describes the VM layout
->   riscv: Prepare ptdump for vm layout dynamic addresses
->
->  Documentation/riscv/index.rst       |  1 +
->  Documentation/riscv/vm-layout.rst   | 61 ++++++++++++++++++++++
->  arch/riscv/boot/loader.lds.S        |  3 +-
->  arch/riscv/include/asm/page.h       | 18 ++++++-
->  arch/riscv/include/asm/pgtable.h    | 37 +++++++++----
->  arch/riscv/include/asm/set_memory.h |  1 +
->  arch/riscv/kernel/head.S            |  3 +-
->  arch/riscv/kernel/module.c          |  6 +--
->  arch/riscv/kernel/setup.c           |  3 ++
->  arch/riscv/kernel/vmlinux.lds.S     |  3 +-
->  arch/riscv/mm/fault.c               | 13 +++++
->  arch/riscv/mm/init.c                | 81 +++++++++++++++++++++++------
->  arch/riscv/mm/kasan_init.c          |  9 ++++
->  arch/riscv/mm/physaddr.c            |  2 +-
->  arch/riscv/mm/ptdump.c              | 67 +++++++++++++++++++-----
->  15 files changed, 258 insertions(+), 50 deletions(-)
->  create mode 100644 Documentation/riscv/vm-layout.rst
+On 10/03/2021 07.06, Rob Herring wrote:
+>> My main concern here is that this creates an inconsistency in the device
+>> tree representation that only works because PCI drivers happen not to
+>> use these code paths. Logically, having "nonposted-mmio" above the PCI
+>> controller would imply that it applies to that bus too. Sure, it doesn't
+>> matter for Linux since it is ignored, but this creates an implicit
+>> exception that PCI buses always use posted modes.
+> 
+> We could be stricter that "nonposted-mmio" must be in the immediate
+> parent. That's kind of in line with how addressing already works.
+> Every level has to have 'ranges' to be an MMIO address, and the
+> address cell size is set by the immediate parent.
+> 
+>> Then if a device comes along that due to some twisted fabric logic needs
+>> nonposted nGnRnE mappings for PCIe (even though the actual PCIe ops will
+>> end up posted at the bus anyway)... how do we represent that? Declare
+>> that another "nonposted-mmio" on the PCIe bus means "no, really, use
+>> nonposted mmio for this"?
+> 
+> If we're strict, yes. The PCI host bridge would have to have "nonposted-mmio".
 
-This generally looks good, but I'm getting a bunch of checkpatch warnings and 
-some conflicts, do you mind fixing those up (and including your other kasan 
-patch, as that's likely to conflict)?
+Works for me; then let's just make it non-recursive.
+
+Do you think we can get rid of the Apple-only optimization if we do 
+this? It would mean only looking at the parent during address 
+resolution, not recursing all the way to the top, so presumably the 
+performance impact would be quite minimal.
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
