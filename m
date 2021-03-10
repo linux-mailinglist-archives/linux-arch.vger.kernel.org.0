@@ -2,30 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A7E334B14
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Mar 2021 23:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD76334BAE
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Mar 2021 23:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233992AbhCJWF7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Mar 2021 17:05:59 -0500
-Received: from mga04.intel.com ([192.55.52.120]:5154 "EHLO mga04.intel.com"
+        id S229771AbhCJWjk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Mar 2021 17:39:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58734 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233240AbhCJWFw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 10 Mar 2021 17:05:52 -0500
-IronPort-SDR: avlu+sgM8xZZpuL80rR8qc9j+7onPdgOfP5jocdlTXQEeWhMEuexOBCRV+zDkLevtCQHmYOqXw
- YfiGriaYvxgw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="186193996"
-X-IronPort-AV: E=Sophos;i="5.81,238,1610438400"; 
-   d="scan'208";a="186193996"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 14:05:49 -0800
-IronPort-SDR: F6uL6gHRCkotCKXyTnfnY7IZBKpPBKWR0DfwlYZEukM0g4Ap2lIWsVlAcAI0E5QpXtb6PdmjvL
- FME80cmHZpsA==
-X-IronPort-AV: E=Sophos;i="5.81,238,1610438400"; 
-   d="scan'208";a="410368528"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 14:05:48 -0800
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        id S229574AbhCJWjd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 10 Mar 2021 17:39:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9440864FAD;
+        Wed, 10 Mar 2021 22:39:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615415973;
+        bh=/46Jnxa7GWN9GVouuxzmFfEuec3FnGDcKOJciHOHIws=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RQVhIJPvxkTfFjVIPmqOKZDu2W4Nh4bCefUys/PH4bS7IXAKLvuIGeL9yhBYKdFP5
+         lksoks30ZjiCv8ilR8KqVY0PdBbpG0g0TNcfZHYk6hwqtefg7gFEAY87X7yt8mhdol
+         QJ2wOLKtIHhcKvcevYhkWhkRCocXou2LN0rCUhk4Zwgl/MnwRYDLqQcrzt1v6lVUMJ
+         Lb+tXWCBqUqRthdAEPSfKPBq6I4FMl068ag+2rhpdfTX7oWzWweApQZ/DYZhaSw0nL
+         DnvADmCkmQa8QE8r3T5gVPAbIyjReGYNV0r37VQZ0hTFu5acOicAQLQ41bdECi4BzT
+         VOU+cnaHYAdzQ==
+Date:   Thu, 11 Mar 2021 00:39:09 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -52,45 +53,52 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH v22 8/8] x86/vdso: Add ENDBR64 to __vdso_sgx_enter_enclave
-Date:   Wed, 10 Mar 2021 14:05:19 -0800
-Message-Id: <20210310220519.16811-9-yu-cheng.yu@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20210310220519.16811-1-yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v22 8/8] x86/vdso: Add ENDBR64 to __vdso_sgx_enter_enclave
+Message-ID: <YElKjT2v628tidE/@kernel.org>
 References: <20210310220519.16811-1-yu-cheng.yu@intel.com>
+ <20210310220519.16811-9-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210310220519.16811-9-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When CET is enabled, __vdso_sgx_enter_enclave() needs an endbr64
-in the beginning of the function.
+On Wed, Mar 10, 2021 at 02:05:19PM -0800, Yu-cheng Yu wrote:
+> When CET is enabled, __vdso_sgx_enter_enclave() needs an endbr64
+> in the beginning of the function.
 
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
----
- arch/x86/entry/vdso/vsgx.S | 3 +++
- 1 file changed, 3 insertions(+)
+OK.
 
-diff --git a/arch/x86/entry/vdso/vsgx.S b/arch/x86/entry/vdso/vsgx.S
-index 86a0e94f68df..a70d4d09f713 100644
---- a/arch/x86/entry/vdso/vsgx.S
-+++ b/arch/x86/entry/vdso/vsgx.S
-@@ -27,6 +27,9 @@
- SYM_FUNC_START(__vdso_sgx_enter_enclave)
- 	/* Prolog */
- 	.cfi_startproc
-+#ifdef CONFIG_X86_CET
-+	endbr64
-+#endif
- 	push	%rbp
- 	.cfi_adjust_cfa_offset	8
- 	.cfi_rel_offset		%rbp, 0
--- 
-2.21.0
+What you should do is to explain what it does and why it's needed.
 
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+>  arch/x86/entry/vdso/vsgx.S | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/x86/entry/vdso/vsgx.S b/arch/x86/entry/vdso/vsgx.S
+> index 86a0e94f68df..a70d4d09f713 100644
+> --- a/arch/x86/entry/vdso/vsgx.S
+> +++ b/arch/x86/entry/vdso/vsgx.S
+> @@ -27,6 +27,9 @@
+>  SYM_FUNC_START(__vdso_sgx_enter_enclave)
+>  	/* Prolog */
+>  	.cfi_startproc
+> +#ifdef CONFIG_X86_CET
+> +	endbr64
+> +#endif
+>  	push	%rbp
+>  	.cfi_adjust_cfa_offset	8
+>  	.cfi_rel_offset		%rbp, 0
+> -- 
+> 2.21.0
+> 
+> 
+
+/Jarkko
