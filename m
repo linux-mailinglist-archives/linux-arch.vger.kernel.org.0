@@ -2,107 +2,190 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A691933373E
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Mar 2021 09:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBB4333A4D
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Mar 2021 11:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbhCJI1h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Mar 2021 03:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S232428AbhCJKmW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Mar 2021 05:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbhCJI1F (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Mar 2021 03:27:05 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCC2C06174A;
-        Wed, 10 Mar 2021 00:27:05 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1091B3FA1B;
-        Wed, 10 Mar 2021 08:26:56 +0000 (UTC)
-Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
- MMIO as non-posted
-To:     Rob Herring <robh@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        DTML <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210304213902.83903-1-marcan@marcan.st>
- <20210304213902.83903-13-marcan@marcan.st>
- <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
- <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st>
- <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
- <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
- <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
- <20210308211306.GA2920998@robh.at.kernel.org>
- <CAK8P3a2GfzUevuQNZeQarJ4GNFsuDj0g7oFuN940Hdaw06YJbA@mail.gmail.com>
- <CAL_JsqK8FagJyQVyG5DAocUjLGZT91b6NzDm_DNMW1hdCz51Xg@mail.gmail.com>
- <c5693760-3b18-e8f1-18b6-bae42c05d329@marcan.st>
- <CAL_Jsq+VLLPa98iaTvOkK-tjuBH4qY7FNEGtufYGv7rXAbwegQ@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <332c0b9a-dcfd-4c3b-9038-47cbda90eb3f@marcan.st>
-Date:   Wed, 10 Mar 2021 17:26:54 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <CAL_Jsq+VLLPa98iaTvOkK-tjuBH4qY7FNEGtufYGv7rXAbwegQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S232387AbhCJKlv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Mar 2021 05:41:51 -0500
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDD5C06174A
+        for <linux-arch@vger.kernel.org>; Wed, 10 Mar 2021 02:41:51 -0800 (PST)
+Received: by mail-qv1-xf4a.google.com with SMTP id h12so12359011qvm.9
+        for <linux-arch@vger.kernel.org>; Wed, 10 Mar 2021 02:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=CXDGXPLv4zBuXju/CY+pJKsC5gho63hQizGsKGKZIlo=;
+        b=s8QQMW2LW/UVYVavbb8dseqF5ki4rCkHLP26JLijl8mjtrb2/K9xsn1pRuxTKkCI4A
+         WGyH7yeNfeUXgTkHZRLKKruj4dvA8zqeAw8g9DEKxuPrIaGljnESUIgjFlOM+bCXz4tn
+         c9bFCJzuS2ISr9LWzCXLNx+Wcm+zwSSUKC22+8M7ayZ+u40rra70SNM/qZC8LntQ8M+x
+         LfbEJhGnYNOCsOoYIBKkY22AYCekDUpQLyniHJOCTXmbR2NjqIWEI/Q7LXtMgkQdT9PA
+         pBMfOEGap4OIRTFxX57bGhAxB9ytAltLxLxoTVs8/M5KXEc0dKDW6iG4+bhnhlJ2Cq5H
+         n5tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=CXDGXPLv4zBuXju/CY+pJKsC5gho63hQizGsKGKZIlo=;
+        b=YIHRuv4VX6NiOHFub+JUAJlEj789SGvV+JCXXEPC+Hl8wUT6asQgEwv62FeMySDr7F
+         ojqmMgHSGjFaxRcx3yQeiugWKphiDUL3RDz527V7h6hNAcsrIo26XVBcIO+g48po5HRM
+         8A4TEKwd0UeGPp3pdwizsAYgCvYBbARnIuBVN43WSkFHR5ZhVS3tovn5m8Qt/hw+/5dA
+         cRPbizyyV1hqLTxyDZdN6Sr++CtQEP1Dtp28YQuU9DZuhVC/mrioyPR0KerzPSr5Vvdu
+         RsgiLe2OUu6lFQGxh9Z2tuGe32mVrDgisrwtVRDpfvy0pYLnnE2xfG5QNL93tlvyEHHh
+         L4dQ==
+X-Gm-Message-State: AOAM533JlFkGp0Yt4GQT5X2RM7rYA0FLTqAEGEQl+HMgKtFMXA4712vT
+        gSD+mBAHo4+h+90A0edqcGa3Ja/saA==
+X-Google-Smtp-Source: ABdhPJyUi3y7lpUQnvLHzVb9XkNgXOybwzuc9DsNWma/PHqm9SowojQnqTCgLARpnGj2C/XeILIJohc7NA==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:e995:ac0b:b57c:49a4])
+ (user=elver job=sendgmr) by 2002:a05:6214:2262:: with SMTP id
+ gs2mr2155838qvb.32.1615372910698; Wed, 10 Mar 2021 02:41:50 -0800 (PST)
+Date:   Wed, 10 Mar 2021 11:41:31 +0100
+Message-Id: <20210310104139.679618-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
+Subject: [PATCH RFC v2 0/8] Add support for synchronous signals on perf events
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, peterz@infradead.org,
+        alexander.shishkin@linux.intel.com, acme@kernel.org,
+        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
+        namhyung@kernel.org, tglx@linutronix.de
+Cc:     glider@google.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
+        christian@brauner.io, dvyukov@google.com, jannh@google.com,
+        axboe@kernel.dk, mascasa@google.com, pcc@google.com,
+        irogers@google.com, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/03/2021 07.06, Rob Herring wrote:
->> My main concern here is that this creates an inconsistency in the device
->> tree representation that only works because PCI drivers happen not to
->> use these code paths. Logically, having "nonposted-mmio" above the PCI
->> controller would imply that it applies to that bus too. Sure, it doesn't
->> matter for Linux since it is ignored, but this creates an implicit
->> exception that PCI buses always use posted modes.
-> 
-> We could be stricter that "nonposted-mmio" must be in the immediate
-> parent. That's kind of in line with how addressing already works.
-> Every level has to have 'ranges' to be an MMIO address, and the
-> address cell size is set by the immediate parent.
-> 
->> Then if a device comes along that due to some twisted fabric logic needs
->> nonposted nGnRnE mappings for PCIe (even though the actual PCIe ops will
->> end up posted at the bus anyway)... how do we represent that? Declare
->> that another "nonposted-mmio" on the PCIe bus means "no, really, use
->> nonposted mmio for this"?
-> 
-> If we're strict, yes. The PCI host bridge would have to have "nonposted-mmio".
+The perf subsystem today unifies various tracing and monitoring
+features, from both software and hardware. One benefit of the perf
+subsystem is automatically inheriting events to child tasks, which
+enables process-wide events monitoring with low overheads. By default
+perf events are non-intrusive, not affecting behaviour of the tasks
+being monitored.
 
-Works for me; then let's just make it non-recursive.
+For certain use-cases, however, it makes sense to leverage the
+generality of the perf events subsystem and optionally allow the tasks
+being monitored to receive signals on events they are interested in.
+This patch series adds the option to synchronously signal user space on
+events.
 
-Do you think we can get rid of the Apple-only optimization if we do 
-this? It would mean only looking at the parent during address 
-resolution, not recursing all the way to the top, so presumably the 
-performance impact would be quite minimal.
+To better support process-wide synchronous self-monitoring, without
+events propagating to children that do not share the current process's
+shared environment, two pre-requisite patches are added to optionally
+restrict inheritance to CLONE_THREAD, and remove events on exec (without
+affecting the parent).
+
+Examples how to use these features can be found in the two kselftests at
+the end of the series. The kselftests verify and stress test the basic
+functionality.
+
+The discussion at [1] led to the changes proposed in this series. The
+approach taken in patch "Add support for SIGTRAP on perf events" to use
+'event_limit' to trigger the signal was kindly suggested by Peter
+Zijlstra in [2].
+
+[1] https://lore.kernel.org/lkml/CACT4Y+YPrXGw+AtESxAgPyZ84TYkNZdP0xpocX2jwVAbZD=-XQ@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/YBv3rAT566k+6zjg@hirez.programming.kicks-ass.net/ 
+
+Motivation and example uses:
+
+1. 	Our immediate motivation is low-overhead sampling-based race
+	detection for user space [3]. By using perf_event_open() at
+	process initialization, we can create hardware
+	breakpoint/watchpoint events that are propagated automatically
+	to all threads in a process. As far as we are aware, today no
+	existing kernel facility (such as ptrace) allows us to set up
+	process-wide watchpoints with minimal overheads (that are
+	comparable to mprotect() of whole pages).
+
+	[3] https://llvm.org/devmtg/2020-09/slides/Morehouse-GWP-Tsan.pdf 
+
+2.	Other low-overhead error detectors that rely on detecting
+	accesses to certain memory locations or code, process-wide and
+	also only in a specific set of subtasks or threads.
+
+Other ideas for use-cases we found interesting, but should only
+illustrate the range of potential to further motivate the utility (we're
+sure there are more):
+
+3.	Code hot patching without full stop-the-world. Specifically, by
+	setting a code breakpoint to entry to the patched routine, then
+	send signals to threads and check that they are not in the
+	routine, but without stopping them further. If any of the
+	threads will enter the routine, it will receive SIGTRAP and
+	pause.
+
+4.	Safepoints without mprotect(). Some Java implementations use
+	"load from a known memory location" as a safepoint. When threads
+	need to be stopped, the page containing the location is
+	mprotect()ed and threads get a signal. This could be replaced with
+	a watchpoint, which does not require a whole page nor DTLB
+	shootdowns.
+
+5.	Threads receiving signals on performance events to
+	throttle/unthrottle themselves.
+
+6.	Tracking data flow globally.
+
+---
+v2:
+* Patch "Support only inheriting events if cloned with CLONE_THREAD"
+  added to series.
+* Patch "Add support for event removal on exec" added to series.
+* Patch "Add kselftest for process-wide sigtrap handling" added to
+  series.
+* Patch "Add kselftest for remove_on_exec" added to series.
+* Implicitly restrict inheriting events if sigtrap, but the child was
+  cloned with CLONE_CLEAR_SIGHAND, because it is not generally safe if
+  the child cleared all signal handlers to continue sending SIGTRAP.
+* Various minor fixes (see details in patches).
+
+v1: https://lkml.kernel.org/r/20210223143426.2412737-1-elver@google.com
+
+Marco Elver (8):
+  perf/core: Apply PERF_EVENT_IOC_MODIFY_ATTRIBUTES to children
+  perf/core: Support only inheriting events if cloned with CLONE_THREAD
+  perf/core: Add support for event removal on exec
+  signal: Introduce TRAP_PERF si_code and si_perf to siginfo
+  perf/core: Add support for SIGTRAP on perf events
+  perf/core: Add breakpoint information to siginfo on SIGTRAP
+  selftests/perf: Add kselftest for process-wide sigtrap handling
+  selftests/perf: Add kselftest for remove_on_exec
+
+ arch/m68k/kernel/signal.c                     |   3 +
+ arch/x86/kernel/signal_compat.c               |   5 +-
+ fs/signalfd.c                                 |   4 +
+ include/linux/compat.h                        |   2 +
+ include/linux/perf_event.h                    |   5 +-
+ include/linux/signal.h                        |   1 +
+ include/uapi/asm-generic/siginfo.h            |   6 +-
+ include/uapi/linux/perf_event.h               |   5 +-
+ include/uapi/linux/signalfd.h                 |   4 +-
+ kernel/events/core.c                          | 130 ++++++++-
+ kernel/fork.c                                 |   2 +-
+ kernel/signal.c                               |  11 +
+ .../testing/selftests/perf_events/.gitignore  |   3 +
+ tools/testing/selftests/perf_events/Makefile  |   6 +
+ tools/testing/selftests/perf_events/config    |   1 +
+ .../selftests/perf_events/remove_on_exec.c    | 256 ++++++++++++++++++
+ tools/testing/selftests/perf_events/settings  |   1 +
+ .../selftests/perf_events/sigtrap_threads.c   | 202 ++++++++++++++
+ 18 files changed, 632 insertions(+), 15 deletions(-)
+ create mode 100644 tools/testing/selftests/perf_events/.gitignore
+ create mode 100644 tools/testing/selftests/perf_events/Makefile
+ create mode 100644 tools/testing/selftests/perf_events/config
+ create mode 100644 tools/testing/selftests/perf_events/remove_on_exec.c
+ create mode 100644 tools/testing/selftests/perf_events/settings
+ create mode 100644 tools/testing/selftests/perf_events/sigtrap_threads.c
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.30.1.766.gb4fecdf3b7-goog
+
