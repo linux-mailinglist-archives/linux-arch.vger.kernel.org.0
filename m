@@ -2,128 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB562337418
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Mar 2021 14:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CF133785D
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Mar 2021 16:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbhCKNfp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 Mar 2021 08:35:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43020 "EHLO mail.kernel.org"
+        id S234118AbhCKPpG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 Mar 2021 10:45:06 -0500
+Received: from mga04.intel.com ([192.55.52.120]:61146 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233603AbhCKNfX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 11 Mar 2021 08:35:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C174464FF5;
-        Thu, 11 Mar 2021 13:35:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615469722;
-        bh=6q4IiXUJWgYscOCHecS9Mt3djdFy8TY6aKd4onYASzw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UqYI40kpdj9pTyDaevY8Rj3aeYiZ42jbr3bj19Mi76nRVXy04kZ924TdIsyUPe5nI
-         kVHCtANhj9MAOhAsi4EcR9R2xtU4MvIMQr7ZTEzzjdilqv+4kCNlORUhtjd8pMR2TR
-         a5HSjhZpsqZyxNzVFKbM1y69DNNfFHM24NsdO67YBiYrU14vwxDLEm6ecS2AiOzBc9
-         4SaZgpwGtDHuQC9aKCe8UCl1mVfahUsXDBZvkbTfyKbiCpAGeKylgMr9UdZ6gr8xb+
-         GjGi8i8c01jNVRFO8iKW48+xTZ+NV+BcVcnm/aJ83vcD+4RmlPuxgYInkS79eYQnk7
-         IxUX0bVdkDD8A==
-Received: by mail-oi1-f174.google.com with SMTP id u198so18155082oia.4;
-        Thu, 11 Mar 2021 05:35:22 -0800 (PST)
-X-Gm-Message-State: AOAM532+Ces9QDIaU/LU6w45qWc3ktC+O6h9xmA/qhDkN8dL6z/uTpDG
-        dr3KBk9UwQU3d5GwGf+egq8FbHrimebEd9Ewrps=
-X-Google-Smtp-Source: ABdhPJxVF0HenIu8QBC6I7NhfOa4G3V0f41d1dKsWotCdWeJNJpyBNdwAHcVht7bLnu5j10LoEjZUejMgModqVzmgxA=
-X-Received: by 2002:aca:5e85:: with SMTP id s127mr6048962oib.67.1615469721794;
- Thu, 11 Mar 2021 05:35:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-13-marcan@marcan.st>
- <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
- <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st> <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
- <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
- <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
- <20210308211306.GA2920998@robh.at.kernel.org> <CAK8P3a2GfzUevuQNZeQarJ4GNFsuDj0g7oFuN940Hdaw06YJbA@mail.gmail.com>
- <CAL_JsqK8FagJyQVyG5DAocUjLGZT91b6NzDm_DNMW1hdCz51Xg@mail.gmail.com>
- <c5693760-3b18-e8f1-18b6-bae42c05d329@marcan.st> <CAL_Jsq+VLLPa98iaTvOkK-tjuBH4qY7FNEGtufYGv7rXAbwegQ@mail.gmail.com>
- <332c0b9a-dcfd-4c3b-9038-47cbda90eb3f@marcan.st> <CAL_Jsq+X7JPm-xrxmy5bGKSuLO59yk6S=EuXmdMn0FwhpZAD7A@mail.gmail.com>
- <CAK8P3a2HWbHc-aGHk792TVh6ea2j+aKswYrB6EBsjPA6fH1=xA@mail.gmail.com> <7ee4a1ac-9fd4-3eca-853d-d12a16ddbb60@marcan.st>
-In-Reply-To: <7ee4a1ac-9fd4-3eca-853d-d12a16ddbb60@marcan.st>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 11 Mar 2021 14:35:05 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1-7nybm5kRVN6WP-+0vy+TWzqHJsMXwz8QtH2jhW+1gQ@mail.gmail.com>
-Message-ID: <CAK8P3a1-7nybm5kRVN6WP-+0vy+TWzqHJsMXwz8QtH2jhW+1gQ@mail.gmail.com>
-Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
- MMIO as non-posted
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Rob Herring <robh@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S234096AbhCKPok (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 11 Mar 2021 10:44:40 -0500
+IronPort-SDR: qWK9aRE2TTZXTnoGQ6XadpIdaUrWHZIrBladi08rhh9Bhd46bi94+w+pNYdIORre8+gcMBXe4+
+ 4SNLXEpDnd0w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9920"; a="186305781"
+X-IronPort-AV: E=Sophos;i="5.81,241,1610438400"; 
+   d="scan'208";a="186305781"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 07:44:40 -0800
+IronPort-SDR: lVQmY3uuvk0SUoyAiiYU6+ijNeIsC7r6XEJxTl3KcWvFb7zk/HRdoWsUdZ7GfcLk9Ooudiw5o4
+ 51RFWl0wayEQ==
+X-IronPort-AV: E=Sophos;i="5.81,241,1610438400"; 
+   d="scan'208";a="404106966"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.103.95]) ([10.212.103.95])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 07:44:39 -0800
+Subject: Re: [PATCH v22 8/8] x86/vdso: Add ENDBR64 to __vdso_sgx_enter_enclave
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        DTML <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+References: <20210310220519.16811-1-yu-cheng.yu@intel.com>
+ <20210310220519.16811-9-yu-cheng.yu@intel.com> <YElKjT2v628tidE/@kernel.org>
+ <8b8efe44-b79f-ce29-ee28-066f88c93840@intel.com>
+ <YEmQJjwjs8UCEO2F@kernel.org>
+ <YEnX3Zn0FXPt7pcM@hirez.programming.kicks-ass.net>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <afd769ac-dd09-0c1f-1ffa-b8f68f48113f@intel.com>
+Date:   Thu, 11 Mar 2021 07:44:39 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
+MIME-Version: 1.0
+In-Reply-To: <YEnX3Zn0FXPt7pcM@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 1:11 PM Hector Martin <marcan@marcan.st> wrote:
-> On 11/03/2021 18.12, Arnd Bergmann wrote:
-> > On Wed, Mar 10, 2021 at 6:01 PM Rob Herring <robh@kernel.org> wrote:
-> >> On Wed, Mar 10, 2021 at 1:27 AM Hector Martin <marcan@marcan.st> wrote:
-> >>> Works for me; then let's just make it non-recursive.
-> >>>
-> >>> Do you think we can get rid of the Apple-only optimization if we do
-> >>> this? It would mean only looking at the parent during address
-> >>> resolution, not recursing all the way to the top, so presumably the
-> >>> performance impact would be quite minimal.
-> >
-> > Works for me.
->
-> Incidentally, even though it would now be unused, I'd like to keep the
-> apple,arm-platform compatible at this point; we've already been pretty
-> close to a use case for it, and I don't want to have to fall back to a
-> list of SoC compatibles if we ever need another quirk for all Apple ARM
-> SoCs (or break backwards compat). It doesn't really hurt to have it in
-> the binding and devicetrees, right?
+On 3/11/2021 12:42 AM, Peter Zijlstra wrote:
+> On Thu, Mar 11, 2021 at 05:36:06AM +0200, Jarkko Sakkinen wrote:
+>> Does it do any harm to put it there unconditionally?
+> 
+> Blows up your text footprint and I$ pressure. These instructions are 4
+> bytes each.
+> 
+> Aside from that, they're a NOP, so only consume front-end resources
+> (hopefully) on older CPUs and when IBT is disabled.
+> 
 
-Yes, keeping the compatible string is a good idea regardless.
+Thanks Peter.  I think probably we'll do the macro Boris suggested. 
+That takes care of the visual clutter, and eliminates the need of using 
+.byte when the assembler is outdated.
 
-> >> Yeah, that should be fine. I'd keep an IS_ENABLED() config check
-> >> though. Then I'll also know if anyone else needs this.
-> >
-> > Ok, makes sense.
-> >
-> > Conceptually, I'd like to then see a check that verifies that the
-> > property is only set for nodes whose parent also has it set, since
-> > that is how AXI defines it: A bus can wait for the ack from its
-> > child node, or it can acknowledge the write to its parent early.
-> > However, this breaks down as soon as a bus does the early ack:
-> > all its children by definition use posted writes (as seen by the
-> > CPU), even if they wait for stores that come from other masters.
-> >
-> > Does this make sense to you?
->
-> Makes sense. This shouldn't really be something the kernel concerns
-> itself with at runtime, just something for the dts linting, right?
->
-> I assume this isn't representable in json-schema, so it would presumably
-> need some ad-hoc validation code.
-
-Agreed, having a check in either dtc or expressed in the json scheme
-is better than a runtime check. I assume Rob would know how to best
-add such a check.
-
-     Arnd
+--
+Yu-cheng
