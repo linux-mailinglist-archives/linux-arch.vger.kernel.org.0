@@ -2,128 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EA1336ACA
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Mar 2021 04:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C952E336E0F
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Mar 2021 09:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbhCKDgj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Mar 2021 22:36:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51254 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229818AbhCKDgb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 10 Mar 2021 22:36:31 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D85C64E22;
-        Thu, 11 Mar 2021 03:36:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615433791;
-        bh=VU36+Oy9eNMQX1av5VV5rT/wzZmLW57dBFB+sUkXF4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e7M11Ykz/wwfbgjKNn5uhle8DDoJiLEl5wtNAzrhBK5zeTMiiIe70zX3rO1f+tMpn
-         EV8wPp3kqY/+Epphh1oW1a5Wg8muWy6V92Lc0VJ47G57DvHYoMIwrbmJC82GJh7K2K
-         xT3sFovM1zbQxp17qxWMUtcMUruA7l6KLd9nF5BCTc7IfAN0XDhrteiGRvWvEOECEo
-         GdnDEiGZfSEgrEWvKdvoj8OFJFrrbOLoTkSFI+bRru2BEB5IIeLYrjnJ4n4t0YTywG
-         EbYs1bSm7vsUntt8XSuaTBZJnaAe/AIFepL4WoJO8P7vVTqj3xFoBZZpl7lAUf19fm
-         z301GU9DwHQVw==
-Date:   Thu, 11 Mar 2021 05:36:06 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v22 8/8] x86/vdso: Add ENDBR64 to __vdso_sgx_enter_enclave
-Message-ID: <YEmQJjwjs8UCEO2F@kernel.org>
-References: <20210310220519.16811-1-yu-cheng.yu@intel.com>
- <20210310220519.16811-9-yu-cheng.yu@intel.com>
- <YElKjT2v628tidE/@kernel.org>
- <8b8efe44-b79f-ce29-ee28-066f88c93840@intel.com>
+        id S231464AbhCKImv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 11 Mar 2021 03:42:51 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:52491 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231234AbhCKImW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 Mar 2021 03:42:22 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MS3r9-1l9WAJ1WnL-00TVFD; Thu, 11 Mar 2021 09:42:20 +0100
+Received: by mail-oi1-f169.google.com with SMTP id d20so22318721oiw.10;
+        Thu, 11 Mar 2021 00:42:19 -0800 (PST)
+X-Gm-Message-State: AOAM532HYypQyDtHTT8ecNnNJRwiaKcAHhwsUnG7O+wqdE0UzDaVBwZQ
+        heMiY8w86sh8cZsmrGvdkaMYCI+4BzyXrPJdz0M=
+X-Google-Smtp-Source: ABdhPJw0KtsLD5mW4MfRrfYgVjcEGOdTXZu9D7NdBG3jZg8HvDppDRmR8vUGXG+YVlxNPnM5Hk4ZbDjA/u/ZDR28oc4=
+X-Received: by 2002:a05:6808:3d9:: with SMTP id o25mr5663752oie.4.1615452138884;
+ Thu, 11 Mar 2021 00:42:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b8efe44-b79f-ce29-ee28-066f88c93840@intel.com>
+References: <20210225080453.1314-1-alex@ghiti.fr> <20210225080453.1314-3-alex@ghiti.fr>
+ <5279e97c-3841-717c-2a16-c249a61573f9@redhat.com> <7d9036d9-488b-47cc-4673-1b10c11baad0@ghiti.fr>
+ <CAK8P3a3mVDwJG6k7PZEKkteszujP06cJf8Zqhq43F0rNsU=h4g@mail.gmail.com> <236a9788-8093-9876-a024-b0ad0d672c72@ghiti.fr>
+In-Reply-To: <236a9788-8093-9876-a024-b0ad0d672c72@ghiti.fr>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 11 Mar 2021 09:42:01 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1+vSoEBqHPzj9S07B7h-Xuwvccpsh1pnn+1xJmS3UdbA@mail.gmail.com>
+Message-ID: <CAK8P3a1+vSoEBqHPzj9S07B7h-Xuwvccpsh1pnn+1xJmS3UdbA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] Documentation: riscv: Add documentation that
+ describes the VM layout
+To:     Alexandre Ghiti <alex@ghiti.fr>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:QMP26k/nK+H+ZHkdP9mo8opGr8UAg8kFikYIqnkNzgShTT3VZEQ
+ hmFFyGu1QCvztiRcLVVERX21CltcD8gc5uiI+o6hIDusSopvhlPvTJcdQASD+tKJmJUW/M3
+ UHrVB7XCF7NA0ZKF1Y9gYUO5kg+DP9cr9yyBX0gdXU4JEHLAsX25dUL/kyGc+fnySst/YDt
+ jHbqlOI1jG6X88hNR5aCA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:RH4E7qcfGzs=:gfQ8It08fa6DbGyiO5hrLQ
+ QFcSFNT7b4lzc0lELnFdcphHKN2QBSHUuvKjGc9SRlBOKqyURmqy1wYSNfVf+/nvTgl3rhBTg
+ OpD1XeJyU08qKxhJw3NDZW1ebdGObjiOMDy94sjV7fKFEHlzuclCycyUqA6PzVNK+1QZTgiwg
+ IcRmiHpEywG+IoWay5/uN2pszOfLMXZTPXNoU69w6qXNLJom7NcbmtzXpaLLzKOvehwtnwbqx
+ bR111Ko3I9sXNW8HmhXVRaBBFNgXWOlpqkUyhtCz8cPDqiXST6YDPasQxJTEoKWV3nk8xKq79
+ ZCHeLUXIJ3/og/Z1HJ6xbrR6ltjOYx4Zus0WzUi9AkDm7uec8LfNC0KP3DtBXk+pQ9e+XOC9z
+ TkQ0FCV5Pn5ue2sH/xQOojYOOlHgLQ/M1FHRJAqkfulgDfSInnUCo1j5dm2ZyRM3PbS7pxvbC
+ X6ydWdsLRk+0ROHq6tStli4as8acJt2kE1ZCMJpVkiYNjNoXkJ1AW1UPjM/ZTLH9l6d/MZTar
+ 5hdfQDZAa4QSEg3sfnZGG8sXzGqAWk2dBVFOjFTFUtt
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 02:55:55PM -0800, Yu, Yu-cheng wrote:
-> On 3/10/2021 2:39 PM, Jarkko Sakkinen wrote:
-> > On Wed, Mar 10, 2021 at 02:05:19PM -0800, Yu-cheng Yu wrote:
-> > > When CET is enabled, __vdso_sgx_enter_enclave() needs an endbr64
-> > > in the beginning of the function.
-> > 
-> > OK.
-> > 
-> > What you should do is to explain what it does and why it's needed.
-> > 
-> 
-> The endbr marks a branch target.  Without the "no-track" prefix, if an
-> indirect call/jmp reaches a non-endbr opcode, a control-protection fault is
-> raised.  Usually endbr's are inserted by the compiler.  For assembly, these
-> have to be put in manually.  I will add this in the commit log if there is
-> another revision.  Thanks!
+On Wed, Mar 10, 2021 at 8:12 PM Alex Ghiti <alex@ghiti.fr> wrote:
+> Le 3/10/21 à 6:42 AM, Arnd Bergmann a écrit :
+> > On Thu, Feb 25, 2021 at 12:56 PM Alex Ghiti <alex@ghiti.fr> wrote:
+> >>
+> >> Le 2/25/21 à 5:34 AM, David Hildenbrand a écrit :
+> >>>                    |            |                  |         |> +
+> >>> ffffffc000000000 | -256    GB | ffffffc7ffffffff |   32 GB | kasan
+> >>>> +   ffffffcefee00000 | -196    GB | ffffffcefeffffff |    2 MB | fixmap
+> >>>> +   ffffffceff000000 | -196    GB | ffffffceffffffff |   16 MB | PCI io
+> >>>> +   ffffffcf00000000 | -196    GB | ffffffcfffffffff |    4 GB | vmemmap
+> >>>> +   ffffffd000000000 | -192    GB | ffffffdfffffffff |   64 GB |
+> >>>> vmalloc/ioremap space
+> >>>> +   ffffffe000000000 | -128    GB | ffffffff7fffffff |  126 GB |
+> >>>> direct mapping of all physical memory
+> >>>
+> >>> ^ So you could never ever have more than 126 GB, correct?
+> >>>
+> >>> I assume that's nothing new.
+> >>>
+> >>
+> >> Before this patch, the limit was 128GB, so in my sense, there is nothing
+> >> new. If ever we want to increase that limit, we'll just have to lower
+> >> PAGE_OFFSET, there is still some unused virtual addresses after kasan
+> >> for example.
+> >
+> > Linus Walleij is looking into changing the arm32 code to have the kernel
+> > direct map inside of the vmalloc area, which would be another place
+> > that you could use here. It would be nice to not have too many different
+> > ways of doing this, but I'm not sure how hard it would be to rework your
+> > code, or if there are any downsides of doing this.
+>
+> This was what my previous version did: https://lkml.org/lkml/2020/6/7/28.
+>
+> This approach was not welcomed very well and it fixed only the problem
+> of the implementation of relocatable kernel. The second issue I'm trying
+> to resolve here is to support both 3 and 4 level page tables using the
+> same kernel without being relocatable (which would introduce performance
+> penalty). I can't do it when the kernel mapping is in the vmalloc region
+> since vmalloc region relies on PAGE_OFFSET which is different on both 3
+> and 4 level page table and that would then require the kernel to be
+> relocatable.
 
-Thanks for the explanation. There is another revision, because this is
-lacking from the commit message.
+Ok, I see.
 
-Does it do any harm to put it there unconditionally?
+I suppose it might work if you moved the direct-map to the lowest
+address and the vmalloc area (incorporating the kernel mapping,
+modules, pio, and fixmap at fixed addresses) to the very top of the
+address space, but you probably already considered and rejected
+that for other reasons.
 
-> 
-> --
-> Yu-cheng
-> 
-> > > 
-> > > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> > > Cc: Andy Lutomirski <luto@kernel.org>
-> > > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > ---
-> > >   arch/x86/entry/vdso/vsgx.S | 3 +++
-> > >   1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/entry/vdso/vsgx.S b/arch/x86/entry/vdso/vsgx.S
-> > > index 86a0e94f68df..a70d4d09f713 100644
-> > > --- a/arch/x86/entry/vdso/vsgx.S
-> > > +++ b/arch/x86/entry/vdso/vsgx.S
-> > > @@ -27,6 +27,9 @@
-> > >   SYM_FUNC_START(__vdso_sgx_enter_enclave)
-> > >   	/* Prolog */
-> > >   	.cfi_startproc
-> > > +#ifdef CONFIG_X86_CET
-> > > +	endbr64
-> > > +#endif
-> > >   	push	%rbp
-> > >   	.cfi_adjust_cfa_offset	8
-> > >   	.cfi_rel_offset		%rbp, 0
-> > > -- 
-> > > 2.21.0
-> > > 
-> > > 
-> > 
-> > /Jarkko
-> > 
-> 
-> 
-
-/Jarkko
+         Arnd
