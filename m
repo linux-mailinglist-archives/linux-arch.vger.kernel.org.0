@@ -2,120 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C952E336E0F
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Mar 2021 09:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CC5336E11
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Mar 2021 09:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbhCKImv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 11 Mar 2021 03:42:51 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:52491 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbhCKImW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 Mar 2021 03:42:22 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MS3r9-1l9WAJ1WnL-00TVFD; Thu, 11 Mar 2021 09:42:20 +0100
-Received: by mail-oi1-f169.google.com with SMTP id d20so22318721oiw.10;
-        Thu, 11 Mar 2021 00:42:19 -0800 (PST)
-X-Gm-Message-State: AOAM532HYypQyDtHTT8ecNnNJRwiaKcAHhwsUnG7O+wqdE0UzDaVBwZQ
-        heMiY8w86sh8cZsmrGvdkaMYCI+4BzyXrPJdz0M=
-X-Google-Smtp-Source: ABdhPJw0KtsLD5mW4MfRrfYgVjcEGOdTXZu9D7NdBG3jZg8HvDppDRmR8vUGXG+YVlxNPnM5Hk4ZbDjA/u/ZDR28oc4=
-X-Received: by 2002:a05:6808:3d9:: with SMTP id o25mr5663752oie.4.1615452138884;
- Thu, 11 Mar 2021 00:42:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20210225080453.1314-1-alex@ghiti.fr> <20210225080453.1314-3-alex@ghiti.fr>
- <5279e97c-3841-717c-2a16-c249a61573f9@redhat.com> <7d9036d9-488b-47cc-4673-1b10c11baad0@ghiti.fr>
- <CAK8P3a3mVDwJG6k7PZEKkteszujP06cJf8Zqhq43F0rNsU=h4g@mail.gmail.com> <236a9788-8093-9876-a024-b0ad0d672c72@ghiti.fr>
-In-Reply-To: <236a9788-8093-9876-a024-b0ad0d672c72@ghiti.fr>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 11 Mar 2021 09:42:01 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1+vSoEBqHPzj9S07B7h-Xuwvccpsh1pnn+1xJmS3UdbA@mail.gmail.com>
-Message-ID: <CAK8P3a1+vSoEBqHPzj9S07B7h-Xuwvccpsh1pnn+1xJmS3UdbA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] Documentation: riscv: Add documentation that
- describes the VM layout
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     David Hildenbrand <david@redhat.com>,
+        id S231243AbhCKImv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 Mar 2021 03:42:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231309AbhCKIml (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 Mar 2021 03:42:41 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4976EC061574;
+        Thu, 11 Mar 2021 00:42:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iNur3LddLbqOxPZObj0ioFPvfinKVBSW9anyjtwfwJM=; b=WanEzgwFy9TFzNVXe3OsRG/IHe
+        +z77vFr5wAdeiwyeKU9/63vQ/AtB1LaHCbqMYn3iPc97V5JHDGCASbLctR3UyHWhTnuwKn5na5HUR
+        Z9dT+KOA47twNFbGCz71zvp8Cj6gGNJe2KKNKC6+zav92iIQuRujY2TNxTk2Syh2TYFau62sdkXb+
+        pk3BCo7z1N92aWL1Hl1qE1HtNE2PldWZYFdC6gLxu0LD15aklrkDWepqleY4zoMDzl32450+mUSfu
+        mqdu2B6R4AeSq5zUGU0gUy7y2gkjJCizQ21sbnDHpLBYjlnPckdtNBUofSO09gALBBqkpgJGGIFqG
+        KXKLP1xw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lKGtU-008ghN-MZ; Thu, 11 Mar 2021 08:42:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DF4D83010CF;
+        Thu, 11 Mar 2021 09:42:05 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D31EF299E3D08; Thu, 11 Mar 2021 09:42:05 +0100 (CET)
+Date:   Thu, 11 Mar 2021 09:42:05 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:QMP26k/nK+H+ZHkdP9mo8opGr8UAg8kFikYIqnkNzgShTT3VZEQ
- hmFFyGu1QCvztiRcLVVERX21CltcD8gc5uiI+o6hIDusSopvhlPvTJcdQASD+tKJmJUW/M3
- UHrVB7XCF7NA0ZKF1Y9gYUO5kg+DP9cr9yyBX0gdXU4JEHLAsX25dUL/kyGc+fnySst/YDt
- jHbqlOI1jG6X88hNR5aCA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:RH4E7qcfGzs=:gfQ8It08fa6DbGyiO5hrLQ
- QFcSFNT7b4lzc0lELnFdcphHKN2QBSHUuvKjGc9SRlBOKqyURmqy1wYSNfVf+/nvTgl3rhBTg
- OpD1XeJyU08qKxhJw3NDZW1ebdGObjiOMDy94sjV7fKFEHlzuclCycyUqA6PzVNK+1QZTgiwg
- IcRmiHpEywG+IoWay5/uN2pszOfLMXZTPXNoU69w6qXNLJom7NcbmtzXpaLLzKOvehwtnwbqx
- bR111Ko3I9sXNW8HmhXVRaBBFNgXWOlpqkUyhtCz8cPDqiXST6YDPasQxJTEoKWV3nk8xKq79
- ZCHeLUXIJ3/og/Z1HJ6xbrR6ltjOYx4Zus0WzUi9AkDm7uec8LfNC0KP3DtBXk+pQ9e+XOC9z
- TkQ0FCV5Pn5ue2sH/xQOojYOOlHgLQ/M1FHRJAqkfulgDfSInnUCo1j5dm2ZyRM3PbS7pxvbC
- X6ydWdsLRk+0ROHq6tStli4as8acJt2kE1ZCMJpVkiYNjNoXkJ1AW1UPjM/ZTLH9l6d/MZTar
- 5hdfQDZAa4QSEg3sfnZGG8sXzGqAWk2dBVFOjFTFUtt
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+Subject: Re: [PATCH v22 8/8] x86/vdso: Add ENDBR64 to __vdso_sgx_enter_enclave
+Message-ID: <YEnX3Zn0FXPt7pcM@hirez.programming.kicks-ass.net>
+References: <20210310220519.16811-1-yu-cheng.yu@intel.com>
+ <20210310220519.16811-9-yu-cheng.yu@intel.com>
+ <YElKjT2v628tidE/@kernel.org>
+ <8b8efe44-b79f-ce29-ee28-066f88c93840@intel.com>
+ <YEmQJjwjs8UCEO2F@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YEmQJjwjs8UCEO2F@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 8:12 PM Alex Ghiti <alex@ghiti.fr> wrote:
-> Le 3/10/21 à 6:42 AM, Arnd Bergmann a écrit :
-> > On Thu, Feb 25, 2021 at 12:56 PM Alex Ghiti <alex@ghiti.fr> wrote:
-> >>
-> >> Le 2/25/21 à 5:34 AM, David Hildenbrand a écrit :
-> >>>                    |            |                  |         |> +
-> >>> ffffffc000000000 | -256    GB | ffffffc7ffffffff |   32 GB | kasan
-> >>>> +   ffffffcefee00000 | -196    GB | ffffffcefeffffff |    2 MB | fixmap
-> >>>> +   ffffffceff000000 | -196    GB | ffffffceffffffff |   16 MB | PCI io
-> >>>> +   ffffffcf00000000 | -196    GB | ffffffcfffffffff |    4 GB | vmemmap
-> >>>> +   ffffffd000000000 | -192    GB | ffffffdfffffffff |   64 GB |
-> >>>> vmalloc/ioremap space
-> >>>> +   ffffffe000000000 | -128    GB | ffffffff7fffffff |  126 GB |
-> >>>> direct mapping of all physical memory
-> >>>
-> >>> ^ So you could never ever have more than 126 GB, correct?
-> >>>
-> >>> I assume that's nothing new.
-> >>>
-> >>
-> >> Before this patch, the limit was 128GB, so in my sense, there is nothing
-> >> new. If ever we want to increase that limit, we'll just have to lower
-> >> PAGE_OFFSET, there is still some unused virtual addresses after kasan
-> >> for example.
-> >
-> > Linus Walleij is looking into changing the arm32 code to have the kernel
-> > direct map inside of the vmalloc area, which would be another place
-> > that you could use here. It would be nice to not have too many different
-> > ways of doing this, but I'm not sure how hard it would be to rework your
-> > code, or if there are any downsides of doing this.
->
-> This was what my previous version did: https://lkml.org/lkml/2020/6/7/28.
->
-> This approach was not welcomed very well and it fixed only the problem
-> of the implementation of relocatable kernel. The second issue I'm trying
-> to resolve here is to support both 3 and 4 level page tables using the
-> same kernel without being relocatable (which would introduce performance
-> penalty). I can't do it when the kernel mapping is in the vmalloc region
-> since vmalloc region relies on PAGE_OFFSET which is different on both 3
-> and 4 level page table and that would then require the kernel to be
-> relocatable.
+On Thu, Mar 11, 2021 at 05:36:06AM +0200, Jarkko Sakkinen wrote:
+> Does it do any harm to put it there unconditionally?
 
-Ok, I see.
+Blows up your text footprint and I$ pressure. These instructions are 4
+bytes each.
 
-I suppose it might work if you moved the direct-map to the lowest
-address and the vmalloc area (incorporating the kernel mapping,
-modules, pio, and fixmap at fixed addresses) to the very top of the
-address space, but you probably already considered and rejected
-that for other reasons.
-
-         Arnd
+Aside from that, they're a NOP, so only consume front-end resources
+(hopefully) on older CPUs and when IBT is disabled.
