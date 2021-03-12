@@ -2,65 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C69D6338A37
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Mar 2021 11:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E414333913A
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Mar 2021 16:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233430AbhCLKep (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 Mar 2021 05:34:45 -0500
-Received: from elvis.franken.de ([193.175.24.41]:52589 "EHLO elvis.franken.de"
+        id S231351AbhCLP2u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 12 Mar 2021 10:28:50 -0500
+Received: from mout.gmx.net ([212.227.17.20]:58795 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233329AbhCLKel (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 12 Mar 2021 05:34:41 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lKf7u-0007WV-01; Fri, 12 Mar 2021 11:34:38 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E1643C1E4A; Fri, 12 Mar 2021 11:27:09 +0100 (CET)
-Date:   Fri, 12 Mar 2021 11:27:09 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: Re: [PATCH 2/2] MIPS: loongson64: alloc pglist_data at run time
-Message-ID: <20210312102709.GB7027@alpha.franken.de>
-References: <20210309080210.25561-1-huangpei@loongson.cn>
- <20210309080210.25561-3-huangpei@loongson.cn>
+        id S230302AbhCLP2e (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 12 Mar 2021 10:28:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1615562901;
+        bh=5kxWxnJH6TxGILTbWiEuWrtMiE4DpLAno4eP5DaAVnM=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=kiKXOysos2SmX0B8pydGx/TlqeNKGYPZVqafF9L5KKf1Al2XFMky8lQfp1MKLafQR
+         u/QUfHptnDrDwR7jBurSje/dRs7eWKoCvC+Tz3VLm8bFRNSY83gukQN+tuzcSAODwF
+         IZKra52x10JkVmVRzlG1owQNUrmao7pr1QvPzkEI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([37.201.215.134]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MeU0q-1lutsH2fjA-00aZGP; Fri, 12
+ Mar 2021 16:28:21 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-doc@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [RFC PATCH] docs: Group arch-specific documentation under "CPU Architectures"
+Date:   Fri, 12 Mar 2021 16:28:03 +0100
+Message-Id: <20210312152804.2110703-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210309080210.25561-3-huangpei@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:8ebQTw4lZ+rVZ5nvFoAmTj5OAS3v/fSaT0/jFvCvQVpD2gpKnVw
+ DilHPjUKk0X3YA+e0yFNd1JIULXgIiQL40MkLj7dZA8ysVSSilzZ7qMxg0HWQZ1wZq9/0K3
+ AlikEl29YsjY9T29dZz7XsfV1x5rdiUHqcVejJieZkb79pkNISCbXGhKVp5K9eocWVNHWNb
+ CCflKytTdcFSBiCjkTG9A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:uihwH/s/73s=:+hoH2NdeT68B6TmcizC9x1
+ TXVdHUe+JqESQt16Cq5/oXL3DvFyFqeaXccPt9272v//kgr3m8I0HKN4pRVradhhqBazITH7z
+ BbDh82hc+C6xAu1YOOl/p58eCju57v2gzTnsTnIk3KJBaFXpo0gOUT01yse58b2Gb0TLHmP3B
+ iO8qd4J12Wkpa/Nfs/y7NWqqO6bUrRiUQVHiuhAst9cBuXHRD1PYYx6y4KwAuTjYb6hQ/Rxsu
+ 4Rh7HBmuXbztjNUPCa1/AbxuAiiivPP3OlMWQW1sJIijtCfksooewFj0nnHAoynHoLyynUkun
+ t7RGGKqiPEQHhHHpzpJvVZJ9NNDhGoiRMeh//UM8cVa6rYYMma2SPhXVJk/qSTyAikR6LbV4N
+ pouSs8E9SSJWIj6CfbEn7BMDuaWfDS0ZRMjlecjFRrgopGIbOjg1XNZesVdGqhfbiaZd/shtG
+ AsOwJORRB9VMct6kVmuYcX4AfHQ5M9VEbN4ivte5AaQjT4ir1Xj8kt5slQuR2CZfwdNT2KHYs
+ wmru5aU2NjA2wff8w7VcDcb/bf9G9hp+Ja78L4MemUNHGE58bgAIUtePAP9eCp7jU1zZ5K7IC
+ 94guYKUzco1RFQa3/Mhw+T2PK8021yuCHoF8lwcPt/q1jy+xssVya+koF1aBOWK9pkfjA8f/R
+ l5ZsYi/Zl4oZ4lLN/SnKD2i+q6cPvMru0mG9BjYePiTHwchhHlsDRG4Fq0dO+Xj9OjqSngkzU
+ aMc0KVWmjwEupvidUCE+dXxuIwMiLE0bzmsokMK3PDoTKCDvSVKzYORAKsl5L3x4VyOXMc/9F
+ OtjA0VL0FSNja1T1BVrci/JdSpkHG27IJCCohsnGiksPsKAC849jSCMly54uYsmxeXUoPoAdo
+ +ABCTXVJnsJjMza5TP8Q==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 09, 2021 at 04:02:10PM +0800, Huang Pei wrote:
-> Loongson64 allocates arrays of pglist_data statically and is located
-> at Node 0, and cpu from Nodes other than 0 need remote access to
-> pglist_data and zone info.
-> 
-> Delay pglist_data allocation till run time, and make it NUMA-aware
-> 
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->  arch/mips/loongson64/numa.c | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
+To declutter the top-level table of contents (the side bar), this
+patch reduces the architecture-specfic documentation to one top-level
+item, "CPU Architectures".
 
-applied to mips-next.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
 
-This patch looks independant from the first one in this series (that's
-why I've applied it). So please post such patches as single patches
-and not as series.
+As a side effect, the TOC in index.html effectively gets one level of
+detail less. This could be fixed by specifying ':maxdepth: 3'.
+=2D--
+ Documentation/arch.rst  | 26 ++++++++++++++++++++++++++
+ Documentation/index.rst | 20 ++------------------
+ 2 files changed, 28 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/arch.rst
 
-Thomas.
+diff --git a/Documentation/arch.rst b/Documentation/arch.rst
+new file mode 100644
+index 0000000000000..f10bd32a5972e
+=2D-- /dev/null
++++ b/Documentation/arch.rst
+@@ -0,0 +1,26 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++CPU Architectures
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++These books provide programming details about architecture-specific
++implementation.
++
++.. toctree::
++   :maxdepth: 2
++
++   arm/index
++   arm64/index
++   ia64/index
++   m68k/index
++   mips/index
++   nios2/index
++   openrisc/index
++   parisc/index
++   powerpc/index
++   riscv/index
++   s390/index
++   sh/index
++   sparc/index
++   x86/index
++   xtensa/index
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index 31f2adc8542dc..54ce34fd6fbda 100644
+=2D-- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -149,27 +149,11 @@ Architecture-agnostic documentation
+ Architecture-specific documentation
+ -----------------------------------
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+-These books provide programming details about architecture-specific
+-implementation.
+-
+ .. toctree::
+    :maxdepth: 2
+
+-   arm/index
+-   arm64/index
+-   ia64/index
+-   m68k/index
+-   mips/index
+-   nios2/index
+-   openrisc/index
+-   parisc/index
+-   powerpc/index
+-   riscv/index
+-   s390/index
+-   sh/index
+-   sparc/index
+-   x86/index
+-   xtensa/index
++   arch
++
+
+ Other documentation
+ -------------------
+=2D-
+2.30.1
+
