@@ -2,49 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F67A3383A9
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Mar 2021 03:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6563383AD
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Mar 2021 03:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbhCLCjh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 Mar 2021 21:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
+        id S231489AbhCLCkJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 Mar 2021 21:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbhCLCj0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 Mar 2021 21:39:26 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F796C061764
-        for <linux-arch@vger.kernel.org>; Thu, 11 Mar 2021 18:39:26 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id w7so7725696pll.8
-        for <linux-arch@vger.kernel.org>; Thu, 11 Mar 2021 18:39:26 -0800 (PST)
+        with ESMTP id S231455AbhCLCjq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 Mar 2021 21:39:46 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF31BC061761
+        for <linux-arch@vger.kernel.org>; Thu, 11 Mar 2021 18:39:46 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id p21so14904006pgl.12
+        for <linux-arch@vger.kernel.org>; Thu, 11 Mar 2021 18:39:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=djQZd3ysyoSutQHrswnBnuimUYSb59dZwog3T2MV0T0=;
-        b=mLI4wibQX2QDrTDp0g3oVwAnp8g8JH2ZHX3coY+tloIS7hQDHaHg7O3U0tqNyPkaXm
-         8rDqn7xBBo4XHsB+a2U3CBHCbqJ61M0ldpB/4IwR6Z3ug6eLs539FiVfed3DGaRV2ZTJ
-         k+65bJQ0eM8Sc9pNW/ZbuOFd1znR6iQPephC8=
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=bWbXoBSRfLL/FoTdQfLfpXolWUy5m83XPY+H7QO24j0=;
+        b=evzkYQgPA8nzFkbfdQKvRQL6ieuUkCwpRnth+avWnhVog6oBX6wwEDiqjRSV5zJc4/
+         a0uxnzyPyJry3x4YSS1x4Kmnn2YsoxzEP8f6D0kWamIfwpqHbY5Y0/qY/FWzHxMfwihz
+         yUkW/BECzVzHTMH03Su4DS19ldO5mtf+x1ZZM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=djQZd3ysyoSutQHrswnBnuimUYSb59dZwog3T2MV0T0=;
-        b=RF+kBu7Hc6oKZ/kszzobXnjCnH18gvTqKDGI84I5Ck/2A8ZovCw0qsWUgX1GzM1kRt
-         v3d4m7BlvjvS4odGx1c2HpuktYf6hcPTC31BF8kkBHWpnV/yTk2mJIKsAyrBOGoY3REL
-         1/Zdc4y8dgj8qZTAV9/blGe4w3K5dF/Df4GqdKprmwtsdjIRWx9mFnW/P8GnrNINWnTY
-         Zpaqb8lJlYvjRWqdYWnZ0f0Z6RhBqGIfSx296eOgjrvLO3lQs7rap7bdC0Yxqeyv6Scs
-         NQNy3GumbFP7Y+PzDnL0fLK6i8YZJPdBiPB/fPm0OWKB7Dm+1/kJQb7hCZYY2D0s+49O
-         TsZQ==
-X-Gm-Message-State: AOAM533HqJZcfWasYtsHaDan6Ie3XLl+YOpez2BZRM70NPs475ERB3Wj
-        xbiyoN5wHepx33Bodf3yAnJzmA==
-X-Google-Smtp-Source: ABdhPJyXid/WhlRRi3IuEn/gj018RDIJnIysnt+MQKHLqWW7jwLJATluPmfQx4YLScgrHSTI05ABow==
-X-Received: by 2002:a17:902:344:b029:e4:a7ab:2e55 with SMTP id 62-20020a1709020344b02900e4a7ab2e55mr11594605pld.63.1615516765493;
-        Thu, 11 Mar 2021 18:39:25 -0800 (PST)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=bWbXoBSRfLL/FoTdQfLfpXolWUy5m83XPY+H7QO24j0=;
+        b=fTUaytjx9NoRFxipNv1D8z8DcIPYNn83ElYYtbNcsN2gBeqXuw9Gt9QmOrS5ZDRSjp
+         n5L4DnO4GfBe4CdiAWM5JgaMxojrQfsypQkcwEFecKdWqWDdmdSHJSzD8sADZV/8PtyZ
+         D9FJ2A8bT2vd9syZCCGnd17z3LagjBwBYna4+okMxhrdE9lIY2EknkYy63/19kq6X50r
+         gtYJRXP9TwlKlyiaBV7Nf1mxurBZ+HvUJiAM36SRMs27O0OKR7nbV4AukP4UJ4YNfgE/
+         xbzVVd+pC47dpKDQNcSMGOkjB7Hov/UZoNdrR3D+6oJkpcEup+FSFC61uL5I/Tb2NS9N
+         o6uw==
+X-Gm-Message-State: AOAM53147BqENMBbpODeSOIbVkzlC6PvQqG+C/wxXbvtTtWGmUi/Whz3
+        MIterkS7Xx6LhimwNf0ry5jaYw==
+X-Google-Smtp-Source: ABdhPJwhrU4emOD5WayCUMZ7IN6WHeCVuTJ7ryuE6Iq+KPE0SNSElLD+CiEu3EiXqH08G+7H37jG2g==
+X-Received: by 2002:a05:6a00:16c7:b029:1b6:68a6:985a with SMTP id l7-20020a056a0016c7b02901b668a6985amr10384578pfc.44.1615516786330;
+        Thu, 11 Mar 2021 18:39:46 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k127sm3858828pfd.63.2021.03.11.18.39.24
+        by smtp.gmail.com with ESMTPSA id t22sm393058pjo.45.2021.03.11.18.39.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 18:39:24 -0800 (PST)
-Date:   Thu, 11 Mar 2021 18:39:23 -0800
+        Thu, 11 Mar 2021 18:39:45 -0800 (PST)
+Date:   Thu, 11 Mar 2021 18:39:44 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Sami Tolvanen <samitolvanen@google.com>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -56,94 +57,78 @@ Cc:     Nathan Chancellor <nathan@kernel.org>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kbuild@vger.kernel.org, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/17] module: cfi: ensure __cfi_check alignment
-Message-ID: <202103111837.813997B4@keescook>
+Subject: Re: [PATCH 01/17] add support for Clang CFI
+Message-ID: <202103111839.4A4375E@keescook>
 References: <20210312004919.669614-1-samitolvanen@google.com>
- <20210312004919.669614-5-samitolvanen@google.com>
+ <20210312004919.669614-2-samitolvanen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210312004919.669614-5-samitolvanen@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210312004919.669614-2-samitolvanen@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 04:49:06PM -0800, Sami Tolvanen wrote:
-> CONFIG_CFI_CLANG_SHADOW assumes the __cfi_check() function is page
-> aligned and at the beginning of the .text section. While Clang would
-> normally align the function correctly, it fails to do so for modules
-> with no executable code.
+On Thu, Mar 11, 2021 at 04:49:03PM -0800, Sami Tolvanen wrote:
+> This change adds support for Clang’s forward-edge Control Flow
+> Integrity (CFI) checking. With CONFIG_CFI_CLANG, the compiler
+> injects a runtime check before each indirect function call to ensure
+> the target is a valid function with the correct static type. This
+> restricts possible call targets and makes it more difficult for
+> an attacker to exploit bugs that allow the modification of stored
+> function pointers. For more details, see:
 > 
-> This change ensures the correct __cfi_check() location and
-> alignment. It also discards the .eh_frame section, which Clang can
-> generate with certain sanitizers, such as CFI.
+>   https://clang.llvm.org/docs/ControlFlowIntegrity.html
 > 
-> Link: https://bugs.llvm.org/show_bug.cgi?id=46293
+> Clang requires CONFIG_LTO_CLANG to be enabled with CFI to gain
+> visibility to possible call targets. Kernel modules are supported
+> with Clang’s cross-DSO CFI mode, which allows checking between
+> independently compiled components.
+> 
+> With CFI enabled, the compiler injects a __cfi_check() function into
+> the kernel and each module for validating local call targets. For
+> cross-module calls that cannot be validated locally, the compiler
+> calls the global __cfi_slowpath_diag() function, which determines
+> the target module and calls the correct __cfi_check() function. This
+> patch includes a slowpath implementation that uses __module_address()
+> to resolve call targets, and with CONFIG_CFI_CLANG_SHADOW enabled, a
+> shadow map that speeds up module look-ups by ~3x.
+> 
+> Clang implements indirect call checking using jump tables and
+> offers two methods of generating them. With canonical jump tables,
+> the compiler renames each address-taken function to <function>.cfi
+> and points the original symbol to a jump table entry, which passes
+> __cfi_check() validation. This isn’t compatible with stand-alone
+> assembly code, which the compiler doesn’t instrument, and would
+> result in indirect calls to assembly code to fail. Therefore, we
+> default to using non-canonical jump tables instead, where the compiler
+> generates a local jump table entry <function>.cfi_jt for each
+> address-taken function, and replaces all references to the function
+> with the address of the jump table entry.
+> 
+> Note that because non-canonical jump table addresses are local
+> to each component, they break cross-module function address
+> equality. Specifically, the address of a global function will be
+> different in each module, as it's replaced with the address of a local
+> jump table entry. If this address is passed to a different module,
+> it won’t match the address of the same function taken there. This
+> may break code that relies on comparing addresses passed from other
+> components.
+> 
+> CFI checking can be disabled in a function with the __nocfi attribute.
+> Additionally, CFI can be disabled for an entire compilation unit by
+> filtering out CC_FLAGS_CFI.
+> 
+> By default, CFI failures result in a kernel panic to stop a potential
+> exploit. CONFIG_CFI_PERMISSIVE enables a permissive mode, where the
+> kernel prints out a rate-limited warning instead, and allows execution
+> to continue. This option is helpful for locating type mismatches, but
+> should only be enabled during development.
+> 
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->  scripts/module.lds.S | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-> index 168cd27e6122..552ddb084f76 100644
-> --- a/scripts/module.lds.S
-> +++ b/scripts/module.lds.S
-> @@ -3,10 +3,13 @@
->   * Archs are free to supply their own linker scripts.  ld will
->   * combine them automatically.
->   */
-> +#include <asm/page.h>
-> +
->  SECTIONS {
->  	/DISCARD/ : {
->  		*(.discard)
->  		*(.discard.*)
-> +		*(.eh_frame)
->  	}
->  
->  	__ksymtab		0 : { *(SORT(___ksymtab+*)) }
-> @@ -40,7 +43,16 @@ SECTIONS {
->  		*(.rodata..L*)
->  	}
->  
-> -	.text : { *(.text .text.[0-9a-zA-Z_]*) }
-> +#ifdef CONFIG_CFI_CLANG
-> +	/*
-> +	 * With CFI_CLANG, ensure __cfi_check is at the beginning of the
-> +	 * .text section, and that the section is aligned to page size.
-> +	 */
-> +	.text : ALIGN(PAGE_SIZE) {
-> +		*(.text.__cfi_check)
-> +		*(.text .text.[0-9a-zA-Z_]* .text..L.cfi*)
-> +	}
-> +#endif
 
-Whoops, I think this reverts to the default .text declaration when
-CONFIG_CFI_CLANG is unset.
-
-I think the only thing that needs the ifdef is the ALIGN, yes? Perhaps
-something like this?
-
-#ifdef CONFIG_CFI_CLANG
-# define ALIGN_CFI ALIGN(PAGE_SIZE)
-#else
-# define ALIGN_CFI
-#endif
-
-	.text : ALIGN_CFI {
-		*(.text.__cfi_check)
-		*(.text .text.[0-9a-zA-Z_]* .text..L.cfi*)
-	}
-
-
--Kees
-
->  }
->  
->  /* bring in arch-specific sections */
-> -- 
-> 2.31.0.rc2.261.g7f71774620-goog
-> 
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
