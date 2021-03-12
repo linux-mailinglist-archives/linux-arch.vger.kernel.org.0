@@ -2,137 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E29753389E9
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Mar 2021 11:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24337338A3E
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Mar 2021 11:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbhCLKUe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 Mar 2021 05:20:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59092 "EHLO mail.kernel.org"
+        id S233446AbhCLKeq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 12 Mar 2021 05:34:46 -0500
+Received: from elvis.franken.de ([193.175.24.41]:52591 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233158AbhCLKUU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 12 Mar 2021 05:20:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36AA265014;
-        Fri, 12 Mar 2021 10:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615544420;
-        bh=Ifsr9yM9IkQPwSwMx+ywHOlUP37f5ulHyfp022mvO2A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OeFAX9kP3QepFXQNlgoNBt/rCJK6ttlPb2z66g1Fm9rBpVgFrq/J8kdQjGgUsInD4
-         gufTH3sTe9dQr7Dv3m1+s38h6IxRmnl+E95aqXEnsDLBUvAp6tR8rtqUgKcqpjxqp2
-         /PLNgpAvUkhC6Nro80THrKr0uqEtcFagUQuiAA0MxjNvaSxWM5vILNol9qLy+s28F6
-         J+T1KgsOG6jMO3vUye9dOowxxCxt5qUUjvK/5fFSPtD4TT0Oc8cjHH1n0ypjxeC82d
-         7Bak7Zg5DjTXfZcRczfdSQNNgm2GdpCsxPAV6Z1gx+V3gwNXNzj3L7oBFGUwlhPO3w
-         6fsJIXl0X2yqA==
-Received: by mail-oo1-f43.google.com with SMTP id i25-20020a4aa1190000b02901bbd9429832so1042119ool.0;
-        Fri, 12 Mar 2021 02:20:20 -0800 (PST)
-X-Gm-Message-State: AOAM533k97eGVayFQI6keYBO7LQKA/Fe9Aiu0lnA2lImthZVNwReb6d2
-        edS4zM+Glo2wjHxtQLGRnW6k0jzghbcXCLlQ/9k=
-X-Google-Smtp-Source: ABdhPJyxJbTVd+9o1L3Cm7RfyBDoKQYmHOnVheMTVTvF/CCztalbxCtJGX/FPRh6wEI0bbDfWUx947MungyzyrTvGEI=
-X-Received: by 2002:a4a:e9a2:: with SMTP id t2mr2692533ood.15.1615544419338;
- Fri, 12 Mar 2021 02:20:19 -0800 (PST)
+        id S233398AbhCLKem (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 12 Mar 2021 05:34:42 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lKf7u-0007WV-00; Fri, 12 Mar 2021 11:34:38 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 406CCC1D54; Fri, 12 Mar 2021 11:24:10 +0100 (CET)
+Date:   Fri, 12 Mar 2021 11:24:10 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Subject: Re: [PATCH 1/2] MIPS: clean up CONFIG_MIPS_PGD_C0_CONTEXT handling
+Message-ID: <20210312102410.GA7027@alpha.franken.de>
+References: <20210309080210.25561-1-huangpei@loongson.cn>
+ <20210309080210.25561-2-huangpei@loongson.cn>
 MIME-Version: 1.0
-References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-13-marcan@marcan.st>
- <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
- <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st> <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
- <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
- <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
- <20210308211306.GA2920998@robh.at.kernel.org> <CAK8P3a2GfzUevuQNZeQarJ4GNFsuDj0g7oFuN940Hdaw06YJbA@mail.gmail.com>
- <CAL_JsqK8FagJyQVyG5DAocUjLGZT91b6NzDm_DNMW1hdCz51Xg@mail.gmail.com>
- <c5693760-3b18-e8f1-18b6-bae42c05d329@marcan.st> <CAL_Jsq+VLLPa98iaTvOkK-tjuBH4qY7FNEGtufYGv7rXAbwegQ@mail.gmail.com>
- <332c0b9a-dcfd-4c3b-9038-47cbda90eb3f@marcan.st> <CAL_Jsq+X7JPm-xrxmy5bGKSuLO59yk6S=EuXmdMn0FwhpZAD7A@mail.gmail.com>
- <CAK8P3a2HWbHc-aGHk792TVh6ea2j+aKswYrB6EBsjPA6fH1=xA@mail.gmail.com>
- <CAL_JsqKYpsXKvcw7xbbYx6z7Cg3P9DxcpLUnOG+m0xeSRO7v_g@mail.gmail.com>
- <CAK8P3a2iASEZf-YRh2SHYhNdUtpo8sdkuoxfk_MonXpXBk1kbg@mail.gmail.com> <CAL_JsqK200WcxD3PP1FToc5w2dyF3b6TYnf2oNd9Mpz77g68og@mail.gmail.com>
-In-Reply-To: <CAL_JsqK200WcxD3PP1FToc5w2dyF3b6TYnf2oNd9Mpz77g68og@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 12 Mar 2021 11:20:03 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3-aLCzWnGv0LPb3KPs_cUy6DXrz3QV5x7aNOU2Zi_48g@mail.gmail.com>
-Message-ID: <CAK8P3a3-aLCzWnGv0LPb3KPs_cUy6DXrz3QV5x7aNOU2Zi_48g@mail.gmail.com>
-Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
- MMIO as non-posted
-To:     Rob Herring <robh@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        DTML <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210309080210.25561-2-huangpei@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 7:10 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Mar 11, 2021 at 9:48 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > On Thu, Mar 11, 2021 at 5:10 PM Rob Herring <robh@kernel.org> wrote:
-> > > On Thu, Mar 11, 2021 at 2:12 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> > > > On Wed, Mar 10, 2021 at 6:01 PM Rob Herring <robh@kernel.org> wrote:
-> > > > Ok, makes sense.
-> > > >
-> > > > Conceptually, I'd like to then see a check that verifies that the
-> > > > property is only set for nodes whose parent also has it set, since
-> > > > that is how AXI defines it: A bus can wait for the ack from its
-> > > > child node, or it can acknowledge the write to its parent early.
-> > > > However, this breaks down as soon as a bus does the early ack:
-> > > > all its children by definition use posted writes (as seen by the
-> > > > CPU), even if they wait for stores that come from other masters.
-> > > >
-> > > > Does this make sense to you?
-> > >
-> > > BTW, I don't think it's clear in this thread, but the current
-> > > definition proposed for the spec[1] and schema is 'nonposted-mmio' is
-> > > specific to 'simple-bus'. I like this restriction and we can expand
-> > > where 'nonposted-mmio' is allowed later if needed.
-> >
-> > That sounds ok, as long as we can express everything for the mac
-> > at the moment. Do we need to explicitly add a description to allow
-> > the property in the root node in addition to simple-bus to be able
-> > to enforce the rule about parent buses also having it?
->
-> IMO it should not be allowed in the root node. That's a failure to
-> define a bus node.
+On Tue, Mar 09, 2021 at 04:02:09PM +0800, Huang Pei wrote:
+> +. LOONGSON64 use 0x98xx_xxxx_xxxx_xxxx as xphys cached
+> 
+> +. let CONFIG_MIPS_PGD_C0_CONTEXT depend on 64bit
+> 
+> +. cast CAC_BASE into u64 to silence warning on MIPS32
+> 
+> CP0 Context has enough room for wraping pgd into its 41-bit PTEBase field.
+> 
+> +. For XPHYS, the trick is that pgd is 4kB aligned, and the PABITS <= 48,
+> only save 48 - 12 + 5(for bit[63:59]) = 41 bits, aka. :
+> 
+>    bit[63:59] | 0000 0000 000 |  bit[47:12] | 0000 0000 0000
+> 
+> +. for CKSEG0, only save 29 - 12 = 17 bits
 
-My interpretation would be that the root node defines the first bus
-connected to the CPU(s) themselves, which may already have
-posted writes. If writes on that bus are posted, then no child could
-be non-posted.
+you are explaining what you are doing, but not why you are doing this.
+So why are you doing this ?
 
-I suppose it depends a bit on the mental model of what the nodes
-refer to. If you say that there cannot be a device with registers
-directly on the root node, but every bus defines its own space,
-then we don't need this, but I think a lot of machines would break
-if you try to enforce the rule that there cannot be devices on
-the root node.
+>  #
+>  # Set to y for ptrace access to watch registers.
+> diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+> index a7521b8f7658..591cfa0fca02 100644
+> --- a/arch/mips/mm/tlbex.c
+> +++ b/arch/mips/mm/tlbex.c
+> @@ -848,8 +848,8 @@ void build_get_pmde64(u32 **p, struct uasm_label **l, struct uasm_reloc **r,
+>  		/* Clear lower 23 bits of context. */
+>  		uasm_i_dins(p, ptr, 0, 0, 23);
+>  
+> -		/* 1 0	1 0 1  << 6  xkphys cached */
+> -		uasm_i_ori(p, ptr, ptr, 0x540);
+> +		/* insert bit[63:59] of CAC_BASE into bit[11:6] of ptr */
+> +		uasm_i_ori(p, ptr, ptr, ((u64)(CAC_BASE) >> 53));
 
-> Also, would that mean your memory has to be non-posted!?
+you want to use bits 63..59 but picking bits 63..53 with this.  While
+bits 58..53 are probably 0, wouldn't it make also sense to mask them out ?
 
-Good question. You could argue that this should not be because you
-don't want to use ioremap_np() flags but instead want this to be
-normal cacheable memory instead of device memory.
+>  		uasm_i_drotr(p, ptr, ptr, 11);
+>  #elif defined(CONFIG_SMP)
+>  		UASM_i_CPUID_MFC0(p, ptr, SMP_CPUID_REG);
+> @@ -1164,8 +1164,9 @@ build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
+>  
+>  	if (pgd_reg == -1) {
+>  		vmalloc_branch_delay_filled = 1;
+> -		/* 1 0	1 0 1  << 6  xkphys cached */
+> -		uasm_i_ori(p, ptr, ptr, 0x540);
+> +		/* insert bit[63:59] of CAC_BASE into bit[11:6] of ptr */
+> +		uasm_i_ori(p, ptr, ptr, ((u64)(CAC_BASE) >> 53));
+> +
+>  		uasm_i_drotr(p, ptr, ptr, 11);
+>  	}
+>  
+> @@ -1292,7 +1293,6 @@ build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
+>  
+>  	return rv;
+>  }
+> -
+>  /*
 
-On the other hand, you definitely don't want memory stores to be
-posted, as that would break coherency between the CPUs when
-a wmb() no longer has an effect.
+why are you removing this empty line ? I'd prefer that it stays there...
 
-       Arnd
+>   * For a 64-bit kernel, we are using the 64-bit XTLB refill exception
+>   * because EXL == 0.  If we wrap, we can also use the 32 instruction
+> -- 
+> 2.17.1
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
