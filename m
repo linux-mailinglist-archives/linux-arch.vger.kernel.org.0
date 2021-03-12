@@ -2,113 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C74337C21
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Mar 2021 19:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2935D338295
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Mar 2021 01:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbhCKSLN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 Mar 2021 13:11:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55496 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230300AbhCKSKf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 11 Mar 2021 13:10:35 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 773FA65018;
-        Thu, 11 Mar 2021 18:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615486234;
-        bh=tmt8DXL/NkkK3fqsKzp1sa5x/enHlRdNBSlE6sT3Ol4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ew/NIGH8ca6hopkG3U8b9r6qb4RL4623K9fly5yItiT+8ubil19Ek3W1I9uzZkXaV
-         SS/wUSc4qF2N/+CEdEEjiosqyXdPlQDV6gmsZyGoYiofROwQuELtuvpXLsg41ZUl+I
-         zTxb4YH7gGW2lP+bk0UmqouHE1A4Ct9j5CBAZIb/EyFukR+wc5+426TEG3xvSqlTNs
-         zrISTJo7Bcn1PT6Tt7VvH6wBUv/FOVlzZjPhhFRyf24OBWtBR8UkBxZNOxnGayUlL3
-         qdG/KlD2b/NUv3xynLWzvL7xQCfBHPzi0d+rEqHmljXgXkL98TRQxiPn6hmAPOYpfu
-         pO74we79VATfg==
-Received: by mail-ej1-f43.google.com with SMTP id e19so48236776ejt.3;
-        Thu, 11 Mar 2021 10:10:34 -0800 (PST)
-X-Gm-Message-State: AOAM532gIRH9bm3Fo+i0EbsHlRjhxiPQWK5SP7fJE/Yz0D30C1g5zyPH
-        LQhMi4sqcRq0QAngd7NwMBkwIHB/s3Zjf6bAFg==
-X-Google-Smtp-Source: ABdhPJyUsXPtzO/H83nHUMgfPs1p3wnAlKlkTmdKFFzieSp9RKRftdZy73PPYTvjnRjgXVDraWLRvsEKaxzbwKml2jg=
-X-Received: by 2002:a17:906:c405:: with SMTP id u5mr4327186ejz.341.1615486232876;
- Thu, 11 Mar 2021 10:10:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-13-marcan@marcan.st>
- <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
- <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st> <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
- <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
- <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
- <20210308211306.GA2920998@robh.at.kernel.org> <CAK8P3a2GfzUevuQNZeQarJ4GNFsuDj0g7oFuN940Hdaw06YJbA@mail.gmail.com>
- <CAL_JsqK8FagJyQVyG5DAocUjLGZT91b6NzDm_DNMW1hdCz51Xg@mail.gmail.com>
- <c5693760-3b18-e8f1-18b6-bae42c05d329@marcan.st> <CAL_Jsq+VLLPa98iaTvOkK-tjuBH4qY7FNEGtufYGv7rXAbwegQ@mail.gmail.com>
- <332c0b9a-dcfd-4c3b-9038-47cbda90eb3f@marcan.st> <CAL_Jsq+X7JPm-xrxmy5bGKSuLO59yk6S=EuXmdMn0FwhpZAD7A@mail.gmail.com>
- <CAK8P3a2HWbHc-aGHk792TVh6ea2j+aKswYrB6EBsjPA6fH1=xA@mail.gmail.com>
- <CAL_JsqKYpsXKvcw7xbbYx6z7Cg3P9DxcpLUnOG+m0xeSRO7v_g@mail.gmail.com> <CAK8P3a2iASEZf-YRh2SHYhNdUtpo8sdkuoxfk_MonXpXBk1kbg@mail.gmail.com>
-In-Reply-To: <CAK8P3a2iASEZf-YRh2SHYhNdUtpo8sdkuoxfk_MonXpXBk1kbg@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 11 Mar 2021 11:10:20 -0700
-X-Gmail-Original-Message-ID: <CAL_JsqK200WcxD3PP1FToc5w2dyF3b6TYnf2oNd9Mpz77g68og@mail.gmail.com>
-Message-ID: <CAL_JsqK200WcxD3PP1FToc5w2dyF3b6TYnf2oNd9Mpz77g68og@mail.gmail.com>
-Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
- MMIO as non-posted
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        DTML <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        id S231495AbhCLAto (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 Mar 2021 19:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230442AbhCLAtV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 Mar 2021 19:49:21 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930BFC061761
+        for <linux-arch@vger.kernel.org>; Thu, 11 Mar 2021 16:49:21 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id q77so27809233ybq.0
+        for <linux-arch@vger.kernel.org>; Thu, 11 Mar 2021 16:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=tdPCoglx2rEXEqBLmU0P2QxdgUDSrZlH5oMXt14Ies0=;
+        b=SAiryR+/1F4QR2Sh8/WAofpQOiQwcTfPu82zao4pCXa65lDYdqykBnXnKwFzTFtMK/
+         Q87M8HfYyHqw99Zdf118VxSCYvhYnQG+eORKppK6x+MBlf2oo3XoOt/Ohol2wSmQf/xp
+         wVB0nZ00nVc3+TPKKfTZbsjBNWzzFRvtYZXbIz4ACG5q8p5WvFqy7E2CFmi9Ajz+E04A
+         Uy8u/v8dN+bKkASP3R9AC07S2LEbbwjDZ5SaGCse/p2/gv+5lH2YYZ87b6g6SBBijhwA
+         347Gs/LWWReVAPqK6YJPcO1tmv+IQfOs/BpEy7EpcOK3zCcOayp6J+gmy+3OI53yFvzD
+         zZJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=tdPCoglx2rEXEqBLmU0P2QxdgUDSrZlH5oMXt14Ies0=;
+        b=bJPX/3Eson26ikhUrH9FMbLnSGBHMl0rBTMNcbea+yKtHYlwqBJhuSVsEKM9sFVi6i
+         75OMX95HML1g2n/WGDCbpR8kahaHXl0FuvmyG703uNRuYUbo0K5RM7+R6yCsAPzmIUX2
+         7QIIgtQZQus6YtQ7bRqshU/B3lq6/nDkeL8mTOFWIWnACnwIrk9eDKTer3WIuYREn7Ui
+         vgrak3z3B/QOxLSOjzo6a/yhSJPOYOmJ7BeerEKacMMb/V3noJGB6M1z7k9uZCxWApvc
+         zCUh/aSGaTYkc8TPndbVfOF9cKoBF+H4pkuI33Lu7koN4eTrUA6fM7nV6/FmNc/9Qxfi
+         WaYQ==
+X-Gm-Message-State: AOAM53122RvntGVdExAwoLweRSpJlReE0dUPgaGx7+2do0PVaHudMDSY
+        yD9AHWGqcrnawwArMYGkikcvre5EErM5U818mlU=
+X-Google-Smtp-Source: ABdhPJzShn28s+halMR+vzT0zjcZemE7Ff5yb7+xlvVhoC/UuBoxjvMG/z2t2Y6cw7vtqzmvzKenzjBEbPWRbnPwaZo=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:c86b:8269:af92:55a])
+ (user=samitolvanen job=sendgmr) by 2002:a25:e785:: with SMTP id
+ e127mr15903182ybh.451.1615510160709; Thu, 11 Mar 2021 16:49:20 -0800 (PST)
+Date:   Thu, 11 Mar 2021 16:49:02 -0800
+Message-Id: <20210312004919.669614-1-samitolvanen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
+Subject: [PATCH 00/17] Add support for Clang CFI
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        bpf@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kbuild@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 9:48 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Thu, Mar 11, 2021 at 5:10 PM Rob Herring <robh@kernel.org> wrote:
-> > On Thu, Mar 11, 2021 at 2:12 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> > > On Wed, Mar 10, 2021 at 6:01 PM Rob Herring <robh@kernel.org> wrote:
-> > > Ok, makes sense.
-> > >
-> > > Conceptually, I'd like to then see a check that verifies that the
-> > > property is only set for nodes whose parent also has it set, since
-> > > that is how AXI defines it: A bus can wait for the ack from its
-> > > child node, or it can acknowledge the write to its parent early.
-> > > However, this breaks down as soon as a bus does the early ack:
-> > > all its children by definition use posted writes (as seen by the
-> > > CPU), even if they wait for stores that come from other masters.
-> > >
-> > > Does this make sense to you?
-> >
-> > BTW, I don't think it's clear in this thread, but the current
-> > definition proposed for the spec[1] and schema is 'nonposted-mmio' is
-> > specific to 'simple-bus'. I like this restriction and we can expand
-> > where 'nonposted-mmio' is allowed later if needed.
->
-> That sounds ok, as long as we can express everything for the mac
-> at the moment. Do we need to explicitly add a description to allow
-> the property in the root node in addition to simple-bus to be able
-> to enforce the rule about parent buses also having it?
+This series adds support for Clang's Control-Flow Integrity (CFI)
+checking. With CFI, the compiler injects a runtime check before each
+indirect function call to ensure the target is a valid function with
+the correct static type. This restricts possible call targets and
+makes it more difficult for an attacker to exploit bugs that allow the
+modification of stored function pointers. For more details, see:
 
-IMO it should not be allowed in the root node. That's a failure to
-define a bus node. Also, would that mean your memory has to be
-non-posted!?
+  https://clang.llvm.org/docs/ControlFlowIntegrity.html
 
-Rob
+The first patch contains build system changes and error handling,
+and implements support for cross-module indirect call checking. The
+remaining patches address issues caused by the compiler
+instrumentation. These include fixing known type mismatches, as well
+as issues with address space confusion and cross-module function
+address equality.
+
+These patches add support only for arm64, but I'll post patches also
+for x86_64 after we address the remaining issues there, including
+objtool support.
+
+You can also pull this series from
+
+  https://github.com/samitolvanen/linux.git cfi-v1
+
+
+Sami Tolvanen (17):
+  add support for Clang CFI
+  cfi: add __cficanonical
+  mm: add generic __va_function and __pa_function macros
+  module: cfi: ensure __cfi_check alignment
+  workqueue: cfi: disable callback pointer check with modules
+  kthread: cfi: disable callback pointer check with modules
+  kallsyms: cfi: strip hashes from static functions
+  bpf: disable CFI in dispatcher functions
+  lib/list_sort: fix function type mismatches
+  lkdtm: use __va_function
+  psci: use __pa_function for cpu_resume
+  arm64: implement __va_function
+  arm64: use __pa_function
+  arm64: add __nocfi to functions that jump to a physical address
+  arm64: add __nocfi to __apply_alternatives
+  KVM: arm64: Disable CFI for nVHE
+  arm64: allow CONFIG_CFI_CLANG to be selected
+
+ Makefile                                  |  17 ++
+ arch/Kconfig                              |  45 +++
+ arch/arm64/Kconfig                        |   1 +
+ arch/arm64/include/asm/memory.h           |  15 +
+ arch/arm64/include/asm/mmu_context.h      |   4 +-
+ arch/arm64/kernel/acpi_parking_protocol.c |   2 +-
+ arch/arm64/kernel/alternative.c           |   4 +-
+ arch/arm64/kernel/cpu-reset.h             |  10 +-
+ arch/arm64/kernel/cpufeature.c            |   4 +-
+ arch/arm64/kernel/psci.c                  |   3 +-
+ arch/arm64/kernel/smp_spin_table.c        |   2 +-
+ arch/arm64/kvm/hyp/nvhe/Makefile          |   6 +-
+ drivers/firmware/psci/psci.c              |   4 +-
+ drivers/misc/lkdtm/usercopy.c             |   2 +-
+ include/asm-generic/vmlinux.lds.h         |  20 +-
+ include/linux/bpf.h                       |   4 +-
+ include/linux/cfi.h                       |  41 +++
+ include/linux/compiler-clang.h            |   3 +
+ include/linux/compiler_types.h            |   8 +
+ include/linux/init.h                      |   6 +-
+ include/linux/mm.h                        |   8 +
+ include/linux/module.h                    |  13 +-
+ include/linux/pci.h                       |   4 +-
+ init/Kconfig                              |   2 +-
+ kernel/Makefile                           |   4 +
+ kernel/cfi.c                              | 329 ++++++++++++++++++++++
+ kernel/kallsyms.c                         |  54 +++-
+ kernel/kthread.c                          |   8 +-
+ kernel/module.c                           |  43 +++
+ kernel/workqueue.c                        |   9 +-
+ lib/list_sort.c                           |   8 +-
+ scripts/Makefile.modfinal                 |   2 +-
+ scripts/module.lds.S                      |  14 +-
+ 33 files changed, 655 insertions(+), 44 deletions(-)
+ create mode 100644 include/linux/cfi.h
+ create mode 100644 kernel/cfi.c
+
+
+base-commit: 28806e4d9b97865b450d72156e9ad229f2067f0b
+-- 
+2.31.0.rc2.261.g7f71774620-goog
+
