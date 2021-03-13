@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F19DF339C67
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Mar 2021 07:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C273D339C60
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Mar 2021 07:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbhCMGmu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 13 Mar 2021 01:42:50 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:42726 "EHLO loongson.cn"
+        id S232709AbhCMGmt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 13 Mar 2021 01:42:49 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:42682 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232440AbhCMGmj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 13 Mar 2021 01:42:39 -0500
+        id S230309AbhCMGmh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 13 Mar 2021 01:42:37 -0500
 Received: from localhost.localdomain (unknown [222.209.9.50])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGda4XkxgjLUYAA--.9506S3;
-        Sat, 13 Mar 2021 14:42:09 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGda4XkxgjLUYAA--.9506S4;
+        Sat, 13 Mar 2021 14:42:10 +0800 (CST)
 From:   Huang Pei <huangpei@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         ambrosehua@gmail.com
@@ -30,30 +30,30 @@ Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 1/6] MIPS: replace -pg with CC_FLAGS_FTRACE
-Date:   Sat, 13 Mar 2021 14:41:44 +0800
-Message-Id: <20210313064149.29276-2-huangpei@loongson.cn>
+Subject: [PATCH 2/6] MIPS: move FTRACE_SYSCALLS from ftrace.c into syscall.c
+Date:   Sat, 13 Mar 2021 14:41:45 +0800
+Message-Id: <20210313064149.29276-3-huangpei@loongson.cn>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210313064149.29276-1-huangpei@loongson.cn>
 References: <20210313064149.29276-1-huangpei@loongson.cn>
-X-CM-TRANSID: AQAAf9AxGda4XkxgjLUYAA--.9506S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7CrWxCw43AF48try7Zr13urg_yoW5Jryxpa
-        nak3Z7Xw4xurW8Kr92yFyUZrsrArWvqrW0qF9rKryUJFySvFnYgr4xtFy5tr95WryxJa48
-        W348WF47JrySv3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPC14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWl
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
-        43ZEXa7VUUnjjDUUUUU==
+X-CM-TRANSID: AQAAf9AxGda4XkxgjLUYAA--.9506S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF4ktr1xZr15Xry3WF4UJwb_yoWrGFykpF
+        s8Z3ZrG395WF10y347ZryFkrZ3Jw4kZryay3ZrK34rZ3Wxt3W5XrZ29a4ktryktFWq9FW8
+        uFWxGr15Cr4ru3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUmj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
+        8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxd
+        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
+        v20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
+        F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2
+        IY04v7MxkIecxEwVAFwVW8AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8
+        JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1V
+        AFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
+        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2Kfnx
+        nUUI43ZEXa7VUjkhLUUUUUU==
 X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -61,65 +61,127 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Signed-off-by: Huang Pei <huangpei@loongson.cn>
 ---
- arch/mips/boot/compressed/Makefile | 2 +-
- arch/mips/kernel/Makefile          | 8 ++++----
- arch/mips/vdso/Makefile            | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ arch/mips/kernel/Makefile  |  1 -
+ arch/mips/kernel/ftrace.c  | 33 ---------------------------------
+ arch/mips/kernel/syscall.c | 32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 32 insertions(+), 34 deletions(-)
 
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index d66511825fe1..8fc9ceeec709 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -18,7 +18,7 @@ include $(srctree)/arch/mips/Kbuild.platforms
- BOOT_HEAP_SIZE := 0x400000
- 
- # Disable Function Tracer
--KBUILD_CFLAGS := $(filter-out -pg, $(KBUILD_CFLAGS))
-+KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE), $(KBUILD_CFLAGS))
- 
- KBUILD_CFLAGS := $(filter-out -fstack-protector, $(KBUILD_CFLAGS))
- 
 diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index 2a05b923f579..33e31ea10234 100644
+index 33e31ea10234..5b2b551058ac 100644
 --- a/arch/mips/kernel/Makefile
 +++ b/arch/mips/kernel/Makefile
-@@ -17,10 +17,10 @@ obj-y		+= cpu-probe.o
- endif
+@@ -39,7 +39,6 @@ obj-$(CONFIG_DEBUG_FS)		+= segment.o
+ obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
+ obj-$(CONFIG_MODULES)		+= module.o
  
- ifdef CONFIG_FUNCTION_TRACER
--CFLAGS_REMOVE_ftrace.o = -pg
--CFLAGS_REMOVE_early_printk.o = -pg
--CFLAGS_REMOVE_perf_event.o = -pg
--CFLAGS_REMOVE_perf_event_mipsxx.o = -pg
-+CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_early_printk.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_perf_event.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_perf_event_mipsxx.o = $(CC_FLAGS_FTRACE)
- endif
+-obj-$(CONFIG_FTRACE_SYSCALLS)	+= ftrace.o
+ obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
  
- obj-$(CONFIG_CEVT_BCM1480)	+= cevt-bcm1480.o
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 5810cc12bc1d..f21cf88f7ae3 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -49,7 +49,7 @@ CFLAGS_vgettimeofday-o32.o = -include $(srctree)/$(src)/config-n32-o32-env.c -in
- CFLAGS_vgettimeofday-n32.o = -include $(srctree)/$(src)/config-n32-o32-env.c -include $(c-gettimeofday-y)
- endif
+ sw-y				:= r4k_switch.o
+diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
+index f57e68f40a34..5156b2e54bfe 100644
+--- a/arch/mips/kernel/ftrace.c
++++ b/arch/mips/kernel/ftrace.c
+@@ -12,14 +12,11 @@
+ #include <linux/uaccess.h>
+ #include <linux/init.h>
+ #include <linux/ftrace.h>
+-#include <linux/syscalls.h>
  
--CFLAGS_REMOVE_vgettimeofday.o = -pg
-+CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE)
+ #include <asm/asm.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/cacheflush.h>
+-#include <asm/syscall.h>
+ #include <asm/uasm.h>
+-#include <asm/unistd.h>
  
- ifdef CONFIG_MIPS_DISABLE_VDSO
-   ifndef CONFIG_MIPS_LD_CAN_LINK_VDSO
-@@ -63,7 +63,7 @@ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
- 	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
- 	-G 0 --eh-frame-hdr --hash-style=sysv --build-id=sha1 -T
+ #include <asm-generic/sections.h>
  
--CFLAGS_REMOVE_vdso.o = -pg
-+CFLAGS_REMOVE_vdso.o = $(CC_FLAGS_FTRACE)
+@@ -382,33 +379,3 @@ void prepare_ftrace_return(unsigned long *parent_ra_addr, unsigned long self_ra,
+ 	WARN_ON(1);
+ }
+ #endif	/* CONFIG_FUNCTION_GRAPH_TRACER */
+-
+-#ifdef CONFIG_FTRACE_SYSCALLS
+-
+-#ifdef CONFIG_32BIT
+-unsigned long __init arch_syscall_addr(int nr)
+-{
+-	return (unsigned long)sys_call_table[nr - __NR_O32_Linux];
+-}
+-#endif
+-
+-#ifdef CONFIG_64BIT
+-
+-unsigned long __init arch_syscall_addr(int nr)
+-{
+-#ifdef CONFIG_MIPS32_N32
+-	if (nr >= __NR_N32_Linux && nr < __NR_N32_Linux + __NR_N32_Linux_syscalls)
+-		return (unsigned long)sysn32_call_table[nr - __NR_N32_Linux];
+-#endif
+-	if (nr >= __NR_64_Linux  && nr < __NR_64_Linux + __NR_64_Linux_syscalls)
+-		return (unsigned long)sys_call_table[nr - __NR_64_Linux];
+-#ifdef CONFIG_MIPS32_O32
+-	if (nr >= __NR_O32_Linux && nr < __NR_O32_Linux + __NR_O32_Linux_syscalls)
+-		return (unsigned long)sys32_call_table[nr - __NR_O32_Linux];
+-#endif
+-
+-	return (unsigned long) &sys_ni_syscall;
+-}
+-#endif
+-
+-#endif /* CONFIG_FTRACE_SYSCALLS */
+diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
+index 2afa3eef486a..797d9ce478da 100644
+--- a/arch/mips/kernel/syscall.c
++++ b/arch/mips/kernel/syscall.c
+@@ -39,7 +39,9 @@
+ #include <asm/shmparam.h>
+ #include <asm/sync.h>
+ #include <asm/sysmips.h>
++#include <asm/syscall.h>
+ #include <asm/switch_to.h>
++#include <asm/unistd.h>
  
- GCOV_PROFILE := n
- UBSAN_SANITIZE := n
+ /*
+  * For historic reasons the pipe(2) syscall on MIPS has an unusual calling
+@@ -233,6 +235,36 @@ SYSCALL_DEFINE3(sysmips, long, cmd, long, arg1, long, arg2)
+ 	return -EINVAL;
+ }
+ 
++#ifdef CONFIG_FTRACE_SYSCALLS
++
++#ifdef CONFIG_32BIT
++unsigned long __init arch_syscall_addr(int nr)
++{
++	return (unsigned long)sys_call_table[nr - __NR_O32_Linux];
++}
++#endif
++
++#ifdef CONFIG_64BIT
++
++unsigned long __init arch_syscall_addr(int nr)
++{
++#ifdef CONFIG_MIPS32_N32
++	if (nr >= __NR_N32_Linux && nr < __NR_N32_Linux + __NR_N32_Linux_syscalls)
++		return (unsigned long)sysn32_call_table[nr - __NR_N32_Linux];
++#endif
++	if (nr >= __NR_64_Linux  && nr < __NR_64_Linux + __NR_64_Linux_syscalls)
++		return (unsigned long)sys_call_table[nr - __NR_64_Linux];
++#ifdef CONFIG_MIPS32_O32
++	if (nr >= __NR_O32_Linux && nr < __NR_O32_Linux + __NR_O32_Linux_syscalls)
++		return (unsigned long)sys32_call_table[nr - __NR_O32_Linux];
++#endif
++
++	return (unsigned long) &sys_ni_syscall;
++}
++#endif
++
++#endif /* CONFIG_FTRACE_SYSCALLS */
++
+ /*
+  * No implemented yet ...
+  */
 -- 
 2.17.1
 
