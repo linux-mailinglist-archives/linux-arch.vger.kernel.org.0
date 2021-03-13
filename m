@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD29A339AE8
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Mar 2021 02:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD278339C64
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Mar 2021 07:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbhCMBkb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 Mar 2021 20:40:31 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:55520 "EHLO loongson.cn"
+        id S232331AbhCMGmu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 13 Mar 2021 01:42:50 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:42724 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232942AbhCMBkB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 12 Mar 2021 20:40:01 -0500
+        id S232431AbhCMGmi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 13 Mar 2021 01:42:38 -0500
 Received: from localhost.localdomain (unknown [222.209.9.50])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxKdbcF0xgiakYAA--.9125S3;
-        Sat, 13 Mar 2021 09:39:49 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGda4XkxgjLUYAA--.9506S2;
+        Sat, 13 Mar 2021 14:42:06 +0800 (CST)
 From:   Huang Pei <huangpei@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         ambrosehua@gmail.com
@@ -25,126 +25,349 @@ Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
         Yang Tiezhu <yangtiezhu@loongson.cn>,
         Gao Juxin <gaojuxin@loongson.cn>,
         Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: [PATCH] MIPS: clean up CONFIG_MIPS_PGD_C0_CONTEXT handling
-Date:   Sat, 13 Mar 2021 09:39:27 +0800
-Message-Id: <20210313013927.26733-2-huangpei@loongson.cn>
+        Jinyang He <hejinyang@loongson.cn>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [RFC PATCH V2]: add DYNAMC_FTRACE_WITH_REGS and
+Date:   Sat, 13 Mar 2021 14:41:43 +0800
+Message-Id: <20210313064149.29276-1-huangpei@loongson.cn>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210313013927.26733-1-huangpei@loongson.cn>
-References: <20210313013927.26733-1-huangpei@loongson.cn>
-X-CM-TRANSID: AQAAf9AxKdbcF0xgiakYAA--.9125S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrWfAF47Zr1xCw48ZFykuFg_yoW5Xr43p3
-        92q3WkGr47Zr98Zry5Aa4kXr4rta90y390vF4DKr909FWqqFn0934rJwnIyF1DGFs7Ga1x
-        Xrs0gFW5Jr9F9w7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPG14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
-        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
-        x2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIF
-        yTuYvjfU8BMKDUUUU
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxGda4XkxgjLUYAA--.9506S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF15Gw4xKF1kur45CF4UArb_yoWrZrW3pF
+        W3ZrnIvr48JrZ0kr4jvrW5Zr1SgrW5CrWDuFn5Gr1rA3Z0kF4Syw18G3W8XrW7GrykArWj
+        qF1jkrykuFyDJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+        VFxhVjvjDU0xZFpf9x0JU3HUDUUUUU=
 X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+. LOONGSON64 use 0x98xx_xxxx_xxxx_xxxx as xphys cached, instread of
-0xa8xx_xxxx_xxxx_xxxx
+V2:
++. fix ftrace regs test failure
 
-+. let CONFIG_MIPS_PGD_C0_CONTEXT depend on 64bit
++. fix kprobe test failure with adding KPROBES_ON_FTRACE
 
-+. cast CAC_BASE into u64 to silence warning on MIPS32
 
-CP0 Context has enough room for wraping pgd into its 41-bit PTEBase field.
+This series add DYNAMC_FTRACE_WITH_REGS and KPROBES_ON_FTRACE support 
+without depending on _mcount and -pg, and try to address following issue
 
-+. For XPHYS, the trick is that pgd is 4kB aligned, and the PABITS <= 53,
-only save 53 - 12 = 41 bits, aka :
++. _mcount stub size is 3 insns in vmlinux  and  4 insns in .ko, too much
 
-   bit[63:59] | 0000 00 |  bit[53:12] | 0000 0000 0000
++. complex handing MIPS32 and MIPS64 in _mcount, especially sp pointer in
+MIPS32
 
-+. for CKSEG0, only save 29 - 12 = 17 bits
++. stub is called with sp adjusted in Callee(the traced function), which
+is hard for livepatch to restore the original sp pointer
 
-when switching pgd, only need to save bit[53:12] or bit[28:12] into
-CP0 Context's bit[63:23], see folling asm generated at run time
+Remaining Issues
+################
 
-tlbmiss_handler_setup_pgd:
-	.set	push
-	.set	noreorder
++. reserve three nops or four nops for <= MIPS R5 ?
 
-	dsra	a2, a0, 29
-	move	a3, a0
-	dins	a0, zero, 29, 35
-	daddiu	a2, a2, 4	//for CKSEG0, a2 from 0xfffffffffffffffc
-				//into 0
+Without direct call, three nops is enough. With direct call, we need to 
+hack ftrace to save the first instruction somewhere. Four nops is enough 
+for all cases
 
-	movn	a0, a3, a2
-	dsll	a0, a0, 11
-	jr	ra
-	dmtc0	a0, CP0_CONTEXT
+MIPS R6 only need three nops without hacking
 
-	.set	pop
++. MIPS32 support, working on it
 
-when using it on page walking
++. checking for gcc version, can previous two bug back porting to gcc 8.5?
+We should check gcc's version
 
-	dmfc0	k0, CP0_CONTEXT
-	dins	k0, zero, 0, 23	         // zero badv2
-	ori	k0, k0, (CAC_BASE >> 53) // *prefix* with bit[63:59]
-	drotr	k0, k0, 11		 // kick it in the right place
++. stack backstrace
 
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/Kconfig    | 3 ++-
- arch/mips/mm/tlbex.c | 9 +++++----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+GCC
+#########
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 2000bb2b0220..5741dae35b74 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2142,7 +2142,8 @@ config CPU_SUPPORTS_HUGEPAGES
- 	depends on !(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))
- config MIPS_PGD_C0_CONTEXT
- 	bool
--	default y if 64BIT && (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
-+	depends on 64BIT
-+	default y if (CPU_MIPSR2 || CPU_MIPSR6) && !CPU_XLP
- 
- #
- # Set to y for ptrace access to watch registers.
-diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-index a7521b8f7658..cfaf710096c9 100644
---- a/arch/mips/mm/tlbex.c
-+++ b/arch/mips/mm/tlbex.c
-@@ -848,8 +848,8 @@ void build_get_pmde64(u32 **p, struct uasm_label **l, struct uasm_reloc **r,
- 		/* Clear lower 23 bits of context. */
- 		uasm_i_dins(p, ptr, 0, 0, 23);
- 
--		/* 1 0	1 0 1  << 6  xkphys cached */
--		uasm_i_ori(p, ptr, ptr, 0x540);
-+		/* insert bit[63:59] of CAC_BASE into bit[11:6] of ptr */
-+		uasm_i_ori(p, ptr, ptr, ((u64)(CAC_BASE) >> 53));
- 		uasm_i_drotr(p, ptr, ptr, 11);
- #elif defined(CONFIG_SMP)
- 		UASM_i_CPUID_MFC0(p, ptr, SMP_CPUID_REG);
-@@ -1164,8 +1164,9 @@ build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
- 
- 	if (pgd_reg == -1) {
- 		vmalloc_branch_delay_filled = 1;
--		/* 1 0	1 0 1  << 6  xkphys cached */
--		uasm_i_ori(p, ptr, ptr, 0x540);
-+		/* insert bit[63:59] of CAC_BASE into bit[11:6] of ptr */
-+		uasm_i_ori(p, ptr, ptr, ((u64)(CAC_BASE) >> 53));
-+
- 		uasm_i_drotr(p, ptr, ptr, 11);
- 	}
- 
--- 
-2.17.1
++. GCC 8 add -fpatchable-function-entry=N[, M] support to insert N 
+nops before real start, for more info, see gcc 8 manual
+
++. GCC/MIPS has two bug: 93242 (fixed in gcc 10), 99217 (with a fix, but
+not accepted) about this option. With fixes applyed in gcc 8.3, vmlinux is OK
+
+
+Design
+#########
+
++. Caller A calls Callee B, with -fpatchable-function-entry=3, B has 
+three nops at its entry,
+
+------------
+	::
+
+		A:
+
+		......
+			jal	B
+			nop
+		......
+
+		B:
+			nop
+			nop
+			nop
+
+		#B: real start 
+			INSN_B_first
+
++. With ftrace initialized or module loaded, this three nop got
+replaced,
+
+------------
+	::
+
+		A:
+
+		......
+			jal	B
+			nop
+		......
+
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			nop
+			li	t0, 0
+
+		#B: real start 
+			INSN_B_first
+
+Obviously, ftrace_regs_caller is 64KB aligned, thanks He Jinyang
+<hejinyang@loongson.cn>
+	
++. To enable tracing , take nop into "jalr at, at“, 
+
+PS: 
+
+"jalr at, at" jump and link into addr in "at", and save the return address
+in "at";
+
+With this, no touching parent return address in ra
+
+------------
+	::
+
+		A:
+
+		......
+			jal	B
+			nop
+		......
+
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			jalr	at, at
+			li	t0, 0
+
+		#B: real start 
+			INSN_B_first
+	
+
++. To disable tracing, take "jalr at, at" into nop
+
+------------
+	::
+
+		A:
+		......
+
+			jal	B
+			nop
+		......
+
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			nop
+			li	t0, 0
+
+		#B: real start 
+			INSN_B_first
+	
++. when tracing without regs, replace "li t0, 0' with "li t0, 1"
+
+------------
+	::
+
+		A:
+		......
+
+			jal	B
+			nop
+		......
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			jalr	at, at
+			li	t0, 1
+		#B: real start 
+			INSN_B_first
+
+With only one instruction modified, it is atomic and no sync needed (
+_mcount need sync between two writes) on both MIPS32 and MIPS64, I got 
+this from ARM64.
+
+we need transfrom from tracing disabled into tracing without regs, first
+replace "li t0, 0" with "li t0, 1", then "nop" with "jalr at, at", still
+no sync between
+
+------------
+	::
+
+		A:
+
+		......
+			jal	B
+			nop
+		......
+		B:
+			lui	at, %hi(ftrace_regs_caller)
+			jalr	at, at
+			li	t0, 1
+
+		#B: real start 
+			INSN_B_first
+
+
+PS:
+
+In mcount-based ftrace of MIPS32 vmlinux, the _mcount calling sequence
+like this:
+
+------------
+	::
+
+		A:
+		......
+
+			jal	B
+			nop
+		......
+		B:
+			move	at, ra
+			jal	_mcount
+			addiu	sp, sp, -32
+		#B: real start 
+			INSN_B_first
+
+------------
+	::
+
+		A:
+		......
+
+			jal	B
+			nop
+		......
+		B:
+			move	at, ra
+			nop
+			nop
+		#B: real start 
+			INSN_B_first
+
+no matter disabing and enabling tracing, we can not atomically change
+both "jalr" and "addiu"(sync does not help here), on MIP32/SMP, whether
+this 
+
+------------
+	::
+
+		A:
+
+		......
+			jal	B
+			nop
+		......
+		B:
+			move	at, ra
+			nop
+			addiu	sp, sp, -32
+		#B: real start 
+			INSN_B_first
+
+or this
+
+------------
+	::
+
+		A:
+		......
+			jal	B
+			nop
+		......
+		B:
+			move	at, ra
+			nop
+			addiu	sp, sp, -32
+		#B: real start 
+			INSN_B_first
+
+would wreck the ftrace
+
++. When B is ok to be patched, replace first four instruction with new 
+function B'
+
+------------
+	::
+
+		A:
+		......
+			jal	B
+			nop
+		......
+		B:
+			lui	at, %hi(B')	// second, fill new B'high
+			addiu	at, %lo(B')	// first, fill nop
+						// third, fill new B' low
+			jr	at		// at last, fill jr
+		#B: real start 
+			nop			//forth, fill nop
+						//Watch Out! 
+						//first instruction 
+						// clobbered. we
+						//need to save it somewhere
+						//or we must use four nops
+
+if tracing enabled, we need to disable tracing first, and we need sync 
+before fill "jr"
+	
+***Or use 4 nops for stub***
+
+Patches
+###########
+
+Patch 1 - Patch 3 
+
+This prepares new MIPS/ftrace with DYNAMIC_FTRACE_WITH_REGS and KPROBES_ON_FTACE 
+in parallel with old MIPS/Ftrace 
+
+NO function changed, these three patches can be merge into one patch
+
+
+Patch 4 - Patch 5
+
+this is needed for all RISC
+
+
+Patch 6
+
+Add DYNAMC_FTRACE_WITH_REGS and KPROBES_ON_FTACE support 
+
+
 
