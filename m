@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C273D339C60
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Mar 2021 07:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2506339C69
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Mar 2021 07:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbhCMGmt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S230309AbhCMGmt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Sat, 13 Mar 2021 01:42:49 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:42682 "EHLO loongson.cn"
+Received: from mail.loongson.cn ([114.242.206.163]:42676 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230309AbhCMGmh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 13 Mar 2021 01:42:37 -0500
+        id S231392AbhCMGmi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 13 Mar 2021 01:42:38 -0500
 Received: from localhost.localdomain (unknown [222.209.9.50])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGda4XkxgjLUYAA--.9506S4;
-        Sat, 13 Mar 2021 14:42:10 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGda4XkxgjLUYAA--.9506S5;
+        Sat, 13 Mar 2021 14:42:12 +0800 (CST)
 From:   Huang Pei <huangpei@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         ambrosehua@gmail.com
@@ -30,18 +30,18 @@ Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 2/6] MIPS: move FTRACE_SYSCALLS from ftrace.c into syscall.c
-Date:   Sat, 13 Mar 2021 14:41:45 +0800
-Message-Id: <20210313064149.29276-3-huangpei@loongson.cn>
+Subject: [PATCH 3/6] MIPS: prepare for new ftrace implementation
+Date:   Sat, 13 Mar 2021 14:41:46 +0800
+Message-Id: <20210313064149.29276-4-huangpei@loongson.cn>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210313064149.29276-1-huangpei@loongson.cn>
 References: <20210313064149.29276-1-huangpei@loongson.cn>
-X-CM-TRANSID: AQAAf9AxGda4XkxgjLUYAA--.9506S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxAF4ktr1xZr15Xry3WF4UJwb_yoWrGFykpF
-        s8Z3ZrG395WF10y347ZryFkrZ3Jw4kZryay3ZrK34rZ3Wxt3W5XrZ29a4ktryktFWq9FW8
-        uFWxGr15Cr4ru3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: AQAAf9AxGda4XkxgjLUYAA--.9506S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7ArW5Jr1xZr4ktw1UZw1rCrg_yoW8GF17pa
+        n7Aas8Gw4xZFWvy34SkryrGFy3JwsYvrWFgFZrtw4rtFnYqFs8Xrn2yr15trW0gr1xKay8
+        Wa48Wr17A3sYv3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUmj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
         x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
         Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
         8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxd
@@ -53,135 +53,47 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxAF4ktr1xZr15Xry3WF4UJwb_yoWrGFykpF
         AFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xII
         jxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
         8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2Kfnx
-        nUUI43ZEXa7VUjkhLUUUUUU==
+        nUUI43ZEXa7VUjPku7UUUUU==
 X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+No function change
+
 Signed-off-by: Huang Pei <huangpei@loongson.cn>
 ---
- arch/mips/kernel/Makefile  |  1 -
- arch/mips/kernel/ftrace.c  | 33 ---------------------------------
- arch/mips/kernel/syscall.c | 32 ++++++++++++++++++++++++++++++++
- 3 files changed, 32 insertions(+), 34 deletions(-)
+ arch/mips/kernel/Makefile                      | 4 ++--
+ arch/mips/kernel/{ftrace.c => ftrace-mcount.c} | 0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename arch/mips/kernel/{ftrace.c => ftrace-mcount.c} (100%)
 
 diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index 33e31ea10234..5b2b551058ac 100644
+index 5b2b551058ac..3e7b0ee54cfb 100644
 --- a/arch/mips/kernel/Makefile
 +++ b/arch/mips/kernel/Makefile
-@@ -39,7 +39,6 @@ obj-$(CONFIG_DEBUG_FS)		+= segment.o
+@@ -17,7 +17,7 @@ obj-y		+= cpu-probe.o
+ endif
+ 
+ ifdef CONFIG_FUNCTION_TRACER
+-CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
++CFLAGS_REMOVE_ftrace-mcount.o = $(CC_FLAGS_FTRACE)
+ CFLAGS_REMOVE_early_printk.o = $(CC_FLAGS_FTRACE)
+ CFLAGS_REMOVE_perf_event.o = $(CC_FLAGS_FTRACE)
+ CFLAGS_REMOVE_perf_event_mipsxx.o = $(CC_FLAGS_FTRACE)
+@@ -39,7 +39,7 @@ obj-$(CONFIG_DEBUG_FS)		+= segment.o
  obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
  obj-$(CONFIG_MODULES)		+= module.o
  
--obj-$(CONFIG_FTRACE_SYSCALLS)	+= ftrace.o
- obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
+-obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
++obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace-mcount.o
  
  sw-y				:= r4k_switch.o
-diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
-index f57e68f40a34..5156b2e54bfe 100644
---- a/arch/mips/kernel/ftrace.c
-+++ b/arch/mips/kernel/ftrace.c
-@@ -12,14 +12,11 @@
- #include <linux/uaccess.h>
- #include <linux/init.h>
- #include <linux/ftrace.h>
--#include <linux/syscalls.h>
- 
- #include <asm/asm.h>
- #include <asm/asm-offsets.h>
- #include <asm/cacheflush.h>
--#include <asm/syscall.h>
- #include <asm/uasm.h>
--#include <asm/unistd.h>
- 
- #include <asm-generic/sections.h>
- 
-@@ -382,33 +379,3 @@ void prepare_ftrace_return(unsigned long *parent_ra_addr, unsigned long self_ra,
- 	WARN_ON(1);
- }
- #endif	/* CONFIG_FUNCTION_GRAPH_TRACER */
--
--#ifdef CONFIG_FTRACE_SYSCALLS
--
--#ifdef CONFIG_32BIT
--unsigned long __init arch_syscall_addr(int nr)
--{
--	return (unsigned long)sys_call_table[nr - __NR_O32_Linux];
--}
--#endif
--
--#ifdef CONFIG_64BIT
--
--unsigned long __init arch_syscall_addr(int nr)
--{
--#ifdef CONFIG_MIPS32_N32
--	if (nr >= __NR_N32_Linux && nr < __NR_N32_Linux + __NR_N32_Linux_syscalls)
--		return (unsigned long)sysn32_call_table[nr - __NR_N32_Linux];
--#endif
--	if (nr >= __NR_64_Linux  && nr < __NR_64_Linux + __NR_64_Linux_syscalls)
--		return (unsigned long)sys_call_table[nr - __NR_64_Linux];
--#ifdef CONFIG_MIPS32_O32
--	if (nr >= __NR_O32_Linux && nr < __NR_O32_Linux + __NR_O32_Linux_syscalls)
--		return (unsigned long)sys32_call_table[nr - __NR_O32_Linux];
--#endif
--
--	return (unsigned long) &sys_ni_syscall;
--}
--#endif
--
--#endif /* CONFIG_FTRACE_SYSCALLS */
-diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
-index 2afa3eef486a..797d9ce478da 100644
---- a/arch/mips/kernel/syscall.c
-+++ b/arch/mips/kernel/syscall.c
-@@ -39,7 +39,9 @@
- #include <asm/shmparam.h>
- #include <asm/sync.h>
- #include <asm/sysmips.h>
-+#include <asm/syscall.h>
- #include <asm/switch_to.h>
-+#include <asm/unistd.h>
- 
- /*
-  * For historic reasons the pipe(2) syscall on MIPS has an unusual calling
-@@ -233,6 +235,36 @@ SYSCALL_DEFINE3(sysmips, long, cmd, long, arg1, long, arg2)
- 	return -EINVAL;
- }
- 
-+#ifdef CONFIG_FTRACE_SYSCALLS
-+
-+#ifdef CONFIG_32BIT
-+unsigned long __init arch_syscall_addr(int nr)
-+{
-+	return (unsigned long)sys_call_table[nr - __NR_O32_Linux];
-+}
-+#endif
-+
-+#ifdef CONFIG_64BIT
-+
-+unsigned long __init arch_syscall_addr(int nr)
-+{
-+#ifdef CONFIG_MIPS32_N32
-+	if (nr >= __NR_N32_Linux && nr < __NR_N32_Linux + __NR_N32_Linux_syscalls)
-+		return (unsigned long)sysn32_call_table[nr - __NR_N32_Linux];
-+#endif
-+	if (nr >= __NR_64_Linux  && nr < __NR_64_Linux + __NR_64_Linux_syscalls)
-+		return (unsigned long)sys_call_table[nr - __NR_64_Linux];
-+#ifdef CONFIG_MIPS32_O32
-+	if (nr >= __NR_O32_Linux && nr < __NR_O32_Linux + __NR_O32_Linux_syscalls)
-+		return (unsigned long)sys32_call_table[nr - __NR_O32_Linux];
-+#endif
-+
-+	return (unsigned long) &sys_ni_syscall;
-+}
-+#endif
-+
-+#endif /* CONFIG_FTRACE_SYSCALLS */
-+
- /*
-  * No implemented yet ...
-  */
+ sw-$(CONFIG_CPU_R3000)		:= r2300_switch.o
+diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace-mcount.c
+similarity index 100%
+rename from arch/mips/kernel/ftrace.c
+rename to arch/mips/kernel/ftrace-mcount.c
 -- 
 2.17.1
 
