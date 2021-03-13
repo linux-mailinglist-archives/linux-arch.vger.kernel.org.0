@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2506339C69
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Mar 2021 07:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B7B339C6B
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Mar 2021 07:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbhCMGmt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 13 Mar 2021 01:42:49 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:42676 "EHLO loongson.cn"
+        id S232462AbhCMGmu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 13 Mar 2021 01:42:50 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:42756 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231392AbhCMGmi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 13 Mar 2021 01:42:38 -0500
+        id S232627AbhCMGms (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 13 Mar 2021 01:42:48 -0500
 Received: from localhost.localdomain (unknown [222.209.9.50])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGda4XkxgjLUYAA--.9506S5;
-        Sat, 13 Mar 2021 14:42:12 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGda4XkxgjLUYAA--.9506S6;
+        Sat, 13 Mar 2021 14:42:13 +0800 (CST)
 From:   Huang Pei <huangpei@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         ambrosehua@gmail.com
@@ -29,71 +29,98 @@ Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
         "Maciej W . Rozycki" <macro@orcam.me.uk>,
         Steven Rostedt <rostedt@goodmis.org>,
         Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 3/6] MIPS: prepare for new ftrace implementation
-Date:   Sat, 13 Mar 2021 14:41:46 +0800
-Message-Id: <20210313064149.29276-4-huangpei@loongson.cn>
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: [PATCH 4/6] kprobes/ftrace: Use ftrace_location() when [dis]arming probes
+Date:   Sat, 13 Mar 2021 14:41:47 +0800
+Message-Id: <20210313064149.29276-5-huangpei@loongson.cn>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210313064149.29276-1-huangpei@loongson.cn>
 References: <20210313064149.29276-1-huangpei@loongson.cn>
-X-CM-TRANSID: AQAAf9AxGda4XkxgjLUYAA--.9506S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArW5Jr1xZr4ktw1UZw1rCrg_yoW8GF17pa
-        n7Aas8Gw4xZFWvy34SkryrGFy3JwsYvrWFgFZrtw4rtFnYqFs8Xrn2yr15trW0gr1xKay8
-        Wa48Wr17A3sYv3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUmj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxd
-        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-        v20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-        F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2
-        IY04v7MxkIecxEwVAFwVW8AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8
-        JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1V
-        AFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
-        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2Kfnx
-        nUUI43ZEXa7VUjPku7UUUUU==
+X-CM-TRANSID: AQAAf9AxGda4XkxgjLUYAA--.9506S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw43WFy7tF4rKryrtw43Wrg_yoW8KrWrpa
+        s0kwn8tr48JFWvgF9Fgw4kZr1rtrn8t347ArW2y3yYyrnxJr1YgF42v3yDtrn8GrZYyFWS
+        yF42vFyjya1xu3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUmF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
+        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
+        z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr
+        1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j
+        6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x
+        IIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_
+        Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8c
+        xan2IY04v7MxkIecxEwVAFwVW8AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+        JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
+        kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
+        6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+        IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2
+        KfnxnUUI43ZEXa7VUjgo2UUUUUU==
 X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-No function change
+From: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
 
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
+Ftrace location could include more than a single instruction in case
+of some architectures (powerpc64, for now). In this case, kprobe is
+permitted on any of those instructions, and uses ftrace infrastructure
+for functioning.
+
+However, [dis]arm_kprobe_ftrace() uses the kprobe address when setting
+up ftrace filter IP. This won't work if the address points to any
+instruction apart from the one that has a branch to _mcount(). To
+resolve this, have [dis]arm_kprobe_ftrace() use ftrace_function() to
+identify the filter IP.
+
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- arch/mips/kernel/Makefile                      | 4 ++--
- arch/mips/kernel/{ftrace.c => ftrace-mcount.c} | 0
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename arch/mips/kernel/{ftrace.c => ftrace-mcount.c} (100%)
+ kernel/kprobes.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index 5b2b551058ac..3e7b0ee54cfb 100644
---- a/arch/mips/kernel/Makefile
-+++ b/arch/mips/kernel/Makefile
-@@ -17,7 +17,7 @@ obj-y		+= cpu-probe.o
- endif
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index 41fdbb7953c6..66ee28b071c2 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1045,9 +1045,10 @@ static int prepare_kprobe(struct kprobe *p)
+ static int __arm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
+ 			       int *cnt)
+ {
++	unsigned long ftrace_ip = ftrace_location((unsigned long)p->addr);
+ 	int ret = 0;
  
- ifdef CONFIG_FUNCTION_TRACER
--CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_ftrace-mcount.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_early_printk.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_perf_event.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_perf_event_mipsxx.o = $(CC_FLAGS_FTRACE)
-@@ -39,7 +39,7 @@ obj-$(CONFIG_DEBUG_FS)		+= segment.o
- obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
- obj-$(CONFIG_MODULES)		+= module.o
+-	ret = ftrace_set_filter_ip(ops, (unsigned long)p->addr, 0, 0);
++	ret = ftrace_set_filter_ip(ops, ftrace_ip, 0, 0);
+ 	if (ret) {
+ 		pr_debug("Failed to arm kprobe-ftrace at %pS (%d)\n",
+ 			 p->addr, ret);
+@@ -1070,7 +1071,7 @@ static int __arm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
+ 	 * At this point, sinec ops is not registered, we should be sefe from
+ 	 * registering empty filter.
+ 	 */
+-	ftrace_set_filter_ip(ops, (unsigned long)p->addr, 1, 0);
++	ftrace_set_filter_ip(ops, ftrace_ip, 1, 0);
+ 	return ret;
+ }
  
--obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
-+obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace-mcount.o
+@@ -1087,6 +1088,7 @@ static int arm_kprobe_ftrace(struct kprobe *p)
+ static int __disarm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
+ 				  int *cnt)
+ {
++	unsigned long ftrace_ip = ftrace_location((unsigned long)p->addr);
+ 	int ret = 0;
  
- sw-y				:= r4k_switch.o
- sw-$(CONFIG_CPU_R3000)		:= r2300_switch.o
-diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace-mcount.c
-similarity index 100%
-rename from arch/mips/kernel/ftrace.c
-rename to arch/mips/kernel/ftrace-mcount.c
+ 	if (*cnt == 1) {
+@@ -1097,7 +1099,7 @@ static int __disarm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
+ 
+ 	(*cnt)--;
+ 
+-	ret = ftrace_set_filter_ip(ops, (unsigned long)p->addr, 1, 0);
++	ret = ftrace_set_filter_ip(ops, ftrace_ip, 1, 0);
+ 	WARN_ONCE(ret < 0, "Failed to disarm kprobe-ftrace at %pS (%d)\n",
+ 		  p->addr, ret);
+ 	return ret;
 -- 
 2.17.1
 
