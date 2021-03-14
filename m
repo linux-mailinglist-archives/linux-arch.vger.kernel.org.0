@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5524A33A3C9
-	for <lists+linux-arch@lfdr.de>; Sun, 14 Mar 2021 10:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C856133A3CE
+	for <lists+linux-arch@lfdr.de>; Sun, 14 Mar 2021 10:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235060AbhCNJMw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 14 Mar 2021 05:12:52 -0400
-Received: from relay13.mail.gandi.net ([217.70.178.233]:24365 "EHLO
-        relay13.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234362AbhCNJMq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 14 Mar 2021 05:12:46 -0400
-X-Greylist: delayed 85522 seconds by postgrey-1.27 at vger.kernel.org; Sun, 14 Mar 2021 05:12:45 EDT
+        id S235022AbhCNJN5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 14 Mar 2021 05:13:57 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:24441 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234985AbhCNJNv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 14 Mar 2021 05:13:51 -0400
+X-Originating-IP: 2.7.49.219
 Received: from debian.home (lfbn-lyo-1-457-219.w2-7.abo.wanadoo.fr [2.7.49.219])
         (Authenticated sender: alex@ghiti.fr)
-        by relay13.mail.gandi.net (Postfix) with ESMTPSA id 990DC8000D;
-        Sun, 14 Mar 2021 09:12:41 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 89591240006;
+        Sun, 14 Mar 2021 09:13:44 +0000 (UTC)
 From:   Alexandre Ghiti <alex@ghiti.fr>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -28,112 +28,129 @@ To:     Jonathan Corbet <corbet@lwn.net>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
         linux-mm@kvack.org
-Cc:     Alexandre Ghiti <alex@ghiti.fr>
-Subject: [PATCH v3 2/3] Documentation: riscv: Add documentation that describes the VM layout
-Date:   Sun, 14 Mar 2021 05:10:26 -0400
-Message-Id: <20210314091027.21592-3-alex@ghiti.fr>
+Cc:     Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>
+Subject: [PATCH v3 3/3] riscv: Prepare ptdump for vm layout dynamic addresses
+Date:   Sun, 14 Mar 2021 05:10:27 -0400
+Message-Id: <20210314091027.21592-4-alex@ghiti.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210314091027.21592-1-alex@ghiti.fr>
 References: <20210314091027.21592-1-alex@ghiti.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This new document presents the RISC-V virtual memory layout and is based
-one the x86 one: it describes the different limits of the different regions
-of the virtual address space.
+This is a preparatory patch for sv48 support that will introduce
+dynamic PAGE_OFFSET.
+
+Dynamic PAGE_OFFSET implies that all zones (vmalloc, vmemmap, fixaddr...)
+whose addresses depend on PAGE_OFFSET become dynamic and can't be used
+to statically initialize the array used by ptdump to identify the
+different zones of the vm layout.
 
 Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
+Reviewed-by: Anup Patel <anup@brainfault.org>
 ---
- Documentation/riscv/index.rst     |  1 +
- Documentation/riscv/vm-layout.rst | 63 +++++++++++++++++++++++++++++++
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/riscv/vm-layout.rst
+ arch/riscv/mm/ptdump.c | 67 ++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 55 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/riscv/index.rst b/Documentation/riscv/index.rst
-index 6e6e39482502..ea915c196048 100644
---- a/Documentation/riscv/index.rst
-+++ b/Documentation/riscv/index.rst
-@@ -6,6 +6,7 @@ RISC-V architecture
-     :maxdepth: 1
+diff --git a/arch/riscv/mm/ptdump.c b/arch/riscv/mm/ptdump.c
+index ace74dec7492..aa1b3bce61ab 100644
+--- a/arch/riscv/mm/ptdump.c
++++ b/arch/riscv/mm/ptdump.c
+@@ -58,29 +58,52 @@ struct ptd_mm_info {
+ 	unsigned long end;
+ };
  
-     boot-image-header
-+    vm-layout
-     pmu
-     patch-acceptance
++enum address_markers_idx {
++#ifdef CONFIG_KASAN
++	KASAN_SHADOW_START_NR,
++	KASAN_SHADOW_END_NR,
++#endif
++	FIXMAP_START_NR,
++	FIXMAP_END_NR,
++	PCI_IO_START_NR,
++	PCI_IO_END_NR,
++#ifdef CONFIG_SPARSEMEM_VMEMMAP
++	VMEMMAP_START_NR,
++	VMEMMAP_END_NR,
++#endif
++	VMALLOC_START_NR,
++	VMALLOC_END_NR,
++	PAGE_OFFSET_NR,
++	MODULES_MAPPING_NR,
++	KERNEL_MAPPING_NR,
++	END_OF_SPACE_NR
++};
++
+ static struct addr_marker address_markers[] = {
+ #ifdef CONFIG_KASAN
+-	{KASAN_SHADOW_START,	"Kasan shadow start"},
+-	{KASAN_SHADOW_END,	"Kasan shadow end"},
++	{0, "Kasan shadow start"},
++	{0, "Kasan shadow end"},
+ #endif
+-	{FIXADDR_START,		"Fixmap start"},
+-	{FIXADDR_TOP,		"Fixmap end"},
+-	{PCI_IO_START,		"PCI I/O start"},
+-	{PCI_IO_END,		"PCI I/O end"},
++	{0, "Fixmap start"},
++	{0, "Fixmap end"},
++	{0, "PCI I/O start"},
++	{0, "PCI I/O end"},
+ #ifdef CONFIG_SPARSEMEM_VMEMMAP
+-	{VMEMMAP_START,		"vmemmap start"},
+-	{VMEMMAP_END,		"vmemmap end"},
++	{0, "vmemmap start"},
++	{0, "vmemmap end"},
+ #endif
+-	{VMALLOC_START,		"vmalloc() area"},
+-	{VMALLOC_END,		"vmalloc() end"},
+-	{PAGE_OFFSET,		"Linear mapping"},
++	{0, "vmalloc() area"},
++	{0, "vmalloc() end"},
++	{0, "Linear mapping"},
++	{0, "Modules mapping"},
++	{0, "Kernel mapping (kernel, BPF)"},
+ 	{-1, NULL},
+ };
  
-diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-new file mode 100644
-index 000000000000..329d32098af4
---- /dev/null
-+++ b/Documentation/riscv/vm-layout.rst
-@@ -0,0 +1,63 @@
-+.. SPDX-License-Identifier: GPL-2.0
+ static struct ptd_mm_info kernel_ptd_info = {
+ 	.mm		= &init_mm,
+ 	.markers	= address_markers,
+-	.base_addr	= KERN_VIRT_START,
++	.base_addr	= 0,
+ 	.end		= ULONG_MAX,
+ };
+ 
+@@ -335,6 +358,26 @@ static int ptdump_init(void)
+ {
+ 	unsigned int i, j;
+ 
++#ifdef CONFIG_KASAN
++	address_markers[KASAN_SHADOW_START_NR].start_address = KASAN_SHADOW_START;
++	address_markers[KASAN_SHADOW_END_NR].start_address = KASAN_SHADOW_END;
++#endif
++	address_markers[FIXMAP_START_NR].start_address = FIXADDR_START;
++	address_markers[FIXMAP_END_NR].start_address = FIXADDR_TOP;
++	address_markers[PCI_IO_START_NR].start_address = PCI_IO_START;
++	address_markers[PCI_IO_END_NR].start_address = PCI_IO_END;
++#ifdef CONFIG_SPARSEMEM_VMEMMAP
++	address_markers[VMEMMAP_START_NR].start_address = VMEMMAP_START;
++	address_markers[VMEMMAP_END_NR].start_address = VMEMMAP_END;
++#endif
++	address_markers[VMALLOC_START_NR].start_address = VMALLOC_START;
++	address_markers[VMALLOC_END_NR].start_address = VMALLOC_END;
++	address_markers[PAGE_OFFSET_NR].start_address = PAGE_OFFSET;
++	address_markers[MODULES_MAPPING_NR].start_address = MODULES_VADDR;
++	address_markers[KERNEL_MAPPING_NR].start_address = kernel_virt_addr;
 +
-+=====================================
-+Virtual Memory Layout on RISC-V Linux
-+=====================================
++	kernel_ptd_info.base_addr = KERN_VIRT_START;
 +
-+:Author: Alexandre Ghiti <alex@ghiti.fr>
-+:Date: 12 February 2021
-+
-+This document describes the virtual memory layout used by the RISC-V Linux
-+Kernel.
-+
-+RISC-V Linux Kernel 32bit
-+=========================
-+
-+RISC-V Linux Kernel SV32
-+------------------------
-+
-+TODO
-+
-+RISC-V Linux Kernel 64bit
-+=========================
-+
-+The RISC-V privileged architecture document states that the 64bit addresses
-+"must have bits 63–48 all equal to bit 47, or else a page-fault exception will
-+occur.": that splits the virtual address space into 2 halves separated by a very
-+big hole, the lower half is where the userspace resides, the upper half is where
-+the RISC-V Linux Kernel resides.
-+
-+RISC-V Linux Kernel SV39
-+------------------------
-+
-+::
-+
-+  ========================================================================================================================
-+      Start addr    |   Offset   |     End addr     |  Size   | VM area description
-+  ========================================================================================================================
-+                    |            |                  |         |
-+   0000000000000000 |    0       | 0000003fffffffff |  256 GB | user-space virtual memory, different per mm
-+  __________________|____________|__________________|_________|___________________________________________________________
-+                    |            |                  |         |
-+   0000004000000000 | +256    GB | ffffffbfffffffff | ~16M TB | ... huge, almost 64 bits wide hole of non-canonical
-+                    |            |                  |         |     virtual memory addresses up to the -256 GB
-+                    |            |                  |         |     starting offset of kernel mappings.
-+  __________________|____________|__________________|_________|___________________________________________________________
-+                                                              |
-+                                                              | Kernel-space virtual memory, shared between all processes:
-+  ____________________________________________________________|___________________________________________________________
-+                    |            |                  |         |
-+   ffffffc000000000 | -256    GB | ffffffc7ffffffff |   32 GB | kasan
-+   ffffffcefee00000 | -196    GB | ffffffcefeffffff |    2 MB | fixmap
-+   ffffffceff000000 | -196    GB | ffffffceffffffff |   16 MB | PCI io
-+   ffffffcf00000000 | -196    GB | ffffffcfffffffff |    4 GB | vmemmap
-+   ffffffd000000000 | -192    GB | ffffffdfffffffff |   64 GB | vmalloc/ioremap space
-+   ffffffe000000000 | -128    GB | ffffffff7fffffff |  124 GB | direct mapping of all physical memory
-+  __________________|____________|__________________|_________|____________________________________________________________
-+                                                              |
-+                                                              |
-+  ____________________________________________________________|____________________________________________________________
-+                    |            |                  |         |
-+   ffffffff00000000 |   -4    GB | ffffffff7fffffff |    2 GB | modules
-+   ffffffff80000000 |   -2    GB | ffffffffffffffff |    2 GB | kernel, BPF
-+  __________________|____________|__________________|_________|____________________________________________________________
+ 	for (i = 0; i < ARRAY_SIZE(pg_level); i++)
+ 		for (j = 0; j < ARRAY_SIZE(pte_bits); j++)
+ 			pg_level[i].mask |= pte_bits[j].mask;
 -- 
 2.20.1
 
