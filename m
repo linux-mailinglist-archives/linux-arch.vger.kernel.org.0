@@ -2,114 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2996933CAD9
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1E633CB04
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbhCPBUs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Mar 2021 21:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
+        id S231846AbhCPByc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Mar 2021 21:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbhCPBUQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:20:16 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A103C06174A
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:20:15 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id e2so10910789pld.9
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:20:15 -0700 (PDT)
+        with ESMTP id S231575AbhCPBya (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:54:30 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91CBC061756;
+        Mon, 15 Mar 2021 18:54:29 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id m186so17164962qke.12;
+        Mon, 15 Mar 2021 18:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:message-id:from:to:cc:subject:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=lllSVlP83Zm5w8UR9KXH+eISNqCBApxi8VdWF12ub40=;
-        b=gFWKzN3reXHAX5ObzOjhJ7RyCpBNzpMnVx+OPPAadiry+RmijAe840mbs2p1JUF67+
-         bxOyjMMJJj2zh6yMQ8RTY8pp5JOWPEi64qKz3/wYmWZrIi46sdqIpixS9Yk+NP+07TGI
-         X4EZAhqZxJobz/JW3ZNaD3EZxppgw8UCyOY3c9lsNP3X+qAlK7LBuBlIFcMng65u7aeD
-         o9UkTv4SScQyxV4uin9/XE9eGB2qIUtqp61jDKfDHIXk0zgMrGlesee50VV2byUdTHmi
-         +Gg/4rxUoFrO1rWi+0a4UrYu5IMzlkJ59QhqfxbB4KpnHpoTZdGoBeYxvhJcYuxnoha0
-         dxkQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HRrxGQOEvm+/qrHASsf/SSlT9PdWhy6EY9fxf2NvOu8=;
+        b=G+2o1OZ1MsI8iRpV1SeE5skr4iOeVuLtUmY2erOFTsPPMX+nve/JlUBPWOJZQgab9M
+         hBpHUQIGgSHMAmVJ6YcJuS47G6c6BZA3mW6ZDS7c1mYMSwGr+8regxHvJ7Dw8vxXaGSi
+         9OO+4tEgMi1KPt4Eb9nCtrmrXgH0/gr//G7kDCZkVy7b1667WN5RbMN3PmavhKnQ4ArU
+         mrnS81tOgR513nspmzGd6IYiF21LiZv8+BsT3eIGR8M7IrP2dze4ObQanO4J6cJwds5W
+         T0FF+nH1g5GrnNOzklaYhDBNuTCVfsnTTpouaHF69sNW0mr+piyB8YL/G5Pc0riTO2X5
+         9zug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=lllSVlP83Zm5w8UR9KXH+eISNqCBApxi8VdWF12ub40=;
-        b=VVYcegtwwEN2xMm3iDafXejlXnhzV+DsTcGSZFz3uwtu0x1Dn91FtVS9uQqFTgsaGd
-         TIsUISuWgBiw3s+0eHkqOXir5cShyyzvWZ+gjijAnYQ/kbjCAgg9f30jySx6Kr0R7olI
-         h2CxRwgGpvu0iM0e2I51PiRg/K5roA8S3iiZuKoT622hKyG0+UOFuraLY/J2HaL9U/aK
-         DlYSnYB8/qKTfFH+ayuoHCisJjD3nDJe0y6+P3Fyop7hAWNO3+tHAQMPgTeOXXt3m+wv
-         kOHoWg80G2A0VQDkwy44yn1su4wC1Qlahoh2AGMitFb1iVzzTe1x10qLtZF9XNYYNCJG
-         wxPA==
-X-Gm-Message-State: AOAM5314jHqEmYgeOD/TPC22wB5K2lUQUI17W0i4El2jio4pk2bwXnTt
-        c8VWpjpVHtUX4rFuYyv2KjA=
-X-Google-Smtp-Source: ABdhPJwcAgrufyKafN+gWXC7R0nTZsc/AgWLL9N3J+gLOt4amYKTaxjTxTVpynIRcDKysNsJud3Ksg==
-X-Received: by 2002:a17:902:8bcb:b029:e6:a4a1:9d7e with SMTP id r11-20020a1709028bcbb02900e6a4a19d7emr11170380plo.25.1615857614647;
-        Mon, 15 Mar 2021 18:20:14 -0700 (PDT)
-Received: from sun.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id z25sm14368515pfn.37.2021.03.15.18.20.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HRrxGQOEvm+/qrHASsf/SSlT9PdWhy6EY9fxf2NvOu8=;
+        b=lNzWdAuUdS7u7NZ4KThRH3F4CXJrvIBPocY3ClrAqIgTjBMi7mAye+kZBkLXyepDFj
+         KHoCGUVImxy0Qt1VuT92+qMEcGDSbEYQu0LPLOfTB7MtqLMf7nNyVJ1LeXX9JPG1CThL
+         96ezoKFpYokI4hkDKXkkOsT878LhjraOx14TcMkT+BG5Clxb2HZdAjTybuaFTbNM8Nfi
+         GKisy41685BbQ13IVWhLXMJolJX4WinQWeNHpAkqcs+GYxCMwkMe8t3KCSonVerAxooH
+         zH7hVDfbEXMmcicI8o9T7/XOPUYL7flFeTmmPcRbU7bM/PqkDPRvovRvFpPzUCRPfDOv
+         Y23Q==
+X-Gm-Message-State: AOAM530SQj4PgNGDsF+nrnjckzdjJkNNNLcoEliWvSl4SQ40NdmAZcE8
+        ZzKQ8nJ4A2u5WXqvxUsw5cf1ioTTbCw=
+X-Google-Smtp-Source: ABdhPJzCaDNSlwkmiZ9WgCW+TTPmrecogVjoyOnn9rGSp0DPSAaxfU8YRYYMYsrW4+k/TO1pl5Lo5g==
+X-Received: by 2002:a37:c441:: with SMTP id h1mr28347436qkm.123.1615859668840;
+        Mon, 15 Mar 2021 18:54:28 -0700 (PDT)
+Received: from localhost ([76.73.146.210])
+        by smtp.gmail.com with ESMTPSA id i25sm3747177qka.38.2021.03.15.18.54.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 18:20:14 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 10:20:13 +0900
-Message-ID: <m21rcfc2sy.wl-thehajime@gmail.com>
-From:   Hajime Tazaki <thehajime@gmail.com>
-To:     johannes@sipsolutions.net
-Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
-        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
-        retrage01@gmail.com
-Subject: Re: [RFC v8 13/20] um: lkl: integrate with irq infrastructure of UML
-In-Reply-To: <5e1f64997ffca8267bde7955fe2eb214dfb9e891.camel@sipsolutions.net>
-References: <cover.1611103406.git.thehajime@gmail.com>
-        <46935454bf02224fb325f0e74d60d0ed674a59f9.1611103406.git.thehajime@gmail.com>
-        <5e1f64997ffca8267bde7955fe2eb214dfb9e891.camel@sipsolutions.net>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.1 Mule/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+        Mon, 15 Mar 2021 18:54:28 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-m68k@lists.linux-m68k.org,
+        linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jianpeng Ma <jianpeng.ma@intel.com>,
+        Joe Perches <joe@perches.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rich Felker <dalias@libc.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: [PATCH v4 00/13] lib/find_bit: fast path for small bitmaps
+Date:   Mon, 15 Mar 2021 18:54:11 -0700
+Message-Id: <20210316015424.1999082-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Bitmap operations are much simpler and faster in case of small bitmaps
+which fit into a single word. In linux/bitmap.c we have a machinery that
+allows compiler to replace actual function call with a few instructions
+if bitmaps passed into the function are small and their size is known at
+compile time.
 
+find_*_bit() API lacks this functionality; but users will benefit from it
+a lot. One important example is cpumask subsystem when
+NR_CPUS <= BITS_PER_LONG.
 
-On Mon, 15 Mar 2021 05:45:23 +0900,
-Johannes Berg wrote:
->=20
-> On Wed, 2021-01-20 at 11:27 +0900, Hajime Tazaki wrote:
-> > =A0static irqreturn_t um_timer(int irq, void *dev)
-> > =A0{
-> > +#ifndef CONFIG_UMMODE_LIB
-> > =A0	if (get_current()->mm !=3D NULL)
->=20
-> Why is the ifdef needed - get_current()->mm should always be NULL for
-> LKL? Surely get_current() must still work?
+v1: https://www.spinics.net/lists/kernel/msg3804727.html
+v2: https://www.spinics.net/lists/linux-m68k/msg16945.html
+v3: https://www.spinics.net/lists/kernel/msg3837020.html
+v4: - move le.h header together with find.h for m68 and sh;
+    - preserve small_const_nbits() macro;
+    - drop FAST_PATH config option as this series doesn't increase .text,
+      instead, it compacts it;
+    - add Andy and Rasmus as reviewers of BITMAP API.
 
-What we tried to ifdef is to avoid the following call;
+Yury Norov (13):
+  tools: disable -Wno-type-limits
+  tools: bitmap: sync function declarations with the kernel
+  arch: rearrange headers inclusion order in asm/bitops for m68k and sh
+  lib: introduce BITS_{FIRST,LAST} macro
+  tools: sync BITS_MASK macros with the kernel
+  lib: extend the scope of small_const_nbits() macro
+  tools: sync small_const_nbits() macro with the kernel
+  lib: inline _find_next_bit() wrappers
+  tools: sync find_next_bit implementation
+  lib: add fast path for find_next_*_bit()
+  lib: add fast path for find_first_*_bit() and find_last_bit()
+  tools: sync lib/find_bit implementation
+  MAINTAINERS: Add entry for the bitmap API
 
-   os_alarm_process(get_current()->mm->context.id.u.pid);
+ MAINTAINERS                             |  16 ++++
+ arch/m68k/include/asm/bitops.h          |   6 +-
+ arch/sh/include/asm/bitops.h            |   5 +-
+ include/asm-generic/bitops/find.h       | 108 +++++++++++++++++++++---
+ include/asm-generic/bitops/le.h         |  38 ++++++++-
+ include/asm-generic/bitsperlong.h       |   9 ++
+ include/linux/bitmap.h                  |  30 +++----
+ include/linux/bitops.h                  |  12 ---
+ include/linux/bits.h                    |   6 ++
+ include/linux/cpumask.h                 |   8 +-
+ include/linux/netdev_features.h         |   2 +-
+ include/linux/nodemask.h                |   2 +-
+ lib/bitmap.c                            |  26 +++---
+ lib/find_bit.c                          |  72 +++-------------
+ lib/genalloc.c                          |   8 +-
+ tools/include/asm-generic/bitops/find.h |  85 +++++++++++++++++--
+ tools/include/asm-generic/bitsperlong.h |   3 +
+ tools/include/linux/bitmap.h            |  31 +++----
+ tools/include/linux/bits.h              |   6 ++
+ tools/lib/bitmap.c                      |  10 +--
+ tools/lib/find_bit.c                    |  56 +++++-------
+ tools/scripts/Makefile.include          |   1 +
+ tools/testing/radix-tree/bitmap.c       |   4 +-
+ 23 files changed, 340 insertions(+), 204 deletions(-)
 
-because we didn't use/update get_current()->mm->context.id (struct
-mm_id) and calling kill(0, SIGALRM) makes a program puzzled thus,
-eliminate it.
+-- 
+2.25.1
 
-> > =A0	sigemptyset(&sig_mask);
-> > =A0	sigaddset(&sig_mask, sig);
-> > -	if (sigprocmask(SIG_UNBLOCK, &sig_mask, NULL) < 0)
-> > -		panic("sigprocmask failed - errno =3D %d\n", errno);
-> > +	if (pthread_sigmask(SIG_UNBLOCK, &sig_mask, NULL) < 0)
-> > +		panic("pthread_sigmask failed - errno =3D %d\n", errno);
->=20
-> UML doesn't normally link with libpthread, and LKL doesn't actually
-> appear to require it either (since it has its lkl_thread and all), so
-> this seems wrong?
-
-I think both UML/LKL link with libpthread.  See old
-scripts/link-vmlinux.sh, or [01/20] patch.
-
--		${CC} ${CFLAGS_vmlinux}				\
--			${strip_debug}				\
--			-o ${output}				\
--			-Wl,-T,${lds}				\
--			${objects}				\
--			-lutil -lrt -lpthread
--		rm -f linux
-
--- Hajime
