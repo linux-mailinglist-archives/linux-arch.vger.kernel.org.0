@@ -2,64 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE97C33CACF
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E3533CAD3
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbhCPBRg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Mar 2021 21:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S230397AbhCPBSH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Mar 2021 21:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234182AbhCPBRS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:17:18 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056ACC06174A
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:17:18 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id s7so16165703plg.5
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:17:18 -0700 (PDT)
+        with ESMTP id S234278AbhCPBRq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:17:46 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750D1C06174A
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:17:46 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id o16so4548012pgu.3
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=1m020LAKRTpRXtfbDLGiNE6QtJTxoR7ZdPVcePetA50=;
-        b=aeVkMuasnoYSpNzhf0Nb6yVl/J8ocMLjGDlRDFlK0J15/0Brr52n9pphfXpGTj/DQP
-         /rJ2ladMqqetJ/qrImSWCyTJ4oD3/e0MAjxy0A7f2AW3e6ylTkudvrUzTMCdiFsJSC1P
-         ZGZDThoRnWL8qenROkVd/+xSJyeJ1JnOKuvl2gHSnqIP4p+1b4Fkq83+fIEJ/fBX17M6
-         mNYWJ05dGC1jAljspSB9pEbDpt/zQ1NLVwVXKJ40Lyg/ohxoa9Til8Lh3oVbUd2a8rAV
-         i4By5QspfaMy76D57SW4Y8nJswm3q1dlzj2K16ydaAzDrREMAmSbflu09+qLWgp+1NZE
-         g8MQ==
+        bh=Sph6AbO38eZpjPHbAVWcmHuYYjTcu+vxy91BdosdlVM=;
+        b=VUFP4FrPW+k4EN2pQyEmAs8weLEv/Sc1JXEOaOk5zlhjoSOkS+JzKYxL2FksFHCqRU
+         d00qNcL5O6+8mH3kP6XVcn4mv8Xdy3rlfpkC/zc94q9r/1sdAa3yHgTOMCeaVULt2EiR
+         yxjay1lIow3jUY5yGiZSrZmahUt1SK9MhWAQEF/u/4Ezmrc0Uw3tZ5SA5A+ecmCuOJQu
+         TNqyIB4PorEsM2zA25LO1s0rDl6ewLn6kuxlt5q6D9mu0jUqIxWjTAN/gA7ZC2diDOSB
+         iXSl01mUHVXF1ysyetpLYhLrX8koes2PnIGJWk1Ch8l/2rVPqExFIsOJT18agVVUtIBL
+         0qnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=1m020LAKRTpRXtfbDLGiNE6QtJTxoR7ZdPVcePetA50=;
-        b=qGVatdohYcVcktHYL4KYCuAIl82EmT/+FVZbt57Y7b+DHBKNDDKqB+z3hp8uCH+R+L
-         dS1pNIG6DJ6V/G4SbVo3xg8hS9jXSDli/OgSKqMOQ+08yyNhM9ENhK3w1tc3tqqiyxm4
-         0TGfY1ihjAkSF+Vna/UZm2LcmQfTr4lpLCNoZLKODWPP4rEPQ0L6znhcadXotQUzPcr8
-         o4aUF1SWCSFsJvkETp7lopTIQlMAIrla7po/08/kDLng9/z4QJ79cniynZr79++P4lBO
-         qv8rN9dSqo5i97n7alDqRqkP1HX+pWE571T9XzFTJFAr0qPHz696TqfCGjdHdJtuog/L
-         oiuQ==
-X-Gm-Message-State: AOAM531vSqA3MUmKqElQwpyzcP3vsFHCcSHZRJWmzOUMjWyC7o9gB818
-        jiYdL6PtlljOzFyPld7Bg9qVFEMQdwvR3g==
-X-Google-Smtp-Source: ABdhPJyb3TOPV9OFGZGx+U9lYSlbHEpzz2Aq53bYkLF3avtmA9LJLMcC1zfZ154M/ac+fVAXE0xivw==
-X-Received: by 2002:a17:90b:154c:: with SMTP id ig12mr1941262pjb.184.1615857437463;
-        Mon, 15 Mar 2021 18:17:17 -0700 (PDT)
+        bh=Sph6AbO38eZpjPHbAVWcmHuYYjTcu+vxy91BdosdlVM=;
+        b=K8h3uImwW40lcEcEJlZ9lCacuW9Dw90VE5YkFUeehouY+QtE2UUXKB06FpsBbmi1SD
+         dEGsK9Tgr71u/jKO5ZdBk8XD8qlxsmxioVu+yBPNUqqnDVthhQrQbex7zbeGAmLMMowR
+         kshSwPmcdYRGB60KAFPhXtxGBBd3AIiJAeTbhRaq7ORnLuCsXHyu2xzkdjX9FkYuZcuV
+         1n/PDfVdmV3zVrO3YbeisPEY6DUebjGuLnojvAYDo1MaqVKCwR21RgcE7j2aX3pi8Ksr
+         5JPyDjrct5ySJ+ewpg+eP/CG5NHeoXpYuPXDGob8/+5i7E+xD2b8Mlh2a7PVD3ZfjMXs
+         cAPA==
+X-Gm-Message-State: AOAM530BtSo55pBFAAvyZzIU9KceevqCMb0OpITasBicl63bHTgHsCFM
+        /aMF1ekUu85WkYt3slx570M=
+X-Google-Smtp-Source: ABdhPJzSg8KS/xvqQB+EYb+ystSg4SNroUVAhKf5YQ9JtKbG7dDSI6nwRwKdbcIY6hmEf0i4TxbYkA==
+X-Received: by 2002:a62:aa0a:0:b029:1ef:fe5:b172 with SMTP id e10-20020a62aa0a0000b02901ef0fe5b172mr12649748pff.9.1615857465909;
+        Mon, 15 Mar 2021 18:17:45 -0700 (PDT)
 Received: from sun.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id m6sm14827498pff.197.2021.03.15.18.17.14
+        by smtp.gmail.com with ESMTPSA id a20sm15442708pfl.97.2021.03.15.18.17.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 18:17:16 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 10:17:15 +0900
-Message-ID: <m2czvzc2xw.wl-thehajime@gmail.com>
+        Mon, 15 Mar 2021 18:17:45 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 10:17:44 +0900
+Message-ID: <m2blbjc2x3.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     johannes@sipsolutions.net
 Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         retrage01@gmail.com
-Subject: Re: [RFC v8 00/20] Unifying LKL into UML
-In-Reply-To: <d357fbd075319d8b32667323bc545e3e5e8e8a21.camel@sipsolutions.net>
-References: <cover.1601960644.git.thehajime@gmail.com>
-        <cover.1611103406.git.thehajime@gmail.com>
-        <d357fbd075319d8b32667323bc545e3e5e8e8a21.camel@sipsolutions.net>
+Subject: Re: [RFC v8 06/20] um: add UML library mode
+In-Reply-To: <ad59d36bc01805bd6f2d2e63e52d85f948b0c7f6.camel@sipsolutions.net>
+References: <cover.1611103406.git.thehajime@gmail.com>
+        <30b989750979c00b5ceec4fe5faa6fb8332212d5.1611103406.git.thehajime@gmail.com>
+        <ad59d36bc01805bd6f2d2e63e52d85f948b0c7f6.camel@sipsolutions.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.1 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,143 +68,149 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-Hello,
-
-First of all, thanks for all the comments to the patchset which has
-been a bit stale.  I'll reply them.
-
-On Mon, 15 Mar 2021 06:03:19 +0900,
+On Mon, 15 Mar 2021 01:49:19 +0900,
 Johannes Berg wrote:
 > 
-> Hi,
+> On Wed, 2021-01-20 at 11:27 +0900, Hajime Tazaki wrote:
+> > 
+> > +++ b/arch/um/lkl/include/asm/atomic.h
+> > @@ -0,0 +1,11 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef __UM_LIBMODE_ATOMIC_H
+> > +#define __UM_LIBMODE_ATOMIC_H
+> > +
+> > +#include <asm-generic/atomic.h>
+> > +
+> > +#ifndef CONFIG_GENERIC_ATOMIC64
+> > +#include "atomic64.h"
+> > +#endif /* !CONFIG_GENERIC_ATOMIC64 */
 > 
-> So I'm still a bit lost here with this, and what exactly you're doing in
-> places.
+> That's not actually configurable, is it? When is this on or off?
+
+This is off when CONFIG_64BIT is off, because in that case (!64BIT) we
+use generic atomic64 facility of in-kernel.
+
+> > +static inline void cpu_relax(void)
+> > +{
+> > +	unsigned long flags;
+> > +
+> > +	/* since this is usually called in a tight loop waiting for some
+> > +	 * external condition (e.g. jiffies) lets run interrupts now to allow
+> > +	 * the external condition to propagate
+> > +	 */
+> > +	local_irq_save(flags);
+> > +	local_irq_restore(flags);
 > 
-> For example, you simulate a single CPU ("depends on !SMP", and anyway
-> UML only supports that right now), yet on the other hand do a *LOT* of
-> extra work with lkl_sem, lkl_thread, lkl_mutex, and all that. It's not
-> clear to me why? Are you trying to model kernel threads as actual
-> userspace pthreads, but then run only one at a time by way of exclusive
-> locking?
+> Hmm?
 > 
-> I think we probably need a bit more architecture introduction here in
-> the cover letter or the documentation patch. The doc patch basically
-> just explains what it does, but not how it does anything, or why it was
-> done in this way.
+> If interrupts are enabled, then you'll get them anyway, and if not, then
+> this does nothing?
 
-We didn't write down the details, which are already described in the
-LKL's paper (*1).  But I think we can extract/summarize some of
-important information from the paper to the document so that the
-design is more understandable.
-
-*1 LKL's paper (pointer is also in the cover letter)
-https://www.researchgate.net/profile/Nicolae_Tapus2/publication/224164682_LKL_The_Linux_kernel_library/links/02bfe50fd921ab4f7c000000.pdf
-
-> For example, I'm asking myself:
->  * Why NOMMU? UML doesn't really do _much_ with memory protection unless
->    you add userspace, which you don't have.
+You might be right; the original LKL does yield-like operation if this
+function is called, but this might not be the case after the
+integration with UML.  I will investigate this and fix it.
 
 
-My interpretation of MMU/NOMMU is like this;
+> > +static inline void arch_copy_thread(struct arch_thread *from,
+> > +				    struct arch_thread *to)
+> > +{
+> > +	panic("unimplemented %s: fork isn't supported yet", __func__);
+> > +}
+> 
+> "yet" seems kind of misleading - I mean, it really *won't* be, since
+> that's basically what UML is, no?
+> 
+> I mean, in principle, nothing actually stops you from building a
+> linux.so instead of linux binary, and having main() renamed to
+> linux_main() so the application can start up whenever it needs to, or
+> something like that?
 
-With (emulated) MMU architecture you will have more smooth integration
-with other subsystems of kernel tree, because some subsystems/features
-are written with "#ifdef CONFIG_MMU".  While NOMMU doesn't, it will
-bring a simplified design with better portability.
+I commented this in the reply-thread of the [00/20] patch.
 
-LKL takes rather to benefit better portability.
+> > diff --git a/arch/um/lkl/include/uapi/asm/bitsperlong.h b/arch/um/lkl/include/uapi/asm/bitsperlong.h
+> > new file mode 100644
+> > index 000000000000..f6657ba0ff9b
+> > --- /dev/null
+> > +++ b/arch/um/lkl/include/uapi/asm/bitsperlong.h
+> > @@ -0,0 +1,13 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef __UM_LIBMODE_UAPI_BITSPERLONG_H
+> > +#define __UM_LIBMODE_UAPI_BITSPERLONG_H
+> > +
+> > +#ifdef CONFIG_64BIT
+> > +#define __BITS_PER_LONG 64
+> > +#else
+> > +#define __BITS_PER_LONG 32
+> > +#endif
+> > +
+> > +#include <asm-generic/bitsperlong.h>
+> 
+> First, that include does nothing.
 
->  * Why pthreads and all? You already require jump_buf, so UML's
->    switch_threads() ought to be just fine for scheduling? It almost
->    seems like you're doing this just so you can serialize against "other
->    threads" (application threads), but wouldn't that trivially be
->    handled by the application? You could let it hook into switch_to() or
->    something, but why should a single "LKL" CPU ever require multiple
->    threads? Seems to me that the userspace could be required to
->    "lkl_run()" or so (vs. lkl_start()). Heck, you could even exit
->    lkl_run() every time you switch tasks in the kernel, and leave
->    scheduling the kernel vs. the application entirely up to the
->    application? (A trivial application would be simply doing something
->    like "while (1) { lkl_run(); pause(); }" mimicking the idle loop of
->    UML.
+We followed the way of arch/x86 (and other archs) for this.
 
-There is a description about this design choice in the LKL paper (*1);
+This actually includes include/asm-generic/bitsperlong.h, which does
+something I think.
 
-  "implementations based on setjmp - longjmp require usage of a single
-  stack space partitioned between all threads. As the Linux kernel
-  uses deep stacks (especially in the VFS layer), in an environment
-  with small stack sizes (e.g. inside another operating system's
-  kernel) this will place a very low limit on the number of possible
-  threads."
+> Second, the comment there says:
+> 
+> /*
+>  * There seems to be no way of detecting this automatically from user
+>  * space, so 64 bit architectures should override this in their
+>  * bitsperlong.h. In particular, an architecture that supports
+>  * both 32 and 64 bit user space must not rely on CONFIG_64BIT
+>  * to decide it, but rather check a compiler provided macro.
+>  */
+> 
+> 
+> So you're doing exactly what it says *not* to?
+> 
+> In fact, that totally makes sense - I mean, this is *uapi* and
+> applications don't have access to CONFIG_ defines etc.
 
-(from page 2, Section II, 2) Thread Support)
+Sorry, this patch is wrong. There is additional diff in [10/20], which
+should be in the same patch here, which eliminates not to rely on
+CONFIG_*.
 
-This is a reason of using pthread as a context primitive.
+I will fix this.
+ 
+> Do you expose that somehow to LKL users that makes this OK-ish? But it's
+> still very confusing, and you've not made sure the necessary header is
+> actually included. IIUC, lkl builds a (shared?) library, so it won't
+> really work this way?
+>
+> > +++ b/arch/um/lkl/include/uapi/asm/byteorder.h
+> > @@ -0,0 +1,11 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef __UM_LIBMODE_UAPI_BYTEORDER_H
+> > +#define __UM_LIBMODE_UAPI_BYTEORDER_H
+> > +
+> > +#if defined(CONFIG_BIG_ENDIAN)
+> > +#include <linux/byteorder/big_endian.h>
+> 
+> Same here.
 
-And instead of manually doing lkl_run() to schedule threads and
-relying on host scheduler, LKL associates each kernel thread with a
-host-provided semaphore so that Linux scheduler has a control of host
-scheduler (prepared by pthread).
+Same problem here; we should not split this in the patch and [10/20].
+Will fix this too.
 
-This is also described (and hasn't changed since then) in the paper *1
-(from page 2, Section II, 3) Thread Switching).
+> > +++ b/arch/um/lkl/um/delay.c
+> > @@ -0,0 +1,31 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +#include <linux/jiffies.h>
+> > +#include <linux/delay.h>
+> > +#include <os.h>
+> > +
+> > +void __ndelay(unsigned long nsecs)
+> > +{
+> > +	long long start = os_nsecs();
+> > +
+> > +	while (os_nsecs() < start + nsecs)
+> > +		;
+> 
+> At least do something like cpu_relax()? Although ... you made that do
+> nothing, so you probably want an arch-specific thing here?
 
-> And - kind of the theme behind all these questions - why is this not
-> making UML actually be a binary that uses LKL? If the design were like
-> what I'm alluding to above, that should actually be possible? Why should
-> it not be possible? Why would it not be desirable? (I'm actually
-> thinking that might be really useful to some of the things I'm doing.)
-> Yes, if the application actually supports userspace running then it has
-> som limitations on what it can do (in particular wrt. signals etc.), but
-> that could be documented and would be OK?
-
-Let me try to describe how I think why not just generate liblinux.so
-from current UML.
-
-Making UML to build a library, which has been a long wanted features,
-can be started;
-
-
-I think there are several functions which the library offers;
-
-- applications can link the library and call functions in the library
-- the library will be used as a replacement of libc.a for syscall operations
-
-to design that with UML, what we need to do are;
-
-1) change Makefile to output liblinux.a
-we faced linker script issue, which is related with generating
-relocatable object in the middle.
-
-2) make the linker-script clean with 2-stage build
-we fix the linker issues of (1)
-
-3) expose syscall as a function call
-conflicts names (link-time and compile-time conflicts)
-
-4) header rename, object localization
-to fix the issue (3)
-
-This is a common set of modifications to a library of UML.
-
-Other parts are a choice of design, I believe.
-Because a library is more _reusable_ than an executable (by it means), the
-choice of LKL is to be portable, which the current UML doesn't pursue it
-extensibly (focus on intel platforms).  Thus, 
-
-5) memory: NOMMU
-6) schedule (of irq/thread): pthread-based rather than setjmp/longjmp
-
-
-Implementing with alternate options 5) and 6) (MMU, jmpbuf) diminishes
-the strength of LKL, which we would like to avoid.  But as you
-mentioned, nothing prevents us to implement the alternate options 5)
-and 6) so, we can share the common part (1-4) if we will start to
-implement.
-
-I hope this makes it a bit clear, but let me know if you found
-anything unclear.
+I think this isn't efficient at all, but portable enough, which is
+(sub)arch-specific requirement.
 
 -- Hajime
-
