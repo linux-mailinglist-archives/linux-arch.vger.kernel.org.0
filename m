@@ -2,64 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D9833CAD6
+	by mail.lfdr.de (Postfix) with ESMTP id 8A13133CAD5
 	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbhCPBTL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S229540AbhCPBTL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Mon, 15 Mar 2021 21:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbhCPBSs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:18:48 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDB5C06174A
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:18:48 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id lr10-20020a17090b4b8ab02900dd61b95c5eso481153pjb.4
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:18:48 -0700 (PDT)
+        with ESMTP id S232746AbhCPBTE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:19:04 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F40BC06174A
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:19:04 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id o3so3054409pfh.11
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:19:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version:content-transfer-encoding;
-        bh=/8lmvByipjfFKZqd/CMYEIc8BwNMpqTTcKBqCWwRymw=;
-        b=rU+yypaZNAn0qJB0tOjW/fsx8mn68YzSIZxpwgcd/uye29FzMO/Dt8lsdORFnJ9nn+
-         HRzmuXz8+xCsRZSI2wbkrP/3lzP4xInPDYS2U3hGE/TrDg8ha5NR/40YITnoC56cWN6n
-         lAgotf9WrXAjo6DrqS0QZNXWpnWH/Mes7wrzHlgdd/sQH8DzXtFhO9wJyzWXMA2M8TRS
-         jqoBz6IvB8J4/pWwllz9p3S8meHgH26vSqSqk74dqGCRb1paDfPB0I475Tdm0QetyZlT
-         ClnA1/TJr8jv3uu75hqwbgy20wE61gUuq8TREfFAAN5QI1HWYIhGwRNIHY0h5eH/mH9Z
-         KOzQ==
+        bh=nF5FcRFNraHBE0OVbfh0No934vQd9+JmS7SJMUyo7vE=;
+        b=eZOnAu04HSa59S4UF1+Kk7hMmfflr113fVEJ5As9cjN+x5ZaoDllGS+T8pCcIevKDl
+         7UUFcODdF6mU8U6rPRfASG8v1uHGL8xESOS78HDKcDJkNp54ezC4S3A1CqZsafZpBlwS
+         isEU2r1Fh2ivih9pKoilDTOFj9EuPK8zdOgVAxABEaX0bsZiPuMwzbHJUbMBmTNjp5wW
+         NMV2MPdLDTx+iwGuw+gHasD2hYDyI7BC4xNIIIWSRNfUbbQ/4c7mqrLXnw0yvSn3wAQB
+         hY12SnRidSkRLVYf0HU4Q9mwXLHIzKfvJ1XjUPtZ73ManJaiAt7oYTKtJlrRHNYgKeCF
+         y87w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=/8lmvByipjfFKZqd/CMYEIc8BwNMpqTTcKBqCWwRymw=;
-        b=Trf6nRio+5elzWeMEyhNkkdm8l0dbzAov8NpfiYl+WFhTa7F30NGs7w6F+3VmORbOy
-         717PbF++xfuqxGeh4jA7MOrHy0VymIC3N7wyB6lIGO/6gfklQpF9tpytOmE5Is3Nk48U
-         41WFJUVRNBPmqMov6DvVsVzUHFvC+dCtf/aFNfOXiW3lO82n+XIJVr23RdySYOgfc9D2
-         hu1yCSqfsg+hq4dofEZea9NTT90BN2gkfyE6uBLu8BvTu8NElDqjHzHv2JlxYZYg6iXz
-         T9dQ6g51dQJbXe8MnZfOU565r1olbiUw85Wwvt/NGPSoB2vt/7XoF99P3WfUkUHfTuvY
-         PIHQ==
-X-Gm-Message-State: AOAM5319QBRwiirZy0eKytJQAdw5po9uLPe6xRNfpqjV19tgZGMDhUEs
-        jm/g//uqPG/G+vUdALdcWRE=
-X-Google-Smtp-Source: ABdhPJwxX7hbZ/cQjvYUDq9xqyudLKBWGui8BPOdmajjrfDk2jSz1I1wwwgkmdbbGtw0qHm4pAd+XQ==
-X-Received: by 2002:a17:90b:4d0c:: with SMTP id mw12mr2109432pjb.216.1615857528112;
-        Mon, 15 Mar 2021 18:18:48 -0700 (PDT)
+        bh=nF5FcRFNraHBE0OVbfh0No934vQd9+JmS7SJMUyo7vE=;
+        b=GCyfeADtdkq0Pdl2gJ6i5UxAILKc88X70KPeFsSk6hLNLy2bMOVxni2+hKY4W+CWay
+         rbWAwTT2STew5fuhQMRU+86YUiG33GcNEHVuLwhUGD9WpqbnON/WZcvJzhmfowjEUPvf
+         znZ9ePOA4Ojn6dD3vqCdh8B1KyCAWDXC4UEG17c5FVEDoojhFuNKS7bMkdNQPDQNyhtH
+         L7KPt1+aLBg57mpujhcAg1mVHszndunCl/GJ+/vsoj+ItrUD8KJHkGB7ehXnwV11HKuv
+         GR9sKOU4yO3jnOXyzz9ygxxwVdmR5lAV2N/PSJv5MUdrDRoU3UCLbJWT0ClSWv/of8mS
+         iUIw==
+X-Gm-Message-State: AOAM532N8oEyxOgmCkDAtyTE4dq2BtbNzqWb7nTeRogZJfBmpRSfANT5
+        Ifcuu1h91pOx+X8o+mT58sc=
+X-Google-Smtp-Source: ABdhPJyTjyu6WjTOSb86t+HiygIV5p0tXOZhhJV+z6FY6G6mTAqIRdNFI8jpbN173yTtP9Qw992v3g==
+X-Received: by 2002:a62:7ecc:0:b029:1ee:f61b:a63f with SMTP id z195-20020a627ecc0000b02901eef61ba63fmr12471631pfc.57.1615857543621;
+        Mon, 15 Mar 2021 18:19:03 -0700 (PDT)
 Received: from sun.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id 14sm14725025pfo.141.2021.03.15.18.18.45
+        by smtp.gmail.com with ESMTPSA id e11sm14629369pfm.24.2021.03.15.18.19.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 18:18:47 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 10:18:47 +0900
-Message-ID: <m27dm7c2vc.wl-thehajime@gmail.com>
+        Mon, 15 Mar 2021 18:19:03 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 10:19:02 +0900
+Message-ID: <m25z1rc2ux.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     johannes@sipsolutions.net
 Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         retrage01@gmail.com
-Subject: Re: [RFC v8 09/20] um: lkl: kernel thread support
-In-Reply-To: <d1d37b2a05fe0ebffca23e1aff1c7f6a5a5d87fd.camel@sipsolutions.net>
+Subject: Re: [RFC v8 19/20] um: lkl: add block device support of UML
+In-Reply-To: <2b649bc5165c7ff4547abd72f7e03e7491980138.camel@sipsolutions.net>
 References: <cover.1611103406.git.thehajime@gmail.com>
-        <3aecd66b9314f2b435fb6df029dc5829bf8c50ff.1611103406.git.thehajime@gmail.com>
-        <d1d37b2a05fe0ebffca23e1aff1c7f6a5a5d87fd.camel@sipsolutions.net>
+        <b3b73864dbb738d0de7c49a6df5a5f53a358ec93.1611103406.git.thehajime@gmail.com>
+        <2b649bc5165c7ff4547abd72f7e03e7491980138.camel@sipsolutions.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.1 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=ISO-8859-1
@@ -69,111 +69,32 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Mon, 15 Mar 2021 02:01:20 +0900,
+On Mon, 15 Mar 2021 05:37:40 +0900,
 Johannes Berg wrote:
 >=20
 > On Wed, 2021-01-20 at 11:27 +0900, Hajime Tazaki wrote:
+> >=20
+> > diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+> > index 24c6596260de..5fb6a852d058 100644
+> > --- a/arch/um/Kconfig
+> > +++ b/arch/um/Kconfig
+> > @@ -29,6 +29,10 @@ config UMMODE_LIB
+> > =A0	select UACCESS_MEMCPY
+> > =A0	select ARCH_THREAD_STACK_ALLOCATOR
+> > =A0	select ARCH_HAS_SYSCALL_WRAPPER
+> > +	select VFAT_FS
+> > +	select NLS_CODEPAGE_437
+> > +	select NLS_ISO8859_1
+> > +	select BTRFS_FS
 >=20
-> > +void __weak subarch_cpu_idle(void)
-> > +{
-> > +}
-> > +
-> > =A0void arch_cpu_idle(void)
-> > =A0{
-> > =A0	cpu_tasks[current_thread_info()->cpu].pid =3D os_getpid();
-> > =A0	um_idle_sleep();
-> > +	subarch_cpu_idle();
->=20
->=20
-> Not sure that belongs into this patch in the first place, but wouldn't
-> it make some sense to move the um_idle_sleep() into the
-> subarch_cpu_idle() so LKL (or apps using it) can get full control?
+> That doesn't really seem to make sense - the sample might need it, but
+> generally LKL doesn't/shouldn't?
 
-Agree.  I'll move that part to um_idle_sleep.
+I'm trying to understand your comment;
+Do you mean that enabling those options in Kconfig doesn't make sense ?
 
-> > +/*
-> > + * This structure is used to get access to the "LKL CPU" that allows u=
-s to run
-> > + * Linux code. Because we have to deal with various synchronization re=
-quirements
-> > + * between idle thread, system calls, interrupts, "reentrancy", CPU sh=
-utdown,
-> > + * imbalance wake up (i.e. acquire the CPU from one thread and release=
- it from
-> > + * another), we can't use a simple synchronization mechanism such as (=
-recursive)
-> > + * mutex or semaphore. Instead, we use a mutex and a bunch of status d=
-ata plus a
-> > + * semaphore.
-> > + */
->=20
-> Honestly, some of that documentation, and perhaps even the whole API for
-> LKL feels like it should come earlier in the series.
->=20
-> E.g. now here I see all those lkl_mutex_lock() (where btw documentation
-> doesn't always match the function name), so you *don't* have the
-> function ops pointer struct anymore?
+and if you mean the sample as sample code, is the added test case
+(e.g., tools/testing/selftests/um/disk.c, which is included in the
+same patch) for this purpose ?
 
-I will check the inconsistency of names.
-# and, yes, we don't have function ops anymore.
-
-> It'd be nice to have some high-level view of what applications *must*
-> do, and what they *can* do, at the beginning of this series.
-
-agree.
-
-> > +	 *
-> > +	 * This algorithm assumes that we never have more the MAX_THREADS
-> > +	 * requesting CPU access.
-> > +	 */
-> > +	#define MAX_THREADS 1000000
->=20
-> What implications does that value have? It seems several orders of
-> magnitude too large?
-
-I guess this is a kind of random number, but will justify (or make it
-smaller) after some investigation.
-
-> > +static int __cpu_try_get_lock(int n)
-> > +{
-> > +	lkl_thread_t self;
-> > +
-> > +	if (__sync_fetch_and_add(&cpu.shutdown_gate, n) >=3D MAX_THREADS)
-> > +		return -2;
->=20
-> Feels like that could be some kind of enum here instead of -2 and -1 and
-> all that magic.
-
-agree; I will update with an enum.
-
-> > +	/* when somebody holds a lock, sleep until released,
-> > +	 * with obtaining a semaphore (cpu.sem)
-> > +	 */
->=20
-> nit: /*
->       * use this comment style
->       */
-
-thanks, it should be. will fix this.
-
-> > +void switch_threads(jmp_buf *me, jmp_buf *you)
-> > +{
-> > +	/* NOP */
-> > +}
->=20
-> Why, actually?
-
-Our threads doesn't use the UML jmp_buf (use pthread instead) so, this
-function has to do nothing.
-
-We can add a comment of this here.
-
-> Again, goes back to the high-level design thing I alluded to above, but
-> it's not clear to me why you need idle (which implies you're running the
-> scheduler) but not this (which implies you're *not* running the
-> scheduler)?
-
-okay, will write a separate document for the high-level description of
-what this is.
-
--- Hajime
+-- HAjime
