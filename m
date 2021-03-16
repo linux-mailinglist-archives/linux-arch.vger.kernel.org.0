@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BF433D712
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 16:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAEB33D716
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 16:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbhCPPRu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Mar 2021 11:17:50 -0400
-Received: from mga05.intel.com ([192.55.52.43]:18991 "EHLO mga05.intel.com"
+        id S235930AbhCPPRv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Mar 2021 11:17:51 -0400
+Received: from mga05.intel.com ([192.55.52.43]:18968 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234338AbhCPPR2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Mar 2021 11:17:28 -0400
-IronPort-SDR: 7tOFqzZtU6Q/0jenApqz5XNbPz7Hr3geXXsMyowBy2f8lh9qZOtTBmvRTSIX/n4noHi3ULFh4F
- g+OWeLOYTu5Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9924"; a="274320163"
+        id S235669AbhCPPRd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 16 Mar 2021 11:17:33 -0400
+IronPort-SDR: puOPESrcX5kDCxXA8ISL4APA0OVkhbWB3/POxy0NWV0HHNxW+QvD8VV36YzmAQaExPGBQMLpEv
+ wxbwM5Oqf4Sg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9924"; a="274320167"
 X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
-   d="scan'208";a="274320163"
+   d="scan'208";a="274320167"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 08:13:29 -0700
-IronPort-SDR: P16eRxhtJC3tkDD98N2OMboHCYq0E3um85KyfEWr4F2N1LB0zW3rb/s+39WRsOkzHi3ON4CeOt
- d9id7phAfdHQ==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 08:13:30 -0700
+IronPort-SDR: /RLryx7L59dd3UdJqntuQHMiDOCDuccNgP0d2n9LHTfD/E+xNf6CHs+k8KWgvc8tQfpqTo5rCR
+ UxDz5dg8tdwg==
 X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
-   d="scan'208";a="449748998"
+   d="scan'208";a="449749003"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 08:13:29 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -52,10 +52,11 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v23 5/9] x86/cet/ibt: Update arch_prctl functions for Indirect Branch Tracking
-Date:   Tue, 16 Mar 2021 08:13:15 -0700
-Message-Id: <20210316151320.6123-6-yu-cheng.yu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH v23 6/9] x86/entry: Introduce ENDBR macro
+Date:   Tue, 16 Mar 2021 08:13:16 -0700
+Message-Id: <20210316151320.6123-7-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210316151320.6123-1-yu-cheng.yu@intel.com>
 References: <20210316151320.6123-1-yu-cheng.yu@intel.com>
@@ -65,41 +66,54 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "H.J. Lu" <hjl.tools@gmail.com>
+ENDBR is a special new instruction for the Indirect Branch Tracking (IBT)
+component of CET.  IBT prevents attacks by ensuring that (most) indirect
+branches and function calls may only land at ENDBR instructions.  Branches
+that don't follow the rules will result in control flow (#CF) exceptions.
 
-Update ARCH_X86_CET_STATUS and ARCH_X86_CET_DISABLE for Indirect Branch
-Tracking.
+ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
+instructions are inserted automatically by the compiler, but branch
+targets written in assembly must have ENDBR added manually.
 
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+There are two ENDBR versions: one for 64-bit and the other for 32.
+Introduce a macro to eliminate ifdeffery at call sites.
+
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- arch/x86/kernel/cet_prctl.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/x86/entry/calling.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/arch/x86/kernel/cet_prctl.c b/arch/x86/kernel/cet_prctl.c
-index 0030c63a08c0..4df1eac41965 100644
---- a/arch/x86/kernel/cet_prctl.c
-+++ b/arch/x86/kernel/cet_prctl.c
-@@ -22,6 +22,9 @@ static int cet_copy_status_to_user(struct cet_status *cet, u64 __user *ubuf)
- 		buf[2] = cet->shstk_size;
- 	}
+diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
+index 07a9331d55e7..a63d33f7f069 100644
+--- a/arch/x86/entry/calling.h
++++ b/arch/x86/entry/calling.h
+@@ -392,3 +392,21 @@ For 32-bit we have the following conventions - kernel is built with
+ .endm
  
-+	if (cet->ibt_enabled)
-+		buf[0] |= GNU_PROPERTY_X86_FEATURE_1_IBT;
-+
- 	return copy_to_user(ubuf, buf, sizeof(buf));
- }
- 
-@@ -46,6 +49,8 @@ int prctl_cet(int option, u64 arg2)
- 			return -EINVAL;
- 		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
- 			cet_disable_shstk();
-+		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_IBT)
-+			cet_disable_ibt();
- 		return 0;
- 
- 	case ARCH_X86_CET_LOCK:
+ #endif /* CONFIG_SMP */
++/*
++ * ENDBR is an instruction for the Indirect Branch Tracking (IBT) component
++ * of CET.  IBT prevents attacks by ensuring that (most) indirect branches
++ * function calls may only land at ENDBR instructions.  Branches that don't
++ * follow the rules will result in control flow (#CF) exceptions.
++ * ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
++ * instructions are inserted automatically by the compiler, but branch
++ * targets written in assembly must have ENDBR added manually.
++ */
++.macro ENDBR
++#ifdef CONFIG_X86_CET
++#ifdef __i386__
++	endbr32
++#else
++	endbr64
++#endif
++#endif
++.endm
 -- 
 2.21.0
 
