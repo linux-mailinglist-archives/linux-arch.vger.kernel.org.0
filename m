@@ -2,64 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E552133CAD1
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F4933CAD4
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbhCPBSI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Mar 2021 21:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
+        id S229710AbhCPBSj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Mar 2021 21:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbhCPBSB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:18:01 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D423C06174A
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:18:01 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id x21so6410907pfa.3
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:18:01 -0700 (PDT)
+        with ESMTP id S231793AbhCPBSZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:18:25 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF54C06174A
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:18:24 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id o16so4548761pgu.3
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:18:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=qhcuYdoOMtV0w4cVzRWN1fajWGcUJ8HbjTsCeMUOnIM=;
-        b=ae6bZCdsqozefryLiEyTDBBld41fLCIpwH1QBXqZ6DSjKtW9mvE0Ge8nRgCgGlBtBJ
-         2OYfY3r7s2hqCZLjiRTAV24k3WYWSIqto5uxZORtxbObSPzG2ZMovDb3keGctARCS/nd
-         KYTzMZEZwWoAvmj+VK7yAN08raZKC6SGRp1SIEH6R2dBrvwFCD+NXEEUgzlUDl6+zyHf
-         m77+n6CEhQ0BglbnX/mMVc9XHNwKbLL/3Zk1QtFIOzePQDIixJO0GYJxvMmD8UVtVkMe
-         LEOJxwJypz5dGP6ps3hjUTOWIIzTJyPoEo12A6Lud/5XunZCTNpqI73w4dIUogeCQc1u
-         WW7g==
+        bh=ff1rWIO8ONBhu+9mkwYDYBw8H5yECZzZ/LJzxXqc+Mc=;
+        b=jabAFlcw2cACmxXTbiDOil5i7nYHy1OU66LFA7xKvERdJ7hjmF6PYrPtYBhTprIGll
+         70h5MeX0qTm2LX0g61vRffyHOiaPAVS2eZwmvTypD4tYf4wp6MzP0xEVA4hmkCQbcQBo
+         j800abUa/h2BUtohSFoCWOckIVCrKoMOJJTaxNblE6p5Lhsq4NC1Ve+xatXzUxLouItK
+         9Zjhga4xB3ByP4RX0ouHwF+WhxWH1MpjTKIKVBJ2QKi/ix468/x/s8qh91Ux01gB0DuZ
+         f0GLssAOIPM4T7LP4wSfhhpxKSFLxV9je69eWrzEg4oTl/5K9r2Oz9Rpv6rzWg3om3+j
+         mCBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=qhcuYdoOMtV0w4cVzRWN1fajWGcUJ8HbjTsCeMUOnIM=;
-        b=pPa1uSJwPPh6ju6b9Ow3XHgyhLT04hzkOmQRtxaGu7JWVsOh64h0aOTJ2oVBc45IRf
-         PWhBk9coCodgsz0l8cUWVoKNGabnNvkVDTO+D7kgv0YRktt7geN5m/vrOOaPTO9OPfx7
-         uikxxaSQfVZlyOL+HsabsnL9odZpEGB7rvU4H0wREXi9tPu1FgSv+J6LI6Aekf8BGLHz
-         3NGWato0t8euHyn9+37Tjby/QJdcJOqO6lQpuQqaUx1NnEcXdjxnUMUiXl1gjqPd5/eA
-         8hLzTG2vSqh0a2m9z4D1ONcH4x2Gu7v2amFWyX0pSEZCk7DrpP4N2QWG++h9Ut8DTnee
-         IiZg==
-X-Gm-Message-State: AOAM531CxeaNwtuENDMYOce+aNlUCB3PvhMnXnr7aeIfWvJQFtD0ZJqt
-        FhYbRHRRFXcu66wevAd4r6s=
-X-Google-Smtp-Source: ABdhPJy7PQTqnis1Eor4iHnDhpTpOtWzi5kulryRhMkHEzb98lNTNBbpkaTUH2rrgh5Kx5N1mVzQiQ==
-X-Received: by 2002:a63:2c8f:: with SMTP id s137mr1557657pgs.51.1615857480769;
-        Mon, 15 Mar 2021 18:18:00 -0700 (PDT)
+        bh=ff1rWIO8ONBhu+9mkwYDYBw8H5yECZzZ/LJzxXqc+Mc=;
+        b=G/yR1YvOVmeX7vgnbAzkeHIVGDChfSzy5/PlyUg6/bTMBtO53PdgWVnXPH4KvXC5oJ
+         so8NY9P5GneG30bn/kWCE5s5o7KdPBO7ulQak1Jy6YNu0hZTyR60NeTHYSh8XunnFPCk
+         jPWgKSXIss8QrEBX9HLaMfvopEnX/NFra7Ii5+D2tKzskATG5Fy5mSYmt2EAywV8zz6g
+         xnRUmHb6deQOOhMttMAF0u7eZviyvk/28lCz/NobCX7PgA+DX4z2TgCZrFwdPY4DpWaT
+         FKE41xx7MrqMxBE17Yk7XYejNf79Hd96b4cD7o043FUgJSNhhZe8EncQD9LBU626ZPK0
+         1v7A==
+X-Gm-Message-State: AOAM532RjI+EoEs34cWhxzMcM/2mmUZUlacaVnbKlozYhM6MmQNma76f
+        SzIns22gy2bXagg3OY/XVRo=
+X-Google-Smtp-Source: ABdhPJwjBFK7YNPh5I8fN7zZ2AaUJBcQA5zAQ+czjdc8l11fhWYVylo6Rs6yfMztiDnJtxbjdcEX8Q==
+X-Received: by 2002:a63:4462:: with SMTP id t34mr1526931pgk.389.1615857503941;
+        Mon, 15 Mar 2021 18:18:23 -0700 (PDT)
 Received: from sun.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id 202sm14290188pfu.46.2021.03.15.18.17.58
+        by smtp.gmail.com with ESMTPSA id mp21sm36935pjb.16.2021.03.15.18.18.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 18:18:00 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 10:17:59 +0900
-Message-ID: <m2a6r3c2wo.wl-thehajime@gmail.com>
+        Mon, 15 Mar 2021 18:18:23 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 10:18:22 +0900
+Message-ID: <m28s6nc2w1.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     johannes@sipsolutions.net
 Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         retrage01@gmail.com
-Subject: Re: [RFC v8 07/20] um: lkl: host interface
-In-Reply-To: <e18da756e9efcae8489c658907b62d68f0969da0.camel@sipsolutions.net>
+Subject: Re: [RFC v8 08/20] um: lkl: memory handling
+In-Reply-To: <03c74a353c87994b61450ba8086f1ccda40b2ea8.camel@sipsolutions.net>
 References: <cover.1611103406.git.thehajime@gmail.com>
-        <f149135f1943eb81998d54c923c10ebffb0b4518.1611103406.git.thehajime@gmail.com>
-        <e18da756e9efcae8489c658907b62d68f0969da0.camel@sipsolutions.net>
+        <19d4990f2ef77ad595248183071da5e43149931c.1611103406.git.thehajime@gmail.com>
+        <03c74a353c87994b61450ba8086f1ccda40b2ea8.camel@sipsolutions.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.1 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,31 +68,70 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Mon, 15 Mar 2021 01:50:27 +0900,
+On Mon, 15 Mar 2021 01:53:01 +0900,
 Johannes Berg wrote:
 > 
 > 
-> > +/**
-> > + * struct lkl_host_operations - host operations used by the Linux kernel
-> > + *
-> > + * These operations must be provided by a host library or by the application
-> > + * itself.
-> > + *
-> > + */
-> > +struct lkl_host_operations {
-> > +};
+> > 
+> > +#else
+> > +
+> > +#include <asm-generic/nommu_context.h>
+> > +
+> > +extern void force_flush_all(void);
+> > 
+> nit: no need for "extern"
+
+thanks, will fix this.
+
+> > +#define CONFIG_KERNEL_RAM_BASE_ADDRESS memory_start
+> > +#include <asm-generic/page.h>
+> > +
+> > +#define __va_space (8*1024*1024)
+> > +
+> > +#ifndef __ASSEMBLY__
+> > +#include <mem.h>
 > 
-> IIRC, in previous reviews we discussed this and you said you'd look at
-> just making those extern functions, instead of function pointers, since
-> realistically there's no use in being able to switch these at runtime.
-> What happened to that? Any particular reason not to?
+> Is that <shared/mem.h>? I think we should start including only with that
+> prefix.
 
-Yes, I followed your suggestion that we just use functions instead of
-function pointers ([17/20]).
+okay, will fix it.
 
-Though we won't use pointers, we still need this structure to inform
-userspace side (of LKL) to kernel. [19/20], block device
-implementation uses this.
+> > +
+> > +void *uml_kmalloc(int size, int flags)
+> > +{
+> > +	return kmalloc(size, flags);
+> > +}
+> 
+> That could probably still be shared?
+
+This function is a stub of arch/um/kernel/mem.c, which LKL doesn't
+use for the build.  Thus we defined here.
+
+Or are you suggesting to not stubbing this function, but extracting
+the function from mem.c ?
+
+> > +int set_memory_ro(unsigned long addr, int numpages)
+> > +{
+> > +	return -EOPNOTSUPP;
+> > +}
+> > +
+> > +int set_memory_rw(unsigned long addr, int numpages)
+> > +{
+> > +	return -EOPNOTSUPP;
+> > +}
+> > +
+> > +int set_memory_nx(unsigned long addr, int numpages)
+> > +{
+> > +	return -EOPNOTSUPP;
+> > +}
+> > +
+> > +int set_memory_x(unsigned long addr, int numpages)
+> > +{
+> > +	return -EOPNOTSUPP;
+> > +}
+> 
+> UML for now no longer has these either.
+
+Ah, I see the changes.  Will fix them.
 
 -- Hajime
-
