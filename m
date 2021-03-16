@@ -2,104 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F12F33CAD8
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2996933CAD9
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbhCPBTn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Mar 2021 21:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
+        id S231398AbhCPBUs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Mar 2021 21:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbhCPBTg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:19:36 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A978C06174A
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:19:36 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id x7-20020a17090a2b07b02900c0ea793940so498534pjc.2
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:19:36 -0700 (PDT)
+        with ESMTP id S231305AbhCPBUQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:20:16 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A103C06174A
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:20:15 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id e2so10910789pld.9
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:20:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
-         :user-agent:mime-version;
-        bh=/aONdzdEHJjSkJXSlFiFKYoN0KeuFnC9kVYyzxSJi0A=;
-        b=RqD2ASXEl6CSFthKXJ1Din5qSGTxQXlk4NmPlfBPAVpWph7E3KsycUerhyp1ltrO2H
-         yjSGaXVW/1b5rPZjWEQkzBg9kGU5bYjR5gsfSBCIebpipzjYTRAlpN6d+zdZ10w3hYU/
-         QD9Me1n/PlGmiTGicRBR5u8yOkv5EgHvj0eTUK4kmDuadMXXdHT7BLbDqXleqktLM8uS
-         DtBNnMkh//3X2lS5ezr/u7s+r/L0UjF+7TgEoa/r1vPWjgUoLpR4s4B+2GmhXEVgnXhA
-         9tNRqGSmFyrjXi0TbcKpPhoCxj+Dv4ecWav4sGEiF7CV7BOHXOz5m9yQnFlVTH1CmxnS
-         XByg==
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=lllSVlP83Zm5w8UR9KXH+eISNqCBApxi8VdWF12ub40=;
+        b=gFWKzN3reXHAX5ObzOjhJ7RyCpBNzpMnVx+OPPAadiry+RmijAe840mbs2p1JUF67+
+         bxOyjMMJJj2zh6yMQ8RTY8pp5JOWPEi64qKz3/wYmWZrIi46sdqIpixS9Yk+NP+07TGI
+         X4EZAhqZxJobz/JW3ZNaD3EZxppgw8UCyOY3c9lsNP3X+qAlK7LBuBlIFcMng65u7aeD
+         o9UkTv4SScQyxV4uin9/XE9eGB2qIUtqp61jDKfDHIXk0zgMrGlesee50VV2byUdTHmi
+         +Gg/4rxUoFrO1rWi+0a4UrYu5IMzlkJ59QhqfxbB4KpnHpoTZdGoBeYxvhJcYuxnoha0
+         dxkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
-         :references:user-agent:mime-version;
-        bh=/aONdzdEHJjSkJXSlFiFKYoN0KeuFnC9kVYyzxSJi0A=;
-        b=R2uLlC/IpvOOemrg/VW6LY6q/PChH5U3K1I3qE+uH031X3UE615JEZ1eGhlexZW2Fa
-         0CmnRYDWUtpkMsCuLT73+BgcoNnOeIwWX6VMXpWqlpTWKInMhATsQFPq7LGXMhAUCv/P
-         PK4/yT+bdekqYeps08ph+Bavsycm9OELCdSwjnV61Gbu6nD0+Ll+6Lq3jyV+SES+iPSl
-         SS/gx5YfCE9lULWx8c0ojAKWkhNrVHrRJVVuNRgYeDp7gF62RRThL9pTyl9A/DScDuvN
-         7iUczRkXrOXg3oUoxlLRKLAU09phH0rODcxCMSM9GdO4+HkfN4MCGj9vAmNVYgY3ffPl
-         HUNw==
-X-Gm-Message-State: AOAM531UznyJw82s2yCQavS5kZU94P+iHpeStWv9krD99dw0fCpfLrnZ
-        mXCQH/VDeWjs0gINfNm0WBg=
-X-Google-Smtp-Source: ABdhPJxS3ha9tndIexBTUnNy1ZCXPto5LrXeXHtc9HHfL6R2I1j/OZJtt/5F3syN991kdl42GknAYA==
-X-Received: by 2002:a17:902:14e:b029:e4:9648:83e6 with SMTP id 72-20020a170902014eb02900e4964883e6mr13719344plb.68.1615857575554;
-        Mon, 15 Mar 2021 18:19:35 -0700 (PDT)
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=lllSVlP83Zm5w8UR9KXH+eISNqCBApxi8VdWF12ub40=;
+        b=VVYcegtwwEN2xMm3iDafXejlXnhzV+DsTcGSZFz3uwtu0x1Dn91FtVS9uQqFTgsaGd
+         TIsUISuWgBiw3s+0eHkqOXir5cShyyzvWZ+gjijAnYQ/kbjCAgg9f30jySx6Kr0R7olI
+         h2CxRwgGpvu0iM0e2I51PiRg/K5roA8S3iiZuKoT622hKyG0+UOFuraLY/J2HaL9U/aK
+         DlYSnYB8/qKTfFH+ayuoHCisJjD3nDJe0y6+P3Fyop7hAWNO3+tHAQMPgTeOXXt3m+wv
+         kOHoWg80G2A0VQDkwy44yn1su4wC1Qlahoh2AGMitFb1iVzzTe1x10qLtZF9XNYYNCJG
+         wxPA==
+X-Gm-Message-State: AOAM5314jHqEmYgeOD/TPC22wB5K2lUQUI17W0i4El2jio4pk2bwXnTt
+        c8VWpjpVHtUX4rFuYyv2KjA=
+X-Google-Smtp-Source: ABdhPJwcAgrufyKafN+gWXC7R0nTZsc/AgWLL9N3J+gLOt4amYKTaxjTxTVpynIRcDKysNsJud3Ksg==
+X-Received: by 2002:a17:902:8bcb:b029:e6:a4a1:9d7e with SMTP id r11-20020a1709028bcbb02900e6a4a19d7emr11170380plo.25.1615857614647;
+        Mon, 15 Mar 2021 18:20:14 -0700 (PDT)
 Received: from sun.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id r30sm14174775pgu.86.2021.03.15.18.19.33
+        by smtp.gmail.com with ESMTPSA id z25sm14368515pfn.37.2021.03.15.18.20.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 18:19:35 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 10:19:33 +0900
-Message-ID: <m235wvc2u2.wl-thehajime@gmail.com>
+        Mon, 15 Mar 2021 18:20:14 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 10:20:13 +0900
+Message-ID: <m21rcfc2sy.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     johannes@sipsolutions.net
 Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         retrage01@gmail.com
-Subject: Re: [RFC v8 11/20] um: lkl: basic console support
-In-Reply-To: <1aebaecdb4c5b3e62f5a89618b9d13f237d6b3c1.camel@sipsolutions.net>
+Subject: Re: [RFC v8 13/20] um: lkl: integrate with irq infrastructure of UML
+In-Reply-To: <5e1f64997ffca8267bde7955fe2eb214dfb9e891.camel@sipsolutions.net>
 References: <cover.1611103406.git.thehajime@gmail.com>
-        <5ec3a7157f7d96943b5701f8d57e102181cd56d2.1611103406.git.thehajime@gmail.com>
-        <1aebaecdb4c5b3e62f5a89618b9d13f237d6b3c1.camel@sipsolutions.net>
+        <46935454bf02224fb325f0e74d60d0ed674a59f9.1611103406.git.thehajime@gmail.com>
+        <5e1f64997ffca8267bde7955fe2eb214dfb9e891.camel@sipsolutions.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.1 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Mon, 15 Mar 2021 05:42:52 +0900,
+
+On Mon, 15 Mar 2021 05:45:23 +0900,
 Johannes Berg wrote:
-> 
-> 
-> > 
-> > -obj-y := stdio_console.o fd.o chan_kern.o chan_user.o line.o
-> > +ifndef CONFIG_UMMODE_LIB
-> > +obj-y := stdio_console.o
-> > +else
-> > +obj-y :=
-> > +endif
-> > +obj-y += fd.o chan_kern.o chan_user.o line.o
-> 
-> Might nicer to do via Kconfig, such as
-> 
-> config STDIO_CONSOLE
-> 	def_bool y
-> 	depends on !UMMODE_LIB
-> 
-> and then
-> 
-> obj-$(CONFIG_STDIO_CONSOLE) += stdio_console.o
-> 
-> here. Similar to CONFIG_STDDER_CONSOLE, after all.
+>=20
+> On Wed, 2021-01-20 at 11:27 +0900, Hajime Tazaki wrote:
+> > =A0static irqreturn_t um_timer(int irq, void *dev)
+> > =A0{
+> > +#ifndef CONFIG_UMMODE_LIB
+> > =A0	if (get_current()->mm !=3D NULL)
+>=20
+> Why is the ifdef needed - get_current()->mm should always be NULL for
+> LKL? Surely get_current() must still work?
 
-Agree.  I'll fix them.
+What we tried to ifdef is to avoid the following call;
 
-> > +/**
-> > + * lkl_print - optional operation that receives console messages
-> 
-> How is it optional? I don't see you having a __weak definition?
+   os_alarm_process(get_current()->mm->context.id.u.pid);
 
-Optional is misleading...  I will fix the comment.
+because we didn't use/update get_current()->mm->context.id (struct
+mm_id) and calling kill(0, SIGALRM) makes a program puzzled thus,
+eliminate it.
+
+> > =A0	sigemptyset(&sig_mask);
+> > =A0	sigaddset(&sig_mask, sig);
+> > -	if (sigprocmask(SIG_UNBLOCK, &sig_mask, NULL) < 0)
+> > -		panic("sigprocmask failed - errno =3D %d\n", errno);
+> > +	if (pthread_sigmask(SIG_UNBLOCK, &sig_mask, NULL) < 0)
+> > +		panic("pthread_sigmask failed - errno =3D %d\n", errno);
+>=20
+> UML doesn't normally link with libpthread, and LKL doesn't actually
+> appear to require it either (since it has its lkl_thread and all), so
+> this seems wrong?
+
+I think both UML/LKL link with libpthread.  See old
+scripts/link-vmlinux.sh, or [01/20] patch.
+
+-		${CC} ${CFLAGS_vmlinux}				\
+-			${strip_debug}				\
+-			-o ${output}				\
+-			-Wl,-T,${lds}				\
+-			${objects}				\
+-			-lutil -lrt -lpthread
+-		rm -f linux
 
 -- Hajime
