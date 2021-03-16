@@ -2,146 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA2E33D81D
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 16:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCEF33D9C9
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 17:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbhCPPtl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Mar 2021 11:49:41 -0400
-Received: from mga03.intel.com ([134.134.136.65]:37769 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237458AbhCPPtX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Mar 2021 11:49:23 -0400
-IronPort-SDR: DT8ckuh7qvC95LQ0gDSlqGJNV4QE+6MXSmYMUR51AcHgosOD8rjOXqOrQakPU/OWo5qBimDNbW
- JF+cPNUuSPxQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9924"; a="189332412"
-X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
-   d="scan'208";a="189332412"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 08:49:21 -0700
-IronPort-SDR: JkPUD6a3838pbd6FLCGwr0inh1fg6cmihcZMMtfznMaUNMyf4mczZZtF1X3HQxLTetSX992zfz
- uBkYPbNRZU4Q==
-X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
-   d="scan'208";a="449759419"
-Received: from kcarrier-mobl.amr.corp.intel.com (HELO [10.209.124.168]) ([10.209.124.168])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 08:49:20 -0700
-Subject: Re: [PATCH v23 6/9] x86/entry: Introduce ENDBR macro
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>
-References: <20210316151320.6123-1-yu-cheng.yu@intel.com>
- <20210316151320.6123-7-yu-cheng.yu@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <f98c600a-80e4-62f0-9c97-eeed708d998d@intel.com>
-Date:   Tue, 16 Mar 2021 08:49:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S236869AbhCPQsz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Mar 2021 12:48:55 -0400
+Received: from casper.infradead.org ([90.155.50.34]:45110 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232997AbhCPQsa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Mar 2021 12:48:30 -0400
+X-Greylist: delayed 1498 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Mar 2021 12:48:29 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DBugU3Nv275YIe120uunlkMX1JrxtNo2cLcdJHIRRa8=; b=e7JSqiKnj0Fjy8O1VZdkU8gkCi
+        Zw/Iz1lwQluCLAZfBohkABD1rVdE2kVrfyvK1+4832d+TiXQMXv/lr7Q5hW4755SvvtnLeWhwu/UK
+        ZLr0wF8JD9oYUbfAhf4kWlWlhwV0UfhWLnOkYY5alFkWFpWXjzqrIlkryBF+tHF+Xbocxlzvp5OEx
+        qVMZb45DGlaHOVFiOyZAAFZXnfYz9YoFyJeR+nL720n8wmeHS9s48kvIZH9appNazEolBO9gjntaA
+        9nVKg7HW8n3e91niZlUAdzdIYj1JS80VkyAn9Y/6ffS+By5FZmWfr1feL+o9Uf5BGX7F9MVIW1Afk
+        dmXojOVA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lMCSf-000J72-0j; Tue, 16 Mar 2021 16:22:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81C26305C22;
+        Tue, 16 Mar 2021 17:22:23 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 52EDE20B05D7C; Tue, 16 Mar 2021 17:22:23 +0100 (CET)
+Date:   Tue, 16 Mar 2021 17:22:23 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
+        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
+        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
+        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
+        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
+        mascasa@google.com, pcc@google.com, irogers@google.com,
+        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v2 3/8] perf/core: Add support for event removal on
+ exec
+Message-ID: <YFDbP3obvxn0SL4w@hirez.programming.kicks-ass.net>
+References: <20210310104139.679618-1-elver@google.com>
+ <20210310104139.679618-4-elver@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20210316151320.6123-7-yu-cheng.yu@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210310104139.679618-4-elver@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 3/16/21 8:13 AM, Yu-cheng Yu wrote:
-> --- a/arch/x86/entry/calling.h
-> +++ b/arch/x86/entry/calling.h
-> @@ -392,3 +392,21 @@ For 32-bit we have the following conventions - kernel is built with
->  .endm
->  
->  #endif /* CONFIG_SMP */
+On Wed, Mar 10, 2021 at 11:41:34AM +0100, Marco Elver wrote:
+> Adds bit perf_event_attr::remove_on_exec, to support removing an event
+> from a task on exec.
+> 
+> This option supports the case where an event is supposed to be
+> process-wide only, and should not propagate beyond exec, to limit
+> monitoring to the original process image only.
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
+
 > +/*
-> + * ENDBR is an instruction for the Indirect Branch Tracking (IBT) component
-> + * of CET.  IBT prevents attacks by ensuring that (most) indirect branches
-> + * function calls may only land at ENDBR instructions.  Branches that don't
-> + * follow the rules will result in control flow (#CF) exceptions.
-> + * ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
-> + * instructions are inserted automatically by the compiler, but branch
-> + * targets written in assembly must have ENDBR added manually.
+> + * Removes all events from the current task that have been marked
+> + * remove-on-exec, and feeds their values back to parent events.
 > + */
-> +.macro ENDBR
-> +#ifdef CONFIG_X86_CET
-> +#ifdef __i386__
-> +	endbr32
-> +#else
-> +	endbr64
-> +#endif
-> +#endif
-> +.endm
+> +static void perf_event_remove_on_exec(void)
+> +{
+> +	int ctxn;
+> +
+> +	for_each_task_context_nr(ctxn) {
+> +		struct perf_event_context *ctx;
+> +		struct perf_event *event, *next;
+> +
+> +		ctx = perf_pin_task_context(current, ctxn);
+> +		if (!ctx)
+> +			continue;
+> +		mutex_lock(&ctx->mutex);
+> +
+> +		list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
+> +			if (!event->attr.remove_on_exec)
+> +				continue;
+> +
+> +			if (!is_kernel_event(event))
+> +				perf_remove_from_owner(event);
+> +			perf_remove_from_context(event, DETACH_GROUP);
 
-Is "#ifdef __i386__" the right thing to use here?  I guess ENDBR only
-ends up getting used in the VDSO, but there's a lot of
-non-userspace-exposed stuff in calling.h.  It seems a bit weird to have
-the normally userspace-only __i386__ in there.
+There's a comment on this in perf_event_exit_event(), if this task
+happens to have the original event, then DETACH_GROUP will destroy the
+grouping.
 
-I don't see any existing direct use of __i386__ in arch/x86/entry/vdso.
+I think this wants to be:
+
+			perf_remove_from_text(event,
+					      child_event->parent ?  DETACH_GROUP : 0);
+
+or something.
+
+> +			/*
+> +			 * Remove the event and feed back its values to the
+> +			 * parent event.
+> +			 */
+> +			perf_event_exit_event(event, ctx, current);
+
+Oooh, and here we call it... but it will do list_del_even() /
+perf_group_detach() *again*.
+
+So the problem is that perf_event_exit_task_context() doesn't use
+remove_from_context(), but instead does task_ctx_sched_out() and then
+relies on the events not being active.
+
+Whereas above you *DO* use remote_from_context(), but then
+perf_event_exit_event() will try and remove it more.
+
+> +		}
+> +		mutex_unlock(&ctx->mutex);
+
+		perf_unpin_context(ctx);
+
+> +		put_ctx(ctx);
+> +	}
+> +}
