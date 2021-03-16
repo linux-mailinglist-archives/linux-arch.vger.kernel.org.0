@@ -2,128 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCEF33D9C9
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 17:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B60633DA5D
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 18:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236869AbhCPQsz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Mar 2021 12:48:55 -0400
-Received: from casper.infradead.org ([90.155.50.34]:45110 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbhCPQsa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Mar 2021 12:48:30 -0400
-X-Greylist: delayed 1498 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Mar 2021 12:48:29 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DBugU3Nv275YIe120uunlkMX1JrxtNo2cLcdJHIRRa8=; b=e7JSqiKnj0Fjy8O1VZdkU8gkCi
-        Zw/Iz1lwQluCLAZfBohkABD1rVdE2kVrfyvK1+4832d+TiXQMXv/lr7Q5hW4755SvvtnLeWhwu/UK
-        ZLr0wF8JD9oYUbfAhf4kWlWlhwV0UfhWLnOkYY5alFkWFpWXjzqrIlkryBF+tHF+Xbocxlzvp5OEx
-        qVMZb45DGlaHOVFiOyZAAFZXnfYz9YoFyJeR+nL720n8wmeHS9s48kvIZH9appNazEolBO9gjntaA
-        9nVKg7HW8n3e91niZlUAdzdIYj1JS80VkyAn9Y/6ffS+By5FZmWfr1feL+o9Uf5BGX7F9MVIW1Afk
-        dmXojOVA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lMCSf-000J72-0j; Tue, 16 Mar 2021 16:22:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81C26305C22;
-        Tue, 16 Mar 2021 17:22:23 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 52EDE20B05D7C; Tue, 16 Mar 2021 17:22:23 +0100 (CET)
-Date:   Tue, 16 Mar 2021 17:22:23 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
-        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
-        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
-        mascasa@google.com, pcc@google.com, irogers@google.com,
-        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 3/8] perf/core: Add support for event removal on
- exec
-Message-ID: <YFDbP3obvxn0SL4w@hirez.programming.kicks-ass.net>
-References: <20210310104139.679618-1-elver@google.com>
- <20210310104139.679618-4-elver@google.com>
+        id S238514AbhCPRMz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Mar 2021 13:12:55 -0400
+Received: from mga01.intel.com ([192.55.52.88]:50270 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239171AbhCPRMm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 16 Mar 2021 13:12:42 -0400
+IronPort-SDR: kupFXEQzqOy4Ngh47OGo92WpruiIVhmacxnCEOG1MjyDormoq4u0xhDWADEvSJZtVmuLTBiWND
+ lEzyeKzwkFIQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="209242689"
+X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
+   d="scan'208";a="209242689"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 10:12:41 -0700
+IronPort-SDR: WAufUYiv2hINDLV1Fsm7MR1NscNe9fmWhCNAMYlonQgBJzkCN1Jk6hMv0wjROGIZvRym4QvWLT
+ XQwO7GxNWjGg==
+X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
+   d="scan'208";a="412295708"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.191.248]) ([10.212.191.248])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 10:12:40 -0700
+Subject: Re: [PATCH v23 6/9] x86/entry: Introduce ENDBR macro
+To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>
+References: <20210316151320.6123-1-yu-cheng.yu@intel.com>
+ <20210316151320.6123-7-yu-cheng.yu@intel.com>
+ <f98c600a-80e4-62f0-9c97-eeed708d998d@intel.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <15966857-9be7-3029-7e93-e40596b4649a@intel.com>
+Date:   Tue, 16 Mar 2021 10:12:39 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210310104139.679618-4-elver@google.com>
+In-Reply-To: <f98c600a-80e4-62f0-9c97-eeed708d998d@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 11:41:34AM +0100, Marco Elver wrote:
-> Adds bit perf_event_attr::remove_on_exec, to support removing an event
-> from a task on exec.
+On 3/16/2021 8:49 AM, Dave Hansen wrote:
+> On 3/16/21 8:13 AM, Yu-cheng Yu wrote:
+>> --- a/arch/x86/entry/calling.h
+>> +++ b/arch/x86/entry/calling.h
+>> @@ -392,3 +392,21 @@ For 32-bit we have the following conventions - kernel is built with
+>>   .endm
+>>   
+>>   #endif /* CONFIG_SMP */
+>> +/*
+>> + * ENDBR is an instruction for the Indirect Branch Tracking (IBT) component
+>> + * of CET.  IBT prevents attacks by ensuring that (most) indirect branches
+>> + * function calls may only land at ENDBR instructions.  Branches that don't
+>> + * follow the rules will result in control flow (#CF) exceptions.
+>> + * ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
+>> + * instructions are inserted automatically by the compiler, but branch
+>> + * targets written in assembly must have ENDBR added manually.
+>> + */
+>> +.macro ENDBR
+>> +#ifdef CONFIG_X86_CET
+>> +#ifdef __i386__
+>> +	endbr32
+>> +#else
+>> +	endbr64
+>> +#endif
+>> +#endif
+>> +.endm
 > 
-> This option supports the case where an event is supposed to be
-> process-wide only, and should not propagate beyond exec, to limit
-> monitoring to the original process image only.
+> Is "#ifdef __i386__" the right thing to use here?  I guess ENDBR only
+> ends up getting used in the VDSO, but there's a lot of
+> non-userspace-exposed stuff in calling.h.  It seems a bit weird to have
+> the normally userspace-only __i386__ in there.
 > 
-> Signed-off-by: Marco Elver <elver@google.com>
+> I don't see any existing direct use of __i386__ in arch/x86/entry/vdso.
+> 
 
-> +/*
-> + * Removes all events from the current task that have been marked
-> + * remove-on-exec, and feeds their values back to parent events.
-> + */
-> +static void perf_event_remove_on_exec(void)
-> +{
-> +	int ctxn;
-> +
-> +	for_each_task_context_nr(ctxn) {
-> +		struct perf_event_context *ctx;
-> +		struct perf_event *event, *next;
-> +
-> +		ctx = perf_pin_task_context(current, ctxn);
-> +		if (!ctx)
-> +			continue;
-> +		mutex_lock(&ctx->mutex);
-> +
-> +		list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
-> +			if (!event->attr.remove_on_exec)
-> +				continue;
-> +
-> +			if (!is_kernel_event(event))
-> +				perf_remove_from_owner(event);
-> +			perf_remove_from_context(event, DETACH_GROUP);
+Good point.  My thought was, __i386__ comes from the compiler having the 
+-m32 command-line option, and it is not dependent on anything else.
 
-There's a comment on this in perf_event_exit_event(), if this task
-happens to have the original event, then DETACH_GROUP will destroy the
-grouping.
+Alternatively, there is another compiler-defined macro _CET_ENDBR that 
+can be used.  We can put the following in calling.h:
 
-I think this wants to be:
+#ifdef __CET__
+#include <cet.h>
+#else
+#define _CET_ENDBR
+#endif
 
-			perf_remove_from_text(event,
-					      child_event->parent ?  DETACH_GROUP : 0);
+and then use _CET_ENDBR in other files.  How is that?
 
-or something.
+In the future, in case we have kernel-mode IBT, ENDBR macros are also 
+needed for other assembly files.
 
-> +			/*
-> +			 * Remove the event and feed back its values to the
-> +			 * parent event.
-> +			 */
-> +			perf_event_exit_event(event, ctx, current);
-
-Oooh, and here we call it... but it will do list_del_even() /
-perf_group_detach() *again*.
-
-So the problem is that perf_event_exit_task_context() doesn't use
-remove_from_context(), but instead does task_ctx_sched_out() and then
-relies on the events not being active.
-
-Whereas above you *DO* use remote_from_context(), but then
-perf_event_exit_event() will try and remove it more.
-
-> +		}
-> +		mutex_unlock(&ctx->mutex);
-
-		perf_unpin_context(ctx);
-
-> +		put_ctx(ctx);
-> +	}
-> +}
+Thanks,
+Yu-cheng
