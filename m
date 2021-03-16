@@ -2,99 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A13133CAD5
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0F833CAD7
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbhCPBTL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Mar 2021 21:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
+        id S230484AbhCPBTn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Mar 2021 21:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbhCPBTE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:19:04 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F40BC06174A
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:19:04 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id o3so3054409pfh.11
-        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:19:04 -0700 (PDT)
+        with ESMTP id S231305AbhCPBTV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:19:21 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CC3C06174A
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:19:21 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id nh23-20020a17090b3657b02900c0d5e235a8so567746pjb.0
+        for <linux-arch@vger.kernel.org>; Mon, 15 Mar 2021 18:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=nF5FcRFNraHBE0OVbfh0No934vQd9+JmS7SJMUyo7vE=;
-        b=eZOnAu04HSa59S4UF1+Kk7hMmfflr113fVEJ5As9cjN+x5ZaoDllGS+T8pCcIevKDl
-         7UUFcODdF6mU8U6rPRfASG8v1uHGL8xESOS78HDKcDJkNp54ezC4S3A1CqZsafZpBlwS
-         isEU2r1Fh2ivih9pKoilDTOFj9EuPK8zdOgVAxABEaX0bsZiPuMwzbHJUbMBmTNjp5wW
-         NMV2MPdLDTx+iwGuw+gHasD2hYDyI7BC4xNIIIWSRNfUbbQ/4c7mqrLXnw0yvSn3wAQB
-         hY12SnRidSkRLVYf0HU4Q9mwXLHIzKfvJ1XjUPtZ73ManJaiAt7oYTKtJlrRHNYgKeCF
-         y87w==
+         :user-agent:mime-version;
+        bh=nwqe8UgBhqxk+hw62UxI72OTBYeNX/dwsxv8iPGRl6o=;
+        b=kPDGwaz2b1P+N6X0Tod9g/ZarUaLOygjU7plkYB/Ib19QkamQmumM17hd6TaRQFePk
+         ixjdmO4RMPR37UkeMDTLddxK4qGbZqLMML0ppvc0pagvq7P9qv6r8I1oJ51iik3fYGPI
+         Nz/DQ/WkGaOV3OK8J3MplFeH4bqrqacB3FIwjLMk0HgT6dxdusdCnmumxyHzmQQG3ROw
+         plUFv0f76BrYGM0HLrYevr8qDz5r6KAUBmuPWeRFXbuSTJ8wW4zhdMpjz9FDYm4QcZJQ
+         6qjMjHVcKrF4QOiFOLEUeiUFOGhRoErx1F05OBcfbRb+Vtfh91aaeqQr8MTszP5a0oN6
+         Z7WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=nF5FcRFNraHBE0OVbfh0No934vQd9+JmS7SJMUyo7vE=;
-        b=GCyfeADtdkq0Pdl2gJ6i5UxAILKc88X70KPeFsSk6hLNLy2bMOVxni2+hKY4W+CWay
-         rbWAwTT2STew5fuhQMRU+86YUiG33GcNEHVuLwhUGD9WpqbnON/WZcvJzhmfowjEUPvf
-         znZ9ePOA4Ojn6dD3vqCdh8B1KyCAWDXC4UEG17c5FVEDoojhFuNKS7bMkdNQPDQNyhtH
-         L7KPt1+aLBg57mpujhcAg1mVHszndunCl/GJ+/vsoj+ItrUD8KJHkGB7ehXnwV11HKuv
-         GR9sKOU4yO3jnOXyzz9ygxxwVdmR5lAV2N/PSJv5MUdrDRoU3UCLbJWT0ClSWv/of8mS
-         iUIw==
-X-Gm-Message-State: AOAM532N8oEyxOgmCkDAtyTE4dq2BtbNzqWb7nTeRogZJfBmpRSfANT5
-        Ifcuu1h91pOx+X8o+mT58sc=
-X-Google-Smtp-Source: ABdhPJyTjyu6WjTOSb86t+HiygIV5p0tXOZhhJV+z6FY6G6mTAqIRdNFI8jpbN173yTtP9Qw992v3g==
-X-Received: by 2002:a62:7ecc:0:b029:1ee:f61b:a63f with SMTP id z195-20020a627ecc0000b02901eef61ba63fmr12471631pfc.57.1615857543621;
-        Mon, 15 Mar 2021 18:19:03 -0700 (PDT)
+         :references:user-agent:mime-version;
+        bh=nwqe8UgBhqxk+hw62UxI72OTBYeNX/dwsxv8iPGRl6o=;
+        b=msijugc94T0LyXoZOmE2GTliDccZsQDydgv8CmvVBADvjhHLaJF9o+YFoMmE9PQx8f
+         wXvW5gBJkfxlihoexBOHwrAMoi9PmWV87INQmnpsYeNkc9WhUEjXWQLhsUkX3g9U8wfO
+         5UA/xsiaBF+XXnVdSuVEQGNBXCTy3t0sw1gN4nPOvTiLkll4/3O9M+ZsvHLL1pZbh+9F
+         1NE5CeiyM7nfusEGhIasV86Y03VwmU0BrmUAmrcUPAS6KzOVBPDt1EOHCOctiUqwi0nv
+         8cvrCTgmhla1RV8QB5ZtAUO9iSWJrskvUCGLhN/mfHAr7KsFJCneb7vEtdC1S/qkZgw1
+         uWdg==
+X-Gm-Message-State: AOAM531YuCV4D+U8x44bQt5mJIofTHO70hQjAIjL7fxC01diCOa1au7U
+        Rh/MYd2109KORpItr55O9H0=
+X-Google-Smtp-Source: ABdhPJzI8T5PSGsw5CBLTjpozOD4z24EgpE5EIVh37XFps8m9YgKA6xmMUCZfDksYIiyFmtKRGxMuQ==
+X-Received: by 2002:a17:90a:9d82:: with SMTP id k2mr2008631pjp.48.1615857561017;
+        Mon, 15 Mar 2021 18:19:21 -0700 (PDT)
 Received: from sun.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id e11sm14629369pfm.24.2021.03.15.18.19.01
+        by smtp.gmail.com with ESMTPSA id u66sm7352636pfu.186.2021.03.15.18.19.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 18:19:03 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 10:19:02 +0900
-Message-ID: <m25z1rc2ux.wl-thehajime@gmail.com>
+        Mon, 15 Mar 2021 18:19:20 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 10:19:19 +0900
+Message-ID: <m24khbc2ug.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     johannes@sipsolutions.net
 Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         retrage01@gmail.com
-Subject: Re: [RFC v8 19/20] um: lkl: add block device support of UML
-In-Reply-To: <2b649bc5165c7ff4547abd72f7e03e7491980138.camel@sipsolutions.net>
+Subject: Re: [RFC v8 12/20] um: lkl: initialization and cleanup
+In-Reply-To: <cf6713530642cdd11abc91a2ddb67f040c806aba.camel@sipsolutions.net>
 References: <cover.1611103406.git.thehajime@gmail.com>
-        <b3b73864dbb738d0de7c49a6df5a5f53a358ec93.1611103406.git.thehajime@gmail.com>
-        <2b649bc5165c7ff4547abd72f7e03e7491980138.camel@sipsolutions.net>
+        <031847ceca73023566fba8e84433a615eac6a2f3.1611103406.git.thehajime@gmail.com>
+        <cf6713530642cdd11abc91a2ddb67f040c806aba.camel@sipsolutions.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.1 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Mon, 15 Mar 2021 05:37:40 +0900,
+On Mon, 15 Mar 2021 05:40:39 +0900,
 Johannes Berg wrote:
->=20
+> 
 > On Wed, 2021-01-20 at 11:27 +0900, Hajime Tazaki wrote:
-> >=20
-> > diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-> > index 24c6596260de..5fb6a852d058 100644
-> > --- a/arch/um/Kconfig
-> > +++ b/arch/um/Kconfig
-> > @@ -29,6 +29,10 @@ config UMMODE_LIB
-> > =A0	select UACCESS_MEMCPY
-> > =A0	select ARCH_THREAD_STACK_ALLOCATOR
-> > =A0	select ARCH_HAS_SYSCALL_WRAPPER
-> > +	select VFAT_FS
-> > +	select NLS_CODEPAGE_437
-> > +	select NLS_ISO8859_1
-> > +	select BTRFS_FS
->=20
-> That doesn't really seem to make sense - the sample might need it, but
-> generally LKL doesn't/shouldn't?
+> > 
+> > +	panic_blink = lkl_panic_blink;
+> 
+> Using a panic notifier would seem more appropriate?
 
-I'm trying to understand your comment;
-Do you mean that enabling those options in Kconfig doesn't make sense ?
+I understand;  will investigate if we can change.
 
-and if you mean the sample as sample code, is the added test case
-(e.g., tools/testing/selftests/um/disk.c, which is included in the
-same patch) for this purpose ?
+> > +	init_sem = lkl_sem_alloc(0);
+> 
+> what's the deal with this?
+> 
+> > +	if (!init_sem)
+> > +		return -ENOMEM;
+> > +
+> > +	ret = lkl_cpu_init();
+> > +	if (ret)
+> > +		goto out_free_init_sem;
+> > +
+> > +	ret = lkl_thread_create(lkl_run_kernel, NULL);
+> > +	if (!ret) {
+> > +		ret = -ENOMEM;
+> > +		goto out_free_init_sem;
+> > +	}
+> > +
+> > +	lkl_sem_down(init_sem);
+> > +	lkl_sem_free(init_sem);
+> 
+> You free it before the kernel really even started?
 
--- HAjime
+The semaphore (init_sem) is unlocked at lkl_run_init(), so this waits
+for finishing the init call. After the initialization ends, it's safe
+to free as it's no longer used.
+
+I may add some description here to make it clear.
+
+-- Hajime
