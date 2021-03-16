@@ -2,85 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB99D33DF7A
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 21:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A59433DFB2
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 22:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbhCPUr2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Mar 2021 16:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbhCPUpB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Mar 2021 16:45:01 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF69C061765
-        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 13:44:45 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id z65so18953024vsz.12
-        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 13:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tLa3leTdMzh1rknpkLUWnm0PAOSso4HRgQA5K7IK6MM=;
-        b=e+TXEaCKvma4VGpnwpOaaFkLknHBGuDmEKybhDxTF83sGcUnhvMjnyd4FKoakznEV3
-         L+49y3mjg3y9zPjYOau5jDdMUzS1QeQc8EZHIuCnYCEvlu/U3MIphrqZ/uP5UmkwxxeL
-         +/myGc8pDphpzzZ7FTh/9hJKxPT9p26Ia2eDhTGk6iETFEiye/52lqU41RoUHrn74DWh
-         Z9MX2qar1Tdy5UlVzs8F5VgOHw+sA5zNyUhbhgEJg7yulcKmANZ/MdTHXU3HQZNR3/3z
-         jprq7sQ3GQvcxl+Y7QEUl59VHWT5WD2/UpeliEvsAr6IQyyxoheHA9cHYYw051xuDx5U
-         BC1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tLa3leTdMzh1rknpkLUWnm0PAOSso4HRgQA5K7IK6MM=;
-        b=KcR7ZU0p7sol6G2vmFi+26KNuPGk9L5PXj2r2iExGSiqu6j5d8J+vQcYN7toF7YKDD
-         492UIe5g5/nBBsxgKTLRkhzBYH95mxF/lNcG+BeXJAw8KCKycXr8TSnvW2DsI6VCUSuI
-         mrtNbpGzVxO/F6Pn+wrVE9QZ9ykLqEQWsoJrWeo/0zj7y9yWMWJJ5ThVP1YB91D88XFN
-         qvvUVGH4qAZuA1LE56hReFCWrYQcsGpvaKbiz3XB/c2a2JYd46003WGTQBIJSzanABMT
-         V4gWgTeEpNb2+McTKRyNGlic7tXgwpwLLzoTrNu0tRZ/rW+IjOLosPYjdC0wRA/ZUgMb
-         FtAQ==
-X-Gm-Message-State: AOAM533GxfMo6IYN7qmYBEwhAfnn82dqBfP2i0vc3INezzpIWJXNPw6q
-        wQra8L7uEcJ3kVZZj1Z6ulmLrOdQRizrEAsOtVSq9Q==
-X-Google-Smtp-Source: ABdhPJwQSd1vGWBZTCJlQRmCK62EXrLyrNMXIW37KTTCmpBtYEbzwPtXhGB1KcQUzWMwYntm7fopfaHU36IppUu0V+Q=
-X-Received: by 2002:a67:db98:: with SMTP id f24mr1241866vsk.13.1615927484959;
- Tue, 16 Mar 2021 13:44:44 -0700 (PDT)
+        id S232149AbhCPVBu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Mar 2021 17:01:50 -0400
+Received: from mga01.intel.com ([192.55.52.88]:4978 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232180AbhCPVBW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 16 Mar 2021 17:01:22 -0400
+IronPort-SDR: HDpvjgXKkWS2ZzziY6TCb4v/W+NVz5Xxrp6/pHqnIlA9UMDi5HDayJJzWQWEs4TmT0Hx6lE82C
+ jfR2exyIR4yA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="209280953"
+X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
+   d="scan'208";a="209280953"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 14:01:10 -0700
+IronPort-SDR: jl9j5Sr8LukusE8rFQ1CMdcCk1xcgInZq6zKKnBJVDNa5Qkmk5nKItZiqHnumNiZuOXqxc5gf8
+ 4v1qN7ImBUuQ==
+X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
+   d="scan'208";a="590805431"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.191.248]) ([10.212.191.248])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 14:01:08 -0700
+Subject: Re: [PATCH v23 6/9] x86/entry: Introduce ENDBR macro
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+References: <20210316151320.6123-1-yu-cheng.yu@intel.com>
+ <20210316151320.6123-7-yu-cheng.yu@intel.com>
+ <f98c600a-80e4-62f0-9c97-eeed708d998d@intel.com>
+ <15966857-9be7-3029-7e93-e40596b4649a@intel.com>
+ <YFENvgrR8JSYq1ae@hirez.programming.kicks-ass.net>
+ <65845773-6cf0-1bdc-1ecf-168de74cc283@intel.com>
+ <YFER79kU+ukn3YZr@hirez.programming.kicks-ass.net>
+ <aff84067-5b9e-1335-e540-ef90ee133ac9@intel.com>
+Message-ID: <9da6397f-326b-7891-5810-a5ac9e0def5d@intel.com>
+Date:   Tue, 16 Mar 2021 14:01:08 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-References: <20210312004919.669614-1-samitolvanen@google.com>
- <20210312004919.669614-18-samitolvanen@google.com> <202103111851.69AA6E59@keescook>
-In-Reply-To: <202103111851.69AA6E59@keescook>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Tue, 16 Mar 2021 13:44:33 -0700
-Message-ID: <CABCJKucpFHC-9rvT7uNF+E-Jh20fz69zdO49_4p8G_Sb634qmw@mail.gmail.com>
-Subject: Re: [PATCH 17/17] arm64: allow CONFIG_CFI_CLANG to be selected
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        bpf@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <aff84067-5b9e-1335-e540-ef90ee133ac9@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 6:51 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Mar 11, 2021 at 04:49:19PM -0800, Sami Tolvanen wrote:
-> > Select ARCH_SUPPORTS_CFI_CLANG to allow CFI to be enabled.
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> Random thought: the vDSO doesn't need special handling because it
-> doesn't make any indirect calls, yes?
+On 3/16/2021 1:26 PM, Yu, Yu-cheng wrote:
+> On 3/16/2021 1:15 PM, Peter Zijlstra wrote:
+>> On Tue, Mar 16, 2021 at 01:05:30PM -0700, Yu, Yu-cheng wrote:
+>>> On 3/16/2021 12:57 PM, Peter Zijlstra wrote:
+>>>> On Tue, Mar 16, 2021 at 10:12:39AM -0700, Yu, Yu-cheng wrote:
+>>>>> Alternatively, there is another compiler-defined macro _CET_ENDBR 
+>>>>> that can
+>>>>> be used.  We can put the following in calling.h:
+>>>>>
+>>>>> #ifdef __CET__
+>>>>> #include <cet.h>
+>>>>> #else
+>>>>> #define _CET_ENDBR
+>>>>> #endif
+>>>>>
+>>>>> and then use _CET_ENDBR in other files.  How is that?
+>>>>>
+>>>>> In the future, in case we have kernel-mode IBT, ENDBR macros are 
+>>>>> also needed
+>>>>> for other assembly files.
+>>>>
+>>>> Can we please call it IBT_ENDBR or just ENDBR. CET is a horrible name,
+>>>> seeing how it is not specific.
+>>>>
+>>>
+>>> _CET_ENDBR is from the compiler and we cannot change it.  We can do:
+>>>
+>>> #define ENDBR _CET_ENDBR
+>>>
+>>> How is that?
+>>
+>> Do we really want to include compiler headers? AFAICT it's not a
+>> built-in. Also what about clang?
+>>
+>> This thing seems trivial enough to build our own, it's a single damn
+>> instruction. That also means we don't have to worry about changes to
+>> header files we don't control.
+>>
+> 
+> Then, what about moving what I had earlier to vdso.h?
+> If we don't want __i386__ either, then make it two macros.
+> 
+> +.macro ENDBR
+> +#ifdef CONFIG_X86_CET
+> +#ifdef __i386__
+> +    endbr32
+> +#else
+> +    endbr64
+> +#endif
+> +#endif
+> +.endm
 
-That might be true, but we also filter out CC_FLAGS_LTO for the vDSO,
-which disables CFI as well.
+I will make it like the following:
 
-Sami
+diff --git a/arch/x86/include/asm/vdso.h b/arch/x86/include/asm/vdso.h
+index 98aa103eb4ab..4c0262dcb93d 100644
+--- a/arch/x86/include/asm/vdso.h
++++ b/arch/x86/include/asm/vdso.h
+@@ -52,6 +52,15 @@ extern int map_vdso_once(const struct vdso_image 
+*image, unsigned long addr);
+  extern bool fixup_vdso_exception(struct pt_regs *regs, int trapnr,
+  				 unsigned long error_code,
+  				 unsigned long fault_addr);
+-#endif /* __ASSEMBLER__ */
++#else /* __ASSEMBLER__ */
++
++#ifdef CONFIG_X86_CET
++#define ENDBR64 endbr64
++#define ENDBR32 endbr32
++#else /*!CONFIG_X86_CET */
++#define ENDBR64
++#define ENDBR32
++#endif
+
++#endif /* __ASSEMBLER__ */
+  #endif /* _ASM_X86_VDSO_H */
