@@ -2,123 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B9E33CB22
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 02:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EDA33CE2F
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 07:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234399AbhCPBzN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Mar 2021 21:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234326AbhCPByn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Mar 2021 21:54:43 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3835DC06174A;
-        Mon, 15 Mar 2021 18:54:43 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id 130so33772107qkh.11;
-        Mon, 15 Mar 2021 18:54:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XeKeCrL0MI2F9lqPgByT6M0Kwx7kgFjWSejiRp+cD7A=;
-        b=HXxgkHr0JvsTJ5Wa9sQlGiMHMihYzgGAFCnL3MQ+2qXeYhptuIiviUUmyiEfleDf0j
-         v+i+d2cqL3mT7r6O8VtPkORDY5JNnmZS7ZJ3fj1roGEEjMHHnod506svTGGx/d09JlOq
-         4arQtiVKR4Amn2nf/sBf/NDLZ0pee8rvp/siORsD69EYEV+a83eY+jszpaXmqS3gm2P5
-         g4tuFNAS+FyMaSRkxZYh9Ad5DxBkUd8jaRKwazX39QtsNRSvzYhQ7/Ha5jwImTX+REGi
-         QbHlfQaeCRJ4/jEUSmUX01gGMfG653h7+hM7PcYlKI4PWGQAii74F+YuJCH6XXa59aVq
-         OJ4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XeKeCrL0MI2F9lqPgByT6M0Kwx7kgFjWSejiRp+cD7A=;
-        b=I9JaKypicqZ4lMDO7GQBWxSxFl/axn3QLK96OX/I/zLbTbUOen0pSBa7GP5bA8QVBC
-         4PxZJyiHqKDh+FOkkXq2qHSXBHSMfUhS0jhqTRmxbwn0PzMHaiF5bzeCSVFTBF2d8Wxw
-         TXQ/9/IM4RNL2HrgbvKj5IUpQASskY9dftZxftAsOY7QH+sabyRSKRhQUxlSIukU1Uml
-         /P46gFORIk5WV1wt1uBRSVn76UGMRr+U41CeKBkBhKwXlWnQsW3URThKevdbbomgUrM8
-         bXsDqijJbwKmBPolYF7g47VDV5jovcg4RBviH+J920DPrUCUD5i35gh7OpDR8OH/U1V8
-         b5Sw==
-X-Gm-Message-State: AOAM530NLPjQ4c6HiG9uFePMhib2eNqgPl0WmVyl5R2hmTC2FFE+9fI8
-        j2PBt7e5HhkSY3cdajsskb7My0b1vGA=
-X-Google-Smtp-Source: ABdhPJy9Co64mtp6x2Wrb+LisAdAzh/bbO6eoIq/TEYaLoLBTtHdk+xfgISLKdYg2BBKazo07rRKfA==
-X-Received: by 2002:a05:620a:1477:: with SMTP id j23mr26829500qkl.416.1615859682248;
-        Mon, 15 Mar 2021 18:54:42 -0700 (PDT)
-Received: from localhost ([76.73.146.210])
-        by smtp.gmail.com with ESMTPSA id f136sm14189503qke.24.2021.03.15.18.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 18:54:42 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-m68k@lists.linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 13/13] MAINTAINERS: Add entry for the bitmap API
-Date:   Mon, 15 Mar 2021 18:54:24 -0700
-Message-Id: <20210316015424.1999082-14-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210316015424.1999082-1-yury.norov@gmail.com>
-References: <20210316015424.1999082-1-yury.norov@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S233939AbhCPG5N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Mar 2021 02:57:13 -0400
+Received: from mga07.intel.com ([134.134.136.100]:44607 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235766AbhCPG5M (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 16 Mar 2021 02:57:12 -0400
+IronPort-SDR: gK2TuscX5yf2Xi4jEYj3BpxvHx/QsOuUwiciImASBPFImq4RiZoLf8Y+nQjGs+Ycw7jBoa5gDr
+ XoNHpkrNl5XQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9924"; a="253227830"
+X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
+   d="scan'208";a="253227830"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2021 23:57:11 -0700
+IronPort-SDR: qnpBGRE2wppZL6tplYqEm0jVKNV60UXK9XAj1XjenkDdKKw1lubXGnQNqiT9J9tG8UKh7kQiNc
+ euuofBv8/mqA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
+   d="scan'208";a="511296069"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Mar 2021 23:57:11 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
+        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
+        carlos@redhat.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com
+Subject: [PATCH v7 0/6] x86: Improve Minimum Alternate Stack Size
+Date:   Mon, 15 Mar 2021 23:52:09 -0700
+Message-Id: <20210316065215.23768-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add myself as maintainer for bitmap API and Andy and Rasmus as reviewers.
+During signal entry, the kernel pushes data onto the normal userspace
+stack. On x86, the data pushed onto the user stack includes XSAVE state,
+which has grown over time as new features and larger registers have been
+added to the architecture.
 
-I'm an author of current implementation of lib/find_bit and an active
-contributor to lib/bitmap. It was spotted that there's no maintainer for
-bitmap API. I'm willing to maintain it.
+MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
+typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
+compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
+constant indicates to userspace how much data the kernel expects to push on
+the user stack, [2][3].
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- MAINTAINERS | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+However, this constant is much too small and does not reflect recent
+additions to the architecture. For instance, when AVX-512 states are in
+use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3dd20015696e..44f94cdd5a20 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3151,6 +3151,22 @@ F:	Documentation/filesystems/bfs.rst
- F:	fs/bfs/
- F:	include/uapi/linux/bfs_fs.h
- 
-+BITMAP API
-+M:	Yury Norov <yury.norov@gmail.com>
-+R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+R:	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-+S:	Maintained
-+F:	include/asm-generic/bitops/find.h
-+F:	include/linux/bitmap.h
-+F:	lib/bitmap.c
-+F:	lib/find_bit.c
-+F:	lib/find_find_bit_benchmark.c
-+F:	lib/test_bitmap.c
-+F:	tools/include/asm-generic/bitops/find.h
-+F:	tools/include/linux/bitmap.h
-+F:	tools/lib/bitmap.c
-+F:	tools/lib/find_bit.c
-+
- BLINKM RGB LED DRIVER
- M:	Jan-Simon Moeller <jansimon.moeller@gmx.de>
- S:	Maintained
+The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
+cause user stack overflow when delivering a signal.
+
+In this series, we suggest a couple of things:
+1. Provide a variable minimum stack size to userspace, as a similar
+   approach to [5].
+2. Avoid using a too-small alternate stack.
+
+Changes from v6 [11]:
+* Updated and fixed the documentation. (Borislav Petkov)
+* Revised the AT_MINSIGSTKSZ comment. (Borislav Petkov)
+
+Changes form v5 [10]:
+* Fixed the overflow detection. (Andy Lutomirski)
+* Reverted the AT_MINSIGSTKSZ removal on arm64. (Dave Martin)
+* Added a documentation about the x86 AT_MINSIGSTKSZ.
+* Supported the existing sigaltstack test to use the new aux vector.
+
+Changes from v4 [9]:
+* Moved the aux vector define to the generic header. (Carlos O'Donell)
+
+Changes from v3 [8]:
+* Updated the changelog. (Borislav Petkov)
+* Revised the test messages again. (Borislav Petkov)
+
+Changes from v2 [7]:
+* Simplified the sigaltstack overflow prevention. (Jann Horn)
+* Renamed fpstate size helper with cleanup. (Borislav Petkov)
+* Cleaned up the signframe struct size defines. (Borislav Petkov)
+* Revised the selftest messages. (Borislav Petkov)
+* Revised a changelog. (Borislav Petkov)
+
+Changes from v1 [6]:
+* Took stack alignment into account for sigframe size. (Dave Martin)
+
+[1]: https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/bits/sigstack.h;h=b9dca794da093dc4d41d39db9851d444e1b54d9b;hb=HEAD
+[2]: https://www.gnu.org/software/libc/manual/html_node/Signal-Stack.html
+[3]: https://man7.org/linux/man-pages/man2/sigaltstack.2.html
+[4]: https://bugzilla.kernel.org/show_bug.cgi?id=153531
+[5]: https://blog.linuxplumbersconf.org/2017/ocw/system/presentations/4671/original/plumbers-dm-2017.pdf
+[6]: https://lore.kernel.org/lkml/20200929205746.6763-1-chang.seok.bae@intel.com/
+[7]: https://lore.kernel.org/lkml/20201119190237.626-1-chang.seok.bae@intel.com/
+[8]: https://lore.kernel.org/lkml/20201223015312.4882-1-chang.seok.bae@intel.com/
+[9]: https://lore.kernel.org/lkml/20210115211038.2072-1-chang.seok.bae@intel.com/
+[10]: https://lore.kernel.org/lkml/20210203172242.29644-1-chang.seok.bae@intel.com/
+[11]: https://lore.kernel.org/lkml/20210227165911.32757-1-chang.seok.bae@intel.com/
+
+Chang S. Bae (6):
+  uapi: Define the aux vector AT_MINSIGSTKSZ
+  x86/signal: Introduce helpers to get the maximum signal frame size
+  x86/elf: Support a new ELF aux vector AT_MINSIGSTKSZ
+  selftest/sigaltstack: Use the AT_MINSIGSTKSZ aux vector if available
+  x86/signal: Detect and prevent an alternate signal stack overflow
+  selftest/x86/signal: Include test cases for validating sigaltstack
+
+ Documentation/x86/elf_auxvec.rst          |  53 +++++++++
+ Documentation/x86/index.rst               |   1 +
+ arch/x86/include/asm/elf.h                |   4 +
+ arch/x86/include/asm/fpu/signal.h         |   2 +
+ arch/x86/include/asm/sigframe.h           |   2 +
+ arch/x86/include/uapi/asm/auxvec.h        |   4 +-
+ arch/x86/kernel/cpu/common.c              |   3 +
+ arch/x86/kernel/fpu/signal.c              |  19 ++++
+ arch/x86/kernel/signal.c                  |  72 +++++++++++-
+ include/uapi/linux/auxvec.h               |   3 +
+ tools/testing/selftests/sigaltstack/sas.c |  20 +++-
+ tools/testing/selftests/x86/Makefile      |   2 +-
+ tools/testing/selftests/x86/sigaltstack.c | 128 ++++++++++++++++++++++
+ 13 files changed, 300 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/x86/elf_auxvec.rst
+ create mode 100644 tools/testing/selftests/x86/sigaltstack.c
+
+
+base-commit: 1e28eed17697bcf343c6743f0028cc3b5dd88bf0
 -- 
-2.25.1
+2.17.1
 
