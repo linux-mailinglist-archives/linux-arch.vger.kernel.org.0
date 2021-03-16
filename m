@@ -2,71 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EABAC33D35D
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 12:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A60333D46B
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 13:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbhCPLxG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Mar 2021 07:53:06 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58294 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229826AbhCPLww (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Mar 2021 07:52:52 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B988CAE56;
-        Tue, 16 Mar 2021 11:52:50 +0000 (UTC)
-Date:   Tue, 16 Mar 2021 12:52:48 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
-        x86@kernel.org, len.brown@intel.com, dave.hansen@intel.com,
-        hjl.tools@gmail.com, Dave.Martin@arm.com, jannh@google.com,
-        mpe@ellerman.id.au, carlos@redhat.com, tony.luck@intel.com,
-        ravi.v.shankar@intel.com, libc-alpha@sourceware.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 5/6] x86/signal: Detect and prevent an alternate
- signal stack overflow
-Message-ID: <20210316115248.GB18822@zn.tnic>
-References: <20210316065215.23768-1-chang.seok.bae@intel.com>
- <20210316065215.23768-6-chang.seok.bae@intel.com>
+        id S234177AbhCPM4v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Mar 2021 08:56:51 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:43588 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234419AbhCPMzm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 16 Mar 2021 08:55:42 -0400
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [222.209.8.251])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Bx4uayqlBgj5cAAA--.276S2;
+        Tue, 16 Mar 2021 20:55:16 +0800 (CST)
+Date:   Tue, 16 Mar 2021 20:55:14 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Subject: Re: [PATCH V4]: minor cleanup and improvement
+Message-ID: <20210316125514.n57pynlywy2ynh4n@ambrosehua-HP-xw6600-Workstation>
+References: <20210309080210.25561-1-huangpei@loongson.cn>
+ <alpine.DEB.2.21.2103142326220.33195@angie.orcam.me.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210316065215.23768-6-chang.seok.bae@intel.com>
+In-Reply-To: <alpine.DEB.2.21.2103142326220.33195@angie.orcam.me.uk>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9Bx4uayqlBgj5cAAA--.276S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYT7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
+        CFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxG
+        xcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxC20s026x
+        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
+        JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+        1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_
+        WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJbIYCTnIWIevJa73UjIFyTuYvjfU5rWrDUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 15, 2021 at 11:52:14PM -0700, Chang S. Bae wrote:
-> @@ -272,7 +275,8 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
->  	 * If we are on the alternate signal stack and would overflow it, don't.
->  	 * Return an always-bogus address instead so we will die with SIGSEGV.
->  	 */
-> -	if (onsigstack && !likely(on_sig_stack(sp)))
-> +	if (onsigstack && unlikely(sp <= current->sas_ss_sp ||
-> +				   sp - current->sas_ss_sp > current->sas_ss_size))
->  		return (void __user *)-1L;
+hi, 
+On Sun, Mar 14, 2021 at 11:31:49PM +0100, Maciej W. Rozycki wrote:
+> On Tue, 9 Mar 2021, Huang Pei wrote:
+> 
+> > [PATCH 1/2] V4 vs V3:
+> 
+>  It will help if you don't change the subject proper of the cover letter 
+> with every iteration of a patch series, as in that case mail user agents 
+> (at least the sane ones) will group all iterations together in the thread 
+> sorting mode.  With the subject changed every time the link is lost and 
+> submissions are scattered all over the mail folder.
+> 
+>   Maciej
 
-So clearly I'm missing something because trying to trigger the test case
-in the bugzilla:
+I got it, thank you
 
-https://bugzilla.kernel.org/show_bug.cgi?id=153531
-
-on current tip/master doesn't work. Runs with MY_MINSIGSTKSZ under 2048
-fail with:
-
-tst-minsigstksz-2: sigaltstack: Cannot allocate memory
-
-and above 2048 don't overwrite bytes below the stack.
-
-So something else is missing. How did you test this patch?
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
