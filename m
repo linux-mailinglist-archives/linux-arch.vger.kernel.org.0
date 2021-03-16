@@ -2,124 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D0A33DEB5
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 21:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 257F433DEDB
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Mar 2021 21:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbhCPU1R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Mar 2021 16:27:17 -0400
-Received: from mga02.intel.com ([134.134.136.20]:65373 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230497AbhCPU06 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Mar 2021 16:26:58 -0400
-IronPort-SDR: hTb7iSmNEUF4RidWHacnxRrpMuQD6ow/LzxrkrfUpZUjUBN5Ambnk5gry1NawO4xVe9ZYIzz2l
- xoiuglamslxw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="176462915"
-X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
-   d="scan'208";a="176462915"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 13:26:54 -0700
-IronPort-SDR: pD5ul5yOwtpfwHTN4BvRRRjbGIMkDXv5lWdENanTMsC4a8NqdJjtNTqy/C6okQOOanN2r8sIaK
- PlyFizGSP54A==
-X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
-   d="scan'208";a="449839286"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.191.248]) ([10.212.191.248])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 13:26:52 -0700
-Subject: Re: [PATCH v23 6/9] x86/entry: Introduce ENDBR macro
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-References: <20210316151320.6123-1-yu-cheng.yu@intel.com>
- <20210316151320.6123-7-yu-cheng.yu@intel.com>
- <f98c600a-80e4-62f0-9c97-eeed708d998d@intel.com>
- <15966857-9be7-3029-7e93-e40596b4649a@intel.com>
- <YFENvgrR8JSYq1ae@hirez.programming.kicks-ass.net>
- <65845773-6cf0-1bdc-1ecf-168de74cc283@intel.com>
- <YFER79kU+ukn3YZr@hirez.programming.kicks-ass.net>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <aff84067-5b9e-1335-e540-ef90ee133ac9@intel.com>
-Date:   Tue, 16 Mar 2021 13:26:52 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S230414AbhCPUej (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Mar 2021 16:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230448AbhCPUeP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Mar 2021 16:34:15 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA09C061756
+        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 13:34:05 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id v123so18960996vsv.9
+        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 13:34:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xrwjt/kZB1RxVC21J+b2Rv85znrbxBlQ2xQVtgXaL8Q=;
+        b=po1Ywby6SU2VWLEUyZ5fNbrtGcCnRgD8+IOMID+GlXWQNN/3aWjrKopHkVgecJy3yJ
+         khd4+NGMXkdhaRRLq7oIG7sqA93cOIbt85nnBMxjdoTTob9e2Am24an2yQVbG1o0V5H8
+         7GVzuReTWAlfbF1CAQXu39fgGvH5SXGbKyaDGdlbOZBsDb8/16qHOkbAClu4ucjVnnpq
+         puCa2KojBGupypPIcNHF88u0nBc0j5j5wmxJB5QqbuzbcGhuC3bdhL35d8XTmOmAH5Ze
+         Rv/YonPUJZL/28fPFwgGqtGza8PZ38b3S3xCK35A47xteLDq+UaKkUNMlUmMa3ohiIUa
+         It1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xrwjt/kZB1RxVC21J+b2Rv85znrbxBlQ2xQVtgXaL8Q=;
+        b=WUO3B6fK6mCKQVof8INktnrbljsTebRHAG66vorgom191ZHo6svT2u/tr9/ZCDKlHb
+         QAZ65nmTVgSD9+sybGhoPvEOHe5xPZl3KLT3+MB0k6zihjV9a8lPcmyHhTRUdWu3SV8p
+         WGHOrKUetPLpuHuksDSywTKuag4eoQfqFq/Bf/jZbbfKjKrLKhcZuWpQBcE8YZfhp+tf
+         TkSs3wONjYfPMPk0+W8R1oaH8WWQ8pqIMlhBq6LiXUafbf7kipNuVf31rIQZ6lieks/8
+         T3ItXhwZ+D/g1Ba0n1deFHrGZT4EJN4vDtv7Fx6+fjlW6oZRFHcj+6FHuo5ChUY9vMcZ
+         jozA==
+X-Gm-Message-State: AOAM531KrB2BA/yrlr0IHDEsW54hz7tqt+J8wmOmVZB6UHphjVWi63AV
+        rqNB1ExFUZnUZFUO2ZKjoYq2mTavtBDE7GUru/9nsQ==
+X-Google-Smtp-Source: ABdhPJwadRPiAKyB9trsaH6fnnn3nCM/AdtJrbuHIQFIQoIMgPzfKSpazXNSL6neJgetXYxyVdUJ7AZv1KZY68p3ujw=
+X-Received: by 2002:a67:2803:: with SMTP id o3mr1486279vso.36.1615926844137;
+ Tue, 16 Mar 2021 13:34:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YFER79kU+ukn3YZr@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210312004919.669614-1-samitolvanen@google.com>
+ <20210312004919.669614-8-samitolvanen@google.com> <202103111843.008B935F8@keescook>
+In-Reply-To: <202103111843.008B935F8@keescook>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Tue, 16 Mar 2021 13:33:53 -0700
+Message-ID: <CABCJKufMb_VFwXLkxjdvN6Y92v-Nc4Z+kThbi7SOkVgGhdFz+g@mail.gmail.com>
+Subject: Re: [PATCH 07/17] kallsyms: cfi: strip hashes from static functions
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        bpf@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 3/16/2021 1:15 PM, Peter Zijlstra wrote:
-> On Tue, Mar 16, 2021 at 01:05:30PM -0700, Yu, Yu-cheng wrote:
->> On 3/16/2021 12:57 PM, Peter Zijlstra wrote:
->>> On Tue, Mar 16, 2021 at 10:12:39AM -0700, Yu, Yu-cheng wrote:
->>>> Alternatively, there is another compiler-defined macro _CET_ENDBR that can
->>>> be used.  We can put the following in calling.h:
->>>>
->>>> #ifdef __CET__
->>>> #include <cet.h>
->>>> #else
->>>> #define _CET_ENDBR
->>>> #endif
->>>>
->>>> and then use _CET_ENDBR in other files.  How is that?
->>>>
->>>> In the future, in case we have kernel-mode IBT, ENDBR macros are also needed
->>>> for other assembly files.
->>>
->>> Can we please call it IBT_ENDBR or just ENDBR. CET is a horrible name,
->>> seeing how it is not specific.
->>>
->>
->> _CET_ENDBR is from the compiler and we cannot change it.  We can do:
->>
->> #define ENDBR _CET_ENDBR
->>
->> How is that?
-> 
-> Do we really want to include compiler headers? AFAICT it's not a
-> built-in. Also what about clang?
-> 
-> This thing seems trivial enough to build our own, it's a single damn
-> instruction. That also means we don't have to worry about changes to
-> header files we don't control.
-> 
+On Thu, Mar 11, 2021 at 6:45 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Mar 11, 2021 at 04:49:09PM -0800, Sami Tolvanen wrote:
+> > With CONFIG_CFI_CLANG and ThinLTO, Clang appends a hash to the names
+> > of all static functions not marked __used. This can break userspace
+> > tools that don't expect the function name to change, so strip out the
+> > hash from the output.
+> >
+> > Suggested-by: Jack Pham <jackp@codeaurora.org>
+> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+>
+> (Is it possible we could end up with symbol name collisions? ... though
+> I guess we would have had collisions before?)
 
-Then, what about moving what I had earlier to vdso.h?
-If we don't want __i386__ either, then make it two macros.
+Yes, these are static functions, so name collisions have always been possible.
 
-+.macro ENDBR
-+#ifdef CONFIG_X86_CET
-+#ifdef __i386__
-+	endbr32
-+#else
-+	endbr64
-+#endif
-+#endif
-+.endm
+Sami
