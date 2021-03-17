@@ -2,129 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2DA33E8B9
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 06:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1150733E92B
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 06:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbhCQFF3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Mar 2021 01:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S229550AbhCQFlK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Mar 2021 01:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbhCQFF3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 01:05:29 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D60C06174A
-        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 22:05:28 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id x184so290251pfd.6
-        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 22:05:28 -0700 (PDT)
+        with ESMTP id S229472AbhCQFlA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 01:41:00 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6FDC06175F;
+        Tue, 16 Mar 2021 22:40:59 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id s7so37771127qkg.4;
+        Tue, 16 Mar 2021 22:40:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MIc7mavbJhN4OuOMILSSjW63cQv0oc3j9t7W7Zfvn3k=;
-        b=fU9xwamVIvSaTTINr66eyaN/9vLWy/U3RHTRoQtlV+QGM22cjCkVK6UdNds3atZs+v
-         lwrY+tDyL/ppBr9hKvCmc5IxfzdMip2gaTAgZDGXQ6Xs04cFN2LQ24LlJRHotVOKvUCH
-         3JTOqAzlDX8icJ+kSfK70sn7CrFvm1RYy3tiSUBmK5a1Qe6+mTFpFeTnFypUUxw9fUu+
-         hmf2R+m08ZuVrQbnJz+5Z8NNKAvjRoeEgTM+fUUo3ZGYXk8A+F9ucXE8MBG9I3okFz/m
-         2Vpx5x4E0li1OV10ow0sYyZw5BNS2RTRFdcPPoFDjl2yv+JiAs3XTkXMoVO32+7qLasj
-         1GLA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CPSm56QZARIcAtzs4AWdlVXD+HaI2HudQhNYE/bwf0c=;
+        b=eNX3/KkKYyE3gNciNxHG2jxNlfRRTV+efiSSrXTJLEM9BLy+T+ER7gUr4lbPR8OQ0R
+         kz1iTGN6ch8aqMmCfJKh14wJlkFwDUIynaDTDRD6k1Nj/RQJh5kcusufWUXLk5zVnAwv
+         8ua6/rTO3DrDQz7lwNDLuD/e93zzpogPQE+qRZHL471WVAsthqat3wUYnrJyGHHCkLjM
+         jungnJ5I9JqlfAb00NcmdfSXlJVR/yRSh3MOrw4WSfPlS+QU+pwVI/N/sUggJAk4xFkD
+         xKCt2Di1rIp3seeJrwyS3fF7cOVBKASIm4rQW50jfxw0+qVnUNRn6dDN2w9kwqE1M6Rc
+         r3uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=MIc7mavbJhN4OuOMILSSjW63cQv0oc3j9t7W7Zfvn3k=;
-        b=hM0mhIluj8dEtmhZB8a802zYVbWFR6kr1KOetYWkPLLXGiwNUmVpN24ETL+yBAIge4
-         88GyfOZKPODsJeec953kciO++WwwGe8ioaZxGZXKrdm4zk46/Rf+hLz3vJSHjL8+ZHjm
-         flmp4kPFBJwnac1swp7fdGBZyEkDSjmbtk8m5iqv7H3k1jVu0MaX208ODPiEqmRsqRTl
-         8BnIcyw+FKwttoQRKjbzTlhIuHVLDvsAc0HCl1o7gB8DXJRSaG5k4ikNzTH3s+c5bXXN
-         38lEuKiDYaDBFmTXjxZ7fjFksbID+ciRENSaSZ3G5G35l/mHq+hpsiX+plRElmNoo38b
-         VPjQ==
-X-Gm-Message-State: AOAM533HQZgPv0n2dBaTZluvzcYh6Jrl+A6wrPJ/EO2W8l8PO+hFpGmt
-        57SGF7XU0eEROgx9SMH0LbgwFQ==
-X-Google-Smtp-Source: ABdhPJyDuEZydtGMqDr8/DG+kP9sdLoSZtmtej+zUMoDcsn6rZDQkEvlHQ9u8k2GdIn70gdBhSt7iA==
-X-Received: by 2002:a62:e708:0:b029:1f8:c092:ff93 with SMTP id s8-20020a62e7080000b02901f8c092ff93mr2675554pfh.21.1615957528395;
-        Tue, 16 Mar 2021 22:05:28 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id i17sm19789935pfq.135.2021.03.16.22.05.27
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CPSm56QZARIcAtzs4AWdlVXD+HaI2HudQhNYE/bwf0c=;
+        b=gINIYZK2RYg15aCb2ZZFv8wy/GNHe1WI8MBt9imONGJvM0uH1ZlB92eZXNyr8+r/W8
+         3FS5SbqQyf3T8MC5O3NrClOZs6ZmCqQYRZsVSZXS5qe+gVKt7iNZOj9DeZFgv9oTYq5H
+         DysviNHjkLhY4u6OftgIpQxZwP04kRAMvk2+OjGfPDCGaUO4sphTXp3hs0AQdjPtjuo8
+         MP18T0MzmsdPXHURLJNNcx2INxOVWlFlMehIQXuFcc2vd3XAAYPXHK3HoqkgoLBh/Sz3
+         BWNfOYMhtUE7cFDi58GawlcB1hH84DByUdw07FIIop2nji/1NdapXXclacomsNURiBtr
+         +kLA==
+X-Gm-Message-State: AOAM532CIx6+9m2bFW2V0cndigkkk+V9VXLk1hcXv3DVQ/6iC6lFijuA
+        3BRQtyq2o8KcOyFilKbBJKQ=
+X-Google-Smtp-Source: ABdhPJx92GrckxUs3tyhYdiw3DknldvYvJ6QoejNd2Zc615/JMAkBxamhbbk2bzbYKYBbc0fPf+VLg==
+X-Received: by 2002:a37:274f:: with SMTP id n76mr2939792qkn.15.1615959658716;
+        Tue, 16 Mar 2021 22:40:58 -0700 (PDT)
+Received: from localhost ([76.73.146.210])
+        by smtp.gmail.com with ESMTPSA id z2sm17499506qkg.22.2021.03.16.22.40.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 22:05:27 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 22:05:27 -0700 (PDT)
-X-Google-Original-Date: Tue, 16 Mar 2021 21:58:03 PDT (-0700)
-Subject:     Re: [PATCH 0/3] Move kernel mapping outside the linear mapping
-In-Reply-To: <0bb85388-c4e1-523a-9bf3-0ccec6c4041e@ghiti.fr>
-CC:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        aryabinin@virtuozzo.com, glider@google.com, dvyukov@google.com,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     alex@ghiti.fr
-Message-ID: <mhng-08cda2bf-fcd9-4848-b549-632d015e1acd@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Tue, 16 Mar 2021 22:40:58 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 22:40:57 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jianpeng Ma <jianpeng.ma@intel.com>,
+        Joe Perches <joe@perches.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rich Felker <dalias@libc.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH 04/13] lib: introduce BITS_{FIRST,LAST} macro
+Message-ID: <20210317054057.GC2114775@yury-ThinkPad>
+References: <20210316015424.1999082-1-yury.norov@gmail.com>
+ <20210316015424.1999082-5-yury.norov@gmail.com>
+ <8021faab-e592-9587-329b-817ae007b89a@rasmusvillemoes.dk>
+ <YFCZtUuMYVNeNlUO@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YFCZtUuMYVNeNlUO@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 13 Mar 2021 01:26:47 PST (-0800), alex@ghiti.fr wrote:
-> Hi Palmer,
->
-> Le 3/9/21 à 9:54 PM, Palmer Dabbelt a écrit :
->> On Thu, 25 Feb 2021 00:04:50 PST (-0800), alex@ghiti.fr wrote:
->>> I decided to split sv48 support in small series to ease the review.
->>>
->>> This patchset pushes the kernel mapping (modules and BPF too) to the last
->>> 4GB of the 64bit address space, this allows to:
->>> - implement relocatable kernel (that will come later in another
->>>   patchset) that requires to move the kernel mapping out of the linear
->>>   mapping to avoid to copy the kernel at a different physical address.
->>> - have a single kernel that is not relocatable (and then that avoids the
->>>   performance penalty imposed by PIC kernel) for both sv39 and sv48.
->>>
->>> The first patch implements this behaviour, the second patch introduces a
->>> documentation that describes the virtual address space layout of the
->>> 64bit
->>> kernel and the last patch is taken from my sv48 series where I simply
->>> added
->>> the dump of the modules/kernel/BPF mapping.
->>>
->>> I removed the Reviewed-by on the first patch since it changed enough from
->>> last time and deserves a second look.
->>>
->>> Alexandre Ghiti (3):
->>>   riscv: Move kernel mapping outside of linear mapping
->>>   Documentation: riscv: Add documentation that describes the VM layout
->>>   riscv: Prepare ptdump for vm layout dynamic addresses
->>>
->>>  Documentation/riscv/index.rst       |  1 +
->>>  Documentation/riscv/vm-layout.rst   | 61 ++++++++++++++++++++++
->>>  arch/riscv/boot/loader.lds.S        |  3 +-
->>>  arch/riscv/include/asm/page.h       | 18 ++++++-
->>>  arch/riscv/include/asm/pgtable.h    | 37 +++++++++----
->>>  arch/riscv/include/asm/set_memory.h |  1 +
->>>  arch/riscv/kernel/head.S            |  3 +-
->>>  arch/riscv/kernel/module.c          |  6 +--
->>>  arch/riscv/kernel/setup.c           |  3 ++
->>>  arch/riscv/kernel/vmlinux.lds.S     |  3 +-
->>>  arch/riscv/mm/fault.c               | 13 +++++
->>>  arch/riscv/mm/init.c                | 81 +++++++++++++++++++++++------
->>>  arch/riscv/mm/kasan_init.c          |  9 ++++
->>>  arch/riscv/mm/physaddr.c            |  2 +-
->>>  arch/riscv/mm/ptdump.c              | 67 +++++++++++++++++++-----
->>>  15 files changed, 258 insertions(+), 50 deletions(-)
->>>  create mode 100644 Documentation/riscv/vm-layout.rst
->>
->> This generally looks good, but I'm getting a bunch of checkpatch
->> warnings and some conflicts, do you mind fixing those up (and including
->> your other kasan patch, as that's likely to conflict)?
->
->
-> I fixed a few checkpatch warnings and rebased on top of for-next but had
-> not conflicts.
->
-> I have just sent the v2.
+On Tue, Mar 16, 2021 at 01:42:45PM +0200, Andy Shevchenko wrote:
+> On Tue, Mar 16, 2021 at 09:35:35AM +0100, Rasmus Villemoes wrote:
+> > On 16/03/2021 02.54, Yury Norov wrote:
+> > > BITMAP_{LAST,FIRST}_WORD_MASK() in linux/bitmap.h duplicates the
+> > > functionality of GENMASK(). The scope of BITMAP* macros is wider
+> > > than just bitmaps. This patch defines 4 new macros: BITS_FIRST(),
+> > > BITS_LAST(), BITS_FIRST_MASK() and BITS_LAST_MASK() in linux/bits.h
+> > > on top of GENMASK() and replaces BITMAP_{LAST,FIRST}_WORD_MASK()
+> > > to avoid duplication and increase the scope of the macros.
+> > > 
+> > > This change doesn't affect code generation. On ARM64:
+> > > scripts/bloat-o-meter vmlinux.before vmlinux
+> > > add/remove: 1/2 grow/shrink: 2/0 up/down: 17/-16 (1)
+> > > Function                                     old     new   delta
+> > > ethtool_get_drvinfo                          900     908      +8
+> > > e843419@0cf2_0001309d_7f0                      -       8      +8
+> > > vermagic                                      48      49      +1
+> > > e843419@0d45_000138bb_f68                      8       -      -8
+> > > e843419@0cc9_00012bce_198c                     8       -      -8
+> > 
+> > [what on earth are those weird symbols?]
+> > 
+> > 
+> > > diff --git a/include/linux/bits.h b/include/linux/bits.h
+> > > index 7f475d59a097..8c191c29506e 100644
+> > > --- a/include/linux/bits.h
+> > > +++ b/include/linux/bits.h
+> > > @@ -37,6 +37,12 @@
+> > >  #define GENMASK(h, l) \
+> > >  	(GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+> > >  
+> > > +#define BITS_FIRST(nr)		GENMASK((nr), 0)
+> > > +#define BITS_LAST(nr)		GENMASK(BITS_PER_LONG - 1, (nr))
+> > > +
+> > > +#define BITS_FIRST_MASK(nr)	BITS_FIRST((nr) % BITS_PER_LONG)
+> > > +#define BITS_LAST_MASK(nr)	BITS_LAST((nr) % BITS_PER_LONG)
+> > 
+> > I don't think it's a good idea to propagate the unusual closed-range
+> > semantics of GENMASK to those wrappers. Almost all C and kernel code
+> > uses the 'inclusive lower bound, exclusive upper bound', and I'd expect
+> > BITS_FIRST(5) to result in a word with five bits set, not six. So I
+> > think these changes as-is make the code much harder to read and understand.
+> > 
+> > Regardless, please add some comments on the valid input ranges to the
+> > macros, whether that ends up being 0 <= nr < BITS_PER_LONG or 0 < nr <=
+> > BITS_PER_LONG or whatnot.
+> > 
+> > It would also be much easier to review if you just redefined the
+> > BITMAP_LAST_WORD_MASK macros etc. in terms of these new things, so you
+> > wouldn't have to do a lot of mechanical changes at the same time as
+> > introducing the new ones - especially when those mechanical changes
+> > involve adding a "minus 1" everywhere.
+> 
+> I tend to agree with Rasmus here.
 
-Thanks.  These (and the second patch of the one I just put on fixes) are
-for-next things, so I'm not going to get a look at them tonight because I want
-to make sure we don't have any more fixes outstanding.
+OK. All this plus terrible GENMASK(high, low) design, when high goes
+first, makes me feel like we need to deprecate GENMASK and propose a
+new interface.
+
+What do you think about this:
+BITS_FIRST(bitnum)      -> [0, bitnum)
+BITS_LAST(bitnum)       -> [bitnum, BITS_PER_LONG)
+BITS_RANGE(begin, end)  -> [begin, end)
+
+We can pick BITS_{LAST,FIRST} implementation from existing BITMAP_*_WORD_MASK
+analogues, and make the BITS_RANGE like:
+        #define BITS_RANGE(begin, end) BITS_FIRST(end) & BITS_LAST(begin)
+
+Regarding BITMAP_*_WORD_MASK, I can save them in bitmap.h as aliases
+to BITS_{LAST,FIRST} to avoid massive renaming. (Should I?)
+
+Would this all work for you?
