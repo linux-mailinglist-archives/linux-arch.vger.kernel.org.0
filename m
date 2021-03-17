@@ -2,104 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B2233F4C5
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 16:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2620033F502
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 17:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbhCQP4o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Mar 2021 11:56:44 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:37704 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231878AbhCQP4Q (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 17 Mar 2021 11:56:16 -0400
-Received: from zn.tnic (p200300ec2f094a000fa04028afd60743.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:4a00:fa0:4028:afd6:743])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9165B1EC056D;
-        Wed, 17 Mar 2021 16:56:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1615996571;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=jKbFwAc3tzTE1JguNnjYbxfLAPfDUjYL9hlZmr/NLIY=;
-        b=LzKzQSFwh9U2Yq/59xL+M9GfQEid0oY5SAwuAjSVqtWer0V2MII7mfaPgF0EsI2g0sJ6gv
-        +Z97J++b/vmGzsGs5pL0DpeCT9X4bAPjmwFtbMdlOn/MKdXhTpwHa8GX1OsVrVesgCzXHG
-        gkz0Ae20Iigp/0Szx2YiOTY+d2tPgvI=
-Date:   Wed, 17 Mar 2021 16:56:08 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v23 15/28] x86/mm: Update maybe_mkwrite() for shadow stack
-Message-ID: <20210317155608.GB25069@zn.tnic>
-References: <20210316151054.5405-1-yu-cheng.yu@intel.com>
- <20210316151054.5405-16-yu-cheng.yu@intel.com>
+        id S232253AbhCQQG0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Mar 2021 12:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232244AbhCQQF5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 12:05:57 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BFAC061764
+        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 09:05:56 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id z65so1324914vsz.12
+        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 09:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v2KL8kozO5erdsP6tss56cJzIGTvQeUixy1fwBfyf9E=;
+        b=L+sKGzrqRGkayjrIbx3UhJgUwtMmmzJiP7xVkweSApuxYoYxI4LeRgqnM7E2cVNFT2
+         L45AC/pwNU1fz3kkRnhcRp5Khlan5/Osp695ao4Zeq1DMR4U7/JYz+4t7MEdHv1+9qwG
+         zwxXB5v4s7x+iSvmDyAA8j6J5F/LEkxHHfS2qwphtbLFYhEDWUv95/kvZL3Trdu79AyT
+         NNZbI9fnUQcz8+iyHBFSLC3Wa55Q+r5QDMMipTfIOHdnYaK4LSCdSwlrvXeW0lhZ4AF5
+         WXtzd1I3zdoC7C//HbblJCanoQNzLOyg1wur/OGHsKtTZ3gw78PQ17RnksLC/ossk+fU
+         fcmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v2KL8kozO5erdsP6tss56cJzIGTvQeUixy1fwBfyf9E=;
+        b=D5fSDJGCccPY05sAByKRE6f9BXcHyY7UqrH7tpugDGyijLaGiI8vez1uLhyOsKQwKj
+         bQ2YYO6BhDVV0IRmw6ekZtMSQC/gAlxAtHclTKBc4kOLTlMHfS0WXmIJVoAjAtCYPmeH
+         iCXjGnuAUDrsIkkZ0qlEzRaBDdGbMpc/s6rnjwvHgiPivDZN/o9lLjYpvHNzuVDRltdv
+         92ZTRAAavAQxt9dOz/V+cN6x+KTwvIEzcPTC5j/FGGE4tQO+Nunn/rcakrr1fowMlP39
+         KlRUFUkMtf9fC131qLpMp2BX1XSqXJlFKrZfuhJWwZrx8M9OQ+FG9K9iFwAjf1cAkGxw
+         7ZdA==
+X-Gm-Message-State: AOAM530hYOLqMdGMR9W2NKXK/z8NyLg023CoeOpNlU0cLp5xuc2i9sr8
+        Cp/vT9m3P+l52T/EKzpPzIK/lc6GZa4nnrjdhKRRUg==
+X-Google-Smtp-Source: ABdhPJxaHsoJ+bz7hvftL5zgwqX9DbDHuTiz3ir8dA5jWQPZop9wwdoJTujQjPIzJwP11rynhQBtRWijCPDqibIFRy4=
+X-Received: by 2002:a67:db98:: with SMTP id f24mr4264884vsk.13.1615997155510;
+ Wed, 17 Mar 2021 09:05:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210316151054.5405-16-yu-cheng.yu@intel.com>
+References: <20210312004919.669614-1-samitolvanen@google.com>
+ <20210312004919.669614-7-samitolvanen@google.com> <20210312061304.GA2321497@infradead.org>
+In-Reply-To: <20210312061304.GA2321497@infradead.org>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Wed, 17 Mar 2021 09:05:44 -0700
+Message-ID: <CABCJKud-wRfmRLFv71QQ6etUMFX6KXsErmL6u0dPH4SU8HS-BQ@mail.gmail.com>
+Subject: Re: [PATCH 06/17] kthread: cfi: disable callback pointer check with modules
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        bpf@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 08:10:41AM -0700, Yu-cheng Yu wrote:
-> When serving a page fault, maybe_mkwrite() makes a PTE writable if its vma
-> has VM_WRITE.
-> 
-> A shadow stack vma has VM_SHSTK.  Its PTEs have _PAGE_DIRTY, but not
-> _PAGE_WRITE.  In fork(), _PAGE_DIRTY is cleared to effect copy-on-write,
+On Thu, Mar 11, 2021 at 10:13 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Thu, Mar 11, 2021 at 04:49:08PM -0800, Sami Tolvanen wrote:
+> > With CONFIG_CFI_CLANG, a callback function passed to
+> > __kthread_queue_delayed_work from a module points to a jump table
+> > entry defined in the module instead of the one used in the core
+> > kernel, which breaks function address equality in this check:
+> >
+> >   WARN_ON_ONCE(timer->function != kthread_delayed_work_timer_fn);
+> >
+> > Disable the warning when CFI and modules are enabled.
+> >
+> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > ---
+> >  kernel/kthread.c | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/kthread.c b/kernel/kthread.c
+> > index 1578973c5740..af5fee350586 100644
+> > --- a/kernel/kthread.c
+> > +++ b/kernel/kthread.c
+> > @@ -963,7 +963,13 @@ static void __kthread_queue_delayed_work(struct kthread_worker *worker,
+> >       struct timer_list *timer = &dwork->timer;
+> >       struct kthread_work *work = &dwork->work;
+> >
+> > -     WARN_ON_ONCE(timer->function != kthread_delayed_work_timer_fn);
+> > +     /*
+> > +      * With CFI, timer->function can point to a jump table entry in a module,
+>
+> you keep spewing this comment line that has exactly 81 characters and
+> thus badly messes up read it with a normal termina everywhere.
+>
+> Maybe instead of fixing that in ever duplication hide the whole check in
+> a well documented helper (which would have to be a macro due to the
+> typing involved).
 
-						  to cause
+Sure, that sounds cleaner. I'll add a helper macro in v2.
 
-> and in page fault, _PAGE_DIRTY is restored and the shadow stack page is
-
-      in the page fault handler...
-
-> writable again.
-> 
-> Update maybe_mkwrite() by introducing arch_maybe_mkwrite(), which sets
-> _PAGE_DIRTY for a shadow stack PTE.
-> 
-> Apply the same changes to maybe_pmd_mkwrite().
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/x86/Kconfig        |  4 ++++
->  arch/x86/mm/pgtable.c   | 18 ++++++++++++++++++
->  include/linux/mm.h      |  2 ++
->  include/linux/pgtable.h | 24 ++++++++++++++++++++++++
->  mm/huge_memory.c        |  2 ++
->  5 files changed, 50 insertions(+)
-
-Looks straightforward to me but I guess it needs a mm person's ack.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Sami
