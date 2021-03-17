@@ -2,57 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC28B33F273
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 15:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D352F33F285
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 15:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbhCQOUH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Mar 2021 10:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S231237AbhCQOYc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Mar 2021 10:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbhCQOUA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 10:20:00 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130CFC06174A
-        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 07:20:00 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id t18so1626093iln.3
-        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 07:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q2PWXoD7KT3esSQNrycMbsgcjlNio2xDcr7h5B3nFMo=;
-        b=CyJrp8QmWw38fXXaQQbAiVc4gTJ5+73ajA/nVonV59EFO0RV5PmCHToix9hen8din9
-         lYVgU8olW+HimAD/S7VUAOzYoAuAeWLaoV2t7I1x5gIzvTsKGS7bnOMKjDyt0lIL5HfL
-         hRHfhm+41EjCXUNLhYKXwWiIGMaYR4L4zKBi7h/iveaBA+SxiKQ1y0ZdRpnvkNhJbeKP
-         9YpiNtuqQys7fR050hzOuA6KnCdGFxGcGBfVycFQspeyj6z0p1imPEH5VqWNxk5sBYhx
-         no+58iPPE7af+IigrgbLrhjo/jTNB8Ww9x8hkFZM67+gD2pQvV45BYVTakJNy2MEtQ8O
-         DFsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q2PWXoD7KT3esSQNrycMbsgcjlNio2xDcr7h5B3nFMo=;
-        b=MQIWdiqZ2cYjPxUPOiprU0c13/PSIpC2ipQEzmNE6vNeFiENxVKLPK1Q72SdWhudru
-         gMbfx+MvYjSYOV/FVgFMA2tpHsEm0AEeJ3BtHhppe6gqeCatnzpjxL3e0mQALUbd6B7f
-         ziu9WAkG6fMNXVA5GwduVbQI6m/u2xVqSbOOe1LDb9nVEnXabmDRzZ6aHrPsAiRP39we
-         7izEaMScFa1RbTQCsUN4mluoQsaAfatBGel8g9/NFU9kNxPEyLJW/sYay/Wbb0n58jN/
-         ecoJS79o1fd2cquPs85Rtz6w5q6a8MIj3XL3uvIl9sFbF/2/O4M+ueieRrzrnETPWI+P
-         NkZg==
-X-Gm-Message-State: AOAM531+ZYza1aRW5/Pol4hBfO4D2h/Ftma2eR0K+oO1lIrcf2Yva+EI
-        O5BhzKrNNPgx/SeBfKRy+D6aE0AmimYJXATnddM=
-X-Google-Smtp-Source: ABdhPJw0gCKxbHLDivCExtmdvFwaAZf6MC0Rkm/gkWUeSCY+jMP2FDqJHII8Y0IwNhiP3lPeeD7yuqNCFv2I7sJV3zg=
-X-Received: by 2002:a92:7311:: with SMTP id o17mr7785695ilc.231.1615990799579;
- Wed, 17 Mar 2021 07:19:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1611103406.git.thehajime@gmail.com> <b3b73864dbb738d0de7c49a6df5a5f53a358ec93.1611103406.git.thehajime@gmail.com>
- <2b649bc5165c7ff4547abd72f7e03e7491980138.camel@sipsolutions.net>
- <m25z1rc2ux.wl-thehajime@gmail.com> <56af0e44c846f4b079256ec997c56119964be402.camel@sipsolutions.net>
-In-Reply-To: <56af0e44c846f4b079256ec997c56119964be402.camel@sipsolutions.net>
-From:   Octavian Purdila <tavi.purdila@gmail.com>
-Date:   Wed, 17 Mar 2021 16:19:48 +0200
-Message-ID: <CAMoF9u2phDz5nmFFSW-9VKs2gTK0exHaPxrOf4nM5gAQnQhcRQ@mail.gmail.com>
-Subject: Re: [RFC v8 19/20] um: lkl: add block device support of UML
-To:     Johannes Berg <johannes@sipsolutions.net>
+        with ESMTP id S231396AbhCQOY2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 10:24:28 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE0BC06174A
+        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 07:24:27 -0700 (PDT)
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1lMX5q-00HNpD-U3; Wed, 17 Mar 2021 15:24:15 +0100
+Message-ID: <8c6f4ba994831b55ce7893f7e8e71a614474b907.camel@sipsolutions.net>
+Subject: Re: [RFC v8 00/20] Unifying LKL into UML
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Octavian Purdila <tavi.purdila@gmail.com>
 Cc:     Hajime Tazaki <thehajime@gmail.com>,
         linux-um <linux-um@lists.infradead.org>, jdike@addtoit.com,
         Richard Weinberger <richard@nod.at>,
@@ -60,44 +29,95 @@ Cc:     Hajime Tazaki <thehajime@gmail.com>,
         linux-kernel-library <linux-kernel-library@freelists.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Akira Moroo <retrage01@gmail.com>
+Date:   Wed, 17 Mar 2021 15:24:14 +0100
+In-Reply-To: <CAMoF9u3q_uhvzT0RJj42fAVQpVf-nnwXM9Zh_qXxYAG8YHcOUQ@mail.gmail.com> (sfid-20210317_150351_779146_168D64BD)
+References: <cover.1601960644.git.thehajime@gmail.com>
+         <cover.1611103406.git.thehajime@gmail.com>
+         <d357fbd075319d8b32667323bc545e3e5e8e8a21.camel@sipsolutions.net>
+         <m2czvzc2xw.wl-thehajime@gmail.com>
+         <bc30898d6ac14c5c6e7eeeb72e41353a298bdf65.camel@sipsolutions.net>
+         <CAMoF9u3q_uhvzT0RJj42fAVQpVf-nnwXM9Zh_qXxYAG8YHcOUQ@mail.gmail.com>
+         (sfid-20210317_150351_779146_168D64BD)
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 11:32 PM Johannes Berg
-<johannes@sipsolutions.net> wrote:
->
-> On Tue, 2021-03-16 at 10:19 +0900, Hajime Tazaki wrote:
-> >
-> > > > --- a/arch/um/Kconfig
-> > > > +++ b/arch/um/Kconfig
-> > > > @@ -29,6 +29,10 @@ config UMMODE_LIB
-> > > >   select UACCESS_MEMCPY
-> > > >   select ARCH_THREAD_STACK_ALLOCATOR
-> > > >   select ARCH_HAS_SYSCALL_WRAPPER
-> > > > + select VFAT_FS
-> > > > + select NLS_CODEPAGE_437
-> > > > + select NLS_ISO8859_1
-> > > > + select BTRFS_FS
-> > >
-> > > That doesn't really seem to make sense - the sample might need it, but
-> > > generally LKL doesn't/shouldn't?
-> >
-> > I'm trying to understand your comment;
-> > Do you mean that enabling those options in Kconfig doesn't make sense ?
->
-> I mean *always* enabling them doesn't make sense. Why shouldn't somebody
-> be allowed to build UMMODE_LIB *without* btrfs? If they have no need for
-> btrfs, why should it select it?
->
-> I can understand that your sample code wants btrfs just to show what it
-> can do, but IMHO it doesn't make sense to *always* enable it.
->
+Hi,
 
-I agree. I think these can stay in defconfigs but here is where a
-library introduces complications which I don't know how is best to
-handle. Should we have the defconfig in arch/um or should we have it
-in tools/testing/selftests/um? Or perhaps both places, one being a
-generic config that would be used by most applications and one
-customized?
+> One use case where this matters are non OS environments such as
+> bootloaders [1], running on bare-bone hardware or kernel drivers [2,
+> 3]. IMO it would be nice to keep these properties.
+
+OK, that makes sense. Still, it seems it could be a compile-time
+decision, and doesn't necessarily mean LKL has to be NOMMU, just that it
+could support both?
+
+I'm really trying to see if we can't get UML to be a user of LKL. IMHO
+that would be good for the code, and even be good for LKL since then
+it's maintained as part of UML as well, not "just" as its own use case.
+
+> > If your abstraction was instead "switch context" then you could still
+> > implement it using pthreads+mutexes, or you could implement it using
+> > fibers on windows, or posix contexts - but you'd have a significantly
+> > reduced API surface, since you'd only expose __switch_to() or similar,
+> > and maybe a new stack allocation etc.
+> 
+> You are right. When I started the implementation for ucontext it was
+> obvious that it would be much simpler to have abstractions closer to
+> what Linux has (alloc, free and switch threads). But I never got to
+> finish that and then things went into a different direction.
+
+OK, sounds like you came to the same conclusion, more or less.
+
+> > Additionally, I do wonder how UML does this now, it *does* use setjmp,
+> > so are you saying it doesn't properly use the kernel stacks?
+> > 
+> 
+> To clarify a bit the statement in the paper, the context there was
+> that we should push the thread implementation to the
+> application/environment we run rather than providing "LKL" threads.
+> This was particularly important for running LKL in other OSes kernel
+> drivers. But you are right, we can use the switch abstraction and
+> implement it with threads and mutexes for those environments where it
+> helps.
+
+Right - like I pointed to USFSTL framework, you could have posix
+ucontext, fiber and pthread at least, and obviously other things in
+other environments (ThreadX anyone? ;-) )
+
+> > But conceptually, why wouldn't it be possible to have a liblinux.so that
+> > *does* build with MMU and userspace support, and UML is a wrapper around
+> > it?
+> > 
+> 
+> This is an interesting idea. Conceptually I think it is possible.
+> There are lots of details to be figured out before we do this. I think
+> that having a NOMMU version could be a good step in the right
+> direction, especially since I think a liblinux.so has more NOMMU
+> usecases than MMU usecases - but I haven't given too much thought to
+> the MMU usecases.
+
+Yeah, maybe UML would be the primary use case. I have been thinking that
+there would be cases where you could combine kunit and having userspace
+though, or unit-style testing but not with kunit which is "inside" the
+kernel, but instead having the test code more "outside" the test kernel.
+That's all kind of handwaving though and not really that crystallized in
+my mind.
+
+That said, I'm not entirely sure NOMMU would be the right path towards
+this - if we do want to go this route it'll probably need changes in
+both LKL and UML to converge to this point, and at least build it into
+the abstractions.
+
+For example the "idle" abstraction discussed elsewhere (is it part of
+the app or part of the kernel?), or the thread discussion above (it is
+part of the app but how is it implemented?) etc.
+
+johannes
+
+
