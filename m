@@ -2,169 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1E733E7CB
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 04:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8482633E890
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 05:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbhCQDlJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Mar 2021 23:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S229571AbhCQEs0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Mar 2021 00:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbhCQDkk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Mar 2021 23:40:40 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D547AC06174A
-        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 20:40:39 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id s21so354820pjq.1
-        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 20:40:39 -0700 (PDT)
+        with ESMTP id S229688AbhCQEsB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 00:48:01 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB3DC06175F;
+        Tue, 16 Mar 2021 21:48:01 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id n79so37713928qke.3;
+        Tue, 16 Mar 2021 21:48:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t280vDZQWk0iZZ+xQFR7BI6xACbsATSb7UzAA7K2/a0=;
-        b=Humdt9srb74JTFtTLWQFozZx4MkuAbxcuC0K/hAZ5mVCgDHroQ+B5lp/tFiHSs+1fB
-         38gITDQeMM6jaALv1oRJIz5cyKYq/Klf5POvfPvYtHVUeU3zrlO27iPji+39hoa5tAfi
-         PWVpnulycTQuCx4y5nsc0oV4FK4GErfmmnFNxAl1GKnhOfAr223cbIpIXY0qcBi/h/q6
-         VgrM8+ttoNi4HncnjFBaJKF04RnkD2OL7B2k/kMDKinkug3q9vebo84Bq4mJ0LaTv/bU
-         7npOzBfb0uicwUxurpmoO4aR08rauCjmBjyyBiS46a7dVMNmHkq3ANaOSjgqKGnRbTFe
-         2ZMA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AvKUgJkyyQ65jXujXRSi4LBYBTUmkT7KkIKMeZrVAdo=;
+        b=KE41bJLJ+162X8e94I0UFNQwCXc+qss+/i9doFeW3HqoqfEkCx5tzGx2JY4vz9vMR1
+         SiEo5JgPk0r8J5Wgx8eZSxw/Yh42zgWo5vExKf/QUXc9GHoRlIYwszaMBcPqmEBrBd7h
+         NSnMaq0iwheHoOoAooSn04VnlbUJQimysg/pH+woEcW8tu5kWkhqLZWngVozARysddan
+         FjYXaFd3zBs9einx3QGeXH/aJAf5vt04wAGT5Z7CoQFcdQFy7sHywoHW35E8QRxhrLFt
+         atIV5yC9K/1yAruECKW3sXqeDUbuBpHlYftG7mcPkBjGl9PqdnMgiZ9cIUkM+waf7HKW
+         6/3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=t280vDZQWk0iZZ+xQFR7BI6xACbsATSb7UzAA7K2/a0=;
-        b=NbWqc9rcRDQgSI+JFgL+mDW1J5gjNkiGs6dXg6rY2hj86GWrjy1BJcVclGseqQYt/1
-         t3YVzZeV7IzYPEO35hicdLHFr+rIys/m+b8UAqv+mfN2x8BmbYbauNCTBteYzMXued4Q
-         zxssHXqoawtUaZ9JTcL2rhC4IaJQzJyaNi2aCN8r7n3smTU3pw2i3SmQiCB0t5F2F/Eu
-         XosdWRwjXQT8pf7lckpmxzViLIalJHieVvT6ZzFiw6Y/Dw3E183yAqbVMIdPoTsDxpFZ
-         N7Mjvu4pcYVubUTzz0Az2tYgGMRtFP7xbip1+9iH7I6Y9+4O0tC1PTof3fe6GLewZx1J
-         E+HA==
-X-Gm-Message-State: AOAM530ovJItmR7VWdLM29qJxmzC71HxVODH7Bj8x8BxbDOvmZ2ad9p+
-        h6I1Pju4/pC5xJSRtMdXWQyyLQ==
-X-Google-Smtp-Source: ABdhPJw+fTIoWjUDX5CUuSKCp+cvthbxVN3kxlUImWClYDjMZlRLuSxvAy55TEc3ABlo9funImT0rQ==
-X-Received: by 2002:a17:902:ed41:b029:e5:c92d:ec24 with SMTP id y1-20020a170902ed41b02900e5c92dec24mr2356365plb.57.1615952439246;
-        Tue, 16 Mar 2021 20:40:39 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id s200sm17957184pfs.53.2021.03.16.20.40.38
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AvKUgJkyyQ65jXujXRSi4LBYBTUmkT7KkIKMeZrVAdo=;
+        b=Xa9Up5yNY7V4ckOupAnwagp7BYQ7P9dskYchIEKvkvC9fUgx6LXvffecFUy67hdRt5
+         CFZ6gCsLXZJ5D9PBawKFUA6jNbkG0MFodELJqLp9+0KAc1KkCfvjWzNsGXaz3hZAor6t
+         OFkgb5Pwhv9d9ibmDhY9DX6CieAMx5bo7O+iwEmZWRDOXpnWDc0M/JE9h4yWDWPFrkEf
+         Uul6mctQ6/OgYCREhIUo3QU6t2GuOa0QDJoWQh20Mr9IvgEq9MGr39+fp6bwzDvezYjK
+         1xI59hNQkg39ZIxIV/rfNYYYEEj4sMWeXRL0/G5MluZfFxcLFV8s/3JDnWFTNyvdgQp2
+         Iv2w==
+X-Gm-Message-State: AOAM5301h3bfLcZjp6NwgwqTxelNSWMK8NeDnIJLg+p7KD6SStw286tS
+        ufIjUD2VYv+/3FS0wRykpik=
+X-Google-Smtp-Source: ABdhPJxZ8lYjXxA3pAiLAVDoONL/005dYCt+qsk2muXPO7guFffCDiHagN6VTwwETZa+yLt1kobxpg==
+X-Received: by 2002:a37:e315:: with SMTP id y21mr2760659qki.418.1615956480256;
+        Tue, 16 Mar 2021 21:48:00 -0700 (PDT)
+Received: from localhost ([76.73.146.210])
+        by smtp.gmail.com with ESMTPSA id e14sm16348614qka.56.2021.03.16.21.47.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 20:40:38 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 20:40:38 -0700 (PDT)
-X-Google-Original-Date: Tue, 16 Mar 2021 20:40:31 PDT (-0700)
-Subject:     Re: [PATCH 2/2] riscv: Enable generic clockevent broadcast
-In-Reply-To: <20210307022446.63732-2-guoren@kernel.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
-        guoren@linux.alibaba.com, tglx@linutronix.de,
-        daniel.lezcano@linaro.org, Anup Patel <Anup.Patel@wdc.com>,
-        Atish Patra <Atish.Patra@wdc.com>, greentime.hu@sifive.com
-From:   Palmer Dabbelt <palmerdabbelt@google.com>
-To:     guoren@kernel.org
-Message-ID: <mhng-25b45eaf-1d0b-4292-9228-1ac3ac68832b@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Tue, 16 Mar 2021 21:47:59 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 21:47:59 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jianpeng Ma <jianpeng.ma@intel.com>,
+        Joe Perches <joe@perches.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rich Felker <dalias@libc.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH 13/13] MAINTAINERS: Add entry for the bitmap API
+Message-ID: <20210317044759.GA2114775@yury-ThinkPad>
+References: <20210316015424.1999082-1-yury.norov@gmail.com>
+ <20210316015424.1999082-14-yury.norov@gmail.com>
+ <YFCabyt9pfPtoQiZ@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YFCabyt9pfPtoQiZ@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 06 Mar 2021 18:24:46 PST (-0800), guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> When percpu-timers are stopped by deep power saving mode, we
-> need system timer help to broadcast IPI_TIMER.
->
-> This is first introduced by broken x86 hardware, where the local apic
-> timer stops in C3 state. But many other architectures(powerpc, mips,
-> arm, hexagon, openrisc, sh) have supported the infrastructure to
-> deal with Power Management issues.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Anup Patel <anup.patel@wdc.com>
-> Cc: Atish Patra <atish.patra@wdc.com>
-> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-> Cc: Greentime Hu <greentime.hu@sifive.com>
-> ---
->  arch/riscv/Kconfig      |  2 ++
->  arch/riscv/kernel/smp.c | 16 ++++++++++++++++
->  2 files changed, 18 insertions(+)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 85d626b8ce5e..8637e7344abe 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -28,6 +28,7 @@ config RISCV
->  	select ARCH_HAS_SET_DIRECT_MAP
->  	select ARCH_HAS_SET_MEMORY
->  	select ARCH_HAS_STRICT_KERNEL_RWX if MMU
-> +	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->  	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
->  	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
->  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-> @@ -39,6 +40,7 @@ config RISCV
->  	select EDAC_SUPPORT
->  	select GENERIC_ARCH_TOPOLOGY if SMP
->  	select GENERIC_ATOMIC64 if !64BIT
-> +	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
->  	select GENERIC_EARLY_IOREMAP
->  	select GENERIC_GETTIMEOFDAY if HAVE_GENERIC_VDSO
->  	select GENERIC_IOREMAP
-> diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-> index ea028d9e0d24..8325d33411d8 100644
-> --- a/arch/riscv/kernel/smp.c
-> +++ b/arch/riscv/kernel/smp.c
-> @@ -9,6 +9,7 @@
->   */
->
->  #include <linux/cpu.h>
-> +#include <linux/clockchips.h>
->  #include <linux/interrupt.h>
->  #include <linux/module.h>
->  #include <linux/profile.h>
-> @@ -27,6 +28,7 @@ enum ipi_message_type {
->  	IPI_CALL_FUNC,
->  	IPI_CPU_STOP,
->  	IPI_IRQ_WORK,
-> +	IPI_TIMER,
->  	IPI_MAX
->  };
->
-> @@ -176,6 +178,12 @@ void handle_IPI(struct pt_regs *regs)
->  			irq_work_run();
->  		}
->
-> +#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
-> +		if (ops & (1 << IPI_TIMER)) {
-> +			stats[IPI_TIMER]++;
-> +			tick_receive_broadcast();
-> +		}
-> +#endif
->  		BUG_ON((ops >> IPI_MAX) != 0);
->
->  		/* Order data access and bit testing. */
-> @@ -192,6 +200,7 @@ static const char * const ipi_names[] = {
->  	[IPI_CALL_FUNC]		= "Function call interrupts",
->  	[IPI_CPU_STOP]		= "CPU stop interrupts",
->  	[IPI_IRQ_WORK]		= "IRQ work interrupts",
-> +	[IPI_TIMER]		= "Timer broadcast interrupts",
->  };
->
->  void show_ipi_stats(struct seq_file *p, int prec)
-> @@ -217,6 +226,13 @@ void arch_send_call_function_single_ipi(int cpu)
->  	send_ipi_single(cpu, IPI_CALL_FUNC);
->  }
->
-> +#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
-> +void tick_broadcast(const struct cpumask *mask)
-> +{
-> +	send_ipi_mask(mask, IPI_TIMER);
-> +}
-> +#endif
-> +
->  void smp_send_stop(void)
->  {
->  	unsigned long timeout;
+[CC Andy Whitcroft, Joe Perches, Dwaipayan Ray, Lukas Bulwahn]
 
-Thanks, this is on for-next.
+On Tue, Mar 16, 2021 at 01:45:51PM +0200, Andy Shevchenko wrote:
+> On Mon, Mar 15, 2021 at 06:54:24PM -0700, Yury Norov wrote:
+> > Add myself as maintainer for bitmap API and Andy and Rasmus as reviewers.
+> > 
+> > I'm an author of current implementation of lib/find_bit and an active
+> > contributor to lib/bitmap. It was spotted that there's no maintainer for
+> > bitmap API. I'm willing to maintain it.
+> > 
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > ---
+> >  MAINTAINERS | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 3dd20015696e..44f94cdd5a20 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -3151,6 +3151,22 @@ F:	Documentation/filesystems/bfs.rst
+> >  F:	fs/bfs/
+> >  F:	include/uapi/linux/bfs_fs.h
+> >  
+> > +BITMAP API
+> > +M:	Yury Norov <yury.norov@gmail.com>
+> > +R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > +R:	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > +S:	Maintained
+> > +F:	include/asm-generic/bitops/find.h
+> > +F:	include/linux/bitmap.h
+> > +F:	lib/bitmap.c
+> > +F:	lib/find_bit.c
+> 
+> > +F:	lib/find_find_bit_benchmark.c
+> 
+> Does this file exist?
+> I guess checkpatch.pl nowadays has a MAINTAINER data base validation.
+
+No lib/find_find_bit_benchmark.c doesn't exist. It's a typo, it should
+be lib/find_bit_benchmark.c. Checkpatch doesn't warn:
+
+yury:linux$ scripts/checkpatch.pl 0013-MAINTAINERS-Add-entry-for-the-bitmap-API.patch
+total: 0 errors, 0 warnings, 22 lines checked
+
+> > +F:	lib/test_bitmap.c
+> > +F:	tools/include/asm-generic/bitops/find.h
+> > +F:	tools/include/linux/bitmap.h
+> > +F:	tools/lib/bitmap.c
+> > +F:	tools/lib/find_bit.c
+> > +
+> >  BLINKM RGB LED DRIVER
+> >  M:	Jan-Simon Moeller <jansimon.moeller@gmx.de>
+> >  S:	Maintained
+> > -- 
+> > 2.25.1
+> > 
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
