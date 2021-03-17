@@ -2,140 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8150733E65A
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 02:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541A833E7B1
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 04:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbhCQBmq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Mar 2021 21:42:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33062 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229732AbhCQBml (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Mar 2021 21:42:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2207D64F8A;
-        Wed, 17 Mar 2021 01:42:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615945360;
-        bh=3alGDHmFzxfE1mdJkhw6gRfUK9karXuKpaVclegdMGw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a3JMvDsBkYu8vglQt41do9DQmoqEzJz0hL8G/e+PDIA/RkjzuA5ldzVBrxyg7cE4O
-         NeOv9K5ZNQGHSVHF3le+I2Sda1le7MH1EWKPo4g4Z7vBAhq2wXBBPFCLMnfFgPRDUK
-         XEMIif4tdw9zABchIZGY5bMNcMXdR++pBmzjB50WjqtlJ7JR0Zt8rac+U0L2k0V38C
-         Uhv4O4kKkutrBdEsZRmcr5ISzz2zyMzGCnvbyFmsGuLjxfgyrYNS//gTypbnwec3BE
-         4NcnEs5VpPhR64MMTaLvPuQpf/WXSZGzKFE8cQt7BuPWdBagw8DnOR7gRzqGWYJDc0
-         GspaLWwllW+Yw==
-Date:   Wed, 17 Mar 2021 03:42:15 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        id S229929AbhCQDgP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Mar 2021 23:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229871AbhCQDgH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Mar 2021 23:36:07 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791DCC061762
+        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 20:36:07 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id c204so165095pfc.4
+        for <linux-arch@vger.kernel.org>; Tue, 16 Mar 2021 20:36:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W8H72798it9OolNWp4JLWdlboyq7CodcHmCStG5d+3I=;
+        b=sDlO2kksnw7mXcOE//Cv43BSuy2P0zSuKgFBddBhhf2tC6IkJ7W8BGkCRbwRJ7nIUo
+         GqgCZLicz29lrk2L/QY+ycBUwQ54L+COiFtCVbAyhfPue9O9HLmE+3MXXZWSfPwiSYPY
+         Juh3VAVgr/ox9Y3wvQyITyQch8YaTdycI/X0HFkTlRZOFgXr66N5OfEamn59CD52L4xV
+         546oJYhNFVDOsMVGi5ukeBqmCKNsBQLxV5HgVceq72qCEt+B0/CgEZ0RenvKSykQrKNB
+         Ou5cUqZ8xgftMk0+KbL/8zGMZmKpbssPZAtAAI9o03G+MT6TrF1jGGLVuoHrqGxEwbzU
+         nQ+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=W8H72798it9OolNWp4JLWdlboyq7CodcHmCStG5d+3I=;
+        b=hhe/muxSZQjzVv5hspo4BGuuKIBLkLbznflRYMF/KVTxhKGzPropi5WA8jy4PiT9HO
+         tBhfnJebBpGjrOGktAGy9lpYN3OYaaWNV8igFUfvEgSI/ZDZYHjRcqGjAfv/H4yAlCYR
+         ugH0t3UKVYEVjndlEfd+nGd2n2bRmlnToM6R5vs7lyHFOEuhsb+NuQjZGIT0UUf7ntfC
+         jn9xenMWT3k+uLkC+LKji1EajcVgB2JaapL5sT9I2Uh8+tJyOPdo1TqCHfcWsxdrsCkN
+         32RqKANCMuUnnLsk520EPBKjj/unRLyEyTEZBJcNUGwK5cAKK4Px7BaEh6tDkI8iYSGA
+         gJww==
+X-Gm-Message-State: AOAM532GnRV+1nUDSzA6RhboB3GaKkj+1PUShM2vg9OhlVXSWj8raK47
+        z+qBD5Ihu5hbpE5nCu8/pgO6rQ==
+X-Google-Smtp-Source: ABdhPJwl5btd1ncxM6rY0CAXQzLiRZjgQVJn8fY2NbH9I7FpzCjOQ2Za5LRVxptThmI9urwNGwsHQw==
+X-Received: by 2002:a63:6dca:: with SMTP id i193mr837247pgc.81.1615952166796;
+        Tue, 16 Mar 2021 20:36:06 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id s22sm724266pjs.42.2021.03.16.20.36.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 20:36:05 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 20:36:05 -0700 (PDT)
+X-Google-Original-Date: Tue, 16 Mar 2021 20:33:16 PDT (-0700)
+Subject:     Re: [PATCH 1/4] irqchip: riscv: Using CPUHP_AP_ONLINE_DYN
+In-Reply-To: <1614608902-85038-1-git-send-email-guoren@kernel.org>
+CC:     guoren@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-arch@vger.kernel.org, guoren@linux.alibaba.com,
+        peterz@infradead.org, tglx@linutronix.de,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v23 9/9] x86/vdso: Add ENDBR to __vdso_sgx_enter_enclave
-Message-ID: <YFFedzHcV/zL883v@kernel.org>
-References: <20210316151320.6123-1-yu-cheng.yu@intel.com>
- <20210316151320.6123-10-yu-cheng.yu@intel.com>
- <YFEFhoi/SB12HUrg@kernel.org>
- <b523b794-3553-f7bb-3a69-24d936f0fefa@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b523b794-3553-f7bb-3a69-24d936f0fefa@intel.com>
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Atish Patra <Atish.Patra@wdc.com>,
+        Christoph Hellwig <hch@lst.de>
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-94d75abc-8624-469c-ac51-0d9c82eabb07@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 12:27:19PM -0700, Yu, Yu-cheng wrote:
-> On 3/16/2021 12:22 PM, Jarkko Sakkinen wrote:
-> > On Tue, Mar 16, 2021 at 08:13:19AM -0700, Yu-cheng Yu wrote:
-> > > ENDBR is a special new instruction for the Indirect Branch Tracking (IBT)
-> > > component of CET.  IBT prevents attacks by ensuring that (most) indirect
-> > > branches and function calls may only land at ENDBR instructions.  Branches
-> > > that don't follow the rules will result in control flow (#CF) exceptions.
-> > > 
-> > > ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
-> > > instructions are inserted automatically by the compiler, but branch
-> > > targets written in assembly must have ENDBR added manually.
-> > > 
-> > > Add ENDBR to __vdso_sgx_enter_enclave() branch targets.
-> > > 
-> > > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> > > Cc: Andy Lutomirski <luto@kernel.org>
-> > > Cc: Borislav Petkov <bp@alien8.de>
-> > > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > ---
-> > >   arch/x86/entry/vdso/vsgx.S | 4 ++++
-> > >   1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/entry/vdso/vsgx.S b/arch/x86/entry/vdso/vsgx.S
-> > > index 86a0e94f68df..1baa9b49053e 100644
-> > > --- a/arch/x86/entry/vdso/vsgx.S
-> > > +++ b/arch/x86/entry/vdso/vsgx.S
-> > > @@ -6,6 +6,7 @@
-> > >   #include <asm/enclu.h>
-> > >   #include "extable.h"
-> > > +#include "../calling.h"
-> > >   /* Relative to %rbp. */
-> > >   #define SGX_ENCLAVE_OFFSET_OF_RUN		16
-> > > @@ -27,6 +28,7 @@
-> > >   SYM_FUNC_START(__vdso_sgx_enter_enclave)
-> > >   	/* Prolog */
-> > >   	.cfi_startproc
-> > > +	ENDBR
-> > >   	push	%rbp
-> > >   	.cfi_adjust_cfa_offset	8
-> > >   	.cfi_rel_offset		%rbp, 0
-> > > @@ -62,6 +64,7 @@ SYM_FUNC_START(__vdso_sgx_enter_enclave)
-> > >   .Lasync_exit_pointer:
-> > >   .Lenclu_eenter_eresume:
-> > >   	enclu
-> > > +	ENDBR
-> > >   	/* EEXIT jumps here unless the enclave is doing something fancy. */
-> > >   	mov	SGX_ENCLAVE_OFFSET_OF_RUN(%rbp), %rbx
-> > > @@ -91,6 +94,7 @@ SYM_FUNC_START(__vdso_sgx_enter_enclave)
-> > >   	jmp	.Lout
-> > >   .Lhandle_exception:
-> > > +	ENDBR
-> > >   	mov	SGX_ENCLAVE_OFFSET_OF_RUN(%rbp), %rbx
-> > >   	/* Set the exception info. */
-> > > -- 
-> > > 2.21.0
-> > > 
-> > > 
-> > 
-> > Looks good to me.
-> > 
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> Thanks for reviewing.  In response to Dave's and Boris' comments, I will
-> replace ENDBR macro with _CET_ENDBR that comes from the compiler.  Can I
-> still keep the Reviewed-by?
+On Mon, 01 Mar 2021 06:28:19 PST (-0800), guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Remove RISC-V irqchip custom definitions in hotplug.h:
+>  - CPUHP_AP_IRQ_RISCV_STARTING
+>  - CPUHP_AP_IRQ_SIFIVE_PLIC_STARTING
+>
+> For coding convention.
+>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> Cc: Anup Patel <anup.patel@wdc.com>
+> Cc: Atish Patra <atish.patra@wdc.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Tested-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Link: https://lore.kernel.org/lkml/CAHk-=wjM+kCsKqNdb=c0hKsv=J7-3Q1zmM15vp6_=8S5XfGMtA@mail.gmail.com/
+> ---
+>  drivers/irqchip/irq-riscv-intc.c  | 2 +-
+>  drivers/irqchip/irq-sifive-plic.c | 2 +-
+>  include/linux/cpuhotplug.h        | 2 --
+>  3 files changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> index 8017f6d..2c37f3a 100644
+> --- a/drivers/irqchip/irq-riscv-intc.c
+> +++ b/drivers/irqchip/irq-riscv-intc.c
+> @@ -125,7 +125,7 @@ static int __init riscv_intc_init(struct device_node *node,
+>  		return rc;
+>  	}
+>
+> -	cpuhp_setup_state(CPUHP_AP_IRQ_RISCV_STARTING,
+> +	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+>  			  "irqchip/riscv/intc:starting",
+>  			  riscv_intc_cpu_starting,
+>  			  riscv_intc_cpu_dying);
+> diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> index 6f432d2..f499f1b 100644
+> --- a/drivers/irqchip/irq-sifive-plic.c
+> +++ b/drivers/irqchip/irq-sifive-plic.c
+> @@ -375,7 +375,7 @@ static int __init plic_init(struct device_node *node,
+>  	 */
+>  	handler = this_cpu_ptr(&plic_handlers);
+>  	if (handler->present && !plic_cpuhp_setup_done) {
+> -		cpuhp_setup_state(CPUHP_AP_IRQ_SIFIVE_PLIC_STARTING,
+> +		cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+>  				  "irqchip/sifive/plic:starting",
+>  				  plic_starting_cpu, plic_dying_cpu);
+>  		plic_cpuhp_setup_done = true;
+> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> index f14adb8..14f49fd 100644
+> --- a/include/linux/cpuhotplug.h
+> +++ b/include/linux/cpuhotplug.h
+> @@ -103,8 +103,6 @@ enum cpuhp_state {
+>  	CPUHP_AP_IRQ_ARMADA_XP_STARTING,
+>  	CPUHP_AP_IRQ_BCM2836_STARTING,
+>  	CPUHP_AP_IRQ_MIPS_GIC_STARTING,
+> -	CPUHP_AP_IRQ_RISCV_STARTING,
+> -	CPUHP_AP_IRQ_SIFIVE_PLIC_STARTING,
+>  	CPUHP_AP_ARM_MVEBU_COHERENCY,
+>  	CPUHP_AP_MICROCODE_LOADER,
+>  	CPUHP_AP_PERF_X86_AMD_UNCORE_STARTING,
 
-I'll rather re-ack, thanks. Most likely give reviewed-by but I always
-prefer to see the code change before doing that.
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
 
-/Jarkko
+I'm going to assume this is going in through an irqchip tree, but LMK if you
+want me to take it via mine.  This isn't really my sort of thing, so I'd prefer
+at least an Ack.
+
+Thanks!
