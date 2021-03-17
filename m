@@ -2,142 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C5333E9F6
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 07:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C03933ECB2
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 10:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbhCQGkk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Mar 2021 02:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S231270AbhCQJPC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Mar 2021 05:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbhCQGkP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 02:40:15 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B04C06174A;
-        Tue, 16 Mar 2021 23:40:15 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id y20so21516372iot.4;
-        Tue, 16 Mar 2021 23:40:15 -0700 (PDT)
+        with ESMTP id S231139AbhCQJOv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 05:14:51 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A006C061760
+        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 02:14:50 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id g8so1016348wmd.4
+        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 02:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BbxV8FFQ5+F/TxA4Io3PIpeBpLDxtoC/hF5K9QMF6D8=;
-        b=dBwe7vj/pgCDOU7q9uxw1w+siPNNDQQsm4MyExCl/kteM++nkzsTx2wozYZ/Q0EWyA
-         XMN1jCSEU405emTKJrJnDONCHpGjWC/jqS0JV+Jq0/CFyIqQ88bwF2EmqppVFFI0599Z
-         pYjNmC3YLG7G22QTontqrzwzb9QKXzH57W9DOHXP0TMoaXamCtuNSam/mHQrcHnhJ5zp
-         Rtx/3ZRbeFDfMNYjCN2CJAX8ysvwRFhYRCd0Y3EPJ4d951qeMSxZ7dfFRxQb2qR76YCr
-         ostjb3petHIqVMjgqRa3yZB2cpHFZIJvTFfy0Hrv2ipMRb3Y/wm1OMb77T0LtthsLdTx
-         chyw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3+HI/szBQ5FOTyD8Qug4Foc8OSZhCyYiT6v5FkPNKc8=;
+        b=jeHJzjXWMszguZe7MoOivSMUVkwfy3EYx2A2MqbLsl+1PdJgoyYc39we0KfZe9tKxS
+         uwGsA6QFEQ7TiQt6NbHQGhxkUUgppZ2JuMnVlI4uCaBRl70txyvrEaCzfhNFgK4TEFiQ
+         4Ccbhy8TcLH41EQrKS8+0/IXvGx3xYDg2X9W7kQ5Cy3J4F235hwbNN3ac6cIEVMD+oKL
+         hZGoTZFsvK7FY1tNpOoyBQEY+INJv2SITH6y13iP0cxAIiayHxD4ZJePbKi5AOw1crIw
+         /0cz7nCmI1Ldm4OkCutFVGSOqfGnR9TohqECuM6vK2SGyrbuKzKLiQHEmjhaKu4Z6p71
+         ADUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BbxV8FFQ5+F/TxA4Io3PIpeBpLDxtoC/hF5K9QMF6D8=;
-        b=gn9Yvhde4cxF/FYJRKxeRIoeZ/EyCYhMNqZgSu+io5QO4du1QgAo4v6eU7Mgtlrplr
-         7+4M8TILg/LbTWPPWyuXHdbMEi/X+S66vRS8L8frMSrqxFXMdI7F18YeP0RpbJzrH79e
-         gDhRpjTWf8djNvPEhs7vrFfemeWD6A1iP4RHmT4mf6f/92YfnxurFqBHrewxN+FhZedY
-         mWaonpAOwRyoXeKyngJqkmXAC5rkX+wrNT4DYRT9wA+fqc7oZxjxWmCsvV06A2z/Blcc
-         qgXdrSyi2RdlVfjUo+QUTDqlUBHGuTcD5YkpzN05TzPzjrYuTh64TraZ0lESfnFytfzg
-         lEnQ==
-X-Gm-Message-State: AOAM533jQQTQJ7MNF0XY2lG8ClQfpwsPtdnWFVT3bDgj2S3pk1g5Jpz9
-        HNFwFIaECqkdoSdjkla8XxIUHbbv+HcqfRcIHxk=
-X-Google-Smtp-Source: ABdhPJzUIIrtKmaGZhfubqNTun6mLmQTTiaCQn1hOdTlRDX13D1LRT2tUa9aLsENTsdq0kdQm1GNr4/QneFvG5WX3sY=
-X-Received: by 2002:a05:6638:2bb:: with SMTP id d27mr1681142jaq.98.1615963214856;
- Tue, 16 Mar 2021 23:40:14 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3+HI/szBQ5FOTyD8Qug4Foc8OSZhCyYiT6v5FkPNKc8=;
+        b=Kw9Kp81Dzp1RHrXyI89PX6DJhvgZfEGltZL3GBu/DfetM7g8gJHuBvnFqnN8P+a/Vv
+         3cz1OFuuAArLKGjmlyxiPS6UY5h9tQS54KP+tgcvu3UVPwssg/bp4eBWrjysEz8o5r9n
+         9CS2DmbNRHKMvPdfcMwcVlviwVD3ODG8FiX/3ejIUI0d4XgJB4RiVlByTNbT06QslLA+
+         VBscMEIDOJlOEZYs0oMrFblRZ04tvqmc/7bl6lyIirLMQgPBMC3Mc4QkqZHMsW90XCWU
+         KNQ6x5hOZNDEgwdHHjFdAHjWXs928s7Vylk4exIVzvwCM+VrJD9x+43Alk3EmJ64pHx0
+         /4wA==
+X-Gm-Message-State: AOAM533UlVMzo3xpmourZPxbzbUw8NBzxZ1F2jnBASTdsxCyIphxXE2e
+        Wdal4qtuO5OpSmUashkcJWFNaA==
+X-Google-Smtp-Source: ABdhPJwV4NfelpdpRCyF9uOCtCgelxHcUPbS1hKlsP3rXiknagWHrC5091KByav6fHAr2xdUa6cLag==
+X-Received: by 2002:a05:600c:4844:: with SMTP id j4mr2685735wmo.179.1615972489089;
+        Wed, 17 Mar 2021 02:14:49 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:94c7:f1f0:53fd:90e4? ([2a01:e34:ed2f:f020:94c7:f1f0:53fd:90e4])
+        by smtp.googlemail.com with ESMTPSA id l4sm24546688wrt.60.2021.03.17.02.14.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Mar 2021 02:14:48 -0700 (PDT)
+Subject: Re: [PATCH 1/2] csky: Enable generic clockevent broadcast
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20210307022446.63732-1-guoren@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <4e57c0f2-c718-01c1-032a-8e4934496b17@linaro.org>
+Date:   Wed, 17 Mar 2021 10:14:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20210316015424.1999082-1-yury.norov@gmail.com>
- <20210316015424.1999082-14-yury.norov@gmail.com> <YFCabyt9pfPtoQiZ@smile.fi.intel.com>
- <20210317044759.GA2114775@yury-ThinkPad> <eff989d0ceaede15216f1046c24829f1113c035f.camel@perches.com>
-In-Reply-To: <eff989d0ceaede15216f1046c24829f1113c035f.camel@perches.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Wed, 17 Mar 2021 07:40:04 +0100
-Message-ID: <CAKXUXMx9SFAxT_GoRw+Un7XyAuXh4LY0+RFwcKVOCG0vr2XUxw@mail.gmail.com>
-Subject: Re: [PATCH 13/13] MAINTAINERS: Add entry for the bitmap API
-To:     Joe Perches <joe@perches.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k@lists.linux-m68k.org, linux-arch@vger.kernel.org,
-        linux-sh@vger.kernel.org, Alexey Klimov <aklimov@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210307022446.63732-1-guoren@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 5:57 AM Joe Perches <joe@perches.com> wrote:
->
-> On Tue, 2021-03-16 at 21:47 -0700, Yury Norov wrote:
-> > [CC Andy Whitcroft, Joe Perches, Dwaipayan Ray, Lukas Bulwahn]
-> >
-> > On Tue, Mar 16, 2021 at 01:45:51PM +0200, Andy Shevchenko wrote:
-> > > On Mon, Mar 15, 2021 at 06:54:24PM -0700, Yury Norov wrote:
-> > > > Add myself as maintainer for bitmap API and Andy and Rasmus as reviewers.
-> > > >
-> > > > I'm an author of current implementation of lib/find_bit and an active
-> > > > contributor to lib/bitmap. It was spotted that there's no maintainer for
-> > > > bitmap API. I'm willing to maintain it.
-> > > >
-> > > > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > > > Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> > > > ---
-> > > >  MAINTAINERS | 16 ++++++++++++++++
-> > > >  1 file changed, 16 insertions(+)
-> > > >
-> > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > index 3dd20015696e..44f94cdd5a20 100644
-> > > > --- a/MAINTAINERS
-> > > > +++ b/MAINTAINERS
-> > > > @@ -3151,6 +3151,22 @@ F: Documentation/filesystems/bfs.rst
-> > > >  F:       fs/bfs/
-> > > >  F:       include/uapi/linux/bfs_fs.h
-> > > >
-> > > >
-> > > > +BITMAP API
-> > > > +M:       Yury Norov <yury.norov@gmail.com>
-> > > > +R:       Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > +R:       Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> > > > +S:       Maintained
-> > > > +F:       include/asm-generic/bitops/find.h
-> > > > +F:       include/linux/bitmap.h
-> > > > +F:       lib/bitmap.c
-> > > > +F:       lib/find_bit.c
-> > >
-> > > > +F:       lib/find_find_bit_benchmark.c
-> > >
-> > > Does this file exist?
-> > > I guess checkpatch.pl nowadays has a MAINTAINER data base validation.
-> >
-> > No lib/find_find_bit_benchmark.c doesn't exist. It's a typo, it should
-> > be lib/find_bit_benchmark.c. Checkpatch doesn't warn:
-> >
-> > yury:linux$ scripts/checkpatch.pl 0013-MAINTAINERS-Add-entry-for-the-bitmap-API.patch
-> > total: 0 errors, 0 warnings, 22 lines checked
->
-> checkpatch does not validate filenames for each patch.
->
-> checkpatch does have a --self-test=patterns capability that does
-> validate file accessibility.
+On 07/03/2021 03:24, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> When percpu-timers are stopped by deep power saving mode, we need
+> system timer help to broadcast IPI_TIMER.
+> 
+> This is first introduced by broken x86 hardware, where the local apic
+> timer stops in C3 state. But many other architectures(powerpc, mips,
+> arm, hexagon, openrisc, sh) have supported the infrastructure to
+> deal with Power Management issues.
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
 
-Joe meant: get_maintainers does have a --self-test=patterns capability
-that does validate file accessibility.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-You can run that before patch submission; otherwise, I run that script
-on linux-next once a week and send out correction patches as far as my
-"spare" time allows to do so.
 
-Lukas
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
