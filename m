@@ -2,109 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2620033F502
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 17:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EBE33F928
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 20:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbhCQQG0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Mar 2021 12:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
+        id S233191AbhCQTaD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Mar 2021 15:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbhCQQF5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 12:05:57 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BFAC061764
-        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 09:05:56 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id z65so1324914vsz.12
-        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 09:05:56 -0700 (PDT)
+        with ESMTP id S232932AbhCQTaB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 15:30:01 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A5AC06175F;
+        Wed, 17 Mar 2021 12:30:00 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id 30so1948388qva.9;
+        Wed, 17 Mar 2021 12:30:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v2KL8kozO5erdsP6tss56cJzIGTvQeUixy1fwBfyf9E=;
-        b=L+sKGzrqRGkayjrIbx3UhJgUwtMmmzJiP7xVkweSApuxYoYxI4LeRgqnM7E2cVNFT2
-         L45AC/pwNU1fz3kkRnhcRp5Khlan5/Osp695ao4Zeq1DMR4U7/JYz+4t7MEdHv1+9qwG
-         zwxXB5v4s7x+iSvmDyAA8j6J5F/LEkxHHfS2qwphtbLFYhEDWUv95/kvZL3Trdu79AyT
-         NNZbI9fnUQcz8+iyHBFSLC3Wa55Q+r5QDMMipTfIOHdnYaK4LSCdSwlrvXeW0lhZ4AF5
-         WXtzd1I3zdoC7C//HbblJCanoQNzLOyg1wur/OGHsKtTZ3gw78PQ17RnksLC/ossk+fU
-         fcmg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RI9Yge4VCvfLN/+w+NDMbTqUaUdyNl42E2BlDToEhF4=;
+        b=rjA9EYKkzULtcYtNckNpuEN+hT13LkqbBV4DSfp/tFIIy2T10YnrKip48+6Liod0iu
+         RTXyG3s6zqNh+ZjbrPvzmgQEOWWz6vEqqgkq9zCCSaUbfp+YDCT4j1/wHWez7nyapo0p
+         uLiOU7D6v+XNlyXRb+o7sm+016LwZgsA77AB3otFaEvZuPPAJCTowcR+z9qyGBTnbIS0
+         bdgCpT/oqV/jIUbyNYVNJAelCr0nS28ojdPeznmXkMKzVWtu3bCN9tnMcJKGfLGmqduX
+         9yzOMBvMUVES0djVHtryodewWh7zLHOBHgocZ3zFuXSpF4TR4Cos2kRUM2Zgfat5j6VC
+         SeyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v2KL8kozO5erdsP6tss56cJzIGTvQeUixy1fwBfyf9E=;
-        b=D5fSDJGCccPY05sAByKRE6f9BXcHyY7UqrH7tpugDGyijLaGiI8vez1uLhyOsKQwKj
-         bQ2YYO6BhDVV0IRmw6ekZtMSQC/gAlxAtHclTKBc4kOLTlMHfS0WXmIJVoAjAtCYPmeH
-         iCXjGnuAUDrsIkkZ0qlEzRaBDdGbMpc/s6rnjwvHgiPivDZN/o9lLjYpvHNzuVDRltdv
-         92ZTRAAavAQxt9dOz/V+cN6x+KTwvIEzcPTC5j/FGGE4tQO+Nunn/rcakrr1fowMlP39
-         KlRUFUkMtf9fC131qLpMp2BX1XSqXJlFKrZfuhJWwZrx8M9OQ+FG9K9iFwAjf1cAkGxw
-         7ZdA==
-X-Gm-Message-State: AOAM530hYOLqMdGMR9W2NKXK/z8NyLg023CoeOpNlU0cLp5xuc2i9sr8
-        Cp/vT9m3P+l52T/EKzpPzIK/lc6GZa4nnrjdhKRRUg==
-X-Google-Smtp-Source: ABdhPJxaHsoJ+bz7hvftL5zgwqX9DbDHuTiz3ir8dA5jWQPZop9wwdoJTujQjPIzJwP11rynhQBtRWijCPDqibIFRy4=
-X-Received: by 2002:a67:db98:: with SMTP id f24mr4264884vsk.13.1615997155510;
- Wed, 17 Mar 2021 09:05:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RI9Yge4VCvfLN/+w+NDMbTqUaUdyNl42E2BlDToEhF4=;
+        b=tjnrS0Ji1boployygr7afoe7jkD6b0RXMH5C2bpam6dXSmtxRu/GnUzNtNqgyjrKqy
+         NPYbhq7tYHDG8GN1WefPL8H1RuC5sb+ZibXBK5yUSl3Ob4PHLsdvxCvqpFbQW/7gOdtT
+         QefIOPoekl+iaiiC34GTbkt/2TxV2ZtSpuTR0hJHXf+SWjALsCZUTrKKNRcsILxQpmiS
+         rFSjUR/oh4t5Q8MSVJHY33UY2m270zX8RzsM9mzqL1LZwHbGmbaeAZ+rX1vfjB+7a/ra
+         AKo/G/LmWapf8LNuF6oKvX78BKTQm9uSpnSyH/d0txJri9UYAIt2LEgZinR2Bcm1BKOH
+         jUog==
+X-Gm-Message-State: AOAM5312iNpJlW2n404jUAJ39Jym9i5uTQVzija8/2KalI5kYZQ99kY/
+        RlFLHjDoj1N5ww+2klgBl9s=
+X-Google-Smtp-Source: ABdhPJyzlT768NJl7SxXB+bC5RpnzqTi1q66iaAstHbq/NLE4Jb2Bao2QLGgRkGOat34uKo0uCdUUw==
+X-Received: by 2002:a05:6214:aae:: with SMTP id ew14mr779116qvb.24.1616009399965;
+        Wed, 17 Mar 2021 12:29:59 -0700 (PDT)
+Received: from localhost ([76.73.146.210])
+        by smtp.gmail.com with ESMTPSA id a19sm18503446qkl.126.2021.03.17.12.29.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Mar 2021 12:29:59 -0700 (PDT)
+Date:   Wed, 17 Mar 2021 12:29:58 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Joe Perches <joe@perches.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k@lists.linux-m68k.org, linux-arch@vger.kernel.org,
+        linux-sh@vger.kernel.org, Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jianpeng Ma <jianpeng.ma@intel.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rich Felker <dalias@libc.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>
+Subject: Re: [PATCH 13/13] MAINTAINERS: Add entry for the bitmap API
+Message-ID: <20210317192958.GA2139254@yury-ThinkPad>
+References: <20210316015424.1999082-1-yury.norov@gmail.com>
+ <20210316015424.1999082-14-yury.norov@gmail.com>
+ <YFCabyt9pfPtoQiZ@smile.fi.intel.com>
+ <20210317044759.GA2114775@yury-ThinkPad>
+ <eff989d0ceaede15216f1046c24829f1113c035f.camel@perches.com>
+ <CAKXUXMx9SFAxT_GoRw+Un7XyAuXh4LY0+RFwcKVOCG0vr2XUxw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210312004919.669614-1-samitolvanen@google.com>
- <20210312004919.669614-7-samitolvanen@google.com> <20210312061304.GA2321497@infradead.org>
-In-Reply-To: <20210312061304.GA2321497@infradead.org>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Wed, 17 Mar 2021 09:05:44 -0700
-Message-ID: <CABCJKud-wRfmRLFv71QQ6etUMFX6KXsErmL6u0dPH4SU8HS-BQ@mail.gmail.com>
-Subject: Re: [PATCH 06/17] kthread: cfi: disable callback pointer check with modules
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        bpf@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKXUXMx9SFAxT_GoRw+Un7XyAuXh4LY0+RFwcKVOCG0vr2XUxw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 10:13 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Thu, Mar 11, 2021 at 04:49:08PM -0800, Sami Tolvanen wrote:
-> > With CONFIG_CFI_CLANG, a callback function passed to
-> > __kthread_queue_delayed_work from a module points to a jump table
-> > entry defined in the module instead of the one used in the core
-> > kernel, which breaks function address equality in this check:
+On Wed, Mar 17, 2021 at 07:40:04AM +0100, Lukas Bulwahn wrote:
+> On Wed, Mar 17, 2021 at 5:57 AM Joe Perches <joe@perches.com> wrote:
 > >
-> >   WARN_ON_ONCE(timer->function != kthread_delayed_work_timer_fn);
+> > On Tue, 2021-03-16 at 21:47 -0700, Yury Norov wrote:
+> > > [CC Andy Whitcroft, Joe Perches, Dwaipayan Ray, Lukas Bulwahn]
+> > >
+> > > On Tue, Mar 16, 2021 at 01:45:51PM +0200, Andy Shevchenko wrote:
+> > > > On Mon, Mar 15, 2021 at 06:54:24PM -0700, Yury Norov wrote:
+> > > > > Add myself as maintainer for bitmap API and Andy and Rasmus as reviewers.
+> > > > >
+> > > > > I'm an author of current implementation of lib/find_bit and an active
+> > > > > contributor to lib/bitmap. It was spotted that there's no maintainer for
+> > > > > bitmap API. I'm willing to maintain it.
+> > > > >
+> > > > > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > > > > Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > > Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > > > > ---
+> > > > >  MAINTAINERS | 16 ++++++++++++++++
+> > > > >  1 file changed, 16 insertions(+)
+> > > > >
+> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > > index 3dd20015696e..44f94cdd5a20 100644
+> > > > > --- a/MAINTAINERS
+> > > > > +++ b/MAINTAINERS
+> > > > > @@ -3151,6 +3151,22 @@ F: Documentation/filesystems/bfs.rst
+> > > > >  F:       fs/bfs/
+> > > > >  F:       include/uapi/linux/bfs_fs.h
+> > > > >
+> > > > >
+> > > > > +BITMAP API
+> > > > > +M:       Yury Norov <yury.norov@gmail.com>
+> > > > > +R:       Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > > +R:       Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > > > > +S:       Maintained
+> > > > > +F:       include/asm-generic/bitops/find.h
+> > > > > +F:       include/linux/bitmap.h
+> > > > > +F:       lib/bitmap.c
+> > > > > +F:       lib/find_bit.c
+> > > >
+> > > > > +F:       lib/find_find_bit_benchmark.c
+> > > >
+> > > > Does this file exist?
+> > > > I guess checkpatch.pl nowadays has a MAINTAINER data base validation.
+> > >
+> > > No lib/find_find_bit_benchmark.c doesn't exist. It's a typo, it should
+> > > be lib/find_bit_benchmark.c. Checkpatch doesn't warn:
+> > >
+> > > yury:linux$ scripts/checkpatch.pl 0013-MAINTAINERS-Add-entry-for-the-bitmap-API.patch
+> > > total: 0 errors, 0 warnings, 22 lines checked
 > >
-> > Disable the warning when CFI and modules are enabled.
+> > checkpatch does not validate filenames for each patch.
 > >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > ---
-> >  kernel/kthread.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/kthread.c b/kernel/kthread.c
-> > index 1578973c5740..af5fee350586 100644
-> > --- a/kernel/kthread.c
-> > +++ b/kernel/kthread.c
-> > @@ -963,7 +963,13 @@ static void __kthread_queue_delayed_work(struct kthread_worker *worker,
-> >       struct timer_list *timer = &dwork->timer;
-> >       struct kthread_work *work = &dwork->work;
-> >
-> > -     WARN_ON_ONCE(timer->function != kthread_delayed_work_timer_fn);
-> > +     /*
-> > +      * With CFI, timer->function can point to a jump table entry in a module,
->
-> you keep spewing this comment line that has exactly 81 characters and
-> thus badly messes up read it with a normal termina everywhere.
->
-> Maybe instead of fixing that in ever duplication hide the whole check in
-> a well documented helper (which would have to be a macro due to the
-> typing involved).
+> > checkpatch does have a --self-test=patterns capability that does
+> > validate file accessibility.
+> 
+> Joe meant: get_maintainers does have a --self-test=patterns capability
+> that does validate file accessibility.
+> 
+> You can run that before patch submission; otherwise, I run that script
+> on linux-next once a week and send out correction patches as far as my
+> "spare" time allows to do so.
 
-Sure, that sounds cleaner. I'll add a helper macro in v2.
-
-Sami
+Thanks for the hint. I see it's able to detect the issue.
