@@ -2,114 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 726FB33EE2B
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 11:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0493B33EE8A
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Mar 2021 11:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbhCQKPq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Mar 2021 06:15:46 -0400
-Received: from casper.infradead.org ([90.155.50.34]:57244 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbhCQKPa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 06:15:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GbFSfPvAGSrYmcgjy1/jiFvVWTiImeZT/N+n10CQYO8=; b=K/KBfR1lYuJIbFmu1hfj4ix8Jn
-        em4xUzlucCoj6dtG0B0LlJmZrrSdTywCapOny9m8bf0LhsIJR6smrTPigMfjkJTWb7+/6bXwxQyI1
-        fSgsrI6fG4w8L6QtBYV71XY39G/clhb/nivLkMUQaciYMDFrNnxm0ez3Jwi+qYgfmmU/10ymuYnal
-        s14JDtuNqJtjTCiVuMLnE7KAW5BFIJ66gTT5tl0N0EG+DvuOrMfKIQcIntXUv7LQHmr7IveCyAh2O
-        t1sQ6hBj4yVh5Vz1sQyRFlF7b5PKE+LFa0o7yVrfQusilBrwT7Xli35PPfbSqpZhnkJmuEFnOtc6H
-        vpx1alMQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lMTC5-001MbO-GD; Wed, 17 Mar 2021 10:14:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 44F923012DF;
-        Wed, 17 Mar 2021 11:14:24 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3537F2C3C233C; Wed, 17 Mar 2021 11:14:24 +0100 (CET)
-Date:   Wed, 17 Mar 2021 11:14:24 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v23 00/28] Control-flow Enforcement: Shadow Stack
-Message-ID: <YFHWgOAEWrOZ+zPf@hirez.programming.kicks-ass.net>
-References: <20210316151054.5405-1-yu-cheng.yu@intel.com>
- <20210316211552.GU4746@worktop.programming.kicks-ass.net>
- <90e453ee-377b-0342-55f9-9412940262f2@intel.com>
- <20210317091800.GA1461644@gmail.com>
+        id S229943AbhCQKoc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Mar 2021 06:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229644AbhCQKoT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 06:44:19 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB91BC06174A;
+        Wed, 17 Mar 2021 03:44:18 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id v11so1290699wro.7;
+        Wed, 17 Mar 2021 03:44:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Bn90u44fy8L7FazXOSgNFKkR48EmU94fLQ8Y07NnDbg=;
+        b=RookSN63CvIIb59cAjK0gkYTO2VoPpDwYkO5C4Mf4smeR2XbSEdgmY6GSS7qSum7QG
+         bQZ2/C/LB2OAkIMlIt11q5glM6MddtfYSvxiZbQ4ioHduesNUy3EWcdCOpuScZvjQ4IH
+         1Jba/B62kF3Byf57FIL/HB//GH6Gntzo3cLY0wbxK1zQkiGcJpyH8w/P3oiQre7oyQD+
+         nqvSajOLwrOJka2syyzG6h0nLbTWdvsm9U3+gwdRYi4gejCzn3DdZihhhGUO7xpRkJjM
+         OqVRxt+jVXVJ0ojSwRbiyIUTKr4/zrEMSWFrYP+DAdqqmuk1UzONGgyldg22kDEvEUvQ
+         x5jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Bn90u44fy8L7FazXOSgNFKkR48EmU94fLQ8Y07NnDbg=;
+        b=Y+SGaMEt0JRAunhiDSBgDSt+Hh+MaABdWi2ZDaM1Rpryt3A858QK8yY1uzEBWpG+Xr
+         DLKnMpg9nMho0aQha3IsKnZadvMtsnLOzKZmAaPPoacBDTgxiVIhRHr97bg/mqzMaKSx
+         XPsNI6PWrT6L72K6OwRic6LdfA6fVGVlBHbwMD4BVxi0DX3/cA0OLlN1BFSJilx0ZRaK
+         hswoDiUrD6luvtoQW4FGhhO+h7CJkVflQvEZthstfK+mV4YCCDpGpKSLpV9nX6ykA9UP
+         xiHHM3ftnO/FFBdWtZijCd2nPg9pVAbBLERjmfps66cGVyZprjRcjxo2Ou0ud1/BA93Y
+         KFzA==
+X-Gm-Message-State: AOAM53162zy6JJaOxoAtiV+tycTIKRNpHQXy5PKrcm7X4HxW/RKdilo+
+        NAkEEDJyUuHAZOlCYSYOicE=
+X-Google-Smtp-Source: ABdhPJzMIr4AJ4UN6QhUkf9RjJgTZhqswu3fbGhNtj+qV4sOmO3SCxJg6IEQ/jBzMi23oJWP+3NezQ==
+X-Received: by 2002:a05:6000:1acd:: with SMTP id i13mr1921557wry.48.1615977857523;
+        Wed, 17 Mar 2021 03:44:17 -0700 (PDT)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id h13sm2026914wmq.29.2021.03.17.03.44.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Mar 2021 03:44:17 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 17 Mar 2021 11:44:15 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     bp@suse.de, tglx@linutronix.de, luto@kernel.org, x86@kernel.org,
+        len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
+        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
+        carlos@redhat.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/6] x86: Improve Minimum Alternate Stack Size
+Message-ID: <20210317104415.GA692070@gmail.com>
+References: <20210316065215.23768-1-chang.seok.bae@intel.com>
+ <20210317100640.GC1724119@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210317091800.GA1461644@gmail.com>
+In-Reply-To: <20210317100640.GC1724119@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 10:18:00AM +0100, Ingo Molnar wrote:
+
+* Ingo Molnar <mingo@kernel.org> wrote:
+
 > 
-> * Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
+> * Chang S. Bae <chang.seok.bae@intel.com> wrote:
 > 
-> > On 3/16/2021 2:15 PM, Peter Zijlstra wrote:
-> > > On Tue, Mar 16, 2021 at 08:10:26AM -0700, Yu-cheng Yu wrote:
-> > > > Control-flow Enforcement (CET) is a new Intel processor feature that blocks
-> > > > return/jump-oriented programming attacks.  Details are in "Intel 64 and
-> > > > IA-32 Architectures Software Developer's Manual" [1].
-> > > > 
-> > > > CET can protect applications and the kernel.  This series enables only
-> > > > application-level protection, and has three parts:
-> > > > 
-> > > >    - Shadow stack [2],
-> > > >    - Indirect branch tracking [3], and
-> > > >    - Selftests [4].
-> > > 
-> > > CET is marketing; afaict SS and IBT are 100% independent and there's no
-> > > reason what so ever to have them share any code, let alone a Kconfig
-> > > knob.
+> > During signal entry, the kernel pushes data onto the normal userspace
+> > stack. On x86, the data pushed onto the user stack includes XSAVE state,
+> > which has grown over time as new features and larger registers have been
+> > added to the architecture.
 > > 
-> > We used to have shadow stack and ibt under separate Kconfig options, but in
-> > a few places they actually share same code path, such as the XSAVES
-> > supervisor states and ELF header for example.  Anyways I will be happy to
-> > make changes again if there is agreement.
+> > MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
+> > typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
+> > compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
+> > constant indicates to userspace how much data the kernel expects to push on
+> > the user stack, [2][3].
+> > 
+> > However, this constant is much too small and does not reflect recent
+> > additions to the architecture. For instance, when AVX-512 states are in
+> > use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
+> > 
+> > The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
+> > cause user stack overflow when delivering a signal.
 > 
-> I was look at:
+> >   uapi: Define the aux vector AT_MINSIGSTKSZ
+> >   x86/signal: Introduce helpers to get the maximum signal frame size
+> >   x86/elf: Support a new ELF aux vector AT_MINSIGSTKSZ
+> >   selftest/sigaltstack: Use the AT_MINSIGSTKSZ aux vector if available
+> >   x86/signal: Detect and prevent an alternate signal stack overflow
+> >   selftest/x86/signal: Include test cases for validating sigaltstack
 > 
->   x86/fpu/xstate: Introduce CET MSR and XSAVES supervisor states
+> So this looks really complicated, is this justified?
 > 
-> didn't see any IBT logic - it's essentially all shadow stack state.
+> Why not just internally round up sigaltstack size if it's too small? 
+> This would be more robust, as it would fix applications that use 
+> MINSIGSTKSZ but don't use the new AT_MINSIGSTKSZ facility.
 > 
-> Which is not surprising, forward call edge integrity protection (IBT) 
-> requires very little state, does it?
+> I.e. does AT_MINSIGSTKSZ have any other uses than avoiding the 
+> segfault if MINSIGSTKSZ is used to create a small signal stack?
 
-They hid the IBT enable bit in the U_CET MSR, which is in the XSAVE
-thing.
+I.e. if the kernel sees a too small ->ss_size in sigaltstack() it 
+would ignore ->ss_sp and mmap() a new sigaltstack instead and use that 
+for the signal handler stack.
 
+This would automatically make MINSIGSTKSZ - and other too small sizes 
+work today, and in the future.
+
+But the question is, is there user-space usage of sigaltstacks that 
+relies on controlling or reading the contents of the stack?
+
+longjmp using programs perhaps?
+
+Thanks,
+
+	Ingo
