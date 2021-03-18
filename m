@@ -2,66 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A8633FC17
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 01:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9C333FC1D
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 01:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbhCRAMK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Mar 2021 20:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
+        id S229934AbhCRAPk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Mar 2021 20:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbhCRAMC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 20:12:02 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51246C06174A
-        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 17:12:02 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id f17so378170plr.0
-        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 17:12:02 -0700 (PDT)
+        with ESMTP id S229562AbhCRAPW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Mar 2021 20:15:22 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67BFC06174A
+        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 17:15:21 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id h25so279741pgm.3
+        for <linux-arch@vger.kernel.org>; Wed, 17 Mar 2021 17:15:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=ARvDJg+f6KP0knSLM+0QM9LQhlux7lyg3t/bKTXqOAA=;
-        b=bW0Fc8FdT9RlYB4WgCYm6n59pqG92Dz/CzkJRZfaFnb2ODLWkexV/usC5R8g3eXi47
-         rUeEbpfluU86PeuYbuiCj55575caFTXfH7+HiitKUPNw8KdUAYFfezuoBYckCSlCJfLt
-         7OLlTc670gqAeifyUiYtqHH7ppf0BUecx9MaenOkjgJ632iC5EeNTnD5Y0Ryc1icWgFi
-         I4aSv6qlq3X6ehlOGRrxoBrw3oFSOQvRSmk34jMQQv2yQbdm2bMnPGduEk8l8qRWswbx
-         SjF1Dk81/XhyGlHRLS4uDWz6x7+IjJKAZWchrN7hlrEbw1p86ct6GM4FK844dhp4fMIX
-         RCBw==
+        bh=A5FghKE6j+n2hWOTxyZ9n8jVkns8KT6VJ9efkKaRMAE=;
+        b=YQ7ujubNQeiu4pvlHyWlYLnkQhqSK7m94IJyPlCDZIGxA3uEJnagPGjHPhVkW9Ylw6
+         wHq8hvWBFTOWzMT7YM7HFJZPquCALdTtCus1JU326F9J1K9aPs3TNAz/pP3+qbj/k6qL
+         X2IE6NmobBe+QO50ugSQFUHVsGROblCNBDSzj+/uvN7YGgJxlxxJDik0UCvTX6Shh+cL
+         J2h4TJTZsKTuAIMfBinxy+VycKmO5u9FrT3Qnf4zeunYgUhDIwKvWhTCBF3mYy6xzL1H
+         roxKSNMrP8832JgIIa+CZMAp0zbkiMjm8LLHp8EHNwhQ477zRFi5NDQbXyf4DXAFYsMT
+         f9Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=ARvDJg+f6KP0knSLM+0QM9LQhlux7lyg3t/bKTXqOAA=;
-        b=sQvJYEL8O1RmBERT5SBMvGhAW+fFtP3v71u9GfYFO/sb/EcqEmtEpVQVWw4nFCcDvE
-         GSO1hF4lpzaG69s5cMx7nm++XtROPq21CKT5peHWAAa9WqGXF8k/bgC461ZobMZAAtcd
-         B+BBI+MVY7UfGz5CI43eC18dmv+JomtkfBV7uk7q5zBMe+n4H7bwBo3E/N9lOFJ2ILlI
-         95FCsXOKPN4SweK8lUcwciw5b4A7nmNp5v3BC3COdU8R8+LuvmBVxADoBv3CSWtM9Xeh
-         U8VnMQEdHuSPbLFLb21LXCcDZZ5yLDyM650TzT4uu2YYvzzvkeYB2Vha4SIHevtsJ6xz
-         rObg==
-X-Gm-Message-State: AOAM531J4hrhh4GH2/RbXjCS0pYl0lkwK0j1/v8+9LuZRnyYabSrRuCN
-        l32sYrjUMROiAZYGv2fM7TM=
-X-Google-Smtp-Source: ABdhPJwcJupsleIwJWVFDTZ5UXXlXU71Xo+g/kNuAF65NZsdstzUmv+iyuU4iq2dbH2ejUbbVr6Oiw==
-X-Received: by 2002:a17:90a:d58a:: with SMTP id v10mr1415687pju.36.1616026321515;
-        Wed, 17 Mar 2021 17:12:01 -0700 (PDT)
+        bh=A5FghKE6j+n2hWOTxyZ9n8jVkns8KT6VJ9efkKaRMAE=;
+        b=O7ei5gYLTegxWd7sp4QVsG5dTpkAFXcY/6DztgqMamdWhY3AB6j8ZHX0kSc1YR3+Fg
+         VoV7PWc/xmPSZk6IrM4CAR06xJZ+f0n5gZ4Yr1IDDl0jjARCp3KIhwGR+v1WrSZwJu/b
+         CrnaWQBD1MW4zJQVR9L9ByLN+tZUU2k09GFr+9j2xDSxMUPc0JVkafWij3mokax+q8pT
+         +yk1tPWmiZS5EBn6J+fYcEvpm7jYiPVf9kn0NXsIK+IxlsLu1dbc2PJVcDZvUO4Q3g2T
+         AZd/e+OKLAPJz27yIB7eztveyCnvwd8ABw8GC4KvBmF0Rf66n1AnjfK8bNsC2R43BM6D
+         VXaA==
+X-Gm-Message-State: AOAM5326GwpfSWm1lrJsmGX0uCLpd6KWkPnrAYAfdCBdyPsFdzguE1Q4
+        3jtBFj+KPyylX2ZoILNMO6U=
+X-Google-Smtp-Source: ABdhPJwfHK/QGtbq4vhdlKtWxU/of/mmJysnt5SA2GBJWcJM5792T3iyBrkBtK2tO0wqWggMSK371w==
+X-Received: by 2002:a62:5f85:0:b029:204:99fa:3371 with SMTP id t127-20020a625f850000b029020499fa3371mr1426245pfb.1.1616026521202;
+        Wed, 17 Mar 2021 17:15:21 -0700 (PDT)
 Received: from sun.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id d5sm210228pjo.12.2021.03.17.17.11.58
+        by smtp.gmail.com with ESMTPSA id b3sm205952pjg.41.2021.03.17.17.15.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 17:12:00 -0700 (PDT)
-Date:   Thu, 18 Mar 2021 09:12:05 +0900
-Message-ID: <m2zgz19v6y.wl-thehajime@gmail.com>
+        Wed, 17 Mar 2021 17:15:20 -0700 (PDT)
+Date:   Thu, 18 Mar 2021 09:15:25 +0900
+Message-ID: <m2y2el9v1e.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     johannes@sipsolutions.net
-Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
+Cc:     tavi.purdila@gmail.com, linux-um@lists.infradead.org,
+        jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         retrage01@gmail.com
-Subject: Re: [RFC v8 08/20] um: lkl: memory handling
-In-Reply-To: <87933c0d6c07745b20f6724721e3bf2da8f67f72.camel@sipsolutions.net>
+Subject: Re: [RFC v8 19/20] um: lkl: add block device support of UML
+In-Reply-To: <3d3e446409d00dfbe62320832799d0a3b34b2b9c.camel@sipsolutions.net>
 References: <cover.1611103406.git.thehajime@gmail.com>
-        <19d4990f2ef77ad595248183071da5e43149931c.1611103406.git.thehajime@gmail.com>
-        <03c74a353c87994b61450ba8086f1ccda40b2ea8.camel@sipsolutions.net>
-        <m28s6nc2w1.wl-thehajime@gmail.com>
-        <87933c0d6c07745b20f6724721e3bf2da8f67f72.camel@sipsolutions.net>
+        <b3b73864dbb738d0de7c49a6df5a5f53a358ec93.1611103406.git.thehajime@gmail.com>
+        <2b649bc5165c7ff4547abd72f7e03e7491980138.camel@sipsolutions.net>
+        <m25z1rc2ux.wl-thehajime@gmail.com>
+        <56af0e44c846f4b079256ec997c56119964be402.camel@sipsolutions.net>
+        <CAMoF9u2phDz5nmFFSW-9VKs2gTK0exHaPxrOf4nM5gAQnQhcRQ@mail.gmail.com>
+        <3d3e446409d00dfbe62320832799d0a3b34b2b9c.camel@sipsolutions.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.1 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -70,34 +72,47 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-Hello,
 
-On Wed, 17 Mar 2021 06:31:03 +0900,
+On Wed, 17 Mar 2021 23:28:10 +0900,
 Johannes Berg wrote:
 > 
-> On Tue, 2021-03-16 at 10:18 +0900, Hajime Tazaki wrote:
-> > 
-> > > > +void *uml_kmalloc(int size, int flags)
-> > > > +{
-> > > > +	return kmalloc(size, flags);
-> > > > +}
-> > > 
-> > > That could probably still be shared?
-> > 
-> > This function is a stub of arch/um/kernel/mem.c, which LKL doesn't
-> > use for the build.  Thus we defined here.
-> > 
-> > Or are you suggesting to not stubbing this function, but extracting
-> > the function from mem.c ?
+> On Wed, 2021-03-17 at 16:19 +0200, Octavian Purdila wrote:
+> > > I can understand that your sample code wants btrfs just to show what it
+> > > can do, but IMHO it doesn't make sense to *always* enable it.
 > 
-> Yes, that's kind of what I was thinking.
+> Btw, what I said there also didn't distinguish between "always enable
+> it" and "always force it enabled".
+> 
+> Right now this patch did the latter, but the former might sort of make
+> sense, but would take the form of a defconfig rather than a Kconfig code
+> change.
 
-Okay, I'll look for a fix with this approach.
+Thanks, I understand the situation.
+I agree that using defconfig should be good in this case.  Will fix this.
 
-> OTOH, I guess it's in os-Linux today?
 
-sorry, I didn't get this line.  uml_kmalloc() is in kernel/mem.c but
-what is in os-Linux ?
+> > I agree. I think these can stay in defconfigs but here is where a
+> > library introduces complications which I don't know how is best to
+> > handle. Should we have the defconfig in arch/um or should we have it
+> > in tools/testing/selftests/um? Or perhaps both places, one being a
+> > generic config that would be used by most applications and one
+> > customized?
+> 
+> Yeah, that's a question - and in that sense LKL will never be a general-
+> purpose "library" since then you'd have to basically build it with
+> "allyesconfig" instead of other things.
+> 
+> Maybe just put a note there with the tools, and maybe a defconfig, and
+> then have some kind of detection at example/tool build or even runtime
+> that the necessary options are selected?
 
-Thanks,
+preparing multiple defconfigs (e.g., tiny, normal, allyes) would be
+one option for build-time selection.
+
+Other possibilities (rather radical) could be to prepare multiple
+sub-libraries (liblinux-core.so liblinux-fs-ext4.so, liblinux-net.so,
+etc) so that users can pick only necessary codes when it's build (or
+open during runtime).  This needs to handle dependencies as kernel
+modules do, thus it's more complicated once we have this ?
+
 -- Hajime
