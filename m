@@ -2,132 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D69F340A37
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 17:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8FA340B18
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 18:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbhCRQ32 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Mar 2021 12:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
+        id S232183AbhCRRLf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Mar 2021 13:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbhCRQ2y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Mar 2021 12:28:54 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C410C06174A
-        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 09:28:54 -0700 (PDT)
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1lMvVo-000DnM-3B; Thu, 18 Mar 2021 17:28:40 +0100
-Message-ID: <2b055a98f6e5e12959f331ed5cc9acb14960da04.camel@sipsolutions.net>
-Subject: Re: [RFC v8 00/20] Unifying LKL into UML
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Hajime Tazaki <thehajime@gmail.com>
-Cc:     tavi.purdila@gmail.com, linux-um@lists.infradead.org,
-        jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
-        retrage01@gmail.com
-Date:   Thu, 18 Mar 2021 17:28:38 +0100
-In-Reply-To: <m2v99oa6m7.wl-thehajime@gmail.com> (sfid-20210318_151735_819777_85B2C8F0)
-References: <cover.1601960644.git.thehajime@gmail.com>
-         <cover.1611103406.git.thehajime@gmail.com>
-         <d357fbd075319d8b32667323bc545e3e5e8e8a21.camel@sipsolutions.net>
-         <m2czvzc2xw.wl-thehajime@gmail.com>
-         <bc30898d6ac14c5c6e7eeeb72e41353a298bdf65.camel@sipsolutions.net>
-         <CAMoF9u3q_uhvzT0RJj42fAVQpVf-nnwXM9Zh_qXxYAG8YHcOUQ@mail.gmail.com>
-         <8c6f4ba994831b55ce7893f7e8e71a614474b907.camel@sipsolutions.net>
-         <m2v99oa6m7.wl-thehajime@gmail.com> (sfid-20210318_151735_819777_85B2C8F0)
+        with ESMTP id S232254AbhCRRLQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Mar 2021 13:11:16 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA08C061760
+        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 10:11:15 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id f81so49054670yba.8
+        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 10:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=SCzz0vkCTXCJ+hl1sGhlu0aynSHOxUfyv4GiVUi2UT8=;
+        b=Qn2g5lLRvdKJvgzF43+LCRfbhyf/1XwO7VexN9MTAJ/y7/GXos2MZ6DPQ5+40SXSdr
+         3WUM1haHcbmP9fvJ5H0GP0vnMIfZYFYJ3/skq+V4JOBLmlhGlPExy6gqYwMz2uSJ1gR3
+         Kgl24aisbJ27zFi0E+w0DAM6qtK+mORJD0REsBOc+I74Jm51pwyVzGpvxB7NjD1JArlW
+         Z1Nw3IJcwTpFcPc/OM/mDZYHlik6/X5+hBBgaF+RBWA6lCnTc9Su31yLYk3E+KZP8/w7
+         k1BrfTKfIXXZ46LHA5pZpwKRNzhgz58PNc7YyUV/9wiANk3u5qYBZVv8t0PgePg8ENXo
+         Bcrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=SCzz0vkCTXCJ+hl1sGhlu0aynSHOxUfyv4GiVUi2UT8=;
+        b=MGrj2aah3F+X1+RUg7bRUzz8YuAeFR3IAXOGRZnp6KsmoNE6DnaXO6G+BhvbIEkTOC
+         +/w5nYBYybdL0ArcIJe72T/Jn9Eu9rWAcKiE+eS9joZqBuZaeNTh52FTkwrFw2Mpqnv1
+         WX8n0wnEy1tmmqOEihXBJUkhS74sU8Jpn3ZZ2eAdpW/MbKVPFZkeU8HfE4UBbgpviqBq
+         atencxUTkbfdSL4L7W9CSVXyJLYrf2ouSl5N2Y6YR19evW7r07vaTAmdYl3j9Lsv++tD
+         nY8wYLf7pCKDNaLQ7SrUdZVC7DmaF6uZEXak9SJ05Grdfk7NbVQQ1JUJ29Yej5mD1Ygz
+         9GFA==
+X-Gm-Message-State: AOAM5320HoxzMHpVaWqefSqpqb2HKwJFNDBVaT3KsXtMI7CGPCIcOBrt
+        sQhGVJOcgnCowSbcVQoNPUjtoxnH3nDPdU3y+jQ=
+X-Google-Smtp-Source: ABdhPJwBMd/Hg8Inw/d+QCjcsX4aY1KphAmvmly7frqYXPa28oCDMQoPY4+7I2PpXYAYog1pvPg18bYfcaeLUFSg7M0=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:c0d7:a7ba:fb41:a35a])
+ (user=samitolvanen job=sendgmr) by 2002:a25:4ce:: with SMTP id
+ 197mr429022ybe.462.1616087474808; Thu, 18 Mar 2021 10:11:14 -0700 (PDT)
+Date:   Thu, 18 Mar 2021 10:10:54 -0700
+Message-Id: <20210318171111.706303-1-samitolvanen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
+Subject: [PATCH v2 00/17] Add support for Clang CFI
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+This series adds support for Clang's Control-Flow Integrity (CFI)
+checking. With CFI, the compiler injects a runtime check before each
+indirect function call to ensure the target is a valid function with
+the correct static type. This restricts possible call targets and
+makes it more difficult for an attacker to exploit bugs that allow the
+modification of stored function pointers. For more details, see:
 
-> I also have an idea for a ThreadX in future, which also implements
-> actual context in the application/environment/host side (not in kernel
-> side, as others do).  Though this environment may not provide
-> mprotect-like features, there is still a value that the application
-> can run Linux code (e.g., network stack) for instance.
+  https://clang.llvm.org/docs/ControlFlowIntegrity.html
 
-Heh. Right.
+The first patch contains build system changes and error handling,
+and implements support for cross-module indirect call checking. The
+remaining patches address issues caused by the compiler
+instrumentation. These include fixing known type mismatches, as well
+as issues with address space confusion and cross-module function
+address equality.
 
-> I agree that LKL (or the library mode) can conceptually offer both
-> NOMMU/MMU capabilities.
-> 
-> I also think that NOMMU library could be the first step and a minimum
-> product as MMU implementation may involve a lot of refactoring which
-> may need more consideration to the current codebase.
-> 
-> We tried with MMU mode library, by sharing build system
-> (Kconfig/Makefile) and runtime facilities (thread/irq/memory).  But,
-> we could only do share irq handling for this first step.
-> 
-> When we implement the MMU mode library in future, we may come up with
-> another abstraction/refactoring into the UML design, which could be a
-> good outcome.  But I think it is beyond the minimum given (already)
-> big changes with the current patchset.
+These patches add support only for arm64, but I'll post patches also
+for x86_64 after we address the remaining issues there, including
+objtool support.
 
-Well, arguably that depends on how you look at it.
+You can also pull this series from
 
-Understandably, you're looking at this from the POV of getting an "MVP"
-(minimum viable product) into mainline as soon as possible.
+  https://github.com/samitolvanen/linux.git cfi-v2
 
-I can understand why you would do that, and this patchset achieves it:
-you get an LKL in mainline that's useful, even if it doesn't achieve the
-best possible architecture and code sharing.
-
-But look at it from the opposite side, from mainline's view (at least in
-my opinion, others may disagree): getting an LKL (whether as an MVP or
-not) isn't really that important! Getting the architecture and code
-sharing right are likely the *primary* goals for mainline this
-integration.
-
-So from my POV it's *more important* to get the shared facilities,
-proper abstraction and refactoring right, likely to the point where UML
-is actually "small binary using the library" (in some fashion). Even if
-that initially means there actually *won't* be NOMMU mode and a library
-that's useful for the LKL use cases.
-
-Yes, that's the longer road into mainline, but it also means that each
-step along the way is actually useful to mainline, I'm assuming here
-that the necessary code refactoring, abstraction, etc. will by itself
-provide some value to UML, but given the messy state it's in, I think
-that's almost certainly going to be true.
-
-So a sense "getting LKL into UML" is at odds with "get LKL working
-quickly". However, doing it this way may ultimately get it into mainline
-faster because it's a much easier incremental route. Say you want to get
-all this thread stuff out of the way that we discussed - then if you
-need to keep UML working but *using* the abstraction you're adding (in
-order to work towards the goal of it using the library) then it becomes
-fairly obvious that you cannot use the abstraction that you have with
-pthreads, mutexes, and semaphores exposed via APIs, but need to build
-the API on "thread switching" primitives instead. I would expect similar
-things to be true for other places.
+---
+Changes in v2:
+ - Fixed .text merging in module.lds.S.
+ - Added WARN_ON_FUNCTION_MISMATCH() and changed kernel/thread.c
+   and kernel/workqueue.c to use the macro instead.
 
 
-Now, are you/we up for that? I don't know. On the one hand, I know
-you're persistent and interested in this, but on the other hand it's
-somewhat at odds with your goals. I believe for mainline it'd be better
-because the code is no worse off each step along the way.
+Sami Tolvanen (17):
+  add support for Clang CFI
+  cfi: add __cficanonical
+  mm: add generic __va_function and __pa_function macros
+  module: ensure __cfi_check alignment
+  workqueue: use WARN_ON_FUNCTION_MISMATCH
+  kthread: use WARN_ON_FUNCTION_MISMATCH
+  kallsyms: strip ThinLTO hashes from static functions
+  bpf: disable CFI in dispatcher functions
+  lib/list_sort: fix function type mismatches
+  lkdtm: use __va_function
+  psci: use __pa_function for cpu_resume
+  arm64: implement __va_function
+  arm64: use __pa_function
+  arm64: add __nocfi to functions that jump to a physical address
+  arm64: add __nocfi to __apply_alternatives
+  KVM: arm64: Disable CFI for nVHE
+  arm64: allow CONFIG_CFI_CLANG to be selected
 
-Taking the thread example again, if we have a thread switching
-abstraction and an implementation in UML, worst case (e.g. if you lose
-interest) is that it's a somewhat pointless abstraction there, but it
-doesn't really make the code significantly worse or more complex.
+ Makefile                                  |  17 ++
+ arch/Kconfig                              |  45 +++
+ arch/arm64/Kconfig                        |   1 +
+ arch/arm64/include/asm/memory.h           |  15 +
+ arch/arm64/include/asm/mmu_context.h      |   4 +-
+ arch/arm64/kernel/acpi_parking_protocol.c |   2 +-
+ arch/arm64/kernel/alternative.c           |   4 +-
+ arch/arm64/kernel/cpu-reset.h             |  10 +-
+ arch/arm64/kernel/cpufeature.c            |   4 +-
+ arch/arm64/kernel/psci.c                  |   3 +-
+ arch/arm64/kernel/smp_spin_table.c        |   2 +-
+ arch/arm64/kvm/hyp/nvhe/Makefile          |   6 +-
+ drivers/firmware/psci/psci.c              |   4 +-
+ drivers/misc/lkdtm/usercopy.c             |   2 +-
+ include/asm-generic/bug.h                 |  16 ++
+ include/asm-generic/vmlinux.lds.h         |  20 +-
+ include/linux/bpf.h                       |   4 +-
+ include/linux/cfi.h                       |  41 +++
+ include/linux/compiler-clang.h            |   3 +
+ include/linux/compiler_types.h            |   8 +
+ include/linux/init.h                      |   6 +-
+ include/linux/mm.h                        |   8 +
+ include/linux/module.h                    |  13 +-
+ include/linux/pci.h                       |   4 +-
+ init/Kconfig                              |   2 +-
+ kernel/Makefile                           |   4 +
+ kernel/cfi.c                              | 329 ++++++++++++++++++++++
+ kernel/kallsyms.c                         |  54 +++-
+ kernel/kthread.c                          |   3 +-
+ kernel/module.c                           |  43 +++
+ kernel/workqueue.c                        |   2 +-
+ lib/list_sort.c                           |   8 +-
+ scripts/Makefile.modfinal                 |   2 +-
+ scripts/module.lds.S                      |  18 +-
+ 34 files changed, 663 insertions(+), 44 deletions(-)
+ create mode 100644 include/linux/cfi.h
+ create mode 100644 kernel/cfi.c
 
-OTOH, having what we have now with pthreads/mutexes/semaphores *does*
-make the code significantly more complex and harder to maintain (IMHO)
-because it adds all kinds of special cases, and they're somewhat more
-difficult to exercise (yes, there are examples, still).
 
-
-In any case, I don't think I'm the one making the decisions here, so
-take this with a grain of salt.
-
-johannes
+base-commit: 6417f03132a6952cd17ddd8eaddbac92b61b17e0
+-- 
+2.31.0.291.g576ba9dcdaf-goog
 
