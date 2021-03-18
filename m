@@ -2,30 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E77B9340974
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 17:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 296253409CC
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 17:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbhCRP7x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Mar 2021 11:59:53 -0400
-Received: from mga18.intel.com ([134.134.136.126]:50906 "EHLO mga18.intel.com"
+        id S231773AbhCRQNW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Mar 2021 12:13:22 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:36602 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231927AbhCRP7d (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 18 Mar 2021 11:59:33 -0400
-IronPort-SDR: h6IIETYp5BVASCxI0v9xPeSs/8Q1QRjwbc1f+FR7nY8DDrZ/zwGA5fERO1fQJzWZj3VkvLWjv0
- irj7+THjQoMw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9927"; a="177304282"
-X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
-   d="scan'208";a="177304282"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 08:59:30 -0700
-IronPort-SDR: kKWFS1pQmad2W49zFYAOG3ZxMvGCyh3Me0VkpNZIi7D+3z5rwfmc2LOnv0QgzMFM+kR/tdiT/+
- a9w/Ya8Irwgw==
-X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
-   d="scan'208";a="450527286"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.36.121]) ([10.209.36.121])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 08:59:29 -0700
-Subject: Re: [PATCH v23 21/28] mm: Re-introduce vm_flags to do_mmap()
-To:     Borislav Petkov <bp@alien8.de>
+        id S231806AbhCRQNA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 18 Mar 2021 12:13:00 -0400
+Received: from zn.tnic (p200300ec2f0fad00070f6d4b275c681b.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:ad00:70f:6d4b:275c:681b])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6FF7E1EC0591;
+        Thu, 18 Mar 2021 17:12:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1616083978;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iYAk+sBJZsOFN0LDj0WLxWQznRPOAKXobgPMm4BR1jY=;
+        b=iZU645W5+QzgvAjHSsEnafuzbLMH+MFR6eKTL53NMcfWNWWCuVIioJi0L2FcA2BLpKT06m
+        gJ/GltvmLMHhfRDWQB3kSksfu1SSX1G6ndpxcKb9xM3QyQvZNQNP9TmzLtd/IW6rREqyu3
+        P+M28m7Fx9Fzv71SMDm+OIAzp4gn0J4=
+Date:   Thu, 18 Mar 2021 17:13:01 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -54,43 +56,32 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Haitao Huang <haitao.huang@intel.com>,
         Peter Collingbourne <pcc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v23 21/28] mm: Re-introduce vm_flags to do_mmap()
+Message-ID: <20210318161301.GG19570@zn.tnic>
 References: <20210316151054.5405-1-yu-cheng.yu@intel.com>
  <20210316151054.5405-22-yu-cheng.yu@intel.com>
  <20210318114232.GD19570@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <af1f109b-c36e-b548-ae15-752f7af7c1d4@intel.com>
-Date:   Thu, 18 Mar 2021 08:59:28 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ <af1f109b-c36e-b548-ae15-752f7af7c1d4@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210318114232.GD19570@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <af1f109b-c36e-b548-ae15-752f7af7c1d4@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 3/18/2021 4:42 AM, Borislav Petkov wrote:
-> On Tue, Mar 16, 2021 at 08:10:47AM -0700, Yu-cheng Yu wrote:
->> There was no more caller passing vm_flags to do_mmap(), and vm_flags was
->> removed from the function's input by:
->>
->>      commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
->>
->> There is a new user now.  Shadow stack allocation passes VM_SHSTK to
->> do_mmap().  Re-introduce vm_flags to do_mmap(), but without the old wrapper
->> do_mmap_pgoff().
-> 
-> Why does this matter at all?
-> 
-> $ git grep do_mmap_pgoff
-> $
-> 
+On Thu, Mar 18, 2021 at 08:59:28AM -0700, Yu, Yu-cheng wrote:
+> Right, do_mmap_pgoff() was removed by commit 45e55300f114.  This patch does
+> not add back the wrapper.  Instead, add vm_flags to do_mmap(). Please advice
+> if I misunderstand the question.
 
-Right, do_mmap_pgoff() was removed by commit 45e55300f114.  This patch 
-does not add back the wrapper.  Instead, add vm_flags to do_mmap(). 
-Please advice if I misunderstand the question.
+I'm just wondering why you even need to mention do_mmap_pgoff() since
+that thing is gone now...
 
-Thanks,
-Yu-cheng
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
