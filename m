@@ -2,231 +2,176 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E761340591
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 13:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701BE3407B1
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 15:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbhCRMcW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Mar 2021 08:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        id S231305AbhCRORh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Mar 2021 10:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbhCRMcS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Mar 2021 08:32:18 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8F6C06174A;
-        Thu, 18 Mar 2021 05:32:18 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0fad00d75c69f143849f33.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:ad00:d75c:69f1:4384:9f33])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9860B1EC0588;
-        Thu, 18 Mar 2021 13:32:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1616070736;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KdZxGoW8E0Yb5R2XGKQeoZI3CfwvnJolse9Jj5h06wE=;
-        b=VsgEwR4JlwvnISKDyXBK4k1m8sJNVs/L68IqL3bCPBrkf+EIhE+ttIW3o/P38FXupadupf
-        CE8Tnk/w/6ekC2/AlPi0WMFZnmzeAvyF5fvJ95lzz9hclGDFVS1bY7sXdl8t7s0D006jnu
-        ije1CeCZz37FiV3dDdTflsP+aw0Xgmo=
-Date:   Thu, 18 Mar 2021 13:32:15 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v23 22/28] x86/cet/shstk: User-mode shadow stack support
-Message-ID: <20210318123215.GE19570@zn.tnic>
-References: <20210316151054.5405-1-yu-cheng.yu@intel.com>
- <20210316151054.5405-23-yu-cheng.yu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210316151054.5405-23-yu-cheng.yu@intel.com>
+        with ESMTP id S231856AbhCRORd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Mar 2021 10:17:33 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09B2C06174A
+        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 07:17:33 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id j25so3585469pfe.2
+        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 07:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:message-id:from:to:cc:subject:in-reply-to:references
+         :user-agent:mime-version;
+        bh=OTNvgazATmy7ZYFAJWGox1akFGRb69EdZteL6XQDbu8=;
+        b=W+0qBirsAp7+6t49z1jp8Vp2U0QfKzlYfUsZmR4ZA1y/o7ASdYuU2plwpBUAuI0DFJ
+         T6cJOrs1f/Mu52+VTmV+gHdtLDB9zMU+tjJbv+vNQcwGYDvoJI4aWZZNJfUnaKNJ1Kuo
+         1SmRh4Qml0htOzglhe+SlVJLnK1zbtGnOhNaVpAaEb7Cwm6gXJ0hq9Tunvczn7BDhsNc
+         bewPOOzS1kRSRIZIrqyvRqrtdDHeLEWEhSdpv9vYMnU+4DQ2Qlr4ngQhYVXPg+b43MZp
+         QidJQmlFOATLTwGVZo+yV8ag79In1piIxD3Ye2jtSgphZ+akCahrBTkNKPvvcEQghSYQ
+         MTTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
+         :references:user-agent:mime-version;
+        bh=OTNvgazATmy7ZYFAJWGox1akFGRb69EdZteL6XQDbu8=;
+        b=OVB7TRDbBfllINgAfZc/h7ktYXNlGuRuv9OVbDk+eH/VvCfY1n5O1BxXHGYizg912M
+         emQsmNOLYSqhvjrO0R9mFO7pE6GiJC0l+7dw3KymDwOej/Pvqback54pJcwWZzE7YlWu
+         gqZKOe2GxHAo8nH3uR/IGBSDgqq0YCCrR8AXUQ3uUJPyajyKQC+K+2Io5InRlTcg9uM6
+         g0J6EiBXVd0qdMy+MbHJSRIW6NejuMHqmVc4YfsnI5mvvhcuZsM4HgpPCBE9Uk1DUslu
+         E32z8ngCh6B3BixHFgL5XgDZ3LfsQaECa4BSovMf+MDAst1FiP+eZ9XViTrD4gvqWq2p
+         9AbQ==
+X-Gm-Message-State: AOAM5322Mo6j+UzfQoKgKF0+yZPgqqDhBLyfvVi7u2tbGJDw/Tfyg8lQ
+        znzwgteEg4C6+O6MpY7mUGU=
+X-Google-Smtp-Source: ABdhPJxs8YcPvg4KsrIQs9N7UZji5D1G+8ksW+uIIJw+mB6rLyzBuDdr7Qo9kz5swGKVa+uXKZBjow==
+X-Received: by 2002:a65:6a4b:: with SMTP id o11mr7219990pgu.138.1616077053156;
+        Thu, 18 Mar 2021 07:17:33 -0700 (PDT)
+Received: from sun.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
+        by smtp.gmail.com with ESMTPSA id s8sm2737546pjg.29.2021.03.18.07.17.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Mar 2021 07:17:32 -0700 (PDT)
+Date:   Thu, 18 Mar 2021 23:17:36 +0900
+Message-ID: <m2v99oa6m7.wl-thehajime@gmail.com>
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     johannes@sipsolutions.net
+Cc:     tavi.purdila@gmail.com, linux-um@lists.infradead.org,
+        jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
+        retrage01@gmail.com
+Subject: Re: [RFC v8 00/20] Unifying LKL into UML
+In-Reply-To: <8c6f4ba994831b55ce7893f7e8e71a614474b907.camel@sipsolutions.net>
+References: <cover.1601960644.git.thehajime@gmail.com>
+        <cover.1611103406.git.thehajime@gmail.com>
+        <d357fbd075319d8b32667323bc545e3e5e8e8a21.camel@sipsolutions.net>
+        <m2czvzc2xw.wl-thehajime@gmail.com>
+        <bc30898d6ac14c5c6e7eeeb72e41353a298bdf65.camel@sipsolutions.net>
+        <CAMoF9u3q_uhvzT0RJj42fAVQpVf-nnwXM9Zh_qXxYAG8YHcOUQ@mail.gmail.com>
+        <8c6f4ba994831b55ce7893f7e8e71a614474b907.camel@sipsolutions.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.1 Mule/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> Subject: Re: [PATCH v23 22/28] x86/cet/shstk:   User-mode shadow stack support
-						^
-						Add
 
-On Tue, Mar 16, 2021 at 08:10:48AM -0700, Yu-cheng Yu wrote:
-> Introduce basic shadow stack enabling/disabling/allocation routines.
-> A task's shadow stack is allocated from memory with VM_SHSTK flag and has
-> a fixed size of min(RLIMIT_STACK, 4GB).
+Hello,
+
+On Wed, 17 Mar 2021 23:24:14 +0900,
+Johannes Berg wrote:
 > 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/x86/include/asm/cet.h       |  28 ++++++
->  arch/x86/include/asm/processor.h |   5 ++
->  arch/x86/kernel/Makefile         |   2 +
->  arch/x86/kernel/cet.c            | 147 +++++++++++++++++++++++++++++++
-
-Yeah, since Peter wants stuff split, let's call that shstk.c and the IBT
-stuff goes into a separate ibt.c please.
-
-> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> index dc6d149bf851..3fce5062261b 100644
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -27,6 +27,7 @@ struct vm86;
->  #include <asm/unwind_hints.h>
->  #include <asm/vmxfeatures.h>
->  #include <asm/vdso/processor.h>
-> +#include <asm/cet.h>
->  
->  #include <linux/personality.h>
->  #include <linux/cache.h>
-> @@ -535,6 +536,10 @@ struct thread_struct {
->  
->  	unsigned int		sig_on_uaccess_err:1;
->  
-> +#ifdef CONFIG_X86_CET
-> +	struct cet_status	cet;
-
-	struct shstk_desc	shstk;
-
-or so.
-
-> +int cet_setup_shstk(void)
-> +{
-> +	unsigned long addr, size;
-> +	struct cet_status *cet = &current->thread.cet;
-> +
-> +	if (!static_cpu_has(X86_FEATURE_SHSTK))
-
-cpu_feature_enabled
-
-> +		return -EOPNOTSUPP;
-> +
-> +	size = round_up(min(rlimit(RLIMIT_STACK), 1UL << 32), PAGE_SIZE);
-						  ^
-						  SZ_4G
-
-> +	addr = alloc_shstk(size, 0);
-> +
-
-^ Superfluous newline.
-
-> +	if (IS_ERR_VALUE(addr))
-> +		return PTR_ERR((void *)addr);
-> +
-> +	cet->shstk_base = addr;
-> +	cet->shstk_size = size;
-> +
-> +	start_update_msrs();
-> +	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
-> +	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
-> +	end_update_msrs();
-> +	return 0;
-> +}
-> +
-> +void cet_disable_shstk(void)
-> +{
-> +	struct cet_status *cet = &current->thread.cet;
-> +	u64 msr_val;
-> +
-> +	if (!static_cpu_has(X86_FEATURE_SHSTK) ||
-
-cpu_feature_enabled
-
-And put the || on the end of each line:
-
-	if (!cpu_feature_enabled() ||
-	    !cet->shstk_size ||
-	    ... )
-
-
-> +	    !cet->shstk_size || !cet->shstk_base)
-> +		return;
-> +
-> +	start_update_msrs();
-> +	rdmsrl(MSR_IA32_U_CET, msr_val);
-> +	wrmsrl(MSR_IA32_U_CET, msr_val & ~CET_SHSTK_EN);
-> +	wrmsrl(MSR_IA32_PL3_SSP, 0);
-> +	end_update_msrs();
-> +
-> +	cet_free_shstk(current);
-> +}
-
-Put that function under cet_free_shstk().
-
-> +void cet_free_shstk(struct task_struct *tsk)
-> +{
-> +	struct cet_status *cet = &tsk->thread.cet;
-> +
-> +	if (!static_cpu_has(X86_FEATURE_SHSTK) ||
-
-cpu_feature_enabled and as above.
-
-> +	    !cet->shstk_size || !cet->shstk_base)
-> +		return;
-> +
-> +	if (!tsk->mm || tsk->mm != current->mm)
-> +		return;
-
-You're operating on current here merrily but what's protecting all those
-paths operating on current from getting current changed underneath them
-due to scheduling? IOW, is preemption safely disabled in all those
-paths ending up here?
-
-> +
-> +	while (1) {
-
-Uuh, an endless loop. What guarantees we'll exit it relatively timely...
-
-> +		int r;
-> +
-> +		r = vm_munmap(cet->shstk_base, cet->shstk_size);
-> +
-> +		/*
-> +		 * Retry if mmap_lock is not available.
-> +		 */
-> +		if (r == -EINTR) {
-> +			cond_resched();
-
-... that thing?
-
-> +			continue;
-> +		}
-> +
-> +		WARN_ON_ONCE(r);
-> +		break;
-> +	}
-> +
-> +	cet->shstk_base = 0;
-> +	cet->shstk_size = 0;
-> +}
-> -- 
-> 2.21.0
+> Hi,
 > 
+> > One use case where this matters are non OS environments such as
+> > bootloaders [1], running on bare-bone hardware or kernel drivers [2,
+> > 3]. IMO it would be nice to keep these properties.
+> 
+> OK, that makes sense. Still, it seems it could be a compile-time
+> decision, and doesn't necessarily mean LKL has to be NOMMU, just that it
+> could support both?
+> 
+> I'm really trying to see if we can't get UML to be a user of LKL. IMHO
+> that would be good for the code, and even be good for LKL since then
+> it's maintained as part of UML as well, not "just" as its own use case.
+>
+> > > If your abstraction was instead "switch context" then you could still
+> > > implement it using pthreads+mutexes, or you could implement it using
+> > > fibers on windows, or posix contexts - but you'd have a significantly
+> > > reduced API surface, since you'd only expose __switch_to() or similar,
+> > > and maybe a new stack allocation etc.
+> > 
+> > You are right. When I started the implementation for ucontext it was
+> > obvious that it would be much simpler to have abstractions closer to
+> > what Linux has (alloc, free and switch threads). But I never got to
+> > finish that and then things went into a different direction.
+> 
+> OK, sounds like you came to the same conclusion, more or less.
+>
+> > > Additionally, I do wonder how UML does this now, it *does* use setjmp,
+> > > so are you saying it doesn't properly use the kernel stacks?
+> > > 
+> > 
+> > To clarify a bit the statement in the paper, the context there was
+> > that we should push the thread implementation to the
+> > application/environment we run rather than providing "LKL" threads.
+> > This was particularly important for running LKL in other OSes kernel
+> > drivers. But you are right, we can use the switch abstraction and
+> > implement it with threads and mutexes for those environments where it
+> > helps.
+> 
+> Right - like I pointed to USFSTL framework, you could have posix
+> ucontext, fiber and pthread at least, and obviously other things in
+> other environments (ThreadX anyone? ;-) )
 
--- 
-Regards/Gruss,
-    Boris.
+I also have an idea for a ThreadX in future, which also implements
+actual context in the application/environment/host side (not in kernel
+side, as others do).  Though this environment may not provide
+mprotect-like features, there is still a value that the application
+can run Linux code (e.g., network stack) for instance.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+# This story is about our old work of network simulation.
+  https://lwn.net/Articles/639333/
+
+> > > But conceptually, why wouldn't it be possible to have a liblinux.so that
+> > > *does* build with MMU and userspace support, and UML is a wrapper around
+> > > it?
+> > > 
+> > 
+> > This is an interesting idea. Conceptually I think it is possible.
+> > There are lots of details to be figured out before we do this. I think
+> > that having a NOMMU version could be a good step in the right
+> > direction, especially since I think a liblinux.so has more NOMMU
+> > usecases than MMU usecases - but I haven't given too much thought to
+> > the MMU usecases.
+> 
+> Yeah, maybe UML would be the primary use case. I have been thinking that
+> there would be cases where you could combine kunit and having userspace
+> though, or unit-style testing but not with kunit which is "inside" the
+> kernel, but instead having the test code more "outside" the test kernel.
+> That's all kind of handwaving though and not really that crystallized in
+> my mind.
+> 
+> That said, I'm not entirely sure NOMMU would be the right path towards
+> this - if we do want to go this route it'll probably need changes in
+> both LKL and UML to converge to this point, and at least build it into
+> the abstractions.
+> 
+> For example the "idle" abstraction discussed elsewhere (is it part of
+> the app or part of the kernel?), or the thread discussion above (it is
+> part of the app but how is it implemented?) etc.
+
+I agree that LKL (or the library mode) can conceptually offer both
+NOMMU/MMU capabilities.
+
+I also think that NOMMU library could be the first step and a minimum
+product as MMU implementation may involve a lot of refactoring which
+may need more consideration to the current codebase.
+
+We tried with MMU mode library, by sharing build system
+(Kconfig/Makefile) and runtime facilities (thread/irq/memory).  But,
+we could only do share irq handling for this first step.
+
+When we implement the MMU mode library in future, we may come up with
+another abstraction/refactoring into the UML design, which could be a
+good outcome.  But I think it is beyond the minimum given (already)
+big changes with the current patchset.
+
+-- Hajime
+
