@@ -2,218 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DCF340DB4
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 20:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 324D5340DD4
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 20:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbhCRTBA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Mar 2021 15:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbhCRTAy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Mar 2021 15:00:54 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1D2C061760
-        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 12:00:53 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 15so8937054ljj.0
-        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 12:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HYca1ndZSGowpwQORXxcl09hudlmdW3oK/eLGvMXjGA=;
-        b=DtsCZAMqawT8GwoT4PVd5v24eAtD3md/tl3oDtZnEKVjuf8aIFuUFBVtTcRdMUj6Ih
-         vazygaVz3QAPRgp1KACpCc4mSY7ZQ4UgJLrM81ts8sPOGAXzrLp9kZE5HnvnYTtmGwhU
-         DVpcdbN7dcpEadnZFbyTsL0eKtM0OTz4FUD6lMtMi92bWtcFi5FYXfOdeX879sB7qSNd
-         MGRcHAxa7IQR9/I1QdEy6xgdnYOef1RbaCDGBREc/S1LWE1/lR3u87z8NjDX13dL1JD+
-         M3BPK/lGlD78JdYbuYFfZF72YaWZpDwZaj//y3Dh1KBdjjZZPYoM/IHKunTLL4eOhGbz
-         J/CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HYca1ndZSGowpwQORXxcl09hudlmdW3oK/eLGvMXjGA=;
-        b=juAlKF5U5Peu3aKXxFSLtF/z8pqiUElwbbtIicTSGklZ/lRAdum12xASGHA7fg9tFj
-         CsWDnFAkMavUBk55rXCQ7NGhe3AL1E2N0muiIam1xyaGrZhL2npsy/6OWgewYu8695d9
-         jNn0Bc/QKgOk6t0g5vla5J0itRzLJu6ZwyvcJLpufIVnqtaddnfa2MlyMqKaW2U1WEBz
-         KYlzHjfBwZFo6GrAzcC8z7+fs9yXgvA2qN/P8wF+xQangNPyF6JHSJO+1/KYd1uUHyib
-         LOX90NgTrnrR2OgdlpjJbZqA57KecHu4i+sFzBDHG0V+6+xPlVAKDWYBCkYP7BbywgW4
-         6vvA==
-X-Gm-Message-State: AOAM530UkvjkN6ZKtAN4hFHoMsE0tKYcVGDj5ahwbZXmHeHEmtYsAc1v
-        uFP8vG4pIEjCCtkzZgv8/AbY6bj2aWAgKX98McHamg==
-X-Google-Smtp-Source: ABdhPJzP/a52k5+dCj0sW8ZVd7EdWFyf0UEYVdSHJNFGWNp/U4i4CeFbe93RfhwQGYgCO4D0YFivDqiJb465mbw4K2E=
-X-Received: by 2002:a2e:9a4e:: with SMTP id k14mr6272028ljj.116.1616094051624;
- Thu, 18 Mar 2021 12:00:51 -0700 (PDT)
+        id S232735AbhCRTGV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Mar 2021 15:06:21 -0400
+Received: from mga14.intel.com ([192.55.52.115]:40804 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231590AbhCRTGA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 18 Mar 2021 15:06:00 -0400
+IronPort-SDR: xKOc06sQKVp6/FUGF8fGeXIx5jd4M5nHvgocyvCnyt5yP/Hf/oIGqfRgh4M0Iy98GPknM62ctr
+ dEJvILz/Iv2A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9927"; a="189128303"
+X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
+   d="scan'208";a="189128303"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 12:06:00 -0700
+IronPort-SDR: hqYeyuc91+tiTRuC7ikztwLhEgKS2tALLRwJSbZ64YO5K2tylKZBX7tsRUFeWimmlOPHqcL6yO
+ P5Jcq/OKHeVg==
+X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
+   d="scan'208";a="389358155"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.36.121]) ([10.209.36.121])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 12:05:58 -0700
+Subject: Re: [PATCH v23 22/28] x86/cet/shstk: User-mode shadow stack support
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+References: <20210316151054.5405-1-yu-cheng.yu@intel.com>
+ <20210316151054.5405-23-yu-cheng.yu@intel.com>
+ <20210318123215.GE19570@zn.tnic>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <b05ee7eb-1b5d-f84f-c8f3-bfe9426e8a7d@intel.com>
+Date:   Thu, 18 Mar 2021 12:05:58 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-References: <20210318171111.706303-1-samitolvanen@google.com> <20210318171111.706303-8-samitolvanen@google.com>
-In-Reply-To: <20210318171111.706303-8-samitolvanen@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 18 Mar 2021 12:00:39 -0700
-Message-ID: <CAKwvOdkETA4OU5d_f_8eCeXgo4juagHuPWo6Fd4jg7C1cWqoYA@mail.gmail.com>
-Subject: Re: [PATCH v2 07/17] kallsyms: strip ThinLTO hashes from static functions
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        bpf <bpf@vger.kernel.org>, linux-hardening@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210318123215.GE19570@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 18, 2021 at 10:11 AM Sami Tolvanen <samitolvanen@google.com> wrote:
->
-> With CONFIG_CFI_CLANG and ThinLTO, Clang appends a hash to the names
-> of all static functions not marked __used. This can break userspace
-> tools that don't expect the function name to change, so strip out the
-> hash from the output.
->
-> Suggested-by: Jack Pham <jackp@codeaurora.org>
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
->  kernel/kallsyms.c | 54 ++++++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 49 insertions(+), 5 deletions(-)
->
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index 8043a90aa50e..17d3a704bafa 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -161,6 +161,26 @@ static unsigned long kallsyms_sym_address(int idx)
->         return kallsyms_relative_base - 1 - kallsyms_offsets[idx];
->  }
->
-> +#if defined(CONFIG_CFI_CLANG) && defined(CONFIG_LTO_CLANG_THIN)
-> +/*
-> + * LLVM appends a hash to static function names when ThinLTO and CFI are
-> + * both enabled, which causes confusion and potentially breaks user space
+On 3/18/2021 5:32 AM, Borislav Petkov wrote:
+>> Subject: Re: [PATCH v23 22/28] x86/cet/shstk:   User-mode shadow stack support
+> 						^
+> 						Add
+> 
+> On Tue, Mar 16, 2021 at 08:10:48AM -0700, Yu-cheng Yu wrote:
+>> Introduce basic shadow stack enabling/disabling/allocation routines.
+>> A task's shadow stack is allocated from memory with VM_SHSTK flag and has
+>> a fixed size of min(RLIMIT_STACK, 4GB).
+>>
+>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+>> Reviewed-by: Kees Cook <keescook@chromium.org>
+>> ---
+>>   arch/x86/include/asm/cet.h       |  28 ++++++
+>>   arch/x86/include/asm/processor.h |   5 ++
+>>   arch/x86/kernel/Makefile         |   2 +
+>>   arch/x86/kernel/cet.c            | 147 +++++++++++++++++++++++++++++++
 
-Might be nice to add an example, something along the lines of:
-ie. foo() becomes foo$asfdasdfasdfasdf()
+[...]
 
-> + * tools, so we will strip the postfix from expanded symbol names.
+>> +void cet_free_shstk(struct task_struct *tsk)
+>> +{
+>> +	struct cet_status *cet = &tsk->thread.cet;
+>> +
+>> +	if (!static_cpu_has(X86_FEATURE_SHSTK) ||
+> 
+> cpu_feature_enabled and as above.
+> 
+>> +	    !cet->shstk_size || !cet->shstk_base)
+>> +		return;
+>> +
+>> +	if (!tsk->mm || tsk->mm != current->mm)
+>> +		return;
+> 
+> You're operating on current here merrily but what's protecting all those
+> paths operating on current from getting current changed underneath them
+> due to scheduling? IOW, is preemption safely disabled in all those
+> paths ending up here?
 
-s/postfix/suffix/ ?
+Good thought.  Indeed, this looks like scheduling would bring some 
+trouble.  However, when this instance is running, the current task must 
+be current, context switch or not.  The purpose of this check is 
+described below.
 
-> + */
-> +static inline char *cleanup_symbol_name(char *s)
-> +{
-> +       char *res = NULL;
-> +
-> +       res = strrchr(s, '$');
-> +       if (res)
-> +               *res = '\0';
-> +
-> +       return res;
-> +}
-> +#else
-> +static inline char *cleanup_symbol_name(char *s) { return NULL; }
-> +#endif
+When fork() fails, it calls exit_thread(), then cet_free_shstk(). 
+Normally the child tsk->mm != current->mm (parent).  There is no need to 
+free shadow stack.
 
-Might be nicer to return a `bool` and have the larger definition
-`return res != NULL`).  Not sure what a caller would do with `res` if
-it was not `NULL`?
+For CLONE_VM, however, the kernel has already allocated a shadow stack 
+for the child and needs to free it because fork() failed.
 
-> +
->  /* Lookup the address for this symbol. Returns 0 if not found. */
->  unsigned long kallsyms_lookup_name(const char *name)
->  {
-> @@ -173,6 +193,9 @@ unsigned long kallsyms_lookup_name(const char *name)
->
->                 if (strcmp(namebuf, name) == 0)
->                         return kallsyms_sym_address(i);
-> +
-> +               if (cleanup_symbol_name(namebuf) && strcmp(namebuf, name) == 0)
-> +                       return kallsyms_sym_address(i);
->         }
->         return module_kallsyms_lookup_name(name);
->  }
-> @@ -303,7 +326,9 @@ const char *kallsyms_lookup(unsigned long addr,
->                                        namebuf, KSYM_NAME_LEN);
->                 if (modname)
->                         *modname = NULL;
-> -               return namebuf;
-> +
-> +               ret = namebuf;
-> +               goto found;
->         }
->
->         /* See if it's in a module or a BPF JITed image. */
-> @@ -316,11 +341,16 @@ const char *kallsyms_lookup(unsigned long addr,
->         if (!ret)
->                 ret = ftrace_mod_address_lookup(addr, symbolsize,
->                                                 offset, modname, namebuf);
-> +
-> +found:
-> +       cleanup_symbol_name(namebuf);
->         return ret;
->  }
->
->  int lookup_symbol_name(unsigned long addr, char *symname)
->  {
-> +       int res;
-> +
->         symname[0] = '\0';
->         symname[KSYM_NAME_LEN - 1] = '\0';
->
-> @@ -331,15 +361,23 @@ int lookup_symbol_name(unsigned long addr, char *symname)
->                 /* Grab name */
->                 kallsyms_expand_symbol(get_symbol_offset(pos),
->                                        symname, KSYM_NAME_LEN);
-> -               return 0;
-> +               goto found;
->         }
->         /* See if it's in a module. */
-> -       return lookup_module_symbol_name(addr, symname);
-> +       res = lookup_module_symbol_name(addr, symname);
-> +       if (res)
-> +               return res;
-> +
-> +found:
-> +       cleanup_symbol_name(symname);
-> +       return 0;
->  }
->
->  int lookup_symbol_attrs(unsigned long addr, unsigned long *size,
->                         unsigned long *offset, char *modname, char *name)
->  {
-> +       int res;
-> +
->         name[0] = '\0';
->         name[KSYM_NAME_LEN - 1] = '\0';
->
-> @@ -351,10 +389,16 @@ int lookup_symbol_attrs(unsigned long addr, unsigned long *size,
->                 kallsyms_expand_symbol(get_symbol_offset(pos),
->                                        name, KSYM_NAME_LEN);
->                 modname[0] = '\0';
-> -               return 0;
-> +               goto found;
->         }
->         /* See if it's in a module. */
-> -       return lookup_module_symbol_attrs(addr, size, offset, modname, name);
-> +       res = lookup_module_symbol_attrs(addr, size, offset, modname, name);
-> +       if (res)
-> +               return res;
-> +
-> +found:
-> +       cleanup_symbol_name(name);
-> +       return 0;
->  }
->
->  /* Look up a kernel symbol and return it in a text buffer. */
-> --
-> 2.31.0.291.g576ba9dcdaf-goog
->
+Maybe I would add comments here.
 
+> 
+>> +
+>> +	while (1) {
+> 
+> Uuh, an endless loop. What guarantees we'll exit it relatively timely...
+> 
+>> +		int r;
+>> +
+>> +		r = vm_munmap(cet->shstk_base, cet->shstk_size);
+>> +
+>> +		/*
+>> +		 * Retry if mmap_lock is not available.
+>> +		 */
+>> +		if (r == -EINTR) {
+>> +			cond_resched();
+> 
+> ... that thing?
 
--- 
-Thanks,
-~Nick Desaulniers
+If vm_munmap() returns -EINTR, mmap_lock is held by something else. 
+That lock should not be held forever.  For other types of error, the 
+loop stops.
+
+> 
+>> +			continue;
+>> +		}
+>> +
+>> +		WARN_ON_ONCE(r);
+>> +		break;
+>> +	}
+>> +
+>> +	cet->shstk_base = 0;
+>> +	cet->shstk_size = 0;
+>> +}
+>> -- 
+>> 2.21.0
+>>
+> 
+
