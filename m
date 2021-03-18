@@ -2,94 +2,180 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD5C340B6B
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 18:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A188340C21
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Mar 2021 18:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbhCRRM1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Mar 2021 13:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S232298AbhCRRu2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Mar 2021 13:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232466AbhCRRLw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Mar 2021 13:11:52 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683B6C061763
-        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 10:11:52 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id y26so23010312pga.10
-        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 10:11:52 -0700 (PDT)
+        with ESMTP id S229469AbhCRRuE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Mar 2021 13:50:04 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4608C06174A
+        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 10:50:03 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id n138so5928803lfa.3
+        for <linux-arch@vger.kernel.org>; Thu, 18 Mar 2021 10:50:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=WZ2fsTX5FLJhX01BulIdj9aVU+u+1SaaqVDcWrlk7vo=;
-        b=p/MDs2PDjsFiD6r2Ts6jM6BFyv2fovLwrbhh8l+TmOVc+XN/ujL2rtlnXKiP30RH8t
-         S6UgRxg5+yaZATMiFP0V7CZXbXRNJuWO2POyPyc/+mNIGwUkdBn8lGC2KIC6cz2hh6sv
-         CJDbF1wva6NSYjwFp6yOZ5B/8Wi6p/+1TbqSDvFzeJTm5qNOjQDlJzu+az351Kb6k01L
-         8H9aN9DLPhNUJmU3pg9aSJhzVGaGFQW4kJ4pkEcD6+oA15BQDjpnmOHp8Myq3XE58psG
-         csbaakT5tvQ7HUsKigBvtgqMzAnRmEwTfvnkEOj9XxC1ys8T6tR9JZXH1i/okjccLokC
-         xvsg==
+        bh=rnxu0Htej1H516ep79Wgi7n3VX+5maU9JLJNzsCgiUM=;
+        b=Ni7pji1XH63Bsx+pQeydcoFnVFUKTo4EK8YEo+eRY0n8Z2OlAnJtkVrPBHxbEsi1+R
+         +o0D2M9JZb3tGqGl8p3T5U+v1MyYLTUUMRcgkL4iuhrlTfi3bi87ds7MxG2e3n0KlK6i
+         3dJiohcmgFoCgox4RNZsf0OK7goEnUFKbgGqAAdLekm/+D9U6DNU7jqJvakwMwfDAFa4
+         v8f//XFUMtHrMKaTRuIfAgjuRPu2++XBnBmKfeuHtrLLgiyJIOsF+rgRl3qxfjWKRupz
+         HuO8O/BYYDPWXJdD72MiPYs06QEHnux8aIOk5Nz61Niw4ufVgh0Hi+g9U0GNCsttzUhd
+         wMtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=WZ2fsTX5FLJhX01BulIdj9aVU+u+1SaaqVDcWrlk7vo=;
-        b=Uu/p86qtHOvD7FkeesZbncwj37HGkpQz2vXE6TioHPh9nDhSU0I81DVS/C6QgPtIlw
-         bnA8qVrAbvZznnoCWo4qBvd0SAFw8yiNWvdGVEXJyiG0t5h+k6iH0V8ciuf3MlhjCHt+
-         qsVjUmnMm1WbRDr/QWZAlc7mS6gJv8Jg8RSAf6dnxV6fs8k3Ns4Pp38w7Q69aB6VCUYB
-         GZKr0nGl/srY3YtYO6hsxSvAXNV2bEfvlt9rbKqlLyCsaFD1L0uniadq3FaOSyoMp0lc
-         dPI1K0BESY34nY/48/HuvZU9stKIzijT46RORkIYl5vD2wmEB8Y6VzNg3y1NoitKi6JB
-         QdIw==
-X-Gm-Message-State: AOAM531kT16wcj/RvSKIwC/J3TdrNbCCvP1tueGvMtOn4NdKclaTkKmf
-        k9+M9go4fgnSIILfC1gS9dSkt5S4KmFU8zT3yvg=
-X-Google-Smtp-Source: ABdhPJwVhIeJ7eN/c102kC0C0PDipbzyJDdK32hnyHrtAGB4zJkWiAPX1yDL/oR7lqAn8+vlGW94yr5eZySyWBFd8bM=
-X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:c0d7:a7ba:fb41:a35a])
- (user=samitolvanen job=sendgmr) by 2002:a17:902:aa8a:b029:e6:64bd:e29d with
- SMTP id d10-20020a170902aa8ab02900e664bde29dmr10716922plr.24.1616087511958;
- Thu, 18 Mar 2021 10:11:51 -0700 (PDT)
-Date:   Thu, 18 Mar 2021 10:11:11 -0700
-In-Reply-To: <20210318171111.706303-1-samitolvanen@google.com>
-Message-Id: <20210318171111.706303-18-samitolvanen@google.com>
-Mime-Version: 1.0
-References: <20210318171111.706303-1-samitolvanen@google.com>
-X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v2 17/17] arm64: allow CONFIG_CFI_CLANG to be selected
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rnxu0Htej1H516ep79Wgi7n3VX+5maU9JLJNzsCgiUM=;
+        b=NlANW+014nEO1XNhIHnKjY90cJSSw2He2zYAmSye5EFca9acG4VlEyDboOVq4HGxml
+         0/RmtzNEqqVNii0vNbC15DzcWpxeICMgzwG6qrroTN5seoGy891pmBzCI1icvyqEupzS
+         hU5rJg7g7oXwJawTWQpfwD5sSYYzVKmubqkUanglsXT1caHGkzsUpi7vOKD4djlfgCrq
+         arqSjUne1hIQulUHhJ7+fGz3FAJmwF86LFVSSa+qixlm8yA+P6VfHll51aoqvFcqc1xo
+         SgKirMEdAS3osKd3QCS3/yNukvxj8yp2CIzmjvP8vrSO0uZvzJlrXjlN1xnzEo1Dd1Bl
+         sCgg==
+X-Gm-Message-State: AOAM531lVx/KkYLgPikIKwBUfOPmNm1qzn6PhiMS0PU4aBuuQKSlXQwW
+        Q9Nt6K9EYCJkY+2DZXlIi4WpcpDd/dQLCsE8FGeWuCF8vZY=
+X-Google-Smtp-Source: ABdhPJwKRBRM7MAUZwFeZ179486WWfFrS/ksEmFI/VqMTZ8H+kaaJb/iKuGQiKzYL2s45rV0vHLFMREgPO6HFTWGKDo=
+X-Received: by 2002:a05:6512:985:: with SMTP id w5mr5887489lft.122.1616089801932;
+ Thu, 18 Mar 2021 10:50:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210318171111.706303-1-samitolvanen@google.com> <20210318171111.706303-3-samitolvanen@google.com>
+In-Reply-To: <20210318171111.706303-3-samitolvanen@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 18 Mar 2021 10:49:50 -0700
+Message-ID: <CAKwvOd=CfNmVT0RNsXw=vhTee40xpA-LjmyfagAQesS6VdAkXQ@mail.gmail.com>
+Subject: Re: [PATCH v2 02/17] cfi: add __cficanonical
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>, bpf@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>
+        Christoph Hellwig <hch@infradead.org>,
+        bpf <bpf@vger.kernel.org>, linux-hardening@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Select ARCH_SUPPORTS_CFI_CLANG to allow CFI to be enabled.
+On Thu, Mar 18, 2021 at 10:11 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+>
+> With CONFIG_CFI_CLANG, the compiler replaces a function address taken
+> in C code with the address of a local jump table entry, which passes
+> runtime indirect call checks. However, the compiler won't replace
+> addresses taken in assembly code, which will result in a CFI failure
+> if we later jump to such an address in instrumented C code. The code
+> generated for the non-canonical jump table looks this:
+>
+>   <noncanonical.cfi_jt>: /* In C, &noncanonical points here */
+>         jmp noncanonical
+>   ...
+>   <noncanonical>:        /* function body */
+>         ...
+>
+> This change adds the __cficanonical attribute, which tells the
+> compiler to use a canonical jump table for the function instead. This
+> means the compiler will rename the actual function to <function>.cfi
+> and points the original symbol to the jump table entry instead:
+>
+>   <canonical>:           /* jump table entry */
+>         jmp canonical.cfi
+>   ...
+>   <canonical.cfi>:       /* function body */
+>         ...
+>
+> As a result, the address taken in assembly, or other non-instrumented
+> code always points to the jump table and therefore, can be used for
+> indirect calls in instrumented code without tripping CFI checks.
+>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>   # pci.h
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- arch/arm64/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Irrelevant to this series, but I checked when the FN attr was first
+available in clang; clang-10. (That's the minimum supported version of
+clang for the kernel, and this series depends on LTO which depends on
+clang-12, so no additional guards are necessary).
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 5656e7aacd69..2eefdbc3e3c9 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -75,6 +75,7 @@ config ARM64
- 	select ARCH_SUPPORTS_SHADOW_CALL_STACK if CC_HAVE_SHADOW_CALL_STACK
- 	select ARCH_SUPPORTS_LTO_CLANG if CPU_LITTLE_ENDIAN
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN
-+	select ARCH_SUPPORTS_CFI_CLANG
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128 && (GCC_VERSION >= 50000 || CC_IS_CLANG)
- 	select ARCH_SUPPORTS_NUMA_BALANCING
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+>  include/linux/compiler-clang.h | 1 +
+>  include/linux/compiler_types.h | 4 ++++
+>  include/linux/init.h           | 4 ++--
+>  include/linux/pci.h            | 4 ++--
+>  4 files changed, 9 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+> index 6de9d0c9377e..adbe76b203e2 100644
+> --- a/include/linux/compiler-clang.h
+> +++ b/include/linux/compiler-clang.h
+> @@ -63,3 +63,4 @@
+>  #endif
+>
+>  #define __nocfi                __attribute__((__no_sanitize__("cfi")))
+> +#define __cficanonical __attribute__((__cfi_canonical_jump_table__))
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 796935a37e37..d29bda7f6ebd 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -246,6 +246,10 @@ struct ftrace_likely_data {
+>  # define __nocfi
+>  #endif
+>
+> +#ifndef __cficanonical
+> +# define __cficanonical
+> +#endif
+> +
+>  #ifndef asm_volatile_goto
+>  #define asm_volatile_goto(x...) asm goto(x)
+>  #endif
+> diff --git a/include/linux/init.h b/include/linux/init.h
+> index b3ea15348fbd..045ad1650ed1 100644
+> --- a/include/linux/init.h
+> +++ b/include/linux/init.h
+> @@ -220,8 +220,8 @@ extern bool initcall_debug;
+>         __initcall_name(initstub, __iid, id)
+>
+>  #define __define_initcall_stub(__stub, fn)                     \
+> -       int __init __stub(void);                                \
+> -       int __init __stub(void)                                 \
+> +       int __init __cficanonical __stub(void);                 \
+> +       int __init __cficanonical __stub(void)                  \
+>         {                                                       \
+>                 return fn();                                    \
+>         }                                                       \
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 86c799c97b77..39684b72db91 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1944,8 +1944,8 @@ enum pci_fixup_pass {
+>  #ifdef CONFIG_LTO_CLANG
+>  #define __DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,  \
+>                                   class_shift, hook, stub)              \
+> -       void stub(struct pci_dev *dev);                                 \
+> -       void stub(struct pci_dev *dev)                                  \
+> +       void __cficanonical stub(struct pci_dev *dev);                  \
+> +       void __cficanonical stub(struct pci_dev *dev)                   \
+>         {                                                               \
+>                 hook(dev);                                              \
+>         }                                                               \
+> --
+> 2.31.0.291.g576ba9dcdaf-goog
+>
+
+
 -- 
-2.31.0.291.g576ba9dcdaf-goog
-
+Thanks,
+~Nick Desaulniers
