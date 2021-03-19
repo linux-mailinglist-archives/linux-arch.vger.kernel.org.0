@@ -2,52 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2CE342534
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Mar 2021 19:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C01342554
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Mar 2021 19:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbhCSSqc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Mar 2021 14:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
+        id S230317AbhCSSyj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Mar 2021 14:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbhCSSpp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Mar 2021 14:45:45 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21293C061761
-        for <linux-arch@vger.kernel.org>; Fri, 19 Mar 2021 11:45:40 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id j25so6514593pfe.2
-        for <linux-arch@vger.kernel.org>; Fri, 19 Mar 2021 11:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=JGY/EqeMUGC+Bt0wZ3nGVTDLepgM3WlnAUKZmdbmQ04=;
-        b=BMblp60iEXVdjovxUp1rExGL91YRwQuPg7ex7JypQ4I7GzGU459rL4//OWZYwwYXk1
-         vbD6FWRxEj3FEA+nwCLdGAE01jhnkk9hWRSGjaS5U+/niv+lnudUwa5wXNK4WXp8Sc+8
-         K5+rT+YUekesYA4H7ZEzBPFgjWkvH2RjmvCE0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=JGY/EqeMUGC+Bt0wZ3nGVTDLepgM3WlnAUKZmdbmQ04=;
-        b=n0uCCtIqOdVJGjXmF7dIwaHUpvxKDhVGRKL49ANjDWY5RFLJ09byJzUmAnPiJZ7nYB
-         dBxrHgjebe7h580yd8arah+1wZZzTMTbnpgnC/+M8eVFNXflOaXqa8ydiDF3ujXAnS5c
-         RE5ryzxOCJqiDUieCEJDjLqA2rQW21VV9JRCg9q+ZIBuzr2o8RdAwU3kXgnip34mCJV1
-         abvBdAEk76OZ4Z3Ei80JtA0/0NYCu5wdx2LWlf5b0sDcSqULqJsMbJ1svQHeaxLg6Qnx
-         rDZ7RS2xMIYvBCt8Hyru3ii6BDN/osOPmGu2/4+VV4aAWHatqUuVMf2ITj+707hhVtlZ
-         SmNw==
-X-Gm-Message-State: AOAM532cZ0uwiM2JMH2w9q+dMKF+L/OkxTJnZIJ5ON87C/BscWR7W+vf
-        5NdyUmvdTM9eHz/scfw9nxco8Q==
-X-Google-Smtp-Source: ABdhPJxnvtZMI8WcSLqJP4CQU2LP1bacblL/FkbqVKRmPz2mN29hO8eLj66oHnTAGfPb6/ukaMAz3Q==
-X-Received: by 2002:a63:ff21:: with SMTP id k33mr12313273pgi.379.1616179539760;
-        Fri, 19 Mar 2021 11:45:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l10sm5888859pfc.125.2021.03.19.11.45.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Mar 2021 11:45:39 -0700 (PDT)
-Date:   Fri, 19 Mar 2021 11:45:38 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+        with ESMTP id S230218AbhCSSyc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Mar 2021 14:54:32 -0400
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C85C06174A;
+        Fri, 19 Mar 2021 11:54:24 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F2Cjq0h8fzMqSGc;
+        Fri, 19 Mar 2021 19:54:23 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4F2Cjk3K5rzlh8TH;
+        Fri, 19 Mar 2021 19:54:18 +0100 (CET)
+Subject: Re: [PATCH v30 12/12] landlock: Add user and kernel documentation
+To:     Kees Cook <keescook@chromium.org>
 Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
         "Serge E . Hallyn" <serge@hallyn.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
@@ -68,40 +42,125 @@ Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v30 04/12] landlock: Add ptrace restrictions
-Message-ID: <202103191145.C8BA4DC@keescook>
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
 References: <20210316204252.427806-1-mic@digikod.net>
- <20210316204252.427806-5-mic@digikod.net>
+ <20210316204252.427806-13-mic@digikod.net> <202103191056.71AB0515A@keescook>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <81c76347-9e92-244f-6f32-600984a6c5cb@digikod.net>
+Date:   Fri, 19 Mar 2021 19:54:34 +0100
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <202103191056.71AB0515A@keescook>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210316204252.427806-5-mic@digikod.net>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 09:42:44PM +0100, Mickaël Salaün wrote:
-> From: Mickaël Salaün <mic@linux.microsoft.com>
-> 
-> Using ptrace(2) and related debug features on a target process can lead
-> to a privilege escalation.  Indeed, ptrace(2) can be used by an attacker
-> to impersonate another task and to remain undetected while performing
-> malicious activities.  Thanks to  ptrace_may_access(), various part of
-> the kernel can check if a tracer is more privileged than a tracee.
-> 
-> A landlocked process has fewer privileges than a non-landlocked process
-> and must then be subject to additional restrictions when manipulating
-> processes. To be allowed to use ptrace(2) and related syscalls on a
-> target process, a landlocked process must have a subset of the target
-> process's rules (i.e. the tracee must be in a sub-domain of the tracer).
-> 
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+On 19/03/2021 19:03, Kees Cook wrote:
+> On Tue, Mar 16, 2021 at 09:42:52PM +0100, Mickaël Salaün wrote:
+>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>
+>> This documentation can be built with the Sphinx framework.
+> 
+> Well, yes. :) Maybe describe what the documentation covers instead here.
+> Regardless: yay docs! This is great.
 
--- 
-Kees Cook
+Well, I don't know what to describe other than the subject, the rest is
+in the patch. :)
+
+> 
+>> [...]
+>> +Bind mounts and OverlayFS
+>> +-------------------------
+>> +
+>> +Landlock enables to restrict access to file hierarchies, which means that these
+>> +access rights can be propagated with bind mounts (cf.
+>> +:doc:`/filesystems/sharedsubtree`) but not with :doc:`/filesystems/overlayfs`.
+>> +
+>> +A bind mount mirrors a source file hierarchy to a destination.  The destination
+>> +hierarchy is then composed of the exact same files, on which Landlock rules can
+>> +be tied, either via the source or the destination path.  These rules restrict
+>> +access when they are encountered on a path, which means that they can restrict
+>> +access to multiple file hierarchies at the same time, whether these hierarchies
+>> +are the result of bind mounts or not.
+>> +
+>> +An OverlayFS mount point consists of upper and lower layers.  These layers are
+>> +combined in a merge directory, result of the mount point.  This merge hierarchy
+>> +may include files from the upper and lower layers, but modifications performed
+>> +on the merge hierarchy only reflects on the upper layer.  From a Landlock
+>> +policy point of view, each OverlayFS layers and merge hierarchies are
+>> +standalone and contains their own set of files and directories, which is
+>> +different from bind mounts.  A policy restricting an OverlayFS layer will not
+>> +restrict the resulted merged hierarchy, and vice versa.
+> 
+> Can you include some examples about what a user of landlock should do?
+> i.e. what are some examples of unexpected results when trying to write
+> policy that runs on top of overlayfs, etc?
+
+Landlock works well with overlayfs, at least from my point of view. It
+may be a bit disturbing with bind mount though, but it is the same with
+other access-controls (e.g. DAC). Landlock users should just think about
+file hierarchies and create their policies accordingly. A user should
+not try to adapt a policy according to his/her understanding of
+overlayfs, but just think about file hierarchies.
+
+> 
+>> [...]
+>> +File renaming and linking
+>> +-------------------------
+>> +
+>> +Because Landlock targets unprivileged access controls, it is needed to properly
+>> +handle composition of rules.  Such property also implies rules nesting.
+>> +Properly handling multiple layers of ruleset, each one of them able to restrict
+>> +access to files, also implies to inherit the ruleset restrictions from a parent
+>> +to its hierarchy.  Because files are identified and restricted by their
+>> +hierarchy, moving or linking a file from one directory to another implies to
+>> +propagate the hierarchy constraints.  To protect against privilege escalations
+>> +through renaming or linking, and for the sack of simplicity, Landlock currently
+> 
+> typo: sack -> sake
+
+Indeed
+
+> 
+>> [...]
+>> +Special filesystems
+>> +-------------------
+>> +
+>> +Access to regular files and directories can be restricted by Landlock,
+>> +according to the handled accesses of a ruleset.  However, files that do not
+>> +come from a user-visible filesystem (e.g. pipe, socket), but can still be
+>> +accessed through /proc/self/fd/, cannot currently be restricted.  Likewise,
+>> +some special kernel filesystems such as nsfs, which can be accessed through
+>> +/proc/self/ns/, cannot currently be restricted.  For now, these kind of special
+>> +paths are then always allowed.  Future Landlock evolutions will enable to
+>> +restrict such paths with dedicated ruleset flags.
+> 
+> With this series, can /proc (at the top level) be blocked? (i.e. can a
+> landlock user avoid the weirdness by making /proc/$pid/ unavailable?)
+
+/proc can be blocked, but not /proc/*/ns/* because of disconnected
+roots. I plan to address this.
+
+> 
+>> +Ruleset layers
+>> +--------------
+>> +
+>> +There is a limit of 64 layers of stacked rulesets.  This can be an issue for a
+>> +task willing to enforce a new ruleset in complement to its 64 inherited
+>> +rulesets.  Once this limit is reached, sys_landlock_restrict_self() returns
+>> +E2BIG.  It is then strongly suggested to carefully build rulesets once in the
+>> +life of a thread, especially for applications able to launch other applications
+>> +that may also want to sandbox themselves (e.g. shells, container managers,
+>> +etc.).
+> 
+> How was this value (64) chosen?
+> 
+
+It was first an implementation constraint to limit the memory allocated
+for each rule, but it could now be increased if needed. The
+implementation still uses u64 for the sake of simplicity, but we could
+switch to a bitmap type.
