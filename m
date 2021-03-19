@@ -2,125 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F8F3422C6
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Mar 2021 18:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9153934232D
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Mar 2021 18:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbhCSREP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Mar 2021 13:04:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229925AbhCSRDn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 19 Mar 2021 13:03:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 59D4A61959;
-        Fri, 19 Mar 2021 17:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616173423;
-        bh=fnbNfVXXSTD6OJ8WdQ6LVfKjqUArSJ75bhS89QA902k=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=B1GcSm/D1kNRA0qRKWzu/c3ZKpVm3TzqwxezJDa+PSERqt2ezZwTqJ0xg/uqfvb/A
-         QC/GflPaOyJQBVdzr3zYPnsDs4Pozyl0h/stZmVQiOrVAIGZHZ9uOPrYZPAUjY1sQI
-         55M9NmgMJUikwyNi2jBgszYm0vpHXn7pI7PdXnx+ic7lPPI8VwNmzrXaGOtLMy/+2V
-         /qnVKM8XZrhfihkUovSYDaVyEI1ZGJNLhviLxUFpgEWAEL7Mh+3Tygq0V/g55+xvwZ
-         ByQzENQ8wRkvL83YCA0EOwh+yssAHg2V5QlRjn785+0aTg/sFOd7dX6GARRr2wMA8m
-         b+IBDwwCHhg/Q==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 017E035239E5; Fri, 19 Mar 2021 10:03:42 -0700 (PDT)
-Date:   Fri, 19 Mar 2021 10:03:42 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        bpf <bpf@vger.kernel.org>, linux-hardening@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 01/17] add support for Clang CFI
-Message-ID: <20210319170342.GM2696@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20210318171111.706303-1-samitolvanen@google.com>
- <20210318171111.706303-2-samitolvanen@google.com>
- <YFPUNlOomp173o5B@hirez.programming.kicks-ass.net>
- <CABCJKufkQay5Fk5mZspn4PY2+mBC0CqC5t9QGkKafX4vUQv6Lg@mail.gmail.com>
- <YFSYkyNFb34N8Ile@hirez.programming.kicks-ass.net>
- <20210319135229.GJ2696@paulmck-ThinkPad-P72>
- <CABCJKud=aJUSgWG==qqKi-+cKRCtRp4qLNgdDqoYKL+S9X7q4A@mail.gmail.com>
+        id S230057AbhCSRYy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Mar 2021 13:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230055AbhCSRYc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Mar 2021 13:24:32 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C059C06174A
+        for <linux-arch@vger.kernel.org>; Fri, 19 Mar 2021 10:24:32 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y200so6364649pfb.5
+        for <linux-arch@vger.kernel.org>; Fri, 19 Mar 2021 10:24:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=y3HPFVQQ8OcLuuAynRQtdLIpt1ZlQVl3Ddi5JOdBy0s=;
+        b=ijJD/g9ZP1Yyl5fSfAFOPGlYJua+C5SS43o3CNhGgSeVXgnDiCqKQcxgzUtQ61O1a6
+         H1DD1WppKq7fzQ315rtxWK9GISWoLs2ph+RpDHyd71ihbwa/fgRSHBtsctslONiHt+uZ
+         IeDn5qP5KUNNOs2PjSdqbqFrlcXgz6WS/Gnp4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=y3HPFVQQ8OcLuuAynRQtdLIpt1ZlQVl3Ddi5JOdBy0s=;
+        b=nIMpLv4SEPiPVrSHlqqXBhlB2Gui8oSGUGcqiVO88X483/QvKhPQZk74aFgpW/0YQQ
+         CcwZ5uJCr3vDPNnTNEMqUMv+rpwq9CTY5OXqWhtdYvCLIYeYgCf/d1JhgLJu/fjzed45
+         5rYPeUbrW0aNyX+x+lQm04q6F6OOYBWPpEz6eRqscUN0+gwVIvpdikJzmfGd5O1jVhX3
+         NVcnkfn2/Bm1LJTpJ6qvFhEO8h9Ei5/PO6+q1HOUkR+9ru3vKudcVtP9OMQfVj0vr+W1
+         AG4xLVQNp3w5yM+fK3Bx93XCiiPP3oL5y2hkxmMgnEkuZnl3cXELbQ6j77ZxP+lTtT5I
+         wBGA==
+X-Gm-Message-State: AOAM530b3NPu1LZMsAyXfdaJAOVm2bsLH/DaF9ystAoSfzGup+aaOiAb
+        fR6phR4a91R9tr9ZVm5FJ+qsPg==
+X-Google-Smtp-Source: ABdhPJxof2S7NAyn0wwLIRht63qQ8yxLGkdNHCaohi74HUCi/0cELJkStbwnSdwtemmhQBNrzgFv4w==
+X-Received: by 2002:a65:4887:: with SMTP id n7mr12266351pgs.14.1616174671959;
+        Fri, 19 Mar 2021 10:24:31 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 2sm5994795pfi.116.2021.03.19.10.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Mar 2021 10:24:31 -0700 (PDT)
+Date:   Fri, 19 Mar 2021 10:24:30 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: Re: [PATCH v30 05/12] LSM: Infrastructure management of the
+ superblock
+Message-ID: <202103191024.40EBCA2C@keescook>
+References: <20210316204252.427806-1-mic@digikod.net>
+ <20210316204252.427806-6-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CABCJKud=aJUSgWG==qqKi-+cKRCtRp4qLNgdDqoYKL+S9X7q4A@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210316204252.427806-6-mic@digikod.net>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 19, 2021 at 09:17:14AM -0700, Sami Tolvanen wrote:
-> On Fri, Mar 19, 2021 at 6:52 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Fri, Mar 19, 2021 at 01:26:59PM +0100, Peter Zijlstra wrote:
-> > > On Thu, Mar 18, 2021 at 04:48:43PM -0700, Sami Tolvanen wrote:
-> > > > On Thu, Mar 18, 2021 at 3:29 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > >
-> > > > > On Thu, Mar 18, 2021 at 10:10:55AM -0700, Sami Tolvanen wrote:
-> > > > > > +static void update_shadow(struct module *mod, unsigned long base_addr,
-> > > > > > +             update_shadow_fn fn)
-> > > > > > +{
-> > > > > > +     struct cfi_shadow *prev;
-> > > > > > +     struct cfi_shadow *next;
-> > > > > > +     unsigned long min_addr, max_addr;
-> > > > > > +
-> > > > > > +     next = vmalloc(SHADOW_SIZE);
-> > > > > > +
-> > > > > > +     mutex_lock(&shadow_update_lock);
-> > > > > > +     prev = rcu_dereference_protected(cfi_shadow,
-> > > > > > +                                      mutex_is_locked(&shadow_update_lock));
-> > > > > > +
-> > > > > > +     if (next) {
-> > > > > > +             next->base = base_addr >> PAGE_SHIFT;
-> > > > > > +             prepare_next_shadow(prev, next);
-> > > > > > +
-> > > > > > +             min_addr = (unsigned long)mod->core_layout.base;
-> > > > > > +             max_addr = min_addr + mod->core_layout.text_size;
-> > > > > > +             fn(next, mod, min_addr & PAGE_MASK, max_addr & PAGE_MASK);
-> > > > > > +
-> > > > > > +             set_memory_ro((unsigned long)next, SHADOW_PAGES);
-> > > > > > +     }
-> > > > > > +
-> > > > > > +     rcu_assign_pointer(cfi_shadow, next);
-> > > > > > +     mutex_unlock(&shadow_update_lock);
-> > > > > > +     synchronize_rcu_expedited();
-> > > > >
-> > > > > expedited is BAD(tm), why is it required and why doesn't it have a
-> > > > > comment?
-> > > >
-> > > > Ah, this uses synchronize_rcu_expedited() because we have a case where
-> > > > synchronize_rcu() hangs here with a specific SoC family after the
-> > > > vendor's cpu_pm driver powers down CPU cores.
-> > >
-> > > Broken vendor drivers seem like an exceedingly poor reason for this.
-> >
-> > The vendor is supposed to make sure that RCU sees the CPU cores as either
-> > deep idle or offline before powering them down.  My guess is that the
-> > CPU is powered down, but RCU (and probably much else in the system)
-> > thinks that the CPU is still up and running.  So I bet that you are
-> > seeing other issues as well.
-> >
-> > I take it that the IPIs from synchronize_rcu_expedited() have the effect
-> > of momentarily powering up those CPUs?
+On Tue, Mar 16, 2021 at 09:42:45PM +0100, Mickaël Salaün wrote:
+> From: Casey Schaufler <casey@schaufler-ca.com>
 > 
-> I suspect you're correct. I'll change this to use synchronize_rcu() in v3.
+> Move management of the superblock->sb_security blob out of the
+> individual security modules and into the security infrastructure.
+> Instead of allocating the blobs from within the modules, the modules
+> tell the infrastructure how much space is required, and the space is
+> allocated there.
+> 
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: John Johansen <john.johansen@canonical.com>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 
-You might also suggest to the vendor that they look for a missing
-rcu_idle_enter(), rcu_irq_exit(), or similar on the code path that the
-outgoing CPUs follow before getting powered down.  That way, they won't
-be wasting power from irrelevant IPIs.  You see, RCU will eventually
-send IPIs to non-responding CPUs for normal grace periods.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-							Thanx, Paul
+-- 
+Kees Cook
