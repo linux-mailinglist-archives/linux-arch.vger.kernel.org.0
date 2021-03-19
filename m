@@ -2,93 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B5A34183A
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Mar 2021 10:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50287341A0F
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Mar 2021 11:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbhCSJ2N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Mar 2021 05:28:13 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:51268 "EHLO mail.skyhub.de"
+        id S229756AbhCSKbE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Mar 2021 06:31:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48944 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229618AbhCSJ2J (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 19 Mar 2021 05:28:09 -0400
-Received: from zn.tnic (p200300ec2f091e00ccf0bdf306f8eebc.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:1e00:ccf0:bdf3:6f8:eebc])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3FBE41EC0598;
-        Fri, 19 Mar 2021 10:28:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1616146087;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=x5iZs50qGLJl3wWJ6Z8Q/HzduN81imNbW0pU6JloYuo=;
-        b=h9c+OWSFsKDiriwZ4T3n4NNMY19803vt4GuW/AcaffbPxaSNUfNucDuudBqw1YPqk5BYqz
-        sVoCdpmAtrWjKbk7Y/cMI1PahAmEIY49jZAhreJVMI3B8oH1aWYVvsgzIewg+mmcuDlTV+
-        3Sw5pKWCvU+z2Xj55irdKup90tXAYFU=
-Date:   Fri, 19 Mar 2021 10:28:06 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        id S229640AbhCSKa6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 19 Mar 2021 06:30:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C39BD64F6A;
+        Fri, 19 Mar 2021 10:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1616149856;
+        bh=Z8G9b0YhKmHAC/dsDd8uBtltIE2j/sLVWNIpgG6WJJs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xujaYl2UO4yAhjivMeasc/K7AMKAZYukltlPK9eUV2Hk6vPFir8C5ZUKniVfiMWFY
+         5s5N24LbdQ/U8UWyJD7Jx77v72RE1V1dtZuM1f7GiBsvXxApyzhPEJ3JVLwsyoCpDi
+         Ecf4p8l2BM3aylZmvJyOPMEwpFmHHLKtCysblAPw=
+Date:   Fri, 19 Mar 2021 11:30:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nicolas Boichat <drinkcat@chromium.org>
+Cc:     stable@vger.kernel.org,
+        Alexandre Chartre <alexandre.chartre@oracle.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christopher Li <sparse@chrisli.org>,
+        Daniel Axtens <dja@axtens.net>,
         Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Marek <michal.lkml@markovi.net>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v23 22/28] x86/cet/shstk: User-mode shadow stack support
-Message-ID: <20210319092806.GB6251@zn.tnic>
-References: <20210316151054.5405-1-yu-cheng.yu@intel.com>
- <20210316151054.5405-23-yu-cheng.yu@intel.com>
- <20210318123215.GE19570@zn.tnic>
- <b05ee7eb-1b5d-f84f-c8f3-bfe9426e8a7d@intel.com>
+        Sasha Levin <sashal@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-sparse@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [for-stable-4.19 PATCH 0/2] Backport patches to fix KASAN+LKDTM
+ with recent clang on ARM64
+Message-ID: <YFR9XavlXEL6Z/7l@kroah.com>
+References: <20210318235416.794798-1-drinkcat@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b05ee7eb-1b5d-f84f-c8f3-bfe9426e8a7d@intel.com>
+In-Reply-To: <20210318235416.794798-1-drinkcat@chromium.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 18, 2021 at 12:05:58PM -0700, Yu, Yu-cheng wrote:
-> Maybe I would add comments here.
+On Fri, Mar 19, 2021 at 07:54:14AM +0800, Nicolas Boichat wrote:
+> 
+> Backport 2 patches that are required to make KASAN+LKDTM work
+> with recent clang (patch 2/2 has a complete description).
+> Tested on our chromeos-4.19 branch.
+> 
+> Patch 1/2 is context conflict only, and 2/2 is a clean backport.
+> 
+> These patches have been merged to 5.4 stable already. We might
+> need to backport to older stable branches, but this is what I
+> could test for now.
 
-Yap.
+Both now queued up, thanks.
 
-Also, looking forward in the set, I see prctl_set() and that is also
-done on current so should be ok.
-
-In any case, yes, documenting the assumptions and expectations wrt
-current here is a good idea.
-
-> If vm_munmap() returns -EINTR, mmap_lock is held by something else. That
-> lock should not be held forever.  For other types of error, the loop stops.
-
-Ok I guess. The subsequent WARN_ON_ONCE() looks weird too but that
-should not fire, right? :)
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+greg k-h
