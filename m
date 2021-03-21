@@ -2,190 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB025342E9F
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Mar 2021 18:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 217C03430CA
+	for <lists+linux-arch@lfdr.de>; Sun, 21 Mar 2021 04:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbhCTRcu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 20 Mar 2021 13:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbhCTRcJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Mar 2021 13:32:09 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7EBC061574;
-        Sat, 20 Mar 2021 10:32:04 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id o19so14488556edc.3;
-        Sat, 20 Mar 2021 10:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bFNu1Uz51KMfEW+ABnORMauFzs3e2ZaieyRLl3pCKvU=;
-        b=QLEA1yh+KCAEYOOkPrpkm+SLlIPC5X02+U8st72y6fRRtiO5YF1lsPGA9gKHuVCc+S
-         JeE+d8dy8xbFQkk6kYDug8s2j8rC8l4OE74223Q4NXPi879WjayWOvq7EtD4AzRL2Hbt
-         fbQU1Rj2JHDwk1XxIIZnAPHI1PX7KBXQmZPWC0uFlwcpcyianWrpXcuVXccOJPqhGp15
-         oCuZBRFEbJSdxvKXeM/KsSwTND95bhQ79jVoocZlmtgsg0YHkogJ8TYDyzAmM0xJ0haA
-         7RDFnSyM3pD/mSj0l/+ID5lk7lPld/FEWCXJlc4LlQKt/WEDi3PdQQnl5p/+ntuWCHRe
-         42fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=bFNu1Uz51KMfEW+ABnORMauFzs3e2ZaieyRLl3pCKvU=;
-        b=kV95/wvjBPQ9f9azuE3ZQuu+8WG3U6JVNqGEluHn5LuoLlkMjU0dKqM67JR9k+xcg0
-         ouK9s22f+z0Bq7qoM1Rpi99/pm1cJonCa5DkIRRiKsH2g6XBNrejJjJG3HCgpqntcmuE
-         bBGSj76jffwUS1wSHvN/tngDpgqXJ1ZArXQAU2iTmocpkirdiUT7buuXasE/y1gSban/
-         secyTOEesROySmlCxtSRBu75uaQTSTpcVayoP9HsLKwQbe2u3UrlI1FD0SXew4t6G+Uz
-         XTb0Lre5/AcF1DEk2W52aMsBRbD5o/6K+8RnkIWb7/OtigUeVmpIPvOIl5FDgmnlnEq4
-         wbSw==
-X-Gm-Message-State: AOAM530s8s8b61kjeCB6z/f4EX1AopgmQ6JCG4+lmWmL56w2RWegTt9X
-        lRtbsJj/Atm5qBlpGvakIBs=
-X-Google-Smtp-Source: ABdhPJzZpJENUP1BZIuAr/xSdl0PHrsU+bxCkZMDAjp/pvukOx+ljoJLGVaN5lMqGFsN1zqnFZ/nLw==
-X-Received: by 2002:a05:6402:3596:: with SMTP id y22mr16635671edc.207.1616261523285;
-        Sat, 20 Mar 2021 10:32:03 -0700 (PDT)
-Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
-        by smtp.gmail.com with ESMTPSA id n2sm5707795ejl.1.2021.03.20.10.32.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Mar 2021 10:32:02 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 20 Mar 2021 18:32:00 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Len Brown <lenb@kernel.org>
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>, hjl.tools@gmail.com,
-        Dave Martin <Dave.Martin@arm.com>, jannh@google.com,
-        mpe@ellerman.id.au, carlos@redhat.com,
-        "bothersome-borer for tony.luck@intel.com" <tony.luck@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 0/6] x86: Improve Minimum Alternate Stack Size
-Message-ID: <20210320173200.GA4153106@gmail.com>
-References: <20210316065215.23768-1-chang.seok.bae@intel.com>
- <20210317100640.GC1724119@gmail.com>
- <20210317104415.GA692070@gmail.com>
- <CAJvTdKnpWL8y4N_BrCiK7fU0UXERwuuM8o84LUpp7Watxd8STw@mail.gmail.com>
+        id S229840AbhCUDuB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 20 Mar 2021 23:50:01 -0400
+Received: from [198.145.29.99] ([198.145.29.99]:48772 "EHLO mail.kernel.org"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S229766AbhCUDtp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 20 Mar 2021 23:49:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6146A61927
+        for <linux-arch@vger.kernel.org>; Sun, 21 Mar 2021 03:48:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616298526;
+        bh=+8YE7y/YSZgHrNvzwVhgChZcApXUwgfjd8Riuw6hYcc=;
+        h=From:Date:Subject:To:From;
+        b=s4dfSmafrPTZcb/SrOJOtZyNCSs4yCAZXoBj2nW6bkqspGV1JqFXriw0XTN1SeJTr
+         hp802iq3pePrSuWUUmXZ2384aUgvHxb1WoJHE1sHGt9/FXUq7tgRsMWYF6FDvwgVCw
+         j4rt82dHErNxGFcowFalI6F52g8dK1P/zWc8Kd97OMV6DXi8PztryKbmZ6VSAmiAvH
+         WGBVf6PZd5sBjzBTDjuUhVjR9FLJRFHEvQUduWAgcKAeJ0AmyIGXi76Y8YQTqgqZ0u
+         lAqhsuvpfCPmIsfppYyHG3LcD4x9ZUTRqZ2OuKo0Kw6Y4a1ngqfY0sST3HZQsq+Wqn
+         9uB4EOAAX2YnQ==
+Received: by mail-ed1-f44.google.com with SMTP id bx7so15309942edb.12
+        for <linux-arch@vger.kernel.org>; Sat, 20 Mar 2021 20:48:46 -0700 (PDT)
+X-Gm-Message-State: AOAM532ke9CzK1qGq2Zb2AtmXIaqLE0RYBbjvzxmUj82Rf49qKfUf2Bt
+        moH6yyPEFrpVcDGLiIZ8hvm1eRrWkFVc6legkRd2lw==
+X-Google-Smtp-Source: ABdhPJxdBic9TpvbjrDK9gci5p/l6RzjCDIrJZmR2Gdzn1E5tLqLPAgdkqXOqNIolK04Cx88Tz6VqT9BVO7Wv0W1y74=
+X-Received: by 2002:aa7:c353:: with SMTP id j19mr18340895edr.263.1616298524972;
+ Sat, 20 Mar 2021 20:48:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJvTdKnpWL8y4N_BrCiK7fU0UXERwuuM8o84LUpp7Watxd8STw@mail.gmail.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Sat, 20 Mar 2021 20:48:34 -0700
+X-Gmail-Original-Message-ID: <CALCETrUx10uHeD7bckVjL9x7S3LEdH3ZfzUbCMWj9j-=nYp8Wg@mail.gmail.com>
+Message-ID: <CALCETrUx10uHeD7bckVjL9x7S3LEdH3ZfzUbCMWj9j-=nYp8Wg@mail.gmail.com>
+Subject: Is s390's new generic-using syscall code actually correct?
+To:     Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, X86 ML <x86@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi all-
 
-* Len Brown <lenb@kernel.org> wrote:
+I'm working on my kentry patchset, and I encountered:
 
-> On Wed, Mar 17, 2021 at 6:45 AM Ingo Molnar <mingo@kernel.org> wrote:
-> >
-> >
-> > * Ingo Molnar <mingo@kernel.org> wrote:
-> >
-> > >
-> > > * Chang S. Bae <chang.seok.bae@intel.com> wrote:
-> > >
-> > > > During signal entry, the kernel pushes data onto the normal userspace
-> > > > stack. On x86, the data pushed onto the user stack includes XSAVE state,
-> > > > which has grown over time as new features and larger registers have been
-> > > > added to the architecture.
-> > > >
-> > > > MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
-> > > > typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
-> > > > compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
-> > > > constant indicates to userspace how much data the kernel expects to push on
-> > > > the user stack, [2][3].
-> > > >
-> > > > However, this constant is much too small and does not reflect recent
-> > > > additions to the architecture. For instance, when AVX-512 states are in
-> > > > use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
-> > > >
-> > > > The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
-> > > > cause user stack overflow when delivering a signal.
-> > >
-> > > >   uapi: Define the aux vector AT_MINSIGSTKSZ
-> > > >   x86/signal: Introduce helpers to get the maximum signal frame size
-> > > >   x86/elf: Support a new ELF aux vector AT_MINSIGSTKSZ
-> > > >   selftest/sigaltstack: Use the AT_MINSIGSTKSZ aux vector if available
-> > > >   x86/signal: Detect and prevent an alternate signal stack overflow
-> > > >   selftest/x86/signal: Include test cases for validating sigaltstack
-> > >
-> > > So this looks really complicated, is this justified?
-> > >
-> > > Why not just internally round up sigaltstack size if it's too small?
-> > > This would be more robust, as it would fix applications that use
-> > > MINSIGSTKSZ but don't use the new AT_MINSIGSTKSZ facility.
-> > >
-> > > I.e. does AT_MINSIGSTKSZ have any other uses than avoiding the
-> > > segfault if MINSIGSTKSZ is used to create a small signal stack?
-> >
-> > I.e. if the kernel sees a too small ->ss_size in sigaltstack() it
-> > would ignore ->ss_sp and mmap() a new sigaltstack instead and use that
-> > for the signal handler stack.
-> >
-> > This would automatically make MINSIGSTKSZ - and other too small sizes
-> > work today, and in the future.
-> >
-> > But the question is, is there user-space usage of sigaltstacks that
-> > relies on controlling or reading the contents of the stack?
-> >
-> > longjmp using programs perhaps?
-> 
-> For the legacy binary that requests a too-small sigaltstack, there are
-> several choices:
-> 
-> We could detect the too-small stack at sigaltstack(2) invocation and
-> return an error.
-> This results in two deal-killing problems:
-> First, some applications don't check the return value, so the check
-> would be fruitless.
-> Second, those that check and error-out may be programs that never
-> actually take the signal, and so we'd be causing a dusty binary to
-> exit, when it didn't exit on another system, or another kernel.
-> 
-> Or we could detect the too small stack at signal registration time.
-> This has the same two deal-killers as above.
-> 
-> Then there is the approach in this patch-set, which detects an
-> imminent stack overflow at run time.
-> It has neither of the two problems above, and the benefit that we now
-> prevent data corruption
-> that could have been happening on some systems already today.  The
-> down side is that the dusty binary
-> that does request the too-small stack can now die at run time.
-> 
-> So your idea of recognizing the problem and conjuring up a 
-> sufficient stack is compelling, since it would likely "just work", 
-> no matter how dumb the program. But where would the the sufficient 
-> stack come from -- is this a new kernel buffer, or is there a way to 
-> abscond some user memory?  I would expect a signal handler to look 
-> at the data on its stack and nobody else will look at that stack.  
-> But this is already an unreasonable program for allocating a special 
-> signal stack in the first place :-/ So yes, one could imagine the 
-> signal handler could longjump instead of gracefully completing, and 
-> if this specially allocated signal stack isn't where the user 
-> planned, that could be trouble.
+commit 56e62a73702836017564eaacd5212e4d0fa1c01d
+Author: Sven Schnelle <svens@linux.ibm.com>
+Date:   Sat Nov 21 11:14:56 2020 +0100
 
-We could mmap() (implicitly) new anonymous memory - but I can see why 
-this is probably more trouble than worth...
+    s390: convert to generic entry
 
-> Another idea we discussed was to detect the potential overflow at 
-> run-time, and instead of killing the process, just push the signal 
-> onto the regular user stack. this might actually work, but it is 
-> sort of devious; and it would not work in the case where the user 
-> overflowed their regular stack already, which may be the most 
-> (only?) compelling reason that they allocated and declared a special 
-> sigaltstack in the first place...
+As part of this work, I was cleaning up the generic syscall helpers,
+and I encountered the goodies in do_syscall() and __do_syscall().
 
-Yeah, this doesn't sound deterministic enough.
+I'm trying to wrap my head around the current code, and I'm rather confused.
 
-Ok, thanks for the detailed answers - I withdraw my objections, let's 
-proceed with the approach you are proposing?
+1. syscall_exit_to_user_mode_work() does *all* the exit work, not just
+the syscall exit work.  So a do_syscall() that gets called twice will
+do the loopy part of the exit work (e.g. signal handling) twice.  Is
+this intentional?  If so, why?
 
-Thanks,
+2. I don't understand how this PIF_SYSCALL_RESTART thing is supposed
+to work.  Looking at the code in Linus' tree, if a signal is pending
+and a syscall returns -ERESTARTSYS, the syscall will return back to
+do_syscall().  The work (as in (1)) gets run, calling do_signal(),
+which will notice -ERESTARTSYS and set PIF_SYSCALL_RESTART.
+Presumably it will also push the signal frame onto the stack and aim
+the return address at the svc instruction mentioned in the commit
+message from "s390: convert to generic entry".  Then __do_syscall()
+will turn interrupts back on and loop right back into do_syscall().
+That seems incorrect.
 
-	Ingo
+Can you enlighten me?  My WIP tree is here:
+https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git/log/?h=x86/kentry
+
+Here are my changes to s390, and I don't think they're really correct:
+
+
+https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git/diff/arch/s390/kernel/syscall.c?h=x86/kentry&id=58a459922be0fb8e0f17aeaebcb0ac8d0575a62c
