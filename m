@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA03343D96
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Mar 2021 11:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10434343E1E
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Mar 2021 11:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbhCVKPI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Mar 2021 06:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S229822AbhCVKjI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Mar 2021 06:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhCVKO5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Mar 2021 06:14:57 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059CFC061762
-        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 03:14:57 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id g8so13214857lfv.12
-        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 03:14:56 -0700 (PDT)
+        with ESMTP id S230140AbhCVKix (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Mar 2021 06:38:53 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00996C061763
+        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 03:38:52 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id i26so4606025lfl.1
+        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 03:38:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=shutemov-name.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=rVYaAi1eY1kPyS3/JwBek8GPGY1ptAf+8QB+EHmsqAU=;
-        b=0xAxeaYtjCj0z4GR/m+iCT1B87INTUY//rqJ+VAahUIwsVg8ZAvYyLV/C73kwEny9I
-         5bmP+Ze/gAocr73JJ11cXkYyXb0/Gf3Zd+r4R3eA58TMDA1eiMWU+rMh1/olatKyJLjo
-         4QKYJ/75INlA0ttbJG3z39uP+Gil0Esyvd0LSgK5Tvb012/4yqglr2y7lQCQCcZcuLcr
-         HPKJqoA+/yI/PbJGB9nlNL9opAR7qW1DeNwoWJ9I18hjVB4+THSiBNsRwIPj7IuDMhNl
-         fGocd8edYDD+GUhQKbrV1adoAPW9vMeyJWE2vDTyiWsTDO41apCkiT/tXVhgWd0t5/6t
-         VLKA==
+        bh=4hC27dQ/u288m0lvIAqx0tpRb+YwDiUGxv3BPznT+sI=;
+        b=aG4CCQmbLb1GnZ6XtEGpwTGDwEDwL2zlf2cTCSr+JZswGfljVFAduiKDUNiHIBi622
+         MrBTtUORsoxUb1IuMEA5gBt7Tsghrdp4iXJZrQxtbROBmzwXXiwuRviIJs/8iMiZW9X1
+         UyXFoJhobLPxFpMrd6dAKytTdo5FoAzwnt2btLeNLaUz2l8B9qzYMewI3XojtnKMMJry
+         iD1BVjkZEKIBVeTPGZxRZ7MlabUdx7vAFGzrWr4YwcpQ+rjCEhWbuCSciM/tCHcC07BF
+         K/OHzUt5f04kquzgVob+i5QS5cUaF94dCWZHah0jwolZFj5tSn1B2VyNmH7kve5Dav56
+         ftzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=rVYaAi1eY1kPyS3/JwBek8GPGY1ptAf+8QB+EHmsqAU=;
-        b=TsfP0rRhUgY/5+u568GhpbcMLkGp6xeNp5Zn2+xkKIBcofzHk1dMbQLQqgweQQPpil
-         4J0yq5D6fnKFBtaGOQiH3BtJEmK8TxOPRlfrnrucOwkLvhAKXDjmhZb/vrofIxwSOc6U
-         ecrcqAyrhZET6tG7Gvt2judMhNpmJw6wxHGIafiZTGdFrdjPP61HNlcYd6SC6vjDwJNc
-         pGFX5bZf80Pm4GkNMArJOxLRiSE9ualUAd056UdsgQNfYSrUbS6egSQhs0WlDpypeff+
-         nTzFxsN28QlQDw7UGVRg0h2WSQNBoHlQneWf1Shszd6T/g7W8xlcD6ge/zDYqoIx7sgd
-         RavQ==
-X-Gm-Message-State: AOAM533bvSGbnBzmuvWIMXIewoHzhvh/+zmJB2lFITWNqCq/hBQWYK+s
-        WNUgDZaJ5xuUWGNdtUxg793s9g==
-X-Google-Smtp-Source: ABdhPJxKaAEo8nt6OXdUuX61A1wui+fxNSys6+2rWR6UBxN18woKeXmAqW98QKT5Ba+bYjAcU7cKIw==
-X-Received: by 2002:a05:6512:348c:: with SMTP id v12mr8454102lfr.271.1616408095388;
-        Mon, 22 Mar 2021 03:14:55 -0700 (PDT)
+        bh=4hC27dQ/u288m0lvIAqx0tpRb+YwDiUGxv3BPznT+sI=;
+        b=lUijW/cnTXA3e0SrVQve2gxpkjpBIOP717BsAnfES60oI3cKh/4979fVL4Q9RIUTHD
+         8tDTfLURn+mg03zwoA+RuTVdF6oREpL+bynTBBCChVAiTmbyv8xpUX7KREIJn9/QSuAv
+         UzllQgrHBHOBFFO2Jz+w5lZYnUPZ6XTtdNCBfFnDiaSRdXQByeS6ucdf4ZzsjFLdMX+O
+         mi/kQdCwLXfgrcdz8+FJVwjZ5chVrSxd/qlub4EWGQEzGygHY3f65Jw2CQAttpgyAEdu
+         vk1Srd4TGIAvGdKuRoCVi6wHFNBB9Q/GSB4P4MS69qz+85tWB1+Hp6KYCMC1hpyA96u4
+         NjYw==
+X-Gm-Message-State: AOAM530Ayo0TzfDet6OWODWpxb9nQ5DwXKqHm1ugYxkePlZLc2IOinbu
+        o4RFWj+hZRJapgkGu8KZnj4DjQ==
+X-Google-Smtp-Source: ABdhPJwUXaWMh/7Jvw00YeWGfYQNsZQnygvvxQt2sYRhrPBaMYhh0Y5PdawcjG6A2A8jca1Jqv+VBw==
+X-Received: by 2002:a05:6512:324d:: with SMTP id c13mr8815993lfr.165.1616409531363;
+        Mon, 22 Mar 2021 03:38:51 -0700 (PDT)
 Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id z10sm1523041lfe.114.2021.03.22.03.14.54
+        by smtp.gmail.com with ESMTPSA id x1sm1527966lff.97.2021.03.22.03.38.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Mar 2021 03:14:54 -0700 (PDT)
+        Mon, 22 Mar 2021 03:38:50 -0700 (PDT)
 Received: by box.localdomain (Postfix, from userid 1000)
-        id 23BA8101DEB; Mon, 22 Mar 2021 13:15:02 +0300 (+03)
-Date:   Mon, 22 Mar 2021 13:15:02 +0300
+        id 48DDE101DEB; Mon, 22 Mar 2021 13:38:58 +0300 (+03)
+Date:   Mon, 22 Mar 2021 13:38:58 +0300
 From:   "Kirill A. Shutemov" <kirill@shutemov.name>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
@@ -79,104 +79,109 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v23 12/28] x86/mm: Update ptep_set_wrprotect() and
- pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
-Message-ID: <20210322101502.b5hdy3qgyh6hf3sr@box>
+Subject: Re: [PATCH v23 14/28] x86/mm: Shadow Stack page fault error checking
+Message-ID: <20210322103858.evxun5bhw2i5sio6@box>
 References: <20210316151054.5405-1-yu-cheng.yu@intel.com>
- <20210316151054.5405-13-yu-cheng.yu@intel.com>
+ <20210316151054.5405-15-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210316151054.5405-13-yu-cheng.yu@intel.com>
+In-Reply-To: <20210316151054.5405-15-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 08:10:38AM -0700, Yu-cheng Yu wrote:
-> When Shadow Stack is introduced, [R/O + _PAGE_DIRTY] PTE is reserved for
-> shadow stack.  Copy-on-write PTEs have [R/O + _PAGE_COW].
+On Tue, Mar 16, 2021 at 08:10:40AM -0700, Yu-cheng Yu wrote:
+> Shadow stack accesses are those that are performed by the CPU where it
+> expects to encounter a shadow stack mapping.  These accesses are performed
+> implicitly by CALL/RET at the site of the shadow stack pointer.  These
+> accesses are made explicitly by shadow stack management instructions like
+> WRUSSQ.
 > 
-> When a PTE goes from [R/W + _PAGE_DIRTY] to [R/O + _PAGE_COW], it could
-> become a transient shadow stack PTE in two cases:
+> Shadow stacks accesses to shadow-stack mapping can see faults in normal,
+> valid operation just like regular accesses to regular mappings.  Shadow
+> stacks need some of the same features like delayed allocation, swap and
+> copy-on-write.
 > 
-> The first case is that some processors can start a write but end up seeing
-> a read-only PTE by the time they get to the Dirty bit, creating a transient
-> shadow stack PTE.  However, this will not occur on processors supporting
-> Shadow Stack, and a TLB flush is not necessary.
+> Shadow stack accesses can also result in errors, such as when a shadow
+> stack overflows, or if a shadow stack access occurs to a non-shadow-stack
+> mapping.
 > 
-> The second case is that when _PAGE_DIRTY is replaced with _PAGE_COW non-
-> atomically, a transient shadow stack PTE can be created as a result.
-> Thus, prevent that with cmpxchg.
-> 
-> Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
-> insights to the issue.  Jann Horn provided the cmpxchg solution.
+> In handling a shadow stack page fault, verify it occurs within a shadow
+> stack mapping.  It is always an error otherwise.  For valid shadow stack
+> accesses, set FAULT_FLAG_WRITE to effect copy-on-write.  Because clearing
+> _PAGE_DIRTY (vs. _PAGE_RW) is used to trigger the fault, shadow stack read
+> fault and shadow stack write fault are not differentiated and both are
+> handled as a write access.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > Reviewed-by: Kees Cook <keescook@chromium.org>
 > ---
->  arch/x86/include/asm/pgtable.h | 36 ++++++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
+>  arch/x86/include/asm/trap_pf.h |  2 ++
+>  arch/x86/mm/fault.c            | 19 +++++++++++++++++++
+>  2 files changed, 21 insertions(+)
 > 
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index e1739f590ca6..46d9394b884f 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -1306,6 +1306,24 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
->  static inline void ptep_set_wrprotect(struct mm_struct *mm,
->  				      unsigned long addr, pte_t *ptep)
->  {
-> +	/*
-> +	 * If Shadow Stack is enabled, pte_wrprotect() moves _PAGE_DIRTY
-> +	 * to _PAGE_COW (see comments at pte_wrprotect()).
-> +	 * When a thread reads a RW=1, Dirty=0 PTE and before changing it
-> +	 * to RW=0, Dirty=0, another thread could have written to the page
-> +	 * and the PTE is RW=1, Dirty=1 now.  Use try_cmpxchg() to detect
-> +	 * PTE changes and update old_pte, then try again.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
-> +		pte_t old_pte, new_pte;
-> +
-> +		old_pte = READ_ONCE(*ptep);
-> +		do {
-> +			new_pte = pte_wrprotect(old_pte);
-> +		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
-
-I think this is wrong. You need to update old_pte on every loop iteration,
-otherwise you can get in to endless loop.
-
-The same issue for pmdp_set_wrprotect().
-
-> +
-> +		return;
-> +	}
->  	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
->  }
+> diff --git a/arch/x86/include/asm/trap_pf.h b/arch/x86/include/asm/trap_pf.h
+> index 10b1de500ab1..afa524325e55 100644
+> --- a/arch/x86/include/asm/trap_pf.h
+> +++ b/arch/x86/include/asm/trap_pf.h
+> @@ -11,6 +11,7 @@
+>   *   bit 3 ==				1: use of reserved bit detected
+>   *   bit 4 ==				1: fault was an instruction fetch
+>   *   bit 5 ==				1: protection keys block access
+> + *   bit 6 ==				1: shadow stack access fault
+>   *   bit 15 ==				1: SGX MMU page-fault
+>   */
+>  enum x86_pf_error_code {
+> @@ -20,6 +21,7 @@ enum x86_pf_error_code {
+>  	X86_PF_RSVD	=		1 << 3,
+>  	X86_PF_INSTR	=		1 << 4,
+>  	X86_PF_PK	=		1 << 5,
+> +	X86_PF_SHSTK	=		1 << 6,
+>  	X86_PF_SGX	=		1 << 15,
+>  };
 >  
-> @@ -1350,6 +1368,24 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
->  static inline void pmdp_set_wrprotect(struct mm_struct *mm,
->  				      unsigned long addr, pmd_t *pmdp)
->  {
-> +	/*
-> +	 * If Shadow Stack is enabled, pmd_wrprotect() moves _PAGE_DIRTY
-> +	 * to _PAGE_COW (see comments at pmd_wrprotect()).
-> +	 * When a thread reads a RW=1, Dirty=0 PMD and before changing it
-> +	 * to RW=0, Dirty=0, another thread could have written to the page
-> +	 * and the PMD is RW=1, Dirty=1 now.  Use try_cmpxchg() to detect
-> +	 * PMD changes and update old_pmd, then try again.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
-> +		pmd_t old_pmd, new_pmd;
-> +
-> +		old_pmd = READ_ONCE(*pmdp);
-> +		do {
-> +			new_pmd = pmd_wrprotect(old_pmd);
-> +		} while (!try_cmpxchg((pmdval_t *)pmdp, (pmdval_t *)&old_pmd, pmd_val(new_pmd)));
-> +
-> +		return;
-> +	}
->  	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
->  }
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index a73347e2cdfc..4316732a18c6 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1100,6 +1100,17 @@ access_error(unsigned long error_code, struct vm_area_struct *vma)
+>  				       (error_code & X86_PF_INSTR), foreign))
+>  		return 1;
 >  
+> +	/*
+> +	 * Verify a shadow stack access is within a shadow stack VMA.
+> +	 * It is always an error otherwise.  Normal data access to a
+> +	 * shadow stack area is checked in the case followed.
+> +	 */
+> +	if (error_code & X86_PF_SHSTK) {
+> +		if (!(vma->vm_flags & VM_SHSTK))
+> +			return 1;
+> +		return 0;
+
+Any reason to return 0 here? I would rather keep the single return 0 in
+the function, after all checks are done.
+
+> +	}
+> +
+>  	if (error_code & X86_PF_WRITE) {
+>  		/* write, present and write, not present: */
+>  		if (unlikely(!(vma->vm_flags & VM_WRITE)))
+> @@ -1293,6 +1304,14 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  
+>  	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+>  
+> +	/*
+> +	 * Clearing _PAGE_DIRTY is used to detect shadow stack access.
+> +	 * This method cannot distinguish shadow stack read vs. write.
+> +	 * For valid shadow stack accesses, set FAULT_FLAG_WRITE to effect
+> +	 * copy-on-write.
+> +	 */
+> +	if (error_code & X86_PF_SHSTK)
+> +		flags |= FAULT_FLAG_WRITE;
+>  	if (error_code & X86_PF_WRITE)
+>  		flags |= FAULT_FLAG_WRITE;
+>  	if (error_code & X86_PF_INSTR)
 > -- 
 > 2.21.0
 > 
