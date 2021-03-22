@@ -2,43 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D404343E55
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Mar 2021 11:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D6E343E86
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Mar 2021 11:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhCVKsy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Mar 2021 06:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        id S230292AbhCVKzz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Mar 2021 06:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbhCVKsr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Mar 2021 06:48:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D24C061574;
-        Mon, 22 Mar 2021 03:48:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hlbTbL1bDzeKPY7EsML2QdUuMjl1zuiAUSBb6VTOOwQ=; b=vq0G7E4dmauEGmK8/emUUDYZon
-        NNjYF1OmrbnibpO3sK1EBuqrCPxvPbi1lPhi596vu88weXqmIoZyMZLdhlRZbM3uVaQfI0emm9Jtj
-        RiDuBpCWr63s0qIMBMs6uA7WiR86Nj2OLZKxdxjxK5tQwjtWPgy7Y930lSF7TG9vgZJyyYbTPUyKp
-        qNhW2Ua6yzlwbRWuoZrQyU2lBXygmzHy5TXRAe0Rka+X0qyfNJqvCwH8GGbej/kUSRULePgXUWtkE
-        N1VoPqVRrySUL0/J6X8cKELQoEvhP+Ge+y3YrAIRAN2XxhcT7DnSd4eUgT0BNRTVarEvyRZD88FES
-        jFbA8mrg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lOI4l-008Mnt-8c; Mon, 22 Mar 2021 10:46:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1171E306BCA;
-        Mon, 22 Mar 2021 11:46:22 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ED1832BCFBDAA; Mon, 22 Mar 2021 11:46:21 +0100 (CET)
-Date:   Mon, 22 Mar 2021 11:46:21 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        with ESMTP id S230384AbhCVKzZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Mar 2021 06:55:25 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E639C061762
+        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 03:55:24 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id u10so20446444lju.7
+        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 03:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=D+PcY8fizKyI1pa8vyAaI0Fu5ahvlZoOnbR8AqNaIGM=;
+        b=cNdFZe9aFiClr44vhnMkdDn4A4PRwCmXoJ8KEm1xluKWbN8IGn8mR3MlZg3J6rbUh5
+         pw68llA/oheOVpyvb+bbJ0sh4EVoe/nmWmGnzNtopCABnUJ7EQgOPtQSFTwM0Kzx8k+M
+         +1mtp/2DwiZq5luOFZ3V/g01ge3sXb9SouwkCD0JH2lHd7gq1I7t86xU+J19KJyHmhmH
+         LYNjOzP/9DVag/uyi8sMESQt8u8P6n+9arqOVmypRXuc6uC+TA53JscZSw5Cedl0Skih
+         Uj5uIS/3Q3i8PmxUzCy71C2yDXfONCcAgKBAsNjfZlR3dTNNB6tHQ8+1nQKyAoEnlb/S
+         6OWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=D+PcY8fizKyI1pa8vyAaI0Fu5ahvlZoOnbR8AqNaIGM=;
+        b=gzehp6H8kZ+CtR+LedRCh3hAMpnDcYVHa0JtOFqadGl9uvDLwI8X3UaRQaZM011EBT
+         9tP4gHpUgYYAx/84rJT4NAJgrPELmfhIXJZ7hnj8fvXSRXxdt7F2dRasbYWVyabi1Ioq
+         biUS9KMjOuHOddEGA/l3VJeKpE4GySr0ekNszX/CRlLL9yLcFJ8F++oed7GRS9KlzXaN
+         zHUEbCn1+Aj8piL1DiKW63BdS2npxedHyUJ11svnF5Y0QzUIKfkxwImwlZSmPx2w8NlY
+         7FkbiiHJYYxOLh/5R8v9WZzC369UVnb0gghYyXjeUg3BsGFcgQAY/vpwPxm/47BVd0Mz
+         8Z0w==
+X-Gm-Message-State: AOAM531MvGB6gOshf+OC+EVeT4vMal1VeERf3BQP1z3mBiJa6cYAgEYj
+        ZRBRfVXq+mVND/hTMohcSBspYw==
+X-Google-Smtp-Source: ABdhPJxf/OAQj9ADevnB8ESViQBvohbq91TGiPa/7o4CoF/N6TtVkgXQQlUwXU07vQ7ubVRc+vrblQ==
+X-Received: by 2002:a2e:2a44:: with SMTP id q65mr9601149ljq.238.1616410523121;
+        Mon, 22 Mar 2021 03:55:23 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id e9sm1905215ljj.52.2021.03.22.03.55.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 03:55:22 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 36E96101DEB; Mon, 22 Mar 2021 13:55:30 +0300 (+03)
+Date:   Mon, 22 Mar 2021 13:55:30 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -57,6 +71,7 @@ Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
@@ -64,31 +79,117 @@ Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v23 12/28] x86/mm: Update ptep_set_wrprotect() and
- pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
-Message-ID: <YFh1fabrBok74F8X@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH v23 17/28] mm: Add guard pages around a shadow stack.
+Message-ID: <20210322105530.pbmfrg6rhywct5ft@box>
 References: <20210316151054.5405-1-yu-cheng.yu@intel.com>
- <20210316151054.5405-13-yu-cheng.yu@intel.com>
- <20210322101502.b5hdy3qgyh6hf3sr@box>
+ <20210316151054.5405-18-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210322101502.b5hdy3qgyh6hf3sr@box>
+In-Reply-To: <20210316151054.5405-18-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 01:15:02PM +0300, Kirill A. Shutemov wrote:
-> On Tue, Mar 16, 2021 at 08:10:38AM -0700, Yu-cheng Yu wrote:
-
-> > +		pte_t old_pte, new_pte;
-> > +
-> > +		old_pte = READ_ONCE(*ptep);
-> > +		do {
-> > +			new_pte = pte_wrprotect(old_pte);
-> > +		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
+On Tue, Mar 16, 2021 at 08:10:43AM -0700, Yu-cheng Yu wrote:
+> INCSSP(Q/D) increments shadow stack pointer and 'pops and discards' the
+> first and the last elements in the range, effectively touches those memory
+> areas.
 > 
-> I think this is wrong. You need to update old_pte on every loop iteration,
-> otherwise you can get in to endless loop.
+> The maximum moving distance by INCSSPQ is 255 * 8 = 2040 bytes and
+> 255 * 4 = 1020 bytes by INCSSPD.  Both ranges are far from PAGE_SIZE.
+> Thus, putting a gap page on both ends of a shadow stack prevents INCSSP,
+> CALL, and RET from going beyond.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/x86/include/asm/page_64_types.h | 10 ++++++++++
+>  include/linux/mm.h                   | 24 ++++++++++++++++++++----
+>  2 files changed, 30 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/page_64_types.h b/arch/x86/include/asm/page_64_types.h
+> index 64297eabad63..23e3d880ce6c 100644
+> --- a/arch/x86/include/asm/page_64_types.h
+> +++ b/arch/x86/include/asm/page_64_types.h
+> @@ -115,4 +115,14 @@
+>  #define KERNEL_IMAGE_SIZE	(512 * 1024 * 1024)
+>  #endif
+>  
+> +/*
+> + * Shadow stack pointer is moved by CALL, RET, and INCSSP(Q/D).  INCSSPQ
+> + * moves shadow stack pointer up to 255 * 8 = ~2 KB (~1KB for INCSSPD) and
+> + * touches the first and the last element in the range, which triggers a
+> + * page fault if the range is not in a shadow stack.  Because of this,
+> + * creating 4-KB guard pages around a shadow stack prevents these
+> + * instructions from going beyond.
+> + */
+> +#define ARCH_SHADOW_STACK_GUARD_GAP PAGE_SIZE
+> +
+>  #endif /* _ASM_X86_PAGE_64_DEFS_H */
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index af805ffde48e..9890e9f5a5e0 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2619,6 +2619,10 @@ extern vm_fault_t filemap_page_mkwrite(struct vm_fault *vmf);
+>  int __must_check write_one_page(struct page *page);
+>  void task_dirty_inc(struct task_struct *tsk);
+>  
+> +#ifndef ARCH_SHADOW_STACK_GUARD_GAP
+> +#define ARCH_SHADOW_STACK_GUARD_GAP 0
+> +#endif
+> +
+>  extern unsigned long stack_guard_gap;
+>  /* Generic expand stack which grows the stack according to GROWS{UP,DOWN} */
+>  extern int expand_stack(struct vm_area_struct *vma, unsigned long address);
+> @@ -2651,9 +2655,15 @@ static inline struct vm_area_struct * find_vma_intersection(struct mm_struct * m
+>  static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
+>  {
+>  	unsigned long vm_start = vma->vm_start;
+> +	unsigned long gap = 0;
+>  
+> -	if (vma->vm_flags & VM_GROWSDOWN) {
+> -		vm_start -= stack_guard_gap;
+> +	if (vma->vm_flags & VM_GROWSDOWN)
+> +		gap = stack_guard_gap;
+> +	else if (vma->vm_flags & VM_SHSTK)
+> +		gap = ARCH_SHADOW_STACK_GUARD_GAP;
 
-It is correct, please consider why the old argument is a pointer.
+Looks too x86-centric for generic code.
+
+Maybe we can have a helper that would return gap for the given VMA?
+The generic version of the helper would only return stack_guard_gap for
+VM_GROWSDOWN. Arch code would override it to handle VM_SHSTK case too.
+
+Similar can be done in vm_end_gap().
+
+> +
+> +	if (gap != 0) {
+> +		vm_start -= gap;
+>  		if (vm_start > vma->vm_start)
+>  			vm_start = 0;
+>  	}
+> @@ -2663,9 +2673,15 @@ static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
+>  static inline unsigned long vm_end_gap(struct vm_area_struct *vma)
+>  {
+>  	unsigned long vm_end = vma->vm_end;
+> +	unsigned long gap = 0;
+> +
+> +	if (vma->vm_flags & VM_GROWSUP)
+> +		gap = stack_guard_gap;
+> +	else if (vma->vm_flags & VM_SHSTK)
+> +		gap = ARCH_SHADOW_STACK_GUARD_GAP;
+>  
+> -	if (vma->vm_flags & VM_GROWSUP) {
+> -		vm_end += stack_guard_gap;
+> +	if (gap != 0) {
+> +		vm_end += gap;
+>  		if (vm_end < vma->vm_end)
+>  			vm_end = -PAGE_SIZE;
+>  	}
+> -- 
+> 2.21.0
+> 
+
+-- 
+ Kirill A. Shutemov
