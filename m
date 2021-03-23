@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACAC346A2A
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Mar 2021 21:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEAC346A30
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Mar 2021 21:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbhCWUki (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Mar 2021 16:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S233642AbhCWUkj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Mar 2021 16:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbhCWUkI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Mar 2021 16:40:08 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F034FC0613E7
-        for <linux-arch@vger.kernel.org>; Tue, 23 Mar 2021 13:40:07 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id p133so114349qka.17
-        for <linux-arch@vger.kernel.org>; Tue, 23 Mar 2021 13:40:07 -0700 (PDT)
+        with ESMTP id S233518AbhCWUkK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Mar 2021 16:40:10 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FE9C0613DB
+        for <linux-arch@vger.kernel.org>; Tue, 23 Mar 2021 13:40:09 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id a16so1986587qtw.1
+        for <linux-arch@vger.kernel.org>; Tue, 23 Mar 2021 13:40:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=xIKsEDWi8EL1j5NSYc2uWQA3l5Y2NiXXcLT9TovNhRQ=;
-        b=CgO/iSD/xRAdG2p+rJSIXqPZiKxGiKV2KoCvVGLUH2ZMIqkf574rj//FtCji3y0utT
-         6lKsLLQNF9ZBDCdsLOxtHp++EYzY5pP2mxldfH597xr3rQ4xUq9h8H5ZqqqHCXkA5Woj
-         AW4sxR0WuNwk6mjflnE1PSnqER0YBsuwjwXu3Ld7LoONyiCQrMHMa5vxLqAxT+oS7dew
-         573+hZHKrFPSsuuYfRH4A915CMBtXOIjkDVY3SgKsQFOEMK30MSps4h+NJvmkF2xbtOc
-         I9PZSHpWCV2Y3qKuZASiPEN0Gbhj4D7LoWjpCn9ubP4M+BIswdDkzinaS2z4pXhbM2te
-         iBHg==
+        bh=bxVrKYuxs5XU9fnnKC3lGs6PXwAVYnFmVHHh5prD+bw=;
+        b=tT+mhGxcn72LL+S/wxj6p6pgongKWrRuo4s35bHXpLA2dicqXg5urUYbPt3d9T/ByR
+         IPHjRKTiXQnv2rbt1aRKlxrdR2rPLJ7tORytyy1drMdPlsn4xgMEb2VaXi9KnmRXw0b+
+         1McGQM2Thg4csg/H4j9okV5jZZhUrLRSHuFW27uwZsHK3LpCc5+cy7/TMp0EDcRjnuha
+         JF7+v1vVLu+/0lrJCTHtkCwIx8QFpif22GcIKNGwCbR4j/Je8b9blw7GwduI3m2NOHlM
+         YfgJo/D20uuFbhQvjr6gzbOj6Nv05LUXHIHdnyfSlGGvEfwFsp60pVuwWb09eTm3iH6Q
+         VSag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=xIKsEDWi8EL1j5NSYc2uWQA3l5Y2NiXXcLT9TovNhRQ=;
-        b=VuECfxIl7v8fVIydWLIC7ojReb9wEbMd0XhWE0bhdl/jJmhH2e/5MpsM0r5CT69Mv3
-         bWiD6o+Z1cr8cdvhbDusiXhl2DqR1VGcpaxqHFl54s25+NnMURNk6JMjib0l3TQPCt3S
-         uvaHAKtz0fQ7X83K5cuJZLlaEAZCCtcj84eLmrbewXxHYTNN/oWoQdo0V1PeyCTGGWY5
-         lBlXu5/S8VeMa7qLDDPhqsCDPG3MzWVQ6QNw/tOFJlQFnFV74K7uMWJW8p0/Uh+5EIQk
-         nkG/c0A1ZsidhzIR+2MbUEyW97s1tjGSG+u6vSafr+fIbV/ZNCudQKHYyqQ+RVeTeLX0
-         pvqw==
-X-Gm-Message-State: AOAM532LRVNENYvX/CwSqr8akEHXN8AYY6c+/1P1MOszso5Y/u5mSoVH
-        cySJ6aGc0qwR2lIXJ92b6x0a8WsNzkM3wHs/idE=
-X-Google-Smtp-Source: ABdhPJxb7WUXqQY1HKNj9KDKWZ2mX+BL8U6d8oevhZ712uyBxXvQItdJYqzQ+dKFDvxGu4W+35Xr/uYgxKxus3pnNFc=
+        bh=bxVrKYuxs5XU9fnnKC3lGs6PXwAVYnFmVHHh5prD+bw=;
+        b=qzheK3PbUR4LQwRba5NSRgjFmvakhyEqxNGJ0mLSwJ9QcZZeCQVjfL3WuGonZdx4Q3
+         W8FoQe6TFRHIrVgS+7GnYa/4Pl+ozSiNoEyxymhbLRGG2UPKPOL9uFXtoyhgW4N+jQcI
+         WkmFtnxGDSbLKtAlz2HT1FeT4CTo3+cuKsMH6XMd9zQ4IkbdwqsMmAXJqSIeXCbkWD+9
+         HFwBp0tCrnKaD0NptXZEpZraaihTPK0cEffJADJZJUczWJwpsx4v08pXsS09vggHONYW
+         TAesJB9I4ErGXW6iKTyrpQskqTqpyXliq7hvkD7vtXQICUkhqWiyBYdxdlvW9Mw8T+Tf
+         LH1Q==
+X-Gm-Message-State: AOAM532xraHc3XbjtEW4a39yjPu3v2qXED5t5WPS7gPlKrL6En8/Qu0x
+        mOpA1SYZ+PZ5cCJo1+ScLrjkuybcV99DnL3gSS4=
+X-Google-Smtp-Source: ABdhPJx9XxcfFaPwjV0eKcB1u5Is4MdpwwvMvMA5rF3C3ca6pKmdXd3MtbY+z05x6lmX/nx6Kd3vneHRgp5+amu1pQk=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:e9a3:260d:763b:67dc])
- (user=samitolvanen job=sendgmr) by 2002:a0c:e9c7:: with SMTP id
- q7mr159305qvo.7.1616532007142; Tue, 23 Mar 2021 13:40:07 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 13:39:39 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a05:6214:aae:: with SMTP id
+ ew14mr188842qvb.24.1616532008942; Tue, 23 Mar 2021 13:40:08 -0700 (PDT)
+Date:   Tue, 23 Mar 2021 13:39:40 -0700
 In-Reply-To: <20210323203946.2159693-1-samitolvanen@google.com>
-Message-Id: <20210323203946.2159693-11-samitolvanen@google.com>
+Message-Id: <20210323203946.2159693-12-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20210323203946.2159693-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v3 10/17] lkdtm: use __va_function
+Subject: [PATCH v3 11/17] psci: use __pa_function for cpu_resume
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -70,30 +70,41 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-To ensure we take the actual address of a function in kernel text, use
-__va_function. Otherwise, with CONFIG_CFI_CLANG, the compiler replaces
-the address with a pointer to the CFI jump table, which is actually in
-the module when compiled with CONFIG_LKDTM=m.
+With CONFIG_CFI_CLANG, the compiler replaces function pointers with
+jump table addresses, which results in __pa_symbol returning the
+physical address of the jump table entry. As the jump table contains
+an immediate jump to an EL1 virtual address, this typically won't
+work as intended. Use __pa_function instead to get the address to
+cpu_resume.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Acked-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/misc/lkdtm/usercopy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/firmware/psci/psci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/misc/lkdtm/usercopy.c b/drivers/misc/lkdtm/usercopy.c
-index 109e8d4302c1..d173d6175c87 100644
---- a/drivers/misc/lkdtm/usercopy.c
-+++ b/drivers/misc/lkdtm/usercopy.c
-@@ -314,7 +314,7 @@ void lkdtm_USERCOPY_KERNEL(void)
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index f5fc429cae3f..facd3cce3244 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -326,7 +326,7 @@ static int psci_suspend_finisher(unsigned long state)
+ {
+ 	u32 power_state = state;
  
- 	pr_info("attempting bad copy_to_user from kernel text: %px\n",
- 		vm_mmap);
--	if (copy_to_user((void __user *)user_addr, vm_mmap,
-+	if (copy_to_user((void __user *)user_addr, __va_function(vm_mmap),
- 			 unconst + PAGE_SIZE)) {
- 		pr_warn("copy_to_user failed, but lacked Oops\n");
- 		goto free_user;
+-	return psci_ops.cpu_suspend(power_state, __pa_symbol(cpu_resume));
++	return psci_ops.cpu_suspend(power_state, __pa_function(cpu_resume));
+ }
+ 
+ int psci_cpu_suspend_enter(u32 state)
+@@ -345,7 +345,7 @@ int psci_cpu_suspend_enter(u32 state)
+ static int psci_system_suspend(unsigned long unused)
+ {
+ 	return invoke_psci_fn(PSCI_FN_NATIVE(1_0, SYSTEM_SUSPEND),
+-			      __pa_symbol(cpu_resume), 0, 0);
++			      __pa_function(cpu_resume), 0, 0);
+ }
+ 
+ static int psci_system_suspend_enter(suspend_state_t state)
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
