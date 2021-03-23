@@ -2,299 +2,357 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 845043466BF
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Mar 2021 18:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71BAE3468C7
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Mar 2021 20:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbhCWRuN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Mar 2021 13:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S232855AbhCWTRA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Mar 2021 15:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbhCWRuD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Mar 2021 13:50:03 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F32C061765
-        for <linux-arch@vger.kernel.org>; Tue, 23 Mar 2021 10:49:51 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id i26so12045725lfl.1
-        for <linux-arch@vger.kernel.org>; Tue, 23 Mar 2021 10:49:51 -0700 (PDT)
+        with ESMTP id S233337AbhCWTQi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Mar 2021 15:16:38 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9A2C061765
+        for <linux-arch@vger.kernel.org>; Tue, 23 Mar 2021 12:16:37 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id g25so11719511wmh.0
+        for <linux-arch@vger.kernel.org>; Tue, 23 Mar 2021 12:16:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=P7FG8frtqOnIaco1BBcfNWyiT6YFpbAkPyq6JjHD/SQ=;
-        b=RqC83U3mrLkb+QFRLoON0Zw9/YzFosu29mToXdupbyes+eP8PIbUGwPqm8r7/KpwRR
-         oZelC5ZmxImg8iBbM2gmLroSoYCiCEUvGtkQiOC4/PAEclQS7ugWWjIJNtnS3605Q2J8
-         ZIN/PuHLu1RX17VYbH9ddtJ1VMYZ2UYl/zac1wDW7HAuCdsaxKFv6RGRsTr5dG5anaRB
-         vswno94C7eL1m8PiYJ70kLt+hevGKr4aTJ011awdWOMnAZwre4yQob6AqxNo1DVYfd7u
-         GLlsD8eUCAS1xPvQV5CkZ/lmgLn5dFcI7bh1eIS+ioRFxMljDx1upkfbDIXRXDqwZEuq
-         dslw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tNS+z+6QvyvEx8iMwg0Sa9sQJaEBMryjtauXMfUQXsg=;
+        b=mI5F3aFOIe/mAhDiuSQnPZIA9HNNew1MolHTGbNOmJqKkXu6a0VIPwJUcmWee297OD
+         wkr9SloIeaER3jqaqc3SzUZvkm15n28g9c360eLRWpOdIqQ/1Tvntr/b9UInFVQoniUc
+         DQH4dtuFQPNKXNlHRLkf47W5VKv2eIr72mhasMsOFlsispiZu4nbcSuPBG3+ZLNvCqTG
+         qlGsewcIFEqo0aTzKIws6wiO5iOpW39351Fe5ePVOot+X9/sOQpGTS4c/s9tyuGVvJJV
+         OtstntnD/pgERiv6qawFok8+BMX2A8WGuydE8L1nHR6go76dj8HG8ypIZujMqAI7gZtB
+         iD7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=P7FG8frtqOnIaco1BBcfNWyiT6YFpbAkPyq6JjHD/SQ=;
-        b=TCK2DStq4vLtrg2yL9fzh9O/we4gS4M/MA7ZFp+UjJDgzYmYmMjRFvFC7SaCMkiEtF
-         tFxhc4ksfmRe12fbxz1MuKVi7vnHL4BX43kuTgZ/05n7ONyQrQ4EZuM6H3C7QM8W2wxS
-         9yW09r8QxQdL5zJc7+0ljfBcvDFWZoPrQr0QD+/nuCdBi1wddwisu3mNgtXoq31m9xjK
-         IQbu2G4Oy53VmVZ7HXt5dEhhGfxyvGr80OZIzKdeitevKxShpp3Xe7ponkGKJAGkDu0H
-         7oJQ/KWQmkosDzyNsAYtWj8k4iksVCb2exGcg7ArPxlpZ9R9CCJEbcL9V1hYP70ZIGzW
-         sRWg==
-X-Gm-Message-State: AOAM533Daq6wRtCMpsLkimy9Ves5uQMMwWzgiqeKwRS1SJbnPwaamRCa
-        EgD6E4NLf0NqEZyI5KuySstK21jxDOPM1v8rB+RE3w==
-X-Google-Smtp-Source: ABdhPJwyenFneH4fs+z0uzL0vIEhWiSdc0Ge3Zq/4vWaO4unkEzFLjqdXBLZ4GR4Y3t93oZd2IPWbg1ktdyPCk9cf3w=
-X-Received: by 2002:a19:22d6:: with SMTP id i205mr3164515lfi.352.1616521789635;
- Tue, 23 Mar 2021 10:49:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210316204252.427806-1-mic@digikod.net> <20210316204252.427806-8-mic@digikod.net>
- <CAG48ez1arKO3uYzwng8fst-UHkcH6J7YzyHFN+vfXUT2=1HT+w@mail.gmail.com> <b41a021c-69f4-075f-e9a0-a4483b280df8@digikod.net>
-In-Reply-To: <b41a021c-69f4-075f-e9a0-a4483b280df8@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 23 Mar 2021 18:49:22 +0100
-Message-ID: <CAG48ez1Vkd3KtYphDHLLbbkKY9T_ByhUcxwYAcWuDAyiA04A+w@mail.gmail.com>
-Subject: Re: [PATCH v30 07/12] landlock: Support filesystem access-control
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tNS+z+6QvyvEx8iMwg0Sa9sQJaEBMryjtauXMfUQXsg=;
+        b=TvwXkA5p6rMUJlvaKMg5Hvq3boF9L2uJ13Yff6/0iuBu8ib5gi/+mIgVPgJK2K5aQ1
+         p67E7t+m70yno/OHG9nmXUQcqKrAeJrV/49VBIKtVwIBETnrBxLZRw5wMFjvNOg1AH8i
+         xFbckrJo5Ep1Czqe3XLj/B6IcO1N4IYNkN47jWX/6OqexfPbyj04fWWEkMKT3fM3ZZgB
+         mEc+z0lDmPODDMhJ7oDsXLlZGPKcUdqfNUlu7NfBIonB63wJMVKX1ACii1TDw2Yfu/nv
+         Gtt9xnRj4ImYvEEGbhKn/0cp9XQ91Tc9fvtpBKmQ/c9jyZzesBKKrSvZncHfze4Pyall
+         eKsQ==
+X-Gm-Message-State: AOAM530YvgATti7Sv9FIMvR0ir/VP3HHYmCgtjANv/D6FWiaXFUlatkC
+        PCON4CySv54HkDEtY0PZWHX2PQ==
+X-Google-Smtp-Source: ABdhPJwRTFeuUShdjMWV5kyhdyH3xDdCP6w717rvFqgvQ7AXSFmYXzmVNBLzrOGFbFSYf8XGBAE1/g==
+X-Received: by 2002:a05:600c:3515:: with SMTP id h21mr4870837wmq.9.1616526996154;
+        Tue, 23 Mar 2021 12:16:36 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:4cfd:1405:ab5d:85f8])
+        by smtp.gmail.com with ESMTPSA id m10sm3547153wmh.13.2021.03.23.12.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Mar 2021 12:16:35 -0700 (PDT)
+Date:   Tue, 23 Mar 2021 20:16:29 +0100
+From:   Marco Elver <elver@google.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Matt Morehouse <mascasa@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Vince Weaver <vincent.weaver@maine.edu>
+Subject: Re: [PATCH RFC v2 8/8] selftests/perf: Add kselftest for
+ remove_on_exec
+Message-ID: <YFo+jdlJt9WpTVu4@elver.google.com>
+References: <20210310104139.679618-1-elver@google.com>
+ <20210310104139.679618-9-elver@google.com>
+ <YFiamKX+xYH2HJ4E@elver.google.com>
+ <CAP-5=fW8NnLFbnK8UwLuYFzkwk6Yjvxv=LdOpE8qgXbyL6=CCg@mail.gmail.com>
+ <CANpmjNN6_jO5vK8fteJ7bEi1gM6Ho2kZxSq9avocM3A5TyFL=g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNN6_jO5vK8fteJ7bEi1gM6Ho2kZxSq9avocM3A5TyFL=g@mail.gmail.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 4:54 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
-> On 23/03/2021 01:13, Jann Horn wrote:
-> >  On Tue, Mar 16, 2021 at 9:43 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.=
-net> wrote:
-> >> Using Landlock objects and ruleset, it is possible to tag inodes
-> >> according to a process's domain.
-> > [...]
-> >> +static void release_inode(struct landlock_object *const object)
-> >> +       __releases(object->lock)
-> >> +{
-> >> +       struct inode *const inode =3D object->underobj;
-> >> +       struct super_block *sb;
-> >> +
-> >> +       if (!inode) {
-> >> +               spin_unlock(&object->lock);
-> >> +               return;
-> >> +       }
-> >> +
-> >> +       /*
-> >> +        * Protects against concurrent use by hook_sb_delete() of the =
-reference
-> >> +        * to the underlying inode.
-> >> +        */
-> >> +       object->underobj =3D NULL;
-> >> +       /*
-> >> +        * Makes sure that if the filesystem is concurrently unmounted=
-,
-> >> +        * hook_sb_delete() will wait for us to finish iput().
-> >> +        */
-> >> +       sb =3D inode->i_sb;
-> >> +       atomic_long_inc(&landlock_superblock(sb)->inode_refs);
-> >> +       spin_unlock(&object->lock);
-> >> +       /*
-> >> +        * Because object->underobj was not NULL, hook_sb_delete() and
-> >> +        * get_inode_object() guarantee that it is safe to reset
-> >> +        * landlock_inode(inode)->object while it is not NULL.  It is =
-therefore
-> >> +        * not necessary to lock inode->i_lock.
-> >> +        */
-> >> +       rcu_assign_pointer(landlock_inode(inode)->object, NULL);
-> >> +       /*
-> >> +        * Now, new rules can safely be tied to @inode with get_inode_=
-object().
-> >> +        */
-> >> +
-> >> +       iput(inode);
-> >> +       if (atomic_long_dec_and_test(&landlock_superblock(sb)->inode_r=
-efs))
-> >> +               wake_up_var(&landlock_superblock(sb)->inode_refs);
-> >> +}
-> > [...]
-> >> +static struct landlock_object *get_inode_object(struct inode *const i=
-node)
-> >> +{
-> >> +       struct landlock_object *object, *new_object;
-> >> +       struct landlock_inode_security *inode_sec =3D landlock_inode(i=
-node);
-> >> +
-> >> +       rcu_read_lock();
-> >> +retry:
-> >> +       object =3D rcu_dereference(inode_sec->object);
-> >> +       if (object) {
-> >> +               if (likely(refcount_inc_not_zero(&object->usage))) {
-> >> +                       rcu_read_unlock();
-> >> +                       return object;
-> >> +               }
-> >> +               /*
-> >> +                * We are racing with release_inode(), the object is g=
-oing
-> >> +                * away.  Wait for release_inode(), then retry.
-> >> +                */
-> >> +               spin_lock(&object->lock);
-> >> +               spin_unlock(&object->lock);
-> >> +               goto retry;
-> >> +       }
-> >> +       rcu_read_unlock();
-> >> +
-> >> +       /*
-> >> +        * If there is no object tied to @inode, then create a new one=
- (without
-> >> +        * holding any locks).
-> >> +        */
-> >> +       new_object =3D landlock_create_object(&landlock_fs_underops, i=
-node);
-> >> +       if (IS_ERR(new_object))
-> >> +               return new_object;
-> >> +
-> >> +       /* Protects against concurrent get_inode_object() calls. */
-> >> +       spin_lock(&inode->i_lock);
-> >> +       object =3D rcu_dereference_protected(inode_sec->object,
-> >> +                       lockdep_is_held(&inode->i_lock));
+On Tue, Mar 23, 2021 at 10:47AM +0100, Marco Elver wrote:
+> On Tue, 23 Mar 2021 at 04:10, Ian Rogers <irogers@google.com> wrote:
+> > On Mon, Mar 22, 2021 at 6:24 AM Marco Elver <elver@google.com> wrote:
+> > > On Wed, Mar 10, 2021 at 11:41AM +0100, Marco Elver wrote:
+> > > > Add kselftest to test that remove_on_exec removes inherited events from
+> > > > child tasks.
+> > > >
+> > > > Signed-off-by: Marco Elver <elver@google.com>
+> > >
+> > > To make compatible with more recent libc, we'll need to fixup the tests
+> > > with the below.
+> > >
+> > > Also, I've seen that tools/perf/tests exists, however it seems to be
+> > > primarily about perf-tool related tests. Is this correct?
+> > >
+> > > I'd propose to keep these purely kernel ABI related tests separate, and
+> > > that way we can also make use of the kselftests framework which will
+> > > also integrate into various CI systems such as kernelci.org.
 > >
-> > rcu_dereference_protected() requires that inode_sec->object is not
-> > concurrently changed, but I think another thread could call
-> > get_inode_object() while we're in landlock_create_object(), and then
-> > we could race with the NULL write in release_inode() here? (It
-> > wouldn't actually be a UAF though because we're not actually accessing
-> > `object` here.) Or am I missing a lock that prevents this?
-> >
-> > In v28 this wasn't an issue because release_inode() was holding
-> > inode->i_lock (and object->lock) during the NULL store; but in v29 and
-> > this version the NULL store in release_inode() moved out of the locked
-> > region. I think you could just move the NULL store in release_inode()
-> > back up (and maybe add a comment explaining the locking rules for
-> > landlock_inode(...)->object)?
-> >
-> > (Or alternatively you could use rcu_dereference_raw() with a comment
-> > explaining that the read pointer is only used to check for NULL-ness,
-> > and that it is guaranteed that the pointer can't change if it is NULL
-> > and we're holding the lock. But that'd be needlessly complicated, I
-> > think.)
->
-> To reach rcu_assign_pointer(landlock_inode(inode)->object, NULL) in
-> release_inode() or in hook_sb_delete(), the
-> landlock_inode(inode)->object need to be non-NULL,
+> > Perhaps there is a way to have both? Having the perf tool spot an
+> > errant kernel feels like a feature. There are also
+> > tools/lib/perf/tests and Vince Weaver's tests [1]. It is possible to
+> > run standalone tests from within perf test by having them be executed
+> > by a shell test.
+> 
+> Thanks for the pointers. Sure, I'd support more additional tests.
+> 
+> But I had another look and it seems the tests in
+> tools/{perf,lib/perf}/tests do focus on perf-tool or the library
+> respectively, so adding kernel ABI tests there feels wrong. (If
+> perf-tool somehow finds use for sigtrap, or remove_on_exec, then
+> having a perf-tool specific test for those would make sense again.)
 
-Yes.
+Ok, I checked once more, and I did find a few pure kernel ABI tests e.g.
+in "wp.c".
 
-> which implies that a
-> call to get_inode_object(inode) either "retry" (because release_inode is
-> only called by landlock_put_object, which set object->usage to 0) until
-> it creates a new object, or reuses the existing referenced object (and
-> increments object->usage).
+[...]
+> Because I'd much prefer in-tree tests with little boilerplate, that
+> are structured with parsable output; in the kernel we have the
+> kselftest framework for tests with a user space component, and KUnit
+> for pure in-kernel tests.
 
-But it can be that landlock_inode(inode)->object only becomes non-NULL
-after get_inode_object() has checked
-rcu_dereference(inode_sec->object).
+So let's try to have both... but from what I could tell, the
+remove_on_exec test just can't be turned into a perf tool built-in test,
+at least not easily. In perf tool I also can't use the new "si_perf"
+field yet.
 
-> The worse case would be if
-> get_inode_object(inode) is called just before the
-> rcu_assign_pointer(landlock_inode(inode)->object, NULL) from
-> hook_sb_delete(), which would result in an object with a NULL underobj,
-> which is the expected behavior (and checked by release_inode).
+I'll add the patch below at the end of the series, so that we can have
+both. Too many tests probably don't hurt...
 
-The scenario I'm talking about doesn't involve hook_sb_delete().
+Thanks,
+-- Marco
 
-> The line rcu_assign_pointer(inode_sec->object, new_object) from
-> get_inode_object() can only be reached if the underlying inode doesn't
-> reference an object,
+------ >8 ------
 
-Yes.
 
-> in which case hook_sb_delete() will not reach the
-> rcu_assign_pointer(landlock_inode(inode)->object, NULL) line for this
-> same inode.
->
-> This works because get_inode_object(inode) is mutually exclusive to
-> itself with the same inode (i.e. an inode can only point to an object
-> that references this same inode).
+commit 6a98611ace59c867aa135f780b1879990180548e
+Author: Marco Elver <elver@google.com>
+Date:   Tue Mar 23 19:51:12 2021 +0100
 
-To clarify: You can concurrently call get_inode_object() multiple
-times on the same inode, right? There are no locks held on entry to
-that function.
+    perf test: Add basic stress test for sigtrap handling
+    
+    Ports the stress test from tools/testing/selftests/sigtrap_threads.c,
+    and add as a perf tool built-in test. This allows checking the basic
+    sigtrap functionality from within the perf tool.
+    
+    Signed-off-by: Marco Elver <elver@google.com>
 
-> I tried to explain this with the comment "Protects against concurrent
-> get_inode_object() calls" in get_inode_object(), and the comments just
-> before both rcu_assign_pointer(landlock_inode(inode)->object, NULL).
-
-The scenario I'm talking about is:
-
-Initially the inode does not have an associated landlock_object. There
-are two threads A and B. Thread A is going to execute
-get_inode_object(). Thread B is going to execute get_inode_object()
-followed immediately by landlock_put_object().
-
-thread A: enters get_inode_object()
-thread A: rcu_dereference(inode_sec->object) returns NULL
-thread A: enters landlock_create_object()
-thread B: enters get_inode_object()
-thread B: rcu_dereference(inode_sec->object) returns NULL
-thread B: calls landlock_create_object()
-thread B: sets inode_sec->object while holding inode->i_lock
-thread B: leaves get_inode_object()
-thread B: enters landlock_put_object()
-thread B: object->usage drops to 0, object->lock is taken
-thread B: calls release_inode()
-thread B: drops object->lock
-thread A: returns from landlock_create_object()
-thread A: takes inode->i_lock
-
-At this point, thread B will run:
-
-    rcu_assign_pointer(landlock_inode(inode)->object, NULL);
-
-while thread A runs:
-
-    rcu_dereference_protected(inode_sec->object,
-        lockdep_is_held(&inode->i_lock));
-
-meaning there is a (theoretical) data race, since
-rcu_dereference_protected() doesn't use READ_ONCE().
-
-> >> +       if (unlikely(object)) {
-> >> +               /* Someone else just created the object, bail out and =
-retry. */
-> >> +               spin_unlock(&inode->i_lock);
-> >> +               kfree(new_object);
-> >> +
-> >> +               rcu_read_lock();
-> >> +               goto retry;
-> >> +       }
-> >> +
-> >> +       rcu_assign_pointer(inode_sec->object, new_object);
-> >> +       /*
-> >> +        * @inode will be released by hook_sb_delete() on its superblo=
-ck
-> >> +        * shutdown.
-> >> +        */
-> >> +       ihold(inode);
-> >> +       spin_unlock(&inode->i_lock);
-> >> +       return new_object;
-> >> +}
+diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
+index 650aec19d490..a429c7a02b37 100644
+--- a/tools/perf/tests/Build
++++ b/tools/perf/tests/Build
+@@ -64,6 +64,7 @@ perf-y += parse-metric.o
+ perf-y += pe-file-parsing.o
+ perf-y += expand-cgroup.o
+ perf-y += perf-time-to-tsc.o
++perf-y += sigtrap.o
+ 
+ $(OUTPUT)tests/llvm-src-base.c: tests/bpf-script-example.c tests/Build
+ 	$(call rule_mkdir)
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index c4b888f18e9c..28a1cb5eaa77 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -359,6 +359,11 @@ static struct test generic_tests[] = {
+ 		.func = test__perf_time_to_tsc,
+ 		.is_supported = test__tsc_is_supported,
+ 	},
++	{
++		.desc = "Sigtrap support",
++		.func = test__sigtrap,
++		.is_supported = test__wp_is_supported, /* uses wp for test */
++	},
+ 	{
+ 		.func = NULL,
+ 	},
+diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+new file mode 100644
+index 000000000000..0888a4e02222
+--- /dev/null
++++ b/tools/perf/tests/sigtrap.c
+@@ -0,0 +1,153 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Basic stress-test for sigtrap support.
++ *
++ * Copyright (C) 2021, Google LLC.
++ */
++
++#include <pthread.h>
++#include <signal.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/ioctl.h>
++#include <sys/syscall.h>
++#include <unistd.h>
++#include <linux/hw_breakpoint.h>
++#include <linux/kernel.h>
++#include "tests.h"
++#include "debug.h"
++#include "event.h"
++#include "cloexec.h"
++#include "../perf-sys.h"
++
++#define NUM_THREADS 5
++
++/* Data shared between test body, threads, and signal handler. */
++static struct {
++	int tids_want_signal;		/* Which threads still want a signal. */
++	int signal_count;		/* Sanity check number of signals received. */
++	volatile int iterate_on;	/* Variable to set breakpoint on. */
++	siginfo_t first_siginfo;	/* First observed siginfo_t. */
++} ctx;
++
++static struct perf_event_attr make_event_attr(void)
++{
++	struct perf_event_attr attr = {
++		.type		= PERF_TYPE_BREAKPOINT,
++		.size		= sizeof(attr),
++		.sample_period	= 1,
++		.disabled	= 1,
++		.bp_addr	= (long)&ctx.iterate_on,
++		.bp_type	= HW_BREAKPOINT_RW,
++		.bp_len		= HW_BREAKPOINT_LEN_1,
++		.inherit	= 1, /* Children inherit events ... */
++		.inherit_thread = 1, /* ... but only cloned with CLONE_THREAD. */
++		.remove_on_exec = 1, /* Required by sigtrap. */
++		.sigtrap	= 1, /* Request synchronous SIGTRAP on event. */
++	};
++	return attr;
++}
++
++static void
++sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __maybe_unused)
++{
++	if (!__atomic_fetch_add(&ctx.signal_count, 1, __ATOMIC_RELAXED))
++		ctx.first_siginfo = *info;
++	__atomic_fetch_sub(&ctx.tids_want_signal, syscall(SYS_gettid), __ATOMIC_RELAXED);
++}
++
++static void *test_thread(void *arg)
++{
++	pthread_barrier_t *barrier = (pthread_barrier_t *)arg;
++	pid_t tid = syscall(SYS_gettid);
++	int i;
++
++	pthread_barrier_wait(barrier);
++
++	__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
++	for (i = 0; i < ctx.iterate_on - 1; i++)
++		__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
++
++	return NULL;
++}
++
++static int run_test_threads(pthread_t *threads, pthread_barrier_t *barrier)
++{
++	int i;
++
++	pthread_barrier_wait(barrier);
++	for (i = 0; i < NUM_THREADS; i++)
++		TEST_ASSERT_EQUAL("pthread_join() failed", pthread_join(threads[i], NULL), 0);
++
++	return 0;
++}
++
++static int run_stress_test(int fd, pthread_t *threads, pthread_barrier_t *barrier)
++{
++	ctx.iterate_on = 3000;
++
++	TEST_ASSERT_EQUAL("misfired signal?", ctx.signal_count, 0);
++	TEST_ASSERT_EQUAL("enable failed", ioctl(fd, PERF_EVENT_IOC_ENABLE, 0), 0);
++	if (run_test_threads(threads, barrier))
++		return -1;
++	TEST_ASSERT_EQUAL("disable failed", ioctl(fd, PERF_EVENT_IOC_DISABLE, 0), 0);
++
++	TEST_ASSERT_EQUAL("unexpected sigtraps", ctx.signal_count, NUM_THREADS * ctx.iterate_on);
++	TEST_ASSERT_EQUAL("missing signals or incorrectly delivered", ctx.tids_want_signal, 0);
++	TEST_ASSERT_VAL("unexpected si_addr", ctx.first_siginfo.si_addr == &ctx.iterate_on);
++	TEST_ASSERT_EQUAL("unexpected si_errno", ctx.first_siginfo.si_errno, PERF_TYPE_BREAKPOINT);
++#if 0 /* FIXME: test build and enable when libc's signal.h has si_perf. */
++	TEST_ASSERT_VAL("unexpected si_perf", ctx.first_siginfo.si_perf ==
++			((HW_BREAKPOINT_LEN_1 << 16) | HW_BREAKPOINT_RW));
++#endif
++
++	return 0;
++}
++
++int test__sigtrap(struct test *test __maybe_unused, int subtest __maybe_unused)
++{
++	struct perf_event_attr attr = make_event_attr();
++	struct sigaction action = {};
++	struct sigaction oldact;
++	pthread_t threads[NUM_THREADS];
++	pthread_barrier_t barrier;
++	int i, fd, ret = 0;
++
++	pthread_barrier_init(&barrier, NULL, NUM_THREADS + 1);
++
++	action.sa_flags = SA_SIGINFO | SA_NODEFER;
++	action.sa_sigaction = sigtrap_handler;
++	sigemptyset(&action.sa_mask);
++	if (sigaction(SIGTRAP, &action, &oldact)) {
++		pr_debug("FAILED sigaction()\n");
++		ret = -1;
++		goto out_sigaction;
++	}
++
++
++	fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
++	if (fd < 0) {
++		pr_debug("FAILED sys_perf_event_open()\n");
++		ret = -1;
++		goto out_sigaction;
++	}
++
++	/* Spawn threads inheriting perf event. */
++	for (i = 0; i < NUM_THREADS; i++) {
++		if (pthread_create(&threads[i], NULL, test_thread, &barrier)) {
++			pr_debug("FAILED pthread_create()");
++			ret = -1;
++			goto out_perf_event;
++		}
++	}
++
++	ret |= run_stress_test(fd, threads, &barrier);
++
++out_perf_event:
++	close(fd);
++out_sigaction:
++	sigaction(SIGTRAP, &oldact, NULL);
++	pthread_barrier_destroy(&barrier);
++	return ret;
++}
+diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
+index b85f005308a3..c3f2e2ecbfd6 100644
+--- a/tools/perf/tests/tests.h
++++ b/tools/perf/tests/tests.h
+@@ -127,6 +127,7 @@ int test__parse_metric(struct test *test, int subtest);
+ int test__pe_file_parsing(struct test *test, int subtest);
+ int test__expand_cgroup_events(struct test *test, int subtest);
+ int test__perf_time_to_tsc(struct test *test, int subtest);
++int test__sigtrap(struct test *test, int subtest);
+ 
+ bool test__bp_signal_is_supported(void);
+ bool test__bp_account_is_supported(void);
