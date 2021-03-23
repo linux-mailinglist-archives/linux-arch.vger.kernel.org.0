@@ -2,81 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD3234557F
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Mar 2021 03:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71B33455F6
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Mar 2021 04:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbhCWCeW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Mar 2021 22:34:22 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:49600 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229467AbhCWCeV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 22 Mar 2021 22:34:21 -0400
-Received: from localhost.localdomain (unknown [182.149.161.110])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxqa6aU1lgrXQFAA--.1011S2;
-        Tue, 23 Mar 2021 10:34:10 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-arch@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: [PATCH] MIPS: fix local_irq_{disable,enable} in asmmacro.h
-Date:   Tue, 23 Mar 2021 10:34:02 +0800
-Message-Id: <20210323023402.9657-1-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: AQAAf9Dxqa6aU1lgrXQFAA--.1011S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr1kur4DtFWkXFyUCFy8Krg_yoWDXwc_Aw
-        1IqwsrWr4fXFZ3W347tw4fuayqga18X393uF4FkrnIyr13Ka1UJa1kZ3sxXw15CFZ0yr4r
-        uay5trWUCwnFkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VU1sYFtUUUUU==
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        id S229879AbhCWDK7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Mar 2021 23:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbhCWDKh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Mar 2021 23:10:37 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52528C061762
+        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 20:10:36 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id x16so19219525wrn.4
+        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 20:10:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ij2qTAkV9onciaXLQh2fELQAThocPd0dv9MVIWIx7vM=;
+        b=r+uMOdSRgBmRm7NI0thZSGjZ2EFpekvMjsgqPBW2fQQYCqu283OtxYJYa8IpOBUrfq
+         sAeC0RkRrvztxa7s3L/B7x52qp3mAeL8tLFy9wls9LDXfKjPvgxuR/yvp3GTFgKZxT+w
+         Gfaq6GBmJHMN+HwPfA+zw+WzA7Ja/WTLuWYF2lsS/n+jCz9qvm3Qf9o59mlnDBsuc3zI
+         CS/cTs8yZd4a1F9qz7cNDAG6dac2879aPh9+/8q6DhxhboVd8GsfX0yDn400s3yjAjPe
+         J+h+KWNAV4UP6N8bW2XNF39BEGBvWcKcDMB/K/4Hnknc7UTzMBxyZzhiYRqoOzyDyL9K
+         0pYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ij2qTAkV9onciaXLQh2fELQAThocPd0dv9MVIWIx7vM=;
+        b=q1rD693hn+QxgMXwldpvL9WvhxpnDBmzOCfYzguFX9MXSf3g5sXXTJKQHN6a8aP9Re
+         ci28YrKdvwsBUsSQuaCWw5WJXy17U09/dWZ/9CRT5OsGJETIRANi1LQPM4KwT2Lh+Ylc
+         frP/ES0OHxUfsGTmdtv8yCG9r8AOCCyf0YV+RmpRpv2Wp42h7vUQqrEo2grcn0hRBgtc
+         m5884ajR5RZeweo2jOtMLCUfX5MZ29FLGswCBWoJHMHsxtRr6Vj9+CKsr2wVLbseW3c5
+         RBM/ARBHAK71K605bw2CEQhSI6lSPm6v+Cz8o7UudBksKboamCE8rM/0g+Nqs86xNuIg
+         uuqA==
+X-Gm-Message-State: AOAM532ETOelgvPEXYhlt5W5osmt1dzqBBnhsqKPIp80w2lVABM/SLHA
+        nL/FfevB0Xf5Oh7FMNZyCFD43Z4TVukQv6gw1gpUXw==
+X-Google-Smtp-Source: ABdhPJzDmmeiCu1efaHZYtsxpK+AONN+FexOeJinR9KuKjtoVcz+vufseyaAN1twehF15gc+9ImRKywiKphcRdDFcek=
+X-Received: by 2002:a05:6000:1acd:: with SMTP id i13mr1545621wry.48.1616469034674;
+ Mon, 22 Mar 2021 20:10:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210310104139.679618-1-elver@google.com> <20210310104139.679618-9-elver@google.com>
+ <YFiamKX+xYH2HJ4E@elver.google.com>
+In-Reply-To: <YFiamKX+xYH2HJ4E@elver.google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 22 Mar 2021 20:10:22 -0700
+Message-ID: <CAP-5=fW8NnLFbnK8UwLuYFzkwk6Yjvxv=LdOpE8qgXbyL6=CCg@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 8/8] selftests/perf: Add kselftest for remove_on_exec
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        viro@zeniv.linux.org.uk, Arnd Bergmann <arnd@arndb.de>,
+        christian@brauner.io, Dmitry Vyukov <dvyukov@google.com>,
+        jannh@google.com, axboe@kernel.dk,
+        Matt Morehouse <mascasa@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        x86 <x86@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vince Weaver <vincent.weaver@maine.edu>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-commit ba9196d2e005 ("MIPS: Make DIEI support as a config option")
-use CPU_HAS_DIEI to indicate whether di/ei is implemented correctly,
-without this patch, "local_irq_disable" from entry.S in 3A1000
-(with buggy di/ei) lose protection of commit e97c5b609880 ("MIPS:
-Make irqflags.h functions preempt-safe")
+On Mon, Mar 22, 2021 at 6:24 AM Marco Elver <elver@google.com> wrote:
+>
+> On Wed, Mar 10, 2021 at 11:41AM +0100, Marco Elver wrote:
+> > Add kselftest to test that remove_on_exec removes inherited events from
+> > child tasks.
+> >
+> > Signed-off-by: Marco Elver <elver@google.com>
+>
+> To make compatible with more recent libc, we'll need to fixup the tests
+> with the below.
+>
+> Also, I've seen that tools/perf/tests exists, however it seems to be
+> primarily about perf-tool related tests. Is this correct?
+>
+> I'd propose to keep these purely kernel ABI related tests separate, and
+> that way we can also make use of the kselftests framework which will
+> also integrate into various CI systems such as kernelci.org.
 
-Fixes: ba9196d2e005 ("MIPS: Make DIEI support as a config option")
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/include/asm/asmmacro.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Perhaps there is a way to have both? Having the perf tool spot an
+errant kernel feels like a feature. There are also
+tools/lib/perf/tests and Vince Weaver's tests [1]. It is possible to
+run standalone tests from within perf test by having them be executed
+by a shell test.
 
-diff --git a/arch/mips/include/asm/asmmacro.h b/arch/mips/include/asm/asmmacro.h
-index 86f2323ebe6b..ca83ada7015f 100644
---- a/arch/mips/include/asm/asmmacro.h
-+++ b/arch/mips/include/asm/asmmacro.h
-@@ -44,8 +44,7 @@
- 	.endm
- #endif
- 
--#if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5) || \
--    defined(CONFIG_CPU_MIPSR6)
-+#ifdef CONFIG_CPU_HAS_DIEI
- 	.macro	local_irq_enable reg=t0
- 	ei
- 	irq_enable_hazard
--- 
-2.17.1
+Thanks,
+Ian
 
+[1] https://github.com/deater/perf_event_tests
+
+> Thanks,
+> -- Marco
+>
+> ------ >8 ------
+>
+> diff --git a/tools/testing/selftests/perf_events/remove_on_exec.c b/tools/testing/selftests/perf_events/remove_on_exec.c
+> index e176b3a74d55..f89d0cfdb81e 100644
+> --- a/tools/testing/selftests/perf_events/remove_on_exec.c
+> +++ b/tools/testing/selftests/perf_events/remove_on_exec.c
+> @@ -13,6 +13,11 @@
+>  #define __have_siginfo_t 1
+>  #define __have_sigval_t 1
+>  #define __have_sigevent_t 1
+> +#define __siginfo_t_defined
+> +#define __sigval_t_defined
+> +#define __sigevent_t_defined
+> +#define _BITS_SIGINFO_CONSTS_H 1
+> +#define _BITS_SIGEVENT_CONSTS_H 1
+>
+>  #include <linux/perf_event.h>
+>  #include <pthread.h>
+> diff --git a/tools/testing/selftests/perf_events/sigtrap_threads.c b/tools/testing/selftests/perf_events/sigtrap_threads.c
+> index 7ebb9bb34c2e..b9a7d4b64b3c 100644
+> --- a/tools/testing/selftests/perf_events/sigtrap_threads.c
+> +++ b/tools/testing/selftests/perf_events/sigtrap_threads.c
+> @@ -13,6 +13,11 @@
+>  #define __have_siginfo_t 1
+>  #define __have_sigval_t 1
+>  #define __have_sigevent_t 1
+> +#define __siginfo_t_defined
+> +#define __sigval_t_defined
+> +#define __sigevent_t_defined
+> +#define _BITS_SIGINFO_CONSTS_H 1
+> +#define _BITS_SIGEVENT_CONSTS_H 1
+>
+>  #include <linux/hw_breakpoint.h>
+>  #include <linux/perf_event.h>
