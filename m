@@ -2,214 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2701E3453BB
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Mar 2021 01:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD3234557F
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Mar 2021 03:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbhCWAOZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Mar 2021 20:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbhCWAOF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Mar 2021 20:14:05 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB20C061756
-        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 17:14:05 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id b83so24022739lfd.11
-        for <linux-arch@vger.kernel.org>; Mon, 22 Mar 2021 17:14:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TIGZs9jCzlV0x2/zD28u6hnF9ziSX82ipPw1eAlhUAk=;
-        b=NQ71vlDt19b2qIy3K62/rODvW/ipNZXPs54iaqoCcYgvr0ZoSYMPbU3vdVRzRslzc0
-         paD44AWGk2fGxml9DqHSXpWchMulVtSjoazoJQCHqMqDiZQv3PQGaTav7G+EZ+/Yz0Ph
-         +I/b57JKRKullcMz8vVJcYd0UwSmrTSWA4CeJdZBKpdTGzNd97/MAdsFkXxVZPhb3k+4
-         9ZqfVflxIPxDAKr+2r/8JCbzty+q0w/uN+ytri4BJTYKvpQ7fCZjmce6o20eSEVn/bUJ
-         Ik0/GtqeP0J9ZbJyd50mOg9CAXERLBgP8bORDoUzBiazlAWWJUCNW/Nya+XY3VMgqVqW
-         H7xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TIGZs9jCzlV0x2/zD28u6hnF9ziSX82ipPw1eAlhUAk=;
-        b=hEimZKIOt4mJtwf1LMelgqXfLSXeQj4+v30vG5Y/ykRSw9a0RM4GQmaoeFhcz9T6R1
-         lH+/fiqhm6wlCy2aLjGXPIUYv7OEXKubNX/V8ZXDB/kk1JjINGV6ppebcWoeNvqoL1ts
-         JQnAQIhCxO3NwElE0EA3K8czLIA//rE0oV79m8yeWAR1fuKwE/foP7tLK1TCXxRC8L/I
-         PLjWDi36vkhvzNBly0yBEdP8+m1cFLQu0+iRXilgQWbyTpJLdPy8wI8ao5WLFnmegIRE
-         jbXzRfSfbRg3Ru+ZX9dLo1zcj4VK0MahcfvLg0/C4duefL9/2HG1OkpIncMyWhyV21EL
-         8D5A==
-X-Gm-Message-State: AOAM533hCPPohXhjAiqskdJCOYP/geh6mRLan3515hFYo6ZrRVB3egz6
-        GjqK6sSBIkNbDBPPjP2PHlMaZhlRo/JrhHaEUqeBxg==
-X-Google-Smtp-Source: ABdhPJzjC3gk50Yb4Wr00pH4fD/9xfeZqVtXPShrjfrPIGPPmvrDVMK0gxGlsIriq6MtCniISI8bDCiz3gzLLpYfAU8=
-X-Received: by 2002:a19:946:: with SMTP id 67mr1116146lfj.74.1616458443362;
- Mon, 22 Mar 2021 17:14:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210316204252.427806-1-mic@digikod.net> <20210316204252.427806-8-mic@digikod.net>
-In-Reply-To: <20210316204252.427806-8-mic@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 23 Mar 2021 01:13:36 +0100
-Message-ID: <CAG48ez1arKO3uYzwng8fst-UHkcH6J7YzyHFN+vfXUT2=1HT+w@mail.gmail.com>
-Subject: Re: [PATCH v30 07/12] landlock: Support filesystem access-control
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S229545AbhCWCeW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Mar 2021 22:34:22 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:49600 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229467AbhCWCeV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 22 Mar 2021 22:34:21 -0400
+Received: from localhost.localdomain (unknown [182.149.161.110])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxqa6aU1lgrXQFAA--.1011S2;
+        Tue, 23 Mar 2021 10:34:10 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-arch@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Subject: [PATCH] MIPS: fix local_irq_{disable,enable} in asmmacro.h
+Date:   Tue, 23 Mar 2021 10:34:02 +0800
+Message-Id: <20210323023402.9657-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: AQAAf9Dxqa6aU1lgrXQFAA--.1011S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr1kur4DtFWkXFyUCFy8Krg_yoWDXwc_Aw
+        1IqwsrWr4fXFZ3W347tw4fuayqga18X393uF4FkrnIyr13Ka1UJa1kZ3sxXw15CFZ0yr4r
+        uay5trWUCwnFkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VU1sYFtUUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
- On Tue, Mar 16, 2021 at 9:43 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
- wrote:
-> Using Landlock objects and ruleset, it is possible to tag inodes
-> according to a process's domain.
-[...]
-> +static void release_inode(struct landlock_object *const object)
-> +       __releases(object->lock)
-> +{
-> +       struct inode *const inode =3D object->underobj;
-> +       struct super_block *sb;
-> +
-> +       if (!inode) {
-> +               spin_unlock(&object->lock);
-> +               return;
-> +       }
-> +
-> +       /*
-> +        * Protects against concurrent use by hook_sb_delete() of the ref=
-erence
-> +        * to the underlying inode.
-> +        */
-> +       object->underobj =3D NULL;
-> +       /*
-> +        * Makes sure that if the filesystem is concurrently unmounted,
-> +        * hook_sb_delete() will wait for us to finish iput().
-> +        */
-> +       sb =3D inode->i_sb;
-> +       atomic_long_inc(&landlock_superblock(sb)->inode_refs);
-> +       spin_unlock(&object->lock);
-> +       /*
-> +        * Because object->underobj was not NULL, hook_sb_delete() and
-> +        * get_inode_object() guarantee that it is safe to reset
-> +        * landlock_inode(inode)->object while it is not NULL.  It is the=
-refore
-> +        * not necessary to lock inode->i_lock.
-> +        */
-> +       rcu_assign_pointer(landlock_inode(inode)->object, NULL);
-> +       /*
-> +        * Now, new rules can safely be tied to @inode with get_inode_obj=
-ect().
-> +        */
-> +
-> +       iput(inode);
-> +       if (atomic_long_dec_and_test(&landlock_superblock(sb)->inode_refs=
-))
-> +               wake_up_var(&landlock_superblock(sb)->inode_refs);
-> +}
-[...]
-> +static struct landlock_object *get_inode_object(struct inode *const inod=
-e)
-> +{
-> +       struct landlock_object *object, *new_object;
-> +       struct landlock_inode_security *inode_sec =3D landlock_inode(inod=
-e);
-> +
-> +       rcu_read_lock();
-> +retry:
-> +       object =3D rcu_dereference(inode_sec->object);
-> +       if (object) {
-> +               if (likely(refcount_inc_not_zero(&object->usage))) {
-> +                       rcu_read_unlock();
-> +                       return object;
-> +               }
-> +               /*
-> +                * We are racing with release_inode(), the object is goin=
-g
-> +                * away.  Wait for release_inode(), then retry.
-> +                */
-> +               spin_lock(&object->lock);
-> +               spin_unlock(&object->lock);
-> +               goto retry;
-> +       }
-> +       rcu_read_unlock();
-> +
-> +       /*
-> +        * If there is no object tied to @inode, then create a new one (w=
-ithout
-> +        * holding any locks).
-> +        */
-> +       new_object =3D landlock_create_object(&landlock_fs_underops, inod=
-e);
-> +       if (IS_ERR(new_object))
-> +               return new_object;
-> +
-> +       /* Protects against concurrent get_inode_object() calls. */
-> +       spin_lock(&inode->i_lock);
-> +       object =3D rcu_dereference_protected(inode_sec->object,
-> +                       lockdep_is_held(&inode->i_lock));
+commit ba9196d2e005 ("MIPS: Make DIEI support as a config option")
+use CPU_HAS_DIEI to indicate whether di/ei is implemented correctly,
+without this patch, "local_irq_disable" from entry.S in 3A1000
+(with buggy di/ei) lose protection of commit e97c5b609880 ("MIPS:
+Make irqflags.h functions preempt-safe")
 
-rcu_dereference_protected() requires that inode_sec->object is not
-concurrently changed, but I think another thread could call
-get_inode_object() while we're in landlock_create_object(), and then
-we could race with the NULL write in release_inode() here? (It
-wouldn't actually be a UAF though because we're not actually accessing
-`object` here.) Or am I missing a lock that prevents this?
+Fixes: ba9196d2e005 ("MIPS: Make DIEI support as a config option")
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+---
+ arch/mips/include/asm/asmmacro.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-In v28 this wasn't an issue because release_inode() was holding
-inode->i_lock (and object->lock) during the NULL store; but in v29 and
-this version the NULL store in release_inode() moved out of the locked
-region. I think you could just move the NULL store in release_inode()
-back up (and maybe add a comment explaining the locking rules for
-landlock_inode(...)->object)?
+diff --git a/arch/mips/include/asm/asmmacro.h b/arch/mips/include/asm/asmmacro.h
+index 86f2323ebe6b..ca83ada7015f 100644
+--- a/arch/mips/include/asm/asmmacro.h
++++ b/arch/mips/include/asm/asmmacro.h
+@@ -44,8 +44,7 @@
+ 	.endm
+ #endif
+ 
+-#if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5) || \
+-    defined(CONFIG_CPU_MIPSR6)
++#ifdef CONFIG_CPU_HAS_DIEI
+ 	.macro	local_irq_enable reg=t0
+ 	ei
+ 	irq_enable_hazard
+-- 
+2.17.1
 
-(Or alternatively you could use rcu_dereference_raw() with a comment
-explaining that the read pointer is only used to check for NULL-ness,
-and that it is guaranteed that the pointer can't change if it is NULL
-and we're holding the lock. But that'd be needlessly complicated, I
-think.)
-
-
-> +       if (unlikely(object)) {
-> +               /* Someone else just created the object, bail out and ret=
-ry. */
-> +               spin_unlock(&inode->i_lock);
-> +               kfree(new_object);
-> +
-> +               rcu_read_lock();
-> +               goto retry;
-> +       }
-> +
-> +       rcu_assign_pointer(inode_sec->object, new_object);
-> +       /*
-> +        * @inode will be released by hook_sb_delete() on its superblock
-> +        * shutdown.
-> +        */
-> +       ihold(inode);
-> +       spin_unlock(&inode->i_lock);
-> +       return new_object;
-> +}
