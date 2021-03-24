@@ -2,117 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D926347B96
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 16:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7CA347CA7
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 16:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbhCXPDh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Mar 2021 11:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        id S236705AbhCXPbd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Mar 2021 11:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236428AbhCXPDH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Mar 2021 11:03:07 -0400
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fa8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0711C061763;
-        Wed, 24 Mar 2021 08:03:06 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F5BLY1j83zMq3Y5;
-        Wed, 24 Mar 2021 16:03:01 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4F5BLT1HXmzlh8TT;
-        Wed, 24 Mar 2021 16:02:57 +0100 (CET)
-Subject: Re: [PATCH v30 08/12] landlock: Add syscall implementations
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20210316204252.427806-1-mic@digikod.net>
- <20210316204252.427806-9-mic@digikod.net> <202103191157.CF13C34@keescook>
- <380d65b2-f515-f3f5-5d57-7f99c528e5c7@digikod.net>
-Message-ID: <9062d586-8fa7-a972-9615-ca3a5fe38cef@digikod.net>
-Date:   Wed, 24 Mar 2021 16:03:36 +0100
-User-Agent: 
+        with ESMTP id S236678AbhCXPbW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Mar 2021 11:31:22 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655A3C0613E0
+        for <linux-arch@vger.kernel.org>; Wed, 24 Mar 2021 08:31:20 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id r12so33601285ejr.5
+        for <linux-arch@vger.kernel.org>; Wed, 24 Mar 2021 08:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fckQzWuJnvD6S/jFF8HUa1PwKAcbSDOKJ4gWr/ndvyk=;
+        b=OlKQtU1q2ZxhFAsb1Cs2Js3zE+ZJzDOEI4+bnRMrr1+uVB7P/Iu6eKckjnXg8zK56l
+         Irrft7thQGCzqA32QFBdXE4+uBuO6iQgfPeDjc1NS4TUbZsPKk2pdNdVY5R9tx4z25Dg
+         ozY6uLy7niX57VhmCVl+dE8zMrZFu7sQlODj4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fckQzWuJnvD6S/jFF8HUa1PwKAcbSDOKJ4gWr/ndvyk=;
+        b=WkMTiNdK4WmOK2lPpJhID6/OcnZfWujMrVmj/Toyn6JnNQQlqo6Z+i9k9H5GsdTr2S
+         Tu6yyijbH0RKjKe3N6ogMF2HOJO+OokJR1QO5pH336KIxyM1CkaaFS9FY1VOeW7V6N4c
+         5RZO7kSFV+M0Trz5HhDoDuV1ijvNphEwz8FOsE/lGWTI6UcZlLQvO5QbrkxQRXQUgrZO
+         gqQDSmxxQ/TLAy/HGGmPrgmK8930746IH3tXi4ve46Tdm+/qg2bDE0YRpfD+ipSjlRW0
+         qL+McflZXfMedcMnnbBCAbja+jzvWtTIAPTk0aHWzCMMWb3mLyU0+C4WPopmAoKMdNgR
+         oWXw==
+X-Gm-Message-State: AOAM533jLWf7MWQ5u1zKf/iNrog1wiEKXDwOZVmq6pWagPDzszA0fDSg
+        r7auww43PO6X+8L6Ek6zegmOEQ==
+X-Google-Smtp-Source: ABdhPJwQj/wpq3nFF6bQFT/Rz0xc2jmEi77W566MBeimLH4Wx2lLOahfvWOwYafWC5mURjTYGhXuXw==
+X-Received: by 2002:a17:906:358c:: with SMTP id o12mr4397574ejb.156.1616599878962;
+        Wed, 24 Mar 2021 08:31:18 -0700 (PDT)
+Received: from [192.168.1.149] ([80.208.71.248])
+        by smtp.gmail.com with ESMTPSA id b12sm1262238eds.94.2021.03.24.08.31.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Mar 2021 08:31:18 -0700 (PDT)
+Subject: Re: [PATCH v3 02/17] cfi: add __cficanonical
+To:     Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210323203946.2159693-1-samitolvanen@google.com>
+ <20210323203946.2159693-3-samitolvanen@google.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <92afcbea-1415-2df1-5e78-4e9a7a4d364b@rasmusvillemoes.dk>
+Date:   Wed, 24 Mar 2021 16:31:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <380d65b2-f515-f3f5-5d57-7f99c528e5c7@digikod.net>
-Content-Type: text/plain; charset=iso-8859-15
+In-Reply-To: <20210323203946.2159693-3-samitolvanen@google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-On 19/03/2021 22:53, Mickaël Salaün wrote:
+On 23/03/2021 21.39, Sami Tolvanen wrote:
+> With CONFIG_CFI_CLANG, the compiler replaces a function address taken
+> in C code with the address of a local jump table entry, which passes
+> runtime indirect call checks. However, the compiler won't replace
+> addresses taken in assembly code, which will result in a CFI failure
+> if we later jump to such an address in instrumented C code. The code
+> generated for the non-canonical jump table looks this:
 > 
-> On 19/03/2021 20:06, Kees Cook wrote:
->> On Tue, Mar 16, 2021 at 09:42:48PM +0100, Mickaël Salaün wrote:
->>> From: Mickaël Salaün <mic@linux.microsoft.com>
-
-[...]
-
->>> +/**
->>> + * sys_landlock_create_ruleset - Create a new ruleset
->>> + *
->>> + * @attr: Pointer to a &struct landlock_ruleset_attr identifying the scope of
->>> + *        the new ruleset.
->>> + * @size: Size of the pointed &struct landlock_ruleset_attr (needed for
->>> + *        backward and forward compatibility).
->>> + * @flags: Must be 0.
->>> + *
->>> + * This system call enables to create a new Landlock ruleset, and returns the
->>> + * related file descriptor on success.
->>> + *
->>> + * Possible returned errors are:
->>> + *
->>> + * - EOPNOTSUPP: Landlock is supported by the kernel but disabled at boot time;
->>> + * - EINVAL: @flags is not 0, or unknown access, or too small @size;
->>> + * - E2BIG or EFAULT: @attr or @size inconsistencies;
->>> + * - ENOMSG: empty &landlock_ruleset_attr.handled_access_fs.
->>> + */
->>> +SYSCALL_DEFINE3(landlock_create_ruleset,
->>> +		const struct landlock_ruleset_attr __user *const, attr,
->>> +		const size_t, size, const __u32, flags)
->>> +{
->>> +	struct landlock_ruleset_attr ruleset_attr;
->>> +	struct landlock_ruleset *ruleset;
->>> +	int err, ruleset_fd;
->>> +
->>> +	/* Build-time checks. */
->>> +	build_check_abi();
->>> +
->>> +	if (!landlock_initialized)
->>> +		return -EOPNOTSUPP;
->>> +
->>> +	/* No flag for now. */
->>> +	if (flags)
->>> +		return -EINVAL;
->>> +
->>> +	/* Copies raw user space buffer. */
->>> +	err = copy_min_struct_from_user(&ruleset_attr, sizeof(ruleset_attr),
->>> +			offsetofend(typeof(ruleset_attr), handled_access_fs),
->>
->> The use of offsetofend() here appears to be kind of the "V1", "V2", ...
->> sizes used in other extensible syscall implementations?
+>   <noncanonical.cfi_jt>: /* In C, &noncanonical points here */
+> 	jmp noncanonical
+>   ...
+>   <noncanonical>:        /* function body */
+> 	...
 > 
-> ruleset_attr is an extensible argument.
+> This change adds the __cficanonical attribute, which tells the
+> compiler to use a canonical jump table for the function instead. This
+> means the compiler will rename the actual function to <function>.cfi
+> and points the original symbol to the jump table entry instead:
+> 
+>   <canonical>:           /* jump table entry */
+> 	jmp canonical.cfi
+>   ...
+>   <canonical.cfi>:       /* function body */
+> 	...
+> 
+> As a result, the address taken in assembly, or other non-instrumented
+> code always points to the jump table and therefore, can be used for
+> indirect calls in instrumented code without tripping CFI checks.
 
-offsetofen() is used to set the minimum size of a valid argument. This
-code will then not change with future extended ruleset_attr.
+Random ramblings, I'm trying to understand how this CFI stuff works.
+
+First, patch 1 and 2 explain the pros and cons of canonical vs
+non-canonical jump tables, in either case, there's problems with stuff
+implemented in assembly. But I don't understand why those pros and cons
+then end up with using the non-canonical jump tables by default. IIUC,
+with canonical jump tables, function pointer equality would keep working
+for functions implemented in C, because &func would always refer to the
+same stub "function" that lives in the same object file as func.cfi,
+whereas with the non-canonical version, each TU (or maybe DSO) that
+takes the address of func ends up with its own func.cfi_jt.
+
+There are of course lots of direct calls of assembly functions, but
+I don't think we take the address of such functions very often. So why
+can't we instead equip the declarations of those with a
+__cfi_noncanonical attribute?
+
+And now, more directed at the clang folks on cc:
+
+As to how CFI works, I've tried to make sense of the clang docs. So at
+place where some int (*)(long, int) function pointer is called, the
+compiler computes (roughly) md5sum("int (*)(long, int)") and uses the
+first 8 bytes as a cookie representing that type. It then goes to some
+global table of jump table ranges indexed by that cookie and checks that
+the address it is about to call is within that range. All jump table
+entries for one type of function are consecutive in memory (with
+complications arising from cross-DSO calls).
+
+What I don't understand about all this is why that indirection through
+some hidden global table and magic jump table (whether canonical or not)
+is even needed in the simple common case of ordinary C functions. Why
+can't the compiler just emit the cookie corresponding to a given
+function's prototype immediately prior to the function? Then the inline
+check would just be "if (*(u64*)((void*)func - 8) == cookie)" and
+function pointer comparison would just work because there's no magic
+involved when doing &func. Cross-DSO calls of C function have no extra
+cost to look up a __cfi_check function in the target DSO. An indirect
+call doesn't touch at least two extra cache lines (the range table and
+the jump table entry). It seems to rely on LTO anyway, so it's not even
+that the compiler would have to emit that cookie for every single
+function, it knows at link time which functions have their address
+taken. Calling functions implemented in assembly through a function
+pointer will have the same problem as with the "canonical" jump table
+approach, but with a suitable attribute on those surely the compiler
+could emit a func.cfi_hoop
+
+  .quad 0x1122334455667788 // cookie
+  <func.cfi_hoop>:
+	jmp func
+
+and perhaps no such attribute would even be needed (with LTO, the
+compiler should be able to see "hey, I don't know that function, it's
+probably implemented in assembly, so lemme emit that trampoline with a
+cookie in front and redirect address-of to that").
+
+Rasmus
