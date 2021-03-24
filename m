@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8CEA34803D
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 19:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D4F348065
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 19:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237478AbhCXSSW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Mar 2021 14:18:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42298 "EHLO mail.kernel.org"
+        id S237393AbhCXSYM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Mar 2021 14:24:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44346 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237451AbhCXSSM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Mar 2021 14:18:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 53D9261A1E;
-        Wed, 24 Mar 2021 18:18:07 +0000 (UTC)
+        id S237532AbhCXSYD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Mar 2021 14:24:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9AC2C61923;
+        Wed, 24 Mar 2021 18:23:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616609891;
-        bh=jLEIjTDMdOEnl8/SfGx6/gltYIIdLbMFJhqthmu7sWI=;
+        s=k20201202; t=1616610242;
+        bh=K6oHNv+C7LY+kAhzbl3PH+/kTu3OVjYksdUZOBHFlLs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UbVwO873llNdsjRRLI+J5vMaoN88DXm+jw+j0sUIZBUclPpTb7Ziu4k6wnsHNiCfF
-         Pm2+8JW+mzLubs4Qy/nr2Bk6fhTTesVy3I2z9ELtOFs5HGiaC5QBnIfT3k5o/JzCZm
-         Ic42bD5UwJKGUYYHQspuAp5GKrQ60c3dz+5EGEwi1k6ZI7Kx9PkjQEdrNeaBoO8Yhb
-         jBw6AICm26Y35MtNLuYn7lyHgfMwRX/Fp97hFQKLceiZRFcnCy5y/YHi8ZYFr7e/xI
-         wWLImdBodOm9uRF/OdDCIZd0jNPTDFT32jtdH9eLMTF9V/7O66u5riEBqlrYUlKpOO
-         8yaOV23QpmtAQ==
-Date:   Wed, 24 Mar 2021 18:18:04 +0000
+        b=ZKt+MCQzHYhfjqUgacgIFrJphqDrv1Ohu4AIGdvpFurBScBaJjDll3mZalfUguou0
+         D+UymlPgk6SPAtFY/tg8jfWe7ktbau3fj4JqqAGepn5WkxoPDHDRk3/Dg2etkgycQv
+         B9Bc4YgGOUCyscy2AS2fUwl9hGSoB2FV8UGZWN0EL652pnnjP210+rCXaW/uRv9dU8
+         uXfI9Pe3t5Idmq4bfVv5mj9KDAiwKdTmY7xrMxtCFc/1QQ519ap8BTIwBfby74g1DV
+         K23ZCo4Xdr6HtfqgQ9Gj573yQ8rKnX2Uh70JgA6/Mz4uLUW9PduLcbjWsAHO8zdJnv
+         s5BIhlSmLU3qQ==
+Date:   Wed, 24 Mar 2021 18:23:55 +0000
 From:   Will Deacon <will@kernel.org>
 To:     Hector Martin <marcan@marcan.st>
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -47,48 +47,37 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFT PATCH v3 11/27] arm64: Implement ioremap_np() to map MMIO
- as nGnRnE
-Message-ID: <20210324181803.GD13181@willie-the-truck>
+Subject: Re: [RFT PATCH v3 14/27] arm64: move ICH_ sysreg bits from
+ arm-gic-v3.h to sysreg.h
+Message-ID: <20210324182355.GE13181@willie-the-truck>
 References: <20210304213902.83903-1-marcan@marcan.st>
- <20210304213902.83903-12-marcan@marcan.st>
+ <20210304213902.83903-15-marcan@marcan.st>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210304213902.83903-12-marcan@marcan.st>
+In-Reply-To: <20210304213902.83903-15-marcan@marcan.st>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 05, 2021 at 06:38:46AM +0900, Hector Martin wrote:
-> This is used on Apple ARM platforms, which require most MMIO
-> (except PCI devices) to be mapped as nGnRnE.
+On Fri, Mar 05, 2021 at 06:38:49AM +0900, Hector Martin wrote:
+> These definitions are in arm-gic-v3.h for historical reasons which no
+> longer apply. Move them to sysreg.h so the AIC driver can use them, as
+> it needs to peek into vGIC registers to deal with the GIC maintentance
+> interrupt.
 > 
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  arch/arm64/include/asm/io.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-> index 5ea8656a2030..953b8703af60 100644
-> --- a/arch/arm64/include/asm/io.h
-> +++ b/arch/arm64/include/asm/io.h
-> @@ -169,6 +169,7 @@ extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
->  
->  #define ioremap(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRE))
->  #define ioremap_wc(addr, size)		__ioremap((addr), (size), __pgprot(PROT_NORMAL_NC))
-> +#define ioremap_np(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRnE))
+>  arch/arm64/include/asm/sysreg.h    | 60 ++++++++++++++++++++++++++++++
+>  include/linux/irqchip/arm-gic-v3.h | 56 ----------------------------
+>  2 files changed, 60 insertions(+), 56 deletions(-)
 
-Probably worth noting that whether or not this actually results in a
-non-posted mapping depends on the system architecture, but this is the
-best we can do, so:
+This would be much easier to remove if you just moved the definitions,
+rather than reordered than and changed the comments at the same time!
+
+But I *think* nothing had changed, so:
 
 Acked-by: Will Deacon <will@kernel.org>
-
-I would personally prefer that drivers didn't have to care about this, and
-ioremap on arm64 figured out the right attributes based on the region being
-mapped, but I haven't followed the discussion closely so I won't die on that
-hill.
 
 Will
