@@ -2,72 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC91347232
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 08:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C787134755A
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 11:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbhCXHPU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Mar 2021 03:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbhCXHPO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Mar 2021 03:15:14 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4680AC061763;
-        Wed, 24 Mar 2021 00:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WZNXlX3eOEcZWcovU9zwR1I2oqNzGrOjWZWd75LU5ZE=; b=dkGd8++747v3h/hYgkBJiJdwk5
-        PWwJAEoFe4SEvtib+PWo8O1uHz83djehIMQSdnlmb1REGO5EV+ai1XfGZioyH8Ql1EhLRkR5p2ZnG
-        1pkAuvYWEkKMLqDvjStL4l9A78QhLzRsPKxflpkfjhZ2hPNag18sMT1dpjWG2WWE+Uc0BBQ/s4dBy
-        6o1fFxinChsqDoPC9wz4p5NvxQWN+AGPjQkubFEVBSKNdmvEPii7GNy/yM3eT1P9iSLUd2Wy8Rhod
-        prA0XCpf7vR/OA/R9UVZ9PZsy/YnOuA17GWykOo2KsrhKISaP/P7KLnX9JfhPBfXzaEy9Ohhktqgn
-        wAvphNNA==;
-Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lOxiH-00B54e-77; Wed, 24 Mar 2021 07:14:16 +0000
-Date:   Wed, 24 Mar 2021 07:13:57 +0000
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/17] mm: add generic __va_function and __pa_function
- macros
-Message-ID: <20210324071357.GB2639075@infradead.org>
-References: <20210323203946.2159693-1-samitolvanen@google.com>
- <20210323203946.2159693-4-samitolvanen@google.com>
+        id S235397AbhCXKIw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Mar 2021 06:08:52 -0400
+Received: from elvis.franken.de ([193.175.24.41]:55080 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233361AbhCXKIo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Mar 2021 06:08:44 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lP0RM-0008Sw-09; Wed, 24 Mar 2021 11:08:40 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 08A30C1C69; Wed, 24 Mar 2021 11:04:14 +0100 (CET)
+Date:   Wed, 24 Mar 2021 11:04:13 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Subject: Re: [PATCH] MIPS: fix local_irq_{disable,enable} in asmmacro.h
+Message-ID: <20210324100413.GJ2378@alpha.franken.de>
+References: <20210323023402.9657-1-huangpei@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210323203946.2159693-4-samitolvanen@google.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20210323023402.9657-1-huangpei@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 01:39:32PM -0700, Sami Tolvanen wrote:
-> With CONFIG_CFI_CLANG, the compiler replaces function addresses
-> in instrumented C code with jump table addresses. This means that
-> __pa_symbol(function) returns the physical address of the jump table
-> entry instead of the actual function, which may not work as the jump
-> table code will immediately jump to a virtual address that may not be
-> mapped.
+On Tue, Mar 23, 2021 at 10:34:02AM +0800, Huang Pei wrote:
+> commit ba9196d2e005 ("MIPS: Make DIEI support as a config option")
+> use CPU_HAS_DIEI to indicate whether di/ei is implemented correctly,
+> without this patch, "local_irq_disable" from entry.S in 3A1000
+> (with buggy di/ei) lose protection of commit e97c5b609880 ("MIPS:
+> Make irqflags.h functions preempt-safe")
 > 
-> To avoid this address space confusion, this change adds generic
-> definitions for __va_function and __pa_function, which architectures
-> that support CFI can override. The typical implementation of the
-> __va_function macro would use inline assembly to take the function
-> address, which avoids compiler instrumentation.
+> Fixes: ba9196d2e005 ("MIPS: Make DIEI support as a config option")
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> ---
+>  arch/mips/include/asm/asmmacro.h | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-I think these helper are sensible, but shouldn't they have somewhat
-less arcane names and proper documentation?
+applied to mips-next.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
