@@ -2,130 +2,203 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D48AA347FA1
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 18:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093D8348001
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 19:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237058AbhCXRjZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Mar 2021 13:39:25 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10606 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237047AbhCXRjA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Mar 2021 13:39:00 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12OHWWeq097863;
-        Wed, 24 Mar 2021 13:38:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=i0jVAPdV4uMZGW+9DRVmj8zwB+KQ4zU198TE5YQBbdo=;
- b=JsiMrqpzRtiRzTYFDhNpMa6FvYzaladPqSoxMoB67y2q8HeP6fXSzhFHJf2lUa/cGN4O
- e51qsqXQyS6E43YrVbVFL+EyEkOfbSqeoJj/DE4ePh+R7hhdxDNaeumY8gU0Zl7LsF1P
- RKtxqWBq+k+efPDBx8qgfiID2xWVZ6HIEPjO66fc3wf6zraDvF41S2ENRJghWgBPV7rN
- rh03bGzjDUtKmu890wLoSvk3gvqfFdTETHz8nkHTxQxdDLOWIMVt1VjJbR2RzPgKxB2O
- QFWIZTcXrl4Uw8Q2kOZlWaiXSKzer5zx785K/kUhDaq7oYBrV5GAflChxew3kuFqmdjB zA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37g9cs161f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Mar 2021 13:38:57 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12OHREki030541;
-        Wed, 24 Mar 2021 17:38:55 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 37d99rck3u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Mar 2021 17:38:54 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12OHcYxB13369834
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Mar 2021 17:38:34 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D0F54C052;
-        Wed, 24 Mar 2021 17:38:52 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F69F4C04E;
-        Wed, 24 Mar 2021 17:38:51 +0000 (GMT)
-Received: from localhost (unknown [9.171.93.123])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 24 Mar 2021 17:38:51 +0000 (GMT)
-Date:   Wed, 24 Mar 2021 18:38:50 +0100
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Sven Schnelle <svens@linux.ibm.com>, X86 ML <x86@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        id S237347AbhCXSGU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Mar 2021 14:06:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232618AbhCXSFy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Mar 2021 14:05:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4430861A1B;
+        Wed, 24 Mar 2021 18:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616609154;
+        bh=4ddFWD0HDeMvJooIHBmVBLMfgHrZIiewXKZt5ch7iWs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A6FHmx+M+t/r7327J8jHlQn2j7eeeQwtuRXHcULuzLaaVTXqZuHY/wFrucrpfDQZC
+         takEBJ1G9jXLsxWNCfiPyc5ZsXKzT28qWT72jH7fC40YsYIR6fwCVeQCoVV2TtWmRK
+         LS4MrPVDMZakskpDgdmzRuOpYyqqXPbmznxYMSyIwiDu9rGOlBQrm7O3NetB/A0p/w
+         bo3i8Dzo1959a2p8UE2xQyE/NJhKDQ5hgIwCiTXFbJtvuzmT5chNnES9MbrJQ9BnGx
+         jqlnKGaoqZzmXDfV9VMH5xlIPe9OzrVIVBpaKUO3ToguDiPbUNN04mlRNBY/WbP8/S
+         iEWD9+cmga8Tw==
+Date:   Wed, 24 Mar 2021 18:05:46 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: Is s390's new generic-using syscall code actually correct?
-Message-ID: <your-ad-here.call-01616607308-ext-0852@work.hours>
-References: <CALCETrUx10uHeD7bckVjL9x7S3LEdH3ZfzUbCMWj9j-=nYp8Wg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALCETrUx10uHeD7bckVjL9x7S3LEdH3ZfzUbCMWj9j-=nYp8Wg@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFT PATCH v3 01/27] arm64: Cope with CPUs stuck in VHE mode
+Message-ID: <20210324180546.GA13181@willie-the-truck>
+References: <20210304213902.83903-1-marcan@marcan.st>
+ <20210304213902.83903-2-marcan@marcan.st>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-24_13:2021-03-24,2021-03-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 malwarescore=0 adultscore=0 phishscore=0 mlxlogscore=999
- spamscore=0 lowpriorityscore=0 clxscore=1011 impostorscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103240127
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210304213902.83903-2-marcan@marcan.st>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Andy,
+On Fri, Mar 05, 2021 at 06:38:36AM +0900, Hector Martin wrote:
+> From: Marc Zyngier <maz@kernel.org>
+> 
+> It seems that the CPU known as Apple M1 has the terrible habit
+> of being stuck with HCR_EL2.E2H==1, in violation of the architecture.
+> 
+> Try and work around this deplorable state of affairs by detecting
+> the stuck bit early and short-circuit the nVHE dance. It is still
+> unknown whether there are many more such nuggets to be found...
+> 
+> Reported-by: Hector Martin <marcan@marcan.st>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> ---
+>  arch/arm64/kernel/head.S     | 33 ++++++++++++++++++++++++++++++---
+>  arch/arm64/kernel/hyp-stub.S | 28 ++++++++++++++++++++++++----
+>  2 files changed, 54 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+> index 66b0e0b66e31..673002b11865 100644
+> --- a/arch/arm64/kernel/head.S
+> +++ b/arch/arm64/kernel/head.S
+> @@ -477,14 +477,13 @@ EXPORT_SYMBOL(kimage_vaddr)
+>   * booted in EL1 or EL2 respectively.
+>   */
+>  SYM_FUNC_START(init_kernel_el)
+> -	mov_q	x0, INIT_SCTLR_EL1_MMU_OFF
+> -	msr	sctlr_el1, x0
+> -
+>  	mrs	x0, CurrentEL
+>  	cmp	x0, #CurrentEL_EL2
+>  	b.eq	init_el2
+>  
+>  SYM_INNER_LABEL(init_el1, SYM_L_LOCAL)
+> +	mov_q	x0, INIT_SCTLR_EL1_MMU_OFF
+> +	msr	sctlr_el1, x0
+>  	isb
+>  	mov_q	x0, INIT_PSTATE_EL1
+>  	msr	spsr_el1, x0
+> @@ -504,6 +503,34 @@ SYM_INNER_LABEL(init_el2, SYM_L_LOCAL)
+>  	msr	vbar_el2, x0
+>  	isb
+>  
+> +	/*
+> +	 * Fruity CPUs seem to have HCR_EL2.E2H set to RES1,
+> +	 * making it impossible to start in nVHE mode. Is that
+> +	 * compliant with the architecture? Absolutely not!
+> +	 */
+> +	mrs	x0, hcr_el2
+> +	and	x0, x0, #HCR_E2H
+> +	cbz	x0, 1f
+> +
+> +	/* Switching to VHE requires a sane SCTLR_EL1 as a start */
+> +	mov_q	x0, INIT_SCTLR_EL1_MMU_OFF
+> +	msr_s	SYS_SCTLR_EL12, x0
+> +
+> +	/*
+> +	 * Force an eret into a helper "function", and let it return
+> +	 * to our original caller... This makes sure that we have
+> +	 * initialised the basic PSTATE state.
+> +	 */
+> +	mov	x0, #INIT_PSTATE_EL2
+> +	msr	spsr_el1, x0
+> +	adr_l	x0, stick_to_vhe
+> +	msr	elr_el1, x0
+> +	eret
+> +
+> +1:
+> +	mov_q	x0, INIT_SCTLR_EL1_MMU_OFF
+> +	msr	sctlr_el1, x0
+> +
+>  	msr	elr_el2, lr
+>  	mov	w0, #BOOT_CPU_MODE_EL2
+>  	eret
+> diff --git a/arch/arm64/kernel/hyp-stub.S b/arch/arm64/kernel/hyp-stub.S
+> index 5eccbd62fec8..c7601030ee82 100644
+> --- a/arch/arm64/kernel/hyp-stub.S
+> +++ b/arch/arm64/kernel/hyp-stub.S
+> @@ -27,12 +27,12 @@ SYM_CODE_START(__hyp_stub_vectors)
+>  	ventry	el2_fiq_invalid			// FIQ EL2t
+>  	ventry	el2_error_invalid		// Error EL2t
+>  
+> -	ventry	el2_sync_invalid		// Synchronous EL2h
+> +	ventry	elx_sync			// Synchronous EL2h
+>  	ventry	el2_irq_invalid			// IRQ EL2h
+>  	ventry	el2_fiq_invalid			// FIQ EL2h
+>  	ventry	el2_error_invalid		// Error EL2h
+>  
+> -	ventry	el1_sync			// Synchronous 64-bit EL1
+> +	ventry	elx_sync			// Synchronous 64-bit EL1
+>  	ventry	el1_irq_invalid			// IRQ 64-bit EL1
+>  	ventry	el1_fiq_invalid			// FIQ 64-bit EL1
+>  	ventry	el1_error_invalid		// Error 64-bit EL1
+> @@ -45,7 +45,7 @@ SYM_CODE_END(__hyp_stub_vectors)
+>  
+>  	.align 11
+>  
+> -SYM_CODE_START_LOCAL(el1_sync)
+> +SYM_CODE_START_LOCAL(elx_sync)
+>  	cmp	x0, #HVC_SET_VECTORS
+>  	b.ne	1f
+>  	msr	vbar_el2, x1
+> @@ -71,7 +71,7 @@ SYM_CODE_START_LOCAL(el1_sync)
+>  
+>  9:	mov	x0, xzr
+>  	eret
+> -SYM_CODE_END(el1_sync)
+> +SYM_CODE_END(elx_sync)
+>  
+>  // nVHE? No way! Give me the real thing!
+>  SYM_CODE_START_LOCAL(mutate_to_vhe)
+> @@ -243,3 +243,23 @@ SYM_FUNC_START(switch_to_vhe)
+>  #endif
+>  	ret
+>  SYM_FUNC_END(switch_to_vhe)
+> +
+> +SYM_FUNC_START(stick_to_vhe)
+> +	/*
+> +	 * Make sure the switch to VHE cannot fail, by overriding the
+> +	 * override. This is hilarious.
+> +	 */
+> +	adr_l	x1, id_aa64mmfr1_override
+> +	add	x1, x1, #FTR_OVR_MASK_OFFSET
+> +	dc 	civac, x1
+> +	dsb	sy
+> +	isb
 
-On Sat, Mar 20, 2021 at 08:48:34PM -0700, Andy Lutomirski wrote:
-> Hi all-
-> 
-> I'm working on my kentry patchset, and I encountered:
-> 
-> commit 56e62a73702836017564eaacd5212e4d0fa1c01d
-> Author: Sven Schnelle <svens@linux.ibm.com>
-> Date:   Sat Nov 21 11:14:56 2020 +0100
-> 
->     s390: convert to generic entry
-> 
-> As part of this work, I was cleaning up the generic syscall helpers,
-> and I encountered the goodies in do_syscall() and __do_syscall().
-> 
-> I'm trying to wrap my head around the current code, and I'm rather confused.
-> 
-> 1. syscall_exit_to_user_mode_work() does *all* the exit work, not just
-> the syscall exit work.  So a do_syscall() that gets called twice will
-> do the loopy part of the exit work (e.g. signal handling) twice.  Is
-> this intentional?  If so, why?
-> 
-> 2. I don't understand how this PIF_SYSCALL_RESTART thing is supposed
-> to work.  Looking at the code in Linus' tree, if a signal is pending
-> and a syscall returns -ERESTARTSYS, the syscall will return back to
-> do_syscall().  The work (as in (1)) gets run, calling do_signal(),
-> which will notice -ERESTARTSYS and set PIF_SYSCALL_RESTART.
-> Presumably it will also push the signal frame onto the stack and aim
-> the return address at the svc instruction mentioned in the commit
-> message from "s390: convert to generic entry".  Then __do_syscall()
-> will turn interrupts back on and loop right back into do_syscall().
-> That seems incorrect.
-> 
-> Can you enlighten me?  My WIP tree is here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git/log/?h=x86/kentry
-> 
+Why do we need an ISB here?
 
-For all the details to that change we'd have to wait for Sven, who is back
-next week.
+> +	ldr	x0, [x1]
+> +	bic	x0, x0, #(0xf << ID_AA64MMFR1_VHE_SHIFT)
+> +	str	x0, [x1]
 
-> Here are my changes to s390, and I don't think they're really correct:
-> 
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git/diff/arch/s390/kernel/syscall.c?h=x86/kentry&id=58a459922be0fb8e0f17aeaebcb0ac8d0575a62c
+I find it a bit bizarre doing this here, as for the primary CPU we're still
+a way away from parsing the early paramaters and for secondary CPUs this
+doesn't need to be done for each one. Furthermore, this same code is run
+on the resume path, which can probably then race with itself.
 
-Couple of things: syscall_exit_to_user_mode_prepare is static,
-and there is another code path in arch/s390/kernel/traps.c using
-enter_from_user_mode/exit_to_user_mode.
+Is it possible to do it later on the boot CPU only, e.g. in
+init_feature_override()? We should probably also log a warning that we're
+ignoring the option because nVHE is not available.
 
-Anyhow I gave your branch a spin and got few new failures on strace test
-suite, in particular on restart_syscall test. I'll try to find time to
-look into details.
+Will
