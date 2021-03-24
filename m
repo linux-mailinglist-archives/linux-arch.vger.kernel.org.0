@@ -2,285 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB5034773F
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 12:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA903478F6
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 13:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235055AbhCXL0L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Mar 2021 07:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
+        id S234672AbhCXM43 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Mar 2021 08:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235361AbhCXLZs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Mar 2021 07:25:48 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51470C061763
-        for <linux-arch@vger.kernel.org>; Wed, 24 Mar 2021 04:25:47 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id li22so765709ejb.18
-        for <linux-arch@vger.kernel.org>; Wed, 24 Mar 2021 04:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=SXHD/uvUmQlMKu8n5JwtEEFXBwNpAPsrMpvny8SPQ1E=;
-        b=vvCpa9HND78wqcF7JFp7r/2FIG3PfUY1b2aBiwcU/PUw5DgAtl0ApCtkZwymEMXk/3
-         Fgu4tvpHw83d23HMAg9Yze+0affNBKwI4WjfG8Gocxma86yk8NN7/mUI1osLwZXEl89Q
-         5vhkDgtzbtSOQZDoKqNzpuildjMay7AYwZjdv+Anol70e+aSrEvctY1VeAKnuDqR4DTJ
-         rQhqwKlBIwplNv9R/mR7JTtGoOzj8p9RlDLKmoJcaMmYPTgm61rP4Ll9vCTCK4zCsIUy
-         /ZoGoGZFfARImjVdqS6BWpfXvU68it7d6umbSXaE90K1d4+4KU8w8DVfGlT92xBDcdHZ
-         JCkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=SXHD/uvUmQlMKu8n5JwtEEFXBwNpAPsrMpvny8SPQ1E=;
-        b=iKtMbLDIi0c7XSTxIPHXE1+d7Bj4nRaZQzk2xSVum8KSLKj+OsokFZeDpUdkGy3Jbk
-         vPqMzMDGb8hnBiu/N6D4XIwY2f0pdTxnJ8fcFiFEwt19AuvsatpZUuz0HP5h/BZ7BrZX
-         j8TyvpEGBg3kPCF5HnWu/623a1/QphuvWhqy9nB/YYaZXFsRsWKIW7YNvAZlo4ZeG278
-         m5vDiaMGT6qO0XjnrCLujquj0rIPbTO/iHy0lAASPpGSQzw0o7RoVdnGdzLiS2T24JtQ
-         xr1ziYr7J7Bplzq5UWTQgFnGXCE872x9r9RolxXnRbVQtT/QyfR6HWIBZbZ96evMt7vQ
-         9cDA==
-X-Gm-Message-State: AOAM530qCYLIgJhLclFQcgjy0/rsVR3sshTJEkVkxYWD+qApVQnzEhqf
-        jpX3Jq5LK6nrA/ZXIvRW5ugkxobRJg==
-X-Google-Smtp-Source: ABdhPJyZha8NDkWJdWXS93mUgqdBXoxsEhkLAwhgs2SpdkL5SBYnAeEXydgCyvOlLVAyR1sG9cBu9ttXHQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:6489:b3f0:4af:af0])
- (user=elver job=sendgmr) by 2002:a17:906:ecb8:: with SMTP id
- qh24mr3238409ejb.162.1616585145705; Wed, 24 Mar 2021 04:25:45 -0700 (PDT)
-Date:   Wed, 24 Mar 2021 12:25:03 +0100
-In-Reply-To: <20210324112503.623833-1-elver@google.com>
-Message-Id: <20210324112503.623833-12-elver@google.com>
-Mime-Version: 1.0
-References: <20210324112503.623833-1-elver@google.com>
-X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v3 11/11] perf test: Add basic stress test for sigtrap handling
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, peterz@infradead.org,
-        alexander.shishkin@linux.intel.com, acme@kernel.org,
+        with ESMTP id S233711AbhCXM4B (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Mar 2021 08:56:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDC3C061763;
+        Wed, 24 Mar 2021 05:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tHp+k1OitbRlspde73UjQtr/BpbC8h6lYxWD13OBqjk=; b=tf1rnOdWTwyzbMBVWRfPe5nYqp
+        zIMdh2lwopsG94dkMaorDBV8dt0SzG2QSjD5XtAFtIqKUjLvzBf4uAbcCGOtjr7jXFL27hLLF0CGu
+        dtdsxAtG1dZd87NgIAGBq0hwifQnAHV0ZFGokUXAMouaXYXAbLh9MPWiNjGUX0h4GUkNWaauMkJaQ
+        tkB4piLWaBw0dGDwmbWUxblTMYOT797DbhWCnOxSAGJtARFaJ7dWQz53CCAiwv+7z5CKBsZdWNsQ3
+        WTDQ3rzj7x0ehPTucy5FQnlywr0M3JX//RiJySTUE64QVaLVb061tCtFoBbMEKoZ2qs54paYWZMHB
+        MBgjKCkA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lP31B-00BM08-Uc; Wed, 24 Mar 2021 12:53:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 92E65300F7A;
+        Wed, 24 Mar 2021 13:53:48 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7823A20693983; Wed, 24 Mar 2021 13:53:48 +0100 (CET)
+Date:   Wed, 24 Mar 2021 13:53:48 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
         mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de
-Cc:     glider@google.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
-        christian@brauner.io, dvyukov@google.com, jannh@google.com,
-        axboe@kernel.dk, mascasa@google.com, pcc@google.com,
-        irogers@google.com, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
+        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
+        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
+        mascasa@google.com, pcc@google.com, irogers@google.com,
+        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 07/11] perf: Add breakpoint information to siginfo on
+ SIGTRAP
+Message-ID: <YFs2XHqepwtlLinx@hirez.programming.kicks-ass.net>
+References: <20210324112503.623833-1-elver@google.com>
+ <20210324112503.623833-8-elver@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210324112503.623833-8-elver@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add basic stress test for sigtrap handling as a perf tool built-in test.
-This allows sanity checking the basic sigtrap functionality from within
-the perf tool.
+On Wed, Mar 24, 2021 at 12:24:59PM +0100, Marco Elver wrote:
+> Encode information from breakpoint attributes into siginfo_t, which
+> helps disambiguate which breakpoint fired.
+> 
+> Note, providing the event fd may be unreliable, since the event may have
+> been modified (via PERF_EVENT_IOC_MODIFY_ATTRIBUTES) between the event
+> triggering and the signal being delivered to user space.
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+> v2:
+> * Add comment about si_perf==0.
+> ---
+>  kernel/events/core.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 1e4c949bf75f..0316d39e8c8f 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -6399,6 +6399,22 @@ static void perf_sigtrap(struct perf_event *event)
+>  	info.si_signo = SIGTRAP;
+>  	info.si_code = TRAP_PERF;
+>  	info.si_errno = event->attr.type;
+> +
+> +	switch (event->attr.type) {
+> +	case PERF_TYPE_BREAKPOINT:
+> +		info.si_addr = (void *)(unsigned long)event->attr.bp_addr;
+> +		info.si_perf = (event->attr.bp_len << 16) | (u64)event->attr.bp_type;
 
-Note: A more elaborate kselftest version of this test can also be found
-in tools/testing/selftests/perf_events/sigtrap_threads.c.
+Ahh, here's the si_perf user. I wasn't really clear to me what was
+supposed to be in that field at patch #5 where it was introduced.
 
-Signed-off-by: Marco Elver <elver@google.com>
----
-v3:
-* Added to series (per suggestion from Ian Rogers).
----
- tools/perf/tests/Build          |   1 +
- tools/perf/tests/builtin-test.c |   5 ++
- tools/perf/tests/sigtrap.c      | 148 ++++++++++++++++++++++++++++++++
- tools/perf/tests/tests.h        |   1 +
- 4 files changed, 155 insertions(+)
- create mode 100644 tools/perf/tests/sigtrap.c
+Would it perhaps make sense to put the user address of struct
+perf_event_attr in there instead? (Obviously we'd have to carry it from
+the syscall to here, but it might be more useful than a random encoding
+of some bits therefrom).
 
-diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
-index 650aec19d490..a429c7a02b37 100644
---- a/tools/perf/tests/Build
-+++ b/tools/perf/tests/Build
-@@ -64,6 +64,7 @@ perf-y += parse-metric.o
- perf-y += pe-file-parsing.o
- perf-y += expand-cgroup.o
- perf-y += perf-time-to-tsc.o
-+perf-y += sigtrap.o
- 
- $(OUTPUT)tests/llvm-src-base.c: tests/bpf-script-example.c tests/Build
- 	$(call rule_mkdir)
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index c4b888f18e9c..28a1cb5eaa77 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -359,6 +359,11 @@ static struct test generic_tests[] = {
- 		.func = test__perf_time_to_tsc,
- 		.is_supported = test__tsc_is_supported,
- 	},
-+	{
-+		.desc = "Sigtrap support",
-+		.func = test__sigtrap,
-+		.is_supported = test__wp_is_supported, /* uses wp for test */
-+	},
- 	{
- 		.func = NULL,
- 	},
-diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
-new file mode 100644
-index 000000000000..b3f4006c22fd
---- /dev/null
-+++ b/tools/perf/tests/sigtrap.c
-@@ -0,0 +1,148 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Basic test for sigtrap support.
-+ *
-+ * Copyright (C) 2021, Google LLC.
-+ */
-+
-+#include <stdint.h>
-+#include <stdlib.h>
-+#include <linux/hw_breakpoint.h>
-+#include <pthread.h>
-+#include <signal.h>
-+#include <sys/ioctl.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+
-+#include "cloexec.h"
-+#include "debug.h"
-+#include "event.h"
-+#include "tests.h"
-+#include "../perf-sys.h"
-+
-+#define NUM_THREADS 5
-+
-+static struct {
-+	int tids_want_signal;		/* Which threads still want a signal. */
-+	int signal_count;		/* Sanity check number of signals received. */
-+	volatile int iterate_on;	/* Variable to set breakpoint on. */
-+	siginfo_t first_siginfo;	/* First observed siginfo_t. */
-+} ctx;
-+
-+static struct perf_event_attr make_event_attr(void)
-+{
-+	struct perf_event_attr attr = {
-+		.type		= PERF_TYPE_BREAKPOINT,
-+		.size		= sizeof(attr),
-+		.sample_period	= 1,
-+		.disabled	= 1,
-+		.bp_addr	= (long)&ctx.iterate_on,
-+		.bp_type	= HW_BREAKPOINT_RW,
-+		.bp_len		= HW_BREAKPOINT_LEN_1,
-+		.inherit	= 1, /* Children inherit events ... */
-+		.inherit_thread = 1, /* ... but only cloned with CLONE_THREAD. */
-+		.remove_on_exec = 1, /* Required by sigtrap. */
-+		.sigtrap	= 1, /* Request synchronous SIGTRAP on event. */
-+	};
-+	return attr;
-+}
-+
-+static void
-+sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __maybe_unused)
-+{
-+	if (!__atomic_fetch_add(&ctx.signal_count, 1, __ATOMIC_RELAXED))
-+		ctx.first_siginfo = *info;
-+	__atomic_fetch_sub(&ctx.tids_want_signal, syscall(SYS_gettid), __ATOMIC_RELAXED);
-+}
-+
-+static void *test_thread(void *arg)
-+{
-+	pthread_barrier_t *barrier = (pthread_barrier_t *)arg;
-+	pid_t tid = syscall(SYS_gettid);
-+	int i;
-+
-+	pthread_barrier_wait(barrier);
-+
-+	__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
-+	for (i = 0; i < ctx.iterate_on - 1; i++)
-+		__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
-+
-+	return NULL;
-+}
-+
-+static int run_test_threads(pthread_t *threads, pthread_barrier_t *barrier)
-+{
-+	int i;
-+
-+	pthread_barrier_wait(barrier);
-+	for (i = 0; i < NUM_THREADS; i++)
-+		TEST_ASSERT_EQUAL("pthread_join() failed", pthread_join(threads[i], NULL), 0);
-+
-+	return TEST_OK;
-+}
-+
-+static int run_stress_test(int fd, pthread_t *threads, pthread_barrier_t *barrier)
-+{
-+	int ret;
-+
-+	ctx.iterate_on = 3000;
-+
-+	TEST_ASSERT_EQUAL("misfired signal?", ctx.signal_count, 0);
-+	TEST_ASSERT_EQUAL("enable failed", ioctl(fd, PERF_EVENT_IOC_ENABLE, 0), 0);
-+	ret = run_test_threads(threads, barrier);
-+	TEST_ASSERT_EQUAL("disable failed", ioctl(fd, PERF_EVENT_IOC_DISABLE, 0), 0);
-+
-+	TEST_ASSERT_EQUAL("unexpected sigtraps", ctx.signal_count, NUM_THREADS * ctx.iterate_on);
-+	TEST_ASSERT_EQUAL("missing signals or incorrectly delivered", ctx.tids_want_signal, 0);
-+	TEST_ASSERT_VAL("unexpected si_addr", ctx.first_siginfo.si_addr == &ctx.iterate_on);
-+	TEST_ASSERT_EQUAL("unexpected si_errno", ctx.first_siginfo.si_errno, PERF_TYPE_BREAKPOINT);
-+#if 0 /* FIXME: test build and enable when libc's signal.h has si_perf. */
-+	TEST_ASSERT_VAL("unexpected si_perf", ctx.first_siginfo.si_perf ==
-+			((HW_BREAKPOINT_LEN_1 << 16) | HW_BREAKPOINT_RW));
-+#endif
-+
-+	return ret;
-+}
-+
-+int test__sigtrap(struct test *test __maybe_unused, int subtest __maybe_unused)
-+{
-+	struct perf_event_attr attr = make_event_attr();
-+	struct sigaction action = {};
-+	struct sigaction oldact;
-+	pthread_t threads[NUM_THREADS];
-+	pthread_barrier_t barrier;
-+	int i, fd, ret = TEST_FAIL;
-+
-+	pthread_barrier_init(&barrier, NULL, NUM_THREADS + 1);
-+
-+	action.sa_flags = SA_SIGINFO | SA_NODEFER;
-+	action.sa_sigaction = sigtrap_handler;
-+	sigemptyset(&action.sa_mask);
-+	if (sigaction(SIGTRAP, &action, &oldact)) {
-+		pr_debug("FAILED sigaction()\n");
-+		goto out;
-+	}
-+
-+	fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
-+	if (fd < 0) {
-+		pr_debug("FAILED sys_perf_event_open()\n");
-+		goto out_restore_sigaction;
-+	}
-+
-+	for (i = 0; i < NUM_THREADS; i++) {
-+		if (pthread_create(&threads[i], NULL, test_thread, &barrier)) {
-+			pr_debug("FAILED pthread_create()");
-+			goto out_close_perf_event;
-+		}
-+	}
-+
-+	ret = run_stress_test(fd, threads, &barrier);
-+
-+out_close_perf_event:
-+	close(fd);
-+out_restore_sigaction:
-+	sigaction(SIGTRAP, &oldact, NULL);
-+out:
-+	pthread_barrier_destroy(&barrier);
-+	return ret;
-+}
-diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-index b85f005308a3..c3f2e2ecbfd6 100644
---- a/tools/perf/tests/tests.h
-+++ b/tools/perf/tests/tests.h
-@@ -127,6 +127,7 @@ int test__parse_metric(struct test *test, int subtest);
- int test__pe_file_parsing(struct test *test, int subtest);
- int test__expand_cgroup_events(struct test *test, int subtest);
- int test__perf_time_to_tsc(struct test *test, int subtest);
-+int test__sigtrap(struct test *test, int subtest);
- 
- bool test__bp_signal_is_supported(void);
- bool test__bp_account_is_supported(void);
--- 
-2.31.0.291.g576ba9dcdaf-goog
-
+Then we can also clearly document that's in that field, and it might be
+more useful for possible other uses.
