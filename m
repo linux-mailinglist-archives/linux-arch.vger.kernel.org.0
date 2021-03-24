@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0F5348019
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 19:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AFF348023
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 19:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237298AbhCXSMy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Mar 2021 14:12:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40686 "EHLO mail.kernel.org"
+        id S237380AbhCXSN6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Mar 2021 14:13:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41172 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237398AbhCXSMS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Mar 2021 14:12:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E3F2E61A24;
-        Wed, 24 Mar 2021 18:12:13 +0000 (UTC)
+        id S237271AbhCXSNw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Mar 2021 14:13:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0856061A21;
+        Wed, 24 Mar 2021 18:13:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616609537;
-        bh=MgoXkuObURmUvWuUKdbb9OKYxXjUYO+tnI1HEsW+seM=;
+        s=k20201202; t=1616609632;
+        bh=X7ZZ1K8yRlc3sjxUN2zWkg4HnGzejqNeoIB193YqAuU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SNZOeiggKvkMd+AmGZyu+AydOXj83oW7ynub4lSjobGEDAnsD4JxGyit4ES49Whfn
-         5cXGZJghwajWlTjP3zlctOgas7fnf3F3un2ilMpJ/P2q6GMlHdr6ee00HjzDJmoluZ
-         dHQqSr8W02oQUOk2/2fyxniJDNik2LrlSoGDiBIZ14EAiPBC823Hg3Xd31LOZ/r2pd
-         JF9jdN36strHOO2F5uVdPNeFJk2Jc56insBYw3zAl8h/30SYdCIBZcyKJseZ0cZ1CR
-         s1zSjGNVmWnJNd2rVhYpT2B2+0SkopHJmG49IP6kxbQERGweAlxHfPIHBjMMSn0G3p
-         aD6VdTjdhpG0w==
-Date:   Wed, 24 Mar 2021 18:12:10 +0000
+        b=RiJEkfaTP+Uen8vZPx08TZfz2O4B2E4Jbts1WzbndAkPMUEMQoJvrsnN+U/bJLmTH
+         pVTA0/r7Gk0GCF9whuI4YmGzO/o72dZazKNuHqd7bV0DpFEef719sLvvwKvY9iAr7q
+         +qBXqQLp04H4DkhH62GKRNonA49dLZ8Tw2H2gLrTcnr7O/KfCadLbfk3cdO+2Fo1cX
+         32toJLHE9ebuAzNP1NiAdbSrgCi6aIgsbZLbp7vFajnFvOM2CCwwuWmTdupZsf86zU
+         4z63TEn3XKszEZPlQfMx8zAufv562PnxYYKJLLOTIGXaKCt4ISmf7Y5AZ3EM2Z4ne2
+         JT2COynBoTLrQ==
+Date:   Wed, 24 Mar 2021 18:13:44 +0000
 From:   Will Deacon <will@kernel.org>
 To:     Hector Martin <marcan@marcan.st>
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -47,116 +47,63 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFT PATCH v3 08/27] asm-generic/io.h:  Add a non-posted variant
- of ioremap()
-Message-ID: <20210324181210.GB13181@willie-the-truck>
+Subject: Re: [RFT PATCH v3 05/27] arm64: cputype: Add CPU implementor & types
+ for the Apple M1 cores
+Message-ID: <20210324181344.GC13181@willie-the-truck>
 References: <20210304213902.83903-1-marcan@marcan.st>
- <20210304213902.83903-9-marcan@marcan.st>
+ <20210304213902.83903-6-marcan@marcan.st>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210304213902.83903-9-marcan@marcan.st>
+In-Reply-To: <20210304213902.83903-6-marcan@marcan.st>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 05, 2021 at 06:38:43AM +0900, Hector Martin wrote:
-> ARM64 currently defaults to posted MMIO (nGnRnE), but some devices
-> require the use of non-posted MMIO (nGnRE). Introduce a new ioremap()
-> variant to handle this case. ioremap_np() is aliased to ioremap() by
-> default on arches that do not implement this variant.
+On Fri, Mar 05, 2021 at 06:38:40AM +0900, Hector Martin wrote:
+> The implementor will be used to condition the FIQ support quirk.
 > 
-> sparc64 is the only architecture that needs to be touched directly,
-> because it includes neither of the generic io.h or iomap.h headers.
-> 
-> This adds the IORESOURCE_MEM_NONPOSTED flag, which maps to this
-> variant and marks a given resource as requiring non-posted mappings.
-> This is implemented in the resource system because it is a SoC-level
-> requirement, so existing drivers do not need special-case code to pick
-> this ioremap variant.
-> 
-> Then this is implemented in devres by introducing devm_ioremap_np(),
-> and making devm_ioremap_resource() automatically select this variant
-> when the resource has the IORESOURCE_MEM_NONPOSTED flag set.
+> The specific CPU types are not used at the moment, but let's add them
+> for documentation purposes.
 > 
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  .../driver-api/driver-model/devres.rst        |  1 +
->  arch/sparc/include/asm/io_64.h                |  4 ++++
->  include/asm-generic/io.h                      | 22 ++++++++++++++++++-
->  include/asm-generic/iomap.h                   |  9 ++++++++
->  include/linux/io.h                            |  2 ++
->  include/linux/ioport.h                        |  1 +
->  lib/devres.c                                  | 22 +++++++++++++++++++
->  7 files changed, 60 insertions(+), 1 deletion(-)
+>  arch/arm64/include/asm/cputype.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-> index cd8b6e657b94..2f45877a539d 100644
-> --- a/Documentation/driver-api/driver-model/devres.rst
-> +++ b/Documentation/driver-api/driver-model/devres.rst
-> @@ -309,6 +309,7 @@ IOMAP
->    devm_ioremap()
->    devm_ioremap_uc()
->    devm_ioremap_wc()
-> +  devm_ioremap_np()
->    devm_ioremap_resource() : checks resource, requests memory region, ioremaps
->    devm_ioremap_resource_wc()
->    devm_platform_ioremap_resource() : calls devm_ioremap_resource() for platform device
-> diff --git a/arch/sparc/include/asm/io_64.h b/arch/sparc/include/asm/io_64.h
-> index 9bb27e5c22f1..9fbfc9574432 100644
-> --- a/arch/sparc/include/asm/io_64.h
-> +++ b/arch/sparc/include/asm/io_64.h
-> @@ -409,6 +409,10 @@ static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
->  #define ioremap_uc(X,Y)			ioremap((X),(Y))
->  #define ioremap_wc(X,Y)			ioremap((X),(Y))
->  #define ioremap_wt(X,Y)			ioremap((X),(Y))
-> +static inline void __iomem *ioremap_np(unsigned long offset, unsigned long size)
-> +{
-> +	return NULL;
-> +}
+> diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
+> index ef5b040dee44..6231e1f0abe7 100644
+> --- a/arch/arm64/include/asm/cputype.h
+> +++ b/arch/arm64/include/asm/cputype.h
+> @@ -59,6 +59,7 @@
+>  #define ARM_CPU_IMP_NVIDIA		0x4E
+>  #define ARM_CPU_IMP_FUJITSU		0x46
+>  #define ARM_CPU_IMP_HISI		0x48
+> +#define ARM_CPU_IMP_APPLE		0x61
 >  
->  static inline void iounmap(volatile void __iomem *addr)
->  {
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index c6af40ce03be..082e0c96db6e 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -942,7 +942,9 @@ static inline void *phys_to_virt(unsigned long address)
->   *
->   * ioremap_wc() and ioremap_wt() can provide more relaxed caching attributes
->   * for specific drivers if the architecture choses to implement them.  If they
-> - * are not implemented we fall back to plain ioremap.
-> + * are not implemented we fall back to plain ioremap. Conversely, ioremap_np()
-> + * can provide stricter non-posted write semantics if the architecture
-> + * implements them.
->   */
->  #ifndef CONFIG_MMU
->  #ifndef ioremap
-> @@ -993,6 +995,24 @@ static inline void __iomem *ioremap_uc(phys_addr_t offset, size_t size)
->  {
->  	return NULL;
->  }
+>  #define ARM_CPU_PART_AEM_V8		0xD0F
+>  #define ARM_CPU_PART_FOUNDATION		0xD00
+> @@ -99,6 +100,9 @@
+>  
+>  #define HISI_CPU_PART_TSV110		0xD01
+>  
+> +#define APPLE_CPU_PART_M1_ICESTORM	0x022
+> +#define APPLE_CPU_PART_M1_FIRESTORM	0x023
 > +
-> +/*
-> + * ioremap_np needs an explicit architecture implementation, as it
-> + * requests stronger semantics than regular ioremap(). Portable drivers
-> + * should instead use one of the higher-level abstractions, like
-> + * devm_ioremap_resource(), to choose the correct variant for any given
-> + * device and bus. Portable drivers with a good reason to want non-posted
-> + * write semantics should always provide an ioremap() fallback in case
-> + * ioremap_np() is not available.
-> + */
-> +#ifndef ioremap_np
-> +#define ioremap_np ioremap_np
-> +static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
-> +{
-> +	return NULL;
-> +}
-> +#endif
+>  #define MIDR_CORTEX_A53 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A53)
+>  #define MIDR_CORTEX_A57 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A57)
+>  #define MIDR_CORTEX_A72 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A72)
+> @@ -127,6 +131,8 @@
+>  #define MIDR_NVIDIA_CARMEL MIDR_CPU_MODEL(ARM_CPU_IMP_NVIDIA, NVIDIA_CPU_PART_CARMEL)
+>  #define MIDR_FUJITSU_A64FX MIDR_CPU_MODEL(ARM_CPU_IMP_FUJITSU, FUJITSU_CPU_PART_A64FX)
+>  #define MIDR_HISI_TSV110 MIDR_CPU_MODEL(ARM_CPU_IMP_HISI, HISI_CPU_PART_TSV110)
+> +#define MIDR_APPLE_M1_ICESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM)
+> +#define MIDR_APPLE_M1_FIRESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM)
 
-Can we implement the generic pci_remap_cfgspace() in terms of ioremap_np()
-if it is supported by the architecture? That way, we could avoid defining
-both on arm64.
+We usually only merge these when they're needed, but this SoC seems broken
+enough that I can see the value in having them from the start :(
+
+Acked-by: Will Deacon <will@kernel.org>
 
 Will
