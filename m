@@ -2,138 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C44347DDF
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 17:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48AA347FA1
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Mar 2021 18:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236553AbhCXQja (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Mar 2021 12:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236414AbhCXQi6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Mar 2021 12:38:58 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA600C0613E0
-        for <linux-arch@vger.kernel.org>; Wed, 24 Mar 2021 09:38:57 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id b5so11669776vsl.9
-        for <linux-arch@vger.kernel.org>; Wed, 24 Mar 2021 09:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wNHiEG33VxCvMonOriWGNjj3ArhqwshcClwSjyhBeSM=;
-        b=aIdOLKogREItDPzd5A+jRjsMTc+xmHWs2f8DXYi4nKG1WB6O5apxTb0kST6RgOkHem
-         ghgvEZWjF8nRr4dbvSOuwWbwjFPuV/vbaRD3Z7CGoVZawIxEFV5mJsE5ZtJNXdRjxRPM
-         /pgQmlNT52f7FhktYcLYtuo6wxnQ3p+E5JGCLX8DI9PAwVPuYWrmoFrgkcQEOH3bWko1
-         yeUR3ZGC2yXuGY5z4MB6db/ziAwUVV0vGN+TjSPkoDw6IcyU8wT+LKtbwhYggLzRtOkn
-         QaW82SDYSI17mjm1c8GXof1fEQ8QDILZ6717zNSQ+sv7WNZgh0LtIzkVfeFDKEGTQ5cn
-         qx9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wNHiEG33VxCvMonOriWGNjj3ArhqwshcClwSjyhBeSM=;
-        b=a2p/w275HkWDTUxApfCjKeXIn9jjKi9sQOVUEiE00KFcW0VIqXiTj5mOY57I0o4G5U
-         cEkuq4ytfKZl7EDxE/YOyiI8NLJb6fpARBtPfAdJKMbkSw6NWwtwdp3jF7qjpVSVxEGU
-         7YavP7ybO9N5ONj+H85myDf9Kmhj80inrrd0vyQjqq++dgtOcaFeuNS1Rp9M5+NxIezl
-         pVfeiD98VixzNo2fhktHoW8lnsgKbMu79j6NhyJShXkDWykrCZ+ysN//GeBEmmYXlPv+
-         VPrdy8j3pW75MurfbJW3b3YVw347geEReNdLR5GCzemh2GgGfiFlRhxHhCDSxg2Q5SCq
-         uCFA==
-X-Gm-Message-State: AOAM532CBZeGE4t4tC1ktnUblq46hCMvFpX6GFM9LMCryjFlxSt+unLW
-        jIOl4k12/eCPHWr+w/eL+C/6Qho3ZiNVKOUuRiVzBg==
-X-Google-Smtp-Source: ABdhPJyWiP2FO1YBFJh/0mu3kCEijgEQEuiJ4RCJ6qBqZ4V3CaaQ9VqbbV+Q52zSjlticSrKlbcWuV02zo+EVO7D8+4=
-X-Received: by 2002:a67:2803:: with SMTP id o3mr2580346vso.36.1616603936571;
- Wed, 24 Mar 2021 09:38:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210323203946.2159693-1-samitolvanen@google.com>
- <20210323203946.2159693-3-samitolvanen@google.com> <92afcbea-1415-2df1-5e78-4e9a7a4d364b@rasmusvillemoes.dk>
-In-Reply-To: <92afcbea-1415-2df1-5e78-4e9a7a4d364b@rasmusvillemoes.dk>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Wed, 24 Mar 2021 09:38:45 -0700
-Message-ID: <CABCJKudTZang_aUCnO63MFUc5mud3DKpHUgRFB-e04L__j_XHA@mail.gmail.com>
-Subject: Re: [PATCH v3 02/17] cfi: add __cficanonical
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        bpf <bpf@vger.kernel.org>, linux-hardening@vger.kernel.org,
+        id S237058AbhCXRjZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Mar 2021 13:39:25 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10606 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237047AbhCXRjA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Mar 2021 13:39:00 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12OHWWeq097863;
+        Wed, 24 Mar 2021 13:38:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=i0jVAPdV4uMZGW+9DRVmj8zwB+KQ4zU198TE5YQBbdo=;
+ b=JsiMrqpzRtiRzTYFDhNpMa6FvYzaladPqSoxMoB67y2q8HeP6fXSzhFHJf2lUa/cGN4O
+ e51qsqXQyS6E43YrVbVFL+EyEkOfbSqeoJj/DE4ePh+R7hhdxDNaeumY8gU0Zl7LsF1P
+ RKtxqWBq+k+efPDBx8qgfiID2xWVZ6HIEPjO66fc3wf6zraDvF41S2ENRJghWgBPV7rN
+ rh03bGzjDUtKmu890wLoSvk3gvqfFdTETHz8nkHTxQxdDLOWIMVt1VjJbR2RzPgKxB2O
+ QFWIZTcXrl4Uw8Q2kOZlWaiXSKzer5zx785K/kUhDaq7oYBrV5GAflChxew3kuFqmdjB zA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37g9cs161f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Mar 2021 13:38:57 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12OHREki030541;
+        Wed, 24 Mar 2021 17:38:55 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 37d99rck3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Mar 2021 17:38:54 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12OHcYxB13369834
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Mar 2021 17:38:34 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1D0F54C052;
+        Wed, 24 Mar 2021 17:38:52 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9F69F4C04E;
+        Wed, 24 Mar 2021 17:38:51 +0000 (GMT)
+Received: from localhost (unknown [9.171.93.123])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 24 Mar 2021 17:38:51 +0000 (GMT)
+Date:   Wed, 24 Mar 2021 18:38:50 +0100
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Sven Schnelle <svens@linux.ibm.com>, X86 ML <x86@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Mark Rutland <mark.rutland@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: Re: Is s390's new generic-using syscall code actually correct?
+Message-ID: <your-ad-here.call-01616607308-ext-0852@work.hours>
+References: <CALCETrUx10uHeD7bckVjL9x7S3LEdH3ZfzUbCMWj9j-=nYp8Wg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CALCETrUx10uHeD7bckVjL9x7S3LEdH3ZfzUbCMWj9j-=nYp8Wg@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-24_13:2021-03-24,2021-03-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 malwarescore=0 adultscore=0 phishscore=0 mlxlogscore=999
+ spamscore=0 lowpriorityscore=0 clxscore=1011 impostorscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103240127
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 8:31 AM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
->
-> On 23/03/2021 21.39, Sami Tolvanen wrote:
-> > With CONFIG_CFI_CLANG, the compiler replaces a function address taken
-> > in C code with the address of a local jump table entry, which passes
-> > runtime indirect call checks. However, the compiler won't replace
-> > addresses taken in assembly code, which will result in a CFI failure
-> > if we later jump to such an address in instrumented C code. The code
-> > generated for the non-canonical jump table looks this:
-> >
-> >   <noncanonical.cfi_jt>: /* In C, &noncanonical points here */
-> >       jmp noncanonical
-> >   ...
-> >   <noncanonical>:        /* function body */
-> >       ...
-> >
-> > This change adds the __cficanonical attribute, which tells the
-> > compiler to use a canonical jump table for the function instead. This
-> > means the compiler will rename the actual function to <function>.cfi
-> > and points the original symbol to the jump table entry instead:
-> >
-> >   <canonical>:           /* jump table entry */
-> >       jmp canonical.cfi
-> >   ...
-> >   <canonical.cfi>:       /* function body */
-> >       ...
-> >
-> > As a result, the address taken in assembly, or other non-instrumented
-> > code always points to the jump table and therefore, can be used for
-> > indirect calls in instrumented code without tripping CFI checks.
->
-> Random ramblings, I'm trying to understand how this CFI stuff works.
->
-> First, patch 1 and 2 explain the pros and cons of canonical vs
-> non-canonical jump tables, in either case, there's problems with stuff
-> implemented in assembly. But I don't understand why those pros and cons
-> then end up with using the non-canonical jump tables by default. IIUC,
-> with canonical jump tables, function pointer equality would keep working
-> for functions implemented in C, because &func would always refer to the
-> same stub "function" that lives in the same object file as func.cfi,
-> whereas with the non-canonical version, each TU (or maybe DSO) that
-> takes the address of func ends up with its own func.cfi_jt.
+Hi Andy,
 
-Correct.
+On Sat, Mar 20, 2021 at 08:48:34PM -0700, Andy Lutomirski wrote:
+> Hi all-
+> 
+> I'm working on my kentry patchset, and I encountered:
+> 
+> commit 56e62a73702836017564eaacd5212e4d0fa1c01d
+> Author: Sven Schnelle <svens@linux.ibm.com>
+> Date:   Sat Nov 21 11:14:56 2020 +0100
+> 
+>     s390: convert to generic entry
+> 
+> As part of this work, I was cleaning up the generic syscall helpers,
+> and I encountered the goodies in do_syscall() and __do_syscall().
+> 
+> I'm trying to wrap my head around the current code, and I'm rather confused.
+> 
+> 1. syscall_exit_to_user_mode_work() does *all* the exit work, not just
+> the syscall exit work.  So a do_syscall() that gets called twice will
+> do the loopy part of the exit work (e.g. signal handling) twice.  Is
+> this intentional?  If so, why?
+> 
+> 2. I don't understand how this PIF_SYSCALL_RESTART thing is supposed
+> to work.  Looking at the code in Linus' tree, if a signal is pending
+> and a syscall returns -ERESTARTSYS, the syscall will return back to
+> do_syscall().  The work (as in (1)) gets run, calling do_signal(),
+> which will notice -ERESTARTSYS and set PIF_SYSCALL_RESTART.
+> Presumably it will also push the signal frame onto the stack and aim
+> the return address at the svc instruction mentioned in the commit
+> message from "s390: convert to generic entry".  Then __do_syscall()
+> will turn interrupts back on and loop right back into do_syscall().
+> That seems incorrect.
+> 
+> Can you enlighten me?  My WIP tree is here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git/log/?h=x86/kentry
+> 
 
-> There are of course lots of direct calls of assembly functions, but
-> I don't think we take the address of such functions very often. So why
-> can't we instead equip the declarations of those with a
-> __cfi_noncanonical attribute?
+For all the details to that change we'd have to wait for Sven, who is back
+next week.
 
-Clang doesn't support these attributes in function declarations,
-unfortunately. If it did, that would certainly help, until someone
-wants to compare addresses of assembly functions, in which case we
-would again have a problem.
+> Here are my changes to s390, and I don't think they're really correct:
+> 
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git/diff/arch/s390/kernel/syscall.c?h=x86/kentry&id=58a459922be0fb8e0f17aeaebcb0ac8d0575a62c
 
-Another way to work around the issue with canonical CFI would be to
-add C wrappers for all address-taken assembly functions, but that's
-not quite ideal either. I think most indirect calls to assembly
-functions happen in the crypto code, which would have required so many
-changes that we decided to default to non-canonical CFI instead. This
-resulted in far fewer kernel changes despite the cross-module function
-address equality issue.
+Couple of things: syscall_exit_to_user_mode_prepare is static,
+and there is another code path in arch/s390/kernel/traps.c using
+enter_from_user_mode/exit_to_user_mode.
 
-Sami
+Anyhow I gave your branch a spin and got few new failures on strace test
+suite, in particular on restart_syscall test. I'll try to find time to
+look into details.
