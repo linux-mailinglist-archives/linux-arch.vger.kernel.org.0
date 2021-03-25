@@ -2,122 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 357A7349AA3
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 20:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3959D349AEF
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 21:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbhCYTpC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Mar 2021 15:45:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56756 "EHLO mail.kernel.org"
+        id S230335AbhCYUUx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 25 Mar 2021 16:20:53 -0400
+Received: from albireo.enyo.de ([37.24.231.21]:34966 "EHLO albireo.enyo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229629AbhCYTog (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 25 Mar 2021 15:44:36 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 80C7D61A1E;
-        Thu, 25 Mar 2021 19:44:34 +0000 (UTC)
-Date:   Thu, 25 Mar 2021 15:44:33 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 4/6] kprobes/ftrace: Use ftrace_location() when
- [dis]arming probes
-Message-ID: <20210325154433.7ed7e56a@gandalf.local.home>
-In-Reply-To: <20210313064149.29276-5-huangpei@loongson.cn>
-References: <20210313064149.29276-1-huangpei@loongson.cn>
-        <20210313064149.29276-5-huangpei@loongson.cn>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S230347AbhCYUUm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 25 Mar 2021 16:20:42 -0400
+X-Greylist: delayed 367 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Mar 2021 16:20:42 EDT
+Received: from [172.17.203.2] (port=38035 helo=deneb.enyo.de)
+        by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1lPWNA-0006VJ-Bh; Thu, 25 Mar 2021 20:14:28 +0000
+Received: from fw by deneb.enyo.de with local (Exim 4.92)
+        (envelope-from <fw@deneb.enyo.de>)
+        id 1lPWN9-00045D-5Z; Thu, 25 Mar 2021 21:14:27 +0100
+From:   Florian Weimer <fw@deneb.enyo.de>
+To:     "Bae\, Chang Seok via Libc-alpha" <libc-alpha@sourceware.org>
+Cc:     Borislav Petkov <bp@suse.de>,
+        "Bae\, Chang Seok" <chang.seok.bae@intel.com>,
+        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "Brown\, Len" <len.brown@intel.com>,
+        "Luck\, Tony" <tony.luck@intel.com>,
+        "jannh\@google.com" <jannh@google.com>,
+        "x86\@kernel.org" <x86@kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Dave.Martin\@arm.com" <Dave.Martin@arm.com>,
+        "Hansen\, Dave" <dave.hansen@intel.com>,
+        "luto\@kernel.org" <luto@kernel.org>,
+        "linux-api\@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "mingo\@kernel.org" <mingo@kernel.org>,
+        "Shankar\, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v7 5/6] x86/signal: Detect and prevent an alternate signal stack overflow
+References: <20210316065215.23768-1-chang.seok.bae@intel.com>
+        <20210316065215.23768-6-chang.seok.bae@intel.com>
+        <20210316115248.GB18822@zn.tnic>
+        <16A53D65-2460-49B3-892B-81EF8D7B12B9@intel.com>
+        <20210325162047.GA32296@zn.tnic>
+        <06722BDE-738A-4513-886E-2C1442C97369@intel.com>
+Date:   Thu, 25 Mar 2021 21:14:27 +0100
+In-Reply-To: <06722BDE-738A-4513-886E-2C1442C97369@intel.com> (Chang Seok via
+        Libc-alpha Bae's message of "Thu, 25 Mar 2021 17:21:04 +0000")
+Message-ID: <87o8f7j8ik.fsf@mid.deneb.enyo.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 13 Mar 2021 14:41:47 +0800
-Huang Pei <huangpei@loongson.cn> wrote:
+* Chang Seok via Libc-alpha Bae:
 
-> From: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
-> 
+> On Mar 25, 2021, at 09:20, Borislav Petkov <bp@suse.de> wrote:
+>> 
+>> $ gcc tst-minsigstksz-2.c -DMY_MINSIGSTKSZ=3453 -o tst-minsigstksz-2
+>> $ ./tst-minsigstksz-2
+>> tst-minsigstksz-2: changed byte 50 bytes below configured stack
+>> 
+>> Whoops.
+>> 
+>> And the debug print said:
+>> 
+>> [ 5395.252884] signal: get_sigframe: sp: 0x7f54ec39e7b8, sas_ss_sp: 0x7f54ec39e6ce, sas_ss_size 0xd7d
+>> 
+>> which tells me that, AFAICT, your check whether we have enough alt stack
+>> doesn't seem to work in this case.
+>
+> Yes, in this case.
+>
+> tst-minsigstksz-2.c has this code:
+>
+> static void
+> handler (int signo)
+> {
+>   /* Clear a bit of on-stack memory.  */
+>   volatile char buffer[256];
+>   for (size_t i = 0; i < sizeof (buffer); ++i)
+>     buffer[i] = 0;
+>   handler_run = 1;
+> }
+> …
+>
+>   if (handler_run != 1)
+>     errx (1, "handler did not run");
+>
+>   for (void *p = stack_buffer; p < stack_bottom; ++p)
+>     if (*(unsigned char *) p != 0xCC)
+>       errx (1, "changed byte %zd bytes below configured stack\n",
+>             stack_bottom - p);
+> …
+>
+> I think the message comes from the handler’s overwriting, not from the kernel.
+>
+> The patch's check is to detect and prevent the kernel-induced overflow --
+> whether alt stack enough for signal delivery itself.  The stack is possibly
+> not enough for the signal handler's use as the kernel does not know for it.
 
-Looks like this was sent before, but was missing the proper authorship
-(which is not Jisheng).
+Ahh, right.  When I wrote the test, I didn't know which turn the
+kernel would eventually take, so the test is quite arbitrary.
 
-   https://lore.kernel.org/linux-arm-kernel/20191225173219.4f9db436@xhacker.debian/
-
--- Steve
-
-
-> Ftrace location could include more than a single instruction in case
-> of some architectures (powerpc64, for now). In this case, kprobe is
-> permitted on any of those instructions, and uses ftrace infrastructure
-> for functioning.
-> 
-> However, [dis]arm_kprobe_ftrace() uses the kprobe address when setting
-> up ftrace filter IP. This won't work if the address points to any
-> instruction apart from the one that has a branch to _mcount(). To
-> resolve this, have [dis]arm_kprobe_ftrace() use ftrace_function() to
-> identify the filter IP.
-> 
-> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-> ---
->  kernel/kprobes.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index 41fdbb7953c6..66ee28b071c2 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -1045,9 +1045,10 @@ static int prepare_kprobe(struct kprobe *p)
->  static int __arm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
->  			       int *cnt)
->  {
-> +	unsigned long ftrace_ip = ftrace_location((unsigned long)p->addr);
->  	int ret = 0;
->  
-> -	ret = ftrace_set_filter_ip(ops, (unsigned long)p->addr, 0, 0);
-> +	ret = ftrace_set_filter_ip(ops, ftrace_ip, 0, 0);
->  	if (ret) {
->  		pr_debug("Failed to arm kprobe-ftrace at %pS (%d)\n",
->  			 p->addr, ret);
-> @@ -1070,7 +1071,7 @@ static int __arm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
->  	 * At this point, sinec ops is not registered, we should be sefe from
->  	 * registering empty filter.
->  	 */
-> -	ftrace_set_filter_ip(ops, (unsigned long)p->addr, 1, 0);
-> +	ftrace_set_filter_ip(ops, ftrace_ip, 1, 0);
->  	return ret;
->  }
->  
-> @@ -1087,6 +1088,7 @@ static int arm_kprobe_ftrace(struct kprobe *p)
->  static int __disarm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
->  				  int *cnt)
->  {
-> +	unsigned long ftrace_ip = ftrace_location((unsigned long)p->addr);
->  	int ret = 0;
->  
->  	if (*cnt == 1) {
-> @@ -1097,7 +1099,7 @@ static int __disarm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
->  
->  	(*cnt)--;
->  
-> -	ret = ftrace_set_filter_ip(ops, (unsigned long)p->addr, 1, 0);
-> +	ret = ftrace_set_filter_ip(ops, ftrace_ip, 1, 0);
->  	WARN_ONCE(ret < 0, "Failed to disarm kprobe-ftrace at %pS (%d)\n",
->  		  p->addr, ret);
->  	return ret;
-
+The glibc dynamic loader uses XSAVE/XSAVEC as well, so you can
+probably double the practical stack requirement if lazy binding is in
+use and can be triggered from the signal handler.  Estimating stack
+sizes is hard.
