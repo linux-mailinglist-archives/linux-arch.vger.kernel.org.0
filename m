@@ -2,63 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 012A0348D98
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 11:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C253348DC9
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 11:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbhCYKBb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Mar 2021 06:01:31 -0400
-Received: from elvis.franken.de ([193.175.24.41]:58851 "EHLO elvis.franken.de"
+        id S229676AbhCYKRN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Mar 2021 06:17:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:45880 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229519AbhCYKBM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 25 Mar 2021 06:01:12 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lPMnd-00074f-03; Thu, 25 Mar 2021 11:01:09 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 44236C1C81; Thu, 25 Mar 2021 11:00:09 +0100 (CET)
-Date:   Thu, 25 Mar 2021 11:00:09 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: Re: [PATCH] MIPS: loongson64: fix bug when PAGE_SIZE > 16KB
-Message-ID: <20210325100009.GD5775@alpha.franken.de>
-References: <20210324032451.27569-1-huangpei@loongson.cn>
+        id S230007AbhCYKRD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 25 Mar 2021 06:17:03 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6609613A1;
+        Thu, 25 Mar 2021 03:17:02 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2EB263F718;
+        Thu, 25 Mar 2021 03:16:57 -0700 (PDT)
+Date:   Thu, 25 Mar 2021 10:16:55 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        bpf <bpf@vger.kernel.org>, linux-hardening@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 03/17] mm: add generic __va_function and __pa_function
+ macros
+Message-ID: <20210325101655.GB36570@C02TD0UTHF1T.local>
+References: <20210323203946.2159693-1-samitolvanen@google.com>
+ <20210323203946.2159693-4-samitolvanen@google.com>
+ <20210324071357.GB2639075@infradead.org>
+ <CABCJKufRHCb0sjr1tMGCoVMzV-5dKPPn-t8=+ihNFAgTr2k0DA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210324032451.27569-1-huangpei@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CABCJKufRHCb0sjr1tMGCoVMzV-5dKPPn-t8=+ihNFAgTr2k0DA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 11:24:51AM +0800, Huang Pei wrote:
-> When page size larger than 16KB, arguments "vaddr + size(16KB)" in
-> "ioremap_page_range(vaddr, vaddr + size,...)" called by
-> "add_legacy_isa_io" is not page-aligned.
+On Wed, Mar 24, 2021 at 08:54:18AM -0700, Sami Tolvanen wrote:
+> On Wed, Mar 24, 2021 at 12:14 AM Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > On Tue, Mar 23, 2021 at 01:39:32PM -0700, Sami Tolvanen wrote:
+> > > With CONFIG_CFI_CLANG, the compiler replaces function addresses
+> > > in instrumented C code with jump table addresses. This means that
+> > > __pa_symbol(function) returns the physical address of the jump table
+> > > entry instead of the actual function, which may not work as the jump
+> > > table code will immediately jump to a virtual address that may not be
+> > > mapped.
+> > >
+> > > To avoid this address space confusion, this change adds generic
+> > > definitions for __va_function and __pa_function, which architectures
+> > > that support CFI can override. The typical implementation of the
+> > > __va_function macro would use inline assembly to take the function
+> > > address, which avoids compiler instrumentation.
+> >
+> > I think these helper are sensible, but shouldn't they have somewhat
+> > less arcane names and proper documentation?
 > 
-> As loongson64 needs at least page size 16KB to get rid of cache alias,
-> and "vaddr" is 64KB-aligned, and 64KB is largest page size supported,
-> rounding "size" up to PAGE_SIZE is enough for all page size supported.
-> 
-> Fixes: 6d0068ad15e4 ("MIPS: Loongson64: Process ISA Node in DeviceTree")
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->  arch/mips/loongson64/init.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Good point, I'll add comments in the next version. I thought
+> __pa_function would be a fairly straightforward replacement for
+> __pa_symbol, but I'm fine with renaming these. Any suggestions for
+> less arcane names?
 
-applied to mips-next.
+I think dropping 'nocfi' into the name would be clear enough. I think
+that given the usual fun with {symbol,module,virt}->phys conversions
+it's not worth having the __pa_* form, and we can leave the phys
+conversion to the caller that knows where the function lives.
 
-Thomas.
+How about we just add `function_nocfi()` ?
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Callers can then do `__pa_symbol(function_nocfi(foo))` and similar.
+
+Thanks,
+Mark.
