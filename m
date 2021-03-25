@@ -2,122 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41223348614
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 01:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 542743489C7
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 08:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232538AbhCYAvf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Mar 2021 20:51:35 -0400
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:54253 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239410AbhCYAvF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Mar 2021 20:51:05 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id E4CF71525;
-        Wed, 24 Mar 2021 20:50:58 -0400 (EDT)
-Received: from imap1 ([10.202.2.51])
-  by compute6.internal (MEProxy); Wed, 24 Mar 2021 20:50:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm1; bh=zjatyvvSSE46LUdl98TXIwR6kX6pq3G
-        UAfknNyuutZM=; b=xGbs5TbNM2wBAWrIdMOdRUUzzyVyoMLN5O+H/tc8f0qX0mO
-        9C+jUVpckEclXRJHD2JStmJNFMB8loOwo6NuAl6SKwx+T/LGlQRewcPlXQOfCR8F
-        dGDYKIXUk2w3U0HoUJZ49kVsmXB0AM+FlsgdPQj5/FeodaFmGcvK8Ogi1LfW+OMa
-        39GVevwPrtH8zvrS51w9qGmzepWV9LR7Ve4ZKGKX0ShbFHR3jgY3ivKF2HPZ01GR
-        IE8KM6yaQ/LF71ZHFrw7YP86Ay0FJ9KiOsDF+oKLPLqk+rmzMcVhnvV0G9MeLUUq
-        5PPICBHUOQZXSl09SjaNeeI9a/oVZA64jcSH7bQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=zjatyv
-        vSSE46LUdl98TXIwR6kX6pq3GUAfknNyuutZM=; b=kdwzp3nrbVsWe/nv5dw2Ef
-        WW7UtbSqn+9uy6LIZ0aty8nfNxnrQnOKD76YkgrghN2smYklAmmJaJ1h5k8F3oR5
-        aYcRvuGgmnyciZpLbKb6ykdYUUGEqcKTf53XPG8yMvu2StrYv/qdkRCRvSoKDWlC
-        OrR7bii0xe8I+sOE72h41riSa3g3jP1Fwq5TSFjkpyj52dcnmSpGB3ZR1I5STlx9
-        hNAW6xejxiWXMVf9/Rvc4O2ulRV6gKXoqeTxFhPc6LWC9EeoxHOWA71k8UnWADBJ
-        AzO28cnixDNhZF5hkvaxmcS9APd6xKc8ZCzZsqEy8K0wdmDuH9bxpb4s28XKWOPA
-        ==
-X-ME-Sender: <xms:cN5bYPg0Rj_s_VWytEEsgni7esOPIdIje8tIqNoVSH5cYZEpaRlgxA>
-    <xme:cN5bYMB5ETEm2vTvfaqxGIje5h1TMqrCOHaWce2pOhnU9Azzd5x3vc-lqWdwrkctw
-    SJiYG97nladjL0xEjI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudegledgvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdflihgr
-    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeekleehtefhhefftddtleeiveefieehueduieefueegueei
-    leeitdeujeehheehudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:cd5bYPGuM0yKVk7jb9M7l1Dz4UZuqLOWVqmzep4KTwUB14iFEmy0tw>
-    <xmx:cd5bYMRuPWrb3JAMdKKtMrTiTGFzdwBn5chm92CiJG1CePBm9FIzzw>
-    <xmx:cd5bYMwFoL4di2U1Q6WkhAm02DK_n1M3oOSI2wSkR5xK-PB6mROC0w>
-    <xmx:ct5bYIfIW0Kba--7zmV3uWGLw-6ztj-bbh0tc3lZZTe9nHU32yz94gb5ciw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DA81313004BF; Wed, 24 Mar 2021 20:50:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-273-g8500d2492d-fm-20210323.002-g8500d249
-Mime-Version: 1.0
-Message-Id: <6e8521f8-80e3-49c8-b85c-ccb2c7f349b5@www.fastmail.com>
-In-Reply-To: <20210324032451.27569-1-huangpei@loongson.cn>
-References: <20210324032451.27569-1-huangpei@loongson.cn>
-Date:   Thu, 25 Mar 2021 08:50:36 +0800
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Huang Pei" <huangpei@loongson.cn>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     "Bibo Mao" <maobibo@loongson.cn>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        "Xuefeng Li" <lixuefeng@loongson.cn>,
-        "Tiezhu Yang" <yangtiezhu@loongson.cn>,
-        "Gao Juxin" <gaojuxin@loongson.cn>,
-        "Huacai Chen" <chenhuacai@loongson.cn>,
-        "Jinyang He" <hejinyang@loongson.cn>
-Subject: Re: [PATCH] MIPS: loongson64: fix bug when PAGE_SIZE > 16KB
-Content-Type: text/plain
+        id S229617AbhCYHCd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Mar 2021 03:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229662AbhCYHB7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Mar 2021 03:01:59 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074AFC061761
+        for <linux-arch@vger.kernel.org>; Thu, 25 Mar 2021 00:01:58 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id k14-20020a9d7dce0000b02901b866632f29so1043710otn.1
+        for <linux-arch@vger.kernel.org>; Thu, 25 Mar 2021 00:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Er9VTBwwaI4g9NSWPaQXCrSglwdU7EBlM0d7c0+OO70=;
+        b=hbSQau/S0befhroiNXRd5O8t1oN/3OjEIMZCtSzpFl/RHERsBfwJwZVn6Nm5FDuLsn
+         X3sE96eypk30BXKU2tgnMTmXLdrLEFveDKo4zr0M36qJwyT8nWlLcajgqON0Zz4xNSQ/
+         qR7Ue/CQkq4CWUE6EA9jQngra/S/MAhRUej/W/rdhbXE+iGxs7vYzwRaKTIeH8lM7+t1
+         KvLnUbsb4cs3XNHr3mNjZaNPjUnVAAqg/zKjDtUE3LJcrtlIva+eWdqE5sxgHi3R6Hk/
+         M3ySio+sobh7dR7VNABom34tFO67Dp2oeR7GPXWNr1TW0hlyDutwoxRZ8vUjvvmRIcDk
+         FQuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Er9VTBwwaI4g9NSWPaQXCrSglwdU7EBlM0d7c0+OO70=;
+        b=AEWZDys02kpzO1RL4R9nmnCorhyZXBHUxHTYZ3/AZ+zCsD5esicOQIHrISGOcQfKzE
+         FU5ToSy9Ldzx4XVYBeeC+SGiuX28I3zFIUV5DX7osPLwaGCgMLThJSfiUxkGZq22qe8E
+         EWKiQYn7USw+j8/MvbjnzQXfhCLl+hw52RBTtoAS66qaXaX8mitZVYiudpHMtmJ7M17T
+         Qm8ZOB+f0LU18s/mzmHv6NM3ZZkMBhRO1nu1oaSzH/xkE6hl9wUUl7Mu314x/mn0pVNL
+         KkPGD4cPu1aW6tPbVoziiTy782quRQoFiCtZ94+fuO2fyogUldHdC3ya3TmeJ9KxmIIQ
+         W6fQ==
+X-Gm-Message-State: AOAM531Dohj0v1byGkard5+LteophfkTASnYG8jty+dHImbiMbNZtRRg
+        9dpCRxELwIyi0cDz7vZPysMxDxQHfWwokYqU6mIM6A==
+X-Google-Smtp-Source: ABdhPJwPvrgsJnGrZMxNyLh8qM0Q/+YmupqLk+E6MqWkru1DKR/2BrqUxCJaMzwupgu4U06ClSQ0DcQAkr86B5+pQP8=
+X-Received: by 2002:a05:6830:1c6e:: with SMTP id s14mr6341695otg.17.1616655718013;
+ Thu, 25 Mar 2021 00:01:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210324112503.623833-1-elver@google.com> <20210324112503.623833-8-elver@google.com>
+ <YFs2XHqepwtlLinx@hirez.programming.kicks-ass.net> <YFs4RDKfbjw89tf3@hirez.programming.kicks-ass.net>
+ <YFs84dx8KcAtSt5/@hirez.programming.kicks-ass.net> <YFtB+Ta9pkMg4C2h@hirez.programming.kicks-ass.net>
+ <YFtF8tEPHrXnw7cX@hirez.programming.kicks-ass.net> <CANpmjNPkBQwmNFO_hnUcjYGM=1SXJy+zgwb2dJeuOTAXphfDsw@mail.gmail.com>
+ <CACT4Y+aKmdsXhRZi2f3LsX3m=krdY4kPsEUcieSugO2wY=xA-Q@mail.gmail.com> <CACT4Y+aRaNSaeWRA2H_q3k9+OpG0Lc3V7JWU8+whZ9s3gob-Kw@mail.gmail.com>
+In-Reply-To: <CACT4Y+aRaNSaeWRA2H_q3k9+OpG0Lc3V7JWU8+whZ9s3gob-Kw@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 25 Mar 2021 08:00:00 +0100
+Message-ID: <CANpmjNOysjStB6VPDNaBnQe37VWtWq5c-7_p0kFbsbN5ohD0Lg@mail.gmail.com>
+Subject: Re: [PATCH v3 07/11] perf: Add breakpoint information to siginfo on SIGTRAP
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian@brauner.io>,
+        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Matt Morehouse <mascasa@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Ian Rogers <irogers@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On Wed, Mar 24, 2021, at 11:24 AM, Huang Pei wrote:
-> When page size larger than 16KB, arguments "vaddr + size(16KB)" in
-> "ioremap_page_range(vaddr, vaddr + size,...)" called by
-> "add_legacy_isa_io" is not page-aligned.
-> 
-> As loongson64 needs at least page size 16KB to get rid of cache alias,
-> and "vaddr" is 64KB-aligned, and 64KB is largest page size supported,
-> rounding "size" up to PAGE_SIZE is enough for all page size supported.
-> 
-> Fixes: 6d0068ad15e4 ("MIPS: Loongson64: Process ISA Node in DeviceTree")
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-
-Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-> ---
->  arch/mips/loongson64/init.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-> index ed75f7971261..052cce6a8a99 100644
-> --- a/arch/mips/loongson64/init.c
-> +++ b/arch/mips/loongson64/init.c
-> @@ -82,7 +82,7 @@ static int __init add_legacy_isa_io(struct 
-> fwnode_handle *fwnode, resource_size_
->  		return -ENOMEM;
->  
->  	range->fwnode = fwnode;
-> -	range->size = size;
-> +	range->size = size = round_up(size, PAGE_SIZE);
->  	range->hw_start = hw_start;
->  	range->flags = LOGIC_PIO_CPU_MMIO;
->  
-> -- 
-> 2.17.1
-> 
+On Wed, 24 Mar 2021 at 15:15, Dmitry Vyukov <dvyukov@google.com> wrote:
+> On Wed, Mar 24, 2021 at 3:12 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+> > > On Wed, 24 Mar 2021 at 15:01, Peter Zijlstra <peterz@infradead.org> wrote:
+> > > >
+> > > > One last try, I'll leave it alone now, I promise :-)
+> > >
+> > > This looks like it does what you suggested, thanks! :-)
+> > >
+> > > I'll still need to think about it, because of the potential problem
+> > > with modify-signal-races and what the user's synchronization story
+> > > would look like then.
+> >
+> > I agree that this looks inherently racy. The attr can't be allocated
+> > on stack, user synchronization may be tricky and expensive. The API
+> > may provoke bugs and some users may not even realize the race problem.
+> >
+> > One potential alternative is use of an opaque u64 context (if we could
+> > shove it into the attr). A user can pass a pointer to the attr in
+> > there (makes it equivalent to this proposal), or bit-pack size/type
+> > (as we want), pass some sequence number or whatever.
 >
+> Just to clarify what I was thinking about, but did not really state:
+> perf_event_attr_t includes u64 ctx, and we return it back to the user
+> in siginfo_t. Kernel does not treat it in any way. This is a pretty
+> common API pattern in general.
 
--- 
-- Jiaxun
+Ok, let's go for a new field in perf_event_attr which is copied to
+si_perf. This gives user space full flexibility to decide what to
+stick in it, and the kernel does not prescribe some weird encoding or
+synchronization that user space would have to live with. I'll probably
+call it perf_event_attr::sig_data, because all si_* things are macros.
+
+Thanks,
+-- Marco
