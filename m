@@ -2,94 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF641348CE3
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 10:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 012A0348D98
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 11:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbhCYJ3f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Mar 2021 05:29:35 -0400
-Received: from smtp-8faf.mail.infomaniak.ch ([83.166.143.175]:55511 "EHLO
-        smtp-8faf.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230070AbhCYJ3N (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 25 Mar 2021 05:29:13 -0400
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F5ftj1bChzMqSFq;
-        Thu, 25 Mar 2021 10:29:01 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4F5ftZ3sl9zlh8TD;
-        Thu, 25 Mar 2021 10:28:54 +0100 (CET)
-Subject: Re: [PATCH v30 02/12] landlock: Add ruleset and domain management
-To:     James Morris <jmorris@namei.org>
-Cc:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20210316204252.427806-1-mic@digikod.net>
- <20210316204252.427806-3-mic@digikod.net> <202103191114.C87C5E2B69@keescook>
- <acda4be1-4076-a31d-fcfd-27764dd598c8@digikod.net>
- <c9dc8adb-7fab-14a1-a658-40b288419fdf@namei.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <25f701bf-fddf-8e9c-1ac1-c50a38579096@digikod.net>
-Date:   Thu, 25 Mar 2021 10:29:35 +0100
-User-Agent: 
+        id S229854AbhCYKBb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Mar 2021 06:01:31 -0400
+Received: from elvis.franken.de ([193.175.24.41]:58851 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229519AbhCYKBM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 25 Mar 2021 06:01:12 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lPMnd-00074f-03; Thu, 25 Mar 2021 11:01:09 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 44236C1C81; Thu, 25 Mar 2021 11:00:09 +0100 (CET)
+Date:   Thu, 25 Mar 2021 11:00:09 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Subject: Re: [PATCH] MIPS: loongson64: fix bug when PAGE_SIZE > 16KB
+Message-ID: <20210325100009.GD5775@alpha.franken.de>
+References: <20210324032451.27569-1-huangpei@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <c9dc8adb-7fab-14a1-a658-40b288419fdf@namei.org>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210324032451.27569-1-huangpei@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-On 24/03/2021 21:31, James Morris wrote:
-> On Fri, 19 Mar 2021, Mickaël Salaün wrote:
+On Wed, Mar 24, 2021 at 11:24:51AM +0800, Huang Pei wrote:
+> When page size larger than 16KB, arguments "vaddr + size(16KB)" in
+> "ioremap_page_range(vaddr, vaddr + size,...)" called by
+> "add_legacy_isa_io" is not page-aligned.
 > 
->>
->>>> Cc: Kees Cook <keescook@chromium.org>
->>>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->>>> Acked-by: Serge Hallyn <serge@hallyn.com>
->>>> Link: https://lore.kernel.org/r/20210316204252.427806-3-mic@digikod.net
->>>
->>> (Aside: you appear to be self-adding your Link: tags -- AIUI, this is
->>> normally done by whoever pulls your series. I've only seen Link: tags
->>> added when needing to refer to something else not included in the
->>> series.)
->>
->> It is an insurance to not lose history. :)
+> As loongson64 needs at least page size 16KB to get rid of cache alias,
+> and "vaddr" is 64KB-aligned, and 64KB is largest page size supported,
+> rounding "size" up to PAGE_SIZE is enough for all page size supported.
 > 
-> How will history be lost? The code is in the repo and discussions can 
-> easily be found by searching for subjects or message IDs.
+> Fixes: 6d0068ad15e4 ("MIPS: Loongson64: Process ISA Node in DeviceTree")
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> ---
+>  arch/mips/loongson64/init.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-The (full and ordered) history may be hard to find without any
-Message-ID in commit messages. The Lore links keep that information (in
-the commit message) and redirect to the related archived email thread,
-which is very handy. For instance, Linus can rely on those links to
-judge the quality of a patch:
-https://lore.kernel.org/lkml/CAHk-=wh7xY3UF7zEc0BNVNjOox59jYBW-Gfi7=emm+BXPWc6nQ@mail.gmail.com/
+applied to mips-next.
 
-> 
-> Is anyone else doing this self linking?
-> 
+Thomas.
 
-I don't know, but it doesn't hurt. This way, if you're using git am
-without b4 am -l (or forgot to add links manually), the history is still
-pointed out by these self-reference links. I find it convenient and it
-is a safeguard to not forget them, no matter who takes the patches.
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
