@@ -2,125 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB4B3493DF
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 15:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F2C349488
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Mar 2021 15:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbhCYOSw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Mar 2021 10:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbhCYOSb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Mar 2021 10:18:31 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3267C06174A;
-        Thu, 25 Mar 2021 07:18:29 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ce10so3191127ejb.6;
-        Thu, 25 Mar 2021 07:18:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lMu1u0tgdpKUYdK0Y2edV56h3EG24/y18/fAyUCWVWo=;
-        b=RbjSEQfqNEssxKbJqIH/emUW3jSbq9bgkMVtMsexGztaajgm+fopQefEDxTPfEaDIb
-         FVO53ZNlI1hsSzxMiyfd+OssWBBSeB+fZTI4mw22lXVF+ItJhweULzi3KcSISHl9fc6Z
-         uyYcjwB/mOGr56dLrk9UO608Wg1Kg8l7Egglol76u7z9losnL8FdpcIQAqW1bsRXaX0U
-         qlRjkh/aG1c225VZti7tuHpguitH9L+1frIE2ZwhHSPkVsXy31F14bWaCM1Qx9S00rLx
-         rMIMXH0WQRMuKUuMEaiiyYgRmbo75EQVt9xEZGWlRyjFMTHA0UQPlet9J8xEeaFAnxhZ
-         tHJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=lMu1u0tgdpKUYdK0Y2edV56h3EG24/y18/fAyUCWVWo=;
-        b=owSoQKmvPLxfGvn1I/xv7A0VM9Oj2f5XOFByaA74Jq4WUbQlzlAW9yKc22iY1zIv1s
-         Qs3f+fFRvORZinkGNpC3Ghwq9+ymH65CK70OY/RDuyCNw7mC6Mqzn0Qq2TQYs5oaw8yp
-         PW/R8wMZh1mTZsDvgtaIXlOg2QRJKGnOe7yuRDRFfUz9blpmVE5DiBSH/i2ircZwZ/q6
-         kenEzOsqoEckuLw5BXr+desAB4Kmz1e42eq+KdhhunBzf/1iw2ys7DMfwOLDaMg6P1Ke
-         EBAmIiOEFqtzLfzmcBQgHQ7e6l7LUZhpJWTSjMMNon4JqkrG6nPgyvLlTpFGdeS0FJ8a
-         aUng==
-X-Gm-Message-State: AOAM533S3B2qpzuKhVd5gwL1+7uuJ3Qic6cbmJRfrgS4DfrpwJhnscam
-        f9uY5F+Fw9LRKA7jl5iy0s8=
-X-Google-Smtp-Source: ABdhPJx99KPo9V0jaqGGq7Ye9JnyXiJfOF3Cm5/DRDHl9roTqWzH+YfFFqt8ZH8gC0LIsPotgBYXig==
-X-Received: by 2002:a17:907:e8f:: with SMTP id ho15mr9886768ejc.541.1616681908525;
-        Thu, 25 Mar 2021 07:18:28 -0700 (PDT)
-Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
-        by smtp.gmail.com with ESMTPSA id p19sm2793453edr.57.2021.03.25.07.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 07:18:28 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 25 Mar 2021 15:18:20 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        id S230494AbhCYOta (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Mar 2021 10:49:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53440 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230078AbhCYOtO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 25 Mar 2021 10:49:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 837F7619F9;
+        Thu, 25 Mar 2021 14:49:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616683753;
+        bh=g2ZlXDmeEeZxEkxEnqAn7onjv8xh5BForWiFk2ex04U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B7AXfE4jFRrobfpRw2FaAYKC6MvyXtU6obWFBYkN0lGwjbQiFaLragEzkHbZItBws
+         QBand/1dIuqMlS8nHo0I+YXxuG4FUSBqCuL4lSjtB1KNR8ZC5A0dHPTgjp6C4Oj477
+         YGYoQaHRwjTqkyAUy9nju41KQckd840sj7rAx2b0qbeWS73PVSRLi5XxftNFChRgBj
+         A74iOhWJ7Z2hED2cBG6LJSpp0VhA5RVDGFxCz/bh5Feg/yMuNLIKAvIJSpdBVn+DEc
+         g38Q/XF19LYytoglY1yJyqNca2iKkNPAL5ceWnMOmYHNen+O1Ivl6iLodMdhA7We0k
+         rrMK1jKks2Uxg==
+Date:   Thu, 25 Mar 2021 14:49:06 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        DTML <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 07/11] perf: Add breakpoint information to siginfo on
- SIGTRAP
-Message-ID: <20210325141820.GA1456211@gmail.com>
-References: <20210324112503.623833-1-elver@google.com>
- <20210324112503.623833-8-elver@google.com>
- <YFs2XHqepwtlLinx@hirez.programming.kicks-ass.net>
- <YFs4RDKfbjw89tf3@hirez.programming.kicks-ass.net>
- <YFs84dx8KcAtSt5/@hirez.programming.kicks-ass.net>
- <YFtB+Ta9pkMg4C2h@hirez.programming.kicks-ass.net>
- <YFtF8tEPHrXnw7cX@hirez.programming.kicks-ass.net>
- <CANpmjNPkBQwmNFO_hnUcjYGM=1SXJy+zgwb2dJeuOTAXphfDsw@mail.gmail.com>
- <CACT4Y+aKmdsXhRZi2f3LsX3m=krdY4kPsEUcieSugO2wY=xA-Q@mail.gmail.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFT PATCH v3 08/27] asm-generic/io.h: Add a non-posted variant
+ of ioremap()
+Message-ID: <20210325144905.GA15109@willie-the-truck>
+References: <20210304213902.83903-1-marcan@marcan.st>
+ <20210304213902.83903-9-marcan@marcan.st>
+ <20210324181210.GB13181@willie-the-truck>
+ <CAK8P3a0913Hs4VfHjdDY1WTAQvMzC83LJcP=9zeE0C-terfBhA@mail.gmail.com>
+ <9e510158-551a-3feb-bdba-17e070f12a8e@marcan.st>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+aKmdsXhRZi2f3LsX3m=krdY4kPsEUcieSugO2wY=xA-Q@mail.gmail.com>
+In-Reply-To: <9e510158-551a-3feb-bdba-17e070f12a8e@marcan.st>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-* Dmitry Vyukov <dvyukov@google.com> wrote:
-
-> On Wed, Mar 24, 2021 at 3:05 PM Marco Elver <elver@google.com> wrote:
-> >
-> > On Wed, 24 Mar 2021 at 15:01, Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > One last try, I'll leave it alone now, I promise :-)
-> >
-> > This looks like it does what you suggested, thanks! :-)
-> >
-> > I'll still need to think about it, because of the potential problem
-> > with modify-signal-races and what the user's synchronization story
-> > would look like then.
+On Thu, Mar 25, 2021 at 11:07:40PM +0900, Hector Martin wrote:
+> On 25/03/2021 04.09, Arnd Bergmann wrote:
+> > On Wed, Mar 24, 2021 at 7:12 PM Will Deacon <will@kernel.org> wrote:
+> > > 
+> > > > +/*
+> > > > + * ioremap_np needs an explicit architecture implementation, as it
+> > > > + * requests stronger semantics than regular ioremap(). Portable drivers
+> > > > + * should instead use one of the higher-level abstractions, like
+> > > > + * devm_ioremap_resource(), to choose the correct variant for any given
+> > > > + * device and bus. Portable drivers with a good reason to want non-posted
+> > > > + * write semantics should always provide an ioremap() fallback in case
+> > > > + * ioremap_np() is not available.
+> > > > + */
+> > > > +#ifndef ioremap_np
+> > > > +#define ioremap_np ioremap_np
+> > > > +static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
+> > > > +{
+> > > > +     return NULL;
+> > > > +}
+> > > > +#endif
+> > > 
+> > > Can we implement the generic pci_remap_cfgspace() in terms of ioremap_np()
+> > > if it is supported by the architecture? That way, we could avoid defining
+> > > both on arm64.
+> > 
+> > Good idea. It needs a fallback in case the ioremap_np() fails on most
+> > architectures, but that sounds easy enough.
+> > 
+> > Since pci_remap_cfgspace() only has custom implementations, it sounds like
+> > we can actually make the generic implementation unconditional in the end,
+> > but that requires adding ioremap_np() on 32-bit as well, and I would keep
+> > that separate from this series.
 > 
-> I agree that this looks inherently racy. The attr can't be allocated
-> on stack, user synchronization may be tricky and expensive. The API
-> may provoke bugs and some users may not even realize the race problem.
+> Sounds good; I'm adding a patch to adjust the generic implementation and
+> remove the arm64 one in v4, and we can then complete the cleanup for other
+> arches later.
 
-Yeah, so why cannot we allocate enough space from the signal handler 
-user-space stack and put the attr there, and point to it from 
-sig_info?
+Cheers. Don't forget to update the comment in the generic code which
+complains about the lack of an ioremap() API for non-posted writes ;)
 
-The idea would be to create a stable, per-signal snapshot of whatever 
-the perf_attr state is at the moment the event happens and the signal 
-is generated - which is roughly what user-space wants, right?
-
-Thanks,
-
-	Ingo
+Will
