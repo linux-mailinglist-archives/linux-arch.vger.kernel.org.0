@@ -2,99 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B42E734A1A8
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 07:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B7234A1B6
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 07:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbhCZGTK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Mar 2021 02:19:10 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:52647 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230080AbhCZGSs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 26 Mar 2021 02:18:48 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4F6Bcj15yQz9txtr;
-        Fri, 26 Mar 2021 07:18:45 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id EPzpYio6x8_7; Fri, 26 Mar 2021 07:18:45 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4F6Bch6s6pz9txtq;
-        Fri, 26 Mar 2021 07:18:44 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C82E58B864;
-        Fri, 26 Mar 2021 07:18:45 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id pXAsruLCGJL2; Fri, 26 Mar 2021 07:18:45 +0100 (CET)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2D9C48B834;
-        Fri, 26 Mar 2021 07:18:45 +0100 (CET)
-Subject: Re: [PATCH v2 6/7] cmdline: Gives architectures opportunity to use
- generically defined boot cmdline manipulation
-To:     Will Deacon <will@kernel.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, danielwa@cisco.com,
-        robh@kernel.org, daniel@gimpelevich.san-francisco.ca.us,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arch@vger.kernel.org, devicetree@vger.kernel.org
-References: <cover.1614705851.git.christophe.leroy@csgroup.eu>
- <2eb6fad3470256fff5c9f33cd876f344abb1628b.1614705851.git.christophe.leroy@csgroup.eu>
- <20210303175747.GD19713@willie-the-truck>
- <8db81511-3f28-4ef1-5e66-188cf7cafad1@csgroup.eu>
- <20210325193216.GC16123@willie-the-truck>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <27de5349-0bc1-74c3-518f-2dcdc1a8cfaf@csgroup.eu>
-Date:   Fri, 26 Mar 2021 07:18:41 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S229839AbhCZGYB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Mar 2021 02:24:01 -0400
+Received: from [212.63.208.185] ([212.63.208.185]:44310 "EHLO
+        mail.marcansoft.com" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229782AbhCZGXs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Mar 2021 02:23:48 -0400
+X-Greylist: delayed 58547 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Mar 2021 02:23:46 EDT
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id EA5CA425DF;
+        Fri, 26 Mar 2021 06:23:32 +0000 (UTC)
+Subject: Re: [RFT PATCH v3 13/27] arm64: Add Apple vendor-specific system
+ registers
+To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210304213902.83903-1-marcan@marcan.st>
+ <20210304213902.83903-14-marcan@marcan.st>
+ <20210324183818.GF13181@willie-the-truck>
+ <20210324185921.GA27297@C02TD0UTHF1T.local>
+ <20210324190428.GG13181@willie-the-truck>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <00d7b1ea-b455-c443-d350-d71a432573e5@marcan.st>
+Date:   Fri, 26 Mar 2021 15:23:30 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <20210325193216.GC16123@willie-the-truck>
+In-Reply-To: <20210324190428.GG13181@willie-the-truck>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 25/03/2021 à 20:32, Will Deacon a écrit :
-> On Thu, Mar 25, 2021 at 12:18:38PM +0100, Christophe Leroy wrote:
+On 25/03/2021 04.04, Will Deacon wrote:
+> On Wed, Mar 24, 2021 at 06:59:21PM +0000, Mark Rutland wrote:
+>> So far we've kept arch/arm64/ largely devoid of IMP-DEF bits, and it
+>> seems a shame to add something with the sole purpose of collating that,
+>> especially given arch code shouldn't need to touch these if FW and
+>> bootloader have done their jobs right.
 >>
->> - For ARM it means to append the bootloader arguments to the CONFIG_CMDLINE
->> - For Powerpc it means to append the CONFIG_CMDLINE to the bootloader arguments
->> - For SH  it means to append the CONFIG_CMDLINE to the bootloader arguments
->> - For EFI it means to append the bootloader arguments to the CONFIG_CMDLINE
->> - For OF it means to append the CONFIG_CMDLINE to the bootloader arguments
->>
->> So what happens on ARM for instance when it selects CONFIG_OF for instance ?
+>> Can we put the definitions in the relevant drivers? That would sidestep
+>> any pain with MAINTAINERS, too.
 > 
-> I think ARM gets different behaviour depending on whether it uses ATAGs or
-> FDT.
+> If we can genuinely ignore these in arch code, then sure. I just don't know
+> how long that is going to be the case, and ending up in a situation where
+> these are scattered randomly throughout the tree sounds horrible to me.
 
-As far as I can see, ARM uses either ATAGs only or both ATAGs and FDT. ATAGs is forced to 'y' when 
-USE_OF is set. Do I miss something ?
+I thought we would need some in KVM code, but given the direction Marc's 
+series ended up in, it seems we won't. So I'm happy keeping these in the 
+respective drivers; if this ends up being messy in the future it 
+shouldn't be a big deal to refactor it all into one file again.
 
-> 
->> Or should we consider that EXTEND means APPEND or PREPEND, no matter which ?
->> Because EXTEND is for instance used for:
->>
->> 	config INITRAMFS_FORCE
->> 		bool "Ignore the initramfs passed by the bootloader"
->> 		depends on CMDLINE_EXTEND || CMDLINE_FORCE
-> 
-> Oh man, I didn't spot that one :(
-> 
-> I think I would make the generic options explicit: either APPEND or PREPEND.
-> Then architectures which choose to define CMDLINE_EXTEND in their Kconfigs
-> can select the generic option that matches their behaviour.
-> 
-> INITRAMFS_FORCE sounds like it should depend on APPEND (assuming that means
-> CONFIG_CMDLINE is appended to the bootloader arguments).
-> 
-
-
-Christophe
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
