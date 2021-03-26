@@ -2,85 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBD834A8BE
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 14:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CC634A935
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 15:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbhCZNqw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Mar 2021 09:46:52 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:28081 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230227AbhCZNpj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 26 Mar 2021 09:45:39 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4F6NWh6NNJz9v03N;
-        Fri, 26 Mar 2021 14:45:04 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id xndv0v1GJYSd; Fri, 26 Mar 2021 14:45:04 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4F6NWh50m3z9v03M;
-        Fri, 26 Mar 2021 14:45:04 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7ED9F8B8CB;
-        Fri, 26 Mar 2021 14:45:05 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id fcwQHTDmL2ra; Fri, 26 Mar 2021 14:45:05 +0100 (CET)
-Received: from po16121vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BF2308B8CD;
-        Fri, 26 Mar 2021 14:45:04 +0100 (CET)
-Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 48ABF67611; Fri, 26 Mar 2021 13:45:05 +0000 (UTC)
-Message-Id: <63c9c340da826c14ed0c4f0121e723b16f626bc7.1616765870.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <cover.1616765869.git.christophe.leroy@csgroup.eu>
-References: <cover.1616765869.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH v3 17/17] cmdline: Remove CONFIG_CMDLINE_EXTEND
-To:     will@kernel.org, danielwa@cisco.com, robh@kernel.org,
-        daniel@gimpelevich.san-francisco.ca.us
-Cc:     linux-arch@vger.kernel.org, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        microblaze <monstr@monstr.eu>, linux-mips@vger.kernel.org,
-        nios2 <ley.foon.tan@intel.com>, openrisc@lists.librecores.org,
-        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Date:   Fri, 26 Mar 2021 13:45:05 +0000 (UTC)
+        id S229671AbhCZODB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Fri, 26 Mar 2021 10:03:01 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:48892 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229871AbhCZOCf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 26 Mar 2021 10:02:35 -0400
+Received: from [192.168.1.111] (unknown [175.152.148.180])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr8tU6V1gRRgBAA--.961S2;
+        Fri, 26 Mar 2021 22:01:58 +0800 (CST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
+Subject: Re: [PATCH 2/6] MIPS: move FTRACE_SYSCALLS from ftrace.c into
+ syscall.c
+From:   Huang Pei <huangpei@loongson.cn>
+In-Reply-To: <20210325153845.759b242e@gandalf.local.home>
+Date:   Fri, 26 Mar 2021 22:01:56 +0800
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <BE3DCFBC-7FF1-4636-8625-6A985A8341BC@loongson.cn>
+References: <20210313064149.29276-1-huangpei@loongson.cn>
+ <20210313064149.29276-3-huangpei@loongson.cn>
+ <20210325153845.759b242e@gandalf.local.home>
+To:     Steven Rostedt <rostedt@goodmis.org>
+X-Mailer: Apple Mail (2.3608.120.23.2.4)
+X-CM-TRANSID: AQAAf9Dxr8tU6V1gRRgBAA--.961S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JrW7Gw1DCF4rWrWrAw4Dtwb_yoWkXrcEyF
+        WxKFyvkw1UtFn5JFW5tr4rXFy3Ww45Xw4kZ3WqgrW5ZasxJa1DJFWDtrW3Xr1xXF18XFs0
+        yw1fAryxtw12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbVxFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+        cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc2xSY4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUYXdjDUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-All architectures providing CONFIG_CMDLINE_EXTEND
-are now converted to GENERIC_CMDLINE.
+I was intended to add -fpatchable-function-entry based new ftrace implementation in parallel 
+with old -pg based one, which is enabled by supported gcc version at build time, since 
 
-This configuration item is not used anymore, drop it.
++. the fix for -fpatchable-function-entry is not merge into upstream; 
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- init/Kconfig | 6 ------
- 1 file changed, 6 deletions(-)
++. the -fpatchable-function-entry does not support static function tracing which is rarely used today, 
+which is only implemented in the old -pg based implementation;
 
-diff --git a/init/Kconfig b/init/Kconfig
-index af0d84662cc2..fa002e3765ab 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -163,12 +163,6 @@ config CMDLINE_FORCE
- 	  arguments provided by the bootloader.
- endchoice
- 
--config CMDLINE_EXTEND
--	bool
--	default CMDLINE_APPEND
--	help
--	  To be removed once all architectures are converted to generic CMDLINE
--
- config COMPILE_TEST
- 	bool "Compile also drivers which will not load"
- 	depends on HAS_IOMEM
--- 
-2.25.0
+Move FTRACE_SYSCALLS into syscall.c, so both new and old implementation can easily be switched
+freely. When everything is all right, old one can be easily removed, and that is patch 1/2/3 intended for
+
+> On Mar 26, 2021, at 3:38 AM, Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> On Sat, 13 Mar 2021 14:41:45 +0800
+> Huang Pei <huangpei@loongson.cn> wrote:
+> 
+> Why?
+> 
+> -- Steve
+> 
+>> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+>> ---
+>> arch/mips/kernel/Makefile  |  1 -
+>> arch/mips/kernel/ftrace.c  | 33 ---------------------------------
+>> arch/mips/kernel/syscall.c | 32 ++++++++++++++++++++++++++++++++
+>> 3 files changed, 32 insertions(+), 34 deletions(-)
 
