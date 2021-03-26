@@ -2,92 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CC634A935
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 15:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB7234A945
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 15:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbhCZODB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Fri, 26 Mar 2021 10:03:01 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:48892 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229871AbhCZOCf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 26 Mar 2021 10:02:35 -0400
-Received: from [192.168.1.111] (unknown [175.152.148.180])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr8tU6V1gRRgBAA--.961S2;
-        Fri, 26 Mar 2021 22:01:58 +0800 (CST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH 2/6] MIPS: move FTRACE_SYSCALLS from ftrace.c into
- syscall.c
-From:   Huang Pei <huangpei@loongson.cn>
-In-Reply-To: <20210325153845.759b242e@gandalf.local.home>
-Date:   Fri, 26 Mar 2021 22:01:56 +0800
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <BE3DCFBC-7FF1-4636-8625-6A985A8341BC@loongson.cn>
-References: <20210313064149.29276-1-huangpei@loongson.cn>
- <20210313064149.29276-3-huangpei@loongson.cn>
- <20210325153845.759b242e@gandalf.local.home>
-To:     Steven Rostedt <rostedt@goodmis.org>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
-X-CM-TRANSID: AQAAf9Dxr8tU6V1gRRgBAA--.961S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JrW7Gw1DCF4rWrWrAw4Dtwb_yoWkXrcEyF
-        WxKFyvkw1UtFn5JFW5tr4rXFy3Ww45Xw4kZ3WqgrW5ZasxJa1DJFWDtrW3Xr1xXF18XFs0
-        yw1fAryxtw12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbVxFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
-        cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc2xSY4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfUYXdjDUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        id S229995AbhCZOJB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Mar 2021 10:09:01 -0400
+Received: from mail-out.m-online.net ([212.18.0.10]:36066 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229984AbhCZOIe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Mar 2021 10:08:34 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4F6P2d6PvWz1ryY1;
+        Fri, 26 Mar 2021 15:08:25 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4F6P2d4qBqz1qqwS;
+        Fri, 26 Mar 2021 15:08:25 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id onoyYkV_BZHU; Fri, 26 Mar 2021 15:08:24 +0100 (CET)
+X-Auth-Info: OEvAU2bUcvvTBFMfvWGLhYIW4WQnHRDFk1cZLlSNZz300DmBDLQfVXreztynDrlR
+Received: from igel.home (ppp-46-244-160-134.dynamic.mnet-online.de [46.244.160.134])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Fri, 26 Mar 2021 15:08:24 +0100 (CET)
+Received: by igel.home (Postfix, from userid 1000)
+        id 998042C35E3; Fri, 26 Mar 2021 15:08:22 +0100 (CET)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     will@kernel.org, danielwa@cisco.com, robh@kernel.org,
+        daniel@gimpelevich.san-francisco.ca.us, linux-arch@vger.kernel.org,
+        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        microblaze <monstr@monstr.eu>, linux-mips@vger.kernel.org,
+        nios2 <ley.foon.tan@intel.com>, openrisc@lists.librecores.org,
+        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v3 11/17] riscv: Convert to GENERIC_CMDLINE
+References: <cover.1616765869.git.christophe.leroy@csgroup.eu>
+        <46745e07b04139a22b5bd01dc37df97e6981e643.1616765870.git.christophe.leroy@csgroup.eu>
+X-Yow:  I'd like some JUNK FOOD...  and then I want to be ALONE --
+Date:   Fri, 26 Mar 2021 15:08:22 +0100
+In-Reply-To: <46745e07b04139a22b5bd01dc37df97e6981e643.1616765870.git.christophe.leroy@csgroup.eu>
+        (Christophe Leroy's message of "Fri, 26 Mar 2021 13:44:58 +0000
+        (UTC)")
+Message-ID: <87zgyqdn3d.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-I was intended to add -fpatchable-function-entry based new ftrace implementation in parallel 
-with old -pg based one, which is enabled by supported gcc version at build time, since 
+On Mär 26 2021, Christophe Leroy wrote:
 
-+. the fix for -fpatchable-function-entry is not merge into upstream; 
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index f8f15332caa2..e7c91ee478d1 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/swiotlb.h>
+>  #include <linux/smp.h>
+>  #include <linux/efi.h>
+> +#include <linux/cmdline.h>
+>  
+>  #include <asm/cpu_ops.h>
+>  #include <asm/early_ioremap.h>
+> @@ -228,10 +229,8 @@ static void __init parse_dtb(void)
+>  	}
+>  
+>  	pr_err("No DTB passed to the kernel\n");
+> -#ifdef CONFIG_CMDLINE_FORCE
+> -	strlcpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+> +	cmdline_build(boot_command_line, NULL, COMMAND_LINE_SIZE);
+>  	pr_info("Forcing kernel command line to: %s\n", boot_command_line);
 
-+. the -fpatchable-function-entry does not support static function tracing which is rarely used today, 
-which is only implemented in the old -pg based implementation;
+Shouldn't that message become conditional in some way?
 
-Move FTRACE_SYSCALLS into syscall.c, so both new and old implementation can easily be switched
-freely. When everything is all right, old one can be easily removed, and that is patch 1/2/3 intended for
+Andreas.
 
-> On Mar 26, 2021, at 3:38 AM, Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> On Sat, 13 Mar 2021 14:41:45 +0800
-> Huang Pei <huangpei@loongson.cn> wrote:
-> 
-> Why?
-> 
-> -- Steve
-> 
->> Signed-off-by: Huang Pei <huangpei@loongson.cn>
->> ---
->> arch/mips/kernel/Makefile  |  1 -
->> arch/mips/kernel/ftrace.c  | 33 ---------------------------------
->> arch/mips/kernel/syscall.c | 32 ++++++++++++++++++++++++++++++++
->> 3 files changed, 32 insertions(+), 34 deletions(-)
-
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
