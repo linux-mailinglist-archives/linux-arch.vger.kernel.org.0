@@ -2,154 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E83D34B13F
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 22:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4E534B1FF
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 23:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbhCZVXy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Mar 2021 17:23:54 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:35548 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbhCZVXj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Mar 2021 17:23:39 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out03.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1lPtvb-000SOd-No; Fri, 26 Mar 2021 15:23:35 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=fess.xmission.com)
-        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1lPtva-00074S-1a; Fri, 26 Mar 2021 15:23:35 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
-        Brian Gerst <brgerst@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210326143831.1550030-1-hch@lst.de>
-        <20210326143831.1550030-4-hch@lst.de>
-Date:   Fri, 26 Mar 2021 16:22:33 -0500
-In-Reply-To: <20210326143831.1550030-4-hch@lst.de> (Christoph Hellwig's
-        message of "Fri, 26 Mar 2021 15:38:30 +0100")
-Message-ID: <m1y2e9vcdi.fsf@fess.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S230272AbhCZWNP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Mar 2021 18:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230076AbhCZWMu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Mar 2021 18:12:50 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBB6C0613B1;
+        Fri, 26 Mar 2021 15:12:49 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id 19so6299970ilj.2;
+        Fri, 26 Mar 2021 15:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VKRu/20dm1kx8lx57omGSjuR80s186bmUyk42/yIwsA=;
+        b=C5tZkbk+9pDwahw0uqoqYov69orWGgkoeSD9AVzTJg+UwqQ2froXblxyfprXV8V1aL
+         6AgWDxcDS6XWgsV9bq+CHyeNTd4wefqpaQeFniwBTGRW1zY7takF0+/KlBukVR0A439M
+         x0tXjlcOSZ6UTqpob3Ln+ftFg4tXBBM99KwhNFVJ3MabD3DapQVXDrUMxJruF1/iKv66
+         yaecCNuaDUCXOXNDfFMp61GLhTWdYT8y40NzuBp5JmabyPwZ+15ECuUdZzDhsPsW53MG
+         pTEerwWnx6ahhp43RqYvy29IDKQHbCwp0+Ok43tr6SVXTO6JOJqljpB6IqPtW4Z0HWp0
+         8KZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VKRu/20dm1kx8lx57omGSjuR80s186bmUyk42/yIwsA=;
+        b=FWnlHmFgcRJZV2GghYDpHdVatzM0Y4pzIrRya53BWq83nkBXcvvFSigGG8xGF/RKEq
+         j59wbbBAU2WnCeVM1e/PPClHwXLqLzWh/MEUbRja5U7UqqOAzadINSzvAcBFnTh4xBRP
+         FiH4gG9xcbYaaynMAf7TWCKRbK/Nm4T2BIB+xsmp64ihmiPMjQg06CrrR999K4/Oi9ro
+         jpBJ9z+Zf51iarX9bGvyT5Mvc7oGZhcbljZD63iGffrdq31w48QWUuFjFxew5bL+VwDh
+         wl+haQIEwild0lrcXyhkP5wZH/7hnEFhoBk3RlvXxkPBE8ZbxGxYrORSw3fDPmHlMjmN
+         yVEA==
+X-Gm-Message-State: AOAM5338q4srXLKqel1gTCGU4YqjHTgUpxgsy5WiEQYHbCZKPikwWicA
+        sBDAXKXpEpnOtzTwYw0dSHvF+iiNKn+VcTgm6f8=
+X-Google-Smtp-Source: ABdhPJwdl4VGs/tkLkbpXsDNTVJ/2e4MIdPgFV7jnZyb31LofH3vnWHNyCk9SeYav7qDJrki2HQ3NJKEWw3vPqxiPcM=
+X-Received: by 2002:a05:6e02:20c3:: with SMTP id 3mr11909241ilq.164.1616796769368;
+ Fri, 26 Mar 2021 15:12:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1lPtva-00074S-1a;;;mid=<m1y2e9vcdi.fsf@fess.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18JI1x3OTuGSmP1SAxwgJUKnILVVDmHpGw=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_40,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels autolearn=disabled
-        version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
-        *      [score: 0.3879]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Christoph Hellwig <hch@lst.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1205 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 12 (1.0%), b_tie_ro: 10 (0.8%), parse: 1.10
-        (0.1%), extract_message_metadata: 13 (1.1%), get_uri_detail_list: 1.37
-        (0.1%), tests_pri_-1000: 7 (0.6%), tests_pri_-950: 1.65 (0.1%),
-        tests_pri_-900: 1.23 (0.1%), tests_pri_-90: 84 (7.0%), check_bayes: 83
-        (6.9%), b_tokenize: 10 (0.9%), b_tok_get_all: 7 (0.6%), b_comp_prob:
-        2.3 (0.2%), b_tok_touch_all: 59 (4.9%), b_finish: 1.20 (0.1%),
-        tests_pri_0: 252 (20.9%), check_dkim_signature: 0.55 (0.0%),
-        check_dkim_adsp: 2.8 (0.2%), poll_dns_idle: 803 (66.7%), tests_pri_10:
-        2.3 (0.2%), tests_pri_500: 826 (68.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 3/4] exec: simplify the compat syscall handling
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
+ <CAHp75VfJ5bGaPkai_adsBoT6=7nS2K8ze0ka3gzZkQARkM5evA@mail.gmail.com>
+In-Reply-To: <CAHp75VfJ5bGaPkai_adsBoT6=7nS2K8ze0ka3gzZkQARkM5evA@mail.gmail.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Sat, 27 Mar 2021 03:42:37 +0530
+Message-ID: <CACG_h5pb0pA+cTNPGircAM3UrV5BGmqgk45LF_9phU_J4FaRyw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Christoph Hellwig <hch@lst.de> writes:
+On Fri, Mar 26, 2021 at 11:32 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Sat, Mar 6, 2021 at 4:08 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+>
+> > +       bitmap_set_value(old, 64, state[0], 32, 0);
+> > +       bitmap_set_value(old, 64, state[1], 32, 32);
+>
+> Isn't it effectively bitnap_from_arr32() ?
+>
+> > +       bitmap_set_value(new, 64, state[0], 32, 0);
+> > +       bitmap_set_value(new, 64, state[1], 32, 32);
+>
+> Ditto.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
 
+Hi Andy,
 
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 06e07278b456fa..b34c1eb9e7ad8e 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -391,47 +391,34 @@ static int bprm_mm_init(struct linux_binprm *bprm)
->  	return err;
->  }
->  
-> -struct user_arg_ptr {
-> -#ifdef CONFIG_COMPAT
-> -	bool is_compat;
-> -#endif
-> -	union {
-> -		const char __user *const __user *native;
-> -#ifdef CONFIG_COMPAT
-> -		const compat_uptr_t __user *compat;
-> -#endif
-> -	} ptr;
-> -};
-> -
-> -static const char __user *get_user_arg_ptr(struct user_arg_ptr argv, int nr)
-> +static const char __user *
-> +get_user_arg_ptr(const char __user *const __user *argv, int nr)
->  {
-> -	const char __user *native;
-> -
-> -#ifdef CONFIG_COMPAT
-> -	if (unlikely(argv.is_compat)) {
-> +	if (in_compat_syscall()) {
-> +		const compat_uptr_t __user *compat_argv =
-> +			compat_ptr((unsigned long)argv);
+With bitmap_set_value() we are also specifying the offset (or start)
+position too. so that the remainder of the array remains unaffected. I
+think it would not be feasible to use bitmap_from/to_arr32()  here.
 
-Ouch!  Passing a pointer around as the wrong type through the kernel!
-
-Perhaps we should reduce everything to do_execveat and
-do_execveat_compat.  Then there would be no need for anything
-to do anything odd with the pointer types.
-
-I think the big change would be to factor out a copy_string out
-of copy_strings, that performs all of the work once we know the proper
-pointer value.
-
-Casting pointers from one type to another scares me as one mistake means
-we are doing something wrong and probably exploitable.
-
-
-Eric
-
-
-
-
->  		compat_uptr_t compat;
->  
-> -		if (get_user(compat, argv.ptr.compat + nr))
-> +		if (get_user(compat, compat_argv + nr))
->  			return ERR_PTR(-EFAULT);
-> -
->  		return compat_ptr(compat);
-> -	}
-> -#endif
-> -
-> -	if (get_user(native, argv.ptr.native + nr))
-> -		return ERR_PTR(-EFAULT);
-> +	} else {
-> +		const char __user *native;
->  
-> -	return native;
-> +		if (get_user(native, argv + nr))
-> +			return ERR_PTR(-EFAULT);
-> +		return native;
-> +	}
->  }
->  
+Regards
+Syed Nayyar Waris
