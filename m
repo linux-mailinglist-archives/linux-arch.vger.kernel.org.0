@@ -2,144 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B1B349F07
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 02:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479DF34A07F
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Mar 2021 05:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbhCZBsw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Mar 2021 21:48:52 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:57574 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230226AbhCZBsp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 25 Mar 2021 21:48:45 -0400
-Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.160.162])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxQ+BTPV1gi+MAAA--.881S2;
-        Fri, 26 Mar 2021 09:48:05 +0800 (CST)
-Date:   Fri, 26 Mar 2021 09:48:03 +0800
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 1/6] MIPS: replace -pg with CC_FLAGS_FTRACE
-Message-ID: <20210326014802.fkdiggo3tak6j5it@ambrosehua-HP-xw6600-Workstation>
-References: <20210313064149.29276-1-huangpei@loongson.cn>
- <20210313064149.29276-2-huangpei@loongson.cn>
- <20210325153814.098a5d32@gandalf.local.home>
+        id S230330AbhCZEax (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Mar 2021 00:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230271AbhCZEa2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Mar 2021 00:30:28 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF86C0613DE
+        for <linux-arch@vger.kernel.org>; Thu, 25 Mar 2021 21:30:28 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id il9-20020a17090b1649b0290114bcb0d6c2so3668638pjb.0
+        for <linux-arch@vger.kernel.org>; Thu, 25 Mar 2021 21:30:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=BOYVi/+atNY4w5a1Eu4AFIfXG1/kriVH66pesNImX2Q=;
+        b=Gt0kpo1iHDKszZFpT+Ko0aQvJV+MsUOHDLUaIYJ1Q9zDa/TrEbIi78eqXX6WSu6GX7
+         pfRyJz2XC0x5LcOpkmHrIji2a8gZ0UyaNJuQmQkFZtr1MsmTrWXI9hJ4wj7KlwhwdP8r
+         3TujOSNdRk4l0XyOTFl+8w69IEFt6kj94zI3g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=BOYVi/+atNY4w5a1Eu4AFIfXG1/kriVH66pesNImX2Q=;
+        b=Cx1VhAhddtGmy52OOIIE3sz6ccy64ssFXzr36bV0Kd26kCXU+9add3YD++psXxVgq5
+         PliHiydqoofwmEz8dY+HkhygitL0i5am55uM7xzayVnTdWIvAqppQxG15b5YMN3C6im6
+         5MaTyRrZjCdvNZ/D73KlhQRVxjAS/4pz+ChS90Gag2MmXVSHrsTBlxtaaeQLMqGM+JKf
+         VOsiKdR5nYyhFTuEdQMEMD1ayk57utoN2iI1JGNRs3XL2wnYiybS/oHxLI1AT/A+oSMd
+         6U9aiWPB9QwF7cKZwig4/Oujx/mDHukVSuOuUJWoZso5AqDzCY6JdMpbOAb2v8bd0rGz
+         itRQ==
+X-Gm-Message-State: AOAM533le2DPQFEeWZx1HHF/hre7xhEWSpe5ZNYsCqGNqHCUQupZn+lT
+        I1pwNYokM8hO/w7XVoPiH2jqig==
+X-Google-Smtp-Source: ABdhPJxORFz8+uxcEeMqmif00hsBXABZprC7wNExOBK8tI1Vw3fwRZI2qlUPU6jEh98HY5uxsdvogA==
+X-Received: by 2002:a17:90a:cc0b:: with SMTP id b11mr12101951pju.216.1616733027910;
+        Thu, 25 Mar 2021 21:30:27 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q14sm7482326pff.94.2021.03.25.21.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Mar 2021 21:30:27 -0700 (PDT)
+Date:   Thu, 25 Mar 2021 21:30:25 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v31 12/12] landlock: Add user and kernel documentation
+Message-ID: <202103252130.C629319B86@keescook>
+References: <20210324191520.125779-1-mic@digikod.net>
+ <20210324191520.125779-13-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210325153814.098a5d32@gandalf.local.home>
-User-Agent: NeoMutt/20171215
-X-CM-TRANSID: AQAAf9CxQ+BTPV1gi+MAAA--.881S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFW8tr1fArWkJF1UZw4Dtwb_yoW5CFy3pa
-        n2kF1DJw4xXry8KryftFy5ZrsrArZYqrW0gFnFgryUtF9xZFnYgr1xtry5XF95WryxA34x
-        Wa48WF17Aryava7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUWa0PUUUUU=
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210324191520.125779-13-mic@digikod.net>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 03:38:14PM -0400, Steven Rostedt wrote:
-> On Sat, 13 Mar 2021 14:41:44 +0800
-> Huang Pei <huangpei@loongson.cn> wrote:
+On Wed, Mar 24, 2021 at 08:15:20PM +0100, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
 > 
+> Add a first document describing userspace API: how to define and enforce
+> a Landlock security policy.  This is explained with a simple example.
+> The Landlock system calls are described with their expected behavior and
+> current limitations.
 > 
-> Even simple changes require change logs. For example:
+> Another document is dedicated to kernel developers, describing guiding
+> principles and some important kernel structures.
 > 
-> "Enabling ftrace may require more than just the -pg flags today. As ftrace
-> enables more flags, use the $(CC_FLAGS_FTRACE) in the make file instead of
-> hard coding "-pg"."
+> This documentation can be built with the Sphinx framework.
 > 
-> Other than that:
-> 
-> Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> 
-> -- Steve
-> 
-Got it, much better than mine, thank you
-> 
-> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > ---
-> >  arch/mips/boot/compressed/Makefile | 2 +-
-> >  arch/mips/kernel/Makefile          | 8 ++++----
-> >  arch/mips/vdso/Makefile            | 4 ++--
-> >  3 files changed, 7 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-> > index d66511825fe1..8fc9ceeec709 100644
-> > --- a/arch/mips/boot/compressed/Makefile
-> > +++ b/arch/mips/boot/compressed/Makefile
-> > @@ -18,7 +18,7 @@ include $(srctree)/arch/mips/Kbuild.platforms
-> >  BOOT_HEAP_SIZE := 0x400000
-> >  
-> >  # Disable Function Tracer
-> > -KBUILD_CFLAGS := $(filter-out -pg, $(KBUILD_CFLAGS))
-> > +KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE), $(KBUILD_CFLAGS))
-> >  
-> >  KBUILD_CFLAGS := $(filter-out -fstack-protector, $(KBUILD_CFLAGS))
-> >  
-> > diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-> > index 2a05b923f579..33e31ea10234 100644
-> > --- a/arch/mips/kernel/Makefile
-> > +++ b/arch/mips/kernel/Makefile
-> > @@ -17,10 +17,10 @@ obj-y		+= cpu-probe.o
-> >  endif
-> >  
-> >  ifdef CONFIG_FUNCTION_TRACER
-> > -CFLAGS_REMOVE_ftrace.o = -pg
-> > -CFLAGS_REMOVE_early_printk.o = -pg
-> > -CFLAGS_REMOVE_perf_event.o = -pg
-> > -CFLAGS_REMOVE_perf_event_mipsxx.o = -pg
-> > +CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
-> > +CFLAGS_REMOVE_early_printk.o = $(CC_FLAGS_FTRACE)
-> > +CFLAGS_REMOVE_perf_event.o = $(CC_FLAGS_FTRACE)
-> > +CFLAGS_REMOVE_perf_event_mipsxx.o = $(CC_FLAGS_FTRACE)
-> >  endif
-> >  
-> >  obj-$(CONFIG_CEVT_BCM1480)	+= cevt-bcm1480.o
-> > diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-> > index 5810cc12bc1d..f21cf88f7ae3 100644
-> > --- a/arch/mips/vdso/Makefile
-> > +++ b/arch/mips/vdso/Makefile
-> > @@ -49,7 +49,7 @@ CFLAGS_vgettimeofday-o32.o = -include $(srctree)/$(src)/config-n32-o32-env.c -in
-> >  CFLAGS_vgettimeofday-n32.o = -include $(srctree)/$(src)/config-n32-o32-env.c -include $(c-gettimeofday-y)
-> >  endif
-> >  
-> > -CFLAGS_REMOVE_vgettimeofday.o = -pg
-> > +CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE)
-> >  
-> >  ifdef CONFIG_MIPS_DISABLE_VDSO
-> >    ifndef CONFIG_MIPS_LD_CAN_LINK_VDSO
-> > @@ -63,7 +63,7 @@ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
-> >  	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
-> >  	-G 0 --eh-frame-hdr --hash-style=sysv --build-id=sha1 -T
-> >  
-> > -CFLAGS_REMOVE_vdso.o = -pg
-> > +CFLAGS_REMOVE_vdso.o = $(CC_FLAGS_FTRACE)
-> >  
-> >  GCOV_PROFILE := n
-> >  UBSAN_SANITIZE := n
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
 
+Thanks for the changes!
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
