@@ -2,263 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D540A34B8C0
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Mar 2021 19:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E72F34B8FB
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Mar 2021 19:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbhC0SH5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Mar 2021 14:07:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42544 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230139AbhC0SHi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 27 Mar 2021 14:07:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 078A6619C9;
-        Sat, 27 Mar 2021 18:07:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616868457;
-        bh=6J9FKNfSghKRn1MDOq84VjUjsgWVuTuIQD6E9D3s7fA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qMnKVpC+8KBWbZTh5R7+nJDXD3FXhoONp+F+fNSMM7wAEy3fkfBBiHZ1XywaZNFKY
-         /buaDYVJGJLf9u3DowXxt8TCubxCUli5p+uomIfnO8jQW9uBcIdDNf6B56bJRp1Oe2
-         bGWZDA6bIVi8oSrawqje9YCB3RDCEi0A6OwXEGjnibYYthPIUgXgoNU1mBR1unLAxv
-         31gzRbCwGVtjcEAF+F6MnrBGaunu9ysKQ39MeZZQ6sBUsu9XbL3gA4NjVmv4wteYE9
-         pA8t8n9CveXdQM6AkIYEAR796wE9bXywe1CsDT3/fJRheglOYpnfPey2bfQTHszp87
-         wQ/TPx8Auoqag==
-From:   guoren@kernel.org
+        id S230170AbhC0SoO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Mar 2021 14:44:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42606 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230127AbhC0Sny (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 27 Mar 2021 14:43:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1616870634;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hfHNZcjhdGk5rFhqOZayvcQKCZrifZd2giGyChxT48Y=;
+        b=ib9wHNFm3mOZE9vyb09GX5LxctH1omqGGzKHGXGGtW7dZjzcA4X165F6WNxL3i+fR73389
+        tXXZ3/4dg9q149o4mZrEw92wJeL0MmCtxCsq7PPvghDUQQxQhnF4CdR0IXKJheQnWL1QgS
+        iuqSBDQnY7bsM/wPsJ3h73qv4zLeQ5w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-565-KTtps0L0MseR04IzHmlZFQ-1; Sat, 27 Mar 2021 14:43:50 -0400
+X-MC-Unique: KTtps0L0MseR04IzHmlZFQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DF5451084C83;
+        Sat, 27 Mar 2021 18:43:47 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-112-10.rdu2.redhat.com [10.10.112.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8471E10013D6;
+        Sat, 27 Mar 2021 18:43:46 +0000 (UTC)
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
+ ARCH_USE_QUEUED_SPINLOCKS_XCHG32
 To:     guoren@kernel.org
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        Michael Clark <michaeljclark@mac.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Anup Patel <anup@brainfault.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: [PATCH v4 4/4] riscv: Convert custom spinlock/rwlock to generic qspinlock/qrwlock
-Date:   Sat, 27 Mar 2021 18:06:39 +0000
-Message-Id: <1616868399-82848-5-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
 References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <b6466a43-6fb3-dc47-e0ef-d493e0930ab2@redhat.com>
+Date:   Sat, 27 Mar 2021 14:43:46 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
+MIME-Version: 1.0
+In-Reply-To: <1616868399-82848-4-git-send-email-guoren@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Michael Clark <michaeljclark@mac.com>
+On 3/27/21 2:06 PM, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Some architectures don't have sub-word swap atomic instruction,
+> they only have the full word's one.
+>
+> The sub-word swap only improve the performance when:
+> NR_CPUS < 16K
+>   *  0- 7: locked byte
+>   *     8: pending
+>   *  9-15: not used
+>   * 16-17: tail index
+>   * 18-31: tail cpu (+1)
+>
+> The 9-15 bits are wasted to use xchg16 in xchg_tail.
+>
+> Please let architecture select xchg16/xchg32 to implement
+> xchg_tail.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Anup Patel <anup@brainfault.org>
+> ---
+>   kernel/Kconfig.locks       |  3 +++
+>   kernel/locking/qspinlock.c | 44 +++++++++++++++++++++-----------------
+>   2 files changed, 27 insertions(+), 20 deletions(-)
+>
+> diff --git a/kernel/Kconfig.locks b/kernel/Kconfig.locks
+> index 3de8fd11873b..d02f1261f73f 100644
+> --- a/kernel/Kconfig.locks
+> +++ b/kernel/Kconfig.locks
+> @@ -239,6 +239,9 @@ config LOCK_SPIN_ON_OWNER
+>   config ARCH_USE_QUEUED_SPINLOCKS
+>   	bool
+>   
+> +config ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+> +	bool
+> +
+>   config QUEUED_SPINLOCKS
+>   	def_bool y if ARCH_USE_QUEUED_SPINLOCKS
+>   	depends on SMP
+> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+> index cbff6ba53d56..54de0632c6a8 100644
+> --- a/kernel/locking/qspinlock.c
+> +++ b/kernel/locking/qspinlock.c
+> @@ -163,26 +163,6 @@ static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
+>   	WRITE_ONCE(lock->locked_pending, _Q_LOCKED_VAL);
+>   }
+>   
+> -/*
+> - * xchg_tail - Put in the new queue tail code word & retrieve previous one
+> - * @lock : Pointer to queued spinlock structure
+> - * @tail : The new queue tail code word
+> - * Return: The previous queue tail code word
+> - *
+> - * xchg(lock, tail), which heads an address dependency
+> - *
+> - * p,*,* -> n,*,* ; prev = xchg(lock, node)
+> - */
+> -static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
+> -{
+> -	/*
+> -	 * We can use relaxed semantics since the caller ensures that the
+> -	 * MCS node is properly initialized before updating the tail.
+> -	 */
+> -	return (u32)xchg_relaxed(&lock->tail,
+> -				 tail >> _Q_TAIL_OFFSET) << _Q_TAIL_OFFSET;
+> -}
+> -
+>   #else /* _Q_PENDING_BITS == 8 */
+>   
+>   /**
+> @@ -206,6 +186,30 @@ static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
+>   {
+>   	atomic_add(-_Q_PENDING_VAL + _Q_LOCKED_VAL, &lock->val);
+>   }
+> +#endif
+> +
+> +#if _Q_PENDING_BITS == 8 && !defined(CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32)
+> +/*
+> + * xchg_tail - Put in the new queue tail code word & retrieve previous one
+> + * @lock : Pointer to queued spinlock structure
+> + * @tail : The new queue tail code word
+> + * Return: The previous queue tail code word
+> + *
+> + * xchg(lock, tail), which heads an address dependency
+> + *
+> + * p,*,* -> n,*,* ; prev = xchg(lock, node)
+> + */
+> +static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
+> +{
+> +	/*
+> +	 * We can use relaxed semantics since the caller ensures that the
+> +	 * MCS node is properly initialized before updating the tail.
+> +	 */
+> +	return (u32)xchg_relaxed(&lock->tail,
+> +				 tail >> _Q_TAIL_OFFSET) << _Q_TAIL_OFFSET;
+> +}
+> +
+> +#else
+>   
+>   /**
+>    * xchg_tail - Put in the new queue tail code word & retrieve previous one
 
-Update the RISC-V port to use the generic qspinlock and qrwlock.
+I don't have any problem adding a 
+CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32 config option to control that.
 
-This patch requires support for xchg for short which are added by
-a previous patch.
+One minor nit:
 
-Guo fixed up compile error which made by below include sequence:
-+#include <asm/qrwlock.h>
-+#include <asm/qspinlock.h>
+#endif /* _Q_PENDING_BITS == 8 */
 
-Signed-off-by: Michael Clark <michaeljclark@mac.com>
-Co-developed-by: Guo Ren <guoren@linux.alibaba.com>
-Tested-by: Guo Ren <guoren@linux.alibaba.com>
-Link: https://lore.kernel.org/linux-riscv/20190211043829.30096-3-michaeljclark@mac.com/
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Anup Patel <anup@brainfault.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
----
- arch/riscv/Kconfig                      |   3 +
- arch/riscv/include/asm/Kbuild           |   3 +
- arch/riscv/include/asm/spinlock.h       | 126 +-----------------------
- arch/riscv/include/asm/spinlock_types.h |  15 +--
- 4 files changed, 11 insertions(+), 136 deletions(-)
+You should probably remove the comment at the trailing end of the 
+corresponding "#endif" as it is now wrong.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 87d7b52f278f..67cc65ba1ea1 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -33,6 +33,9 @@ config RISCV
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_FRAME_POINTERS
- 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
-+	select ARCH_USE_QUEUED_RWLOCKS
-+	select ARCH_USE_QUEUED_SPINLOCKS
-+	select ARCH_USE_QUEUED_SPINLOCKS_XCHG32
- 	select CLONE_BACKWARDS
- 	select CLINT_TIMER if !MMU
- 	select COMMON_CLK
-diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-index 445ccc97305a..750c1056b90f 100644
---- a/arch/riscv/include/asm/Kbuild
-+++ b/arch/riscv/include/asm/Kbuild
-@@ -3,5 +3,8 @@ generic-y += early_ioremap.h
- generic-y += extable.h
- generic-y += flat.h
- generic-y += kvm_para.h
-+generic-y += mcs_spinlock.h
-+generic-y += qrwlock.h
-+generic-y += qspinlock.h
- generic-y += user.h
- generic-y += vmlinux.lds.h
-diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-index f4f7fa1b7ca8..a557de67a425 100644
---- a/arch/riscv/include/asm/spinlock.h
-+++ b/arch/riscv/include/asm/spinlock.h
-@@ -7,129 +7,7 @@
- #ifndef _ASM_RISCV_SPINLOCK_H
- #define _ASM_RISCV_SPINLOCK_H
- 
--#include <linux/kernel.h>
--#include <asm/current.h>
--#include <asm/fence.h>
--
--/*
-- * Simple spin lock operations.  These provide no fairness guarantees.
-- */
--
--/* FIXME: Replace this with a ticket lock, like MIPS. */
--
--#define arch_spin_is_locked(x)	(READ_ONCE((x)->lock) != 0)
--
--static inline void arch_spin_unlock(arch_spinlock_t *lock)
--{
--	smp_store_release(&lock->lock, 0);
--}
--
--static inline int arch_spin_trylock(arch_spinlock_t *lock)
--{
--	int tmp = 1, busy;
--
--	__asm__ __volatile__ (
--		"	amoswap.w %0, %2, %1\n"
--		RISCV_ACQUIRE_BARRIER
--		: "=r" (busy), "+A" (lock->lock)
--		: "r" (tmp)
--		: "memory");
--
--	return !busy;
--}
--
--static inline void arch_spin_lock(arch_spinlock_t *lock)
--{
--	while (1) {
--		if (arch_spin_is_locked(lock))
--			continue;
--
--		if (arch_spin_trylock(lock))
--			break;
--	}
--}
--
--/***********************************************************/
--
--static inline void arch_read_lock(arch_rwlock_t *lock)
--{
--	int tmp;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bltz	%1, 1b\n"
--		"	addi	%1, %1, 1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		: "+A" (lock->lock), "=&r" (tmp)
--		:: "memory");
--}
--
--static inline void arch_write_lock(arch_rwlock_t *lock)
--{
--	int tmp;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bnez	%1, 1b\n"
--		"	li	%1, -1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		: "+A" (lock->lock), "=&r" (tmp)
--		:: "memory");
--}
--
--static inline int arch_read_trylock(arch_rwlock_t *lock)
--{
--	int busy;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bltz	%1, 1f\n"
--		"	addi	%1, %1, 1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		"1:\n"
--		: "+A" (lock->lock), "=&r" (busy)
--		:: "memory");
--
--	return !busy;
--}
--
--static inline int arch_write_trylock(arch_rwlock_t *lock)
--{
--	int busy;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bnez	%1, 1f\n"
--		"	li	%1, -1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		"1:\n"
--		: "+A" (lock->lock), "=&r" (busy)
--		:: "memory");
--
--	return !busy;
--}
--
--static inline void arch_read_unlock(arch_rwlock_t *lock)
--{
--	__asm__ __volatile__(
--		RISCV_RELEASE_BARRIER
--		"	amoadd.w x0, %1, %0\n"
--		: "+A" (lock->lock)
--		: "r" (-1)
--		: "memory");
--}
--
--static inline void arch_write_unlock(arch_rwlock_t *lock)
--{
--	smp_store_release(&lock->lock, 0);
--}
-+#include <asm/qspinlock.h>
-+#include <asm/qrwlock.h>
- 
- #endif /* _ASM_RISCV_SPINLOCK_H */
-diff --git a/arch/riscv/include/asm/spinlock_types.h b/arch/riscv/include/asm/spinlock_types.h
-index f398e7638dd6..d033a973f287 100644
---- a/arch/riscv/include/asm/spinlock_types.h
-+++ b/arch/riscv/include/asm/spinlock_types.h
-@@ -6,20 +6,11 @@
- #ifndef _ASM_RISCV_SPINLOCK_TYPES_H
- #define _ASM_RISCV_SPINLOCK_TYPES_H
- 
--#ifndef __LINUX_SPINLOCK_TYPES_H
-+#if !defined(__LINUX_SPINLOCK_TYPES_H) && !defined(_ASM_RISCV_SPINLOCK_H)
- # error "please don't include this file directly"
- #endif
- 
--typedef struct {
--	volatile unsigned int lock;
--} arch_spinlock_t;
--
--#define __ARCH_SPIN_LOCK_UNLOCKED	{ 0 }
--
--typedef struct {
--	volatile unsigned int lock;
--} arch_rwlock_t;
--
--#define __ARCH_RW_LOCK_UNLOCKED		{ 0 }
-+#include <asm-generic/qspinlock_types.h>
-+#include <asm-generic/qrwlock_types.h>
- 
- #endif /* _ASM_RISCV_SPINLOCK_TYPES_H */
--- 
-2.17.1
+Cheers,
+Longman
 
