@@ -2,117 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C20C234D1F4
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Mar 2021 15:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778AB34D25C
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Mar 2021 16:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbhC2N4r convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 29 Mar 2021 09:56:47 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:34525 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbhC2N4e (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Mar 2021 09:56:34 -0400
-Received: from mail-oi1-f178.google.com ([209.85.167.178]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MpDRp-1lz7PW2Xst-00qjrS; Mon, 29 Mar 2021 15:56:29 +0200
-Received: by mail-oi1-f178.google.com with SMTP id f9so13140969oiw.5;
-        Mon, 29 Mar 2021 06:56:29 -0700 (PDT)
-X-Gm-Message-State: AOAM5328ryP4bPtdXoqyPt4r4CIKMoXYUYXImDwk9uyNc6Mz0d9W9JID
-        13kD1HSI+inwMft4Prd3bia0tgC2e9llRLC/CNo=
-X-Google-Smtp-Source: ABdhPJy0vJalLgX9WOoI4FQEZJ7ly3VUocO7/EsGYULttaQFdCVk5swQHlGoklL1MAn8jh7Q3Vrvjf5tWz+qCh9IZ/U=
-X-Received: by 2002:a05:6808:313:: with SMTP id i19mr18216138oie.67.1617026188151;
- Mon, 29 Mar 2021 06:56:28 -0700 (PDT)
+        id S230344AbhC2O1z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Mar 2021 10:27:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50544 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230435AbhC2O1W (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Mar 2021 10:27:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617028042;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EqaKeR15hrRm51GbIjdwaRPlkul2MMX60iIFRxZ1Rns=;
+        b=NJ4WbBqt65Ck2WscDeBiYG17Qrbp19F/ilBKwuDmCVPcRbHa1ZIPza0pfxJ0BykyMqCGqm
+        ACPwAflP2TTS6Nw07V4TowEL9vZWv0Bau5wTKfC22IKzmyeuPH1jg/Afdz2vsveI4yFKaH
+        MfHdMz3GJhAYrkQylnW7/9rryu6Zazg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-320-UHzIechdPAaIBPxsNiYvwg-1; Mon, 29 Mar 2021 10:27:16 -0400
+X-MC-Unique: UHzIechdPAaIBPxsNiYvwg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C40D8874998;
+        Mon, 29 Mar 2021 14:27:13 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.79])
+        by smtp.corp.redhat.com (Postfix) with SMTP id B271B60916;
+        Mon, 29 Mar 2021 14:27:07 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon, 29 Mar 2021 16:27:13 +0200 (CEST)
+Date:   Mon, 29 Mar 2021 16:27:06 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Marco Elver <elver@google.com>, alexander.shishkin@linux.intel.com,
+        acme@kernel.org, mingo@redhat.com, jolsa@redhat.com,
+        mark.rutland@arm.com, namhyung@kernel.org, tglx@linutronix.de,
+        glider@google.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
+        christian@brauner.io, dvyukov@google.com, jannh@google.com,
+        axboe@kernel.dk, mascasa@google.com, pcc@google.com,
+        irogers@google.com, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-kselftest@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
+Message-ID: <20210329142705.GA24849@redhat.com>
+References: <20210324112503.623833-1-elver@google.com>
+ <20210324112503.623833-7-elver@google.com>
+ <YFxGb+QHEumZB6G8@elver.google.com>
+ <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
- <1616868399-82848-4-git-send-email-guoren@kernel.org> <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
- <CAK8P3a2bNH-1VjsZmZJkvGzzZY=ckaaOK9ZGL-oD0DH4jW-+kQ@mail.gmail.com>
- <YGG3JIBVO0w6W3fg@hirez.programming.kicks-ass.net> <YGG6Ms5Rl0AOJL2i@hirez.programming.kicks-ass.net>
- <CAJF2gTRwd0QpUZumDFUN1J=effv67ucUdsQ96PJwjBhPgJ1npw@mail.gmail.com>
-In-Reply-To: <CAJF2gTRwd0QpUZumDFUN1J=effv67ucUdsQ96PJwjBhPgJ1npw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 29 Mar 2021 15:56:13 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3jpQ7dDiVG0s_DQiL6n_MdnhYHMjqFfJ92JJBJFPQZPQ@mail.gmail.com>
-Message-ID: <CAK8P3a3jpQ7dDiVG0s_DQiL6n_MdnhYHMjqFfJ92JJBJFPQZPQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Anup Patel <anup@brainfault.org>,
-        Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:dmtIqfkAnwfuOb33wbiLKllUprvh9DHR635YnFbWvX+s8NaTKOv
- bEm7HAjcfLFBJmoMCSqxcOhvOqwRHlv18OQwN5xZ0v2jbRu2XCvHXmA8LoGYq7jyvrG/eS6
- vHvriOahkJF6hthnWkg04JggI8P3HJiTKiJCpxMWyNvtC/M31Hb6k96cVnpIvan7wM2VX+c
- +UAl1iE7sDyjJ9zn3n5cw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wzwbNUZfmG0=:l6Qtv7KmQhgj4T0woVP72b
- DRSDQusLaTxs2pej+VZwjFdK1hWGUe+dZ6Yy8S2h4AnTQydA/HE8t0VlKPuguUgFfFIawD7Rp
- U9gJQxes9keHnlnUojeV025+18RjAqU4vbYHaSMEx0ay1+U2H/lSKa7OhgOcVAbG21gh719+2
- BudNEG3RMhX64EkVhksYfI5bdHLA7DjFYR1jR423+ImmihDA9iv3nayMSaSPaUxOQ00JoFIH2
- UO84Vvb+VOpecB0scXDQLpQHBgbvsvT04i9KZAXFBiFjeePf+/NXIwMNdDc8vox2rBVfgEPRt
- XzURvBV2hB6YOCSKPjDDGbgcGwneJGoToX30yHE9o2fpc9yNnrgoEyyJq1UcJDCLUH9uNqwdf
- 7xCIIzxBBDgABUpc9zyvtW5B5+gT3WZjmHmgD6MuxFSK0ReOJ5rOBqx0bpcAg39HHdVga7gdX
- azgGbOYqj5wyNh0943eRftBdbOy76PQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 2:52 PM Guo Ren <guoren@kernel.org> wrote:
+On 03/29, Peter Zijlstra wrote:
 >
-> On Mon, Mar 29, 2021 at 7:31 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> On Thu, Mar 25, 2021 at 09:14:39AM +0100, Marco Elver wrote:
+> > @@ -6395,6 +6395,13 @@ static void perf_sigtrap(struct perf_event *event)
+> >  {
+> >  	struct kernel_siginfo info;
 > >
-> > On Mon, Mar 29, 2021 at 01:16:53PM +0200, Peter Zijlstra wrote:
-> > > Anyway, an additional 'funny' is that I suspect you cannot prove fwd
-> > > progress of the entire primitive with any of this on. But who cares
-> > > about details anyway.. :/
-> >
-> > What's the architectural guarantee on LL/SC progress for RISC-V ?
->
-> funct5    | aq | rl   | rs2 |  rs1  | funct3 | rd | opcode
->      5          1    1      5       5         3        5          7
-> LR.W/D  ordering  0     addr    width   dest    AMO
-> SC.W/D  ordering  src  addr    width   dest    AMO
->
-> LR.W loads a word from the address in rs1, places the sign-extended
-> value in rd, and registers a reservation set—a set of bytes that
-> subsumes the bytes in the addressed word. SC.W conditionally writes a
-> word in rs2 to the address in rs1: the SC.W succeeds only if the
-> reservation is still valid and the reservation set contains the bytes
-> being written. If the SC.W succeeds, the instruction writes the word
-> in rs2 to memory, and it writes zero to rd. If the SC.W fails, the
-> instruction does not write to memory, and it writes a nonzero value to
-> rd. Regardless of success or failure, executing an SC.W instruction
-> *invalidates any reservation held by this hart*.
->
-> More details, ref:
-> https://github.com/riscv/riscv-isa-manual
+> > +	/*
+> > +	 * This irq_work can race with an exiting task; bail out if sighand has
+> > +	 * already been released in release_task().
+> > +	 */
+> > +	if (!current->sighand)
+> > +		return;
 
-I think section "3.5.3.2 Reservability PMA" [1] would be a more relevant
-link, as this defines memory areas that either do or do not have
-forward progress guarantees, including this part:
+This is racy. If "current" has already passed exit_notify(), current->parent
+can do release_task() and destroy current->sighand right after the check.
 
-   "When LR/SC is used for memory locations marked RsrvNonEventual,
-     software should provide alternative fall-back mechanisms used when
-     lack of progress is detected."
+> Urgh.. I'm not entirely sure that check is correct, but I always forget
+> the rules with signal. It could be we ought to be testing PF_EXISTING
+> instead.
 
-My reading of this is that if the example you tried stalls, then either
-the PMA is not RsrvEventual, and it is wrong to rely on ll/sc on this,
-or that the PMA is marked RsrvEventual but the implementation is
-buggy.
+Agreed, PF_EXISTING check makes more sense in any case, the exiting task
+can't receive the signal anyway.
 
-It also seems that the current "amoswap" based implementation
-would be reliable independent of RsrvEventual/RsrvNonEventual.
-arm64 is already in the situation of having to choose between
-two cmpxchg() implementation at runtime to allow falling back to
-a slower but more general version, but it's best to avoid that if you
-can.
+Oleg.
 
-         Arnd
-
-[1] http://www.five-embeddev.com/riscv-isa-manual/latest/machine.html#atomicity-pmas
