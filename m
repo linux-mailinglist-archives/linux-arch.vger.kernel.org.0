@@ -2,85 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C08D34CF64
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Mar 2021 13:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E69534CFA3
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Mar 2021 14:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbhC2LvJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Mar 2021 07:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbhC2Luk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Mar 2021 07:50:40 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD719C061574;
-        Mon, 29 Mar 2021 04:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7UpbfvkQlofjez1TPOd4UNQFXQ8qN4tvk7VAKOS6IdU=; b=d1jazCfp9GFupDWuBoEvDZbGQK
-        UZh3r/Vp7n5hXFiWCRo215QQeab+C/jEbXVjcic5hvqv1r6g1ghqgrv2GxYXYmkSyn4iBwAS+LchH
-        7gZ35kDMDQ9572RglcVE7MJEUXddNPs8Kd3T5ODSizVqeAKVKfP64BLPfF5dA2MQFFi+tCK3ySnj/
-        k7bpEyUmvUYCGxB4sNNoCeCl561LuFtPXN/WCumUy0p2m5rBfOZEcaoXWn/52rEV5pZnqgiaHoApH
-        4at1tHWSSFRxtOcbeUlp63TMCdcM7UVOQIapZPgpZ0v8tD3V5ZkJ2SrKZ+7iq52ZFro1OaDrYGS0z
-        nQ1RJ6Zw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lQqPU-000cyZ-G1; Mon, 29 Mar 2021 11:50:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2D0E3305CC3;
-        Mon, 29 Mar 2021 13:50:19 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0EFE92071A3DD; Mon, 29 Mar 2021 13:50:19 +0200 (CEST)
-Date:   Mon, 29 Mar 2021 13:50:18 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
-        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
-        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
-        mascasa@google.com, pcc@google.com, irogers@google.com,
-        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 01/11] perf: Rework perf_event_exit_event()
-Message-ID: <YGG++nxhvVBSEphQ@hirez.programming.kicks-ass.net>
-References: <20210324112503.623833-1-elver@google.com>
- <20210324112503.623833-2-elver@google.com>
- <YFxjJam0ErVmk99i@elver.google.com>
- <YFy3qI65dBfbsZ1z@elver.google.com>
- <YFzgO0AhGFODmgc1@elver.google.com>
+        id S231599AbhC2MCW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Mar 2021 08:02:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42920 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230434AbhC2MBy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Mar 2021 08:01:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2110361930;
+        Mon, 29 Mar 2021 12:01:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617019314;
+        bh=UT+UrRIVgNhbmAkKeg6HsueNZaK8AB1/0MS5NZZ5NQU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MfOCEZUNUnR4dKPxmau5OQU9kxgxhGvwo8N3JR/s148VGWrMMAXEH9mfymMgQHnNI
+         YhluAI+zInviPvrAzt7wGZUmUh24tq3e4VUhcVfmrQG16kSpgI34Eop4Epu9GViqs/
+         IVmw0BZ5JkW63+MoqQ6G98fb6T2mfyqZ3IP+ltAjR0AILOFUyaO7MNL3hyVm/5bPws
+         gCi9d/jWTSzGzH6MVMCsFqvbEQnKc5jTCLn7HLSVlr+Xmmw1KvMQXyicd6Uc2kzljR
+         404UjwjSmNXVdzJce57PFhk1eGmE8j82NwIiXy6V+pb94GZGHpnIFXPED1fvDHqRUM
+         VFkV5eigHQKew==
+Received: by mail-lj1-f175.google.com with SMTP id 15so15680568ljj.0;
+        Mon, 29 Mar 2021 05:01:54 -0700 (PDT)
+X-Gm-Message-State: AOAM531QGLHi1fZ3Kz0L044sDVLidaUegeRgFF5MU8mi9G/8mFRc0JN2
+        R6zrajyHs0YtSKgJncIyrNcsaS8Bnv0AAcOdSY0=
+X-Google-Smtp-Source: ABdhPJzaBfHptHYx2DLdzeLBCg5t7USdDIneRxDhGd2vvHRCAncwdw++SOaq3bmLo7VgUJwtyPywTZc5e3lJtCC4kNI=
+X-Received: by 2002:a2e:9084:: with SMTP id l4mr17142105ljg.498.1617019312425;
+ Mon, 29 Mar 2021 05:01:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YFzgO0AhGFODmgc1@elver.google.com>
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org> <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+ <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com> <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net>
+In-Reply-To: <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 29 Mar 2021 20:01:41 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+Message-ID: <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 08:10:51PM +0100, Marco Elver wrote:
+On Mon, Mar 29, 2021 at 7:26 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Mar 29, 2021 at 07:19:29PM +0800, Guo Ren wrote:
+> > On Mon, Mar 29, 2021 at 3:50 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Sat, Mar 27, 2021 at 06:06:38PM +0000, guoren@kernel.org wrote:
+> > > > From: Guo Ren <guoren@linux.alibaba.com>
+> > > >
+> > > > Some architectures don't have sub-word swap atomic instruction,
+> > > > they only have the full word's one.
+> > > >
+> > > > The sub-word swap only improve the performance when:
+> > > > NR_CPUS < 16K
+> > > >  *  0- 7: locked byte
+> > > >  *     8: pending
+> > > >  *  9-15: not used
+> > > >  * 16-17: tail index
+> > > >  * 18-31: tail cpu (+1)
+> > > >
+> > > > The 9-15 bits are wasted to use xchg16 in xchg_tail.
+> > > >
+> > > > Please let architecture select xchg16/xchg32 to implement
+> > > > xchg_tail.
+> > >
+> > > So I really don't like this, this pushes complexity into the generic
+> > > code for something that's really not needed.
+> > >
+> > > Lots of RISC already implement sub-word atomics using word ll/sc.
+> > > Obviously they're not sharing code like they should be :/ See for
+> > > example arch/mips/kernel/cmpxchg.c.
+> > I see, we've done two versions of this:
+> >  - Using cmpxchg codes from MIPS by Michael
+> >  - Re-write with assembly codes by Guo
+> >
+> > But using the full-word atomic xchg instructions implement xchg16 has
+> > the semantic risk for atomic operations.
+>
+> What? -ENOPARSE
 
-> and therefore synthesized this fix on top:
-> 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 57de8d436efd..e77294c7e654 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -12400,7 +12400,7 @@ static void sync_child_event(struct perf_event *child_event)
->  	if (child_event->attr.inherit_stat) {
->  		struct task_struct *task = child_event->ctx->task;
->  
-> -		if (task)
-> +		if (task && task != TASK_TOMBSTONE)
->  			perf_event_read_event(child_event, task);
->  	}
->  
-> which fixes the problem. My guess is that the parent and child are both
-> racing to exit?
-> 
-> Does that make any sense?
+u32 a = 0x55aa66bb;
+u16 *ptr = &a;
 
-Yes, I think it does. ACK
+CPU0                       CPU1
+=========             =========
+xchg16(ptr, new)     while(1)
+                                    WRITE_ONCE(*(ptr + 1), x);
+
+When we use lr.w/sc.w implement xchg16, it'll cause CPU0 deadlock.
+
+>
+> > > Also, I really do think doing ticket locks first is a far more sensible
+> > > step.
+> > NACK by Anup
+>
+> Who's he when he's not sending NAKs ?
+We've talked before:
+https://lore.kernel.org/linux-riscv/CAAhSdy1JHLUFwu7RuCaQ+RUWRBks2KsDva7EpRt8--4ZfofSUQ@mail.gmail.com/T/#t
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
