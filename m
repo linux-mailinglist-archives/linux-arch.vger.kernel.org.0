@@ -2,57 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F01434D6F3
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Mar 2021 20:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6625334D75B
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Mar 2021 20:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbhC2SXR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Mar 2021 14:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbhC2SWr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Mar 2021 14:22:47 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3194C061756
-        for <linux-arch@vger.kernel.org>; Mon, 29 Mar 2021 11:22:47 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id g8-20020a9d6c480000b02901b65ca2432cso13177973otq.3
-        for <linux-arch@vger.kernel.org>; Mon, 29 Mar 2021 11:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P+4V7kdgmOSoM2q5m0q378E9m02rDEI4zRk0CO5JIEk=;
-        b=ihmdOem+jlQqEIYcjQMemO9yzZ76f8aNqKaq2e8wFi4szCWed/e1VkYakstJEI3Drg
-         NaAdM5GWc0knwIVc+ct6Hw2HnP7hY90CMpni9QukM9RxNUdKXO+8UtDrP5hSr3OnGdo3
-         SKg0voWbPM4pd5WN6CYz0lwI3i8uBCJ9cypbH1Cf9U6oVSlVmAF/cJilJc+gS1S8l056
-         +rctM+5G8Sc+Et8OC9/ZiaHJ6YISl9zzcyHMyx8QAhSYg+ZfYEKNIsYVF8TO4CFqDl6K
-         bMRlibkCRKn3uTiSk9PfKBr3QBZq+/VnNjn39AfuF1jjVsf+WQ6k/kEX2sx+aMYVbwJH
-         2+fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P+4V7kdgmOSoM2q5m0q378E9m02rDEI4zRk0CO5JIEk=;
-        b=hatO219x8D6VFQXzZycIOvIOtT6G78+j0cuOkmI6S5KYf7J5OwYtdW+DLpitRZrG7F
-         VYD5wThGJfDyOSEoLsSRvcaqvJYPjwt1jbdPZVPciOpEk9uiH/XIU09gIG7qf4vQRuoW
-         u7MOdZaHZ+3PZ47QfZK+8k9BGXAHpITt9kYP97wmt+gzr6OC9hr8rerd1tK6k5MHd/qj
-         adfxTOe0CGN7ERoyn6frGdNka4qeAeEKehpA9sTINzTA58vxudaE1s2kuS+fO8cjwRSP
-         XohCuKO5ZVOxtjElGP4wxjGbfN8y9EYCyvzeTif0QiZ+IkKncMY4//gJCzWvPUT71cTN
-         /4Qw==
-X-Gm-Message-State: AOAM530k40fiWmx7k/RyFeEwKFUy3eXbn9CH8ppSIf2MSJYb1DURIbr7
-        tRox2T8OEFS4Ui15xLzGXtfrFKcmaAL+qukHkXIt0g==
-X-Google-Smtp-Source: ABdhPJxiVzLFlZAvOj3MGXOk8B4cJRaWtdZ8/zj6Pb9YYwrVffx1QS2Y35JTKZ3UFc6rYjOtTvwKJABEFVgoDhzoe8w=
-X-Received: by 2002:a05:6830:148c:: with SMTP id s12mr24623928otq.251.1617042166749;
- Mon, 29 Mar 2021 11:22:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210324112503.623833-1-elver@google.com> <20210324112503.623833-7-elver@google.com>
- <YFxGb+QHEumZB6G8@elver.google.com> <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
- <20210329142705.GA24849@redhat.com>
-In-Reply-To: <20210329142705.GA24849@redhat.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 29 Mar 2021 20:22:34 +0200
-Message-ID: <CANpmjNN=dpMmanU1mzigUscZQ6_Bx6u4u5mS4Ukhy0PTiexgDA@mail.gmail.com>
-Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
-To:     Oleg Nesterov <oleg@redhat.com>
+        id S231786AbhC2Seb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Mar 2021 14:34:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47753 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231637AbhC2SeG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Mar 2021 14:34:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617042845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pDaHHzh6SdLVte/qI+KKbIrazg9pPxb7giE0iRBcJy4=;
+        b=b6999D+6qaAwvhbvFlcUk+JpkW3dCC+VsXSCFlUUbVjxX2s47P6I9rxPPLIU9szC6IudE1
+        J3mPs13+ao4CvhWQ0Fvth90/Nn501L23Du3rFV0zUYrtoNoJMvU8zspeuGdl/8YfH8mYY3
+        rWWlh2MphnlP+1kXLes/3Rpwmz6u2sc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-428-6CvGnPCoONa9AJSA2KRzUg-1; Mon, 29 Mar 2021 14:34:03 -0400
+X-MC-Unique: 6CvGnPCoONa9AJSA2KRzUg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7C03F87A82A;
+        Mon, 29 Mar 2021 18:34:00 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.79])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 4D0395D6A1;
+        Mon, 29 Mar 2021 18:33:53 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon, 29 Mar 2021 20:34:00 +0200 (CEST)
+Date:   Mon, 29 Mar 2021 20:33:52 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Marco Elver <elver@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -73,47 +58,35 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
+Message-ID: <20210329183351.GD24849@redhat.com>
+References: <20210324112503.623833-1-elver@google.com>
+ <20210324112503.623833-7-elver@google.com>
+ <YFxGb+QHEumZB6G8@elver.google.com>
+ <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
+ <20210329142705.GA24849@redhat.com>
+ <CANpmjNN=dpMmanU1mzigUscZQ6_Bx6u4u5mS4Ukhy0PTiexgDA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNN=dpMmanU1mzigUscZQ6_Bx6u4u5mS4Ukhy0PTiexgDA@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 29 Mar 2021 at 16:27, Oleg Nesterov <oleg@redhat.com> wrote:
-> On 03/29, Peter Zijlstra wrote:
-> >
-> > On Thu, Mar 25, 2021 at 09:14:39AM +0100, Marco Elver wrote:
-> > > @@ -6395,6 +6395,13 @@ static void perf_sigtrap(struct perf_event *event)
-> > >  {
-> > >     struct kernel_siginfo info;
-> > >
-> > > +   /*
-> > > +    * This irq_work can race with an exiting task; bail out if sighand has
-> > > +    * already been released in release_task().
-> > > +    */
-> > > +   if (!current->sighand)
-> > > +           return;
+On 03/29, Marco Elver wrote:
 >
-> This is racy. If "current" has already passed exit_notify(), current->parent
-> can do release_task() and destroy current->sighand right after the check.
->
-> > Urgh.. I'm not entirely sure that check is correct, but I always forget
-> > the rules with signal. It could be we ought to be testing PF_EXISTING
-> > instead.
->
-> Agreed, PF_EXISTING check makes more sense in any case, the exiting task
-> can't receive the signal anyway.
+> So, per off-list discussion, it appears that I should ask to clarify:
+> PF_EXISTING or PF_EXITING?
 
-So, per off-list discussion, it appears that I should ask to clarify:
-PF_EXISTING or PF_EXITING?
+Aaaaaaah, sorry Marco.
 
-It appears that PF_EXISTING is what's being suggested, whereas it has
-not been mentioned anywhere, nor are its semantics clear. If it is not
-simply the negation of PF_EXITING, what are its semantics? And why do
-we need it in the case here (instead of something else that already
-exists)?
+PF_EXITING, of course.
 
-Thanks,
--- Marco
+Oleg.
+
