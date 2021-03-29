@@ -2,82 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C34E634D060
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Mar 2021 14:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97ECC34D07D
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Mar 2021 14:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbhC2Mu1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Mar 2021 08:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbhC2MuK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Mar 2021 08:50:10 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63782C061574;
-        Mon, 29 Mar 2021 05:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1918iT4uzotqNOl2NIVcMWIyYjsHFO6ajOdXvBHTmz0=; b=OsUkcjaEC5QtmphwWlRuqGUNXm
-        sguIJD8uR8Q6kUa/CzuVxzzaza4CR5bOBGKP4wnkUapwhIyaIa816SR+QuolvtGEeRoMiWR2U9eOr
-        Y1eGuQ39WXYD2PlMMJRwOtlSCLtcRu4QL+9EJgRmP4v9eAwl7tq2lUyzErBosRYBRiXGA6p4r3piE
-        l3JMoIDOkzIUC+gtjIaBZ6l+MT9NDe1uo3vldrRNQoHOB8kZQIUDYfehHZXB4CZYq4g4KuqP6ffRZ
-        BR6rRc+bXfkJyW0+ypDZRJmZNSqGj/yhXMvIYXGocXid1OhDKbYDx235eu3aXlyeJx62QZv3dzYgb
-        mTqTXNMg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lQrKo-001aXI-L9; Mon, 29 Mar 2021 12:49:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CFD843011FE;
-        Mon, 29 Mar 2021 14:49:31 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BA3C42BB1A697; Mon, 29 Mar 2021 14:49:31 +0200 (CEST)
-Date:   Mon, 29 Mar 2021 14:49:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        id S231478AbhC2Mxk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Mar 2021 08:53:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46676 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231270AbhC2MxK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Mar 2021 08:53:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2665A61934;
+        Mon, 29 Mar 2021 12:53:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617022390;
+        bh=ZtH+hMquy7Na1NKF/yxIB+LhxXUi37ByQKiTFk9d38U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iy/yWInWB8DBRPxhLE7cb8nnL6SjCZMkWAdqdfKqXrpShBLHbTyVWa0wYkSN/tX5v
+         Iu2rpPH80kkfOhq/UaN9/SA2YdB+x9RzSUizC5xp3FbagOGD5b8lWF+eiPxaQmBmsG
+         8mQrC67o6eRGU77PTSiyD5FqmWZB/XMtgSQ5Lr9cr8/1EInyzd3Enz3sAFQtKWMDis
+         x3GYxZ0FAXmMllpi+MTFzy++LKlizjyA1MYaBsoE2fzmId5Zv5Q27wwu0mWOSFEudJ
+         MXKxlcT5oSR+vVk0rlL8s5NVNMSWLEZchX3yY/jaxKeq8CZH6LQBvCanFjA1q171Om
+         P1oxZoWMTKRBQ==
+Received: by mail-lf1-f41.google.com with SMTP id o10so18223327lfb.9;
+        Mon, 29 Mar 2021 05:53:10 -0700 (PDT)
+X-Gm-Message-State: AOAM533cSk97HasmT8nByVThJULtDdqVPyK13bf2i1w0RLRFzSF8Li8M
+        CVz+iN9B15UZU561UOhAEZN+6nbU59L6+hzz1NM=
+X-Google-Smtp-Source: ABdhPJzKyxFt/x88AyNxVA443wYhozA+/lh8xw56UgIWl+92QcqgMI4gEBYMXLqoZdXoDirHF7Uz5bRUqUYJrcU8Gu8=
+X-Received: by 2002:a19:f501:: with SMTP id j1mr17188294lfb.231.1617022388450;
+ Mon, 29 Mar 2021 05:53:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org> <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+ <CAK8P3a2bNH-1VjsZmZJkvGzzZY=ckaaOK9ZGL-oD0DH4jW-+kQ@mail.gmail.com>
+ <YGG3JIBVO0w6W3fg@hirez.programming.kicks-ass.net> <YGG6Ms5Rl0AOJL2i@hirez.programming.kicks-ass.net>
+In-Reply-To: <YGG6Ms5Rl0AOJL2i@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 29 Mar 2021 20:52:57 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRwd0QpUZumDFUN1J=effv67ucUdsQ96PJwjBhPgJ1npw@mail.gmail.com>
+Message-ID: <CAJF2gTRwd0QpUZumDFUN1J=effv67ucUdsQ96PJwjBhPgJ1npw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-csky@vger.kernel.org,
         linux-arch <linux-arch@vger.kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         Waiman Long <longman@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
-Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
- ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Message-ID: <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net>
-References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
- <1616868399-82848-4-git-send-email-guoren@kernel.org>
- <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
- <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
- <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net>
- <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+        Anup Patel <anup@brainfault.org>,
+        Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 08:01:41PM +0800, Guo Ren wrote:
-> u32 a = 0x55aa66bb;
-> u16 *ptr = &a;
-> 
-> CPU0                       CPU1
-> =========             =========
-> xchg16(ptr, new)     while(1)
->                                     WRITE_ONCE(*(ptr + 1), x);
-> 
-> When we use lr.w/sc.w implement xchg16, it'll cause CPU0 deadlock.
+On Mon, Mar 29, 2021 at 7:31 PM Peter Zijlstra <peterz@infradead.org> wrote=
+:
+>
+> On Mon, Mar 29, 2021 at 01:16:53PM +0200, Peter Zijlstra wrote:
+> > Anyway, an additional 'funny' is that I suspect you cannot prove fwd
+> > progress of the entire primitive with any of this on. But who cares
+> > about details anyway.. :/
+>
+> What's the architectural guarantee on LL/SC progress for RISC-V ?
 
-Then I think your LL/SC is broken.
+funct5    | aq | rl   | rs2 |  rs1  | funct3 | rd | opcode
+     5          1    1      5       5         3        5          7
+LR.W/D  ordering  0     addr    width   dest    AMO
+SC.W/D  ordering  src  addr    width   dest    AMO
 
-That also means you really don't want to build super complex locking
-primitives on top, because that live-lock will percolate through.
+LR.W loads a word from the address in rs1, places the sign-extended
+value in rd, and registers a reservation set=E2=80=94a set of bytes that
+subsumes the bytes in the addressed word. SC.W conditionally writes a
+word in rs2 to the address in rs1: the SC.W succeeds only if the
+reservation is still valid and the reservation set contains the bytes
+being written. If the SC.W succeeds, the instruction writes the word
+in rs2 to memory, and it writes zero to rd. If the SC.W fails, the
+instruction does not write to memory, and it writes a nonzero value to
+rd. Regardless of success or failure, executing an SC.W instruction
+*invalidates any reservation held by this hart*.
 
-Step 1 would be to get your architecute fixed such that it can provide
-fwd progress guarantees for LL/SC. Otherwise there's absolutely no point
-in building complex systems with it.
+More details, ref:
+https://github.com/riscv/riscv-isa-manual
+
+> And what if you double loop it like cmpxchg() ?
+Can you give a code snippet?
+
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
