@@ -2,135 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEA834DD54
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Mar 2021 03:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609A834DE58
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Mar 2021 04:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbhC3BKg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Mar 2021 21:10:36 -0400
-Received: from mailgate.ics.forth.gr ([139.91.1.2]:58694 "EHLO
-        mailgate.ics.forth.gr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbhC3BKV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Mar 2021 21:10:21 -0400
-X-Greylist: delayed 1072 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Mar 2021 21:10:20 EDT
-Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
-        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 12U0qO8Z066170
-        for <linux-arch@vger.kernel.org>; Tue, 30 Mar 2021 03:52:24 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
-        q=dns/txt; i=@ics.forth.gr; t=1617065539; x=1619657539;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4Ytp87wkA+alvM5YO/7dlXgP5/jZJBWXepwASfozGUU=;
-        b=CXdKG8AeuRZiwZ+qSuU9itQVeS+S6jzZD+LSRTjBq4uIMwy1EtYl2LFohFQ3P0aL
-        1snhQLBfGMnJPLlMUvta1R1ExG60xpMGjvqAzE108mPHfXrfMlKUizgfR2G3CWnj
-        dKei0YP7+vI+q9xmsTyWmdWtYdS0hBwgkfMMp+y/DHsFRhQlCWvNoRqg2neDGsDy
-        A/MbNsCxbPucEdxZvgGboLEud/obw/iKdEC8cDqcfAJRCeFRpho58PpEswmR8XMQ
-        DBZlttMlmL7pkMgUDfZroBTVf9b7EC2+ikG/v595zLMuOGi9LkWZ5Pgiy0gLVEtB
-        d2DVMQG/q9QvZWbAMsyDiw==;
-X-AuditID: 8b5b014d-a4c337000000209f-f6-60627642ff7a
-Received: from enigma.ics.forth.gr (enigma-2.ics.forth.gr [139.91.151.35])
-        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id 86.6D.08351.24672606; Tue, 30 Mar 2021 03:52:18 +0300 (EEST)
-X-ICS-AUTH-INFO: Authenticated user:  at ics.forth.gr
+        id S230495AbhC3C1F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Mar 2021 22:27:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230089AbhC3C0e (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Mar 2021 22:26:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E3804619A7;
+        Tue, 30 Mar 2021 02:26:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617071194;
+        bh=DsNUDKNJ0Zn7ha019DqF6JpRF6ePLDXBpY2fY4Rt5zI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=d4cb+mFmuvef/cwfP2zNQ3obGFGjzuzoUwV/X2Zigv4nsZNUWKslRrqdL34xGoLxn
+         96WVK3ko/y5YsTXEzBvfqnWDjP0ijpDer3lLY8MPYAeN9i8JVTGiO6vGNYDOowoWHZ
+         KWY83N80nfMGMh9gQ6f3pRmEufiZZ3fe3+W58B6HXt6U/owpCK++KKZV9lfwu7cmZz
+         lTuJ2/F7BpyWD8Hb7PUf5J1BMo6rogzywecLGkdu3g9KM5rt+XesuBAdPnMbzL2Pt2
+         XB8jdv3pb5/7T1ey8dbagvED+OrQQDtvAHHbre4u+uDUBm39lzH+oKQlmdvbJDGg+r
+         t8BC3M/LaSv4g==
+Received: by mail-lf1-f43.google.com with SMTP id g8so21404523lfv.12;
+        Mon, 29 Mar 2021 19:26:33 -0700 (PDT)
+X-Gm-Message-State: AOAM532xQGkROV/T4XoBJzMcIh/pLwC3669/assFnQO22haLivakrhSm
+        AcOEQaqwBWVxJflh+IZuY3vtGDVdPuQ/n5hcWjw=
+X-Google-Smtp-Source: ABdhPJxU6mxcUsuISjomLk93VoCYmMFU/zeXtni2UcWWrrqJGhcLnr4AAMCcANyUFGhKFwrj3dIEI2b9d5by4xErFtM=
+X-Received: by 2002:ac2:5e26:: with SMTP id o6mr18679032lfg.355.1617071192050;
+ Mon, 29 Mar 2021 19:26:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 30 Mar 2021 03:52:17 +0300
-From:   Nick Kossifidis <mick@ics.forth.gr>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        Will Deacon <will@kernel.org>,
-        Daniel Walker <danielwa@cisco.com>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>, devicetree@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-kernel@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        microblaze <monstr@monstr.eu>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        nios2 <ley.foon.tan@intel.com>,
-        Openrisc <openrisc@lists.librecores.org>,
-        linux-hexagon@vger.kernel.org,
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org> <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+ <CAK8P3a2bNH-1VjsZmZJkvGzzZY=ckaaOK9ZGL-oD0DH4jW-+kQ@mail.gmail.com>
+ <YGG3JIBVO0w6W3fg@hirez.programming.kicks-ass.net> <YGG6Ms5Rl0AOJL2i@hirez.programming.kicks-ass.net>
+ <CAJF2gTRwd0QpUZumDFUN1J=effv67ucUdsQ96PJwjBhPgJ1npw@mail.gmail.com> <CAK8P3a3jpQ7dDiVG0s_DQiL6n_MdnhYHMjqFfJ92JJBJFPQZPQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a3jpQ7dDiVG0s_DQiL6n_MdnhYHMjqFfJ92JJBJFPQZPQ@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 30 Mar 2021 10:26:19 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSpnHndT9NkrzvNP6xvqV51_DENwh2BHaduUnGyUE=Jaw@mail.gmail.com>
+Message-ID: <CAJF2gTSpnHndT9NkrzvNP6xvqV51_DENwh2BHaduUnGyUE=Jaw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
-        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org,
-        SH-Linux <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>, paul.walmsley@sifive.com
-Subject: Re: [PATCH v3 11/17] riscv: Convert to GENERIC_CMDLINE
-Organization: FORTH
-In-Reply-To: <CAL_JsqK2TT=j1QjiRgTYQvwHqivE-3HgYo2JzxTJSWO2wvK69Q@mail.gmail.com>
-References: <cover.1616765869.git.christophe.leroy@csgroup.eu>
- <46745e07b04139a22b5bd01dc37df97e6981e643.1616765870.git.christophe.leroy@csgroup.eu>
- <87zgyqdn3d.fsf@igel.home> <81a7e63f-57d4-5c81-acc5-35278fe5bb04@csgroup.eu>
- <CAL_JsqK2TT=j1QjiRgTYQvwHqivE-3HgYo2JzxTJSWO2wvK69Q@mail.gmail.com>
-Message-ID: <3ae0c2faa08f76efb8a446f262b712df@mailhost.ics.forth.gr>
-X-Sender: mick@mailhost.ics.forth.gr
-User-Agent: Roundcube Webmail/1.3.16
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCIsWRmVeSWpSXmKPExsXSHT1dWde5LCnB4AO/xZ1Jz9ktjh7vZbZo
-        XriE2WL+kXOsFvd3NzJadOz6ymKx6fE1Vov3LTvYLC7vmsNm0blpK6PFts8tbBZz/kxhtlh5
-        di27xe/v/1gtnnw8DVTceZnNom0Wv8X/PTvYLfqXdrBZNJxcwWrRcsfU4seGx6wOYh5Tfm9k
-        9fh68xyTx/0Hz1k9Fu95yeSxaVUnm8ehwx2MHi8Obmf22Lyk3mP9hm2MHudnLGT0+Ns1hdnj
-        UvN1do/Pm+QCeKO4bFJSczLLUov07RK4MpqW3GYuuMdT8eD2fOYGxrVcXYycHBICJhKb5j1j
-        72Lk4hASOM4ocWFHFwtEwlRi9t5ORhCbV0BQ4uTMJ2BxZgELialX9jNC2PISzVtnM4PYLAKq
-        Els+QMTZBDQl5l86CFYvIqAo8bttGivIAmaBz+wSj242AhVxcAgL2Essn2UHUsMvICzx6e5F
-        VhCbUyBQ4uqL32wQB61hkjh69A8zxBEuEv8+TmeFOE5F4sPvB+wgc0SB7M1zlSYwCs5Ccuos
-        JKfOQnLqAkbmVYwCiWXGepnJxXpp+UUlGXrpRZsYwRHN6LuD8fbmt3qHGJk4GA8xSnAwK4nw
-        Ch9ITBDiTUmsrEotyo8vKs1JLT7EKM3BoiTOy6s3IV5IID2xJDU7NbUgtQgmy8TBKdXAZDF7
-        Ibu7bpJ0S056lY5T1mb7vUI9xyRZInM7SjMP8ahbfi7Uu/0qNq1njospX8DU78dj3x2SfDtV
-        xHr+FbGLEcWvzua/LQj7ONkr3DCLIUHfakKWSpDXwry3fhOKIt/ODEo56nXrAdt29SnP+nMU
-        /0fe/8z4TdbTnDN88c+XOWxtenuYQhzmfH6zlLlrvXps4O6P71n8I2qa5vKWSe5VsPzLdTHu
-        SsfRmr9zrF4xMis2pC6wc3hy+6X3kX3s6p2BTRKZ765un2UqyV7ZejbXdqbCqqDP7v8XdzH4
-        y8tEl3xTvfqpobI9Nip3m3ir+7L5W7548iblXFzk8i1x838fU8lVvJ6yk1SXnTbzEFViKc5I
-        NNRiLipOBAC7YhWKVwMAAA==
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Anup Patel <anup@brainfault.org>,
+        Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Στις 2021-03-26 17:26, Rob Herring έγραψε:
-> On Fri, Mar 26, 2021 at 8:20 AM Christophe Leroy
-> <christophe.leroy@csgroup.eu> wrote:
->> 
->> 
->> 
->> Le 26/03/2021 à 15:08, Andreas Schwab a écrit :
->> > On Mär 26 2021, Christophe Leroy wrote:
->> >
->> >> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
->> >> index f8f15332caa2..e7c91ee478d1 100644
->> >> --- a/arch/riscv/kernel/setup.c
->> >> +++ b/arch/riscv/kernel/setup.c
->> >> @@ -20,6 +20,7 @@
->> >>   #include <linux/swiotlb.h>
->> >>   #include <linux/smp.h>
->> >>   #include <linux/efi.h>
->> >> +#include <linux/cmdline.h>
->> >>
->> >>   #include <asm/cpu_ops.h>
->> >>   #include <asm/early_ioremap.h>
->> >> @@ -228,10 +229,8 @@ static void __init parse_dtb(void)
->> >>      }
->> >>
->> >>      pr_err("No DTB passed to the kernel\n");
->> >> -#ifdef CONFIG_CMDLINE_FORCE
->> >> -    strlcpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
->> >> +    cmdline_build(boot_command_line, NULL, COMMAND_LINE_SIZE);
->> >>      pr_info("Forcing kernel command line to: %s\n", boot_command_line);
->> >
->> > Shouldn't that message become conditional in some way?
->> >
->> 
->> You are right, I did something similar on ARM but looks like I missed 
->> it on RISCV.
-> 
-> How is this hunk even useful? Under what conditions can you boot
-> without a DTB? Even with a built-in DTB, the DT cmdline handling would
-> be called.
-> 
-> Rob
-> 
+On Mon, Mar 29, 2021 at 9:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Mar 29, 2021 at 2:52 PM Guo Ren <guoren@kernel.org> wrote:
+> >
+> > On Mon, Mar 29, 2021 at 7:31 PM Peter Zijlstra <peterz@infradead.org> w=
+rote:
+> > >
+> > > On Mon, Mar 29, 2021 at 01:16:53PM +0200, Peter Zijlstra wrote:
+> > > > Anyway, an additional 'funny' is that I suspect you cannot prove fw=
+d
+> > > > progress of the entire primitive with any of this on. But who cares
+> > > > about details anyway.. :/
+> > >
+> > > What's the architectural guarantee on LL/SC progress for RISC-V ?
+> >
+> > funct5    | aq | rl   | rs2 |  rs1  | funct3 | rd | opcode
+> >      5          1    1      5       5         3        5          7
+> > LR.W/D  ordering  0     addr    width   dest    AMO
+> > SC.W/D  ordering  src  addr    width   dest    AMO
+> >
+> > LR.W loads a word from the address in rs1, places the sign-extended
+> > value in rd, and registers a reservation set=E2=80=94a set of bytes tha=
+t
+> > subsumes the bytes in the addressed word. SC.W conditionally writes a
+> > word in rs2 to the address in rs1: the SC.W succeeds only if the
+> > reservation is still valid and the reservation set contains the bytes
+> > being written. If the SC.W succeeds, the instruction writes the word
+> > in rs2 to memory, and it writes zero to rd. If the SC.W fails, the
+> > instruction does not write to memory, and it writes a nonzero value to
+> > rd. Regardless of success or failure, executing an SC.W instruction
+> > *invalidates any reservation held by this hart*.
+> >
+> > More details, ref:
+> > https://github.com/riscv/riscv-isa-manual
+>
+> I think section "3.5.3.2 Reservability PMA" [1] would be a more relevant
+> link, as this defines memory areas that either do or do not have
+> forward progress guarantees, including this part:
+>
+>    "When LR/SC is used for memory locations marked RsrvNonEventual,
+>      software should provide alternative fall-back mechanisms used when
+>      lack of progress is detected."
+>
+> My reading of this is that if the example you tried stalls, then either
+> the PMA is not RsrvEventual, and it is wrong to rely on ll/sc on this,
+> or that the PMA is marked RsrvEventual but the implementation is
+> buggy.
+Yes, PMA just defines physical memory region attributes, But in our
+processor, when MMU is enabled (satp's value register > 2) in s-mode,
+it will look at our custom PTE's attributes BIT(63) ref [1]:
 
-cced Paul who introduced this:
-https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/arch/riscv/kernel/setup.c?id=8fd6e05c7463b635e51ec7df0a1858c1b5a6e350
+   PTE format:
+   | 63 | 62 | 61 | 60 | 59 | 58-8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
+     SO   C    B    SH   SE    RSW   D   A   G   U   X   W   R   V
+     ^    ^    ^    ^    ^
+   BIT(63): SO - Strong Order
+   BIT(62): C  - Cacheable
+   BIT(61): B  - Bufferable
+   BIT(60): SH - Shareable
+   BIT(59): SE - Security
 
+So the memory also could be RsrvNone/RsrvEventual.
+
+[1] https://github.com/c-sky/csky-linux/commit/e837aad23148542771794d8a2fcc=
+52afd0fcbf88
+
+>
+> It also seems that the current "amoswap" based implementation
+> would be reliable independent of RsrvEventual/RsrvNonEventual.
+Yes, the hardware implementation of AMO could be different from LR/SC.
+AMO could use ACE snoop holding to lock the bus in hw coherency
+design, but LR/SC uses an exclusive monitor without locking the bus.
+
+> arm64 is already in the situation of having to choose between
+> two cmpxchg() implementation at runtime to allow falling back to
+> a slower but more general version, but it's best to avoid that if you
+> can.
+Current RISC-V needn't multiple versions to select, and all AMO &
+LR/SC has been defined in the spec.
+
+RISC-V hasn't CAS instructions, and it uses LR/SC for cmpxchg. I don't
+think LR/SC would be slower than CAS, and CAS is just good for code
+size.
+
+>
+>          Arnd
+>
+> [1] http://www.five-embeddev.com/riscv-isa-manual/latest/machine.html#ato=
+micity-pmas
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
