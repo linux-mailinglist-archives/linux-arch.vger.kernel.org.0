@@ -2,333 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D75D6350507
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Mar 2021 18:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89071350516
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Mar 2021 18:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234238AbhCaQtE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Mar 2021 12:49:04 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:33163 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234325AbhCaQst (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 31 Mar 2021 12:48:49 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4F9XMM2Bz5z9txhk;
-        Wed, 31 Mar 2021 18:48:47 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id kkYxGT-WVj0t; Wed, 31 Mar 2021 18:48:47 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4F9XMM1SVbz9txhd;
-        Wed, 31 Mar 2021 18:48:47 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5E7818B828;
-        Wed, 31 Mar 2021 18:48:48 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id POr98gdHDeS2; Wed, 31 Mar 2021 18:48:48 +0200 (CEST)
-Received: from po16121vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E32198B80D;
-        Wed, 31 Mar 2021 18:48:47 +0200 (CEST)
-Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id B581D67641; Wed, 31 Mar 2021 16:48:47 +0000 (UTC)
-Message-Id: <1a15495f80ec19a87b16cf874dbf7c3fa5ec40fe.1617209142.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <cover.1617209141.git.christophe.leroy@csgroup.eu>
-References: <cover.1617209141.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH RESEND v1 4/4] powerpc/vdso: Add support for time namespaces
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        dima@arista.com, avagin@gmail.com, arnd@arndb.de,
-        tglx@linutronix.de, vincenzo.frascino@arm.com, luto@kernel.org,
-        linux-arch@vger.kernel.org
-Date:   Wed, 31 Mar 2021 16:48:47 +0000 (UTC)
+        id S234238AbhCaQui (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Mar 2021 12:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234035AbhCaQuZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Mar 2021 12:50:25 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E078C06174A
+        for <linux-arch@vger.kernel.org>; Wed, 31 Mar 2021 09:50:25 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 68-20020a9d0f4a0000b02901b663e6258dso19511380ott.13
+        for <linux-arch@vger.kernel.org>; Wed, 31 Mar 2021 09:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rdpwslgy7i3fT+uqHNLqy9H/4PdpXsKpQtKlUmrnWNs=;
+        b=Ic5OrjlK2s8S56gjj/cC3LJo+Zd6eYLbKKzA9nlhzS+DGhcnENAp5/sTGyrer47MYA
+         9jRyxQ86yp9rpPZ+tUn/+kXJz+U2C1UJHAiobjQr0bYNm0bDVbAvJ2SmLRgxGgtbkWax
+         VfSD5oIAMK3Hx3COMA4PLq4kf3nVuHSkPCetmASTDasMGzABVpnrNEJMtT4fDSIlQ/HX
+         iUsEE4faTm3L8AODBS5Ae5F6V27fU+ZyZ7iJgB08v3kNjQxxdARgvkfaCOCXGGq64upm
+         +/9NqEPLZlMVahIuuJfiQ6J+ki3DNXHGCitT/FhDo0DHZ1XJTabKI51qyEAN9ZfSspXa
+         3+pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rdpwslgy7i3fT+uqHNLqy9H/4PdpXsKpQtKlUmrnWNs=;
+        b=h6Txw/edvjrVB5jEZKkgyn7zlIg6AUKcTAo4CmnaQSqu0uLKpVnKuCXmtg1XgxLuxa
+         jXdQvdKVk7+3W+01r6IYDmTlKAbRdpgnxZZKsOAY2jipxUKNz9C5t5O03yQrIQ+vK4SU
+         B5AJt7udgqWajbI52SP16PC/U+7oPawNuZ9MOmxUhypcxK3W1uviPNkD2Hskk15fLmjX
+         d9Lbz5umkyawAiq5URLNMNFPYZePtGXjtrwLe+1qnaeB/P44IVOW+8r2+nNem23EjznK
+         92vHC67q7Zz0oKLPkLWQixhmOnD5CkwsojScSl6MyuOz5Bcuk+pIDAccr+xY1Gnv076W
+         MYvA==
+X-Gm-Message-State: AOAM530RN3+kaVgTjuVXN9fvWgGHeZOyD9arFm4vvvOLcq4oJN63+xgf
+        hZFStrlQiVHzDhM2kLo+nadjfNuXKXeAFdCvM83hPA==
+X-Google-Smtp-Source: ABdhPJwb4gtrTABbnL6uQcyrjzA0brdgMtdN+E7/WammKTa93I0urg9baMlbzu4LK+C3GslQkiMyIoYkVbC7IqUTLbQ=
+X-Received: by 2002:a05:6830:148c:: with SMTP id s12mr3484254otq.251.1617209424896;
+ Wed, 31 Mar 2021 09:50:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210324112503.623833-1-elver@google.com> <20210324112503.623833-7-elver@google.com>
+ <YFxGb+QHEumZB6G8@elver.google.com> <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
+ <CANpmjNOPJNhJ2L7cxrvf__tCZpy=+T1nBotKmzr2xMJypd-oJQ@mail.gmail.com> <YGSMXJvLBpQOm3WV@hirez.programming.kicks-ass.net>
+In-Reply-To: <YGSMXJvLBpQOm3WV@hirez.programming.kicks-ass.net>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 31 Mar 2021 18:50:12 +0200
+Message-ID: <CANpmjNPGmzzg-uv3DGZ+1M+nDNy3WiFU7g3u_CzR-GBju+1Z_Q@mail.gmail.com>
+Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian@brauner.io>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Matt Morehouse <mascasa@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Ian Rogers <irogers@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds the necessary glue to provide time namespaces.
+On Wed, 31 Mar 2021 at 16:51, Peter Zijlstra <peterz@infradead.org> wrote:
+> On Wed, Mar 31, 2021 at 02:32:58PM +0200, Marco Elver wrote:
+> > On Mon, 29 Mar 2021 at 14:07, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > > (and we might already have a problem on some architectures where there
+> > > can be significant time between these due to not having
+> > > arch_irq_work_raise(), so ideally we ought to double check current in
+> > > your case)
+> >
+> > I missed this bit -- just to verify: here we want to check that
+> > event->ctx->task == current, in case the the irq_work runs when the
+> > current task has already been replaced. Correct?
+>
+> Yeah, just not sure what a decent failure would be, silent ignore seems
+> undesired, maybe WARN and archs that can trigger it get to fix it ?
 
-Things are mainly copied from ARM64.
+I'll go with a WARN and add a comment.
 
-__arch_get_timens_vdso_data() calculates timens vdso data position
-based on the vdso data position, knowing it is the next page in vvar.
-This avoids having to redo the mflr/bcl/mflr/mtlr dance to locate
-the page relative to running code position.
+This also revealed there should be a requirement that sigtrap events
+must be associated with a task (syzkaller managed to trigger the
+warning for cpu events).
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/Kconfig                         |   3 +-
- arch/powerpc/include/asm/vdso/gettimeofday.h |  10 ++
- arch/powerpc/include/asm/vdso_datapage.h     |   2 -
- arch/powerpc/kernel/vdso.c                   | 116 ++++++++++++++++---
- arch/powerpc/kernel/vdso32/vdso32.lds.S      |   2 +-
- arch/powerpc/kernel/vdso64/vdso64.lds.S      |   2 +-
- 6 files changed, 114 insertions(+), 21 deletions(-)
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index c1344c05226c..71daff5f15d5 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -172,6 +172,7 @@ config PPC
- 	select GENERIC_CPU_AUTOPROBE
- 	select GENERIC_CPU_VULNERABILITIES	if PPC_BARRIER_NOSPEC
- 	select GENERIC_EARLY_IOREMAP
-+	select GENERIC_GETTIMEOFDAY
- 	select GENERIC_IRQ_SHOW
- 	select GENERIC_IRQ_SHOW_LEVEL
- 	select GENERIC_PCI_IOMAP		if PCI
-@@ -179,7 +180,7 @@ config PPC
- 	select GENERIC_STRNCPY_FROM_USER
- 	select GENERIC_STRNLEN_USER
- 	select GENERIC_TIME_VSYSCALL
--	select GENERIC_GETTIMEOFDAY
-+	select GENERIC_VDSO_TIME_NS
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_HUGE_VMAP		if PPC_BOOK3S_64 && PPC_RADIX_MMU
- 	select HAVE_ARCH_JUMP_LABEL
-diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
-index d453e725c79f..e448df1dd071 100644
---- a/arch/powerpc/include/asm/vdso/gettimeofday.h
-+++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_POWERPC_VDSO_GETTIMEOFDAY_H
- #define _ASM_POWERPC_VDSO_GETTIMEOFDAY_H
- 
-+#include <asm/page.h>
-+
- #ifdef __ASSEMBLY__
- 
- #include <asm/ppc_asm.h>
-@@ -153,6 +155,14 @@ static __always_inline u64 __arch_get_hw_counter(s32 clock_mode,
- 
- const struct vdso_data *__arch_get_vdso_data(void);
- 
-+#ifdef CONFIG_TIME_NS
-+static __always_inline
-+const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_data *vd)
-+{
-+	return (void *)vd + PAGE_SIZE;
-+}
-+#endif
-+
- static inline bool vdso_clocksource_ok(const struct vdso_data *vd)
- {
- 	return true;
-diff --git a/arch/powerpc/include/asm/vdso_datapage.h b/arch/powerpc/include/asm/vdso_datapage.h
-index 3f958ecf2beb..a585c8e538ff 100644
---- a/arch/powerpc/include/asm/vdso_datapage.h
-+++ b/arch/powerpc/include/asm/vdso_datapage.h
-@@ -107,9 +107,7 @@ extern struct vdso_arch_data *vdso_data;
- 	bcl	20, 31, .+4
- 999:
- 	mflr	\ptr
--#if CONFIG_PPC_PAGE_SHIFT > 14
- 	addis	\ptr, \ptr, (_vdso_datapage - 999b)@ha
--#endif
- 	addi	\ptr, \ptr, (_vdso_datapage - 999b)@l
- .endm
- 
-diff --git a/arch/powerpc/kernel/vdso.c b/arch/powerpc/kernel/vdso.c
-index b14907209822..717f2c9a7573 100644
---- a/arch/powerpc/kernel/vdso.c
-+++ b/arch/powerpc/kernel/vdso.c
-@@ -18,6 +18,7 @@
- #include <linux/security.h>
- #include <linux/memblock.h>
- #include <linux/syscalls.h>
-+#include <linux/time_namespace.h>
- #include <vdso/datapage.h>
- 
- #include <asm/syscall.h>
-@@ -50,6 +51,12 @@ static union {
- } vdso_data_store __page_aligned_data;
- struct vdso_arch_data *vdso_data = &vdso_data_store.data;
- 
-+enum vvar_pages {
-+	VVAR_DATA_PAGE_OFFSET,
-+	VVAR_TIMENS_PAGE_OFFSET,
-+	VVAR_NR_PAGES,
-+};
-+
- static int vdso_mremap(const struct vm_special_mapping *sm, struct vm_area_struct *new_vma,
- 		       unsigned long text_size)
- {
-@@ -73,8 +80,12 @@ static int vdso64_mremap(const struct vm_special_mapping *sm, struct vm_area_str
- 	return vdso_mremap(sm, new_vma, &vdso64_end - &vdso64_start);
- }
- 
-+static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
-+			     struct vm_area_struct *vma, struct vm_fault *vmf);
-+
- static struct vm_special_mapping vvar_spec __ro_after_init = {
- 	.name = "[vvar]",
-+	.fault = vvar_fault,
- };
- 
- static struct vm_special_mapping vdso32_spec __ro_after_init = {
-@@ -87,6 +98,94 @@ static struct vm_special_mapping vdso64_spec __ro_after_init = {
- 	.mremap = vdso64_mremap,
- };
- 
-+#ifdef CONFIG_TIME_NS
-+struct vdso_data *arch_get_vdso_data(void *vvar_page)
-+{
-+	return ((struct vdso_arch_data *)vvar_page)->data;
-+}
-+
-+/*
-+ * The vvar mapping contains data for a specific time namespace, so when a task
-+ * changes namespace we must unmap its vvar data for the old namespace.
-+ * Subsequent faults will map in data for the new namespace.
-+ *
-+ * For more details see timens_setup_vdso_data().
-+ */
-+int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
-+{
-+	struct mm_struct *mm = task->mm;
-+	struct vm_area_struct *vma;
-+
-+	mmap_read_lock(mm);
-+
-+	for (vma = mm->mmap; vma; vma = vma->vm_next) {
-+		unsigned long size = vma->vm_end - vma->vm_start;
-+
-+		if (vma_is_special_mapping(vma, &vvar_spec))
-+			zap_page_range(vma, vma->vm_start, size);
-+	}
-+
-+	mmap_read_unlock(mm);
-+	return 0;
-+}
-+
-+static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
-+{
-+	if (likely(vma->vm_mm == current->mm))
-+		return current->nsproxy->time_ns->vvar_page;
-+
-+	/*
-+	 * VM_PFNMAP | VM_IO protect .fault() handler from being called
-+	 * through interfaces like /proc/$pid/mem or
-+	 * process_vm_{readv,writev}() as long as there's no .access()
-+	 * in special_mapping_vmops.
-+	 * For more details check_vma_flags() and __access_remote_vm()
-+	 */
-+	WARN(1, "vvar_page accessed remotely");
-+
-+	return NULL;
-+}
-+#else
-+static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
-+{
-+	return NULL;
-+}
-+#endif
-+
-+static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
-+			     struct vm_area_struct *vma, struct vm_fault *vmf)
-+{
-+	struct page *timens_page = find_timens_vvar_page(vma);
-+	unsigned long pfn;
-+
-+	switch (vmf->pgoff) {
-+	case VVAR_DATA_PAGE_OFFSET:
-+		if (timens_page)
-+			pfn = page_to_pfn(timens_page);
-+		else
-+			pfn = virt_to_pfn(vdso_data);
-+		break;
-+#ifdef CONFIG_TIME_NS
-+	case VVAR_TIMENS_PAGE_OFFSET:
-+		/*
-+		 * If a task belongs to a time namespace then a namespace
-+		 * specific VVAR is mapped with the VVAR_DATA_PAGE_OFFSET and
-+		 * the real VVAR page is mapped with the VVAR_TIMENS_PAGE_OFFSET
-+		 * offset.
-+		 * See also the comment near timens_setup_vdso_data().
-+		 */
-+		if (!timens_page)
-+			return VM_FAULT_SIGBUS;
-+		pfn = virt_to_pfn(vdso_data);
-+		break;
-+#endif /* CONFIG_TIME_NS */
-+	default:
-+		return VM_FAULT_SIGBUS;
-+	}
-+
-+	return vmf_insert_pfn(vma, vmf->address, pfn);
-+}
-+
- /*
-  * This is called from binfmt_elf, we create the special vma for the
-  * vDSO and insert it into the mm struct tree
-@@ -95,7 +194,7 @@ static int __arch_setup_additional_pages(struct linux_binprm *bprm, int uses_int
- {
- 	unsigned long vdso_size, vdso_base, mappings_size;
- 	struct vm_special_mapping *vdso_spec;
--	unsigned long vvar_size = PAGE_SIZE;
-+	unsigned long vvar_size = VVAR_NR_PAGES * PAGE_SIZE;
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
- 
-@@ -266,19 +365,6 @@ static struct page ** __init vdso_setup_pages(void *start, void *end)
- 	return pagelist;
- }
- 
--static struct page ** __init vvar_setup_pages(void)
--{
--	struct page **pagelist;
--
--	/* .pages is NULL-terminated */
--	pagelist = kcalloc(2, sizeof(struct page *), GFP_KERNEL);
--	if (!pagelist)
--		panic("%s: Cannot allocate page list for VVAR", __func__);
--
--	pagelist[0] = virt_to_page(vdso_data);
--	return pagelist;
--}
--
- static int __init vdso_init(void)
- {
- #ifdef CONFIG_PPC64
-@@ -317,8 +403,6 @@ static int __init vdso_init(void)
- 	if (IS_ENABLED(CONFIG_PPC64))
- 		vdso64_spec.pages = vdso_setup_pages(&vdso64_start, &vdso64_end);
- 
--	vvar_spec.pages = vvar_setup_pages();
--
- 	smp_wmb();
- 
- 	return 0;
-diff --git a/arch/powerpc/kernel/vdso32/vdso32.lds.S b/arch/powerpc/kernel/vdso32/vdso32.lds.S
-index a4b806b0d618..58e0099f70f4 100644
---- a/arch/powerpc/kernel/vdso32/vdso32.lds.S
-+++ b/arch/powerpc/kernel/vdso32/vdso32.lds.S
-@@ -17,7 +17,7 @@ ENTRY(_start)
- 
- SECTIONS
- {
--	PROVIDE(_vdso_datapage = . - PAGE_SIZE);
-+	PROVIDE(_vdso_datapage = . - 2 * PAGE_SIZE);
- 	. = SIZEOF_HEADERS;
- 
- 	.hash          	: { *(.hash) }			:text
-diff --git a/arch/powerpc/kernel/vdso64/vdso64.lds.S b/arch/powerpc/kernel/vdso64/vdso64.lds.S
-index 2f3c359cacd3..0288cad428b0 100644
---- a/arch/powerpc/kernel/vdso64/vdso64.lds.S
-+++ b/arch/powerpc/kernel/vdso64/vdso64.lds.S
-@@ -17,7 +17,7 @@ ENTRY(_start)
- 
- SECTIONS
- {
--	PROVIDE(_vdso_datapage = . - PAGE_SIZE);
-+	PROVIDE(_vdso_datapage = . - 2 * PAGE_SIZE);
- 	. = SIZEOF_HEADERS;
- 
- 	.hash		: { *(.hash) }			:text
--- 
-2.25.0
-
+Thanks,
+-- Marco
