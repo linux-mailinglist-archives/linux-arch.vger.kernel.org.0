@@ -2,139 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 432A1350213
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Mar 2021 16:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C913A35023D
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Mar 2021 16:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235890AbhCaOYT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Mar 2021 10:24:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36172 "EHLO mail.kernel.org"
+        id S235957AbhCaObt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Mar 2021 10:31:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43552 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235452AbhCaOX7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 31 Mar 2021 10:23:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 725C060FED;
-        Wed, 31 Mar 2021 14:23:50 +0000 (UTC)
+        id S235630AbhCaObo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 31 Mar 2021 10:31:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 01F3760FF0;
+        Wed, 31 Mar 2021 14:31:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617200639;
-        bh=MKND8RUjXo0TsNaafQ2pFvm3xr35TmSoHeHO5Oj9xjQ=;
+        s=k20201202; t=1617201104;
+        bh=Oq2p2++lqOERCPM++AATk5Rdw/3Ja6gaVMhRgPIzPF0=;
         h=From:To:Cc:Subject:Date:From;
-        b=TAXb6eUsGCa4pdiVCqqKZnGfljZXt9haax8xWlFgCI3e0unvgRQx8xBTVeRrFGV/q
-         ifZGF5satsq3w54m9YLloJlD4yd2NX9uvO/KNJ8oESnJDgML/1NhMS+UOSZqrNVaVB
-         LOeHARVji+rKirnnqECw1FuhzLstxw2Vju9F73YHNEp4DrZmDImtmvzWpwBG3HHmkU
-         gyTLq73p2b/dG60fDAuaUlJ92XmMV6XhiJLMiNEc5a1fHlv3Qz8pkdKafJ7VR5xJgS
-         Ch6PZXwz4Jdc6b/Yk37ku10IPVem2+6nVLkRC8BEnQFfEbcLU9I3SOjITDFAaL1C8C
-         nZikeyOe+Fp1w==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: [PATCH] memfd_secret: use unsigned int rather than long as syscall flags type
-Date:   Wed, 31 Mar 2021 17:23:45 +0300
-Message-Id: <20210331142345.27532-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        b=nzY/wb74M0jYfXHnZiSzoI4o7pq5Y3fTkzio1WdfkdRKufUohKQwkm1PBLN3tufHE
+         9OgAOpE32h2+T9nnF1ZCPS1coRoUrCzNA6DyKMuNSxpqkRqMIdROAGSe2CoLT6u0u0
+         /1h66strn7saF1NEJrq8/A+Hy2dp6ib8IsgmKIVMt9rrPFl0WEWvgcqy/N+E6U5hwm
+         TGkr8KWwp9XlnInAw2drOXo7N61mG3GRNZ4E45pXzIx/rRrUYdKrtzVzakE1zxYrUT
+         pBm1qXLMVF5/zB174lV3VS47Fv+LLoFhQ33oZLj5e8FJszP+LGNs4UTY3rumbNQKgY
+         KMQvZq5datBQg==
+From:   guoren@kernel.org
+To:     guoren@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH v6 0/9] riscv: Add qspinlock/qrwlock
+Date:   Wed, 31 Mar 2021 14:30:31 +0000
+Message-Id: <1617201040-83905-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Yuri Norov says:
+Current riscv is still using baby spinlock implementation. It'll cause
+fairness and cache line bouncing problems. Many people are involved
+and pay the efforts to improve it:
 
-  If parameter size is the same for native and compat ABIs, we may
-  wire a syscall made by compat client to native handler. This is
-  true for unsigned int, but not true for unsigned long or pointer.
+ - The first version of patch was made in 2019.1:
+   https://lore.kernel.org/linux-riscv/20190211043829.30096-1-michaeljclark@mac.com/#r
 
-  That's why I suggest using unsigned int and so avoid creating compat
-  entry point.
+ - The second version was made in 2020.11:
+   https://lore.kernel.org/linux-riscv/1606225437-22948-2-git-send-email-guoren@kernel.org/
 
-Use unsigned int as the type of the flags parameter in memfd_secret()
-system call.
+ - A good discussion at Platform HSC.2021-03-08:
+   https://drive.google.com/drive/folders/1ooqdnIsYx7XKor5O1XTtM6D1CHp4hc0p
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
+ - A good discussion on V4 in mailling list:
+   https://lore.kernel.org/linux-riscv/1616868399-82848-1-git-send-email-guoren@kernel.org/T/#t
 
-@Andrew,
-The patch is vs v5.12-rc5-mmots-2021-03-30-23, I'd appreciate if it would
-be added as a fixup to the memfd_secret series.
+ - Openrisc's maintainer want to implement arch_cmpxchg infrastructure.
+   https://lore.kernel.org/linux-riscv/1616868399-82848-1-git-send-email-guoren@kernel.org/T/#m11b712fb6a4fda043811b1f4c3d61446951ed65a
 
- include/linux/syscalls.h                  | 2 +-
- mm/secretmem.c                            | 2 +-
- tools/testing/selftests/vm/memfd_secret.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Hope your comments and Tested-by or Co-developed-by or Reviewed-by ...
 
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 49c93c906893..1a1b5d724497 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1050,7 +1050,7 @@ asmlinkage long sys_landlock_create_ruleset(const struct landlock_ruleset_attr _
- asmlinkage long sys_landlock_add_rule(int ruleset_fd, enum landlock_rule_type rule_type,
- 		const void __user *rule_attr, __u32 flags);
- asmlinkage long sys_landlock_restrict_self(int ruleset_fd, __u32 flags);
--asmlinkage long sys_memfd_secret(unsigned long flags);
-+asmlinkage long sys_memfd_secret(unsigned int flags);
- 
- /*
-  * Architecture-specific system calls
-diff --git a/mm/secretmem.c b/mm/secretmem.c
-index f2ae3f32a193..3b1ba3991964 100644
---- a/mm/secretmem.c
-+++ b/mm/secretmem.c
-@@ -199,7 +199,7 @@ static struct file *secretmem_file_create(unsigned long flags)
- 	return file;
- }
- 
--SYSCALL_DEFINE1(memfd_secret, unsigned long, flags)
-+SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
- {
- 	struct file *file;
- 	int fd, err;
-diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
-index c878c2b841fc..2462f52e9c96 100644
---- a/tools/testing/selftests/vm/memfd_secret.c
-+++ b/tools/testing/selftests/vm/memfd_secret.c
-@@ -38,7 +38,7 @@ static unsigned long page_size;
- static unsigned long mlock_limit_cur;
- static unsigned long mlock_limit_max;
- 
--static int memfd_secret(unsigned long flags)
-+static int memfd_secret(unsigned int flags)
- {
- 	return syscall(__NR_memfd_secret, flags);
- }
+Let's kick the qspinlock into riscv right now (Also for the
+architecture which hasn't xchg16 atomic instruction.)
+
+Change V6:
+ - Add  ticket-lock for riscv, default is qspinlock
+ - Keep ticket-lock for csky,  default is ticketlock
+ - Using smp_cond_load for riscv ticket-lock
+ - Optimize csky ticketlock with smp_cond_load, store_release
+ - Add PPC_LBARX_LWARX for powerpc 
+
+Change V5:
+ - Fixup #endif comment typo by Waiman
+ - Remove cmpxchg coding convention patches which will get into a
+   separate patchset later by Arnd's advice
+ - Try to involve more architectures in the discussion
+
+Change V4:
+ - Remove custom sub-word xchg implementation
+ - Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32 in locking/qspinlock
+
+Change V3:
+ - Coding convention by Peter Zijlstra's advices
+
+Change V2:
+ - Coding convention in cmpxchg.h
+ - Re-implement short xchg
+ - Remove char & cmpxchg implementations
+
+Guo Ren (8):
+  locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+  riscv: locks: Introduce ticket-based spinlock implementation
+  csky: locks: Optimize coding convention
+  csky: Convert custom spinlock/rwlock to generic qspinlock/qrwlock
+  openrisc: qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+  sparc: qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+  xtensa: qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+  powerpc/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+
+Michael Clark (1):
+  riscv: Convert custom spinlock/rwlock to generic qspinlock/qrwlock
+
+ arch/csky/Kconfig                       |   8 ++
+ arch/csky/include/asm/Kbuild            |   2 +
+ arch/csky/include/asm/spinlock.h        |  15 +--
+ arch/csky/include/asm/spinlock_types.h  |   4 +
+ arch/openrisc/Kconfig                   |   1 +
+ arch/powerpc/Kconfig                    |   1 +
+ arch/riscv/Kconfig                      |   8 ++
+ arch/riscv/include/asm/Kbuild           |   3 +
+ arch/riscv/include/asm/spinlock.h       | 158 +++++++++---------------
+ arch/riscv/include/asm/spinlock_types.h |  26 ++--
+ arch/sparc/Kconfig                      |   1 +
+ arch/xtensa/Kconfig                     |   1 +
+ kernel/Kconfig.locks                    |   3 +
+ kernel/locking/qspinlock.c              |  46 +++----
+ 14 files changed, 142 insertions(+), 135 deletions(-)
+
 -- 
-2.28.0
+2.17.1
 
