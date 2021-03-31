@@ -2,164 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1BB3502C9
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Mar 2021 16:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B8F3502FF
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Mar 2021 17:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235114AbhCaOyE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Mar 2021 10:54:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47643 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236150AbhCaOxp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 31 Mar 2021 10:53:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617202422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XZEKE6hBaJr4eywpWwM7diien2WEI7hK6/ALRAO0X7o=;
-        b=gb7P9Y83Phlll0xSC9w6ag/SPoP0hwnx1ER/1BzH9w8zshFDczdj9W1NXgffEBUerE2XMa
-        qjimVeIC71TmEtpz6roI1RETLS9nYs55A9wt10UkFSmD8sIblU1Jnan+49DTRsnZmU+vve
-        Es3PIxugSa6amr6KT2/kwrZ18V3ou80=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-255-q9s5QEWiO9Oyky6hKm6VYA-1; Wed, 31 Mar 2021 10:53:37 -0400
-X-MC-Unique: q9s5QEWiO9Oyky6hKm6VYA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9F98A612A3;
-        Wed, 31 Mar 2021 14:53:28 +0000 (UTC)
-Received: from [10.36.113.60] (ovpn-113-60.ams2.redhat.com [10.36.113.60])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 17D9910013D7;
-        Wed, 31 Mar 2021 14:53:16 +0000 (UTC)
-Subject: Re: [PATCH] memfd_secret: use unsigned int rather than long as
- syscall flags type
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-References: <20210331142345.27532-1-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <516d5d41-8d4a-7519-e88e-e16747e993c9@redhat.com>
-Date:   Wed, 31 Mar 2021 16:53:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S236150AbhCaPLT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Mar 2021 11:11:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53242 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236057AbhCaPLI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 31 Mar 2021 11:11:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B16960FD7;
+        Wed, 31 Mar 2021 15:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617203467;
+        bh=TbOY0j6r4pK8GJkDQSSBT0PG2JRtiy2xv/ZAq0i48Ss=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hdH3tDlHe+07OFGfYhY+WigjDnxq+BZOrIr3z28vnHUCREYXNBXiiyfLMq45Gz4KD
+         OXTKoAe6fIzf39nk/ohjZVjQ1itgFk8Qp7wtUj5WoeoEHQro70UWqsoWoJxe7re/0Y
+         6R7//wzNDqhwwgl4SytvcYDcdeHl4EdVx3OUPhvRV4uVo1SzXuOU4Knk7H0MNCXtA/
+         S/GGFBx9Rhaatf9dcX1UnKeh3p0W49ISNoSuBRj7iXZEP5EOYSi7/qExjdDebJCO7T
+         CsiZ2SSZkKJBL9FYKokkMNDMbDG5dbZalbZvz1oMcfS4EMnDrD86Djzl8IhGuG8QcH
+         qBZg0qd+DfMzQ==
+Received: by mail-lf1-f41.google.com with SMTP id i26so29574541lfl.1;
+        Wed, 31 Mar 2021 08:11:07 -0700 (PDT)
+X-Gm-Message-State: AOAM533ys/yWhw9g0+76CvOOgKo9WYHiKPHC1D0Rfj8y6wgA5pt7aEN9
+        9TjrXgH4VoISKIlztXVYU8wihmb6cfGQPB73VL8=
+X-Google-Smtp-Source: ABdhPJxs/JOsMnXbAvQoHRYQUiHPUCi/rrjdiOo3Uk29mwIYM4PTu1vWQ44R+zMcgoxUlGYwTQK+40BUJaSfUaObY3M=
+X-Received: by 2002:a05:6512:3709:: with SMTP id z9mr2415095lfr.557.1617203465685;
+ Wed, 31 Mar 2021 08:11:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210331142345.27532-1-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+References: <1616868399-82848-4-git-send-email-guoren@kernel.org>
+ <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net> <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
+ <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net> <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net> <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
+ <YGNNCEAMSWbBU+hd@hirez.programming.kicks-ass.net> <20210330223514.GE1171117@lianli.shorne-pla.net>
+ <CAK8P3a0hj2pYr-CuNJkjO==RafZ=J+6kCo4HTWEwvvRXPcngJA@mail.gmail.com> <20210331123107.GF1171117@lianli.shorne-pla.net>
+In-Reply-To: <20210331123107.GF1171117@lianli.shorne-pla.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 31 Mar 2021 23:10:53 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRZOFL_LECFcg6nEzNaDA_MR4dhxygFwm1_sDKY9CzBPA@mail.gmail.com>
+Message-ID: <CAJF2gTRZOFL_LECFcg6nEzNaDA_MR4dhxygFwm1_sDKY9CzBPA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Anup Patel <anup@brainfault.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 31.03.21 16:23, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> Yuri Norov says:
-> 
->    If parameter size is the same for native and compat ABIs, we may
->    wire a syscall made by compat client to native handler. This is
->    true for unsigned int, but not true for unsigned long or pointer.
-> 
->    That's why I suggest using unsigned int and so avoid creating compat
->    entry point.
-> 
-> Use unsigned int as the type of the flags parameter in memfd_secret()
-> system call.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
-> 
-> @Andrew,
-> The patch is vs v5.12-rc5-mmots-2021-03-30-23, I'd appreciate if it would
-> be added as a fixup to the memfd_secret series.
-> 
->   include/linux/syscalls.h                  | 2 +-
->   mm/secretmem.c                            | 2 +-
->   tools/testing/selftests/vm/memfd_secret.c | 2 +-
->   3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index 49c93c906893..1a1b5d724497 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -1050,7 +1050,7 @@ asmlinkage long sys_landlock_create_ruleset(const struct landlock_ruleset_attr _
->   asmlinkage long sys_landlock_add_rule(int ruleset_fd, enum landlock_rule_type rule_type,
->   		const void __user *rule_attr, __u32 flags);
->   asmlinkage long sys_landlock_restrict_self(int ruleset_fd, __u32 flags);
-> -asmlinkage long sys_memfd_secret(unsigned long flags);
-> +asmlinkage long sys_memfd_secret(unsigned int flags);
->   
->   /*
->    * Architecture-specific system calls
-> diff --git a/mm/secretmem.c b/mm/secretmem.c
-> index f2ae3f32a193..3b1ba3991964 100644
-> --- a/mm/secretmem.c
-> +++ b/mm/secretmem.c
-> @@ -199,7 +199,7 @@ static struct file *secretmem_file_create(unsigned long flags)
->   	return file;
->   }
->   
-> -SYSCALL_DEFINE1(memfd_secret, unsigned long, flags)
-> +SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
->   {
->   	struct file *file;
->   	int fd, err;
-> diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
-> index c878c2b841fc..2462f52e9c96 100644
-> --- a/tools/testing/selftests/vm/memfd_secret.c
-> +++ b/tools/testing/selftests/vm/memfd_secret.c
-> @@ -38,7 +38,7 @@ static unsigned long page_size;
->   static unsigned long mlock_limit_cur;
->   static unsigned long mlock_limit_max;
->   
-> -static int memfd_secret(unsigned long flags)
-> +static int memfd_secret(unsigned int flags)
->   {
->   	return syscall(__NR_memfd_secret, flags);
->   }
-> 
+Hi Stafford,
 
-LGTM
+How do think add ARCH_USE_QUEUED_SPINLOCKS_XCHG32 in openrisc?
+
+https://lore.kernel.org/linux-riscv/1617201040-83905-7-git-send-email-guoren@kernel.org/T/#u
+
+On Wed, Mar 31, 2021 at 8:31 PM Stafford Horne <shorne@gmail.com> wrote:
+>
+> On Wed, Mar 31, 2021 at 09:23:27AM +0200, Arnd Bergmann wrote:
+> > On Wed, Mar 31, 2021 at 12:35 AM Stafford Horne <shorne@gmail.com> wrote:
+> > >
+> > > I just want to chime in here, there may be a better spot in the thread to
+> > > mention this but, for OpenRISC I did implement some generic 8/16-bit xchg code
+> > > which I have on my todo list somwhere to replace the other generic
+> > > implementations like that in mips.
+> > >
+> > >   arch/openrisc/include/asm/cmpxchg.h
+> > >
+> > > The idea would be that architectures just implement these methods:
+> > >
+> > >   long cmpxchg_u32(*ptr,old,new)
+> > >   long xchg_u32(*ptr,val)
+> > >
+> > > Then the rest of the generic header would implement cmpxchg.
+> >
+> > I like the idea of generalizing it a little further. I'd suggest staying a
+> > little closer to the existing naming here though, as we already have
+> > cmpxchg() for the type-agnostic version, and cmpxchg64() for the
+> > fixed-length 64-bit version.
+>
+> OK.
+>
+> > I think a nice interface between architecture-specific and architecture
+> > independent code would be to have architectures provide
+> > arch_cmpxchg32()/arch_xchg32() as the most basic version, as well
+> > as arch_cmpxchg8()/arch_cmpxchg16()/arch_xchg8()/arch_xchg16()
+> > if they have instructions for those.
+>
+> Thanks for the name suggestions, it makes it easier for me.
+>
+> > The common code can then build cmpxchg16()/xchg16() on top of
+> > either the 16-bit or the 32-bit primitives, and build the cmpxchg()/xchg()
+> > wrapper around those (or alternatively we can decide to have them
+> > only deal with fixed-32-bit and long/pointer sized atomics).
+>
+> Yeah, that was the idea.
+>
+> -Stafford
+
+
 
 -- 
-Thanks,
+Best Regards
+ Guo Ren
 
-David / dhildenb
-
+ML: https://lore.kernel.org/linux-csky/
