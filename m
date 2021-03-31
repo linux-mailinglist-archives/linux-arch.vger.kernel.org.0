@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0458E35025B
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Mar 2021 16:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE96E35026B
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Mar 2021 16:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236152AbhCaOc6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Mar 2021 10:32:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44196 "EHLO mail.kernel.org"
+        id S236050AbhCaOd0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Mar 2021 10:33:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236078AbhCaOcs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 31 Mar 2021 10:32:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6931060FF3;
-        Wed, 31 Mar 2021 14:32:40 +0000 (UTC)
+        id S236076AbhCaOc4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 31 Mar 2021 10:32:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 012EC60FF1;
+        Wed, 31 Mar 2021 14:32:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617201168;
-        bh=sUpQ42V7/BeYJXo8xKilrJhdJzUrsLncMVt8E/NbmTI=;
+        s=k20201202; t=1617201176;
+        bh=Ot/5PmXwS11uulWq3qWA2topEHV4IQyVTJcB7EIJEto=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GCVYBSdWsYiqvYH5oYGVId4/MzMe7NvqmPl9pDexAmFGD5cqNZXH9o4HF+vhiGkPO
-         8FwMZKnRdTNt/mGm5FdZTRJq1SejRG6Dxn8BSX9Q9sF8/FJERgS/Joq1pLuXw/+SpX
-         fYWvWFagOvEbTBlo/Pm13nwT+dH76caJG6x5oxHY56TU/7XMud7W4lSCBA+Ztvbs94
-         c0JgeKblXHOXlNsS4FEsCYE4cla47L5ne5HZ+MMUdf+o+9w1vaKOmt595yXPl7W+Hh
-         KH/sOLUZchvSdfTn72MXz6kpPr/LWwx757q1Byt0vVOGqX8v9929SUwkrE66Ui0awe
-         zbLNNqBSjJGpA==
+        b=K4mj3Ucq0o81O2XyVG3hmXxx3WMjl1D+IiWQy6y3glymXCyXz7HvUH0Y/fnYr9f1h
+         1wUUw0fx8O0SKe53NjW/bj/Ou5QXwaPc1g1UvmKUHfz4nwx525LvJmbfcYf5RgZhWk
+         XZR9y8fM+4DYoaAJXNL2jgLdlXBwoOnIc/jSJ3r/9sKttJ2VVol/puJBKAjtvOtqgj
+         YTwPsq2+RWCppmBEqhKeWazUtN2PGYkR30QcO8bTOPCiOzxjHuAOCNJtEBr/pnFukQ
+         2743V9mO+HynrrCRbhsuAOsY5f1+RMF3zawK3FR7K+l/QgZF57ChVKoxlykrytyZNk
+         r7q5BWtdFi1iw==
 From:   guoren@kernel.org
 To:     guoren@kernel.org
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -30,11 +30,13 @@ Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
         openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
         Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH v6 8/9] xtensa: qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Date:   Wed, 31 Mar 2021 14:30:39 +0000
-Message-Id: <1617201040-83905-9-git-send-email-guoren@kernel.org>
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: [PATCH v6 9/9] powerpc/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+Date:   Wed, 31 Mar 2021 14:30:40 +0000
+Message-Id: <1617201040-83905-10-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1617201040-83905-1-git-send-email-guoren@kernel.org>
 References: <1617201040-83905-1-git-send-email-guoren@kernel.org>
@@ -53,26 +55,30 @@ the semantic risk for atomic operations.
 This patch cancels the dependency of on qspinlock generic code on
 architecture's xchg16.
 
+Also no need when PPC_LBARX_LWARX is enabled, see the link below.
+
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
+Link: https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20201107032328.2454582-1-npiggin@gmail.com/
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
 ---
- arch/xtensa/Kconfig | 1 +
+ arch/powerpc/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 9ad6b7b82707..f19d780638f7 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -9,6 +9,7 @@ config XTENSA
- 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-+	select ARCH_USE_QUEUED_SPINLOCKS_XCHG32
- 	select ARCH_WANT_FRAME_POINTERS
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 386ae12d8523..6133ad51690e 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -151,6 +151,7 @@ config PPC
+ 	select ARCH_USE_CMPXCHG_LOCKREF		if PPC64
+ 	select ARCH_USE_QUEUED_RWLOCKS		if PPC_QUEUED_SPINLOCKS
+ 	select ARCH_USE_QUEUED_SPINLOCKS	if PPC_QUEUED_SPINLOCKS
++	select ARCH_USE_QUEUED_SPINLOCKS_XCHG32	if PPC_QUEUED_SPINLOCKS && !PPC_LBARX_LWARX
  	select ARCH_WANT_IPC_PARSE_VERSION
- 	select BUILDTIME_TABLE_SORT
+ 	select ARCH_WANT_IRQS_OFF_ACTIVATE_MM
+ 	select ARCH_WANT_LD_ORPHAN_WARN
 -- 
 2.17.1
 
