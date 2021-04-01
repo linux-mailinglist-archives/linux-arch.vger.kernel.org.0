@@ -2,230 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF1F35192D
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 19:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D758B351870
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 19:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbhDARv7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Apr 2021 13:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
+        id S234596AbhDARpu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Apr 2021 13:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236919AbhDARth (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Apr 2021 13:49:37 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46170C0617AB;
-        Thu,  1 Apr 2021 04:28:05 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id k8so1797603iop.12;
-        Thu, 01 Apr 2021 04:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=moOyGRcGHar9YNt0N/Y7uFjPvSME0sZl6mnpRsX5JvU=;
-        b=ifnqDCESEWCwygu7Q8TcEEjwG35Ap4TGL1lIxVlgSIHnbzmG25rF7VK74GW/oT/Lgh
-         2UJ9bIQNzSDOlkch2hOCYH1HpIqOco9idX9WVqPyouTWaS8Ou04kvDlzHghlRMp4jHPf
-         nskapKeDijNI6NmbdwMQ0kmLLDvSqDkg1MFJwvHTqGAGSsKLk5VXeqNC5Euy8zgxYvnF
-         O3TzXfeLmGd9cTk7Hw7vPqePTLusUXV5nmy1w7nHwPPWrDqSZAM1o5RCdXpXwBhAZ9SF
-         he5bn3R+I/nx5KU477ajaxMPDRxH3dbiHtmAvkpsU7i0mKguLtw3QMN4BcDqvQv0/j90
-         uHKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=moOyGRcGHar9YNt0N/Y7uFjPvSME0sZl6mnpRsX5JvU=;
-        b=kHhW+NJQO3z63t/oCc+6zGf8AhETEZabjnLpYw4FXB7iG35u2fc30tSO9+tVymtdeO
-         JCZR4QmFL2OiI2jMiJtoP2SMWn5RqjrP44sa28ft7G9tJTaiA4X9EHEWFqVA0Ar4mipk
-         n6hla3mMHMPc8TZH+MM0mvvKcI+23znEY2u5STX/UNw6u3ht/SqfNyPb+Ena2CRvWejR
-         +L/KpN+IHXcU89bDuES+8zB0zTOIsEPqvBIMHvMWov6IPyDqTLpzd327x/8S8uZ1ZOkD
-         DeRbmcYYbytKkn2lcyBYR8rLd6kSQpOZiIzqN7Rh2LMhQYGKexuX9LRYa46cXxvzx1tc
-         GxMg==
-X-Gm-Message-State: AOAM533BHM4sBB3om+ON/d6xRvL0Ngl+Z9InSujeZmgYvMPWUq852m7t
-        QmngFRiMURBi+ppQAVJTVqDd6RXKeWfiu1OMJGSClh+xhZrFLA==
-X-Google-Smtp-Source: ABdhPJxhpMPww1OveGSHxepFu4l+A0e2gZ/exiHFMOBtsrHDLLr9n61X8fXz/bnSkzdlVx94sCa1xegT1QRnmXoNsps=
-X-Received: by 2002:a05:6602:21cd:: with SMTP id c13mr6082518ioc.44.1617275764762;
- Thu, 01 Apr 2021 04:16:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
- <36db7be3-73b6-c822-02e8-13e3864b0463@xilinx.com> <CAMpxmJUv0iU0Ntmks1f6ThDAG6x_eJLYYCaDSjy+1Syedzc5dQ@mail.gmail.com>
- <DM6PR02MB53863852A28F782B0942ECD8AF7C9@DM6PR02MB5386.namprd02.prod.outlook.com>
-In-Reply-To: <DM6PR02MB53863852A28F782B0942ECD8AF7C9@DM6PR02MB5386.namprd02.prod.outlook.com>
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-Date:   Thu, 1 Apr 2021 16:45:52 +0530
-Message-ID: <CACG_h5q6P5NiNByttQ-NZvq8x3GCTKfSU=Yyywk7PcO6_=i2Mw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Michal Simek <michals@xilinx.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
+        with ESMTP id S234638AbhDARii (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Apr 2021 13:38:38 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8AAC035470;
+        Thu,  1 Apr 2021 06:16:42 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id D249442715;
+        Thu,  1 Apr 2021 13:16:32 +0000 (UTC)
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        Srinivas Goud <sgoud@xilinx.com>,
-        Srinivas Neeli <sneeli@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210304213902.83903-1-marcan@marcan.st>
+ <20210304213902.83903-17-marcan@marcan.st>
+ <20210324195742.GA13474@willie-the-truck>
+ <3564ed98-6ad6-7ddd-01d2-36d7f5af90e0@marcan.st>
+ <20210329120442.GA3636@willie-the-truck>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [RFT PATCH v3 16/27] irqchip/apple-aic: Add support for the Apple
+ Interrupt Controller
+Message-ID: <5ff8eef3-6943-d3c8-cd6f-3dcb44158fab@marcan.st>
+Date:   Thu, 1 Apr 2021 22:16:30 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20210329120442.GA3636@willie-the-truck>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 8:56 PM Srinivas Neeli <sneeli@xilinx.com> wrote:
->
-> Hi,
->
-> > -----Original Message-----
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > Sent: Friday, March 26, 2021 10:58 PM
-> > To: Michal Simek <michals@xilinx.com>
-> > Cc: Syed Nayyar Waris <syednwaris@gmail.com>; Srinivas Neeli
-> > <sneeli@xilinx.com>; Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com>; William Breathitt Gray
-> > <vilhelm.gray@gmail.com>; Arnd Bergmann <arnd@arndb.de>; Robert
-> > Richter <rrichter@marvell.com>; Linus Walleij <linus.walleij@linaro.org>;
-> > Masahiro Yamada <yamada.masahiro@socionext.com>; Andrew Morton
-> > <akpm@linux-foundation.org>; Zhang Rui <rui.zhang@intel.com>; Daniel
-> > Lezcano <daniel.lezcano@linaro.org>; Amit Kucheria
-> > <amit.kucheria@verdurent.com>; Linux-Arch <linux-arch@vger.kernel.org>;
-> > linux-gpio <linux-gpio@vger.kernel.org>; LKML <linux-
-> > kernel@vger.kernel.org>; arm-soc <linux-arm-kernel@lists.infradead.org>;
-> > linux-pm <linux-pm@vger.kernel.org>; Srinivas Goud <sgoud@xilinx.com>
-> > Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and
-> > _set_value
-> >
-> > On Mon, Mar 8, 2021 at 8:13 AM Michal Simek <michal.simek@xilinx.com>
-> > wrote:
-> > >
-> > >
-> > >
-> > > On 3/6/21 3:06 PM, Syed Nayyar Waris wrote:
-> > > > This patch reimplements the xgpio_set_multiple() function in
-> > > > drivers/gpio/gpio-xilinx.c to use the new generic functions:
-> > > > bitmap_get_value() and bitmap_set_value(). The code is now simpler
-> > > > to read and understand. Moreover, instead of looping for each bit in
-> > > > xgpio_set_multiple() function, now we can check each channel at a
-> > > > time and save cycles.
-> > > >
-> > > > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > > Cc: Michal Simek <michal.simek@xilinx.com>
-> > > > Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-> > > > Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
-> > > > ---
-> > > >  drivers/gpio/gpio-xilinx.c | 63
-> > > > +++++++++++++++++++-------------------
-> > > >  1 file changed, 32 insertions(+), 31 deletions(-)
-> > > >
-> > > > diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-> > > > index be539381fd82..8445e69cf37b 100644
-> > > > --- a/drivers/gpio/gpio-xilinx.c
-> > > > +++ b/drivers/gpio/gpio-xilinx.c
-> > > > @@ -15,6 +15,7 @@
-> > > >  #include <linux/of_device.h>
-> > > >  #include <linux/of_platform.h>
-> > > >  #include <linux/slab.h>
-> > > > +#include "gpiolib.h"
-> > > >
-> > > >  /* Register Offset Definitions */
-> > > >  #define XGPIO_DATA_OFFSET   (0x0)    /* Data register  */
-> > > > @@ -141,37 +142,37 @@ static void xgpio_set_multiple(struct
-> > > > gpio_chip *gc, unsigned long *mask,  {
-> > > >       unsigned long flags;
-> > > >       struct xgpio_instance *chip = gpiochip_get_data(gc);
-> > > > -     int index = xgpio_index(chip, 0);
-> > > > -     int offset, i;
-> > > > -
-> > > > -     spin_lock_irqsave(&chip->gpio_lock[index], flags);
-> > > > -
-> > > > -     /* Write to GPIO signals */
-> > > > -     for (i = 0; i < gc->ngpio; i++) {
-> > > > -             if (*mask == 0)
-> > > > -                     break;
-> > > > -             /* Once finished with an index write it out to the register */
-> > > > -             if (index !=  xgpio_index(chip, i)) {
-> > > > -                     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > -                                    index * XGPIO_CHANNEL_OFFSET,
-> > > > -                                    chip->gpio_state[index]);
-> > > > -                     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
-> > > > -                     index =  xgpio_index(chip, i);
-> > > > -                     spin_lock_irqsave(&chip->gpio_lock[index], flags);
-> > > > -             }
-> > > > -             if (__test_and_clear_bit(i, mask)) {
-> > > > -                     offset =  xgpio_offset(chip, i);
-> > > > -                     if (test_bit(i, bits))
-> > > > -                             chip->gpio_state[index] |= BIT(offset);
-> > > > -                     else
-> > > > -                             chip->gpio_state[index] &= ~BIT(offset);
-> > > > -             }
-> > > > -     }
-> > > > -
-> > > > -     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > -                    index * XGPIO_CHANNEL_OFFSET, chip->gpio_state[index]);
-> > > > -
-> > > > -     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
-> > > > +     u32 *const state = chip->gpio_state;
-> > > > +     unsigned int *const width = chip->gpio_width;
-> > > > +
-> > > > +     DECLARE_BITMAP(old, 64);
-> > > > +     DECLARE_BITMAP(new, 64);
-> > > > +     DECLARE_BITMAP(changed, 64);
-> > > > +
-> > > > +     spin_lock_irqsave(&chip->gpio_lock[0], flags);
-> > > > +     spin_lock(&chip->gpio_lock[1]);
-> > > > +
-> > > > +     bitmap_set_value(old, 64, state[0], width[0], 0);
-> > > > +     bitmap_set_value(old, 64, state[1], width[1], width[0]);
-> > > > +     bitmap_replace(new, old, bits, mask, gc->ngpio);
-> > > > +
-> > > > +     bitmap_set_value(old, 64, state[0], 32, 0);
-> > > > +     bitmap_set_value(old, 64, state[1], 32, 32);
-> > > > +     state[0] = bitmap_get_value(new, 0, width[0]);
-> > > > +     state[1] = bitmap_get_value(new, width[0], width[1]);
-> > > > +     bitmap_set_value(new, 64, state[0], 32, 0);
-> > > > +     bitmap_set_value(new, 64, state[1], 32, 32);
-> > > > +     bitmap_xor(changed, old, new, 64);
-> > > > +
-> > > > +     if (((u32 *)changed)[0])
-> > > > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET,
-> > > > +                             state[0]);
-> > > > +     if (((u32 *)changed)[1])
-> > > > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > +                             XGPIO_CHANNEL_OFFSET, state[1]);
-> > > > +
-> > > > +     spin_unlock(&chip->gpio_lock[1]);
-> > > > +     spin_unlock_irqrestore(&chip->gpio_lock[0], flags);
-> > > >  }
-> > > >
-> > > >  /**
-> > > >
-> > >
-> > > Srinivas N: Can you please test this code?
-> > >
-> > > Thanks,
-> > > Michal
-> >
-> > Hey, any chance of getting that Tested-by?
-> I tested patches with few modifications in code (spin_lock handling and merge conflict).
-> functionality wise it's working fine.
->
-> >
-> > Bart
+Hi Will,
 
-Hi Bartosz,
+On 29/03/2021 21.04, Will Deacon wrote:
+>> One CPU still needs to be able to mutate the flags of another CPU to fire an
+>> IPI; AIUI the per-cpu ops are *not* atomic for concurrent access by multiple
+>> CPUs, and in fact there is no API for that, only for "this CPU".
+> 
+> Huh, I really thought we had an API for that, but you're right. Oh well! But
+> I'd still suggest a per-cpu atomic_t in that case, rather than the array.
 
-May I please know the URL of the tree that you are using. I had been
-using the tree below for submitting this patchset on GPIO to you.
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
+Yeah, after digging into the per-cpu stuff earlier and understanding how 
+it works, I agree that a per-cpu atomic makes sense here. Switched it to 
+that (which simplified out a bunch of smp_processor_id() calls too). Thanks!
 
-I think I am using the wrong tree. On which tree should I base my
-patches on for my next  (v4) submission? Should I use the tree below?
-:
-https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+>>> I think a more idiomatic (and portable) way to do this would be to use
+>>> the relaxed accessors, but with smp_mb__after_atomic() between them. Do you
+>>> have a good reason for _not_ doing it like that?
+>>
+>> Not particularly, other than symmetry with the case below.
+> 
+> I think it would be better not to rely on arm64-specific ordering unless
+> there's a good reason to.
 
-Regards
-Syed Nayyar Waris
+Sounds reasonable, I'll switch to the barrier version.
+
+>> We do need the return data here, and the release semantics (or another
+>> barrier before it). But the read below can be made relaxed and a barrier
+>> used instead, and then the same patern above except with a plain
+>> atomic_or().
+> 
+> Yes, I think using atomic_fetch_or() followed by atomic_read() would be
+> best (obviously with the relevant comments!)
+
+atomic_fetch_or_release is sufficient here (atomic_fetch_or is stronger; 
+atomic_fetch_or_relaxed would not be strong enough as this needs to be 
+ordered after any writes prior to sending the IPI; in this case release 
+semantics also make logical sense).
+
+>> It is ordered, right? As the comment says, it "needs to be ordered after the
+>> aic_ic_write() above". atomic_fetch_andnot() is *supposed* to be fully
+>> ordered and that should include against the writel_relaxed() on
+>> AIC_IPI_FLAG. On ARM it turns out it's not quite fully ordered, but the
+>> acquire semantics of the read half are sufficient for this case, as they
+>> guarantee the flags are always read after the FIQ has been ACKed.
+> 
+> Sorry, I missed that the answer to my question was already written in the
+> comment. However, I'm still a bit unsure about whether the memory barriers
+> give you what you need here. The barrier in atomic_fetch_andnot() will
+> order the previous aic_ic_write(AIC_IPI_ACK) for the purposes of other
+> CPUs reading those locations, but it doesn't say anything about when the
+> interrupt controller actually changes state after the Ack.
+> 
+> Given that the AIC is mapped Device-nGnRnE, the Arm ARM offers:
+> 
+>    | Additionally, for Device-nGnRnE memory, a read or write of a Location
+>    | in a Memory-mapped peripheral that exhibits side-effects is complete
+>    | only when the read or write both:
+>    |
+>    | * Can begin to affect the state of the Memory-mapped peripheral.
+>    | * Can trigger all associated side-effects, whether they affect other
+>    |   peripheral devices, PEs, or memory.
+> 
+> so without AIC documentation I can't tell whether completion of the Ack write
+> just begins the process of an Ack (in which case we might need something like
+> a read-back), or whether the write response back from the AIC only occurs once
+> the Ack has taken effect. Any ideas?
+
+Ahh, you're talking about latency within AIC itself... I obviously don't 
+have an authoritative answer to this, though the hardware designer in me 
+wants to say this really ought to be single-cycle type stuff that isn't 
+internally pipelined in a way that would create races.
+
+I tried to set up an SMP test case for the atomic-to-AIC sequence in 
+m1n1, but unfortunately I couldn't hit the race window in deliberately 
+racy code (i.e. ack after clearing flags) without widening it even 
+further with at least one dummy load in between, and of course I didn't 
+experience any races with the proper code either.
+
+What I can say is that a simple set IPI; ack IPI (in adjacent str 
+instructions) sequence always yields a cleared IPI, and the converse 
+always yields a set IPI. So if there is latency to the operations it 
+seems it would at least be the same for sets and acks and would imply 
+readbacks block, which should still yield equivalently correct results. 
+But of course this is a single-CPU test, so it is not fully 
+representative of what could happen in an SMP scenario.
+
+At this point all I can say is I'm inclined to shrug and say we have no 
+evidence of this being something that can happen, and it shouldn't in 
+sane hardware, and hope for the best :-)
+
+Thanks,
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
