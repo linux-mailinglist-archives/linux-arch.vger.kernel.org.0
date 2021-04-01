@@ -2,119 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECFA350B3F
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 02:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CC1350C76
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 04:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbhDAAck (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Mar 2021 20:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S233030AbhDACP3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Mar 2021 22:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbhDAAcK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Mar 2021 20:32:10 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078F9C06175F;
-        Wed, 31 Mar 2021 17:32:10 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id v70so646451qkb.8;
-        Wed, 31 Mar 2021 17:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=R5eR+cvpKZq1WYNNc805w7v5z1Gu54WewjgBw3zPSZw=;
-        b=eG+/eqlEB+D/yCNe7zlVJgHe15xLKvk+EdruRzRsHl8qL/OhqO2s4dBJBxM54EXgOO
-         sCApJaxsKTtoojPLbTTSpuKyrigZD5/pmm9f7gujpq1eFmjn9AjMqHAclzQy+wdv/GxB
-         4wIWcjcGJff8bilTKqOLXpVLeDm1tNLF3MKReIcz0PpZ8BNPVGTJCvMsK2VIfftig54u
-         0fem+lyi70p1L/YcNcsux7loTpIg2DBQOuDqIMMEi9FFRdmLfiiJz8Fgf/O3TK414z5o
-         AmFmvH0rye2Uc2Vggamo66a6V0KRyb6Mtfm4M9V743MNySC13rw8n+2qN2nyjdZq19eQ
-         VOiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=R5eR+cvpKZq1WYNNc805w7v5z1Gu54WewjgBw3zPSZw=;
-        b=oV7RaU0hwnNM5VdEiLE8dlxtzNmrJGywCidJSHQgl/RJChpEhWHBU7RLv00it6BIAr
-         lS5cDPPaXOhhPL4UaPr/S33b1actGMkNCjnLPHAACyBgfspJxPCDbYBUbINXknqE80uJ
-         zrkcnOUkMW+8pbuGGBVpNgtt9czkursAic3YPbUnaRSNibg1RCWn82AxelY+ZiBpoE0V
-         cALnWd1aDH1UKy9MRx57IbS22Rg95DGv61I+l519zkd9zH0VeTe1o69Kuln+IqdOc8Ss
-         Asht2UQ/9yxQPVknyDK+ukbMek7rqyzKsAEh7ggYfqFPUO5wauqVTVM+FIj594OlJNy2
-         uFiw==
-X-Gm-Message-State: AOAM533mOU9lEzjr3DMOZclNVQg/HpCj0Pt1L1UbbJpk/6u7bjZgMJ43
-        sAFfhlxwWmMtgdjhQu0OQb4PntNtvkS3fw==
-X-Google-Smtp-Source: ABdhPJwZYb/UGumLv+aImCXZA08eHtGRinQM4tEe5XNBd32JW273HOB7CohLCLtXAs7On6YDaUZKOQ==
-X-Received: by 2002:a05:620a:1353:: with SMTP id c19mr6046144qkl.392.1617237128944;
-        Wed, 31 Mar 2021 17:32:08 -0700 (PDT)
-Received: from localhost ([207.98.216.60])
-        by smtp.gmail.com with ESMTPSA id d24sm2655513qko.54.2021.03.31.17.32.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Mar 2021 17:32:08 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-m68k@lists.linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 12/12] MAINTAINERS: Add entry for the bitmap API
-Date:   Wed, 31 Mar 2021 17:31:53 -0700
-Message-Id: <20210401003153.97325-13-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210401003153.97325-1-yury.norov@gmail.com>
-References: <20210401003153.97325-1-yury.norov@gmail.com>
+        with ESMTP id S232994AbhDACPV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Mar 2021 22:15:21 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD14C061574;
+        Wed, 31 Mar 2021 19:15:19 -0700 (PDT)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lRmr7-001X2U-Bm; Thu, 01 Apr 2021 02:14:45 +0000
+Date:   Thu, 1 Apr 2021 02:14:45 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH v31 07/12] landlock: Support filesystem access-control
+Message-ID: <YGUslUPwp85Zrp4t@zeniv-ca.linux.org.uk>
+References: <20210324191520.125779-1-mic@digikod.net>
+ <20210324191520.125779-8-mic@digikod.net>
+ <d2764451-8970-6cbd-e2bf-254a42244ffc@digikod.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <d2764451-8970-6cbd-e2bf-254a42244ffc@digikod.net>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add myself as maintainer for bitmap API and Andy and Rasmus as reviewers.
+On Wed, Mar 31, 2021 at 07:33:50PM +0200, Mickaël Salaün wrote:
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- MAINTAINERS | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+> > +static inline u64 unmask_layers(
+> > +		const struct landlock_ruleset *const domain,
+> > +		const struct path *const path, const u32 access_request,
+> > +		u64 layer_mask)
+> > +{
+> > +	const struct landlock_rule *rule;
+> > +	const struct inode *inode;
+> > +	size_t i;
+> > +
+> > +	if (d_is_negative(path->dentry))
+> > +		/* Continues to walk while there is no mapped inode. */
+				     ^^^^^
+Odd comment, that...
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bbd4484b5ba6..fcf89f8cbb6a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3172,6 +3172,22 @@ F:	Documentation/filesystems/bfs.rst
- F:	fs/bfs/
- F:	include/uapi/linux/bfs_fs.h
- 
-+BITMAP API
-+M:	Yury Norov <yury.norov@gmail.com>
-+R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+R:	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-+S:	Maintained
-+F:	include/asm-generic/bitops/find.h
-+F:	include/linux/bitmap.h
-+F:	lib/bitmap.c
-+F:	lib/find_bit.c
-+F:	lib/find_bit_benchmark.c
-+F:	lib/test_bitmap.c
-+F:	tools/include/asm-generic/bitops/find.h
-+F:	tools/include/linux/bitmap.h
-+F:	tools/lib/bitmap.c
-+F:	tools/lib/find_bit.c
-+
- BLINKM RGB LED DRIVER
- M:	Jan-Simon Moeller <jansimon.moeller@gmx.de>
- S:	Maintained
--- 
-2.25.1
+> > +static int check_access_path(const struct landlock_ruleset *const domain,
+> > +		const struct path *const path, u32 access_request)
+> > +{
 
+> > +	walker_path = *path;
+> > +	path_get(&walker_path);
+
+> > +	while (true) {
+> > +		struct dentry *parent_dentry;
+> > +
+> > +		layer_mask = unmask_layers(domain, &walker_path,
+> > +				access_request, layer_mask);
+> > +		if (layer_mask == 0) {
+> > +			/* Stops when a rule from each layer grants access. */
+> > +			allowed = true;
+> > +			break;
+> > +		}
+> > +
+> > +jump_up:
+> > +		if (walker_path.dentry == walker_path.mnt->mnt_root) {
+> > +			if (follow_up(&walker_path)) {
+> > +				/* Ignores hidden mount points. */
+> > +				goto jump_up;
+> > +			} else {
+> > +				/*
+> > +				 * Stops at the real root.  Denies access
+> > +				 * because not all layers have granted access.
+> > +				 */
+> > +				allowed = false;
+> > +				break;
+> > +			}
+> > +		}
+> > +		if (unlikely(IS_ROOT(walker_path.dentry))) {
+> > +			/*
+> > +			 * Stops at disconnected root directories.  Only allows
+> > +			 * access to internal filesystems (e.g. nsfs, which is
+> > +			 * reachable through /proc/<pid>/ns/<namespace>).
+> > +			 */
+> > +			allowed = !!(walker_path.mnt->mnt_flags & MNT_INTERNAL);
+> > +			break;
+> > +		}
+> > +		parent_dentry = dget_parent(walker_path.dentry);
+> > +		dput(walker_path.dentry);
+> > +		walker_path.dentry = parent_dentry;
+> > +	}
+> > +	path_put(&walker_path);
+> > +	return allowed ? 0 : -EACCES;
+
+That's a whole lot of grabbing/dropping references...  I realize that it's
+an utterly tactless question, but... how costly it is?  IOW, do you have
+profiling data?
+
+> > +/*
+> > + * pivot_root(2), like mount(2), changes the current mount namespace.  It must
+> > + * then be forbidden for a landlocked process.
+
+... and cross-directory rename(2) can change the tree topology.  Do you ban that
+as well?
+
+[snip]
+
+> > +static int hook_path_rename(const struct path *const old_dir,
+> > +		struct dentry *const old_dentry,
+> > +		const struct path *const new_dir,
+> > +		struct dentry *const new_dentry)
+> > +{
+> > +	const struct landlock_ruleset *const dom =
+> > +		landlock_get_current_domain();
+> > +
+> > +	if (!dom)
+> > +		return 0;
+> > +	/* The mount points are the same for old and new paths, cf. EXDEV. */
+> > +	if (old_dir->dentry != new_dir->dentry)
+> > +		/* For now, forbids reparenting. */
+> > +		return -EACCES;
+
+You do, apparently, and not in a way that would have the userland fall
+back to copy+unlink.  Lovely...  Does e.g. git survive such restriction?
+Same question for your average package build...
