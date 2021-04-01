@@ -2,151 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CC1350C76
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 04:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7693510F1
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 10:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbhDACP3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Mar 2021 22:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
+        id S229459AbhDAIgP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Apr 2021 04:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232994AbhDACPV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Mar 2021 22:15:21 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD14C061574;
-        Wed, 31 Mar 2021 19:15:19 -0700 (PDT)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lRmr7-001X2U-Bm; Thu, 01 Apr 2021 02:14:45 +0000
-Date:   Thu, 1 Apr 2021 02:14:45 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH v31 07/12] landlock: Support filesystem access-control
-Message-ID: <YGUslUPwp85Zrp4t@zeniv-ca.linux.org.uk>
-References: <20210324191520.125779-1-mic@digikod.net>
- <20210324191520.125779-8-mic@digikod.net>
- <d2764451-8970-6cbd-e2bf-254a42244ffc@digikod.net>
+        with ESMTP id S233592AbhDAIfs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Apr 2021 04:35:48 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCE0C0613E6;
+        Thu,  1 Apr 2021 01:35:48 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id f10so1101300pgl.9;
+        Thu, 01 Apr 2021 01:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XVWxBV7AAcEU+9GV07Fj7VLJdKFcDyXYfOYCJpN3/Vw=;
+        b=R0SX9ZHt4mk0/lyKsmkproGfhH9a2F/mQbKzjw5o5yJQjwY+F1zwV8PQA3FJ/pyXOu
+         6gUnMFePtYjKX9l7A1g9jeNliSZku4IaeHDwKOsHFpzd0Q/zl51sdTOWb1VC/nowQ+BJ
+         bb8eEqS6618xUhOHQ99O6QKNkzgCXSOS+wEayuvjsqpYOYEHKGRrSsnmxmPhbRMdtx01
+         yQsZ3OdcEUkF9JqIvQiog89sYu4j/0UyGW+2HKEQ4KocIrfMj8XeGq03nNpkN7w8e0Rl
+         vT44K0k6vDvutPyo+BfCYZFc6hNocrNmfwucin2RtRcMuawcOwuaxsfwRn0jUCrWECqg
+         Vt+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XVWxBV7AAcEU+9GV07Fj7VLJdKFcDyXYfOYCJpN3/Vw=;
+        b=O4MEp9+Ho9tUAfzD0bq0pgTYzRXS2UIL6zfpwzUnMkQwHdUGD4lFl2xr38eWrwFq/a
+         DnUhw41U325gD5anV3vmQHjYpKAutHqB0yPpwmA6lNg/SJwVIJYqzxC8qhQzqzuO/pAg
+         m2rLW9NFJt38iGG8pBUfblqnybTbisXpjHwzxzAMN+V+lwZfvg1D2DNJUDpmRT+Hf6Jb
+         hZ3qfAje+O+dSOjYUdnYq3nuMSvkzkiQjUAf5RQbe41cP7h2PJ0jqM9iUJxqMW9UuxsX
+         4PKzpMvmuy1HspYfr+9RhMtQKwcfMCAOgjcLpgOkE006HTFrjBh8wwpJD96nvbe+cf6A
+         4iaQ==
+X-Gm-Message-State: AOAM532d8TUts41e4t8ZccufoEeJ89cii2Z1GOKUXiwklgkOop6fkmaY
+        KhCOE6aJd8Fq9ZEPqjFPh7MPcJk/e0gru1pvQ09u1WcMYLY=
+X-Google-Smtp-Source: ABdhPJxJ0LERe+QskxE4j9CC+8mm9/t+p7kYOj9gx8UnJVa90NEQL87WRUv6loCfopemfWX1wM7oOMVRATjPvqA9WXY=
+X-Received: by 2002:a62:528e:0:b029:1f5:c5ee:a487 with SMTP id
+ g136-20020a62528e0000b02901f5c5eea487mr6410772pfb.7.1617266147657; Thu, 01
+ Apr 2021 01:35:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d2764451-8970-6cbd-e2bf-254a42244ffc@digikod.net>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20210401003153.97325-1-yury.norov@gmail.com> <20210401003153.97325-6-yury.norov@gmail.com>
+In-Reply-To: <20210401003153.97325-6-yury.norov@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 1 Apr 2021 11:35:31 +0300
+Message-ID: <CAHp75Veq1ghvLq0Ms77ANx3Lb-QMWOq0CnxPeL0X7V-XeipUAA@mail.gmail.com>
+Subject: Re: [PATCH 05/12] lib: extend the scope of small_const_nbits() macro
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux-SH <linux-sh@vger.kernel.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jianpeng Ma <jianpeng.ma@intel.com>,
+        Joe Perches <joe@perches.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rich Felker <dalias@libc.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 07:33:50PM +0200, Mickaël Salaün wrote:
+On Thu, Apr 1, 2021 at 3:41 AM Yury Norov <yury.norov@gmail.com> wrote:
+>
+> find_bit would also benefit from small_const_nbits() optimizations.
+> The detailed comment is provided by Rasmus Villemoes.
 
-> > +static inline u64 unmask_layers(
-> > +		const struct landlock_ruleset *const domain,
-> > +		const struct path *const path, const u32 access_request,
-> > +		u64 layer_mask)
-> > +{
-> > +	const struct landlock_rule *rule;
-> > +	const struct inode *inode;
-> > +	size_t i;
-> > +
-> > +	if (d_is_negative(path->dentry))
-> > +		/* Continues to walk while there is no mapped inode. */
-				     ^^^^^
-Odd comment, that...
+Thanks, now it looks good!
+Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> > +static int check_access_path(const struct landlock_ruleset *const domain,
-> > +		const struct path *const path, u32 access_request)
-> > +{
+> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+>  include/asm-generic/bitsperlong.h | 12 ++++++++++++
+>  include/linux/bitmap.h            |  8 --------
+>  2 files changed, 12 insertions(+), 8 deletions(-)
+>
+> diff --git a/include/asm-generic/bitsperlong.h b/include/asm-generic/bitsperlong.h
+> index 3905c1c93dc2..1023e2a4bd37 100644
+> --- a/include/asm-generic/bitsperlong.h
+> +++ b/include/asm-generic/bitsperlong.h
+> @@ -23,4 +23,16 @@
+>  #define BITS_PER_LONG_LONG 64
+>  #endif
+>
+> +/*
+> + * small_const_nbits(n) is true precisely when it is known at compile-time
+> + * that BITMAP_SIZE(n) is 1, i.e. 1 <= n <= BITS_PER_LONG. This allows
+> + * various bit/bitmap APIs to provide a fast inline implementation. Bitmaps
+> + * of size 0 are very rare, and a compile-time-known-size 0 is most likely
+> + * a sign of error. They will be handled correctly by the bit/bitmap APIs,
+> + * but using the out-of-line functions, so that the inline implementations
+> + * can unconditionally dereference the pointer(s).
+> + */
+> +#define small_const_nbits(nbits) \
+> +       (__builtin_constant_p(nbits) && (nbits) <= BITS_PER_LONG && (nbits) > 0)
+> +
+>  #endif /* __ASM_GENERIC_BITS_PER_LONG */
+> diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+> index 2cb1d7cfe8f9..a36cfcec4e77 100644
+> --- a/include/linux/bitmap.h
+> +++ b/include/linux/bitmap.h
+> @@ -230,14 +230,6 @@ int bitmap_print_to_pagebuf(bool list, char *buf,
+>  #define BITMAP_FIRST_WORD_MASK(start) (~0UL << ((start) & (BITS_PER_LONG - 1)))
+>  #define BITMAP_LAST_WORD_MASK(nbits) (~0UL >> (-(nbits) & (BITS_PER_LONG - 1)))
+>
+> -/*
+> - * The static inlines below do not handle constant nbits==0 correctly,
+> - * so make such users (should any ever turn up) call the out-of-line
+> - * versions.
+> - */
+> -#define small_const_nbits(nbits) \
+> -       (__builtin_constant_p(nbits) && (nbits) <= BITS_PER_LONG && (nbits) > 0)
+> -
+>  static inline void bitmap_zero(unsigned long *dst, unsigned int nbits)
+>  {
+>         unsigned int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
+> --
+> 2.25.1
+>
 
-> > +	walker_path = *path;
-> > +	path_get(&walker_path);
 
-> > +	while (true) {
-> > +		struct dentry *parent_dentry;
-> > +
-> > +		layer_mask = unmask_layers(domain, &walker_path,
-> > +				access_request, layer_mask);
-> > +		if (layer_mask == 0) {
-> > +			/* Stops when a rule from each layer grants access. */
-> > +			allowed = true;
-> > +			break;
-> > +		}
-> > +
-> > +jump_up:
-> > +		if (walker_path.dentry == walker_path.mnt->mnt_root) {
-> > +			if (follow_up(&walker_path)) {
-> > +				/* Ignores hidden mount points. */
-> > +				goto jump_up;
-> > +			} else {
-> > +				/*
-> > +				 * Stops at the real root.  Denies access
-> > +				 * because not all layers have granted access.
-> > +				 */
-> > +				allowed = false;
-> > +				break;
-> > +			}
-> > +		}
-> > +		if (unlikely(IS_ROOT(walker_path.dentry))) {
-> > +			/*
-> > +			 * Stops at disconnected root directories.  Only allows
-> > +			 * access to internal filesystems (e.g. nsfs, which is
-> > +			 * reachable through /proc/<pid>/ns/<namespace>).
-> > +			 */
-> > +			allowed = !!(walker_path.mnt->mnt_flags & MNT_INTERNAL);
-> > +			break;
-> > +		}
-> > +		parent_dentry = dget_parent(walker_path.dentry);
-> > +		dput(walker_path.dentry);
-> > +		walker_path.dentry = parent_dentry;
-> > +	}
-> > +	path_put(&walker_path);
-> > +	return allowed ? 0 : -EACCES;
-
-That's a whole lot of grabbing/dropping references...  I realize that it's
-an utterly tactless question, but... how costly it is?  IOW, do you have
-profiling data?
-
-> > +/*
-> > + * pivot_root(2), like mount(2), changes the current mount namespace.  It must
-> > + * then be forbidden for a landlocked process.
-
-... and cross-directory rename(2) can change the tree topology.  Do you ban that
-as well?
-
-[snip]
-
-> > +static int hook_path_rename(const struct path *const old_dir,
-> > +		struct dentry *const old_dentry,
-> > +		const struct path *const new_dir,
-> > +		struct dentry *const new_dentry)
-> > +{
-> > +	const struct landlock_ruleset *const dom =
-> > +		landlock_get_current_domain();
-> > +
-> > +	if (!dom)
-> > +		return 0;
-> > +	/* The mount points are the same for old and new paths, cf. EXDEV. */
-> > +	if (old_dir->dentry != new_dir->dentry)
-> > +		/* For now, forbids reparenting. */
-> > +		return -EACCES;
-
-You do, apparently, and not in a way that would have the userland fall
-back to copy+unlink.  Lovely...  Does e.g. git survive such restriction?
-Same question for your average package build...
+-- 
+With Best Regards,
+Andy Shevchenko
