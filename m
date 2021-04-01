@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7693510F1
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 10:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41B33510FA
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 10:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbhDAIgP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Apr 2021 04:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S233383AbhDAIiZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Apr 2021 04:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbhDAIfs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Apr 2021 04:35:48 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCE0C0613E6;
-        Thu,  1 Apr 2021 01:35:48 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id f10so1101300pgl.9;
-        Thu, 01 Apr 2021 01:35:48 -0700 (PDT)
+        with ESMTP id S230284AbhDAIiD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Apr 2021 04:38:03 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE70C0613E6;
+        Thu,  1 Apr 2021 01:38:02 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id ay2so671356plb.3;
+        Thu, 01 Apr 2021 01:38:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=XVWxBV7AAcEU+9GV07Fj7VLJdKFcDyXYfOYCJpN3/Vw=;
-        b=R0SX9ZHt4mk0/lyKsmkproGfhH9a2F/mQbKzjw5o5yJQjwY+F1zwV8PQA3FJ/pyXOu
-         6gUnMFePtYjKX9l7A1g9jeNliSZku4IaeHDwKOsHFpzd0Q/zl51sdTOWb1VC/nowQ+BJ
-         bb8eEqS6618xUhOHQ99O6QKNkzgCXSOS+wEayuvjsqpYOYEHKGRrSsnmxmPhbRMdtx01
-         yQsZ3OdcEUkF9JqIvQiog89sYu4j/0UyGW+2HKEQ4KocIrfMj8XeGq03nNpkN7w8e0Rl
-         vT44K0k6vDvutPyo+BfCYZFc6hNocrNmfwucin2RtRcMuawcOwuaxsfwRn0jUCrWECqg
-         Vt+g==
+        bh=/DR/oCvdUrivLyxVjX0k5t5viZTaG5ynlKBdZ6XK8yw=;
+        b=DigLtN+n47ZECxKDEDBm0jjd/+WlZN7IgCN/xHvrAdNSYQtIkAUW7+ofQ8xfZBpj2v
+         hmu7oy9Q0/dYIW1+mJC79XH/yRwwVSAijMsqN6nxFEx55vyZCATNO3bKTGcnPOQ92OpF
+         avWVuZYCWQQsrb7Z3+bsLGdB9n+BtHsWybs+dTsBRe2R7OtuIeRN2do5Xv1kFy9IOo1o
+         3M1WJ2deKgSDCVyjsYhBwiktQSDSPoHPYqSXrXXe/zpK7JrFQZyR6CGtXDDS688lA/Rs
+         ud7Kt39BPY2iBXYCKV9BDh9IztDOXF6QX+6z20PMjCOPnfvL3SPE9bAQ5bTrOwzuxzWp
+         O89g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XVWxBV7AAcEU+9GV07Fj7VLJdKFcDyXYfOYCJpN3/Vw=;
-        b=O4MEp9+Ho9tUAfzD0bq0pgTYzRXS2UIL6zfpwzUnMkQwHdUGD4lFl2xr38eWrwFq/a
-         DnUhw41U325gD5anV3vmQHjYpKAutHqB0yPpwmA6lNg/SJwVIJYqzxC8qhQzqzuO/pAg
-         m2rLW9NFJt38iGG8pBUfblqnybTbisXpjHwzxzAMN+V+lwZfvg1D2DNJUDpmRT+Hf6Jb
-         hZ3qfAje+O+dSOjYUdnYq3nuMSvkzkiQjUAf5RQbe41cP7h2PJ0jqM9iUJxqMW9UuxsX
-         4PKzpMvmuy1HspYfr+9RhMtQKwcfMCAOgjcLpgOkE006HTFrjBh8wwpJD96nvbe+cf6A
-         4iaQ==
-X-Gm-Message-State: AOAM532d8TUts41e4t8ZccufoEeJ89cii2Z1GOKUXiwklgkOop6fkmaY
-        KhCOE6aJd8Fq9ZEPqjFPh7MPcJk/e0gru1pvQ09u1WcMYLY=
-X-Google-Smtp-Source: ABdhPJxJ0LERe+QskxE4j9CC+8mm9/t+p7kYOj9gx8UnJVa90NEQL87WRUv6loCfopemfWX1wM7oOMVRATjPvqA9WXY=
-X-Received: by 2002:a62:528e:0:b029:1f5:c5ee:a487 with SMTP id
- g136-20020a62528e0000b02901f5c5eea487mr6410772pfb.7.1617266147657; Thu, 01
- Apr 2021 01:35:47 -0700 (PDT)
+        bh=/DR/oCvdUrivLyxVjX0k5t5viZTaG5ynlKBdZ6XK8yw=;
+        b=nKM16HZBC+gw2R3KGmnLxtFPzZ31jQpZeBcXaQrgazLFooO6NKU22lf5lLdEIp/64n
+         Mbpk6iWd5LTqvLm8aYQWYDql/Jp4T070QuQvh3TyYeTO4DaJ0tcrBhgTSTae4QgPWP3e
+         XXhK/y/FcQOA9AqZxUZiJZttzW05N6wM/A/LA8ZJY4TtKGC29YH1zydl2QxrSoiOIFkn
+         DrO8FUZ0n2Iia37fUkdySOD8+Ponbdfo/DbO9SWKx12+elVwJgpolq+uQmor3eYCEPr4
+         IR08y3yV/baslcO910LDXlp+zXAD24TwteiOMFwb+RIGkte9JZABqzkaJASBlGnuzQFM
+         1OLg==
+X-Gm-Message-State: AOAM5335PgpiodNpsyYCGX5KMLM9YXlWhreXDEhMqC8I/c9M6/k2iDpM
+        7vqJD7bJO4tjqNTZ7IAq3grXCIx0Zgirl+/jMoE=
+X-Google-Smtp-Source: ABdhPJy9tIhXmtaO9mcQAPSIZ87x41BYVA/mQb8L8/H9DJeVdXaSW5XcFHUXzVTFLyWkxfeZt9vTK3wDR8r9BtKHZpg=
+X-Received: by 2002:a17:902:ee02:b029:e6:5397:d79c with SMTP id
+ z2-20020a170902ee02b02900e65397d79cmr7139694plb.21.1617266282119; Thu, 01 Apr
+ 2021 01:38:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210401003153.97325-1-yury.norov@gmail.com> <20210401003153.97325-6-yury.norov@gmail.com>
-In-Reply-To: <20210401003153.97325-6-yury.norov@gmail.com>
+References: <20210401003153.97325-1-yury.norov@gmail.com> <20210401003153.97325-8-yury.norov@gmail.com>
+In-Reply-To: <20210401003153.97325-8-yury.norov@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 1 Apr 2021 11:35:31 +0300
-Message-ID: <CAHp75Veq1ghvLq0Ms77ANx3Lb-QMWOq0CnxPeL0X7V-XeipUAA@mail.gmail.com>
-Subject: Re: [PATCH 05/12] lib: extend the scope of small_const_nbits() macro
+Date:   Thu, 1 Apr 2021 11:37:45 +0300
+Message-ID: <CAHp75VdSgTC7JaNeWY66evEW1FaX+aKG33oO87ESSJQBC0qLHA@mail.gmail.com>
+Subject: Re: [PATCH 07/12] lib: inline _find_next_bit() wrappers
 To:     Yury Norov <yury.norov@gmail.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -77,62 +77,202 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 1, 2021 at 3:41 AM Yury Norov <yury.norov@gmail.com> wrote:
+On Thu, Apr 1, 2021 at 3:42 AM Yury Norov <yury.norov@gmail.com> wrote:
 >
-> find_bit would also benefit from small_const_nbits() optimizations.
-> The detailed comment is provided by Rasmus Villemoes.
+> lib/find_bit.c declares five single-line wrappers for _find_next_bit().
+> We may turn those wrappers to inline functions. It eliminates unneeded
+> function calls and opens room for compile-time optimizations.
 
-Thanks, now it looks good!
 Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 > Signed-off-by: Yury Norov <yury.norov@gmail.com>
 > Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 > ---
->  include/asm-generic/bitsperlong.h | 12 ++++++++++++
->  include/linux/bitmap.h            |  8 --------
->  2 files changed, 12 insertions(+), 8 deletions(-)
+>  include/asm-generic/bitops/find.h | 28 ++++++++++++----
+>  include/asm-generic/bitops/le.h   | 17 +++++++---
+>  lib/find_bit.c                    | 56 ++-----------------------------
+>  3 files changed, 37 insertions(+), 64 deletions(-)
 >
-> diff --git a/include/asm-generic/bitsperlong.h b/include/asm-generic/bitsperlong.h
-> index 3905c1c93dc2..1023e2a4bd37 100644
-> --- a/include/asm-generic/bitsperlong.h
-> +++ b/include/asm-generic/bitsperlong.h
-> @@ -23,4 +23,16 @@
->  #define BITS_PER_LONG_LONG 64
+> diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
+> index 9fdf21302fdf..7ad70dab8e93 100644
+> --- a/include/asm-generic/bitops/find.h
+> +++ b/include/asm-generic/bitops/find.h
+> @@ -2,6 +2,10 @@
+>  #ifndef _ASM_GENERIC_BITOPS_FIND_H_
+>  #define _ASM_GENERIC_BITOPS_FIND_H_
+>
+> +extern unsigned long _find_next_bit(const unsigned long *addr1,
+> +               const unsigned long *addr2, unsigned long nbits,
+> +               unsigned long start, unsigned long invert, unsigned long le);
+> +
+>  #ifndef find_next_bit
+>  /**
+>   * find_next_bit - find the next set bit in a memory region
+> @@ -12,8 +16,12 @@
+>   * Returns the bit number for the next set bit
+>   * If no bits are set, returns @size.
+>   */
+> -extern unsigned long find_next_bit(const unsigned long *addr, unsigned long
+> -               size, unsigned long offset);
+> +static inline
+> +unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+> +                           unsigned long offset)
+> +{
+> +       return _find_next_bit(addr, NULL, size, offset, 0UL, 0);
+> +}
 >  #endif
 >
-> +/*
-> + * small_const_nbits(n) is true precisely when it is known at compile-time
-> + * that BITMAP_SIZE(n) is 1, i.e. 1 <= n <= BITS_PER_LONG. This allows
-> + * various bit/bitmap APIs to provide a fast inline implementation. Bitmaps
-> + * of size 0 are very rare, and a compile-time-known-size 0 is most likely
-> + * a sign of error. They will be handled correctly by the bit/bitmap APIs,
-> + * but using the out-of-line functions, so that the inline implementations
-> + * can unconditionally dereference the pointer(s).
-> + */
-> +#define small_const_nbits(nbits) \
-> +       (__builtin_constant_p(nbits) && (nbits) <= BITS_PER_LONG && (nbits) > 0)
-> +
->  #endif /* __ASM_GENERIC_BITS_PER_LONG */
-> diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-> index 2cb1d7cfe8f9..a36cfcec4e77 100644
-> --- a/include/linux/bitmap.h
-> +++ b/include/linux/bitmap.h
-> @@ -230,14 +230,6 @@ int bitmap_print_to_pagebuf(bool list, char *buf,
->  #define BITMAP_FIRST_WORD_MASK(start) (~0UL << ((start) & (BITS_PER_LONG - 1)))
->  #define BITMAP_LAST_WORD_MASK(nbits) (~0UL >> (-(nbits) & (BITS_PER_LONG - 1)))
+>  #ifndef find_next_and_bit
+> @@ -27,9 +35,13 @@ extern unsigned long find_next_bit(const unsigned long *addr, unsigned long
+>   * Returns the bit number for the next set bit
+>   * If no bits are set, returns @size.
+>   */
+> -extern unsigned long find_next_and_bit(const unsigned long *addr1,
+> +static inline
+> +unsigned long find_next_and_bit(const unsigned long *addr1,
+>                 const unsigned long *addr2, unsigned long size,
+> -               unsigned long offset);
+> +               unsigned long offset)
+> +{
+> +       return _find_next_bit(addr1, addr2, size, offset, 0UL, 0);
+> +}
+>  #endif
 >
-> -/*
-> - * The static inlines below do not handle constant nbits==0 correctly,
-> - * so make such users (should any ever turn up) call the out-of-line
-> - * versions.
-> - */
-> -#define small_const_nbits(nbits) \
-> -       (__builtin_constant_p(nbits) && (nbits) <= BITS_PER_LONG && (nbits) > 0)
-> -
->  static inline void bitmap_zero(unsigned long *dst, unsigned int nbits)
+>  #ifndef find_next_zero_bit
+> @@ -42,8 +54,12 @@ extern unsigned long find_next_and_bit(const unsigned long *addr1,
+>   * Returns the bit number of the next zero bit
+>   * If no bits are zero, returns @size.
+>   */
+> -extern unsigned long find_next_zero_bit(const unsigned long *addr, unsigned
+> -               long size, unsigned long offset);
+> +static inline
+> +unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+> +                                unsigned long offset)
+> +{
+> +       return _find_next_bit(addr, NULL, size, offset, ~0UL, 0);
+> +}
+>  #endif
+>
+>  #ifdef CONFIG_GENERIC_FIND_FIRST_BIT
+> diff --git a/include/asm-generic/bitops/le.h b/include/asm-generic/bitops/le.h
+> index 188d3eba3ace..21305f6cea0b 100644
+> --- a/include/asm-generic/bitops/le.h
+> +++ b/include/asm-generic/bitops/le.h
+> @@ -2,6 +2,7 @@
+>  #ifndef _ASM_GENERIC_BITOPS_LE_H_
+>  #define _ASM_GENERIC_BITOPS_LE_H_
+>
+> +#include <asm-generic/bitops/find.h>
+>  #include <asm/types.h>
+>  #include <asm/byteorder.h>
+>
+> @@ -32,13 +33,21 @@ static inline unsigned long find_first_zero_bit_le(const void *addr,
+>  #define BITOP_LE_SWIZZLE       ((BITS_PER_LONG-1) & ~0x7)
+>
+>  #ifndef find_next_zero_bit_le
+> -extern unsigned long find_next_zero_bit_le(const void *addr,
+> -               unsigned long size, unsigned long offset);
+> +static inline
+> +unsigned long find_next_zero_bit_le(const void *addr, unsigned
+> +               long size, unsigned long offset)
+> +{
+> +       return _find_next_bit(addr, NULL, size, offset, ~0UL, 1);
+> +}
+>  #endif
+>
+>  #ifndef find_next_bit_le
+> -extern unsigned long find_next_bit_le(const void *addr,
+> -               unsigned long size, unsigned long offset);
+> +static inline
+> +unsigned long find_next_bit_le(const void *addr, unsigned
+> +               long size, unsigned long offset)
+> +{
+> +       return _find_next_bit(addr, NULL, size, offset, 0UL, 1);
+> +}
+>  #endif
+>
+>  #ifndef find_first_zero_bit_le
+> diff --git a/lib/find_bit.c b/lib/find_bit.c
+> index f67f86fd2f62..b03a101367f8 100644
+> --- a/lib/find_bit.c
+> +++ b/lib/find_bit.c
+> @@ -29,7 +29,7 @@
+>   *    searching it for one bits.
+>   *  - The optional "addr2", which is anded with "addr1" if present.
+>   */
+> -static unsigned long _find_next_bit(const unsigned long *addr1,
+> +unsigned long _find_next_bit(const unsigned long *addr1,
+>                 const unsigned long *addr2, unsigned long nbits,
+>                 unsigned long start, unsigned long invert, unsigned long le)
 >  {
->         unsigned int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
+> @@ -68,37 +68,7 @@ static unsigned long _find_next_bit(const unsigned long *addr1,
+>
+>         return min(start + __ffs(tmp), nbits);
+>  }
+> -#endif
+> -
+> -#ifndef find_next_bit
+> -/*
+> - * Find the next set bit in a memory region.
+> - */
+> -unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+> -                           unsigned long offset)
+> -{
+> -       return _find_next_bit(addr, NULL, size, offset, 0UL, 0);
+> -}
+> -EXPORT_SYMBOL(find_next_bit);
+> -#endif
+> -
+> -#ifndef find_next_zero_bit
+> -unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+> -                                unsigned long offset)
+> -{
+> -       return _find_next_bit(addr, NULL, size, offset, ~0UL, 0);
+> -}
+> -EXPORT_SYMBOL(find_next_zero_bit);
+> -#endif
+> -
+> -#if !defined(find_next_and_bit)
+> -unsigned long find_next_and_bit(const unsigned long *addr1,
+> -               const unsigned long *addr2, unsigned long size,
+> -               unsigned long offset)
+> -{
+> -       return _find_next_bit(addr1, addr2, size, offset, 0UL, 0);
+> -}
+> -EXPORT_SYMBOL(find_next_and_bit);
+> +EXPORT_SYMBOL(_find_next_bit);
+>  #endif
+>
+>  #ifndef find_first_bit
+> @@ -157,28 +127,6 @@ unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
+>  EXPORT_SYMBOL(find_last_bit);
+>  #endif
+>
+> -#ifdef __BIG_ENDIAN
+> -
+> -#ifndef find_next_zero_bit_le
+> -unsigned long find_next_zero_bit_le(const void *addr, unsigned
+> -               long size, unsigned long offset)
+> -{
+> -       return _find_next_bit(addr, NULL, size, offset, ~0UL, 1);
+> -}
+> -EXPORT_SYMBOL(find_next_zero_bit_le);
+> -#endif
+> -
+> -#ifndef find_next_bit_le
+> -unsigned long find_next_bit_le(const void *addr, unsigned
+> -               long size, unsigned long offset)
+> -{
+> -       return _find_next_bit(addr, NULL, size, offset, 0UL, 1);
+> -}
+> -EXPORT_SYMBOL(find_next_bit_le);
+> -#endif
+> -
+> -#endif /* __BIG_ENDIAN */
+> -
+>  unsigned long find_next_clump8(unsigned long *clump, const unsigned long *addr,
+>                                unsigned long size, unsigned long offset)
+>  {
 > --
 > 2.25.1
 >
