@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC8435223D
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 00:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC98335223A
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 00:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235724AbhDAWLx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Apr 2021 18:11:53 -0400
-Received: from mga11.intel.com ([192.55.52.93]:34676 "EHLO mga11.intel.com"
+        id S235716AbhDAWLv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Apr 2021 18:11:51 -0400
+Received: from mga11.intel.com ([192.55.52.93]:34674 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235080AbhDAWLh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S235069AbhDAWLh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Thu, 1 Apr 2021 18:11:37 -0400
-IronPort-SDR: XOgB9hMqtdyp06CdSj3FkRuLCmDjDEjWVGTp7JW5SsWZJ2R2wbsRxj7nI1GIXcwGYl4meJOxY2
- +/V2g7nqyu+Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="189084579"
+IronPort-SDR: zgkDeCHnpzIquYTklwezMm+ENQdxG4zmLC4q/nouvLUJMOK1l712JQcoiT7n5AigtsFSyuWkxQ
+ oGMwE/6LuU9g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="189084585"
 X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="189084579"
+   d="scan'208";a="189084585"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 15:11:24 -0700
-IronPort-SDR: mpWU7ZRZ10LDWKSod+5CSr0sTZSexKKRE2GvtO5cH2swVdThcqVjhzlRY2XkNJWjgaeqv6nbN3
- SXU97KX1bJ/w==
+IronPort-SDR: qvDUVgLNQTrVngNQgTB5rVJCECCArmO5+U62GuXCGyQXb4zI22BTpOZeJuMwvjbqFcyzdBaPKm
+ F1w+csx0kq/Q==
 X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="517513915"
+   d="scan'208";a="517513918"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 15:11:24 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -54,9 +54,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v24 16/30] mm: Fixup places that call pte_mkwrite() directly
-Date:   Thu,  1 Apr 2021 15:10:50 -0700
-Message-Id: <20210401221104.31584-17-yu-cheng.yu@intel.com>
+Subject: [PATCH v24 17/30] mm: Add guard pages around a shadow stack.
+Date:   Thu,  1 Apr 2021 15:10:51 -0700
+Message-Id: <20210401221104.31584-18-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210401221104.31584-1-yu-cheng.yu@intel.com>
 References: <20210401221104.31584-1-yu-cheng.yu@intel.com>
@@ -66,87 +66,129 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When serving a page fault, maybe_mkwrite() makes a PTE writable if it is in
-a writable vma.  A shadow stack vma is writable, but its PTEs need
-_PAGE_DIRTY to be set to become writable.  For this reason, maybe_mkwrite()
-has been updated.
+INCSSP(Q/D) increments shadow stack pointer and 'pops and discards' the
+first and the last elements in the range, effectively touches those memory
+areas.
 
-There are a few places that call pte_mkwrite() directly, but have the
-same result as from maybe_mkwrite().  These sites need to be updated for
-shadow stack as well.  Thus, change them to maybe_mkwrite():
-
-- do_anonymous_page() and migrate_vma_insert_page() check VM_WRITE directly
-  and call pte_mkwrite(), which is the same as maybe_mkwrite().  Change
-  them to maybe_mkwrite().
-
-- In do_numa_page(), if the numa entry was writable, then pte_mkwrite()
-  is called directly.  Fix it by doing maybe_mkwrite().
-
-- In change_pte_range(), pte_mkwrite() is called directly.  Replace it with
-  maybe_mkwrite().
-
-  A shadow stack vma is writable but has different vma
-flags, and handled accordingly in maybe_mkwrite().
+The maximum moving distance by INCSSPQ is 255 * 8 = 2040 bytes and
+255 * 4 = 1020 bytes by INCSSPD.  Both ranges are far from PAGE_SIZE.
+Thus, putting a gap page on both ends of a shadow stack prevents INCSSP,
+CALL, and RET from going beyond.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Cc: Kees Cook <keescook@chromium.org>
 Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- mm/memory.c   | 5 ++---
- mm/migrate.c  | 3 +--
- mm/mprotect.c | 2 +-
- 3 files changed, 4 insertions(+), 6 deletions(-)
+v24:
+- Instead changing vm_*_gap(), create x86-specific versions.
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 5efa07fb6cdc..c70c3847f79d 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3561,8 +3561,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	__SetPageUptodate(page);
+ arch/x86/include/asm/page_types.h | 17 +++++++++++++++
+ arch/x86/mm/mmap.c                | 36 +++++++++++++++++++++++++++++++
+ include/linux/mm.h                |  4 ++++
+ 3 files changed, 57 insertions(+)
+
+diff --git a/arch/x86/include/asm/page_types.h b/arch/x86/include/asm/page_types.h
+index a506a411474d..3a5529bcfd76 100644
+--- a/arch/x86/include/asm/page_types.h
++++ b/arch/x86/include/asm/page_types.h
+@@ -73,6 +73,23 @@ bool pfn_range_is_mapped(unsigned long start_pfn, unsigned long end_pfn);
  
- 	entry = mk_pte(page, vma->vm_page_prot);
--	if (vma->vm_flags & VM_WRITE)
--		entry = pte_mkwrite(pte_mkdirty(entry));
-+	entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ extern void initmem_init(void);
  
- 	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
- 			&vmf->ptl);
-@@ -4125,7 +4124,7 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
- 	pte = pte_modify(old_pte, vma->vm_page_prot);
- 	pte = pte_mkyoung(pte);
- 	if (was_writable)
--		pte = pte_mkwrite(pte);
-+		pte = maybe_mkwrite(pte, vma);
- 	ptep_modify_prot_commit(vma, vmf->address, vmf->pte, old_pte, pte);
- 	update_mmu_cache(vma, vmf->address, vmf->pte);
++/*
++ * Shadow stack pointer is moved by CALL, RET, and INCSSP(Q/D).  INCSSPQ
++ * moves shadow stack pointer up to 255 * 8 = ~2 KB (~1KB for INCSSPD) and
++ * touches the first and the last element in the range, which triggers a
++ * page fault if the range is not in a shadow stack.  Because of this,
++ * creating 4-KB guard pages around a shadow stack prevents these
++ * instructions from going beyond.
++ */
++#define SHADOW_STACK_GUARD_GAP PAGE_SIZE
++
++#define vm_start_gap vm_start_gap
++struct vm_area_struct;
++extern unsigned long vm_start_gap(struct vm_area_struct *vma);
++
++#define vm_end_gap vm_end_gap
++extern unsigned long vm_end_gap(struct vm_area_struct *vma);
++
+ #endif	/* !__ASSEMBLY__ */
  
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 62b81d5257aa..7251c88a3d64 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2976,8 +2976,7 @@ static void migrate_vma_insert_page(struct migrate_vma *migrate,
- 		}
- 	} else {
- 		entry = mk_pte(page, vma->vm_page_prot);
--		if (vma->vm_flags & VM_WRITE)
--			entry = pte_mkwrite(pte_mkdirty(entry));
-+		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ #endif	/* _ASM_X86_PAGE_DEFS_H */
+diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
+index f3f52c5e2fd6..e714ddc8f3f7 100644
+--- a/arch/x86/mm/mmap.c
++++ b/arch/x86/mm/mmap.c
+@@ -250,3 +250,39 @@ bool pfn_modify_allowed(unsigned long pfn, pgprot_t prot)
+ 		return false;
+ 	return true;
+ }
++
++unsigned long vm_start_gap(struct vm_area_struct *vma)
++{
++	unsigned long vm_start = vma->vm_start;
++	unsigned long gap = 0;
++
++	if (vma->vm_flags & VM_GROWSDOWN)
++		gap = stack_guard_gap;
++	else if (vma->vm_flags & VM_SHADOW_STACK)
++		gap = SHADOW_STACK_GUARD_GAP;
++
++	if (gap != 0) {
++		vm_start -= gap;
++		if (vm_start > vma->vm_start)
++			vm_start = 0;
++	}
++	return vm_start;
++}
++
++unsigned long vm_end_gap(struct vm_area_struct *vma)
++{
++	unsigned long vm_end = vma->vm_end;
++	unsigned long gap = 0;
++
++	if (vma->vm_flags & VM_GROWSUP)
++		gap = stack_guard_gap;
++	else if (vma->vm_flags & VM_SHADOW_STACK)
++		gap = SHADOW_STACK_GUARD_GAP;
++
++	if (gap != 0) {
++		vm_end += gap;
++		if (vm_end < vma->vm_end)
++			vm_end = -PAGE_SIZE;
++	}
++	return vm_end;
++}
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 6ac9b3e9a865..3e9c84f21ef6 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2660,6 +2660,7 @@ static inline struct vm_area_struct * find_vma_intersection(struct mm_struct * m
+ 	return vma;
+ }
+ 
++#ifndef vm_start_gap
+ static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
+ {
+ 	unsigned long vm_start = vma->vm_start;
+@@ -2671,7 +2672,9 @@ static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
  	}
+ 	return vm_start;
+ }
++#endif
  
- 	ptep = pte_offset_map_lock(mm, pmdp, addr, &ptl);
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 94188df1ee55..c1ce78d688b6 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -135,7 +135,7 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 			if (dirty_accountable && pte_dirty(ptent) &&
- 					(pte_soft_dirty(ptent) ||
- 					 !(vma->vm_flags & VM_SOFTDIRTY))) {
--				ptent = pte_mkwrite(ptent);
-+				ptent = maybe_mkwrite(ptent, vma);
- 			}
- 			ptep_modify_prot_commit(vma, addr, pte, oldpte, ptent);
- 			pages++;
++#ifndef vm_end_gap
+ static inline unsigned long vm_end_gap(struct vm_area_struct *vma)
+ {
+ 	unsigned long vm_end = vma->vm_end;
+@@ -2683,6 +2686,7 @@ static inline unsigned long vm_end_gap(struct vm_area_struct *vma)
+ 	}
+ 	return vm_end;
+ }
++#endif
+ 
+ static inline unsigned long vma_pages(struct vm_area_struct *vma)
+ {
 -- 
 2.21.0
 
