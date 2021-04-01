@@ -2,230 +2,228 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E98E351D03
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 20:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88607351DF2
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 20:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbhDASX1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Apr 2021 14:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235678AbhDASMt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Apr 2021 14:12:49 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4C2C06178A;
-        Thu,  1 Apr 2021 04:16:05 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id b10so1813043iot.4;
-        Thu, 01 Apr 2021 04:16:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=moOyGRcGHar9YNt0N/Y7uFjPvSME0sZl6mnpRsX5JvU=;
-        b=ifnqDCESEWCwygu7Q8TcEEjwG35Ap4TGL1lIxVlgSIHnbzmG25rF7VK74GW/oT/Lgh
-         2UJ9bIQNzSDOlkch2hOCYH1HpIqOco9idX9WVqPyouTWaS8Ou04kvDlzHghlRMp4jHPf
-         nskapKeDijNI6NmbdwMQ0kmLLDvSqDkg1MFJwvHTqGAGSsKLk5VXeqNC5Euy8zgxYvnF
-         O3TzXfeLmGd9cTk7Hw7vPqePTLusUXV5nmy1w7nHwPPWrDqSZAM1o5RCdXpXwBhAZ9SF
-         he5bn3R+I/nx5KU477ajaxMPDRxH3dbiHtmAvkpsU7i0mKguLtw3QMN4BcDqvQv0/j90
-         uHKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=moOyGRcGHar9YNt0N/Y7uFjPvSME0sZl6mnpRsX5JvU=;
-        b=soWyT1A9W0BaF3W0ttGi3Fr6RaD5QfT0MlnXkKCHFRcaQwKHqNzNYPF689Vrsf5MyY
-         0vmI+U0Dxgb9QjCvQ5etBk2ooHAJBm9PGD06fxeAk1vUv3R+U7bWe5MIphILjUtXMsFk
-         qCyj7gJiiIpg4kkLkQH98Xbbvg+CxuDS9dL/KZd9uYM+Zw5X58ge9Z5cRsZAW0/5XdAV
-         /IqQAOfdBSGgk8Tc87ULekIt/Vo6oQw26TBLtAoVfIvpxo5S3BR0/MwCj+Pf9oOf9PCD
-         Pdh2Uu8o5UbEIwkkmQXxphqBIjZgN74hohDj28Ru8FfSb9zdiZ01nIBAPcJoHB1DScnV
-         b4AQ==
-X-Gm-Message-State: AOAM5301yeH8I1sju1WJfHVnbqiS0AHgrNgbE3kF/w0Li5uAMRErmfB3
-        8Vedp6igrX+BfyiUkmlCVJHxEVZhOcIkSUI3f7s=
-X-Google-Smtp-Source: ABdhPJxhpMPww1OveGSHxepFu4l+A0e2gZ/exiHFMOBtsrHDLLr9n61X8fXz/bnSkzdlVx94sCa1xegT1QRnmXoNsps=
-X-Received: by 2002:a05:6602:21cd:: with SMTP id c13mr6082518ioc.44.1617275764762;
- Thu, 01 Apr 2021 04:16:04 -0700 (PDT)
+        id S236471AbhDASdU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Apr 2021 14:33:20 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:46930 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234601AbhDASVV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Apr 2021 14:21:21 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 131FPNmA176646;
+        Thu, 1 Apr 2021 15:32:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=62CUDxAtV3yxCJlqzCuxvemaJpVkPEKiTQZXt7HaeVs=;
+ b=MfWfoVpJ2drNn/KyR00qT47zRVVHM0kdaiP9GQ1qLUZq11v/uX9iz1nPbcww3XFhGf6Q
+ C0Dh568oWZ8v+4X0LsayCPh/eE6I/qTXenVunyAv+PLoQMEEUpQ/Ut/yF+3Vn9kExuE7
+ W2WrsjMPCqCpIO9UTKQv+pFEfv2O3yxPm4P++kTDeSeqkgPNYmJlA6wdYDbCr3PgTxSs
+ FVUzUTj/RItuiu1RAGJ9SW7x7dEB4GbmIOBhEx52y6Mhymx4GEmukMjsENzmx91mae7A
+ jdTmRZosi8fHg8L/9TswBFs0lALIQr/ozmNMIBBQ07iIVSDAudyO5YlT4l6sMhRD5tPM 0w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 37n30sa776-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Apr 2021 15:32:29 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 131FLoPX063317;
+        Thu, 1 Apr 2021 15:32:27 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 37n2asydrj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Apr 2021 15:32:27 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 131FWBcB031868;
+        Thu, 1 Apr 2021 15:32:11 GMT
+Received: from neelam.us.oracle.com (/10.152.128.16)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 01 Apr 2021 08:32:10 -0700
+From:   Alex Kogan <alex.kogan@oracle.com>
+To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
+        will.deacon@arm.com, arnd@arndb.de, longman@redhat.com,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
+        jglauber@marvell.com
+Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        alex.kogan@oracle.com, dave.dice@oracle.com
+Subject: [PATCH v14 1/6] locking/qspinlock: Rename mcs lock/unlock macros and make them more generic
+Date:   Thu,  1 Apr 2021 11:31:51 -0400
+Message-Id: <20210401153156.1165900-2-alex.kogan@oracle.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210401153156.1165900-1-alex.kogan@oracle.com>
+References: <20210401153156.1165900-1-alex.kogan@oracle.com>
 MIME-Version: 1.0
-References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
- <36db7be3-73b6-c822-02e8-13e3864b0463@xilinx.com> <CAMpxmJUv0iU0Ntmks1f6ThDAG6x_eJLYYCaDSjy+1Syedzc5dQ@mail.gmail.com>
- <DM6PR02MB53863852A28F782B0942ECD8AF7C9@DM6PR02MB5386.namprd02.prod.outlook.com>
-In-Reply-To: <DM6PR02MB53863852A28F782B0942ECD8AF7C9@DM6PR02MB5386.namprd02.prod.outlook.com>
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-Date:   Thu, 1 Apr 2021 16:45:52 +0530
-Message-ID: <CACG_h5q6P5NiNByttQ-NZvq8x3GCTKfSU=Yyywk7PcO6_=i2Mw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Michal Simek <michals@xilinx.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        Srinivas Goud <sgoud@xilinx.com>,
-        Srinivas Neeli <sneeli@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9941 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 spamscore=0
+ mlxscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2103310000
+ definitions=main-2104010104
+X-Proofpoint-GUID: sA6lj1ntfXIO8yjM87-E0_aOuqL_axbg
+X-Proofpoint-ORIG-GUID: sA6lj1ntfXIO8yjM87-E0_aOuqL_axbg
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9941 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
+ bulkscore=0 priorityscore=1501 suspectscore=0 mlxscore=0 spamscore=0
+ clxscore=1011 mlxlogscore=999 malwarescore=0 adultscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2103310000
+ definitions=main-2104010104
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 8:56 PM Srinivas Neeli <sneeli@xilinx.com> wrote:
->
-> Hi,
->
-> > -----Original Message-----
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > Sent: Friday, March 26, 2021 10:58 PM
-> > To: Michal Simek <michals@xilinx.com>
-> > Cc: Syed Nayyar Waris <syednwaris@gmail.com>; Srinivas Neeli
-> > <sneeli@xilinx.com>; Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com>; William Breathitt Gray
-> > <vilhelm.gray@gmail.com>; Arnd Bergmann <arnd@arndb.de>; Robert
-> > Richter <rrichter@marvell.com>; Linus Walleij <linus.walleij@linaro.org>;
-> > Masahiro Yamada <yamada.masahiro@socionext.com>; Andrew Morton
-> > <akpm@linux-foundation.org>; Zhang Rui <rui.zhang@intel.com>; Daniel
-> > Lezcano <daniel.lezcano@linaro.org>; Amit Kucheria
-> > <amit.kucheria@verdurent.com>; Linux-Arch <linux-arch@vger.kernel.org>;
-> > linux-gpio <linux-gpio@vger.kernel.org>; LKML <linux-
-> > kernel@vger.kernel.org>; arm-soc <linux-arm-kernel@lists.infradead.org>;
-> > linux-pm <linux-pm@vger.kernel.org>; Srinivas Goud <sgoud@xilinx.com>
-> > Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and
-> > _set_value
-> >
-> > On Mon, Mar 8, 2021 at 8:13 AM Michal Simek <michal.simek@xilinx.com>
-> > wrote:
-> > >
-> > >
-> > >
-> > > On 3/6/21 3:06 PM, Syed Nayyar Waris wrote:
-> > > > This patch reimplements the xgpio_set_multiple() function in
-> > > > drivers/gpio/gpio-xilinx.c to use the new generic functions:
-> > > > bitmap_get_value() and bitmap_set_value(). The code is now simpler
-> > > > to read and understand. Moreover, instead of looping for each bit in
-> > > > xgpio_set_multiple() function, now we can check each channel at a
-> > > > time and save cycles.
-> > > >
-> > > > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > > Cc: Michal Simek <michal.simek@xilinx.com>
-> > > > Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-> > > > Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
-> > > > ---
-> > > >  drivers/gpio/gpio-xilinx.c | 63
-> > > > +++++++++++++++++++-------------------
-> > > >  1 file changed, 32 insertions(+), 31 deletions(-)
-> > > >
-> > > > diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-> > > > index be539381fd82..8445e69cf37b 100644
-> > > > --- a/drivers/gpio/gpio-xilinx.c
-> > > > +++ b/drivers/gpio/gpio-xilinx.c
-> > > > @@ -15,6 +15,7 @@
-> > > >  #include <linux/of_device.h>
-> > > >  #include <linux/of_platform.h>
-> > > >  #include <linux/slab.h>
-> > > > +#include "gpiolib.h"
-> > > >
-> > > >  /* Register Offset Definitions */
-> > > >  #define XGPIO_DATA_OFFSET   (0x0)    /* Data register  */
-> > > > @@ -141,37 +142,37 @@ static void xgpio_set_multiple(struct
-> > > > gpio_chip *gc, unsigned long *mask,  {
-> > > >       unsigned long flags;
-> > > >       struct xgpio_instance *chip = gpiochip_get_data(gc);
-> > > > -     int index = xgpio_index(chip, 0);
-> > > > -     int offset, i;
-> > > > -
-> > > > -     spin_lock_irqsave(&chip->gpio_lock[index], flags);
-> > > > -
-> > > > -     /* Write to GPIO signals */
-> > > > -     for (i = 0; i < gc->ngpio; i++) {
-> > > > -             if (*mask == 0)
-> > > > -                     break;
-> > > > -             /* Once finished with an index write it out to the register */
-> > > > -             if (index !=  xgpio_index(chip, i)) {
-> > > > -                     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > -                                    index * XGPIO_CHANNEL_OFFSET,
-> > > > -                                    chip->gpio_state[index]);
-> > > > -                     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
-> > > > -                     index =  xgpio_index(chip, i);
-> > > > -                     spin_lock_irqsave(&chip->gpio_lock[index], flags);
-> > > > -             }
-> > > > -             if (__test_and_clear_bit(i, mask)) {
-> > > > -                     offset =  xgpio_offset(chip, i);
-> > > > -                     if (test_bit(i, bits))
-> > > > -                             chip->gpio_state[index] |= BIT(offset);
-> > > > -                     else
-> > > > -                             chip->gpio_state[index] &= ~BIT(offset);
-> > > > -             }
-> > > > -     }
-> > > > -
-> > > > -     xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > -                    index * XGPIO_CHANNEL_OFFSET, chip->gpio_state[index]);
-> > > > -
-> > > > -     spin_unlock_irqrestore(&chip->gpio_lock[index], flags);
-> > > > +     u32 *const state = chip->gpio_state;
-> > > > +     unsigned int *const width = chip->gpio_width;
-> > > > +
-> > > > +     DECLARE_BITMAP(old, 64);
-> > > > +     DECLARE_BITMAP(new, 64);
-> > > > +     DECLARE_BITMAP(changed, 64);
-> > > > +
-> > > > +     spin_lock_irqsave(&chip->gpio_lock[0], flags);
-> > > > +     spin_lock(&chip->gpio_lock[1]);
-> > > > +
-> > > > +     bitmap_set_value(old, 64, state[0], width[0], 0);
-> > > > +     bitmap_set_value(old, 64, state[1], width[1], width[0]);
-> > > > +     bitmap_replace(new, old, bits, mask, gc->ngpio);
-> > > > +
-> > > > +     bitmap_set_value(old, 64, state[0], 32, 0);
-> > > > +     bitmap_set_value(old, 64, state[1], 32, 32);
-> > > > +     state[0] = bitmap_get_value(new, 0, width[0]);
-> > > > +     state[1] = bitmap_get_value(new, width[0], width[1]);
-> > > > +     bitmap_set_value(new, 64, state[0], 32, 0);
-> > > > +     bitmap_set_value(new, 64, state[1], 32, 32);
-> > > > +     bitmap_xor(changed, old, new, 64);
-> > > > +
-> > > > +     if (((u32 *)changed)[0])
-> > > > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET,
-> > > > +                             state[0]);
-> > > > +     if (((u32 *)changed)[1])
-> > > > +             xgpio_writereg(chip->regs + XGPIO_DATA_OFFSET +
-> > > > +                             XGPIO_CHANNEL_OFFSET, state[1]);
-> > > > +
-> > > > +     spin_unlock(&chip->gpio_lock[1]);
-> > > > +     spin_unlock_irqrestore(&chip->gpio_lock[0], flags);
-> > > >  }
-> > > >
-> > > >  /**
-> > > >
-> > >
-> > > Srinivas N: Can you please test this code?
-> > >
-> > > Thanks,
-> > > Michal
-> >
-> > Hey, any chance of getting that Tested-by?
-> I tested patches with few modifications in code (spin_lock handling and merge conflict).
-> functionality wise it's working fine.
->
-> >
-> > Bart
+The mcs unlock macro (arch_mcs_lock_handoff) should accept the value to be
+stored into the lock argument as another argument. This allows using the
+same macro in cases where the value to be stored when passing the lock is
+different from 1.
 
-Hi Bartosz,
+Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
+Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
+Reviewed-by: Waiman Long <longman@redhat.com>
+---
+ arch/arm/include/asm/mcs_spinlock.h |  6 +++---
+ include/asm-generic/mcs_spinlock.h  |  4 ++--
+ kernel/locking/mcs_spinlock.h       | 18 +++++++++---------
+ kernel/locking/qspinlock.c          |  4 ++--
+ kernel/locking/qspinlock_paravirt.h |  2 +-
+ 5 files changed, 17 insertions(+), 17 deletions(-)
 
-May I please know the URL of the tree that you are using. I had been
-using the tree below for submitting this patchset on GPIO to you.
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
+diff --git a/arch/arm/include/asm/mcs_spinlock.h b/arch/arm/include/asm/mcs_spinlock.h
+index 529d2cf4d06f..1eb4d733459c 100644
+--- a/arch/arm/include/asm/mcs_spinlock.h
++++ b/arch/arm/include/asm/mcs_spinlock.h
+@@ -6,7 +6,7 @@
+ #include <asm/spinlock.h>
+ 
+ /* MCS spin-locking. */
+-#define arch_mcs_spin_lock_contended(lock)				\
++#define arch_mcs_spin_wait(lock)					\
+ do {									\
+ 	/* Ensure prior stores are observed before we enter wfe. */	\
+ 	smp_mb();							\
+@@ -14,9 +14,9 @@ do {									\
+ 		wfe();							\
+ } while (0)								\
+ 
+-#define arch_mcs_spin_unlock_contended(lock)				\
++#define arch_mcs_lock_handoff(lock, val)				\
+ do {									\
+-	smp_store_release(lock, 1);					\
++	smp_store_release((lock), (val));				\
+ 	dsb_sev();							\
+ } while (0)
+ 
+diff --git a/include/asm-generic/mcs_spinlock.h b/include/asm-generic/mcs_spinlock.h
+index 10cd4ffc6ba2..f933d99c63e0 100644
+--- a/include/asm-generic/mcs_spinlock.h
++++ b/include/asm-generic/mcs_spinlock.h
+@@ -4,8 +4,8 @@
+ /*
+  * Architectures can define their own:
+  *
+- *   arch_mcs_spin_lock_contended(l)
+- *   arch_mcs_spin_unlock_contended(l)
++ *   arch_mcs_spin_wait(l)
++ *   arch_mcs_lock_handoff(l, val)
+  *
+  * See kernel/locking/mcs_spinlock.c.
+  */
+diff --git a/kernel/locking/mcs_spinlock.h b/kernel/locking/mcs_spinlock.h
+index 5e10153b4d3c..904ba5d0f3f4 100644
+--- a/kernel/locking/mcs_spinlock.h
++++ b/kernel/locking/mcs_spinlock.h
+@@ -21,7 +21,7 @@ struct mcs_spinlock {
+ 	int count;  /* nesting count, see qspinlock.c */
+ };
+ 
+-#ifndef arch_mcs_spin_lock_contended
++#ifndef arch_mcs_spin_wait
+ /*
+  * Using smp_cond_load_acquire() provides the acquire semantics
+  * required so that subsequent operations happen after the
+@@ -29,20 +29,20 @@ struct mcs_spinlock {
+  * ARM64 would like to do spin-waiting instead of purely
+  * spinning, and smp_cond_load_acquire() provides that behavior.
+  */
+-#define arch_mcs_spin_lock_contended(l)					\
+-do {									\
+-	smp_cond_load_acquire(l, VAL);					\
++#define arch_mcs_spin_wait(l)					\
++do {								\
++	smp_cond_load_acquire(l, VAL);				\
+ } while (0)
+ #endif
+ 
+-#ifndef arch_mcs_spin_unlock_contended
++#ifndef arch_mcs_lock_handoff
+ /*
+  * smp_store_release() provides a memory barrier to ensure all
+  * operations in the critical section has been completed before
+  * unlocking.
+  */
+-#define arch_mcs_spin_unlock_contended(l)				\
+-	smp_store_release((l), 1)
++#define arch_mcs_lock_handoff(l, val)				\
++	smp_store_release((l), (val))
+ #endif
+ 
+ /*
+@@ -91,7 +91,7 @@ void mcs_spin_lock(struct mcs_spinlock **lock, struct mcs_spinlock *node)
+ 	WRITE_ONCE(prev->next, node);
+ 
+ 	/* Wait until the lock holder passes the lock down. */
+-	arch_mcs_spin_lock_contended(&node->locked);
++	arch_mcs_spin_wait(&node->locked);
+ }
+ 
+ /*
+@@ -115,7 +115,7 @@ void mcs_spin_unlock(struct mcs_spinlock **lock, struct mcs_spinlock *node)
+ 	}
+ 
+ 	/* Pass lock to next waiter. */
+-	arch_mcs_spin_unlock_contended(&next->locked);
++	arch_mcs_lock_handoff(&next->locked, 1);
+ }
+ 
+ #endif /* __LINUX_MCS_SPINLOCK_H */
+diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+index cbff6ba53d56..435d696f9250 100644
+--- a/kernel/locking/qspinlock.c
++++ b/kernel/locking/qspinlock.c
+@@ -471,7 +471,7 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+ 		WRITE_ONCE(prev->next, node);
+ 
+ 		pv_wait_node(node, prev);
+-		arch_mcs_spin_lock_contended(&node->locked);
++		arch_mcs_spin_wait(&node->locked);
+ 
+ 		/*
+ 		 * While waiting for the MCS lock, the next pointer may have
+@@ -550,7 +550,7 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+ 	if (!next)
+ 		next = smp_cond_load_relaxed(&node->next, (VAL));
+ 
+-	arch_mcs_spin_unlock_contended(&next->locked);
++	arch_mcs_lock_handoff(&next->locked, 1);
+ 	pv_kick_node(lock, next);
+ 
+ release:
+diff --git a/kernel/locking/qspinlock_paravirt.h b/kernel/locking/qspinlock_paravirt.h
+index e84d21aa0722..619d80fd5ea8 100644
+--- a/kernel/locking/qspinlock_paravirt.h
++++ b/kernel/locking/qspinlock_paravirt.h
+@@ -368,7 +368,7 @@ static void pv_kick_node(struct qspinlock *lock, struct mcs_spinlock *node)
+ 	 *
+ 	 * Matches with smp_store_mb() and cmpxchg() in pv_wait_node()
+ 	 *
+-	 * The write to next->locked in arch_mcs_spin_unlock_contended()
++	 * The write to next->locked in arch_mcs_lock_handoff()
+ 	 * must be ordered before the read of pn->state in the cmpxchg()
+ 	 * below for the code to work correctly. To guarantee full ordering
+ 	 * irrespective of the success or failure of the cmpxchg(),
+-- 
+2.24.3 (Apple Git-128)
 
-I think I am using the wrong tree. On which tree should I base my
-patches on for my next  (v4) submission? Should I use the tree below?
-:
-https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
-
-Regards
-Syed Nayyar Waris
