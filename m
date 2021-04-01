@@ -2,269 +2,189 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E07351869
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 19:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D4A35192A
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Apr 2021 19:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234849AbhDARpt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Apr 2021 13:45:49 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:46394 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234598AbhDARiV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Apr 2021 13:38:21 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 131FOg5e070032;
-        Thu, 1 Apr 2021 15:32:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=7xXbGt6ipWzN0FZkyp189L12QPq4brrACDlQEhO9jOc=;
- b=Orh7DWiSEkhi46sVS8uD9de2qKn2XqMAqtNz4svvpuR/SkEjuK3wjbxNx3w5F3qvVrgP
- vlVolgRr906BHJ1Ac5AQIjfwSdjyDR+pr3c818rmSpX87bTV+lC4zUC8dBD6+qtcrp8s
- guIz26iMUKR3F8nErtxCJzsKd8e3Q3k4Fa/kRDNJuEdpiCji0jUwh8TjvstjdQEGRZXT
- Y1FQuNm2/a1b5Y14xXv5LLvWWWrBDjj5+IndJNWTw1Pk3jCSsPpUkyKC7PmJMBBme/9Q
- HUbGmi7H7/sDa/yFxQ7Pngs7S0ZHVj2S4AXd6Ozu9BQ9hbiSvHYZO1VhNIgMra0573dt xQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 37n2a029c3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Apr 2021 15:32:30 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 131FLwuQ024262;
-        Thu, 1 Apr 2021 15:32:28 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 37n2asea1v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Apr 2021 15:32:28 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 131FWFjn011670;
-        Thu, 1 Apr 2021 15:32:15 GMT
-Received: from neelam.us.oracle.com (/10.152.128.16)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 01 Apr 2021 08:32:15 -0700
-From:   Alex Kogan <alex.kogan@oracle.com>
-To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
-        will.deacon@arm.com, arnd@arndb.de, longman@redhat.com,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
-        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
-        jglauber@marvell.com
-Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        alex.kogan@oracle.com, dave.dice@oracle.com
-Subject: [PATCH v14 4/6] locking/qspinlock: Introduce starvation avoidance into CNA
-Date:   Thu,  1 Apr 2021 11:31:54 -0400
-Message-Id: <20210401153156.1165900-5-alex.kogan@oracle.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210401153156.1165900-1-alex.kogan@oracle.com>
-References: <20210401153156.1165900-1-alex.kogan@oracle.com>
+        id S234548AbhDARv4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Apr 2021 13:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236535AbhDARpZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Apr 2021 13:45:25 -0400
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE077C03117F;
+        Thu,  1 Apr 2021 10:11:06 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FB8pb136rzMqMD8;
+        Thu,  1 Apr 2021 19:11:03 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4FB8pQ6Nzrzlh8TN;
+        Thu,  1 Apr 2021 19:10:54 +0200 (CEST)
+Subject: Re: [PATCH v31 07/12] landlock: Support filesystem access-control
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+References: <20210324191520.125779-1-mic@digikod.net>
+ <20210324191520.125779-8-mic@digikod.net>
+ <d2764451-8970-6cbd-e2bf-254a42244ffc@digikod.net>
+ <YGUslUPwp85Zrp4t@zeniv-ca.linux.org.uk>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <84e1cd29-0f09-1ed4-c680-65ca8c6988a3@digikod.net>
+Date:   Thu, 1 Apr 2021 19:12:05 +0200
+User-Agent: 
 MIME-Version: 1.0
+In-Reply-To: <YGUslUPwp85Zrp4t@zeniv-ca.linux.org.uk>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-IMR: 1
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9941 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2103310000 definitions=main-2104010104
-X-Proofpoint-GUID: SxpQz_8HPk0JH92ICcz0JyiH62VRzll5
-X-Proofpoint-ORIG-GUID: SxpQz_8HPk0JH92ICcz0JyiH62VRzll5
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9941 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 adultscore=0
- clxscore=1015 mlxlogscore=999 phishscore=0 bulkscore=0 priorityscore=1501
- spamscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2103310000
- definitions=main-2104010104
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Keep track of the time the thread at the head of the secondary queue
-has been waiting, and force inter-node handoff once this time passes
-a preset threshold. The default value for the threshold (10ms) can be
-overridden with the new kernel boot command-line option
-"numa_spinlock_threshold". The ms value is translated internally to the
-nearest rounded-up jiffies.
 
-Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
-Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
-Reviewed-by: Waiman Long <longman@redhat.com>
----
- .../admin-guide/kernel-parameters.txt         |  9 ++
- kernel/locking/qspinlock_cna.h                | 96 ++++++++++++++++---
- 2 files changed, 93 insertions(+), 12 deletions(-)
+On 01/04/2021 04:14, Al Viro wrote:
+> On Wed, Mar 31, 2021 at 07:33:50PM +0200, Mickaël Salaün wrote:
+> 
+>>> +static inline u64 unmask_layers(
+>>> +		const struct landlock_ruleset *const domain,
+>>> +		const struct path *const path, const u32 access_request,
+>>> +		u64 layer_mask)
+>>> +{
+>>> +	const struct landlock_rule *rule;
+>>> +	const struct inode *inode;
+>>> +	size_t i;
+>>> +
+>>> +	if (d_is_negative(path->dentry))
+>>> +		/* Continues to walk while there is no mapped inode. */
+> 				     ^^^^^
+> Odd comment, that...
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index ace55afd4441..5c959631a8c8 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3485,6 +3485,15 @@
- 			Not specifying this option is equivalent to
- 			numa_spinlock=auto.
- 
-+	numa_spinlock_threshold=	[NUMA, PV_OPS]
-+			Set the time threshold in milliseconds for the
-+			number of intra-node lock hand-offs before the
-+			NUMA-aware spinlock is forced to be passed to
-+			a thread on another NUMA node.	Valid values
-+			are in the [1..100] range. Smaller values result
-+			in a more fair, but less performant spinlock,
-+			and vice versa. The default value is 10.
-+
- 	numa_zonelist_order= [KNL, BOOT] Select zonelist order for NUMA.
- 			'node', 'default' can be specified
- 			This can be set from sysctl after boot.
-diff --git a/kernel/locking/qspinlock_cna.h b/kernel/locking/qspinlock_cna.h
-index d689861a7b3d..0513360c11fe 100644
---- a/kernel/locking/qspinlock_cna.h
-+++ b/kernel/locking/qspinlock_cna.h
-@@ -37,6 +37,12 @@
-  * gradually filter the primary queue, leaving only waiters running on the same
-  * preferred NUMA node.
-  *
-+ * We change the NUMA node preference after a waiter at the head of the
-+ * secondary queue spins for a certain amount of time (10ms, by default).
-+ * We do that by flushing the secondary queue into the head of the primary queue,
-+ * effectively changing the preference to the NUMA node of the waiter at the head
-+ * of the secondary queue at the time of the flush.
-+ *
-  * For more details, see https://arxiv.org/abs/1810.05600.
-  *
-  * Authors: Alex Kogan <alex.kogan@oracle.com>
-@@ -49,13 +55,33 @@ struct cna_node {
- 	u16			real_numa_node;
- 	u32			encoded_tail;	/* self */
- 	u32			partial_order;	/* enum val */
-+	s32			start_time;
- };
- 
- enum {
- 	LOCAL_WAITER_FOUND,
- 	LOCAL_WAITER_NOT_FOUND,
-+	FLUSH_SECONDARY_QUEUE
- };
- 
-+/*
-+ * Controls the threshold time in ms (default = 10) for intra-node lock
-+ * hand-offs before the NUMA-aware variant of spinlock is forced to be
-+ * passed to a thread on another NUMA node. The default setting can be
-+ * changed with the "numa_spinlock_threshold" boot option.
-+ */
-+#define MSECS_TO_JIFFIES(m)	\
-+	(((m) + (MSEC_PER_SEC / HZ) - 1) / (MSEC_PER_SEC / HZ))
-+static int intra_node_handoff_threshold __ro_after_init = MSECS_TO_JIFFIES(10);
-+
-+static inline bool intra_node_threshold_reached(struct cna_node *cn)
-+{
-+	s32 current_time = (s32)jiffies;
-+	s32 threshold = cn->start_time + intra_node_handoff_threshold;
-+
-+	return current_time - threshold > 0;
-+}
-+
- static void __init cna_init_nodes_per_cpu(unsigned int cpu)
- {
- 	struct mcs_spinlock *base = per_cpu_ptr(&qnodes[0].mcs, cpu);
-@@ -99,6 +125,7 @@ static __always_inline void cna_init_node(struct mcs_spinlock *node)
- 
- 	cn->numa_node = cn->real_numa_node;
- 	cn->partial_order = LOCAL_WAITER_FOUND;
-+	cn->start_time = 0;
- }
- 
- /*
-@@ -198,8 +225,15 @@ static void cna_splice_next(struct mcs_spinlock *node,
- 
- 	/* stick `next` on the secondary queue tail */
- 	if (node->locked <= 1) { /* if secondary queue is empty */
-+		struct cna_node *cn = (struct cna_node *)node;
-+
- 		/* create secondary queue */
- 		next->next = next;
-+
-+		cn->start_time = (s32)jiffies;
-+		/* make sure start_time != 0 iff secondary queue is not empty */
-+		if (!cn->start_time)
-+			cn->start_time = 1;
- 	} else {
- 		/* add to the tail of the secondary queue */
- 		struct mcs_spinlock *tail_2nd = decode_tail(node->locked);
-@@ -250,11 +284,17 @@ static void cna_order_queue(struct mcs_spinlock *node)
- static __always_inline u32 cna_wait_head_or_lock(struct qspinlock *lock,
- 						 struct mcs_spinlock *node)
- {
--	/*
--	 * Try and put the time otherwise spent spin waiting on
--	 * _Q_LOCKED_PENDING_MASK to use by sorting our lists.
--	 */
--	cna_order_queue(node);
-+	struct cna_node *cn = (struct cna_node *)node;
-+
-+	if (!cn->start_time || !intra_node_threshold_reached(cn)) {
-+		/*
-+		 * Try and put the time otherwise spent spin waiting on
-+		 * _Q_LOCKED_PENDING_MASK to use by sorting our lists.
-+		 */
-+		cna_order_queue(node);
-+	} else {
-+		cn->partial_order = FLUSH_SECONDARY_QUEUE;
-+	}
- 
- 	return 0; /* we lied; we didn't wait, go do so now */
- }
-@@ -270,13 +310,28 @@ static inline void cna_lock_handoff(struct mcs_spinlock *node,
- 	if (partial_order == LOCAL_WAITER_NOT_FOUND)
- 		cna_order_queue(node);
- 
--	/*
--	 * We have a local waiter, either real or fake one;
--	 * reload @next in case it was changed by cna_order_queue().
--	 */
--	next = node->next;
--	if (node->locked > 1)
--		val = node->locked;	/* preseve secondary queue */
-+	if (partial_order != FLUSH_SECONDARY_QUEUE) {
-+		/*
-+		 * We have a local waiter, either real or fake one;
-+		 * reload @next in case it was changed by cna_order_queue().
-+		 */
-+		next = node->next;
-+		if (node->locked > 1) {
-+			val = node->locked;     /* preseve secondary queue */
-+			((struct cna_node *)next)->start_time = cn->start_time;
-+		}
-+	} else {
-+		/*
-+		 * We decided to flush the secondary queue;
-+		 * this can only happen if that queue is not empty.
-+		 */
-+		WARN_ON(node->locked <= 1);
-+		/*
-+		 * Splice the secondary queue onto the primary queue and pass the lock
-+		 * to the longest waiting remote waiter.
-+		 */
-+		next = cna_splice_head(NULL, 0, node, next);
-+	}
- 
- 	arch_mcs_lock_handoff(&next->locked, val);
- }
-@@ -328,3 +383,20 @@ void __init cna_configure_spin_lock_slowpath(void)
- 
- 	pr_info("Enabling CNA spinlock\n");
- }
-+
-+static int __init numa_spinlock_threshold_setup(char *str)
-+{
-+	int param;
-+
-+	if (get_option(&str, &param)) {
-+		/* valid value is between 1 and 100 */
-+		if (param <= 0 || param > 100)
-+			return 0;
-+
-+		intra_node_handoff_threshold = msecs_to_jiffies(param);
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+__setup("numa_spinlock_threshold=", numa_spinlock_threshold_setup);
--- 
-2.24.3 (Apple Git-128)
+I'll replace that with something more appropriate, e.g. "Ignore
+nonexistent leafs".
 
+> 
+>>> +static int check_access_path(const struct landlock_ruleset *const domain,
+>>> +		const struct path *const path, u32 access_request)
+>>> +{
+> 
+>>> +	walker_path = *path;
+>>> +	path_get(&walker_path);
+> 
+>>> +	while (true) {
+>>> +		struct dentry *parent_dentry;
+>>> +
+>>> +		layer_mask = unmask_layers(domain, &walker_path,
+>>> +				access_request, layer_mask);
+>>> +		if (layer_mask == 0) {
+>>> +			/* Stops when a rule from each layer grants access. */
+>>> +			allowed = true;
+>>> +			break;
+>>> +		}
+>>> +
+>>> +jump_up:
+>>> +		if (walker_path.dentry == walker_path.mnt->mnt_root) {
+>>> +			if (follow_up(&walker_path)) {
+>>> +				/* Ignores hidden mount points. */
+>>> +				goto jump_up;
+>>> +			} else {
+>>> +				/*
+>>> +				 * Stops at the real root.  Denies access
+>>> +				 * because not all layers have granted access.
+>>> +				 */
+>>> +				allowed = false;
+>>> +				break;
+>>> +			}
+>>> +		}
+>>> +		if (unlikely(IS_ROOT(walker_path.dentry))) {
+>>> +			/*
+>>> +			 * Stops at disconnected root directories.  Only allows
+>>> +			 * access to internal filesystems (e.g. nsfs, which is
+>>> +			 * reachable through /proc/<pid>/ns/<namespace>).
+>>> +			 */
+>>> +			allowed = !!(walker_path.mnt->mnt_flags & MNT_INTERNAL);
+>>> +			break;
+>>> +		}
+>>> +		parent_dentry = dget_parent(walker_path.dentry);
+>>> +		dput(walker_path.dentry);
+>>> +		walker_path.dentry = parent_dentry;
+>>> +	}
+>>> +	path_put(&walker_path);
+>>> +	return allowed ? 0 : -EACCES;
+> 
+> That's a whole lot of grabbing/dropping references...  I realize that it's
+> an utterly tactless question, but... how costly it is?  IOW, do you have
+> profiling data?
+
+It looks like a legitimate question.
+
+First, Landlock may not be appropriate for every workloads. The
+check_access_path()'s complexity is now linear, which is a consequence
+of the "unprivileged" target (i.e. multiple layers of file hierarchies).
+Adding caching should help a lot to improve performance (i.e. limit the
+path walking), but it will come with future improvements.
+
+I profiled a "find" loop on the linux-5.12-rc3 source tree in a tmpfs
+(and with cached entries): openat(2) calls spend ~30% of their time in
+check_access_path() with a base directory of one parent (/linux) and
+~45% with a base directory of ten parents (/1/2/3/4/5/6/7/8/9/linux).
+Overall, the performance impact is between 3.0% (with a minimum depth of
+1) and 5.4% (with a minimum depth of 10) of the full execution time of
+these worse case scenarios, which are ~4800 openat(2) calls. This is not
+a surprise and doesn't seem so bad without optimization.
+
+
+> 
+>>> +/*
+>>> + * pivot_root(2), like mount(2), changes the current mount namespace.  It must
+>>> + * then be forbidden for a landlocked process.
+> 
+> ... and cross-directory rename(2) can change the tree topology.  Do you ban that
+> as well?
+> 
+> [snip]
+> 
+>>> +static int hook_path_rename(const struct path *const old_dir,
+>>> +		struct dentry *const old_dentry,
+>>> +		const struct path *const new_dir,
+>>> +		struct dentry *const new_dentry)
+>>> +{
+>>> +	const struct landlock_ruleset *const dom =
+>>> +		landlock_get_current_domain();
+>>> +
+>>> +	if (!dom)
+>>> +		return 0;
+>>> +	/* The mount points are the same for old and new paths, cf. EXDEV. */
+>>> +	if (old_dir->dentry != new_dir->dentry)
+>>> +		/* For now, forbids reparenting. */
+>>> +		return -EACCES;
+> 
+> You do, apparently, and not in a way that would have the userland fall
+> back to copy+unlink.  Lovely...  Does e.g. git survive such restriction?
+> Same question for your average package build...
+
+As explained in the documentation, there is some limitations that make
+this first step not appropriate for all use cases. I'll use EXDEV to
+gracefully forbid reparenting, which gives a chance to userspace to deal
+with that. It may not be enough for package management though. I plan to
+address such limitation with future evolutions.
+
+Thanks for these suggestions.
