@@ -2,76 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF59D352476
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 02:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BF8352696
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 08:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235993AbhDBAdB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Apr 2021 20:33:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35780 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233677AbhDBAdB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 1 Apr 2021 20:33:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2111D6100C;
-        Fri,  2 Apr 2021 00:32:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1617323580;
-        bh=l5OBmZolqQt7kxKdrbukEJTSt9ja/UZ2NhAmGHQ3zxU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kG/JulKQ/j7q300El8hcUdl9djvCOTMS316bPRU5+zmo9B22mCs+usRR8Evbkkn3N
-         vA22n5vywmXywzyPXhGzM0UbJXdoQ9BA2ttE7BZclCb+sTtuAmm/YGdbm35L7i53EV
-         glVlMEwvdxswxe9y/dSTG3XBRgE8mCchA/H3Kpqg=
-Date:   Thu, 1 Apr 2021 17:32:58 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux-SH <linux-sh@vger.kernel.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.osdn.me>
-Subject: Re: [PATCH v6 00/12] lib/find_bit: fast path for small bitmaps
-Message-Id: <20210401173258.1f9a107ef13f210fb4896780@linux-foundation.org>
-In-Reply-To: <CAHp75VdTndAD1gyLE_e8m9AaxrRMCNpYEu22+tWe1xrAz8oKBw@mail.gmail.com>
-References: <20210401003153.97325-1-yury.norov@gmail.com>
-        <CAHp75VdzRXPsQ7Jvivm5UU+mfkgQ_0rmnegp04v-v9fwrjdrqg@mail.gmail.com>
-        <CAK8P3a2EGc4BS7UTyC6=ySgLEoyqbswh1Gh_=M21NmhRThssYQ@mail.gmail.com>
-        <CAHp75VdTndAD1gyLE_e8m9AaxrRMCNpYEu22+tWe1xrAz8oKBw@mail.gmail.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S229553AbhDBGh6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Apr 2021 02:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229522AbhDBGh5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Apr 2021 02:37:57 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF20C0613E6;
+        Thu,  1 Apr 2021 23:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=23JVev1P6hfZn75YYKAeRgCkKkBm6a8rfr6nXZM/23Y=; b=DidHl2sJes5CZndoc3Jq3dcebg
+        mHIG2+4LZPraKak5HEMoK0y5J2IN+LGspSYgcrDWzNKlc2hELMTpEx/cRtXNSteFzQC58hDAl/Zf7
+        FnMIDAJJhvKvxesv3o0OwP/BzOHYMsJyft0tWmRNf3lx4Lnyk1AquB6H2AutP63hjsWxrxBEumlcb
+        2rC3O68k8xLzsESDaHWYMzu3vLCyoQAMZNMXEUIEeRl6vkT8pgZBNaHnhTsDAG4+NgJGZOIlFY9Ky
+        bnP3x4iu02ItVcHPk1+J4B68TLe+1IqUgzG8yVAGE2P8dQQe9sbqQQ6wDpJxGuR2URuUn8LGWri3a
+        KUpOgXeA==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lSDR6-007IGD-Qr; Fri, 02 Apr 2021 06:37:42 +0000
+Date:   Fri, 2 Apr 2021 07:37:40 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH v5 03/18] mm: add generic function_nocfi macro
+Message-ID: <20210402063740.GA1738362@infradead.org>
+References: <20210401233216.2540591-1-samitolvanen@google.com>
+ <20210401233216.2540591-4-samitolvanen@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210401233216.2540591-4-samitolvanen@google.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 1 Apr 2021 12:50:31 +0300 Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+Thanks, this looks much better than the earlier naming:
 
-> > I normally don't have a lot of material for asm-generic either, half
-> > the time there are no pull requests at all for a given release. I would
-> > expect future changes to the bitmap implementation to only need
-> > an occasional bugfix, which could go through either the asm-generic
-> > tree or through mm and doesn't need another separate pull request.
-> >
-> > If it turns out to be a tree that needs regular updates every time,
-> > then having a top level repository in linux-next would be appropriate.
-> 
-> Agree. asm-generic may serve for this. My worries are solely about how
-> much burden we add on Andrew's shoulders.
-
-Is fine.  Saving other developers from having to maintain tiny trees is
-a thing I do.
-
+Acked-by: Christoph Hellwig <hch@lst.de>
