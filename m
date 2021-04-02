@@ -2,58 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20ED93528F6
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 11:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A72A352982
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 12:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233718AbhDBJk6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Apr 2021 05:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
+        id S234488AbhDBKHk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Apr 2021 06:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234482AbhDBJk5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Apr 2021 05:40:57 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA1BC0613E6;
-        Fri,  2 Apr 2021 02:40:57 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id r193so1906323ior.9;
-        Fri, 02 Apr 2021 02:40:57 -0700 (PDT)
+        with ESMTP id S234207AbhDBKHj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Apr 2021 06:07:39 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C98C0613E6;
+        Fri,  2 Apr 2021 03:07:38 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id e186so4892622iof.7;
+        Fri, 02 Apr 2021 03:07:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NpfJ7ZDCsL19dq39DZU8Zv+kNBnx+3lvoUY6iHvhzLo=;
-        b=nZ/aoOT7fuDONxs8HFnvIWfKJaJK51Zva46kyAvGnIMwidBbKBzlkk2gsmj++BISZO
-         F8XZUaiCCLN6/04DmxBI0e5zYCZ66WhQawVIHWEJmU5ovypVxr1u1SAyB6ev/dGDvQrB
-         14lK3pRFbZPcP1xxQKH679gvcHxOPd1OZ2X1UefH/z6Z4XH0wujTz55GfO8fJSIDjWY2
-         GvcGcDiz0i4g+UulGa3vNI1PtwT0KYEygyWvup098qM+gOrcHgHDFRbrcnMbfBfawAyV
-         Hk2T3AQblyZl252l+SzH4l7jgTYTdlPaiKf0QSvxIYiIhFu/EzQbOD1SzNzpBnXcTu4T
-         puog==
+        bh=SeOEv4eerfZMMN9wbPTmtUV41hsInB/cRaOxivaSmYg=;
+        b=B0meY3W3X5Y8YLebNNl4XcvfgWTq8mBvPURN1m3huvgOzYL1ZxdoeFGBzQ2RX1O2+X
+         Jmx9A8D7rA7yuuLrgmWLz8HRT23m9qJxtCK5dhpHhv59FulYkCJXM6IXl/ymFmntFKNA
+         icV+5K9OD4e/ReICmsl4QrcJA+ipoGVoU1ge/Zh4Z0vcE56hZJbgCaZuQD92WX2aqmLe
+         kjcEWqz3sv1a9PRo6OOtZZJCQ4rxgr1RSbb/U/9JYKqPLtcOBBzDIFUmktOyepk4+E6w
+         Qjd9KqdROlIz5q0DPEd12oMec8tpUuJTxcr3KKEhmLIyr0hGXgmcawD5qUng8F414OTB
+         /LeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NpfJ7ZDCsL19dq39DZU8Zv+kNBnx+3lvoUY6iHvhzLo=;
-        b=ER6uDKjCVkRigLB82PQy68buBZJ4UgSt22UG4rwRZNSLGOzS5x9QgNdbd29yEGDFR0
-         gX1NZ3dVT3JM5cLshXpiAPgqVUY+/j635HjeHQGm8gMuxn/RtAZcJwWB3bFxyNfXMn3L
-         yZqtwn26WkS4gfc0DKnI8xBKYUW76QlmMVpCQoEfCT/n8zcDAebjwTpIWHON/AVmpq2X
-         /kGYikIfsLKaI0G+WateD0Da04QFBDmLnVbQlFo5tbzQQWGeGNvllZncEq3h3TXJ6DGF
-         i01HJxMuJDW4dF/rE7CC0+vbFFfKn+bx/02fygEvdUCxjumpnVVKr+AEo3AMBBfFCPva
-         t4Mw==
-X-Gm-Message-State: AOAM531rR/YdxOTTOGu5Zg3uXz0Isoa/WyC5LvWbB1cYVSlVn6GQKXun
-        vWdALAR0r0I+1/OEo2wbzlLd+mdmmds/5bsOD50=
-X-Google-Smtp-Source: ABdhPJzHbK5cq1FQe+dTjZRuzv4fwtZuUKmnl4BPeWlMpMqCEbzOkqZIjKR0aKE8oI8LjfZNuxOmzDMyqlFa1tSC9GQ=
-X-Received: by 2002:a05:6638:ec7:: with SMTP id q7mr12109057jas.54.1617356456649;
- Fri, 02 Apr 2021 02:40:56 -0700 (PDT)
+        bh=SeOEv4eerfZMMN9wbPTmtUV41hsInB/cRaOxivaSmYg=;
+        b=lABBA9uwO2voppOvyz5ZyhEKlFabSd1rd5iGHGf4eXdKiHEbQC/by0WyzrIbGje9TP
+         dFGRB/YCR+jIptEoJtcDYChm3IjX2ZhmkQJUDlGZ8BPHUNN5E0VSVtC3wiyLwwKQmt4G
+         dXOMuEmY20TR6DIgxKGWSlTTlsAnK0bx0U1RBPg0+sV2VbS0CpJK3J1VGtVum5TYs6Ox
+         WxH+Pt6wh3jVN7eeTewzV2L5P/CABBKCSM585myBbsJnZpq6q3QG7Aupk8eGqjFQsHIU
+         rRJjiXylrwzaURlGbfSY/jceu46gDRLVPpkBtJaTubM1xnFr+XnClwtIl/spp369VDvz
+         iNUA==
+X-Gm-Message-State: AOAM532tno637S7LcdgD/iv0Y2U3heARYiMh0RAl4OyH0LpYpMneMcL7
+        rMi+3QyZ6N7K/U9e3J7PPm/36o/z670w5CTw+so=
+X-Google-Smtp-Source: ABdhPJzGJSd3y77/tYWERkflE7EwK2aNPKQZZnYP6DrG1spSrX7/cbJyzHUyyOK87SbC6l2f8o2iM1U/vAzvLJRTgJY=
+X-Received: by 2002:a02:c6c4:: with SMTP id r4mr11861455jan.77.1617358057544;
+ Fri, 02 Apr 2021 03:07:37 -0700 (PDT)
 MIME-Version: 1.0
 References: <cover.1615038553.git.syednwaris@gmail.com> <4c259d34b5943bf384fd3cb0d98eccf798a34f0f.1615038553.git.syednwaris@gmail.com>
- <CAHp75VePT-Df1F8ma1__ay8+9DHtYwonvwTZtK-OFqCtXshx-w@mail.gmail.com>
-In-Reply-To: <CAHp75VePT-Df1F8ma1__ay8+9DHtYwonvwTZtK-OFqCtXshx-w@mail.gmail.com>
+ <YGHxNFXAjcg4PfnE@smile.fi.intel.com>
+In-Reply-To: <YGHxNFXAjcg4PfnE@smile.fi.intel.com>
 From:   Syed Nayyar Waris <syednwaris@gmail.com>
-Date:   Fri, 2 Apr 2021 15:10:37 +0530
-Message-ID: <CACG_h5pNhJJQ1nvmPmT1iZJwtLB+a-4nmy=TmgU6GLWiyF=bHA@mail.gmail.com>
+Date:   Fri, 2 Apr 2021 15:37:26 +0530
+Message-ID: <CACG_h5qV2g7GUKtktBydxfx2Z-o3_6Tssj_+Dt-xZxYKVo9YMw@mail.gmail.com>
 Subject: Re: [PATCH v3 3/3] gpio: xilinx: Utilize generic bitmap_get_value and _set_value
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         William Breathitt Gray <vilhelm.gray@gmail.com>,
         Michal Simek <michal.simek@xilinx.com>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -74,11 +73,10 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 26, 2021 at 11:27 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Mon, Mar 29, 2021 at 8:54 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Sat, Mar 6, 2021 at 4:08 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> >
+> On Sat, Mar 06, 2021 at 07:36:30PM +0530, Syed Nayyar Waris wrote:
 > > This patch reimplements the xgpio_set_multiple() function in
 > > drivers/gpio/gpio-xilinx.c to use the new generic functions:
 > > bitmap_get_value() and bitmap_set_value(). The code is now simpler
@@ -88,53 +86,29 @@ On Fri, Mar 26, 2021 at 11:27 PM Andy Shevchenko
 >
 > ...
 >
-> > +       u32 *const state = chip->gpio_state;
-> > +       unsigned int *const width = chip->gpio_width;
+> > +     u32 *const state = chip->gpio_state;
 >
-> > +
+> Looking at this... What's the point of the const here?
 >
-> Extra blank line.
+> Am I right that this tells: pointer is a const, while the data underneath
+> can be modified?
+
+Yes you are right and the data underneath can be modified.
+I have removed the 'const' in v4
+
 >
-> > +       DECLARE_BITMAP(old, 64);
-> > +       DECLARE_BITMAP(new, 64);
-> > +       DECLARE_BITMAP(changed, 64);
+> > +     unsigned int *const width = chip->gpio_width;
 >
-> > +       spin_lock_irqsave(&chip->gpio_lock[0], flags);
-> > +       spin_lock(&chip->gpio_lock[1]);
+> Ditto.
 >
-> I understand why this is done at the top of the function in the original code.
-> I do not understand why you put some operations under spin lock.
->
-> Have you checked what each of these spin locks protects?
-> Please check and try to lock as minimum as possible.
->
-> > +       bitmap_set_value(old, 64, state[0], width[0], 0);
-> > +       bitmap_set_value(old, 64, state[1], width[1], width[0]);
-> > +       bitmap_replace(new, old, bits, mask, gc->ngpio);
-> > +
-> > +       bitmap_set_value(old, 64, state[0], 32, 0);
-> > +       bitmap_set_value(old, 64, state[1], 32, 32);
-> > +       state[0] = bitmap_get_value(new, 0, width[0]);
-> > +       state[1] = bitmap_get_value(new, width[0], width[1]);
-> > +       bitmap_set_value(new, 64, state[0], 32, 0);
-> > +       bitmap_set_value(new, 64, state[1], 32, 32);
-> > +       bitmap_xor(changed, old, new, 64);
->
-> Original code and this is cryptic. Can you add a few comments
-> explaining what is going on here?
->
-> > +       spin_unlock(&chip->gpio_lock[1]);
-> > +       spin_unlock_irqrestore(&chip->gpio_lock[0], flags);
+> Putting const:s here and there for sake of the const is not good practice.
+> It makes code harder to read.
+
+Okay.
+
 >
 > --
 > With Best Regards,
 > Andy Shevchenko
-
-Have removed the extra line and added comments. Regarding locking - I
-see that now there is just a single lock available instead of 2 locks.
-Have made necessary changes. Thanks
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/gpio/gpio-xilinx.c?id=37ef334680800263b32bb96a5156a4b47f0244a2
-
-Regards
-
-Syed Nayyar Waris
+>
+>
