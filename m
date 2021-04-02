@@ -2,54 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 510A435298F
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 12:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A84A352992
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 12:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbhDBKLo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Apr 2021 06:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
+        id S229722AbhDBKMY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Apr 2021 06:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbhDBKLo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Apr 2021 06:11:44 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C34C0613E6;
-        Fri,  2 Apr 2021 03:11:42 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id t140so3285963pgb.13;
-        Fri, 02 Apr 2021 03:11:42 -0700 (PDT)
+        with ESMTP id S229605AbhDBKMX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Apr 2021 06:12:23 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B2CC0613E6;
+        Fri,  2 Apr 2021 03:12:22 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id j25so3341630pfe.2;
+        Fri, 02 Apr 2021 03:12:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=uINt+NN92c/qqfcZODFiV431lREP2XSc10cIb3wY4cc=;
-        b=l/fmTCDn13mLbCThcvC6o8U9EAGLpx5ASG68btJFTg+HocJJ0kP0nOt6taopeYMDB3
-         RdKOdDANC483leCBktWTrtX1VNOtbddTw1Oi+7qB/LczPzyHH4RBeSbVxqIdL16Tc4yt
-         /RJpofJnpA5wgO3NecEYKlQi+jWHONp/cNM4AblrELIXeb4riFUc//slAfbiNU4BoLqN
-         UajRyBO5G1qXQYOoXE0xA2NTyzHS9CsLRDy8OP8dmz8ddEFH+4PtD4HtYbdM3EKpzwFl
-         ms1Tl3FWYdxTQmNUXoamORAZ8npktqBXeMVQTOASVOWAQBeUVyxYXgNAuZVWLZ4cho+T
-         yxig==
+         :content-disposition:in-reply-to:user-agent;
+        bh=pjJTs/trNbCfk/Wd5AeG0sctmtT3vopPWM58p/JWi08=;
+        b=X0pl6oiDGAB8riJRc8TdXBwVXf3oZNvOJwhTa2W7pA6M5M9hyfmX2bdbKbwz3pblYH
+         IYZg697aXp3DpAZFoRpEwUwnG4Ag90KNmwmeUStf6J9wmarh7MIONtvf1++OG7p/D7JQ
+         vHyoAHEujja+kgxFzY7F8rpzz/L+xoNeoT4okBQ8ARmhePe0AW0pahn3rGDhiHWW1FTW
+         7ArCZ4+c3aZn6tz5iajWiKbQC0bX/UUDgt8X8asCIgEhk7QA4Fapo+SASiuOZj+hAU79
+         E/RLY4srtg9kbXu4wHonooy57C3VgAQVj3IZLjA1ySSBcQRCXQ5L/hgzGa6aWDUkWF8Q
+         glGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=uINt+NN92c/qqfcZODFiV431lREP2XSc10cIb3wY4cc=;
-        b=Yf5bWJT8HW6WkDE2vy7Qvgz3hz7wzMup5+gPtylhirFQivc1qCNNNmCoeX3HLTY3ob
-         Z5at5MZVy4sTy2Rwj5ypNgL+LLFFRkJYZUx0UqdYOGR5o4N99icFrR5uZA1wL4TRUFLN
-         y+rsgSPmWjIL84BIadnTuo6YFgDmOR650JD00bYoqG163+zoayAnIdpetD6W77fJIa08
-         wV4734jFUsCyqIe6NCOVl7wODAZa/6wFTCxyRAof8l9CwOUYsU8lItoTTMjUFs+CK3X8
-         hlz5UKF5/xc2GgzxX6VLH3Yy9LYTmVxc34oAZXi2IOwlKvWPfu7SXocLhop8fb9qRQgu
-         7PJQ==
-X-Gm-Message-State: AOAM53147UNQ7atQaqRhu8kRIfd5vlYe1P3+yM0NLuV1FTw0mt77Tldy
-        IMH/nMGz+v8lhFuq/kqBR0Q=
-X-Google-Smtp-Source: ABdhPJwYOkp3h/5YYuq7wFH6wtT41RcO8LQl85nhoCS0ohhE7PHiPkpZ9rNp9iCbGWqgyHPiyvbWzA==
-X-Received: by 2002:a62:6883:0:b029:220:4426:449c with SMTP id d125-20020a6268830000b02902204426449cmr11368828pfc.14.1617358301687;
-        Fri, 02 Apr 2021 03:11:41 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pjJTs/trNbCfk/Wd5AeG0sctmtT3vopPWM58p/JWi08=;
+        b=SyMs5h+Z9eOR7717/2L4aVb2ovv/v1Mk37veRGhOo7AKIK/OlMD7Prm91QjT8ei4+g
+         Bl+ajISffKyzI8J5JdVKBawgfQIN5uAjufeKuE6iAtbdZLBQodVwLG0vMNW3FzMLjbpi
+         96Ve2wyMltFZioY1/y37/IYKR+dI2LpcgjnNXPUPEvuaefB+Ckxyaq7pGU2QGK8GrR7C
+         oanhBaoJKpjtjKsPsvUVeXYr/43CUsTMfqbQotFu7nZ/mX8X6/Oxk4ifkc7Kv1YOmFYn
+         Mb142h82lVQCQ8P6YV4g92+F2rGTZACrao8p6fl/bbBczX834QZpnfNBhf6Z2M2uAt6X
+         J4Xw==
+X-Gm-Message-State: AOAM531npC7X9VoKs48ufQuyaXY0ArLfxOmP+1wZUi285ZdcEJEL+k3L
+        fjMh+slyx3bPqaTUFD/uoRM=
+X-Google-Smtp-Source: ABdhPJw8RJb7DEr9GjqHs0QTLVJduTr4bs7vTfx3FKXKyLa3wkOCb2XxgyvGtFl04jQnovTx3jM9Cw==
+X-Received: by 2002:a63:f542:: with SMTP id e2mr11371560pgk.338.1617358342446;
+        Fri, 02 Apr 2021 03:12:22 -0700 (PDT)
 Received: from syed ([223.225.111.29])
-        by smtp.gmail.com with ESMTPSA id v13sm7326337pfu.54.2021.04.02.03.11.35
+        by smtp.gmail.com with ESMTPSA id b84sm8051524pfb.162.2021.04.02.03.12.16
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 02 Apr 2021 03:11:41 -0700 (PDT)
-Date:   Fri, 2 Apr 2021 15:41:24 +0530
+        Fri, 02 Apr 2021 03:12:22 -0700 (PDT)
+Date:   Fri, 2 Apr 2021 15:42:06 +0530
 From:   Syed Nayyar Waris <syednwaris@gmail.com>
 To:     bgolaszewski@baylibre.com
 Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
@@ -60,184 +58,64 @@ Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
         amit.kucheria@verdurent.com, linux-arch@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH v4 1/3] gpiolib: Introduce the for_each_set_nbits macro
-Message-ID: <12102d94258fc6bd5c01800b7cea680fc51d8b93.1617357235.git.syednwaris@gmail.com>
+Subject: [PATCH v4 2/3] gpio: thunderx: Utilize for_each_set_nbits macro
+Message-ID: <3a9bd0a593798538bec54d8b5ceab20a73d7eaa1.1617357235.git.syednwaris@gmail.com>
 References: <cover.1617357235.git.syednwaris@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <cover.1617357235.git.syednwaris@gmail.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This macro iterates for each group of bits (clump) with set bits,
-within a bitmap memory region. For each iteration, "start" is set to
-the bit offset of the found clump, while the respective clump value is
-stored to the location pointed by "clump". Additionally, the
-bitmap_get_value() and bitmap_set_value() functions are introduced to
-respectively get and set a value of n-bits in a bitmap memory region.
-The n-bits can have any size from 1 to BITS_PER_LONG. size less
-than 1 or more than BITS_PER_LONG causes undefined behaviour.
-Moreover, during setting value of n-bit in bitmap, if a situation arise
-that the width of next n-bit is exceeding the word boundary, then it
-will divide itself such that some portion of it is stored in that word,
-while the remaining portion is stored in the next higher word. Similar
-situation occurs while retrieving the value from bitmap.
+This patch reimplements the thunderx_gpio_set_multiple function in
+drivers/gpio/gpio-thunderx.c to use the new for_each_set_nbits macro.
+Instead of looping for each bank in thunderx_gpio_set_multiple
+function, now we can skip bank which is not set and save cycles.
 
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Bartosz Gołaszewski <bgolaszewski@baylibre.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Robert Richter <rrichter@marvell.com>
+Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
 Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 ---
- drivers/gpio/gpiolib.c | 90 ++++++++++++++++++++++++++++++++++++++++++
- drivers/gpio/gpiolib.h | 28 +++++++++++++
- 2 files changed, 118 insertions(+)
+ drivers/gpio/gpio-thunderx.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 1427c1be749b..5576d1465c81 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -150,6 +150,96 @@ struct gpio_desc *gpiochip_get_desc(struct gpio_chip *gc,
- }
- EXPORT_SYMBOL_GPL(gpiochip_get_desc);
+diff --git a/drivers/gpio/gpio-thunderx.c b/drivers/gpio/gpio-thunderx.c
+index 9f66deab46ea..4349e7393a1d 100644
+--- a/drivers/gpio/gpio-thunderx.c
++++ b/drivers/gpio/gpio-thunderx.c
+@@ -16,7 +16,7 @@
+ #include <linux/pci.h>
+ #include <linux/spinlock.h>
+ #include <asm-generic/msi.h>
+-
++#include "gpiolib.h"
  
-+/**
-+ * bitmap_get_value - get a value of n-bits from the memory region
-+ * @map: address to the bitmap memory region
-+ * @start: bit offset of the n-bit value
-+ * @nbits: size of value in bits (must be between 1 and BITS_PER_LONG inclusive).
-+ *
-+ * Returns value of nbits located at the @start bit offset within the @map
-+ * memory region.
-+ */
-+unsigned long bitmap_get_value(const unsigned long *map,
-+				unsigned long start,
-+				unsigned long nbits)
-+{
-+	const size_t index = BIT_WORD(start);
-+	const unsigned long offset = start % BITS_PER_LONG;
-+	const unsigned long ceiling = round_up(start + 1, BITS_PER_LONG);
-+	const unsigned long space = ceiling - start;
-+	unsigned long value_low, value_high;
+ #define GPIO_RX_DAT	0x0
+ #define GPIO_TX_SET	0x8
+@@ -275,12 +275,15 @@ static void thunderx_gpio_set_multiple(struct gpio_chip *chip,
+ 				       unsigned long *bits)
+ {
+ 	int bank;
+-	u64 set_bits, clear_bits;
++	unsigned long set_bits, clear_bits, gpio_mask;
++	unsigned long offset;
 +
-+	if (space >= nbits)
-+		return (map[index] >> offset) & GENMASK(nbits - 1, 0);
-+	else {
-+		value_low = map[index] & BITMAP_FIRST_WORD_MASK(start);
-+		value_high = map[index + 1] & BITMAP_LAST_WORD_MASK(start + nbits);
-+		return (value_low >> offset) | (value_high << space);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(bitmap_get_value);
-+
-+/**
-+ * bitmap_set_value - set value within a memory region
-+ * @map: address to the bitmap memory region
-+ * @nbits: size of map in bits
-+ * @value: value of clump
-+ * @value_width: size of value in bits (must be between 1 and BITS_PER_LONG inclusive)
-+ * @start: bit offset of the value
-+ */
-+void bitmap_set_value(unsigned long *map, unsigned long nbits,
-+			unsigned long value, unsigned long value_width,
-+			unsigned long start)
-+{
-+	const unsigned long index = BIT_WORD(start);
-+	const unsigned long length = BIT_WORD(nbits);
-+	const unsigned long offset = start % BITS_PER_LONG;
-+	const unsigned long ceiling = round_up(start + 1, BITS_PER_LONG);
-+	const unsigned long space = ceiling - start;
-+
-+	value &= GENMASK(value_width - 1, 0);
-+
-+	if (space >= value_width) {
-+		map[index] &= ~(GENMASK(value_width - 1, 0) << offset);
-+		map[index] |= value << offset;
-+	} else {
-+		map[index + 0] &= ~BITMAP_FIRST_WORD_MASK(start);
-+		map[index + 0] |= value << offset;
-+
-+		if (index + 1 >= length)
-+			return;
-+
-+		map[index + 1] &= ~BITMAP_LAST_WORD_MASK(start + value_width);
-+		map[index + 1] |= value >> space;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(bitmap_set_value);
-+
-+/**
-+ * find_next_clump - find next clump with set bits in a memory region
-+ * @clump: location to store copy of found clump
-+ * @addr: address to base the search on
-+ * @size: bitmap size in number of bits
-+ * @offset: bit offset at which to start searching
-+ * @clump_size: clump size in bits
-+ *
-+ * Returns the bit offset for the next set clump; the found clump value is
-+ * copied to the location pointed by @clump. If no bits are set, returns @size.
-+ */
-+unsigned long find_next_clump(unsigned long *clump, const unsigned long *addr,
-+				unsigned long size, unsigned long offset,
-+				unsigned long clump_size)
-+{
-+	offset = find_next_bit(addr, size, offset);
-+	if (offset == size)
-+		return size;
-+
-+	offset = rounddown(offset, clump_size);
-+	*clump = bitmap_get_value(addr, offset, clump_size);
-+	return offset;
-+}
-+EXPORT_SYMBOL_GPL(find_next_clump);
-+
- /**
-  * desc_to_gpio - convert a GPIO descriptor to the integer namespace
-  * @desc: GPIO descriptor
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index 30bc3f80f83e..af79784dfce3 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -141,6 +141,34 @@ int gpio_set_debounce_timeout(struct gpio_desc *desc, unsigned int debounce);
- int gpiod_hog(struct gpio_desc *desc, const char *name,
- 		unsigned long lflags, enum gpiod_flags dflags);
+ 	struct thunderx_gpio *txgpio = gpiochip_get_data(chip);
  
-+unsigned long bitmap_get_value(const unsigned long *map,
-+				unsigned long start,
-+				unsigned long nbits);
-+
-+void bitmap_set_value(unsigned long *map, unsigned long nbits,
-+			unsigned long value, unsigned long value_width,
-+			unsigned long start);
-+
-+unsigned long find_next_clump(unsigned long *clump, const unsigned long *addr,
-+				unsigned long size, unsigned long offset,
-+				unsigned long clump_size);
-+
-+#define find_first_clump(clump, bits, size, clump_size) \
-+	find_next_clump((clump), (bits), (size), 0, (clump_size))
-+
-+/**
-+ * for_each_set_nbits - iterate over bitmap for each clump with set bits
-+ * @start: bit offset to start search and to store the current iteration offset
-+ * @clump: location to store copy of current 8-bit clump
-+ * @bits: bitmap address to base the search on
-+ * @size: bitmap size in number of bits
-+ * @clump_size: clump size in bits
-+ */
-+#define for_each_set_nbits(start, clump, bits, size, clump_size) \
-+	for ((start) = find_first_clump(&(clump), (bits), (size), (clump_size)); \
-+	     (start) < (size); \
-+	     (start) = find_next_clump(&(clump), (bits), (size), (start) + (clump_size), (clump_size)))
-+
- /*
-  * Return the GPIO number of the passed descriptor relative to its chip
-  */
+-	for (bank = 0; bank <= chip->ngpio / 64; bank++) {
+-		set_bits = bits[bank] & mask[bank];
+-		clear_bits = ~bits[bank] & mask[bank];
++	for_each_set_nbits(offset, gpio_mask, mask, chip->ngpio, 64) {
++		bank = offset / 64;
++		set_bits = bits[bank] & gpio_mask;
++		clear_bits = ~bits[bank] & gpio_mask;
+ 		writeq(set_bits, txgpio->register_base + (bank * GPIO_2ND_BANK) + GPIO_TX_SET);
+ 		writeq(clear_bits, txgpio->register_base + (bank * GPIO_2ND_BANK) + GPIO_TX_CLR);
+ 	}
 -- 
 2.29.0
 
