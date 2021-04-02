@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F32B53527F4
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 11:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D293527F9
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 11:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbhDBJGt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Apr 2021 05:06:49 -0400
-Received: from marcansoft.com ([212.63.210.85]:34460 "EHLO mail.marcansoft.com"
+        id S234798AbhDBJG5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Apr 2021 05:06:57 -0400
+Received: from marcansoft.com ([212.63.210.85]:34516 "EHLO mail.marcansoft.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231160AbhDBJGr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 2 Apr 2021 05:06:47 -0400
+        id S234744AbhDBJGz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 2 Apr 2021 05:06:55 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id D634F4272F;
-        Fri,  2 Apr 2021 09:06:37 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 9B3B242720;
+        Fri,  2 Apr 2021 09:06:44 +0000 (UTC)
 From:   Hector Martin <marcan@marcan.st>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
@@ -38,10 +38,11 @@ Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
         Christoph Hellwig <hch@infradead.org>,
         "David S. Miller" <davem@davemloft.net>,
         devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 07/18] asm-generic/io.h:  Add a non-posted variant of ioremap()
-Date:   Fri,  2 Apr 2021 18:05:31 +0900
-Message-Id: <20210402090542.131194-8-marcan@marcan.st>
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v4 08/18] docs: driver-api: device-io: Document I/O access functions
+Date:   Fri,  2 Apr 2021 18:05:32 +0900
+Message-Id: <20210402090542.131194-9-marcan@marcan.st>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210402090542.131194-1-marcan@marcan.st>
 References: <20210402090542.131194-1-marcan@marcan.st>
@@ -51,202 +52,167 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ARM64 currently defaults to posted MMIO (nGnRE), but some devices
-require the use of non-posted MMIO (nGnRnE). Introduce a new ioremap()
-variant to handle this case. ioremap_np() returns NULL on arches that
-do not implement this variant.
+From: Arnd Bergmann <arnd@arndb.de>
 
-sparc64 is the only architecture that needs to be touched directly,
-because it includes neither of the generic io.h or iomap.h headers.
+This adds more detailed descriptions of the various read/write
+primitives available for use with I/O memory/ports.
 
-This adds the IORESOURCE_MEM_NONPOSTED flag, which maps to this
-variant and marks a given resource as requiring non-posted mappings.
-This is implemented in the resource system because it is a SoC-level
-requirement, so existing drivers do not need special-case code to pick
-this ioremap variant.
-
-Then this is implemented in devres by introducing devm_ioremap_np(),
-and making devm_ioremap_resource() automatically select this variant
-when the resource has the IORESOURCE_MEM_NONPOSTED flag set.
-
-Acked-by: Marc Zyngier <maz@kernel.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- .../driver-api/driver-model/devres.rst        |  1 +
- arch/sparc/include/asm/io_64.h                |  4 ++++
- include/asm-generic/io.h                      | 22 ++++++++++++++++++-
- include/asm-generic/iomap.h                   |  9 ++++++++
- include/linux/io.h                            |  2 ++
- include/linux/ioport.h                        |  1 +
- lib/devres.c                                  | 22 +++++++++++++++++++
- 7 files changed, 60 insertions(+), 1 deletion(-)
+ Documentation/driver-api/device-io.rst | 138 +++++++++++++++++++++++++
+ 1 file changed, 138 insertions(+)
 
-diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-index cd8b6e657b94..2f45877a539d 100644
---- a/Documentation/driver-api/driver-model/devres.rst
-+++ b/Documentation/driver-api/driver-model/devres.rst
-@@ -309,6 +309,7 @@ IOMAP
-   devm_ioremap()
-   devm_ioremap_uc()
-   devm_ioremap_wc()
-+  devm_ioremap_np()
-   devm_ioremap_resource() : checks resource, requests memory region, ioremaps
-   devm_ioremap_resource_wc()
-   devm_platform_ioremap_resource() : calls devm_ioremap_resource() for platform device
-diff --git a/arch/sparc/include/asm/io_64.h b/arch/sparc/include/asm/io_64.h
-index 9bb27e5c22f1..9fbfc9574432 100644
---- a/arch/sparc/include/asm/io_64.h
-+++ b/arch/sparc/include/asm/io_64.h
-@@ -409,6 +409,10 @@ static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
- #define ioremap_uc(X,Y)			ioremap((X),(Y))
- #define ioremap_wc(X,Y)			ioremap((X),(Y))
- #define ioremap_wt(X,Y)			ioremap((X),(Y))
-+static inline void __iomem *ioremap_np(unsigned long offset, unsigned long size)
-+{
-+	return NULL;
-+}
+diff --git a/Documentation/driver-api/device-io.rst b/Documentation/driver-api/device-io.rst
+index 764963876d08..b20864b3ddc7 100644
+--- a/Documentation/driver-api/device-io.rst
++++ b/Documentation/driver-api/device-io.rst
+@@ -146,6 +146,144 @@ There are also equivalents to memcpy. The ins() and
+ outs() functions copy bytes, words or longs to the given
+ port.
  
- static inline void iounmap(volatile void __iomem *addr)
- {
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index c6af40ce03be..082e0c96db6e 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -942,7 +942,9 @@ static inline void *phys_to_virt(unsigned long address)
-  *
-  * ioremap_wc() and ioremap_wt() can provide more relaxed caching attributes
-  * for specific drivers if the architecture choses to implement them.  If they
-- * are not implemented we fall back to plain ioremap.
-+ * are not implemented we fall back to plain ioremap. Conversely, ioremap_np()
-+ * can provide stricter non-posted write semantics if the architecture
-+ * implements them.
-  */
- #ifndef CONFIG_MMU
- #ifndef ioremap
-@@ -993,6 +995,24 @@ static inline void __iomem *ioremap_uc(phys_addr_t offset, size_t size)
- {
- 	return NULL;
- }
++__iomem pointer tokens
++======================
 +
-+/*
-+ * ioremap_np needs an explicit architecture implementation, as it
-+ * requests stronger semantics than regular ioremap(). Portable drivers
-+ * should instead use one of the higher-level abstractions, like
-+ * devm_ioremap_resource(), to choose the correct variant for any given
-+ * device and bus. Portable drivers with a good reason to want non-posted
-+ * write semantics should always provide an ioremap() fallback in case
-+ * ioremap_np() is not available.
-+ */
-+#ifndef ioremap_np
-+#define ioremap_np ioremap_np
-+static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
-+{
-+	return NULL;
-+}
-+#endif
++The data type for an MMIO address is an ``__iomem`` qualified pointer, such as
++``void __iomem *reg``. On most architectures it is a regular pointer that
++points to a virtual memory address and can be offset or dereferenced, but in
++portable code, it must only be passed from and to functions that explicitly
++operated on an ``__iomem`` token, in particular the ioremap() and
++readl()/writel() functions. The 'sparse' semantic code checker can be used to
++verify that this is done correctly.
 +
- #endif
- 
- #ifdef CONFIG_HAS_IOPORT_MAP
-diff --git a/include/asm-generic/iomap.h b/include/asm-generic/iomap.h
-index 649224664969..9b3eb6d86200 100644
---- a/include/asm-generic/iomap.h
-+++ b/include/asm-generic/iomap.h
-@@ -101,6 +101,15 @@ extern void ioport_unmap(void __iomem *);
- #define ioremap_wt ioremap
- #endif
- 
-+#ifndef ARCH_HAS_IOREMAP_NP
-+/* See the comment in asm-generic/io.h about ioremap_np(). */
-+#define ioremap_np ioremap_np
-+static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
-+{
-+	return NULL;
-+}
-+#endif
++While on most architectures, ioremap() creates a page table entry for an
++uncached virtual address pointing to the physical MMIO address, some
++architectures require special instructions for MMIO, and the ``__iomem`` pointer
++just encodes the physical address or an offsettable cookie that is interpreted
++by readl()/writel().
 +
- #ifdef CONFIG_PCI
- /* Destroy a virtual mapping cookie for a PCI BAR (memory or IO) */
- struct pci_dev;
-diff --git a/include/linux/io.h b/include/linux/io.h
-index 8394c56babc2..d718354ed3e1 100644
---- a/include/linux/io.h
-+++ b/include/linux/io.h
-@@ -68,6 +68,8 @@ void __iomem *devm_ioremap_uc(struct device *dev, resource_size_t offset,
- 				   resource_size_t size);
- void __iomem *devm_ioremap_wc(struct device *dev, resource_size_t offset,
- 				   resource_size_t size);
-+void __iomem *devm_ioremap_np(struct device *dev, resource_size_t offset,
-+				   resource_size_t size);
- void devm_iounmap(struct device *dev, void __iomem *addr);
- int check_signature(const volatile void __iomem *io_addr,
- 			const unsigned char *signature, int length);
-diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-index 55de385c839c..1de6c2e40c32 100644
---- a/include/linux/ioport.h
-+++ b/include/linux/ioport.h
-@@ -108,6 +108,7 @@ struct resource {
- #define IORESOURCE_MEM_32BIT		(3<<3)
- #define IORESOURCE_MEM_SHADOWABLE	(1<<5)	/* dup: IORESOURCE_SHADOWABLE */
- #define IORESOURCE_MEM_EXPANSIONROM	(1<<6)
-+#define IORESOURCE_MEM_NONPOSTED	(1<<7)
- 
- /* PnP I/O specific bits (IORESOURCE_BITS) */
- #define IORESOURCE_IO_16BIT_ADDR	(1<<0)
-diff --git a/lib/devres.c b/lib/devres.c
-index 2a4ff5d64288..4679dbb1bf5f 100644
---- a/lib/devres.c
-+++ b/lib/devres.c
-@@ -10,6 +10,7 @@ enum devm_ioremap_type {
- 	DEVM_IOREMAP = 0,
- 	DEVM_IOREMAP_UC,
- 	DEVM_IOREMAP_WC,
-+	DEVM_IOREMAP_NP,
- };
- 
- void devm_ioremap_release(struct device *dev, void *res)
-@@ -42,6 +43,9 @@ static void __iomem *__devm_ioremap(struct device *dev, resource_size_t offset,
- 	case DEVM_IOREMAP_WC:
- 		addr = ioremap_wc(offset, size);
- 		break;
-+	case DEVM_IOREMAP_NP:
-+		addr = ioremap_np(offset, size);
-+		break;
- 	}
- 
- 	if (addr) {
-@@ -98,6 +102,21 @@ void __iomem *devm_ioremap_wc(struct device *dev, resource_size_t offset,
- }
- EXPORT_SYMBOL(devm_ioremap_wc);
- 
-+/**
-+ * devm_ioremap_np - Managed ioremap_np()
-+ * @dev: Generic device to remap IO address for
-+ * @offset: Resource address to map
-+ * @size: Size of map
-+ *
-+ * Managed ioremap_np().  Map is automatically unmapped on driver detach.
-+ */
-+void __iomem *devm_ioremap_np(struct device *dev, resource_size_t offset,
-+			      resource_size_t size)
-+{
-+	return __devm_ioremap(dev, offset, size, DEVM_IOREMAP_NP);
-+}
-+EXPORT_SYMBOL(devm_ioremap_np);
++Differences between I/O access functions
++========================================
 +
- /**
-  * devm_iounmap - Managed iounmap()
-  * @dev: Generic device to unmap for
-@@ -128,6 +147,9 @@ __devm_ioremap_resource(struct device *dev, const struct resource *res,
- 		return IOMEM_ERR_PTR(-EINVAL);
- 	}
- 
-+	if (type == DEVM_IOREMAP && res->flags & IORESOURCE_MEM_NONPOSTED)
-+		type = DEVM_IOREMAP_NP;
++readq(), readl(), readw(), readb(), writeq(), writel(), writew(), writeb()
 +
- 	size = resource_size(res);
++  These are the most generic accessors, providing serialization against other
++  MMIO accesses and DMA accesses as well as fixed endianness for accessing
++  little-endian PCI devices and on-chip peripherals. Portable device drivers
++  should generally use these for any access to ``__iomem`` pointers.
++
++  Note that posted writes are not strictly ordered against a spinlock, see
++  Documentation/driver-api/io_ordering.rst.
++
++readq_relaxed(), readl_relaxed(), readw_relaxed(), readb_relaxed(),
++writeq_relaxed(), writel_relaxed(), writew_relaxed(), writeb_relaxed()
++
++  On architectures that require an expensive barrier for serializing against
++  DMA, these "relaxed" versions of the MMIO accessors only serialize against
++  each other, but contain a less expensive barrier operation. A device driver
++  might use these in a particularly performance sensitive fast path, with a
++  comment that explains why the usage in a specific location is safe without
++  the extra barriers.
++
++  See memory-barriers.txt for a more detailed discussion on the precise ordering
++  guarantees of the non-relaxed and relaxed versions.
++
++ioread64(), ioread32(), ioread16(), ioread8(),
++iowrite64(), iowrite32(), iowrite16(), iowrite8()
++
++  These are an alternative to the normal readl()/writel() functions, with almost
++  identical behavior, but they can also operate on ``__iomem`` tokens returned
++  for mapping PCI I/O space with pci_iomap() or ioport_map(). On architectures
++  that require special instructions for I/O port access, this adds a small
++  overhead for an indirect function call implemented in lib/iomap.c, while on
++  other architectures, these are simply aliases.
++
++ioread64be(), ioread32be(), ioread16be()
++iowrite64be(), iowrite32be(), iowrite16be()
++
++  These behave in the same way as the ioread32()/iowrite32() family, but with
++  reversed byte order, for accessing devices with big-endian MMIO registers.
++  Device drivers that can operate on either big-endian or little-endian
++  registers may have to implement a custom wrapper function that picks one or
++  the other depending on which device was found.
++
++  Note: On some architectures, the normal readl()/writel() functions
++  traditionally assume that devices are the same endianness as the CPU, while
++  using a hardware byte-reverse on the PCI bus when running a big-endian kernel.
++  Drivers that use readl()/writel() this way are generally not portable, but
++  tend to be limited to a particular SoC.
++
++hi_lo_readq(), lo_hi_readq(), hi_lo_readq_relaxed(), lo_hi_readq_relaxed(),
++ioread64_lo_hi(), ioread64_hi_lo(), ioread64be_lo_hi(), ioread64be_hi_lo(),
++hi_lo_writeq(), lo_hi_writeq(), hi_lo_writeq_relaxed(), lo_hi_writeq_relaxed(),
++iowrite64_lo_hi(), iowrite64_hi_lo(), iowrite64be_lo_hi(), iowrite64be_hi_lo()
++
++  Some device drivers have 64-bit registers that cannot be accessed atomically
++  on 32-bit architectures but allow two consecutive 32-bit accesses instead.
++  Since it depends on the particular device which of the two halves has to be
++  accessed first, a helper is provided for each combination of 64-bit accessors
++  with either low/high or high/low word ordering. A device driver must include
++  either <linux/io-64-nonatomic-lo-hi.h> or <linux/io-64-nonatomic-hi-lo.h> to
++  get the function definitions along with helpers that redirect the normal
++  readq()/writeq() to them on architectures that do not provide 64-bit access
++  natively.
++
++__raw_readq(), __raw_readl(), __raw_readw(), __raw_readb(),
++__raw_writeq(), __raw_writel(), __raw_writew(), __raw_writeb()
++
++  These are low-level MMIO accessors without barriers or byteorder changes and
++  architecture specific behavior. Accesses are usually atomic in the sense that
++  a four-byte __raw_readl() does not get split into individual byte loads, but
++  multiple consecutive accesses can be combined on the bus. In portable code, it
++  is only safe to use these to access memory behind a device bus but not MMIO
++  registers, as there are no ordering guarantees with regard to other MMIO
++  accesses or even spinlocks. The byte order is generally the same as for normal
++  memory, so unlike the other functions, these can be used to copy data between
++  kernel memory and device memory.
++
++inl(), inw(), inb(), outl(), outw(), outb()
++
++  PCI I/O port resources traditionally require separate helpers as they are
++  implemented using special instructions on the x86 architecture. On most other
++  architectures, these are mapped to readl()/writel() style accessors
++  internally, usually pointing to a fixed area in virtual memory. Instead of an
++  ``__iomem`` pointer, the address is a 32-bit integer token to identify a port
++  number. PCI requires I/O port access to be non-posted, meaning that an outb()
++  must complete before the following code executes, while a normal writeb() may
++  still be in progress. On architectures that correctly implement this, I/O port
++  access is therefore ordered against spinlocks. Many non-x86 PCI host bridge
++  implementations and CPU architectures however fail to implement non-posted I/O
++  space on PCI, so they can end up being posted on such hardware.
++
++  In some architectures, the I/O port number space has a 1:1 mapping to
++  ``__iomem`` pointers, but this is not recommended and device drivers should
++  not rely on that for portability. Similarly, an I/O port number as described
++  in a PCI base address register may not correspond to the port number as seen
++  by a device driver. Portable drivers need to read the port number for the
++  resource provided by the kernel.
++
++  There are no direct 64-bit I/O port accessors, but pci_iomap() in combination
++  with ioread64/iowrite64 can be used instead.
++
++inl_p(), inw_p(), inb_p(), outl_p(), outw_p(), outb_p()
++
++  On ISA devices that require specific timing, the _p versions of the I/O
++  accessors add a small delay. On architectures that do not have ISA buses,
++  these are aliases to the normal inb/outb helpers.
++
++readsq, readsl, readsw, readsb
++writesq, writesl, writesw, writesb
++ioread64_rep, ioread32_rep, ioread16_rep, ioread8_rep
++iowrite64_rep, iowrite32_rep, iowrite16_rep, iowrite8_rep
++insl, insw, insb, outsl, outsw, outsb
++
++  These are helpers that access the same address multiple times, usually to copy
++  data between kernel memory byte stream and a FIFO buffer. Unlike the normal
++  MMIO accessors, these do not perform a byteswap on big-endian kernels, so the
++  first byte in the FIFO register corresponds to the first byte in the memory
++  buffer regardless of the architecture.
++
+ Public Functions Provided
+ =========================
  
- 	if (res->name)
 -- 
 2.30.0
 
