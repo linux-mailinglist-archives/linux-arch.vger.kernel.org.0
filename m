@@ -2,25 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C270D35280A
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 11:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8DE35280D
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 11:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbhDBJHd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Apr 2021 05:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbhDBJHX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Apr 2021 05:07:23 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662ACC0613E6;
-        Fri,  2 Apr 2021 02:07:19 -0700 (PDT)
+        id S234968AbhDBJHk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Apr 2021 05:07:40 -0400
+Received: from marcansoft.com ([212.63.210.85]:34812 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234894AbhDBJH2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 2 Apr 2021 05:07:28 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id B558B4272F;
-        Fri,  2 Apr 2021 09:07:11 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 6CAEC42720;
+        Fri,  2 Apr 2021 09:07:18 +0000 (UTC)
 From:   Hector Martin <marcan@marcan.st>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
@@ -42,9 +39,9 @@ Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 12/18] of/address: Add infrastructure to declare MMIO as non-posted
-Date:   Fri,  2 Apr 2021 18:05:36 +0900
-Message-Id: <20210402090542.131194-13-marcan@marcan.st>
+Subject: [PATCH v4 13/18] arm64: Move ICH_ sysreg bits from arm-gic-v3.h to sysreg.h
+Date:   Fri,  2 Apr 2021 18:05:37 +0900
+Message-Id: <20210402090542.131194-14-marcan@marcan.st>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210402090542.131194-1-marcan@marcan.st>
 References: <20210402090542.131194-1-marcan@marcan.st>
@@ -54,114 +51,162 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This implements the 'nonposted-mmio' boolean property. Placing this
-property in a bus marks all direct child devices as requiring
-non-posted MMIO mappings. If no such property is found, the default
-is posted MMIO.
+These definitions are in arm-gic-v3.h for historical reasons which no
+longer apply. Move them to sysreg.h so the AIC driver can use them, as
+it needs to peek into vGIC registers to deal with the GIC maintentance
+interrupt.
 
-of_mmio_is_nonposted() performs this check to determine if a given
-device has requested non-posted MMIO.
-
-of_address_to_resource() uses this to set the IORESOURCE_MEM_NONPOSTED
-flag on resources that require non-posted MMIO.
-
-of_iomap() and of_io_request_and_map() then use this flag to pick the
-correct ioremap() variant.
-
-This mechanism is currently restricted to builds that support Apple ARM
-platforms, as an optimization.
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Acked-by: Will Deacon <will@kernel.org>
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- drivers/of/address.c       | 43 ++++++++++++++++++++++++++++++++++++--
- include/linux/of_address.h |  1 +
- 2 files changed, 42 insertions(+), 2 deletions(-)
+ arch/arm64/include/asm/sysreg.h    | 60 ++++++++++++++++++++++++++++++
+ include/linux/irqchip/arm-gic-v3.h | 56 ----------------------------
+ 2 files changed, 60 insertions(+), 56 deletions(-)
 
-diff --git a/drivers/of/address.c b/drivers/of/address.c
-index 73ddf2540f3f..6485cc536e81 100644
---- a/drivers/of/address.c
-+++ b/drivers/of/address.c
-@@ -847,6 +847,9 @@ static int __of_address_to_resource(struct device_node *dev,
- 		return -EINVAL;
- 	memset(r, 0, sizeof(struct resource));
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index d4a5fca984c3..609dc42ec8c8 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -1032,6 +1032,66 @@
+ #define TRFCR_ELx_ExTRE			BIT(1)
+ #define TRFCR_ELx_E0TRE			BIT(0)
  
-+	if (of_mmio_is_nonposted(dev))
-+		flags |= IORESOURCE_MEM_NONPOSTED;
 +
- 	r->start = taddr;
- 	r->end = taddr + size - 1;
- 	r->flags = flags;
-@@ -896,7 +899,10 @@ void __iomem *of_iomap(struct device_node *np, int index)
- 	if (of_address_to_resource(np, index, &res))
- 		return NULL;
++/* GIC Hypervisor interface registers */
++/* ICH_MISR_EL2 bit definitions */
++#define ICH_MISR_EOI		(1 << 0)
++#define ICH_MISR_U		(1 << 1)
++
++/* ICH_LR*_EL2 bit definitions */
++#define ICH_LR_VIRTUAL_ID_MASK	((1ULL << 32) - 1)
++
++#define ICH_LR_EOI		(1ULL << 41)
++#define ICH_LR_GROUP		(1ULL << 60)
++#define ICH_LR_HW		(1ULL << 61)
++#define ICH_LR_STATE		(3ULL << 62)
++#define ICH_LR_PENDING_BIT	(1ULL << 62)
++#define ICH_LR_ACTIVE_BIT	(1ULL << 63)
++#define ICH_LR_PHYS_ID_SHIFT	32
++#define ICH_LR_PHYS_ID_MASK	(0x3ffULL << ICH_LR_PHYS_ID_SHIFT)
++#define ICH_LR_PRIORITY_SHIFT	48
++#define ICH_LR_PRIORITY_MASK	(0xffULL << ICH_LR_PRIORITY_SHIFT)
++
++/* ICH_HCR_EL2 bit definitions */
++#define ICH_HCR_EN		(1 << 0)
++#define ICH_HCR_UIE		(1 << 1)
++#define ICH_HCR_NPIE		(1 << 3)
++#define ICH_HCR_TC		(1 << 10)
++#define ICH_HCR_TALL0		(1 << 11)
++#define ICH_HCR_TALL1		(1 << 12)
++#define ICH_HCR_EOIcount_SHIFT	27
++#define ICH_HCR_EOIcount_MASK	(0x1f << ICH_HCR_EOIcount_SHIFT)
++
++/* ICH_VMCR_EL2 bit definitions */
++#define ICH_VMCR_ACK_CTL_SHIFT	2
++#define ICH_VMCR_ACK_CTL_MASK	(1 << ICH_VMCR_ACK_CTL_SHIFT)
++#define ICH_VMCR_FIQ_EN_SHIFT	3
++#define ICH_VMCR_FIQ_EN_MASK	(1 << ICH_VMCR_FIQ_EN_SHIFT)
++#define ICH_VMCR_CBPR_SHIFT	4
++#define ICH_VMCR_CBPR_MASK	(1 << ICH_VMCR_CBPR_SHIFT)
++#define ICH_VMCR_EOIM_SHIFT	9
++#define ICH_VMCR_EOIM_MASK	(1 << ICH_VMCR_EOIM_SHIFT)
++#define ICH_VMCR_BPR1_SHIFT	18
++#define ICH_VMCR_BPR1_MASK	(7 << ICH_VMCR_BPR1_SHIFT)
++#define ICH_VMCR_BPR0_SHIFT	21
++#define ICH_VMCR_BPR0_MASK	(7 << ICH_VMCR_BPR0_SHIFT)
++#define ICH_VMCR_PMR_SHIFT	24
++#define ICH_VMCR_PMR_MASK	(0xffUL << ICH_VMCR_PMR_SHIFT)
++#define ICH_VMCR_ENG0_SHIFT	0
++#define ICH_VMCR_ENG0_MASK	(1 << ICH_VMCR_ENG0_SHIFT)
++#define ICH_VMCR_ENG1_SHIFT	1
++#define ICH_VMCR_ENG1_MASK	(1 << ICH_VMCR_ENG1_SHIFT)
++
++/* ICH_VTR_EL2 bit definitions */
++#define ICH_VTR_PRI_BITS_SHIFT	29
++#define ICH_VTR_PRI_BITS_MASK	(7 << ICH_VTR_PRI_BITS_SHIFT)
++#define ICH_VTR_ID_BITS_SHIFT	23
++#define ICH_VTR_ID_BITS_MASK	(7 << ICH_VTR_ID_BITS_SHIFT)
++#define ICH_VTR_SEIS_SHIFT	22
++#define ICH_VTR_SEIS_MASK	(1 << ICH_VTR_SEIS_SHIFT)
++#define ICH_VTR_A3V_SHIFT	21
++#define ICH_VTR_A3V_MASK	(1 << ICH_VTR_A3V_SHIFT)
++
+ #ifdef __ASSEMBLY__
  
--	return ioremap(res.start, resource_size(&res));
-+	if (res.flags & IORESOURCE_MEM_NONPOSTED)
-+		return ioremap_np(res.start, resource_size(&res));
-+	else
-+		return ioremap(res.start, resource_size(&res));
- }
- EXPORT_SYMBOL(of_iomap);
+ 	.irp	num,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
+diff --git a/include/linux/irqchip/arm-gic-v3.h b/include/linux/irqchip/arm-gic-v3.h
+index f6d092fdb93d..81cbf85f73de 100644
+--- a/include/linux/irqchip/arm-gic-v3.h
++++ b/include/linux/irqchip/arm-gic-v3.h
+@@ -575,67 +575,11 @@
+ #define ICC_SRE_EL1_DFB			(1U << 1)
+ #define ICC_SRE_EL1_SRE			(1U << 0)
  
-@@ -928,7 +934,11 @@ void __iomem *of_io_request_and_map(struct device_node *np, int index,
- 	if (!request_mem_region(res.start, resource_size(&res), name))
- 		return IOMEM_ERR_PTR(-EBUSY);
+-/*
+- * Hypervisor interface registers (SRE only)
+- */
+-#define ICH_LR_VIRTUAL_ID_MASK		((1ULL << 32) - 1)
+-
+-#define ICH_LR_EOI			(1ULL << 41)
+-#define ICH_LR_GROUP			(1ULL << 60)
+-#define ICH_LR_HW			(1ULL << 61)
+-#define ICH_LR_STATE			(3ULL << 62)
+-#define ICH_LR_PENDING_BIT		(1ULL << 62)
+-#define ICH_LR_ACTIVE_BIT		(1ULL << 63)
+-#define ICH_LR_PHYS_ID_SHIFT		32
+-#define ICH_LR_PHYS_ID_MASK		(0x3ffULL << ICH_LR_PHYS_ID_SHIFT)
+-#define ICH_LR_PRIORITY_SHIFT		48
+-#define ICH_LR_PRIORITY_MASK		(0xffULL << ICH_LR_PRIORITY_SHIFT)
+-
+ /* These are for GICv2 emulation only */
+ #define GICH_LR_VIRTUALID		(0x3ffUL << 0)
+ #define GICH_LR_PHYSID_CPUID_SHIFT	(10)
+ #define GICH_LR_PHYSID_CPUID		(7UL << GICH_LR_PHYSID_CPUID_SHIFT)
  
--	mem = ioremap(res.start, resource_size(&res));
-+	if (res.flags & IORESOURCE_MEM_NONPOSTED)
-+		mem = ioremap_np(res.start, resource_size(&res));
-+	else
-+		mem = ioremap(res.start, resource_size(&res));
-+
- 	if (!mem) {
- 		release_mem_region(res.start, resource_size(&res));
- 		return IOMEM_ERR_PTR(-ENOMEM);
-@@ -1094,3 +1104,32 @@ bool of_dma_is_coherent(struct device_node *np)
- 	return false;
- }
- EXPORT_SYMBOL_GPL(of_dma_is_coherent);
-+
-+/**
-+ * of_mmio_is_nonposted - Check if device uses non-posted MMIO
-+ * @np:	device node
-+ *
-+ * Returns true if the "nonposted-mmio" property was found for
-+ * the device's bus.
-+ *
-+ * This is currently only enabled on builds that support Apple ARM devices, as
-+ * an optimization.
-+ */
-+bool of_mmio_is_nonposted(struct device_node *np)
-+{
-+	struct device_node *parent;
-+	bool nonposted;
-+
-+	if (!IS_ENABLED(CONFIG_ARCH_APPLE))
-+		return false;
-+
-+	parent = of_get_parent(np);
-+	if (!parent)
-+		return false;
-+
-+	nonposted = of_property_read_bool(parent, "nonposted-mmio");
-+
-+	of_node_put(parent);
-+	return nonposted;
-+}
-+EXPORT_SYMBOL_GPL(of_mmio_is_nonposted);
-diff --git a/include/linux/of_address.h b/include/linux/of_address.h
-index 88bc943405cd..88f6333fee6c 100644
---- a/include/linux/of_address.h
-+++ b/include/linux/of_address.h
-@@ -62,6 +62,7 @@ extern struct of_pci_range *of_pci_range_parser_one(
- 					struct of_pci_range_parser *parser,
- 					struct of_pci_range *range);
- extern bool of_dma_is_coherent(struct device_node *np);
-+extern bool of_mmio_is_nonposted(struct device_node *np);
- #else /* CONFIG_OF_ADDRESS */
- static inline void __iomem *of_io_request_and_map(struct device_node *device,
- 						  int index, const char *name)
+-#define ICH_MISR_EOI			(1 << 0)
+-#define ICH_MISR_U			(1 << 1)
+-
+-#define ICH_HCR_EN			(1 << 0)
+-#define ICH_HCR_UIE			(1 << 1)
+-#define ICH_HCR_NPIE			(1 << 3)
+-#define ICH_HCR_TC			(1 << 10)
+-#define ICH_HCR_TALL0			(1 << 11)
+-#define ICH_HCR_TALL1			(1 << 12)
+-#define ICH_HCR_EOIcount_SHIFT		27
+-#define ICH_HCR_EOIcount_MASK		(0x1f << ICH_HCR_EOIcount_SHIFT)
+-
+-#define ICH_VMCR_ACK_CTL_SHIFT		2
+-#define ICH_VMCR_ACK_CTL_MASK		(1 << ICH_VMCR_ACK_CTL_SHIFT)
+-#define ICH_VMCR_FIQ_EN_SHIFT		3
+-#define ICH_VMCR_FIQ_EN_MASK		(1 << ICH_VMCR_FIQ_EN_SHIFT)
+-#define ICH_VMCR_CBPR_SHIFT		4
+-#define ICH_VMCR_CBPR_MASK		(1 << ICH_VMCR_CBPR_SHIFT)
+-#define ICH_VMCR_EOIM_SHIFT		9
+-#define ICH_VMCR_EOIM_MASK		(1 << ICH_VMCR_EOIM_SHIFT)
+-#define ICH_VMCR_BPR1_SHIFT		18
+-#define ICH_VMCR_BPR1_MASK		(7 << ICH_VMCR_BPR1_SHIFT)
+-#define ICH_VMCR_BPR0_SHIFT		21
+-#define ICH_VMCR_BPR0_MASK		(7 << ICH_VMCR_BPR0_SHIFT)
+-#define ICH_VMCR_PMR_SHIFT		24
+-#define ICH_VMCR_PMR_MASK		(0xffUL << ICH_VMCR_PMR_SHIFT)
+-#define ICH_VMCR_ENG0_SHIFT		0
+-#define ICH_VMCR_ENG0_MASK		(1 << ICH_VMCR_ENG0_SHIFT)
+-#define ICH_VMCR_ENG1_SHIFT		1
+-#define ICH_VMCR_ENG1_MASK		(1 << ICH_VMCR_ENG1_SHIFT)
+-
+-#define ICH_VTR_PRI_BITS_SHIFT		29
+-#define ICH_VTR_PRI_BITS_MASK		(7 << ICH_VTR_PRI_BITS_SHIFT)
+-#define ICH_VTR_ID_BITS_SHIFT		23
+-#define ICH_VTR_ID_BITS_MASK		(7 << ICH_VTR_ID_BITS_SHIFT)
+-#define ICH_VTR_SEIS_SHIFT		22
+-#define ICH_VTR_SEIS_MASK		(1 << ICH_VTR_SEIS_SHIFT)
+-#define ICH_VTR_A3V_SHIFT		21
+-#define ICH_VTR_A3V_MASK		(1 << ICH_VTR_A3V_SHIFT)
+-
+ #define ICC_IAR1_EL1_SPURIOUS		0x3ff
+ 
+ #define ICC_SRE_EL2_SRE			(1 << 0)
 -- 
 2.30.0
 
