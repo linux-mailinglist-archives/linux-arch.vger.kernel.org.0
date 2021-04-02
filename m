@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A956352CC1
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 18:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F53E352CD0
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Apr 2021 18:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235949AbhDBPSY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Apr 2021 11:18:24 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:21614 "EHLO pegase1.c-s.fr"
+        id S235966AbhDBPSZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Apr 2021 11:18:25 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:61689 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235426AbhDBPSM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 2 Apr 2021 11:18:12 -0400
+        id S235472AbhDBPSN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 2 Apr 2021 11:18:13 -0400
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4FBkFq3PhZz9v2lx;
-        Fri,  2 Apr 2021 17:18:07 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4FBkFr3RcWz9v2m8;
+        Fri,  2 Apr 2021 17:18:08 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 0PaqD_YmZwDc; Fri,  2 Apr 2021 17:18:07 +0200 (CEST)
+        with ESMTP id GxtO1UqBUW7x; Fri,  2 Apr 2021 17:18:08 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4FBkFq2Xz3z9v2ls;
-        Fri,  2 Apr 2021 17:18:07 +0200 (CEST)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FBkFr2PTSz9v2ls;
+        Fri,  2 Apr 2021 17:18:08 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4C7DE8BB79;
-        Fri,  2 Apr 2021 17:18:09 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 34FB48BB7B;
+        Fri,  2 Apr 2021 17:18:10 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id raQsvRwETSOo; Fri,  2 Apr 2021 17:18:09 +0200 (CEST)
+        with ESMTP id BmkAXxz0r5S7; Fri,  2 Apr 2021 17:18:10 +0200 (CEST)
 Received: from po16121vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C09DE8BB7E;
-        Fri,  2 Apr 2021 17:18:08 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D1B498BB79;
+        Fri,  2 Apr 2021 17:18:09 +0200 (CEST)
 Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 9D16267989; Fri,  2 Apr 2021 15:18:08 +0000 (UTC)
-Message-Id: <bcc28f6552708885aecb14a7106b65afbffcc294.1617375802.git.christophe.leroy@csgroup.eu>
+        id A374467989; Fri,  2 Apr 2021 15:18:09 +0000 (UTC)
+Message-Id: <2e49b9ae60a90aec8b555946279cab059a2812a4.1617375802.git.christophe.leroy@csgroup.eu>
 In-Reply-To: <cover.1617375802.git.christophe.leroy@csgroup.eu>
 References: <cover.1617375802.git.christophe.leroy@csgroup.eu>
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH v4 07/20] powerpc: Convert to GENERIC_CMDLINE
+Subject: [PATCH v4 08/20] arm: Convert to GENERIC_CMDLINE
 To:     will@kernel.org, danielwa@cisco.com, robh@kernel.org,
         daniel@gimpelevich.san-francisco.ca.us, arnd@kernel.org,
         akpm@linux-foundation.org
@@ -51,56 +51,53 @@ Cc:     linux-arch@vger.kernel.org, devicetree@vger.kernel.org,
         x86@kernel.org, linux-xtensa@linux-xtensa.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-mm@kvack.org
-Date:   Fri,  2 Apr 2021 15:18:08 +0000 (UTC)
+Date:   Fri,  2 Apr 2021 15:18:09 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This updates the powerpc code to use the new cmdline building function.
-
-The cmdline_build() defines a temporary string in __initdata.
-powerpc uses __prombss instead at the moment, so we must
-call cmdline_build() with destination different from the source
-to allow GCC to optimise the temporary string out.
+This converts the architecture to GENERIC_CMDLINE.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
 v4:
-- Use cmdline_build() instead of __cmdline_build()
-- Add cmdline_strlcpy() define
+- Removed dependency to ATAGS
+- Removed the message when forcing
 ---
- arch/powerpc/Kconfig            | 37 +--------------------------------
- arch/powerpc/kernel/prom_init.c | 21 +++++++++----------
- 2 files changed, 11 insertions(+), 47 deletions(-)
+ arch/arm/Kconfig              | 38 +----------------------------------
+ arch/arm/kernel/atags_parse.c | 13 +++---------
+ 2 files changed, 4 insertions(+), 47 deletions(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index c1344c05226c..6723f10ac246 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -168,6 +168,7 @@ config PPC
- 	select EDAC_SUPPORT
- 	select GENERIC_ATOMIC64			if PPC32
- 	select GENERIC_CLOCKEVENTS_BROADCAST	if SMP
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 5da96f5df48f..1a1808b0eef7 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -50,6 +50,7 @@ config ARM
+ 	select GENERIC_ARCH_TOPOLOGY if ARM_CPU_TOPOLOGY
+ 	select GENERIC_ATOMIC64 if CPU_V7M || CPU_V6 || !CPU_32v6K || !AEABI
+ 	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
 +	select GENERIC_CMDLINE
- 	select GENERIC_CMOS_UPDATE
+ 	select GENERIC_IRQ_IPI if SMP
  	select GENERIC_CPU_AUTOPROBE
- 	select GENERIC_CPU_VULNERABILITIES	if PPC_BARRIER_NOSPEC
-@@ -888,42 +889,6 @@ config PPC_DENORMALISATION
- 	  Add support for handling denormalisation of single precision
- 	  values.  Useful for bare metal only.  If unsure say Y here.
+ 	select GENERIC_EARLY_IOREMAP
+@@ -1740,43 +1741,6 @@ config ARM_ATAG_DTB_COMPAT_CMDLINE_EXTEND
+ 
+ endchoice
  
 -config CMDLINE
--	string "Initial kernel command string"
+-	string "Default kernel command string"
 -	default ""
 -	help
--	  On some platforms, there is currently no way for the boot loader to
--	  pass arguments to the kernel. For these platforms, you can supply
--	  some command-line options at build time by entering them here.  In
--	  most cases you will need to specify the root device here.
+-	  On some architectures (e.g. CATS), there is currently no way
+-	  for the boot loader to pass arguments to the kernel. For these
+-	  architectures, you should supply some command-line options at build
+-	  time by entering them here. As a minimum, you should specify the
+-	  memory size and the root device (e.g., mem=64M root=/dev/nfs).
 -
 -choice
 -	prompt "Kernel command line type" if CMDLINE != ""
 -	default CMDLINE_FROM_BOOTLOADER
+-	depends on ATAGS
 -
 -config CMDLINE_FROM_BOOTLOADER
 -	bool "Use bootloader kernel arguments if available"
@@ -122,59 +119,42 @@ index c1344c05226c..6723f10ac246 100644
 -	  loader passes other arguments to the kernel.
 -	  This is useful if you cannot or don't want to change the
 -	  command-line options your boot loader passes to the kernel.
--
 -endchoice
 -
- config EXTRA_TARGETS
- 	string "Additional default image types"
- 	help
-diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
-index 33316ee55265..704afd028213 100644
---- a/arch/powerpc/kernel/prom_init.c
-+++ b/arch/powerpc/kernel/prom_init.c
-@@ -152,7 +152,7 @@ static struct prom_t __prombss prom;
- static unsigned long __prombss prom_entry;
- 
- static char __prombss of_stdout_device[256];
--static char __prombss prom_scratch[256];
-+static char __prombss prom_scratch[COMMAND_LINE_SIZE];
- 
- static unsigned long __prombss dt_header_start;
- static unsigned long __prombss dt_struct_start, dt_struct_end;
-@@ -770,24 +770,23 @@ static unsigned long prom_memparse(const char *ptr, const char **retptr)
-  * Early parsing of the command line passed to the kernel, used for
-  * "mem=x" and the options that affect the iommu
+ config XIP_KERNEL
+ 	bool "Kernel Execute-In-Place from ROM"
+ 	depends on !ARM_LPAE && !ARCH_MULTIPLATFORM
+diff --git a/arch/arm/kernel/atags_parse.c b/arch/arm/kernel/atags_parse.c
+index 373b61f9a4f0..ef97ec015c51 100644
+--- a/arch/arm/kernel/atags_parse.c
++++ b/arch/arm/kernel/atags_parse.c
+@@ -14,6 +14,7 @@
+  * is not parsed in any way).
   */
-+#define cmdline_strlcat prom_strlcat
-+#define cmdline_strlcpy prom_strlcpy
+ 
 +#include <linux/cmdline.h>
-+
- static void __init early_cmdline_parse(void)
+ #include <linux/init.h>
+ #include <linux/initrd.h>
+ #include <linux/kernel.h>
+@@ -120,16 +121,8 @@ __tagtable(ATAG_REVISION, parse_tag_revision);
+ 
+ static int __init parse_tag_cmdline(const struct tag *tag)
  {
- 	const char *opt;
--
--	char *p;
- 	int l = 0;
--
--	prom_cmd_line[0] = 0;
--	p = prom_cmd_line;
-+	bool truncated;
+-#if defined(CONFIG_CMDLINE_EXTEND)
+-	strlcat(default_command_line, " ", COMMAND_LINE_SIZE);
+-	strlcat(default_command_line, tag->u.cmdline.cmdline,
+-		COMMAND_LINE_SIZE);
+-#elif defined(CONFIG_CMDLINE_FORCE)
+-	pr_warn("Ignoring tag cmdline (using the default kernel command line)\n");
+-#else
+-	strlcpy(default_command_line, tag->u.cmdline.cmdline,
+-		COMMAND_LINE_SIZE);
+-#endif
++	cmdline_build(default_command_line, tag->u.cmdline.cmdline);
++
+ 	return 0;
+ }
  
- 	if (!IS_ENABLED(CONFIG_CMDLINE_FORCE) && (long)prom.chosen > 0)
--		l = prom_getprop(prom.chosen, "bootargs", p, COMMAND_LINE_SIZE-1);
-+		l = prom_getprop(prom.chosen, "bootargs", prom_scratch,
-+				 COMMAND_LINE_SIZE - 1);
- 
--	if (IS_ENABLED(CONFIG_CMDLINE_EXTEND) || l <= 0 || p[0] == '\0')
--		prom_strlcat(prom_cmd_line, " " CONFIG_CMDLINE,
--			     sizeof(prom_cmd_line));
-+	truncated = !__cmdline_build(prom_cmd_line, l > 0 ? prom_scratch : NULL);
- 
--	prom_printf("command line: %s\n", prom_cmd_line);
-+	prom_printf("command line: %s %s\n", prom_cmd_line, truncated ? "[truncated]" : "");
- 
- #ifdef CONFIG_PPC64
- 	opt = prom_strstr(prom_cmd_line, "iommu=");
 -- 
 2.25.0
 
