@@ -2,127 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F40E353906
-	for <lists+linux-arch@lfdr.de>; Sun,  4 Apr 2021 19:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A383A353B68
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Apr 2021 06:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbhDDRU5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 4 Apr 2021 13:20:57 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:63707 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231272AbhDDRU4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 4 Apr 2021 13:20:56 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4FD0tP1t4vz9tymG;
-        Sun,  4 Apr 2021 19:20:45 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id ffq992l6CBkv; Sun,  4 Apr 2021 19:20:45 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4FD0tP0d2fz9tymF;
-        Sun,  4 Apr 2021 19:20:45 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9F2F08B78E;
-        Sun,  4 Apr 2021 19:20:48 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id b-KtXSnASDF0; Sun,  4 Apr 2021 19:20:48 +0200 (CEST)
-Received: from po16121vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4454D8B76A;
-        Sun,  4 Apr 2021 19:20:48 +0200 (CEST)
-Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 06D3A67685; Sun,  4 Apr 2021 17:20:48 +0000 (UTC)
-Message-Id: <34d20d1dbb88f26d418b33985557b0475374a1a5.1617556785.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [RFC PATCH v6 1/1] cmdline: Add capability to both append and prepend at
- the same time
-To:     will@kernel.org, danielwa@cisco.com, robh@kernel.org,
-        daniel@gimpelevich.san-francisco.ca.us, arnd@kernel.org,
-        akpm@linux-foundation.org
-Cc:     linux-arch@vger.kernel.org, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        microblaze <monstr@monstr.eu>, linux-mips@vger.kernel.org,
-        nios2 <ley.foon.tan@intel.com>, openrisc@lists.librecores.org,
-        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-mm@kvack.org
-Date:   Sun,  4 Apr 2021 17:20:48 +0000 (UTC)
+        id S230038AbhDEExY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Apr 2021 00:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230036AbhDEExY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Apr 2021 00:53:24 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77C2C061756;
+        Sun,  4 Apr 2021 21:53:17 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id v8so5101319plz.10;
+        Sun, 04 Apr 2021 21:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZCE8DXq6AXOhvGcnEbPdIGiWxGR0DNPB4En9zD417Mo=;
+        b=AjR104ethb/rIHzSnVpqVgi6EsTCzJaaUxnLpilWzQbcoMJU/+9r0Z9QHCdn842aO9
+         agRr0cv9hjGTOhgosz26MQTAtZBwKLcvl0/7TkCsMnauaLGbmBS9EkD+SfteNM6H9huV
+         c3uylhufMbXhGp6wnqw23rb6O3v4/+/gsrGBqbRHvHv40zCUbw9mTB/aT35baR6+SAUL
+         dyiKy4friYGOoIxeN6pAwk/wVbwrvwFAwxD5B39n/Wz8aS7nvnSbmxahArC1dKFbdmUg
+         l0aoUQxOsWkhvHwfrHeku6rWzWHCw3yr8/q4Oe6vqfCDHrEwoFPB83ECQVsc4mDQsX5r
+         FewA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZCE8DXq6AXOhvGcnEbPdIGiWxGR0DNPB4En9zD417Mo=;
+        b=ikA1T+W2VOKTTsvEZPkK567/LDTzjjNWL63PeEni9WDb8GlLA6RMUQQfES9dUgtzwm
+         gnYynwgEQWADEZdqjJmOetzl80LeXwSQD2yx+1yZICu6RdCIKg2hKi0JonAVdXwb7GbA
+         VPXNKHkx0erbRHD0BjUru/eQWw6TdydLPNzXQzAdWW2fDlHBilQl0TPtYQKI9yYiVeC1
+         jqtYnvKsEkdRYwJaGEG2tpny3wbmYPuAn0efLqRj/UKVWP5c0ad/skIhBOXQ9shrRNMX
+         rsoVTyC874F0GHnTnDydT6THKytkYdypipmP9+jz2fUn/HVm82BgXASzwZEf+j4VkhhP
+         uB6w==
+X-Gm-Message-State: AOAM531KqV/flUv0eWyboh/2iAFRI7EMfJb/dpsBOXwM545TUcOkffes
+        Zt4OUeJwghrEPSJqrUIYlV8kEfH5CSsOUg==
+X-Google-Smtp-Source: ABdhPJzfg2ojOFwwEAtuSC96RYvGRpvmKRNH0XexWPQ2Qhe5nU1HK9MGimRyUq/fHwj0Fqunx6onqA==
+X-Received: by 2002:a17:90a:a108:: with SMTP id s8mr24898984pjp.199.1617598397085;
+        Sun, 04 Apr 2021 21:53:17 -0700 (PDT)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id gm10sm14102358pjb.4.2021.04.04.21.53.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Apr 2021 21:53:16 -0700 (PDT)
+Date:   Sun, 4 Apr 2021 21:50:50 -0700
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        dima@arista.com, arnd@arndb.de, tglx@linutronix.de,
+        vincenzo.frascino@arm.com, luto@kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH RESEND v1 4/4] powerpc/vdso: Add support for time
+ namespaces
+Message-ID: <YGqXKkLDwDb589Qg@gmail.com>
+References: <cover.1617209141.git.christophe.leroy@csgroup.eu>
+ <1a15495f80ec19a87b16cf874dbf7c3fa5ec40fe.1617209142.git.christophe.leroy@csgroup.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <1a15495f80ec19a87b16cf874dbf7c3fa5ec40fe.1617209142.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-One user has expressed the need to both append and prepend some
-built-in parameters to the command line provided by the bootloader.
+On Wed, Mar 31, 2021 at 04:48:47PM +0000, Christophe Leroy wrote:
+> This patch adds the necessary glue to provide time namespaces.
+> 
+> Things are mainly copied from ARM64.
+> 
+> __arch_get_timens_vdso_data() calculates timens vdso data position
+> based on the vdso data position, knowing it is the next page in vvar.
+> This avoids having to redo the mflr/bcl/mflr/mtlr dance to locate
+> the page relative to running code position.
+>
 
-Allthough it is a corner case, it is easy to implement so let's do it.
-
-When the user chooses to prepend the bootloader provided command line
-with the built-in command line, he is offered the possibility to enter
-an additionnal built-in command line to be appended after the
-bootloader provided command line.
-
-It is a complementary feature which has no impact on the already
-existing ones and/or the existing defconfig.
-
-Suggested-by: Daniel Walker <danielwa@cisco.com>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-Sending this out as an RFC, applies on top of the series
-("Implement GENERIC_CMDLINE"). I will add it to the series next spin
-unless someone is against it.
----
- include/linux/cmdline.h |  3 +++
- init/Kconfig            | 12 +++++++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/cmdline.h b/include/linux/cmdline.h
-index 020028e2bdf0..fb274a4d5519 100644
---- a/include/linux/cmdline.h
-+++ b/include/linux/cmdline.h
-@@ -36,6 +36,9 @@ static __always_inline bool __cmdline_build(char *dst, const char *src)
+Acked-by: Andrei Vagin <avagin@gmail.com>
  
- 	len = cmdline_strlcat(dst, src, COMMAND_LINE_SIZE);
- 
-+	if (IS_ENABLED(CONFIG_CMDLINE_PREPEND))
-+		len = cmdline_strlcat(dst, " " CONFIG_CMDLINE_MORE, COMMAND_LINE_SIZE);
-+
- 	if (IS_ENABLED(CONFIG_CMDLINE_APPEND))
- 		len = cmdline_strlcat(dst, " " CONFIG_CMDLINE, COMMAND_LINE_SIZE);
- 
-diff --git a/init/Kconfig b/init/Kconfig
-index fa002e3765ab..cd3087ff4f28 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -128,6 +128,14 @@ config CMDLINE
- 	  If this string is not empty, additional choices are proposed
- 	  below to determine how it will be used by the kernel.
- 
-+config CMDLINE_MORE
-+	string "Additional default kernel command string" if GENERIC_CMDLINE && CMDLINE_PREPEND
-+	default ""
-+	help
-+	  Defines an additional default kernel command string.
-+	  If this string is not empty, it is appended to the
-+	  command-line arguments provided by the bootloader
-+
- choice
- 	prompt "Kernel command line type" if CMDLINE != ""
- 	default CMDLINE_PREPEND if ARCH_WANT_CMDLINE_PREPEND_BY_DEFAULT
-@@ -154,7 +162,9 @@ config CMDLINE_PREPEND
- 	bool "Prepend to the bootloader kernel arguments"
- 	help
- 	  The default kernel command string will be prepended to the
--	  command-line arguments provided by the bootloader.
-+	  command-line arguments provided by the bootloader. When this
-+	  option is selected, another string can be added which will
-+	  be appended.
- 
- config CMDLINE_FORCE
- 	bool "Always use the default kernel command string"
--- 
-2.25.0
-
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
