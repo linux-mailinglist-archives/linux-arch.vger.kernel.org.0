@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A383A353B68
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Apr 2021 06:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB77353B6F
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Apr 2021 07:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbhDEExY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Apr 2021 00:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        id S231829AbhDEFCi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Apr 2021 01:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbhDEExY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Apr 2021 00:53:24 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77C2C061756;
-        Sun,  4 Apr 2021 21:53:17 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id v8so5101319plz.10;
-        Sun, 04 Apr 2021 21:53:17 -0700 (PDT)
+        with ESMTP id S230036AbhDEFCh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Apr 2021 01:02:37 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A16C061756;
+        Sun,  4 Apr 2021 22:02:32 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id e10so752922pls.6;
+        Sun, 04 Apr 2021 22:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ZCE8DXq6AXOhvGcnEbPdIGiWxGR0DNPB4En9zD417Mo=;
-        b=AjR104ethb/rIHzSnVpqVgi6EsTCzJaaUxnLpilWzQbcoMJU/+9r0Z9QHCdn842aO9
-         agRr0cv9hjGTOhgosz26MQTAtZBwKLcvl0/7TkCsMnauaLGbmBS9EkD+SfteNM6H9huV
-         c3uylhufMbXhGp6wnqw23rb6O3v4/+/gsrGBqbRHvHv40zCUbw9mTB/aT35baR6+SAUL
-         dyiKy4friYGOoIxeN6pAwk/wVbwrvwFAwxD5B39n/Wz8aS7nvnSbmxahArC1dKFbdmUg
-         l0aoUQxOsWkhvHwfrHeku6rWzWHCw3yr8/q4Oe6vqfCDHrEwoFPB83ECQVsc4mDQsX5r
-         FewA==
+        bh=kK15QIzlv37/lctPxHTH0/oV3sSKj5dMjOshVvLQYOY=;
+        b=gyKml+buuchIf9zLiJIVWS/8SzsE3vie/q8RjjEKEoC9X5+eK9qAKzMKWxOYqpa4Up
+         KpOAS0eXBL4aKv45eMa8N2NmSLc7tkb95RWRZaSoIH63ICZJNPXiEDntozIZhUQWK8rc
+         g9ZOcHM/sKjaEi6WkL/IIcYMgVo73TwCNZ4yx9PdUK4U8kylnrx8RzWbLKyHqZnvQuzh
+         Nkb8LsqnLU+RcWB0segCj3iV9VZu/Lza0exBAOkpAmmIPtm0WySWJKmmNPTLLk66UDa9
+         C2fC5gvawj5GdnFEj3dCRwmrpDkNOxat2bkijMxV0wYXkDBeDmTecx9/puNx8TNvs+zS
+         JF7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ZCE8DXq6AXOhvGcnEbPdIGiWxGR0DNPB4En9zD417Mo=;
-        b=ikA1T+W2VOKTTsvEZPkK567/LDTzjjNWL63PeEni9WDb8GlLA6RMUQQfES9dUgtzwm
-         gnYynwgEQWADEZdqjJmOetzl80LeXwSQD2yx+1yZICu6RdCIKg2hKi0JonAVdXwb7GbA
-         VPXNKHkx0erbRHD0BjUru/eQWw6TdydLPNzXQzAdWW2fDlHBilQl0TPtYQKI9yYiVeC1
-         jqtYnvKsEkdRYwJaGEG2tpny3wbmYPuAn0efLqRj/UKVWP5c0ad/skIhBOXQ9shrRNMX
-         rsoVTyC874F0GHnTnDydT6THKytkYdypipmP9+jz2fUn/HVm82BgXASzwZEf+j4VkhhP
-         uB6w==
-X-Gm-Message-State: AOAM531KqV/flUv0eWyboh/2iAFRI7EMfJb/dpsBOXwM545TUcOkffes
-        Zt4OUeJwghrEPSJqrUIYlV8kEfH5CSsOUg==
-X-Google-Smtp-Source: ABdhPJzfg2ojOFwwEAtuSC96RYvGRpvmKRNH0XexWPQ2Qhe5nU1HK9MGimRyUq/fHwj0Fqunx6onqA==
-X-Received: by 2002:a17:90a:a108:: with SMTP id s8mr24898984pjp.199.1617598397085;
-        Sun, 04 Apr 2021 21:53:17 -0700 (PDT)
+        bh=kK15QIzlv37/lctPxHTH0/oV3sSKj5dMjOshVvLQYOY=;
+        b=crOKtCcXZPUa9jv6EP4giL5J+Oqbb8zAmEE48gpcgvgmDFXxMrxaa7N3SgoclZ3rIv
+         ETTp8f6ynLPoY/j/yaGI7y/Nz0k6j5tZyWdP/PccJey/HrYIc/692XXzMPE7Ja5/fCIl
+         OvyBLkulPSsP+xqbpZzd8Lp7B/xT8JdoiLlJG7aDh89hBAZd0Km3QMimsNC34P44oMTL
+         R7l1AcdeGEWHa+NfeA9S5fo8JB6wl5OyQTutDYQsxlUUSRhOM0Os3LKT5xHEjB2/2332
+         2gPNuzvtntrbY5LAytJZ+DoXEzzcwIFNpT9Qe96I/l43GLZXVL7U8JWnTmwtL4QPmy9N
+         K2Hw==
+X-Gm-Message-State: AOAM530egbJDVlzU/w36ABa1x8TLiysPsK6DoJqp1CnoIO6XV1O/KZpI
+        slunrs0FGhdRiqrQdyN6ljY7A0J9yD6lxw==
+X-Google-Smtp-Source: ABdhPJzLdUJy3dvpZoB0nqEQ8yTO9K/hjp0XKNEZRVpkDvLIZGb27U4wcpyLU1qydKLB2z3nz7DBUw==
+X-Received: by 2002:a17:902:7b90:b029:e6:f01d:9db2 with SMTP id w16-20020a1709027b90b02900e6f01d9db2mr22475666pll.69.1617598951642;
+        Sun, 04 Apr 2021 22:02:31 -0700 (PDT)
 Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
-        by smtp.gmail.com with ESMTPSA id gm10sm14102358pjb.4.2021.04.04.21.53.15
+        by smtp.gmail.com with ESMTPSA id 14sm14227119pfl.1.2021.04.04.22.02.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Apr 2021 21:53:16 -0700 (PDT)
-Date:   Sun, 4 Apr 2021 21:50:50 -0700
+        Sun, 04 Apr 2021 22:02:31 -0700 (PDT)
+Date:   Sun, 4 Apr 2021 22:00:05 -0700
 From:   Andrei Vagin <avagin@gmail.com>
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -57,28 +57,27 @@ Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         dima@arista.com, arnd@arndb.de, tglx@linutronix.de,
         vincenzo.frascino@arm.com, luto@kernel.org,
         linux-arch@vger.kernel.org
-Subject: Re: [PATCH RESEND v1 4/4] powerpc/vdso: Add support for time
- namespaces
-Message-ID: <YGqXKkLDwDb589Qg@gmail.com>
+Subject: Re: [PATCH RESEND v1 2/4] lib/vdso: Add vdso_data pointer as input
+ to __arch_get_timens_vdso_data()
+Message-ID: <YGqZVf5+74RYp8H5@gmail.com>
 References: <cover.1617209141.git.christophe.leroy@csgroup.eu>
- <1a15495f80ec19a87b16cf874dbf7c3fa5ec40fe.1617209142.git.christophe.leroy@csgroup.eu>
+ <539c4204b1baa77c55f758904a1ea239abbc7a5c.1617209142.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-In-Reply-To: <1a15495f80ec19a87b16cf874dbf7c3fa5ec40fe.1617209142.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <539c4204b1baa77c55f758904a1ea239abbc7a5c.1617209142.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 04:48:47PM +0000, Christophe Leroy wrote:
-> This patch adds the necessary glue to provide time namespaces.
+On Wed, Mar 31, 2021 at 04:48:45PM +0000, Christophe Leroy wrote:
+> For the same reason as commit e876f0b69dc9 ("lib/vdso: Allow
+> architectures to provide the vdso data pointer"), powerpc wants to
+> avoid calculation of relative position to code.
 > 
-> Things are mainly copied from ARM64.
-> 
-> __arch_get_timens_vdso_data() calculates timens vdso data position
-> based on the vdso data position, knowing it is the next page in vvar.
-> This avoids having to redo the mflr/bcl/mflr/mtlr dance to locate
-> the page relative to running code position.
+> As the timens_vdso_data is next page to vdso_data, provide
+> vdso_data pointer to __arch_get_timens_vdso_data() in order
+> to ease the calculation on powerpc in following patches.
 >
 
 Acked-by: Andrei Vagin <avagin@gmail.com>
