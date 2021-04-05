@@ -2,262 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE95353C01
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Apr 2021 07:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEF23541E9
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Apr 2021 13:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbhDEFy2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Apr 2021 01:54:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35920 "EHLO mail.kernel.org"
+        id S233778AbhDEL64 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Apr 2021 07:58:56 -0400
+Received: from mga14.intel.com ([192.55.52.115]:45795 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229454AbhDEFy2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 5 Apr 2021 01:54:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D5B56138A;
-        Mon,  5 Apr 2021 05:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617602062;
-        bh=JiFMrkMx+0KZ/H6wRs19a5D3wV0zK+NjPnMfiNxQllA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QNV74FvKtTR9UWwWW+SVs18ha4h/JXOf8Hs2t+2QmXZVdvqcSBPR42ZmtUYOUo57+
-         Mj3YxaF4PDmMtM1uJxe5nTi3vMmiOtjn9W159VMvjvQGEXuk371bXB7VOwahT/FSPt
-         onxcn8oVPb4yH5yk/jhVKhP5KaXFsBI7iCcwJoTwEXUm1PBvOnz47o9H2Xb2Gx4zj+
-         3jF9sGLK3f43MBgVDvN0PfITOLgXRPuBndWMnJ3A0fiJZhZc9NH2AAvdZdm0hq2vg5
-         fkwZAkpHfs0xTP5hqAlNBJGM90pEjNCXNG/hJ3K1XkdM4XMcy/UORm/1zziAFcVw+F
-         F94+MvWAMjARg==
-Received: by mail-lf1-f53.google.com with SMTP id m12so15903401lfq.10;
-        Sun, 04 Apr 2021 22:54:22 -0700 (PDT)
-X-Gm-Message-State: AOAM530dLRTiZWXDXLkors4BfTcK8zMYzZdsUQDE+Akjbvp3ZuhojLyN
-        A/Sz4DbkpGt8xD3/koeAn5PpH7CrVAvteA1AEtA=
-X-Google-Smtp-Source: ABdhPJyzXhAKMVnILTiaRfbn+YIno4HeobyVoyCH/zyVOKo0SkJt6gv50ATy9e1+w5v2g1FpxbFE78pIt8C0WBtlsG8=
-X-Received: by 2002:a05:6512:3ca7:: with SMTP id h39mr16908838lfv.346.1617602060393;
- Sun, 04 Apr 2021 22:54:20 -0700 (PDT)
+        id S233960AbhDEL6z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 5 Apr 2021 07:58:55 -0400
+IronPort-SDR: fiuSY6eEdrvZF4Du1vN9NXBAMbeGnYJVYKv16AcS1HpDR6RLAJxPC1JIJPT9sd2ZboVaAxuEHK
+ scmF36L8II2g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9944"; a="192357900"
+X-IronPort-AV: E=Sophos;i="5.81,306,1610438400"; 
+   d="scan'208";a="192357900"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 04:58:48 -0700
+IronPort-SDR: hbWQXiBgEZ3QUgsl33+QUPhP+YH5y+9V9E/J5tZnT77mACSuR4Uuhxy+zn5+OYGL1WoD4azlTX
+ XpZFKc7fzOHQ==
+X-IronPort-AV: E=Sophos;i="5.81,306,1610438400"; 
+   d="scan'208";a="529396729"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 04:58:46 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lTNsR-001PpQ-9U; Mon, 05 Apr 2021 14:58:43 +0300
+Date:   Mon, 5 Apr 2021 14:58:43 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] h8300: rearrange headers inclusion order in asm/bitops
+Message-ID: <YGr7c9zHoCKN1Gyn@smile.fi.intel.com>
+References: <20210401203228.124145-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-References: <1617201040-83905-1-git-send-email-guoren@kernel.org> <1617201040-83905-4-git-send-email-guoren@kernel.org>
-In-Reply-To: <1617201040-83905-4-git-send-email-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 5 Apr 2021 13:54:08 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRWc1R7UHc2qjskA75OhSPgx+LQkcE_XtWppf4rGi-U8Q@mail.gmail.com>
-Message-ID: <CAJF2gTRWc1R7UHc2qjskA75OhSPgx+LQkcE_XtWppf4rGi-U8Q@mail.gmail.com>
-Subject: Re: [PATCH v6 3/9] riscv: locks: Introduce ticket-based spinlock implementation
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
-        openrisc@lists.librecores.org,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Anup Patel <anup@brainfault.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210401203228.124145-1-yury.norov@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 10:32 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> This patch introduces a ticket lock implementation for riscv, along the
-> same lines as the implementation for arch/arm & arch/csky.
->
-> We still use qspinlock as default.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Anup Patel <anup@brainfault.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
+On Thu, Apr 01, 2021 at 01:32:28PM -0700, Yury Norov wrote:
+> This patch fixes [next-20210401] commit a5145bdad3ff ("arch: rearrange
+
+"This patch fixes [next-20210401] commit ..." ==>
+
+"The commit ...
+
+> headers inclusion order in asm/bitops for m68k and sh").
+
+...fixed header ordering issue."
+
+
+> h8300 has 
+> similar problem, which was overlooked by me.
+
+
+> h8300 includes bitmap/{find,le}.h prior to ffs/fls headers. New fast-path
+> implementation in find.h requires ffs/fls. Reordering the headers inclusion
+> sequence helps to prevent compile-time implicit function declaration error.
+
+Whit above commit message rephrasing:
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 > ---
->  arch/riscv/Kconfig                      |  7 ++-
->  arch/riscv/include/asm/spinlock.h       | 84 +++++++++++++++++++++++++
->  arch/riscv/include/asm/spinlock_types.h | 17 +++++
->  3 files changed, 107 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 67cc65ba1ea1..34d0276f01d5 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -34,7 +34,7 @@ config RISCV
->         select ARCH_WANT_FRAME_POINTERS
->         select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
->         select ARCH_USE_QUEUED_RWLOCKS
-> -       select ARCH_USE_QUEUED_SPINLOCKS
-> +       select ARCH_USE_QUEUED_SPINLOCKS        if !RISCV_TICKET_LOCK
->         select ARCH_USE_QUEUED_SPINLOCKS_XCHG32
->         select CLONE_BACKWARDS
->         select CLINT_TIMER if !MMU
-> @@ -344,6 +344,11 @@ config NEED_PER_CPU_EMBED_FIRST_CHUNK
->         def_bool y
->         depends on NUMA
->
-> +config RISCV_TICKET_LOCK
-> +       bool "Ticket-based spin-locking"
-> +       help
-> +         Say Y here to use ticket-based spin-locking.
+>  arch/h8300/include/asm/bitops.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/h8300/include/asm/bitops.h b/arch/h8300/include/asm/bitops.h
+> index 7aa16c732aa9..c867a80cab5b 100644
+> --- a/arch/h8300/include/asm/bitops.h
+> +++ b/arch/h8300/include/asm/bitops.h
+> @@ -9,6 +9,10 @@
+>  
+>  #include <linux/compiler.h>
+>  
+> +#include <asm-generic/bitops/fls.h>
+> +#include <asm-generic/bitops/__fls.h>
+> +#include <asm-generic/bitops/fls64.h>
 > +
->  config RISCV_ISA_C
->         bool "Emit compressed instructions when building Linux"
->         default y
-> diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-> index a557de67a425..90b7eaa950cf 100644
-> --- a/arch/riscv/include/asm/spinlock.h
-> +++ b/arch/riscv/include/asm/spinlock.h
-> @@ -7,7 +7,91 @@
->  #ifndef _ASM_RISCV_SPINLOCK_H
->  #define _ASM_RISCV_SPINLOCK_H
->
-> +#ifdef CONFIG_RISCV_TICKET_LOCK
-> +#ifdef CONFIG_32BIT
-> +#define __ASM_SLLIW "slli\t"
-> +#define __ASM_SRLIW "srli\t"
-> +#else
-> +#define __ASM_SLLIW "slliw\t"
-> +#define __ASM_SRLIW "srliw\t"
-> +#endif
-> +
-> +/*
-> + * Ticket-based spin-locking.
-> + */
-> +static inline void arch_spin_lock(arch_spinlock_t *lock)
-> +{
-> +       arch_spinlock_t lockval;
-> +       u32 tmp;
-> +
-> +       asm volatile (
-> +               "1:     lr.w    %0, %2          \n"
-> +               "       mv      %1, %0          \n"
-> +               "       addw    %0, %0, %3      \n"
-> +               "       sc.w    %0, %0, %2      \n"
-> +               "       bnez    %0, 1b          \n"
-> +               : "=&r" (tmp), "=&r" (lockval), "+A" (lock->lock)
-> +               : "r" (1 << TICKET_NEXT)
-> +               : "memory");
-It's could be optimized by amoadd.w with Anup advice, and I'll update
-it in the next patchset version:
-diff --git a/arch/riscv/include/asm/spinlock.h
-b/arch/riscv/include/asm/spinlock.h
-index 90b7eaa950cf..435286ad342b 100644
---- a/arch/riscv/include/asm/spinlock.h
-+++ b/arch/riscv/include/asm/spinlock.h
-@@ -22,15 +22,10 @@
- static inline void arch_spin_lock(arch_spinlock_t *lock)
- {
-        arch_spinlock_t lockval;
--       u32 tmp;
+>  #ifdef __KERNEL__
+>  
+>  #ifndef _LINUX_BITOPS_H
+> @@ -173,8 +177,4 @@ static inline unsigned long __ffs(unsigned long word)
+>  
+>  #endif /* __KERNEL__ */
+>  
+> -#include <asm-generic/bitops/fls.h>
+> -#include <asm-generic/bitops/__fls.h>
+> -#include <asm-generic/bitops/fls64.h>
+> -
+>  #endif /* _H8300_BITOPS_H */
+> -- 
+> 2.25.1
+> 
 
-        asm volatile (
--               "1:     lr.w    %0, %2          \n"
--               "       mv      %1, %0          \n"
--               "       addw    %0, %0, %3      \n"
--               "       sc.w    %0, %0, %2      \n"
--               "       bnez    %0, 1b          \n"
--               : "=&r" (tmp), "=&r" (lockval), "+A" (lock->lock)
-+               "   amoadd.w    %0, %2, %1      \n"
-+               : "=&r" (lockval), "+A" (lock->lock)
-                : "r" (1 << TICKET_NEXT)
-                : "memory");
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-
-
-> +
-> +       smp_cond_load_acquire(&lock->tickets.owner,
-> +                                       VAL == lockval.tickets.next);
-> +}
-> +
-> +static inline int arch_spin_trylock(arch_spinlock_t *lock)
-> +{
-> +       u32 tmp, contended, res;
-> +
-> +       do {
-> +               asm volatile (
-> +               "       lr.w    %0, %3          \n"
-> +               __ASM_SRLIW    "%1, %0, %5      \n"
-> +               __ASM_SLLIW    "%2, %0, %5      \n"
-> +               "       or      %1, %2, %1      \n"
-> +               "       li      %2, 0           \n"
-> +               "       sub     %1, %1, %0      \n"
-> +               "       bnez    %1, 1f          \n"
-> +               "       addw    %0, %0, %4      \n"
-> +               "       sc.w    %2, %0, %3      \n"
-> +               "1:                             \n"
-> +               : "=&r" (tmp), "=&r" (contended), "=&r" (res),
-> +                 "+A" (lock->lock)
-> +               : "r" (1 << TICKET_NEXT), "I" (TICKET_NEXT)
-> +               : "memory");
-> +       } while (res);
-> +
-> +       if (!contended)
-> +               __atomic_acquire_fence();
-> +
-> +       return !contended;
-> +}
-> +
-> +static inline void arch_spin_unlock(arch_spinlock_t *lock)
-> +{
-> +       smp_store_release(&lock->tickets.owner, lock->tickets.owner + 1);
-> +}
-> +
-> +static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
-> +{
-> +       return lock.tickets.owner == lock.tickets.next;
-> +}
-> +
-> +static inline int arch_spin_is_locked(arch_spinlock_t *lock)
-> +{
-> +       return !arch_spin_value_unlocked(READ_ONCE(*lock));
-> +}
-> +
-> +static inline int arch_spin_is_contended(arch_spinlock_t *lock)
-> +{
-> +       struct __raw_tickets tickets = READ_ONCE(lock->tickets);
-> +
-> +       return (tickets.next - tickets.owner) > 1;
-> +}
-> +#define arch_spin_is_contended arch_spin_is_contended
-> +#else /* CONFIG_RISCV_TICKET_LOCK */
->  #include <asm/qspinlock.h>
-> +#endif /* CONFIG_RISCV_TICKET_LOCK */
-> +
->  #include <asm/qrwlock.h>
->
->  #endif /* _ASM_RISCV_SPINLOCK_H */
-> diff --git a/arch/riscv/include/asm/spinlock_types.h b/arch/riscv/include/asm/spinlock_types.h
-> index d033a973f287..afbb19841d0f 100644
-> --- a/arch/riscv/include/asm/spinlock_types.h
-> +++ b/arch/riscv/include/asm/spinlock_types.h
-> @@ -10,7 +10,24 @@
->  # error "please don't include this file directly"
->  #endif
->
-> +#ifdef CONFIG_RISCV_TICKET_LOCK
-> +#define TICKET_NEXT    16
-> +
-> +typedef struct {
-> +       union {
-> +               u32 lock;
-> +               struct __raw_tickets {
-> +                       /* little endian */
-> +                       u16 owner;
-> +                       u16 next;
-> +               } tickets;
-> +       };
-> +} arch_spinlock_t;
-> +
-> +#define __ARCH_SPIN_LOCK_UNLOCKED      { { 0 } }
-> +#else
->  #include <asm-generic/qspinlock_types.h>
-> +#endif
->  #include <asm-generic/qrwlock_types.h>
->
->  #endif /* _ASM_RISCV_SPINLOCK_TYPES_H */
-> --
-> 2.17.1
->
-
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
