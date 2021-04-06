@@ -2,175 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC8035598A
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 18:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D57235599C
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 18:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236232AbhDFQr7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 12:47:59 -0400
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:44911 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbhDFQr7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 12:47:59 -0400
-Received: by mail-oo1-f49.google.com with SMTP id p2-20020a4aa8420000b02901bc7a7148c4so3834382oom.11;
-        Tue, 06 Apr 2021 09:47:51 -0700 (PDT)
+        id S244338AbhDFQvU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 12:51:20 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:37474 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232755AbhDFQvT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 12:51:19 -0400
+Received: by mail-pg1-f173.google.com with SMTP id k8so10803139pgf.4;
+        Tue, 06 Apr 2021 09:51:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=KsEFQn5ynPj9Q6od5ymvE84NEzlALObqjlPA4SQWRs8=;
-        b=Caw06k2MWg1OwP78wZ8gxa1iBXixjWgwRK2lx5HicQ+kWOMh530QGvjE3JBelhmRd0
-         l07PZY89Xc+IP2Fe3Q07P00Zrud9P99oyC3rVkj5hNHogjeFOs2WXWYX6NHrkcS77WDB
-         P94qXGk/+0YrRAgXMMq1WAsVWu8yQuFD3GSljzjKlW2YkKn3Ln9bZZmwVfedZBvP9wye
-         sb+bJ+cmCDA7UEeKzcLBmFvfHHy+K6I9ZkNz1T//ij1po0BAvYPxqH/ngulIh+neVnwM
-         dBeZx5xLXFV3/2z9Ru2STWfxz+G2LpmUaRNkVTanJflI0gOfcrhU00ZS71tPKGEe4II+
-         yk1w==
-X-Gm-Message-State: AOAM533bh+Z9JfB6jSH1+OBEj7zpjZAA7gedjUbhfsCpclV+KT8gGytY
-        EzrbMCvb+rUCHrDKj0jiVw==
-X-Google-Smtp-Source: ABdhPJwPZn4vyuV4WbEQb7jrirEmMI3mRcpb+G+wNqe7KnEHeN8KG33o//cShwHkWNjdpn2Mmze2sA==
-X-Received: by 2002:a4a:d354:: with SMTP id d20mr27213126oos.12.1617727670969;
-        Tue, 06 Apr 2021 09:47:50 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id m16sm4687480otj.11.2021.04.06.09.47.48
+        bh=dUOVVdYoSYbWJM3R8BfH3yp511tJPXM9SJGSE2TL6GY=;
+        b=XzvTLzBSh6AVFmF1bhUcCakBkjYqyiM5hRmbNdk4aaKMQUrWHtM4iNWpHacQCJ3jut
+         nniz2y6tUM3GXo7Qbs/GTppYnltT2AZJz/ZLKKRWGLPLGhRNGiWffXKX0yIWWG622Ak9
+         7n5CYuHt1TCDBLXL7TIbyVffkbej+qoDPfGL6cLHOVI2gzcNvz2NMjTUg8etMVtWOWkU
+         GKipYQ8nygMkQ62qdAhi/RWoRdXaOY1yjYYZ/9QmAtHNrKZf13ki9oHznkg84thGWA5u
+         0njk2u6+kHetQeEP7PnC/3yxVvZuoKzpKib6vHXSoeEw5FZWSEwHhYjcj1HB2l3vSl/G
+         L9TA==
+X-Gm-Message-State: AOAM533o32v/QbiiS3xuqYLlWGbZG3Z29O9XITGjGHubLRO3i799FWS9
+        zea8kKFYzfSC3UrQBCgWE88=
+X-Google-Smtp-Source: ABdhPJxJPRbZ8hHR0ZfqHaRIyDYJATSlH01Zbyq90wb+DV+jR9f7adBrfQ3tFv0Oj/c/stWG4JfCFg==
+X-Received: by 2002:a63:1303:: with SMTP id i3mr27619155pgl.32.1617727870490;
+        Tue, 06 Apr 2021 09:51:10 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id p11sm3129812pjo.48.2021.04.06.09.51.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 09:47:50 -0700 (PDT)
-Received: (nullmailer pid 1942347 invoked by uid 1000);
-        Tue, 06 Apr 2021 16:47:48 -0000
-Date:   Tue, 6 Apr 2021 11:47:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 12/18] of/address: Add infrastructure to declare MMIO
- as non-posted
-Message-ID: <20210406164748.GA1937719@robh.at.kernel.org>
-References: <20210402090542.131194-1-marcan@marcan.st>
- <20210402090542.131194-13-marcan@marcan.st>
+        Tue, 06 Apr 2021 09:51:09 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id AB32F40402; Tue,  6 Apr 2021 16:51:08 +0000 (UTC)
+Date:   Tue, 6 Apr 2021 16:51:08 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Joerg Roedel <jroedel@suse.de>, Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-remoteproc@vger.kernel.org, linux-arch@vger.kernel.org,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Corey Minyard <minyard@acm.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Subject: Re: [PATCH v1 1/1] kernel.h: Split out panic and oops helpers
+Message-ID: <20210406165108.GA4332@42.do-not-panic.com>
+References: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210402090542.131194-13-marcan@marcan.st>
+In-Reply-To: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Apr 02, 2021 at 06:05:36PM +0900, Hector Martin wrote:
-> This implements the 'nonposted-mmio' boolean property. Placing this
-> property in a bus marks all direct child devices as requiring
-> non-posted MMIO mappings. If no such property is found, the default
-> is posted MMIO.
-> 
-> of_mmio_is_nonposted() performs this check to determine if a given
-> device has requested non-posted MMIO.
-> 
-> of_address_to_resource() uses this to set the IORESOURCE_MEM_NONPOSTED
-> flag on resources that require non-posted MMIO.
-> 
-> of_iomap() and of_io_request_and_map() then use this flag to pick the
-> correct ioremap() variant.
-> 
-> This mechanism is currently restricted to builds that support Apple ARM
-> platforms, as an optimization.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  drivers/of/address.c       | 43 ++++++++++++++++++++++++++++++++++++--
->  include/linux/of_address.h |  1 +
->  2 files changed, 42 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/of/address.c b/drivers/of/address.c
-> index 73ddf2540f3f..6485cc536e81 100644
-> --- a/drivers/of/address.c
-> +++ b/drivers/of/address.c
-> @@ -847,6 +847,9 @@ static int __of_address_to_resource(struct device_node *dev,
->  		return -EINVAL;
->  	memset(r, 0, sizeof(struct resource));
->  
-> +	if (of_mmio_is_nonposted(dev))
-> +		flags |= IORESOURCE_MEM_NONPOSTED;
+On Tue, Apr 06, 2021 at 04:31:58PM +0300, Andy Shevchenko wrote:
+> diff --git a/include/linux/panic_notifier.h b/include/linux/panic_notifier.h
+> new file mode 100644
+> index 000000000000..41e32483d7a7
+> --- /dev/null
+> +++ b/include/linux/panic_notifier.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_PANIC_NOTIFIERS_H
+> +#define _LINUX_PANIC_NOTIFIERS_H
 > +
->  	r->start = taddr;
->  	r->end = taddr + size - 1;
->  	r->flags = flags;
-> @@ -896,7 +899,10 @@ void __iomem *of_iomap(struct device_node *np, int index)
->  	if (of_address_to_resource(np, index, &res))
->  		return NULL;
->  
-> -	return ioremap(res.start, resource_size(&res));
-> +	if (res.flags & IORESOURCE_MEM_NONPOSTED)
-> +		return ioremap_np(res.start, resource_size(&res));
-> +	else
-> +		return ioremap(res.start, resource_size(&res));
->  }
->  EXPORT_SYMBOL(of_iomap);
->  
-> @@ -928,7 +934,11 @@ void __iomem *of_io_request_and_map(struct device_node *np, int index,
->  	if (!request_mem_region(res.start, resource_size(&res), name))
->  		return IOMEM_ERR_PTR(-EBUSY);
->  
-> -	mem = ioremap(res.start, resource_size(&res));
-> +	if (res.flags & IORESOURCE_MEM_NONPOSTED)
-> +		mem = ioremap_np(res.start, resource_size(&res));
-> +	else
-> +		mem = ioremap(res.start, resource_size(&res));
+> +#include <linux/notifier.h>
+> +#include <linux/types.h>
 > +
->  	if (!mem) {
->  		release_mem_region(res.start, resource_size(&res));
->  		return IOMEM_ERR_PTR(-ENOMEM);
-> @@ -1094,3 +1104,32 @@ bool of_dma_is_coherent(struct device_node *np)
->  	return false;
->  }
->  EXPORT_SYMBOL_GPL(of_dma_is_coherent);
+> +extern struct atomic_notifier_head panic_notifier_list;
 > +
-> +/**
-> + * of_mmio_is_nonposted - Check if device uses non-posted MMIO
-> + * @np:	device node
-> + *
-> + * Returns true if the "nonposted-mmio" property was found for
-> + * the device's bus.
-> + *
-> + * This is currently only enabled on builds that support Apple ARM devices, as
-> + * an optimization.
-> + */
-> +bool of_mmio_is_nonposted(struct device_node *np)
-> +{
-> +	struct device_node *parent;
-> +	bool nonposted;
+> +extern bool crash_kexec_post_notifiers;
 > +
-> +	if (!IS_ENABLED(CONFIG_ARCH_APPLE))
-> +		return false;
-> +
-> +	parent = of_get_parent(np);
-> +	if (!parent)
-> +		return false;
-> +
-> +	nonposted = of_property_read_bool(parent, "nonposted-mmio");
-> +
-> +	of_node_put(parent);
-> +	return nonposted;
-> +}
-> +EXPORT_SYMBOL_GPL(of_mmio_is_nonposted);
+> +#endif	/* _LINUX_PANIC_NOTIFIERS_H */
 
-Is this needed outside of of/address.c? If not, please make it static 
-and don't export.
+Why is it worth it to add another file just for this? Seems like a very
+small file.
 
-With that,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+  Luis
