@@ -2,105 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF66354B66
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 05:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DF7354DA2
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 09:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242379AbhDFDu7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Apr 2021 23:50:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50998 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233639AbhDFDu7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 5 Apr 2021 23:50:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D895D611EE;
-        Tue,  6 Apr 2021 03:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617681052;
-        bh=szRR4JcrQICDR26E7y2EmbZ8ojtgg1rHPlcrE0/d3ls=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Xh7LyhlX8SgYtaHo207MEW2YT8a8f1clTe8y0Yi2E7VuF9cUTfe3JNTF/XGwPyFR1
-         7J0Gpiyo8cIbAloHohpmQUYB4YgDXxaKIbx9OdCUDVq2Mfr7ffFqOl5g2SeEDwbRJp
-         kjeZVx00J+1BGWp5Uu85JuFeWRfHJDIk+Y9CTprTvQJ9+wtB9KeZgyeXFLxGYq+9UD
-         oUYNEKYxSHPACshu3nkz63R73hwAtR4zoTEqdh2ulp7EwSnwEN/5VZNrTZIXtGpeHz
-         C6yA+io5tq4xzb/4cKCGwLiVQjlYVXb7m29lq4j4/n9F1YwCFYKJZyxY5au3/vHiU6
-         Uz++RocqdA5lQ==
-Received: by mail-lf1-f46.google.com with SMTP id o126so20585175lfa.0;
-        Mon, 05 Apr 2021 20:50:51 -0700 (PDT)
-X-Gm-Message-State: AOAM533DWFYAOKbErtDhkmiv6Pt+TRtpTW4b1FbvGxLSC0Oa/IfKgI9I
-        udcqeKbkCI64nwa3zJq+0s/jfwjLDha9qFtXmbM=
-X-Google-Smtp-Source: ABdhPJxz7vekhbYxQi/US2gfIUiFffiADC+caHLoxoXMbnk8SvvFWk5EFQrEYzPpfuBRSNV+B6LNPvDCyqdYyVLCZPM=
-X-Received: by 2002:a19:f501:: with SMTP id j1mr20502473lfb.231.1617681050232;
- Mon, 05 Apr 2021 20:50:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
- <1616868399-82848-4-git-send-email-guoren@kernel.org> <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
- <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
- <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net> <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
- <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net> <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
- <YGNNCEAMSWbBU+hd@hirez.programming.kicks-ass.net> <20210330223514.GE1171117@lianli.shorne-pla.net>
- <CAK8P3a0hj2pYr-CuNJkjO==RafZ=J+6kCo4HTWEwvvRXPcngJA@mail.gmail.com>
-In-Reply-To: <CAK8P3a0hj2pYr-CuNJkjO==RafZ=J+6kCo4HTWEwvvRXPcngJA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 6 Apr 2021 11:50:38 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRxPMURTE3M5WMQ_0q1yZ6K8nraGsFjGLUmpG9nYS_hng@mail.gmail.com>
-Message-ID: <CAJF2gTRxPMURTE3M5WMQ_0q1yZ6K8nraGsFjGLUmpG9nYS_hng@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Stafford Horne <shorne@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+        id S234659AbhDFHQ6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 03:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232063AbhDFHQ6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 03:16:58 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5BFC06174A;
+        Tue,  6 Apr 2021 00:16:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aRGRQBCE7ZKsjbhrcqSn4Jo3nc9IkKbKN4abWLlyP80=; b=WvzcNuYnVyRbah4nxnWcWdoNU6
+        H5wHYaDBfCISTQvHzRpzGRn91lc03dCUXiBbEEUDCPEB4Yeq63GiV6lLq8i8AZn/tWpZxZYSuhctd
+        jzf6VVp1NOue0hMTMWxQ6mga6cVW6N5Z42Buoy8IX/h0NKUa+zFqx39wB3zP83mikjucbNP8MchX1
+        FwnadXNwysORLciBkvj7UA/dLnA6M1F8WphRWx/kc45XKGGoqNFHveQGY09rmNhpPwFkIBPB2rDgH
+        euma4zKdRl019WHxYogGJ9bTOK8qADgmVesbRspJNMCQ2pQLQNFFeKHZtm1/fK0PL76zCDW9f+atv
+        w96mJ69g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lTfwF-00CQIw-Vj; Tue, 06 Apr 2021 07:16:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A7762301324;
+        Tue,  6 Apr 2021 09:15:50 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 79FD12C1D199B; Tue,  6 Apr 2021 09:15:50 +0200 (CEST)
+Date:   Tue, 6 Apr 2021 09:15:50 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-csky@vger.kernel.org,
         linux-arch <linux-arch@vger.kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         Waiman Long <longman@redhat.com>,
-        Anup Patel <anup@brainfault.org>
-Content-Type: text/plain; charset="UTF-8"
+        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
+ ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+Message-ID: <YGwKpmPkn5xIxIyx@hirez.programming.kicks-ass.net>
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org>
+ <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+ <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
+ <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net>
+ <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net>
+ <CAJF2gTS4jexKsSiXBY=5rz53LjcLUZ1K4pxjYJDVQCWx_8JTuA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTS4jexKsSiXBY=5rz53LjcLUZ1K4pxjYJDVQCWx_8JTuA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 3:23 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Mar 31, 2021 at 12:35 AM Stafford Horne <shorne@gmail.com> wrote:
+On Wed, Mar 31, 2021 at 11:22:35PM +0800, Guo Ren wrote:
+> On Mon, Mar 29, 2021 at 8:50 PM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > I just want to chime in here, there may be a better spot in the thread to
-> > mention this but, for OpenRISC I did implement some generic 8/16-bit xchg code
-> > which I have on my todo list somwhere to replace the other generic
-> > implementations like that in mips.
+> > On Mon, Mar 29, 2021 at 08:01:41PM +0800, Guo Ren wrote:
+> > > u32 a = 0x55aa66bb;
+> > > u16 *ptr = &a;
+> > >
+> > > CPU0                       CPU1
+> > > =========             =========
+> > > xchg16(ptr, new)     while(1)
+> > >                                     WRITE_ONCE(*(ptr + 1), x);
+> > >
+> > > When we use lr.w/sc.w implement xchg16, it'll cause CPU0 deadlock.
 > >
-> >   arch/openrisc/include/asm/cmpxchg.h
-> >
-> > The idea would be that architectures just implement these methods:
-> >
-> >   long cmpxchg_u32(*ptr,old,new)
-> >   long xchg_u32(*ptr,val)
-> >
-> > Then the rest of the generic header would implement cmpxchg.
->
-> I like the idea of generalizing it a little further. I'd suggest staying a
-> little closer to the existing naming here though, as we already have
-> cmpxchg() for the type-agnostic version, and cmpxchg64() for the
-> fixed-length 64-bit version.
->
-> I think a nice interface between architecture-specific and architecture
-> independent code would be to have architectures provide
-> arch_cmpxchg32()/arch_xchg32() as the most basic version, as well
-> as arch_cmpxchg8()/arch_cmpxchg16()/arch_xchg8()/arch_xchg16()
-> if they have instructions for those.
->
-> The common code can then build cmpxchg16()/xchg16() on top of
-> either the 16-bit or the 32-bit primitives, and build the cmpxchg()/xchg()
-> wrapper around those (or alternatively we can decide to have them
-> only deal with fixed-32-bit and long/pointer sized atomics).
-I think these emulation codes are suitable for some architectures but not riscv.
+> > Then I think your LL/SC is broken.
+> No, it's not broken LR.W/SC.W. Quote <8.3 Eventual Success of
+> Store-Conditional Instructions>:
+> 
+> "As a consequence of the eventuality guarantee, if some harts in an
+> execution environment are executing constrained LR/SC loops, and no
+> other harts or devices in the execution environment execute an
+> unconditional store or AMO to that reservation set, then at least one
+> hart will eventually exit its constrained LR/SC loop. By contrast, if
+> other harts or devices continue to write to that reservation set, it
+> is not guaranteed that any hart will exit its LR/SC loop."
 
-We shouldn't export xchg16/cmpxchg16(emulated by lr.w/sc.w) in riscv,
-We should forbid these sub-word atomic primitive and lets the
-programmers consider their atomic design.
+(there, reflowed it for you)
 
--- 
-Best Regards
- Guo Ren
+That just means your arch spec is broken too :-)
 
-ML: https://lore.kernel.org/linux-csky/
+> So I think it's a feature of LR/SC. How does the above code (also use
+> ll.w/sc.w to implement xchg16) running on arm64?
+> 
+> 1: ldxr
+>     eor
+>     cbnz ... 2f
+>     stxr
+>     cbnz ... 1b   // I think it would deadlock for arm64.
+> 
+> "LL/SC fwd progress" which you have mentioned could guarantee stxr
+> success? How hardware could do that?
+
+I'm not a hardware person; I've never actually build anything larger
+than a 4 bit adder with nand gates (IIRC, 25+ years ago). And I'll let
+Will answer the ARM64 part.
+
+That said, I think the idea is that if you lock the line (load-locked is
+a clue ofcourse) to the core until either: an exception (or anything
+else that is guaranteed to fail LL/SC), SC or N instructions, then a
+competing LL/SC will stall in the LL while the first core makes
+progress.
+
+This same principle is key to hardware progress for cmpxchg/cas loops,
+don't instantly yield the exclusive hold on the cacheline, keep it
+around for a while.
+
+Out-of-order CPUs can do even better I think, by virtue of them being
+able to see tight loops.
+
+
+Anyway, given you have such a crap architecture (and here I thought
+RISC-V was supposed to be a modern design *sigh*), you had better go
+look at the sparc64 atomic implementation which has a software backoff
+for failed CAS in order to make fwd progress.
