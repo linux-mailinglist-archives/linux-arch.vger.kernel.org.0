@@ -2,104 +2,272 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAC8355760
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 17:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A6C3558B7
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 18:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345478AbhDFPKU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 11:10:20 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:40685 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbhDFPKT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 11:10:19 -0400
-Received: from mail-ot1-f42.google.com ([209.85.210.42]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MQ5nE-1lGVe444tE-00M82P; Tue, 06 Apr 2021 17:10:09 +0200
-Received: by mail-ot1-f42.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso14919233oti.11;
-        Tue, 06 Apr 2021 08:10:08 -0700 (PDT)
-X-Gm-Message-State: AOAM5339u61P3hcDQHSMv4Bb3Vc6UeOaPqfPKECpFig1uCct5fovZUts
-        XPwTqmkcSBGX/Hjod6hc9kc3/Hsfqq4PeYD4X4Y=
-X-Google-Smtp-Source: ABdhPJymivlM3E85H8Q+0NCLICsUYllvqqVKgV6xTox+xVrAvu7QQQ8spiRatNW1320IbQIk/CTiHARLx2Yc4o/NYxk=
-X-Received: by 2002:a05:6830:148c:: with SMTP id s12mr28037074otq.251.1617721807123;
- Tue, 06 Apr 2021 08:10:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 6 Apr 2021 17:09:50 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3PBvj_JEgxqSD6fg_J8kZzUz_KthZ66RdA5tF4CPPbdg@mail.gmail.com>
-Message-ID: <CAK8P3a3PBvj_JEgxqSD6fg_J8kZzUz_KthZ66RdA5tF4CPPbdg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] kernel.h: Split out panic and oops helpers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Joerg Roedel <jroedel@suse.de>, Wei Liu <wei.liu@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        id S1346150AbhDFQDk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 12:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346130AbhDFQDk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 12:03:40 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA24C06174A;
+        Tue,  6 Apr 2021 09:03:30 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id m13so15605007oiw.13;
+        Tue, 06 Apr 2021 09:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DXuMvybWpRt4PM+Qgqf16jsNWFOgCO9JLNdluWmfwc4=;
+        b=rSCmibMZ1dZuqDCb7K7iRXGaa8DLdSW4UpceS/oPeHg+aAa3Z5dA+LFLCLjP+BjCFr
+         pzg8FZHT4DPAPK5dQ5Hqx7gh6IraXjbGQl/mWrYWcEJhOpuDuNQnkLc8cEVurIJ+7qbc
+         ZDTTh7llH8wy3gRD8aGWRRRHICrI1AnHgo3Di5+K0fiPTayiM9VJzzrrDeikkbgndhoi
+         b9bBgIPbHAYOfmCffNl/DyIday9v8t4AuQ559y4y8zEQEbVM8uK/XLMobgkBuExjzARa
+         XilwGSaxZ4wGJKOwVg60GyAT7QLU9T8/g8beUCVGMhoO9xsC7SaLIIsI9oswNuEFVOvD
+         tWHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DXuMvybWpRt4PM+Qgqf16jsNWFOgCO9JLNdluWmfwc4=;
+        b=pFeapIRO+AR1GyIJnjkmLFrttRnz5TNpb8gnY2bBG8cmGMUOWizcG26UiWb/Mnr8Bp
+         UzXvHvHxye7BPy8E4EqtYc8zbDWMHgEyQiQKza7XufVsj+CJzbyo+WKTdI29qKK+mYCC
+         6tY7VItm+cXaLqdbYN2XEDFFHtIS9iM7ISqAYCJ35S+kVkHeyZnvP3SUBcleN+wzI/R0
+         mQjZYOFhIWj9wnRCX+7zOk6ZZVBxi9bQ0ADFHaOkOdyEXLgYilL8EkfrI7gP8cFGsNcC
+         v2dzVPpn32Y665AcoCq39iMztxNrKApLwETd6puxxntCLNQFLRteyT6pMshMEJuAyl4M
+         Xo/w==
+X-Gm-Message-State: AOAM530IONOdKkTEPmnB7pPyO6MiMzqfKawyphLkdss3vmoaT/TKGTw0
+        W5zd0DC5t69aJIpiBXB0OiU=
+X-Google-Smtp-Source: ABdhPJwtPQ3FMWZbLH53D6bk91CTQ7Dnfs4MpY6aB20C8cA1Che99rkav8rsszNojUM6Cj43TZKsGw==
+X-Received: by 2002:aca:1b01:: with SMTP id b1mr3652063oib.177.1617725009996;
+        Tue, 06 Apr 2021 09:03:29 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f8sm4630528otp.71.2021.04.06.09.03.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 06 Apr 2021 09:03:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 6 Apr 2021 09:03:27 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
+        Alexey Klimov <aklimov@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        linux-remoteproc@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        kexec@lists.infradead.org, rcu@vger.kernel.org,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Corey Minyard <minyard@acm.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:j4MYXLrEq3uWqMv+X0D99JwRTObPxDHDhULsj99en1zd/J0IS/M
- 9DH+aY6RDqyTbtsxdBcUfZb+VnY8T9dkC4Ci3fV4yaKiT3GP45iRwVaY38uzag+7e1eYfKy
- q/Sp50e+En2buLkJEK/wbFqVNilXsvIYeIUaIPF0vQBDu1+1gy8WogTZT+70k09VATRurYk
- GmKsn/l8oe0Pk4pW5dtGg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GP+1VYp8m50=:bsgZllEAEV+Im6+kBThy/N
- JRso7MC3s7MZECvcG6PxvLGm48/w8u+AwOaEEM1TpolGdUeWEn/hhpdt6UWGtWJGzy0NgHb1b
- ECWpueBJLTVs7fSSrUUnujvbDiNbQeSq3j5DI0JIYFPG8qaXZquoG+NcbGehYjTJtibfwbaa4
- MhR08FPn0d9M6hcsAB8DWsEtr0KwkviFgvGkVMxMp7zB46YO9hPgBKPRtUiGdXjiY35QA422Z
- pI220xkX3UXgAJmZlsfT8lnTiwhJ6goIM5u4qGHoy1wGPTrwW0CvNzx+k8+QpKfm/nEmZcla/
- AY6TjYhY9EjBCHJ7tEnvJf+fKCFAdKwrH0GRt8ecy2tD99Z62l4JNkIlY0FoL0FqrCGA5R3Tl
- N5lgSxJoiGwhOxR1ax5wKVmJ8zCsMuMh925Jl7s4XakMqWmL5Dg62rWCzcp1sDnC/q+1gTyps
- xxdNyBrccocNyELt3aLU2Tv7JuleTWM=
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jianpeng Ma <jianpeng.ma@intel.com>,
+        Joe Perches <joe@perches.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rich Felker <dalias@libc.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH 11/13] lib: add fast path for find_first_*_bit() and
+ find_last_bit()
+Message-ID: <20210406160327.GA180841@roeck-us.net>
+References: <20210316015424.1999082-1-yury.norov@gmail.com>
+ <20210316015424.1999082-12-yury.norov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210316015424.1999082-12-yury.norov@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 6, 2021 at 3:31 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> kernel.h is being used as a dump for all kinds of stuff for a long time.
-> Here is the attempt to start cleaning it up by splitting out panic and
-> oops helpers.
->
-> At the same time convert users in header and lib folder to use new header.
-> Though for time being include new header back to kernel.h to avoid twisted
-> indirected includes for existing users.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Mon, Mar 15, 2021 at 06:54:22PM -0700, Yury Norov wrote:
+> Similarly to bitmap functions, users would benefit if we'll handle
+> a case of small-size bitmaps that fit into a single word.
+> 
+> While here, move the find_last_bit() declaration to bitops/find.h
+> where other find_*_bit() functions sit.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  include/asm-generic/bitops/find.h | 50 ++++++++++++++++++++++++++++---
+>  include/linux/bitops.h            | 12 --------
+>  lib/find_bit.c                    | 12 ++++----
+>  3 files changed, 52 insertions(+), 22 deletions(-)
+> 
+> diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
+> index 4148c74a1e4d..8d818b304869 100644
+> --- a/include/asm-generic/bitops/find.h
+> +++ b/include/asm-generic/bitops/find.h
+> @@ -5,6 +5,9 @@
+>  extern unsigned long _find_next_bit(const unsigned long *addr1,
+>  		const unsigned long *addr2, unsigned long nbits,
+>  		unsigned long start, unsigned long invert, unsigned long le);
+> +extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
+> +extern unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size);
+> +extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long size);
+>  
+>  #ifndef find_next_bit
+>  /**
+> @@ -102,8 +105,17 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+>   * Returns the bit number of the first set bit.
+>   * If no bits are set, returns @size.
+>   */
+> -extern unsigned long find_first_bit(const unsigned long *addr,
+> -				    unsigned long size);
+> +static inline
+> +unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+> +{
+> +	if (small_const_nbits(size)) {
+> +		unsigned long val = *addr & BITS_FIRST(size - 1);
+> +
+> +		return val ? __ffs(val) : size;
 
-Nice!
+This patch results in:
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+include/asm-generic/bitops/find.h: In function 'find_last_bit':
+include/asm-generic/bitops/find.h:164:16: error: implicit declaration of function '__fls'; did you mean '__ffs'?
+
+and:
+
+./include/asm-generic/bitops/__fls.h: At top level:
+./include/asm-generic/bitops/__fls.h:13:38: error: conflicting types for '__fls'
+
+when building scripts/mod/devicetable-offsets.o.
+
+Seen with h8300 builds.
+
+Guenter
+
+> +	}
+> +
+> +	return _find_first_bit(addr, size);
+> +}
+>  
+>  /**
+>   * find_first_zero_bit - find the first cleared bit in a memory region
+> @@ -113,8 +125,17 @@ extern unsigned long find_first_bit(const unsigned long *addr,
+>   * Returns the bit number of the first cleared bit.
+>   * If no bits are zero, returns @size.
+>   */
+> -extern unsigned long find_first_zero_bit(const unsigned long *addr,
+> -					 unsigned long size);
+> +static inline
+> +unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+> +{
+> +	if (small_const_nbits(size)) {
+> +		unsigned long val = *addr | ~BITS_FIRST(size - 1);
+> +
+> +		return val == ~0UL ? size : ffz(val);
+> +	}
+> +
+> +	return _find_first_zero_bit(addr, size);
+> +}
+>  #else /* CONFIG_GENERIC_FIND_FIRST_BIT */
+>  
+>  #ifndef find_first_bit
+> @@ -126,6 +147,27 @@ extern unsigned long find_first_zero_bit(const unsigned long *addr,
+>  
+>  #endif /* CONFIG_GENERIC_FIND_FIRST_BIT */
+>  
+> +#ifndef find_last_bit
+> +/**
+> + * find_last_bit - find the last set bit in a memory region
+> + * @addr: The address to start the search at
+> + * @size: The number of bits to search
+> + *
+> + * Returns the bit number of the last set bit, or size.
+> + */
+> +static inline
+> +unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
+> +{
+> +	if (small_const_nbits(size)) {
+> +		unsigned long val = *addr & BITS_FIRST(size - 1);
+> +
+> +		return val ? __fls(val) : size;
+> +	}
+> +
+> +	return _find_last_bit(addr, size);
+> +}
+> +#endif
+> +
+>  /**
+>   * find_next_clump8 - find next 8-bit clump with set bits in a memory region
+>   * @clump: location to store copy of found clump
+> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+> index a5a48303b0f1..26bf15e6cd35 100644
+> --- a/include/linux/bitops.h
+> +++ b/include/linux/bitops.h
+> @@ -286,17 +286,5 @@ static __always_inline void __assign_bit(long nr, volatile unsigned long *addr,
+>  })
+>  #endif
+>  
+> -#ifndef find_last_bit
+> -/**
+> - * find_last_bit - find the last set bit in a memory region
+> - * @addr: The address to start the search at
+> - * @size: The number of bits to search
+> - *
+> - * Returns the bit number of the last set bit, or size.
+> - */
+> -extern unsigned long find_last_bit(const unsigned long *addr,
+> -				   unsigned long size);
+> -#endif
+> -
+>  #endif /* __KERNEL__ */
+>  #endif
+> diff --git a/lib/find_bit.c b/lib/find_bit.c
+> index 2470ae390f3c..e2c301d28568 100644
+> --- a/lib/find_bit.c
+> +++ b/lib/find_bit.c
+> @@ -75,7 +75,7 @@ EXPORT_SYMBOL(_find_next_bit);
+>  /*
+>   * Find the first set bit in a memory region.
+>   */
+> -unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+> +unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
+>  {
+>  	unsigned long idx;
+>  
+> @@ -86,14 +86,14 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+>  
+>  	return size;
+>  }
+> -EXPORT_SYMBOL(find_first_bit);
+> +EXPORT_SYMBOL(_find_first_bit);
+>  #endif
+>  
+>  #ifndef find_first_zero_bit
+>  /*
+>   * Find the first cleared bit in a memory region.
+>   */
+> -unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+> +unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size)
+>  {
+>  	unsigned long idx;
+>  
+> @@ -104,11 +104,11 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+>  
+>  	return size;
+>  }
+> -EXPORT_SYMBOL(find_first_zero_bit);
+> +EXPORT_SYMBOL(_find_first_zero_bit);
+>  #endif
+>  
+>  #ifndef find_last_bit
+> -unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
+> +unsigned long _find_last_bit(const unsigned long *addr, unsigned long size)
+>  {
+>  	if (size) {
+>  		unsigned long val = BITS_FIRST_MASK(size - 1);
+> @@ -124,7 +124,7 @@ unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
+>  	}
+>  	return size;
+>  }
+> -EXPORT_SYMBOL(find_last_bit);
+> +EXPORT_SYMBOL(_find_last_bit);
+>  #endif
+>  
+>  unsigned long find_next_clump8(unsigned long *clump, const unsigned long *addr,
