@@ -2,111 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 134FE354F2C
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 10:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273B7355204
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 13:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244654AbhDFI5K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 04:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244643AbhDFI5J (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 04:57:09 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D451C06174A;
-        Tue,  6 Apr 2021 01:57:02 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id s11so9945308pfm.1;
-        Tue, 06 Apr 2021 01:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uZUmKkwLM2oSaojuTn4DZClVwuluaLe6PZbLvPR8s3c=;
-        b=WpscpUN2s8UcwB80GPNIwVjusSFrsDNimXL3met/I3dY8jN7f/vDKn6GC3ZCHm0gvJ
-         X0eSOYRoV3NrPws6+e881tyauDFR2DHTYRV6VDqRR6VreNS5QLy+z6a529MqZm6XO64F
-         lmZaxZTY8DzlbI/lOZk7FXot9YJCSbwMtxI73bs8JqKe+1fcadudbIefJQn+3yvE5QwO
-         v51LL2yCRBNsZZY7W/VBJY2QK9Zy7gCpGu0LKVY+ttIhCbpKZSiKfm34rIQ6oN64mUjr
-         ODCo1c/gMcffa6EZt3MRR1y4wMbMqMCvg55HnV7a22su7k7OVEgCuiZOOpr1Dun6mzcW
-         ahtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uZUmKkwLM2oSaojuTn4DZClVwuluaLe6PZbLvPR8s3c=;
-        b=J5/o6RTxKalU+T50low4s8hC5FxP4Era2plCV+dnynbLVJS3lvTlP+aVjsR1ZnZix2
-         hrR/dZurFBvEEZNaOhlkKX6NEyTg4s2vAzgcP4E0qbqwtzeJWbajU+LqqlXOHSJbILFH
-         REtT+ZeMQxtVBG1W0uKjQrpLr9Lvwi/zBdWEEgj1ONHMOlk8lBArqRP6XYv3CsXxLjGn
-         xF3i2sDgDiB1MaGabEd6WD3q1pxVAftxHZ211BRDn8n5hjj1t/735IFcLcAP6P35h6uO
-         F5Pj99g0BoHPCYeVr4MFIJpBuI/OjQNJ+AJq9bv/dwMgVH3la3t5reoKgjzjLCDpKGNo
-         HTfg==
-X-Gm-Message-State: AOAM531otqjcSLlC8AH8YtypS5tFc1F6WoUCE4GULHLP89XRJTGdaJQa
-        kh1p1b3QTinPjcKuTKmze7Q=
-X-Google-Smtp-Source: ABdhPJyoX4fauwUz8/uRPC+PLrlDTqY/BbNhdRIQpb2w7mh6/qLvfq7K0aPB9a6PVbfbagmli9jcUQ==
-X-Received: by 2002:a63:e903:: with SMTP id i3mr21319346pgh.374.1617699421963;
-        Tue, 06 Apr 2021 01:57:01 -0700 (PDT)
-Received: from localhost (g139.124-45-193.ppp.wakwak.ne.jp. [124.45.193.139])
-        by smtp.gmail.com with ESMTPSA id y15sm20720606pgi.31.2021.04.06.01.57.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 01:57:01 -0700 (PDT)
-Date:   Tue, 6 Apr 2021 17:56:59 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-Subject: Re: [PATCH v6 6/9] openrisc: qspinlock: Add
- ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Message-ID: <20210406085659.GF3288043@lianli.shorne-pla.net>
-References: <1617201040-83905-1-git-send-email-guoren@kernel.org>
- <1617201040-83905-7-git-send-email-guoren@kernel.org>
+        id S245494AbhDFL1a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 07:27:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:41182 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245477AbhDFL13 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Apr 2021 07:27:29 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43D8E31B;
+        Tue,  6 Apr 2021 04:27:20 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C66723F73D;
+        Tue,  6 Apr 2021 04:27:15 -0700 (PDT)
+Date:   Tue, 6 Apr 2021 12:27:06 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH v5 03/18] mm: add generic function_nocfi macro
+Message-ID: <20210406112656.GA96480@C02TD0UTHF1T.local>
+References: <20210401233216.2540591-1-samitolvanen@google.com>
+ <20210401233216.2540591-4-samitolvanen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1617201040-83905-7-git-send-email-guoren@kernel.org>
+In-Reply-To: <20210401233216.2540591-4-samitolvanen@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 02:30:37PM +0000, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On Thu, Apr 01, 2021 at 04:32:01PM -0700, Sami Tolvanen wrote:
+> With CONFIG_CFI_CLANG, the compiler replaces function addresses
+> in instrumented C code with jump table addresses. This means that
+> __pa_symbol(function) returns the physical address of the jump table
+> entry instead of the actual function, which may not work as the jump
+> table code will immediately jump to a virtual address that may not be
+> mapped.
 > 
-> We don't have native hw xchg16 instruction, so let qspinlock
-> generic code to deal with it.
+> To avoid this address space confusion, this change adds a generic
+> definition for function_nocfi(), which architectures that support CFI
+> can override. The typical implementation of would use inline assembly
+> to take the function address, which avoids compiler instrumentation.
 > 
-> Using the full-word atomic xchg instructions implement xchg16 has
-> the semantic risk for atomic operations.
-> 
-> This patch cancels the dependency of on qspinlock generic code on
-> architecture's xchg16.
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Jonas Bonn <jonas@southpole.se>
-> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: openrisc@lists.librecores.org
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Acked-by: Stafford Horne <shorne@gmail.com>
+FWIW:
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
 
 > ---
->  arch/openrisc/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  include/linux/mm.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> index 591acc5990dc..b299e409429f 100644
-> --- a/arch/openrisc/Kconfig
-> +++ b/arch/openrisc/Kconfig
-> @@ -33,6 +33,7 @@ config OPENRISC
->  	select OR1K_PIC
->  	select CPU_NO_EFFICIENT_FFS if !OPENRISC_HAVE_INST_FF1
->  	select ARCH_USE_QUEUED_SPINLOCKS
-> +	select ARCH_USE_QUEUED_SPINLOCKS_XCHG32
->  	select ARCH_USE_QUEUED_RWLOCKS
->  	select OMPIC if SMP
->  	select ARCH_WANT_FRAME_POINTERS
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 8ba434287387..22cce9c7dd05 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -124,6 +124,16 @@ extern int mmap_rnd_compat_bits __read_mostly;
+>  #define lm_alias(x)	__va(__pa_symbol(x))
+>  #endif
+>  
+> +/*
+> + * With CONFIG_CFI_CLANG, the compiler replaces function addresses in
+> + * instrumented C code with jump table addresses. Architectures that
+> + * support CFI can define this macro to return the actual function address
+> + * when needed.
+> + */
+> +#ifndef function_nocfi
+> +#define function_nocfi(x) (x)
+> +#endif
+> +
+>  /*
+>   * To prevent common memory management code establishing
+>   * a zero page mapping on a read fault.
 > -- 
-> 2.17.1
+> 2.31.0.208.g409f899ff0-goog
 > 
