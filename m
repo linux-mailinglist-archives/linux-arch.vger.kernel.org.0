@@ -2,58 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4313556C3
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 16:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C793556E2
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 16:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345237AbhDFOjo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 10:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345215AbhDFOjn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 10:39:43 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E85CC061761
-        for <linux-arch@vger.kernel.org>; Tue,  6 Apr 2021 07:39:33 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id l12-20020a9d6a8c0000b0290238e0f9f0d8so14809125otq.8
-        for <linux-arch@vger.kernel.org>; Tue, 06 Apr 2021 07:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mvista-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=A9/oUrZcom6uNGfq8uQSMfL5RjzorysUyhxrrEpOhZQ=;
-        b=jVp4LQa5fpfONGeRhMPma1uxlOJ6CXJvy93wnlaGkszijzRZX4GP31qLbOdrFUx9d8
-         SN7/z6WwtNVmZgiGOxPPOtCgT1NQH7g3NP6K1uj/d+Cj5DiyhAg9llwoIeBQaQAM7mfK
-         7gxshk0yzmOS3ig6OVdDC/A0+bDYmd1+7IYazjMD55ELbrWFzOc5U+f9Ua47SqJiE2ic
-         qy3L2qasrr7N5nB6l3tEqmiBFqvfSJc5WoMKGegkuJ45Nl1JSVvxDDJMGiq0a+L0JLgE
-         OWxYGV+4WSfrvV+iZ2O7gIN/tkpU4+EMOq2QHye+MWXNdq8mFdSi+zrXV9NFYQtQkQo1
-         1iDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=A9/oUrZcom6uNGfq8uQSMfL5RjzorysUyhxrrEpOhZQ=;
-        b=DFFkvmgyGE2xyA7N/0KSBc3KhnI8qNt0QTGgIn63CKnS4HKuJjeCylEhQQjOt9WSDz
-         v+dn1cVCYbdpHGePrrxuLM1+LqfaaTT5TQU6WD6yVZUGd4Mj0rjHHEEnL4VN9tiYvWX6
-         HQ50yfIDpdNU+/ECatx/7Um7cXEr29BWULQKdmXLpfYB8nVCesRF4gMUo3iaJvlZnRze
-         3eZzvagR3iltJP3Qk4BjckwXZGtbzOzMkmnncnusdw1WZLHgAUC6Rbsjl5L2ByXnWvo8
-         MpBT70/DTM9KADdBxQa/iwLyG/9nUHU+UVYycRIEMt8gO5itaB5l7BIsLG7H1st9tDA0
-         WZhg==
-X-Gm-Message-State: AOAM530yI7poHDfvTSxtxBk1z78VN2hgPrHaXxaJTwZfbXsrnZHQxjKM
-        cv5regDSOkZlfY0UVTVfEzGZpA==
-X-Google-Smtp-Source: ABdhPJy8JWc4jZaZX01KbZFfD0qHlJIfjC5GLBU9ob9QnsmfPtoyA8gGMABB2kkmRAhm7/K2AJZ2Dg==
-X-Received: by 2002:a05:6830:15d2:: with SMTP id j18mr27564004otr.75.1617719972291;
-        Tue, 06 Apr 2021 07:39:32 -0700 (PDT)
-Received: from minyard.net ([2001:470:b8f6:1b:f584:ff80:e7e9:e850])
-        by smtp.gmail.com with ESMTPSA id a6sm3567669oiw.44.2021.04.06.07.39.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 07:39:32 -0700 (PDT)
-Date:   Tue, 6 Apr 2021 09:39:29 -0500
-From:   Corey Minyard <cminyard@mvista.com>
+        id S1345279AbhDFOnq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 10:43:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47620 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345263AbhDFOnp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Apr 2021 10:43:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D38761158;
+        Tue,  6 Apr 2021 14:43:27 +0000 (UTC)
+Date:   Tue, 6 Apr 2021 16:43:24 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Joerg Roedel <jroedel@suse.de>, Wei Liu <wei.liu@kernel.org>,
         Michael Kelley <mikelley@microsoft.com>,
         Mike Rapoport <rppt@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -87,11 +54,10 @@ Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Kees Cook <keescook@chromium.org>,
         Iurii Zaikin <yzaikin@google.com>
 Subject: Re: [PATCH v1 1/1] kernel.h: Split out panic and oops helpers
-Message-ID: <20210406143929.GN7167@minyard.net>
-Reply-To: cminyard@mvista.com
+Message-ID: <20210406144324.bmc22gborwj3zjvv@wittgenstein>
 References: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
@@ -106,14 +72,15 @@ On Tue, Apr 06, 2021 at 04:31:58PM +0300, Andy Shevchenko wrote:
 > At the same time convert users in header and lib folder to use new header.
 > Though for time being include new header back to kernel.h to avoid twisted
 > indirected includes for existing users.
-
-For the IPMI portion:
-
-Acked-by: Corey Minyard <cminyard@mvista.com>
-
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
+
+(I think David has tried something like this a few years ago too?)
+Good idea in any case. (Be good to see kbuild do an allmodconfig build
+of this though.)
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+
 >  arch/powerpc/kernel/setup-common.c   |  1 +
 >  arch/x86/include/asm/desc.h          |  1 +
 >  arch/x86/kernel/cpu/mshyperv.c       |  1 +
