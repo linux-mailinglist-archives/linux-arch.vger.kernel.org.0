@@ -2,121 +2,171 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 396C9355E23
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 23:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9ED8355EF4
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 00:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242246AbhDFVr1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 17:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239469AbhDFVrY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 17:47:24 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B04C06174A;
-        Tue,  6 Apr 2021 14:47:15 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id g8-20020a9d6c480000b02901b65ca2432cso16093056otq.3;
-        Tue, 06 Apr 2021 14:47:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=aJiBwTpZjE7QhEBloyE2+TbCO+3vc2O0H0G9BLE7cIQ=;
-        b=otSc53xnoioIufF2kLcwnpRxJC7Q9UjbUtjqKcQkCUg3wI4dxUmLvYYQl0+/ae3L46
-         kq3zeSGbXz+aGoVjeezNXfHXvG6c3PD96uIKHpYfiqQN3UleakqTaVpxuahE8G/eV/Qu
-         vvZSM6dnMGboL7B6rQZNqfwFCPCuSHKbD1QSxOZY0PEGguilzbEeXZ4vTYaPn9QSX3MD
-         v9T9tbz/Tidcy0ZXfnM2LF4siKgS9/okxDOf8v5QhgS/FXSqMDDDLrtFN7nlPkkVwnAU
-         g/Wg+XRJetpbCfPl5FSXQBy7tMAeyJGX+EVhZZYi6kVbsDcbnggHiuK6yioVRAKn2NDz
-         yqTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=aJiBwTpZjE7QhEBloyE2+TbCO+3vc2O0H0G9BLE7cIQ=;
-        b=XxlW5p3LBnD/a0Dq7LXusPOHoPiCFSsJKfaUTaSIAolQ3tzptmNxx3bk16FWbB3E/S
-         JIjA9n57Ewn4sPL1dFhK40v7wedyBsOlJS2vQPMJALKAzkq+RdJmqtgKi82hFHXWZpgD
-         6I+bGjR/Si1Vg6Rxk1b16422l7eB/f883XLUMvku/qPjtpLjCOO/PCa3mlROdGkMSJuI
-         we1k/B5er2VCu4XAM9cFtGZB+UulUskUqQ+AmwJ9mz+i2bwOJx9qRqNC3TC+g8SPQceP
-         Sid26bH0cQQHX/YRtEn+VqnIGKqci5g47ugk/WuHE4FT2gyynaTOfmhC6nm2Miti31rP
-         ijWg==
-X-Gm-Message-State: AOAM533psRYsIQUycUk1aNbrcpXgJ2/pjCAPQY2/kP8EMNf2hIrdyBN4
-        HyEBTDlf/ZZjWZQGkzq3d1w=
-X-Google-Smtp-Source: ABdhPJwudEr9DsPWLB6IxPyLB/LbwGssz53UrSkpaViooZbxMR5kZJssPcfMAtYdaUmzB+B804KpZg==
-X-Received: by 2002:a9d:3c2:: with SMTP id f60mr147833otf.220.1617745635089;
-        Tue, 06 Apr 2021 14:47:15 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x2sm5089350ote.47.2021.04.06.14.47.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 06 Apr 2021 14:47:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 6 Apr 2021 14:47:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] h8300: rearrange headers inclusion order in asm/bitops
-Message-ID: <20210406214713.GA75728@roeck-us.net>
+        id S1344140AbhDFWtx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 18:49:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344099AbhDFWtw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Apr 2021 18:49:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A908B613EE
+        for <linux-arch@vger.kernel.org>; Tue,  6 Apr 2021 22:49:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617749383;
+        bh=a1o900AcqYwmW0fqkduPTeR3emc4C6Rs1gEIEqdiYaE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KEGDvjznudoHSkkT4y8V8E5/qd3x4roetFh+RpuJqloQCxb5ul1FSIFFwdyhhkCVE
+         CW+F27jDoneZukSbicGCRN0vGYvja89yI0gmXYVVfuw1C0Nr1UXKNB5y8Vl78J6HXr
+         YVwxAmbmm/iDQRLgUSYRZ6JfQoPE8yzmWh+bF1mVeJMCO2LkQKYupqhwy/3q3oHsWh
+         2Q2DIi5sxyP4cK22nuF0G4d/q3HAxigzoqqsaHEGuTYL5a9sYWneu4cyHAHjroNHJB
+         7Uie18iRLZqlQprOAHclOsKzv3IxX7iNngvfGKiu/X/4R8II/8UNOZd1jg+V8wzCer
+         Mv1NB0hkTDMYQ==
+Received: by mail-ed1-f41.google.com with SMTP id ba6so10939252edb.1
+        for <linux-arch@vger.kernel.org>; Tue, 06 Apr 2021 15:49:43 -0700 (PDT)
+X-Gm-Message-State: AOAM532kR/jeMdIXvrnaBm6wu7UYK+eCKFs4WzUkmhzn3ObxPinzQ2MP
+        lzap34fHX8QtO1wr4mjoKlbnyECzqcVHVP1+PKlwBw==
+X-Google-Smtp-Source: ABdhPJwKOmYqoxCioac2TWNaDNZOT88xkRzZYjrRVTEBe+20+kIF/hfmpbTf57P7Ofjo4GQDMBsu3KVolwUAhM7TefM=
+X-Received: by 2002:a50:fa92:: with SMTP id w18mr790243edr.172.1617749382023;
+ Tue, 06 Apr 2021 15:49:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20210401221104.31584-1-yu-cheng.yu@intel.com> <20210401221104.31584-25-yu-cheng.yu@intel.com>
+In-Reply-To: <20210401221104.31584-25-yu-cheng.yu@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 6 Apr 2021 15:49:30 -0700
+X-Gmail-Original-Message-ID: <CALCETrWf4=1KPYvwpO6KJETZHMHUA6z7rH7nx=SU9gsJSOTXPg@mail.gmail.com>
+Message-ID: <CALCETrWf4=1KPYvwpO6KJETZHMHUA6z7rH7nx=SU9gsJSOTXPg@mail.gmail.com>
+Subject: Re: [PATCH v24 24/30] x86/cet/shstk: Introduce shadow stack token
+ setup/verify routines
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 06, 2021 at 11:36:25AM -0700, Yury Norov wrote:
-> The commit a5145bdad3ff ("arch: rearrange headers inclusion order in
-> asm/bitops for m68k and sh") on next-20210401 fixed header ordering issue.
-> h8300 has similar problem, which was overlooked by me.
-> 
-> h8300 includes bitmap/{find,le}.h prior to ffs/fls headers. New fast-path
-> implementation in find.h requires ffs/fls. Reordering the headers inclusion
-> sequence helps to prevent compile-time implicit function declaration error.
-> 
-> v2: change wording in the comment.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
-
+On Thu, Apr 1, 2021 at 3:12 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>
+> A shadow stack restore token marks a restore point of the shadow stack, and
+> the address in a token must point directly above the token, which is within
+> the same shadow stack.  This is distinctively different from other pointers
+> on the shadow stack, since those pointers point to executable code area.
+>
+> The restore token can be used as an extra protection for signal handling.
+> To deliver a signal, create a shadow stack restore token and put the token
+> and the signal restorer address on the shadow stack.  In sigreturn, verify
+> the token and restore from it the shadow stack pointer.
+>
+> Introduce token setup and verify routines.  Also introduce WRUSS, which is
+> a kernel-mode instruction but writes directly to user shadow stack.  It is
+> used to construct user signal stack as described above.
+>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Cc: Kees Cook <keescook@chromium.org>
 > ---
->  arch/h8300/include/asm/bitops.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/h8300/include/asm/bitops.h b/arch/h8300/include/asm/bitops.h
-> index 7aa16c732aa9..c867a80cab5b 100644
-> --- a/arch/h8300/include/asm/bitops.h
-> +++ b/arch/h8300/include/asm/bitops.h
-> @@ -9,6 +9,10 @@
->  
->  #include <linux/compiler.h>
->  
-> +#include <asm-generic/bitops/fls.h>
-> +#include <asm-generic/bitops/__fls.h>
-> +#include <asm-generic/bitops/fls64.h>
+>  arch/x86/include/asm/cet.h           |   9 ++
+>  arch/x86/include/asm/special_insns.h |  32 +++++++
+>  arch/x86/kernel/shstk.c              | 126 +++++++++++++++++++++++++++
+>  3 files changed, 167 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+> index 8b83ded577cc..ef6155213b7e 100644
+> --- a/arch/x86/include/asm/cet.h
+> +++ b/arch/x86/include/asm/cet.h
+> @@ -20,6 +20,10 @@ int shstk_setup_thread(struct task_struct *p, unsigned long clone_flags,
+>                        unsigned long stack_size);
+>  void shstk_free(struct task_struct *p);
+>  void shstk_disable(void);
+> +int shstk_setup_rstor_token(bool ia32, unsigned long rstor,
+> +                           unsigned long *token_addr, unsigned long *new_ssp);
+> +int shstk_check_rstor_token(bool ia32, unsigned long token_addr,
+> +                           unsigned long *new_ssp);
+>  #else
+>  static inline int shstk_setup(void) { return 0; }
+>  static inline int shstk_setup_thread(struct task_struct *p,
+> @@ -27,6 +31,11 @@ static inline int shstk_setup_thread(struct task_struct *p,
+>                                      unsigned long stack_size) { return 0; }
+>  static inline void shstk_free(struct task_struct *p) {}
+>  static inline void shstk_disable(void) {}
+> +static inline int shstk_setup_rstor_token(bool ia32, unsigned long rstor,
+> +                                         unsigned long *token_addr,
+> +                                         unsigned long *new_ssp) { return 0; }
+> +static inline int shstk_check_rstor_token(bool ia32, unsigned long token_addr,
+> +                                         unsigned long *new_ssp) { return 0; }
+>  #endif
+>
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+> index 1d3cbaef4bb7..c41c371f6c7d 100644
+> --- a/arch/x86/include/asm/special_insns.h
+> +++ b/arch/x86/include/asm/special_insns.h
+> @@ -234,6 +234,38 @@ static inline void clwb(volatile void *__p)
+>                 : [pax] "a" (p));
+>  }
+>
+> +#ifdef CONFIG_X86_SHADOW_STACK
+> +#if defined(CONFIG_IA32_EMULATION) || defined(CONFIG_X86_X32)
+> +static inline int write_user_shstk_32(unsigned long addr, unsigned int val)
+
+u32 __user *addr?
+
+> +{
+> +       asm_volatile_goto("1: wrussd %1, (%0)\n"
+> +                         _ASM_EXTABLE(1b, %l[fail])
+> +                         :: "r" (addr), "r" (val)
+> +                         :: fail);
+> +       return 0;
+> +fail:
+> +       return -EPERM;
+
+-EFAULT?
+
+> +}
+> +#else
+> +static inline int write_user_shstk_32(unsigned long addr, unsigned int val)
+> +{
+> +       WARN_ONCE(1, "%s used but not supported.\n", __func__);
+> +       return -EFAULT;
+> +}
+> +#endif
 > +
->  #ifdef __KERNEL__
->  
->  #ifndef _LINUX_BITOPS_H
-> @@ -173,8 +177,4 @@ static inline unsigned long __ffs(unsigned long word)
->  
->  #endif /* __KERNEL__ */
->  
-> -#include <asm-generic/bitops/fls.h>
-> -#include <asm-generic/bitops/__fls.h>
-> -#include <asm-generic/bitops/fls64.h>
-> -
->  #endif /* _H8300_BITOPS_H */
-> -- 
-> 2.25.1
-> 
+> +static inline int write_user_shstk_64(unsigned long addr, unsigned long val)
+
+u64 __user *addr, perhaps?
+
+> +{
+> +       asm_volatile_goto("1: wrussq %1, (%0)\n"
+> +                         _ASM_EXTABLE(1b, %l[fail])
+> +                         :: "r" (addr), "r" (val)
+
+Can you use the modern [addr] "r" (addr) syntax?
