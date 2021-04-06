@@ -2,123 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 217FC355C1E
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 21:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396C9355E23
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 23:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240934AbhDFTWF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 15:22:05 -0400
-Received: from marcansoft.com ([212.63.210.85]:49944 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229488AbhDFTWF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Apr 2021 15:22:05 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 30DF941E64;
-        Tue,  6 Apr 2021 19:21:48 +0000 (UTC)
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210402090542.131194-1-marcan@marcan.st>
- <20210402090542.131194-16-marcan@marcan.st> <87ft03p9cd.wl-maz@kernel.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v4 15/18] irqchip/apple-aic: Add support for the Apple
- Interrupt Controller
-Message-ID: <5a4a0ab4-5a4e-1f1c-f6c6-97439b95e7ee@marcan.st>
-Date:   Wed, 7 Apr 2021 04:21:46 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S242246AbhDFVr1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 17:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239469AbhDFVrY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 17:47:24 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B04C06174A;
+        Tue,  6 Apr 2021 14:47:15 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id g8-20020a9d6c480000b02901b65ca2432cso16093056otq.3;
+        Tue, 06 Apr 2021 14:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=aJiBwTpZjE7QhEBloyE2+TbCO+3vc2O0H0G9BLE7cIQ=;
+        b=otSc53xnoioIufF2kLcwnpRxJC7Q9UjbUtjqKcQkCUg3wI4dxUmLvYYQl0+/ae3L46
+         kq3zeSGbXz+aGoVjeezNXfHXvG6c3PD96uIKHpYfiqQN3UleakqTaVpxuahE8G/eV/Qu
+         vvZSM6dnMGboL7B6rQZNqfwFCPCuSHKbD1QSxOZY0PEGguilzbEeXZ4vTYaPn9QSX3MD
+         v9T9tbz/Tidcy0ZXfnM2LF4siKgS9/okxDOf8v5QhgS/FXSqMDDDLrtFN7nlPkkVwnAU
+         g/Wg+XRJetpbCfPl5FSXQBy7tMAeyJGX+EVhZZYi6kVbsDcbnggHiuK6yioVRAKn2NDz
+         yqTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:user-agent;
+        bh=aJiBwTpZjE7QhEBloyE2+TbCO+3vc2O0H0G9BLE7cIQ=;
+        b=XxlW5p3LBnD/a0Dq7LXusPOHoPiCFSsJKfaUTaSIAolQ3tzptmNxx3bk16FWbB3E/S
+         JIjA9n57Ewn4sPL1dFhK40v7wedyBsOlJS2vQPMJALKAzkq+RdJmqtgKi82hFHXWZpgD
+         6I+bGjR/Si1Vg6Rxk1b16422l7eB/f883XLUMvku/qPjtpLjCOO/PCa3mlROdGkMSJuI
+         we1k/B5er2VCu4XAM9cFtGZB+UulUskUqQ+AmwJ9mz+i2bwOJx9qRqNC3TC+g8SPQceP
+         Sid26bH0cQQHX/YRtEn+VqnIGKqci5g47ugk/WuHE4FT2gyynaTOfmhC6nm2Miti31rP
+         ijWg==
+X-Gm-Message-State: AOAM533psRYsIQUycUk1aNbrcpXgJ2/pjCAPQY2/kP8EMNf2hIrdyBN4
+        HyEBTDlf/ZZjWZQGkzq3d1w=
+X-Google-Smtp-Source: ABdhPJwudEr9DsPWLB6IxPyLB/LbwGssz53UrSkpaViooZbxMR5kZJssPcfMAtYdaUmzB+B804KpZg==
+X-Received: by 2002:a9d:3c2:: with SMTP id f60mr147833otf.220.1617745635089;
+        Tue, 06 Apr 2021 14:47:15 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x2sm5089350ote.47.2021.04.06.14.47.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 06 Apr 2021 14:47:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 6 Apr 2021 14:47:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] h8300: rearrange headers inclusion order in asm/bitops
+Message-ID: <20210406214713.GA75728@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <87ft03p9cd.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 07/04/2021 03.16, Marc Zyngier wrote:
-> Hi Hector,
+On Tue, Apr 06, 2021 at 11:36:25AM -0700, Yury Norov wrote:
+> The commit a5145bdad3ff ("arch: rearrange headers inclusion order in
+> asm/bitops for m68k and sh") on next-20210401 fixed header ordering issue.
+> h8300 has similar problem, which was overlooked by me.
 > 
-> On Fri, 02 Apr 2021 10:05:39 +0100,
-> Hector Martin <marcan@marcan.st> wrote:
->> +		/*
->> +		 * In EL1 the non-redirected registers are the guest's,
->> +		 * not EL2's, so remap the hwirqs to match.
->> +		 */
->> +		if (!is_kernel_in_hyp_mode()) {
->> +			switch (fwspec->param[1]) {
->> +			case AIC_TMR_GUEST_PHYS:
->> +				*hwirq = ic->nr_hw + AIC_TMR_HV_PHYS;
->> +				break;
->> +			case AIC_TMR_GUEST_VIRT:
->> +				*hwirq = ic->nr_hw + AIC_TMR_HV_VIRT;
->> +				break;
->> +			case AIC_TMR_HV_PHYS:
->> +			case AIC_TMR_HV_VIRT:
->> +				return -ENOENT;
->> +			default:
->> +				break;
->> +			}
->> +		}
+> h8300 includes bitmap/{find,le}.h prior to ffs/fls headers. New fast-path
+> implementation in find.h requires ffs/fls. Reordering the headers inclusion
+> sequence helps to prevent compile-time implicit function declaration error.
 > 
-> Urgh, this is nasty. You are internally remapping the hwirq from one
-> timer to another in order to avoid accessing the enable register
-> which happens to be an EL2 only register?
+> v2: change wording in the comment.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 
-The remapping is to make the IRQs route properly at all.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-There are EL2 and EL0 timers, and on GIC each timer goes to its own IRQ. 
-But here there are no real IRQs, everything's a FIQ. However, thanks to 
-VHE, the EL2 timer shows up as the EL0 timer, and the EL0 timer is 
-accessed via EL02 registers, when in EL2. So in EL2/VHE mode, "HV" means 
-EL0 and "guest" means EL02, while in EL1, there is no HV and "guest" 
-means EL0. And since we figure out which IRQ fired by reading timer 
-registers, this is what matters. So I map the guest IRQs to the HV 
-hwirqs in EL1 mode, which makes this all work out. Then the timer code 
-goes and ends up undoing all this logic again, so we map to separate 
-fake "IRQs" only to end up right back at using the same timer registers 
-anuway :-)
+Guenter
 
-Really, the ugliness here is that the constant meaning is overloaded. In 
-fwspec context they mean what they say on the tin, while in hwirq 
-context "HV" means EL0 and "guest" means EL02 (other FIQs would be 
-passed through unchanged). Perhaps some additional defines might help 
-clarify this? Say, at the top of this file (not in the binding),
-
-/*
-  * Pass-through mapping from real timers to the correct registers to
-  * access them in EL2/VHE mode. When running in EL1, this gets
-  * overridden to access the guest timer using EL0 registers.
-  */
-#define AIC_TMR_EL0_PHYS AIC_TMR_HV_PHYS
-#define AIC_TMR_EL0_VIRT AIC_TMR_HV_VIRT
-#define AIC_TMR_EL02_PHYS AIC_TMR_GUEST_PHYS
-#define AIC_TMR_EL02_VIRT AIC_TMR_GUEST_VIRT
-
-Then the irqchip/FIQ dispatch side can use the EL* constants, the 
-default pass-through mapping is appropriate for VHE/EL2 mode, and 
-translation can adjust it for EL1 mode.
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+> ---
+>  arch/h8300/include/asm/bitops.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/h8300/include/asm/bitops.h b/arch/h8300/include/asm/bitops.h
+> index 7aa16c732aa9..c867a80cab5b 100644
+> --- a/arch/h8300/include/asm/bitops.h
+> +++ b/arch/h8300/include/asm/bitops.h
+> @@ -9,6 +9,10 @@
+>  
+>  #include <linux/compiler.h>
+>  
+> +#include <asm-generic/bitops/fls.h>
+> +#include <asm-generic/bitops/__fls.h>
+> +#include <asm-generic/bitops/fls64.h>
+> +
+>  #ifdef __KERNEL__
+>  
+>  #ifndef _LINUX_BITOPS_H
+> @@ -173,8 +177,4 @@ static inline unsigned long __ffs(unsigned long word)
+>  
+>  #endif /* __KERNEL__ */
+>  
+> -#include <asm-generic/bitops/fls.h>
+> -#include <asm-generic/bitops/__fls.h>
+> -#include <asm-generic/bitops/fls64.h>
+> -
+>  #endif /* _H8300_BITOPS_H */
+> -- 
+> 2.25.1
+> 
