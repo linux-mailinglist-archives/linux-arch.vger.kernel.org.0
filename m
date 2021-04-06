@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F5535520E
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 13:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E12A35526F
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 13:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245537AbhDFL1v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 07:27:51 -0400
-Received: from foss.arm.com ([217.140.110.172]:41214 "EHLO foss.arm.com"
+        id S243054AbhDFLhP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 07:37:15 -0400
+Received: from foss.arm.com ([217.140.110.172]:41426 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245532AbhDFL1u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Apr 2021 07:27:50 -0400
+        id S241774AbhDFLhO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Apr 2021 07:37:14 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5792DED1;
-        Tue,  6 Apr 2021 04:27:42 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF9C9101E;
+        Tue,  6 Apr 2021 04:37:05 -0700 (PDT)
 Received: from C02TD0UTHF1T.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CC5943F73D;
-        Tue,  6 Apr 2021 04:27:37 -0700 (PDT)
-Date:   Tue, 6 Apr 2021 12:27:35 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 243363F73D;
+        Tue,  6 Apr 2021 04:37:00 -0700 (PDT)
+Date:   Tue, 6 Apr 2021 12:36:57 +0100
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     Sami Tolvanen <samitolvanen@google.com>
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -35,64 +35,72 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v5 11/18] psci: use function_nocfi for cpu_resume
-Message-ID: <20210406112735.GB96480@C02TD0UTHF1T.local>
+Subject: Re: [PATCH v5 12/18] arm64: implement function_nocfi
+Message-ID: <20210406113657.GC96480@C02TD0UTHF1T.local>
 References: <20210401233216.2540591-1-samitolvanen@google.com>
- <20210401233216.2540591-12-samitolvanen@google.com>
+ <20210401233216.2540591-13-samitolvanen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210401233216.2540591-12-samitolvanen@google.com>
+In-Reply-To: <20210401233216.2540591-13-samitolvanen@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 01, 2021 at 04:32:09PM -0700, Sami Tolvanen wrote:
-> With CONFIG_CFI_CLANG, the compiler replaces function pointers with
-> jump table addresses, which results in __pa_symbol returning the
-> physical address of the jump table entry. As the jump table contains
-> an immediate jump to an EL1 virtual address, this typically won't
-> work as intended. Use function_nocfi to get the actual address of
-> cpu_resume.
+On Thu, Apr 01, 2021 at 04:32:10PM -0700, Sami Tolvanen wrote:
+> With CONFIG_CFI_CLANG, the compiler replaces function addresses in
+> instrumented C code with jump table addresses. This change implements
+> the function_nocfi() macro, which returns the actual function address
+> instead.
 > 
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 > Reviewed-by: Kees Cook <keescook@chromium.org>
 
+I think that it's unfortunate that we have to drop to assembly here, but
+given this is infrequent I agree it's not the end of the world, so:
+
 Acked-by: Mark Rutland <mark.rutland@arm.com>
 
+> ---
+>  arch/arm64/include/asm/memory.h | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> index 0aabc3be9a75..b55410afd3d1 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -321,6 +321,21 @@ static inline void *phys_to_virt(phys_addr_t x)
+>  #define virt_to_pfn(x)		__phys_to_pfn(__virt_to_phys((unsigned long)(x)))
+>  #define sym_to_pfn(x)		__phys_to_pfn(__pa_symbol(x))
+>  
+> +#ifdef CONFIG_CFI_CLANG
+> +/*
+> + * With CONFIG_CFI_CLANG, the compiler replaces function address
+> + * references with the address of the function's CFI jump table
+> + * entry. The function_nocfi macro always returns the address of the
+> + * actual function instead.
+> + */
+> +#define function_nocfi(x) ({						\
+> +	void *addr;							\
+> +	asm("adrp %0, " __stringify(x) "\n\t"				\
+> +	    "add  %0, %0, :lo12:" __stringify(x) : "=r" (addr));	\
+
+If it's not too painful, could we please move the asm constrain onto its
+own line? That makes it slightly easier to read, and aligns with what
+we've (mostly) done elsewhere in arm64.
+
+Not a big deal either way, and the ack stands regardless.
+
+Thanks,
 Mark.
 
-> ---
->  drivers/firmware/psci/psci.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> index f5fc429cae3f..64344e84bd63 100644
-> --- a/drivers/firmware/psci/psci.c
-> +++ b/drivers/firmware/psci/psci.c
-> @@ -325,8 +325,9 @@ static int __init psci_features(u32 psci_func_id)
->  static int psci_suspend_finisher(unsigned long state)
->  {
->  	u32 power_state = state;
-> +	phys_addr_t pa_cpu_resume = __pa_symbol(function_nocfi(cpu_resume));
->  
-> -	return psci_ops.cpu_suspend(power_state, __pa_symbol(cpu_resume));
-> +	return psci_ops.cpu_suspend(power_state, pa_cpu_resume);
->  }
->  
->  int psci_cpu_suspend_enter(u32 state)
-> @@ -344,8 +345,10 @@ int psci_cpu_suspend_enter(u32 state)
->  
->  static int psci_system_suspend(unsigned long unused)
->  {
-> +	phys_addr_t pa_cpu_resume = __pa_symbol(function_nocfi(cpu_resume));
+> +	addr;								\
+> +})
+> +#endif
 > +
->  	return invoke_psci_fn(PSCI_FN_NATIVE(1_0, SYSTEM_SUSPEND),
-> -			      __pa_symbol(cpu_resume), 0, 0);
-> +			      pa_cpu_resume, 0, 0);
->  }
->  
->  static int psci_system_suspend_enter(suspend_state_t state)
+>  /*
+>   *  virt_to_page(x)	convert a _valid_ virtual address to struct page *
+>   *  virt_addr_valid(x)	indicates whether a virtual address is valid
 > -- 
 > 2.31.0.208.g409f899ff0-goog
 > 
