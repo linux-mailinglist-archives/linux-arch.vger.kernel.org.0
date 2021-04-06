@@ -2,129 +2,516 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A2D355463
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 14:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D791355530
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 15:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239473AbhDFM7t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 08:59:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50518 "EHLO mail.kernel.org"
+        id S233586AbhDFNcW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 09:32:22 -0400
+Received: from mga06.intel.com ([134.134.136.31]:42373 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239096AbhDFM7s (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Apr 2021 08:59:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C5CE4613D0;
-        Tue,  6 Apr 2021 12:59:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617713980;
-        bh=MmM0Z9fxkhm9SnK1fIQO8WfodlzxxDy0XGkEAZogl2I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ced3vzglcPx9Dq5ivxegHloEXLqHUvr8HzmjUiElf9G8ZTMaTmyhNp0joHw1JKNqf
-         ZRM9DA+kHwYmohQHkWQqZ1mY5MX6JFQVwnqjFhTgpF6IBsYESfOJZOAf0RELyopPJq
-         LkabyEZF6sycaumizzGhgcJVYpUNNw9ZTxllksAQoGC0qwN2IigVSJRhHO1esBD9bc
-         k+MKBv2YFYHFbZfivBGsRSPcz2wvcaPmknHEprCzG4ndkuBInhHLDt5q5SbcJGQsSC
-         KmaNndJU8U3WBfgQ/3iyaX4nEl5Ndzt9vGN5HTeu6tYmP0JWsfixBFtjFrLGaL76Qi
-         pBcLmFQkBVvwQ==
-Received: by mail-oo1-f50.google.com with SMTP id p2-20020a4aa8420000b02901bc7a7148c4so3650862oom.11;
-        Tue, 06 Apr 2021 05:59:40 -0700 (PDT)
-X-Gm-Message-State: AOAM532n7cYUjwAs6uDDoeTlXiHt6OUSQdczA6zxR19Aii4NhVMDTBPN
-        M7kefO9QCZAv1tmBjTkkciGwbH4QZw0KYyagFu0=
-X-Google-Smtp-Source: ABdhPJxDNCj1NGgcj5QYLyY5XEVb262+iXVbnwzUprYhCzBA1PE1J8t6rkdEDSwZ0xpnvPoJA7HzmVROrJw7qRz0qWw=
-X-Received: by 2002:a4a:bd97:: with SMTP id k23mr26482678oop.13.1617713980054;
- Tue, 06 Apr 2021 05:59:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210401233216.2540591-1-samitolvanen@google.com>
- <20210401233216.2540591-15-samitolvanen@google.com> <20210406115357.GE96480@C02TD0UTHF1T.local>
-In-Reply-To: <20210406115357.GE96480@C02TD0UTHF1T.local>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 6 Apr 2021 14:59:28 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFHm5rqKqku5=WF-NcsUNmWp4Ymxu7aO9=XkD-LhLr-dA@mail.gmail.com>
-Message-ID: <CAMj1kXFHm5rqKqku5=WF-NcsUNmWp4Ymxu7aO9=XkD-LhLr-dA@mail.gmail.com>
-Subject: Re: [PATCH v5 14/18] arm64: add __nocfi to functions that jump to a
- physical address
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        id S233147AbhDFNcW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Apr 2021 09:32:22 -0400
+IronPort-SDR: sX/sop4LM7Kztq3vAyYI5C467gpyU3aFCwyW+KXUMuJUb1R/nyii/hpBjhGzKllZgYN5FnORiS
+ bky14NPc0xlA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9946"; a="254396271"
+X-IronPort-AV: E=Sophos;i="5.81,309,1610438400"; 
+   d="scan'208";a="254396271"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2021 06:32:12 -0700
+IronPort-SDR: jtMOa4mD5dYKwnCEQwrRNFvdx2wdv8anVlaUnlD6ffpa3InIRgZR06tCD5GLvkIjPd/LeQclQ5
+ EOsXyxHp6HQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,309,1610438400"; 
+   d="scan'208";a="386575513"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 06 Apr 2021 06:32:03 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 00BDCB7; Tue,  6 Apr 2021 16:32:18 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Joerg Roedel <jroedel@suse.de>, Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vlastimil Babka <vbabka@suse.cz>,
         "Paul E. McKenney" <paulmck@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>, linux-hardening@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-remoteproc@vger.kernel.org, linux-arch@vger.kernel.org,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Corey Minyard <minyard@acm.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Subject: [PATCH v1 1/1] kernel.h: Split out panic and oops helpers
+Date:   Tue,  6 Apr 2021 16:31:58 +0300
+Message-Id: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 6 Apr 2021 at 13:54, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> [adding Ard for EFI runtime services bits]
->
-> On Thu, Apr 01, 2021 at 04:32:12PM -0700, Sami Tolvanen wrote:
-> > Disable CFI checking for functions that switch to linear mapping and
-> > make an indirect call to a physical address, since the compiler only
-> > understands virtual addresses and the CFI check for such indirect calls
-> > would always fail.
->
-> What does physical vs virtual have to do with this? Does the address
-> actually matter, or is this just a general thing that when calling an
-> assembly function we won't have a trampoline that the caller expects?
->
-> I wonder if we need to do something with asmlinkage here, perhaps?
->
-> I didn't spot anything in the seriues handling EFI runtime services
-> calls, and I strongly suspect we need to do something for those, unless
-> they're handled implicitly by something else.
->
+kernel.h is being used as a dump for all kinds of stuff for a long time.
+Here is the attempt to start cleaning it up by splitting out panic and
+oops helpers.
 
-All indirect EFI calls are routed via a asm helper that I originally
-added to check whether x18 was corrupted by the firmware. So from the
-caller side, we should be fine.
+At the same time convert users in header and lib folder to use new header.
+Though for time being include new header back to kernel.h to avoid twisted
+indirected includes for existing users.
 
-All callees are addresses that are provided by the firmware via tables
-in memory, so I would assume that this addresses the callee side as
-well. AFAICT, it is never left up to the compiler to emit these
-indirect calls, or take the address of a firmware routine.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/powerpc/kernel/setup-common.c   |  1 +
+ arch/x86/include/asm/desc.h          |  1 +
+ arch/x86/kernel/cpu/mshyperv.c       |  1 +
+ arch/x86/kernel/setup.c              |  1 +
+ drivers/char/ipmi/ipmi_msghandler.c  |  1 +
+ drivers/remoteproc/remoteproc_core.c |  1 +
+ include/asm-generic/bug.h            |  3 +-
+ include/linux/kernel.h               | 84 +-----------------------
+ include/linux/panic.h                | 98 ++++++++++++++++++++++++++++
+ include/linux/panic_notifier.h       | 12 ++++
+ kernel/hung_task.c                   |  1 +
+ kernel/kexec_core.c                  |  1 +
+ kernel/panic.c                       |  1 +
+ kernel/rcu/tree.c                    |  2 +
+ kernel/sysctl.c                      |  1 +
+ kernel/trace/trace.c                 |  1 +
+ 16 files changed, 126 insertions(+), 84 deletions(-)
+ create mode 100644 include/linux/panic.h
+ create mode 100644 include/linux/panic_notifier.h
 
-But a test would be nice :-)
+diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
+index 74a98fff2c2f..046fe21b5c3b 100644
+--- a/arch/powerpc/kernel/setup-common.c
++++ b/arch/powerpc/kernel/setup-common.c
+@@ -9,6 +9,7 @@
+ #undef DEBUG
+ 
+ #include <linux/export.h>
++#include <linux/panic_notifier.h>
+ #include <linux/string.h>
+ #include <linux/sched.h>
+ #include <linux/init.h>
+diff --git a/arch/x86/include/asm/desc.h b/arch/x86/include/asm/desc.h
+index 476082a83d1c..ceb12683b6d1 100644
+--- a/arch/x86/include/asm/desc.h
++++ b/arch/x86/include/asm/desc.h
+@@ -9,6 +9,7 @@
+ #include <asm/irq_vectors.h>
+ #include <asm/cpu_entry_area.h>
+ 
++#include <linux/debug_locks.h>
+ #include <linux/smp.h>
+ #include <linux/percpu.h>
+ 
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 22f13343b5da..9e5c6f2b044d 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -17,6 +17,7 @@
+ #include <linux/irq.h>
+ #include <linux/kexec.h>
+ #include <linux/i8253.h>
++#include <linux/panic_notifier.h>
+ #include <linux/random.h>
+ #include <asm/processor.h>
+ #include <asm/hypervisor.h>
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 59e5e0903b0c..570699eecf90 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -14,6 +14,7 @@
+ #include <linux/initrd.h>
+ #include <linux/iscsi_ibft.h>
+ #include <linux/memblock.h>
++#include <linux/panic_notifier.h>
+ #include <linux/pci.h>
+ #include <linux/root_dev.h>
+ #include <linux/hugetlb.h>
+diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
+index 8a0e97b33cae..e96cb5c4f97a 100644
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -16,6 +16,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/errno.h>
++#include <linux/panic_notifier.h>
+ #include <linux/poll.h>
+ #include <linux/sched.h>
+ #include <linux/seq_file.h>
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 626a6b90fba2..76dd8e2b1e7e 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -20,6 +20,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/device.h>
++#include <linux/panic_notifier.h>
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+ #include <linux/dma-map-ops.h>
+diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
+index 76a10e0dca9f..719410b93f99 100644
+--- a/include/asm-generic/bug.h
++++ b/include/asm-generic/bug.h
+@@ -17,7 +17,8 @@
+ #endif
+ 
+ #ifndef __ASSEMBLY__
+-#include <linux/kernel.h>
++#include <linux/panic.h>
++#include <linux/printk.h>
+ 
+ #ifdef CONFIG_BUG
+ 
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index 09035ac67d4b..6c5a05ac1ecb 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -14,6 +14,7 @@
+ #include <linux/math.h>
+ #include <linux/minmax.h>
+ #include <linux/typecheck.h>
++#include <linux/panic.h>
+ #include <linux/printk.h>
+ #include <linux/build_bug.h>
+ #include <linux/static_call_types.h>
+@@ -70,7 +71,6 @@
+ #define lower_32_bits(n) ((u32)((n) & 0xffffffff))
+ 
+ struct completion;
+-struct pt_regs;
+ struct user;
+ 
+ #ifdef CONFIG_PREEMPT_VOLUNTARY
+@@ -175,14 +175,6 @@ void __might_fault(const char *file, int line);
+ static inline void might_fault(void) { }
+ #endif
+ 
+-extern struct atomic_notifier_head panic_notifier_list;
+-extern long (*panic_blink)(int state);
+-__printf(1, 2)
+-void panic(const char *fmt, ...) __noreturn __cold;
+-void nmi_panic(struct pt_regs *regs, const char *msg);
+-extern void oops_enter(void);
+-extern void oops_exit(void);
+-extern bool oops_may_print(void);
+ void do_exit(long error_code) __noreturn;
+ void complete_and_exit(struct completion *, long) __noreturn;
+ 
+@@ -368,52 +360,8 @@ extern int __kernel_text_address(unsigned long addr);
+ extern int kernel_text_address(unsigned long addr);
+ extern int func_ptr_is_kernel_text(void *ptr);
+ 
+-#ifdef CONFIG_SMP
+-extern unsigned int sysctl_oops_all_cpu_backtrace;
+-#else
+-#define sysctl_oops_all_cpu_backtrace 0
+-#endif /* CONFIG_SMP */
+-
+ extern void bust_spinlocks(int yes);
+-extern int panic_timeout;
+-extern unsigned long panic_print;
+-extern int panic_on_oops;
+-extern int panic_on_unrecovered_nmi;
+-extern int panic_on_io_nmi;
+-extern int panic_on_warn;
+-extern unsigned long panic_on_taint;
+-extern bool panic_on_taint_nousertaint;
+-extern int sysctl_panic_on_rcu_stall;
+-extern int sysctl_max_rcu_stall_to_panic;
+-extern int sysctl_panic_on_stackoverflow;
+-
+-extern bool crash_kexec_post_notifiers;
+ 
+-/*
+- * panic_cpu is used for synchronizing panic() and crash_kexec() execution. It
+- * holds a CPU number which is executing panic() currently. A value of
+- * PANIC_CPU_INVALID means no CPU has entered panic() or crash_kexec().
+- */
+-extern atomic_t panic_cpu;
+-#define PANIC_CPU_INVALID	-1
+-
+-/*
+- * Only to be used by arch init code. If the user over-wrote the default
+- * CONFIG_PANIC_TIMEOUT, honor it.
+- */
+-static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
+-{
+-	if (panic_timeout == arch_default_timeout)
+-		panic_timeout = timeout;
+-}
+-extern const char *print_tainted(void);
+-enum lockdep_ok {
+-	LOCKDEP_STILL_OK,
+-	LOCKDEP_NOW_UNRELIABLE
+-};
+-extern void add_taint(unsigned flag, enum lockdep_ok);
+-extern int test_taint(unsigned flag);
+-extern unsigned long get_taint(void);
+ extern int root_mountflags;
+ 
+ extern bool early_boot_irqs_disabled;
+@@ -432,36 +380,6 @@ extern enum system_states {
+ 	SYSTEM_SUSPEND,
+ } system_state;
+ 
+-/* This cannot be an enum because some may be used in assembly source. */
+-#define TAINT_PROPRIETARY_MODULE	0
+-#define TAINT_FORCED_MODULE		1
+-#define TAINT_CPU_OUT_OF_SPEC		2
+-#define TAINT_FORCED_RMMOD		3
+-#define TAINT_MACHINE_CHECK		4
+-#define TAINT_BAD_PAGE			5
+-#define TAINT_USER			6
+-#define TAINT_DIE			7
+-#define TAINT_OVERRIDDEN_ACPI_TABLE	8
+-#define TAINT_WARN			9
+-#define TAINT_CRAP			10
+-#define TAINT_FIRMWARE_WORKAROUND	11
+-#define TAINT_OOT_MODULE		12
+-#define TAINT_UNSIGNED_MODULE		13
+-#define TAINT_SOFTLOCKUP		14
+-#define TAINT_LIVEPATCH			15
+-#define TAINT_AUX			16
+-#define TAINT_RANDSTRUCT		17
+-#define TAINT_FLAGS_COUNT		18
+-#define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+-
+-struct taint_flag {
+-	char c_true;	/* character printed when tainted */
+-	char c_false;	/* character printed when not tainted */
+-	bool module;	/* also show as a per-module taint flag */
+-};
+-
+-extern const struct taint_flag taint_flags[TAINT_FLAGS_COUNT];
+-
+ extern const char hex_asc[];
+ #define hex_asc_lo(x)	hex_asc[((x) & 0x0f)]
+ #define hex_asc_hi(x)	hex_asc[((x) & 0xf0) >> 4]
+diff --git a/include/linux/panic.h b/include/linux/panic.h
+new file mode 100644
+index 000000000000..f5844908a089
+--- /dev/null
++++ b/include/linux/panic.h
+@@ -0,0 +1,98 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_PANIC_H
++#define _LINUX_PANIC_H
++
++#include <linux/compiler_attributes.h>
++#include <linux/types.h>
++
++struct pt_regs;
++
++extern long (*panic_blink)(int state);
++__printf(1, 2)
++void panic(const char *fmt, ...) __noreturn __cold;
++void nmi_panic(struct pt_regs *regs, const char *msg);
++extern void oops_enter(void);
++extern void oops_exit(void);
++extern bool oops_may_print(void);
++
++#ifdef CONFIG_SMP
++extern unsigned int sysctl_oops_all_cpu_backtrace;
++#else
++#define sysctl_oops_all_cpu_backtrace 0
++#endif /* CONFIG_SMP */
++
++extern int panic_timeout;
++extern unsigned long panic_print;
++extern int panic_on_oops;
++extern int panic_on_unrecovered_nmi;
++extern int panic_on_io_nmi;
++extern int panic_on_warn;
++
++extern unsigned long panic_on_taint;
++extern bool panic_on_taint_nousertaint;
++
++extern int sysctl_panic_on_rcu_stall;
++extern int sysctl_max_rcu_stall_to_panic;
++extern int sysctl_panic_on_stackoverflow;
++
++extern bool crash_kexec_post_notifiers;
++
++/*
++ * panic_cpu is used for synchronizing panic() and crash_kexec() execution. It
++ * holds a CPU number which is executing panic() currently. A value of
++ * PANIC_CPU_INVALID means no CPU has entered panic() or crash_kexec().
++ */
++extern atomic_t panic_cpu;
++#define PANIC_CPU_INVALID	-1
++
++/*
++ * Only to be used by arch init code. If the user over-wrote the default
++ * CONFIG_PANIC_TIMEOUT, honor it.
++ */
++static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
++{
++	if (panic_timeout == arch_default_timeout)
++		panic_timeout = timeout;
++}
++
++/* This cannot be an enum because some may be used in assembly source. */
++#define TAINT_PROPRIETARY_MODULE	0
++#define TAINT_FORCED_MODULE		1
++#define TAINT_CPU_OUT_OF_SPEC		2
++#define TAINT_FORCED_RMMOD		3
++#define TAINT_MACHINE_CHECK		4
++#define TAINT_BAD_PAGE			5
++#define TAINT_USER			6
++#define TAINT_DIE			7
++#define TAINT_OVERRIDDEN_ACPI_TABLE	8
++#define TAINT_WARN			9
++#define TAINT_CRAP			10
++#define TAINT_FIRMWARE_WORKAROUND	11
++#define TAINT_OOT_MODULE		12
++#define TAINT_UNSIGNED_MODULE		13
++#define TAINT_SOFTLOCKUP		14
++#define TAINT_LIVEPATCH			15
++#define TAINT_AUX			16
++#define TAINT_RANDSTRUCT		17
++#define TAINT_FLAGS_COUNT		18
++#define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
++
++struct taint_flag {
++	char c_true;	/* character printed when tainted */
++	char c_false;	/* character printed when not tainted */
++	bool module;	/* also show as a per-module taint flag */
++};
++
++extern const struct taint_flag taint_flags[TAINT_FLAGS_COUNT];
++
++enum lockdep_ok {
++	LOCKDEP_STILL_OK,
++	LOCKDEP_NOW_UNRELIABLE,
++};
++
++extern const char *print_tainted(void);
++extern void add_taint(unsigned flag, enum lockdep_ok);
++extern int test_taint(unsigned flag);
++extern unsigned long get_taint(void);
++
++#endif	/* _LINUX_PANIC_H */
+diff --git a/include/linux/panic_notifier.h b/include/linux/panic_notifier.h
+new file mode 100644
+index 000000000000..41e32483d7a7
+--- /dev/null
++++ b/include/linux/panic_notifier.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_PANIC_NOTIFIERS_H
++#define _LINUX_PANIC_NOTIFIERS_H
++
++#include <linux/notifier.h>
++#include <linux/types.h>
++
++extern struct atomic_notifier_head panic_notifier_list;
++
++extern bool crash_kexec_post_notifiers;
++
++#endif	/* _LINUX_PANIC_NOTIFIERS_H */
+diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+index bb2e3e15c84c..2871076e4d29 100644
+--- a/kernel/hung_task.c
++++ b/kernel/hung_task.c
+@@ -15,6 +15,7 @@
+ #include <linux/kthread.h>
+ #include <linux/lockdep.h>
+ #include <linux/export.h>
++#include <linux/panic_notifier.h>
+ #include <linux/sysctl.h>
+ #include <linux/suspend.h>
+ #include <linux/utsname.h>
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index f099baee3578..4b34a9aa32bc 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -26,6 +26,7 @@
+ #include <linux/suspend.h>
+ #include <linux/device.h>
+ #include <linux/freezer.h>
++#include <linux/panic_notifier.h>
+ #include <linux/pm.h>
+ #include <linux/cpu.h>
+ #include <linux/uaccess.h>
+diff --git a/kernel/panic.c b/kernel/panic.c
+index 332736a72a58..edad89660a2b 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -23,6 +23,7 @@
+ #include <linux/reboot.h>
+ #include <linux/delay.h>
+ #include <linux/kexec.h>
++#include <linux/panic_notifier.h>
+ #include <linux/sched.h>
+ #include <linux/sysrq.h>
+ #include <linux/init.h>
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index ce5b4cd6bd18..a58c9c86fa13 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -32,6 +32,8 @@
+ #include <linux/export.h>
+ #include <linux/completion.h>
+ #include <linux/moduleparam.h>
++#include <linux/panic.h>
++#include <linux/panic_notifier.h>
+ #include <linux/percpu.h>
+ #include <linux/notifier.h>
+ #include <linux/cpu.h>
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 3601786ddaeb..e5cf9c4ef5e1 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -27,6 +27,7 @@
+ #include <linux/sysctl.h>
+ #include <linux/bitmap.h>
+ #include <linux/signal.h>
++#include <linux/panic.h>
+ #include <linux/printk.h>
+ #include <linux/proc_fs.h>
+ #include <linux/security.h>
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 507a30bf26e4..9612a1d8fa13 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -39,6 +39,7 @@
+ #include <linux/slab.h>
+ #include <linux/ctype.h>
+ #include <linux/init.h>
++#include <linux/panic_notifier.h>
+ #include <linux/poll.h>
+ #include <linux/nmi.h>
+ #include <linux/fs.h>
+-- 
+2.30.2
 
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  arch/arm64/include/asm/mmu_context.h | 2 +-
-> >  arch/arm64/kernel/cpu-reset.h        | 8 ++++----
-> >  arch/arm64/kernel/cpufeature.c       | 2 +-
-> >  3 files changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
-> > index 386b96400a57..d3cef9133539 100644
-> > --- a/arch/arm64/include/asm/mmu_context.h
-> > +++ b/arch/arm64/include/asm/mmu_context.h
-> > @@ -119,7 +119,7 @@ static inline void cpu_install_idmap(void)
-> >   * Atomically replaces the active TTBR1_EL1 PGD with a new VA-compatible PGD,
-> >   * avoiding the possibility of conflicting TLB entries being allocated.
-> >   */
-> > -static inline void cpu_replace_ttbr1(pgd_t *pgdp)
-> > +static inline void __nocfi cpu_replace_ttbr1(pgd_t *pgdp)
->
-> Given these are inlines, what's the effect when these are inlined into a
-> function that would normally use CFI? Does CFI get supressed for the
-> whole function, or just the bit that got inlined?
->
-> Is there an attribute that we could place on a function pointer to tell
-> the compiler to not check calls via that pointer? If that existed we'd
-> be able to scope this much more tightly.
->
-
-I agree that it would be very helpful to be able to define a function
-pointer type that is exempt from CFI checks.
