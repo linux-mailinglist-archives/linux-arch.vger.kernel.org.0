@@ -2,59 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB503556A3
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 16:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE203556C6
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 16:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbhDFOaJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 10:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345155AbhDFOaG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 10:30:06 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B1BC061762
-        for <linux-arch@vger.kernel.org>; Tue,  6 Apr 2021 07:29:57 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 91-20020a9d08640000b0290237d9c40382so14769343oty.12
-        for <linux-arch@vger.kernel.org>; Tue, 06 Apr 2021 07:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hQuAvIyYNagg9JyQzFat1nJUGgDzxw1aFC3YiFQyaP8=;
-        b=r0xxTuGtRNzYKu8nqiDI+DB5zSPkGLUpbLgQNQaGLGkgiwpw5MLANjpcq8MYaU0Hq2
-         X8hOUDV1/oX/57fSmkTii8Bi2YNGL51y3lk4KSq6YfYCl9xD99P2sRCmzVmEG58kiwA4
-         O05ho4ncMEJoZb938OZlbjiRKlK/EjE9hdYwjEFKVhW8aa5VjYe3kTtXHut1plKroA5I
-         LK8jHR4u1E1zwzgU3jfR/e97UySNVfA6xtYPZDw8iliqxhEF4hMoTSEYpSrDe0cNmIoT
-         5uGPRIzoOUAtKfyfQyD6S4s1F14OHjawgvJvGlkrf0GyIfoE+3kDp/xK61HSyY5bjF7+
-         zvuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hQuAvIyYNagg9JyQzFat1nJUGgDzxw1aFC3YiFQyaP8=;
-        b=hqpQOsNRE3OsqXHRwlMVlfPBZy3I31mbsWwFP95qP456iI9dl8jax/DUl42cBD2Bds
-         WsTFke2fyxL0jAgAufTUnUeuMI8AHdp698UfhXxnu8pBK70Csel3ks1F0fwOPmTt39tv
-         aSH3Q/Hqf1jLkpWoZs12hn+FndE39Kv2q25woNNgIzJz48sqnhf0Fpidmk0ueYasczEv
-         j34+0ugdYfF1ko83oA0gl8VQJqycuZzR9ASgj5IJdwegUjzgG+5v9sia8+JgKzpS0fUh
-         65hSUb8ciag0NBK58ZGinbHGFju9lAXkPTh/TjOPgdLLA0Es+tYXKSOMrQnbERIEn8d8
-         r5Hw==
-X-Gm-Message-State: AOAM5300nsD/rIFx5BLSt+L4Ie0a8Mq21/8Di44UphMjYKYNcpVOY4pW
-        yVuu0td00o1O1LL5e1oeUw+ZJQ==
-X-Google-Smtp-Source: ABdhPJwoj/Chr5jtxoWPmUxeZgdomq36W/mf+NaHAUUL9Ola9ZGgZLXjYEl5wLxRYiH8O3M4xb6gkw==
-X-Received: by 2002:a05:6830:309d:: with SMTP id f29mr26342263ots.225.1617719396349;
-        Tue, 06 Apr 2021 07:29:56 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id d13sm4689185otk.74.2021.04.06.07.29.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 07:29:55 -0700 (PDT)
-Date:   Tue, 6 Apr 2021 09:29:52 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+        id S243274AbhDFOjn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 10:39:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46654 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243277AbhDFOjm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Apr 2021 10:39:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B468961041;
+        Tue,  6 Apr 2021 14:39:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617719974;
+        bh=G2BOVus52Iqv5BWziu8fp8dbl+kVdMy8pIchFSY+N7Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SlT7S0jfOQB0ipW94M+9K780g98fCxdRJ2QJSXci+Rly0qaDQCHFeXHTOsI463Xi7
+         S70I+/1OXQBcTfcIkIpl67B5zXSuZCsFVQzUBPU8aiRkhXqG4+Gr/kX784jry6UKjU
+         t/VEsOeLGhmj1jkbfR4iAG4mFD+vamcJPKxJMUcvNbOJ2RhmbWIpBgjpUvC0BANEGE
+         vr4AodXPx2i9E03UI+pPMK1LRyEpkXwf1hJUOL/xYCdBgDtehTwHpHwy3IOxolwkOe
+         Eefs8HR/7P44p9cGBhR5ZazQeydf2U0negBr9o85K3dg0zDsONcgGw+lFDOTompGZC
+         fzX5/aFjCjwKQ==
+Date:   Tue, 6 Apr 2021 17:39:15 +0300
+From:   Mike Rapoport <rppt@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Joerg Roedel <jroedel@suse.de>, Wei Liu <wei.liu@kernel.org>,
         Michael Kelley <mikelley@microsoft.com>,
-        Mike Rapoport <rppt@kernel.org>,
         Corey Minyard <cminyard@mvista.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
@@ -87,7 +63,7 @@ Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Kees Cook <keescook@chromium.org>,
         Iurii Zaikin <yzaikin@google.com>
 Subject: Re: [PATCH v1 1/1] kernel.h: Split out panic and oops helpers
-Message-ID: <20210406142952.GG904837@yoga>
+Message-ID: <YGxykw1Il6NvKTSe@kernel.org>
 References: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -97,8 +73,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue 06 Apr 08:31 CDT 2021, Andy Shevchenko wrote:
-
+On Tue, Apr 06, 2021 at 04:31:58PM +0300, Andy Shevchenko wrote:
 > kernel.h is being used as a dump for all kinds of stuff for a long time.
 > Here is the attempt to start cleaning it up by splitting out panic and
 > oops helpers.
@@ -107,8 +82,47 @@ On Tue 06 Apr 08:31 CDT 2021, Andy Shevchenko wrote:
 > Though for time being include new header back to kernel.h to avoid twisted
 > indirected includes for existing users.
 > 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 
-Regards,
-Bjorn
+> ---
+>  arch/powerpc/kernel/setup-common.c   |  1 +
+>  arch/x86/include/asm/desc.h          |  1 +
+>  arch/x86/kernel/cpu/mshyperv.c       |  1 +
+>  arch/x86/kernel/setup.c              |  1 +
+>  drivers/char/ipmi/ipmi_msghandler.c  |  1 +
+>  drivers/remoteproc/remoteproc_core.c |  1 +
+>  include/asm-generic/bug.h            |  3 +-
+>  include/linux/kernel.h               | 84 +-----------------------
+>  include/linux/panic.h                | 98 ++++++++++++++++++++++++++++
+>  include/linux/panic_notifier.h       | 12 ++++
+>  kernel/hung_task.c                   |  1 +
+>  kernel/kexec_core.c                  |  1 +
+>  kernel/panic.c                       |  1 +
+>  kernel/rcu/tree.c                    |  2 +
+>  kernel/sysctl.c                      |  1 +
+>  kernel/trace/trace.c                 |  1 +
+>  16 files changed, 126 insertions(+), 84 deletions(-)
+>  create mode 100644 include/linux/panic.h
+>  create mode 100644 include/linux/panic_notifier.h
+> 
+> diff --git a/arch/x86/include/asm/desc.h b/arch/x86/include/asm/desc.h
+> index 476082a83d1c..ceb12683b6d1 100644
+> --- a/arch/x86/include/asm/desc.h
+> +++ b/arch/x86/include/asm/desc.h
+> @@ -9,6 +9,7 @@
+>  #include <asm/irq_vectors.h>
+>  #include <asm/cpu_entry_area.h>
+>  
+> +#include <linux/debug_locks.h>
+
+This seems unrelated, but I might be missing something.
+
+>  #include <linux/smp.h>
+>  #include <linux/percpu.h>
+>  
+
+-- 
+Sincerely yours,
+Mike.
