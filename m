@@ -2,24 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A0A355283
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 13:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB283552D4
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 13:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238084AbhDFLmK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 07:42:10 -0400
-Received: from foss.arm.com ([217.140.110.172]:41584 "EHLO foss.arm.com"
+        id S1343612AbhDFLyS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 07:54:18 -0400
+Received: from foss.arm.com ([217.140.110.172]:41848 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232429AbhDFLmJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Apr 2021 07:42:09 -0400
+        id S1343558AbhDFLyN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Apr 2021 07:54:13 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49CA41042;
-        Tue,  6 Apr 2021 04:42:01 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACB70113E;
+        Tue,  6 Apr 2021 04:54:05 -0700 (PDT)
 Received: from C02TD0UTHF1T.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B4B53F73D;
-        Tue,  6 Apr 2021 04:41:56 -0700 (PDT)
-Date:   Tue, 6 Apr 2021 12:41:53 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F9E23F73D;
+        Tue,  6 Apr 2021 04:54:00 -0700 (PDT)
+Date:   Tue, 6 Apr 2021 12:53:57 +0100
 From:   Mark Rutland <mark.rutland@arm.com>
-To:     Sami Tolvanen <samitolvanen@google.com>
+To:     Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
@@ -34,142 +35,103 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v5 13/18] arm64: use function_nocfi with __pa_symbol
-Message-ID: <20210406114153.GD96480@C02TD0UTHF1T.local>
+        clang-built-linux@googlegroups.com, ardb@kernel.org
+Subject: Re: [PATCH v5 14/18] arm64: add __nocfi to functions that jump to a
+ physical address
+Message-ID: <20210406115357.GE96480@C02TD0UTHF1T.local>
 References: <20210401233216.2540591-1-samitolvanen@google.com>
- <20210401233216.2540591-14-samitolvanen@google.com>
+ <20210401233216.2540591-15-samitolvanen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210401233216.2540591-14-samitolvanen@google.com>
+In-Reply-To: <20210401233216.2540591-15-samitolvanen@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 01, 2021 at 04:32:11PM -0700, Sami Tolvanen wrote:
-> With CONFIG_CFI_CLANG, the compiler replaces function address
-> references with the address of the function's CFI jump table
-> entry. This means that __pa_symbol(function) returns the physical
-> address of the jump table entry, which can lead to address space
-> confusion as the jump table points to the function's virtual
-> address. Therefore, use the function_nocfi() macro to ensure we are
-> always taking the address of the actual function instead.
-> 
+[adding Ard for EFI runtime services bits]
+
+On Thu, Apr 01, 2021 at 04:32:12PM -0700, Sami Tolvanen wrote:
+> Disable CFI checking for functions that switch to linear mapping and
+> make an indirect call to a physical address, since the compiler only
+> understands virtual addresses and the CFI check for such indirect calls
+> would always fail.
+
+What does physical vs virtual have to do with this? Does the address
+actually matter, or is this just a general thing that when calling an
+assembly function we won't have a trampoline that the caller expects?
+
+I wonder if we need to do something with asmlinkage here, perhaps?
+
+I didn't spot anything in the seriues handling EFI runtime services
+calls, and I strongly suspect we need to do something for those, unless
+they're handled implicitly by something else.
+
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 > Reviewed-by: Kees Cook <keescook@chromium.org>
 > ---
->  arch/arm64/include/asm/mmu_context.h      | 2 +-
->  arch/arm64/kernel/acpi_parking_protocol.c | 3 ++-
->  arch/arm64/kernel/cpu-reset.h             | 2 +-
->  arch/arm64/kernel/cpufeature.c            | 2 +-
->  arch/arm64/kernel/psci.c                  | 3 ++-
->  arch/arm64/kernel/smp_spin_table.c        | 3 ++-
->  6 files changed, 9 insertions(+), 6 deletions(-)
+>  arch/arm64/include/asm/mmu_context.h | 2 +-
+>  arch/arm64/kernel/cpu-reset.h        | 8 ++++----
+>  arch/arm64/kernel/cpufeature.c       | 2 +-
+>  3 files changed, 6 insertions(+), 6 deletions(-)
 > 
 > diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
-> index bd02e99b1a4c..386b96400a57 100644
+> index 386b96400a57..d3cef9133539 100644
 > --- a/arch/arm64/include/asm/mmu_context.h
 > +++ b/arch/arm64/include/asm/mmu_context.h
-> @@ -140,7 +140,7 @@ static inline void cpu_replace_ttbr1(pgd_t *pgdp)
->  		ttbr1 |= TTBR_CNP_BIT;
->  	}
->  
-> -	replace_phys = (void *)__pa_symbol(idmap_cpu_replace_ttbr1);
-> +	replace_phys = (void *)__pa_symbol(function_nocfi(idmap_cpu_replace_ttbr1));
->  
->  	cpu_install_idmap();
->  	replace_phys(ttbr1);
-> diff --git a/arch/arm64/kernel/acpi_parking_protocol.c b/arch/arm64/kernel/acpi_parking_protocol.c
-> index e7c941d8340d..bfeeb5319abf 100644
-> --- a/arch/arm64/kernel/acpi_parking_protocol.c
-> +++ b/arch/arm64/kernel/acpi_parking_protocol.c
-> @@ -99,7 +99,8 @@ static int acpi_parking_protocol_cpu_boot(unsigned int cpu)
->  	 * that read this address need to convert this address to the
->  	 * Boot-Loader's endianness before jumping.
->  	 */
-> -	writeq_relaxed(__pa_symbol(secondary_entry), &mailbox->entry_point);
-> +	writeq_relaxed(__pa_symbol(function_nocfi(secondary_entry)),
-> +		       &mailbox->entry_point);
->  	writel_relaxed(cpu_entry->gic_cpu_id, &mailbox->cpu_id);
->  
->  	arch_send_wakeup_ipi_mask(cpumask_of(cpu));
-> diff --git a/arch/arm64/kernel/cpu-reset.h b/arch/arm64/kernel/cpu-reset.h
-> index ed50e9587ad8..f3adc574f969 100644
-> --- a/arch/arm64/kernel/cpu-reset.h
-> +++ b/arch/arm64/kernel/cpu-reset.h
-> @@ -22,7 +22,7 @@ static inline void __noreturn cpu_soft_restart(unsigned long entry,
->  
->  	unsigned long el2_switch = !is_kernel_in_hyp_mode() &&
->  		is_hyp_mode_available();
-> -	restart = (void *)__pa_symbol(__cpu_soft_restart);
-> +	restart = (void *)__pa_symbol(function_nocfi(__cpu_soft_restart));
->  
->  	cpu_install_idmap();
->  	restart(el2_switch, entry, arg0, arg1, arg2);
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index e5281e1c8f1d..0b2e0d7b13ec 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -1462,7 +1462,7 @@ kpti_install_ng_mappings(const struct arm64_cpu_capabilities *__unused)
->  	if (arm64_use_ng_mappings)
->  		return;
->  
-> -	remap_fn = (void *)__pa_symbol(idmap_kpti_install_ng_mappings);
-> +	remap_fn = (void *)__pa_symbol(function_nocfi(idmap_kpti_install_ng_mappings));
->  
->  	cpu_install_idmap();
->  	remap_fn(cpu, num_online_cpus(), __pa_symbol(swapper_pg_dir));
-> diff --git a/arch/arm64/kernel/psci.c b/arch/arm64/kernel/psci.c
-> index 62d2bda7adb8..e74bcb57559b 100644
-> --- a/arch/arm64/kernel/psci.c
-> +++ b/arch/arm64/kernel/psci.c
-> @@ -38,7 +38,8 @@ static int __init cpu_psci_cpu_prepare(unsigned int cpu)
->  
->  static int cpu_psci_cpu_boot(unsigned int cpu)
->  {
-> -	int err = psci_ops.cpu_on(cpu_logical_map(cpu), __pa_symbol(secondary_entry));
-> +	int err = psci_ops.cpu_on(cpu_logical_map(cpu),
-> +			__pa_symbol(function_nocfi(secondary_entry)));
+> @@ -119,7 +119,7 @@ static inline void cpu_install_idmap(void)
+>   * Atomically replaces the active TTBR1_EL1 PGD with a new VA-compatible PGD,
+>   * avoiding the possibility of conflicting TLB entries being allocated.
+>   */
+> -static inline void cpu_replace_ttbr1(pgd_t *pgdp)
+> +static inline void __nocfi cpu_replace_ttbr1(pgd_t *pgdp)
 
-Could we use a temporary here, e.g.
+Given these are inlines, what's the effect when these are inlined into a
+function that would normally use CFI? Does CFI get supressed for the
+whole function, or just the bit that got inlined?
 
-	phys_addr_t pa_secondary_entry = __pa_symbol(function_nocfi(secondary_entry));
-	int err = psci_ops.cpu_on(cpu_logical_map(cpu), pa_secondary_entry);
-
->  	if (err)
->  		pr_err("failed to boot CPU%d (%d)\n", cpu, err);
->  
-> diff --git a/arch/arm64/kernel/smp_spin_table.c b/arch/arm64/kernel/smp_spin_table.c
-> index 056772c26098..4c4e36ded4aa 100644
-> --- a/arch/arm64/kernel/smp_spin_table.c
-> +++ b/arch/arm64/kernel/smp_spin_table.c
-> @@ -88,7 +88,8 @@ static int smp_spin_table_cpu_prepare(unsigned int cpu)
->  	 * boot-loader's endianness before jumping. This is mandated by
->  	 * the boot protocol.
->  	 */
-> -	writeq_relaxed(__pa_symbol(secondary_holding_pen), release_addr);
-> +	writeq_relaxed(__pa_symbol(function_nocfi(secondary_holding_pen)),
-> +		       release_addr);
-
-Likewise here? e.g. at the start of the function have:
-
-	phys_addr_t pa_holding_pen = __pa_symbol(function_nocfi(secondary_holding_pen));
-
-... then here have:
-
-	writeq_relaxed(pa_holding_pen, release_addr);
-
-With those:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Is there an attribute that we could place on a function pointer to tell
+the compiler to not check calls via that pointer? If that existed we'd
+be able to scope this much more tightly.
 
 Thanks,
 Mark.
 
->  	__flush_dcache_area((__force void *)release_addr,
->  			    sizeof(*release_addr));
+>  {
+>  	typedef void (ttbr_replace_func)(phys_addr_t);
+>  	extern ttbr_replace_func idmap_cpu_replace_ttbr1;
+> diff --git a/arch/arm64/kernel/cpu-reset.h b/arch/arm64/kernel/cpu-reset.h
+> index f3adc574f969..9a7b1262ef17 100644
+> --- a/arch/arm64/kernel/cpu-reset.h
+> +++ b/arch/arm64/kernel/cpu-reset.h
+> @@ -13,10 +13,10 @@
+>  void __cpu_soft_restart(unsigned long el2_switch, unsigned long entry,
+>  	unsigned long arg0, unsigned long arg1, unsigned long arg2);
 >  
+> -static inline void __noreturn cpu_soft_restart(unsigned long entry,
+> -					       unsigned long arg0,
+> -					       unsigned long arg1,
+> -					       unsigned long arg2)
+> +static inline void __noreturn __nocfi cpu_soft_restart(unsigned long entry,
+> +						       unsigned long arg0,
+> +						       unsigned long arg1,
+> +						       unsigned long arg2)
+>  {
+>  	typeof(__cpu_soft_restart) *restart;
+>  
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index 0b2e0d7b13ec..c2f94a5206e0 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -1445,7 +1445,7 @@ static bool unmap_kernel_at_el0(const struct arm64_cpu_capabilities *entry,
+>  }
+>  
+>  #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
+> -static void
+> +static void __nocfi
+>  kpti_install_ng_mappings(const struct arm64_cpu_capabilities *__unused)
+>  {
+>  	typedef void (kpti_remap_fn)(int, int, phys_addr_t);
 > -- 
 > 2.31.0.208.g409f899ff0-goog
 > 
