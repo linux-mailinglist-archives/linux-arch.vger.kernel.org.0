@@ -2,128 +2,186 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B198C3559E7
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 19:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929CB355A42
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 19:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbhDFRDR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 13:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S1346913AbhDFRZf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 13:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbhDFRDR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 13:03:17 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EA7C061760
-        for <linux-arch@vger.kernel.org>; Tue,  6 Apr 2021 10:03:08 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id l8so8152605vsj.13
-        for <linux-arch@vger.kernel.org>; Tue, 06 Apr 2021 10:03:08 -0700 (PDT)
+        with ESMTP id S232578AbhDFRZf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 13:25:35 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A429C06174A;
+        Tue,  6 Apr 2021 10:25:27 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id fn8so2709266qvb.5;
+        Tue, 06 Apr 2021 10:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aSGe0bQ5V3W50ybbudz7bPErfQLcHAnbU3s+nR3236o=;
-        b=NC4Z5tuEQPH56mSVdL6re/GYvhMXmcZBBZJAe0K5oARYXXzfmQy/y1gj01ihWMSmli
-         1Lb/UGbC8aKZb1zPEG9o6M9ucnwbSG6WIoA+FHAPLLbQ01uPDRIuyTwZIpAHLwOG+yq1
-         kkZI+8JMwHOnnEn+lyCTAlWm8etMOLtVCp3S1q3K3aO4yA/23/eH2gEXX6vdFz0CJGwN
-         VF7c5vQJUcdiwYPAChJeB0X1E472u2faiMpy7Ui5DpvqvQTq4h26rGokMp0GpoEMI+P1
-         LV6JUbpNRzT8/BwmE+OHq/ZwSd4sY0JKeDMdURpYfRd1bJM30/6AX5SE7dZl6ySWo0EK
-         KluA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HjIY6aWZ/uvHhM5BKnP3jscK0FBNItngTC5eimC1oFI=;
+        b=V+JG4luCR0b56/p+Hv4EgOuljif4M7BrF1R+nfoI5OsEwCVXQqTm/WwMZ681EicIT+
+         jf1Uwmh7DH9rA54IBEqp/nq7K6NXga/xs1A+ItmZm9vokyJcjNPKYj7O5qcA53sA/Twp
+         2o8bvMag0JtT8juqcTglS+J12WkTotgnB/WApgui2mLBFslT1KL/GQ6e+qHE8b9eravs
+         GdiEE9jfH5w/LeYxWmNa5+3jLpkvlMXRlL5RYS0sYuwKUTcVktfyuynNAASH3pallAwB
+         wq2kdPf+QEEK58vg9OfEGamcBLde0344bTdvxQutG8G6qYTURwgul5zLA6SXB1tqWxa/
+         8Q7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aSGe0bQ5V3W50ybbudz7bPErfQLcHAnbU3s+nR3236o=;
-        b=VQTEXrVi88eEvcKcYvp9mODwkQFIK5xyZ9HID75x09yev4WGtxi7zZeJx2g1JHOpS0
-         R5ok+f+IIlHVWcn8DeyKdFlLi3h/nrTGaYx38FZLdXWP9qYRQF7s44KkatOKRJELwiEC
-         OULJ1e42lfZQW1NEeMAoxQ6JMvAVJeaKcRjamOvxbsN6TepXmCHIZIcL76vwAfWHVnlb
-         fKtoq5TeDvDKt+iYdLDx8tcFJZLBjSHkYgTDpYGis2EAnJSvXNw0wvcRHH1ApNuGBpGZ
-         vsStlXat8CA9eUApkjUbqJUuyI4LKJda1bPI3dw8go+JQoC961J6mv/xHAhs9QnG7kTu
-         4WRg==
-X-Gm-Message-State: AOAM532y+tOW+2BtPkA7O1H7qMHcux4+gPy1yR+zya0YVlN8dCRope3Z
-        Ch9A1uYe9/IaEvny+NxFICiI08gadMEjhr3MXt6M+w==
-X-Google-Smtp-Source: ABdhPJxQSX0S7k4FzbEyhTnhHluxlT34cEUaV5NL9+ccGUPUJJazSLwY0K1+rikJtvM1UuMR3n/GOvlAUPSV1eX6hZs=
-X-Received: by 2002:a05:6102:2423:: with SMTP id l3mr16985008vsi.54.1617728587679;
- Tue, 06 Apr 2021 10:03:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210401233216.2540591-1-samitolvanen@google.com>
- <20210401233216.2540591-13-samitolvanen@google.com> <20210406113657.GC96480@C02TD0UTHF1T.local>
-In-Reply-To: <20210406113657.GC96480@C02TD0UTHF1T.local>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Tue, 6 Apr 2021 10:02:56 -0700
-Message-ID: <CABCJKueabmkC3OXSGHKMKS9wJEeRGHBd3b1hK6fM=mMKkj3b1A@mail.gmail.com>
-Subject: Re: [PATCH v5 12/18] arm64: implement function_nocfi
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        bpf <bpf@vger.kernel.org>, linux-hardening@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HjIY6aWZ/uvHhM5BKnP3jscK0FBNItngTC5eimC1oFI=;
+        b=SsnW7AMJlmBZ45JfFWikH6O/K0TuRalBy98amYpwsFHg6/vrYxwqfvYVSWRIjGWwqt
+         OiPDM5eBnab6/rw90dOpFi3Cb7q6xGA+T/8MxIynkAiS/nU1BPNDIphEzng6wrkNX3oo
+         5w5xZCS0tjyva9MwM3hjROkVbHRfhTe5N3R38YMqVA1aAkAMvairyUzumaRI7iLQVWE+
+         MkBjsc/pSySUtct3Hjsnox9RUG2hxjEms/eLbKP48Uo1k2aBEyDzgcHmvVHKp016kzxY
+         eO3usm8VnjGT3keW2/4jN4vAog+sERXaETzXX5/la63+kuX3En1fSIOiL/zs38AKs2kQ
+         u5SQ==
+X-Gm-Message-State: AOAM530ARfPsK5AUDnFDVmLsZHTWMLbWMwj0MiIfYBzmifyLzLGTa3bH
+        1z/zsQUe0egXbL38wS/VlcfE1TYpeJw=
+X-Google-Smtp-Source: ABdhPJxCnqpDDoiwmSWHUEP6xAQGZGQrKRlH4kuk7ohk/vvF7w4FMdf+MUERXRCuXqWJW7LJHmQ98Q==
+X-Received: by 2002:ad4:4cca:: with SMTP id i10mr29832924qvz.49.1617729926315;
+        Tue, 06 Apr 2021 10:25:26 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id x14sm16025449qkx.112.2021.04.06.10.25.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Apr 2021 10:25:25 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 2BABF27C0054;
+        Tue,  6 Apr 2021 13:25:25 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 06 Apr 2021 13:25:25 -0400
+X-ME-Sender: <xms:g5lsYIxIxkxRsm1u6D9obZmveykknLjLNrx5HhDgTnZymPCGIb97rQ>
+    <xme:g5lsYMTHoGaNMpVBsIRTBuuyOp4jEgOQapucYXhNADKna11cwzYvMxOaIhrMgOmw0
+    NBEFE7HOzpWeoRaZg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudejhedgiedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdortddttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnheptdevvdfhkeevuedtueetgeefvdeuveehteelfeehfeelteetuefffeelleel
+    ueevnecuffhomhgrihhnpehrihhstghvrdhorhhgpdhkvghrnhgvlhdrohhrghenucfkph
+    epudefuddruddtjedrudegjedruddvieenucevlhhushhtvghrufhiiigvpedtnecurfgr
+    rhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonh
+    grlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghnghep
+    pehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:g5lsYKV-_z2SguaFtbhfCJ_73Ja-6OesVU2kkZ2n8RTMu-IurrW8VA>
+    <xmx:g5lsYGiWkAz5xAFkJkGL0tkmjZUfpf4A8CQ4JDWNJfV1vd8d1jRdGA>
+    <xmx:g5lsYKA-1VQnwa1SqZrZgp5GROmrPdFSt59yP5dm2J2RQhrMXae4mg>
+    <xmx:hZlsYO64iCXqEXTU581wijEu5WviGywcF7AjNoRq6Y12ZTfFP3TWmhnPzEUafgz4>
+Received: from localhost (unknown [131.107.147.126])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9C6FD1080063;
+        Tue,  6 Apr 2021 13:25:23 -0400 (EDT)
+Date:   Wed, 7 Apr 2021 01:24:12 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
+ ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+Message-ID: <YGyZPCxJYGOvqYZQ@boqun-archlinux>
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org>
+ <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+ <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
+ <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net>
+ <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net>
+ <CAJF2gTS4jexKsSiXBY=5rz53LjcLUZ1K4pxjYJDVQCWx_8JTuA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTS4jexKsSiXBY=5rz53LjcLUZ1K4pxjYJDVQCWx_8JTuA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 6, 2021 at 4:37 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Thu, Apr 01, 2021 at 04:32:10PM -0700, Sami Tolvanen wrote:
-> > With CONFIG_CFI_CLANG, the compiler replaces function addresses in
-> > instrumented C code with jump table addresses. This change implements
-> > the function_nocfi() macro, which returns the actual function address
-> > instead.
+On Wed, Mar 31, 2021 at 11:22:35PM +0800, Guo Ren wrote:
+> On Mon, Mar 29, 2021 at 8:50 PM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> I think that it's unfortunate that we have to drop to assembly here, but
-> given this is infrequent I agree it's not the end of the world, so:
->
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
->
-> > ---
-> >  arch/arm64/include/asm/memory.h | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
+> > On Mon, Mar 29, 2021 at 08:01:41PM +0800, Guo Ren wrote:
+> > > u32 a = 0x55aa66bb;
+> > > u16 *ptr = &a;
+> > >
+> > > CPU0                       CPU1
+> > > =========             =========
+> > > xchg16(ptr, new)     while(1)
+> > >                                     WRITE_ONCE(*(ptr + 1), x);
+> > >
+> > > When we use lr.w/sc.w implement xchg16, it'll cause CPU0 deadlock.
 > >
-> > diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-> > index 0aabc3be9a75..b55410afd3d1 100644
-> > --- a/arch/arm64/include/asm/memory.h
-> > +++ b/arch/arm64/include/asm/memory.h
-> > @@ -321,6 +321,21 @@ static inline void *phys_to_virt(phys_addr_t x)
-> >  #define virt_to_pfn(x)               __phys_to_pfn(__virt_to_phys((unsigned long)(x)))
-> >  #define sym_to_pfn(x)                __phys_to_pfn(__pa_symbol(x))
+> > Then I think your LL/SC is broken.
+> No, it's not broken LR.W/SC.W. Quote <8.3 Eventual Success of
+> Store-Conditional Instructions>:
+> 
+> "As a consequence of the eventuality guarantee, if some harts in an
+> execution environment are
+> executing constrained LR/SC loops, and no other harts or devices in
+> the execution environment
+> execute an unconditional store or AMO to that reservation set, then at
+> least one hart will
+> eventually exit its constrained LR/SC loop. By contrast, if other
+> harts or devices continue to
+> write to that reservation set, it is not guaranteed that any hart will
+> exit its LR/SC loop."
+> 
+> So I think it's a feature of LR/SC. How does the above code (also use
+> ll.w/sc.w to implement xchg16) running on arm64?
+> 
+> 1: ldxr
+>     eor
+>     cbnz ... 2f
+>     stxr
+>     cbnz ... 1b   // I think it would deadlock for arm64.
+> 
+> "LL/SC fwd progress" which you have mentioned could guarantee stxr
+> success? How hardware could do that?
+> 
+
+Actually, "old" riscv standard does provide fwd progress ;-) In
+
+	https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf
+
+Section "7.2 Load-Reserved/Store-Conditional Instructions":
+
+"""
+One advantage of CAS is that it guarantees that some hart eventually
+makes progress, whereas an LR/SC atomic sequence could livelock
+indefinitely on some systems. To avoid this concern, we added an
+architectural guarantee of forward progress to LR/SC atomic sequences.
+The restrictions on LR/SC sequence contents allows an implementation to
+**capture a cache line on the LR and complete the LR/SC sequence by
+holding off remote cache interventions for a bounded short time**.
+"""
+
+The guarantee is removed later due to "Earlier versions of this
+specification imposed a stronger starvation-freedom guarantee. However,
+the weaker livelock-freedom guarantee is sufficient to implement the C11
+and C++11 languages, and is substantially easier to provide in some
+microarchitectural styles."
+
+But I take it as an example that hardware can guarantee this.
+
+Regards,
+Boqun
+
 > >
-> > +#ifdef CONFIG_CFI_CLANG
-> > +/*
-> > + * With CONFIG_CFI_CLANG, the compiler replaces function address
-> > + * references with the address of the function's CFI jump table
-> > + * entry. The function_nocfi macro always returns the address of the
-> > + * actual function instead.
-> > + */
-> > +#define function_nocfi(x) ({                                         \
-> > +     void *addr;                                                     \
-> > +     asm("adrp %0, " __stringify(x) "\n\t"                           \
-> > +         "add  %0, %0, :lo12:" __stringify(x) : "=r" (addr));        \
->
-> If it's not too painful, could we please move the asm constrain onto its
-> own line? That makes it slightly easier to read, and aligns with what
-> we've (mostly) done elsewhere in arm64.
-
-Sure, I'll change this in the next version.
-
-> Not a big deal either way, and the ack stands regardless.
->
-> Thanks,
-> Mark.
-
-Sami
+> > That also means you really don't want to build super complex locking
+> > primitives on top, because that live-lock will percolate through.
+> >
+> > Step 1 would be to get your architecute fixed such that it can provide
+> > fwd progress guarantees for LL/SC. Otherwise there's absolutely no point
+> > in building complex systems with it.
+> --
+> Best Regards
+>  Guo Ren
+> 
+> ML: https://lore.kernel.org/linux-csky/
