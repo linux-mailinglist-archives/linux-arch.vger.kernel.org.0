@@ -2,147 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BDD355B1A
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 20:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8E9355B1E
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Apr 2021 20:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236826AbhDFSPx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Apr 2021 14:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236823AbhDFSPw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Apr 2021 14:15:52 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6EAC061756;
-        Tue,  6 Apr 2021 11:15:44 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id j3so5593116qvs.1;
-        Tue, 06 Apr 2021 11:15:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SM97r+t3B/0Sl/bYA0tAxXDl/DGgw9Hc/stwzaVm5lI=;
-        b=YOnnxLVuQaP7gy9jJQJLgrNK82zoXWf8BKOEjRJ7IknEJnviHryc81DEfIrUQ2knNP
-         t7CWrMmMQ/nSJ3DSO7ARiS/oVSwoh6DfpmQdW4bP5zqOl9UPAYoNH8AzMdrhse9M1CPg
-         eTatcmId3o1g/amVnAm+GCwV3fz5Ulrn6qrcTqmCy7jyBQenHfp9njNJNZYBjxTIMXYi
-         YvOqNe8/p6M4/7VLBZ/cXo+5NVQxtvrgMbPCnKBopU/mP1ulBJmHZQ+WxKbfcW7CMJ4t
-         EzH6Gnws74T25wZJ5mXDXiXgOnlm5SLanoUas2KBieAwKiYhG/+F6yKSSray6shbE5xV
-         ITAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SM97r+t3B/0Sl/bYA0tAxXDl/DGgw9Hc/stwzaVm5lI=;
-        b=CL49Cs5hqFnVG/MWPgcHiimqhwkazJTH5fCBqMQ3zpd8HxcsUi34O85uteuV6SryHx
-         JQXx1QgVmjqO+2NyTyAZo6Bf6fsP15OMvx7JtHSj9pRGYE5JxS3CH7UbnYUqounmNHo9
-         UY5+UQBNq6+PxI3vxopvc5nY+ujKZ1sEAhQVwmiYQCCWegO+EHHVnFsMuuzJMCzmmmUf
-         KxAjWyM3je6IXp6+5x0dWXOR8TUdaksEDslF/9L3eoyB13NTRvPFSU6ioBXvWljHoELA
-         2ENJWye7TdgmT1/jLniKgqyw7XLmdbDXTtihaOm0VwtnZ7Oyr/d9dBQuHWcXuvCpD/Qd
-         H2MA==
-X-Gm-Message-State: AOAM5309Gk8HZLpY9ZrGlKyeQdE5cS77b3HujlYciMh/2hcFR9l9YG70
-        adxKKAzYVH4dSYMPnI6Z6ro=
-X-Google-Smtp-Source: ABdhPJxZVb3/MGOAQygSnVOhur7hk5+nMcz2n4FNAYRLIh6ssKrcLFMnM34XpTY2HYgow8rrUtppdg==
-X-Received: by 2002:a0c:eda7:: with SMTP id h7mr19509145qvr.26.1617732943021;
-        Tue, 06 Apr 2021 11:15:43 -0700 (PDT)
-Received: from localhost ([2601:4c0:104:d5fc:c1b1:fa44:c411:7822])
-        by smtp.gmail.com with ESMTPSA id w5sm16371237qkc.85.2021.04.06.11.15.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 11:15:42 -0700 (PDT)
-Date:   Tue, 6 Apr 2021 11:15:41 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH 11/13] lib: add fast path for find_first_*_bit() and
- find_last_bit()
-Message-ID: <20210406181541.GA792963@yury-ThinkPad>
-References: <20210316015424.1999082-1-yury.norov@gmail.com>
- <20210316015424.1999082-12-yury.norov@gmail.com>
- <20210406160327.GA180841@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210406160327.GA180841@roeck-us.net>
+        id S236823AbhDFSQb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Apr 2021 14:16:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44054 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236444AbhDFSQa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Apr 2021 14:16:30 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 20996613B3;
+        Tue,  6 Apr 2021 18:16:22 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lTqFQ-005uvp-1y; Tue, 06 Apr 2021 19:16:20 +0100
+Date:   Tue, 06 Apr 2021 19:16:18 +0100
+Message-ID: <87ft03p9cd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
+        Will Deacon <will@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 15/18] irqchip/apple-aic: Add support for the Apple Interrupt Controller
+In-Reply-To: <20210402090542.131194-16-marcan@marcan.st>
+References: <20210402090542.131194-1-marcan@marcan.st>
+        <20210402090542.131194-16-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: marcan@marcan.st, linux-arm-kernel@lists.infradead.org, robh@kernel.org, arnd@kernel.org, olof@lixom.net, krzk@kernel.org, mark.kettenis@xs4all.nl, tony@atomide.com, mohamed.mediouni@caramail.com, stan@corellium.com, graf@amazon.com, will@kernel.org, linus.walleij@linaro.org, mark.rutland@arm.com, andy.shevchenko@gmail.com, corbet@lwn.net, catalin.marinas@arm.com, hch@infradead.org, davem@davemloft.net, devicetree@vger.kernel.org, linux-doc@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 06, 2021 at 09:03:27AM -0700, Guenter Roeck wrote:
-> On Mon, Mar 15, 2021 at 06:54:22PM -0700, Yury Norov wrote:
-> > Similarly to bitmap functions, users would benefit if we'll handle
-> > a case of small-size bitmaps that fit into a single word.
-> > 
-> > While here, move the find_last_bit() declaration to bitops/find.h
-> > where other find_*_bit() functions sit.
-> > 
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  include/asm-generic/bitops/find.h | 50 ++++++++++++++++++++++++++++---
-> >  include/linux/bitops.h            | 12 --------
-> >  lib/find_bit.c                    | 12 ++++----
-> >  3 files changed, 52 insertions(+), 22 deletions(-)
-> > 
-> > diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
-> > index 4148c74a1e4d..8d818b304869 100644
-> > --- a/include/asm-generic/bitops/find.h
-> > +++ b/include/asm-generic/bitops/find.h
-> > @@ -5,6 +5,9 @@
-> >  extern unsigned long _find_next_bit(const unsigned long *addr1,
-> >  		const unsigned long *addr2, unsigned long nbits,
-> >  		unsigned long start, unsigned long invert, unsigned long le);
-> > +extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
-> > +extern unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size);
-> > +extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long size);
-> >  
-> >  #ifndef find_next_bit
-> >  /**
-> > @@ -102,8 +105,17 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
-> >   * Returns the bit number of the first set bit.
-> >   * If no bits are set, returns @size.
-> >   */
-> > -extern unsigned long find_first_bit(const unsigned long *addr,
-> > -				    unsigned long size);
-> > +static inline
-> > +unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
-> > +{
-> > +	if (small_const_nbits(size)) {
-> > +		unsigned long val = *addr & BITS_FIRST(size - 1);
-> > +
-> > +		return val ? __ffs(val) : size;
-> 
-> This patch results in:
-> 
-> include/asm-generic/bitops/find.h: In function 'find_last_bit':
-> include/asm-generic/bitops/find.h:164:16: error: implicit declaration of function '__fls'; did you mean '__ffs'?
-> 
-> and:
-> 
-> ./include/asm-generic/bitops/__fls.h: At top level:
-> ./include/asm-generic/bitops/__fls.h:13:38: error: conflicting types for '__fls'
-> 
-> when building scripts/mod/devicetable-offsets.o.
-> 
-> Seen with h8300 builds.
-> 
-> Guenter
+Hi Hector,
 
-The patch is here:
+On Fri, 02 Apr 2021 10:05:39 +0100,
+Hector Martin <marcan@marcan.st> wrote:
+> 
+> This is the root interrupt controller used on Apple ARM SoCs such as the
+> M1. This irqchip driver performs multiple functions:
+> 
+> * Handles both IRQs and FIQs
+> 
+> * Drives the AIC peripheral itself (which handles IRQs)
+> 
+> * Dispatches FIQs to downstream hard-wired clients (currently the ARM
+>   timer).
+> 
+> * Implements a virtual IPI multiplexer to funnel multiple Linux IPIs
+>   into a single hardware IPI
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  MAINTAINERS                     |   2 +
+>  drivers/irqchip/Kconfig         |   8 +
+>  drivers/irqchip/Makefile        |   1 +
+>  drivers/irqchip/irq-apple-aic.c | 837 ++++++++++++++++++++++++++++++++
+>  include/linux/cpuhotplug.h      |   1 +
+>  5 files changed, 849 insertions(+)
+>  create mode 100644 drivers/irqchip/irq-apple-aic.c
 
-https://lkml.org/lkml/2021/4/1/1184
- 
-Yury
+[...]
+
+> +static int aic_irq_domain_translate(struct irq_domain *id,
+> +				    struct irq_fwspec *fwspec,
+> +				    unsigned long *hwirq,
+> +				    unsigned int *type)
+> +{
+> +	struct aic_irq_chip *ic = id->host_data;
+> +
+> +	if (fwspec->param_count != 3 || !is_of_node(fwspec->fwnode))
+> +		return -EINVAL;
+> +
+> +	switch (fwspec->param[0]) {
+> +	case AIC_IRQ:
+> +		if (fwspec->param[1] >= ic->nr_hw)
+> +			return -EINVAL;
+> +		*hwirq = fwspec->param[1];
+> +		break;
+> +	case AIC_FIQ:
+> +		if (fwspec->param[1] >= AIC_NR_FIQ)
+> +			return -EINVAL;
+> +		*hwirq = ic->nr_hw + fwspec->param[1];
+> +
+> +		/*
+> +		 * In EL1 the non-redirected registers are the guest's,
+> +		 * not EL2's, so remap the hwirqs to match.
+> +		 */
+> +		if (!is_kernel_in_hyp_mode()) {
+> +			switch (fwspec->param[1]) {
+> +			case AIC_TMR_GUEST_PHYS:
+> +				*hwirq = ic->nr_hw + AIC_TMR_HV_PHYS;
+> +				break;
+> +			case AIC_TMR_GUEST_VIRT:
+> +				*hwirq = ic->nr_hw + AIC_TMR_HV_VIRT;
+> +				break;
+> +			case AIC_TMR_HV_PHYS:
+> +			case AIC_TMR_HV_VIRT:
+> +				return -ENOENT;
+> +			default:
+> +				break;
+> +			}
+> +		}
+
+Urgh, this is nasty. You are internally remapping the hwirq from one
+timer to another in order to avoid accessing the enable register
+which happens to be an EL2 only register?
+
+The way we normally deal with this kind of things is by providing a
+different set of irq_chip callbacks. In this particular case, this
+would leave mask/unmask as empty stubs. Or you could move the FIQ
+handling to use handle_simple_irq(), because there isn't any callback
+that is actually applicable.
+
+It isn't a big deal for now, but that's something we should consider
+addressing in the future. With that in mind:
+
+Reviewed-by: Marc Zyngier <maz@kernel.org>
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
