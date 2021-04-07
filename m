@@ -2,162 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA249356B7F
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 13:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F3C356B9E
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 13:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244635AbhDGLqs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 07:46:48 -0400
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:33620 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234728AbhDGLqs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 07:46:48 -0400
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 137BkH4S014490;
-        Wed, 7 Apr 2021 20:46:17 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 137BkH4S014490
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1617795977;
-        bh=e90N5wkF1hteFP0jbF58SprpJVKj/n+S9wgTEG6K0FU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=0/7TaLTG1n5REF91X1AZOuKj23ztlPWXi/d4KOqPSn8CMB4/bu4RWfGmP6czoTmPF
-         t8Iq/BtgvvKa/kvEYw7RzS9wt2TEeC97wBXLHcj73Xp351QncwWQlI1dl9UveOp2wM
-         PDGOPdSNPCiBcKHQNhQXvElB+LsZAq0J8K9be5Vxd/s+sqUW1H7bHAz/ex00K7y9yc
-         pWqhfgO78jmUa0mSDtMZkB0/ZR/4TnlmS6h7SKW6MKx5w2/czrmOOvo53B30Val2AP
-         9sWxJARxEDyAWNQra2YrB2bP5nK9VBf0+v1hXBxvznovCQP0157jKE8ZOXOPOkERH/
-         6XgnBuUeG3IWg==
-X-Nifty-SrcIP: [209.85.214.178]
-Received: by mail-pl1-f178.google.com with SMTP id p10so4063117pld.0;
-        Wed, 07 Apr 2021 04:46:17 -0700 (PDT)
-X-Gm-Message-State: AOAM533UGs3G8zY/r6CMandWEeoZpG/0UGP0pQFi5pZDH/ZRRJce0zEU
-        hBT+f1X1xJ+WVciDPFMJHiF6Ql5P3jhNwNPaB1g=
-X-Google-Smtp-Source: ABdhPJwJoOhh0r/oUL4pdVvHWI3QqGMXW6MConrvV8ZSEojaWe52StwsenE49C8CUiAxSf0ixYjEthzutaEsSxsE9iU=
-X-Received: by 2002:a17:90a:1056:: with SMTP id y22mr2724939pjd.153.1617795976615;
- Wed, 07 Apr 2021 04:46:16 -0700 (PDT)
+        id S238645AbhDGL6W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 07:58:22 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:40761 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235156AbhDGL6W (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 07:58:22 -0400
+Received: from mail-ot1-f51.google.com ([209.85.210.51]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M8QJq-1lYUXD0Juq-004Qn1; Wed, 07 Apr 2021 13:58:11 +0200
+Received: by mail-ot1-f51.google.com with SMTP id 68-20020a9d0f4a0000b02901b663e6258dso17705658ott.13;
+        Wed, 07 Apr 2021 04:58:10 -0700 (PDT)
+X-Gm-Message-State: AOAM532P+LTvgiyg//oDpq268NEDNh6eSWKvORmDfUbh+aveAxW4hblo
+        3D+buRw9rzaCN8LVKgzBQ3uX9uB0RQlG6eOwJFs=
+X-Google-Smtp-Source: ABdhPJx6go5dv1rl+UzSOJd8wXt6Dn5ysS0pumma2IYLczj0nxb9z8e54FWCSruRNbRkAB1z2p2UWVLfOdOItXz14d4=
+X-Received: by 2002:a9d:316:: with SMTP id 22mr2634357otv.210.1617796689525;
+ Wed, 07 Apr 2021 04:58:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210407053419.449796-1-gregkh@linuxfoundation.org> <20210407053419.449796-21-gregkh@linuxfoundation.org>
-In-Reply-To: <20210407053419.449796-21-gregkh@linuxfoundation.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 7 Apr 2021 20:45:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASHEETPwBr1C6PwZwohH2QeSJtAZgAMwXHASw=dg3kCpA@mail.gmail.com>
-Message-ID: <CAK7LNASHEETPwBr1C6PwZwohH2QeSJtAZgAMwXHASw=dg3kCpA@mail.gmail.com>
-Subject: Re: [PATCH 20/20] kbuild: scripts/install.sh: update documentation
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+References: <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net>
+ <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net> <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
+ <YGNNCEAMSWbBU+hd@hirez.programming.kicks-ass.net> <20210330223514.GE1171117@lianli.shorne-pla.net>
+ <CAK8P3a0hj2pYr-CuNJkjO==RafZ=J+6kCo4HTWEwvvRXPcngJA@mail.gmail.com>
+ <CAJF2gTRxPMURTE3M5WMQ_0q1yZ6K8nraGsFjGLUmpG9nYS_hng@mail.gmail.com>
+ <20210406085626.GE3288043@lianli.shorne-pla.net> <CAK8P3a3Pf3TbGoVP7JP7gfPV-WDM8MHV_hdqSwNKKFDr1Sb3zQ@mail.gmail.com>
+ <YG2ZTSFMGrikYWuL@hirez.programming.kicks-ass.net>
+In-Reply-To: <YG2ZTSFMGrikYWuL@hirez.programming.kicks-ass.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 7 Apr 2021 13:57:53 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2E6JYwT7a1HUt=65v2cCJTTZm9mrW4Rxq=sXN4h9ObKg@mail.gmail.com>
+Message-ID: <CAK8P3a2E6JYwT7a1HUt=65v2cCJTTZm9mrW4Rxq=sXN4h9ObKg@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stafford Horne <shorne@gmail.com>, Guo Ren <guoren@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
         linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Anup Patel <anup@brainfault.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Q+LxeWOajDm9vRyjc77jrrc4X6RNkbQet1TKLaV84MYFveIGR8s
+ svnak3qoEbH/9QKBlQG6pjU7spxHmV/jDhvAKv46K9ejd0hDYOlwVTuGRl+U4aNtgypLKn2
+ K12mle/kdzWNvHe4FoZsiF7rqR7fHJnNYJCVOTlc2iLtL16r15Krrag9eiNM6nOAqQDzI++
+ f+HXJl6cnAcU2yYOx1Ubg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lqWdy+WePdg=:UQU7Rv1JA6KnhJgErRwsc3
+ aOyD+pa8lAxI9cXa/UvP2u9Ax2ISX6ZmFunvnsZUhsPTDSURia9TEeWQj9JkKyzrA3Nnq8GcX
+ wDb4Vk42Ua/y5wkVS/8yaJdocczZo+YAz2mDsXtak0YpT9zC9C3zXXpPO91WTch3WAW8hvsxB
+ lZvIojSb2IsC5e4Z3DV6x48qbfE4MrD+pfsgsb4s93KZG240mpkUQt31qC+0z9JHj5ePDKzQ7
+ f4q2XEpPoYOjzp6+Ok20K6ckpkr4rXzO2IzV1FxGIsyYWz5tys/fPX2R41//OtiE4f4eLiayE
+ FWCbnjZte/y82BXXh6qXnRYeBX75CccB+m5xx6Bp9gYfeeaYCsaMyR7v+p6aKFG+xj2j/grSG
+ KDboEdIzj/U5ziHLKnGOjpJmtVg0Fynz+vskWJIsCyu6eQscRGJ9OP1uHqhNSJO+851coMY9t
+ vULt2L0rcbCRwaQgF5OmwKp8XVT+DmvVcSoAAo4xtJZjXvZHyFGVrjxPy7Cb4xkbKxV6FC3p+
+ N0IVfYSjtRt4phfaLBSS2buujV+l93EGxuT+iXRJLI2s0+P+/GJHYICotfZDrYvPARdgudHXI
+ jcGQNoHLsL6loAOO2Eu+0SFT0wV0IYY6nK
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 7, 2021 at 2:35 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Wed, Apr 7, 2021 at 1:36 PM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> Add a proper SPDX line and document the install.sh file a lot better,
-> explaining exactly what it does, and update the copyright notice and
-> provide a better message about the lack of LILO being present or not as
-> really, no one should be using that anymore...
+> On Wed, Apr 07, 2021 at 10:42:50AM +0200, Arnd Bergmann wrote:
+> > Since there are really only a handful of instances in the kernel
+> > that use the cmpxchg() or xchg() on u8/u16 variables, it would seem
+> > best to just disallow those completely
 >
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  scripts/install.sh | 33 ++++++++++++++++++++++++++-------
->  1 file changed, 26 insertions(+), 7 deletions(-)
+> Not going to happen. xchg16 is optimal for qspinlock and if we replace
+> that with a cmpxchg loop on x86 we're regressing.
+
+I did not mean to remove the possibility of doing a 16-bit compare-exchange
+operation altogether, just removing it from the regular macros.
+
+We already do this for the 64-bit xchg64()/cmpxchg64(), which only some
+of the 32-bit architectures provide, so I think having an explicit
+xchg8()/xchg16()/cmpxchg8()/cmpxchg16() interface while tightening the
+type checking would be more consistent here.
+
+On any 32-bit architecture, cmpxchg()/xchg() macros then only have
+to deal with word-sized operations.
+
+> > Interestingly, the s390 version using __sync_val_compare_and_swap()
+> > seems to produce nice output on all architectures that have atomic
+> > instructions, with any supported compiler, to the point where I think
+> > we could just use that to replace most of the inline-asm versions except
+> > for arm64:
+> >
+> > #define cmpxchg(ptr, o, n)                                              \
+> > ({                                                                      \
+> >         __typeof__(*(ptr)) __o = (o);                                   \
+> >         __typeof__(*(ptr)) __n = (n);                                   \
+> >         (__typeof__(*(ptr))) __sync_val_compare_and_swap((ptr),__o,__n);\
+> > })
 >
-> diff --git a/scripts/install.sh b/scripts/install.sh
-> index 225b19bbbfa6..dd86fb9971e9 100644
-> --- a/scripts/install.sh
-> +++ b/scripts/install.sh
-> @@ -1,14 +1,14 @@
->  #!/bin/sh
-> -#
-> -# This file is subject to the terms and conditions of the GNU General Public
-> -# License.  See the file "COPYING" in the main directory of this archive
-> -# for more details.
-> +# SPDX-License-Identifier: GPL-2.0
->  #
->  # Copyright (C) 1995 by Linus Torvalds
-> +# Copyright (C) 2021 Greg Kroah-Hartman
->  #
->  # Adapted from code in arch/i386/boot/Makefile by H. Peter Anvin
-> +# Adapted from code in arch/i386/boot/install.sh by Russell King
+> It generates the LL/SC loop, but doesn't do sensible optimizations when
+> it's again used in a loop itself. That is, it generates a loop of a
+> loop, just like what you'd expect, which is sub-optimal for LL/SC.
 
-Perhaps, this line can go to
-"10/20 kbuild: arm: use common install script"  ?
+One thing that it does though is to generate an ll/sc loop for xchg16(),
+while mips, openrisc, xtensa and sparc64 currently open-code the
+nested loop in their respective xchg16() wrappers. I have not seen
+any case in which it produces object code that is worse than the
+architecture specific code does today, except for those that rely on
+runtime patching (i486+smp, arm64+lse).
 
-
-
-
-> +# Adapted from code in arch/arm/boot/install.sh by Stuart Menefy
-
-I think this line came from 18/20,
-but do we need to keep it?
-
-You removed arch/sh/boot/compressed/install.sh entirely.
-
-
-
->  #
-> -# "make install" script for i386 architecture
-> +# "make install" script for Linux to be used by all architectures.
->  #
->  # Arguments:
->  #   $1 - kernel version
-> @@ -16,6 +16,26 @@
->  #   $3 - kernel map file
->  #   $4 - default install path (blank if root directory)
->  #
-> +# Installs the built kernel image and map and symbol file in the specified
-> +# install location.  If no install path is selected, the files will be placed
-> +# in the root directory.
-> +#
-> +# The name of the kernel image will be "vmlinux-VERSION" for uncompressed
-> +# kernels or "vmlinuz-VERSION' for compressed kernels.
-> +#
-> +# The kernel map file will be named "System.map-VERSION"
-> +#
-> +# Note, not all architectures seem to like putting the VERSION number in the
-> +# file name, see below in the script for a list of those that do not.  For
-> +# those that do not the "-VERSION" will not be present in the file name.
-> +#
-> +# If there is currently a kernel image or kernel map file present with the name
-> +# of the file to be copied to the location, it will be renamed to contain a
-> +# ".old" suffix.
-> +#
-> +# If ~/bin/${INSTALLKERNEL} or /sbin/${INSTALLKERNEL} is executable, execution
-> +# will be passed to that program instead of this one to allow for distro or
-> +# system specific installation scripts to be used.
+> > Not how gcc's acquire/release behavior of __sync_val_compare_and_swap()
+> > relates to what the kernel wants here.
+> >
+> > The gcc documentation also recommends using the standard
+> > __atomic_compare_exchange_n() builtin instead, which would allow
+> > constructing release/acquire/relaxed versions as well, but I could not
+> > get it to produce equally good output. (possibly I was using it wrong)
 >
->  verify () {
->         if [ ! -f "$1" ]; then
-> @@ -45,7 +65,6 @@ verify "$2"
->  verify "$3"
+> I'm scared to death of the C11 crap, the compiler will 'optimize' them
+> when it feels like it and use the C11 memory model rules for it, which
+> are not compatible with the kernel rules.
 >
->  # User may have a custom install script
-> -
->  if [ -x ~/bin/"${INSTALLKERNEL}" ]; then exec ~/bin/"${INSTALLKERNEL}" "$@"; fi
->  if [ -x /sbin/"${INSTALLKERNEL}" ]; then exec /sbin/"${INSTALLKERNEL}" "$@"; fi
->
-> @@ -111,7 +130,7 @@ case "${ARCH}" in
->                 elif [ -x /etc/lilo/install ]; then
->                         /etc/lilo/install
->                 else
-> -                       echo "Cannot find LILO."
-> +                       echo "Cannot find LILO, ensure your bootloader knows of the new kernel image."
+> But the same thing applies, it won't do the right thing for composites.
 
+Makes sense. As I said, I could not even get it to produce optimal code
+for the simple case.
 
-Since you soften the message, I guess this is not a warning message.
-I assume it is intentional to put it in stdout instead of stderr.
-
-
->                 fi
->                 ;;
->  esac
-> --
-> 2.31.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+         Arnd
