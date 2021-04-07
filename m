@@ -2,138 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACE535752B
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 21:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433D335759C
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 22:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347438AbhDGTu7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 15:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        id S1349258AbhDGUNM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 16:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345736AbhDGTu7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 15:50:59 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B60C06175F;
-        Wed,  7 Apr 2021 12:50:49 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id i81so19971018oif.6;
-        Wed, 07 Apr 2021 12:50:49 -0700 (PDT)
+        with ESMTP id S1349257AbhDGUNM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 16:13:12 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FDAC06175F;
+        Wed,  7 Apr 2021 13:13:01 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y16so135811pfc.5;
+        Wed, 07 Apr 2021 13:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/6KYvi3qxRc6jQvr4Dp41laAk9y6iyvnOJ43zRUQVDs=;
-        b=uMkSxAToTLC2pzNL2A1x2wHmlIPTWtxcS1voRqMd4Wk2cE46uuQ7CmmXoD0JOuyqs3
-         j/r0v8HGBIUbdx9KJhzFTPBgwxULt9abG2boBigiWj6wq7Y5a2g+MTn9lwCslBJAFSSR
-         QtSYtOj8NU2fJW44APqVse3qTz83MbIraafH5x/GUZ/N7W6mgTWaj9EmmwSXDyFBkxwN
-         2JEKRMuJjRTE31eCYpYtlsO3t77N0npLqjK3Tf0enfqNZnvYdL/JJMlqo9upiPJAgcCS
-         iFDueF1/k/mFno3kVcSmYVIkS1rnmhCagU6n7O5wZVkMTnDidjrh8Zv2mk9ZwPvvTaAp
-         1uvg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dwldfrHGB7cvjNDHe6gxp+OQ0DSzEe0anuIQnT5lIYc=;
+        b=dKW4tyxbGX73iHxH5Iha60EvcjCvKI+5hrpqwPPcbjELczGr/kzgfdsnLJJsWtOJbP
+         ubOwwaB3iZb/RBJ+1QPkWGQAjFPjPBqh2IboNE1nH7H1pZZqyeSqspXh1PeeRkVlyVq3
+         D+oq7t34NOHRn9OQqu4dUPDeY2QjjFesL1gh9WM+knJrz1i5ZQMIlvyZpNZOQKqZbOKS
+         4CB8O8zOE9mVX0eyokxf96eDPzy8oTdAAN584lU799CDSvkBRtjLRtC/rvSTel9pIKWP
+         gshTMF9nTcU8N6w8UNgn+aG83qEZcXRIQj51bqqxl3MvzOMunlFLxakjAhVMSVBe674a
+         jRAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/6KYvi3qxRc6jQvr4Dp41laAk9y6iyvnOJ43zRUQVDs=;
-        b=Bj8B18w68Q6T54NCsLItGyXCqC1yAknCwVdg/gEypiqePd5K04v1F9t2VQY62e1MFS
-         ZxX/bclL2aCLsuY+T5A4uDnkStQH9MDmIsGVBJsiCepbLLZFuz1tGEOf/53HtFZOJif7
-         2E2R5rMbRUIZeucRWBZGFx4BOKiBmHHMdodz+bFB5ekSA1qvRBwZ8UEz9lFNMQLtqHFk
-         IJrEGrRpR6Q6k6oB+qUO3JB6QSZa2kcdpe8piKh9e2WhmJeqCsKAIx8WaIDLcXc1rZvT
-         Q1l2DbpqDgotTrl3TQsR/SJKbOksVqjCQuhZdKa8IQAkgdYAUHZtGljBCaRAsuSggLJ2
-         44qQ==
-X-Gm-Message-State: AOAM531XSMNxlGmG0ASA2BSB1qoMClB/18j3poEQRFSKby3BH6M31rNK
-        Lq3BWfaSA8CjYxcaOYNJwXG7juHIi86fxfMv+Sg=
-X-Google-Smtp-Source: ABdhPJwgDlWh7b9fwq5CxJcqk+iLb58LoK/PouPKlTof9Xft/P6tcdH2xc6ZBnvV9eIhMlUmggxqiokqoy1vOC0BVj8=
-X-Received: by 2002:a05:6808:1cb:: with SMTP id x11mr3375444oic.89.1617825048444;
- Wed, 07 Apr 2021 12:50:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <1616868399-82848-4-git-send-email-guoren@kernel.org>
- <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net> <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
- <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net> <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
- <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net> <CAJF2gTS4jexKsSiXBY=5rz53LjcLUZ1K4pxjYJDVQCWx_8JTuA@mail.gmail.com>
- <YGwKpmPkn5xIxIyx@hirez.programming.kicks-ass.net> <20210407094224.GA3393992@infradead.org>
- <CAHB2gtROGuoNzv5f9QrhWX=3ZtZmUM=SAjYhKqP7dTiTTQwkqA@mail.gmail.com> <YG3XDnNc+GaW1Tz4@hirez.programming.kicks-ass.net>
-In-Reply-To: <YG3XDnNc+GaW1Tz4@hirez.programming.kicks-ass.net>
-From:   =?UTF-8?Q?Christoph_M=C3=BCllner?= <christophm30@gmail.com>
-Date:   Wed, 7 Apr 2021 21:50:37 +0200
-Message-ID: <CAHB2gtRGMizmWsv+Quf1jA=mzj6-jD5Rgz-XX2jQuR4dn3oDgQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dwldfrHGB7cvjNDHe6gxp+OQ0DSzEe0anuIQnT5lIYc=;
+        b=rXerty21UGmpdCTPjnHq5rg76oOHvDDEyFJL1khsUyGRbvZeSDVdY5dzOhNdrM2Om8
+         VkyHV2tS+1jS7mRmPcVAzULtI+vfypUy7acOl1qwHvOzSjUuPK4Xv/l8nmLjfbfvblmR
+         W6YA2LUNl6vyqVLJYPO4ntfczXIfVgKSKYiQ0OSSo23zZO+QaCtW1ZlHzsdxApDcGfzJ
+         xK1lW/QR5Jt4wE3ARF4KlVqqxqfKPXLcvpJMbiJ7u4VwVJa6CCojDtj3CViPO6+g3DEG
+         yO9QcoVJg/w2I9dU+IiXi4RSDxPBHeTqDuh9n6laLY/UCbcm1TSUGMUiqUpGFQ+YuY4D
+         rWDg==
+X-Gm-Message-State: AOAM533JmvcVa4xtOni6+me2ZLjO1ov8C3oFKJPiMJwoU/M9fBfIF9/t
+        ZVW/sIPL5PS1j98PdUKq5V8=
+X-Google-Smtp-Source: ABdhPJx1TzjDHM8SCpdazwwikZp8MB63xmALxAEXVlHdCjBoBVsMzPPllM88y4Piph/rcIdj06SGPw==
+X-Received: by 2002:a65:610f:: with SMTP id z15mr4931593pgu.360.1617826380553;
+        Wed, 07 Apr 2021 13:13:00 -0700 (PDT)
+Received: from localhost (g191.124-44-145.ppp.wakwak.ne.jp. [124.44.145.191])
+        by smtp.gmail.com with ESMTPSA id m1sm5878421pjk.24.2021.04.07.13.12.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Apr 2021 13:12:59 -0700 (PDT)
+Date:   Thu, 8 Apr 2021 05:12:58 +0900
+From:   Stafford Horne <shorne@gmail.com>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Christoph Hellwig <hch@infradead.org>, Guo Ren <guoren@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
+Cc:     Boqun Feng <boqun.feng@gmail.com>, guoren@kernel.org,
+        linux-arch@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         Guo Ren <guoren@linux.alibaba.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        openrisc@lists.librecores.org, Anup Patel <anup@brainfault.org>,
+        sparclinux@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [OpenRISC] [PATCH v6 1/9] locking/qspinlock: Add
+ ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+Message-ID: <20210407201258.GH3288043@lianli.shorne-pla.net>
+References: <1617201040-83905-1-git-send-email-guoren@kernel.org>
+ <1617201040-83905-2-git-send-email-guoren@kernel.org>
+ <YGyRrBjomDCPOBUd@boqun-archlinux>
+ <20210406235208.GG3288043@lianli.shorne-pla.net>
+ <YG1/xRgWlLHD4j/8@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YG1/xRgWlLHD4j/8@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 7, 2021 at 6:00 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, Apr 07, 2021 at 11:47:49AM +0200, Peter Zijlstra wrote:
+> On Wed, Apr 07, 2021 at 08:52:08AM +0900, Stafford Horne wrote:
+> > Why doesn't RISC-V add the xchg16 emulation code similar to OpenRISC?  For
+> > OpenRISC we added xchg16 and xchg8 emulation code to enable qspinlocks.  So
+> > one thought is with CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32=y, can we remove our
+> > xchg16/xchg8 emulation code?
+> 
+> CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32 is guaranteed crap.
 >
-> On Wed, Apr 07, 2021 at 04:29:12PM +0200, Christoph M=C3=BCllner wrote:
-> > RISC-V defines LR/SC loops consisting of up to 16 instructions as
-> > constrained LR/SC loops.  Such constrained LR/SC loops provide the
-> > required forward guarantees, that are expected (similar to what other
-> > architectures, like AArch64, have).
->
-> The text quoted by others didn't seem to say such a thing, but whatever.
+> All the architectures that have wanted it are RISC style LL/SC archs,
+> and for them a cmpxchg loop is a daft thing to do, since it reduces the
+> chance of it behaving sanely.
+> 
+> Why would we provide something that's known to be suboptimal? If an
+> architecture chooses to not care about determinism and or fwd progress,
+> then that's their choice. But not one, I feel, we should encourage.
 
-The RISC-V unpriv spec is public can be found here:
-https://riscv.org/technical/specifications/
-Version 20191213 discusses LR/SC-loops in section 8.3 (page 51).
-So in case you are interested in the exact wording, you can find it there.
+Thanks, this is the response I was hoping my comment would provoke.
 
-> > What RISC-V does not have is sub-word atomics and if required, we
-> > would have to implement them as LL/SC sequences. And yes, using atomic
-> > instructions is preferred over using LL/SC,
->
-> (psudo asm, can't be bothered to figure out the actual syntax)
->
->         # setup r_and_mask, r_or_mask
->
-> .L1
->         LL r, [word]
->         AND r, r, r_and_mask
->         OR r, r, r_or_mask
->         SC r, [word]
->         JNE .L1
+So not enabling CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32 for architectures
+unless they really want it should be the way.
 
-I fully agree with this.
-I've implemented a patch for that two weeks ago using the following helper:
-
-+/*
-+ * Mask and set given bits at a given address atomically.
-+ * The masked old value will be returned.
-+ */
-+static inline u32 atomic_mask_and_set(u32* p, u32 mask, u32 val)
-+{
-+       u32 ret, tmp;
-+       __asm__ __volatile__ (
-+               "0:     lr.w %0, %2\n"
-+               "       and  %0, %0, %3\n"
-+               "       or   %1, %0, %4\n"
-+               "       sc.w %1, %1, %2\n"
-+               "       bnez %1, 0b\n"
-+               : "+&r"(ret), "=3D&r" (tmp), "+A"(*p)
-+               : "r" (mask), "rJ"(val)
-+               : "memory");
-+       return ret;
-+}
-
-However, Guo pushed out a new patchset in between and I decided to not cont=
-inue
-my approach to not undermine his approach.
-
-I will sync up with Guo to provide a common patchset.
-
-Thanks,
-Christoph
-
-> is what you need for LL/SC based xchg16, that's less than 16
-> instructions. If RISC-V guarantees fwd progress on that, good, write it
-> like that and lets end this thread.
->
-> The fact that this is apparently hard, is not good.
+-Stafford
