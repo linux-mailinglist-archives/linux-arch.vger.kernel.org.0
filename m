@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0D2357122
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 17:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1528357126
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 17:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236125AbhDGPze (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 11:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S235675AbhDGP4E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 11:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbhDGPze (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 11:55:34 -0400
+        with ESMTP id S232716AbhDGP4E (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 11:56:04 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E3FC061756;
-        Wed,  7 Apr 2021 08:55:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB81C061756;
+        Wed,  7 Apr 2021 08:55:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
         Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
         Sender:Reply-To:Content-ID:Content-Description;
-        bh=a8elwdZOsCHEPMraxac9e3Y9q00OjQSrAqqfC563Li0=; b=hT6rnPygmAOYuDBJ32gkAH24DN
-        y0EskBQYVhmESQygX/JL1U9CFVN+vrw/X7f9JTPcPCgdQ0LfUq9HawJDre8t8SVigUPAP7gB/glVm
-        qgAIylcHxk4Si+FR+ujhExsOgHLe7mhsLbe5p7LaCwVlflxb5He+EL7JVv1UnjRMWP6inKBD5KMwv
-        nu0686GQIB6TMS465yR1qCNjO7osE7Oz1r2O1wVhf1N2AdhYQEaUzwHGexje1/o1iKA3DErFp/mQM
-        fUWkDL41gAFBEkN8r5Uj8W9Nj8cxy31EKCUCk8SAm9oHb9jRFGbmZMBzzEb00QQllAZzoElXkIyXB
-        1r8acCwQ==;
+        bh=ZN4QPdG1dWY6PBo4DSX5jrwf0CE9CsAs0+P/fZZM2Q4=; b=v56zcA69Axw8XFUBNIHFOZoenq
+        iUwADmybOT9cRYlkoTELmY4GiYo9Kmzl1EZ678sgaqNY87YCrmckChlCNEv7eE4zYmyUzLAvrhY3W
+        qPFqCtxoQn11hJvCjtdgYsSdfkm3ty/AsejW0/O4m6CZ9gT9vCRtU4OURHA0vqk7QEvzxsprnKH6D
+        6b8mLKd42nleucfHxTd22W1tZhXpty0Ct5NjmKw4ggQcRug1NLYPcbIfEqqojKra0hTXt8+J1Dvjf
+        Uus5cbh2eupcBfyVoSkwl7KJoyalB8DWrAKz2Z5741s+TxaQ3BUgDlk0wRRo2/FX4aDIxsD2w2+me
+        KBb63rWw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lUASU-00Ehp1-Ej; Wed, 07 Apr 2021 15:51:45 +0000
+        id 1lUATs-00EhxJ-PW; Wed, 07 Apr 2021 15:52:43 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 994483015D3;
-        Wed,  7 Apr 2021 17:51:07 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6F1AF300219;
+        Wed,  7 Apr 2021 17:52:36 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 42E382BF09268; Wed,  7 Apr 2021 17:51:07 +0200 (CEST)
-Date:   Wed, 7 Apr 2021 17:51:07 +0200
+        id 61DB52BF09264; Wed,  7 Apr 2021 17:52:36 +0200 (CEST)
+Date:   Wed, 7 Apr 2021 17:52:36 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Christoph =?iso-8859-1?Q?M=FCllner?= <christophm30@gmail.com>
 Cc:     Christoph Hellwig <hch@infradead.org>, Guo Ren <guoren@kernel.org>,
@@ -49,7 +49,7 @@ Cc:     Christoph Hellwig <hch@infradead.org>, Guo Ren <guoren@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
 Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
  ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Message-ID: <YG3U677P9QKqFGMY@hirez.programming.kicks-ass.net>
+Message-ID: <YG3VRIUjjaK+pfES@hirez.programming.kicks-ass.net>
 References: <1616868399-82848-4-git-send-email-guoren@kernel.org>
  <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
  <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
@@ -70,11 +70,9 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Wed, Apr 07, 2021 at 04:29:12PM +0200, Christoph Müllner wrote:
-> Further, it is not the case that RISC-V has no guarantees at all.
-> It just does not provide a forward progress guarantee for a
-> synchronization implementation,
-> that writes in an endless loop to a memory location while trying to
-> complete an LL/SC
-> loop on the same memory location at the same time.
+> The comparison with sparc64 is not applicable, as sparc64 does not
+> have LL/SC instructions.
 
-Userspace can DoS the kernel that way, see futex.
+Sparc64 has CAS, without hardware fwd progress. It has to do software
+backoff for failed CAS in order to do software fwd progress.
+
