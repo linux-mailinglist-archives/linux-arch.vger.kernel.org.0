@@ -2,137 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B5E356D36
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 15:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777B8356D46
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 15:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbhDGNXM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 09:23:12 -0400
-Received: from conssluserg-05.nifty.com ([210.131.2.90]:17968 "EHLO
-        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233053AbhDGNXK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 09:23:10 -0400
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 137DMab6004819;
-        Wed, 7 Apr 2021 22:22:36 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 137DMab6004819
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1617801756;
-        bh=Usra8KcBYgGZoqiKSYtDpYF/LC0cwPSDqgPA0XLdu0U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kf/VzT3qMbMcvWtm2f4X35CJ2YRHwIRNAR+wfKuAd2HPMTg2UqpLg+3vczEjyvQ17
-         lC03gDJdWN7SPtrw2xBkJKVfnThUHZxSmHo1O701c7vh2e55L6YXdUiCAjYW1K7WxZ
-         08Ld4ItN6MzcVqe13Rp2CdP+WqL05VNEyrcVAWZWteR++jCWtgMrrTd3vdBTNeKH+G
-         lRumuXWlo3Du9++4rN2GAN/Z9SC4wgbRVLVq4Q2TzrfEniUmnx1UqK2XmoC7ThkuA/
-         jkz+56D3P0qntBmoybHbd/oVYydmR/0k5BW+PU2iCvneRLzkZ0nub4y8oVH1PqcZP9
-         a5yfGYOLypjmg==
-X-Nifty-SrcIP: [209.85.215.172]
-Received: by mail-pg1-f172.google.com with SMTP id t22so5903083pgu.0;
-        Wed, 07 Apr 2021 06:22:36 -0700 (PDT)
-X-Gm-Message-State: AOAM532Qql37xHrpMq5+gApKeaa5P59Zgyln4dYYtPbek+m9U2JNpwLQ
-        SD6WuSlFBrzHrlu3KM5RVbSXcbTDeElMuXrh5qI=
-X-Google-Smtp-Source: ABdhPJwk9qS0BMUYh5/qdYqoHXSyq4h3xksMbErCbs90p3+A591ceXgm4FOBcMs5kvsm1Qs6lHOiJttPXHcA8V+G7cw=
-X-Received: by 2002:a65:428b:: with SMTP id j11mr3299165pgp.47.1617801755787;
- Wed, 07 Apr 2021 06:22:35 -0700 (PDT)
+        id S241490AbhDGN2K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 09:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233670AbhDGN2J (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 09:28:09 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095A9C061756;
+        Wed,  7 Apr 2021 06:27:59 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id ay2so9343905plb.3;
+        Wed, 07 Apr 2021 06:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gPk0txwiQH41tkl6+Ko80XOzDT7sy08dTJ8kEynQ9CU=;
+        b=nYAHgMcQiiw77htOI1QpiWyBzhidrkQ6G/F/MbfbkXN0dZFZb6ZYWfuCB6iIcTiWs9
+         0uSxShhivoJZAh/okUk5qPjVNXwLoDH45RCT8tIfW1A9H0Bw6mV/AjcMSuLTjUe5KTs5
+         2FcILVsdH7wuD2/e7xivF2L1ril9u3T07mqi6iCGlZR7dOV7uKt8mEMReWpjFAt/IxBD
+         zx17dyOY9Pyttf13SAnQ8z3gOJy5NmiAUoad8owKvkWaVxq2oYmQMf5vUHdyJzcBoIhV
+         6nC56N3ajJkJZQ7hDNIlI2YRfcVHgmPnuv/anFMd+M0g09QYzZkiKT16hXM4vlZPX0eC
+         dCAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gPk0txwiQH41tkl6+Ko80XOzDT7sy08dTJ8kEynQ9CU=;
+        b=W2H+Sld3oNqySvkL4CJKLijSzSUv3zPlpWB3kw31lAl4dNilJPoj74gljMUkY4haBy
+         DjnAosmN7fgfPNNXxy+yqUwMDB/deZ3nLl3fqwrI3sMV+sslnwv46FS34kqkumEMvCDE
+         rbVeyyoVBr0duzdCrRo4xQOK/PNc2FNVI99iA/PlmRRF68/JxU19Ke69NF+eDUGpTGV5
+         9XuDydKbtidhAZ96XL8vDNPr48bqX3mf1kSey6MHJX2GR1uDW29jfNw3pRu141jZEAnF
+         lfm+Nb/3WP8r63fT1n43W2rXiRamOnv67Jrkmwd5vw237qw/fh+QAghmlVXN6KkTODhN
+         5C+g==
+X-Gm-Message-State: AOAM530rRlLbj33qCQ353P1gsRbCB+yFcqPwdAa+fBX9rTaq4U26bpQv
+        TMBSrH1iNvn8KkVbV3IYoQ7c+ebISqxPYVt26mg=
+X-Google-Smtp-Source: ABdhPJxINTgdzGxgxpyx7J3bDDMYfqiVzgSvvr9cLG3u0qIDaQdOp29ZfGUSOS2zQVfphaDqdijzJ2sm00mrrmGaTqM=
+X-Received: by 2002:a17:90a:5407:: with SMTP id z7mr3379125pjh.228.1617802078532;
+ Wed, 07 Apr 2021 06:27:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210407053419.449796-1-gregkh@linuxfoundation.org>
- <20210407053419.449796-8-gregkh@linuxfoundation.org> <CAK7LNASbZ4hY8ypd8TegnRpxQUM-HB84n2VHUmu=k_RxwCnpXg@mail.gmail.com>
- <YG2tvk010wRkIVSX@kroah.com>
-In-Reply-To: <YG2tvk010wRkIVSX@kroah.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 7 Apr 2021 22:21:58 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARewRB3JENY1vXecz23W+XtOuO4MP4MNTPUx1KKRLKQGA@mail.gmail.com>
-Message-ID: <CAK7LNARewRB3JENY1vXecz23W+XtOuO4MP4MNTPUx1KKRLKQGA@mail.gmail.com>
-Subject: Re: [PATCH 07/20] kbuild: scripts/install.sh: allow for the version number
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+References: <20210402090542.131194-1-marcan@marcan.st> <20210402090542.131194-12-marcan@marcan.st>
+In-Reply-To: <20210402090542.131194-12-marcan@marcan.st>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 7 Apr 2021 16:27:42 +0300
+Message-ID: <CAHp75Vcghw6=05vbhX5J8sHoo78JMoq5z4w9__XcocrtRVjF3g@mail.gmail.com>
+Subject: Re: [PATCH v4 11/18] asm-generic/io.h: implement pci_remap_cfgspace
+ using ioremap_np
+To:     Hector Martin <marcan@marcan.st>
+Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
+        Will Deacon <will@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 7, 2021 at 10:04 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Fri, Apr 2, 2021 at 12:07 PM Hector Martin <marcan@marcan.st> wrote:
 >
-> On Wed, Apr 07, 2021 at 08:05:23PM +0900, Masahiro Yamada wrote:
-> > On Wed, Apr 7, 2021 at 2:35 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > Some architectures put the version number by default at the end of the
-> > > files that are copied, so add support for this to be set by arch type.
-> > >
-> > > Odds are one day we should change this for x86, but let's not break
-> > > anyone's systems just yet.
-> > >
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > ---
-> > >  scripts/install.sh | 15 +++++++++++++--
-> > >  1 file changed, 13 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/scripts/install.sh b/scripts/install.sh
-> > > index 72dc4c81013e..934619f81119 100644
-> > > --- a/scripts/install.sh
-> > > +++ b/scripts/install.sh
-> > > @@ -60,8 +60,19 @@ else
-> > >         base=vmlinux
-> > >  fi
-> > >
-> > > -install "$2" "$4"/"$base"
-> > > -install "$3" "$4"/System.map
-> > > +# Some architectures name their files based on version number, and
-> > > +# others do not.  Call out the ones that do not to make it obvious.
-> > > +case "${ARCH}" in
-> > > +       x86)
-> > > +               version=""
-> > > +               ;;
-> > > +       *)
-> > > +               version="-${1}"
-> > > +               ;;
-> > > +esac
-> > > +
-> > > +install "$2" "$4"/"$base""$version"
-> >
-> >
-> > Too many quotes are eye sore.
-> >
-> >
-> >     install "$2" "$4/$base$version"
-> >
-> > looks cleaner in my opinion.
-> >
-> > Shell correctly understands the end of each
-> > variable because a slash or a dollar
-> > cannot be a part of a variable name.
+> Now that we have ioremap_np(), we can make pci_remap_cfgspace() default
+> to it, falling back to ioremap() on platforms where it is not available.
 >
-> Good idea, I usually just default to "quote everything!" when dealing
-> with bash variables.  I'll fix this up.
->
-> Oh, any preference for "$2" vs. "${2}"?  I don't care either way but I
-> couldn't tell what is the normal kernel style these days.
+> Remove the arm64 implementation, since that is now redundant. Future
+> cleanups should be able to do the same for other arches, and eventually
+> make the generic pci_remap_cfgspace() unconditional.
 
+...
 
-I do not see a well-defined coding style guideline
-for shell scripts.
+> +       void __iomem *ret = ioremap_np(offset, size);
+> +
+> +       if (!ret)
+> +               ret = ioremap(offset, size);
+> +
+> +       return ret;
 
-If you want to know my personal preference,
-I use "$2" without braces.
+Usually negative conditions are worse for cognitive functions of human beings.
+(On top of that some patterns are applied)
 
+I would rewrite above as
 
-Thanks.
+void __iomem *ret;
 
+ret = ioremap_np(offset, size);
+if (ret)
+  return ret;
 
->
-> thanks for all of the review, much appreciated!
-
-My pleasure.
-
->
-> greg k-h
-
-
+return ioremap(offset, size);
 
 -- 
-Best Regards
-Masahiro Yamada
+With Best Regards,
+Andy Shevchenko
