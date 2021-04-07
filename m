@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FDC35632B
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 07:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CFE35632F
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 07:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348739AbhDGFfG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 01:35:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38444 "EHLO mail.kernel.org"
+        id S1345257AbhDGFfL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 01:35:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38540 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348735AbhDGFfF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 7 Apr 2021 01:35:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CA765613C0;
-        Wed,  7 Apr 2021 05:34:55 +0000 (UTC)
+        id S1348757AbhDGFfI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 7 Apr 2021 01:35:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5097B613CE;
+        Wed,  7 Apr 2021 05:34:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617773696;
-        bh=uMP12yNGVObvgWoR/JQ2SMvn/xmE14YMI6OCZDUEt6c=;
+        s=korg; t=1617773698;
+        bh=0om60PPyB8AjfB1ITSmbocahrr+Wf0G845qHknWIX6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k+kNCQEr8yxoXksUAGeIg0cHAcz58x0yHwYpeE215KR+xLyQrlubB5SdoZhBEI4wF
-         pujGtCniuFqLvEs6MGZs79LcD/bn8rDgleSYIcWsnbIut0GzxUucX2m8P3a5Zbzn7N
-         tdoHchZFpyC0OEcJG5c+wrTUGJO85+aqpkOJwEwk=
+        b=C4jtnY4z2HLxWTcOOcTN6W4MiZyMAdia1o5HKoroUK2ACGE4CbbU/79glOZ/1jUVI
+         rnXUZdQAB42ebhhn1gXsAA/XlkBJLoZ+P2Pe3X/2SqXzH8lyX/jzgJkpk2HKsUjWrZ
+         1bpI49yIdPP34X/f8lbP9Anjpv6MvDiZuBBfX8o0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>
 Cc:     linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
-Subject: [PATCH 15/20] kbuild: parisc: use common install script
-Date:   Wed,  7 Apr 2021 07:34:14 +0200
-Message-Id: <20210407053419.449796-16-gregkh@linuxfoundation.org>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 16/20] kbuild: powerpc: use common install script
+Date:   Wed,  7 Apr 2021 07:34:15 +0200
+Message-Id: <20210407053419.449796-17-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210407053419.449796-1-gregkh@linuxfoundation.org>
 References: <20210407053419.449796-1-gregkh@linuxfoundation.org>
@@ -40,63 +40,50 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The common scripts/install.sh script will now work for parisc, all that
-is needed is to add the compressed image type to it.  So add that file
-type check, and then we can remove the two different copies of the
-parisc install.sh script that were only different by one line and have
-the arch call the common install script.
+The common scripts/install.sh script will now work for powerpc, all that
+is needed is to add it to the list of arches that do not put the version
+number in the installed file name.
 
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-parisc@vger.kernel.org
+After the kernel is installed, powerpc also likes to install a few
+random files, so provide the ability to do that as well.
+
+With that we can remove the powerpc-only version of the install script.
+
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: linuxppc-dev@lists.ozlabs.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/Makefile        |  4 +--
- arch/parisc/boot/Makefile   |  2 +-
- arch/parisc/boot/install.sh | 65 ------------------------------------
- arch/parisc/install.sh      | 66 -------------------------------------
- scripts/install.sh          |  1 +
- 5 files changed, 4 insertions(+), 134 deletions(-)
- delete mode 100644 arch/parisc/boot/install.sh
- delete mode 100644 arch/parisc/install.sh
+ arch/powerpc/boot/Makefile   |  4 +--
+ arch/powerpc/boot/install.sh | 55 ------------------------------------
+ scripts/install.sh           | 14 ++++++++-
+ 3 files changed, 15 insertions(+), 58 deletions(-)
+ delete mode 100644 arch/powerpc/boot/install.sh
 
-diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
-index 7d9f71aa829a..296d8ab8e2aa 100644
---- a/arch/parisc/Makefile
-+++ b/arch/parisc/Makefile
-@@ -164,10 +164,10 @@ vmlinuz: vmlinux
- endif
+diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
+index 2b8da923ceca..bbfcbd33e0b7 100644
+--- a/arch/powerpc/boot/Makefile
++++ b/arch/powerpc/boot/Makefile
+@@ -442,11 +442,11 @@ $(obj)/zImage.initrd:	$(addprefix $(obj)/, $(initrd-y))
  
- install:
--	$(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
-+	$(CONFIG_SHELL) $(srctree)/scripts/install.sh \
- 			$(KERNELRELEASE) vmlinux System.map "$(INSTALL_PATH)"
- zinstall:
--	$(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
-+	$(CONFIG_SHELL) $(srctree)/scripts/install.sh \
- 			$(KERNELRELEASE) vmlinuz System.map "$(INSTALL_PATH)"
+ # Only install the vmlinux
+ install: $(CONFIGURE) $(addprefix $(obj)/, $(image-y))
+-	sh -x $(srctree)/$(src)/install.sh "$(KERNELRELEASE)" vmlinux System.map "$(INSTALL_PATH)"
++	sh -x $(srctree)/scripts/install.sh "$(KERNELRELEASE)" vmlinux System.map "$(INSTALL_PATH)"
  
- CLEAN_FILES	+= lifimage
-diff --git a/arch/parisc/boot/Makefile b/arch/parisc/boot/Makefile
-index 61f44142cfe1..ad2611929aee 100644
---- a/arch/parisc/boot/Makefile
-+++ b/arch/parisc/boot/Makefile
-@@ -17,5 +17,5 @@ $(obj)/compressed/vmlinux: FORCE
- 	$(Q)$(MAKE) $(build)=$(obj)/compressed $@
+ # Install the vmlinux and other built boot targets.
+ zInstall: $(CONFIGURE) $(addprefix $(obj)/, $(image-y))
+-	sh -x $(srctree)/$(src)/install.sh "$(KERNELRELEASE)" vmlinux System.map "$(INSTALL_PATH)" $^
++	sh -x $(srctree)/scripts/install.sh "$(KERNELRELEASE)" vmlinux System.map "$(INSTALL_PATH)" $^
  
- install: $(CONFIGURE) $(obj)/bzImage
--	sh -x  $(srctree)/$(obj)/install.sh $(KERNELRELEASE) $(obj)/bzImage \
-+	sh -x  $(srctree)/scripts/install.sh $(KERNELRELEASE) $(obj)/bzImage \
- 	      System.map "$(INSTALL_PATH)"
-diff --git a/arch/parisc/boot/install.sh b/arch/parisc/boot/install.sh
+ PHONY += install zInstall
+ 
+diff --git a/arch/powerpc/boot/install.sh b/arch/powerpc/boot/install.sh
 deleted file mode 100644
-index 8f7c365fad83..000000000000
---- a/arch/parisc/boot/install.sh
+index b6a256bc96ee..000000000000
+--- a/arch/powerpc/boot/install.sh
 +++ /dev/null
-@@ -1,65 +0,0 @@
+@@ -1,55 +0,0 @@
 -#!/bin/sh
--#
--# arch/parisc/install.sh, derived from arch/i386/boot/install.sh
 -#
 -# This file is subject to the terms and conditions of the GNU General Public
 -# License.  See the file "COPYING" in the main directory of this archive
@@ -104,145 +91,85 @@ index 8f7c365fad83..000000000000
 -#
 -# Copyright (C) 1995 by Linus Torvalds
 -#
--# Adapted from code in arch/i386/boot/Makefile by H. Peter Anvin
+-# Blatantly stolen from in arch/i386/boot/install.sh by Dave Hansen 
 -#
--# "make install" script for i386 architecture
--#
--# Arguments:
--#   $1 - kernel version
--#   $2 - kernel image file
--#   $3 - kernel map file
--#   $4 - default install path (blank if root directory)
--#
--
--verify () {
--	if [ ! -f "$1" ]; then
--		echo ""                                                   1>&2
--		echo " *** Missing file: $1"                              1>&2
--		echo ' *** You need to run "make" before "make install".' 1>&2
--		echo ""                                                   1>&2
--		exit 1
--	fi
--}
--
--# Make sure the files actually exist
--
--verify "$2"
--verify "$3"
--
--# User may have a custom install script
--
--if [ -n "${INSTALLKERNEL}" ]; then
--  if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
--  if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
--fi
--
--# Default install
--
--if [ "$(basename $2)" = "zImage" ]; then
--# Compressed install
--  echo "Installing compressed kernel"
--  base=vmlinuz
--else
--# Normal install
--  echo "Installing normal kernel"
--  base=vmlinux
--fi
--
--if [ -f $4/$base-$1 ]; then
--  mv $4/$base-$1 $4/$base-$1.old
--fi
--cat $2 > $4/$base-$1
--
--# Install system map file
--if [ -f $4/System.map-$1 ]; then
--  mv $4/System.map-$1 $4/System.map-$1.old
--fi
--cp $3 $4/System.map-$1
-diff --git a/arch/parisc/install.sh b/arch/parisc/install.sh
-deleted file mode 100644
-index 056d588befdd..000000000000
---- a/arch/parisc/install.sh
-+++ /dev/null
-@@ -1,66 +0,0 @@
--#!/bin/sh
--#
--# arch/parisc/install.sh, derived from arch/i386/boot/install.sh
--#
--# This file is subject to the terms and conditions of the GNU General Public
--# License.  See the file "COPYING" in the main directory of this archive
--# for more details.
--#
--# Copyright (C) 1995 by Linus Torvalds
--#
--# Adapted from code in arch/i386/boot/Makefile by H. Peter Anvin
--#
--# "make install" script for i386 architecture
+-# "make install" script for ppc64 architecture
 -#
 -# Arguments:
 -#   $1 - kernel version
 -#   $2 - kernel image file
 -#   $3 - kernel map file
 -#   $4 - default install path (blank if root directory)
+-#   $5 and more - kernel boot files; zImage*, uImage, cuImage.*, etc.
 -#
 -
--verify () {
--	if [ ! -f "$1" ]; then
--		echo ""                                                   1>&2
--		echo " *** Missing file: $1"                              1>&2
--		echo ' *** You need to run "make" before "make install".' 1>&2
--		echo ""                                                   1>&2
--		exit 1
--	fi
--}
--
--# Make sure the files actually exist
--
--verify "$2"
--verify "$3"
+-# Bail with error code if anything goes wrong
+-set -e
 -
 -# User may have a custom install script
 -
--if [ -n "${INSTALLKERNEL}" ]; then
--  if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
--  if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
--fi
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
 -
 -# Default install
 -
--if [ "$(basename $2)" = "vmlinuz" ]; then
--# Compressed install
--  echo "Installing compressed kernel"
--  base=vmlinuz
--else
--# Normal install
--  echo "Installing normal kernel"
--  base=vmlinux
+-# this should work for both the pSeries zImage and the iSeries vmlinux.sm
+-image_name=`basename $2`
+-
+-if [ -f $4/$image_name ]; then
+-	mv $4/$image_name $4/$image_name.old
 -fi
 -
--if [ -f $4/$base-$1 ]; then
--  mv $4/$base-$1 $4/$base-$1.old
+-if [ -f $4/System.map ]; then
+-	mv $4/System.map $4/System.old
 -fi
--cat $2 > $4/$base-$1
 -
--# Install system map file
--if [ -f $4/System.map-$1 ]; then
--  mv $4/System.map-$1 $4/System.map-$1.old
--fi
--cp $3 $4/System.map-$1
+-cat $2 > $4/$image_name
+-cp $3 $4/System.map
 -
+-# Copy all the bootable image files
+-path=$4
+-shift 4
+-while [ $# -ne 0 ]; do
+-	image_name=`basename $1`
+-	if [ -f $path/$image_name ]; then
+-		mv $path/$image_name $path/$image_name.old
+-	fi
+-	cat $1 > $path/$image_name
+-	shift
+-done;
 diff --git a/scripts/install.sh b/scripts/install.sh
-index 407ffa65062c..e0ffb95737d4 100644
+index e0ffb95737d4..67c0a5f74af2 100644
 --- a/scripts/install.sh
 +++ b/scripts/install.sh
-@@ -53,6 +53,7 @@ base=$(basename "$2")
- if [ "$base" = "bzImage" ] ||
-    [ "$base" = "Image.gz" ] ||
-    [ "$base" = "vmlinux.gz" ] ||
-+   [ "$base" = "vmlinuz" ] ||
-    [ "$base" = "zImage" ] ; then
- 	# Compressed install
- 	echo "Installing compressed kernel"
+@@ -67,7 +67,7 @@ fi
+ # Some architectures name their files based on version number, and
+ # others do not.  Call out the ones that do not to make it obvious.
+ case "${ARCH}" in
+-	ia64 | m68k | nios2 | x86)
++	ia64 | m68k | nios2 | powerpc | x86)
+ 		version=""
+ 		;;
+ 	*)
+@@ -93,6 +93,18 @@ case "${ARCH}" in
+ 			/usr/sbin/elilo
+ 		fi
+ 		;;
++	powerpc)
++		# powerpc installation can list other boot targets after the
++		# install path that should be copied to the correct location
++		path=$4
++		shift 4
++		while [ $# -ne 0 ]; do
++			image_name=$(basename "$1")
++			install "$1" "$path"/"$image_name"
++			shift
++		done;
++		sync
++		;;
+ 	x86)
+ 		if [ -x /sbin/lilo ]; then
+ 			/sbin/lilo
 -- 
 2.31.1
 
