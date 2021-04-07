@@ -2,131 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A998D356BAF
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 14:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9C7356BEB
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 14:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237783AbhDGMCf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 08:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235980AbhDGMCc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 08:02:32 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62DDC061756;
-        Wed,  7 Apr 2021 05:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kup8Tbsn6HZvUw+XmcObowlhon8SoekR6kQcOh9L/Zs=; b=mu6zWKT7AaQIXV1F84Hp8EjpXN
-        6xxMM+0ir0DMTl+JNLpG/M+JYnDvVckJakn7oJane/GjwqoNu3INzvnbPdsmQo1PFK/ymW49WxoQO
-        +3jHE0j5XphttjrQO2vQOsE1N4GrlMyXj42WVQ9eNu5Vfoc/xoCT6J7S+q8BMy6NHMrUHsYuiNn2W
-        VmqyX/zblz8tsohMY161KigzTo9bUzUoojQFoYNLmlc4SBM14ObfYzXvCUwZLVhxcqecyfYv/k5Y4
-        9KFmqEkmL8wjReOhatMZTtX4/csYE3F/vcapDwPYHORRGeR0V2wm3/FMUdYLikSrscUhM9ik64ouD
-        RszZf98A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lU6su-004vyE-Ks; Wed, 07 Apr 2021 12:02:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 225723001FB;
-        Wed,  7 Apr 2021 14:02:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 082A523D3AF84; Wed,  7 Apr 2021 14:02:12 +0200 (CEST)
-Date:   Wed, 7 Apr 2021 14:02:11 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Stafford Horne <shorne@gmail.com>, Guo Ren <guoren@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Anup Patel <anup@brainfault.org>
-Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
- ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Message-ID: <YG2fQ1tGDIMhyIHe@hirez.programming.kicks-ass.net>
-References: <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
- <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net>
- <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
- <YGNNCEAMSWbBU+hd@hirez.programming.kicks-ass.net>
- <20210330223514.GE1171117@lianli.shorne-pla.net>
- <CAK8P3a0hj2pYr-CuNJkjO==RafZ=J+6kCo4HTWEwvvRXPcngJA@mail.gmail.com>
- <CAJF2gTRxPMURTE3M5WMQ_0q1yZ6K8nraGsFjGLUmpG9nYS_hng@mail.gmail.com>
- <20210406085626.GE3288043@lianli.shorne-pla.net>
- <CAK8P3a3Pf3TbGoVP7JP7gfPV-WDM8MHV_hdqSwNKKFDr1Sb3zQ@mail.gmail.com>
- <YG2ZTSFMGrikYWuL@hirez.programming.kicks-ass.net>
+        id S244861AbhDGMQB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 08:16:01 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37276 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234542AbhDGMQA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 08:16:00 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 137C3gEp173757;
+        Wed, 7 Apr 2021 08:15:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=Lxj40dpOv+iFXbAWfhTZRnR8s3LKVpG47j3P4TYD2qI=;
+ b=hA46bv2ba54miGjwjf3xLKOB/OmN3p0nA7k/KDPqoUogpjCVTwBnfU0CWJXxq0FJQ0rz
+ wDpME3/Hl4YRW8Fp3L91X7sC4W4Fm/ZTnMYJ60/La80JlZi9pO6WfNw2C69DnSb+P2y7
+ VEYUYRTwdf7e9mh9SEZl6LwzX1PEZW1wts24KTmqiUb6bzVXthsjQdrgsK4NgfZDMxKo
+ RSoyGcDIuiLkNTwbOoPPAh1oy+mVowBpjzbHwK5DmKVysUIJfPyP2cVxTU8UXRjS635r
+ L/SEmf9TqUQ3tEmEJJ+YR3d0OSNZi2B4hdpVr/+PuDdjenGTLacSev+v5ihloP2zcJ03 EQ== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37rvpg7yyp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Apr 2021 08:15:46 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 137C7NEb023814;
+        Wed, 7 Apr 2021 12:15:44 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 37rvbw0ca7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Apr 2021 12:15:44 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 137CFfGL53412214
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Apr 2021 12:15:41 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E2F1AE05A;
+        Wed,  7 Apr 2021 12:15:41 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C2918AE057;
+        Wed,  7 Apr 2021 12:15:40 +0000 (GMT)
+Received: from osiris (unknown [9.171.27.208])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  7 Apr 2021 12:15:40 +0000 (GMT)
+Date:   Wed, 7 Apr 2021 14:15:39 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH 17/20] kbuild: s390: use common install script
+Message-ID: <YG2iawVO+fit6N5T@osiris>
+References: <20210407053419.449796-1-gregkh@linuxfoundation.org>
+ <20210407053419.449796-18-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YG2ZTSFMGrikYWuL@hirez.programming.kicks-ass.net>
+In-Reply-To: <20210407053419.449796-18-gregkh@linuxfoundation.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Pajna-vBjbwYhzfCxdFTnEuZTPVBAVFh
+X-Proofpoint-GUID: Pajna-vBjbwYhzfCxdFTnEuZTPVBAVFh
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-04-07_07:2021-04-06,2021-04-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=636 priorityscore=1501 clxscore=1011 malwarescore=0
+ suspectscore=0 bulkscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104070080
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 01:36:45PM +0200, Peter Zijlstra wrote:
-> On Wed, Apr 07, 2021 at 10:42:50AM +0200, Arnd Bergmann wrote:
-> > Since there are really only a handful of instances in the kernel
-> > that use the cmpxchg() or xchg() on u8/u16 variables, it would seem
-> > best to just disallow those completely 
+On Wed, Apr 07, 2021 at 07:34:16AM +0200, Greg Kroah-Hartman wrote:
+> The common scripts/install.sh script will now work for s390, no changes
+> needed.  So call that instead and delete the s390-only install script.
 > 
-> Not going to happen. xchg16 is optimal for qspinlock and if we replace
-> that with a cmpxchg loop on x86 we're regressing.
-> 
-> > Interestingly, the s390 version using __sync_val_compare_and_swap()
-> > seems to produce nice output on all architectures that have atomic
-> > instructions, with any supported compiler, to the point where I think
-> > we could just use that to replace most of the inline-asm versions except
-> > for arm64:
-> > 
-> > #define cmpxchg(ptr, o, n)                                              \
-> > ({                                                                      \
-> >         __typeof__(*(ptr)) __o = (o);                                   \
-> >         __typeof__(*(ptr)) __n = (n);                                   \
-> >         (__typeof__(*(ptr))) __sync_val_compare_and_swap((ptr),__o,__n);\
-> > })
-> 
-> It generates the LL/SC loop, but doesn't do sensible optimizations when
-> it's again used in a loop itself. That is, it generates a loop of a
-> loop, just like what you'd expect, which is sub-optimal for LL/SC.
-> 
-> > Not how gcc's acquire/release behavior of __sync_val_compare_and_swap()
-> > relates to what the kernel wants here.
-> > 
-> > The gcc documentation also recommends using the standard
-> > __atomic_compare_exchange_n() builtin instead, which would allow
-> > constructing release/acquire/relaxed versions as well, but I could not
-> > get it to produce equally good output. (possibly I was using it wrong)
-> 
-> I'm scared to death of the C11 crap, the compiler will 'optimize' them
-> when it feels like it and use the C11 memory model rules for it, which
-> are not compatible with the kernel rules.
-> 
-> But the same thing applies, it won't do the right thing for composites.
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  arch/s390/boot/Makefile   |  2 +-
+>  arch/s390/boot/install.sh | 30 ------------------------------
+>  2 files changed, 1 insertion(+), 31 deletions(-)
+>  delete mode 100644 arch/s390/boot/install.sh
 
-See the mess it makes:
-
-https://godbolt.org/z/r7d13d4Kf
-
-That should've been something like:
-
-
-__xadd:
-	mov r3, r0
-	dmb ish
-.L1:
-	ldrex r0, [r3]
-	adds r1, r0
-	strex ip, r0, [r3]
-	cmp ip, #0
-	bne .L1
-	dmb ish
-
-
-Which I'll argue has stronger guarantees than the double loop. I'm
-pretty sure branches can release the lock on some archs (Alpha is known
-to do this).
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
