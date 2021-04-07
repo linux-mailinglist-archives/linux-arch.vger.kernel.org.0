@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E3F356325
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 07:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0457E356341
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 07:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348719AbhDGFfE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 01:35:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38418 "EHLO mail.kernel.org"
+        id S1345295AbhDGFfa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 01:35:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38858 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345238AbhDGFfE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 7 Apr 2021 01:35:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 98CEC613CE;
-        Wed,  7 Apr 2021 05:34:53 +0000 (UTC)
+        id S1348785AbhDGFfV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 7 Apr 2021 01:35:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1BB7E613CE;
+        Wed,  7 Apr 2021 05:35:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617773694;
-        bh=yzTHByr3GvboIW/T6xufocsK6BWzHcPe3Ttz3XpWwHw=;
+        s=korg; t=1617773712;
+        bh=ceCRkUFPQ18/GAzGPcuYnwEBnMTGiXa4tglmN9EQyEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q2v8znZRcentw4aDHVudeeDQ/PA3S8rVznRDTSOlpd+Z+N5RX14c8NJkCp6RxqaRX
-         tHlK9Xuu5BXh93xQMg1XF8tfkCxs6WiBjNLBOr/ML8ScWSILeZxioURieZH9XApQuZ
-         zRGEnxLoKQcU/2n6F8/c0HMu3d3pKEB7qKHNND8E=
+        b=JGy8Sq0s+WIxeUAsWcmLiv4eMjH+0Q7J/MM/NuOMS/Tm4E8WoopeoLQ+SX/a/pkWq
+         xj/JL0qHd0yhUQcyqjroSTIjSFDraftoHtZWoW6aPpeL9lr2IRSrcB15I3xLJ45Yns
+         3q66iRsPQC8A0VwqF0uGZZbBBAS1G272878xIABM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>
 Cc:     linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 06/20] kbuild: scripts/install.sh: handle compressed/uncompressed kernel images
-Date:   Wed,  7 Apr 2021 07:34:05 +0200
-Message-Id: <20210407053419.449796-7-gregkh@linuxfoundation.org>
+Subject: [PATCH 07/20] kbuild: scripts/install.sh: allow for the version number
+Date:   Wed,  7 Apr 2021 07:34:06 +0200
+Message-Id: <20210407053419.449796-8-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210407053419.449796-1-gregkh@linuxfoundation.org>
 References: <20210407053419.449796-1-gregkh@linuxfoundation.org>
@@ -38,44 +38,43 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-For x86, the default kernel image is compressed, but other architectures
-allowed both compressed and uncompressed kernel images to be built.  Add
-a test to detect which one this is, and either name the output file
-"vmlinuz" for a compressed image, or "vmlinux" for an uncompressed
-image.
+Some architectures put the version number by default at the end of the
+files that are copied, so add support for this to be set by arch type.
 
-For x86 this change is a no-op, but other architectures depend on this.
+Odds are one day we should change this for x86, but let's not break
+anyone's systems just yet.
 
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/install.sh | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ scripts/install.sh | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/install.sh b/scripts/install.sh
-index 2adcb993efa2..72dc4c81013e 100644
+index 72dc4c81013e..934619f81119 100644
 --- a/scripts/install.sh
 +++ b/scripts/install.sh
-@@ -49,8 +49,18 @@ verify "$3"
- if [ -x ~/bin/"${INSTALLKERNEL}" ]; then exec ~/bin/"${INSTALLKERNEL}" "$@"; fi
- if [ -x /sbin/"${INSTALLKERNEL}" ]; then exec /sbin/"${INSTALLKERNEL}" "$@"; fi
+@@ -60,8 +60,19 @@ else
+ 	base=vmlinux
+ fi
  
--# Default install - same as make zlilo
--install "$2" "$4"/vmlinuz
-+base=$(basename "$2")
-+if [ "$base" = "bzImage" ]; then
-+	# Compressed install
-+	echo "Installing compressed kernel"
-+	base=vmlinuz
-+else
-+	# Normal install
-+	echo "Installing normal kernel"
-+	base=vmlinux
-+fi
+-install "$2" "$4"/"$base"
+-install "$3" "$4"/System.map
++# Some architectures name their files based on version number, and
++# others do not.  Call out the ones that do not to make it obvious.
++case "${ARCH}" in
++	x86)
++		version=""
++		;;
++	*)
++		version="-${1}"
++		;;
++esac
 +
-+install "$2" "$4"/"$base"
- install "$3" "$4"/System.map
++install "$2" "$4"/"$base""$version"
++install "$3" "$4"/System.map"$version"
  sync
  
+ # Some architectures like to call specific bootloader "helper" programs:
 -- 
 2.31.1
 
