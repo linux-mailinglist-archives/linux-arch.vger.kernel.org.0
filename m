@@ -2,212 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0713569B6
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 12:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A737E356A88
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 12:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240571AbhDGKbr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 06:31:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34777 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236558AbhDGKbr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 06:31:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617791497;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nJSxvPf+2fQxpcou71SA/t4hQw4etrSkU0eumEfbqCc=;
-        b=NI6ODgu1MmOPKY8PDp/Bgak3yGjHnqcRNLZUHeluhPts6r0VEd/2K5JIz4qPs1nqwpuuEE
-        nt+ojN18KMpaVGaRHNJACqUiRuADurvoRfRk/lL0mVbJ2KY/xxTe14UBmwFveS304Pgx3w
-        au3YkvCqPBFixnLmKCEbtwih7Wabf4I=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-521-SMXER1lrNQy7RmmVKzJMWQ-1; Wed, 07 Apr 2021 06:31:35 -0400
-X-MC-Unique: SMXER1lrNQy7RmmVKzJMWQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2D4221006C82;
-        Wed,  7 Apr 2021 10:31:30 +0000 (UTC)
-Received: from [10.36.114.68] (ovpn-114-68.ams2.redhat.com [10.36.114.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 624C871284;
-        Wed,  7 Apr 2021 10:31:13 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>
-References: <20210317110644.25343-1-david@redhat.com>
- <20210317110644.25343-3-david@redhat.com>
- <CAG48ez0BQ3Vd3nDLEvyiSU0XALgUQ=c-fAwcFVScUkgo_9qVuQ@mail.gmail.com>
- <2bab28c7-08c0-7ff0-c70e-9bf94da05ce1@redhat.com>
- <CAG48ez20rLRNPZj6hLHQ_PLT8H60kTac-uXRiLByD70Q7+qsdQ@mail.gmail.com>
- <26227fc6-3e7b-4e69-f69d-4dc2a67ecfe8@redhat.com>
- <54165ffe-dbf7-377a-a710-d15be4701f20@redhat.com>
-Organization: Red Hat GmbH
-Subject: Re: [PATCH v1 2/5] mm/madvise: introduce MADV_POPULATE_(READ|WRITE)
- to prefault/prealloc memory
-Message-ID: <5f49b60c-957d-8cb4-de7a-7c855dc72942@redhat.com>
-Date:   Wed, 7 Apr 2021 12:31:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S1351689AbhDGKyt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 06:54:49 -0400
+Received: from conssluserg-01.nifty.com ([210.131.2.80]:39262 "EHLO
+        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351677AbhDGKys (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 06:54:48 -0400
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 137As8HD019478;
+        Wed, 7 Apr 2021 19:54:08 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 137As8HD019478
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1617792849;
+        bh=GHNPkbKKRD5a2nOrnlcUrTtHVkd1LKSTOkdi37JpDHU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hglKVWsWPoSPlcAkB7IWZyL8TfhVMtb1jwzW+vYGb7wNj/VqvKxpqzmj/NdEW4qXA
+         FQLoPxx0FMcuz1+W0NNdg3pzarv/8JmbjLR+Jnpfx16p6+iczYBPXDbke9C5/dHRsD
+         GOHDAgpezkdzPQDaKKGQaBPcvJ93VNMiky+g9E4W3rkoMdQWC1d0/2nUH7E3/g7KZx
+         3/xGroEPRtvv0S5Rq39a4spV5mp40qOcuD2x9oDdM2hr15OZyxmE5QNrmp8LVvxLIM
+         UAtEqygWYCjWXMu7pNQ1WuyOQhO143xps5qMp+CaY8ET8CbzwNa9p1AAuO8PQawhNy
+         6GjPJmCpAnTqA==
+X-Nifty-SrcIP: [209.85.215.179]
+Received: by mail-pg1-f179.google.com with SMTP id t140so12730227pgb.13;
+        Wed, 07 Apr 2021 03:54:08 -0700 (PDT)
+X-Gm-Message-State: AOAM531JOiy2I9USoPy4H1GkaaaI/CBKCkTjPwxvko7aE3pW7iPQ2Van
+        fNBAlmmw5Jps+VA3q46t536s89VBYpZzacESjrk=
+X-Google-Smtp-Source: ABdhPJwENjk1RFkDexdOz06v/RR2+j+tqRdYw68oYExSazKnvcKp/fepcg8daUq2vXTHGwayMzbgSMqHF6Ipvgk8tME=
+X-Received: by 2002:aa7:8d84:0:b029:1f8:3449:1bc6 with SMTP id
+ i4-20020aa78d840000b02901f834491bc6mr2286908pfr.76.1617792847926; Wed, 07 Apr
+ 2021 03:54:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <54165ffe-dbf7-377a-a710-d15be4701f20@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20210407053419.449796-1-gregkh@linuxfoundation.org>
+ <CAMuHMdWGnr1wK3yZdLovxmVQT1yc2DR+J6FwQyCLxQS-Bp29Rw@mail.gmail.com>
+ <YG1jSj7BiDscHBhz@kroah.com> <20210407080229.GF1463@shell.armlinux.org.uk>
+ <YG1oQRc1ayGEI+4G@kroah.com> <20210407081436.GG1463@shell.armlinux.org.uk> <YG1vTx5XtgMeA9kX@kroah.com>
+In-Reply-To: <YG1vTx5XtgMeA9kX@kroah.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 7 Apr 2021 19:53:30 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATeAoBukc+D873b6E=Muw1scc-OWCncx5X6iXMrJjhzeQ@mail.gmail.com>
+Message-ID: <CAK7LNATeAoBukc+D873b6E=Muw1scc-OWCncx5X6iXMrJjhzeQ@mail.gmail.com>
+Subject: Re: [PATCH 00/20] kbuild: unify the install.sh script usage
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nick Hu <nickhu@andestech.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 30.03.21 18:31, David Hildenbrand wrote:
-> On 30.03.21 18:30, David Hildenbrand wrote:
->> On 30.03.21 18:21, Jann Horn wrote:
->>> On Tue, Mar 30, 2021 at 5:01 PM David Hildenbrand <david@redhat.com> wrote:
->>>>>> +long faultin_vma_page_range(struct vm_area_struct *vma, unsigned long start,
->>>>>> +                           unsigned long end, bool write, int *locked)
->>>>>> +{
->>>>>> +       struct mm_struct *mm = vma->vm_mm;
->>>>>> +       unsigned long nr_pages = (end - start) / PAGE_SIZE;
->>>>>> +       int gup_flags;
->>>>>> +
->>>>>> +       VM_BUG_ON(!PAGE_ALIGNED(start));
->>>>>> +       VM_BUG_ON(!PAGE_ALIGNED(end));
->>>>>> +       VM_BUG_ON_VMA(start < vma->vm_start, vma);
->>>>>> +       VM_BUG_ON_VMA(end > vma->vm_end, vma);
->>>>>> +       mmap_assert_locked(mm);
->>>>>> +
->>>>>> +       /*
->>>>>> +        * FOLL_HWPOISON: Return -EHWPOISON instead of -EFAULT when we hit
->>>>>> +        *                a poisoned page.
->>>>>> +        * FOLL_POPULATE: Always populate memory with VM_LOCKONFAULT.
->>>>>> +        * !FOLL_FORCE: Require proper access permissions.
->>>>>> +        */
->>>>>> +       gup_flags = FOLL_TOUCH | FOLL_POPULATE | FOLL_MLOCK | FOLL_HWPOISON;
->>>>>> +       if (write)
->>>>>> +               gup_flags |= FOLL_WRITE;
->>>>>> +
->>>>>> +       /*
->>>>>> +        * See check_vma_flags(): Will return -EFAULT on incompatible mappings
->>>>>> +        * or with insufficient permissions.
->>>>>> +        */
->>>>>> +       return __get_user_pages(mm, start, nr_pages, gup_flags,
->>>>>> +                               NULL, NULL, locked);
->>>>>
->>>>> You mentioned in the commit message that you don't want to actually
->>>>> dirty all the file pages and force writeback; but doesn't
->>>>> POPULATE_WRITE still do exactly that? In follow_page_pte(), if
->>>>> FOLL_TOUCH and FOLL_WRITE are set, we mark the page as dirty:
->>>>
->>>> Well, I mention that POPULATE_READ explicitly doesn't do that. I
->>>> primarily set it because populate_vma_page_range() also sets it.
->>>>
->>>> Is it safe to *not* set it? IOW, fault something writable into a page
->>>> table (where the CPU could dirty it without additional page faults)
->>>> without marking it accessed? For me, this made logically sense. Thus I
->>>> also understood why populate_vma_page_range() set it.
->>>
->>> FOLL_TOUCH doesn't have anything to do with installing the PTE - it
->>> essentially means "the caller of get_user_pages wants to read/write
->>> the contents of the returned page, so please do the same things you
->>> would do if userspace was accessing the page". So in particular, if
->>> you look up a page via get_user_pages() with FOLL_WRITE|FOLL_TOUCH,
->>> that tells the MM subsystem "I will be writing into this page directly
->>> from the kernel, bypassing the userspace page tables, so please mark
->>> it as dirty now so that it will be properly written back later". Part
->>> of that is that it marks the page as recently used, which has an
->>> effect on LRU pageout behavior, I think - as far as I understand, that
->>> is why populate_vma_page_range() uses FOLL_TOUCH.
->>>
->>> If you look at __get_user_pages(), you can see that it is split up
->>> into two major parts: faultin_page() for creating PTEs, and
->>> follow_page_mask() for grabbing pages from PTEs. faultin_page()
->>> ignores FOLL_TOUCH completely; only follow_page_mask() uses it.
->>>
->>> In a way I guess maybe you do want the "mark as recently accessed"
->>> part that FOLL_TOUCH would give you without FOLL_WRITE? But I think
->>> you very much don't want the dirtying that FOLL_TOUCH|FOLL_WRITE leads
->>> to. Maybe the ideal approach would be to add a new FOLL flag to say "I
->>> only want to mark as recently used, I don't want to dirty". Or maybe
->>> it's enough to just leave out the FOLL_TOUCH entirely, I don't know.
->>
->> Any thoughts why populate_vma_page_range() does it?
-> 
-> Sorry, I missed the explanation above - thanks!
-
-Looking into the details, adjusting the FOLL_TOUCH logic won't make too 
-much of a difference for MADV_POPULATE_WRITE I guess. AFAIKs, the 
-biggest impact of FOLL_TOUCH is actually with FOLL_FORCE - which we are 
-not using, but populate_vma_page_range() is.
+On Wed, Apr 7, 2021 at 5:37 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Apr 07, 2021 at 09:14:36AM +0100, Russell King - ARM Linux admin wrote:
+> > On Wed, Apr 07, 2021 at 10:07:29AM +0200, Greg Kroah-Hartman wrote:
+> > > On Wed, Apr 07, 2021 at 09:02:29AM +0100, Russell King - ARM Linux admin wrote:
+> > > > On Wed, Apr 07, 2021 at 09:46:18AM +0200, Greg Kroah-Hartman wrote:
+> > > > > On Wed, Apr 07, 2021 at 09:18:11AM +0200, Geert Uytterhoeven wrote:
+> > > > > > Hi Greg,
+> > > > > >
+> > > > > > Thanks for your series!
+> > > > > >
+> > > > > > On Wed, Apr 7, 2021 at 7:34 AM Greg Kroah-Hartman
+> > > > > > <gregkh@linuxfoundation.org> wrote:
+> > > > > > > Almost every architecture has copied the "install.sh" script that
+> > > > > > > originally came with i386, and modified it in very tiny ways.  This
+> > > > > > > patch series unifies all of these scripts into one single script to
+> > > > > > > allow people to understand how to correctly install a kernel, and fixes
+> > > > > > > up some issues regarding trying to install a kernel to a path with
+> > > > > > > spaces in it.
+> > > > > > >
+> > > > > > > Note that not all architectures actually seem to have any type of way to
+> > > > > > > install a kernel, they must rely on external scripts or tools which
+> > > > > > > feels odd as everything should be included here in the main repository.
+> > > > > > > I'll work on trying to figure out the missing architecture issues
+> > > > > > > afterward.
+> > > > > >
+> > > > > > I'll bite ;-)
+> > > > > >
+> > > > > > Does anyone actually use these scripts (outside of x86)?
+> > > >
+> > > > Yes, every time I build a kernel. My kernel build system involves
+> > > > typing "kbuild <flags> <dirname> <machines...>" and the kernel gets
+> > > > built in ../build/<dirname>. When the build completes, it gets
+> > > > installed into ~/systems/<dirname>, tar'd up, and copied to the
+> > > > destination machines, unpacked, installed as appropriate, and
+> > > > the machine rebooted if requested.
+> > > >
+> > > > The installation step is done via the ~/bin/installkernel script.
+> > >
+> > > So you don't use install.sh at all except to invoke your local script.
+> >
+> > It depends where the kernel is being built; it has been used in the
+> > past (one will notice that the arm32 version is not a direct copy of
+> > the x86 version, and never was - it was modified from day 1.) It's
+> > placement and naming of the files in /boot is still used today, which
+> > is slightly different from the x86 version.
+>
+> The placement depends on the caller to the script, so that's not an
+> issue here.  The name for the output does differ from x86, but the
+> "common" script handles all of that (or it should, if not I messed up.)
+>
+> Attached below is the common scripts/install.sh that this patch series
+> produces at the end of it, if you want to check to see if I missed
+> anything for your arch.
+>
+> thanks,
+>
+> greg k-h
 
 
-If a page was not faulted in yet, 
-faultin_page(FOLL_WRITE)->handle_mm_fault(FAULT_FLAG_WRITE) will already 
-mark the PTE/PMD/... dirty and accessed. One example is 
-handle_pte_fault(). We will mark the page accessed again via FOLL_TOUCH, 
-which doesn't seem to be strictly required.
 
+Thanks for nice cleanups!
 
-If the page was already faulted in, we have three cases:
+I will give some nit-picking comments to individual patches.
+Overall, this series looks nice.
 
-1. Page faulted in writable. The page should already be dirty (otherwise 
-we would be in trouble I guess). We will mark it accessed.
-
-2. Page faulted in readable. handle_mm_fault() will fault it in writable 
-and set the page dirty.
-
-3. Page faulted in readable and we have FOLL_FORCE. We mark the page 
-dirty and accessed.
-
-
-So doing a MADV_POPULATE_WRITE, whereby we prefault page tables 
-writable, doesn't seem to fly without marking the pages dirty. That's 
-one reason why I included MADV_POPULATE_READ.
-
-We could
-
-a) Drop FOLL_TOUCH. We are not marking the page accessed, which would 
-mean it gets evicted rather earlier than later.
-
-b) Introduce FOLL_ACCESSED which won't do the dirtying. But then, the 
-pages are already dirty as explained above, so there isn't a real 
-observable change.
-
-c) Keep it as is: Mark the page accessed and dirty. As it's already 
-dirty, that does not seem to be a real issue.
-
-Am I missing something obvious? Thanks!
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Best Regards
+Masahiro Yamada
