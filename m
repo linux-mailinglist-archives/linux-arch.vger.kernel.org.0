@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1528357126
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 17:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D439357149
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 18:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235675AbhDGP4E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 11:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
+        id S1354019AbhDGQAy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 12:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbhDGP4E (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 11:56:04 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB81C061756;
-        Wed,  7 Apr 2021 08:55:54 -0700 (PDT)
+        with ESMTP id S1353992AbhDGQAr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 12:00:47 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3A1C061760;
+        Wed,  7 Apr 2021 09:00:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
         Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
         Sender:Reply-To:Content-ID:Content-Description;
-        bh=ZN4QPdG1dWY6PBo4DSX5jrwf0CE9CsAs0+P/fZZM2Q4=; b=v56zcA69Axw8XFUBNIHFOZoenq
-        iUwADmybOT9cRYlkoTELmY4GiYo9Kmzl1EZ678sgaqNY87YCrmckChlCNEv7eE4zYmyUzLAvrhY3W
-        qPFqCtxoQn11hJvCjtdgYsSdfkm3ty/AsejW0/O4m6CZ9gT9vCRtU4OURHA0vqk7QEvzxsprnKH6D
-        6b8mLKd42nleucfHxTd22W1tZhXpty0Ct5NjmKw4ggQcRug1NLYPcbIfEqqojKra0hTXt8+J1Dvjf
-        Uus5cbh2eupcBfyVoSkwl7KJoyalB8DWrAKz2Z5741s+TxaQ3BUgDlk0wRRo2/FX4aDIxsD2w2+me
-        KBb63rWw==;
+        bh=H+ZMVpfa/CabsD8d5PA65uD38iRKxpv+RvDo3hX8JW0=; b=LI3JirhTB4v5sXB94brRFz4Bju
+        Wx43cTRdICjBTwxuivVFW0b3J3HCgJtddI9O74+en4344IeBjDnThR37hrfvrEZpSdcZWUAlia37w
+        p8ZNcMrV7gkhxpMv9YuImiWojpUnypK4nBh9hHAQtN9ibgSFzgip1Ga3/JPpJexePQU96Fpm1r5ux
+        nG+hPED8h6w72ag7NjWKZAKLCbARHK68oucBf7/2he+6JNCoJpLIfcswTYvbJhNL2Sxvqzw39vKAr
+        3DE45L+ESAD1HHwGzWYzPLTvZGHimMkQxba/wWv557j2dih+BvU3gdgjywVdj+320u3rR6c7ho/vD
+        pKL64eng==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lUATs-00EhxJ-PW; Wed, 07 Apr 2021 15:52:43 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lUAbH-005NDW-Kw; Wed, 07 Apr 2021 16:00:15 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6F1AF300219;
-        Wed,  7 Apr 2021 17:52:36 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 002B73001FB;
+        Wed,  7 Apr 2021 18:00:14 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 61DB52BF09264; Wed,  7 Apr 2021 17:52:36 +0200 (CEST)
-Date:   Wed, 7 Apr 2021 17:52:36 +0200
+        id E298B2BF09269; Wed,  7 Apr 2021 18:00:14 +0200 (CEST)
+Date:   Wed, 7 Apr 2021 18:00:14 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Christoph =?iso-8859-1?Q?M=FCllner?= <christophm30@gmail.com>
 Cc:     Christoph Hellwig <hch@infradead.org>, Guo Ren <guoren@kernel.org>,
@@ -49,7 +49,7 @@ Cc:     Christoph Hellwig <hch@infradead.org>, Guo Ren <guoren@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
 Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
  ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Message-ID: <YG3VRIUjjaK+pfES@hirez.programming.kicks-ass.net>
+Message-ID: <YG3XDnNc+GaW1Tz4@hirez.programming.kicks-ass.net>
 References: <1616868399-82848-4-git-send-email-guoren@kernel.org>
  <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
  <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
@@ -70,9 +70,30 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Wed, Apr 07, 2021 at 04:29:12PM +0200, Christoph Müllner wrote:
-> The comparison with sparc64 is not applicable, as sparc64 does not
-> have LL/SC instructions.
+> RISC-V defines LR/SC loops consisting of up to 16 instructions as
+> constrained LR/SC loops.  Such constrained LR/SC loops provide the
+> required forward guarantees, that are expected (similar to what other
+> architectures, like AArch64, have).
 
-Sparc64 has CAS, without hardware fwd progress. It has to do software
-backoff for failed CAS in order to do software fwd progress.
+The text quoted by others didn't seem to say such a thing, but whatever.
 
+> What RISC-V does not have is sub-word atomics and if required, we
+> would have to implement them as LL/SC sequences. And yes, using atomic
+> instructions is preferred over using LL/SC,
+
+(psudo asm, can't be bothered to figure out the actual syntax)
+
+	# setup r_and_mask, r_or_mask
+
+.L1
+	LL r, [word]
+	AND r, r, r_and_mask
+	OR r, r, r_or_mask
+	SC r, [word]
+	JNE .L1
+
+is what you need for LL/SC based xchg16, that's less than 16
+instructions. If RISC-V guarantees fwd progress on that, good, write it
+like that and lets end this thread.
+
+The fact that this is apparently hard, is not good.
