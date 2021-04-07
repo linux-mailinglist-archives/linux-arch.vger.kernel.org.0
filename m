@@ -2,235 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B29E3357502
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 21:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACE535752B
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 21:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355637AbhDGTgS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 15:36:18 -0400
-Received: from mga09.intel.com ([134.134.136.24]:30011 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345628AbhDGTgR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 7 Apr 2021 15:36:17 -0400
-IronPort-SDR: TdEZj9cmyPaIWVjf2/EKdRQ/MEP2ty4BQrWm5MmqCmz4urQoWL+LUS7UMnK6gpVtcNqSCTNszz
- yo9nMxPOyu5w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="193499952"
-X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
-   d="scan'208";a="193499952"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2021 12:36:07 -0700
-IronPort-SDR: rAPVXak+nGDVnXg9E3NIe27rAWHjK35mnoyvbDaT6d99UCplYkjy2wqj9cOCpfHty8nh69qdk1
- E3HjT8/jTPWA==
-X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
-   d="scan'208";a="448370025"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.254.186.83]) ([10.254.186.83])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2021 12:36:05 -0700
-Subject: Re: [PATCH v24 25/30] x86/cet/shstk: Handle signals for shadow stack
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-References: <20210401221104.31584-1-yu-cheng.yu@intel.com>
- <20210401221104.31584-26-yu-cheng.yu@intel.com>
- <CALCETrWa+gjf2c2WDVxk23xd11kTnrUmiqrMsOVXOKPL4Eg-JA@mail.gmail.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <76743437-24b3-7c33-2570-6100c8811165@intel.com>
-Date:   Wed, 7 Apr 2021 12:36:04 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S1347438AbhDGTu7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 15:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345736AbhDGTu7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 15:50:59 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B60C06175F;
+        Wed,  7 Apr 2021 12:50:49 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id i81so19971018oif.6;
+        Wed, 07 Apr 2021 12:50:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/6KYvi3qxRc6jQvr4Dp41laAk9y6iyvnOJ43zRUQVDs=;
+        b=uMkSxAToTLC2pzNL2A1x2wHmlIPTWtxcS1voRqMd4Wk2cE46uuQ7CmmXoD0JOuyqs3
+         j/r0v8HGBIUbdx9KJhzFTPBgwxULt9abG2boBigiWj6wq7Y5a2g+MTn9lwCslBJAFSSR
+         QtSYtOj8NU2fJW44APqVse3qTz83MbIraafH5x/GUZ/N7W6mgTWaj9EmmwSXDyFBkxwN
+         2JEKRMuJjRTE31eCYpYtlsO3t77N0npLqjK3Tf0enfqNZnvYdL/JJMlqo9upiPJAgcCS
+         iFDueF1/k/mFno3kVcSmYVIkS1rnmhCagU6n7O5wZVkMTnDidjrh8Zv2mk9ZwPvvTaAp
+         1uvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/6KYvi3qxRc6jQvr4Dp41laAk9y6iyvnOJ43zRUQVDs=;
+        b=Bj8B18w68Q6T54NCsLItGyXCqC1yAknCwVdg/gEypiqePd5K04v1F9t2VQY62e1MFS
+         ZxX/bclL2aCLsuY+T5A4uDnkStQH9MDmIsGVBJsiCepbLLZFuz1tGEOf/53HtFZOJif7
+         2E2R5rMbRUIZeucRWBZGFx4BOKiBmHHMdodz+bFB5ekSA1qvRBwZ8UEz9lFNMQLtqHFk
+         IJrEGrRpR6Q6k6oB+qUO3JB6QSZa2kcdpe8piKh9e2WhmJeqCsKAIx8WaIDLcXc1rZvT
+         Q1l2DbpqDgotTrl3TQsR/SJKbOksVqjCQuhZdKa8IQAkgdYAUHZtGljBCaRAsuSggLJ2
+         44qQ==
+X-Gm-Message-State: AOAM531XSMNxlGmG0ASA2BSB1qoMClB/18j3poEQRFSKby3BH6M31rNK
+        Lq3BWfaSA8CjYxcaOYNJwXG7juHIi86fxfMv+Sg=
+X-Google-Smtp-Source: ABdhPJwgDlWh7b9fwq5CxJcqk+iLb58LoK/PouPKlTof9Xft/P6tcdH2xc6ZBnvV9eIhMlUmggxqiokqoy1vOC0BVj8=
+X-Received: by 2002:a05:6808:1cb:: with SMTP id x11mr3375444oic.89.1617825048444;
+ Wed, 07 Apr 2021 12:50:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CALCETrWa+gjf2c2WDVxk23xd11kTnrUmiqrMsOVXOKPL4Eg-JA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1616868399-82848-4-git-send-email-guoren@kernel.org>
+ <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net> <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
+ <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net> <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net> <CAJF2gTS4jexKsSiXBY=5rz53LjcLUZ1K4pxjYJDVQCWx_8JTuA@mail.gmail.com>
+ <YGwKpmPkn5xIxIyx@hirez.programming.kicks-ass.net> <20210407094224.GA3393992@infradead.org>
+ <CAHB2gtROGuoNzv5f9QrhWX=3ZtZmUM=SAjYhKqP7dTiTTQwkqA@mail.gmail.com> <YG3XDnNc+GaW1Tz4@hirez.programming.kicks-ass.net>
+In-Reply-To: <YG3XDnNc+GaW1Tz4@hirez.programming.kicks-ass.net>
+From:   =?UTF-8?Q?Christoph_M=C3=BCllner?= <christophm30@gmail.com>
+Date:   Wed, 7 Apr 2021 21:50:37 +0200
+Message-ID: <CAHB2gtRGMizmWsv+Quf1jA=mzj6-jD5Rgz-XX2jQuR4dn3oDgQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Christoph Hellwig <hch@infradead.org>, Guo Ren <guoren@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/6/2021 3:50 PM, Andy Lutomirski wrote:
-> On Thu, Apr 1, 2021 at 3:11 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
->>
->> When shadow stack is enabled, a task's shadow stack states must be saved
->> along with the signal context and later restored in sigreturn.  However,
->> currently there is no systematic facility for extending a signal context.
->>
->> Introduce a signal context extension struct 'sc_ext', which is used to save
->> shadow stack restore token address and WAIT_ENDBR status[1].  The extension
->> is located above the fpu states, plus alignment.
->>
->> Introduce routines for the allocation, save, and restore for sc_ext:
->> - fpu__alloc_sigcontext_ext(),
->> - save_extra_state_to_sigframe(),
->> - get_extra_state_from_sigframe(),
->> - restore_extra_state().
->>
->> [1] WAIT_ENDBR will be introduced later in the Indirect Branch Tracking
->>      series, but add that into sc_ext now to keep the struct stable in case
->>      the IBT series is applied later.
-> 
-> Please don't.  Instead, please figure out how that structure gets
-> extended for real, and organize your patches to demonstrate that the
-> extension works.
-> 
->>
->> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
->> Cc: Kees Cook <keescook@chromium.org>
->> ---
->> v24:
->> - Split out shadow stack token routines to a separate patch.
->> - Put signal frame save/restore routines to fpu/signal.c and re-name accordingly.
->>
->>   arch/x86/ia32/ia32_signal.c            |  16 +++
->>   arch/x86/include/asm/cet.h             |   2 +
->>   arch/x86/include/asm/fpu/internal.h    |   2 +
->>   arch/x86/include/uapi/asm/sigcontext.h |   9 ++
->>   arch/x86/kernel/fpu/signal.c           | 143 +++++++++++++++++++++++++
->>   arch/x86/kernel/signal.c               |   9 ++
->>   6 files changed, 181 insertions(+)
->>
+On Wed, Apr 7, 2021 at 6:00 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, Apr 07, 2021 at 04:29:12PM +0200, Christoph M=C3=BCllner wrote:
+> > RISC-V defines LR/SC loops consisting of up to 16 instructions as
+> > constrained LR/SC loops.  Such constrained LR/SC loops provide the
+> > required forward guarantees, that are expected (similar to what other
+> > architectures, like AArch64, have).
+>
+> The text quoted by others didn't seem to say such a thing, but whatever.
 
-[...]
+The RISC-V unpriv spec is public can be found here:
+https://riscv.org/technical/specifications/
+Version 20191213 discusses LR/SC-loops in section 8.3 (page 51).
+So in case you are interested in the exact wording, you can find it there.
 
->> diff --git a/arch/x86/include/uapi/asm/sigcontext.h b/arch/x86/include/uapi/asm/sigcontext.h
->> index 844d60eb1882..cf2d55db3be4 100644
->> --- a/arch/x86/include/uapi/asm/sigcontext.h
->> +++ b/arch/x86/include/uapi/asm/sigcontext.h
->> @@ -196,6 +196,15 @@ struct _xstate {
->>          /* New processor state extensions go here: */
->>   };
->>
->> +/*
->> + * Located at the end of sigcontext->fpstate, aligned to 8.
->> + */
->> +struct sc_ext {
->> +       unsigned long total_size;
->> +       unsigned long ssp;
->> +       unsigned long wait_endbr;
->> +};
-> 
-> We need some proper documentation and an extensibility story for this.
-> This won't be the last time we extend the signal state.  Keep in mind
-> that the FPU state is very likely to become genuinely variable sized
-> due to AVX-512 and AMX.
-> 
+> > What RISC-V does not have is sub-word atomics and if required, we
+> > would have to implement them as LL/SC sequences. And yes, using atomic
+> > instructions is preferred over using LL/SC,
+>
+> (psudo asm, can't be bothered to figure out the actual syntax)
+>
+>         # setup r_and_mask, r_or_mask
+>
+> .L1
+>         LL r, [word]
+>         AND r, r, r_and_mask
+>         OR r, r, r_or_mask
+>         SC r, [word]
+>         JNE .L1
 
-Right now, on the signal stack, we have:
+I fully agree with this.
+I've implemented a patch for that two weeks ago using the following helper:
 
-- siginfo, ucontext,
-- fpu states (xsave state),
++/*
++ * Mask and set given bits at a given address atomically.
++ * The masked old value will be returned.
++ */
++static inline u32 atomic_mask_and_set(u32* p, u32 mask, u32 val)
++{
++       u32 ret, tmp;
++       __asm__ __volatile__ (
++               "0:     lr.w %0, %2\n"
++               "       and  %0, %0, %3\n"
++               "       or   %1, %0, %4\n"
++               "       sc.w %1, %1, %2\n"
++               "       bnez %1, 0b\n"
++               : "+&r"(ret), "=3D&r" (tmp), "+A"(*p)
++               : "r" (mask), "rJ"(val)
++               : "memory");
++       return ret;
++}
 
-We might not want to change ucontext.  The concern is breaking existing 
-app's.
+However, Guo pushed out a new patchset in between and I decided to not cont=
+inue
+my approach to not undermine his approach.
 
-Fpu states are all user states (vs. ssp, wait_endbr are supervisor 
-states).  Therefore, we cannot put ssp and wait_endbr in fpu states. 
-Fpu states can grow to whatever size (AVX-512 etc.), the extension is 
-always above it if the user stack has room.  If the user stack does not 
-have enough room, fpu__aloc_mathframe() fails.
-
-The struct sc_ext has a simple 'total_size' field for error checking. 
-To extend it, newer fields are always added to the end and total_size 
-keeps track of it.  I will put more comments about this.
-
-> We also have the ability to extend ucontext, I believe, and I'd like
-> some analysis of why we want to put ssp and wait_endbr into the FPU
-> context instead of the ucontext.
-> 
-
-[...]
-
->> diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
->> index a4ec65317a7f..2e56f2fe8be0 100644
->> --- a/arch/x86/kernel/fpu/signal.c
->> +++ b/arch/x86/kernel/fpu/signal.c
-
-[...]
-
->> +
->> +/*
->> + * Called from __fpu__restore_sig() and XSAVES buffer is protected by
->> + * set_thread_flag(TIF_NEED_FPU_LOAD) in the slow path.
->> + */
->> +void restore_extra_state(struct sc_ext *sc_ext)
->> +{
->> +#ifdef CONFIG_X86_CET
->> +       struct cet_status *cet = &current->thread.cet;
->> +       struct cet_user_state *cet_user_state;
->> +       u64 msr_val = 0;
->> +
->> +       if (!cpu_feature_enabled(X86_FEATURE_CET))
->> +               return;
->> +
->> +       cet_user_state = get_xsave_addr(&current->thread.fpu.state.xsave,
->> +                                       XFEATURE_CET_USER);
->> +       if (!cet_user_state)
->> +               return;
->> +
->> +       if (cet->shstk_size) {
-> 
-> Is fpregs_lock() needed?
-
-This path is already protected.
-
-> 
->> +               if (test_thread_flag(TIF_NEED_FPU_LOAD))
->> +                       cet_user_state->user_ssp = sc_ext->ssp;
->> +               else
->> +                       wrmsrl(MSR_IA32_PL3_SSP, sc_ext->ssp);
-> 
-> wrmsrl_safe() please.
-> 
->> +
->> +               msr_val |= CET_SHSTK_EN;
->> +       }
->> +
->> +       if (test_thread_flag(TIF_NEED_FPU_LOAD))
->> +               cet_user_state->user_cet = msr_val;
->> +       else
->> +               wrmsrl(MSR_IA32_U_CET, msr_val);
->> +#endif
-> 
-> I don't understand. Why are you recomputing MSR_IA32_U_CET here?
-> 
-> As another general complaint about this patch set, there's
-> cet->shstk_size and there's MSR_IA32_U_CET (and its copy in the fpu
-> state), and they seem to be used somewhat interchangably.  Why are
-> both needed?  Could there be some new helpers to help manage them all
-> in a unified way?
-> 
-
-Indeed, shadow stack/IBT states are cached in the thread header.  Their 
-MSRs and XSAVES states are accessed only when necessary.  The signal 
-restore path has been optimized in the past and I hope not to put in 
-code that negates past work.
-
-I agree with your other comments for the patch and will update in the 
-next revision.
+I will sync up with Guo to provide a common patchset.
 
 Thanks,
-Yu-cheng
+Christoph
+
+> is what you need for LL/SC based xchg16, that's less than 16
+> instructions. If RISC-V guarantees fwd progress on that, good, write it
+> like that and lets end this thread.
+>
+> The fact that this is apparently hard, is not good.
