@@ -2,33 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0457E356341
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 07:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FF9356344
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 07:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345295AbhDGFfa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 01:35:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38858 "EHLO mail.kernel.org"
+        id S1345273AbhDGFff (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 01:35:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38916 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348785AbhDGFfV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 7 Apr 2021 01:35:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1BB7E613CE;
-        Wed,  7 Apr 2021 05:35:11 +0000 (UTC)
+        id S1345284AbhDGFfY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 7 Apr 2021 01:35:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BD09B613B8;
+        Wed,  7 Apr 2021 05:35:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617773712;
-        bh=ceCRkUFPQ18/GAzGPcuYnwEBnMTGiXa4tglmN9EQyEo=;
+        s=korg; t=1617773715;
+        bh=1LtG+7DK6bKnBi2fiCGvmOM2s+/3SEL/McsxhTD/qJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JGy8Sq0s+WIxeUAsWcmLiv4eMjH+0Q7J/MM/NuOMS/Tm4E8WoopeoLQ+SX/a/pkWq
-         xj/JL0qHd0yhUQcyqjroSTIjSFDraftoHtZWoW6aPpeL9lr2IRSrcB15I3xLJ45Yns
-         3q66iRsPQC8A0VwqF0uGZZbBBAS1G272878xIABM=
+        b=FiAjfIrc+lYbxFl7uEMgtFbNoQWG9fQ9+R5YhhD6ILil9yXVjnuxL4vjTRSrdbAN+
+         P752TFTKp+ls8/yMWH5+MhgMWcch0jJRAkSetV9r8qHUbw+XmMxqJfnTG7CIsfHIyg
+         Zzrl98tHawNoaBMihLWOeOaJj4UFGHJ6hgPWvGJ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>
 Cc:     linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 07/20] kbuild: scripts/install.sh: allow for the version number
-Date:   Wed,  7 Apr 2021 07:34:06 +0200
-Message-Id: <20210407053419.449796-8-gregkh@linuxfoundation.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH 08/20] kbuild: riscv: use common install script
+Date:   Wed,  7 Apr 2021 07:34:07 +0200
+Message-Id: <20210407053419.449796-9-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210407053419.449796-1-gregkh@linuxfoundation.org>
 References: <20210407053419.449796-1-gregkh@linuxfoundation.org>
@@ -38,43 +42,118 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Some architectures put the version number by default at the end of the
-files that are copied, so add support for this to be set by arch type.
+The common scripts/install.sh script will now work for riscv, all that
+is needed is to add the compressed image type to it.  So add that file
+type check and remove the riscv-only version of the file.
 
-Odds are one day we should change this for x86, but let's not break
-anyone's systems just yet.
-
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: linux-riscv@lists.infradead.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/install.sh | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ arch/riscv/boot/Makefile   |  4 +--
+ arch/riscv/boot/install.sh | 60 --------------------------------------
+ scripts/install.sh         |  3 +-
+ 3 files changed, 4 insertions(+), 63 deletions(-)
+ delete mode 100644 arch/riscv/boot/install.sh
 
+diff --git a/arch/riscv/boot/Makefile b/arch/riscv/boot/Makefile
+index 03404c84f971..4ba33aec4ccb 100644
+--- a/arch/riscv/boot/Makefile
++++ b/arch/riscv/boot/Makefile
+@@ -47,9 +47,9 @@ $(obj)/loader.bin: $(obj)/loader FORCE
+ 	$(call if_changed,objcopy)
+ 
+ install:
+-	$(CONFIG_SHELL) $(srctree)/$(src)/install.sh $(KERNELRELEASE) \
++	$(CONFIG_SHELL) $(srctree)/scripts/install.sh $(KERNELRELEASE) \
+ 	$(obj)/Image System.map "$(INSTALL_PATH)"
+ 
+ zinstall:
+-	$(CONFIG_SHELL) $(srctree)/$(src)/install.sh $(KERNELRELEASE) \
++	$(CONFIG_SHELL) $(srctree)/scripts/install.sh $(KERNELRELEASE) \
+ 	$(obj)/Image.gz System.map "$(INSTALL_PATH)"
+diff --git a/arch/riscv/boot/install.sh b/arch/riscv/boot/install.sh
+deleted file mode 100644
+index 18c39159c0ff..000000000000
+--- a/arch/riscv/boot/install.sh
++++ /dev/null
+@@ -1,60 +0,0 @@
+-#!/bin/sh
+-#
+-# arch/riscv/boot/install.sh
+-#
+-# This file is subject to the terms and conditions of the GNU General Public
+-# License.  See the file "COPYING" in the main directory of this archive
+-# for more details.
+-#
+-# Copyright (C) 1995 by Linus Torvalds
+-#
+-# Adapted from code in arch/i386/boot/Makefile by H. Peter Anvin
+-# Adapted from code in arch/i386/boot/install.sh by Russell King
+-#
+-# "make install" script for the RISC-V Linux port
+-#
+-# Arguments:
+-#   $1 - kernel version
+-#   $2 - kernel image file
+-#   $3 - kernel map file
+-#   $4 - default install path (blank if root directory)
+-#
+-
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+-	fi
+-}
+-
+-# Make sure the files actually exist
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+-
+-if [ "$(basename $2)" = "Image.gz" ]; then
+-# Compressed install
+-  echo "Installing compressed kernel"
+-  base=vmlinuz
+-else
+-# Normal install
+-  echo "Installing normal kernel"
+-  base=vmlinux
+-fi
+-
+-if [ -f $4/$base-$1 ]; then
+-  mv $4/$base-$1 $4/$base-$1.old
+-fi
+-cat $2 > $4/$base-$1
+-
+-# Install system map file
+-if [ -f $4/System.map-$1 ]; then
+-  mv $4/System.map-$1 $4/System.map-$1.old
+-fi
+-cp $3 $4/System.map-$1
 diff --git a/scripts/install.sh b/scripts/install.sh
-index 72dc4c81013e..934619f81119 100644
+index 934619f81119..9c8a22d96255 100644
 --- a/scripts/install.sh
 +++ b/scripts/install.sh
-@@ -60,8 +60,19 @@ else
- 	base=vmlinux
- fi
+@@ -50,7 +50,8 @@ if [ -x ~/bin/"${INSTALLKERNEL}" ]; then exec ~/bin/"${INSTALLKERNEL}" "$@"; fi
+ if [ -x /sbin/"${INSTALLKERNEL}" ]; then exec /sbin/"${INSTALLKERNEL}" "$@"; fi
  
--install "$2" "$4"/"$base"
--install "$3" "$4"/System.map
-+# Some architectures name their files based on version number, and
-+# others do not.  Call out the ones that do not to make it obvious.
-+case "${ARCH}" in
-+	x86)
-+		version=""
-+		;;
-+	*)
-+		version="-${1}"
-+		;;
-+esac
-+
-+install "$2" "$4"/"$base""$version"
-+install "$3" "$4"/System.map"$version"
- sync
- 
- # Some architectures like to call specific bootloader "helper" programs:
+ base=$(basename "$2")
+-if [ "$base" = "bzImage" ]; then
++if [ "$base" = "bzImage" ] ||
++   [ "$base" = "Image.gz" ] ; then
+ 	# Compressed install
+ 	echo "Installing compressed kernel"
+ 	base=vmlinuz
 -- 
 2.31.1
 
