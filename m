@@ -2,79 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF0A35651B
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 09:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9226435654B
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Apr 2021 09:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237893AbhDGHTe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Apr 2021 03:19:34 -0400
-Received: from mail-vk1-f169.google.com ([209.85.221.169]:42569 "EHLO
-        mail-vk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234913AbhDGHTe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 03:19:34 -0400
-Received: by mail-vk1-f169.google.com with SMTP id f11so3734559vkl.9;
-        Wed, 07 Apr 2021 00:19:25 -0700 (PDT)
+        id S1349445AbhDGHeL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Apr 2021 03:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349438AbhDGHeK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Apr 2021 03:34:10 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49350C06174A;
+        Wed,  7 Apr 2021 00:34:01 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id i4so376058pjk.1;
+        Wed, 07 Apr 2021 00:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QvZSBrH1kmgxKZKSD+pBe7YtJvXFi8yG9kfTKSmsc5Q=;
+        b=O2cXbe0TlOnka3Htg7a7ktCEm4u84Apnd4pxAh+QckwGH1N5XUJxAQXGojK8urTwHW
+         S6qKShLuqQpXW7czN7NSppj8uMSG1ILItUs2jRqW9KCOM0ewsGPs471AJdd9fQwkregx
+         5WJsKLnvvgP9H/rO+GMThc5QqAWIM6vJUjUihrVpN1qBZ1PZrQQurpb3jy0hrvC8q/ga
+         193Hbzqy2uMvrG2DBivJBITDOAFTPHgkYrA0xxTN2O5/SDYNzxk8E+F9Ofv4wPxpKtYd
+         OpyTo6+F49K8x0yWEkTWuqKF3gTonWd9jxsyeBFNYymfsKPd0N1ZAJ/ruwq0yRVkpYX5
+         /xXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=w7Kx3btHgz7ta84S98Pg8BsIYMvQVkxtEX2Vc+I1KDE=;
-        b=pdULniQvaHJLvms5DYJXVm6q6vM6ohAuPQE9POsNCYX1Jshj5bmvoP6Bl9Ec8yO/fE
-         gtqE7ZM7ozHZ7+UsAJtSDSU1E1OHODCn68WSTXLxE/9PLH5Ebcd2ivB0LXtoGPz4YM2t
-         nZJHYEcMXIJeZb9nyJ13xr4zxU7M4j1ZiRXhpaRbaF7WbAUZoErsbMBIAYtFGlHQwf26
-         DJUV68pesg22h/CS5FKvA0sUEyRhOCjKhBS6NewHI8rFRi/y2L0Jkp+lnkOrFKIsFsUR
-         GNS75v9z8V9Rqfn+v2k17x27xNVft20oQbfbUq3LtviR1Z79RCt6w1KSqmYSlYH1PadG
-         xEHQ==
-X-Gm-Message-State: AOAM53048WbSW++AeTTbqYtJar+DwMPqpK+VsVYD+PsHttvGb26zkuKP
-        rXliF1WUcO5FR4mOeak2bZLgnILa8f3yZgUUGsFHt2QS
-X-Google-Smtp-Source: ABdhPJwSQIt0vRe/XPXraai5HlJT7pCQD6XwKdxiqkw/AiDw3l8QCTjw4hMZ46DTMUjbS5Q4AAwq3/pfH95+VvfIl+g=
-X-Received: by 2002:a1f:b689:: with SMTP id g131mr1055576vkf.6.1617779964647;
- Wed, 07 Apr 2021 00:19:24 -0700 (PDT)
+        bh=QvZSBrH1kmgxKZKSD+pBe7YtJvXFi8yG9kfTKSmsc5Q=;
+        b=It3wmurtf3RzDQg5MbvIKfnNC72Wd9j3tdITngALofG7LqQTLW3OPQCtldNm0o7pfN
+         vv6qrC6BmiLflb9Y2jK8e1Tw6F6dvD6Xtb2GLk/VBPQZo76gtaVLMk8/Yl2jhR8i6JcA
+         Yupq8wnJ6MywTGqAe85FUj/riByuVr+xU4sH55ollKcjkNzKPONlw1OXXv0+pfnZ2iC2
+         vhTPcgreszCN1xGhxtPRCzfUXcUfC6yICtfAitgkGF4+T+HOwb0A9NPf9jbPalcw5SCj
+         hwv8xozO9qPdI7UeUMOvT7Jsv5e7gCF+8/NTzxcHKIkXX8YPoAEAwcMxFwWYOag9Fc3j
+         bU+g==
+X-Gm-Message-State: AOAM533NK4KGWEkiEc1OC1RcdlQTGg5Jw8Cdq/K5BEQAMNOaF47mYdvu
+        hJWvWJ4hVxY88VhiaFfAIAWd6OrjgZ86cPhgha0=
+X-Google-Smtp-Source: ABdhPJyRMoGPnuz4MO0FmGOHIM1XSyhsQpJQrKhPLw79y8VziNPPVSJYtRew3BRLtYZwwl4H1BLduTLJZdkCaUCy8qY=
+X-Received: by 2002:a17:902:a406:b029:e6:78c4:71c8 with SMTP id
+ p6-20020a170902a406b02900e678c471c8mr1880447plq.17.1617780840716; Wed, 07 Apr
+ 2021 00:34:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210407053419.449796-1-gregkh@linuxfoundation.org> <20210407053419.449796-13-gregkh@linuxfoundation.org>
-In-Reply-To: <20210407053419.449796-13-gregkh@linuxfoundation.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 7 Apr 2021 09:19:13 +0200
-Message-ID: <CAMuHMdUP38rfMSFB87MCfJ0J_2JteKfJGYsdTnkkOcHViQL_OA@mail.gmail.com>
-Subject: Re: [PATCH 12/20] kbuild: m68k: use common install script
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
+References: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com> <20210406165108.GA4332@42.do-not-panic.com>
+In-Reply-To: <20210406165108.GA4332@42.do-not-panic.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 7 Apr 2021 10:33:44 +0300
+Message-ID: <CAHp75Ve9vBQqSegM2-ch9NUN-MdevxxOs5ZdHkk1W7AacN+Wrw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] kernel.h: Split out panic and oops helpers
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Joerg Roedel <jroedel@suse.de>, Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        linux-remoteproc@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Corey Minyard <minyard@acm.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Greg,
-
-On Wed, Apr 7, 2021 at 7:35 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> The common scripts/install.sh script will now work for m68k, all that
-> is needed is to add it to the list of arches that do not put the version
-> number in the installed file name.
+On Wed, Apr 7, 2021 at 10:25 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
 >
-> With that we can remove the m68k-only version of the install script.
+> On Tue, Apr 06, 2021 at 04:31:58PM +0300, Andy Shevchenko wrote:
+> > diff --git a/include/linux/panic_notifier.h b/include/linux/panic_notifier.h
+> > new file mode 100644
+> > index 000000000000..41e32483d7a7
+> > --- /dev/null
+> > +++ b/include/linux/panic_notifier.h
+> > @@ -0,0 +1,12 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef _LINUX_PANIC_NOTIFIERS_H
+> > +#define _LINUX_PANIC_NOTIFIERS_H
+> > +
+> > +#include <linux/notifier.h>
+> > +#include <linux/types.h>
+> > +
+> > +extern struct atomic_notifier_head panic_notifier_list;
+> > +
+> > +extern bool crash_kexec_post_notifiers;
+> > +
+> > +#endif       /* _LINUX_PANIC_NOTIFIERS_H */
 >
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: linux-m68k@lists.linux-m68k.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Why is it worth it to add another file just for this?
 
-Thanks for your patch!
+The main point is to break tons of loops that prevent having clean
+headers anymore.
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+In this case, see bug.h, which is very important in this sense.
 
-I guess it would "work" with the version number, too.
+>  Seems like a very
+> small file.
 
-Gr{oetje,eeting}s,
-
-                        Geert
+If it is an argument, it's kinda strange. We have much smaller headers.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+With Best Regards,
+Andy Shevchenko
