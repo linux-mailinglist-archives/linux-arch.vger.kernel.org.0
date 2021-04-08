@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFB7358D30
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 21:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE5F358D8E
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 21:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232919AbhDHTEY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Apr 2021 15:04:24 -0400
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:44555 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbhDHTEX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Apr 2021 15:04:23 -0400
-Received: by mail-oi1-f171.google.com with SMTP id a8so3252017oic.11;
-        Thu, 08 Apr 2021 12:04:10 -0700 (PDT)
+        id S231715AbhDHTmD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Apr 2021 15:42:03 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:42892 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231451AbhDHTmC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Apr 2021 15:42:02 -0400
+Received: by mail-oi1-f172.google.com with SMTP id n140so3366773oig.9;
+        Thu, 08 Apr 2021 12:41:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=DUrGxOBRGKnSQEqHR05dYQldYxqAXJweo2+bFsG+WpA=;
-        b=X56XCd+UzmF2lh1xts3CLdO7hFz8v7Vy+NegtIsYO2MAsmhIMSnZ0J/AaBxxRdap++
-         0aSoQkTg3F70U/hY+/1DLD06fqvuYnOzG0yC2JOCDInKeWFeU1O2GaGpZXva5ihVImmo
-         w79fe5bVC5ExbteJ2R+JapSNHeY2+j8hPwq1PhN8Zn0nlev66Z9exVRdroPFfqdQ/xOb
-         +Lm2PWjkngRiwLJjeWrUcU7Lm7SVVw1yZ7Jbkfg9INQnyqth6qMyTbNgmBVbn+7ustYN
-         MSJg2WFQiSC/jt6dv7tYqcuFwsyaXbdC8niofYhCWy+tGh849p7qXwA/dsokXpaGksUz
-         jedQ==
-X-Gm-Message-State: AOAM531ZBsTOdcM73WxLRaevEggHNKsXQt7kngpFIjKN2cyRhMdniiqf
-        HrU8D6bhFZ6nS1rIX1BCBA==
-X-Google-Smtp-Source: ABdhPJzc/ezUgVYn/c2gVo9JEsyTGvBA4ZkkApktnBVPpB6CFT0oT9dS88OzEW8tCbInDt8Gjv+2IA==
-X-Received: by 2002:a05:6808:138a:: with SMTP id c10mr7276133oiw.117.1617908650345;
-        Thu, 08 Apr 2021 12:04:10 -0700 (PDT)
+        bh=FITwZl80gS3YR2FZtlgpQ5oYWS85Ct2sijj6jggUvFY=;
+        b=TiVW/LZRUP8Pz3lJsyNkxOMK6j17tBOkoiqk/g5lAcJVW9Ha+tJixUKYHLe2e+NZtB
+         /4LB+y5lgwsq2yi53ADp5IEM+vERYOKY0GK30waHjm5e1fx7yXbkb2Sg5XyR/xsM1b7g
+         DyKU3w4TFRvv0FEiKQoIr5zEFz6MbM5TKQvvFLUeTUaZ+PS5+G4O0zxEGc0NCV2U+9oq
+         MSeNdgVb2Y38rDXNj/gDNiIwFj166mfzUP7VA8yYK3b53kVL/rpakUi2Ced87L8wigg0
+         dqACwZYSgYI0qzFjIkJ9I9ZgYi/q0QS1wZwlSJSWE1IgSqSdwHY7Q3TXBiHwlDgF5KdW
+         nVTA==
+X-Gm-Message-State: AOAM531MF01zD9dW9EQ0xBS4ShiIiQ5gt5AjbAHvYgsXjbJOGl2lOuF0
+        cFFTCXt+0CDj5VtFvo8sBA==
+X-Google-Smtp-Source: ABdhPJws8AH5mE+MDBnJXs7fKUy6WuwH3lOBsNvmWgFCUyZHpaJjOknPdkw2lABZOuOUgpOplmGZIg==
+X-Received: by 2002:aca:4ad2:: with SMTP id x201mr7515600oia.46.1617910910592;
+        Thu, 08 Apr 2021 12:41:50 -0700 (PDT)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g9sm56746otk.6.2021.04.08.12.04.08
+        by smtp.gmail.com with ESMTPSA id y10sm72595oto.18.2021.04.08.12.41.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Apr 2021 12:04:09 -0700 (PDT)
-Received: (nullmailer pid 1795497 invoked by uid 1000);
-        Thu, 08 Apr 2021 19:04:08 -0000
-Date:   Thu, 8 Apr 2021 14:04:08 -0500
+        Thu, 08 Apr 2021 12:41:49 -0700 (PDT)
+Received: (nullmailer pid 1844346 invoked by uid 1000);
+        Thu, 08 Apr 2021 19:41:48 -0000
+Date:   Thu, 8 Apr 2021 14:41:48 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>, will@kernel.org,
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     will@kernel.org, danielwa@cisco.com,
         daniel@gimpelevich.san-francisco.ca.us, arnd@kernel.org,
         akpm@linux-foundation.org, linux-arch@vger.kernel.org,
         devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
@@ -49,51 +49,144 @@ Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>, will@kernel.org,
         x86@kernel.org, linux-xtensa@linux-xtensa.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-mm@kvack.org
-Subject: Re: [PATCH v4 19/20] mips: Convert to GENERIC_CMDLINE
-Message-ID: <20210408190408.GA1724284@robh.at.kernel.org>
+Subject: Re: [PATCH v4 18/20] x86: Convert to GENERIC_CMDLINE
+Message-ID: <20210408194148.GB1724284@robh.at.kernel.org>
 References: <cover.1617375802.git.christophe.leroy@csgroup.eu>
- <a01b6cdbae01fff77e26f7a5c40ee5260e1952b5.1617375802.git.christophe.leroy@csgroup.eu>
- <20210406173836.GW2469518@zorba>
+ <ab0fd4477964cdbf99e3dd2965a455aa3e738e4b.1617375802.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210406173836.GW2469518@zorba>
+In-Reply-To: <ab0fd4477964cdbf99e3dd2965a455aa3e738e4b.1617375802.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 06, 2021 at 10:38:36AM -0700, Daniel Walker wrote:
-> On Fri, Apr 02, 2021 at 03:18:21PM +0000, Christophe Leroy wrote:
-> > -config CMDLINE_BOOL
-> > -	bool "Built-in kernel command line"
-> > -	help
-> > -	  For most systems, it is firmware or second stage bootloader that
-> > -	  by default specifies the kernel command line options.  However,
-> > -	  it might be necessary or advantageous to either override the
-> > -	  default kernel command line or add a few extra options to it.
-> > -	  For such cases, this option allows you to hardcode your own
-> > -	  command line options directly into the kernel.  For that, you
-> > -	  should choose 'Y' here, and fill in the extra boot arguments
-> > -	  in CONFIG_CMDLINE.
-> > -
-> > -	  The built-in options will be concatenated to the default command
-> > -	  line if CMDLINE_OVERRIDE is set to 'N'. Otherwise, the default
-> > -	  command line will be ignored and replaced by the built-in string.
-> > -
-> > -	  Most MIPS systems will normally expect 'N' here and rely upon
-> > -	  the command line from the firmware or the second-stage bootloader.
-> > -
+On Fri, Apr 02, 2021 at 03:18:20PM +0000, Christophe Leroy wrote:
+> This converts the architecture to GENERIC_CMDLINE.
 > 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/x86/Kconfig        | 45 ++---------------------------------------
+>  arch/x86/kernel/setup.c | 17 ++--------------
+>  2 files changed, 4 insertions(+), 58 deletions(-)
 > 
-> See how you complained that I have CMDLINE_BOOL in my changed, and you think it
-> shouldn't exist.
-> 
-> Yet here mips has it, and you just deleted it with no feature parity in your
-> changes for this.
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index a20684d56b4b..66b384228ca3 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -104,6 +104,7 @@ config X86
+>  	select ARCH_USE_QUEUED_SPINLOCKS
+>  	select ARCH_USE_SYM_ANNOTATIONS
+>  	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+> +	select ARCH_WANT_CMDLINE_PREPEND_BY_DEFAULT
 
-AFAICT, CMDLINE_BOOL equates to a non-empty or empty CONFIG_CMDLINE. You 
-seem to need it just because you have CMDLINE_PREPEND and 
-CMDLINE_APPEND. If that's not it, what feature is missing? CMDLINE_BOOL 
-is not a feature, but an implementation detail.
+Seems to be non-existent kconfig option.
+
+>  	select ARCH_WANT_DEFAULT_BPF_JIT	if X86_64
+>  	select ARCH_WANTS_DYNAMIC_TASK_STRUCT
+>  	select ARCH_WANT_HUGE_PMD_SHARE
+> @@ -118,6 +119,7 @@ config X86
+>  	select EDAC_SUPPORT
+>  	select GENERIC_CLOCKEVENTS_BROADCAST	if X86_64 || (X86_32 && X86_LOCAL_APIC)
+>  	select GENERIC_CLOCKEVENTS_MIN_ADJUST
+> +	select GENERIC_CMDLINE
+>  	select GENERIC_CMOS_UPDATE
+>  	select GENERIC_CPU_AUTOPROBE
+>  	select GENERIC_CPU_VULNERABILITIES
+> @@ -2358,49 +2360,6 @@ choice
+>  
+>  endchoice
+>  
+> -config CMDLINE_BOOL
+> -	bool "Built-in kernel command line"
+> -	help
+> -	  Allow for specifying boot arguments to the kernel at
+> -	  build time.  On some systems (e.g. embedded ones), it is
+> -	  necessary or convenient to provide some or all of the
+> -	  kernel boot arguments with the kernel itself (that is,
+> -	  to not rely on the boot loader to provide them.)
+> -
+> -	  To compile command line arguments into the kernel,
+> -	  set this option to 'Y', then fill in the
+> -	  boot arguments in CONFIG_CMDLINE.
+> -
+> -	  Systems with fully functional boot loaders (i.e. non-embedded)
+> -	  should leave this option set to 'N'.
+> -
+> -config CMDLINE
+> -	string "Built-in kernel command string"
+> -	depends on CMDLINE_BOOL
+> -	default ""
+> -	help
+> -	  Enter arguments here that should be compiled into the kernel
+> -	  image and used at boot time.  If the boot loader provides a
+> -	  command line at boot time, it is appended to this string to
+> -	  form the full kernel command line, when the system boots.
+> -
+> -	  However, you can use the CONFIG_CMDLINE_FORCE option to
+> -	  change this behavior.
+> -
+> -	  In most cases, the command line (whether built-in or provided
+> -	  by the boot loader) should specify the device for the root
+> -	  file system.
+> -
+> -config CMDLINE_FORCE
+> -	bool "Built-in command line overrides boot loader arguments"
+> -	depends on CMDLINE_BOOL && CMDLINE != ""
+> -	help
+> -	  Set this option to 'Y' to have the kernel ignore the boot loader
+> -	  command line, and use ONLY the built-in command line.
+> -
+> -	  This is used to work around broken boot loaders.  This should
+> -	  be set to 'N' under normal conditions.
+> -
+>  config MODIFY_LDT_SYSCALL
+>  	bool "Enable the LDT (local descriptor table)" if EXPERT
+>  	default y
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index 6f2de58eeb54..3f274b02e51c 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -5,6 +5,7 @@
+>   * This file contains the setup_arch() code, which handles the architecture-dependent
+>   * parts of early kernel initialization.
+>   */
+> +#include <linux/cmdline.h>
+>  #include <linux/console.h>
+>  #include <linux/crash_dump.h>
+>  #include <linux/dma-map-ops.h>
+> @@ -161,9 +162,6 @@ unsigned long saved_video_mode;
+>  #define RAMDISK_LOAD_FLAG		0x4000
+>  
+>  static char __initdata command_line[COMMAND_LINE_SIZE];
+> -#ifdef CONFIG_CMDLINE_BOOL
+> -static char __initdata builtin_cmdline[COMMAND_LINE_SIZE] = CONFIG_CMDLINE;
+> -#endif
+>  
+>  #if defined(CONFIG_EDD) || defined(CONFIG_EDD_MODULE)
+>  struct edd edd;
+> @@ -883,18 +881,7 @@ void __init setup_arch(char **cmdline_p)
+>  	bss_resource.start = __pa_symbol(__bss_start);
+>  	bss_resource.end = __pa_symbol(__bss_stop)-1;
+>  
+> -#ifdef CONFIG_CMDLINE_BOOL
+> -#ifdef CONFIG_CMDLINE_FORCE
+> -	strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+> -#else
+> -	if (builtin_cmdline[0]) {
+> -		/* append boot loader cmdline to builtin */
+> -		strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
+> -		strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+> -		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+> -	}
+> -#endif
+> -#endif
+> +	cmdline_build(boot_command_line, boot_command_line);
+>  
+>  	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+>  	*cmdline_p = command_line;
+
+Once this is all done, I wonder if we can get rid of the strlcpy and 
+perhaps also cmdline_p.
 
 Rob
