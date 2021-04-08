@@ -2,52 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F187358387
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 14:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE0C3584AF
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 15:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbhDHMp2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Apr 2021 08:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbhDHMp1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Apr 2021 08:45:27 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1210CC061763
-        for <linux-arch@vger.kernel.org>; Thu,  8 Apr 2021 05:45:16 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u17so2826792ejk.2
-        for <linux-arch@vger.kernel.org>; Thu, 08 Apr 2021 05:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=UMuAklHy/tPt7YPBozpvIQsmWDAIa3a/la6+zoUVcdI=;
-        b=JXlbvdv6BKxL2QLt+A6EZMYCjKur7zKVGHA+SPjjhttU3LjU5J8CTsvMPL70CwGYsq
-         CUXz1jkKLkBNcttlxCmAirFDD+kjBSkQXhxTFfLF/zDE+suTqi1E02kHIf/SGivtkXXC
-         r7MEDlKMlo41vpb3rOrLkq/HnnmBY745AuXsE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UMuAklHy/tPt7YPBozpvIQsmWDAIa3a/la6+zoUVcdI=;
-        b=tXZIc4lWOwqCIZWpTPGYC2phcDRH+xfjqtm7T1x8nAiFPm59Cai50xtX7SHM8uoCXN
-         aMv239wuzInEvN9tKGfpipDVlFimFEir83tDTRjp5Lhpr7BnLtIvPT7Q4lALU05tUpxQ
-         EitF4Ii2wF3sOzuWhEVckBmzd/JFcmHhoorEVCI3hoyPKRKhMcmr06N13IRvC8GMnfxD
-         oNhpK55RDfERJ9RyikeIPsTbcto6wFFQfPMenNaJu+3RE5dk6ePP7gw0nPP1GbC4jnQp
-         CKDhIKwBUuoZPQFgSb7yltbALamFQN43rLYGZyuXqGDHuz2v6ndaMOtVFeiVO6HMyUsG
-         3tvw==
-X-Gm-Message-State: AOAM532nkFfP4ZXd1Lqcz6n+ExHdbe6kysAOzuNCuzw8ZcnOGiWz8T8N
-        GMOtdRVUin55/hYjhsk0iolzlw==
-X-Google-Smtp-Source: ABdhPJwq7QZNDA3D6CGhNZXcz6mj8YzK/fNHfbq7NkBvOdUqzkgcZZF3Ehka2wUefbZcZbtsp6oq8w==
-X-Received: by 2002:a17:906:1fd7:: with SMTP id e23mr400958ejt.528.1617885914623;
-        Thu, 08 Apr 2021 05:45:14 -0700 (PDT)
-Received: from [192.168.1.149] ([80.208.71.248])
-        by smtp.gmail.com with ESMTPSA id r4sm14262813ejd.125.2021.04.08.05.45.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Apr 2021 05:45:14 -0700 (PDT)
-Subject: Re: [PATCH v1 1/1] kernel.h: Split out panic and oops helpers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        id S231370AbhDHN3f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Apr 2021 09:29:35 -0400
+Received: from mga03.intel.com ([134.134.136.65]:48288 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229803AbhDHN3e (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 8 Apr 2021 09:29:34 -0400
+IronPort-SDR: QUpz64eg2gnFCpzxDWzU/AwdrbTUJxrBXgfjbrrtWatHMBwK5ASN5glArcmYGrKckRBAVv66VO
+ L60nOvGTEpHA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="193579533"
+X-IronPort-AV: E=Sophos;i="5.82,206,1613462400"; 
+   d="scan'208";a="193579533"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 06:29:22 -0700
+IronPort-SDR: D3QHX5UVSB8YX34MZLNYlLK0kPKdVmkIBWjKvFADTZAC3rD9R9M8THaBbj3tnr/+TF6aChcI+z
+ hErj278onk1A==
+X-IronPort-AV: E=Sophos;i="5.82,206,1613462400"; 
+   d="scan'208";a="419147368"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 06:29:13 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lUUia-002IVr-4H; Thu, 08 Apr 2021 16:29:08 +0300
+Date:   Thu, 8 Apr 2021 16:29:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Joerg Roedel <jroedel@suse.de>, Wei Liu <wei.liu@kernel.org>,
         Michael Kelley <mikelley@microsoft.com>,
         Mike Rapoport <rppt@kernel.org>,
@@ -64,8 +47,8 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         openipmi-developer@lists.sourceforge.net,
         linux-remoteproc@vger.kernel.org, linux-arch@vger.kernel.org,
         kexec@lists.infradead.org, rcu@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-fsdevel@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -84,67 +67,78 @@ Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Iurii Zaikin <yzaikin@google.com>
+Subject: Re: [PATCH v1 1/1] kernel.h: Split out panic and oops helpers
+Message-ID: <YG8FJOYVovYIOLXA@smile.fi.intel.com>
 References: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <03be4ed9-8e8d-e2c2-611d-ac09c61d84f9@rasmusvillemoes.dk>
-Date:   Thu, 8 Apr 2021 14:45:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+ <03be4ed9-8e8d-e2c2-611d-ac09c61d84f9@rasmusvillemoes.dk>
 MIME-Version: 1.0
-In-Reply-To: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <03be4ed9-8e8d-e2c2-611d-ac09c61d84f9@rasmusvillemoes.dk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06/04/2021 15.31, Andy Shevchenko wrote:
-> kernel.h is being used as a dump for all kinds of stuff for a long time.
-> Here is the attempt to start cleaning it up by splitting out panic and
-> oops helpers.
+On Thu, Apr 08, 2021 at 02:45:12PM +0200, Rasmus Villemoes wrote:
+> On 06/04/2021 15.31, Andy Shevchenko wrote:
+> > kernel.h is being used as a dump for all kinds of stuff for a long time.
+> > Here is the attempt to start cleaning it up by splitting out panic and
+> > oops helpers.
+> 
+> Yay.
+> 
+> Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-Yay.
+Thanks!
 
-Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > At the same time convert users in header and lib folder to use new header.
+> > Though for time being include new header back to kernel.h to avoid twisted
+> > indirected includes for existing users.
+> 
+> I think it would be good to have some place to note that "This #include
+> is just for backwards compatibility, it will go away RealSoonNow, so if
+> you rely on something from linux/panic.h, include that explicitly
+> yourself TYVM. And if you're looking for a janitorial task, write a
+> script to check that every file that uses some identifier defined in
+> panic.h actually includes that file. When all offenders are found and
+> dealt with, remove the #include and this note.".
 
-> At the same time convert users in header and lib folder to use new header.
-> Though for time being include new header back to kernel.h to avoid twisted
-> indirected includes for existing users.
+Good and...
 
-I think it would be good to have some place to note that "This #include
-is just for backwards compatibility, it will go away RealSoonNow, so if
-you rely on something from linux/panic.h, include that explicitly
-yourself TYVM. And if you're looking for a janitorial task, write a
-script to check that every file that uses some identifier defined in
-panic.h actually includes that file. When all offenders are found and
-dealt with, remove the #include and this note.".
+> > +struct taint_flag {
+> > +	char c_true;	/* character printed when tainted */
+> > +	char c_false;	/* character printed when not tainted */
+> > +	bool module;	/* also show as a per-module taint flag */
+> > +};
+> > +
+> > +extern const struct taint_flag taint_flags[TAINT_FLAGS_COUNT];
+> 
+> While you're doing this, nothing outside of kernel/panic.c cares about
+> the definition of struct taint_flag or use the taint_flags array, so
+> could you make the definition private to that file and make the array
+> static? (Another patch, of course.)
 
-> +
-> +struct taint_flag {
-> +	char c_true;	/* character printed when tainted */
-> +	char c_false;	/* character printed when not tainted */
-> +	bool module;	/* also show as a per-module taint flag */
-> +};
-> +
-> +extern const struct taint_flag taint_flags[TAINT_FLAGS_COUNT];
+...according to the above if *you are looking for a janitorial task*... :-))
 
-While you're doing this, nothing outside of kernel/panic.c cares about
-the definition of struct taint_flag or use the taint_flags array, so
-could you make the definition private to that file and make the array
-static? (Another patch, of course.)
+> > +enum lockdep_ok {
+> > +	LOCKDEP_STILL_OK,
+> > +	LOCKDEP_NOW_UNRELIABLE,
+> > +};
+> > +
+> > +extern const char *print_tainted(void);
+> > +extern void add_taint(unsigned flag, enum lockdep_ok);
+> > +extern int test_taint(unsigned flag);
+> > +extern unsigned long get_taint(void);
+> 
+> I know you're just moving code, but it would be a nice opportunity to
+> drop the redundant externs.
 
-> +enum lockdep_ok {
-> +	LOCKDEP_STILL_OK,
-> +	LOCKDEP_NOW_UNRELIABLE,
-> +};
-> +
-> +extern const char *print_tainted(void);
-> +extern void add_taint(unsigned flag, enum lockdep_ok);
-> +extern int test_taint(unsigned flag);
-> +extern unsigned long get_taint(void);
+As above. But for all these I have heard you. So, I'll keep this response
+as part of my always only growing TODO list.
 
-I know you're just moving code, but it would be a nice opportunity to
-drop the redundant externs.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Rasmus
+
