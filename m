@@ -2,92 +2,79 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88485358E17
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 22:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF12358E77
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 22:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbhDHUIZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Apr 2021 16:08:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58688 "EHLO mail.kernel.org"
+        id S232285AbhDHUcZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Apr 2021 16:32:25 -0400
+Received: from namei.org ([65.99.196.166]:37518 "EHLO mail.namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231451AbhDHUIY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 8 Apr 2021 16:08:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E98DF61132;
-        Thu,  8 Apr 2021 20:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617912493;
-        bh=lJBvFSudiDrxZs+SnGh4YtxaarzP38H043H9PsxfbKw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tBubWWY3+neAkzvUwVEoCp09FqswXCDaRx0c5tqpOKjvcYtVCmFe8JHZ54TSymAUN
-         LcUpHK9kiXHWgsLiDmBkRkBjUyBdxgg10Kg/vhYMlvwhM6Td33Bu/fEAPoZH7Rwzg3
-         y/02Yh1kIkod5A/25l6gmVy/uGkdg25wTAzvSArNYFnlkxuDzKdqut3U9ckR8RDs9P
-         vDjyKsx0P5LjQjJsrua6oISbMFMHmtnTHx3DuSW049FdIe7WaniCJJy7rcIwUJrymm
-         s/dYmx64TzuZ1Bdy4C5SW9baPR3AZmbYAPa+qWcEfy3HARHgLptgEEwfQza7x3mWiq
-         CQZwA4HwhhFsA==
-Received: by mail-ed1-f41.google.com with SMTP id e7so3875940edu.10;
-        Thu, 08 Apr 2021 13:08:12 -0700 (PDT)
-X-Gm-Message-State: AOAM532MiIY6kAZq95BJu9tubGyyd7/DL4oJw+thkRKSDYMiwaxoJhQV
-        gQ4jjRQ5aOfzJxMQjGXOu1ZN4nPcKxa0JK0RbQ==
-X-Google-Smtp-Source: ABdhPJyQM3sGNyB4lBHJyB/vMz0AuBm9hT4GnsJ9rwYhPZ4h1PIVlO3IzyI5ADQSr6ra6UOvePCEFavpVtRgMZ1GG6I=
-X-Received: by 2002:a05:6402:212:: with SMTP id t18mr13947421edv.165.1617912491462;
- Thu, 08 Apr 2021 13:08:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <34d20d1dbb88f26d418b33985557b0475374a1a5.1617556785.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <34d20d1dbb88f26d418b33985557b0475374a1a5.1617556785.git.christophe.leroy@csgroup.eu>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 8 Apr 2021 15:08:00 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ=UNfptbNHR5XAS9BQRv3C5+YonW9rwypA5gGt2N7bGQ@mail.gmail.com>
-Message-ID: <CAL_JsqJ=UNfptbNHR5XAS9BQRv3C5+YonW9rwypA5gGt2N7bGQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v6 1/1] cmdline: Add capability to both append and
- prepend at the same time
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Will Deacon <will@kernel.org>, Daniel Walker <danielwa@cisco.com>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Arnd Bergmann <arnd@kernel.org>,
+        id S232091AbhDHUcY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 8 Apr 2021 16:32:24 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.namei.org (Postfix) with ESMTPS id 0EC185A6;
+        Thu,  8 Apr 2021 20:28:45 +0000 (UTC)
+Date:   Fri, 9 Apr 2021 06:28:44 +1000 (AEST)
+From:   James Morris <jmorris@namei.org>
+To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+cc:     Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>, devicetree@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        microblaze <monstr@monstr.eu>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        nios2 <ley.foon.tan@intel.com>,
-        Openrisc <openrisc@lists.librecores.org>,
-        linux-hexagon@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org,
-        SH-Linux <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v33 07/12] landlock: Support filesystem access-control
+In-Reply-To: <20210407160726.542794-8-mic@digikod.net>
+Message-ID: <5f4dfa1-f9ac-f31f-3237-dcf976cabbfc@namei.org>
+References: <20210407160726.542794-1-mic@digikod.net> <20210407160726.542794-8-mic@digikod.net>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="1665246916-304441139-1617913725=:4030621"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Apr 4, 2021 at 12:20 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
-> One user has expressed the need to both append and prepend some
-> built-in parameters to the command line provided by the bootloader.
->
-> Allthough it is a corner case, it is easy to implement so let's do it.
->
-> When the user chooses to prepend the bootloader provided command line
-> with the built-in command line, he is offered the possibility to enter
-> an additionnal built-in command line to be appended after the
-> bootloader provided command line.
->
-> It is a complementary feature which has no impact on the already
-> existing ones and/or the existing defconfig.
->
-> Suggested-by: Daniel Walker <danielwa@cisco.com>
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
-> Sending this out as an RFC, applies on top of the series
-> ("Implement GENERIC_CMDLINE"). I will add it to the series next spin
-> unless someone is against it.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Well, it works, but you are working around the existing kconfig and
-the result is not great. You'd never design it this way.
+--1665246916-304441139-1617913725=:4030621
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Rob
+On Wed, 7 Apr 2021, Mickaël Salaün wrote:
+
+> Changes since v31:
+> * Gracefully forbid reparenting by returning EXDEV in hook_path_link()
+>   and hook_path_rename() (hinted by Al Viro).
+> * Replace excessive WARN_ON_ONCE() with unlikely() in
+>   hook_path_rename() and use ENOENT instead of EACCES.
+> * Improve comment in unmask_layers() (pointed out by Al Viro).  Also use
+>   filesystem "topology" instead of "layout", which seems more
+>   appropriate.
+> * Add access(2) to the documented list of unsupported syscall families.
+> * Replace "option" with "flag" in hook_sb_mount() comment.
+
+Good to see these changes.
+
+Al: any further comments now on this patch?
+
+-- 
+James Morris
+<jmorris@namei.org>
+
+--1665246916-304441139-1617913725=:4030621--
