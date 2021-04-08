@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0413358C47
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 20:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AE3358C4E
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 20:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbhDHS3R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Apr 2021 14:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S232878AbhDHS3X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Apr 2021 14:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbhDHS3E (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Apr 2021 14:29:04 -0400
+        with ESMTP id S232887AbhDHS3I (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Apr 2021 14:29:08 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8FAC061762
-        for <linux-arch@vger.kernel.org>; Thu,  8 Apr 2021 11:28:52 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id w9so2894812ybw.7
-        for <linux-arch@vger.kernel.org>; Thu, 08 Apr 2021 11:28:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A299C0613DD
+        for <linux-arch@vger.kernel.org>; Thu,  8 Apr 2021 11:28:54 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 10so2816712ybu.18
+        for <linux-arch@vger.kernel.org>; Thu, 08 Apr 2021 11:28:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=sqe+SRM2tt54QgMNprHB5Ltl/JmQ4l0M9EfeayUX7cA=;
-        b=prCsiu3tjKJFc4pP0/+ujOO/HtNJYS943pILJiCXrDbIUQY4DwftcDzmjbqU8Znqzs
-         ReSZn865iFbsu11kWjfPBjM/AAiEJpAQQHUMwHxVVAeHXhQN1OHlhomroaYK7Vaim+wi
-         us6bUks8K563fMiSGiRf7cDSFVVRsSPVT9Kp3Y6HKLvXNYAASpNp0uCsZPUmsVI2RO78
-         7etrNqjlHs2AhheD8vpQrc/1+H0Q9t7QljuufEgx8rL0gFyVyX8i17OaiFy0DvugM8k8
-         kC3kVB6YoMV5Pfl80tgCca3MJ2B4VTCYyxzgyxEgHMcv4rScjHAd8A0N7P1fnaJc+bQt
-         ykzg==
+        bh=eRIdrbJ2jhHVLL9Tut/j9YYL8eIOqR89a+xPlg5BO0U=;
+        b=nmyke+h8npDMiaqZwmNe2cMGG5hnU/u86z+9PT3d46wvKA7EcCFmI0rQdqzR05Y94d
+         x+FoWT2ztku/VLu13xl6nOzxWcgAQBZNzaVQoRT/BZKY/QCn5viNJODflkqOHL2h8bIc
+         aXPxyU21LsZKarOM3mV+jnfOkvN12Im/BNNAstmefU7NUVKXda8sDV56EdzQGZkRH6HI
+         Ge28ESdL5igzDlIGSLdtjCKbzqfFWKAA99mnu1WYMj3ofZprEP9yhJ6F5n03KpOYXGRd
+         9RB68j79aY/kCAHYgMOUSzHniKYM03/nbKN1xwcZ+T/TTnJ7hc/Hh/o5UhWr0z4dfbls
+         JpkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=sqe+SRM2tt54QgMNprHB5Ltl/JmQ4l0M9EfeayUX7cA=;
-        b=KBX0ew48CEBnmCEd23kb44FBxSzn5F5688R0DRrTE7mOlZ2qILCnxgeVKDISnfcDe2
-         46bPbjWDeadpgkKyZlu7j9HykwNjrsO9wzfO5wT5g4MvoQ6H2UAKxxoj55kcg/vy3+6H
-         92WAqCMHAAYIq2gaxTPlV1v+hdGYhrDUZcBFjbF1S2ZNvU3wNLNBM51179c4OgrVnf3i
-         1dcLYAv9m9SmIr4XutrZrhl97/Kq/S8cODedGamY6MuAqv1zl4mNbqRdwHRxp865EqbP
-         17cc7fy4LhpiSdMy8legT1vtbScODVuezsfrkepERL4dZYIfRUwLI889qhBGGHoYoPnN
-         /TCg==
-X-Gm-Message-State: AOAM5337g+nOm3A4E6tPws7Gtv1Q55TXv4URXYpIQnb+cSxTs7geoQ6A
-        1KrkAal6jahP1Kodp7HaHt4KopEDwKO/74Rcg4A=
-X-Google-Smtp-Source: ABdhPJxYVjdCzFadep6CzUxo/2ynBssueHSOvDokbrGpmosVElcDFd+DnNsM/GYXnls1d0LLyuI1Tzej1BjrPfvz2Cw=
+        bh=eRIdrbJ2jhHVLL9Tut/j9YYL8eIOqR89a+xPlg5BO0U=;
+        b=d+G2whsldWdTBZPUBBxbFBOh5v7Ebh2kbKqtVl33jzkphg5OdWwPCehCwCCiaITCE3
+         WCwVm9x7gDvnswsJZMguf+zrh8A1S63QUPnBXzbQ+KkYE+Pihh2AgJnCU0IUuulrHG+y
+         H0NU8oRnlq0+Iu8QEOYgPjmGsEn/DHGmYJkVFb80B+aeH4shsnn+oumP36CMraBCKrOT
+         BMc8AtIhimySNZ651fCxrmXfE6HiJbHNfDVWM3jeNLI9Ck5exisOaqL2fU1JKVbUN2d/
+         7TSmj9j5ujIn30VUEdub5GmNf3QHDw5CMI4/W6prmirEGf3uqQNqBhemZpTdXLQg2kBe
+         2tqg==
+X-Gm-Message-State: AOAM5311dULc7y9EYQ+Vntu2vfc58XD3LhBuVwaCLKmx+31QPFzpqHIV
+        z2YCue2Rk1bhCEhIuovnxQscOPoI2bLWLHNVwZ8=
+X-Google-Smtp-Source: ABdhPJyMT0E4fOxaTOJdEe713UBqERQEDC7/usw7J6XiontVMo/EZlk1EZRRx22SXnar09N3hws8MrTfLQISf5YJ/HU=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:3560:8505:40a2:e021])
- (user=samitolvanen job=sendgmr) by 2002:a25:ae03:: with SMTP id
- a3mr14172639ybj.118.1617906531475; Thu, 08 Apr 2021 11:28:51 -0700 (PDT)
-Date:   Thu,  8 Apr 2021 11:28:28 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a25:3c9:: with SMTP id
+ 192mr14007073ybd.319.1617906533406; Thu, 08 Apr 2021 11:28:53 -0700 (PDT)
+Date:   Thu,  8 Apr 2021 11:28:29 -0700
 In-Reply-To: <20210408182843.1754385-1-samitolvanen@google.com>
-Message-Id: <20210408182843.1754385-4-samitolvanen@google.com>
+Message-Id: <20210408182843.1754385-5-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20210408182843.1754385-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
-Subject: [PATCH v6 03/18] mm: add generic function_nocfi macro
+Subject: [PATCH v6 04/18] module: ensure __cfi_check alignment
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -74,47 +74,65 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-With CONFIG_CFI_CLANG, the compiler replaces function addresses
-in instrumented C code with jump table addresses. This means that
-__pa_symbol(function) returns the physical address of the jump table
-entry instead of the actual function, which may not work as the jump
-table code will immediately jump to a virtual address that may not be
-mapped.
+CONFIG_CFI_CLANG_SHADOW assumes the __cfi_check() function is page
+aligned and at the beginning of the .text section. While Clang would
+normally align the function correctly, it fails to do so for modules
+with no executable code.
 
-To avoid this address space confusion, this change adds a generic
-definition for function_nocfi(), which architectures that support CFI
-can override. The typical implementation of would use inline assembly
-to take the function address, which avoids compiler instrumentation.
+This change ensures the correct __cfi_check() location and
+alignment. It also discards the .eh_frame section, which Clang can
+generate with certain sanitizers, such as CFI.
 
+Link: https://bugs.llvm.org/show_bug.cgi?id=46293
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Jessica Yu <jeyu@kernel.org>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
- include/linux/mm.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ scripts/module.lds.S | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 8ba434287387..22cce9c7dd05 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -124,6 +124,16 @@ extern int mmap_rnd_compat_bits __read_mostly;
- #define lm_alias(x)	__va(__pa_symbol(x))
- #endif
- 
-+/*
-+ * With CONFIG_CFI_CLANG, the compiler replaces function addresses in
-+ * instrumented C code with jump table addresses. Architectures that
-+ * support CFI can define this macro to return the actual function address
-+ * when needed.
-+ */
-+#ifndef function_nocfi
-+#define function_nocfi(x) (x)
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index 2c52535f9b56..04c5685c25cf 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -3,10 +3,20 @@
+  * Archs are free to supply their own linker scripts.  ld will
+  * combine them automatically.
+  */
++#ifdef CONFIG_CFI_CLANG
++# include <asm/page.h>
++# define ALIGN_CFI 		ALIGN(PAGE_SIZE)
++# define SANITIZER_DISCARDS	*(.eh_frame)
++#else
++# define ALIGN_CFI
++# define SANITIZER_DISCARDS
 +#endif
 +
- /*
-  * To prevent common memory management code establishing
-  * a zero page mapping on a read fault.
+ SECTIONS {
+ 	/DISCARD/ : {
+ 		*(.discard)
+ 		*(.discard.*)
++		SANITIZER_DISCARDS
+ 	}
+ 
+ 	__ksymtab		0 : { *(SORT(___ksymtab+*)) }
+@@ -41,7 +51,14 @@ SECTIONS {
+ 		*(.rodata..L*)
+ 	}
+ 
+-	.text : { *(.text .text.[0-9a-zA-Z_]*) }
++	/*
++	 * With CONFIG_CFI_CLANG, we assume __cfi_check is at the beginning
++	 * of the .text section, and is aligned to PAGE_SIZE.
++	 */
++	.text : ALIGN_CFI {
++		*(.text.__cfi_check)
++		*(.text .text.[0-9a-zA-Z_]* .text..L.cfi*)
++	}
+ #endif
+ }
+ 
 -- 
 2.31.1.295.g9ea45b61b8-goog
 
