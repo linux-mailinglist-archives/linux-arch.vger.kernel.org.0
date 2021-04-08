@@ -2,254 +2,230 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B349C3588F9
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 17:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34B4358C36
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Apr 2021 20:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbhDHPzv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Apr 2021 11:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S232827AbhDHS27 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Apr 2021 14:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbhDHPzv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Apr 2021 11:55:51 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ECDC061760;
-        Thu,  8 Apr 2021 08:55:39 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1C00841E64;
-        Thu,  8 Apr 2021 15:55:30 +0000 (UTC)
-To:     soc@kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        with ESMTP id S232814AbhDHS27 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Apr 2021 14:28:59 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D23BC061760
+        for <linux-arch@vger.kernel.org>; Thu,  8 Apr 2021 11:28:46 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id x7so2880796ybs.10
+        for <linux-arch@vger.kernel.org>; Thu, 08 Apr 2021 11:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=hFbfrV6NLQcaUFBI7qoKubPMd6hwVRmqL95jk4+jyxc=;
+        b=JBj3h6xqwlztdZoD9Dqpfp7Alwo8u054FoOK8zma9pkGeWTeuATHhjoaZNawNS9+V6
+         Tb0dfg5qd67tmw3R8nLEKrnIYOWChn0hf/JHJSKf1HDGlH5u4FFW0wRgpWmyLSvt4ajs
+         5NMl9F0QfJzNd/l72+LsejYvM3DXrFq4dHIUFzx2BzuMfxcENkc+lXht5+iKIHiJQ9jO
+         5Hv8ezegeHjGE0ZRU2sZBv0I3I9xLvPzXRtinDBJ/SSxL2hsoHBwdVVGqnvIdCCslKLV
+         FjLUh4sBAuzykaGDJG7ZoK2ZyXcz8dON+CCNISz/BBMbMLgM2CAMTit3atSJCz7eDK7b
+         N/3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=hFbfrV6NLQcaUFBI7qoKubPMd6hwVRmqL95jk4+jyxc=;
+        b=YsDExvVccw4RvGulJQgB/HIH7rpjspjQOOLTbn/37mJqHNqD9cSbBNqN9ZoJoZSz52
+         44RbOS0DzMhHUj1J+PhA31tG4mqYb+Qg5/AG0wNgcIZX7yXHA0c12SppUp97u0GO/z2m
+         lG5Y4z1odB327tBA+5kXAGCtwUzGl2hh4BKMP1+ircbULgVqnqirKur2AXn+EctUrrdq
+         omA0QcXNce05heJOWpKo3NF05rQmPR4vaPJlhfnq0LKh+eSmZy11OAdsuZCEEV90FQuT
+         1lGbIDnaPHj4XZMjYhJdTAUkS9kwzt3jZ2sAhhKjRlKUJ/PvGg/Y1IUD4tTBN1acHYZZ
+         nkJw==
+X-Gm-Message-State: AOAM530huvaWQN7q1nA91CaVkiWHyoK15F06pxcmfhEIA5bsxggv7AGQ
+        gaOfhN2E+RRpf6jsLc1o2U9rTK2bC+/jbQOc0I8=
+X-Google-Smtp-Source: ABdhPJzp417bGfyY56r6I/HGmGdmkcvMSkgwww5nAXRa8l4TGBMnYYcrRloFTGcs6uh2r5JE+hqZHf9jDTXST4AD3dM=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:3560:8505:40a2:e021])
+ (user=samitolvanen job=sendgmr) by 2002:a25:31d5:: with SMTP id
+ x204mr13666827ybx.3.1617906525373; Thu, 08 Apr 2021 11:28:45 -0700 (PDT)
+Date:   Thu,  8 Apr 2021 11:28:25 -0700
+Message-Id: <20210408182843.1754385-1-samitolvanen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
+Subject: [PATCH v6 00/18] Add support for Clang CFI
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-From:   Hector Martin <marcan@marcan.st>
-Subject: [GIT PULL] Apple M1 SoC platform bring-up for 5.13
-Message-ID: <bdb18e9f-fcd7-1e31-2224-19c0e5090706@marcan.st>
-Date:   Fri, 9 Apr 2021 00:55:28 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+        Peter Zijlstra <peterz@infradead.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd and all,
+This series adds support for Clang's Control-Flow Integrity (CFI)
+checking. With CFI, the compiler injects a runtime check before each
+indirect function call to ensure the target is a valid function with
+the correct static type. This restricts possible call targets and
+makes it more difficult for an attacker to exploit bugs that allow the
+modification of stored function pointers. For more details, see:
 
-Here's the final version of the M1 SoC bring-up series, based on
-v4 which was reviewed here:
+  https://clang.llvm.org/docs/ControlFlowIntegrity.html
 
-https://lore.kernel.org/linux-arm-kernel/20210402090542.131194-1-marcan@marcan.st/T/#u
+The first patch contains build system changes and error handling,
+and implements support for cross-module indirect call checking. The
+remaining patches address issues caused by the compiler
+instrumentation. These include fixing known type mismatches, as well
+as issues with address space confusion and cross-module function
+address equality.
 
-Changes since v4 as reviewed:
+These patches add support only for arm64, but I'll post patches also
+for x86_64 after we address the remaining issues there, including
+objtool support.
 
-* Sort DT soc bus nodes by address (NFC)
-* Introduce defines to better represent the meaning of hwirq IDs in
-   the AIC driver (NFC)
-* Update stale comments in AIC (NFC)
-* Make of_mmio_is_nonposted static and not exported (export change only)
-* Rewrite pci_remap_cfgspace() more succintly using ?: operator (NFC)
-* Update FIQ series merge to arm64/for-next/fiq
-* Remove the nVHE series (we will let this go through amd64 on its own)
+You can also pull this series from
 
-The public key that signed the tag is available here:
+  https://github.com/samitolvanen/linux.git cfi-v6
 
-https://mrcn.st/pub
+---
+Changes in v6:
+ - Added temporary variables and moved assembly constraints to a
+   separate line based on Mark's suggestions.
 
-Or pull e22a629a4c515dd5 from keys.gnupg.net or pgp.mit.edu.
+Changes in v5:
+ - Changed module.lds.S to only include <asm/page.h> when CFI is
+   enabled to fix the MIPS build.
+ - Added a patch that fixes dynamic ftrace with CFI on arm64.
 
-Cheers,
-Hector
+Changes in v4:
+ - Per Mark's suggestion, dropped __pa_function() and renamed
+   __va_function() to function_nocfi().
+ - Added a comment to function_nocfi() to explain what it does.
+ - Updated the psci patch to use an intermediate variable for
+   the physical address for clarity.
 
-The following changes since commit 847bea3d08af9158ae9e17b43632d6aa4f1702a0:
+Changes in v3:
+ - Added a patch to change list_sort() callers treewide to use
+   const pointers instead of simply removing the internal casts.
+ - Changed cleanup_symbol_name() to return bool.
+ - Changed module.lds.S to drop the .eh_frame section only with
+   CONFIG_CFI_CLANG.
+ - Switched to synchronize_rcu() in update_shadow().
 
-   Merge remote-tracking branch 'arm64/for-next/fiq' (2021-04-08 19:21:57 +0900)
+Changes in v2:
+ - Fixed .text merging in module.lds.S.
+ - Added WARN_ON_FUNCTION_MISMATCH() and changed kernel/thread.c
+   and kernel/workqueue.c to use the macro instead.
 
-are available in the Git repository at:
 
-   https://github.com/AsahiLinux/linux.git tags/m1-soc-bringup-v5
+Sami Tolvanen (18):
+  add support for Clang CFI
+  cfi: add __cficanonical
+  mm: add generic function_nocfi macro
+  module: ensure __cfi_check alignment
+  workqueue: use WARN_ON_FUNCTION_MISMATCH
+  kthread: use WARN_ON_FUNCTION_MISMATCH
+  kallsyms: strip ThinLTO hashes from static functions
+  bpf: disable CFI in dispatcher functions
+  treewide: Change list_sort to use const pointers
+  lkdtm: use function_nocfi
+  psci: use function_nocfi for cpu_resume
+  arm64: implement function_nocfi
+  arm64: use function_nocfi with __pa_symbol
+  arm64: add __nocfi to functions that jump to a physical address
+  arm64: add __nocfi to __apply_alternatives
+  arm64: ftrace: use function_nocfi for ftrace_call
+  KVM: arm64: Disable CFI for nVHE
+  arm64: allow CONFIG_CFI_CLANG to be selected
 
-for you to fetch changes up to 7d2d16ccf15d8eb84accfaf44a0b324f36e39588:
+ Makefile                                      |  17 +
+ arch/Kconfig                                  |  45 +++
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/include/asm/memory.h               |  16 +
+ arch/arm64/include/asm/mmu_context.h          |   4 +-
+ arch/arm64/kernel/acpi_parking_protocol.c     |   3 +-
+ arch/arm64/kernel/alternative.c               |   4 +-
+ arch/arm64/kernel/cpu-reset.h                 |  10 +-
+ arch/arm64/kernel/cpufeature.c                |   4 +-
+ arch/arm64/kernel/ftrace.c                    |   2 +-
+ arch/arm64/kernel/psci.c                      |   3 +-
+ arch/arm64/kernel/smp_spin_table.c            |   3 +-
+ arch/arm64/kvm/hyp/nvhe/Makefile              |   6 +-
+ arch/arm64/kvm/vgic/vgic-its.c                |   8 +-
+ arch/arm64/kvm/vgic/vgic.c                    |   3 +-
+ block/blk-mq-sched.c                          |   3 +-
+ block/blk-mq.c                                |   3 +-
+ drivers/acpi/nfit/core.c                      |   3 +-
+ drivers/acpi/numa/hmat.c                      |   3 +-
+ drivers/clk/keystone/sci-clk.c                |   4 +-
+ drivers/firmware/psci/psci.c                  |   7 +-
+ drivers/gpu/drm/drm_modes.c                   |   3 +-
+ drivers/gpu/drm/i915/gt/intel_engine_user.c   |   3 +-
+ drivers/gpu/drm/i915/gvt/debugfs.c            |   2 +-
+ drivers/gpu/drm/i915/selftests/i915_gem_gtt.c |   3 +-
+ drivers/gpu/drm/radeon/radeon_cs.c            |   4 +-
+ .../hw/usnic/usnic_uiom_interval_tree.c       |   3 +-
+ drivers/interconnect/qcom/bcm-voter.c         |   2 +-
+ drivers/md/raid5.c                            |   3 +-
+ drivers/misc/lkdtm/usercopy.c                 |   2 +-
+ drivers/misc/sram.c                           |   4 +-
+ drivers/nvme/host/core.c                      |   3 +-
+ .../controller/cadence/pcie-cadence-host.c    |   3 +-
+ drivers/spi/spi-loopback-test.c               |   3 +-
+ fs/btrfs/raid56.c                             |   3 +-
+ fs/btrfs/tree-log.c                           |   3 +-
+ fs/btrfs/volumes.c                            |   3 +-
+ fs/ext4/fsmap.c                               |   4 +-
+ fs/gfs2/glock.c                               |   3 +-
+ fs/gfs2/log.c                                 |   2 +-
+ fs/gfs2/lops.c                                |   3 +-
+ fs/iomap/buffered-io.c                        |   3 +-
+ fs/ubifs/gc.c                                 |   7 +-
+ fs/ubifs/replay.c                             |   4 +-
+ fs/xfs/scrub/bitmap.c                         |   4 +-
+ fs/xfs/xfs_bmap_item.c                        |   4 +-
+ fs/xfs/xfs_buf.c                              |   6 +-
+ fs/xfs/xfs_extent_busy.c                      |   4 +-
+ fs/xfs/xfs_extent_busy.h                      |   3 +-
+ fs/xfs/xfs_extfree_item.c                     |   4 +-
+ fs/xfs/xfs_refcount_item.c                    |   4 +-
+ fs/xfs/xfs_rmap_item.c                        |   4 +-
+ include/asm-generic/bug.h                     |  16 +
+ include/asm-generic/vmlinux.lds.h             |  20 +-
+ include/linux/bpf.h                           |   4 +-
+ include/linux/cfi.h                           |  41 +++
+ include/linux/compiler-clang.h                |   3 +
+ include/linux/compiler_types.h                |   8 +
+ include/linux/init.h                          |   6 +-
+ include/linux/list_sort.h                     |   7 +-
+ include/linux/mm.h                            |  10 +
+ include/linux/module.h                        |  13 +-
+ include/linux/pci.h                           |   4 +-
+ init/Kconfig                                  |   2 +-
+ kernel/Makefile                               |   4 +
+ kernel/cfi.c                                  | 329 ++++++++++++++++++
+ kernel/kallsyms.c                             |  55 ++-
+ kernel/kthread.c                              |   3 +-
+ kernel/module.c                               |  43 +++
+ kernel/workqueue.c                            |   2 +-
+ lib/list_sort.c                               |  17 +-
+ lib/test_list_sort.c                          |   3 +-
+ net/tipc/name_table.c                         |   4 +-
+ scripts/Makefile.modfinal                     |   2 +-
+ scripts/module.lds.S                          |  19 +-
+ 75 files changed, 760 insertions(+), 113 deletions(-)
+ create mode 100644 include/linux/cfi.h
+ create mode 100644 kernel/cfi.c
 
-   arm64: apple: Add initial Apple Mac mini (M1, 2020) devicetree (2021-04-08 20:18:41 +0900)
 
-----------------------------------------------------------------
-Apple M1 SoC platform bring-up
+base-commit: e0a472fffe435af52ea4e21e1e0001c5c8ffc6c7
+-- 
+2.31.1.295.g9ea45b61b8-goog
 
-This series brings up initial support for the Apple M1 SoC, used in the
-2020 Mac Mini, MacBook Pro, and MacBook Air models.
-
-The following features are supported in this initial port:
-
-- UART (samsung-style) with earlycon support
-- Interrupts, including affinity and IPIs (Apple Interrupt Controller)
-- SMP (through standard spin-table support)
-- simplefb-based framebuffer
-- Devicetree for the Mac Mini (should work for the others too at this
-   stage)
-
-== Merge notes ==
-
-This tag is based on v5.12-rc3 and includes the following two
-dependencies merged in:
-
-* Tip of arm64/for-next/fiq: 3889ba70102e
-   This is a hard (build) dependency that adds support for FIQ
-   interrupts, which is required for this SoC and the included AIC
-   irqchip driver. It is already merged in the arm64 tree.
-
-* From tty/tty-next: 71b25f4df984
-   This commit includes the Samsung UART changes that have already
-   been merged into the tty tree. It is nominally a soft dependency,
-   but if this series is merged first it would trigger devicetree
-   validation failures as the DT included in it depends on bindings
-   introduced in the tty tree.
-
-   There was a merge conflict here. It has been resolved the same
-   way gregkh resolved it in a later tty merge, and both tty-next
-   and torvalds/master merge cleanly with this series at this time.
-
-This series additionally depends on the nVHE changes in [1] to boot,
-but we are letting those get merged through arm64.
-
-[1] https://lore.kernel.org/linux-arm-kernel/20210408131010.1109027-1-maz@kernel.org/T/#u
-
-== Testing notes ==
-
-This has been tested on an Apple M1 Mac Mini booting to a framebuffer
-and serial console, with SMP and KASLR, with an arm64 defconfig
-(+ CONFIG_FB_SIMPLE for the fb). In addition, the AIC driver now
-supports running in EL1, tested in UP mode only.
-
-== About the hardware ==
-
-These machines officially support booting unsigned/user-provided
-XNU-like kernels, with a very different boot protocol and devicetree
-format. We are developing an initial bootloader, m1n1 [1], to take care
-of as many hardware peculiarities as possible and present a standard
-Linux arm64 boot protocol and device tree. In the future, I expect that
-production setups will add U-Boot and perhaps GRUB into the boot chain,
-to make the boot process similar to other ARM64 platforms.
-
-The machines expose their debug UART over USB Type C, triggered with
-vendor-specific USB-PD commands. Currently, the easiest way to get a
-serial console on these machines is to use a second M1 box and a simple
-USB C cable [2]. You can also build a DIY interface using an Arduino, a
-FUSB302 chip or board, and a 1.2V UART-TTL adapter [3]. In the coming
-weeks we will be designing an open hardware project to provide
-serial/debug connectivity to these machines (and, hopefully, also
-support other UART-over-Type C setups from other vendors). Please
-contact me privately if you are interested in getting an early prototype
-version of one of these devices.
-
-We also have WIP/not merged yet support for loading kernels and
-interacting via dwc3 usb-gadget, which works with a standard C-C or C-A
-cable and any Linux host.
-
-A quickstart guide to booting Linux kernels on these machines is
-available at [4], and we are documenting the hardware at [5].
-
-[1] https://github.com/AsahiLinux/m1n1/
-[2] https://github.com/AsahiLinux/macvdmtool/
-[3] https://github.com/AsahiLinux/vdmtool/
-[4] https://github.com/AsahiLinux/docs/wiki/Developer-Quickstart
-[5] https://github.com/AsahiLinux/docs/wiki
-
-== Project Blurb ==
-
-Asahi Linux is an open community project dedicated to developing and
-maintaining mainline support for Apple Silicon on Linux. Feel free to
-drop by #asahi and #asahi-dev on freenode to chat with us, or check
-our website for more information on the project:
-
-https://asahilinux.org/
-
-Signed-off-by: Hector Martin <marcan@marcan.st>
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-       docs: driver-api: device-io: Document I/O access functions
-
-Hector Martin (17):
-       dt-bindings: vendor-prefixes: Add apple prefix
-       dt-bindings: arm: apple: Add bindings for Apple ARM platforms
-       dt-bindings: arm: cpus: Add apple,firestorm & icestorm compatibles
-       arm64: cputype: Add CPU implementor & types for the Apple M1 cores
-       dt-bindings: timer: arm,arch_timer: Add interrupt-names support
-       arm64: arch_timer: Implement support for interrupt-names
-       asm-generic/io.h:  Add a non-posted variant of ioremap()
-       docs: driver-api: device-io: Document ioremap() variants & access funcs
-       arm64: Implement ioremap_np() to map MMIO as nGnRnE
-       asm-generic/io.h: implement pci_remap_cfgspace using ioremap_np
-       of/address: Add infrastructure to declare MMIO as non-posted
-       arm64: Move ICH_ sysreg bits from arm-gic-v3.h to sysreg.h
-       dt-bindings: interrupt-controller: Add DT bindings for apple-aic
-       irqchip/apple-aic: Add support for the Apple Interrupt Controller
-       arm64: Kconfig: Introduce CONFIG_ARCH_APPLE
-       dt-bindings: display: Add apple,simple-framebuffer
-       arm64: apple: Add initial Apple Mac mini (M1, 2020) devicetree
-
-  Documentation/devicetree/bindings/arm/apple.yaml   |  64 ++
-  Documentation/devicetree/bindings/arm/cpus.yaml    |   2 +
-  .../bindings/display/simple-framebuffer.yaml       |   5 +
-  .../bindings/interrupt-controller/apple,aic.yaml   |  88 +++
-  .../devicetree/bindings/timer/arm,arch_timer.yaml  |  19 +
-  .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
-  Documentation/driver-api/device-io.rst             | 356 +++++++++
-  Documentation/driver-api/driver-model/devres.rst   |   1 +
-  MAINTAINERS                                        |  14 +
-  arch/arm64/Kconfig.platforms                       |   7 +
-  arch/arm64/boot/dts/Makefile                       |   1 +
-  arch/arm64/boot/dts/apple/Makefile                 |   2 +
-  arch/arm64/boot/dts/apple/t8103-j274.dts           |  45 ++
-  arch/arm64/boot/dts/apple/t8103.dtsi               | 135 ++++
-  arch/arm64/configs/defconfig                       |   1 +
-  arch/arm64/include/asm/cputype.h                   |   6 +
-  arch/arm64/include/asm/io.h                        |  11 +-
-  arch/arm64/include/asm/sysreg.h                    |  60 ++
-  arch/sparc/include/asm/io_64.h                     |   4 +
-  drivers/clocksource/arm_arch_timer.c               |  24 +-
-  drivers/irqchip/Kconfig                            |   8 +
-  drivers/irqchip/Makefile                           |   1 +
-  drivers/irqchip/irq-apple-aic.c                    | 852 +++++++++++++++++++++
-  drivers/of/address.c                               |  43 +-
-  include/asm-generic/io.h                           |  22 +-
-  include/asm-generic/iomap.h                        |   9 +
-  include/clocksource/arm_arch_timer.h               |   1 +
-  .../dt-bindings/interrupt-controller/apple-aic.h   |  15 +
-  include/linux/cpuhotplug.h                         |   1 +
-  include/linux/io.h                                 |  18 +-
-  include/linux/ioport.h                             |   1 +
-  include/linux/irqchip/arm-gic-v3.h                 |  56 --
-  lib/devres.c                                       |  22 +
-  33 files changed, 1816 insertions(+), 80 deletions(-)
-  create mode 100644 Documentation/devicetree/bindings/arm/apple.yaml
-  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-  create mode 100644 arch/arm64/boot/dts/apple/Makefile
-  create mode 100644 arch/arm64/boot/dts/apple/t8103-j274.dts
-  create mode 100644 arch/arm64/boot/dts/apple/t8103.dtsi
-  create mode 100644 drivers/irqchip/irq-apple-aic.c
-  create mode 100644 include/dt-bindings/interrupt-controller/apple-aic.h
