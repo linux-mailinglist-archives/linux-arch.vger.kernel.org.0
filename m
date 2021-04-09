@@ -2,134 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF9D359BB0
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 12:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A9D359BDE
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 12:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbhDIKPm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Apr 2021 06:15:42 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:54986 "EHLO mail.skyhub.de"
+        id S233587AbhDIKVP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Apr 2021 06:21:15 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:29555 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233851AbhDIKMb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Apr 2021 06:12:31 -0400
-Received: from zn.tnic (p200300ec2f0be10048f842a34b65c796.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:e100:48f8:42a3:4b65:c796])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5143E1EC0345;
-        Fri,  9 Apr 2021 12:12:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1617963136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=koEbuNDmdhGDu2ay8IpM2qYEJm21DVX8eeBWkuWqc2I=;
-        b=JOjOjGo6n8ctViJXkPL+UQEHtj5zYd8rpZrcP+sZezMa1SBathd+X2ZANVtH3ls4n/eoYb
-        VZP38BQpV+Qv7OU47u+1xlbjMsBo1L/PI+lytUBsoMo3U9GugzTZG2nnh/UGDRP3E+/YyZ
-        9N1soZxem3P3MhhtTg9MdzUnZ0kOe98=
-Date:   Fri, 9 Apr 2021 12:12:14 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v24 04/30] x86/cpufeatures: Introduce X86_FEATURE_CET and
- setup functions
-Message-ID: <20210409101214.GC15567@zn.tnic>
-References: <20210401221104.31584-1-yu-cheng.yu@intel.com>
- <20210401221104.31584-5-yu-cheng.yu@intel.com>
+        id S232990AbhDIKVN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Apr 2021 06:21:13 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4FGvKd22R6z9vBmN;
+        Fri,  9 Apr 2021 12:20:53 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id U6kaT8vyPDk2; Fri,  9 Apr 2021 12:20:53 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FGvKd0qpkz9vBmM;
+        Fri,  9 Apr 2021 12:20:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 449288B7E3;
+        Fri,  9 Apr 2021 12:20:54 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 20mYPqZcSrF8; Fri,  9 Apr 2021 12:20:54 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0866D8B7E1;
+        Fri,  9 Apr 2021 12:20:52 +0200 (CEST)
+Subject: Re: [PATCH v4 18/20] x86: Convert to GENERIC_CMDLINE
+To:     Rob Herring <robh@kernel.org>
+Cc:     will@kernel.org, danielwa@cisco.com,
+        daniel@gimpelevich.san-francisco.ca.us, arnd@kernel.org,
+        akpm@linux-foundation.org, linux-arch@vger.kernel.org,
+        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        microblaze <monstr@monstr.eu>, linux-mips@vger.kernel.org,
+        nios2 <ley.foon.tan@intel.com>, openrisc@lists.librecores.org,
+        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1617375802.git.christophe.leroy@csgroup.eu>
+ <ab0fd4477964cdbf99e3dd2965a455aa3e738e4b.1617375802.git.christophe.leroy@csgroup.eu>
+ <20210408194148.GB1724284@robh.at.kernel.org>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <834c4850-5541-b5c2-0b7b-d7d960ab2629@csgroup.eu>
+Date:   Fri, 9 Apr 2021 12:20:49 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210401221104.31584-5-yu-cheng.yu@intel.com>
+In-Reply-To: <20210408194148.GB1724284@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 01, 2021 at 03:10:38PM -0700, Yu-cheng Yu wrote:
-> Introduce a software-defined X86_FEATURE_CET, which indicates either Shadow
-> Stack or Indirect Branch Tracking (or both) is present.  Also introduce
-> related cpu init/setup functions.
+
+
+Le 08/04/2021 à 21:41, Rob Herring a écrit :
+> On Fri, Apr 02, 2021 at 03:18:20PM +0000, Christophe Leroy wrote:
+>> This converts the architecture to GENERIC_CMDLINE.
+>>
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> ---
+>>   arch/x86/Kconfig        | 45 ++---------------------------------------
+>>   arch/x86/kernel/setup.c | 17 ++--------------
+>>   2 files changed, 4 insertions(+), 58 deletions(-)
+>>
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index a20684d56b4b..66b384228ca3 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -104,6 +104,7 @@ config X86
+>>   	select ARCH_USE_QUEUED_SPINLOCKS
+>>   	select ARCH_USE_SYM_ANNOTATIONS
+>>   	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+>> +	select ARCH_WANT_CMDLINE_PREPEND_BY_DEFAULT
 > 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> ---
-> v24:
-> - Update #ifdef placement to reflect Kconfig changes of splitting shadow stack and ibt.
+> Seems to be non-existent kconfig option.
+
+Oops. Added in v5.
+
+>> @@ -883,18 +881,7 @@ void __init setup_arch(char **cmdline_p)
+>>   	bss_resource.start = __pa_symbol(__bss_start);
+>>   	bss_resource.end = __pa_symbol(__bss_stop)-1;
+>>   
+>> -#ifdef CONFIG_CMDLINE_BOOL
+>> -#ifdef CONFIG_CMDLINE_FORCE
+>> -	strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+>> -#else
+>> -	if (builtin_cmdline[0]) {
+>> -		/* append boot loader cmdline to builtin */
+>> -		strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
+>> -		strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+>> -		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+>> -	}
+>> -#endif
+>> -#endif
+>> +	cmdline_build(boot_command_line, boot_command_line);
+>>   
+>>   	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+>>   	*cmdline_p = command_line;
 > 
->  arch/x86/include/asm/cpufeatures.h          |  2 +-
->  arch/x86/include/asm/disabled-features.h    |  9 ++++++++-
->  arch/x86/include/uapi/asm/processor-flags.h |  2 ++
->  arch/x86/kernel/cpu/common.c                | 14 ++++++++++++++
->  arch/x86/kernel/cpu/intel.c                 |  3 +++
->  5 files changed, 28 insertions(+), 2 deletions(-)
+> Once this is all done, I wonder if we can get rid of the strlcpy and
+> perhaps also cmdline_p.
 > 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index bf861fc89fef..d771e62677de 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -108,7 +108,7 @@
->  #define X86_FEATURE_EXTD_APICID		( 3*32+26) /* Extended APICID (8 bits) */
->  #define X86_FEATURE_AMD_DCM		( 3*32+27) /* AMD multi-node processor */
->  #define X86_FEATURE_APERFMPERF		( 3*32+28) /* P-State hardware coordination feedback capability (APERF/MPERF MSRs) */
-> -/* free					( 3*32+29) */
-> +#define X86_FEATURE_CET			( 3*32+29) /* Control-flow enforcement */
 
-Right, I know we talked about having this synthetic flag but now that we
-are moving to CONFIG_X86_SHADOW_STACK and separate SHSTK and IBT feature
-bits, that synthetic flag is not needed anymore.
+It seems rather complicated, in init/main.c you have heavy manipulations of command lines which 
+seems to be done in setup_command_line() which seems to add stuff in front of command lines, at the 
+end we end up with several command lines:
 
-For the cases where you wanna test whether any of the two are present,
-we're probably better off adding a x86_cet_enabled() helper which tests
-SHSTK and IBT bits.
+/* Untouched saved command line (eg. for /proc) */
+char *saved_command_line;
+/* Command line for parameter parsing */
+static char *static_command_line;
+/* Untouched extra command line */
+static char *extra_command_line;
 
-I haven't gone through the whole thing yet but depending on the context
-and the fact that AMD doesn't support IBT, that helper might need some
-tweaking too. I'll see.
+Some of them come from the cmdline_p which others are from boot_command_line.
 
->  #define X86_FEATURE_NONSTOP_TSC_S3	( 3*32+30) /* TSC doesn't stop in S3 state */
->  #define X86_FEATURE_TSC_KNOWN_FREQ	( 3*32+31) /* TSC has known frequency */
->  
-> diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-> index e5c6ed9373e8..018cd7acd3e9 100644
-> --- a/arch/x86/include/asm/disabled-features.h
-> +++ b/arch/x86/include/asm/disabled-features.h
-> @@ -74,13 +74,20 @@
->  #define DISABLE_SHSTK	(1 << (X86_FEATURE_SHSTK & 31))
->  #endif
->  
-> +#ifdef CONFIG_X86_CET
-
-And you don't need that config item either - AFAICT, you can use
-CONFIG_X86_SHADOW_STACK everywhere.
-
-Which would simplify that config space.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+I think a cleanup on all that stuff would be worth it as a further step.
