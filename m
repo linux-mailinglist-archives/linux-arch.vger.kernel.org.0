@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3E035A1E8
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 17:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C1735A1F7
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 17:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbhDIPXL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Apr 2021 11:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S233332AbhDIP0E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Apr 2021 11:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234077AbhDIPXK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Apr 2021 11:23:10 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9461C061763
-        for <linux-arch@vger.kernel.org>; Fri,  9 Apr 2021 08:22:56 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id p23so3241103ljn.0
-        for <linux-arch@vger.kernel.org>; Fri, 09 Apr 2021 08:22:56 -0700 (PDT)
+        with ESMTP id S232855AbhDIP0E (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Apr 2021 11:26:04 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48955C061761
+        for <linux-arch@vger.kernel.org>; Fri,  9 Apr 2021 08:25:50 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id f17so3237730lfu.7
+        for <linux-arch@vger.kernel.org>; Fri, 09 Apr 2021 08:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=shutemov-name.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+k4OGaKct24bDTvy6WNpkixMUqc+BwIGOTLeQUlDJc4=;
-        b=1Wu1lDrLqKmQYbSQDEj3E9Qxwy8h1i7mhDgpBkPzrLQYTLbGaj5Mp0CsW6mRfMyThA
-         M3l5WLK+P1MkxgBmTaYdZIROCBIj12DdPSCwZqNSj3ObZXK0b0fzj8h/89RpWSnV4TV+
-         Htot1/fni42/e1gUjMQPMQKljI746lZ6jOJQuaJvg9NIgikAYKMLSHWCbPXd4SmVDfPI
-         LyNR2+J8q/LjOawjya2k3HMCCepMroyH1PsEu4EZgi+yt+w7oCQMlIo3YYV6MiG/t9VH
-         a3vrnuDmVuOI4h25ik81QKx7//UAYMDnAi+T/eFKiOjOJFKh4hxGGfPdcArgZNYFQcgd
-         UFzA==
+        bh=ce6m/UIYgJRrvW7RSWTVG0DWr0xVOqVU43L3DVJ9fRM=;
+        b=yjbbIWyxQB6ZNUWgWfXJj3TAnOTe4JM6fJUMA5SEQGFwbrcyHgQFh7RRX3fMjsJ/xx
+         oyp07+etBQnRQM/45znSt5gvJUkKaV/U8P16uBLY5/5q2Ox/X1QE8iHhmrogr857yYND
+         y6+yyooKI4LUiqOlnFAqI6Y/g0e4hrZtP2vIpCvyeXtba+XlKfyQ/cQN1+u56KPvAJsh
+         WZT11/5zIkeJ5jAiwNriUs9WFOSvs/96XRhwFVKfF2IYmUea2Ht83hRyv99gYlnAspzl
+         +rPgQdI4fCf0Lj1rH0HVobtyCnaLofrLFNi3F2KG6RO8RetuxutaZEP9TAP9K7EpTjwx
+         fLBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+k4OGaKct24bDTvy6WNpkixMUqc+BwIGOTLeQUlDJc4=;
-        b=oe64QMfxNSEz8tar17NFqw6cr8frmBUjr8qCmo+B4/DEWzB2AIndQJcihAhe3YLPpm
-         YzZK2+uv6ItzbJb8K744ZODdlhmoX8PVbXrwytn7ArB2DpgcSShIcdPt2tEIxUWxENFb
-         znZLV/1yAnce7zgJHJuac9yCZ7tjYo1TV7kZywch3VfA434Hj1Dpc7x3V2UsqcJY3fFj
-         LcxMbz59yWEN3BxO/6tAKWXyrIUG6uJPg069+Fx0W0enmO5q2Vm6HlWSh+xHY3v8V7p6
-         9tESz3E05dHlD1FoNl6uZNT3f6JuWLh9Y4+1nPJqqFdcEZ8E2YEIvLJ9byUiRpK9OeCf
-         Yeug==
-X-Gm-Message-State: AOAM533aQj2ErkZkCjBTqT6dASjBnvg04WunZNaa+XxAtaxJ3gAWkgFA
-        aXOQCBqdkTjHazY4ch8/wrzkxg==
-X-Google-Smtp-Source: ABdhPJzqAlWa1t3oxJTDCx16afMmbftoO5aawVqh56tv5EJ1nWbjUQVZoeXq47yGs0zD4CmHEoPHCQ==
-X-Received: by 2002:a2e:a487:: with SMTP id h7mr9297185lji.447.1617981775309;
-        Fri, 09 Apr 2021 08:22:55 -0700 (PDT)
+        bh=ce6m/UIYgJRrvW7RSWTVG0DWr0xVOqVU43L3DVJ9fRM=;
+        b=fWMIdZ72A/JN+6qa6oWRT7UxxcBYGXLJAkqn25VDHl4X+rJPLWVgARdpxbbxauq4J7
+         1Ae4EsgQKqgrqMnIEYjSYstG1AJDtVztExEPnXavWuicdDoLugm2OQxfO87FXA580s7o
+         ZSDyX/WyS5QA/pi8l6x7pOGl6fVRR9jatA4YCzsegwH286uLnp6YtlokobL1n5s17sk7
+         4P3+7nVH1zj/uGhqFPdlxNdDrtMDRPd2BPiyKAFtiu4rUksj1RamE3ElWvHED3RTg9gr
+         1rqxvF5M9aaQvaXQjzw+1K/jmE0zIa2HJ/EE546tPo+VE0+b1s3+ZEBJ/U3Xd43i2a40
+         H8OA==
+X-Gm-Message-State: AOAM532QtZtdKU9Yq+ImmaxgoKV6BBnH3tgiFNcpQEpAbjOwMAOh5jak
+        i3ijVsTPtClqXBuSCIAhtFrajg==
+X-Google-Smtp-Source: ABdhPJxFBsu79jPxCQidLtLR6o7KuhwUDppH8nwIit73lLNAUMKcEtfajg/yu084AD0cUS8KP90s1A==
+X-Received: by 2002:ac2:51de:: with SMTP id u30mr10804713lfm.550.1617981948362;
+        Fri, 09 Apr 2021 08:25:48 -0700 (PDT)
 Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id n11sm298684ljg.7.2021.04.09.08.22.54
+        by smtp.gmail.com with ESMTPSA id m19sm307113lfl.170.2021.04.09.08.25.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Apr 2021 08:22:54 -0700 (PDT)
+        Fri, 09 Apr 2021 08:25:47 -0700 (PDT)
 Received: by box.localdomain (Postfix, from userid 1000)
-        id 2C0B7102498; Fri,  9 Apr 2021 18:22:54 +0300 (+03)
-Date:   Fri, 9 Apr 2021 18:22:54 +0300
+        id 58AB3102498; Fri,  9 Apr 2021 18:25:47 +0300 (+03)
+Date:   Fri, 9 Apr 2021 18:25:47 +0300
 From:   "Kirill A. Shutemov" <kirill@shutemov.name>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
@@ -80,63 +80,54 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v24 17/30] mm: Add guard pages around a shadow stack.
-Message-ID: <20210409152254.tmpfubsksrd2qbeq@box.shutemov.name>
+Subject: Re: [PATCH v24 18/30] mm/mmap: Add shadow stack pages to memory
+ accounting
+Message-ID: <20210409152547.ljbcoqrqyej7ojxs@box.shutemov.name>
 References: <20210401221104.31584-1-yu-cheng.yu@intel.com>
- <20210401221104.31584-18-yu-cheng.yu@intel.com>
+ <20210401221104.31584-19-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210401221104.31584-18-yu-cheng.yu@intel.com>
+In-Reply-To: <20210401221104.31584-19-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 01, 2021 at 03:10:51PM -0700, Yu-cheng Yu wrote:
-> INCSSP(Q/D) increments shadow stack pointer and 'pops and discards' the
-> first and the last elements in the range, effectively touches those memory
-> areas.
-> 
-> The maximum moving distance by INCSSPQ is 255 * 8 = 2040 bytes and
-> 255 * 4 = 1020 bytes by INCSSPD.  Both ranges are far from PAGE_SIZE.
-> Thus, putting a gap page on both ends of a shadow stack prevents INCSSP,
-> CALL, and RET from going beyond.
+On Thu, Apr 01, 2021 at 03:10:52PM -0700, Yu-cheng Yu wrote:
+> Account shadow stack pages to stack memory.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > Cc: Kees Cook <keescook@chromium.org>
 > Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > ---
 > v24:
-> - Instead changing vm_*_gap(), create x86-specific versions.
+> - Change arch_shadow_stack_mapping() to is_shadow_stack_mapping().
+> - Change VM_SHSTK to VM_SHADOW_STACK.
 > 
->  arch/x86/include/asm/page_types.h | 17 +++++++++++++++
->  arch/x86/mm/mmap.c                | 36 +++++++++++++++++++++++++++++++
->  include/linux/mm.h                |  4 ++++
->  3 files changed, 57 insertions(+)
+>  arch/x86/mm/pgtable.c   |  7 +++++++
+>  include/linux/pgtable.h | 11 +++++++++++
+>  mm/mmap.c               |  5 +++++
+>  3 files changed, 23 insertions(+)
 > 
-> diff --git a/arch/x86/include/asm/page_types.h b/arch/x86/include/asm/page_types.h
-> index a506a411474d..3a5529bcfd76 100644
-> --- a/arch/x86/include/asm/page_types.h
-> +++ b/arch/x86/include/asm/page_types.h
-> @@ -73,6 +73,23 @@ bool pfn_range_is_mapped(unsigned long start_pfn, unsigned long end_pfn);
+> diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+> index e778dbbef3d8..212a8c1fe5ba 100644
+> --- a/arch/x86/mm/pgtable.c
+> +++ b/arch/x86/mm/pgtable.c
+> @@ -897,3 +897,10 @@ int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
 >  
->  extern void initmem_init(void);
->  
-> +/*
-> + * Shadow stack pointer is moved by CALL, RET, and INCSSP(Q/D).  INCSSPQ
-> + * moves shadow stack pointer up to 255 * 8 = ~2 KB (~1KB for INCSSPD) and
-> + * touches the first and the last element in the range, which triggers a
-> + * page fault if the range is not in a shadow stack.  Because of this,
-> + * creating 4-KB guard pages around a shadow stack prevents these
-> + * instructions from going beyond.
-> + */
-> +#define SHADOW_STACK_GUARD_GAP PAGE_SIZE
+>  #endif /* CONFIG_X86_64 */
+>  #endif	/* CONFIG_HAVE_ARCH_HUGE_VMAP */
+> +
+> +#ifdef CONFIG_ARCH_HAS_SHADOW_STACK
+> +bool is_shadow_stack_mapping(vm_flags_t vm_flags)
+> +{
+> +	return (vm_flags & VM_SHADOW_STACK);
+> +}
 
-The define is only used within arch/x86/mm/mmap.c. Maybe move it there?
+No, just define it as you have here in linux/mm.h. It will always be false
+for !CONFIG_ARCH_HAS_SHADOW_STACK as VM_SHADOW_STACK is 0 there.
 
-Otherwise:
-
-Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+This maze of #ifdefs are unneeded.
 
 -- 
  Kirill A. Shutemov
