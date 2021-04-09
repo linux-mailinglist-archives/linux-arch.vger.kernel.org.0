@@ -2,56 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D7335A213
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 17:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B809135A25C
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 17:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbhDIPeh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Apr 2021 11:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhDIPeg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Apr 2021 11:34:36 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DE2C061761
-        for <linux-arch@vger.kernel.org>; Fri,  9 Apr 2021 08:34:23 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id g8so10320345lfv.12
-        for <linux-arch@vger.kernel.org>; Fri, 09 Apr 2021 08:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=U7W2zOO2xjLYVvabtgbkl9/yC/jywr+n7bzYgDZAEXM=;
-        b=GLSGHdRI9yh0cnabzROu7oCFA+D4zBD6sTCDKFyVNB6zILTCgxVqS9aD3XNoIlirKn
-         qBPHgUvbOuPFVfUnF4RB3dCehyGhNA81bOZ+fKoXWmU9lMDkwXyy3f14Kt6QvZbU1xQX
-         DGge9k2KVhgrdaHdCVDKaGFHTG2oS7jjKw+AElJKr21l/KD2vrlTBuBIUbX4ZoInDVSY
-         5qtdrQ/ZdZ8uc6JH3colccCctI58j638rVtdtTArNu3RwJ6dx51icuy5b4K5+oqzdqtq
-         opppDijvJX9YbZn2n2YjfPXbKxdTwNq5oB7FKd3YWfFx7nzfb+5Q8PQF9Wnta11BxMXg
-         nCnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=U7W2zOO2xjLYVvabtgbkl9/yC/jywr+n7bzYgDZAEXM=;
-        b=BtaPl+uyBcPUxLXK+4MJEn4g6wR6tcKQTGoOBiYiabRJZJYL/AnET4U3h5jlFiZZ/K
-         DcNgFshtaSLungbzKKqrGvEurFdofOV9kdKVfka5kCE1299NAe2P0qk2abybu4t+3qVy
-         BUTHB8dZBOy7gMB4EghYGlmJJLgiAOn6K+cb6remwWvfqP9G1Q4B1L+rW7S/+q+zqw3l
-         RLH6/oyUqrIQDDbCCmGkEb2gO/q3e267mtunPFA7Mh6X+hhwkKFGNjyJRjsAyT6r6ueY
-         imsEGBEuDchnm7Bw5hEVCnrMG5CCet1/J/ntR4sRC3nEU1g13W68Wvqm5ixY7cC1zdP2
-         RfdA==
-X-Gm-Message-State: AOAM532l3bj/Cl2FahI4tbMSfnCLSbs8Zu/nuqL22P/Vd4v72jxxaj1w
-        g2LKjw81hpCygzAt4Q3RNkmqbQ==
-X-Google-Smtp-Source: ABdhPJyFm+ZMRTY3RQ+tIN+xhbECgPZpQWAhR2FzAkfeHi3To00sdzemqkeeTLDi9+YbF4tv9TmJBw==
-X-Received: by 2002:a05:6512:2343:: with SMTP id p3mr10321124lfu.538.1617982461808;
-        Fri, 09 Apr 2021 08:34:21 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id l15sm290367ljg.66.2021.04.09.08.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Apr 2021 08:34:21 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id BAAF2102498; Fri,  9 Apr 2021 18:34:20 +0300 (+03)
-Date:   Fri, 9 Apr 2021 18:34:20 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        id S233929AbhDIPxJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Apr 2021 11:53:09 -0400
+Received: from mga02.intel.com ([134.134.136.20]:55410 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233827AbhDIPxI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Apr 2021 11:53:08 -0400
+IronPort-SDR: yS1abaxNnF0/+r+/CWsctDT5nvXqp4KZQt7jW6m2SsbzWgQ3KW6IVRcGpnRHFy08Dl4REqD38T
+ JjzGWz3U/bNA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9949"; a="180917390"
+X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
+   d="scan'208";a="180917390"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 08:52:54 -0700
+IronPort-SDR: ZexAgEz/BljwHFGPfWGCgKkgzwrs3QaaLNLbxrVoN9CoognrzT4tz/PFTlwdtm7Fo28lWJvetr
+ HFhg+y9x11CA==
+X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
+   d="scan'208";a="520325087"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.27.140]) ([10.212.27.140])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 08:52:53 -0700
+Subject: Re: [PATCH v24 04/30] x86/cpufeatures: Introduce X86_FEATURE_CET and
+ setup functions
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -60,7 +35,6 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
@@ -78,99 +52,96 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v24 20/30] mm/mprotect: Exclude shadow stack from
- preserve_write
-Message-ID: <20210409153420.h6ybujbz7jyhyurb@box.shutemov.name>
+        Haitao Huang <haitao.huang@intel.com>
 References: <20210401221104.31584-1-yu-cheng.yu@intel.com>
- <20210401221104.31584-21-yu-cheng.yu@intel.com>
+ <20210401221104.31584-5-yu-cheng.yu@intel.com>
+ <20210409101214.GC15567@zn.tnic>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <c7cb0ed6-2725-ba0d-093e-393eab9918b2@intel.com>
+Date:   Fri, 9 Apr 2021 08:52:52 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210401221104.31584-21-yu-cheng.yu@intel.com>
+In-Reply-To: <20210409101214.GC15567@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 01, 2021 at 03:10:54PM -0700, Yu-cheng Yu wrote:
-> In change_pte_range(), when a PTE is changed for prot_numa, _PAGE_RW is
-> preserved to avoid the additional write fault after the NUMA hinting fault.
-> However, pte_write() now includes both normal writable and shadow stack
-> (RW=0, Dirty=1) PTEs, but the latter does not have _PAGE_RW and has no need
-> to preserve it.
+On 4/9/2021 3:12 AM, Borislav Petkov wrote:
+> On Thu, Apr 01, 2021 at 03:10:38PM -0700, Yu-cheng Yu wrote:
+>> Introduce a software-defined X86_FEATURE_CET, which indicates either Shadow
+>> Stack or Indirect Branch Tracking (or both) is present.  Also introduce
+>> related cpu init/setup functions.
+>>
+>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> ---
+>> v24:
+>> - Update #ifdef placement to reflect Kconfig changes of splitting shadow stack and ibt.
+>>
+>>   arch/x86/include/asm/cpufeatures.h          |  2 +-
+>>   arch/x86/include/asm/disabled-features.h    |  9 ++++++++-
+>>   arch/x86/include/uapi/asm/processor-flags.h |  2 ++
+>>   arch/x86/kernel/cpu/common.c                | 14 ++++++++++++++
+>>   arch/x86/kernel/cpu/intel.c                 |  3 +++
+>>   5 files changed, 28 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+>> index bf861fc89fef..d771e62677de 100644
+>> --- a/arch/x86/include/asm/cpufeatures.h
+>> +++ b/arch/x86/include/asm/cpufeatures.h
+>> @@ -108,7 +108,7 @@
+>>   #define X86_FEATURE_EXTD_APICID		( 3*32+26) /* Extended APICID (8 bits) */
+>>   #define X86_FEATURE_AMD_DCM		( 3*32+27) /* AMD multi-node processor */
+>>   #define X86_FEATURE_APERFMPERF		( 3*32+28) /* P-State hardware coordination feedback capability (APERF/MPERF MSRs) */
+>> -/* free					( 3*32+29) */
+>> +#define X86_FEATURE_CET			( 3*32+29) /* Control-flow enforcement */
 > 
-> Exclude shadow stack from preserve_write test, and apply the same change to
-> change_huge_pmd().
+> Right, I know we talked about having this synthetic flag but now that we
+> are moving to CONFIG_X86_SHADOW_STACK and separate SHSTK and IBT feature
+> bits, that synthetic flag is not needed anymore.
 > 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
-> v24:
-> - Change arch_shadow_stack_mapping() to is_shadow_stack_mapping().
-> 
->  mm/huge_memory.c | 7 ++++++-
->  mm/mprotect.c    | 9 ++++++++-
->  2 files changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 65fc0aedd577..1d41138c4f74 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -1812,12 +1812,17 @@ int change_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
->  	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
->  	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
->  	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
-> +	bool shstk = is_shadow_stack_mapping(vma->vm_flags);
->  
->  	ptl = __pmd_trans_huge_lock(pmd, vma);
->  	if (!ptl)
->  		return 0;
->  
-> -	preserve_write = prot_numa && pmd_write(*pmd);
-> +	/*
-> +	 * Preserve only normal writable huge PMD, but not shadow
-> +	 * stack (RW=0, Dirty=1).
-> +	 */
-> +	preserve_write = prot_numa && pmd_write(*pmd) && !shstk;
-
-New variable seems unnecessary. What about just:
-
-	if (is_shadow_stack_mapping(vma->vm_flags))
-		preserve_write = false;
-
-?
-
->  	ret = 1;
->  
->  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index c1ce78d688b6..550448dc5ff1 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -75,7 +75,14 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
->  		oldpte = *pte;
->  		if (pte_present(oldpte)) {
->  			pte_t ptent;
-> -			bool preserve_write = prot_numa && pte_write(oldpte);
-> +			bool shstk = is_shadow_stack_mapping(vma->vm_flags);
-> +			bool preserve_write;
-> +
-> +			/*
-> +			 * Preserve only normal writable PTE, but not shadow
-> +			 * stack (RW=0, Dirty=1).
-> +			 */
-> +			preserve_write = prot_numa && pte_write(oldpte) && !shstk;
-
-Ditto.
-
->  
->  			/*
->  			 * Avoid trapping faults against the zero or KSM
-> -- 
-> 2.21.0
-> 
+> For the cases where you wanna test whether any of the two are present,
+> we're probably better off adding a x86_cet_enabled() helper which tests
+> SHSTK and IBT bits.
 > 
 
--- 
- Kirill A. Shutemov
+Recall we had complicated code for the XSAVES features detection in 
+xstate.c.  Dave Hansen proposed the solution and then the whole thing 
+becomes simple.  Because of this flag, even when only the shadow stack 
+is available, the code handles it nicely.
+
+> I haven't gone through the whole thing yet but depending on the context
+> and the fact that AMD doesn't support IBT, that helper might need some
+> tweaking too. I'll see.
+> 
+>>   #define X86_FEATURE_NONSTOP_TSC_S3	( 3*32+30) /* TSC doesn't stop in S3 state */
+>>   #define X86_FEATURE_TSC_KNOWN_FREQ	( 3*32+31) /* TSC has known frequency */
+>>   
+>> diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+>> index e5c6ed9373e8..018cd7acd3e9 100644
+>> --- a/arch/x86/include/asm/disabled-features.h
+>> +++ b/arch/x86/include/asm/disabled-features.h
+>> @@ -74,13 +74,20 @@
+>>   #define DISABLE_SHSTK	(1 << (X86_FEATURE_SHSTK & 31))
+>>   #endif
+>>   
+>> +#ifdef CONFIG_X86_CET
+> 
+> And you don't need that config item either - AFAICT, you can use
+> CONFIG_X86_SHADOW_STACK everywhere.
+> 
+> Which would simplify that config space.
+
+Would this equal to only CONFIG_X86_CET (one Kconfig option)?  In fact, 
+when you proposed only CONFIG_X86_CET, things became much simpler.
+Practically, IBT is not much in terms of code size.  Since we have 
+already separated the two, why don't we leave it as-is.  When people 
+start using it more, there will be more feedback, and we can decide if 
+one Kconfig is better?
+
+Thanks,
+Yu-cheng
