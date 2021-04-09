@@ -2,988 +2,1102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1AD3597B0
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 10:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77372359B00
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 12:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbhDIIX1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Apr 2021 04:23:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:40096 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229846AbhDIIX0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Apr 2021 04:23:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617956593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Cqrz76rzWIaRbgxVXwQLmavVfjNJYWdjy2pon2bya6E=;
-        b=ih5S50GoUkbmDGCNe1vqSSZQbx9DqlM6iPPR2hrcrPSsA+RBQdy0YT+qbCnTExywefPQBH
-        YBE7j3z8M6SO9VwRXHNKjG52vm4ue2CKV6D58E2Ys1u9lTi041kCIjw/aSd+zNLkbEa07l
-        i1UM1Om7PQRNX46HQBd6F0eBjXKtdt0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-27-Ih4agEZuODymKrg21ZEZoA-1; Fri, 09 Apr 2021 04:23:09 -0400
-X-MC-Unique: Ih4agEZuODymKrg21ZEZoA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F01058026AC;
-        Fri,  9 Apr 2021 08:23:07 +0000 (UTC)
-Received: from [10.36.115.11] (ovpn-115-11.ams2.redhat.com [10.36.115.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BC9F810013D7;
-        Fri,  9 Apr 2021 08:23:04 +0000 (UTC)
-To:     Alex Ghiti <alex@ghiti.fr>,
+        id S233825AbhDIKHN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Apr 2021 06:07:13 -0400
+Received: from mga18.intel.com ([134.134.136.126]:50892 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231772AbhDIKDC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Apr 2021 06:03:02 -0400
+IronPort-SDR: OxV/kdSVrC3LBw2fUqMqW2Cz3acScC2NJOEiL7BjuqrWoo4lm1jyObAT0f5dINr3h7/nYwysho
+ tzOGIrWTDoag==
+X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="181264567"
+X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
+   d="scan'208";a="181264567"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 03:02:48 -0700
+IronPort-SDR: RalkOHRWz6iloJxOUmIeoeNsZTn2Zt/Y1Q+kJaWpdXSu5rc+SR0Rt/UXA/GW158e2hjUnBXSs4
+ LQKqP2dOfQzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
+   d="scan'208";a="380597770"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 09 Apr 2021 03:02:37 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 946B9501; Fri,  9 Apr 2021 13:02:53 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Wei Liu <wei.liu@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Jason J. Herne" <jjherne@linux.ibm.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Joe Perches <joe@perches.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Wang Wenhu <wenhu.wang@vivo.com>,
+        Marek Czerski <ma.czerski@gmail.com>,
+        Hongbo Yao <yaohongbo@huawei.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-clk@vger.kernel.org, linux-edac@vger.kernel.org,
+        coresight@lists.linaro.org, linux-leds@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Cc:     Vitaly Wool <vitaly.wool@konsulko.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Alex Elder <elder@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Daniel Drake <dsd@laptop.org>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
         Mike Rapoport <rppt@linux.ibm.com>
-References: <20210409065115.11054-1-alex@ghiti.fr>
- <3500f3cb-b660-5bbc-ae8d-0c9770e4a573@ghiti.fr>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Subject: Re: [PATCH v7] RISC-V: enable XIP
-Message-ID: <be575094-badf-bac7-1629-36808ca530cc@redhat.com>
-Date:   Fri, 9 Apr 2021 10:23:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+Subject: [PATCH v2 1/1] kernel.h: Split out panic and oops helpers
+Date:   Fri,  9 Apr 2021 13:02:50 +0300
+Message-Id: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <3500f3cb-b660-5bbc-ae8d-0c9770e4a573@ghiti.fr>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 09.04.21 09:14, Alex Ghiti wrote:
-> Le 4/9/21 à 2:51 AM, Alexandre Ghiti a écrit :
->> From: Vitaly Wool <vitaly.wool@konsulko.com>
->>
->> Introduce XIP (eXecute In Place) support for RISC-V platforms.
->> It allows code to be executed directly from non-volatile storage
->> directly addressable by the CPU, such as QSPI NOR flash which can
->> be found on many RISC-V platforms. This makes way for significant
->> optimization of RAM footprint. The XIP kernel is not compressed
->> since it has to run directly from flash, so it will occupy more
->> space on the non-volatile storage. The physical flash address used
->> to link the kernel object files and for storing it has to be known
->> at compile time and is represented by a Kconfig option.
->>
->> XIP on RISC-V will for the time being only work on MMU-enabled
->> kernels.
->>
-> I added linux-mm and linux-arch to get feedbacks because I noticed that
-> DEBUG_VM_PGTABLE fails for SPARSEMEM (it works for FLATMEM but I think
-> it does not do what is expected): the fact that we don't have any struct
-> page to back the text and rodata in flash is the problem but to which
-> extent ?
+kernel.h is being used as a dump for all kinds of stuff for a long time.
+Here is the attempt to start cleaning it up by splitting out panic and
+oops helpers.
 
-Just wondering, why can't we create a memmap for that memory -- or is it 
-even desireable to not do that explicity? There might be some nasty side 
-effects when not having a memmap for text and rodata.
+There are several purposes of doing this:
+- dropping dependency in bug.h
+- dropping a loop by moving out panic_notifier.h
+- unload kernel.h from something which has its own domain
 
-I would assume stimply exposing the physical memory range to memblock as 
-RAM and marking it reserved would create a memmap that's fully 
-initialized like any bootmem (PG_reserved).
+At the same time convert users tree-wide to use new headers, although
+for the time being include new header back to kernel.h to avoid twisted
+indirected includes for existing users.
 
-Or is there a reason why we cannot do that?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Acked-by: Corey Minyard <cminyard@mvista.com>
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Kees Cook <keescook@chromium.org>
+Acked-by: Wei Liu <wei.liu@kernel.org>
+Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+v2:
+ - fixed all errors with allmodconfig on x86_64 (Andrew)
+ - checked with allyesconfig on x86_64
+ - additionally grepped source code for panic notifier list usage
+   and converted all users
+ - elaborated commit message (Luis)
+ - collected given tags (incl. Andrew's SoB, see below)
 
-Also, will that memory properly be exposed in the resource tree as 
-System RAM (e.g., /proc/iomem) ? Otherwise some things (/proc/kcore) 
-won't work as expected - the kernel won't be included in a dump.
+I added Andrew's SoB since part of the fixes I took from him. Andrew,
+feel free to amend or tell me how you want me to do.
 
+ arch/alpha/kernel/setup.c                     |  2 +-
+ arch/arm64/kernel/setup.c                     |  1 +
+ arch/mips/kernel/relocate.c                   |  1 +
+ arch/mips/sgi-ip22/ip22-reset.c               |  1 +
+ arch/mips/sgi-ip32/ip32-reset.c               |  1 +
+ arch/parisc/kernel/pdc_chassis.c              |  1 +
+ arch/powerpc/kernel/setup-common.c            |  1 +
+ arch/s390/kernel/ipl.c                        |  1 +
+ arch/sparc/kernel/sstate.c                    |  1 +
+ arch/um/drivers/mconsole_kern.c               |  1 +
+ arch/um/kernel/um_arch.c                      |  1 +
+ arch/x86/include/asm/desc.h                   |  1 +
+ arch/x86/kernel/cpu/mshyperv.c                |  1 +
+ arch/x86/kernel/setup.c                       |  1 +
+ arch/x86/purgatory/purgatory.c                |  2 +
+ arch/x86/xen/enlighten.c                      |  1 +
+ arch/xtensa/platforms/iss/setup.c             |  1 +
+ drivers/bus/brcmstb_gisb.c                    |  1 +
+ drivers/char/ipmi/ipmi_msghandler.c           |  1 +
+ drivers/clk/analogbits/wrpll-cln28hpc.c       |  4 +
+ drivers/edac/altera_edac.c                    |  1 +
+ drivers/firmware/google/gsmi.c                |  1 +
+ drivers/hv/vmbus_drv.c                        |  1 +
+ .../hwtracing/coresight/coresight-cpu-debug.c |  1 +
+ drivers/leds/trigger/ledtrig-activity.c       |  1 +
+ drivers/leds/trigger/ledtrig-heartbeat.c      |  1 +
+ drivers/leds/trigger/ledtrig-panic.c          |  1 +
+ drivers/misc/bcm-vk/bcm_vk_dev.c              |  1 +
+ drivers/misc/ibmasm/heartbeat.c               |  1 +
+ drivers/misc/pvpanic/pvpanic.c                |  1 +
+ drivers/net/ipa/ipa_smp2p.c                   |  1 +
+ drivers/parisc/power.c                        |  1 +
+ drivers/power/reset/ltc2952-poweroff.c        |  1 +
+ drivers/remoteproc/remoteproc_core.c          |  1 +
+ drivers/s390/char/con3215.c                   |  1 +
+ drivers/s390/char/con3270.c                   |  1 +
+ drivers/s390/char/sclp.c                      |  1 +
+ drivers/s390/char/sclp_con.c                  |  1 +
+ drivers/s390/char/sclp_vt220.c                |  1 +
+ drivers/s390/char/zcore.c                     |  1 +
+ drivers/soc/bcm/brcmstb/pm/pm-arm.c           |  1 +
+ drivers/staging/olpc_dcon/olpc_dcon.c         |  1 +
+ drivers/video/fbdev/hyperv_fb.c               |  1 +
+ include/asm-generic/bug.h                     |  3 +-
+ include/linux/kernel.h                        | 84 +---------------
+ include/linux/panic.h                         | 98 +++++++++++++++++++
+ include/linux/panic_notifier.h                | 12 +++
+ kernel/hung_task.c                            |  1 +
+ kernel/kexec_core.c                           |  1 +
+ kernel/panic.c                                |  1 +
+ kernel/rcu/tree.c                             |  2 +
+ kernel/sysctl.c                               |  1 +
+ kernel/trace/trace.c                          |  1 +
+ 53 files changed, 167 insertions(+), 85 deletions(-)
+ create mode 100644 include/linux/panic.h
+ create mode 100644 include/linux/panic_notifier.h
 
-> 
-> Thanks,
-> 
-> Alex
-> 
->> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr> [ Rebase on top of "Move
->> kernel mapping outside the linear mapping ]
->> Signed-off-by: Vitaly Wool <vitaly.wool@konsulko.com>
->> ---
->>
->> Changes in v2:
->> - dedicated macro for XIP address fixup when MMU is not enabled yet
->>     o both for 32-bit and 64-bit RISC-V
->> - SP is explicitly set to a safe place in RAM before __copy_data call
->> - removed redundant alignment requirements in vmlinux-xip.lds.S
->> - changed long -> uintptr_t typecast in __XIP_FIXUP macro.
->> Changes in v3:
->> - rebased against latest for-next
->> - XIP address fixup macro now takes an argument
->> - SMP related fixes
->> Changes in v4:
->> - rebased against the current for-next
->> - less #ifdef's in C/ASM code
->> - dedicated XIP_FIXUP_OFFSET assembler macro in head.S
->> - C-specific definitions moved into #ifndef __ASSEMBLY__
->> - Fixed multi-core boot
->> Changes in v5:
->> - fixed build error for non-XIP kernels
->> Changes in v6:
->> - XIP_PHYS_RAM_BASE config option renamed to PHYS_RAM_BASE
->> - added PHYS_RAM_BASE_FIXED config flag to allow usage of
->>     PHYS_RAM_BASE in non-XIP configurations if needed
->> - XIP_FIXUP macro rewritten with a tempoarary variable to avoid side
->>     effects
->> - fixed crash for non-XIP kernels that don't use built-in DTB
->> Changes in v7:
->> - Fix pfn_base that required FIXUP
->> - Fix copy_data which lacked + 1 in size to copy
->> - Fix pfn_valid for FLATMEM
->> - Rebased on top of "Move kernel mapping outside the linear mapping":
->>     this is the biggest change and affected mm/init.c,
->>     kernel/vmlinux-xip.lds.S and include/asm/pgtable.h: XIP kernel is now
->>     mapped like 'normal' kernel at the end of the address space.
->>
->>    arch/riscv/Kconfig                  |  51 ++++++++++-
->>    arch/riscv/Makefile                 |   8 +-
->>    arch/riscv/boot/Makefile            |  13 +++
->>    arch/riscv/include/asm/page.h       |  28 ++++++
->>    arch/riscv/include/asm/pgtable.h    |  25 +++++-
->>    arch/riscv/kernel/head.S            |  46 +++++++++-
->>    arch/riscv/kernel/head.h            |   3 +
->>    arch/riscv/kernel/setup.c           |  10 ++-
->>    arch/riscv/kernel/vmlinux-xip.lds.S | 133 ++++++++++++++++++++++++++++
->>    arch/riscv/kernel/vmlinux.lds.S     |   6 ++
->>    arch/riscv/mm/init.c                | 118 ++++++++++++++++++++++--
->>    11 files changed, 424 insertions(+), 17 deletions(-)
->>    create mode 100644 arch/riscv/kernel/vmlinux-xip.lds.S
->>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 8ea60a0a19ae..4d0153805927 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -28,7 +28,7 @@ config RISCV
->>    	select ARCH_HAS_PTE_SPECIAL
->>    	select ARCH_HAS_SET_DIRECT_MAP
->>    	select ARCH_HAS_SET_MEMORY
->> -	select ARCH_HAS_STRICT_KERNEL_RWX if MMU
->> +	select ARCH_HAS_STRICT_KERNEL_RWX if MMU && !XIP_KERNEL
->>    	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->>    	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
->>    	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
->> @@ -441,7 +441,7 @@ config EFI_STUB
->>    
->>    config EFI
->>    	bool "UEFI runtime support"
->> -	depends on OF
->> +	depends on OF && !XIP_KERNEL
->>    	select LIBFDT
->>    	select UCS2_STRING
->>    	select EFI_PARAMS_FROM_FDT
->> @@ -465,11 +465,56 @@ config STACKPROTECTOR_PER_TASK
->>    	def_bool y
->>    	depends on STACKPROTECTOR && CC_HAVE_STACKPROTECTOR_TLS
->>    
->> +config PHYS_RAM_BASE_FIXED
->> +	bool "Explicitly specified physical RAM address"
->> +	default n
->> +
->> +config PHYS_RAM_BASE
->> +	hex "Platform Physical RAM address"
->> +	depends on PHYS_RAM_BASE_FIXED
->> +	default "0x80000000"
->> +	help
->> +	  This is the physical address of RAM in the system. It has to be
->> +	  explicitly specified to run early relocations of read-write data
->> +	  from flash to RAM.
->> +
->> +config XIP_KERNEL
->> +	bool "Kernel Execute-In-Place from ROM"
->> +	depends on MMU
->> +	select PHYS_RAM_BASE_FIXED
->> +	help
->> +	  Execute-In-Place allows the kernel to run from non-volatile storage
->> +	  directly addressable by the CPU, such as NOR flash. This saves RAM
->> +	  space since the text section of the kernel is not loaded from flash
->> +	  to RAM.  Read-write sections, such as the data section and stack,
->> +	  are still copied to RAM.  The XIP kernel is not compressed since
->> +	  it has to run directly from flash, so it will take more space to
->> +	  store it.  The flash address used to link the kernel object files,
->> +	  and for storing it, is configuration dependent. Therefore, if you
->> +	  say Y here, you must know the proper physical address where to
->> +	  store the kernel image depending on your own flash memory usage.
->> +
->> +	  Also note that the make target becomes "make xipImage" rather than
->> +	  "make zImage" or "make Image".  The final kernel binary to put in
->> +	  ROM memory will be arch/riscv/boot/xipImage.
->> +
->> +	  If unsure, say N.
->> +
->> +config XIP_PHYS_ADDR
->> +	hex "XIP Kernel Physical Location"
->> +	depends on XIP_KERNEL
->> +	default "0x21000000"
->> +	help
->> +	  This is the physical address in your flash memory the kernel will
->> +	  be linked for and stored to.  This address is dependent on your
->> +	  own flash usage.
->> +
->>    endmenu
->>    
->>    config BUILTIN_DTB
->> -	def_bool n
->> +	bool
->>    	depends on OF
->> +	default y if XIP_KERNEL
->>    
->>    menu "Power management options"
->>    
->> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
->> index 1368d943f1f3..8fcbec03974d 100644
->> --- a/arch/riscv/Makefile
->> +++ b/arch/riscv/Makefile
->> @@ -82,7 +82,11 @@ CHECKFLAGS += -D__riscv -D__riscv_xlen=$(BITS)
->>    
->>    # Default target when executing plain make
->>    boot		:= arch/riscv/boot
->> +ifeq ($(CONFIG_XIP_KERNEL),y)
->> +KBUILD_IMAGE := $(boot)/xipImage
->> +else
->>    KBUILD_IMAGE	:= $(boot)/Image.gz
->> +endif
->>    
->>    head-y := arch/riscv/kernel/head.o
->>    
->> @@ -95,12 +99,14 @@ PHONY += vdso_install
->>    vdso_install:
->>    	$(Q)$(MAKE) $(build)=arch/riscv/kernel/vdso $@
->>    
->> +ifneq ($(CONFIG_XIP_KERNEL),y)
->>    ifeq ($(CONFIG_RISCV_M_MODE)$(CONFIG_SOC_CANAAN),yy)
->>    KBUILD_IMAGE := $(boot)/loader.bin
->>    else
->>    KBUILD_IMAGE := $(boot)/Image.gz
->>    endif
->> -BOOT_TARGETS := Image Image.gz loader loader.bin
->> +endif
->> +BOOT_TARGETS := Image Image.gz loader loader.bin xipImage
->>    
->>    all:	$(notdir $(KBUILD_IMAGE))
->>    
->> diff --git a/arch/riscv/boot/Makefile b/arch/riscv/boot/Makefile
->> index 03404c84f971..6bf299f70c27 100644
->> --- a/arch/riscv/boot/Makefile
->> +++ b/arch/riscv/boot/Makefile
->> @@ -17,8 +17,21 @@
->>    KCOV_INSTRUMENT := n
->>    
->>    OBJCOPYFLAGS_Image :=-O binary -R .note -R .note.gnu.build-id -R .comment -S
->> +OBJCOPYFLAGS_xipImage :=-O binary -R .note -R .note.gnu.build-id -R .comment -S
->>    
->>    targets := Image Image.* loader loader.o loader.lds loader.bin
->> +targets := Image Image.* loader loader.o loader.lds loader.bin xipImage
->> +
->> +ifeq ($(CONFIG_XIP_KERNEL),y)
->> +
->> +quiet_cmd_mkxip = $(quiet_cmd_objcopy)
->> +cmd_mkxip = $(cmd_objcopy)
->> +
->> +$(obj)/xipImage: vmlinux FORCE
->> +	$(call if_changed,mkxip)
->> +	@$(kecho) '  Physical Address of xipImage: $(CONFIG_XIP_PHYS_ADDR)'
->> +
->> +endif
->>    
->>    $(obj)/Image: vmlinux FORCE
->>    	$(call if_changed,objcopy)
->> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
->> index 22cfb2be60dc..6fe0ff8c8fa9 100644
->> --- a/arch/riscv/include/asm/page.h
->> +++ b/arch/riscv/include/asm/page.h
->> @@ -91,6 +91,9 @@ typedef struct page *pgtable_t;
->>    #ifdef CONFIG_MMU
->>    extern unsigned long va_pa_offset;
->>    extern unsigned long va_kernel_pa_offset;
->> +#ifdef CONFIG_XIP_KERNEL
->> +extern unsigned long va_kernel_xip_pa_offset;
->> +#endif
->>    extern unsigned long pfn_base;
->>    #define ARCH_PFN_OFFSET		(pfn_base)
->>    #else
->> @@ -102,11 +105,29 @@ extern unsigned long pfn_base;
->>    extern unsigned long kernel_virt_addr;
->>    
->>    #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + va_pa_offset))
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define kernel_mapping_pa_to_va(y)	({						\
->> +	unsigned long _y = y;								\
->> +	(_y >= CONFIG_PHYS_RAM_BASE) ?							\
->> +		(void *)((unsigned long)(_y) + va_kernel_pa_offset + XIP_OFFSET) :	\
->> +		(void *)((unsigned long)(_y) + va_kernel_xip_pa_offset);		\
->> +	})
->> +#else
->>    #define kernel_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + va_kernel_pa_offset))
->> +#endif
->>    #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
->>    
->>    #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - va_pa_offset)
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define kernel_mapping_va_to_pa(y) ({						\
->> +	unsigned long _y = y;							\
->> +	(_y < kernel_virt_addr + XIP_OFFSET) ?					\
->> +		((unsigned long)(_y) - va_kernel_xip_pa_offset) :		\
->> +		((unsigned long)(_y) - va_kernel_pa_offset - XIP_OFFSET);	\
->> +	})
->> +#else
->>    #define kernel_mapping_va_to_pa(x)	((unsigned long)(x) - va_kernel_pa_offset)
->> +#endif
->>    #define __va_to_pa_nodebug(x)	({						\
->>    	unsigned long _x = x;							\
->>    	(_x < kernel_virt_addr) ?						\
->> @@ -139,9 +160,16 @@ extern phys_addr_t __phys_addr_symbol(unsigned long x);
->>    #define phys_to_page(paddr)	(pfn_to_page(phys_to_pfn(paddr)))
->>    
->>    #ifdef CONFIG_FLATMEM
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define pfn_valid(pfn) \
->> +	((((pfn) >= ARCH_PFN_OFFSET) && (((pfn) - ARCH_PFN_OFFSET) < max_mapnr)) ||	\
->> +		((pfn) >= PFN_DOWN(CONFIG_XIP_PHYS_ADDR) &&				\
->> +		(((pfn) - PFN_DOWN(CONFIG_XIP_PHYS_ADDR)) < XIP_OFFSET)))
->> +#else
->>    #define pfn_valid(pfn) \
->>    	(((pfn) >= ARCH_PFN_OFFSET) && (((pfn) - ARCH_PFN_OFFSET) < max_mapnr))
->>    #endif
->> +#endif
->>    
->>    #endif /* __ASSEMBLY__ */
->>    
->> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
->> index 80e63a93e903..c2dc4f83eed8 100644
->> --- a/arch/riscv/include/asm/pgtable.h
->> +++ b/arch/riscv/include/asm/pgtable.h
->> @@ -64,6 +64,19 @@
->>    #define FIXADDR_SIZE     PGDIR_SIZE
->>    #endif
->>    #define FIXADDR_START    (FIXADDR_TOP - FIXADDR_SIZE)
->> +
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define XIP_OFFSET		SZ_8M
->> +#define XIP_FIXUP(addr) ({							\
->> +	uintptr_t __a = (uintptr_t)(addr);					\
->> +	(__a >= CONFIG_XIP_PHYS_ADDR && __a < CONFIG_XIP_PHYS_ADDR + SZ_16M) ?	\
->> +		__a - CONFIG_XIP_PHYS_ADDR + CONFIG_PHYS_RAM_BASE - XIP_OFFSET :\
->> +		__a;								\
->> +	})
->> +#else
->> +#define XIP_FIXUP(addr)		(addr)
->> +#endif /* CONFIG_XIP_KERNEL */
->> +
->>    #endif
->>    
->>    #ifndef __ASSEMBLY__
->> @@ -499,8 +512,16 @@ static inline int ptep_clear_flush_young(struct vm_area_struct *vma,
->>    #define kern_addr_valid(addr)   (1) /* FIXME */
->>    
->>    extern char _start[];
->> -extern void *dtb_early_va;
->> -extern uintptr_t dtb_early_pa;
->> +extern void *_dtb_early_va;
->> +extern uintptr_t _dtb_early_pa;
->> +#if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_MMU)
->> +#define dtb_early_va	(*(void **)XIP_FIXUP(&_dtb_early_va))
->> +#define dtb_early_pa	(*(uintptr_t *)XIP_FIXUP(&_dtb_early_pa))
->> +#else
->> +#define dtb_early_va	_dtb_early_va
->> +#define dtb_early_pa	_dtb_early_pa
->> +#endif /* CONFIG_XIP_KERNEL */
->> +
->>    void setup_bootmem(void);
->>    void paging_init(void);
->>    void misc_mem_init(void);
->> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
->> index 6cb05f22e52a..89cc58ab52b4 100644
->> --- a/arch/riscv/kernel/head.S
->> +++ b/arch/riscv/kernel/head.S
->> @@ -9,11 +9,23 @@
->>    #include <linux/linkage.h>
->>    #include <asm/thread_info.h>
->>    #include <asm/page.h>
->> +#include <asm/pgtable.h>
->>    #include <asm/csr.h>
->>    #include <asm/hwcap.h>
->>    #include <asm/image.h>
->>    #include "efi-header.S"
->>    
->> +#ifdef CONFIG_XIP_KERNEL
->> +.macro XIP_FIXUP_OFFSET reg
->> +	REG_L t0, _xip_fixup
->> +	add \reg, \reg, t0
->> +.endm
->> +_xip_fixup: .dword CONFIG_PHYS_RAM_BASE - CONFIG_XIP_PHYS_ADDR - XIP_OFFSET
->> +#else
->> +.macro XIP_FIXUP_OFFSET reg
->> +.endm
->> +#endif /* CONFIG_XIP_KERNEL */
->> +
->>    __HEAD
->>    ENTRY(_start)
->>    	/*
->> @@ -70,6 +82,7 @@ pe_head_start:
->>    relocate:
->>    	/* Relocate return address */
->>    	la a1, kernel_virt_addr
->> +	XIP_FIXUP_OFFSET a1
->>    	REG_L a1, 0(a1)
->>    	la a2, _start
->>    	sub a1, a1, a2
->> @@ -92,6 +105,7 @@ relocate:
->>    	 * to ensure the new translations are in use.
->>    	 */
->>    	la a0, trampoline_pg_dir
->> +	XIP_FIXUP_OFFSET a0
->>    	srl a0, a0, PAGE_SHIFT
->>    	or a0, a0, a1
->>    	sfence.vma
->> @@ -145,7 +159,9 @@ secondary_start_sbi:
->>    
->>    	slli a3, a0, LGREG
->>    	la a4, __cpu_up_stack_pointer
->> +	XIP_FIXUP_OFFSET a4
->>    	la a5, __cpu_up_task_pointer
->> +	XIP_FIXUP_OFFSET a5
->>    	add a4, a3, a4
->>    	add a5, a3, a5
->>    	REG_L sp, (a4)
->> @@ -157,6 +173,7 @@ secondary_start_common:
->>    #ifdef CONFIG_MMU
->>    	/* Enable virtual memory and relocate to virtual address */
->>    	la a0, swapper_pg_dir
->> +	XIP_FIXUP_OFFSET a0
->>    	call relocate
->>    #endif
->>    	call setup_trap_vector
->> @@ -237,12 +254,33 @@ pmp_done:
->>    .Lgood_cores:
->>    #endif
->>    
->> +#ifndef CONFIG_XIP_KERNEL
->>    	/* Pick one hart to run the main boot sequence */
->>    	la a3, hart_lottery
->>    	li a2, 1
->>    	amoadd.w a3, a2, (a3)
->>    	bnez a3, .Lsecondary_start
->>    
->> +#else
->> +	/* hart_lottery in flash contains a magic number */
->> +	la a3, hart_lottery
->> +	mv a2, a3
->> +	XIP_FIXUP_OFFSET a2
->> +	lw t1, (a3)
->> +	amoswap.w t0, t1, (a2)
->> +	/* first time here if hart_lottery in RAM is not set */
->> +	beq t0, t1, .Lsecondary_start
->> +
->> +	la sp, _end + THREAD_SIZE
->> +	XIP_FIXUP_OFFSET sp
->> +	mv s0, a0
->> +	call __copy_data
->> +
->> +	/* Restore a0 copy */
->> +	mv a0, s0
->> +#endif
->> +
->> +#ifndef CONFIG_XIP_KERNEL
->>    	/* Clear BSS for flat non-ELF images */
->>    	la a3, __bss_start
->>    	la a4, __bss_stop
->> @@ -252,15 +290,18 @@ clear_bss:
->>    	add a3, a3, RISCV_SZPTR
->>    	blt a3, a4, clear_bss
->>    clear_bss_done:
->> -
->> +#endif
->>    	/* Save hart ID and DTB physical address */
->>    	mv s0, a0
->>    	mv s1, a1
->> +
->>    	la a2, boot_cpu_hartid
->> +	XIP_FIXUP_OFFSET a2
->>    	REG_S a0, (a2)
->>    
->>    	/* Initialize page tables and relocate to virtual addresses */
->>    	la sp, init_thread_union + THREAD_SIZE
->> +	XIP_FIXUP_OFFSET sp
->>    #ifdef CONFIG_BUILTIN_DTB
->>    	la a0, __dtb_start
->>    #else
->> @@ -269,6 +310,7 @@ clear_bss_done:
->>    	call setup_vm
->>    #ifdef CONFIG_MMU
->>    	la a0, early_pg_dir
->> +	XIP_FIXUP_OFFSET a0
->>    	call relocate
->>    #endif /* CONFIG_MMU */
->>    
->> @@ -293,7 +335,9 @@ clear_bss_done:
->>    
->>    	slli a3, a0, LGREG
->>    	la a1, __cpu_up_stack_pointer
->> +	XIP_FIXUP_OFFSET a1
->>    	la a2, __cpu_up_task_pointer
->> +	XIP_FIXUP_OFFSET a2
->>    	add a1, a3, a1
->>    	add a2, a3, a2
->>    
->> diff --git a/arch/riscv/kernel/head.h b/arch/riscv/kernel/head.h
->> index b48dda3d04f6..aabbc3ac3e48 100644
->> --- a/arch/riscv/kernel/head.h
->> +++ b/arch/riscv/kernel/head.h
->> @@ -12,6 +12,9 @@ extern atomic_t hart_lottery;
->>    
->>    asmlinkage void do_page_fault(struct pt_regs *regs);
->>    asmlinkage void __init setup_vm(uintptr_t dtb_pa);
->> +#ifdef CONFIG_XIP_KERNEL
->> +asmlinkage void __init __copy_data(void);
->> +#endif
->>    
->>    extern void *__cpu_up_stack_pointer[];
->>    extern void *__cpu_up_task_pointer[];
->> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
->> index 30e4af0fd50c..2ddf654c72bb 100644
->> --- a/arch/riscv/kernel/setup.c
->> +++ b/arch/riscv/kernel/setup.c
->> @@ -50,7 +50,11 @@ struct screen_info screen_info __section(".data") = {
->>     * This is used before the kernel initializes the BSS so it can't be in the
->>     * BSS.
->>     */
->> -atomic_t hart_lottery __section(".sdata");
->> +atomic_t hart_lottery __section(".sdata")
->> +#ifdef CONFIG_XIP_KERNEL
->> += ATOMIC_INIT(0xC001BEEF)
->> +#endif
->> +;
->>    unsigned long boot_cpu_hartid;
->>    static DEFINE_PER_CPU(struct cpu, cpu_devices);
->>    
->> @@ -254,7 +258,7 @@ void __init setup_arch(char **cmdline_p)
->>    #if IS_ENABLED(CONFIG_BUILTIN_DTB)
->>    	unflatten_and_copy_device_tree();
->>    #else
->> -	if (early_init_dt_verify(__va(dtb_early_pa)))
->> +	if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
->>    		unflatten_device_tree();
->>    	else
->>    		pr_err("No DTB found in kernel mappings\n");
->> @@ -266,7 +270,7 @@ void __init setup_arch(char **cmdline_p)
->>    	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
->>    		protect_kernel_text_data();
->>    
->> -#if defined(CONFIG_64BIT) && defined(CONFIG_MMU)
->> +#if defined(CONFIG_64BIT) && defined(CONFIG_MMU) && !defined(CONFIG_XIP_KERNEL)
->>    	protect_kernel_linear_mapping_text_rodata();
->>    #endif
->>    
->> diff --git a/arch/riscv/kernel/vmlinux-xip.lds.S b/arch/riscv/kernel/vmlinux-xip.lds.S
->> new file mode 100644
->> index 000000000000..4b29b9917f99
->> --- /dev/null
->> +++ b/arch/riscv/kernel/vmlinux-xip.lds.S
->> @@ -0,0 +1,133 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (C) 2012 Regents of the University of California
->> + * Copyright (C) 2017 SiFive
->> + * Copyright (C) 2020 Vitaly Wool, Konsulko AB
->> + */
->> +
->> +#include <asm/pgtable.h>
->> +#define LOAD_OFFSET KERNEL_LINK_ADDR
->> +/* No __ro_after_init data in the .rodata section - which will always be ro */
->> +#define RO_AFTER_INIT_DATA
->> +
->> +#include <asm/vmlinux.lds.h>
->> +#include <asm/page.h>
->> +#include <asm/pgtable.h>
->> +#include <asm/cache.h>
->> +#include <asm/thread_info.h>
->> +
->> +OUTPUT_ARCH(riscv)
->> +ENTRY(_start)
->> +
->> +jiffies = jiffies_64;
->> +
->> +SECTIONS
->> +{
->> +	/* Beginning of code and text segment */
->> +	. = LOAD_OFFSET;
->> +	_xiprom = .;
->> +	_start = .;
->> +	HEAD_TEXT_SECTION
->> +	INIT_TEXT_SECTION(PAGE_SIZE)
->> +	/* we have to discard exit text and such at runtime, not link time */
->> +	.exit.text :
->> +	{
->> +		EXIT_TEXT
->> +	}
->> +
->> +	.text : {
->> +		_text = .;
->> +		_stext = .;
->> +		TEXT_TEXT
->> +		SCHED_TEXT
->> +		CPUIDLE_TEXT
->> +		LOCK_TEXT
->> +		KPROBES_TEXT
->> +		ENTRY_TEXT
->> +		IRQENTRY_TEXT
->> +		SOFTIRQENTRY_TEXT
->> +		*(.fixup)
->> +		_etext = .;
->> +	}
->> +	RO_DATA(L1_CACHE_BYTES)
->> +	.srodata : {
->> +		*(.srodata*)
->> +	}
->> +	.init.rodata : {
->> +		INIT_SETUP(16)
->> +		INIT_CALLS
->> +		CON_INITCALL
->> +		INIT_RAM_FS
->> +	}
->> +	_exiprom = .;			/* End of XIP ROM area */
->> +
->> +
->> +/*
->> + * From this point, stuff is considered writable and will be copied to RAM
->> + */
->> +	__data_loc = ALIGN(16);		/* location in file */
->> +	. = LOAD_OFFSET + XIP_OFFSET;	/* location in memory */
->> +
->> +	_sdata = .;			/* Start of data section */
->> +	_data = .;
->> +	RW_DATA(L1_CACHE_BYTES, PAGE_SIZE, THREAD_SIZE)
->> +	_edata = .;
->> +	__start_ro_after_init = .;
->> +	.data.ro_after_init : AT(ADDR(.data.ro_after_init) - LOAD_OFFSET) {
->> +		*(.data..ro_after_init)
->> +	}
->> +	__end_ro_after_init = .;
->> +
->> +	. = ALIGN(PAGE_SIZE);
->> +	__init_begin = .;
->> +	.init.data : {
->> +		INIT_DATA
->> +	}
->> +	.exit.data : {
->> +		EXIT_DATA
->> +	}
->> +	. = ALIGN(8);
->> +	__soc_early_init_table : {
->> +		__soc_early_init_table_start = .;
->> +		KEEP(*(__soc_early_init_table))
->> +		__soc_early_init_table_end = .;
->> +	}
->> +	__soc_builtin_dtb_table : {
->> +		__soc_builtin_dtb_table_start = .;
->> +		KEEP(*(__soc_builtin_dtb_table))
->> +		__soc_builtin_dtb_table_end = .;
->> +	}
->> +	PERCPU_SECTION(L1_CACHE_BYTES)
->> +
->> +	. = ALIGN(PAGE_SIZE);
->> +	__init_end = .;
->> +
->> +	.sdata : {
->> +		__global_pointer$ = . + 0x800;
->> +		*(.sdata*)
->> +		*(.sbss*)
->> +	}
->> +
->> +	BSS_SECTION(PAGE_SIZE, PAGE_SIZE, 0)
->> +	EXCEPTION_TABLE(0x10)
->> +
->> +	.rel.dyn : AT(ADDR(.rel.dyn) - LOAD_OFFSET) {
->> +		*(.rel.dyn*)
->> +	}
->> +
->> +	/*
->> +	 * End of copied data. We need a dummy section to get its LMA.
->> +	 * Also located before final ALIGN() as trailing padding is not stored
->> +	 * in the resulting binary file and useless to copy.
->> +	 */
->> +	.data.endmark : AT(ADDR(.data.endmark) - LOAD_OFFSET) { }
->> +	_edata_loc = LOADADDR(.data.endmark);
->> +
->> +	. = ALIGN(PAGE_SIZE);
->> +	_end = .;
->> +
->> +	STABS_DEBUG
->> +	DWARF_DEBUG
->> +
->> +	DISCARDS
->> +}
->> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
->> index 0726c05e0336..0a59b65cf789 100644
->> --- a/arch/riscv/kernel/vmlinux.lds.S
->> +++ b/arch/riscv/kernel/vmlinux.lds.S
->> @@ -4,8 +4,13 @@
->>     * Copyright (C) 2017 SiFive
->>     */
->>    
->> +#ifdef CONFIG_XIP_KERNEL
->> +#include "vmlinux-xip.lds.S"
->> +#else
->> +
->>    #include <asm/pgtable.h>
->>    #define LOAD_OFFSET KERNEL_LINK_ADDR
->> +
->>    #include <asm/vmlinux.lds.h>
->>    #include <asm/page.h>
->>    #include <asm/cache.h>
->> @@ -133,3 +138,4 @@ SECTIONS
->>    
->>    	DISCARDS
->>    }
->> +#endif /* CONFIG_XIP_KERNEL */
->> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->> index 093f3a96ecfc..9961573f9a55 100644
->> --- a/arch/riscv/mm/init.c
->> +++ b/arch/riscv/mm/init.c
->> @@ -27,6 +27,9 @@
->>    
->>    unsigned long kernel_virt_addr = KERNEL_LINK_ADDR;
->>    EXPORT_SYMBOL(kernel_virt_addr);
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define kernel_virt_addr       (*((unsigned long *)XIP_FIXUP(&kernel_virt_addr)))
->> +#endif
->>    
->>    unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
->>    							__page_aligned_bss;
->> @@ -34,8 +37,8 @@ EXPORT_SYMBOL(empty_zero_page);
->>    
->>    extern char _start[];
->>    #define DTB_EARLY_BASE_VA      PGDIR_SIZE
->> -void *dtb_early_va __initdata;
->> -uintptr_t dtb_early_pa __initdata;
->> +void *_dtb_early_va __initdata;
->> +uintptr_t _dtb_early_pa __initdata;
->>    
->>    struct pt_alloc_ops {
->>    	pte_t *(*get_pte_virt)(phys_addr_t pa);
->> @@ -118,6 +121,10 @@ void __init setup_bootmem(void)
->>    	phys_addr_t dram_end = memblock_end_of_DRAM();
->>    	phys_addr_t max_mapped_addr = __pa(~(ulong)0);
->>    
->> +#ifdef CONFIG_XIP_KERNEL
->> +	vmlinux_start = __pa_symbol(&_sdata);
->> +#endif
->> +
->>    	/* The maximal physical memory size is -PAGE_OFFSET. */
->>    	memblock_enforce_memory_limit(-PAGE_OFFSET);
->>    
->> @@ -159,17 +166,44 @@ void __init setup_bootmem(void)
->>    	memblock_allow_resize();
->>    }
->>    
->> +#ifdef CONFIG_XIP_KERNEL
->> +
->> +extern char _xiprom[], _exiprom[];
->> +extern char _sdata[], _edata[];
->> +
->> +#endif /* CONFIG_XIP_KERNEL */
->> +
->>    #ifdef CONFIG_MMU
->> -static struct pt_alloc_ops pt_ops;
->> +static struct pt_alloc_ops _pt_ops;
->> +
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define pt_ops (*(struct pt_alloc_ops *)XIP_FIXUP(&_pt_ops))
->> +#else
->> +#define pt_ops _pt_ops
->> +#endif
->>    
->>    /* Offset between linear mapping virtual address and kernel load address */
->>    unsigned long va_pa_offset;
->>    EXPORT_SYMBOL(va_pa_offset);
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define va_pa_offset   (*((unsigned long *)XIP_FIXUP(&va_pa_offset)))
->> +#endif
->>    /* Offset between kernel mapping virtual address and kernel load address */
->>    unsigned long va_kernel_pa_offset;
->>    EXPORT_SYMBOL(va_kernel_pa_offset);
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define va_kernel_pa_offset    (*((unsigned long *)XIP_FIXUP(&va_kernel_pa_offset)))
->> +#endif
->> +unsigned long va_kernel_xip_pa_offset;
->> +EXPORT_SYMBOL(va_kernel_xip_pa_offset);
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define va_kernel_xip_pa_offset        (*((unsigned long *)XIP_FIXUP(&va_kernel_xip_pa_offset)))
->> +#endif
->>    unsigned long pfn_base;
->>    EXPORT_SYMBOL(pfn_base);
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define pfn_base       (*((unsigned long *)XIP_FIXUP(&pfn_base)))
->> +#endif
->>    
->>    pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
->>    pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
->> @@ -177,6 +211,12 @@ pte_t fixmap_pte[PTRS_PER_PTE] __page_aligned_bss;
->>    
->>    pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
->>    
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
->> +#define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
->> +#define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
->> +#endif /* CONFIG_XIP_KERNEL */
->> +
->>    void __set_fixmap(enum fixed_addresses idx, phys_addr_t phys, pgprot_t prot)
->>    {
->>    	unsigned long addr = __fix_to_virt(idx);
->> @@ -252,6 +292,12 @@ pmd_t fixmap_pmd[PTRS_PER_PMD] __page_aligned_bss;
->>    pmd_t early_pmd[PTRS_PER_PMD] __initdata __aligned(PAGE_SIZE);
->>    pmd_t early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAGE_SIZE);
->>    
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define trampoline_pmd ((pmd_t *)XIP_FIXUP(trampoline_pmd))
->> +#define fixmap_pmd     ((pmd_t *)XIP_FIXUP(fixmap_pmd))
->> +#define early_pmd      ((pmd_t *)XIP_FIXUP(early_pmd))
->> +#endif /* CONFIG_XIP_KERNEL */
->> +
->>    static pmd_t *__init get_pmd_virt_early(phys_addr_t pa)
->>    {
->>    	/* Before MMU is enabled */
->> @@ -368,6 +414,19 @@ static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
->>    	return PMD_SIZE;
->>    }
->>    
->> +#ifdef CONFIG_XIP_KERNEL
->> +/* called from head.S with MMU off */
->> +asmlinkage void __init __copy_data(void)
->> +{
->> +	void *from = (void *)(&_sdata);
->> +	void *end = (void *)(&_end);
->> +	void *to = (void *)CONFIG_PHYS_RAM_BASE;
->> +	size_t sz = (size_t)(end - from + 1);
->> +
->> +	memcpy(to, from, sz);
->> +}
->> +#endif
->> +
->>    /*
->>     * setup_vm() is called from head.S with MMU-off.
->>     *
->> @@ -387,7 +446,35 @@ static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
->>    #endif
->>    
->>    uintptr_t load_pa, load_sz;
->> +#ifdef CONFIG_XIP_KERNEL
->> +#define load_pa        (*((uintptr_t *)XIP_FIXUP(&load_pa)))
->> +#define load_sz        (*((uintptr_t *)XIP_FIXUP(&load_sz)))
->> +#endif
->> +
->> +#ifdef CONFIG_XIP_KERNEL
->> +uintptr_t xiprom, xiprom_sz;
->> +#define xiprom_sz      (*((uintptr_t *)XIP_FIXUP(&xiprom_sz)))
->> +#define xiprom         (*((uintptr_t *)XIP_FIXUP(&xiprom)))
->>    
->> +static void __init create_kernel_page_table(pgd_t *pgdir, uintptr_t map_size)
->> +{
->> +	uintptr_t va, end_va;
->> +
->> +	/* Map the flash resident part */
->> +	end_va = kernel_virt_addr + xiprom_sz;
->> +	for (va = kernel_virt_addr; va < end_va; va += map_size)
->> +		create_pgd_mapping(pgdir, va,
->> +				   xiprom + (va - kernel_virt_addr),
->> +				   map_size, PAGE_KERNEL_EXEC);
->> +
->> +	/* Map the data in RAM */
->> +	end_va = kernel_virt_addr + XIP_OFFSET + load_sz;
->> +	for (va = kernel_virt_addr + XIP_OFFSET; va < end_va; va += map_size)
->> +		create_pgd_mapping(pgdir, va,
->> +				   load_pa + (va - (kernel_virt_addr + XIP_OFFSET)),
->> +				   map_size, PAGE_KERNEL);
->> +}
->> +#else
->>    static void __init create_kernel_page_table(pgd_t *pgdir, uintptr_t map_size)
->>    {
->>    	uintptr_t va, end_va;
->> @@ -398,16 +485,28 @@ static void __init create_kernel_page_table(pgd_t *pgdir, uintptr_t map_size)
->>    				   load_pa + (va - kernel_virt_addr),
->>    				   map_size, PAGE_KERNEL_EXEC);
->>    }
->> +#endif
->>    
->>    asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>    {
->> -	uintptr_t pa;
->> +	uintptr_t __maybe_unused pa;
->>    	uintptr_t map_size;
->>    #ifndef __PAGETABLE_PMD_FOLDED
->>    	pmd_t fix_bmap_spmd, fix_bmap_epmd;
->>    #endif
->> +
->> +#ifdef CONFIG_XIP_KERNEL
->> +	xiprom = (uintptr_t)CONFIG_XIP_PHYS_ADDR;
->> +	xiprom_sz = (uintptr_t)(&_exiprom) - (uintptr_t)(&_xiprom);
->> +
->> +	load_pa = (uintptr_t)CONFIG_PHYS_RAM_BASE;
->> +	load_sz = (uintptr_t)(&_end) - (uintptr_t)(&_sdata);
->> +
->> +	va_kernel_xip_pa_offset = kernel_virt_addr - xiprom;
->> +#else
->>    	load_pa = (uintptr_t)(&_start);
->>    	load_sz = (uintptr_t)(&_end) - load_pa;
->> +#endif
->>    
->>    	va_pa_offset = PAGE_OFFSET - load_pa;
->>    	va_kernel_pa_offset = kernel_virt_addr - load_pa;
->> @@ -441,8 +540,13 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>    	/* Setup trampoline PGD and PMD */
->>    	create_pgd_mapping(trampoline_pg_dir, kernel_virt_addr,
->>    			   (uintptr_t)trampoline_pmd, PGDIR_SIZE, PAGE_TABLE);
->> +#ifdef CONFIG_XIP_KERNEL
->> +	create_pmd_mapping(trampoline_pmd, kernel_virt_addr,
->> +			   xiprom, PMD_SIZE, PAGE_KERNEL_EXEC);
->> +#else
->>    	create_pmd_mapping(trampoline_pmd, kernel_virt_addr,
->>    			   load_pa, PMD_SIZE, PAGE_KERNEL_EXEC);
->> +#endif
->>    #else
->>    	/* Setup trampoline PGD */
->>    	create_pgd_mapping(trampoline_pg_dir, kernel_virt_addr,
->> @@ -474,7 +578,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>    	 * whereas dtb_early_va will be used before setup_vm_final installs
->>    	 * the linear mapping.
->>    	 */
->> -	dtb_early_va = kernel_mapping_pa_to_va(dtb_pa);
->> +	dtb_early_va = kernel_mapping_pa_to_va(XIP_FIXUP(dtb_pa));
->>    #endif /* CONFIG_BUILTIN_DTB */
->>    #else
->>    #ifndef CONFIG_BUILTIN_DTB
->> @@ -486,7 +590,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>    			   pa + PGDIR_SIZE, PGDIR_SIZE, PAGE_KERNEL);
->>    	dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa & (PGDIR_SIZE - 1));
->>    #else /* CONFIG_BUILTIN_DTB */
->> -	dtb_early_va = kernel_mapping_pa_to_va(dtb_pa);
->> +	dtb_early_va = kernel_mapping_pa_to_va(XIP_FIXUP(dtb_pa));
->>    #endif /* CONFIG_BUILTIN_DTB */
->>    #endif
->>    	dtb_early_pa = dtb_pa;
->> @@ -522,7 +626,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>    #endif
->>    }
->>    
->> -#ifdef CONFIG_64BIT
->> +#if defined(CONFIG_64BIT) && !defined(CONFIG_XIP_KERNEL)
->>    void protect_kernel_linear_mapping_text_rodata(void)
->>    {
->>    	unsigned long text_start = (unsigned long)lm_alias(_start);
->>
-> 
-
-
+diff --git a/arch/alpha/kernel/setup.c b/arch/alpha/kernel/setup.c
+index 03dda3beb3bd..5d1296534682 100644
+--- a/arch/alpha/kernel/setup.c
++++ b/arch/alpha/kernel/setup.c
+@@ -28,6 +28,7 @@
+ #include <linux/init.h>
+ #include <linux/string.h>
+ #include <linux/ioport.h>
++#include <linux/panic_notifier.h>
+ #include <linux/platform_device.h>
+ #include <linux/memblock.h>
+ #include <linux/pci.h>
+@@ -46,7 +47,6 @@
+ #include <linux/log2.h>
+ #include <linux/export.h>
+ 
+-extern struct atomic_notifier_head panic_notifier_list;
+ static int alpha_panic_event(struct notifier_block *, unsigned long, void *);
+ static struct notifier_block alpha_panic_block = {
+ 	alpha_panic_event,
+diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+index 61845c0821d9..787bc0f601b3 100644
+--- a/arch/arm64/kernel/setup.c
++++ b/arch/arm64/kernel/setup.c
+@@ -23,6 +23,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/smp.h>
+ #include <linux/fs.h>
++#include <linux/panic_notifier.h>
+ #include <linux/proc_fs.h>
+ #include <linux/memblock.h>
+ #include <linux/of_fdt.h>
+diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+index 499a5357c09f..56b51de2dc51 100644
+--- a/arch/mips/kernel/relocate.c
++++ b/arch/mips/kernel/relocate.c
+@@ -18,6 +18,7 @@
+ #include <linux/kernel.h>
+ #include <linux/libfdt.h>
+ #include <linux/of_fdt.h>
++#include <linux/panic_notifier.h>
+ #include <linux/sched/task.h>
+ #include <linux/start_kernel.h>
+ #include <linux/string.h>
+diff --git a/arch/mips/sgi-ip22/ip22-reset.c b/arch/mips/sgi-ip22/ip22-reset.c
+index c374f3ceec38..9028dbbb45dd 100644
+--- a/arch/mips/sgi-ip22/ip22-reset.c
++++ b/arch/mips/sgi-ip22/ip22-reset.c
+@@ -12,6 +12,7 @@
+ #include <linux/kernel.h>
+ #include <linux/sched/signal.h>
+ #include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ #include <linux/pm.h>
+ #include <linux/timer.h>
+ 
+diff --git a/arch/mips/sgi-ip32/ip32-reset.c b/arch/mips/sgi-ip32/ip32-reset.c
+index 20d8637340be..18d1c115cd53 100644
+--- a/arch/mips/sgi-ip32/ip32-reset.c
++++ b/arch/mips/sgi-ip32/ip32-reset.c
+@@ -12,6 +12,7 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/panic_notifier.h>
+ #include <linux/sched.h>
+ #include <linux/sched/signal.h>
+ #include <linux/notifier.h>
+diff --git a/arch/parisc/kernel/pdc_chassis.c b/arch/parisc/kernel/pdc_chassis.c
+index 75ae88d13909..da154406d368 100644
+--- a/arch/parisc/kernel/pdc_chassis.c
++++ b/arch/parisc/kernel/pdc_chassis.c
+@@ -20,6 +20,7 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/kernel.h>
++#include <linux/panic_notifier.h>
+ #include <linux/reboot.h>
+ #include <linux/notifier.h>
+ #include <linux/cache.h>
+diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
+index 74a98fff2c2f..046fe21b5c3b 100644
+--- a/arch/powerpc/kernel/setup-common.c
++++ b/arch/powerpc/kernel/setup-common.c
+@@ -9,6 +9,7 @@
+ #undef DEBUG
+ 
+ #include <linux/export.h>
++#include <linux/panic_notifier.h>
+ #include <linux/string.h>
+ #include <linux/sched.h>
+ #include <linux/init.h>
+diff --git a/arch/s390/kernel/ipl.c b/arch/s390/kernel/ipl.c
+index 7a21eca498aa..e0b675dd7080 100644
+--- a/arch/s390/kernel/ipl.c
++++ b/arch/s390/kernel/ipl.c
+@@ -13,6 +13,7 @@
+ #include <linux/init.h>
+ #include <linux/device.h>
+ #include <linux/delay.h>
++#include <linux/panic_notifier.h>
+ #include <linux/reboot.h>
+ #include <linux/ctype.h>
+ #include <linux/fs.h>
+diff --git a/arch/sparc/kernel/sstate.c b/arch/sparc/kernel/sstate.c
+index ac8677c3841e..3bcc4ddc6911 100644
+--- a/arch/sparc/kernel/sstate.c
++++ b/arch/sparc/kernel/sstate.c
+@@ -6,6 +6,7 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ #include <linux/reboot.h>
+ #include <linux/init.h>
+ 
+diff --git a/arch/um/drivers/mconsole_kern.c b/arch/um/drivers/mconsole_kern.c
+index 6d00af25ec6b..328b16f99b30 100644
+--- a/arch/um/drivers/mconsole_kern.c
++++ b/arch/um/drivers/mconsole_kern.c
+@@ -12,6 +12,7 @@
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ #include <linux/reboot.h>
+ #include <linux/sched/debug.h>
+ #include <linux/proc_fs.h>
+diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
+index 74e07e748a9b..9512253947d5 100644
+--- a/arch/um/kernel/um_arch.c
++++ b/arch/um/kernel/um_arch.c
+@@ -7,6 +7,7 @@
+ #include <linux/init.h>
+ #include <linux/mm.h>
+ #include <linux/module.h>
++#include <linux/panic_notifier.h>
+ #include <linux/seq_file.h>
+ #include <linux/string.h>
+ #include <linux/utsname.h>
+diff --git a/arch/x86/include/asm/desc.h b/arch/x86/include/asm/desc.h
+index 476082a83d1c..ceb12683b6d1 100644
+--- a/arch/x86/include/asm/desc.h
++++ b/arch/x86/include/asm/desc.h
+@@ -9,6 +9,7 @@
+ #include <asm/irq_vectors.h>
+ #include <asm/cpu_entry_area.h>
+ 
++#include <linux/debug_locks.h>
+ #include <linux/smp.h>
+ #include <linux/percpu.h>
+ 
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 22f13343b5da..9e5c6f2b044d 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -17,6 +17,7 @@
+ #include <linux/irq.h>
+ #include <linux/kexec.h>
+ #include <linux/i8253.h>
++#include <linux/panic_notifier.h>
+ #include <linux/random.h>
+ #include <asm/processor.h>
+ #include <asm/hypervisor.h>
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 59e5e0903b0c..570699eecf90 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -14,6 +14,7 @@
+ #include <linux/initrd.h>
+ #include <linux/iscsi_ibft.h>
+ #include <linux/memblock.h>
++#include <linux/panic_notifier.h>
+ #include <linux/pci.h>
+ #include <linux/root_dev.h>
+ #include <linux/hugetlb.h>
+diff --git a/arch/x86/purgatory/purgatory.c b/arch/x86/purgatory/purgatory.c
+index f03b64d9cb51..7558139920f8 100644
+--- a/arch/x86/purgatory/purgatory.c
++++ b/arch/x86/purgatory/purgatory.c
+@@ -9,6 +9,8 @@
+  */
+ 
+ #include <linux/bug.h>
++#include <linux/kernel.h>
++#include <linux/types.h>
+ #include <crypto/sha2.h>
+ #include <asm/purgatory.h>
+ 
+diff --git a/arch/x86/xen/enlighten.c b/arch/x86/xen/enlighten.c
+index aa9f50fccc5d..c79bd0af2e8c 100644
+--- a/arch/x86/xen/enlighten.c
++++ b/arch/x86/xen/enlighten.c
+@@ -6,6 +6,7 @@
+ #include <linux/cpu.h>
+ #include <linux/kexec.h>
+ #include <linux/slab.h>
++#include <linux/panic_notifier.h>
+ 
+ #include <xen/xen.h>
+ #include <xen/features.h>
+diff --git a/arch/xtensa/platforms/iss/setup.c b/arch/xtensa/platforms/iss/setup.c
+index ed519aee0ec8..d3433e1bb94e 100644
+--- a/arch/xtensa/platforms/iss/setup.c
++++ b/arch/xtensa/platforms/iss/setup.c
+@@ -14,6 +14,7 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ #include <linux/printk.h>
+ #include <linux/string.h>
+ 
+diff --git a/drivers/bus/brcmstb_gisb.c b/drivers/bus/brcmstb_gisb.c
+index 7355fa2cb439..6551286a60cc 100644
+--- a/drivers/bus/brcmstb_gisb.c
++++ b/drivers/bus/brcmstb_gisb.c
+@@ -6,6 +6,7 @@
+ #include <linux/init.h>
+ #include <linux/types.h>
+ #include <linux/module.h>
++#include <linux/panic_notifier.h>
+ #include <linux/platform_device.h>
+ #include <linux/interrupt.h>
+ #include <linux/sysfs.h>
+diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
+index 8a0e97b33cae..e96cb5c4f97a 100644
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -16,6 +16,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/errno.h>
++#include <linux/panic_notifier.h>
+ #include <linux/poll.h>
+ #include <linux/sched.h>
+ #include <linux/seq_file.h>
+diff --git a/drivers/clk/analogbits/wrpll-cln28hpc.c b/drivers/clk/analogbits/wrpll-cln28hpc.c
+index 776ead319ae9..7c64ea52a8d5 100644
+--- a/drivers/clk/analogbits/wrpll-cln28hpc.c
++++ b/drivers/clk/analogbits/wrpll-cln28hpc.c
+@@ -23,8 +23,12 @@
+ 
+ #include <linux/bug.h>
+ #include <linux/err.h>
++#include <linux/limits.h>
+ #include <linux/log2.h>
+ #include <linux/math64.h>
++#include <linux/math.h>
++#include <linux/minmax.h>
++
+ #include <linux/clk/analogbits-wrpll-cln28hpc.h>
+ 
+ /* MIN_INPUT_FREQ: minimum input clock frequency, in Hz (Fref_min) */
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index 5f7fd79ec82f..61c21bd880a4 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -20,6 +20,7 @@
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_platform.h>
++#include <linux/panic_notifier.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/types.h>
+diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
+index bb6e77ee3898..adaa492c3d2d 100644
+--- a/drivers/firmware/google/gsmi.c
++++ b/drivers/firmware/google/gsmi.c
+@@ -19,6 +19,7 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/fs.h>
+ #include <linux/slab.h>
++#include <linux/panic_notifier.h>
+ #include <linux/ioctl.h>
+ #include <linux/acpi.h>
+ #include <linux/io.h>
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 004c3390c15f..7107b9b6eff4 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -25,6 +25,7 @@
+ 
+ #include <linux/delay.h>
+ #include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ #include <linux/ptrace.h>
+ #include <linux/screen_info.h>
+ #include <linux/kdebug.h>
+diff --git a/drivers/hwtracing/coresight/coresight-cpu-debug.c b/drivers/hwtracing/coresight/coresight-cpu-debug.c
+index 2dcf13de751f..9731d3a96073 100644
+--- a/drivers/hwtracing/coresight/coresight-cpu-debug.c
++++ b/drivers/hwtracing/coresight/coresight-cpu-debug.c
+@@ -17,6 +17,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
++#include <linux/panic_notifier.h>
+ #include <linux/pm_qos.h>
+ #include <linux/slab.h>
+ #include <linux/smp.h>
+diff --git a/drivers/leds/trigger/ledtrig-activity.c b/drivers/leds/trigger/ledtrig-activity.c
+index 14ba7faaed9e..30bc9df03636 100644
+--- a/drivers/leds/trigger/ledtrig-activity.c
++++ b/drivers/leds/trigger/ledtrig-activity.c
+@@ -11,6 +11,7 @@
+ #include <linux/kernel_stat.h>
+ #include <linux/leds.h>
+ #include <linux/module.h>
++#include <linux/panic_notifier.h>
+ #include <linux/reboot.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+diff --git a/drivers/leds/trigger/ledtrig-heartbeat.c b/drivers/leds/trigger/ledtrig-heartbeat.c
+index 36b6709afe9f..7fe0a05574d2 100644
+--- a/drivers/leds/trigger/ledtrig-heartbeat.c
++++ b/drivers/leds/trigger/ledtrig-heartbeat.c
+@@ -11,6 +11,7 @@
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/init.h>
++#include <linux/panic_notifier.h>
+ #include <linux/slab.h>
+ #include <linux/timer.h>
+ #include <linux/sched.h>
+diff --git a/drivers/leds/trigger/ledtrig-panic.c b/drivers/leds/trigger/ledtrig-panic.c
+index 5751cd032f9d..64abf2e91608 100644
+--- a/drivers/leds/trigger/ledtrig-panic.c
++++ b/drivers/leds/trigger/ledtrig-panic.c
+@@ -8,6 +8,7 @@
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ #include <linux/leds.h>
+ #include "../leds.h"
+ 
+diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
+index 6bfea3210389..ad639ee85b2a 100644
+--- a/drivers/misc/bcm-vk/bcm_vk_dev.c
++++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+@@ -9,6 +9,7 @@
+ #include <linux/fs.h>
+ #include <linux/idr.h>
+ #include <linux/interrupt.h>
++#include <linux/panic_notifier.h>
+ #include <linux/kref.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+diff --git a/drivers/misc/ibmasm/heartbeat.c b/drivers/misc/ibmasm/heartbeat.c
+index 4f5f3bdc814d..59c9a0d95659 100644
+--- a/drivers/misc/ibmasm/heartbeat.c
++++ b/drivers/misc/ibmasm/heartbeat.c
+@@ -9,6 +9,7 @@
+  */
+ 
+ #include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ #include "ibmasm.h"
+ #include "dot_command.h"
+ #include "lowlevel.h"
+diff --git a/drivers/misc/pvpanic/pvpanic.c b/drivers/misc/pvpanic/pvpanic.c
+index 65f70a4da8c0..793ea0c01193 100644
+--- a/drivers/misc/pvpanic/pvpanic.c
++++ b/drivers/misc/pvpanic/pvpanic.c
+@@ -13,6 +13,7 @@
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/panic_notifier.h>
+ #include <linux/types.h>
+ #include <linux/cdev.h>
+ #include <linux/list.h>
+diff --git a/drivers/net/ipa/ipa_smp2p.c b/drivers/net/ipa/ipa_smp2p.c
+index a5f7a79a1923..34b68dc43886 100644
+--- a/drivers/net/ipa/ipa_smp2p.c
++++ b/drivers/net/ipa/ipa_smp2p.c
+@@ -8,6 +8,7 @@
+ #include <linux/device.h>
+ #include <linux/interrupt.h>
+ #include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ #include <linux/soc/qcom/smem.h>
+ #include <linux/soc/qcom/smem_state.h>
+ 
+diff --git a/drivers/parisc/power.c b/drivers/parisc/power.c
+index ebaf6867b457..456776bd8ee6 100644
+--- a/drivers/parisc/power.c
++++ b/drivers/parisc/power.c
+@@ -38,6 +38,7 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ #include <linux/reboot.h>
+ #include <linux/sched/signal.h>
+ #include <linux/kthread.h>
+diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
+index d1495af30081..8688c8ba8894 100644
+--- a/drivers/power/reset/ltc2952-poweroff.c
++++ b/drivers/power/reset/ltc2952-poweroff.c
+@@ -52,6 +52,7 @@
+ #include <linux/slab.h>
+ #include <linux/kmod.h>
+ #include <linux/module.h>
++#include <linux/panic_notifier.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/reboot.h>
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 626a6b90fba2..76dd8e2b1e7e 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -20,6 +20,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/device.h>
++#include <linux/panic_notifier.h>
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+ #include <linux/dma-map-ops.h>
+diff --git a/drivers/s390/char/con3215.c b/drivers/s390/char/con3215.c
+index 1fd5bca9fa20..02523f4e29f4 100644
+--- a/drivers/s390/char/con3215.c
++++ b/drivers/s390/char/con3215.c
+@@ -19,6 +19,7 @@
+ #include <linux/console.h>
+ #include <linux/interrupt.h>
+ #include <linux/err.h>
++#include <linux/panic_notifier.h>
+ #include <linux/reboot.h>
+ #include <linux/serial.h> /* ASYNC_* flags */
+ #include <linux/slab.h>
+diff --git a/drivers/s390/char/con3270.c b/drivers/s390/char/con3270.c
+index e21962c0fd94..87cdbace1453 100644
+--- a/drivers/s390/char/con3270.c
++++ b/drivers/s390/char/con3270.c
+@@ -13,6 +13,7 @@
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+ #include <linux/list.h>
++#include <linux/panic_notifier.h>
+ #include <linux/types.h>
+ #include <linux/slab.h>
+ #include <linux/err.h>
+diff --git a/drivers/s390/char/sclp.c b/drivers/s390/char/sclp.c
+index 986bbbc23d0a..6627820a5eb9 100644
+--- a/drivers/s390/char/sclp.c
++++ b/drivers/s390/char/sclp.c
+@@ -11,6 +11,7 @@
+ #include <linux/kernel_stat.h>
+ #include <linux/module.h>
+ #include <linux/err.h>
++#include <linux/panic_notifier.h>
+ #include <linux/spinlock.h>
+ #include <linux/interrupt.h>
+ #include <linux/timer.h>
+diff --git a/drivers/s390/char/sclp_con.c b/drivers/s390/char/sclp_con.c
+index 9b852a47ccc1..cc01a7b8595d 100644
+--- a/drivers/s390/char/sclp_con.c
++++ b/drivers/s390/char/sclp_con.c
+@@ -10,6 +10,7 @@
+ #include <linux/kmod.h>
+ #include <linux/console.h>
+ #include <linux/init.h>
++#include <linux/panic_notifier.h>
+ #include <linux/timer.h>
+ #include <linux/jiffies.h>
+ #include <linux/termios.h>
+diff --git a/drivers/s390/char/sclp_vt220.c b/drivers/s390/char/sclp_vt220.c
+index 7f4445b0f819..5b8a7b090a97 100644
+--- a/drivers/s390/char/sclp_vt220.c
++++ b/drivers/s390/char/sclp_vt220.c
+@@ -9,6 +9,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/spinlock.h>
++#include <linux/panic_notifier.h>
+ #include <linux/list.h>
+ #include <linux/wait.h>
+ #include <linux/timer.h>
+diff --git a/drivers/s390/char/zcore.c b/drivers/s390/char/zcore.c
+index bd3c724bf695..b5b0848da93b 100644
+--- a/drivers/s390/char/zcore.c
++++ b/drivers/s390/char/zcore.c
+@@ -15,6 +15,7 @@
+ #include <linux/init.h>
+ #include <linux/slab.h>
+ #include <linux/debugfs.h>
++#include <linux/panic_notifier.h>
+ #include <linux/reboot.h>
+ 
+ #include <asm/asm-offsets.h>
+diff --git a/drivers/soc/bcm/brcmstb/pm/pm-arm.c b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+index a673fdffe216..3cbb165d6e30 100644
+--- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
++++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+@@ -28,6 +28,7 @@
+ #include <linux/notifier.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
++#include <linux/panic_notifier.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+ #include <linux/printk.h>
+diff --git a/drivers/staging/olpc_dcon/olpc_dcon.c b/drivers/staging/olpc_dcon/olpc_dcon.c
+index 6d8e9a481786..7284cb4ac395 100644
+--- a/drivers/staging/olpc_dcon/olpc_dcon.c
++++ b/drivers/staging/olpc_dcon/olpc_dcon.c
+@@ -22,6 +22,7 @@
+ #include <linux/device.h>
+ #include <linux/uaccess.h>
+ #include <linux/ctype.h>
++#include <linux/panic_notifier.h>
+ #include <linux/reboot.h>
+ #include <linux/olpc-ec.h>
+ #include <asm/tsc.h>
+diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
+index 4dc9077dd2ac..ac06ee7c87d7 100644
+--- a/drivers/video/fbdev/hyperv_fb.c
++++ b/drivers/video/fbdev/hyperv_fb.c
+@@ -52,6 +52,7 @@
+ #include <linux/completion.h>
+ #include <linux/fb.h>
+ #include <linux/pci.h>
++#include <linux/panic_notifier.h>
+ #include <linux/efi.h>
+ #include <linux/console.h>
+ 
+diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
+index 76a10e0dca9f..719410b93f99 100644
+--- a/include/asm-generic/bug.h
++++ b/include/asm-generic/bug.h
+@@ -17,7 +17,8 @@
+ #endif
+ 
+ #ifndef __ASSEMBLY__
+-#include <linux/kernel.h>
++#include <linux/panic.h>
++#include <linux/printk.h>
+ 
+ #ifdef CONFIG_BUG
+ 
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index 09035ac67d4b..6c5a05ac1ecb 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -14,6 +14,7 @@
+ #include <linux/math.h>
+ #include <linux/minmax.h>
+ #include <linux/typecheck.h>
++#include <linux/panic.h>
+ #include <linux/printk.h>
+ #include <linux/build_bug.h>
+ #include <linux/static_call_types.h>
+@@ -70,7 +71,6 @@
+ #define lower_32_bits(n) ((u32)((n) & 0xffffffff))
+ 
+ struct completion;
+-struct pt_regs;
+ struct user;
+ 
+ #ifdef CONFIG_PREEMPT_VOLUNTARY
+@@ -175,14 +175,6 @@ void __might_fault(const char *file, int line);
+ static inline void might_fault(void) { }
+ #endif
+ 
+-extern struct atomic_notifier_head panic_notifier_list;
+-extern long (*panic_blink)(int state);
+-__printf(1, 2)
+-void panic(const char *fmt, ...) __noreturn __cold;
+-void nmi_panic(struct pt_regs *regs, const char *msg);
+-extern void oops_enter(void);
+-extern void oops_exit(void);
+-extern bool oops_may_print(void);
+ void do_exit(long error_code) __noreturn;
+ void complete_and_exit(struct completion *, long) __noreturn;
+ 
+@@ -368,52 +360,8 @@ extern int __kernel_text_address(unsigned long addr);
+ extern int kernel_text_address(unsigned long addr);
+ extern int func_ptr_is_kernel_text(void *ptr);
+ 
+-#ifdef CONFIG_SMP
+-extern unsigned int sysctl_oops_all_cpu_backtrace;
+-#else
+-#define sysctl_oops_all_cpu_backtrace 0
+-#endif /* CONFIG_SMP */
+-
+ extern void bust_spinlocks(int yes);
+-extern int panic_timeout;
+-extern unsigned long panic_print;
+-extern int panic_on_oops;
+-extern int panic_on_unrecovered_nmi;
+-extern int panic_on_io_nmi;
+-extern int panic_on_warn;
+-extern unsigned long panic_on_taint;
+-extern bool panic_on_taint_nousertaint;
+-extern int sysctl_panic_on_rcu_stall;
+-extern int sysctl_max_rcu_stall_to_panic;
+-extern int sysctl_panic_on_stackoverflow;
+-
+-extern bool crash_kexec_post_notifiers;
+ 
+-/*
+- * panic_cpu is used for synchronizing panic() and crash_kexec() execution. It
+- * holds a CPU number which is executing panic() currently. A value of
+- * PANIC_CPU_INVALID means no CPU has entered panic() or crash_kexec().
+- */
+-extern atomic_t panic_cpu;
+-#define PANIC_CPU_INVALID	-1
+-
+-/*
+- * Only to be used by arch init code. If the user over-wrote the default
+- * CONFIG_PANIC_TIMEOUT, honor it.
+- */
+-static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
+-{
+-	if (panic_timeout == arch_default_timeout)
+-		panic_timeout = timeout;
+-}
+-extern const char *print_tainted(void);
+-enum lockdep_ok {
+-	LOCKDEP_STILL_OK,
+-	LOCKDEP_NOW_UNRELIABLE
+-};
+-extern void add_taint(unsigned flag, enum lockdep_ok);
+-extern int test_taint(unsigned flag);
+-extern unsigned long get_taint(void);
+ extern int root_mountflags;
+ 
+ extern bool early_boot_irqs_disabled;
+@@ -432,36 +380,6 @@ extern enum system_states {
+ 	SYSTEM_SUSPEND,
+ } system_state;
+ 
+-/* This cannot be an enum because some may be used in assembly source. */
+-#define TAINT_PROPRIETARY_MODULE	0
+-#define TAINT_FORCED_MODULE		1
+-#define TAINT_CPU_OUT_OF_SPEC		2
+-#define TAINT_FORCED_RMMOD		3
+-#define TAINT_MACHINE_CHECK		4
+-#define TAINT_BAD_PAGE			5
+-#define TAINT_USER			6
+-#define TAINT_DIE			7
+-#define TAINT_OVERRIDDEN_ACPI_TABLE	8
+-#define TAINT_WARN			9
+-#define TAINT_CRAP			10
+-#define TAINT_FIRMWARE_WORKAROUND	11
+-#define TAINT_OOT_MODULE		12
+-#define TAINT_UNSIGNED_MODULE		13
+-#define TAINT_SOFTLOCKUP		14
+-#define TAINT_LIVEPATCH			15
+-#define TAINT_AUX			16
+-#define TAINT_RANDSTRUCT		17
+-#define TAINT_FLAGS_COUNT		18
+-#define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+-
+-struct taint_flag {
+-	char c_true;	/* character printed when tainted */
+-	char c_false;	/* character printed when not tainted */
+-	bool module;	/* also show as a per-module taint flag */
+-};
+-
+-extern const struct taint_flag taint_flags[TAINT_FLAGS_COUNT];
+-
+ extern const char hex_asc[];
+ #define hex_asc_lo(x)	hex_asc[((x) & 0x0f)]
+ #define hex_asc_hi(x)	hex_asc[((x) & 0xf0) >> 4]
+diff --git a/include/linux/panic.h b/include/linux/panic.h
+new file mode 100644
+index 000000000000..f5844908a089
+--- /dev/null
++++ b/include/linux/panic.h
+@@ -0,0 +1,98 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_PANIC_H
++#define _LINUX_PANIC_H
++
++#include <linux/compiler_attributes.h>
++#include <linux/types.h>
++
++struct pt_regs;
++
++extern long (*panic_blink)(int state);
++__printf(1, 2)
++void panic(const char *fmt, ...) __noreturn __cold;
++void nmi_panic(struct pt_regs *regs, const char *msg);
++extern void oops_enter(void);
++extern void oops_exit(void);
++extern bool oops_may_print(void);
++
++#ifdef CONFIG_SMP
++extern unsigned int sysctl_oops_all_cpu_backtrace;
++#else
++#define sysctl_oops_all_cpu_backtrace 0
++#endif /* CONFIG_SMP */
++
++extern int panic_timeout;
++extern unsigned long panic_print;
++extern int panic_on_oops;
++extern int panic_on_unrecovered_nmi;
++extern int panic_on_io_nmi;
++extern int panic_on_warn;
++
++extern unsigned long panic_on_taint;
++extern bool panic_on_taint_nousertaint;
++
++extern int sysctl_panic_on_rcu_stall;
++extern int sysctl_max_rcu_stall_to_panic;
++extern int sysctl_panic_on_stackoverflow;
++
++extern bool crash_kexec_post_notifiers;
++
++/*
++ * panic_cpu is used for synchronizing panic() and crash_kexec() execution. It
++ * holds a CPU number which is executing panic() currently. A value of
++ * PANIC_CPU_INVALID means no CPU has entered panic() or crash_kexec().
++ */
++extern atomic_t panic_cpu;
++#define PANIC_CPU_INVALID	-1
++
++/*
++ * Only to be used by arch init code. If the user over-wrote the default
++ * CONFIG_PANIC_TIMEOUT, honor it.
++ */
++static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
++{
++	if (panic_timeout == arch_default_timeout)
++		panic_timeout = timeout;
++}
++
++/* This cannot be an enum because some may be used in assembly source. */
++#define TAINT_PROPRIETARY_MODULE	0
++#define TAINT_FORCED_MODULE		1
++#define TAINT_CPU_OUT_OF_SPEC		2
++#define TAINT_FORCED_RMMOD		3
++#define TAINT_MACHINE_CHECK		4
++#define TAINT_BAD_PAGE			5
++#define TAINT_USER			6
++#define TAINT_DIE			7
++#define TAINT_OVERRIDDEN_ACPI_TABLE	8
++#define TAINT_WARN			9
++#define TAINT_CRAP			10
++#define TAINT_FIRMWARE_WORKAROUND	11
++#define TAINT_OOT_MODULE		12
++#define TAINT_UNSIGNED_MODULE		13
++#define TAINT_SOFTLOCKUP		14
++#define TAINT_LIVEPATCH			15
++#define TAINT_AUX			16
++#define TAINT_RANDSTRUCT		17
++#define TAINT_FLAGS_COUNT		18
++#define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
++
++struct taint_flag {
++	char c_true;	/* character printed when tainted */
++	char c_false;	/* character printed when not tainted */
++	bool module;	/* also show as a per-module taint flag */
++};
++
++extern const struct taint_flag taint_flags[TAINT_FLAGS_COUNT];
++
++enum lockdep_ok {
++	LOCKDEP_STILL_OK,
++	LOCKDEP_NOW_UNRELIABLE,
++};
++
++extern const char *print_tainted(void);
++extern void add_taint(unsigned flag, enum lockdep_ok);
++extern int test_taint(unsigned flag);
++extern unsigned long get_taint(void);
++
++#endif	/* _LINUX_PANIC_H */
+diff --git a/include/linux/panic_notifier.h b/include/linux/panic_notifier.h
+new file mode 100644
+index 000000000000..41e32483d7a7
+--- /dev/null
++++ b/include/linux/panic_notifier.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_PANIC_NOTIFIERS_H
++#define _LINUX_PANIC_NOTIFIERS_H
++
++#include <linux/notifier.h>
++#include <linux/types.h>
++
++extern struct atomic_notifier_head panic_notifier_list;
++
++extern bool crash_kexec_post_notifiers;
++
++#endif	/* _LINUX_PANIC_NOTIFIERS_H */
+diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+index bb2e3e15c84c..2871076e4d29 100644
+--- a/kernel/hung_task.c
++++ b/kernel/hung_task.c
+@@ -15,6 +15,7 @@
+ #include <linux/kthread.h>
+ #include <linux/lockdep.h>
+ #include <linux/export.h>
++#include <linux/panic_notifier.h>
+ #include <linux/sysctl.h>
+ #include <linux/suspend.h>
+ #include <linux/utsname.h>
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index f099baee3578..4b34a9aa32bc 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -26,6 +26,7 @@
+ #include <linux/suspend.h>
+ #include <linux/device.h>
+ #include <linux/freezer.h>
++#include <linux/panic_notifier.h>
+ #include <linux/pm.h>
+ #include <linux/cpu.h>
+ #include <linux/uaccess.h>
+diff --git a/kernel/panic.c b/kernel/panic.c
+index 332736a72a58..edad89660a2b 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -23,6 +23,7 @@
+ #include <linux/reboot.h>
+ #include <linux/delay.h>
+ #include <linux/kexec.h>
++#include <linux/panic_notifier.h>
+ #include <linux/sched.h>
+ #include <linux/sysrq.h>
+ #include <linux/init.h>
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 03282196953a..67f8f65a9ada 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -32,6 +32,8 @@
+ #include <linux/export.h>
+ #include <linux/completion.h>
+ #include <linux/moduleparam.h>
++#include <linux/panic.h>
++#include <linux/panic_notifier.h>
+ #include <linux/percpu.h>
+ #include <linux/notifier.h>
+ #include <linux/cpu.h>
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 3601786ddaeb..e5cf9c4ef5e1 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -27,6 +27,7 @@
+ #include <linux/sysctl.h>
+ #include <linux/bitmap.h>
+ #include <linux/signal.h>
++#include <linux/panic.h>
+ #include <linux/printk.h>
+ #include <linux/proc_fs.h>
+ #include <linux/security.h>
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 507a30bf26e4..9612a1d8fa13 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -39,6 +39,7 @@
+ #include <linux/slab.h>
+ #include <linux/ctype.h>
+ #include <linux/init.h>
++#include <linux/panic_notifier.h>
+ #include <linux/poll.h>
+ #include <linux/nmi.h>
+ #include <linux/fs.h>
 -- 
-Thanks,
-
-David / dhildenb
+2.30.2
 
