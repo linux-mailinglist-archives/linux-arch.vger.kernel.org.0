@@ -2,338 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5246735A26F
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 17:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930C735A296
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 18:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbhDIP51 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Apr 2021 11:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232796AbhDIP51 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Apr 2021 11:57:27 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CA9C061760
-        for <linux-arch@vger.kernel.org>; Fri,  9 Apr 2021 08:57:13 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id g8so10429814lfv.12
-        for <linux-arch@vger.kernel.org>; Fri, 09 Apr 2021 08:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XsvaSY8zYN9q+b8PbsWtp1w+Khl2vjj666Eagwy6n5c=;
-        b=Sxywz2hcOMwDVDk2CRpRj35+nfOUayyt5AgurLU6/5LbZVVIrGm0OSEUetnqf8s+Xr
-         Ca3L5pd44k1WYJtzFaqb1ge5LmarpaDUj83GyGgHm1xh5gwqrIAqy0/csimThBS4XZKp
-         F90EiIohVQpSZ/n+/XVxCqqjsXRNzApETZu2jafVluNR5Toh2A4EiU+Cy3IjahBUR2KM
-         /rfpuVa/n9Zh2fkO1GBaDCNniGZj/oEm9Od19IKM2cQ3TIcXZ3/MV0RGluxxEd6Vl8dm
-         jBevVax0yxfRXa6E9Lxz5kQMBqE6l252/antXatpXEYgFPqzK22/wjgjhUmtKaffmm8B
-         jeVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XsvaSY8zYN9q+b8PbsWtp1w+Khl2vjj666Eagwy6n5c=;
-        b=IEuQR6u/KWTheG3zrJDlAmCBsD0J7+66jT93m6JtvnxFDtR1eq7Vp/5vi8g0XtIt2k
-         a6LyxmZSQH4fJmigq8Xi/kVQBE80RrLLXL1ED3lR4DhGa4WPJqApIl/Kn8V5xAFrUN9z
-         Bf0Zkrr/RGle/5sctNTOAcTDq/Bo7/CNGrBjFejuafAQt/fe2dr9sNuQDkG6qg34x6vQ
-         NQUzJexgra6ziHxh7qsq+U7GemwzIPFddFafOlP7lhilpvHxnJ74dzfVZT8zFoxCqLIN
-         WGmDCf5tI+58b7rxuXZcYrdj1avnvGp4B5uyvNEXFe3qK52On2RjNZmcFLqPzwc/M3wp
-         4q9A==
-X-Gm-Message-State: AOAM530MUcWDCvsu2f3yJsyl3mWxFzE/HxAyUfzIzeJwd/MkDLK3SyCz
-        RcZH1aOKCPFpYl7fci1dZL6GjQ==
-X-Google-Smtp-Source: ABdhPJx4167C4epw4GZ3O6x+I3bz4h7dUH3Dy06BAJVx7+AZjRBM6+oPCgBhDIGlc3OtAdyHcZZ4mw==
-X-Received: by 2002:a05:6512:33a8:: with SMTP id i8mr10617815lfg.375.1617983832458;
-        Fri, 09 Apr 2021 08:57:12 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id f15sm304423lfr.51.2021.04.09.08.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Apr 2021 08:57:11 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 586C5102498; Fri,  9 Apr 2021 18:57:11 +0300 (+03)
-Date:   Fri, 9 Apr 2021 18:57:11 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        id S233912AbhDIQFG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Apr 2021 12:05:06 -0400
+Received: from sonic310-30.consmr.mail.ne1.yahoo.com ([66.163.186.211]:42692
+        "EHLO sonic310-30.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233441AbhDIQFF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Apr 2021 12:05:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1617984290; bh=hx2AE2I6w9Qq9AGRy34zDwr9Uc4ea9n2GR6ByjcrG9s=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=B+QJZ07h2oNd52a1X5XcKgjVNBUkXJElSH7AUPTlJvC6WXDMLVBKGyN5viXJ1BP3XM7tWK3M+QGRdPxbmmJbn4R6oo48+8od68lMjbhXOiAyEGR2q7n9e2MUOZ07EkdqzMjvlLlSACQ286nRxTI++8P1ttGZADn7pY8ly9xxRoHna/zxv9AVHlEwLwjtpL+DnhAP2CC6nLc5DfhSF1QSkIlSlyvTUhNH7zHyRsSVqd1LYdWD3dbT68ysscnn2ERnApUr8wzshLaoUN/1XTGd/yTCZEnScu2jyCb4HzNHHnHg3zO1ypVVzKrcz5b692+MuIZXE8QOwxN2yDyUPa3MYQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1617984290; bh=Lcd3vERvJtsGZPqBzW+44fNU/kSVsstAYRF57V0GSZk=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=r5gfO0QwIux+UfoKei00oBCP4hBXjZ0FSLv3xJW/rv00R5m2MH3bCtqh1PwFbQAGIsfpawSmAGlJGtBeqJ58/UaeoV3AVbei4nqoqPQ7/YoHyA63PseFNcA349sE43X2NdHLcL1tK5hcqDmtKyouW8biVv5NMfQyUqVgJBnDbdLt3hzw9XttC8JMbXi2oyvIsH7ta8yYTD09c5wTK9IPj6TcnAJrzQ8lKKcPo2mkZVKLeeo8TKm9T+ya2HMBT+sQ3VxceONGtnZtJ4UZlNN+HKHEdYuiIsOoH8OTmiGJbKn8oC+aTqvHCpEFvZmePkB+vnn2VuDLPFBXbdNsXQFMOw==
+X-YMail-OSG: m9Hr8bwVM1l2uVBPYry5Cr3m7UXU5F1xrdNlNk3Xzu_MRCV1GKlNKyDAlKx6vjc
+ 2tLuvOXfEDsv9lq8rCYKWqDbicn.iby98MEWriNsAoOsEcSQ6ztf5aQim_3o4xAB9KL0zZllAoGv
+ HnFfOg7jLhnmF0wsLg3JELyxskmU6fBkxQGio1NZIRy.kBtDN3lyxWuJzeALGoDTdTxszfvH7mDD
+ 1tBGc3h3S1HdvARMqanihmUx_qJaVEVdno6581AO.UrcTo4Uu1KmJbThMIN38ZU7vLLRtHTN2gxC
+ aYsvU.UWFnotv66qLTH8Vlc2zXXJzG.PuPtyH2OwtLaMlxWdP60VP1Ux7FDov7p4eZqEog3xtqBY
+ 2Nfr5vHJu5vb_NRwOpDHCVZBPO.1B3PDMiM0WDTCR7aGIC5h6QBVjSSjn8h2bKbmRWxmx1PkPA22
+ G.oXq4nyEo9KGSCFBE_7UAH2eY8_qz0s0v9xJt50SnUwVeEuwqz0K2y._kM8ljhLe_QnszLlhj_4
+ XchHKBRV8ZK54JpOvWzTC4TVc5b6t8s0FqfKG4PhdUAl9KdHOeznuQrerXsIB1A6AfuZEv_B_vwn
+ nUD7JUGqujefLNSYIRR3CHzDQ4NAB7oPtc7_u3OdGbl5vKLH9KOxwP92Ra55BtyeheR.D5hPYvOr
+ unbB8hAhc.7xigk4dphOMUwwMfEzMT9X7aw1VJtoWENVixigLA1hCCLvUUxBhkuEICst.sYeQjkf
+ vMSqFG.A8HZ6pGsaE7fpQmZFpXyHGPK.pnbKkysVAqhn.JzlG2u2SXSE7i6DGwC9GLDuDtU11mhf
+ bGdIGeoHR8x14tyvV3WWpGTwzMmI4JMw9axszFQuZ_hQnyeYg4BImSIPvEfyZqxZznL6KNQ8_GVI
+ LXXgk2ZdjPG.vX4t62AurrHuzCvg6mq83fzFgrTFiK1Z64D2fTNAO5VCjqCzwMiHEa7MT8MACjX6
+ qP1wlIwH3q2wanEJdAJT9cSgqTSqwrRxpN49JqFCHMKYxPc3RopKzFdAFCGlFl0M3d5fP0RjqOKB
+ lyl.6QCkDir2mm_fVnjgwsEgm1GAS5sXaeyaT4lOuT641dtbTMOi5PhOf84FtY6MGsFwvvLBEX9Z
+ fmmbLEt4fpxb_7LOQga2K7N6iFnP9s0Cm3CzAAY41.ppeoffr2syWeVaFX4hYyELKhjo_02sNqsV
+ HkuiQ5Dh6zFU61UurgLmXMKC9olqi7eVc8HNIUybkonFCBo167dLtIUXmwQ5KTbYeHC3IHhdT5Tq
+ yNErWuIHTozX.1iksdPnS6B7rJ5aKm_3PMU8Of1YqOl0oN6q5Ok48f4cMYiGJ2Pjma7QTEMLQzwE
+ yPwh.KgbvvGfno_.wkFVpKS31gL8hK_LaMFJnvPyuVL8BFEvuv9kRNYS2jddLgem9lBx9aJ1.RZR
+ YmZ8NcgnXg3H0FTxY1n7QMg8o9Xy0x4wzddFjSPLXCXV0ppNGITjKE25POWe3c3W.4CjIMcnoKdH
+ DniuXlOmfJgxmAbK3US7R44yaNuX822wRPFbQh3JT4E1WLU11Wfo6mv_TSh_wjMvjYV6moBWWPkd
+ zDYt.1Z7O8XssTRFjhfJy6irI2U4.d8p6mhw1xRKIAD5RQbwSgvmmVoV_5Gl3FniTRjAjUA8O1MZ
+ L_..js.W_7v3BPJBhF9mUDUe7hNHWxiXQ2NH.kWlcxl8HY7LHyLG6Hf_MHFKhp8lw2vh_EkiR217
+ JPLGI56CqEILkWdv5EL2a3fD4c3L6i5h2D95Hw8XlA3byle3DjWVJfiZ0efFOfOafeBKcDlZV8ps
+ kzU7ygyKoKkLZy1o_lXzVtgnkebl23mfbPT3AcVaXgFnXL2jf74qlcH.DIEkdGn2CBvcjW62L4Kc
+ 78l9FuB7Y_XYlU.K9mn7dmLqPsdxpQo_gwjYtxUIBUxP_dC8qk4I95POHt.vifsJUcA50gX8kf9d
+ n.kWoeMJqwA5tAzYx6Lv.kp7N0Bop7EgnwkFLNDbg8hCOrPcUylrupYUUuFb8ELEyqicE.Gn6bfu
+ S4Fo0b0plKOg3daZS43hEjyVhfeZ9HARdGetqUVe90AzZVWpNh3lCi5G6syamKGDoDnN92a_b5km
+ P32R8T0Uc3BmEvuCc2aaE6GQ32XiGpdKX0Nd7ryxmS8OfiLC2e3t8LEtGIOa4ZFo0vc6o_bdMcZE
+ Gaw6asjk3j7bc.5.owOvoIGn2b0LNE9w6mF8ESG5vSgMvJaDHZdazf_jJW6c6exhUoo6Gio3d..d
+ 7Sm94CZ2S24AhOlQOOncuUtRESZD.GYBSRvNKBtqYUuilxC71Ffk0UU4sTvD5tdGt7y7jdkEVRhs
+ vxq1R7cOG44dEya59lvowXptw37ZqH0F4XJTRW5gxo6MA7jY7KN4v8eWZ.QiHJ5n6PpIkRM.PVpX
+ rbtZUgCbOMpFRbidIYjaH0ZaK791mENRJs5k0_J7eEVFSsIClQePQynvkJgV7AT5CkwAdfYrtdTf
+ OTospNChy.FVFg3tgxZmmB9G91qiIBsV.pFeqR1WuAClAhbEVAMACIsz_ZN1KSd1BwISWlI78rvu
+ vZiecj_3BolxUlaW5Ym5Xxxe1S3VO0Q_7VJTIapvJtQdt.uilhaEKpCQWEBdqRM8EziapzHxtfsP
+ s8IXEZyOuHeU8e5NrZ0x_wzZ1W7TltPN3IlNcWBMT7_eHvCa5daDUl41DR0uuogiMTYfGrxDmUpY
+ _PJMu95XuSzvA05l4rY2ZT6eYIg4C8vbH8DmrfDe0fPkaWhco4mXZAu60qZUKc70Wrk_fEJtFy3Z
+ p6i6.96pNtaEiYwL4Ns_5IRhjgrkmLWUjHZDsXoSrk5gAxpQK4Akk23YP9XGuhjDOnPqQDbRSz3N
+ 4aHut4Q5LZwdKCzgu2s4kG9SfSy5tAxVSpw6gtCXo43V46zZNXD2_EHLSgKididIAddhS8jX_4TW
+ TySDmWEZnm3nq9ERhSslVnE66r1QQrs.EpisiZYeT6VRy4c6QwfN46rhy0.VTPlut5rqt7LLyKkm
+ HjeIsuL31DvJQkXuFCxINP5gR5s8545d6IfsRatKVXo6WNt.hwQO39xEHiOzGdRB6NKPEXO7SNxk
+ yFDBBIHVvtK7VluyBhn5nRyn4t4BdK3FpILSbdH3gEvAc7vnxOxy3QRwxsllYTSuG9KPl4g314b7
+ Ae0caUN2nfM3Zp1kvhXdx3qYzCS_ioLeOSTp5dLI32FUuKou_07Qohie2ikgOqjmIBamGoMMcR7L
+ Ikr2yuH7cB4NOJKqsytmww_mpt.N6YHEcbCA9bMcalPtrQfX8g0CThOf3K_2GpJF4HKnTyj.Jpxc
+ L1IxhQPhkbxIS3p2AzzeUVyEyh7XzIcnumKCy0XDyLfFrw1gxecT.OSYYnO_PEHc052ArjgUl8oy
+ P6IaucIknckoy90hKF5b_1E.L6LS_O04_KgoO9YueWpDaozd5fnYxdyuKo2Nsskcqq5G9wPiEndr
+ kWFRiND.CJuIRXxkOSI32VtU7fTrFEn.jSh18GP1svvGQEHMH1dSWj7nTEWcWUUR0M4TXF03QcrZ
+ fLie5JhOlDCO7UZsRNrS9Yur2e46BtwN1zXVKJau.gP.6kDq5ZgqiVJTkjyYfTiZmkR2wq2UNpMB
+ luPCc469qvRTVlwedwthx9dm28Xxvupss2jG8aaykurWYYwI2CU88Dv8QFrvvIXMc.HQHyyDuKg1
+ 0CqWQ3oVdbf6m_uMUYx3v0bhc4fkCY5TJSC5ib2RPV54ppAX_6ZAbr5ZS6DU75sUKKP8P0xB_Yoi
+ HJSN24naPsejZhosPkjqqDZMEQ5WzKOe6guQwlgPr0VJWnKzEBeRt8KX6cLgETX6h5GVazu1wa2b
+ VhYOAccwo0zLJ6Vu2Y5eARB8vq1QtCzX5bt9VQC81oJQTsVoNBabL44.E2d6wagI8mwpQpjjyzOp
+ NgEDW3N4TiQyHa4R5KxH1FdLacqYydN4qeVsn6MH_7mf7oRL0PO.UhXo2QYg58E11LZvHtmdrwxa
+ .BuYfYzBlIDPQ8tV_QjvU5KE4rJY3Gz4qrsvDxKyGsT.N727r1Soi4oHHu4KUPlxzT8zVJE6o1.H
+ 9VhknZnN1UheYE9kwgiID120URjvsxKMPWIDF0mmvswejKej3Wsr.6aSJPyNCkzEF3UptWGgI99y
+ 495tEdPVz5rsaMaVpBo9MvLMPCPIPpPtxl.H5Q_t7_PACsUnXqVLv8JezwNHqTnnGr1nYaBYS53Q
+ VJ39_brtxVWjrzXYbdUczrJq7smS_L3QvU8UMOlj6JRy7IQHfhXz7oPAKBTWMTpr2Ka3z.jME_g.
+ Z.wlAkyi.qUrCn5Byug3OmYt8.QL9F9nVibmiJDhr2UQvlNKvU.vyMm5XLPZ4pF_QEoQ-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Fri, 9 Apr 2021 16:04:50 +0000
+Received: by kubenode563.mail-prod1.omega.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID a2480e1f2493dc0ec318d730caad4606;
+          Fri, 09 Apr 2021 16:04:45 +0000 (UTC)
+Subject: Re: [PATCH v33 00/12] Landlock LSM
+To:     James Morris <jmorris@namei.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Cc:     Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v24 22/30] x86/cet/shstk: Add user-mode shadow stack
- support
-Message-ID: <20210409155711.kxf3fjc7csvqpl33@box.shutemov.name>
-References: <20210401221104.31584-1-yu-cheng.yu@intel.com>
- <20210401221104.31584-23-yu-cheng.yu@intel.com>
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20210407160726.542794-1-mic@digikod.net>
+ <d7f25c43-8bea-2640-292b-df2fcceae428@namei.org>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Message-ID: <9e4e42a3-937e-710d-8ccb-9bcb0969c5cb@schaufler-ca.com>
+Date:   Fri, 9 Apr 2021 09:04:41 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210401221104.31584-23-yu-cheng.yu@intel.com>
+In-Reply-To: <d7f25c43-8bea-2640-292b-df2fcceae428@namei.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Mailer: WebService/1.1.18121 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/16)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 01, 2021 at 03:10:56PM -0700, Yu-cheng Yu wrote:
-> Introduce basic shadow stack enabling/disabling/allocation routines.
-> A task's shadow stack is allocated from memory with VM_SHADOW_STACK flag
-> and has a fixed size of min(RLIMIT_STACK, 4GB).
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> ---
-> v24:
-> - Rename cet.c to shstk.c, update related areas accordingly.
-> 
->  arch/x86/include/asm/cet.h       |  29 +++++++
->  arch/x86/include/asm/processor.h |   5 ++
->  arch/x86/kernel/Makefile         |   2 +
->  arch/x86/kernel/shstk.c          | 128 +++++++++++++++++++++++++++++++
->  4 files changed, 164 insertions(+)
->  create mode 100644 arch/x86/include/asm/cet.h
->  create mode 100644 arch/x86/kernel/shstk.c
-> 
-> diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-> new file mode 100644
-> index 000000000000..aa85d599b184
-> --- /dev/null
-> +++ b/arch/x86/include/asm/cet.h
-> @@ -0,0 +1,29 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_CET_H
-> +#define _ASM_X86_CET_H
-> +
-> +#ifndef __ASSEMBLY__
-> +#include <linux/types.h>
-> +
-> +struct task_struct;
-> +/*
-> + * Per-thread CET status
-> + */
-> +struct cet_status {
-> +	unsigned long	shstk_base;
-> +	unsigned long	shstk_size;
-> +};
-> +
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +int shstk_setup(void);
-> +void shstk_free(struct task_struct *p);
-> +void shstk_disable(void);
-> +#else
-> +static inline int shstk_setup(void) { return 0; }
-> +static inline void shstk_free(struct task_struct *p) {}
-> +static inline void shstk_disable(void) {}
-> +#endif
-> +
-> +#endif /* __ASSEMBLY__ */
-> +
-> +#endif /* _ASM_X86_CET_H */
-> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> index f1b9ed5efaa9..a5d703fda74e 100644
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -27,6 +27,7 @@ struct vm86;
->  #include <asm/unwind_hints.h>
->  #include <asm/vmxfeatures.h>
->  #include <asm/vdso/processor.h>
-> +#include <asm/cet.h>
->  
->  #include <linux/personality.h>
->  #include <linux/cache.h>
-> @@ -535,6 +536,10 @@ struct thread_struct {
->  
->  	unsigned int		sig_on_uaccess_err:1;
->  
-> +#ifdef CONFIG_X86_CET
-> +	struct cet_status	cet;
-> +#endif
-> +
->  	/* Floating point and extended processor state */
->  	struct fpu		fpu;
->  	/*
-> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-> index 2ddf08351f0b..0f99b093f350 100644
-> --- a/arch/x86/kernel/Makefile
-> +++ b/arch/x86/kernel/Makefile
-> @@ -150,6 +150,8 @@ obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
->  obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
->  
->  obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev-es.o
-> +obj-$(CONFIG_X86_SHADOW_STACK)		+= shstk.o
-> +
->  ###
->  # 64 bit specific files
->  ifeq ($(CONFIG_X86_64),y)
-> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-> new file mode 100644
-> index 000000000000..5406fdf6df3c
-> --- /dev/null
-> +++ b/arch/x86/kernel/shstk.c
-> @@ -0,0 +1,128 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * shstk.c - Intel shadow stack support
-> + *
-> + * Copyright (c) 2021, Intel Corporation.
-> + * Yu-cheng Yu <yu-cheng.yu@intel.com>
-> + */
-> +
-> +#include <linux/types.h>
-> +#include <linux/mm.h>
-> +#include <linux/mman.h>
-> +#include <linux/slab.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/sched/signal.h>
-> +#include <linux/compat.h>
-> +#include <linux/sizes.h>
-> +#include <linux/user.h>
-> +#include <asm/msr.h>
-> +#include <asm/fpu/internal.h>
-> +#include <asm/fpu/xstate.h>
-> +#include <asm/fpu/types.h>
-> +#include <asm/cet.h>
-> +
-> +static void start_update_msrs(void)
-> +{
-> +	fpregs_lock();
-> +	if (test_thread_flag(TIF_NEED_FPU_LOAD))
-> +		__fpregs_load_activate();
-> +}
-> +
-> +static void end_update_msrs(void)
-> +{
-> +	fpregs_unlock();
-> +}
-> +
-> +static unsigned long alloc_shstk(unsigned long size, int flags)
-> +{
-> +	struct mm_struct *mm = current->mm;
-> +	unsigned long addr, populate;
-> +
-> +	/* VM_SHADOW_STACK requires MAP_ANONYMOUS, MAP_PRIVATE */
-> +	flags |= MAP_ANONYMOUS | MAP_PRIVATE;
+On 4/8/2021 6:48 PM, James Morris wrote:
+> I've added this to my tree at:
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git landlock_lsm_v33
+>
+> and merged that into the next-testing branch which is pulled into Linux 
+> next.
 
-Looks like all callers has flags == 0. Do I miss something.
+Thank you.
 
-> +
-> +	mmap_write_lock(mm);
-> +	addr = do_mmap(NULL, 0, size, PROT_READ, flags, VM_SHADOW_STACK, 0,
-> +		       &populate, NULL);
-> +	mmap_write_unlock(mm);
-> +
-> +	if (populate)
-> +		mm_populate(addr, populate);
-
-If all callers pass down flags==0, populate will never happen.
-
-> +
-> +	return addr;
-> +}
-> +
-> +int shstk_setup(void)
-> +{
-> +	unsigned long addr, size;
-> +	struct cet_status *cet = &current->thread.cet;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		return -EOPNOTSUPP;
-> +
-> +	size = round_up(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G), PAGE_SIZE);
-> +	addr = alloc_shstk(size, 0);
-> +	if (IS_ERR_VALUE(addr))
-> +		return PTR_ERR((void *)addr);
-> +
-> +	cet->shstk_base = addr;
-> +	cet->shstk_size = size;
-> +
-> +	start_update_msrs();
-> +	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
-> +	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
-> +	end_update_msrs();
-> +	return 0;
-> +}
-> +
-> +void shstk_free(struct task_struct *tsk)
-> +{
-> +	struct cet_status *cet = &tsk->thread.cet;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) ||
-> +	    !cet->shstk_size ||
-> +	    !cet->shstk_base)
-> +		return;
-> +
-> +	if (!tsk->mm)
-> +		return;
-> +
-> +	while (1) {
-> +		int r;
-> +
-> +		r = vm_munmap(cet->shstk_base, cet->shstk_size);
-> +
-> +		/*
-> +		 * vm_munmap() returns -EINTR when mmap_lock is held by
-> +		 * something else, and that lock should not be held for a
-> +		 * long time.  Retry it for the case.
-> +		 */
-
-Hm, no. -EINTR is not about the lock being held by somebody else. The task
-got a signal and need to return to userspace.
-
-I have not looked at the rest of the patches yet, but why do you need a
-special free path for shadow stack? Why the normal unmap route doesn't
-work for you?
-
-> +		if (r == -EINTR) {
-> +			cond_resched();
-> +			continue;
-> +		}
-> +		break;
-> +	}
-> +
-> +	cet->shstk_base = 0;
-> +	cet->shstk_size = 0;
-> +}
-> +
-> +void shstk_disable(void)
-> +{
-> +	struct cet_status *cet = &current->thread.cet;
-> +	u64 msr_val;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) ||
-> +	    !cet->shstk_size ||
-> +	    !cet->shstk_base)
-> +		return;
-> +
-> +	start_update_msrs();
-> +	rdmsrl(MSR_IA32_U_CET, msr_val);
-> +	wrmsrl(MSR_IA32_U_CET, msr_val & ~CET_SHSTK_EN);
-> +	wrmsrl(MSR_IA32_PL3_SSP, 0);
-> +	end_update_msrs();
-> +
-> +	shstk_free(current);
-> +}
-> -- 
-> 2.21.0
-> 
-> 
-
--- 
- Kirill A. Shutemov
