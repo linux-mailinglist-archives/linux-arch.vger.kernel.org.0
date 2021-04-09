@@ -2,126 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 930C735A296
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 18:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C81D35A42D
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Apr 2021 18:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233912AbhDIQFG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Apr 2021 12:05:06 -0400
-Received: from sonic310-30.consmr.mail.ne1.yahoo.com ([66.163.186.211]:42692
-        "EHLO sonic310-30.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233441AbhDIQFF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Apr 2021 12:05:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1617984290; bh=hx2AE2I6w9Qq9AGRy34zDwr9Uc4ea9n2GR6ByjcrG9s=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=B+QJZ07h2oNd52a1X5XcKgjVNBUkXJElSH7AUPTlJvC6WXDMLVBKGyN5viXJ1BP3XM7tWK3M+QGRdPxbmmJbn4R6oo48+8od68lMjbhXOiAyEGR2q7n9e2MUOZ07EkdqzMjvlLlSACQ286nRxTI++8P1ttGZADn7pY8ly9xxRoHna/zxv9AVHlEwLwjtpL+DnhAP2CC6nLc5DfhSF1QSkIlSlyvTUhNH7zHyRsSVqd1LYdWD3dbT68ysscnn2ERnApUr8wzshLaoUN/1XTGd/yTCZEnScu2jyCb4HzNHHnHg3zO1ypVVzKrcz5b692+MuIZXE8QOwxN2yDyUPa3MYQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1617984290; bh=Lcd3vERvJtsGZPqBzW+44fNU/kSVsstAYRF57V0GSZk=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=r5gfO0QwIux+UfoKei00oBCP4hBXjZ0FSLv3xJW/rv00R5m2MH3bCtqh1PwFbQAGIsfpawSmAGlJGtBeqJ58/UaeoV3AVbei4nqoqPQ7/YoHyA63PseFNcA349sE43X2NdHLcL1tK5hcqDmtKyouW8biVv5NMfQyUqVgJBnDbdLt3hzw9XttC8JMbXi2oyvIsH7ta8yYTD09c5wTK9IPj6TcnAJrzQ8lKKcPo2mkZVKLeeo8TKm9T+ya2HMBT+sQ3VxceONGtnZtJ4UZlNN+HKHEdYuiIsOoH8OTmiGJbKn8oC+aTqvHCpEFvZmePkB+vnn2VuDLPFBXbdNsXQFMOw==
-X-YMail-OSG: m9Hr8bwVM1l2uVBPYry5Cr3m7UXU5F1xrdNlNk3Xzu_MRCV1GKlNKyDAlKx6vjc
- 2tLuvOXfEDsv9lq8rCYKWqDbicn.iby98MEWriNsAoOsEcSQ6ztf5aQim_3o4xAB9KL0zZllAoGv
- HnFfOg7jLhnmF0wsLg3JELyxskmU6fBkxQGio1NZIRy.kBtDN3lyxWuJzeALGoDTdTxszfvH7mDD
- 1tBGc3h3S1HdvARMqanihmUx_qJaVEVdno6581AO.UrcTo4Uu1KmJbThMIN38ZU7vLLRtHTN2gxC
- aYsvU.UWFnotv66qLTH8Vlc2zXXJzG.PuPtyH2OwtLaMlxWdP60VP1Ux7FDov7p4eZqEog3xtqBY
- 2Nfr5vHJu5vb_NRwOpDHCVZBPO.1B3PDMiM0WDTCR7aGIC5h6QBVjSSjn8h2bKbmRWxmx1PkPA22
- G.oXq4nyEo9KGSCFBE_7UAH2eY8_qz0s0v9xJt50SnUwVeEuwqz0K2y._kM8ljhLe_QnszLlhj_4
- XchHKBRV8ZK54JpOvWzTC4TVc5b6t8s0FqfKG4PhdUAl9KdHOeznuQrerXsIB1A6AfuZEv_B_vwn
- nUD7JUGqujefLNSYIRR3CHzDQ4NAB7oPtc7_u3OdGbl5vKLH9KOxwP92Ra55BtyeheR.D5hPYvOr
- unbB8hAhc.7xigk4dphOMUwwMfEzMT9X7aw1VJtoWENVixigLA1hCCLvUUxBhkuEICst.sYeQjkf
- vMSqFG.A8HZ6pGsaE7fpQmZFpXyHGPK.pnbKkysVAqhn.JzlG2u2SXSE7i6DGwC9GLDuDtU11mhf
- bGdIGeoHR8x14tyvV3WWpGTwzMmI4JMw9axszFQuZ_hQnyeYg4BImSIPvEfyZqxZznL6KNQ8_GVI
- LXXgk2ZdjPG.vX4t62AurrHuzCvg6mq83fzFgrTFiK1Z64D2fTNAO5VCjqCzwMiHEa7MT8MACjX6
- qP1wlIwH3q2wanEJdAJT9cSgqTSqwrRxpN49JqFCHMKYxPc3RopKzFdAFCGlFl0M3d5fP0RjqOKB
- lyl.6QCkDir2mm_fVnjgwsEgm1GAS5sXaeyaT4lOuT641dtbTMOi5PhOf84FtY6MGsFwvvLBEX9Z
- fmmbLEt4fpxb_7LOQga2K7N6iFnP9s0Cm3CzAAY41.ppeoffr2syWeVaFX4hYyELKhjo_02sNqsV
- HkuiQ5Dh6zFU61UurgLmXMKC9olqi7eVc8HNIUybkonFCBo167dLtIUXmwQ5KTbYeHC3IHhdT5Tq
- yNErWuIHTozX.1iksdPnS6B7rJ5aKm_3PMU8Of1YqOl0oN6q5Ok48f4cMYiGJ2Pjma7QTEMLQzwE
- yPwh.KgbvvGfno_.wkFVpKS31gL8hK_LaMFJnvPyuVL8BFEvuv9kRNYS2jddLgem9lBx9aJ1.RZR
- YmZ8NcgnXg3H0FTxY1n7QMg8o9Xy0x4wzddFjSPLXCXV0ppNGITjKE25POWe3c3W.4CjIMcnoKdH
- DniuXlOmfJgxmAbK3US7R44yaNuX822wRPFbQh3JT4E1WLU11Wfo6mv_TSh_wjMvjYV6moBWWPkd
- zDYt.1Z7O8XssTRFjhfJy6irI2U4.d8p6mhw1xRKIAD5RQbwSgvmmVoV_5Gl3FniTRjAjUA8O1MZ
- L_..js.W_7v3BPJBhF9mUDUe7hNHWxiXQ2NH.kWlcxl8HY7LHyLG6Hf_MHFKhp8lw2vh_EkiR217
- JPLGI56CqEILkWdv5EL2a3fD4c3L6i5h2D95Hw8XlA3byle3DjWVJfiZ0efFOfOafeBKcDlZV8ps
- kzU7ygyKoKkLZy1o_lXzVtgnkebl23mfbPT3AcVaXgFnXL2jf74qlcH.DIEkdGn2CBvcjW62L4Kc
- 78l9FuB7Y_XYlU.K9mn7dmLqPsdxpQo_gwjYtxUIBUxP_dC8qk4I95POHt.vifsJUcA50gX8kf9d
- n.kWoeMJqwA5tAzYx6Lv.kp7N0Bop7EgnwkFLNDbg8hCOrPcUylrupYUUuFb8ELEyqicE.Gn6bfu
- S4Fo0b0plKOg3daZS43hEjyVhfeZ9HARdGetqUVe90AzZVWpNh3lCi5G6syamKGDoDnN92a_b5km
- P32R8T0Uc3BmEvuCc2aaE6GQ32XiGpdKX0Nd7ryxmS8OfiLC2e3t8LEtGIOa4ZFo0vc6o_bdMcZE
- Gaw6asjk3j7bc.5.owOvoIGn2b0LNE9w6mF8ESG5vSgMvJaDHZdazf_jJW6c6exhUoo6Gio3d..d
- 7Sm94CZ2S24AhOlQOOncuUtRESZD.GYBSRvNKBtqYUuilxC71Ffk0UU4sTvD5tdGt7y7jdkEVRhs
- vxq1R7cOG44dEya59lvowXptw37ZqH0F4XJTRW5gxo6MA7jY7KN4v8eWZ.QiHJ5n6PpIkRM.PVpX
- rbtZUgCbOMpFRbidIYjaH0ZaK791mENRJs5k0_J7eEVFSsIClQePQynvkJgV7AT5CkwAdfYrtdTf
- OTospNChy.FVFg3tgxZmmB9G91qiIBsV.pFeqR1WuAClAhbEVAMACIsz_ZN1KSd1BwISWlI78rvu
- vZiecj_3BolxUlaW5Ym5Xxxe1S3VO0Q_7VJTIapvJtQdt.uilhaEKpCQWEBdqRM8EziapzHxtfsP
- s8IXEZyOuHeU8e5NrZ0x_wzZ1W7TltPN3IlNcWBMT7_eHvCa5daDUl41DR0uuogiMTYfGrxDmUpY
- _PJMu95XuSzvA05l4rY2ZT6eYIg4C8vbH8DmrfDe0fPkaWhco4mXZAu60qZUKc70Wrk_fEJtFy3Z
- p6i6.96pNtaEiYwL4Ns_5IRhjgrkmLWUjHZDsXoSrk5gAxpQK4Akk23YP9XGuhjDOnPqQDbRSz3N
- 4aHut4Q5LZwdKCzgu2s4kG9SfSy5tAxVSpw6gtCXo43V46zZNXD2_EHLSgKididIAddhS8jX_4TW
- TySDmWEZnm3nq9ERhSslVnE66r1QQrs.EpisiZYeT6VRy4c6QwfN46rhy0.VTPlut5rqt7LLyKkm
- HjeIsuL31DvJQkXuFCxINP5gR5s8545d6IfsRatKVXo6WNt.hwQO39xEHiOzGdRB6NKPEXO7SNxk
- yFDBBIHVvtK7VluyBhn5nRyn4t4BdK3FpILSbdH3gEvAc7vnxOxy3QRwxsllYTSuG9KPl4g314b7
- Ae0caUN2nfM3Zp1kvhXdx3qYzCS_ioLeOSTp5dLI32FUuKou_07Qohie2ikgOqjmIBamGoMMcR7L
- Ikr2yuH7cB4NOJKqsytmww_mpt.N6YHEcbCA9bMcalPtrQfX8g0CThOf3K_2GpJF4HKnTyj.Jpxc
- L1IxhQPhkbxIS3p2AzzeUVyEyh7XzIcnumKCy0XDyLfFrw1gxecT.OSYYnO_PEHc052ArjgUl8oy
- P6IaucIknckoy90hKF5b_1E.L6LS_O04_KgoO9YueWpDaozd5fnYxdyuKo2Nsskcqq5G9wPiEndr
- kWFRiND.CJuIRXxkOSI32VtU7fTrFEn.jSh18GP1svvGQEHMH1dSWj7nTEWcWUUR0M4TXF03QcrZ
- fLie5JhOlDCO7UZsRNrS9Yur2e46BtwN1zXVKJau.gP.6kDq5ZgqiVJTkjyYfTiZmkR2wq2UNpMB
- luPCc469qvRTVlwedwthx9dm28Xxvupss2jG8aaykurWYYwI2CU88Dv8QFrvvIXMc.HQHyyDuKg1
- 0CqWQ3oVdbf6m_uMUYx3v0bhc4fkCY5TJSC5ib2RPV54ppAX_6ZAbr5ZS6DU75sUKKP8P0xB_Yoi
- HJSN24naPsejZhosPkjqqDZMEQ5WzKOe6guQwlgPr0VJWnKzEBeRt8KX6cLgETX6h5GVazu1wa2b
- VhYOAccwo0zLJ6Vu2Y5eARB8vq1QtCzX5bt9VQC81oJQTsVoNBabL44.E2d6wagI8mwpQpjjyzOp
- NgEDW3N4TiQyHa4R5KxH1FdLacqYydN4qeVsn6MH_7mf7oRL0PO.UhXo2QYg58E11LZvHtmdrwxa
- .BuYfYzBlIDPQ8tV_QjvU5KE4rJY3Gz4qrsvDxKyGsT.N727r1Soi4oHHu4KUPlxzT8zVJE6o1.H
- 9VhknZnN1UheYE9kwgiID120URjvsxKMPWIDF0mmvswejKej3Wsr.6aSJPyNCkzEF3UptWGgI99y
- 495tEdPVz5rsaMaVpBo9MvLMPCPIPpPtxl.H5Q_t7_PACsUnXqVLv8JezwNHqTnnGr1nYaBYS53Q
- VJ39_brtxVWjrzXYbdUczrJq7smS_L3QvU8UMOlj6JRy7IQHfhXz7oPAKBTWMTpr2Ka3z.jME_g.
- Z.wlAkyi.qUrCn5Byug3OmYt8.QL9F9nVibmiJDhr2UQvlNKvU.vyMm5XLPZ4pF_QEoQ-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Fri, 9 Apr 2021 16:04:50 +0000
-Received: by kubenode563.mail-prod1.omega.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID a2480e1f2493dc0ec318d730caad4606;
-          Fri, 09 Apr 2021 16:04:45 +0000 (UTC)
-Subject: Re: [PATCH v33 00/12] Landlock LSM
-To:     James Morris <jmorris@namei.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Cc:     Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        id S233332AbhDIQ7f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Apr 2021 12:59:35 -0400
+Received: from mail-pf1-f175.google.com ([209.85.210.175]:40920 "EHLO
+        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229665AbhDIQ7d (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Apr 2021 12:59:33 -0400
+Received: by mail-pf1-f175.google.com with SMTP id a12so4627991pfc.7;
+        Fri, 09 Apr 2021 09:59:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+9xha/pXNeFBGiuagKWknyCqPbUKuPA8GXpvrC9Jx0I=;
+        b=uVuMaR1s2F7d/omAKiLje0v9C0pLAnkUQNK8cPdkwIIihwSIVktZSVUn06pA5v3Ljw
+         pwPD3lxHzclJBo/rtdZrqZ7PcLdUbi9YPGIWG38AZRRUtSN8vyFvS3KhG9pmM7e8MWtE
+         bfGe8YdQmY8mFIOW323KqkqoaObDOHA5UxDhtnwmFm3KztuLJU/4CxZXN9ChyxaObE/M
+         O8ooD6wPsX4guUfEc60QntUL/BaY8Ckt+dOhTO7Z5AzQILv1+ZT2n75fYLk5/bn6jdlL
+         S/gDXTO4T1xaR5LgewkouDOvyd9PtWqOucTl8PYXo+4gQkPAbhfCwFmX985bkO62vjgB
+         cyXA==
+X-Gm-Message-State: AOAM531OQKMa0IZsiAI3kiiMJxjvN+JTnGIWSzUNxI7d4VC0IR6aQsmh
+        hApvEHhsH5YHjS6YElbyTcE=
+X-Google-Smtp-Source: ABdhPJw6kXgrPuw8A7YDvuzOsmJlxLxKBkWC3Ar3os6uxRVSPlCkaHeQd8atCkDOR792q4QQZ8VNRA==
+X-Received: by 2002:a65:40c7:: with SMTP id u7mr14223236pgp.29.1617987559416;
+        Fri, 09 Apr 2021 09:59:19 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id i22sm73788pfq.170.2021.04.09.09.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Apr 2021 09:59:18 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 6D85340256; Fri,  9 Apr 2021 16:59:17 +0000 (UTC)
+Date:   Fri, 9 Apr 2021 16:59:17 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Wei Liu <wei.liu@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Jason J. Herne" <jjherne@linux.ibm.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Joe Perches <joe@perches.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Wang Wenhu <wenhu.wang@vivo.com>,
+        Marek Czerski <ma.czerski@gmail.com>,
+        Hongbo Yao <yaohongbo@huawei.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-clk@vger.kernel.org, linux-edac@vger.kernel.org,
+        coresight@lists.linaro.org, linux-leds@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
         Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-References: <20210407160726.542794-1-mic@digikod.net>
- <d7f25c43-8bea-2640-292b-df2fcceae428@namei.org>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Message-ID: <9e4e42a3-937e-710d-8ccb-9bcb0969c5cb@schaufler-ca.com>
-Date:   Fri, 9 Apr 2021 09:04:41 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Alex Elder <elder@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Daniel Drake <dsd@laptop.org>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH v2 1/1] kernel.h: Split out panic and oops helpers
+Message-ID: <20210409165917.GH4332@42.do-not-panic.com>
+References: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <d7f25c43-8bea-2640-292b-df2fcceae428@namei.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Mailer: WebService/1.1.18121 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/16)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/8/2021 6:48 PM, James Morris wrote:
-> I've added this to my tree at:
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git landlock_lsm_v33
->
-> and merged that into the next-testing branch which is pulled into Linux 
-> next.
+On Fri, Apr 09, 2021 at 01:02:50PM +0300, Andy Shevchenko wrote:
+> kernel.h is being used as a dump for all kinds of stuff for a long time.
+> Here is the attempt to start cleaning it up by splitting out panic and
+> oops helpers.
+> 
+> There are several purposes of doing this:
+> - dropping dependency in bug.h
+> - dropping a loop by moving out panic_notifier.h
+> - unload kernel.h from something which has its own domain
+> 
+> At the same time convert users tree-wide to use new headers, although
+> for the time being include new header back to kernel.h to avoid twisted
+> indirected includes for existing users.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: Corey Minyard <cminyard@mvista.com>
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Wei Liu <wei.liu@kernel.org>
+> Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 
-Thank you.
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
+  Luis
