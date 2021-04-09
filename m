@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA89835A922
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Apr 2021 01:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7463035A954
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Apr 2021 01:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234883AbhDIXOZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Apr 2021 19:14:25 -0400
-Received: from mga04.intel.com ([192.55.52.120]:31333 "EHLO mga04.intel.com"
+        id S235220AbhDIXrk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Apr 2021 19:47:40 -0400
+Received: from mga06.intel.com ([134.134.136.31]:14587 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234880AbhDIXOZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Apr 2021 19:14:25 -0400
-IronPort-SDR: 8FOQqofsNKjTpM0K517Jcfxc3KzuY1CThC/x+Z2quemPgcz9nj0ZV64O7HC7YFRWp9ffysRaHs
- cC8kQ2Cfc6tw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9949"; a="191708954"
+        id S235163AbhDIXri (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Apr 2021 19:47:38 -0400
+IronPort-SDR: 4oTMDTbu7ghJ1nVn9+6esl52exZ5ABLXB5jtEzUzErDqkWILSfvJN+EykT59fT/hvgMMspsEND
+ ugC34gjrjVgQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9949"; a="255190796"
 X-IronPort-AV: E=Sophos;i="5.82,210,1613462400"; 
-   d="scan'208";a="191708954"
+   d="scan'208";a="255190796"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 16:14:11 -0700
-IronPort-SDR: Rs7zQ8aB0ZMvUycmEhQuydYbL7lqQgBkA3wFN0NTzubAov5AhJqpP0n+EbiE6x11UCLPnEfnO5
- PvrqU4zxc37A==
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 16:47:23 -0700
+IronPort-SDR: 7kkS8Wxc9BTdMnvBz67vi/4ovTt7qmo8Sx/XhHsJNzLbHt5HqfH+DEzabiA6I67db98dmOCI/G
+ QyDmN3Xu1ijQ==
 X-IronPort-AV: E=Sophos;i="5.82,210,1613462400"; 
-   d="scan'208";a="416460352"
+   d="scan'208";a="416470774"
 Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.27.140]) ([10.212.27.140])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 16:14:10 -0700
-Subject: Re: [PATCH v24 04/30] x86/cpufeatures: Introduce X86_FEATURE_CET and
- setup functions
-To:     Borislav Petkov <bp@alien8.de>
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 16:47:22 -0700
+Subject: Re: [PATCH v24 22/30] x86/cet/shstk: Add user-mode shadow stack
+ support
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -35,6 +35,7 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
@@ -54,17 +55,15 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 References: <20210401221104.31584-1-yu-cheng.yu@intel.com>
- <20210401221104.31584-5-yu-cheng.yu@intel.com>
- <20210409101214.GC15567@zn.tnic>
- <c7cb0ed6-2725-ba0d-093e-393eab9918b2@intel.com>
- <20210409171408.GG15567@zn.tnic>
+ <20210401221104.31584-23-yu-cheng.yu@intel.com>
+ <20210409155711.kxf3fjc7csvqpl33@box.shutemov.name>
 From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <f7a1299a-916f-70fe-6881-0951fe4fe38a@intel.com>
-Date:   Fri, 9 Apr 2021 16:14:09 -0700
+Message-ID: <d1fc2f06-b6ad-f780-72c0-cf7ec6633a30@intel.com>
+Date:   Fri, 9 Apr 2021 16:47:21 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.9.0
 MIME-Version: 1.0
-In-Reply-To: <20210409171408.GG15567@zn.tnic>
+In-Reply-To: <20210409155711.kxf3fjc7csvqpl33@box.shutemov.name>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,55 +71,159 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/9/2021 10:14 AM, Borislav Petkov wrote:
-> On Fri, Apr 09, 2021 at 08:52:52AM -0700, Yu, Yu-cheng wrote:
->> Recall we had complicated code for the XSAVES features detection in
->> xstate.c.  Dave Hansen proposed the solution and then the whole thing
->> becomes simple.  Because of this flag, even when only the shadow stack is
->> available, the code handles it nicely.
-> 
-> Is that what you mean?
-> 
-> @@ -53,6 +55,8 @@ static short xsave_cpuid_features[] __initdata = {
->   	X86_FEATURE_INTEL_PT,
->   	X86_FEATURE_PKU,
->   	X86_FEATURE_ENQCMD,
-> +	X86_FEATURE_CET, /* XFEATURE_CET_USER */
-> +	X86_FEATURE_CET, /* XFEATURE_CET_KERNEL */
-> 
-> or what is the piece which becomes simpler?
+On 4/9/2021 8:57 AM, Kirill A. Shutemov wrote:
+> On Thu, Apr 01, 2021 at 03:10:56PM -0700, Yu-cheng Yu wrote:
+>> Introduce basic shadow stack enabling/disabling/allocation routines.
+>> A task's shadow stack is allocated from memory with VM_SHADOW_STACK flag
+>> and has a fixed size of min(RLIMIT_STACK, 4GB).
+>>
+>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+>> Cc: Kees Cook <keescook@chromium.org>
 
-Yes, this is it.
+[...]
 
->> Would this equal to only CONFIG_X86_CET (one Kconfig option)?  In fact, when
->> you proposed only CONFIG_X86_CET, things became much simpler.
+>> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+>> new file mode 100644
+>> index 000000000000..5406fdf6df3c
+>> --- /dev/null
+>> +++ b/arch/x86/kernel/shstk.c
+>> @@ -0,0 +1,128 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * shstk.c - Intel shadow stack support
+>> + *
+>> + * Copyright (c) 2021, Intel Corporation.
+>> + * Yu-cheng Yu <yu-cheng.yu@intel.com>
+>> + */
+>> +
+>> +#include <linux/types.h>
+>> +#include <linux/mm.h>
+>> +#include <linux/mman.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/uaccess.h>
+>> +#include <linux/sched/signal.h>
+>> +#include <linux/compat.h>
+>> +#include <linux/sizes.h>
+>> +#include <linux/user.h>
+>> +#include <asm/msr.h>
+>> +#include <asm/fpu/internal.h>
+>> +#include <asm/fpu/xstate.h>
+>> +#include <asm/fpu/types.h>
+>> +#include <asm/cet.h>
+>> +
+>> +static void start_update_msrs(void)
+>> +{
+>> +	fpregs_lock();
+>> +	if (test_thread_flag(TIF_NEED_FPU_LOAD))
+>> +		__fpregs_load_activate();
+>> +}
+>> +
+>> +static void end_update_msrs(void)
+>> +{
+>> +	fpregs_unlock();
+>> +}
+>> +
+>> +static unsigned long alloc_shstk(unsigned long size, int flags)
+>> +{
+>> +	struct mm_struct *mm = current->mm;
+>> +	unsigned long addr, populate;
+>> +
+>> +	/* VM_SHADOW_STACK requires MAP_ANONYMOUS, MAP_PRIVATE */
+>> +	flags |= MAP_ANONYMOUS | MAP_PRIVATE;
 > 
-> When you use CONFIG_X86_SHADOW_STACK instead, it should remain same
-> simple no?
-> 
+> Looks like all callers has flags == 0. Do I miss something.
 
-Signals, arch_prctl, and ELF header are three places that need to depend 
-on either shadow stack or IBT is configured.  To remain simple, we can 
-make all three depend on CONFIG_X86_SHADOW_STACK, and in Kconfig, make 
-CONFIG_X86_IBT depend on CONFIG_X86_SHADOW_STACK.  Without shadow stack, 
-IBT itself is not as useful anyway.
+My earlier versions use this flag.  I should have removed it.
 
->> Practically, IBT is not much in terms of code size.  Since we have already
->> separated the two, why don't we leave it as-is.  When people start using it
->> more, there will be more feedback, and we can decide if one Kconfig is
->> better?
+>> +
+>> +	mmap_write_lock(mm);
+>> +	addr = do_mmap(NULL, 0, size, PROT_READ, flags, VM_SHADOW_STACK, 0,
+>> +		       &populate, NULL);
+>> +	mmap_write_unlock(mm);
+>> +
+>> +	if (populate)
+>> +		mm_populate(addr, populate);
 > 
-> Because when we add stuff to the kernel, we add the simplest and
-> cleanest version possible and later, when we determine that additional
-> functionality is needed, *then* we add it. Not the other way around.
+> If all callers pass down flags==0, populate will never happen.
+
+I will fix it.
+
+>> +
+>> +	return addr;
+>> +}
+>> +
+>> +int shstk_setup(void)
+>> +{
+>> +	unsigned long addr, size;
+>> +	struct cet_status *cet = &current->thread.cet;
+>> +
+>> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	size = round_up(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G), PAGE_SIZE);
+>> +	addr = alloc_shstk(size, 0);
+>> +	if (IS_ERR_VALUE(addr))
+>> +		return PTR_ERR((void *)addr);
+>> +
+>> +	cet->shstk_base = addr;
+>> +	cet->shstk_size = size;
+>> +
+>> +	start_update_msrs();
+>> +	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
+>> +	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
+>> +	end_update_msrs();
+>> +	return 0;
+>> +}
+>> +
+>> +void shstk_free(struct task_struct *tsk)
+>> +{
+>> +	struct cet_status *cet = &tsk->thread.cet;
+>> +
+>> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) ||
+>> +	    !cet->shstk_size ||
+>> +	    !cet->shstk_base)
+>> +		return;
+>> +
+>> +	if (!tsk->mm)
+>> +		return;
+>> +
+>> +	while (1) {
+>> +		int r;
+>> +
+>> +		r = vm_munmap(cet->shstk_base, cet->shstk_size);
+>> +
+>> +		/*
+>> +		 * vm_munmap() returns -EINTR when mmap_lock is held by
+>> +		 * something else, and that lock should not be held for a
+>> +		 * long time.  Retry it for the case.
+>> +		 */
 > 
-> Our Kconfig symbol space is already an abomination so we can't just add
-> some more and decide later.
-> 
-> What happens in such situations usually is stuff gets added, it bitrots
-> and some poor soul - very likely a maintainer who has to mop up after
-> everybody - comes and cleans it up. I'd like to save myself that
-> cleaning up.
-> 
-> Thx.
->
+> Hm, no. -EINTR is not about the lock being held by somebody else. The task
+> got a signal and need to return to userspace.
+
+ From tracing the code itself, it looks like it cannot acquire the lock. 
+  Let me dig into it.
+
+> I have not looked at the rest of the patches yet, but why do you need a
+> special free path for shadow stack? Why the normal unmap route doesn't
+> work for you?
+
+The thread's shadow stack is allocated by the kernel, so it needs to be 
+freed when the thread exits.
+
+>> +		if (r == -EINTR) {
+>> +			cond_resched();
+>> +			continue;
+>> +		}
+>> +		break;
+>> +	}
+>> +
+>> +	cet->shstk_base = 0;
+>> +	cet->shstk_size = 0;
+>> +}
+>> +
+
+[...]
+
+Thanks,
+Yu-cheng
