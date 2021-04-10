@@ -2,31 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7463035A954
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Apr 2021 01:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CCE35AC76
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Apr 2021 11:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbhDIXrk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Apr 2021 19:47:40 -0400
-Received: from mga06.intel.com ([134.134.136.31]:14587 "EHLO mga06.intel.com"
+        id S231279AbhDJJaI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 10 Apr 2021 05:30:08 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:37160 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235163AbhDIXri (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Apr 2021 19:47:38 -0400
-IronPort-SDR: 4oTMDTbu7ghJ1nVn9+6esl52exZ5ABLXB5jtEzUzErDqkWILSfvJN+EykT59fT/hvgMMspsEND
- ugC34gjrjVgQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9949"; a="255190796"
-X-IronPort-AV: E=Sophos;i="5.82,210,1613462400"; 
-   d="scan'208";a="255190796"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 16:47:23 -0700
-IronPort-SDR: 7kkS8Wxc9BTdMnvBz67vi/4ovTt7qmo8Sx/XhHsJNzLbHt5HqfH+DEzabiA6I67db98dmOCI/G
- QyDmN3Xu1ijQ==
-X-IronPort-AV: E=Sophos;i="5.82,210,1613462400"; 
-   d="scan'208";a="416470774"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.27.140]) ([10.212.27.140])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 16:47:22 -0700
-Subject: Re: [PATCH v24 22/30] x86/cet/shstk: Add user-mode shadow stack
- support
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+        id S229537AbhDJJaH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 10 Apr 2021 05:30:07 -0400
+Received: from zn.tnic (p200300ec2f1aea004ff424aef8172112.dip0.t-ipconnect.de [IPv6:2003:ec:2f1a:ea00:4ff4:24ae:f817:2112])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 243AB1EC0409;
+        Sat, 10 Apr 2021 11:29:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1618046992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=U4fOVgCu+Cc3JD0fk9iTK0StzoBFsYk6BLIrkX0M9Mk=;
+        b=DRP6H5Ya6IuI83rk+l8ifJgdtETmDKwOsMtW/uVOTSKMmoq2JlNAflXx9ngr3q1hYBwnKo
+        Otg746xtSkovC47rbD3PERQsxbGqzbsmyQ/zEdn+F8RrBZtspuxrsUYofvIb8SM6xRVtGJ
+        GvB0pOIrbUR/pw+mHGHW1CoVzKbqFO0=
+Date:   Sat, 10 Apr 2021 11:29:51 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -35,7 +36,6 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
@@ -54,176 +54,49 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
+Subject: Re: [PATCH v24 04/30] x86/cpufeatures: Introduce X86_FEATURE_CET and
+ setup functions
+Message-ID: <20210410092951.GA21691@zn.tnic>
 References: <20210401221104.31584-1-yu-cheng.yu@intel.com>
- <20210401221104.31584-23-yu-cheng.yu@intel.com>
- <20210409155711.kxf3fjc7csvqpl33@box.shutemov.name>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <d1fc2f06-b6ad-f780-72c0-cf7ec6633a30@intel.com>
-Date:   Fri, 9 Apr 2021 16:47:21 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+ <20210401221104.31584-5-yu-cheng.yu@intel.com>
+ <20210409101214.GC15567@zn.tnic>
+ <c7cb0ed6-2725-ba0d-093e-393eab9918b2@intel.com>
+ <20210409171408.GG15567@zn.tnic>
+ <f7a1299a-916f-70fe-6881-0951fe4fe38a@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210409155711.kxf3fjc7csvqpl33@box.shutemov.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f7a1299a-916f-70fe-6881-0951fe4fe38a@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/9/2021 8:57 AM, Kirill A. Shutemov wrote:
-> On Thu, Apr 01, 2021 at 03:10:56PM -0700, Yu-cheng Yu wrote:
->> Introduce basic shadow stack enabling/disabling/allocation routines.
->> A task's shadow stack is allocated from memory with VM_SHADOW_STACK flag
->> and has a fixed size of min(RLIMIT_STACK, 4GB).
->>
->> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
->> Cc: Kees Cook <keescook@chromium.org>
-
-[...]
-
->> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
->> new file mode 100644
->> index 000000000000..5406fdf6df3c
->> --- /dev/null
->> +++ b/arch/x86/kernel/shstk.c
->> @@ -0,0 +1,128 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * shstk.c - Intel shadow stack support
->> + *
->> + * Copyright (c) 2021, Intel Corporation.
->> + * Yu-cheng Yu <yu-cheng.yu@intel.com>
->> + */
->> +
->> +#include <linux/types.h>
->> +#include <linux/mm.h>
->> +#include <linux/mman.h>
->> +#include <linux/slab.h>
->> +#include <linux/uaccess.h>
->> +#include <linux/sched/signal.h>
->> +#include <linux/compat.h>
->> +#include <linux/sizes.h>
->> +#include <linux/user.h>
->> +#include <asm/msr.h>
->> +#include <asm/fpu/internal.h>
->> +#include <asm/fpu/xstate.h>
->> +#include <asm/fpu/types.h>
->> +#include <asm/cet.h>
->> +
->> +static void start_update_msrs(void)
->> +{
->> +	fpregs_lock();
->> +	if (test_thread_flag(TIF_NEED_FPU_LOAD))
->> +		__fpregs_load_activate();
->> +}
->> +
->> +static void end_update_msrs(void)
->> +{
->> +	fpregs_unlock();
->> +}
->> +
->> +static unsigned long alloc_shstk(unsigned long size, int flags)
->> +{
->> +	struct mm_struct *mm = current->mm;
->> +	unsigned long addr, populate;
->> +
->> +	/* VM_SHADOW_STACK requires MAP_ANONYMOUS, MAP_PRIVATE */
->> +	flags |= MAP_ANONYMOUS | MAP_PRIVATE;
+On Fri, Apr 09, 2021 at 04:14:09PM -0700, Yu, Yu-cheng wrote:
+> > @@ -53,6 +55,8 @@ static short xsave_cpuid_features[] __initdata = {
+> >   	X86_FEATURE_INTEL_PT,
+> >   	X86_FEATURE_PKU,
+> >   	X86_FEATURE_ENQCMD,
+> > +	X86_FEATURE_CET, /* XFEATURE_CET_USER */
+> > +	X86_FEATURE_CET, /* XFEATURE_CET_KERNEL */
+> > 
+> > or what is the piece which becomes simpler?
 > 
-> Looks like all callers has flags == 0. Do I miss something.
+> Yes, this is it.
 
-My earlier versions use this flag.  I should have removed it.
+Those should be X86_FEATURE_SHSTK no?
 
->> +
->> +	mmap_write_lock(mm);
->> +	addr = do_mmap(NULL, 0, size, PROT_READ, flags, VM_SHADOW_STACK, 0,
->> +		       &populate, NULL);
->> +	mmap_write_unlock(mm);
->> +
->> +	if (populate)
->> +		mm_populate(addr, populate);
-> 
-> If all callers pass down flags==0, populate will never happen.
+> Signals, arch_prctl, and ELF header are three places that need to depend on
+> either shadow stack or IBT is configured.  To remain simple, we can make all
+> three depend on CONFIG_X86_SHADOW_STACK, and in Kconfig, make CONFIG_X86_IBT
+> depend on CONFIG_X86_SHADOW_STACK.  Without shadow stack, IBT itself is not
+> as useful anyway.
 
-I will fix it.
+Makes sense to me.
 
->> +
->> +	return addr;
->> +}
->> +
->> +int shstk_setup(void)
->> +{
->> +	unsigned long addr, size;
->> +	struct cet_status *cet = &current->thread.cet;
->> +
->> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
->> +		return -EOPNOTSUPP;
->> +
->> +	size = round_up(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G), PAGE_SIZE);
->> +	addr = alloc_shstk(size, 0);
->> +	if (IS_ERR_VALUE(addr))
->> +		return PTR_ERR((void *)addr);
->> +
->> +	cet->shstk_base = addr;
->> +	cet->shstk_size = size;
->> +
->> +	start_update_msrs();
->> +	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
->> +	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
->> +	end_update_msrs();
->> +	return 0;
->> +}
->> +
->> +void shstk_free(struct task_struct *tsk)
->> +{
->> +	struct cet_status *cet = &tsk->thread.cet;
->> +
->> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) ||
->> +	    !cet->shstk_size ||
->> +	    !cet->shstk_base)
->> +		return;
->> +
->> +	if (!tsk->mm)
->> +		return;
->> +
->> +	while (1) {
->> +		int r;
->> +
->> +		r = vm_munmap(cet->shstk_base, cet->shstk_size);
->> +
->> +		/*
->> +		 * vm_munmap() returns -EINTR when mmap_lock is held by
->> +		 * something else, and that lock should not be held for a
->> +		 * long time.  Retry it for the case.
->> +		 */
-> 
-> Hm, no. -EINTR is not about the lock being held by somebody else. The task
-> got a signal and need to return to userspace.
+Thx.
 
- From tracing the code itself, it looks like it cannot acquire the lock. 
-  Let me dig into it.
+-- 
+Regards/Gruss,
+    Boris.
 
-> I have not looked at the rest of the patches yet, but why do you need a
-> special free path for shadow stack? Why the normal unmap route doesn't
-> work for you?
-
-The thread's shadow stack is allocated by the kernel, so it needs to be 
-freed when the thread exits.
-
->> +		if (r == -EINTR) {
->> +			cond_resched();
->> +			continue;
->> +		}
->> +		break;
->> +	}
->> +
->> +	cet->shstk_base = 0;
->> +	cet->shstk_size = 0;
->> +}
->> +
-
-[...]
-
-Thanks,
-Yu-cheng
+https://people.kernel.org/tglx/notes-about-netiquette
