@@ -2,160 +2,267 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5021735B62A
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Apr 2021 18:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A111C35B637
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Apr 2021 18:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236470AbhDKQpZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 11 Apr 2021 12:45:25 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:43611 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235855AbhDKQpZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Apr 2021 12:45:25 -0400
-Received: from debian.home (lfbn-lyo-1-457-219.w2-7.abo.wanadoo.fr [2.7.49.219])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id A5A4D100007;
-        Sun, 11 Apr 2021 16:45:01 +0000 (UTC)
-From:   Alexandre Ghiti <alex@ghiti.fr>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>
-Subject: [PATCH v5 3/3] riscv: Prepare ptdump for vm layout dynamic addresses
-Date:   Sun, 11 Apr 2021 12:41:46 -0400
-Message-Id: <20210411164146.20232-4-alex@ghiti.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210411164146.20232-1-alex@ghiti.fr>
-References: <20210411164146.20232-1-alex@ghiti.fr>
+        id S235338AbhDKQve (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 11 Apr 2021 12:51:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55336 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233514AbhDKQvd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 11 Apr 2021 12:51:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 06AB2610A8;
+        Sun, 11 Apr 2021 16:51:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618159877;
+        bh=hdSLHeSFPSGynlGflxt+p7hzQD3ysw8VuEPN1TxHROo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=u92ZNmVK9Okwh6sssywhSfccMkrhyVbN0i1TzFQL6ubJe69Tup7uioO2B9iqMd86R
+         PyZ0nIQIDEDoAUcp4VH3s3x2J9YyjO1zaUEf9DXia28SOTL+AZwrnhWgZObeZK35IP
+         Mworx49ICMEC1ZgjZOImQCDKTztZLllqG/G/tp0f0ABdVW6WKi7ogEnZtNlnYGmPa+
+         MD6EfRtXCYXjrj3jRMIr4dmsz4f0usPxap0g6auXFA0M/p8yMcdcHUVSzB1kZJoz1R
+         fipLWLnhth24IQWAQi0DnJ53iaGzHPfzM1CfxsJ9DLxzUApTJSn1eIRnqbr7xsq9Gx
+         f15Nu2dLaaTdA==
+Received: by mail-lf1-f41.google.com with SMTP id e14so4784903lfn.11;
+        Sun, 11 Apr 2021 09:51:16 -0700 (PDT)
+X-Gm-Message-State: AOAM531xR9iYLoORN5Al/aT6mir0j6YaM4qWplyHc268/ECE4C8dX72l
+        yfSBHPJKAWT+9Z86Mc1fetOTN2i/1DUWEoZY4C0=
+X-Google-Smtp-Source: ABdhPJwytlwOM+Rr5ik6o9Gt0Np/mypGW3IwYId67m7mmduUv1Bjo9G3FOhKEOOdYbF0Wmx6IQxmHYMGzhwXowpdgyc=
+X-Received: by 2002:ac2:4191:: with SMTP id z17mr5521549lfh.557.1618159875345;
+ Sun, 11 Apr 2021 09:51:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1617201040-83905-1-git-send-email-guoren@kernel.org>
+ <1617201040-83905-4-git-send-email-guoren@kernel.org> <CAJF2gTQRGWetpvvtXOn8_KzH8EQwL6VG02AoKBUWTkE69Xn6Kg@mail.gmail.com>
+In-Reply-To: <CAJF2gTQRGWetpvvtXOn8_KzH8EQwL6VG02AoKBUWTkE69Xn6Kg@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 12 Apr 2021 00:51:03 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQpmgzXb+oi3uHuQ5e1awS2AwOtm4XJo8ce6pVkuXst+Q@mail.gmail.com>
+Message-ID: <CAJF2gTQpmgzXb+oi3uHuQ5e1awS2AwOtm4XJo8ce6pVkuXst+Q@mail.gmail.com>
+Subject: Re: [PATCH v6 3/9] riscv: locks: Introduce ticket-based spinlock implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
+        openrisc@lists.librecores.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Anup Patel <anup@brainfault.org>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is a preparatory patch for sv48 support that will introduce
-dynamic PAGE_OFFSET.
+On Mon, Apr 12, 2021 at 12:02 AM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Wed, Mar 31, 2021 at 10:32 PM <guoren@kernel.org> wrote:
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > This patch introduces a ticket lock implementation for riscv, along the
+> > same lines as the implementation for arch/arm & arch/csky.
+> >
+> > We still use qspinlock as default.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Anup Patel <anup@brainfault.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  arch/riscv/Kconfig                      |  7 ++-
+> >  arch/riscv/include/asm/spinlock.h       | 84 +++++++++++++++++++++++++
+> >  arch/riscv/include/asm/spinlock_types.h | 17 +++++
+> >  3 files changed, 107 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 67cc65ba1ea1..34d0276f01d5 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -34,7 +34,7 @@ config RISCV
+> >         select ARCH_WANT_FRAME_POINTERS
+> >         select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
+> >         select ARCH_USE_QUEUED_RWLOCKS
+> > -       select ARCH_USE_QUEUED_SPINLOCKS
+> > +       select ARCH_USE_QUEUED_SPINLOCKS        if !RISCV_TICKET_LOCK
+> >         select ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+> >         select CLONE_BACKWARDS
+> >         select CLINT_TIMER if !MMU
+> > @@ -344,6 +344,11 @@ config NEED_PER_CPU_EMBED_FIRST_CHUNK
+> >         def_bool y
+> >         depends on NUMA
+> >
+> > +config RISCV_TICKET_LOCK
+> > +       bool "Ticket-based spin-locking"
+> > +       help
+> > +         Say Y here to use ticket-based spin-locking.
+> > +
+> >  config RISCV_ISA_C
+> >         bool "Emit compressed instructions when building Linux"
+> >         default y
+> > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
+> > index a557de67a425..90b7eaa950cf 100644
+> > --- a/arch/riscv/include/asm/spinlock.h
+> > +++ b/arch/riscv/include/asm/spinlock.h
+> > @@ -7,7 +7,91 @@
+> >  #ifndef _ASM_RISCV_SPINLOCK_H
+> >  #define _ASM_RISCV_SPINLOCK_H
+> >
+> > +#ifdef CONFIG_RISCV_TICKET_LOCK
+> > +#ifdef CONFIG_32BIT
+> > +#define __ASM_SLLIW "slli\t"
+> > +#define __ASM_SRLIW "srli\t"
+> > +#else
+> > +#define __ASM_SLLIW "slliw\t"
+> > +#define __ASM_SRLIW "srliw\t"
+> > +#endif
+> > +
+> > +/*
+> > + * Ticket-based spin-locking.
+> > + */
+> > +static inline void arch_spin_lock(arch_spinlock_t *lock)
+> > +{
+> > +       arch_spinlock_t lockval;
+> > +       u32 tmp;
+> > +
+> > +       asm volatile (
+> > +               "1:     lr.w    %0, %2          \n"
+> > +               "       mv      %1, %0          \n"
+> > +               "       addw    %0, %0, %3      \n"
+> > +               "       sc.w    %0, %0, %2      \n"
+> > +               "       bnez    %0, 1b          \n"
+> > +               : "=&r" (tmp), "=&r" (lockval), "+A" (lock->lock)
+> > +               : "r" (1 << TICKET_NEXT)
+> > +               : "memory");
+> > +
+> > +       smp_cond_load_acquire(&lock->tickets.owner,
+> > +                                       VAL == lockval.tickets.next);
+> It's wrong, blew is fixup:
+>
+> diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
+> index fe98ad8ece51..2be627ceb9df 100644
+> --- a/arch/csky/include/asm/spinlock.h
+> +++ b/arch/csky/include/asm/spinlock.h
+> @@ -27,7 +27,8 @@ static inline void arch_spin_lock(arch_spinlock_t *lock)
+>                 : "r"(p), "r"(ticket_next)
+>                 : "cc");
+>
+> -       smp_cond_load_acquire(&lock->tickets.owner,
+> +       if (lockval.owner != lockval.tickets.next)
+> +               smp_cond_load_acquire(&lock->tickets.owner,
+>                                         VAL == lockval.tickets.next);
+eh... plus __smp_acquire_fence:
 
-Dynamic PAGE_OFFSET implies that all zones (vmalloc, vmemmap, fixaddr...)
-whose addresses depend on PAGE_OFFSET become dynamic and can't be used
-to statically initialize the array used by ptdump to identify the
-different zones of the vm layout.
+       if (lockval.owner != lockval.tickets.next)
+               smp_cond_load_acquire(&lock->tickets.owner,
+                                        VAL == lockval.tickets.next);
+       else
+               __smp_acquire_fence();
 
-Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-Reviewed-by: Anup Patel <anup@brainfault.org>
----
- arch/riscv/mm/ptdump.c | 73 +++++++++++++++++++++++++++++++++++-------
- 1 file changed, 61 insertions(+), 12 deletions(-)
+> > +}
+> > +
+> > +static inline int arch_spin_trylock(arch_spinlock_t *lock)
+> > +{
+> > +       u32 tmp, contended, res;
+> > +
+> > +       do {
+> > +               asm volatile (
+> > +               "       lr.w    %0, %3          \n"
+> > +               __ASM_SRLIW    "%1, %0, %5      \n"
+> > +               __ASM_SLLIW    "%2, %0, %5      \n"
+> > +               "       or      %1, %2, %1      \n"
+> > +               "       li      %2, 0           \n"
+> > +               "       sub     %1, %1, %0      \n"
+> > +               "       bnez    %1, 1f          \n"
+> > +               "       addw    %0, %0, %4      \n"
+> > +               "       sc.w    %2, %0, %3      \n"
+> > +               "1:                             \n"
+> > +               : "=&r" (tmp), "=&r" (contended), "=&r" (res),
+> > +                 "+A" (lock->lock)
+> > +               : "r" (1 << TICKET_NEXT), "I" (TICKET_NEXT)
+> > +               : "memory");
+> > +       } while (res);
+> > +
+> > +       if (!contended)
+> > +               __atomic_acquire_fence();
+> > +
+> > +       return !contended;
+> > +}
+> > +
+> > +static inline void arch_spin_unlock(arch_spinlock_t *lock)
+> > +{
+> > +       smp_store_release(&lock->tickets.owner, lock->tickets.owner + 1);
+> > +}
+> > +
+> > +static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+> > +{
+> > +       return lock.tickets.owner == lock.tickets.next;
+> > +}
+> > +
+> > +static inline int arch_spin_is_locked(arch_spinlock_t *lock)
+> > +{
+> > +       return !arch_spin_value_unlocked(READ_ONCE(*lock));
+> > +}
+> > +
+> > +static inline int arch_spin_is_contended(arch_spinlock_t *lock)
+> > +{
+> > +       struct __raw_tickets tickets = READ_ONCE(lock->tickets);
+> > +
+> > +       return (tickets.next - tickets.owner) > 1;
+> > +}
+> > +#define arch_spin_is_contended arch_spin_is_contended
+> > +#else /* CONFIG_RISCV_TICKET_LOCK */
+> >  #include <asm/qspinlock.h>
+> > +#endif /* CONFIG_RISCV_TICKET_LOCK */
+> > +
+> >  #include <asm/qrwlock.h>
+> >
+> >  #endif /* _ASM_RISCV_SPINLOCK_H */
+> > diff --git a/arch/riscv/include/asm/spinlock_types.h b/arch/riscv/include/asm/spinlock_types.h
+> > index d033a973f287..afbb19841d0f 100644
+> > --- a/arch/riscv/include/asm/spinlock_types.h
+> > +++ b/arch/riscv/include/asm/spinlock_types.h
+> > @@ -10,7 +10,24 @@
+> >  # error "please don't include this file directly"
+> >  #endif
+> >
+> > +#ifdef CONFIG_RISCV_TICKET_LOCK
+> > +#define TICKET_NEXT    16
+> > +
+> > +typedef struct {
+> > +       union {
+> > +               u32 lock;
+> > +               struct __raw_tickets {
+> > +                       /* little endian */
+> > +                       u16 owner;
+> > +                       u16 next;
+> > +               } tickets;
+> > +       };
+> > +} arch_spinlock_t;
+> > +
+> > +#define __ARCH_SPIN_LOCK_UNLOCKED      { { 0 } }
+> > +#else
+> >  #include <asm-generic/qspinlock_types.h>
+> > +#endif
+> >  #include <asm-generic/qrwlock_types.h>
+> >
+> >  #endif /* _ASM_RISCV_SPINLOCK_TYPES_H */
+> > --
+> > 2.17.1
+> >
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+>
+> ML: https://lore.kernel.org/linux-csky/
 
-diff --git a/arch/riscv/mm/ptdump.c b/arch/riscv/mm/ptdump.c
-index ace74dec7492..0aba4421115c 100644
---- a/arch/riscv/mm/ptdump.c
-+++ b/arch/riscv/mm/ptdump.c
-@@ -58,29 +58,56 @@ struct ptd_mm_info {
- 	unsigned long end;
- };
- 
-+enum address_markers_idx {
-+#ifdef CONFIG_KASAN
-+	KASAN_SHADOW_START_NR,
-+	KASAN_SHADOW_END_NR,
-+#endif
-+	FIXMAP_START_NR,
-+	FIXMAP_END_NR,
-+	PCI_IO_START_NR,
-+	PCI_IO_END_NR,
-+#ifdef CONFIG_SPARSEMEM_VMEMMAP
-+	VMEMMAP_START_NR,
-+	VMEMMAP_END_NR,
-+#endif
-+	VMALLOC_START_NR,
-+	VMALLOC_END_NR,
-+	PAGE_OFFSET_NR,
-+#ifdef CONFIG_64BIT
-+	MODULES_MAPPING_NR,
-+#endif
-+	KERNEL_MAPPING_NR,
-+	END_OF_SPACE_NR
-+};
-+
- static struct addr_marker address_markers[] = {
- #ifdef CONFIG_KASAN
--	{KASAN_SHADOW_START,	"Kasan shadow start"},
--	{KASAN_SHADOW_END,	"Kasan shadow end"},
-+	{0, "Kasan shadow start"},
-+	{0, "Kasan shadow end"},
- #endif
--	{FIXADDR_START,		"Fixmap start"},
--	{FIXADDR_TOP,		"Fixmap end"},
--	{PCI_IO_START,		"PCI I/O start"},
--	{PCI_IO_END,		"PCI I/O end"},
-+	{0, "Fixmap start"},
-+	{0, "Fixmap end"},
-+	{0, "PCI I/O start"},
-+	{0, "PCI I/O end"},
- #ifdef CONFIG_SPARSEMEM_VMEMMAP
--	{VMEMMAP_START,		"vmemmap start"},
--	{VMEMMAP_END,		"vmemmap end"},
-+	{0, "vmemmap start"},
-+	{0, "vmemmap end"},
-+#endif
-+	{0, "vmalloc() area"},
-+	{0, "vmalloc() end"},
-+	{0, "Linear mapping"},
-+#ifdef CONFIG_64BIT
-+	{0, "Modules mapping"},
- #endif
--	{VMALLOC_START,		"vmalloc() area"},
--	{VMALLOC_END,		"vmalloc() end"},
--	{PAGE_OFFSET,		"Linear mapping"},
-+	{0, "Kernel mapping (kernel, BPF)"},
- 	{-1, NULL},
- };
- 
- static struct ptd_mm_info kernel_ptd_info = {
- 	.mm		= &init_mm,
- 	.markers	= address_markers,
--	.base_addr	= KERN_VIRT_START,
-+	.base_addr	= 0,
- 	.end		= ULONG_MAX,
- };
- 
-@@ -335,6 +362,28 @@ static int ptdump_init(void)
- {
- 	unsigned int i, j;
- 
-+#ifdef CONFIG_KASAN
-+	address_markers[KASAN_SHADOW_START_NR].start_address = KASAN_SHADOW_START;
-+	address_markers[KASAN_SHADOW_END_NR].start_address = KASAN_SHADOW_END;
-+#endif
-+	address_markers[FIXMAP_START_NR].start_address = FIXADDR_START;
-+	address_markers[FIXMAP_END_NR].start_address = FIXADDR_TOP;
-+	address_markers[PCI_IO_START_NR].start_address = PCI_IO_START;
-+	address_markers[PCI_IO_END_NR].start_address = PCI_IO_END;
-+#ifdef CONFIG_SPARSEMEM_VMEMMAP
-+	address_markers[VMEMMAP_START_NR].start_address = VMEMMAP_START;
-+	address_markers[VMEMMAP_END_NR].start_address = VMEMMAP_END;
-+#endif
-+	address_markers[VMALLOC_START_NR].start_address = VMALLOC_START;
-+	address_markers[VMALLOC_END_NR].start_address = VMALLOC_END;
-+	address_markers[PAGE_OFFSET_NR].start_address = PAGE_OFFSET;
-+#ifdef CONFIG_64BIT
-+	address_markers[MODULES_MAPPING_NR].start_address = MODULES_VADDR;
-+#endif
-+	address_markers[KERNEL_MAPPING_NR].start_address = kernel_virt_addr;
-+
-+	kernel_ptd_info.base_addr = KERN_VIRT_START;
-+
- 	for (i = 0; i < ARRAY_SIZE(pg_level); i++)
- 		for (j = 0; j < ARRAY_SIZE(pte_bits); j++)
- 			pg_level[i].mask |= pte_bits[j].mask;
+
+
 -- 
-2.20.1
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/
