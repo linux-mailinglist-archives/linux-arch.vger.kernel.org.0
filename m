@@ -2,123 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A8435C287
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Apr 2021 12:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AF035C323
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Apr 2021 12:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239565AbhDLJp0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 12 Apr 2021 05:45:26 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:28226 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239556AbhDLJhp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 12 Apr 2021 05:37:45 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-82-C7COxs-EPmWmM_DfUiqZhw-1; Mon, 12 Apr 2021 10:37:23 +0100
-X-MC-Unique: C7COxs-EPmWmM_DfUiqZhw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Mon, 12 Apr 2021 10:37:22 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.012; Mon, 12 Apr 2021 10:37:22 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S242968AbhDLJ5p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Apr 2021 05:57:45 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:37593 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244612AbhDLJ4W (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Apr 2021 05:56:22 -0400
+Received: from mail-wm1-f48.google.com ([209.85.128.48]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MrQR7-1lrm6z072V-00oWTe; Mon, 12 Apr 2021 11:55:58 +0200
+Received: by mail-wm1-f48.google.com with SMTP id k128so6426596wmk.4;
+        Mon, 12 Apr 2021 02:55:57 -0700 (PDT)
+X-Gm-Message-State: AOAM533r1rofXj88LVWJfah19XlDU6BtZ0B1yeutMbGESfkPn1Et7hVf
+        AIrdTACXZyzFyre5JlfjGvKg/BUppQ9zoWHcUJU=
+X-Google-Smtp-Source: ABdhPJzTfxxaxsVCZqgwljY94HrF+v5FbHKG19HOl8IGqXY6e9UlqBjrbb/hk/qI5QxcbCRl2V2ekh7/KCvv8xos6no=
+X-Received: by 2002:a7b:c14a:: with SMTP id z10mr3077982wmi.75.1618221357638;
+ Mon, 12 Apr 2021 02:55:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210412085545.2595431-1-hch@lst.de> <20210412085545.2595431-2-hch@lst.de>
+In-Reply-To: <20210412085545.2595431-2-hch@lst.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 12 Apr 2021 11:55:41 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2MSJarPMfJ8RrSKDMXte3KQec=+GQ-LzV6HB7-Nm1FcQ@mail.gmail.com>
+Message-ID: <CAK8P3a2MSJarPMfJ8RrSKDMXte3KQec=+GQ-LzV6HB7-Nm1FcQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] uapi: remove the unused HAVE_ARCH_STRUCT_FLOCK64 define
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
         Helge Deller <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         "David S. Miller" <davem@davemloft.net>,
-        "x86@kernel.org" <x86@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH 5/5] compat: consolidate the compat_flock{,64} definition
-Thread-Topic: [PATCH 5/5] compat: consolidate the compat_flock{,64} definition
-Thread-Index: AQHXL3nAXViKKuH90kqxIUkBtWSuL6qwmWXw
-Date:   Mon, 12 Apr 2021 09:37:21 +0000
-Message-ID: <15be19af19174c7692dd795297884096@AcuMS.aculab.com>
-References: <20210412085545.2595431-1-hch@lst.de>
- <20210412085545.2595431-6-hch@lst.de>
-In-Reply-To: <20210412085545.2595431-6-hch@lst.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:cQhKiyfxzUY6mYQRHUjOusziZyiZ2ECTHu0hWevLcqyEW8Ur3qo
+ MJ8Fmc6YsrzdC+sHyrk/5t1UF52iImlAYS/KBm5dnbPE75XGl9a62cUTIVY5m3X4evCOA9s
+ 2PYnWr4aV8aDF2PLQJiYCmCQn5kErMbNxRpMCVhJURPr32Xo0oCxjT0IHaHTk3gynHsX3di
+ lZdRgN3PWY0Wx8xYimvrA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:uC/Hyc4Vk1k=:+Wd3nZw1uJebz60gCPd265
+ PXuT1mRaIPDr01XZCfSLjAmewK6VGt+vkboVDxrmNWkuNM7WKUT6ekADhcQpoBrtpVFzQ5DaX
+ nrI9B/NbsL0qgkd00XB1NrDlteYOhm5HyLTMRIBMsruhea1AhkMqU3su44Tf0wyu1LhJElCkq
+ /PTJTE2RF6IKklSSiNT5qHGxCIr7Jj2Z0ZAmbry53T3vSjslalVOdxE173frdOACMogM6gyjU
+ dGKkNlN57I71RpJktBuo7y4g8Pc/ighN2BTVnofrcypcvbpAD2p4FunLpmHAWKznh76kAF+Gx
+ 2oflh5ys6Iv+HqsxCp8tRqS5NR0PXimFoVeJnXND0ZmKAOYixinfgHyhLYwvWnVRxvoFBVgyd
+ S6yM5OzdX4Iqy6/vKQ5qbaq0NZEFx5K3TOS7BXqUwe8ZP0FsQwCtkGBnSYhyQByFlgdeEvAf6
+ nDi9VMf9r4FwxNWuvrfFhG9Qd3ft5m5x0gg/ru/OPjEWHsYDjnjEOX3+O0SSVeJBK3aQINs7s
+ cn8cD6gzO8mMi5kmpU7vOlOutdu0lH/mn/WG6Ga14TqNahfIEt6qlWeV7ZNDYvzVBksgiDrzl
+ QHOIymPJGKy1z2A6UHrLeF/i0WmI3wlUUr
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Christoph Hellwig
-> Sent: 12 April 2021 09:56
-> 
-> Provide a single common definition for the compat_flock and
-> compat_flock64 structures using the same tricks as for the native
-> variants.  An extra define is added for the packing required on x86.
-> 
-...
->  /*
-> - * IA32 uses 4 byte alignment for 64 bit quantities,
-> - * so we need to pack this structure.
-> + * IA32 uses 4 byte alignment for 64 bit quantities, so we need to pack the
-> + * compat flock64 structure.
->   */
-> -struct compat_flock64 {
-> -	short		l_type;
-> -	short		l_whence;
-> -	compat_loff_t	l_start;
-> -	compat_loff_t	l_len;
-> -	compat_pid_t	l_pid;
-> -} __attribute__((packed));
-> +#define __ARCH_NEED_COMPAT_FLOCK64_PACKED
+On Mon, Apr 12, 2021 at 10:55 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-That shouldn't need to be packed at all.
-(Since the 32bit variant isn't packed.)
+The patch looks good, but I'd like to see a description for each one.
+How about:
 
-compat_loff_t should itself have __attribute__((aligned(4)))
-probably inherited from compat_s64.
-So l_start will be at offset 4 without the __packed.
+| The check was added when Stephen Rothwell created the file, but
+| no architecture ever defined it.
 
-I'm guessing that compat_pid_t is 16 bits?
-So the native 32bit version has an unnamed 2 byte structure pad.
-The 'packed' removes this pad from the compat structure.
-
-AFAICT (apart from mips) the __ARCH_COMPAT_FLOCK_PAD is just
-adding an explicit pad for the implicit pad the compiler
-would generate because compat_pid_t is 16 bits.
-
-If the padding need not be named for the 64bit system calls.
-(Where there is probably rather more padding all over the place.)
-then it doesn't need to be named for the compat variants.
-
-Even the mips extra padding could be removed.
-F_GETLK might be expected to do a read-write of them, so
-return EFAULT if not mapped.
-But nothing should be testing the EFAULT is returned!
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+        Arnd
