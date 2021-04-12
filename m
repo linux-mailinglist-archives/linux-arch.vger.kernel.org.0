@@ -2,118 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C293935C72F
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Apr 2021 15:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52A435D31A
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Apr 2021 00:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241867AbhDLNMK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Apr 2021 09:12:10 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:22849 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241758AbhDLNMH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 12 Apr 2021 09:12:07 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-107-jlA7rlBNM9W_p6yNzfFSUA-1; Mon, 12 Apr 2021 14:11:46 +0100
-X-MC-Unique: jlA7rlBNM9W_p6yNzfFSUA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Mon, 12 Apr 2021 14:11:45 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.012; Mon, 12 Apr 2021 14:11:45 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>
-CC:     Christoph Hellwig <hch@lst.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
+        id S242539AbhDLWax (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Apr 2021 18:30:53 -0400
+Received: from mga03.intel.com ([134.134.136.65]:9484 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242505AbhDLWau (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 12 Apr 2021 18:30:50 -0400
+IronPort-SDR: N6D21jWil7Yr+TvJevWLGYdxgd6/4MSyEEwvlCKjM0RpmZ90NKRF9pa09yK5wIfh+Mu2kXOFR6
+ yQBzcCeMrgog==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="194321861"
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="194321861"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 15:30:28 -0700
+IronPort-SDR: 2rbDJDW0oEw3ofV9BmXcdOJHvioLhH1jy5K5tYpcC3JjAjJdc/4Bt823mwA8blxgzoRZqRmLId
+ GvRG5KSpAdQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="614717573"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Apr 2021 15:30:26 -0700
+Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Mon, 12 Apr 2021 15:30:26 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2
+ via Frontend Transport; Mon, 12 Apr 2021 15:30:26 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2106.2; Mon, 12 Apr 2021 15:30:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DSVYEYPJXSCzaToH+l9qa9t42FKi0IyzF01u0+N6z73hRKV+zsiBwcZrvQaY0RH1GW4glHuN+mXz8rlx+KcB6Rpk8RsFXiylE8cdLze2e95ymOVEldvF6yEr4iUhvmPX9EF+bc3Z5Qom0ocpVHLAL2wMewWshdZ2itW8WC7bHqCN/rLg+WBXz+VjY/AbStb5OmE3d0uP4SoqOLY0fU7oMCW7Ax89/YkvN/FSMFHNAwQC9yOaUOxIczo6cehUQBlY5vy6ZZ9HmKTs7tTqOgCbeRpJjYE62Ou4CiS3z1f95pw1LC1TPulUszlHRQLSXL9lV1SY3U+B35AKpBJREuFYxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UKA7N2a4iKfFWv5qWLrG19vcNE+m1oF4+cnvTdt28bM=;
+ b=ncVwRoPGyCqcOjGBK16WOJxwrYlx2XOxj5A7qxHWrYRglLs6grPpW3m2TCPTImg5IMiRPUTpVBzmEkgRvindUyvHYmI/6Osy2wHULEw1qVgSYmii6gSSE0qRLr6YWyiiUMqwOE0UpdlWGndStULWHif7xsLi0oUjsZ3hTNFZVltR3vThNYfehtsQTogDGApoLQUEzvoJemAhfVTU5/ENkh5+8PtXqFSVFmdZAfK9a/NTr5TYg4tBQsyvYV7CGkSA8/4N4fl1jcLDzecby1yhkPd8ni44JD/Qlr5mxnqR7HfY9590cna/Qdl6oC3Cp1sOjmW80dClXBx2A+0GAJcoOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UKA7N2a4iKfFWv5qWLrG19vcNE+m1oF4+cnvTdt28bM=;
+ b=rmW6MlBHzq6vBjPwn0Ou2sQlSPfIUdHXQfvXE0rSjOSKH6APTZQ4jxPcX0Be+EYye3/tpsvzau5KqtD1bKpaUL7ANobhObs6mwcbFKtjCdrCEMOrv4cU1bc3+ubpXFwZ5mxj4UiF8l5MntyTD9dljnscIZEpdAine4zYC6RkvEc=
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by PH0PR11MB4872.namprd11.prod.outlook.com (2603:10b6:510:32::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.22; Mon, 12 Apr
+ 2021 22:30:24 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::8878:2a72:7987:673]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::8878:2a72:7987:673%5]) with mapi id 15.20.4020.022; Mon, 12 Apr 2021
+ 22:30:24 +0000
+From:   "Bae, Chang Seok" <chang.seok.bae@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Andy Lutomirski <luto@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, X86 ML <x86@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "H. J. Lu" <hjl.tools@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Jann Horn <jannh@google.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH 5/5] compat: consolidate the compat_flock{,64} definition
-Thread-Topic: [PATCH 5/5] compat: consolidate the compat_flock{,64} definition
-Thread-Index: AQHXL3nAXViKKuH90kqxIUkBtWSuL6qwmWXwgAATjVCAAACRAIAAKVLA
-Date:   Mon, 12 Apr 2021 13:11:45 +0000
-Message-ID: <0bef075082b244d2b7a5a140336a40d5@AcuMS.aculab.com>
-References: <20210412085545.2595431-1-hch@lst.de>
- <20210412085545.2595431-6-hch@lst.de>
- <15be19af19174c7692dd795297884096@AcuMS.aculab.com>
- <5c3635a2b44a496b88d665e8686d9436@AcuMS.aculab.com>
- <CAK8P3a1JZ=JerasdkntzX_ApaCF7C29ZS1E31aPQATOts0ZiLw@mail.gmail.com>
-In-Reply-To: <CAK8P3a1JZ=JerasdkntzX_ApaCF7C29ZS1E31aPQATOts0ZiLw@mail.gmail.com>
-Accept-Language: en-GB, en-US
+        Carlos O'Donell <carlos@redhat.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        libc-alpha <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 5/6] x86/signal: Detect and prevent an alternate signal
+ stack overflow
+Thread-Topic: [PATCH v7 5/6] x86/signal: Detect and prevent an alternate
+ signal stack overflow
+Thread-Index: AQHXGjGh/SWJiX8oekyfIlNJ9KylvKqVEKUAgAALkICAAKhIgIAAXUOAgBuAt4A=
+Date:   Mon, 12 Apr 2021 22:30:23 +0000
+Message-ID: <DB68C825-25F9-48F9-AFAD-4F6C7DCA11F8@intel.com>
+References: <20210316065215.23768-1-chang.seok.bae@intel.com>
+ <20210316065215.23768-6-chang.seok.bae@intel.com>
+ <CALCETrU_n+dP4GaUJRQoKcDSwaWL9Vc99Yy+N=QGVZ_tx_j3Zg@mail.gmail.com>
+ <20210325185435.GB32296@zn.tnic>
+ <CALCETrXQZuvJQrHDMst6PPgtJxaS_sPk2JhwMiMDNPunq45YFg@mail.gmail.com>
+ <20210326103041.GB25229@zn.tnic>
+In-Reply-To: <20210326103041.GB25229@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+x-mailer: Apple Mail (2.3608.120.23.2.4)
+authentication-results: alien8.de; dkim=none (message not signed)
+ header.d=none;alien8.de; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [73.189.248.82]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 44fff02e-88ae-4231-3226-08d8fe029093
+x-ms-traffictypediagnostic: PH0PR11MB4872:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <PH0PR11MB48725F9B684A1BEFB4DD2208D8709@PH0PR11MB4872.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3Lr7IuWKZhGQX7sMo2x3x6WI8wMSfyc3p6rdxhdAFdhP0OJwL4VGpnwk+1wYyXCJCb+UA88W3mnwIucEutY8BZVC2+4IQNCZa7oRlOGrYnenUFaISvHdt5ed5pz05TXbjNvA1X1+xj4sfPcNHLG4X3NAG8AKO6l+mt/ik68fv6NdOt/uoePPWD3jFb/JkZ9qu2/QJIeaIMWslU7S0qZoe5vt7cqhKq2CLARB80aqc5iwBIctr1ZHeI9vKCMKHxg67N1K08KYxuAgyev9xdMJp/kUFW4XnWWlzrfs9JtyWGzX/zBMea2LazUXkjK8CuKzJKvyYsol2fszE46l+tAABj+OoqNxHyIW/sJgeGYmJ8TZQdVAWaK5xuJJXlGWnMW4yQo0LQzfGw2AdrOaE9CXhsEF5GrYUqpntqy0hH/45DqHvs8r7IKUDw5rc1EhY8Lz9uDt/+Lf0SnLcPYyR9xZ+cPka6slCX3Sjff8pBBKrXtpmsMokv1UwYK4i5c8pHyGFHTXcPAg5zpWhZ1cfr3wNyK0nxWy35nrY3GKqB5m2HEpqUTe/2E08ML5yXDgQldrv0+eiJNR5oTAT/057UYfPnmVnhrnZYMTMxjC84X98GbUc+ZrAMh+3cGCxbgLxc4k8ZrIk6Pt61mlQA9zKNQYnsyzA9urkdQ3KhPgmRKruBc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(39860400002)(396003)(366004)(136003)(346002)(36756003)(66476007)(6512007)(66556008)(64756008)(4326008)(6486002)(2906002)(186003)(2616005)(5660300002)(86362001)(71200400001)(38100700002)(66446008)(4744005)(33656002)(6916009)(8936002)(76116006)(8676002)(316002)(54906003)(53546011)(7416002)(26005)(66946007)(6506007)(478600001)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?/uIL5p9iSn7F3/WMsmaMn7Qr/tOGutrk1cnN6Bfg1S5WAhvdauL4HpgjVQi0?=
+ =?us-ascii?Q?oZMzHJxrcO6tKE6z5H06avdofY3MZghZ8DhBG/wrYlnxUH6Ky5eQm2zIZi4A?=
+ =?us-ascii?Q?p3P77vudTeQxSYiTnKekS3GmqPQG2wSCEyGnSU6k7zFWkKVgz2/h67v+JS4D?=
+ =?us-ascii?Q?GMEwJolHfKQs5M6HOoSrPYTeNR8a084b5O9v/OV/jpq5R07MjQk+8AsD9i9P?=
+ =?us-ascii?Q?fXmVQi1ziIKwMi+LPYhI9wLd80WiBvClBw+CZkFbTxTp+UOyy9GG0Jd1YC+e?=
+ =?us-ascii?Q?YdYLA9JUlZUTkDc+QlGrRUxZiTbVlt/iO6iOUzLnl2ut3CzfTQc6d1IWl4h5?=
+ =?us-ascii?Q?B7ypuD21yzCVYDaphR4ICKRlJv3YnvF+Z10AAOa62jFOul+qWQYNIT2+FFic?=
+ =?us-ascii?Q?xJdnvpu3iXsO4fMCBIhN+RLYeB9KfY3XrQ3QBG4ZiO6/EoCDrI/iyYZexj8M?=
+ =?us-ascii?Q?SNRGYWT9W/2jtnBZZhKyeosG6PF0tok5OSHWNZ7wtGXtntbkK69BdT3MYQo0?=
+ =?us-ascii?Q?B+Fren0RoTdoyumQenFEordP6EXMZCsfuNz0D9pkALwWj7VKC9RCRF4J7kJ5?=
+ =?us-ascii?Q?48AHKvqxKdA3OtdWdpHl7M2j4+0/IRASMFkS/stbifmru0W+ldo01dBsDr7n?=
+ =?us-ascii?Q?UfSuXgPwke3cKBd09JMEOaILROy620EXvYYAzHPsAYN0rpER9QCki/aJtess?=
+ =?us-ascii?Q?Q8sGBTYzKkpXnYhCcSYPlomOjuoZPNMvcmsj/mO06XHb6BSDKHAkqo/b1Xdb?=
+ =?us-ascii?Q?s0xM0hNfoF0arcTWB6uv6t5cuO2M4Ykcl4/6Ekh2A9kyqY45iSMi8j3EdeCP?=
+ =?us-ascii?Q?PTPG6JnUgiBFZIfxeltt1s5bnba4fXmJ6xOgFCQ9dzUgKaAtT+vxBJnZQ3wx?=
+ =?us-ascii?Q?UUteKLYhGJAQHazdOOrl/B6GETuN4wR2tdQ9nRx3g4d06cqs+TvxNE7nojv7?=
+ =?us-ascii?Q?ebyjdsNIRoCSpyXoj44+0raIO8SPO4+oMmL8SyQok1BzjwQkXLVNS3mU3cVX?=
+ =?us-ascii?Q?1TaO5Ftue9TxyTG0qMnf0WsTCmwPyTaJ8Fswi4/ivnbknM3epAXF0O8xaPjB?=
+ =?us-ascii?Q?X7/W+v36z1+xhMlPzOKZapISen4vj9Xu4L7vpHGDpJDFJLvJmYLhohfHolAX?=
+ =?us-ascii?Q?ZDjAfzxS/E3Qb6Xkp/3fwAIWejOuVy0mjU878fnLEI9J87bmkOcWuWFPq+bN?=
+ =?us-ascii?Q?8YYlIVVLz5oxUVhN4VvAHHjF75aUKszFQHOeCSnvLZBDL9e8n02KZ+oU5NAh?=
+ =?us-ascii?Q?AAjX4T0I9NKOZ3AopTvSGKEL84+SxmHgJ6m9L3tPyhfVCKMOoTYdjIZO8mD0?=
+ =?us-ascii?Q?MMnA0N2DuyVRgCxtJiFLxuB9?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <0386E1260B472B48B679A4DFE8DA25E4@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44fff02e-88ae-4231-3226-08d8fe029093
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2021 22:30:24.0148
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5QCVppgaFrOUJhlrqLIWOK33ZV8yr0VfOF6sqEh6YHMw5IsRSwJ5J4/y/8Ov+M/PCKtlGFBHyt6yIea/wgW1Yn/LP+EbeCZXkRMvYR6OyUo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4872
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAxMiBBcHJpbCAyMDIxIDEyOjI2DQo+IA0KPiBP
-biBNb24sIEFwciAxMiwgMjAyMSBhdCAxMjo1NCBQTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxhaWdo
-dEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPiBGcm9tOiBEYXZpZCBMYWlnaHQgPiBTZW50OiAxMiBB
-cHJpbCAyMDIxIDEwOjM3DQo+ID4gLi4uDQo+ID4gPiBJJ20gZ3Vlc3NpbmcgdGhhdCBjb21wYXRf
-cGlkX3QgaXMgMTYgYml0cz8NCj4gPiA+IFNvIHRoZSBuYXRpdmUgMzJiaXQgdmVyc2lvbiBoYXMg
-YW4gdW5uYW1lZCAyIGJ5dGUgc3RydWN0dXJlIHBhZC4NCj4gPiA+IFRoZSAncGFja2VkJyByZW1v
-dmVzIHRoaXMgcGFkIGZyb20gdGhlIGNvbXBhdCBzdHJ1Y3R1cmUuDQo+ID4gPg0KPiA+ID4gQUZB
-SUNUIChhcGFydCBmcm9tIG1pcHMpIHRoZSBfX0FSQ0hfQ09NUEFUX0ZMT0NLX1BBRCBpcyBqdXN0
-DQo+ID4gPiBhZGRpbmcgYW4gZXhwbGljaXQgcGFkIGZvciB0aGUgaW1wbGljaXQgcGFkIHRoZSBj
-b21waWxlcg0KPiA+ID4gd291bGQgZ2VuZXJhdGUgYmVjYXVzZSBjb21wYXRfcGlkX3QgaXMgMTYg
-Yml0cy4NCj4gPg0KPiA+IEkndmUganVzdCBsb29rZWQgYXQgdGhlIGhlYWRlci4NCj4gPiBjb21w
-YXRfcGlkX3QgaXMgMzIgYml0cy4NCj4gPiBTbyBMaW51eCBtdXN0IGhhdmUgZ2FpbmVkIDMyYml0
-IHBpZHMgYXQgc29tZSBlYXJsaWVyIHRpbWUuDQo+ID4gKEhpc3RvcmljYWxseSBVbml4IHBpZHMg
-d2VyZSAxNiBiaXQgLSBldmVuIG9uIDMyYml0IHN5c3RlbXMuKQ0KPiA+DQo+ID4gV2hpY2ggbWFr
-ZXMgdGhlIGV4cGxpY2l0IHBhZCBpbiAnc3BhcmMnIHJhdGhlciAnaW50ZXJlc3RpbmcnLg0KPiAN
-Cj4gSSBzYXcgaXQgd2FzIHRoZXJlIHNpbmNlIHRoZSBzcGFyYyBrZXJuZWwgc3VwcG9ydCBnb3Qg
-bWVyZ2VkIGluDQo+IGxpbnV4LTEuMywgcG9zc2libHkgY29waWVkIGZyb20gYW4gb2xkZXIgc3Vu
-b3MgdmVyc2lvbi4NCg0KV2hpY2ggaGFkIGEgMTZiaXQgcGlkIHdoZW4gSSB1c2VkIGl0Lg0KU28g
-dGhpcyBpcyBhIGJ1ZyBpbiB0aGUgc3BhcmMgbWVyZ2UhDQoNClRoZSBleHBsaWNpdCAnc2hvcnQn
-IHBhZCBjb3VsZCBiZSByZW1vdmVkIGZyb20gdGhlIDY0Yml0IHZhcmlhbnQNCmJlY2F1c2UgdGhl
-cmUgYXJlIGFsd2F5cyA0IGJ5dGVzIG9mIHBhZCBhZnRlciBsX3BpZC4NCkJ1dCBpdCBkb2VzIGV4
-dGVuZCB0aGUgYXBwbGljYXRpb24gc3RydWN0dXJlIG9uIDMyYml0IHNwYXJjIHNvIG11c3QNCnJl
-bWFpbiBpbiB0aGUgdWFwaSBoZWFkZXIuDQpJdCBkb2Vzbid0IG5lZWQgdG8gYmUgaW4gdGhlICdj
-b21wYXQnIGRlZmluaXRpb24uDQoNCj4gPiBvaCAtIGNvbXBhdF9sb2ZmX3QgaXMgb25seSB1c2Vk
-IGluIGEgY291cGxlIG9mIG90aGVyIHBsYWNlcy4NCj4gPiBuZWl0aGVyIGNhcmUgaW4gYW55IHdh
-eSBhYm91dCB0aGUgYWxpZ25tZW50Lg0KPiA+IChQcm92aWRlZCBnZXRfdXNlcigpIGRvZXNuJ3Qg
-ZmF1bHQgb24gYSA4bis0IGFsaWduZWQgYWRkcmVzcy4pDQo+IA0KPiBBaCByaWdodCwgSSBhbHNv
-IHNlZSB0aGF0IGFmdGVyIHRoaXMgc2VyaWVzIGl0J3Mgb25seSB1c2VkIGluIHRvIG90aGVyDQo+
-IHBsYWNlczogIGNvbXBhdF9yZXN1bWVfc3dhcF9hcmVhLCB3aGljaCBjb3VsZCBhbHNvIGxvc2Ug
-dGhlDQo+IF9fcGFja2VkIGFubm90YXRpb24sDQoNClRoYXQgc3RydWN0dXJlIGp1c3QgZGVmaW5l
-cyAwIGFuZCA4LCB0aGUgc3RydWN0dXJlIHNpemUgZG9lc24ndA0KbWF0dGVyIGFuZCB0aGUgb2Zm
-c2V0cyBhcmUgJ3Bhc3NlZCB0bycgZ2V0X3VzZXIoKSBzbyBieXRlDQphY2Nlc3NlcyBhcmVuJ3Qg
-cGVyZm9ybWVkLg0KDQo+IGFuZCBpbiB0aGUgZGVjbGFyYXRpb24gb2YNCj4gY29tcGF0X3N5c19z
-ZW5kZmlsZTY0LCB3aGVyZSBpdCBtYWtlcyBubyBkaWZmZXJlbmNlLg0KDQpXaGljaCBzaG91bGQg
-cHJvYmFibHkgdXNlIGdldF91c2VyKCkgcmF0aGVyIHRoYW4gY29weV9mcm9tX3VzZXIoKS4NCg0K
-QWx0aG91Z2ggc29tZSBhcmNoaXRlY3R1cmVzIG1heSBuZWVkIGZhbGxiYWNrIGNvZGUgZm9yDQpt
-aXNhbGlnbmVkIGdldF91c2VyKCkgPw0KT3IgaXMgdGhlcmUgYSBnZW5lcmFsICdjb3Agb3V0JyB0
-aGF0IHN0cnVjdHVyZXMgcGFzc2VkIHRvIHRoZQ0Ka2VybmVsIGFyZSByZXF1aXJlZCB0byBiZSBj
-b3JyZWN0bHkgYWxpZ25lZC4NClRoZXkgc2hvdWxkIGJlIGFsaWduZWQgdW5sZXNzIHRoZSBrZXJu
-ZWwgaXMgJ3BsYXlpbmcgZ2FtZXMnDQpsaWtlIHJlYWRpbmcgJ3N0cnVjdCBwb2xsZmQnIGFzIGEg
-NjRiaXQgaXRlbS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
-QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
-aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Mar 26, 2021, at 03:30, Borislav Petkov <bp@alien8.de> wrote:
+> On Thu, Mar 25, 2021 at 09:56:53PM -0700, Andy Lutomirski wrote:
+>> We really ought to have a SIGSIGFAIL signal that's sent, double-fault
+>> style, when we fail to send a signal.
+>=20
+> Yeap, we should be able to tell userspace that we couldn't send a
+> signal, hohumm.
+
+Hi Boris,
+
+Let me clarify some details as preparing to include this in a revision.
+
+So, IIUC, a number needs to be assigned for this new SIGFAIL. At a glance, =
+not
+sure which one to pick there in signal.h -- 1-31 fully occupied and the res=
+t
+for 33 different real-time signals.
+
+Also, perhaps, force_sig(SIGFAIL) here, instead of return -1 -- to die with
+SIGSEGV.
+
+Thanks,
+Chang
 
