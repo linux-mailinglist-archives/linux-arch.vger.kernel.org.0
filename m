@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AF035C323
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Apr 2021 12:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EDF35C352
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Apr 2021 12:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242968AbhDLJ5p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Apr 2021 05:57:45 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:37593 "EHLO
+        id S238057AbhDLKGY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Apr 2021 06:06:24 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:42681 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244612AbhDLJ4W (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Apr 2021 05:56:22 -0400
-Received: from mail-wm1-f48.google.com ([209.85.128.48]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MrQR7-1lrm6z072V-00oWTe; Mon, 12 Apr 2021 11:55:58 +0200
-Received: by mail-wm1-f48.google.com with SMTP id k128so6426596wmk.4;
-        Mon, 12 Apr 2021 02:55:57 -0700 (PDT)
-X-Gm-Message-State: AOAM533r1rofXj88LVWJfah19XlDU6BtZ0B1yeutMbGESfkPn1Et7hVf
-        AIrdTACXZyzFyre5JlfjGvKg/BUppQ9zoWHcUJU=
-X-Google-Smtp-Source: ABdhPJzTfxxaxsVCZqgwljY94HrF+v5FbHKG19HOl8IGqXY6e9UlqBjrbb/hk/qI5QxcbCRl2V2ekh7/KCvv8xos6no=
-X-Received: by 2002:a7b:c14a:: with SMTP id z10mr3077982wmi.75.1618221357638;
- Mon, 12 Apr 2021 02:55:57 -0700 (PDT)
+        with ESMTP id S239693AbhDLKER (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Apr 2021 06:04:17 -0400
+Received: from mail-wm1-f44.google.com ([209.85.128.44]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MuVOM-1loFLz01qc-00rWKb; Mon, 12 Apr 2021 12:03:57 +0200
+Received: by mail-wm1-f44.google.com with SMTP id k128so6440219wmk.4;
+        Mon, 12 Apr 2021 03:03:56 -0700 (PDT)
+X-Gm-Message-State: AOAM531QjEsrwvzo/ViQ7GZGLyabLL5Js0s9lXjecqMatmBYUrfhHuFF
+        SzbAsw1huoXQb1ksna+WznNd6KJvx3GhtZTGezI=
+X-Google-Smtp-Source: ABdhPJz1GJVeZO+sIN2KpJ8Wn8donSpdvAqFqtcymRYAYBYot2xnOavBT3UwXj8nuP92Z994bQxnP3scv1qVkv9AVF0=
+X-Received: by 2002:a7b:c245:: with SMTP id b5mr25489890wmj.120.1618221836576;
+ Mon, 12 Apr 2021 03:03:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210412085545.2595431-1-hch@lst.de> <20210412085545.2595431-2-hch@lst.de>
-In-Reply-To: <20210412085545.2595431-2-hch@lst.de>
+References: <20210412085545.2595431-1-hch@lst.de>
+In-Reply-To: <20210412085545.2595431-1-hch@lst.de>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 12 Apr 2021 11:55:41 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2MSJarPMfJ8RrSKDMXte3KQec=+GQ-LzV6HB7-Nm1FcQ@mail.gmail.com>
-Message-ID: <CAK8P3a2MSJarPMfJ8RrSKDMXte3KQec=+GQ-LzV6HB7-Nm1FcQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] uapi: remove the unused HAVE_ARCH_STRUCT_FLOCK64 define
+Date:   Mon, 12 Apr 2021 12:03:40 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a38qgkjkh4+fDKp4TufL+2_W-quZBFK9pJFf7wXP=84xQ@mail.gmail.com>
+Message-ID: <CAK8P3a38qgkjkh4+fDKp4TufL+2_W-quZBFK9pJFf7wXP=84xQ@mail.gmail.com>
+Subject: Re: consolidate the flock uapi definitions
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -50,33 +50,39 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         sparclinux <sparclinux@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:cQhKiyfxzUY6mYQRHUjOusziZyiZ2ECTHu0hWevLcqyEW8Ur3qo
- MJ8Fmc6YsrzdC+sHyrk/5t1UF52iImlAYS/KBm5dnbPE75XGl9a62cUTIVY5m3X4evCOA9s
- 2PYnWr4aV8aDF2PLQJiYCmCQn5kErMbNxRpMCVhJURPr32Xo0oCxjT0IHaHTk3gynHsX3di
- lZdRgN3PWY0Wx8xYimvrA==
+X-Provags-ID: V03:K1:Dps70YksbRgOOYYzitLBwIiCvjUaqq0PzQS+9jryUR6sjkSkzVi
+ Z5OdoVhP6elJGW3hcIXNuO1pVfwf0DY2PQq2XGmGGpGQf0h3WYfeQNSzz4RyoAzn2nLUdi3
+ HLXh4VNf//zZZY+ByCodtcDxii+Ub+aXpmA1MEz/PcbTvEmqetuufSlyyeC9Nx+tG2meNjd
+ 8OfTdzjQDEOdC3hGC8npA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:uC/Hyc4Vk1k=:+Wd3nZw1uJebz60gCPd265
- PXuT1mRaIPDr01XZCfSLjAmewK6VGt+vkboVDxrmNWkuNM7WKUT6ekADhcQpoBrtpVFzQ5DaX
- nrI9B/NbsL0qgkd00XB1NrDlteYOhm5HyLTMRIBMsruhea1AhkMqU3su44Tf0wyu1LhJElCkq
- /PTJTE2RF6IKklSSiNT5qHGxCIr7Jj2Z0ZAmbry53T3vSjslalVOdxE173frdOACMogM6gyjU
- dGKkNlN57I71RpJktBuo7y4g8Pc/ighN2BTVnofrcypcvbpAD2p4FunLpmHAWKznh76kAF+Gx
- 2oflh5ys6Iv+HqsxCp8tRqS5NR0PXimFoVeJnXND0ZmKAOYixinfgHyhLYwvWnVRxvoFBVgyd
- S6yM5OzdX4Iqy6/vKQ5qbaq0NZEFx5K3TOS7BXqUwe8ZP0FsQwCtkGBnSYhyQByFlgdeEvAf6
- nDi9VMf9r4FwxNWuvrfFhG9Qd3ft5m5x0gg/ru/OPjEWHsYDjnjEOX3+O0SSVeJBK3aQINs7s
- cn8cD6gzO8mMi5kmpU7vOlOutdu0lH/mn/WG6Ga14TqNahfIEt6qlWeV7ZNDYvzVBksgiDrzl
- QHOIymPJGKy1z2A6UHrLeF/i0WmI3wlUUr
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JhsavkM/5Ss=:zkobLlRXkmjwTPYUdZkJDb
+ mSXH7ktDlvbeTu7s4XAi+ZEsVEIGoyifakHVvcjbyMDUUyK2xA9M02Pl/BwMO3V2HaNxWHt7z
+ 8U9qseI2Klq3RHfhWG26prOb4sr4W6389IdnAsBejgdHDXQD/PRwrfXTEYKKz/Z2E7zWmCu4c
+ sHcOwsuK/eiePNjk0Qxa97bMfRVKxBXL0L/OkzTiZoclCu6nIeVtrHUGh3liWhJKEVDOBxd1M
+ BA+MiE61AYUn/GGSVqEPHlYOtF4nl0q6Mau9R715BKfSmZG5RnX7eu2BODFsAp57J4ishaFu7
+ viaB4JWPJuaCQWIGkYV9i3HkWX5N3mc9oZS8hFuRTx7INh3piBzlbT0S7Z9P9vHSwd6lb/Lhn
+ r960oHG3wwPcZ/ZNyc5kq684fblqsxyHkdstht2U3CAiMesJCap/F7Cu8GraDA3H3Qs7Ocwnz
+ ibs7wtfqsiy+31P1CJM+UBD38kMz1JKVfDn2e9vTtXKaDGkIdG3pxYe98rvuujxFgRWYSJItU
+ Fc+5ChUDNRSqhhYtXNWsbcxlstvJKRF/iTkjJuyqHn+wlhvUnhLxMk1hqcWAtgRwu8zL+nDJr
+ lOnhA2dVZfA5LQTR6ITJLp2MA17khRjqCA
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Mon, Apr 12, 2021 at 10:55 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Hi all,
+>
+> currently we deal with the slight differents in the various architecture
+> variants of the flock and flock64 stuctures in a very cruft way.  This
+> series switches to just use small arch hooks and define the rest in
+> asm-generic and linux/compat.h instead.
 
-The patch looks good, but I'd like to see a description for each one.
-How about:
+Nice cleanup. I can merge it through the asm-generic tree if you like,
+though it's a little late just ahead of the merge window.
 
-| The check was added when Stephen Rothwell created the file, but
-| no architecture ever defined it.
+I would not want to change the compat_loff_t definition to compat_s64
+to avoid the padding at this time, though that might be a useful cleanup
+for a future cycle.
 
         Arnd
