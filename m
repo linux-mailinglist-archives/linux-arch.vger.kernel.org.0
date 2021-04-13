@@ -2,193 +2,219 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BB335DDCA
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Apr 2021 13:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9922135DE1B
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Apr 2021 13:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbhDMLbJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Apr 2021 07:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbhDMLbJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Apr 2021 07:31:09 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC6BC061574;
-        Tue, 13 Apr 2021 04:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1VjW7Uh2w6eNF/Gh7/5tKwqhApl8TRKkl5CPq/5mjX8=; b=NRLLelL8Ga05tj1rNply/2Wu0A
-        0MMzohQtk7bke27oT/QYPTkIoAbKYNnrkGRjK0/3mDSPetn1+UapsIc4CC9vsPoEIslrjl9CyL8cw
-        1TGggkCrjn8D9NEu8QqK/5lCicZVwWoIAjdNoNeaVSVWOqPcQfXw1ddtGqGoBP8u+m3b1oaNXK/PU
-        T7MXoKO04QlPU+p3f8cYrL7cOA4slQzDFGcpSbEXuy8wo8LsAYzDOJlYt2CalQxju++QK/B0oYRPJ
-        uzgldAkScT9P9oTM+iK1kjcyYUNCrYglaZ8mqS69A1+QHDLB+qh2t1ZrtM+CrDCkXpXmpgTOw4vbL
-        5INccSUA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lWHFC-0093aR-OI; Tue, 13 Apr 2021 11:30:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 06EEE300033;
-        Tue, 13 Apr 2021 13:30:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 88F7C2C4C642E; Tue, 13 Apr 2021 13:30:06 +0200 (CEST)
-Date:   Tue, 13 Apr 2021 13:30:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alex Kogan <alex.kogan@oracle.com>
-Cc:     linux@armlinux.org.uk, mingo@redhat.com, will.deacon@arm.com,
-        arnd@arndb.de, longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-Subject: Re: [PATCH v14 3/6] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-Message-ID: <YHWAvjymlE5svU71@hirez.programming.kicks-ass.net>
-References: <20210401153156.1165900-1-alex.kogan@oracle.com>
- <20210401153156.1165900-4-alex.kogan@oracle.com>
+        id S230491AbhDMLzJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Apr 2021 07:55:09 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2472 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230411AbhDMLzI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 13 Apr 2021 07:55:08 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13DBYGJK093276;
+        Tue, 13 Apr 2021 07:54:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=K1D0TefXvbQcZQJhHF0HWva11X2Hy1Uc9SEtL0kx9ZY=;
+ b=LqqG02oIz4nVoq2QcRWPVdZ/tsng5DNt0qxqrgIgap+2bz7i+zB6A4NVsXUvp9SDcy1a
+ bFYftbfNcwdB3jYVI/M2RZBEr91ZtDV53tE9eSTkcXwWbj0R6Z3Uu2q/Uyy3p0KRXsBM
+ uhqjkr2xt3xrrmrlGtDubIPjB4Be0VeQrzOGAuMf7+zdtSKwbfGudx1WvmcT9BQuvzSu
+ jEPKeAuCh+AVEblyk4ZPMtUUZVtCoTrumiGUvNbMZaAa6D5+78liNt3NDpr5Q5IFclXX
+ 8IU/AZqm6xEguwg+jNps+ilklnS6vO5m+coP9f25lxm+UszTD//rGBljCIYYkoEKS6Ax Zw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37vkpjqh1x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Apr 2021 07:54:45 -0400
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13DBYrMg094933;
+        Tue, 13 Apr 2021 07:54:44 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37vkpjqh1b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Apr 2021 07:54:44 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13DBr8Rg018615;
+        Tue, 13 Apr 2021 11:54:42 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 37u3n89d68-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Apr 2021 11:54:41 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13DBsdrL27001124
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Apr 2021 11:54:39 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7520D52052;
+        Tue, 13 Apr 2021 11:54:39 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2DD725204E;
+        Tue, 13 Apr 2021 11:54:39 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH] asm-generic/io.h: Silence -Wnull-pointer-arithmetic warning on PCI_IOBASE
+Date:   Tue, 13 Apr 2021 13:54:39 +0200
+Message-Id: <20210413115439.1011560-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210401153156.1165900-4-alex.kogan@oracle.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Svov5rAQw-nSijM3JuZ1icP9P81uchPp
+X-Proofpoint-ORIG-GUID: Yp3UWpatE9sMn0DVXWk63CSU3xVUGLub
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-13_04:2021-04-13,2021-04-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
+ lowpriorityscore=0 clxscore=1011 adultscore=0 phishscore=0
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104060000 definitions=main-2104130081
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 01, 2021 at 11:31:53AM -0400, Alex Kogan wrote:
+When PCI_IOBASE is not defined, it is set to 0 such that it is ignored
+in calls to the readX/writeX primitives. While mathematically obvious
+this triggers clang's -Wnull-pointer-arithmetic warning.
 
-> +/*
-> + * cna_splice_tail -- splice the next node from the primary queue onto
-> + * the secondary queue.
-> + */
-> +static void cna_splice_next(struct mcs_spinlock *node,
-> +			    struct mcs_spinlock *next,
-> +			    struct mcs_spinlock *nnext)
+An additional complication is that PCI_IOBASE is explicitly typed as
+"void __iomem *" which causes the type conversion that converts the
+"unsigned long" port/addr parameters to the appropriate pointer type.
+As non pointer types are used by drivers at the callsite since these are
+dealing with I/O port numbers, changing the parameter type would cause
+further warnings in drivers. Instead use "uintptr_t" for PCI_IOBASE
+0 and explicitly cast to "void __iomem *" when calling readX/writeX.
 
-You forgot to update the comment when you changed the name on this
-thing.
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ include/asm-generic/io.h | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-> +/*
-> + * cna_order_queue - check whether the next waiter in the main queue is on
-> + * the same NUMA node as the lock holder; if not, and it has a waiter behind
-> + * it in the main queue, move the former onto the secondary queue.
-> + */
-> +static void cna_order_queue(struct mcs_spinlock *node)
-> +{
-> +	struct mcs_spinlock *next = READ_ONCE(node->next);
-> +	struct cna_node *cn = (struct cna_node *)node;
-> +	int numa_node, next_numa_node;
-> +
-> +	if (!next) {
-> +		cn->partial_order = LOCAL_WAITER_NOT_FOUND;
-> +		return;
-> +	}
-> +
-> +	numa_node = cn->numa_node;
-> +	next_numa_node = ((struct cna_node *)next)->numa_node;
-> +
-> +	if (next_numa_node != numa_node) {
-> +		struct mcs_spinlock *nnext = READ_ONCE(next->next);
-> +
-> +		if (nnext) {
-> +			cna_splice_next(node, next, nnext);
-> +			next = nnext;
-> +		}
-> +		/*
-> +		 * Inherit NUMA node id of primary queue, to maintain the
-> +		 * preference even if the next waiter is on a different node.
-> +		 */
-> +		((struct cna_node *)next)->numa_node = numa_node;
-> +	}
-> +}
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index c6af40ce03be..8eb00bdef7ad 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -441,7 +441,7 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
+ #endif /* CONFIG_64BIT */
+ 
+ #ifndef PCI_IOBASE
+-#define PCI_IOBASE ((void __iomem *)0)
++#define PCI_IOBASE ((uintptr_t)0)
+ #endif
+ 
+ #ifndef IO_SPACE_LIMIT
+@@ -461,7 +461,7 @@ static inline u8 _inb(unsigned long addr)
+ 	u8 val;
+ 
+ 	__io_pbr();
+-	val = __raw_readb(PCI_IOBASE + addr);
++	val = __raw_readb((void __iomem *)(PCI_IOBASE + addr));
+ 	__io_par(val);
+ 	return val;
+ }
+@@ -474,7 +474,7 @@ static inline u16 _inw(unsigned long addr)
+ 	u16 val;
+ 
+ 	__io_pbr();
+-	val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
++	val = __le16_to_cpu((__le16 __force)__raw_readw((void __iomem *)(PCI_IOBASE + addr)));
+ 	__io_par(val);
+ 	return val;
+ }
+@@ -487,7 +487,7 @@ static inline u32 _inl(unsigned long addr)
+ 	u32 val;
+ 
+ 	__io_pbr();
+-	val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
++	val = __le32_to_cpu((__le32 __force)__raw_readl((void __iomem *)(PCI_IOBASE + addr)));
+ 	__io_par(val);
+ 	return val;
+ }
+@@ -498,7 +498,7 @@ static inline u32 _inl(unsigned long addr)
+ static inline void _outb(u8 value, unsigned long addr)
+ {
+ 	__io_pbw();
+-	__raw_writeb(value, PCI_IOBASE + addr);
++	__raw_writeb(value, (void __iomem *)(PCI_IOBASE + addr));
+ 	__io_paw();
+ }
+ #endif
+@@ -508,7 +508,7 @@ static inline void _outb(u8 value, unsigned long addr)
+ static inline void _outw(u16 value, unsigned long addr)
+ {
+ 	__io_pbw();
+-	__raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
++	__raw_writew((u16 __force)cpu_to_le16(value), (void __iomem *)(PCI_IOBASE + addr));
+ 	__io_paw();
+ }
+ #endif
+@@ -518,7 +518,7 @@ static inline void _outw(u16 value, unsigned long addr)
+ static inline void _outl(u32 value, unsigned long addr)
+ {
+ 	__io_pbw();
+-	__raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
++	__raw_writel((u32 __force)cpu_to_le32(value), (void __iomem *)(PCI_IOBASE + addr));
+ 	__io_paw();
+ }
+ #endif
+@@ -606,7 +606,7 @@ static inline void outl_p(u32 value, unsigned long addr)
+ #define insb insb
+ static inline void insb(unsigned long addr, void *buffer, unsigned int count)
+ {
+-	readsb(PCI_IOBASE + addr, buffer, count);
++	readsb((void __iomem *)(PCI_IOBASE + addr), buffer, count);
+ }
+ #endif
+ 
+@@ -614,7 +614,7 @@ static inline void insb(unsigned long addr, void *buffer, unsigned int count)
+ #define insw insw
+ static inline void insw(unsigned long addr, void *buffer, unsigned int count)
+ {
+-	readsw(PCI_IOBASE + addr, buffer, count);
++	readsw((void __iomem *)(PCI_IOBASE + addr), buffer, count);
+ }
+ #endif
+ 
+@@ -622,7 +622,7 @@ static inline void insw(unsigned long addr, void *buffer, unsigned int count)
+ #define insl insl
+ static inline void insl(unsigned long addr, void *buffer, unsigned int count)
+ {
+-	readsl(PCI_IOBASE + addr, buffer, count);
++	readsl((void __iomem *)(PCI_IOBASE + addr), buffer, count);
+ }
+ #endif
+ 
+@@ -631,7 +631,7 @@ static inline void insl(unsigned long addr, void *buffer, unsigned int count)
+ static inline void outsb(unsigned long addr, const void *buffer,
+ 			 unsigned int count)
+ {
+-	writesb(PCI_IOBASE + addr, buffer, count);
++	writesb((void __iomem *)(PCI_IOBASE + addr), buffer, count);
+ }
+ #endif
+ 
+@@ -640,7 +640,7 @@ static inline void outsb(unsigned long addr, const void *buffer,
+ static inline void outsw(unsigned long addr, const void *buffer,
+ 			 unsigned int count)
+ {
+-	writesw(PCI_IOBASE + addr, buffer, count);
++	writesw((void __iomem *)(PCI_IOBASE + addr), buffer, count);
+ }
+ #endif
+ 
+@@ -649,7 +649,7 @@ static inline void outsw(unsigned long addr, const void *buffer,
+ static inline void outsl(unsigned long addr, const void *buffer,
+ 			 unsigned int count)
+ {
+-	writesl(PCI_IOBASE + addr, buffer, count);
++	writesl((void __iomem *)(PCI_IOBASE + addr), buffer, count);
+ }
+ #endif
+ 
+-- 
+2.25.1
 
-So the obvious change since last time I looked a this is that it now
-only looks 1 entry ahead. Which makes sense I suppose.
-
-I'm not really a fan of the 'partial_order' name combined with that
-silly enum { LOCAL_WAITER_FOUND, LOCAL_WAITER_NOT_FOUND }. That's just
-really bad naming all around. The enum is about having a waiter while
-the variable is about partial order, that doesn't match at all.
-
-If you rename the variable to 'has_waiter' and simply use 0,1 values,
-things would be ever so more readable. But I don't think that makes
-sense, see below.
-
-I'm also not sure about that whole numa_node thing, why would you
-over-write the numa node, why at this point ?
-
-> +
-> +/* Abuse the pv_wait_head_or_lock() hook to get some work done */
-> +static __always_inline u32 cna_wait_head_or_lock(struct qspinlock *lock,
-> +						 struct mcs_spinlock *node)
-> +{
-> +	/*
-> +	 * Try and put the time otherwise spent spin waiting on
-> +	 * _Q_LOCKED_PENDING_MASK to use by sorting our lists.
-> +	 */
-> +	cna_order_queue(node);
-> +
-> +	return 0; /* we lied; we didn't wait, go do so now */
-
-So here we inspect one entry ahead and then quit. I can't rmember, but
-did we try something like:
-
-	/*
-	 * Try and put the time otherwise spent spin waiting on
-	 * _Q_LOCKED_PENDING_MASK to use by sorting our lists.
-	 * Move one entry at a go until either the list is fully
-	 * sorted or we ran out of spin condition.
-	 */
-	while (READ_ONCE(lock->val) & _Q_LOCKED_PENDING_MASK &&
-	       node->partial_order)
-		cna_order_queue(node);
-
-	return 0;
-
-This will keep moving @next to the remote list until such a time that
-we're forced to continue or @next is local.
-
-> +}
-> +
-> +static inline void cna_lock_handoff(struct mcs_spinlock *node,
-> +				 struct mcs_spinlock *next)
-> +{
-> +	struct cna_node *cn = (struct cna_node *)node;
-> +	u32 val = 1;
-> +
-> +	u32 partial_order = cn->partial_order;
-> +
-> +	if (partial_order == LOCAL_WAITER_NOT_FOUND)
-> +		cna_order_queue(node);
-> +
-
-AFAICT this is where playing silly games with ->numa_node belong; but
-right along with that goes a comment that describes why any of that
-makes sense.
-
-I mean, if you leave your node, for any reason, why bother coming back
-to it, why not accept it is a sign of the gods you're overdue for a
-node-change?
-
-Was the efficacy of this scheme tested?
-
-> +	/*
-> +	 * We have a local waiter, either real or fake one;
-> +	 * reload @next in case it was changed by cna_order_queue().
-> +	 */
-> +	next = node->next;
-> +	if (node->locked > 1)
-> +		val = node->locked;	/* preseve secondary queue */
-
-IIRC we used to do:
-
-	val |= node->locked;
-
-Which is simpler for not having branches. Why change a good thing?
-
-> +
-> +	arch_mcs_lock_handoff(&next->locked, val);
-> +}
