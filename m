@@ -2,97 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B04A35E121
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Apr 2021 16:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A389B35E299
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Apr 2021 17:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346422AbhDMOM2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Apr 2021 10:12:28 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:28288 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245036AbhDMOM1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 13 Apr 2021 10:12:27 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-278-AvhJ3iXtMyqzl2W9G4PAMw-1; Tue, 13 Apr 2021 15:12:05 +0100
-X-MC-Unique: AvhJ3iXtMyqzl2W9G4PAMw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Tue, 13 Apr 2021 15:12:04 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.012; Tue, 13 Apr 2021 15:12:03 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>
-CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "Guo Ren" <guoren@kernel.org>
-Subject: RE: [PATCH] asm-generic/io.h: Silence -Wnull-pointer-arithmetic
- warning on PCI_IOBASE
-Thread-Topic: [PATCH] asm-generic/io.h: Silence -Wnull-pointer-arithmetic
- warning on PCI_IOBASE
-Thread-Index: AQHXMGSVFmL3q8InjEiRDqC8qAyY5Kqyacdg///5xgCAABWwYA==
-Date:   Tue, 13 Apr 2021 14:12:03 +0000
-Message-ID: <40d4114fa34043d0841b81d09457c415@AcuMS.aculab.com>
-References: <20210413115439.1011560-1-schnelle@linux.ibm.com>
- <CAK8P3a1WTZOYpJ2TSjnbytQJWgtfwkQ8bXXdnqCnOn6ugJqN_w@mail.gmail.com>
- <84ab737edbe13d390373850bf317920b3a486b87.camel@linux.ibm.com>
- <CAK8P3a2NR2nhEffFQJdMq2Do_g2ji-7p3+iWyzw+aXD6gov05w@mail.gmail.com>
- <11ead5c2c73c42cbbeef32966bc7e5c2@AcuMS.aculab.com>
- <CAK8P3a3PK9zyeP4ymELtc2ZYnymECoACiigw9Za+pvSJpCk5=g@mail.gmail.com>
-In-Reply-To: <CAK8P3a3PK9zyeP4ymELtc2ZYnymECoACiigw9Za+pvSJpCk5=g@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1346594AbhDMPWz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Apr 2021 11:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231834AbhDMPWy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Apr 2021 11:22:54 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C63C061574;
+        Tue, 13 Apr 2021 08:22:34 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id e2so4095736plh.8;
+        Tue, 13 Apr 2021 08:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+srfers9E9q4+P9qtsCb4JStuWkS4WZj6vAcaSoVbMo=;
+        b=BxpjZ6O/1c8XzgIAhlhju9pI7snp8yqWAuS8roa86byjm18CBnlXvlPSDp4K9ogLCA
+         md0ln4yPw4zxAALH2i/ba9zXaZ6xqI5anhWQWsKTyXcjTA4PqPlOPAz4bVVBRKUdz1dw
+         tFv19azdKvuMaVlNG1M78WQRzIKeeH2Yd81Lo+4JqXIkRzd++1sVVqFjHEHAnlc2uZmg
+         hcNXFAYNfdrNLJ9IdG6DrMk0dn1h0KZrWl939rgLUvGMphJGsxCbkLNsZt8n2KWAvdOh
+         pTS12g3TaF9aS/Undgp9qlRJeG/Q3B5s2DllAhmLTGxzifFjsah62AIskhiq0qHFiaLJ
+         lQvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+srfers9E9q4+P9qtsCb4JStuWkS4WZj6vAcaSoVbMo=;
+        b=HmyGXZQmtTvMQLQGxb4DSjP8l5Vix1vIWjnzNmZtkqTELoCmL4skNoNX6DMvPc3oJd
+         fyTKI5b4xeT1dhkXa84H6SnJCJ3L0KE1N7B7MVobQgYCykMzSSlc6w/xNOk2jdQfkIFl
+         /gEhelfl1aVCdTSC4yitwO+pSAivHuO6SdmgxdECkEIb2wzo3KkMZi42+zfawmcWi0Dp
+         eMSlQpP8ItpmtTZ9zKRuUVagI8kbGysHebUXXpsC5o+KF7MaEZJdG3S/zIzeuGKOjJl1
+         b0Fzi4l0+O9I8T1XspWmd7LGSqsfbuEC1R++0GkJ1rYa89l/D8m3RlSMqR1utOj9W9Ro
+         cVZg==
+X-Gm-Message-State: AOAM531XT9aWFkheiyqCeqwHsbm3xq8GtkvYbBSTxyEXnx3+WeXrPzed
+        8QB5fB2hQk14d1rYCDj14+E=
+X-Google-Smtp-Source: ABdhPJxkj7EMiqnlNwZhemaad9k8TJwF36mYJkC/cilAzSTY6lmSj1a708p3PUSfYTswP4gAS4KdrA==
+X-Received: by 2002:a17:90a:5407:: with SMTP id z7mr581197pjh.228.1618327353881;
+        Tue, 13 Apr 2021 08:22:33 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:36:5b29:fe1a:45c9:c61c])
+        by smtp.gmail.com with ESMTPSA id y3sm12882026pfg.145.2021.04.13.08.22.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Apr 2021 08:22:33 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
+        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        konrad.wilk@oracle.com, hch@lst.de, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, joro@8bytes.org, will@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com,
+        sunilmut@microsoft.com
+Subject: [RFC V2 PATCH 00/12] x86/Hyper-V: Add Hyper-V Isolation VM support
+Date:   Tue, 13 Apr 2021 11:22:05 -0400
+Message-Id: <20210413152217.3386288-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAxMyBBcHJpbCAyMDIxIDE0OjQwDQo+IA0KPiBP
-biBUdWUsIEFwciAxMywgMjAyMSBhdCAzOjA2IFBNIERhdmlkIExhaWdodCA8RGF2aWQuTGFpZ2h0
-QGFjdWxhYi5jb20+IHdyb3RlOg0KPiA+DQo+ID4gRnJvbTogQXJuZCBCZXJnbWFubg0KPiA+ID4g
-U2VudDogMTMgQXByaWwgMjAyMSAxMzo1OA0KPiA+IC4uLg0KPiA+ID4gVGhlIHJlbWFpbmluZyBv
-bmVzIChjc2t5LCBtNjhrLCBzcGFyYzMyKSBuZWVkIHRvIGJlIGluc3BlY3RlZA0KPiA+ID4gbWFu
-dWFsbHkgdG8gc2VlIGlmIHRoZXkgY3VycmVudGx5IHN1cHBvcnQgUENJIEkvTyBzcGFjZSBidXQg
-aW4NCj4gPiA+IGZhY3QgdXNlIGFkZHJlc3MgemVybyBhcyB0aGUgYmFzZSAod2l0aCBsYXJnZSBy
-ZXNvdXJjZXMpIG9yIHRoZXkNCj4gPiA+IHNob3VsZCBhbHNvIHR1cm4gdGhlIG9wZXJhdGlvbnMg
-aW50byBhIE5PUC4NCj4gPg0KPiA+IEknZCBleHBlY3Qgc3BhcmMzMiB0byB1c2UgYW4gQVNJIHRv
-IGFjY2VzcyBQQ0kgSU8gc3BhY2UuDQo+ID4gSSBjYW4ndCBxdWl0ZSByZW1lbWJlciB3aGV0aGVy
-IElPIHNwYWNlIHdhcyBzdXBwb3J0ZWQgYXQgYWxsLg0KPiANCj4gSSBzZWUgdGhpcyBiaXQgaW4g
-YXJjaC9zcGFyYy9rZXJuZWwvbGVvbl9wY2kuYw0KPiANCj4gICogUENJIE1lbW9yeSBhbmQgUHJl
-ZmV0Y2hhYmxlIE1lbW9yeSBpcyBkaXJlY3QtbWFwcGVkLiBIb3dldmVyIEkvTyBTcGFjZSBpcw0K
-PiAgKiBhY2Nlc3NlZCB0aHJvdWdoIGEgV2luZG93IHdoaWNoIGlzIHRyYW5zbGF0ZWQgdG8gbG93
-IDY0S0IgaW4gUENJIHNwYWNlLCB0aGUNCj4gICogZmlyc3QgNEtCIGlzIG5vdCB1c2VkIHNvIDYw
-S0IgaXMgYXZhaWxhYmxlLg0KPiAuLi4NCj4gICAgICAgICBwY2lfYWRkX3Jlc291cmNlX29mZnNl
-dCgmcmVzb3VyY2VzLCAmaW5mby0+aW9fc3BhY2UsDQo+ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgaW5mby0+aW9fc3BhY2Uuc3RhcnQgLSAweDEwMDApOw0KPiANCj4gd2hpY2ggbWVh
-bnMgdGhhdCB0aGVyZSBpcyBJL08gc3BhY2UsIHdoaWNoIGdldHMgYWNjZXNzZWQgdGhyb3VnaCB3
-aGljaGV2ZXINCj4gbWV0aG9kIHJlYWRiKCkgdXNlcy4gSGF2aW5nIHRoZSBvZmZzZXQgZXF1YWwg
-dG8gdGhlIHJlc291cmNlIG1lYW5zIHRoYXQNCj4gdGhlICcodm9pZCAqKTAnIHN0YXJ0IGlzIGNv
-cnJlY3QuDQoNCkl0IG11c3QgaGF2ZSBiZWVuIHRoZSBWTUVidXMgKGFuZCBtYXliZSBzQnVzKSBz
-cGFyYyB0aGF0IHVzZWQgYW4gQVNJLg0KDQpJIGRvIHJlbWVtYmVyIGlzc3VlcyB3aXRoIFNvbGFy
-aXMgb2Ygc29tZSBQQ0kgY2FyZHMgbm90IGxpa2luZw0KYmVpbmcgYXNzaWduZWQgYSBCQVIgYWRk
-cmVzcyBvZiB6ZXJvLg0KVGhhdCBtYXkgYmUgd2h5IHRoZSBsb3cgNGsgSU8gc3BhY2UgaXNuJ3Qg
-YXNzaWduZWQgaGVyZS4NCihJJ3ZlIG5ldmVyIHJ1biBMaW51eCBvbiBzcGFyYywganVzdCBTVlI0
-IGFuZCBTb2xhcmlzLikNCg0KSSBndWVzcyBzZXR0aW5nIFBDSV9JT0JBU0UgdG8gemVybyBpcyBz
-YWZlciB3aGVuIHlvdSBjYW4ndCB0cnVzdA0KZHJpdmVycyBub3QgdG8gdXNlIGluYigpIGluc3Rl
-YWQgb2YgcmVhZGIoKS4NCk9yIHdoYXRldmVyIGlvX3JlYWQoKSBlbmRzIHVwIGJlaW5nLg0KDQoJ
-RGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1v
-dW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEz
-OTczODYgKFdhbGVzKQ0K
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+
+
+Hyper-V provides two kinds of Isolation VMs. VBS(Virtualization-based
+security) and AMD SEV-SNP unenlightened Isolation VMs. This patchset
+is to add support for these Isolation VM support in Linux.
+
+The memory of these vms are encrypted and host can't access guest
+memory directly. Hyper-V provides new host visibility hvcall and
+the guest needs to call new hvcall to mark memory visible to host
+before sharing memory with host. For security, all network/storage
+stack memory should not be shared with host and so there is bounce
+buffer requests.
+
+Vmbus channel ring buffer already plays bounce buffer role because
+all data from/to host needs to copy from/to between the ring buffer
+and IO stack memory. So mark vmbus channel ring buffer visible to
+host.
+
+There are two exceptions - packets sent by vmbus_sendpacket_
+pagebuffer() and vmbus_sendpacket_mpb_desc(). These packets
+contains IO stack memory address and host will access these memory.
+So add Hyper-V DMA Ops and use DMA API in the netvsc and storvsc
+drivers to allocate bounce buffer via swiotlb interface.
+
+For SNP isolation VM, guest needs to access the shared memory via
+extra address space which is specified by Hyper-V CPUID HYPERV_CPUID_
+ISOLATION_CONFIG. The access physical address of the shared memory
+should be bounce buffer memory GPA plus with shared_gpa_boundary
+reported by CPUID.
+
+Change since v1:
+       * Add DMA API support in the netvsc and storvsc driver.
+       * Add Hyper-V DMA ops.
+       * Add static branch for the check of isolation type snp.
+       * Fix some code style comments.
+
+Tianyu Lan (12):
+  x86/HV: Initialize GHCB page in Isolation VM
+  x86/HV: Initialize shared memory boundary in Isolation VM
+  x86/Hyper-V: Add new hvcall guest address host visibility support
+  HV: Add Write/Read MSR registers via ghcb
+  HV: Add ghcb hvcall support for SNP VM
+  HV/Vmbus: Add SNP support for VMbus channel initiate message
+  HV/Vmbus: Initialize VMbus ring buffer for Isolation VM
+  UIO/Hyper-V: Not load UIO HV driver in the isolation VM.
+  swiotlb: Add bounce buffer remap address setting function
+  HV/IOMMU: Add Hyper-V dma ops support
+  HV/Netvsc: Add Isolation VM support for netvsc driver
+  HV/Storvsc: Add Isolation VM support for storvsc driver
+
+ arch/x86/hyperv/Makefile           |   2 +-
+ arch/x86/hyperv/hv_init.c          |  70 +++++--
+ arch/x86/hyperv/ivm.c              | 289 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h |  22 +++
+ arch/x86/include/asm/mshyperv.h    |  90 +++++++--
+ arch/x86/kernel/cpu/mshyperv.c     |   5 +
+ arch/x86/kernel/pci-swiotlb.c      |   3 +-
+ drivers/hv/channel.c               |  44 ++++-
+ drivers/hv/connection.c            |  68 ++++++-
+ drivers/hv/hv.c                    |  73 ++++++--
+ drivers/hv/hyperv_vmbus.h          |   3 +
+ drivers/hv/ring_buffer.c           |  83 ++++++---
+ drivers/hv/vmbus_drv.c             |   3 +
+ drivers/iommu/hyperv-iommu.c       | 127 +++++++++++++
+ drivers/net/hyperv/hyperv_net.h    |  11 ++
+ drivers/net/hyperv/netvsc.c        | 137 +++++++++++++-
+ drivers/net/hyperv/rndis_filter.c  |   3 +
+ drivers/scsi/storvsc_drv.c         |  67 ++++++-
+ drivers/uio/uio_hv_generic.c       |   5 +
+ include/asm-generic/hyperv-tlfs.h  |   1 +
+ include/asm-generic/mshyperv.h     |  18 +-
+ include/linux/hyperv.h             |  12 +-
+ include/linux/swiotlb.h            |   5 +
+ kernel/dma/swiotlb.c               |  13 +-
+ mm/ioremap.c                       |   1 +
+ mm/vmalloc.c                       |   1 +
+ 26 files changed, 1068 insertions(+), 88 deletions(-)
+ create mode 100644 arch/x86/hyperv/ivm.c
+
+-- 
+2.25.1
 
