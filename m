@@ -2,130 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4ED35DE34
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Apr 2021 14:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205DA35DEB8
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Apr 2021 14:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238034AbhDMMD4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Apr 2021 08:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237609AbhDMMD4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Apr 2021 08:03:56 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB204C061574;
-        Tue, 13 Apr 2021 05:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6KpzU18eXMDe/3Xb84g1a2GDcLOlQ4ZLthSWTM3Q8Z8=; b=NJuH3upRDSQU/v0LS0b2VKedoz
-        yn+GkzfBO4OPiS+JHLQRK9sAn8ds9v4liCyEFxTwMeWz45LhUxhzT0t6/cQgEftZyYpn7iJU3gL7p
-        NRrhLKO+cy3TbkfQH1oOCc+5XFbCY5ip53geF7AQVennuk3LeYirPrks3QEmcd9gzoi85F3BzWThi
-        iL+lOcVQmbJhsr97FMFAR5lv2z8RkWVWq63BcNHFA4/hExtlBH4q9uET+cxieV9SqvYdXDf7RGfys
-        D+ifUrOiJZQINBlSn6attQvXTXCGkUiLwVVj64GbRLi5VAS8VDM61nzR5XGkk/ROGAiBMm2lvohjg
-        pYuGNRxw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lWHl5-009A7T-Ma; Tue, 13 Apr 2021 12:03:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3763F300033;
-        Tue, 13 Apr 2021 14:03:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1B0D82C2DBD59; Tue, 13 Apr 2021 14:03:07 +0200 (CEST)
-Date:   Tue, 13 Apr 2021 14:03:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alex Kogan <alex.kogan@oracle.com>
-Cc:     linux@armlinux.org.uk, mingo@redhat.com, will.deacon@arm.com,
-        arnd@arndb.de, longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-Subject: Re: [PATCH v14 4/6] locking/qspinlock: Introduce starvation
- avoidance into CNA
-Message-ID: <YHWIezK9pbmbWxsu@hirez.programming.kicks-ass.net>
-References: <20210401153156.1165900-1-alex.kogan@oracle.com>
- <20210401153156.1165900-5-alex.kogan@oracle.com>
+        id S1345617AbhDMM12 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Apr 2021 08:27:28 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:33297 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345548AbhDMM1Q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Apr 2021 08:27:16 -0400
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MrPRB-1lrNHN3EEp-00oUcR; Tue, 13 Apr 2021 14:26:54 +0200
+Received: by mail-wr1-f45.google.com with SMTP id p6so9547056wrn.9;
+        Tue, 13 Apr 2021 05:26:54 -0700 (PDT)
+X-Gm-Message-State: AOAM531RTstzoW4h7X7DkOkmmdQSaYrP2Al/ftLmMhudAKAJCFLXLUcP
+        HjMk5ntP6e9qG/JnrR6iaGNd02jZkbV1GYuKFnM=
+X-Google-Smtp-Source: ABdhPJwKvFsyDfbyGYss2v7jOXjBzh0mMu283RtmlU14qXGq/cPdHuxJ1FGe8j5NYZ0lo1+YSfN65D73UMNsuNFan5U=
+X-Received: by 2002:adf:c70b:: with SMTP id k11mr37437743wrg.165.1618316814410;
+ Tue, 13 Apr 2021 05:26:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210401153156.1165900-5-alex.kogan@oracle.com>
+References: <20210413115439.1011560-1-schnelle@linux.ibm.com>
+In-Reply-To: <20210413115439.1011560-1-schnelle@linux.ibm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 13 Apr 2021 14:26:38 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1WTZOYpJ2TSjnbytQJWgtfwkQ8bXXdnqCnOn6ugJqN_w@mail.gmail.com>
+Message-ID: <CAK8P3a1WTZOYpJ2TSjnbytQJWgtfwkQ8bXXdnqCnOn6ugJqN_w@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic/io.h: Silence -Wnull-pointer-arithmetic
+ warning on PCI_IOBASE
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:dwhLFRyXtozyRyi1aq+zXpihKoy+XXL8N0nzsGkulGAzdwz913q
+ 7fTw87231jyO3u6CvzKm9eEf8D9WZFO6cLrezMC4w5U4uhS/tw+fzAlBhhMpxPJTZHjRlto
+ 49WKb3GeoAXWTThvGsmnA4O4qxcGlJSejpq135ayI/0VpyOlluzSzsrAcWpmKtMwE8Hg3yS
+ EXjszpaTTTDdYSir7qfKQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QOfJNXzDiqU=:EyA4ORiDC71ZdPS+LwbCIj
+ 6oCSQ/AlSWHA50t2dJeYhpqgohKBe39xLKPMr86cm06Hq0aoWiYDmDllz8mN2uCZTmnwXmqc+
+ 9v/98mj08bVQL8oz0k4CTaOWcanM/2seOEXVdvbpUKFXQGpno+7BOLgmPnm1zZld+xrLPa3cw
+ y5CJn6eDe/W7dew/+VX3ZF7OD+xg4gE8Mph7EuPS4ojOjA2HCo8KejEInEWIrDswqhxXYi4hd
+ Kv4759OF0w1bWpY3Z8eLEi9vd31s9VyjFwtUhPzTvUrY2i8922Ih0gpdvVJrOb8/8zDIxtce8
+ /ndK4EpuCqnA9TAOoYtA9LLqO1Egx0NlEiRSyZFVj/6JD2rFI3o+lK2uenwgd5vQqWSQD9Z0/
+ WG0ik7PnQ7HJQ9cCCNaQ0Mis7nlJn4WKiahilxVe6KGo7X6SACKT37d8twXOOL/h//TQzEpMf
+ xi0w7wSnko4nTT4tDLJ4YMKKlo7TE6uXjomEN6ID2rQMwBYRQfX1EpR3m1qyC/ASPjUeR0svN
+ L9t5sOvt1zhgThXGlFaUS0=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 01, 2021 at 11:31:54AM -0400, Alex Kogan wrote:
+On Tue, Apr 13, 2021 at 1:54 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+>
+> When PCI_IOBASE is not defined, it is set to 0 such that it is ignored
+> in calls to the readX/writeX primitives. While mathematically obvious
+> this triggers clang's -Wnull-pointer-arithmetic warning.
 
-> @@ -49,13 +55,33 @@ struct cna_node {
->  	u16			real_numa_node;
->  	u32			encoded_tail;	/* self */
->  	u32			partial_order;	/* enum val */
-> +	s32			start_time;
->  };
+Indeed, this is an annoying warning.
 
-> +/*
-> + * Controls the threshold time in ms (default = 10) for intra-node lock
-> + * hand-offs before the NUMA-aware variant of spinlock is forced to be
-> + * passed to a thread on another NUMA node. The default setting can be
-> + * changed with the "numa_spinlock_threshold" boot option.
-> + */
-> +#define MSECS_TO_JIFFIES(m)	\
-> +	(((m) + (MSEC_PER_SEC / HZ) - 1) / (MSEC_PER_SEC / HZ))
-> +static int intra_node_handoff_threshold __ro_after_init = MSECS_TO_JIFFIES(10);
-> +
-> +static inline bool intra_node_threshold_reached(struct cna_node *cn)
-> +{
-> +	s32 current_time = (s32)jiffies;
-> +	s32 threshold = cn->start_time + intra_node_handoff_threshold;
-> +
-> +	return current_time - threshold > 0;
-> +}
+> An additional complication is that PCI_IOBASE is explicitly typed as
+> "void __iomem *" which causes the type conversion that converts the
+> "unsigned long" port/addr parameters to the appropriate pointer type.
+> As non pointer types are used by drivers at the callsite since these are
+> dealing with I/O port numbers, changing the parameter type would cause
+> further warnings in drivers. Instead use "uintptr_t" for PCI_IOBASE
+> 0 and explicitly cast to "void __iomem *" when calling readX/writeX.
+>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  include/asm-generic/io.h | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+> index c6af40ce03be..8eb00bdef7ad 100644
+> --- a/include/asm-generic/io.h
+> +++ b/include/asm-generic/io.h
+> @@ -441,7 +441,7 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
+>  #endif /* CONFIG_64BIT */
+>
+>  #ifndef PCI_IOBASE
+> -#define PCI_IOBASE ((void __iomem *)0)
+> +#define PCI_IOBASE ((uintptr_t)0)
+>  #endif
+>
+>  #ifndef IO_SPACE_LIMIT
 
-None of this makes any sense:
+Your patch looks wrong in the way it changes the type of one of the definitions,
+but not the type of any of the architecture specific ones. It's also
+awkward since
+'void __iomem *' is really the correct type, while 'uintptr_t' is not!
 
- - why do you track time elapsed as a signed entity?
- - why are you using jiffies; that's terrible granularity.
+I think the real underlying problem is that '0' is a particularly bad
+default value,
+we should not have used this one in asm-generic, or maybe have left it as
+mandatory to be defined by an architecture to a sane value. Note that
+architectures that don't actually support I/O ports will cause a NULL
+pointer dereference when loading a legacy driver, which is exactly what clang
+is warning about here. Architectures that to support I/O ports in PCI typically
+map them at a fixed location in the virtual address space and should put that
+location here, rather than adding the pointer value to the port resources.
 
-As Andi already said, 10ms is silly large. You've just inflated the
-lock-acquire time for every contended lock to stupid land just because
-NUMA.
+What we might do instead here would be move the definition into those
+architectures that actually define the base to be at address zero, with a
+comment explaining why this is a bad location, and then changing the
+inb/outb style helpers to either an empty function or a WARN_ONCE().
 
-And this also brings me to the whole premise of this series; *why* are
-we optimizing this? What locks are so contended that this actually helps
-and shouldn't you be spending your time breaking those locks? That would
-improve throughput more than this ever can.
+On which architectures do you see the problem? How is the I/O port
+actually mapped there?
 
->  static void __init cna_init_nodes_per_cpu(unsigned int cpu)
->  {
->  	struct mcs_spinlock *base = per_cpu_ptr(&qnodes[0].mcs, cpu);
-
-> @@ -250,11 +284,17 @@ static void cna_order_queue(struct mcs_spinlock *node)
->  static __always_inline u32 cna_wait_head_or_lock(struct qspinlock *lock,
->  						 struct mcs_spinlock *node)
->  {
-> -	/*
-> -	 * Try and put the time otherwise spent spin waiting on
-> -	 * _Q_LOCKED_PENDING_MASK to use by sorting our lists.
-> -	 */
-> -	cna_order_queue(node);
-> +	struct cna_node *cn = (struct cna_node *)node;
-> +
-> +	if (!cn->start_time || !intra_node_threshold_reached(cn)) {
-> +		/*
-> +		 * Try and put the time otherwise spent spin waiting on
-> +		 * _Q_LOCKED_PENDING_MASK to use by sorting our lists.
-> +		 */
-> +		cna_order_queue(node);
-> +	} else {
-> +		cn->partial_order = FLUSH_SECONDARY_QUEUE;
-
-This is even worse naming..
-
-> +	}
->  
->  	return 0; /* we lied; we didn't wait, go do so now */
->  }
+      Arnd
