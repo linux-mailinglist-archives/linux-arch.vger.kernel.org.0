@@ -2,122 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C173635F4F4
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 15:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0C735F589
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 16:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbhDNNjQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Apr 2021 09:39:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351415AbhDNNjP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 14 Apr 2021 09:39:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 80488611AD;
-        Wed, 14 Apr 2021 13:38:50 +0000 (UTC)
-Date:   Wed, 14 Apr 2021 15:38:47 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Joe Perches <joe@perches.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Aleksa Sarai <cyphar@cyphar.com>
-Subject: Re: [PATCH] Documentation: syscalls: add a note about  ABI-agnostic
- types
-Message-ID: <20210414133847.2gwws46ktuqxkghu@wittgenstein>
-References: <20210409204304.1273139-1-yury.norov@gmail.com>
- <20210414044020.GA44464@yury-ThinkPad>
- <20210414081422.5a9d0c4b@coco.lan>
- <20210414084605.pdlnjkwa3h47jxno@wittgenstein>
- <YHa52ddAzcRGOB/m@kernel.org>
+        id S239201AbhDNNu6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Apr 2021 09:50:58 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:35022 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237770AbhDNNu4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 14 Apr 2021 09:50:56 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-275-gomfhLBpMGmSQ6lS9xz_RQ-1; Wed, 14 Apr 2021 14:50:23 +0100
+X-MC-Unique: gomfhLBpMGmSQ6lS9xz_RQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.2; Wed, 14 Apr 2021 14:50:23 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.012; Wed, 14 Apr 2021 14:50:23 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Niklas Schnelle' <schnelle@linux.ibm.com>,
+        'Arnd Bergmann' <arnd@arndb.de>
+CC:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        "Guo Ren" <guoren@kernel.org>
+Subject: RE: [PATCH] asm-generic/io.h: Silence -Wnull-pointer-arithmetic
+ warning on PCI_IOBASE
+Thread-Topic: [PATCH] asm-generic/io.h: Silence -Wnull-pointer-arithmetic
+ warning on PCI_IOBASE
+Thread-Index: AQHXMGSVFmL3q8InjEiRDqC8qAyY5Kqyacdg///5xgCAABWwYIABakUAgAAh4xA=
+Date:   Wed, 14 Apr 2021 13:50:23 +0000
+Message-ID: <ac3447d8db2146798b86135e9f49891d@AcuMS.aculab.com>
+References: <20210413115439.1011560-1-schnelle@linux.ibm.com>
+         <CAK8P3a1WTZOYpJ2TSjnbytQJWgtfwkQ8bXXdnqCnOn6ugJqN_w@mail.gmail.com>
+         <84ab737edbe13d390373850bf317920b3a486b87.camel@linux.ibm.com>
+         <CAK8P3a2NR2nhEffFQJdMq2Do_g2ji-7p3+iWyzw+aXD6gov05w@mail.gmail.com>
+         <11ead5c2c73c42cbbeef32966bc7e5c2@AcuMS.aculab.com>
+         <CAK8P3a3PK9zyeP4ymELtc2ZYnymECoACiigw9Za+pvSJpCk5=g@mail.gmail.com>
+         <40d4114fa34043d0841b81d09457c415@AcuMS.aculab.com>
+ <c6f3c9a70e054e9087f657bf4f142732fd43784c.camel@linux.ibm.com>
+In-Reply-To: <c6f3c9a70e054e9087f657bf4f142732fd43784c.camel@linux.ibm.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YHa52ddAzcRGOB/m@kernel.org>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 12:46:01PM +0300, Mike Rapoport wrote:
-> On Wed, Apr 14, 2021 at 10:46:05AM +0200, Christian Brauner wrote:
-> > On Wed, Apr 14, 2021 at 08:14:22AM +0200, Mauro Carvalho Chehab wrote:
-> > > Em Tue, 13 Apr 2021 21:40:20 -0700
-> > > Yury Norov <yury.norov@gmail.com> escreveu:
-> > > 
-> > > > Ping?
-> > > > 
-> > > > On Fri, Apr 09, 2021 at 01:43:04PM -0700, Yury Norov wrote:
-> > > > > Recently added memfd_secret() syscall had a flags parameter passed
-> > > > > as unsigned long, which requires creation of compat entry for it.
-> > > > > It was possible to change the type of flags to unsigned int and so
-> > > > > avoid bothering with compat layer.
-> > > > > 
-> > > > > https://www.spinics.net/lists/linux-mm/msg251550.html
-> > > > > 
-> > > > > Documentation/process/adding-syscalls.rst doesn't point clearly about
-> > > > > preference of ABI-agnostic types. This patch adds such notification.
-> > > > > 
-> > > > > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > > > > ---
-> > > > >  Documentation/process/adding-syscalls.rst | 7 +++++++
-> > > > >  1 file changed, 7 insertions(+)
-> > > > > 
-> > > > > diff --git a/Documentation/process/adding-syscalls.rst b/Documentation/process/adding-syscalls.rst
-> > > > > index 9af35f4ec728..46add16edf14 100644
-> > > > > --- a/Documentation/process/adding-syscalls.rst
-> > > > > +++ b/Documentation/process/adding-syscalls.rst
-> > > > > @@ -172,6 +172,13 @@ arguments (i.e. parameter 1, 3, 5), to allow use of contiguous pairs of 32-bit
-> > > > >  registers.  (This concern does not apply if the arguments are part of a
-> > > > >  structure that's passed in by pointer.)
-> > > > >  
-> > > > > +Whenever possible, try to use ABI-agnostic types for passing parameters to
-> > > > > +a syscall in order to avoid creating compat entry for it. Linux supports two
-> > > > > +ABI models - ILP32 and LP64. 
-> > > 
-> > > > > + The types like ``void *``, ``long``, ``size_t``,
-> > > > > +``off_t`` have different size in those ABIs;
-> > > 
-> > > In the case of pointers, the best is to use __u64. The pointer can then
-> > > be read on Kernelspace with something like this:
-> > > 
-> > > 	static inline void __user *media_get_uptr(__u64 arg)
-> > > 	{
-> > > 		return (void __user *)(uintptr_t)arg;
-> > > 	}
-> > > 
-> > > 
-> > > > > types like ``char`` and  ``int``
-> > > > > +have the same size and don't require a compat layer support. For flags, it's
-> > > > > +always better to use ``unsigned int``.
-> > > > > +
-> > > 
-> > > I don't think this is true for all compilers on userspace, as the C
-> > > standard doesn't define how many bits an int/unsigned int has. 
-> > > So, even if this is today's reality, things may change in the future.
-> > > 
-> > > For instance, I remember we had to replace "int" and "enum" by "__u32" 
-> > > and "long" by "__u64" at the media uAPI in the past, when we start
-> > > seeing x86_64 Kernels with 32-bits userspace and when cameras started 
-> > > being supported on arm32.
-> > > 
-> > > We did have some real bugs with "enum", as, on that time, some
-> > > compilers (gcc, I guess) were optimizing them to have less than
-> > > 32 bits on certain architectures, when it fits.
-> > 
-> > Fwiw, Aleksa and I have written extended syscall documentation
-> > documenting the agreement that we came to in a dedicated session with a
-> > wide range of kernel folks during Linux Plumbers last year. We simply
-> > never had time to actually send this series but fwiw here it is. It also
-> > mentions the use of correct types. If people feel it's worth it I can
-> > send as a proper series:
-> 
-> Yes, please.
+RnJvbTogTmlrbGFzIFNjaG5lbGxlDQo+IFNlbnQ6IDE0IEFwcmlsIDIwMjEgMTM6MzUNCj4gDQo+
+IE9uIFR1ZSwgMjAyMS0wNC0xMyBhdCAxNDoxMiArMDAwMCwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0K
+PiA+IEZyb206IEFybmQgQmVyZ21hbm4NCj4gPiA+IFNlbnQ6IDEzIEFwcmlsIDIwMjEgMTQ6NDAN
+Cj4gPiA+DQo+ID4gPiBPbiBUdWUsIEFwciAxMywgMjAyMSBhdCAzOjA2IFBNIERhdmlkIExhaWdo
+dCA8RGF2aWQuTGFpZ2h0QGFjdWxhYi5jb20+IHdyb3RlOg0KPiA+ID4gPiBGcm9tOiBBcm5kIEJl
+cmdtYW5uDQo+ID4gPiA+ID4gU2VudDogMTMgQXByaWwgMjAyMSAxMzo1OA0KPiA+ID4gPiAuLi4N
+Cj4gPiA+ID4gPiBUaGUgcmVtYWluaW5nIG9uZXMgKGNza3ksIG02OGssIHNwYXJjMzIpIG5lZWQg
+dG8gYmUgaW5zcGVjdGVkDQo+ID4gPiA+ID4gbWFudWFsbHkgdG8gc2VlIGlmIHRoZXkgY3VycmVu
+dGx5IHN1cHBvcnQgUENJIEkvTyBzcGFjZSBidXQgaW4NCj4gPiA+ID4gPiBmYWN0IHVzZSBhZGRy
+ZXNzIHplcm8gYXMgdGhlIGJhc2UgKHdpdGggbGFyZ2UgcmVzb3VyY2VzKSBvciB0aGV5DQo+ID4g
+PiA+ID4gc2hvdWxkIGFsc28gdHVybiB0aGUgb3BlcmF0aW9ucyBpbnRvIGEgTk9QLg0KPiA+ID4g
+Pg0KPiA+ID4gPiBJJ2QgZXhwZWN0IHNwYXJjMzIgdG8gdXNlIGFuIEFTSSB0byBhY2Nlc3MgUENJ
+IElPIHNwYWNlLg0KPiA+ID4gPiBJIGNhbid0IHF1aXRlIHJlbWVtYmVyIHdoZXRoZXIgSU8gc3Bh
+Y2Ugd2FzIHN1cHBvcnRlZCBhdCBhbGwuDQo+ID4gPg0KPiA+ID4gSSBzZWUgdGhpcyBiaXQgaW4g
+YXJjaC9zcGFyYy9rZXJuZWwvbGVvbl9wY2kuYw0KPiA+ID4NCj4gPiA+ICAqIFBDSSBNZW1vcnkg
+YW5kIFByZWZldGNoYWJsZSBNZW1vcnkgaXMgZGlyZWN0LW1hcHBlZC4gSG93ZXZlciBJL08gU3Bh
+Y2UgaXMNCj4gPiA+ICAqIGFjY2Vzc2VkIHRocm91Z2ggYSBXaW5kb3cgd2hpY2ggaXMgdHJhbnNs
+YXRlZCB0byBsb3cgNjRLQiBpbiBQQ0kgc3BhY2UsIHRoZQ0KPiA+ID4gICogZmlyc3QgNEtCIGlz
+IG5vdCB1c2VkIHNvIDYwS0IgaXMgYXZhaWxhYmxlLg0KPiA+ID4gLi4uDQo+ID4gPiAgICAgICAg
+IHBjaV9hZGRfcmVzb3VyY2Vfb2Zmc2V0KCZyZXNvdXJjZXMsICZpbmZvLT5pb19zcGFjZSwNCj4g
+PiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaW5mby0+aW9fc3BhY2Uuc3RhcnQg
+LSAweDEwMDApOw0KPiA+ID4NCj4gPiA+IHdoaWNoIG1lYW5zIHRoYXQgdGhlcmUgaXMgSS9PIHNw
+YWNlLCB3aGljaCBnZXRzIGFjY2Vzc2VkIHRocm91Z2ggd2hpY2hldmVyDQo+ID4gPiBtZXRob2Qg
+cmVhZGIoKSB1c2VzLiBIYXZpbmcgdGhlIG9mZnNldCBlcXVhbCB0byB0aGUgcmVzb3VyY2UgbWVh
+bnMgdGhhdA0KPiA+ID4gdGhlICcodm9pZCAqKTAnIHN0YXJ0IGlzIGNvcnJlY3QuDQo+ID4NCj4g
+PiBJdCBtdXN0IGhhdmUgYmVlbiB0aGUgVk1FYnVzIChhbmQgbWF5YmUgc0J1cykgc3BhcmMgdGhh
+dCB1c2VkIGFuIEFTSS4NCj4gPg0KPiA+IEkgZG8gcmVtZW1iZXIgaXNzdWVzIHdpdGggU29sYXJp
+cyBvZiBzb21lIFBDSSBjYXJkcyBub3QgbGlraW5nDQo+ID4gYmVpbmcgYXNzaWduZWQgYSBCQVIg
+YWRkcmVzcyBvZiB6ZXJvLg0KPiA+IFRoYXQgbWF5IGJlIHdoeSB0aGUgbG93IDRrIElPIHNwYWNl
+IGlzbid0IGFzc2lnbmVkIGhlcmUuDQo+ID4gKEkndmUgbmV2ZXIgcnVuIExpbnV4IG9uIHNwYXJj
+LCBqdXN0IFNWUjQgYW5kIFNvbGFyaXMuKQ0KPiA+DQo+ID4gSSBndWVzcyBzZXR0aW5nIFBDSV9J
+T0JBU0UgdG8gemVybyBpcyBzYWZlciB3aGVuIHlvdSBjYW4ndCB0cnVzdA0KPiA+IGRyaXZlcnMg
+bm90IHRvIHVzZSBpbmIoKSBpbnN0ZWFkIG9mIHJlYWRiKCkuDQo+ID4gT3Igd2hhdGV2ZXIgaW9f
+cmVhZCgpIGVuZHMgdXAgYmVpbmcuDQo+ID4NCj4gPiAJRGF2aWQNCj4gDQo+IFNvICJJIGd1ZXNz
+IHNldHRpbmcgUENJX0lPQkFTRSB0byB6ZXJvIGlzIHNhZmVyIHdoZW4geW91IGNhbid0IHRydXN0
+DQo+IGRyaXZlcnMgbm90IHRvIHVzZSBpbmIoKeKApiIgaW4gcHJpbmNpcGxlIGlzIHRydWUgb24g
+b3RoZXIgYXJjaGl0ZWN0dXJlcw0KPiB0aGFuIHNwYXJjIHRvbywgcmlnaHQ/IFNvIGRvIHlvdSB0
+aGluayB0aGlzIG1lYW5zIHdlIHNob3VsZG4ndCBnbyB3aXRoDQo+IEFybmQncyBpZGVhIG9mIG1h
+a2luZyBpbmIoKSBqdXN0IFdBUk5fT05DRSgpIGlmIFBDSV9JT0JBU0UgaXMgbm90DQo+IGRlZmlu
+ZWQgb3IganVzdCB0aGF0IGZvciBzcGFyYyBkZWZpbmluZyBpdCBhcyAwIHdvdWxkIGJlIHByZWZl
+cnJlZD8NCj4gDQo+IEFzIGZvciBzMzkwIHNpbmNlIHdlIG9ubHkgc3VwcG9ydCBhIGxpbWl0ZWQg
+bnVtYmVyIG9mIGRyaXZlcnMgSSB0aGluaw0KPiBmb3IgdXMgc3VjaCBhIFdBUk5fT05DRSgpIGZv
+ciBpbmIoKSB3b3VsZCBiZSBwcmVmZXJhYmxlLg0KPiANCj4gSSBndWVzcyBvbmUgb3B0aW9uIHdv
+dWxkIGJlIHRvIGxldCBlYWNoIGFyY2hpdGVjdHVyZSBvcHQgaW4gdG8gbGVhdmluZw0KPiBQQ0lf
+SU9CQVNFIHVuZGVmaW5lZCBidXQgaW4gdGhlIGZpcnN0IHBhdGNoIHB1c2ggUENJX0lPQkFTRSAw
+IGludG8gYWxsDQo+IGRyaXZlcnMgdGhhdCBjdXJyZW50bHkgZG9uJ3QgZGVmaW5lIGl0IGF0IGFs
+bCBfYW5kXyBkbyBub3QgZGVmaW5lIHRoZWlyDQo+IG93biBpbmIoKSBldGMuDQoNCkhvdyBtdWNo
+IGNvZGUgb3V0c2lkZSBvZiBsZWdhY3kgeDg2IGRyaXZlcnMgc2hvdWxkIGJlIHVzaW5nIGluYigp
+IGV0Yz8NCkknbSBub3Qgc3VyZSBhbnkgb3RoZXIgKG1vZGVybikgY3B1IGhhdmUgc2VwYXJhdGUg
+SU8gaW5zdHJ1Y3Rpb25zLg0KDQpCZWNhdXNlIHNvbWUgUENJKGUpIHJlc291cmNlcyBtaWdodCBi
+ZSBhdmFpbGFibGUgb24gbWVtb3J5IG9yIElPIEJBUnMNCihwb3NzaWJsZSBkdXBsaWNhdGUgQkFS
+IG9uIHNvbWUgY2FyZHMpIGFyZW4ndCB0aGVyZSBhbHNvIGlvcmVhZGIoKQ0KZnVuY3Rpb25zICh3
+aXRoIGFkZHJlc3NlcyBhcyBwYXJhbWV0ZXJzKT8NCklJUkMgb24geDg2IHRoZXkgdHJlYXQgc21h
+bGwgdmFsdWVzIGFzIElPIHBvcnRzIGFuZCBsYXJnZSBvbmVzDQphcyBtZW1vcnkgbWFwcGVkIGFk
+ZHJlc3Nlcy4NCklmIFBDSSBJTyBzcGFjZSBpcyBtZW1vcnkgbWFwcGVkIHRoZW4gdGhlc2Ugd291
+bGQgYmUgZGlyZWN0bHkgZXF1aXZhbGVudA0KdG8gcmVhZGIoKSAoZXRjKS4NCg0KU28gcGVyaGFw
+cyBpbmIoKSBzaG91bGQganVzdCBub3QgYmUgZGVmaW5lZCBhdCBhbGwgZXhjZXB0IG9uIHg4Nj8N
+CihQZXJoYXBzIGV4Y2VwdCBmb3IgQ09NUElMRV9URVNUKS4NCklmIGl0IGlzIGRlZmluZWQsIHRo
+ZW4gbWF5YmUgaXQgc2hvdWxkIG5ldmVyIGJlIGNhbGxlZD8NClNvIGEgV0FSTl9PTkNFKCkgcmV0
+dXJuaW5nIH4wIGZvciByZWFkcyBtaWdodCBldmVuIGJlIGJlc3QuDQoNCk9mIGNvdXJzZSwgdGhl
+cmUgd2lsbCBiZSBzb21lIG9ic2N1cmUgZmFsbG91dCAtIHRoZXJlIGFsd2F5cyBpcy4NCg0KCURh
+dmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3Vu
+dCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3
+Mzg2IChXYWxlcykNCg==
 
-Ok, I'll try to fix the commit messages and send it out.
-
-Christian
