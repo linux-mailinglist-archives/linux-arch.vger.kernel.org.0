@@ -2,146 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7559435F321
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 14:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFE735F3DB
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 14:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345830AbhDNMGg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Apr 2021 08:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbhDNMGf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Apr 2021 08:06:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB40C061574;
-        Wed, 14 Apr 2021 05:06:13 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0e8f000d8b3334e5756a5b.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:8f00:d8b:3334:e575:6a5b])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0ACE51EC0258;
-        Wed, 14 Apr 2021 14:06:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1618401971;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0bOwwcL9Kvry/JIj9MWAQh0BzulfnML/XsdeCNjF41M=;
-        b=EsuYHJF3Mmmb93XzYTaMkibkCmffFwBslbVFH03vanOMA4FczPFO8Se8D0necJ6pPRe4eC
-        vlU/Opqz1DYiJYhxQRuxEwS6CSX+TH9OaavRMct5Wi5VSGSGX30KGZnJI+9F2RmPi4TjgY
-        WkJ4fvykBHrcHCYEHYJPvusUTO96L9k=
-Date:   Wed, 14 Apr 2021 14:06:08 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, X86 ML <x86@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "H. J. Lu" <hjl.tools@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Jann Horn <jannh@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Carlos O'Donell <carlos@redhat.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        libc-alpha <libc-alpha@sourceware.org>,
+        id S237789AbhDNMfM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Apr 2021 08:35:12 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:28006 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229765AbhDNMfL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 14 Apr 2021 08:35:11 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13ECXLjs082105;
+        Wed, 14 Apr 2021 08:34:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=t08pgRARfONYID5oKmw0vTX25J07bAbAivjLULLeJlI=;
+ b=OBv9mqk8OQSiONC9E+wYDo1FXHt4dM3rdsn/IuJ84PSLffEAlbm5N7JCOofjkvPeaadQ
+ Uf9X0yQBTF6FTpHYq1QLbyJYsASUSxhAk8kV/0OCopur3k3UbKAdK8cP2vZlPeiuTgni
+ nsOBxNUL16Gm6n4mH8X43/fRQkqPURvE8EGQoM4YQdWknGNA9YNBKYlsg8idwDDa3Ep8
+ 3w0HMqtd7ZhsMkV+65U5aX6FXjnmHTJh0AImneJrzWPzRLESbZL30E8mArZlXUik6gNk
+ eSMY/BKHk41R2TOVihjo0uG2MovJkxDuRn3VPQczFrZORFxw/hphjKLLxpFpZkjpSpWW ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37vjtv8vx4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Apr 2021 08:34:42 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13ECYJmi088812;
+        Wed, 14 Apr 2021 08:34:41 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37vjtv8vwj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Apr 2021 08:34:41 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13ECRL8P008697;
+        Wed, 14 Apr 2021 12:34:39 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 37u3n89rcr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Apr 2021 12:34:39 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13ECYFmI13107558
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Apr 2021 12:34:15 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C380A4051;
+        Wed, 14 Apr 2021 12:34:37 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BFFA6A4055;
+        Wed, 14 Apr 2021 12:34:36 +0000 (GMT)
+Received: from sig-9-145-163-27.de.ibm.com (unknown [9.145.163.27])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 14 Apr 2021 12:34:36 +0000 (GMT)
+Message-ID: <c6f3c9a70e054e9087f657bf4f142732fd43784c.camel@linux.ibm.com>
+Subject: Re: [PATCH] asm-generic/io.h: Silence -Wnull-pointer-arithmetic
+ warning on PCI_IOBASE
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "'Arnd Bergmann'" <arnd@arndb.de>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 5/6] x86/signal: Detect and prevent an alternate
- signal stack overflow
-Message-ID: <20210414120608.GE10709@zn.tnic>
-References: <20210316065215.23768-1-chang.seok.bae@intel.com>
- <20210316065215.23768-6-chang.seok.bae@intel.com>
- <CALCETrU_n+dP4GaUJRQoKcDSwaWL9Vc99Yy+N=QGVZ_tx_j3Zg@mail.gmail.com>
- <20210325185435.GB32296@zn.tnic>
- <CALCETrXQZuvJQrHDMst6PPgtJxaS_sPk2JhwMiMDNPunq45YFg@mail.gmail.com>
- <20210326103041.GB25229@zn.tnic>
- <DB68C825-25F9-48F9-AFAD-4F6C7DCA11F8@intel.com>
- <20210414101250.GD10709@zn.tnic>
- <87o8eh9k7w.fsf@oldenburg.str.redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Guo Ren <guoren@kernel.org>
+Date:   Wed, 14 Apr 2021 14:34:36 +0200
+In-Reply-To: <40d4114fa34043d0841b81d09457c415@AcuMS.aculab.com>
+References: <20210413115439.1011560-1-schnelle@linux.ibm.com>
+         <CAK8P3a1WTZOYpJ2TSjnbytQJWgtfwkQ8bXXdnqCnOn6ugJqN_w@mail.gmail.com>
+         <84ab737edbe13d390373850bf317920b3a486b87.camel@linux.ibm.com>
+         <CAK8P3a2NR2nhEffFQJdMq2Do_g2ji-7p3+iWyzw+aXD6gov05w@mail.gmail.com>
+         <11ead5c2c73c42cbbeef32966bc7e5c2@AcuMS.aculab.com>
+         <CAK8P3a3PK9zyeP4ymELtc2ZYnymECoACiigw9Za+pvSJpCk5=g@mail.gmail.com>
+         <40d4114fa34043d0841b81d09457c415@AcuMS.aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87o8eh9k7w.fsf@oldenburg.str.redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cXeDngAzJk4G47j_fUM_9aNOG6XcQ9XV
+X-Proofpoint-ORIG-GUID: XfhqNwJhoXUPrB125TwaEW8uHjp9E7Ad
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-14_06:2021-04-14,2021-04-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 bulkscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=999 clxscore=1011 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104140086
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 01:30:43PM +0200, Florian Weimer wrote:
-> Is this discussion about better behavior (at least diagnostics) for
-> existing applications, without any code changes?  Or an alternative
-> programming model?
+On Tue, 2021-04-13 at 14:12 +0000, David Laight wrote:
+> From: Arnd Bergmann
+> > Sent: 13 April 2021 14:40
+> > 
+> > On Tue, Apr 13, 2021 at 3:06 PM David Laight <David.Laight@aculab.com> wrote:
+> > > From: Arnd Bergmann
+> > > > Sent: 13 April 2021 13:58
+> > > ...
+> > > > The remaining ones (csky, m68k, sparc32) need to be inspected
+> > > > manually to see if they currently support PCI I/O space but in
+> > > > fact use address zero as the base (with large resources) or they
+> > > > should also turn the operations into a NOP.
+> > > 
+> > > I'd expect sparc32 to use an ASI to access PCI IO space.
+> > > I can't quite remember whether IO space was supported at all.
+> > 
+> > I see this bit in arch/sparc/kernel/leon_pci.c
+> > 
+> >  * PCI Memory and Prefetchable Memory is direct-mapped. However I/O Space is
+> >  * accessed through a Window which is translated to low 64KB in PCI space, the
+> >  * first 4KB is not used so 60KB is available.
+> > ...
+> >         pci_add_resource_offset(&resources, &info->io_space,
+> >                                 info->io_space.start - 0x1000);
+> > 
+> > which means that there is I/O space, which gets accessed through whichever
+> > method readb() uses. Having the offset equal to the resource means that
+> > the '(void *)0' start is correct.
+> 
+> It must have been the VMEbus (and maybe sBus) sparc that used an ASI.
+> 
+> I do remember issues with Solaris of some PCI cards not liking
+> being assigned a BAR address of zero.
+> That may be why the low 4k IO space isn't assigned here.
+> (I've never run Linux on sparc, just SVR4 and Solaris.)
+> 
+> I guess setting PCI_IOBASE to zero is safer when you can't trust
+> drivers not to use inb() instead of readb().
+> Or whatever io_read() ends up being.
+> 
+> 	David
 
-Former.
+So "I guess setting PCI_IOBASE to zero is safer when you can't trust
+drivers not to use inb()…" in principle is true on other architectures
+than sparc too, right? So do you think this means we shouldn't go with
+Arnd's idea of making inb() just WARN_ONCE() if PCI_IOBASE is not
+defined or just that for sparc defining it as 0 would be preferred?
 
-> Does noavx512 acutally reduce the XSAVE size to AVX2 levels?
+As for s390 since we only support a limited number of drivers I think
+for us such a WARN_ONCE() for inb() would be preferable.
 
-Yeah.
+I guess one option would be to let each architecture opt in to leaving
+PCI_IOBASE undefined but in the first patch push PCI_IOBASE 0 into all
+drivers that currently don't define it at all _and_ do not define their
+own inb() etc.
 
-> Or would you need noxsave?
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
-I don't think so.
-
-> One possibility is that the sigaltstack size check prevents application
-> from running which work just fine today because all they do is install a
-> stack overflow handler, and stack overflow does not actually happen.
-
-So sigaltstack(2) says in the NOTES:
-
-       Functions  called  from  a signal handler executing on an alternate signal stack
-       will also use the alternate signal stack.  (This also applies  to  any  handlers
-       invoked for other signals while the process is executing on the alternate signal
-       stack.)  Unlike the standard stack, the system does not automatically extend the
-       alternate  signal  stack.   Exceeding the allocated size of the alternate signal
-       stack will lead to unpredictable results.
-
-> So if sigaltstack fails and the application checks the result of the
-> system call, it probably won't run at all. Shifting the diagnostic to
-> the pointer where the signal would have to be delivered is perhaps the
-> only thing that can be done.
-
-So using the example from the same manpage:
-
-       The most common usage of an alternate signal stack is to handle the SIGSEGV sig‐
-       nal that is generated if the space available for the normal process stack is ex‐
-       hausted: in this case, a signal handler for SIGSEGV cannot  be  invoked  on  the
-       process stack; if we wish to handle it, we must use an alternate signal stack.
-
-and considering these "unpredictable results" would it make sense or
-even be at all possible to return SIGFAIL from that SIGSEGV signal
-handler which should run on the sigaltstack but that sigaltstack
-overflows?
-
-I think we wanna be able to tell the process through that previously
-registered SIGSEGV handler which is supposed to run on the sigaltstack,
-that that stack got overflowed.
-
-Or is this use case obsolete and this is not what people do at all?
-
-> As for SIGFAIL in particular, I don't think there are any leftover
-> signal numbers.  It would need a prctl to assign the signal number, and
-> I'm not sure if there is a useful programming model because signals do
-> not really compose well even today.  SIGFAIL adds another point where
-> libraries need to collaborate, and we do not have a mechanism for that.
-> (This is about what Rich Felker termed “library-safe code”, proper
-> maintenance of process-wide resources such as the current directory.)
-
-Oh fun.
-
-I guess if Linux goes and does something, people would adopt it and
-it'll become standard. :-P
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
