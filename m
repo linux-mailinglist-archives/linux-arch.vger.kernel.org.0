@@ -2,95 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 311F135F8D8
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 18:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDC435F903
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 18:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352657AbhDNQSM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Apr 2021 12:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345859AbhDNQSK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Apr 2021 12:18:10 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26C7C061574
-        for <linux-arch@vger.kernel.org>; Wed, 14 Apr 2021 09:17:48 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id w8so8063505plg.9
-        for <linux-arch@vger.kernel.org>; Wed, 14 Apr 2021 09:17:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0eL/B6Xsq6Q/24IYguuLfwVoh9qvE+Qw7MZOf5nGHyg=;
-        b=DWKLnEjIRc6nqOLRuoo9K6bOLQMW5c1mqbVDL7yGhVs88fhUl8h/izys8YK3f/gwVM
-         PcQzKMKIFq9o0hwsUhKISfLDewBl34wWHl1mNxtvbMhH9ULpfprQDggqRkhav/DB3fq5
-         Lt6TuRqVyREjop1FfnrZ4OwusSTzbuxed+y0o4pqUcZLeuQPE7o9Q0ERP1T2859SlHBK
-         swDXpNsO2sseabX97kJN/6O4FliaKLmz/0n5+zOfFOhIc71jVo20vJcnie48mgAzBh32
-         YSPSVWZiitdeHf/qr6sagNpJv+45RDkOHNv90Ca9f1wMkoDLDoLK0Hka9u0ctg+akLmV
-         r8Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0eL/B6Xsq6Q/24IYguuLfwVoh9qvE+Qw7MZOf5nGHyg=;
-        b=Fcji6r3dE5ff4Ocy4vuoeWdObLIgUzyA6HAGntls0uqBD2l8F2HpBaecPLqyPErTEl
-         tQZkI3AynFlAv9Q2DWaE/K/QP20fI2tqgtnlMde+Ne0oD4j9+tCw9OoNT03/s/rgTEPV
-         +hZ527FQJwQ46dCPA83Pkz/b7xjXOXy3r2csKQu9qH1hWqepwKdfDuXbhZFIlSo+M+wW
-         VhyA56pEOA0oDbKG6gdBVSylYzJGGQBoWhiza8SUClMm9k5lRzGwgE/SzbcTXDDlzTDm
-         GB3q5MvHnZhXcBMovlXrWOEXERbsp2e870x9VEtq9WosYd6tbB7EqE0KaqqXsPxGWzwj
-         Zviw==
-X-Gm-Message-State: AOAM531um0E1CUH4eK7UDAY181OUiXxr4GMuUmtwu+AIjlC0wSjoIafH
-        MrcZM6MhQWyzfah8/gLoDYkxNg==
-X-Google-Smtp-Source: ABdhPJx5Ic6DX2vQpbh90Yradu9W82hKhZ9FhXc7n7c05NjGIO6V9+vgFJUqzgqafzt2aOiNHdkPHQ==
-X-Received: by 2002:a17:902:cec1:b029:eb:66ee:6da0 with SMTP id d1-20020a170902cec1b02900eb66ee6da0mr1001099plg.84.1618417068337;
-        Wed, 14 Apr 2021 09:17:48 -0700 (PDT)
-Received: from hermes.local (76-14-218-44.or.wavecable.com. [76.14.218.44])
-        by smtp.gmail.com with ESMTPSA id r5sm5092591pjd.38.2021.04.14.09.17.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Apr 2021 09:17:48 -0700 (PDT)
-Date:   Wed, 14 Apr 2021 09:17:38 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, arnd@arndb.de, akpm@linux-foundation.org,
-        konrad.wilk@oracle.com, hch@lst.de, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, joro@8bytes.org, will@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, vkuznets@redhat.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com,
-        sunilmut@microsoft.com
-Subject: Re: [Resend RFC PATCH V2 08/12] UIO/Hyper-V: Not load UIO HV driver
- in the isolation VM.
-Message-ID: <20210414091738.3df4bed5@hermes.local>
-In-Reply-To: <YHcOL+HlEoh5jPb8@kroah.com>
-References: <20210414144945.3460554-1-ltykernel@gmail.com>
-        <20210414144945.3460554-9-ltykernel@gmail.com>
-        <YHcOL+HlEoh5jPb8@kroah.com>
+        id S1351634AbhDNQcL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Apr 2021 12:32:11 -0400
+Received: from mout.gmx.net ([212.227.15.18]:34845 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349084AbhDNQcK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 14 Apr 2021 12:32:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1618417896;
+        bh=FZ9GrzKKcGZUQfcEpxp5BlYmttssC2dTkHA74RKI9aU=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=KkESVuej5eT2CJPcF5VQs0Oeu1LoTXOqiXguXm5VZoxTivkFFQuUBisUIRnLvJcpk
+         qqN+nHf+AlYUbar99jp/FNpAlv4uLlo4leSeAlO69tiR3uTSMugeq/z80WhkwhL4Md
+         o+22OYHsdvxq6NsZIarwaP0M9sIsMA08a2aylvkM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.158.221]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MybKp-1lkvOX1jkD-00yvkz; Wed, 14
+ Apr 2021 18:31:36 +0200
+Subject: Re: [PATCH 15/20] kbuild: parisc: use common install script
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org
+References: <20210407053419.449796-1-gregkh@linuxfoundation.org>
+ <20210407053419.449796-16-gregkh@linuxfoundation.org>
+ <CAK7LNATkQfwqr9-G5KwGmWDeG81Wn0eb3ZVxopJjxCq18S28=Q@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+Message-ID: <5e16a94b-7383-3ec5-949f-f4c5d2c812f5@gmx.de>
+Date:   Wed, 14 Apr 2021 18:30:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAK7LNATkQfwqr9-G5KwGmWDeG81Wn0eb3ZVxopJjxCq18S28=Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:TDlocKOvRUziINmfgs2TvkiCW4nNU7lXGq0VVBP61oTJiZ0A07t
+ /buLeUgCiwyBnknrQEm5Kd7KAeUkHPkdNTwZ0+W+iDyhuqE7EeRfO11ZX6GvCqHC0aLq2rA
+ JE+DPR60MNvV6kDw82f/M2OtDqptP+wtaZAUS5mev3hxVqg8ImkolZWdDs6BHvcM9j9tNXn
+ +buLPIV04t7HhKxX/vB4Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:KDpldex5/p0=:M1Mu70R/n4l0ji5vnqhKZc
+ aE4E6oGYhzHyb9dW997jQgjZf5WYxb8ADiT3ComF+GSNVtt5omGFuJWNKYInTOhsRl5d253ws
+ OOgVinVqLCsKwIQ4oAVchOz55MgeDqD/jVKBjONwsyWHNWrF924g3A7pHTuzOThOPV5mQQyz8
+ /+6PY9/IdFnhFz4lZbP5uQZCbeBRfIIqVPwL+M9XGEn/YwUrB+ovbEPLMtLIP48CNS4OijmPE
+ vwAlMBDvnjr+iKKnOhNg/NeqazGxifbnSAkqw2t2H/CUpP6jQX4chbxKIubX6mzZ0MG0LIIc1
+ yUWZU2ow/Bw9VAhep6zngAj9KsdjHQkU3r/+b5vP8Re0gsWGwbUfRG+T6L4ZITs/fjfQF8BUI
+ Px+KsBsg434zXuOvdBY426jkjhDPSPIIoWeL8cXUQag03yW6yrwkf9PlxAj69sYpFBbeGraoE
+ sX4OmnoNQI8p25hIsYx0E7APYrW+SlSz43sg6W185rA7ZPgh7CiGpPh7F1Btva5xYOgG/Pf30
+ xMMS9cD8CQJyvnizwszlF9xiz7apweEJTVROhUrw4xatKtmOqbaKPJlbrZmkfFge28uBPmIz/
+ K8txzSuOU24Ro5LMrctPOfA46MkKUjLze76aMlG2evJ2VYzy06UerOBmuVvPb0v8ZYPUFAHrB
+ pwMIMU5GIuuP/keyzKdHQU9sGo0T6bNFFR3it6xHXAfNEaGX01QsK40fSVeh1YRizkPIQbXKC
+ 0Es48oCCJPCLUsYZvugzJiL8zLcIX2QXYdbEweFPTOvwVpz4w37MEng5cD3nVb+y2gK2FHPY5
+ afVuykgZNonRixH7CdeXpnTzb410b77HlsZ9u4KA4x+xR1amf5ZvO1uK669jFa7QW15A1ttU5
+ cIW2c0lPK6y72+8wRTVZVBRHrkd25IviKMp/fdE2/O5fjNwDvnOaQENHNEXlx7FJrG63uWCDk
+ E5s3GsNwjCH6kpw3cSjlydVn3CD+dw5WXdFkhkTB64SUIkQTk/GODXR4M8+rfLUaokDikEI9C
+ 1craIDnyBQvzW9PxcuOCakPmFEQi9I+MVY73oLRAHqD4fqXihxxxIi1xZP45hoONmWTnA4UIU
+ VUSPricM6+Dpt9E2o2STiSpspBeRloRymryOpu4pqPOWqUvqDQOVJnz2k6+uMLGZpMzgKNVT/
+ RLQZIEur75igqG0CZOdH5H1KbPUjN77p6E+3TgCSdglz/Lsq7om8dOgfuS/tKhwTcL8Mk=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 14 Apr 2021 17:45:51 +0200
-Greg KH <gregkh@linuxfoundation.org> wrote:
+On 4/7/21 1:23 PM, Masahiro Yamada wrote:
+> On Wed, Apr 7, 2021 at 2:34 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+>>
+>> The common scripts/install.sh script will now work for parisc, all that
+>> is needed is to add the compressed image type to it.  So add that file
+>> type check, and then we can remove the two different copies of the
+>> parisc install.sh script that were only different by one line and have
+>> the arch call the common install script.
+>>
+>> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Cc: linux-parisc@vger.kernel.org
+>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> ---
+>>   arch/parisc/Makefile        |  4 +--
+>>   arch/parisc/boot/Makefile   |  2 +-
+>>   arch/parisc/boot/install.sh | 65 ------------------------------------
+>>   arch/parisc/install.sh      | 66 ------------------------------------=
+-
+>>   scripts/install.sh          |  1 +
+>>   5 files changed, 4 insertions(+), 134 deletions(-)
+>>   delete mode 100644 arch/parisc/boot/install.sh
+>>   delete mode 100644 arch/parisc/install.sh
+>>
+>> diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
+>> index 7d9f71aa829a..296d8ab8e2aa 100644
+>> --- a/arch/parisc/Makefile
+>> +++ b/arch/parisc/Makefile
+>> @@ -164,10 +164,10 @@ vmlinuz: vmlinux
+>>   endif
+>>
+>>   install:
+>> -       $(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
+>> +       $(CONFIG_SHELL) $(srctree)/scripts/install.sh \
+>>                          $(KERNELRELEASE) vmlinux System.map "$(INSTALL=
+_PATH)"
+>>   zinstall:
+>> -       $(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
+>> +       $(CONFIG_SHELL) $(srctree)/scripts/install.sh \
+>>                          $(KERNELRELEASE) vmlinuz System.map "$(INSTALL=
+_PATH)"
+>>
+>>   CLEAN_FILES    +=3D lifimage
+>> diff --git a/arch/parisc/boot/Makefile b/arch/parisc/boot/Makefile
+>> index 61f44142cfe1..ad2611929aee 100644
+>> --- a/arch/parisc/boot/Makefile
+>> +++ b/arch/parisc/boot/Makefile
+>> @@ -17,5 +17,5 @@ $(obj)/compressed/vmlinux: FORCE
+>>          $(Q)$(MAKE) $(build)=3D$(obj)/compressed $@
+>>
+>>   install: $(CONFIGURE) $(obj)/bzImage
+>> -       sh -x  $(srctree)/$(obj)/install.sh $(KERNELRELEASE) $(obj)/bzI=
+mage \
+>> +       sh -x  $(srctree)/scripts/install.sh $(KERNELRELEASE) $(obj)/bz=
+Image \
+>>                System.map "$(INSTALL_PATH)"
+>
+>
+>
+> As far as I understood, there is no way to invoke this 'install' target
+> in arch/parisc/boot/Makefile since everything is done
+> by arch/parisc/Makefile.
+>
+> Can we remove this 'install' rule entirely?
 
-> On Wed, Apr 14, 2021 at 10:49:41AM -0400, Tianyu Lan wrote:
-> > From: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> > 
-> > UIO HV driver should not load in the isolation VM for security reason.
-> > Return ENOTSUPP in the hv_uio_probe() in the isolation VM.
-> > 
-> > Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+Yes, I think it can go in arch/parisc/boot/Makefile.
 
-This is debatable, in isolation VM's shouldn't userspace take responsibility
-to validate host communication. If that is an issue please participate with
-the DPDK community (main user of this) to make sure netvsc userspace driver
-has the required checks.
-
+Helge
