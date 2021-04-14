@@ -2,97 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBBA335F9EF
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 19:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B501735FA17
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 19:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350411AbhDNRbw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Apr 2021 13:31:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46407 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233568AbhDNRbu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 14 Apr 2021 13:31:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618421487;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pwu8ITVpaktX/oaFXebOFcED+CIuIn8065SfkxgfWGI=;
-        b=iTt40Y0tPmQzD8yLHF5bBjlU3I1o9EYos+2WhgWVijeVp0hRx3wYbL6tNQeN0HpfQS4ymr
-        WHm2ELVDAyf0rRTTw7GhK74+CEsD//MGm7AVFIRoihvLxIs0yN0XG2rS6yVt9hKfs0DDeu
-        Amjyff9iOBjHuXupCdLLhVa/QC4+zv4=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-420-i9tRVYHdO8uGsLLm6lUFRw-1; Wed, 14 Apr 2021 13:31:25 -0400
-X-MC-Unique: i9tRVYHdO8uGsLLm6lUFRw-1
-Received: by mail-qt1-f197.google.com with SMTP id o15-20020ac872cf0000b02901b358afcd96so2375223qtp.1
-        for <linux-arch@vger.kernel.org>; Wed, 14 Apr 2021 10:31:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Pwu8ITVpaktX/oaFXebOFcED+CIuIn8065SfkxgfWGI=;
-        b=M6x4UbQLP9NrEkORJuLVpPbD0+t9s3jtbukpRlpSsOfWCRHsq8O4azNEh0GLUZ83cd
-         n1LoHIT06igZuyrhf+nbuLoRRcxxe5TBmdlvGd94KP4ESVcJUmuoex9cNi/wRLu5XQ9n
-         U2BbSEU8GNNMfQPxEusNd5S84/zoBIn/TiKR1lZboJZ51IcpXew6Xo6/LmYyYW+7Nano
-         DLjP7QjHBGUljqDOvGvmz//SwBa0KTIRbAI9VnejlERBdhazqocJTwyTuzW44bWLOxX0
-         ZmmmM0f7hfnykb/8O0IUN4jrnzbnZMy2kfcqEqXWtBjkKWjOUf3WNt01IvE263VFyzVi
-         zqkg==
-X-Gm-Message-State: AOAM533XldzPD8SEczyIvo85kcnMK+5BXRwZhOp6eVoXRonwZ0I8Oa5l
-        oo3Ycc1ofs3UmQ6S5Y8sBPRuY6ltIXoOKdUDtovNMBLrtrXPxYDDIzFCIvQj7jbJ73itqz96H2y
-        mqr8t946LvIgMxf2y/4MNag==
-X-Received: by 2002:ae9:dcc1:: with SMTP id q184mr6147256qkf.482.1618421480635;
-        Wed, 14 Apr 2021 10:31:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyRXvclwrtNw0vyg4pKHWPDmETRkr+Mf1wxudR7KTzhxmhPecsOFB7lkLfuIC0V32mXc/loLw==
-X-Received: by 2002:ae9:dcc1:: with SMTP id q184mr6147223qkf.482.1618421480434;
-        Wed, 14 Apr 2021 10:31:20 -0700 (PDT)
-Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
-        by smtp.gmail.com with ESMTPSA id t17sm18505qtr.42.2021.04.14.10.31.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Apr 2021 10:31:19 -0700 (PDT)
-From:   Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Subject: Re: [External] : Re: [PATCH v14 4/6] locking/qspinlock: Introduce
- starvation avoidance into CNA
-To:     Andi Kleen <ak@linux.intel.com>, Waiman Long <llong@redhat.com>
-Cc:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, will.deacon@arm.com,
-        arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-References: <20210401153156.1165900-1-alex.kogan@oracle.com>
- <20210401153156.1165900-5-alex.kogan@oracle.com>
- <87mtu2vhzz.fsf@linux.intel.com>
- <CA1141EF-76A8-47A9-97B9-3CB2FC246B1A@oracle.com>
- <4a9dbfa7-db68-a2dc-9018-a5b74f0f421c@redhat.com>
- <20210414172602.GW3762101@tassilo.jf.intel.com>
-Message-ID: <6c968acd-dda2-ed1f-6582-b7811030761e@redhat.com>
-Date:   Wed, 14 Apr 2021 13:31:17 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S1351098AbhDNRv3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Apr 2021 13:51:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34204 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351076AbhDNRv3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 14 Apr 2021 13:51:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CEFD06121E;
+        Wed, 14 Apr 2021 17:51:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1618422667;
+        bh=L91rvimOeNnMBAtgfvMuBl6PMf48osTpkcfJfYNf/Ko=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Bv2bVc7Gww8cnl36F7mCL0FIsBbV7kyaEA4yN0zHeaZpLhkI18bnDMmBt/1kHBVDs
+         Y38NL4scoLwrcgzAoWLF/iW4/xpg4EcH3894Yj6C3jkM6uxESyk+HFU+mWju6aX+Ue
+         ndRXQh7l+5zR0fibHPNVAB0BB7J/PVW0l/fJPNuo=
+Date:   Wed, 14 Apr 2021 19:51:04 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org
+Subject: Re: [PATCH 15/20] kbuild: parisc: use common install script
+Message-ID: <YHcriObDPauSbfYd@kroah.com>
+References: <20210407053419.449796-1-gregkh@linuxfoundation.org>
+ <20210407053419.449796-16-gregkh@linuxfoundation.org>
+ <CAK7LNATkQfwqr9-G5KwGmWDeG81Wn0eb3ZVxopJjxCq18S28=Q@mail.gmail.com>
+ <5e16a94b-7383-3ec5-949f-f4c5d2c812f5@gmx.de>
 MIME-Version: 1.0
-In-Reply-To: <20210414172602.GW3762101@tassilo.jf.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5e16a94b-7383-3ec5-949f-f4c5d2c812f5@gmx.de>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/14/21 1:26 PM, Andi Kleen wrote:
->> The CNA code, if enabled, will be in vmlinux, not in a kernel module. As a
->> result, I think a module parameter will be no different from a kernel
->> command line parameter in this regard.
-> You can still change it in /sys at runtime, even if it's in the vmlinux.
+On Wed, Apr 14, 2021 at 06:30:59PM +0200, Helge Deller wrote:
+> On 4/7/21 1:23 PM, Masahiro Yamada wrote:
+> > On Wed, Apr 7, 2021 at 2:34 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > > 
+> > > The common scripts/install.sh script will now work for parisc, all that
+> > > is needed is to add the compressed image type to it.  So add that file
+> > > type check, and then we can remove the two different copies of the
+> > > parisc install.sh script that were only different by one line and have
+> > > the arch call the common install script.
+> > > 
+> > > Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> > > Cc: Helge Deller <deller@gmx.de>
+> > > Cc: linux-parisc@vger.kernel.org
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >   arch/parisc/Makefile        |  4 +--
+> > >   arch/parisc/boot/Makefile   |  2 +-
+> > >   arch/parisc/boot/install.sh | 65 ------------------------------------
+> > >   arch/parisc/install.sh      | 66 -------------------------------------
+> > >   scripts/install.sh          |  1 +
+> > >   5 files changed, 4 insertions(+), 134 deletions(-)
+> > >   delete mode 100644 arch/parisc/boot/install.sh
+> > >   delete mode 100644 arch/parisc/install.sh
+> > > 
+> > > diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
+> > > index 7d9f71aa829a..296d8ab8e2aa 100644
+> > > --- a/arch/parisc/Makefile
+> > > +++ b/arch/parisc/Makefile
+> > > @@ -164,10 +164,10 @@ vmlinuz: vmlinux
+> > >   endif
+> > > 
+> > >   install:
+> > > -       $(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
+> > > +       $(CONFIG_SHELL) $(srctree)/scripts/install.sh \
+> > >                          $(KERNELRELEASE) vmlinux System.map "$(INSTALL_PATH)"
+> > >   zinstall:
+> > > -       $(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
+> > > +       $(CONFIG_SHELL) $(srctree)/scripts/install.sh \
+> > >                          $(KERNELRELEASE) vmlinuz System.map "$(INSTALL_PATH)"
+> > > 
+> > >   CLEAN_FILES    += lifimage
+> > > diff --git a/arch/parisc/boot/Makefile b/arch/parisc/boot/Makefile
+> > > index 61f44142cfe1..ad2611929aee 100644
+> > > --- a/arch/parisc/boot/Makefile
+> > > +++ b/arch/parisc/boot/Makefile
+> > > @@ -17,5 +17,5 @@ $(obj)/compressed/vmlinux: FORCE
+> > >          $(Q)$(MAKE) $(build)=$(obj)/compressed $@
+> > > 
+> > >   install: $(CONFIGURE) $(obj)/bzImage
+> > > -       sh -x  $(srctree)/$(obj)/install.sh $(KERNELRELEASE) $(obj)/bzImage \
+> > > +       sh -x  $(srctree)/scripts/install.sh $(KERNELRELEASE) $(obj)/bzImage \
+> > >                System.map "$(INSTALL_PATH)"
+> > 
+> > 
+> > 
+> > As far as I understood, there is no way to invoke this 'install' target
+> > in arch/parisc/boot/Makefile since everything is done
+> > by arch/parisc/Makefile.
+> > 
+> > Can we remove this 'install' rule entirely?
+> 
+> Yes, I think it can go in arch/parisc/boot/Makefile.
 
-I see, thank for the clarification.
+It's already there today, so I'll delete the rule from
+arch/parisc/Makefile in my next round.
 
-Cheers,
-Longman
+thanks,
 
+greg k-h
