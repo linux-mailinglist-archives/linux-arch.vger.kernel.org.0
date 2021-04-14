@@ -2,116 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC0D35EAE3
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 04:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1776235EBFB
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Apr 2021 06:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbhDNCcd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Apr 2021 22:32:33 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:43126 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbhDNCcd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Apr 2021 22:32:33 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13E2QMj9063285;
-        Wed, 14 Apr 2021 02:30:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=w6C5CtiBnXdjgKEXIjAFsIoL+gLxujYJkEUCd/DEkqE=;
- b=AnHgQGespbOtXpgfo4hpU1xuzKDoFd+9fu6cGkCEAcERDAYam8dJTA5Jaw+fmOVDGgqI
- 72neJ3vY0c1ICt2Z70wptFghoiKi7GNpMLS6jZewClNINB/Lcs5xXw/DN8UQredSSK/K
- +e+pZvuFdlaugfhIQmEi5J+b0YGUb8FE81eKN+LHzKE3EO3bs4Bkxxhkhx6bO58UTOpv
- KYCi2aNvLYWYjVOgmfG0SikXgg8IiJVp4aNEAnlC3J13c+1x3Owq+2F4wQ+YgcwMiA3F
- wehjiErqikczxC3t66xaK+Ri34EoucTZrlygfFCFIaJgeXn2hKoZHsfdShTHu4mwToJ6 bA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 37u1hbh0m2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Apr 2021 02:30:47 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13E2PVFF055389;
-        Wed, 14 Apr 2021 02:30:45 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 37unst8pth-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Apr 2021 02:30:45 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 13E2Uh9g028709;
-        Wed, 14 Apr 2021 02:30:43 GMT
-Received: from [10.39.235.234] (/10.39.235.234)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 14 Apr 2021 02:30:43 +0000
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [External] : Re: [PATCH v14 4/6] locking/qspinlock: Introduce
- starvation avoidance into CNA
-From:   Alex Kogan <alex.kogan@oracle.com>
-In-Reply-To: <20210413212203.GT3762101@tassilo.jf.intel.com>
-Date:   Tue, 13 Apr 2021 22:30:41 -0400
-Cc:     linux@armlinux.org.uk, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will.deacon@arm.com>, arnd@arndb.de,
-        longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7902C919-9624-48C9-89C3-D390A9FF78AB@oracle.com>
-References: <20210401153156.1165900-1-alex.kogan@oracle.com>
- <20210401153156.1165900-5-alex.kogan@oracle.com>
- <87mtu2vhzz.fsf@linux.intel.com>
- <CA1141EF-76A8-47A9-97B9-3CB2FC246B1A@oracle.com>
- <20210413212203.GT3762101@tassilo.jf.intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
-X-Proofpoint-IMR: 1
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9953 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- malwarescore=0 suspectscore=0 bulkscore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104140016
-X-Proofpoint-GUID: 0wVLpAsklsLLbRASaJbeaA4Y4iHpN-OR
-X-Proofpoint-ORIG-GUID: 0wVLpAsklsLLbRASaJbeaA4Y4iHpN-OR
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9953 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 priorityscore=1501
- clxscore=1015 adultscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
- lowpriorityscore=0 spamscore=0 phishscore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
- definitions=main-2104140016
+        id S231493AbhDNEko (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Apr 2021 00:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230496AbhDNEkn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Apr 2021 00:40:43 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9974BC061574;
+        Tue, 13 Apr 2021 21:40:22 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id h7so14578974qtx.3;
+        Tue, 13 Apr 2021 21:40:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9BCnDgTYwbVMwDnN4eWFAK2W985VQMQVft27SbY4QTY=;
+        b=GGMyP8RVsvdwPgOFd1CrPyPEqN8Nm/Hz9bJ4al7HNqaQHbwGpUoldGFL4rgCniwC++
+         R54j6hEUgTW6g40XFYedO4bqHV5aYZkeWjEoZKfmy+1aquWz9eZ0UKAjUghSlqAdaDko
+         Zm4GvFZxi9uFixVDbsGLnI+skx91HjzGru6b4ExfM8lZyL/qZetVX1Nwt6ndwgtCNC67
+         /v8FQEMkejGT28tvRZSbWG23VmkO6/exbjz/4IjXytXtoFeUntk8G7v//sOjoGojl7Qb
+         YXp2KcaVl6JmiJvExO/QVXHeoqGcR3KCp7DNr7h2fXRLjPgRk+y5YAd24mQAtCutMMqh
+         TY4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9BCnDgTYwbVMwDnN4eWFAK2W985VQMQVft27SbY4QTY=;
+        b=by9gwWuNENQ9De9iDw7mPPYrlqUohv0YCE781holozKHhLT4ADcKB+Zu4Dqd3WfobN
+         5Afjjm9aMNv2DgDrUSIzuGTqLNc5MO6GZVhrgYtp9b1AIMGrt9iTEO9qOM+FMgrhhbeJ
+         21Filqp1TWzzkUeXrLAxdj0aXrCtdXAwDehrKlPI/dWzDbE0aL2vf3x/tHZbXKu3iWn1
+         x7AXx2ycE0mdP+0LOlkd7nreocK2Q/KfZlVsxp536FWrJ2B4G3D2K0I2LZ+JfkkZOrkh
+         DVKtxyqsitsxfknGUainXd2w5XXb4hiuj4Rg05Kp289vzthi4i028iuDoowcOVqsc2Zj
+         WWfQ==
+X-Gm-Message-State: AOAM530JLX1bjOeNj3R6Xg0U0vtcFQV4FQaBHUoMWkti+vmoAdJVZczI
+        9XaNokKkBS3id8BeZzKJuaBZ9hfhguE=
+X-Google-Smtp-Source: ABdhPJzXKIUj0I/LTjOOZ9Q3r/ZvWXA4butRYDA48FJpRVe3BL+JVdYczzYZf8GtnewuKU+2251ylA==
+X-Received: by 2002:ac8:59c9:: with SMTP id f9mr33576466qtf.234.1618375221607;
+        Tue, 13 Apr 2021 21:40:21 -0700 (PDT)
+Received: from localhost ([207.98.216.60])
+        by smtp.gmail.com with ESMTPSA id l24sm2625079qtp.18.2021.04.13.21.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Apr 2021 21:40:21 -0700 (PDT)
+Date:   Tue, 13 Apr 2021 21:40:20 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Joe Perches <joe@perches.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH] Documentation: syscalls: add a note about  ABI-agnostic
+ types
+Message-ID: <20210414044020.GA44464@yury-ThinkPad>
+References: <20210409204304.1273139-1-yury.norov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210409204304.1273139-1-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Ping?
 
-
-> On Apr 13, 2021, at 5:22 PM, Andi Kleen <ak@linux.intel.com> wrote:
->=20
->>> ms granularity seems very coarse grained for this. Surely
->>> at some point of spinning you can afford a ktime_get? But ok.
->> We are reading time when we are at the head of the (main) queue, but
->> don=E2=80=99t have the lock yet. Not sure about the latency of =
-ktime_get(), but
->> anything reasonably fast but not necessarily precise should work.
->=20
-> Actually cpu_clock / sched_clock (see my other email). These should
-> be fast without corner cases and also monotonic.
-I see, thanks.
-
->=20
->>=20
->>> Could you turn that into a moduleparm which can be changed at =
-runtime?
->>> Would be strange to have to reboot just to play with this parameter
->> Yes, good suggestion, thanks.
->>=20
->>> This would also make the code a lot shorter I guess.
->> So you don=E2=80=99t think we need the command-line parameter, just =
-the module_param?
->=20
-> module_params can be changed at the command line too, so yes.
-Got it, thanks again.
-
-=E2=80=94 Alex
-
+On Fri, Apr 09, 2021 at 01:43:04PM -0700, Yury Norov wrote:
+> Recently added memfd_secret() syscall had a flags parameter passed
+> as unsigned long, which requires creation of compat entry for it.
+> It was possible to change the type of flags to unsigned int and so
+> avoid bothering with compat layer.
+> 
+> https://www.spinics.net/lists/linux-mm/msg251550.html
+> 
+> Documentation/process/adding-syscalls.rst doesn't point clearly about
+> preference of ABI-agnostic types. This patch adds such notification.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  Documentation/process/adding-syscalls.rst | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/process/adding-syscalls.rst b/Documentation/process/adding-syscalls.rst
+> index 9af35f4ec728..46add16edf14 100644
+> --- a/Documentation/process/adding-syscalls.rst
+> +++ b/Documentation/process/adding-syscalls.rst
+> @@ -172,6 +172,13 @@ arguments (i.e. parameter 1, 3, 5), to allow use of contiguous pairs of 32-bit
+>  registers.  (This concern does not apply if the arguments are part of a
+>  structure that's passed in by pointer.)
+>  
+> +Whenever possible, try to use ABI-agnostic types for passing parameters to
+> +a syscall in order to avoid creating compat entry for it. Linux supports two
+> +ABI models - ILP32 and LP64. The types like ``void *``, ``long``, ``size_t``,
+> +``off_t`` have different size in those ABIs; types like ``char`` and  ``int``
+> +have the same size and don't require a compat layer support. For flags, it's
+> +always better to use ``unsigned int``.
+> +
+>  
+>  Proposing the API
+>  -----------------
+> -- 
+> 2.25.1
