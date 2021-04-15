@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFD336041D
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Apr 2021 10:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF38360488
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Apr 2021 10:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbhDOIUS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Apr 2021 04:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
+        id S231491AbhDOIkU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Apr 2021 04:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbhDOIUS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Apr 2021 04:20:18 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272F5C061574;
-        Thu, 15 Apr 2021 01:19:56 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id g16so2268651pfq.5;
-        Thu, 15 Apr 2021 01:19:56 -0700 (PDT)
+        with ESMTP id S231599AbhDOIkT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Apr 2021 04:40:19 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D60AC061574;
+        Thu, 15 Apr 2021 01:39:57 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id o123so15599051pfb.4;
+        Thu, 15 Apr 2021 01:39:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=55qzNVVtKjr2EGfMAcgdM/oHJ/MI5Oe+cwdS/Ji0ZVI=;
-        b=j1tVlhHWeqCzmIWXEopfN2gvVhO87Jr/RyNB0t/arTH8+bg7DKBr+fI040TTp9S9dB
-         /NzzFMy3hbY/ewwcaITstDzoy52Wgs4wGuQ5U5o4uPJowRFrrEnSMnP8N2Qb3i5zZjXQ
-         sCqSMpYbitygg49aIHDhasd3Pi72eqGwhTPoAnW1qgSzqZW7XWXrv/4JCx9LSDXMvhzf
-         znL5/rmGU9y1+OFti8QmL1ryMuD9so/V9sqtlzAaVReyqpoDpbqtdZOG7VIAMj0ZL4w4
-         Kv0HXVb9dekpbqJdlNhLG+oY2Owt4l/wcViRbNFuH7o1uikboz9/tlwvLhkf0FLxKmmz
-         xTZw==
+        bh=3tRTg0shzbghpK8s5KkDpORVJgOU6nXvQDc4YptWxp4=;
+        b=dzupOljK/n2OhOKq3IFzO/jpubmmgifqonI7cIVcK57nYONTDn0gN+SMqd+LVuhEue
+         vSOJmf26iaOeofbY33+7llZWIbG92xNXaeesFkp0AroekPl+iUY+XDIvyc5flXvsoEht
+         MVOKE1W2f9eGWDOGOYFjhcZC1B0OTfJfA7W2qzrPcXDekA8tmSlR2QPNB5MryIIYQZbz
+         ssdKILAwuvYxQTVduNjgdr6acCBmQgkipEXGjIFt51ycr+XxjnOqTeHVyfVVJxloaLud
+         HhtVRgp39rFZsswxe1bP3XX88qm2K7hfI04uSV4FuUyBP6bcWcG9umfpyC/scl3ngPhd
+         V10Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=55qzNVVtKjr2EGfMAcgdM/oHJ/MI5Oe+cwdS/Ji0ZVI=;
-        b=JGoz6Crs1qH1AMfpCkqkeQx9IylV5HCIC98ReJTHTGltQGyFP5Y1gGyJVhbjubCG3n
-         wCbX29hjzJ/lRZ/7EgmXo77JFmr8DQC34JfmxNPUoKpvIs/6LPf6zGwYSSzOw0/v3P1Z
-         8EbcPgcEIZNJHCGnHlGU2SE5LgJ3zdWNbhY2sFPK4WK0MMQkMw7npwH96UUltcIm3NXo
-         k8Wwo0t9T5lAT6w56VgU8S339iO5pOgCBndcfJEvhPeoG5aycyuReXp7TxZudPBliuL5
-         DsIA3n1u23riz1tBje3sP2wSgSp86dKG4yjZLUtniFi+5xy2Zueh6rDpcXMaxiAIqy82
-         /sfw==
-X-Gm-Message-State: AOAM532hy3Pztf/EZCK9am1Mdz5y8WJNLiX0wI0xYmolz8gYTC/PRF6V
-        SFX+sd8qh7zejvuctXTJT9AfqeWyOsh60dyQ
-X-Google-Smtp-Source: ABdhPJwWGtaQnufAXInm7v66wKabfVJG17NJUFp65axa03YX5DYY821+MSztj4RCKZDgwDB8o2T9wQ==
-X-Received: by 2002:a63:470f:: with SMTP id u15mr2378163pga.199.1618474795726;
-        Thu, 15 Apr 2021 01:19:55 -0700 (PDT)
+        bh=3tRTg0shzbghpK8s5KkDpORVJgOU6nXvQDc4YptWxp4=;
+        b=UKSh1c0QQ/oWbomzt3ldMzxbCOijZcTMgd1BxIpqpS/S3+cUw9NAfEj7afOoLxLkrc
+         BUP9OGKwWy8COrTFTyrDK73Lrx15/qlWTlA/LTJcgmRF6tkKpAjbCY4p6Gj+d8A/vrKk
+         aBstPPbttzHcrDikvQKVBk0Q1GHycu7qpTKnrQYNPJNHBbzBQ41AebqJUkTynHR0wwD2
+         8oTtvI7NTCeDGJyAoSaejDIRlqCoCjFkEDNBw0wgV1JgGqXfv4ycNOwx08FSAH0ruxRH
+         sbWQj8+P6CyF8jHqSrHCEBtAbRu/xUgZYEH7WTgmzNcY/eZmhznUv2NoHFOkB19T/DQB
+         4TFg==
+X-Gm-Message-State: AOAM530wbnT7qjY2PLgWiIRhJfpBJADgrNIhlGrG8SPBTSRbU7ujUc5S
+        HiP3REvdVE7VxkOfTQmgqVA=
+X-Google-Smtp-Source: ABdhPJz/E8YagRoaQfmGydf9eGCq3z8Im0ouKOCNMw/9TlVzNQ5NsPj3ODCpxu/cZ1XaZZeQpmJi/Q==
+X-Received: by 2002:a62:e119:0:b029:245:8e0:820 with SMTP id q25-20020a62e1190000b029024508e00820mr2092886pfh.4.1618475996564;
+        Thu, 15 Apr 2021 01:39:56 -0700 (PDT)
 Received: from ?IPv6:2404:f801:0:6:8000::a31c? ([2404:f801:9000:1a:efeb::a31c])
-        by smtp.gmail.com with ESMTPSA id h21sm1732615pgi.60.2021.04.15.01.19.46
+        by smtp.gmail.com with ESMTPSA id t67sm1573474pfb.210.2021.04.15.01.39.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Apr 2021 01:19:55 -0700 (PDT)
-Subject: Re: [Resend RFC PATCH V2 04/12] HV: Add Write/Read MSR registers via
- ghcb
+        Thu, 15 Apr 2021 01:39:56 -0700 (PDT)
+Subject: Re: [Resend RFC PATCH V2 11/12] HV/Netvsc: Add Isolation VM support
+ for netvsc driver
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         wei.liu@kernel.org, tglx@linutronix.de, mingo@redhat.com,
@@ -66,15 +66,15 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         thomas.lendacky@amd.com, brijesh.singh@amd.com,
         sunilmut@microsoft.com
 References: <20210414144945.3460554-1-ltykernel@gmail.com>
- <20210414144945.3460554-5-ltykernel@gmail.com>
- <20210414154141.GB32045@lst.de>
+ <20210414144945.3460554-12-ltykernel@gmail.com>
+ <20210414155016.GE32045@lst.de>
 From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <d35e6ab5-cb25-61aa-e36e-7e4bcb241964@gmail.com>
-Date:   Thu, 15 Apr 2021 16:19:45 +0800
+Message-ID: <de145e13-2444-aa01-906e-e3abe5a64dc4@gmail.com>
+Date:   Thu, 15 Apr 2021 16:39:45 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.9.1
 MIME-Version: 1.0
-In-Reply-To: <20210414154141.GB32045@lst.de>
+In-Reply-To: <20210414155016.GE32045@lst.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -82,13 +82,52 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/14/2021 11:41 PM, Christoph Hellwig wrote:
->> +EXPORT_SYMBOL_GPL(hv_ghcb_msr_write);
+
+
+On 4/14/2021 11:50 PM, Christoph Hellwig wrote:
+>> +struct dma_range {
+>> +	dma_addr_t dma;
+>> +	u32 mapping_size;
+>> +};
 > 
-> Just curious, who is going to use all these exports?  These seems like
-> extremely low-level functionality.  Isn't there a way to build a more
-> useful higher level API?
+> That's a rather generic name that is bound to create a conflict sooner
+> or later.
+
+Good point. Will update.
+
+> 
+>>   #include "hyperv_net.h"
+>>   #include "netvsc_trace.h"
+>> +#include "../../hv/hyperv_vmbus.h"
+> 
+> Please move public interfaces out of the private header rather than doing
+> this.
+
+OK. Will update.
+
+> 
+>> +	if (hv_isolation_type_snp()) {
+>> +		area = get_vm_area(buf_size, VM_IOREMAP);
+> 
+> Err, no.  get_vm_area is private a for a reason.
+> 
+>> +		if (!area)
+>> +			goto cleanup;
+>> +
+>> +		vaddr = (unsigned long)area->addr;
+>> +		for (i = 0; i < buf_size / HV_HYP_PAGE_SIZE; i++) {
+>> +			extra_phys = (virt_to_hvpfn(net_device->recv_buf + i * HV_HYP_PAGE_SIZE)
+>> +				<< HV_HYP_PAGE_SHIFT) + ms_hyperv.shared_gpa_boundary;
+>> +			ret |= ioremap_page_range(vaddr + i * HV_HYP_PAGE_SIZE,
+>> +					   vaddr + (i + 1) * HV_HYP_PAGE_SIZE,
+>> +					   extra_phys, PAGE_KERNEL_IO);
+>> +		}
+>> +
+>> +		if (ret)
+>> +			goto cleanup;
+> 
+> And this is not something a driver should ever do.  I think you are badly
+> reimplementing functionality that should be in the dma coherent allocator
+> here.
 >
-
-Yes, will remove it.
-
+OK. I will try hiding these in the Hyper-V dma ops callback. Thanks.
