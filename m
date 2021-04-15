@@ -2,235 +2,225 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C647A36137C
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Apr 2021 22:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF403614A7
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 00:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbhDOUaH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Apr 2021 16:30:07 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:54966 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbhDOUaD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Apr 2021 16:30:03 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13FKJU20066894;
-        Thu, 15 Apr 2021 20:29:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2020-01-29;
- bh=j65uDSOqi1ViCyk4CkctHXFYOUTcowaPLtPH0xVO3DY=;
- b=A8rR+D0FKBzUVLIDw/sfz6eXOBT2mqjZLMpivkeXvV7+MYCplzi7tkSnp7YSB7kKb5vv
- z4GA1aEM7hBbaiW6Mo1XanUWrE77TWWoqICNG37KZNgWiQzGEOu8FCTO6RI5qzYLSUdM
- sF0CWIqS5ZaHYe3aViJL9ZtdErso6TlXye4hUT68zzzHXSUuw8Y934N+J2glZYp10URQ
- IR/SVNHmapcoNcx1GaMlYxec2Mvcm987C6nrSaSydOyviAEz20WxivStQAOpQpsARxjw
- d4y5MaPKO+J2e4PzVcKwMrC79p8qSuWQzcEPf7vuDHkVdfE2wsGZzyD+sIEeKCCzthkk zg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 37u4nnq50r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Apr 2021 20:29:03 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13FKQcgl130223;
-        Thu, 15 Apr 2021 20:29:03 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
-        by aserp3030.oracle.com with ESMTP id 37unkt5e7b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Apr 2021 20:29:02 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aTkvLA0o3qKM06me6bC3H4Z2zriaXEJj5ULY/UhINNeDcDdXC1Bf76UtoD0NfUALP3UCXg3vRhrl12HnY4VoRy8r4Fee6WZYeSpmi7c3gjYA5Os0Lu4GsRkl5IxnS9vizCnFzQ4GI4iNogEfU/gmOpYgalIn/KkPtF4KDlKQ4+YJs49Ch4/TIGg6Hgf7kcZ8WCsrkxgpBh52PCi9QGg/Irsw0QahpHUw50ZmOsHhLN+WvPR7sTJg/gBs7COTJa9vAA6oA7qu+DkaX9tHeeVuHOmPMsHd9wdcqJse+u3mnuT3ShX7sA+7LNBApqvsydBmk9LjCyLG1cvHK+npo66hCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j65uDSOqi1ViCyk4CkctHXFYOUTcowaPLtPH0xVO3DY=;
- b=P/Q1QryWnZ1nJCbzFp9eRtRdizLXMM6/UkPiY4uJYtXu+xa3ipNoUQ+hBQGUWf30ROl3LO+qeEbsBjcVUbAevdKe8fRcgMm4ueEVd6lZdJM0C//9iuAozjCbeokHvpPRYnWGhKYGGpCFf/Yhvb23bIvBjZdRCOgCxvYkc/hTsCFdiEXWQk/+eSAhP61zK8a8nXI74kLjNmLl+dL4Um3cy9Uy61npO8mzYdJ84Gidq7WtfX+XieDgg4/c1A6rjMTS0rEy4lfmmKB8GFR93Oz+OQfZmCr49mDnvwIlPUbH/xp8CqwEAN4BxeE6jgqJDHesSWPpNDDxQFAxhbLlJIJD8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j65uDSOqi1ViCyk4CkctHXFYOUTcowaPLtPH0xVO3DY=;
- b=Fs5ibvo4em7NEtqpZjX4Nj+tfUEikt1Wjq/31Sobd2FU4tSgSddo6mAdhZ4qCoJBuFKLX3R650sobQynzX3+w6OEk4nuz1koyIK5OtwIFgnf6NWDBG3M5AmcocSJCnOn2mAPG2BsBjxhcWUUZBunNNDgAnwVJAsmASTgLeyPblg=
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=oracle.com;
-Received: from BYAPR10MB2999.namprd10.prod.outlook.com (2603:10b6:a03:85::27)
- by BYAPR10MB3733.namprd10.prod.outlook.com (2603:10b6:a03:120::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.18; Thu, 15 Apr
- 2021 20:29:00 +0000
-Received: from BYAPR10MB2999.namprd10.prod.outlook.com
- ([fe80::50f2:e203:1cc5:d4f7]) by BYAPR10MB2999.namprd10.prod.outlook.com
- ([fe80::50f2:e203:1cc5:d4f7%7]) with mapi id 15.20.4020.022; Thu, 15 Apr 2021
- 20:29:00 +0000
-Date:   Thu, 15 Apr 2021 16:28:48 -0400
-From:   Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
-        akpm@linux-foundation.org, gregkh@linuxfoundation.org, hch@lst.de,
-        m.szyprowski@samsung.com, robin.murphy@arm.com, joro@8bytes.org,
-        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, vkuznets@redhat.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com,
-        sunilmut@microsoft.com
-Subject: Re: [Resend RFC PATCH V2 09/12] swiotlb: Add bounce buffer remap
- address setting function
-Message-ID: <YHiiALogMcdYDue3@dhcp-10-154-102-149.vpn.oracle.com>
-References: <20210414144945.3460554-1-ltykernel@gmail.com>
- <20210414144945.3460554-10-ltykernel@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210414144945.3460554-10-ltykernel@gmail.com>
-X-Originating-IP: [138.3.200.21]
-X-ClientProxiedBy: SA9PR13CA0012.namprd13.prod.outlook.com
- (2603:10b6:806:21::17) To BYAPR10MB2999.namprd10.prod.outlook.com
- (2603:10b6:a03:85::27)
+        id S235133AbhDOWP5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Apr 2021 18:15:57 -0400
+Received: from mga14.intel.com ([192.55.52.115]:22365 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235086AbhDOWP4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 15 Apr 2021 18:15:56 -0400
+IronPort-SDR: JELECdd0dOmfPWb2j/CNSvlxTaIcp2KG8iclu4R6OniUqS4OTGRSqFsAHtuj40yOM9I38sleTl
+ sDpgemVxO1+A==
+X-IronPort-AV: E=McAfee;i="6200,9189,9955"; a="194513314"
+X-IronPort-AV: E=Sophos;i="5.82,225,1613462400"; 
+   d="scan'208";a="194513314"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 15:15:33 -0700
+IronPort-SDR: z23KPKPERcNC+yqUJvMYuFwzn/9eHC9Dk3KllVv2jej2nSsk8IZGYsjqjd/ltt1Yh3ec5+6CbV
+ w6H80P+sxNKA==
+X-IronPort-AV: E=Sophos;i="5.82,225,1613462400"; 
+   d="scan'208";a="451270856"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 15:15:32 -0700
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v25 00/30] Control-flow Enforcement: Shadow Stack
+Date:   Thu, 15 Apr 2021 15:13:49 -0700
+Message-Id: <20210415221419.31835-1-yu-cheng.yu@intel.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from dhcp-10-154-102-149.vpn.oracle.com (138.3.200.21) by SA9PR13CA0012.namprd13.prod.outlook.com (2603:10b6:806:21::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.6 via Frontend Transport; Thu, 15 Apr 2021 20:28:53 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b2be517c-c459-42be-9646-08d9004d1a15
-X-MS-TrafficTypeDiagnostic: BYAPR10MB3733:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR10MB3733B7DA67A1A5D69A7CA208894D9@BYAPR10MB3733.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2449;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YwaINjnGCJI2Wupy4VEQSO2nkR3K/HODQ4swSraejATXkcYz1JHhAfQGbI1nQLqdPk2Bv95P28Sn73SedJ0SX2vMTWfRd76qTdwHZZAHrkksf3pJ4WpSoKLU8/Nv8KkWcjHn4un6L54SbwgpbxezOvmoW58tb090e3xEVNm5w+0D6DJ1bvOowvr+HFs9PR+vV655+7CIYMjhmVuLshQ22O3MH/7YDL1OI5PgfyKO5SOqexnVp7/ADYIwv0iguC1LGRD+zA9PQLry5QjgSDVqiQqArrN/ylpePfR2wLDVXH/qJmISBtMzCsEKBvF7iyGhFktOv2BVHgAoElED/NKSGetjJNmX+jCKthOBCd4Lp1cknppa+8ywRd/eG5MRy91+GfVRYQ9S38F3gydHAnWf7jYdY44Vqgr0bMFqWkL8zBKKPh/5fkZQbPD8/6CMIZtVz7fC/FHW66mtIXmQbjkQ8h6PzLAb8fQdACD1gKz6K0pufRvnfoRVJKBBBJUhslwdMXa7j6poqAfgF0HXtjvET16gmslOKA36fgMhi6MDyn5goQ/PiMB/5dufKEvIAQLq8fQOHAf8ST0PV5+cgWNLYwDP7SRko3ce8ee3LYbX4aDC+zpLRIt2M05VY+zWVSN6dRUhAPTu1Bukc/S8nc69hG6ZFEWj7UJdwl+eHat52Q3ElwpDqzN+kmFIxebUqGyw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2999.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(39860400002)(396003)(376002)(136003)(346002)(66946007)(66476007)(66556008)(7406005)(5660300002)(83380400001)(2906002)(52116002)(7696005)(508600001)(6916009)(316002)(7416002)(956004)(45080400002)(4326008)(6666004)(16526019)(26005)(186003)(55016002)(8676002)(86362001)(38350700002)(8936002)(38100700002)(102196002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?DtkVvyHDoO5TyfgDDWKAQ5bEc7aXmzBzBZE9qsZMF+zTK4q1ejhuW6Sgf+Zf?=
- =?us-ascii?Q?LCsgjKUu2DEtolbK+oYCdod2XN4qSsCzWzWZKzWK8dG4YRaPc0Fmn18LaHfu?=
- =?us-ascii?Q?J8ZaDc5YCOEqVDCKL296p3On+ASEno8TBqbw5LKYsWJuWulym16ISQvqGccd?=
- =?us-ascii?Q?deyEGBHZ94LOc7Y7YKOYs0Ni6DMXS9YEJnwuuDvI5KQRAY5HHRjEoDb7zJVG?=
- =?us-ascii?Q?0sG32jJiD+c3vR3dwcBQcyw0sVVWMrt54ETp7ACjHvpBdE8S4eqzQTTaHXfZ?=
- =?us-ascii?Q?/KPnTvGezJCF6iM7J9Ux+yn67ft6qFzfkghgNyeNH1NN/NIItYMUeRFLWac0?=
- =?us-ascii?Q?uIqVObwz3dTL+0nbAdWu4Ywon/wLnWspInnnh/1g6WzgtaIF1/Jmng+nCbvM?=
- =?us-ascii?Q?wJNWKbEQYpa8ZrcWXhxBZdUkY4sn/5tbSTC7mIRT2YjSG6NyJWIwkn2tiU3Y?=
- =?us-ascii?Q?AUo/krl8R7HzVzUXAMdj3KKfd/BcfrpjjPAR4LhQV2dymgEwuJElIXX2cGTu?=
- =?us-ascii?Q?ME+kzI2/z3q+GMdF/ZxuNcClE0rH/y6D/E3Xqkm0fVt/qSWzdCny+4Jq9gQY?=
- =?us-ascii?Q?bKkfCnXNtHHPITztgAhQMOYav5lE6MAgnaF5tL0lq+b2tcTj45RjB+QjjV8o?=
- =?us-ascii?Q?16gS8RVgWiVH+saTybIRUIlJzrFppgpFXkV/FcKr8Kh4xsjlTiHpWxLmU4+i?=
- =?us-ascii?Q?4c4aiVT6j7u4Lh/3etV98QgzNmMBtK8Q05s/BQ6k7NJv6TqKCxdy3iWenD4s?=
- =?us-ascii?Q?B82xy5aziFusEHAntFtoTNFW1sZ+EB8mDqIQNAEqahjfKV077zwu29pdktKS?=
- =?us-ascii?Q?CMiDIxU46F+RSwizR6kZG687IeWjQc0XnRuJDfO8NOgnM2IPPwA2PcfK57hp?=
- =?us-ascii?Q?ypYZkea01wWzTtEE5OgWKIsuz6B9oz4Buz6j7efl/FgomOZC9uPXJ3AcyCzb?=
- =?us-ascii?Q?2rE+I0KyWU8WzscIYXNNT00WfPJ205YsEdwSiDTFqeqV5vBJUxPT600Au4PW?=
- =?us-ascii?Q?Tzsc4ybyHn2eFide8cSGQ34MzxSe24echZJ61ivITKHVPC7iAErTsTKLiek7?=
- =?us-ascii?Q?cEYDj5LanOVtJm4h8SZMC9abd5DXGMk89tSh70Tr8G0tv64sjjeCYlNIngsL?=
- =?us-ascii?Q?UVGMs0Cs7WrxCRX3phrXLOjkS3nXHJR8xj8CfOLPxRuk7Vxl4+gc95+IsjIR?=
- =?us-ascii?Q?e8rXKQ+7Ivtqk1nJVIzaZsJLQo4XSA8evY0dLl3Bw/8JOb5BzKlvYhsYmetO?=
- =?us-ascii?Q?SOQPnmzNc5ul0+3A09lM7sAm8ILf0pri46pBX+khPR4qD6moi+yjNQ+rC5rQ?=
- =?us-ascii?Q?pFAbQWy7X61yHjNqisX1KCIS?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2be517c-c459-42be-9646-08d9004d1a15
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2999.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2021 20:29:00.2238
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I6vcUJ74ZZ5COtBvTz5Kb6GIEgNB+5u9eKIpmE6DnT6Zu8prHV3XMhHbSoGY+cAy7mwpYLEwNXJHoaYJI5hCkw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB3733
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9955 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- adultscore=0 phishscore=0 malwarescore=0 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104150127
-X-Proofpoint-ORIG-GUID: 2twAKbrCAHJzc_HSiIvgWcdX6LCO-AYl
-X-Proofpoint-GUID: 2twAKbrCAHJzc_HSiIvgWcdX6LCO-AYl
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9955 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- phishscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
- clxscore=1015 lowpriorityscore=0 spamscore=0 impostorscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104150126
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 10:49:42AM -0400, Tianyu Lan wrote:
-> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> 
-> For Hyper-V isolation VM with AMD SEV SNP, the bounce buffer(shared memory)
-> needs to be accessed via extra address space(e.g address above bit39).
-> Hyper-V code may remap extra address space outside of swiotlb. swiotlb_bounce()
+Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+return/jump-oriented programming attacks.  Details are in "Intel 64 and
+IA-32 Architectures Software Developer's Manual" [1].
 
-May? Isn't this a MUST in this case?
+CET can protect applications and the kernel.  This series enables only
+application-level protection, and has three parts:
 
-> needs to use remap virtual address to copy data from/to bounce buffer. Add
-> new interface swiotlb_set_bounce_remap() to do that.
+  - Shadow stack [2],
+  - Indirect branch tracking [3], and
+  - Selftests [4].
 
-I am bit lost - why can't you use the swiotlb_init and pass in your
-DMA pool that is already above bit 39?
+I have run tests on these patches for quite some time, and they have been
+very stable.  Linux distributions with CET are available now, and Intel
+processors with CET are already on the market.  It would be nice if CET
+support can be accepted into the kernel.  I will be working to address any
+issues should they come up.
 
-> 
-> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> ---
->  include/linux/swiotlb.h |  5 +++++
->  kernel/dma/swiotlb.c    | 13 ++++++++++++-
->  2 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
-> index d9c9fc9ca5d2..3ccd08116683 100644
-> --- a/include/linux/swiotlb.h
-> +++ b/include/linux/swiotlb.h
-> @@ -82,8 +82,13 @@ unsigned int swiotlb_max_segment(void);
->  size_t swiotlb_max_mapping_size(struct device *dev);
->  bool is_swiotlb_active(void);
->  void __init swiotlb_adjust_size(unsigned long new_size);
-> +void swiotlb_set_bounce_remap(unsigned char *vaddr);
->  #else
->  #define swiotlb_force SWIOTLB_NO_FORCE
-> +static inline void swiotlb_set_bounce_remap(unsigned char *vaddr)
-> +{
-> +}
-> +
->  static inline bool is_swiotlb_buffer(phys_addr_t paddr)
->  {
->  	return false;
-> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> index 7c42df6e6100..5fd2db6aa149 100644
-> --- a/kernel/dma/swiotlb.c
-> +++ b/kernel/dma/swiotlb.c
-> @@ -94,6 +94,7 @@ static unsigned int io_tlb_index;
->   * not be bounced (unless SWIOTLB_FORCE is set).
->   */
->  static unsigned int max_segment;
-> +static unsigned char *swiotlb_bounce_remap_addr;
->  
->  /*
->   * We need to save away the original address corresponding to a mapped entry
-> @@ -421,6 +422,11 @@ void __init swiotlb_exit(void)
->  	swiotlb_cleanup();
->  }
->  
-> +void swiotlb_set_bounce_remap(unsigned char *vaddr)
-> +{
-> +	swiotlb_bounce_remap_addr = vaddr;
-> +}
-> +
->  /*
->   * Bounce: copy the swiotlb buffer from or back to the original dma location
->   */
-> @@ -428,7 +434,12 @@ static void swiotlb_bounce(phys_addr_t orig_addr, phys_addr_t tlb_addr,
->  			   size_t size, enum dma_data_direction dir)
->  {
->  	unsigned long pfn = PFN_DOWN(orig_addr);
-> -	unsigned char *vaddr = phys_to_virt(tlb_addr);
-> +	unsigned char *vaddr;
-> +
-> +	if (swiotlb_bounce_remap_addr)
-> +		vaddr = swiotlb_bounce_remap_addr + tlb_addr - io_tlb_start;
-> +	else
-> +		vaddr = phys_to_virt(tlb_addr);
->  
->  	if (PageHighMem(pfn_to_page(pfn))) {
->  		/* The buffer does not have a mapping.  Map it in and copy */
-> -- 
-> 2.25.1
-> 
+Changes in v25:
+- Remove Kconfig X86_CET and software-defined feature flag X86_FEATURE_CET.
+  Use X86_SHADOW_STACK and X86_FEATURE_SHSTK directly.  Update related
+  areas accordingly.
+- Patch #16: Make same changes to do_huge_pmd_numa_page() as to
+  do_numa_page().
+- Patch #25: Update signal handling, use restorer address already
+  retrieved, update MSR restoring code.
+- Smaller changes are called out in each patch.
+- Rebase to Linus tree v5.12-rc7.
+
+[1] Intel 64 and IA-32 Architectures Software Developer's Manual:
+
+    https://software.intel.com/en-us/download/intel-64-and-ia-32-
+    architectures-sdm-combined-volumes-1-2a-2b-2c-2d-3a-3b-3c-3d-and-4
+
+[2] Shadow Stack patches v24:
+
+    https://lore.kernel.org/r/20210401221104.31584-1-yu-cheng.yu@intel.com/
+
+[3] Indirect Branch Tracking patches v24
+
+    https://lore.kernel.org/r/20210401221403.32253-1-yu-cheng.yu@intel.com/
+
+[4] I am holding off the selftests changes and working to get Reviewed-by's.
+    The earlier version of the selftests patches:
+
+    https://lkml.kernel.org/r/20200521211720.20236-1-yu-cheng.yu@intel.com/
+
+[5] The kernel ptrace patch is tested with an Intel-internal updated GDB.
+    I am holding off the kernel ptrace patch to re-test it with my earlier
+    patch for fixing regset holes.
+
+Yu-cheng Yu (30):
+  Documentation/x86: Add CET description
+  x86/cet/shstk: Add Kconfig option for Shadow Stack
+  x86/cpufeatures: Add CET CPU feature flags for Control-flow
+    Enforcement Technology (CET)
+  x86/cpufeatures: Introduce CPU setup and option parsing for CET
+  x86/fpu/xstate: Introduce CET MSR and XSAVES supervisor states
+  x86/cet: Add control-protection fault handler
+  x86/mm: Remove _PAGE_DIRTY from kernel RO pages
+  x86/mm: Move pmd_write(), pud_write() up in the file
+  x86/mm: Introduce _PAGE_COW
+  drm/i915/gvt: Change _PAGE_DIRTY to _PAGE_DIRTY_BITS
+  x86/mm: Update pte_modify for _PAGE_COW
+  x86/mm: Update ptep_set_wrprotect() and pmdp_set_wrprotect() for
+    transition from _PAGE_DIRTY to _PAGE_COW
+  mm: Introduce VM_SHADOW_STACK for shadow stack memory
+  x86/mm: Shadow Stack page fault error checking
+  x86/mm: Update maybe_mkwrite() for shadow stack
+  mm: Fixup places that call pte_mkwrite() directly
+  mm: Add guard pages around a shadow stack.
+  mm/mmap: Add shadow stack pages to memory accounting
+  mm: Update can_follow_write_pte() for shadow stack
+  mm/mprotect: Exclude shadow stack from preserve_write
+  mm: Re-introduce vm_flags to do_mmap()
+  x86/cet/shstk: Add user-mode shadow stack support
+  x86/cet/shstk: Handle thread shadow stack
+  x86/cet/shstk: Introduce shadow stack token setup/verify routines
+  x86/cet/shstk: Handle signals for shadow stack
+  ELF: Introduce arch_setup_elf_property()
+  x86/cet/shstk: Add arch_prctl functions for shadow stack
+  mm: Move arch_calc_vm_prot_bits() to arch/x86/include/asm/mman.h
+  mm: Update arch_validate_flags() to include vma anonymous
+  mm: Introduce PROT_SHSTK for shadow stack
+
+ .../admin-guide/kernel-parameters.txt         |   6 +
+ Documentation/filesystems/proc.rst            |   1 +
+ Documentation/x86/index.rst                   |   1 +
+ Documentation/x86/intel_cet.rst               | 136 ++++++++
+ arch/arm64/include/asm/elf.h                  |   5 +
+ arch/arm64/include/asm/mman.h                 |   4 +-
+ arch/sparc/include/asm/mman.h                 |   4 +-
+ arch/x86/Kconfig                              |  24 ++
+ arch/x86/Kconfig.assembler                    |   5 +
+ arch/x86/ia32/ia32_signal.c                   |  24 +-
+ arch/x86/include/asm/cet.h                    |  52 +++
+ arch/x86/include/asm/cpufeatures.h            |   2 +
+ arch/x86/include/asm/disabled-features.h      |   8 +-
+ arch/x86/include/asm/elf.h                    |  13 +
+ arch/x86/include/asm/fpu/internal.h           |   2 +
+ arch/x86/include/asm/fpu/types.h              |  23 +-
+ arch/x86/include/asm/fpu/xstate.h             |   6 +-
+ arch/x86/include/asm/idtentry.h               |   4 +
+ arch/x86/include/asm/mman.h                   |  87 +++++
+ arch/x86/include/asm/mmu_context.h            |   3 +
+ arch/x86/include/asm/msr-index.h              |  19 ++
+ arch/x86/include/asm/page_types.h             |   7 +
+ arch/x86/include/asm/pgtable.h                | 299 +++++++++++++++--
+ arch/x86/include/asm/pgtable_types.h          |  48 ++-
+ arch/x86/include/asm/processor.h              |   5 +
+ arch/x86/include/asm/special_insns.h          |  32 ++
+ arch/x86/include/asm/trap_pf.h                |   2 +
+ arch/x86/include/uapi/asm/mman.h              |  28 +-
+ arch/x86/include/uapi/asm/prctl.h             |   4 +
+ arch/x86/include/uapi/asm/processor-flags.h   |   2 +
+ arch/x86/include/uapi/asm/sigcontext.h        |   9 +
+ arch/x86/kernel/Makefile                      |   2 +
+ arch/x86/kernel/cet_prctl.c                   |  60 ++++
+ arch/x86/kernel/cpu/common.c                  |  14 +
+ arch/x86/kernel/cpu/cpuid-deps.c              |   2 +
+ arch/x86/kernel/fpu/signal.c                  | 137 +++++++-
+ arch/x86/kernel/fpu/xstate.c                  |  10 +-
+ arch/x86/kernel/idt.c                         |   4 +
+ arch/x86/kernel/process.c                     |  21 +-
+ arch/x86/kernel/process_64.c                  |  32 ++
+ arch/x86/kernel/shstk.c                       | 304 ++++++++++++++++++
+ arch/x86/kernel/signal.c                      |   9 +
+ arch/x86/kernel/signal_compat.c               |   2 +-
+ arch/x86/kernel/traps.c                       |  63 ++++
+ arch/x86/mm/fault.c                           |  19 ++
+ arch/x86/mm/mmap.c                            |  47 +++
+ arch/x86/mm/pat/set_memory.c                  |   2 +-
+ arch/x86/mm/pgtable.c                         |  25 ++
+ drivers/gpu/drm/i915/gvt/gtt.c                |   2 +-
+ fs/aio.c                                      |   2 +-
+ fs/binfmt_elf.c                               |   4 +
+ fs/proc/task_mmu.c                            |   3 +
+ include/linux/elf.h                           |   6 +
+ include/linux/mm.h                            |  18 +-
+ include/linux/mman.h                          |   2 +-
+ include/linux/pgtable.h                       |   9 +
+ include/uapi/asm-generic/siginfo.h            |   3 +-
+ include/uapi/linux/elf.h                      |   9 +
+ ipc/shm.c                                     |   2 +-
+ mm/gup.c                                      |  16 +-
+ mm/huge_memory.c                              |  27 +-
+ mm/memory.c                                   |   5 +-
+ mm/migrate.c                                  |   3 +-
+ mm/mmap.c                                     |  17 +-
+ mm/mprotect.c                                 |  11 +-
+ mm/nommu.c                                    |   4 +-
+ mm/util.c                                     |   2 +-
+ 67 files changed, 1644 insertions(+), 119 deletions(-)
+ create mode 100644 Documentation/x86/intel_cet.rst
+ create mode 100644 arch/x86/include/asm/cet.h
+ create mode 100644 arch/x86/include/asm/mman.h
+ create mode 100644 arch/x86/kernel/cet_prctl.c
+ create mode 100644 arch/x86/kernel/shstk.c
+
+-- 
+2.21.0
+
