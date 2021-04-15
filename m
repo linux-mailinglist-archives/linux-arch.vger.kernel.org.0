@@ -2,603 +2,696 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DE636013A
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Apr 2021 06:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B136360389
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Apr 2021 09:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbhDOEyx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Apr 2021 00:54:53 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:57411 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbhDOEyx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Apr 2021 00:54:53 -0400
-X-Originating-IP: 2.7.49.219
-Received: from [192.168.1.100] (lfbn-lyo-1-457-219.w2-7.abo.wanadoo.fr [2.7.49.219])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 4BBB7E0002;
-        Thu, 15 Apr 2021 04:54:25 +0000 (UTC)
-Subject: Re: [PATCH v5 1/3] riscv: Move kernel mapping outside of linear
- mapping
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        aryabinin@virtuozzo.com, glider@google.com, dvyukov@google.com,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-References: <mhng-90fff6bd-5a70-4927-98c1-a515a7448e71@palmerdabbelt-glaptop>
-From:   Alex Ghiti <alex@ghiti.fr>
-Message-ID: <76353fc0-f734-db47-0d0c-f0f379763aa0@ghiti.fr>
-Date:   Thu, 15 Apr 2021 00:54:25 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
-MIME-Version: 1.0
-In-Reply-To: <mhng-90fff6bd-5a70-4927-98c1-a515a7448e71@palmerdabbelt-glaptop>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+        id S231241AbhDOHkn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Apr 2021 03:40:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50198 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231215AbhDOHkm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 15 Apr 2021 03:40:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 852A76101D;
+        Thu, 15 Apr 2021 07:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618472419;
+        bh=4blNk4FjFiRNb1cmNjCunvUnxGhRMibYmE7cNitTlPU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YYoKP/d82VU7zr7mn7PtJ0mTGacBQUeWbye2cBV/TWPYAHOdmSCL9fcAIML8wEtV/
+         YAZQZ+tyd5gjRPl6mhtZnZ/7tlnQjyQ0spsD6Cl7tMK0jkKPk20JhnK4T3KhrV504V
+         dVRL+CQLBh/cU10cME+5YaK7isq90SjDzVNH2PEQMyxrr/zcsoudOVX2XqVMOYNe5Q
+         JMioyVWFHKFEH1edD1hIS2oX+K8kfeB6DPrutzg/BF0ktg6kt4oNsPe/BGs4zCzrFP
+         tQgE88bV/14soIV+aXbrcQHYao+7A8TJ9Flz2X76BuqDzhVL5BaXCkpWaRBPcEnPlc
+         I28eAeo18Wu5g==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, Anup.Patel@wdc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: [PATCH] riscv: atomic: Using ARCH_ATOMIC in asm/atomic.h
+Date:   Thu, 15 Apr 2021 07:39:22 +0000
+Message-Id: <1618472362-85193-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Le 4/15/21 à 12:20 AM, Palmer Dabbelt a écrit :
-> On Sun, 11 Apr 2021 09:41:44 PDT (-0700), alex@ghiti.fr wrote:
->> This is a preparatory patch for relocatable kernel and sv48 support.
->>
->> The kernel used to be linked at PAGE_OFFSET address therefore we could 
->> use
->> the linear mapping for the kernel mapping. But the relocated kernel base
->> address will be different from PAGE_OFFSET and since in the linear 
->> mapping,
->> two different virtual addresses cannot point to the same physical 
->> address,
->> the kernel mapping needs to lie outside the linear mapping so that we 
->> don't
->> have to copy it at the same physical offset.
->>
->> The kernel mapping is moved to the last 2GB of the address space, BPF
->> is now always after the kernel and modules use the 2GB memory range right
->> before the kernel, so BPF and modules regions do not overlap. KASLR
->> implementation will simply have to move the kernel in the last 2GB range
->> and just take care of leaving enough space for BPF.
->>
->> In addition, by moving the kernel to the end of the address space, both
->> sv39 and sv48 kernels will be exactly the same without needing to be
->> relocated at runtime.
->>
->> Suggested-by: Arnd Bergmann <arnd@arndb.de>
->> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
->> ---
->>  arch/riscv/boot/loader.lds.S        |  3 +-
->>  arch/riscv/include/asm/page.h       | 17 +++++-
->>  arch/riscv/include/asm/pgtable.h    | 37 ++++++++----
->>  arch/riscv/include/asm/set_memory.h |  1 +
->>  arch/riscv/kernel/head.S            |  3 +-
->>  arch/riscv/kernel/module.c          |  6 +-
->>  arch/riscv/kernel/setup.c           |  5 ++
->>  arch/riscv/kernel/vmlinux.lds.S     |  3 +-
->>  arch/riscv/mm/fault.c               | 13 +++++
->>  arch/riscv/mm/init.c                | 87 ++++++++++++++++++++++-------
->>  arch/riscv/mm/kasan_init.c          |  9 +++
->>  arch/riscv/mm/physaddr.c            |  2 +-
->>  12 files changed, 146 insertions(+), 40 deletions(-)
->>
->> diff --git a/arch/riscv/boot/loader.lds.S b/arch/riscv/boot/loader.lds.S
->> index 47a5003c2e28..62d94696a19c 100644
->> --- a/arch/riscv/boot/loader.lds.S
->> +++ b/arch/riscv/boot/loader.lds.S
->> @@ -1,13 +1,14 @@
->>  /* SPDX-License-Identifier: GPL-2.0 */
->>
->>  #include <asm/page.h>
->> +#include <asm/pgtable.h>
->>
->>  OUTPUT_ARCH(riscv)
->>  ENTRY(_start)
->>
->>  SECTIONS
->>  {
->> -    . = PAGE_OFFSET;
->> +    . = KERNEL_LINK_ADDR;
->>
->>      .payload : {
->>          *(.payload)
->> diff --git a/arch/riscv/include/asm/page.h 
->> b/arch/riscv/include/asm/page.h
->> index adc9d26f3d75..22cfb2be60dc 100644
->> --- a/arch/riscv/include/asm/page.h
->> +++ b/arch/riscv/include/asm/page.h
->> @@ -90,15 +90,28 @@ typedef struct page *pgtable_t;
->>
->>  #ifdef CONFIG_MMU
->>  extern unsigned long va_pa_offset;
->> +extern unsigned long va_kernel_pa_offset;
->>  extern unsigned long pfn_base;
->>  #define ARCH_PFN_OFFSET        (pfn_base)
->>  #else
->>  #define va_pa_offset        0
->> +#define va_kernel_pa_offset    0
->>  #define ARCH_PFN_OFFSET        (PAGE_OFFSET >> PAGE_SHIFT)
->>  #endif /* CONFIG_MMU */
->>
->> -#define __pa_to_va_nodebug(x)    ((void *)((unsigned long) (x) + 
->> va_pa_offset))
->> -#define __va_to_pa_nodebug(x)    ((unsigned long)(x) - va_pa_offset)
->> +extern unsigned long kernel_virt_addr;
->> +
->> +#define linear_mapping_pa_to_va(x)    ((void *)((unsigned long)(x) + 
->> va_pa_offset))
->> +#define kernel_mapping_pa_to_va(x)    ((void *)((unsigned long)(x) + 
->> va_kernel_pa_offset))
->> +#define __pa_to_va_nodebug(x)        linear_mapping_pa_to_va(x)
->> +
->> +#define linear_mapping_va_to_pa(x)    ((unsigned long)(x) - 
->> va_pa_offset)
->> +#define kernel_mapping_va_to_pa(x)    ((unsigned long)(x) - 
->> va_kernel_pa_offset)
->> +#define __va_to_pa_nodebug(x)    ({                        \
->> +    unsigned long _x = x;                            \
->> +    (_x < kernel_virt_addr) ?                        \
->> +        linear_mapping_va_to_pa(_x) : kernel_mapping_va_to_pa(_x);    \
->> +    })
->>
->>  #ifdef CONFIG_DEBUG_VIRTUAL
->>  extern phys_addr_t __virt_to_phys(unsigned long x);
->> diff --git a/arch/riscv/include/asm/pgtable.h 
->> b/arch/riscv/include/asm/pgtable.h
->> index ebf817c1bdf4..80e63a93e903 100644
->> --- a/arch/riscv/include/asm/pgtable.h
->> +++ b/arch/riscv/include/asm/pgtable.h
->> @@ -11,23 +11,30 @@
->>
->>  #include <asm/pgtable-bits.h>
->>
->> -#ifndef __ASSEMBLY__
->> -
->> -/* Page Upper Directory not used in RISC-V */
->> -#include <asm-generic/pgtable-nopud.h>
->> -#include <asm/page.h>
->> -#include <asm/tlbflush.h>
->> -#include <linux/mm_types.h>
->> +#ifndef CONFIG_MMU
->> +#define KERNEL_LINK_ADDR    PAGE_OFFSET
->> +#else
->>
->> -#ifdef CONFIG_MMU
->> +#define ADDRESS_SPACE_END    (UL(-1))
->> +/*
->> + * Leave 2GB for kernel and BPF at the end of the address space
->> + */
->> +#define KERNEL_LINK_ADDR    (ADDRESS_SPACE_END - SZ_2G + 1)
->>
->>  #define VMALLOC_SIZE     (KERN_VIRT_SIZE >> 1)
->>  #define VMALLOC_END      (PAGE_OFFSET - 1)
->>  #define VMALLOC_START    (PAGE_OFFSET - VMALLOC_SIZE)
->>
->> +/* KASLR should leave at least 128MB for BPF after the kernel */
->>  #define BPF_JIT_REGION_SIZE    (SZ_128M)
->> -#define BPF_JIT_REGION_START    (PAGE_OFFSET - BPF_JIT_REGION_SIZE)
->> -#define BPF_JIT_REGION_END    (VMALLOC_END)
->> +#define BPF_JIT_REGION_START    PFN_ALIGN((unsigned long)&_end)
->> +#define BPF_JIT_REGION_END    (BPF_JIT_REGION_START + 
->> BPF_JIT_REGION_SIZE)
->> +
->> +/* Modules always live before the kernel */
->> +#ifdef CONFIG_64BIT
->> +#define MODULES_VADDR    (PFN_ALIGN((unsigned long)&_end) - SZ_2G)
->> +#define MODULES_END    (PFN_ALIGN((unsigned long)&_start))
->> +#endif
->>
->>  /*
->>   * Roughly size the vmemmap space to be large enough to fit enough
->> @@ -57,9 +64,16 @@
->>  #define FIXADDR_SIZE     PGDIR_SIZE
->>  #endif
->>  #define FIXADDR_START    (FIXADDR_TOP - FIXADDR_SIZE)
->> -
->>  #endif
->>
->> +#ifndef __ASSEMBLY__
->> +
->> +/* Page Upper Directory not used in RISC-V */
->> +#include <asm-generic/pgtable-nopud.h>
->> +#include <asm/page.h>
->> +#include <asm/tlbflush.h>
->> +#include <linux/mm_types.h>
->> +
->>  #ifdef CONFIG_64BIT
->>  #include <asm/pgtable-64.h>
->>  #else
->> @@ -484,6 +498,7 @@ static inline int ptep_clear_flush_young(struct 
->> vm_area_struct *vma,
->>
->>  #define kern_addr_valid(addr)   (1) /* FIXME */
->>
->> +extern char _start[];
->>  extern void *dtb_early_va;
->>  extern uintptr_t dtb_early_pa;
->>  void setup_bootmem(void);
->> diff --git a/arch/riscv/include/asm/set_memory.h 
->> b/arch/riscv/include/asm/set_memory.h
->> index 6887b3d9f371..a9c56776fa0e 100644
->> --- a/arch/riscv/include/asm/set_memory.h
->> +++ b/arch/riscv/include/asm/set_memory.h
->> @@ -17,6 +17,7 @@ int set_memory_x(unsigned long addr, int numpages);
->>  int set_memory_nx(unsigned long addr, int numpages);
->>  int set_memory_rw_nx(unsigned long addr, int numpages);
->>  void protect_kernel_text_data(void);
->> +void protect_kernel_linear_mapping_text_rodata(void);
->>  #else
->>  static inline int set_memory_ro(unsigned long addr, int numpages) { 
->> return 0; }
->>  static inline int set_memory_rw(unsigned long addr, int numpages) { 
->> return 0; }
->> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
->> index f5a9bad86e58..6cb05f22e52a 100644
->> --- a/arch/riscv/kernel/head.S
->> +++ b/arch/riscv/kernel/head.S
->> @@ -69,7 +69,8 @@ pe_head_start:
->>  #ifdef CONFIG_MMU
->>  relocate:
->>      /* Relocate return address */
->> -    li a1, PAGE_OFFSET
->> +    la a1, kernel_virt_addr
->> +    REG_L a1, 0(a1)
->>      la a2, _start
->>      sub a1, a1, a2
->>      add ra, ra, a1
->> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
->> index 104fba889cf7..ce153771e5e9 100644
->> --- a/arch/riscv/kernel/module.c
->> +++ b/arch/riscv/kernel/module.c
->> @@ -408,12 +408,10 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const 
->> char *strtab,
->>  }
->>
->>  #if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
->> -#define VMALLOC_MODULE_START \
->> -     max(PFN_ALIGN((unsigned long)&_end - SZ_2G), VMALLOC_START)
->>  void *module_alloc(unsigned long size)
->>  {
->> -    return __vmalloc_node_range(size, 1, VMALLOC_MODULE_START,
->> -                    VMALLOC_END, GFP_KERNEL,
->> +    return __vmalloc_node_range(size, 1, MODULES_VADDR,
->> +                    MODULES_END, GFP_KERNEL,
->>                      PAGE_KERNEL_EXEC, 0, NUMA_NO_NODE,
->>                      __builtin_return_address(0));
->>  }
->> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
->> index e85bacff1b50..30e4af0fd50c 100644
->> --- a/arch/riscv/kernel/setup.c
->> +++ b/arch/riscv/kernel/setup.c
->> @@ -265,6 +265,11 @@ void __init setup_arch(char **cmdline_p)
->>
->>      if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
->>          protect_kernel_text_data();
->> +
->> +#if defined(CONFIG_64BIT) && defined(CONFIG_MMU)
->> +    protect_kernel_linear_mapping_text_rodata();
->> +#endif
->> +
->>  #ifdef CONFIG_SWIOTLB
->>      swiotlb_init(1);
->>  #endif
->> diff --git a/arch/riscv/kernel/vmlinux.lds.S 
->> b/arch/riscv/kernel/vmlinux.lds.S
->> index de03cb22d0e9..0726c05e0336 100644
->> --- a/arch/riscv/kernel/vmlinux.lds.S
->> +++ b/arch/riscv/kernel/vmlinux.lds.S
->> @@ -4,7 +4,8 @@
->>   * Copyright (C) 2017 SiFive
->>   */
->>
->> -#define LOAD_OFFSET PAGE_OFFSET
->> +#include <asm/pgtable.h>
->> +#define LOAD_OFFSET KERNEL_LINK_ADDR
->>  #include <asm/vmlinux.lds.h>
->>  #include <asm/page.h>
->>  #include <asm/cache.h>
->> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
->> index 8f17519208c7..1b14d523a95c 100644
->> --- a/arch/riscv/mm/fault.c
->> +++ b/arch/riscv/mm/fault.c
->> @@ -231,6 +231,19 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
->>          return;
->>      }
->>
->> +#ifdef CONFIG_64BIT
->> +    /*
->> +     * Modules in 64bit kernels lie in their own virtual region which 
->> is not
->> +     * in the vmalloc region, but dealing with page faults in this 
->> region
->> +     * or the vmalloc region amounts to doing the same thing: 
->> checking that
->> +     * the mapping exists in init_mm.pgd and updating user page 
->> table, so
->> +     * just use vmalloc_fault.
->> +     */
->> +    if (unlikely(addr >= MODULES_VADDR && addr < MODULES_END)) {
->> +        vmalloc_fault(regs, code, addr);
->> +        return;
->> +    }
->> +#endif
->>      /* Enable interrupts if they were enabled in the parent context. */
->>      if (likely(regs->status & SR_PIE))
->>          local_irq_enable();
->> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->> index 7f5036fbee8c..093f3a96ecfc 100644
->> --- a/arch/riscv/mm/init.c
->> +++ b/arch/riscv/mm/init.c
->> @@ -25,6 +25,9 @@
->>
->>  #include "../kernel/head.h"
->>
->> +unsigned long kernel_virt_addr = KERNEL_LINK_ADDR;
->> +EXPORT_SYMBOL(kernel_virt_addr);
->> +
->>  unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
->>                              __page_aligned_bss;
->>  EXPORT_SYMBOL(empty_zero_page);
->> @@ -88,6 +91,8 @@ static void print_vm_layout(void)
->>            (unsigned long)VMALLOC_END);
->>      print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
->>            (unsigned long)high_memory);
->> +    print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
->> +          (unsigned long)ADDRESS_SPACE_END);
->>  }
->>  #else
->>  static void print_vm_layout(void) { }
->> @@ -116,8 +121,13 @@ void __init setup_bootmem(void)
->>      /* The maximal physical memory size is -PAGE_OFFSET. */
->>      memblock_enforce_memory_limit(-PAGE_OFFSET);
->>
->> -    /* Reserve from the start of the kernel to the end of the kernel */
->> -    memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
->> +    /*
->> +     * Reserve from the start of the kernel to the end of the kernel
->> +     * and make sure we align the reservation on PMD_SIZE since we will
->> +     * map the kernel in the linear mapping as read-only: we do not want
->> +     * any allocation to happen between _end and the next pmd aligned 
->> page.
->> +     */
->> +    memblock_reserve(vmlinux_start, (vmlinux_end - vmlinux_start + 
->> PMD_SIZE - 1) & PMD_MASK);
->>
->>      /*
->>       * memblock allocator is not aware of the fact that last 4K bytes of
->> @@ -152,8 +162,12 @@ void __init setup_bootmem(void)
->>  #ifdef CONFIG_MMU
->>  static struct pt_alloc_ops pt_ops;
->>
->> +/* Offset between linear mapping virtual address and kernel load 
->> address */
->>  unsigned long va_pa_offset;
->>  EXPORT_SYMBOL(va_pa_offset);
->> +/* Offset between kernel mapping virtual address and kernel load 
->> address */
->> +unsigned long va_kernel_pa_offset;
->> +EXPORT_SYMBOL(va_kernel_pa_offset);
->>  unsigned long pfn_base;
->>  EXPORT_SYMBOL(pfn_base);
->>
->> @@ -257,7 +271,7 @@ static pmd_t *get_pmd_virt_late(phys_addr_t pa)
->>
->>  static phys_addr_t __init alloc_pmd_early(uintptr_t va)
->>  {
->> -    BUG_ON((va - PAGE_OFFSET) >> PGDIR_SHIFT);
->> +    BUG_ON((va - kernel_virt_addr) >> PGDIR_SHIFT);
->>
->>      return (uintptr_t)early_pmd;
->>  }
->> @@ -372,17 +386,32 @@ static uintptr_t __init 
->> best_map_size(phys_addr_t base, phys_addr_t size)
->>  #error "setup_vm() is called from head.S before relocate so it should 
->> not use absolute addressing."
->>  #endif
->>
->> +uintptr_t load_pa, load_sz;
->> +
->> +static void __init create_kernel_page_table(pgd_t *pgdir, uintptr_t 
->> map_size)
->> +{
->> +    uintptr_t va, end_va;
->> +
->> +    end_va = kernel_virt_addr + load_sz;
->> +    for (va = kernel_virt_addr; va < end_va; va += map_size)
->> +        create_pgd_mapping(pgdir, va,
->> +                   load_pa + (va - kernel_virt_addr),
->> +                   map_size, PAGE_KERNEL_EXEC);
->> +}
->> +
->>  asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>  {
->> -    uintptr_t va, pa, end_va;
->> -    uintptr_t load_pa = (uintptr_t)(&_start);
->> -    uintptr_t load_sz = (uintptr_t)(&_end) - load_pa;
->> +    uintptr_t pa;
->>      uintptr_t map_size;
->>  #ifndef __PAGETABLE_PMD_FOLDED
->>      pmd_t fix_bmap_spmd, fix_bmap_epmd;
->>  #endif
->> +    load_pa = (uintptr_t)(&_start);
->> +    load_sz = (uintptr_t)(&_end) - load_pa;
->>
->>      va_pa_offset = PAGE_OFFSET - load_pa;
->> +    va_kernel_pa_offset = kernel_virt_addr - load_pa;
->> +
->>      pfn_base = PFN_DOWN(load_pa);
->>
->>      /*
->> @@ -410,26 +439,22 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>      create_pmd_mapping(fixmap_pmd, FIXADDR_START,
->>                 (uintptr_t)fixmap_pte, PMD_SIZE, PAGE_TABLE);
->>      /* Setup trampoline PGD and PMD */
->> -    create_pgd_mapping(trampoline_pg_dir, PAGE_OFFSET,
->> +    create_pgd_mapping(trampoline_pg_dir, kernel_virt_addr,
->>                 (uintptr_t)trampoline_pmd, PGDIR_SIZE, PAGE_TABLE);
->> -    create_pmd_mapping(trampoline_pmd, PAGE_OFFSET,
->> +    create_pmd_mapping(trampoline_pmd, kernel_virt_addr,
->>                 load_pa, PMD_SIZE, PAGE_KERNEL_EXEC);
->>  #else
->>      /* Setup trampoline PGD */
->> -    create_pgd_mapping(trampoline_pg_dir, PAGE_OFFSET,
->> +    create_pgd_mapping(trampoline_pg_dir, kernel_virt_addr,
->>                 load_pa, PGDIR_SIZE, PAGE_KERNEL_EXEC);
->>  #endif
->>
->>      /*
->> -     * Setup early PGD covering entire kernel which will allows
->> +     * Setup early PGD covering entire kernel which will allow
->>       * us to reach paging_init(). We map all memory banks later
->>       * in setup_vm_final() below.
->>       */
->> -    end_va = PAGE_OFFSET + load_sz;
->> -    for (va = PAGE_OFFSET; va < end_va; va += map_size)
->> -        create_pgd_mapping(early_pg_dir, va,
->> -                   load_pa + (va - PAGE_OFFSET),
->> -                   map_size, PAGE_KERNEL_EXEC);
->> +    create_kernel_page_table(early_pg_dir, map_size);
->>
->>  #ifndef __PAGETABLE_PMD_FOLDED
->>      /* Setup early PMD for DTB */
->> @@ -444,7 +469,12 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>                 pa + PMD_SIZE, PMD_SIZE, PAGE_KERNEL);
->>      dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa & (PMD_SIZE - 
->> 1));
->>  #else /* CONFIG_BUILTIN_DTB */
->> -    dtb_early_va = __va(dtb_pa);
->> +    /*
->> +     * __va can't be used since it would return a linear mapping address
->> +     * whereas dtb_early_va will be used before setup_vm_final installs
->> +     * the linear mapping.
->> +     */
->> +    dtb_early_va = kernel_mapping_pa_to_va(dtb_pa);
->>  #endif /* CONFIG_BUILTIN_DTB */
->>  #else
->>  #ifndef CONFIG_BUILTIN_DTB
->> @@ -456,7 +486,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>                 pa + PGDIR_SIZE, PGDIR_SIZE, PAGE_KERNEL);
->>      dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa & (PGDIR_SIZE 
->> - 1));
->>  #else /* CONFIG_BUILTIN_DTB */
->> -    dtb_early_va = __va(dtb_pa);
->> +    dtb_early_va = kernel_mapping_pa_to_va(dtb_pa);
->>  #endif /* CONFIG_BUILTIN_DTB */
->>  #endif
->>      dtb_early_pa = dtb_pa;
->> @@ -492,6 +522,22 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>  #endif
->>  }
->>
->> +#ifdef CONFIG_64BIT
->> +void protect_kernel_linear_mapping_text_rodata(void)
->> +{
->> +    unsigned long text_start = (unsigned long)lm_alias(_start);
->> +    unsigned long init_text_start = (unsigned 
->> long)lm_alias(__init_text_begin);
->> +    unsigned long rodata_start = (unsigned 
->> long)lm_alias(__start_rodata);
->> +    unsigned long data_start = (unsigned long)lm_alias(_data);
->> +
->> +    set_memory_ro(text_start, (init_text_start - text_start) >> 
->> PAGE_SHIFT);
->> +    set_memory_nx(text_start, (init_text_start - text_start) >> 
->> PAGE_SHIFT);
->> +
->> +    set_memory_ro(rodata_start, (data_start - rodata_start) >> 
->> PAGE_SHIFT);
->> +    set_memory_nx(rodata_start, (data_start - rodata_start) >> 
->> PAGE_SHIFT);
->> +}
->> +#endif
->> +
->>  static void __init setup_vm_final(void)
->>  {
->>      uintptr_t va, map_size;
->> @@ -513,7 +559,7 @@ static void __init setup_vm_final(void)
->>                 __pa_symbol(fixmap_pgd_next),
->>                 PGDIR_SIZE, PAGE_TABLE);
->>
->> -    /* Map all memory banks */
->> +    /* Map all memory banks in the linear mapping */
->>      for_each_mem_range(i, &start, &end) {
->>          if (start >= end)
->>              break;
->> @@ -525,10 +571,13 @@ static void __init setup_vm_final(void)
->>          for (pa = start; pa < end; pa += map_size) {
->>              va = (uintptr_t)__va(pa);
->>              create_pgd_mapping(swapper_pg_dir, va, pa,
->> -                       map_size, PAGE_KERNEL_EXEC);
->> +                       map_size, PAGE_KERNEL);
->>          }
->>      }
->>
->> +    /* Map the kernel */
->> +    create_kernel_page_table(swapper_pg_dir, PMD_SIZE);
->> +
->>      /* Clear fixmap PTE and PMD mappings */
->>      clear_fixmap(FIX_PTE);
->>      clear_fixmap(FIX_PMD);
->> diff --git a/arch/riscv/mm/kasan_init.c b/arch/riscv/mm/kasan_init.c
->> index 2c39f0386673..28f4d52cf17e 100644
->> --- a/arch/riscv/mm/kasan_init.c
->> +++ b/arch/riscv/mm/kasan_init.c
->> @@ -171,6 +171,10 @@ void __init kasan_init(void)
->>      phys_addr_t _start, _end;
->>      u64 i;
->>
->> +    /*
->> +     * Populate all kernel virtual address space with 
->> kasan_early_shadow_page
->> +     * except for the linear mapping and the modules/kernel/BPF mapping.
->> +     */
->>      kasan_populate_early_shadow((void *)KASAN_SHADOW_START,
->>                      (void *)kasan_mem_to_shadow((void *)
->>                                  VMEMMAP_END));
->> @@ -183,6 +187,7 @@ void __init kasan_init(void)
->>              (void *)kasan_mem_to_shadow((void *)VMALLOC_START),
->>              (void *)kasan_mem_to_shadow((void *)VMALLOC_END));
->>
->> +    /* Populate the linear mapping */
->>      for_each_mem_range(i, &_start, &_end) {
->>          void *start = (void *)__va(_start);
->>          void *end = (void *)__va(_end);
->> @@ -193,6 +198,10 @@ void __init kasan_init(void)
->>          kasan_populate(kasan_mem_to_shadow(start), 
->> kasan_mem_to_shadow(end));
->>      };
->>
->> +    /* Populate kernel, BPF, modules mapping */
->> +    kasan_populate(kasan_mem_to_shadow((const void *)MODULES_VADDR),
->> +               kasan_mem_to_shadow((const void *)BPF_JIT_REGION_END));
->> +
->>      for (i = 0; i < PTRS_PER_PTE; i++)
->>          set_pte(&kasan_early_shadow_pte[i],
->>              mk_pte(virt_to_page(kasan_early_shadow_page),
->> diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
->> index e8e4dcd39fed..35703d5ef5fd 100644
->> --- a/arch/riscv/mm/physaddr.c
->> +++ b/arch/riscv/mm/physaddr.c
->> @@ -23,7 +23,7 @@ EXPORT_SYMBOL(__virt_to_phys);
->>
->>  phys_addr_t __phys_addr_symbol(unsigned long x)
->>  {
->> -    unsigned long kernel_start = (unsigned long)PAGE_OFFSET;
->> +    unsigned long kernel_start = (unsigned long)kernel_virt_addr;
->>      unsigned long kernel_end = (unsigned long)_end;
->>
->>      /*
-> 
-> This is breaking boot for me with CONFIG_STRICT_KERNEL_RWX=n.  I'm not 
-> even really convinced that's a useful config to support, but it's 
-> currently optional and I'd prefer to avoid breaking it if possible.
-> 
-> I can't quite figure out what's going on here and I'm pretty much tired 
-> out for tonight.  LMK if you don't have time to look at it and I'll try 
-> to give it another shot.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I'm taking a look at that.
+The linux/atomic-arch-fallback.h has been there for a while, but
+only x86 & arm64 support it. Let's make riscv follow the
+linux/arch/* development trendy and make the codes more readable
+and maintainable.
 
-Thanks,
+This patch also cleanup some codes:
+ - Add atomic_andnot_* operation
+ - Using amoswap.w.rl & amoswap.w.aq instructions in xchg
+ - Remove cmpxchg_acquire/release unnecessary optimization
 
-Alex
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Link: https://lore.kernel.org/linux-riscv/CAK8P3a0FG3cpqBNUP7kXj3713cMUqV1WcEh-vcRnGKM00WXqxw@mail.gmail.com/
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Anup Patel <anup@brainfault.org>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+---
+ arch/riscv/include/asm/atomic.h  | 230 +++++++++++++++------------------------
+ arch/riscv/include/asm/cmpxchg.h | 199 ++-------------------------------
+ 2 files changed, 99 insertions(+), 330 deletions(-)
+
+diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+index 400a8c8..7436981 100644
+--- a/arch/riscv/include/asm/atomic.h
++++ b/arch/riscv/include/asm/atomic.h
+@@ -8,13 +8,8 @@
+ #ifndef _ASM_RISCV_ATOMIC_H
+ #define _ASM_RISCV_ATOMIC_H
+ 
+-#ifdef CONFIG_GENERIC_ATOMIC64
+-# include <asm-generic/atomic64.h>
+-#else
+-# if (__riscv_xlen < 64)
+-#  error "64-bit atomics require XLEN to be at least 64"
+-# endif
+-#endif
++#include <linux/compiler.h>
++#include <linux/types.h>
+ 
+ #include <asm/cmpxchg.h>
+ #include <asm/barrier.h>
+@@ -25,25 +20,13 @@
+ #define __atomic_release_fence()					\
+ 	__asm__ __volatile__(RISCV_RELEASE_BARRIER "" ::: "memory");
+ 
+-static __always_inline int atomic_read(const atomic_t *v)
+-{
+-	return READ_ONCE(v->counter);
+-}
+-static __always_inline void atomic_set(atomic_t *v, int i)
+-{
+-	WRITE_ONCE(v->counter, i);
+-}
++#define arch_atomic_read(v)			__READ_ONCE((v)->counter)
++#define arch_atomic_set(v, i)			__WRITE_ONCE(((v)->counter), (i))
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-#define ATOMIC64_INIT(i) { (i) }
+-static __always_inline s64 atomic64_read(const atomic64_t *v)
+-{
+-	return READ_ONCE(v->counter);
+-}
+-static __always_inline void atomic64_set(atomic64_t *v, s64 i)
+-{
+-	WRITE_ONCE(v->counter, i);
+-}
++#define ATOMIC64_INIT				ATOMIC_INIT
++#define arch_atomic64_read			arch_atomic_read
++#define arch_atomic64_set			arch_atomic_set
+ #endif
+ 
+ /*
+@@ -53,7 +36,7 @@ static __always_inline void atomic64_set(atomic64_t *v, s64 i)
+  */
+ #define ATOMIC_OP(op, asm_op, I, asm_type, c_type, prefix)		\
+ static __always_inline							\
+-void atomic##prefix##_##op(c_type i, atomic##prefix##_t *v)		\
++void arch_atomic##prefix##_##op(c_type i, atomic##prefix##_t *v)	\
+ {									\
+ 	__asm__ __volatile__ (						\
+ 		"	amo" #asm_op "." #asm_type " zero, %1, %0"	\
+@@ -76,6 +59,12 @@ ATOMIC_OPS(sub, add, -i)
+ ATOMIC_OPS(and, and,  i)
+ ATOMIC_OPS( or,  or,  i)
+ ATOMIC_OPS(xor, xor,  i)
++ATOMIC_OPS(andnot, and,  -i)
++
++#define arch_atomic_andnot	arch_atomic_andnot
++#ifndef CONFIG_GENERIC_ATOMIC64
++#define arch_atomic64_andnot	arch_atomic64_andnot
++#endif
+ 
+ #undef ATOMIC_OP
+ #undef ATOMIC_OPS
+@@ -87,7 +76,7 @@ ATOMIC_OPS(xor, xor,  i)
+  */
+ #define ATOMIC_FETCH_OP(op, asm_op, I, asm_type, c_type, prefix)	\
+ static __always_inline							\
+-c_type atomic##prefix##_fetch_##op##_relaxed(c_type i,			\
++c_type arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,		\
+ 					     atomic##prefix##_t *v)	\
+ {									\
+ 	register c_type ret;						\
+@@ -99,7 +88,7 @@ c_type atomic##prefix##_fetch_##op##_relaxed(c_type i,			\
+ 	return ret;							\
+ }									\
+ static __always_inline							\
+-c_type atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)	\
++c_type arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)\
+ {									\
+ 	register c_type ret;						\
+ 	__asm__ __volatile__ (						\
+@@ -112,15 +101,16 @@ c_type atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)	\
+ 
+ #define ATOMIC_OP_RETURN(op, asm_op, c_op, I, asm_type, c_type, prefix)	\
+ static __always_inline							\
+-c_type atomic##prefix##_##op##_return_relaxed(c_type i,			\
++c_type arch_atomic##prefix##_##op##_return_relaxed(c_type i,		\
+ 					      atomic##prefix##_t *v)	\
+ {									\
+-        return atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I;	\
++        return arch_atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I;	\
+ }									\
+ static __always_inline							\
+-c_type atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)	\
++c_type arch_atomic##prefix##_##op##_return(c_type i,			\
++						atomic##prefix##_t *v)	\
+ {									\
+-        return atomic##prefix##_fetch_##op(i, v) c_op I;		\
++        return arch_atomic##prefix##_fetch_##op(i, v) c_op I;		\
+ }
+ 
+ #ifdef CONFIG_GENERIC_ATOMIC64
+@@ -138,26 +128,26 @@ c_type atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)	\
+ ATOMIC_OPS(add, add, +,  i)
+ ATOMIC_OPS(sub, add, +, -i)
+ 
+-#define atomic_add_return_relaxed	atomic_add_return_relaxed
+-#define atomic_sub_return_relaxed	atomic_sub_return_relaxed
+-#define atomic_add_return		atomic_add_return
+-#define atomic_sub_return		atomic_sub_return
++#define arch_atomic_add_return_relaxed		arch_atomic_add_return_relaxed
++#define arch_atomic_sub_return_relaxed		arch_atomic_sub_return_relaxed
++#define arch_atomic_add_return			arch_atomic_add_return
++#define arch_atomic_sub_return			arch_atomic_sub_return
+ 
+-#define atomic_fetch_add_relaxed	atomic_fetch_add_relaxed
+-#define atomic_fetch_sub_relaxed	atomic_fetch_sub_relaxed
+-#define atomic_fetch_add		atomic_fetch_add
+-#define atomic_fetch_sub		atomic_fetch_sub
++#define arch_atomic_fetch_add_relaxed		arch_atomic_fetch_add_relaxed
++#define arch_atomic_fetch_sub_relaxed		arch_atomic_fetch_sub_relaxed
++#define arch_atomic_fetch_add			arch_atomic_fetch_add
++#define arch_atomic_fetch_sub			arch_atomic_fetch_sub
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-#define atomic64_add_return_relaxed	atomic64_add_return_relaxed
+-#define atomic64_sub_return_relaxed	atomic64_sub_return_relaxed
+-#define atomic64_add_return		atomic64_add_return
+-#define atomic64_sub_return		atomic64_sub_return
+-
+-#define atomic64_fetch_add_relaxed	atomic64_fetch_add_relaxed
+-#define atomic64_fetch_sub_relaxed	atomic64_fetch_sub_relaxed
+-#define atomic64_fetch_add		atomic64_fetch_add
+-#define atomic64_fetch_sub		atomic64_fetch_sub
++#define arch_atomic64_add_return_relaxed	arch_atomic64_add_return_relaxed
++#define arch_atomic64_sub_return_relaxed	arch_atomic64_sub_return_relaxed
++#define arch_atomic64_add_return		arch_atomic64_add_return
++#define arch_atomic64_sub_return		arch_atomic64_sub_return
++
++#define arch_atomic64_fetch_add_relaxed		arch_atomic64_fetch_add_relaxed
++#define arch_atomic64_fetch_sub_relaxed		arch_atomic64_fetch_sub_relaxed
++#define arch_atomic64_fetch_add			arch_atomic64_fetch_add
++#define arch_atomic64_fetch_sub			arch_atomic64_fetch_sub
+ #endif
+ 
+ #undef ATOMIC_OPS
+@@ -172,23 +162,28 @@ ATOMIC_OPS(sub, add, +, -i)
+ #endif
+ 
+ ATOMIC_OPS(and, and, i)
++ATOMIC_OPS(andnot, and, -i)
+ ATOMIC_OPS( or,  or, i)
+ ATOMIC_OPS(xor, xor, i)
+ 
+-#define atomic_fetch_and_relaxed	atomic_fetch_and_relaxed
+-#define atomic_fetch_or_relaxed		atomic_fetch_or_relaxed
+-#define atomic_fetch_xor_relaxed	atomic_fetch_xor_relaxed
+-#define atomic_fetch_and		atomic_fetch_and
+-#define atomic_fetch_or			atomic_fetch_or
+-#define atomic_fetch_xor		atomic_fetch_xor
++#define arch_atomic_fetch_and_relaxed		arch_atomic_fetch_and_relaxed
++#define arch_atomic_fetch_andnot_relaxed	arch_atomic_fetch_andnot_relaxed
++#define arch_atomic_fetch_or_relaxed		arch_atomic_fetch_or_relaxed
++#define arch_atomic_fetch_xor_relaxed		arch_atomic_fetch_xor_relaxed
++#define arch_atomic_fetch_and			arch_atomic_fetch_and
++#define arch_atomic_fetch_andnot		arch_atomic_fetch_andnot
++#define arch_atomic_fetch_or			arch_atomic_fetch_or
++#define arch_atomic_fetch_xor			arch_atomic_fetch_xor
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-#define atomic64_fetch_and_relaxed	atomic64_fetch_and_relaxed
+-#define atomic64_fetch_or_relaxed	atomic64_fetch_or_relaxed
+-#define atomic64_fetch_xor_relaxed	atomic64_fetch_xor_relaxed
+-#define atomic64_fetch_and		atomic64_fetch_and
+-#define atomic64_fetch_or		atomic64_fetch_or
+-#define atomic64_fetch_xor		atomic64_fetch_xor
++#define arch_atomic64_fetch_and_relaxed		arch_atomic64_fetch_and_relaxed
++#define arch_atomic64_fetch_andnot_relaxed	arch_atomic64_fetch_andnot_relaxed
++#define arch_atomic64_fetch_or_relaxed		arch_atomic64_fetch_or_relaxed
++#define arch_atomic64_fetch_xor_relaxed		arch_atomic64_fetch_xor_relaxed
++#define arch_atomic64_fetch_and			arch_atomic64_fetch_and
++#define arch_atomic64_fetch_andnot		arch_atomic64_fetch_andnot
++#define arch_atomic64_fetch_or			arch_atomic64_fetch_or
++#define arch_atomic64_fetch_xor			arch_atomic64_fetch_xor
+ #endif
+ 
+ #undef ATOMIC_OPS
+@@ -197,7 +192,7 @@ ATOMIC_OPS(xor, xor, i)
+ #undef ATOMIC_OP_RETURN
+ 
+ /* This is required to provide a full barrier on success. */
+-static __always_inline int atomic_fetch_add_unless(atomic_t *v, int a, int u)
++static __always_inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
+ {
+        int prev, rc;
+ 
+@@ -214,10 +209,10 @@ static __always_inline int atomic_fetch_add_unless(atomic_t *v, int a, int u)
+ 		: "memory");
+ 	return prev;
+ }
+-#define atomic_fetch_add_unless atomic_fetch_add_unless
++#define arch_atomic_fetch_add_unless arch_atomic_fetch_add_unless
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-static __always_inline s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
++static __always_inline s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
+ {
+        s64 prev;
+        long rc;
+@@ -235,82 +230,10 @@ static __always_inline s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u
+ 		: "memory");
+ 	return prev;
+ }
+-#define atomic64_fetch_add_unless atomic64_fetch_add_unless
++#define arch_atomic64_fetch_add_unless		arch_atomic64_fetch_add_unless
+ #endif
+ 
+-/*
+- * atomic_{cmp,}xchg is required to have exactly the same ordering semantics as
+- * {cmp,}xchg and the operations that return, so they need a full barrier.
+- */
+-#define ATOMIC_OP(c_t, prefix, size)					\
+-static __always_inline							\
+-c_t atomic##prefix##_xchg_relaxed(atomic##prefix##_t *v, c_t n)		\
+-{									\
+-	return __xchg_relaxed(&(v->counter), n, size);			\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_xchg_acquire(atomic##prefix##_t *v, c_t n)		\
+-{									\
+-	return __xchg_acquire(&(v->counter), n, size);			\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_xchg_release(atomic##prefix##_t *v, c_t n)		\
+-{									\
+-	return __xchg_release(&(v->counter), n, size);			\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_xchg(atomic##prefix##_t *v, c_t n)			\
+-{									\
+-	return __xchg(&(v->counter), n, size);				\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_cmpxchg_relaxed(atomic##prefix##_t *v,		\
+-				     c_t o, c_t n)			\
+-{									\
+-	return __cmpxchg_relaxed(&(v->counter), o, n, size);		\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_cmpxchg_acquire(atomic##prefix##_t *v,		\
+-				     c_t o, c_t n)			\
+-{									\
+-	return __cmpxchg_acquire(&(v->counter), o, n, size);		\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_cmpxchg_release(atomic##prefix##_t *v,		\
+-				     c_t o, c_t n)			\
+-{									\
+-	return __cmpxchg_release(&(v->counter), o, n, size);		\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_cmpxchg(atomic##prefix##_t *v, c_t o, c_t n)	\
+-{									\
+-	return __cmpxchg(&(v->counter), o, n, size);			\
+-}
+-
+-#ifdef CONFIG_GENERIC_ATOMIC64
+-#define ATOMIC_OPS()							\
+-	ATOMIC_OP(int,   , 4)
+-#else
+-#define ATOMIC_OPS()							\
+-	ATOMIC_OP(int,   , 4)						\
+-	ATOMIC_OP(s64, 64, 8)
+-#endif
+-
+-ATOMIC_OPS()
+-
+-#define atomic_xchg_relaxed atomic_xchg_relaxed
+-#define atomic_xchg_acquire atomic_xchg_acquire
+-#define atomic_xchg_release atomic_xchg_release
+-#define atomic_xchg atomic_xchg
+-#define atomic_cmpxchg_relaxed atomic_cmpxchg_relaxed
+-#define atomic_cmpxchg_acquire atomic_cmpxchg_acquire
+-#define atomic_cmpxchg_release atomic_cmpxchg_release
+-#define atomic_cmpxchg atomic_cmpxchg
+-
+-#undef ATOMIC_OPS
+-#undef ATOMIC_OP
+-
+-static __always_inline int atomic_sub_if_positive(atomic_t *v, int offset)
++static __always_inline int arch_atomic_sub_if_positive(atomic_t *v, int offset)
+ {
+        int prev, rc;
+ 
+@@ -327,11 +250,11 @@ static __always_inline int atomic_sub_if_positive(atomic_t *v, int offset)
+ 		: "memory");
+ 	return prev - offset;
+ }
++#define arch_atomic_dec_if_positive(v)	arch_atomic_sub_if_positive(v, 1)
+ 
+-#define atomic_dec_if_positive(v)	atomic_sub_if_positive(v, 1)
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-static __always_inline s64 atomic64_sub_if_positive(atomic64_t *v, s64 offset)
++static __always_inline s64 arch_atomic64_sub_if_positive(atomic64_t *v, s64 offset)
+ {
+        s64 prev;
+        long rc;
+@@ -349,8 +272,35 @@ static __always_inline s64 atomic64_sub_if_positive(atomic64_t *v, s64 offset)
+ 		: "memory");
+ 	return prev - offset;
+ }
++#define arch_atomic64_dec_if_positive(v)	arch_atomic64_sub_if_positive(v, 1)
++#endif
++
++#define arch_atomic_xchg_relaxed(v, new) \
++	arch_xchg_relaxed(&((v)->counter), (new))
++#define arch_atomic_xchg_acquire(v, new) \
++	arch_xchg_acquire(&((v)->counter), (new))
++#define arch_atomic_xchg_release(v, new) \
++	arch_xchg_release(&((v)->counter), (new))
++#define arch_atomic_xchg(v, new) \
++	arch_xchg(&((v)->counter), (new))
++
++#define arch_atomic_cmpxchg_relaxed(v, old, new) \
++	arch_cmpxchg_relaxed(&((v)->counter), (old), (new))
++#define arch_atomic_cmpxchg_acquire(v, old, new) \
++	arch_cmpxchg_acquire(&((v)->counter), (old), (new))
++#define arch_atomic_cmpxchg_release(v, old, new) \
++	arch_cmpxchg_release(&((v)->counter), (old), (new))
++#define arch_atomic_cmpxchg(v, old, new) \
++	arch_cmpxchg(&((v)->counter), (old), (new))
+ 
+-#define atomic64_dec_if_positive(v)	atomic64_sub_if_positive(v, 1)
++#ifndef CONFIG_GENERIC_ATOMIC64
++#define arch_atomic64_xchg_relaxed		arch_atomic_xchg_relaxed
++#define arch_atomic64_xchg			arch_atomic_xchg
++
++#define arch_atomic64_cmpxchg_relaxed		arch_atomic_cmpxchg_relaxed
++#define arch_atomic64_cmpxchg			arch_atomic_cmpxchg
+ #endif
+ 
++#define ARCH_ATOMIC
++
+ #endif /* _ASM_RISCV_ATOMIC_H */
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index 262e5bb..16195a6 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -37,7 +37,7 @@
+ 	__ret;								\
+ })
+ 
+-#define xchg_relaxed(ptr, x)						\
++#define arch_xchg_relaxed(ptr, x)					\
+ ({									\
+ 	__typeof__(*(ptr)) _x_ = (x);					\
+ 	(__typeof__(*(ptr))) __xchg_relaxed((ptr),			\
+@@ -52,16 +52,14 @@
+ 	switch (size) {							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+-			"	amoswap.w %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
++			"	amoswap.w.aq %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+ 		break;							\
+ 	case 8:								\
+ 		__asm__ __volatile__ (					\
+-			"	amoswap.d %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
++			"	amoswap.d.aq %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+@@ -72,7 +70,7 @@
+ 	__ret;								\
+ })
+ 
+-#define xchg_acquire(ptr, x)						\
++#define arch_xchg_acquire(ptr, x)					\
+ ({									\
+ 	__typeof__(*(ptr)) _x_ = (x);					\
+ 	(__typeof__(*(ptr))) __xchg_acquire((ptr),			\
+@@ -87,16 +85,14 @@
+ 	switch (size) {							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.w %0, %2, %1\n"			\
++			"	amoswap.w.rl %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+ 		break;							\
+ 	case 8:								\
+ 		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.d %0, %2, %1\n"			\
++			"	amoswap.d.rl %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+@@ -107,7 +103,7 @@
+ 	__ret;								\
+ })
+ 
+-#define xchg_release(ptr, x)						\
++#define arch_xchg_release(ptr, x)					\
+ ({									\
+ 	__typeof__(*(ptr)) _x_ = (x);					\
+ 	(__typeof__(*(ptr))) __xchg_release((ptr),			\
+@@ -140,24 +136,12 @@
+ 	__ret;								\
+ })
+ 
+-#define xchg(ptr, x)							\
++#define arch_xchg(ptr, x)						\
+ ({									\
+ 	__typeof__(*(ptr)) _x_ = (x);					\
+ 	(__typeof__(*(ptr))) __xchg((ptr), _x_, sizeof(*(ptr)));	\
+ })
+ 
+-#define xchg32(ptr, x)							\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
+-	xchg((ptr), (x));						\
+-})
+-
+-#define xchg64(ptr, x)							\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
+-	xchg((ptr), (x));						\
+-})
+-
+ /*
+  * Atomic compare and exchange.  Compare OLD with MEM, if identical,
+  * store NEW in MEM.  Return the initial value in MEM.  Success is
+@@ -199,7 +183,7 @@
+ 	__ret;								\
+ })
+ 
+-#define cmpxchg_relaxed(ptr, o, n)					\
++#define arch_cmpxchg_relaxed(ptr, o, n)					\
+ ({									\
+ 	__typeof__(*(ptr)) _o_ = (o);					\
+ 	__typeof__(*(ptr)) _n_ = (n);					\
+@@ -207,169 +191,4 @@
+ 					_o_, _n_, sizeof(*(ptr)));	\
+ })
+ 
+-#define __cmpxchg_acquire(ptr, old, new, size)				\
+-({									\
+-	__typeof__(ptr) __ptr = (ptr);					\
+-	__typeof__(*(ptr)) __old = (old);				\
+-	__typeof__(*(ptr)) __new = (new);				\
+-	__typeof__(*(ptr)) __ret;					\
+-	register unsigned int __rc;					\
+-	switch (size) {							\
+-	case 4:								\
+-		__asm__ __volatile__ (					\
+-			"0:	lr.w %0, %2\n"				\
+-			"	bne  %0, %z3, 1f\n"			\
+-			"	sc.w %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			RISCV_ACQUIRE_BARRIER				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" ((long)__old), "rJ" (__new)		\
+-			: "memory");					\
+-		break;							\
+-	case 8:								\
+-		__asm__ __volatile__ (					\
+-			"0:	lr.d %0, %2\n"				\
+-			"	bne %0, %z3, 1f\n"			\
+-			"	sc.d %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			RISCV_ACQUIRE_BARRIER				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" (__old), "rJ" (__new)			\
+-			: "memory");					\
+-		break;							\
+-	default:							\
+-		BUILD_BUG();						\
+-	}								\
+-	__ret;								\
+-})
+-
+-#define cmpxchg_acquire(ptr, o, n)					\
+-({									\
+-	__typeof__(*(ptr)) _o_ = (o);					\
+-	__typeof__(*(ptr)) _n_ = (n);					\
+-	(__typeof__(*(ptr))) __cmpxchg_acquire((ptr),			\
+-					_o_, _n_, sizeof(*(ptr)));	\
+-})
+-
+-#define __cmpxchg_release(ptr, old, new, size)				\
+-({									\
+-	__typeof__(ptr) __ptr = (ptr);					\
+-	__typeof__(*(ptr)) __old = (old);				\
+-	__typeof__(*(ptr)) __new = (new);				\
+-	__typeof__(*(ptr)) __ret;					\
+-	register unsigned int __rc;					\
+-	switch (size) {							\
+-	case 4:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"0:	lr.w %0, %2\n"				\
+-			"	bne  %0, %z3, 1f\n"			\
+-			"	sc.w %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" ((long)__old), "rJ" (__new)		\
+-			: "memory");					\
+-		break;							\
+-	case 8:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"0:	lr.d %0, %2\n"				\
+-			"	bne %0, %z3, 1f\n"			\
+-			"	sc.d %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" (__old), "rJ" (__new)			\
+-			: "memory");					\
+-		break;							\
+-	default:							\
+-		BUILD_BUG();						\
+-	}								\
+-	__ret;								\
+-})
+-
+-#define cmpxchg_release(ptr, o, n)					\
+-({									\
+-	__typeof__(*(ptr)) _o_ = (o);					\
+-	__typeof__(*(ptr)) _n_ = (n);					\
+-	(__typeof__(*(ptr))) __cmpxchg_release((ptr),			\
+-					_o_, _n_, sizeof(*(ptr)));	\
+-})
+-
+-#define __cmpxchg(ptr, old, new, size)					\
+-({									\
+-	__typeof__(ptr) __ptr = (ptr);					\
+-	__typeof__(*(ptr)) __old = (old);				\
+-	__typeof__(*(ptr)) __new = (new);				\
+-	__typeof__(*(ptr)) __ret;					\
+-	register unsigned int __rc;					\
+-	switch (size) {							\
+-	case 4:								\
+-		__asm__ __volatile__ (					\
+-			"0:	lr.w %0, %2\n"				\
+-			"	bne  %0, %z3, 1f\n"			\
+-			"	sc.w.rl %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"	fence rw, rw\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" ((long)__old), "rJ" (__new)		\
+-			: "memory");					\
+-		break;							\
+-	case 8:								\
+-		__asm__ __volatile__ (					\
+-			"0:	lr.d %0, %2\n"				\
+-			"	bne %0, %z3, 1f\n"			\
+-			"	sc.d.rl %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"	fence rw, rw\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" (__old), "rJ" (__new)			\
+-			: "memory");					\
+-		break;							\
+-	default:							\
+-		BUILD_BUG();						\
+-	}								\
+-	__ret;								\
+-})
+-
+-#define cmpxchg(ptr, o, n)						\
+-({									\
+-	__typeof__(*(ptr)) _o_ = (o);					\
+-	__typeof__(*(ptr)) _n_ = (n);					\
+-	(__typeof__(*(ptr))) __cmpxchg((ptr),				\
+-				       _o_, _n_, sizeof(*(ptr)));	\
+-})
+-
+-#define cmpxchg_local(ptr, o, n)					\
+-	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
+-
+-#define cmpxchg32(ptr, o, n)						\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
+-	cmpxchg((ptr), (o), (n));					\
+-})
+-
+-#define cmpxchg32_local(ptr, o, n)					\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
+-	cmpxchg_relaxed((ptr), (o), (n))				\
+-})
+-
+-#define cmpxchg64(ptr, o, n)						\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
+-	cmpxchg((ptr), (o), (n));					\
+-})
+-
+-#define cmpxchg64_local(ptr, o, n)					\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
+-	cmpxchg_relaxed((ptr), (o), (n));				\
+-})
+-
+ #endif /* _ASM_RISCV_CMPXCHG_H */
+-- 
+2.7.4
+
