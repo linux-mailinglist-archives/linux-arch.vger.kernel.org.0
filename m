@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57643361500
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 00:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58C5361505
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 00:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237148AbhDOWSF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Apr 2021 18:18:05 -0400
-Received: from mga14.intel.com ([192.55.52.115]:22365 "EHLO mga14.intel.com"
+        id S235896AbhDOWSS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Apr 2021 18:18:18 -0400
+Received: from mga14.intel.com ([192.55.52.115]:22373 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235997AbhDOWRQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 15 Apr 2021 18:17:16 -0400
-IronPort-SDR: irXvP/GFRdf3heMGwDv2AcVaWSdqz8ZmK++WRom7AXRxcAL496YAYOAFV/onXuio2gQ2TvfNaw
- zBjs/3jG1UOA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9955"; a="194513384"
+        id S236013AbhDOWRn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 15 Apr 2021 18:17:43 -0400
+IronPort-SDR: 0/44kxUtW7S0YPgvU/O3/GywqDFHtSQ6lubLinSa76zTZK/XfHaOdcCF/5qaaacTU0QKy5OOs3
+ SuJ6nDCFV6dw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9955"; a="194513386"
 X-IronPort-AV: E=Sophos;i="5.82,225,1613462400"; 
-   d="scan'208";a="194513384"
+   d="scan'208";a="194513386"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 15:15:39 -0700
-IronPort-SDR: L0ERRbeNh2MfSfyXl7QXsXYtpH159o4fM46f9MXp5SQVwX5Oi6xjt7NgFzdiT8SStB7EUdAzlX
- wFIU3IACA77g==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 15:15:40 -0700
+IronPort-SDR: sXgWcWEz4QxcL+G/ojomf/d5AugQizA9D0j0rDoq+sWjTmANzKGiggseX3CViyML0ozT/+0cJq
+ GJyqtTLAxEbg==
 X-IronPort-AV: E=Sophos;i="5.82,225,1613462400"; 
-   d="scan'208";a="451270936"
+   d="scan'208";a="451270940"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 15:15:39 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -53,9 +53,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v25 22/30] x86/cet/shstk: Add user-mode shadow stack support
-Date:   Thu, 15 Apr 2021 15:14:11 -0700
-Message-Id: <20210415221419.31835-23-yu-cheng.yu@intel.com>
+Subject: [PATCH v25 23/30] x86/cet/shstk: Handle thread shadow stack
+Date:   Thu, 15 Apr 2021 15:14:12 -0700
+Message-Id: <20210415221419.31835-24-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210415221419.31835-1-yu-cheng.yu@intel.com>
 References: <20210415221419.31835-1-yu-cheng.yu@intel.com>
@@ -65,227 +65,193 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce basic shadow stack enabling/disabling/allocation routines.
-A task's shadow stack is allocated from memory with VM_SHADOW_STACK flag
-and has a fixed size of min(RLIMIT_STACK, 4GB).
+For clone() with CLONE_VM specified, the child and the parent must have
+separate shadow stacks.  Thus, the kernel allocates, and frees on thread
+exit a new shadow stack for the child.
+
+Use stack_size passed from clone3() syscall for thread shadow stack size,
+but cap it to min(RLIMIT_STACK, 4 GB).  A compat-mode thread shadow stack
+size is further reduced to 1/4.  This allows more threads to run in a 32-
+bit address space.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc: Kees Cook <keescook@chromium.org>
 ---
-v25:
-- Change CONFIG_X86_CET to CONFIG_X86_SHADOW_STACK.
-- Update alloc_shstk(), remove unused input flags.
-v24:
-- Rename cet.c to shstk.c, update related areas accordingly.
-
- arch/x86/include/asm/cet.h       |  29 ++++++++
- arch/x86/include/asm/processor.h |   5 ++
- arch/x86/kernel/Makefile         |   2 +
- arch/x86/kernel/shstk.c          | 123 +++++++++++++++++++++++++++++++
- 4 files changed, 159 insertions(+)
- create mode 100644 arch/x86/include/asm/cet.h
- create mode 100644 arch/x86/kernel/shstk.c
+ arch/x86/include/asm/cet.h         |  5 +++
+ arch/x86/include/asm/mmu_context.h |  3 ++
+ arch/x86/kernel/process.c          | 15 ++++++--
+ arch/x86/kernel/shstk.c            | 57 +++++++++++++++++++++++++++++-
+ 4 files changed, 76 insertions(+), 4 deletions(-)
 
 diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-new file mode 100644
-index 000000000000..aa85d599b184
---- /dev/null
+index aa85d599b184..8b83ded577cc 100644
+--- a/arch/x86/include/asm/cet.h
 +++ b/arch/x86/include/asm/cet.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_CET_H
-+#define _ASM_X86_CET_H
-+
-+#ifndef __ASSEMBLY__
-+#include <linux/types.h>
-+
-+struct task_struct;
-+/*
-+ * Per-thread CET status
-+ */
-+struct cet_status {
-+	unsigned long	shstk_base;
-+	unsigned long	shstk_size;
-+};
-+
-+#ifdef CONFIG_X86_SHADOW_STACK
-+int shstk_setup(void);
-+void shstk_free(struct task_struct *p);
-+void shstk_disable(void);
-+#else
-+static inline int shstk_setup(void) { return 0; }
-+static inline void shstk_free(struct task_struct *p) {}
-+static inline void shstk_disable(void) {}
-+#endif
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* _ASM_X86_CET_H */
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index f1b9ed5efaa9..3690b78e55bb 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -27,6 +27,7 @@ struct vm86;
- #include <asm/unwind_hints.h>
- #include <asm/vmxfeatures.h>
- #include <asm/vdso/processor.h>
+@@ -16,10 +16,15 @@ struct cet_status {
+ 
+ #ifdef CONFIG_X86_SHADOW_STACK
+ int shstk_setup(void);
++int shstk_setup_thread(struct task_struct *p, unsigned long clone_flags,
++		       unsigned long stack_size);
+ void shstk_free(struct task_struct *p);
+ void shstk_disable(void);
+ #else
+ static inline int shstk_setup(void) { return 0; }
++static inline int shstk_setup_thread(struct task_struct *p,
++				     unsigned long clone_flags,
++				     unsigned long stack_size) { return 0; }
+ static inline void shstk_free(struct task_struct *p) {}
+ static inline void shstk_disable(void) {}
+ #endif
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index 27516046117a..53569114aa01 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -11,6 +11,7 @@
+ 
+ #include <asm/tlbflush.h>
+ #include <asm/paravirt.h>
++#include <asm/cet.h>
+ #include <asm/debugreg.h>
+ 
+ extern atomic64_t last_mm_ctx_id;
+@@ -146,6 +147,8 @@ do {						\
+ #else
+ #define deactivate_mm(tsk, mm)			\
+ do {						\
++	if (!tsk->vfork_done)			\
++		shstk_free(tsk);		\
+ 	load_gs_index(0);			\
+ 	loadsegment(fs, 0);			\
+ } while (0)
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 9c214d7085a4..fa01e8679d01 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -43,6 +43,7 @@
+ #include <asm/io_bitmap.h>
+ #include <asm/proto.h>
+ #include <asm/frame.h>
 +#include <asm/cet.h>
  
- #include <linux/personality.h>
- #include <linux/cache.h>
-@@ -535,6 +536,10 @@ struct thread_struct {
+ #include "process.h"
  
- 	unsigned int		sig_on_uaccess_err:1;
+@@ -109,6 +110,7 @@ void exit_thread(struct task_struct *tsk)
  
-+#ifdef CONFIG_X86_SHADOW_STACK
-+	struct cet_status	cet;
+ 	free_vm86(t);
+ 
++	shstk_free(tsk);
+ 	fpu__drop(fpu);
+ }
+ 
+@@ -122,8 +124,9 @@ static int set_new_tls(struct task_struct *p, unsigned long tls)
+ 		return do_set_thread_area_64(p, ARCH_SET_FS, tls);
+ }
+ 
+-int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
+-		struct task_struct *p, unsigned long tls)
++int copy_thread(unsigned long clone_flags, unsigned long sp,
++		unsigned long stack_size, struct task_struct *p,
++		unsigned long tls)
+ {
+ 	struct inactive_task_frame *frame;
+ 	struct fork_frame *fork_frame;
+@@ -163,7 +166,7 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
+ 	/* Kernel thread ? */
+ 	if (unlikely(p->flags & (PF_KTHREAD | PF_IO_WORKER))) {
+ 		memset(childregs, 0, sizeof(struct pt_regs));
+-		kthread_frame_init(frame, sp, arg);
++		kthread_frame_init(frame, sp, stack_size);
+ 		return 0;
+ 	}
+ 
+@@ -181,6 +184,12 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
+ 	if (clone_flags & CLONE_SETTLS)
+ 		ret = set_new_tls(p, tls);
+ 
++#ifdef CONFIG_X86_64
++	/* Allocate a new shadow stack for pthread */
++	if (!ret)
++		ret = shstk_setup_thread(p, clone_flags, stack_size);
 +#endif
 +
- 	/* Floating point and extended processor state */
- 	struct fpu		fpu;
- 	/*
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 2ddf08351f0b..0f99b093f350 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -150,6 +150,8 @@ obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
- obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+ 	if (!ret && unlikely(test_tsk_thread_flag(current, TIF_IO_BITMAP)))
+ 		io_bitmap_share(p);
  
- obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev-es.o
-+obj-$(CONFIG_X86_SHADOW_STACK)		+= shstk.o
-+
- ###
- # 64 bit specific files
- ifeq ($(CONFIG_X86_64),y)
 diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-new file mode 100644
-index 000000000000..c815c7507830
---- /dev/null
+index c815c7507830..d387df84b7f1 100644
+--- a/arch/x86/kernel/shstk.c
 +++ b/arch/x86/kernel/shstk.c
-@@ -0,0 +1,123 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * shstk.c - Intel shadow stack support
-+ *
-+ * Copyright (c) 2021, Intel Corporation.
-+ * Yu-cheng Yu <yu-cheng.yu@intel.com>
-+ */
-+
-+#include <linux/types.h>
-+#include <linux/mm.h>
-+#include <linux/mman.h>
-+#include <linux/slab.h>
-+#include <linux/uaccess.h>
-+#include <linux/sched/signal.h>
-+#include <linux/compat.h>
-+#include <linux/sizes.h>
-+#include <linux/user.h>
-+#include <asm/msr.h>
-+#include <asm/fpu/internal.h>
-+#include <asm/fpu/xstate.h>
-+#include <asm/fpu/types.h>
-+#include <asm/cet.h>
-+
-+static void start_update_msrs(void)
-+{
-+	fpregs_lock();
-+	if (test_thread_flag(TIF_NEED_FPU_LOAD))
-+		__fpregs_load_activate();
-+}
-+
-+static void end_update_msrs(void)
-+{
-+	fpregs_unlock();
-+}
-+
-+static unsigned long alloc_shstk(unsigned long size)
-+{
-+	struct mm_struct *mm = current->mm;
-+	unsigned long addr, populate;
-+	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
-+
-+	mmap_write_lock(mm);
-+	addr = do_mmap(NULL, 0, size, PROT_READ, flags, VM_SHADOW_STACK, 0,
-+		       &populate, NULL);
-+	mmap_write_unlock(mm);
-+
-+	return addr;
-+}
-+
-+int shstk_setup(void)
+@@ -70,6 +70,55 @@ int shstk_setup(void)
+ 	return 0;
+ }
+ 
++int shstk_setup_thread(struct task_struct *tsk, unsigned long clone_flags,
++		       unsigned long stack_size)
 +{
 +	unsigned long addr, size;
-+	struct cet_status *cet = &current->thread.cet;
++	struct cet_user_state *state;
++	struct cet_status *cet = &tsk->thread.cet;
 +
-+	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-+		return -EOPNOTSUPP;
++	if (!cet->shstk_size)
++		return 0;
 +
-+	size = round_up(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G), PAGE_SIZE);
++	if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
++		return 0;
++
++	state = get_xsave_addr(&tsk->thread.fpu.state.xsave,
++			       XFEATURE_CET_USER);
++
++	if (!state)
++		return -EINVAL;
++
++	if (stack_size == 0)
++		return -EINVAL;
++
++	/* Cap shadow stack size to 4 GB */
++	size = min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G);
++	size = min(size, stack_size);
++
++	/*
++	 * Compat-mode pthreads share a limited address space.
++	 * If each function call takes an average of four slots
++	 * stack space, allocate 1/4 of stack size for shadow stack.
++	 */
++	if (in_compat_syscall())
++		size /= 4;
++	size = round_up(size, PAGE_SIZE);
 +	addr = alloc_shstk(size);
-+	if (IS_ERR_VALUE(addr))
-+		return PTR_ERR((void *)addr);
 +
++	if (IS_ERR_VALUE(addr)) {
++		cet->shstk_base = 0;
++		cet->shstk_size = 0;
++		return PTR_ERR((void *)addr);
++	}
++
++	fpu__prepare_write(&tsk->thread.fpu);
++	state->user_ssp = (u64)(addr + size);
 +	cet->shstk_base = addr;
 +	cet->shstk_size = size;
-+
-+	start_update_msrs();
-+	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
-+	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
-+	end_update_msrs();
 +	return 0;
 +}
 +
-+void shstk_free(struct task_struct *tsk)
-+{
-+	struct cet_status *cet = &tsk->thread.cet;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) ||
-+	    !cet->shstk_size ||
-+	    !cet->shstk_base)
-+		return;
-+
-+	if (!tsk->mm)
-+		return;
-+
-+	while (1) {
-+		int r;
-+
-+		r = vm_munmap(cet->shstk_base, cet->shstk_size);
-+
-+		/*
-+		 * vm_munmap() returns -EINTR when mmap_lock is held by
-+		 * something else, and that lock should not be held for a
-+		 * long time.  Retry it for the case.
-+		 */
-+		if (r == -EINTR) {
-+			cond_resched();
-+			continue;
-+		}
-+		break;
-+	}
-+
-+	cet->shstk_base = 0;
-+	cet->shstk_size = 0;
-+}
-+
-+void shstk_disable(void)
-+{
-+	struct cet_status *cet = &current->thread.cet;
-+	u64 msr_val;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) ||
-+	    !cet->shstk_size ||
-+	    !cet->shstk_base)
-+		return;
-+
-+	start_update_msrs();
-+	rdmsrl(MSR_IA32_U_CET, msr_val);
-+	wrmsrl(MSR_IA32_U_CET, msr_val & ~CET_SHSTK_EN);
-+	wrmsrl(MSR_IA32_PL3_SSP, 0);
-+	end_update_msrs();
-+
-+	shstk_free(current);
-+}
+ void shstk_free(struct task_struct *tsk)
+ {
+ 	struct cet_status *cet = &tsk->thread.cet;
+@@ -79,7 +128,13 @@ void shstk_free(struct task_struct *tsk)
+ 	    !cet->shstk_base)
+ 		return;
+ 
+-	if (!tsk->mm)
++	/*
++	 * When fork() with CLONE_VM fails, the child (tsk) already has a
++	 * shadow stack allocated, and exit_thread() calls this function to
++	 * free it.  In this case the parent (current) and the child is
++	 * sharing the same mm struct.
++	 */
++	if (!tsk->mm || tsk->mm != current->mm)
+ 		return;
+ 
+ 	while (1) {
 -- 
 2.21.0
 
