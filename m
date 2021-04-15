@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD033614F6
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 00:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C323614FA
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 00:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbhDOWRn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Apr 2021 18:17:43 -0400
-Received: from mga14.intel.com ([192.55.52.115]:22373 "EHLO mga14.intel.com"
+        id S237096AbhDOWSB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Apr 2021 18:18:01 -0400
+Received: from mga14.intel.com ([192.55.52.115]:22384 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235291AbhDOWRI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 15 Apr 2021 18:17:08 -0400
-IronPort-SDR: RXCqNouNqjOO/zGuTU8sLQ855689BzguhvLmxd204ugM+VExxKKcOYW9EyA+PmSWEBfmTzM4XK
- 4jEdIw+E8eng==
-X-IronPort-AV: E=McAfee;i="6200,9189,9955"; a="194513372"
+        id S235152AbhDOWRQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 15 Apr 2021 18:17:16 -0400
+IronPort-SDR: UlHYXNPTwePtTWvyOVAhERq8xAUNUHOis/P4V8u7ukTvBrjVotNar1igVeghwgcxXPXQeEwrIA
+ M3tFzbZpbJ+w==
+X-IronPort-AV: E=McAfee;i="6200,9189,9955"; a="194513375"
 X-IronPort-AV: E=Sophos;i="5.82,225,1613462400"; 
-   d="scan'208";a="194513372"
+   d="scan'208";a="194513375"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 15:15:38 -0700
-IronPort-SDR: NtphittWxHIIYhKewyTtbZEf2Ftqea+CenJyUW/ySgvdzmRH96D1Y5ELEfCOc/etW/Me3kU4Y+
- rIHs9h8FC80Q==
+IronPort-SDR: vhn1Z324SBbr0lQ2D1W71SPNqDVsbykgutpkzrQbxq8+1kfgJIwf4rH1poI7LfaUjjrCQXERLk
+ cNRlOzYa9Vdw==
 X-IronPort-AV: E=Sophos;i="5.82,225,1613462400"; 
-   d="scan'208";a="451270922"
+   d="scan'208";a="451270926"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 15:15:37 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 15:15:38 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -54,9 +54,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v25 19/30] mm: Update can_follow_write_pte() for shadow stack
-Date:   Thu, 15 Apr 2021 15:14:08 -0700
-Message-Id: <20210415221419.31835-20-yu-cheng.yu@intel.com>
+Subject: [PATCH v25 20/30] mm/mprotect: Exclude shadow stack from preserve_write
+Date:   Thu, 15 Apr 2021 15:14:09 -0700
+Message-Id: <20210415221419.31835-21-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210415221419.31835-1-yu-cheng.yu@intel.com>
 References: <20210415221419.31835-1-yu-cheng.yu@intel.com>
@@ -66,100 +66,63 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Can_follow_write_pte() ensures a read-only page is COWed by checking the
-FOLL_COW flag, and uses pte_dirty() to validate the flag is still valid.
+In change_pte_range(), when a PTE is changed for prot_numa, _PAGE_RW is
+preserved to avoid the additional write fault after the NUMA hinting fault.
+However, pte_write() now includes both normal writable and shadow stack
+(RW=0, Dirty=1) PTEs, but the latter does not have _PAGE_RW and has no need
+to preserve it.
 
-Like a writable data page, a shadow stack page is writable, and becomes
-read-only during copy-on-write, but it is always dirty.  Thus, in the
-can_follow_write_pte() check, it belongs to the writable page case and
-should be excluded from the read-only page pte_dirty() check.  Apply
-the same changes to can_follow_write_pmd().
-
-While at it, also split the long line into smaller ones.
+Exclude shadow stack from preserve_write test, and apply the same change to
+change_huge_pmd().
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc: Kees Cook <keescook@chromium.org>
 Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
 v25:
-- Split long line into smaller ones.
+- Move is_shadow_stack_mapping() to a separate line.
 v24:
 - Change arch_shadow_stack_mapping() to is_shadow_stack_mapping().
 
- mm/gup.c         | 16 ++++++++++++----
- mm/huge_memory.c | 16 ++++++++++++----
- 2 files changed, 24 insertions(+), 8 deletions(-)
+ mm/huge_memory.c | 7 +++++++
+ mm/mprotect.c    | 7 +++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index ef7d2da9f03f..f2813cf4d07b 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -356,10 +356,18 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
-  * FOLL_FORCE can write to even unwritable pte's, but only
-  * after we've gone through a COW cycle and they are dirty.
-  */
--static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
-+static inline bool can_follow_write_pte(pte_t pte, unsigned int flags,
-+					vm_flags_t vm_flags)
- {
--	return pte_write(pte) ||
--		((flags & FOLL_FORCE) && (flags & FOLL_COW) && pte_dirty(pte));
-+	if (pte_write(pte))
-+		return true;
-+	if ((flags & (FOLL_FORCE | FOLL_COW)) != (FOLL_FORCE | FOLL_COW))
-+		return false;
-+	if (!pte_dirty(pte))
-+		return false;
-+	if (is_shadow_stack_mapping(vm_flags))
-+		return false;
-+	return true;
- }
- 
- static struct page *follow_page_pte(struct vm_area_struct *vma,
-@@ -402,7 +410,7 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
- 	}
- 	if ((flags & FOLL_NUMA) && pte_protnone(pte))
- 		goto no_page;
--	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags)) {
-+	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags, vma->vm_flags)) {
- 		pte_unmap_unlock(ptep, ptl);
- 		return NULL;
- 	}
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 044029ef45cd..a0858eac0320 100644
+index a0858eac0320..9e51cae35aad 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -1338,10 +1338,18 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf, pmd_t orig_pmd)
-  * FOLL_FORCE can write to even unwritable pmd's, but only
-  * after we've gone through a COW cycle and they are dirty.
-  */
--static inline bool can_follow_write_pmd(pmd_t pmd, unsigned int flags)
-+static inline bool can_follow_write_pmd(pmd_t pmd, unsigned int flags,
-+					vm_flags_t vm_flags)
- {
--	return pmd_write(pmd) ||
--	       ((flags & FOLL_FORCE) && (flags & FOLL_COW) && pmd_dirty(pmd));
-+	if (pmd_write(pmd))
-+		return true;
-+	if ((flags & (FOLL_FORCE | FOLL_COW)) != (FOLL_FORCE | FOLL_COW))
-+		return false;
-+	if (!pmd_dirty(pmd))
-+		return false;
-+	if (is_shadow_stack_mapping(vm_flags))
-+		return false;
-+	return true;
- }
+@@ -1824,6 +1824,13 @@ int change_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
+ 		return 0;
  
- struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
-@@ -1354,7 +1362,7 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
+ 	preserve_write = prot_numa && pmd_write(*pmd);
++
++	/*
++	 * Preserve only normal writable huge PMD, but not shadow
++	 * stack (RW=0, Dirty=1).
++	 */
++	if (is_shadow_stack_mapping(vma->vm_flags))
++		preserve_write = false;
+ 	ret = 1;
  
- 	assert_spin_locked(pmd_lockptr(mm, pmd));
+ #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index c1ce78d688b6..3b2f0d75519f 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -77,6 +77,13 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+ 			pte_t ptent;
+ 			bool preserve_write = prot_numa && pte_write(oldpte);
  
--	if (flags & FOLL_WRITE && !can_follow_write_pmd(*pmd, flags))
-+	if (flags & FOLL_WRITE && !can_follow_write_pmd(*pmd, flags, vma->vm_flags))
- 		goto out;
- 
- 	/* Avoid dumping huge zero page */
++			/*
++			 * Preserve only normal writable PTE, but not shadow
++			 * stack (RW=0, Dirty=1).
++			 */
++			if (is_shadow_stack_mapping(vma->vm_flags))
++				preserve_write = false;
++
+ 			/*
+ 			 * Avoid trapping faults against the zero or KSM
+ 			 * pages. See similar comment in change_huge_pmd.
 -- 
 2.21.0
 
