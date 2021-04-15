@@ -2,118 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1217C3615C9
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 01:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC6D3615EF
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 01:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236108AbhDOXFL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Apr 2021 19:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
+        id S235250AbhDOXNB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Apr 2021 19:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234949AbhDOXFL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Apr 2021 19:05:11 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDD2C061574;
-        Thu, 15 Apr 2021 16:04:47 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FLw0C5xDmz9sVv;
-        Fri, 16 Apr 2021 09:04:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618527885;
-        bh=ZhL6BpAiTk9FcT+T5DgCqZyNjJQV/rrieoSAtVXb50k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XgtjymfRlfy1wmujSuDaVsubNDGDI5cH8Ky3frmMzce1GQ5CKbJkNiSIznaOEpZO4
-         vfEk//aaBOnBej919i4EXHnvy7FrEC2yVTdagClMBE4tiLT5Emib4z76kpvl6SZX4s
-         DYK5q7kV2Gzt3dgqVCkf161CB2BIpgUvjs+wO7zq/Q7fDzrYAcZLmbAZY32qgDszjJ
-         5690y8zA4KpyEnKuQuwNk1PrSkoMWS+M8pv7mMlTGcRV8f8zhml6F9mKtknF7lWwLH
-         Oedb+T8o64ZBpog6+Sey6OBFynbC9yywm6vPvZFWA6UGV+UMHYn2jsCLKf7O1qYi4r
-         Qv6w4A497We/Q==
-Date:   Fri, 16 Apr 2021 09:04:42 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v13 14/14] powerpc/64s/radix: Enable huge vmalloc
- mappings
-Message-ID: <20210416090442.3852817d@canb.auug.org.au>
-In-Reply-To: <20210415115529.9703ba8e9f7a38dea39efa56@linux-foundation.org>
-References: <20210317062402.533919-1-npiggin@gmail.com>
-        <20210317062402.533919-15-npiggin@gmail.com>
-        <a5c57276-737d-930b-670c-58dc0c815501@csgroup.eu>
-        <20210415115529.9703ba8e9f7a38dea39efa56@linux-foundation.org>
+        with ESMTP id S234914AbhDOXNB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Apr 2021 19:13:01 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4B1C061756
+        for <linux-arch@vger.kernel.org>; Thu, 15 Apr 2021 16:12:38 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id j6-20020a17090adc86b02900cbfe6f2c96so13570511pjv.1
+        for <linux-arch@vger.kernel.org>; Thu, 15 Apr 2021 16:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=axtens.net; s=google;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=quZmVxdkfveDUtpLM1NU/LuQrdZNONtDpXYzxh0MMQU=;
+        b=dlBNCIJGr0qL38amaMZRkug9NjLuSZKepOmlGO/a/0dku+GQVYqb2GS0jPTD9w2gLe
+         mxyKCuERedST3RGnVbk4l07BD+E5BOSCp/2NFPvySo56I89CsE7aDSCbVRn53Jv8Ql5N
+         hSp7xLsHsW85pUai/ansn/rQu7ZvTTszyfp0E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=quZmVxdkfveDUtpLM1NU/LuQrdZNONtDpXYzxh0MMQU=;
+        b=t+femjD2KaNNChDAbziqOkX837jlntGU2KIrGmRVo43t8Ijw2bbNLgfIRTKjBSyd6Z
+         qFhw7N2gZmZk7V/B0AHUSxfmwp6AiBhrk0X8+gYd+VDtTk8nhsTO0x/NCK2uuvH4+BoQ
+         0Twyla5W+41TYPbbWPBYyDVbb9pPsNmzoSz09cm9rpD+GEnKmZzHpaOe7gpswYxCZqPN
+         kf+lZIS8s+sfpKTCL4pPmhluPcrEiabM8EFdqPpS3z6reD6VSfgHVMLSoXGMnEodzHJj
+         pnxjjxeTskrw1GjxlBUKXmdlUmzbFwXyaA3n38LwuehLIrjzkyixHuRynJ9oJjgVHomo
+         Ihtw==
+X-Gm-Message-State: AOAM531eYXp0AZhub2I8lkOH9cNpH+9xne41lbrIglmhF+2d8VfBg/dl
+        g7G/7s1IMAtXcQUG0Ie63Dwcfw==
+X-Google-Smtp-Source: ABdhPJxtoW/lfV/Z4uQg/42K/o4Py3SAIqP7jABAruwS7PxREUqkSHGAEbZJMX/djPbOm2w9XfP5tw==
+X-Received: by 2002:a17:902:59d4:b029:ea:bbc5:c775 with SMTP id d20-20020a17090259d4b02900eabbc5c775mr6469026plj.11.1618528357637;
+        Thu, 15 Apr 2021 16:12:37 -0700 (PDT)
+Received: from localhost (2001-44b8-111e-5c00-3f8b-a64e-9a27-b872.static.ipv6.internode.on.net. [2001:44b8:111e:5c00:3f8b:a64e:9a27:b872])
+        by smtp.gmail.com with ESMTPSA id x11sm3055779pfr.7.2021.04.15.16.12.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Apr 2021 16:12:37 -0700 (PDT)
+From:   Daniel Axtens <dja@axtens.net>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Steven Price <steven.price@arm.com>, akpm@linux-foundation.org
+Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v1 3/5] mm: ptdump: Provide page size to notepage()
+In-Reply-To: <1ef6b954fb7b0f4dfc78820f1e612d2166c13227.1618506910.git.christophe.leroy@csgroup.eu>
+References: <cover.1618506910.git.christophe.leroy@csgroup.eu> <1ef6b954fb7b0f4dfc78820f1e612d2166c13227.1618506910.git.christophe.leroy@csgroup.eu>
+Date:   Fri, 16 Apr 2021 09:12:34 +1000
+Message-ID: <8735vr16sd.fsf@dja-thinkpad.axtens.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CoWv8MZ9HFnuCaw0+k+d2WJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---Sig_/CoWv8MZ9HFnuCaw0+k+d2WJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Christophe,
 
-Hi all,
+>  static void note_page(struct ptdump_state *pt_st, unsigned long addr, int level,
+> -		      u64 val)
+> +		      u64 val, unsigned long page_size)
 
-On Thu, 15 Apr 2021 11:55:29 -0700 Andrew Morton <akpm@linux-foundation.org=
-> wrote:
->
-> On Thu, 15 Apr 2021 12:23:55 +0200 Christophe Leroy <christophe.leroy@csg=
-roup.eu> wrote:
-> > > +	 * is done. STRICT_MODULE_RWX may require extra work to support this
-> > > +	 * too.
-> > > +	 */
-> > >  =20
-> > > -	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END, GF=
-P_KERNEL,
-> > > -				    PAGE_KERNEL_EXEC, VM_FLUSH_RESET_PERMS, NUMA_NO_NODE, =20
-> >=20
-> >=20
-> > I think you should add the following in <asm/pgtable.h>
-> >=20
-> > #ifndef MODULES_VADDR
-> > #define MODULES_VADDR VMALLOC_START
-> > #define MODULES_END VMALLOC_END
-> > #endif
-> >=20
-> > And leave module_alloc() as is (just removing the enclosing #ifdef MODU=
-LES_VADDR and adding the=20
-> > VM_NO_HUGE_VMAP  flag)
-> >=20
-> > This would minimise the conflits with the changes I did in powerpc/next=
- reported by Stephen R.
-> >  =20
->=20
-> I'll drop powerpc-64s-radix-enable-huge-vmalloc-mappings.patch for now,
-> make life simpler.
+Compilers can warn about unused parameters at -Wextra level.  However,
+reading scripts/Makefile.extrawarn it looks like the warning is
+explicitly _disabled_ in the kernel at W=1 and not reenabled at W=2 or
+W=3. So I guess this is fine...
 
-I have dropped that patch from linux-next.
---=20
-Cheers,
-Stephen Rothwell
+> @@ -126,7 +126,7 @@ static int ptdump_hole(unsigned long addr, unsigned long next,
+>  {
+>  	struct ptdump_state *st = walk->private;
+>  
+> -	st->note_page(st, addr, depth, 0);
+> +	st->note_page(st, addr, depth, 0, 0);
 
---Sig_/CoWv8MZ9HFnuCaw0+k+d2WJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+I know it doesn't matter at this point, but I'm not really thrilled by
+the idea of passing 0 as the size here. Doesn't the hole have a known
+page size?
 
------BEGIN PGP SIGNATURE-----
+>  
+>  	return 0;
+>  }
+> @@ -153,5 +153,5 @@ void ptdump_walk_pgd(struct ptdump_state *st, struct mm_struct *mm, pgd_t *pgd)
+>  	mmap_read_unlock(mm);
+>  
+>  	/* Flush out the last page */
+> -	st->note_page(st, 0, -1, 0);
+> +	st->note_page(st, 0, -1, 0, 0);
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB4xooACgkQAVBC80lX
-0GyqrwgAmtxuo7IZ6/S/4r8/v7sJcfEh324RYwwpvHZyWyBU4D0WMZ3u6tLaT08i
-8909zACOYf6M/4cLPDrztpz6xfeM1mGyPNhjB/0aplDRtKW5KSQ2a51Q3YBbkK84
-rlb8vDTWM0o2a6hffjkcx+0jgEA9QjwXcZ9hzQ1pAu27d7tzix6FjJrcU6/Hx3hS
-j/v5q26pEdh7NDF/Fwke1K5dZqucYA7sf4mW2H3/49eD0FOryNLR29URiqjZKJuq
-uvDep2QoGIFIzlZxgAmJqphMrVZB/QNmTeyf62QWLCWP/bZUJA+ZBwN+CfZ6V/hG
-3DnNR1inpWry4OGBBtKmNzLCfRZluA==
-=/HhO
------END PGP SIGNATURE-----
+I'm more OK with the idea of passing 0 as the size when the depth is -1
+(don't know): if we don't know the depth we conceptually can't know the
+page size.
 
---Sig_/CoWv8MZ9HFnuCaw0+k+d2WJ--
+Regards,
+Daniel
+
