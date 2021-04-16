@@ -2,152 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9CD361E1D
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 12:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AFA361E27
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 12:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239137AbhDPKlb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Apr 2021 06:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
+        id S241770AbhDPKm2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Apr 2021 06:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbhDPKla (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Apr 2021 06:41:30 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F284AC061574;
-        Fri, 16 Apr 2021 03:41:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FMCRd1BPDz9sVv;
-        Fri, 16 Apr 2021 20:41:01 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1618569661;
-        bh=SeOzQ9Fg9C2zAMuj8cY5McP+aFk25PiM311deR2n+II=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dlrfmoa66rjbsgjm/6d63tAsvauWz+/zCQSBCnuup3KRzbygxslVoQS9YLGzEmxCp
-         BlmJROc2q2TCvBVUIsPXowKqD3tb+ePzQL27V3dkPyfXbwzb78UU1jdjd137lpsvKm
-         KRliFf+AabCTWYguQlPH0zI4TXJyjldAKamw26SoqGPY25rAGdtoTIaVkio+4Uf4L1
-         SEAb53oUP9Z4uROoJLiyxDIETXgY4VU69wU0ZSnGCG4nWNO75litn3pAbksUGbd/82
-         gAnYfZRakpES4+dl5kRnYehiwK32L5HnaGG6PdUlZ0kv9Tk4UjgZL+TxjgXEcebnmo
-         67fGXanIuuK6g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Tony Ambardar <tony.ambardar@gmail.com>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>, Rosen Penev <rosenp@gmail.com>
-Subject: Re: [PATCH v3] powerpc: fix EDEADLOCK redefinition error in
- uapi/asm/errno.h
-In-Reply-To: <CAPGftE-Q+Q479j7SikDBQLiM+VKbpXpRYnTeEJeAHeZrh_Ok2A@mail.gmail.com>
-References: <20200917000757.1232850-1-Tony.Ambardar@gmail.com>
- <20200917135437.1238787-1-Tony.Ambardar@gmail.com>
- <CAPGftE-Q+Q479j7SikDBQLiM+VKbpXpRYnTeEJeAHeZrh_Ok2A@mail.gmail.com>
-Date:   Fri, 16 Apr 2021 20:41:00 +1000
-Message-ID: <87r1jaeclf.fsf@mpe.ellerman.id.au>
+        with ESMTP id S241753AbhDPKm1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Apr 2021 06:42:27 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19262C06175F
+        for <linux-arch@vger.kernel.org>; Fri, 16 Apr 2021 03:42:03 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id t14-20020a05600c198eb029012eeb3edfaeso3910551wmq.2
+        for <linux-arch@vger.kernel.org>; Fri, 16 Apr 2021 03:42:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zex7i7Gm7ilDvh/qRtb14tTVDUsTiPnIyJ8lJBlTVDY=;
+        b=o+NE8pGADgY4FrSGIXWUfJDlnJ1juLdQCdEiocUx/f4kBswMU6EacEfCbch4zfDr8H
+         +8aCGjJXpl6SK20MOt1VpdXaX4BbkHmki5A2hh1gmZ20w2EMJP1VjnEsC8VADb9byTqY
+         lE+sl5rG/g22g2pLcBDdBqPUtuuihLLbi7A6mVCOjdUC+LZqLYwD2VrW6Q33ZmABcitG
+         osCWWS16aeTjD/SapJryOxU2/k5hi64Zs2KKTkPikhugxITJ9wbjvvaZwkFN1zhfoIGY
+         lMbuOFwM6i8S1cr0T1JDeA7IJyAS5SdymT8sxxaVslfrawq50NfS7neQz6FJIXPKg4kh
+         wuBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zex7i7Gm7ilDvh/qRtb14tTVDUsTiPnIyJ8lJBlTVDY=;
+        b=Fzsqb9vpFGGqNJHcQo9HOGrKgicUTMfzvqjqLGEKddbPh9sWrXILBywnxbeqHcY+3g
+         6PeBKi0O78ZBwD/Fb6H8JV6LVvUfSYj0T13TyvwMKwRZH2W1/kwd3AoI0c+mC+KNA1jp
+         7EVJgM5v7RKyduw2sT1FzkG15NiX+K+3y4n/Z2IhkGlaWWLerarIfXp3SF6UxcIPVlKj
+         auTI0bb6cKjBfQwTFWKaee25IP8gBfFRAlGQDey9TN3hbEZ7MixZ8cVfBORay448H0kI
+         H9eHhEiAtwoqnKZ3hRAzKEEwvexXXkQ3KJy2dudvDG1DaCFHsGO4+UtCH113M+cTmvlm
+         kEbQ==
+X-Gm-Message-State: AOAM531MQN8UyVhRWVTW/pscBHhJ4zO4dT3zdr0AHvco5kOFR0Y8PuXL
+        +k39AQmhNk2pyQSvv2DWA0U/khVMRmB7L/UPQedCsA==
+X-Google-Smtp-Source: ABdhPJzSZVwXQXIP/gEzyKiBpeLInXpc+75cZ3dvpf3JNqEHMcXwCYZIJpV2ZQZVzZT+LiXa+F2urN3JdQz1K4fuTB0=
+X-Received: by 2002:a7b:c348:: with SMTP id l8mr7746989wmj.152.1618569721686;
+ Fri, 16 Apr 2021 03:42:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20210415110426.2238-1-alex@ghiti.fr>
+In-Reply-To: <20210415110426.2238-1-alex@ghiti.fr>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 16 Apr 2021 16:11:50 +0530
+Message-ID: <CAAhSdy2pD2q99-g3QSSHbpqw1ZD402fStFmbKNFzht2m=MS8mQ@mail.gmail.com>
+Subject: Re: [PATCH] riscv: Protect kernel linear mapping only if
+ CONFIG_STRICT_KERNEL_RWX is set
+To:     Alexandre Ghiti <alex@ghiti.fr>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>, linux-doc@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        kasan-dev@googlegroups.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Tony Ambardar <tony.ambardar@gmail.com> writes:
-> Hello Michael,
+On Thu, Apr 15, 2021 at 4:34 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
 >
-> The latest version of this patch addressed all feedback I'm aware of
-> when submitted last September, and I've seen no further comments from
-> reviewers since then.
+> If CONFIG_STRICT_KERNEL_RWX is not set, we cannot set different permissions
+> to the kernel data and text sections, so make sure it is defined before
+> trying to protect the kernel linear mapping.
 >
-> Could you please let me know where this stands and if anything further
-> is needed?
+> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
 
-Sorry, it's still sitting in my inbox :/
+Maybe you should add "Fixes:" tag in commit tag ?
 
-I was going to reply to suggest we split the tools change out. The
-headers under tools are usually updated by another maintainer, I think
-it might even be scripted.
+Otherwise it looks good.
 
-Anyway I've applied your patch and done that (dropped the change to
-tools/.../errno.h), which should also mean the stable backport is more
-likely to work automatically.
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-It will hit mainline in v5.13-rc1 and then be backported to the stable
-trees.
+Regards,
+Anup
 
-I don't think you actually need the tools version of the header updated
-to fix your bug? In which case we can probably just wait for it to be
-updated automatically when the tools headers are sync'ed with the kernel
-versions.
-
-cheers
-
-
-> On Thu, 17 Sept 2020 at 06:54, Tony Ambardar <tony.ambardar@gmail.com> wrote:
->>
->> A few archs like powerpc have different errno.h values for macros
->> EDEADLOCK and EDEADLK. In code including both libc and linux versions of
->> errno.h, this can result in multiple definitions of EDEADLOCK in the
->> include chain. Definitions to the same value (e.g. seen with mips) do
->> not raise warnings, but on powerpc there are redefinitions changing the
->> value, which raise warnings and errors (if using "-Werror").
->>
->> Guard against these redefinitions to avoid build errors like the following,
->> first seen cross-compiling libbpf v5.8.9 for powerpc using GCC 8.4.0 with
->> musl 1.1.24:
->>
->>   In file included from ../../arch/powerpc/include/uapi/asm/errno.h:5,
->>                    from ../../include/linux/err.h:8,
->>                    from libbpf.c:29:
->>   ../../include/uapi/asm-generic/errno.h:40: error: "EDEADLOCK" redefined [-Werror]
->>    #define EDEADLOCK EDEADLK
->>
->>   In file included from toolchain-powerpc_8540_gcc-8.4.0_musl/include/errno.h:10,
->>                    from libbpf.c:26:
->>   toolchain-powerpc_8540_gcc-8.4.0_musl/include/bits/errno.h:58: note: this is the location of the previous definition
->>    #define EDEADLOCK       58
->>
->>   cc1: all warnings being treated as errors
->>
->> CC: Stable <stable@vger.kernel.org>
->> Reported-by: Rosen Penev <rosenp@gmail.com>
->> Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
->> ---
->> v1 -> v2:
->>  * clean up commit description formatting
->>
->> v2 -> v3: (per Michael Ellerman)
->>  * drop indeterminate 'Fixes' tags, request stable backports instead
->> ---
->>  arch/powerpc/include/uapi/asm/errno.h       | 1 +
->>  tools/arch/powerpc/include/uapi/asm/errno.h | 1 +
->>  2 files changed, 2 insertions(+)
->>
->> diff --git a/arch/powerpc/include/uapi/asm/errno.h b/arch/powerpc/include/uapi/asm/errno.h
->> index cc79856896a1..4ba87de32be0 100644
->> --- a/arch/powerpc/include/uapi/asm/errno.h
->> +++ b/arch/powerpc/include/uapi/asm/errno.h
->> @@ -2,6 +2,7 @@
->>  #ifndef _ASM_POWERPC_ERRNO_H
->>  #define _ASM_POWERPC_ERRNO_H
->>
->> +#undef EDEADLOCK
->>  #include <asm-generic/errno.h>
->>
->>  #undef EDEADLOCK
->> diff --git a/tools/arch/powerpc/include/uapi/asm/errno.h b/tools/arch/powerpc/include/uapi/asm/errno.h
->> index cc79856896a1..4ba87de32be0 100644
->> --- a/tools/arch/powerpc/include/uapi/asm/errno.h
->> +++ b/tools/arch/powerpc/include/uapi/asm/errno.h
->> @@ -2,6 +2,7 @@
->>  #ifndef _ASM_POWERPC_ERRNO_H
->>  #define _ASM_POWERPC_ERRNO_H
->>
->> +#undef EDEADLOCK
->>  #include <asm-generic/errno.h>
->>
->>  #undef EDEADLOCK
->> --
->> 2.25.1
->>
+> ---
+>  arch/riscv/kernel/setup.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 626003bb5fca..ab394d173cd4 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -264,12 +264,12 @@ void __init setup_arch(char **cmdline_p)
+>
+>         sbi_init();
+>
+> -       if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
+> +       if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX)) {
+>                 protect_kernel_text_data();
+> -
+> -#if defined(CONFIG_64BIT) && defined(CONFIG_MMU)
+> -       protect_kernel_linear_mapping_text_rodata();
+> +#ifdef CONFIG_64BIT
+> +               protect_kernel_linear_mapping_text_rodata();
+>  #endif
+> +       }
+>
+>  #ifdef CONFIG_SWIOTLB
+>         swiotlb_init(1);
+> --
+> 2.20.1
+>
