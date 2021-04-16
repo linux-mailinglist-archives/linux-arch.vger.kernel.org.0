@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A5036193D
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 07:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85835361975
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Apr 2021 07:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbhDPF0E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Apr 2021 01:26:04 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:47140 "EHLO pegase1.c-s.fr"
+        id S238757AbhDPFtO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Apr 2021 01:49:14 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:61684 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229955AbhDPF0E (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 16 Apr 2021 01:26:04 -0400
+        id S231598AbhDPFtI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 16 Apr 2021 01:49:08 -0400
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4FM4Rj5BTJzB09bL;
-        Fri, 16 Apr 2021 07:25:37 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4FM4yL18bxzB09bL;
+        Fri, 16 Apr 2021 07:48:42 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id IiPlMveTf2d4; Fri, 16 Apr 2021 07:25:37 +0200 (CEST)
+        with ESMTP id y8gfrr0M5iy9; Fri, 16 Apr 2021 07:48:42 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4FM4Rj3d6HzB09bK;
-        Fri, 16 Apr 2021 07:25:37 +0200 (CEST)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FM4yK6ptpzB09bK;
+        Fri, 16 Apr 2021 07:48:41 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4E55D8B81C;
-        Fri, 16 Apr 2021 07:25:38 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C3C238B81C;
+        Fri, 16 Apr 2021 07:48:42 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 2-smQfjtxhxm; Fri, 16 Apr 2021 07:25:38 +0200 (CEST)
+        with ESMTP id GFphMEGbTxDw; Fri, 16 Apr 2021 07:48:42 +0200 (CEST)
 Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7F75E8B81A;
-        Fri, 16 Apr 2021 07:25:37 +0200 (CEST)
-Subject: Re: [PATCH v1 4/5] mm: ptdump: Support hugepd table entries
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BFF598B81A;
+        Fri, 16 Apr 2021 07:48:41 +0200 (CEST)
+Subject: Re: [PATCH v1 1/5] mm: pagewalk: Fix walk for hugepage tables
 To:     Daniel Axtens <dja@axtens.net>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Steven Price <steven.price@arm.com>, akpm@linux-foundation.org
-Cc:     linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
+Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org, linux-mm@kvack.org
 References: <cover.1618506910.git.christophe.leroy@csgroup.eu>
- <f41a177a0fd5a71db616e586a9ec5c51102c6656.1618506910.git.christophe.leroy@csgroup.eu>
- <87zgxzyvn3.fsf@dja-thinkpad.axtens.net>
+ <733408f48b1ed191f53518123ee6fc6d42287cc6.1618506910.git.christophe.leroy@csgroup.eu>
+ <877dl3184l.fsf@dja-thinkpad.axtens.net>
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <0e7b9312-888c-2e53-b7fd-a887fd9fb429@csgroup.eu>
-Date:   Fri, 16 Apr 2021 07:25:36 +0200
+Message-ID: <56d4c630-ac1e-6b75-39a5-7b5bfbd5b1aa@csgroup.eu>
+Date:   Fri, 16 Apr 2021 07:48:41 +0200
 User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.9.1
 MIME-Version: 1.0
-In-Reply-To: <87zgxzyvn3.fsf@dja-thinkpad.axtens.net>
+In-Reply-To: <877dl3184l.fsf@dja-thinkpad.axtens.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: fr
 Content-Transfer-Encoding: 8bit
@@ -58,63 +58,131 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Daniel,
 
-Le 16/04/2021 à 01:29, Daniel Axtens a écrit :
+
+Le 16/04/2021 à 00:43, Daniel Axtens a écrit :
 > Hi Christophe,
 > 
->> Which hugepd, page table entries can be at any level
->> and can be of any size.
+>> Pagewalk ignores hugepd entries and walk down the tables
+>> as if it was traditionnal entries, leading to crazy result.
 >>
->> Add support for them.
+>> Add walk_hugepd_range() and use it to walk hugepage tables.
 >>
 >> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 >> ---
->>   mm/ptdump.c | 17 +++++++++++++++--
->>   1 file changed, 15 insertions(+), 2 deletions(-)
+>>   mm/pagewalk.c | 54 +++++++++++++++++++++++++++++++++++++++++++++------
+>>   1 file changed, 48 insertions(+), 6 deletions(-)
 >>
->> diff --git a/mm/ptdump.c b/mm/ptdump.c
->> index 61cd16afb1c8..6efdb8c15a7d 100644
->> --- a/mm/ptdump.c
->> +++ b/mm/ptdump.c
->> @@ -112,11 +112,24 @@ static int ptdump_pte_entry(pte_t *pte, unsigned long addr,
->>   {
->>   	struct ptdump_state *st = walk->private;
->>   	pte_t val = ptep_get(pte);
->> +	unsigned long page_size = next - addr;
->> +	int level;
+>> diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+>> index e81640d9f177..410a9d8f7572 100644
+>> --- a/mm/pagewalk.c
+>> +++ b/mm/pagewalk.c
+>> @@ -58,6 +58,32 @@ static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+>>   	return err;
+>>   }
+>>   
+>> +static int walk_hugepd_range(hugepd_t *phpd, unsigned long addr,
+>> +			     unsigned long end, struct mm_walk *walk, int pdshift)
+>> +{
+>> +	int err = 0;
+>> +#ifdef CONFIG_ARCH_HAS_HUGEPD
+>> +	const struct mm_walk_ops *ops = walk->ops;
+>> +	int shift = hugepd_shift(*phpd);
+>> +	int page_size = 1 << shift;
 >> +
->> +	if (page_size >= PGDIR_SIZE)
->> +		level = 0;
->> +	else if (page_size >= P4D_SIZE)
->> +		level = 1;
->> +	else if (page_size >= PUD_SIZE)
->> +		level = 2;
->> +	else if (page_size >= PMD_SIZE)
->> +		level = 3;
->> +	else
->> +		level = 4;
->>   
->>   	if (st->effective_prot)
->> -		st->effective_prot(st, 4, pte_val(val));
->> +		st->effective_prot(st, level, pte_val(val));
->>   
->> -	st->note_page(st, addr, 4, pte_val(val), PAGE_SIZE);
->> +	st->note_page(st, addr, level, pte_val(val), page_size);
+>> +	if (addr & (page_size - 1))
+>> +		return 0;
+>> +
+>> +	for (;;) {
+>> +		pte_t *pte = hugepte_offset(*phpd, addr, pdshift);
+>> +
+>> +		err = ops->pte_entry(pte, addr, addr + page_size, walk);
+>> +		if (err)
+>> +			break;
+>> +		if (addr >= end - page_size)
+>> +			break;
+>> +		addr += page_size;
+>> +	}
 > 
-> It seems to me that passing both level and page_size is a bit redundant,
-> but I guess it does reduce the impact on each arch's code?
+> Initially I thought this was a somewhat unintuitive way to structure
+> this loop, but I see it parallels the structure of walk_pte_range_inner,
+> so I think the consistency is worth it.
+> 
+> I notice the pte walking code potentially takes some locks: does this
+> code need to do that?
+> 
+> arch/powerpc/mm/hugetlbpage.c says that hugepds are protected by the
+> mm->page_table_lock, but I don't think we're taking it in this code.
 
-Exactly, as shown above, the level can be re-calculated based on the page size, but it would be a 
-unnecessary impact on all architectures and would duplicate the re-calculation of the level whereas 
-in most cases we get it for free from the caller.
+I'll add it, thanks.
 
+> 
+>> +#endif
+>> +	return err;
+>> +}
+>> +
+>>   static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+>>   			  struct mm_walk *walk)
+>>   {
+>> @@ -108,7 +134,10 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+>>   				goto again;
+>>   		}
+>>   
+>> -		err = walk_pte_range(pmd, addr, next, walk);
+>> +		if (is_hugepd(__hugepd(pmd_val(*pmd))))
+>> +			err = walk_hugepd_range((hugepd_t *)pmd, addr, next, walk, PMD_SHIFT);
+>> +		else
+>> +			err = walk_pte_range(pmd, addr, next, walk);
+>>   		if (err)
+>>   			break;
+>>   	} while (pmd++, addr = next, addr != end);
+>> @@ -157,7 +186,10 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
+>>   		if (pud_none(*pud))
+>>   			goto again;
+>>   
+>> -		err = walk_pmd_range(pud, addr, next, walk);
+>> +		if (is_hugepd(__hugepd(pud_val(*pud))))
+>> +			err = walk_hugepd_range((hugepd_t *)pud, addr, next, walk, PUD_SHIFT);
+>> +		else
+>> +			err = walk_pmd_range(pud, addr, next, walk);
+> 
+> I'm a bit worried you might end up calling into walk_hugepd_range with
+> ops->pte_entry == NULL, and then jumping to 0.
+
+You are right, I missed it.
+I'll bail out of walk_hugepd_range() when ops->pte_entry is NULL.
+
+
+> 
+> static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
+> 			  struct mm_walk *walk)
+> {
+> ...
+>          pud = pud_offset(p4d, addr);
+> 	do {
+>                  ...
+>                  if ((!walk->vma && (pud_leaf(*pud) || !pud_present(*pud))) ||
+> 		    walk->action == ACTION_CONTINUE ||
+> 		    !(ops->pmd_entry || ops->pte_entry)) <<< THIS CHECK
+> 			continue;
+>                  ...
+> 		if (is_hugepd(__hugepd(pud_val(*pud))))
+> 			err = walk_hugepd_range((hugepd_t *)pud, addr, next, walk, PUD_SHIFT);
+> 		else
+> 			err = walk_pmd_range(pud, addr, next, walk);
+> 		if (err)
+> 			break;
+> 	} while (pud++, addr = next, addr != end);
+> 
+> walk_pud_range will proceed if there is _either_ an ops->pmd_entry _or_
+> an ops->pte_entry, but walk_hugepd_range will call ops->pte_entry
+> unconditionally.
+> 
+> The same issue applies to walk_{p4d,pgd}_range...
 > 
 > Kind regards,
 > Daniel
 > 
->>   
->>   	return 0;
->>   }
->> -- 
->> 2.25.0
+
+Thanks
+Christophe
