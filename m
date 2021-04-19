@@ -2,121 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B618E3641A3
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Apr 2021 14:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB5636434F
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Apr 2021 15:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233627AbhDSMZ0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Apr 2021 08:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239114AbhDSMZX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Apr 2021 08:25:23 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AE3C061760;
-        Mon, 19 Apr 2021 05:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CpUXgyXNu2L6aDoABWkfEW3c8xEi9KV0vjBOP+ZePLk=; b=iQPnFaPBrCivR61heeMKYPHCvt
-        pCkxUp9NhouUvSBFQbKd7Fhrz1AZsx3Q2HZw+IDT8EHnokduaSFYutUpfRsDIS9zau7bYybxvA1ff
-        pFuhFl2IUQxSd7XRlYtlj+FFgppBw6LQsud2DK1DXCxjC27lUaR1zxXyZRCerN1ljbP11kgtjJLqD
-        N3p32/8yEAIzdAsbm2eTCBPbMAghI+Qr4ApaAjdCTvfikAf7G0xc6BI0IOM72rhvFT7X+pD+yabkm
-        HNtjrKvSh/m2oRc0ljDrhGv2UnUnfK5uxuGIjbM8MIST4BHLYve7TzvctYq/QernMV8JatSft25WL
-        KBRcr6Lg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lYSua-00Diet-6d; Mon, 19 Apr 2021 12:22:16 +0000
-Date:   Mon, 19 Apr 2021 13:21:56 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH] secretmem: optimize page_is_secretmem()
-Message-ID: <20210419122156.GZ2531743@casper.infradead.org>
-References: <20210419084218.7466-1-rppt@kernel.org>
- <20210419112302.GX2531743@casper.infradead.org>
- <YH1v4XVzfXC1dYND@kernel.org>
+        id S240134AbhDSNQ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Apr 2021 09:16:57 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:1813 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240144AbhDSNOy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 19 Apr 2021 09:14:54 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4FP6j54THDz9txv8;
+        Mon, 19 Apr 2021 15:14:17 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id yKDNb47P5hGT; Mon, 19 Apr 2021 15:14:17 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FP6j53cN4z9txv7;
+        Mon, 19 Apr 2021 15:14:17 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 866238B7B4;
+        Mon, 19 Apr 2021 15:14:22 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id CgC9R0HVBL9q; Mon, 19 Apr 2021 15:14:22 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AB4DA8B7BD;
+        Mon, 19 Apr 2021 15:14:21 +0200 (CEST)
+Subject: Re: [PATCH v1 3/5] mm: ptdump: Provide page size to notepage()
+To:     Steven Price <steven.price@arm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        akpm@linux-foundation.org
+Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org, linux-mm@kvack.org
+References: <cover.1618506910.git.christophe.leroy@csgroup.eu>
+ <1ef6b954fb7b0f4dfc78820f1e612d2166c13227.1618506910.git.christophe.leroy@csgroup.eu>
+ <41819925-3ee5-4771-e98b-0073e8f095cf@arm.com>
+ <da53d2f2-b472-0c38-bdd5-99c5a098675d@csgroup.eu>
+ <1102cda1-b00f-b6ef-6bf3-22068cc11510@arm.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <627ee414-2f78-94e3-b77b-1013f52e77e3@csgroup.eu>
+Date:   Mon, 19 Apr 2021 15:14:21 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YH1v4XVzfXC1dYND@kernel.org>
+In-Reply-To: <1102cda1-b00f-b6ef-6bf3-22068cc11510@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Apr 19, 2021 at 02:56:17PM +0300, Mike Rapoport wrote:
-> On Mon, Apr 19, 2021 at 12:23:02PM +0100, Matthew Wilcox wrote:
-> > So you're calling page_is_secretmem() on a struct page without having
-> > a refcount on it.  That is definitely not allowed.  secretmem seems to
-> > be full of these kinds of races; I know this isn't the first one I've
-> > seen in it.  I don't think this patchset is ready for this merge window.
+
+
+Le 16/04/2021 à 12:51, Steven Price a écrit :
+> On 16/04/2021 11:38, Christophe Leroy wrote:
+>>
+>>
+>> Le 16/04/2021 à 11:28, Steven Price a écrit :
+>>> On 15/04/2021 18:18, Christophe Leroy wrote:
+>>>
+>>> To be honest I don't fully understand why powerpc requires the page_size - it appears to be using 
+>>> it purely to find "holes" in the calls to note_page(), but I haven't worked out why such holes 
+>>> would occur.
+>>
+>> I was indeed introduced for KASAN. We have a first commit 
+>> https://github.com/torvalds/linux/commit/cabe8138 which uses page size to detect whether it is a 
+>> KASAN like stuff.
+>>
+>> Then came https://github.com/torvalds/linux/commit/b00ff6d8c as a fix. I can't remember what the 
+>> problem was exactly, something around the use of hugepages for kernel memory, came as part of the 
+>> series 
+>> https://patchwork.ozlabs.org/project/linuxppc-dev/cover/cover.1589866984.git.christophe.leroy@csgroup.eu/ 
 > 
-> There were races in the older version that did caching of large pages and
-> those were fixed then, but this is anyway irrelevant because all that code
-> was dropped in the latest respins.
 > 
-> I don't think that the fix of the race in gup_pte_range is that significant
-> to wait 3 more months because of it.
-
-I have no particular interest in secretmem, but it seems that every time
-I come across it while looking at something else, I see these kinds of
-major mistakes in it.  That says to me it's not ready and hasn't seen
-enough review.
-
-> > With that fixed, you'll have a head page that you can use for testing,
-> > which means you don't need to test PageCompound() (because you know the
-> > page isn't PageTail), you can just test PageHead().
+> Ah, that's useful context. So it looks like powerpc took a different route to reducing the KASAN 
+> output to x86.
 > 
-> I can't say I follow you here. page_is_secretmem() is intended to be a
-> generic test, so I don't see how it will get PageHead() if it is called
-> from other places.
+> Given the generic ptdump code has handling for KASAN already it should be possible to drop that from 
+> the powerpc arch code, which I think means we don't actually need to provide page size to 
+> notepage(). Hopefully that means more code to delete ;)
+> 
 
-static inline bool head_is_secretmem(struct page *head)
-{
-	if (PageHead(head))
-		return false;
-	...
-}
+Looking at how the generic ptdump code handles KASAN, I'm a bit sceptic.
 
-static inline bool page_is_secretmem(struct page *page)
-{
-	if (PageTail(page))
-		return false;
-	return head_is_secretmem(page);
-}
+IIUC, it is checking that kasan_early_shadow_pte is in the same page as the pgtable referred by the 
+PMD entry. But what happens if that PMD entry is referring another pgtable which is inside the same 
+page as kasan_early_shadow_pte ?
 
-(yes, calling it head is a misnomer, because it's not necessarily a head,
-it might be a base page, but until we have a name for pages which might
-be a head page or a base page, it'll have to do ...)
+Shouldn't the test be
+
+	if (pmd_page_vaddr(val) == lm_alias(kasan_early_shadow_pte))
+		return note_kasan_page_table(walk, addr);
+
+
+Christophe
