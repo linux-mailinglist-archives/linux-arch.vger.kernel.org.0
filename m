@@ -2,55 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A7F363A0D
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Apr 2021 06:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2C7363B93
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Apr 2021 08:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbhDSEHU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Apr 2021 00:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237494AbhDSEFc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Apr 2021 00:05:32 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144B5C061760;
-        Sun, 18 Apr 2021 21:05:00 -0700 (PDT)
-Received: by ozlabs.org (Postfix, from userid 1034)
-        id 4FNtVr5w9cz9vH8; Mon, 19 Apr 2021 14:04:36 +1000 (AEST)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Tony Ambardar <tony.ambardar@gmail.com>
-Cc:     Paul Mackerras <paulus@samba.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tony Ambardar <Tony.Ambardar@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Stable <stable@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Rosen Penev <rosenp@gmail.com>
-In-Reply-To: <20200917135437.1238787-1-Tony.Ambardar@gmail.com>
-References: <20200917000757.1232850-1-Tony.Ambardar@gmail.com> <20200917135437.1238787-1-Tony.Ambardar@gmail.com>
-Subject: Re: [PATCH v3] powerpc: fix EDEADLOCK redefinition error in uapi/asm/errno.h
-Message-Id: <161880480720.1398509.14927712402293166726.b4-ty@ellerman.id.au>
-Date:   Mon, 19 Apr 2021 14:00:07 +1000
+        id S237563AbhDSGhF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Apr 2021 02:37:05 -0400
+Received: from verein.lst.de ([213.95.11.211]:45287 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230002AbhDSGhE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 19 Apr 2021 02:37:04 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 030166736F; Mon, 19 Apr 2021 08:36:31 +0200 (CEST)
+Date:   Mon, 19 Apr 2021 08:36:30 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Cc:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, akpm@linux-foundation.org,
+        gregkh@linuxfoundation.org, hch@lst.de, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, joro@8bytes.org, will@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com,
+        sunilmut@microsoft.com
+Subject: Re: [Resend RFC PATCH V2 07/12] HV/Vmbus: Initialize VMbus ring
+ buffer for Isolation VM
+Message-ID: <20210419063630.GA18882@lst.de>
+References: <20210414144945.3460554-1-ltykernel@gmail.com> <20210414144945.3460554-8-ltykernel@gmail.com> <YHig78Xra5tEQhMD@dhcp-10-154-102-149.vpn.oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YHig78Xra5tEQhMD@dhcp-10-154-102-149.vpn.oracle.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 17 Sep 2020 06:54:37 -0700, Tony Ambardar wrote:
-> A few archs like powerpc have different errno.h values for macros
-> EDEADLOCK and EDEADLK. In code including both libc and linux versions of
-> errno.h, this can result in multiple definitions of EDEADLOCK in the
-> include chain. Definitions to the same value (e.g. seen with mips) do
-> not raise warnings, but on powerpc there are redefinitions changing the
-> value, which raise warnings and errors (if using "-Werror").
+On Thu, Apr 15, 2021 at 04:24:15PM -0400, Konrad Rzeszutek Wilk wrote:
+> So you are exposing these two:
+>  EXPORT_SYMBOL_GPL(get_vm_area);
+>  EXPORT_SYMBOL_GPL(ioremap_page_range);
 > 
-> [...]
+> But if you used vmap wouldn't you get the same thing for free?
 
-Applied to powerpc/next.
+Yes, this needs to go into some vmap version, preferably reusing the
+existing code in kernel/dma/remap.c.
 
-[1/1] powerpc: fix EDEADLOCK redefinition error in uapi/asm/errno.h
-      https://git.kernel.org/powerpc/c/7de21e679e6a789f3729e8402bc440b623a28eae
-
-cheers
+Exporting get_vm_area is a complete dealbreaker and not going to happen.
+We worked hard on not exposing it to modules.
