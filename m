@@ -2,162 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F1A3645A8
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Apr 2021 16:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF280364721
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Apr 2021 17:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhDSOIU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Apr 2021 10:08:20 -0400
-Received: from foss.arm.com ([217.140.110.172]:43716 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230021AbhDSOIU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 19 Apr 2021 10:08:20 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1290C31B;
-        Mon, 19 Apr 2021 07:07:50 -0700 (PDT)
-Received: from [192.168.1.179] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CA2C3F7D7;
-        Mon, 19 Apr 2021 07:07:48 -0700 (PDT)
-Subject: Re: [PATCH v2 1/4] mm: pagewalk: Fix walk for hugepage tables
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        akpm@linux-foundation.org, dja@axtens.net
-Cc:     Oliver O'Halloran <oohall@gmail.com>, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1618828806.git.christophe.leroy@csgroup.eu>
- <db6981c69f96a8c9c6dcf688b7f485e15993ddef.1618828806.git.christophe.leroy@csgroup.eu>
-From:   Steven Price <steven.price@arm.com>
-Message-ID: <1fdb0abe-b4b5-937c-0d9b-859a5cbb5726@arm.com>
-Date:   Mon, 19 Apr 2021 15:07:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S234114AbhDSP32 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Apr 2021 11:29:28 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:45120 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233733AbhDSP31 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Apr 2021 11:29:27 -0400
+Received: from cwcc.thunk.org (pool-72-74-133-215.bstnma.fios.verizon.net [72.74.133.215])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 13JFSplv032708
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Apr 2021 11:28:51 -0400
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 3695315C3B0D; Mon, 19 Apr 2021 11:28:51 -0400 (EDT)
+Date:   Mon, 19 Apr 2021 11:28:51 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Maintainers / Kernel Summit 2021 planning kick-off
+Message-ID: <YH2hs6EsPTpDAqXc@mit.edu>
 MIME-Version: 1.0
-In-Reply-To: <db6981c69f96a8c9c6dcf688b7f485e15993ddef.1618828806.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 19/04/2021 11:47, Christophe Leroy wrote:
-> Pagewalk ignores hugepd entries and walk down the tables
-> as if it was traditionnal entries, leading to crazy result.
-> 
-> Add walk_hugepd_range() and use it to walk hugepage tables.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+[ Feel free to forward this to other Linux kernel mailing lists as
+  appropriate -- Ted ]
 
-Looks correct to me, sadly I don't have a suitable system to test it.
+This year, the Maintainers and Kernel Summit is currently planned to
+be held in Dublin, Ireland, September 27 -- 29th.  Of course, this is
+subject to change depending on how much progress the world makes
+towards vaccinating the population against the COVID-19 virus, and
+whether employers are approving conference travel.  At this point,
+there's a fairly good chance that we will need to move to a virtual
+conference format, either for one or both of the summits.
 
-Reviewed-by: Steven Price <steven.price@arm.com>
+As in previous years, the Maintainers Summit is invite-only, where the
+primary focus will be process issues around Linux Kernel Development.
+It will be limited to 30 invitees and a handful of sponsored
+attendees.
 
-> ---
-> v2:
-> - Add a guard for NULL ops->pte_entry
-> - Take mm->page_table_lock when walking hugepage table, as suggested by follow_huge_pd()
-> ---
->   mm/pagewalk.c | 58 ++++++++++++++++++++++++++++++++++++++++++++++-----
->   1 file changed, 53 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-> index e81640d9f177..9b3db11a4d1d 100644
-> --- a/mm/pagewalk.c
-> +++ b/mm/pagewalk.c
-> @@ -58,6 +58,45 @@ static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
->   	return err;
->   }
->   
-> +#ifdef CONFIG_ARCH_HAS_HUGEPD
-> +static int walk_hugepd_range(hugepd_t *phpd, unsigned long addr,
-> +			     unsigned long end, struct mm_walk *walk, int pdshift)
-> +{
-> +	int err = 0;
-> +	const struct mm_walk_ops *ops = walk->ops;
-> +	int shift = hugepd_shift(*phpd);
-> +	int page_size = 1 << shift;
-> +
-> +	if (!ops->pte_entry)
-> +		return 0;
-> +
-> +	if (addr & (page_size - 1))
-> +		return 0;
-> +
-> +	for (;;) {
-> +		pte_t *pte;
-> +
-> +		spin_lock(&walk->mm->page_table_lock);
-> +		pte = hugepte_offset(*phpd, addr, pdshift);
-> +		err = ops->pte_entry(pte, addr, addr + page_size, walk);
-> +		spin_unlock(&walk->mm->page_table_lock);
-> +
-> +		if (err)
-> +			break;
-> +		if (addr >= end - page_size)
-> +			break;
-> +		addr += page_size;
-> +	}
-> +	return err;
-> +}
-> +#else
-> +static int walk_hugepd_range(hugepd_t *phpd, unsigned long addr,
-> +			     unsigned long end, struct mm_walk *walk, int pdshift)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->   static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
->   			  struct mm_walk *walk)
->   {
-> @@ -108,7 +147,10 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
->   				goto again;
->   		}
->   
-> -		err = walk_pte_range(pmd, addr, next, walk);
-> +		if (is_hugepd(__hugepd(pmd_val(*pmd))))
-> +			err = walk_hugepd_range((hugepd_t *)pmd, addr, next, walk, PMD_SHIFT);
-> +		else
-> +			err = walk_pte_range(pmd, addr, next, walk);
->   		if (err)
->   			break;
->   	} while (pmd++, addr = next, addr != end);
-> @@ -157,7 +199,10 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
->   		if (pud_none(*pud))
->   			goto again;
->   
-> -		err = walk_pmd_range(pud, addr, next, walk);
-> +		if (is_hugepd(__hugepd(pud_val(*pud))))
-> +			err = walk_hugepd_range((hugepd_t *)pud, addr, next, walk, PUD_SHIFT);
-> +		else
-> +			err = walk_pmd_range(pud, addr, next, walk);
->   		if (err)
->   			break;
->   	} while (pud++, addr = next, addr != end);
-> @@ -189,7 +234,9 @@ static int walk_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
->   			if (err)
->   				break;
->   		}
-> -		if (ops->pud_entry || ops->pmd_entry || ops->pte_entry)
-> +		if (is_hugepd(__hugepd(p4d_val(*p4d))))
-> +			err = walk_hugepd_range((hugepd_t *)p4d, addr, next, walk, P4D_SHIFT);
-> +		else if (ops->pud_entry || ops->pmd_entry || ops->pte_entry)
->   			err = walk_pud_range(p4d, addr, next, walk);
->   		if (err)
->   			break;
-> @@ -224,8 +271,9 @@ static int walk_pgd_range(unsigned long addr, unsigned long end,
->   			if (err)
->   				break;
->   		}
-> -		if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry ||
-> -		    ops->pte_entry)
-> +		if (is_hugepd(__hugepd(pgd_val(*pgd))))
-> +			err = walk_hugepd_range((hugepd_t *)pgd, addr, next, walk, PGDIR_SHIFT);
-> +		else if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry || ops->pte_entry)
->   			err = walk_p4d_range(pgd, addr, next, walk);
->   		if (err)
->   			break;
-> 
+The Kernel Summit is organized as a track which is run in parallel
+with the other tracks at the Linux Plumbers Conference (LPC), and is
+open to all registered attendees of LPC.
 
+Linus has generated a core list of people to be invited to the
+Maintainers Summit, and the program committee will be using that list
+a starting point of people to be considered.  People who suggest
+topics that should be discussed at the Maintainers Summit will also be
+added to the list for consideration.  To make topic suggestions for
+the Maintainers Summit, please send e-mail to the
+ksummit@lists.linux.dev with a subject prefix of [MAINTAINERS SUMMIT].
+
+(Note: The older ksummit-discuss@lists.linuxfoundation.org list has
+been migrated to lists.linux.dev, with the subscriber list and
+archives preserved.)
+
+The other job of the program committee will be to organize the program
+for the Kernel Summit.  The goal of the Kernel Summit track will be to
+provide a forum to discuss specific technical issues that would be
+easier to resolve in person than over e-mail.  The program committee
+will also consider "information sharing" topics if they are clearly of
+interest to the wider development community (i.e., advanced training
+in topics that would be useful to kernel developers).
+
+To suggest a topic for the Kernel Summit, please do two things.
+First, please tag your e-mail with [TECH TOPIC].  As before, please
+use a separate e-mail for each topic, and send the topic suggestions
+to the ksummit-discuss list.
+
+Secondly, please create a topic at the Linux Plumbers Conference
+proposal submission site and target it to the Kernel Summit track.
+For your convenience you can use:
+
+	https://bit.ly/lpc21-summit
+
+Please do both steps.  I'll try to notice if someone forgets one or
+the other, but your chances of making sure your proposal gets the
+necessary attention and consideration are maximized by submitting both
+to the mailing list and the web site.
+
+People who submit topic suggestions before June 12th and which are
+accepted, will be given free admission to the Linux Plumbers
+Conference.
+
+We will be reserving roughly half of the Kernel Summit slots for
+last-minute discussions that will be scheduled during the week of
+Plumbers, in an "unconference style".  This allows last-minute ideas
+that come up to be given given slots for discussion.
+
+If you were not subscribed on to the kernel@lists.linux-dev mailing
+list from last year (or if you had removed yourself from the
+ksummit-discuss@lists.linux-foundation.org mailing list after the
+previous year's kernel and maintainers' summit summit), you can
+subscribe sending an e-mail to:
+
+	ksummit+subscribe@lists.linux.dev
+
+The mailing list archive is available at:
+
+	https://lore.kernel.org/ksummit
+
+The program committee this year is composed of the following people:
+
+Jens Axboe
+Arnd Bergmann
+Jon Corbet
+Greg Kroah-Hartman
+Ted Ts'o
