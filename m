@@ -2,121 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE881365C0D
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Apr 2021 17:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BB4365CD2
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Apr 2021 18:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbhDTPVr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Apr 2021 11:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbhDTPVq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Apr 2021 11:21:46 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078D3C06174A;
-        Tue, 20 Apr 2021 08:21:15 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id h15so8094826pfv.2;
-        Tue, 20 Apr 2021 08:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IubIvA+FZc+EgYaLla1wNxM0Nrtj3DHof/IpDLSwAko=;
-        b=I4yP89FRP5i2uxVxl6i5lyAw3mredKc46Hjeoi7O9yUplQ1n0j3Y0o1SaATIVNfyq4
-         teur2VlRjebXnJrXtmJM5UKcyINF7y9nt7eJ4h2Nj9VKcW4SDr7ASpYqevicADvLjSpZ
-         BcdUWRI28kdfl/QTUrSbHWrX4bxcKg5kigsvPFmraKk01TgCjRpIdrWz8rCxHFi/mdal
-         s4BKA5FrT8bg+QmBXI5iysCGKPMPo2xeM4LNJb3Mzab1E/x16D7j6SnHvvknf4k5KLD+
-         UqDskbF3E4p7if1FPMyCFMP8IPbcI/hh0NmL9fW95RDqIIZlVko2His34l8P33AB9Kyv
-         EjXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IubIvA+FZc+EgYaLla1wNxM0Nrtj3DHof/IpDLSwAko=;
-        b=TQBHOiHzFIkxl5NhxtCzM8qNSnB5sLh4BHghLmmnbAyg+f6Nly9PpqkceG8S6vy7y1
-         cvZzP+U71/kc5NKhIULvEGftlIupfsPhTulYHZVhA7AEZfviPfurPgma9tRaY2OLM0Vk
-         rbl2YJxfRuN15dYKR+IVl5DsC5IywsvedUankyTA8ciTq/LEeYYDC920jDFVkO2hCCyr
-         4QAHqeCV/rxBLtoT5zDsmFJZx9F9pDu+oHv7GTEvRK4bdl9JFy022kFshh919m4JGjus
-         OlYtlhrfFKVdTtMLuEpvNGmCP31XhF4L6V36NEKXAaWO5ckQ/dzpYBpvJXW+lOZ/x27e
-         k2Eg==
-X-Gm-Message-State: AOAM531ab7kn17PFO6KQA+/hRomQEj9BZWbsV9xReRRVZO8zaztvbA8a
-        w5pIClat6xdD1s8BsxsHnnky1G7qtStPQqDcC6OeGQG+sdI=
-X-Google-Smtp-Source: ABdhPJzGghpoDCwO9kK2QCglkrPkmiAPcjJ3yQECzehAQ/Rh2Lt07/rbOaMl18l4ndllh1JWFu8ageLFbFdjGhXx2wQ=
-X-Received: by 2002:a62:ed0f:0:b029:257:7278:e72b with SMTP id
- u15-20020a62ed0f0000b02902577278e72bmr24791289pfh.17.1618932074554; Tue, 20
- Apr 2021 08:21:14 -0700 (PDT)
+        id S232473AbhDTQGV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Apr 2021 12:06:21 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:23168 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232174AbhDTQGV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 20 Apr 2021 12:06:21 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4FPpST5fYSz9tyMJ;
+        Tue, 20 Apr 2021 18:05:45 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id 6qTfVqAOsH66; Tue, 20 Apr 2021 18:05:45 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FPpST4Shgz9tyMF;
+        Tue, 20 Apr 2021 18:05:45 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2B5AD8B807;
+        Tue, 20 Apr 2021 18:05:47 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id ZiEcE-0Tlz-R; Tue, 20 Apr 2021 18:05:47 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0267E8B7ED;
+        Tue, 20 Apr 2021 18:05:45 +0200 (CEST)
+Subject: Re: [PATCH v4 19/20] mips: Convert to GENERIC_CMDLINE
+To:     Daniel Walker <danielwa@cisco.com>, Rob Herring <robh@kernel.org>
+Cc:     will@kernel.org, daniel@gimpelevich.san-francisco.ca.us,
+        arnd@kernel.org, akpm@linux-foundation.org,
+        linux-arch@vger.kernel.org, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        microblaze <monstr@monstr.eu>, linux-mips@vger.kernel.org,
+        nios2 <ley.foon.tan@intel.com>, openrisc@lists.librecores.org,
+        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1617375802.git.christophe.leroy@csgroup.eu>
+ <a01b6cdbae01fff77e26f7a5c40ee5260e1952b5.1617375802.git.christophe.leroy@csgroup.eu>
+ <20210406173836.GW2469518@zorba>
+ <20210408190408.GA1724284@robh.at.kernel.org>
+ <20210409012349.GG3981976@zorba>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <d92f99bf-20b7-a4b6-3d86-5b859e42cad8@csgroup.eu>
+Date:   Tue, 20 Apr 2021 18:05:44 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-References: <1618925829-90071-1-git-send-email-guoren@kernel.org>
-In-Reply-To: <1618925829-90071-1-git-send-email-guoren@kernel.org>
-From:   Greentime Hu <green.hu@gmail.com>
-Date:   Tue, 20 Apr 2021 23:20:37 +0800
-Message-ID: <CAEbi=3fdKep_szy3jNYZrDr847avKYTHOQyNoUm5vy5ijv7Z0w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] nds32: Cleanup deprecated function strlen_user
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210409012349.GG3981976@zorba>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-<guoren@kernel.org> =E6=96=BC 2021=E5=B9=B44=E6=9C=8820=E6=97=A5 =E9=80=B1=
-=E4=BA=8C =E4=B8=8B=E5=8D=889:38=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> $ grep strlen_user * -r
-> arch/csky/include/asm/uaccess.h:#define strlen_user(str) strnlen_user(str=
-, 32767)
-> arch/csky/lib/usercopy.c: * strlen_user: - Get the size of a string in us=
-er space.
-> arch/ia64/lib/strlen.S: // Please note that in the case of strlen() as op=
-posed to strlen_user()
-> arch/mips/lib/strnlen_user.S: *  make strlen_user and strnlen_user access=
- the first few KSEG0
-> arch/nds32/include/asm/uaccess.h:extern __must_check long strlen_user(con=
-st char __user * str);
-> arch/nios2/include/asm/uaccess.h:extern __must_check long strlen_user(con=
-st char __user *str);
-> arch/riscv/include/asm/uaccess.h:extern long __must_check strlen_user(con=
-st char __user *str);
-> kernel/trace/trace_probe_tmpl.h:static nokprobe_inline int fetch_store_st=
-rlen_user(unsigned long addr);
-> kernel/trace/trace_probe_tmpl.h:                        ret +=3D fetch_st=
-ore_strlen_user(val + code->offset);
-> kernel/trace/trace_uprobe.c:fetch_store_strlen_user(unsigned long addr)
-> kernel/trace/trace_kprobe.c:fetch_store_strlen_user(unsigned long addr)
-> kernel/trace/trace_kprobe.c:            return fetch_store_strlen_user(ad=
-dr);
->
-> See grep result, nobody uses it.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/nds32/include/asm/uaccess.h | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/arch/nds32/include/asm/uaccess.h b/arch/nds32/include/asm/ua=
-ccess.h
-> index 010ba5f..d4cbf06 100644
-> --- a/arch/nds32/include/asm/uaccess.h
-> +++ b/arch/nds32/include/asm/uaccess.h
-> @@ -260,7 +260,6 @@ do {                                                 =
-                       \
->
->  extern unsigned long __arch_clear_user(void __user * addr, unsigned long=
- n);
->  extern long strncpy_from_user(char *dest, const char __user * src, long =
-count);
-> -extern __must_check long strlen_user(const char __user * str);
->  extern __must_check long strnlen_user(const char __user * str, long n);
->  extern unsigned long __arch_copy_from_user(void *to, const void __user *=
- from,
->                                             unsigned long n);
 
-Thank you, Guo.
-Acked-by: Greentime Hu <green.hu@gmail.com>
+
+Le 09/04/2021 à 03:23, Daniel Walker a écrit :
+> On Thu, Apr 08, 2021 at 02:04:08PM -0500, Rob Herring wrote:
+>> On Tue, Apr 06, 2021 at 10:38:36AM -0700, Daniel Walker wrote:
+>>> On Fri, Apr 02, 2021 at 03:18:21PM +0000, Christophe Leroy wrote:
+>>>> -config CMDLINE_BOOL
+>>>> -	bool "Built-in kernel command line"
+>>>> -	help
+>>>> -	  For most systems, it is firmware or second stage bootloader that
+>>>> -	  by default specifies the kernel command line options.  However,
+>>>> -	  it might be necessary or advantageous to either override the
+>>>> -	  default kernel command line or add a few extra options to it.
+>>>> -	  For such cases, this option allows you to hardcode your own
+>>>> -	  command line options directly into the kernel.  For that, you
+>>>> -	  should choose 'Y' here, and fill in the extra boot arguments
+>>>> -	  in CONFIG_CMDLINE.
+>>>> -
+>>>> -	  The built-in options will be concatenated to the default command
+>>>> -	  line if CMDLINE_OVERRIDE is set to 'N'. Otherwise, the default
+>>>> -	  command line will be ignored and replaced by the built-in string.
+>>>> -
+>>>> -	  Most MIPS systems will normally expect 'N' here and rely upon
+>>>> -	  the command line from the firmware or the second-stage bootloader.
+>>>> -
+>>>
+>>>
+>>> See how you complained that I have CMDLINE_BOOL in my changed, and you think it
+>>> shouldn't exist.
+>>>
+>>> Yet here mips has it, and you just deleted it with no feature parity in your
+>>> changes for this.
+>>
+>> AFAICT, CMDLINE_BOOL equates to a non-empty or empty CONFIG_CMDLINE. You
+>> seem to need it just because you have CMDLINE_PREPEND and
+>> CMDLINE_APPEND. If that's not it, what feature is missing? CMDLINE_BOOL
+>> is not a feature, but an implementation detail.
+> 
+> Not true.
+> 
+> It makes it easier to turn it all off inside the Kconfig , so it's for usability
+> and multiple architecture have it even with just CMDLINE as I was commenting
+> here.
+> 
+
+Among the 13 architectures having CONFIG_CMDLINE, todayb only 6 have a CONFIG_CMDLINE_BOOL in addition:
+
+arch/arm/Kconfig:config CMDLINE
+arch/arm64/Kconfig:config CMDLINE
+arch/hexagon/Kconfig:config CMDLINE
+arch/microblaze/Kconfig:config CMDLINE
+arch/mips/Kconfig.debug:config CMDLINE
+arch/nios2/Kconfig:config CMDLINE
+arch/openrisc/Kconfig:config CMDLINE
+arch/powerpc/Kconfig:config CMDLINE
+arch/riscv/Kconfig:config CMDLINE
+arch/sh/Kconfig:config CMDLINE
+arch/sparc/Kconfig:config CMDLINE
+arch/x86/Kconfig:config CMDLINE
+arch/xtensa/Kconfig:config CMDLINE
+
+arch/microblaze/Kconfig:config CMDLINE_BOOL
+arch/mips/Kconfig.debug:config CMDLINE_BOOL
+arch/nios2/Kconfig:config CMDLINE_BOOL
+arch/sparc/Kconfig:config CMDLINE_BOOL
+arch/x86/Kconfig:config CMDLINE_BOOL
+arch/xtensa/Kconfig:config CMDLINE_BOOL
+
+
+In the begining I hesitated about the CMDLINE_BOOL, at the end I decided to go the same way as what 
+is done today in the kernel for initramfs with CONFIG_INITRAMFS_SOURCE.
+
+The problem I see within adding CONFIG_CMDLINE_BOOL for every architecture which don't have it today 
+is that when doing a "make oldconfig" on their custom configs, thousands of users will loose their 
+CMDLINE without notice.
+
+When we do the other way round, removing CONFIG_CMDLINE_BOOL on the 6 architectures that have it 
+today will have no impact on existing config.
+
+Also, in order to avoid tons of #ifdefs in the code as mandated by Kernel Codying Style §21, we have 
+to have CONFIG_CMDLINE defined at all time, so at the end CONFIG_CMDLINE_BOOL is really redundant 
+with an empty CONFIG_CMDLINE.
+
+Unlike you, the approach I took for my series is to minimise the impact on existing implementation 
+and existing configurations as much as possible.
+
+I know you have a different approach where you break every existing config anyway.
+
+https://www.kernel.org/doc/html/latest/process/coding-style.html#conditional-compilation
+
+Christophe
