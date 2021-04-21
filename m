@@ -2,149 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C3D3666CC
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Apr 2021 10:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6B23666FB
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Apr 2021 10:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234496AbhDUIMT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Apr 2021 04:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234451AbhDUIMS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Apr 2021 04:12:18 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D3EC06138E
-        for <linux-arch@vger.kernel.org>; Wed, 21 Apr 2021 01:11:46 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id r186so13852815oif.8
-        for <linux-arch@vger.kernel.org>; Wed, 21 Apr 2021 01:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=msdAKUkaozlyVVqcOzRUhmh/jucXO4phsOtdu8kld0Q=;
-        b=pmcZpnXrP/hJMVCWPTO21s5w2C6jBAae3cwns8jXbIAlH8wJ0ociggMr54Xu8ecPyu
-         Ts3vAfnbXRjGjjaOpdE3khaNxMfkIVFLJs/VPTchrldH57VyWiKm8/PkO/l23yKf4/B3
-         PXP7y7a4IoRg94BZn74bFwwZuTsbMP2+7LlFMn6D4/NCGWLNAD/L1eTKPx8wPv62+K5u
-         Q63UbNpzHT2Bhe2SyiaDu8W01foSt9YJIpvEZ+mbLLePdV1OVgc1nHGpkdTQIyVNOYz5
-         7nu42E7mOjFlfnXKGUZk9PnyUQSPNEG+OC0vaYfSAZ+E4f+Cce2o4a7yASOZ0U6u4TA8
-         eCag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=msdAKUkaozlyVVqcOzRUhmh/jucXO4phsOtdu8kld0Q=;
-        b=WE8OzQuUWalstVtZJqQir2GvQHNuHDEWo+4Rp6CnqbOVQCy57nXbuI9lufCV9B6iWK
-         Q85t0VRlhsYt9MMcrfb7aO3mE8vRS95IGOwuNYSEi4RB7G7Kw+bQVo6vllnIlnG64bCs
-         NnH+aMTC6OK4LM2GzBXLGL+uS1tTh+xicRCEE/zoY0Vj1EZSl7OlxfZazRf2GgCkEEUk
-         7e1t4uWFTZ9WlG8qlH4qIXdmxuulYNCbEn6YSRTiVUdBh4UdOK5MrS5YHRqa+8H1tQxh
-         qws9ta8g6/BbZXNpOwcsbCjX8T8TLvt5jidqGfsLczEnwOePqm7D9qKxFz65xJvkJ8JT
-         G8Tw==
-X-Gm-Message-State: AOAM530nQP8Yne4MhZbqec6xED9IGY45NlHwjs/AtUq/lfUSNEwiktZ9
-        U+gJiWdhevu6IDthRdua5xDvNbzhAI/Ccdbd9nVPKQ==
-X-Google-Smtp-Source: ABdhPJy1tfc8MMLbLxb17dL/Fz+emF7KQc0Sq2AZPCRIAITdiREKq62E+vLNNTXjO6JYEXGn4JOR0UYxdckLCtorADI=
-X-Received: by 2002:aca:bb06:: with SMTP id l6mr6066042oif.121.1618992705356;
- Wed, 21 Apr 2021 01:11:45 -0700 (PDT)
+        id S234861AbhDUI3f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Apr 2021 04:29:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39764 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234632AbhDUI3e (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Apr 2021 04:29:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 82A3D6142C;
+        Wed, 21 Apr 2021 08:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618993741;
+        bh=PlDQaFaPk/kK/krQ9Bde4x/76KoZ9JGgl7x0Ep6sHVk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pO4njqXE6uBEbx7G0wZlpJqd1p67dfNA7DkA542Htbybn2qZOAeINQEBvtbR0yfD+
+         +laEtyvzotfzONDY7GUxCcU+DfEaGDwy3pIK4fuPtZtCKsnYphOKhPjJyNP8zbL8i6
+         0oJAxKrvFMkrd8JSevVqFzmQA4JD1q2vehc35jNjw/dXeDuMwHScKLsll2gnDWjQtm
+         UtjkQCqY0xXSPnYT5heGL8ZZgifqb5n2DWESfobdYjmTtPJAC+6N5wxQhHL+VTfEQ+
+         2uvhALFQZNX+3ztsJ/2yAuILymkQUThB6HBxQQcfuP7I9MmRGCkKT5gFlGZPxqLZxb
+         AXABIwbNdIhCQ==
+Received: by mail-lf1-f54.google.com with SMTP id 4so5769291lfp.11;
+        Wed, 21 Apr 2021 01:29:01 -0700 (PDT)
+X-Gm-Message-State: AOAM531Af6FekkVT9zBhiW2RGJ7cDxd11/64oYKjJ7rHNRBWWKT0nVuL
+        I9bPxOtM7Vj4u02GFn3lnktWAktxZNtckjvx0oQ=
+X-Google-Smtp-Source: ABdhPJyLGHbOYUo5kuRuRui9Du9S01mLmss+HOmeO1VcFN20rB5jfa8IKdI3kVIvvkC7cLrIhIA+yBJKbfVJGWJ89/A=
+X-Received: by 2002:a19:e34c:: with SMTP id c12mr19212590lfk.555.1618993739734;
+ Wed, 21 Apr 2021 01:28:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210408103605.1676875-1-elver@google.com> <CGME20210420212618eucas1p102b427d1af9c682217dfe093f3eac3e8@eucas1p1.samsung.com>
- <20210408103605.1676875-6-elver@google.com> <1fbf3429-42e5-0959-9a5c-91de80f02b6a@samsung.com>
- <CANpmjNM8wEJngK=J8Lt9npkZgrSWoRsqkdajErWEoY_=M1GW5A@mail.gmail.com>
- <43f8a3bf-34c5-0fc9-c335-7f92eaf23022@samsung.com> <dccaa337-f3e5-08e4-fe40-a603811bb13e@samsung.com>
-In-Reply-To: <dccaa337-f3e5-08e4-fe40-a603811bb13e@samsung.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 21 Apr 2021 10:11:33 +0200
-Message-ID: <CANpmjNP6-yKpxHqYFiA8Up-ujBQaeP7xyq1BrsV-NqMjJ-uHAQ@mail.gmail.com>
-Subject: Re: [PATCH v4 05/10] signal: Introduce TRAP_PERF si_code and si_perf
- to siginfo
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
+References: <1618925829-90071-1-git-send-email-guoren@kernel.org>
+ <1618925829-90071-2-git-send-email-guoren@kernel.org> <CAK8P3a1aNDomNiX7W1USWnmdw1VR21ALX7NvJYGW9LBO+jvA4A@mail.gmail.com>
+In-Reply-To: <CAK8P3a1aNDomNiX7W1USWnmdw1VR21ALX7NvJYGW9LBO+jvA4A@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 21 Apr 2021 16:28:48 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ7LPW7tb-Q+mPVnVbfqUCaBotqOQhwk32N7tr59HZU9A@mail.gmail.com>
+Message-ID: <CAJF2gTQ7LPW7tb-Q+mPVnVbfqUCaBotqOQhwk32N7tr59HZU9A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] nios2: Cleanup deprecated function strlen_user
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 21 Apr 2021 at 09:35, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
->
-> On 21.04.2021 08:21, Marek Szyprowski wrote:
-> > On 21.04.2021 00:42, Marco Elver wrote:
-> >> On Tue, 20 Apr 2021 at 23:26, Marek Szyprowski
-> >> <m.szyprowski@samsung.com> wrote:
-> >>> On 08.04.2021 12:36, Marco Elver wrote:
-> >>>> Introduces the TRAP_PERF si_code, and associated siginfo_t field
-> >>>> si_perf. These will be used by the perf event subsystem to send
-> >>>> signals
-> >>>> (if requested) to the task where an event occurred.
-> >>>>
-> >>>> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
-> >>>> Acked-by: Arnd Bergmann <arnd@arndb.de> # asm-generic
-> >>>> Signed-off-by: Marco Elver <elver@google.com>
-> >>> This patch landed in linux-next as commit fb6cc127e0b6 ("signal:
-> >>> Introduce TRAP_PERF si_code and si_perf to siginfo"). It causes
-> >>> regression on my test systems (arm 32bit and 64bit). Most systems fails
-> >>> to boot in the given time frame. I've observed that there is a timeout
-> >>> waiting for udev to populate /dev and then also during the network
-> >>> interfaces configuration. Reverting this commit, together with
-> >>> 97ba62b27867 ("perf: Add support for SIGTRAP on perf events") to let it
-> >>> compile, on top of next-20210420 fixes the issue.
-> >> Thanks, this is weird for sure and nothing in particular stands out.
-> >>
-> >> I have questions:
-> >> -- Can you please share your config?
-> >
-> > This happens with standard multi_v7_defconfig (arm) or just defconfig
-> > for arm64.
-> >
-> >> -- Also, can you share how you run this? Can it be reproduced in qemu?
-> > Nothing special. I just boot my test systems and see that they are
-> > waiting lots of time during the udev populating /dev and network
-> > interfaces configuration. I didn't try with qemu yet.
-> >> -- How did you derive this patch to be at fault? Why not just
-> >> 97ba62b27867, given you also need to revert it?
-> > Well, I've just run my boot tests with automated 'git bisect' and that
-> > was its result. It was a bit late in the evening, so I didn't analyze
-> > it further, I've just posted a report about the issue I've found. It
-> > looks that bisecting pointed to a wrong commit somehow.
-> >> If you are unsure which patch exactly it is, can you try just
-> >> reverting 97ba62b27867 and see what happens?
-> >
-> > Indeed, this is a real faulty commit. Initially I've decided to revert
-> > it to let kernel compile (it uses some symbols introduced by this
-> > commit). Reverting only it on top of linux-next 20210420 also fixes
-> > the issue. I'm sorry for the noise in this thread. I hope we will find
-> > what really causes the issue.
->
-> This was a premature conclusion. It looks that during the test I've did
-> while writing that reply, the modules were not deployed properly and a
-> test board (RPi4) booted without modules. In that case the board booted
-> fine and there was no udev timeout. After deploying kernel modules, the
-> udev timeout is back.
+Thx Arnd,
 
-I'm confused now. Can you confirm that the problem is due to your
-kernel modules, or do you think it's still due to 97ba62b27867? Or
-fb6cc127e0b6 (this patch)?
+On Tue, Apr 20, 2021 at 10:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Apr 20, 2021 at 3:37 PM <guoren@kernel.org> wrote:
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > $ grep strlen_user * -r
+> > arch/csky/include/asm/uaccess.h:#define strlen_user(str) strnlen_user(str, 32767)
+> > arch/csky/lib/usercopy.c: * strlen_user: - Get the size of a string in user space.
+> > arch/ia64/lib/strlen.S: // Please note that in the case of strlen() as opposed to strlen_user()
+> > arch/mips/lib/strnlen_user.S: *  make strlen_user and strnlen_user access the first few KSEG0
+> > arch/nds32/include/asm/uaccess.h:extern __must_check long strlen_user(const char __user * str);
+> > arch/nios2/include/asm/uaccess.h:extern __must_check long strlen_user(const char __user *str);
+> > arch/riscv/include/asm/uaccess.h:extern long __must_check strlen_user(const char __user *str);
+> > kernel/trace/trace_probe_tmpl.h:static nokprobe_inline int fetch_store_strlen_user(unsigned long addr);
+> > kernel/trace/trace_probe_tmpl.h:                        ret += fetch_store_strlen_user(val + code->offset);
+> > kernel/trace/trace_uprobe.c:fetch_store_strlen_user(unsigned long addr)
+> > kernel/trace/trace_kprobe.c:fetch_store_strlen_user(unsigned long addr)
+> > kernel/trace/trace_kprobe.c:            return fetch_store_strlen_user(addr);
+>
+> I would suggest using "grep strlen_user * -rw", to let the whole-word match
+> filter out the irrelevant ones for the changelog.
+>
+> > See grep result, nobody uses it.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+>
+> All three patches
+>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Do you want me to pick them up in the asm-generic tree?
+Yes, please take them.
 
-Thanks,
--- Marco
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
