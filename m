@@ -2,68 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B95A4366A26
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Apr 2021 13:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2B2366A45
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Apr 2021 13:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238294AbhDULvS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Apr 2021 07:51:18 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48776 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238216AbhDULvS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Apr 2021 07:51:18 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13LBiPCm166756;
-        Wed, 21 Apr 2021 07:50:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=umFa+41AGn1p0ze7VTHK1gWh/RUXya1ijTfV9QCSiUU=;
- b=Fg+gjzmIsdkWN2gD6MQFOMUskRgAI7wvOomoXc8tUZ232jGOusYCK0QAesykWFWy9Px6
- ja+v1kP9wThdS6Y7FD47R54K2iePD5jO3sQGfqnGYdqKdw6ALR2mI2lFNFDBi3D/T0pO
- RCJCZ5CPx8nNJfArsvLON/EX3Cy8DJ0r2xys6WbOMY3h8RYC86A14oiYCGNU6/nRJuTg
- Cm73iFvSvU9QmRqcGTiAUOCNCIw58NCMa5ReNI30kzL8Rn78gDZSpMszjGoQ03og70Yv
- VuuqUuFe196UkXTFFvapgJpOKypKFeBrtGoqk4eGKyPVrXPv9wH4iKJrM7lDqd67ZDF/ ZQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 382keg84vr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Apr 2021 07:50:31 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13LBjTo5173888;
-        Wed, 21 Apr 2021 07:50:31 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 382keg84v4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Apr 2021 07:50:30 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13LBmOZW023128;
-        Wed, 21 Apr 2021 11:50:29 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 37yqa8j915-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Apr 2021 11:50:28 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13LBo3t334406874
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 21 Apr 2021 11:50:03 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D0CC4C044;
-        Wed, 21 Apr 2021 11:50:26 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D968D4C04A;
-        Wed, 21 Apr 2021 11:50:25 +0000 (GMT)
-Received: from sig-9-145-20-41.uk.ibm.com (unknown [9.145.20.41])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 21 Apr 2021 11:50:25 +0000 (GMT)
-Message-ID: <aac9ac52de09ff7162fc7caa6e817258d9dd313d.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 3/3] asm-generic/io.h: Silence
- -Wnull-pointer-arithmetic warning on PCI_IOBASE
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S239405AbhDUL6j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Apr 2021 07:58:39 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:56435 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239446AbhDUL61 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Apr 2021 07:58:27 -0400
+Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MoeU5-1lFp7Y1LxZ-00p4iR; Wed, 21 Apr 2021 13:57:53 +0200
+Received: by mail-wr1-f41.google.com with SMTP id h4so32048630wrt.12;
+        Wed, 21 Apr 2021 04:57:53 -0700 (PDT)
+X-Gm-Message-State: AOAM5304dWFga/AWz4PhZR4VLhfiqVH+uOFx6PN6Mk2Pek2moeu/Rgsu
+        FilXl3LJcq70vSj5NXKvjafXD46Ng4WZu6Hd4bI=
+X-Google-Smtp-Source: ABdhPJxxLHU622QUTxVLT5JG28FXBqbMwoP9QmuTk81YvLLEEGjqqeD8jwt159GM0E527X3eKOyaGZAiRaJowXbS4kU=
+X-Received: by 2002:adf:c70b:: with SMTP id k11mr27161191wrg.165.1619006273000;
+ Wed, 21 Apr 2021 04:57:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210421111759.2059976-1-schnelle@linux.ibm.com>
+ <20210421111759.2059976-4-schnelle@linux.ibm.com> <bb21141706d7477794453f7f52f6bc98@AcuMS.aculab.com>
+ <aac9ac52de09ff7162fc7caa6e817258d9dd313d.camel@linux.ibm.com>
+In-Reply-To: <aac9ac52de09ff7162fc7caa6e817258d9dd313d.camel@linux.ibm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 21 Apr 2021 13:57:34 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0uXo+CLs2emsXE=-Zr+FjxV5k7AWNdGrN0fa37gwub8w@mail.gmail.com>
+Message-ID: <CAK8P3a0uXo+CLs2emsXE=-Zr+FjxV5k7AWNdGrN0fa37gwub8w@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] asm-generic/io.h: Silence -Wnull-pointer-arithmetic
+ warning on PCI_IOBASE
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     David Laight <David.Laight@aculab.com>,
         Vineet Gupta <vgupta@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         "clang-built-linux@googlegroups.com" 
         <clang-built-linux@googlegroups.com>,
@@ -73,83 +46,47 @@ Cc:     Nathan Chancellor <nathan@kernel.org>,
         "linux-snps-arc@lists.infradead.org" 
         <linux-snps-arc@lists.infradead.org>,
         "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
-Date:   Wed, 21 Apr 2021 13:50:25 +0200
-In-Reply-To: <bb21141706d7477794453f7f52f6bc98@AcuMS.aculab.com>
-References: <20210421111759.2059976-1-schnelle@linux.ibm.com>
-         <20210421111759.2059976-4-schnelle@linux.ibm.com>
-         <bb21141706d7477794453f7f52f6bc98@AcuMS.aculab.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GljSLrlc0NXVaepFAyeRF6XnrO1FeM8W
-X-Proofpoint-ORIG-GUID: 50MlIDyyzltO3bQ54AWDJNeVxVPQ8cF6
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-21_04:2021-04-21,2021-04-21 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 clxscore=1015 adultscore=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 suspectscore=0 mlxscore=0 bulkscore=0
- mlxlogscore=999 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104060000 definitions=main-2104210090
+X-Provags-ID: V03:K1:Nbszmafly6zxXrw+94wUB1T+SrE3e9eolGVJfdlUZiokV/c1+8m
+ CimfvAj3d5UIr6dLA0IRpbAbQGb3vJgRPMh12ywCzuFZpcM4QHBJqL28DG1U1EUk4dByT/v
+ eVLCmYcOWamGkF5STsm6rVry8lrkh3NlmKEqWOTYInJuFgqeLzOykJ0Jx8y+LQJnDuvrQz5
+ 439hOoDiHo9RJ9gdeyMog==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CJnzMup/cT4=:S8V6aP8Nog3aZiaZ06islw
+ niTrTQphyCwqy5rb/QJy/ZXtB+5qOxrZkjP+dTjHDW3kSF/RfXjBkj3YP1EqYmLpw6G5Wqf/r
+ jppch8xRq3+8lEvYVBqLlmLHZApJqRYOOjnvG5l8hMDAyYqOtp0HYwUzWMxRdlNBV9UpRTTp6
+ ogb3PqosO73F3bzZ0O00CXrdjMr2P1toixZUNwxI6xonKpTVr05h7m5MYCbqfkkI7eDCksVVl
+ 0ZV5T1Cr5XQeVHgczldHRpq37SuWFjd5JQ4yrkaEUSw12YGA1GyYQx9DXyhON1X2MQ+yR3Wc7
+ C/ndOMcV8br5fvHniVyr3THSxkg1ve/TTHO+wqSG8cOE90vzc4a4e3aKInq0bJfg/cgxaUU7n
+ ZG+bs+vy0CKcMtaP3t9V6tPx9ntMGyqAHW13kvmNq+4pg8xhD9N1fn2AXFrktCurBv0h7y3uI
+ jGkNrB7VaAAKF69n7XgfBigpN2P+aOspngj1R15Br5ARnz4zkmNAZQuve+76eSZWOA8wOtTjD
+ d0Bez6ejpre9rwOkovyBy8=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2021-04-21 at 11:24 +0000, David Laight wrote:
-> From: Niklas Schnelle
-> > Sent: 21 April 2021 12:18
-> > 
-> > When PCI_IOBASE is not defined, it is set to 0 such that it is ignored
-> > in calls to the readX/writeX primitives. This triggers clang's
-> > -Wnull-pointer-arithmetic warning and will result in illegal accesses on
-> > platforms that do not support I/O ports if drivers do still attempt to
-> > access them.
-> > 
-> > Make things explicit and silence the warning by letting inb() and
-> > friends fail with WARN_ONCE() and a 0xff... return in case PCI_IOBASE is
-> > not defined.
-> ...
-> > diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> > index c6af40ce03be..aabb0a8186ee 100644
-> > --- a/include/asm-generic/io.h
-> > +++ b/include/asm-generic/io.h
-> ...
-> > @@ -458,12 +454,17 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
-> >  #define _inb _inb
-> >  static inline u8 _inb(unsigned long addr)
-> >  {
-> > +#ifdef PCI_IOBASE
-> >  	u8 val;
-> > 
-> >  	__io_pbr();
-> >  	val = __raw_readb(PCI_IOBASE + addr);
-> >  	__io_par(val);
-> >  	return val;
-> > +#else
-> > +	WARN_ONCE(1, "No I/O port support\n");
-> > +	return ~0;
-> > +#endif
-> >  }
-> >  #endif
-> 
-> I suspect that this might be better not inlined
-> when PCI_IOBASE is undefined.
-> 
-> Otherwise you get quite a lot of bloat from all the
-> WARN_ONCE() calls.
-> 
-> 	David
+On Wed, Apr 21, 2021 at 1:50 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> On Wed, 2021-04-21 at 11:24 +0000, David Laight wrote:
+> >
+> > I suspect that this might be better not inlined
+> > when PCI_IOBASE is undefined.
+> >
+> > Otherwise you get quite a lot of bloat from all the
+> > WARN_ONCE() calls.
+>
+> Hmm, I was wondering if we should rather have a large ifdef block of
+> all these functions stubbed to WARN_ONCE rather than in each function.
+> As I understand it this would be necessary if we want the inline gone.
+> They would still be static though so we still get a copy per
+> compilation unit that uses it or am I misunderstanding?
 
-Hmm, I was wondering if we should rather have a large ifdef block of
-all these functions stubbed to WARN_ONCE rather than in each function.
-As I understand it this would be necessary if we want the inline gone.
-They would still be static though so we still get a copy per
-compilation unit that uses it or am I misunderstanding?
+I wouldn't worry too much about the size of known broken drivers during
+compile testing. Also, since the functions are marked 'inline' and not
+'__always_inline', the compiler is free to decide not to inline them if
+the contents are excessively big, and since the strings are all identical,
+they should be constant-folded.
 
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
+If you want to make this a little smaller, using pr_warn_once()
+would be a little smaller, but also give less information.
 
+      Arnd
