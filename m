@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D69367C1E
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 10:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71258367C42
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 10:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbhDVIQO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Apr 2021 04:16:14 -0400
-Received: from mail-dm3nam07on2071.outbound.protection.outlook.com ([40.107.95.71]:58368
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        id S235529AbhDVIRa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Apr 2021 04:17:30 -0400
+Received: from mail-dm6nam11on2086.outbound.protection.outlook.com ([40.107.223.86]:37536
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235353AbhDVIQN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Apr 2021 04:16:13 -0400
+        id S235526AbhDVIR3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Apr 2021 04:17:29 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wo69zory96Utknbi2bpOzH+Wc5fqmiU8PCEgEGrxOw8PoDp5iLFqtRlIrWwYWhZckBM7Y77ieVrhQN8hhG5E3eXUZDc/lKsoLAMQpqXoLdw5QnXXjxjR3UQvDb8creUNW7qDiz5hAwqD0OC2Ao1bOAb8orzjK+kFxSDn3Z0gaKjQWWyIGYBsiHhdcD8s+TpM4v8XBOtJrH3GIEo6iE1tG3eu+Rs9ow47lxc0EE7L2kb+jF6tg5TQ7xaPS0TnPHw/MflOQVw8GRb6bw5J+iTqFr63a5voS12pWISq4MPtKfzp/BqmEDKCtzrY8XR8kY82i5+DfruewWsfcsP1mMxfnA==
+ b=PbupAbkt1Y9WuGT9qOJS7lZlDGvSwcHclZd6M3Qsahz7bUbAVBnLNMKzyIucGnZYQ5jXz3VLB3ZaCwf+C0vbCCppTgPmePr4yfqlJQ9nNLi9SjfrQG4w6rOuuEzC/fuCpZwK/VIC+gpk0TABd07VSuDvz1Ga7OCNj/K9cUIOPmHt96i23hwxoAmOQljZ+/MG/yvdfqEbR2g903z9ePcUq3dWtNXOaEe+tbR+L1G7t4zkKHM5maTumj09xmXldxHd1JLJ4WEBYU3u7nTbmwd9xcbLgK8jOm0chq/6akis88YmNxZbe4kx2tcuH6kcPGYm/OriwndVmdkwr1PJGJIdiw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AmrFbzLXqyCvnKwsPoePx5gw9HpN/jnKUZHcl7dka6g=;
- b=W7VAKswUNrC+1B3L5S62JFMycpMw3lfu+TbTg0r7M2k52BUolS5uvpMNbgwemVgmWoPN8Pau9O1EpDVhonIiRmYuBx34E00D6uqwH2HShjklkqZtiyc1YSyrYlUPBHpiN1bcUnE60M91BnRoCmxHs6Jg0dJ+yeAII3nxLnkoP1wynTlCpdVEW5JnUOzQwF2Z92/aeipkZfM2X5f5N0WhKr6DycEDNgngpVemytIDGSGLMyPjMscCpL0lA5uuga0H5/sOYYyTDCHliBM9uqsVoshC2tvfWfO9G0HzGri78Lbh0AQ9ny86WkVJzNcDWux3T4SV+rmEOjW3mQ0hHpPgDA==
+ bh=oq+qBPcPbTa5KykEfFLD4bbBZ35fuqzptm5NfiJmyi0=;
+ b=WJtHEV2gau9O6MMfO6vZe3xIPTv9EFvOgZD5UOIFU1ijBy4fNpWLo1fpTWrNcBF39jEsogAeH1OyjWAZjNJxGMrvoIrzRACiV0Rw7Ih/uQagG0aDdcCcfm2J3jklqopMnu6cmTThY140FEDW9pOf/BISYP8GhxbXkz1JyU3i/yVCUQHgrMYUE14rvPbnIdmHFDM23mcpu55f/SbmaWWpacm+bcBK/MNvkKXXCm9ZMW1RNGOLlFuJm0ibsy6bEuDJ02KZbvN1q+2JpFTsJ84DF0Q9/S5d4ajQlKeG9V5zKXFDm9oqgWBWE9OFnRROpRhLGJ2bkutigzXVP+Rw0EUOMA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.112.34) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=nvidia.com;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AmrFbzLXqyCvnKwsPoePx5gw9HpN/jnKUZHcl7dka6g=;
- b=e87c/9FMYmP7YykZp6nmWAWdI9/TaSmsHYrn7ms8wMMqtTcQEpDkmwyYe2bWQQPLd3ri1PTsWziC7A+3PqdPEvz4Wxgbm5cVqnehhBb2MI6E1/t1OCjkQscG08pGtYS6gzZR/U3/AuFAS9uz5v8fdRd3mdHZpz5lcGVGCR85vKz8pfbLw88AUWqCxwrSCQ+Y+vSqYdqEczTKxij+/NJcSffscB97s+hX3QwejN8QafwvLMHUcNJpjfidL5kgep7hpV5JULGODNbyVvfmFz1xiqVvQO4Ur8K5ZkipWE5KOOQy6siaO7SgSPzGZhYbvFnffgKiyLvrnWL8LVw4h+01YA==
-Received: from MW2PR2101CA0008.namprd21.prod.outlook.com (2603:10b6:302:1::21)
- by DM6PR12MB4548.namprd12.prod.outlook.com (2603:10b6:5:2a1::11) with
+ bh=oq+qBPcPbTa5KykEfFLD4bbBZ35fuqzptm5NfiJmyi0=;
+ b=eUWZMqLeoIhhDyK4dOR7WhIr8kdWQxt4yEBQFIwyc+v8M8x0TdTOgQvFKKx9qhB6xzfUahZEEdYjR5+jvleJv5l6pCZF/I44heVtj2HFdtGwrBY46NnuTLxfbieItr4rjoU4Jpt3qWISBbWLWBDoBj5GTY6FAjlUPAOxtC/ENV8tSo39Jzm6IY64kCeL6dIPGmiCmn52IR/NdM7yOFTTAI7LGX7Q9NQvBmSLvoilooUPSTkeNqzATwQUvs1KEZy1HVLrThj/e0yFZz/CL3XrWsV9q9LnQ4vCYWtWSMBAoE2qo57Jb0/4JzbOm6MfjBb9V2Yyd7q8N1RUL50N1RB8Xw==
+Received: from MW4PR04CA0260.namprd04.prod.outlook.com (2603:10b6:303:88::25)
+ by MN2PR12MB3758.namprd12.prod.outlook.com (2603:10b6:208:169::28) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.19; Thu, 22 Apr
- 2021 08:15:37 +0000
-Received: from CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:302:1:cafe::b8) by MW2PR2101CA0008.outlook.office365.com
- (2603:10b6:302:1::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.3 via Frontend
- Transport; Thu, 22 Apr 2021 08:15:37 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.21; Thu, 22 Apr
+ 2021 08:16:53 +0000
+Received: from CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:88:cafe::5b) by MW4PR04CA0260.outlook.office365.com
+ (2603:10b6:303:88::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.21 via Frontend
+ Transport; Thu, 22 Apr 2021 08:16:52 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
  smtp.mailfrom=nvidia.com; google.com; dkim=none (message not signed)
  header.d=none;google.com; dmarc=pass action=none header.from=nvidia.com;
@@ -45,30 +45,65 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.112.34 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.112.34; helo=mail.nvidia.com;
 Received: from mail.nvidia.com (216.228.112.34) by
- CO1NAM11FT015.mail.protection.outlook.com (10.13.175.130) with Microsoft SMTP
+ CO1NAM11FT066.mail.protection.outlook.com (10.13.175.18) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4065.21 via Frontend Transport; Thu, 22 Apr 2021 08:15:37 +0000
+ 15.20.4065.21 via Frontend Transport; Thu, 22 Apr 2021 08:16:52 +0000
 Received: from [10.26.49.10] (172.20.145.6) by HQMAIL107.nvidia.com
  (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 22 Apr
- 2021 08:15:33 +0000
-Subject: Re: [PATCH tip 1/2] signal, perf: Fix siginfo_t by avoiding u64 on
- 32-bit architectures
-To:     Marco Elver <elver@google.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <tglx@linutronix.de>
-CC:     <m.szyprowski@samsung.com>, <dvyukov@google.com>,
-        <glider@google.com>, <arnd@arndb.de>, <christian@brauner.io>,
-        <axboe@kernel.dk>, <pcc@google.com>, <oleg@redhat.com>,
-        <kasan-dev@googlegroups.com>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20210422064437.3577327-1-elver@google.com>
+ 2021 08:16:45 +0000
+Subject: Re: [PATCH v4 05/10] signal: Introduce TRAP_PERF si_code and si_perf
+ to siginfo
+To:     Marco Elver <elver@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian@brauner.io>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Matt Morehouse <mascasa@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Ian Rogers <irogers@google.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <linux-tegra@vger.kernel.org>
+References: <CANpmjNM8wEJngK=J8Lt9npkZgrSWoRsqkdajErWEoY_=M1GW5A@mail.gmail.com>
+ <43f8a3bf-34c5-0fc9-c335-7f92eaf23022@samsung.com>
+ <dccaa337-f3e5-08e4-fe40-a603811bb13e@samsung.com>
+ <CANpmjNP6-yKpxHqYFiA8Up-ujBQaeP7xyq1BrsV-NqMjJ-uHAQ@mail.gmail.com>
+ <740077ce-efe1-b171-f807-bc5fd95a32ba@samsung.com>
+ <f114ff4a-6612-0935-12ac-0e2ac18d896c@samsung.com>
+ <CANpmjNM6bQpc49teN-9qQhCXoJXaek5stFGR2kPwDroSFBc0fw@mail.gmail.com>
+ <cf6ed5cd-3202-65ce-86bc-6f1eba1b7d17@samsung.com>
+ <CANpmjNPr_JtRC762ap8PQVmsFNY5YhHvOk0wNcPHq=ZQt-qxYg@mail.gmail.com>
+ <YIBSg7Vi+U383dT7@elver.google.com>
+ <CGME20210421182355eucas1p23b419002936ab5f1ffc25652135cc152@eucas1p2.samsung.com>
+ <YIBtr2w/8KhOoiUA@elver.google.com>
+ <dd99b921-3d79-a21f-8942-40fa5bf53190@samsung.com>
+ <CANpmjNPbMOUd_Wh5aHGdH8WLrYpyBFUpwx6g3Kj2D6eevvaU8w@mail.gmail.com>
 From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <0734b0e8-b4c0-05bb-b90c-de89edb61b5d@nvidia.com>
-Date:   Thu, 22 Apr 2021 09:15:30 +0100
+Message-ID: <e590c4f6-ad6a-26a4-4f5f-9e6e63bfb15a@nvidia.com>
+Date:   Thu, 22 Apr 2021 09:16:43 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <20210422064437.3577327-1-elver@google.com>
+In-Reply-To: <CANpmjNPbMOUd_Wh5aHGdH8WLrYpyBFUpwx6g3Kj2D6eevvaU8w@mail.gmail.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,59 +112,60 @@ X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
  HQMAIL107.nvidia.com (172.20.187.13)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9d710e30-c035-4cad-4b5a-08d90566cf64
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4548:
-X-Microsoft-Antispam-PRVS: <DM6PR12MB4548FCE178160AD74170443AD9469@DM6PR12MB4548.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Office365-Filtering-Correlation-Id: 46b2d5bf-fba0-49a2-bcdb-08d90566fc25
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3758:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3758BFD9334AFFC08B699A0CD9469@MN2PR12MB3758.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0KTlrxID9+XCJ4fyydsUEi9epDHmEVgBvdgfqpG+VnfI+n+qHha2Wbp5v9G01L76nQL0fKDgZOOHKkQKM45PnBCKrDjH0kw7s/NSerUqB0XK9ItMKMLXTQFGBA6bH8AzOoQgw7rGB2UfIBZ37VEDnQhwpu0sIb65c9DSaCXTsDQew8oMI7ez1g0wWhMyV3M9Gk6aD3XJZnPth3egajqo8T/x+LLbQcJzbLvAwFOZBEOa5LSvBkGULXEBCYcoqXEG8WxhN9BfxFGBv+9NE34V0mPF0dvchXhaRnGIz6WXzniEQtsC7JytlMfwUOtU5LTs4KA4qWAv+zmlfu8zE7Ez/AfRcc3gV9P2urSS6RUt9spnmztu8mL3gzmrgDpljul6N8xPIThMyP8iVIdmg3isoS2IyvyFO1oKP0Zo+KY31m0WEmI86WFrN59ZVISDG8SNZTq3QJAtFabuBJZKB1jl2G86oFXJ2Sl6uLeVS2jnN78qnjDUJ7VvIE4AxqJU8Mkz/C7YHm+B0UwjLV9R8s+Rw5yj1HrFSN3VVUZOuC2U0mfJV154rCM38Q4wRyMP0KS5GmsjrpjqAAbw8tH3z3pWk6/Q2CyHOCy/QtPRyr7aJDSNJfUUwynLngqzTBV15px91hYZ1mp8sZTa7ar8JHVWIcXF2asraa+kEIIdlFiLeUvtaarsxY5fniWHPmO0vDqM
-X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(136003)(376002)(39860400002)(346002)(396003)(36840700001)(46966006)(26005)(82310400003)(478600001)(31696002)(356005)(16526019)(53546011)(2616005)(7416002)(47076005)(2906002)(426003)(8676002)(36860700001)(4326008)(70586007)(316002)(8936002)(70206006)(336012)(86362001)(5660300002)(110136005)(36756003)(54906003)(31686004)(7636003)(82740400003)(16576012)(36906005)(186003)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: nm5s+WgV7SQ8bBFfG1OlcKc4uJ8eghCmgsLVl90qOnH7vUoHUilS0KzakTQwzcepwt5ugpt55utCYrfBj/1Y8caAsOpqtF69hgQuFqbtkvXXOoya/gjp0VR9Fo72P5iNhXMqxGRTxi1vMLXtzxHYHkEe1oYToKMVExl8kCZAS/efyxYO4RqumzkN63dp6N6q/3Nnc2eE2VpdOylZJBnrDiJLIfNi6R30GodaE/UWY+yj5X9BT3Cv2slDjMSwsmlHZzcbR5nQ7ho6/Kn80NllfSBWVDBHRoCzj288AvgQ4gYaguKF+ZLmNnCHH9a++5d8vW892rLv6M3lLCcgQW/Vyas7DEUncHc6sn80YYBmOptNvwE3cGVDiz1aOxlW4LIif6T7WAs0gVO0cdawLjcuoHoyRXYyKQi+/BZ8CnCbwnO0P9VTHIP5ho9Wse+2lZWZRHEo38NOS+ImQI2Lzvk8fucnoYyypZbvGDXXEGtyIxkIIxTfqhC6TUveqoAs56j3HJ6m6sX+p1i3i1Rq9eCNKoLnanjUOiI3kZYQnU+sJnaiV790TwJy9J32EWuEi1reqf6a75CIfZjGHyTLx6qG8OeTCPCwpP0c/DCbqckI8BiIg6eueATDXyqg9ZNiL0B9k5qFe4SIhmZVFM27OV2a+JRGqiCqxNZHKYRIldNIXqgwf/kwdmwB7o5iHPYbp82L/VcQRak5K6V9BjLh/WrokNpemkKLx6wZgu/V0DHHTNbRd4UNxygJytVEFq98zeiFd9J+ns7urgpbOaX7dOyhEg==
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(39860400002)(376002)(136003)(396003)(346002)(46966006)(36840700001)(5660300002)(86362001)(31686004)(7406005)(36906005)(7416002)(316002)(82310400003)(7636003)(82740400003)(83380400001)(31696002)(70586007)(70206006)(356005)(186003)(426003)(36756003)(8676002)(4326008)(47076005)(16526019)(966005)(36860700001)(53546011)(110136005)(478600001)(2906002)(54906003)(16576012)(2616005)(8936002)(26005)(336012)(43740500002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2021 08:15:37.2796
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2021 08:16:52.3701
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d710e30-c035-4cad-4b5a-08d90566cf64
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46b2d5bf-fba0-49a2-bcdb-08d90566fc25
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4548
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3758
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On 22/04/2021 07:44, Marco Elver wrote:
-> On some architectures, like Arm, the alignment of a structure is that of
-> its largest member.
+On 22/04/2021 07:47, Marco Elver wrote:
+> On Thu, 22 Apr 2021 at 08:12, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+> [...]
+>>> So I think we just have to settle on 'unsigned long' here. On many
+>>> architectures, like 32-bit Arm, the alignment of a structure is that of
+>>> its largest member. This means that there is no portable way to add
+>>> 64-bit integers to siginfo_t on 32-bit architectures.
+>>>
+>>> In the case of the si_perf field, word size is sufficient since the data
+>>> it contains is user-defined. On 32-bit architectures, any excess bits of
+>>> perf_event_attr::sig_data will therefore be truncated when copying into
+>>> si_perf.
+>>>
+>>> Feel free to test the below if you have time, but the below lets me boot
+>>> 32-bit arm which previously timed out. It also passes all the
+>>> static_asserts() I added (will send those as separate patches).
+>>>
+>>> Once I'm convinced this passes all others tests too, I'll send a patch.
+>>
+>> This fixes the issue I've observed on my test systems. Feel free to add:
+>>
+>> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>>
+>> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > 
-> This means that there is no portable way to add 64-bit integers to
-> siginfo_t on 32-bit architectures, because siginfo_t does not contain
-> any 64-bit integers on 32-bit architectures.
-> 
-> In the case of the si_perf field, word size is sufficient since there is
-> no exact requirement on size, given the data it contains is user-defined
-> via perf_event_attr::sig_data. On 32-bit architectures, any excess bits
-> of perf_event_attr::sig_data will therefore be truncated when copying
-> into si_perf.
-> 
-> Since this field is intended to disambiguate events (e.g. encoding
-> relevant information if there are more events of the same type), 32 bits
-> should provide enough entropy to do so on 32-bit architectures.
-> 
-> For 64-bit architectures, no change is intended.
-> 
-> Fixes: fb6cc127e0b6 ("signal: Introduce TRAP_PERF si_code and si_perf to siginfo")
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Reported-by: Jon Hunter <jonathanh@nvidia.com>
-> Signed-off-by: Marco Elver <elver@google.com>
+> Thank you for testing! It's been sent:
+> https://lkml.kernel.org/r/20210422064437.3577327-1-elver@google.com
 
 
-Thanks for fixing!
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Thanks! This fixes the problem for Tegra as well. I have responded to
+the above patch with my tested-by.
 
 Cheers
 Jon
