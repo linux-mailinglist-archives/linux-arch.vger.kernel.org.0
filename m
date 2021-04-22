@@ -2,94 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BD4367A1A
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 08:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E94367A24
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 08:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbhDVGpj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Apr 2021 02:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
+        id S234841AbhDVGsB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Apr 2021 02:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234890AbhDVGpg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 02:45:36 -0400
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC185C06174A
-        for <linux-arch@vger.kernel.org>; Wed, 21 Apr 2021 23:45:00 -0700 (PDT)
-Received: by mail-wr1-x449.google.com with SMTP id 91-20020adf92e40000b029010470a9ebc4so12269305wrn.14
-        for <linux-arch@vger.kernel.org>; Wed, 21 Apr 2021 23:45:00 -0700 (PDT)
+        with ESMTP id S234887AbhDVGsB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 02:48:01 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AFCC06138C
+        for <linux-arch@vger.kernel.org>; Wed, 21 Apr 2021 23:47:26 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id i81so44875486oif.6
+        for <linux-arch@vger.kernel.org>; Wed, 21 Apr 2021 23:47:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Sugwskr8rXy42pZ1xDG6/Yn9grQzLU2kaW/tniDjvCM=;
-        b=rlmZAOT4B8TFqAZfZ08hCQP6c8Lo5iDRtrCmUNvvQfPE2MM8TQVihWTTmzMuSendWu
-         yX+RaWI3/1avKzx9airDR9aL48aJWg8GIWMZcHboD9GKsYqKNJkl1Sd8UbVlDroUbRxT
-         B6+HRfVChEHZtk9KTA1SSqpw+ZHUQvGm1Uz1fY6Rz2kq/qq6GvJzN/41hCtme7AQ5rsp
-         PodsoHWH/gfa1Fbt9QmGwRjIM04KLoBHQpmiECbBz3g+6LRJ4YfkGhpRTe7QZIFbLGH+
-         JKqayl8XPz7Stk7eXLPT/KB6A163xlvaydZwEuEw5tln8PZfuCouXuz3CO5LpRH2KTE8
-         fKVw==
+        bh=wTjjN5jAG5wIij1DihAnfF2YGoCBK9l6YKfTSDtQuuw=;
+        b=lA/wdfNnxbUzsB2aSrzU1nhguY4+P6Aj7qnVqkf5OhF3sIXJOlTSGd9kiMXUAzxysb
+         W9QxSlfFJL7eB48TdEIbZwylUsW48RfPkIAqFU/rp2hCT5QWBBzk8WEoWFAagDOwQM/e
+         Vrf8OGXAY/yBa15JsD4ffNk5Yq521ogLASDGN+9A73YZBNVlqNihiexcQD9WoaQ67iJR
+         TgLFSLgTG6X7ptC8ZGmhj9i5I1DB7ubEaF0JWBSUgGG1mljq/HcUXyo9XgxL9gMNrINK
+         2XsvC7sxwvCG4Rb/UT4z60h0z7UJ36wu/Uh+Ls0nO6/f21RJ61u0O+KXLP+C5dPrvvs4
+         eLHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Sugwskr8rXy42pZ1xDG6/Yn9grQzLU2kaW/tniDjvCM=;
-        b=FhoT8TdA3s0JgLenKd2z06Kzvm5iDI4JCVMRDq/689wObdQTcLbnY8WKFWxzvQ8oe0
-         htyXfG+lJWmVnGpvxo1StE9xmXAu+feRrnsXj8IE1wV1A6JNomMaJBH1PTDMw49ocgbh
-         aJHpu3T8rjMKvcQSm32c9TAzZXrNoUJY5zsEMrvQYph10152J0biTSm+IIAeKZR/aCjb
-         /Bw2gDveTsM1M0A12wLGEoqNoEAEPJzxRipCw81NU4WJuFcuLpmduy1ttB8XOVNmhw8/
-         VT+ma42akjv2fHQaa8YUQp9ksW4CPIosBpRtLooto2lSMxP1dCzNRS2CRhrp17ubvpQs
-         WH0w==
-X-Gm-Message-State: AOAM531q9VkNfzvxEZY/IyKIwdXdhq5y3KfgKFSj6lNpcMJUND22ETAq
-        j4UI5NGH523DqzIAPVgzxAgoUkzRSA==
-X-Google-Smtp-Source: ABdhPJy+hre1G5RN1jq0nJSfzX61loPh+welwRzkqIFqp7alxaEk/o/Xx49s2TFsWZg2yfvXi5JrJ0YSHg==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:6273:c89a:6562:e1ba])
- (user=elver job=sendgmr) by 2002:a05:600c:35cf:: with SMTP id
- r15mr12248413wmq.183.1619073899334; Wed, 21 Apr 2021 23:44:59 -0700 (PDT)
-Date:   Thu, 22 Apr 2021 08:44:37 +0200
-In-Reply-To: <20210422064437.3577327-1-elver@google.com>
-Message-Id: <20210422064437.3577327-2-elver@google.com>
-Mime-Version: 1.0
-References: <20210422064437.3577327-1-elver@google.com>
-X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
-Subject: [PATCH tip 2/2] signal, perf: Add missing TRAP_PERF case in siginfo_layout()
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wTjjN5jAG5wIij1DihAnfF2YGoCBK9l6YKfTSDtQuuw=;
+        b=FQKBkLKhsi7e32Pagvo0P11bFRnzEDgB7kE5tFO30mPra4JBjCynAbYWkXKmcDzRTa
+         ax7YOAIIIUHaWN2yinS9fKuitee+kbYJURSJThUFz5MBoKe0liaVGRKM2Hv96TUudXjG
+         5+T6pShexYiMp7EYsZVr6aCXg18Zeb9s93Y43Mu0/aODRG1OmNjfeLbo381eGsebMlnM
+         o62YD0ctEtYOq3MJyKmsBKt6BV3ikHpr+0ujyJVSxljIo1p6TZa3/tkFNAFtxhyaxwFw
+         mizB1UfVt1TmKvarQ4BHGjR1BeZAmhcPhgToAzarFDpLryiB1S/CXSyMPxkszKrkLW/5
+         PMMQ==
+X-Gm-Message-State: AOAM530W8qkQQ70dAZCz8MV0oD7Ak4lUL7hkvAJ9I7HoPxKAIv3KcLLt
+        GO2u/OGB0wgJ5LBuQhBngkQLkIom1qFHs8xzdTIOIA==
+X-Google-Smtp-Source: ABdhPJz+a6SHZEXyLt9Z7/nm+V2v7tz51a75rL/rIBsZOOdAAJeD+/znnbrUP8V+l4NnAp+N+L56r3GGMKmOwrilkZY=
+X-Received: by 2002:aca:408a:: with SMTP id n132mr1231205oia.70.1619074045847;
+ Wed, 21 Apr 2021 23:47:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <CANpmjNM8wEJngK=J8Lt9npkZgrSWoRsqkdajErWEoY_=M1GW5A@mail.gmail.com>
+ <43f8a3bf-34c5-0fc9-c335-7f92eaf23022@samsung.com> <dccaa337-f3e5-08e4-fe40-a603811bb13e@samsung.com>
+ <CANpmjNP6-yKpxHqYFiA8Up-ujBQaeP7xyq1BrsV-NqMjJ-uHAQ@mail.gmail.com>
+ <740077ce-efe1-b171-f807-bc5fd95a32ba@samsung.com> <f114ff4a-6612-0935-12ac-0e2ac18d896c@samsung.com>
+ <CANpmjNM6bQpc49teN-9qQhCXoJXaek5stFGR2kPwDroSFBc0fw@mail.gmail.com>
+ <cf6ed5cd-3202-65ce-86bc-6f1eba1b7d17@samsung.com> <CANpmjNPr_JtRC762ap8PQVmsFNY5YhHvOk0wNcPHq=ZQt-qxYg@mail.gmail.com>
+ <YIBSg7Vi+U383dT7@elver.google.com> <CGME20210421182355eucas1p23b419002936ab5f1ffc25652135cc152@eucas1p2.samsung.com>
+ <YIBtr2w/8KhOoiUA@elver.google.com> <dd99b921-3d79-a21f-8942-40fa5bf53190@samsung.com>
+In-Reply-To: <dd99b921-3d79-a21f-8942-40fa5bf53190@samsung.com>
 From:   Marco Elver <elver@google.com>
-To:     elver@google.com, peterz@infradead.org, mingo@redhat.com,
-        tglx@linutronix.de
-Cc:     m.szyprowski@samsung.com, jonathanh@nvidia.com, dvyukov@google.com,
-        glider@google.com, arnd@arndb.de, christian@brauner.io,
-        axboe@kernel.dk, pcc@google.com, oleg@redhat.com,
-        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Thu, 22 Apr 2021 08:47:13 +0200
+Message-ID: <CANpmjNPbMOUd_Wh5aHGdH8WLrYpyBFUpwx6g3Kj2D6eevvaU8w@mail.gmail.com>
+Subject: Re: [PATCH v4 05/10] signal: Introduce TRAP_PERF si_code and si_perf
+ to siginfo
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian@brauner.io>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Matt Morehouse <mascasa@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Ian Rogers <irogers@google.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-tegra@vger.kernel.org, jonathanh@nvidia.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add the missing TRAP_PERF case in siginfo_layout() for interpreting the
-layout correctly as SIL_PERF_EVENT instead of just SIL_FAULT. This
-ensures the si_perf field is copied and not just the si_addr field.
+On Thu, 22 Apr 2021 at 08:12, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+[...]
+> > So I think we just have to settle on 'unsigned long' here. On many
+> > architectures, like 32-bit Arm, the alignment of a structure is that of
+> > its largest member. This means that there is no portable way to add
+> > 64-bit integers to siginfo_t on 32-bit architectures.
+> >
+> > In the case of the si_perf field, word size is sufficient since the data
+> > it contains is user-defined. On 32-bit architectures, any excess bits of
+> > perf_event_attr::sig_data will therefore be truncated when copying into
+> > si_perf.
+> >
+> > Feel free to test the below if you have time, but the below lets me boot
+> > 32-bit arm which previously timed out. It also passes all the
+> > static_asserts() I added (will send those as separate patches).
+> >
+> > Once I'm convinced this passes all others tests too, I'll send a patch.
+>
+> This fixes the issue I've observed on my test systems. Feel free to add:
+>
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-This was caught and tested by running the perf_events/sigtrap_threads
-kselftest as a 32-bit binary with a 64-bit kernel.
+Thank you for testing! It's been sent:
+https://lkml.kernel.org/r/20210422064437.3577327-1-elver@google.com
 
-Fixes: fb6cc127e0b6 ("signal: Introduce TRAP_PERF si_code and si_perf to siginfo")
-Signed-off-by: Marco Elver <elver@google.com>
----
- kernel/signal.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 9ed81ee4ff17..b354655a0e57 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -3251,6 +3251,8 @@ enum siginfo_layout siginfo_layout(unsigned sig, int si_code)
- 			else if ((sig == SIGSEGV) && (si_code == SEGV_PKUERR))
- 				layout = SIL_FAULT_PKUERR;
- #endif
-+			else if ((sig == SIGTRAP) && (si_code == TRAP_PERF))
-+				layout = SIL_PERF_EVENT;
- 		}
- 		else if (si_code <= NSIGPOLL)
- 			layout = SIL_POLL;
--- 
-2.31.1.498.g6c1eba8ee3d-goog
-
+Thanks,
+-- Marco
