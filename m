@@ -2,115 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E354536857C
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 19:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B253686A0
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 20:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238021AbhDVRHl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Apr 2021 13:07:41 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:8606 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238206AbhDVRHf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 13:07:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1619111198; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=th4lh6hwjfD7YppPPMf+uOrTMTqW4GV7g/q6MkXuTBuzT2Ag2W3Blz5gLC6p4syMkN
-    EfGCREYcYWlJ0SmQ+a15eHEsPJDdedE2R6mr4dU2sCcz/bGBgtMnmP1FjqVMCu847dC2
-    pKJV2ccju9JKKGQ+Qncf6zLArqACuUt9bDvSGWLyoBEq0FxcG+0Ui1Yb0KMXidzEc8Qr
-    p9NGBDKg24hbGCvvPAzHofhX8Npuq33qjuDyyfd/GKiye8UreN99E2ZILBbC1itQSuQm
-    mriQWqVpQ0nDn47PJl5eUUAxJLDdliOPefkf5B2DGDdCDnrbZgxpE7+FnaSetg6jtwIn
-    bbFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1619111198;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=RZEhjPMTimtcOAMcX8JWlzvK+WjQDhgXOxbfImygjNU=;
-    b=n+DFXBaRckaQUdmzb3uQ08PlykCEMLb0ZALFV/3JMJZRoZEPRTJaE3yF/SFfj8IcVr
-    Wek2q08FUZOncZDrQpsKNCDo4SpKDQcOO9R4Io9MTLmlqbiyYKim0XVrgpIPWA9Xz81P
-    MFmme/ZdVZ+xFxkhC85OhzJWNuSIURS3I5oYG69tKCOOEKjAAA3748ffW7Oapk2wocSp
-    m3bcAiIZtgVoquDB0iq415dNVgvwbsvtWX+sf90Kl7Dp41/vK4Y6IJOgJHSo8M+x/jjn
-    rGFfCvHHTCaC8Huz0A2Ke25UTkQnEhA4YQhX0MYbycgNShsfb3/EjenqOXNO0sSg2V+D
-    BPyg==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1619111198;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=RZEhjPMTimtcOAMcX8JWlzvK+WjQDhgXOxbfImygjNU=;
-    b=n0iAFzbgPDMjLR1aswEeJsNWnXIRPDy7g2B3x23bgPhNwVFWRCemigEJ05HIUONGqU
-    J2vhu/v4qeFy1Ol1mRizPpo3O3zdyG4WKOau2E8GR9XsI6saj+m7VAwZyW1uXsRMerdk
-    C+sMBB9ibnqPhtUZ3UBr8YSMOWtNCHgS//6e7OFFJ96uRiiFMPIEGMG5DNCOWp1aZCAK
-    JrApMuHtuaK/iQdWVnk2ZIoCBQRsAls52W7orMXt43xkrQlW8RD6sln6fBbgUkOje41i
-    SNYrr4+5Sk+QnzFdUDzEe4fuPuwuJ2Nb+pd/FbRU/XQvJi9VLVd2JfV6VYlYpjd0SJic
-    vPew==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qOxWRk4dCylX7xo8GB7++2Zda3a+jmqyM0co2qg7zyOUbI="
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2001:16b8:2600:e600:a8e1:bb4:fe1c:cea8]
-    by smtp.strato.de (RZmta 47.24.3 AUTH)
-    with ESMTPSA id Q01a92x3MH6bYOb
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 22 Apr 2021 19:06:37 +0200 (CEST)
-Subject: Re: [PATCH 0/4] Reinstate and improve MIPS `do_div' implementation
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=us-ascii
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <alpine.DEB.2.21.2104221828200.44318@angie.orcam.me.uk>
-Date:   Thu, 22 Apr 2021 19:06:36 +0200
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S236934AbhDVShN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Apr 2021 14:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236885AbhDVShM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 14:37:12 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C75C06174A;
+        Thu, 22 Apr 2021 11:36:37 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id r186so18963892oif.8;
+        Thu, 22 Apr 2021 11:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=BYTuPMRUexPPGvW6L1BJds8lSCPzcxEGFZPlK6FTX5Q=;
+        b=lzLVIMk/sD6EH5Ou0EKkBA7/dkiIEbylUlyG2qLLy2nEv6Qy9kCTwiat6sai94yuO5
+         WyGo6aFBOA74o/iDElyktIv/qsytHyeIH2qxw5gp4efQbzMHZEI4KEJtnmEE6uKKCYeZ
+         cwYpCIVJi/2ujGTBEHeN8ux8KTKcBsPULjVapcG5R8fqPPJT50POaMiAq8zE2qpqnCnh
+         tXWRKRgoqh6PkeFgpY7VRx4mgge3WcWw1n9ke7hGbN3GhzpMenpI4aBJuuV8TALvFsUL
+         uR6oRY3U6ThdOomUPVo4wQDkMUYwrgOKBrYCkasvPKmb4MJX4RG0QsnSfrwVyVErzv3W
+         8SVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BYTuPMRUexPPGvW6L1BJds8lSCPzcxEGFZPlK6FTX5Q=;
+        b=W9Xw0ZQSiCP/KhQdadt/tcRgJyeparzTGGI1eu2lkdAESdmibHJRYkKCaDY/qYwXn4
+         yz4LMnltpp+Epe93pYlnp6O8v9x7Bj1YBe7aHBFkNYbS22QVjPqeuGTj7yAV4P1WIUB7
+         l3attTiRT3uGFCq62kxIziEpWWHzN241AUPdPnBGrBmFwRz7xZ7PySt66I7B9e3+jPqN
+         /gsaX4sUM9AUAPYbtEd/TwRkVBd4M/VksXRgmtqW0j/lMk+BkpQ8gCAb9l9lMJXAOlGj
+         riHILZ1QkAAW6w7ENy8jc4CFpu4lunoM8V+DlIerpMB6osjg1iNDQeOn2mez12yaUdmy
+         WQCA==
+X-Gm-Message-State: AOAM533QlpLW/Q95fy8C89YKf7TjKIMybRJ5CeT9IAajXlXP4tDMaLM8
+        LfzQhLpsWOeNHmQqYx7E19I=
+X-Google-Smtp-Source: ABdhPJxLB1HYUuROmP8V+ubyXzzB0HnMxdsPjxrumTVmWgD12fwqUh8KLYkkg8BTnKRUCy6o3MMJ+A==
+X-Received: by 2002:aca:c755:: with SMTP id x82mr939223oif.83.1619116596702;
+        Thu, 22 Apr 2021 11:36:36 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p11sm780397oti.53.2021.04.22.11.36.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 22 Apr 2021 11:36:36 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 22 Apr 2021 11:36:34 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Huacai Chen <chenhuacai@kernel.org>,
         Huacai Chen <chenhuacai@loongson.cn>,
-        linux-arch@vger.kernel.org,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Lubomir Rintel <lkundrak@v3.sk>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8FCB8F58-7F0A-4A9E-8BEA-7CCF09A43B63@goldelico.com>
-References: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk> <51BC7C74-68BF-4A8E-8CFB-DB4EBBC89706@goldelico.com> <alpine.DEB.2.21.2104211904490.44318@angie.orcam.me.uk> <E6326E8A-50DA-4F81-9865-F29EE0E298A9@goldelico.com> <2d636696-35f0-4731-b1c3-5445a57964fb@www.fastmail.com> <895956F9-4EBC-4C8A-9BF2-7E457E96C1D7@goldelico.com> <alpine.DEB.2.21.2104221828200.44318@angie.orcam.me.uk>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-X-Mailer: Apple Mail (2.3124)
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 3/4] MIPS: Reinstate platform `__div64_32' handler
+Message-ID: <20210422183634.GA108385@roeck-us.net>
+References: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2104200212500.44318@angie.orcam.me.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2104200212500.44318@angie.orcam.me.uk>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Apr 20, 2021 at 04:50:40AM +0200, Maciej W. Rozycki wrote:
+> Our current MIPS platform `__div64_32' handler is inactive, because it 
+> is incorrectly only enabled for 64-bit configurations, for which generic 
+> `do_div' code does not call it anyway.
+> 
+> The handler is not suitable for being called from there though as it 
+> only calculates 32 bits of the quotient under the assumption the 64-bit 
+> divident has been suitably reduced.  Code for such reduction used to be 
+> there, however it has been incorrectly removed with commit c21004cd5b4c 
+> ("MIPS: Rewrite <asm/div64.h> to work with gcc 4.4.0."), which should 
+> have only updated an obsoleted constraint for an inline asm involving 
+> $hi and $lo register outputs, while possibly wiring the original MIPS 
+> variant of the `do_div' macro as `__div64_32' handler for the generic 
+> `do_div' implementation
+> 
+> Correct the handler as follows then:
+> 
+> - Revert most of the commit referred, however retaining the current 
+>   formatting, except for the final two instructions of the inline asm 
+>   sequence, which the original commit missed.  Omit the original 64-bit 
+>   parts though.
+> 
+> - Rename the original `do_div' macro to `__div64_32'.  Use the combined 
+>   `x' constraint referring to the MD accumulator as a whole, replacing 
+>   the original individual `h' and `l' constraints used for $hi and $lo 
+>   registers respectively, of which `h' has been obsoleted with GCC 4.4. 
+>   Update surrounding code accordingly.
+> 
+>   We have since removed support for GCC versions before 4.9, so no need 
+>   for a special arrangement here; GCC has supported the `x' constraint 
+>   since forever anyway, or at least going back to 1991.
+> 
+> - Rename the `__base' local variable in `__div64_32' to `__radix' to 
+>   avoid a conflict with a local variable in `do_div'.
+> 
+> - Actually enable this code for 32-bit rather than 64-bit configurations
+>   by qualifying it with BITS_PER_LONG being 32 instead of 64.  Include 
+>   <asm/bitsperlong.h> for this macro rather than <linux/types.h> as we 
+>   don't need anything else.
+> 
+> - Finally include <asm-generic/div64.h> last rather than first.
+> 
+> This has passed correctness verification with test_div64 and reduced the 
+> module's average execution time down to 1.0668s and 0.2629s from 2.1529s 
+> and 0.5647s respectively for an R3400 CPU @40MHz and a 5Kc CPU @160MHz.  
+> For a reference 64-bit `do_div' code where we have the DDIVU instruction 
+> available to do the whole calculation right away averages at 0.0660s for 
+> the latter CPU.
+> 
+This patch results in:
 
-> Am 22.04.2021 um 18:55 schrieb Maciej W. Rozycki <macro@orcam.me.uk>:
->=20
->=20
-> Have you used it as a module or at bootstrap?
+arch/mips/mti-malta/malta-time.c: In function 'plat_time_init':
+./arch/mips/include/asm/div64.h:76:3: error: inconsistent operand constraints in an 'asm'
 
-I did load it by insmod.
+and similar errors when trying to compile malta_qemu_32r6_defconfig.
+I tried with gcc 8.3.0, 8.4.0, 9.3.0, and 10.3.0.
 
-> I would expect your JZ4730 device to have the CP0 Count register as =
-well,=20
-> as it has been architectural ever since MIPS III really, or is your =
-system=20
-> SMP with CP0 Count registers out of sync across CPUs due to sleep =
-modes or=20
-> whatever?
+Does this need some additional new compile flags ?
 
-It switches clocksource to some operating system timers on the SoC which
-may have an influence on the resolution (or precision).
-
-> Thanks for sharing your figures.
-
-It was a pleasure towards better MIPS support...
-
->=20
->> [1] we are preparing full support for the JZ4730 based Skytone Alpha =
-machine. Most features
->> are working except sound/I2S. I2C is a little unreliable and Ethernet =
-has hickups. And scheduling
->> which indicates some fundamental IRQ or timer issue we could not yet =
-identify.
->=20
-> Good luck with that!
-
-BR and thanks,
-Niklaus
-
+Thanks,
+Guenter
