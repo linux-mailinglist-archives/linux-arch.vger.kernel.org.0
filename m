@@ -2,95 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DC936870E
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 21:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B9236871D
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 21:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238778AbhDVTTJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Apr 2021 15:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S238702AbhDVTXU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Apr 2021 15:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238752AbhDVTTJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 15:19:09 -0400
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13DFC06174A
-        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 12:18:33 -0700 (PDT)
-Received: by mail-wm1-x34a.google.com with SMTP id f134-20020a1c1f8c0000b029012e03286b7bso1995413wmf.0
-        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 12:18:33 -0700 (PDT)
+        with ESMTP id S236668AbhDVTXU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 15:23:20 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05C2C061756
+        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 12:22:44 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id k14-20020a9d7dce0000b02901b866632f29so43218038otn.1
+        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 12:22:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Sugwskr8rXy42pZ1xDG6/Yn9grQzLU2kaW/tniDjvCM=;
-        b=N0/i2Z5Ah+iH6G2EkCovNrk2mBQPzeAFd1m1GTNwITesl1LuHaJiptjsZe5b00INE0
-         ryeY0Z6v39pUAKaMEgkBjhW9/H/F8x/EC1yO/tKfGc8ZaoNHTpOR9kAM3kK/NKb9i4Pi
-         FlpKg43hd6FHxaowCZWxZ85B0Wp9kl8rUBQYQCuPGlvNV3qeM451H99iVqhHIVlfUK9m
-         lepgeHJbEFEyQ7zPZRBJfT+zBUJiByw7ElIIWWkDTdmMULFDO6JX+UcPAAyUlDsTmZvS
-         /4YCAC5rfJyuBzED+h/5nhWMGtXI7GGykXofz5B7Eq49UNx9nLFJt6fGKSXmdCAZS3la
-         Aamw==
+        bh=66cEbil9eINHpcRrkzmgQxcSDhUEl5mJfXPxp3tOEXI=;
+        b=IuMg6mQeBwJh4wTwLnveFoFpVCocNbp/3EC4dwCMijoPhLgQM2OBh4NUIZQwRzsLzW
+         yYUK/yBVD+pjy3xQqUyrjYIWcB65J/+htg7XP2EYaEZ6LluevaV3OfGb5DqbxPWkexz9
+         e9Hr4nzsad9879fuUtXEkkmYIvolaJX/qO07bJ9/pH2oCxyYlNvUU180O1hr+XS7qAcP
+         HOJ0PnJLi5S79sK+mXpRHBp5AzAf3NweX5pKLSbi3BCQUEnEGKeNSulp4rqrWsDneIsn
+         DjK05zqJ25SPj0NRq+FOEEn5/fGxMyOzXla900ECNgIHH6ZPofKnTKl0LWDF6GSoFUf9
+         WWWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Sugwskr8rXy42pZ1xDG6/Yn9grQzLU2kaW/tniDjvCM=;
-        b=SJ/1/XWfFbn38djp7eFxxMUWX6jX7LoTU7XZ0u0Hq/KNKV7G4PyyqwwGN1PxTmLiVu
-         cVEQBvtFDln7plqxj+C3KuGB2tbmWgyGPDC1uHGfAfX9uLIIVy9TV7dgVUXTVOLnSoMi
-         YpwlGg7ioZGzuqL0CjXJkbAktG9pZAy5s0ymo+LPjIbnVDV5aAIe5QncN1+RhZiPe0BS
-         tbXwAu6KD+ZV7bsJZCDlvxlT3tApbCOKIR4iTUO91N1f2NmOidxiNSFXKk0LF3r8nueM
-         RHTDnglgXKbWnZbBwdpIpTyoIED4yHa2boPhQ1WP14Ny+VmGBoQBbRyWMot1NPYBlSmD
-         M3jQ==
-X-Gm-Message-State: AOAM533lWe700scKH/2sa1/YmQhiNWsAEEpyRplEocQPUYQ3ysZ09n3V
-        6n5xBcQH1bOLfCpIHp8w0eDJLIUdOA==
-X-Google-Smtp-Source: ABdhPJwl+q5WjR5zsegf/9T50JzWO1+p0hZUP1HC7HBRkSIEzansnudeZv6f3dYlA7JH8yzgTt1aNJBYgQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:145c:dc52:6539:7ac5])
- (user=elver job=sendgmr) by 2002:a1c:c246:: with SMTP id s67mr312123wmf.86.1619119112369;
- Thu, 22 Apr 2021 12:18:32 -0700 (PDT)
-Date:   Thu, 22 Apr 2021 21:18:23 +0200
-In-Reply-To: <20210422191823.79012-1-elver@google.com>
-Message-Id: <20210422191823.79012-2-elver@google.com>
-Mime-Version: 1.0
-References: <20210422191823.79012-1-elver@google.com>
-X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
-Subject: [PATCH tip v2 2/2] signal, perf: Add missing TRAP_PERF case in siginfo_layout()
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=66cEbil9eINHpcRrkzmgQxcSDhUEl5mJfXPxp3tOEXI=;
+        b=A5fL442j4/V2NbyPg3po4Nu+GL3+F7gYhnJulmR+SZORh3+DeAntb/DETPhN67tUyk
+         Qy70eAnhQpPmTXAYnmb8WX3K6tJl7hVcltxFUWFY1O7ugAVfmpXSwcDc60dGYfB43L0f
+         SF0+P/8ogGCefpyKB7DMo2ZHLxix7b+Q4Qu90evGcWOZouSXzwcNdJe+SGAAKZHbh43X
+         kcbA0sKYs4oQEMnsO3qpbwBzMweRWmeuQ9BK+OrORhl6fxF/EdxiPOQQfAYnVvTFWNHD
+         PzRY8tQkLraDQUF4cvpbQdnj4ZM99ecYVyympdvEk47zKjM/6sycubKL6kLgVR5x1Dbg
+         cA3w==
+X-Gm-Message-State: AOAM533/M4hS9BtcL630fw/hhjnL+u/37HhIu+nND5oTYQCs6l1s/cTY
+        RN+UUjKwvenaK2+adQ7IbzYMkyXkXcHOoHn7GjfEiQ==
+X-Google-Smtp-Source: ABdhPJwx2fYflGjsAzNwa66QYD0lhZUtecFrQpiV3owpBNe0jgxddvCCKETq2D5XKlLBMFEXtVDQDJOt9zvi59YXxn4=
+X-Received: by 2002:a9d:1ea9:: with SMTP id n38mr83098otn.233.1619119364007;
+ Thu, 22 Apr 2021 12:22:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210422064437.3577327-1-elver@google.com> <d480a4f56d544fb98eb1cdd62f44ae91@AcuMS.aculab.com>
+ <CANpmjNNjkQdziFZDkPy5EnwCF+VyBWKXEwCDgNpxHGZd+BLQag@mail.gmail.com>
+In-Reply-To: <CANpmjNNjkQdziFZDkPy5EnwCF+VyBWKXEwCDgNpxHGZd+BLQag@mail.gmail.com>
 From:   Marco Elver <elver@google.com>
-To:     elver@google.com, peterz@infradead.org, mingo@redhat.com,
-        tglx@linutronix.de
-Cc:     m.szyprowski@samsung.com, jonathanh@nvidia.com, dvyukov@google.com,
-        glider@google.com, arnd@arndb.de, christian@brauner.io,
-        axboe@kernel.dk, pcc@google.com, oleg@redhat.com,
-        David.Laight@aculab.com, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
+Date:   Thu, 22 Apr 2021 21:22:31 +0200
+Message-ID: <CANpmjNNHRmaxawVKNe8Oe=pnEgoJG6iqevHNJRa4EoeFtS5fYQ@mail.gmail.com>
+Subject: Re: [PATCH tip 1/2] signal, perf: Fix siginfo_t by avoiding u64 on
+ 32-bit architectures
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "glider@google.com" <glider@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "christian@brauner.io" <christian@brauner.io>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "pcc@google.com" <pcc@google.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add the missing TRAP_PERF case in siginfo_layout() for interpreting the
-layout correctly as SIL_PERF_EVENT instead of just SIL_FAULT. This
-ensures the si_perf field is copied and not just the si_addr field.
+On Thu, 22 Apr 2021 at 12:17, Marco Elver <elver@google.com> wrote:
+> On Thu, 22 Apr 2021 at 11:48, David Laight <David.Laight@aculab.com> wrote:
+> >
+> > From: Marco Elver
+> > > Sent: 22 April 2021 07:45
+> > >
+> > > On some architectures, like Arm, the alignment of a structure is that of
+> > > its largest member.
+> >
+> > That is true everywhere.
+> > (Apart from obscure ABI where structure have at least 4 byte alignment!)
+>
+> For instance, x86 didn't complain, nor did m68k. Both of them have
+> compile-time checks for the layout (I'm adding those for Arm
+> elsewhere).
+[...]
+> > Much as I hate __packed, you could add __packed to the
+> > definition of the structure member _perf.
+> > The compiler will remove the padding before it and will
+> > assume it has the alignment of the previous item.
+> >
+> > So it will never use byte accesses.
+>
+> Sure __packed works for Arm. But I think there's no precedent using
+> this on siginfo_t, possibly for good reasons? I simply can't find
+> evidence that this is portable on *all* architectures and for *all*
+> possible definitions of siginfo_t, including those that live in things
+> like glibc.
+>
+> Can we confirm that __packed is fine to add to siginfo_t on *all*
+> architectures for *all* possible definitions of siginfo_t? I currently
+> can't. And given it's outside the scope of the C standard (as of C11
+> we got _Alignas, but that doesn't help I think), I'd vote to not
+> venture too far for code that should be portable especially things as
+> important as siginfo_t, and has definitions *outside* the kernel (I
+> know we do lots of non-standard things, but others might not).
 
-This was caught and tested by running the perf_events/sigtrap_threads
-kselftest as a 32-bit binary with a 64-bit kernel.
+After thinking about this all afternoon, you convinced me that the
+commit message wasn't great, and this should be in the commit message,
+too: https://lkml.kernel.org/r/20210422191823.79012-1-elver@google.com
 
-Fixes: fb6cc127e0b6 ("signal: Introduce TRAP_PERF si_code and si_perf to siginfo")
-Signed-off-by: Marco Elver <elver@google.com>
----
- kernel/signal.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 9ed81ee4ff17..b354655a0e57 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -3251,6 +3251,8 @@ enum siginfo_layout siginfo_layout(unsigned sig, int si_code)
- 			else if ((sig == SIGSEGV) && (si_code == SEGV_PKUERR))
- 				layout = SIL_FAULT_PKUERR;
- #endif
-+			else if ((sig == SIGTRAP) && (si_code == TRAP_PERF))
-+				layout = SIL_PERF_EVENT;
- 		}
- 		else if (si_code <= NSIGPOLL)
- 			layout = SIL_POLL;
--- 
-2.31.1.498.g6c1eba8ee3d-goog
-
+Thanks,
+-- Marco
