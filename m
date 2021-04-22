@@ -2,37 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E8F368825
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 22:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18A9368833
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 22:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236896AbhDVUoR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Apr 2021 16:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
+        id S239383AbhDVUsd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Apr 2021 16:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236915AbhDVUoP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 16:44:15 -0400
+        with ESMTP id S236851AbhDVUsd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 16:48:33 -0400
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F2F3C06174A;
-        Thu, 22 Apr 2021 13:43:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3A0CC06174A;
+        Thu, 22 Apr 2021 13:47:57 -0700 (PDT)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 79CBA92009C; Thu, 22 Apr 2021 22:43:38 +0200 (CEST)
+        id CF57D92009D; Thu, 22 Apr 2021 22:47:56 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 73C7C92009B;
-        Thu, 22 Apr 2021 22:43:38 +0200 (CEST)
-Date:   Thu, 22 Apr 2021 22:43:38 +0200 (CEST)
+        by angie.orcam.me.uk (Postfix) with ESMTP id C959B92009B;
+        Thu, 22 Apr 2021 22:47:56 +0200 (CEST)
+Date:   Thu, 22 Apr 2021 22:47:56 +0200 (CEST)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Guenter Roeck <linux@roeck-us.net>
-cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Huacai Chen <chenhuacai@kernel.org>,
         Huacai Chen <chenhuacai@loongson.cn>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 3/4] MIPS: Reinstate platform `__div64_32' handler
-In-Reply-To: <20210422183634.GA108385@roeck-us.net>
-Message-ID: <alpine.DEB.2.21.2104222044560.44318@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk> <alpine.DEB.2.21.2104200212500.44318@angie.orcam.me.uk> <20210422183634.GA108385@roeck-us.net>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] MIPS: Avoid DIVU in `__div64_32' is result would be
+ zero
+In-Reply-To: <20210422110855.GA9564@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2104222244220.44318@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk> <alpine.DEB.2.21.2104200331110.44318@angie.orcam.me.uk> <284CBC37-0F4F-4077-A172-7E47C90B8B43@goldelico.com> <alpine.DEB.2.21.2104211810200.44318@angie.orcam.me.uk> <20210422075645.GA5996@alpha.franken.de>
+ <alpine.DEB.2.21.2104221053500.44318@angie.orcam.me.uk> <20210422110855.GA9564@alpha.franken.de>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -40,28 +42,27 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 22 Apr 2021, Guenter Roeck wrote:
+On Thu, 22 Apr 2021, Thomas Bogendoerfer wrote:
 
-> This patch results in:
+> >  Hmm, what about changes known to actually break something then?  Like 
+> > with R6 here?  Those will undoubtedly cause someone a headache with 
+> > bisection sometime in the future.  Are you sure your policy is the best 
+> > possible?
 > 
-> arch/mips/mti-malta/malta-time.c: In function 'plat_time_init':
-> ./arch/mips/include/asm/div64.h:76:3: error: inconsistent operand constraints in an 'asm'
+> This is my Linus pull tree, so I'm following 
 > 
-> and similar errors when trying to compile malta_qemu_32r6_defconfig.
+> Documentation/maintainer/rebasing-and-merging.rst
 
- Thanks for the heads-up, however the 0-DAY bot has caught this issue 
-already last night and I would have addressed it earlier on if not for a 
-failure of my Malta board :( which disrupted my verification.
+ Fair enough.
 
-> I tried with gcc 8.3.0, 8.4.0, 9.3.0, and 10.3.0.
+> >  Meanwhile I'll be able to give DECstation figures only.  I guess such 
+> > limited results will suffice if I post the fix as an update rather than 
+> > replacement.
 > 
-> Does this need some additional new compile flags ?
+> thank you.
 
- MIPSr6 doesn't have the original division instruction along with the MD 
-accumulator registers anymore, and consequently GCC cannot fit the 
-constraint requested.
-
- We don't need that asm however.  Maybe we didn't with GCC 2.95 either, 
-but I suspect there was something to it.  Anyway I have just posted a fix.
+ I have requested 3/4 to be backported however, so I think in this case 
+4/4 will have to follow as well as 2/2 of the fix series I have just 
+posted.  Will you be able to resolve this somehow?
 
   Maciej
