@@ -2,390 +2,279 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C194B368272
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 16:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A17E368399
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 17:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236398AbhDVOaJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Apr 2021 10:30:09 -0400
-Received: from foss.arm.com ([217.140.110.172]:52210 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236341AbhDVOaI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Apr 2021 10:30:08 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 989271424;
-        Thu, 22 Apr 2021 07:29:33 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.22.241])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF6393F73B;
-        Thu, 22 Apr 2021 07:29:31 -0700 (PDT)
-Date:   Thu, 22 Apr 2021 15:29:29 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] asm-generic: atomic64: handle ARCH_ATOMIC builds (was
- "Re: [PATCH v3 1/2] locking/atomics: Fixup GENERIC_ATOMIC64 conflict") with
- atomic-arch-fallback.h
-Message-ID: <20210422142929.GC66392@C02TD0UTHF1T.local>
-References: <1619009626-93453-1-git-send-email-guoren@kernel.org>
- <20210422105945.GB62037@C02TD0UTHF1T.local>
- <CAJF2gTQSrBM5rBH+2cG8-iTAw8C+A20S-WGtE33hjVVLVLCpJA@mail.gmail.com>
+        id S237939AbhDVPmL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Apr 2021 11:42:11 -0400
+Received: from smtp-42a9.mail.infomaniak.ch ([84.16.66.169]:57155 "EHLO
+        smtp-42a9.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237450AbhDVPmK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Apr 2021 11:42:10 -0400
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FR1qb4dRyzMptYp;
+        Thu, 22 Apr 2021 17:41:31 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4FR1qV5kmGzlmrs5;
+        Thu, 22 Apr 2021 17:41:26 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v34 00/13] Landlock LSM
+Date:   Thu, 22 Apr 2021 17:41:10 +0200
+Message-Id: <20210422154123.13086-1-mic@digikod.net>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTQSrBM5rBH+2cG8-iTAw8C+A20S-WGtE33hjVVLVLCpJA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 22, 2021 at 09:12:19PM +0800, Guo Ren wrote:
-> On Thu, Apr 22, 2021 at 6:59 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > Hi Guo,
-> >
-> > On Wed, Apr 21, 2021 at 12:53:45PM +0000, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Current GENERIC_ATOMIC64 in atomic-arch-fallback.h is broken. When a 32-bit
-> > > arch use atomic-arch-fallback.h will cause compile error.
-> > >
-> > > In file included from include/linux/atomic.h:81,
-> > >                     from include/linux/rcupdate.h:25,
-> > >                     from include/linux/rculist.h:11,
-> > >                     from include/linux/pid.h:5,
-> > >                     from include/linux/sched.h:14,
-> > >                     from arch/riscv/kernel/asm-offsets.c:10:
-> > >    include/linux/atomic-arch-fallback.h: In function 'arch_atomic64_inc':
-> > > >> include/linux/atomic-arch-fallback.h:1447:2: error: implicit declaration of function 'arch_atomic64_add'; did you mean 'arch_atomic_add'? [-Werror=implicit-function-declaration]
-> > >     1447 |  arch_atomic64_add(1, v);
-> > >          |  ^~~~~~~~~~~~~~~~~
-> > >          |  arch_atomic_add
-> >
-> > This is expected; GENERIC_ATOMIC64 doesn't implement arch_atomic64_*(),
-> > and thus violates the expectations of the fallback code.
-> >
-> > To make GENERIC_ATOMIC64 compatible with ARCH_ATOMIC, the
-> > GENERIC_ATOMIC64 implementation *must* provide arch_atomic64_*()
-> > functions.
-> How do you let a "static __always_inline" of
-> "asm-generic/atomic-instrumented.h" call a real function? See
-> lib/atomic64.c.
+Hi,
 
-Can you rephrase the question? I don't understand what you're asking
-here.
+This updated patch series adds a new patch on top of the previous ones.
+It brings a new flag to landlock_create_ruleset(2) that enables
+efficient and simple backward compatibility checks for future evolutions
+of Landlock (e.g. new access-control rights).  Indeed, it is important
+to help user space to follow a best-effort security.  This new flag is
+not strictly useful for applications using the current Landlock features
+but it will be useful when applications developed for newer kernels will
+be run on older kernels (e.g. the current one).
 
-If you're asking about how the calls are directed to
-generic_atomic64_*(), the atomic-instrumented atomic64_<foo>() function
-will try to call arch_atomic64_<foo>(), and the pre-processor
-definitions in asm-generic/atomic64.h will direct that to
-generic_atomic64_<foo>().
+Here is an example of a (work in progress) library using this
+information to provide a nice backward compatible API:
+https://github.com/landlock-lsm/rust-landlock
 
-If you're asking about inlining specifically, I'm afraid I don't
-understand. It's legitimate for a static __always_inline function A to
-call a non-inlined function B, and this works just fine. In that case, A
-will get inlined into its caller, and B will not, but nothing stops A
-from calling B.
+The SLOC count is 1331 for security/landlock/ and 2626 for
+tools/testing/selftest/landlock/ .
+Test coverage for security/landlock/ is 93.6% of lines:
+https://landlock.io/linux-lcov/landlock-v34/security/landlock/index.html
+The code not covered only deals with internal kernel errors (e.g. memory
+allocation), race conditions and safety checks that should not be
+triggered.  This series is being fuzzed by syzkaller (covering internal
+kernel errors) that now supports Landlock:
+https://github.com/google/syzkaller/pull/2380
+syzkaller coverage reached 72% (ci-upstream-linux-next-kasan-gce-root):
+https://syzkaller.appspot.com/upstream
 
-> > > The atomic-arch-fallback.h & atomic-fallback.h &
-> > > atomic-instrumented.h are generated by gen-atomic-fallback.sh &
-> > > gen-atomic-instrumented.sh, so just take care the bash files.
-> > >
-> > > Remove the dependency of atomic-*-fallback.h in atomic64.h.
-> >
-> > Please don't duplicate the fallbacks; this'll make it harder to move
-> > other over and eventually remove the non-ARCH_ATOMIC implementations.
-> >
-> > Does the patch below make things work for you, or have I missed
-> > something?
-> RISC-V combines 32bit & 64bit together just like x86. Current
-> ARCH_ATOMIC could work perfectly with RV64, but not RV32.
->
-> RV32 still could use ARCH_ATOMIC to improve kasan check.
+The HTML documentation is available here:
+https://landlock.io/linux-doc/landlock-v34/userspace-api/landlock.html
 
-I understand that (and I want riscv to use ARCH_ATOMIC), but that
-doesn't answer my question.
+This series can be applied on top of v5.12-rc3 .  This can be tested with
+CONFIG_SECURITY_LANDLOCK, CONFIG_SAMPLE_LANDLOCK and by prepending
+"landlock," to CONFIG_LSM.  This patch series can be found in a Git
+repository here:
+https://github.com/landlock-lsm/linux/commits/landlock-v34
+This patch series seems ready for upstream and I would really appreciate
+final reviews.
 
-I went and built this locally, starting with v5.12-rc8, applying my
-patch, then applying your second patch atop. Both defconfig and
-rv32_defconfig build just fine, though I wasn't able to check KASAN with
-GCC 10.1.0.
+Landlock LSM
+============
 
-Is there a problem that I've missed, or does my patch work?
+The goal of Landlock is to enable to restrict ambient rights (e.g.
+global filesystem access) for a set of processes.  Because Landlock is a
+stackable LSM [1], it makes possible to create safe security sandboxes
+as new security layers in addition to the existing system-wide
+access-controls. This kind of sandbox is expected to help mitigate the
+security impact of bugs or unexpected/malicious behaviors in user-space
+applications. Landlock empowers any process, including unprivileged
+ones, to securely restrict themselves.
 
-Thanks,
-Mark.
+Landlock is inspired by seccomp-bpf but instead of filtering syscalls
+and their raw arguments, a Landlock rule can restrict the use of kernel
+objects like file hierarchies, according to the kernel semantic.
+Landlock also takes inspiration from other OS sandbox mechanisms: XNU
+Sandbox, FreeBSD Capsicum or OpenBSD Pledge/Unveil.
 
-> > I've given this a basic build test on an arm config using
-> > GENERIC_ATOMIC64 (but not ARCH_ATOMIC).
-> >
-> > Thanks,
-> > Mark.
-> > ---->8----
-> > From 7f0389c8a1f41ecb5b2700f6ba38ff2ba093eb33 Mon Sep 17 00:00:00 2001
-> > From: Mark Rutland <mark.rutland@arm.com>
-> > Date: Thu, 22 Apr 2021 11:26:04 +0100
-> > Subject: [PATCH] asm-generic: atomic64: handle ARCH_ATOMIC builds
-> >
-> > We'd like all architectures to convert to ARCH_ATOMIC, as this will
-> > enable functionality, and once all architectures are converted it will
-> > be possible to make significant cleanups to the atomic headers.
-> >
-> > A number of architectures use GENERIC_ATOMIC64, and it's impractical to
-> > convert them all in one go. To make it possible to convert them
-> > one-by-one, let's make the GENERIC_ATOMIC64 implementation function as
-> > either atomic64_*() or arch_atomic64_*() depending on whether
-> > ARCH_ATOMIC is selected. To do this, the C implementations are prefixed
-> > as generic_atomic64_*(), and the asm-generic/atomic64.h header maps
-> > atomic64_*()/arch_atomic64_*() onto these as appropriate via teh
-> > preprocessor.
-> >
-> > Once all users are moved over to ARCH_ATOMIC the ifdeffery in the header
-> > can be simplified and/or removed entirely.
-> >
-> > For existing users (none of which select ARCH_ATOMIC), there should be
-> > no functional change as a result of this patch.
-> >
-> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Guo Ren <guoren@linux.alibaba.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > ---
-> >  include/asm-generic/atomic64.h | 74 ++++++++++++++++++++++++++++++++++--------
-> >  lib/atomic64.c                 | 36 ++++++++++----------
-> >  2 files changed, 79 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/include/asm-generic/atomic64.h b/include/asm-generic/atomic64.h
-> > index 370f01d4450f..45c7ff8c9477 100644
-> > --- a/include/asm-generic/atomic64.h
-> > +++ b/include/asm-generic/atomic64.h
-> > @@ -15,19 +15,17 @@ typedef struct {
-> >
-> >  #define ATOMIC64_INIT(i)       { (i) }
-> >
-> > -extern s64 atomic64_read(const atomic64_t *v);
-> > -extern void atomic64_set(atomic64_t *v, s64 i);
-> > -
-> > -#define atomic64_set_release(v, i)     atomic64_set((v), (i))
-> > +extern s64 generic_atomic64_read(const atomic64_t *v);
-> > +extern void generic_atomic64_set(atomic64_t *v, s64 i);
-> >
-> >  #define ATOMIC64_OP(op)                                                        \
-> > -extern void     atomic64_##op(s64 a, atomic64_t *v);
-> > +extern void generic_atomic64_##op(s64 a, atomic64_t *v);
-> >
-> >  #define ATOMIC64_OP_RETURN(op)                                         \
-> > -extern s64 atomic64_##op##_return(s64 a, atomic64_t *v);
-> > +extern s64 generic_atomic64_##op##_return(s64 a, atomic64_t *v);
-> >
-> >  #define ATOMIC64_FETCH_OP(op)                                          \
-> > -extern s64 atomic64_fetch_##op(s64 a, atomic64_t *v);
-> > +extern s64 generic_atomic64_fetch_##op(s64 a, atomic64_t *v);
-> >
-> >  #define ATOMIC64_OPS(op)       ATOMIC64_OP(op) ATOMIC64_OP_RETURN(op) ATOMIC64_FETCH_OP(op)
-> >
-> > @@ -46,11 +44,61 @@ ATOMIC64_OPS(xor)
-> >  #undef ATOMIC64_OP_RETURN
-> >  #undef ATOMIC64_OP
-> >
-> > -extern s64 atomic64_dec_if_positive(atomic64_t *v);
-> > -#define atomic64_dec_if_positive atomic64_dec_if_positive
-> > -extern s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n);
-> > -extern s64 atomic64_xchg(atomic64_t *v, s64 new);
-> > -extern s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u);
-> > -#define atomic64_fetch_add_unless atomic64_fetch_add_unless
-> > +extern s64 generic_atomic64_dec_if_positive(atomic64_t *v);
-> > +extern s64 generic_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n);
-> > +extern s64 generic_atomic64_xchg(atomic64_t *v, s64 new);
-> > +extern s64 generic_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u);
-> > +
-> > +#ifdef ARCH_ATOMIC
-> > +
-> > +#define arch_atomic64_read             generic_atomic64_read
-> > +#define arch_atomic64_set              generic_atomic64_set
-> > +#define arch_atomic64_set_release      generic_atomic64_set
-> > +
-> > +#define        arch_atomic64_add               generic_atomic64_add
-> > +#define        arch_atomic64_add_return        generic_atomic64_add_return
-> > +#define        arch_atomic64_fetch_add         generic_atomic64_fetch_add
-> > +#define        arch_atomic64_sub               generic_atomic64_sub
-> > +#define        arch_atomic64_sub_return        generic_atomic64_sub_return
-> > +#define        arch_atomic64_fetch_sub         generic_atomic64_fetch_sub
-> > +
-> > +#define        arch_atomic64_and               generic_atomic64_and
-> > +#define        arch_atomic64_fetch_and         generic_atomic64_fetch_and
-> > +#define        arch_atomic64_or                generic_atomic64_or
-> > +#define        arch_atomic64_fetch_or          generic_atomic64_fetch_or
-> > +#define        arch_atomic64_xor               generic_atomic64_xor
-> > +#define        arch_atomic64_fetch_xor         generic_atomic64_fetch_xor
-> > +
-> > +#define arch_atomic64_dec_if_positive  generic_atomic64_dec_if_positive
-> > +#define arch_atomic64_cmpxchg          generic_atomic64_cmpxchg
-> > +#define arch_atomic64_xchg             generic_atomic64_xchg
-> > +#define arch_atomic64_fetch_add_unless generic_atomic64_fetch_add_unless
-> > +
-> > +#else /* ARCH_ATOMIC */
-> > +
-> > +#define atomic64_read                  generic_atomic64_read
-> > +#define atomic64_set                   generic_atomic64_set
-> > +#define atomic64_set_release           generic_atomic64_set
-> > +
-> > +#define        atomic64_add                    generic_atomic64_add
-> > +#define        atomic64_add_return             generic_atomic64_add_return
-> > +#define        atomic64_fetch_add              generic_atomic64_fetch_add
-> > +#define        atomic64_sub                    generic_atomic64_sub
-> > +#define        atomic64_sub_return             generic_atomic64_sub_return
-> > +#define        atomic64_fetch_sub              generic_atomic64_fetch_sub
-> > +
-> > +#define        atomic64_and                    generic_atomic64_and
-> > +#define        atomic64_fetch_and              generic_atomic64_fetch_and
-> > +#define        atomic64_or                     generic_atomic64_or
-> > +#define        atomic64_fetch_or               generic_atomic64_fetch_or
-> > +#define        atomic64_xor                    generic_atomic64_xor
-> > +#define        atomic64_fetch_xor              generic_atomic64_fetch_xor
-> > +
-> > +#define atomic64_dec_if_positive       generic_atomic64_dec_if_positive
-> > +#define atomic64_cmpxchg               generic_atomic64_cmpxchg
-> > +#define atomic64_xchg                  generic_atomic64_xchg
-> > +#define atomic64_fetch_add_unless      generic_atomic64_fetch_add_unless
-> > +
-> > +#endif /* ARCH_ATOMIC */
-> >
-> >  #endif  /*  _ASM_GENERIC_ATOMIC64_H  */
-> > diff --git a/lib/atomic64.c b/lib/atomic64.c
-> > index e98c85a99787..3df653994177 100644
-> > --- a/lib/atomic64.c
-> > +++ b/lib/atomic64.c
-> > @@ -42,7 +42,7 @@ static inline raw_spinlock_t *lock_addr(const atomic64_t *v)
-> >         return &atomic64_lock[addr & (NR_LOCKS - 1)].lock;
-> >  }
-> >
-> > -s64 atomic64_read(const atomic64_t *v)
-> > +s64 generic_atomic64_read(const atomic64_t *v)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -53,9 +53,9 @@ s64 atomic64_read(const atomic64_t *v)
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_read);
-> > +EXPORT_SYMBOL(generic_atomic64_read);
-> >
-> > -void atomic64_set(atomic64_t *v, s64 i)
-> > +void generic_atomic64_set(atomic64_t *v, s64 i)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -64,10 +64,10 @@ void atomic64_set(atomic64_t *v, s64 i)
-> >         v->counter = i;
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >  }
-> > -EXPORT_SYMBOL(atomic64_set);
-> > +EXPORT_SYMBOL(generic_atomic64_set);
-> >
-> >  #define ATOMIC64_OP(op, c_op)                                          \
-> > -void atomic64_##op(s64 a, atomic64_t *v)                               \
-> > +void generic_atomic64_##op(s64 a, atomic64_t *v)                       \
-> >  {                                                                      \
-> >         unsigned long flags;                                            \
-> >         raw_spinlock_t *lock = lock_addr(v);                            \
-> > @@ -76,10 +76,10 @@ void atomic64_##op(s64 a, atomic64_t *v)                            \
-> >         v->counter c_op a;                                              \
-> >         raw_spin_unlock_irqrestore(lock, flags);                        \
-> >  }                                                                      \
-> > -EXPORT_SYMBOL(atomic64_##op);
-> > +EXPORT_SYMBOL(generic_atomic64_##op);
-> >
-> >  #define ATOMIC64_OP_RETURN(op, c_op)                                   \
-> > -s64 atomic64_##op##_return(s64 a, atomic64_t *v)                       \
-> > +s64 generic_atomic64_##op##_return(s64 a, atomic64_t *v)               \
-> >  {                                                                      \
-> >         unsigned long flags;                                            \
-> >         raw_spinlock_t *lock = lock_addr(v);                            \
-> > @@ -90,10 +90,10 @@ s64 atomic64_##op##_return(s64 a, atomic64_t *v)                    \
-> >         raw_spin_unlock_irqrestore(lock, flags);                        \
-> >         return val;                                                     \
-> >  }                                                                      \
-> > -EXPORT_SYMBOL(atomic64_##op##_return);
-> > +EXPORT_SYMBOL(generic_atomic64_##op##_return);
-> >
-> >  #define ATOMIC64_FETCH_OP(op, c_op)                                    \
-> > -s64 atomic64_fetch_##op(s64 a, atomic64_t *v)                          \
-> > +s64 generic_atomic64_fetch_##op(s64 a, atomic64_t *v)                  \
-> >  {                                                                      \
-> >         unsigned long flags;                                            \
-> >         raw_spinlock_t *lock = lock_addr(v);                            \
-> > @@ -105,7 +105,7 @@ s64 atomic64_fetch_##op(s64 a, atomic64_t *v)                               \
-> >         raw_spin_unlock_irqrestore(lock, flags);                        \
-> >         return val;                                                     \
-> >  }                                                                      \
-> > -EXPORT_SYMBOL(atomic64_fetch_##op);
-> > +EXPORT_SYMBOL(generic_atomic64_fetch_##op);
-> >
-> >  #define ATOMIC64_OPS(op, c_op)                                         \
-> >         ATOMIC64_OP(op, c_op)                                           \
-> > @@ -130,7 +130,7 @@ ATOMIC64_OPS(xor, ^=)
-> >  #undef ATOMIC64_OP_RETURN
-> >  #undef ATOMIC64_OP
-> >
-> > -s64 atomic64_dec_if_positive(atomic64_t *v)
-> > +s64 generic_atomic64_dec_if_positive(atomic64_t *v)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -143,9 +143,9 @@ s64 atomic64_dec_if_positive(atomic64_t *v)
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_dec_if_positive);
-> > +EXPORT_SYMBOL(generic_atomic64_dec_if_positive);
-> >
-> > -s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
-> > +s64 generic_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -158,9 +158,9 @@ s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_cmpxchg);
-> > +EXPORT_SYMBOL(generic_atomic64_cmpxchg);
-> >
-> > -s64 atomic64_xchg(atomic64_t *v, s64 new)
-> > +s64 generic_atomic64_xchg(atomic64_t *v, s64 new)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -172,9 +172,9 @@ s64 atomic64_xchg(atomic64_t *v, s64 new)
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_xchg);
-> > +EXPORT_SYMBOL(generic_atomic64_xchg);
-> >
-> > -s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
-> > +s64 generic_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -188,4 +188,4 @@ s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
-> >
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_fetch_add_unless);
-> > +EXPORT_SYMBOL(generic_atomic64_fetch_add_unless);
-> > --
-> > 2.11.0
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
+In this current form, Landlock misses some access-control features.
+This enables to minimize this patch series and ease review.  This series
+still addresses multiple use cases, especially with the combined use of
+seccomp-bpf: applications with built-in sandboxing, init systems,
+security sandbox tools and security-oriented APIs [2].
+
+[1] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
+[2] https://lore.kernel.org/lkml/f646e1c7-33cf-333f-070c-0a40ad0468cd@digikod.net/
+
+Previous versions:
+v33: https://lore.kernel.org/lkml/20210407160726.542794-1-mic@digikod.net/
+v32: https://lore.kernel.org/lkml/20210401205208.2756565-1-mic@digikod.net/
+v31: https://lore.kernel.org/lkml/20210324191520.125779-1-mic@digikod.net/
+v30: https://lore.kernel.org/lkml/20210316204252.427806-1-mic@digikod.net/
+v29: https://lore.kernel.org/lkml/20210225190614.2181147-1-mic@digikod.net/
+v28: https://lore.kernel.org/lkml/20210202162710.657398-1-mic@digikod.net/
+v27: https://lore.kernel.org/lkml/20210121205119.793296-1-mic@digikod.net/
+v26: https://lore.kernel.org/lkml/20201209192839.1396820-1-mic@digikod.net/
+v25: https://lore.kernel.org/lkml/20201201192322.213239-1-mic@digikod.net/
+v24: https://lore.kernel.org/lkml/20201112205141.775752-1-mic@digikod.net/
+v23: https://lore.kernel.org/lkml/20201103182109.1014179-1-mic@digikod.net/
+v22: https://lore.kernel.org/lkml/20201027200358.557003-1-mic@digikod.net/
+v21: https://lore.kernel.org/lkml/20201008153103.1155388-1-mic@digikod.net/
+v20: https://lore.kernel.org/lkml/20200802215903.91936-1-mic@digikod.net/
+v19: https://lore.kernel.org/lkml/20200707180955.53024-1-mic@digikod.net/
+v18: https://lore.kernel.org/lkml/20200526205322.23465-1-mic@digikod.net/
+v17: https://lore.kernel.org/lkml/20200511192156.1618284-1-mic@digikod.net/
+v16: https://lore.kernel.org/lkml/20200416103955.145757-1-mic@digikod.net/
+v15: https://lore.kernel.org/lkml/20200326202731.693608-1-mic@digikod.net/
+v14: https://lore.kernel.org/lkml/20200224160215.4136-1-mic@digikod.net/
+v13: https://lore.kernel.org/lkml/20191104172146.30797-1-mic@digikod.net/
+v12: https://lore.kernel.org/lkml/20191031164445.29426-1-mic@digikod.net/
+v11: https://lore.kernel.org/lkml/20191029171505.6650-1-mic@digikod.net/
+v10: https://lore.kernel.org/lkml/20190721213116.23476-1-mic@digikod.net/
+v9: https://lore.kernel.org/lkml/20190625215239.11136-1-mic@digikod.net/
+v8: https://lore.kernel.org/lkml/20180227004121.3633-1-mic@digikod.net/
+v7: https://lore.kernel.org/lkml/20170821000933.13024-1-mic@digikod.net/
+v6: https://lore.kernel.org/lkml/20170328234650.19695-1-mic@digikod.net/
+v5: https://lore.kernel.org/lkml/20170222012632.4196-1-mic@digikod.net/
+v4: https://lore.kernel.org/lkml/20161026065654.19166-1-mic@digikod.net/
+v3: https://lore.kernel.org/lkml/20160914072415.26021-1-mic@digikod.net/
+v2: https://lore.kernel.org/lkml/1472121165-29071-1-git-send-email-mic@digikod.net/
+v1: https://lore.kernel.org/kernel-hardening/1458784008-16277-1-git-send-email-mic@digikod.net/
+
+Casey Schaufler (1):
+  LSM: Infrastructure management of the superblock
+
+Mickaël Salaün (12):
+  landlock: Add object management
+  landlock: Add ruleset and domain management
+  landlock: Set up the security framework and manage credentials
+  landlock: Add ptrace restrictions
+  fs,security: Add sb_delete hook
+  landlock: Support filesystem access-control
+  landlock: Add syscall implementations
+  arch: Wire up Landlock syscalls
+  selftests/landlock: Add user space tests
+  samples/landlock: Add a sandbox manager example
+  landlock: Add user and kernel documentation
+  landlock: Enable user space to infer supported features
+
+ Documentation/security/index.rst              |    1 +
+ Documentation/security/landlock.rst           |   85 +
+ Documentation/userspace-api/index.rst         |    1 +
+ Documentation/userspace-api/landlock.rst      |  311 ++
+ MAINTAINERS                                   |   15 +
+ arch/Kconfig                                  |    7 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |    3 +
+ arch/arm/tools/syscall.tbl                    |    3 +
+ arch/arm64/include/asm/unistd.h               |    2 +-
+ arch/arm64/include/asm/unistd32.h             |    6 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |    3 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |    3 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |    3 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |    3 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |    3 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |    3 +
+ arch/s390/kernel/syscalls/syscall.tbl         |    3 +
+ arch/sh/kernel/syscalls/syscall.tbl           |    3 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |    3 +
+ arch/um/Kconfig                               |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    3 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    3 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |    3 +
+ fs/super.c                                    |    1 +
+ include/linux/lsm_hook_defs.h                 |    1 +
+ include/linux/lsm_hooks.h                     |    4 +
+ include/linux/security.h                      |    4 +
+ include/linux/syscalls.h                      |    7 +
+ include/uapi/asm-generic/unistd.h             |    8 +-
+ include/uapi/linux/landlock.h                 |  137 +
+ kernel/sys_ni.c                               |    5 +
+ samples/Kconfig                               |    7 +
+ samples/Makefile                              |    1 +
+ samples/landlock/.gitignore                   |    1 +
+ samples/landlock/Makefile                     |   13 +
+ samples/landlock/sandboxer.c                  |  238 ++
+ security/Kconfig                              |   11 +-
+ security/Makefile                             |    2 +
+ security/landlock/Kconfig                     |   21 +
+ security/landlock/Makefile                    |    4 +
+ security/landlock/common.h                    |   20 +
+ security/landlock/cred.c                      |   46 +
+ security/landlock/cred.h                      |   58 +
+ security/landlock/fs.c                        |  692 ++++
+ security/landlock/fs.h                        |   70 +
+ security/landlock/limits.h                    |   21 +
+ security/landlock/object.c                    |   67 +
+ security/landlock/object.h                    |   91 +
+ security/landlock/ptrace.c                    |  120 +
+ security/landlock/ptrace.h                    |   14 +
+ security/landlock/ruleset.c                   |  473 +++
+ security/landlock/ruleset.h                   |  165 +
+ security/landlock/setup.c                     |   40 +
+ security/landlock/setup.h                     |   18 +
+ security/landlock/syscalls.c                  |  451 +++
+ security/security.c                           |   51 +-
+ security/selinux/hooks.c                      |   58 +-
+ security/selinux/include/objsec.h             |    6 +
+ security/selinux/ss/services.c                |    3 +-
+ security/smack/smack.h                        |    6 +
+ security/smack/smack_lsm.c                    |   35 +-
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/landlock/.gitignore   |    2 +
+ tools/testing/selftests/landlock/Makefile     |   24 +
+ tools/testing/selftests/landlock/base_test.c  |  266 ++
+ tools/testing/selftests/landlock/common.h     |  183 ++
+ tools/testing/selftests/landlock/config       |    7 +
+ tools/testing/selftests/landlock/fs_test.c    | 2791 +++++++++++++++++
+ .../testing/selftests/landlock/ptrace_test.c  |  337 ++
+ tools/testing/selftests/landlock/true.c       |    5 +
+ 72 files changed, 6986 insertions(+), 77 deletions(-)
+ create mode 100644 Documentation/security/landlock.rst
+ create mode 100644 Documentation/userspace-api/landlock.rst
+ create mode 100644 include/uapi/linux/landlock.h
+ create mode 100644 samples/landlock/.gitignore
+ create mode 100644 samples/landlock/Makefile
+ create mode 100644 samples/landlock/sandboxer.c
+ create mode 100644 security/landlock/Kconfig
+ create mode 100644 security/landlock/Makefile
+ create mode 100644 security/landlock/common.h
+ create mode 100644 security/landlock/cred.c
+ create mode 100644 security/landlock/cred.h
+ create mode 100644 security/landlock/fs.c
+ create mode 100644 security/landlock/fs.h
+ create mode 100644 security/landlock/limits.h
+ create mode 100644 security/landlock/object.c
+ create mode 100644 security/landlock/object.h
+ create mode 100644 security/landlock/ptrace.c
+ create mode 100644 security/landlock/ptrace.h
+ create mode 100644 security/landlock/ruleset.c
+ create mode 100644 security/landlock/ruleset.h
+ create mode 100644 security/landlock/setup.c
+ create mode 100644 security/landlock/setup.h
+ create mode 100644 security/landlock/syscalls.c
+ create mode 100644 tools/testing/selftests/landlock/.gitignore
+ create mode 100644 tools/testing/selftests/landlock/Makefile
+ create mode 100644 tools/testing/selftests/landlock/base_test.c
+ create mode 100644 tools/testing/selftests/landlock/common.h
+ create mode 100644 tools/testing/selftests/landlock/config
+ create mode 100644 tools/testing/selftests/landlock/fs_test.c
+ create mode 100644 tools/testing/selftests/landlock/ptrace_test.c
+ create mode 100644 tools/testing/selftests/landlock/true.c
+
+
+base-commit: 1e28eed17697bcf343c6743f0028cc3b5dd88bf0
+-- 
+2.31.1
+
