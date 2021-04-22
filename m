@@ -2,222 +2,340 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB20367E7C
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 12:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB49367F25
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Apr 2021 12:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235835AbhDVKSJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Apr 2021 06:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235809AbhDVKSI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 06:18:08 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37509C06174A
-        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 03:17:33 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id g4-20020a9d6b040000b029029debbbb3ecso8670188otp.7
-        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 03:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2gsWkNJIVwwQTgMpqGzbaIUC/BfooyEOt1c03CyO1cY=;
-        b=nyhWc3nG16c5O7B6dKi3NLerpDx5GqVjW+Qclbscghcf8oR9qZpmNp+w/Q7RVYm2Ai
-         KskmX3pdAVoxtxJx6AFVSC5ZLN7rDB/oYhB6pjj4c/iMKbF9M+/0rEg2ultB/5WMeETK
-         pMn0nr5Pv3+uO7smK4g0KQ6ccBcqGigtyhBPUNkPIdAPdJhuNveeF28QzymwnaqCnLMB
-         jdtX5jFHxADLR64TQ3C0KTO/jZQLoIZ24ZAxNjHaVr6qfKXQoWjqkNzNiZgevpphukoQ
-         qHmcHLJqprq7flb559GGD7AbSQOIjA6T3bMld5w3xhIPZglPfcAs8Uccxn83EbPWmrw6
-         vrpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2gsWkNJIVwwQTgMpqGzbaIUC/BfooyEOt1c03CyO1cY=;
-        b=dqW/mQmRMRBnw4cDVltMVPUYVn/HVwo25RU3YysBPz/ZusDhGAh4X7Y2YeMGb2TF56
-         IWW8/vjoNmueEcT+R7soJbLtFAoNyCv5avdlbQx7ktKl4DULiNZev/+qgDUmiMJPZtws
-         M8HXBTP8rzaBITRVTdbobfW1sSWhamavMpq9/JY/uEw0pHjEz9mpwJLkiAIGOH21A4yh
-         UzK782YwLvOWLoZ5N88YiUOr4clThPAi1Y7t8GzT8bOwC0gGl+4MR1IjZOMH9ZnqvDWu
-         wuVu8lQoYOyHzCrs2F0S7FDGt/rvGuaBKojXYjWZV0HyKkCJNTo71eixI3cQGnzId1kT
-         d9Dw==
-X-Gm-Message-State: AOAM5335WZT1HbUHA056VOUskpOGSS6E/1IA6YKtu3hwIp8c4++ygclR
-        XjAbRUGMKs/04D5GSTWynHHAKLovMtpWpRKQNkeaFA==
-X-Google-Smtp-Source: ABdhPJxE0Q9zjfZ2NyvLvVX/ipAnmDUW+kGMT83HQSuGBnKtxTQRMuOnT8fvNvc4WWAEH2PyCVnl8mQRX05kY3DubhQ=
-X-Received: by 2002:a05:6830:241b:: with SMTP id j27mr2248529ots.17.1619086652316;
- Thu, 22 Apr 2021 03:17:32 -0700 (PDT)
+        id S235513AbhDVLAZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Apr 2021 07:00:25 -0400
+Received: from foss.arm.com ([217.140.110.172]:49924 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235455AbhDVLAY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Apr 2021 07:00:24 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDE2311FB;
+        Thu, 22 Apr 2021 03:59:49 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [10.57.22.241])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D918E3F774;
+        Thu, 22 Apr 2021 03:59:47 -0700 (PDT)
+Date:   Thu, 22 Apr 2021 11:59:45 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH] asm-generic: atomic64: handle ARCH_ATOMIC builds (was "Re:
+ [PATCH v3 1/2] locking/atomics: Fixup GENERIC_ATOMIC64 conflict") with
+ atomic-arch-fallback.h
+Message-ID: <20210422105945.GB62037@C02TD0UTHF1T.local>
+References: <1619009626-93453-1-git-send-email-guoren@kernel.org>
 MIME-Version: 1.0
-References: <20210422064437.3577327-1-elver@google.com> <d480a4f56d544fb98eb1cdd62f44ae91@AcuMS.aculab.com>
-In-Reply-To: <d480a4f56d544fb98eb1cdd62f44ae91@AcuMS.aculab.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 22 Apr 2021 12:17:20 +0200
-Message-ID: <CANpmjNNjkQdziFZDkPy5EnwCF+VyBWKXEwCDgNpxHGZd+BLQag@mail.gmail.com>
-Subject: Re: [PATCH tip 1/2] signal, perf: Fix siginfo_t by avoiding u64 on
- 32-bit architectures
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "glider@google.com" <glider@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "christian@brauner.io" <christian@brauner.io>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "pcc@google.com" <pcc@google.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1619009626-93453-1-git-send-email-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 22 Apr 2021 at 11:48, David Laight <David.Laight@aculab.com> wrote:
->
-> From: Marco Elver
-> > Sent: 22 April 2021 07:45
-> >
-> > On some architectures, like Arm, the alignment of a structure is that of
-> > its largest member.
->
-> That is true everywhere.
-> (Apart from obscure ABI where structure have at least 4 byte alignment!)
+Hi Guo,
 
-For instance, x86 didn't complain, nor did m68k. Both of them have
-compile-time checks for the layout (I'm adding those for Arm
-elsewhere).
+On Wed, Apr 21, 2021 at 12:53:45PM +0000, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Current GENERIC_ATOMIC64 in atomic-arch-fallback.h is broken. When a 32-bit
+> arch use atomic-arch-fallback.h will cause compile error.
+> 
+> In file included from include/linux/atomic.h:81,
+>                     from include/linux/rcupdate.h:25,
+>                     from include/linux/rculist.h:11,
+>                     from include/linux/pid.h:5,
+>                     from include/linux/sched.h:14,
+>                     from arch/riscv/kernel/asm-offsets.c:10:
+>    include/linux/atomic-arch-fallback.h: In function 'arch_atomic64_inc':
+> >> include/linux/atomic-arch-fallback.h:1447:2: error: implicit declaration of function 'arch_atomic64_add'; did you mean 'arch_atomic_add'? [-Werror=implicit-function-declaration]
+>     1447 |  arch_atomic64_add(1, v);
+>          |  ^~~~~~~~~~~~~~~~~
+>          |  arch_atomic_add
 
-> > This means that there is no portable way to add 64-bit integers to
-> > siginfo_t on 32-bit architectures, because siginfo_t does not contain
-> > any 64-bit integers on 32-bit architectures.
->
-> Uh?
->
-> The actual problem is that adding a 64-bit aligned item to the union
-> forces the union to be 8 byte aligned and adds a 4 byte pad before it
-> (and possibly another one at the end of the structure).
+This is expected; GENERIC_ATOMIC64 doesn't implement arch_atomic64_*(),
+and thus violates the expectations of the fallback code.
 
-Yes, which means there's no portable way (without starting to add
-attributes that are outside the C std) to add 64-bit integers to
-siginfo_t without breaking the ABI on 32-bit architectures.
+To make GENERIC_ATOMIC64 compatible with ARCH_ATOMIC, the
+GENERIC_ATOMIC64 implementation *must* provide arch_atomic64_*()
+functions.
 
-> > In the case of the si_perf field, word size is sufficient since there is
-> > no exact requirement on size, given the data it contains is user-defined
-> > via perf_event_attr::sig_data. On 32-bit architectures, any excess bits
-> > of perf_event_attr::sig_data will therefore be truncated when copying
-> > into si_perf.
->
-> Is that right on BE architectures?
+> The atomic-arch-fallback.h & atomic-fallback.h &
+> atomic-instrumented.h are generated by gen-atomic-fallback.sh &
+> gen-atomic-instrumented.sh, so just take care the bash files.
+> 
+> Remove the dependency of atomic-*-fallback.h in atomic64.h.
 
-We effectively do
+Please don't duplicate the fallbacks; this'll make it harder to move
+other over and eventually remove the non-ARCH_ATOMIC implementations.
 
-  u64 sig_data = ...;
-  unsigned long si_perf = sig_data;
+Does the patch below make things work for you, or have I missed
+something?
 
-Since the user decides what to place into perf_event_attr::sig_data,
-whatever ends up in si_perf is fully controllable by the user, who
-knows which arch they're on. So I do not think this is a problem.
-
-> > Since this field is intended to disambiguate events (e.g. encoding
-> > relevant information if there are more events of the same type), 32 bits
-> > should provide enough entropy to do so on 32-bit architectures.
->
-> What is the size of the field used to supply the data?
-> The size of the returned item really ought to match.
-
-It's u64, but because perf_event_attr wants fixed size fields, this
-can't change.
-
-> Much as I hate __packed, you could add __packed to the
-> definition of the structure member _perf.
-> The compiler will remove the padding before it and will
-> assume it has the alignment of the previous item.
->
-> So it will never use byte accesses.
-
-Sure __packed works for Arm. But I think there's no precedent using
-this on siginfo_t, possibly for good reasons? I simply can't find
-evidence that this is portable on *all* architectures and for *all*
-possible definitions of siginfo_t, including those that live in things
-like glibc.
-
-Can we confirm that __packed is fine to add to siginfo_t on *all*
-architectures for *all* possible definitions of siginfo_t? I currently
-can't. And given it's outside the scope of the C standard (as of C11
-we got _Alignas, but that doesn't help I think), I'd vote to not
-venture too far for code that should be portable especially things as
-important as siginfo_t, and has definitions *outside* the kernel (I
-know we do lots of non-standard things, but others might not).
+I've given this a basic build test on an arm config using
+GENERIC_ATOMIC64 (but not ARCH_ATOMIC).
 
 Thanks,
--- Marco
+Mark.
+---->8----
+From 7f0389c8a1f41ecb5b2700f6ba38ff2ba093eb33 Mon Sep 17 00:00:00 2001
+From: Mark Rutland <mark.rutland@arm.com>
+Date: Thu, 22 Apr 2021 11:26:04 +0100
+Subject: [PATCH] asm-generic: atomic64: handle ARCH_ATOMIC builds
 
->         David
->
-> >
-> > For 64-bit architectures, no change is intended.
-> >
-> > Fixes: fb6cc127e0b6 ("signal: Introduce TRAP_PERF si_code and si_perf to siginfo")
-> > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > Reported-by: Jon Hunter <jonathanh@nvidia.com>
-> > Signed-off-by: Marco Elver <elver@google.com>
-> > ---
-> >
-> > Note: I added static_assert()s to verify the siginfo_t layout to
-> > arch/arm and arch/arm64, which caught the problem. I'll send them
-> > separately to arm&arm64 maintainers respectively.
-> > ---
-> >  include/linux/compat.h                                | 2 +-
-> >  include/uapi/asm-generic/siginfo.h                    | 2 +-
-> >  tools/testing/selftests/perf_events/sigtrap_threads.c | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/compat.h b/include/linux/compat.h
-> > index c8821d966812..f0d2dd35d408 100644
-> > --- a/include/linux/compat.h
-> > +++ b/include/linux/compat.h
-> > @@ -237,7 +237,7 @@ typedef struct compat_siginfo {
-> >                                       u32 _pkey;
-> >                               } _addr_pkey;
-> >                               /* used when si_code=TRAP_PERF */
-> > -                             compat_u64 _perf;
-> > +                             compat_ulong_t _perf;
-> >                       };
-> >               } _sigfault;
-> >
-> > diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-> > index d0bb9125c853..03d6f6d2c1fe 100644
-> > --- a/include/uapi/asm-generic/siginfo.h
-> > +++ b/include/uapi/asm-generic/siginfo.h
-> > @@ -92,7 +92,7 @@ union __sifields {
-> >                               __u32 _pkey;
-> >                       } _addr_pkey;
-> >                       /* used when si_code=TRAP_PERF */
-> > -                     __u64 _perf;
-> > +                     unsigned long _perf;
-> >               };
-> >       } _sigfault;
-> >
-> > diff --git a/tools/testing/selftests/perf_events/sigtrap_threads.c
-> > b/tools/testing/selftests/perf_events/sigtrap_threads.c
-> > index 9c0fd442da60..78ddf5e11625 100644
-> > --- a/tools/testing/selftests/perf_events/sigtrap_threads.c
-> > +++ b/tools/testing/selftests/perf_events/sigtrap_threads.c
-> > @@ -44,7 +44,7 @@ static struct {
-> >  } ctx;
-> >
-> >  /* Unique value to check si_perf is correctly set from perf_event_attr::sig_data. */
-> > -#define TEST_SIG_DATA(addr) (~(uint64_t)(addr))
-> > +#define TEST_SIG_DATA(addr) (~(unsigned long)(addr))
-> >
-> >  static struct perf_event_attr make_event_attr(bool enabled, volatile void *addr)
-> >  {
-> > --
-> > 2.31.1.498.g6c1eba8ee3d-goog
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+We'd like all architectures to convert to ARCH_ATOMIC, as this will
+enable functionality, and once all architectures are converted it will
+be possible to make significant cleanups to the atomic headers.
+
+A number of architectures use GENERIC_ATOMIC64, and it's impractical to
+convert them all in one go. To make it possible to convert them
+one-by-one, let's make the GENERIC_ATOMIC64 implementation function as
+either atomic64_*() or arch_atomic64_*() depending on whether
+ARCH_ATOMIC is selected. To do this, the C implementations are prefixed
+as generic_atomic64_*(), and the asm-generic/atomic64.h header maps
+atomic64_*()/arch_atomic64_*() onto these as appropriate via teh
+preprocessor.
+
+Once all users are moved over to ARCH_ATOMIC the ifdeffery in the header
+can be simplified and/or removed entirely.
+
+For existing users (none of which select ARCH_ATOMIC), there should be
+no functional change as a result of this patch.
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Guo Ren <guoren@linux.alibaba.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+---
+ include/asm-generic/atomic64.h | 74 ++++++++++++++++++++++++++++++++++--------
+ lib/atomic64.c                 | 36 ++++++++++----------
+ 2 files changed, 79 insertions(+), 31 deletions(-)
+
+diff --git a/include/asm-generic/atomic64.h b/include/asm-generic/atomic64.h
+index 370f01d4450f..45c7ff8c9477 100644
+--- a/include/asm-generic/atomic64.h
++++ b/include/asm-generic/atomic64.h
+@@ -15,19 +15,17 @@ typedef struct {
+ 
+ #define ATOMIC64_INIT(i)	{ (i) }
+ 
+-extern s64 atomic64_read(const atomic64_t *v);
+-extern void atomic64_set(atomic64_t *v, s64 i);
+-
+-#define atomic64_set_release(v, i)	atomic64_set((v), (i))
++extern s64 generic_atomic64_read(const atomic64_t *v);
++extern void generic_atomic64_set(atomic64_t *v, s64 i);
+ 
+ #define ATOMIC64_OP(op)							\
+-extern void	 atomic64_##op(s64 a, atomic64_t *v);
++extern void generic_atomic64_##op(s64 a, atomic64_t *v);
+ 
+ #define ATOMIC64_OP_RETURN(op)						\
+-extern s64 atomic64_##op##_return(s64 a, atomic64_t *v);
++extern s64 generic_atomic64_##op##_return(s64 a, atomic64_t *v);
+ 
+ #define ATOMIC64_FETCH_OP(op)						\
+-extern s64 atomic64_fetch_##op(s64 a, atomic64_t *v);
++extern s64 generic_atomic64_fetch_##op(s64 a, atomic64_t *v);
+ 
+ #define ATOMIC64_OPS(op)	ATOMIC64_OP(op) ATOMIC64_OP_RETURN(op) ATOMIC64_FETCH_OP(op)
+ 
+@@ -46,11 +44,61 @@ ATOMIC64_OPS(xor)
+ #undef ATOMIC64_OP_RETURN
+ #undef ATOMIC64_OP
+ 
+-extern s64 atomic64_dec_if_positive(atomic64_t *v);
+-#define atomic64_dec_if_positive atomic64_dec_if_positive
+-extern s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n);
+-extern s64 atomic64_xchg(atomic64_t *v, s64 new);
+-extern s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u);
+-#define atomic64_fetch_add_unless atomic64_fetch_add_unless
++extern s64 generic_atomic64_dec_if_positive(atomic64_t *v);
++extern s64 generic_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n);
++extern s64 generic_atomic64_xchg(atomic64_t *v, s64 new);
++extern s64 generic_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u);
++
++#ifdef ARCH_ATOMIC
++
++#define arch_atomic64_read		generic_atomic64_read
++#define arch_atomic64_set		generic_atomic64_set
++#define arch_atomic64_set_release	generic_atomic64_set
++
++#define	arch_atomic64_add		generic_atomic64_add
++#define	arch_atomic64_add_return	generic_atomic64_add_return
++#define	arch_atomic64_fetch_add		generic_atomic64_fetch_add
++#define	arch_atomic64_sub		generic_atomic64_sub
++#define	arch_atomic64_sub_return	generic_atomic64_sub_return
++#define	arch_atomic64_fetch_sub		generic_atomic64_fetch_sub
++
++#define	arch_atomic64_and		generic_atomic64_and
++#define	arch_atomic64_fetch_and		generic_atomic64_fetch_and
++#define	arch_atomic64_or		generic_atomic64_or
++#define	arch_atomic64_fetch_or		generic_atomic64_fetch_or
++#define	arch_atomic64_xor		generic_atomic64_xor
++#define	arch_atomic64_fetch_xor		generic_atomic64_fetch_xor
++
++#define arch_atomic64_dec_if_positive 	generic_atomic64_dec_if_positive
++#define arch_atomic64_cmpxchg	 	generic_atomic64_cmpxchg
++#define arch_atomic64_xchg	 	generic_atomic64_xchg
++#define arch_atomic64_fetch_add_unless	generic_atomic64_fetch_add_unless
++
++#else /* ARCH_ATOMIC */
++
++#define atomic64_read			generic_atomic64_read
++#define atomic64_set			generic_atomic64_set
++#define atomic64_set_release		generic_atomic64_set
++
++#define	atomic64_add			generic_atomic64_add
++#define	atomic64_add_return		generic_atomic64_add_return
++#define	atomic64_fetch_add		generic_atomic64_fetch_add
++#define	atomic64_sub			generic_atomic64_sub
++#define	atomic64_sub_return		generic_atomic64_sub_return
++#define	atomic64_fetch_sub		generic_atomic64_fetch_sub
++
++#define	atomic64_and			generic_atomic64_and
++#define	atomic64_fetch_and		generic_atomic64_fetch_and
++#define	atomic64_or			generic_atomic64_or
++#define	atomic64_fetch_or		generic_atomic64_fetch_or
++#define	atomic64_xor			generic_atomic64_xor
++#define	atomic64_fetch_xor		generic_atomic64_fetch_xor
++
++#define atomic64_dec_if_positive 	generic_atomic64_dec_if_positive
++#define atomic64_cmpxchg	 	generic_atomic64_cmpxchg
++#define atomic64_xchg	 		generic_atomic64_xchg
++#define atomic64_fetch_add_unless	generic_atomic64_fetch_add_unless
++
++#endif /* ARCH_ATOMIC */
+ 
+ #endif  /*  _ASM_GENERIC_ATOMIC64_H  */
+diff --git a/lib/atomic64.c b/lib/atomic64.c
+index e98c85a99787..3df653994177 100644
+--- a/lib/atomic64.c
++++ b/lib/atomic64.c
+@@ -42,7 +42,7 @@ static inline raw_spinlock_t *lock_addr(const atomic64_t *v)
+ 	return &atomic64_lock[addr & (NR_LOCKS - 1)].lock;
+ }
+ 
+-s64 atomic64_read(const atomic64_t *v)
++s64 generic_atomic64_read(const atomic64_t *v)
+ {
+ 	unsigned long flags;
+ 	raw_spinlock_t *lock = lock_addr(v);
+@@ -53,9 +53,9 @@ s64 atomic64_read(const atomic64_t *v)
+ 	raw_spin_unlock_irqrestore(lock, flags);
+ 	return val;
+ }
+-EXPORT_SYMBOL(atomic64_read);
++EXPORT_SYMBOL(generic_atomic64_read);
+ 
+-void atomic64_set(atomic64_t *v, s64 i)
++void generic_atomic64_set(atomic64_t *v, s64 i)
+ {
+ 	unsigned long flags;
+ 	raw_spinlock_t *lock = lock_addr(v);
+@@ -64,10 +64,10 @@ void atomic64_set(atomic64_t *v, s64 i)
+ 	v->counter = i;
+ 	raw_spin_unlock_irqrestore(lock, flags);
+ }
+-EXPORT_SYMBOL(atomic64_set);
++EXPORT_SYMBOL(generic_atomic64_set);
+ 
+ #define ATOMIC64_OP(op, c_op)						\
+-void atomic64_##op(s64 a, atomic64_t *v)				\
++void generic_atomic64_##op(s64 a, atomic64_t *v)			\
+ {									\
+ 	unsigned long flags;						\
+ 	raw_spinlock_t *lock = lock_addr(v);				\
+@@ -76,10 +76,10 @@ void atomic64_##op(s64 a, atomic64_t *v)				\
+ 	v->counter c_op a;						\
+ 	raw_spin_unlock_irqrestore(lock, flags);			\
+ }									\
+-EXPORT_SYMBOL(atomic64_##op);
++EXPORT_SYMBOL(generic_atomic64_##op);
+ 
+ #define ATOMIC64_OP_RETURN(op, c_op)					\
+-s64 atomic64_##op##_return(s64 a, atomic64_t *v)			\
++s64 generic_atomic64_##op##_return(s64 a, atomic64_t *v)		\
+ {									\
+ 	unsigned long flags;						\
+ 	raw_spinlock_t *lock = lock_addr(v);				\
+@@ -90,10 +90,10 @@ s64 atomic64_##op##_return(s64 a, atomic64_t *v)			\
+ 	raw_spin_unlock_irqrestore(lock, flags);			\
+ 	return val;							\
+ }									\
+-EXPORT_SYMBOL(atomic64_##op##_return);
++EXPORT_SYMBOL(generic_atomic64_##op##_return);
+ 
+ #define ATOMIC64_FETCH_OP(op, c_op)					\
+-s64 atomic64_fetch_##op(s64 a, atomic64_t *v)				\
++s64 generic_atomic64_fetch_##op(s64 a, atomic64_t *v)			\
+ {									\
+ 	unsigned long flags;						\
+ 	raw_spinlock_t *lock = lock_addr(v);				\
+@@ -105,7 +105,7 @@ s64 atomic64_fetch_##op(s64 a, atomic64_t *v)				\
+ 	raw_spin_unlock_irqrestore(lock, flags);			\
+ 	return val;							\
+ }									\
+-EXPORT_SYMBOL(atomic64_fetch_##op);
++EXPORT_SYMBOL(generic_atomic64_fetch_##op);
+ 
+ #define ATOMIC64_OPS(op, c_op)						\
+ 	ATOMIC64_OP(op, c_op)						\
+@@ -130,7 +130,7 @@ ATOMIC64_OPS(xor, ^=)
+ #undef ATOMIC64_OP_RETURN
+ #undef ATOMIC64_OP
+ 
+-s64 atomic64_dec_if_positive(atomic64_t *v)
++s64 generic_atomic64_dec_if_positive(atomic64_t *v)
+ {
+ 	unsigned long flags;
+ 	raw_spinlock_t *lock = lock_addr(v);
+@@ -143,9 +143,9 @@ s64 atomic64_dec_if_positive(atomic64_t *v)
+ 	raw_spin_unlock_irqrestore(lock, flags);
+ 	return val;
+ }
+-EXPORT_SYMBOL(atomic64_dec_if_positive);
++EXPORT_SYMBOL(generic_atomic64_dec_if_positive);
+ 
+-s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
++s64 generic_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
+ {
+ 	unsigned long flags;
+ 	raw_spinlock_t *lock = lock_addr(v);
+@@ -158,9 +158,9 @@ s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
+ 	raw_spin_unlock_irqrestore(lock, flags);
+ 	return val;
+ }
+-EXPORT_SYMBOL(atomic64_cmpxchg);
++EXPORT_SYMBOL(generic_atomic64_cmpxchg);
+ 
+-s64 atomic64_xchg(atomic64_t *v, s64 new)
++s64 generic_atomic64_xchg(atomic64_t *v, s64 new)
+ {
+ 	unsigned long flags;
+ 	raw_spinlock_t *lock = lock_addr(v);
+@@ -172,9 +172,9 @@ s64 atomic64_xchg(atomic64_t *v, s64 new)
+ 	raw_spin_unlock_irqrestore(lock, flags);
+ 	return val;
+ }
+-EXPORT_SYMBOL(atomic64_xchg);
++EXPORT_SYMBOL(generic_atomic64_xchg);
+ 
+-s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
++s64 generic_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
+ {
+ 	unsigned long flags;
+ 	raw_spinlock_t *lock = lock_addr(v);
+@@ -188,4 +188,4 @@ s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
+ 
+ 	return val;
+ }
+-EXPORT_SYMBOL(atomic64_fetch_add_unless);
++EXPORT_SYMBOL(generic_atomic64_fetch_add_unless);
+-- 
+2.11.0
+
