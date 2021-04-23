@@ -2,248 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40519368EE1
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 10:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886F4368F36
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 11:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241309AbhDWIeo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Apr 2021 04:34:44 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:55361 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbhDWIen (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Apr 2021 04:34:43 -0400
-X-Originating-IP: 2.7.49.219
-Received: from [192.168.1.12] (lfbn-lyo-1-457-219.w2-7.abo.wanadoo.fr [2.7.49.219])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 178B620003;
-        Fri, 23 Apr 2021 08:34:02 +0000 (UTC)
-Subject: Re: [PATCH] riscv: Fix 32b kernel caused by 64b kernel mapping moving
- outside linear mapping
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, linux-doc@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        kasan-dev@googlegroups.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-References: <20210417172159.32085-1-alex@ghiti.fr>
- <CAAhSdy23jRTp3VoBpnH8B79eSSmuw8qMEYrXyh-02ccWT3O5QQ@mail.gmail.com>
-From:   Alex Ghiti <alex@ghiti.fr>
-Message-ID: <66e9a8e0-5764-2eea-4070-bad3fb7ee48e@ghiti.fr>
-Date:   Fri, 23 Apr 2021 04:34:02 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S229456AbhDWJKq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Apr 2021 05:10:46 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:58719 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230041AbhDWJKp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Apr 2021 05:10:45 -0400
+Received: from mail-wm1-f52.google.com ([209.85.128.52]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MowT0-1lGW6A2OII-00qRVk; Fri, 23 Apr 2021 11:10:08 +0200
+Received: by mail-wm1-f52.google.com with SMTP id d200-20020a1c1dd10000b02901384767d4a5so791858wmd.3;
+        Fri, 23 Apr 2021 02:10:08 -0700 (PDT)
+X-Gm-Message-State: AOAM532chMh6sJsAcm+oUrzm8Ae8Az9gpXb/2TuiZs5DFqp38z8D7FPK
+        bElUy7UyBdp2bgZ3qWQBfxq0I+HXzYCqnPsHpoI=
+X-Google-Smtp-Source: ABdhPJwG4iISCun3SMeBT+lGNcPYknZCmZ8DGhKtLsTvEtKKUMDsbx2MeJ/NM+0B7i+dYTrSWag9p/pB+JkKtkFk9/E=
+X-Received: by 2002:a05:600c:2282:: with SMTP id 2mr4574759wmf.84.1619169008193;
+ Fri, 23 Apr 2021 02:10:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAAhSdy23jRTp3VoBpnH8B79eSSmuw8qMEYrXyh-02ccWT3O5QQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+References: <20210423025545.313965-1-palmer@dabbelt.com>
+In-Reply-To: <20210423025545.313965-1-palmer@dabbelt.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 23 Apr 2021 11:09:46 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2+yCYm22g-r7aWE4RT7ZLcZn89aiWGcDhgFh_ZU3fSfQ@mail.gmail.com>
+Message-ID: <CAK8P3a2+yCYm22g-r7aWE4RT7ZLcZn89aiWGcDhgFh_ZU3fSfQ@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic: Remove asm/setup.h from the UABI.
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:v5dXW3kRmXrqrQDdVtMA5jZn00BZqD+wIKeyF2uVwTkYnhHl22m
+ wZoZtbrL9Do5qpR8fzXf0DeyQPAd/nIxdVsOw5fggNDxWgQxXePgIdHmTJXDWchW/h0mzbf
+ Nl7JPwSKbtLGMAUiSAzF9Mzg4NRP8qWPEmI6DZXvvgKql44UkuTR7jPYblJi2Sp+tEt4b4i
+ HZT+KFxt+/tHmu7BjRaqQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LCMt4R5q5Es=:5e9FOZecZpffL9T4kLM+DJ
+ 7cDMldASflKRsXrwTJIkA40KhvPmRyckowRnJD3m6QYePZFfgneSrLSS3pxPPTk4Pxid8nx4O
+ gm0furu3T/9UXlhf7COkuJhQ472LQ10vthcgqGIqmpso02j51A2wtbGIdR41Qy8KZejo+TJZd
+ 8VhYVemxU3IyQBeJWwazBxUujLsYnNcmg3EXMmqAE0SUVPNsUQ9X10ecwvYFcdTiT1Zd3cFCZ
+ LDkblgF+bThVr7JlQSg+Elx/34ut7Au/OhHg8kxZtqvq0Q859o7ytmpzgpE/VpI+VRy6bHTFq
+ 1H2GMrf/bUy2bGUNq8kwKW32T7G9mmZMt7ZOj46Oh2bV2xZr/xqeOPLL5VeFccoDVJPwevDWF
+ 3tDCIcyz7VaBT8uqzAxIykuVX97uKQKeh2l+No5/+HPXoAdH+nJVs7PStENPiHtsKlIOMukBa
+ 9+D5bg5v8D90hgEGfTGz4S//nJ4He+sC3sabELmEBmlD27ULAHlF4ou+kxVmqcyO9Ch4RCKij
+ 8uYbdRJf3nksi5wzPqN48g=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Le 4/20/21 à 12:18 AM, Anup Patel a écrit :
-> On Sat, Apr 17, 2021 at 10:52 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
->>
->> Fix multiple leftovers when moving the kernel mapping outside the linear
->> mapping for 64b kernel that left the 32b kernel unusable.
->>
->> Fixes: 4b67f48da707 ("riscv: Move kernel mapping outside of linear mapping")
->> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-> 
-> Quite a few #ifdef but I don't see any better way at the moment. Maybe we can
-> clean this later. Otherwise looks good to me.
-> 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
+On Fri, Apr 23, 2021 at 4:57 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> From: Palmer Dabbelt <palmerdabbelt@google.com>
+>
+> I honestly have no idea if this is sane.
+>
+> This all came up in the context of increasing COMMAND_LINE_SIZE in the
+> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+> maximum length of /proc/cmdline and userspace could staticly rely on
+> that to be correct.
+>
+> Usually I wouldn't mess around with changing this sort of thing, but
+> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+> increasing, but they're from before the UAPI split so I'm not quite sure
+> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+> asm-generic/setup.h.").
+>
+> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+> part of the UABI to begin with, and userspace should be able to handle
+> /proc/cmdline of whatever length it turns out to be.  I don't see any
+> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+> search, but that's not really enough to consider it unused on my end.
+>
+> I couldn't think of a better way to ask about this then just sending the
+> patch.
 
-Thanks Anup!
+I think removing asm/setup.h from the uapi headers makes sense,
+but then we should do it consistently for all architectures as far
+as possible.
 
-@Palmer: This is not on for-next yet and then rv32 is broken. This does 
-not apply immediately on top of for-next though, so if you need a new 
-version, I can do that. But this squashes nicely with the patch it fixes 
-if you prefer.
+Most architectures either use the generic file or they provide their
+own one-line version, so if we move them back, I would do it
+for all.
 
-Let me know, I can do that very quickly.
+The architectures that have additional contents in this file
+are alpha, arm, and ia64. We I would leave those unchanged
+in that case.
 
-Alex
-
-> 
-> Regards,
-> Anup
-> 
->> ---
->>   arch/riscv/include/asm/page.h    |  9 +++++++++
->>   arch/riscv/include/asm/pgtable.h | 16 ++++++++++++----
->>   arch/riscv/mm/init.c             | 25 ++++++++++++++++++++++++-
->>   3 files changed, 45 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
->> index 22cfb2be60dc..f64b61296c0c 100644
->> --- a/arch/riscv/include/asm/page.h
->> +++ b/arch/riscv/include/asm/page.h
->> @@ -90,15 +90,20 @@ typedef struct page *pgtable_t;
->>
->>   #ifdef CONFIG_MMU
->>   extern unsigned long va_pa_offset;
->> +#ifdef CONFIG_64BIT
->>   extern unsigned long va_kernel_pa_offset;
->> +#endif
->>   extern unsigned long pfn_base;
->>   #define ARCH_PFN_OFFSET                (pfn_base)
->>   #else
->>   #define va_pa_offset           0
->> +#ifdef CONFIG_64BIT
->>   #define va_kernel_pa_offset    0
->> +#endif
->>   #define ARCH_PFN_OFFSET                (PAGE_OFFSET >> PAGE_SHIFT)
->>   #endif /* CONFIG_MMU */
->>
->> +#ifdef CONFIG_64BIT
->>   extern unsigned long kernel_virt_addr;
->>
->>   #define linear_mapping_pa_to_va(x)     ((void *)((unsigned long)(x) + va_pa_offset))
->> @@ -112,6 +117,10 @@ extern unsigned long kernel_virt_addr;
->>          (_x < kernel_virt_addr) ?                                               \
->>                  linear_mapping_va_to_pa(_x) : kernel_mapping_va_to_pa(_x);      \
->>          })
->> +#else
->> +#define __pa_to_va_nodebug(x)  ((void *)((unsigned long) (x) + va_pa_offset))
->> +#define __va_to_pa_nodebug(x)  ((unsigned long)(x) - va_pa_offset)
->> +#endif
->>
->>   #ifdef CONFIG_DEBUG_VIRTUAL
->>   extern phys_addr_t __virt_to_phys(unsigned long x);
->> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
->> index 80e63a93e903..5afda75cc2c3 100644
->> --- a/arch/riscv/include/asm/pgtable.h
->> +++ b/arch/riscv/include/asm/pgtable.h
->> @@ -16,19 +16,27 @@
->>   #else
->>
->>   #define ADDRESS_SPACE_END      (UL(-1))
->> -/*
->> - * Leave 2GB for kernel and BPF at the end of the address space
->> - */
->> +
->> +#ifdef CONFIG_64BIT
->> +/* Leave 2GB for kernel and BPF at the end of the address space */
->>   #define KERNEL_LINK_ADDR       (ADDRESS_SPACE_END - SZ_2G + 1)
->> +#else
->> +#define KERNEL_LINK_ADDR       PAGE_OFFSET
->> +#endif
->>
->>   #define VMALLOC_SIZE     (KERN_VIRT_SIZE >> 1)
->>   #define VMALLOC_END      (PAGE_OFFSET - 1)
->>   #define VMALLOC_START    (PAGE_OFFSET - VMALLOC_SIZE)
->>
->> -/* KASLR should leave at least 128MB for BPF after the kernel */
->>   #define BPF_JIT_REGION_SIZE    (SZ_128M)
->> +#ifdef CONFIG_64BIT
->> +/* KASLR should leave at least 128MB for BPF after the kernel */
->>   #define BPF_JIT_REGION_START   PFN_ALIGN((unsigned long)&_end)
->>   #define BPF_JIT_REGION_END     (BPF_JIT_REGION_START + BPF_JIT_REGION_SIZE)
->> +#else
->> +#define BPF_JIT_REGION_START   (PAGE_OFFSET - BPF_JIT_REGION_SIZE)
->> +#define BPF_JIT_REGION_END     (VMALLOC_END)
->> +#endif
->>
->>   /* Modules always live before the kernel */
->>   #ifdef CONFIG_64BIT
->> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->> index 093f3a96ecfc..dc9b988e0778 100644
->> --- a/arch/riscv/mm/init.c
->> +++ b/arch/riscv/mm/init.c
->> @@ -91,8 +91,10 @@ static void print_vm_layout(void)
->>                    (unsigned long)VMALLOC_END);
->>          print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
->>                    (unsigned long)high_memory);
->> +#ifdef CONFIG_64BIT
->>          print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
->>                    (unsigned long)ADDRESS_SPACE_END);
->> +#endif
->>   }
->>   #else
->>   static void print_vm_layout(void) { }
->> @@ -165,9 +167,11 @@ static struct pt_alloc_ops pt_ops;
->>   /* Offset between linear mapping virtual address and kernel load address */
->>   unsigned long va_pa_offset;
->>   EXPORT_SYMBOL(va_pa_offset);
->> +#ifdef CONFIG_64BIT
->>   /* Offset between kernel mapping virtual address and kernel load address */
->>   unsigned long va_kernel_pa_offset;
->>   EXPORT_SYMBOL(va_kernel_pa_offset);
->> +#endif
->>   unsigned long pfn_base;
->>   EXPORT_SYMBOL(pfn_base);
->>
->> @@ -410,7 +414,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>          load_sz = (uintptr_t)(&_end) - load_pa;
->>
->>          va_pa_offset = PAGE_OFFSET - load_pa;
->> +#ifdef CONFIG_64BIT
->>          va_kernel_pa_offset = kernel_virt_addr - load_pa;
->> +#endif
->>
->>          pfn_base = PFN_DOWN(load_pa);
->>
->> @@ -469,12 +475,16 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>                             pa + PMD_SIZE, PMD_SIZE, PAGE_KERNEL);
->>          dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa & (PMD_SIZE - 1));
->>   #else /* CONFIG_BUILTIN_DTB */
->> +#ifdef CONFIG_64BIT
->>          /*
->>           * __va can't be used since it would return a linear mapping address
->>           * whereas dtb_early_va will be used before setup_vm_final installs
->>           * the linear mapping.
->>           */
->>          dtb_early_va = kernel_mapping_pa_to_va(dtb_pa);
->> +#else
->> +       dtb_early_va = __va(dtb_pa);
->> +#endif /* CONFIG_64BIT */
->>   #endif /* CONFIG_BUILTIN_DTB */
->>   #else
->>   #ifndef CONFIG_BUILTIN_DTB
->> @@ -486,7 +496,11 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>                             pa + PGDIR_SIZE, PGDIR_SIZE, PAGE_KERNEL);
->>          dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa & (PGDIR_SIZE - 1));
->>   #else /* CONFIG_BUILTIN_DTB */
->> +#ifdef CONFIG_64BIT
->>          dtb_early_va = kernel_mapping_pa_to_va(dtb_pa);
->> +#else
->> +       dtb_early_va = __va(dtb_pa);
->> +#endif /* CONFIG_64BIT */
->>   #endif /* CONFIG_BUILTIN_DTB */
->>   #endif
->>          dtb_early_pa = dtb_pa;
->> @@ -571,12 +585,21 @@ static void __init setup_vm_final(void)
->>                  for (pa = start; pa < end; pa += map_size) {
->>                          va = (uintptr_t)__va(pa);
->>                          create_pgd_mapping(swapper_pg_dir, va, pa,
->> -                                          map_size, PAGE_KERNEL);
->> +                                          map_size,
->> +#ifdef CONFIG_64BIT
->> +                                          PAGE_KERNEL
->> +#else
->> +                                          PAGE_KERNEL_EXEC
->> +#endif
->> +                                       );
->> +
->>                  }
->>          }
->>
->> +#ifdef CONFIG_64BIT
->>          /* Map the kernel */
->>          create_kernel_page_table(swapper_pg_dir, PMD_SIZE);
->> +#endif
->>
->>          /* Clear fixmap PTE and PMD mappings */
->>          clear_fixmap(FIX_PTE);
->> --
->> 2.20.1
->>
+        Arnd
