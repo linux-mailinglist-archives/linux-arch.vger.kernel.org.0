@@ -2,114 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F491369062
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 12:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098AA3694D9
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 16:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241755AbhDWKbw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Apr 2021 06:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S239066AbhDWOhe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Apr 2021 10:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbhDWKbw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Apr 2021 06:31:52 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB05C06174A
-        for <linux-arch@vger.kernel.org>; Fri, 23 Apr 2021 03:31:15 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id q22so14333187lfu.8
-        for <linux-arch@vger.kernel.org>; Fri, 23 Apr 2021 03:31:15 -0700 (PDT)
+        with ESMTP id S231169AbhDWOhZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Apr 2021 10:37:25 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D07C06174A
+        for <linux-arch@vger.kernel.org>; Fri, 23 Apr 2021 07:36:47 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id p12so35330014pgj.10
+        for <linux-arch@vger.kernel.org>; Fri, 23 Apr 2021 07:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nVeVlI4593fiW9RW+jOZR7+NI8aHLRggRFUJzlCEeiw=;
-        b=L3yNbVR7vDqlEzKpr1hvuZi2AA3e606pV/+AC8izKBNA4rT7CETixrpyX1NTYvZ0ht
-         OVTaTeyclEjTbP2SW+AKceSgQVQrh7zh2znDAAo2H4Jly6m9yz0kk3Gti6ludWRBO8Cd
-         HIZjL1WxraFcf7p6X9KMDuEkZoIhf/+kf+zRXW38PJu/x1uuAAEBoaKwNSneD0gUuiev
-         lBm1Vg6pdQo7t0GM5sQVpCEuHa6mIwqcbZm8VaMcqJNfiZYxhnf26a2rG/nvujI9KmVa
-         8YsGuedLN7jGQtTcIscE7OCuiLkt2c9d6AARaaScixmWvKqjrPzSLKOXlO8A1uP436ch
-         RMuw==
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uoOkccNDSms2R4LZsMg1sjMsmp7WtuEiZhaADKTqPMM=;
+        b=a2X1O2GpUB1cmeStoxoytRyRwXSNa9srsnr2FVr6ocsOYkrx2cLMRNhSJr6gh4gE1M
+         FUsr3/5t9rC1a/a3tZXV5ZJirxH/b4E5fKUz1sFdyjKZ7Dc8dj69fq9eC4GWfLn5lKI3
+         0rssI18e+zs58t30w3bgVMnel8Ajs+IQ+dWcJcloeu2ooFOiOOjhpr6Pvg2+dqhBvHRO
+         zptbyjoKv57PWMkAgoje2QcsVsiPTf3HLmNs5PhIPor+2FmNLa06Jxe8S7LDtZjm/Zzz
+         eKASbMAgXAu9V9cbtUxjGlxXSVcUV0oCig4JsmtECZlmM1zMKE6rIOOJ86HQNCT5Tq77
+         tyGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nVeVlI4593fiW9RW+jOZR7+NI8aHLRggRFUJzlCEeiw=;
-        b=UEti6NDjPdOi3uHDveVYVlX5fBGdwtg5WPoUqXDeH6SFHhgOW1CUgYXcsqPrnQ5GKe
-         IjOQKmApLvChDzi/q5LAlGIO2KlfLaOjIMDZC2RNlnGtSHqQKPJy8yTb2+uQ57eYWP0J
-         gGS4VpNT8R3NF9McHDvRtk/nyRnnfzGrDRWIoburLmUUTyY3jif9yT7zDoc8df0yVdlg
-         H3tGxUJW2I8QmiQMzly2uQapA9ZNr64q9Om9460j6cNHMIUlEKW4olBS+SSJ1oZD9pO5
-         yQ0ZuDBzz7LxMlQesc0jhopxstpZzpsuQJILS3+fIQMFJyLaMV8ql36fgJM9HDjzTEel
-         Y5Lg==
-X-Gm-Message-State: AOAM532teTO6LvrGHN0w3R3zmCUxbdGEVBawFcifWH/aKpg7435HcQ0o
-        w9JdjqIPtwP7USjPuVRNgUiM7A==
-X-Google-Smtp-Source: ABdhPJwVNorWa+AWglF5pbaAmSR9Pq5BC71Nyf4ZYyqMrppUpW+kSLOMonXik1nhCbMjO9HNpZZ1kA==
-X-Received: by 2002:ac2:4a76:: with SMTP id q22mr2191519lfp.475.1619173873766;
-        Fri, 23 Apr 2021 03:31:13 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id j9sm512647lfg.49.2021.04.23.03.31.13
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=uoOkccNDSms2R4LZsMg1sjMsmp7WtuEiZhaADKTqPMM=;
+        b=mOUwMMRWVrBXt0L3EM1B89Do4cO6Gph/AXlu/ovfvTgUWXNdbvWWgW2m1/2QoJ33hM
+         QunK3njW4MTyW9JGIhl51a3h6GgOQX3wnMWIM6bMGsjsyytxXpXjmDmNXTGsjAgdphfX
+         H+CtCs5yoaoaY1jpG6X/H82+L9fBGaorP/ksy+T1AxhvNpzQlu6Itv/ok+hAT6SgXv/o
+         52mpOcycB1QMHlWR3vuETPkh1EwYiJwoBhdDZuOwtjj1TkFVHECOp6g4GzduhyXrv4eq
+         g/abpA8lZG6OrdCeYawjqDXJoSdKjWvjp/IdcHVXaGgPIrk3Ap0KvRGM5d88hROdxgcw
+         gKhQ==
+X-Gm-Message-State: AOAM5322YxEtQwDhf9HLPqD0jpzvVYWRaJ2dL1p0+rUOJ2qwYtQp51nZ
+        4m2UyJEi4v0rzIFAGIvJJ7sENN+Zzc5BIDj9
+X-Google-Smtp-Source: ABdhPJxskERFqYIiVdaP/G0GpZFz42BGMcnIgrol0YG2i6ZSO+jJ7FOg1Lu5RjPTfKHv1TBAWs2s5Q==
+X-Received: by 2002:a63:2204:: with SMTP id i4mr4098426pgi.76.1619188606622;
+        Fri, 23 Apr 2021 07:36:46 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id u20sm5417753pgl.27.2021.04.23.07.36.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Apr 2021 03:31:13 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id E64B910257F; Fri, 23 Apr 2021 13:31:14 +0300 (+03)
-Date:   Fri, 23 Apr 2021 13:31:14 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v25 21/30] mm: Re-introduce vm_flags to do_mmap()
-Message-ID: <20210423103114.3hheurux4ixccrwv@box.shutemov.name>
-References: <20210415221419.31835-1-yu-cheng.yu@intel.com>
- <20210415221419.31835-22-yu-cheng.yu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210415221419.31835-22-yu-cheng.yu@intel.com>
+        Fri, 23 Apr 2021 07:36:45 -0700 (PDT)
+Date:   Fri, 23 Apr 2021 07:36:45 -0700 (PDT)
+X-Google-Original-Date: Fri, 23 Apr 2021 07:36:44 PDT (-0700)
+Subject:     Re: [PATCH] asm-generic: Remove asm/setup.h from the UABI.
+In-Reply-To: <CAK8P3a2+yCYm22g-r7aWE4RT7ZLcZn89aiWGcDhgFh_ZU3fSfQ@mail.gmail.com>
+CC:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-1f6be9fb-cb82-4a66-b23b-59b0c0d33b42@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 15, 2021 at 03:14:10PM -0700, Yu-cheng Yu wrote:
-> There was no more caller passing vm_flags to do_mmap(), and vm_flags was
-> removed from the function's input by:
-> 
->     commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
-> 
-> There is a new user now.  Shadow stack allocation passes VM_SHADOW_STACK to
-> do_mmap().  Thus, re-introduce vm_flags to do_mmap().
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Reviewed-by: Peter Collingbourne <pcc@google.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Oleg Nesterov <oleg@redhat.com>
-> Cc: linux-mm@kvack.org
+On Fri, 23 Apr 2021 02:09:46 PDT (-0700), Arnd Bergmann wrote:
+> On Fri, Apr 23, 2021 at 4:57 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>>
+>> From: Palmer Dabbelt <palmerdabbelt@google.com>
+>>
+>> I honestly have no idea if this is sane.
+>>
+>> This all came up in the context of increasing COMMAND_LINE_SIZE in the
+>> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+>> maximum length of /proc/cmdline and userspace could staticly rely on
+>> that to be correct.
+>>
+>> Usually I wouldn't mess around with changing this sort of thing, but
+>> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+>> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+>> increasing, but they're from before the UAPI split so I'm not quite sure
+>> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+>> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+>> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+>> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+>> asm-generic/setup.h.").
+>>
+>> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+>> part of the UABI to begin with, and userspace should be able to handle
+>> /proc/cmdline of whatever length it turns out to be.  I don't see any
+>> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+>> search, but that's not really enough to consider it unused on my end.
+>>
+>> I couldn't think of a better way to ask about this then just sending the
+>> patch.
+>
+> I think removing asm/setup.h from the uapi headers makes sense,
+> but then we should do it consistently for all architectures as far
+> as possible.
+>
+> Most architectures either use the generic file or they provide their
+> own one-line version, so if we move them back, I would do it
+> for all.
 
-Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Ya, makes sense.  I just wanted to see if anyone had a reason for things 
+being this way before I chased everything around.
 
--- 
- Kirill A. Shutemov
+> The architectures that have additional contents in this file
+> are alpha, arm, and ia64. We I would leave those unchanged
+> in that case.
