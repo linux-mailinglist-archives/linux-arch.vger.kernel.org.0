@@ -2,75 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4841D369613
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 17:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91D0369689
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 18:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbhDWPXE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Apr 2021 11:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbhDWPXE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Apr 2021 11:23:04 -0400
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82923C06174A;
-        Fri, 23 Apr 2021 08:22:27 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FRdM55TyDzMrV2C;
-        Fri, 23 Apr 2021 17:22:25 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4FRdM160b0zlh8TR;
-        Fri, 23 Apr 2021 17:22:21 +0200 (CEST)
-Subject: Re: [PATCH v34 00/13] Landlock LSM
-To:     James Morris <jmorris@namei.org>
-Cc:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        id S243212AbhDWQAh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Apr 2021 12:00:37 -0400
+Received: from mga05.intel.com ([192.55.52.43]:62705 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243177AbhDWQAf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 23 Apr 2021 12:00:35 -0400
+IronPort-SDR: zh+H+j+kZJ4l2ZIoYH4e2WsfrzAv6xIqJjmR3S1lemrIOVAA0uTsqIijtHWi7LjVp7m0tpZ2nx
+ K/iIUiwSrMGw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9963"; a="281418077"
+X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
+   d="scan'208";a="281418077"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 08:59:58 -0700
+IronPort-SDR: w9MlMKEafsoA2GnJcPHYgHXbBDKJtAUy0Zz1rc7GGzWPVqI4elo3AjtBMWhPWCMiTLrQej0ran
+ 2vn64bGpfHGg==
+X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
+   d="scan'208";a="603576576"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.37.160]) ([10.212.37.160])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 08:59:56 -0700
+Subject: Re: [PATCH v25 21/30] mm: Re-introduce vm_flags to do_mmap()
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-References: <20210422154123.13086-1-mic@digikod.net>
- <9c775578-627c-e682-873a-ec7b763a7fcd@namei.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <ac26af3b-067b-de01-8c99-687c5de432e5@digikod.net>
-Date:   Fri, 23 Apr 2021 17:22:11 +0200
-User-Agent: 
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20210415221419.31835-1-yu-cheng.yu@intel.com>
+ <20210415221419.31835-22-yu-cheng.yu@intel.com>
+ <20210423103114.3hheurux4ixccrwv@box.shutemov.name>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <a49d5fc5-03f8-511d-bf59-f2e56df33106@intel.com>
+Date:   Fri, 23 Apr 2021 08:59:55 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <9c775578-627c-e682-873a-ec7b763a7fcd@namei.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210423103114.3hheurux4ixccrwv@box.shutemov.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-On 22/04/2021 21:31, James Morris wrote:
-> On Thu, 22 Apr 2021, Mickaël Salaün wrote:
-> 
->> Hi,
+On 4/23/2021 3:31 AM, Kirill A. Shutemov wrote:
+> On Thu, Apr 15, 2021 at 03:14:10PM -0700, Yu-cheng Yu wrote:
+>> There was no more caller passing vm_flags to do_mmap(), and vm_flags was
+>> removed from the function's input by:
 >>
->> This updated patch series adds a new patch on top of the previous ones.
->> It brings a new flag to landlock_create_ruleset(2) that enables
->> efficient and simple backward compatibility checks for future evolutions
->> of Landlock (e.g. new access-control rights).
+>>      commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
+>>
+>> There is a new user now.  Shadow stack allocation passes VM_SHADOW_STACK to
+>> do_mmap().  Thus, re-introduce vm_flags to do_mmap().
+>>
+>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+>> Reviewed-by: Peter Collingbourne <pcc@google.com>
+>> Reviewed-by: Kees Cook <keescook@chromium.org>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Oleg Nesterov <oleg@redhat.com>
+>> Cc: linux-mm@kvack.org
 > 
-> Applied to git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git 
-> landlock_lsm_v34
+> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > 
-> and it replaces the v33 branch in next-testing.
 
-Thanks! It is now in next:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/?h=next-20210423
+Thanks for reviewing.
+
+Yu-cheng
