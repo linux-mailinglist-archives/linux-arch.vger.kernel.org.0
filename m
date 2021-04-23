@@ -2,83 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 601E836998C
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 20:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0389B3699D0
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 20:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbhDWS1d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Apr 2021 14:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbhDWS1c (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Apr 2021 14:27:32 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C595C061574;
-        Fri, 23 Apr 2021 11:26:55 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id g38so56668754ybi.12;
-        Fri, 23 Apr 2021 11:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=usW4K6lNB80DxgPMKXGwbs60wwBIL6B9yLZGCMNyXto=;
-        b=RKHxCjbwiYoJu18YQepeMR8QGc0vnj8LX0se6valfLiMgyRphjvbPmL0/miLszk4wy
-         z8tHgiA3gETAtwHTPdV93LWLoMHjYHk+gRJR76OiSloyQROuaRPl++UT9+2kM24a8uc5
-         LfKflQoIm5HxQdstQmWvcZkpVOMJ4su1hHKqtdIcyzVix9lixDGLdwVeCD5O4CadZBJv
-         DSKoFI4gJ/3XmgLvdhLCGs8sMIEscghdw6ZaEfmAg3pIC20MQxLAa7nSxD3DBeEmPGKM
-         duvnUePvxjVei1WzXrXRSjG7+aSto5yuVXAt2Tz0MfAG/AJBPUH0d6+2b2nGVYgspUFx
-         Pqqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=usW4K6lNB80DxgPMKXGwbs60wwBIL6B9yLZGCMNyXto=;
-        b=a2NSff+9vH2ekdMqb2qBFpIWe8kvXIVBWItDMYWxi4xiZ/HnBd1cTjs91MabqY8vt7
-         Y4Z1RfQXDisTpdBajLZufeSaohhtlNOP3J77Gdwx1icKxftue9MdF1tVjYDbc9Mmi+Dj
-         mHcJGd5BbJNfYSqU87owIrvPLXzSMLCyayIjz9zmIbXH5cp1FDqoNQ7mHkb9gZdn/eNJ
-         KNZp7sCb3uGu/85lIB/eTY5kaILRA2b1C5ksEy3AkYgQ6A0yfMEU8KoDrolgp2HP98HD
-         7+bDFrHCdP2G1ru7PTxcE/zLsF3pevkFGnIDXA3IHGD/+HUGYU5WnroU8HYC8cC0RAOO
-         iu1Q==
-X-Gm-Message-State: AOAM531dJZ+RlpC5U7mv0pyrMfAlTrFX7NSJeYMhGBFQbTW+zCekiURE
-        y9ywPy98ACT15dUpF9t346HDEhF+BtQNe8TqNOs=
-X-Google-Smtp-Source: ABdhPJzDy2BHUKe38AJkXoVl5skypgLMZejlaNr6k/YTvsD6VVijOpBgEiZHh9b9Di56K05jwiSkGuSHla/qYSlWrKY=
-X-Received: by 2002:a25:818f:: with SMTP id p15mr6881986ybk.135.1619202414411;
- Fri, 23 Apr 2021 11:26:54 -0700 (PDT)
+        id S243657AbhDWSgf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Apr 2021 14:36:35 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:43373 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243499AbhDWSge (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 23 Apr 2021 14:36:34 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1619202957; h=Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Message-ID: Date: Subject: In-Reply-To: References: Cc:
+ To: From: Reply-To: Sender;
+ bh=RhAT7aH0Aqqk6QCKlg4vyZ7VqDWoW4t/2SQv52LFvD8=; b=ld8wGnZ1s2dF52D0UB1V3BXIWcN911pznFe+pTcpYDcxuzod3ldiYUaCulS8x0Wv2VW3Kqbj
+ NRtU40OiZD7GSHIXIsjnqeyWHxgbdldeRIR0CtpHEu2HbqfZydfWvHWiyXur0Krmyw225pn7
+ IRnsbkBsftqRG7UWgavpzQyE94Q=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5MDNlZiIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 60831382a817abd39a7ef485 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 23 Apr 2021 18:35:46
+ GMT
+Sender: bcain=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 54076C4338A; Fri, 23 Apr 2021 18:35:46 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        PDS_BAD_THREAD_QP_64,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from BCAIN (104-54-226-75.lightspeed.austtx.sbcglobal.net [104.54.226.75])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bcain)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A09CFC433D3;
+        Fri, 23 Apr 2021 18:35:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A09CFC433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=bcain@codeaurora.org
+Reply-To: <bcain@codeaurora.org>
+From:   "Brian Cain" <bcain@codeaurora.org>
+To:     "'Arnd Bergmann'" <arnd@kernel.org>,
+        "'Nick Desaulniers'" <ndesaulniers@google.com>
+Cc:     "'open list:QUALCOMM HEXAGON...'" <linux-hexagon@vger.kernel.org>,
+        "'clang-built-linux'" <clang-built-linux@googlegroups.com>,
+        "'linux-arch'" <linux-arch@vger.kernel.org>,
+        "'Guenter Roeck'" <linux@roeck-us.net>
+References: <CAKwvOdngSxXGYAykAbC=GLE_uWGap220=k1zOSxe1ntuC=0wjA@mail.gmail.com> <CAK8P3a2DCCjOq+sB+9sRM7XrtnkromCs_+znv3dehqLiYFDQag@mail.gmail.com>
+In-Reply-To: <CAK8P3a2DCCjOq+sB+9sRM7XrtnkromCs_+znv3dehqLiYFDQag@mail.gmail.com>
+Subject: RE: ARCH=hexagon unsupported?
+Date:   Fri, 23 Apr 2021 13:35:43 -0500
+Message-ID: <025b01d7386f$78deed80$6a9cc880$@codeaurora.org>
 MIME-Version: 1.0
-References: <CAKwvOdngSxXGYAykAbC=GLE_uWGap220=k1zOSxe1ntuC=0wjA@mail.gmail.com>
- <CAK8P3a2DCCjOq+sB+9sRM7XrtnkromCs_+znv3dehqLiYFDQag@mail.gmail.com>
- <fa0bed95-5ddf-ecad-0613-2f13837578c3@infradead.org> <CAK8P3a0ttLxzP0J-mocxB2TkfEYJYj37TdW=uM65fB4giC_qeg@mail.gmail.com>
-In-Reply-To: <CAK8P3a0ttLxzP0J-mocxB2TkfEYJYj37TdW=uM65fB4giC_qeg@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 23 Apr 2021 20:26:43 +0200
-Message-ID: <CANiq72kNVDAiT+=SDuFNkC90=cJFqOYfHy60oiqsht6mcEDeYA@mail.gmail.com>
-Subject: Re: ARCH=hexagon unsupported?
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Brian Cain <bcain@codeaurora.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-us
+Thread-Index: AQHA6GaHPKlqiI34kZpdCyOyqmKBQAItWAQVqt13LMA=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 8:18 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> Correct, as I understand it , work on gcc was stopped after the 4.6 release and
-> any testing internally to Qualcomm was done using a patched clang. A few years
-> ago this was said to be (almost?) entirely upstream, but as Nick points out
-> it has never been possible to build an upstream hexagon kernel with an upstream
-> clang.
+> -----Original Message-----
+> From: Arnd Bergmann <arnd@kernel.org>
+> Sent: Friday, April 23, 2021 4:37 AM
+> To: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: open list:QUALCOMM HEXAGON... <linux-hexagon@vger.kernel.org>;
+> clang-built-linux <clang-built-linux@googlegroups.com>; Brian Cain
+> <bcain@codeaurora.org>; linux-arch <linux-arch@vger.kernel.org>; =
+Guenter
+> Roeck <linux@roeck-us.net>
+> Subject: Re: ARCH=3Dhexagon unsupported?
+>=20
+> On Fri, Apr 23, 2021 at 12:12 AM 'Nick Desaulniers' via Clang Built =
+Linux
+> <clang-built-linux@googlegroups.com> wrote:
+> >
+> > Arnd,
+> > No one can build ARCH=3Dhexagon and
+> > https://github.com/ClangBuiltLinux/linux/issues/759 has been open =
+for
+> > 2 years.
+> >
+> > Trying to build
+> > $ ARCH=3Dhexagon CROSS_COMPILE=3Dhexagon-linux-gnu make LLVM=3D1
+> LLVM_IAS=3D1
+> > -j71
+> >
+> > shows numerous issues, the latest of which commit 8320514c91bea
+> > ("hexagon: switch to ->regset_get()") has a very obvious typo which
+> > misspells the `struct` keyword and has been in the tree for almost 1
+> > year.
+>=20
+> Thank you for looking into it.
+>=20
+> > Why is arch/hexagon/ in the tree if no one can build it?
+>=20
+> Removing it sounds reasonable to me, it's been broken for too long, =
+and we
+> did the same thing for unicore32 that was in the same situation where =
+the
+> gcc port was too old to build the kernel and the clang port never =
+quite work
+> in mainline.
+>=20
+> Guenter also brought up the issue a year ago, and nothing happened.
+> I see Brian still occasionally sends an Ack to a patch that gets =
+merged through
+> another tree, but he has not send any patches or pull requests himself =
+after
+> taking over maintainership from Richard Kuo in 2019, and the four =
+hexagon
+> pull requests after 2014 only contained build fixes from developers =
+that don't
+> have access to the hardware (Randy Dunlap, Viresh Kumar, Mike =
+Frysinger
+> and me).
 
-It is pretty much dead code then. It would be a good idea to be a bit
-more strict on this, i.e. not let archs linger in mainline if not
-properly maintained. I would go even as far as requiring some public
-CI logs for all architectures building -next/-rc as proof that some
-configuration actually builds with some compiler, even if the compiler
-is not an upstream one.
+Nick, Arnd,
 
-Cheers,
-Miguel
+I can appreciate your frustration, I can see that I have let the =
+community down here.  I would like to keep hexagon in-tree and I am =
+committed to making the changes necessary to do so.  I have a patch =
+under internal review to address the cited build issues and =
+libgcc/compiler-rt content.  In addition, my team has been focusing on =
+developing QEMU system mode support that would mitigate some of the need =
+for having hardware access.  We have landed support for userspace =
+hexagon-linux in upstream QEMU.  My team and I want to make hexagon's =
+open source footprint larger, not smaller.  I realize that not being a =
+good steward of the hexagon kernel has not helped, and we will do what =
+we can to fix it.
+
+-Brian
+
