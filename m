@@ -2,97 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 886F4368F36
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 11:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8255368F7C
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 11:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbhDWJKq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Apr 2021 05:10:46 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:58719 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbhDWJKp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Apr 2021 05:10:45 -0400
-Received: from mail-wm1-f52.google.com ([209.85.128.52]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MowT0-1lGW6A2OII-00qRVk; Fri, 23 Apr 2021 11:10:08 +0200
-Received: by mail-wm1-f52.google.com with SMTP id d200-20020a1c1dd10000b02901384767d4a5so791858wmd.3;
-        Fri, 23 Apr 2021 02:10:08 -0700 (PDT)
-X-Gm-Message-State: AOAM532chMh6sJsAcm+oUrzm8Ae8Az9gpXb/2TuiZs5DFqp38z8D7FPK
-        bElUy7UyBdp2bgZ3qWQBfxq0I+HXzYCqnPsHpoI=
-X-Google-Smtp-Source: ABdhPJwG4iISCun3SMeBT+lGNcPYknZCmZ8DGhKtLsTvEtKKUMDsbx2MeJ/NM+0B7i+dYTrSWag9p/pB+JkKtkFk9/E=
-X-Received: by 2002:a05:600c:2282:: with SMTP id 2mr4574759wmf.84.1619169008193;
- Fri, 23 Apr 2021 02:10:08 -0700 (PDT)
+        id S241737AbhDWJhw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Apr 2021 05:37:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58638 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230006AbhDWJhw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 23 Apr 2021 05:37:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ABE646144D;
+        Fri, 23 Apr 2021 09:37:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619170635;
+        bh=DhWbEd6Zvej3S1gi9RrvaWUTau2t6QhBVtOz/AAHkCw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AWXh7jkigqZyb4phESyB8qzBxlF5kBw2rJTxmT89CflV8bWUOnwpS8uiVMUShm8Z3
+         024BBWofWDpYOSlZih/r2j5VtxR/KU4tZpFVxJ4NPvSdcpIz1zWaiyLErdRtTrop8A
+         sF+pKRnX70UKVtTTsZmiyt5DFaiOxFzgknqsEa5POLUnCrmZAEEzfoN7aZsz/me5Er
+         gv4g8qeemNIsjhQfvbtJVFTTyXWz3/pw8KIkjKaZkAcTOcxGFb64R7X81YeDWHNyyI
+         FT107TIQ1p24RWiWdzyPZ7R7XOCJGIbiny8UgVbHuvR9DeFgannYm+ikOAO1eVlWKC
+         XlSc5jOcBBJ2w==
+Received: by mail-wr1-f52.google.com with SMTP id p6so41015380wrn.9;
+        Fri, 23 Apr 2021 02:37:15 -0700 (PDT)
+X-Gm-Message-State: AOAM531Ii/zN2Z6ebcD8F5lrzARQJSkdevC4fJEqC1grX4Aj9P8cIcwZ
+        UYd/FrlsgaRajUuFszO6Bdps7chclP56KOPDJq0=
+X-Google-Smtp-Source: ABdhPJzZmFcXcp4maY4jkuBcNPwUzX/RFcQIP2ASUdLO84NCx4+UA6Z5ZqhZAvPt9eOmSU0Kf5SYBYFsjwBaDOvZ6Ec=
+X-Received: by 2002:adf:db4f:: with SMTP id f15mr3513380wrj.99.1619170634187;
+ Fri, 23 Apr 2021 02:37:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210423025545.313965-1-palmer@dabbelt.com>
-In-Reply-To: <20210423025545.313965-1-palmer@dabbelt.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 23 Apr 2021 11:09:46 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2+yCYm22g-r7aWE4RT7ZLcZn89aiWGcDhgFh_ZU3fSfQ@mail.gmail.com>
-Message-ID: <CAK8P3a2+yCYm22g-r7aWE4RT7ZLcZn89aiWGcDhgFh_ZU3fSfQ@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic: Remove asm/setup.h from the UABI.
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
+References: <CAKwvOdngSxXGYAykAbC=GLE_uWGap220=k1zOSxe1ntuC=0wjA@mail.gmail.com>
+In-Reply-To: <CAKwvOdngSxXGYAykAbC=GLE_uWGap220=k1zOSxe1ntuC=0wjA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 23 Apr 2021 11:36:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2DCCjOq+sB+9sRM7XrtnkromCs_+znv3dehqLiYFDQag@mail.gmail.com>
+Message-ID: <CAK8P3a2DCCjOq+sB+9sRM7XrtnkromCs_+znv3dehqLiYFDQag@mail.gmail.com>
+Subject: Re: ARCH=hexagon unsupported?
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:v5dXW3kRmXrqrQDdVtMA5jZn00BZqD+wIKeyF2uVwTkYnhHl22m
- wZoZtbrL9Do5qpR8fzXf0DeyQPAd/nIxdVsOw5fggNDxWgQxXePgIdHmTJXDWchW/h0mzbf
- Nl7JPwSKbtLGMAUiSAzF9Mzg4NRP8qWPEmI6DZXvvgKql44UkuTR7jPYblJi2Sp+tEt4b4i
- HZT+KFxt+/tHmu7BjRaqQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LCMt4R5q5Es=:5e9FOZecZpffL9T4kLM+DJ
- 7cDMldASflKRsXrwTJIkA40KhvPmRyckowRnJD3m6QYePZFfgneSrLSS3pxPPTk4Pxid8nx4O
- gm0furu3T/9UXlhf7COkuJhQ472LQ10vthcgqGIqmpso02j51A2wtbGIdR41Qy8KZejo+TJZd
- 8VhYVemxU3IyQBeJWwazBxUujLsYnNcmg3EXMmqAE0SUVPNsUQ9X10ecwvYFcdTiT1Zd3cFCZ
- LDkblgF+bThVr7JlQSg+Elx/34ut7Au/OhHg8kxZtqvq0Q859o7ytmpzgpE/VpI+VRy6bHTFq
- 1H2GMrf/bUy2bGUNq8kwKW32T7G9mmZMt7ZOj46Oh2bV2xZr/xqeOPLL5VeFccoDVJPwevDWF
- 3tDCIcyz7VaBT8uqzAxIykuVX97uKQKeh2l+No5/+HPXoAdH+nJVs7PStENPiHtsKlIOMukBa
- 9+D5bg5v8D90hgEGfTGz4S//nJ4He+sC3sabELmEBmlD27ULAHlF4ou+kxVmqcyO9Ch4RCKij
- 8uYbdRJf3nksi5wzPqN48g=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 4:57 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+On Fri, Apr 23, 2021 at 12:12 AM 'Nick Desaulniers' via Clang Built
+Linux <clang-built-linux@googlegroups.com> wrote:
 >
-> From: Palmer Dabbelt <palmerdabbelt@google.com>
+> Arnd,
+> No one can build ARCH=hexagon and
+> https://github.com/ClangBuiltLinux/linux/issues/759 has been open for
+> 2 years.
 >
-> I honestly have no idea if this is sane.
+> Trying to build
+> $ ARCH=hexagon CROSS_COMPILE=hexagon-linux-gnu make LLVM=1 LLVM_IAS=1 -j71
 >
-> This all came up in the context of increasing COMMAND_LINE_SIZE in the
-> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
-> maximum length of /proc/cmdline and userspace could staticly rely on
-> that to be correct.
->
-> Usually I wouldn't mess around with changing this sort of thing, but
-> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
-> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
-> increasing, but they're from before the UAPI split so I'm not quite sure
-> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
-> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
-> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
-> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
-> asm-generic/setup.h.").
->
-> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
-> part of the UABI to begin with, and userspace should be able to handle
-> /proc/cmdline of whatever length it turns out to be.  I don't see any
-> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
-> search, but that's not really enough to consider it unused on my end.
->
-> I couldn't think of a better way to ask about this then just sending the
-> patch.
+> shows numerous issues, the latest of which
+> commit 8320514c91bea ("hexagon: switch to ->regset_get()")
+> has a very obvious typo which misspells the `struct` keyword and has
+> been in the tree for almost 1 year.
 
-I think removing asm/setup.h from the uapi headers makes sense,
-but then we should do it consistently for all architectures as far
-as possible.
+Thank you for looking into it.
 
-Most architectures either use the generic file or they provide their
-own one-line version, so if we move them back, I would do it
-for all.
+> Why is arch/hexagon/ in the tree if no one can build it?
 
-The architectures that have additional contents in this file
-are alpha, arm, and ia64. We I would leave those unchanged
-in that case.
+Removing it sounds reasonable to me, it's been broken for too long, and
+we did the same thing for unicore32 that was in the same situation
+where the gcc port was too old to build the kernel and the clang
+port never quite work in mainline.
 
-        Arnd
+Guenter also brought up the issue a year ago, and nothing happened.
+I see Brian still occasionally sends an Ack to a patch that gets merged
+through another tree, but he has not send any patches or pull requests
+himself after taking over maintainership from Richard Kuo in 2019,
+and the four hexagon pull requests after 2014 only contained build fixes
+from developers that don't have access to the hardware (Randy Dunlap,
+Viresh Kumar, Mike Frysinger and me).
+
+       Arnd
+
+[1] https://lore.kernel.org/lkml/04ca01d633a8$9abb8070$d0328150$@codeaurora.org/
+
+---
+$ git log --grep=linux-hexagon-kernel
+commit bb736a5c0e9a2605f11c2bbb60a68f757832da32
+Merge: 45979a956b92 18dd1793a340
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri Sep 20 11:28:43 2019 -0700
+
+    Merge branch 'for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rkuo/linux-hexagon-kernel
+
+    Pull Hexagon maintainership update from Richard Kuo:
+     "I am leaving QuIC, and Brian Cain will be taking over maintainership
+      of the Hexagon port"
+
+    * 'for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rkuo/linux-hexagon-kernel:
+      Hexagon: change maintainer to Brian Cain
+
+commit 72d4c6e5893a122c2fd060ded2b490582a5bb377
+Merge: 1d176582c795 5c41aaad409c
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu Sep 13 16:33:26 2018 -1000
+
+    Merge branch 'for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rkuo/linux-hexagon-kernel
+
+    Pull hexagon fixes from Richard Kuo:
+     "Some fixes for compile warnings"
+
+    * 'for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rkuo/linux-hexagon-kernel:
+      hexagon: modify ffs() and fls() to return int
+      arch/hexagon: fix kernel/dma.c build warning
+
+commit 2d618bdf71635463a4aa4ad0fe46ec852292bc0c
+Merge: f2125992e7cb 330e261c35df
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue May 1 19:54:22 2018 -0700
+
+    Merge branch 'for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rkuo/linux-hexagon-kernel
+
+    Pull hexagon fixes from Richard Kuo:
+     "Some small fixes for module compilation"
+
+    * 'for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rkuo/linux-hexagon-kernel:
+      hexagon: export csum_partial_copy_nocheck
+      hexagon: add memset_io() helper
+
+commit 0cdf5a464070c8a2980a27113c47fb8e71babb9c
+Merge: 65c61bc5dbbc 02cc2ccfe771
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu Sep 10 16:19:07 2015 -0700
+
+    Merge branch 'for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rkuo/linux-hexagon-kernel
+
+    Pull hexagon updates from Richard Kuo:
+     "Just two fixes -- one for a uapi header and one for a timer interface"
+
+    * 'for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rkuo/linux-hexagon-kernel:
+      Revert "Hexagon: fix signal.c compile error"
+      hexagon/time: Migrate to new 'set-state' interface
