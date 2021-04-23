@@ -2,167 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE68368A6C
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 03:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCB7368B50
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Apr 2021 04:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbhDWBf1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Apr 2021 21:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
+        id S236407AbhDWC45 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Apr 2021 22:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbhDWBf1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 21:35:27 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0CEC061574
-        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 18:34:51 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id u11so18627862pjr.0
-        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 18:34:51 -0700 (PDT)
+        with ESMTP id S229600AbhDWC45 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Apr 2021 22:56:57 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1E5C06174A
+        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 19:56:20 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id f6-20020a17090a6546b029015088cf4a1eso477093pjs.2
+        for <linux-arch@vger.kernel.org>; Thu, 22 Apr 2021 19:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2u9IVBbrQtK5nxCkY5Ql7e2S1s+pJgrMEaI8rlOVi1A=;
-        b=kTIabuH9XG8EpGNkxN0ttB2TSmNE1UXivJVL/O3iBhAmQtRpUGW6mdNngm3gaVyfHk
-         mZd9igv/ZBylu7j0rFkbzyVbfgP+ZKtnZIFUq1iqZQmxygpodGL8feHFwTGP6bxSDycC
-         aS/dcIescNWiXHRyi86Y8JX+grwyam5ml+aVSu0fu1iKHlX2FNXST0o08A+dKXWyewrs
-         Kh2wSpw3Z38NA32RLIlAhlUrXsT3V8u9XqihnCW3TDKfRab7JiRIMyde0fJAEMOA6t0x
-         dHExxcIpGTZcYxxvXbTeDJKIXOlCaRLkaiKneXlRbAMT21PyRBSE/QeEK7EInSAU7Ulk
-         lR/Q==
+        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
+         :from:to;
+        bh=UtQhf0AMGUbWT9+v2yf9kUp3nmfSVtohRhb6bLrpe3w=;
+        b=g//+B6F+TXQhW76hcLtZtiPnhUoG4OKOoeXsITq/NnITlSIoZ/PSEkyiJBwjx1pzOJ
+         b/bru8FIC5SXz4K1SStTS1wrvbNgZ9GOW48lVyUxKaO+1SVehz0ICVVFzTklw331xhjG
+         SYZVHe9vBOMA2SzGyusWqV5V0DOepdOP26d3+HgKF1B371z9qMc5+XH2CI/ISZW9rJhO
+         LcUJnRg5wcq4VBdUDV/WkD8UDrOWLLvUBHOVOmY55jzheZBUoqDnqhxj87IJ3d3H14QU
+         oD8WIYr7Ch8+u757kgjJ9rVTih+G9Y98n+xTjNje/DpNFrFV1FvtKilSaqX+Nf1sBZG+
+         os/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=2u9IVBbrQtK5nxCkY5Ql7e2S1s+pJgrMEaI8rlOVi1A=;
-        b=dPlXdto98jflBMcH7HyYABGpoI1BPR5r+502PLvxw1h2/4mkesTKmB7YW1OkWi2DYq
-         KSWWuv+PunDSTcD1Xk5VEuwtu2X0WbolLaucH0+udnPdlfT0G1R/jlpZh6XWQyLk8X+C
-         nAOKNOky+/vb+rFAmXzVrIdYoGdViRo3R8dg2/VD0MBqn0jtbHH58IEd5y49NHDRcw2p
-         FgIUdnCN6gaGbM/8wHLCl2a+JFeOUPNrO5bqqHtOYLQ65j50eeMzo3Ml17ptXFrYt7ey
-         O9/wxCDGW/thd4RuLkGzr7buqqSlElAzurko16X79XQpI4bQjnZl5xumPYBS2DDoK0LA
-         Dn2Q==
-X-Gm-Message-State: AOAM530U5CfsbcSsnPggFLIaQFWKP2ZYkbVUQfLps3/VZ6tlK2g6n1id
-        T7BJxKnFK762TIKt022R4It07w==
-X-Google-Smtp-Source: ABdhPJyPGTWn9ZwTGF0D0ZB3bx8F9D7skQtSMEe+BuiaPPW01VWIa1OOFmwPEC3wIJMBb5FDn5+xdg==
-X-Received: by 2002:a17:90b:950:: with SMTP id dw16mr3058402pjb.68.1619141690659;
-        Thu, 22 Apr 2021 18:34:50 -0700 (PDT)
+        h=x-gm-message-state:subject:date:message-id:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=UtQhf0AMGUbWT9+v2yf9kUp3nmfSVtohRhb6bLrpe3w=;
+        b=Z8aAS8HhNLEgF+/g9sCYX8pzbV6+Yu7j7UynxuJBGolwan8pxeDMSN3V01gCd85+Yd
+         O/CdY5/zPA61P/1ggGGpEcmU+9SZr9VVXefy05gJbooPzNdcqoWVLt76e/FPSDzjdDBC
+         t8C9jCW0sHaIbncaB2IXVGcTF8SJdM3Yo3kS9P1liyMaYs61/Dxl2n1zxzNIYZ+5Kife
+         zzjGOJld/id+KvW4aKNcqCgckv6aVlviK2GSmRa8nxVUd4vHTIiYoaRnNJYGDbzmtdrV
+         vBJBI4a0vQ9wnuQqVKCoWZGWEGiz0iGEejYSRHYj8ad0WMBiTL9LuNPoIZZKaMICDP40
+         DgyQ==
+X-Gm-Message-State: AOAM530ahRaY9ZAWGgW93/Duijox8DQBgpxoGxMwFYbxF4zIcQWF7Itc
+        T479fBv6MCclCbssVMptRhEsTVioR9NWKw==
+X-Google-Smtp-Source: ABdhPJwUbOVgaL9jeXHuyFS1nq5rKBtjrsM1C9sCYcWtBQPflZeSEQ9adYi/u2sQZXINu1KuHSZoBA==
+X-Received: by 2002:a17:90a:9a85:: with SMTP id e5mr3107773pjp.201.1619146579609;
+        Thu, 22 Apr 2021 19:56:19 -0700 (PDT)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id w140sm3106903pfc.176.2021.04.22.18.34.49
+        by smtp.gmail.com with ESMTPSA id a4sm3217271pff.140.2021.04.22.19.56.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Apr 2021 18:34:50 -0700 (PDT)
-Date:   Thu, 22 Apr 2021 18:34:50 -0700 (PDT)
-X-Google-Original-Date: Thu, 22 Apr 2021 18:34:48 PDT (-0700)
-Subject:     Re: [PATCH] riscv: Protect kernel linear mapping only if CONFIG_STRICT_KERNEL_RWX is set
-In-Reply-To: <72130961-0419-9b1f-e88e-aa1e933f2942@ghiti.fr>
-CC:     anup@brainfault.org, corbet@lwn.net,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        aryabinin@virtuozzo.com, glider@google.com, dvyukov@google.com,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     alex@ghiti.fr
-Message-ID: <mhng-45fde203-6fd8-408c-b911-3efbb83d9cf3@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Thu, 22 Apr 2021 19:56:19 -0700 (PDT)
+Subject: [PATCH] asm-generic: Remove asm/setup.h from the UABI.
+Date:   Thu, 22 Apr 2021 19:55:45 -0700
+Message-Id: <20210423025545.313965-1-palmer@dabbelt.com>
+X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, Palmer Dabbelt <palmerdabbelt@google.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Arnd Bergmann <arnd@arndb.de>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 17 Apr 2021 10:26:36 PDT (-0700), alex@ghiti.fr wrote:
-> Le 4/16/21 à 12:33 PM, Palmer Dabbelt a écrit :
->> On Fri, 16 Apr 2021 03:47:19 PDT (-0700), alex@ghiti.fr wrote:
->>> Hi Anup,
->>>
->>> Le 4/16/21 à 6:41 AM, Anup Patel a écrit :
->>>> On Thu, Apr 15, 2021 at 4:34 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
->>>>>
->>>>> If CONFIG_STRICT_KERNEL_RWX is not set, we cannot set different
->>>>> permissions
->>>>> to the kernel data and text sections, so make sure it is defined before
->>>>> trying to protect the kernel linear mapping.
->>>>>
->>>>> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
->>>>
->>>> Maybe you should add "Fixes:" tag in commit tag ?
->>>
->>> Yes you're right I should have done that. Maybe Palmer will squash it as
->>> it just entered for-next?
->>
->> Ya, I'll do it.  My testing box was just tied up last night for the rc8
->> PR, so I threw this on for-next to get the buildbots to take a look.
->> It's a bit too late to take something for this week, as I try to be
->> pretty conservative this late in the cycle.  There's another kprobes fix
->> on the list so if we end up with an rc8 I might send this along with
->> that, otherwise this'll just go onto for-next before the linear map
->> changes that exercise the bug.
->>
->> You're more than welcome to just dig up the fixes tag and reply, my
->> scripts pull all tags from replies (just like Revieweb-by).  Otherwise
->> I'll do it myself, most people don't really post Fixes tags that
->> accurately so I go through it for pretty much everything anyway.
->
-> Here it is:
->
-> Fixes: 4b67f48da707 ("riscv: Move kernel mapping outside of linear mapping")
+From: Palmer Dabbelt <palmerdabbelt@google.com>
 
-Thanks.  I just squashed it, though, as I had to rewrite this anyway.
+I honestly have no idea if this is sane.
 
->
-> Thanks,
->
->>
->> Thanks for sorting this out so quickly!
->>
->>>
->>>>
->>>> Otherwise it looks good.
->>>>
->>>> Reviewed-by: Anup Patel <anup@brainfault.org>
->>>
->>> Thank you!
->>>
->>> Alex
->>>
->>>>
->>>> Regards,
->>>> Anup
->>>>
->>>>> ---
->>>>>   arch/riscv/kernel/setup.c | 8 ++++----
->>>>>   1 file changed, 4 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
->>>>> index 626003bb5fca..ab394d173cd4 100644
->>>>> --- a/arch/riscv/kernel/setup.c
->>>>> +++ b/arch/riscv/kernel/setup.c
->>>>> @@ -264,12 +264,12 @@ void __init setup_arch(char **cmdline_p)
->>>>>
->>>>>          sbi_init();
->>>>>
->>>>> -       if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
->>>>> +       if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX)) {
->>>>>                  protect_kernel_text_data();
->>>>> -
->>>>> -#if defined(CONFIG_64BIT) && defined(CONFIG_MMU)
->>>>> -       protect_kernel_linear_mapping_text_rodata();
->>>>> +#ifdef CONFIG_64BIT
->>>>> +               protect_kernel_linear_mapping_text_rodata();
->>>>>   #endif
->>>>> +       }
->>>>>
->>>>>   #ifdef CONFIG_SWIOTLB
->>>>>          swiotlb_init(1);
->>>>> --
->>>>> 2.20.1
->>>>>
->>>>
->>>> _______________________________________________
->>>> linux-riscv mailing list
->>>> linux-riscv@lists.infradead.org
->>>> http://lists.infradead.org/mailman/listinfo/linux-riscv
->>>>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+This all came up in the context of increasing COMMAND_LINE_SIZE in the
+RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+maximum length of /proc/cmdline and userspace could staticly rely on
+that to be correct.
+
+Usually I wouldn't mess around with changing this sort of thing, but
+PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+increasing, but they're from before the UAPI split so I'm not quite sure
+what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+asm-generic/setup.h.").
+
+It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+part of the UABI to begin with, and userspace should be able to handle
+/proc/cmdline of whatever length it turns out to be.  I don't see any
+references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+search, but that's not really enough to consider it unused on my end.
+
+I couldn't think of a better way to ask about this then just sending the
+patch.
+
+Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
+---
+ include/{uapi => }/asm-generic/setup.h | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename include/{uapi => }/asm-generic/setup.h (100%)
+
+diff --git a/include/uapi/asm-generic/setup.h b/include/asm-generic/setup.h
+similarity index 100%
+rename from include/uapi/asm-generic/setup.h
+rename to include/asm-generic/setup.h
+-- 
+2.31.1.498.g6c1eba8ee3d-goog
+
