@@ -2,87 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6B8369C8D
-	for <lists+linux-arch@lfdr.de>; Sat, 24 Apr 2021 00:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B064369DD7
+	for <lists+linux-arch@lfdr.de>; Sat, 24 Apr 2021 02:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbhDWW1l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Apr 2021 18:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
+        id S232106AbhDXAb2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Apr 2021 20:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232283AbhDWW1k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Apr 2021 18:27:40 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82989C061574;
-        Fri, 23 Apr 2021 15:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=9p+f2yEK4EX631yr0nLf67Yo+8aAuwLas6USm3q+guE=; b=VUsIIiWaXRIitxr+LIP/9TRx/a
-        oq7jC/A3vVfw8DgbkA34V4c2wxPT1SBd93piZo51HTgdM5tCOxBTDrNtxg47d24d0OakSa2UkQrV0
-        0oxqFuFn5G5OrsJNiGvazc3aCc3q3wE6oz/rls3qmvTJc/FV87lROU9pYxUv2VaotyGgJVzzuEOy4
-        CG1W99HbLWakwMa4MK7z9YkATKCaccnYdylCs0G860wOFLDnGG7XqeVitcHcl7rXTFJYlVHm7NgmJ
-        F0eim+xuMuNpgQVFKazrBI7DezgINd1d0zEV+leI74tfG29HJsBBp4BDp5iQE6p79sHgtyjd11L/3
-        RAXIiLew==;
-Received: from [2601:1c0:6280:3f0::6d64]
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1la4GL-002VV4-9G; Fri, 23 Apr 2021 22:27:01 +0000
-Subject: Re: ARCH=hexagon unsupported?
-To:     bcain@codeaurora.org, 'Arnd Bergmann' <arnd@kernel.org>
-Cc:     'Nick Desaulniers' <ndesaulniers@google.com>,
-        "'open list:QUALCOMM HEXAGON...'" <linux-hexagon@vger.kernel.org>,
-        'clang-built-linux' <clang-built-linux@googlegroups.com>,
-        'linux-arch' <linux-arch@vger.kernel.org>,
-        'Guenter Roeck' <linux@roeck-us.net>
-References: <CAKwvOdngSxXGYAykAbC=GLE_uWGap220=k1zOSxe1ntuC=0wjA@mail.gmail.com>
- <CAK8P3a2DCCjOq+sB+9sRM7XrtnkromCs_+znv3dehqLiYFDQag@mail.gmail.com>
- <fa0bed95-5ddf-ecad-0613-2f13837578c3@infradead.org>
- <CAK8P3a0ttLxzP0J-mocxB2TkfEYJYj37TdW=uM65fB4giC_qeg@mail.gmail.com>
- <026d01d73877$386a1920$a93e4b60$@codeaurora.org>
- <027401d7387e$f5630120$e0290360$@codeaurora.org>
- <24da08a4-e055-d8ac-8214-97d86cdcfd3d@infradead.org>
- <02a501d7388f$8dfb3b90$a9f1b2b0$@codeaurora.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <42ab3057-3b43-7f98-6387-6e79761d2d3f@infradead.org>
-Date:   Fri, 23 Apr 2021 15:26:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        with ESMTP id S237320AbhDXAb0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Apr 2021 20:31:26 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC4BC06174A
+        for <linux-arch@vger.kernel.org>; Fri, 23 Apr 2021 17:30:47 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id em21-20020a17090b0155b029014e204a81e6so5255428pjb.1
+        for <linux-arch@vger.kernel.org>; Fri, 23 Apr 2021 17:30:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
+         :from:to;
+        bh=guSSRx65IripoYc8dsOm6JI430Ep/aIkyxlfSlPeaA8=;
+        b=IB00by7h6dymC8ZKL8amoE0YgUaKyWHVx6TLwSUhxXu/tEakwqd8LM3mPK8pAxQ5TH
+         mzdBEjNvt4M/1w/MJA/GYiupuELZS9Y5IqWiwuzY1W7Z6XnPXHOyAD9ChiE4I/pRgRRY
+         Unp90I5iviDab4Nz+nAadLFr+JgB9KPzCVhfIK7ZU5bAE3h48KDynKHvB6ARIFKrVS70
+         vExerh6n5VrHVFnVKfS3cK1rWNdjq1pFOzw0YLLEWI7orx2FRyYcBq0LwBxPSfShrr4Q
+         97shPWCY+sNlJRLdKvVXw/N1jNcvVN1l15KjnfY4Vbsx/+gYd5Pj3G6qTGYBkKyIQedr
+         Q7dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:date:message-id:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=guSSRx65IripoYc8dsOm6JI430Ep/aIkyxlfSlPeaA8=;
+        b=ZZTDJwLPdCa4KA6PVtMDzb9yN22GTPJgh7pjA+VQ/3EBl4ujwzhE9+Y8G0aB3tJtrn
+         HOWYn1KdyZrDaWf9fQra4cNpvF6MAn47UuEa6CV5w/T7X0utLvdkrjsX2SSV6B8kpYOr
+         vqqHYhj11ix87iUSjrYUTKfVVEN8E3R+ooxhBdcas94F13MrRRRv//Pzw9w1d71OtyFq
+         WZgpm3tMEIuOYpiwLn0EKp5oXPdIDdlVNA6XHeV5ewiaC7mqylyLoYFs86xKGZ3ahSad
+         0IlLTtV4bstMkbT8u9SPYnRgIiq8LRLQpLKZDMlBLLm0dRyCZ+jex80VuNjsxHx76toM
+         6zgQ==
+X-Gm-Message-State: AOAM531wKaajvZPaxKvgrzCvcNiLcpB90wnRiVHpp0+el14dKDcp8I3y
+        Vsl3RXeHZnkmtkh9Hfvrsu3oXw==
+X-Google-Smtp-Source: ABdhPJzmaUZNjFhvN7BPTb5VybKl4vJlX5CTqmcac0oPUJitgQ87Hn0K91tX3GuaHuoWjlkXGj/jtw==
+X-Received: by 2002:a17:902:b117:b029:e6:81ed:8044 with SMTP id q23-20020a170902b117b02900e681ed8044mr6399499plr.13.1619224246844;
+        Fri, 23 Apr 2021 17:30:46 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id lt11sm8733662pjb.23.2021.04.23.17.30.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Apr 2021 17:30:46 -0700 (PDT)
+Subject: [PATCH] tools/memory-model: Correct the name of smp_mb__after_spinlock()
+Date:   Fri, 23 Apr 2021 17:25:09 -0700
+Message-Id: <20210424002509.797308-1-palmer@dabbelt.com>
+X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
 MIME-Version: 1.0
-In-Reply-To: <02a501d7388f$8dfb3b90$a9f1b2b0$@codeaurora.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        paulmck@kernel.org, akiyks@gmail.com,
+        Daniel Lustig <dlustig@nvidia.com>, joel@joelfernandes.org,
+        elver@google.com, Palmer Dabbelt <palmerdabbelt@google.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@android.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     mingo@kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/23/21 3:25 PM, Brian Cain wrote:
->> -----Original Message-----
->> From: Randy Dunlap <rdunlap@infradead.org>
-> ...
->>> It's published as a container in the Gitlab Container Registry.  You can use
->> docker/podman to pull "registry.gitlab.com/qemu-
->> project/qemu/qemu/debian-hexagon-cross" in order to use it.
->>
->> Hi Brian,
->>
->> Maybe that will be useful to someone.
->>
->> However, I am looking for something like a tarball that I can download and
->> deploy locally, like one can find at these locations:
->>
->> https://toolchains.bootlin.com/
->> https://download.01.org/0day-ci/cross-package/
->> https://mirrors.edge.kernel.org/pub/tools/crosstool/
-> 
-> Randy,
-> 
-> 	I 100% agree, I would prefer a tarball myself.  I have been working with the team to produce the tarball and we haven't been able to deliver that yet.  No good excuses here, only bad ones: somewhat tied up in process bureaucracy.
-> 
-> I can share the recipe that was used to build the toolchain in the container.  No Dockerfile required, just a shell script w/mostly cmake + make commands.  All of the sources are public, but musl is a downstream-public repo because we haven't landed the hexagon support in upstream musl yet.
+From: Palmer Dabbelt <palmerdabbelt@google.com>
 
-Hi Brian,
-I can wait. :)
+This was missing one of the double _s.  I only found it because I
+mis-typed the name myself.
 
-Thanks.
+Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
+---
+ tools/memory-model/Documentation/explanation.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index f9d610d5a1a4..5d72f3112e56 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -2510,7 +2510,7 @@ they behave as follows:
+ 	smp_mb__after_atomic() orders po-earlier atomic updates and
+ 	the events preceding them against all po-later events;
+ 
+-	smp_mb_after_spinlock() orders po-earlier lock acquisition
++	smp_mb__after_spinlock() orders po-earlier lock acquisition
+ 	events and the events preceding them against all po-later
+ 	events.
+ 
+-- 
+2.31.1.498.g6c1eba8ee3d-goog
 
