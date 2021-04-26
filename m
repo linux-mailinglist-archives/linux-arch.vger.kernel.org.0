@@ -2,106 +2,346 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4697136B694
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Apr 2021 18:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55B336B6BB
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Apr 2021 18:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234232AbhDZQQ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Apr 2021 12:16:57 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7890 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234351AbhDZQQy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Apr 2021 12:16:54 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13QG2uBI170971;
-        Mon, 26 Apr 2021 12:16:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=E0kz0EJfOSMbctgZHIbPrtsz8wCykbYF4ml7+FBNOuY=;
- b=WO80uvnYRYqyv+Q6od0ijlVE5L6kICg88586ylX/pdgSA6W29I8sa0/mwkHcbrlB6ywy
- YjZ4J7pJZkzzbtz9tTf1Ie+QEoMmRjAeBqdRYipvJ/N5ckl934Fn/oH5oo2jQ7lUT1DV
- /C9vXZu+0Gl7pife8m7eSi7YzXdL2cHcrTITIV8yzMPeVPXODDa6bE5n8m1ynIa+fnyi
- crmIwR969sK/WYte6NoLz1FO6w/gBXfP3UD6hMb3Y9EoyNpIguado18CQqF+rPg3eheZ
- J7BlTAOh+xKpulAAxf4Dyhq1RIPbuZverTCVzCY2jkTCBZYVpW9U2aDzJJKXmb89OM14 og== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 385xg15n5f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Apr 2021 12:16:03 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13QGEmO5021241;
-        Mon, 26 Apr 2021 16:16:02 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 384gjxrf19-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Apr 2021 16:16:01 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13QGFwre40239400
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 26 Apr 2021 16:15:58 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B57D942042;
-        Mon, 26 Apr 2021 16:15:58 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB22E42041;
-        Mon, 26 Apr 2021 16:15:57 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.40.129])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 26 Apr 2021 16:15:57 +0000 (GMT)
-Date:   Mon, 26 Apr 2021 19:15:55 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Vladimir Isaev <Vladimir.Isaev@synopsys.com>
-Cc:     "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ARC: Use max_high_pfn as a HIGHMEM zone border
-Message-ID: <YIbnO3BhOeUSRU0E@linux.ibm.com>
-References: <20210426101004.42695-1-isaev@synopsys.com>
- <YIakBTNpLsPJaj7i@linux.ibm.com>
- <BY5PR12MB41318EB561C2E936B0371B5EDF429@BY5PR12MB4131.namprd12.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BY5PR12MB41318EB561C2E936B0371B5EDF429@BY5PR12MB4131.namprd12.prod.outlook.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BLF-7QuEMiNJAE9cDSBetA1gurf1Ts6J
-X-Proofpoint-ORIG-GUID: BLF-7QuEMiNJAE9cDSBetA1gurf1Ts6J
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-26_08:2021-04-26,2021-04-26 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- phishscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
- mlxlogscore=887 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104260122
+        id S234124AbhDZQ0B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Apr 2021 12:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233923AbhDZQ0B (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Apr 2021 12:26:01 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025BEC061574
+        for <linux-arch@vger.kernel.org>; Mon, 26 Apr 2021 09:25:20 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id w10so2984194pgh.5
+        for <linux-arch@vger.kernel.org>; Mon, 26 Apr 2021 09:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fSI8/NRCqwzanGzofgGeswpyryhOl5XK8N/2SPExUaM=;
+        b=ZyHP65m0JRImHmM6z0hPa7p88MDC4qJnPBAiFXsCazeiEf8sVCdjZtPvmVHqYY67dJ
+         IzP0XEBzBR8UzeDpv6weuSRRrh4OVpjOHYi6pyLuzvhJYJWYbHICIdwa2K3CLaoHSukd
+         37D1ROX4l7xG/q710dJEeLbTFH4ip1I4t753y4OmZEUO+cSavc6B3wLi9BAMxEPMxOQE
+         70xO8xijWxWxPUNrkQAhnSxqYlcGZsU7j8v/luvriloVOf3gqxzrICTDUHZT6vG0T6be
+         eJ6uKP0tALSH3KY3L1g5TE+uJtGXqqKbISVfy7VPc1VIGDwq6nR51I9Z70hDgtXvrrRL
+         MiMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=fSI8/NRCqwzanGzofgGeswpyryhOl5XK8N/2SPExUaM=;
+        b=IntiTtudObH351F4YLOIuQ+T5hprfVyaK3WJ/h9fHMPExmh+yhgQRVx8LDIQIE4I7n
+         k9m7ItzMUgg5xWzq7Kv/c7Wzcj4lOVRyD3louUVlsjUjgqXAeIyueyjVQlY2Ub80a8iu
+         KaUPc3KOxFgZ5cvvFGAa8zSTKhiS5c07PcEjLC25a72Qzn+sr9qc5jhCSXEaIHJN5VOx
+         PSTzl7T6Ev3Ol0gbynWOOolyRuh6jTeXdbcdzebqc5sP1nBcvlLgm69DfH+ZjjU3iA5z
+         UjAf0TQXZAaaqHamhB3AgWAH9qSzmhR7ycpq34S5dM0Ho4FKsdRRG4HxyzkwopolEZjY
+         1THQ==
+X-Gm-Message-State: AOAM533h2NWKJFuH4s++D5yUZHFdNdPHHPJEH6quMgtssCn+3o+CcwtI
+        Tbs0KMoDC2PFq/2hKQElmW4P6w==
+X-Google-Smtp-Source: ABdhPJyzUDRjAvbhDAsSYd7QnOPV1+zieZp/viVrdrq5mIFB3KrJRDUA9nwmtgatZd/53jvnAmVwIA==
+X-Received: by 2002:a62:4e4c:0:b029:259:b25f:1bf with SMTP id c73-20020a624e4c0000b0290259b25f01bfmr18054066pfb.40.1619454319216;
+        Mon, 26 Apr 2021 09:25:19 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id z2sm201012pfj.203.2021.04.26.09.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Apr 2021 09:25:18 -0700 (PDT)
+Date:   Mon, 26 Apr 2021 09:25:18 -0700 (PDT)
+X-Google-Original-Date: Mon, 26 Apr 2021 09:25:17 PDT (-0700)
+Subject:     Re: [PATCH] riscv: Fix 32b kernel caused by 64b kernel mapping moving outside linear mapping
+In-Reply-To: <97819559-0af0-0422-5b6c-30872f759daa@ghiti.fr>
+CC:     anup@brainfault.org, corbet@lwn.net,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        aryabinin@virtuozzo.com, glider@google.com, dvyukov@google.com,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alex@ghiti.fr
+Message-ID: <mhng-9ced605b-ce0a-4fbd-b794-d01bc51b900c@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 11:55:00AM +0000, Vladimir Isaev wrote:
-> Hi Mike,
-> 
-> On Mon, April 26, 2021 2:29 PM, Mike Rapoport wrote:
-> > On Mon, Apr 26, 2021 at 01:10:04PM +0300, Vladimir Isaev wrote:
-> > > -	max_zone_pfn[ZONE_HIGHMEM] = min_low_pfn;
-> > > +	max_zone_pfn[ZONE_HIGHMEM] = max_high_pfn;
-> > 
-> > This is correct with PAE40, but it will break !PAE40 when "highmem" has lower
-> > addresses than lowmem.
-> > 
-> > It rather should be something like:
-> > 
-> >         if (IS_ENABLED(CONFIG_ARC_HAS_PAE40))
-> >                 max_zone_pfn[ZONE_HIGHMEM] = max_high_pfn;
-> >         else
-> >             	max_zone_pfn[ZONE_HIGHMEM] = min_low_pfn;
-> > 
-> 
-> Not sure if I understand why we should have min_low_pfn here. In !PAE40
-> case max_high_pfn just will be smaller than min_low_pfn.
+On Fri, 23 Apr 2021 13:49:10 PDT (-0700), alex@ghiti.fr wrote:
+>
+>
+> Le 4/23/21 à 12:57 PM, Palmer Dabbelt a écrit :
+>> On Fri, 23 Apr 2021 01:34:02 PDT (-0700), alex@ghiti.fr wrote:
+>>> Le 4/20/21 à 12:18 AM, Anup Patel a écrit :
+>>>> On Sat, Apr 17, 2021 at 10:52 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
+>>>>>
+>>>>> Fix multiple leftovers when moving the kernel mapping outside the
+>>>>> linear
+>>>>> mapping for 64b kernel that left the 32b kernel unusable.
+>>>>>
+>>>>> Fixes: 4b67f48da707 ("riscv: Move kernel mapping outside of linear
+>>>>> mapping")
+>>>>> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
+>>>>
+>>>> Quite a few #ifdef but I don't see any better way at the moment.
+>>>> Maybe we can
+>>>> clean this later. Otherwise looks good to me.
+>>
+>> Agreed.  I'd recently sent out a patch set that got NACK'd because we're
+>> supposed to be relying on the compiler to optimize away references that
+>> can be staticly determined to not be exercised, which is probably the
+>> way forward to getting rid of a lot of of preprocessor stuff.  That all
+>> seems very fragile and is a bigger problem than this, though, so it's
+>> probably best to do it as its own thing.
+>>
+>>>> Reviewed-by: Anup Patel <anup@brainfault.org>
+>>>
+>>> Thanks Anup!
+>>>
+>>> @Palmer: This is not on for-next yet and then rv32 is broken. This does
+>>> not apply immediately on top of for-next though, so if you need a new
+>>> version, I can do that. But this squashes nicely with the patch it fixes
+>>> if you prefer.
+>>
+>> Thanks.  I just hadn't gotten to this one yet, but as you pointed out
+>> it's probably best to just squash it.  It's in the version on for-next
+>> now, it caused few conflicts but I think I got everything sorted out.
+>>
+>> Now that everything is in I'm going to stop rewriting this stuff, as it
+>> touches pretty much the whole tree.  I don't have much of a patch back
+>> log as of right now, and as the new stuff will be on top of it that will
+>> make everyone's lives easier.
+>>
+>>>
+>>> Let me know, I can do that very quickly.
+>>>
+>>> Alex
+>>>
+>>>>
+>>>> Regards,
+>>>> Anup
+>>>>
+>>>>> ---
+>>>>>   arch/riscv/include/asm/page.h    |  9 +++++++++
+>>>>>   arch/riscv/include/asm/pgtable.h | 16 ++++++++++++----
+>>>>>   arch/riscv/mm/init.c             | 25 ++++++++++++++++++++++++-
+>>>>>   3 files changed, 45 insertions(+), 5 deletions(-)
+>>>>>
+>>>>> diff --git a/arch/riscv/include/asm/page.h
+>>>>> b/arch/riscv/include/asm/page.h
+>>>>> index 22cfb2be60dc..f64b61296c0c 100644
+>>>>> --- a/arch/riscv/include/asm/page.h
+>>>>> +++ b/arch/riscv/include/asm/page.h
+>>>>> @@ -90,15 +90,20 @@ typedef struct page *pgtable_t;
+>>>>>
+>>>>>   #ifdef CONFIG_MMU
+>>>>>   extern unsigned long va_pa_offset;
+>>>>> +#ifdef CONFIG_64BIT
+>>>>>   extern unsigned long va_kernel_pa_offset;
+>>>>> +#endif
+>>>>>   extern unsigned long pfn_base;
+>>>>>   #define ARCH_PFN_OFFSET                (pfn_base)
+>>>>>   #else
+>>>>>   #define va_pa_offset           0
+>>>>> +#ifdef CONFIG_64BIT
+>>>>>   #define va_kernel_pa_offset    0
+>>>>> +#endif
+>>>>>   #define ARCH_PFN_OFFSET                (PAGE_OFFSET >> PAGE_SHIFT)
+>>>>>   #endif /* CONFIG_MMU */
+>>>>>
+>>>>> +#ifdef CONFIG_64BIT
+>
+> This one is incorrect as kernel_virt_addr is used also in 32b kernel,
+> which causes 32b failure when CONFIG_DEBUG_VIRTUAL is set, the following
+> diff fixes it:
+>
+> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+> index e280ba60cb34..6a7761c86ec2 100644
+> --- a/arch/riscv/include/asm/page.h
+> +++ b/arch/riscv/include/asm/page.h
+> @@ -106,9 +106,9 @@ extern unsigned long pfn_base;
+>   #define ARCH_PFN_OFFSET                (PAGE_OFFSET >> PAGE_SHIFT)
+>   #endif /* CONFIG_MMU */
+>
+> -#ifdef CONFIG_64BIT
+>   extern unsigned long kernel_virt_addr;
+>
+> +#ifdef CONFIG_64BIT
+>   #define linear_mapping_pa_to_va(x)     ((void *)((unsigned long)(x) +
+> va_pa_offset))
+>   #ifdef CONFIG_XIP_KERNEL
+>   #define kernel_mapping_pa_to_va(y)     ({
+>                   \
 
-Hmm, actually, you are right. This should be fine.
+Can you send a patch for this one?  I'm trying to avoid rebasing any 
+more, as there's more stuff on top of this now.
 
--- 
-Sincerely yours,
-Mike.
+>
+>>>>>   extern unsigned long kernel_virt_addr;
+>>>>>
+>>>>>   #define linear_mapping_pa_to_va(x)     ((void *)((unsigned
+>>>>> long)(x) + va_pa_offset))
+>>>>> @@ -112,6 +117,10 @@ extern unsigned long kernel_virt_addr;
+>>>>>          (_x < kernel_virt_addr)
+>>>>> ?                                               \
+>>>>>                  linear_mapping_va_to_pa(_x) :
+>>>>> kernel_mapping_va_to_pa(_x);      \
+>>>>>          })
+>>>>> +#else
+>>>>> +#define __pa_to_va_nodebug(x)  ((void *)((unsigned long) (x) +
+>>>>> va_pa_offset))
+>>>>> +#define __va_to_pa_nodebug(x)  ((unsigned long)(x) - va_pa_offset)
+>>>>> +#endif
+>>>>>
+>>>>>   #ifdef CONFIG_DEBUG_VIRTUAL
+>>>>>   extern phys_addr_t __virt_to_phys(unsigned long x);
+>>>>> diff --git a/arch/riscv/include/asm/pgtable.h
+>>>>> b/arch/riscv/include/asm/pgtable.h
+>>>>> index 80e63a93e903..5afda75cc2c3 100644
+>>>>> --- a/arch/riscv/include/asm/pgtable.h
+>>>>> +++ b/arch/riscv/include/asm/pgtable.h
+>>>>> @@ -16,19 +16,27 @@
+>>>>>   #else
+>>>>>
+>>>>>   #define ADDRESS_SPACE_END      (UL(-1))
+>>>>> -/*
+>>>>> - * Leave 2GB for kernel and BPF at the end of the address space
+>>>>> - */
+>>>>> +
+>>>>> +#ifdef CONFIG_64BIT
+>>>>> +/* Leave 2GB for kernel and BPF at the end of the address space */
+>>>>>   #define KERNEL_LINK_ADDR       (ADDRESS_SPACE_END - SZ_2G + 1)
+>>>>> +#else
+>>>>> +#define KERNEL_LINK_ADDR       PAGE_OFFSET
+>>>>> +#endif
+>>>>>
+>>>>>   #define VMALLOC_SIZE     (KERN_VIRT_SIZE >> 1)
+>>>>>   #define VMALLOC_END      (PAGE_OFFSET - 1)
+>>>>>   #define VMALLOC_START    (PAGE_OFFSET - VMALLOC_SIZE)
+>>>>>
+>>>>> -/* KASLR should leave at least 128MB for BPF after the kernel */
+>>>>>   #define BPF_JIT_REGION_SIZE    (SZ_128M)
+>>>>> +#ifdef CONFIG_64BIT
+>>>>> +/* KASLR should leave at least 128MB for BPF after the kernel */
+>>>>>   #define BPF_JIT_REGION_START   PFN_ALIGN((unsigned long)&_end)
+>>>>>   #define BPF_JIT_REGION_END     (BPF_JIT_REGION_START +
+>>>>> BPF_JIT_REGION_SIZE)
+>>>>> +#else
+>>>>> +#define BPF_JIT_REGION_START   (PAGE_OFFSET - BPF_JIT_REGION_SIZE)
+>>>>> +#define BPF_JIT_REGION_END     (VMALLOC_END)
+>>>>> +#endif
+>>>>>
+>>>>>   /* Modules always live before the kernel */
+>>>>>   #ifdef CONFIG_64BIT
+>>>>> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+>>>>> index 093f3a96ecfc..dc9b988e0778 100644
+>>>>> --- a/arch/riscv/mm/init.c
+>>>>> +++ b/arch/riscv/mm/init.c
+>>>>> @@ -91,8 +91,10 @@ static void print_vm_layout(void)
+>>>>>                    (unsigned long)VMALLOC_END);
+>>>>>          print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
+>>>>>                    (unsigned long)high_memory);
+>>>>> +#ifdef CONFIG_64BIT
+>>>>>          print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+>>>>>                    (unsigned long)ADDRESS_SPACE_END);
+>>>>> +#endif
+>>>>>   }
+>>>>>   #else
+>>>>>   static void print_vm_layout(void) { }
+>>>>> @@ -165,9 +167,11 @@ static struct pt_alloc_ops pt_ops;
+>>>>>   /* Offset between linear mapping virtual address and kernel load
+>>>>> address */
+>>>>>   unsigned long va_pa_offset;
+>>>>>   EXPORT_SYMBOL(va_pa_offset);
+>>>>> +#ifdef CONFIG_64BIT
+>>>>>   /* Offset between kernel mapping virtual address and kernel load
+>>>>> address */
+>>>>>   unsigned long va_kernel_pa_offset;
+>>>>>   EXPORT_SYMBOL(va_kernel_pa_offset);
+>>>>> +#endif
+>>>>>   unsigned long pfn_base;
+>>>>>   EXPORT_SYMBOL(pfn_base);
+>>>>>
+>>>>> @@ -410,7 +414,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>>>>>          load_sz = (uintptr_t)(&_end) - load_pa;
+>>>>>
+>>>>>          va_pa_offset = PAGE_OFFSET - load_pa;
+>>>>> +#ifdef CONFIG_64BIT
+>>>>>          va_kernel_pa_offset = kernel_virt_addr - load_pa;
+>>>>> +#endif
+>>>>>
+>>>>>          pfn_base = PFN_DOWN(load_pa);
+>>>>>
+>>>>> @@ -469,12 +475,16 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>>>>>                             pa + PMD_SIZE, PMD_SIZE, PAGE_KERNEL);
+>>>>>          dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa &
+>>>>> (PMD_SIZE - 1));
+>>>>>   #else /* CONFIG_BUILTIN_DTB */
+>>>>> +#ifdef CONFIG_64BIT
+>>>>>          /*
+>>>>>           * __va can't be used since it would return a linear
+>>>>> mapping address
+>>>>>           * whereas dtb_early_va will be used before setup_vm_final
+>>>>> installs
+>>>>>           * the linear mapping.
+>>>>>           */
+>>>>>          dtb_early_va = kernel_mapping_pa_to_va(dtb_pa);
+>>>>> +#else
+>>>>> +       dtb_early_va = __va(dtb_pa);
+>>>>> +#endif /* CONFIG_64BIT */
+>>>>>   #endif /* CONFIG_BUILTIN_DTB */
+>>>>>   #else
+>>>>>   #ifndef CONFIG_BUILTIN_DTB
+>>>>> @@ -486,7 +496,11 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>>>>>                             pa + PGDIR_SIZE, PGDIR_SIZE, PAGE_KERNEL);
+>>>>>          dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa &
+>>>>> (PGDIR_SIZE - 1));
+>>>>>   #else /* CONFIG_BUILTIN_DTB */
+>>>>> +#ifdef CONFIG_64BIT
+>>>>>          dtb_early_va = kernel_mapping_pa_to_va(dtb_pa);
+>>>>> +#else
+>>>>> +       dtb_early_va = __va(dtb_pa);
+>>>>> +#endif /* CONFIG_64BIT */
+>>>>>   #endif /* CONFIG_BUILTIN_DTB */
+>>>>>   #endif
+>>>>>          dtb_early_pa = dtb_pa;
+>>>>> @@ -571,12 +585,21 @@ static void __init setup_vm_final(void)
+>>>>>                  for (pa = start; pa < end; pa += map_size) {
+>>>>>                          va = (uintptr_t)__va(pa);
+>>>>>                          create_pgd_mapping(swapper_pg_dir, va, pa,
+>>>>> -                                          map_size, PAGE_KERNEL);
+>>>>> +                                          map_size,
+>>>>> +#ifdef CONFIG_64BIT
+>>>>> +                                          PAGE_KERNEL
+>>>>> +#else
+>>>>> +                                          PAGE_KERNEL_EXEC
+>>>>> +#endif
+>>>>> +                                       );
+>>>>> +
+>>>>>                  }
+>>>>>          }
+>>>>>
+>>>>> +#ifdef CONFIG_64BIT
+>>>>>          /* Map the kernel */
+>>>>>          create_kernel_page_table(swapper_pg_dir, PMD_SIZE);
+>>>>> +#endif
+>>>>>
+>>>>>          /* Clear fixmap PTE and PMD mappings */
+>>>>>          clear_fixmap(FIX_PTE);
+>>>>> --
+>>>>> 2.20.1
+>>>>>
+>
+> I agree with you, too much #ifdef, it is hardly readable: I take a look
+> at how I can make it simpler.
+>
+> Sorry for all those fixes,
+>
+> Alex
+>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
