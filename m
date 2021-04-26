@@ -2,32 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3178436B86C
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Apr 2021 19:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CBE36B876
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Apr 2021 20:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237659AbhDZR46 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Apr 2021 13:56:58 -0400
-Received: from mga14.intel.com ([192.55.52.115]:31190 "EHLO mga14.intel.com"
+        id S237552AbhDZSBr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Apr 2021 14:01:47 -0400
+Received: from mga06.intel.com ([134.134.136.31]:20514 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237681AbhDZR46 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Apr 2021 13:56:58 -0400
-IronPort-SDR: B8aO52X430f/pBsWcn102yppHQnco6lEUE+47Gv7Y2ry3AOwEhkJiu9FVRI02wPinginsYzdEH
- 8JPHck26mz8w==
-X-IronPort-AV: E=McAfee;i="6200,9189,9966"; a="195932719"
+        id S235357AbhDZSBr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 26 Apr 2021 14:01:47 -0400
+IronPort-SDR: DHMRGsqCkDzc30UCqVOFr+y9UtijMsne/6X/Xn1cjj6JN5H3t5byTc2K4XSYVMe4Q75NJAblIE
+ LQ6Qlal7EAUg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9966"; a="257683199"
 X-IronPort-AV: E=Sophos;i="5.82,252,1613462400"; 
-   d="scan'208";a="195932719"
+   d="scan'208";a="257683199"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2021 10:56:16 -0700
-IronPort-SDR: 1sFm/xgmzUAr4alO+noRJjjdcUA+BwSswC61DGQQKhMYK7WbIJvRSAcnZmSi7MGyL25NKxfPCD
- fF20YtrXYBQQ==
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2021 11:01:00 -0700
+IronPort-SDR: K8cA858LlMyW2WrbT3P+DmNpVokOFgZuLVKN6Qcgrul5wvhMk4IOD+I9+DUpFMPPSMiSf1xXUh
+ +qUVw8CigAcQ==
 X-IronPort-AV: E=Sophos;i="5.82,252,1613462400"; 
-   d="scan'208";a="422743315"
+   d="scan'208";a="422745165"
 Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.73.213]) ([10.212.73.213])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2021 10:56:15 -0700
-Subject: Re: [PATCH v25 29/30] mm: Update arch_validate_flags() to include vma
- anonymous
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2021 11:00:58 -0700
+Subject: Re: [PATCH v25 30/30] mm: Introduce PROT_SHSTK for shadow stack
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -55,20 +53,17 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 References: <20210415221419.31835-1-yu-cheng.yu@intel.com>
- <20210415221419.31835-30-yu-cheng.yu@intel.com>
- <20210426064056.bqbeekpsogd32yvm@box.shutemov.name>
- <20210426111114.GF4985@arm.com>
+ <20210415221419.31835-31-yu-cheng.yu@intel.com>
+ <20210426065243.ozh6doz6q5xonrqe@box.shutemov.name>
 From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <eff52cb8-021a-3a52-eb7e-84473b3dfd0c@intel.com>
-Date:   Mon, 26 Apr 2021 10:56:14 -0700
+Message-ID: <afd939a0-c49d-c0e2-7d10-d65e18ea02ba@intel.com>
+Date:   Mon, 26 Apr 2021 11:00:58 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210426111114.GF4985@arm.com>
+In-Reply-To: <20210426065243.ozh6doz6q5xonrqe@box.shutemov.name>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -76,35 +71,68 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/26/2021 4:11 AM, Catalin Marinas wrote:
-> On Mon, Apr 26, 2021 at 09:40:56AM +0300, Kirill A. Shutemov wrote:
->> On Thu, Apr 15, 2021 at 03:14:18PM -0700, Yu-cheng Yu wrote:
->>> When newer VM flags are being created, such as VM_MTE, it becomes necessary
->>> for mmap/mprotect to verify if certain flags are being applied to an
->>> anonymous VMA.
->>>
->>> To solve this, one approach is adding a VM flag to track that MAP_ANONYMOUS
->>> is specified [1], and then using the flag in arch_validate_flags().
->>>
->>> Another approach is passing vma_is_anonymous() to arch_validate_flags().
->>> To prepare the introduction of PROT_SHSTK, which creates a shadow stack
->>> mapping and can only be applied to an anonymous VMA, update arch_validate_
->>> flags() to include anonymous VMA information.
+On 4/25/2021 11:52 PM, Kirill A. Shutemov wrote:
+> On Thu, Apr 15, 2021 at 03:14:19PM -0700, Yu-cheng Yu wrote:
+>> There are three possible options to create a shadow stack allocation API:
+>> an arch_prctl, a new syscall, or adding PROT_SHSTK to mmap()/mprotect().
+>> Each has its advantages and compromises.
 >>
->> I would rather pass down whole vma. Who knows what else
->> arch_validate_flags() would need to know about the VMA tomorrow:
+>> An arch_prctl() is the least intrusive.  However, the existing x86
+>> arch_prctl() takes only two parameters.  Multiple parameters must be
+>> passed in a memory buffer.  There is a proposal to pass more parameters in
+>> registers [1], but no active discussion on that.
 >>
->> 	arch_validate_flags(vma, newflags);
+>> A new syscall minimizes compatibility issues and offers an extensible frame
+>> work to other architectures, but this will likely result in some overlap of
+>> mmap()/mprotect().
 >>
->> should do the trick.
+>> The introduction of PROT_SHSTK to mmap()/mprotect() takes advantage of
 > 
-> A reason why we added a separate VM_MTE_ALLOWED flag was that we wanted
-> MTE on other RAM-based based mappings, not just anonymous pages. See
-> 51b0bff2f703 ("mm: Allow arm64 mmap(PROT_MTE) on RAM-based files").
+> Maybe PROT_SHADOW_STACK?
 > 
-> Anyway, the above change doesn't get in the way.
-> 
+>> existing APIs.  The x86-specific PROT_SHSTK is translated to
+>> VM_SHADOW_STACK and a shadow stack mapping is created without reinventing
+>> the wheel.  There are potential pitfalls though.  The most obvious one
+>> would be using this as a bypass to shadow stack protection.  However, the
+>> attacker would have to get to the syscall first.
+>>
+>> [1] https://lore.kernel.org/lkml/20200828121624.108243-1-hjl.tools@gmail.com/
+>>
+>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>> ---
+>> v24:
+>> - Update arch_calc_vm_prot_bits(), leave PROT* checking to
+>>    arch_validate_prot().
+>> - Update arch_validate_prot(), leave vma flags checking to
+>>    arch_validate_flags().
+>> - Add arch_validate_flags().
+>>
+>>   arch/x86/include/asm/mman.h      | 59 +++++++++++++++++++++++++++++++-
+>>   arch/x86/include/uapi/asm/mman.h |  1 +
+>>   include/linux/mm.h               |  1 +
+>>   3 files changed, 60 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
+>> index 629f6c81263a..1821c179f35d 100644
+>> --- a/arch/x86/include/asm/mman.h
+>> +++ b/arch/x86/include/asm/mman.h
 
-Thanks a lot for the clarification!
+[...]
+
+>> +
+>> +#define arch_validate_prot arch_validate_prot
+>> +
+>> +static inline bool arch_validate_flags(unsigned long vm_flags, bool is_anon)
+>> +{
+>> +	if (vm_flags & VM_SHADOW_STACK) {
+>> +		if ((vm_flags & VM_SHARED) || !is_anon)
+> 
+> VM_SHARED check is redundant. vma_is_anonymous() should be enough.
+> Anonymous shared mappings would fail vma_is_anonymous().
+>
+
+Thanks for looking into this.  I will update and send another version.
 
 Yu-cheng
