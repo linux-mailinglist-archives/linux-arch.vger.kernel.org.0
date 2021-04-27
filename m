@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E66236CD10
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A2236CD14
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239040AbhD0Usl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Apr 2021 16:48:41 -0400
-Received: from mga09.intel.com ([134.134.136.24]:56332 "EHLO mga09.intel.com"
+        id S239076AbhD0Usn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Apr 2021 16:48:43 -0400
+Received: from mga09.intel.com ([134.134.136.24]:56333 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239118AbhD0Usc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Apr 2021 16:48:32 -0400
-IronPort-SDR: KG8Ae6puePo12Ee8xNlYUz8KO7wkmz+KTF9GSP9scNrFfRF1Sk+bg3sOGF9YiksmepJ6p/dxYH
- mQ/OAVhlKtBw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="196699375"
+        id S239125AbhD0Usd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Apr 2021 16:48:33 -0400
+IronPort-SDR: cWb7nv/vGQiguLqKCd4TWQcDLKCPOgYDltL8XyqzxEzUpKUizdwS1pSVzPXbmrue8gZ6xvsMh6
+ TaWP1VGUZVow==
+X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="196699378"
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="196699375"
+   d="scan'208";a="196699378"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:46 -0700
-IronPort-SDR: 6nLYEAddouy36fNcM0WDDZlcvPnFj1T2XiWHGrMlEJ6tIvvXlqCkSb67R4dFwjPSnMNQ17B8tF
- harbdUpW1VOQ==
+IronPort-SDR: ov/RI9T90yn2xY2JDcjo9CvtpS5GWNa/OTjC8CReQZbgUVFWBK+X00vy3jr592+HQqFke2GIA7
+ B02SBFf6ojFw==
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="457835072"
+   d="scan'208";a="457835074"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:46 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -53,9 +53,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v26 1/9] x86/cet/ibt: Add Kconfig option for Indirect Branch Tracking
-Date:   Tue, 27 Apr 2021 13:47:12 -0700
-Message-Id: <20210427204720.25007-2-yu-cheng.yu@intel.com>
+Subject: [PATCH v26 2/9] x86/cet/ibt: Add user-mode Indirect Branch Tracking support
+Date:   Tue, 27 Apr 2021 13:47:13 -0700
+Message-Id: <20210427204720.25007-3-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210427204720.25007-1-yu-cheng.yu@intel.com>
 References: <20210427204720.25007-1-yu-cheng.yu@intel.com>
@@ -65,78 +65,123 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Indirect Branch Tracking (IBT) provides protection against CALL-/JMP-
-oriented programming attacks.  It is active when the kernel has this
-feature enabled, and the processor and the application support it.
-When this feature is enabled, legacy non-IBT applications continue to
-work, but without IBT protection.
+Introduce user-mode Indirect Branch Tracking (IBT) support.  Add routines
+for the setup/disable of IBT.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc: Kees Cook <keescook@chromium.org>
 ---
-v25:
-- Make CONFIG_X86_IBT depend on CONFIG_X86_SHADOW_STACK.
+v24:
+- Move IBT routines to a separate ibt.c, update related areas accordingly.
 
- arch/x86/Kconfig                         | 19 +++++++++++++++++++
- arch/x86/include/asm/disabled-features.h |  8 +++++++-
- 2 files changed, 26 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/cet.h |  9 ++++++
+ arch/x86/kernel/Makefile   |  1 +
+ arch/x86/kernel/ibt.c      | 57 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 67 insertions(+)
+ create mode 100644 arch/x86/kernel/ibt.c
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 77d2e44995d7..6bb69fba0dad 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1965,6 +1965,25 @@ config X86_SHADOW_STACK
+diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+index 662335ceb57f..17afcc9ea4d1 100644
+--- a/arch/x86/include/asm/cet.h
++++ b/arch/x86/include/asm/cet.h
+@@ -15,6 +15,7 @@ struct cet_status {
+ 	unsigned long	shstk_base;
+ 	unsigned long	shstk_size;
+ 	unsigned int	locked:1;
++	unsigned int	ibt_enabled:1;
+ };
  
- 	  If unsure, say N.
- 
-+config X86_IBT
-+	prompt "Intel Indirect Branch Tracking"
-+	def_bool n
-+	depends on X86_SHADOW_STACK
-+	depends on $(cc-option,-fcf-protection)
-+	help
-+	  Indirect Branch Tracking (IBT) provides protection against
-+	  CALL-/JMP-oriented programming attacks.  It is active when
-+	  the kernel has this feature enabled, and the processor and
-+	  the application support it.  When this feature is enabled,
-+	  legacy non-IBT applications continue to work, but without
-+	  IBT protection.
-+	  Support for this feature is present on Tiger Lake family of
-+	  processors released in 2020 or later.  Enabling this feature
-+	  increases kernel text size by 3.7 KB.
-+	  See Documentation/x86/intel_cet.rst for more information.
-+
-+	  If unsure, say N.
-+
- config EFI
- 	bool "EFI runtime service support"
- 	depends on ACPI
-diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index e5c6ed9373e8..07cc40d49947 100644
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@ -74,6 +74,12 @@
- #define DISABLE_SHSTK	(1 << (X86_FEATURE_SHSTK & 31))
+ #ifdef CONFIG_X86_SHADOW_STACK
+@@ -41,6 +42,14 @@ static inline int shstk_check_rstor_token(bool ia32, unsigned long token_addr,
+ 					  unsigned long *new_ssp) { return 0; }
  #endif
  
 +#ifdef CONFIG_X86_IBT
-+#define DISABLE_IBT	0
++int ibt_setup(void);
++void ibt_disable(void);
 +#else
-+#define DISABLE_IBT	(1 << (X86_FEATURE_IBT & 31))
++static inline int ibt_setup(void) { return 0; }
++static inline void ibt_disable(void) {}
 +#endif
 +
- /*
-  * Make sure to add features to the correct mask
-  */
-@@ -96,7 +102,7 @@
- #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
- 			 DISABLE_ENQCMD|DISABLE_SHSTK)
- #define DISABLED_MASK17	0
--#define DISABLED_MASK18	0
-+#define DISABLED_MASK18	(DISABLE_IBT)
- #define DISABLED_MASK19	0
- #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 20)
+ #ifdef CONFIG_X86_SHADOW_STACK
+ int prctl_cet(int option, u64 arg2);
+ #else
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index eb13d578ad36..e10e007c1d80 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -151,6 +151,7 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
  
+ obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev-es.o
+ obj-$(CONFIG_X86_SHADOW_STACK)		+= shstk.o cet_prctl.o
++obj-$(CONFIG_X86_IBT)			+= ibt.o
+ 
+ ###
+ # 64 bit specific files
+diff --git a/arch/x86/kernel/ibt.c b/arch/x86/kernel/ibt.c
+new file mode 100644
+index 000000000000..d2cef1a0345b
+--- /dev/null
++++ b/arch/x86/kernel/ibt.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * ibt.c - Intel Indirect Branch Tracking support
++ *
++ * Copyright (c) 2021, Intel Corporation.
++ * Yu-cheng Yu <yu-cheng.yu@intel.com>
++ */
++
++#include <linux/user.h>
++#include <asm/msr.h>
++#include <asm/fpu/internal.h>
++#include <asm/fpu/xstate.h>
++#include <asm/fpu/types.h>
++#include <asm/cet.h>
++
++static void start_update_msrs(void)
++{
++	fpregs_lock();
++	if (test_thread_flag(TIF_NEED_FPU_LOAD))
++		__fpregs_load_activate();
++}
++
++static void end_update_msrs(void)
++{
++	fpregs_unlock();
++}
++
++int ibt_setup(void)
++{
++	u64 msr_val;
++
++	if (!cpu_feature_enabled(X86_FEATURE_IBT))
++		return -EOPNOTSUPP;
++
++	start_update_msrs();
++	rdmsrl(MSR_IA32_U_CET, msr_val);
++	msr_val |= (CET_ENDBR_EN | CET_NO_TRACK_EN);
++	wrmsrl(MSR_IA32_U_CET, msr_val);
++	end_update_msrs();
++	current->thread.cet.ibt_enabled = 1;
++	return 0;
++}
++
++void ibt_disable(void)
++{
++	u64 msr_val;
++
++	if (!cpu_feature_enabled(X86_FEATURE_IBT))
++		return;
++
++	start_update_msrs();
++	rdmsrl(MSR_IA32_U_CET, msr_val);
++	msr_val &= ~CET_ENDBR_EN;
++	wrmsrl(MSR_IA32_U_CET, msr_val);
++	end_update_msrs();
++	current->thread.cet.ibt_enabled = 0;
++}
 -- 
 2.21.0
 
