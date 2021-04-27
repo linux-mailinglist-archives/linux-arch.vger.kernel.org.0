@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7209B36CD04
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65E636CD0D
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239382AbhD0UrN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Apr 2021 16:47:13 -0400
-Received: from mga05.intel.com ([192.55.52.43]:31782 "EHLO mga05.intel.com"
+        id S239039AbhD0Usl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Apr 2021 16:48:41 -0400
+Received: from mga09.intel.com ([134.134.136.24]:56328 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239394AbhD0Uqg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Apr 2021 16:46:36 -0400
-IronPort-SDR: Pd2J7z9M3T0ne7v5OF+Gr0fM0qEhmmWEnOwHAoJladbkTJcQ6ZuQJnYOZTDS6fLSXSkXTAx7eT
- QIULjITpphAQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="281922506"
+        id S239117AbhD0Usc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Apr 2021 16:48:32 -0400
+IronPort-SDR: LmrFdP3Fbeerw+FIWnpgtCtq6Zb0/pwH8sQMYKkto7dz29ek4pkAQYM/x/+59XwNZnuGmMXJaP
+ PIywFv0A2O/A==
+X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="196699371"
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="281922506"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:44:26 -0700
-IronPort-SDR: xWB2H/oAI2gkiea5eIHtXHrJcmmmzHjfnM/w0JGR3fwufgi1UErfUQeXDwBL4TzugG+6o0qqyj
- zJ4vZYmADzSQ==
+   d="scan'208";a="196699371"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:46 -0700
+IronPort-SDR: 4wycrG0YscEnQRkoH+NLgzG1p2lzpH6RyGw5R6bcJ4HsGNJudeECn8n1PXiq6KVpH8qYpjjQGb
+ s6cju3hVWtAg==
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="465623580"
+   d="scan'208";a="457835067"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:44:25 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:45 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -52,163 +52,71 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v26 30/30] mm: Introduce PROT_SHADOW_STACK for shadow stack
-Date:   Tue, 27 Apr 2021 13:43:15 -0700
-Message-Id: <20210427204315.24153-31-yu-cheng.yu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v26 0/9] Control-flow Enforcement: Indirect Branch Tracking
+Date:   Tue, 27 Apr 2021 13:47:11 -0700
+Message-Id: <20210427204720.25007-1-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20210427204315.24153-1-yu-cheng.yu@intel.com>
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-There are three possible options to create a shadow stack allocation API:
-an arch_prctl, a new syscall, or adding PROT_SHADOW_STACK to mmap() and
-mprotect().  Each has its advantages and compromises.
+Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+return/jump-oriented programming attacks.  Details are in "Intel 64 and
+IA-32 Architectures Software Developer's Manual" [1].
 
-An arch_prctl() is the least intrusive.  However, the existing x86
-arch_prctl() takes only two parameters.  Multiple parameters must be
-passed in a memory buffer.  There is a proposal to pass more parameters in
-registers [1], but no active discussion on that.
+This is the second part of CET and enables Indirect Branch Tracking (IBT).
+It is built on top of the shadow stack series.
 
-A new syscall minimizes compatibility issues and offers an extensible frame
-work to other architectures, but this will likely result in some overlap of
-mmap()/mprotect().
+Changes in v26:
+- Rebase to Linus tree v5.12.
 
-The introduction of PROT_SHADOW_STACK to mmap()/mprotect() takes advantage
-of existing APIs.  The x86-specific PROT_SHADOW_STACK is translated to
-VM_SHADOW_STACK and a shadow stack mapping is created without reinventing
-the wheel.  There are potential pitfalls though.  The most obvious one
-would be using this as a bypass to shadow stack protection.  However, the
-attacker would have to get to the syscall first.
+Changes in v25:
+- Make updates to Kconfig and CPU feature flags for the removal of Kconfig
+  X86_CET and software-defined X86_FEATURE_CET.
+- Update ENDBR definition.
+- Rebase to Linus tree v5.12-rc7.
 
-[1] https://lore.kernel.org/lkml/20200828121624.108243-1-hjl.tools@gmail.com/
+[1] Intel 64 and IA-32 Architectures Software Developer's Manual:
 
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
-v26:
-- Change PROT_SHSTK to PROT_SHADOW_STACK.
-- Remove (vm_flags & VM_SHARED) check, since it is covered by
-  !vma_is_anonymous().
+    https://software.intel.com/en-us/download/intel-64-and-ia-32-
+    architectures-sdm-combined-volumes-1-2a-2b-2c-2d-3a-3b-3c-3d-and-4
 
-v24:
-- Update arch_calc_vm_prot_bits(), leave PROT* checking to
-  arch_validate_prot().
-- Update arch_validate_prot(), leave vma flags checking to
-  arch_validate_flags().
-- Add arch_validate_flags().
+[2] Indirect Branch Tracking patches v25:
 
- arch/x86/include/asm/mman.h      | 60 +++++++++++++++++++++++++++++++-
- arch/x86/include/uapi/asm/mman.h |  2 ++
- include/linux/mm.h               |  1 +
- 3 files changed, 62 insertions(+), 1 deletion(-)
+    https://lore.kernel.org/r/20210415221734.32628-1-yu-cheng.yu@intel.com/
 
-diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
-index 629f6c81263a..fbb90f1b02c0 100644
---- a/arch/x86/include/asm/mman.h
-+++ b/arch/x86/include/asm/mman.h
-@@ -20,11 +20,69 @@
- 		((vm_flags) & VM_PKEY_BIT2 ? _PAGE_PKEY_BIT2 : 0) |	\
- 		((vm_flags) & VM_PKEY_BIT3 ? _PAGE_PKEY_BIT3 : 0))
- 
--#define arch_calc_vm_prot_bits(prot, key) (		\
-+#define pkey_vm_prot_bits(prot, key) (			\
- 		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
- 		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
- 		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
- 		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
-+#else
-+#define pkey_vm_prot_bits(prot, key) (0)
- #endif
- 
-+static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
-+						   unsigned long pkey)
-+{
-+	unsigned long vm_prot_bits = pkey_vm_prot_bits(prot, pkey);
-+
-+	if (prot & PROT_SHADOW_STACK)
-+		vm_prot_bits |= VM_SHADOW_STACK;
-+
-+	return vm_prot_bits;
-+}
-+
-+#define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
-+
-+#ifdef CONFIG_X86_SHADOW_STACK
-+static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
-+{
-+	unsigned long valid = PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM |
-+			      PROT_SHADOW_STACK;
-+
-+	if (prot & ~valid)
-+		return false;
-+
-+	if (prot & PROT_SHADOW_STACK) {
-+		if (!current->thread.cet.shstk_size)
-+			return false;
-+
-+		/*
-+		 * A shadow stack mapping is indirectly writable by only
-+		 * the CALL and WRUSS instructions, but not other write
-+		 * instructions).  PROT_SHADOW_STACK and PROT_WRITE are
-+		 * mutually exclusive.
-+		 */
-+		if (prot & PROT_WRITE)
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
-+#define arch_validate_prot arch_validate_prot
-+
-+static inline bool arch_validate_flags(struct vm_area_struct *vma, unsigned long vm_flags)
-+{
-+	/*
-+	 * Shadow stack must be anonymous and not shared.
-+	 */
-+	if ((vm_flags & VM_SHADOW_STACK) && !vma_is_anonymous(vma))
-+		return false;
-+
-+	return true;
-+}
-+
-+#define arch_validate_flags(vma, vm_flags) arch_validate_flags(vma, vm_flags)
-+
-+#endif /* CONFIG_X86_SHADOW_STACK */
-+
- #endif /* _ASM_X86_MMAN_H */
-diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
-index f28fa4acaeaf..4c36b263cf0a 100644
---- a/arch/x86/include/uapi/asm/mman.h
-+++ b/arch/x86/include/uapi/asm/mman.h
-@@ -4,6 +4,8 @@
- 
- #define MAP_32BIT	0x40		/* only give out 32bit addresses */
- 
-+#define PROT_SHADOW_STACK	0x10	/* shadow stack pages */
-+
- #include <asm-generic/mman.h>
- 
- #endif /* _UAPI_ASM_X86_MMAN_H */
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 1ccec5cc399b..9a7652eea207 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -342,6 +342,7 @@ extern unsigned int kobjsize(const void *objp);
- 
- #if defined(CONFIG_X86)
- # define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
-+# define VM_ARCH_CLEAR	VM_SHADOW_STACK
- #elif defined(CONFIG_PPC)
- # define VM_SAO		VM_ARCH_1	/* Strong Access Ordering (powerpc) */
- #elif defined(CONFIG_PARISC)
+H.J. Lu (3):
+  x86/cet/ibt: Update arch_prctl functions for Indirect Branch Tracking
+  x86/vdso: Insert endbr32/endbr64 to vDSO
+  x86/vdso/32: Add ENDBR to __kernel_vsyscall entry point
+
+Yu-cheng Yu (6):
+  x86/cet/ibt: Add Kconfig option for Indirect Branch Tracking
+  x86/cet/ibt: Add user-mode Indirect Branch Tracking support
+  x86/cet/ibt: Handle signals for Indirect Branch Tracking
+  x86/cet/ibt: Update ELF header parsing for Indirect Branch Tracking
+  x86/vdso: Introduce ENDBR macro
+  x86/vdso: Add ENDBR to __vdso_sgx_enter_enclave
+
+ arch/x86/Kconfig                         | 21 +++++++++
+ arch/x86/entry/vdso/Makefile             |  4 ++
+ arch/x86/entry/vdso/vdso32/system_call.S |  2 +
+ arch/x86/entry/vdso/vsgx.S               |  4 ++
+ arch/x86/include/asm/cet.h               |  9 ++++
+ arch/x86/include/asm/disabled-features.h |  8 +++-
+ arch/x86/include/asm/vdso.h              | 20 ++++++++-
+ arch/x86/include/uapi/asm/sigcontext.h   |  1 +
+ arch/x86/kernel/Makefile                 |  1 +
+ arch/x86/kernel/cet_prctl.c              |  5 +++
+ arch/x86/kernel/fpu/signal.c             | 33 ++++++++++++--
+ arch/x86/kernel/ibt.c                    | 57 ++++++++++++++++++++++++
+ arch/x86/kernel/process_64.c             |  8 ++++
+ 13 files changed, 168 insertions(+), 5 deletions(-)
+ create mode 100644 arch/x86/kernel/ibt.c
+
 -- 
 2.21.0
 
