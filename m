@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EA336CD22
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2390036CD26
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239026AbhD0Us5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Apr 2021 16:48:57 -0400
-Received: from mga09.intel.com ([134.134.136.24]:56333 "EHLO mga09.intel.com"
+        id S239083AbhD0UtD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Apr 2021 16:49:03 -0400
+Received: from mga09.intel.com ([134.134.136.24]:56328 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239050AbhD0Usm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Apr 2021 16:48:42 -0400
-IronPort-SDR: fS5q1pddt9hFLoXEvuKYjzOzgDxBvYLkQVsZP8Q3FYAmcwMSpGFTzvcM/njqeGCckidwUqViBD
- cOOpisLRmJPA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="196699391"
+        id S238822AbhD0Usy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Apr 2021 16:48:54 -0400
+IronPort-SDR: bsNBoN7tvKplVHW0qolX4Y7t0C/9eAqA/nYPDlO9FDcZTXSqXk9aL2CRop6Uneu/bbcpRjqwda
+ jhqYfeXCsbFw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="196699393"
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="196699391"
+   d="scan'208";a="196699393"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:47 -0700
-IronPort-SDR: ZJLrSBbSRJuTYagjrCFfM3ti+f2Obbsudc8GHCim9z3MOQzNlG42ypfvQuFU7lXF7/I5kIRL7P
- tcKg4RVl/h1Q==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:48 -0700
+IronPort-SDR: YZTpyRz72PGCwgLwYeiqOXflRhnFSy5K/ZvH7jx+osAG/5rZX2MaO78gXUKYCIkkgLkIWRWtk1
+ VU4pI0QeRxMA==
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="457835088"
+   d="scan'208";a="457835092"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:47 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -53,9 +53,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v26 5/9] x86/cet/ibt: Update arch_prctl functions for Indirect Branch Tracking
-Date:   Tue, 27 Apr 2021 13:47:16 -0700
-Message-Id: <20210427204720.25007-6-yu-cheng.yu@intel.com>
+Subject: [PATCH v26 6/9] x86/vdso: Insert endbr32/endbr64 to vDSO
+Date:   Tue, 27 Apr 2021 13:47:17 -0700
+Message-Id: <20210427204720.25007-7-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210427204720.25007-1-yu-cheng.yu@intel.com>
 References: <20210427204720.25007-1-yu-cheng.yu@intel.com>
@@ -67,42 +67,38 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: "H.J. Lu" <hjl.tools@gmail.com>
 
-Update ARCH_X86_CET_STATUS and ARCH_X86_CET_DISABLE for Indirect Branch
-Tracking.
+When Indirect Branch Tracking (IBT) is enabled, vDSO functions may be
+called indirectly, and must have ENDBR32 or ENDBR64 as the first
+instruction.  The compiler must support -fcf-protection=branch so that it
+can be used to compile vDSO.
 
 Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
 ---
 v24:
-- Update for function name changes introduced from splitting shadow stack and ibt.
+- Replace CONFIG_X86_CET with CONFIG_X86_IBT to reflect splitting of shadow
+  stack and ibt.
 
- arch/x86/kernel/cet_prctl.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/x86/entry/vdso/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/kernel/cet_prctl.c b/arch/x86/kernel/cet_prctl.c
-index 3bb9f32ca70d..ab05597545c5 100644
---- a/arch/x86/kernel/cet_prctl.c
-+++ b/arch/x86/kernel/cet_prctl.c
-@@ -22,6 +22,9 @@ static int cet_copy_status_to_user(struct cet_status *cet, u64 __user *ubuf)
- 		buf[2] = cet->shstk_size;
- 	}
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 05c4abc2fdfd..a773a5f03b63 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -93,6 +93,10 @@ endif
  
-+	if (cet->ibt_enabled)
-+		buf[0] |= GNU_PROPERTY_X86_FEATURE_1_IBT;
+ $(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+ 
++ifdef CONFIG_X86_IBT
++$(vobjs) $(vobjs32): KBUILD_CFLAGS += -fcf-protection=branch
++endif
 +
- 	return copy_to_user(ubuf, buf, sizeof(buf));
- }
- 
-@@ -46,6 +49,8 @@ int prctl_cet(int option, u64 arg2)
- 			return -EINVAL;
- 		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
- 			shstk_disable();
-+		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_IBT)
-+			ibt_disable();
- 		return 0;
- 
- 	case ARCH_X86_CET_LOCK:
+ #
+ # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
+ #
 -- 
 2.21.0
 
