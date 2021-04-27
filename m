@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF04A36CD00
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7209B36CD04
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239087AbhD0UrK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Apr 2021 16:47:10 -0400
-Received: from mga05.intel.com ([192.55.52.43]:31798 "EHLO mga05.intel.com"
+        id S239382AbhD0UrN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Apr 2021 16:47:13 -0400
+Received: from mga05.intel.com ([192.55.52.43]:31782 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239044AbhD0Uqc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Apr 2021 16:46:32 -0400
-IronPort-SDR: ZL2eABa1zh3dlqU/92qMT0yVznQh+2+5h9GZ1LPD8kLcwiWQenzWPJY/KAERdrhD5mWIMV1Wpg
- 8IQUiRMvSFdA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="281922505"
+        id S239394AbhD0Uqg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Apr 2021 16:46:36 -0400
+IronPort-SDR: Pd2J7z9M3T0ne7v5OF+Gr0fM0qEhmmWEnOwHAoJladbkTJcQ6ZuQJnYOZTDS6fLSXSkXTAx7eT
+ QIULjITpphAQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="281922506"
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="281922505"
+   d="scan'208";a="281922506"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:44:25 -0700
-IronPort-SDR: xtJHpIS9Akgk3yrr6I4AH9oYnMCacZLvBt3pMls0JqIaGOZgvywvKXp62L6pyHD+s4IAixmFBu
- 6gDaLjPlgRdQ==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:44:26 -0700
+IronPort-SDR: xWB2H/oAI2gkiea5eIHtXHrJcmmmzHjfnM/w0JGR3fwufgi1UErfUQeXDwBL4TzugG+6o0qqyj
+ zJ4vZYmADzSQ==
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="465623573"
+   d="scan'208";a="465623580"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:44:25 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -53,13 +53,10 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH v26 29/30] mm: Update arch_validate_flags() to test vma anonymous
-Date:   Tue, 27 Apr 2021 13:43:14 -0700
-Message-Id: <20210427204315.24153-30-yu-cheng.yu@intel.com>
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH v26 30/30] mm: Introduce PROT_SHADOW_STACK for shadow stack
+Date:   Tue, 27 Apr 2021 13:43:15 -0700
+Message-Id: <20210427204315.24153-31-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210427204315.24153-1-yu-cheng.yu@intel.com>
 References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
@@ -69,117 +66,149 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When newer VM flags are being created, such as VM_MTE, it becomes necessary
-for mmap/mprotect to verify if certain flags are being applied to an
-anonymous VMA.
+There are three possible options to create a shadow stack allocation API:
+an arch_prctl, a new syscall, or adding PROT_SHADOW_STACK to mmap() and
+mprotect().  Each has its advantages and compromises.
 
-To solve this, one approach is adding a VM flag to track that MAP_ANONYMOUS
-is specified [1], and then using the flag in arch_validate_flags().
+An arch_prctl() is the least intrusive.  However, the existing x86
+arch_prctl() takes only two parameters.  Multiple parameters must be
+passed in a memory buffer.  There is a proposal to pass more parameters in
+registers [1], but no active discussion on that.
 
-Another approach is passing the VMA to arch_validate_flags(), and check
-vma_is_anonymous().
+A new syscall minimizes compatibility issues and offers an extensible frame
+work to other architectures, but this will likely result in some overlap of
+mmap()/mprotect().
 
-To prepare the introduction of PROT_SHADOW_STACK, which creates a shadow
-stack mapping and can be applied only to an anonymous VMA, update
-arch_validate_flags() to pass in the VMA.
+The introduction of PROT_SHADOW_STACK to mmap()/mprotect() takes advantage
+of existing APIs.  The x86-specific PROT_SHADOW_STACK is translated to
+VM_SHADOW_STACK and a shadow stack mapping is created without reinventing
+the wheel.  There are potential pitfalls though.  The most obvious one
+would be using this as a bypass to shadow stack protection.  However, the
+attacker would have to get to the syscall first.
 
-[1] commit 9f3419315f3c ("arm64: mte: Add PROT_MTE support to mmap() and mprotect()"),
+[1] https://lore.kernel.org/lkml/20200828121624.108243-1-hjl.tools@gmail.com/
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Kees Cook <keescook@chromium.org>
 Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: Will Deacon <will@kernel.org>
 ---
 v26:
-- Instead of passing vma is anonymous, pass the VMA to arch_validate_flags().
+- Change PROT_SHSTK to PROT_SHADOW_STACK.
+- Remove (vm_flags & VM_SHARED) check, since it is covered by
+  !vma_is_anonymous().
 
- arch/arm64/include/asm/mman.h | 4 ++--
- arch/sparc/include/asm/mman.h | 4 ++--
- include/linux/mman.h          | 2 +-
- mm/mmap.c                     | 2 +-
- mm/mprotect.c                 | 2 +-
- 5 files changed, 7 insertions(+), 7 deletions(-)
+v24:
+- Update arch_calc_vm_prot_bits(), leave PROT* checking to
+  arch_validate_prot().
+- Update arch_validate_prot(), leave vma flags checking to
+  arch_validate_flags().
+- Add arch_validate_flags().
 
-diff --git a/arch/arm64/include/asm/mman.h b/arch/arm64/include/asm/mman.h
-index e3e28f7daf62..7c45e7578f78 100644
---- a/arch/arm64/include/asm/mman.h
-+++ b/arch/arm64/include/asm/mman.h
-@@ -74,7 +74,7 @@ static inline bool arch_validate_prot(unsigned long prot,
- }
- #define arch_validate_prot(prot, addr) arch_validate_prot(prot, addr)
+ arch/x86/include/asm/mman.h      | 60 +++++++++++++++++++++++++++++++-
+ arch/x86/include/uapi/asm/mman.h |  2 ++
+ include/linux/mm.h               |  1 +
+ 3 files changed, 62 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
+index 629f6c81263a..fbb90f1b02c0 100644
+--- a/arch/x86/include/asm/mman.h
++++ b/arch/x86/include/asm/mman.h
+@@ -20,11 +20,69 @@
+ 		((vm_flags) & VM_PKEY_BIT2 ? _PAGE_PKEY_BIT2 : 0) |	\
+ 		((vm_flags) & VM_PKEY_BIT3 ? _PAGE_PKEY_BIT3 : 0))
  
--static inline bool arch_validate_flags(unsigned long vm_flags)
+-#define arch_calc_vm_prot_bits(prot, key) (		\
++#define pkey_vm_prot_bits(prot, key) (			\
+ 		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
+ 		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
+ 		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
+ 		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
++#else
++#define pkey_vm_prot_bits(prot, key) (0)
+ #endif
+ 
++static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
++						   unsigned long pkey)
++{
++	unsigned long vm_prot_bits = pkey_vm_prot_bits(prot, pkey);
++
++	if (prot & PROT_SHADOW_STACK)
++		vm_prot_bits |= VM_SHADOW_STACK;
++
++	return vm_prot_bits;
++}
++
++#define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
++
++#ifdef CONFIG_X86_SHADOW_STACK
++static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
++{
++	unsigned long valid = PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM |
++			      PROT_SHADOW_STACK;
++
++	if (prot & ~valid)
++		return false;
++
++	if (prot & PROT_SHADOW_STACK) {
++		if (!current->thread.cet.shstk_size)
++			return false;
++
++		/*
++		 * A shadow stack mapping is indirectly writable by only
++		 * the CALL and WRUSS instructions, but not other write
++		 * instructions).  PROT_SHADOW_STACK and PROT_WRITE are
++		 * mutually exclusive.
++		 */
++		if (prot & PROT_WRITE)
++			return false;
++	}
++
++	return true;
++}
++
++#define arch_validate_prot arch_validate_prot
++
 +static inline bool arch_validate_flags(struct vm_area_struct *vma, unsigned long vm_flags)
- {
- 	if (!system_supports_mte())
- 		return true;
-@@ -82,6 +82,6 @@ static inline bool arch_validate_flags(unsigned long vm_flags)
- 	/* only allow VM_MTE if VM_MTE_ALLOWED has been set previously */
- 	return !(vm_flags & VM_MTE) || (vm_flags & VM_MTE_ALLOWED);
- }
--#define arch_validate_flags(vm_flags) arch_validate_flags(vm_flags)
++{
++	/*
++	 * Shadow stack must be anonymous and not shared.
++	 */
++	if ((vm_flags & VM_SHADOW_STACK) && !vma_is_anonymous(vma))
++		return false;
++
++	return true;
++}
++
 +#define arch_validate_flags(vma, vm_flags) arch_validate_flags(vma, vm_flags)
++
++#endif /* CONFIG_X86_SHADOW_STACK */
++
+ #endif /* _ASM_X86_MMAN_H */
+diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
+index f28fa4acaeaf..4c36b263cf0a 100644
+--- a/arch/x86/include/uapi/asm/mman.h
++++ b/arch/x86/include/uapi/asm/mman.h
+@@ -4,6 +4,8 @@
  
- #endif /* ! __ASM_MMAN_H__ */
-diff --git a/arch/sparc/include/asm/mman.h b/arch/sparc/include/asm/mman.h
-index 274217e7ed70..0ec4975f167d 100644
---- a/arch/sparc/include/asm/mman.h
-+++ b/arch/sparc/include/asm/mman.h
-@@ -60,11 +60,11 @@ static inline int sparc_validate_prot(unsigned long prot, unsigned long addr)
- 	return 1;
- }
+ #define MAP_32BIT	0x40		/* only give out 32bit addresses */
  
--#define arch_validate_flags(vm_flags) arch_validate_flags(vm_flags)
-+#define arch_validate_flags(vma, vm_flags) arch_validate_flags(vma, vm_flags)
- /* arch_validate_flags() - Ensure combination of flags is valid for a
-  *	VMA.
-  */
--static inline bool arch_validate_flags(unsigned long vm_flags)
-+static inline bool arch_validate_flags(struct vm_area_struct *vma, unsigned long vm_flags)
- {
- 	/* If ADI is being enabled on this VMA, check for ADI
- 	 * capability on the platform and ensure VMA is suitable
-diff --git a/include/linux/mman.h b/include/linux/mman.h
-index 629cefc4ecba..41d6fbf4e7d9 100644
---- a/include/linux/mman.h
-+++ b/include/linux/mman.h
-@@ -114,7 +114,7 @@ static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
-  *
-  * Returns true if the VM_* flags are valid.
-  */
--static inline bool arch_validate_flags(unsigned long flags)
-+static inline bool arch_validate_flags(struct vm_area_struct *vma, unsigned long flags)
- {
- 	return true;
- }
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 7b2992ef8ee0..b6a2b44b75dc 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1850,7 +1850,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 	}
++#define PROT_SHADOW_STACK	0x10	/* shadow stack pages */
++
+ #include <asm-generic/mman.h>
  
- 	/* Allow architectures to sanity-check the vm_flags */
--	if (!arch_validate_flags(vma->vm_flags)) {
-+	if (!arch_validate_flags(vma, vma->vm_flags)) {
- 		error = -EINVAL;
- 		if (file)
- 			goto unmap_and_free_vma;
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 3b2f0d75519f..7aef1e1af11a 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -611,7 +611,7 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
- 		}
+ #endif /* _UAPI_ASM_X86_MMAN_H */
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 1ccec5cc399b..9a7652eea207 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -342,6 +342,7 @@ extern unsigned int kobjsize(const void *objp);
  
- 		/* Allow architectures to sanity-check the new flags */
--		if (!arch_validate_flags(newflags)) {
-+		if (!arch_validate_flags(vma, newflags)) {
- 			error = -EINVAL;
- 			goto out;
- 		}
+ #if defined(CONFIG_X86)
+ # define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
++# define VM_ARCH_CLEAR	VM_SHADOW_STACK
+ #elif defined(CONFIG_PPC)
+ # define VM_SAO		VM_ARCH_1	/* Strong Access Ordering (powerpc) */
+ #elif defined(CONFIG_PARISC)
 -- 
 2.21.0
 
