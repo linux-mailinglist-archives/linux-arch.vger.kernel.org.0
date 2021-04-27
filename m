@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB7C36CCEC
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAD536CCE6
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239363AbhD0Uq2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Apr 2021 16:46:28 -0400
-Received: from mga05.intel.com ([192.55.52.43]:31780 "EHLO mga05.intel.com"
+        id S239033AbhD0UqY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Apr 2021 16:46:24 -0400
+Received: from mga05.intel.com ([192.55.52.43]:31779 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239183AbhD0UqT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Apr 2021 16:46:19 -0400
-IronPort-SDR: NBeY9gqQIDRS6JTJsY0HSbmj1qprTpdgXPao9j6tJ1DJ6WP3Z87Khmz6X5iF3NGUE9AjTDcqHY
- ITH6SDt1J+DA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="281922493"
+        id S239179AbhD0UqU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Apr 2021 16:46:20 -0400
+IronPort-SDR: 4ON2Yo8w83/Xbq7LML85lH06lK9GS3UeAyupEVP+oAsxemNLxJ+vDgOSnQ5hA80kOI/BC3ZIWp
+ jGPsXC660Svg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="281922496"
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="281922493"
+   d="scan'208";a="281922496"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:44:22 -0700
-IronPort-SDR: 75VLjNgq4HBl3JHUeKIoj71GJcm5Gbcd3TtQYTMTQH/p9nAv02K9RPUsZm2A3RWacsigMkHh5P
- jeDPO8y3iV0g==
+IronPort-SDR: qTt0V0V7d3JR1JYWKWQfR06T/CyMY+mWsWEwYivGU0EXnElIqhBL5NlcCZ9//aCZgjfJrtNRLU
+ nvYZ6siDBSGQ==
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="465623548"
+   d="scan'208";a="465623551"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:44:21 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:44:22 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -53,9 +53,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v26 23/30] x86/cet/shstk: Handle thread shadow stack
-Date:   Tue, 27 Apr 2021 13:43:08 -0700
-Message-Id: <20210427204315.24153-24-yu-cheng.yu@intel.com>
+Subject: [PATCH v26 24/30] x86/cet/shstk: Introduce shadow stack token setup/verify routines
+Date:   Tue, 27 Apr 2021 13:43:09 -0700
+Message-Id: <20210427204315.24153-25-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210427204315.24153-1-yu-cheng.yu@intel.com>
 References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
@@ -65,193 +65,244 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-For clone() with CLONE_VM specified, the child and the parent must have
-separate shadow stacks.  Thus, the kernel allocates, and frees on thread
-exit a new shadow stack for the child.
+A shadow stack restore token marks a restore point of the shadow stack, and
+the address in a token must point directly above the token, which is within
+the same shadow stack.  This is distinctively different from other pointers
+on the shadow stack, since those pointers point to executable code area.
 
-Use stack_size passed from clone3() syscall for thread shadow stack size,
-but cap it to min(RLIMIT_STACK, 4 GB).  A compat-mode thread shadow stack
-size is further reduced to 1/4.  This allows more threads to run in a 32-
-bit address space.
+The restore token can be used as an extra protection for signal handling.
+To deliver a signal, create a shadow stack restore token and put the token
+and the signal restorer address on the shadow stack.  In sigreturn, verify
+the token and restore from it the shadow stack pointer.
+
+Introduce token setup and verify routines.  Also introduce WRUSS, which is
+a kernel-mode instruction but writes directly to user shadow stack.  It is
+used to construct user signal stack as described above.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/cet.h         |  5 +++
- arch/x86/include/asm/mmu_context.h |  3 ++
- arch/x86/kernel/process.c          | 15 ++++++--
- arch/x86/kernel/shstk.c            | 57 +++++++++++++++++++++++++++++-
- 4 files changed, 76 insertions(+), 4 deletions(-)
+v25:
+- Update inline assembly syntax, use %[].
+- Change token address from (unsigned long) to (u64/u32 __user *).
+- Change -EPERM to -EFAULT.
+
+ arch/x86/include/asm/cet.h           |   9 ++
+ arch/x86/include/asm/special_insns.h |  32 +++++++
+ arch/x86/kernel/shstk.c              | 126 +++++++++++++++++++++++++++
+ 3 files changed, 167 insertions(+)
 
 diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-index aa85d599b184..8b83ded577cc 100644
+index 8b83ded577cc..ef6155213b7e 100644
 --- a/arch/x86/include/asm/cet.h
 +++ b/arch/x86/include/asm/cet.h
-@@ -16,10 +16,15 @@ struct cet_status {
- 
- #ifdef CONFIG_X86_SHADOW_STACK
- int shstk_setup(void);
-+int shstk_setup_thread(struct task_struct *p, unsigned long clone_flags,
-+		       unsigned long stack_size);
+@@ -20,6 +20,10 @@ int shstk_setup_thread(struct task_struct *p, unsigned long clone_flags,
+ 		       unsigned long stack_size);
  void shstk_free(struct task_struct *p);
  void shstk_disable(void);
++int shstk_setup_rstor_token(bool ia32, unsigned long rstor,
++			    unsigned long *token_addr, unsigned long *new_ssp);
++int shstk_check_rstor_token(bool ia32, unsigned long token_addr,
++			    unsigned long *new_ssp);
  #else
  static inline int shstk_setup(void) { return 0; }
-+static inline int shstk_setup_thread(struct task_struct *p,
-+				     unsigned long clone_flags,
-+				     unsigned long stack_size) { return 0; }
+ static inline int shstk_setup_thread(struct task_struct *p,
+@@ -27,6 +31,11 @@ static inline int shstk_setup_thread(struct task_struct *p,
+ 				     unsigned long stack_size) { return 0; }
  static inline void shstk_free(struct task_struct *p) {}
  static inline void shstk_disable(void) {}
++static inline int shstk_setup_rstor_token(bool ia32, unsigned long rstor,
++					  unsigned long *token_addr,
++					  unsigned long *new_ssp) { return 0; }
++static inline int shstk_check_rstor_token(bool ia32, unsigned long token_addr,
++					  unsigned long *new_ssp) { return 0; }
  #endif
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 27516046117a..53569114aa01 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -11,6 +11,7 @@
  
- #include <asm/tlbflush.h>
- #include <asm/paravirt.h>
-+#include <asm/cet.h>
- #include <asm/debugreg.h>
- 
- extern atomic64_t last_mm_ctx_id;
-@@ -146,6 +147,8 @@ do {						\
- #else
- #define deactivate_mm(tsk, mm)			\
- do {						\
-+	if (!tsk->vfork_done)			\
-+		shstk_free(tsk);		\
- 	load_gs_index(0);			\
- 	loadsegment(fs, 0);			\
- } while (0)
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 9c214d7085a4..fa01e8679d01 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -43,6 +43,7 @@
- #include <asm/io_bitmap.h>
- #include <asm/proto.h>
- #include <asm/frame.h>
-+#include <asm/cet.h>
- 
- #include "process.h"
- 
-@@ -109,6 +110,7 @@ void exit_thread(struct task_struct *tsk)
- 
- 	free_vm86(t);
- 
-+	shstk_free(tsk);
- 	fpu__drop(fpu);
+ #endif /* __ASSEMBLY__ */
+diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+index 1d3cbaef4bb7..5a0488923cae 100644
+--- a/arch/x86/include/asm/special_insns.h
++++ b/arch/x86/include/asm/special_insns.h
+@@ -234,6 +234,38 @@ static inline void clwb(volatile void *__p)
+ 		: [pax] "a" (p));
  }
  
-@@ -122,8 +124,9 @@ static int set_new_tls(struct task_struct *p, unsigned long tls)
- 		return do_set_thread_area_64(p, ARCH_SET_FS, tls);
- }
- 
--int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
--		struct task_struct *p, unsigned long tls)
-+int copy_thread(unsigned long clone_flags, unsigned long sp,
-+		unsigned long stack_size, struct task_struct *p,
-+		unsigned long tls)
- {
- 	struct inactive_task_frame *frame;
- 	struct fork_frame *fork_frame;
-@@ -163,7 +166,7 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
- 	/* Kernel thread ? */
- 	if (unlikely(p->flags & (PF_KTHREAD | PF_IO_WORKER))) {
- 		memset(childregs, 0, sizeof(struct pt_regs));
--		kthread_frame_init(frame, sp, arg);
-+		kthread_frame_init(frame, sp, stack_size);
- 		return 0;
- 	}
- 
-@@ -181,6 +184,12 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
- 	if (clone_flags & CLONE_SETTLS)
- 		ret = set_new_tls(p, tls);
- 
-+#ifdef CONFIG_X86_64
-+	/* Allocate a new shadow stack for pthread */
-+	if (!ret)
-+		ret = shstk_setup_thread(p, clone_flags, stack_size);
++#ifdef CONFIG_X86_SHADOW_STACK
++#if defined(CONFIG_IA32_EMULATION) || defined(CONFIG_X86_X32)
++static inline int write_user_shstk_32(u32 __user *addr, u32 val)
++{
++	asm_volatile_goto("1: wrussd %[val], (%[addr])\n"
++			  _ASM_EXTABLE(1b, %l[fail])
++			  :: [addr] "r" (addr), [val] "r" (val)
++			  :: fail);
++	return 0;
++fail:
++	return -EFAULT;
++}
++#else
++static inline int write_user_shstk_32(u32 __user *addr, u32 val)
++{
++	WARN_ONCE(1, "%s used but not supported.\n", __func__);
++	return -EFAULT;
++}
 +#endif
 +
- 	if (!ret && unlikely(test_tsk_thread_flag(current, TIF_IO_BITMAP)))
- 		io_bitmap_share(p);
++static inline int write_user_shstk_64(u64 __user *addr, u64 val)
++{
++	asm_volatile_goto("1: wrussq %[val], (%[addr])\n"
++			  _ASM_EXTABLE(1b, %l[fail])
++			  :: [addr] "r" (addr), [val] "r" (val)
++			  :: fail);
++	return 0;
++fail:
++	return -EFAULT;
++}
++#endif /* CONFIG_X86_SHADOW_STACK */
++
+ #define nop() asm volatile ("nop")
  
+ static inline void serialize(void)
 diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index c815c7507830..d387df84b7f1 100644
+index d387df84b7f1..48a0c87414ef 100644
 --- a/arch/x86/kernel/shstk.c
 +++ b/arch/x86/kernel/shstk.c
-@@ -70,6 +70,55 @@ int shstk_setup(void)
- 	return 0;
- }
+@@ -20,6 +20,7 @@
+ #include <asm/fpu/xstate.h>
+ #include <asm/fpu/types.h>
+ #include <asm/cet.h>
++#include <asm/special_insns.h>
  
-+int shstk_setup_thread(struct task_struct *tsk, unsigned long clone_flags,
-+		       unsigned long stack_size)
+ static void start_update_msrs(void)
+ {
+@@ -176,3 +177,128 @@ void shstk_disable(void)
+ 
+ 	shstk_free(current);
+ }
++
++static unsigned long _get_user_shstk_addr(void)
 +{
-+	unsigned long addr, size;
-+	struct cet_user_state *state;
-+	struct cet_status *cet = &tsk->thread.cet;
++	struct fpu *fpu = &current->thread.fpu;
++	unsigned long ssp = 0;
 +
-+	if (!cet->shstk_size)
-+		return 0;
++	fpregs_lock();
 +
-+	if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
-+		return 0;
++	if (fpregs_state_valid(fpu, smp_processor_id())) {
++		rdmsrl(MSR_IA32_PL3_SSP, ssp);
++	} else {
++		struct cet_user_state *p;
 +
-+	state = get_xsave_addr(&tsk->thread.fpu.state.xsave,
-+			       XFEATURE_CET_USER);
-+
-+	if (!state)
-+		return -EINVAL;
-+
-+	if (stack_size == 0)
-+		return -EINVAL;
-+
-+	/* Cap shadow stack size to 4 GB */
-+	size = min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G);
-+	size = min(size, stack_size);
-+
-+	/*
-+	 * Compat-mode pthreads share a limited address space.
-+	 * If each function call takes an average of four slots
-+	 * stack space, allocate 1/4 of stack size for shadow stack.
-+	 */
-+	if (in_compat_syscall())
-+		size /= 4;
-+	size = round_up(size, PAGE_SIZE);
-+	addr = alloc_shstk(size);
-+
-+	if (IS_ERR_VALUE(addr)) {
-+		cet->shstk_base = 0;
-+		cet->shstk_size = 0;
-+		return PTR_ERR((void *)addr);
++		p = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
++		if (p)
++			ssp = p->user_ssp;
 +	}
 +
-+	fpu__prepare_write(&tsk->thread.fpu);
-+	state->user_ssp = (u64)(addr + size);
-+	cet->shstk_base = addr;
-+	cet->shstk_size = size;
++	fpregs_unlock();
++	return ssp;
++}
++
++#define TOKEN_MODE_MASK	3UL
++#define TOKEN_MODE_64	1UL
++#define IS_TOKEN_64(token) (((token) & TOKEN_MODE_MASK) == TOKEN_MODE_64)
++#define IS_TOKEN_32(token) (((token) & TOKEN_MODE_MASK) == 0)
++
++/*
++ * Create a restore token on the shadow stack.  A token is always 8-byte
++ * and aligned to 8.
++ */
++static int _create_rstor_token(bool ia32, unsigned long ssp,
++			       unsigned long *token_addr)
++{
++	unsigned long addr;
++
++	*token_addr = 0;
++
++	if ((!ia32 && !IS_ALIGNED(ssp, 8)) || !IS_ALIGNED(ssp, 4))
++		return -EINVAL;
++
++	addr = ALIGN_DOWN(ssp, 8) - 8;
++
++	/* Is the token for 64-bit? */
++	if (!ia32)
++		ssp |= TOKEN_MODE_64;
++
++	if (write_user_shstk_64((u64 __user *)addr, (u64)ssp))
++		return -EFAULT;
++
++	*token_addr = addr;
 +	return 0;
 +}
 +
- void shstk_free(struct task_struct *tsk)
- {
- 	struct cet_status *cet = &tsk->thread.cet;
-@@ -79,7 +128,13 @@ void shstk_free(struct task_struct *tsk)
- 	    !cet->shstk_base)
- 		return;
- 
--	if (!tsk->mm)
++/*
++ * Create a restore token on shadow stack, and then push the user-mode
++ * function return address.
++ */
++int shstk_setup_rstor_token(bool ia32, unsigned long ret_addr,
++			    unsigned long *token_addr, unsigned long *new_ssp)
++{
++	struct cet_status *cet = &current->thread.cet;
++	unsigned long ssp = 0;
++	int err = 0;
++
++	if (cet->shstk_size) {
++		if (!ret_addr)
++			return -EINVAL;
++
++		ssp = _get_user_shstk_addr();
++		err = _create_rstor_token(ia32, ssp, token_addr);
++		if (err)
++			return err;
++
++		if (ia32) {
++			*new_ssp = *token_addr - sizeof(u32);
++			err = write_user_shstk_32((u32 __user *)*new_ssp, (u32)ret_addr);
++		} else {
++			*new_ssp = *token_addr - sizeof(u64);
++			err = write_user_shstk_64((u64 __user *)*new_ssp, (u64)ret_addr);
++		}
++	}
++
++	return err;
++}
++
++/*
++ * Verify token_addr point to a valid token, and then set *new_ssp
++ * according to the token.
++ */
++int shstk_check_rstor_token(bool ia32, unsigned long token_addr, unsigned long *new_ssp)
++{
++	unsigned long token;
++
++	*new_ssp = 0;
++
++	if (!IS_ALIGNED(token_addr, 8))
++		return -EINVAL;
++
++	if (get_user(token, (unsigned long __user *)token_addr))
++		return -EFAULT;
++
++	/* Is 64-bit mode flag correct? */
++	if (!ia32 && !IS_TOKEN_64(token))
++		return -EINVAL;
++	else if (ia32 && !IS_TOKEN_32(token))
++		return -EINVAL;
++
++	token &= ~TOKEN_MODE_MASK;
++
 +	/*
-+	 * When fork() with CLONE_VM fails, the child (tsk) already has a
-+	 * shadow stack allocated, and exit_thread() calls this function to
-+	 * free it.  In this case the parent (current) and the child is
-+	 * sharing the same mm struct.
++	 * Restore address properly aligned?
 +	 */
-+	if (!tsk->mm || tsk->mm != current->mm)
- 		return;
- 
- 	while (1) {
++	if ((!ia32 && !IS_ALIGNED(token, 8)) || !IS_ALIGNED(token, 4))
++		return -EINVAL;
++
++	/*
++	 * Token was placed properly?
++	 */
++	if (((ALIGN_DOWN(token, 8) - 8) != token_addr) || token >= TASK_SIZE_MAX)
++		return -EINVAL;
++
++	*new_ssp = token;
++	return 0;
++}
 -- 
 2.21.0
 
