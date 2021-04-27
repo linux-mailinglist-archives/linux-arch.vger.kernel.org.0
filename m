@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A2236CD14
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235B636CD1C
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Apr 2021 22:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239076AbhD0Usn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Apr 2021 16:48:43 -0400
-Received: from mga09.intel.com ([134.134.136.24]:56333 "EHLO mga09.intel.com"
+        id S239125AbhD0Usz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Apr 2021 16:48:55 -0400
+Received: from mga09.intel.com ([134.134.136.24]:56332 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239125AbhD0Usd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Apr 2021 16:48:33 -0400
-IronPort-SDR: cWb7nv/vGQiguLqKCd4TWQcDLKCPOgYDltL8XyqzxEzUpKUizdwS1pSVzPXbmrue8gZ6xvsMh6
- TaWP1VGUZVow==
-X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="196699378"
+        id S239013AbhD0Usl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Apr 2021 16:48:41 -0400
+IronPort-SDR: fBItFukVcEKD9I8ZdPwgUdN+pnu1PrfHG+KBL3jDHkuy6Mu55igekX7oTvjTNNWZDz5/Oj/Pf1
+ qiXoCvEbjzpQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="196699384"
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="196699378"
+   d="scan'208";a="196699384"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:46 -0700
-IronPort-SDR: ov/RI9T90yn2xY2JDcjo9CvtpS5GWNa/OTjC8CReQZbgUVFWBK+X00vy3jr592+HQqFke2GIA7
- B02SBFf6ojFw==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:47 -0700
+IronPort-SDR: Pi3OT6Wwcbcgmmd81vUv5l2zvvxYQF2IfewtRkuAF146pjmP5XMNTNqEOeFqhhQKkeCJjgVbJq
+ RkrO4oi+v2Lw==
 X-IronPort-AV: E=Sophos;i="5.82,255,1613462400"; 
-   d="scan'208";a="457835074"
+   d="scan'208";a="457835078"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 13:47:46 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -53,9 +53,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v26 2/9] x86/cet/ibt: Add user-mode Indirect Branch Tracking support
-Date:   Tue, 27 Apr 2021 13:47:13 -0700
-Message-Id: <20210427204720.25007-3-yu-cheng.yu@intel.com>
+Subject: [PATCH v26 3/9] x86/cet/ibt: Handle signals for Indirect Branch Tracking
+Date:   Tue, 27 Apr 2021 13:47:14 -0700
+Message-Id: <20210427204720.25007-4-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210427204720.25007-1-yu-cheng.yu@intel.com>
 References: <20210427204720.25007-1-yu-cheng.yu@intel.com>
@@ -65,123 +65,115 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce user-mode Indirect Branch Tracking (IBT) support.  Add routines
-for the setup/disable of IBT.
+When an indirect CALL/JMP instruction is executed and before it reaches
+the target, it is in 'WAIT_ENDBR' status, which can be read from
+MSR_IA32_U_CET.  The status is part of a task's status before a signal is
+raised and preserved in the signal frame.  It is restored for sigreturn.
+
+IBT state machine is described in Intel SDM Vol. 1, Sec. 18.3.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc: Kees Cook <keescook@chromium.org>
 ---
+v25:
+- Move the addition of sc_ext.wait_endbr from an earlier shadow stack
+  patch to here.
+- Change X86_FEATURE_CET to X86_FEATURE_SHSTK.
+- Change wrmsrl() to wrmsrl_safe() and handle error.
+
 v24:
-- Move IBT routines to a separate ibt.c, update related areas accordingly.
+- Update for changes from splitting shadow stack and ibt.
 
- arch/x86/include/asm/cet.h |  9 ++++++
- arch/x86/kernel/Makefile   |  1 +
- arch/x86/kernel/ibt.c      | 57 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 67 insertions(+)
- create mode 100644 arch/x86/kernel/ibt.c
+ arch/x86/include/uapi/asm/sigcontext.h |  1 +
+ arch/x86/kernel/fpu/signal.c           | 33 +++++++++++++++++++++++---
+ 2 files changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-index 662335ceb57f..17afcc9ea4d1 100644
---- a/arch/x86/include/asm/cet.h
-+++ b/arch/x86/include/asm/cet.h
-@@ -15,6 +15,7 @@ struct cet_status {
- 	unsigned long	shstk_base;
- 	unsigned long	shstk_size;
- 	unsigned int	locked:1;
-+	unsigned int	ibt_enabled:1;
+diff --git a/arch/x86/include/uapi/asm/sigcontext.h b/arch/x86/include/uapi/asm/sigcontext.h
+index 10d7fa192d48..ee5bacce7d87 100644
+--- a/arch/x86/include/uapi/asm/sigcontext.h
++++ b/arch/x86/include/uapi/asm/sigcontext.h
+@@ -203,6 +203,7 @@ struct _xstate {
+ struct sc_ext {
+ 	unsigned long total_size;
+ 	unsigned long ssp;
++	unsigned long wait_endbr;
  };
  
- #ifdef CONFIG_X86_SHADOW_STACK
-@@ -41,6 +42,14 @@ static inline int shstk_check_rstor_token(bool ia32, unsigned long token_addr,
- 					  unsigned long *new_ssp) { return 0; }
+ /*
+diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+index 0488407bec81..0ed01e70b09e 100644
+--- a/arch/x86/kernel/fpu/signal.c
++++ b/arch/x86/kernel/fpu/signal.c
+@@ -71,16 +71,29 @@ int save_extra_state_to_sigframe(int ia32, void __user *fp, void __user *restore
+ 			return err;
+ 
+ 		ext.ssp = token_addr;
++	}
+ 
++	if (new_ssp || cet->ibt_enabled) {
+ 		fpregs_lock();
+ 		if (test_thread_flag(TIF_NEED_FPU_LOAD))
+ 			__fpregs_load_activate();
+ 		if (new_ssp)
+ 			err = wrmsrl_safe(MSR_IA32_PL3_SSP, new_ssp);
++
++		if (!err && cet->ibt_enabled) {
++			u64 msr_val;
++
++			err = rdmsrl_safe(MSR_IA32_U_CET, &msr_val);
++			if (!err && (msr_val & CET_WAIT_ENDBR)) {
++				ext.wait_endbr = 1;
++				msr_val &= ~CET_WAIT_ENDBR;
++				err = wrmsrl_safe(MSR_IA32_U_CET, msr_val);
++			}
++		}
+ 		fpregs_unlock();
+ 	}
+ 
+-	if (!err && ext.ssp) {
++	if (!err && (ext.ssp || cet->ibt_enabled)) {
+ 		void __user *p = fp;
+ 
+ 		ext.total_size = sizeof(ext);
+@@ -110,7 +123,8 @@ static int get_extra_state_from_sigframe(int ia32, void __user *fp, struct sc_ex
+ 	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
+ 		return 0;
+ 
+-	if (!cet->shstk_size)
++	if (!cet->shstk_size &&
++	    !cet->ibt_enabled)
+ 		return 0;
+ 
+ 	memset(ext, 0, sizeof(*ext));
+@@ -149,6 +163,19 @@ static int restore_extra_state_to_xregs(struct sc_ext *sc_ext)
+ 
+ 	if (cet->shstk_size)
+ 		err = wrmsrl_safe(MSR_IA32_PL3_SSP, sc_ext->ssp);
++
++	if (err)
++		return err;
++
++	if (cet->ibt_enabled && sc_ext->wait_endbr) {
++		u64 msr_val;
++
++		err = rdmsrl_safe(MSR_IA32_U_CET, &msr_val);
++		if (!err) {
++			msr_val |= CET_WAIT_ENDBR;
++			err = wrmsrl_safe(MSR_IA32_U_CET, msr_val);
++		}
++	}
  #endif
- 
-+#ifdef CONFIG_X86_IBT
-+int ibt_setup(void);
-+void ibt_disable(void);
-+#else
-+static inline int ibt_setup(void) { return 0; }
-+static inline void ibt_disable(void) {}
-+#endif
-+
- #ifdef CONFIG_X86_SHADOW_STACK
- int prctl_cet(int option, u64 arg2);
- #else
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index eb13d578ad36..e10e007c1d80 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -151,6 +151,7 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
- 
- obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev-es.o
- obj-$(CONFIG_X86_SHADOW_STACK)		+= shstk.o cet_prctl.o
-+obj-$(CONFIG_X86_IBT)			+= ibt.o
- 
- ###
- # 64 bit specific files
-diff --git a/arch/x86/kernel/ibt.c b/arch/x86/kernel/ibt.c
-new file mode 100644
-index 000000000000..d2cef1a0345b
---- /dev/null
-+++ b/arch/x86/kernel/ibt.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * ibt.c - Intel Indirect Branch Tracking support
-+ *
-+ * Copyright (c) 2021, Intel Corporation.
-+ * Yu-cheng Yu <yu-cheng.yu@intel.com>
-+ */
-+
-+#include <linux/user.h>
-+#include <asm/msr.h>
-+#include <asm/fpu/internal.h>
-+#include <asm/fpu/xstate.h>
-+#include <asm/fpu/types.h>
-+#include <asm/cet.h>
-+
-+static void start_update_msrs(void)
-+{
-+	fpregs_lock();
-+	if (test_thread_flag(TIF_NEED_FPU_LOAD))
-+		__fpregs_load_activate();
-+}
-+
-+static void end_update_msrs(void)
-+{
-+	fpregs_unlock();
-+}
-+
-+int ibt_setup(void)
-+{
-+	u64 msr_val;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_IBT))
-+		return -EOPNOTSUPP;
-+
-+	start_update_msrs();
-+	rdmsrl(MSR_IA32_U_CET, msr_val);
-+	msr_val |= (CET_ENDBR_EN | CET_NO_TRACK_EN);
-+	wrmsrl(MSR_IA32_U_CET, msr_val);
-+	end_update_msrs();
-+	current->thread.cet.ibt_enabled = 1;
-+	return 0;
-+}
-+
-+void ibt_disable(void)
-+{
-+	u64 msr_val;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_IBT))
-+		return;
-+
-+	start_update_msrs();
-+	rdmsrl(MSR_IA32_U_CET, msr_val);
-+	msr_val &= ~CET_ENDBR_EN;
-+	wrmsrl(MSR_IA32_U_CET, msr_val);
-+	end_update_msrs();
-+	current->thread.cet.ibt_enabled = 0;
-+}
+ 	return err;
+ }
+@@ -616,7 +643,7 @@ static unsigned long fpu__alloc_sigcontext_ext(unsigned long sp)
+ 	 * sigcontext_ext is at: fpu + fpu_user_xstate_size +
+ 	 * FP_XSTATE_MAGIC2_SIZE, then aligned to 8.
+ 	 */
+-	if (cet->shstk_size)
++	if (cet->shstk_size || cet->ibt_enabled)
+ 		sp -= (sizeof(struct sc_ext) + 8);
+ #endif
+ 	return sp;
 -- 
 2.21.0
 
