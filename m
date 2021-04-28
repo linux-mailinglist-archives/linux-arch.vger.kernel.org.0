@@ -2,127 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E724D36D0D5
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 05:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E30E36D0EB
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 05:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbhD1DTC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Apr 2021 23:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        id S235712AbhD1DgL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Apr 2021 23:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbhD1DS6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Apr 2021 23:18:58 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD944C061574;
-        Tue, 27 Apr 2021 20:18:09 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso55336580otb.13;
-        Tue, 27 Apr 2021 20:18:09 -0700 (PDT)
+        with ESMTP id S229600AbhD1DgG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Apr 2021 23:36:06 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2A9C061574
+        for <linux-arch@vger.kernel.org>; Tue, 27 Apr 2021 20:35:22 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id h7so3471577plt.1
+        for <linux-arch@vger.kernel.org>; Tue, 27 Apr 2021 20:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=YsKXqMxnWaheIKomrBNLMLiA91AUivCW/MY4aVdmRJo=;
-        b=TrdlinmZsn+N1assTFm2B8Uzlj+iLdkcpBVMg0qpDpTm8c3dD2Aq+Gjw6VVW1as5F5
-         8fPH5TW/hZVIgvRe8LocCO9CDqMCYk+MJEsaCCDwboqOqRUJkdi/z5agvLZFSyEYAS5C
-         MVBewibFDf0U668z9zOjI6mJnZaU7bsleRMQPu+rSWuNnLdNFioFGdxyzymOuslVfEVt
-         SKnKZjBUIB2/UaIMGgI3F229XnKnDs51YaSbubX19TtAfmNJNxSduwq+6cE/jSLWu6l4
-         6s10BP8sXLtL6aEDDSxe6vLagYoocLBLV7pbp/BQHin3g2D1p3FnBzg/+hHElL4izf6a
-         XOUw==
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pkolduBNLLIr5vIIXbQQOt2wpdaq8aKiRXOt5tHWv0k=;
+        b=AQ8FCd36kKveqrMIgf7gDWhpb3Z2GF9RhV+CpYRyHF3aTCzjysEv4uLA3Nc/ctIMr1
+         FPYLA4bAcRcw0su3LPEK77MXyoAK1/Y0Kawr+7hLLF5oY+4FkGXkSEvuPhWoN40Lw7pj
+         MF0NKPcfpE+yM+YAm1UFH3Rh4SP/4nCVjmtJqeruOH2yFL67Pxcxu1nnAPBX227IDRen
+         tfG9YMFGLaLIFrKrkCHETFFYXO3IS/QADhw2OmI1EnYSlDeeji820daFlYUT6Kni+/dw
+         2I/AOw8spRHZRiip3Gq186c8GufOHoaHt45x0NqHXlU3DHaIFkR4frwxh405j4erOK2O
+         ftEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YsKXqMxnWaheIKomrBNLMLiA91AUivCW/MY4aVdmRJo=;
-        b=nN6uQ4kGpLD46mQD959/OmPgLtr91egABKGBvTsBmbXyilun7ssTEQj6egvrEKbWsT
-         3/rYb2jfr+QMYICSG1WFe5/YAgtS0NZi9tW2uPQXRqTZWCn7sfnk/mIIc6jHN/fTjgu5
-         AnXK18dwq0oBpD68NCMG8VRSH522P1k2/VhYAe6UA5GxYkIqp0/svQqkbNt9ElMM1VEy
-         UXQURGwTtzXZWp6DE3XO+jSW+VncZCg1H19zPMT9irWGdY2PE0ScPCkKVvUTC55XbK0I
-         4j2sdvZTXeT2l1hgWTbLrXWFbDhe9MsFtwj1z8xnYIUZ3ajSMTV1L8AkgSGcNBQFH0mU
-         yzPQ==
-X-Gm-Message-State: AOAM530G6OHP9/uvvUtOYt/DZeplCuqmks+eX7Bg+zapCB6mEr56bCHQ
-        v6K8ntppO4ZDsqlBnldteCrNz9Ipyq4=
-X-Google-Smtp-Source: ABdhPJxrneilmSFjHNXwRbpBuDiI7HmDeOY+tTijSE/MDaA2H9rxFD6xLkPE6cQFy92U82d8wXCHdA==
-X-Received: by 2002:a05:6830:1507:: with SMTP id k7mr10191701otp.106.1619579889009;
-        Tue, 27 Apr 2021 20:18:09 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 186sm1069891oof.14.2021.04.27.20.18.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 27 Apr 2021 20:18:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 27 Apr 2021 20:18:07 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] csky: uaccess.h: Coding convention with asm generic
-Message-ID: <20210428031807.GA27619@roeck-us.net>
-References: <1618995255-91499-1-git-send-email-guoren@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1618995255-91499-1-git-send-email-guoren@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=pkolduBNLLIr5vIIXbQQOt2wpdaq8aKiRXOt5tHWv0k=;
+        b=irqV3oXw6I+pOnmu/4ByNyShqpxkexP7WlfFHoJXDjZrbJSHjG9LKr8T/TTv9p4bQG
+         B16r0f8pJNURF2MgJudIV1XouxQG3syNm0soLrUYzHBdznu0MadZWyhUUb7VxNe93Wyo
+         zigG9WaEXUcfL6EXc4YhXO6eWEDA2xghlxlLiNa5oc8ogv2su8l1SAoOVVfZ4Qr5aB+x
+         kIctTOX11VT/L4GiMithyAA5UIsJB6GRYRQ1J5gUkS2yXqiwMTAtXb6mk6slJ/ca/vci
+         hSFqmhd5vFkCOMZI7zCGrcQWCG+ZXWJEZxk3eSPTX63pyRbhsM4qmj4umA9E9gt67qtr
+         wHNg==
+X-Gm-Message-State: AOAM530eZ3fkNAbjAX1Bz6/t6q9pzTN3wKzkoUiu9eQK6oDw3bYH2Vfd
+        xJzMbzz8FVnEqGU7UChnj9gm9g==
+X-Google-Smtp-Source: ABdhPJwMgSQQE79CAJ3VE3v1uID2azdmj5M/8eezAiYtjefmEN0N+WVUz8Ar2sct5D1D7zmhD50G2w==
+X-Received: by 2002:a17:902:6b4c:b029:ec:a55f:f4e7 with SMTP id g12-20020a1709026b4cb02900eca55ff4e7mr28397654plt.72.1619580921559;
+        Tue, 27 Apr 2021 20:35:21 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id b4sm3260291pfv.188.2021.04.27.20.35.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Apr 2021 20:35:21 -0700 (PDT)
+Date:   Tue, 27 Apr 2021 20:35:21 -0700 (PDT)
+X-Google-Original-Date: Tue, 27 Apr 2021 20:35:19 PDT (-0700)
+Subject:     Re: [PATCH v8] RISC-V: enable XIP
+In-Reply-To: <20210428030824.GA196954@roeck-us.net>
+CC:     alex@ghiti.fr, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vitaly.wool@konsulko.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     linux@roeck-us.net
+Message-ID: <mhng-6764680f-437c-4733-8569-6f76d9c3aa4f@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 21, 2021 at 08:54:15AM +0000, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Using asm-generic/uaccess.h to prevent duplicated code:
->  - Add user_addr_max which mentioned in generic uaccess.h
->  - Remove custom definitions of KERNEL/USER_DS, get/set_fs,
->    uaccess_kerenl
->  - Using generic extable.h instead of custom definitions in
->    uaccess.h
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
+On Tue, 27 Apr 2021 20:08:24 PDT (-0700), linux@roeck-us.net wrote:
+> On Tue, Apr 13, 2021 at 02:35:14AM -0400, Alexandre Ghiti wrote:
+>> From: Vitaly Wool <vitaly.wool@konsulko.com>
+>>
+>> Introduce XIP (eXecute In Place) support for RISC-V platforms.
+>> It allows code to be executed directly from non-volatile storage
+>> directly addressable by the CPU, such as QSPI NOR flash which can
+>> be found on many RISC-V platforms. This makes way for significant
+>> optimization of RAM footprint. The XIP kernel is not compressed
+>> since it has to run directly from flash, so it will occupy more
+>> space on the non-volatile storage. The physical flash address used
+>> to link the kernel object files and for storing it has to be known
+>> at compile time and is represented by a Kconfig option.
+>>
+>> XIP on RISC-V will for the time being only work on MMU-enabled
+>> kernels.
+>>
+>> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr> [ Rebase on top of "Move
+>> kernel mapping outside the linear mapping" ]
+>> Signed-off-by: Vitaly Wool <vitaly.wool@konsulko.com>
+>> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>
+> In next-20210426, when building riscv:allnoconfig or riscv:tinyconfig:
+>
+> arch/riscv/kernel/setup.c: In function 'setup_arch':
+> arch/riscv/kernel/setup.c:284:32: error: implicit declaration of function 'XIP_FIXUP'
 
-Building csky:tinyconfig ... failed
---------------
-Error log:
-csky-linux-ld: fs/readdir.o: in function `__put_user_fn':
-readdir.c:(.text+0x7c): undefined reference to `__put_user_bad'
-csky-linux-ld: fs/readdir.o: in function `$d':
-readdir.c:(.text+0x1bc): undefined reference to `__put_user_bad'
-make[1]: *** [Makefile:1277: vmlinux] Error 1
-make: *** [Makefile:222: __sub-make] Error 2
-
-Bisect log attached.
-
-Guenter
-
----
-# bad: [3f1fee3e7237347f09a2c7fa538119e6d9ea4b84] Add linux-next specific files for 20210426
-# good: [9f4ad9e425a1d3b6a34617b8ea226d56a119a717] Linux 5.12
-git bisect start 'HEAD' 'v5.12'
-# bad: [bb8f486776983897309645c98705670c3d2a16e5] Merge remote-tracking branch 'crypto/master'
-git bisect bad bb8f486776983897309645c98705670c3d2a16e5
-# bad: [6ab4f4364c450991a476eef5bc57bef3586354ed] Merge remote-tracking branch 'jc_docs/docs-next'
-git bisect bad 6ab4f4364c450991a476eef5bc57bef3586354ed
-# bad: [fd73cab0b2a046136842b23f027dae3686588ba5] Merge remote-tracking branch 'parisc-hd/for-next'
-git bisect bad fd73cab0b2a046136842b23f027dae3686588ba5
-# good: [f0e6103e023e0ede67848ddcd6b07044574f4fd3] soc: document merges
-git bisect good f0e6103e023e0ede67848ddcd6b07044574f4fd3
-# good: [70361dc0add47d3818acf9c33718ce7395f8aaa5] Merge remote-tracking branch 'arm-soc/for-next'
-git bisect good 70361dc0add47d3818acf9c33718ce7395f8aaa5
-# good: [f62ad9f6e1100e3a1b6ca7a004fd5a972ff768df] Merge remote-tracking branch 'ti-k3/ti-k3-next'
-git bisect good f62ad9f6e1100e3a1b6ca7a004fd5a972ff768df
-# bad: [b3b33dda4fd25e201c77f0ce9277dd34f31e86ce] Merge remote-tracking branch 'h8300/h8300-next'
-git bisect bad b3b33dda4fd25e201c77f0ce9277dd34f31e86ce
-# good: [6a861bd8cf3c96f5825d031732e365b7721a84a5] Merge branch 'clk-qcom' into clk-next
-git bisect good 6a861bd8cf3c96f5825d031732e365b7721a84a5
-# good: [1dd129f1deec0606fb70992521a7e5bcd2f85c69] Merge branch 'clk-qcom' into clk-next
-git bisect good 1dd129f1deec0606fb70992521a7e5bcd2f85c69
-# good: [8808515be0ed4e33de9bfdc65f4c1b547ee11065] h8300: Replace <linux/clk-provider.h> by <linux/of_clk.h>
-git bisect good 8808515be0ed4e33de9bfdc65f4c1b547ee11065
-# good: [e27d3ecdeb8923f35cb856fd20be14256aaa7575] Merge remote-tracking branch 'clk/clk-next'
-git bisect good e27d3ecdeb8923f35cb856fd20be14256aaa7575
-# bad: [d3900e8d918f8fbd1366b9c2998e2830e66a0081] csky: uaccess.h: Coding convention with asm generic
-git bisect bad d3900e8d918f8fbd1366b9c2998e2830e66a0081
-# good: [0b1f557a1fa02174a982f557581e348d91987ec6] csky: Fixup typos
-git bisect good 0b1f557a1fa02174a982f557581e348d91987ec6
-# good: [8bfe70e696584deeed1de1bcbfcde405aa1a1344] csky: fix syscache.c fallthrough warning
-git bisect good 8bfe70e696584deeed1de1bcbfcde405aa1a1344
-# first bad commit: [d3900e8d918f8fbd1366b9c2998e2830e66a0081] csky: uaccess.h: Coding convention with asm generic
+Sorry about that.  I thought I'd fixed the last build, but I guess I 
+managed to just miss these build failures in a spew of successes.  I 
+just sent out a patch to fix it.
