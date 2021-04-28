@@ -2,158 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A57A36DCF2
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 18:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81A736DD54
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 18:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbhD1QZn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Apr 2021 12:25:43 -0400
-Received: from mga01.intel.com ([192.55.52.88]:43430 "EHLO mga01.intel.com"
+        id S241215AbhD1QrA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Apr 2021 12:47:00 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:36618 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230294AbhD1QZn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 28 Apr 2021 12:25:43 -0400
-IronPort-SDR: +4Spkr0uMoBgdOlJU22Pw7WvkHr689r04aaJ69bXQmM4Y9gd7GeyXoKVaMHB7lzWk4Vuyst3js
- vh6uuJSbMsug==
-X-IronPort-AV: E=McAfee;i="6200,9189,9968"; a="217503193"
-X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
-   d="scan'208";a="217503193"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 09:24:56 -0700
-IronPort-SDR: iYKiWGUzmjWmi7osjPR7ovPDHt4e7Z5mHFxVw8uXJpANdfEyblOIG9sK3P803dR1wOybig8Imf
- nQ2aVbEXh9Zg==
-X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
-   d="scan'208";a="537022643"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.133.34]) ([10.209.133.34])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 09:24:53 -0700
-Subject: Re: [PATCH v26 0/9] Control-flow Enforcement: Indirect Branch
- Tracking
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Andy Lutomirski' <luto@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
+        id S241139AbhD1Qq6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Apr 2021 12:46:58 -0400
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4FVkzS05MQz9tcb;
+        Wed, 28 Apr 2021 18:46:12 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0mBuk7O_7kHk; Wed, 28 Apr 2021 18:46:11 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FVkzR6Cxgz9tcY;
+        Wed, 28 Apr 2021 18:46:11 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 720158B839;
+        Wed, 28 Apr 2021 18:46:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id ikFClZJogkW5; Wed, 28 Apr 2021 18:46:11 +0200 (CEST)
+Received: from po15610vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id EDB278B831;
+        Wed, 28 Apr 2021 18:46:10 +0200 (CEST)
+Received: by po15610vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id B90C16428C; Wed, 28 Apr 2021 16:46:10 +0000 (UTC)
+Message-Id: <cover.1619628001.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [RFC PATCH v1 0/4] Implement huge VMAP and VMALLOC on powerpc 8xx
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-References: <20210427204720.25007-1-yu-cheng.yu@intel.com>
- <0e03c50ea05440209d620971b9db4f29@AcuMS.aculab.com>
- <CALCETrUpZfznXzN3Ld33DMvQcHD2ACnhYf9KdP+5-xXuX_pVpA@mail.gmail.com>
- <CAMe9rOp7FauoqQ0vx+ZVPGOE9+ABspheuGLc++Chj_goE5HvWA@mail.gmail.com>
- <CALCETrVHUP9=2kX3aJJugcagsf26W0sLEPsDvVCZNnBmbWrOLQ@mail.gmail.com>
- <0c6e1c922bc54326b1121194759565f5@AcuMS.aculab.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <7d857e5d-e3d3-1182-5712-813abf48ccba@intel.com>
-Date:   Wed, 28 Apr 2021 09:24:52 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
-MIME-Version: 1.0
-In-Reply-To: <0c6e1c922bc54326b1121194759565f5@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Mike Rapoport <rppt@kernel.org>
+Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sparclinux@vger.kernel.org, linux-mm@kvack.org
+Date:   Wed, 28 Apr 2021 16:46:10 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/28/2021 8:33 AM, David Laight wrote:
-> From: Andy Lutomirski
->> Sent: 28 April 2021 16:15
->>
->> On Wed, Apr 28, 2021 at 7:57 AM H.J. Lu <hjl.tools@gmail.com> wrote:
->>>
->>> On Wed, Apr 28, 2021 at 7:52 AM Andy Lutomirski <luto@kernel.org> wrote:
->>>>
->>>> On Wed, Apr 28, 2021 at 7:48 AM David Laight <David.Laight@aculab.com> wrote:
->>>>>
->>>>> From: Yu-cheng Yu
->>>>>> Sent: 27 April 2021 21:47
->>>>>>
->>>>>> Control-flow Enforcement (CET) is a new Intel processor feature that blocks
->>>>>> return/jump-oriented programming attacks.  Details are in "Intel 64 and
->>>>>> IA-32 Architectures Software Developer's Manual" [1].
->>>>> ...
->>>>>
->>>>> Does this feature require that 'binary blobs' for out of tree drivers
->>>>> be compiled by a version of gcc that adds the ENDBRA instructions?
->>>>>
->>>>> If enabled for userspace, what happens if an old .so is dynamically
->>>>> loaded?
->>>
->>> CET will be disabled by ld.so in this case.
->>
->> What if a program starts a thread and then dlopens a legacy .so?
-> 
-> Or has shadow stack enabled and opens a .so that uses retpolines?
-> 
+This series is a first tentative to implement huge VMAP and VMALLOC
+on powerpc 8xx. This series applies on Linux next.
+For the time being the 8xx specificities are plugged directly into
+generic mm functions. I have no real idea on how to make it a nice
+beautiful generic implementation for the time being, hence this RFC
+in order to get suggestions.
 
-When shadow stack is enabled, retpolines are not necessary.  I don't 
-know if glibc has been updated for detection of this case.  H.J.?
+powerpc 8xx has 4 page sizes:
+- 4k
+- 16k
+- 512k
+- 8M
 
->>>>> Or do all userspace programs and libraries have to have been compiled
->>>>> with the ENDBRA instructions?
->>>
->>> Correct.  ld and ld.so check this.
->>>
->>>> If you believe that the userspace tooling for the legacy IBT table
->>>> actually works, then it should just work.  Yu-cheng, etc: how well
->>>> tested is it?
->>>>
->>>
->>> Legacy IBT bitmap isn't unused since it doesn't cover legacy codes
->>> generated by legacy JITs.
->>>
->>
->> How does ld.so decide whether a legacy JIT is in use?
-> 
-> What if your malware just precedes its 'jump into the middle of a function'
-> with a %ds segment override?
-> 
+At the time being, vmalloc and vmap only support huge pages which are
+leaf at PMD level.
 
-Do you mean far jump?  It is not tracked by ibt, which tracks near 
-indirect jump.  The details can be found in Intel SDM.
+Here the PMD level is 4M, it doesn't correspond to any supported
+page size.
 
-> I may have a real problem here.
-> We currently release program/library binaries that run on Linux
-> distributions that go back as far as RHEL6 (2.6.32 kernel era).
-> To do this everything is compiled on a userspace of the same vintage.
-> I'm not at all sure a new enough gcc to generate the ENDBR64 instructions
-> will run on the relevant system - and may barf on the system headers
-> even if we got it to run.
-> I really don't want to have to build multiple copies of everything.
+For the time being, implement use of 16k and 512k pages which is done
+at PTE level.
 
-This is likely OK.  We have tested many combinations.  Should you run 
-into any issue, please let glibc people know.
+Support of 8M pages will be implemented later, it requires use of
+hugepd tables.
 
-Thanks!
+Christophe Leroy (4):
+  mm/ioremap: Fix iomap_max_page_shift
+  mm/hugetlb: Change parameters of arch_make_huge_pte()
+  mm/pgtable: Add stubs for {pmd/pub}_{set/clear}_huge
+  mm/vmalloc: Add support for huge pages on VMAP and VMALLOC for powerpc
+    8xx
 
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
+ arch/arm64/include/asm/hugetlb.h              |  3 +-
+ arch/arm64/mm/hugetlbpage.c                   |  5 +-
+ arch/powerpc/Kconfig                          |  3 +-
+ .../include/asm/nohash/32/hugetlb-8xx.h       |  5 +-
+ arch/sparc/include/asm/pgtable_64.h           |  3 +-
+ arch/sparc/mm/hugetlbpage.c                   |  6 +-
+ include/linux/hugetlb.h                       |  4 +-
+ include/linux/pgtable.h                       | 26 ++++++-
+ mm/hugetlb.c                                  |  6 +-
+ mm/ioremap.c                                  |  6 +-
+ mm/migrate.c                                  |  4 +-
+ mm/vmalloc.c                                  | 74 ++++++++++++++++---
+ 12 files changed, 111 insertions(+), 34 deletions(-)
+
+-- 
+2.25.0
 
