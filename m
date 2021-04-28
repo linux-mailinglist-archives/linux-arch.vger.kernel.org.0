@@ -2,44 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCB736D9FE
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 17:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4395A36DAC5
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 17:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240260AbhD1OxS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Apr 2021 10:53:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34950 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231506AbhD1OxS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 28 Apr 2021 10:53:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 30EE16143E
-        for <linux-arch@vger.kernel.org>; Wed, 28 Apr 2021 14:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619621553;
-        bh=v9MXjcMFDkwGRxGtKjG0QxDDhk6y4//cm0KjKwV14/0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KRG/4bXmqOpbEk2St/DRgo26OHKoEpvaJMcORuhBhJnAKSJO0hf22cyOzkqsqg7XJ
-         NMBdrJ7AZp2Ifo59fj4Vk9u7RorERhLrwUapTwJLqqzV3IGaWJL5G06xIuGiogYHET
-         b532Nv7EFUmxnIklw4vgXoHXRvRp5YuXx5u/MrA917KjaLWZ05kn65qG+o8QD3hwhg
-         x0luXKQvpp1LpHfDmnvy1qm4DrsITXKKm6eRWgnsFuWGt4lA/Uv4+4Igr+o7FGb+Tg
-         fN6BEMDxbs2tA9WFGcVPAO/4Qop+TNJjVaW3vlEdo0PmXfueeKeiWGCaWw9b1sbzHz
-         kmbBpzDOXP1LQ==
-Received: by mail-ed1-f50.google.com with SMTP id n25so2492091edr.5
-        for <linux-arch@vger.kernel.org>; Wed, 28 Apr 2021 07:52:33 -0700 (PDT)
-X-Gm-Message-State: AOAM533JvUyPgKop79JTd3cz2nImOY+NeNt5u4C/FKE0a2UHI9lvHHWY
-        hJK/+NzqXSwRyDdt5XCZDnwDvg9Rn2kca2r6DE9OmQ==
-X-Google-Smtp-Source: ABdhPJz+QIzKaPnT4DT6hm809Ge+488Ygp48T6Uu+3gaGnaUVYy9et+z5f3TMrjkz6M7tyk1lUqB4cQlJnvVlzDNxh4=
-X-Received: by 2002:a05:6402:cbb:: with SMTP id cn27mr12113500edb.222.1619621551563;
- Wed, 28 Apr 2021 07:52:31 -0700 (PDT)
+        id S237167AbhD1PCO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Apr 2021 11:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236071AbhD1PBu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Apr 2021 11:01:50 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E605C0612AD;
+        Wed, 28 Apr 2021 07:57:15 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id d25so25800294oij.5;
+        Wed, 28 Apr 2021 07:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xU26eKhAat6ZuGhDgaDU4lA3EkxCkgm/s81rka2sejI=;
+        b=k5jI8e0y1SuWfZ34di/qkLtVolNK2FRYo26+wf8LY5DibGsrSHDxJYhS8RKM0i+O43
+         0/dIqE+x2A+/sK3y3/wHosMr3rOsYPkD/ZOTo6CHe+FUahRCYdho1Yt6Jkz+s9b0Nys0
+         Vv8t5Q+QJjN8/RyO+vs75phCLTS1RZ6DphJ5UUZaGOHIHfYHssGHPTu0rCZ12vnOJzkj
+         VJ5Mt9IG28Bn9w5NSRdMJXXBD8um5qj+gZHPKbC10bgfUBJCvWEIxArkOiO2RDPT32k/
+         rZJx18sosR84PdHF7v3OHSjmMTDb07Ud7Hjw4g3QpWhzbZRpWZQqYoXJpzQvy1AiOkJH
+         9oqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xU26eKhAat6ZuGhDgaDU4lA3EkxCkgm/s81rka2sejI=;
+        b=tATLSXcjOfx0zWs7c92BBmT5KedZcKziKeTsYjNBk8dcXl72kFbHjzC+Iz1ax1hlji
+         2+8/Qu7naBH118HJ+8LXmeE5lYBQd78xzAsAtfwmZ07idvUUTdBLM6RxUmVVSdv1gLNi
+         P7IDTUkUjSV53aIJkQzzxL8l5TZZy+NvrswBb7Kn/rS03FD/KOcGsbjCDe10dSveKnFv
+         lcZ/x1ciLjfLHEHY1j336MkfW/FS4iEPIOZhTtlEAmXkIukQkZ9e0OtwjIIg1Nl+Uais
+         2g6cASj/ZJLbbZhVAA6wgBVLRmW28EUs8peA9HLDVveurGeyFTJKorHBcRYNwHBXIHfC
+         KJ6g==
+X-Gm-Message-State: AOAM5307pA7RHRTmvVoZ1ysMN93i4UvTSJP4f1FnjGj/PA7/hWD35fK+
+        oaDIoP5yqRjwsFUb1YLlOn4PevocCFyaQtybAck=
+X-Google-Smtp-Source: ABdhPJwBNAOYLNSRfUtYzVTxF2AYiX9nqQGGM+fJ+rtx+rAaaxqanQIebBFJnPrd9GA9ddLcf6+KFh8vSnkc+g05TdA=
+X-Received: by 2002:a05:6808:2d0:: with SMTP id a16mr12208850oid.116.1619621835014;
+ Wed, 28 Apr 2021 07:57:15 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210427204720.25007-1-yu-cheng.yu@intel.com> <0e03c50ea05440209d620971b9db4f29@AcuMS.aculab.com>
-In-Reply-To: <0e03c50ea05440209d620971b9db4f29@AcuMS.aculab.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Wed, 28 Apr 2021 07:52:19 -0700
-X-Gmail-Original-Message-ID: <CALCETrUpZfznXzN3Ld33DMvQcHD2ACnhYf9KdP+5-xXuX_pVpA@mail.gmail.com>
-Message-ID: <CALCETrUpZfznXzN3Ld33DMvQcHD2ACnhYf9KdP+5-xXuX_pVpA@mail.gmail.com>
+ <CALCETrUpZfznXzN3Ld33DMvQcHD2ACnhYf9KdP+5-xXuX_pVpA@mail.gmail.com>
+In-Reply-To: <CALCETrUpZfznXzN3Ld33DMvQcHD2ACnhYf9KdP+5-xXuX_pVpA@mail.gmail.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Wed, 28 Apr 2021 07:56:38 -0700
+Message-ID: <CAMe9rOp7FauoqQ0vx+ZVPGOE9+ABspheuGLc++Chj_goE5HvWA@mail.gmail.com>
 Subject: Re: [PATCH v26 0/9] Control-flow Enforcement: Indirect Branch Tracking
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
         "x86@kernel.org" <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -50,15 +64,13 @@ Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
         Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
@@ -76,26 +88,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 28, 2021 at 7:48 AM David Laight <David.Laight@aculab.com> wrote:
+On Wed, Apr 28, 2021 at 7:52 AM Andy Lutomirski <luto@kernel.org> wrote:
 >
-> From: Yu-cheng Yu
-> > Sent: 27 April 2021 21:47
+> On Wed, Apr 28, 2021 at 7:48 AM David Laight <David.Laight@aculab.com> wrote:
 > >
-> > Control-flow Enforcement (CET) is a new Intel processor feature that blocks
-> > return/jump-oriented programming attacks.  Details are in "Intel 64 and
-> > IA-32 Architectures Software Developer's Manual" [1].
-> ...
->
-> Does this feature require that 'binary blobs' for out of tree drivers
-> be compiled by a version of gcc that adds the ENDBRA instructions?
->
-> If enabled for userspace, what happens if an old .so is dynamically
-> loaded?
-> Or do all userspace programs and libraries have to have been compiled
-> with the ENDBRA instructions?
+> > From: Yu-cheng Yu
+> > > Sent: 27 April 2021 21:47
+> > >
+> > > Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+> > > return/jump-oriented programming attacks.  Details are in "Intel 64 and
+> > > IA-32 Architectures Software Developer's Manual" [1].
+> > ...
+> >
+> > Does this feature require that 'binary blobs' for out of tree drivers
+> > be compiled by a version of gcc that adds the ENDBRA instructions?
+> >
+> > If enabled for userspace, what happens if an old .so is dynamically
+> > loaded?
 
-If you believe that the userspace tooling for the legacy IBT table
-actually works, then it should just work.  Yu-cheng, etc: how well
-tested is it?
+CET will be disabled by ld.so in this case.
 
---Andy
+> > Or do all userspace programs and libraries have to have been compiled
+> > with the ENDBRA instructions?
+
+Correct.  ld and ld.so check this.
+
+> If you believe that the userspace tooling for the legacy IBT table
+> actually works, then it should just work.  Yu-cheng, etc: how well
+> tested is it?
+>
+
+Legacy IBT bitmap isn't unused since it doesn't cover legacy codes
+generated by legacy JITs.
+
+-- 
+H.J.
