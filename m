@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C764F36E03A
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 22:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26EF36E046
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 22:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240999AbhD1UaJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Apr 2021 16:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        id S241967AbhD1UbA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Apr 2021 16:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240942AbhD1UaI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Apr 2021 16:30:08 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34176C06138D
-        for <linux-arch@vger.kernel.org>; Wed, 28 Apr 2021 13:29:23 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id gc22-20020a17090b3116b02901558435aec1so6023182pjb.4
-        for <linux-arch@vger.kernel.org>; Wed, 28 Apr 2021 13:29:23 -0700 (PDT)
+        with ESMTP id S241927AbhD1Ua7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Apr 2021 16:30:59 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2103C06138B
+        for <linux-arch@vger.kernel.org>; Wed, 28 Apr 2021 13:30:12 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id h14-20020a17090aea8eb02901553e1cc649so7541589pjz.0
+        for <linux-arch@vger.kernel.org>; Wed, 28 Apr 2021 13:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=UeII31CqNuFlE2BoTtr+fZN9wyzsy3hprcPYll4covw=;
-        b=jylj96Rw3QUQm4doFDBK0kop0iQgCV6NfySkOr5T98cqbEgl0duruUVIG5KC7g1OvD
-         XbTL/oRiSQ9ur3CZJRvyYbHIxY99dg3xegs4Ok2C8JzBM74t3TX7EC/VLwhZfoPz+u4/
-         RcByLq8jJDIgsj0tknp3coppc77n13njbPFO8=
+        bh=P+vKZ+ijBuTYKlW4ksMgx+Vfg6fzuznEGR/mj5GiueA=;
+        b=cjFidoHrwQOs6nvggZcyJHPrqy+fC3lyB+khjXw8XuHUFFpmXhDbTFYt4Z0pcBKzIu
+         +pYRKW5ncOZPFtP4kJPVLZD6RWZVY/45yIeJMmu7wv3lRl6oGjQUu/+MiO4G0VaeNB52
+         7LZlajzspTx8tLP+6aHqhBrlwyTRwrLFleo7s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=UeII31CqNuFlE2BoTtr+fZN9wyzsy3hprcPYll4covw=;
-        b=XNctRVP0TT53CPJ5fyba+BPWIfSolLNajCetLiGn0To0TeoG/UaJ3+C+2AWPMoM6UY
-         /Uv2NDytVxp+QMYrOhG5XMKKmT3FY8N/qEx1/0XQXBNNtBzT/kQ+h24Y1TuZKMGOSf5y
-         1SSnzA5NV4kmv/6AsEUMxrB8jtSxnBPPOG1hh2zUPRad6HCiXAgQ+W+OJClAY1QbNqDJ
-         gR3m2yLT4bJ7GxOyrq+9kJyEiYrqywwDmiLb4SknO26gwMu1iz1iuFpFt1DccnzT+CdU
-         KMufUBKKKGmwmltrTPqm3ot35gyzRbc10SE3EdsKCXPj3QS32WO+7LoU1ULTrolclKHo
-         zv1g==
-X-Gm-Message-State: AOAM530Nc6yNWSB3kJwnhofh5hYhD8JkewmQQgGcFQW2jl9AkxU/Lqiz
-        nipVcTSAvfHvwok/Pj/bKdWb/Q==
-X-Google-Smtp-Source: ABdhPJwYkEDNlOuREptaQ5l3kQMV3gSjH3e1SrIdJIlzfjRSlDOr3aN5Uamkiddf+M4fmetyZadajQ==
-X-Received: by 2002:a17:90a:8c8c:: with SMTP id b12mr36346748pjo.35.1619641762540;
-        Wed, 28 Apr 2021 13:29:22 -0700 (PDT)
+        bh=P+vKZ+ijBuTYKlW4ksMgx+Vfg6fzuznEGR/mj5GiueA=;
+        b=H4eDbaUHCJS0z/oVR/ZC16X5A72yDn0qKdLntQnfvGO/7j6coV923btbrTSJY5sahZ
+         0jV5fMUN9DlumudKIFQjCJhyXdXdu8jWF4R1DgcFlu+FzLR40yJ7r4Vs1jbvpvsUx7aZ
+         9wJNt+2dPAUo2ouhSJ1QjdZoUGLnUr42HfEgoGaw6577LNj15EErzFF7Ecp8Y5kt8FcE
+         hyCMRxMnEhK0zNgBYJwf9b307TqOTmtmVFsNUWtQBTWGRdgFrD6dkHANhJxa+2IlZtbo
+         TF1KK0npYjoYqyVSDMFNoWSUmXUSFvCupuEoXCxEALzDcCfHi3OQkpbDAsYGhoBzJPz4
+         QV7A==
+X-Gm-Message-State: AOAM530Mk2dfWDTYsQfo2smm+Mkj96A1Vu259KAak80aKybu5UT0N3Yi
+        NVEGVY+zF1zsmCa1mUuJzNZOXA==
+X-Google-Smtp-Source: ABdhPJyBQNS6Zhg9r+1Ydyw6DrEvZh5KvBBtP08tgx1YOKud2zKIe07WgXGa7qTG+VtPhaq9gdPUog==
+X-Received: by 2002:a17:902:8601:b029:e6:7b87:8add with SMTP id f1-20020a1709028601b02900e67b878addmr32266307plo.3.1619641812285;
+        Wed, 28 Apr 2021 13:30:12 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k15sm516116pfi.0.2021.04.28.13.29.21
+        by smtp.gmail.com with ESMTPSA id i20sm318571pjz.48.2021.04.28.13.30.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Apr 2021 13:29:21 -0700 (PDT)
-Date:   Wed, 28 Apr 2021 13:29:20 -0700
+        Wed, 28 Apr 2021 13:30:11 -0700 (PDT)
+Date:   Wed, 28 Apr 2021 13:30:10 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
@@ -73,25 +73,22 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v26 1/9] x86/cet/ibt: Add Kconfig option for Indirect
- Branch Tracking
-Message-ID: <202104281329.564AACB@keescook>
+Subject: Re: [PATCH v26 2/9] x86/cet/ibt: Add user-mode Indirect Branch
+ Tracking support
+Message-ID: <202104281330.4269E2B@keescook>
 References: <20210427204720.25007-1-yu-cheng.yu@intel.com>
- <20210427204720.25007-2-yu-cheng.yu@intel.com>
+ <20210427204720.25007-3-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210427204720.25007-2-yu-cheng.yu@intel.com>
+In-Reply-To: <20210427204720.25007-3-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 27, 2021 at 01:47:12PM -0700, Yu-cheng Yu wrote:
-> Indirect Branch Tracking (IBT) provides protection against CALL-/JMP-
-> oriented programming attacks.  It is active when the kernel has this
-> feature enabled, and the processor and the application support it.
-> When this feature is enabled, legacy non-IBT applications continue to
-> work, but without IBT protection.
+On Tue, Apr 27, 2021 at 01:47:13PM -0700, Yu-cheng Yu wrote:
+> Introduce user-mode Indirect Branch Tracking (IBT) support.  Add routines
+> for the setup/disable of IBT.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
