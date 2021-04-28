@@ -2,51 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3C536E06F
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 22:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A02136E084
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 22:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242026AbhD1UkQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Apr 2021 16:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242024AbhD1UkP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Apr 2021 16:40:15 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02D1C06138C
-        for <linux-arch@vger.kernel.org>; Wed, 28 Apr 2021 13:39:28 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id t22so10347841pgu.0
-        for <linux-arch@vger.kernel.org>; Wed, 28 Apr 2021 13:39:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bP0jsyLUeBZMcia9mVsWBqP6zFcasRiNfS5tk4kM0rM=;
-        b=A8+FVi1mPar4WLP24ObFpp1Q218abKlV0OQrmnoXUgmmTraergbRvRIY1olI2H8FM5
-         Zs2ESIBKBScQGKK1e8f+Sa1YgkVnUJgNUswDh4G4ZG1eWdx+7ssZlBxd43RQhC93UIcT
-         UKYW2k8b4p/NrYoP+17PCBkBmkSnwJZS6FulQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bP0jsyLUeBZMcia9mVsWBqP6zFcasRiNfS5tk4kM0rM=;
-        b=fiTBUaPEazLtEfU3jB6K1JmvTpMa0VYDyWz1A3lUzv/YD5GcvZgTEgXcYGkAxfyec8
-         lhYLNkE68xFh6CoSvXLsswfPo1EFefEBoblcCTJhyrO2H004LHYWyDOEYpO3E1PCJfot
-         trt11ZDFhUabxjVlpHgfQvp6J0fpomTY3MCUYEFXDg4Y2cH0m+qGEg9+nkDMeIwdZylG
-         mXBAEtjMzph6RC7KIC+S1Ul+DmF5KsMMVcY3Q7/xVBVDPHStVbp4XmeAf698wwYXywCh
-         YoSbB/s6ZqOpyklHAKAKwbascnvto2jVPtaP9GvaDVdUzAUGSikUmvgZs7bV5VEzSJjC
-         AjpQ==
-X-Gm-Message-State: AOAM530jFOm7aWu2b21XXD3pg+SdccKbyLcg+rWt0+kIt4rr/B0+MPzx
-        /PsUa7PCYxf+pSDKeuboe+mxHw==
-X-Google-Smtp-Source: ABdhPJz7TORt5UPUxQHJtcwUy7DLeU9h16cX0ZufDjJxSEVTidsxEub3MlR7oNmOUCLjsAVtm6Bv+w==
-X-Received: by 2002:a62:cd83:0:b029:275:d87e:612e with SMTP id o125-20020a62cd830000b0290275d87e612emr18839700pfg.49.1619642368304;
-        Wed, 28 Apr 2021 13:39:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l18sm5405576pjq.33.2021.04.28.13.39.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Apr 2021 13:39:27 -0700 (PDT)
-Date:   Wed, 28 Apr 2021 13:39:26 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        id S229624AbhD1Utz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Apr 2021 16:49:55 -0400
+Received: from mga05.intel.com ([192.55.52.43]:44235 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229549AbhD1Utz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Apr 2021 16:49:55 -0400
+IronPort-SDR: oQslHqnxWIgintvtE7RYF1lX4vyqNHwVIRBySiHaDWo/pNx7jMxmRt1Mk+KLOoYXKf9T0ImSEs
+ OjHlDktm57hQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9968"; a="282185508"
+X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
+   d="scan'208";a="282185508"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 13:49:10 -0700
+IronPort-SDR: vGWnJwbrgfpkN2beMuwcFAXncWISz0cuUun5JLR7YTtvYQETrR84ByQZ5LM6c2xCSLqPBh62Yf
+ yPkIg66jONag==
+X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
+   d="scan'208";a="423708019"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.133.34]) ([10.209.133.34])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 13:49:09 -0700
+Subject: Re: [PATCH v26 6/9] x86/vdso: Insert endbr32/endbr64 to vDSO
+To:     Kees Cook <keescook@chromium.org>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -72,35 +51,76 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: Re: [PATCH v26 9/9] x86/vdso: Add ENDBR to __vdso_sgx_enter_enclave
-Message-ID: <202104281339.E21514F9D@keescook>
+        Haitao Huang <haitao.huang@intel.com>
 References: <20210427204720.25007-1-yu-cheng.yu@intel.com>
- <20210427204720.25007-10-yu-cheng.yu@intel.com>
+ <20210427204720.25007-7-yu-cheng.yu@intel.com>
+ <202104281332.94A153C@keescook>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <88dc2e45-5fd4-9a1a-c493-3ff868a627f4@intel.com>
+Date:   Wed, 28 Apr 2021 13:49:08 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210427204720.25007-10-yu-cheng.yu@intel.com>
+In-Reply-To: <202104281332.94A153C@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 27, 2021 at 01:47:20PM -0700, Yu-cheng Yu wrote:
-> ENDBR is a special new instruction for the Indirect Branch Tracking (IBT)
-> component of CET.  IBT prevents attacks by ensuring that (most) indirect
-> branches and function calls may only land at ENDBR instructions.  Branches
-> that don't follow the rules will result in control flow (#CF) exceptions.
+On 4/28/2021 1:33 PM, Kees Cook wrote:
+> On Tue, Apr 27, 2021 at 01:47:17PM -0700, Yu-cheng Yu wrote:
+>> From: "H.J. Lu" <hjl.tools@gmail.com>
+>>
+>> When Indirect Branch Tracking (IBT) is enabled, vDSO functions may be
+>> called indirectly, and must have ENDBR32 or ENDBR64 as the first
+>> instruction.  The compiler must support -fcf-protection=branch so that it
+>> can be used to compile vDSO.
 > 
-> ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
-> instructions are inserted automatically by the compiler, but branch
-> targets written in assembly must have ENDBR added manually.
+> If you respin this, you can maybe rephrase this since CONFIG_X86_IBT
+> has already tested for the compiler support.
 > 
-> Add ENDBR to __vdso_sgx_enter_enclave() branch targets.
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Yes, I will fix this.  Thanks for reviewing!
 
--- 
-Kees Cook
+Yu-cheng
+
+>>
+>> Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+>> Cc: Andy Lutomirski <luto@kernel.org>
+>> Cc: Kees Cook <keescook@chromium.org>
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> 
+> -Kees
+> 
+>> ---
+>> v24:
+>> - Replace CONFIG_X86_CET with CONFIG_X86_IBT to reflect splitting of shadow
+>>    stack and ibt.
+>>
+>>   arch/x86/entry/vdso/Makefile | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+>> index 05c4abc2fdfd..a773a5f03b63 100644
+>> --- a/arch/x86/entry/vdso/Makefile
+>> +++ b/arch/x86/entry/vdso/Makefile
+>> @@ -93,6 +93,10 @@ endif
+>>   
+>>   $(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+>>   
+>> +ifdef CONFIG_X86_IBT
+>> +$(vobjs) $(vobjs32): KBUILD_CFLAGS += -fcf-protection=branch
+>> +endif
+>> +
+>>   #
+>>   # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
+>>   #
+>> -- 
+>> 2.21.0
+>>
+> 
+
