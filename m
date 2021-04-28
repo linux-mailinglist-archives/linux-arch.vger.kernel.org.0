@@ -2,115 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB3436D315
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 09:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A31736D3F5
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 10:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbhD1H0x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Apr 2021 03:26:53 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:57461 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbhD1H0x (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Apr 2021 03:26:53 -0400
-Received: from [192.168.1.100] (lfbn-lyo-1-457-219.w2-7.abo.wanadoo.fr [2.7.49.219])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 90F6624000F;
-        Wed, 28 Apr 2021 07:26:03 +0000 (UTC)
-Subject: Re: [PATCH] riscv: Remove 32b kernel mapping from page table dump
-To:     Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, linux-doc@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        kasan-dev@googlegroups.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-References: <20210418112856.15078-1-alex@ghiti.fr>
- <CAAhSdy3csxeTiXgf8eKnRYhD7BM1LDLPddrn527AkA_-fiEGkw@mail.gmail.com>
-From:   Alex Ghiti <alex@ghiti.fr>
-Message-ID: <16cd2359-2453-8184-cf96-2c02800abe8a@ghiti.fr>
-Date:   Wed, 28 Apr 2021 03:26:02 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S236961AbhD1Iag (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Apr 2021 04:30:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41236 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231635AbhD1Iag (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Apr 2021 04:30:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9840D61004;
+        Wed, 28 Apr 2021 08:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619598591;
+        bh=Tm1uVNQ67mbZJApKzKgumPT2UQKkVy566R+vx8NdHow=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kfJxTjEx6qLjN5q3rofMNmg+8qiPg5vVxBZlegK8koo06urJSSQEb9+0m2HA75sCQ
+         uDD69Xwl3tVZoKFPQcthBPgjrFjUyKCST9LUZ7TzJQHl+bjy919/UoyvZnF1pw3cKC
+         gUtr6eo+8Iv/Vq7B+KcT+8D1Hn3nnEerr3z/rIyrp89dSdsc4CubymDceJcg9XKZNw
+         axWWsAPWXGHL+OfTSeRxmNTcxdCD26rA8GaepAeDIcPLqGdnz/H9qAQlNcgEkYuEnd
+         I4GP/Fx2z737e/Ax66xA8Rc8y8Lwm58j+AuEiLGKTr2FC8pvddzs850qUL8yUpltVS
+         b+lNHJp095FOA==
+Received: by mail-lj1-f173.google.com with SMTP id a5so34330225ljk.0;
+        Wed, 28 Apr 2021 01:29:51 -0700 (PDT)
+X-Gm-Message-State: AOAM531PusRHU1GeckmqH/0T74v6phWh2/Whg3m1J6R8Kzw0JEJLDhYx
+        KonMJ8EHWzx5RvjHzQMn7GDOXenEeTzRJoV6Fm0=
+X-Google-Smtp-Source: ABdhPJz4vpA4DzKSSeqScfy8/oLabj9HnGSXolbcycO1Oz+q28y3kW2onnpEN6jXwTRTEk2IRRbZuWh265zFeDLsc64=
+X-Received: by 2002:a2e:9f57:: with SMTP id v23mr19298434ljk.498.1619598589840;
+ Wed, 28 Apr 2021 01:29:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAAhSdy3csxeTiXgf8eKnRYhD7BM1LDLPddrn527AkA_-fiEGkw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+References: <1618995255-91499-1-git-send-email-guoren@kernel.org> <20210428031807.GA27619@roeck-us.net>
+In-Reply-To: <20210428031807.GA27619@roeck-us.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 28 Apr 2021 16:29:38 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTSMC947zisNs+j_2rMoBqoOy-j1jvVBk2DNrf0Xt6sWA@mail.gmail.com>
+Message-ID: <CAJF2gTTSMC947zisNs+j_2rMoBqoOy-j1jvVBk2DNrf0Xt6sWA@mail.gmail.com>
+Subject: Re: [PATCH] csky: uaccess.h: Coding convention with asm generic
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Palmer,
+Thx, Guenter
 
-Le 4/20/21 à 12:19 AM, Anup Patel a écrit :
-> On Sun, Apr 18, 2021 at 4:59 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
->>
->> The 32b kernel mapping lies in the linear mapping, there is no point in
->> printing its address in page table dump, so remove this leftover that
->> comes from moving the kernel mapping outside the linear mapping for 64b
->> kernel.
->>
->> Fixes: e9efb21fe352 ("riscv: Prepare ptdump for vm layout dynamic addresses")
->> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-> 
-> Looks good to me.
-> 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> 
-> Regards,
-> Anup
-> 
->> ---
->>   arch/riscv/mm/ptdump.c | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/riscv/mm/ptdump.c b/arch/riscv/mm/ptdump.c
->> index 0aba4421115c..a4ed4bdbbfde 100644
->> --- a/arch/riscv/mm/ptdump.c
->> +++ b/arch/riscv/mm/ptdump.c
->> @@ -76,8 +76,8 @@ enum address_markers_idx {
->>          PAGE_OFFSET_NR,
->>   #ifdef CONFIG_64BIT
->>          MODULES_MAPPING_NR,
->> -#endif
->>          KERNEL_MAPPING_NR,
->> +#endif
->>          END_OF_SPACE_NR
->>   };
->>
->> @@ -99,8 +99,8 @@ static struct addr_marker address_markers[] = {
->>          {0, "Linear mapping"},
->>   #ifdef CONFIG_64BIT
->>          {0, "Modules mapping"},
->> -#endif
->>          {0, "Kernel mapping (kernel, BPF)"},
->> +#endif
->>          {-1, NULL},
->>   };
->>
->> @@ -379,8 +379,8 @@ static int ptdump_init(void)
->>          address_markers[PAGE_OFFSET_NR].start_address = PAGE_OFFSET;
->>   #ifdef CONFIG_64BIT
->>          address_markers[MODULES_MAPPING_NR].start_address = MODULES_VADDR;
->> -#endif
->>          address_markers[KERNEL_MAPPING_NR].start_address = kernel_virt_addr;
->> +#endif
->>
->>          kernel_ptd_info.base_addr = KERN_VIRT_START;
->>
->> --
->> 2.20.1
->>
+On Wed, Apr 28, 2021 at 11:18 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Apr 21, 2021 at 08:54:15AM +0000, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Using asm-generic/uaccess.h to prevent duplicated code:
+> >  - Add user_addr_max which mentioned in generic uaccess.h
+> >  - Remove custom definitions of KERNEL/USER_DS, get/set_fs,
+> >    uaccess_kerenl
+> >  - Using generic extable.h instead of custom definitions in
+> >    uaccess.h
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+>
+> Building csky:tinyconfig ... failed
+> --------------
+> Error log:
+> csky-linux-ld: fs/readdir.o: in function `__put_user_fn':
+> readdir.c:(.text+0x7c): undefined reference to `__put_user_bad'
+> csky-linux-ld: fs/readdir.o: in function `$d':
+> readdir.c:(.text+0x1bc): undefined reference to `__put_user_bad'
+> make[1]: *** [Makefile:1277: vmlinux] Error 1
+> make: *** [Makefile:222: __sub-make] Error 2
+It's a bug, I can't put __put_user_bad in __put_user_fn, and
+__put_user has done that:
 
-Do you think you can take this patch too on for-next?
+/*
+ * These are the main single-value transfer routines.  They automatically
+ * use the right size if we just have the right pointer type.
+ * This version just falls back to copy_{from,to}_user, which should
+ * provide a fast-path for small values.
+ */
+#define __put_user(x, ptr) \
+({                                                              \
+        __typeof__(*(ptr)) __x = (x);                           \
+        int __pu_err = -EFAULT;                                 \
+        __chk_user_ptr(ptr);                                    \
+        switch (sizeof (*(ptr))) {                              \
+        case 1:                                                 \
+        case 2:                                                 \
+        case 4:                                                 \
+        case 8:                                                 \
+                __pu_err = __put_user_fn(sizeof (*(ptr)),       \
+                                         ptr, &__x);            \
+                break;                                          \
+        default:                                                \
+                __put_user_bad();                               \
+                break;                                          \
+         }                                                      \
+        __pu_err;                                               \
+})
 
-Thanks,
+Also, the same problem in __get_user, and I didn't implement "case 8:".
 
-Alex
+I'll fix up it in another patch and implement __get_user_case_8
+(similar with arch/arc.)
+
+>
+> Bisect log attached.
+>
+> Guenter
+>
+> ---
+> # bad: [3f1fee3e7237347f09a2c7fa538119e6d9ea4b84] Add linux-next specific files for 20210426
+> # good: [9f4ad9e425a1d3b6a34617b8ea226d56a119a717] Linux 5.12
+> git bisect start 'HEAD' 'v5.12'
+> # bad: [bb8f486776983897309645c98705670c3d2a16e5] Merge remote-tracking branch 'crypto/master'
+> git bisect bad bb8f486776983897309645c98705670c3d2a16e5
+> # bad: [6ab4f4364c450991a476eef5bc57bef3586354ed] Merge remote-tracking branch 'jc_docs/docs-next'
+> git bisect bad 6ab4f4364c450991a476eef5bc57bef3586354ed
+> # bad: [fd73cab0b2a046136842b23f027dae3686588ba5] Merge remote-tracking branch 'parisc-hd/for-next'
+> git bisect bad fd73cab0b2a046136842b23f027dae3686588ba5
+> # good: [f0e6103e023e0ede67848ddcd6b07044574f4fd3] soc: document merges
+> git bisect good f0e6103e023e0ede67848ddcd6b07044574f4fd3
+> # good: [70361dc0add47d3818acf9c33718ce7395f8aaa5] Merge remote-tracking branch 'arm-soc/for-next'
+> git bisect good 70361dc0add47d3818acf9c33718ce7395f8aaa5
+> # good: [f62ad9f6e1100e3a1b6ca7a004fd5a972ff768df] Merge remote-tracking branch 'ti-k3/ti-k3-next'
+> git bisect good f62ad9f6e1100e3a1b6ca7a004fd5a972ff768df
+> # bad: [b3b33dda4fd25e201c77f0ce9277dd34f31e86ce] Merge remote-tracking branch 'h8300/h8300-next'
+> git bisect bad b3b33dda4fd25e201c77f0ce9277dd34f31e86ce
+> # good: [6a861bd8cf3c96f5825d031732e365b7721a84a5] Merge branch 'clk-qcom' into clk-next
+> git bisect good 6a861bd8cf3c96f5825d031732e365b7721a84a5
+> # good: [1dd129f1deec0606fb70992521a7e5bcd2f85c69] Merge branch 'clk-qcom' into clk-next
+> git bisect good 1dd129f1deec0606fb70992521a7e5bcd2f85c69
+> # good: [8808515be0ed4e33de9bfdc65f4c1b547ee11065] h8300: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+> git bisect good 8808515be0ed4e33de9bfdc65f4c1b547ee11065
+> # good: [e27d3ecdeb8923f35cb856fd20be14256aaa7575] Merge remote-tracking branch 'clk/clk-next'
+> git bisect good e27d3ecdeb8923f35cb856fd20be14256aaa7575
+> # bad: [d3900e8d918f8fbd1366b9c2998e2830e66a0081] csky: uaccess.h: Coding convention with asm generic
+> git bisect bad d3900e8d918f8fbd1366b9c2998e2830e66a0081
+> # good: [0b1f557a1fa02174a982f557581e348d91987ec6] csky: Fixup typos
+> git bisect good 0b1f557a1fa02174a982f557581e348d91987ec6
+> # good: [8bfe70e696584deeed1de1bcbfcde405aa1a1344] csky: fix syscache.c fallthrough warning
+> git bisect good 8bfe70e696584deeed1de1bcbfcde405aa1a1344
+> # first bad commit: [d3900e8d918f8fbd1366b9c2998e2830e66a0081] csky: uaccess.h: Coding convention with asm generic
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
