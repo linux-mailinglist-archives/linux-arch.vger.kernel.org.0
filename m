@@ -2,58 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC5A36D5D0
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 12:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F3F36D7AC
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 14:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239454AbhD1Kan (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Apr 2021 06:30:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46632 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230057AbhD1Kam (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 28 Apr 2021 06:30:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A9162613FF;
-        Wed, 28 Apr 2021 10:29:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619605797;
-        bh=8C+OErcF42crulhtmpO3zOoSt0k/g7nGDTskXCzZBv0=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Da432CDk5RTSR+1+b85H4jxdY4rw0w2r+IVM2U59jpCTLGTuuTqyHcKD+gHDkWs5s
-         tlCQdDuWIM5amEuBPZEbZLEp/8zF4A8Wa6bog/pzz6xY8HWmkIQY3eda4xcWV72zQH
-         0EyDKY6foSXFcEVQPphyRgCCTiBLRlbfyUDJ5rDF5W3Hyh027BmMdsfRge//6oblO9
-         DPxgUcmWFPah1k4/aNdkLDh46k+nRSKasC4vhxisUbFof6Cu4iKEpPNHwUn32INzIy
-         sFCrJiflrUZfOAkZmrYkK8IwQm5hO2H2YfopdfozwyNX3WYNLIhxL2gxM99LWQx49C
-         8CG1MeO321bMQ==
-Date:   Wed, 28 Apr 2021 12:29:52 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-cc:     ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
-Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
-In-Reply-To: <YH2hs6EsPTpDAqXc@mit.edu>
-Message-ID: <nycvar.YFH.7.76.2104281228350.18270@cbobk.fhfr.pm>
-References: <YH2hs6EsPTpDAqXc@mit.edu>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S237039AbhD1Mur (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Apr 2021 08:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231506AbhD1Mur (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Apr 2021 08:50:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706CAC061574;
+        Wed, 28 Apr 2021 05:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=352/lgOwUkMwD9iQddxtMDN0ioz58bz5rwYjNmwVsLg=; b=ThQ1R+bu1jlRN4CBDTXlPRSiBB
+        Im7+XUv4tbT84Nq8pHPlrVK21IqwldG3jSqVsC0/vak1Rfo31p/Q4huE10skEY6eKtt2ncUbG9u49
+        VDURGTOVAud7akyVmGymqunXCrecN+WEcM/zL8fs6OHkUbHAG11sTsxUoFT3WmxKMHP6R5r6/Y57s
+        /tS1KXTrSWrYpN0pH25R1XtMehHR86Ocf7xdw3GDgcbyrbFW5NuA9kDY297gsERzS3DmzuTQN1Ibj
+        YC8V2U1e2bFFmTFOyugZW/N3jRsffPc9OdrjavccbtUJ5FJoI0dXNdCup93iA82HDcqQ0WoZ1S/yn
+        StV88iSQ==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lbjdS-008IOe-4O; Wed, 28 Apr 2021 12:49:47 +0000
+Date:   Wed, 28 Apr 2021 13:49:46 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Guo Ren <guoren@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH] csky: uaccess.h: Coding convention with asm generic
+Message-ID: <20210428124946.GA1976154@infradead.org>
+References: <1618995255-91499-1-git-send-email-guoren@kernel.org>
+ <20210428031807.GA27619@roeck-us.net>
+ <CAJF2gTTSMC947zisNs+j_2rMoBqoOy-j1jvVBk2DNrf0Xt6sWA@mail.gmail.com>
+ <CAK8P3a1DvsXSEDoovLk11hzNHyJi7vqNoToU+n5aFi2viZO_Uw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1DvsXSEDoovLk11hzNHyJi7vqNoToU+n5aFi2viZO_Uw@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 19 Apr 2021, Theodore Ts'o wrote:
+On Wed, Apr 28, 2021 at 11:25:29AM +0200, Arnd Bergmann wrote:
+> Actually, please don't use the asm-generic __put_user version based
+> on copy_to_user, we probably have killed it off long ago.
 
-> This year, the Maintainers and Kernel Summit is currently planned to
-> be held in Dublin, Ireland, September 27 -- 29th.  
+Yes, they are horrible.  
 
-Hi Ted,
+> We might want to come up with a new version of asm-generic/uaccess.h
+> that actually makes it easier to have a sane per-architecture
+> implementation of the low-level accessors without set_fs().
+> 
+> I've added Christoph to Cc here, he probably has some ideas
+> on where we should be heading.
 
-given the fact that OSS is being relocated from Dublin to Washington [1], 
-is Kernel Summit following that direction?
+I think asm-generic/uaccess.h pretty much only makes sense for
+nommu.  For that case we can just kill the __{get,put}_user_fn
+indirection.  I actually have work for that in an old branch.
 
-[1] https://www.linuxfoundation.org/en/press-release/the-linux-foundation-announces-open-source-summit-embedded-linux-conference-2021-will-move-from-dublin-ireland-to-seattle-washington/
+Trying to use any of asm-generic/uaccess.h for MMU based kernel is
+just asking for trouble.
 
--- 
-Jiri Kosina
-SUSE Labs
+> One noteworthy aspect is that almost nothing users the low-level
+> __get_user()/__put_user() helpers any more outside of architecture
+> specific code, so we may not need to have separate versions
+> for much longer.
 
+Al has been trying to kill them off entirely for a while, and I hope
+he'll eventually succeed.  That being said the difference should be
+that the __ versions just skip the access_ok, so having both is
+fairly trivial to implement.
