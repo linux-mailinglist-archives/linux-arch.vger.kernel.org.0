@@ -2,35 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4569936DEA9
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 19:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F7536DF05
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Apr 2021 20:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243193AbhD1Rx1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Apr 2021 13:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243187AbhD1Rx0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Apr 2021 13:53:26 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DB2C061573;
-        Wed, 28 Apr 2021 10:52:40 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0c1700f2769e812f937597.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:1700:f276:9e81:2f93:7597])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2BB431EC0242;
-        Wed, 28 Apr 2021 19:52:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1619632359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=uNuSRpt+Nn8E1Ie1R3utO4unCBUpAQGFbeK/Hl3lbwA=;
-        b=f66CoGete6UVNGpfGs/Fm2JVHxdlkjHe22uMROZcu8rr0x2vEvFY/1wCWVsC5/+qsG2d20
-        OC+P3YZqbuPB/ykR8uGOFeBXsaI3T1EXVnAIl5+CHOile1nSbGtjmvFoWjfMD3TKeplfm3
-        J6jPvXnOnMA5cMOUbp3RdC1kckLGAZU=
-Date:   Wed, 28 Apr 2021 19:52:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        id S243572AbhD1Sjs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Apr 2021 14:39:48 -0400
+Received: from mga03.intel.com ([134.134.136.65]:17775 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235613AbhD1Sjr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Apr 2021 14:39:47 -0400
+IronPort-SDR: 1VMV8Mi3lof0WrrsPldix/Ja96EQtJUJ3T7/VLwsfD62M+NFGNx/BDKOOnQbWyi+vV6r5VDhbt
+ 4afjvueP7zWw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9968"; a="196876300"
+X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
+   d="scan'208";a="196876300"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 11:39:01 -0700
+IronPort-SDR: Eyij2/3/xueqhv26etxQzIXzQtPT5rX0f6zloVm+HZBYnABguCl1d9tC0mRZyqw7zQkgL6+fMb
+ nfTvUehN8Wgg==
+X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
+   d="scan'208";a="458322752"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.133.34]) ([10.209.133.34])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 11:39:00 -0700
+Subject: Re: [PATCH v26 22/30] x86/cet/shstk: Add user-mode shadow stack
+ support
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -57,163 +53,186 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v26 22/30] x86/cet/shstk: Add user-mode shadow stack
- support
-Message-ID: <YImg5hmBnTZTkYIp@zn.tnic>
 References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-23-yu-cheng.yu@intel.com>
+ <20210427204315.24153-23-yu-cheng.yu@intel.com> <YImg5hmBnTZTkYIp@zn.tnic>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <3a0ed2e3-b13d-0db6-87af-fecd394ddd2e@intel.com>
+Date:   Wed, 28 Apr 2021 11:39:00 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210427204315.24153-23-yu-cheng.yu@intel.com>
+In-Reply-To: <YImg5hmBnTZTkYIp@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 27, 2021 at 01:43:07PM -0700, Yu-cheng Yu wrote:
-> @@ -535,6 +536,10 @@ struct thread_struct {
->  
->  	unsigned int		sig_on_uaccess_err:1;
->  
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +	struct cet_status	cet;
+On 4/28/2021 10:52 AM, Borislav Petkov wrote:
+> On Tue, Apr 27, 2021 at 01:43:07PM -0700, Yu-cheng Yu wrote:
+>> @@ -535,6 +536,10 @@ struct thread_struct {
+>>   
+>>   	unsigned int		sig_on_uaccess_err:1;
+>>   
+>> +#ifdef CONFIG_X86_SHADOW_STACK
+>> +	struct cet_status	cet;
+> 
+> A couple of versions ago I said:
+> 
+> "	struct shstk_desc       shstk;
+> 
+> or so"
+> 
+> but no movement here. That thing is still called cet_status even though
+> there's nothing status-related with it.
+> 
+> So what's up?
+> 
 
-A couple of versions ago I said:
+Sorry about that.  After that email thread, we went ahead to separate 
+shadow stack and ibt into different files.  I thought about the struct, 
+the file names cet.h, etc.  The struct still needs to include ibt 
+status, and if it is shstk_desc, the name is not entirely true.  One 
+possible approach is, we don't make it a struct here, and put every item 
+directly in thread_struct.  However, the benefit of putting all in a 
+struct is understandable (you might argue the opposite :-)).  Please 
+make the call, and I will do the change.
 
-"	struct shstk_desc       shstk;
+>> +static unsigned long alloc_shstk(unsigned long size)
+>> +{
+>> +	struct mm_struct *mm = current->mm;
+>> +	unsigned long addr, populate;
+>> +	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
+> 
+> The tip-tree preferred ordering of variable declarations at the
+> beginning of a function is reverse fir tree order::
+> 
+> 	struct long_struct_name *descriptive_name;
+> 	unsigned long foo, bar;
+> 	unsigned int tmp;
+> 	int ret;
+> 
+> The above is faster to parse than the reverse ordering::
+> 
+> 	int ret;
+> 	unsigned int tmp;
+> 	unsigned long foo, bar;
+> 	struct long_struct_name *descriptive_name;
+> 
+> And even more so than random ordering::
+> 
+> 	unsigned long foo, bar;
+> 	int ret;
+> 	struct long_struct_name *descriptive_name;
+> 	unsigned int tmp;
+> 
+> Please fix it up everywhere.
+> 
 
-or so"
+Ok!
 
-but no movement here. That thing is still called cet_status even though
-there's nothing status-related with it.
+>> +	mmap_write_lock(mm);
+>> +	addr = do_mmap(NULL, 0, size, PROT_READ, flags, VM_SHADOW_STACK, 0,
+>> +		       &populate, NULL);
+>> +	mmap_write_unlock(mm);
+>> +
+>> +	return addr;
+>> +}
+>> +
+>> +int shstk_setup(void)
+>> +{
+>> +	unsigned long addr, size;
+>> +	struct cet_status *cet = &current->thread.cet;
+>> +
+>> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	size = round_up(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G), PAGE_SIZE);
+>> +	addr = alloc_shstk(size);
+>> +	if (IS_ERR_VALUE(addr))
+>> +		return PTR_ERR((void *)addr);
+>> +
+>> +	cet->shstk_base = addr;
+>> +	cet->shstk_size = size;
+>> +
+>> +	start_update_msrs();
+>> +	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
+>> +	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
+>> +	end_update_msrs();
+> 
+> <---- newline here.
+> 
+>> +	return 0;
+>> +}
+>> +
+>> +void shstk_free(struct task_struct *tsk)
+>> +{
+>> +	struct cet_status *cet = &tsk->thread.cet;
+>> +
+>> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) ||
+>> +	    !cet->shstk_size ||
+>> +	    !cet->shstk_base)
+>> +		return;
+>> +
+>> +	if (!tsk->mm)
+>> +		return;
+> 
+> Where are the comments you said you wanna add:
+> 
+> https://lkml.kernel.org/r/b05ee7eb-1b5d-f84f-c8f3-bfe9426e8a7d@intel.com
+> 
+> ?
+> 
 
-So what's up?
+Yes, the comments are in patch #23: Handle thread shadow stack.  I 
+wanted to add that in the patch that takes the path.
 
-> +static unsigned long alloc_shstk(unsigned long size)
-> +{
-> +	struct mm_struct *mm = current->mm;
-> +	unsigned long addr, populate;
-> +	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
+>> +
+>> +	while (1) {
+>> +		int r;
+>> +
+>> +		r = vm_munmap(cet->shstk_base, cet->shstk_size);
+> 
+> 		int r = vm_munmap...
+> 
+>> +
+>> +		/*
+>> +		 * vm_munmap() returns -EINTR when mmap_lock is held by
+>> +		 * something else, and that lock should not be held for a
+>> +		 * long time.  Retry it for the case.
+>> +		 */
+>> +		if (r == -EINTR) {
+>> +			cond_resched();
+>> +			continue;
+>> +		}
+>> +		break;
+>> +	}
+> 
+> vm_munmap() can return other negative error values, where are you
+> handling those?
+> 
 
-The tip-tree preferred ordering of variable declarations at the
-beginning of a function is reverse fir tree order::
+For other error values, the loop stops.
 
-	struct long_struct_name *descriptive_name;
-	unsigned long foo, bar;
-	unsigned int tmp;
-	int ret;
+>> +
+>> +	cet->shstk_base = 0;
+>> +	cet->shstk_size = 0;
+>> +}
+>> +
+>> +void shstk_disable(void)
+>> +{
+>> +	struct cet_status *cet = &current->thread.cet;
+> 
+> Same question as before: what guarantees that current doesn't change
+> from under you here?
 
-The above is faster to parse than the reverse ordering::
+The actual reading/writing MSRs are protected by fpregs_lock().
 
-	int ret;
-	unsigned int tmp;
-	unsigned long foo, bar;
-	struct long_struct_name *descriptive_name;
+> 
+> One of the worst thing to do is to ignore review comments. I'd strongly
+> suggest you pay more attention and avoid that in the future.
+> 
+> Thx.
+> 
 
-And even more so than random ordering::
-
-	unsigned long foo, bar;
-	int ret;
-	struct long_struct_name *descriptive_name;
-	unsigned int tmp;
-
-Please fix it up everywhere.
-
-> +	mmap_write_lock(mm);
-> +	addr = do_mmap(NULL, 0, size, PROT_READ, flags, VM_SHADOW_STACK, 0,
-> +		       &populate, NULL);
-> +	mmap_write_unlock(mm);
-> +
-> +	return addr;
-> +}
-> +
-> +int shstk_setup(void)
-> +{
-> +	unsigned long addr, size;
-> +	struct cet_status *cet = &current->thread.cet;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		return -EOPNOTSUPP;
-> +
-> +	size = round_up(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G), PAGE_SIZE);
-> +	addr = alloc_shstk(size);
-> +	if (IS_ERR_VALUE(addr))
-> +		return PTR_ERR((void *)addr);
-> +
-> +	cet->shstk_base = addr;
-> +	cet->shstk_size = size;
-> +
-> +	start_update_msrs();
-> +	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
-> +	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
-> +	end_update_msrs();
-
-<---- newline here.
-
-> +	return 0;
-> +}
-> +
-> +void shstk_free(struct task_struct *tsk)
-> +{
-> +	struct cet_status *cet = &tsk->thread.cet;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) ||
-> +	    !cet->shstk_size ||
-> +	    !cet->shstk_base)
-> +		return;
-> +
-> +	if (!tsk->mm)
-> +		return;
-
-Where are the comments you said you wanna add:
-
-https://lkml.kernel.org/r/b05ee7eb-1b5d-f84f-c8f3-bfe9426e8a7d@intel.com
-
-?
-
-> +
-> +	while (1) {
-> +		int r;
-> +
-> +		r = vm_munmap(cet->shstk_base, cet->shstk_size);
-
-		int r = vm_munmap...
-
-> +
-> +		/*
-> +		 * vm_munmap() returns -EINTR when mmap_lock is held by
-> +		 * something else, and that lock should not be held for a
-> +		 * long time.  Retry it for the case.
-> +		 */
-> +		if (r == -EINTR) {
-> +			cond_resched();
-> +			continue;
-> +		}
-> +		break;
-> +	}
-
-vm_munmap() can return other negative error values, where are you
-handling those?
-
-> +
-> +	cet->shstk_base = 0;
-> +	cet->shstk_size = 0;
-> +}
-> +
-> +void shstk_disable(void)
-> +{
-> +	struct cet_status *cet = &current->thread.cet;
-
-Same question as before: what guarantees that current doesn't change
-from under you here?
-
-One of the worst thing to do is to ignore review comments. I'd strongly
-suggest you pay more attention and avoid that in the future.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
