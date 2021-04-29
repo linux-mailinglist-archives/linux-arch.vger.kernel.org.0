@@ -2,31 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9204336EDFD
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Apr 2021 18:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102D236EE5B
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Apr 2021 18:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240760AbhD2QR5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Apr 2021 12:17:57 -0400
-Received: from mga07.intel.com ([134.134.136.100]:12153 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233480AbhD2QR5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 29 Apr 2021 12:17:57 -0400
-IronPort-SDR: u6RT5mR3NcX5bHVZOUpa+4AKjiaNPjx0dQF7RQ3RCA5o78NA04SE/8GxkXX2aKlplglR4vx5Wz
- zFOWWKdPUXgQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9969"; a="260990856"
-X-IronPort-AV: E=Sophos;i="5.82,259,1613462400"; 
-   d="scan'208";a="260990856"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2021 09:17:08 -0700
-IronPort-SDR: qpscS/NTPaNExpS/xy+h77DjUAj0MfSqWUBQ9aWY26+7MNzDWCTgXqKlTL6m4WaoZlZ1zH9tjB
- 1WJjeFNQOWHQ==
-X-IronPort-AV: E=Sophos;i="5.82,259,1613462400"; 
-   d="scan'208";a="458834640"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.75.159]) ([10.212.75.159])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2021 09:17:07 -0700
-Subject: Re: [PATCH v26 22/30] x86/cet/shstk: Add user-mode shadow stack
- support
-To:     Borislav Petkov <bp@alien8.de>
+        id S240833AbhD2Qql (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Apr 2021 12:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232724AbhD2Qqk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Apr 2021 12:46:40 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB09C06138B;
+        Thu, 29 Apr 2021 09:45:53 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0a4f00c0c5be88e2edfd96.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:4f00:c0c5:be88:e2ed:fd96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 253F71EC0266;
+        Thu, 29 Apr 2021 18:45:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1619714752;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+ad63PVCcTY8G5quIEl9VpmY7+0tV15lo66Ty6GyFEc=;
+        b=WllWCfTKHtk2grwTb0bcROdTjEBFSTbW4IXMbRR95A5UWvb7B3LcyCQW5zVPfLHYDOLscW
+        jsc6FXvL4pMBHB6B4gOUdPm+a6YuR+cRRSAow3GJ7FqHIB60Joq69Zy9+HQF+gB0Efqk/F
+        eXiJMErDV5h38KquyvNSKrSczvhY63o=
+Date:   Thu, 29 Apr 2021 18:45:49 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -53,103 +57,69 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
+Subject: Re: [PATCH v26 22/30] x86/cet/shstk: Add user-mode shadow stack
+ support
+Message-ID: <YIrivcpkUwrmoO7w@zn.tnic>
 References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-23-yu-cheng.yu@intel.com> <YImg5hmBnTZTkYIp@zn.tnic>
- <3a0ed2e3-b13d-0db6-87af-fecd394ddd2e@intel.com> <YIp4c95E9/9DYR6z@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <bdd41e35-29f0-896a-72ec-8b1abeafda0d@intel.com>
-Date:   Thu, 29 Apr 2021 09:17:06 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+ <20210427204315.24153-23-yu-cheng.yu@intel.com>
+ <YImg5hmBnTZTkYIp@zn.tnic>
+ <3a0ed2e3-b13d-0db6-87af-fecd394ddd2e@intel.com>
+ <YIp4c95E9/9DYR6z@zn.tnic>
+ <bdd41e35-29f0-896a-72ec-8b1abeafda0d@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YIp4c95E9/9DYR6z@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bdd41e35-29f0-896a-72ec-8b1abeafda0d@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/29/2021 2:12 AM, Borislav Petkov wrote:
-> On Wed, Apr 28, 2021 at 11:39:00AM -0700, Yu, Yu-cheng wrote:
->> Sorry about that.  After that email thread, we went ahead to separate shadow
->> stack and ibt into different files.  I thought about the struct, the file
->> names cet.h, etc.  The struct still needs to include ibt status, and if it
->> is shstk_desc, the name is not entirely true.  One possible approach is, we
->> don't make it a struct here, and put every item directly in thread_struct.
->> However, the benefit of putting all in a struct is understandable (you might
->> argue the opposite :-)).  Please make the call, and I will do the change.
-> 
-> /me looks forward into the patchset...
-> 
-> So this looks like the final version of it:
-> 
-> @@ -15,6 +15,7 @@ struct cet_status {
->   	unsigned long	shstk_base;
->   	unsigned long	shstk_size;
->   	unsigned int	locked:1;
-> +	unsigned int	ibt_enabled:1;
->   };
-> 
-> If so, that thing should be simply:
-> 
-> 	struct cet {
-> 		unsigned long shstk_base;
-> 		unsigned long shstk_size;
-> 		unsigned int shstk_lock : 1,
-> 			     ibt	: 1;
-> 	}
-> 
-> Is that ibt flag per thread or why is it here? I guess I'll find out.
-> 
-> /me greps...
-> 
-> ah yes, it is.
-> 
+On Thu, Apr 29, 2021 at 09:17:06AM -0700, Yu, Yu-cheng wrote:
+> The lock applies to both shadow stack and ibt.  So maybe just "locked"?
 
-The lock applies to both shadow stack and ibt.  So maybe just "locked"?
+Sure.
 
->> Yes, the comments are in patch #23: Handle thread shadow stack.  I wanted to
->> add that in the patch that takes the path.
+> vm_munmap() returns error as the following:
 > 
-> That comes next, I'll look there.
-> 
->>> vm_munmap() can return other negative error values, where are you
->>> handling those?
->>>
->>
->> For other error values, the loop stops.
-> 
-> And then what happens?
-> 
->>>> +	cet->shstk_base = 0;
->>>> +	cet->shstk_size = 0;
-> 
-> You clear those here without even checking whether unmap failed somehow.
-> And then stuff leaks but we don't care, right?
-> 
-> Someone else's problem, I'm sure.
-> 
+> (1) -EINVAL: address/size/alignment is wrong.
+> 	For shadow stack, the kernel keeps track of it, this cannot/should not
+> happen.
 
-vm_munmap() returns error as the following:
+You mean nothing might corrupt
 
-(1) -EINVAL: address/size/alignment is wrong.
-	For shadow stack, the kernel keeps track of it, this cannot/should not 
-happen.  Should it happen, it is a bug.  The kernel can probably do WARN().
+        cet->shstk_base
+        cet->shstk_size
 
-(2) -ENOMEM: when doing __split_vma()/__vma_adjust(), kmem_cache_alloc() 
-fails.
-	Not much we can do.  Perhaps WARN()?
+?
 
-(3) -EINTR: mmap_write_lock_killable(mm) fails.
-	This should only happen to a pthread.  When a thread is existing, its 
-siblings are holding mm->mmap_lock.  This is handled here.
+I can't count the ways I've heard "should not happen" before and then it
+happening anyway.
 
-Right now, in the kernel, only the munmap() syscall returns 
-__vm_munmap() error code, otherwise the error is not checked.  Within 
-the kernel and if -EINTR is not expected, this makes sense as explained 
-above.
+So probably not but we better catch stuff like that instead of leaking.
 
-Thanks for questioning.  This piece needs to be correct.
+> Should it happen, it is a bug.
 
-Yu-cheng
+Ack.
+
+> The kernel can probably do WARN().
+
+Most definitely WARN. You need to catch funsies like that. But WARN_ONCE
+should be enough for now.
+
+> (2) -ENOMEM: when doing __split_vma()/__vma_adjust(), kmem_cache_alloc()
+> fails.
+> 	Not much we can do.  Perhaps WARN()?
+
+You got it.
+
+Bottom line is: if you can check for this and it is cheap, then
+definitely. Code changes, gets rewritten, reorganized, the old
+assertions change significance, and so on...
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
