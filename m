@@ -2,135 +2,404 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFA836E5EC
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Apr 2021 09:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE3B36E63C
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Apr 2021 09:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239563AbhD2H3C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Apr 2021 03:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S233375AbhD2HtH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Apr 2021 03:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239542AbhD2H25 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Apr 2021 03:28:57 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E48C06138F;
-        Thu, 29 Apr 2021 00:28:11 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id h36so49163112lfv.7;
-        Thu, 29 Apr 2021 00:28:10 -0700 (PDT)
+        with ESMTP id S231405AbhD2HtH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Apr 2021 03:49:07 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BF4C06138D
+        for <linux-arch@vger.kernel.org>; Thu, 29 Apr 2021 00:48:20 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id d11so7911812wrw.8
+        for <linux-arch@vger.kernel.org>; Thu, 29 Apr 2021 00:48:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jdGoIRWBioljnz1nn4BBzNDaqsoqN9PPsguAeYrjWLg=;
-        b=HJX7+45yNzfNOqoK21ORJnfSS4SqA73WGkbuaPh5kcOvNYBW3pgUgci+P8nrnGhQNi
-         QZWfIOMDuLxP7E+IQpYLX9lQKKuah9ZA8zd1fRzmg+us00a0DmfVFSJnoglvDlrR5JPu
-         wZT0M0/aUfULpMBV9n6oztU1UyISEfYE99jx+Q8TP6g+4uRAG8uA8+yTJauJnN5AbBUY
-         qNoqboxDl+xzzGI7bhFrM+aicJFNWgbT7KP6ymuX4ynpdc3n//T15fOaV6b78MEdGhpM
-         FgBTL7grc3s+XEViMjWFpN6JTZThcff9VQa1IWXouixVnItPd6v/EBVeRr1oW/H3lGiu
-         /UIA==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=BpYrN5HcmOywbaw+z2lQkv5C1/K+LRrq5c9nfbi+Y18=;
+        b=JcIUqcHrwEEUIrK8eQIfevaimISQgkglEN9be726HSuGNOosQiIBpj36PaV8Ucnp5u
+         9NxIQMi1yPtrPQPenV7Kz4l/CXRSi9QqFQe4kSLcpv/PW90R4cQ8WUN2ildfIa2JeGZl
+         8yIAMi4iXAvSAxYZwr1VW6MRcxe8X5rLEKcG8TMt07J9F5JKqtzDbtpi26+0ffY/rTza
+         pf13/jHc7SLkCJYL5U88wQwtC2Mnb34B7psULAykrLvMYPCm5+MzIdU4mOh4+kXN6yhW
+         Psc5tBvD+24PXoPWLo+O9mKYgMkGF2Pq8T+TdNhvi3Aywql2ZXNnTr3V1KozPtgK6zJZ
+         eknQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jdGoIRWBioljnz1nn4BBzNDaqsoqN9PPsguAeYrjWLg=;
-        b=F7+IaO8wzRH5HaDZ7T77Gov35YfycrgsjdDmc/5Uz+pJbUnQSZzrU5lrgE64EQhJSP
-         32Lk8yfAiYARvKp8shBrftuGmLcoo0qws35hlHZkKmaMgohLu7GvpPRhbBsZ32ZOSgWi
-         oMOroKpoqpAKsqedrDZsnY9U12THMT0UMEIFYriBshw4xmcaFWca8fXO4ITnqb9iX6RR
-         osr1sxE1LfcqW6m17zK5polb/jxBA9GGCTBP2iXmptwNrb8WAfllNfT1ntJVIz1VIq40
-         Oa5gI4UTsU6qavlS3g4NLC5zoJ4RO2GeoNH7aZjxwb7W3mPYw1VDTMLzT7qJ1JoL1Jt+
-         jb9A==
-X-Gm-Message-State: AOAM531FUzHww6X9No679KWry/KHEaRq6pENdedH23LqD53HVRitJCdj
-        H0n7s7Bmx7zpKM0RozizhrY=
-X-Google-Smtp-Source: ABdhPJwuzpu7JK/CSqJabsNtmy0swVR3AkMVRzJ7rqYa3XCC6KgbaqN5bCkxJUe0VVIgGQcVOJHNpg==
-X-Received: by 2002:a05:6512:12d2:: with SMTP id p18mr4572032lfg.239.1619681289241;
-        Thu, 29 Apr 2021 00:28:09 -0700 (PDT)
-Received: from grain.localdomain ([5.18.199.94])
-        by smtp.gmail.com with ESMTPSA id f17sm260073lfu.215.2021.04.29.00.28.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=BpYrN5HcmOywbaw+z2lQkv5C1/K+LRrq5c9nfbi+Y18=;
+        b=GflVQ5T/kwtUt+Za3HCCbBJvRC2uHo8BCP+iJjZ8wiJPq9Ce+gMA8dUoGftCRHA7lD
+         40O6CaltR7JkpyY+hPDifvBLtNAhw9goMf4+h74Rj/aFfl/HToL1Qv/Y/vAWTHDaNsJg
+         rU2sE5gLU1mWirf0P1h/1/4nUJt2ksT2BRbszlZ7PLyyFnOLU5gMerGorhW7Ju6SeihF
+         KsQsGupdFbe1nAMyDaExjESEM5RXPE6Klpn0tuSW1of+/1O7Q0RIaWUgdbMFz0j0lq7W
+         V+e4YoSyZACzU+GAk3wsgTqW1o8BPiO4hL/rIOl++wS9fOWi65vXa9C4YgIDMFDdGUFH
+         x44Q==
+X-Gm-Message-State: AOAM530snW3rFt2WvJ6GxOy0f1RweATsUrWFoh6oCiLymWkb1lHNos+6
+        9t7ZSgU6imhyRoyO5VZLQiycSw==
+X-Google-Smtp-Source: ABdhPJyr0jiAuOvDT1Z+V8GkwzkBVN754Ae6Efaf0Fi+YrTrKm1160jW+hdV67dq0vpM7vh/OfmSvA==
+X-Received: by 2002:a5d:610d:: with SMTP id v13mr11811010wrt.173.1619682499142;
+        Thu, 29 Apr 2021 00:48:19 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:fdf0:ddee:bee4:b3ce])
+        by smtp.gmail.com with ESMTPSA id m81sm2571110wmf.26.2021.04.29.00.48.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Apr 2021 00:28:08 -0700 (PDT)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 72CF5560116; Thu, 29 Apr 2021 10:28:07 +0300 (MSK)
-Date:   Thu, 29 Apr 2021 10:28:07 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
+        Thu, 29 Apr 2021 00:48:18 -0700 (PDT)
+Date:   Thu, 29 Apr 2021 09:48:12 +0200
+From:   Marco Elver <elver@google.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Florian Weimer <fweimer@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: extending ucontext (Re: [PATCH v26 25/30] x86/cet/shstk: Handle
- signals for shadow stack)
-Message-ID: <YIpgB5HbnNPWX4FP@grain>
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-26-yu-cheng.yu@intel.com>
- <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com>
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: siginfo_t ABI break on sparc64 from si_addr_lsb move 3y ago
+Message-ID: <YIpkvGrBFGlB5vNj@elver.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com>
 User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 28, 2021 at 04:03:55PM -0700, Andy Lutomirski wrote:
-> On Tue, Apr 27, 2021 at 1:44 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
-> >
-> > When shadow stack is enabled, a task's shadow stack states must be saved
-> > along with the signal context and later restored in sigreturn.  However,
-> > currently there is no systematic facility for extending a signal context.
-> > There is some space left in the ucontext, but changing ucontext is likely
-> > to create compatibility issues and there is not enough space for further
-> > extensions.
-> >
-> > Introduce a signal context extension struct 'sc_ext', which is used to save
-> > shadow stack restore token address.  The extension is located above the fpu
-> > states, plus alignment.  The struct can be extended (such as the ibt's
-> > wait_endbr status to be introduced later), and sc_ext.total_size field
-> > keeps track of total size.
-> 
-> I still don't like this.
-> 
-> Here's how the signal layout works, for better or for worse:
-> 
-> The kernel has:
-> 
-> struct rt_sigframe {
->     char __user *pretcode;
->     struct ucontext uc;
->     struct siginfo info;
->     /* fp state follows here */
-> };
-> 
-> This is roughly the actual signal frame.  But userspace does not have
-> this struct declared, and user code does not know the sizes of the
-> fields.  So it's accessed in a nonsensical way.  The signal handler
+Hello,  Eric,
 
-Well, not really. While indeed this is not declared as a part of API
-the structure is widely used for rt_sigreturn syscall (and we're using
-it inside criu thus any change here will simply break the restore
-procedure). Sorry out of time right now, I'll read your mail more
-carefully once time permit.
+By inspecting the logs I've seen that about 3 years ago there had been a
+number of siginfo_t cleanups. This included moving si_addr_lsb:
+
+	b68a68d3dcc1 ("signal: Move addr_lsb into the _sigfault union for clarity")
+	859d880cf544 ("signal: Correct the offset of si_pkey in struct siginfo")
+ 	8420f71943ae ("signal: Correct the offset of si_pkey and si_lower in struct siginfo on m68k")
+
+In an ideal world, we could just have si_addr + the union in _sigfault,
+but it seems there are more corner cases. :-/
+
+The reason I've stumbled upon this is that I wanted to add the just
+merged si_perf [1] field to glibc. But what I noticed is that glibc's
+definition and ours are vastly different around si_addr_lsb, si_lower,
+si_upper, and si_pkey.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=42dec9a936e7696bea1f27d3c5a0068cd9aa95fd
+
+In our current definition of siginfo_t, si_addr_lsb is placed into the
+same union as si_lower, si_upper, and si_pkey (and now si_perf). From
+the logs I see that si_lower, si_upper, and si_pkey are padded because
+si_addr_lsb used to be outside the union, which goes back to
+"signal: Move addr_lsb into the _sigfault union for clarity".
+
+Since then, si_addr_lsb must also be pointer-aligned, because the union
+containing it must be pointer-aligned (because si_upper, si_lower). On
+all architectures where si_addr_lsb is right after si_addr, this is
+perfectly fine, because si_addr itself is a pointer...
+
+... except for the anomaly that are 64-bit architectures that define
+__ARCH_SI_TRAPNO and want that 'int si_trapno'. Like, for example
+sparc64, which means siginfo_t's ABI has been subtly broken on sparc64
+since v4.16.
+
+The following static asserts illustrate this:
+
+--- a/arch/sparc/kernel/signal_64.c
++++ b/arch/sparc/kernel/signal_64.c
+@@ -556,3 +556,37 @@ void do_notify_resume(struct pt_regs *regs, unsigned long orig_i0, unsigned long
+ 	user_enter();
+ }
+ 
++static_assert(offsetof(siginfo_t, si_signo)	== 0);
++static_assert(offsetof(siginfo_t, si_errno)	== 4);
++static_assert(offsetof(siginfo_t, si_code)	== 8);
++static_assert(offsetof(siginfo_t, si_pid)	== 16);
++static_assert(offsetof(siginfo_t, si_uid)	== 20);
++static_assert(offsetof(siginfo_t, si_tid)	== 16);
++static_assert(offsetof(siginfo_t, si_overrun)	== 20);
++static_assert(offsetof(siginfo_t, si_status)	== 24);
++static_assert(offsetof(siginfo_t, si_utime)	== 32);
++static_assert(offsetof(siginfo_t, si_stime)	== 40);
++static_assert(offsetof(siginfo_t, si_value)	== 24);
++static_assert(offsetof(siginfo_t, si_int)	== 24);
++static_assert(offsetof(siginfo_t, si_ptr)	== 24);
++static_assert(offsetof(siginfo_t, si_addr)	== 16);
++static_assert(offsetof(siginfo_t, si_trapno)	== 24);
++#if 1 /* Correct offsets, obtained from v4.14 */
++static_assert(offsetof(siginfo_t, si_addr_lsb)	== 28);
++static_assert(offsetof(siginfo_t, si_lower)	== 32);
++static_assert(offsetof(siginfo_t, si_upper)	== 40);
++static_assert(offsetof(siginfo_t, si_pkey)	== 32);
++#else /* Current offsets, as of v4.16 */
++static_assert(offsetof(siginfo_t, si_addr_lsb)	== 32);
++static_assert(offsetof(siginfo_t, si_lower)	== 40);
++static_assert(offsetof(siginfo_t, si_upper)	== 48);
++static_assert(offsetof(siginfo_t, si_pkey)	== 40);
++#endif
++static_assert(offsetof(siginfo_t, si_band)	== 16);
++static_assert(offsetof(siginfo_t, si_fd)	== 20);
+
+---
+
+Granted, nobody seems to have noticed because I don't even know if these
+fields have use on sparc64. But I don't yet see this as justification to
+leave things as-is...
+
+The collateral damage of this, and the acute problem that I'm having is
+defining si_perf in a sort-of readable and portable way in siginfo_t
+definitions that live outside the kernel, where sparc64 does not yet
+have broken si_addr_lsb. And the same difficulty applies to the kernel
+if we want to unbreak sparc64, while not wanting to move si_perf for
+other architectures.
+
+There are 2 options I see to solve this:
+
+1. Make things simple again. We could just revert the change moving
+   si_addr_lsb into the union, and sadly accept we'll have to live with
+   that legacy "design" mistake. (si_perf stays in the union, but will
+   unfortunately change its offset for all architectures... this one-off
+   move might be ok because it's new.)
+
+2. Add special cases to retain si_addr_lsb in the union on architectures
+   that do not have __ARCH_SI_TRAPNO (the majority). I have added a
+   draft patch that would do this below (with some refactoring so that
+   it remains sort-of readable), as an experiment to see how complicated
+   this gets.
+
+Option (1) means we'll forever be wasting the space where si_addr_lsb
+lives (including the padding). It'd also mean we'd move si_perf for
+_all_ architectures -- this might be acceptable, given there is no
+stable release with it yet -- the fix just needs to be merged before the
+release of v5.13! It is the simpler option though -- and I don't know if
+we need all this complexity.
+
+Option (2) perhaps results in better space utilization. Maybe that's
+better long-term if we worry about space in some rather distant future
+-- where we need those 8 bytes on 64-bit architectures to not exceed 128
+bytes. This option, however, doesn't just make us carry this complexity
+forever, but also forces it onto everyone else, like glibc and other
+libcs (including those in other languages with C FFIs) which have their
+own definition of siginfo_t.
+
+Which option do you prefer? Are there better options?
+
+Many thanks,
+-- Marco
+
+------ >8 ------
+
+Option #2 draft:
+
+diff --git a/arch/sparc/kernel/signal_64.c b/arch/sparc/kernel/signal_64.c
+index a0eec62c825d..150ee27b1423 100644
+--- a/arch/sparc/kernel/signal_64.c
++++ b/arch/sparc/kernel/signal_64.c
+@@ -556,3 +556,37 @@ void do_notify_resume(struct pt_regs *regs, unsigned long orig_i0, unsigned long
+ 	user_enter();
+ }
+ 
++/*
++ * Compile-time assertions for siginfo_t offsets. Unlike other architectures,
++ * sparc64 is special, because it requires si_trapno (int), and the following
++ * si_addr_lsb (short) need not be word aligned. Accidental changes around the
++ * offset of si_addr_lsb and the following fields would only be caught here.
++ */
++static_assert(offsetof(siginfo_t, si_signo)	== 0);
++static_assert(offsetof(siginfo_t, si_errno)	== 4);
++static_assert(offsetof(siginfo_t, si_code)	== 8);
++static_assert(offsetof(siginfo_t, si_pid)	== 16);
++static_assert(offsetof(siginfo_t, si_uid)	== 20);
++static_assert(offsetof(siginfo_t, si_tid)	== 16);
++static_assert(offsetof(siginfo_t, si_overrun)	== 20);
++static_assert(offsetof(siginfo_t, si_status)	== 24);
++static_assert(offsetof(siginfo_t, si_utime)	== 32);
++static_assert(offsetof(siginfo_t, si_stime)	== 40);
++static_assert(offsetof(siginfo_t, si_value)	== 24);
++static_assert(offsetof(siginfo_t, si_int)	== 24);
++static_assert(offsetof(siginfo_t, si_ptr)	== 24);
++static_assert(offsetof(siginfo_t, si_addr)	== 16);
++static_assert(offsetof(siginfo_t, si_trapno)	== 24);
++#if 1 /* Correct offsets, obtained from v4.14 */
++static_assert(offsetof(siginfo_t, si_addr_lsb)	== 28);
++static_assert(offsetof(siginfo_t, si_lower)	== 32);
++static_assert(offsetof(siginfo_t, si_upper)	== 40);
++static_assert(offsetof(siginfo_t, si_pkey)	== 32);
++#else /* Current offsets, as of v4.16 */
++static_assert(offsetof(siginfo_t, si_addr_lsb)	== 32);
++static_assert(offsetof(siginfo_t, si_lower)	== 40);
++static_assert(offsetof(siginfo_t, si_upper)	== 48);
++static_assert(offsetof(siginfo_t, si_pkey)	== 40);
++#endif
++static_assert(offsetof(siginfo_t, si_band)	== 16);
++static_assert(offsetof(siginfo_t, si_fd)	== 20);
+diff --git a/include/linux/compat.h b/include/linux/compat.h
+index f0d2dd35d408..5ea9f9c748dd 100644
+--- a/include/linux/compat.h
++++ b/include/linux/compat.h
+@@ -158,6 +158,31 @@ typedef union compat_sigval {
+ 	compat_uptr_t	sival_ptr;
+ } compat_sigval_t;
+ 
++struct __compat_sigfault_addin {
++#ifdef __ARCH_SI_TRAPNO
++	int _trapno;	/* TRAP # which caused the signal */
++#endif
++	/*
++	 * used when si_code=BUS_MCEERR_AR or
++	 * used when si_code=BUS_MCEERR_AO
++	 */
++	short int _addr_lsb;	/* Valid LSB of the reported address. */
++
++/* See include/asm-generic/uapi/siginfo.h */
++#ifdef __ARCH_SI_TRAPNO
++#	define __COMPAT_SIGFAULT_ADDIN_FIXED struct __compat_sigfault_addin _addin;
++#	define __COMPAT_SIGFAULT_ADDIN_UNION
++#	define __COMPAT_SIGFAULT_LEGACY_UNION_PAD
++#else
++#	define __COMPAT_SIGFAULT_ADDIN_FIXED
++#	define __COMPAT_SIGFAULT_ADDIN_UNION struct __compat_sigfault_addin _addin;
++#	define __COMPAT_SIGFAULT_LEGACY_UNION_PAD				\
++		char _unused[__alignof__(compat_uptr_t) < sizeof(short) ?       \
++				   sizeof(short) :				\
++				   __alignof__(compat_uptr_t)];
++#endif
++};
++
+ typedef struct compat_siginfo {
+ 	int si_signo;
+ #ifndef __ARCH_HAS_SWAPPED_SIGINFO
+@@ -214,26 +239,18 @@ typedef struct compat_siginfo {
+ 		/* SIGILL, SIGFPE, SIGSEGV, SIGBUS, SIGTRAP, SIGEMT */
+ 		struct {
+ 			compat_uptr_t _addr;	/* faulting insn/memory ref. */
+-#ifdef __ARCH_SI_TRAPNO
+-			int _trapno;	/* TRAP # which caused the signal */
+-#endif
+-#define __COMPAT_ADDR_BND_PKEY_PAD  (__alignof__(compat_uptr_t) < sizeof(short) ? \
+-				     sizeof(short) : __alignof__(compat_uptr_t))
++			__COMPAT_SIGFAULT_ADDIN_FIXED
+ 			union {
+-				/*
+-				 * used when si_code=BUS_MCEERR_AR or
+-				 * used when si_code=BUS_MCEERR_AO
+-				 */
+-				short int _addr_lsb;	/* Valid LSB of the reported address. */
++				__COMPAT_SIGFAULT_ADDIN_UNION
+ 				/* used when si_code=SEGV_BNDERR */
+ 				struct {
+-					char _dummy_bnd[__COMPAT_ADDR_BND_PKEY_PAD];
++					__COMPAT_SIGFAULT_LEGACY_UNION_PAD
+ 					compat_uptr_t _lower;
+ 					compat_uptr_t _upper;
+ 				} _addr_bnd;
+ 				/* used when si_code=SEGV_PKUERR */
+ 				struct {
+-					char _dummy_pkey[__COMPAT_ADDR_BND_PKEY_PAD];
++					__COMPAT_SIGFAULT_LEGACY_UNION_PAD
+ 					u32 _pkey;
+ 				} _addr_pkey;
+ 				/* used when si_code=TRAP_PERF */
+diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+index 03d6f6d2c1fe..f1c1a0300ac8 100644
+--- a/include/uapi/asm-generic/siginfo.h
++++ b/include/uapi/asm-generic/siginfo.h
+@@ -29,6 +29,45 @@ typedef union sigval {
+ #define __ARCH_SI_ATTRIBUTES
+ #endif
+ 
++/*
++ * The _sigfault portion of __sifields after si_addr varies depending on
++ * architecture; capture these rules here.
++ */
++struct __sifields_sigfault_addin {
++#ifdef __ARCH_SI_TRAPNO
++	int _trapno;	/* TRAP # which caused the signal */
++#endif
++	/*
++	 * used when si_code=BUS_MCEERR_AR or
++	 * used when si_code=BUS_MCEERR_AO
++	 */
++	short _addr_lsb; /* LSB of the reported address */
++
++#if defined(__ARCH_SI_TRAPNO)
++/*
++ * If we have si_trapno between si_addr and si_addr_lsb, we cannot safely move
++ * it inside the union due to alignment of si_trapno+si_addr_lsb vs. the union.
++ */
++#	define __SI_SIGFAULT_ADDIN_FIXED struct __sifields_sigfault_addin _addin;
++#	define __SI_SIGFAULT_ADDIN_UNION
++#	define __SI_SIGFAULT_LEGACY_UNION_PAD
++#else
++/*
++ * Safe to move si_addr_lsb inside the union. We will benefit from better space
++ * usage for new fields added to the union.
++ *
++ * Fields that were added after si_addr_lsb, before it become part of the union,
++ * require padding to retain the ABI. New fields do not require padding.
++ */
++#	define __SI_SIGFAULT_ADDIN_FIXED
++#	define __SI_SIGFAULT_ADDIN_UNION struct __sifields_sigfault_addin _addin;
++#	define __SI_SIGFAULT_LEGACY_UNION_PAD				\
++		char _unused[__alignof__(void *) < sizeof(short) ?	\
++					   sizeof(short) :		\
++					   __alignof__(void *)];
++#endif
++};
++
+ union __sifields {
+ 	/* kill() */
+ 	struct {
+@@ -63,32 +102,23 @@ union __sifields {
+ 	/* SIGILL, SIGFPE, SIGSEGV, SIGBUS, SIGTRAP, SIGEMT */
+ 	struct {
+ 		void __user *_addr; /* faulting insn/memory ref. */
+-#ifdef __ARCH_SI_TRAPNO
+-		int _trapno;	/* TRAP # which caused the signal */
+-#endif
+ #ifdef __ia64__
+ 		int _imm;		/* immediate value for "break" */
+ 		unsigned int _flags;	/* see ia64 si_flags */
+ 		unsigned long _isr;	/* isr */
+ #endif
+-
+-#define __ADDR_BND_PKEY_PAD  (__alignof__(void *) < sizeof(short) ? \
+-			      sizeof(short) : __alignof__(void *))
++		__SI_SIGFAULT_ADDIN_FIXED
+ 		union {
+-			/*
+-			 * used when si_code=BUS_MCEERR_AR or
+-			 * used when si_code=BUS_MCEERR_AO
+-			 */
+-			short _addr_lsb; /* LSB of the reported address */
++			__SI_SIGFAULT_ADDIN_UNION
+ 			/* used when si_code=SEGV_BNDERR */
+ 			struct {
+-				char _dummy_bnd[__ADDR_BND_PKEY_PAD];
++				__SI_SIGFAULT_LEGACY_UNION_PAD
+ 				void __user *_lower;
+ 				void __user *_upper;
+ 			} _addr_bnd;
+ 			/* used when si_code=SEGV_PKUERR */
+ 			struct {
+-				char _dummy_pkey[__ADDR_BND_PKEY_PAD];
++				__SI_SIGFAULT_LEGACY_UNION_PAD
+ 				__u32 _pkey;
+ 			} _addr_pkey;
+ 			/* used when si_code=TRAP_PERF */
+@@ -151,9 +181,9 @@ typedef struct siginfo {
+ #define si_ptr		_sifields._rt._sigval.sival_ptr
+ #define si_addr		_sifields._sigfault._addr
+ #ifdef __ARCH_SI_TRAPNO
+-#define si_trapno	_sifields._sigfault._trapno
++#define si_trapno	_sifields._sigfault._addin._trapno
+ #endif
+-#define si_addr_lsb	_sifields._sigfault._addr_lsb
++#define si_addr_lsb	_sifields._sigfault._addin._addr_lsb
+ #define si_lower	_sifields._sigfault._addr_bnd._lower
+ #define si_upper	_sifields._sigfault._addr_bnd._upper
+ #define si_pkey		_sifields._sigfault._addr_pkey._pkey
