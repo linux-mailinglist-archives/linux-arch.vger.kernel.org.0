@@ -2,189 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEC136EF28
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Apr 2021 19:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D5636EFA1
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Apr 2021 20:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241060AbhD2RwL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Apr 2021 13:52:11 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:44882 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241048AbhD2RwL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Apr 2021 13:52:11 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13THngC6118078;
-        Thu, 29 Apr 2021 17:50:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2020-01-29;
- bh=43n4WCu36N6Yo9wgtHy01ToLFV/XMMYfUs1pC3ue4NQ=;
- b=ldP/0l8swlzwnNLjO2X8sza/ekcBe4V4hsKHBVmr6xtwtoNmhZAnWvO3rSCtdal/yMsL
- rAPpEQHqhNyVFtIcQBCGhNm+e8BJJLi8fNba/eqsDpIG0ue1Vj9DZMTdxl8ev6KCZ8qz
- xDsYBm8IiYtveTUSoycPLlx5q6xX0XJc8EHtYOjdJqcaI/dFeE31Yqp+kEJphfkzgzaT
- am5yjvpxTu8l9UUBJgHnBl/irfb3eNID2shU9L9LXO4vE/knfR5iX73T5ze93X99OyNe
- 7+gwonikySUV7TXNTmt+j+lAmNt9NQpmPD530qfyFq7TYoH9nxlr/9XWPGDOh6TvLtMa Rg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 385aft58w9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Apr 2021 17:50:54 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13THnwIv192587;
-        Thu, 29 Apr 2021 17:50:53 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
-        by aserp3020.oracle.com with ESMTP id 384b5aq4h1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Apr 2021 17:50:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YG9g4b1sgaQ8nwl+jTA/EaDSsJoXSlXMVfI5u1cLIPHYIbsQyiYFmLzvWY25QNlzvnUfHCB9Rij5DoVHocJtQjsgSLN4hzmYYoEftaGMEEqmhO3hH7y5ba5zfdILA3s7jqRPnXZiWfeQkqqcYAKF0kL2hXsqdtOC785852yEz6WXU91Iq/cZrtFUoUMi3WYLgT8ygGltwiLRGJpD6tVD71xQlenqRGHu7n7Kw7KA556Vp4LtE14j00mmlWN549ZDfh36rvFAZ7kmLCaNeuY4FpOSfO2Pr3MynOerYR09Go35R18SODrcD54D7CeWS9KwELb0kX8rW3zCP7uFOVYf+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=43n4WCu36N6Yo9wgtHy01ToLFV/XMMYfUs1pC3ue4NQ=;
- b=L7ZB9hI/BEUsvN+0ZRtKJsOAzDAgFAUha5zIFHqzCD0HvqvFEWmh+hSj8+FY3gH4Vgez1SidlkE2seC5rPukNxMVLQQpvS83pDBLHUlREj7ZiXAA5tMB+t7s44rCJERGncdTBh4++cqaqzrKlB5NMPqPtWCwr53c8H5FaBq5BBiHXXQOY5hSRiFpW8bpGUuHk5C2Vg36xqgIv0/RH+X4XRNbZgxS5bXcm88jG5wG+g5OIXLvLC5kKPn491/aMqYB5PMertBU7eEScRAXfma/IFl37xX+1NukFfKkUyXc4nWPvotDna1AJY0Ndbwq/8tu7Vg77BPivoklRBEFkmuHlg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        id S241055AbhD2Srs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Apr 2021 14:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241017AbhD2Srs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Apr 2021 14:47:48 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BA9C06138C
+        for <linux-arch@vger.kernel.org>; Thu, 29 Apr 2021 11:47:01 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id p6-20020a4adc060000b02901f9a8fc324fso1265264oov.10
+        for <linux-arch@vger.kernel.org>; Thu, 29 Apr 2021 11:47:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=43n4WCu36N6Yo9wgtHy01ToLFV/XMMYfUs1pC3ue4NQ=;
- b=sNTQVFf886EgfTVnKQ1smVv6Sy0Gai2pwF2VVMcGhrEif3SjjNOBCotDKIS1BOFZCJ1mV/N91ricsGIJN2wZ+OJWpWZBQrL0EbAyB+/5wqz+0/cEs5vR1gwzXVg4qjdV0GQ9YsGsJt9TVKJjOTc/eVJioLuhF7lOyGNJkU9hmjs=
-Authentication-Results: kvack.org; dkim=none (message not signed)
- header.d=none;kvack.org; dmarc=none action=none header.from=oracle.com;
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by BY5PR10MB4353.namprd10.prod.outlook.com (2603:10b6:a03:201::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.24; Thu, 29 Apr
- 2021 17:50:52 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4407:2ff6:c0a:5d90]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4407:2ff6:c0a:5d90%8]) with mapi id 15.20.4065.027; Thu, 29 Apr 2021
- 17:50:52 +0000
-Subject: Re: [RFC PATCH v1 2/4] mm/hugetlb: Change parameters of
- arch_make_huge_pte()
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>
-Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sparclinux@vger.kernel.org, linux-mm@kvack.org
-References: <cover.1619628001.git.christophe.leroy@csgroup.eu>
- <e111d0d90231ae63e4b89da8efa87cde31daeeee.1619628001.git.christophe.leroy@csgroup.eu>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <d7c516b7-4fec-dc1c-c931-e7b17272372e@oracle.com>
-Date:   Thu, 29 Apr 2021 10:50:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
-In-Reply-To: <e111d0d90231ae63e4b89da8efa87cde31daeeee.1619628001.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [50.38.35.18]
-X-ClientProxiedBy: CO2PR04CA0175.namprd04.prod.outlook.com
- (2603:10b6:104:4::29) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8+UJwrU2MphE2H9pVBe4Va+3pVl8MrgEBW+di5Ar9x8=;
+        b=YheD8PJ4vjevdlZN9xjnFDpXx4r8xj2WfocSQQ4FGrmpUl25K4XoAHracDIHAGonKN
+         Jv3mQKHDRRNGM9uEqJMtY4Yp9sJ3Z6THXD+9dAm2ae5aXwuyvkAQ/SuhvQyXFZNln9i2
+         akSju72aiY34YA1tJymgIHYtICD8WkUWRdIjCAjzxQr8A9Poah+p2KGQoWPwUYfMK1g7
+         aLIoo8lvbq17uIsuedHL2iNKfjB94cT0cHbrYZbZxc/kkTs6hyLzneEYpH3ZydvnAXZ0
+         jvxrcdJ+BRzf2j1qvZOSHDGDCPF+loGh+oihiIW+0yzNjgqWWgkE7+/VoNUsYlxK75OI
+         yKow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8+UJwrU2MphE2H9pVBe4Va+3pVl8MrgEBW+di5Ar9x8=;
+        b=L9cCQdp41SMgGmN8xFo2guFKOsaPl9b7RYCxq+zxctsmV5JJa2j18FTZ6vFtsF8sta
+         IIiIMnoaZaM8PiDsHuS6YsM+V3YdNT6d6XUM51UnyfHL9edlZ0Mv7htLjZZMDxcLoaSC
+         w0gI7IWhbNm/Zgn9mDSFd1VR/PLrNPd6GUiXduebbFx8phb1feZze3wrfHUHXfzZklZj
+         j+Xw3ehTRqPEMiigEqbsEAB258jerE+UKeqGI6PvqTZNKxJKIRw0L+SF9THCvJ0XSPis
+         /iQ4qEyfnlkXHN+jyUx3xfhQfWEAyffHpsLtVesd24+iFLKijfWjMI3/WnR2JmzJmg+U
+         A/ww==
+X-Gm-Message-State: AOAM533RwIqQMHzdPDzZgyprlRvY1DVQR0te2M+jtnyLadJYp9g1WLz0
+        Wh5A/6N0iwWRYoqNUlnI1V1IG3fRVPjdwh32HkR//Q==
+X-Google-Smtp-Source: ABdhPJxg+cX3WOkcKuWZN0i123++XM7omVXz3QzNsOO657nSkyD05K2ZNT5GkuRpNxSGCUdZmf57iALTgxI/591rfdA=
+X-Received: by 2002:a4a:96e3:: with SMTP id t32mr1153302ooi.14.1619722020332;
+ Thu, 29 Apr 2021 11:47:00 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.2.112] (50.38.35.18) by CO2PR04CA0175.namprd04.prod.outlook.com (2603:10b6:104:4::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.27 via Frontend Transport; Thu, 29 Apr 2021 17:50:51 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: be01d3cd-9c22-491f-1d30-08d90b375479
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4353:
-X-Microsoft-Antispam-PRVS: <BY5PR10MB4353C14F4BB18D3F47571913E25F9@BY5PR10MB4353.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2CF5AiQzEZRtjjGdgmaQfLpm3m5Pxmoo+b0AmK+8S8XfgG8M+SIZ3tvMQbJaATDeoZsA6VZ6dtFHCoZKOLmspspcyMVHogPxMkmrU5oqgCGiwQBVxNEVmmyQNSjkHf3Ege6dbh/TKpWXIgBcWSnLr+Sk9nItb6pLW9/3VKlzdRncFqPSKtdP42e02Exe+mZAtv59M/4NFEkFY/8LmqsGBnbO4cqxrEFgCJvFwXT1pq/NGMfEZMBDkIoddscf4DcLXjjIRRKzjKYhP9Bxf8J6YI1nhOsb9UOAAENOszPM/8idAQ2bFyMKZo22hSRvjRz8uN7DsZRTSu8Ub4D2LNjoNDwGeKaGLmzT6PonVF8RWXakpKsQWWpoaiMM3Q2TvU4+3mHGL+lCSHiPO8ePEgI8VB+k5YMkJheS32p7wQSOcwFSIU+xY/8IpCfbEiXLO1K8jXcvQ2lyCI9n0Xc/xiygAGse+LrdGBmfjaWn9vUeX679iFTYHaHLKXIrPnwx/ysDFAxLA8gQ7arf2/KP5eYveagJvkHr+BIGZk1AOykwgwHB0YlPprceicxUf+KYZ1tmE5dsgSHHfieSsg9tO/BH98CvSWChJ9BteIeRRpVMn73E/zP4+K5P+HNHYu3YRtVOfg/mj4kPE7SB0OEbtpdYShGcD1lnaum1oNnX5AV+h5S4NvX4IeiFmADhWb1wHhF3jNeRNgGGHYsSNtBUvOtnLV8GwPk1ZXgPgRwQIz6E8/+i50LWsigKTiaG9lnSXsZR
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(396003)(136003)(366004)(346002)(39860400002)(44832011)(26005)(2616005)(2906002)(66556008)(956004)(7416002)(36756003)(66476007)(5660300002)(16526019)(478600001)(6486002)(110136005)(38350700002)(4326008)(83380400001)(316002)(16576012)(31696002)(86362001)(31686004)(186003)(38100700002)(66946007)(53546011)(52116002)(8676002)(8936002)(14583001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?VjRMdmpzemhzUlpBMGhhQjFINmQ3dU1GbFRZTUxJeCtSemNDa1BNaXZ6ZTNC?=
- =?utf-8?B?eGptb2Y0cXVYR1pRQVNQVGFCRGdBODdaV2dYdmFmeEpzZ1M5VlozcXBHZGNV?=
- =?utf-8?B?V1VsUU5PNXIxVnUvTmFXNHE3WUllLzJ3Q2Q3eG9oaWZGL0RaMjgxZkZ0UlNz?=
- =?utf-8?B?NnBEa2ZhNjFLell4UUVLUTcwU082NHFvdWpoWk1XNnRhSnZzakUvQmc1OXRS?=
- =?utf-8?B?cy9aZmYycUdRRTExWFJjQ2FzSXQ2dWJBYVZoTmhTYm9sc2laWEFJVEdUVDhz?=
- =?utf-8?B?NnFTYTZ0VUtGMGROS3ZhY0xuZEJYUGpXZldPZ0pEbUh4OEhVRlRXMFNqdHQw?=
- =?utf-8?B?Z29FL200ejlXbVhkUGdhNG15d0s5UURqalFOY0NUZ1g5b1pnN2FvamNzZFNy?=
- =?utf-8?B?T1YzKzFEaHZNdEpzOHF4WkFLL0hTeGtMU1B4V1VqNDhXTEFSQmJ6ejJFeGpw?=
- =?utf-8?B?WFR1d0JSVHZ0RW5vK0lKTXpTVFJUeWpvMXRXWFphVXNhdTRuSkRsRE4zbG9t?=
- =?utf-8?B?TVduTnZVcW9CTDZuU21STm00eVdpNUY4UzE0WVM0VFR5Mi9nM2JmVW1icm9L?=
- =?utf-8?B?dmdFTTM1S3J4NGlTRm5GdkI5S0tBRnNNV2xldDJ1RW5KajJ4b0x3eVBrYkVQ?=
- =?utf-8?B?Wkk1WnJBcm0rbkE4bUpBS0FqZXhnSkppNDh0c2pXQ3BxV2pSMGMrd3NBTDgy?=
- =?utf-8?B?VkRtSXU1TGdLZWdFL3B2dHhoa3FTVVNHVFpnSGZMeUZReElUVS9BOEZCejhi?=
- =?utf-8?B?OUwxeGhJMkNZYlBLVVNsNWl6c0ZRbmdGRGhLNE1XbVVXZFhUcjNJVlRDRHQ0?=
- =?utf-8?B?dGJOOUhTaW1ORDFLbU9OM0dnY0tLcEFWUDFrZk9CdFAwK3NmZVUwUmJPaVcz?=
- =?utf-8?B?Z3FsK0d3TmJiL2J2RjhMV0U0d0V5cC8wZGVEYnVod3ZJeXJVK1NCd1FHd0ZQ?=
- =?utf-8?B?SzhYOVd2SmNSWHliUVZCUDdEOW05RDdHYmJvVEdlR0NvdjFYVkMxd2NlbzVi?=
- =?utf-8?B?R0VVZlFiRUpBVk9UNWY3U0JEVXBnY05pUHhjZmQrY3ZtTVlyd1ZxVWs5UEJJ?=
- =?utf-8?B?S20ya2IyeS9nbzcxNGt2T1NJeUdiMG1XU3NUL2dxc1c3eG85MjFGb2M2MVo1?=
- =?utf-8?B?UzlaR1FhVmp3VHVBKysrTllrK2Q3Qmlwa3JBeFUzbWFRcFNteUVzYkFHbWxY?=
- =?utf-8?B?UHMzNThSNHZBNERnV0lEN0hZcGhmVzN6S3ZOZ1pMdUMzRTFpSzdHbW5CMW1C?=
- =?utf-8?B?ZzdiRzhhSEVHM3p3T0YzelUyUnEzU3NSMzRvSHljSlNUY05LZm5VcWxtSzhK?=
- =?utf-8?B?aGVoc1pwT0VyOEZqZkF5WTJSb0hvWUFDWVlGRnVWeHBTS3psN3pGSmFJVDRn?=
- =?utf-8?B?VCt6UW4ybmJiZGNBU0NkR2VQV2R2NWdEdG80ODY5Tm8vbWxMUjlSSVozSjdi?=
- =?utf-8?B?dThVQzIxUHRFSGU2SG1sRGhOaVQxUTUxaEVSQk9mdHIyeFR0ZnhmdGd6bzFE?=
- =?utf-8?B?VFFQUnVlRnRkSkI4Z0ZzMzc4bkhSOFZJSHZSb2FxWW50Yi9PbXVIM2U3VHNY?=
- =?utf-8?B?NW4xOUozUGVrd1hIbDNZWkdVNVljTHRmbkpjYU92U2FCQUhZTDBUNFRmSWds?=
- =?utf-8?B?U2pSbk9aaHFYSDh0anFsWGs4SkRPaHVuUmtlUG5pS3N6VlBwTnlFOFlMWEh2?=
- =?utf-8?B?UTVnUWthWFM0VjZyb0tLRGJyUHJsUU95ZEFWcHR2dkFRN0t2dUxuaVphMU0y?=
- =?utf-8?Q?W53nLqWea9nz03TTlkItRzaHqN9r0hmoEOh900x?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be01d3cd-9c22-491f-1d30-08d90b375479
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2021 17:50:51.9798
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QkkfGpvp0kflmcVUA6QE21SxVoYidAAkDUidV1u4fnNSp4QA3ZepFDYmygLwkRunzXtizXwAGMP074ChA8Iihw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4353
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9969 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxscore=0
- malwarescore=0 phishscore=0 adultscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
- definitions=main-2104290114
-X-Proofpoint-GUID: lpIwFLQgmVUIcAnbQjnxaSIOx2hh5NU2
-X-Proofpoint-ORIG-GUID: lpIwFLQgmVUIcAnbQjnxaSIOx2hh5NU2
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9969 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=999 malwarescore=0 phishscore=0 priorityscore=1501
- clxscore=1011 spamscore=0 bulkscore=0 suspectscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104290114
+References: <YIpkvGrBFGlB5vNj@elver.google.com> <m11rat9f85.fsf@fess.ebiederm.org>
+In-Reply-To: <m11rat9f85.fsf@fess.ebiederm.org>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 29 Apr 2021 20:46:48 +0200
+Message-ID: <CANpmjNNeH7+7H3y-5BCNGx+Yo11HG-F3M5TLqCAXd11Up5PTWA@mail.gmail.com>
+Subject: Re: siginfo_t ABI break on sparc64 from si_addr_lsb move 3y ago
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Florian Weimer <fweimer@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        sparclinux@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-api@vger.kernel.org,
+        kasan-dev <kasan-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/28/21 9:46 AM, Christophe Leroy wrote:
-> At the time being, arch_make_huge_pte() has the following prototype:
-> 
-> 	pte_t arch_make_huge_pte(pte_t entry, struct vm_area_struct *vma,
-> 				 struct page *page, int writable);
-> 
-> vma is used to get the pages shift or size.
-> vma is also used on Sparc to get vm_flags.
-> page is not used.
-> writable is not used.
-> 
-> In order to use this function without a vma, and replace vma by shift
-> and flags. Also remove the used parameters.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/arm64/include/asm/hugetlb.h                 | 3 +--
->  arch/arm64/mm/hugetlbpage.c                      | 5 ++---
->  arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h | 5 ++---
->  arch/sparc/include/asm/pgtable_64.h              | 3 +--
->  arch/sparc/mm/hugetlbpage.c                      | 6 ++----
->  include/linux/hugetlb.h                          | 4 ++--
->  mm/hugetlb.c                                     | 6 ++++--
->  mm/migrate.c                                     | 4 +++-
->  8 files changed, 17 insertions(+), 19 deletions(-)
+On Thu, 29 Apr 2021 at 19:24, Eric W. Biederman <ebiederm@xmission.com> wrote:
+[...]
+> > Granted, nobody seems to have noticed because I don't even know if these
+> > fields have use on sparc64. But I don't yet see this as justification to
+> > leave things as-is...
+> >
+> > The collateral damage of this, and the acute problem that I'm having is
+> > defining si_perf in a sort-of readable and portable way in siginfo_t
+> > definitions that live outside the kernel, where sparc64 does not yet
+> > have broken si_addr_lsb. And the same difficulty applies to the kernel
+> > if we want to unbreak sparc64, while not wanting to move si_perf for
+> > other architectures.
+> >
+> > There are 2 options I see to solve this:
+> >
+> > 1. Make things simple again. We could just revert the change moving
+> >    si_addr_lsb into the union, and sadly accept we'll have to live with
+> >    that legacy "design" mistake. (si_perf stays in the union, but will
+> >    unfortunately change its offset for all architectures... this one-off
+> >    move might be ok because it's new.)
+> >
+> > 2. Add special cases to retain si_addr_lsb in the union on architectures
+> >    that do not have __ARCH_SI_TRAPNO (the majority). I have added a
+> >    draft patch that would do this below (with some refactoring so that
+> >    it remains sort-of readable), as an experiment to see how complicated
+> >    this gets.
+> >
+> > Which option do you prefer? Are there better options?
+>
+> Personally the most important thing to have is a single definition
+> shared by all architectures so that we consolidate testing.
+>
+> A little piece of me cries a little whenever I see how badly we
+> implemented the POSIX design.  As specified by POSIX the fields can be
+> place in siginfo such that 32bit and 64bit share a common definition.
+> Unfortunately we did not addpadding after si_addr on 32bit to
+> accommodate a 64bit si_addr.
 
-Hi Christophe,
+I think it's even worse than that, see the fun I had with siginfo last
+week: https://lkml.kernel.org/r/20210422191823.79012-1-elver@google.com
+... because of the 3 initial ints and no padding after them, we can't
+portably add __u64 fields to siginfo, and are forever forced to have
+subtly different behaviour between 32-bit and 64-bit architectures.
+:-/
 
-Sorry, no suggestion for how to make a beautiful generic implementation.
+> I find it unfortunate that we are adding yet another definition that
+> requires translation between 32bit and 64bit, but I am glad
+> that at least the translation is not architecture specific.  That common
+> definition is what has allowed this potential issue to be caught
+> and that makes me very happy to see.
+>
+> Let's go with Option 3.
+>
+> Confirm BUS_MCEERR_AR, BUS_MCEERR_AO, SEGV_BNDERR, SEGV_PKUERR are not
+> in use on any architecture that defines __ARCH_SI_TRAPNO, and then fixup
+> the userspace definitions of these fields.
+>
+> To the kernel I would add some BUILD_BUG_ON's to whatever the best
+> maintained architecture (sparc64?) that implements __ARCH_SI_TRAPNO just
+> to confirm we don't create future regressions by accident.
+>
+> I did a quick search and the architectures that define __ARCH_SI_TRAPNO
+> are sparc, mips, and alpha.  All have 64bit implementations.  A further
+> quick search shows that none of those architectures have faults that
+> use BUS_MCEERR_AR, BUS_MCEERR_AO, SEGV_BNDERR, SEGV_PKUERR, nor do
+> they appear to use mm/memory-failure.c
+>
+> So it doesn't look like we have an ABI regression to fix.
 
-This patch is straight forward.
-Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
--- 
-Mike Kravetz
+That sounds fine to me -- my guess was that they're not used on these
+architectures, but I just couldn't make that call.
+
+I have patches adding compile-time asserts for sparc64, arm, arm64
+ready to go. I'll send them after some more testing.
+
+Thanks,
+-- Marco
