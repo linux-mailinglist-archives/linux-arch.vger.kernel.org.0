@@ -2,117 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E250036F5DB
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Apr 2021 08:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C5F36F90C
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Apr 2021 13:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbhD3Gqk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Apr 2021 02:46:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:41246 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230394AbhD3Gqj (ORCPT
+        id S231476AbhD3LRp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Apr 2021 07:17:45 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1336 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229849AbhD3LRo (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Apr 2021 02:46:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619765151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PFZmzCqPtD1TeQ1IgnxgwBuBBj2UfpUYGVhQ61V9gY0=;
-        b=CO1ZtfocqTxIz6aW0nd/4+5Y9Yz4QjnUh+TbPWjWzaTK7+XtPzCLTHUB9sBspp+qoA9r31
-        Lt6KUWv0GIPRF+EwGce5q45LOf/8sOfQQMuCOthTDWKdiym4vaK0bKSvVBnfVzUvwW0kk4
-        rxpPM0brZ8OkDEGQCoXHtIAcHgkpWP4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-147-bVvfBOJoOuGwtxj_hE5rSQ-1; Fri, 30 Apr 2021 02:45:46 -0400
-X-MC-Unique: bVvfBOJoOuGwtxj_hE5rSQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B23AB802939;
-        Fri, 30 Apr 2021 06:45:42 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (ovpn-115-124.ams2.redhat.com [10.36.115.124])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2A74C5D9C6;
-        Fri, 30 Apr 2021 06:45:27 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: extending ucontext (Re: [PATCH v26 25/30] x86/cet/shstk: Handle
- signals for shadow stack)
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
-        <20210427204315.24153-26-yu-cheng.yu@intel.com>
-        <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com>
-Date:   Fri, 30 Apr 2021 08:45:40 +0200
-In-Reply-To: <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com>
-        (Andy Lutomirski's message of "Wed, 28 Apr 2021 16:03:55 -0700")
-Message-ID: <87a6pgb78r.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Fri, 30 Apr 2021 07:17:44 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13UB3H4M016527;
+        Fri, 30 Apr 2021 07:16:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=X7H6Thm5vVvEdOzIMF99WmtzE3yIxl5XgPZmIRQQpSM=;
+ b=BNfwknSmGRvxLT33wsoOPyxeWMipoQHfo4/O8XDyHNyLU3gvh8qbW034jnOI7FEaMKx8
+ w/E94NrQRqe3rrMpZldpxGgH/oq3dFrBlmhhvWULuXv5BAEUnkJumCPxyzLdeY5ed9Qy
+ dkxAY+ckatHVlhtbFO+Bzr9l7DjrmzSRgWP3TeHcum2SAMJ9K/Acv1oFwc+KT0OPTfZ3
+ TeDUYe7FcNbOzkZHs4jW7WR/LcqXLfIcKCUD90/+sep4DpRYIZ3nmZ6TxW6E6txtyaAy
+ zrXh7kCoawUz7cjYZss189Gkqxa4tx5iDpAgngnWmpito7it3tKJRzPC0BeTaKeNUFBA 0g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 388drswy1k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Apr 2021 07:16:47 -0400
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13UBDd8B052160;
+        Fri, 30 Apr 2021 07:16:46 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 388drswy0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Apr 2021 07:16:46 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13UBCsJJ010967;
+        Fri, 30 Apr 2021 11:16:44 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 384ay81q8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Apr 2021 11:16:44 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13UBGf4C45809994
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Apr 2021 11:16:42 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2843A4057;
+        Fri, 30 Apr 2021 11:16:41 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DF82A4040;
+        Fri, 30 Apr 2021 11:16:41 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 30 Apr 2021 11:16:41 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, sparclinux@vger.kernel.org
+Subject: [PATCH v4 0/3] asm-generic/io.h: Silence -Wnull-pointer-arithmetic warning on PCI_IOBASE
+Date:   Fri, 30 Apr 2021 13:16:38 +0200
+Message-Id: <20210430111641.1911207-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xRR3TU8l-97YDHOxFoi3RsZeyFN6kn-G
+X-Proofpoint-GUID: RZlDyf6cM3uzqma3gwaEolsaHKGd2vpX
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-30_06:2021-04-30,2021-04-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 mlxscore=0 bulkscore=0 spamscore=0 malwarescore=0
+ clxscore=1015 suspectscore=0 adultscore=0 priorityscore=1501
+ mlxlogscore=729 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104060000 definitions=main-2104300080
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Andy Lutomirski:
+From: Niklas Schnelle <niklas@komani.de>
 
-> The kernel has:
->
-> struct rt_sigframe {
->     char __user *pretcode;
->     struct ucontext uc;
->     struct siginfo info;
->     /* fp state follows here */
-> };
->
-> This is roughly the actual signal frame.  But userspace does not have
-> this struct declared, and user code does not know the sizes of the
-> fields.  So it's accessed in a nonsensical way.  The signal handler
-> function is passed a pointer to the whole sigframe implicitly in RSP,
-> a pointer to &frame->info in RSI, anda pointer to &frame->uc in RDX.
-> User code can *find* the fp state by following a pointer from
-> mcontext, which is, in turn, found via uc:
->
-> struct ucontext {
->     unsigned long      uc_flags;
->     struct ucontext  *uc_link;
->     stack_t          uc_stack;
->     struct sigcontext uc_mcontext;  <-- fp pointer is in here
->     sigset_t      uc_sigmask;    /* mask last for extensibility */
-> };
+Hi,
 
-I must say that I haven't reviewed this in detail, but for historic
-reasons, glibc userspace has a differently-sized sigset_t.  So the
-kernel ucontext (used in signals) and user ucontext (used for
-swapcontext et al.) are already fully decoupled?
+This is version 4 of my attempt to get rid of a clang
+-Wnull-pointer-arithmetic warning for the use of PCI_IOBASE in
+asm-generic/io.h. This was originally found on s390 but should apply to
+all platforms leaving PCI_IOBASE undefined while making use of the inb()
+and friends helpers from asm-generic/io.h.
+
+This applies cleanly and was compile tested on top of v5.12 for the
+previously broken ARC, nds32, h8300 and risc-v architecture
+
+I did boot test this only on x86_64 and s390x the former implements
+inb() itself while the latter would emit a WARN_ONCE() but no drivers
+use inb().
 
 Thanks,
-Florian
+Niklas
+
+Changes since v3:
+- Changed the subject of the last patch to better reflect the actual
+  change i.e. the addition of WARN_ONCE() to the helpers not the
+  silencing of the clang warning
+- Added asm/bug.h to asm-generic/io.h so it doesn't have to be included
+  previously by all arches to be available for the WARN_ONCE()
+- Added patch for risc-v which defines PCI_IOBASE except when compiled
+  for nommu
+
+Changes since v2:
+- Improved comment for SPARC PCI_IOBASE definition as suggested
+  by David Laight
+- Added a patch for ARC which is missing the asm/bug.h include for
+  WARN_ONCE() (kernel test robot)
+- Added ifdefs to ioport_map() and __pci_ioport_map() since apparently
+  at least test configs enable CONFIG_HAS_IOPORT_MAP even on
+  architectures which leave PCI_IOBASE unset (kernel test robot for
+  nds32 and ARC).
+
+Changes since v1:
+- Added patch to explicitly set PCI_IOBASE to 0 on sparc as suggested by
+  Arnd Bergmann
+- Instead of working around the warning with a uintptr_t PCI_IOBASE make
+  inb() and friends explicitly WARN_ONCE() and return 0xff... (Arnd
+  Bergmann)
+
+Niklas Schnelle (3):
+  sparc: explicitly set PCI_IOBASE to 0
+  risc-v: Use generic io.h helpers for nommu
+  asm-generic/io.h: warn in inb() and friends with undefined PCI_IOBASE
+
+ arch/riscv/include/asm/io.h |  5 +--
+ arch/sparc/include/asm/io.h |  8 +++++
+ include/asm-generic/io.h    | 65 ++++++++++++++++++++++++++++++++++---
+ 3 files changed, 72 insertions(+), 6 deletions(-)
+
+-- 
+2.31.1
 
