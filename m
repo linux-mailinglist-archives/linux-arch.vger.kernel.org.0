@@ -2,615 +2,252 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D95936FE3C
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Apr 2021 18:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEB236FF13
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Apr 2021 19:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbhD3QFQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Apr 2021 12:05:16 -0400
-Received: from foss.arm.com ([217.140.110.172]:50190 "EHLO foss.arm.com"
+        id S229954AbhD3RBr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Apr 2021 13:01:47 -0400
+Received: from mga09.intel.com ([134.134.136.24]:13918 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229712AbhD3QFN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Apr 2021 12:05:13 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6173101E;
-        Fri, 30 Apr 2021 09:04:24 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.5.252])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4FD2C3F70D;
-        Fri, 30 Apr 2021 09:04:23 -0700 (PDT)
-Date:   Fri, 30 Apr 2021 17:04:20 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v3 1/2] locking/atomics: Fixup GENERIC_ATOMIC64 conflict
- with atomic-arch-fallback.h
-Message-ID: <20210430160420.GB57205@C02TD0UTHF1T.local>
-References: <1619009626-93453-1-git-send-email-guoren@kernel.org>
+        id S230428AbhD3RBq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Apr 2021 13:01:46 -0400
+IronPort-SDR: BUr2MuC7xgLryPzhQ8P/UovGTsKvhRLcCoL+7fjQ+sv72kAoCFqRi5lVN/v09M1ToPd7HPFKsZ
+ N4mGQ1HwyBlw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9970"; a="197416939"
+X-IronPort-AV: E=Sophos;i="5.82,263,1613462400"; 
+   d="scan'208";a="197416939"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2021 10:00:53 -0700
+IronPort-SDR: 8QwAOLtabmDg1mS99F3nT1I95E80eSon+n2uG3kTLCjmvDOMM2JY0oOq8/UUMTvEHLSRha/Wyl
+ nljC4lygAejw==
+X-IronPort-AV: E=Sophos;i="5.82,263,1613462400"; 
+   d="scan'208";a="387423627"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.119.226]) ([10.212.119.226])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2021 10:00:49 -0700
+Subject: Re: extending ucontext (Re: [PATCH v26 25/30] x86/cet/shstk: Handle
+ signals for shadow stack)
+To:     Andy Lutomirski <luto@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
+ <20210427204315.24153-26-yu-cheng.yu@intel.com>
+ <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <8fd86049-930d-c9b7-379c-56c02a12cd77@intel.com>
+Date:   Fri, 30 Apr 2021 10:00:47 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1619009626-93453-1-git-send-email-guoren@kernel.org>
+In-Reply-To: <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Guo,
+On 4/28/2021 4:03 PM, Andy Lutomirski wrote:
+> On Tue, Apr 27, 2021 at 1:44 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>>
+>> When shadow stack is enabled, a task's shadow stack states must be saved
+>> along with the signal context and later restored in sigreturn.  However,
+>> currently there is no systematic facility for extending a signal context.
+>> There is some space left in the ucontext, but changing ucontext is likely
+>> to create compatibility issues and there is not enough space for further
+>> extensions.
+>>
+>> Introduce a signal context extension struct 'sc_ext', which is used to save
+>> shadow stack restore token address.  The extension is located above the fpu
+>> states, plus alignment.  The struct can be extended (such as the ibt's
+>> wait_endbr status to be introduced later), and sc_ext.total_size field
+>> keeps track of total size.
+> 
+> I still don't like this.
+> 
+> Here's how the signal layout works, for better or for worse:
+> 
+> The kernel has:
+> 
+> struct rt_sigframe {
+>      char __user *pretcode;
+>      struct ucontext uc;
+>      struct siginfo info;
+>      /* fp state follows here */
+> };
+> 
+> This is roughly the actual signal frame.  But userspace does not have
+> this struct declared, and user code does not know the sizes of the
+> fields.  So it's accessed in a nonsensical way.  The signal handler
+> function is passed a pointer to the whole sigframe implicitly in RSP,
+> a pointer to &frame->info in RSI, anda pointer to &frame->uc in RDX.
+> User code can *find* the fp state by following a pointer from
+> mcontext, which is, in turn, found via uc:
+> 
+> struct ucontext {
+>      unsigned long      uc_flags;
+>      struct ucontext  *uc_link;
+>      stack_t          uc_stack;
+>      struct sigcontext uc_mcontext;  <-- fp pointer is in here
+>      sigset_t      uc_sigmask;    /* mask last for extensibility */
+> };
+> 
+> The kernel, in sigreturn, works a bit differently.  The sigreturn
+> variants know the base address of the frame but don't have the benefit
+> of receiving pointers to the fields.  So instead the kernel takes
+> advantage of the fact that it knows the offset to uc and parses uc
+> accordingly.  And the kernel follows the pointer in mcontext to find
+> the fp state.  The latter bit is quite important later.  The kernel
+> does not parse info at all.
+> 
+> The fp state is its own mess.  When XSAVE happened, Intel kindly (?)
+> gave us a software defined area between the "legacy" x87 region and
+> the modern supposedly extensible part.  Linux sticks the following
+> structure in that hole:
+> 
+> struct _fpx_sw_bytes {
+>      /*
+>       * If set to FP_XSTATE_MAGIC1 then this is an xstate context.
+>       * 0 if a legacy frame.
+>       */
+>      __u32                magic1;
+> 
+>      /*
+>       * Total size of the fpstate area:
+>       *
+>       *  - if magic1 == 0 then it's sizeof(struct _fpstate)
+>       *  - if magic1 == FP_XSTATE_MAGIC1 then it's sizeof(struct _xstate)
+>       *    plus extensions (if any)
+>       */
+>      __u32                extended_size;
+> 
+>      /*
+>       * Feature bit mask (including FP/SSE/extended state) that is present
+>       * in the memory layout:
+>       */
+>      __u64                xfeatures;
+> 
+>      /*
+>       * Actual XSAVE state size, based on the xfeatures saved in the layout.
+>       * 'extended_size' is greater than 'xstate_size':
+>       */
+>      __u32                xstate_size;
+> 
+>      /* For future use: */
+>      __u32                padding[7];
+> };
+> 
+> 
+> That's where we are right now upstream.  The kernel has a parser for
+> the FPU state that is bugs piled upon bugs and is going to have to be
+> rewritten sometime soon.  On top of all this, we have two upcoming
+> features, both of which require different kinds of extensions:
+> 
+> 1. AVX-512.  (Yeah, you thought this story was over a few years ago,
+> but no.  And AMX makes it worse.)  To make a long story short, we
+> promised user code many years ago that a signal frame fit in 2048
+> bytes with some room to spare.  With AVX-512 this is false.  With AMX
+> it's so wrong it's not even funny.  The only way out of the mess
+> anyone has come up with involves making the length of the FPU state
+> vary depending on which features are INIT, i.e. making it more compact
+> than "compact" mode is.  This has a side effect: it's no longer
+> possible to modify the state in place, because enabling a feature with
+> no space allocated will make the structure bigger, and the stack won't
+> have room.  Fortunately, one can relocate the entire FPU state, update
+> the pointer in mcontext, and the kernel will happily follow the
+> pointer.  So new code on a new kernel using a super-compact state
+> could expand the state by allocating new memory (on the heap? very
+> awkwardly on the stack?) and changing the pointer.  For all we know,
+> some code already fiddles with the pointer.  This is great, except
+> that your patch sticks more data at the end of the FPU block that no
+> one is expecting, and your sigreturn code follows that pointer, and
+> will read off into lala land.
+> 
 
-I had a look at completing the treewide conversion to ARCH_ATOMIC, and
-I've pushed the results to my atomics/arch-atomic branch on kernel.org:
+Then, what about we don't do that at all.  Is it possible from now on we 
+don't stick more data at the end, and take the relocating-fpu approach?
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=atomics/arch-atomic
-  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git atomics/arch-atomic
+> 2. CET.  CET wants us to find a few more bytes somewhere, and those
+> bytes logically belong in ucontext, and here we are.
+> 
 
-Once v5.13-rc1 is out I intend to rebase and post the series to LKML.
-The Kbuild test robot has been attacked the series for the last few
-days, and I think it's fairly robust now, but if you wanted to take an
-early look at the riscv or csky bits that'd be much appreciated.
+Fortunately, we can spare CET the need of ucontext extension.  When the 
+kernel handles sigreturn, the user-mode shadow stack pointer is right at 
+the restore token.  There is no need to put that in ucontext.
 
-I've omitted the structural changes and optimizations you had prepared
-for riscv, but I think those can be applied atop (or applied as a
-preparatory step for the ARCH_ATOMIC conversion). I'd like to keep the
-two steps separate to make bisection easier.
+However, the WAIT_ENDBR status needs to be saved/restored for signals. 
+Since IBT is now dependent on shadow stack, we can use a spare bit of 
+the shadow stack restore token for that.
 
-Thanks,
-Mark.
+I have tested the change, and will send out another version of the whole 
+series.
 
-On Wed, Apr 21, 2021 at 12:53:45PM +0000, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+> This is *almost*, but not quite, easy: struct ucontext is already
+> variable length!  Unfortunately, the whole variable length portion is
+> used up by uc_sigmask.  So I propose that we introduce a brand new
+> bona fide extension mechanism.  It works like this:
 > 
-> Current GENERIC_ATOMIC64 in atomic-arch-fallback.h is broken. When a 32-bit
-> arch use atomic-arch-fallback.h will cause compile error.
+> First, we add a struct ucontext_extension at the end.  It looks like:
 > 
-> In file included from include/linux/atomic.h:81,
->                     from include/linux/rcupdate.h:25,
->                     from include/linux/rculist.h:11,
->                     from include/linux/pid.h:5,
->                     from include/linux/sched.h:14,
->                     from arch/riscv/kernel/asm-offsets.c:10:
->    include/linux/atomic-arch-fallback.h: In function 'arch_atomic64_inc':
-> >> include/linux/atomic-arch-fallback.h:1447:2: error: implicit declaration of function 'arch_atomic64_add'; did you mean 'arch_atomic_add'? [-Werror=implicit-function-declaration]
->     1447 |  arch_atomic64_add(1, v);
->          |  ^~~~~~~~~~~~~~~~~
->          |  arch_atomic_add
+> struct ucontext_extension {
+>    u64 length;  /* sizeof(struct ucontext_extension) */
+>    u64 flags;  /* we will want this some day */
+>    [CET stuff here]
+>    [future stuff here]
+> };
 > 
-> The atomic-arch-fallback.h & atomic-fallback.h &
-> atomic-instrumented.h are generated by gen-atomic-fallback.sh &
-> gen-atomic-instrumented.sh, so just take care the bash files.
+> And we locate it by scrounging a word somewhere in ucontext to give
+> the offset from the beginning of struct ucontext to
+> ucontext_extension.  We indicate the presence of this feature using a
+> new uc_flags bit.  I can think of a couple of vaguely reasonable
+> places:
 > 
-> Remove the dependency of atomic-*-fallback.h in atomic64.h.
+> a) the reserved word in sigcontext.  This is fine for x86 but not so
+> great if other architectures want to do this.
 > 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> ---
->  include/asm-generic/atomic-instrumented.h | 264 +++++++++++++++---------------
->  include/asm-generic/atomic64.h            |  89 ++++++++++
->  include/linux/atomic-arch-fallback.h      |   5 +-
->  include/linux/atomic-fallback.h           |   5 +-
->  scripts/atomic/gen-atomic-fallback.sh     |   3 +-
->  scripts/atomic/gen-atomic-instrumented.sh |  23 ++-
->  6 files changed, 251 insertions(+), 138 deletions(-)
+> b) uc_link.  Fine everywhere but powerpc.  Oops.
 > 
-> diff --git a/include/asm-generic/atomic-instrumented.h b/include/asm-generic/atomic-instrumented.h
-> index 888b6cf..c9e69c6 100644
-> --- a/include/asm-generic/atomic-instrumented.h
-> +++ b/include/asm-generic/atomic-instrumented.h
-> @@ -831,6 +831,137 @@ atomic_dec_if_positive(atomic_t *v)
->  #define atomic_dec_if_positive atomic_dec_if_positive
->  #endif
->  
-> +#if !defined(arch_xchg_relaxed) || defined(arch_xchg)
-> +#define xchg(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_xchg(__ai_ptr, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if defined(arch_xchg_acquire)
-> +#define xchg_acquire(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_xchg_acquire(__ai_ptr, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if defined(arch_xchg_release)
-> +#define xchg_release(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_xchg_release(__ai_ptr, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if defined(arch_xchg_relaxed)
-> +#define xchg_relaxed(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_xchg_relaxed(__ai_ptr, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if !defined(arch_cmpxchg_relaxed) || defined(arch_cmpxchg)
-> +#define cmpxchg(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if defined(arch_cmpxchg_acquire)
-> +#define cmpxchg_acquire(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_cmpxchg_acquire(__ai_ptr, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if defined(arch_cmpxchg_release)
-> +#define cmpxchg_release(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_cmpxchg_release(__ai_ptr, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if defined(arch_cmpxchg_relaxed)
-> +#define cmpxchg_relaxed(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if !defined(arch_try_cmpxchg_relaxed) || defined(arch_try_cmpxchg)
-> +#define try_cmpxchg(ptr, oldp, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	typeof(oldp) __ai_oldp = (oldp); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-> +	arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if defined(arch_try_cmpxchg_acquire)
-> +#define try_cmpxchg_acquire(ptr, oldp, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	typeof(oldp) __ai_oldp = (oldp); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-> +	arch_try_cmpxchg_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if defined(arch_try_cmpxchg_release)
-> +#define try_cmpxchg_release(ptr, oldp, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	typeof(oldp) __ai_oldp = (oldp); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-> +	arch_try_cmpxchg_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#if defined(arch_try_cmpxchg_relaxed)
-> +#define try_cmpxchg_relaxed(ptr, oldp, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	typeof(oldp) __ai_oldp = (oldp); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-> +	arch_try_cmpxchg_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> +})
-> +#endif
-> +
-> +#define cmpxchg_local(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_cmpxchg_local(__ai_ptr, __VA_ARGS__); \
-> +})
-> +
-> +#define sync_cmpxchg(ptr, ...) \
-> +({ \
-> +	typeof(ptr) __ai_ptr = (ptr); \
-> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> +	arch_sync_cmpxchg(__ai_ptr, __VA_ARGS__); \
-> +})
-> +
-> +#ifndef CONFIG_GENERIC_ATOMIC64
->  static __always_inline s64
->  atomic64_read(const atomic64_t *v)
->  {
-> @@ -1641,78 +1772,6 @@ atomic64_dec_if_positive(atomic64_t *v)
->  #define atomic64_dec_if_positive atomic64_dec_if_positive
->  #endif
->  
-> -#if !defined(arch_xchg_relaxed) || defined(arch_xchg)
-> -#define xchg(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_xchg(__ai_ptr, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if defined(arch_xchg_acquire)
-> -#define xchg_acquire(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_xchg_acquire(__ai_ptr, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if defined(arch_xchg_release)
-> -#define xchg_release(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_xchg_release(__ai_ptr, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if defined(arch_xchg_relaxed)
-> -#define xchg_relaxed(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_xchg_relaxed(__ai_ptr, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if !defined(arch_cmpxchg_relaxed) || defined(arch_cmpxchg)
-> -#define cmpxchg(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if defined(arch_cmpxchg_acquire)
-> -#define cmpxchg_acquire(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_cmpxchg_acquire(__ai_ptr, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if defined(arch_cmpxchg_release)
-> -#define cmpxchg_release(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_cmpxchg_release(__ai_ptr, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if defined(arch_cmpxchg_relaxed)
-> -#define cmpxchg_relaxed(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
-> -})
-> -#endif
-> -
->  #if !defined(arch_cmpxchg64_relaxed) || defined(arch_cmpxchg64)
->  #define cmpxchg64(ptr, ...) \
->  ({ \
-> @@ -1749,57 +1808,6 @@ atomic64_dec_if_positive(atomic64_t *v)
->  })
->  #endif
->  
-> -#if !defined(arch_try_cmpxchg_relaxed) || defined(arch_try_cmpxchg)
-> -#define try_cmpxchg(ptr, oldp, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	typeof(oldp) __ai_oldp = (oldp); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-> -	arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if defined(arch_try_cmpxchg_acquire)
-> -#define try_cmpxchg_acquire(ptr, oldp, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	typeof(oldp) __ai_oldp = (oldp); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-> -	arch_try_cmpxchg_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if defined(arch_try_cmpxchg_release)
-> -#define try_cmpxchg_release(ptr, oldp, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	typeof(oldp) __ai_oldp = (oldp); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-> -	arch_try_cmpxchg_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#if defined(arch_try_cmpxchg_relaxed)
-> -#define try_cmpxchg_relaxed(ptr, oldp, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	typeof(oldp) __ai_oldp = (oldp); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-> -	arch_try_cmpxchg_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> -})
-> -#endif
-> -
-> -#define cmpxchg_local(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_cmpxchg_local(__ai_ptr, __VA_ARGS__); \
-> -})
-> -
->  #define cmpxchg64_local(ptr, ...) \
->  ({ \
->  	typeof(ptr) __ai_ptr = (ptr); \
-> @@ -1807,13 +1815,7 @@ atomic64_dec_if_positive(atomic64_t *v)
->  	arch_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
->  })
->  
-> -#define sync_cmpxchg(ptr, ...) \
-> -({ \
-> -	typeof(ptr) __ai_ptr = (ptr); \
-> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-> -	arch_sync_cmpxchg(__ai_ptr, __VA_ARGS__); \
-> -})
-> -
-> +#endif
->  #define cmpxchg_double(ptr, ...) \
->  ({ \
->  	typeof(ptr) __ai_ptr = (ptr); \
-> @@ -1830,4 +1832,4 @@ atomic64_dec_if_positive(atomic64_t *v)
->  })
->  
->  #endif /* _ASM_GENERIC_ATOMIC_INSTRUMENTED_H */
-> -// 4bec382e44520f4d8267e42620054db26a659ea3
-> +// 21c7f7e074cb2cb7e2f593fe7c8f6dec6ab9e7ea
-> diff --git a/include/asm-generic/atomic64.h b/include/asm-generic/atomic64.h
-> index 370f01d..bb5cf1e 100644
-> --- a/include/asm-generic/atomic64.h
-> +++ b/include/asm-generic/atomic64.h
-> @@ -34,6 +34,18 @@ extern s64 atomic64_fetch_##op(s64 a, atomic64_t *v);
->  ATOMIC64_OPS(add)
->  ATOMIC64_OPS(sub)
->  
-> +#define atomic64_add_relaxed atomic64_add
-> +#define atomic64_add_acquire atomic64_add
-> +#define atomic64_add_release atomic64_add
-> +
-> +#define atomic64_add_return_relaxed atomic64_add_return
-> +#define atomic64_add_return_acquire atomic64_add_return
-> +#define atomic64_add_return_release atomic64_add_return
-> +
-> +#define atomic64_fetch_add_relaxed atomic64_fetch_add
-> +#define atomic64_fetch_add_acquire atomic64_fetch_add
-> +#define atomic64_fetch_add_release atomic64_fetch_add
-> +
->  #undef ATOMIC64_OPS
->  #define ATOMIC64_OPS(op)	ATOMIC64_OP(op) ATOMIC64_FETCH_OP(op)
->  
-> @@ -49,8 +61,85 @@ ATOMIC64_OPS(xor)
->  extern s64 atomic64_dec_if_positive(atomic64_t *v);
->  #define atomic64_dec_if_positive atomic64_dec_if_positive
->  extern s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n);
-> +#define atomic64_cmpxchg_relaxed atomic64_cmpxchg
-> +#define atomic64_cmpxchg_acquire atomic64_cmpxchg
-> +#define atomic64_cmpxchg_release atomic64_cmpxchg
->  extern s64 atomic64_xchg(atomic64_t *v, s64 new);
-> +#define atomic64_xchg_relaxed atomic64_xchg
-> +#define atomic64_xchg_acquire atomic64_xchg
-> +#define atomic64_xchg_release atomic64_xchg
->  extern s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u);
->  #define atomic64_fetch_add_unless atomic64_fetch_add_unless
->  
-> +static __always_inline void
-> +atomic64_inc(atomic64_t *v)
-> +{
-> +	atomic64_add(1, v);
-> +}
-> +
-> +static __always_inline s64
-> +atomic64_inc_return(atomic64_t *v)
-> +{
-> +	return atomic64_add_return(1, v);
-> +}
-> +
-> +static __always_inline s64
-> +atomic64_fetch_inc(atomic64_t *v)
-> +{
-> +	return atomic64_fetch_add(1, v);
-> +}
-> +
-> +static __always_inline void
-> +atomic64_dec(atomic64_t *v)
-> +{
-> +	atomic64_sub(1, v);
-> +}
-> +
-> +static __always_inline s64
-> +atomic64_dec_return(atomic64_t *v)
-> +{
-> +	return atomic64_sub_return(1, v);
-> +}
-> +
-> +static __always_inline s64
-> +atomic64_fetch_dec(atomic64_t *v)
-> +{
-> +	return atomic64_fetch_sub(1, v);
-> +}
-> +
-> +static __always_inline void
-> +atomic64_andnot(s64 i, atomic64_t *v)
-> +{
-> +	atomic64_and(~i, v);
-> +}
-> +
-> +static __always_inline s64
-> +atomic64_fetch_andnot(s64 i, atomic64_t *v)
-> +{
-> +	return atomic64_fetch_and(~i, v);
-> +}
-> +
-> +static __always_inline bool
-> +atomic64_sub_and_test(int i, atomic64_t *v)
-> +{
-> +	return atomic64_sub_return(i, v) == 0;
-> +}
-> +
-> +static __always_inline bool
-> +atomic64_dec_and_test(atomic64_t *v)
-> +{
-> +	return atomic64_dec_return(v) == 0;
-> +}
-> +
-> +static __always_inline bool
-> +atomic64_inc_and_test(atomic64_t *v)
-> +{
-> +	return atomic64_inc_return(v) == 0;
-> +}
-> +
-> +static __always_inline bool
-> +atomic64_add_negative(s64 i, atomic64_t *v)
-> +{
-> +	return atomic64_add_return(i, v) < 0;
-> +}
->  #endif  /*  _ASM_GENERIC_ATOMIC64_H  */
-> diff --git a/include/linux/atomic-arch-fallback.h b/include/linux/atomic-arch-fallback.h
-> index a3dba31..2f1db6a 100644
-> --- a/include/linux/atomic-arch-fallback.h
-> +++ b/include/linux/atomic-arch-fallback.h
-> @@ -1252,7 +1252,7 @@ arch_atomic_dec_if_positive(atomic_t *v)
->  
->  #ifdef CONFIG_GENERIC_ATOMIC64
->  #include <asm-generic/atomic64.h>
-> -#endif
-> +#else
->  
->  #ifndef arch_atomic64_read_acquire
->  static __always_inline s64
-> @@ -2357,5 +2357,6 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
->  #define arch_atomic64_dec_if_positive arch_atomic64_dec_if_positive
->  #endif
->  
-> +#endif /* CONFIG_GENERIC_ATOMIC64 */
->  #endif /* _LINUX_ATOMIC_FALLBACK_H */
-> -// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
-> +// ae31a21075855e67a9b2927f8241dedddafda046
-> diff --git a/include/linux/atomic-fallback.h b/include/linux/atomic-fallback.h
-> index 2a3f55d..7dda483 100644
-> --- a/include/linux/atomic-fallback.h
-> +++ b/include/linux/atomic-fallback.h
-> @@ -1369,7 +1369,7 @@ atomic_dec_if_positive(atomic_t *v)
->  
->  #ifdef CONFIG_GENERIC_ATOMIC64
->  #include <asm-generic/atomic64.h>
-> -#endif
-> +#else
->  
->  #define arch_atomic64_read atomic64_read
->  #define arch_atomic64_read_acquire atomic64_read_acquire
-> @@ -2591,5 +2591,6 @@ atomic64_dec_if_positive(atomic64_t *v)
->  #define atomic64_dec_if_positive atomic64_dec_if_positive
->  #endif
->  
-> +#endif /* CONFIG_GENERIC_ATOMIC64 */
->  #endif /* _LINUX_ATOMIC_FALLBACK_H */
-> -// d78e6c293c661c15188f0ec05bce45188c8d5892
-> +// b809c8e3c88910826f765bdba4a74f21c527029d
-> diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
-> index 317a6ce..8b7a685 100755
-> --- a/scripts/atomic/gen-atomic-fallback.sh
-> +++ b/scripts/atomic/gen-atomic-fallback.sh
-> @@ -247,7 +247,7 @@ done
->  cat <<EOF
->  #ifdef CONFIG_GENERIC_ATOMIC64
->  #include <asm-generic/atomic64.h>
-> -#endif
-> +#else
->  
->  EOF
->  
-> @@ -256,5 +256,6 @@ grep '^[a-z]' "$1" | while read name meta args; do
->  done
->  
->  cat <<EOF
-> +#endif /* CONFIG_GENERIC_ATOMIC64 */
->  #endif /* _LINUX_ATOMIC_FALLBACK_H */
->  EOF
-> diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
-> index 5766ffc..1f2a58b 100755
-> --- a/scripts/atomic/gen-atomic-instrumented.sh
-> +++ b/scripts/atomic/gen-atomic-instrumented.sh
-> @@ -182,21 +182,40 @@ grep '^[a-z]' "$1" | while read name meta args; do
->  	gen_proto "${meta}" "${name}" "atomic" "int" ${args}
->  done
->  
-> +for xchg in "xchg" "cmpxchg" "try_cmpxchg"; do
-> +	for order in "" "_acquire" "_release" "_relaxed"; do
-> +		gen_optional_xchg "${xchg}" "${order}"
-> +	done
-> +done
-> +
-> +for xchg in "cmpxchg_local" "sync_cmpxchg"; do
-> +	gen_xchg "${xchg}" ""
-> +	printf "\n"
-> +done
-> +
-> +cat <<EOF
-> +#ifndef CONFIG_GENERIC_ATOMIC64
-> +EOF
-> +
->  grep '^[a-z]' "$1" | while read name meta args; do
->  	gen_proto "${meta}" "${name}" "atomic64" "s64" ${args}
->  done
->  
-> -for xchg in "xchg" "cmpxchg" "cmpxchg64" "try_cmpxchg"; do
-> +for xchg in "cmpxchg64"; do
->  	for order in "" "_acquire" "_release" "_relaxed"; do
->  		gen_optional_xchg "${xchg}" "${order}"
->  	done
->  done
->  
-> -for xchg in "cmpxchg_local" "cmpxchg64_local" "sync_cmpxchg"; do
-> +for xchg in "cmpxchg64_local"; do
->  	gen_xchg "${xchg}" ""
->  	printf "\n"
->  done
->  
-> +cat <<EOF
-> +#endif
-> +EOF
-> +
->  gen_xchg "cmpxchg_double" "2 * "
->  
->  printf "\n\n"
-> -- 
-> 2.7.4
+> c) use the high bits of uc_flags.  After all, once we add extensions,
+> we don't need new flags, so we can steal 16 high bits of uc_flags for
+> this.
 > 
+> I think I'm in favor of (c).  We do:
+> 
+> (uc_flags & 0xffff0000) == 0: extension not present
+> 
+> Otherwise the extension region is at ucontext + (uc_flags >> 16).
+> 
+> And sigreturn finds the extension the same way, because CRIU can
+> already migrate a signal frame from one kernel to another, your patch
+> breaks this, and having sigreturn hardcode the offset would also break
+> it.
+> 
+> What do you think?
+> 
+
