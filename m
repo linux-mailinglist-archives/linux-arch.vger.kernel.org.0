@@ -2,27 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BC6370439
-	for <lists+linux-arch@lfdr.de>; Sat,  1 May 2021 01:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40BB370440
+	for <lists+linux-arch@lfdr.de>; Sat,  1 May 2021 01:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbhD3XtK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Apr 2021 19:49:10 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:36550 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbhD3XtK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Apr 2021 19:49:10 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1lccra-004FDQ-6Q; Fri, 30 Apr 2021 17:48:02 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=fess.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1lccrY-007K7B-6o; Fri, 30 Apr 2021 17:48:01 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Marco Elver <elver@google.com>
+        id S233025AbhD3XvK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Apr 2021 19:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232957AbhD3XvJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Apr 2021 19:51:09 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEF2C06138D
+        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 16:50:20 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id s1-20020a4ac1010000b02901cfd9170ce2so15877422oop.12
+        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 16:50:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q/q7DptLC8egYbR7opYakYP8H9u2iTP4dEK6HMA0wYI=;
+        b=cI3yQrkNwf6EUbrFxXy4L8iUKQfRVeS7b27mJg8q4vPtLahufJGGltwG+4Qf/9Ruwm
+         f/wwpUsV1hedJDN6gO+CDbXQFd1EDANy5OWSYC5txTLOr6HwQ3Hdp+RAJRrEyM51E0b1
+         Ay4KYZqHN+MIFPvtAgJRfdW8fCFI0WdceWauCiiGhO7jRSnzhliA82FIEVEeImYwJUse
+         gsrxp7fSduKCZ8Re3n2SedOIotgrbj3y0duChsFTVKbjNdb1Zdrbzjclv+ylIqUeYPWk
+         xYjRFZ0b1s3S9OjWnRDpozoQSQZ9qpwojgea2yAHW2WavS+J07N6pNxM5D4IJEv1vw3a
+         Hhqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q/q7DptLC8egYbR7opYakYP8H9u2iTP4dEK6HMA0wYI=;
+        b=p0Ld5Mch1Uu8iR+m0uK6a6BCLKI3My7JHZxe4DTCM5IZYswTzB+7C87x0CzpoBgR6t
+         RyNw/zdDE62JMfsdZXMaQS2unp9Rew3SL8cbaK60n7Ygu5AJbYyiYsanfkQbQlmwYCkM
+         GCVTCdGJV1IoEoCtVXOanQ5URZQ6IhMohlzH8L2z7MABK2RFLs8tw5n6sWgNINS1LG8K
+         1o9eGoF8Ms4C8cIPAhZ5IequmHJO9FZbxeyj4Wywd2n4dQae4KSRel8KNa3jrww46Glr
+         mBvl8fGUQnD7W6DHvVKkmY8dHVdmZeohFtabIXh8SU64kvJ1mTBlKJRfqmmw+lo2tA/r
+         ZTQg==
+X-Gm-Message-State: AOAM5339ih8xYUbIfTicEmwEMp8ApLjSGFeo4maMjeufxIXJvTxDD8t7
+        85ELOOLjanejuP0IOcOjATGD45yE8ChCtlXUmChGKw==
+X-Google-Smtp-Source: ABdhPJyxcbYG0z/wbFYM2KfbPDk4IEK2fp9FIJ5gR9LNAk+AoOPt5KThaXTWfhI4EkWsyRXXiXzxtUETGhL2umOnUNk=
+X-Received: by 2002:a4a:e692:: with SMTP id u18mr6616156oot.54.1619826619823;
+ Fri, 30 Apr 2021 16:50:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <YIpkvGrBFGlB5vNj@elver.google.com> <m11rat9f85.fsf@fess.ebiederm.org>
+ <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
+ <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com> <m17dkjttpj.fsf@fess.ebiederm.org>
+In-Reply-To: <m17dkjttpj.fsf@fess.ebiederm.org>
+From:   Marco Elver <elver@google.com>
+Date:   Sat, 1 May 2021 01:50:08 +0200
+Message-ID: <CANpmjNNU=00iq50xyVpqeg21kata+cTS=wZ7zcU_78K=rWL-=w@mail.gmail.com>
+Subject: Re: siginfo_t ABI break on sparc64 from si_addr_lsb move 3y ago
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Florian Weimer <fweimer@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -36,102 +66,148 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Florian Weimer <fweimer@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
         kasan-dev <kasan-dev@googlegroups.com>
-References: <YIpkvGrBFGlB5vNj@elver.google.com>
-        <m11rat9f85.fsf@fess.ebiederm.org>
-        <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
-        <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com>
-        <m1zgxfs7zq.fsf_-_@fess.ebiederm.org>
-Date:   Fri, 30 Apr 2021 18:47:56 -0500
-In-Reply-To: <m1zgxfs7zq.fsf_-_@fess.ebiederm.org> (Eric W. Biederman's
-        message of "Fri, 30 Apr 2021 17:49:45 -0500")
-Message-ID: <m1r1irpc5v.fsf@fess.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1lccrY-007K7B-6o;;;mid=<m1r1irpc5v.fsf@fess.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/ymAofLNxA6qk5cQWTdhMdZa83kQdvOUU=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.7 required=8.0 tests=ALL_TRUSTED,BAYES_20,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,T_XMDrugObfuBody_08,XMNoVowels,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
-        *      [score: 0.0820]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  1.0 T_XMDrugObfuBody_08 obfuscated drug references
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Marco Elver <elver@google.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1371 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (0.8%), b_tie_ro: 9 (0.7%), parse: 1.07 (0.1%),
-         extract_message_metadata: 3.6 (0.3%), get_uri_detail_list: 1.30
-        (0.1%), tests_pri_-1000: 4.5 (0.3%), tests_pri_-950: 1.21 (0.1%),
-        tests_pri_-900: 1.04 (0.1%), tests_pri_-90: 93 (6.8%), check_bayes: 91
-        (6.6%), b_tokenize: 8 (0.6%), b_tok_get_all: 8 (0.6%), b_comp_prob:
-        2.1 (0.2%), b_tok_touch_all: 71 (5.2%), b_finish: 0.81 (0.1%),
-        tests_pri_0: 1234 (90.0%), check_dkim_signature: 0.50 (0.0%),
-        check_dkim_adsp: 2.2 (0.2%), poll_dns_idle: 0.58 (0.0%), tests_pri_10:
-        3.1 (0.2%), tests_pri_500: 9 (0.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC][PATCH 0/3] signal: Move si_trapno into the _si_fault union
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, 30 Apr 2021 at 22:15, Eric W. Biederman <ebiederm@xmission.com> wrote:
+[...]
+> arm64 only abuses si_errno in compat code for bug compatibility with
+> arm32.
+>
+> > Given it'd be wasted space otherwise, and we define the semantics of
+> > whatever is stored in siginfo on the new signal, it'd be good to keep.
+>
+> Except you don't completely.  You are not defining a new signal.  You
+> are extending the definition of SIGTRAP.  Anything generic that
+> responds to all SIGTRAPs can reasonably be looking at si_errno.
 
-Well with 7 patches instead of 3 that was a little more than I thought
-I was going to send.
+I see where you're coming from, and agree with this if si_errno
+already had some semantics for some subset of SIGTRAPs. I've tried to
+analyze the situation a bit further, since siginfo seems to be a giant
+minefield and semantics is underspecified at best. :-)
 
-However that does demonstrate what I am thinking, and I think most of
-the changes are reasonable at this point.
+Do any of the existing SIGTRAPs define si_errno to be set? As far as I
+can tell, they don't.
 
-I am very curious how synchronous this all is, because if this code
-is truly synchronous updating signalfd to handle this class of signal
-doesn't really make sense.
+If this is true, I think there are benefits and downsides to
+repurposing si_errno (similar to what SIGSYS did). The obvious
+downside is as you suggest, it's not always a real errno. The benefit
+is that we avoid introducing more and more fields -- i.e. if we permit
+si_errno to be repurposed for SIGTRAP and its value depends on the
+precise si_code, too, we simplify siginfo's overall definition (also
+given every new field needs more code in kernel/signal.c, too).
 
-If the code is not synchronous using force_sig is questionable.
+Given SIGTRAPs are in response to some user-selected event in the
+user's code (breakpoints, ptrace, etc. ... now perf events), the user
+must already check the si_code to select the right action because
+SIGTRAPs are not alike (unlike, e.g. SIGSEGV). Because of this, I
+think that repurposing si_errno in an si_code-dependent way for
+SIGTRAPs is safe.
 
-Eric W. Biederman (7):
-      siginfo: Move si_trapno inside the union inside _si_fault
-      signal: Implement SIL_FAULT_TRAPNO
-      signal: Use dedicated helpers to send signals with si_trapno set
-      signal: Remove __ARCH_SI_TRAPNO
-      signal: Rename SIL_PERF_EVENT SIL_FAULT_PERF_EVENT for consistency
-      signal: Factor force_sig_perf out of perf_sigtrap
-      signal: Deliver all of the perf_data in si_perf
+If you think it is simply untenable to repurpose si_errno for
+SIGTRAPs, please confirm -- I'll just send a minimal patch to fix (I'd
+probably just remove setting it... everything else is too intrusive as
+a "fix".. sigh).
 
- arch/alpha/include/uapi/asm/siginfo.h |   2 -
- arch/alpha/kernel/osf_sys.c           |   2 +-
- arch/alpha/kernel/signal.c            |   4 +-
- arch/alpha/kernel/traps.c             |  24 ++++----
- arch/alpha/mm/fault.c                 |   4 +-
- arch/mips/include/uapi/asm/siginfo.h  |   2 -
- arch/sparc/include/uapi/asm/siginfo.h |   3 -
- arch/sparc/kernel/process_64.c        |   2 +-
- arch/sparc/kernel/sys_sparc_32.c      |   2 +-
- arch/sparc/kernel/sys_sparc_64.c      |   2 +-
- arch/sparc/kernel/traps_32.c          |  22 +++----
- arch/sparc/kernel/traps_64.c          |  44 ++++++--------
- arch/sparc/kernel/unaligned_32.c      |   2 +-
- arch/sparc/mm/fault_32.c              |   2 +-
- arch/sparc/mm/fault_64.c              |   2 +-
- fs/signalfd.c                         |  13 ++--
- include/linux/compat.h                |   9 +--
- include/linux/sched/signal.h          |  13 ++--
- include/linux/signal.h                |   3 +-
- include/uapi/asm-generic/siginfo.h    |  11 ++--
- include/uapi/linux/signalfd.h         |   4 +-
- kernel/events/core.c                  |  11 +---
- kernel/signal.c                       | 108 ++++++++++++++++++++++------------
- 23 files changed, 149 insertions(+), 142 deletions(-)
+The cleanups as you outline below seem orthogonal and not urgent for
+5.13 (all changes and cleanups for __ARCH_SI_TRAPNO seem too intrusive
+without -next exposure).
+
+Thanks,
+-- Marco
+
+> Further you are already adding a field with si_perf you can just as
+> easily add a second field with well defined semantics for that data.
+>
+> >> The code is only safe if the analysis that says we can move si_trapno
+> >> and perhaps the ia64 fields into the union is correct.  It looks like
+> >> ia64 much more actively uses it's signal extension fields including for
+> >> SIGTRAP, so I am not at all certain the generic definition of
+> >> perf_sigtrap is safe on ia64.
+> >
+> > Trying to understand the requirements of si_trapno myself: safe here
+> > would mean that si_trapno is not required if we fire our SIGTRAP /
+> > TRAP_PERF.
+> >
+> > As far as I can tell that is the case -- see below.
+> >
+> >> > I suppose in theory sparc64 or alpha might start using the other
+> >> > fields in the future, and an application might be compiled against
+> >> > mismatched headers, but that is unlikely and is already broken
+> >> > with the current headers.
+> >>
+> >> If we localize the use of si_trapno to just a few special cases on alpha
+> >> and sparc I think we don't even need to worry about breaking userspace
+> >> on any architecture.  It will complicate siginfo_layout, but it is a
+> >> complication that reflects reality.
+> >>
+> >> I don't have a clue how any of this affects ia64.  Does perf work on
+> >> ia64?  Does perf work on sparc, and alpha?
+> >>
+> >> If perf works on ia64 we need to take a hard look at what is going on
+> >> there as well.
+> >
+> > No perf on ia64, but it seems alpha and sparc have perf:
+> >
+> >       $ git grep 'select.*HAVE_PERF_EVENTS$' -- arch/
+> >       arch/alpha/Kconfig:     select HAVE_PERF_EVENTS    <--
+> >       arch/arc/Kconfig:       select HAVE_PERF_EVENTS
+> >       arch/arm/Kconfig:       select HAVE_PERF_EVENTS
+> >       arch/arm64/Kconfig:     select HAVE_PERF_EVENTS
+> >       arch/csky/Kconfig:      select HAVE_PERF_EVENTS
+> >       arch/hexagon/Kconfig:   select HAVE_PERF_EVENTS
+> >       arch/mips/Kconfig:      select HAVE_PERF_EVENTS
+> >       arch/nds32/Kconfig:     select HAVE_PERF_EVENTS
+> >       arch/parisc/Kconfig:    select HAVE_PERF_EVENTS
+> >       arch/powerpc/Kconfig:   select HAVE_PERF_EVENTS
+> >       arch/riscv/Kconfig:     select HAVE_PERF_EVENTS
+> >       arch/s390/Kconfig:      select HAVE_PERF_EVENTS
+> >       arch/sh/Kconfig:        select HAVE_PERF_EVENTS
+> >       arch/sparc/Kconfig:     select HAVE_PERF_EVENTS    <--
+> >       arch/x86/Kconfig:       select HAVE_PERF_EVENTS
+> >       arch/xtensa/Kconfig:    select HAVE_PERF_EVENTS
+> >
+> > Now, given ia64 is not an issue, I wanted to understand the semantics of
+> > si_trapno. Per https://man7.org/linux/man-pages/man2/sigaction.2.html, I
+> > see:
+> >
+> >       int si_trapno;    /* Trap number that caused
+> >                            hardware-generated signal
+> >                            (unused on most architectures) */
+> >
+> > ... its intended semantics seem to suggest it would only be used by some
+> > architecture-specific signal like you identified above. So if the
+> > semantics is some code of a hardware trap/fault, then we're fine and do
+> > not need to set it.
+> >
+> > Also bearing in mind we define the semantics any new signal, and given
+> > most architectures do not have si_trapno, definitions of new generic
+> > signals should probably not include odd architecture specific details
+> > related to old architectures.
+> >
+> > From all this, my understanding now is that we can move si_trapno into
+> > the union, correct? What else did you have in mind?
+>
+> Yes.  Let's move si_trapno into the union.
+>
+> That implies a few things like siginfo_layout needs to change.
+>
+> The helpers in kernel/signal.c can change to not imply that
+> if you define __ARCH_SI_TRAPNO you must always define and
+> pass in si_trapno.  A force_sig_trapno could be defined instead
+> to handle the cases that alpha and sparc use si_trapno.
+>
+> It would be nice if a force_sig_perf_trap could be factored
+> out of perf_trap and placed in kernel/signal.c.
+>
+> My experience (especially this round) is that it becomes much easier to
+> audit the users of siginfo if there is a dedicated function in
+> kernel/signal.c that is simply passed the parameters that need
+> to be placed in siginfo.
+>
+> So I would very much like to see if I can make force_sig_info static.
+>
+> Eric
+>
