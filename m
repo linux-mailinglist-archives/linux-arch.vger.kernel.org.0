@@ -2,56 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A40BB370440
-	for <lists+linux-arch@lfdr.de>; Sat,  1 May 2021 01:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB584370465
+	for <lists+linux-arch@lfdr.de>; Sat,  1 May 2021 02:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbhD3XvK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Apr 2021 19:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
+        id S230290AbhEAA3e (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Apr 2021 20:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbhD3XvJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Apr 2021 19:51:09 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEF2C06138D
-        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 16:50:20 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id s1-20020a4ac1010000b02901cfd9170ce2so15877422oop.12
-        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 16:50:20 -0700 (PDT)
+        with ESMTP id S230226AbhEAA3e (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Apr 2021 20:29:34 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50492C06138B
+        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 17:28:45 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id u16so54448704oiu.7
+        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 17:28:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Q/q7DptLC8egYbR7opYakYP8H9u2iTP4dEK6HMA0wYI=;
-        b=cI3yQrkNwf6EUbrFxXy4L8iUKQfRVeS7b27mJg8q4vPtLahufJGGltwG+4Qf/9Ruwm
-         f/wwpUsV1hedJDN6gO+CDbXQFd1EDANy5OWSYC5txTLOr6HwQ3Hdp+RAJRrEyM51E0b1
-         Ay4KYZqHN+MIFPvtAgJRfdW8fCFI0WdceWauCiiGhO7jRSnzhliA82FIEVEeImYwJUse
-         gsrxp7fSduKCZ8Re3n2SedOIotgrbj3y0duChsFTVKbjNdb1Zdrbzjclv+ylIqUeYPWk
-         xYjRFZ0b1s3S9OjWnRDpozoQSQZ9qpwojgea2yAHW2WavS+J07N6pNxM5D4IJEv1vw3a
-         Hhqg==
+        bh=wrSDrh86BIUH92uxEEUIIzYXakmk5H1bASu7Ra8z2vg=;
+        b=cvM0ZoU48pK2bYkaKMuHnSoQ06aWqFfkle9mtgOE/Ush8rIB5JVJRuoCRAzplzdNNl
+         I8sBtiJuY+Wewk8R0f9ELuux1yOcHKWmMSma4409yzW1wIDhiddWDFYV9WPOb8jS9KEY
+         LASs1C1i+LifJunVK3i65hUcADSM/TcSa7HX5GTfeaERdUOeUnTpL/0JoA6Nwi5GDJnJ
+         yftzIBkHJmylhsDacSB0TT2ywGtL+Rwk9MPNLWm9iMRXMEv0/Aw8K4aGrQnyKHcS9by4
+         LqL7xbL0BirIf5oh0qpJIKXzj4gS6APG4yb3UqYogyYAVhgHkscBpZvU728ThVeDXKFx
+         NfDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Q/q7DptLC8egYbR7opYakYP8H9u2iTP4dEK6HMA0wYI=;
-        b=p0Ld5Mch1Uu8iR+m0uK6a6BCLKI3My7JHZxe4DTCM5IZYswTzB+7C87x0CzpoBgR6t
-         RyNw/zdDE62JMfsdZXMaQS2unp9Rew3SL8cbaK60n7Ygu5AJbYyiYsanfkQbQlmwYCkM
-         GCVTCdGJV1IoEoCtVXOanQ5URZQ6IhMohlzH8L2z7MABK2RFLs8tw5n6sWgNINS1LG8K
-         1o9eGoF8Ms4C8cIPAhZ5IequmHJO9FZbxeyj4Wywd2n4dQae4KSRel8KNa3jrww46Glr
-         mBvl8fGUQnD7W6DHvVKkmY8dHVdmZeohFtabIXh8SU64kvJ1mTBlKJRfqmmw+lo2tA/r
-         ZTQg==
-X-Gm-Message-State: AOAM5339ih8xYUbIfTicEmwEMp8ApLjSGFeo4maMjeufxIXJvTxDD8t7
-        85ELOOLjanejuP0IOcOjATGD45yE8ChCtlXUmChGKw==
-X-Google-Smtp-Source: ABdhPJyxcbYG0z/wbFYM2KfbPDk4IEK2fp9FIJ5gR9LNAk+AoOPt5KThaXTWfhI4EkWsyRXXiXzxtUETGhL2umOnUNk=
-X-Received: by 2002:a4a:e692:: with SMTP id u18mr6616156oot.54.1619826619823;
- Fri, 30 Apr 2021 16:50:19 -0700 (PDT)
+        bh=wrSDrh86BIUH92uxEEUIIzYXakmk5H1bASu7Ra8z2vg=;
+        b=EdiC2htZEwsgonYjHH4RLLh6fcVutzAPYomhRyT/jRj2YwwTA4CRdkiaqSXp8gsUZG
+         kAA0PGxXXSSHoSJamDMGORvaoWsFCK6eLK4jlqmbkMt2Nw3fzQCx0iGsPbmOHhetPpdj
+         ZkT1MWoc0VoqF2GHWONypWIUi3YiZurZyUQIlfbuhiVrCreUzXBBPWuS19Y9ylolzkkm
+         mwMHp2Qw0ZlMX992pEf8jyxAe//uRZhY6xL827LgMOgzFQKx1rIjvbKtLFvCVnd0+6oW
+         6i/H5AtR1FSgzb9CvkT/xxFmLmH4kwMzslFLxsmYMSlMgGJFoV9AbypaVE85qchr5CrB
+         ayow==
+X-Gm-Message-State: AOAM530NvMQ6hPm3v0kQXVi9uKq5jWcs1kzLrf4YxrP4nVVK5hKnkwBr
+        E/LDt90+EPjP+QQzFsQ2yzr/T60Ad3lgNApz2EiGfw==
+X-Google-Smtp-Source: ABdhPJwd0pDQ1vHrS8Z2nkyzNABox9/lzR97Z3rpScDEZ96BeynLMF42t/vDPTiSITQxEl86WXm5uwEG3bhnj95lNz8=
+X-Received: by 2002:aca:408a:: with SMTP id n132mr6068321oia.70.1619828924536;
+ Fri, 30 Apr 2021 17:28:44 -0700 (PDT)
 MIME-Version: 1.0
 References: <YIpkvGrBFGlB5vNj@elver.google.com> <m11rat9f85.fsf@fess.ebiederm.org>
  <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
- <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com> <m17dkjttpj.fsf@fess.ebiederm.org>
-In-Reply-To: <m17dkjttpj.fsf@fess.ebiederm.org>
+ <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com>
+ <m1zgxfs7zq.fsf_-_@fess.ebiederm.org> <m1im43qrug.fsf_-_@fess.ebiederm.org>
+In-Reply-To: <m1im43qrug.fsf_-_@fess.ebiederm.org>
 From:   Marco Elver <elver@google.com>
-Date:   Sat, 1 May 2021 01:50:08 +0200
-Message-ID: <CANpmjNNU=00iq50xyVpqeg21kata+cTS=wZ7zcU_78K=rWL-=w@mail.gmail.com>
-Subject: Re: siginfo_t ABI break on sparc64 from si_addr_lsb move 3y ago
+Date:   Sat, 1 May 2021 02:28:33 +0200
+Message-ID: <CANpmjNOwUfcCrBfCjtq9ngjqkqjYzehrqS+=+2oA=703tNP=aA@mail.gmail.com>
+Subject: Re: Is perf_sigtrap synchronous?
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Florian Weimer <fweimer@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -71,143 +72,52 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 30 Apr 2021 at 22:15, Eric W. Biederman <ebiederm@xmission.com> wrote:
-[...]
-> arm64 only abuses si_errno in compat code for bug compatibility with
-> arm32.
+On Sat, 1 May 2021 at 01:23, Eric W. Biederman <ebiederm@xmission.com> wrote:
 >
-> > Given it'd be wasted space otherwise, and we define the semantics of
-> > whatever is stored in siginfo on the new signal, it'd be good to keep.
+> I am looking at perf_sigtrap and I am confused by the code.
 >
-> Except you don't completely.  You are not defining a new signal.  You
-> are extending the definition of SIGTRAP.  Anything generic that
-> responds to all SIGTRAPs can reasonably be looking at si_errno.
+>
+>         /*
+>          * We'd expect this to only occur if the irq_work is delayed and either
+>          * ctx->task or current has changed in the meantime. This can be the
+>          * case on architectures that do not implement arch_irq_work_raise().
+>          */
+>         if (WARN_ON_ONCE(event->ctx->task != current))
+>                 return;
+>
+>         /*
+>          * perf_pending_event() can race with the task exiting.
+>          */
+>         if (current->flags & PF_EXITING)
+>                 return;
+>
+>
+> It performs tests that absolutely can never fail if we are talking about
+> a synchronous exception.  The code force_sig family of functions only
+> make sense to use with and are only safe to use with synchronous
+> exceptions.
+>
+> Are the tests in perf_sigtrap necessary or is perf_sigtrap not reporting
+> a synchronous event?
 
-I see where you're coming from, and agree with this if si_errno
-already had some semantics for some subset of SIGTRAPs. I've tried to
-analyze the situation a bit further, since siginfo seems to be a giant
-minefield and semantics is underspecified at best. :-)
+Yes it's synchronous, insofar that the user will receive the signal
+right when the event happens (I've tested this extensively, also see
+tools/testing/selftests/perf_events). Of course, there's some effort
+involved from the point where the event triggered to actually safely
+delivering the signal. In particular, for HW events, these arrive in
+NMI, and we can't do much in NMI, and therefore will queue an
+irq_work.
 
-Do any of the existing SIGTRAPs define si_errno to be set? As far as I
-can tell, they don't.
+On architectures that properly implement irq_work, it will do a
+self-IPI, so that once it is safe to do so, another interrupt is
+delivered where we process the event and do the force_sig_info(). The
+task where the event occurred never got a chance to run -- except for
+bad architectures with broken irq_work, and the first WARN_ON() is
+there so we don't crash the kernel if somebody botched their irq_work.
 
-If this is true, I think there are benefits and downsides to
-repurposing si_errno (similar to what SIGSYS did). The obvious
-downside is as you suggest, it's not always a real errno. The benefit
-is that we avoid introducing more and more fields -- i.e. if we permit
-si_errno to be repurposed for SIGTRAP and its value depends on the
-precise si_code, too, we simplify siginfo's overall definition (also
-given every new field needs more code in kernel/signal.c, too).
-
-Given SIGTRAPs are in response to some user-selected event in the
-user's code (breakpoints, ptrace, etc. ... now perf events), the user
-must already check the si_code to select the right action because
-SIGTRAPs are not alike (unlike, e.g. SIGSEGV). Because of this, I
-think that repurposing si_errno in an si_code-dependent way for
-SIGTRAPs is safe.
-
-If you think it is simply untenable to repurpose si_errno for
-SIGTRAPs, please confirm -- I'll just send a minimal patch to fix (I'd
-probably just remove setting it... everything else is too intrusive as
-a "fix".. sigh).
-
-The cleanups as you outline below seem orthogonal and not urgent for
-5.13 (all changes and cleanups for __ARCH_SI_TRAPNO seem too intrusive
-without -next exposure).
+Since we're talking about various HW events, these can still trigger
+while the task is exiting, before perf_event_exit_task() being called
+during do_exit(). That's why we have the 2nd check.
 
 Thanks,
 -- Marco
-
-> Further you are already adding a field with si_perf you can just as
-> easily add a second field with well defined semantics for that data.
->
-> >> The code is only safe if the analysis that says we can move si_trapno
-> >> and perhaps the ia64 fields into the union is correct.  It looks like
-> >> ia64 much more actively uses it's signal extension fields including for
-> >> SIGTRAP, so I am not at all certain the generic definition of
-> >> perf_sigtrap is safe on ia64.
-> >
-> > Trying to understand the requirements of si_trapno myself: safe here
-> > would mean that si_trapno is not required if we fire our SIGTRAP /
-> > TRAP_PERF.
-> >
-> > As far as I can tell that is the case -- see below.
-> >
-> >> > I suppose in theory sparc64 or alpha might start using the other
-> >> > fields in the future, and an application might be compiled against
-> >> > mismatched headers, but that is unlikely and is already broken
-> >> > with the current headers.
-> >>
-> >> If we localize the use of si_trapno to just a few special cases on alpha
-> >> and sparc I think we don't even need to worry about breaking userspace
-> >> on any architecture.  It will complicate siginfo_layout, but it is a
-> >> complication that reflects reality.
-> >>
-> >> I don't have a clue how any of this affects ia64.  Does perf work on
-> >> ia64?  Does perf work on sparc, and alpha?
-> >>
-> >> If perf works on ia64 we need to take a hard look at what is going on
-> >> there as well.
-> >
-> > No perf on ia64, but it seems alpha and sparc have perf:
-> >
-> >       $ git grep 'select.*HAVE_PERF_EVENTS$' -- arch/
-> >       arch/alpha/Kconfig:     select HAVE_PERF_EVENTS    <--
-> >       arch/arc/Kconfig:       select HAVE_PERF_EVENTS
-> >       arch/arm/Kconfig:       select HAVE_PERF_EVENTS
-> >       arch/arm64/Kconfig:     select HAVE_PERF_EVENTS
-> >       arch/csky/Kconfig:      select HAVE_PERF_EVENTS
-> >       arch/hexagon/Kconfig:   select HAVE_PERF_EVENTS
-> >       arch/mips/Kconfig:      select HAVE_PERF_EVENTS
-> >       arch/nds32/Kconfig:     select HAVE_PERF_EVENTS
-> >       arch/parisc/Kconfig:    select HAVE_PERF_EVENTS
-> >       arch/powerpc/Kconfig:   select HAVE_PERF_EVENTS
-> >       arch/riscv/Kconfig:     select HAVE_PERF_EVENTS
-> >       arch/s390/Kconfig:      select HAVE_PERF_EVENTS
-> >       arch/sh/Kconfig:        select HAVE_PERF_EVENTS
-> >       arch/sparc/Kconfig:     select HAVE_PERF_EVENTS    <--
-> >       arch/x86/Kconfig:       select HAVE_PERF_EVENTS
-> >       arch/xtensa/Kconfig:    select HAVE_PERF_EVENTS
-> >
-> > Now, given ia64 is not an issue, I wanted to understand the semantics of
-> > si_trapno. Per https://man7.org/linux/man-pages/man2/sigaction.2.html, I
-> > see:
-> >
-> >       int si_trapno;    /* Trap number that caused
-> >                            hardware-generated signal
-> >                            (unused on most architectures) */
-> >
-> > ... its intended semantics seem to suggest it would only be used by some
-> > architecture-specific signal like you identified above. So if the
-> > semantics is some code of a hardware trap/fault, then we're fine and do
-> > not need to set it.
-> >
-> > Also bearing in mind we define the semantics any new signal, and given
-> > most architectures do not have si_trapno, definitions of new generic
-> > signals should probably not include odd architecture specific details
-> > related to old architectures.
-> >
-> > From all this, my understanding now is that we can move si_trapno into
-> > the union, correct? What else did you have in mind?
->
-> Yes.  Let's move si_trapno into the union.
->
-> That implies a few things like siginfo_layout needs to change.
->
-> The helpers in kernel/signal.c can change to not imply that
-> if you define __ARCH_SI_TRAPNO you must always define and
-> pass in si_trapno.  A force_sig_trapno could be defined instead
-> to handle the cases that alpha and sparc use si_trapno.
->
-> It would be nice if a force_sig_perf_trap could be factored
-> out of perf_trap and placed in kernel/signal.c.
->
-> My experience (especially this round) is that it becomes much easier to
-> audit the users of siginfo if there is a dedicated function in
-> kernel/signal.c that is simply passed the parameters that need
-> to be placed in siginfo.
->
-> So I would very much like to see if I can make force_sig_info static.
->
-> Eric
->
