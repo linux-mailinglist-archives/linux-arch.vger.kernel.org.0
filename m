@@ -2,57 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB584370465
-	for <lists+linux-arch@lfdr.de>; Sat,  1 May 2021 02:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00DA37047C
+	for <lists+linux-arch@lfdr.de>; Sat,  1 May 2021 02:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbhEAA3e (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Apr 2021 20:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
+        id S231254AbhEAAiZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Apr 2021 20:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbhEAA3e (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Apr 2021 20:29:34 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50492C06138B
-        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 17:28:45 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id u16so54448704oiu.7
-        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 17:28:45 -0700 (PDT)
+        with ESMTP id S231205AbhEAAiY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Apr 2021 20:38:24 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FCBC06138D
+        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 17:37:34 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id t8so1976149oij.0
+        for <linux-arch@vger.kernel.org>; Fri, 30 Apr 2021 17:37:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wrSDrh86BIUH92uxEEUIIzYXakmk5H1bASu7Ra8z2vg=;
-        b=cvM0ZoU48pK2bYkaKMuHnSoQ06aWqFfkle9mtgOE/Ush8rIB5JVJRuoCRAzplzdNNl
-         I8sBtiJuY+Wewk8R0f9ELuux1yOcHKWmMSma4409yzW1wIDhiddWDFYV9WPOb8jS9KEY
-         LASs1C1i+LifJunVK3i65hUcADSM/TcSa7HX5GTfeaERdUOeUnTpL/0JoA6Nwi5GDJnJ
-         yftzIBkHJmylhsDacSB0TT2ywGtL+Rwk9MPNLWm9iMRXMEv0/Aw8K4aGrQnyKHcS9by4
-         LqL7xbL0BirIf5oh0qpJIKXzj4gS6APG4yb3UqYogyYAVhgHkscBpZvU728ThVeDXKFx
-         NfDA==
+        bh=iYQeAScJs1TpMXononV3fp1ygIDD0T/s8VaH8jvt3Xw=;
+        b=BePQGXKejT78YB+1Qc5q1LCPNsGstYOV9R088g5QlShgvjvM6ixO0lzCO87W+2TSwp
+         znK2jDTneTfQHKD5uXShgkoJJolm6Bz5N/EpZXuPhYTS6BFF5IkfvoX18p4FHyHQvY4+
+         hXJbJoQq26tEPkPvjcG2/98QNh45edHmhZWqhkxCTc7VTF2opNFtY1Z0MIXNPxlaHsjB
+         ZMeloEw7ihZti5Zsu/oJYJLe0bQkNbe20ExgjOelN6ADUadC/pM+rBBH/kZzZq3ZkcwK
+         nnnsu4CBGHT3agel86Jlryxeenvqys1N+5c46cXHYT0kybVbeCNf+vY4SGwCaTNp6m1H
+         fBIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wrSDrh86BIUH92uxEEUIIzYXakmk5H1bASu7Ra8z2vg=;
-        b=EdiC2htZEwsgonYjHH4RLLh6fcVutzAPYomhRyT/jRj2YwwTA4CRdkiaqSXp8gsUZG
-         kAA0PGxXXSSHoSJamDMGORvaoWsFCK6eLK4jlqmbkMt2Nw3fzQCx0iGsPbmOHhetPpdj
-         ZkT1MWoc0VoqF2GHWONypWIUi3YiZurZyUQIlfbuhiVrCreUzXBBPWuS19Y9ylolzkkm
-         mwMHp2Qw0ZlMX992pEf8jyxAe//uRZhY6xL827LgMOgzFQKx1rIjvbKtLFvCVnd0+6oW
-         6i/H5AtR1FSgzb9CvkT/xxFmLmH4kwMzslFLxsmYMSlMgGJFoV9AbypaVE85qchr5CrB
-         ayow==
-X-Gm-Message-State: AOAM530NvMQ6hPm3v0kQXVi9uKq5jWcs1kzLrf4YxrP4nVVK5hKnkwBr
-        E/LDt90+EPjP+QQzFsQ2yzr/T60Ad3lgNApz2EiGfw==
-X-Google-Smtp-Source: ABdhPJwd0pDQ1vHrS8Z2nkyzNABox9/lzR97Z3rpScDEZ96BeynLMF42t/vDPTiSITQxEl86WXm5uwEG3bhnj95lNz8=
-X-Received: by 2002:aca:408a:: with SMTP id n132mr6068321oia.70.1619828924536;
- Fri, 30 Apr 2021 17:28:44 -0700 (PDT)
+        bh=iYQeAScJs1TpMXononV3fp1ygIDD0T/s8VaH8jvt3Xw=;
+        b=L0zk+O5l8DrLUItRreAYswz4qXmLUyFxzJhhDYzVKWBe5q7AkeVykZPMrD49MDHhas
+         ytuot+skhi2Z8LjXWzgRH9v5OXpLPiX9+k9cDVnLgg5UTp0pAiH/oQF0HkI47EkQRmhC
+         owm9Xms+yC99/2ngJORXWYPja8r28ShcnbUWuBR5BV9oH0fTGHLfjHSlgOtKMIAhbU38
+         c8Z5QBhOsVY2/seE6FhrquINEBvR0pyfkB3wU/5NVyf52XDdmuxSqm3OX9ZSulV/ZiJi
+         58AeROCtJfz5xF2S+S23YQpl3BCmTJVNQ7wjbwe01qQDCOfu7BBY51eBHSBc6DXb2aZW
+         G9SQ==
+X-Gm-Message-State: AOAM533ypR697KA9Mwf5W2Ov3Nl0LYx9D1+BkL0qSF3qBgCz9Ds0IVVb
+        k0TkXVW34MpRlbssLkPwhfZblJAkPXM2vHPhPAFyfw==
+X-Google-Smtp-Source: ABdhPJxIo+BVTYzvdhNqfbqRCIwfel9igFlw7u9W4kJYtv5n3JP2YhvgynpMjQkCwdk9y9SzRO6wrc/4VyE8xKAg5N0=
+X-Received: by 2002:aca:408a:: with SMTP id n132mr6087597oia.70.1619829453704;
+ Fri, 30 Apr 2021 17:37:33 -0700 (PDT)
 MIME-Version: 1.0
 References: <YIpkvGrBFGlB5vNj@elver.google.com> <m11rat9f85.fsf@fess.ebiederm.org>
  <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
  <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com>
- <m1zgxfs7zq.fsf_-_@fess.ebiederm.org> <m1im43qrug.fsf_-_@fess.ebiederm.org>
-In-Reply-To: <m1im43qrug.fsf_-_@fess.ebiederm.org>
+ <m1zgxfs7zq.fsf_-_@fess.ebiederm.org> <m1r1irpc5v.fsf@fess.ebiederm.org>
+In-Reply-To: <m1r1irpc5v.fsf@fess.ebiederm.org>
 From:   Marco Elver <elver@google.com>
-Date:   Sat, 1 May 2021 02:28:33 +0200
-Message-ID: <CANpmjNOwUfcCrBfCjtq9ngjqkqjYzehrqS+=+2oA=703tNP=aA@mail.gmail.com>
-Subject: Re: Is perf_sigtrap synchronous?
+Date:   Sat, 1 May 2021 02:37:22 +0200
+Message-ID: <CANpmjNNfiSgntiOzgMc5Y41KVAV_3VexdXCMADekbQEqSP3vqQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH 0/3] signal: Move si_trapno into the _si_fault union
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Florian Weimer <fweimer@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -72,52 +72,36 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 1 May 2021 at 01:23, Eric W. Biederman <ebiederm@xmission.com> wrote:
+On Sat, 1 May 2021 at 01:48, Eric W. Biederman <ebiederm@xmission.com> wrote:
 >
-> I am looking at perf_sigtrap and I am confused by the code.
+> Well with 7 patches instead of 3 that was a little more than I thought
+> I was going to send.
 >
+> However that does demonstrate what I am thinking, and I think most of
+> the changes are reasonable at this point.
 >
->         /*
->          * We'd expect this to only occur if the irq_work is delayed and either
->          * ctx->task or current has changed in the meantime. This can be the
->          * case on architectures that do not implement arch_irq_work_raise().
->          */
->         if (WARN_ON_ONCE(event->ctx->task != current))
->                 return;
+> I am very curious how synchronous this all is, because if this code
+> is truly synchronous updating signalfd to handle this class of signal
+> doesn't really make sense.
 >
->         /*
->          * perf_pending_event() can race with the task exiting.
->          */
->         if (current->flags & PF_EXITING)
->                 return;
+> If the code is not synchronous using force_sig is questionable.
 >
->
-> It performs tests that absolutely can never fail if we are talking about
-> a synchronous exception.  The code force_sig family of functions only
-> make sense to use with and are only safe to use with synchronous
-> exceptions.
->
-> Are the tests in perf_sigtrap necessary or is perf_sigtrap not reporting
-> a synchronous event?
+> Eric W. Biederman (7):
+>       siginfo: Move si_trapno inside the union inside _si_fault
+>       signal: Implement SIL_FAULT_TRAPNO
+>       signal: Use dedicated helpers to send signals with si_trapno set
+>       signal: Remove __ARCH_SI_TRAPNO
+>       signal: Rename SIL_PERF_EVENT SIL_FAULT_PERF_EVENT for consistency
+>       signal: Factor force_sig_perf out of perf_sigtrap
+>       signal: Deliver all of the perf_data in si_perf
 
-Yes it's synchronous, insofar that the user will receive the signal
-right when the event happens (I've tested this extensively, also see
-tools/testing/selftests/perf_events). Of course, there's some effort
-involved from the point where the event triggered to actually safely
-delivering the signal. In particular, for HW events, these arrive in
-NMI, and we can't do much in NMI, and therefore will queue an
-irq_work.
+Thank you for doing this so quickly -- it looks much cleaner. I'll
+have a more detailed look next week and also run some tests myself.
 
-On architectures that properly implement irq_work, it will do a
-self-IPI, so that once it is safe to do so, another interrupt is
-delivered where we process the event and do the force_sig_info(). The
-task where the event occurred never got a chance to run -- except for
-bad architectures with broken irq_work, and the first WARN_ON() is
-there so we don't crash the kernel if somebody botched their irq_work.
+At a first glance, you've broken our tests in
+tools/testing/selftests/perf_events/ -- needs a
+s/si_perf/si_perf.data/, s/si_errno/si_perf.type/
 
-Since we're talking about various HW events, these can still trigger
-while the task is exiting, before perf_event_exit_task() being called
-during do_exit(). That's why we have the 2nd check.
+Thanks!
 
-Thanks,
 -- Marco
