@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3556370E74
-	for <lists+linux-arch@lfdr.de>; Sun,  2 May 2021 20:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D84E370E8C
+	for <lists+linux-arch@lfdr.de>; Sun,  2 May 2021 20:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbhEBS2T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 2 May 2021 14:28:19 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:39128 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbhEBS2T (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 2 May 2021 14:28:19 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        id S231801AbhEBSkR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 2 May 2021 14:40:17 -0400
+Received: from out02.mta.xmission.com ([166.70.13.232]:44752 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229686AbhEBSkQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 2 May 2021 14:40:16 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out02.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1ldGoQ-00FXga-HS; Sun, 02 May 2021 12:27:26 -0600
+        id 1ldGzy-00FCZQ-V6; Sun, 02 May 2021 12:39:23 -0600
 Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=fess.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
         (envelope-from <ebiederm@xmission.com>)
-        id 1ldGoP-00BO9w-MT; Sun, 02 May 2021 12:27:26 -0600
+        id 1ldGzx-0006hK-2a; Sun, 02 May 2021 12:39:22 -0600
 From:   ebiederm@xmission.com (Eric W. Biederman)
 To:     Marco Elver <elver@google.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Florian Weimer <fweimer@redhat.com>,
@@ -41,89 +41,211 @@ References: <YIpkvGrBFGlB5vNj@elver.google.com>
         <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
         <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com>
         <m1zgxfs7zq.fsf_-_@fess.ebiederm.org>
-        <m1tunns7yf.fsf_-_@fess.ebiederm.org>
-        <CANpmjNOZj-jRfFH365znJGqDAwdXL4Z2QBuHOtdvN_uNJ8WBSA@mail.gmail.com>
-Date:   Sun, 02 May 2021 13:27:21 -0500
-In-Reply-To: <CANpmjNOZj-jRfFH365znJGqDAwdXL4Z2QBuHOtdvN_uNJ8WBSA@mail.gmail.com>
-        (Marco Elver's message of "Sat, 1 May 2021 12:31:10 +0200")
-Message-ID: <m1czu9ng8m.fsf@fess.ebiederm.org>
+        <m11rarqqx2.fsf_-_@fess.ebiederm.org>
+        <CANpmjNNJ_MnNyD4R2+9i24E=9xPHKnwTh6zwWtBYkuAq1Xo6-w@mail.gmail.com>
+Date:   Sun, 02 May 2021 13:39:16 -0500
+In-Reply-To: <CANpmjNNJ_MnNyD4R2+9i24E=9xPHKnwTh6zwWtBYkuAq1Xo6-w@mail.gmail.com>
+        (Marco Elver's message of "Sat, 1 May 2021 12:47:21 +0200")
+Message-ID: <m1wnshm14b.fsf@fess.ebiederm.org>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
-X-XM-SPF: eid=1ldGoP-00BO9w-MT;;;mid=<m1czu9ng8m.fsf@fess.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+I6HZ0cD4XvYQ+uzlALtJgYoOqGyYDPxk=
+X-XM-SPF: eid=1ldGzx-0006hK-2a;;;mid=<m1wnshm14b.fsf@fess.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/61Mdwb7TuChJAy6IEn9kCmxkmOP4SzJw=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa03.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
-        XMSubLong autolearn=disabled version=3.4.2
-X-Spam-Virus: No
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: ****
+X-Spam-Status: No, score=4.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,LotsOfNums_01,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
+        T_XMDrugObfuBody_08,XMNoVowels,XMSubLong autolearn=disabled
+        version=3.4.2
 X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4920]
+        *      [score: 0.4960]
         *  0.7 XMSubLong Long Subject
         *  1.5 XMNoVowels Alpha-numberic number with no vowels
         *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        *  1.2 LotsOfNums_01 BODY: Lots of long strings of numbers
         * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa03 1397; Body=1 Fuz1=1 Fuz2=1]
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
         *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Marco Elver <elver@google.com>
+        *  1.0 T_XMDrugObfuBody_08 obfuscated drug references
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Marco Elver <elver@google.com>
 X-Spam-Relay-Country: 
-X-Spam-Timing: total 325 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 4.4 (1.3%), b_tie_ro: 3.0 (0.9%), parse: 1.06
-        (0.3%), extract_message_metadata: 11 (3.3%), get_uri_detail_list: 1.98
-        (0.6%), tests_pri_-1000: 11 (3.4%), tests_pri_-950: 1.02 (0.3%),
-        tests_pri_-900: 0.83 (0.3%), tests_pri_-90: 52 (16.0%), check_bayes:
-        51 (15.6%), b_tokenize: 6 (1.8%), b_tok_get_all: 7 (2.2%),
-        b_comp_prob: 1.90 (0.6%), b_tok_touch_all: 33 (10.1%), b_finish: 0.72
-        (0.2%), tests_pri_0: 232 (71.3%), check_dkim_signature: 0.37 (0.1%),
-        check_dkim_adsp: 2.3 (0.7%), poll_dns_idle: 0.94 (0.3%), tests_pri_10:
-        2.7 (0.8%), tests_pri_500: 7 (2.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/3] siginfo: Move si_trapno inside the union inside _si_fault
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+X-Spam-Timing: total 591 ms - load_scoreonly_sql: 0.09 (0.0%),
+        signal_user_changed: 13 (2.1%), b_tie_ro: 11 (1.8%), parse: 1.61
+        (0.3%), extract_message_metadata: 16 (2.7%), get_uri_detail_list: 3.7
+        (0.6%), tests_pri_-1000: 14 (2.3%), tests_pri_-950: 1.44 (0.2%),
+        tests_pri_-900: 1.21 (0.2%), tests_pri_-90: 69 (11.7%), check_bayes:
+        68 (11.5%), b_tokenize: 13 (2.2%), b_tok_get_all: 11 (1.8%),
+        b_comp_prob: 2.8 (0.5%), b_tok_touch_all: 38 (6.4%), b_finish: 0.89
+        (0.1%), tests_pri_0: 448 (75.7%), check_dkim_signature: 0.71 (0.1%),
+        check_dkim_adsp: 2.5 (0.4%), poll_dns_idle: 0.70 (0.1%), tests_pri_10:
+        3.4 (0.6%), tests_pri_500: 20 (3.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 7/3] signal: Deliver all of the perf_data in si_perf
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 Marco Elver <elver@google.com> writes:
 
-> On Sat, 1 May 2021 at 00:50, Eric W. Biederman <ebiederm@xmission.com> wrote:
+> On Sat, 1 May 2021 at 01:44, Eric W. Biederman <ebiederm@xmission.com> wrote:
 >>
->> It turns out that linux uses si_trapno very sparingly, and as such it
->> can be considered extra information for a very narrow selection of
->> signals, rather than information that is present with every fault
->> reported in siginfo.
+>> Don't abuse si_errno and deliver all of the perf data in si_perf.
 >>
->> As such move si_trapno inside the union inside of _si_fault.  This
->> results in no change in placement, and makes it eaiser to extend
->> _si_fault in the future as this reduces the number of special cases.
->> In particular with si_trapno included in the union it is no longer a
->> concern that the union must be pointer alligned on most architectures
->> because the union followes immediately after si_addr which is a
->> pointer.
->>
->
-> Maybe add "Link:
-> https://lkml.kernel.org/r/CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com"
->
 >> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>> ---
 >
-> Acked-by: Marco Elver <elver@google.com>
+> Thank you for the fix, this looks cleaner.
 >
-> By no longer guarding it with __ARCH_SI_TRAPNO we run the risk that it
-> will be used by something else at some point. Is that intentional?
+> Just note that this patch needs to include updates to
+> tools/testing/selftests/perf_events. This should do it:
+>>  sed -i 's/si_perf/si_perf.data/g; s/si_errno/si_perf.type/g' tools/testing/selftests/perf_events/*.c
+>
+> Subject: s/perf_data/perf data/ ?
+>
+> For uapi, need to switch to __u32, see below.
 
-The motivation was letting the code be tested on other architectures.
+Good point.
 
-But once si_trapno falls inside the union instead of being present for
-every signal reporting a fault it doesn't really matter.
+The one thing that this doesn't do is give you a 64bit field
+on 32bit architectures.
 
-I think it would be poor taste but harmless to use si_trapno, mostly
-because defining a new entry in the union could be more specific and
-well defined.
+On 32bit builds the layout is:
+
+	int si_signo;
+	int si_errno;
+	int si_code;
+	void __user *_addr;
+        
+So I believe if the first 3 fields were moved into the _sifields union
+si_perf could define a 64bit field as it's first member and it would not
+break anything else.
+
+Given that the data field is 64bit that seems desirable.
 
 Eric
+
+
+>>  fs/signalfd.c                      |  3 ++-
+>>  include/linux/compat.h             |  5 ++++-
+>>  include/uapi/asm-generic/siginfo.h |  5 ++++-
+>>  include/uapi/linux/signalfd.h      |  4 ++--
+>>  kernel/signal.c                    | 18 +++++++++++-------
+>>  5 files changed, 23 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/fs/signalfd.c b/fs/signalfd.c
+>> index 83130244f653..9686af56f073 100644
+>> --- a/fs/signalfd.c
+>> +++ b/fs/signalfd.c
+>> @@ -134,7 +134,8 @@ static int signalfd_copyinfo(struct signalfd_siginfo __user *uinfo,
+>>                 break;
+>>         case SIL_FAULT_PERF_EVENT:
+>>                 new.ssi_addr = (long) kinfo->si_addr;
+>> -               new.ssi_perf = kinfo->si_perf;
+>> +               new.ssi_perf_type = kinfo->si_perf.type;
+>> +               new.ssi_perf_data = kinfo->si_perf.data;
+>>                 break;
+>>         case SIL_CHLD:
+>>                 new.ssi_pid    = kinfo->si_pid;
+>> diff --git a/include/linux/compat.h b/include/linux/compat.h
+>> index 24462ed63af4..0726f9b3a57c 100644
+>> --- a/include/linux/compat.h
+>> +++ b/include/linux/compat.h
+>> @@ -235,7 +235,10 @@ typedef struct compat_siginfo {
+>>                                         u32 _pkey;
+>>                                 } _addr_pkey;
+>>                                 /* used when si_code=TRAP_PERF */
+>> -                               compat_ulong_t _perf;
+>> +                               struct {
+>> +                                       compat_ulong_t data;
+>> +                                       u32 type;
+>> +                               } _perf;
+>>                         };
+>>                 } _sigfault;
+>>
+>> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+>> index 2abdf1d19aad..19b6310021a3 100644
+>> --- a/include/uapi/asm-generic/siginfo.h
+>> +++ b/include/uapi/asm-generic/siginfo.h
+>> @@ -90,7 +90,10 @@ union __sifields {
+>>                                 __u32 _pkey;
+>>                         } _addr_pkey;
+>>                         /* used when si_code=TRAP_PERF */
+>> -                       unsigned long _perf;
+>> +                       struct {
+>> +                               unsigned long data;
+>> +                               u32 type;
+>
+> This needs to be __u32.
+>
+>
+>> +                       } _perf;
+>>                 };
+>>         } _sigfault;
+>>
+>> diff --git a/include/uapi/linux/signalfd.h b/include/uapi/linux/signalfd.h
+>> index 7e333042c7e3..e78dddf433fc 100644
+>> --- a/include/uapi/linux/signalfd.h
+>> +++ b/include/uapi/linux/signalfd.h
+>> @@ -39,8 +39,8 @@ struct signalfd_siginfo {
+>>         __s32 ssi_syscall;
+>>         __u64 ssi_call_addr;
+>>         __u32 ssi_arch;
+>> -       __u32 __pad3;
+>> -       __u64 ssi_perf;
+>> +       __u32 ssi_perf_type;
+>> +       __u64 ssi_perf_data;
+>>
+>>         /*
+>>          * Pad strcture to 128 bytes. Remember to update the
+>> diff --git a/kernel/signal.c b/kernel/signal.c
+>> index 5b1ad7f080ab..cb3574b7319c 100644
+>> --- a/kernel/signal.c
+>> +++ b/kernel/signal.c
+>> @@ -1758,11 +1758,13 @@ int force_sig_perf(void __user *pending_addr, u32 type, u64 sig_data)
+>>         struct kernel_siginfo info;
+>>
+>>         clear_siginfo(&info);
+>> -       info.si_signo = SIGTRAP;
+>> -       info.si_errno = type;
+>> -       info.si_code  = TRAP_PERF;
+>> -       info.si_addr  = pending_addr;
+>> -       info.si_perf  = sig_data;
+>> +       info.si_signo     = SIGTRAP;
+>> +       info.si_errno     = 0;
+>> +       info.si_code      = TRAP_PERF;
+>> +       info.si_addr      = pending_addr;
+>> +       info.si_perf.data = sig_data;
+>> +       info.si_perf.type = type;
+>> +
+>>         return force_sig_info(&info);
+>>  }
+>>
+>> @@ -3379,7 +3381,8 @@ void copy_siginfo_to_external32(struct compat_siginfo *to,
+>>                 break;
+>>         case SIL_FAULT_PERF_EVENT:
+>>                 to->si_addr = ptr_to_compat(from->si_addr);
+>> -               to->si_perf = from->si_perf;
+>> +               to->si_perf.data = from->si_perf.data;
+>> +               to->si_perf.type = from->si_perf.type;
+>>                 break;
+>>         case SIL_CHLD:
+>>                 to->si_pid = from->si_pid;
+>> @@ -3455,7 +3458,8 @@ static int post_copy_siginfo_from_user32(kernel_siginfo_t *to,
+>>                 break;
+>>         case SIL_FAULT_PERF_EVENT:
+>>                 to->si_addr = compat_ptr(from->si_addr);
+>> -               to->si_perf = from->si_perf;
+>> +               to->si_perf.data = from->si_perf.data;
+>> +               to->si_perf.type = from->si_perf.type;
+>>                 break;
+>>         case SIL_CHLD:
+>>                 to->si_pid    = from->si_pid;
+>> --
+>> 2.30.1
