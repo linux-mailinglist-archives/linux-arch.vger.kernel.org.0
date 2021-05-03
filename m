@@ -2,119 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37FF637141F
-	for <lists+linux-arch@lfdr.de>; Mon,  3 May 2021 13:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D0F37155E
+	for <lists+linux-arch@lfdr.de>; Mon,  3 May 2021 14:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbhECLR7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 May 2021 07:17:59 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:48030 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232868AbhECLR7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 3 May 2021 07:17:59 -0400
-Received: from zn.tnic (p200300ec2f268e00596557e7a2777a9d.dip0.t-ipconnect.de [IPv6:2003:ec:2f26:8e00:5965:57e7:a277:7a9d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 38F741EC0419;
-        Mon,  3 May 2021 13:17:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1620040624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=MU1V7MQihEu+KJpscrtBmUqeHfxQ/TteggSascxCRdE=;
-        b=YmlOlel2zQcfWUwcZjhQbd9PplzvrIA4gD0JDrWGUW1EtGky1JiWzVgj4aHSrlmaZdWT+t
-        ZS/HTE3TvYw+RvljJhB+bT0M+WSH117CRt0Pb2v7ixGh6sBoziG6bWrbM2j0aJIgkJZ4Th
-        Ir9iDO951GSCDzHWx2FAc7MdoimdObA=
-Date:   Mon, 3 May 2021 13:17:02 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
+        id S233218AbhECMrn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 May 2021 08:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233158AbhECMrm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 May 2021 08:47:42 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BF8C06174A;
+        Mon,  3 May 2021 05:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QfWmNFzhd1S/Ji2/R39Bqc12Zh4EulMnH47lj47aGq8=; b=XumoXk4rcDMvg1IUtUvmE938GI
+        b9X1L0f/kTqhp+eUmDneBVIM+VLK4tcedpSWvAruEG9FrIV+dDDkG6tk9dPnLUIw2aULil5oYw5OZ
+        l3hYxn7VHpVQXPZiVHyY5oS/cRee2er8krYJO9JDfWWTji6bid8Jc0oVN5trfSQc6fw0MfF6NldLt
+        fRrPh5i+52JaYvSqjmnyptQdJ/EQl3DkIWZzPd9/yn0b22j2Uta1ux3PhjLV+HJwWlJxLi0oFVYV2
+        +/cY512qd4rCd23VnD6vVYYYURxouR+zJIFvt03xYQ6SB/LUBlP3xHPpRXnVRnzD4t1wWmG2P1FRB
+        9sCS/Ibw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1ldXvz-00Dt54-Ne; Mon, 03 May 2021 12:46:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DF9C83001D0;
+        Mon,  3 May 2021 14:44:21 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B0B282CEAF0C5; Mon,  3 May 2021 14:44:21 +0200 (CEST)
+Date:   Mon, 3 May 2021 14:44:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ingo Molnar <mingo@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, X86 ML <x86@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "H. J. Lu" <hjl.tools@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Jann Horn <jannh@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Carlos O'Donell <carlos@redhat.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        libc-alpha <libc-alpha@sourceware.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        sparclinux <sparclinux@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 5/6] x86/signal: Detect and prevent an alternate
- signal stack overflow
-Message-ID: <YI/brhlCsKd4PTDP@zn.tnic>
-References: <20210316065215.23768-6-chang.seok.bae@intel.com>
- <CALCETrU_n+dP4GaUJRQoKcDSwaWL9Vc99Yy+N=QGVZ_tx_j3Zg@mail.gmail.com>
- <20210325185435.GB32296@zn.tnic>
- <CALCETrXQZuvJQrHDMst6PPgtJxaS_sPk2JhwMiMDNPunq45YFg@mail.gmail.com>
- <20210326103041.GB25229@zn.tnic>
- <DB68C825-25F9-48F9-AFAD-4F6C7DCA11F8@intel.com>
- <20210414101250.GD10709@zn.tnic>
- <87o8eh9k7w.fsf@oldenburg.str.redhat.com>
- <20210414120608.GE10709@zn.tnic>
- <877dkg8jv6.fsf@oldenburg.str.redhat.com>
+        kasan-dev <kasan-dev@googlegroups.com>
+Subject: Re: [PATCH 7/3] signal: Deliver all of the perf_data in si_perf
+Message-ID: <YI/wJSwQitisM8Xf@hirez.programming.kicks-ass.net>
+References: <YIpkvGrBFGlB5vNj@elver.google.com>
+ <m11rat9f85.fsf@fess.ebiederm.org>
+ <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
+ <m15z031z0a.fsf@fess.ebiederm.org>
+ <YIxVWkT03TqcJLY3@elver.google.com>
+ <m1zgxfs7zq.fsf_-_@fess.ebiederm.org>
+ <m11rarqqx2.fsf_-_@fess.ebiederm.org>
+ <CANpmjNNJ_MnNyD4R2+9i24E=9xPHKnwTh6zwWtBYkuAq1Xo6-w@mail.gmail.com>
+ <m1wnshm14b.fsf@fess.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <877dkg8jv6.fsf@oldenburg.str.redhat.com>
+In-Reply-To: <m1wnshm14b.fsf@fess.ebiederm.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 03, 2021 at 07:30:21AM +0200, Florian Weimer wrote:
-> Just to be clear, I'm worried about the case where an application
-> installs a stack overflow handler, but stack overflow does not regularly
-> happen at run time.  GNU m4 is an example.  Today, for most m4 scripts,
-> it's totally fine to have an alternative signal stack which is too
-> small.  If the kernel returned an error for the sigaltstack call, m4
-> wouldn't start anymore, independently of the script.  Which is worse
-> than memory corruption with some scripts, I think.
+On Sun, May 02, 2021 at 01:39:16PM -0500, Eric W. Biederman wrote:
 
-Oh lovely.
-
+> The one thing that this doesn't do is give you a 64bit field
+> on 32bit architectures.
 > 
-> > Or is this use case obsolete and this is not what people do at all?
+> On 32bit builds the layout is:
 > 
-> It's widely used in currently-maintained software.  It's the only way to
-> recover from stack overflows without boundary checks on every function
-> call.
+> 	int si_signo;
+> 	int si_errno;
+> 	int si_code;
+> 	void __user *_addr;
+>         
+> So I believe if the first 3 fields were moved into the _sifields union
+> si_perf could define a 64bit field as it's first member and it would not
+> break anything else.
 > 
-> Does the alternative signal stack actually have to contain the siginfo_t
-> data?  I don't think it has to be contiguous.  Maybe the kernel could
-> allocate and map something behind the processes back if the sigaltstack
-> region is too small?
+> Given that the data field is 64bit that seems desirable.
 
-So there's an attempt floating around to address this:
+The data field is fundamentally an address, it is internally a u64
+because the perf ring buffer has u64 alignment and it saves on compat
+crap etc.
 
-https://lkml.kernel.org/r/20210422044856.27250-1-chang.seok.bae@intel.com
-
-esp patch 3.
-
-I'd appreciate having a look and sanity-checking this whether it makes
-sense and could be useful this way...
-
-> And for the stack overflow handler, the kernel could treat SIGSEGV with
-> a sigaltstack region that is too small like the SIG_DFL handler.  This
-> would make m4 work again.
-
-/me searches a bit about SIG_DFL...
-
-Do you mean that the default action in this case should be what SIGSEGV
-does by default - to dump core?
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+So for the 32bit/compat case the high bits will always be 0 and
+truncating into an unsigned long is fine.
