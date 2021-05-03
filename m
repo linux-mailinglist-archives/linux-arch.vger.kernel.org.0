@@ -2,260 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 159B43711C3
-	for <lists+linux-arch@lfdr.de>; Mon,  3 May 2021 08:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FF637141F
+	for <lists+linux-arch@lfdr.de>; Mon,  3 May 2021 13:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232862AbhECG6u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 3 May 2021 02:58:50 -0400
-Received: from terminus.zytor.com ([198.137.202.136]:34649 "EHLO
-        mail.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229817AbhECG6t (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 3 May 2021 02:58:49 -0400
-X-Greylist: delayed 3195 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 May 2021 02:58:49 EDT
-Received: from [IPv6:2601:646:8602:8be1:c08d:3145:af85:af1c] ([IPv6:2601:646:8602:8be1:c08d:3145:af85:af1c])
-        (authenticated bits=0)
-        by mail.zytor.com (8.16.1/8.15.2) with ESMTPSA id 14363Tu2908670
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Sun, 2 May 2021 23:03:30 -0700
-Authentication-Results: mail.zytor.com; dkim=permerror (bad message/signature format)
-From:   "H. Peter Anvin" <hpa@zytor.com>
-Message-Id: <202105030603.14363Tu2908670@mail.zytor.com>
-Date:   Sun, 02 May 2021 23:03:06 -0700
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CALCETrWnxd9-dGdYsw5LC+iRffAmuSzzDQGde8nYQdFJyFYp9Q@mail.gmail.com>
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com> <20210427204315.24153-26-yu-cheng.yu@intel.com> <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com> <8fd86049-930d-c9b7-379c-56c02a12cd77@intel.com> <CALCETrX9z-73wpy-SCy8NE1XfQgXAN0mCmjv0jXDDomMyS7TKg@mail.gmail.com> <CALCETrWnxd9-dGdYsw5LC+iRffAmuSzzDQGde8nYQdFJyFYp9Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Subject: Re: extending ucontext (Re: [PATCH v26 25/30] x86/cet/shstk: Handle signals for shadow stack)
-To:     Andy Lutomirski <luto@kernel.org>
-CC:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        id S232960AbhECLR7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 May 2021 07:17:59 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:48030 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232868AbhECLR7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 3 May 2021 07:17:59 -0400
+Received: from zn.tnic (p200300ec2f268e00596557e7a2777a9d.dip0.t-ipconnect.de [IPv6:2003:ec:2f26:8e00:5965:57e7:a277:7a9d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 38F741EC0419;
+        Mon,  3 May 2021 13:17:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1620040624;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=MU1V7MQihEu+KJpscrtBmUqeHfxQ/TteggSascxCRdE=;
+        b=YmlOlel2zQcfWUwcZjhQbd9PplzvrIA4gD0JDrWGUW1EtGky1JiWzVgj4aHSrlmaZdWT+t
+        ZS/HTE3TvYw+RvljJhB+bT0M+WSH117CRt0Pb2v7ixGh6sBoziG6bWrbM2j0aJIgkJZ4Th
+        Ir9iDO951GSCDzHWx2FAc7MdoimdObA=
+Date:   Mon, 3 May 2021 13:17:02 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     "Bae, Chang Seok" <chang.seok.bae@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
+        Ingo Molnar <mingo@kernel.org>, X86 ML <x86@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "H. J. Lu" <hjl.tools@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Jann Horn <jannh@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Carlos O'Donell <carlos@redhat.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        libc-alpha <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas.Shanbhogue@zytor.com
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 5/6] x86/signal: Detect and prevent an alternate
+ signal stack overflow
+Message-ID: <YI/brhlCsKd4PTDP@zn.tnic>
+References: <20210316065215.23768-6-chang.seok.bae@intel.com>
+ <CALCETrU_n+dP4GaUJRQoKcDSwaWL9Vc99Yy+N=QGVZ_tx_j3Zg@mail.gmail.com>
+ <20210325185435.GB32296@zn.tnic>
+ <CALCETrXQZuvJQrHDMst6PPgtJxaS_sPk2JhwMiMDNPunq45YFg@mail.gmail.com>
+ <20210326103041.GB25229@zn.tnic>
+ <DB68C825-25F9-48F9-AFAD-4F6C7DCA11F8@intel.com>
+ <20210414101250.GD10709@zn.tnic>
+ <87o8eh9k7w.fsf@oldenburg.str.redhat.com>
+ <20210414120608.GE10709@zn.tnic>
+ <877dkg8jv6.fsf@oldenburg.str.redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <877dkg8jv6.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-<vedvyas.shanbhogue@intel.com>,Dave Martin <Dave.Martin@arm.com>,Weijiang Yang <weijiang.yang@intel.com>,Pengfei Xu <pengfei.xu@intel.com>,Haitao Huang <haitao.huang@intel.com>
-From: "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <2360408E-9967-469C-96AF-E8AC40044021@zytor.com>
+On Mon, May 03, 2021 at 07:30:21AM +0200, Florian Weimer wrote:
+> Just to be clear, I'm worried about the case where an application
+> installs a stack overflow handler, but stack overflow does not regularly
+> happen at run time.  GNU m4 is an example.  Today, for most m4 scripts,
+> it's totally fine to have an alternative signal stack which is too
+> small.  If the kernel returned an error for the sigaltstack call, m4
+> wouldn't start anymore, independently of the script.  Which is worse
+> than memory corruption with some scripts, I think.
 
-There are a few words at the end of the FXSAVE area for software use for this reason: so we can extend the signal frame – originally to enable saving the XSAVE state but that doesn't use up the whole software available area.
+Oh lovely.
 
-On May 2, 2021 4:23:49 PM PDT, Andy Lutomirski <luto@kernel.org> wrote:
->On Fri, Apr 30, 2021 at 10:47 AM Andy Lutomirski <luto@kernel.org>
->wrote:
->>
->> On Fri, Apr 30, 2021 at 10:00 AM Yu, Yu-cheng <yu-cheng.yu@intel.com>
->wrote:
->> >
->> > On 4/28/2021 4:03 PM, Andy Lutomirski wrote:
->> > > On Tue, Apr 27, 2021 at 1:44 PM Yu-cheng Yu
-><yu-cheng.yu@intel.com> wrote:
->> > >>
->> > >> When shadow stack is enabled, a task's shadow stack states must
->be saved
->> > >> along with the signal context and later restored in sigreturn. 
->However,
->> > >> currently there is no systematic facility for extending a signal
->context.
->> > >> There is some space left in the ucontext, but changing ucontext
->is likely
->> > >> to create compatibility issues and there is not enough space for
->further
->> > >> extensions.
->> > >>
->> > >> Introduce a signal context extension struct 'sc_ext', which is
->used to save
->> > >> shadow stack restore token address.  The extension is located
->above the fpu
->> > >> states, plus alignment.  The struct can be extended (such as the
->ibt's
->> > >> wait_endbr status to be introduced later), and sc_ext.total_size
->field
->> > >> keeps track of total size.
->> > >
->> > > I still don't like this.
->> > >
->> > > Here's how the signal layout works, for better or for worse:
->> > >
->> > > The kernel has:
->> > >
->> > > struct rt_sigframe {
->> > >      char __user *pretcode;
->> > >      struct ucontext uc;
->> > >      struct siginfo info;
->> > >      /* fp state follows here */
->> > > };
->> > >
->> > > This is roughly the actual signal frame.  But userspace does not
->have
->> > > this struct declared, and user code does not know the sizes of
->the
->> > > fields.  So it's accessed in a nonsensical way.  The signal
->handler
->> > > function is passed a pointer to the whole sigframe implicitly in
->RSP,
->> > > a pointer to &frame->info in RSI, anda pointer to &frame->uc in
->RDX.
->> > > User code can *find* the fp state by following a pointer from
->> > > mcontext, which is, in turn, found via uc:
->> > >
->> > > struct ucontext {
->> > >      unsigned long      uc_flags;
->> > >      struct ucontext  *uc_link;
->> > >      stack_t          uc_stack;
->> > >      struct sigcontext uc_mcontext;  <-- fp pointer is in here
->> > >      sigset_t      uc_sigmask;    /* mask last for extensibility
->*/
->> > > };
->> > >
->> > > The kernel, in sigreturn, works a bit differently.  The sigreturn
->> > > variants know the base address of the frame but don't have the
->benefit
->> > > of receiving pointers to the fields.  So instead the kernel takes
->> > > advantage of the fact that it knows the offset to uc and parses
->uc
->> > > accordingly.  And the kernel follows the pointer in mcontext to
->find
->> > > the fp state.  The latter bit is quite important later.  The
->kernel
->> > > does not parse info at all.
->> > >
->> > > The fp state is its own mess.  When XSAVE happened, Intel kindly
->(?)
->> > > gave us a software defined area between the "legacy" x87 region
->and
->> > > the modern supposedly extensible part.  Linux sticks the
->following
->> > > structure in that hole:
->> > >
->> > > struct _fpx_sw_bytes {
->> > >      /*
->> > >       * If set to FP_XSTATE_MAGIC1 then this is an xstate
->context.
->> > >       * 0 if a legacy frame.
->> > >       */
->> > >      __u32                magic1;
->> > >
->> > >      /*
->> > >       * Total size of the fpstate area:
->> > >       *
->> > >       *  - if magic1 == 0 then it's sizeof(struct _fpstate)
->> > >       *  - if magic1 == FP_XSTATE_MAGIC1 then it's sizeof(struct
->_xstate)
->> > >       *    plus extensions (if any)
->> > >       */
->> > >      __u32                extended_size;
->> > >
->> > >      /*
->> > >       * Feature bit mask (including FP/SSE/extended state) that
->is present
->> > >       * in the memory layout:
->> > >       */
->> > >      __u64                xfeatures;
->> > >
->> > >      /*
->> > >       * Actual XSAVE state size, based on the xfeatures saved in
->the layout.
->> > >       * 'extended_size' is greater than 'xstate_size':
->> > >       */
->> > >      __u32                xstate_size;
->> > >
->> > >      /* For future use: */
->> > >      __u32                padding[7];
->> > > };
->> > >
->> > >
->> > > That's where we are right now upstream.  The kernel has a parser
->for
->> > > the FPU state that is bugs piled upon bugs and is going to have
->to be
->> > > rewritten sometime soon.  On top of all this, we have two
->upcoming
->> > > features, both of which require different kinds of extensions:
->> > >
->> > > 1. AVX-512.  (Yeah, you thought this story was over a few years
->ago,
->> > > but no.  And AMX makes it worse.)  To make a long story short, we
->> > > promised user code many years ago that a signal frame fit in 2048
->> > > bytes with some room to spare.  With AVX-512 this is false.  With
->AMX
->> > > it's so wrong it's not even funny.  The only way out of the mess
->> > > anyone has come up with involves making the length of the FPU
->state
->> > > vary depending on which features are INIT, i.e. making it more
->compact
->> > > than "compact" mode is.  This has a side effect: it's no longer
->> > > possible to modify the state in place, because enabling a feature
->with
->> > > no space allocated will make the structure bigger, and the stack
->won't
->> > > have room.  Fortunately, one can relocate the entire FPU state,
->update
->> > > the pointer in mcontext, and the kernel will happily follow the
->> > > pointer.  So new code on a new kernel using a super-compact state
->> > > could expand the state by allocating new memory (on the heap?
->very
->> > > awkwardly on the stack?) and changing the pointer.  For all we
->know,
->> > > some code already fiddles with the pointer.  This is great,
->except
->> > > that your patch sticks more data at the end of the FPU block that
->no
->> > > one is expecting, and your sigreturn code follows that pointer,
->and
->> > > will read off into lala land.
->> > >
->> >
->> > Then, what about we don't do that at all.  Is it possible from now
->on we
->> > don't stick more data at the end, and take the relocating-fpu
->approach?
->> >
->> > > 2. CET.  CET wants us to find a few more bytes somewhere, and
->those
->> > > bytes logically belong in ucontext, and here we are.
->> > >
->> >
->> > Fortunately, we can spare CET the need of ucontext extension.  When
->the
->> > kernel handles sigreturn, the user-mode shadow stack pointer is
->right at
->> > the restore token.  There is no need to put that in ucontext.
->>
->> That seems entirely reasonable.  This might also avoid needing to
->> teach CRIU about CET at all.
->
->Wait, what's the actual shadow stack token format?  And is the token
->on the new stack or the old stack when sigaltstack is in use?  For
->that matter, is there any support for an alternate shadow stack for
->signals?
->
->--Andy
+> 
+> > Or is this use case obsolete and this is not what people do at all?
+> 
+> It's widely used in currently-maintained software.  It's the only way to
+> recover from stack overflows without boundary checks on every function
+> call.
+> 
+> Does the alternative signal stack actually have to contain the siginfo_t
+> data?  I don't think it has to be contiguous.  Maybe the kernel could
+> allocate and map something behind the processes back if the sigaltstack
+> region is too small?
+
+So there's an attempt floating around to address this:
+
+https://lkml.kernel.org/r/20210422044856.27250-1-chang.seok.bae@intel.com
+
+esp patch 3.
+
+I'd appreciate having a look and sanity-checking this whether it makes
+sense and could be useful this way...
+
+> And for the stack overflow handler, the kernel could treat SIGSEGV with
+> a sigaltstack region that is too small like the SIG_DFL handler.  This
+> would make m4 work again.
+
+/me searches a bit about SIG_DFL...
+
+Do you mean that the default action in this case should be what SIGSEGV
+does by default - to dump core?
+
+Thx.
 
 -- 
-Sent from my Android device with K-9 Mail. Please excuse my brevity.
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
