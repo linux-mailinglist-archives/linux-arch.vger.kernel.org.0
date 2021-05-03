@@ -2,202 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D8E371802
-	for <lists+linux-arch@lfdr.de>; Mon,  3 May 2021 17:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230C23718DB
+	for <lists+linux-arch@lfdr.de>; Mon,  3 May 2021 18:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbhECPaJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 May 2021 11:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbhECPaH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 May 2021 11:30:07 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7756EC061763
-        for <linux-arch@vger.kernel.org>; Mon,  3 May 2021 08:29:14 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id d10so3864796pgf.12
-        for <linux-arch@vger.kernel.org>; Mon, 03 May 2021 08:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=2V3HYq3YbH5eZIxZs7nKcsCMHCZy6Xq7DA+V46SoNmI=;
-        b=TpPnf3bolYDVSjJPRDR8FjKGu85pfRv77SBJZBQHoYEbphH6DRrCLMsD3dOCctjAnL
-         wYvu3jVE2AQewOxDy3vbfn34JxTgO54FuX0FukEmGBlfMPgi/OwJRDW8pwT8TYvQLPIa
-         SAxm3wjxi7gZbV7CyGYGyYJ7J8VFqd+lGgJA5S/dnsskEew6z4LDbJqlNSWLZW7VQcQw
-         XE8cpOE0KyYGVnmLW0WdupKeoC3QvggNovzlgSezkkAQc1nuKa8GFvy0zhhielqXmimy
-         /B82tbcges+mfMiayPFZ6b3WCcwAP4Tzfr3NKzRg7CsvpOwm8JdBdR2efMIQ8UrLRsFm
-         7CnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=2V3HYq3YbH5eZIxZs7nKcsCMHCZy6Xq7DA+V46SoNmI=;
-        b=gHE60kmxk+gNay8v4h5xtDfraG2CoFBhuWIiJ8phlDkrQn6bEMW32JtGfeor+/U1Y0
-         lR4hQPP6eD2eN8TgvLYqdYRw7bZgdSNLcwaMDmQsDv3tYD9ozUX1BDpmvS+5bopNUE7s
-         apqKAhRpwGfWlaPVSuPlO5SA9QNvKZtsXU1oEk+bLqsnNrLV4OpHdyJ2e0o5Emx8GFzK
-         9BBmlFxKV/rOjOpMBKUlzCnbtVgm7PaYLzsbwhkh5BkEk85dTj4FXpJH8Mczr4URCoRn
-         r9VVwXtYVAj/a8KcfMu2mAiBRqTfFO8ww5HyP/SQC++Ud9rIj62+GCuENjah0h/TEUyj
-         /peQ==
-X-Gm-Message-State: AOAM533l5Jk5njMHIo0ThriU1H0k3xD5NjRyvZDIIxfG3944DcHbCEIr
-        2teu8lEpQdg2iKq2iGi5EQnwEQ==
-X-Google-Smtp-Source: ABdhPJzUqbXM/URmBF8ZSKH3HSbo8rHKVMg/k9x+YM8ZCOfN/FE0pEJH6vDM7iXTKEJD89xzJexv7A==
-X-Received: by 2002:a62:1888:0:b029:262:de45:b458 with SMTP id 130-20020a6218880000b0290262de45b458mr19722073pfy.20.1620055753894;
-        Mon, 03 May 2021 08:29:13 -0700 (PDT)
-Received: from smtpclient.apple ([2601:646:c200:1ef2:1960:85f5:fe97:e8ac])
-        by smtp.gmail.com with ESMTPSA id l3sm17757773pju.44.2021.05.03.08.29.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 May 2021 08:29:13 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: extending ucontext (Re: [PATCH v26 25/30] x86/cet/shstk: Handle signals for shadow stack)
-Date:   Mon, 3 May 2021 08:29:11 -0700
-Message-Id: <2D8926E4-F1B6-433A-96EA-995A66F3F42D@amacapital.net>
-References: <782ffe96-b830-d13b-db80-5b60f41ccdbf@intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-In-Reply-To: <782ffe96-b830-d13b-db80-5b60f41ccdbf@intel.com>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-X-Mailer: iPhone Mail (18E199)
+        id S230474AbhECQJV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 May 2021 12:09:21 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:47955 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230210AbhECQJV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 May 2021 12:09:21 -0400
+Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N4h7p-1lWxI52Z1j-011nEf; Mon, 03 May 2021 18:08:26 +0200
+Received: by mail-wm1-f46.google.com with SMTP id k4-20020a7bc4040000b02901331d89fb83so3824109wmi.5;
+        Mon, 03 May 2021 09:08:26 -0700 (PDT)
+X-Gm-Message-State: AOAM531V/p+Kd8tUJwf5HIvQg1LXfkIK7Uns8T2Yi46cXrrlcPNWIQ/5
+        /0zto/t2nLrSYTS+Y3xgPMxpt5rJcNmG/TXsZjo=
+X-Google-Smtp-Source: ABdhPJxYMTQJVWw4WAAd9FKPLJo6XWwuPeyfNnK3keAI5ERAvz63WNcWg2FiOjsFOVj9CWG/OQW083WJQcY7aApQpDg=
+X-Received: by 2002:a7b:c846:: with SMTP id c6mr32166374wml.75.1620058106200;
+ Mon, 03 May 2021 09:08:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210430111641.1911207-1-schnelle@linux.ibm.com>
+In-Reply-To: <20210430111641.1911207-1-schnelle@linux.ibm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 3 May 2021 18:07:41 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3mCujxC0=_cL6Z88Xh2cb=OY_Ct7DVpJNvRn1v9=FhkQ@mail.gmail.com>
+Message-ID: <CAK8P3a3mCujxC0=_cL6Z88Xh2cb=OY_Ct7DVpJNvRn1v9=FhkQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] asm-generic/io.h: Silence -Wnull-pointer-arithmetic
+ warning on PCI_IOBASE
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Vineet Gupta <vgupta@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        sparclinux <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ttSkI0gIoMXApQ/NBgONSZBhlv+vaN7DOdJfzbslazuqcGkP+6H
+ zYKG9HAdkR7tAYwUPZNv8X6mYjOFVpYg1Lhxzah2tOWyriam/QFjvSLRZcobJN6S8vbwTFc
+ bepQ0B7o9Bs0sIEiZV5RHF9TzhIeVoroYF3/D7pUVCaWiXBSpeXIdCtCLdLr3otNnFjhJy7
+ /5x8cJck19z7A3E0ws28A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MuVa7V+jiQg=:RIpZ9QCoWYxQBrCcu2dzUS
+ PIZ6R/5v5sSAxKQ+nuH/yVsu3Uox4mrrxgxRvsnKo1BNY2xYQgYoFyEwbNvBCZNjdtpjQQ5Op
+ bTvJ3JO29LSMldV9WF1DeTDKZMkPawd5ZI+H2stUxS6nKDZF2UjKrY61DF5gXWWGdGVkivAhS
+ Uckf0Ah3BCjv5b0quFY0QAEFz3f1PbqhcmlzEErbQFj1Yjt+8mvzSlepaXgVD+l67uWuanItU
+ dhQCA9AoKBTSkKOLbwrmMa8ItR3LYcAvH7I8XJ2MwJl+ouTgJ51T3akf9zkIatNqrJ/n7qNgP
+ K/LDindeju1wJ0m1nltOaJ2AoKPCGSzm4tAPS911fIRpr1SOTGz+/MP4Yhk7H3dzQ0BRWhSO/
+ AR+TXu5lqZQjrbYhDVsQfuijMU7zxjtz0mTKuk3CPnNM34h66JzXBfL7piWGN6tJoJFie8Drm
+ yCGKpko2IeFw5JzPpQHT0xsNoeqP4U0QixWWzJQ7GjMip38EN1taKYgtY4YFA6OnzuKfcv7ks
+ V9kecgcNEhQDk0FPfAlLpG/adqAIPMPmYM5t+2GBHQE1nQtAArN0pX8p27IKEpahwKaTZn77M
+ CsFxrcSUu9665NQiWW6EcGGzznpWwM2tT1AamvpJXlGs/7XQwHTNkf8wx63InB6eSJq7Gw1YC
+ hS5Y=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, Apr 30, 2021 at 1:16 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+>
+> From: Niklas Schnelle <niklas@komani.de>
+>
+> This is version 4 of my attempt to get rid of a clang
+> -Wnull-pointer-arithmetic warning for the use of PCI_IOBASE in
+> asm-generic/io.h. This was originally found on s390 but should apply to
+> all platforms leaving PCI_IOBASE undefined while making use of the inb()
+> and friends helpers from asm-generic/io.h.
+>
+> This applies cleanly and was compile tested on top of v5.12 for the
+> previously broken ARC, nds32, h8300 and risc-v architecture
+>
+> I did boot test this only on x86_64 and s390x the former implements
+> inb() itself while the latter would emit a WARN_ONCE() but no drivers
+> use inb().
 
-> On May 3, 2021, at 8:14 AM, Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
->=20
-> =EF=BB=BFOn 5/2/2021 4:23 PM, Andy Lutomirski wrote:
->>> On Fri, Apr 30, 2021 at 10:47 AM Andy Lutomirski <luto@kernel.org> wrote=
-:
->>>=20
->>> On Fri, Apr 30, 2021 at 10:00 AM Yu, Yu-cheng <yu-cheng.yu@intel.com> wr=
-ote:
->>>>=20
->>>> On 4/28/2021 4:03 PM, Andy Lutomirski wrote:
->>>>> On Tue, Apr 27, 2021 at 1:44 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wr=
-ote:
->>>>>>=20
->>>>>> When shadow stack is enabled, a task's shadow stack states must be sa=
-ved
->>>>>> along with the signal context and later restored in sigreturn.  Howev=
-er,
->>>>>> currently there is no systematic facility for extending a signal cont=
-ext.
->>>>>> There is some space left in the ucontext, but changing ucontext is li=
-kely
->>>>>> to create compatibility issues and there is not enough space for furt=
-her
->>>>>> extensions.
->>>>>>=20
->>>>>> Introduce a signal context extension struct 'sc_ext', which is used t=
-o save
->>>>>> shadow stack restore token address.  The extension is located above t=
-he fpu
->>>>>> states, plus alignment.  The struct can be extended (such as the ibt'=
-s
->>>>>> wait_endbr status to be introduced later), and sc_ext.total_size fiel=
-d
->>>>>> keeps track of total size.
->>>>>=20
->>>>> I still don't like this.
->>>>>=20
->>>>> Here's how the signal layout works, for better or for worse:
->>>>>=20
->=20
-> [...]
->=20
->>>>>=20
->>>>> That's where we are right now upstream.  The kernel has a parser for
->>>>> the FPU state that is bugs piled upon bugs and is going to have to be
->>>>> rewritten sometime soon.  On top of all this, we have two upcoming
->>>>> features, both of which require different kinds of extensions:
->>>>>=20
->>>>> 1. AVX-512.  (Yeah, you thought this story was over a few years ago,
->>>>> but no.  And AMX makes it worse.)  To make a long story short, we
->>>>> promised user code many years ago that a signal frame fit in 2048
->>>>> bytes with some room to spare.  With AVX-512 this is false.  With AMX
->>>>> it's so wrong it's not even funny.  The only way out of the mess
->>>>> anyone has come up with involves making the length of the FPU state
->>>>> vary depending on which features are INIT, i.e. making it more compact=
+This looks all fine to me, but with the merge window open right now, I
+can't add it into linux-next yet, and it wouldn't qualify as a bugfix for 5.13.
 
->>>>> than "compact" mode is.  This has a side effect: it's no longer
->>>>> possible to modify the state in place, because enabling a feature with=
+Please resend them to me after -rc1 is out so I can merge it for
+5.14 through the asm-generic tree.
 
->>>>> no space allocated will make the structure bigger, and the stack won't=
+Please add two small changes to the changelog texts:
 
->>>>> have room.  Fortunately, one can relocate the entire FPU state, update=
+- for patch 3, please include a 'Link: tag' to the lore archive of the
+  previous discussion, that should cover any questions that people
+  may have
 
->>>>> the pointer in mcontext, and the kernel will happily follow the
->>>>> pointer.  So new code on a new kernel using a super-compact state
->>>>> could expand the state by allocating new memory (on the heap? very
->>>>> awkwardly on the stack?) and changing the pointer.  For all we know,
->>>>> some code already fiddles with the pointer.  This is great, except
->>>>> that your patch sticks more data at the end of the FPU block that no
->>>>> one is expecting, and your sigreturn code follows that pointer, and
->>>>> will read off into lala land.
->>>>>=20
->>>>=20
->>>> Then, what about we don't do that at all.  Is it possible from now on w=
-e
->>>> don't stick more data at the end, and take the relocating-fpu approach?=
+- for the risc-v patch, I would suggest explaining that this fixes
+  an existing runtime bug, not just a compiler error:
+  | This is already broken, as accessing a fixed I/O port number of
+  | an ISA device on NOMMU RISC-V would turn into a NULL pointer
+  | dereference.
+  Feel free to either copy this, or use your own explanation.
 
->>>>=20
->>>>> 2. CET.  CET wants us to find a few more bytes somewhere, and those
->>>>> bytes logically belong in ucontext, and here we are.
->>>>>=20
->>>>=20
->>>> Fortunately, we can spare CET the need of ucontext extension.  When the=
-
->>>> kernel handles sigreturn, the user-mode shadow stack pointer is right a=
-t
->>>> the restore token.  There is no need to put that in ucontext.
->>>=20
->>> That seems entirely reasonable.  This might also avoid needing to
->>> teach CRIU about CET at all.
->> Wait, what's the actual shadow stack token format?  And is the token
->> on the new stack or the old stack when sigaltstack is in use?  For
->> that matter, is there any support for an alternate shadow stack for
->> signals?
->=20
-> The restore token is a pointer pointing directly above itself and bit[0] i=
-ndicates 64-bit mode.
->=20
-> Because the shadow stack stores only return addresses, there is no alterna=
-te shadow stack.  However, the application can allocate and switch to a new s=
-hadow stack.
-
-I think we should make the ABI support an alternate shadow stack even if we d=
-on=E2=80=99t implement it initially. After all, some day someone might want t=
-o register a handler for shadow stack overflow.
-
->=20
-> Yu-cheng
+       Arnd
