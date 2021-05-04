@@ -2,245 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FA137319F
-	for <lists+linux-arch@lfdr.de>; Tue,  4 May 2021 22:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82473731CA
+	for <lists+linux-arch@lfdr.de>; Tue,  4 May 2021 23:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbhEDUuB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 May 2021 16:50:01 -0400
-Received: from mga12.intel.com ([192.55.52.136]:25517 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230150AbhEDUuA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 4 May 2021 16:50:00 -0400
-IronPort-SDR: BiTzOCpr/sRVblL917FJK67gdIB0IIsdm8d5yabb1QarmW8cV+3HtMntt3EPHU48yrwk2kNSV9
- TNvhmUbOZfVw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="177614963"
-X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="177614963"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 13:49:05 -0700
-IronPort-SDR: 6KDt1n8pfcb9gJH0NzrYGgA5EZXyDWXzCYb41j9NgDFcQB0vnbTXvsm/VpOSZC2ClLdLm+iNKj
- OCE0Yn8pJhDw==
-X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="388940055"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.251.140.235]) ([10.251.140.235])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 13:49:03 -0700
-Subject: Re: extending ucontext (Re: [PATCH v26 25/30] x86/cet/shstk: Handle
- signals for shadow stack)
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        id S232803AbhEDVOv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 May 2021 17:14:51 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:40958 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231445AbhEDVOv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 May 2021 17:14:51 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1le2Ma-001fqZ-FW; Tue, 04 May 2021 15:13:52 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=fess.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1le2MZ-00HGan-CR; Tue, 04 May 2021 15:13:52 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Marco Elver <elver@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Florian Weimer <fweimer@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-26-yu-cheng.yu@intel.com>
- <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com>
- <8fd86049-930d-c9b7-379c-56c02a12cd77@intel.com>
- <CALCETrX9z-73wpy-SCy8NE1XfQgXAN0mCmjv0jXDDomMyS7TKg@mail.gmail.com>
- <a7c332c8-9368-40b1-e221-ec921f7db948@intel.com>
-Message-ID: <5fc5dea4-0705-2aad-cf8f-7ff78a5e518a@intel.com>
-Date:   Tue, 4 May 2021 13:49:02 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>
+References: <YIpkvGrBFGlB5vNj@elver.google.com>
+        <m11rat9f85.fsf@fess.ebiederm.org>
+        <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
+        <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com>
+        <m1zgxfs7zq.fsf_-_@fess.ebiederm.org>
+        <m1r1irpc5v.fsf@fess.ebiederm.org>
+        <CANpmjNNfiSgntiOzgMc5Y41KVAV_3VexdXCMADekbQEqSP3vqQ@mail.gmail.com>
+        <m1czuapjpx.fsf@fess.ebiederm.org>
+        <CANpmjNNyifBNdpejc6ofT6+n6FtUw-Cap_z9Z9YCevd7Wf3JYQ@mail.gmail.com>
+        <m14kfjh8et.fsf_-_@fess.ebiederm.org>
+Date:   Tue, 04 May 2021 16:13:47 -0500
+In-Reply-To: <m14kfjh8et.fsf_-_@fess.ebiederm.org> (Eric W. Biederman's
+        message of "Mon, 03 May 2021 15:25:14 -0500")
+Message-ID: <m1tuni8ano.fsf_-_@fess.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <a7c332c8-9368-40b1-e221-ec921f7db948@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-XM-SPF: eid=1le2MZ-00HGan-CR;;;mid=<m1tuni8ano.fsf_-_@fess.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18t2On/7dJt0RgDhiKTS9M48FC5+jx0m4U=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.6 required=8.0 tests=ALL_TRUSTED,BAYES_20,
+        DCC_CHECK_NEGATIVE,FVGT_m_MULTI_ODD,T_TM2_M_HEADER_IN_MSG,
+        T_TooManySym_01 autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
+        *      [score: 0.1758]
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.4 FVGT_m_MULTI_ODD Contains multiple odd letter combinations
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Marco Elver <elver@google.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 470 ms - load_scoreonly_sql: 0.16 (0.0%),
+        signal_user_changed: 15 (3.2%), b_tie_ro: 12 (2.6%), parse: 2.2 (0.5%),
+         extract_message_metadata: 8 (1.8%), get_uri_detail_list: 3.8 (0.8%),
+        tests_pri_-1000: 7 (1.6%), tests_pri_-950: 2.1 (0.4%), tests_pri_-900:
+        1.70 (0.4%), tests_pri_-90: 72 (15.3%), check_bayes: 69 (14.7%),
+        b_tokenize: 14 (3.1%), b_tok_get_all: 10 (2.2%), b_comp_prob: 3.8
+        (0.8%), b_tok_touch_all: 37 (7.8%), b_finish: 1.32 (0.3%),
+        tests_pri_0: 333 (70.7%), check_dkim_signature: 1.09 (0.2%),
+        check_dkim_adsp: 2.6 (0.6%), poll_dns_idle: 0.84 (0.2%), tests_pri_10:
+        2.2 (0.5%), tests_pri_500: 12 (2.6%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH v3 00/12] signal: sort out si_trapno and si_perf
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/30/2021 11:32 AM, Yu, Yu-cheng wrote:
-> On 4/30/2021 10:47 AM, Andy Lutomirski wrote:
->> On Fri, Apr 30, 2021 at 10:00 AM Yu, Yu-cheng <yu-cheng.yu@intel.com> 
->> wrote:
->>>
->>> On 4/28/2021 4:03 PM, Andy Lutomirski wrote:
->>>> On Tue, Apr 27, 2021 at 1:44 PM Yu-cheng Yu <yu-cheng.yu@intel.com> 
->>>> wrote:
->>>>>
->>>>> When shadow stack is enabled, a task's shadow stack states must be 
->>>>> saved
->>>>> along with the signal context and later restored in sigreturn.  
->>>>> However,
->>>>> currently there is no systematic facility for extending a signal 
->>>>> context.
->>>>> There is some space left in the ucontext, but changing ucontext is 
->>>>> likely
->>>>> to create compatibility issues and there is not enough space for 
->>>>> further
->>>>> extensions.
->>>>>
->>>>> Introduce a signal context extension struct 'sc_ext', which is used 
->>>>> to save
->>>>> shadow stack restore token address.  The extension is located above 
->>>>> the fpu
->>>>> states, plus alignment.  The struct can be extended (such as the ibt's
->>>>> wait_endbr status to be introduced later), and sc_ext.total_size field
->>>>> keeps track of total size.
->>>>
->>>> I still don't like this.
->>>>
->>>> Here's how the signal layout works, for better or for worse:
->>>>
->>>> The kernel has:
->>>>
->>>> struct rt_sigframe {
->>>>       char __user *pretcode;
->>>>       struct ucontext uc;
->>>>       struct siginfo info;
->>>>       /* fp state follows here */
->>>> };
->>>>
->>>> This is roughly the actual signal frame.  But userspace does not have
->>>> this struct declared, and user code does not know the sizes of the
->>>> fields.  So it's accessed in a nonsensical way.  The signal handler
->>>> function is passed a pointer to the whole sigframe implicitly in RSP,
->>>> a pointer to &frame->info in RSI, anda pointer to &frame->uc in RDX.
->>>> User code can *find* the fp state by following a pointer from
->>>> mcontext, which is, in turn, found via uc:
->>>>
->>>> struct ucontext {
->>>>       unsigned long      uc_flags;
->>>>       struct ucontext  *uc_link;
->>>>       stack_t          uc_stack;
->>>>       struct sigcontext uc_mcontext;  <-- fp pointer is in here
->>>>       sigset_t      uc_sigmask;    /* mask last for extensibility */
->>>> };
->>>>
->>>> The kernel, in sigreturn, works a bit differently.  The sigreturn
->>>> variants know the base address of the frame but don't have the benefit
->>>> of receiving pointers to the fields.  So instead the kernel takes
->>>> advantage of the fact that it knows the offset to uc and parses uc
->>>> accordingly.  And the kernel follows the pointer in mcontext to find
->>>> the fp state.  The latter bit is quite important later.  The kernel
->>>> does not parse info at all.
->>>>
->>>> The fp state is its own mess.  When XSAVE happened, Intel kindly (?)
->>>> gave us a software defined area between the "legacy" x87 region and
->>>> the modern supposedly extensible part.  Linux sticks the following
->>>> structure in that hole:
->>>>
->>>> struct _fpx_sw_bytes {
->>>>       /*
->>>>        * If set to FP_XSTATE_MAGIC1 then this is an xstate context.
->>>>        * 0 if a legacy frame.
->>>>        */
->>>>       __u32                magic1;
->>>>
->>>>       /*
->>>>        * Total size of the fpstate area:
->>>>        *
->>>>        *  - if magic1 == 0 then it's sizeof(struct _fpstate)
->>>>        *  - if magic1 == FP_XSTATE_MAGIC1 then it's sizeof(struct 
->>>> _xstate)
->>>>        *    plus extensions (if any)
->>>>        */
->>>>       __u32                extended_size;
->>>>
->>>>       /*
->>>>        * Feature bit mask (including FP/SSE/extended state) that is 
->>>> present
->>>>        * in the memory layout:
->>>>        */
->>>>       __u64                xfeatures;
->>>>
->>>>       /*
->>>>        * Actual XSAVE state size, based on the xfeatures saved in 
->>>> the layout.
->>>>        * 'extended_size' is greater than 'xstate_size':
->>>>        */
->>>>       __u32                xstate_size;
->>>>
->>>>       /* For future use: */
->>>>       __u32                padding[7];
->>>> };
->>>>
->>>>
->>>> That's where we are right now upstream.  The kernel has a parser for
->>>> the FPU state that is bugs piled upon bugs and is going to have to be
->>>> rewritten sometime soon.  On top of all this, we have two upcoming
->>>> features, both of which require different kinds of extensions:
->>>>
->>>> 1. AVX-512.  (Yeah, you thought this story was over a few years ago,
->>>> but no.  And AMX makes it worse.)  To make a long story short, we
->>>> promised user code many years ago that a signal frame fit in 2048
->>>> bytes with some room to spare.  With AVX-512 this is false.  With AMX
->>>> it's so wrong it's not even funny.  The only way out of the mess
->>>> anyone has come up with involves making the length of the FPU state
->>>> vary depending on which features are INIT, i.e. making it more compact
->>>> than "compact" mode is.  This has a side effect: it's no longer
->>>> possible to modify the state in place, because enabling a feature with
->>>> no space allocated will make the structure bigger, and the stack won't
->>>> have room.  Fortunately, one can relocate the entire FPU state, update
->>>> the pointer in mcontext, and the kernel will happily follow the
->>>> pointer.  So new code on a new kernel using a super-compact state
->>>> could expand the state by allocating new memory (on the heap? very
->>>> awkwardly on the stack?) and changing the pointer.  For all we know,
->>>> some code already fiddles with the pointer.  This is great, except
->>>> that your patch sticks more data at the end of the FPU block that no
->>>> one is expecting, and your sigreturn code follows that pointer, and
->>>> will read off into lala land.
->>>>
->>>
->>> Then, what about we don't do that at all.  Is it possible from now on we
->>> don't stick more data at the end, and take the relocating-fpu approach?
->>>
->>>> 2. CET.  CET wants us to find a few more bytes somewhere, and those
->>>> bytes logically belong in ucontext, and here we are.
->>>>
->>>
->>> Fortunately, we can spare CET the need of ucontext extension.  When the
->>> kernel handles sigreturn, the user-mode shadow stack pointer is right at
->>> the restore token.  There is no need to put that in ucontext.
->>
->> That seems entirely reasonable.  This might also avoid needing to
->> teach CRIU about CET at all.
->>
->>>
->>> However, the WAIT_ENDBR status needs to be saved/restored for signals.
->>> Since IBT is now dependent on shadow stack, we can use a spare bit of
->>> the shadow stack restore token for that.
->>
->> That seems like unnecessary ABI coupling.  We have plenty of bits in
->> uc_flags, and we have an entire reserved word in sigcontext.  How
->> about just sticking this bit in one of those places?
-> 
-> Yes, I will make it UC_WAIT_ENDBR.
 
-Personally, I think an explicit flag is cleaner than using a reserved 
-word somewhere.  However, there is a small issue: ia32 has no uc_flags.
+This set of changes sorts out the ABI issues with SIGTRAP TRAP_PERF, and
+hopefully will can get merged before any userspace code starts using the
+new ABI.
 
-This series can support legacy apps up to now.  But, instead of creating 
-too many special cases, perhaps we should drop CET support of ia32?
+The big ideas are:
+- Placing the asserts first to prevent unexpected ABI changes
+- si_trapno becomming ordinary fault subfield.
+- struct signalfd_siginfo is almost full
 
-Thoughts?
+This set of changes starts out with Marco's static_assert changes and
+additional one of my own that enforces the fact that the alignment of
+siginfo_t is also part of the ABI.  Together these build time
+checks verify there are no unexpected ABI changes in the changes
+that follow.
 
-Thanks,
-Yu-cheng
+The field si_trapno is changed to become an ordinary extension of the
+_sigfault member of siginfo.
+
+The code is refactored a bit and then si_perf_type is added along side
+si_perf_data in the _perf subfield of _sigfault of siginfo_t.
+
+Finally the signalfd_siginfo fields are removed as they appear to be
+filling up the structure without userspace actually being able to use
+them.
+
+v2: https://lkml.kernel.org/r/m14kfjh8et.fsf_-_@fess.ebiederm.org
+v1: https://lkml.kernel.org/r/m1zgxfs7zq.fsf_-_@fess.ebiederm.org
+
+Eric W. Biederman (9):
+      signal: Verify the alignment and size of siginfo_t
+      siginfo: Move si_trapno inside the union inside _si_fault
+      signal: Implement SIL_FAULT_TRAPNO
+      signal: Use dedicated helpers to send signals with si_trapno set
+      signal: Remove __ARCH_SI_TRAPNO
+      signal: Rename SIL_PERF_EVENT SIL_FAULT_PERF_EVENT for consistency
+      signal: Factor force_sig_perf out of perf_sigtrap
+      signal: Deliver all of the siginfo perf data in _perf
+      signalfd: Remove SIL_FAULT_PERF_EVENT fields from signalfd_siginfo
+
+Marco Elver (3):
+      sparc64: Add compile-time asserts for siginfo_t offsets
+      arm: Add compile-time asserts for siginfo_t offsets
+      arm64: Add compile-time asserts for siginfo_t offsets
+
+ arch/alpha/include/uapi/asm/siginfo.h              |   2 -
+ arch/alpha/kernel/osf_sys.c                        |   2 +-
+ arch/alpha/kernel/signal.c                         |   4 +-
+ arch/alpha/kernel/traps.c                          |  24 ++---
+ arch/alpha/mm/fault.c                              |   4 +-
+ arch/arm/kernel/signal.c                           |  39 +++++++
+ arch/arm64/kernel/signal.c                         |  39 +++++++
+ arch/arm64/kernel/signal32.c                       |  39 +++++++
+ arch/mips/include/uapi/asm/siginfo.h               |   2 -
+ arch/sparc/include/uapi/asm/siginfo.h              |   3 -
+ arch/sparc/kernel/process_64.c                     |   2 +-
+ arch/sparc/kernel/signal32.c                       |  37 +++++++
+ arch/sparc/kernel/signal_64.c                      |  36 +++++++
+ arch/sparc/kernel/sys_sparc_32.c                   |   2 +-
+ arch/sparc/kernel/sys_sparc_64.c                   |   2 +-
+ arch/sparc/kernel/traps_32.c                       |  22 ++--
+ arch/sparc/kernel/traps_64.c                       |  44 ++++----
+ arch/sparc/kernel/unaligned_32.c                   |   2 +-
+ arch/sparc/mm/fault_32.c                           |   2 +-
+ arch/sparc/mm/fault_64.c                           |   2 +-
+ arch/x86/kernel/signal_compat.c                    |  15 ++-
+ fs/signalfd.c                                      |  23 ++---
+ include/linux/compat.h                             |  10 +-
+ include/linux/sched/signal.h                       |  13 +--
+ include/linux/signal.h                             |   3 +-
+ include/uapi/asm-generic/siginfo.h                 |  20 ++--
+ include/uapi/linux/signalfd.h                      |   4 +-
+ kernel/events/core.c                               |  11 +-
+ kernel/signal.c                                    | 113 +++++++++++++--------
+ .../selftests/perf_events/sigtrap_threads.c        |  12 +--
+ 30 files changed, 373 insertions(+), 160 deletions(-)
