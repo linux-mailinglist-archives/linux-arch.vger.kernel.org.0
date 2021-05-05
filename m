@@ -2,27 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE48373D62
-	for <lists+linux-arch@lfdr.de>; Wed,  5 May 2021 16:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5774374743
+	for <lists+linux-arch@lfdr.de>; Wed,  5 May 2021 19:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbhEEON5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 May 2021 10:13:57 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:43334 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbhEEONl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 May 2021 10:13:41 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1leIGa-00CGlJ-DX; Wed, 05 May 2021 08:12:44 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=fess.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1leIGX-002GvZ-Te; Wed, 05 May 2021 08:12:43 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Marco Elver <elver@google.com>
+        id S234320AbhEERyU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 May 2021 13:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234711AbhEERyK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 May 2021 13:54:10 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E244C034632
+        for <linux-arch@vger.kernel.org>; Wed,  5 May 2021 10:25:12 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id c36-20020a05683034a4b02902a5b84b1d12so2388312otu.8
+        for <linux-arch@vger.kernel.org>; Wed, 05 May 2021 10:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mhdimRmcWFxSoj8AFDYbNHsikBJUsUucL4YCEQ/2njw=;
+        b=XwV87+f8d7jiYw4U+qEweujviEosUJz4mImc4wpkn1QEZXlev2sM2d4pHmB9ofh0n9
+         Yq3P7e/x1h5Ku11y/LkqEy7Tg83m26DuXSv/6b8ycMo0LPll3ANtPBbvosNpyd5xtL+E
+         ENILOdjTnsjJQmXGdhRXu2Hpb+fNUHY+BTdNjf4x7S3P/lDuy7sGcKn1KV1P05zZkPaU
+         +uqSz3jnlE/qY9W1RdsdkdaNVel7e9fhAlzMSfmNdykR+OeoIqGnuw6gDl9eOGrhMUs6
+         6lniOEx+5gWlfLei1GD2lVdJcYtfvvZwcta7uSNLTtcrObbDfRzjRogS9wh7FlfsBfeP
+         l5Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mhdimRmcWFxSoj8AFDYbNHsikBJUsUucL4YCEQ/2njw=;
+        b=olb5K979rkhT4Y99k6PK82CYzNWPVyJgWTvZjErQ7+t3rUm3vSswaX+0lOUo9ReTaG
+         z9bETdhv3YCggd0PbnHoVaA3crrPwjrnV/gX1eY2sjxejVy0GjSH+NXnZe6oKyEQ6gc2
+         5eYffPNpX03+YJSFMlIj26rQhakD0PsahwBcZtD6aVFoVbGuoHzcv/TW7xdYH5P3aV81
+         UjgtC7Ph6mysAC486Wy7l0JEnpjw3LukudnOOUwmZbzMSju/jk5iDLA968QhZ4N0+qOu
+         EwL2RyluYfuLzbgoximV7WOXGaPmm8njRBlIhPKyDbt8NymvZkgjV5B8KzgzlEOnLjmg
+         e/aA==
+X-Gm-Message-State: AOAM531spptHFYYuR6MaJwBrC3/lk7+ZJ1Fd7ySf0m616LH/oJvteYv2
+        Um1R56JN1hevTivOMzBz+xC8zKO+kaGtMYrU6qGXO3RDv8Q=
+X-Google-Smtp-Source: ABdhPJyRmdxXpkBjJhgLypJ27cbqA5yX2resHSeWAzU/LvydLIlTFHc1MP/3HSXWQhhwdgCDtzeYFR3RP7khraLUkho=
+X-Received: by 2002:a05:6830:410e:: with SMTP id w14mr23863201ott.251.1620235511237;
+ Wed, 05 May 2021 10:25:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <m1tuni8ano.fsf_-_@fess.ebiederm.org> <20210505141101.11519-1-ebiederm@xmission.com>
+ <20210505141101.11519-4-ebiederm@xmission.com>
+In-Reply-To: <20210505141101.11519-4-ebiederm@xmission.com>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 5 May 2021 19:24:00 +0200
+Message-ID: <CANpmjNNJ0vHq3s+mEqR1q8jqCzgHmivRcU+1m_Q8vquV5t5xWw@mail.gmail.com>
+Subject: Re: [PATCH v3 04/12] signal: Verify the alignment and size of siginfo_t
+To:     "Eric W. Beiderman" <ebiederm@xmission.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Florian Weimer <fweimer@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -36,120 +65,148 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Florian Weimer <fweimer@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
         kasan-dev <kasan-dev@googlegroups.com>
-References: <YIpkvGrBFGlB5vNj@elver.google.com>
-        <m11rat9f85.fsf@fess.ebiederm.org>
-        <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
-        <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com>
-        <m1zgxfs7zq.fsf_-_@fess.ebiederm.org>
-        <m1r1irpc5v.fsf@fess.ebiederm.org>
-        <CANpmjNNfiSgntiOzgMc5Y41KVAV_3VexdXCMADekbQEqSP3vqQ@mail.gmail.com>
-        <m1czuapjpx.fsf@fess.ebiederm.org>
-        <CANpmjNNyifBNdpejc6ofT6+n6FtUw-Cap_z9Z9YCevd7Wf3JYQ@mail.gmail.com>
-        <m14kfjh8et.fsf_-_@fess.ebiederm.org>
-        <m1tuni8ano.fsf_-_@fess.ebiederm.org>
-        <CANpmjNM5sYihM_9P5YHx06BooqLDhK96cMHGKaf61nCcoDJBdw@mail.gmail.com>
-Date:   Wed, 05 May 2021 09:12:38 -0500
-In-Reply-To: <CANpmjNM5sYihM_9P5YHx06BooqLDhK96cMHGKaf61nCcoDJBdw@mail.gmail.com>
-        (Marco Elver's message of "Wed, 5 May 2021 00:05:00 +0200")
-Message-ID: <m1o8dp8e21.fsf@fess.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1leIGX-002GvZ-Te;;;mid=<m1o8dp8e21.fsf@fess.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19By7EuCGlSC+Hrh/+dmLFpw1rmZv8aoeM=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.4 required=8.0 tests=ALL_TRUSTED,BAYES_40,
-        DCC_CHECK_NEGATIVE,FVGT_m_MULTI_ODD,TR_XM_PhishingBody,
-        T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XM_B_Phish66 autolearn=disabled
-        version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
-        *      [score: 0.3381]
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        *  2.0 XM_B_Phish66 BODY: Obfuscated XMission
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.4 FVGT_m_MULTI_ODD Contains multiple odd letter combinations
-        *  0.0 TR_XM_PhishingBody Phishing flag in body of message
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Marco Elver <elver@google.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1887 ms - load_scoreonly_sql: 0.17 (0.0%),
-        signal_user_changed: 15 (0.8%), b_tie_ro: 12 (0.6%), parse: 1.92
-        (0.1%), extract_message_metadata: 20 (1.1%), get_uri_detail_list: 3.8
-        (0.2%), tests_pri_-1000: 19 (1.0%), tests_pri_-950: 1.90 (0.1%),
-        tests_pri_-900: 1.38 (0.1%), tests_pri_-90: 1228 (65.1%), check_bayes:
-        1225 (64.9%), b_tokenize: 12 (0.6%), b_tok_get_all: 9 (0.5%),
-        b_comp_prob: 3.1 (0.2%), b_tok_touch_all: 1197 (63.4%), b_finish: 1.32
-        (0.1%), tests_pri_0: 579 (30.7%), check_dkim_signature: 0.87 (0.0%),
-        check_dkim_adsp: 2.6 (0.1%), poll_dns_idle: 0.44 (0.0%), tests_pri_10:
-        2.2 (0.1%), tests_pri_500: 13 (0.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v3 00/12] signal: sort out si_trapno and si_perf
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Marco Elver <elver@google.com> writes:
-
-> On Tue, 4 May 2021 at 23:13, Eric W. Biederman <ebiederm@xmission.com> wrote:
->>
->> This set of changes sorts out the ABI issues with SIGTRAP TRAP_PERF, and
->> hopefully will can get merged before any userspace code starts using the
->> new ABI.
->>
->> The big ideas are:
->> - Placing the asserts first to prevent unexpected ABI changes
->> - si_trapno becomming ordinary fault subfield.
->> - struct signalfd_siginfo is almost full
->>
->> This set of changes starts out with Marco's static_assert changes and
->> additional one of my own that enforces the fact that the alignment of
->> siginfo_t is also part of the ABI.  Together these build time
->> checks verify there are no unexpected ABI changes in the changes
->> that follow.
->>
->> The field si_trapno is changed to become an ordinary extension of the
->> _sigfault member of siginfo.
->>
->> The code is refactored a bit and then si_perf_type is added along side
->> si_perf_data in the _perf subfield of _sigfault of siginfo_t.
->>
->> Finally the signalfd_siginfo fields are removed as they appear to be
->> filling up the structure without userspace actually being able to use
->> them.
->>
->> v2: https://lkml.kernel.org/r/m14kfjh8et.fsf_-_@fess.ebiederm.org
->> v1: https://lkml.kernel.org/r/m1zgxfs7zq.fsf_-_@fess.ebiederm.org
->>
->> Eric W. Biederman (9):
->>       signal: Verify the alignment and size of siginfo_t
->>       siginfo: Move si_trapno inside the union inside _si_fault
->>       signal: Implement SIL_FAULT_TRAPNO
->>       signal: Use dedicated helpers to send signals with si_trapno set
->>       signal: Remove __ARCH_SI_TRAPNO
->>       signal: Rename SIL_PERF_EVENT SIL_FAULT_PERF_EVENT for consistency
->>       signal: Factor force_sig_perf out of perf_sigtrap
->>       signal: Deliver all of the siginfo perf data in _perf
->>       signalfd: Remove SIL_FAULT_PERF_EVENT fields from signalfd_siginfo
->>
->> Marco Elver (3):
->>       sparc64: Add compile-time asserts for siginfo_t offsets
->>       arm: Add compile-time asserts for siginfo_t offsets
->>       arm64: Add compile-time asserts for siginfo_t offsets
+On Wed, 5 May 2021 at 16:11, Eric W. Beiderman <ebiederm@xmission.com> wrote:
+> From: "Eric W. Biederman" <ebiederm@xmission.com>
 >
-> I can't seem to see the rest of them in my inbox. LKML also is missing
-> them: https://lore.kernel.org/linux-api/m1tuni8ano.fsf_-_@fess.ebiederm.org/
+> Update the static assertions about siginfo_t to also describe
+> it's alignment and size.
 >
-> Something must have swallowed them. Could you resend?
-> I'll then test in the morning.
+> While investigating if it was possible to add a 64bit field into
+> siginfo_t[1] it became apparent that the alignment of siginfo_t
+> is as much a part of the ABI as the size of the structure.
+>
+> If the alignment changes siginfo_t when embedded in another structure
+> can move to a different offset.  Which is not acceptable from an ABI
+> structure.
+>
+> So document that fact and add static assertions to notify developers
+> if they change change the alignment by accident.
+>
+> [1] https://lkml.kernel.org/r/YJEZdhe6JGFNYlum@elver.google.com
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-They got stuck going out you should see them any time now.
-Sorry about that.
+Acked-by: Marco Elver <elver@google.com>
 
-Eric
+> ---
+>  arch/arm/kernel/signal.c           | 2 ++
+>  arch/arm64/kernel/signal.c         | 2 ++
+>  arch/arm64/kernel/signal32.c       | 2 ++
+>  arch/sparc/kernel/signal32.c       | 2 ++
+>  arch/sparc/kernel/signal_64.c      | 2 ++
+>  arch/x86/kernel/signal_compat.c    | 6 ++++++
+>  include/uapi/asm-generic/siginfo.h | 5 +++++
+>  7 files changed, 21 insertions(+)
+>
+> diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
+> index 2dac5d2c5cf6..643bcb0f091b 100644
+> --- a/arch/arm/kernel/signal.c
+> +++ b/arch/arm/kernel/signal.c
+> @@ -737,6 +737,8 @@ static_assert(NSIGBUS       == 5);
+>  static_assert(NSIGTRAP == 6);
+>  static_assert(NSIGCHLD == 6);
+>  static_assert(NSIGSYS  == 2);
+> +static_assert(sizeof(siginfo_t) == 128);
+> +static_assert(__alignof__(siginfo_t) == 4);
+>  static_assert(offsetof(siginfo_t, si_signo)    == 0x00);
+>  static_assert(offsetof(siginfo_t, si_errno)    == 0x04);
+>  static_assert(offsetof(siginfo_t, si_code)     == 0x08);
+> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> index af8bd2af1298..ad4bd27fc044 100644
+> --- a/arch/arm64/kernel/signal.c
+> +++ b/arch/arm64/kernel/signal.c
+> @@ -985,6 +985,8 @@ static_assert(NSIGBUS       == 5);
+>  static_assert(NSIGTRAP == 6);
+>  static_assert(NSIGCHLD == 6);
+>  static_assert(NSIGSYS  == 2);
+> +static_assert(sizeof(siginfo_t) == 128);
+
+Would using SI_MAX_SIZE be appropriate? Perhaps not.. in case somebody
+changes it, given these static asserts are meant to double-check.
+
+I leave it to you to decide what makes more sense.
+
+> +static_assert(__alignof__(siginfo_t) == 8);
+>  static_assert(offsetof(siginfo_t, si_signo)    == 0x00);
+>  static_assert(offsetof(siginfo_t, si_errno)    == 0x04);
+>  static_assert(offsetof(siginfo_t, si_code)     == 0x08);
+> diff --git a/arch/arm64/kernel/signal32.c b/arch/arm64/kernel/signal32.c
+> index b6afb646515f..ee6c7484e130 100644
+> --- a/arch/arm64/kernel/signal32.c
+> +++ b/arch/arm64/kernel/signal32.c
+> @@ -469,6 +469,8 @@ static_assert(NSIGBUS       == 5);
+>  static_assert(NSIGTRAP == 6);
+>  static_assert(NSIGCHLD == 6);
+>  static_assert(NSIGSYS  == 2);
+> +static_assert(sizeof(compat_siginfo_t) == 128);
+> +static_assert(__alignof__(compat_siginfo_t) == 4);
+>  static_assert(offsetof(compat_siginfo_t, si_signo)     == 0x00);
+>  static_assert(offsetof(compat_siginfo_t, si_errno)     == 0x04);
+>  static_assert(offsetof(compat_siginfo_t, si_code)      == 0x08);
+> diff --git a/arch/sparc/kernel/signal32.c b/arch/sparc/kernel/signal32.c
+> index 778ed5c26d4a..32b977f253e3 100644
+> --- a/arch/sparc/kernel/signal32.c
+> +++ b/arch/sparc/kernel/signal32.c
+> @@ -757,6 +757,8 @@ static_assert(NSIGBUS       == 5);
+>  static_assert(NSIGTRAP == 6);
+>  static_assert(NSIGCHLD == 6);
+>  static_assert(NSIGSYS  == 2);
+> +static_assert(sizeof(compat_siginfo_t) == 128);
+> +static_assert(__alignof__(compat_siginfo_t) == 4);
+>  static_assert(offsetof(compat_siginfo_t, si_signo)     == 0x00);
+>  static_assert(offsetof(compat_siginfo_t, si_errno)     == 0x04);
+>  static_assert(offsetof(compat_siginfo_t, si_code)      == 0x08);
+> diff --git a/arch/sparc/kernel/signal_64.c b/arch/sparc/kernel/signal_64.c
+> index c9bbf5f29078..e9dda9db156c 100644
+> --- a/arch/sparc/kernel/signal_64.c
+> +++ b/arch/sparc/kernel/signal_64.c
+> @@ -567,6 +567,8 @@ static_assert(NSIGBUS       == 5);
+>  static_assert(NSIGTRAP == 6);
+>  static_assert(NSIGCHLD == 6);
+>  static_assert(NSIGSYS  == 2);
+> +static_assert(sizeof(siginfo_t) == 128);
+> +static_assert(__alignof__(siginfo_t) == 8);
+>  static_assert(offsetof(siginfo_t, si_signo)    == 0x00);
+>  static_assert(offsetof(siginfo_t, si_errno)    == 0x04);
+>  static_assert(offsetof(siginfo_t, si_code)     == 0x08);
+> diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
+> index 0e5d0a7e203b..e735bc129331 100644
+> --- a/arch/x86/kernel/signal_compat.c
+> +++ b/arch/x86/kernel/signal_compat.c
+> @@ -34,7 +34,13 @@ static inline void signal_compat_build_tests(void)
+>         BUILD_BUG_ON(NSIGSYS  != 2);
+>
+>         /* This is part of the ABI and can never change in size: */
+> +       BUILD_BUG_ON(sizeof(siginfo_t) != 128);
+>         BUILD_BUG_ON(sizeof(compat_siginfo_t) != 128);
+> +
+> +       /* This is a part of the ABI and can never change in alignment */
+> +       BUILD_BUG_ON(__alignof__(siginfo_t) != 8);
+> +       BUILD_BUG_ON(__alignof__(compat_siginfo_t) != 4);
+> +
+>         /*
+>          * The offsets of all the (unioned) si_fields are fixed
+>          * in the ABI, of course.  Make sure none of them ever
+> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+> index 03d6f6d2c1fe..91c80d0c10c5 100644
+> --- a/include/uapi/asm-generic/siginfo.h
+> +++ b/include/uapi/asm-generic/siginfo.h
+> @@ -29,6 +29,11 @@ typedef union sigval {
+>  #define __ARCH_SI_ATTRIBUTES
+>  #endif
+>
+> +/*
+> + * Be careful when extending this union.  On 32bit siginfo_t is 32bit
+> + * aligned.  Which means that a 64bit field or any other field that
+> + * would increase the alignment of siginfo_t will break the ABI.
+> + */
+>  union __sifields {
+>         /* kill() */
+>         struct {
+> --
+> 2.30.1
+>
