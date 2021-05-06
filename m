@@ -2,290 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65775375D0E
-	for <lists+linux-arch@lfdr.de>; Fri,  7 May 2021 00:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5D2375DA3
+	for <lists+linux-arch@lfdr.de>; Fri,  7 May 2021 01:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbhEFWGW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 May 2021 18:06:22 -0400
-Received: from mga14.intel.com ([192.55.52.115]:25401 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230149AbhEFWGT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 May 2021 18:06:19 -0400
-IronPort-SDR: aVvx8E7eLZcNY2kpyYVI9cjFAH3s1B8suKPVmc8z36twu9Sru51jqtCPpJH8q0ulLsXDPWk8Vn
- lo0AZI0zHw7Q==
-X-IronPort-AV: E=McAfee;i="6200,9189,9976"; a="198233911"
-X-IronPort-AV: E=Sophos;i="5.82,279,1613462400"; 
-   d="scan'208";a="198233911"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2021 15:05:18 -0700
-IronPort-SDR: E3B3lZ5t9BIU7x8JT3XoIkdfTP2uDRLb1wtuJN38MAl21fRXDH3sv+Vcf7oDpbQ+XVVkx4ab22
- JaNUBAXX/BSw==
-X-IronPort-AV: E=Sophos;i="5.82,279,1613462400"; 
-   d="scan'208";a="434596777"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.251.158.199]) ([10.251.158.199])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2021 15:05:16 -0700
-Subject: Re: extending ucontext (Re: [PATCH v26 25/30] x86/cet/shstk: Handle
- signals for shadow stack)
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-26-yu-cheng.yu@intel.com>
- <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com>
- <8fd86049-930d-c9b7-379c-56c02a12cd77@intel.com>
- <CALCETrX9z-73wpy-SCy8NE1XfQgXAN0mCmjv0jXDDomMyS7TKg@mail.gmail.com>
- <a7c332c8-9368-40b1-e221-ec921f7db948@intel.com>
- <5fc5dea4-0705-2aad-cf8f-7ff78a5e518a@intel.com>
-Message-ID: <bf16ab7e-bf27-68eb-efc9-c0468fb1c651@intel.com>
-Date:   Thu, 6 May 2021 15:05:15 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S233007AbhEFXmG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 May 2021 19:42:06 -0400
+Received: from mailgate.ics.forth.gr ([139.91.1.2]:13313 "EHLO
+        mailgate.ics.forth.gr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232896AbhEFXmF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 May 2021 19:42:05 -0400
+X-Greylist: delayed 1486 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 May 2021 19:42:05 EDT
+Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
+        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 146NGIq0043561
+        for <linux-arch@vger.kernel.org>; Fri, 7 May 2021 02:16:20 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
+        q=dns/txt; i=@ics.forth.gr; t=1620342973; x=1622934973;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=uf0onNfnHBzOPbID0tZ8t011w+r/nxI4x/Q1TyEOdQE=;
+        b=PM4UzE0tjJb0ton6+hFqgkCcvCPtBByAxRm712TdGgM8oH0uKI3fYmQulecm+EDP
+        VX/y3RFo1wqeqd0M0KT/NGXp67dMJ3EswjXL7/Rvs2m3exSNibfkcTfc4Ds1LdVZ
+        zIO1mwOOSeXB/gkB+gBayO9ehtfE1kOLWrgcVaes3kdO9vNH4wOxJv3okCWEcOXq
+        7wxQ55OdhLAsE3nZ4q/4x7s7ycQC0w3Gol5dj1eF7An6hnmST3jy8YU3tIa2mTWi
+        ctsjP4o/QYbATmSPpaRFC0hLvogkCgCc8SAFLAmz5IdYCrO9I64z/wBrUohkg55F
+        bxOCRdo40Lnk7VwOyEhcoA==;
+X-AuditID: 8b5b014d-a70347000000209f-ba-609478bd5c23
+Received: from enigma.ics.forth.gr (enigma.ics.forth.gr [139.91.151.35])
+        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id EB.87.08351.DB874906; Fri,  7 May 2021 02:16:13 +0300 (EEST)
+X-ICS-AUTH-INFO: Authenticated user:  at ics.forth.gr
 MIME-Version: 1.0
-In-Reply-To: <5fc5dea4-0705-2aad-cf8f-7ff78a5e518a@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
+Date:   Fri, 07 May 2021 02:16:03 +0300
+From:   Nick Kossifidis <mick@ics.forth.gr>
+To:     jejb@linux.ibm.com
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v18 0/9] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Organization: FORTH
+In-Reply-To: <8eb933f921c9dfe4c9b1b304e8f8fa4fbc249d84.camel@linux.ibm.com>
+References: <20210303162209.8609-1-rppt@kernel.org>
+ <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
+ <de27bfae0f4fdcbb0bb4ad17ec5aeffcd774c44b.camel@linux.ibm.com>
+ <996dbc29-e79c-9c31-1e47-cbf20db2937d@redhat.com>
+ <8eb933f921c9dfe4c9b1b304e8f8fa4fbc249d84.camel@linux.ibm.com>
+Message-ID: <77fe28bd940b2c1afd69d65b6d349352@mailhost.ics.forth.gr>
+X-Sender: mick@mailhost.ics.forth.gr
+User-Agent: Roundcube Webmail/1.3.16
+X-Brightmail-Tracker: H4sIAAAAAAAAA03SfUwTZxzA8Tx317uDrOFEGZdKwNWRbGwrmsn8JTKijs2LRuLMFhUW5AI3
+        YEMkLRAmc2EC8qqjtS+uRXlRAUlHoWUwCoQXZQUFXwpaNhHr4I91MNxkTEaHjK5bwj9PPsnv
+        l+f5/vHQuH+HSEKnpmcK8nQ+TUr6EmVxus1vdOeoE7Y8rwmBSpORhGXV9xTMNz8n4UldOQLH
+        n7MIdJo7CH5uLkKwYFrCoW5eTcCC6g4J2pZAqB1vw8CorMHB8qyYhGLrAgHmqfsi6OoeImDU
+        WkmCbuIJCZPGFRHkKx9Q0DZfQMJt6zciuOK4i8GjszvB3luNwb3HBgJuVDgpcI2W43Ba7we2
+        M70YLP+wegzftIvguqkdg3F1Hgl992cQqF1NFFjMGhxODZgwuL1sE0HBRAS4F1cfXWyeEu18
+        jXtWeJbgjBeNiHMvqRA363IRnDJ/juI69A8prtqcxVkawrhLXS6MMzeWkJz5qYri5m7dorjB
+        826Cmx7TYVxFbS/iLg69fyAo1jcySUhLzRbk4VEJvilu0zSWcdUvx5CnovKQ9oVS5EOzzDZ2
+        pP4SKkW+tD8zgNjxDhXlHUSwhu4S5LGYWccOfT1NeIwzwGrGepDXIWz+twbcY4IJZQunlzGP
+        SeZVtsret7pP0xuYF9k5Y7B3fUHMOpThHq9nBLbu0SjpsR+znn368K7IYx9mH/tTWRfh7WnE
+        2CbVH/81RLNttnukt+1l9je3k/LcH7BqywVpBVqnX1OqX1OqX1NajfBGxPDZb8pSExWyj4/L
+        M1NkyXIz+vd3of3foQeWX2X9CKNRP2JpXLpBfLP2XIK/OIn/7IQgP35UnpUmKPrRRpqQBorF
+        soqj/kwynyl8KggZgvz/KUb7SPIw2ye49vWaA7G7646gV97u3FS/vSc+sGAXzQTzA+8ym22D
+        fVdq9w5+0HCygX4skW48Nzw+c3lP/kRMg7mocleU6PCxbbGNY6f4SbrqWkzPaEn5mb25xS99
+        eCI0Lqp+UR2wPTc7aEYjuyHZpI4+KZS3HYmov1z11Wyc1nb+gmEpMqA874uglMPD82NO7Zxj
+        x+fh4cnYwc6t6SO7i6xJDvvgis+P7YfYmD36GVPxlwMfheXwzEF5xu9ME52YteN0HHM1VP2L
+        zKjtlBiynFH7nWVNrVN/C9b49ux3qt5rPRapmNTxRSst5MhkdHohWWFShiRu+ev6W/amVs2h
+        ay1B4vjS4FwpoUjht4bhcgX/D3XLkQHMAwAA
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/4/2021 1:49 PM, Yu, Yu-cheng wrote:
-> On 4/30/2021 11:32 AM, Yu, Yu-cheng wrote:
->> On 4/30/2021 10:47 AM, Andy Lutomirski wrote:
->>> On Fri, Apr 30, 2021 at 10:00 AM Yu, Yu-cheng <yu-cheng.yu@intel.com> 
->>> wrote:
->>>>
->>>> On 4/28/2021 4:03 PM, Andy Lutomirski wrote:
->>>>> On Tue, Apr 27, 2021 at 1:44 PM Yu-cheng Yu <yu-cheng.yu@intel.com> 
->>>>> wrote:
->>>>>>
->>>>>> When shadow stack is enabled, a task's shadow stack states must be 
->>>>>> saved
->>>>>> along with the signal context and later restored in sigreturn. 
->>>>>> However,
->>>>>> currently there is no systematic facility for extending a signal 
->>>>>> context.
->>>>>> There is some space left in the ucontext, but changing ucontext is 
->>>>>> likely
->>>>>> to create compatibility issues and there is not enough space for 
->>>>>> further
->>>>>> extensions.
->>>>>>
->>>>>> Introduce a signal context extension struct 'sc_ext', which is 
->>>>>> used to save
->>>>>> shadow stack restore token address.  The extension is located 
->>>>>> above the fpu
->>>>>> states, plus alignment.  The struct can be extended (such as the 
->>>>>> ibt's
->>>>>> wait_endbr status to be introduced later), and sc_ext.total_size 
->>>>>> field
->>>>>> keeps track of total size.
->>>>>
->>>>> I still don't like this.
->>>>>
-
-[...]
-
->>>>>
->>>>> That's where we are right now upstream.  The kernel has a parser for
->>>>> the FPU state that is bugs piled upon bugs and is going to have to be
->>>>> rewritten sometime soon.  On top of all this, we have two upcoming
->>>>> features, both of which require different kinds of extensions:
->>>>>
->>>>> 1. AVX-512.  (Yeah, you thought this story was over a few years ago,
->>>>> but no.  And AMX makes it worse.)  To make a long story short, we
->>>>> promised user code many years ago that a signal frame fit in 2048
->>>>> bytes with some room to spare.  With AVX-512 this is false.  With AMX
->>>>> it's so wrong it's not even funny.  The only way out of the mess
->>>>> anyone has come up with involves making the length of the FPU state
->>>>> vary depending on which features are INIT, i.e. making it more compact
->>>>> than "compact" mode is.  This has a side effect: it's no longer
->>>>> possible to modify the state in place, because enabling a feature with
->>>>> no space allocated will make the structure bigger, and the stack won't
->>>>> have room.  Fortunately, one can relocate the entire FPU state, update
->>>>> the pointer in mcontext, and the kernel will happily follow the
->>>>> pointer.  So new code on a new kernel using a super-compact state
->>>>> could expand the state by allocating new memory (on the heap? very
->>>>> awkwardly on the stack?) and changing the pointer.  For all we know,
->>>>> some code already fiddles with the pointer.  This is great, except
->>>>> that your patch sticks more data at the end of the FPU block that no
->>>>> one is expecting, and your sigreturn code follows that pointer, and
->>>>> will read off into lala land.
->>>>>
->>>>
->>>> Then, what about we don't do that at all.  Is it possible from now 
->>>> on we
->>>> don't stick more data at the end, and take the relocating-fpu approach?
->>>>
->>>>> 2. CET.  CET wants us to find a few more bytes somewhere, and those
->>>>> bytes logically belong in ucontext, and here we are.
->>>>>
->>>>
->>>> Fortunately, we can spare CET the need of ucontext extension.  When the
->>>> kernel handles sigreturn, the user-mode shadow stack pointer is 
->>>> right at
->>>> the restore token.  There is no need to put that in ucontext.
->>>
->>> That seems entirely reasonable.  This might also avoid needing to
->>> teach CRIU about CET at all.
->>>
->>>>
->>>> However, the WAIT_ENDBR status needs to be saved/restored for signals.
->>>> Since IBT is now dependent on shadow stack, we can use a spare bit of
->>>> the shadow stack restore token for that.
->>>
->>> That seems like unnecessary ABI coupling.  We have plenty of bits in
->>> uc_flags, and we have an entire reserved word in sigcontext.  How
->>> about just sticking this bit in one of those places?
->>
->> Yes, I will make it UC_WAIT_ENDBR.
+Στις 2021-05-06 20:05, James Bottomley έγραψε:
+> On Thu, 2021-05-06 at 18:45 +0200, David Hildenbrand wrote:
+>> 
+>> Also, there is a way to still read that memory when root by
+>> 
+>> 1. Having kdump active (which would often be the case, but maybe not
+>> to dump user pages )
+>> 2. Triggering a kernel crash (easy via proc as root)
+>> 3. Waiting for the reboot after kump() created the dump and then
+>> reading the content from disk.
 > 
-> Personally, I think an explicit flag is cleaner than using a reserved 
-> word somewhere.  However, there is a small issue: ia32 has no uc_flags.
+> Anything that can leave physical memory intact but boot to a kernel
+> where the missing direct map entry is restored could theoretically
+> extract the secret.  However, it's not exactly going to be a stealthy
+> extraction ...
 > 
-> This series can support legacy apps up to now.  But, instead of creating 
-> too many special cases, perhaps we should drop CET support of ia32?
+>> Or, as an attacker, load a custom kexec() kernel and read memory
+>> from the new environment. Of course, the latter two are advanced
+>> mechanisms, but they are possible when root. We might be able to
+>> mitigate, for example, by zeroing out secretmem pages before booting
+>> into the kexec kernel, if we care :)
 > 
-> Thoughts?
+> I think we could handle it by marking the region, yes, and a zero on
+> shutdown might be useful ... it would prevent all warm reboot type
+> attacks.
 > 
 
-Once we have UC_WAIT_ENDBR, IBT signal handling becomes quite simple. 
-Like the following:
-
-diff --git a/arch/x86/include/uapi/asm/ucontext.h 
-b/arch/x86/include/uapi/asm/ucontext.h
-index 5657b7a49f03..96375d609e11 100644
---- a/arch/x86/include/uapi/asm/ucontext.h
-+++ b/arch/x86/include/uapi/asm/ucontext.h
-@@ -49,6 +49,11 @@
-   */
-  #define UC_SIGCONTEXT_SS	0x2
-  #define UC_STRICT_RESTORE_SS	0x4
-+
-+/*
-+ * UC_WAIT_ENDBR indicates the task is in wait-ENDBR status.
-+ */
-+#define UC_WAIT_ENDBR		0x08
-  #endif
-
-  #include <asm-generic/ucontext.h>
-diff --git a/arch/x86/kernel/ibt.c b/arch/x86/kernel/ibt.c
-index d2563dd4759f..da804314ddc4 100644
---- a/arch/x86/kernel/ibt.c
-+++ b/arch/x86/kernel/ibt.c
-@@ -66,3 +66,32 @@ void ibt_disable(void)
-  	ibt_set_clear_msr_bits(0, CET_ENDBR_EN);
-  	current->thread.cet.ibt = 0;
-  }
-+
-+int ibt_get_clear_wait_endbr(void)
-+{
-+	u64 msr_val = 0;
-+
-+	if (!current->thread.cet.ibt)
-+		return 0;
-+
-+	fpregs_lock();
-+
-+	if (test_thread_flag(TIF_NEED_FPU_LOAD))
-+		__fpregs_load_activate();
-+
-+	if (!rdmsrl_safe(MSR_IA32_U_CET, &msr_val))
-+		wrmsrl(MSR_IA32_U_CET, msr_val & ~CET_WAIT_ENDBR);
-+
-+	fpregs_unlock();
-+
-+	return msr_val & CET_WAIT_ENDBR;
-+}
-+
-+int ibt_set_wait_endbr(void)
-+{
-+	if (!current->thread.cet.ibt)
-+		return 0;
-+
-+
-+	return ibt_set_clear_msr_bits(CET_WAIT_ENDBR, 0);
-+}
-diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index 66b662e57e19..5afd15419006 100644
---- a/arch/x86/kernel/signal.c
-+++ b/arch/x86/kernel/signal.c
-@@ -46,6 +46,7 @@
-  #include <asm/syscall.h>
-  #include <asm/sigframe.h>
-  #include <asm/signal.h>
-+#include <asm/cet.h>
-
-  #ifdef CONFIG_X86_64
-  /*
-@@ -134,6 +135,9 @@ static int restore_sigcontext(struct pt_regs *regs,
-  	 */
-  	if (unlikely(!(uc_flags & UC_STRICT_RESTORE_SS) && 
-user_64bit_mode(regs)))
-  		force_valid_ss(regs);
-+
-+	if (uc_flags & UC_WAIT_ENDBR)
-+		ibt_set_wait_endbr();
-  #endif
-
-  	return fpu__restore_sig((void __user *)sc.fpstate,
-@@ -433,6 +437,9 @@ static unsigned long frame_uc_flags(struct pt_regs 
-*regs)
-  	if (likely(user_64bit_mode(regs)))
-  		flags |= UC_STRICT_RESTORE_SS;
-
-+	if (ibt_get_clear_wait_endbr())
-+		flags |= UC_WAIT_ENDBR;
-+
-  	return flags;
-  }
-
-
-However, this cannot handle ia32 with no SA_SIGINFO.  For that, can we 
-create a synthetic token on the shadow stack?
-
-- The token points to itself with reserved bit[1] set, and cannot be 
-used for RSTORSSP.
-- The token only exists for ia32 with no SA_SIGINFO *AND* when the task 
-is in wait-endbr.
-
-The signal shadow stack will look like this:
-
---> ssp before signal
-     synthetic IBT token (for ia32 no SA_SIGINFO)
-     shadow stack restore token
-     sigreturn address
-
-The synthetic token is not valid in other situations.
-How is that?
-
-Thanks,
-Yu-cheng
+I had similar concerns about recovering secrets with kdump, and 
+considered cleaning up keyrings before jumping to the new kernel. The 
+problem is we can't provide guarantees in that case, once the kernel has 
+crashed and we are on our way to run crashkernel, we can't be sure we 
+can reliably zero-out anything, the more code we add to that path the 
+more risky it gets. However during reboot/normal kexec() we should do 
+some cleanup, it makes sense and secretmem can indeed be useful in that 
+case. Regarding loading custom kexec() kernels, we mitigate this with 
+the kexec file-based API where we can verify the signature of the loaded 
+kimage (assuming the system runs a kernel provided by a trusted 3rd 
+party and we 've maintained a chain of trust since booting).
