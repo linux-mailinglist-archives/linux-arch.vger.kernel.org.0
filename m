@@ -2,147 +2,149 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74520374F73
-	for <lists+linux-arch@lfdr.de>; Thu,  6 May 2021 08:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC441374FB1
+	for <lists+linux-arch@lfdr.de>; Thu,  6 May 2021 09:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbhEFGj3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 May 2021 02:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbhEFGj3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 May 2021 02:39:29 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C88C061574
-        for <linux-arch@vger.kernel.org>; Wed,  5 May 2021 23:38:30 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id gj14so2804293pjb.5
-        for <linux-arch@vger.kernel.org>; Wed, 05 May 2021 23:38:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4pB76DI3Wkv2k+3Ah6E6o80wVVbTYgSMN4+zljmic/s=;
-        b=F3VwvTrhJqDf7jP0FJSLtwO120b7Mf8vKLXOH2MJocvZQJMphG+bHlfFJe8MPPcKHO
-         YXhVQS6DfmJyJMCgM5LZnWZHyG3tQt73DRmd3ICxYECMLEo/MYOVZKOhyVCKR5CmgVac
-         9BR3mf5u2IkbAbcbOvELUusMbfM/jhczAPgMkHd2w/aGpc0p8K0Vuxj3LWqwo2iX8jGI
-         MsxPvwddQr+NARZBgN3sZbiYBaLwj3bT3PgPVbSg76PuRiKfStkZqyepZPwhBo/42lIC
-         0hYWSeF4bbbeFe5P4gvik60dLfaeaauTh5PqFNC4gy2nxGwOHNtgJO0V2wLUTmC+shqQ
-         pD9w==
+        id S232944AbhEFHCJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 May 2021 03:02:09 -0400
+Received: from mail-vs1-f52.google.com ([209.85.217.52]:38498 "EHLO
+        mail-vs1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232873AbhEFHCJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 May 2021 03:02:09 -0400
+Received: by mail-vs1-f52.google.com with SMTP id j128so2425040vsc.5;
+        Thu, 06 May 2021 00:01:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=4pB76DI3Wkv2k+3Ah6E6o80wVVbTYgSMN4+zljmic/s=;
-        b=oGJonjvaV3TilbFI8RDWOrbpnOgksyo8vnGnKPGT1b1bRO/UEZGAijy7IY/wtra+KD
-         veyOa/iGxBC9T1nDaCq8d7oS+DWCjOwN2pK8Qyuu27a2oQeWav56BLT2oqzKKvfoQI2r
-         U1X0MUCSMFcJO94ZoWLnJbUQ1aDuyQscsYN801/Vo1L415M2jRmuXz8nvDOz5mKb6tWP
-         4THxkLdPshYOGIZVycyefA6PJAWjDaK/+bYB4sKUGwLr24JdC5j8vDUFvq0qGtrq23yt
-         8+ANhgfq0Kjnkp+s4b1g1MsgqnYqVv6M2qIB9mPvBb1SdTutAH24rODKSRXbDtrmxD/M
-         L6rQ==
-X-Gm-Message-State: AOAM531RNASxX3Dv7hkmrkA4I9FXXMnsDBrAsI1XDvjWM9xqRapkqzSz
-        pU3uHv7bU3JZ68NJA6yQEyhghg==
-X-Google-Smtp-Source: ABdhPJwjlJoVmo+6a8XDUXjGWJK6yuc+LZUn/I5j2bvw1wuEzN68RA3bmZmY0Echj2/a31sOJGD7bg==
-X-Received: by 2002:a17:902:7081:b029:ed:5f:20af with SMTP id z1-20020a1709027081b02900ed005f20afmr3082620plk.60.1620283110274;
-        Wed, 05 May 2021 23:38:30 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id n129sm1143567pfn.54.2021.05.05.23.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 May 2021 23:38:29 -0700 (PDT)
-Date:   Wed, 05 May 2021 23:38:29 -0700 (PDT)
-X-Google-Original-Date: Wed, 05 May 2021 23:38:26 PDT (-0700)
-Subject:     Re: [PATCH v8] RISC-V: enable XIP
-In-Reply-To: <CA+G9fYv4y+n6PoYf1jOPZbjPxY7rTi+Ajc89zsNzTS0_uL+RJw@mail.gmail.com>
-CC:     alex@ghiti.fr, vitaly.wool@konsulko.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, lkft-triage@lists.linaro.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     naresh.kamboju@linaro.org
-Message-ID: <mhng-1125f9ca-cd05-4183-8c0e-e33922bc9add@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NoT+A0718WNsTbHBS5BGp5G+tj2RfytrZk7R7tgIl08=;
+        b=X248YRswNzAfo6iG1kNtPokKkdBeSO8s61uJm6eTDuG4PrFnr/zB6gAcYTzegMUI4Z
+         7Fx2czLZ55vauWk8OQ5WrPkt42CQ5BJI5FjbLf8m1xhxBX0tHRJvP9U+vBHMeNyaxAJI
+         AV7hCQsNQXyGuIGDFTSgGFIl9JE0CQF4goqEE3mPsHqbcjaI65xlc4l+3iL2yZG6HiyF
+         2AoZEQL10iJD0Q0NgwAI+s6QUMEaiSoOnHOmv4E33xUxYk6oHbbEn2yn38w+LsFYf75e
+         zxIDlf2LrgGp6pYfceDVsbje3BNhitT06tWGt/xR9GPFrsLjM9itTWpHyqR5YibvMTgH
+         JbLg==
+X-Gm-Message-State: AOAM533z2oqp/Njt2gXVBeP4JbJ/wH3mLrRaHR+z67MOlVfxdnHQAJ4j
+        7niDnJlGECU7b+fv8m91nNSTIAZSSNJxQ6fPIBfuqH4jwpA=
+X-Google-Smtp-Source: ABdhPJwtWn/D8K3Zn0jy1HK/vfeVlKteOEghQDe5DwJ1/OrY0tE/MhHEc0uYnsYlAuAKkFm96EHQ1hlHO1JAX4ayqVg=
+X-Received: by 2002:a67:f503:: with SMTP id u3mr1764571vsn.3.1620284470626;
+ Thu, 06 May 2021 00:01:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <YIpkvGrBFGlB5vNj@elver.google.com> <m11rat9f85.fsf@fess.ebiederm.org>
+ <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
+ <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com>
+ <m1zgxfs7zq.fsf_-_@fess.ebiederm.org> <m1r1irpc5v.fsf@fess.ebiederm.org>
+ <CANpmjNNfiSgntiOzgMc5Y41KVAV_3VexdXCMADekbQEqSP3vqQ@mail.gmail.com>
+ <m1czuapjpx.fsf@fess.ebiederm.org> <CANpmjNNyifBNdpejc6ofT6+n6FtUw-Cap_z9Z9YCevd7Wf3JYQ@mail.gmail.com>
+ <m14kfjh8et.fsf_-_@fess.ebiederm.org> <m1tuni8ano.fsf_-_@fess.ebiederm.org>
+In-Reply-To: <m1tuni8ano.fsf_-_@fess.ebiederm.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 6 May 2021 09:00:59 +0200
+Message-ID: <CAMuHMdUXh45iNmzrqqQc1kwD_OELHpujpst1BTMXDYTe7vKSCg@mail.gmail.com>
+Subject: Re: [PATCH v3 00/12] signal: sort out si_trapno and si_perf
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 26 Apr 2021 09:46:16 PDT (-0700), naresh.kamboju@linaro.org wrote:
-> my two cents,
->
-> The riscv build failed on Linux -next 20210426 tag kernel due to
-> below warnings / errors.
-> Following builds failed.
->  - riscv (tinyconfig) with gcc-8
->  - riscv (allnoconfig) with gcc-8
->  - riscv (tinyconfig) with gcc-9
->  - riscv (allnoconfig) with gcc-9
->  - riscv (tinyconfig) with gcc-10
->  - riscv (allnoconfig) with gcc-10
->
->> >> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
->> >> > index 30e4af0fd50c..2ddf654c72bb 100644
->> >> > --- a/arch/riscv/kernel/setup.c
->> >> > +++ b/arch/riscv/kernel/setup.c
->> >> > @@ -50,7 +50,11 @@ struct screen_info screen_info __section(".data") = {
->> >> >   * This is used before the kernel initializes the BSS so it can't be in the
->> >> >   * BSS.
->> >> >   */
->> >> > -atomic_t hart_lottery __section(".sdata");
->> >> > +atomic_t hart_lottery __section(".sdata")
->> >> > +#ifdef CONFIG_XIP_KERNEL
->> >> > += ATOMIC_INIT(0xC001BEEF)
->> >> > +#endif
->> >> > +;
->> >> >  unsigned long boot_cpu_hartid;
->> >> >  static DEFINE_PER_CPU(struct cpu, cpu_devices);
->> >> >
->> >> > @@ -254,7 +258,7 @@ void __init setup_arch(char **cmdline_p)
->> >> >  #if IS_ENABLED(CONFIG_BUILTIN_DTB)
->> >> >       unflatten_and_copy_device_tree();
->> >> >  #else
->> >> > -     if (early_init_dt_verify(__va(dtb_early_pa)))
->> >> > +     if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
->
-> arch/riscv/kernel/setup.c: In function 'setup_arch':
-> arch/riscv/kernel/setup.c:284:32: error: implicit declaration of
-> function 'XIP_FIXUP' [-Werror=implicit-function-declaration]
->   if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
->                                 ^~~~~~~~~
-> arch/riscv/include/asm/page.h:112:62: note: in definition of macro
-> 'linear_mapping_pa_to_va'
->  #define linear_mapping_pa_to_va(x) ((void *)((unsigned long)(x) +
-> va_pa_offset))
->                                                               ^
-> arch/riscv/include/asm/page.h:156:27: note: in expansion of macro
-> '__pa_to_va_nodebug'
->  #define __va(x)  ((void *)__pa_to_va_nodebug((phys_addr_t)(x)))
->                            ^~~~~~~~~~~~~~~~~~
-> arch/riscv/kernel/setup.c:284:27: note: in expansion of macro '__va'
->   if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
->                            ^~~~
-> cc1: some warnings being treated as errors
->
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
->
->
-> steps to reproduce:
-> ---------------------------
-> # TuxMake is a command line tool and Python library that provides
-> # portable and repeatable Linux kernel builds across a variety of
-> # architectures, toolchains, kernel configurations, and make targets.
-> #
-> # TuxMake supports the concept of runtimes.
-> # See https://docs.tuxmake.org/runtimes/, for that to work it requires
-> # that you install podman or docker on your system.
-> #
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
-> # See https://docs.tuxmake.org/ for complete documentation.
->
->
-> tuxmake --runtime podman --target-arch riscv --toolchain gcc-8
-> --kconfig allnoconfig
+Hi Eric,
 
-Sorry, I didn't notice this as it went by but I think I've already fixed 
-this one up.
+On Tue, May 4, 2021 at 11:14 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> This set of changes sorts out the ABI issues with SIGTRAP TRAP_PERF, and
+> hopefully will can get merged before any userspace code starts using the
+> new ABI.
+>
+> The big ideas are:
+> - Placing the asserts first to prevent unexpected ABI changes
+> - si_trapno becomming ordinary fault subfield.
+> - struct signalfd_siginfo is almost full
+>
+> This set of changes starts out with Marco's static_assert changes and
+> additional one of my own that enforces the fact that the alignment of
+> siginfo_t is also part of the ABI.  Together these build time
+> checks verify there are no unexpected ABI changes in the changes
+> that follow.
+>
+> The field si_trapno is changed to become an ordinary extension of the
+> _sigfault member of siginfo.
+>
+> The code is refactored a bit and then si_perf_type is added along side
+> si_perf_data in the _perf subfield of _sigfault of siginfo_t.
+>
+> Finally the signalfd_siginfo fields are removed as they appear to be
+> filling up the structure without userspace actually being able to use
+> them.
+
+Thanks for your series, which is now in next-20210506.
+
+>  arch/alpha/include/uapi/asm/siginfo.h              |   2 -
+>  arch/alpha/kernel/osf_sys.c                        |   2 +-
+>  arch/alpha/kernel/signal.c                         |   4 +-
+>  arch/alpha/kernel/traps.c                          |  24 ++---
+>  arch/alpha/mm/fault.c                              |   4 +-
+>  arch/arm/kernel/signal.c                           |  39 +++++++
+>  arch/arm64/kernel/signal.c                         |  39 +++++++
+>  arch/arm64/kernel/signal32.c                       |  39 +++++++
+>  arch/mips/include/uapi/asm/siginfo.h               |   2 -
+>  arch/sparc/include/uapi/asm/siginfo.h              |   3 -
+>  arch/sparc/kernel/process_64.c                     |   2 +-
+>  arch/sparc/kernel/signal32.c                       |  37 +++++++
+>  arch/sparc/kernel/signal_64.c                      |  36 +++++++
+>  arch/sparc/kernel/sys_sparc_32.c                   |   2 +-
+>  arch/sparc/kernel/sys_sparc_64.c                   |   2 +-
+>  arch/sparc/kernel/traps_32.c                       |  22 ++--
+>  arch/sparc/kernel/traps_64.c                       |  44 ++++----
+>  arch/sparc/kernel/unaligned_32.c                   |   2 +-
+>  arch/sparc/mm/fault_32.c                           |   2 +-
+>  arch/sparc/mm/fault_64.c                           |   2 +-
+>  arch/x86/kernel/signal_compat.c                    |  15 ++-
+
+No changes needed for other architectures?
+All m68k configs are broken with
+
+arch/m68k/kernel/signal.c:626:35: error: 'siginfo_t' {aka 'struct
+siginfo'} has no member named 'si_perf'; did you mean 'si_errno'?
+
+See e.g. http://kisskb.ellerman.id.au/kisskb/buildresult/14537820/
+
+There are still a few more references left to si_perf:
+
+$ git grep -n -w si_perf
+Next/merge.log:2902:Merging userns/for-next (4cf4e48fff05 signal: sort
+out si_trapno and si_perf)
+arch/m68k/kernel/signal.c:626:  BUILD_BUG_ON(offsetof(siginfo_t,
+si_perf) != 0x10);
+include/uapi/linux/perf_event.h:467:     * siginfo_t::si_perf, e.g. to
+permit user to identify the event.
+tools/testing/selftests/perf_events/sigtrap_threads.c:46:/* Unique
+value to check si_perf is correctly set from
+perf_event_attr::sig_data. */
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
