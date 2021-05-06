@@ -2,183 +2,200 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEED375656
-	for <lists+linux-arch@lfdr.de>; Thu,  6 May 2021 17:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F793375729
+	for <lists+linux-arch@lfdr.de>; Thu,  6 May 2021 17:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235093AbhEFPPa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 May 2021 11:15:30 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:45168 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234977AbhEFPP3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 May 2021 11:15:29 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out02.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1lefhp-005MIv-LY; Thu, 06 May 2021 09:14:25 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=fess.xmission.com)
-        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1lefhl-0000RC-E9; Thu, 06 May 2021 09:14:22 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Florian Weimer <fweimer@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S235289AbhEFPao (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 May 2021 11:30:44 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25670 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235593AbhEFP2m (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 May 2021 11:28:42 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 146F6QQk151323;
+        Thu, 6 May 2021 11:26:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=sjoZoiMhBl/YeAs7nylvrqucKRtz6t+UYFLBf4hwx58=;
+ b=HNnR1WbtcErDOmskKqlTooqNTP1IivLAtx4QS4CKp6cKX+kgP4zQvoFZWL5AVg264ZTj
+ /8JlRuQgWTJqNrDCfS3qB6iutm3wRUwNb5gT6wRvkj7xEihLZiVwqPsEQ8ad6kAutzc1
+ vWXExVZgy6ss+xtA+6SYXg/ZOVdbIsgx2CKiIb7wGnIwmvj1GGrO7ifiBh9RhnmDdNoJ
+ LMoRMK0OqojDRTYJuBf4qF8l+Q7nlnlOocgvLdq3bMaE1Oq4M0+Eg7+ihwCtwfSxcest
+ 1EoxjQ/XX+Q78+58ZXnBQCbBu5x4dPi1zM0YuMj7+PuRZF52CyumY9KDrfdHysz7ZluW Mw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38cjhps4q7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 May 2021 11:26:58 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 146F7KKD161033;
+        Thu, 6 May 2021 11:26:58 -0400
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38cjhps4pf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 May 2021 11:26:57 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 146FLr4I023803;
+        Thu, 6 May 2021 15:26:56 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma04dal.us.ibm.com with ESMTP id 38bedtysuw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 May 2021 15:26:56 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 146FQtK516646530
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 May 2021 15:26:55 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 71AB07805E;
+        Thu,  6 May 2021 15:26:55 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 50AA17805C;
+        Thu,  6 May 2021 15:26:43 +0000 (GMT)
+Received: from jarvis (unknown [9.80.192.238])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  6 May 2021 15:26:42 +0000 (GMT)
+Message-ID: <de27bfae0f4fdcbb0bb4ad17ec5aeffcd774c44b.camel@linux.ibm.com>
+Subject: Re: [PATCH v18 0/9] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Collingbourne <pcc@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
-References: <YIpkvGrBFGlB5vNj@elver.google.com>
-        <m11rat9f85.fsf@fess.ebiederm.org>
-        <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
-        <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com>
-        <m1zgxfs7zq.fsf_-_@fess.ebiederm.org>
-        <m1r1irpc5v.fsf@fess.ebiederm.org>
-        <CANpmjNNfiSgntiOzgMc5Y41KVAV_3VexdXCMADekbQEqSP3vqQ@mail.gmail.com>
-        <m1czuapjpx.fsf@fess.ebiederm.org>
-        <CANpmjNNyifBNdpejc6ofT6+n6FtUw-Cap_z9Z9YCevd7Wf3JYQ@mail.gmail.com>
-        <m14kfjh8et.fsf_-_@fess.ebiederm.org>
-        <m1tuni8ano.fsf_-_@fess.ebiederm.org>
-        <CAMuHMdUXh45iNmzrqqQc1kwD_OELHpujpst1BTMXDYTe7vKSCg@mail.gmail.com>
-Date:   Thu, 06 May 2021 10:14:17 -0500
-In-Reply-To: <CAMuHMdUXh45iNmzrqqQc1kwD_OELHpujpst1BTMXDYTe7vKSCg@mail.gmail.com>
-        (Geert Uytterhoeven's message of "Thu, 6 May 2021 09:00:59 +0200")
-Message-ID: <m1pmy36gja.fsf@fess.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Date:   Thu, 06 May 2021 08:26:41 -0700
+In-Reply-To: <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
+References: <20210303162209.8609-1-rppt@kernel.org>
+         <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1lefhl-0000RC-E9;;;mid=<m1pmy36gja.fsf@fess.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19LyVyCtQprDRirlYQLwegi4JFnnMVJ0N8=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01
-        autolearn=disabled version=3.4.2
-X-Spam-Virus: No
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4275]
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Geert Uytterhoeven <geert@linux-m68k.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 635 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.7 (0.6%), b_tie_ro: 2.6 (0.4%), parse: 0.69
-        (0.1%), extract_message_metadata: 13 (2.1%), get_uri_detail_list: 1.75
-        (0.3%), tests_pri_-1000: 18 (2.8%), tests_pri_-950: 1.07 (0.2%),
-        tests_pri_-900: 0.79 (0.1%), tests_pri_-90: 202 (31.8%), check_bayes:
-        200 (31.6%), b_tokenize: 8 (1.2%), b_tok_get_all: 9 (1.4%),
-        b_comp_prob: 1.72 (0.3%), b_tok_touch_all: 179 (28.2%), b_finish: 0.76
-        (0.1%), tests_pri_0: 385 (60.7%), check_dkim_signature: 0.41 (0.1%),
-        check_dkim_adsp: 2.3 (0.4%), poll_dns_idle: 0.81 (0.1%), tests_pri_10:
-        1.71 (0.3%), tests_pri_500: 7 (1.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v3 00/12] signal: sort out si_trapno and si_perf
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HbXsy0ifNJ0qG09HbRm_LXazjxQbp5n0
+X-Proofpoint-ORIG-GUID: DJupxtqPHyyQ3Z1xYY6MEK2xJzvjhhcP
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-06_10:2021-05-06,2021-05-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ clxscore=1011 mlxlogscore=999 lowpriorityscore=0 priorityscore=1501
+ spamscore=0 mlxscore=0 adultscore=0 bulkscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2105060108
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Geert Uytterhoeven <geert@linux-m68k.org> writes:
+On Wed, 2021-05-05 at 12:08 -0700, Andrew Morton wrote:
+> On Wed,  3 Mar 2021 18:22:00 +0200 Mike Rapoport <rppt@kernel.org>
+> wrote:
+> 
+> > This is an implementation of "secret" mappings backed by a file
+> > descriptor.
+> > 
+> > The file descriptor backing secret memory mappings is created using
+> > a dedicated memfd_secret system call The desired protection mode
+> > for the memory is configured using flags parameter of the system
+> > call. The mmap() of the file descriptor created with memfd_secret()
+> > will create a "secret" memory mapping. The pages in that mapping
+> > will be marked as not present in the direct map and will be present
+> > only in the page table of the owning mm.
+> > 
+> > Although normally Linux userspace mappings are protected from other
+> > users, such secret mappings are useful for environments where a
+> > hostile tenant is trying to trick the kernel into giving them
+> > access to other tenants mappings.
+> 
+> I continue to struggle with this and I don't recall seeing much
+> enthusiasm from others.  Perhaps we're all missing the value point
+> and some additional selling is needed.
+> 
+> Am I correct in understanding that the overall direction here is to
+> protect keys (and perhaps other things) from kernel bugs?  That if
+> the kernel was bug-free then there would be no need for this
+> feature?  If so, that's a bit sad.  But realistic I guess.
 
-> Hi Eric,
->
-> On Tue, May 4, 2021 at 11:14 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->> This set of changes sorts out the ABI issues with SIGTRAP TRAP_PERF, and
->> hopefully will can get merged before any userspace code starts using the
->> new ABI.
->>
->> The big ideas are:
->> - Placing the asserts first to prevent unexpected ABI changes
->> - si_trapno becomming ordinary fault subfield.
->> - struct signalfd_siginfo is almost full
->>
->> This set of changes starts out with Marco's static_assert changes and
->> additional one of my own that enforces the fact that the alignment of
->> siginfo_t is also part of the ABI.  Together these build time
->> checks verify there are no unexpected ABI changes in the changes
->> that follow.
->>
->> The field si_trapno is changed to become an ordinary extension of the
->> _sigfault member of siginfo.
->>
->> The code is refactored a bit and then si_perf_type is added along side
->> si_perf_data in the _perf subfield of _sigfault of siginfo_t.
->>
->> Finally the signalfd_siginfo fields are removed as they appear to be
->> filling up the structure without userspace actually being able to use
->> them.
->
-> Thanks for your series, which is now in next-20210506.
->
->>  arch/alpha/include/uapi/asm/siginfo.h              |   2 -
->>  arch/alpha/kernel/osf_sys.c                        |   2 +-
->>  arch/alpha/kernel/signal.c                         |   4 +-
->>  arch/alpha/kernel/traps.c                          |  24 ++---
->>  arch/alpha/mm/fault.c                              |   4 +-
->>  arch/arm/kernel/signal.c                           |  39 +++++++
->>  arch/arm64/kernel/signal.c                         |  39 +++++++
->>  arch/arm64/kernel/signal32.c                       |  39 +++++++
->>  arch/mips/include/uapi/asm/siginfo.h               |   2 -
->>  arch/sparc/include/uapi/asm/siginfo.h              |   3 -
->>  arch/sparc/kernel/process_64.c                     |   2 +-
->>  arch/sparc/kernel/signal32.c                       |  37 +++++++
->>  arch/sparc/kernel/signal_64.c                      |  36 +++++++
->>  arch/sparc/kernel/sys_sparc_32.c                   |   2 +-
->>  arch/sparc/kernel/sys_sparc_64.c                   |   2 +-
->>  arch/sparc/kernel/traps_32.c                       |  22 ++--
->>  arch/sparc/kernel/traps_64.c                       |  44 ++++----
->>  arch/sparc/kernel/unaligned_32.c                   |   2 +-
->>  arch/sparc/mm/fault_32.c                           |   2 +-
->>  arch/sparc/mm/fault_64.c                           |   2 +-
->>  arch/x86/kernel/signal_compat.c                    |  15 ++-
->
-> No changes needed for other architectures?
-> All m68k configs are broken with
+Secret memory really serves several purposes. The "increase the level
+of difficulty of secret exfiltration" you describe.  And, as you say,
+if the kernel were bug free this wouldn't be necessary.
 
-Thanks.  I hadn't realized that si_perf asserts existed on m68k.
-Thankfully linux-next caught this these.
+But also:
 
-Looking a little more deeply, it is strange that this is tested on m68k.
-The architecture does not implement HAVE_PERF_EVENTS so it is impossible
-for this signal to be generated.
+   1. Memory safety for use space code.  Once the secret memory is
+      allocated, the user can't accidentally pass it into the kernel to be
+      transmitted somewhere.
+   2. It also serves as a basis for context protection of virtual
+      machines, but other groups are working on this aspect, and it is
+      broadly similar to the secret exfiltration from the kernel problem.
 
-On the off chance this these new signals will appear on m68k someday I
-will update the assertion.
+> 
+> Is this intended to protect keys/etc after the attacker has gained
+> the ability to run arbitrary kernel-mode code?  If so, that seems
+> optimistic, doesn't it?
 
-> arch/m68k/kernel/signal.c:626:35: error: 'siginfo_t' {aka 'struct
-> siginfo'} has no member named 'si_perf'; did you mean 'si_errno'?
->
-> See e.g. http://kisskb.ellerman.id.au/kisskb/buildresult/14537820/
->
-> There are still a few more references left to si_perf:
->
-> $ git grep -n -w si_perf
-> Next/merge.log:2902:Merging userns/for-next (4cf4e48fff05 signal: sort
-> out si_trapno and si_perf)
-> arch/m68k/kernel/signal.c:626:  BUILD_BUG_ON(offsetof(siginfo_t,
-> si_perf) != 0x10);
-> include/uapi/linux/perf_event.h:467:     * siginfo_t::si_perf, e.g. to
-> permit user to identify the event.
-> tools/testing/selftests/perf_events/sigtrap_threads.c:46:/* Unique
-> value to check si_perf is correctly set from
-> perf_event_attr::sig_data. */
+Not exactly: there are many types of kernel attack, but mostly the
+attacker either manages to effect a privilege escalation to root or
+gets the ability to run a ROP gadget.  The object of this code is to be
+completely secure against root trying to extract the secret (some what
+similar to the lockdown idea), thus defeating privilege escalation and
+to provide "sufficient" protection against ROP gadgets.
 
-I will sweep them up as well.
+The ROP gadget thing needs more explanation: the usual defeatist
+approach is to say that once the attacker gains the stack, they can do
+anything because they can find enough ROP gadgets to be turing
+complete.  However, in the real world, given the kernel stack size
+limit and address space layout randomization making finding gadgets
+really hard, usually the attacker gets one or at most two gadgets to
+string together.  Not having any in-kernel primitive for accessing
+secret memory means the one gadget ROP attack can't work.  Since the
+only way to access secret memory is to reconstruct the missing mapping
+entry, the attacker has to recover the physical page and insert a PTE
+pointing to it in the kernel and then retrieve the contents.  That
+takes at least three gadgets which is a level of difficulty beyond most
+standard attacks.
 
-Eric
+> I think that a very complete description of the threats which this
+> feature addresses would be helpful.  
+
+It's designed to protect against three different threats:
+
+   1. Detection of user secret memory mismanagement
+   2. significant protection against privilege escalation
+   3. enhanced protection (in conjunction with all the other in-kernel
+      attack prevention systems) against ROP attacks.
+
+Do you want us to add this to one of the patch descriptions?
+
+James
+
+
