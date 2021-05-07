@@ -2,199 +2,205 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B7B375D72
-	for <lists+linux-arch@lfdr.de>; Fri,  7 May 2021 01:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B9F376136
+	for <lists+linux-arch@lfdr.de>; Fri,  7 May 2021 09:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbhEFXcS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 May 2021 19:32:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52900 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231929AbhEFXcS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 May 2021 19:32:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E7F74613E4
-        for <linux-arch@vger.kernel.org>; Thu,  6 May 2021 23:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620343879;
-        bh=IITCyoi4hOnQGgAjRVqRr7RtIsMxc4kk9HMuRUc4kAA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=N1T6PTE+RFbWB3avXhdSDYjXOHf2b71uQ/fL3u21uoAsgpzSqs1hJmi8t9vLiEZQD
-         g2JI3ttp49It3Px3GLiyljZuio2Y4JNFiUEu+9MX0hOEiEHw498EfzJwGZvLPaVnpg
-         n12avQSqalGzT84BCL8hMWX4pUrMcJKLl7s1SbC1ofYM5HSIXuo+7E/uNo8GCd/5lE
-         y83PyYHe69DjCpo/RiNgvNbbxRI5oH4ujIqMOPQ4j+xnnkaStQhq1ZXkCIrKXs1akQ
-         FLrAGUxM2AZ56a+9dlvcD1u3W9cWAP0UPgucz1OqtLZfo2YawBsGyOGQYa8jGc8NkZ
-         mu62RWDVchwtw==
-Received: by mail-ej1-f54.google.com with SMTP id a4so10807952ejk.1
-        for <linux-arch@vger.kernel.org>; Thu, 06 May 2021 16:31:19 -0700 (PDT)
-X-Gm-Message-State: AOAM533vlPTU4y+Gh3eFNp1wKLI+B8JmO1rHjUsyE7Z/Kh0NmGIbySmd
-        l4FQwpuv2WPUPilPNtYAWD6pVi6FuvmLpE7f2PnV0g==
-X-Google-Smtp-Source: ABdhPJy/HzUeyVBBOPMQzBeIl7qYyB1Cn0Bw3qIUSRljI0+cxPtL7Jufl+V2qYgyD4Kr53bGa8ynkwEWn9q1gDRzC2M=
-X-Received: by 2002:a17:906:c010:: with SMTP id e16mr7123175ejz.214.1620343878143;
- Thu, 06 May 2021 16:31:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com> <20210427204315.24153-26-yu-cheng.yu@intel.com>
- <CALCETrVTeYfzO-XWh+VwTuKCyPyp-oOMGH=QR_msG9tPQ4xPmA@mail.gmail.com>
- <8fd86049-930d-c9b7-379c-56c02a12cd77@intel.com> <CALCETrX9z-73wpy-SCy8NE1XfQgXAN0mCmjv0jXDDomMyS7TKg@mail.gmail.com>
- <a7c332c8-9368-40b1-e221-ec921f7db948@intel.com> <5fc5dea4-0705-2aad-cf8f-7ff78a5e518a@intel.com>
- <bf16ab7e-bf27-68eb-efc9-c0468fb1c651@intel.com>
-In-Reply-To: <bf16ab7e-bf27-68eb-efc9-c0468fb1c651@intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Thu, 6 May 2021 16:31:06 -0700
-X-Gmail-Original-Message-ID: <CALCETrWbOP_exK9cHT9vEDsQjorqC4SjhyU+gUzmGNdanO-enw@mail.gmail.com>
-Message-ID: <CALCETrWbOP_exK9cHT9vEDsQjorqC4SjhyU+gUzmGNdanO-enw@mail.gmail.com>
-Subject: Re: extending ucontext (Re: [PATCH v26 25/30] x86/cet/shstk: Handle
- signals for shadow stack)
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
+        id S235369AbhEGHgw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 May 2021 03:36:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30364 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235358AbhEGHgv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 May 2021 03:36:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1620372951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YRLhFcul/s0bAb0h6pwheuix10YVXJYp5em6Jk4RpTY=;
+        b=LKQ8IWaBht40hQ37zGhiXWlx+x+Dj6an1dgqmq+UDQ3Msuggv1C2b3TezDAWLG/j28CUxx
+        SYtxDjtmTeLa6lateTlt99a9Vpwn/iZBxnYdboXBfMzDsZa4lqARUwn76xIegra1nQR16K
+        nHeDtHsZAN4JgiRXzfUjQ3eqptexoS4=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-602-kVyuCwovOKet5kxAJ1g8jw-1; Fri, 07 May 2021 03:35:49 -0400
+X-MC-Unique: kVyuCwovOKet5kxAJ1g8jw-1
+Received: by mail-ej1-f71.google.com with SMTP id k9-20020a17090646c9b029039d323bd239so2646512ejs.16
+        for <linux-arch@vger.kernel.org>; Fri, 07 May 2021 00:35:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:organization:subject
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=YRLhFcul/s0bAb0h6pwheuix10YVXJYp5em6Jk4RpTY=;
+        b=GXLCnE83uhO2vY/rJHzZNepl8gN6xtLJY78kvyLjdZPL7KxvXs+4IbrJtFJ4Yr3V3m
+         dQBJQGZKfhczRygZ9HVJlLUolOdIDnhXxfx9qdew6LV3WLR+vf0KsfYXd2EZJ82SB9qz
+         nFx3nZn2IhIr03Hies6Avzj9GLoD0xPfQfG+5IR8tInGbzcCheOjLGcVfLo5q0c/rOxp
+         OUZsSryXAWpfIXgfXxG30XPXpCzOPwaCHzEOTK/dxldS9KV9MAqTXjULpoptRtMPSPEB
+         VTl9OauLGHJNsCUmPFONe5G/SVFzy9sqfsQUXUhprhiklzJqZRnhoUxXm3bTohWdKIet
+         hovg==
+X-Gm-Message-State: AOAM532Uaqh2k09eDarNVSi9hSRSss3SBhQvAztwTPB76arL6Yf+VKsi
+        OQfJZnY8b96f1E4Tb9UQLZrJe/W0feB0jsf7UcIWJ6ALeBAKQchCJV/t5yMzgXhDk3t903WN8gq
+        hZRzj3PqXpGEa8fhFKLzIag==
+X-Received: by 2002:a17:907:174a:: with SMTP id lf10mr8861621ejc.433.1620372948263;
+        Fri, 07 May 2021 00:35:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx5XI2zKUbsKazvcW2Vr5jvMDeiB+dtOEKTtfzbIqz37aYae3i7ugq6B0OmfMhiabycSZroRA==
+X-Received: by 2002:a17:907:174a:: with SMTP id lf10mr8861569ejc.433.1620372947917;
+        Fri, 07 May 2021 00:35:47 -0700 (PDT)
+Received: from [192.168.3.132] (p5b0c63c0.dip0.t-ipconnect.de. [91.12.99.192])
+        by smtp.gmail.com with ESMTPSA id l17sm2925176ejk.22.2021.05.07.00.35.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 May 2021 00:35:47 -0700 (PDT)
+To:     Nick Kossifidis <mick@ics.forth.gr>, jejb@linux.ibm.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+References: <20210303162209.8609-1-rppt@kernel.org>
+ <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
+ <de27bfae0f4fdcbb0bb4ad17ec5aeffcd774c44b.camel@linux.ibm.com>
+ <996dbc29-e79c-9c31-1e47-cbf20db2937d@redhat.com>
+ <8eb933f921c9dfe4c9b1b304e8f8fa4fbc249d84.camel@linux.ibm.com>
+ <77fe28bd940b2c1afd69d65b6d349352@mailhost.ics.forth.gr>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v18 0/9] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <5232c8a7-8a05-9d0f-69ff-3dba2b04e784@redhat.com>
+Date:   Fri, 7 May 2021 09:35:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <77fe28bd940b2c1afd69d65b6d349352@mailhost.ics.forth.gr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 6, 2021 at 3:05 PM Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
->
-> On 5/4/2021 1:49 PM, Yu, Yu-cheng wrote:
-> > On 4/30/2021 11:32 AM, Yu, Yu-cheng wrote:
-> >> On 4/30/2021 10:47 AM, Andy Lutomirski wrote:
-> >>> On Fri, Apr 30, 2021 at 10:00 AM Yu, Yu-cheng <yu-cheng.yu@intel.com>
-> >>> wrote:
-> >>>>
-> >>>> On 4/28/2021 4:03 PM, Andy Lutomirski wrote:
-> >>>>> On Tue, Apr 27, 2021 at 1:44 PM Yu-cheng Yu <yu-cheng.yu@intel.com>
-> >>>>> wrote:
-> >>>>>>
-> >>>>>> When shadow stack is enabled, a task's shadow stack states must be
-> >>>>>> saved
-> >>>>>> along with the signal context and later restored in sigreturn.
-> >>>>>> However,
-> >>>>>> currently there is no systematic facility for extending a signal
-> >>>>>> context.
-> >>>>>> There is some space left in the ucontext, but changing ucontext is
-> >>>>>> likely
-> >>>>>> to create compatibility issues and there is not enough space for
-> >>>>>> further
-> >>>>>> extensions.
-> >>>>>>
-> >>>>>> Introduce a signal context extension struct 'sc_ext', which is
-> >>>>>> used to save
-> >>>>>> shadow stack restore token address.  The extension is located
-> >>>>>> above the fpu
-> >>>>>> states, plus alignment.  The struct can be extended (such as the
-> >>>>>> ibt's
-> >>>>>> wait_endbr status to be introduced later), and sc_ext.total_size
-> >>>>>> field
-> >>>>>> keeps track of total size.
-> >>>>>
-> >>>>> I still don't like this.
-> >>>>>
->
-> [...]
->
-> >>>>>
-> >>>>> That's where we are right now upstream.  The kernel has a parser for
-> >>>>> the FPU state that is bugs piled upon bugs and is going to have to be
-> >>>>> rewritten sometime soon.  On top of all this, we have two upcoming
-> >>>>> features, both of which require different kinds of extensions:
-> >>>>>
-> >>>>> 1. AVX-512.  (Yeah, you thought this story was over a few years ago,
-> >>>>> but no.  And AMX makes it worse.)  To make a long story short, we
-> >>>>> promised user code many years ago that a signal frame fit in 2048
-> >>>>> bytes with some room to spare.  With AVX-512 this is false.  With AMX
-> >>>>> it's so wrong it's not even funny.  The only way out of the mess
-> >>>>> anyone has come up with involves making the length of the FPU state
-> >>>>> vary depending on which features are INIT, i.e. making it more compact
-> >>>>> than "compact" mode is.  This has a side effect: it's no longer
-> >>>>> possible to modify the state in place, because enabling a feature with
-> >>>>> no space allocated will make the structure bigger, and the stack won't
-> >>>>> have room.  Fortunately, one can relocate the entire FPU state, update
-> >>>>> the pointer in mcontext, and the kernel will happily follow the
-> >>>>> pointer.  So new code on a new kernel using a super-compact state
-> >>>>> could expand the state by allocating new memory (on the heap? very
-> >>>>> awkwardly on the stack?) and changing the pointer.  For all we know,
-> >>>>> some code already fiddles with the pointer.  This is great, except
-> >>>>> that your patch sticks more data at the end of the FPU block that no
-> >>>>> one is expecting, and your sigreturn code follows that pointer, and
-> >>>>> will read off into lala land.
-> >>>>>
-> >>>>
-> >>>> Then, what about we don't do that at all.  Is it possible from now
-> >>>> on we
-> >>>> don't stick more data at the end, and take the relocating-fpu approach?
-> >>>>
-> >>>>> 2. CET.  CET wants us to find a few more bytes somewhere, and those
-> >>>>> bytes logically belong in ucontext, and here we are.
-> >>>>>
-> >>>>
-> >>>> Fortunately, we can spare CET the need of ucontext extension.  When the
-> >>>> kernel handles sigreturn, the user-mode shadow stack pointer is
-> >>>> right at
-> >>>> the restore token.  There is no need to put that in ucontext.
-> >>>
-> >>> That seems entirely reasonable.  This might also avoid needing to
-> >>> teach CRIU about CET at all.
-> >>>
-> >>>>
-> >>>> However, the WAIT_ENDBR status needs to be saved/restored for signals.
-> >>>> Since IBT is now dependent on shadow stack, we can use a spare bit of
-> >>>> the shadow stack restore token for that.
-> >>>
-> >>> That seems like unnecessary ABI coupling.  We have plenty of bits in
-> >>> uc_flags, and we have an entire reserved word in sigcontext.  How
-> >>> about just sticking this bit in one of those places?
-> >>
-> >> Yes, I will make it UC_WAIT_ENDBR.
-> >
-> > Personally, I think an explicit flag is cleaner than using a reserved
-> > word somewhere.  However, there is a small issue: ia32 has no uc_flags.
-> >
-> > This series can support legacy apps up to now.  But, instead of creating
-> > too many special cases, perhaps we should drop CET support of ia32?
-> >
-> > Thoughts?
+On 07.05.21 01:16, Nick Kossifidis wrote:
+> Στις 2021-05-06 20:05, James Bottomley έγραψε:
+>> On Thu, 2021-05-06 at 18:45 +0200, David Hildenbrand wrote:
+>>>
+>>> Also, there is a way to still read that memory when root by
+>>>
+>>> 1. Having kdump active (which would often be the case, but maybe not
+>>> to dump user pages )
+>>> 2. Triggering a kernel crash (easy via proc as root)
+>>> 3. Waiting for the reboot after kump() created the dump and then
+>>> reading the content from disk.
+>>
+>> Anything that can leave physical memory intact but boot to a kernel
+>> where the missing direct map entry is restored could theoretically
+>> extract the secret.  However, it's not exactly going to be a stealthy
+>> extraction ...
+>>
+>>> Or, as an attacker, load a custom kexec() kernel and read memory
+>>> from the new environment. Of course, the latter two are advanced
+>>> mechanisms, but they are possible when root. We might be able to
+>>> mitigate, for example, by zeroing out secretmem pages before booting
+>>> into the kexec kernel, if we care :)
+>>
+>> I think we could handle it by marking the region, yes, and a zero on
+>> shutdown might be useful ... it would prevent all warm reboot type
+>> attacks.
+>>
+> 
+> I had similar concerns about recovering secrets with kdump, and
+> considered cleaning up keyrings before jumping to the new kernel. The
+> problem is we can't provide guarantees in that case, once the kernel has
+> crashed and we are on our way to run crashkernel, we can't be sure we
+> can reliably zero-out anything, the more code we add to that path the
 
-I'm really not thrilled about coupling IBT and SHSTK like this.
+Well, I think it depends. Assume we do the following
 
-Here are a couple of possible solutions:
+1) Zero out any secretmem pages when handing them back to the buddy. 
+(alternative: init_on_free=1) -- if not already done, I didn't check the 
+code.
 
-- Don't support IBT in 32-bit mode, or maybe just don't support IBT
-with legacy 32-bit signals.  The actual mechanics of this could be
-awkward.  Maybe we would reject the sigaction() call or the
-IBT-enabling request if they conflict?
+2) On kdump(), zero out all allocated secretmem. It'd be easier if we'd 
+just allocated from a fixed physical memory area; otherwise we have to 
+walk process page tables or use a PFN walker. And zeroing out secretmem 
+pages without a direct mapping is a different challenge.
 
-- Find some space in the signal frame for these flags.  Looking around
-a bit, sigframe_ia32 has fpstate_unused, but I can imagine things like
-CRIU getting very confused if it stops being unused.  sigframe_ia32
-uses sigcontext_32, which has a bunch of reserved space in __gsh,
-__fsh, etc.
+Now, during 2) it can happen that
 
-rt_sigframe_ia32 has uc_flags, so this isn't a real problem.
+a) We crash in our clearing code (e.g., something is seriously messed 
+up) and fail to start the kdump kernel. That's actually good, instead of 
+leaking data we fail hard.
 
-I don't have a brilliant solution here.
+b) We don't find all secretmem pages, for example, because process page 
+tables are messed up or something messed up our memmap (if we'd use that 
+to identify secretmem pages via a PFN walker somehow)
+
+
+But for the simple cases (e.g., malicious root tries to crash the kernel 
+via /proc/sysrq-trigger) both a) and b) wouldn't apply.
+
+Obviously, if an admin would want to mitigate right now, he would want 
+to disable kdump completely, meaning any attempt to load a crashkernel 
+would fail and cannot be enabled again for that kernel (also not via 
+cmdline an attacker could modify to reboot into a system with the option 
+for a crashkernel). Disabling kdump in the kernel when secretmem pages 
+are allocated is one approach, although sub-optimal.
+
+> more risky it gets. However during reboot/normal kexec() we should do
+> some cleanup, it makes sense and secretmem can indeed be useful in that
+> case. Regarding loading custom kexec() kernels, we mitigate this with
+> the kexec file-based API where we can verify the signature of the loaded
+> kimage (assuming the system runs a kernel provided by a trusted 3rd
+> party and we 've maintained a chain of trust since booting).
+
+For example in VMs (like QEMU), we often don't clear physical memory 
+during a reboot. So if an attacker manages to load a kernel that you can 
+trick into reading random physical memory areas, we can leak secretmem 
+data I think.
+
+And there might be ways to achieve that just using the cmdline, not 
+necessarily loading a different kernel. For example if you limit the 
+kernel footprint ("mem=256M") and disable strict_iomem_checks 
+("strict_iomem_checks=relaxed") you can just extract that memory via 
+/dev/mem if I am not wrong.
+
+So as an attacker, modify the (grub) cmdline to "mem=256M 
+strict_iomem_checks=relaxed", reboot, and read all memory via /dev/mem. 
+Or load a signed kexec kernel with that cmdline and boot into it.
+
+Interesting problem :)
+
+-- 
+Thanks,
+
+David / dhildenb
+
