@@ -2,89 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E11376D82
-	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 01:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AA8376D8C
+	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 01:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbhEGX4M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 May 2021 19:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S230197AbhEGX67 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 May 2021 19:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbhEGX4M (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 May 2021 19:56:12 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639E4C061574
-        for <linux-arch@vger.kernel.org>; Fri,  7 May 2021 16:55:11 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id x20so15048847lfu.6
-        for <linux-arch@vger.kernel.org>; Fri, 07 May 2021 16:55:11 -0700 (PDT)
+        with ESMTP id S230140AbhEGX67 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 May 2021 19:58:59 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CE7C06138A
+        for <linux-arch@vger.kernel.org>; Fri,  7 May 2021 16:57:59 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id g24so6104530pji.4
+        for <linux-arch@vger.kernel.org>; Fri, 07 May 2021 16:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RDWJpUYmPPrkWqh/DpQreXEAXgVxI78KHgUhVmuROJY=;
-        b=bAm5Ql5fOqSQmXEpAgHiRH580ICA55MB2VHmk9uSnuKh6sX3gBT0sxUiLe9tugQXHV
-         xPuYrutsGdw9bMxPVweU6xAja+iWUIg18TiZQ9aNH2cXIRNK5mUdJFglXjh+B+seedSf
-         Av/0nlLTEWl9quCHTc+aDXWuD10MgloAMF+aw=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2iQQvEB0+fCpb/rAB5HWawShZb8qZlIcaFuxaSL0oes=;
+        b=EqhSZy45d2y8OQQwraWGhlD9n54vClwPwSn7UuK9xZviJIBJseEIUX0aF36GebrTNP
+         3Y9esEq2VEVMdpYAd+09juu7yIqSSNYhNNt+rVs1po+n6QlJ3kc6cbxhUV5wUfFprLGx
+         TjvIY1CeOIbcMr4b7WQIEnR9bfI+n///RODlA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RDWJpUYmPPrkWqh/DpQreXEAXgVxI78KHgUhVmuROJY=;
-        b=cNJ56dZKcLUb21lpDNpQIQPYovnkIk3OCuKjw2ZJY6rmEfxAcGDX2Q2PWTi94yxqQw
-         p7KyK25oUh+zz7Uhh48Mvc9vEALGGY5DGwyx9wIOAeQYBkQnHJOmZQD7eweP97eBDPZp
-         nFIAMNhjcpwf3qgpILfX5Qea3tV68+NMcOPCOfUqFLZInI0WaZz4J1eX4IGPoAmA+2uG
-         IN+rl8d9gT0vg0UAJXK3qwBtpCFv80k315OLK0CDvXfyfvQ8RQM+B3/NMAqPlS1yWiwp
-         /RObDxdzexVHQrA2hs4NhAWNQVsPjiL/8GI6k4uUhxl78cR+4uTsuHJU6RGAktTWccW4
-         9ADw==
-X-Gm-Message-State: AOAM530kIK8h+XhJ78fps0roCtH8U9ewVUWKBKmG4Y9GlxAZflVO9emI
-        0Ye/3VheyfD+4nmsdZKnmHTXBi7hEvExaaEdtmc=
-X-Google-Smtp-Source: ABdhPJyzJupHiSpWT+0pDlvQXPR+e6EZjHWRvmrPzQpTXMC9I5FqCQPiaXuTV927t5fRcgPPric1PQ==
-X-Received: by 2002:ac2:5f58:: with SMTP id 24mr8336043lfz.200.1620431709738;
-        Fri, 07 May 2021 16:55:09 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id l28sm1469243lfk.95.2021.05.07.16.55.09
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 May 2021 16:55:09 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id x19so15044746lfa.2
-        for <linux-arch@vger.kernel.org>; Fri, 07 May 2021 16:55:09 -0700 (PDT)
-X-Received: by 2002:ac2:5e6e:: with SMTP id a14mr7887858lfr.201.1620431708918;
- Fri, 07 May 2021 16:55:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2iQQvEB0+fCpb/rAB5HWawShZb8qZlIcaFuxaSL0oes=;
+        b=hC648UbhzwVGVSMkhvsTa0lUfFRzDU5FhAXK6/4fqVI/OEhrOfwL4JY3SLplGFIM7D
+         Y0PQwuyHhSZPMHgUzH38qaNYc/sOD8AihJl0523etJOKHpjmv9gRAQ22DKs52L8OHPCl
+         1EZoK9ise0f1Q21ILxXirqmsOkWNph4wARw0rCI4Fx8yh/ElsvQksmRlvAFnHX2waNT+
+         D+cK3QpJ3VdtfWRUhlpnDwjuw6bHHJgaeQelMtMy7nGkdC3Q/nXg9Z1W9nZH4Vtv6dhR
+         VgXnq+WbSgvpmIWH60GeZM8EjKpEJRrciv0qSDeboyVUmvt3zl//noX7BFBRlMF2pi5C
+         USJQ==
+X-Gm-Message-State: AOAM530ZrXweCkXXMCROLz/betWWLLJYQllUEziQUPk+lOVS1lSdzqWj
+        TqwSlDAtjTs7wdhfeodPXvjSBA==
+X-Google-Smtp-Source: ABdhPJwW5et97Z//abVIXmo2gBu5V8/Vzg230KpxBawys34RoMW6n/H4x7d7dTWApKrw1+7V8ZstIg==
+X-Received: by 2002:a17:902:ff09:b029:ed:3b29:ff43 with SMTP id f9-20020a170902ff09b02900ed3b29ff43mr12583115plj.14.1620431878548;
+        Fri, 07 May 2021 16:57:58 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id ha14sm5011198pjb.40.2021.05.07.16.57.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 May 2021 16:57:56 -0700 (PDT)
+Date:   Fri, 7 May 2021 16:57:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v18 0/9] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <202105071620.E834B1FA92@keescook>
+References: <20210303162209.8609-1-rppt@kernel.org>
+ <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
+ <de27bfae0f4fdcbb0bb4ad17ec5aeffcd774c44b.camel@linux.ibm.com>
+ <202105060916.ECDEC21@keescook>
+ <9e1953a1412fad06a9f7988a280d2d9a74ab0464.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20210507220813.365382-1-arnd@kernel.org> <20210507220813.365382-13-arnd@kernel.org>
-In-Reply-To: <20210507220813.365382-13-arnd@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 7 May 2021 16:54:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiqLPZbiWFZ3rDNCY0fm=dFR3SSDONvrVNVbkOQmQS1vw@mail.gmail.com>
-Message-ID: <CAHk-=wiqLPZbiWFZ3rDNCY0fm=dFR3SSDONvrVNVbkOQmQS1vw@mail.gmail.com>
-Subject: Re: [RFC 12/12] asm-generic: simplify asm/unaligned.h
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e1953a1412fad06a9f7988a280d2d9a74ab0464.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 7, 2021 at 3:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The get_unaligned()/put_unaligned() implementations are much more complex
-> than necessary, now that all architectures use the same code.
+On Thu, May 06, 2021 at 11:47:47AM -0700, James Bottomley wrote:
+> On Thu, 2021-05-06 at 10:33 -0700, Kees Cook wrote:
+> > On Thu, May 06, 2021 at 08:26:41AM -0700, James Bottomley wrote:
+> [...]
+> > > > I think that a very complete description of the threats which
+> > > > this feature addresses would be helpful.  
+> > > 
+> > > It's designed to protect against three different threats:
+> > > 
+> > >    1. Detection of user secret memory mismanagement
+> > 
+> > I would say "cross-process secret userspace memory exposures" (via a
+> > number of common interfaces by blocking it at the GUP level).
+> > 
+> > >    2. significant protection against privilege escalation
+> > 
+> > I don't see how this series protects against privilege escalation.
+> > (It protects against exfiltration.) Maybe you mean include this in
+> > the first bullet point (i.e. "cross-process secret userspace memory
+> > exposures, even in the face of privileged processes")?
+> 
+> It doesn't prevent privilege escalation from happening in the first
+> place, but once the escalation has happened it protects against
+> exfiltration by the newly minted root attacker.
 
-Thanks for doing this, it looks good to me.
+So, after thinking a bit more about this, I don't think there is
+protection here against privileged execution. This feature kind of helps
+against cross-process read/write attempts, but it doesn't help with
+sufficiently privileged (i.e. ptraced) execution, since we can just ask
+the process itself to do the reading:
 
-I suspect it's still slightly unnecessarily complicated - why is that
-get_unaligned() not just
+$ gdb ./memfd_secret
+...
+ready: 0x7ffff7ffb000
+Breakpoint 1, ...
+(gdb) compile code unsigned long addr = 0x7ffff7ffb000UL; printf("%016lx\n", *((unsigned long *)addr));
+55555555555555555
 
-  #define get_unaligned(ptr) \
-        __get_unaligned_t(typeof(*__ptr), __ptr)
+And since process_vm_readv() requires PTRACE_ATTACH, there's very little
+difference in effort between process_vm_readv() and the above.
 
-Because I'm not seeing the reason for doing that "__auto_type __ptr"
-thing - the argument to a "typeof()" isn't actually evaluated.
+So, what other paths through GUP exist that aren't covered by
+PTRACE_ATTACH? And if none, then should this actually just be done by
+setting the process undumpable? (This is already what things like gnupg
+do.)
 
-Maybe I'm just nit-picking, this certainly is a huge improvement regardless.
+So, the user-space side of this doesn't seem to really help. The kernel
+side protection is interesting for kernel read/write flaws, though, in
+the sense that the process is likely not being attacked from "current",
+so a kernel-side attack would need to either walk the page tables and
+create new ones, or spawn a new userspace process to do the ptracing.
 
-             Linus
+So, while I like the idea of this stuff, and I see how it provides
+certain coverages, I'm curious to learn more about the threat model to
+make sure it's actually providing meaningful hurdles to attacks.
+
+-- 
+Kees Cook
