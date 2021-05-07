@@ -2,205 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B9F376136
-	for <lists+linux-arch@lfdr.de>; Fri,  7 May 2021 09:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCE837616B
+	for <lists+linux-arch@lfdr.de>; Fri,  7 May 2021 09:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235369AbhEGHgw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 May 2021 03:36:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30364 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235358AbhEGHgv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 May 2021 03:36:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620372951;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YRLhFcul/s0bAb0h6pwheuix10YVXJYp5em6Jk4RpTY=;
-        b=LKQ8IWaBht40hQ37zGhiXWlx+x+Dj6an1dgqmq+UDQ3Msuggv1C2b3TezDAWLG/j28CUxx
-        SYtxDjtmTeLa6lateTlt99a9Vpwn/iZBxnYdboXBfMzDsZa4lqARUwn76xIegra1nQR16K
-        nHeDtHsZAN4JgiRXzfUjQ3eqptexoS4=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-602-kVyuCwovOKet5kxAJ1g8jw-1; Fri, 07 May 2021 03:35:49 -0400
-X-MC-Unique: kVyuCwovOKet5kxAJ1g8jw-1
-Received: by mail-ej1-f71.google.com with SMTP id k9-20020a17090646c9b029039d323bd239so2646512ejs.16
-        for <linux-arch@vger.kernel.org>; Fri, 07 May 2021 00:35:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:organization:subject
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=YRLhFcul/s0bAb0h6pwheuix10YVXJYp5em6Jk4RpTY=;
-        b=GXLCnE83uhO2vY/rJHzZNepl8gN6xtLJY78kvyLjdZPL7KxvXs+4IbrJtFJ4Yr3V3m
-         dQBJQGZKfhczRygZ9HVJlLUolOdIDnhXxfx9qdew6LV3WLR+vf0KsfYXd2EZJ82SB9qz
-         nFx3nZn2IhIr03Hies6Avzj9GLoD0xPfQfG+5IR8tInGbzcCheOjLGcVfLo5q0c/rOxp
-         OUZsSryXAWpfIXgfXxG30XPXpCzOPwaCHzEOTK/dxldS9KV9MAqTXjULpoptRtMPSPEB
-         VTl9OauLGHJNsCUmPFONe5G/SVFzy9sqfsQUXUhprhiklzJqZRnhoUxXm3bTohWdKIet
-         hovg==
-X-Gm-Message-State: AOAM532Uaqh2k09eDarNVSi9hSRSss3SBhQvAztwTPB76arL6Yf+VKsi
-        OQfJZnY8b96f1E4Tb9UQLZrJe/W0feB0jsf7UcIWJ6ALeBAKQchCJV/t5yMzgXhDk3t903WN8gq
-        hZRzj3PqXpGEa8fhFKLzIag==
-X-Received: by 2002:a17:907:174a:: with SMTP id lf10mr8861621ejc.433.1620372948263;
-        Fri, 07 May 2021 00:35:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx5XI2zKUbsKazvcW2Vr5jvMDeiB+dtOEKTtfzbIqz37aYae3i7ugq6B0OmfMhiabycSZroRA==
-X-Received: by 2002:a17:907:174a:: with SMTP id lf10mr8861569ejc.433.1620372947917;
-        Fri, 07 May 2021 00:35:47 -0700 (PDT)
-Received: from [192.168.3.132] (p5b0c63c0.dip0.t-ipconnect.de. [91.12.99.192])
-        by smtp.gmail.com with ESMTPSA id l17sm2925176ejk.22.2021.05.07.00.35.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 May 2021 00:35:47 -0700 (PDT)
-To:     Nick Kossifidis <mick@ics.forth.gr>, jejb@linux.ibm.com
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-References: <20210303162209.8609-1-rppt@kernel.org>
- <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
- <de27bfae0f4fdcbb0bb4ad17ec5aeffcd774c44b.camel@linux.ibm.com>
- <996dbc29-e79c-9c31-1e47-cbf20db2937d@redhat.com>
- <8eb933f921c9dfe4c9b1b304e8f8fa4fbc249d84.camel@linux.ibm.com>
- <77fe28bd940b2c1afd69d65b6d349352@mailhost.ics.forth.gr>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v18 0/9] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <5232c8a7-8a05-9d0f-69ff-3dba2b04e784@redhat.com>
-Date:   Fri, 7 May 2021 09:35:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S235738AbhEGHse (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 May 2021 03:48:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35326 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235710AbhEGHsc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 7 May 2021 03:48:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5350661132;
+        Fri,  7 May 2021 07:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620373640;
+        bh=XFqW5/0INXkY7fiA03jYF2gDpE6cWawWuPSZmXlC8s0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VqiXPuGjge0oMUa49t2d0omFSMtna+bT91ylp6Oqkyx2pRb9umJaFAZe4WlPT6gfD
+         eud1JN3+NvEHqOoiyi9w5K3l7icH4HGodFnB2z1hRJFjTSLKHW5F+EMJq3FklvMStz
+         0C4JjTcjpc9tsScwQYCF7lXu9oHA1dTB2fGF5z1EchN8EPkIbRSJMJ9s1hs87PHYv0
+         Yml3/2bm8UmFHXa5QedKYc9/Qe0NVPDpsWyJ0m9+KALHB3YGN7UOofdLRDSyJLnizK
+         ehLfohPefUL0qNRHhki4CfdIiHW02h3tRJDjNs6PBKXqoUYtgnRK5eZEG2NFXQ1MgV
+         pT7vGXQ9Iga3Q==
+Date:   Fri, 7 May 2021 00:47:14 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [BUG mips llvm] MIPS: malformed R_MIPS_{HI16,LO16} with LLVM
+Message-ID: <YJTwglbUOb67r733@archlinux-ax161>
+References: <20210109171058.497636-1-alobakin@pm.me>
 MIME-Version: 1.0
-In-Reply-To: <77fe28bd940b2c1afd69d65b6d349352@mailhost.ics.forth.gr>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210109171058.497636-1-alobakin@pm.me>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 07.05.21 01:16, Nick Kossifidis wrote:
-> Στις 2021-05-06 20:05, James Bottomley έγραψε:
->> On Thu, 2021-05-06 at 18:45 +0200, David Hildenbrand wrote:
->>>
->>> Also, there is a way to still read that memory when root by
->>>
->>> 1. Having kdump active (which would often be the case, but maybe not
->>> to dump user pages )
->>> 2. Triggering a kernel crash (easy via proc as root)
->>> 3. Waiting for the reboot after kump() created the dump and then
->>> reading the content from disk.
->>
->> Anything that can leave physical memory intact but boot to a kernel
->> where the missing direct map entry is restored could theoretically
->> extract the secret.  However, it's not exactly going to be a stealthy
->> extraction ...
->>
->>> Or, as an attacker, load a custom kexec() kernel and read memory
->>> from the new environment. Of course, the latter two are advanced
->>> mechanisms, but they are possible when root. We might be able to
->>> mitigate, for example, by zeroing out secretmem pages before booting
->>> into the kexec kernel, if we care :)
->>
->> I think we could handle it by marking the region, yes, and a zero on
->> shutdown might be useful ... it would prevent all warm reboot type
->> attacks.
->>
+On Sat, Jan 09, 2021 at 05:11:18PM +0000, Alexander Lobakin wrote:
+> Machine: MIPS32 R2 Big Endian (interAptiv (multi))
 > 
-> I had similar concerns about recovering secrets with kdump, and
-> considered cleaning up keyrings before jumping to the new kernel. The
-> problem is we can't provide guarantees in that case, once the kernel has
-> crashed and we are on our way to run crashkernel, we can't be sure we
-> can reliably zero-out anything, the more code we add to that path the
+> While testing MIPS with LLVM, I found a weird and very rare bug with
+> MIPS relocs that LLVM emits into kernel modules. It happens on both
+> 11.0.0 and latest git snapshot and applies, as I can see, only to
+> references to static symbols.
+> 
+> When the kernel loads the module, it allocates a space for every
+> section and then manually apply the relocations relative to the
+> new address.
+> 
+> Let's say we have a function phy_probe() in drivers/net/phy/libphy.ko.
+> It's static and referenced only in phy_register_driver(), where it's
+> used to fill callback pointer in a structure.
+> 
+> The real function address after module loading is 0xc06c1444, that
+> is observed in its ELF st_value field.
+> There are two relocs related to this usage in phy_register_driver():
+> 
+> R_MIPS_HI16 refers to 0x3c010000
+> R_MIPS_LO16 refers to 0x24339444
+> 
+> The address of .text is 0xc06b8000. So the destination is calculated
+> as follows:
+> 
+> 0x00000000 from hi16;
+> 0xffff9444 from lo16 (sign extend as it's always treated as signed);
+> 0xc06b8000 from base.
+> 
+> = 0xc06b1444. The value is lower than the real phy_probe() address
+> (0xc06c1444) by 0x10000 and is lower than the base address of
+> module's .text, so it's 100% incorrect.
+> 
+> This results in:
+> 
+> [    2.204022] CPU 3 Unable to handle kernel paging request at virtual
+> address c06b1444, epc == c06b1444, ra == 803f1090
+> 
+> The correct instructions should be:
+> 
+> R_MIPS_HI16 0x3c010001
+> R_MIPS_LO16 0x24339444
+> 
+> so there'll be 0x00010000 from hi16.
+> 
+> I tried to catch those bugs in arch/mips/kernel/module.c (by checking
+> if the destination is lower than the base address, which should never
+> happen), and seems like I have only 3 such places in libphy.ko (and
+> one in nf_tables.ko).
+> I don't think it should be handled somehow in mentioned source code
+> as it would look rather ugly and may break kernels build with GNU
+> stack, which seems to not produce such bad codes.
+> 
+> If I should report this to any other resources, please let me know.
+> I chose clang-built-linux and LKML as it may not happen with userland
+> (didn't tried to catch).
+> 
+> Thanks,
+> Al
+> 
 
-Well, I think it depends. Assume we do the following
+Hi Alexander,
 
-1) Zero out any secretmem pages when handing them back to the buddy. 
-(alternative: init_on_free=1) -- if not already done, I didn't check the 
-code.
+Doubling back around to this as I was browsing through the LLVM 12.0.1
+blockers on LLVM's bug tracker and I noticed a commit that could resolve
+this? It refers to the same relocations that you reference here.
 
-2) On kdump(), zero out all allocated secretmem. It'd be easier if we'd 
-just allocated from a fixed physical memory area; otherwise we have to 
-walk process page tables or use a PFN walker. And zeroing out secretmem 
-pages without a direct mapping is a different challenge.
+https://bugs.llvm.org/show_bug.cgi?id=49821
 
-Now, during 2) it can happen that
+http://github.com/llvm/llvm-project/commit/7e83a7f1fdfcc2edde61f0a535f9d7a56f531db9
 
-a) We crash in our clearing code (e.g., something is seriously messed 
-up) and fail to start the kdump kernel. That's actually good, instead of 
-leaking data we fail hard.
+I think that Debian's apt.llvm.org repository should have a build
+available with that commit in it. Otherwise, building it from source is
+not too complicated with my script:
 
-b) We don't find all secretmem pages, for example, because process page 
-tables are messed up or something messed up our memmap (if we'd use that 
-to identify secretmem pages via a PFN walker somehow)
+https://github.com/ClangBuiltLinux/tc-build
 
+$ ./build-llvm.py --build-stage1-only --install-stage1-only --projects "clang;lld" --targets "Mips;X86"
 
-But for the simple cases (e.g., malicious root tries to crash the kernel 
-via /proc/sysrq-trigger) both a) and b) wouldn't apply.
+would get you a working toolchain relatively quickly.
 
-Obviously, if an admin would want to mitigate right now, he would want 
-to disable kdump completely, meaning any attempt to load a crashkernel 
-would fail and cannot be enabled again for that kernel (also not via 
-cmdline an attacker could modify to reboot into a system with the option 
-for a crashkernel). Disabling kdump in the kernel when secretmem pages 
-are allocated is one approach, although sub-optimal.
-
-> more risky it gets. However during reboot/normal kexec() we should do
-> some cleanup, it makes sense and secretmem can indeed be useful in that
-> case. Regarding loading custom kexec() kernels, we mitigate this with
-> the kexec file-based API where we can verify the signature of the loaded
-> kimage (assuming the system runs a kernel provided by a trusted 3rd
-> party and we 've maintained a chain of trust since booting).
-
-For example in VMs (like QEMU), we often don't clear physical memory 
-during a reboot. So if an attacker manages to load a kernel that you can 
-trick into reading random physical memory areas, we can leak secretmem 
-data I think.
-
-And there might be ways to achieve that just using the cmdline, not 
-necessarily loading a different kernel. For example if you limit the 
-kernel footprint ("mem=256M") and disable strict_iomem_checks 
-("strict_iomem_checks=relaxed") you can just extract that memory via 
-/dev/mem if I am not wrong.
-
-So as an attacker, modify the (grub) cmdline to "mem=256M 
-strict_iomem_checks=relaxed", reboot, and read all memory via /dev/mem. 
-Or load a signed kexec kernel with that cmdline and boot into it.
-
-Interesting problem :)
-
--- 
-Thanks,
-
-David / dhildenb
-
+Cheers,
+Nathan
