@@ -2,131 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCE837616B
-	for <lists+linux-arch@lfdr.de>; Fri,  7 May 2021 09:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F69937677F
+	for <lists+linux-arch@lfdr.de>; Fri,  7 May 2021 17:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235738AbhEGHse (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 May 2021 03:48:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35326 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235710AbhEGHsc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 7 May 2021 03:48:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5350661132;
-        Fri,  7 May 2021 07:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620373640;
-        bh=XFqW5/0INXkY7fiA03jYF2gDpE6cWawWuPSZmXlC8s0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VqiXPuGjge0oMUa49t2d0omFSMtna+bT91ylp6Oqkyx2pRb9umJaFAZe4WlPT6gfD
-         eud1JN3+NvEHqOoiyi9w5K3l7icH4HGodFnB2z1hRJFjTSLKHW5F+EMJq3FklvMStz
-         0C4JjTcjpc9tsScwQYCF7lXu9oHA1dTB2fGF5z1EchN8EPkIbRSJMJ9s1hs87PHYv0
-         Yml3/2bm8UmFHXa5QedKYc9/Qe0NVPDpsWyJ0m9+KALHB3YGN7UOofdLRDSyJLnizK
-         ehLfohPefUL0qNRHhki4CfdIiHW02h3tRJDjNs6PBKXqoUYtgnRK5eZEG2NFXQ1MgV
-         pT7vGXQ9Iga3Q==
-Date:   Fri, 7 May 2021 00:47:14 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [BUG mips llvm] MIPS: malformed R_MIPS_{HI16,LO16} with LLVM
-Message-ID: <YJTwglbUOb67r733@archlinux-ax161>
-References: <20210109171058.497636-1-alobakin@pm.me>
+        id S237746AbhEGPFc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 May 2021 11:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234841AbhEGPF2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 May 2021 11:05:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A78C061574;
+        Fri,  7 May 2021 08:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fRqBvN0tx2pJaoUlzcO69LtYKZ2yqF996XdsgiyBnas=; b=vaCd2p/D451W+krKP3Hm+Mbqfr
+        M8QcUhbPPqPhLegCFXy/cxzLW7FvZbb6uNxUkrkGKI7XjV3rn1ZAHfUBFG0w/Gcd1Y0HXH+I+0tsZ
+        X5OIkmdSb3DENIfibsKFsOFwf+J99y1XPqyblM2DtI5EMz6S+PaSg2Gnd8QEkW1EprcE5IyDWWb6H
+        XccLGtI0WGlOs3TxB5jzm8biFUFGO1u++Fy5mXwuv4p8ZE02GLqDy0C+/fvdeiHDl1AhGyFKWfXC8
+        WRULaO5OwTroeiZB1MTX6BJLmVDaSGw7qazPs7fahImlS4WfUKCD7jeGmPMUmeQ9MZT53HIVPhRiY
+        pkdu3BuQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lf1z6-003Gsj-Mp; Fri, 07 May 2021 15:01:57 +0000
+Date:   Fri, 7 May 2021 16:01:44 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH v3 2/2] secretmem: optimize page_is_secretmem()
+Message-ID: <YJVWWFrvTzC2M0ba@casper.infradead.org>
+References: <20210420150049.14031-1-rppt@kernel.org>
+ <20210420150049.14031-3-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210109171058.497636-1-alobakin@pm.me>
+In-Reply-To: <20210420150049.14031-3-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jan 09, 2021 at 05:11:18PM +0000, Alexander Lobakin wrote:
-> Machine: MIPS32 R2 Big Endian (interAptiv (multi))
-> 
-> While testing MIPS with LLVM, I found a weird and very rare bug with
-> MIPS relocs that LLVM emits into kernel modules. It happens on both
-> 11.0.0 and latest git snapshot and applies, as I can see, only to
-> references to static symbols.
-> 
-> When the kernel loads the module, it allocates a space for every
-> section and then manually apply the relocations relative to the
-> new address.
-> 
-> Let's say we have a function phy_probe() in drivers/net/phy/libphy.ko.
-> It's static and referenced only in phy_register_driver(), where it's
-> used to fill callback pointer in a structure.
-> 
-> The real function address after module loading is 0xc06c1444, that
-> is observed in its ELF st_value field.
-> There are two relocs related to this usage in phy_register_driver():
-> 
-> R_MIPS_HI16 refers to 0x3c010000
-> R_MIPS_LO16 refers to 0x24339444
-> 
-> The address of .text is 0xc06b8000. So the destination is calculated
-> as follows:
-> 
-> 0x00000000 from hi16;
-> 0xffff9444 from lo16 (sign extend as it's always treated as signed);
-> 0xc06b8000 from base.
-> 
-> = 0xc06b1444. The value is lower than the real phy_probe() address
-> (0xc06c1444) by 0x10000 and is lower than the base address of
-> module's .text, so it's 100% incorrect.
-> 
-> This results in:
-> 
-> [    2.204022] CPU 3 Unable to handle kernel paging request at virtual
-> address c06b1444, epc == c06b1444, ra == 803f1090
-> 
-> The correct instructions should be:
-> 
-> R_MIPS_HI16 0x3c010001
-> R_MIPS_LO16 0x24339444
-> 
-> so there'll be 0x00010000 from hi16.
-> 
-> I tried to catch those bugs in arch/mips/kernel/module.c (by checking
-> if the destination is lower than the base address, which should never
-> happen), and seems like I have only 3 such places in libphy.ko (and
-> one in nf_tables.ko).
-> I don't think it should be handled somehow in mentioned source code
-> as it would look rather ugly and may break kernels build with GNU
-> stack, which seems to not produce such bad codes.
-> 
-> If I should report this to any other resources, please let me know.
-> I chose clang-built-linux and LKML as it may not happen with userland
-> (didn't tried to catch).
-> 
-> Thanks,
-> Al
-> 
+On Tue, Apr 20, 2021 at 06:00:49PM +0300, Mike Rapoport wrote:
+> +	mapping = (struct address_space *)
+> +		((unsigned long)page->mapping & ~PAGE_MAPPING_FLAGS);
+> +
+> +	if (mapping != page->mapping)
+> +		return false;
+> +
+> +	return page->mapping->a_ops == &secretmem_aops;
 
-Hi Alexander,
+... why do you go back to page->mapping here?
 
-Doubling back around to this as I was browsing through the LLVM 12.0.1
-blockers on LLVM's bug tracker and I noticed a commit that could resolve
-this? It refers to the same relocations that you reference here.
-
-https://bugs.llvm.org/show_bug.cgi?id=49821
-
-http://github.com/llvm/llvm-project/commit/7e83a7f1fdfcc2edde61f0a535f9d7a56f531db9
-
-I think that Debian's apt.llvm.org repository should have a build
-available with that commit in it. Otherwise, building it from source is
-not too complicated with my script:
-
-https://github.com/ClangBuiltLinux/tc-build
-
-$ ./build-llvm.py --build-stage1-only --install-stage1-only --projects "clang;lld" --targets "Mips;X86"
-
-would get you a working toolchain relatively quickly.
-
-Cheers,
-Nathan
+	return mapping->a_ops == &secretmem_aops
