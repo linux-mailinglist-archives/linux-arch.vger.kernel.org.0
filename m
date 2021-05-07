@@ -2,39 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA823376C31
-	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 00:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AF6376C35
+	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 00:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbhEGWMf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 May 2021 18:12:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59076 "EHLO mail.kernel.org"
+        id S230021AbhEGWMj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 May 2021 18:12:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59210 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230074AbhEGWMe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 7 May 2021 18:12:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 016BE61157;
-        Fri,  7 May 2021 22:11:31 +0000 (UTC)
+        id S230034AbhEGWMi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 7 May 2021 18:12:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C742661164;
+        Fri,  7 May 2021 22:11:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620425493;
-        bh=59qmX/8bNt05Y62LGNDKy0eALe4d0WbxN5MMLh0uyE0=;
+        s=k20201202; t=1620425498;
+        bh=pZSz9/bE1dccUz0arW63l+m26jk29w2RT0c+Ugq0qIY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kZ0dWtAPuQc4xytTkom0IuIRDlu8kCPMbS4FEd4n+I7aA8+09N6WNcp9heHqFL1Mt
-         Dl8lIQj3Qy13jdeZVFW+i/uy/FkBT2gZBxHQQzZ31l6uWDiwOknxt3gNlhc1L1dxKq
-         rEPUR+VQHN6R7kRcxW7E/ftw3mORtNsP8iFQO4viTlRsrmH0fVaawsPKf7ikXgzGay
-         VhKNQnIzrl93hO9XmnwHqXubyl8hHxrvdn6esem4wWlm6DI9OMkozuwLblqnl7mlvN
-         QqYGLD6trN9zARPGVpc7cry8c7hguYaziG5fVdanJ9EQQDAQEsa/8l6Va40u6j85iP
-         omFidlrYMG+XQ==
+        b=G25uAdymMRmpMNsrSc4/A7NYT726TtqP9IbZga0Ld/6wJezslzOUOlMTMc7BWw6b1
+         Ns0qhCIhJgV3EmyXzJMy0ibjD9qj8GwnE0fLGld6N+vCUJfe0vwKaedh9KSHCLNaTE
+         N3hcbkkmnY/Gp8sMHlQK/ngjoRzRgFT6cO20agqouyY6jUPNHmg/kiZTDJkiAnxlq+
+         GQe+6saKXwHatLjEjQ0rAHfTN5naQyy3eoAHMRpi2xfN0G9EkRWdPmWAVMCU1aBYrs
+         H5hvy2G9M2Ocn3RzDuq1t8qpU3hIvFq//NSsNbaM5vixgevgsE/TUWd2AUC5xqlBlN
+         4DnfpYNJ7hAnQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arch@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Vineet Gupta <vgupta@synopsys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        linux-ntfs-dev@lists.sourceforge.net, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC 08/12] partitions: msdos: fix one-byte get_unaligned()
-Date:   Sat,  8 May 2021 00:07:53 +0200
-Message-Id: <20210507220813.365382-9-arnd@kernel.org>
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC 09/12] apparmor: use get_unaligned() only for multi-byte words
+Date:   Sat,  8 May 2021 00:07:54 +0200
+Message-Id: <20210507220813.365382-10-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210507220813.365382-1-arnd@kernel.org>
 References: <20210507220813.365382-1-arnd@kernel.org>
@@ -46,46 +46,36 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-A simplification of get_unaligned() clashes with callers that pass
-in a character pointer, causing a harmless warning like:
+Using get_unaligned() on a u8 pointer is pointless, and will
+result in a compiler warning after a planned cleanup:
 
-block/partitions/msdos.c: In function 'msdos_partition':
-include/asm-generic/unaligned.h:13:22: warning: 'packed' attribute ignored for field of type 'u8' {aka 'unsigned char'} [-Wattributes]
+In file included from arch/x86/include/generated/asm/unaligned.h:1,
+                 from security/apparmor/policy_unpack.c:16:
+security/apparmor/policy_unpack.c: In function 'unpack_u8':
+include/asm-generic/unaligned.h:13:15: error: 'packed' attribute ignored for field of type 'u8' {aka 'unsigned char'} [-Werror=attributes]
+   13 |  const struct { type x __packed; } *__pptr = (typeof(__pptr))(ptr); \
+      |               ^
 
-Remove the get_unaligned() call and just use the byte directly.
+Simply dereference this pointer directly.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- block/partitions/ldm.h   | 2 +-
- block/partitions/msdos.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ security/apparmor/policy_unpack.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/partitions/ldm.h b/block/partitions/ldm.h
-index d8d6beaa72c4..1a77ff09cc5f 100644
---- a/block/partitions/ldm.h
-+++ b/block/partitions/ldm.h
-@@ -85,7 +85,7 @@ struct parsed_partitions;
- #define TOC_BITMAP2		"log"		/* bitmaps in the TOCBLOCK. */
- 
- /* Borrowed from msdos.c */
--#define SYS_IND(p)		(get_unaligned(&(p)->sys_ind))
-+#define SYS_IND(p)		((p)->sys_ind)
- 
- struct frag {				/* VBLK Fragment handling */
- 	struct list_head list;
-diff --git a/block/partitions/msdos.c b/block/partitions/msdos.c
-index 8f2fcc080264..d78549d7619d 100644
---- a/block/partitions/msdos.c
-+++ b/block/partitions/msdos.c
-@@ -38,7 +38,7 @@
-  */
- #include <asm/unaligned.h>
- 
--#define SYS_IND(p)	get_unaligned(&p->sys_ind)
-+#define SYS_IND(p)	(p->sys_ind)
- 
- static inline sector_t nr_sects(struct msdos_partition *p)
- {
+diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
+index b8efbda545cb..0acca6f2a93f 100644
+--- a/security/apparmor/policy_unpack.c
++++ b/security/apparmor/policy_unpack.c
+@@ -304,7 +304,7 @@ static bool unpack_u8(struct aa_ext *e, u8 *data, const char *name)
+ 		if (!inbounds(e, sizeof(u8)))
+ 			goto fail;
+ 		if (data)
+-			*data = get_unaligned((u8 *)e->pos);
++			*data = *((u8 *)e->pos);
+ 		e->pos += sizeof(u8);
+ 		return true;
+ 	}
 -- 
 2.29.2
 
