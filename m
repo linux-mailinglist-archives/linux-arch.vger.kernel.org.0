@@ -2,212 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14041376C42
-	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 00:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01F1376D1E
+	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 01:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbhEGWNg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 May 2021 18:13:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60322 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230159AbhEGWNe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 7 May 2021 18:13:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AD8261164;
-        Fri,  7 May 2021 22:12:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620425553;
-        bh=pLN/AlAGxiGZnqtkHzoskF1g1y+Og1zx70nNd/gvob8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pBsqGsNNIzjK+PGIuts/XJxLGOfdWKWNQVtev9dvJeI9RqUXAPVHM6cB4lC4k81Hl
-         28ml/1Uop7UbH/8srSlLCVXory4QCnr6iBhIRfAakrAY4KDvqUgFcZzG4l9KjWsqLZ
-         1ILyYT6adToShnPi3qkl/uIOVl0ZGZbipmb17NNa+nXxicmvENBPr96/1hcOQ5PZVP
-         BRn98uSDpeE3wKOZc/l6L72CW9sbzwnplXYrD23MZ+JmEHxEl7SRHqKVHkxNPgfVIc
-         XrHB4s6umTZIX5a0bj91HFX0XMUHeGCXDfaVxxZ2OFTngzRJkxGXNYwougNvu/FeJP
-         hIgVgry1MeXrg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-arch@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        James Morris <jmorris@namei.org>, Jens Axboe <axboe@kernel.dk>,
-        John Johansen <john.johansen@canonical.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Rich Felker <dalias@libc.org>,
-        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-crypto@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, linux-block@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [RFC 0/12] Unify asm/unaligned.h around struct helper
-Date:   Sat,  8 May 2021 00:07:58 +0200
-Message-Id: <20210507220813.365382-14-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210507220813.365382-1-arnd@kernel.org>
-References: <20210507220813.365382-1-arnd@kernel.org>
+        id S229836AbhEGXDf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 May 2021 19:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229470AbhEGXDd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 May 2021 19:03:33 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2A3C061574;
+        Fri,  7 May 2021 16:02:30 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id u13so11991558edd.3;
+        Fri, 07 May 2021 16:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=38ULn+OwZaEekiuv6xhRuA2bEJaogBDMw8bfMrQc/YY=;
+        b=XDblBBk9CyTpFhSL1O13vR6Dsco6KDKUZtk6a19GSyzwsxADxSRRblMlh+mJK+tx9Y
+         yMVHE61PmiP6xHi/2zGhmkf9z5ilJGqrCWYCCFpgSRtA51WL0AZNl25lYIsu+VozNe7Z
+         bLkelhv7Kvvqb0qUVt6fYX9J/s9Pn4urfJChMaPBrEg6TlHgjDO/ueADGhojNTT0ZO4Z
+         vrx606MxCQyBLV4w0JuTDdR+L/bttoG3oZeX619susFjPPuLyE0mYSbHiT2uQvdd7S0c
+         /7hhKfRx6XHQancq0d/IpdWIzRJpUjq4hBZzdBHVzTUJYyt9uNyMFwFAq2MFrISDSwlV
+         Xq6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=38ULn+OwZaEekiuv6xhRuA2bEJaogBDMw8bfMrQc/YY=;
+        b=ktzllT7HGdo3B3jyE/sefvscjOntrMCyVrg1K/R79Y0Xk8awTJBKP8LOssV94DVSSn
+         XzuIu4LtM8CBJFLQWObXnt/hLOksDZgH6pmBJHsmh3d14INqUrZqbznetKUVOcpBPh33
+         Em9dg75pV832SXRYfF/x9+gqA/+tIk1gQN0CnNKdVhDSpiUhiC2SaWw6u1QAXCTZa6NT
+         6UUQ4nprYrU+GHLxDyw+qUhtUdZRX9HqUymSnqyTYyz7gffQ9xbiOsfNthgDTFbOUO3w
+         qTSD6039DUh3RLu9Ys1xqQFGFvsP5/pBu0X5laYiWHOm901/VlhKxu5fRsbtHaoSIMek
+         cGTA==
+X-Gm-Message-State: AOAM531hdMIsf2El0II0MOdDEMUsolkvVoPvxj6n/kdBH9YGwAsq8kOY
+        WmlAZlzcKtYL12gDkYJH8sIk68wzRyj4uqfmHmY=
+X-Google-Smtp-Source: ABdhPJy86zQpfnrAnV3u2eyy5bdWdlpCTzNDUbhj78N0nCrWk094oosvAk5GWLZsTW48/uS9hx8AHh94O3ppiH56G4I=
+X-Received: by 2002:a50:d0c1:: with SMTP id g1mr6897542edf.201.1620428548878;
+ Fri, 07 May 2021 16:02:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210507220813.365382-1-arnd@kernel.org> <20210507220813.365382-3-arnd@kernel.org>
+In-Reply-To: <20210507220813.365382-3-arnd@kernel.org>
+From:   Stafford Horne <shorne@gmail.com>
+Date:   Sat, 8 May 2021 08:02:17 +0900
+Message-ID: <CAAfxs77U4-ojjmsX1uQ9QwhnKa69Aqcs=br+H-Yc7E7RNODqvQ@mail.gmail.com>
+Subject: Re: [RFC 02/12] openrisc: always use unaligned-struct header
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Openrisc <openrisc@lists.librecores.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Sat, May 8, 2021 at 7:10 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> openrisc is the only architecture using the linux/unaligned/*memmove
+> infrastructure. There is a comment saying that this version is more
+> efficient, but this was added in 2011 before the openrisc gcc port
+> was merged upstream.
+>
+> I checked a couple of files to see what the actual difference is with
+> the mainline gcc (9.4 and 11.1), and found that the generic header
+> seems to produce better code now, regardless of the gcc version.
+>
+> Specifically, the be_memmove leads to allocating a stack slot and
+> copying the data one byte at a time, then reading the whole word
+> from the stack:
+>
+> 00000000 <test_get_unaligned_memmove>:
+>    0:   9c 21 ff f4     l.addi r1,r1,-12
+>    4:   d4 01 10 04     l.sw 4(r1),r2
+>    8:   8e 63 00 00     l.lbz r19,0(r3)
+>    c:   9c 41 00 0c     l.addi r2,r1,12
+>   10:   8e 23 00 01     l.lbz r17,1(r3)
+>   14:   db e2 9f f4     l.sb -12(r2),r19
+>   18:   db e2 8f f5     l.sb -11(r2),r17
+>   1c:   8e 63 00 02     l.lbz r19,2(r3)
+>   20:   8e 23 00 03     l.lbz r17,3(r3)
+>   24:   d4 01 48 08     l.sw 8(r1),r9
+>   28:   db e2 9f f6     l.sb -10(r2),r19
+>   2c:   db e2 8f f7     l.sb -9(r2),r17
+>   30:   85 62 ff f4     l.lwz r11,-12(r2)
+>   34:   85 21 00 08     l.lwz r9,8(r1)
+>   38:   84 41 00 04     l.lwz r2,4(r1)
+>   3c:   44 00 48 00     l.jr r9
+>   40:   9c 21 00 0c     l.addi r1,r1,12
+>
+> while the be_struct version reads each byte into a register
+> and does a shift to the right position:
+>
+> 00000000 <test_get_unaligned_struct>:
+>    0:   9c 21 ff f8     l.addi r1,r1,-8
+>    4:   8e 63 00 00     l.lbz r19,0(r3)
+>    8:   aa 20 00 18     l.ori r17,r0,0x18
+>    c:   e2 73 88 08     l.sll r19,r19,r17
+>   10:   8d 63 00 01     l.lbz r11,1(r3)
+>   14:   aa 20 00 10     l.ori r17,r0,0x10
+>   18:   e1 6b 88 08     l.sll r11,r11,r17
+>   1c:   e1 6b 98 04     l.or r11,r11,r19
+>   20:   8e 23 00 02     l.lbz r17,2(r3)
+>   24:   aa 60 00 08     l.ori r19,r0,0x8
+>   28:   e2 31 98 08     l.sll r17,r17,r19
+>   2c:   d4 01 10 00     l.sw 0(r1),r2
+>   30:   d4 01 48 04     l.sw 4(r1),r9
+>   34:   9c 41 00 08     l.addi r2,r1,8
+>   38:   e2 31 58 04     l.or r17,r17,r11
+>   3c:   8d 63 00 03     l.lbz r11,3(r3)
+>   40:   e1 6b 88 04     l.or r11,r11,r17
+>   44:   84 41 00 00     l.lwz r2,0(r1)
+>   48:   85 21 00 04     l.lwz r9,4(r1)
+>   4c:   44 00 48 00     l.jr r9
+>   50:   9c 21 00 08     l.addi r1,r1,8
+>
+> I don't know how the loads/store perform compared to the shift version
+> on a particular microarchitecture, but my guess is that the shifts
+> are better.
 
-The get_unaligned()/put_unaligned() helpers are traditionally architecture
-specific, with the two main variants being the "access-ok.h" version
-that assumes unaligned pointer accesses always work on a particular
-architecture, and the "le-struct.h" version that casts the data to a
-byte aligned type before dereferencing, for architectures that cannot
-always do unaligned accesses in hardware.
+Thanks for doing the investigation on this as well.
 
-Based on the discussion linked below, it appears that the access-ok
-version is not realiable on any architecture, but the struct version
-probably has no downsides. This series changes the code to use the
-same implementation on all architectures, addressing the few exceptions
-separately.
+Load stores are slow like on most architectures.  WIth caching it will
+be faster, but
+still not faster than the shifts.  So this looks good to me.
 
-I've pushed the patches to the asm-generic git tree for testing.
+> In the trivial example, the struct version is a few instructions longer,
+> but building a whole kernel shows an overall reduction in code size,
+> presumably because it now has to manage fewer stack slots:
+>
+>    text    data     bss     dec     hex filename
+> 4792010  181480   82324 5055814  4d2546 vmlinux-unaligned-memmove
+> 4790642  181480   82324 5054446  4d1fee vmlinux-unaligned-struct
 
-	Arnd
+That's a plus.
 
-Link: https://lore.kernel.org/lkml/75d07691-1e4f-741f-9852-38c0b4f520bc@synopsys.com/
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363
-Link: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git unaligned-rework
+> Remove the memmove version completely and let openrisc use the same
+> code as everyone else, as a simplification.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Arnd Bergmann (12):
-  asm-generic: use asm-generic/unaligned.h for most architectures
-  openrisc: always use unaligned-struct header
-  sh: remove unaligned access for sh4a
-  m68k: select CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-  powerpc: use linux/unaligned/le_struct.h on LE power7
-  asm-generic: unaligned: remove byteshift helpers
-  asm-generic: unaligned always use struct helpers
-  partitions: msdos: fix one-byte get_unaligned()
-  apparmor: use get_unaligned() only for multi-byte words
-  mwifiex: re-fix for unaligned accesses
-  netpoll: avoid put_unaligned() on single character
-  asm-generic: simplify asm/unaligned.h
+Acked-by: Stafford Horne <shorne@gmail.com>
 
- arch/alpha/include/asm/unaligned.h          |  12 --
- arch/arm/include/asm/unaligned.h            |  27 ---
- arch/ia64/include/asm/unaligned.h           |  12 --
- arch/m68k/Kconfig                           |   1 +
- arch/m68k/include/asm/unaligned.h           |  26 ---
- arch/microblaze/include/asm/unaligned.h     |  27 ---
- arch/mips/crypto/crc32-mips.c               |   2 +-
- arch/openrisc/include/asm/unaligned.h       |  47 -----
- arch/parisc/include/asm/unaligned.h         |   6 +-
- arch/powerpc/include/asm/unaligned.h        |  22 ---
- arch/sh/include/asm/unaligned-sh4a.h        | 199 --------------------
- arch/sh/include/asm/unaligned.h             |  13 --
- arch/sparc/include/asm/unaligned.h          |  11 --
- arch/x86/include/asm/unaligned.h            |  15 --
- arch/xtensa/include/asm/unaligned.h         |  29 ---
- block/partitions/ldm.h                      |   2 +-
- block/partitions/msdos.c                    |   2 +-
- drivers/net/wireless/marvell/mwifiex/pcie.c |  10 +-
- include/asm-generic/unaligned.h             | 149 ++++++++++++---
- include/linux/unaligned/access_ok.h         |  68 -------
- include/linux/unaligned/be_byteshift.h      |  71 -------
- include/linux/unaligned/be_memmove.h        |  37 ----
- include/linux/unaligned/be_struct.h         |  37 ----
- include/linux/unaligned/generic.h           | 115 -----------
- include/linux/unaligned/le_byteshift.h      |  71 -------
- include/linux/unaligned/le_memmove.h        |  37 ----
- include/linux/unaligned/le_struct.h         |  37 ----
- include/linux/unaligned/memmove.h           |  46 -----
- net/core/netpoll.c                          |   4 +-
- security/apparmor/policy_unpack.c           |   2 +-
- 30 files changed, 137 insertions(+), 1000 deletions(-)
- delete mode 100644 arch/alpha/include/asm/unaligned.h
- delete mode 100644 arch/arm/include/asm/unaligned.h
- delete mode 100644 arch/ia64/include/asm/unaligned.h
- delete mode 100644 arch/m68k/include/asm/unaligned.h
- delete mode 100644 arch/microblaze/include/asm/unaligned.h
- delete mode 100644 arch/openrisc/include/asm/unaligned.h
- delete mode 100644 arch/powerpc/include/asm/unaligned.h
- delete mode 100644 arch/sh/include/asm/unaligned-sh4a.h
- delete mode 100644 arch/sh/include/asm/unaligned.h
- delete mode 100644 arch/sparc/include/asm/unaligned.h
- delete mode 100644 arch/x86/include/asm/unaligned.h
- delete mode 100644 arch/xtensa/include/asm/unaligned.h
- delete mode 100644 include/linux/unaligned/access_ok.h
- delete mode 100644 include/linux/unaligned/be_byteshift.h
- delete mode 100644 include/linux/unaligned/be_memmove.h
- delete mode 100644 include/linux/unaligned/be_struct.h
- delete mode 100644 include/linux/unaligned/generic.h
- delete mode 100644 include/linux/unaligned/le_byteshift.h
- delete mode 100644 include/linux/unaligned/le_memmove.h
- delete mode 100644 include/linux/unaligned/le_struct.h
- delete mode 100644 include/linux/unaligned/memmove.h
+> ---
+>  arch/openrisc/include/asm/unaligned.h | 47 ---------------------------
+>  include/linux/unaligned/be_memmove.h  | 37 ---------------------
+>  include/linux/unaligned/le_memmove.h  | 37 ---------------------
+>  include/linux/unaligned/memmove.h     | 46 --------------------------
+>  4 files changed, 167 deletions(-)
+>  delete mode 100644 arch/openrisc/include/asm/unaligned.h
+>  delete mode 100644 include/linux/unaligned/be_memmove.h
+>  delete mode 100644 include/linux/unaligned/le_memmove.h
+>  delete mode 100644 include/linux/unaligned/memmove.h
 
-Cc: Amitkumar Karwar <amitkarwar@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ganapathi Bhat <ganapathi017@gmail.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: James Morris <jmorris@namei.org>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: John Johansen <john.johansen@canonical.com>
-Cc: Jonas Bonn <jonas@southpole.se>
-Cc: Kalle Valo <kvalo@codeaurora.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Rich Felker <dalias@libc.org>
-Cc: "Richard Russon (FlatCap)" <ldm@flatcap.org>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Sharvari Harisangam <sharvari.harisangam@nxp.com>
-Cc: Stafford Horne <shorne@gmail.com>
-Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: Xinming Hu <huxinming820@gmail.com>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: linux-crypto@vger.kernel.org
-Cc: openrisc@lists.librecores.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-sh@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: linux-ntfs-dev@lists.sourceforge.net
-Cc: linux-block@vger.kernel.org
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
+Thanks again,
 
--- 
-2.29.2
-
+-Stafford
