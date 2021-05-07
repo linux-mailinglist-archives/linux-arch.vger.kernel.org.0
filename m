@@ -2,81 +2,210 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2561376C90
-	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 00:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1091376C0A
+	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 00:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbhEGWZr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 May 2021 18:25:47 -0400
-Received: from bosmailout03.eigbox.net ([66.96.186.3]:45669 "EHLO
-        bosmailout03.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhEGWZo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 May 2021 18:25:44 -0400
-X-Greylist: delayed 1816 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 18:25:34 EDT
-Received: from bosmailscan08.eigbox.net ([10.20.15.8])
-        by bosmailout03.eigbox.net with esmtp (Exim)
-        id 1lf8QM-0003Fa-7M; Fri, 07 May 2021 17:54:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=godsofu4.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aM9bUFGSTpfnep8zAVAJMnojqhcwpuHDFPgQnPqW4M4=; b=I+6Bb1DJY/YYTRas0wZTN+AC1D
-        vtIg40M7SDAM/b29+/wY3GjGjzug9/OzX2aPoevJgNlEKSTs0SrEPfP3WhSQM0PCLHlkQfkyX8QT9
-        UZ7TTwAz03WtyNGtE+DdqqC0pYUcPkHvqE4MDSKlo5Vm1z1vJqGpkJRtWe2MFWIr6++JBuHOfV7Fd
-        34Die1lJ1lpPfDh70Zq++IiTaMjdlcGGo7pbn4hVn1WweIC9h772TR5+6npXCISSeeyCgPsBbikdE
-        ZWIrJkpukBwvBgblKKCxDugovauKoCEDbS56mNadJP+sg7ztteNlHrnEQFJYYsCNrcdD1v8ilxnSi
-        f8nqykSw==;
-Received: from [10.115.3.32] (helo=bosimpout12)
-        by bosmailscan08.eigbox.net with esmtp (Exim)
-        id 1lf8QK-0002fP-Rn; Fri, 07 May 2021 17:54:16 -0400
-Received: from boswebmail06.eigbox.net ([10.20.16.6])
-        by bosimpout12 with 
-        id 1xuC2500D07qujN01xuFUj; Fri, 07 May 2021 17:54:16 -0400
-X-EN-SP-DIR: OUT
-X-EN-SP-SQ: 1
-Received: from [127.0.0.1] (helo=homestead)
-        by boswebmail06.eigbox.net with esmtp (Exim)
-        id 1lf8PX-0006IT-Ae; Fri, 07 May 2021 17:53:27 -0400
-Received: from [197.239.81.229]
- by emailmg.homestead.com
- with HTTP (HTTP/1.1 POST); Fri, 07 May 2021 17:53:27 -0400
+        id S229778AbhEGWKF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 May 2021 18:10:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56016 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229713AbhEGWKE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 7 May 2021 18:10:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AA33B60BD3;
+        Fri,  7 May 2021 22:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620425342;
+        bh=pLN/AlAGxiGZnqtkHzoskF1g1y+Og1zx70nNd/gvob8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GZ13BdKpryifxhRwUeXYiDxMV+BWySTA7GY7/CWwvuCWkusUFDxkw2jKiOlfzjbCr
+         So4fZaGkAyPTwA8Q1TjLVhcTwgJc8xvHUXFTKFHcbAkEIqYdWcKh0axCM+T92qoOrQ
+         bkgNUSiGEeKqAdmwuN3qiVKoII2y7FbwOUX6mX301a6kiRL+VhsHKLQbMnh2CNRIHJ
+         HKxjre312EfivKKOz+Q2DN/Jdax+mgS6zOKiXtE7A5jQN2E+WeTOOh+m15wqAaIqSp
+         vmCijYogutqPzDP5KIogDPopYspUOizf4eB1toyhkfcE7uWw2BB6nwUsTEL9hofb0l
+         fr7hse6Wb3kJA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-arch@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        James Morris <jmorris@namei.org>, Jens Axboe <axboe@kernel.dk>,
+        John Johansen <john.johansen@canonical.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-crypto@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, linux-block@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [RFC 0/12] Unify asm/unaligned.h around struct helper
+Date:   Sat,  8 May 2021 00:07:45 +0200
+Message-Id: <20210507220813.365382-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Date:   Fri, 07 May 2021 21:53:27 +0000
-From:   Mrs Suzara Maling Wan <fast65@godsofu4.com>
-To:     undisclosed-recipients:;
-Subject: URGENT REPLY NEEDED
-Reply-To: suzara2017malingwan@gmail.com
-Mail-Reply-To: suzara2017malingwan@gmail.com
-Message-ID: <4c6a48748f6731dac9b66cce1916443b@godsofu4.com>
-X-Sender: fast65@godsofu4.com
-User-Agent: Roundcube Webmail/1.3.14
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-EN-AuthUser: fast65@godsofu4.com
-Sender:  Mrs Suzara Maling Wan <fast65@godsofu4.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+From: Arnd Bergmann <arnd@arndb.de>
 
+The get_unaligned()/put_unaligned() helpers are traditionally architecture
+specific, with the two main variants being the "access-ok.h" version
+that assumes unaligned pointer accesses always work on a particular
+architecture, and the "le-struct.h" version that casts the data to a
+byte aligned type before dereferencing, for architectures that cannot
+always do unaligned accesses in hardware.
 
-My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
-of the Philippine presently base in West Africa B/F, dealing with
-exportation of Gold, I was diagnose of blood Causal decease, and my
-doctor have announce to me that I have few days to leave due to the
-condition of my sickness.
+Based on the discussion linked below, it appears that the access-ok
+version is not realiable on any architecture, but the struct version
+probably has no downsides. This series changes the code to use the
+same implementation on all architectures, addressing the few exceptions
+separately.
 
-I have a desire to build an orphanage home in your country of which i
-cannot execute the project myself due to my present health condition,
-I am willing to hand over the project under your care for you to help
-me fulfill my dreams and desire of building an orphanage home in your
-country.
+I've pushed the patches to the asm-generic git tree for testing.
 
-Reply in you are will to help so that I can direct you to my bank for
-the urgent transfer of the fund/money require for the project to your
-account as I have already made the fund/money available.
+	Arnd
 
-With kind regards
-Mrs Suzara Maling Wan
+Link: https://lore.kernel.org/lkml/75d07691-1e4f-741f-9852-38c0b4f520bc@synopsys.com/
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363
+Link: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git unaligned-rework
+
+Arnd Bergmann (12):
+  asm-generic: use asm-generic/unaligned.h for most architectures
+  openrisc: always use unaligned-struct header
+  sh: remove unaligned access for sh4a
+  m68k: select CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+  powerpc: use linux/unaligned/le_struct.h on LE power7
+  asm-generic: unaligned: remove byteshift helpers
+  asm-generic: unaligned always use struct helpers
+  partitions: msdos: fix one-byte get_unaligned()
+  apparmor: use get_unaligned() only for multi-byte words
+  mwifiex: re-fix for unaligned accesses
+  netpoll: avoid put_unaligned() on single character
+  asm-generic: simplify asm/unaligned.h
+
+ arch/alpha/include/asm/unaligned.h          |  12 --
+ arch/arm/include/asm/unaligned.h            |  27 ---
+ arch/ia64/include/asm/unaligned.h           |  12 --
+ arch/m68k/Kconfig                           |   1 +
+ arch/m68k/include/asm/unaligned.h           |  26 ---
+ arch/microblaze/include/asm/unaligned.h     |  27 ---
+ arch/mips/crypto/crc32-mips.c               |   2 +-
+ arch/openrisc/include/asm/unaligned.h       |  47 -----
+ arch/parisc/include/asm/unaligned.h         |   6 +-
+ arch/powerpc/include/asm/unaligned.h        |  22 ---
+ arch/sh/include/asm/unaligned-sh4a.h        | 199 --------------------
+ arch/sh/include/asm/unaligned.h             |  13 --
+ arch/sparc/include/asm/unaligned.h          |  11 --
+ arch/x86/include/asm/unaligned.h            |  15 --
+ arch/xtensa/include/asm/unaligned.h         |  29 ---
+ block/partitions/ldm.h                      |   2 +-
+ block/partitions/msdos.c                    |   2 +-
+ drivers/net/wireless/marvell/mwifiex/pcie.c |  10 +-
+ include/asm-generic/unaligned.h             | 149 ++++++++++++---
+ include/linux/unaligned/access_ok.h         |  68 -------
+ include/linux/unaligned/be_byteshift.h      |  71 -------
+ include/linux/unaligned/be_memmove.h        |  37 ----
+ include/linux/unaligned/be_struct.h         |  37 ----
+ include/linux/unaligned/generic.h           | 115 -----------
+ include/linux/unaligned/le_byteshift.h      |  71 -------
+ include/linux/unaligned/le_memmove.h        |  37 ----
+ include/linux/unaligned/le_struct.h         |  37 ----
+ include/linux/unaligned/memmove.h           |  46 -----
+ net/core/netpoll.c                          |   4 +-
+ security/apparmor/policy_unpack.c           |   2 +-
+ 30 files changed, 137 insertions(+), 1000 deletions(-)
+ delete mode 100644 arch/alpha/include/asm/unaligned.h
+ delete mode 100644 arch/arm/include/asm/unaligned.h
+ delete mode 100644 arch/ia64/include/asm/unaligned.h
+ delete mode 100644 arch/m68k/include/asm/unaligned.h
+ delete mode 100644 arch/microblaze/include/asm/unaligned.h
+ delete mode 100644 arch/openrisc/include/asm/unaligned.h
+ delete mode 100644 arch/powerpc/include/asm/unaligned.h
+ delete mode 100644 arch/sh/include/asm/unaligned-sh4a.h
+ delete mode 100644 arch/sh/include/asm/unaligned.h
+ delete mode 100644 arch/sparc/include/asm/unaligned.h
+ delete mode 100644 arch/x86/include/asm/unaligned.h
+ delete mode 100644 arch/xtensa/include/asm/unaligned.h
+ delete mode 100644 include/linux/unaligned/access_ok.h
+ delete mode 100644 include/linux/unaligned/be_byteshift.h
+ delete mode 100644 include/linux/unaligned/be_memmove.h
+ delete mode 100644 include/linux/unaligned/be_struct.h
+ delete mode 100644 include/linux/unaligned/generic.h
+ delete mode 100644 include/linux/unaligned/le_byteshift.h
+ delete mode 100644 include/linux/unaligned/le_memmove.h
+ delete mode 100644 include/linux/unaligned/le_struct.h
+ delete mode 100644 include/linux/unaligned/memmove.h
+
+Cc: Amitkumar Karwar <amitkarwar@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ganapathi Bhat <ganapathi017@gmail.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: James Morris <jmorris@namei.org>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: John Johansen <john.johansen@canonical.com>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Kalle Valo <kvalo@codeaurora.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Rich Felker <dalias@libc.org>
+Cc: "Richard Russon (FlatCap)" <ldm@flatcap.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Sharvari Harisangam <sharvari.harisangam@nxp.com>
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Xinming Hu <huxinming820@gmail.com>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-crypto@vger.kernel.org
+Cc: openrisc@lists.librecores.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-ntfs-dev@lists.sourceforge.net
+Cc: linux-block@vger.kernel.org
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+
+-- 
+2.29.2
+
