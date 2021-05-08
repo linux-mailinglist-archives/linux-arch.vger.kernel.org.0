@@ -2,141 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F50E3770AC
-	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 10:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEC03770E5
+	for <lists+linux-arch@lfdr.de>; Sat,  8 May 2021 11:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbhEHIdj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 May 2021 04:33:39 -0400
-Received: from mga03.intel.com ([134.134.136.65]:1864 "EHLO mga03.intel.com"
+        id S230308AbhEHJaS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 May 2021 05:30:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229583AbhEHIdj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 8 May 2021 04:33:39 -0400
-IronPort-SDR: iGj3HWXJafN/APTQo/U2tdJHDuXW9TG2Puqfi67+Cc7urwkeVI5v++HZocuLiSIionO55HGgnb
- ZfsWURppXSCw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9977"; a="198937932"
-X-IronPort-AV: E=Sophos;i="5.82,283,1613462400"; 
-   d="scan'208";a="198937932"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2021 01:32:38 -0700
-IronPort-SDR: XkC4+XOIU6X4lp3gObPf4QBuGo3wwaaRcNnP9IEl8zMwNX5CF07oqoRTGhVBKNdx79a252oFb6
- KRzTU6aCUrHA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,283,1613462400"; 
-   d="scan'208";a="453379337"
-Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 08 May 2021 01:32:36 -0700
-Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lfIO4-000Bas-8F; Sat, 08 May 2021 08:32:36 +0000
-Date:   Sat, 08 May 2021 16:31:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:unaligned-rework] BUILD SUCCESS
- e9fbd0aaca697320141b15df7df33656467cddfb
-Message-ID: <60964c73.m7ibGGRdRJSh+GB0%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229583AbhEHJaQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 8 May 2021 05:30:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B101461430;
+        Sat,  8 May 2021 09:29:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620466155;
+        bh=R6RMIUYi3bq0SpvGcfXGDP9cDJfCB+cyfouoJdnFiRI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sHJQs0+GeEQ9GsxbId71DGEqb8J/IkMWOCo5LDI4s1VlhJJRyHRVPvLaRSiqzF+zs
+         uevx6s4CiFMC7l3+NIsJA0p2L46mjHZNqfmMmpQI4XiFuIkRpXumoH4sX7YrNixoRe
+         54el9y7wUj/q9N+vWhdgmCRpOUKiG+qwdmipfSTpAFxxK1qY+zgBi6STJ4VUKTfPr2
+         VodIeRiiVRg2FsI3I9sX3elIkIbsaTVonmschSZhrWg72a/+3g1SV/ijXgXhW8iire
+         Hs2JVNwnBT7BYkk9vvXYWenCaFuvP32WhORaro73FcuFVo6Jg/cwdBUkYhf09vRCFs
+         5+Y95P0irCz4g==
+Received: by mail-ot1-f48.google.com with SMTP id u25-20020a0568302319b02902ac3d54c25eso10102599ote.1;
+        Sat, 08 May 2021 02:29:15 -0700 (PDT)
+X-Gm-Message-State: AOAM533yMIwIEUQldB/Bk2Eo0sLH/6uK1DA3F3dxpXsmpHgL2WeWqHQ0
+        Hv3ZitNlK07i4m4NZvs6us1D+l+DXGy/ro1IFo8=
+X-Google-Smtp-Source: ABdhPJzzxX8ZeyeaB2I42nvNj8llnJjhTpj8VT5r7VdzqSAU7R4/NDjXSro8yRZtlbdoR2DGmjy2Rh3zyAWVFMJx7lo=
+X-Received: by 2002:a9d:30b:: with SMTP id 11mr11493944otv.298.1620466155082;
+ Sat, 08 May 2021 02:29:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20210507220813.365382-1-arnd@kernel.org> <20210507220813.365382-13-arnd@kernel.org>
+ <CAHk-=wiqLPZbiWFZ3rDNCY0fm=dFR3SSDONvrVNVbkOQmQS1vw@mail.gmail.com>
+In-Reply-To: <CAHk-=wiqLPZbiWFZ3rDNCY0fm=dFR3SSDONvrVNVbkOQmQS1vw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 8 May 2021 11:28:26 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3sxfYG4WReXPe6fg33K7tQaP4K-F53yBcTfyEXv0W22A@mail.gmail.com>
+Message-ID: <CAK8P3a3sxfYG4WReXPe6fg33K7tQaP4K-F53yBcTfyEXv0W22A@mail.gmail.com>
+Subject: Re: [RFC 12/12] asm-generic: simplify asm/unaligned.h
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git unaligned-rework
-branch HEAD: e9fbd0aaca697320141b15df7df33656467cddfb  asm-generic: simplify asm/unaligned.h
+On Sat, May 8, 2021 at 1:54 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> On Fri, May 7, 2021 at 3:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > The get_unaligned()/put_unaligned() implementations are much more complex
+> > than necessary, now that all architectures use the same code.
+>
+> Thanks for doing this, it looks good to me.
+>
+> I suspect it's still slightly unnecessarily complicated - why is that
+> get_unaligned() not just
+>
+>   #define get_unaligned(ptr) \
+>         __get_unaligned_t(typeof(*__ptr), __ptr)
+>
+> Because I'm not seeing the reason for doing that "__auto_type __ptr"
+> thing - the argument to a "typeof()" isn't actually evaluated.
 
-elapsed time: 724m
+Both versions are equally correct, I picked the __auto_type version
+because this tends to produce smaller preprocessor output when you have
+multiple layers of nested macros with 'ptr' expanding to something
+complicated, and the get_unaligned() itself being expanded multiple
+times again.
 
-configs tested: 81
-configs skipped: 2
+When I recently experimented with possible changes to cmpxchg() and
+get_user(), it had a measurable impact on compile time with clang on
+those macros.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+get_unaligned() doesn't appear to be used much in nested macros
+at all, so it probably won't actually help here, and I can just do the
+simpler version instead.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                       maple_defconfig
-mips                           ip27_defconfig
-powerpc64                           defconfig
-xtensa                              defconfig
-um                            kunit_defconfig
-arm                        oxnas_v6_defconfig
-arm                  colibri_pxa300_defconfig
-mips                            ar7_defconfig
-mips                           xway_defconfig
-powerpc                     ksi8560_defconfig
-mips                         cobalt_defconfig
-powerpc                      chrp32_defconfig
-s390                          debug_defconfig
-sh                           se7206_defconfig
-sh                           se7722_defconfig
-arm                       cns3420vb_defconfig
-mips                          malta_defconfig
-m68k                          sun3x_defconfig
-sparc64                             defconfig
-mips                           ip22_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a013-20210508
-i386                 randconfig-a015-20210508
-i386                 randconfig-a014-20210508
-i386                 randconfig-a016-20210508
-i386                 randconfig-a011-20210508
-i386                 randconfig-a012-20210508
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+I forgot to mention in the changelog that this version does not actually
+require the argument to be a scalar, not sure if this is something
+we want or not. It does allow developers to write something like
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+__be32 get_ip_saddr(struct sk_buff *skb)
+{
+      struct iphdr *iph = ip_hdr(skb);
+      return get_unaligned(iph).saddr;
+}
+
+and get the expected result. While this seems handy, it also makes it
+harder to change the macro back to one that only works on scalars
+after such usage becomes widespread.
+
+        Arnd
