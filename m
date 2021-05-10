@@ -2,128 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56979377C73
-	for <lists+linux-arch@lfdr.de>; Mon, 10 May 2021 08:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6DC377DE8
+	for <lists+linux-arch@lfdr.de>; Mon, 10 May 2021 10:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbhEJGkv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 May 2021 02:40:51 -0400
-Received: from mail-ua1-f46.google.com ([209.85.222.46]:36515 "EHLO
-        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbhEJGkv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 May 2021 02:40:51 -0400
-Received: by mail-ua1-f46.google.com with SMTP id x9so4898906uao.3;
-        Sun, 09 May 2021 23:39:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=88Ilm7Flv2wT81QtnUpmPqsLyEiLP/hNQ6e6DIypvF8=;
-        b=K6W8HKJx59RQTDZYtfrpD9TBufFbMwSPx0C/z/2FXOrNYvEbP1Y3eWc0PESju2+nHL
-         sYngEOrwI2uyxaM1NU4fEiqvgIMUXqa4MYH9OagdfBskKBQ0OxpMGRHRe45zIyBpr2Gc
-         lFXJk608wipaCR+2Jx8X+7k0zevZ4gMQfGFQbh7W2xkEMI34gxcuqbXR8f7oUe+mjCz3
-         F5sQWFLBZZL7fAJ1oJieYaEM3S58SIbHpHMO/oISvWJQqMYeiMm9MlSbCF8bnkeldn0q
-         1KuHgSY7LZxdcJrWf1ZayZwESeX9sjUUPw53tIGW99dhjC1iQXocnzdqrJQeFZnhDHow
-         aRmQ==
-X-Gm-Message-State: AOAM533KVsSdrkbKzQwLe4s4TxjZpN2lIXhUAgQPyhdYsJqe/4+51xDM
-        BRQba4/Z7/xbDxK50JWObv1UxrywCSLTQsdbkvgdRJgO
-X-Google-Smtp-Source: ABdhPJx9aX2w0srOx4Ut30nBYM1wWKO8fDI93D0cYhc7YNORjnnYGTtPGGZLM+lrSx0up2luWduXp+HPTWfTLyC13lU=
-X-Received: by 2002:ab0:59cb:: with SMTP id k11mr3832034uad.100.1620628786270;
- Sun, 09 May 2021 23:39:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210507220813.365382-1-arnd@kernel.org> <20210507220813.365382-13-arnd@kernel.org>
-In-Reply-To: <20210507220813.365382-13-arnd@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 May 2021 08:39:35 +0200
-Message-ID: <CAMuHMdUuFPy8F8xwuZys7zdH_nRGQcrjgTSC0UTdcGMv+wEwRg@mail.gmail.com>
-Subject: Re: [RFC 12/12] asm-generic: simplify asm/unaligned.h
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S230216AbhEJISg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 May 2021 04:18:36 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:37274 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230331AbhEJISe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 May 2021 04:18:34 -0400
+Received: from [50.53.41.238] (helo=[192.168.192.153])
+        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <john.johansen@canonical.com>)
+        id 1lg16V-0004Ab-0S; Mon, 10 May 2021 08:17:27 +0000
+Subject: Re: [RFC 09/12] apparmor: use get_unaligned() only for multi-byte
+ words
+To:     Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Vineet Gupta <vgupta@synopsys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210507220813.365382-1-arnd@kernel.org>
+ <20210507220813.365382-10-arnd@kernel.org>
+From:   John Johansen <john.johansen@canonical.com>
+Autocrypt: addr=john.johansen@canonical.com; prefer-encrypt=mutual; keydata=
+ LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkU1bXJQb0JFQURB
+ azE5UHNnVmdCS2tJbW1SMmlzUFE2bzdLSmhUVEtqSmR3VmJrV1NuTm4rbzZVcDVrCm5LUDFm
+ NDlFQlFsY2VXZzF5cC9Od2JSOGFkK2VTRU8vdW1hL0srUHFXdkJwdEtDOVNXRDk3Rkc0dUI0
+ L2Nhb20KTEVVOTdzTFFNdG52R1dkeHJ4VlJHTTRhbnpXWU1neno1VFptSWlWVFo0M091NVZw
+ YVMxVnoxWlN4UDNoL3hLTgpaci9UY1c1V1FhaTh1M1BXVm5ia2poU1pQSHYxQmdoTjY5cXhF
+ UG9tckpCbTFnbXR4M1ppVm1GWGx1d1RtVGdKCk9rcEZvbDduYkowaWxuWUhyQTdTWDNDdFIx
+ dXBlVXBNYS9XSWFuVk85NldkVGpISElhNDNmYmhtUXViZTR0eFMKM0ZjUUxPSlZxUXN4NmxF
+ OUI3cUFwcG05aFExMHFQV3dkZlB5LyswVzZBV3ROdTVBU2lHVkNJbld6bDJIQnFZZAovWmxs
+ OTN6VXErTklvQ244c0RBTTlpSCt3dGFHRGNKeXdJR0luK2VkS050SzcyQU1nQ2hUZy9qMVpv
+ V0g2WmVXClBqdVVmdWJWelp0bzFGTW9HSi9TRjRNbWRRRzFpUU50ZjRzRlpiRWdYdXk5Y0dp
+ MmJvbUYwenZ5QkpTQU5weGwKS05CRFlLek42S3owOUhVQWtqbEZNTmdvbUwvY2pxZ0FCdEF4
+ NTlMK2RWSVpmYUYyODFwSWNVWnp3dmg1K0pvRwplT1c1dUJTTWJFN0wzOG5zem9veWtJSjVY
+ ckFjaGtKeE5mejdrK0ZuUWVLRWtOekVkMkxXYzNRRjRCUVpZUlQ2ClBISGdhM1JneWtXNSsx
+ d1RNcUpJTGRtdGFQYlhyRjNGdm5WMExSUGN2NHhLeDdCM2ZHbTd5Z2Rvb3dBUkFRQUIKdEIx
+ S2IyaHVJRXB2YUdGdWMyVnVJRHhxYjJodVFHcHFiWGd1Ym1WMFBva0NPZ1FUQVFvQUpBSWJB
+ d1VMQ1FnSApBd1VWQ2drSUN3VVdBZ01CQUFJZUFRSVhnQVVDVG8wWVZ3SVpBUUFLQ1JBRkx6
+ WndHTlhEMkx4SkQvOVRKWkNwCndsbmNUZ1llcmFFTWVEZmtXdjhjMUlzTTFqMEFtRTRWdEwr
+ ZkU3ODBaVlA5Z2tqZ2tkWVN4dDdlY0VUUFRLTWEKWlNpc3JsMVJ3cVUwb29nWGRYUVNweHJH
+ SDAxaWN1LzJuMGpjWVNxWUtnZ1B4eTc4QkdzMkxacTRYUGZKVFptSApaR25YR3EvZURyL21T
+ bmowYWF2QkptTVo2amJpUHo2eUh0QllQWjlmZG84YnRjendQNDFZZVdvSXUyNi84SUk2CmYw
+ WG0zVkM1b0FhOHY3UmQrUldaYThUTXdsaHpIRXh4ZWwzanRJN0l6ek9zbm1FOS84RG0wQVJE
+ NWlUTENYd1IKMWN3SS9KOUJGL1MxWHY4UE4xaHVUM0l0Q05kYXRncDh6cW9Ka2dQVmptdnlM
+ NjRRM2ZFa1liZkhPV3NhYmE5LwprQVZ0Qk56OVJURmg3SUhEZkVDVmFUb3VqQmQ3QnRQcXIr
+ cUlqV0ZhZEpEM0k1ZUxDVkp2VnJyb2xyQ0FUbEZ0Ck4zWWtRczZKbjFBaUlWSVUzYkhSOEdq
+ ZXZnejVMbDZTQ0dIZ1Jya3lScG5TWWFVL3VMZ24zN042QVl4aS9RQUwKK2J5M0N5RUZManpX
+ QUV2eVE4YnEzSXVjbjdKRWJoUy9KLy9kVXFMb2VVZjh0c0dpMDB6bXJJVFpZZUZZQVJoUQpN
+ dHNmaXpJclZEdHoxaVBmL1pNcDVnUkJuaXlqcFhuMTMxY20zTTNndjZIclFzQUdubjhBSnJ1
+ OEdEaTVYSllJCmNvLzEreC9xRWlOMm5DbGFBT3BiaHpOMmVVdlBEWTVXMHEzYkEvWnAybWZH
+ NTJ2YlJJK3RRMEJyMUhkL3ZzbnQKVUhPOTAzbU1aZXAyTnpOM0JaNXFFdlB2RzRyVzVacTJE
+ cHliV2JRclNtOW9iaUJLYjJoaGJuTmxiaUE4YW05bwpiaTVxYjJoaGJuTmxia0JqWVc1dmJt
+ bGpZV3d1WTI5dFBva0NOd1FUQVFvQUlRVUNUbzBYV2dJYkF3VUxDUWdICkF3VVZDZ2tJQ3dV
+ V0FnTUJBQUllQVFJWGdBQUtDUkFGTHpad0dOWEQySXRNRC85anliYzg3ZE00dUFIazZ5Tk0K
+ TjBZL0JGbW10VFdWc09CaHFPbm9iNGkzOEJyRE8yQzFoUUNQQ1FlNExMczEvNHB0ZW92UXQ4
+ QjJGeXJQVmp3Zwo3alpUSE5LNzRyNmxDQ1Z4eDN5dTFCN1U5UG80VlRrY3NsVmIxL3FtV3V4
+ OFhXY040eXZrVHFsTCtHeHB5Sm45CjlaWmZmWEpjNk9oNlRtT2ZiS0d2TXV1djVhclNJQTNK
+ SEZMZjlhTHZadEExaXNKVXI3cFM5YXBnOXVUVUdVcDcKd2ZWMFdUNlQzZUczbXRVVTJ1cDVK
+ VjQ4NTBMMDVqSFM2dVdpZS9ZK3lmSk9iaXlyeE4vNlpxVzVHb25oTEJxLwptc3pjVjV2QlQz
+ QkRWZTNSdkY2WGRNOU9oUG4xK1k4MXg1NCt2UTExM044aUx3RjdHR2ExNFp5SVZBTlpEMEkw
+ CkhqUnZhMmsvUnFJUlR6S3l1UEg1cGtsY0tIVlBFRk1tT3pNVCtGT294Tmp2Uys3K3dHMktN
+ RFlFbUhQcjFQSkIKWlNaZUh6SzE5dGZhbFBNcHBGeGkrc3lZTGFnTjBtQjdKSFF3WTdjclV1
+ T0RoeWNxNjBZVnoxdGFFeWd1M1l2MgoyL0kxRUNHSHZLSEc2d2M5MG80M0MvZWxIRUNYbkVo
+ N3RLcGxEY3BJQytPQ21NeEtIaFI0NitYY1p2Z3c0RGdiCjdjYTgzZVFSM0NHODlMdlFwVzJM
+ TEtFRUJEajdoWmhrTGJra1BSWm0zdzhKWTQ0YXc4VnRneFdkblNFTUNMeEwKSU9OaDZ1Wjcv
+ L0RZVnRjSWFNSllrZWJhWnRHZENwMElnVVpiMjQvVmR2WkNZYk82MkhrLzNWbzFuWHdIVUVz
+ Mwo2RC92MWJUMFJaRmk2OUxnc0NjT2N4NGdZTGtDRFFST1pxejZBUkFBb3F3NmtrQmhXeU0x
+ ZnZnYW1BVmplWjZuCktFZm5SV2JrQzk0TDFFc0pMdXAzV2IyWDBBQk5PSFNrYlNENHBBdUMy
+ dEtGL0VHQnQ1Q1A3UWRWS1JHY1F6QWQKNmIyYzFJZHk5Ukx3Nnc0Z2krbm4vZDFQbTFra1lo
+ a1NpNXpXYUlnMG01UlFVaytFbDh6a2Y1dGNFLzFOMFo1TwpLMkpoandGdTViWDBhMGw0Y0ZH
+ V1ZRRWNpVk1ES1J0eE1qRXRrM1N4RmFsbTZaZFEycHAyODIyY2xucTR6WjltCld1MWQyd2F4
+ aXorYjVJYTR3ZURZYTduNDFVUmNCRVViSkFnbmljSmtKdENUd3lJeElXMktuVnlPcmp2a1F6
+ SUIKdmFQMEZkUDJ2dlpvUE1kbENJek9sSWtQTGd4RTBJV3VlVFhlQkpoTnMwMXBiOGJMcW1U
+ SU1sdTRMdkJFTEEvdgplaWFqajVzOHk1NDJIL2FIc2ZCZjRNUVVoSHhPL0JaVjdoMDZLU1Vm
+ SWFZN09nQWdLdUdOQjNVaWFJVVM1K2E5CmduRU9RTER4S1J5L2E3UTF2OVMrTnZ4KzdqOGlI
+ M2prUUpoeFQ2WkJoWkdSeDBna0gzVCtGMG5ORG01TmFKVXMKYXN3Z0pycUZaa1VHZDJNcm0x
+ cW5Ld1hpQXQ4U0ljRU5kcTMzUjBLS0tSQzgwWGd3ajhKbjMwdlhMU0crTk8xRwpIMFVNY0F4
+ TXd5L3B2azZMVTVKR2paUjczSjVVTFZoSDRNTGJEZ2dEM21QYWlHOCtmb3RUckpVUHFxaGc5
+ aHlVCkVQcFlHN3NxdDc0WG43OStDRVpjakxIenlsNnZBRkUyVzBreGxMdFF0VVpVSE8zNmFm
+ RnY4cUdwTzNacVB2akIKVXVhdFhGNnR2VVFDd2YzSDZYTUFFUUVBQVlrQ0h3UVlBUW9BQ1FV
+ Q1RtYXMrZ0liREFBS0NSQUZMelp3R05YRAoyRC9YRC8wZGRNLzRhaTFiK1RsMWp6bkthalgz
+ a0crTWVFWWVJNGY0MHZjbzNyT0xyblJHRk9jYnl5ZlZGNjlNCktlcGllNE93b0kxamNUVTBB
+ RGVjbmJXbkROSHByMFNjenhCTXJvM2Juckxoc212anVuVFlJdnNzQlp0QjRhVkoKanVMSUxQ
+ VWxuaEZxYTdmYlZxMFpRamJpVi9ydDJqQkVOZG05cGJKWjZHam5wWUljQWJQQ0NhL2ZmTDQv
+ U1FSUwpZSFhvaEdpaVM0eTVqQlRtSzVsdGZld0xPdzAyZmtleEgrSUpGcnJHQlhEU2c2bjJT
+ Z3hubisrTkYzNGZYY205CnBpYXczbUtzSUNtKzBoZE5oNGFmR1o2SVdWOFBHMnRlb29WRHA0
+ ZFlpaCsreFgvWFM4ekJDYzFPOXc0bnpsUDIKZ0t6bHFTV2JoaVdwaWZSSkJGYTRXdEFlSlRk
+ WFlkMzdqL0JJNFJXV2hueXc3YUFQTkdqMzN5dEdITlVmNlJvMgovanRqNHRGMXkvUUZYcWpK
+ Ry93R2pwZHRSZmJ0VWpxTEhJc3ZmUE5OSnEvOTU4cDc0bmRBQ2lkbFdTSHpqK09wCjI2S3Bi
+ Rm5td05PMHBzaVVzbmh2SEZ3UE8vdkFibDNSc1I1KzBSbytodnMyY0VtUXV2OXIvYkRsQ2Zw
+ enAydDMKY0srcmh4VXFpc094OERaZnoxQm5rYW9DUkZidnZ2ays3TC9mb21QbnRHUGtxSmNp
+ WUU4VEdIa1p3MWhPa3UrNApPb00yR0I1bkVEbGorMlRGL2pMUStFaXBYOVBrUEpZdnhmUmxD
+ NmRLOFBLS2ZYOUtkZm1BSWNnSGZuVjFqU24rCjh5SDJkakJQdEtpcVcwSjY5YUlzeXg3aVYv
+ MDNwYVBDakpoN1hxOXZBenlkTjVVL1VBPT0KPTZQL2IKLS0tLS1FTkQgUEdQIFBVQkxJQyBL
+ RVkgQkxPQ0stLS0tLQo=
+Organization: Canonical
+Message-ID: <a301b47e-dc27-cdc8-ab93-07816e5dc2e1@canonical.com>
+Date:   Mon, 10 May 2021 01:17:23 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210507220813.365382-10-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd,
-
-On Sat, May 8, 2021 at 12:12 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> The get_unaligned()/put_unaligned() implementations are much more complex
-> than necessary, now that all architectures use the same code.
->
-> Move everything into one file and use a much more compact way to express
-> the same logic.
->
-> I've compared the binary output using gcc-11 across defconfig builds for
-> all architectures and found this patch to make no difference, except for
-> a single function on powerpc that needs two additional register moves
-> because of random differences in register allocation.
->
-> There are a handful of callers of the low-level __get_unaligned_cpu32,
-> so leave that in place for the time being even though the common code
-> no longer uses it.
->
-> This adds a warning for any caller of get_unaligned()/put_unaligned()
-> that passes in a single-byte pointer, but I've sent patches for all
-> instances that show up in x86 and randconfig builds. It would be nice
-> to change the arguments of the endian-specific accessors to take the
-> matching __be16/__be32/__be64/__le16/__le32/__le64 arguments instead of
-> a void pointer, but that requires more changes to the rest of the kernel.
->
+On 5/7/21 3:07 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Using get_unaligned() on a u8 pointer is pointless, and will
+> result in a compiler warning after a planned cleanup:
+> 
+> In file included from arch/x86/include/generated/asm/unaligned.h:1,
+>                  from security/apparmor/policy_unpack.c:16:
+> security/apparmor/policy_unpack.c: In function 'unpack_u8':
+> include/asm-generic/unaligned.h:13:15: error: 'packed' attribute ignored for field of type 'u8' {aka 'unsigned char'} [-Werror=attributes]
+>    13 |  const struct { type x __packed; } *__pptr = (typeof(__pptr))(ptr); \
+>       |               ^
+> 
+> Simply dereference this pointer directly.
+> 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: John Johansen <john.johansen@canonical.com>
 
-Thanks for your patch!
+> ---
+>  security/apparmor/policy_unpack.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
+> index b8efbda545cb..0acca6f2a93f 100644
+> --- a/security/apparmor/policy_unpack.c
+> +++ b/security/apparmor/policy_unpack.c
+> @@ -304,7 +304,7 @@ static bool unpack_u8(struct aa_ext *e, u8 *data, const char *name)
+>  		if (!inbounds(e, sizeof(u8)))
+>  			goto fail;
+>  		if (data)
+> -			*data = get_unaligned((u8 *)e->pos);
+> +			*data = *((u8 *)e->pos);
+>  		e->pos += sizeof(u8);
+>  		return true;
+>  	}
+> 
 
-> @@ -6,20 +6,132 @@
->   * This is the most generic implementation of unaligned accesses
->   * and should work almost anywhere.
->   */
-> +#include <linux/unaligned/packed_struct.h>
->  #include <asm/byteorder.h>
->
-> -#if defined(__LITTLE_ENDIAN)
-> -# include <linux/unaligned/le_struct.h>
-> -# include <linux/unaligned/generic.h>
-> -# define get_unaligned __get_unaligned_le
-> -# define put_unaligned __put_unaligned_le
-> -#elif defined(__BIG_ENDIAN)
-> -# include <linux/unaligned/be_struct.h>
-> -# include <linux/unaligned/generic.h>
-> -# define get_unaligned __get_unaligned_be
-> -# define put_unaligned __put_unaligned_be
-> -#else
-> -# error need to define endianess
-> -#endif
-> +#define __get_unaligned_t(type, ptr) ({                                                \
-> +       const struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);      \
-> +       __pptr->x;                                                              \
-
-Space before tab (cfr. checkpatch).
-
-> +})
-> +
-> +#define get_unaligned(ptr) ({                                                  \
-> +       __auto_type __ptr = (ptr);                                              \
-> +       __get_unaligned_t(typeof(*__ptr), __ptr);                               \
-> +})
-> +
-> +#define __put_unaligned_t(type, val, ptr) ({                                   \
-> +       struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);            \
-> +       __pptr->x = (val);                                                      \
-
-Likewise
-
-> +})
->
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
