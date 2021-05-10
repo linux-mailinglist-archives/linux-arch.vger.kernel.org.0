@@ -2,205 +2,237 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A187C379A6D
-	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 00:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A49379AC5
+	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 01:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbhEJW7N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 May 2021 18:59:13 -0400
-Received: from mga02.intel.com ([134.134.136.20]:14343 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229502AbhEJW7M (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 10 May 2021 18:59:12 -0400
-IronPort-SDR: 5CCxM31DrQ8NpRCc57zhv8RqDO51fL6JXRIul4MJVkw5VTUsKQCY8WFY9rtcImWpqRy2Aq/LHQ
- EakplwnAGuvQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9980"; a="186440128"
-X-IronPort-AV: E=Sophos;i="5.82,288,1613462400"; 
-   d="scan'208";a="186440128"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 15:58:06 -0700
-IronPort-SDR: QsXO/4wRx+z3mdOQUqRrWo77zUAK8pyl2+PvaaF/SdE5zZB8LiimPlTFQZZ4cYaXz9oRpRzdWf
- iJ15TiTGHg8g==
-X-IronPort-AV: E=Sophos;i="5.82,288,1613462400"; 
-   d="scan'208";a="434014879"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.251.144.113]) ([10.251.144.113])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 15:58:00 -0700
-Subject: Re: [PATCH v26 23/30] x86/cet/shstk: Handle thread shadow stack
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        id S229925AbhEJXff (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 May 2021 19:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229561AbhEJXfd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 May 2021 19:35:33 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC71BC061574;
+        Mon, 10 May 2021 16:34:26 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id f8so9180189qth.6;
+        Mon, 10 May 2021 16:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VBkKGU/ki1TRk8sMHAAIgbib+6nzNUIdtQYyvnJ5USQ=;
+        b=CxW+dEAVXDk0b2mz4xXAAOo7sYkrFcE5NyMGbLT9v+fVGYHFySZSszVTHx4H/liqji
+         Xeq5aF0hmaVzNedK+/d1+rTH5aIzQVpZxviWs9tQSVhAQHdsHYpsiGrXFh9u5DhT9Zdg
+         UOLuhNpNuPl6307+StHDNUrYjsb6XR8CheLiAeP54NkA0/tKve4OYAUOIvtsTBmfYqfX
+         HaUySPfTrhoIhD7m1OE4acogxJl33PpXBFRPV5BXoAowrb44D61fGrkf9BsTxNXaH0w4
+         Q3sirpM2o1JXsSpmWHU/B7y+310h8D691jnYP+y8aTs+tcl8mr76M1RU+hghStXgptK/
+         m1RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VBkKGU/ki1TRk8sMHAAIgbib+6nzNUIdtQYyvnJ5USQ=;
+        b=QLT8TjWGD9WqHlkyHuC2lzMYLc1Cd0gzazxwpTVwQbo/CU9q51N9HXY3gUvjkeKqv/
+         WjWMDXeepjubPeXq+m00+xFoGUtVlf46hrVkOMDUsi/wBVWNjuRW3ImDKp3mgMNkeDFX
+         tE1uHh8uQPriAI2FebSJf2IncdwZ3xKTIMKmjkJAqxW7MXkaKUyIDhCXgMzImP1y75BA
+         z81pQB4YG00NkH9Azf14dUJYOS3DwMovzZzivf2Mix3BfRoTbo/0gPA6VFcJz/pkdIkK
+         0FGqk4KKMJ4ZpwbemEQd5Wk+L7gGZvXGzlbxZjcjT8Lee84kMciPoQ3ZkUH6a4uXzJSk
+         E/+Q==
+X-Gm-Message-State: AOAM5339LvzZLcI3Mm+43JJQCIKNgLeLyVNs2dny/9gay5c/6Ujc2mUE
+        ektDForauqgi7zWj12NY7SEXxrGpkhdVDA==
+X-Google-Smtp-Source: ABdhPJx3h/hkHoHuys3vF3Pv9tha50NlDAjZ7yH2vb6gQ0kPvY6LQcUL8DPQUTXcb5C3DWHyADBvBg==
+X-Received: by 2002:a05:622a:2c9:: with SMTP id a9mr10456062qtx.38.1620689665622;
+        Mon, 10 May 2021 16:34:25 -0700 (PDT)
+Received: from localhost ([207.98.216.60])
+        by smtp.gmail.com with ESMTPSA id z4sm12639919qtv.7.2021.05.10.16.34.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 May 2021 16:34:25 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
         Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-24-yu-cheng.yu@intel.com> <YJlADyc/9pn8Sjkn@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <89598d32-4bf8-b989-ee77-5b4b55a138a9@intel.com>
-Date:   Mon, 10 May 2021 15:57:56 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Richard Weinberger <richard@nod.at>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Will Deacon <will@kernel.org>, Yogesh Lal <ylal@codeaurora.org>
+Subject: [PATCH] all: remove GENERIC_FIND_FIRST_BIT
+Date:   Mon, 10 May 2021 16:34:21 -0700
+Message-Id: <20210510233421.18684-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <YJlADyc/9pn8Sjkn@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/10/2021 7:15 AM, Borislav Petkov wrote:
-> On Tue, Apr 27, 2021 at 01:43:08PM -0700, Yu-cheng Yu wrote:
+In the 5.12 cycle we enabled the GENERIC_FIND_FIRST_BIT config option
+for ARM64 and MIPS. It increased performance and shrunk .text size; and
+so far I didn't receive any negative feedback on the change.
 
-[...]
+https://lore.kernel.org/linux-arch/20210225135700.1381396-1-yury.norov@gmail.com/
 
->> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
->> index c815c7507830..d387df84b7f1 100644
->> --- a/arch/x86/kernel/shstk.c
->> +++ b/arch/x86/kernel/shstk.c
->> @@ -70,6 +70,55 @@ int shstk_setup(void)
->>   	return 0;
->>   }
-> 
->> +int shstk_setup_thread(struct task_struct *tsk, unsigned long clone_flags,
-> 
-> Judging by what this function does, its name wants to be
-> 
-> shstk_alloc_thread_stack()
-> 
-> or so?
-> 
->> +		       unsigned long stack_size)
->> +{
->> +	unsigned long addr, size;
->> +	struct cet_user_state *state;
->> +	struct cet_status *cet = &tsk->thread.cet;
-> 
-> The tip-tree preferred ordering of variable declarations at the
-> beginning of a function is reverse fir tree order::
-> 
-> 	struct long_struct_name *descriptive_name;
-> 	unsigned long foo, bar;
-> 	unsigned int tmp;
-> 	int ret;
-> 
-> The above is faster to parse than the reverse ordering::
-> 
-> 	int ret;
-> 	unsigned int tmp;
-> 	unsigned long foo, bar;
-> 	struct long_struct_name *descriptive_name;
-> 
-> And even more so than random ordering::
-> 
-> 	unsigned long foo, bar;
-> 	int ret;
-> 	struct long_struct_name *descriptive_name;
-> 	unsigned int tmp;
-> 
->> +
->> +	if (!cet->shstk_size)
->> +		return 0;
->> +
-> 
-> This check needs a comment.
-> 
->> +	if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
->> +		return 0;
->> +
->> +	state = get_xsave_addr(&tsk->thread.fpu.state.xsave,
->> +			       XFEATURE_CET_USER);
-> 
-> Let that line stick out.
-> 
->> +
->> +	if (!state)
->> +		return -EINVAL;
->> +
->> +	if (stack_size == 0)
-> 
-> 	if (!stack_size)
-> 
->> +		return -EINVAL;
-> 
-> and that test needs to be done first in the function.
-> 
->> +
->> +	/* Cap shadow stack size to 4 GB */
-> 
-> Why?
-> 
+I think it's time to make all architectures use find_{first,last}_bit()
+unconditionally and remove the corresponding config option.
 
-This is not necessary.  I will make it just stack_size, which is passed 
-in from copy_thread().
+This patch doesn't introduce functional changes for arc, arm64, mips,
+s390 and x86 because they already enable GENERIC_FIND_FIRST_BIT. There
+will be no changes for arm because it implements find_{first,last}_bit
+in arch code. For other architectures I expect improvement both in
+performance and .text size.
 
->> +	size = min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G);
->> +	size = min(size, stack_size);
->> +
->> +	/*
->> +	 * Compat-mode pthreads share a limited address space.
->> +	 * If each function call takes an average of four slots
->> +	 * stack space, allocate 1/4 of stack size for shadow stack.
->> +	 */
->> +	if (in_compat_syscall())
->> +		size /= 4;
-> 
-> <---- newline here.
-> 
->> +	size = round_up(size, PAGE_SIZE);
->> +	addr = alloc_shstk(size);
->> +
-> 
-> ^ Superfluous newline.
-> 
->> +	if (IS_ERR_VALUE(addr)) {
->> +		cet->shstk_base = 0;
->> +		cet->shstk_size = 0;
->> +		return PTR_ERR((void *)addr);
->> +	}
->> +
->> +	fpu__prepare_write(&tsk->thread.fpu);
->> +	state->user_ssp = (u64)(addr + size);
-> 
-> cet_user_state has u64, cet_status has unsigned longs. Make them all u64.
-> 
-> And since cet_status is per thread, but I had suggested struct
-> shstk_desc, I think now that that should be called
-> 
-> struct thread_shstk
-> 
-> or so to denote *exactly* what it is.
-> 
+It would be great if people with an access to real hardware would share
+the output of bloat-o-meter and lib/find_bit_benchmark.
 
-So this struct will be:
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ arch/arc/Kconfig                  |  1 -
+ arch/arm64/Kconfig                |  1 -
+ arch/mips/Kconfig                 |  1 -
+ arch/s390/Kconfig                 |  1 -
+ arch/x86/Kconfig                  |  1 -
+ arch/x86/um/Kconfig               |  1 -
+ include/asm-generic/bitops/find.h | 12 ------------
+ lib/Kconfig                       |  3 ---
+ 8 files changed, 21 deletions(-)
 
-struct thread_shstk {
-	u64 shstk_base;
-	u64 shstk_size;
-	u64 locked:1;
-	u64 ibt:1;
-};
+diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+index bc8d6aecfbbd..9c991ba50db3 100644
+--- a/arch/arc/Kconfig
++++ b/arch/arc/Kconfig
+@@ -19,7 +19,6 @@ config ARC
+ 	select COMMON_CLK
+ 	select DMA_DIRECT_REMAP
+ 	select GENERIC_ATOMIC64 if !ISA_ARCV2 || !(ARC_HAS_LL64 && ARC_HAS_LLSC)
+-	select GENERIC_FIND_FIRST_BIT
+ 	# for now, we don't need GENERIC_IRQ_PROBE, CONFIG_GENERIC_IRQ_CHIP
+ 	select GENERIC_IRQ_SHOW
+ 	select GENERIC_PCI_IOMAP
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index e09a9591af45..9d5b36f7d981 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -108,7 +108,6 @@ config ARM64
+ 	select GENERIC_CPU_AUTOPROBE
+ 	select GENERIC_CPU_VULNERABILITIES
+ 	select GENERIC_EARLY_IOREMAP
+-	select GENERIC_FIND_FIRST_BIT
+ 	select GENERIC_IDLE_POLL_SETUP
+ 	select GENERIC_IRQ_IPI
+ 	select GENERIC_IRQ_PROBE
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index b72458215d20..3ddae7918386 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -27,7 +27,6 @@ config MIPS
+ 	select GENERIC_ATOMIC64 if !64BIT
+ 	select GENERIC_CMOS_UPDATE
+ 	select GENERIC_CPU_AUTOPROBE
+-	select GENERIC_FIND_FIRST_BIT
+ 	select GENERIC_GETTIMEOFDAY
+ 	select GENERIC_IOMAP
+ 	select GENERIC_IRQ_PROBE
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index c1ff874e6c2e..3a10ceb8a097 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -125,7 +125,6 @@ config S390
+ 	select GENERIC_CPU_AUTOPROBE
+ 	select GENERIC_CPU_VULNERABILITIES
+ 	select GENERIC_ENTRY
+-	select GENERIC_FIND_FIRST_BIT
+ 	select GENERIC_GETTIMEOFDAY
+ 	select GENERIC_PTDUMP
+ 	select GENERIC_SMP_IDLE_THREAD
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index b83364a15d34..6a7d8305365e 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -123,7 +123,6 @@ config X86
+ 	select GENERIC_CPU_VULNERABILITIES
+ 	select GENERIC_EARLY_IOREMAP
+ 	select GENERIC_ENTRY
+-	select GENERIC_FIND_FIRST_BIT
+ 	select GENERIC_IOMAP
+ 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK	if SMP
+ 	select GENERIC_IRQ_MATRIX_ALLOCATOR	if X86_LOCAL_APIC
+diff --git a/arch/x86/um/Kconfig b/arch/x86/um/Kconfig
+index 95d26a69088b..40d6a06e41c8 100644
+--- a/arch/x86/um/Kconfig
++++ b/arch/x86/um/Kconfig
+@@ -8,7 +8,6 @@ endmenu
+ 
+ config UML_X86
+ 	def_bool y
+-	select GENERIC_FIND_FIRST_BIT
+ 
+ config 64BIT
+ 	bool "64-bit kernel" if "$(SUBARCH)" = "x86"
+diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
+index 0d132ee2a291..8a7b70c79e15 100644
+--- a/include/asm-generic/bitops/find.h
++++ b/include/asm-generic/bitops/find.h
+@@ -95,8 +95,6 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+ }
+ #endif
+ 
+-#ifdef CONFIG_GENERIC_FIND_FIRST_BIT
+-
+ /**
+  * find_first_bit - find the first set bit in a memory region
+  * @addr: The address to start the search at
+@@ -136,16 +134,6 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+ 
+ 	return _find_first_zero_bit(addr, size);
+ }
+-#else /* CONFIG_GENERIC_FIND_FIRST_BIT */
+-
+-#ifndef find_first_bit
+-#define find_first_bit(addr, size) find_next_bit((addr), (size), 0)
+-#endif
+-#ifndef find_first_zero_bit
+-#define find_first_zero_bit(addr, size) find_next_zero_bit((addr), (size), 0)
+-#endif
+-
+-#endif /* CONFIG_GENERIC_FIND_FIRST_BIT */
+ 
+ #ifndef find_last_bit
+ /**
+diff --git a/lib/Kconfig b/lib/Kconfig
+index a38cc61256f1..8346b3181214 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -59,9 +59,6 @@ config GENERIC_STRNLEN_USER
+ config GENERIC_NET_UTILS
+ 	bool
+ 
+-config GENERIC_FIND_FIRST_BIT
+-	bool
+-
+ source "lib/math/Kconfig"
+ 
+ config NO_GENERIC_PCI_IOPORT_MAP
+-- 
+2.25.1
 
-Ok?
-
-Thanks,
-Yu-cheng
