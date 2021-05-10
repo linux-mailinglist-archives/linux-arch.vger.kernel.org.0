@@ -2,320 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED0E377EB4
-	for <lists+linux-arch@lfdr.de>; Mon, 10 May 2021 10:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2294A37810B
+	for <lists+linux-arch@lfdr.de>; Mon, 10 May 2021 12:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbhEJIzC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 May 2021 04:55:02 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:1362 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230180AbhEJIy6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 10 May 2021 04:54:58 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14A8Xs20191813;
-        Mon, 10 May 2021 04:53:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=KTQxO0IWEBnipVyxp6Fd/H0bA828QsZiHmmsIJMhYdA=;
- b=O33KM7of0JHQENW2TVEGZGb4cTYIzCgkcDC+SB179gc5aHsO0Hk7SxCwFaHqdIOT7YJ/
- UHI6zc8LGng90xKLXW+SwOCAn/qCueGaEfRDswErp6PuSYu10dgxgRAdI5X7tY/Alfw1
- f7kf/mbYdYJnNnmmtY2Q9Sb1+54z8HNeRBQNB490q9vVcapuKN6M8Gh5qIY+N/jGl9F9
- 99atDA0lAjBS6m2vHsDV7aPkhoqt7PRzN0pa1LxrE5hQ2LiUSjkOu5KNL1xP93kNcMFz
- WYJUnlw/f5NOKuKNcb4DLKv6W/6ckfRRl6pUKs6yaO/r+JyWr1QYyTQlzHLotzo8pyMH 0A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38f19a0qr3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 May 2021 04:53:45 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 14A8YEa9195724;
-        Mon, 10 May 2021 04:53:45 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38f19a0qqj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 May 2021 04:53:45 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14A8puT1032599;
-        Mon, 10 May 2021 08:53:43 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 38dj988sma-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 May 2021 08:53:43 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14A8rel642664428
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 May 2021 08:53:41 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D5BB352051;
-        Mon, 10 May 2021 08:53:40 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 86EC852054;
-        Mon, 10 May 2021 08:53:40 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, sparclinux@vger.kernel.org
-Subject: [PATCH v5 3/3] asm-generic/io.h: warn in inb() and friends with undefined PCI_IOBASE
-Date:   Mon, 10 May 2021 10:53:39 +0200
-Message-Id: <20210510085339.1857696-4-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210510085339.1857696-1-schnelle@linux.ibm.com>
-References: <20210510085339.1857696-1-schnelle@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: lt4WvBzPqWcPuaEn9ddQ7T59OQnmIB_w
-X-Proofpoint-ORIG-GUID: FfQlznQpHXOlcYIz5WcgABTNATqREt0K
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S230442AbhEJKRg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 May 2021 06:17:36 -0400
+Received: from mail-vs1-f52.google.com ([209.85.217.52]:35626 "EHLO
+        mail-vs1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230393AbhEJKR3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 May 2021 06:17:29 -0400
+Received: by mail-vs1-f52.google.com with SMTP id j13so8124988vsf.2;
+        Mon, 10 May 2021 03:16:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sVvVN78+/ymEH+RZL6HvoVCZVksTZw7UVoQH006DAA8=;
+        b=uiiBmkHlh6s5t0Q6ekUiP2RK7fY7IrsyQ4X30oiYA8nOMTOpVbsOvsK7rvWIFRp5nB
+         Iyz9R163vNvnPCJjmJnKmSm9EVCKvRl3B8XAu/IQq0hbrCjB938R2BQfS2eqOpwdotGZ
+         9pFwtE0SkDsLD9aCYyjTNEeofBctawz9Do4erZDD9m6RaGkVyXC24qrPpqEUloTKapnG
+         6uYgPdJG0ouqCMdUKazKPGQj0VRN81LNyPxfW1MDE2XhFnh97MuO/gmBH6LojXMha+eq
+         K00aTjCBMcVu5XyNmqHszmx9GMMcQg4BSKMLVtzRWmxVcIZGbF9YWM1CgN4dKUh3KZ7S
+         ao/A==
+X-Gm-Message-State: AOAM531JjyLLwBGwA+OJvXqPpY+9fUftJOP2AN9bNMe6nZntmYtHtYJa
+        9mls5DQUw1KnpELouF1hp176F5u0ZHy/VKgocUs=
+X-Google-Smtp-Source: ABdhPJwCjZFq7knTQzQamMPg7B/M6YwpWZB1FCmai2ATFOyJJM+uqtP/4aHsoLXiIPOmyugP+gy2CWFKz8LbQiDSA/c=
+X-Received: by 2002:a67:8745:: with SMTP id j66mr19115560vsd.18.1620641784321;
+ Mon, 10 May 2021 03:16:24 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-10_04:2021-05-10,2021-05-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 adultscore=0 lowpriorityscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2105100061
+References: <20210507220813.365382-1-arnd@kernel.org> <20210507220813.365382-2-arnd@kernel.org>
+In-Reply-To: <20210507220813.365382-2-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 10 May 2021 12:16:13 +0200
+Message-ID: <CAMuHMdV1=mJzbr1cLwo-zUnThh9J8BmdW870dJCvp_Kft8kM2w@mail.gmail.com>
+Subject: Re: [RFC 01/12] asm-generic: use asm-generic/unaligned.h for most architectures
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Michal Simek <monstr@monstr.eu>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When PCI_IOBASE is not defined, it is set to 0 such that it is ignored
-in calls to the readX/writeX primitives. This triggers clang's
--Wnull-pointer-arithmetic warning and will result in illegal accesses on
-platforms that do not support I/O ports.
+Hi Arnd,
 
-Make things explicit and silence the warning by letting inb() and
-friends fail with WARN_ONCE() and a 0xff... return in case PCI_IOBASE is
-not defined.
+On Sat, May 8, 2021 at 12:09 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> There are several architectures that just duplicate the contents
+> of asm-generic/unaligned.h, so change those over to use the
+> file directly, to make future modifications easier.
+>
+> The exceptions are:
+>
+> - arm32 sets HAVE_EFFICIENT_UNALIGNED_ACCESS, but wants the
+>   unaligned-struct version
+>
+> - ppc64le disables HAVE_EFFICIENT_UNALIGNED_ACCESS but includes
+>   the access-ok version
+>
+> - m68k (non-dragonball) also uses the access-ok version without
+>   setting HAVE_EFFICIENT_UNALIGNED_ACCESS.
 
-Link: https://lore.kernel.org/lkml/20210421111759.2059976-1-schnelle@linux.ibm.com/
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- include/asm-generic/io.h | 65 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 61 insertions(+), 4 deletions(-)
+This not only applies to dragonball, which has the CPU32 core, but also
+to plain 68000, and any SoCs including the 68EC000 core.
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index e93375c710b9..7b523683c241 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -8,6 +8,7 @@
- #define __ASM_GENERIC_IO_H
- 
- #include <asm/page.h> /* I/O is all done through memory accesses */
-+#include <linux/bug.h>
- #include <linux/string.h> /* for memset() and memcpy() */
- #include <linux/types.h>
- 
-@@ -440,10 +441,6 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
- #endif
- #endif /* CONFIG_64BIT */
- 
--#ifndef PCI_IOBASE
--#define PCI_IOBASE ((void __iomem *)0)
--#endif
--
- #ifndef IO_SPACE_LIMIT
- #define IO_SPACE_LIMIT 0xffff
- #endif
-@@ -458,12 +455,17 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
- #define _inb _inb
- static inline u8 _inb(unsigned long addr)
- {
-+#ifdef PCI_IOBASE
- 	u8 val;
- 
- 	__io_pbr();
- 	val = __raw_readb(PCI_IOBASE + addr);
- 	__io_par(val);
- 	return val;
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+	return ~0;
-+#endif
- }
- #endif
- 
-@@ -471,12 +473,17 @@ static inline u8 _inb(unsigned long addr)
- #define _inw _inw
- static inline u16 _inw(unsigned long addr)
- {
-+#ifdef PCI_IOBASE
- 	u16 val;
- 
- 	__io_pbr();
- 	val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
- 	__io_par(val);
- 	return val;
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+	return ~0;
-+#endif
- }
- #endif
- 
-@@ -484,12 +491,17 @@ static inline u16 _inw(unsigned long addr)
- #define _inl _inl
- static inline u32 _inl(unsigned long addr)
- {
-+#ifdef PCI_IOBASE
- 	u32 val;
- 
- 	__io_pbr();
- 	val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
- 	__io_par(val);
- 	return val;
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+	return ~0;
-+#endif
- }
- #endif
- 
-@@ -497,9 +509,13 @@ static inline u32 _inl(unsigned long addr)
- #define _outb _outb
- static inline void _outb(u8 value, unsigned long addr)
- {
-+#ifdef PCI_IOBASE
- 	__io_pbw();
- 	__raw_writeb(value, PCI_IOBASE + addr);
- 	__io_paw();
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
-@@ -507,9 +523,13 @@ static inline void _outb(u8 value, unsigned long addr)
- #define _outw _outw
- static inline void _outw(u16 value, unsigned long addr)
- {
-+#ifdef PCI_IOBASE
- 	__io_pbw();
- 	__raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
- 	__io_paw();
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
-@@ -517,9 +537,13 @@ static inline void _outw(u16 value, unsigned long addr)
- #define _outl _outl
- static inline void _outl(u32 value, unsigned long addr)
- {
-+#ifdef PCI_IOBASE
- 	__io_pbw();
- 	__raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
- 	__io_paw();
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
-@@ -606,7 +630,11 @@ static inline void outl_p(u32 value, unsigned long addr)
- #define insb insb
- static inline void insb(unsigned long addr, void *buffer, unsigned int count)
- {
-+#ifdef PCI_IOBASE
- 	readsb(PCI_IOBASE + addr, buffer, count);
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
-@@ -614,7 +642,11 @@ static inline void insb(unsigned long addr, void *buffer, unsigned int count)
- #define insw insw
- static inline void insw(unsigned long addr, void *buffer, unsigned int count)
- {
-+#ifdef PCI_IOBASE
- 	readsw(PCI_IOBASE + addr, buffer, count);
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
-@@ -622,7 +654,11 @@ static inline void insw(unsigned long addr, void *buffer, unsigned int count)
- #define insl insl
- static inline void insl(unsigned long addr, void *buffer, unsigned int count)
- {
-+#ifdef PCI_IOBASE
- 	readsl(PCI_IOBASE + addr, buffer, count);
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
-@@ -631,7 +667,11 @@ static inline void insl(unsigned long addr, void *buffer, unsigned int count)
- static inline void outsb(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
-+#ifdef PCI_IOBASE
- 	writesb(PCI_IOBASE + addr, buffer, count);
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
-@@ -640,7 +680,11 @@ static inline void outsb(unsigned long addr, const void *buffer,
- static inline void outsw(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
-+#ifdef PCI_IOBASE
- 	writesw(PCI_IOBASE + addr, buffer, count);
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
-@@ -649,7 +693,11 @@ static inline void outsw(unsigned long addr, const void *buffer,
- static inline void outsl(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
-+#ifdef PCI_IOBASE
- 	writesl(PCI_IOBASE + addr, buffer, count);
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
-@@ -1020,18 +1068,27 @@ static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
- #define ioport_map ioport_map
- static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
- {
-+#ifdef PCI_IOBASE
- 	port &= IO_SPACE_LIMIT;
- 	return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+	return NULL;
-+#endif
- }
- #define __pci_ioport_unmap __pci_ioport_unmap
- static inline void __pci_ioport_unmap(void __iomem *p)
- {
-+#ifdef PCI_IOBASE
- 	uintptr_t start = (uintptr_t) PCI_IOBASE;
- 	uintptr_t addr = (uintptr_t) p;
- 
- 	if (addr >= start && addr < start + IO_SPACE_LIMIT)
- 		return;
- 	iounmap(p);
-+#else
-+	WARN_ONCE(1, "No I/O port support\n");
-+#endif
- }
- #endif
- 
+It also applies to early Coldfire, but AFAIK Linux doesn't support these
+(see dfe1d26d4a90287e ("m68knommu: Allow ColdFire CPUs to use unaligned
+ accesses")).
+
+ > - sh4a has a custom inline asm version
+>
+> - openrisc is the only one using the memmove version that
+>   generally leads to worse code.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+>  arch/m68k/include/asm/unaligned.h       |  9 +-------
+
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
