@@ -2,254 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C20B4379546
-	for <lists+linux-arch@lfdr.de>; Mon, 10 May 2021 19:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501443796C3
+	for <lists+linux-arch@lfdr.de>; Mon, 10 May 2021 20:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbhEJRWh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 May 2021 13:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbhEJRWe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 May 2021 13:22:34 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698F4C061574;
-        Mon, 10 May 2021 10:21:28 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id u7so8718483qvv.12;
-        Mon, 10 May 2021 10:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9sjLsVt8xymIh+A7BLyf2HYNixYx504wOSrn7OVFJwY=;
-        b=dYpRd8UBzBUQr2X+7B7FSdpW0/245RPF7H10qWxN/QAuMadAda8cqB23N8kMNFAW4G
-         VXTqhTJdMMcipdhAHP/yZyUDFkuw2NbZiW2/iHG95N8hheGFHCO29mX7vOK4CisCLB9A
-         bojYgFTYdlONo+rg0WcdAu4+XjjFTiE3LHh7oAkpISnOO5fo5tQxIbcvNnS1u+piVij/
-         t8kK8RFhv26nqqszVTM8ymQkgaG4ChC4kE70jtizruU+x6rOT5OWjvwHqWHuPw8aSKuV
-         +mtXB6E5nNy24Npd/nOHXex4J2Lt4At2gBAcEZkg9RyXWaYyOKVMzndNq4kwagP4zwKQ
-         G8Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9sjLsVt8xymIh+A7BLyf2HYNixYx504wOSrn7OVFJwY=;
-        b=RmbSDdzBV55UclbeEfIxLAxyM/jeNi3HYJbO1zChhqaQG2in/HVWs584z59cVoKOA4
-         pGerOO3QuEaYoSItA3ijlOxYMNGitc69ex89eH0+SO/0g/Qm5uBcEtI5VQ8RFAim3CZU
-         OGRuInWwzuCEFuzrMLBWDCzrPwDergsjp3mVJOhPW2wLJGPpz9VYkXsAlyChYa1Fdztn
-         PYKQ7KDz5W+5DL0DLyPG2xIzHhe98ut9jdtU2UdnxULchuDttwNps+dr6XNWWCcyb+5C
-         kokLXBeSP/xSZuiUmUCVcvSBhvlf3x3909NatCdXgxFeGuw7ZkOyzRbI3YJwONOvI144
-         WLOA==
-X-Gm-Message-State: AOAM5316XhRI3wS4IYFnxoCu4F0g3NPO68j3NL+6CRrjpPGalSkQr0um
-        u2wEJcjGrYm02E7aCsS0Gjg=
-X-Google-Smtp-Source: ABdhPJyx7jsRK8LEcdf7aWQRrTJWrrHx58JYmuJLXj76C8df16j2xWAHfu2XyIx87yYxQtDpoR4wBQ==
-X-Received: by 2002:ad4:5c68:: with SMTP id i8mr24688332qvh.53.1620667287417;
-        Mon, 10 May 2021 10:21:27 -0700 (PDT)
-Received: from localhost ([207.98.216.60])
-        by smtp.gmail.com with ESMTPSA id h7sm1744818qtj.35.2021.05.10.10.21.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 10:21:26 -0700 (PDT)
-Date:   Mon, 10 May 2021 10:21:26 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S231689AbhEJSDo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 May 2021 14:03:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55058 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231499AbhEJSDo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 10 May 2021 14:03:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 94CA1614A5;
+        Mon, 10 May 2021 18:02:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620669758;
+        bh=n42L871tHZ441F87A/b+CutETfOOFwkObERFP9A3pdA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jAVU4p1uzu94ulPZBeoZfk4s2+0oKep8O35dEH9B3XGOnfBOez0cqT9O/YPNWcq7K
+         T7jehq1COHzvQk562M5QFEuz58iBsW6GnwPXjhA/cVyTt1N3jxE15rCZgZHKILMpn/
+         j2uFJ1Qhe2ksUV0APrDOdlb2LHSBV6/yEmdkTakyE7eMIf2Gd3PEcDYmfuilpYxdEE
+         J2LthyZVJKGF4qAs0eL5J6Nek5zNOrWq6FoOABkHN+M7vDleC7VZQX3j2kIx/+Qboo
+         1/WODQxulH/sCuGBwe0ku+eYg7lCepVzxRaMSgvNWQxZ05b1ox+NqaPNhK7RwoJCp7
+         a38PA1z3yoBmQ==
+Date:   Mon, 10 May 2021 21:02:21 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux-SH <linux-sh@vger.kernel.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH 11/12] tools: sync lib/find_bit implementation
-Message-ID: <YJlravuhJLlWaqjs@yury-ThinkPad>
-References: <20210401003153.97325-1-yury.norov@gmail.com>
- <20210401003153.97325-12-yury.norov@gmail.com>
- <1ac7bbc2-45d9-26ed-0b33-bf382b8d858b@I-love.SAKURA.ne.jp>
- <CAHp75Vea0Y_LfWC7LNDoDZqO4t+SVHV5HZMzErfyMPoBAjjk1g@mail.gmail.com>
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v18 0/9] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <YJl1LQvQuxxfGRnJ@kernel.org>
+References: <20210303162209.8609-1-rppt@kernel.org>
+ <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
+ <de27bfae0f4fdcbb0bb4ad17ec5aeffcd774c44b.camel@linux.ibm.com>
+ <202105060916.ECDEC21@keescook>
+ <9e1953a1412fad06a9f7988a280d2d9a74ab0464.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75Vea0Y_LfWC7LNDoDZqO4t+SVHV5HZMzErfyMPoBAjjk1g@mail.gmail.com>
+In-Reply-To: <9e1953a1412fad06a9f7988a280d2d9a74ab0464.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 10, 2021 at 06:44:44PM +0300, Andy Shevchenko wrote:
-> +Cc: Rikard
+On Thu, May 06, 2021 at 11:47:47AM -0700, James Bottomley wrote:
+> On Thu, 2021-05-06 at 10:33 -0700, Kees Cook wrote:
+> > On Thu, May 06, 2021 at 08:26:41AM -0700, James Bottomley wrote:
 > 
-> On Mon, May 10, 2021 at 6:31 PM Tetsuo Handa
-> <penguin-kernel@i-love.sakura.ne.jp> wrote:
-> >
-> > Commit eaae7841ba83bb42 ("tools: sync lib/find_bit implementation") broke
-> > build of 5.13-rc1 using gcc (GCC) 8.3.1 20190311 (Red Hat 8.3.1-3).
-> >
-> >   DESCEND  objtool
-> >   CC       /usr/src/linux/tools/objtool/exec-cmd.o
-> >   CC       /usr/src/linux/tools/objtool/help.o
-> >   CC       /usr/src/linux/tools/objtool/pager.o
-> >   CC       /usr/src/linux/tools/objtool/parse-options.o
-> >   CC       /usr/src/linux/tools/objtool/run-command.o
-> >   CC       /usr/src/linux/tools/objtool/sigchain.o
-> >   CC       /usr/src/linux/tools/objtool/subcmd-config.o
-> >   LD       /usr/src/linux/tools/objtool/libsubcmd-in.o
-> >   AR       /usr/src/linux/tools/objtool/libsubcmd.a
-> >   CC       /usr/src/linux/tools/objtool/arch/x86/special.o
-> > In file included from /usr/src/linux/tools/include/linux/kernel.h:8:0,
-> >                  from /usr/src/linux/tools/include/linux/list.h:7,
-> >                  from /usr/src/linux/tools/objtool/include/objtool/arch.h:10,
-> >                  from /usr/src/linux/tools/objtool/include/objtool/check.h:11,
-> >                  from /usr/src/linux/tools/objtool/include/objtool/special.h:10,
-> >                  from arch/x86/special.c:4:
-> > /usr/src/linux/tools/include/asm-generic/bitops/find.h: In function 'find_next_bit':
-> > /usr/src/linux/tools/include/linux/bits.h:24:21: error: first argument to '__builtin_choose_expr' not a constant
-> >   (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> >                      ^
-> > /usr/src/linux/tools/include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
-> >  #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-> >                                                               ^
-> > /usr/src/linux/tools/include/linux/bits.h:38:3: note: in expansion of macro 'GENMASK_INPUT_CHECK'
-> >   (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-> >    ^
-> > /usr/src/linux/tools/include/asm-generic/bitops/find.h:32:17: note: in expansion of macro 'GENMASK'
-> >    val = *addr & GENMASK(size - 1, offset);
-> >                  ^
-> > /usr/src/linux/tools/include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not an integer constant
-> >  #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-> >                                                    ^
-> > /usr/src/linux/tools/include/linux/bits.h:24:3: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
-> >   (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> >    ^
-> > /usr/src/linux/tools/include/linux/bits.h:38:3: note: in expansion of macro 'GENMASK_INPUT_CHECK'
-> >   (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-> >    ^
-> > /usr/src/linux/tools/include/asm-generic/bitops/find.h:32:17: note: in expansion of macro 'GENMASK'
-> >    val = *addr & GENMASK(size - 1, offset);
-> >                  ^
-> > /usr/src/linux/tools/include/asm-generic/bitops/find.h: In function 'find_next_and_bit':
-> > /usr/src/linux/tools/include/linux/bits.h:24:21: error: first argument to '__builtin_choose_expr' not a constant
-> >   (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> >                      ^
-> > /usr/src/linux/tools/include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
-> >  #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-> >                                                               ^
-> > /usr/src/linux/tools/include/linux/bits.h:38:3: note: in expansion of macro 'GENMASK_INPUT_CHECK'
-> >   (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-> >    ^
-> > /usr/src/linux/tools/include/asm-generic/bitops/find.h:62:27: note: in expansion of macro 'GENMASK'
-> >    val = *addr1 & *addr2 & GENMASK(size - 1, offset);
-> >                            ^
-> > /usr/src/linux/tools/include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not an integer constant
-> >  #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-> >                                                    ^
-> > /usr/src/linux/tools/include/linux/bits.h:24:3: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
-> >   (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> >    ^
-> > /usr/src/linux/tools/include/linux/bits.h:38:3: note: in expansion of macro 'GENMASK_INPUT_CHECK'
-> >   (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-> >    ^
-> > /usr/src/linux/tools/include/asm-generic/bitops/find.h:62:27: note: in expansion of macro 'GENMASK'
-> >    val = *addr1 & *addr2 & GENMASK(size - 1, offset);
-> >                            ^
-> > /usr/src/linux/tools/include/asm-generic/bitops/find.h: In function 'find_next_zero_bit':
-> > /usr/src/linux/tools/include/linux/bits.h:24:21: error: first argument to '__builtin_choose_expr' not a constant
-> >   (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> >                      ^
-> > /usr/src/linux/tools/include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
-> >  #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-> >                                                               ^
-> > /usr/src/linux/tools/include/linux/bits.h:38:3: note: in expansion of macro 'GENMASK_INPUT_CHECK'
-> >   (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-> >    ^
-> > /usr/src/linux/tools/include/asm-generic/bitops/find.h:90:18: note: in expansion of macro 'GENMASK'
-> >    val = *addr | ~GENMASK(size - 1, offset);
-> >                   ^
-> > /usr/src/linux/tools/include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not an integer constant
-> >  #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-> >                                                    ^
-> > /usr/src/linux/tools/include/linux/bits.h:24:3: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
-> >   (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> >    ^
-> > /usr/src/linux/tools/include/linux/bits.h:38:3: note: in expansion of macro 'GENMASK_INPUT_CHECK'
-> >   (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-> >    ^
-> > /usr/src/linux/tools/include/asm-generic/bitops/find.h:90:18: note: in expansion of macro 'GENMASK'
-> >    val = *addr | ~GENMASK(size - 1, offset);
-> >                   ^
-> > make[5]: *** [/usr/src/linux/tools/objtool/arch/x86/special.o] Error 1
-> > make[4]: *** [arch/x86] Error 2
-> > make[3]: *** [/usr/src/linux/tools/objtool/objtool-in.o] Error 2
-> > make[2]: *** [objtool] Error 2
-> > make[1]: *** [tools/objtool] Error 2
-> > make: *** [__sub-make] Error 2
-> >
-> >
-> > Applying below diff seems to solve the build failure.
-> >
-> It will desynchronize this implementation with the mother's one (i.e.
-> in bits.h).
+> > What's happening with O_CLOEXEC in this code? I don't see that
+> > mentioned in the cover letter either. Why is it disallowed? That
+> > seems a strange limitation for something trying to avoid leaking
+> > secrets into other processes.
 > 
-> > Do we need to use BUILD_BUG_ON_ZERO() here?
-> 
-> Rikard?
->
-> >
-> > diff --git a/tools/include/linux/bits.h b/tools/include/linux/bits.h
-> > index 7f475d59a097..0aba9294f29d 100644
-> > --- a/tools/include/linux/bits.h
-> > +++ b/tools/include/linux/bits.h
-> > @@ -21,8 +21,7 @@
-> >  #if !defined(__ASSEMBLY__)
-> >  #include <linux/build_bug.h>
-> >  #define GENMASK_INPUT_CHECK(h, l) \
-> > -       (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> > -               __builtin_constant_p((l) > (h)), (l) > (h), 0)))
-> > +       ({ BUILD_BUG_ON(__builtin_constant_p((l) > (h)) && ((l) > (h))); 0; })
-> >  #else
-> >  /*
-> >   * BUILD_BUG_ON_ZERO is not available in h files included from asm files,
- 
-As Andy said, we need to sync tools/GENMASK_INPUT_CHECK() with the
-kernel version, and if I do this, I have many build failures:
+> I actually thought we forced it, so I'll let Mike address this.  I
+> think allowing it is great, so the secret memory isn't inherited by
+> children, but I can see use cases where a process would want its child
+> to inherit the secrets.
 
-https://pastebin.com/Fan1VLVF
+We do not enforce O_CLOEXEC, but if the user explicitly requested O_CLOEXEC
+it would be passed to get_unused_fd_flags().
 
-Maybe in this case we should use __GENMASK() to bypass GENMASK_INPUT_CHECK()...
-I'll check everything carefully this evening.
- 
-> > Also, why the fast path of find_*_bit() functions does not check
-> > __builtin_constant_p(offset) as well as small_const_nbits(size), for the fast
-> > path fails to catch BUILD_BUG_ON_ZERO() when offset argument is not a constant.
->
-> How would this help anything?
-> 
-> If you ask a bit from a bitmap behind the size, what do you expect to get?
-> 
-> And I'm a bit lost here, because I can't imagine the offset being
-> constant along with a size of bitmap. What do we want to achieve by
-> this? Any examples to better understand the case?
-
-If offset is constant, the existing fast path optimization would work
-even better, without any modifications. (Not sure there's an example of
-it in the existing codebase.) But even if the offset is not constant,
-fast path works quite well - it saves ~1K of .text and improves on
-performance:
-
-https://lore.kernel.org/linux-m68k/20210321215457.588554-10-yury.norov@gmail.com/
-
-We don't need to disable the optimization for non-constant offsets,
-for sure. If asserts in GENMASK() break build, we should use __GENMASK().
-
-Thanks,
-Yury
+-- 
+Sincerely yours,
+Mike.
