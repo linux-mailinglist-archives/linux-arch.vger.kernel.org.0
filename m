@@ -2,97 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 501443796C3
-	for <lists+linux-arch@lfdr.de>; Mon, 10 May 2021 20:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590DD3797C9
+	for <lists+linux-arch@lfdr.de>; Mon, 10 May 2021 21:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbhEJSDo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 May 2021 14:03:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55058 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231499AbhEJSDo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 10 May 2021 14:03:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 94CA1614A5;
-        Mon, 10 May 2021 18:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620669758;
-        bh=n42L871tHZ441F87A/b+CutETfOOFwkObERFP9A3pdA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jAVU4p1uzu94ulPZBeoZfk4s2+0oKep8O35dEH9B3XGOnfBOez0cqT9O/YPNWcq7K
-         T7jehq1COHzvQk562M5QFEuz58iBsW6GnwPXjhA/cVyTt1N3jxE15rCZgZHKILMpn/
-         j2uFJ1Qhe2ksUV0APrDOdlb2LHSBV6/yEmdkTakyE7eMIf2Gd3PEcDYmfuilpYxdEE
-         J2LthyZVJKGF4qAs0eL5J6Nek5zNOrWq6FoOABkHN+M7vDleC7VZQX3j2kIx/+Qboo
-         1/WODQxulH/sCuGBwe0ku+eYg7lCepVzxRaMSgvNWQxZ05b1ox+NqaPNhK7RwoJCp7
-         a38PA1z3yoBmQ==
-Date:   Mon, 10 May 2021 21:02:21 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v18 0/9] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <YJl1LQvQuxxfGRnJ@kernel.org>
-References: <20210303162209.8609-1-rppt@kernel.org>
- <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
- <de27bfae0f4fdcbb0bb4ad17ec5aeffcd774c44b.camel@linux.ibm.com>
- <202105060916.ECDEC21@keescook>
- <9e1953a1412fad06a9f7988a280d2d9a74ab0464.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9e1953a1412fad06a9f7988a280d2d9a74ab0464.camel@linux.ibm.com>
+        id S230002AbhEJTi7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 May 2021 15:38:59 -0400
+Received: from flippiebeckerswealth.xyz ([62.173.147.206]:45422 "EHLO
+        host.flippiebeckerswealth.xyz" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230045AbhEJTi6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 10 May 2021 15:38:58 -0400
+X-Greylist: delayed 17449 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 May 2021 15:38:58 EDT
+Received: from flippiebeckerswealth.xyz (ec2-3-142-218-249.us-east-2.compute.amazonaws.com [3.142.218.249])
+        by host.flippiebeckerswealth.xyz (Postfix) with ESMTPA id 2BCC91DFF03
+        for <linux-arch@vger.kernel.org>; Mon, 10 May 2021 17:06:49 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippiebeckerswealth.xyz 2BCC91DFF03
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippiebeckerswealth.xyz; s=default; t=1620655609;
+        bh=Lxx5rGQCX/MQzrwE9epz1Mb5yPYRqDyEupWj6GReobo=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=VdCFeu2BKLYh/lNsCCVk98miPONP14suiQSkU3qHEUpmVaiqI+4zermzdbhuFQljK
+         mbzHO5GqfL0LvF/LLWHFpMhYi8FlpaOG2ERC9voiQNX2mdp3ic58ALehAJU5HBHKnx
+         CUBKSUHg+l4HRRhlYhOgIrseTPatsw6fqtxshWZY=
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippiebeckerswealth.xyz 2BCC91DFF03
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippiebeckerswealth.xyz; s=default; t=1620655609;
+        bh=Lxx5rGQCX/MQzrwE9epz1Mb5yPYRqDyEupWj6GReobo=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=VdCFeu2BKLYh/lNsCCVk98miPONP14suiQSkU3qHEUpmVaiqI+4zermzdbhuFQljK
+         mbzHO5GqfL0LvF/LLWHFpMhYi8FlpaOG2ERC9voiQNX2mdp3ic58ALehAJU5HBHKnx
+         CUBKSUHg+l4HRRhlYhOgIrseTPatsw6fqtxshWZY=
+Reply-To: cpavlides@flippiebeckerwealthservices.com
+From:   Chris Pavlides <cpavlides@flippiebeckerswealth.xyz>
+To:     linux-arch@vger.kernel.org
+Subject: Personal
+Date:   10 May 2021 14:06:48 +0000
+Message-ID: <20210510140648.3B35BE4191AF8DA3@flippiebeckerswealth.xyz>
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 06, 2021 at 11:47:47AM -0700, James Bottomley wrote:
-> On Thu, 2021-05-06 at 10:33 -0700, Kees Cook wrote:
-> > On Thu, May 06, 2021 at 08:26:41AM -0700, James Bottomley wrote:
-> 
-> > What's happening with O_CLOEXEC in this code? I don't see that
-> > mentioned in the cover letter either. Why is it disallowed? That
-> > seems a strange limitation for something trying to avoid leaking
-> > secrets into other processes.
-> 
-> I actually thought we forced it, so I'll let Mike address this.  I
-> think allowing it is great, so the secret memory isn't inherited by
-> children, but I can see use cases where a process would want its child
-> to inherit the secrets.
+Hello there,
 
-We do not enforce O_CLOEXEC, but if the user explicitly requested O_CLOEXEC
-it would be passed to get_unused_fd_flags().
+I hope this message finds you in good spirits especially during=20
+this challenging time of coronavirus pandemic. I hope you and=20
+your family are well and keeping safe. Anyway, I am Chris=20
+Pavlides, a broker working with Flippiebecker Wealth. I got your=20
+contact (along with few other contacts) through an online=20
+business directory and I thought I should contact you to see if=20
+you are interested in this opportunity. I am contacting you=20
+because one of my high profile clients is interested in investing=20
+abroad and has asked me to look for individuals and companies=20
+with interesting business ideas and projects that he can invest=20
+in. He wants to invest a substantial amount of asset abroad.
 
--- 
-Sincerely yours,
-Mike.
+Please kindly respond back to this email if you are interested in=20
+this opportunity. Once I receive your response, I will give you=20
+more details and we can plan a strategy that will be beneficial=20
+to all parties.
+
+Best regards
+
+C Pavlides
+Flippiebecker Wealth
