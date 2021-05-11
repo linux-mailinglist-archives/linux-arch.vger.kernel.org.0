@@ -2,111 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBEE37A82F
-	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 15:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7177E37A97E
+	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 16:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbhEKNyl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 May 2021 09:54:41 -0400
-Received: from mail-40136.protonmail.ch ([185.70.40.136]:25711 "EHLO
-        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbhEKNyi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 09:54:38 -0400
-Date:   Tue, 11 May 2021 13:53:22 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1620741209; bh=jI9W9Blj/Z2qjs3mmYq2tUWMQe2pKTQ81XNwCTvedF4=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=bmoJ+2g9V7Dr5u4+mbx7+VWWI+VbNHXRu4+Pl5zJLxdO8By602YaZnUhpNrhCPfuf
-         sbGhHBahrMkDSDYReFAPMkFqjPE4x8cpaOrhYQFoA7Pi1+JJpqo2n3DHog4Fh835IC
-         SwuVMUMGEUTEyCy9h6K2k7Z4cDonsp1kjOs5B/RUpmFc3r7Ss/JE9LUqblCbvvDEXx
-         X5UcOUlKsJbrg/1ok2jCKdAkre6tcBWjrhWXBXIkhyoJ08J+Lla6ZGEPrALMFwxfe2
-         LE2Q2pde3JcBQWvSUEPsRbmeMTCpqwnoDjzV6LAHmwvfrzXiUkzv2GjOwBGQhfzl1p
-         apSpWWjgxYVgA==
-To:     Yury Norov <yury.norov@gmail.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Alexey Klimov <aklimov@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Richard Weinberger <richard@nod.at>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Will Deacon <will@kernel.org>, Yogesh Lal <ylal@codeaurora.org>
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH] all: remove GENERIC_FIND_FIRST_BIT
-Message-ID: <20210511134551.18721-1-alobakin@pm.me>
-In-Reply-To: <20210510233421.18684-1-yury.norov@gmail.com>
-References: <20210510233421.18684-1-yury.norov@gmail.com>
+        id S231927AbhEKOhF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 May 2021 10:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231695AbhEKOhE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 10:37:04 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3EDC061761
+        for <linux-arch@vger.kernel.org>; Tue, 11 May 2021 07:35:57 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id n184so19171650oia.12
+        for <linux-arch@vger.kernel.org>; Tue, 11 May 2021 07:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google;
+        h=subject:to:references:from:cc:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ETXAFKWQdH8/eG9YgJ2MyXQqUI4w0G+a8+7kidOetNw=;
+        b=D+8UcMkB2GUwjj2F27jdDoxAVAL9rdC9MdMoJFlDBNeHzfe67XWP/sw3xSweHhjvu0
+         L7zFyh43n9/fy4cUZSlUsyNvNqDkT2TqDuEFXFN77WQ7UwdcaxgaJydbt2h0Tqt9neqT
+         2ljICDLxSDdscBg19eDiJRfFGl65YBejwUIvU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:cc:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ETXAFKWQdH8/eG9YgJ2MyXQqUI4w0G+a8+7kidOetNw=;
+        b=GV8kaKbW2m+QBDugAgThJjHLTT0+wODunrIxzLTHwle8d3gWOxjhLH0l5Opom9by9C
+         VON7YH2k0w+4W2uwJAu6gfRrbIP+NQm+HYhyLVNqp9zN+ZMDn3EVpDiJ/ng8R7fLrN5V
+         kJFsidY3I9izpifJd2J5Fr/Yr6K0vlnVt9YUA6RWWtxYOEZEIDy5lVZY0dZ/txhHZG3x
+         PT7evw1YHRT6QK+yrFSMfqZfJbKck3jm/Yqyd74W5T/OBPMSDgxiDnspDSVtGd7lcLmk
+         GyBqsC1CJOGB9cB02E1jdsWks2ynA92sDSMBbKjeMTpDgcP+bw6NTfz/vNvLLPdSMcc6
+         ZT2w==
+X-Gm-Message-State: AOAM530RDWBEh7vJ1It9X6Do/GtE15HW1lysUdYghFEkt8u8bS//KWUu
+        2jHZASOgSfuM3rW4QCsF2xk73Q==
+X-Google-Smtp-Source: ABdhPJyvp7T0CdewBKkqMXtDA5ThSmqkKCGgPnZJ05uagz+Vq5z9FBuvh4nrA0ZkdxuooO6UIklVPg==
+X-Received: by 2002:aca:53d8:: with SMTP id h207mr3883260oib.177.1620743757147;
+        Tue, 11 May 2021 07:35:57 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id 2sm3341540ota.67.2021.05.11.07.35.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 May 2021 07:35:56 -0700 (PDT)
+Subject: Re: [PATCH v3 1/1] kernel.h: Split out panic and oops helpers
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20210511074137.33666-1-andriy.shevchenko@linux.intel.com>
+From:   Alex Elder <elder@ieee.org>
+Cc:     linux-xtensa@linux-xtensa.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-clk@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        coresight@lists.linaro.org, linux-leds@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        kexec@lists.infradead.org, rcu@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, xen-devel@lists.xenproject.org
+Message-ID: <c6fa5d2c-84e2-2046-19f0-66cf5dd72077@ieee.org>
+Date:   Tue, 11 May 2021 09:35:54 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+In-Reply-To: <20210511074137.33666-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
-Date: Mon, 10 May 2021 16:34:21 -0700
-
-> In the 5.12 cycle we enabled the GENERIC_FIND_FIRST_BIT config option
-> for ARM64 and MIPS. It increased performance and shrunk .text size; and
-> so far I didn't receive any negative feedback on the change.
->
-> https://lore.kernel.org/linux-arch/20210225135700.1381396-1-yury.norov@gm=
-ail.com/
->
-> I think it's time to make all architectures use find_{first,last}_bit()
-> unconditionally and remove the corresponding config option.
->
-> This patch doesn't introduce functional changes for arc, arm64, mips,
-> s390 and x86 because they already enable GENERIC_FIND_FIRST_BIT. There
-> will be no changes for arm because it implements find_{first,last}_bit
-> in arch code. For other architectures I expect improvement both in
-> performance and .text size.
->
-> It would be great if people with an access to real hardware would share
-> the output of bloat-o-meter and lib/find_bit_benchmark.
->
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+On 5/11/21 2:41 AM, Andy Shevchenko wrote:
+> kernel.h is being used as a dump for all kinds of stuff for a long time.
+> Here is the attempt to start cleaning it up by splitting out panic and
+> oops helpers.
+> 
+> There are several purposes of doing this:
+> - dropping dependency in bug.h
+> - dropping a loop by moving out panic_notifier.h
+> - unload kernel.h from something which has its own domain
+> 
+> At the same time convert users tree-wide to use new headers, although
+> for the time being include new header back to kernel.h to avoid twisted
+> indirected includes for existing users.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: Corey Minyard <cminyard@mvista.com>
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Wei Liu <wei.liu@kernel.org>
+> Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Co-developed-by: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Acked-by: Sebastian Reichel <sre@kernel.org>
+> Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
+> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Acked-by: Helge Deller <deller@gmx.de> # parisc
 > ---
->  arch/arc/Kconfig                  |  1 -
->  arch/arm64/Kconfig                |  1 -
->  arch/mips/Kconfig                 |  1 -
+> v3: rebased on top of v5.13-rc1, collected a few more tags
+> 
+> Note WRT Andrew's SoB tag above: I have added it since part of the cases
+> I took from him. Andrew, feel free to amend or tell me how you want me
+> to do.
+> 
 
-MIPS bit:
+Acked-by: Alex Elder <elder@kernel.org>
 
-Reviewed-by: Alexander Lobakin <alobakin@pm.me>
-Tested-by: Alexander Lobakin <alobakin@pm.me>
+. . .
 
->  arch/s390/Kconfig                 |  1 -
->  arch/x86/Kconfig                  |  1 -
->  arch/x86/um/Kconfig               |  1 -
->  include/asm-generic/bitops/find.h | 12 ------------
->  lib/Kconfig                       |  3 ---
->  8 files changed, 21 deletions(-)
+> diff --git a/drivers/net/ipa/ipa_smp2p.c b/drivers/net/ipa/ipa_smp2p.c
+> index a5f7a79a1923..34b68dc43886 100644
+> --- a/drivers/net/ipa/ipa_smp2p.c
+> +++ b/drivers/net/ipa/ipa_smp2p.c
+> @@ -8,6 +8,7 @@
+>   #include <linux/device.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/notifier.h>
+> +#include <linux/panic_notifier.h>
+>   #include <linux/soc/qcom/smem.h>
+>   #include <linux/soc/qcom/smem_state.h>
+>   
 
-Thanks,
-Al
-
+. . .
