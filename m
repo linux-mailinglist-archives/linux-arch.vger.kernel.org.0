@@ -2,161 +2,227 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5995537AEC5
-	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 20:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E7437B029
+	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 22:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbhEKSxH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 May 2021 14:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S229952AbhEKUjL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 May 2021 16:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbhEKSwz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 14:52:55 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48547C06138C;
-        Tue, 11 May 2021 11:51:48 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e2so18082913ilr.1;
-        Tue, 11 May 2021 11:51:48 -0700 (PDT)
+        with ESMTP id S229716AbhEKUjK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 16:39:10 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF38C061574;
+        Tue, 11 May 2021 13:38:03 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id z9so30503124lfu.8;
+        Tue, 11 May 2021 13:38:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1zPO68rECc+Worbr8mpoHDMicmfWQWDsecrogWsDsoQ=;
-        b=lUOzvKR7OcFpY3RFzFgr4FfdY+ltDTeD+w+XTPlSXAD60lNeu0OutmmA3OapNwiIOs
-         iOGGjwpez+HzgWZKjsLeHv/b7ne6PJXQGzWgJEryLJMkUuLeRJDhkHtKfnfQN54XHv+t
-         iWg5/I8gU7sXudG/yQXuwEKlLk5+RqDXvgIL23dhr63JSghTd4PPQBtoSPw88Xe0mYb1
-         mdXZW4KQgIBgzqPRDkt46MQleqFIO14rbyTwJN77jc9KKKIJDnhc4K1S1qgtwqFK5cSI
-         b5GCLFGyh7G5KxULcx9wtTmd/9ugmEXaDIcDl87WA3cq6Si7oKgmknwsAeKY6p7ODVW5
-         koRg==
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DK5tJmmDmMugyANGMz6uGMnaLAd2KYOdGC6b7FxAiPM=;
+        b=DoPsmcM0KMuwfSZoXP7+nCQ7uK43uv743oLY70bnV1QUOvnfM4y5EHwQaKkPWi1VES
+         SxtAnBgAZMdaJFYgPmdUQUv8TH4AiQXQHWo7O+/1Pfn4h5Up20uBgbaaacNWop3q5UKg
+         Ylf/U1gg6eXP87OZsGStjMPh/9kY3JO4zR4/vJEa6/dQojwHrn7lzZlVGwzwYDlQgkdv
+         Ni33StgwcAh/hZcDa3bWYvGxfZuXrmeNH1lpn5AmlIZkY+tk1Chiv/AgineevkA0s+Pr
+         0rdE227eoKrvXDJklMEC2k8R6Iz8F0ruvSMz/4YKaWXxiijC5i7HPm3GEOkvup3N+NG6
+         S15A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1zPO68rECc+Worbr8mpoHDMicmfWQWDsecrogWsDsoQ=;
-        b=l2PHr/r9fFo8He1VRsE4zTJH6bJGt/qoTIOSL8o2uk7WQBa17+hgJNg2Sw4w/8z11S
-         dkNYd4xcRAlU/FY+tnl8qw9GKY+7IkoqWAqE0Hi9+F8di9lKSnxaua6ZSR+jwwzycWNH
-         FA377/VH+TTGiIm0JTtmmz+QUGcn2YFrHZ0GrrUTuS/IGnpwgFf+wMCVtZ9cFaBHDmmc
-         5En0YVyMsAGBM2NNbLpF0ygQreaMbRIWiF1vkLNjAKqsFhcl3oT/E1VYnvsPVTfRSWdh
-         f+AecMcfI5mZz+XKbDUj2uQXNl3PJYwZLVhu6sVSh2VCwp/IZqyHceipeS3Q0l9F5D4c
-         dMCQ==
-X-Gm-Message-State: AOAM531biR2BtuloWr45wz9J6fKvBCXhTXWC9ziEH15I8UycdcXs9Pe9
-        4EIzLRk2bA3HbN5gOqBW+EM=
-X-Google-Smtp-Source: ABdhPJzgH2JupKPauvVNrxewRnPOgZT9DsS7spCYIvNf3mENzkbGKi8D+JbpvRz4e1wSrzR8pbrZeQ==
-X-Received: by 2002:a92:cf05:: with SMTP id c5mr25905167ilo.225.1620759107543;
-        Tue, 11 May 2021 11:51:47 -0700 (PDT)
-Received: from frodo.mearth (c-24-9-77-57.hsd1.co.comcast.net. [24.9.77.57])
-        by smtp.googlemail.com with ESMTPSA id t10sm405096ils.36.2021.05.11.11.51.46
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DK5tJmmDmMugyANGMz6uGMnaLAd2KYOdGC6b7FxAiPM=;
+        b=WWN8/FULwNE6vElDSyC4nCXF9Nk6hLVHDSv026HJYQYlx8IZ5ciaRYTHALGfcq7HcW
+         FAyl7o0blcLU8ITKQfRCpMSeLNjfDXRL5uBNw/sMzLV0BmwDYnje+a2naRvS5yqsK3jn
+         Y7b1ApMjJb45rp0KwpjIqisAb40SzoSQmMGXnfbyIcJhAMpBx17LifeG1t6xHwR9wOUt
+         SL0ys2WUH8YtLTSfcmyVa6AVNJkzymDcZmmUxwsbFOBe64nwclAxgQlkW2YU/fB5ihMD
+         kmEHgeuObrYfGgmpglh/jnS+df9uhKKX4dVklnfHjMeCoybJihZvxjD0UNnChm4CJcar
+         kidQ==
+X-Gm-Message-State: AOAM532RnyhZlyHsGAGIC2fdCEOHM3pmBKdP8ldiLKfokBAK6b+S7TpM
+        Kx/+6xU6v9Wlihtf43rjgZs=
+X-Google-Smtp-Source: ABdhPJxtflci7Mz+vugabPHlCz0Q0Gx5fwa6L+2OG/Z8QYy5+y8O3N6sL1J9naRsa6hASsDD5zduvA==
+X-Received: by 2002:a05:6512:3e14:: with SMTP id i20mr21586920lfv.142.1620765481818;
+        Tue, 11 May 2021 13:38:01 -0700 (PDT)
+Received: from rikard (h-158-174-22-223.NA.cust.bahnhof.se. [158.174.22.223])
+        by smtp.gmail.com with ESMTPSA id f24sm834191ljc.80.2021.05.11.13.38.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 May 2021 11:51:47 -0700 (PDT)
-From:   Jim Cromie <jim.cromie@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, Jim Cromie <jim.cromie@gmail.com>
-Subject: [RFC PATCH v5 19/28] dyndbg: RFC handle __dyndbg* sections in module.lds.h
-Date:   Tue, 11 May 2021 12:50:48 -0600
-Message-Id: <20210511185057.3815777-20-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210511185057.3815777-1-jim.cromie@gmail.com>
-References: <20210511185057.3815777-1-jim.cromie@gmail.com>
+        Tue, 11 May 2021 13:38:01 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+X-Google-Original-From: Rikard Falkeborn <rikard.falkeborn>
+Date:   Tue, 11 May 2021 22:37:58 +0200
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux-SH <linux-sh@vger.kernel.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jianpeng Ma <jianpeng.ma@intel.com>,
+        Joe Perches <joe@perches.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rich Felker <dalias@libc.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH 11/12] tools: sync lib/find_bit implementation
+Message-ID: <YJrrJhvwq7RUvDXD@rikard>
+References: <20210401003153.97325-1-yury.norov@gmail.com>
+ <20210401003153.97325-12-yury.norov@gmail.com>
+ <1ac7bbc2-45d9-26ed-0b33-bf382b8d858b@I-love.SAKURA.ne.jp>
+ <CAHp75Vea0Y_LfWC7LNDoDZqO4t+SVHV5HZMzErfyMPoBAjjk1g@mail.gmail.com>
+ <YJm5Dpo+RspbAtye@rikard>
+ <YJoyMrqRtB3GSAny@smile.fi.intel.com>
+ <YJpePAHS3EDw6PK1@rikard>
+ <151de51e-9302-1f59-407a-e0d68bbaf11c@i-love.sakura.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <151de51e-9302-1f59-407a-e0d68bbaf11c@i-love.sakura.ne.jp>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Up until now, loadable modules have tacitly linked the 2 __dyndbg*
-sections into the .ko, as observable in log by enabling module.c's
-pr_debugs and loading a module.
+On Tue, May 11, 2021 at 08:53:53PM +0900, Tetsuo Handa wrote:
+> On 2021/05/11 0:44, Andy Shevchenko wrote:
+> > And I'm a bit lost here, because I can't imagine the offset being
+> > constant along with a size of bitmap. What do we want to achieve by
+> > this? Any examples to better understand the case?
+> 
+> Because I feel that the GENMASK() macro cannot be evaluated without
+> both arguments being a constant.
+> 
+> The usage is
+> 
+>  unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+>                             unsigned long offset)
+>  {
+> +       if (small_const_nbits(size)) {
+> +               unsigned long val;
+> +
+> +               if (unlikely(offset >= size))
+> +                       return size;
+> +
+> +               val = *addr & GENMASK(size - 1, offset);
+> +               return val ? __ffs(val) : size;
+> +       }
+> +
+>         return _find_next_bit(addr, NULL, size, offset, 0UL, 0);
+>  }
+> 
+> where GENMASK() might be called even if "offset" is not a constant.
+> 
+> #define GENMASK(h, l) \
+>      (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+> 
+> #define __GENMASK(h, l) \
+>      (((~UL(0)) - (UL(1) << (l)) + 1) & \
+>        (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+> 
+> #define GENMASK_INPUT_CHECK(h, l) \
+>      (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+>           __builtin_constant_p((l) > (h)), (l) > (h), 0)))
+> 
+> __GENMASK() does not need "h" and "l" being a constant.
+> 
+> Yes, small_const_nbits(size) in find_next_bit() can guarantee that "size" is a
+> constant and hence "h" argument in GENMASK_INPUT_CHECK() call is also a constant.
+> But nothing can guarantee that "offset" is a constant, and hence nothing can
+> guarantee that "l" argument in GENMASK_INPUT_CHECK() call is also a constant.
+> 
+> Then, how can (l) > (h) in __builtin_constant_p((l) > (h)) be evaluated at build time
+> if either l or h (i.e. "offset" and "size - 1" in find_next_bit()) lacks a guarantee of
+> being a constant?
+> 
 
-But now, we need to explicitly place the header sections in front of
-their respective __dyndbg* sections, so we reuse input section names
-for the output.
+So the idea is that if (l > h) is constant, __builtin_constant_p should
+evaluate that, and if it is not it should use zero instead as input to
+__builtin_chose_expr(). This works with non-const inputs in many other
+places in the kernel, but apparently in this case with a certain
+compiler, it doesn't so I guess we need to work around it.
 
-This gives us the placement we need for the header record, which we
-can see in the "add-module:"s and elements "0 0" below:
+> But what a surprise,
+> 
+> On 2021/05/11 7:51, Rikard Falkeborn wrote:
+> > Does the following work for you? For simplicity, I copied__is_constexpr from
+> > include/linux/minmax.h (which isn't available in tools/). A proper patch
+> > would reuse __is_constexpr (possibly refactoring it to a separate
+> > header since bits.h including minmax.h for that only seems smelly) and fix
+> > bits.h in the kernel header as well, to keep the files in sync.
+> 
+> this works for me.
+> 
 
-    "0 0" lines are headers: predicate (function==module && !lineno)
-    "X debug prints in" are 1 too high, they count headers.
-    we are adding tables for empty modules (1st 2 below)
+Great, thanks for testing!
 
-[    7.578873] dyndbg: add-module: ghash_clmulni_intel
-[    7.579716] dyndbg:  0 0 ghash_clmulni_intel.ghash_clmulni_intel.0
-[    7.608995] dyndbg:   1 debug prints in module ghash_clmulni_intel
-[    8.078085] dyndbg: add-module: rapl
-[    8.078977] dyndbg:  0 0 rapl.rapl.0
-[    8.079584] dyndbg:   1 debug prints in module rapl
-[    8.082009] RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
-[    8.099294] dyndbg: add-module: intel_rapl_common
-[    8.100177] dyndbg:  0 0 intel_rapl_common.intel_rapl_common.0
-[    8.101026] dyndbg:  1 1 intel_rapl_common.rapl_remove_package.1279
-[    8.101931] dyndbg:  2 2 intel_rapl_common.rapl_detect_domains.1245
-[    8.102836] dyndbg:  3 3 intel_rapl_common.rapl_detect_domains.1242
-[    8.103778] dyndbg:  4 4 intel_rapl_common.rapl_package_register_powercap.1159
-[    8.104960] dyndbg:  5 5 intel_rapl_common.rapl_package_register_powercap.1145
-[    8.106246] dyndbg:  6 6 intel_rapl_common.rapl_package_register_powercap.1114
-[    8.107302] dyndbg:  7 7 intel_rapl_common.rapl_package_register_powercap.1108
-[    8.108338] dyndbg:  8 8 intel_rapl_common.rapl_update_domain_data.1083
-[    8.109278] dyndbg:  9 9 intel_rapl_common.rapl_check_unit_atom.824
-[    8.110255] dyndbg:  10 10 intel_rapl_common.rapl_check_unit_core.796
-[    8.111361] dyndbg:  11 11 intel_rapl_common.rapl_read_data_raw.722
-[    8.112301] dyndbg:  12 12 intel_rapl_common.contraint_to_pl.303
-[    8.113276] dyndbg:  13 debug prints in module intel_rapl_common
-[    8.130452] dyndbg: add-module: intel_rapl_msr
-[    8.131140] dyndbg:  0 0 intel_rapl_msr.intel_rapl_msr.0
-[    8.132026] dyndbg:  1 1 intel_rapl_msr.rapl_msr_probe.172
-[    8.132818] dyndbg:  2 2 intel_rapl_msr.rapl_msr_read_raw.104
-[    8.133794] dyndbg:   3 debug prints in module intel_rapl_msr
+I sent a patch for this here:
+https://lore.kernel.org/lkml/20210511203716.117010-1-rikard.falkeborn@gmail.com/
 
-This gives us the property we need:
+Rikard
 
-   fixed offset from &__dyndbg[N] to &__dyndbg[0]
-   container_of gets &header
-   header has ptr to __dyndbg_sites[]
-   we can (in principle) drop __dyndbg.site ptr
-   (after we adapt header to keep it)
-
-TODO:
-
-At this point, for loaded modules, ddebug_add_module() sees the header
-as 0'th element, as we need in order to drop site (and regain worst
-case footprint parity).
-
-It could/should properly init this header to support the _sites[n]
-lookup for loaded mods.  Or at least handle it explicitly.  Or at
-least see what proc-show does with it currently.
-
-Note that for builtins, decided by (__start <= dp < __stop), we use
-__start___dyndbg_sites[N] directly, and dont need the header.
-
-But maybe we should use it anyway, double-checking/BUGing when wrong.
-
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- include/asm-generic/module.lds.h | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/include/asm-generic/module.lds.h b/include/asm-generic/module.lds.h
-index f210d5c1b78b..328c48dfc88c 100644
---- a/include/asm-generic/module.lds.h
-+++ b/include/asm-generic/module.lds.h
-@@ -4,7 +4,17 @@
- 
- /*
-  * <asm/module.lds.h> can specify arch-specific sections for linking modules.
-- * Empty for the asm-generic header.
-+ *
-+ * For loadable modules with CONFIG_DYNAMIC_DEBUG, we need to keep the
-+ * 2 __dyndbg* ELF sections, which are loaded by module.c
-+ *
-+ * Pack the 2 __dyndbg* input sections with their respective
-+ * .gnu.linkonce. header records into 2 output sections, with those
-+ * header records in the 0th element.
-  */
-+SECTIONS {
-+__dyndbg_sites	: ALIGN(8) { *(.gnu.linkonce.dyndbg_site) *(__dyndbg_sites) }
-+__dyndbg	: ALIGN(8) { *(.gnu.linkonce.dyndbg)	  *(__dyndbg) }
-+}
- 
- #endif /* __ASM_GENERIC_MODULE_LDS_H */
--- 
-2.31.1
-
+> > 
+> > diff --git a/tools/include/linux/bits.h b/tools/include/linux/bits.h
+> > index 7f475d59a097..7bc4c31a7df0 100644
+> > --- a/tools/include/linux/bits.h
+> > +++ b/tools/include/linux/bits.h
+> > @@ -19,10 +19,13 @@
+> >   * GENMASK_ULL(39, 21) gives us the 64bit vector 0x000000ffffe00000.
+> >   */
+> >  #if !defined(__ASSEMBLY__)
+> > +
+> > +#define __is_constexpr(x) \
+> > +       (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+> >  #include <linux/build_bug.h>
+> >  #define GENMASK_INPUT_CHECK(h, l) \
+> >         (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+> > -               __builtin_constant_p((l) > (h)), (l) > (h), 0)))
+> > +               __is_constexpr((l) > (h)), (l) > (h), 0)))
+> >  #else
+> >  /*
+> >   * BUILD_BUG_ON_ZERO is not available in h files included from asm files,
+> > 
+> 
+> 
+> 
+> On 2021/05/11 7:52, Yury Norov wrote:
+> > I tested the objtool build with the 8.4.0 and 7.5.0 compilers from
+> > ubuntu 21 distro, and it looks working. Can you please share more
+> > details about your system? 
+> 
+> Nothing special. A plain x86_64 CentOS 7.9 system with devtoolset-8.
+> 
+> $ /opt/rh/devtoolset-8/root/bin/gcc --version
+> gcc (GCC) 8.3.1 20190311 (Red Hat 8.3.1-3)
+> Copyright (C) 2018 Free Software Foundation, Inc.
+> This is free software; see the source for copying conditions.  There is NO
+> warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+> 
+> $ rpm -qi devtoolset-8-gcc
+> Name        : devtoolset-8-gcc
+> Version     : 8.3.1
+> Release     : 3.2.el7
+> Architecture: x86_64
+> Install Date: Wed Apr 22 07:58:16 2020
+> Group       : Development/Languages
+> Size        : 74838011
+> License     : GPLv3+ and GPLv3+ with exceptions and GPLv2+ with exceptions and LGPLv2+ and BSD
+> Signature   : RSA/SHA1, Thu Apr 16 19:44:43 2020, Key ID 4eb84e71f2ee9d55
+> Source RPM  : devtoolset-8-gcc-8.3.1-3.2.el7.src.rpm
+> Build Date  : Sat Mar 28 00:06:45 2020
+> Build Host  : c1be.rdu2.centos.org
+> Relocations : (not relocatable)
+> Packager    : CBS <cbs@centos.org>
+> Vendor      : CentOS
+> URL         : http://gcc.gnu.org
+> Summary     : GCC version 8
+> Description :
+> The devtoolset-8-gcc package contains the GNU Compiler Collection version 7.
+> 
