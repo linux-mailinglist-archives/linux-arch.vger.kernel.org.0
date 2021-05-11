@@ -2,31 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1AA437A9C8
-	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 16:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B981D37ACB7
+	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 19:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbhEKOpO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 May 2021 10:45:14 -0400
-Received: from mga11.intel.com ([192.55.52.93]:37055 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231154AbhEKOpO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 11 May 2021 10:45:14 -0400
-IronPort-SDR: gMK/SnPUHjREfJMdcX7vd2KPn7jaQN86UdRUfMrOOsVDLJDh83csQYkxmQZ2DkOIPkE+qEf2rQ
- DZxZsJGV3YlA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="196362832"
-X-IronPort-AV: E=Sophos;i="5.82,291,1613462400"; 
-   d="scan'208";a="196362832"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 07:44:08 -0700
-IronPort-SDR: 7V+9fvwXTKhUEpN2lvCIsHN2TqNwmLJvPUcOKEsw//yhaLuJGNRifnvWmU/hT2zoRsJ46EEfyI
- vzjaY6esLPCw==
-X-IronPort-AV: E=Sophos;i="5.82,291,1613462400"; 
-   d="scan'208";a="468935466"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.34.147]) ([10.212.34.147])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 07:44:07 -0700
-Subject: Re: [PATCH v26 30/30] mm: Introduce PROT_SHADOW_STACK for shadow
- stack
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+        id S231230AbhEKRKy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 May 2021 13:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230315AbhEKRKx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 13:10:53 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521CBC061574;
+        Tue, 11 May 2021 10:09:47 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0ec70020ab858661d7f414.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:c700:20ab:8586:61d7:f414])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 134C61EC02E6;
+        Tue, 11 May 2021 19:09:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1620752985;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=oXj+aT1NLTLdq4xvPpDkmK4mlSpKcyX1kXRzqY9sy/I=;
+        b=bLcn8++CHPCwI1r2+fGHgbqQmPMj0/Kw1DAyubBcNj+IKE9PD5aHN82t0EOQYgw9zkmX8U
+        VMpPrqq8dwdNUvdWd3XkPDW+VrSH9QT2L5Yp2JzKL44ITn0WeVVb2mlJjcR4IxfCdcZh0e
+        tVqiaLj/s+Svo/KGRT6NwRVyr9HxLRg=
+Date:   Tue, 11 May 2021 19:09:41 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -35,7 +39,6 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
@@ -53,174 +56,48 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+        Haitao Huang <haitao.huang@intel.com>
+Subject: Re: [PATCH v26 23/30] x86/cet/shstk: Handle thread shadow stack
+Message-ID: <YJq6VZ/XMAtfkrMc@zn.tnic>
 References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-31-yu-cheng.yu@intel.com>
- <20210511114852.5wm6a5z72xjlqc4c@box>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <b395ae6c-dfbe-59c2-0f12-e65a111a532a@intel.com>
-Date:   Tue, 11 May 2021 07:44:07 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ <20210427204315.24153-24-yu-cheng.yu@intel.com>
+ <YJlADyc/9pn8Sjkn@zn.tnic>
+ <89598d32-4bf8-b989-ee77-5b4b55a138a9@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210511114852.5wm6a5z72xjlqc4c@box>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <89598d32-4bf8-b989-ee77-5b4b55a138a9@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/11/2021 4:48 AM, Kirill A. Shutemov wrote:
-> On Tue, Apr 27, 2021 at 01:43:15PM -0700, Yu-cheng Yu wrote:
->> There are three possible options to create a shadow stack allocation API:
->> an arch_prctl, a new syscall, or adding PROT_SHADOW_STACK to mmap() and
->> mprotect().  Each has its advantages and compromises.
->>
->> An arch_prctl() is the least intrusive.  However, the existing x86
->> arch_prctl() takes only two parameters.  Multiple parameters must be
->> passed in a memory buffer.  There is a proposal to pass more parameters in
->> registers [1], but no active discussion on that.
->>
->> A new syscall minimizes compatibility issues and offers an extensible frame
->> work to other architectures, but this will likely result in some overlap of
->> mmap()/mprotect().
->>
->> The introduction of PROT_SHADOW_STACK to mmap()/mprotect() takes advantage
->> of existing APIs.  The x86-specific PROT_SHADOW_STACK is translated to
->> VM_SHADOW_STACK and a shadow stack mapping is created without reinventing
->> the wheel.  There are potential pitfalls though.  The most obvious one
->> would be using this as a bypass to shadow stack protection.  However, the
->> attacker would have to get to the syscall first.
->>
->> [1] https://lore.kernel.org/lkml/20200828121624.108243-1-hjl.tools@gmail.com/
->>
->> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
->> ---
->> v26:
->> - Change PROT_SHSTK to PROT_SHADOW_STACK.
->> - Remove (vm_flags & VM_SHARED) check, since it is covered by
->>    !vma_is_anonymous().
->>
->> v24:
->> - Update arch_calc_vm_prot_bits(), leave PROT* checking to
->>    arch_validate_prot().
->> - Update arch_validate_prot(), leave vma flags checking to
->>    arch_validate_flags().
->> - Add arch_validate_flags().
->>
->>   arch/x86/include/asm/mman.h      | 60 +++++++++++++++++++++++++++++++-
->>   arch/x86/include/uapi/asm/mman.h |  2 ++
->>   include/linux/mm.h               |  1 +
->>   3 files changed, 62 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
->> index 629f6c81263a..fbb90f1b02c0 100644
->> --- a/arch/x86/include/asm/mman.h
->> +++ b/arch/x86/include/asm/mman.h
->> @@ -20,11 +20,69 @@
->>   		((vm_flags) & VM_PKEY_BIT2 ? _PAGE_PKEY_BIT2 : 0) |	\
->>   		((vm_flags) & VM_PKEY_BIT3 ? _PAGE_PKEY_BIT3 : 0))
->>   
->> -#define arch_calc_vm_prot_bits(prot, key) (		\
->> +#define pkey_vm_prot_bits(prot, key) (			\
->>   		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
->>   		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
->>   		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
->>   		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
->> +#else
->> +#define pkey_vm_prot_bits(prot, key) (0)
->>   #endif
->>   
->> +static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
->> +						   unsigned long pkey)
->> +{
->> +	unsigned long vm_prot_bits = pkey_vm_prot_bits(prot, pkey);
->> +
->> +	if (prot & PROT_SHADOW_STACK)
->> +		vm_prot_bits |= VM_SHADOW_STACK;
->> +
->> +	return vm_prot_bits;
->> +}
->> +
->> +#define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
->> +
->> +#ifdef CONFIG_X86_SHADOW_STACK
->> +static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
->> +{
->> +	unsigned long valid = PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM |
->> +			      PROT_SHADOW_STACK;
->> +
->> +	if (prot & ~valid)
->> +		return false;
->> +
->> +	if (prot & PROT_SHADOW_STACK) {
->> +		if (!current->thread.cet.shstk_size)
->> +			return false;
->> +
->> +		/*
->> +		 * A shadow stack mapping is indirectly writable by only
->> +		 * the CALL and WRUSS instructions, but not other write
->> +		 * instructions).  PROT_SHADOW_STACK and PROT_WRITE are
->> +		 * mutually exclusive.
->> +		 */
->> +		if (prot & PROT_WRITE)
->> +			return false;
->> +	}
->> +
->> +	return true;
->> +}
->> +
->> +#define arch_validate_prot arch_validate_prot
->> +
->> +static inline bool arch_validate_flags(struct vm_area_struct *vma, unsigned long vm_flags)
->> +{
->> +	/*
->> +	 * Shadow stack must be anonymous and not shared.
->> +	 */
->> +	if ((vm_flags & VM_SHADOW_STACK) && !vma_is_anonymous(vma))
->> +		return false;
->> +
->> +	return true;
->> +}
->> +
->> +#define arch_validate_flags(vma, vm_flags) arch_validate_flags(vma, vm_flags)
->> +
->> +#endif /* CONFIG_X86_SHADOW_STACK */
->> +
->>   #endif /* _ASM_X86_MMAN_H */
->> diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
->> index f28fa4acaeaf..4c36b263cf0a 100644
->> --- a/arch/x86/include/uapi/asm/mman.h
->> +++ b/arch/x86/include/uapi/asm/mman.h
->> @@ -4,6 +4,8 @@
->>   
->>   #define MAP_32BIT	0x40		/* only give out 32bit addresses */
->>   
->> +#define PROT_SHADOW_STACK	0x10	/* shadow stack pages */
->> +
->>   #include <asm-generic/mman.h>
->>   
->>   #endif /* _UAPI_ASM_X86_MMAN_H */
->> diff --git a/include/linux/mm.h b/include/linux/mm.h
->> index 1ccec5cc399b..9a7652eea207 100644
->> --- a/include/linux/mm.h
->> +++ b/include/linux/mm.h
->> @@ -342,6 +342,7 @@ extern unsigned int kobjsize(const void *objp);
->>   
->>   #if defined(CONFIG_X86)
->>   # define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
->> +# define VM_ARCH_CLEAR	VM_SHADOW_STACK
+On Mon, May 10, 2021 at 03:57:56PM -0700, Yu, Yu-cheng wrote:
+> So this struct will be:
+>
+> struct thread_shstk {
+> 	u64 shstk_base;
+> 	u64 shstk_size;
+> 	u64 locked:1;
+> 	u64 ibt:1;
+> };
 > 
-> Nit: you can put VM_SHADOW_STACK directly into VM_FLAGS_CLEAR. It's
-> already conditinal on the feature enabled and VM_NONE otherwise.
-> 
-> Up to you.
-> 
-> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> 
+> Ok?
 
-Thanks!
+Pretty much.
+
+You can even remove the "shstk_" from the members and when you call the
+pointer "shstk", accessing the members will read
+
+	shstk->base
+	shstk->size
+	...
+
+and all is organic and readable :)
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
