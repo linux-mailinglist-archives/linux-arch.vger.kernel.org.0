@@ -2,58 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 106C537AEC4
+	by mail.lfdr.de (Postfix) with ESMTP id 5995537AEC5
 	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 20:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbhEKSxH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S232306AbhEKSxH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Tue, 11 May 2021 14:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232274AbhEKSwy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 14:52:54 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE947C06138A;
-        Tue, 11 May 2021 11:51:46 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id r5so18069842ilb.2;
-        Tue, 11 May 2021 11:51:46 -0700 (PDT)
+        with ESMTP id S232143AbhEKSwz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 14:52:55 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48547C06138C;
+        Tue, 11 May 2021 11:51:48 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e2so18082913ilr.1;
+        Tue, 11 May 2021 11:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UmFJIyUaXJT257OL/LmtMVaV16lked49orHA6dOpiLw=;
-        b=XRpp9WtoJag16JQlFNYd3Z4dVHrz7VWz/k2R1ZNTPMXy38+H1Rp1iygfzynxNNf6y9
-         RcI0C7QVxcOcfqWKLIM7fhQQN06WyIgsHiQwdt9tOIqFzEnPQh3pKC5JIU884IBR7wYu
-         MtcoBTyEAHy9SFqqAMShxbCn7sdQjukd2qZAwGPO6Y/+Jj0zZ+MDO/JI2VPbCspmaXk4
-         n5iWvrKC7dXHZ8kqmUQfd/ejuxK2Vcfn6dlTLSmpI1AyZ5BXWFO6UlSzGj0XykiTLESx
-         WLRZD/db8Ut9PcS/uXO9iBaNNnvhaxOzj/rDo0PnEJPcdXNXvAuhTrwHhollK+kr/Efv
-         Ne1w==
+        bh=1zPO68rECc+Worbr8mpoHDMicmfWQWDsecrogWsDsoQ=;
+        b=lUOzvKR7OcFpY3RFzFgr4FfdY+ltDTeD+w+XTPlSXAD60lNeu0OutmmA3OapNwiIOs
+         iOGGjwpez+HzgWZKjsLeHv/b7ne6PJXQGzWgJEryLJMkUuLeRJDhkHtKfnfQN54XHv+t
+         iWg5/I8gU7sXudG/yQXuwEKlLk5+RqDXvgIL23dhr63JSghTd4PPQBtoSPw88Xe0mYb1
+         mdXZW4KQgIBgzqPRDkt46MQleqFIO14rbyTwJN77jc9KKKIJDnhc4K1S1qgtwqFK5cSI
+         b5GCLFGyh7G5KxULcx9wtTmd/9ugmEXaDIcDl87WA3cq6Si7oKgmknwsAeKY6p7ODVW5
+         koRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UmFJIyUaXJT257OL/LmtMVaV16lked49orHA6dOpiLw=;
-        b=QSl/BnvdggYaR2pM5XWzaaOSkAUTDZ+RYsUpVvQ5Ubac5dBgKPtXOC/EKTmQyjyAUv
-         0gpnjs8cPlGHsWFqpQnumhbrjmPPOeFUERNrWqi5S/eI9EhR8c1urgfbRE/PA/i/Gvr8
-         nrhPp8yRTQTFToeg4x/QT3qdi3EVuNdbAMqAJ6bE6LiOvpyeiQOWv+CGai2CNyQc5rUp
-         B+YtvdLZEjN+Qp5iMOalZB3UVbMX9Bdqa+kQPOr8ykaWZYb2gOhHnvvfVBeZp/PY5bE+
-         q5tJu2QFRZYbSonGtz8rSeZ3iGcnfDx3fU23DH/aoVonKUNEz/FKEvBvsmc+vlnCcroe
-         FMxQ==
-X-Gm-Message-State: AOAM532Cj7RnJQrOGPfpdxj3xzDbXOUh2Xqx3bAzxmzhkfzZz4AlZM2g
-        Egcg56aRTgpDK4G3t8ryhGE=
-X-Google-Smtp-Source: ABdhPJwAIWEWqcGtjz/0v8UZKqFhezkQ4HVghcAKCXOZQSajWCJQ1PG5ZoVf78BE73tfRClYkjyiwA==
-X-Received: by 2002:a05:6e02:e0a:: with SMTP id a10mr26327480ilk.271.1620759106391;
-        Tue, 11 May 2021 11:51:46 -0700 (PDT)
+        bh=1zPO68rECc+Worbr8mpoHDMicmfWQWDsecrogWsDsoQ=;
+        b=l2PHr/r9fFo8He1VRsE4zTJH6bJGt/qoTIOSL8o2uk7WQBa17+hgJNg2Sw4w/8z11S
+         dkNYd4xcRAlU/FY+tnl8qw9GKY+7IkoqWAqE0Hi9+F8di9lKSnxaua6ZSR+jwwzycWNH
+         FA377/VH+TTGiIm0JTtmmz+QUGcn2YFrHZ0GrrUTuS/IGnpwgFf+wMCVtZ9cFaBHDmmc
+         5En0YVyMsAGBM2NNbLpF0ygQreaMbRIWiF1vkLNjAKqsFhcl3oT/E1VYnvsPVTfRSWdh
+         f+AecMcfI5mZz+XKbDUj2uQXNl3PJYwZLVhu6sVSh2VCwp/IZqyHceipeS3Q0l9F5D4c
+         dMCQ==
+X-Gm-Message-State: AOAM531biR2BtuloWr45wz9J6fKvBCXhTXWC9ziEH15I8UycdcXs9Pe9
+        4EIzLRk2bA3HbN5gOqBW+EM=
+X-Google-Smtp-Source: ABdhPJzgH2JupKPauvVNrxewRnPOgZT9DsS7spCYIvNf3mENzkbGKi8D+JbpvRz4e1wSrzR8pbrZeQ==
+X-Received: by 2002:a92:cf05:: with SMTP id c5mr25905167ilo.225.1620759107543;
+        Tue, 11 May 2021 11:51:47 -0700 (PDT)
 Received: from frodo.mearth (c-24-9-77-57.hsd1.co.comcast.net. [24.9.77.57])
-        by smtp.googlemail.com with ESMTPSA id t10sm405096ils.36.2021.05.11.11.51.45
+        by smtp.googlemail.com with ESMTPSA id t10sm405096ils.36.2021.05.11.11.51.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 May 2021 11:51:46 -0700 (PDT)
+        Tue, 11 May 2021 11:51:47 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, Jim Cromie <jim.cromie@gmail.com>
-Subject: [RFC PATCH v5 18/28] dyndbg: RFC - DEFINE_DYNAMIC_DEBUG_TABLE
-Date:   Tue, 11 May 2021 12:50:47 -0600
-Message-Id: <20210511185057.3815777-19-jim.cromie@gmail.com>
+Subject: [RFC PATCH v5 19/28] dyndbg: RFC handle __dyndbg* sections in module.lds.h
+Date:   Tue, 11 May 2021 12:50:48 -0600
+Message-Id: <20210511185057.3815777-20-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210511185057.3815777-1-jim.cromie@gmail.com>
 References: <20210511185057.3815777-1-jim.cromie@gmail.com>
@@ -63,245 +63,100 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-DEFINE_DYNAMIC_DEBUG_TABLE is based on DEFINE_DYNAMIC_DEBUG_METADATA.
-Like its model, it creates/allocates a pair of structs: _ddebug &
-_ddebug_site.  It inits them distinctively, so is_dyndbg_header_pair()
-macro can verify them.
+Up until now, loadable modules have tacitly linked the 2 __dyndbg*
+sections into the .ko, as observable in log by enabling module.c's
+pr_debugs and loading a module.
 
-Its purpose is to reserve a single pair of header records in the front
-of the "__dyndbg" & "__dyndbg_sites" sections.  This has several parts;
+But now, we need to explicitly place the header sections in front of
+their respective __dyndbg* sections, so we reuse input section names
+for the output.
 
-- the pair of structs are placed into 2 .gnu.linkonce.dyndbg* sections
-  corresponding to the 2 dyndbg* sections populated by _METADATA
+This gives us the placement we need for the header record, which we
+can see in the "add-module:"s and elements "0 0" below:
 
-- vmlinux.lds.h places these 2 new sections into the dyndbg* sections,
-  at the start___dyndbg*s.
+    "0 0" lines are headers: predicate (function==module && !lineno)
+    "X debug prints in" are 1 too high, they count headers.
+    we are adding tables for empty modules (1st 2 below)
 
-- the pair has "__used __weak" to qualm compiler concerns.
-  explicit externs were problematic with initialization, static decls too.
+[    7.578873] dyndbg: add-module: ghash_clmulni_intel
+[    7.579716] dyndbg:  0 0 ghash_clmulni_intel.ghash_clmulni_intel.0
+[    7.608995] dyndbg:   1 debug prints in module ghash_clmulni_intel
+[    8.078085] dyndbg: add-module: rapl
+[    8.078977] dyndbg:  0 0 rapl.rapl.0
+[    8.079584] dyndbg:   1 debug prints in module rapl
+[    8.082009] RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+[    8.099294] dyndbg: add-module: intel_rapl_common
+[    8.100177] dyndbg:  0 0 intel_rapl_common.intel_rapl_common.0
+[    8.101026] dyndbg:  1 1 intel_rapl_common.rapl_remove_package.1279
+[    8.101931] dyndbg:  2 2 intel_rapl_common.rapl_detect_domains.1245
+[    8.102836] dyndbg:  3 3 intel_rapl_common.rapl_detect_domains.1242
+[    8.103778] dyndbg:  4 4 intel_rapl_common.rapl_package_register_powercap.1159
+[    8.104960] dyndbg:  5 5 intel_rapl_common.rapl_package_register_powercap.1145
+[    8.106246] dyndbg:  6 6 intel_rapl_common.rapl_package_register_powercap.1114
+[    8.107302] dyndbg:  7 7 intel_rapl_common.rapl_package_register_powercap.1108
+[    8.108338] dyndbg:  8 8 intel_rapl_common.rapl_update_domain_data.1083
+[    8.109278] dyndbg:  9 9 intel_rapl_common.rapl_check_unit_atom.824
+[    8.110255] dyndbg:  10 10 intel_rapl_common.rapl_check_unit_core.796
+[    8.111361] dyndbg:  11 11 intel_rapl_common.rapl_read_data_raw.722
+[    8.112301] dyndbg:  12 12 intel_rapl_common.contraint_to_pl.303
+[    8.113276] dyndbg:  13 debug prints in module intel_rapl_common
+[    8.130452] dyndbg: add-module: intel_rapl_msr
+[    8.131140] dyndbg:  0 0 intel_rapl_msr.intel_rapl_msr.0
+[    8.132026] dyndbg:  1 1 intel_rapl_msr.rapl_msr_probe.172
+[    8.132818] dyndbg:  2 2 intel_rapl_msr.rapl_msr_read_raw.104
+[    8.133794] dyndbg:   3 debug prints in module intel_rapl_msr
 
-With this, the header record is now really __dyndbg[0].
+This gives us the property we need:
 
-Notes:
+   fixed offset from &__dyndbg[N] to &__dyndbg[0]
+   container_of gets &header
+   header has ptr to __dyndbg_sites[]
+   we can (in principle) drop __dyndbg.site ptr
+   (after we adapt header to keep it)
 
-DYNAMIC_DEBUG is a 'transparent' facility, in that pr_debug() users
-get extra features without additional api.  Because of this,
-DEFINE_DYNAMIC_DEBUG_TABLE is invoked by dynamic_debug.h on behalf of
-all its (indirect) users, including printk.h.
+TODO:
 
-IOW this has wide effects; it results in multiple redundant
-declarations of header records, even single object files may get
-multiple copies.  Placing these records into .gnu.linkonce. sections
-with "__used __weak " seems to resolve the redundancies.  This may
-well be the cause of the need for HEAD~1.
+At this point, for loaded modules, ddebug_add_module() sees the header
+as 0'th element, as we need in order to drop site (and regain worst
+case footprint parity).
 
-In vmlinux-lds.h, I added 2 more KEEPs to place the .gnu.linkonce.*
-headers at the front of their respective __dyndbg* sections.  I moved
-the __dyndbg lines into a new macro, which maybe should be done as a
-separate commit, or in the earlier commit that touched it. RFC.
+It could/should properly init this header to support the _sites[n]
+lookup for loaded mods.  Or at least handle it explicitly.  Or at
+least see what proc-show does with it currently.
 
-The headers are really just struct _ddebug*s, they are initialized
-distinctively so that they're recogizable by code, using macro
-is_dyndbg_header_pair(dbg, dbgsite).
+Note that for builtins, decided by (__start <= dp < __stop), we use
+__start___dyndbg_sites[N] directly, and dont need the header.
 
-DECLARE_DYNAMIC_DEBUG_TABLE() initializes the header record pairs with
-values which are "impossible" for pr_debug()s:
-
-- lineno == 0
-- site == iter->site
-- modname == function		not possible in proper linkage
-- modname == format		not possible in normal linkage
-- filename = (void*) iter	forced loopback
-
-Next:
-
-Get __dyndbg[0] from any *dp within __dyndbg[N].  Then with
-__dyndbg[0].site, we can get __dyndbg_sites[N].  This is a little
-slower than a direct pointer, but this is an unlikely debug path, so
-this 'up-N-over-down-N' access is ok.
-
-Eventually we can adapt the header (as a new struct/union) to keep its
-pointer to the __dyndbg_sites[] section/block, while allowing us to
-drop it from struct _ddebug, regaining memory parity with master.  But
-for now, we keep .site, and will soon use it to validate the
-'up-N-over-down-N' computation.
-
-For clarity, N is _ddebug._index.  For both builtins & loadable
-modules, it is init'd to remember the fixed offset from the beginning
-of the section/block/memory-allocation (actual elf sections for *ko's,
-and a __start/__stop delineated part of .data for builtins).
-
-N/_index will be used solely to get to __debugs[0] and over to
-__debug_sites[N].  It is distinct from a module's numdbgs, which is
-used mainly when walking control, and is kept in struct _ddeug_table.
+But maybe we should use it anyway, double-checking/BUGing when wrong.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/asm-generic/vmlinux.lds.h | 27 ++++++++++++-------
- include/linux/dynamic_debug.h     | 45 +++++++++++++++++++++++++++++++
- lib/dynamic_debug.c               | 18 ++++++-------
- 3 files changed, 72 insertions(+), 18 deletions(-)
+ include/asm-generic/module.lds.h | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 4f2af9de2f03..189286405b40 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -335,6 +335,22 @@
- 	KEEP(*(.dtb.init.rodata))					\
- 	__dtb_end = .;
+diff --git a/include/asm-generic/module.lds.h b/include/asm-generic/module.lds.h
+index f210d5c1b78b..328c48dfc88c 100644
+--- a/include/asm-generic/module.lds.h
++++ b/include/asm-generic/module.lds.h
+@@ -4,7 +4,17 @@
  
-+/* implement dynamic printk debug */
-+#if defined(CONFIG_DYNAMIC_DEBUG) || defined(CONFIG_DYNAMIC_DEBUG_CORE)
-+#define DYNAMIC_DEBUG_DATA()						\
-+	. = ALIGN(8);							\
-+	__start___dyndbg_sites = .;					\
-+	KEEP(*(.gnu.linkonce.dyndbg_site))				\
-+	KEEP(*(__dyndbg_sites))						\
-+	__stop___dyndbg_sites = .;					\
-+	__start___dyndbg = .;						\
-+	KEEP(*(.gnu.linkonce.dyndbg))					\
-+	KEEP(*(__dyndbg))						\
-+	__stop___dyndbg = .;
-+#else
-+#define DYNAMIC_DEBUG_DATA()
-+#endif
-+
  /*
-  * .data section
+  * <asm/module.lds.h> can specify arch-specific sections for linking modules.
+- * Empty for the asm-generic header.
++ *
++ * For loadable modules with CONFIG_DYNAMIC_DEBUG, we need to keep the
++ * 2 __dyndbg* ELF sections, which are loaded by module.c
++ *
++ * Pack the 2 __dyndbg* input sections with their respective
++ * .gnu.linkonce. header records into 2 output sections, with those
++ * header records in the 0th element.
   */
-@@ -351,15 +367,8 @@
- 	__end_once = .;							\
- 	STRUCT_ALIGN();							\
- 	*(__tracepoints)						\
--	/* implement dynamic printk debug */				\
--	. = ALIGN(8);							\
--	__start___dyndbg_sites = .;					\
--	KEEP(*(__dyndbg_sites))					\
--	__stop___dyndbg_sites = .;					\
--	__start___dyndbg = .;						\
--	KEEP(*(__dyndbg))						\
--	__stop___dyndbg = .;						\
--	LIKELY_PROFILE()		       				\
-+	DYNAMIC_DEBUG_DATA()						\
-+	LIKELY_PROFILE()						\
- 	BRANCH_PROFILE()						\
- 	TRACE_PRINTKS()							\
- 	BPF_RAW_TP()							\
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index a15e417cbba8..06ae1d8d8c10 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -113,6 +113,43 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 		_DPRINTK_KEY_INIT				\
- 	}
++SECTIONS {
++__dyndbg_sites	: ALIGN(8) { *(.gnu.linkonce.dyndbg_site) *(__dyndbg_sites) }
++__dyndbg	: ALIGN(8) { *(.gnu.linkonce.dyndbg)	  *(__dyndbg) }
++}
  
-+/*
-+ * DEFINE_DYNAMIC_DEBUG_TABLE(): This is a special version of
-+ * DEFINE_DYNAMIC_DEBUG_METADATA().  It creates a single pair of
-+ * header records, which linker scripts place into __dyndbg[0] &
-+ * __dyndbg_sites[0].
-+ * To allow a robust runtime test for is_dyndbg_header_pair(I,S),
-+ * force-initialize S->filename to point back to I, an otherwize
-+ * pathological condition.
-+ */
-+#define DEFINE_DYNAMIC_DEBUG_TABLE()				\
-+	/* forward decl, allowing loopback pointer */		\
-+	__weak struct _ddebug __used __aligned(8)		\
-+		__section(".gnu.linkonce.dyndbg")		\
-+		_LINKONCE_dyndbg_header;			\
-+	__weak struct _ddebug_site __used __aligned(8)		\
-+		__section(".gnu.linkonce.dyndbg_site")		\
-+	_LINKONCE_dyndbg_site_header = {			\
-+		.modname = KBUILD_MODNAME,			\
-+		.function = KBUILD_MODNAME,			\
-+		/* forced pointer loopback, for distinction */	\
-+		.filename = (void *) &_LINKONCE_dyndbg_header	\
-+	};							\
-+	__weak struct _ddebug __used __aligned(8)		\
-+		__section(".gnu.linkonce.dyndbg")		\
-+	_LINKONCE_dyndbg_header = {				\
-+		.site = &_LINKONCE_dyndbg_site_header,		\
-+		.format = KBUILD_MODNAME			\
-+	}
-+
-+/* The header initializations as a distinguishing predicate */
-+#define is_dyndbg_header_pair(iter, sitep)			\
-+	(sitep == iter->site					\
-+	 && (!iter->lineno)					\
-+	 && (iter->format == sitep->modname)			\
-+	 && (sitep->modname == sitep->function)			\
-+	 && ((void *)sitep->filename == (void *)iter))
-+
- #ifdef CONFIG_JUMP_LABEL
- 
- #ifdef DEBUG
-@@ -243,4 +280,12 @@ static inline int dynamic_debug_exec_queries(const char *query, const char *modn
- 
- #endif /* !CONFIG_DYNAMIC_DEBUG_CORE */
- 
-+#if ((defined(CONFIG_DYNAMIC_DEBUG) ||						\
-+      (defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE)))	\
-+     && defined(KBUILD_MODNAME) && !defined(NO_DYNAMIC_DEBUG_TABLE))
-+
-+/* transparently invoked, except when -DNO_DYNAMIC_DEBUG_TABLE */
-+DEFINE_DYNAMIC_DEBUG_TABLE();
-+#endif
-+
- #endif
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index c5927b6c1c0c..9d9cb36f40a6 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -1190,8 +1190,7 @@ static int __init dynamic_debug_init(void)
- 	const char *modname = NULL;
- 	char *cmdline;
- 	int ret = 0;
--	int site_ct = 0, entries = 0, modct = 0;
--	int mod_index = 0;
-+	int i, site_ct = 0, modct = 0, mod_index = 0;
- 
- 	if (&__start___dyndbg == &__stop___dyndbg) {
- 		if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
-@@ -1207,10 +1206,9 @@ static int __init dynamic_debug_init(void)
- 	site = site_mod_start = __start___dyndbg_sites;
- 	modname = site->modname;
- 
--	for (; iter < __stop___dyndbg; iter++, site++) {
-+	for (i = 0; iter < __stop___dyndbg; iter++, site++, i++) {
- 
--		BUG_ON(site != iter->site);
--		entries++;
-+		WARN_ON(site != iter->site);
- 
- 		if (strcmp(modname, site->modname)) {
- 			modct++;
-@@ -1219,10 +1217,12 @@ static int __init dynamic_debug_init(void)
- 						  site_ct, mod_index, modname);
- 			if (ret)
- 				goto out_err;
--			site_ct = 0;
-+
- 			modname = site->modname;
- 			iter_mod_start = iter;
- 			site_mod_start = site;
-+			mod_index += site_ct;
-+			site_ct = 0;
- 		}
- 		site_ct++;
- 	}
-@@ -1232,9 +1232,9 @@ static int __init dynamic_debug_init(void)
- 
- 	ddebug_init_success = 1;
- 	vpr_info("%d modules, %d entries and %d bytes in ddebug tables, %d bytes in __dyndbg section, %d bytes in __dyndbg_sites section\n",
--		 modct, entries, (int)(modct * sizeof(struct ddebug_table)),
--		 (int)(entries * sizeof(struct _ddebug)),
--		 (int)(entries * sizeof(struct _ddebug_site)));
-+		 modct, i, (int)(modct * sizeof(struct ddebug_table)),
-+		 (int)(i * sizeof(struct _ddebug)),
-+		 (int)(i * sizeof(struct _ddebug_site)));
- 
- 	/* apply ddebug_query boot param, dont unload tables on err */
- 	if (ddebug_setup_string[0] != '\0') {
+ #endif /* __ASM_GENERIC_MODULE_LDS_H */
 -- 
 2.31.1
 
