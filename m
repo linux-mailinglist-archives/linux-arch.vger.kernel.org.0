@@ -2,129 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D423037A4B2
-	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 12:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B9C37A5DA
+	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 13:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbhEKKh5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 May 2021 06:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S231495AbhEKLgp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 May 2021 07:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbhEKKh4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 06:37:56 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E16C061763;
-        Tue, 11 May 2021 03:36:50 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id z13so27952794lft.1;
-        Tue, 11 May 2021 03:36:50 -0700 (PDT)
+        with ESMTP id S230501AbhEKLgp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 07:36:45 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD804C06175F
+        for <linux-arch@vger.kernel.org>; Tue, 11 May 2021 04:35:38 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id h4so28210752lfv.0
+        for <linux-arch@vger.kernel.org>; Tue, 11 May 2021 04:35:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=mPTGhSdYS1EwXktDTrRYGbw3xN/gpinHXJ0dbeYJ3es=;
-        b=uLAisls4ltrVE4/Ogyxj6kPvgrmoXy2pwMhFXj+C/1mOobjpzx0EP8xJNpPURz4OnO
-         aG3Dll4zNPrlWeqY0JdN4+eQlLJTqkmso/8DyY9YVmessQPzyJGx/DXBAEwNcJv4I27Q
-         dg3nz34jHrmu6DbuXxwJVHRD0x+uCOGhKYluvrALG/nIBDwCUIJj+kta9gu9WH3LwJe/
-         6S4Ak774b1i9g7BRjnIg41lyA7bGEuj7lcaAlvpjpXPArfdeOpBG1SBXs9nJhirvfFT4
-         o1JWaFsxWH/O4AHF7N+q/aFWJ3nib2f/V8tR/oKhB8oiytYd2RPUHCqGVg+W7jV8oYac
-         tfxA==
+        bh=Le0Ew1Hg9KvgF6la0IVI4c8P/UYPK3oIC8S0v1P/CXY=;
+        b=UV4F7xsUhFUHbA1Rt4aUC+TkWj2LsXA90mQqrzmQetnGSqhTWOhlHIdRmNkriRRdHG
+         En11f5rwNkzEopt/p81S0ZLB7JqTWk3Sg+oDmy7bKDWwpRgIuABxB4hVFpzKq5lQkyQO
+         lzWzvMvCcV+3cC+u3Af/IXNj83qwkghjYLpXRnB67s4FXmUFZz1q4RcJM5RuHFudut0n
+         QKcimK7Iulxv3/gPkMwastZrAozSuyOcanocRWiE2RJhRS2bA8TVetZRUglbLOjCv3JR
+         nGZFENVvZKIrLb88wJVbs5XExg8wbyn5/YK+ESrw0NQAmJco0W2ZGHjhx4P9IUEH3cBv
+         nLEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=mPTGhSdYS1EwXktDTrRYGbw3xN/gpinHXJ0dbeYJ3es=;
-        b=f8/vt//XrJy704kJNh2waKlp3YZsMZ+uAOD0l42NI6JU92yXMGwD6vy0RUXIoTJkjP
-         gtpGDp1wB00wiDHRrFb9t8HtrOYEE+gMEMN8hIlGmOtqyox8fLOxINn8icm9q0OO81zA
-         76s3s/P2o9sfFNBCrzvz3Ha1nQ6DvmA3CUneyFimTuKUpKThx97Mjl3MwhQP5b737TCL
-         /jdck+rlFbY8Ki/3EjD01hMMqwUXEwZ9kxA5u+i58/xH0qqzC1bGNxa39X65zDz2Q0TV
-         PFtuzxCPGOHShbYHeX+waI4yOnlkM4Dfc4+reEyabEkwh7tn9J6THEKkzI6AyQBkgjSX
-         DBWQ==
-X-Gm-Message-State: AOAM532sPGsatCmp0u3vUXVS1J1KMgPHRralHkN7TjBduN5dLDF8KGwJ
-        oUKxalrJrve35t2zxceNwKw=
-X-Google-Smtp-Source: ABdhPJxH3TGCNCqhpUbtkmWcuM1loUXzrtKYaQ4Uv96NT1vQ/n7AYKCj9cmK9h40us2sMTkRMZ1b/Q==
-X-Received: by 2002:a19:c111:: with SMTP id r17mr19841633lff.564.1620729408667;
-        Tue, 11 May 2021 03:36:48 -0700 (PDT)
-Received: from rikard (h-158-174-22-223.NA.cust.bahnhof.se. [158.174.22.223])
-        by smtp.gmail.com with ESMTPSA id n7sm2548891lft.65.2021.05.11.03.36.47
+        bh=Le0Ew1Hg9KvgF6la0IVI4c8P/UYPK3oIC8S0v1P/CXY=;
+        b=YY43ki1KsdO0PRzYFKllgTZjUS1mrt4UuccKi5+iL/QdAmbZ6k8kWaW1uWzRArbzo/
+         EDx2wWuyaNUID3cwRQkMUc9ohu1AAtKDlm2Z15z5LEWTy59NG6Ig3j12ShDM9mbDFvX+
+         eWR/ARouhDbUw9jlAfEqP60XugLEpaBN7A2QSZP5KVeIc38kUQens9z17aOygUzKDyvL
+         v1E+YLQnzs/kyngpXptBYLzwrbmjVIhORYL/uDCOhDGkNAttOwWl307LYmcVNf9GrF/Q
+         9ZRnTwzEPdueKjJ66mphmm3DL5WHc9Soy6Xg8btYlD0fROxsdJWe/30Qx368LssRGgHL
+         kuCA==
+X-Gm-Message-State: AOAM531HrKS4w/J9UdjpcBBfXwL4CsN4JIXynNLnBVo314NNYWRpBXAw
+        SlqfV7X9byFnFSvjx69r5tMcsQ==
+X-Google-Smtp-Source: ABdhPJxDAf43hUbtVcN3je+p5bV1NnAEkVOyB91N3WfTapOVx8IiLDHDsJqmKf0Ko6pqzpOzMNntKA==
+X-Received: by 2002:a05:6512:374b:: with SMTP id a11mr20151995lfs.377.1620732937423;
+        Tue, 11 May 2021 04:35:37 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id u27sm2578687lfm.239.2021.05.11.04.35.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 May 2021 03:36:48 -0700 (PDT)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-X-Google-Original-From: Rikard Falkeborn <rikard.falkeborn>
-Date:   Tue, 11 May 2021 12:36:44 +0200
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Yury Norov <yury.norov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux-SH <linux-sh@vger.kernel.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH 11/12] tools: sync lib/find_bit implementation
-Message-ID: <YJpePAHS3EDw6PK1@rikard>
-References: <20210401003153.97325-1-yury.norov@gmail.com>
- <20210401003153.97325-12-yury.norov@gmail.com>
- <1ac7bbc2-45d9-26ed-0b33-bf382b8d858b@I-love.SAKURA.ne.jp>
- <CAHp75Vea0Y_LfWC7LNDoDZqO4t+SVHV5HZMzErfyMPoBAjjk1g@mail.gmail.com>
- <YJm5Dpo+RspbAtye@rikard>
- <YJoyMrqRtB3GSAny@smile.fi.intel.com>
+        Tue, 11 May 2021 04:35:36 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 0E4C5102615; Tue, 11 May 2021 14:35:37 +0300 (+03)
+Date:   Tue, 11 May 2021 14:35:37 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v26 29/30] mm: Update arch_validate_flags() to test vma
+ anonymous
+Message-ID: <20210511113537.d2uqen4pyh6xx53o@box>
+References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
+ <20210427204315.24153-30-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YJoyMrqRtB3GSAny@smile.fi.intel.com>
+In-Reply-To: <20210427204315.24153-30-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 11, 2021 at 10:28:50AM +0300, Andy Shevchenko wrote:
-> On Tue, May 11, 2021 at 12:51:58AM +0200, Rikard Falkeborn wrote:
-> > On Mon, May 10, 2021 at 06:44:44PM +0300, Andy Shevchenko wrote:
+On Tue, Apr 27, 2021 at 01:43:14PM -0700, Yu-cheng Yu wrote:
+> When newer VM flags are being created, such as VM_MTE, it becomes necessary
+> for mmap/mprotect to verify if certain flags are being applied to an
+> anonymous VMA.
 > 
-> ...
+> To solve this, one approach is adding a VM flag to track that MAP_ANONYMOUS
+> is specified [1], and then using the flag in arch_validate_flags().
 > 
-> > Does the following work for you? For simplicity, I copied__is_constexpr from
-> > include/linux/minmax.h (which isn't available in tools/). A proper patch
-> > would reuse __is_constexpr (possibly refactoring it to a separate
-> > header since bits.h including minmax.h for that only seems smelly)
+> Another approach is passing the VMA to arch_validate_flags(), and check
+> vma_is_anonymous().
 > 
-> I think we need to have it in something like compiler.h (top level). Under
-> 'top level' I meant something with the function as of compiler.h but with
-> Linuxisms rather than compiler attributes or so.
+> To prepare the introduction of PROT_SHADOW_STACK, which creates a shadow
+> stack mapping and can be applied only to an anonymous VMA, update
+> arch_validate_flags() to pass in the VMA.
+> 
+> [1] commit 9f3419315f3c ("arm64: mte: Add PROT_MTE support to mmap() and mprotect()"),
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Right. Will you send a patch, or do you want me to?
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-It would be good to get confirmation that __is_constexpr solves the
-build failure.
-
-> 
-> Separate header for the (single) macro is too much...
-> 
-
-Agreed.
-
-> > and fix
-> > bits.h in the kernel header as well, to keep the files in sync.
-> 
-> Right.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
-
-With Best Regards,
-Rikard
+-- 
+ Kirill A. Shutemov
