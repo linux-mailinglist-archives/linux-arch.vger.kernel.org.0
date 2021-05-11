@@ -2,110 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8823637A667
-	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 14:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBEE37A82F
+	for <lists+linux-arch@lfdr.de>; Tue, 11 May 2021 15:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbhEKMS2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 May 2021 08:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbhEKMS1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 08:18:27 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7572EC061574;
-        Tue, 11 May 2021 05:17:18 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id s22so15606795pgk.6;
-        Tue, 11 May 2021 05:17:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oop2Ovp8EWOv+egH128OBsTcETSDonZFH/twdK2VyXQ=;
-        b=CEz0RXbjwosGhH8hdR9o1C73Do4+xBRNtm/XvgetWpHK68FX2KTg+3wIg7/4SQR/L+
-         7tdHgPWm5xG7gDh/iwRfrTZQdkDg4akoHewRUxXLhDzgG6vxiaY5Qo/89g9Pd9zEIwKu
-         KCXXWabShDlt64TYCyGgQaMNImmytPy0uC6r242U3Ak9w7oR8iuvlhzqhP90BwdBmK2L
-         lLrfLTLR2iCLAfAPQE2JmseVHupO/rmfGDWh/FjRLSMEzjtDsO3gtDDTz7o75v9uAoc9
-         C9A8/mcK3UxZIgpR2/cW9B9f/OVj4A9LeNDzrTP4cQd/VH7t84+J7+9PzZi51rRVID+U
-         Qhmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oop2Ovp8EWOv+egH128OBsTcETSDonZFH/twdK2VyXQ=;
-        b=T7hsGHPoOZ4nMmNmppkANYh2hbKGPE2PAp4PWiKi8tnwbf/Qb1h4dBGRacfKVlFXhT
-         zk/+NjwqC9eknjhKMdwyfl6iFpqBwoPRBKkSSd8Ltos1eYM10lXsgs3elC7vtI0/jnmG
-         DnRs9HY+sM3OEIIo7eRgiRKK1hxDnsimn9Tr3DyFKmz+0OCIsmWK2jnVRp6utJs3JDmH
-         jW9HQGOhih1UEhsa0t2cAXSb7VUdtSUuAXES/wgqp4jUXilhQL+GvQRKTj1U/WNcoCIl
-         jyzQR4ep1GbSDVygNeGC6JlwKNTRINbhPpGUiq89WsjaR6H1W0Gi0Ro/2pye80cIy6qe
-         3ACg==
-X-Gm-Message-State: AOAM530rb/61wmSxNc0SHn6mEtK6r/TwWpC7P1z5k+tel4i+1UHXus64
-        F3yYVzRE+nGiuLkwt5ed6HIiUudKp4nCJ1O/sm8=
-X-Google-Smtp-Source: ABdhPJyVcbgqCaK23waa0/SMpPauuLaNO44XEidyEsBXv9sGVkGIp3uAGlSgcIvjQbj0U3XNk2TS5nfqmHHxZMXWIzg=
-X-Received: by 2002:a63:4145:: with SMTP id o66mr7680949pga.4.1620735437892;
- Tue, 11 May 2021 05:17:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210401003153.97325-1-yury.norov@gmail.com> <20210401003153.97325-12-yury.norov@gmail.com>
- <1ac7bbc2-45d9-26ed-0b33-bf382b8d858b@I-love.SAKURA.ne.jp>
- <CAHp75Vea0Y_LfWC7LNDoDZqO4t+SVHV5HZMzErfyMPoBAjjk1g@mail.gmail.com>
- <YJm5Dpo+RspbAtye@rikard> <YJoyMrqRtB3GSAny@smile.fi.intel.com> <YJpePAHS3EDw6PK1@rikard>
-In-Reply-To: <YJpePAHS3EDw6PK1@rikard>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 11 May 2021 15:17:01 +0300
-Message-ID: <CAHp75VdVubL-_kLV80Z9cVDpjYb_HT4ivw3t-QUj0594whL=wQ@mail.gmail.com>
-Subject: Re: [PATCH 11/12] tools: sync lib/find_bit implementation
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Yury Norov <yury.norov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S231639AbhEKNyl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 May 2021 09:54:41 -0400
+Received: from mail-40136.protonmail.ch ([185.70.40.136]:25711 "EHLO
+        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231634AbhEKNyi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 May 2021 09:54:38 -0400
+Date:   Tue, 11 May 2021 13:53:22 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1620741209; bh=jI9W9Blj/Z2qjs3mmYq2tUWMQe2pKTQ81XNwCTvedF4=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=bmoJ+2g9V7Dr5u4+mbx7+VWWI+VbNHXRu4+Pl5zJLxdO8By602YaZnUhpNrhCPfuf
+         sbGhHBahrMkDSDYReFAPMkFqjPE4x8cpaOrhYQFoA7Pi1+JJpqo2n3DHog4Fh835IC
+         SwuVMUMGEUTEyCy9h6K2k7Z4cDonsp1kjOs5B/RUpmFc3r7Ss/JE9LUqblCbvvDEXx
+         X5UcOUlKsJbrg/1ok2jCKdAkre6tcBWjrhWXBXIkhyoJ08J+Lla6ZGEPrALMFwxfe2
+         LE2Q2pde3JcBQWvSUEPsRbmeMTCpqwnoDjzV6LAHmwvfrzXiUkzv2GjOwBGQhfzl1p
+         apSpWWjgxYVgA==
+To:     Yury Norov <yury.norov@gmail.com>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Alexey Klimov <aklimov@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux-SH <linux-sh@vger.kernel.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Content-Type: text/plain; charset="UTF-8"
+        Richard Weinberger <richard@nod.at>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Will Deacon <will@kernel.org>, Yogesh Lal <ylal@codeaurora.org>
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH] all: remove GENERIC_FIND_FIRST_BIT
+Message-ID: <20210511134551.18721-1-alobakin@pm.me>
+In-Reply-To: <20210510233421.18684-1-yury.norov@gmail.com>
+References: <20210510233421.18684-1-yury.norov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 11, 2021 at 1:36 PM Rikard Falkeborn
-<rikard.falkeborn@gmail.com> wrote:
+From: Yury Norov <yury.norov@gmail.com>
+Date: Mon, 10 May 2021 16:34:21 -0700
+
+> In the 5.12 cycle we enabled the GENERIC_FIND_FIRST_BIT config option
+> for ARM64 and MIPS. It increased performance and shrunk .text size; and
+> so far I didn't receive any negative feedback on the change.
 >
-> On Tue, May 11, 2021 at 10:28:50AM +0300, Andy Shevchenko wrote:
-> > On Tue, May 11, 2021 at 12:51:58AM +0200, Rikard Falkeborn wrote:
-> > > On Mon, May 10, 2021 at 06:44:44PM +0300, Andy Shevchenko wrote:
-> >
-> > ...
-> >
-> > > Does the following work for you? For simplicity, I copied__is_constexpr from
-> > > include/linux/minmax.h (which isn't available in tools/). A proper patch
-> > > would reuse __is_constexpr (possibly refactoring it to a separate
-> > > header since bits.h including minmax.h for that only seems smelly)
-> >
-> > I think we need to have it in something like compiler.h (top level). Under
-> > 'top level' I meant something with the function as of compiler.h but with
-> > Linuxisms rather than compiler attributes or so.
+> https://lore.kernel.org/linux-arch/20210225135700.1381396-1-yury.norov@gm=
+ail.com/
 >
-> Right. Will you send a patch, or do you want me to?
+> I think it's time to make all architectures use find_{first,last}_bit()
+> unconditionally and remove the corresponding config option.
+>
+> This patch doesn't introduce functional changes for arc, arm64, mips,
+> s390 and x86 because they already enable GENERIC_FIND_FIRST_BIT. There
+> will be no changes for arm because it implements find_{first,last}_bit
+> in arch code. For other architectures I expect improvement both in
+> performance and .text size.
+>
+> It would be great if people with an access to real hardware would share
+> the output of bloat-o-meter and lib/find_bit_benchmark.
+>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  arch/arc/Kconfig                  |  1 -
+>  arch/arm64/Kconfig                |  1 -
+>  arch/mips/Kconfig                 |  1 -
 
-Please, go ahead!
-I'm in a vacation mood (tomorrow it will start)
+MIPS bit:
 
-> It would be good to get confirmation that __is_constexpr solves the
-> build failure.
+Reviewed-by: Alexander Lobakin <alobakin@pm.me>
+Tested-by: Alexander Lobakin <alobakin@pm.me>
 
--- 
-With Best Regards,
-Andy Shevchenko
+>  arch/s390/Kconfig                 |  1 -
+>  arch/x86/Kconfig                  |  1 -
+>  arch/x86/um/Kconfig               |  1 -
+>  include/asm-generic/bitops/find.h | 12 ------------
+>  lib/Kconfig                       |  3 ---
+>  8 files changed, 21 deletions(-)
+
+Thanks,
+Al
+
