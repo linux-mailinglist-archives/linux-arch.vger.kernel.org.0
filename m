@@ -2,86 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5965137CFB5
-	for <lists+linux-arch@lfdr.de>; Wed, 12 May 2021 19:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E4D37CFB8
+	for <lists+linux-arch@lfdr.de>; Wed, 12 May 2021 19:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbhELRQ6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 May 2021 13:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S232299AbhELRQ7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 May 2021 13:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241157AbhELQ0m (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 May 2021 12:26:42 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77052C0612EA;
-        Wed, 12 May 2021 08:56:54 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0bb80077d55d62652951c8.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:b800:77d5:5d62:6529:51c8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AFF941EC0523;
-        Wed, 12 May 2021 17:56:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1620835012;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=OA2T3EfM3yuS2/g28AeCNtkAWuVuqdQFcc8kwJ1h0cQ=;
-        b=kTjSthv6wlxUixi9Eb+guR9PkLPJL1RwsEu5iYG2Hgijh5pjb+n2/ok9Gk6p+CSlgBWDbN
-        rxCKi8P0hxhseMjmi/Ghg82A32KwfMPftfsVz6qcqCYiF+0CignEDKIozxyVCO58/xqhh6
-        FzPH9upGhKsUwfA5fiurKGIWzVQTdKQ=
-Date:   Wed, 12 May 2021 17:56:49 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: Re: [PATCH v26 23/30] x86/cet/shstk: Handle thread shadow stack
-Message-ID: <YJv6wdnQPIJ+Uk12@zn.tnic>
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-24-yu-cheng.yu@intel.com>
- <YJlADyc/9pn8Sjkn@zn.tnic>
- <a645aefc-632f-b1eb-4f4e-1c5b0f9e75d5@intel.com>
+        with ESMTP id S241766AbhELQ2A (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 May 2021 12:28:00 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669DEC08C5E3;
+        Wed, 12 May 2021 09:01:14 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gc22-20020a17090b3116b02901558435aec1so3545617pjb.4;
+        Wed, 12 May 2021 09:01:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=5/MplZ6oYXtQw2JFwTKJsqNpcX+apjnkiw44w1Cqcuo=;
+        b=EQwntmF6pP3DBJ88bmhariOI9t4IKKtCPxB2phWGOC74jrMotb3ZCiTXXW16g67V0h
+         8HVeJ0GheMO0pRAFNX4jKbmzmE+Qf8EKG3s79mh2+TjoJ77eNPmt01t4bFBgCEpZMQYS
+         LtqGvaxjzI7bnbkr39ucdoF9COsZV+kpDzrwJ3LopkNaVGle3wN8WsASeqDSWcrxUXNq
+         l5Oqo36f1zOS36IgBY0vrE19xWxnxCnuQZW0ACKwM1vfnoNVDWJ5KT6c8CBkMQmT0Avv
+         j0Aoqpt+TzspMyc0v3GAvNXVY/RSbD7UNpll9CI5ElGs5Xyk4zXN78+QI0vIQtbqXWFj
+         2nGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5/MplZ6oYXtQw2JFwTKJsqNpcX+apjnkiw44w1Cqcuo=;
+        b=iTNPI9+g6uEyvSg1ZjeXqt0vqhPzmchPxSYMFRukTiAHsmoWETaA1S8X3kxLwUrqRL
+         LJjTP+s/RGkWBAe/cuaOtoKspqcZvNbG59O3wuV9bSAh/r8tYKXgENQic7gDVg+jrIbu
+         VjVLQ9QgxmME9YJm150963ttpogsvzEtWZKdT0UVsCGzkAVHeDa29Syu0nvFfKHn7Uje
+         Kh0Fpi+icBkxkJ6lP1h86pRAO434JjRP9d3cZkHSSMRvRI5VzezBREXPMQoTWFNWii9t
+         q3jXYOnnV7v52dFqng77nneWVlgZhBqemQBF6dLrQ99cRHQkJNLhvj5UtkO9z1LD5YEU
+         d3HQ==
+X-Gm-Message-State: AOAM530qYfh5IN4C5iOnHJHfstm89JzzZDccu6mAiPbNRaDTsAI7poR6
+        15wdC8Hl7bSzZa2uBeQrkPo=
+X-Google-Smtp-Source: ABdhPJxtWg7IxeHd7M+hWJJqKPqAcUV/yJEzGw/b/vFIZdhJW26Hi6Inh2Unritq+GbozDcH9ke1gw==
+X-Received: by 2002:a17:90a:7442:: with SMTP id o2mr2519021pjk.44.1620835273807;
+        Wed, 12 May 2021 09:01:13 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
+        by smtp.gmail.com with ESMTPSA id i24sm238402pfd.35.2021.05.12.09.01.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 May 2021 09:01:13 -0700 (PDT)
+Subject: Re: [Resend RFC PATCH V2 10/12] HV/IOMMU: Add Hyper-V dma ops support
+To:     Christoph Hellwig <hch@lst.de>, konrad.wilk@oracle.com
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
+        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, joro@8bytes.org, will@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com,
+        sunilmut@microsoft.com
+References: <20210414144945.3460554-1-ltykernel@gmail.com>
+ <20210414144945.3460554-11-ltykernel@gmail.com>
+ <20210414154729.GD32045@lst.de>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <a316af73-2c96-f307-6285-593597e05123@gmail.com>
+Date:   Thu, 13 May 2021 00:01:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a645aefc-632f-b1eb-4f4e-1c5b0f9e75d5@intel.com>
+In-Reply-To: <20210414154729.GD32045@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 11, 2021 at 11:35:03AM -0700, Yu, Yu-cheng wrote:
-> io_bitmap_share() does refcount_inc(&current->thread.io_bitmap->refcnt), and
-> the function won't fail.  However, shadow stack allocation can fail.  So,
-> maybe leave io_bitmap_share() at the end?
+Hi Christoph and Konrad:
+      Current Swiotlb bounce buffer uses a pool for all devices. There
+is a high overhead to get or free bounce buffer during performance test.
+Swiotlb code now use a global spin lock to protect bounce buffer data.
+Several device queues try to acquire the spin lock and this introduce
+additional overhead.
 
-Yap, makes sense.
+For performance and security perspective, each devices should have a
+separate swiotlb bounce buffer pool and so this part needs to rework.
+I want to check this is right way to resolve performance issues with 
+swiotlb bounce buffer. If you have some other suggestions,welcome.
 
-Thx.
+Thanks.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+On 4/14/2021 11:47 PM, Christoph Hellwig wrote:
+>> +static dma_addr_t hyperv_map_page(struct device *dev, struct page *page,
+>> +				  unsigned long offset, size_t size,
+>> +				  enum dma_data_direction dir,
+>> +				  unsigned long attrs)
+>> +{
+>> +	phys_addr_t map, phys = (page_to_pfn(page) << PAGE_SHIFT) + offset;
+>> +
+>> +	if (!hv_is_isolation_supported())
+>> +		return phys;
+>> +
+>> +	map = swiotlb_tbl_map_single(dev, phys, size, HV_HYP_PAGE_SIZE, dir,
+>> +				     attrs);
+>> +	if (map == (phys_addr_t)DMA_MAPPING_ERROR)
+>> +		return DMA_MAPPING_ERROR;
+>> +
+>> +	return map;
+>> +}
+> 
+> This largerly duplicates what dma-direct + swiotlb does.  Please use
+> force_dma_unencrypted to force bounce buffering and just use the generic
+> code.
+> 
+>> +	if (hv_isolation_type_snp()) {
+>> +		ret = hv_set_mem_host_visibility(
+>> +				phys_to_virt(hyperv_io_tlb_start),
+>> +				hyperv_io_tlb_size,
+>> +				VMBUS_PAGE_VISIBLE_READ_WRITE);
+>> +		if (ret)
+>> +			panic("%s: Fail to mark Hyper-v swiotlb buffer visible to host. err=%d\n",
+>> +			      __func__, ret);
+>> +
+>> +		hyperv_io_tlb_remap = ioremap_cache(hyperv_io_tlb_start
+>> +					    + ms_hyperv.shared_gpa_boundary,
+>> +						    hyperv_io_tlb_size);
+>> +		if (!hyperv_io_tlb_remap)
+>> +			panic("%s: Fail to remap io tlb.\n", __func__);
+>> +
+>> +		memset(hyperv_io_tlb_remap, 0x00, hyperv_io_tlb_size);
+>> +		swiotlb_set_bounce_remap(hyperv_io_tlb_remap);
+> 
+> And this really needs to go into a common hook where we currently just
+> call set_memory_decrypted so that all the different schemes for these
+> trusted VMs (we have about half a dozen now) can share code rather than
+> reinventing it.
+> 
