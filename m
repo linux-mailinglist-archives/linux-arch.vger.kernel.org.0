@@ -2,110 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F2937B718
-	for <lists+linux-arch@lfdr.de>; Wed, 12 May 2021 09:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC7637B7A0
+	for <lists+linux-arch@lfdr.de>; Wed, 12 May 2021 10:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbhELHvF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 May 2021 03:51:05 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:50065 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbhELHvF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 May 2021 03:51:05 -0400
-Received: from mail-oi1-f178.google.com ([209.85.167.178]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MFKX3-1lihhK34Pp-00Fnda; Wed, 12 May 2021 09:49:55 +0200
-Received: by mail-oi1-f178.google.com with SMTP id x15so7731063oic.13;
-        Wed, 12 May 2021 00:49:55 -0700 (PDT)
-X-Gm-Message-State: AOAM5332yO5fBiTf58nzSnzrGM13tnnVMVvXp+6Vm9GXPnge8Fqoosq0
-        bwic36wCqdqkwYZXa/BM5jt9yIG2rb9ootp5+kU=
-X-Google-Smtp-Source: ABdhPJxd0lpfpoLIqJOw+6SPCO8QED3/X3t9JAR8I4sQlku1WpueQz6KE4WIiLlRxouPNnwly1mFxvEEQ4Zrg7KWp+o=
-X-Received: by 2002:aca:f587:: with SMTP id t129mr25234423oih.84.1620805794260;
- Wed, 12 May 2021 00:49:54 -0700 (PDT)
+        id S230149AbhELINn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 May 2021 04:13:43 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:27716 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230347AbhELINm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 12 May 2021 04:13:42 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-24-Mu4ZH7yROfqaElxRZepFWA-1; Wed, 12 May 2021 09:12:32 +0100
+X-MC-Unique: Mu4ZH7yROfqaElxRZepFWA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.2; Wed, 12 May 2021 09:12:30 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.015; Wed, 12 May 2021 09:12:30 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Borislav Petkov' <bp@alien8.de>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Eugene Syromiatnikov" <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        "Weijiang Yang" <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        "Haitao Huang" <haitao.huang@intel.com>
+Subject: RE: [PATCH v26 23/30] x86/cet/shstk: Handle thread shadow stack
+Thread-Topic: [PATCH v26 23/30] x86/cet/shstk: Handle thread shadow stack
+Thread-Index: AQHXRoh6HV4c4+Eb3km5gqBECdAPb6rff7ZQ
+Date:   Wed, 12 May 2021 08:12:29 +0000
+Message-ID: <e22d3116efef4e25a45fc6b58d5622ef@AcuMS.aculab.com>
+References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
+ <20210427204315.24153-24-yu-cheng.yu@intel.com> <YJlADyc/9pn8Sjkn@zn.tnic>
+ <89598d32-4bf8-b989-ee77-5b4b55a138a9@intel.com> <YJq6VZ/XMAtfkrMc@zn.tnic>
+In-Reply-To: <YJq6VZ/XMAtfkrMc@zn.tnic>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20210401003153.97325-1-yury.norov@gmail.com> <20210401003153.97325-12-yury.norov@gmail.com>
- <1ac7bbc2-45d9-26ed-0b33-bf382b8d858b@I-love.SAKURA.ne.jp>
- <CAHp75Vea0Y_LfWC7LNDoDZqO4t+SVHV5HZMzErfyMPoBAjjk1g@mail.gmail.com>
- <YJm5Dpo+RspbAtye@rikard> <YJoyMrqRtB3GSAny@smile.fi.intel.com>
- <YJpePAHS3EDw6PK1@rikard> <151de51e-9302-1f59-407a-e0d68bbaf11c@i-love.sakura.ne.jp>
- <YJrrJhvwq7RUvDXD@rikard>
-In-Reply-To: <YJrrJhvwq7RUvDXD@rikard>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 12 May 2021 09:48:57 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a02qNHcksJ8DahHgLtbM9ZOydGjE3__3GoxgJFiWrAT0w@mail.gmail.com>
-Message-ID: <CAK8P3a02qNHcksJ8DahHgLtbM9ZOydGjE3__3GoxgJFiWrAT0w@mail.gmail.com>
-Subject: Re: [PATCH 11/12] tools: sync lib/find_bit implementation
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux-SH <linux-sh@vger.kernel.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fhzWoOc1Vad7Gk0f0i3YZQTK7+oA8uzLV3sSW2zE6I47Ody7IvG
- S0rZhdcOmArhLGlKkN1ijeiTQrZ8WMMZFefLsOAMnFJrJeQPFlDraXdgRyMU3S/pxOXZe0g
- BsfNnWJgJOSMWKh2ZovFD7lypwLsYydBp2uw2L+vSc66ZfZckw/BZ8xsWEtKjxfaPba8u3J
- l08CRvBFmJL2LQvms5Cwg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KK/dcYhHyco=:CAyYNaS8gDrjoZWnGW4SWq
- E8AaGhybFNBdvJxiR+GRumjv3VKz0jhJNfW4HndiWyssPH49ibo1CZcxYtq/anY0PEZeaO/Jp
- g9My9IpOds7tbz9kPb47eWFiXdgLHh89RUzMUECtIZXLiGNnsa52/LlKDnt3sOcjq9prq6KUL
- Iw2khn48hpKRmKf54LMEUa3+AQDBiF8L+nWjneAH3TM2CBFnQaJSDLIzmgYAHhanqpSdFXoa7
- IqhLX1qpkIScny65UVA05L3HmHmY3t3bxoFFCJWYCX4gOU+10pGWjU0wj5EkSLqd3oi3cpJPw
- JkR6bF2FPHWBMkjgU55RExNZHI8RvwW/1hjOMOtYUFjKqz5LkjxdCEnQZxXftg0aUUGdKascV
- sj/twLz9OZtizPljvAz0YiP6DqWDlqZWQGLC51/kFpE7dSYbyEpNXpVUt9jncgxvWURNFFYf9
- 6ES0kgyxQtuon2CtZQKkA9demAPU7ac1cuCt51tw5JQEEvARHI8/k5F0UP3jcsqsH2HPJmYvk
- ke5jjaQ5xzWPNZqleeBgGM=
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 11, 2021 at 10:39 PM Rikard Falkeborn
-<rikard.falkeborn@gmail.com> wrote:
-> On Tue, May 11, 2021 at 08:53:53PM +0900, Tetsuo Handa wrote:
+RnJvbTogQm9yaXNsYXYgUGV0a292DQo+IFNlbnQ6IDExIE1heSAyMDIxIDE4OjEwDQo+IA0KPiBP
+biBNb24sIE1heSAxMCwgMjAyMSBhdCAwMzo1Nzo1NlBNIC0wNzAwLCBZdSwgWXUtY2hlbmcgd3Jv
+dGU6DQo+ID4gU28gdGhpcyBzdHJ1Y3Qgd2lsbCBiZToNCj4gPg0KPiA+IHN0cnVjdCB0aHJlYWRf
+c2hzdGsgew0KPiA+IAl1NjQgc2hzdGtfYmFzZTsNCj4gPiAJdTY0IHNoc3RrX3NpemU7DQo+ID4g
+CXU2NCBsb2NrZWQ6MTsNCj4gPiAJdTY0IGlidDoxOw0KDQpObyBwb2ludCBpbiBiaXQgZmllbGRz
+Pw0KDQo+ID4gfTsNCj4gPg0KPiA+IE9rPw0KPiANCj4gUHJldHR5IG11Y2guDQo+IA0KPiBZb3Ug
+Y2FuIGV2ZW4gcmVtb3ZlIHRoZSAic2hzdGtfIiBmcm9tIHRoZSBtZW1iZXJzIGFuZCB3aGVuIHlv
+dSBjYWxsIHRoZQ0KPiBwb2ludGVyICJzaHN0ayIsIGFjY2Vzc2luZyB0aGUgbWVtYmVycyB3aWxs
+IHJlYWQNCj4gDQo+IAlzaHN0ay0+YmFzZQ0KPiAJc2hzdGstPnNpemUNCj4gCS4uLg0KPiANCj4g
+YW5kIGFsbCBpcyBvcmdhbmljIGFuZCByZWFkYWJsZSA6KQ0KDQpBbmQgZW50aXJlbHkgbm90IGdy
+ZXBwYWJsZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJh
+bWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0
+cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-> > #define GENMASK_INPUT_CHECK(h, l) \
-> >      (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> >           __builtin_constant_p((l) > (h)), (l) > (h), 0)))
-> >
-> > __GENMASK() does not need "h" and "l" being a constant.
-> >
-> > Yes, small_const_nbits(size) in find_next_bit() can guarantee that "size" is a
-> > constant and hence "h" argument in GENMASK_INPUT_CHECK() call is also a constant.
-> > But nothing can guarantee that "offset" is a constant, and hence nothing can
-> > guarantee that "l" argument in GENMASK_INPUT_CHECK() call is also a constant.
-> >
-> > Then, how can (l) > (h) in __builtin_constant_p((l) > (h)) be evaluated at build time
-> > if either l or h (i.e. "offset" and "size - 1" in find_next_bit()) lacks a guarantee of
-> > being a constant?
-> >
->
-> So the idea is that if (l > h) is constant, __builtin_constant_p should
-> evaluate that, and if it is not it should use zero instead as input to
-> __builtin_chose_expr(). This works with non-const inputs in many other
-> places in the kernel, but apparently in this case with a certain
-> compiler, it doesn't so I guess we need to work around it.
-
-I have a vague memory that __builtin_constant_p() inside of
-__builtin_choose_expr()
-always evaluates to false because of the order in which the compiler processes
-those: If constant-folding only happens after __builtin_choose_expr(), then
-__builtin_constant_p() has to be false.
-
-        Arnd
