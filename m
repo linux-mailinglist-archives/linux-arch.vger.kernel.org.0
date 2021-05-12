@@ -2,96 +2,149 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC7637B7A0
-	for <lists+linux-arch@lfdr.de>; Wed, 12 May 2021 10:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B323F37B7A7
+	for <lists+linux-arch@lfdr.de>; Wed, 12 May 2021 10:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbhELINn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 May 2021 04:13:43 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:27716 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230347AbhELINm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 12 May 2021 04:13:42 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-24-Mu4ZH7yROfqaElxRZepFWA-1; Wed, 12 May 2021 09:12:32 +0100
-X-MC-Unique: Mu4ZH7yROfqaElxRZepFWA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Wed, 12 May 2021 09:12:30 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.015; Wed, 12 May 2021 09:12:30 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Borislav Petkov' <bp@alien8.de>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Eugene Syromiatnikov" <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        "Weijiang Yang" <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        "Haitao Huang" <haitao.huang@intel.com>
-Subject: RE: [PATCH v26 23/30] x86/cet/shstk: Handle thread shadow stack
-Thread-Topic: [PATCH v26 23/30] x86/cet/shstk: Handle thread shadow stack
-Thread-Index: AQHXRoh6HV4c4+Eb3km5gqBECdAPb6rff7ZQ
-Date:   Wed, 12 May 2021 08:12:29 +0000
-Message-ID: <e22d3116efef4e25a45fc6b58d5622ef@AcuMS.aculab.com>
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-24-yu-cheng.yu@intel.com> <YJlADyc/9pn8Sjkn@zn.tnic>
- <89598d32-4bf8-b989-ee77-5b4b55a138a9@intel.com> <YJq6VZ/XMAtfkrMc@zn.tnic>
-In-Reply-To: <YJq6VZ/XMAtfkrMc@zn.tnic>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S230181AbhELIQu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 May 2021 04:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229968AbhELIQt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 May 2021 04:16:49 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA29C061574
+        for <linux-arch@vger.kernel.org>; Wed, 12 May 2021 01:15:40 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id f24so33682213ejc.6
+        for <linux-arch@vger.kernel.org>; Wed, 12 May 2021 01:15:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ofYbiesQgwQaEexlewrml7cRxApQkWB2Nx460iDcnyo=;
+        b=cHIOWKyzF0AfFHiktnENLignESiqbB75M/2S8bNYGwb4UmCWst1kzfVRtHWBUILKXs
+         c7eSZ9hehTk8NLHKdrT9XYNXDarjEYNKlTulZQDt9ENuebCRNglJRbSanTXy8bx1NlVm
+         YW7PRTEc6U7mjbRYuKiT9exW6nbvZazhgiCk4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ofYbiesQgwQaEexlewrml7cRxApQkWB2Nx460iDcnyo=;
+        b=GPDtqcHGaBXudp+RpqtGiy/Z9u8bd5cGq8kg7zcjCVFR9DTnYD4UYCUGHRptHlJPei
+         RC4WKbf02DFrsLdzkCjAjirHmHVYuge52h7dnj5Wri3Sx8HhXiYqlllrZROGx7RWIxDv
+         FKztaeaY3JxqzOTeral9Qfrt2smV8aozxcTYMCFsUkmZWb/dHP358iZG3dlxW48JLqt5
+         iyKH7RciFLzcKQMuN0hL6BbuIZPCJShZujlNJzyetxmLqMJvA2ueVMCCXiL2ukliHZNj
+         Wbfr0C5Uel6ilwHGcAqxUA/dJHn26NA+u+tWWvP26C5P1iET42DCv1t8ofe8Hu5O8yvH
+         wSAA==
+X-Gm-Message-State: AOAM533GCGnp60mDEeCp2TT/Iv6hrDHqaC8/lbXELmlLzFybrfM6OfKv
+        Nwp1jH5uKlpspf7mQxFq07G1lQ==
+X-Google-Smtp-Source: ABdhPJzRky2jZTiXS/jGvK3y0xATQ4vtskLl8aSJ36xGqYFwRVDIZS1+rKVRogxxKQkuc5o4q2jaog==
+X-Received: by 2002:a17:906:f42:: with SMTP id h2mr37200326ejj.317.1620807339603;
+        Wed, 12 May 2021 01:15:39 -0700 (PDT)
+Received: from [192.168.1.149] ([80.208.71.248])
+        by smtp.gmail.com with ESMTPSA id um28sm13885567ejb.63.2021.05.12.01.15.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 May 2021 01:15:39 -0700 (PDT)
+Subject: Re: [PATCH 11/12] tools: sync lib/find_bit implementation
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux-SH <linux-sh@vger.kernel.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        David Sterba <dsterba@suse.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jianpeng Ma <jianpeng.ma@intel.com>,
+        Joe Perches <joe@perches.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rich Felker <dalias@libc.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+References: <20210401003153.97325-1-yury.norov@gmail.com>
+ <20210401003153.97325-12-yury.norov@gmail.com>
+ <1ac7bbc2-45d9-26ed-0b33-bf382b8d858b@I-love.SAKURA.ne.jp>
+ <CAHp75Vea0Y_LfWC7LNDoDZqO4t+SVHV5HZMzErfyMPoBAjjk1g@mail.gmail.com>
+ <YJm5Dpo+RspbAtye@rikard> <YJoyMrqRtB3GSAny@smile.fi.intel.com>
+ <YJpePAHS3EDw6PK1@rikard>
+ <151de51e-9302-1f59-407a-e0d68bbaf11c@i-love.sakura.ne.jp>
+ <YJrrJhvwq7RUvDXD@rikard>
+ <CAK8P3a02qNHcksJ8DahHgLtbM9ZOydGjE3__3GoxgJFiWrAT0w@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <030ae370-967c-22d4-56f8-cb0435be7540@rasmusvillemoes.dk>
+Date:   Wed, 12 May 2021 10:15:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <CAK8P3a02qNHcksJ8DahHgLtbM9ZOydGjE3__3GoxgJFiWrAT0w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQm9yaXNsYXYgUGV0a292DQo+IFNlbnQ6IDExIE1heSAyMDIxIDE4OjEwDQo+IA0KPiBP
-biBNb24sIE1heSAxMCwgMjAyMSBhdCAwMzo1Nzo1NlBNIC0wNzAwLCBZdSwgWXUtY2hlbmcgd3Jv
-dGU6DQo+ID4gU28gdGhpcyBzdHJ1Y3Qgd2lsbCBiZToNCj4gPg0KPiA+IHN0cnVjdCB0aHJlYWRf
-c2hzdGsgew0KPiA+IAl1NjQgc2hzdGtfYmFzZTsNCj4gPiAJdTY0IHNoc3RrX3NpemU7DQo+ID4g
-CXU2NCBsb2NrZWQ6MTsNCj4gPiAJdTY0IGlidDoxOw0KDQpObyBwb2ludCBpbiBiaXQgZmllbGRz
-Pw0KDQo+ID4gfTsNCj4gPg0KPiA+IE9rPw0KPiANCj4gUHJldHR5IG11Y2guDQo+IA0KPiBZb3Ug
-Y2FuIGV2ZW4gcmVtb3ZlIHRoZSAic2hzdGtfIiBmcm9tIHRoZSBtZW1iZXJzIGFuZCB3aGVuIHlv
-dSBjYWxsIHRoZQ0KPiBwb2ludGVyICJzaHN0ayIsIGFjY2Vzc2luZyB0aGUgbWVtYmVycyB3aWxs
-IHJlYWQNCj4gDQo+IAlzaHN0ay0+YmFzZQ0KPiAJc2hzdGstPnNpemUNCj4gCS4uLg0KPiANCj4g
-YW5kIGFsbCBpcyBvcmdhbmljIGFuZCByZWFkYWJsZSA6KQ0KDQpBbmQgZW50aXJlbHkgbm90IGdy
-ZXBwYWJsZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJh
-bWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0
-cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On 12/05/2021 09.48, Arnd Bergmann wrote:
+> On Tue, May 11, 2021 at 10:39 PM Rikard Falkeborn
+> <rikard.falkeborn@gmail.com> wrote:
+>> On Tue, May 11, 2021 at 08:53:53PM +0900, Tetsuo Handa wrote:
+> 
+>>> #define GENMASK_INPUT_CHECK(h, l) \
+>>>      (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+>>>           __builtin_constant_p((l) > (h)), (l) > (h), 0)))
+>>>
+>>> __GENMASK() does not need "h" and "l" being a constant.
+>>>
+>>> Yes, small_const_nbits(size) in find_next_bit() can guarantee that "size" is a
+>>> constant and hence "h" argument in GENMASK_INPUT_CHECK() call is also a constant.
+>>> But nothing can guarantee that "offset" is a constant, and hence nothing can
+>>> guarantee that "l" argument in GENMASK_INPUT_CHECK() call is also a constant.
+>>>
+>>> Then, how can (l) > (h) in __builtin_constant_p((l) > (h)) be evaluated at build time
+>>> if either l or h (i.e. "offset" and "size - 1" in find_next_bit()) lacks a guarantee of
+>>> being a constant?
+>>>
+>>
+>> So the idea is that if (l > h) is constant, __builtin_constant_p should
+>> evaluate that, and if it is not it should use zero instead as input to
+>> __builtin_chose_expr(). This works with non-const inputs in many other
+>> places in the kernel, but apparently in this case with a certain
+>> compiler, it doesn't so I guess we need to work around it.
+> 
+> I have a vague memory that __builtin_constant_p() inside of
+> __builtin_choose_expr()
+> always evaluates to false because of the order in which the compiler processes
+> those: If constant-folding only happens after __builtin_choose_expr(), then
+> __builtin_constant_p() has to be false.
 
+It's more complicated than that. __builtin_constant_p on something which
+is a bona-fide Integer Constant Expression (ICE) gets folded early to a
+1. And then it turns out that such a __builtin_constant_p() that folds
+early to a 1 can be "stronger" than a literal 1, in the sense that when
+used as the controlling expression of a ?: with nonsense in the false
+branch, the former is OK but the latter fails:
+
+https://lore.kernel.org/lkml/c68a0f46-346c-70a0-a9b8-31747888f05f@rasmusvillemoes.dk/
+
+Now what happens when the argument to __builtin_constant_p is not an ICE
+is a lot more complicated. The argument _may_ be so obviously
+non-constant that it can be folded early to a 0, hence still be suitable
+as first argument to __b_c_e. But it is also possible that the compiler
+leaves it unevaluated, in the "hope" that a later optimization stage
+could prove the argument constant. And that's the case where __b_c_e
+will then break, because that can't be left unevaluated for very long -
+the very _type_ of the result depends on which branch is chosen.
+
+tl;dr: there's no "order in which the compiler processes those", __b_c_p
+can get evaluated (folded) early, before __b_c_e inspects it, or be left
+for later stages.
+
+Rasmus
