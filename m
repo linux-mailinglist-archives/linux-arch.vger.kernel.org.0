@@ -2,79 +2,232 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D187637F19B
-	for <lists+linux-arch@lfdr.de>; Thu, 13 May 2021 05:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABF937F1D4
+	for <lists+linux-arch@lfdr.de>; Thu, 13 May 2021 06:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbhEMDVe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 May 2021 23:21:34 -0400
-Received: from mga01.intel.com ([192.55.52.88]:3839 "EHLO mga01.intel.com"
+        id S229504AbhEMEIT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 May 2021 00:08:19 -0400
+Received: from mga14.intel.com ([192.55.52.115]:46950 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230186AbhEMDVe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 12 May 2021 23:21:34 -0400
-IronPort-SDR: jpcampUkN8j5ENkutHgnXttTP6UuQWbFX21OkssKz541OKdmrHjBDaIsHglOMfbgUTHtTo9wcM
- u7frGVag81Sg==
-X-IronPort-AV: E=McAfee;i="6200,9189,9982"; a="220844202"
+        id S229460AbhEMEIS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 13 May 2021 00:08:18 -0400
+IronPort-SDR: u6DaTau5W4/1ST8aBs3vPwjO2wRv23k1ovHDt69rQz7mQ38zzo4CgiAQKEfGVrY4l0i4MoZc6C
+ 5os+fa34E6Vw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9982"; a="199545618"
 X-IronPort-AV: E=Sophos;i="5.82,296,1613462400"; 
-   d="scan'208";a="220844202"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 20:20:20 -0700
-IronPort-SDR: mj7EoWy5caILec4mbk32Dm0KgdMRCgdis+B5aYwjfmce1/m431ZPlq/GAXkQxk0u9LSJU6JlnK
- f6t1SWydDh2g==
+   d="scan'208";a="199545618"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 21:07:06 -0700
+IronPort-SDR: RS5RASIGC1X4cV1dQicJ6McplDE322Nuwr9mfMRcdTsBM/kTCvetgxDfc1aNaTntdO/+OLjNbQ
+ k/T16BbXfRIg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,296,1613462400"; 
-   d="scan'208";a="623090674"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.128]) ([10.239.159.128])
-  by fmsmga006.fm.intel.com with ESMTP; 12 May 2021 20:20:14 -0700
-Cc:     baolu.lu@linux.intel.com, linux-hyperv@vger.kernel.org,
-        brijesh.singh@amd.com, linux-mm@kvack.org, hpa@zytor.com,
-        kys@microsoft.com, will@kernel.org, sunilmut@microsoft.com,
-        linux-arch@vger.kernel.org, wei.liu@kernel.org,
-        sthemmin@microsoft.com, linux-scsi@vger.kernel.org, x86@kernel.org,
-        mingo@redhat.com, kuba@kernel.org, jejb@linux.ibm.com,
-        thomas.lendacky@amd.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        arnd@arndb.de, haiyangz@microsoft.com, bp@alien8.de,
-        tglx@linutronix.de, vkuznets@redhat.com,
-        martin.petersen@oracle.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        netdev@vger.kernel.org, akpm@linux-foundation.org,
-        robin.murphy@arm.com, davem@davemloft.net
-Subject: Re: [Resend RFC PATCH V2 10/12] HV/IOMMU: Add Hyper-V dma ops support
-To:     Tianyu Lan <ltykernel@gmail.com>, Christoph Hellwig <hch@lst.de>,
-        konrad.wilk@oracle.com
-References: <20210414144945.3460554-1-ltykernel@gmail.com>
- <20210414144945.3460554-11-ltykernel@gmail.com>
- <20210414154729.GD32045@lst.de>
- <a316af73-2c96-f307-6285-593597e05123@gmail.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <7cda690b-adb0-1f5f-2048-b52f75c0399f@linux.intel.com>
-Date:   Thu, 13 May 2021 11:19:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+   d="scan'208";a="392129738"
+Received: from lkp-server01.sh.intel.com (HELO ddd90b05c979) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 12 May 2021 21:07:05 -0700
+Received: from kbuild by ddd90b05c979 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lh2cq-000061-JO; Thu, 13 May 2021 04:07:04 +0000
+Date:   Thu, 13 May 2021 12:06:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [asm-generic:master] BUILD SUCCESS
+ d74ebb76967f2395128f8cb7e87c31c27758e104
+Message-ID: <609ca5b0.U0lRjXNJJKYPl4pB%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <a316af73-2c96-f307-6285-593597e05123@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/13/21 12:01 AM, Tianyu Lan wrote:
-> Hi Christoph and Konrad:
->       Current Swiotlb bounce buffer uses a pool for all devices. There
-> is a high overhead to get or free bounce buffer during performance test.
-> Swiotlb code now use a global spin lock to protect bounce buffer data.
-> Several device queues try to acquire the spin lock and this introduce
-> additional overhead.
-> 
-> For performance and security perspective, each devices should have a
-> separate swiotlb bounce buffer pool and so this part needs to rework.
-> I want to check this is right way to resolve performance issues with 
-> swiotlb bounce buffer. If you have some other suggestions,welcome.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+branch HEAD: d74ebb76967f2395128f8cb7e87c31c27758e104  Merge branch 'asm-generic-unaligned' into asm-generic
 
-Is this what you want?
+elapsed time: 720m
 
-https://lore.kernel.org/linux-iommu/20210510095026.3477496-1-tientzu@chromium.org/
+configs tested: 170
+configs skipped: 3
 
-Best regards,
-baolu
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                           h3600_defconfig
+mips                      malta_kvm_defconfig
+arm                        realview_defconfig
+arm                      footbridge_defconfig
+powerpc                     sequoia_defconfig
+mips                  decstation_64_defconfig
+s390                       zfcpdump_defconfig
+xtensa                    xip_kc705_defconfig
+m68k                        m5407c3_defconfig
+arc                 nsimosci_hs_smp_defconfig
+ia64                        generic_defconfig
+sh                          lboxre2_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                      mgcoge_defconfig
+powerpc                   lite5200b_defconfig
+sparc64                          alldefconfig
+powerpc                 mpc836x_rdk_defconfig
+mips                     loongson2k_defconfig
+sh                         microdev_defconfig
+powerpc                       ppc64_defconfig
+nds32                               defconfig
+arc                     haps_hs_smp_defconfig
+mips                          rm200_defconfig
+powerpc                      cm5200_defconfig
+powerpc                      katmai_defconfig
+powerpc                      pcm030_defconfig
+powerpc                 mpc8313_rdb_defconfig
+powerpc                      ppc64e_defconfig
+arm                        neponset_defconfig
+arm                           h5000_defconfig
+h8300                               defconfig
+openrisc                  or1klitex_defconfig
+mips                     cu1000-neo_defconfig
+arm                           omap1_defconfig
+m68k                        mvme147_defconfig
+powerpc                     skiroot_defconfig
+arm                              alldefconfig
+m68k                       m5208evb_defconfig
+arm                           viper_defconfig
+sh                        edosk7705_defconfig
+s390                          debug_defconfig
+mips                           xway_defconfig
+i386                                defconfig
+powerpc                 canyonlands_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                        warp_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc                     kmeter1_defconfig
+powerpc                   currituck_defconfig
+m68k                             allyesconfig
+s390                             allyesconfig
+powerpc                      bamboo_defconfig
+m68k                       bvme6000_defconfig
+arm                     am200epdkit_defconfig
+sh                        dreamcast_defconfig
+mips                           gcw0_defconfig
+arm                          ixp4xx_defconfig
+sh                        sh7785lcr_defconfig
+mips                           ci20_defconfig
+powerpc                 mpc8272_ads_defconfig
+sh                             sh03_defconfig
+arm                           sama5_defconfig
+arm                       imx_v6_v7_defconfig
+sh                         ap325rxa_defconfig
+sparc                               defconfig
+powerpc                          g5_defconfig
+powerpc                 mpc834x_mds_defconfig
+h8300                       h8s-sim_defconfig
+powerpc                    adder875_defconfig
+sh                               j2_defconfig
+sh                   sh7770_generic_defconfig
+arm                          pxa168_defconfig
+ia64                          tiger_defconfig
+powerpc                       holly_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                          simpad_defconfig
+mips                     loongson1b_defconfig
+m68k                        mvme16x_defconfig
+m68k                       m5249evb_defconfig
+powerpc                        cell_defconfig
+sh                           se7780_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20210512
+x86_64               randconfig-a004-20210512
+x86_64               randconfig-a001-20210512
+x86_64               randconfig-a005-20210512
+x86_64               randconfig-a002-20210512
+x86_64               randconfig-a006-20210512
+i386                 randconfig-a003-20210512
+i386                 randconfig-a001-20210512
+i386                 randconfig-a005-20210512
+i386                 randconfig-a004-20210512
+i386                 randconfig-a002-20210512
+i386                 randconfig-a006-20210512
+i386                 randconfig-a003-20210513
+i386                 randconfig-a001-20210513
+i386                 randconfig-a005-20210513
+i386                 randconfig-a004-20210513
+i386                 randconfig-a002-20210513
+i386                 randconfig-a006-20210513
+i386                 randconfig-a016-20210512
+i386                 randconfig-a014-20210512
+i386                 randconfig-a011-20210512
+i386                 randconfig-a015-20210512
+i386                 randconfig-a012-20210512
+i386                 randconfig-a013-20210512
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+x86_64                           allyesconfig
+
+clang tested configs:
+x86_64               randconfig-a003-20210513
+x86_64               randconfig-a004-20210513
+x86_64               randconfig-a001-20210513
+x86_64               randconfig-a005-20210513
+x86_64               randconfig-a002-20210513
+x86_64               randconfig-a006-20210513
+x86_64               randconfig-a015-20210512
+x86_64               randconfig-a012-20210512
+x86_64               randconfig-a011-20210512
+x86_64               randconfig-a013-20210512
+x86_64               randconfig-a016-20210512
+x86_64               randconfig-a014-20210512
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
