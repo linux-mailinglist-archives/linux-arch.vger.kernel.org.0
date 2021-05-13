@@ -2,91 +2,79 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7764C37EEB0
-	for <lists+linux-arch@lfdr.de>; Thu, 13 May 2021 01:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D187637F19B
+	for <lists+linux-arch@lfdr.de>; Thu, 13 May 2021 05:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348196AbhELWFF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 May 2021 18:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389927AbhELVEB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 May 2021 17:04:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A686DC0611B5;
-        Wed, 12 May 2021 13:55:06 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1620852905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L34T/UenUIuq4jeGVl6/Hdv4Eqp08Y7XCNJ8f0KJUjw=;
-        b=Kg6kVYoIgblFaV2cgbUMCuWDceMtbJKTH7blWXawUSb9swAZzsfkOgzIqfxU5BtUj3AY7f
-        YY55SOAhpRrVy03NlQRTSQeJWiEK6V6ttfRw7nZEqMTL2q9Sc4aq+rtQlEvRuckkyeXk/U
-        x0tNZajCa7SboBoCLmjsoNNzHs9hcZpBsPbYIeq68GhoORMLQPyWQqPzoWMbzOS4gQmTqe
-        Ba/Z7AkzJjEdwsUreBxEx7bEPAy5saURcxpKEBy3rkC1tj8mBcR8H7dMiMMdKanVDx5gW4
-        rwL2hqIaBrcSMhrGhn3qBF/eBYzDtmqTrty4b4UeOKxvIMLslWdo4Lczwrm8jQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1620852905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L34T/UenUIuq4jeGVl6/Hdv4Eqp08Y7XCNJ8f0KJUjw=;
-        b=JvwFIWeD/Oq7qlJnp6Q65ddy634JUD+/dlVZhUnx7W3Ov7Mqdcu0qt/GeIbtd9/FTKxIpc
-        ONMasOCGz62hbLCA==
-To:     "Bae\, Chang Seok" <chang.seok.bae@intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Andy Lutomirski <luto@kernel.org>, "bp\@suse.de" <bp@suse.de>,
-        "mingo\@kernel.org" <mingo@kernel.org>,
-        "x86\@kernel.org" <x86@kernel.org>,
-        "Brown\, Len" <len.brown@intel.com>,
-        "Hansen\, Dave" <dave.hansen@intel.com>,
-        "hjl.tools\@gmail.com" <hjl.tools@gmail.com>,
-        "Dave.Martin\@arm.com" <Dave.Martin@arm.com>,
-        "jannh\@google.com" <jannh@google.com>,
-        "mpe\@ellerman.id.au" <mpe@ellerman.id.au>,
-        "carlos\@redhat.com" <carlos@redhat.com>,
-        "Luck\, Tony" <tony.luck@intel.com>,
-        "Shankar\, Ravi V" <ravi.v.shankar@intel.com>,
-        "libc-alpha\@sourceware.org" <libc-alpha@sourceware.org>,
-        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api\@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 5/6] x86/signal: Detect and prevent an alternate signal stack overflow
-In-Reply-To: <B8EF2379-0AF6-4D00-B6B8-214CA9073BFC@intel.com>
-References: <20210422044856.27250-1-chang.seok.bae@intel.com> <20210422044856.27250-6-chang.seok.bae@intel.com> <YJrOsbyYhMndI5jd@zn.tnic> <B8EF2379-0AF6-4D00-B6B8-214CA9073BFC@intel.com>
-Date:   Wed, 12 May 2021 22:55:04 +0200
-Message-ID: <87pmxv65av.ffs@nanos.tec.linutronix.de>
+        id S230472AbhEMDVe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 May 2021 23:21:34 -0400
+Received: from mga01.intel.com ([192.55.52.88]:3839 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230186AbhEMDVe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 12 May 2021 23:21:34 -0400
+IronPort-SDR: jpcampUkN8j5ENkutHgnXttTP6UuQWbFX21OkssKz541OKdmrHjBDaIsHglOMfbgUTHtTo9wcM
+ u7frGVag81Sg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9982"; a="220844202"
+X-IronPort-AV: E=Sophos;i="5.82,296,1613462400"; 
+   d="scan'208";a="220844202"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 20:20:20 -0700
+IronPort-SDR: mj7EoWy5caILec4mbk32Dm0KgdMRCgdis+B5aYwjfmce1/m431ZPlq/GAXkQxk0u9LSJU6JlnK
+ f6t1SWydDh2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,296,1613462400"; 
+   d="scan'208";a="623090674"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.128]) ([10.239.159.128])
+  by fmsmga006.fm.intel.com with ESMTP; 12 May 2021 20:20:14 -0700
+Cc:     baolu.lu@linux.intel.com, linux-hyperv@vger.kernel.org,
+        brijesh.singh@amd.com, linux-mm@kvack.org, hpa@zytor.com,
+        kys@microsoft.com, will@kernel.org, sunilmut@microsoft.com,
+        linux-arch@vger.kernel.org, wei.liu@kernel.org,
+        sthemmin@microsoft.com, linux-scsi@vger.kernel.org, x86@kernel.org,
+        mingo@redhat.com, kuba@kernel.org, jejb@linux.ibm.com,
+        thomas.lendacky@amd.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        arnd@arndb.de, haiyangz@microsoft.com, bp@alien8.de,
+        tglx@linutronix.de, vkuznets@redhat.com,
+        martin.petersen@oracle.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        netdev@vger.kernel.org, akpm@linux-foundation.org,
+        robin.murphy@arm.com, davem@davemloft.net
+Subject: Re: [Resend RFC PATCH V2 10/12] HV/IOMMU: Add Hyper-V dma ops support
+To:     Tianyu Lan <ltykernel@gmail.com>, Christoph Hellwig <hch@lst.de>,
+        konrad.wilk@oracle.com
+References: <20210414144945.3460554-1-ltykernel@gmail.com>
+ <20210414144945.3460554-11-ltykernel@gmail.com>
+ <20210414154729.GD32045@lst.de>
+ <a316af73-2c96-f307-6285-593597e05123@gmail.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <7cda690b-adb0-1f5f-2048-b52f75c0399f@linux.intel.com>
+Date:   Thu, 13 May 2021 11:19:26 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <a316af73-2c96-f307-6285-593597e05123@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 12 2021 at 18:48, Chang Seok Bae wrote:
-> On May 11, 2021, at 11:36, Borislav Petkov <bp@alien8.de> wrote:
->> 
->> I clumsily tried to register a SIGSEGV handler with
->> 
->>        act.sa_sigaction = my_sigsegv;
->>        sigaction(SIGSEGV, &act, NULL);
->> 
->> but that doesn't fire - task gets killed. Maybe I'm doing it wrong.
->
-> Since the altstack is already overflowed, perhaps set the flag like this -- not
-> using it to get the handler:
->
-> 	act.sa_sigaction = my_sigsegv;
-> +	act.sa_flags = SA_SIGINFO;
-> 	sigaction(SIGSEGV, &act, NULL);
->
-> FWIW, I think this is just a workaround for this case; in practice, altstack is
-> rather a backup for normal stack corruption.
+On 5/13/21 12:01 AM, Tianyu Lan wrote:
+> Hi Christoph and Konrad:
+>       Current Swiotlb bounce buffer uses a pool for all devices. There
+> is a high overhead to get or free bounce buffer during performance test.
+> Swiotlb code now use a global spin lock to protect bounce buffer data.
+> Several device queues try to acquire the spin lock and this introduce
+> additional overhead.
+> 
+> For performance and security perspective, each devices should have a
+> separate swiotlb bounce buffer pool and so this part needs to rework.
+> I want to check this is right way to resolve performance issues with 
+> swiotlb bounce buffer. If you have some other suggestions,welcome.
 
-That's the intended usage, but it's not limited to that and there exists
-creative (ab)use of sigaltstack beyond catching the overflow of the
-regular stack.
+Is this what you want?
 
-Thanks,
+https://lore.kernel.org/linux-iommu/20210510095026.3477496-1-tientzu@chromium.org/
 
-        tglx
+Best regards,
+baolu
