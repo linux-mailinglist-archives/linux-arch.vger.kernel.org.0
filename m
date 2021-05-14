@@ -2,229 +2,236 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB625381110
-	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 21:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B17381170
+	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 22:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbhENTqx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 May 2021 15:46:53 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:56818 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230495AbhENTqw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 14 May 2021 15:46:52 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B5C25400E5;
-        Fri, 14 May 2021 19:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1621021540; bh=XmG4n8vJxbRH7bBrVjUXsvPsTWs/midRcduQpFfikI0=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=EbEeU8FKtL/UmcNdyOSAK6Qg7k4N1z2b6T9DoMNKXhBVvX+RwPpyMWpQ21GJNYZnu
-         jUaOkIKGbLB6f8wGIKd1Xr2Eqpw9S/p5d/hr+wQ9sASVER4s8epDNb405MxXaraFMw
-         6lOyCVi6X5ETslJJVjy3JCqDoeyHuMJ0wzAh2aB+t/gtH/wG50lcISuABeCehG1yMS
-         moeu9Di2xjRTv9Od87ioybFzxiN+wVbCwR+bzOueFeJIHiWANK783loiizH6LXJ/0f
-         baHiiFUo3bqjt4lMn0Bi1GO5L446Tnye7VTJL9STzgZMzSD8QmhgWH1bN3ikeb4KU7
-         nWdLOkv0uXMFg==
-Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 7C07AA006A;
-        Fri, 14 May 2021 19:45:30 +0000 (UTC)
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 3A359800C4;
-        Fri, 14 May 2021 19:45:19 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=vgupta@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="pqbBrRsd";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g13J+ZE7cmd6aASpzItin32ziGymgtzESlEeEd8thP7kezQriRJHclLAlKPp8qskuY0fYRdAb+7+nOWeMNbwBtxqiealsifYm78UhORxMLi6auDwguOlbeKg5VIael9N4hzai87CLZuBWzmgEaCwpeP9Q4d28t7OxfogcLeEDHVi+cjK8SCu8cXF3DOHO/FOil0bv86osG79u4drogl+NaiQJW/YMtO4Vt2gFeQHxYJcQWDSWDkX7oh70gcI5E2l2zHR0sY/wJxymouSqNfCaQEOFP9fgnd7C3dbwsAmAJaP/eM4vjQIfUWNmKdTdkgWIlKY5XMk+hI9+dIVW47iEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XmG4n8vJxbRH7bBrVjUXsvPsTWs/midRcduQpFfikI0=;
- b=iFGm0APjAMam7MLwEK5NzQT8lQdk22rwGZU1f0Zzyzq/QDv7vRfxkC1oRkLD6wx1y+IaaGWhSGJ4yRG171xFBv3MT3GDUARJVE8rfWikgC5YZBfr50OLXVQuR0r01u6/uQvdGC69haNnsUS0gnCpg5OyG7ZY/D3rnscn0kbfnHwVi4Uh+lpzyZj8ME1eKcVqPezdHdR6BvSe1QWiO8jdUWlGneY3K4TEU7xZMmTnzB37hileFSq6dRpk32IpcTgeWzktZTlg0tMELwjEHbig1yqPr+n6mHb5+ddAgY+iZCUoQb3Dd4R+Cprke35GahKHh5IOgODm/Axr8CA5qU0nww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XmG4n8vJxbRH7bBrVjUXsvPsTWs/midRcduQpFfikI0=;
- b=pqbBrRsdzHkve5erFrn0KJX/6qveXM1TqPgoVVT1JKF5QGfHFgQobm8LxAzkmtYlamCs2rvx2LkcyWpscvLqwc8WYViqvo/9GrvVsFzHGnpiirxBi7JBVRLfZTNbkJ9NHSrdBUYoKth1xECtgiiP7Tj0pqzGJLeW34yDI9E48WI=
-Received: from BYAPR12MB3479.namprd12.prod.outlook.com (2603:10b6:a03:dc::26)
- by BY5PR12MB4918.namprd12.prod.outlook.com (2603:10b6:a03:1df::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.25; Fri, 14 May
- 2021 19:45:17 +0000
-Received: from BYAPR12MB3479.namprd12.prod.outlook.com
- ([fe80::d1a0:ed05:b9cc:e94d]) by BYAPR12MB3479.namprd12.prod.outlook.com
- ([fe80::d1a0:ed05:b9cc:e94d%7]) with mapi id 15.20.4108.036; Fri, 14 May 2021
- 19:45:17 +0000
-X-SNPS-Relay: synopsys.com
-From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>
-CC:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        James Morris <jmorris@namei.org>, Jens Axboe <axboe@kernel.dk>,
-        John Johansen <john.johansen@canonical.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Rich Felker <dalias@libc.org>,
-        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        "linux-ntfs-dev@lists.sourceforge.net" 
-        <linux-ntfs-dev@lists.sourceforge.net>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
-Thread-Topic: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
-Thread-Index: AQHXSKg19FKoFxcBX0+yXT8p8kMtfqrjPPKAgAAWKgCAAAiYAIAABkwA
-Date:   Fri, 14 May 2021 19:45:16 +0000
-Message-ID: <14016937-b9c3-c131-db18-f97081806c7f@synopsys.com>
-References: <20210514100106.3404011-1-arnd@kernel.org>
- <CAHk-=whGObOKruA_bU3aPGZfoDqZM1_9wBkwREp0H0FgR-90uQ@mail.gmail.com>
- <2408c893-4ae7-4f53-f58c-497c91f5b034@synopsys.com>
- <CAHk-=wih8UHDwJ8x6m-p0PQ7o4S4gOBwGNs=w=q10GNY7A-70w@mail.gmail.com>
-In-Reply-To: <CAHk-=wih8UHDwJ8x6m-p0PQ7o4S4gOBwGNs=w=q10GNY7A-70w@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-authentication-results: linux-foundation.org; dkim=none (message not signed)
- header.d=none;linux-foundation.org; dmarc=none action=none
- header.from=synopsys.com;
-x-originating-ip: [149.117.75.11]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5aff8a86-dc2f-4587-f7be-08d91710ccd4
-x-ms-traffictypediagnostic: BY5PR12MB4918:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR12MB49187A75ECC97544DAF92C2AB6509@BY5PR12MB4918.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3968;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BYaXSC3TslWRkzsViqCiF1+Wxp9ZRdRQeChNpCHqFojES9rxJcWKNb0aQn3ba1j1eHw1lhWLivOzkP7ST7eqae7VyAlocuyIm7zFVSWFwC573EHkc9ysVGP1OT57JYg4lhGRB+zUL/QN8/gxAlW3aaTN25UIc4zo9QJaEY8IJ1oNRP483/bqXJ6e0eGRvrtLBSxI7qGscKgJPnAA7+LXqcHlvCU/1JbMMmbNA2EpRvk3ANPp6HhgROzFjtSQxpov1LbDn7uf7vd5G954cpAp/ByoLyLc0a7eX1tUb7Ts9aUhxpLmHAmpsX8ZlUg0dpGrXYKdPQUqmXhYgaBjZlTphwRh1VCD/pQ+v3DGwN1USDB8meAh8zTuVBMY8cF8/6TZdvVeConeAGm7YRuAKJKTGbSyF8Qe4IuODHZxB8AZJshJo+SLxmLhjieKUtfnRe18hx1fvpxNjMuy9pvUMdBJGHgxPLuJ/oSro+muliSqkS9peSV5ftb4i4VrCXhE/qx81Uw9T9fWlTX9BadBDKUY183cgt25W3InSN4DApd8UlTYN03fUPxaC0wMIwIbkMaFgAeZICX+/tXpb16+gLxh/mO68owoJcmkIhFDzzvY9xb6vJWCFIBPZr1fh8S0X7LvxseKYAcuO3UK8dhxg4/X9M+Qk1+9pLtWuW2iFA2BiHFNEvGWGetGFVRrYuQaj2aq
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3479.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(366004)(346002)(376002)(396003)(39850400004)(31696002)(36756003)(86362001)(38100700002)(66946007)(66476007)(83380400001)(26005)(7416002)(7406005)(66556008)(71200400001)(64756008)(2616005)(2906002)(4326008)(54906003)(316002)(6512007)(110136005)(122000001)(6486002)(8676002)(186003)(478600001)(66446008)(8936002)(31686004)(6506007)(53546011)(5660300002)(76116006)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?eXpKSWxoSEtpUWlxU0x0OElweWd4YnlKVGNubEVaZDI1OTBKTTNXdGFNR1RZ?=
- =?utf-8?B?R01Kcnd5MEhXbldycDlDNDdla050UmJmNkc5WnBBTFZXYXVVVUhpUnM3VGty?=
- =?utf-8?B?OGNFOVVkZ2pTVm1NZ2dIckt0TTdyUHhDa2ZKRGp4M0krckJRYnlZOHUwQ1Yr?=
- =?utf-8?B?UlRBZktOQlFQNHB5VlkzcEZrclB5U25Mcjl3U1ZBM0RFYVJiOGtyL1NzQWMr?=
- =?utf-8?B?OEFsTFdzNTd0T0xVazZPM0Z1NWR2Z0JldnFkOUpLZlgySGl0LzFxcXJlNFBL?=
- =?utf-8?B?ejlwU05tMjkzcGozNkFwWFBFa3A3RzN4elloa1VKenRya3dpWE9NN0szWFlu?=
- =?utf-8?B?ZTFXN1VLaHdRdmdYRFltN3B3dHZxOWNZaFF2UEYwcjk1bkI0cEV6cDF6ZWVo?=
- =?utf-8?B?dGRqMS8rK0R5NU15d1VWM1BZME04MTZ6QVg4N1doUndhKy9lQlp2Q2M2TmVC?=
- =?utf-8?B?aldpQk5YUEsrS2FCMEhSd2ZmajNJRnBDR0xPdW55RXhTanNXUEllTGpDa2pU?=
- =?utf-8?B?ZnlicW51dlBxRGFJUDNXRU9EVitiSTBGcXgxWG9TYTV0eDFXVmI2MmcwS2FY?=
- =?utf-8?B?VUlUTnlaN3JPR0NFOGhoeDhheWxUdTNJUjdoZ2l2L2FqcFkyQTlhaGppV0lr?=
- =?utf-8?B?b1RPdldzSHZIYXI0MUFxMmVkanhTNjNCZUJnOHE3cERLU2doT01kZytBV1p2?=
- =?utf-8?B?aldhZjBkWitsQndUMkhuMXhuUlVNNzk4RlJhVVc2Z1F4RXAvUVI5ODJLaXNh?=
- =?utf-8?B?K25kR0xBbHdIZndOazdYdk9FN0VjOGdndks5SUc5UExic0M2SWJqSkM3SHAr?=
- =?utf-8?B?NTRKOGxUakVJSy9ZSVNId1I3M0M2aTVDOEZNSUxDVlpzeCtBWS8zWDk5YXVR?=
- =?utf-8?B?YVY0dS9Nem0xVEVQUmUxbjlLRGtOeE50QzdrRnpzbWV2TnI3OWMzc3Z6eDB6?=
- =?utf-8?B?UllDUlRJaVhCSGJ5MHRqeXNQSDRJN2tZblkzVE00M1ZzaXhaaTU4Tk5MS042?=
- =?utf-8?B?eU9JcFpySk15WUx2SXQ2K1diQWZnZjhoLzRmRTN6U2R2N0NndFVMUHBzb0k2?=
- =?utf-8?B?VUZ0TnFkYW5sN1dWYURpWjBuM0VjQVRtNkdib2VqNGlCaTVKZGdKUVBLc0VN?=
- =?utf-8?B?K1NxYnF4NUVQOVc4RWM5NjR0a0dzNUVGY1ZQYTdSZzdyUGMyRWdibmFmaGZB?=
- =?utf-8?B?NWhNMFpyNmtiRzFPckR0blBiSnpqMWhrVXpnTnZ0OC9KRTgxV01iaTUzRTJq?=
- =?utf-8?B?VEJuYTgrQkNJTVVhek83REQ3ZE04N3NFUStUS2JYZmZ5M0E4Wm0yTDhDZy80?=
- =?utf-8?B?OFZKcFZKaFBZLzdXcEdVYlBUb1N5NVo2S2w3di85SWpNWnVhb1BQZ1pDQXZX?=
- =?utf-8?B?L3k5d2F3QURTMW1USVNqWmt5WS93QWhOa0dVeW5PQnlQYXplYzI4MGN1VlJB?=
- =?utf-8?B?VVI5cmNJTllLZVZrZE4xbEhkSUZCaWlqZ3poV2c1R1ZTRUlDWVNSOHV5bDY2?=
- =?utf-8?B?T0tnV1N0Z0s0L284TUNTaWtSVVRzalRJQThBd2hVSm9jSDJnMEFzbGFsZXVD?=
- =?utf-8?B?dXlMR3hPVGpsQ1hobmdHdXVPMTUxOEtmeUUrQWVCdUtqZFdlUmN0blluN2la?=
- =?utf-8?B?ZUVsUjJteHdKSmxQRlRWR0ErVE84aGM5bGlseHhqN0FKR1JrejRpa010KzN2?=
- =?utf-8?B?cHlCUmswbXhIbEhrd3dSbkZZUldHWGtISUl1Ry94Zi9yNGV5MjVZcTlRZnI0?=
- =?utf-8?Q?EObv19a7YEYIAM6Ebg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <280212593F4F8844BA7CA332FCBE0B2A@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S233267AbhENUKY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 May 2021 16:10:24 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:50452 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232896AbhENUKW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 May 2021 16:10:22 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14EK4wKJ003075;
+        Fri, 14 May 2021 20:08:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=XIXP6H7V7DdcZmhwJrMCwGnBWYwS335MqQkEGFbFM+o=;
+ b=ZaaUUFkEXoX5xiOAhX91jSwR0ESspMnA9jlBwHgKsvpSoovlD5KQYPNdk/4xOpCCPPj0
+ I7iDhxUMJJzDkR7yCsZBarTPykjgXxO8y+HVAoTcnhEEjapnLrlNaZvog8XZdTaoYJRe
+ ASEGSdSNhW2a0n6xfboZH6lQKBGHFZBRrEyRlh+fFrsICfKNdKtUtbCN8GK9Dd6Qrm0G
+ BOBq6V77E1cRrctVkA2pmMl/6dAINmzMy1/P2EiAPH4N0QPoW4ujlIZavudgfBmDIP/z
+ rMfjAEuqL0aYG/0UgaY72aeRmtR7N035UJNAIR49GOGqg3F23WCJOki54/VAOIZyW75/ KA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 38gpndd92a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 May 2021 20:08:09 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14EK4sd6079510;
+        Fri, 14 May 2021 20:08:08 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 38gppf8bn7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 May 2021 20:08:08 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 14EK87eE102525;
+        Fri, 14 May 2021 20:08:07 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 38gppf8bm2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 May 2021 20:08:07 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 14EK7rjJ011932;
+        Fri, 14 May 2021 20:07:53 GMT
+Received: from neelam.us.oracle.com (/10.152.128.16)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 14 May 2021 13:07:53 -0700
+From:   Alex Kogan <alex.kogan@oracle.com>
+To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
+        will.deacon@arm.com, arnd@arndb.de, longman@redhat.com,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
+        jglauber@marvell.com
+Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        alex.kogan@oracle.com, dave.dice@oracle.com
+Subject: [PATCH v15 0/6] Add NUMA-awareness to qspinlock
+Date:   Fri, 14 May 2021 16:07:37 -0400
+Message-Id: <20210514200743.3026725-1-alex.kogan@oracle.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3479.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5aff8a86-dc2f-4587-f7be-08d91710ccd4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2021 19:45:16.9872
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VNdnXkbVpoFAdxneSiaJHaxdJz58kbCGlzZbu2j6F9WUrz8DCRRNO202snd5252dKG1PqcAqjBeu5v4ac9n/IQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4918
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: CQ2IeJfea9oFx90D7WAPE0fWvSMLLgiC
+X-Proofpoint-GUID: CQ2IeJfea9oFx90D7WAPE0fWvSMLLgiC
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9984 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 phishscore=0
+ priorityscore=1501 suspectscore=0 spamscore=0 lowpriorityscore=0
+ adultscore=0 clxscore=1015 mlxscore=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2105140159
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gNS8xNC8yMSAxMjoyMiBQTSwgTGludXMgVG9ydmFsZHMgd3JvdGU6DQo+IE9uIEZyaSwgTWF5
-IDE0LCAyMDIxIGF0IDExOjUyIEFNIFZpbmVldCBHdXB0YQ0KPiA8VmluZWV0Lkd1cHRhMUBzeW5v
-cHN5cy5jb20+IHdyb3RlOg0KPj4gV2Fzbid0IHRoZSBuZXcgemxpYiBjb2RlIHNsYXRlZCBmb3Ig
-NS4xNC4gSSBkb24ndCBzZWUgaXQgaW4geW91ciBtYXN0ZXIgeWV0DQo+IFlvdSdyZSByaWdodCwg
-SSBuZXZlciBhY3R1YWxseSBjb21taXR0ZWQgaXQsIHNpbmNlIGl0IHdhcyBzcGVjaWZpYyB0bw0K
-PiBBUkMgYW5kIC1PMw0KDQpXZWxsLCBub3QgcmVhbGx5LCB0aGUgaXNzdWUgbWFuaWZlc3RlZCBp
-biBBUkMgTzMgdGVzdGluZywgYnV0IEkgc2hvd2VkIA0KdGhlIHByb2JsZW0gZXhpc3RlZCBmb3Ig
-YXJtNjQgZ2NjIHRvby4NCg0KPiBhbmQgSSB3YXNuJ3QgZW50aXJlbHkgaGFwcHkgd2l0aCB0aGUg
-YW1vdW50IG9mIHRlc3RpbmcgaXQNCj4gZ290ICh3aXRoIEhlaWtvIHBvaW50aW5nIG91dCB0aGF0
-IHRoZSBzMzkwIHN0dWZmIG5lZWRlZCBtb3JlIGZpeGVzIGZvcg0KPiB0aGUgY2hhbmdlKS4NCg0K
-V2l0aCBoaXMgYWRkb24gcGF0Y2ggZXZlcnl0aGluZyBzZWVtZWQgaHVua3kgZG9yeS4NCg0KPiBU
-aGUgcGF0Y2ggYmVsb3cgaXMgcmVxdWlyZWQgb24gdG9wIG9mIHlvdXIgcGF0Y2ggdG8gbWFrZSBp
-dCBjb21waWxlDQo+IGZvciBzMzkwIGFzIHdlbGwuDQo+IFRlc3RlZCB3aXRoIGtlcm5lbCBpbWFn
-ZSBkZWNvbXByZXNzaW9uLCBhbmQgYWxzbyBidHJmcyB3aXRoIGZpbGUNCj4gY29tcHJlc3Npb247
-IGJvdGggc29mdHdhcmUgYW5kIGhhcmR3YXJlIGNvbXByZXNzaW9uLg0KPiBFdmVyeXRoaW5nIHNl
-ZW1zIHRvIHdvcmsuDQoNCj4gU28gaW4gZmFjdCBpdCdzIG5vdCBldmVuIHF1ZXVlZCB1cCBmb3Ig
-NS4xNCBkdWUgdG8gdGhpcyBhbGwsIEkganVzdCBkcm9wcGVkIGl0Lg0KDQpCdXQgV2h5LiBDYW4n
-dCB3ZSB0aHJvdyBpdCBpbiBsaW51eC1uZXh0IGZvciA1LjE0LiBJIHByb21pc2UgdG8gdGVzdCBp
-dCANCi0gYW5kIHdpbGwgbGlrZWx5IGhpdCBhbnkgY29ybmVyIGNhc2VzLiBBbHNvIGZvciB0aGUg
-dGltZSBiZWluZyB3ZSBjb3VsZCANCmZvcmNlIGp1c3QgdGhhdCBmaWxlL2ZpbGVzIHRvIGJ1aWxk
-IGZvciAtTzMgdG8gc3RyZXNzIHRlc3QgdGhlIGFzcGVjdHMgDQp0aGF0IHdlcmUgZnJhZ2lsZS4N
-Cg0KPj4+ICAgIGFuZCB0aGUgYmlnZ3kNCj4+PiBjYXNlIGRpZG4ndCBldmVuIHVzZSAiZ2V0X3Vu
-YWxpZ25lZCgpIikuDQo+PiBJbmRlZWQgdGhpcyBzZXJpZXMgaXMgc29ydCBvZiBvcnRob2dvbmFs
-IHRvIHRoYXQgYnVnLCBidXQgSU1PIHRoYXQgYnVnDQo+PiBzdGlsbCBleGlzdHMgaW4gNS4xMyBm
-b3IgLU8zIGJ1aWxkLCBncmFudGVkIHRoYXQgaXMgbm90IGVuYWJsZWQgZm9yICFBUkMuDQo+IFJp
-Z2h0LCB0aGUgemxpYiBidWcgaXMgc3RpbGwgdGhlcmUuDQo+DQo+IEJ1dCBBcm5kJ3Mgc2VyaWVz
-IHdvdWxkbid0IGV2ZW4gZml4IGl0OiByaWdodCBub3cgaW5mZmFzdCBoYXMgaXRzIG93bg0KPiAt
-IHVnbHkgYW5kIHNsb3cgLSBzcGVjaWFsIDItYnl0ZS1vbmx5IHZlcnNpb24gb2YgImdldF91bmFs
-aWduZWQoKSIsDQo+IGNhbGxlZCAiZ2V0X3VuYWxpZ25lZDE2KCkiLg0KDQpJIGtub3cgdGhhdCdz
-IHdoeSBzYWlkIHRoZXkgYXJlIG9ydGhvZ29uYWwuDQoNCg0KPiBBbmQgYmVjYXVzZSBpdCdzIHVn
-bHkgYW5kIHNsb3csIGl0J3Mgbm90IGFjdHVhbGx5IHVzZWQgZm9yDQo+IENPTkZJR19IQVZFX0VG
-RklDSUVOVF9VTkFMSUdORURfQUNDRVNTLg0KPg0KPiBWaW5lZXQgLSBtYXliZSB0aGUgZml4IGlz
-IHRvIG5vdCB0YWtlIG15IHBhdGNoIHRvIHVwZGF0ZSB0byBhIG5ld2VyDQo+IHpsaWIsIGJ1dCB0
-byBqdXN0IGZpeCBpbmZmYXN0IHRvIHVzZSB0aGUgcHJvcGVyIGdldF91bmFsaWduZWQoKS4gVGhl
-bg0KPiBBcm5kJ3Mgc2VyaWVzIF93b3VsZF8gYWN0dWFsbHkgZml4IGFsbCB0aGlzLi4NCg0KT0sg
-aWYgeW91IHNheSBzby4NCg0KLVZpbmVldA0K
+Changes from v14:
+----------------
+
+- Change the way the main queue is scanned and reordered in
+cna_wait_head_or_lock(), based on Peter's suggestion.
+
+In detail: instead of inspecting only one queue node, we now scan
+(and move nodes into the secondary queue) as long as the lock
+remains busy. This simplified the code quite a bit, as we don't need
+to call cna_order_queue() again from cna_lock_handoff(). 
+
+- Use local_clock() instead of relying on jiffies to decide when to
+flush the secondary queue, per Andy's suggestion.
+
+- Use module_param() for numa_spinlock_threshold_ns, so it can be tweaked
+at runtime, per Andy's suggestion.
+
+- Reduce the default value for numa_spinlock_threshold_ns to 1ms based on
+the comments from Andy and Peter. The performance numbers below include
+results with the new default as well as with the value of 10ms, which was 
+the default threshold in previous revisions of the series.
+
+Summary
+-------
+
+Lock throughput can be increased by handing a lock to a waiter on the
+same NUMA node as the lock holder, provided care is taken to avoid
+starvation of waiters on other NUMA nodes. This patch introduces CNA
+(compact NUMA-aware lock) as the slow path for qspinlock. It is
+enabled through a configuration option (NUMA_AWARE_SPINLOCKS).
+
+CNA is a NUMA-aware version of the MCS lock. Spinning threads are
+organized in two queues, a primary queue for threads running on the same
+node as the current lock holder, and a secondary queue for threads
+running on other nodes. Threads store the ID of the node on which
+they are running in their queue nodes. After acquiring the MCS lock and
+before acquiring the spinlock, the MCS lock holder checks whether the next
+waiter in the primary queue (if exists) is running on the same NUMA node.
+If it is not, that waiter is detached from the main queue and moved into
+the tail of the secondary queue. This way, we gradually filter the primary
+queue, leaving only waiters running on the same preferred NUMA node. Note
+that certain priortized waiters (e.g., in irq and nmi contexts) are
+excluded from being moved to the secondary queue. We change the NUMA node
+preference after a waiter at the head of the secondary queue spins for a
+certain amount of time. We do that by flushing the secondary queue into
+the head of the primary queue, effectively changing the preference to the
+NUMA node of the waiter at the head of the secondary queue at the time of
+the flush.
+
+More details are available at https://arxiv.org/abs/1810.05600.
+
+We have done some performance evaluation with the locktorture module
+as well as with several benchmarks from the will-it-scale repo.
+The following locktorture results are from an Oracle X5-4 server
+(four Intel Xeon E7-8895 v3 @ 2.60GHz sockets with 18 hyperthreaded
+cores each). Each number represents an average (over 25 runs) of the
+total number of ops (x10^7) reported at the end of each run. The 
+standard deviation is also reported in (), and in general is about 3%
+from the average. The 'stock' kernel is v5.12.0,
+commit 3cf5c8ea3a66, compiled in the default configuration. 
+'CNA' is the modified kernel with NUMA_AWARE_SPINLOCKS set and
+the new default threshold of 1ms for flushing the secondary queue
+(numa_spinlock_threshold_ns); 'CNA-10ms' is the same as CNA, 
+but uses the threshold of 10ms. The speedup is calculated by dividing 
+the result of 'CNA' and 'CNA-10ms', respectively, by the result
+achieved with 'stock'.
+
+#thr  	 stock      CNA          / speedup  CNA-10ms    / speedup
+  1  2.695 (0.108) 2.704 (0.099) / 1.003  2.712 (0.077) / 1.006
+  2  2.753 (0.187) 2.785 (0.171) / 1.012  2.822 (0.174) / 1.025
+  4  4.355 (0.139) 4.417 (0.179) / 1.014  4.361 (0.181) / 1.001
+  8  5.163 (0.119) 7.017 (0.195) / 1.359  7.369 (0.186) / 1.427
+ 16  5.944 (0.134) 9.110 (0.242) / 1.532  9.187 (0.233) / 1.546
+ 32  6.310 (0.082) 9.710 (0.156) / 1.539  9.827 (0.161) / 1.557
+ 36  6.374 (0.112) 9.777 (0.141) / 1.534  9.830 (0.124) / 1.542
+ 72  6.170 (0.139) 9.922 (0.190) / 1.608  9.945 (0.136) / 1.612
+108  6.002 (0.089) 9.651 (0.176) / 1.608  9.847 (0.125) / 1.641
+142  5.784 (0.079) 9.477 (0.089) / 1.638  9.641 (0.113) / 1.667
+
+The following tables contain throughput results (ops/us) from the same
+setup for will-it-scale/open1_threads: 
+
+#thr  	 stock      CNA          / speedup  CNA-10ms    / speedup
+  1  0.503 (0.004) 0.501 (0.001) / 0.996  0.503 (0.002) / 1.000
+  2  0.783 (0.014) 0.773 (0.011) / 0.988  0.774 (0.016) / 0.989
+  4  1.422 (0.025) 1.398 (0.030) / 0.983  1.403 (0.025) / 0.987
+  8  1.753 (0.104) 1.641 (0.132) / 0.936  1.675 (0.134) / 0.956
+ 16  1.851 (0.097) 1.760 (0.103) / 0.951  1.774 (0.119) / 0.959
+ 32  0.905 (0.081) 1.708 (0.081) / 1.888  1.738 (0.069) / 1.922
+ 36  0.895 (0.058) 1.726 (0.065) / 1.928  1.735 (0.081) / 1.938
+ 72  0.823 (0.033) 1.610 (0.067) / 1.957  1.647 (0.067) / 2.002
+108  0.845 (0.035) 1.588 (0.054) / 1.878  1.740 (0.067) / 2.058
+142  0.840 (0.030) 1.546 (0.042) / 1.839  1.740 (0.048) / 2.070
+
+and will-it-scale/lock2_threads:
+
+#thr  	 stock      CNA          / speedup  CNA-10ms    / speedup
+  1  1.551 (0.003) 1.558 (0.006) / 1.005  1.558 (0.003) / 1.005
+  2  2.722 (0.064) 2.704 (0.063) / 0.993  2.727 (0.058) / 1.002
+  4  5.286 (0.178) 5.360 (0.151) / 1.014  5.360 (0.135) / 1.014
+  8  4.115 (0.297) 3.906 (0.383) / 0.949  4.062 (0.366) / 0.987
+ 16  4.119 (0.121) 3.950 (0.131) / 0.959  4.009 (0.132) / 0.973
+ 32  2.508 (0.097) 3.805 (0.106) / 1.517  3.960 (0.091) / 1.579
+ 36  2.457 (0.101) 3.810 (0.072) / 1.551  3.931 (0.106) / 1.600
+ 72  1.913 (0.103) 3.530 (0.070) / 1.845  3.860 (0.078) / 2.018
+108  1.891 (0.109) 3.410 (0.079) / 1.803  3.881 (0.097) / 2.052
+142  1.752 (0.096) 3.236 (0.080) / 1.847  3.774 (0.078) / 2.155
+
+Our evaluation shows that CNA also improves performance of user 
+applications that have hot pthread mutexes. Those mutexes are 
+blocking, and waiting threads park and unpark via the futex 
+mechanism in the kernel. Given that kernel futex chains, which
+are hashed by the mutex address, are each protected by a 
+chain-specific spin lock, the contention on a user-mode mutex 
+translates into contention on a kernel level spinlock. 
+
+Here are the throughput results (ops/us) for the leveldb ‘readrandom’
+benchmark:
+
+#thr  	 stock      CNA          / speedup  CNA-10ms    / speedup
+  1  0.533 (0.011) 0.539 (0.014) / 1.012  0.536 (0.013) / 1.006
+  2  0.854 (0.022) 0.856 (0.017) / 1.003  0.857 (0.020) / 1.004
+  4  1.236 (0.028) 1.238 (0.054) / 1.002  1.217 (0.054) / 0.985
+  8  1.207 (0.117) 1.198 (0.122) / 0.993  1.155 (0.138) / 0.957
+ 16  0.758 (0.055) 1.128 (0.118) / 1.489  1.068 (0.131) / 1.409
+ 32  0.743 (0.027) 1.153 (0.028) / 1.551  1.147 (0.021) / 1.543
+ 36  0.708 (0.027) 1.150 (0.024) / 1.623  1.137 (0.026) / 1.605
+ 72  0.629 (0.016) 1.112 (0.019) / 1.767  1.134 (0.019) / 1.802
+108  0.610 (0.012) 1.053 (0.018) / 1.725  1.130 (0.017) / 1.853
+142  0.606 (0.013) 1.008 (0.020) / 1.664  1.110 (0.023) / 1.833
+
+Further comments are welcome and appreciated.
+
+Alex Kogan (6):
+  locking/qspinlock: Rename mcs lock/unlock macros and make them more
+    generic
+  locking/qspinlock: Refactor the qspinlock slow path
+  locking/qspinlock: Introduce CNA into the slow path of qspinlock
+  locking/qspinlock: Introduce starvation avoidance into CNA
+  locking/qspinlock: Avoid moving certain threads between waiting queues
+    in CNA
+  locking/qspinlock: Introduce the shuffle reduction optimization into
+    CNA
+
+ .../admin-guide/kernel-parameters.txt         |  18 +
+ arch/arm/include/asm/mcs_spinlock.h           |   6 +-
+ arch/x86/Kconfig                              |  20 +
+ arch/x86/include/asm/qspinlock.h              |   4 +
+ arch/x86/kernel/alternative.c                 |   4 +
+ include/asm-generic/mcs_spinlock.h            |   4 +-
+ kernel/locking/mcs_spinlock.h                 |  20 +-
+ kernel/locking/qspinlock.c                    |  82 +++-
+ kernel/locking/qspinlock_cna.h                | 425 ++++++++++++++++++
+ kernel/locking/qspinlock_paravirt.h           |   2 +-
+ 10 files changed, 562 insertions(+), 23 deletions(-)
+ create mode 100644 kernel/locking/qspinlock_cna.h
+
+-- 
+2.24.3 (Apple Git-128)
+
