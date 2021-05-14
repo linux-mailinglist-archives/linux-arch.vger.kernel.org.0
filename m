@@ -2,58 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8A6380538
-	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 10:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4479380569
+	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 10:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233585AbhENI3g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 May 2021 04:29:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:41389 "EHLO
+        id S231644AbhENIoq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 May 2021 04:44:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32480 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230362AbhENI3c (ORCPT
+        by vger.kernel.org with ESMTP id S231846AbhENIoq (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 14 May 2021 04:29:32 -0400
+        Fri, 14 May 2021 04:44:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620980901;
+        s=mimecast20190719; t=1620981815;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5w0DUc6v8+Ohu3/Un9/gp8Wn9KzAdxtOI/JJ1rmwYuM=;
-        b=V3ffW5L+xsnb79Zht29sHM28tM7Y9itoDPaczSHBWM5GVB1Q6CmVfZrmaxxKfkLNpY+bPA
-        Bai2fEg4EFqtw+Sgkf3qmLKib7cM5oAcuPSGHDSJ83Ld2K5DDCga/GYshRFPfo2SWAxDSa
-        uvw8tvV2kHTcdx1nIhM4t5X5JLDToOI=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-469-PYK5PmxBMmqFjfc1TdXY-A-1; Fri, 14 May 2021 04:28:20 -0400
-X-MC-Unique: PYK5PmxBMmqFjfc1TdXY-A-1
-Received: by mail-ej1-f72.google.com with SMTP id m18-20020a1709062352b02903d2d831f9baso1180795eja.20
-        for <linux-arch@vger.kernel.org>; Fri, 14 May 2021 01:28:19 -0700 (PDT)
+        bh=lsAavQGtZZQfxxuNta+2PaMZ+gKpW3kyTUx2+4IIAWk=;
+        b=JiMEd8pQZmZeGJR5SfsEN9Xj7aAWl7ahr3kI/jkZbfoHa3dYKpu7hAilU7K7s0crVTVZdN
+        XYuJfnkNvLuKvADSyxsvA7Yp6w1ApPAP/u1utRDK81rzuNjxAY2k8e+Yf/THJI76ZU9SCZ
+        C3th9TBK6+XQCFETS8n4BF/kEl9hrGU=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-214-E0KUCoxMNF6ckDAkoxX4Vw-1; Fri, 14 May 2021 04:43:32 -0400
+X-MC-Unique: E0KUCoxMNF6ckDAkoxX4Vw-1
+Received: by mail-ej1-f71.google.com with SMTP id gt39-20020a1709072da7b02903a8f7736a08so8237635ejc.1
+        for <linux-arch@vger.kernel.org>; Fri, 14 May 2021 01:43:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
+        h=x-gm-message-state:to:cc:references:from:organization:subject
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=5w0DUc6v8+Ohu3/Un9/gp8Wn9KzAdxtOI/JJ1rmwYuM=;
-        b=t6225YRyv7D4BS9teJVmFGavYJWHfobZbvTu0HnicqW2lPl02txQrSpjjSJT0QhSaF
-         iGmJRyLAkkEN32U/KrysLhGphit7Aj4PMPFnbVpAbo8LNaAl75bh02KGw7f/Csh6Dvcm
-         jKbPL9QleMNP/XMRS0zdVZsUop2C5bhuB8RzZZruWGGCYNECJAqKsXjPSpr3igEzDlU0
-         MtRVBJ/JUl85D2g/q6eGtYMOw00LJVyLWMJhLBpgkw4NqslB3nerE/neULxYdrP/WRlB
-         T4kz0/HvG5E6RTsoSEMljs1DzRSz9VbHR5cXNsy2Px2LQb+4T6276r8F0PQ9/2W6YY9p
-         YdKA==
-X-Gm-Message-State: AOAM531BynxOy/Q9qNVbybFpblteISGlb+3kT8llsXrdEfFZMt6qoUTK
-        rStfyYYucH7NjLqsbBjzIdLhsVWiKVSVhdjyHOLLrjciyWR3D61vW3tqfiZxW2Trj6mimc+EY8t
-        lx/R+OQoTLqPd1bJdwVYn3Q==
-X-Received: by 2002:aa7:c510:: with SMTP id o16mr54629593edq.310.1620980898826;
-        Fri, 14 May 2021 01:28:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxAa7CtEGRAWr1lF7BGwkWkyoH00MJ3yOs2g5NJWUfLIy+27BD8PFUUKz633oLeJlXdgmtb9Q==
-X-Received: by 2002:aa7:c510:: with SMTP id o16mr54629525edq.310.1620980898588;
-        Fri, 14 May 2021 01:28:18 -0700 (PDT)
+        bh=lsAavQGtZZQfxxuNta+2PaMZ+gKpW3kyTUx2+4IIAWk=;
+        b=Hsdh8x5zzmjvXUWd/h1KwrkRbQYjdzX4jFTWIMTaj5w5X5uZln8hOWytZFJ4J3aH9y
+         TkrVqFQOckQr8UO5JZyT3Cp/cJMjEHmxWwkQup1mMP/FJwP3NpTvmSfW7jbGAGFrtC72
+         8VJMSKGaDHe7WGqnstIjmGixaXKUnjBd7dK98VWDzZ1M2ccpW/Dex9k+3VYabmHtmMHn
+         rDoGWG6ibReFA0tEJMusYXLf09fLK3yQHT4C0OWHTmLXXZiAxUONdbVyTdGWcvoNcaN6
+         2wmcdt9yl897XgYcrAVzE/O1SyWLHu0x/s4lc6MCGigd+akgy+5LHzkTzTIHIyI64gaR
+         3lfg==
+X-Gm-Message-State: AOAM531NZSk/18EwAeYGKotmvCoGTB3jQfTXTXc+Dr7tERqIrwlKW9Kq
+        YI/6R2Re3hWQDzNeTxpxg5xveBiBWGDXmyW6Z+MId2quKc2OWVHm1A1bqDkvlyH6DeX8slPbprh
+        81TGyErpHX8xUtK4DIjrOQw==
+X-Received: by 2002:a50:ed0c:: with SMTP id j12mr54641176eds.12.1620981811602;
+        Fri, 14 May 2021 01:43:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJypI4ge2hxqi/JfrvWJM2sA3w80IXDC+WmQ5wQdEdZZtqA+keJm9IEpbNTASfWRrXFPNSGQBQ==
+X-Received: by 2002:a50:ed0c:: with SMTP id j12mr54641100eds.12.1620981811327;
+        Fri, 14 May 2021 01:43:31 -0700 (PDT)
 Received: from [192.168.3.132] (p5b0c6501.dip0.t-ipconnect.de. [91.12.101.1])
-        by smtp.gmail.com with ESMTPSA id s4sm4090012edq.96.2021.05.14.01.28.16
+        by smtp.gmail.com with ESMTPSA id k12sm3969468edo.50.2021.05.14.01.43.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 May 2021 01:28:18 -0700 (PDT)
-Subject: Re: [PATCH v19 2/8] riscv/Kconfig: make direct map manipulation
- options depend on MMU
+        Fri, 14 May 2021 01:43:31 -0700 (PDT)
 To:     Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -92,20 +90,22 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, kernel test robot <lkp@intel.com>
+        x86@kernel.org
 References: <20210513184734.29317-1-rppt@kernel.org>
- <20210513184734.29317-3-rppt@kernel.org>
+ <20210513184734.29317-4-rppt@kernel.org>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-Message-ID: <adb9f79a-8b9a-0302-e83c-03ad17d3743b@redhat.com>
-Date:   Fri, 14 May 2021 10:28:16 +0200
+Subject: Re: [PATCH v19 3/8] set_memory: allow set_direct_map_*_noflush() for
+ multiple pages
+Message-ID: <858e5561-bc7d-4ce1-5cb8-3c333199d52a@redhat.com>
+Date:   Fri, 14 May 2021 10:43:29 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210513184734.29317-3-rppt@kernel.org>
+In-Reply-To: <20210513184734.29317-4-rppt@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -113,36 +113,107 @@ X-Mailing-List: linux-arch@vger.kernel.org
 On 13.05.21 20:47, Mike Rapoport wrote:
 > From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> ARCH_HAS_SET_DIRECT_MAP and ARCH_HAS_SET_MEMORY configuration options have
-> no meaning when CONFIG_MMU is disabled and there is no point to enable
-> them for the nommu case.
+> The underlying implementations of set_direct_map_invalid_noflush() and
+> set_direct_map_default_noflush() allow updating multiple contiguous pages
+> at once.
 > 
-> Add an explicit dependency on MMU for these options.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->   arch/riscv/Kconfig | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index a8ad8eb76120..c426e7d20907 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -26,8 +26,8 @@ config RISCV
->   	select ARCH_HAS_KCOV
->   	select ARCH_HAS_MMIOWB
->   	select ARCH_HAS_PTE_SPECIAL
-> -	select ARCH_HAS_SET_DIRECT_MAP
-> -	select ARCH_HAS_SET_MEMORY
-> +	select ARCH_HAS_SET_DIRECT_MAP if MMU
-> +	select ARCH_HAS_SET_MEMORY if MMU
->   	select ARCH_HAS_STRICT_KERNEL_RWX if MMU && !XIP_KERNEL
->   	select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
->   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+> Add numpages parameter to set_direct_map_*_noflush() to expose this
+> ability with these APIs.
 > 
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+[...]
+
+Finally doing some in-depth review, sorry for not having a detailed look 
+earlier.
+
+
+>   
+> -int set_direct_map_invalid_noflush(struct page *page)
+> +int set_direct_map_invalid_noflush(struct page *page, int numpages)
+>   {
+>   	struct page_change_data data = {
+>   		.set_mask = __pgprot(0),
+>   		.clear_mask = __pgprot(PTE_VALID),
+>   	};
+> +	unsigned long size = PAGE_SIZE * numpages;
+>   
+
+Nit: I'd have made this const and added an early exit for !numpages. But 
+whatever you prefer.
+
+>   	if (!debug_pagealloc_enabled() && !rodata_full)
+>   		return 0;
+>   
+>   	return apply_to_page_range(&init_mm,
+>   				   (unsigned long)page_address(page),
+> -				   PAGE_SIZE, change_page_range, &data);
+> +				   size, change_page_range, &data);
+>   }
+>   
+> -int set_direct_map_default_noflush(struct page *page)
+> +int set_direct_map_default_noflush(struct page *page, int numpages)
+>   {
+>   	struct page_change_data data = {
+>   		.set_mask = __pgprot(PTE_VALID | PTE_WRITE),
+>   		.clear_mask = __pgprot(PTE_RDONLY),
+>   	};
+> +	unsigned long size = PAGE_SIZE * numpages;
+>   
+
+Nit: dito
+
+>   	if (!debug_pagealloc_enabled() && !rodata_full)
+>   		return 0;
+>   
+>   	return apply_to_page_range(&init_mm,
+>   				   (unsigned long)page_address(page),
+> -				   PAGE_SIZE, change_page_range, &data);
+> +				   size, change_page_range, &data);
+>   }
+>   
+
+
+[...]
+
+>   extern int kernel_set_to_readonly;
+> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> index 156cd235659f..15a55d6e9cec 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -2192,14 +2192,14 @@ static int __set_pages_np(struct page *page, int numpages)
+>   	return __change_page_attr_set_clr(&cpa, 0);
+>   }
+>   
+> -int set_direct_map_invalid_noflush(struct page *page)
+> +int set_direct_map_invalid_noflush(struct page *page, int numpages)
+>   {
+> -	return __set_pages_np(page, 1);
+> +	return __set_pages_np(page, numpages);
+>   }
+>   
+> -int set_direct_map_default_noflush(struct page *page)
+> +int set_direct_map_default_noflush(struct page *page, int numpages)
+>   {
+> -	return __set_pages_p(page, 1);
+> +	return __set_pages_p(page, numpages);
+>   }
+>   
+
+So, what happens if we succeeded setting 
+set_direct_map_invalid_noflush() for some pages but fail when having to 
+split a large mapping?
+
+Did I miss something or would the current code not undo what it 
+partially did? Or do we simply not care?
+
+I guess to handle this cleanly we would either have to catch all error 
+cases first (esp. splitting large mappings) before actually performing 
+the set to invalid, or have some recovery code in place if possible.
+
+
+AFAIKs, your patch #5 right now only calls it with 1 page, do we need 
+this change at all? Feels like a leftover from older versions to me 
+where we could have had more than a single page.
 
 -- 
 Thanks,
