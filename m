@@ -2,39 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2C43806AB
-	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 12:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3303806AF
+	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 12:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbhENKEP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 May 2021 06:04:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59030 "EHLO mail.kernel.org"
+        id S232769AbhENKEd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 May 2021 06:04:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59108 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231312AbhENKEP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 14 May 2021 06:04:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5018F6101D;
-        Fri, 14 May 2021 10:03:02 +0000 (UTC)
+        id S232788AbhENKEZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 14 May 2021 06:04:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EDEF1613BC;
+        Fri, 14 May 2021 10:03:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620986584;
-        bh=FPNQwU1Fl73aJ4Stz3Ksja+PDp3+qBwHTreqoor7ZMc=;
+        s=k20201202; t=1620986594;
+        bh=BxM0a2GIcYUsz3uGmN0mNfbozSdu2tjfSI9QqHdr1O4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dkTxjMxP8BS6aWEGKFs2dGOjRAmMG0QxKwcyb5GR/9tAehdLz0QhB3WZ08W9vzGdy
-         PuJXKBQX3/no3Syh5eHDcGa0y9Tfb61Exj2nQREY3PzKQsRaglTxHRI3OhPAvhnGwM
-         kNz32ifd5QdQ+cIF1l7u7UPTFeV++igS9QglAdBEkH7ETJQB9HeB4kM9BofSjbrqL3
-         sauUqQUPzcV5IMwaD6iBdhpLGavlq6EXnfVJhvB+r5U3qMTc75PZXLZJuvI8XbZAvM
-         JP7UPxy2wwlwV6GHCUF8HT38cvckdKtoaSdtkT8DqZUn4ONNb54oCb1H1exssqbka6
-         ikhtfGsB0CTSA==
+        b=FaN8BVmbXcbx5UiBjEKeBlsTMVt3vwEzGf/AMIrt7e8+iH+becJHPlNOueyjTrls7
+         PEGg+6UoAQFAH4djhazwUS0Xyps0N5F1oe/cJGcUzNRRRxQr1CzhF60QR2XehJtChI
+         mtc3HfsVvSgouIvW+YwM0csiyPD0LGZmjS59k29kQg2h9ESglvETMFhwkWBKQR1oh+
+         muAniuKVBIShflrrUZjQavwOnWs5Z/baBFqpzF8JeigiJi7NeG8uvX00+RdOoaQxKx
+         bwLqnwjAWpv1Gvb5KqgcbpEaUgB8dilMbVCssTL7R7KNvTZws43tr/xnbtbfEtB1wx
+         uGimByU01Q34w==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arch@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Vineet Gupta <vgupta@synopsys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Stafford Horne <shorne@gmail.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 02/13] openrisc: always use unaligned-struct header
-Date:   Fri, 14 May 2021 12:00:50 +0200
-Message-Id: <20210514100106.3404011-3-arnd@kernel.org>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 03/13] sh: remove unaligned access for sh4a
+Date:   Fri, 14 May 2021 12:00:51 +0200
+Message-Id: <20210514100106.3404011-4-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210514100106.3404011-1-arnd@kernel.org>
 References: <20210514100106.3404011-1-arnd@kernel.org>
@@ -46,282 +45,253 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-openrisc is the only architecture using the linux/unaligned/*memmove
-infrastructure. There is a comment saying that this version is more
-efficient, but this was added in 2011 before the openrisc gcc port
-was merged upstream.
+Unlike every other architecture, sh4a uses an inline asm implementation
+for get_unaligned(). I have shown that this produces better object
+code than the asm-generic version. However, there are very few users of
+arch/sh/ overall, and most of those seem to use sh4 rather than sh4a CPU
+cores, so it seems not worth keeping the complexity in the architecture
+independent code.
 
-I checked a couple of files to see what the actual difference is with
-the mainline gcc (9.4 and 11.1), and found that the generic header
-seems to produce better code now, regardless of the gcc version.
+Change over to the generic version to allow simplifying that in a
+follow-up patch.
 
-Specifically, the be_memmove leads to allocating a stack slot and
-copying the data one byte at a time, then reading the whole word
-from the stack:
-
-00000000 <test_get_unaligned_memmove>:
-   0:	9c 21 ff f4 	l.addi r1,r1,-12
-   4:	d4 01 10 04 	l.sw 4(r1),r2
-   8:	8e 63 00 00 	l.lbz r19,0(r3)
-   c:	9c 41 00 0c 	l.addi r2,r1,12
-  10:	8e 23 00 01 	l.lbz r17,1(r3)
-  14:	db e2 9f f4 	l.sb -12(r2),r19
-  18:	db e2 8f f5 	l.sb -11(r2),r17
-  1c:	8e 63 00 02 	l.lbz r19,2(r3)
-  20:	8e 23 00 03 	l.lbz r17,3(r3)
-  24:	d4 01 48 08 	l.sw 8(r1),r9
-  28:	db e2 9f f6 	l.sb -10(r2),r19
-  2c:	db e2 8f f7 	l.sb -9(r2),r17
-  30:	85 62 ff f4 	l.lwz r11,-12(r2)
-  34:	85 21 00 08 	l.lwz r9,8(r1)
-  38:	84 41 00 04 	l.lwz r2,4(r1)
-  3c:	44 00 48 00 	l.jr r9
-  40:	9c 21 00 0c 	l.addi r1,r1,12
-
-while the be_struct version reads each byte into a register
-and does a shift to the right position:
-
-00000000 <test_get_unaligned_struct>:
-   0:	9c 21 ff f8 	l.addi r1,r1,-8
-   4:	8e 63 00 00 	l.lbz r19,0(r3)
-   8:	aa 20 00 18 	l.ori r17,r0,0x18
-   c:	e2 73 88 08 	l.sll r19,r19,r17
-  10:	8d 63 00 01 	l.lbz r11,1(r3)
-  14:	aa 20 00 10 	l.ori r17,r0,0x10
-  18:	e1 6b 88 08 	l.sll r11,r11,r17
-  1c:	e1 6b 98 04 	l.or r11,r11,r19
-  20:	8e 23 00 02 	l.lbz r17,2(r3)
-  24:	aa 60 00 08 	l.ori r19,r0,0x8
-  28:	e2 31 98 08 	l.sll r17,r17,r19
-  2c:	d4 01 10 00 	l.sw 0(r1),r2
-  30:	d4 01 48 04 	l.sw 4(r1),r9
-  34:	9c 41 00 08 	l.addi r2,r1,8
-  38:	e2 31 58 04 	l.or r17,r17,r11
-  3c:	8d 63 00 03 	l.lbz r11,3(r3)
-  40:	e1 6b 88 04 	l.or r11,r11,r17
-  44:	84 41 00 00 	l.lwz r2,0(r1)
-  48:	85 21 00 04 	l.lwz r9,4(r1)
-  4c:	44 00 48 00 	l.jr r9
-  50:	9c 21 00 08 	l.addi r1,r1,8
-
-According to Stafford Horne, the new version should in fact perform
-better.
-
-In the trivial example, the struct version is a few instructions longer,
-but building a whole kernel shows an overall reduction in code size,
-presumably because it now has to manage fewer stack slots:
-
-   text	   data	    bss	    dec	    hex	filename
-4792010	 181480	  82324	5055814	 4d2546	vmlinux-unaligned-memmove
-4790642	 181480	  82324	5054446	 4d1fee	vmlinux-unaligned-struct
-
-Remove the memmove version completely and let openrisc use the same
-code as everyone else, as a simplification.
+If there are sh4a users that want the best performance, it would probably
+be best to add support for the movua instruction in gcc itself, as this
+would not just help get_unaligned() callers but any code that accesses
+a __packed variable in user space or kernel.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Stafford Horne <shorne@gmail.com>
 ---
- arch/openrisc/include/asm/unaligned.h | 47 ---------------------------
- include/linux/unaligned/be_memmove.h  | 37 ---------------------
- include/linux/unaligned/le_memmove.h  | 37 ---------------------
- include/linux/unaligned/memmove.h     | 46 --------------------------
- 4 files changed, 167 deletions(-)
- delete mode 100644 arch/openrisc/include/asm/unaligned.h
- delete mode 100644 include/linux/unaligned/be_memmove.h
- delete mode 100644 include/linux/unaligned/le_memmove.h
- delete mode 100644 include/linux/unaligned/memmove.h
+ arch/sh/include/asm/unaligned-sh4a.h | 199 ---------------------------
+ arch/sh/include/asm/unaligned.h      |  13 --
+ 2 files changed, 212 deletions(-)
+ delete mode 100644 arch/sh/include/asm/unaligned-sh4a.h
+ delete mode 100644 arch/sh/include/asm/unaligned.h
 
-diff --git a/arch/openrisc/include/asm/unaligned.h b/arch/openrisc/include/asm/unaligned.h
+diff --git a/arch/sh/include/asm/unaligned-sh4a.h b/arch/sh/include/asm/unaligned-sh4a.h
 deleted file mode 100644
-index 14353f2101f2..000000000000
---- a/arch/openrisc/include/asm/unaligned.h
+index d311f00ed530..000000000000
+--- a/arch/sh/include/asm/unaligned-sh4a.h
 +++ /dev/null
-@@ -1,47 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * OpenRISC Linux
-- *
-- * Linux architectural port borrowing liberally from similar works of
-- * others.  All original copyrights apply as per the original source
-- * declaration.
-- *
-- * OpenRISC implementation:
-- * Copyright (C) 2003 Matjaz Breskvar <phoenix@bsemi.com>
-- * Copyright (C) 2010-2011 Jonas Bonn <jonas@southpole.se>
-- * et al.
-- */
--
--#ifndef __ASM_OPENRISC_UNALIGNED_H
--#define __ASM_OPENRISC_UNALIGNED_H
+@@ -1,199 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __ASM_SH_UNALIGNED_SH4A_H
+-#define __ASM_SH_UNALIGNED_SH4A_H
 -
 -/*
-- * This is copied from the generic implementation and the C-struct
-- * variant replaced with the memmove variant.  The GCC compiler
-- * for the OR32 arch optimizes too aggressively for the C-struct
-- * variant to work, so use the memmove variant instead.
+- * SH-4A has support for unaligned 32-bit loads, and 32-bit loads only.
+- * Support for 64-bit accesses are done through shifting and masking
+- * relative to the endianness. Unaligned stores are not supported by the
+- * instruction encoding, so these continue to use the packed
+- * struct.
 - *
-- * It may be worth considering implementing the unaligned access
-- * exception handler and allowing unaligned accesses (access_ok.h)...
-- * not sure if it would be much of a performance win without further
-- * investigation.
+- * The same note as with the movli.l/movco.l pair applies here, as long
+- * as the load is guaranteed to be inlined, nothing else will hook in to
+- * r0 and we get the return value for free.
+- *
+- * NOTE: Due to the fact we require r0 encoding, care should be taken to
+- * avoid mixing these heavily with other r0 consumers, such as the atomic
+- * ops. Failure to adhere to this can result in the compiler running out
+- * of spill registers and blowing up when building at low optimization
+- * levels. See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34777.
 - */
+-#include <linux/unaligned/packed_struct.h>
+-#include <linux/types.h>
 -#include <asm/byteorder.h>
 -
--#if defined(__LITTLE_ENDIAN)
--# include <linux/unaligned/le_memmove.h>
--# include <linux/unaligned/be_byteshift.h>
--# include <linux/unaligned/generic.h>
--# define get_unaligned	__get_unaligned_le
--# define put_unaligned	__put_unaligned_le
--#elif defined(__BIG_ENDIAN)
--# include <linux/unaligned/be_memmove.h>
--# include <linux/unaligned/le_byteshift.h>
--# include <linux/unaligned/generic.h>
--# define get_unaligned	__get_unaligned_be
--# define put_unaligned	__put_unaligned_be
+-static inline u16 sh4a_get_unaligned_cpu16(const u8 *p)
+-{
+-#ifdef __LITTLE_ENDIAN
+-	return p[0] | p[1] << 8;
 -#else
--# error need to define endianess
+-	return p[0] << 8 | p[1];
 -#endif
--
--#endif /* __ASM_OPENRISC_UNALIGNED_H */
-diff --git a/include/linux/unaligned/be_memmove.h b/include/linux/unaligned/be_memmove.h
-deleted file mode 100644
-index 7164214a4ba1..000000000000
---- a/include/linux/unaligned/be_memmove.h
-+++ /dev/null
-@@ -1,37 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LINUX_UNALIGNED_BE_MEMMOVE_H
--#define _LINUX_UNALIGNED_BE_MEMMOVE_H
--
--#include <linux/unaligned/memmove.h>
--
--static inline u16 get_unaligned_be16(const void *p)
--{
--	return __get_unaligned_memmove16((const u8 *)p);
 -}
 -
--static inline u32 get_unaligned_be32(const void *p)
+-static __always_inline u32 sh4a_get_unaligned_cpu32(const u8 *p)
 -{
--	return __get_unaligned_memmove32((const u8 *)p);
+-	unsigned long unaligned;
+-
+-	__asm__ __volatile__ (
+-		"movua.l	@%1, %0\n\t"
+-		 : "=z" (unaligned)
+-		 : "r" (p)
+-	);
+-
+-	return unaligned;
 -}
 -
--static inline u64 get_unaligned_be64(const void *p)
+-/*
+- * Even though movua.l supports auto-increment on the read side, it can
+- * only store to r0 due to instruction encoding constraints, so just let
+- * the compiler sort it out on its own.
+- */
+-static inline u64 sh4a_get_unaligned_cpu64(const u8 *p)
 -{
--	return __get_unaligned_memmove64((const u8 *)p);
+-#ifdef __LITTLE_ENDIAN
+-	return (u64)sh4a_get_unaligned_cpu32(p + 4) << 32 |
+-		    sh4a_get_unaligned_cpu32(p);
+-#else
+-	return (u64)sh4a_get_unaligned_cpu32(p) << 32 |
+-		    sh4a_get_unaligned_cpu32(p + 4);
+-#endif
 -}
--
--static inline void put_unaligned_be16(u16 val, void *p)
--{
--	__put_unaligned_memmove16(val, p);
--}
--
--static inline void put_unaligned_be32(u32 val, void *p)
--{
--	__put_unaligned_memmove32(val, p);
--}
--
--static inline void put_unaligned_be64(u64 val, void *p)
--{
--	__put_unaligned_memmove64(val, p);
--}
--
--#endif /* _LINUX_UNALIGNED_LE_MEMMOVE_H */
-diff --git a/include/linux/unaligned/le_memmove.h b/include/linux/unaligned/le_memmove.h
-deleted file mode 100644
-index 9202e864d026..000000000000
---- a/include/linux/unaligned/le_memmove.h
-+++ /dev/null
-@@ -1,37 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LINUX_UNALIGNED_LE_MEMMOVE_H
--#define _LINUX_UNALIGNED_LE_MEMMOVE_H
--
--#include <linux/unaligned/memmove.h>
 -
 -static inline u16 get_unaligned_le16(const void *p)
 -{
--	return __get_unaligned_memmove16((const u8 *)p);
+-	return le16_to_cpu(sh4a_get_unaligned_cpu16(p));
 -}
 -
 -static inline u32 get_unaligned_le32(const void *p)
 -{
--	return __get_unaligned_memmove32((const u8 *)p);
+-	return le32_to_cpu(sh4a_get_unaligned_cpu32(p));
 -}
 -
 -static inline u64 get_unaligned_le64(const void *p)
 -{
--	return __get_unaligned_memmove64((const u8 *)p);
+-	return le64_to_cpu(sh4a_get_unaligned_cpu64(p));
+-}
+-
+-static inline u16 get_unaligned_be16(const void *p)
+-{
+-	return be16_to_cpu(sh4a_get_unaligned_cpu16(p));
+-}
+-
+-static inline u32 get_unaligned_be32(const void *p)
+-{
+-	return be32_to_cpu(sh4a_get_unaligned_cpu32(p));
+-}
+-
+-static inline u64 get_unaligned_be64(const void *p)
+-{
+-	return be64_to_cpu(sh4a_get_unaligned_cpu64(p));
+-}
+-
+-static inline void nonnative_put_le16(u16 val, u8 *p)
+-{
+-	*p++ = val;
+-	*p++ = val >> 8;
+-}
+-
+-static inline void nonnative_put_le32(u32 val, u8 *p)
+-{
+-	nonnative_put_le16(val, p);
+-	nonnative_put_le16(val >> 16, p + 2);
+-}
+-
+-static inline void nonnative_put_le64(u64 val, u8 *p)
+-{
+-	nonnative_put_le32(val, p);
+-	nonnative_put_le32(val >> 32, p + 4);
+-}
+-
+-static inline void nonnative_put_be16(u16 val, u8 *p)
+-{
+-	*p++ = val >> 8;
+-	*p++ = val;
+-}
+-
+-static inline void nonnative_put_be32(u32 val, u8 *p)
+-{
+-	nonnative_put_be16(val >> 16, p);
+-	nonnative_put_be16(val, p + 2);
+-}
+-
+-static inline void nonnative_put_be64(u64 val, u8 *p)
+-{
+-	nonnative_put_be32(val >> 32, p);
+-	nonnative_put_be32(val, p + 4);
 -}
 -
 -static inline void put_unaligned_le16(u16 val, void *p)
 -{
--	__put_unaligned_memmove16(val, p);
+-#ifdef __LITTLE_ENDIAN
+-	__put_unaligned_cpu16(val, p);
+-#else
+-	nonnative_put_le16(val, p);
+-#endif
 -}
 -
 -static inline void put_unaligned_le32(u32 val, void *p)
 -{
--	__put_unaligned_memmove32(val, p);
+-#ifdef __LITTLE_ENDIAN
+-	__put_unaligned_cpu32(val, p);
+-#else
+-	nonnative_put_le32(val, p);
+-#endif
 -}
 -
 -static inline void put_unaligned_le64(u64 val, void *p)
 -{
--	__put_unaligned_memmove64(val, p);
+-#ifdef __LITTLE_ENDIAN
+-	__put_unaligned_cpu64(val, p);
+-#else
+-	nonnative_put_le64(val, p);
+-#endif
 -}
 -
--#endif /* _LINUX_UNALIGNED_LE_MEMMOVE_H */
-diff --git a/include/linux/unaligned/memmove.h b/include/linux/unaligned/memmove.h
+-static inline void put_unaligned_be16(u16 val, void *p)
+-{
+-#ifdef __BIG_ENDIAN
+-	__put_unaligned_cpu16(val, p);
+-#else
+-	nonnative_put_be16(val, p);
+-#endif
+-}
+-
+-static inline void put_unaligned_be32(u32 val, void *p)
+-{
+-#ifdef __BIG_ENDIAN
+-	__put_unaligned_cpu32(val, p);
+-#else
+-	nonnative_put_be32(val, p);
+-#endif
+-}
+-
+-static inline void put_unaligned_be64(u64 val, void *p)
+-{
+-#ifdef __BIG_ENDIAN
+-	__put_unaligned_cpu64(val, p);
+-#else
+-	nonnative_put_be64(val, p);
+-#endif
+-}
+-
+-/*
+- * While it's a bit non-obvious, even though the generic le/be wrappers
+- * use the __get/put_xxx prefixing, they actually wrap in to the
+- * non-prefixed get/put_xxx variants as provided above.
+- */
+-#include <linux/unaligned/generic.h>
+-
+-#ifdef __LITTLE_ENDIAN
+-# define get_unaligned __get_unaligned_le
+-# define put_unaligned __put_unaligned_le
+-#else
+-# define get_unaligned __get_unaligned_be
+-# define put_unaligned __put_unaligned_be
+-#endif
+-
+-#endif /* __ASM_SH_UNALIGNED_SH4A_H */
+diff --git a/arch/sh/include/asm/unaligned.h b/arch/sh/include/asm/unaligned.h
 deleted file mode 100644
-index ac71b53bc6dc..000000000000
---- a/include/linux/unaligned/memmove.h
+index 0c92e2c73af4..000000000000
+--- a/arch/sh/include/asm/unaligned.h
 +++ /dev/null
-@@ -1,46 +0,0 @@
+@@ -1,13 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LINUX_UNALIGNED_MEMMOVE_H
--#define _LINUX_UNALIGNED_MEMMOVE_H
+-#ifndef _ASM_SH_UNALIGNED_H
+-#define _ASM_SH_UNALIGNED_H
 -
--#include <linux/kernel.h>
--#include <linux/string.h>
+-#ifdef CONFIG_CPU_SH4A
+-/* SH-4A can handle unaligned loads in a relatively neutered fashion. */
+-#include <asm/unaligned-sh4a.h>
+-#else
+-/* Otherwise, SH can't handle unaligned accesses. */
+-#include <asm-generic/unaligned.h>
+-#endif
 -
--/* Use memmove here, so gcc does not insert a __builtin_memcpy. */
--
--static inline u16 __get_unaligned_memmove16(const void *p)
--{
--	u16 tmp;
--	memmove(&tmp, p, 2);
--	return tmp;
--}
--
--static inline u32 __get_unaligned_memmove32(const void *p)
--{
--	u32 tmp;
--	memmove(&tmp, p, 4);
--	return tmp;
--}
--
--static inline u64 __get_unaligned_memmove64(const void *p)
--{
--	u64 tmp;
--	memmove(&tmp, p, 8);
--	return tmp;
--}
--
--static inline void __put_unaligned_memmove16(u16 val, void *p)
--{
--	memmove(p, &val, 2);
--}
--
--static inline void __put_unaligned_memmove32(u32 val, void *p)
--{
--	memmove(p, &val, 4);
--}
--
--static inline void __put_unaligned_memmove64(u64 val, void *p)
--{
--	memmove(p, &val, 8);
--}
--
--#endif /* _LINUX_UNALIGNED_MEMMOVE_H */
+-#endif /* _ASM_SH_UNALIGNED_H */
 -- 
 2.29.2
 
