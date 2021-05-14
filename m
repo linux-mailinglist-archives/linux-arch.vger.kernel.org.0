@@ -2,45 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AFE3806CE
-	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 12:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198A53806D1
+	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 12:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbhENKGQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 May 2021 06:06:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59970 "EHLO mail.kernel.org"
+        id S232821AbhENKGb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 May 2021 06:06:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60058 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233976AbhENKGI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 14 May 2021 06:06:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B44506101D;
-        Fri, 14 May 2021 10:04:54 +0000 (UTC)
+        id S233921AbhENKGN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 14 May 2021 06:06:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B17F0613BC;
+        Fri, 14 May 2021 10:05:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620986696;
-        bh=+A8VF6/YLLVZtHfI0InfFULYrSxtxYtufbUrU8xRDtk=;
+        s=k20201202; t=1620986702;
+        bh=8+fEpQGvOmZGTcdOWEcXXVRuIui7OYRzo8xlL/ha8Ag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gmhKJJL5SXQjQHnTSGgQ2PjxnGS+rwWSAS3V/Z/ffTc9JenAPf10igkOoMsjVN2Rb
-         e5mST0FjQNa+/WQs2dSiN4FdAejisks0FgWfOrG/AcT3ImFcuomEpazmDe677XdvOz
-         mQm3c49fFcei1qSN14KkY1AjMAhOjkFWKdxewjc1CurH3IXjf4iSvJY52Fmf9e6QSZ
-         0KiesqlzEeTUXEQIPrZjo/C6Y6x5/OesVx20g8jImzwBziM/K8oz7yyA0lZ1gMiXvO
-         zL7ucIYZVeODSqj5GMsB82HFn3YUj6U7NioxAmfJ7JafuH/EvqiIQZ0dTWzLkVyEuD
-         cLidUnIE5ceUQ==
+        b=Afedm/HX0dqQvHyQAQ0JH+c4cBhR8V86+6bYftWfPKbRhV5rm3obFx3dpUy2391RZ
+         DqdqU77qt2TOLsl1HtCeaY/qExMKekWhPBt7esxl8OXJQsQtCMyeiSgUT3v/2E3NbG
+         ESgkaAJSH7UIec+EVAuz8jonQczDGLUXVEJ1takv1neV5pMwg5d6kVoQnBoGPDf5Ki
+         Lu1+gdgPrrriLDZJhtCFUOzAPl4iWdLipeyW1aQykA5YD4b3dlTeTxtqg1TTXlCuVE
+         VjQ94WnuyYpggAmZwCvkcOGk/yNKJWNb3a1cupCaapaZ/x/J4+oTHb//yiYQnvU2K4
+         P0wFtqI6giOXQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arch@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Vineet Gupta <vgupta@synopsys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/13] netpoll: avoid put_unaligned() on single character
-Date:   Fri, 14 May 2021 12:00:59 +0200
-Message-Id: <20210514100106.3404011-12-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 12/13] asm-generic: uaccess: 1-byte access is always aligned
+Date:   Fri, 14 May 2021 12:01:00 +0200
+Message-Id: <20210514100106.3404011-13-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210514100106.3404011-1-arnd@kernel.org>
 References: <20210514100106.3404011-1-arnd@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -48,51 +43,44 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-With a planned cleanup, using put_unaligned() on a single character
-results in a harmless warning:
+With the cleaned up version of asm-generic/unaligned.h,
+there is a warning about the get_user/put_user helpers using
+unaligned access for single-byte variables:
 
-In file included from ./arch/x86/include/generated/asm/unaligned.h:1,
-                 from include/linux/etherdevice.h:24,
-                 from net/core/netpoll.c:18:
-net/core/netpoll.c: In function 'netpoll_send_udp':
-include/asm-generic/unaligned.h:23:9: error: 'packed' attribute ignored for field of type 'unsigned char' [-Werror=attributes]
-net/core/netpoll.c:431:3: note: in expansion of macro 'put_unaligned'
-  431 |   put_unaligned(0x60, (unsigned char *)ip6h);
-      |   ^~~~~~~~~~~~~
-include/asm-generic/unaligned.h:23:9: error: 'packed' attribute ignored for field of type 'unsigned char' [-Werror=attributes]
-net/core/netpoll.c:459:3: note: in expansion of macro 'put_unaligned'
-  459 |   put_unaligned(0x45, (unsigned char *)iph);
-      |   ^~~~~~~~~~~~~
+include/asm-generic/uaccess.h: In function ‘__get_user_fn’:
+include/asm-generic/unaligned.h:13:15: warning: ‘packed’ attribute ignored for field of type ‘u8’ {aka ‘unsigned char’} [-Wattributes]
+  const struct { type x __packed; } *__pptr = (typeof(__pptr))(ptr); \
 
-Replace this with an open-coded pointer dereference.
+Change these to use a direct pointer dereference to avoid the
+warnings.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- net/core/netpoll.c | 4 ++--
+ include/asm-generic/uaccess.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/netpoll.c b/net/core/netpoll.c
-index c310c7c1cef7..9c49a38fa315 100644
---- a/net/core/netpoll.c
-+++ b/net/core/netpoll.c
-@@ -428,7 +428,7 @@ void netpoll_send_udp(struct netpoll *np, const char *msg, int len)
- 		ip6h = ipv6_hdr(skb);
+diff --git a/include/asm-generic/uaccess.h b/include/asm-generic/uaccess.h
+index 4973328f3c6e..7e903e450659 100644
+--- a/include/asm-generic/uaccess.h
++++ b/include/asm-generic/uaccess.h
+@@ -19,7 +19,7 @@ __get_user_fn(size_t size, const void __user *from, void *to)
  
- 		/* ip6h->version = 6; ip6h->priority = 0; */
--		put_unaligned(0x60, (unsigned char *)ip6h);
-+		*(unsigned char *)ip6h = 0x60;
- 		ip6h->flow_lbl[0] = 0;
- 		ip6h->flow_lbl[1] = 0;
- 		ip6h->flow_lbl[2] = 0;
-@@ -456,7 +456,7 @@ void netpoll_send_udp(struct netpoll *np, const char *msg, int len)
- 		iph = ip_hdr(skb);
+ 	switch (size) {
+ 	case 1:
+-		*(u8 *)to = get_unaligned((u8 __force *)from);
++		*(u8 *)to = *((u8 __force *)from);
+ 		return 0;
+ 	case 2:
+ 		*(u16 *)to = get_unaligned((u16 __force *)from);
+@@ -45,7 +45,7 @@ __put_user_fn(size_t size, void __user *to, void *from)
  
- 		/* iph->version = 4; iph->ihl = 5; */
--		put_unaligned(0x45, (unsigned char *)iph);
-+		*(unsigned char *)iph = 0x45;
- 		iph->tos      = 0;
- 		put_unaligned(htons(ip_len), &(iph->tot_len));
- 		iph->id       = htons(atomic_inc_return(&ip_ident));
+ 	switch (size) {
+ 	case 1:
+-		put_unaligned(*(u8 *)from, (u8 __force *)to);
++		*(*(u8 *)from, (u8 __force *)to);
+ 		return 0;
+ 	case 2:
+ 		put_unaligned(*(u16 *)from, (u16 __force *)to);
 -- 
 2.29.2
 
