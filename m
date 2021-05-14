@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B17381170
-	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 22:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4266F38116E
+	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 22:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233267AbhENUKY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 May 2021 16:10:24 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:50452 "EHLO
+        id S233299AbhENUKX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 May 2021 16:10:23 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:50450 "EHLO
         userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbhENUKW (ORCPT
+        with ESMTP id S232869AbhENUKW (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 14 May 2021 16:10:22 -0400
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14EK4wKJ003075;
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14EK4SIu002674;
         Fri, 14 May 2021 20:08:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type :
+ subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=XIXP6H7V7DdcZmhwJrMCwGnBWYwS335MqQkEGFbFM+o=;
- b=ZaaUUFkEXoX5xiOAhX91jSwR0ESspMnA9jlBwHgKsvpSoovlD5KQYPNdk/4xOpCCPPj0
- I7iDhxUMJJzDkR7yCsZBarTPykjgXxO8y+HVAoTcnhEEjapnLrlNaZvog8XZdTaoYJRe
- ASEGSdSNhW2a0n6xfboZH6lQKBGHFZBRrEyRlh+fFrsICfKNdKtUtbCN8GK9Dd6Qrm0G
- BOBq6V77E1cRrctVkA2pmMl/6dAINmzMy1/P2EiAPH4N0QPoW4ujlIZavudgfBmDIP/z
- rMfjAEuqL0aYG/0UgaY72aeRmtR7N035UJNAIR49GOGqg3F23WCJOki54/VAOIZyW75/ KA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 38gpndd92a-1
+ bh=kNf0Omw3pBdfSHRT6ge2P9qwzvS/1Wd39dFDBS2OHmI=;
+ b=aI4qf3yphRNx1rRmD5p1ZaOYKdvX6+YmirJo3CAHyttruhEyz+zT50yAMJvvV8I83iJ0
+ pW1Ts6tbRRz1ZE1KbtKpvuYADDJX9qMj5FksXCNFXTxTTbx8S6QvK6tAnBhPi9ejAVob
+ zlCMQNA7UzPJOb8W2sE0trsUYJKAWvF4n/fro4VLluETJ8XJtn14orFxB0cS62SpShvq
+ paNzhnjmq/+ckHcOHFxeYaXKZ1Q9+Az9cW86kuGRyhLT4nWMQeUMWICR9EUIWaRZHasf
+ fU8257/P5Z/RxiKLXyBbX0y2/GybLg2lEsKwFKvVC1Q4KwMLLWFTjOHbOpDL5ZvuTaN8 lw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 38gpndd92b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 14 May 2021 20:08:09 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14EK4sd6079510;
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14EK61ZZ158977;
         Fri, 14 May 2021 20:08:08 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 38gppf8bn7-1
+        by aserp3030.oracle.com with ESMTP id 38gppqd6qy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 14 May 2021 20:08:08 +0000
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 14EK87eE102525;
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 14EK87o1161896;
         Fri, 14 May 2021 20:08:07 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 38gppf8bm2-1
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 38gppqd6qp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 14 May 2021 20:08:07 +0000
 Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 14EK7rjJ011932;
-        Fri, 14 May 2021 20:07:53 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 14EK7seB011249;
+        Fri, 14 May 2021 20:07:54 GMT
 Received: from neelam.us.oracle.com (/10.152.128.16)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 14 May 2021 13:07:53 -0700
+        with ESMTP ; Fri, 14 May 2021 13:07:54 -0700
 From:   Alex Kogan <alex.kogan@oracle.com>
 To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
         will.deacon@arm.com, arnd@arndb.de, longman@redhat.com,
@@ -56,15 +56,16 @@ To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
         jglauber@marvell.com
 Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
         alex.kogan@oracle.com, dave.dice@oracle.com
-Subject: [PATCH v15 0/6] Add NUMA-awareness to qspinlock
-Date:   Fri, 14 May 2021 16:07:37 -0400
-Message-Id: <20210514200743.3026725-1-alex.kogan@oracle.com>
+Subject: [PATCH v15 1/6] locking/qspinlock: Rename mcs lock/unlock macros and make them more generic
+Date:   Fri, 14 May 2021 16:07:38 -0400
+Message-Id: <20210514200743.3026725-2-alex.kogan@oracle.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210514200743.3026725-1-alex.kogan@oracle.com>
+References: <20210514200743.3026725-1-alex.kogan@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: CQ2IeJfea9oFx90D7WAPE0fWvSMLLgiC
-X-Proofpoint-GUID: CQ2IeJfea9oFx90D7WAPE0fWvSMLLgiC
+X-Proofpoint-ORIG-GUID: ZwLLa-Y9Hp_09IkRm68vAD2CXR9ZNSbO
+X-Proofpoint-GUID: ZwLLa-Y9Hp_09IkRm68vAD2CXR9ZNSbO
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9984 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 phishscore=0
  priorityscore=1501 suspectscore=0 spamscore=0 lowpriorityscore=0
@@ -75,163 +76,155 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Changes from v14:
-----------------
+The mcs unlock macro (arch_mcs_lock_handoff) should accept the value to be
+stored into the lock argument as another argument. This allows using the
+same macro in cases where the value to be stored when passing the lock is
+different from 1.
 
-- Change the way the main queue is scanned and reordered in
-cna_wait_head_or_lock(), based on Peter's suggestion.
+Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
+Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
+Reviewed-by: Waiman Long <longman@redhat.com>
+---
+ arch/arm/include/asm/mcs_spinlock.h |  6 +++---
+ include/asm-generic/mcs_spinlock.h  |  4 ++--
+ kernel/locking/mcs_spinlock.h       | 18 +++++++++---------
+ kernel/locking/qspinlock.c          |  4 ++--
+ kernel/locking/qspinlock_paravirt.h |  2 +-
+ 5 files changed, 17 insertions(+), 17 deletions(-)
 
-In detail: instead of inspecting only one queue node, we now scan
-(and move nodes into the secondary queue) as long as the lock
-remains busy. This simplified the code quite a bit, as we don't need
-to call cna_order_queue() again from cna_lock_handoff(). 
-
-- Use local_clock() instead of relying on jiffies to decide when to
-flush the secondary queue, per Andy's suggestion.
-
-- Use module_param() for numa_spinlock_threshold_ns, so it can be tweaked
-at runtime, per Andy's suggestion.
-
-- Reduce the default value for numa_spinlock_threshold_ns to 1ms based on
-the comments from Andy and Peter. The performance numbers below include
-results with the new default as well as with the value of 10ms, which was 
-the default threshold in previous revisions of the series.
-
-Summary
--------
-
-Lock throughput can be increased by handing a lock to a waiter on the
-same NUMA node as the lock holder, provided care is taken to avoid
-starvation of waiters on other NUMA nodes. This patch introduces CNA
-(compact NUMA-aware lock) as the slow path for qspinlock. It is
-enabled through a configuration option (NUMA_AWARE_SPINLOCKS).
-
-CNA is a NUMA-aware version of the MCS lock. Spinning threads are
-organized in two queues, a primary queue for threads running on the same
-node as the current lock holder, and a secondary queue for threads
-running on other nodes. Threads store the ID of the node on which
-they are running in their queue nodes. After acquiring the MCS lock and
-before acquiring the spinlock, the MCS lock holder checks whether the next
-waiter in the primary queue (if exists) is running on the same NUMA node.
-If it is not, that waiter is detached from the main queue and moved into
-the tail of the secondary queue. This way, we gradually filter the primary
-queue, leaving only waiters running on the same preferred NUMA node. Note
-that certain priortized waiters (e.g., in irq and nmi contexts) are
-excluded from being moved to the secondary queue. We change the NUMA node
-preference after a waiter at the head of the secondary queue spins for a
-certain amount of time. We do that by flushing the secondary queue into
-the head of the primary queue, effectively changing the preference to the
-NUMA node of the waiter at the head of the secondary queue at the time of
-the flush.
-
-More details are available at https://arxiv.org/abs/1810.05600.
-
-We have done some performance evaluation with the locktorture module
-as well as with several benchmarks from the will-it-scale repo.
-The following locktorture results are from an Oracle X5-4 server
-(four Intel Xeon E7-8895 v3 @ 2.60GHz sockets with 18 hyperthreaded
-cores each). Each number represents an average (over 25 runs) of the
-total number of ops (x10^7) reported at the end of each run. The 
-standard deviation is also reported in (), and in general is about 3%
-from the average. The 'stock' kernel is v5.12.0,
-commit 3cf5c8ea3a66, compiled in the default configuration. 
-'CNA' is the modified kernel with NUMA_AWARE_SPINLOCKS set and
-the new default threshold of 1ms for flushing the secondary queue
-(numa_spinlock_threshold_ns); 'CNA-10ms' is the same as CNA, 
-but uses the threshold of 10ms. The speedup is calculated by dividing 
-the result of 'CNA' and 'CNA-10ms', respectively, by the result
-achieved with 'stock'.
-
-#thr  	 stock      CNA          / speedup  CNA-10ms    / speedup
-  1  2.695 (0.108) 2.704 (0.099) / 1.003  2.712 (0.077) / 1.006
-  2  2.753 (0.187) 2.785 (0.171) / 1.012  2.822 (0.174) / 1.025
-  4  4.355 (0.139) 4.417 (0.179) / 1.014  4.361 (0.181) / 1.001
-  8  5.163 (0.119) 7.017 (0.195) / 1.359  7.369 (0.186) / 1.427
- 16  5.944 (0.134) 9.110 (0.242) / 1.532  9.187 (0.233) / 1.546
- 32  6.310 (0.082) 9.710 (0.156) / 1.539  9.827 (0.161) / 1.557
- 36  6.374 (0.112) 9.777 (0.141) / 1.534  9.830 (0.124) / 1.542
- 72  6.170 (0.139) 9.922 (0.190) / 1.608  9.945 (0.136) / 1.612
-108  6.002 (0.089) 9.651 (0.176) / 1.608  9.847 (0.125) / 1.641
-142  5.784 (0.079) 9.477 (0.089) / 1.638  9.641 (0.113) / 1.667
-
-The following tables contain throughput results (ops/us) from the same
-setup for will-it-scale/open1_threads: 
-
-#thr  	 stock      CNA          / speedup  CNA-10ms    / speedup
-  1  0.503 (0.004) 0.501 (0.001) / 0.996  0.503 (0.002) / 1.000
-  2  0.783 (0.014) 0.773 (0.011) / 0.988  0.774 (0.016) / 0.989
-  4  1.422 (0.025) 1.398 (0.030) / 0.983  1.403 (0.025) / 0.987
-  8  1.753 (0.104) 1.641 (0.132) / 0.936  1.675 (0.134) / 0.956
- 16  1.851 (0.097) 1.760 (0.103) / 0.951  1.774 (0.119) / 0.959
- 32  0.905 (0.081) 1.708 (0.081) / 1.888  1.738 (0.069) / 1.922
- 36  0.895 (0.058) 1.726 (0.065) / 1.928  1.735 (0.081) / 1.938
- 72  0.823 (0.033) 1.610 (0.067) / 1.957  1.647 (0.067) / 2.002
-108  0.845 (0.035) 1.588 (0.054) / 1.878  1.740 (0.067) / 2.058
-142  0.840 (0.030) 1.546 (0.042) / 1.839  1.740 (0.048) / 2.070
-
-and will-it-scale/lock2_threads:
-
-#thr  	 stock      CNA          / speedup  CNA-10ms    / speedup
-  1  1.551 (0.003) 1.558 (0.006) / 1.005  1.558 (0.003) / 1.005
-  2  2.722 (0.064) 2.704 (0.063) / 0.993  2.727 (0.058) / 1.002
-  4  5.286 (0.178) 5.360 (0.151) / 1.014  5.360 (0.135) / 1.014
-  8  4.115 (0.297) 3.906 (0.383) / 0.949  4.062 (0.366) / 0.987
- 16  4.119 (0.121) 3.950 (0.131) / 0.959  4.009 (0.132) / 0.973
- 32  2.508 (0.097) 3.805 (0.106) / 1.517  3.960 (0.091) / 1.579
- 36  2.457 (0.101) 3.810 (0.072) / 1.551  3.931 (0.106) / 1.600
- 72  1.913 (0.103) 3.530 (0.070) / 1.845  3.860 (0.078) / 2.018
-108  1.891 (0.109) 3.410 (0.079) / 1.803  3.881 (0.097) / 2.052
-142  1.752 (0.096) 3.236 (0.080) / 1.847  3.774 (0.078) / 2.155
-
-Our evaluation shows that CNA also improves performance of user 
-applications that have hot pthread mutexes. Those mutexes are 
-blocking, and waiting threads park and unpark via the futex 
-mechanism in the kernel. Given that kernel futex chains, which
-are hashed by the mutex address, are each protected by a 
-chain-specific spin lock, the contention on a user-mode mutex 
-translates into contention on a kernel level spinlock. 
-
-Here are the throughput results (ops/us) for the leveldb ‘readrandom’
-benchmark:
-
-#thr  	 stock      CNA          / speedup  CNA-10ms    / speedup
-  1  0.533 (0.011) 0.539 (0.014) / 1.012  0.536 (0.013) / 1.006
-  2  0.854 (0.022) 0.856 (0.017) / 1.003  0.857 (0.020) / 1.004
-  4  1.236 (0.028) 1.238 (0.054) / 1.002  1.217 (0.054) / 0.985
-  8  1.207 (0.117) 1.198 (0.122) / 0.993  1.155 (0.138) / 0.957
- 16  0.758 (0.055) 1.128 (0.118) / 1.489  1.068 (0.131) / 1.409
- 32  0.743 (0.027) 1.153 (0.028) / 1.551  1.147 (0.021) / 1.543
- 36  0.708 (0.027) 1.150 (0.024) / 1.623  1.137 (0.026) / 1.605
- 72  0.629 (0.016) 1.112 (0.019) / 1.767  1.134 (0.019) / 1.802
-108  0.610 (0.012) 1.053 (0.018) / 1.725  1.130 (0.017) / 1.853
-142  0.606 (0.013) 1.008 (0.020) / 1.664  1.110 (0.023) / 1.833
-
-Further comments are welcome and appreciated.
-
-Alex Kogan (6):
-  locking/qspinlock: Rename mcs lock/unlock macros and make them more
-    generic
-  locking/qspinlock: Refactor the qspinlock slow path
-  locking/qspinlock: Introduce CNA into the slow path of qspinlock
-  locking/qspinlock: Introduce starvation avoidance into CNA
-  locking/qspinlock: Avoid moving certain threads between waiting queues
-    in CNA
-  locking/qspinlock: Introduce the shuffle reduction optimization into
-    CNA
-
- .../admin-guide/kernel-parameters.txt         |  18 +
- arch/arm/include/asm/mcs_spinlock.h           |   6 +-
- arch/x86/Kconfig                              |  20 +
- arch/x86/include/asm/qspinlock.h              |   4 +
- arch/x86/kernel/alternative.c                 |   4 +
- include/asm-generic/mcs_spinlock.h            |   4 +-
- kernel/locking/mcs_spinlock.h                 |  20 +-
- kernel/locking/qspinlock.c                    |  82 +++-
- kernel/locking/qspinlock_cna.h                | 425 ++++++++++++++++++
- kernel/locking/qspinlock_paravirt.h           |   2 +-
- 10 files changed, 562 insertions(+), 23 deletions(-)
- create mode 100644 kernel/locking/qspinlock_cna.h
-
+diff --git a/arch/arm/include/asm/mcs_spinlock.h b/arch/arm/include/asm/mcs_spinlock.h
+index 529d2cf4d06f..1eb4d733459c 100644
+--- a/arch/arm/include/asm/mcs_spinlock.h
++++ b/arch/arm/include/asm/mcs_spinlock.h
+@@ -6,7 +6,7 @@
+ #include <asm/spinlock.h>
+ 
+ /* MCS spin-locking. */
+-#define arch_mcs_spin_lock_contended(lock)				\
++#define arch_mcs_spin_wait(lock)					\
+ do {									\
+ 	/* Ensure prior stores are observed before we enter wfe. */	\
+ 	smp_mb();							\
+@@ -14,9 +14,9 @@ do {									\
+ 		wfe();							\
+ } while (0)								\
+ 
+-#define arch_mcs_spin_unlock_contended(lock)				\
++#define arch_mcs_lock_handoff(lock, val)				\
+ do {									\
+-	smp_store_release(lock, 1);					\
++	smp_store_release((lock), (val));				\
+ 	dsb_sev();							\
+ } while (0)
+ 
+diff --git a/include/asm-generic/mcs_spinlock.h b/include/asm-generic/mcs_spinlock.h
+index 10cd4ffc6ba2..f933d99c63e0 100644
+--- a/include/asm-generic/mcs_spinlock.h
++++ b/include/asm-generic/mcs_spinlock.h
+@@ -4,8 +4,8 @@
+ /*
+  * Architectures can define their own:
+  *
+- *   arch_mcs_spin_lock_contended(l)
+- *   arch_mcs_spin_unlock_contended(l)
++ *   arch_mcs_spin_wait(l)
++ *   arch_mcs_lock_handoff(l, val)
+  *
+  * See kernel/locking/mcs_spinlock.c.
+  */
+diff --git a/kernel/locking/mcs_spinlock.h b/kernel/locking/mcs_spinlock.h
+index 85251d8771d9..e794babc519a 100644
+--- a/kernel/locking/mcs_spinlock.h
++++ b/kernel/locking/mcs_spinlock.h
+@@ -21,7 +21,7 @@ struct mcs_spinlock {
+ 	int count;  /* nesting count, see qspinlock.c */
+ };
+ 
+-#ifndef arch_mcs_spin_lock_contended
++#ifndef arch_mcs_spin_wait
+ /*
+  * Using smp_cond_load_acquire() provides the acquire semantics
+  * required so that subsequent operations happen after the
+@@ -29,20 +29,20 @@ struct mcs_spinlock {
+  * ARM64 would like to do spin-waiting instead of purely
+  * spinning, and smp_cond_load_acquire() provides that behavior.
+  */
+-#define arch_mcs_spin_lock_contended(l)					\
+-do {									\
+-	smp_cond_load_acquire(l, VAL);					\
++#define arch_mcs_spin_wait(l)					\
++do {								\
++	smp_cond_load_acquire(l, VAL);				\
+ } while (0)
+ #endif
+ 
+-#ifndef arch_mcs_spin_unlock_contended
++#ifndef arch_mcs_lock_handoff
+ /*
+  * smp_store_release() provides a memory barrier to ensure all
+  * operations in the critical section has been completed before
+  * unlocking.
+  */
+-#define arch_mcs_spin_unlock_contended(l)				\
+-	smp_store_release((l), 1)
++#define arch_mcs_lock_handoff(l, val)				\
++	smp_store_release((l), (val))
+ #endif
+ 
+ /*
+@@ -91,7 +91,7 @@ void mcs_spin_lock(struct mcs_spinlock **lock, struct mcs_spinlock *node)
+ 	WRITE_ONCE(prev->next, node);
+ 
+ 	/* Wait until the lock holder passes the lock down. */
+-	arch_mcs_spin_lock_contended(&node->locked);
++	arch_mcs_spin_wait(&node->locked);
+ }
+ 
+ /*
+@@ -115,7 +115,7 @@ void mcs_spin_unlock(struct mcs_spinlock **lock, struct mcs_spinlock *node)
+ 	}
+ 
+ 	/* Pass lock to next waiter. */
+-	arch_mcs_spin_unlock_contended(&next->locked);
++	arch_mcs_lock_handoff(&next->locked, 1);
+ }
+ 
+ #endif /* __LINUX_MCS_SPINLOCK_H */
+diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+index cbff6ba53d56..435d696f9250 100644
+--- a/kernel/locking/qspinlock.c
++++ b/kernel/locking/qspinlock.c
+@@ -471,7 +471,7 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+ 		WRITE_ONCE(prev->next, node);
+ 
+ 		pv_wait_node(node, prev);
+-		arch_mcs_spin_lock_contended(&node->locked);
++		arch_mcs_spin_wait(&node->locked);
+ 
+ 		/*
+ 		 * While waiting for the MCS lock, the next pointer may have
+@@ -550,7 +550,7 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+ 	if (!next)
+ 		next = smp_cond_load_relaxed(&node->next, (VAL));
+ 
+-	arch_mcs_spin_unlock_contended(&next->locked);
++	arch_mcs_lock_handoff(&next->locked, 1);
+ 	pv_kick_node(lock, next);
+ 
+ release:
+diff --git a/kernel/locking/qspinlock_paravirt.h b/kernel/locking/qspinlock_paravirt.h
+index e84d21aa0722..619d80fd5ea8 100644
+--- a/kernel/locking/qspinlock_paravirt.h
++++ b/kernel/locking/qspinlock_paravirt.h
+@@ -368,7 +368,7 @@ static void pv_kick_node(struct qspinlock *lock, struct mcs_spinlock *node)
+ 	 *
+ 	 * Matches with smp_store_mb() and cmpxchg() in pv_wait_node()
+ 	 *
+-	 * The write to next->locked in arch_mcs_spin_unlock_contended()
++	 * The write to next->locked in arch_mcs_lock_handoff()
+ 	 * must be ordered before the read of pn->state in the cmpxchg()
+ 	 * below for the code to work correctly. To guarantee full ordering
+ 	 * irrespective of the success or failure of the cmpxchg(),
 -- 
 2.24.3 (Apple Git-128)
 
