@@ -2,56 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C677038062A
-	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 11:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AED380632
+	for <lists+linux-arch@lfdr.de>; Fri, 14 May 2021 11:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbhENJ1B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 May 2021 05:27:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:40054 "EHLO
+        id S232430AbhENJ22 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 May 2021 05:28:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26420 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232300AbhENJ1A (ORCPT
+        by vger.kernel.org with ESMTP id S230457AbhENJ21 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 14 May 2021 05:27:00 -0400
+        Fri, 14 May 2021 05:28:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620984349;
+        s=mimecast20190719; t=1620984436;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Fx334L5vVgVDfx7L2kVeRZ1gFR/dFDyujA5YMe7z6io=;
-        b=S5lFNU5TQKD03U47KGRUq0qxXj401VvzZwf8ycDk75sZ8elD6zmYfr8ormTPVmnMFlB//f
-        k7DIspm8Yj8j769M+pu58fgnypnwOYb1A7IAdw2hBPD/n1GZwGdpwstsH11YZVHvVvpX7A
-        tkxkRTd+2YudBVAMGoeBZyeF6WdzMDE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-569-GfALomdfOa-p_TkE5IYyYg-1; Fri, 14 May 2021 05:25:47 -0400
-X-MC-Unique: GfALomdfOa-p_TkE5IYyYg-1
-Received: by mail-ed1-f72.google.com with SMTP id w20-20020aa7dcd40000b02903886b9b0013so16109916edu.22
-        for <linux-arch@vger.kernel.org>; Fri, 14 May 2021 02:25:47 -0700 (PDT)
+        bh=yW2asbdUagGat2ijahWn20ew93BwpmErRmbUGUDMNcY=;
+        b=PesLttMemUFfXv4leFnnycKMR7EyGaoYpAU0v/r5JNdfxLgHyxhvVKxVgyPgmx44r89nP9
+        10WPakKrV9JVSb8BKJGMMsZ+hUub63RAcAXtv+PL123B+nE0AfDbP39bZ241uPW4lmE0XM
+        6e/IqPFzISJ2mkN1o9bFvg2F3HLhM5c=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-407-k91ky70WOP67Cvn0GDnhMQ-1; Fri, 14 May 2021 05:27:14 -0400
+X-MC-Unique: k91ky70WOP67Cvn0GDnhMQ-1
+Received: by mail-ej1-f70.google.com with SMTP id bi3-20020a170906a243b02903933c4d9132so9426245ejb.11
+        for <linux-arch@vger.kernel.org>; Fri, 14 May 2021 02:27:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:organization:subject
+        h=x-gm-message-state:subject:to:cc:references:from:organization
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Fx334L5vVgVDfx7L2kVeRZ1gFR/dFDyujA5YMe7z6io=;
-        b=akPjkXzxX0Z3eCM8+LOJPFo0X8LzaHI/frh0924QSKnxxX192LGEIh2Cdk3+MV+qI1
-         GM1AS5LwJqJmRuOFl0n8FAFM1zyGfLtFh24szYFhUifDodrdayQIpFLmI7jy5D5AvwFr
-         RkD/+aofG8Bq4qZCy+4+Scf735zVXTZ5lUZu3FhDCMA41HHnYe+L1QpSLhcSHnfLe5mL
-         Qg5tUffq4uKn1L9lxSanlwgx1zUR7BWgRlqrFZOPzoY1/JUMswU3omsWh8AL7oshsaws
-         ViwPLe0vdGWbQSR8hR4gYjK1Qu+uci9iTpBI520Qr4nnbCX9zCqRaASHhRzL31Zyk29T
-         xiRw==
-X-Gm-Message-State: AOAM530AIbuBDZVga+5NgiGJysdSsBH3rhxfz6cCzeATNDYYze/lbM9F
-        pbhOxOGQF1Agzr99/r4hYZlVkUniucX0HXsy8/+/M68sic6QYhmSaGmcd8eIsP7TM3ipjNefm3f
-        FS5q4VNg/jHtxpscnQtSwFQ==
-X-Received: by 2002:a50:cd57:: with SMTP id d23mr54117171edj.5.1620984346438;
-        Fri, 14 May 2021 02:25:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwffpojWIdDjWYW/MMXX/wRjb+C923CYpz5CDGlKRq9NSx2v+gQE16nA0IMA6MthtTXx38cuQ==
-X-Received: by 2002:a50:cd57:: with SMTP id d23mr54117114edj.5.1620984346105;
-        Fri, 14 May 2021 02:25:46 -0700 (PDT)
+        bh=yW2asbdUagGat2ijahWn20ew93BwpmErRmbUGUDMNcY=;
+        b=shhEq35YcgJuKraD4/ZEO0d8Cmof6YT9AuKcR/5YShgLhGiYSHVXmdZlil309yeHyy
+         3lyoxJT7vCiU4FFEpZzwFl/Bq1wvNU5azjCdHEmaktDefOAZEy8OLNxLGzJPHLAGnn6Q
+         lm42qfXzZMFefNYX0coqtlvfRVgLBl1+/Ln1VRFG6WsBdr1kt0bMTo9MklvEF5LwEUd2
+         NFb4YPFypPkSzJWUGCB4WZge4nSERrODDtGc8zWlfSdiae+dTXyNKX1PG6RQSPUP15Kp
+         vFBwMTjmiwbv7bx3je6b1s4DrlwzdSUEcuiETax9p7uNvy08xGoxGsO+w6gfa+5m74x2
+         d/mg==
+X-Gm-Message-State: AOAM533p9wSXuBPIx+YZRCGu4IdNz3lFAM2/G4xNBvnF3sk61ngQjGks
+        k4Z3KhIXohGKIUvMtLq15u3pCwJVwAphZpOPvHcRjpARlwdA8/e9vLyoURrVJ26lWpT9WOx8WXo
+        GJWToG9qFwyqwlyQUP+gwMA==
+X-Received: by 2002:a05:6402:10c6:: with SMTP id p6mr55735308edu.241.1620984433540;
+        Fri, 14 May 2021 02:27:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyEtOCv5Ls17oMjk/nlAqkQoSV5N2CP4kQHSOXjzJBX9acMLtoFBB9xjtabyDhiKP+sEIswPA==
+X-Received: by 2002:a05:6402:10c6:: with SMTP id p6mr55735269edu.241.1620984433367;
+        Fri, 14 May 2021 02:27:13 -0700 (PDT)
 Received: from [192.168.3.132] (p5b0c6501.dip0.t-ipconnect.de. [91.12.101.1])
-        by smtp.gmail.com with ESMTPSA id gt12sm3267244ejb.60.2021.05.14.02.25.44
+        by smtp.gmail.com with ESMTPSA id m9sm3510728ejj.53.2021.05.14.02.27.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 May 2021 02:25:45 -0700 (PDT)
+        Fri, 14 May 2021 02:27:13 -0700 (PDT)
+Subject: Re: [PATCH v19 6/8] PM: hibernate: disable when there are active
+ secretmem users
 To:     Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -92,182 +94,167 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org
 References: <20210513184734.29317-1-rppt@kernel.org>
- <20210513184734.29317-6-rppt@kernel.org>
+ <20210513184734.29317-7-rppt@kernel.org>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-Subject: Re: [PATCH v19 5/8] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <b625c5d7-bfcc-9e95-1f79-fc8b61498049@redhat.com>
-Date:   Fri, 14 May 2021 11:25:43 +0200
+Message-ID: <d243610c-78df-5e25-cb60-320e7a352d82@redhat.com>
+Date:   Fri, 14 May 2021 11:27:11 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210513184734.29317-6-rppt@kernel.org>
+In-Reply-To: <20210513184734.29317-7-rppt@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
->   #ifdef CONFIG_IA64
->   # include <linux/efi.h>
-> @@ -64,6 +65,9 @@ static inline int valid_mmap_phys_addr_range(unsigned long pfn, size_t size)
->   #ifdef CONFIG_STRICT_DEVMEM
->   static inline int page_is_allowed(unsigned long pfn)
->   {
-> +	if (pfn_valid(pfn) && page_is_secretmem(pfn_to_page(pfn)))
-> +		return 0;
-> +
-
-1. The memmap might be garbage. You should use pfn_to_online_page() instead.
-
-page = pfn_to_online_page(pfn);
-if (page && page_is_secretmem(page))
-	return 0;
-
-2. What about !CONFIG_STRICT_DEVMEM?
-
-3. Someone could map physical memory before a secretmem page gets 
-allocated and read the content after it got allocated and gets used. If 
-someone would gain root privileges and would wait for the target 
-application to (re)start, that could be problematic.
-
-
-I do wonder if enforcing CONFIG_STRICT_DEVMEM would be cleaner. 
-devmem_is_allowed() should disallow access to any system ram, and 
-thereby, any possible secretmem pages, avoiding this check completely.
-
-
-[...]
-
+On 13.05.21 20:47, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> It is unsafe to allow saving of secretmem areas to the hibernation
+> snapshot as they would be visible after the resume and this essentially
+> will defeat the purpose of secret memory mappings.
+> 
+> Prevent hibernation whenever there are active secret memory users.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Christopher Lameter <cl@linux.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Elena Reshetova <elena.reshetova@intel.com>
+> Cc: Hagen Paul Pfeifer <hagen@jauu.net>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: James Bottomley <jejb@linux.ibm.com>
+> Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Roman Gushchin <guro@fb.com>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Tycho Andersen <tycho@tycho.ws>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+>   include/linux/secretmem.h |  6 ++++++
+>   kernel/power/hibernate.c  |  5 ++++-
+>   mm/secretmem.c            | 15 +++++++++++++++
+>   3 files changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/secretmem.h b/include/linux/secretmem.h
+> index e617b4afcc62..21c3771e6a56 100644
+> --- a/include/linux/secretmem.h
+> +++ b/include/linux/secretmem.h
+> @@ -30,6 +30,7 @@ static inline bool page_is_secretmem(struct page *page)
+>   }
 >   
-> diff --git a/mm/secretmem.c b/mm/secretmem.c
-> new file mode 100644
-> index 000000000000..1ae50089adf1
-> --- /dev/null
-> +++ b/mm/secretmem.c
-> @@ -0,0 +1,239 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright IBM Corporation, 2021
-> + *
-> + * Author: Mike Rapoport <rppt@linux.ibm.com>
-> + */
-> +
-> +#include <linux/mm.h>
-> +#include <linux/fs.h>
-> +#include <linux/swap.h>
-> +#include <linux/mount.h>
-> +#include <linux/memfd.h>
-> +#include <linux/bitops.h>
-> +#include <linux/printk.h>
-> +#include <linux/pagemap.h>
-> +#include <linux/syscalls.h>
-> +#include <linux/pseudo_fs.h>
-> +#include <linux/secretmem.h>
-> +#include <linux/set_memory.h>
-> +#include <linux/sched/signal.h>
-> +
-> +#include <uapi/linux/magic.h>
-> +
-> +#include <asm/tlbflush.h>
-> +
-> +#include "internal.h"
-> +
-> +#undef pr_fmt
-> +#define pr_fmt(fmt) "secretmem: " fmt
-> +
-> +/*
-> + * Define mode and flag masks to allow validation of the system call
-> + * parameters.
-> + */
-> +#define SECRETMEM_MODE_MASK	(0x0)
-> +#define SECRETMEM_FLAGS_MASK	SECRETMEM_MODE_MASK
-> +
-> +static bool secretmem_enable __ro_after_init;
-> +module_param_named(enable, secretmem_enable, bool, 0400);
-> +MODULE_PARM_DESC(secretmem_enable,
-> +		 "Enable secretmem and memfd_secret(2) system call");
-> +
-> +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+>   bool vma_is_secretmem(struct vm_area_struct *vma);
+> +bool secretmem_active(void);
+>   
+>   #else
+>   
+> @@ -43,6 +44,11 @@ static inline bool page_is_secretmem(struct page *page)
+>   	return false;
+>   }
+>   
+> +static inline bool secretmem_active(void)
 > +{
-> +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> +	struct inode *inode = file_inode(vmf->vma->vm_file);
-> +	pgoff_t offset = vmf->pgoff;
-> +	gfp_t gfp = vmf->gfp_mask;
-> +	unsigned long addr;
-> +	struct page *page;
-> +	int err;
+> +	return false;
+> +}
 > +
-> +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-> +		return vmf_error(-EINVAL);
+>   #endif /* CONFIG_SECRETMEM */
+>   
+>   #endif /* _LINUX_SECRETMEM_H */
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index da0b41914177..559acef3fddb 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -31,6 +31,7 @@
+>   #include <linux/genhd.h>
+>   #include <linux/ktime.h>
+>   #include <linux/security.h>
+> +#include <linux/secretmem.h>
+>   #include <trace/events/power.h>
+>   
+>   #include "power.h"
+> @@ -81,7 +82,9 @@ void hibernate_release(void)
+>   
+>   bool hibernation_available(void)
+>   {
+> -	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
+> +	return nohibernate == 0 &&
+> +		!security_locked_down(LOCKDOWN_HIBERNATION) &&
+> +		!secretmem_active();
+>   }
+>   
+>   /**
+> diff --git a/mm/secretmem.c b/mm/secretmem.c
+> index 1ae50089adf1..7c2499e4de22 100644
+> --- a/mm/secretmem.c
+> +++ b/mm/secretmem.c
+> @@ -40,6 +40,13 @@ module_param_named(enable, secretmem_enable, bool, 0400);
+>   MODULE_PARM_DESC(secretmem_enable,
+>   		 "Enable secretmem and memfd_secret(2) system call");
+>   
+> +static atomic_t secretmem_users;
 > +
-> +retry:
-> +	page = find_lock_page(mapping, offset);
-> +	if (!page) {
-> +		page = alloc_page(gfp | __GFP_ZERO);
-
-We'll end up here with gfp == GFP_HIGHUSER (via the mapping below), correct?
-
-> +		if (!page)
-> +			return VM_FAULT_OOM;
+> +bool secretmem_active(void)
+> +{
+> +	return !!atomic_read(&secretmem_users);
+> +}
 > +
-> +		err = set_direct_map_invalid_noflush(page, 1);
-> +		if (err) {
-> +			put_page(page);
-> +			return vmf_error(err);
-
-Would we want to translate that to a proper VM_FAULT_..., which would 
-most probably be VM_FAULT_OOM when we fail to allocate a pagetable?
-
-> +		}
+>   static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+>   {
+>   	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+> @@ -94,6 +101,12 @@ static const struct vm_operations_struct secretmem_vm_ops = {
+>   	.fault = secretmem_fault,
+>   };
+>   
+> +static int secretmem_release(struct inode *inode, struct file *file)
+> +{
+> +	atomic_dec(&secretmem_users);
+> +	return 0;
+> +}
 > +
-> +		__SetPageUptodate(page);
-> +		err = add_to_page_cache_lru(page, mapping, offset, gfp);
-> +		if (unlikely(err)) {
-> +			put_page(page);
-> +			/*
-> +			 * If a split of large page was required, it
-> +			 * already happened when we marked the page invalid
-> +			 * which guarantees that this call won't fail
-> +			 */
-> +			set_direct_map_default_noflush(page, 1);
-> +			if (err == -EEXIST)
-> +				goto retry;
-> +
-> +			return vmf_error(err);
-> +		}
-> +
-> +		addr = (unsigned long)page_address(page);
-> +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+>   static int secretmem_mmap(struct file *file, struct vm_area_struct *vma)
+>   {
+>   	unsigned long len = vma->vm_end - vma->vm_start;
+> @@ -116,6 +129,7 @@ bool vma_is_secretmem(struct vm_area_struct *vma)
+>   }
+>   
+>   static const struct file_operations secretmem_fops = {
+> +	.release	= secretmem_release,
+>   	.mmap		= secretmem_mmap,
+>   };
+>   
+> @@ -202,6 +216,7 @@ SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
+>   	file->f_flags |= O_LARGEFILE;
+>   
+>   	fd_install(fd, file);
+> +	atomic_inc(&secretmem_users);
+>   	return fd;
+>   
+>   err_put_fd:
+> 
 
-Hmm, to me it feels like something like that belongs into the 
-set_direct_map_invalid_*() calls? Otherwise it's just very easy to mess 
-up ...
+It looks a bit racy, but I guess we don't really care about these corner 
+cases.
 
-
-I'm certainly not a filesystem guy. Nothing else jumped at me.
-
-
-To me, the overall approach makes sense and I consider it an improved 
-mlock() mechanism for storing secrets, although I'd love to have some 
-more information in the log regarding access via root, namely that there 
-are still fancy ways to read secretmem memory once root via
-
-1. warm reboot attacks especially in VMs (e.g., modifying the cmdline)
-2. kexec-style reboot attacks (e.g., modifying the cmdline)
-3. kdump attacks
-4. kdb most probably
-5. "letting the process read the memory for us" via Kees if that still
-    applies
-6. ... most probably something else
-
-Just to make people aware that there are still some things to be sorted 
-out when we fully want to protect against privilege escalations.
-
-(maybe this information is buried in the cover letter already, where it 
-usually gets lost)
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
 Thanks,
