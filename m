@@ -2,90 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DAE38170B
-	for <lists+linux-arch@lfdr.de>; Sat, 15 May 2021 11:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7B1381761
+	for <lists+linux-arch@lfdr.de>; Sat, 15 May 2021 11:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbhEOJDU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 15 May 2021 05:03:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39138 "EHLO mail.kernel.org"
+        id S234701AbhEOJ53 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 May 2021 05:57:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47368 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229819AbhEOJDT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 15 May 2021 05:03:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A92416135D;
-        Sat, 15 May 2021 09:02:06 +0000 (UTC)
+        id S230050AbhEOJ52 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 15 May 2021 05:57:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E9A85613EC;
+        Sat, 15 May 2021 09:56:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621069326;
-        bh=JbkgiqKo05fRNbDZSt9CFHvFX6bz61XsTpTkCFIs3zs=;
+        s=k20201202; t=1621072575;
+        bh=xTDtBJ9V9VYwOUf/uC9UTFd+NHYG7n2WkwAKLnOotog=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IOBd8yMa4rv0vsCxa1k4BW/oZzG3MFSbxqmKM2UJ3Ro3tUehP++GOxRHaur97iPPA
-         VHumfaThH6c6jZf02shZ3S0ph21UmmDMl5GsNCHPfejtczRHHghMrjJxC4fgWqX2Dj
-         fqz2hq0zOCb3XiqlS3OpQwX+Q+BhCcCvKWit+K548+3faVfsPCWvTUkbRVo92QK1NY
-         tZW4IcFXI//tPqKeKfJHoXED2++YYgZAkIuRzPoOojRqv+rpoeJOayTAC+o/9Xa32H
-         q9P6IO/H3K1IvgpIcEj1EYDA58BMaG27BAj/UjF1awLqWWXMmHCi/8Z+Z+h3u2OwjF
-         uygYlZ0AuO9Lg==
-Received: by mail-wr1-f49.google.com with SMTP id z17so1420758wrq.7;
-        Sat, 15 May 2021 02:02:06 -0700 (PDT)
-X-Gm-Message-State: AOAM532d2AL1CNA/qB2+veLPyWxTpr+CCYi9+zPe6j532Vg+lwDJNR1g
-        vwNAHRVYFJAFBfN487/UyQJ1sTsFLYLyzpPSq0Y=
-X-Google-Smtp-Source: ABdhPJzg2d2S00U4zNlU7vNMN0rVhw0grxjbritw0q/6FeyQwXwNPaFL0Cc+zGzRUDeO1MI0sHNEjvR97BCff3g/boA=
-X-Received: by 2002:adf:fe04:: with SMTP id n4mr6617537wrr.361.1621069325292;
- Sat, 15 May 2021 02:02:05 -0700 (PDT)
+        b=ZfV7S2lgmdAvPgP/14Cz0gdHfnetBWdk+Q+d8pV0P00a1HmCgumdcMwm0PNT+Pqjw
+         e/MA68F5K9M9Qphu5vpeMC6AffSf74ZmrYjMh2DZMw/qgkXpSi0gdGanccgi7MiBWX
+         dQsLBQU1zqe75bZWo2v2x6VW3SFEXUPoJp8HBwG60r2B1UzIuucQ+j9sbcAOlKfX3T
+         AeJotkFM/hq26/v31msWgWjR7qBNa0cYdrndqqdPuS1oerK+SHRbB/aLV/+SbPJp7t
+         25Qlc1z5N91oBQvdAaoxmTPLyaSt/mDe39Dtn5h//hEXZwh+HQX52Peq/j/HaxA5U7
+         AR6vH0QbEmzjA==
+Received: by mail-wr1-f42.google.com with SMTP id s8so1493859wrw.10;
+        Sat, 15 May 2021 02:56:14 -0700 (PDT)
+X-Gm-Message-State: AOAM531yQGyUQGklJAckjuqE0alVkgUhTSMxIxyoMSpNApw0byZi3vSL
+        qT+7aj6Cir9HNXxNyPbabyKkTzP+FwbT4XKKIcY=
+X-Google-Smtp-Source: ABdhPJyU1TeHsTyhdSvAyF4C1QTcXoaRrpe2s4yt2wtnu6GWm1DoLujaxn1SkUeZ3N6LZcimtNJwCO6vX/IPuQocx+g=
+X-Received: by 2002:adf:fe04:: with SMTP id n4mr6852056wrr.361.1621072573589;
+ Sat, 15 May 2021 02:56:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210514100106.3404011-1-arnd@kernel.org> <20210514100106.3404011-11-arnd@kernel.org>
- <87lf8gikhp.fsf@codeaurora.org>
-In-Reply-To: <87lf8gikhp.fsf@codeaurora.org>
+References: <20210514220942.879805-1-arnd@kernel.org> <20210515064015.GA26545@lst.de>
+In-Reply-To: <20210515064015.GA26545@lst.de>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 15 May 2021 11:01:02 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0zc7GGEjPzYsAi=EPxs+3PL0PuhiRF2DfAfR1OHAn+gg@mail.gmail.com>
-Message-ID: <CAK8P3a0zc7GGEjPzYsAi=EPxs+3PL0PuhiRF2DfAfR1OHAn+gg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/13] mwifiex: re-fix for unaligned accesses
-To:     Kalle Valo <kvalo@codeaurora.org>
+Date:   Sat, 15 May 2021 11:55:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2ukLgV3K3sW8gkkz6cvKh+wmP_C0av2hnYcftfXMPTWA@mail.gmail.com>
+Message-ID: <CAK8P3a2ukLgV3K3sW8gkkz6cvKh+wmP_C0av2hnYcftfXMPTWA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] asm-generic: strncpy_from_user/strnlen_user cleanup
+To:     Christoph Hellwig <hch@lst.de>
 Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Vineet Gupta <vgupta@synopsys.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Devidas Puranik <devidas@marvell.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Sid Manning <sidneym@codeaurora.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devidas.puranik@nxp.com
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-um <linux-um@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, May 15, 2021 at 8:22 AM Kalle Valo <kvalo@codeaurora.org> wrote:
-> Arnd Bergmann <arnd@kernel.org> writes:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > A patch from 2017 changed some accesses to DMA memory to use
-> > get_unaligned_le32() and similar interfaces, to avoid problems
-> > with doing unaligned accesson uncached memory.
-> >
-> > However, the change in the mwifiex_pcie_alloc_sleep_cookie_buf()
-> > function ended up changing the size of the access instead,
-> > as it operates on a pointer to u8.
-> >
-> > Change this function back to actually access the entire 32 bits.
-> > Note that the pointer is aligned by definition because it came
-> > from dma_alloc_coherent().
-> >
-> > Fixes: 92c70a958b0b ("mwifiex: fix for unaligned reads")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Sat, May 15, 2021 at 8:40 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> Via which tree should this go? I assume it will go via some other tree
-> so:
->
-> Acked-by: Kalle Valo <kvalo@codeaurora.org>
+> I generall like this consolidation, but for the patches that remote
+> the arch / asm-generic versions, can you please elaborate a little
+> more why the lib version is preferable?  The current commit logs are
+> not very informative.
 
-I have queued the series in the asm-generic tree for 5.14, as the patches
-that depend on this one are a little too invasive for 5.13 at this point.
+Indeed. I do remember writing the patches last year thinking "this should
+really get fixed", but apparently I failed to describe the actual problem at
+the time. I have gone through it again and annotated what I found now,
+but I have a feeling that there were additional problems with the old
+code that I still did not capture.
 
-If you think this fix should be in 5.13, please take it through your tree.
+Sending v2 now: same code, more text.
 
-        Arnd
+       Arnd
