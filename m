@@ -2,113 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF13381A7A
-	for <lists+linux-arch@lfdr.de>; Sat, 15 May 2021 20:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDE5381A92
+	for <lists+linux-arch@lfdr.de>; Sat, 15 May 2021 20:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbhEOSZW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 15 May 2021 14:25:22 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:18503 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234129AbhEOSZT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 15 May 2021 14:25:19 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1621103046; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=ch3A0RldTQj2BJift1c1BerWB0aD14nIhxK4TmHg/Ss=; b=km0nvxIPJU4brewd7mOA6uJ4vvntiQexxLlL5ldcOD4iGimGtXcQ4IUPGyKOD0RSp9fgnxUo
- AdaIjV/eKpFzsMoOh+VBPq3OE0xHCs5httBFLR/pQDMlpfsIO9keY9fJ5iVyo7dovZiZU4lj
- uF2T0/+Fgjrhq2cn1VghTjcP2Qs=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5MDNlZiIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 60a011bd7b5af81b5c419f5d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 15 May 2021 18:23:57
- GMT
-Sender: kvalo=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C0EF0C4323A; Sat, 15 May 2021 18:23:57 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 86F7AC433D3;
-        Sat, 15 May 2021 18:23:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 86F7AC433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S231585AbhEOSmb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 May 2021 14:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231558AbhEOSmb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 15 May 2021 14:42:31 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3318C061573;
+        Sat, 15 May 2021 11:41:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=PQIE0/xjrN58EzSnLe1MpUaylEOcI28tzfG0NuGPhW8=; b=iO1uT6YnO8uxKVm2wxcF3WYNul
+        uAaUbrslLEizhWDYdNR7LwUKsWLUO1Olv2CA+TObcrNqt4iIla6tkG5IwWCislQvoD0j53i0LqHjv
+        b8ptjKptfRCNaNtJOv6jWO8cRgKwtZPjdFyYYU8cKCGBYV7PVvGdBEmeBjy/N5ml/SMr6VYet2Pgy
+        AQs4fDkfpyeujLcrGrraUrgmq761V9f7WoZ/c0qqfE4O0eD3fjsA84K3chvMqK65NjBwa8kodst5s
+        EOTAOuADapooaxtDRjovusrGjphJlDcg6yWw5uCtYM1owlvry28MLRGjY5moDTg50I75+ujsgXlm7
+        Hes8sztg==;
+Received: from [2601:1c0:6280:3f0::7376]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lhzDt-00CeFt-ND; Sat, 15 May 2021 18:41:13 +0000
+Subject: Re: [PATCH v2 12/13] asm-generic: uaccess: 1-byte access is always
+ aligned
+To:     Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Vineet Gupta <vgupta@synopsys.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Devidas Puranik <devidas@marvell.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devidas.puranik@nxp.com
-Subject: Re: [PATCH v2 10/13] mwifiex: re-fix for unaligned accesses
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
 References: <20210514100106.3404011-1-arnd@kernel.org>
-        <20210514100106.3404011-11-arnd@kernel.org>
-        <87lf8gikhp.fsf@codeaurora.org>
-        <CAK8P3a0zc7GGEjPzYsAi=EPxs+3PL0PuhiRF2DfAfR1OHAn+gg@mail.gmail.com>
-Date:   Sat, 15 May 2021 21:23:51 +0300
-In-Reply-To: <CAK8P3a0zc7GGEjPzYsAi=EPxs+3PL0PuhiRF2DfAfR1OHAn+gg@mail.gmail.com>
-        (Arnd Bergmann's message of "Sat, 15 May 2021 11:01:02 +0200")
-Message-ID: <878s4fj1oo.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+ <20210514100106.3404011-13-arnd@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <9f763da3-25c6-24e7-91e9-f3016a85f9f7@infradead.org>
+Date:   Sat, 15 May 2021 11:41:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20210514100106.3404011-13-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
+On 5/14/21 3:01 AM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> With the cleaned up version of asm-generic/unaligned.h,
+> there is a warning about the get_user/put_user helpers using
+> unaligned access for single-byte variables:
+> 
+> include/asm-generic/uaccess.h: In function ‘__get_user_fn’:
+> include/asm-generic/unaligned.h:13:15: warning: ‘packed’ attribute ignored for field of type ‘u8’ {aka ‘unsigned char’} [-Wattributes]
+>   const struct { type x __packed; } *__pptr = (typeof(__pptr))(ptr); \
+> 
+> Change these to use a direct pointer dereference to avoid the
+> warnings.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  include/asm-generic/uaccess.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/asm-generic/uaccess.h b/include/asm-generic/uaccess.h
+> index 4973328f3c6e..7e903e450659 100644
+> --- a/include/asm-generic/uaccess.h
+> +++ b/include/asm-generic/uaccess.h
+> @@ -19,7 +19,7 @@ __get_user_fn(size_t size, const void __user *from, void *to)
+>  
+>  	switch (size) {
+>  	case 1:
+> -		*(u8 *)to = get_unaligned((u8 __force *)from);
+> +		*(u8 *)to = *((u8 __force *)from);
+>  		return 0;
+>  	case 2:
+>  		*(u16 *)to = get_unaligned((u16 __force *)from);
+> @@ -45,7 +45,7 @@ __put_user_fn(size_t size, void __user *to, void *from)
+>  
+>  	switch (size) {
+>  	case 1:
+> -		put_unaligned(*(u8 *)from, (u8 __force *)to);
+> +		*(*(u8 *)from, (u8 __force *)to);
 
-> On Sat, May 15, 2021 at 8:22 AM Kalle Valo <kvalo@codeaurora.org> wrote:
->> Arnd Bergmann <arnd@kernel.org> writes:
->> > From: Arnd Bergmann <arnd@arndb.de>
->> >
->> > A patch from 2017 changed some accesses to DMA memory to use
->> > get_unaligned_le32() and similar interfaces, to avoid problems
->> > with doing unaligned accesson uncached memory.
->> >
->> > However, the change in the mwifiex_pcie_alloc_sleep_cookie_buf()
->> > function ended up changing the size of the access instead,
->> > as it operates on a pointer to u8.
->> >
->> > Change this function back to actually access the entire 32 bits.
->> > Note that the pointer is aligned by definition because it came
->> > from dma_alloc_coherent().
->> >
->> > Fixes: 92c70a958b0b ("mwifiex: fix for unaligned reads")
->> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->>
->> Via which tree should this go? I assume it will go via some other tree
->> so:
->>
->> Acked-by: Kalle Valo <kvalo@codeaurora.org>
->
-> I have queued the series in the asm-generic tree for 5.14, as the patches
-> that depend on this one are a little too invasive for 5.13 at this point.
->
-> If you think this fix should be in 5.13, please take it through your tree.
+Should that be           from = 
+?
 
-I think v5.14 is more approriate, so please take this via your tree.
-Thanks.
+>  		return 0;
+>  	case 2:
+>  		put_unaligned(*(u16 *)from, (u16 __force *)to);
+> 
+
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+~Randy
