@@ -2,94 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BCC381996
-	for <lists+linux-arch@lfdr.de>; Sat, 15 May 2021 17:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF13381A7A
+	for <lists+linux-arch@lfdr.de>; Sat, 15 May 2021 20:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbhEOPiL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 15 May 2021 11:38:11 -0400
-Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:37731 "EHLO
-        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232773AbhEOPiK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 15 May 2021 11:38:10 -0400
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1lhwLX-0015oL-08; Sat, 15 May 2021 17:36:55 +0200
-Received: from pd9f74b7b.dip0.t-ipconnect.de ([217.247.75.123] helo=[192.168.178.23])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1lhwLW-001yNF-PF; Sat, 15 May 2021 17:36:54 +0200
-Subject: Re: [PATCH v2 03/13] sh: remove unaligned access for sh4a
+        id S234427AbhEOSZW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 May 2021 14:25:22 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:18503 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234129AbhEOSZT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 15 May 2021 14:25:19 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1621103046; h=Content-Type: MIME-Version: Message-ID:
+ In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
+ bh=ch3A0RldTQj2BJift1c1BerWB0aD14nIhxK4TmHg/Ss=; b=km0nvxIPJU4brewd7mOA6uJ4vvntiQexxLlL5ldcOD4iGimGtXcQ4IUPGyKOD0RSp9fgnxUo
+ AdaIjV/eKpFzsMoOh+VBPq3OE0xHCs5httBFLR/pQDMlpfsIO9keY9fJ5iVyo7dovZiZU4lj
+ uF2T0/+Fgjrhq2cn1VghTjcP2Qs=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5MDNlZiIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 60a011bd7b5af81b5c419f5d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 15 May 2021 18:23:57
+ GMT
+Sender: kvalo=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C0EF0C4323A; Sat, 15 May 2021 18:23:57 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 86F7AC433D3;
+        Sat, 15 May 2021 18:23:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 86F7AC433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     linux-arch <linux-arch@vger.kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Vineet Gupta <vgupta@synopsys.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Devidas Puranik <devidas@marvell.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devidas.puranik@nxp.com
+Subject: Re: [PATCH v2 10/13] mwifiex: re-fix for unaligned accesses
 References: <20210514100106.3404011-1-arnd@kernel.org>
- <20210514100106.3404011-4-arnd@kernel.org>
- <3d70eb2a-2969-197e-63e8-f3e0a6a8ddd8@physik.fu-berlin.de>
- <CAK8P3a1oO_moABCtNqLkM9ccVh9c=andfz+qiSucTCXcqJkYVA@mail.gmail.com>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Message-ID: <71b5d15d-7bd2-aa08-cc0a-3caccf9c66c8@physik.fu-berlin.de>
-Date:   Sat, 15 May 2021 17:36:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        <20210514100106.3404011-11-arnd@kernel.org>
+        <87lf8gikhp.fsf@codeaurora.org>
+        <CAK8P3a0zc7GGEjPzYsAi=EPxs+3PL0PuhiRF2DfAfR1OHAn+gg@mail.gmail.com>
+Date:   Sat, 15 May 2021 21:23:51 +0300
+In-Reply-To: <CAK8P3a0zc7GGEjPzYsAi=EPxs+3PL0PuhiRF2DfAfR1OHAn+gg@mail.gmail.com>
+        (Arnd Bergmann's message of "Sat, 15 May 2021 11:01:02 +0200")
+Message-ID: <878s4fj1oo.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a1oO_moABCtNqLkM9ccVh9c=andfz+qiSucTCXcqJkYVA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 217.247.75.123
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd!
+Arnd Bergmann <arnd@kernel.org> writes:
 
-On 5/14/21 2:22 PM, Arnd Bergmann wrote:
->> My Renesas SH4-Boards actually run an sh4a-Kernel, not an sh4-Kernel:
+> On Sat, May 15, 2021 at 8:22 AM Kalle Valo <kvalo@codeaurora.org> wrote:
+>> Arnd Bergmann <arnd@kernel.org> writes:
+>> > From: Arnd Bergmann <arnd@arndb.de>
+>> >
+>> > A patch from 2017 changed some accesses to DMA memory to use
+>> > get_unaligned_le32() and similar interfaces, to avoid problems
+>> > with doing unaligned accesson uncached memory.
+>> >
+>> > However, the change in the mwifiex_pcie_alloc_sleep_cookie_buf()
+>> > function ended up changing the size of the access instead,
+>> > as it operates on a pointer to u8.
+>> >
+>> > Change this function back to actually access the entire 32 bits.
+>> > Note that the pointer is aligned by definition because it came
+>> > from dma_alloc_coherent().
+>> >
+>> > Fixes: 92c70a958b0b ("mwifiex: fix for unaligned reads")
+>> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 >>
->> root@tirpitz:~> uname -a
->> Linux tirpitz 5.11.0-rc4-00012-g10c03c5bf422 #161 PREEMPT Mon Jan 18 21:10:17 CET 2021 sh4a GNU/Linux
->> root@tirpitz:~>
+>> Via which tree should this go? I assume it will go via some other tree
+>> so:
 >>
->> So, if this change reduces performance on sh4a, I would rather not merge it.
-> 
-> It only makes a difference in very specific scenarios in which unaligned
-> accesses are done in a fast path, e.g. when forwarding network packet
-> at a high rate on a big-endian kernel (little-endian kernels wouldn't run into
-> this on IP headers). If you have a use case for this machine on which the
-> you can show a performance regression, I can add a patch on top to put
-> the optimized sh4a get_unaligned_le32() back. Dropping this patch
-> altogether would make the series much more complex because most of
-> the associated code gets removed in the end.
+>> Acked-by: Kalle Valo <kvalo@codeaurora.org>
+>
+> I have queued the series in the asm-generic tree for 5.14, as the patches
+> that depend on this one are a little too invasive for 5.13 at this point.
+>
+> If you think this fix should be in 5.13, please take it through your tree.
 
-Hmm, okay. But why does code which sits below arch/sh have to be removed anyway?
-
-I don't fully understand why it poses any maintenance burden/
-
-> As I mentioned, supporting "movua" in the compiler likely has a much
-> larger impact on performance, as it would also help in user space, and
-> it should improve the networking case on little-endian kernels by replacing
-> the four separate byte loads/shift pairs with a movua plus a byteswap.
-
-The problem is that - at least in Debian - we use the sh4 baseline while the kernel
-supports both sh4 and sh4a, so we can't use any of these instructions in userland at
-the moment.
-
-Adrian
+I think v5.14 is more approriate, so please take this via your tree.
+Thanks.
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
