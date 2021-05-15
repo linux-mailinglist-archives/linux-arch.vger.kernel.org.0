@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3608381798
-	for <lists+linux-arch@lfdr.de>; Sat, 15 May 2021 12:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF6238179B
+	for <lists+linux-arch@lfdr.de>; Sat, 15 May 2021 12:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbhEOKUk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 15 May 2021 06:20:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48218 "EHLO mail.kernel.org"
+        id S234874AbhEOKVE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 May 2021 06:21:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48488 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234856AbhEOKU0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 15 May 2021 06:20:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 91842613F7;
-        Sat, 15 May 2021 10:19:09 +0000 (UTC)
+        id S234815AbhEOKUa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 15 May 2021 06:20:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0B335613ED;
+        Sat, 15 May 2021 10:19:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621073953;
-        bh=kI7iPmlJRPV9cT24htrm0onuzJ0NEoNiBghzMsHijxY=;
+        s=k20201202; t=1621073958;
+        bh=5EiV6+uSoRXpKB9TPWxNu5WmBqsPjct5G2z66NyP0fw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XfM/0trNZKCIK7Oa1enMTPiSVt8geLkcYU8otQOB9OeV/EdYV8/BVKtML4mcS7vCO
-         r/SkhN/MThpOxdGCYI0s9BEv3QHUmpi9sl8uGaS4zRqre+k8FBybLBQMr21jw1aZxk
-         qmEpWFxRY5cpCO8vFEPeL7idKCVz4MxheBnAB0o7Vm8kfMcGCggwxGwpUyCN1U1jtn
-         6WNMJUo/V/aQlwYibT7yGorRNWV7qFEFrNoXajIPaaPp2jxC5roUUYE0fUSFx+I3bu
-         wuJsMlYmtOursEBvcgKO0DT8u+TwMaalVsQucbwm5B9zckFSvQCyMiluZkg/oPDE9n
-         LU3061hEHSCtw==
+        b=bjky3cSuDqZIES1KbepcV5Oby6RvxvISRH0AGI4mDxg/BM6uDnjAapszFc+ptgQNt
+         J0tcmi3xigYXX6LJOuynlQSBPrO9WxPj+DHGujJh2g321TLT2yXZIWKChiUclVzNT4
+         e58Rf8vzaJI19p63w017oebZKBmnLE1JxFJ1EqoB+mcwLFkW7KFxUSpVniv3oWMjB/
+         AbImTti61Fc9PLzwUugONY6MJ21I7VRetVRK7MGExtcfjVaYKiPP3HYU+Cv6SlyudR
+         o0/Wn48mXsLWAkQpjkkDV0eSXkAeuZeYrNAIMxNEqrbMd6pJyq6LaoRglM9p2zd//o
+         ggJFHQ3qZVlvw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arch@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
@@ -44,9 +44,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
         uclinux-h8-devel@lists.sourceforge.jp,
         linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
         linux-riscv@lists.infradead.org, linux-um@lists.infradead.org
-Subject: [PATCH 3/6] [v2] hexagon: use generic strncpy/strnlen from_user
-Date:   Sat, 15 May 2021 12:18:00 +0200
-Message-Id: <20210515101803.924427-4-arnd@kernel.org>
+Subject: [PATCH 4/6] [v2] arc: use generic strncpy/strnlen from_user
+Date:   Sat, 15 May 2021 12:18:01 +0200
+Message-Id: <20210515101803.924427-5-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210515101803.924427-1-arnd@kernel.org>
 References: <20210515101803.924427-1-arnd@kernel.org>
@@ -58,239 +58,163 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Most per-architecture versions of these functions are broken in some form,
-and they are almost certainly slower than the generic code as well.
+Most per-architecture versions of these functions are broken
+in some form, and they are almost certainly slower than the
+generic code as well.
 
-Remove the ones for hexagon and instead use the generic version.
-This custom version reads the data twice for strncpy() by doing an extra
-strnlen(), and it apparently lacks a check for user_addr_max().
+This version is fairly slow because it always does byte accesses
+even for aligned data, and its checks for user_addr_max() differ
+from the generic code.
+
+Remove the ones for arc and instead use the generic version.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/hexagon/Kconfig                |   2 +
- arch/hexagon/include/asm/uaccess.h  |  33 +-------
- arch/hexagon/kernel/hexagon_ksyms.c |   1 -
- arch/hexagon/mm/Makefile            |   2 +-
- arch/hexagon/mm/strnlen_user.S      | 126 ----------------------------
- 5 files changed, 5 insertions(+), 159 deletions(-)
- delete mode 100644 arch/hexagon/mm/strnlen_user.S
+ arch/arc/Kconfig               |  2 +
+ arch/arc/include/asm/uaccess.h | 83 ++--------------------------------
+ arch/arc/mm/extable.c          | 12 -----
+ 3 files changed, 7 insertions(+), 90 deletions(-)
 
-diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
-index f18ec6f49c15..d094186188df 100644
---- a/arch/hexagon/Kconfig
-+++ b/arch/hexagon/Kconfig
-@@ -19,6 +19,8 @@ config HEXAGON
- 	# GENERIC_ALLOCATOR is used by dma_alloc_coherent()
- 	select GENERIC_ALLOCATOR
- 	select GENERIC_IRQ_SHOW
+diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+index 2d98501c0897..a38f403a8811 100644
+--- a/arch/arc/Kconfig
++++ b/arch/arc/Kconfig
+@@ -27,6 +27,8 @@ config ARC
+ 	select GENERIC_PENDING_IRQ if SMP
+ 	select GENERIC_SCHED_CLOCK
+ 	select GENERIC_SMP_IDLE_THREAD
 +	select GENERIC_STRNCPY_FROM_USER
 +	select GENERIC_STRNLEN_USER
  	select HAVE_ARCH_KGDB
  	select HAVE_ARCH_TRACEHOOK
- 	select NEED_SG_DMA_LENGTH
-diff --git a/arch/hexagon/include/asm/uaccess.h b/arch/hexagon/include/asm/uaccess.h
-index 59aa3a50744f..d950df12d8c5 100644
---- a/arch/hexagon/include/asm/uaccess.h
-+++ b/arch/hexagon/include/asm/uaccess.h
-@@ -57,42 +57,13 @@ unsigned long raw_copy_to_user(void __user *to, const void *from,
- __kernel_size_t __clear_user_hexagon(void __user *dest, unsigned long count);
- #define __clear_user(a, s) __clear_user_hexagon((a), (s))
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if ARC_MMU_V4
+diff --git a/arch/arc/include/asm/uaccess.h b/arch/arc/include/asm/uaccess.h
+index 3476348f361e..754a23f26736 100644
+--- a/arch/arc/include/asm/uaccess.h
++++ b/arch/arc/include/asm/uaccess.h
+@@ -655,96 +655,23 @@ static inline unsigned long __arc_clear_user(void __user *to, unsigned long n)
+ 	return res;
+ }
  
--extern long __strnlen_user(const char __user *src, long n);
--
--static inline strnlen_user(const char __user *src, long n)
+-static inline long
+-__arc_strncpy_from_user(char *dst, const char __user *src, long count)
 -{
--        if (!access_ok(src, 1))
--		return 0;
+-	long res = 0;
+-	char val;
 -
--	return __strnlen_user(src, n);
--}
--/*  get around the ifndef in asm-generic/uaccess.h  */
-+extern long strnlen_user(const char __user *src, long n);
- #define strnlen_user strnlen_user
- 
--static inline long strncpy_from_user(char *dst, const char __user *src, long n);
-+extern long strncpy_from_user(char *dst, const char __user *src, long n)
- #define strncpy_from_user strncpy_from_user
- 
- #include <asm-generic/uaccess.h>
- 
--/*  Todo:  an actual accelerated version of this.  */
--static inline long strncpy_from_user(char *dst, const char __user *src, long n)
--{
--	long res = strnlen_user(src, n);
--
--	if (unlikely(!res))
+-	if (!access_ok(src, 1))
 -		return -EFAULT;
 -
--	if (res > n) {
--		long left = raw_copy_from_user(dst, src, n);
--		if (unlikely(left))
--			memset(dst + (n - left), 0, left);
--		return n;
--	} else {
--		long left = raw_copy_from_user(dst, src, res);
--		if (unlikely(left))
--			memset(dst + (res - left), 0, left);
--		return res-1;
--	}
+-	if (count == 0)
+-		return 0;
+-
+-	__asm__ __volatile__(
+-	"	mov	lp_count, %5		\n"
+-	"	lp	3f			\n"
+-	"1:	ldb.ab  %3, [%2, 1]		\n"
+-	"	breq.d	%3, 0, 3f               \n"
+-	"	stb.ab  %3, [%1, 1]		\n"
+-	"	add	%0, %0, 1	# Num of NON NULL bytes copied	\n"
+-	"3:								\n"
+-	"	.section .fixup, \"ax\"		\n"
+-	"	.align 4			\n"
+-	"4:	mov %0, %4		# sets @res as -EFAULT	\n"
+-	"	j   3b				\n"
+-	"	.previous			\n"
+-	"	.section __ex_table, \"a\"	\n"
+-	"	.align 4			\n"
+-	"	.word   1b, 4b			\n"
+-	"	.previous			\n"
+-	: "+r"(res), "+r"(dst), "+r"(src), "=r"(val)
+-	: "g"(-EFAULT), "r"(count)
+-	: "lp_count", "memory");
+-
+-	return res;
 -}
+-
+-static inline long __arc_strnlen_user(const char __user *s, long n)
+-{
+-	long res, tmp1, cnt;
+-	char val;
+-
+-	if (!access_ok(s, 1))
+-		return 0;
+-
+-	__asm__ __volatile__(
+-	"	mov %2, %1			\n"
+-	"1:	ldb.ab  %3, [%0, 1]		\n"
+-	"	breq.d  %3, 0, 2f		\n"
+-	"	sub.f   %2, %2, 1		\n"
+-	"	bnz 1b				\n"
+-	"	sub %2, %2, 1			\n"
+-	"2:	sub %0, %1, %2			\n"
+-	"3:	;nop				\n"
+-	"	.section .fixup, \"ax\"		\n"
+-	"	.align 4			\n"
+-	"4:	mov %0, 0			\n"
+-	"	j   3b				\n"
+-	"	.previous			\n"
+-	"	.section __ex_table, \"a\"	\n"
+-	"	.align 4			\n"
+-	"	.word 1b, 4b			\n"
+-	"	.previous			\n"
+-	: "=r"(res), "=r"(tmp1), "=r"(cnt), "=r"(val)
+-	: "0"(s), "1"(n)
+-	: "memory");
+-
+-	return res;
+-}
+-
+ #ifndef CONFIG_CC_OPTIMIZE_FOR_SIZE
  
+ #define INLINE_COPY_TO_USER
+ #define INLINE_COPY_FROM_USER
+ 
+ #define __clear_user(d, n)		__arc_clear_user(d, n)
+-#define strncpy_from_user(d, s, n)	__arc_strncpy_from_user(d, s, n)
+-#define strnlen_user(s, n)		__arc_strnlen_user(s, n)
+ #else
+ extern unsigned long arc_clear_user_noinline(void __user *to,
+ 		unsigned long n);
+-extern long arc_strncpy_from_user_noinline (char *dst, const char __user *src,
+-		long count);
+-extern long arc_strnlen_user_noinline(const char __user *src, long n);
+-
+ #define __clear_user(d, n)		arc_clear_user_noinline(d, n)
+-#define strncpy_from_user(d, s, n)	arc_strncpy_from_user_noinline(d, s, n)
+-#define strnlen_user(s, n)		arc_strnlen_user_noinline(s, n)
+-
  #endif
-diff --git a/arch/hexagon/kernel/hexagon_ksyms.c b/arch/hexagon/kernel/hexagon_ksyms.c
-index 35545a7386a0..ec56ce2d92a2 100644
---- a/arch/hexagon/kernel/hexagon_ksyms.c
-+++ b/arch/hexagon/kernel/hexagon_ksyms.c
-@@ -15,7 +15,6 @@ EXPORT_SYMBOL(__clear_user_hexagon);
- EXPORT_SYMBOL(raw_copy_from_user);
- EXPORT_SYMBOL(raw_copy_to_user);
- EXPORT_SYMBOL(iounmap);
--EXPORT_SYMBOL(__strnlen_user);
- EXPORT_SYMBOL(__vmgetie);
- EXPORT_SYMBOL(__vmsetie);
- EXPORT_SYMBOL(__vmyield);
-diff --git a/arch/hexagon/mm/Makefile b/arch/hexagon/mm/Makefile
-index 893838499591..49911a906fd0 100644
---- a/arch/hexagon/mm/Makefile
-+++ b/arch/hexagon/mm/Makefile
-@@ -4,4 +4,4 @@
- #
  
- obj-y := init.o ioremap.o uaccess.o vm_fault.o cache.o
--obj-y += copy_to_user.o copy_from_user.o strnlen_user.o vm_tlb.o
-+obj-y += copy_to_user.o copy_from_user.o vm_tlb.o
-diff --git a/arch/hexagon/mm/strnlen_user.S b/arch/hexagon/mm/strnlen_user.S
-deleted file mode 100644
-index 4b5574a7cc9c..000000000000
---- a/arch/hexagon/mm/strnlen_user.S
-+++ /dev/null
-@@ -1,126 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * User string length functions for kernel
-- *
-- * Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
-- */
++extern long strncpy_from_user(char *dst, const char __user *src, long count);
++#define strncpy_from_user(d, s, n)	strncpy_from_user(d, s, n)
++extern long strnlen_user(const char __user *src, long n);
++#define strnlen_user(s, n)		strnlen_user(s, n)
++
+ #include <asm/segment.h>
+ #include <asm-generic/uaccess.h>
+ 
+diff --git a/arch/arc/mm/extable.c b/arch/arc/mm/extable.c
+index b06b09ddf924..4e14c4244ea2 100644
+--- a/arch/arc/mm/extable.c
++++ b/arch/arc/mm/extable.c
+@@ -32,16 +32,4 @@ unsigned long arc_clear_user_noinline(void __user *to,
+ }
+ EXPORT_SYMBOL(arc_clear_user_noinline);
+ 
+-long arc_strncpy_from_user_noinline(char *dst, const char __user *src,
+-		long count)
+-{
+-	return __arc_strncpy_from_user(dst, src, count);
+-}
+-EXPORT_SYMBOL(arc_strncpy_from_user_noinline);
 -
--#define isrc	r0
--#define max	r1	/*  Do not change!  */
--
--#define end	r2
--#define tmp1	r3
--
--#define obo	r6	/*  off-by-one  */
--#define start	r7
--#define mod8	r8
--#define dbuf    r15:14
--#define dcmp	r13:12
--
--/*
-- * The vector mask version of this turned out *really* badly.
-- * The hardware loop version also turned out *really* badly.
-- * Seems straight pointer arithmetic basically wins here.
-- */
--
--#define fname __strnlen_user
--
--	.text
--	.global fname
--	.type fname, @function
--	.p2align 5  /*  why?  */
--fname:
--	{
--		mod8 = and(isrc,#7);
--		end = add(isrc,max);
--		start = isrc;
--	}
--	{
--		P0 = cmp.eq(mod8,#0);
--		mod8 = and(end,#7);
--		dcmp = #0;
--		if (P0.new) jump:t dw_loop;	/*  fire up the oven  */
--	}
--
--alignment_loop:
--fail_1:	{
--		tmp1 = memb(start++#1);
--	}
--	{
--		P0 = cmp.eq(tmp1,#0);
--		if (P0.new) jump:nt exit_found;
--		P1 = cmp.gtu(end,start);
--		mod8 = and(start,#7);
--	}
--	{
--		if (!P1) jump exit_error;  /*  hit the end  */
--		P0 = cmp.eq(mod8,#0);
--	}
--	{
--		if (!P0) jump alignment_loop;
--	}
--
--
--
--dw_loop:
--fail_2:	{
--		dbuf = memd(start);
--		obo = add(start,#1);
--	}
--	{
--		P0 = vcmpb.eq(dbuf,dcmp);
--	}
--	{
--		tmp1 = P0;
--		P0 = cmp.gtu(end,start);
--	}
--	{
--		tmp1 = ct0(tmp1);
--		mod8 = and(end,#7);
--		if (!P0) jump end_check;
--	}
--	{
--		P0 = cmp.eq(tmp1,#32);
--		if (!P0.new) jump:nt exit_found;
--		if (!P0.new) start = add(obo,tmp1);
--	}
--	{
--		start = add(start,#8);
--		jump dw_loop;
--	}	/*  might be nice to combine these jumps...   */
--
--
--end_check:
--	{
--		P0 = cmp.gt(tmp1,mod8);
--		if (P0.new) jump:nt exit_error;	/*  neverfound!  */
--		start = add(obo,tmp1);
--	}
--
--exit_found:
--	{
--		R0 = sub(start,isrc);
--		jumpr R31;
--	}
--
--exit_error:
--	{
--		R0 = add(max,#1);
--		jumpr R31;
--	}
--
--	/*  Uh, what does the "fixup" return here?  */
--	.falign
--fix_1:
--	{
--		R0 = #0;
--		jumpr R31;
--	}
--
--	.size fname,.-fname
--
--
--.section __ex_table,"a"
--.long fail_1,fix_1
--.long fail_2,fix_1
--.previous
+-long arc_strnlen_user_noinline(const char __user *src, long n)
+-{
+-	return __arc_strnlen_user(src, n);
+-}
+-EXPORT_SYMBOL(arc_strnlen_user_noinline);
+ #endif
 -- 
 2.29.2
 
