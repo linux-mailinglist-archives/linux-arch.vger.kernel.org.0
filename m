@@ -2,260 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B39381D3B
-	for <lists+linux-arch@lfdr.de>; Sun, 16 May 2021 09:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD50381D4A
+	for <lists+linux-arch@lfdr.de>; Sun, 16 May 2021 09:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233595AbhEPHa6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 16 May 2021 03:30:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35618 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229807AbhEPHa6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 16 May 2021 03:30:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E02561186;
-        Sun, 16 May 2021 07:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621150183;
-        bh=+OVDWA7/0Ml7ugiOtMv/uSOFjjO2dGH0xRQLpIVrDKo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eBhIrhYCTFIxc+VLsj8yA1Hoe59pJz4TDDp6gfkIUHKRIu0++Cr5KOBRH7zrVG52p
-         jLfgetdQBPFyGyYlCbhHgrA81HExKP2ocYEBnwzrEhSEVffjHtkoz36MNZWcelhnjr
-         noHKLnAroU/P6toelBVnxQ/nCrteyUNSBeOVQywuuFyCuwJ6KjRHTSSw3C+ibOdCJ3
-         nZMC/S7X0atBwkdwhNBuFLlwXmQxpjArOHlAb4RGnRXLMyIjWStS2eO92iGNxGhb4j
-         AFUJ5pyWh3JLWvb+t/p5OaBJRuDbt8Hej/cPyKYdFGX/8WcxIDRg2v902Yv7qfiYZ0
-         ydk4b7ykNjpwQ==
-Date:   Sun, 16 May 2021 10:29:24 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Hagen Paul Pfeifer <hagen@jauu.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        id S233826AbhEPHl2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 16 May 2021 03:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229501AbhEPHl2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 May 2021 03:41:28 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5C1C061573;
+        Sun, 16 May 2021 00:40:12 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id h16so3174371edr.6;
+        Sun, 16 May 2021 00:40:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=atWgUCMhsGNXsz/gNWslNxnGXhNwsHL+hDk1DcVED5I=;
+        b=o+vUNgadmD0yG7ldn770Bb8R/zCV9GVEAt2UQQgCpBYujRUcZ0bCjdGg6Kl4jkaas8
+         S0V6VzF0REg8zl47sc/j+VqUQdyLhbWw4v6ZAEMvjvLY94MrULU/vfcAA290OAibDlN1
+         hqs8NO0ot0ihSBmgS9aqW6g8D5XOWV64EYrFyCzAmEGV4XLWNJpNIVgCb1STq9ccQtaa
+         LkyV02smdfsnhJ8F0sprAbzmAnI9zfua3zHyAKDYYytbQ+BMY56S1FazZL3GXa4Lm/E4
+         +T/AEmucL4l2a8/XpdVYi6Mtz9ardrLgy7jV6kLACg1FBMeU+fcdeY5zuBk8I2i9Imhx
+         j7DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=atWgUCMhsGNXsz/gNWslNxnGXhNwsHL+hDk1DcVED5I=;
+        b=MjpIShKYFqWAi3MNGC/N53t0uvNttiMDoOhdJkXxkr65OlKSMwcR0qsdR5EUeYLBG3
+         ZRFHDtmCy8MLBSisdBthzODgs5PfKB4V5RRh3cAIWfMBvCBXPsnpeaVNuLRLihUBZN7B
+         LfnFJdPJ/q/31fI0DC1I0buz1Z8DR5sTujj1O2l3og/zUE7KMjICLw32U3NCcoYy3PdJ
+         ryHmzHPc95efC44t65nihXFTm/YhHjPAZ88nrVwB5Nmzntq4n5yhGfzFkMsu/9hgoP/t
+         TijQDiF2eTbEIkFxXtpTNMEHxPoG6Y8BKE4c9+3nVmUFPX84yJffhjI+ZX59WlgsGvO7
+         e4ig==
+X-Gm-Message-State: AOAM533q3D83uy+HcQm0/gCZnv7Ia4M+mvCiRI+N90EU7PfAhLb5DssP
+        fh63QLSTj8izNQXLClfiMBI=
+X-Google-Smtp-Source: ABdhPJznuZaMygYqm29ZlMZ/DJdjVZpnXsklUT6JzAXgsF7zw2Quk4pm5AaDKPD6F+NvV4wUK01hzQ==
+X-Received: by 2002:a50:fd13:: with SMTP id i19mr22824583eds.386.1621150811730;
+        Sun, 16 May 2021 00:40:11 -0700 (PDT)
+Received: from gmail.com (563BBFD3.dsl.pool.telekom.hu. [86.59.191.211])
+        by smtp.gmail.com with ESMTPSA id qo19sm1799357ejb.7.2021.05.16.00.40.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 May 2021 00:40:11 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sun, 16 May 2021 09:40:09 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v19 5/8] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <YKDJ1L7XpJRQgSch@kernel.org>
-References: <20210513184734.29317-1-rppt@kernel.org>
- <20210513184734.29317-6-rppt@kernel.org>
- <b625c5d7-bfcc-9e95-1f79-fc8b61498049@redhat.com>
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [GIT PULL] siginfo: ABI fixes for v5.13-rc2
+Message-ID: <YKDMWXj2YDkDy1DG@gmail.com>
+References: <m15z031z0a.fsf@fess.ebiederm.org>
+ <YIxVWkT03TqcJLY3@elver.google.com>
+ <m1zgxfs7zq.fsf_-_@fess.ebiederm.org>
+ <m1r1irpc5v.fsf@fess.ebiederm.org>
+ <CANpmjNNfiSgntiOzgMc5Y41KVAV_3VexdXCMADekbQEqSP3vqQ@mail.gmail.com>
+ <m1czuapjpx.fsf@fess.ebiederm.org>
+ <CANpmjNNyifBNdpejc6ofT6+n6FtUw-Cap_z9Z9YCevd7Wf3JYQ@mail.gmail.com>
+ <m14kfjh8et.fsf_-_@fess.ebiederm.org>
+ <m1tuni8ano.fsf_-_@fess.ebiederm.org>
+ <m1a6oxewym.fsf_-_@fess.ebiederm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b625c5d7-bfcc-9e95-1f79-fc8b61498049@redhat.com>
+In-Reply-To: <m1a6oxewym.fsf_-_@fess.ebiederm.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 14, 2021 at 11:25:43AM +0200, David Hildenbrand wrote:
-> >   #ifdef CONFIG_IA64
-> >   # include <linux/efi.h>
-> > @@ -64,6 +65,9 @@ static inline int valid_mmap_phys_addr_range(unsigned long pfn, size_t size)
-> >   #ifdef CONFIG_STRICT_DEVMEM
-> >   static inline int page_is_allowed(unsigned long pfn)
-> >   {
-> > +	if (pfn_valid(pfn) && page_is_secretmem(pfn_to_page(pfn)))
-> > +		return 0;
-> > +
-> 
-> 1. The memmap might be garbage. You should use pfn_to_online_page() instead.
-> 
-> page = pfn_to_online_page(pfn);
-> if (page && page_is_secretmem(page))
-> 	return 0;
-> 
-> 2. What about !CONFIG_STRICT_DEVMEM?
-> 
-> 3. Someone could map physical memory before a secretmem page gets allocated
-> and read the content after it got allocated and gets used. If someone would
-> gain root privileges and would wait for the target application to (re)start,
-> that could be problematic.
-> 
-> 
-> I do wonder if enforcing CONFIG_STRICT_DEVMEM would be cleaner.
-> devmem_is_allowed() should disallow access to any system ram, and thereby,
-> any possible secretmem pages, avoiding this check completely.
 
-I've been thinking a bit more about the /dev/mem case, it seems I was to
-fast on the trigger with adding that test for page_is_secretmem().
+* Eric W. Biederman <ebiederm@xmission.com> wrote:
 
-When CONFIG_STRICT_DEVMEM=y the access to RAM is anyway forbidden and if
-the user built a kernel with CONFIG_STRICT_DEVMEM=n all the physical memory
-is accessible by root anyway.
+> Looking deeper it was discovered that si_trapno is used for only
+> a few select signals on alpha and sparc, and that none of the
+> other _sigfault fields past si_addr are used at all.  Which means
+> technically no regression on alpha and sparc.
 
-We might want to default STRICT_DEVMEM to "y" for all architectures and not
-only arm64, ppc and x86, but this is not strictly related to this series.
- 
-> [...]
-> 
-> > diff --git a/mm/secretmem.c b/mm/secretmem.c
-> > new file mode 100644
-> > index 000000000000..1ae50089adf1
-> > --- /dev/null
-> > +++ b/mm/secretmem.c
-> > @@ -0,0 +1,239 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright IBM Corporation, 2021
-> > + *
-> > + * Author: Mike Rapoport <rppt@linux.ibm.com>
-> > + */
-> > +
-> > +#include <linux/mm.h>
-> > +#include <linux/fs.h>
-> > +#include <linux/swap.h>
-> > +#include <linux/mount.h>
-> > +#include <linux/memfd.h>
-> > +#include <linux/bitops.h>
-> > +#include <linux/printk.h>
-> > +#include <linux/pagemap.h>
-> > +#include <linux/syscalls.h>
-> > +#include <linux/pseudo_fs.h>
-> > +#include <linux/secretmem.h>
-> > +#include <linux/set_memory.h>
-> > +#include <linux/sched/signal.h>
-> > +
-> > +#include <uapi/linux/magic.h>
-> > +
-> > +#include <asm/tlbflush.h>
-> > +
-> > +#include "internal.h"
-> > +
-> > +#undef pr_fmt
-> > +#define pr_fmt(fmt) "secretmem: " fmt
-> > +
-> > +/*
-> > + * Define mode and flag masks to allow validation of the system call
-> > + * parameters.
-> > + */
-> > +#define SECRETMEM_MODE_MASK	(0x0)
-> > +#define SECRETMEM_FLAGS_MASK	SECRETMEM_MODE_MASK
-> > +
-> > +static bool secretmem_enable __ro_after_init;
-> > +module_param_named(enable, secretmem_enable, bool, 0400);
-> > +MODULE_PARM_DESC(secretmem_enable,
-> > +		 "Enable secretmem and memfd_secret(2) system call");
-> > +
-> > +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
-> > +{
-> > +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> > +	struct inode *inode = file_inode(vmf->vma->vm_file);
-> > +	pgoff_t offset = vmf->pgoff;
-> > +	gfp_t gfp = vmf->gfp_mask;
-> > +	unsigned long addr;
-> > +	struct page *page;
-> > +	int err;
-> > +
-> > +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-> > +		return vmf_error(-EINVAL);
-> > +
-> > +retry:
-> > +	page = find_lock_page(mapping, offset);
-> > +	if (!page) {
-> > +		page = alloc_page(gfp | __GFP_ZERO);
-> 
-> We'll end up here with gfp == GFP_HIGHUSER (via the mapping below), correct?
+If there's no functional regression on any platform, could much of this 
+wait until v5.14, or do we want some of these cleanups right now?
 
-Yes
- 
-> > +		if (!page)
-> > +			return VM_FAULT_OOM;
-> > +
-> > +		err = set_direct_map_invalid_noflush(page, 1);
-> > +		if (err) {
-> > +			put_page(page);
-> > +			return vmf_error(err);
-> 
-> Would we want to translate that to a proper VM_FAULT_..., which would most
-> probably be VM_FAULT_OOM when we fail to allocate a pagetable?
+The fixes seem to be for long-existing bugs, not fresh regressions, AFAICS. 
+The asserts & cleanups are useful, but not regression fixes.
 
-That's what vmf_error does, it translates -ESOMETHING to VM_FAULT_XYZ.
+I.e. this is a bit scary:
 
-> > +		}
-> > +
-> > +		__SetPageUptodate(page);
-> > +		err = add_to_page_cache_lru(page, mapping, offset, gfp);
-> > +		if (unlikely(err)) {
-> > +			put_page(page);
-> > +			/*
-> > +			 * If a split of large page was required, it
-> > +			 * already happened when we marked the page invalid
-> > +			 * which guarantees that this call won't fail
-> > +			 */
-> > +			set_direct_map_default_noflush(page, 1);
-> > +			if (err == -EEXIST)
-> > +				goto retry;
-> > +
-> > +			return vmf_error(err);
-> > +		}
-> > +
-> > +		addr = (unsigned long)page_address(page);
-> > +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-> 
-> Hmm, to me it feels like something like that belongs into the
-> set_direct_map_invalid_*() calls? Otherwise it's just very easy to mess up
-> ...
+>  32 files changed, 377 insertions(+), 163 deletions(-)
 
-AFAIU set_direct_map() deliberately do not flush TLB and leave it to the
-caller to allow gathering multiple updates of the direct map and doing a
-single TLB flush afterwards.
+at -rc2 time.
 
-> I'm certainly not a filesystem guy. Nothing else jumped at me.
-> 
-> 
-> To me, the overall approach makes sense and I consider it an improved
-> mlock() mechanism for storing secrets, although I'd love to have some more
-> information in the log regarding access via root, namely that there are
-> still fancy ways to read secretmem memory once root via
-> 
-> 1. warm reboot attacks especially in VMs (e.g., modifying the cmdline)
-> 2. kexec-style reboot attacks (e.g., modifying the cmdline)
-> 3. kdump attacks
-> 4. kdb most probably
-> 5. "letting the process read the memory for us" via Kees if that still
->    applies
-> 6. ... most probably something else
-> 
-> Just to make people aware that there are still some things to be sorted out
-> when we fully want to protect against privilege escalations.
-> 
-> (maybe this information is buried in the cover letter already, where it
-> usually gets lost)
+Thanks,
 
-I believe that it belongs more to the man page than to changelog so that
-the *users* are aware of secretmem limitations.
- 
--- 
-Sincerely yours,
-Mike.
+	Ingo
