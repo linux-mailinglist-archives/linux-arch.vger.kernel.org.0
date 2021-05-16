@@ -2,86 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F9D381AF7
-	for <lists+linux-arch@lfdr.de>; Sat, 15 May 2021 22:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A6A381D34
+	for <lists+linux-arch@lfdr.de>; Sun, 16 May 2021 09:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbhEOUSy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 15 May 2021 16:18:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38882 "EHLO mail.kernel.org"
+        id S233556AbhEPHOx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 16 May 2021 03:14:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60868 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234840AbhEOUSv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 15 May 2021 16:18:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E63696121E;
-        Sat, 15 May 2021 20:17:37 +0000 (UTC)
+        id S229807AbhEPHOw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 16 May 2021 03:14:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BE3C96115C;
+        Sun, 16 May 2021 07:13:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621109857;
-        bh=Z9NQzsSFCaSLn3jMjEHhBdcoFhlXWyGQ4ZxdOXx3NYA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=traaZJipL6kqLOa/FfhL7XkYEVzXJ6VK11z51O0PmjgxeOXOHzJig1nqPACsvqn73
-         /Prt6FS/O4Vf4P/igam5GkrfH1hWpG4bOJPXcf7O0vB7zKbcx4YxuecdlNGJOLFZar
-         JBVC7ml8MRpHpL5e0rWB5Ek2FvUlqXujauJAM0uGpYPVu0R/dz/aFLBC2qUvjMKO1U
-         veZKr21xLUb95Q3LTpDa4IeGaEjsb2HteTWWnrn58wPw59An/b2OL+zFiOs0vQnybx
-         B5OcYcjaAgKEANlvlbfTYNmlvnx9CK3G4RbmmAZWGE0X5f0iCg/DpomxBmfdgZEz4G
-         oMg4r1ctGWdUA==
-Received: by mail-wr1-f43.google.com with SMTP id z17so2415856wrq.7;
-        Sat, 15 May 2021 13:17:37 -0700 (PDT)
-X-Gm-Message-State: AOAM533ZpMGkRxZ0leBOl9xWfEIlJUtLpfPkffT9+RMzGxC/YLp+fYKR
-        2bFHeB7ZCmyqc9Og4jPwxQKLgPvP5BlKt5iNpfU=
-X-Google-Smtp-Source: ABdhPJxm+4q3De3RBJDfQGvWSlPiUE6c2DBBt55wdtCluO9aXAU9V+hkjWv4pM6qjaKQ5DGkyvnlFE5bXR41SbZuXEc=
-X-Received: by 2002:a5d:5404:: with SMTP id g4mr1680204wrv.286.1621109856628;
- Sat, 15 May 2021 13:17:36 -0700 (PDT)
+        s=k20201202; t=1621149218;
+        bh=IoT9uozjOozDjgXpC4P6jXJSumTP/QNdfBTNGYn48Go=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UJGadq3iWVyp6JiaaARzML2nDhD/6cxgoukhLb//Cm1oiKYNlw2vGT6JTI7JDXvj2
+         sv01qcX7qz1P0swA1iAeer1zfo0u8w0FM+2xjAKXq5nty+4U8NND5Zd35VzjSdgPvo
+         tDXqQy0wo5sGVwSrA1ulFuVwtCplNbJ71DrU3dWxVebC/bnfBzEDBPZgIZbVXfd0Sk
+         QuBjs82K5fBUBM1+e1y5/3sAud3EurnH6Q3/XujCr4AuuRXHMRs0y7nWOwkAisAJxZ
+         RIgDFv5dORgRpVXtvZRRsIItfRvWQyJQI2ZhrWK1iaupqJoRD9qzvTr0ixi2Std5XI
+         RjQV7hOfflMCg==
+Date:   Sun, 16 May 2021 10:13:19 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v19 3/8] set_memory: allow set_direct_map_*_noflush() for
+ multiple pages
+Message-ID: <YKDGD0k990bBCEGG@kernel.org>
+References: <20210513184734.29317-1-rppt@kernel.org>
+ <20210513184734.29317-4-rppt@kernel.org>
+ <858e5561-bc7d-4ce1-5cb8-3c333199d52a@redhat.com>
 MIME-Version: 1.0
-References: <20210514100106.3404011-1-arnd@kernel.org> <20210514100106.3404011-13-arnd@kernel.org>
- <9f763da3-25c6-24e7-91e9-f3016a85f9f7@infradead.org>
-In-Reply-To: <9f763da3-25c6-24e7-91e9-f3016a85f9f7@infradead.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 15 May 2021 22:16:32 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0Sp9JV-1pgqH0uf7tXxpL2O-VB+Unse8VaenO5drR15Q@mail.gmail.com>
-Message-ID: <CAK8P3a0Sp9JV-1pgqH0uf7tXxpL2O-VB+Unse8VaenO5drR15Q@mail.gmail.com>
-Subject: Re: [PATCH v2 12/13] asm-generic: uaccess: 1-byte access is always aligned
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <858e5561-bc7d-4ce1-5cb8-3c333199d52a@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, May 15, 2021 at 8:41 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 5/14/21 3:01 AM, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > diff --git a/include/asm-generic/uaccess.h b/include/asm-generic/uaccess.h
-> > index 4973328f3c6e..7e903e450659 100644
-> > --- a/include/asm-generic/uaccess.h
-> > +++ b/include/asm-generic/uaccess.h
-> > @@ -19,7 +19,7 @@ __get_user_fn(size_t size, const void __user *from, void *to)
-> >
-> >       switch (size) {
-> >       case 1:
-> > -             *(u8 *)to = get_unaligned((u8 __force *)from);
-> > +             *(u8 *)to = *((u8 __force *)from);
-> >               return 0;
-> >       case 2:
-> >               *(u16 *)to = get_unaligned((u16 __force *)from);
-> > @@ -45,7 +45,7 @@ __put_user_fn(size_t size, void __user *to, void *from)
-> >
-> >       switch (size) {
-> >       case 1:
-> > -             put_unaligned(*(u8 *)from, (u8 __force *)to);
-> > +             *(*(u8 *)from, (u8 __force *)to);
->
-> Should that be           from =
-> ?
+On Fri, May 14, 2021 at 10:43:29AM +0200, David Hildenbrand wrote:
+> On 13.05.21 20:47, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > The underlying implementations of set_direct_map_invalid_noflush() and
+> > set_direct_map_default_noflush() allow updating multiple contiguous pages
+> > at once.
+> > 
+> > Add numpages parameter to set_direct_map_*_noflush() to expose this
+> > ability with these APIs.
+> 
+> AFAIKs, your patch #5 right now only calls it with 1 page, do we need this
+> change at all? Feels like a leftover from older versions to me where we
+> could have had more than a single page.
 
-Thanks a lot for catching the typo!
+Right, will drop it. 
 
-Changed now to
-
-        *(u8 __force *)to = *(u8 *)from;
-
-For some reason neither my own build testing nor the kernel
-build bot caught it so far.
-
-        Arnd
+-- 
+Sincerely yours,
+Mike.
