@@ -2,43 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8898C3825D3
-	for <lists+linux-arch@lfdr.de>; Mon, 17 May 2021 09:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2DF38274A
+	for <lists+linux-arch@lfdr.de>; Mon, 17 May 2021 10:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235231AbhEQHvP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 May 2021 03:51:15 -0400
-Received: from mail-ua1-f41.google.com ([209.85.222.41]:35487 "EHLO
-        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235230AbhEQHvO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 May 2021 03:51:14 -0400
-Received: by mail-ua1-f41.google.com with SMTP id n61so1816797uan.2;
-        Mon, 17 May 2021 00:49:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wm1leRczzFOwOFaSNT2IC1vyfbeH7BGd9FvIHYCsh/w=;
-        b=CpX4nJZ0xQ+qCL0hsY5+pyieu90VHU3tQCSnspR6kXgmozyl4YvwqZSKFy2F4YjWN7
-         zX1PYHEqH3z75ysGzaRh3NTZSafJyHfBa7oXLJ44yl7oXUOVdkLincPPA8R3uNPiGKi/
-         +ZdAPUOmRjQICeVQn0Xvym5P5TvBeYSHY6LYaEucWCagAhQGOiY77PGG+ceJjjzJvJvU
-         gIMdGawghORqiqs3Z1jEg2wbY24Mdi3gACew6JtM+at5GYb83Hy6HQN96rprf1yvCy8n
-         euQxbf/IAJ/20fp1aBtfr+bWirPU39M/R5vAarQ7VlhX/qZFXrplSkq3mnxRZeTMp8mu
-         DzHA==
-X-Gm-Message-State: AOAM5338yq5Dt/vDQJk2W8g7VoK+Y1DA7sZr+l/Bf5qfdgylr97uOqPC
-        c/Mm7qK6q8HzMX2wKTxg/I216oSCPhkRLTSXxVw=
-X-Google-Smtp-Source: ABdhPJxMkbz10U6Jg7YSgioxoN/77aKbpd9YpL153uII/i6U1HGzQThHJEqUHqKW1WMKKAc41kkz+IhZpWsMRXHngY4=
-X-Received: by 2002:ab0:f5:: with SMTP id 108mr16323124uaj.106.1621237797742;
- Mon, 17 May 2021 00:49:57 -0700 (PDT)
+        id S235363AbhEQIpY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 May 2021 04:45:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60942 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235494AbhEQIpT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 17 May 2021 04:45:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4EFB461184;
+        Mon, 17 May 2021 08:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621241043;
+        bh=pGxJJRkE9qeDtccc/YEcwOP1pJnAulKNh3xYI4CjqcE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VhyR280qktq3Yj7mvUPKACKxoTFcuZgScgzvJHx3l38cArr8+Z1PHUCauN7611dwt
+         NPqfUoJoLvybKsWnw5XBfWBnw8Kv/cK+DKuTDCcu6S3genrIH4gyCUDyMru0esHMq3
+         IQajegZypqB2swBYx+h3oZex0t4OU4xmY+RiLrkmtgPak2eiVPLgJdWphXaIjg2ZQR
+         xazekUTIUzom3w/On/AUGF/4aikSScp4WWIi0uoJhNFKiP0lEpNVnpQ48HG9k3wCGu
+         5YN9cseL+gw6iSznh8e4ihyONNGEmrxfyQM2XPKMRSASOUsEWkgPtNFIfn50Tm8Cvs
+         7//2tKougJRQA==
+Received: by mail-wm1-f51.google.com with SMTP id z19-20020a7bc7d30000b029017521c1fb75so2478967wmk.0;
+        Mon, 17 May 2021 01:44:03 -0700 (PDT)
+X-Gm-Message-State: AOAM532xA7QFH2+P2DODo0KsRt+DGT3pXCyq8ZIi0NgyHPpf7piGEIYX
+        dJrCQe9X2ZzMmeQwNuDMXzA6JKwTdDafiIYGbrI=
+X-Google-Smtp-Source: ABdhPJyn3HuFOFAJWNgd1wcrETQpYkMJHnXvEOT0odsuIYz2sA4AdaozgJ+/NI7bT1baIPTv7IRh4lYoa6g98QiwBCo=
+X-Received: by 2002:a7b:c446:: with SMTP id l6mr6057480wmi.75.1621241041984;
+ Mon, 17 May 2021 01:44:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210514220942.879805-1-arnd@kernel.org> <20210514220942.879805-5-arnd@kernel.org>
-In-Reply-To: <20210514220942.879805-5-arnd@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 17 May 2021 09:49:45 +0200
-Message-ID: <CAMuHMdXPWdNqeeyCuKheOyTT-DSqrhKQyotmY5YBhdbz-VgfwA@mail.gmail.com>
-Subject: Re: [PATCH 4/5] asm-generic: uaccess: remove inline strncpy_from_user/strnlen_user
-To:     Arnd Bergmann <arnd@kernel.org>
+References: <20210514220942.879805-1-arnd@kernel.org> <20210514220942.879805-2-arnd@kernel.org>
+ <CAMuHMdXr6gxbJu+otHV=PhoXvM7aoshs_A-SVpTmYw1iDdiqsg@mail.gmail.com>
+In-Reply-To: <CAMuHMdXr6gxbJu+otHV=PhoXvM7aoshs_A-SVpTmYw1iDdiqsg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 17 May 2021 10:42:54 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a02V8k6aGkqtc0A7PiAwhJDCw6yMW=m4nmTmgVbwy316g@mail.gmail.com>
+Message-ID: <CAK8P3a02V8k6aGkqtc0A7PiAwhJDCw6yMW=m4nmTmgVbwy316g@mail.gmail.com>
+Subject: Re: [PATCH 1/5] asm-generic/uaccess.h: remove __strncpy_from_user/__strnlen_user
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@lst.de>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Vineet Gupta <vgupta@synopsys.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
@@ -65,26 +68,18 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, May 15, 2021 at 12:11 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, May 17, 2021 at 9:42 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> Consolidate the asm-generic implementation with the library version
-> that is used everywhere else.
+> On Sat, May 15, 2021 at 12:10 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > This is a preparation for changing over architectures to the
+> > generic implementation one at a time. As there are no callers
+> > of either __strncpy_from_user() or __strnlen_user(), fold these
+> > into the strncpy_from_user() strnlen_user() functions to make
 >
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ... and ...
 
->  arch/m68k/Kconfig             |  4 +--
+Fixed, thanks!
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+      Arnd
