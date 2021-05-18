@@ -2,487 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFB5387330
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 09:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0951D38734E
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 09:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347168AbhERHXn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 03:23:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53202 "EHLO mail.kernel.org"
+        id S240647AbhERH20 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 03:28:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56646 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347129AbhERHXd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 03:23:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 98C0861261;
-        Tue, 18 May 2021 07:22:03 +0000 (UTC)
+        id S240235AbhERH2X (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 03:28:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EE75161353;
+        Tue, 18 May 2021 07:27:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621322535;
-        bh=/sX/jGQ3JN6/XKQ1NDaJYJw4pzJL70dwO5FMw+G72PY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f+YjTzqP+9dSYI70RU4DThrizsxctxLZRMu/q8ty2IWe8Nc17NbquHWFyKjmU2vc9
-         m8RagSp2RC0Zc5xEwMWxUj3Gzi/5pxqgdYGEikeskllS6D9DJgYG8e5JGb2DYRqHG7
-         d0EmNU6cGWLKjDHS9oy9W3PeK0P3g1z7w9zmCg4QimU6dtqvhHSzUd26wH9ViqHEEM
-         dvPmXVQmKGBO/XhNVqX/8wpcPK9Ksnv3x7AsX4CJ76j849EeYlbh5BNyS+xI9GW6xP
-         Wv2kjJL30YV1Ld6SakA9TbIOpihvIoB09ylE42UkxBumMXtRF7U2iQB8q4R9BvCJdS
-         HYBQHXzveFGLg==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Hagen Paul Pfeifer <hagen@jauu.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: [PATCH v20 7/7] secretmem: test: add basic selftest for memfd_secret(2)
-Date:   Tue, 18 May 2021 10:20:34 +0300
-Message-Id: <20210518072034.31572-8-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210518072034.31572-1-rppt@kernel.org>
-References: <20210518072034.31572-1-rppt@kernel.org>
+        s=k20201202; t=1621322826;
+        bh=tr42CgFCvzDLTaED1GLg2sfLJpu7z95Hx0uB17IraIA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vFuTpSZlyekcp66+1xXP7UZO1BN2bgkvFtUPcj1zJCS149c+Zvi5hPquocBVIojB2
+         Z7exeBYrhumkzjJUSvEpKFGW4FaqBqZSq7xU7M8ZbBXk0ZQ5jVfmLPFTh3D4RbZM9j
+         lrUhs82y4HlTvmFkV/mBBanL9tIfDdHW4GCSJAjCwx8xBjvD/9MzWbWnE1oIuT7iX5
+         gYhCI1yVOzSCg5K38ilmDg450rgYNeNMsjsLC6gOgw0amIXTpygFFnPllY+Yc4M1UR
+         B2od90rmhi/bP2cvywv26nLYI1niEqFU+sMFU1it04NiboiejydzFTKGEQcZqqBYpS
+         U/cWQ9vRIoLtg==
+Received: by mail-wr1-f49.google.com with SMTP id a4so9011174wrr.2;
+        Tue, 18 May 2021 00:27:05 -0700 (PDT)
+X-Gm-Message-State: AOAM533uYGieda+TwW6tF4wz8TdYChzHQDjVJR2354nb6NmMyl4ketaJ
+        8Bg2PHoUUjerVtW3qhap3NailXosaBVZsQYTYjQ=
+X-Google-Smtp-Source: ABdhPJw7JTt4IAZe/TChTanjbi1ijbilhjNGsF3uk1EUqanoDrTYb4AVMmBaFkHaFRFYOWXro9yDE/Lwgvl9R0Actyg=
+X-Received: by 2002:a5d:6dc4:: with SMTP id d4mr5094533wrz.105.1621322824578;
+ Tue, 18 May 2021 00:27:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210514100106.3404011-1-arnd@kernel.org> <20210514100106.3404011-8-arnd@kernel.org>
+ <YKLlyQnR+3uW4ETD@gmail.com>
+In-Reply-To: <YKLlyQnR+3uW4ETD@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 18 May 2021 09:25:54 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0iqe5V6uvaW+Eo0qiwzvyUVavVEfZGwXh4s8ad+0RdCg@mail.gmail.com>
+Message-ID: <CAK8P3a0iqe5V6uvaW+Eo0qiwzvyUVavVEfZGwXh4s8ad+0RdCg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/13] asm-generic: unaligned always use struct helpers
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+On Mon, May 17, 2021 at 11:53 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> On Fri, May 14, 2021 at 12:00:55PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > As found by Vineet Gupta and Linus Torvalds, gcc has somewhat unexpected
+> > behavior when faced with overlapping unaligned pointers. The kernel's
+> > unaligned/access-ok.h header technically invokes undefined behavior
+> > that happens to usually work on the architectures using it, but if the
+> > compiler optimizes code based on the assumption that undefined behavior
+> > doesn't happen, it can create output that actually causes data corruption.
+> >
+> > A related problem was previously found on 32-bit ARMv7, where most
+> > instructions can be used on unaligned data, but 64-bit ldrd/strd causes
+> > an exception. The workaround was to always use the unaligned/le_struct.h
+> > helper instead of unaligned/access-ok.h, in commit 1cce91dfc8f7 ("ARM:
+> > 8715/1: add a private asm/unaligned.h").
+> >
+> > The same solution should work on all other architectures as well, so
+> > remove the access-ok.h variant and use the other one unconditionally on
+> > all architectures, picking either the big-endian or little-endian version.
+>
+> FYI, gcc 10 had a bug where it miscompiled code that uses "packed structs" to
+> copy between overlapping unaligned pointers
+> (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94994).
 
-The test verifies that file descriptor created with memfd_secret does not
-allow read/write operations, that secret memory mappings respect
-RLIMIT_MEMLOCK and that remote accesses with process_vm_read() and
-ptrace() to the secret memory fail.
+Thank you for pointing this out
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Acked-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Christopher Lameter <cl@linux.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Elena Reshetova <elena.reshetova@intel.com>
-Cc: Hagen Paul Pfeifer <hagen@jauu.net>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tycho Andersen <tycho@tycho.ws>
-Cc: Will Deacon <will@kernel.org>
----
- tools/testing/selftests/vm/.gitignore     |   1 +
- tools/testing/selftests/vm/Makefile       |   3 +-
- tools/testing/selftests/vm/memfd_secret.c | 296 ++++++++++++++++++++++
- tools/testing/selftests/vm/run_vmtests.sh |  17 ++
- 4 files changed, 316 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/vm/memfd_secret.c
+> I'm not sure whether the kernel will run into that or not, and gcc has since
+> fixed it.  But it's worth mentioning, especially since the issue mentioned in
+> this commit sounds very similar (overlapping unaligned pointers), and both
+> involved implementations of DEFLATE decompression.
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 1f651e85ed60..da92ded5a27c 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -21,5 +21,6 @@ va_128TBswitch
- map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
-+memfd_secret
- local_config.*
- split_huge_page_test
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 73e1cc96d7c2..266580ea938c 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -34,6 +34,7 @@ TEST_GEN_FILES += khugepaged
- TEST_GEN_FILES += map_fixed_noreplace
- TEST_GEN_FILES += map_hugetlb
- TEST_GEN_FILES += map_populate
-+TEST_GEN_FILES += memfd_secret
- TEST_GEN_FILES += mlock-random-test
- TEST_GEN_FILES += mlock2-tests
- TEST_GEN_FILES += mremap_dontunmap
-@@ -134,7 +135,7 @@ warn_32bit_failure:
- endif
- endif
- 
--$(OUTPUT)/mlock-random-test: LDLIBS += -lcap
-+$(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
- 
- $(OUTPUT)/gup_test: ../../../../mm/gup_test.h
- 
-diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
-new file mode 100644
-index 000000000000..93e7e7ffed33
---- /dev/null
-+++ b/tools/testing/selftests/vm/memfd_secret.c
-@@ -0,0 +1,296 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright IBM Corporation, 2021
-+ *
-+ * Author: Mike Rapoport <rppt@linux.ibm.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <sys/uio.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <sys/types.h>
-+#include <sys/ptrace.h>
-+#include <sys/syscall.h>
-+#include <sys/resource.h>
-+#include <sys/capability.h>
-+
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <stdio.h>
-+
-+#include "../kselftest.h"
-+
-+#define fail(fmt, ...) ksft_test_result_fail(fmt, ##__VA_ARGS__)
-+#define pass(fmt, ...) ksft_test_result_pass(fmt, ##__VA_ARGS__)
-+#define skip(fmt, ...) ksft_test_result_skip(fmt, ##__VA_ARGS__)
-+
-+#ifdef __NR_memfd_secret
-+
-+#define PATTERN	0x55
-+
-+static const int prot = PROT_READ | PROT_WRITE;
-+static const int mode = MAP_SHARED;
-+
-+static unsigned long page_size;
-+static unsigned long mlock_limit_cur;
-+static unsigned long mlock_limit_max;
-+
-+static int memfd_secret(unsigned int flags)
-+{
-+	return syscall(__NR_memfd_secret, flags);
-+}
-+
-+static void test_file_apis(int fd)
-+{
-+	char buf[64];
-+
-+	if ((read(fd, buf, sizeof(buf)) >= 0) ||
-+	    (write(fd, buf, sizeof(buf)) >= 0) ||
-+	    (pread(fd, buf, sizeof(buf), 0) >= 0) ||
-+	    (pwrite(fd, buf, sizeof(buf), 0) >= 0))
-+		fail("unexpected file IO\n");
-+	else
-+		pass("file IO is blocked as expected\n");
-+}
-+
-+static void test_mlock_limit(int fd)
-+{
-+	size_t len;
-+	char *mem;
-+
-+	len = mlock_limit_cur;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("unable to mmap secret memory\n");
-+		return;
-+	}
-+	munmap(mem, len);
-+
-+	len = mlock_limit_max * 2;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem != MAP_FAILED) {
-+		fail("unexpected mlock limit violation\n");
-+		munmap(mem, len);
-+		return;
-+	}
-+
-+	pass("mlock limit is respected\n");
-+}
-+
-+static void try_process_vm_read(int fd, int pipefd[2])
-+{
-+	struct iovec liov, riov;
-+	char buf[64];
-+	char *mem;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		exit(KSFT_FAIL);
-+	}
-+
-+	liov.iov_len = riov.iov_len = sizeof(buf);
-+	liov.iov_base = buf;
-+	riov.iov_base = mem;
-+
-+	if (process_vm_readv(getppid(), &liov, 1, &riov, 1, 0) < 0) {
-+		if (errno == ENOSYS)
-+			exit(KSFT_SKIP);
-+		exit(KSFT_PASS);
-+	}
-+
-+	exit(KSFT_FAIL);
-+}
-+
-+static void try_ptrace(int fd, int pipefd[2])
-+{
-+	pid_t ppid = getppid();
-+	int status;
-+	char *mem;
-+	long ret;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		perror("pipe write");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = ptrace(PTRACE_ATTACH, ppid, 0, 0);
-+	if (ret) {
-+		perror("ptrace_attach");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = waitpid(ppid, &status, WUNTRACED);
-+	if ((ret != ppid) || !(WIFSTOPPED(status))) {
-+		fprintf(stderr, "weird waitppid result %ld stat %x\n",
-+			ret, status);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0))
-+		exit(KSFT_PASS);
-+
-+	exit(KSFT_FAIL);
-+}
-+
-+static void check_child_status(pid_t pid, const char *name)
-+{
-+	int status;
-+
-+	waitpid(pid, &status, 0);
-+
-+	if (WIFEXITED(status) && WEXITSTATUS(status) == KSFT_SKIP) {
-+		skip("%s is not supported\n", name);
-+		return;
-+	}
-+
-+	if ((WIFEXITED(status) && WEXITSTATUS(status) == KSFT_PASS) ||
-+	    WIFSIGNALED(status)) {
-+		pass("%s is blocked as expected\n", name);
-+		return;
-+	}
-+
-+	fail("%s: unexpected memory access\n", name);
-+}
-+
-+static void test_remote_access(int fd, const char *name,
-+			       void (*func)(int fd, int pipefd[2]))
-+{
-+	int pipefd[2];
-+	pid_t pid;
-+	char *mem;
-+
-+	if (pipe(pipefd)) {
-+		fail("pipe failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		fail("fork failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	if (pid == 0) {
-+		func(fd, pipefd);
-+		return;
-+	}
-+
-+	mem = mmap(NULL, page_size, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("Unable to mmap secret memory\n");
-+		return;
-+	}
-+
-+	ftruncate(fd, page_size);
-+	memset(mem, PATTERN, page_size);
-+
-+	if (write(pipefd[1], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	check_child_status(pid, name);
-+}
-+
-+static void test_process_vm_read(int fd)
-+{
-+	test_remote_access(fd, "process_vm_read", try_process_vm_read);
-+}
-+
-+static void test_ptrace(int fd)
-+{
-+	test_remote_access(fd, "ptrace", try_ptrace);
-+}
-+
-+static int set_cap_limits(rlim_t max)
-+{
-+	struct rlimit new;
-+	cap_t cap = cap_init();
-+
-+	new.rlim_cur = max;
-+	new.rlim_max = max;
-+	if (setrlimit(RLIMIT_MEMLOCK, &new)) {
-+		perror("setrlimit() returns error");
-+		return -1;
-+	}
-+
-+	/* drop capabilities including CAP_IPC_LOCK */
-+	if (cap_set_proc(cap)) {
-+		perror("cap_set_proc() returns error");
-+		return -2;
-+	}
-+
-+	return 0;
-+}
-+
-+static void prepare(void)
-+{
-+	struct rlimit rlim;
-+
-+	page_size = sysconf(_SC_PAGE_SIZE);
-+	if (!page_size)
-+		ksft_exit_fail_msg("Failed to get page size %s\n",
-+				   strerror(errno));
-+
-+	if (getrlimit(RLIMIT_MEMLOCK, &rlim))
-+		ksft_exit_fail_msg("Unable to detect mlock limit: %s\n",
-+				   strerror(errno));
-+
-+	mlock_limit_cur = rlim.rlim_cur;
-+	mlock_limit_max = rlim.rlim_max;
-+
-+	printf("page_size: %ld, mlock.soft: %ld, mlock.hard: %ld\n",
-+	       page_size, mlock_limit_cur, mlock_limit_max);
-+
-+	if (page_size > mlock_limit_cur)
-+		mlock_limit_cur = page_size;
-+	if (page_size > mlock_limit_max)
-+		mlock_limit_max = page_size;
-+
-+	if (set_cap_limits(mlock_limit_max))
-+		ksft_exit_fail_msg("Unable to set mlock limit: %s\n",
-+				   strerror(errno));
-+}
-+
-+#define NUM_TESTS 4
-+
-+int main(int argc, char *argv[])
-+{
-+	int fd;
-+
-+	prepare();
-+
-+	ksft_print_header();
-+	ksft_set_plan(NUM_TESTS);
-+
-+	fd = memfd_secret(0);
-+	if (fd < 0) {
-+		if (errno == ENOSYS)
-+			ksft_exit_skip("memfd_secret is not supported\n");
-+		else
-+			ksft_exit_fail_msg("memfd_secret failed: %s\n",
-+					   strerror(errno));
-+	}
-+
-+	test_mlock_limit(fd);
-+	test_file_apis(fd);
-+	test_process_vm_read(fd);
-+	test_ptrace(fd);
-+
-+	close(fd);
-+
-+	ksft_exit(!ksft_get_fail_cnt());
-+}
-+
-+#else /* __NR_memfd_secret */
-+
-+int main(int argc, char *argv[])
-+{
-+	printf("skip: skipping memfd_secret test (missing __NR_memfd_secret)\n");
-+	return KSFT_SKIP;
-+}
-+
-+#endif /* __NR_memfd_secret */
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index e953f3cd9664..95a67382f132 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -346,4 +346,21 @@ else
- 	exitcode=1
- fi
- 
-+echo "running memfd_secret test"
-+echo "------------------------------------"
-+./memfd_secret
-+ret_val=$?
-+
-+if [ $ret_val -eq 0 ]; then
-+	echo "[PASS]"
-+elif [ $ret_val -eq $ksft_skip ]; then
-+	echo "[SKIP]"
-+	exitcode=$ksft_skip
-+else
-+	echo "[FAIL]"
-+	exitcode=1
-+fi
-+
-+exit $exitcode
-+
- exit $exitcode
--- 
-2.28.0
+I tried reproducing this on the kernel deflate code with the kernel.org gcc-10.1
+and gcc-10.3 crosstool versions but couldn't quite get there with Vineet's
+preprocessed source https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363
 
+Trying with both the original get_unaligned() version in there and the
+packed-struct
+variant, I get the same output from gcc-10.1 and gcc-10.3 when I compile those
+myself for arc hs4x , but it's rather different from the output that Vineet got
+and I don't know how to spot whether the problem exists in any of those
+versions.
+
+> Anyway, partly due to the above, in userspace I now only use memcpy() to
+> implement {get,put}_unaligned_*, since these days it seems to be compiled
+> optimally and have the least amount of problems.
+>
+> I wonder if the kernel should do the same, or whether there are still cases
+> where memcpy() isn't compiled optimally.  armv6/7 used to be one such case, but
+> it was fixed in gcc 6.
+
+It would have to be memmove(), not memcpy() in this case, right?
+My feeling is that if gcc-4.9 and gcc-5 produce correct but slightly slower
+code, we can live with that, unlike the possibility of gcc-10.{1,2} producing
+incorrect code.
+
+Since the new asm/unaligned.h has a single implementation across all
+architectures, we could probably fall back to a memmove based version for
+the compilers affected by the 94994 bug,  but I'd first need to have a better
+way to test regarding whether given combination of asm/unaligned.h and
+compiler version runs into this bug.
+
+I have checked your reproducer and confirmed that it does affect x86_64
+gcc-10.1 -O3 with my proposed version of asm-generic/unaligned.h, but
+does not trigger on any other version (4.9 though 9.3, 10.3 or 11.1), and not
+on -O2 or "-O3 -mno-sse" builds or on arm64, but that doesn't necessarily
+mean it's safe on these.
+
+        Arnd
