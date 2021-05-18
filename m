@@ -2,24 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E39C387662
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 12:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43558387674
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 12:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241645AbhERKZz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 06:25:55 -0400
-Received: from foss.arm.com ([217.140.110.172]:48128 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239674AbhERKZy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 06:25:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F83E1FB;
-        Tue, 18 May 2021 03:24:36 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.6.226])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A1EB3F719;
-        Tue, 18 May 2021 03:24:27 -0700 (PDT)
-Date:   Tue, 18 May 2021 11:24:24 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Mike Rapoport <rppt@kernel.org>
+        id S1348497AbhERK2h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 06:28:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46546 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348487AbhERK2g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 06:28:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1621333638;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Th9b0uelp+zuS5Dolk9edCcQodErGvwWmi6QbbSzCQ8=;
+        b=hu4cwNlgqIF9y6apOx12S2Ln9ed/WSIc5qETK3CNvMU7q+r+gTr9soTYGttRGNOEuNjaSM
+        pif+hPFuDmB8R2mJotHO4CzpzJhMpNxX4EHGbSKhfFIAr+uY9x3aA88hXNFEMEcnWGVn3z
+        Gw01N0VUayxiTcznVWu9omKv/9drT/I=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-93-UGPLxcZTNsuHflsTOcDe8A-1; Tue, 18 May 2021 06:27:16 -0400
+X-MC-Unique: UGPLxcZTNsuHflsTOcDe8A-1
+Received: by mail-wr1-f72.google.com with SMTP id i102-20020adf90ef0000b029010dfcfc46c0so5398343wri.1
+        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 03:27:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Th9b0uelp+zuS5Dolk9edCcQodErGvwWmi6QbbSzCQ8=;
+        b=heC67DQ8FRS6nlQX4jpKcVk+5SIIdXZStSMEagId2KLB8Z+lJF0gzeTjv7o3kUwEKo
+         KLjZXcXGbQ08vjafIbgbDWrlpYOHMSNxAqrP6IE994hTU8KJcaCDmAPXZet5UwOC1b/L
+         LSdCMCkWzSpMB8N4BnyPQRmvOIoi38lLU/ODYJlQlLBwXnYk4nJAgSbGnOWBwExgj0PE
+         L0D4zU2I7FjlasyPqoTMHOCFTftsfvIZVwioQTOmfrMJOcn/XHCR4PwL3/yzwMgoOiYv
+         uOWeqHNLyTaMUGLhwnkXXTiqQcs4fXs/xbIep+47x9LBvu4VpoSg18c5OncVluv2N4tk
+         cX4w==
+X-Gm-Message-State: AOAM532GfjhDqRJud7o6c9x0Ccff6PFI4E7nh/M2p6RR6fsaUN7lDWbT
+        eANLtSIXXW8VhTIi8InGICkRv1xGX43MP9GA+ITAPGHkZ7269dEpI0IcsARAbu81B5/gyMMwWRO
+        XhLs1XKRdDTD5EFOk1xKt2A==
+X-Received: by 2002:a05:600c:35cc:: with SMTP id r12mr4525776wmq.157.1621333635632;
+        Tue, 18 May 2021 03:27:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzL+bP4BGJ/+tDiLE4ZHcq1wv671RbTKwVIAcgFztdQnfjanbuq/Gm2r3B/QzaKSEduy6Y9Cg==
+X-Received: by 2002:a05:600c:35cc:: with SMTP id r12mr4525739wmq.157.1621333635433;
+        Tue, 18 May 2021 03:27:15 -0700 (PDT)
+Received: from [192.168.3.132] (p5b0c64fd.dip0.t-ipconnect.de. [91.12.100.253])
+        by smtp.gmail.com with ESMTPSA id z3sm1173826wrq.42.2021.05.18.03.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 May 2021 03:27:15 -0700 (PDT)
+Subject: Re: [PATCH v19 6/8] PM: hibernate: disable when there are active
+ secretmem users
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
@@ -28,7 +64,6 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Hagen Paul Pfeifer <hagen@jauu.net>,
@@ -58,169 +93,47 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org
-Subject: Re: [PATCH v19 6/8] PM: hibernate: disable when there are active
- secretmem users
-Message-ID: <20210518102424.GD82842@C02TD0UTHF1T.local>
 References: <20210513184734.29317-1-rppt@kernel.org>
  <20210513184734.29317-7-rppt@kernel.org>
+ <20210518102424.GD82842@C02TD0UTHF1T.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Message-ID: <47d0e5b1-ffee-d694-4865-8718619c1be0@redhat.com>
+Date:   Tue, 18 May 2021 12:27:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210513184734.29317-7-rppt@kernel.org>
+In-Reply-To: <20210518102424.GD82842@C02TD0UTHF1T.local>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 13, 2021 at 09:47:32PM +0300, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On 18.05.21 12:24, Mark Rutland wrote:
+> On Thu, May 13, 2021 at 09:47:32PM +0300, Mike Rapoport wrote:
+>> From: Mike Rapoport <rppt@linux.ibm.com>
+>>
+>> It is unsafe to allow saving of secretmem areas to the hibernation
+>> snapshot as they would be visible after the resume and this essentially
+>> will defeat the purpose of secret memory mappings.
+>>
+>> Prevent hibernation whenever there are active secret memory users.
 > 
-> It is unsafe to allow saving of secretmem areas to the hibernation
-> snapshot as they would be visible after the resume and this essentially
-> will defeat the purpose of secret memory mappings.
+> Have we thought about how this is going to work in practice, e.g. on
+> mobile systems? It seems to me that there are a variety of common
+> applications which might want to use this which people don't expect to
+> inhibit hibernate (e.g. authentication agents, web browsers).
 > 
-> Prevent hibernation whenever there are active secret memory users.
+> Are we happy to say that any userspace application can incidentally
+> inhibit hibernate?
 
-Have we thought about how this is going to work in practice, e.g. on
-mobile systems? It seems to me that there are a variety of common
-applications which might want to use this which people don't expect to
-inhibit hibernate (e.g. authentication agents, web browsers).
+It's worth noting that secretmem has to be explicitly enabled by the 
+admin to even work.
 
-Are we happy to say that any userspace application can incidentally
-inhibit hibernate?
-
+-- 
 Thanks,
-Mark.
 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Christopher Lameter <cl@linux.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Elena Reshetova <elena.reshetova@intel.com>
-> Cc: Hagen Paul Pfeifer <hagen@jauu.net>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: James Bottomley <jejb@linux.ibm.com>
-> Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: Roman Gushchin <guro@fb.com>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Tycho Andersen <tycho@tycho.ws>
-> Cc: Will Deacon <will@kernel.org>
-> ---
->  include/linux/secretmem.h |  6 ++++++
->  kernel/power/hibernate.c  |  5 ++++-
->  mm/secretmem.c            | 15 +++++++++++++++
->  3 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/secretmem.h b/include/linux/secretmem.h
-> index e617b4afcc62..21c3771e6a56 100644
-> --- a/include/linux/secretmem.h
-> +++ b/include/linux/secretmem.h
-> @@ -30,6 +30,7 @@ static inline bool page_is_secretmem(struct page *page)
->  }
->  
->  bool vma_is_secretmem(struct vm_area_struct *vma);
-> +bool secretmem_active(void);
->  
->  #else
->  
-> @@ -43,6 +44,11 @@ static inline bool page_is_secretmem(struct page *page)
->  	return false;
->  }
->  
-> +static inline bool secretmem_active(void)
-> +{
-> +	return false;
-> +}
-> +
->  #endif /* CONFIG_SECRETMEM */
->  
->  #endif /* _LINUX_SECRETMEM_H */
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index da0b41914177..559acef3fddb 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -31,6 +31,7 @@
->  #include <linux/genhd.h>
->  #include <linux/ktime.h>
->  #include <linux/security.h>
-> +#include <linux/secretmem.h>
->  #include <trace/events/power.h>
->  
->  #include "power.h"
-> @@ -81,7 +82,9 @@ void hibernate_release(void)
->  
->  bool hibernation_available(void)
->  {
-> -	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
-> +	return nohibernate == 0 &&
-> +		!security_locked_down(LOCKDOWN_HIBERNATION) &&
-> +		!secretmem_active();
->  }
->  
->  /**
-> diff --git a/mm/secretmem.c b/mm/secretmem.c
-> index 1ae50089adf1..7c2499e4de22 100644
-> --- a/mm/secretmem.c
-> +++ b/mm/secretmem.c
-> @@ -40,6 +40,13 @@ module_param_named(enable, secretmem_enable, bool, 0400);
->  MODULE_PARM_DESC(secretmem_enable,
->  		 "Enable secretmem and memfd_secret(2) system call");
->  
-> +static atomic_t secretmem_users;
-> +
-> +bool secretmem_active(void)
-> +{
-> +	return !!atomic_read(&secretmem_users);
-> +}
-> +
->  static vm_fault_t secretmem_fault(struct vm_fault *vmf)
->  {
->  	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> @@ -94,6 +101,12 @@ static const struct vm_operations_struct secretmem_vm_ops = {
->  	.fault = secretmem_fault,
->  };
->  
-> +static int secretmem_release(struct inode *inode, struct file *file)
-> +{
-> +	atomic_dec(&secretmem_users);
-> +	return 0;
-> +}
-> +
->  static int secretmem_mmap(struct file *file, struct vm_area_struct *vma)
->  {
->  	unsigned long len = vma->vm_end - vma->vm_start;
-> @@ -116,6 +129,7 @@ bool vma_is_secretmem(struct vm_area_struct *vma)
->  }
->  
->  static const struct file_operations secretmem_fops = {
-> +	.release	= secretmem_release,
->  	.mmap		= secretmem_mmap,
->  };
->  
-> @@ -202,6 +216,7 @@ SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
->  	file->f_flags |= O_LARGEFILE;
->  
->  	fd_install(fd, file);
-> +	atomic_inc(&secretmem_users);
->  	return fd;
->  
->  err_put_fd:
-> -- 
-> 2.28.0
-> 
+David / dhildenb
+
