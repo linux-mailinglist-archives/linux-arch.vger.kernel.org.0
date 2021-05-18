@@ -2,106 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D897387701
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 13:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FB5387721
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 13:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348692AbhERLBQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 07:01:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42350 "EHLO mail.kernel.org"
+        id S1348315AbhERLJw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 07:09:52 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55746 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348192AbhERLBP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 07:01:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 345F661285;
-        Tue, 18 May 2021 10:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621335598;
-        bh=GAu4rojTdKt4OvWm/lfPAfaF+P0Bv2/Zuy8m9Dpr8Hc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nTvC5ILgSDMPBB8Q9/Fxmdl3wZl2k2z0lugQX1WTE6EO+qimQX0L2JoXL0BQ++6XT
-         Rv2RQVPF0QOZxJsiIzJmcoIBI8/qdm6AxvyJExYfMwqoawA2Iqg74sZDL0ytyt5vDD
-         HZa3gQhf2m+scTQtuvvpcDLjfUEdalI2Gov/1/rMQNQLu+aYInC5QOy7tb6qqyke6e
-         R/A1hui4xM2JA4lki0nnUaiUaLWVQ8Q7xnGGSwdvkwIy3GW7xjbTUntn4dR3uOOg5j
-         n63+dCR7pS6yDz6/NAXlT5KcX5jS93daKIuB34/x0mVvwiSKeixbtMpGuPxYm9CE6a
-         q7IrFG7a2UZuA==
-Date:   Tue, 18 May 2021 11:59:51 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        id S1348295AbhERLJs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 07:09:48 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1621336109; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4YrC8sXmTYcRXRqQEW1PHcV/1KnSvWM0S1bOpAI2CJA=;
+        b=IeXTGF9s14zk1xMYwqe63UzwmexLD0t5w2/lmVlgBw7GL+9Q9WNp2iapvjbdnvXH0892B0
+        1vztSfmB1vN+rsIDTC2mrkkDvcaU/PrlXK+za1yXSEDxf3T+eBJpwkZkg54uwDGDEWVXGh
+        cLuYNls00SwLIDJ2DsL6MtGb3g25t6M=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id B0DBDB00E;
+        Tue, 18 May 2021 11:08:28 +0000 (UTC)
+Date:   Tue, 18 May 2021 13:08:27 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
         Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: Re: [PATCH v6 13/21] sched: Admit forcefully-affined tasks into
- SCHED_DEADLINE
-Message-ID: <20210518105951.GC7770@willie-the-truck>
-References: <20210518094725.7701-1-will@kernel.org>
- <20210518094725.7701-14-will@kernel.org>
- <YKOU9onXUxVLPGaB@google.com>
- <20210518102833.GA7770@willie-the-truck>
- <YKObZ1GcfVIVWRWt@google.com>
+        James Bottomley <jejb@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v19 5/8] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <YKOgK9eQSfgoz6eE@dhcp22.suse.cz>
+References: <20210513184734.29317-1-rppt@kernel.org>
+ <20210513184734.29317-6-rppt@kernel.org>
+ <b625c5d7-bfcc-9e95-1f79-fc8b61498049@redhat.com>
+ <YKDJ1L7XpJRQgSch@kernel.org>
+ <YKOP5x8PPbqzcsdK@dhcp22.suse.cz>
+ <8e114f09-60e4-2343-1c42-1beaf540c150@redhat.com>
+ <YKOXbNWvUsqM4uxb@dhcp22.suse.cz>
+ <00644dd8-edac-d3fd-a080-0a175fa9bf13@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YKObZ1GcfVIVWRWt@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <00644dd8-edac-d3fd-a080-0a175fa9bf13@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 18, 2021 at 10:48:07AM +0000, Quentin Perret wrote:
-> On Tuesday 18 May 2021 at 11:28:34 (+0100), Will Deacon wrote:
-> > I don't have strong opinions on this, but I _do_ want the admission via
-> > sched_setattr() to be consistent with execve(). What you're suggesting
-> > ticks that box, but how many applications are prepared to handle a failed
-> > execve()? I suspect it will be fatal.
+On Tue 18-05-21 12:35:36, David Hildenbrand wrote:
+> On 18.05.21 12:31, Michal Hocko wrote:
+> > On Tue 18-05-21 12:06:42, David Hildenbrand wrote:
+> > > On 18.05.21 11:59, Michal Hocko wrote:
+> > > > On Sun 16-05-21 10:29:24, Mike Rapoport wrote:
+> > > > > On Fri, May 14, 2021 at 11:25:43AM +0200, David Hildenbrand wrote:
+> > > > [...]
+> > > > > > > +		if (!page)
+> > > > > > > +			return VM_FAULT_OOM;
+> > > > > > > +
+> > > > > > > +		err = set_direct_map_invalid_noflush(page, 1);
+> > > > > > > +		if (err) {
+> > > > > > > +			put_page(page);
+> > > > > > > +			return vmf_error(err);
+> > > > > > 
+> > > > > > Would we want to translate that to a proper VM_FAULT_..., which would most
+> > > > > > probably be VM_FAULT_OOM when we fail to allocate a pagetable?
+> > > > > 
+> > > > > That's what vmf_error does, it translates -ESOMETHING to VM_FAULT_XYZ.
+> > > > 
+> > > > I haven't read through the rest but this has just caught my attention.
+> > > > Is it really reasonable to trigger the oom killer when you cannot
+> > > > invalidate the direct mapping. From a quick look at the code it is quite
+> > > > unlikely to se ENOMEM from that path (it allocates small pages) but this
+> > > > can become quite sublte over time. Shouldn't this simply SIGBUS if it
+> > > > cannot manipulate the direct mapping regardless of the underlying reason
+> > > > for that?
+> > > > 
+> > > 
+> > > OTOH, it means our kernel zones are depleted, so we'd better reclaim somehow
+> > > ...
+> > 
+> > Killing a userspace seems to be just a bad way around that.
+> > 
+> > Although I have to say openly that I am not a great fan of VM_FAULT_OOM
+> > in general. It is usually a a wrong way to tell the handle the failure
+> > because it happens outside of the allocation context so you lose all the
+> > details (e.g. allocation constrains, numa policy etc.). Also whenever
+> > there is ENOMEM then the allocation itself has already made sure that
+> > all the reclaim attempts have been already depleted. Just consider an
+> > allocation with GFP_NOWAIT/NO_RETRY or similar to fail and propagate
+> > ENOMEM up the call stack. Turning that into the OOM killer sounds like a
+> > bad idea to me.  But that is a more general topic. I have tried to bring
+> > this up in the past but there was not much of an interest to fix it as
+> > it was not a pressing problem...
+> > 
 > 
-> Yep, probably.
-> 
-> > Probably also worth pointing out that the approach here will at least
-> > warn in the execve() case when the affinity is overridden for a deadline
-> > task.
-> 
-> Right so I think either way will be imperfect, so I agree with the
-> above.
-> 
-> Maybe one thing though is that, IIRC, userspace _can_ disable admission
-> control if it wants to. In this case I'd have no problem with allowing
-> this weird behaviour when admission control is off -- the kernel won't
-> provide any guarantees. But if it's left on, then it's a different
-> story.
-> 
-> So what about we say, if admission control is off, we allow execve() and
-> sched_setattr() with appropriate warnings as you suggest, but if
-> admission control is on then we fail both?
+> I'm certainly interested; it would mean that we actually want to try
+> recovering from VM_FAULT_OOM in various cases, and as you state, we might
+> have to supply more information to make that work reliably.
 
-That's an interesting idea. The part that I'm not super keen about is
-that it means admission control _also_ has an effect on the behaviour of
-execve(), so practically you'd have to have it disabled as long as you
-have the possibility of 32-bit deadline tasks anywhere in the system,
-which impacts 64-bit tasks which may well want admission control enabled.
+Or maybe we want to get rid of VM_FAULT_OOM altogether... But this is
+really tangent to this discussion. The only relation is that this would
+be another place to check when somebody wants to go that direction.
 
-So perhaps my initial position of trying to keep sched_setattr() and
-execve() consistent with each other is flawed and actually we can say:
+> Having that said, I guess what we have here is just the same as when our
+> process fails to allocate a generic page table in __handle_mm_fault(), when
+> we fail p4d_alloc() and friends ...
 
-  * Disable admission control if you want to admit a 32-bit task explicitly
-    via sched_setattr()
-
-  * If a 64-bit deadline task execve()s a 32-bit program then we warn
-    and override the affinity (i.e. you should avoid doing this if you
-    care about the deadlines).
-
-That amounts to dropping this patch and tweaking the documentation.
-
-Dunno, what do you think?
-
-Will
+From a quick look it is really similar in a sense that it effectively never
+happens and if it does then it certainly does the wrong thing. The point
+I was trying to make is that there is likely no need to go that way.
+Fundamentally, not being able to handle direct map for the page fault
+sounds like what SIGBUS should be used for. From my POV it is similar to
+ENOSPC when FS cannot allocate metadata on the storage.
+-- 
+Michal Hocko
+SUSE Labs
