@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA965387596
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 11:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167D0387599
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 11:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348112AbhERJuN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 05:50:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50190 "EHLO mail.kernel.org"
+        id S1348057AbhERJu3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 05:50:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50270 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348139AbhERJtb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 05:49:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 57CF1613E6;
-        Tue, 18 May 2021 09:48:10 +0000 (UTC)
+        id S1348056AbhERJte (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 05:49:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE8E2613DB;
+        Tue, 18 May 2021 09:48:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621331293;
-        bh=3IIlWuzmNSSaLHDQQBcc0aUminZ817yeuijTww75wDE=;
+        s=k20201202; t=1621331297;
+        bh=P87T2EfUL7peRiOL9j9h5VxX48Zfl+w2CWwNb/BHI/k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jhIWlDKt5jYI09Emq1vje2nk2fkytA9qWdsOJveSi29sEf7xh5MH/O61vAAaZgLLY
-         xmGF2hJM9JuETDkUpDVM48Wr6uyNi9rn3KkRge+l+ujaYNLqFgmf5v/kdeOqsTWOSG
-         Udz/fowf5cFwGnCz5UctZQlz6M7BP9HQXjtE0cYhHBlwod8x4N0FKdcOpoqyIQuV1n
-         tEaum75VtMAiznWVNebBUwCpQ2L+XyHbaDI3PtoXPdvb6KXQqgR12EToCZPUfP0sBp
-         oluPnLaOrjqgKubHYAZaHuSXgvB39WbZ5xmGOzQDhEcahqfibLF2K8yfppeAuFev3T
-         VsYJN5MqEu/Yw==
+        b=fEetJlCzqOez2e7J4B7XUnVnt3Uw1kt/v1RkvMkHpV/oc7I5qwF1IVj6EnkT8iqqu
+         ezAtVrzs18o6PT/4U5I84PqtvXE6xaKZ7aEuHQMXidCvT6jjTsKVAvWxqZ1PdcAC/A
+         UpZOBjToLwld7ULDIUXBJJyIP7S+IsVEB5NjUB3vpaiLa+LvdrYTftk5SnnYYmOSWb
+         aKCvIGouAjn/2Y9kl02SmS/558f/bw3p1qgkUGNUS7+S9M+KFJTLwYwFXQyQj4a/cw
+         DFUQABCuIHoe8TI51N+iNHceWzLnEpr4w/Q5eUA9sMI+tri175AxAZAMCkrIUjVc0i
+         SR0zvVxQpNJ0A==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: [PATCH v6 10/21] sched: Introduce task_struct::user_cpus_ptr to track requested affinity
-Date:   Tue, 18 May 2021 10:47:14 +0100
-Message-Id: <20210518094725.7701-11-will@kernel.org>
+Subject: [PATCH v6 11/21] sched: Split the guts of sched_setaffinity() into a helper function
+Date:   Tue, 18 May 2021 10:47:15 +0100
+Message-Id: <20210518094725.7701-12-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210518094725.7701-1-will@kernel.org>
 References: <20210518094725.7701-1-will@kernel.org>
@@ -53,121 +53,157 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In preparation for saving and restoring the user-requested CPU affinity
-mask of a task, add a new cpumask_t pointer to 'struct task_struct'.
-
-If the pointer is non-NULL, then the mask is copied across fork() and
-freed on task exit.
+In preparation for replaying user affinity requests using a saved mask,
+split sched_setaffinity() up so that the initial task lookup and
+security checks are only performed when the request is coming directly
+from userspace.
 
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- include/linux/sched.h | 13 +++++++++++++
- init/init_task.c      |  1 +
- kernel/fork.c         |  2 ++
- kernel/sched/core.c   | 20 ++++++++++++++++++++
- 4 files changed, 36 insertions(+)
+ kernel/sched/core.c | 110 +++++++++++++++++++++++---------------------
+ 1 file changed, 58 insertions(+), 52 deletions(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index d2c881384517..db32d4f7e5b3 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -730,6 +730,7 @@ struct task_struct {
- 	unsigned int			policy;
- 	int				nr_cpus_allowed;
- 	const cpumask_t			*cpus_ptr;
-+	cpumask_t			*user_cpus_ptr;
- 	cpumask_t			cpus_mask;
- 	void				*migration_pending;
- #ifdef CONFIG_SMP
-@@ -1688,6 +1689,8 @@ extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_cpus_
- #ifdef CONFIG_SMP
- extern void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask);
- extern int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask);
-+extern int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src, int node);
-+extern void release_user_cpus_ptr(struct task_struct *p);
- #else
- static inline void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
- {
-@@ -1698,6 +1701,16 @@ static inline int set_cpus_allowed_ptr(struct task_struct *p, const struct cpuma
- 		return -EINVAL;
- 	return 0;
- }
-+static inline int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src, int node)
-+{
-+	if (src->user_cpus_ptr)
-+		return -EINVAL;
-+	return 0;
-+}
-+static inline void release_user_cpus_ptr(struct task_struct *p)
-+{
-+	WARN_ON(p->user_cpus_ptr);
-+}
- #endif
- 
- extern int yield_to(struct task_struct *p, bool preempt);
-diff --git a/init/init_task.c b/init/init_task.c
-index 8b08c2e19cbb..158c2b1689e1 100644
---- a/init/init_task.c
-+++ b/init/init_task.c
-@@ -80,6 +80,7 @@ struct task_struct init_task
- 	.normal_prio	= MAX_PRIO - 20,
- 	.policy		= SCHED_NORMAL,
- 	.cpus_ptr	= &init_task.cpus_mask,
-+	.user_cpus_ptr	= NULL,
- 	.cpus_mask	= CPU_MASK_ALL,
- 	.nr_cpus_allowed= NR_CPUS,
- 	.mm		= NULL,
-diff --git a/kernel/fork.c b/kernel/fork.c
-index dc06afd725cb..d3710e7f1686 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -446,6 +446,7 @@ void put_task_stack(struct task_struct *tsk)
- 
- void free_task(struct task_struct *tsk)
- {
-+	release_user_cpus_ptr(tsk);
- 	scs_release(tsk);
- 
- #ifndef CONFIG_THREAD_INFO_IN_TASK
-@@ -918,6 +919,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- #endif
- 	if (orig->cpus_ptr == &orig->cpus_mask)
- 		tsk->cpus_ptr = &tsk->cpus_mask;
-+	dup_user_cpus_ptr(tsk, orig, node);
- 
- 	/*
- 	 * One for the user space visible state that goes away when reaped.
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 21da3d7f9e47..9512623d5a60 100644
+index 9512623d5a60..808bbe669a6d 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -2129,6 +2129,26 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
- 	__do_set_cpus_allowed(p, new_mask, 0);
+@@ -6788,9 +6788,61 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, struct sched_attr __user *, uattr,
+ 	return retval;
  }
  
-+int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
-+		      int node)
-+{
-+	if (!src->user_cpus_ptr)
-+		return 0;
+-long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
++static int
++__sched_setaffinity(struct task_struct *p, const struct cpumask *mask)
+ {
++	int retval;
+ 	cpumask_var_t cpus_allowed, new_mask;
 +
-+	dst->user_cpus_ptr = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
-+	if (!dst->user_cpus_ptr)
++	if (!alloc_cpumask_var(&cpus_allowed, GFP_KERNEL))
 +		return -ENOMEM;
 +
-+	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
-+	return 0;
++	if (!alloc_cpumask_var(&new_mask, GFP_KERNEL))
++		return -ENOMEM;
++
++	cpuset_cpus_allowed(p, cpus_allowed);
++	cpumask_and(new_mask, mask, cpus_allowed);
++
++	/*
++	 * Since bandwidth control happens on root_domain basis,
++	 * if admission test is enabled, we only admit -deadline
++	 * tasks allowed to run on all the CPUs in the task's
++	 * root_domain.
++	 */
++#ifdef CONFIG_SMP
++	if (task_has_dl_policy(p) && dl_bandwidth_enabled()) {
++		rcu_read_lock();
++		if (!cpumask_subset(task_rq(p)->rd->span, new_mask)) {
++			retval = -EBUSY;
++			rcu_read_unlock();
++			goto out_free_masks;
++		}
++		rcu_read_unlock();
++	}
++#endif
++again:
++	retval = __set_cpus_allowed_ptr(p, new_mask, SCA_CHECK);
++	if (retval)
++		goto out_free_masks;
++
++	cpuset_cpus_allowed(p, cpus_allowed);
++	if (!cpumask_subset(new_mask, cpus_allowed)) {
++		/*
++		 * We must have raced with a concurrent cpuset update.
++		 * Just reset the cpumask to the cpuset's cpus_allowed.
++		 */
++		cpumask_copy(new_mask, cpus_allowed);
++		goto again;
++	}
++
++out_free_masks:
++	free_cpumask_var(new_mask);
++	free_cpumask_var(cpus_allowed);
++	return retval;
 +}
 +
-+void release_user_cpus_ptr(struct task_struct *p)
++long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
 +{
-+	kfree(p->user_cpus_ptr);
-+	p->user_cpus_ptr = NULL;
-+}
+ 	struct task_struct *p;
+ 	int retval;
+ 
+@@ -6810,68 +6862,22 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
+ 		retval = -EINVAL;
+ 		goto out_put_task;
+ 	}
+-	if (!alloc_cpumask_var(&cpus_allowed, GFP_KERNEL)) {
+-		retval = -ENOMEM;
+-		goto out_put_task;
+-	}
+-	if (!alloc_cpumask_var(&new_mask, GFP_KERNEL)) {
+-		retval = -ENOMEM;
+-		goto out_free_cpus_allowed;
+-	}
+-	retval = -EPERM;
 +
- /*
-  * This function is wildly self concurrent; here be dragons.
-  *
+ 	if (!check_same_owner(p)) {
+ 		rcu_read_lock();
+ 		if (!ns_capable(__task_cred(p)->user_ns, CAP_SYS_NICE)) {
+ 			rcu_read_unlock();
+-			goto out_free_new_mask;
++			retval = -EPERM;
++			goto out_put_task;
+ 		}
+ 		rcu_read_unlock();
+ 	}
+ 
+ 	retval = security_task_setscheduler(p);
+ 	if (retval)
+-		goto out_free_new_mask;
+-
+-
+-	cpuset_cpus_allowed(p, cpus_allowed);
+-	cpumask_and(new_mask, in_mask, cpus_allowed);
+-
+-	/*
+-	 * Since bandwidth control happens on root_domain basis,
+-	 * if admission test is enabled, we only admit -deadline
+-	 * tasks allowed to run on all the CPUs in the task's
+-	 * root_domain.
+-	 */
+-#ifdef CONFIG_SMP
+-	if (task_has_dl_policy(p) && dl_bandwidth_enabled()) {
+-		rcu_read_lock();
+-		if (!cpumask_subset(task_rq(p)->rd->span, new_mask)) {
+-			retval = -EBUSY;
+-			rcu_read_unlock();
+-			goto out_free_new_mask;
+-		}
+-		rcu_read_unlock();
+-	}
+-#endif
+-again:
+-	retval = __set_cpus_allowed_ptr(p, new_mask, SCA_CHECK);
++		goto out_put_task;
+ 
+-	if (!retval) {
+-		cpuset_cpus_allowed(p, cpus_allowed);
+-		if (!cpumask_subset(new_mask, cpus_allowed)) {
+-			/*
+-			 * We must have raced with a concurrent cpuset
+-			 * update. Just reset the cpus_allowed to the
+-			 * cpuset's cpus_allowed
+-			 */
+-			cpumask_copy(new_mask, cpus_allowed);
+-			goto again;
+-		}
+-	}
+-out_free_new_mask:
+-	free_cpumask_var(new_mask);
+-out_free_cpus_allowed:
+-	free_cpumask_var(cpus_allowed);
++	retval = __sched_setaffinity(p, in_mask);
+ out_put_task:
+ 	put_task_struct(p);
+ 	return retval;
 -- 
 2.31.1.751.gd2f1c929bd-goog
 
