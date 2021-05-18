@@ -2,107 +2,225 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B08387654
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 12:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E39C387662
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 12:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242635AbhERKWJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 06:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240638AbhERKWF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 May 2021 06:22:05 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BDCC061756
-        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 03:20:46 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id c14so7789790wrx.3
-        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 03:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=70ytm4W0WP5qG41Y6kcb7UDXaJDfERJqeAyjJPyIpfw=;
-        b=Uv+GAHDgcZbUm2zGwTW9XJE77SnSSgIbjr+0yXlS/BSOwyDCahG2BrBG+B9fx6xgUR
-         2d251BjxqiRP4QngXmg+RT9+RE4bpEIUWUHajM6o5N++rP60IeKJlN16BAjIbHOKFfqY
-         yYZ29frKkzKR/9/FqWAlqWUrvck9BOXa7/H3Myboh3FX01spR2lEAqXTVTGvZPueICFS
-         8Y4V6d3EpeYXGaalsYUrZy28VFc3WlTbjvO0BtzGsS52CYmtGulBczIP4qzktdRHssoI
-         JLbGdka9F+jonY6DG3pkKZ/V9CGDrECIYPd0xg06JlH+TpoLBTE2oYkuS5rR02qyztEe
-         ldzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=70ytm4W0WP5qG41Y6kcb7UDXaJDfERJqeAyjJPyIpfw=;
-        b=j1OGpnYQic4Ds28r/pqHvgxlX6jbC/+zIFfj6bRbSTg8foPRRmMRrGGw/rWNZP6PI+
-         xE0Pw3t5pGFeSpj62yjoAFHfB0GRiOD7fDX1L3npwUCB4bs5rIzsVxCxIqTw7J1F5p9T
-         j23ZEpvrns6GNLZ+tLV6lU4nbDVq3Xb3/S4sM34goRZwIvslmJOWVlrh9Y6aoflP2KqJ
-         beC+is68Emrcw5ulKoR4ykqswtOQLuRqHCNVopaOnmYzH8hIhytuz0i007Ximi5E8SMM
-         Ov9/wMHkl8BEzID16LdJMQT+833mJRyN7mNZ6ebpVDLqzQumJLSPWeL5F7lCZWJr2gQ3
-         J6Lg==
-X-Gm-Message-State: AOAM53008fvG6tg6+QjF8MPjkU8X0uo0F3KH7NAkqm8iJarUEoQ2c+yH
-        kRYDbjKgqcxlqbmNDSxIV6fDbg==
-X-Google-Smtp-Source: ABdhPJwGsDXSNDfperQKGi8GavxUP9aJ6KvyV2Q3pXV8ILLSRN0HEh7dHMbiP7y3oBxMbndkBSYZlQ==
-X-Received: by 2002:a5d:47ae:: with SMTP id 14mr5879747wrb.190.1621333245170;
-        Tue, 18 May 2021 03:20:45 -0700 (PDT)
-Received: from google.com (105.168.195.35.bc.googleusercontent.com. [35.195.168.105])
-        by smtp.gmail.com with ESMTPSA id o8sm2569124wrx.4.2021.05.18.03.20.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 03:20:44 -0700 (PDT)
-Date:   Tue, 18 May 2021 10:20:38 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        id S241645AbhERKZz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 06:25:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:48128 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239674AbhERKZy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 06:25:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F83E1FB;
+        Tue, 18 May 2021 03:24:36 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [10.57.6.226])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A1EB3F719;
+        Tue, 18 May 2021 03:24:27 -0700 (PDT)
+Date:   Tue, 18 May 2021 11:24:24 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
         Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: Re: [PATCH v6 13/21] sched: Admit forcefully-affined tasks into
- SCHED_DEADLINE
-Message-ID: <YKOU9onXUxVLPGaB@google.com>
-References: <20210518094725.7701-1-will@kernel.org>
- <20210518094725.7701-14-will@kernel.org>
+        James Bottomley <jejb@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v19 6/8] PM: hibernate: disable when there are active
+ secretmem users
+Message-ID: <20210518102424.GD82842@C02TD0UTHF1T.local>
+References: <20210513184734.29317-1-rppt@kernel.org>
+ <20210513184734.29317-7-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210518094725.7701-14-will@kernel.org>
+In-Reply-To: <20210513184734.29317-7-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tuesday 18 May 2021 at 10:47:17 (+0100), Will Deacon wrote:
-> On asymmetric systems where the affinity of a task is restricted to
-> contain only the CPUs capable of running it, admission to the deadline
-> scheduler is likely to fail because the span of the sched domain
-> contains incompatible CPUs. Although this is arguably the right thing to
-> do, it is inconsistent with the case where the affinity of a task is
-> restricted after already having been admitted to the deadline scheduler.
+On Thu, May 13, 2021 at 09:47:32PM +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> For example, on an arm64 system where not all CPUs support 32-bit
-> applications, a 64-bit deadline task can exec() a 32-bit image and have
-> its affinity forcefully restricted.
+> It is unsafe to allow saving of secretmem areas to the hibernation
+> snapshot as they would be visible after the resume and this essentially
+> will defeat the purpose of secret memory mappings.
+> 
+> Prevent hibernation whenever there are active secret memory users.
 
-So I guess the alternative would be to fail exec-ing into 32bit from a
-64bit DL task, and then drop this patch?
+Have we thought about how this is going to work in practice, e.g. on
+mobile systems? It seems to me that there are a variety of common
+applications which might want to use this which people don't expect to
+inhibit hibernate (e.g. authentication agents, web browsers).
 
-The nice thing about your approach is that existing applications won't
-really notice a difference (execve would still 'work'), but on the cons
-side it breaks admission control, which is sad.
-
-I don't expect this weird execve-to-32bit pattern from DL to be that
-common in practice (at the very least not in Android), so maybe we could
-start with the stricter version (fail the execve), and wait to see if
-folks complain? Making things stricter later will be harder.
-
-Thoughts?
+Are we happy to say that any userspace application can incidentally
+inhibit hibernate?
 
 Thanks,
-Quentin
+Mark.
+
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Christopher Lameter <cl@linux.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Elena Reshetova <elena.reshetova@intel.com>
+> Cc: Hagen Paul Pfeifer <hagen@jauu.net>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: James Bottomley <jejb@linux.ibm.com>
+> Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Roman Gushchin <guro@fb.com>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Tycho Andersen <tycho@tycho.ws>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+>  include/linux/secretmem.h |  6 ++++++
+>  kernel/power/hibernate.c  |  5 ++++-
+>  mm/secretmem.c            | 15 +++++++++++++++
+>  3 files changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/secretmem.h b/include/linux/secretmem.h
+> index e617b4afcc62..21c3771e6a56 100644
+> --- a/include/linux/secretmem.h
+> +++ b/include/linux/secretmem.h
+> @@ -30,6 +30,7 @@ static inline bool page_is_secretmem(struct page *page)
+>  }
+>  
+>  bool vma_is_secretmem(struct vm_area_struct *vma);
+> +bool secretmem_active(void);
+>  
+>  #else
+>  
+> @@ -43,6 +44,11 @@ static inline bool page_is_secretmem(struct page *page)
+>  	return false;
+>  }
+>  
+> +static inline bool secretmem_active(void)
+> +{
+> +	return false;
+> +}
+> +
+>  #endif /* CONFIG_SECRETMEM */
+>  
+>  #endif /* _LINUX_SECRETMEM_H */
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index da0b41914177..559acef3fddb 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -31,6 +31,7 @@
+>  #include <linux/genhd.h>
+>  #include <linux/ktime.h>
+>  #include <linux/security.h>
+> +#include <linux/secretmem.h>
+>  #include <trace/events/power.h>
+>  
+>  #include "power.h"
+> @@ -81,7 +82,9 @@ void hibernate_release(void)
+>  
+>  bool hibernation_available(void)
+>  {
+> -	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
+> +	return nohibernate == 0 &&
+> +		!security_locked_down(LOCKDOWN_HIBERNATION) &&
+> +		!secretmem_active();
+>  }
+>  
+>  /**
+> diff --git a/mm/secretmem.c b/mm/secretmem.c
+> index 1ae50089adf1..7c2499e4de22 100644
+> --- a/mm/secretmem.c
+> +++ b/mm/secretmem.c
+> @@ -40,6 +40,13 @@ module_param_named(enable, secretmem_enable, bool, 0400);
+>  MODULE_PARM_DESC(secretmem_enable,
+>  		 "Enable secretmem and memfd_secret(2) system call");
+>  
+> +static atomic_t secretmem_users;
+> +
+> +bool secretmem_active(void)
+> +{
+> +	return !!atomic_read(&secretmem_users);
+> +}
+> +
+>  static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+>  {
+>  	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+> @@ -94,6 +101,12 @@ static const struct vm_operations_struct secretmem_vm_ops = {
+>  	.fault = secretmem_fault,
+>  };
+>  
+> +static int secretmem_release(struct inode *inode, struct file *file)
+> +{
+> +	atomic_dec(&secretmem_users);
+> +	return 0;
+> +}
+> +
+>  static int secretmem_mmap(struct file *file, struct vm_area_struct *vma)
+>  {
+>  	unsigned long len = vma->vm_end - vma->vm_start;
+> @@ -116,6 +129,7 @@ bool vma_is_secretmem(struct vm_area_struct *vma)
+>  }
+>  
+>  static const struct file_operations secretmem_fops = {
+> +	.release	= secretmem_release,
+>  	.mmap		= secretmem_mmap,
+>  };
+>  
+> @@ -202,6 +216,7 @@ SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
+>  	file->f_flags |= O_LARGEFILE;
+>  
+>  	fd_install(fd, file);
+> +	atomic_inc(&secretmem_users);
+>  	return fd;
+>  
+>  err_put_fd:
+> -- 
+> 2.28.0
+> 
