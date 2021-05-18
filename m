@@ -2,54 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8923876E2
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 12:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D897387701
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 13:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239447AbhERKtg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 06:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241228AbhERKtc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 May 2021 06:49:32 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3B1C061756
-        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 03:48:12 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id o6-20020a05600c4fc6b029015ec06d5269so1223566wmq.0
-        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 03:48:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lw//WQHU1n8Lr/SxhTfcfyc8tvk7S4lAFPEm1TkdCHc=;
-        b=jX9kX3Vod+I5rJUyU3cakHfzGdz5a5bQTSWVHWoUF68aLrBioufVUMrdLrwYA7KVgN
-         eKLuTdcWsE8cCeK881ntTFN7BxBmqSs8GrQ/4HsJs4QkmOMvCgz57xB8py6JNHZ4q55u
-         Syqwk3o+fLHz7otqXclL6PhUe3qxkOwcm1ATA400g++22qFMB7cbUis1J8LekpDIOc2R
-         dfbFFYZgyi3zDX4ERYVsMsF2OIDcKpVMwV2LRogtiLE/CZxdfD+0uLOzGk5EfdJeji//
-         k8PWHbpBHjh8fgP//HMPG5rhN5IUcWeHyw6BUcgC4gLyrIOuwXBTuUUZwfVBxsmVaVIQ
-         Te1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lw//WQHU1n8Lr/SxhTfcfyc8tvk7S4lAFPEm1TkdCHc=;
-        b=dwvjFM/K+trzQlr1e6NdqREyVpx+hUJtI3+wPoxuRCOKzc6fTX8eXtMVbRWb0zCMMr
-         j+3bIdU1zoHqOUru11eK1NTLG7ERaunPf5hz+gY/RS9qfx8oL6Btmj/vZJSz9OePr+bp
-         ccbQwJDkYNjCgsEzvoh/KR+rr9s8Uw+Y1tWpOIHF1KXaIqSohK0pLKVRlIQJA2qQEG9h
-         ZTbkCnvKjlulGMdGBI9TJ6C1Y8ixPMsq2BwSi0T9o4Mhqlg7cwNmPeBpV6UCureWz3/6
-         eKDwTgWlqlhrsPEROKpIzDavCydysqtQeGyIkNY/0TGkiWhFNQXYzEbzEAKmqlBo5Z5r
-         fu5w==
-X-Gm-Message-State: AOAM532Lz7x/4pk7kKqmQN/HsplPRjjQEaGVaD5DPWEpp0AHwA0LVRSO
-        vMQDO9ND7i1yv5EzORxw/Nwmxw==
-X-Google-Smtp-Source: ABdhPJzRiT7qtOCBDsKWLZ6LPMj4QiYCEg9Nduj8NBMDuCXcB7+XAdn7gCxXdilFj6ofUcHz4C743g==
-X-Received: by 2002:a1c:b646:: with SMTP id g67mr207192wmf.117.1621334890798;
-        Tue, 18 May 2021 03:48:10 -0700 (PDT)
-Received: from google.com (105.168.195.35.bc.googleusercontent.com. [35.195.168.105])
-        by smtp.gmail.com with ESMTPSA id h14sm2930154wmb.1.2021.05.18.03.48.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 03:48:10 -0700 (PDT)
-Date:   Tue, 18 May 2021 10:48:07 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Will Deacon <will@kernel.org>
+        id S1348692AbhERLBQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 07:01:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42350 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348192AbhERLBP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 07:01:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 345F661285;
+        Tue, 18 May 2021 10:59:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621335598;
+        bh=GAu4rojTdKt4OvWm/lfPAfaF+P0Bv2/Zuy8m9Dpr8Hc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nTvC5ILgSDMPBB8Q9/Fxmdl3wZl2k2z0lugQX1WTE6EO+qimQX0L2JoXL0BQ++6XT
+         Rv2RQVPF0QOZxJsiIzJmcoIBI8/qdm6AxvyJExYfMwqoawA2Iqg74sZDL0ytyt5vDD
+         HZa3gQhf2m+scTQtuvvpcDLjfUEdalI2Gov/1/rMQNQLu+aYInC5QOy7tb6qqyke6e
+         R/A1hui4xM2JA4lki0nnUaiUaLWVQ8Q7xnGGSwdvkwIy3GW7xjbTUntn4dR3uOOg5j
+         n63+dCR7pS6yDz6/NAXlT5KcX5jS93daKIuB34/x0mVvwiSKeixbtMpGuPxYm9CE6a
+         q7IrFG7a2UZuA==
+Date:   Tue, 18 May 2021 11:59:51 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Quentin Perret <qperret@google.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -67,49 +43,65 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
 Subject: Re: [PATCH v6 13/21] sched: Admit forcefully-affined tasks into
  SCHED_DEADLINE
-Message-ID: <YKObZ1GcfVIVWRWt@google.com>
+Message-ID: <20210518105951.GC7770@willie-the-truck>
 References: <20210518094725.7701-1-will@kernel.org>
  <20210518094725.7701-14-will@kernel.org>
  <YKOU9onXUxVLPGaB@google.com>
  <20210518102833.GA7770@willie-the-truck>
+ <YKObZ1GcfVIVWRWt@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210518102833.GA7770@willie-the-truck>
+In-Reply-To: <YKObZ1GcfVIVWRWt@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tuesday 18 May 2021 at 11:28:34 (+0100), Will Deacon wrote:
-> I don't have strong opinions on this, but I _do_ want the admission via
-> sched_setattr() to be consistent with execve(). What you're suggesting
-> ticks that box, but how many applications are prepared to handle a failed
-> execve()? I suspect it will be fatal.
+On Tue, May 18, 2021 at 10:48:07AM +0000, Quentin Perret wrote:
+> On Tuesday 18 May 2021 at 11:28:34 (+0100), Will Deacon wrote:
+> > I don't have strong opinions on this, but I _do_ want the admission via
+> > sched_setattr() to be consistent with execve(). What you're suggesting
+> > ticks that box, but how many applications are prepared to handle a failed
+> > execve()? I suspect it will be fatal.
+> 
+> Yep, probably.
+> 
+> > Probably also worth pointing out that the approach here will at least
+> > warn in the execve() case when the affinity is overridden for a deadline
+> > task.
+> 
+> Right so I think either way will be imperfect, so I agree with the
+> above.
+> 
+> Maybe one thing though is that, IIRC, userspace _can_ disable admission
+> control if it wants to. In this case I'd have no problem with allowing
+> this weird behaviour when admission control is off -- the kernel won't
+> provide any guarantees. But if it's left on, then it's a different
+> story.
+> 
+> So what about we say, if admission control is off, we allow execve() and
+> sched_setattr() with appropriate warnings as you suggest, but if
+> admission control is on then we fail both?
 
-Yep, probably.
+That's an interesting idea. The part that I'm not super keen about is
+that it means admission control _also_ has an effect on the behaviour of
+execve(), so practically you'd have to have it disabled as long as you
+have the possibility of 32-bit deadline tasks anywhere in the system,
+which impacts 64-bit tasks which may well want admission control enabled.
 
-> Probably also worth pointing out that the approach here will at least
-> warn in the execve() case when the affinity is overridden for a deadline
-> task.
+So perhaps my initial position of trying to keep sched_setattr() and
+execve() consistent with each other is flawed and actually we can say:
 
-Right so I think either way will be imperfect, so I agree with the
-above.
+  * Disable admission control if you want to admit a 32-bit task explicitly
+    via sched_setattr()
 
-Maybe one thing though is that, IIRC, userspace _can_ disable admission
-control if it wants to. In this case I'd have no problem with allowing
-this weird behaviour when admission control is off -- the kernel won't
-provide any guarantees. But if it's left on, then it's a different
-story.
+  * If a 64-bit deadline task execve()s a 32-bit program then we warn
+    and override the affinity (i.e. you should avoid doing this if you
+    care about the deadlines).
 
-So what about we say, if admission control is off, we allow execve() and
-sched_setattr() with appropriate warnings as you suggest, but if
-admission control is on then we fail both?
+That amounts to dropping this patch and tweaking the documentation.
 
-We might still see random failures in the wild if admission control is
-left enabled on those devices but then I think these could qualify as
-a device misconfiguration, not as a kernel bug.
+Dunno, what do you think?
 
-Thoughts?
-
-Thanks,
-Quentin
+Will
