@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D53387AA9
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 16:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BA4387AE8
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 16:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349743AbhEROIP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 10:08:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50192 "EHLO mail.kernel.org"
+        id S1349918AbhEROUX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 10:20:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55694 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244785AbhEROIO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 10:08:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1F83760BD3;
-        Tue, 18 May 2021 14:06:56 +0000 (UTC)
+        id S243610AbhEROUW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 10:20:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CA31661261;
+        Tue, 18 May 2021 14:19:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621346816;
-        bh=EBdubQ1sGe/Bbb8YFCgOGYR3HaooPs65ywrzHVDre7k=;
+        s=k20201202; t=1621347544;
+        bh=nrAiIQTKJqiGVWRN+fZiK7vfTpl+mh6GdbMLf8QWU6M=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RbV02EcJhjnPpoAgtlUffPYAFOIPf2Zfq2gUt1oVyTEiAYhzQx98Z7sJ0sTGbAXaS
-         NlBJEs1szZ4F2EEkvUJ6IACrfC7cTICSOF5VcXMYLtKj6JaDd6gz1SfFGF7u8GExsK
-         uzoJ/uR9JOLdzl8ubsB5wcrxikl5CIBETIRLr3nNKcFnYshed5fk6DIELvnt5Eu1t9
-         0A7NljYACgUoCSxWmsc/iOaQtu+4wuvo8m6LHULmb3/fbpofv7qPg1TafF9e3/MrHK
-         yVasf0WeCo6NhlMmCSCsqPhsxLkc6y1uwYZycTnNEQ8sQXnTtplHuVzt+Fk8BgyEGp
-         sZIbwqrUxDA4w==
-Received: by mail-wm1-f41.google.com with SMTP id u4-20020a05600c00c4b02901774b80945cso1592333wmm.3;
-        Tue, 18 May 2021 07:06:56 -0700 (PDT)
-X-Gm-Message-State: AOAM531JYeMrEeq0rZhAawyDNIomsaMl4otcFqx8cepu/iysyGqgbM5/
-        GrkrLMeAgHlf1a04WP3JU1+Pv/QVfOm5IWKxNyo=
-X-Google-Smtp-Source: ABdhPJx+yeQS6ZDHm5FRpgmqd8Rk2r80K5a8CnDcKJIH0RKrLCYMj6CuRTSlOrPLbmKbp1JI5kZJwEAnlPfvw/suG58=
-X-Received: by 2002:a1c:9895:: with SMTP id a143mr5564837wme.43.1621346814762;
- Tue, 18 May 2021 07:06:54 -0700 (PDT)
+        b=uO2nCdiW0NvUD3Oq2cx82BZG1aOLpwqISU2mJf1pn/41gmWeJwtJ3KwTWkPZOSffp
+         qtEeD+G01WQE2a6OLg6viaogVrTcoartVG2vRtYwIcq9FSRcV1egrAvYdgmA/X3tdB
+         m+P5YNb/2zoWb2ENaduSUYHTB0469Qb0Kj+2op5ABqhzmU5gjMCmQF2DbOGijvmPsZ
+         xCjeQ8txdUZYsP5uPuGPMjh0ckotg/LymHT4x6ecHUAo8zYTM6uAVSt2umBf2+GizG
+         +1ADzfu8zRcpU2xe1Of94E5AHIjxvrL1zbXxtiJz14yqM7TivZbQbYGDShT6WINj/N
+         peuu9A0lgQRXg==
+Received: by mail-wr1-f44.google.com with SMTP id j14so8694518wrq.5;
+        Tue, 18 May 2021 07:19:04 -0700 (PDT)
+X-Gm-Message-State: AOAM533iH7VBzIlnOuNZh8KObkGowvuqg209qCpHSe1GYY10O9Ap2071
+        YIwemHu4gzeOIo+zwLND8bzHA526So8jSfafqg8=
+X-Google-Smtp-Source: ABdhPJzFpyp1CPVwvL2JvI3KmHNWPOcV2naQQAKLVgR48kQxz5AWGK/oLA+ez9stiNWkfs+BeuLGyXYYTicjDNU1kEw=
+X-Received: by 2002:a5d:6dc4:: with SMTP id d4mr7586717wrz.105.1621347543476;
+ Tue, 18 May 2021 07:19:03 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210517203343.3941777-1-arnd@kernel.org> <20210517203343.3941777-2-arnd@kernel.org>
- <m1bl982m8c.fsf@fess.ebiederm.org>
-In-Reply-To: <m1bl982m8c.fsf@fess.ebiederm.org>
+ <m1bl982m8c.fsf@fess.ebiederm.org> <CAK8P3a27_z8zk6j5W4n+u3g2e90v-h+3AbaTZ6YjCQ0B7AbJaA@mail.gmail.com>
+In-Reply-To: <CAK8P3a27_z8zk6j5W4n+u3g2e90v-h+3AbaTZ6YjCQ0B7AbJaA@mail.gmail.com>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 18 May 2021 16:05:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a27_z8zk6j5W4n+u3g2e90v-h+3AbaTZ6YjCQ0B7AbJaA@mail.gmail.com>
-Message-ID: <CAK8P3a27_z8zk6j5W4n+u3g2e90v-h+3AbaTZ6YjCQ0B7AbJaA@mail.gmail.com>
+Date:   Tue, 18 May 2021 16:17:53 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a277VggQbBnXUzpwP7TKMj-S_z6rDMYYxfjyQmzGJdpCA@mail.gmail.com>
+Message-ID: <CAK8P3a277VggQbBnXUzpwP7TKMj-S_z6rDMYYxfjyQmzGJdpCA@mail.gmail.com>
 Subject: Re: [PATCH v3 1/4] kexec: simplify compat_sys_kexec_load
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     linux-arch <linux-arch@vger.kernel.org>,
@@ -57,44 +57,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 18, 2021 at 3:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+On Tue, May 18, 2021 at 4:05 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> Arnd Bergmann <arnd@kernel.org> writes:
->
-> > From: Arnd Bergmann <arnd@arndb.de>KEXEC_ARCH_DEFAULT
+> On Tue, May 18, 2021 at 3:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
 > >
-> > The compat version of sys_kexec_load() uses compat_alloc_user_space to
-> > convert the user-provided arguments into the native format.
+> > Arnd Bergmann <arnd@kernel.org> writes:
 > >
-> > Move the conversion into the regular implementation with
-> > an in_compat_syscall() check to simplify it and avoid the
-> > compat_alloc_user_space() call.
+> > > From: Arnd Bergmann <arnd@arndb.de>KEXEC_ARCH_DEFAULT
+> > >
+> > > The compat version of sys_kexec_load() uses compat_alloc_user_space to
+> > > convert the user-provided arguments into the native format.
+> > >
+> > > Move the conversion into the regular implementation with
+> > > an in_compat_syscall() check to simplify it and avoid the
+> > > compat_alloc_user_space() call.
+> > >
+> > > compat_sys_kexec_load() now behaves the same as sys_kexec_load().
 > >
-> > compat_sys_kexec_load() now behaves the same as sys_kexec_load().
+> > Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> >KEXEC_ARCH_DEFAULT
+> > The patch is wrong.
+> >
+> > The logic between the compat entry point and the ordinary entry point
+> > are by necessity different.   This unifies the logic and breaks the compat
+> > entry point.
+> >
+> > The fundamentally necessity is that the code being loaded needs to know
+> > which mode the kernel is running in so it can safely transition to the
+> > new kernel.
+> >
+> > Given that the two entry points fundamentally need different logic,
+> > and that difference was not preserved and the goal of this patchset
+> > was to unify that which fundamentally needs to be different.  I don't
+> > think this patch series makes any sense for kexec.
 >
-> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
->KEXEC_ARCH_DEFAULT
-> The patch is wrong.
->
-> The logic between the compat entry point and the ordinary entry point
-> are by necessity different.   This unifies the logic and breaks the compat
-> entry point.
->
-> The fundamentally necessity is that the code being loaded needs to know
-> which mode the kernel is running in so it can safely transition to the
-> new kernel.
->
-> Given that the two entry points fundamentally need different logic,
-> and that difference was not preserved and the goal of this patchset
-> was to unify that which fundamentally needs to be different.  I don't
-> think this patch series makes any sense for kexec.
+> Sorry, I'm not following that explanation. Can you clarify what different
+> modes of the kernel you are referring to here, and how my patch
+> changes this?
 
-Sorry, I'm not following that explanation. Can you clarify what different
-modes of the kernel you are referring to here, and how my patch
-changes this?
+I think I figured it out now myself after comparing the two functions:
 
-The only difference I can see between the native and compat entry
-points is the layout of the kexec_segment structure, and that is
-obviously preserved by my patch.
+--- a/kernel/kexec.c
++++ b/kernel/kexec.c
+@@ -269,7 +269,8 @@ SYSCALL_DEFINE4(kexec_load, unsigned long, entry,
+unsigned long, nr_segments,
 
-         Arnd
+        /* Verify we are on the appropriate architecture */
+        if (((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH) &&
+-               ((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH_DEFAULT))
++               (in_compat_syscall() ||
++               ((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH_DEFAULT)))
+                return -EINVAL;
+
+        /* Because we write directly to the reserved memory
+
+Not sure if that's the best way of doing it, but it looks like folding this
+in restores the current behavior.
+
+        Arnd
