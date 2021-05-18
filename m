@@ -2,33 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2338C3881ED
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 23:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4603388223
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 23:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242643AbhERVPi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 17:15:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:36129 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241969AbhERVPh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 17:15:37 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-258-XZiFWQz-NZmRbfTBBekA3Q-1; Tue, 18 May 2021 22:14:06 +0100
-X-MC-Unique: XZiFWQz-NZmRbfTBBekA3Q-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Tue, 18 May 2021 22:14:04 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.015; Tue, 18 May 2021 22:14:04 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@kernel.org>
-CC:     Eric Biggers <ebiggers@kernel.org>,
+        id S236860AbhERVcc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 17:32:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51602 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236729AbhERVcc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 17:32:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 90A876124C;
+        Tue, 18 May 2021 21:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621373474;
+        bh=d0+hSpHTltY5juyqwHwyL+G+xHCIlY0BOiHIqPiFSTM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K3IkDYf5WzG84qZdrk493mElmsqetEgx7UtrgyRD92P25kMU/2NnsR1jUS/IdYBj1
+         KpHfDimRF4fXrFQ75vN7kAoaJxW4DtlpllTLXKjN74Jpdfzywy0nuBMQU4uNjPLvzq
+         YcCKMH0JQ/3Yj+KZUonoDZ7j2+U6eZbzWHXYcHSkRoTnTwDSQ7iepxk8u6YzIuknPW
+         nBT2zx6uFojpxjdgasR5X+VLrmXSALrJceUxQ1Qi8sZNBiFNgek49YbyWhFHhYoGLM
+         Sr6kLztyMyuHVPK+zmrSMFT6aM6wrdbq9TagKSMB9QL/nSAfL+JlINx3IkVwMWq/xO
+         KG87Ke2bRZjyQ==
+Date:   Tue, 18 May 2021 14:31:12 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         Vineet Gupta <vgupta@synopsys.com>,
-        "Russell King" <linux@armlinux.org.uk>,
+        Russell King <linux@armlinux.org.uk>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -36,58 +38,61 @@ CC:     Eric Biggers <ebiggers@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
         <linux-crypto@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
-Subject: RE: [PATCH v2 07/13] asm-generic: unaligned always use struct helpers
-Thread-Topic: [PATCH v2 07/13] asm-generic: unaligned always use struct
- helpers
-Thread-Index: AQHXS/YCMZkjEhef40atSxJR3LrT4Krpu4HQ
-Date:   Tue, 18 May 2021 21:14:04 +0000
-Message-ID: <2a31acad459d4e37b31da5b270dcf0ba@AcuMS.aculab.com>
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Nobuhiro Iwamatsu <iwamatsu@debian.org>
+Subject: Re: [PATCH v2 07/13] asm-generic: unaligned always use struct helpers
+Message-ID: <YKQyICQuyJZsl+/j@gmail.com>
 References: <20210514100106.3404011-1-arnd@kernel.org>
- <20210514100106.3404011-8-arnd@kernel.org> <YKLlyQnR+3uW4ETD@gmail.com>
+ <20210514100106.3404011-8-arnd@kernel.org>
+ <YKLlyQnR+3uW4ETD@gmail.com>
  <CAK8P3a0iqe5V6uvaW+Eo0qiwzvyUVavVEfZGwXh4s8ad+0RdCg@mail.gmail.com>
  <CAHk-=wjjo+F8HVkq3eLg+=7hjZPF5mkA4JbgAU8FGE_oAw2MEg@mail.gmail.com>
-In-Reply-To: <CAHk-=wjjo+F8HVkq3eLg+=7hjZPF5mkA4JbgAU8FGE_oAw2MEg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <CAK8P3a3hbts4k+rrfnE8Z78ezCaME0UVgwqkdLW5NOps2YHUQQ@mail.gmail.com>
+ <CAHk-=wjuoGyxDhAF8SsrTkN0-YfCx7E6jUN3ikC_tn2AKWTTsA@mail.gmail.com>
+ <CAK8P3a0QMjP-i7aw_CBRHPu7ffzX0p_vYF_SRtpd_iB8HW5TqQ@mail.gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0QMjP-i7aw_CBRHPu7ffzX0p_vYF_SRtpd_iB8HW5TqQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTggTWF5IDIwMjEgMTU6NTYNCj4gDQo+IE9u
-IFR1ZSwgTWF5IDE4LCAyMDIxIGF0IDEyOjI3IEFNIEFybmQgQmVyZ21hbm4gPGFybmRAa2VybmVs
-Lm9yZz4gd3JvdGU6DQo+ID4gPg0KPiA+ID4gSSB3b25kZXIgaWYgdGhlIGtlcm5lbCBzaG91bGQg
-ZG8gdGhlIHNhbWUsIG9yIHdoZXRoZXIgdGhlcmUgYXJlIHN0aWxsIGNhc2VzDQo+ID4gPiB3aGVy
-ZSBtZW1jcHkoKSBpc24ndCBjb21waWxlZCBvcHRpbWFsbHkuICBhcm12Ni83IHVzZWQgdG8gYmUg
-b25lIHN1Y2ggY2FzZSwgYnV0DQo+ID4gPiBpdCB3YXMgZml4ZWQgaW4gZ2NjIDYuDQo+ID4NCj4g
-PiBJdCB3b3VsZCBoYXZlIHRvIGJlIG1lbW1vdmUoKSwgbm90IG1lbWNweSgpIGluIHRoaXMgY2Fz
-ZSwgcmlnaHQ/DQo+IA0KPiBObywgaXQgd291bGQgc2ltcGx5IGJlIHNvbWV0aGluZyBsaWtlDQo+
-IA0KPiAgICNkZWZpbmUgX19nZXRfdW5hbGlnbmVkX3QodHlwZSwgcHRyKSBcDQo+ICAgICAgICAg
-KHsgdHlwZSBfX3ZhbDsgbWVtY3B5KCZfX3ZhbCwgcHRyLCBzaXplb2YodHlwZSkpOyBfX3ZhbDsg
-fSkNCg0KWW91IHN0aWxsIG5lZWQgc29tZXRoaW5nIHRvIGVuc3VyZSB0aGF0IGdjYyBjYW4ndCBh
-c3N1bWUgdGhhdA0KJ3B0cicgaGFzIGFuIGFsaWduZWQgdHlwZS4NCklmIHRoZXJlIGlzIGFuICdp
-bnQgKnB0cicgdmlzaWJsZSBpbiB0aGUgY2FsbCBjaGFpbiBubyBhbW91bnQNCm9mICh2b2lkICop
-IGNhc3RzIHdpbGwgbWFrZSBnY2MgZm9yZ2V0IHRoZSBhbGlnbm1lbnQuDQpTbyB0aGUgbWVtY3B5
-KCkgd2lsbCBnZXQgY29udmVydGVkIHRvIGFuIGFsaWduZWQgbG9hZC1zdG9yZSBwYWlyLg0KKFRo
-aXMgaGFzIGFsd2F5cyBjYXVzZWQgZ3JpZWYgb24gc3BhcmMuKQ0KDQpBIGNhc3QgdGhvdWdoIChs
-b25nKSBtaWdodCBiZSBlbm91Z2gsIGFzIG1pZ2h0IGEgY2FzdCB0byBhIF9fcGFja2VkDQpzdHJ1
-Y3QgcG9pbnRlciB0eXBlLg0KVXNpbmcgYSB1bmlvbiBvZiB0aGUgdHdvIHBvaW50ZXIgdHlwZXMg
-bWlnaHQgYmUgb2sgLSBidXQgbWlnaHQNCmdlbmVyYXRlIGEgc3RvcmUvbG9hZCB0byBzdGFjay4N
-CkFuIGFsdGVybmF0aXZlIGlzIGFuIGFzbSBzdGF0ZW1lbnQgd2l0aCBpbnB1dCBhbmQgb3V0cHV0
-IG9mIGRpZmZlcmVudA0KcG9pbnRlciB0eXBlcyBidXQgdXNpbmcgdGhlIHNhbWUgcmVnaXN0ZXIg
-Zm9yIGJvdGguDQpUaGF0IG91Z2h0IHRvIGZvcmNlIHRoZSBjb21waWxlIHRvIGZvcmdldCBhbnkg
-dHJhY2tlZCB0eXBlDQphbmQgdmFsdWUuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
-c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
-IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Tue, May 18, 2021 at 10:51:23PM +0200, Arnd Bergmann wrote:
+> 
+> > zstd looks very similar to lz4.
+> 
+> > End result: at a minimum, I'd suggest using
+> > "-fno-tree-loop-vectorize", although somebody should check that NEON
+> > case.
+> 
+> > And I still think that using O3 for anything halfway complicated
+> > should be considered odd and need some strong numbers to enable.
+> 
+> Agreed. I think there is a fairly strong case for just using -O2 on lz4
+> and backport that to stable.
+> Searching for lz4 bugs with -O3 also finds several reports including
+> one that I sent myself:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65709
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69702
+> 
+> I see that user space zstd is built with -O3 in Debian, but it the changelog
+> also lists "Improved : better speed on clang and gcc -O2, thanks to Eric
+> Biggers", so maybe Eric has some useful ideas on whether we should
+> just use -O2 for the in-kernel version.
+> 
 
+In my opinion, -O2 is a good default even for compression code.  I generally
+don't see any benefit from -O3 in compression code I've written.
+
+That being said, -O2 is what I usually use during development.  Other people
+could write code that relies on -O3 to be optimized well.
+
+The Makefiles for lz4 and zstd use -O3 by default, which is a little concerning.
+I do expect that they're still well-written enough to do well with -O2 too, but
+it would require doing benchmarks to tell for sure.  (As Arnd noted, it happens
+that I did do such benchmarks on zstd about 5 years ago, and I found an issue
+where some functions weren't marked inline when they should be, causing them to
+be inlined at -O3 but not at -O2.  That got fixed.)
+
+- Eric
