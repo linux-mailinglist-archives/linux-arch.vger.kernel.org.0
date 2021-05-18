@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB723875A4
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 11:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997D33875A8
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 11:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243449AbhERJuo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 05:50:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50554 "EHLO mail.kernel.org"
+        id S1348252AbhERJuz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 05:50:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50190 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242093AbhERJt7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 05:49:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C1FDA61401;
-        Tue, 18 May 2021 09:48:38 +0000 (UTC)
+        id S1348045AbhERJuL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 05:50:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5329561403;
+        Tue, 18 May 2021 09:48:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621331321;
-        bh=6g9NVbkObRxGunwkaQ5JxyE6uDt34ueHBKqyl0oVxYE=;
+        s=k20201202; t=1621331325;
+        bh=s9Bz6q2x/QfoapW/bvF+kNoVHzS747ZjQm5kJMTQ8ug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kbkOc+WKgFFl0HV+uacnOtz0MtG+VG7IhssMjNOO3i3md9AUXwFLFbGvOlpJpP2UK
-         f2exwaDNgrJDxMFDR5OlCqmVex9lfkqHocqc6c3LInUzFdAFzLPcI9gCtH4YNVksco
-         f+lMksvAgtytTY+DC1MbXoWtJDcR2JormPvecHdqDcBPcLYqp0pzb2jYqu/Wn1RQNT
-         zJ+Y73ZOzrAKdEYP/S3kDgZqofiXT0z6KJlaprpYRMtofQNdN0g7rm9ysamPRUDA7D
-         bDugtVJzZ5+Nx0fCM7DDgQvkYtTx8Zn3xOlpnl7S9DmXA/SsDgYKH3N9wC7BOyL6Lt
-         SMBvCK4BI4tJQ==
+        b=h7zS00zStct6l9agEnN+I9aZki2iULUfO6eXw/xDHXgUQvmUu3xE/mUjpzT3DviMR
+         3amO2G0va/GqityTOw3Etvhd/5exc6AAUv0WSMO3L6kaRkWICFIdgeMhZjWGK816lk
+         lkCsAcHxy5SKh+ZfEbO0jca7RfulSvydQQfkm2u0stlKeh2bGqmYsnbogjv1+RcZnQ
+         RYsaP+5wET5HnX/2kYsZAaix6vD1ujhvVw7FfH7F94gkZ2T2Ny9c9sjuVZUQc1BLY+
+         ltA+vSja2r8ubSMaD2LcQ7Af0AvqYzrpweCKQ+qccs9EZ9XBDWjPs4k7uwcrTU0CT7
+         /ia6iySGKWlpA==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: [PATCH v6 18/21] arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched system
-Date:   Tue, 18 May 2021 10:47:22 +0100
-Message-Id: <20210518094725.7701-19-will@kernel.org>
+Subject: [PATCH v6 19/21] arm64: Hook up cmdline parameter to allow mismatched 32-bit EL0
+Date:   Tue, 18 May 2021 10:47:23 +0100
+Message-Id: <20210518094725.7701-20-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210518094725.7701-1-will@kernel.org>
 References: <20210518094725.7701-1-will@kernel.org>
@@ -53,61 +53,52 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-If we want to support 32-bit applications, then when we identify a CPU
-with mismatched 32-bit EL0 support we must ensure that we will always
-have an active 32-bit CPU available to us from then on. This is important
-for the scheduler, because is_cpu_allowed() will be constrained to 32-bit
-CPUs for compat tasks and forced migration due to a hotplug event will
-hang if no 32-bit CPUs are available.
-
-On detecting a mismatch, prevent offlining of either the mismatching CPU
-if it is 32-bit capable, or find the first active 32-bit capable CPU
-otherwise.
+Allow systems with mismatched 32-bit support at EL0 to run 32-bit
+applications based on a new kernel parameter.
 
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- arch/arm64/kernel/cpufeature.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ Documentation/admin-guide/kernel-parameters.txt | 8 ++++++++
+ arch/arm64/kernel/cpufeature.c                  | 7 +++++++
+ 2 files changed, 15 insertions(+)
 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index cb89dbdedc46..a2e453919bb6 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -287,6 +287,14 @@
+ 			do not want to use tracing_snapshot_alloc() as it needs
+ 			to be done where GFP_KERNEL allocations are allowed.
+ 
++	allow_mismatched_32bit_el0 [ARM64]
++			Allow execve() of 32-bit applications and setting of the
++			PER_LINUX32 personality on systems where only a strict
++			subset of the CPUs support 32-bit EL0. When this
++			parameter is present, the set of CPUs supporting 32-bit
++			EL0 is indicated by /sys/devices/system/cpu/aarch32_el0
++			and hot-unplug operations may be restricted.
++
+ 	amd_iommu=	[HW,X86-64]
+ 			Pass parameters to the AMD IOMMU driver in the system.
+ 			Possible values are:
 diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 959442f76ed7..72efdc611b14 100644
+index 72efdc611b14..f2c97baa050f 100644
 --- a/arch/arm64/kernel/cpufeature.c
 +++ b/arch/arm64/kernel/cpufeature.c
-@@ -2896,15 +2896,33 @@ void __init setup_cpu_features(void)
- 
- static int enable_mismatched_32bit_el0(unsigned int cpu)
- {
-+	static int lucky_winner = -1;
-+
- 	struct cpuinfo_arm64 *info = &per_cpu(cpu_data, cpu);
- 	bool cpu_32bit = id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0);
- 
- 	if (cpu_32bit) {
- 		cpumask_set_cpu(cpu, cpu_32bit_el0_mask);
- 		static_branch_enable_cpuslocked(&arm64_mismatched_32bit_el0);
--		setup_elf_hwcaps(compat_elf_hwcaps);
- 	}
- 
-+	if (cpumask_test_cpu(0, cpu_32bit_el0_mask) == cpu_32bit)
-+		return 0;
-+
-+	if (lucky_winner >= 0)
-+		return 0;
-+
-+	/*
-+	 * We've detected a mismatch. We need to keep one of our CPUs with
-+	 * 32-bit EL0 online so that is_cpu_allowed() doesn't end up rejecting
-+	 * every CPU in the system for a 32-bit task.
-+	 */
-+	lucky_winner = cpu_32bit ? cpu : cpumask_any_and(cpu_32bit_el0_mask,
-+							 cpu_active_mask);
-+	get_cpu_device(lucky_winner)->offline_disabled = true;
-+	setup_elf_hwcaps(compat_elf_hwcaps);
-+	pr_info("Asymmetric 32-bit EL0 support detected on CPU %u; CPU hot-unplug disabled on CPU %u\n",
-+		cpu, lucky_winner);
- 	return 0;
+@@ -1298,6 +1298,13 @@ const struct cpumask *system_32bit_el0_cpumask(void)
+ 	return cpu_possible_mask;
  }
  
++static int __init parse_32bit_el0_param(char *str)
++{
++	allow_mismatched_32bit_el0 = true;
++	return 0;
++}
++early_param("allow_mismatched_32bit_el0", parse_32bit_el0_param);
++
+ static ssize_t aarch32_el0_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
 -- 
 2.31.1.751.gd2f1c929bd-goog
 
