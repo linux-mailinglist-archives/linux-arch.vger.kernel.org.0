@@ -2,135 +2,279 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AD43879BD
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 15:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B342B387A32
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 15:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbhERNVO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 09:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242855AbhERNVN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 May 2021 09:21:13 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578B0C061573
-        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 06:19:55 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id h4so10172986wrt.12
-        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 06:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Fl2hbnq4KTo11sm1rurPAiZ5nl2ffJf+gTd0frGhNMo=;
-        b=m5PLNpLU1FyFg7I9oj9BuALAC/QcWw5Dv8rvdXmUmFEOzVPqJWjuRNhWM1uIeiKauB
-         5CSLYCGqNyCCv6dV/WFrfWKU8lsgWPQySSv6artDRUhvhuVYinu6tdaHXBcqdiDOXr/e
-         3ZO/6MmqSw4OwF1PI3r7AZFvMyXuIpnhBOSuBY5u7AutQcyvyK2aLTnabPKr2U8rSq9E
-         ma0YawdRqqf8fN8/3O7iHBKuA43jq2QBiwjKTGCOmB71PO2ua9kX2q1+RGwIJ7NFpQ05
-         85/jXgJA5boxxDLSGzic4iYHMnBeG9zYXW1VcckhRDuFfCswW2pUzfgAijFGfKUB2FDi
-         IyuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Fl2hbnq4KTo11sm1rurPAiZ5nl2ffJf+gTd0frGhNMo=;
-        b=pbCM/X7+MGNmMlVnGyST1Kj4679mgrwSieOvA3ID0PbRRw3PqSRizJRGUN2M9ZfH4l
-         BtH0bAO41nM0TQinpqjjqu+LimkDJDcsur7Z8wTFUUPUa4bsJNye1RqPpLfS6Vhhb8ey
-         v/8CgfVRrOhZmuxlSJFWb70/g32vDkGcC0+uajIgSDI+u4hsumc+IwWwg7p228jSmUga
-         43a4mfj+Zf3ST28zEHlIoOd3c0Auh2fuTu9i/HGjMtCpxJgRWd7bK3J+QqPB5k4Rvrg/
-         0NYz++8YMj+LgJhEUTBfWN7/ufpxj/BYpLZsAr0ChBMfL/hwOV2LaoICNadg+uNsEXfR
-         9feg==
-X-Gm-Message-State: AOAM532aK6WjPdYTqZ4RkV3hHD/kanhDjg5mq499CkEE6lH7c+XfGikM
-        NKSCbrxN6Cuzmr+/kz4WuqxmVg==
-X-Google-Smtp-Source: ABdhPJwtEm2cBRiEIt+snvROWKnxUOfuHq73a7rNECr6Qw9eykwLa7rdlkW34cJYL3rFLTjdPydmaA==
-X-Received: by 2002:a5d:4910:: with SMTP id x16mr7053213wrq.112.1621343993969;
-        Tue, 18 May 2021 06:19:53 -0700 (PDT)
-Received: from google.com (105.168.195.35.bc.googleusercontent.com. [35.195.168.105])
-        by smtp.gmail.com with ESMTPSA id x8sm21590597wrs.25.2021.05.18.06.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 06:19:53 -0700 (PDT)
-Date:   Tue, 18 May 2021 13:19:50 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: Re: [PATCH v6 13/21] sched: Admit forcefully-affined tasks into
- SCHED_DEADLINE
-Message-ID: <YKO+9lPLQLPm4Nwt@google.com>
-References: <20210518094725.7701-1-will@kernel.org>
- <20210518094725.7701-14-will@kernel.org>
- <YKOU9onXUxVLPGaB@google.com>
- <20210518102833.GA7770@willie-the-truck>
- <YKObZ1GcfVIVWRWt@google.com>
- <20210518105951.GC7770@willie-the-truck>
+        id S230479AbhERNmn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 09:42:43 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:37022 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230217AbhERNmm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 May 2021 09:42:42 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out01.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1lizyG-00Axt3-Vi; Tue, 18 May 2021 07:41:17 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=fess.xmission.com)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1lizyF-0005tf-St; Tue, 18 May 2021 07:41:16 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        kexec@lists.infradead.org
+References: <20210517203343.3941777-1-arnd@kernel.org>
+        <20210517203343.3941777-2-arnd@kernel.org>
+Date:   Tue, 18 May 2021 08:41:07 -0500
+In-Reply-To: <20210517203343.3941777-2-arnd@kernel.org> (Arnd Bergmann's
+        message of "Mon, 17 May 2021 22:33:40 +0200")
+Message-ID: <m1bl982m8c.fsf@fess.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210518105951.GC7770@willie-the-truck>
+Content-Type: text/plain
+X-XM-SPF: eid=1lizyF-0005tf-St;;;mid=<m1bl982m8c.fsf@fess.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+3MixM5wFfwyFMlKmVM10vOLfImi60fNc=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
+        XMGappySubj_01 autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.5 XMGappySubj_01 Very gappy subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Arnd Bergmann <arnd@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 683 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 13 (1.8%), b_tie_ro: 11 (1.6%), parse: 1.70
+        (0.2%), extract_message_metadata: 24 (3.5%), get_uri_detail_list: 5
+        (0.7%), tests_pri_-1000: 19 (2.8%), tests_pri_-950: 1.52 (0.2%),
+        tests_pri_-900: 1.23 (0.2%), tests_pri_-90: 147 (21.5%), check_bayes:
+        145 (21.2%), b_tokenize: 15 (2.2%), b_tok_get_all: 10 (1.5%),
+        b_comp_prob: 2.8 (0.4%), b_tok_touch_all: 113 (16.5%), b_finish: 1.09
+        (0.2%), tests_pri_0: 454 (66.5%), check_dkim_signature: 0.75 (0.1%),
+        check_dkim_adsp: 3.0 (0.4%), poll_dns_idle: 0.82 (0.1%), tests_pri_10:
+        4.3 (0.6%), tests_pri_500: 13 (1.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v3 1/4] kexec: simplify compat_sys_kexec_load
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tuesday 18 May 2021 at 11:59:51 (+0100), Will Deacon wrote:
-> On Tue, May 18, 2021 at 10:48:07AM +0000, Quentin Perret wrote:
-> > On Tuesday 18 May 2021 at 11:28:34 (+0100), Will Deacon wrote:
-> > > I don't have strong opinions on this, but I _do_ want the admission via
-> > > sched_setattr() to be consistent with execve(). What you're suggesting
-> > > ticks that box, but how many applications are prepared to handle a failed
-> > > execve()? I suspect it will be fatal.
-> > 
-> > Yep, probably.
-> > 
-> > > Probably also worth pointing out that the approach here will at least
-> > > warn in the execve() case when the affinity is overridden for a deadline
-> > > task.
-> > 
-> > Right so I think either way will be imperfect, so I agree with the
-> > above.
-> > 
-> > Maybe one thing though is that, IIRC, userspace _can_ disable admission
-> > control if it wants to. In this case I'd have no problem with allowing
-> > this weird behaviour when admission control is off -- the kernel won't
-> > provide any guarantees. But if it's left on, then it's a different
-> > story.
-> > 
-> > So what about we say, if admission control is off, we allow execve() and
-> > sched_setattr() with appropriate warnings as you suggest, but if
-> > admission control is on then we fail both?
-> 
-> That's an interesting idea. The part that I'm not super keen about is
-> that it means admission control _also_ has an effect on the behaviour of
-> execve()
+Arnd Bergmann <arnd@kernel.org> writes:
 
-Right, that's a good point. And it looks like fork() behaves the same
-regardless of admission control being enabled or not -- it is forbidden
-from DL either way. So I can't say there is a precedent :/
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The compat version of sys_kexec_load() uses compat_alloc_user_space to
+> convert the user-provided arguments into the native format.
+>
+> Move the conversion into the regular implementation with
+> an in_compat_syscall() check to simplify it and avoid the
+> compat_alloc_user_space() call.
+>
+> compat_sys_kexec_load() now behaves the same as sys_kexec_load().
 
-> so practically you'd have to have it disabled as long as you
-> have the possibility of 32-bit deadline tasks anywhere in the system,
-> which impacts 64-bit tasks which may well want admission control enabled.
+Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-Indeed, this is a bit sad, but I don't know if the kernel should pretend
-it can guarantee to meet your deadlines and at the same time allow to do
-something that wrecks the underlying theory.
+The patch is wrong.
 
-I'd personally be happy with saying that admission control should be
-disabled on these dumb systems (and have that documented), at least
-until DL gets proper support for affinities. ISTR there was work going
-in that direction, but some folks in the CC list will know better.
+The logic between the compat entry point and the ordinary entry point
+are by necessity different.   This unifies the logic and breaks the compat
+entry point.
 
-@Juri, maybe you would know if that's still planned?
+The fundamentally necessity is that the code being loaded needs to know
+which mode the kernel is running in so it can safely transition to the
+new kernel.
 
-Thanks,
-Quentin
+Given that the two entry points fundamentally need different logic,
+and that difference was not preserved and the goal of this patchset
+was to unify that which fundamentally needs to be different.  I don't
+think this patch series makes any sense for kexec.
+
+Eric
+
+
+
+
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  include/linux/kexec.h |  2 -
+>  kernel/kexec.c        | 95 +++++++++++++++++++------------------------
+>  2 files changed, 42 insertions(+), 55 deletions(-)
+>
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 0c994ae37729..f61e310d7a85 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -88,14 +88,12 @@ struct kexec_segment {
+>  	size_t memsz;
+>  };
+>  
+> -#ifdef CONFIG_COMPAT
+>  struct compat_kexec_segment {
+>  	compat_uptr_t buf;
+>  	compat_size_t bufsz;
+>  	compat_ulong_t mem;	/* User space sees this as a (void *) ... */
+>  	compat_size_t memsz;
+>  };
+> -#endif
+>  
+>  #ifdef CONFIG_KEXEC_FILE
+>  struct purgatory_info {
+> diff --git a/kernel/kexec.c b/kernel/kexec.c
+> index c82c6c06f051..6618b1d9f00b 100644
+> --- a/kernel/kexec.c
+> +++ b/kernel/kexec.c
+> @@ -19,21 +19,46 @@
+>  
+>  #include "kexec_internal.h"
+>  
+> +static int copy_user_compat_segment_list(struct kimage *image,
+> +					 unsigned long nr_segments,
+> +					 void __user *segments)
+> +{
+> +	struct compat_kexec_segment __user *cs = segments;
+> +	struct compat_kexec_segment segment;
+> +	int i;
+> +
+> +	for (i = 0; i < nr_segments; i++) {
+> +		if (copy_from_user(&segment, &cs[i], sizeof(segment)))
+> +			return -EFAULT;
+> +
+> +		image->segment[i] = (struct kexec_segment) {
+> +			.buf   = compat_ptr(segment.buf),
+> +			.bufsz = segment.bufsz,
+> +			.mem   = segment.mem,
+> +			.memsz = segment.memsz,
+> +		};
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +
+>  static int copy_user_segment_list(struct kimage *image,
+>  				  unsigned long nr_segments,
+>  				  struct kexec_segment __user *segments)
+>  {
+> -	int ret;
+>  	size_t segment_bytes;
+>  
+>  	/* Read in the segments */
+>  	image->nr_segments = nr_segments;
+>  	segment_bytes = nr_segments * sizeof(*segments);
+> -	ret = copy_from_user(image->segment, segments, segment_bytes);
+> -	if (ret)
+> -		ret = -EFAULT;
+> +	if (in_compat_syscall())
+> +		return copy_user_compat_segment_list(image, nr_segments, segments);
+>  
+> -	return ret;
+> +	if (copy_from_user(image->segment, segments, segment_bytes))
+> +		return -EFAULT;
+> +
+> +	return 0;
+>  }
+>  
+>  static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
+> @@ -233,8 +258,9 @@ static inline int kexec_load_check(unsigned long nr_segments,
+>  	return 0;
+>  }
+>  
+> -SYSCALL_DEFINE4(kexec_load, unsigned long, entry, unsigned long, nr_segments,
+> -		struct kexec_segment __user *, segments, unsigned long, flags)
+> +static int kernel_kexec_load(unsigned long entry, unsigned long nr_segments,
+> +			     struct kexec_segment __user * segments,
+> +			     unsigned long flags)
+>  {
+>  	int result;
+>  
+> @@ -265,57 +291,20 @@ SYSCALL_DEFINE4(kexec_load, unsigned long, entry, unsigned long, nr_segments,
+>  	return result;
+>  }
+>  
+> +SYSCALL_DEFINE4(kexec_load, unsigned long, entry, unsigned long, nr_segments,
+> +		struct kexec_segment __user *, segments, unsigned long, flags)
+> +{
+> +	return kernel_kexec_load(entry, nr_segments, segments, flags);
+> +}
+> +
+>  #ifdef CONFIG_COMPAT
+>  COMPAT_SYSCALL_DEFINE4(kexec_load, compat_ulong_t, entry,
+>  		       compat_ulong_t, nr_segments,
+>  		       struct compat_kexec_segment __user *, segments,
+>  		       compat_ulong_t, flags)
+>  {
+> -	struct compat_kexec_segment in;
+> -	struct kexec_segment out, __user *ksegments;
+> -	unsigned long i, result;
+> -
+> -	result = kexec_load_check(nr_segments, flags);
+> -	if (result)
+> -		return result;
+> -
+> -	/* Don't allow clients that don't understand the native
+> -	 * architecture to do anything.
+> -	 */
+> -	if ((flags & KEXEC_ARCH_MASK) == KEXEC_ARCH_DEFAULT)
+> -		return -EINVAL;
+> -
+> -	ksegments = compat_alloc_user_space(nr_segments * sizeof(out));
+> -	for (i = 0; i < nr_segments; i++) {
+> -		result = copy_from_user(&in, &segments[i], sizeof(in));
+> -		if (result)
+> -			return -EFAULT;
+> -
+> -		out.buf   = compat_ptr(in.buf);
+> -		out.bufsz = in.bufsz;
+> -		out.mem   = in.mem;
+> -		out.memsz = in.memsz;
+> -
+> -		result = copy_to_user(&ksegments[i], &out, sizeof(out));
+> -		if (result)
+> -			return -EFAULT;
+> -	}
+> -
+> -	/* Because we write directly to the reserved memory
+> -	 * region when loading crash kernels we need a mutex here to
+> -	 * prevent multiple crash  kernels from attempting to load
+> -	 * simultaneously, and to prevent a crash kernel from loading
+> -	 * over the top of a in use crash kernel.
+> -	 *
+> -	 * KISS: always take the mutex.
+> -	 */
+> -	if (!mutex_trylock(&kexec_mutex))
+> -		return -EBUSY;
+> -
+> -	result = do_kexec_load(entry, nr_segments, ksegments, flags);
+> -
+> -	mutex_unlock(&kexec_mutex);
+> -
+> -	return result;
+> +	return kernel_kexec_load(entry, nr_segments,
+> +				 (struct kexec_segment __user *)segments,
+> +				 flags);
+>  }
+>  #endif
