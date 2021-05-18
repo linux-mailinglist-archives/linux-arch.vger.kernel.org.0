@@ -2,32 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F018D3875E5
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 11:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7B4387612
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 12:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348232AbhERKA2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 06:00:28 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55290 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348228AbhERKAZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 06:00:25 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1621331946; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        id S1348338AbhERKIK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 06:08:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59871 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348343AbhERKIG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 06:08:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1621332408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=b8xv7F9R3YDRWAMnBTpPRwnYRLd13u+yXERM3M4MUTs=;
-        b=JS/jDkcP1gH5mTt25RX5I6j86/cz/ZDydaWWHW2hqY8nQAAzE3DLIomRP5iqBIJVDfMfru
-        o/w0GyCy15FdVoUInzSjJEpAT5R+5767DWCkHYFbUgNcLAIQDa3PDa25+ejFAKMWeiZdjA
-        Bt7ymH4NrrKr2c/O8dhrS2VhugnQsAg=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id BEF56AEAC;
-        Tue, 18 May 2021 09:59:05 +0000 (UTC)
-Date:   Tue, 18 May 2021 11:59:03 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        bh=dFkmeu2athwSt2LK0RUUi/E/grHFe/dKRRuvCpK8qJo=;
+        b=Jz46/iEL2CI5eOOR0VslPi4IvMIEHryICTdHTZTi4DLK7snBGh+9W6VKWvWYRjcDIRYJ1R
+        PZnrKD9US/nVolN7oIjNK7k/COF0R/JuAWBfyGNiJNkOnwFlsPnm8/bZIc+VDjIbUeBQMu
+        yhx2ghzn0ryv0mJGm+AnWGsMfHDq5pw=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-294-I03A1BuSPZCSClzYZs-gcw-1; Tue, 18 May 2021 06:06:46 -0400
+X-MC-Unique: I03A1BuSPZCSClzYZs-gcw-1
+Received: by mail-wr1-f69.google.com with SMTP id 67-20020adf81490000b029010756d109e6so5306712wrm.13
+        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 03:06:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=dFkmeu2athwSt2LK0RUUi/E/grHFe/dKRRuvCpK8qJo=;
+        b=QGTQRh/lHnnhEeP8zerF/ZpSN1I1k2Prmv23Xym0RpLdSyrs+pPNwaICDohfBo8/HZ
+         tlniSfw4YIasw5zbd0sYx1SJAqLgJbZ+zNJzcf//xhxF8m7vfSTB4a6JoRH4gjE5c93n
+         xtLLwG6rd+/LiLs78d3g/X86QhMpgoA/4BRg9iconFr6K6h9YomBb4nBsiquCutYLjmu
+         xUL1J5l//0lwsiMz7maODLXhHL9CQGdbGpWBXJbr002FzcT/YXH0Q4aoUbjFR/bhEg8D
+         M0evo4IjwOxgZihrZ5S3lpt7H//SOIkP5UcJxwkq7EjwlgsagcevwOTGuG/H6nQWd/FB
+         iNUQ==
+X-Gm-Message-State: AOAM533ihckIozMJgWTyn0fGeaccgyOjiCsX+unrHqZUeHyJuT8Zr80r
+        ouKY68yn26/2UCeF4ws1aEzwCOk3OgHsQJeajKGNu+s90wmxhfSY6kuKvekj5Ga59qjBMoJCqDg
+        kcEeoaZKHriT+XZ/V7uRZnQ==
+X-Received: by 2002:a05:6000:1ac5:: with SMTP id i5mr5879839wry.6.1621332405357;
+        Tue, 18 May 2021 03:06:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwiVxI2VqHM3UC3HkCv7YVP9ChZhf/paSvmhTbK/1R/b2aClM7EAkaKYj9OwIH5AzvG3tEX6Q==
+X-Received: by 2002:a05:6000:1ac5:: with SMTP id i5mr5879787wry.6.1621332405164;
+        Tue, 18 May 2021 03:06:45 -0700 (PDT)
+Received: from [192.168.3.132] (p5b0c64fd.dip0.t-ipconnect.de. [91.12.100.253])
+        by smtp.gmail.com with ESMTPSA id f14sm8395872wry.40.2021.05.18.03.06.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 May 2021 03:06:44 -0700 (PDT)
+Subject: Re: [PATCH v19 5/8] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+To:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
@@ -64,44 +92,56 @@ Cc:     David Hildenbrand <david@redhat.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org
-Subject: Re: [PATCH v19 5/8] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <YKOP5x8PPbqzcsdK@dhcp22.suse.cz>
 References: <20210513184734.29317-1-rppt@kernel.org>
  <20210513184734.29317-6-rppt@kernel.org>
  <b625c5d7-bfcc-9e95-1f79-fc8b61498049@redhat.com>
- <YKDJ1L7XpJRQgSch@kernel.org>
+ <YKDJ1L7XpJRQgSch@kernel.org> <YKOP5x8PPbqzcsdK@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Message-ID: <8e114f09-60e4-2343-1c42-1beaf540c150@redhat.com>
+Date:   Tue, 18 May 2021 12:06:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YKDJ1L7XpJRQgSch@kernel.org>
+In-Reply-To: <YKOP5x8PPbqzcsdK@dhcp22.suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun 16-05-21 10:29:24, Mike Rapoport wrote:
-> On Fri, May 14, 2021 at 11:25:43AM +0200, David Hildenbrand wrote:
-[...]
-> > > +		if (!page)
-> > > +			return VM_FAULT_OOM;
-> > > +
-> > > +		err = set_direct_map_invalid_noflush(page, 1);
-> > > +		if (err) {
-> > > +			put_page(page);
-> > > +			return vmf_error(err);
-> > 
-> > Would we want to translate that to a proper VM_FAULT_..., which would most
-> > probably be VM_FAULT_OOM when we fail to allocate a pagetable?
+On 18.05.21 11:59, Michal Hocko wrote:
+> On Sun 16-05-21 10:29:24, Mike Rapoport wrote:
+>> On Fri, May 14, 2021 at 11:25:43AM +0200, David Hildenbrand wrote:
+> [...]
+>>>> +		if (!page)
+>>>> +			return VM_FAULT_OOM;
+>>>> +
+>>>> +		err = set_direct_map_invalid_noflush(page, 1);
+>>>> +		if (err) {
+>>>> +			put_page(page);
+>>>> +			return vmf_error(err);
+>>>
+>>> Would we want to translate that to a proper VM_FAULT_..., which would most
+>>> probably be VM_FAULT_OOM when we fail to allocate a pagetable?
+>>
+>> That's what vmf_error does, it translates -ESOMETHING to VM_FAULT_XYZ.
 > 
-> That's what vmf_error does, it translates -ESOMETHING to VM_FAULT_XYZ.
+> I haven't read through the rest but this has just caught my attention.
+> Is it really reasonable to trigger the oom killer when you cannot
+> invalidate the direct mapping. From a quick look at the code it is quite
+> unlikely to se ENOMEM from that path (it allocates small pages) but this
+> can become quite sublte over time. Shouldn't this simply SIGBUS if it
+> cannot manipulate the direct mapping regardless of the underlying reason
+> for that?
+> 
 
-I haven't read through the rest but this has just caught my attention.
-Is it really reasonable to trigger the oom killer when you cannot
-invalidate the direct mapping. From a quick look at the code it is quite
-unlikely to se ENOMEM from that path (it allocates small pages) but this
-can become quite sublte over time. Shouldn't this simply SIGBUS if it
-cannot manipulate the direct mapping regardless of the underlying reason
-for that?
+OTOH, it means our kernel zones are depleted, so we'd better reclaim 
+somehow ...
+
 -- 
-Michal Hocko
-SUSE Labs
+Thanks,
+
+David / dhildenb
+
