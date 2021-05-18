@@ -2,152 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FB5387721
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 13:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1813238774D
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 13:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348315AbhERLJw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 07:09:52 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55746 "EHLO mx2.suse.de"
+        id S1348803AbhERLTI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 07:19:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38910 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348295AbhERLJs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 07:09:48 -0400
+        id S237443AbhERLTE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 07:19:04 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1621336109; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1621336665; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4YrC8sXmTYcRXRqQEW1PHcV/1KnSvWM0S1bOpAI2CJA=;
-        b=IeXTGF9s14zk1xMYwqe63UzwmexLD0t5w2/lmVlgBw7GL+9Q9WNp2iapvjbdnvXH0892B0
-        1vztSfmB1vN+rsIDTC2mrkkDvcaU/PrlXK+za1yXSEDxf3T+eBJpwkZkg54uwDGDEWVXGh
-        cLuYNls00SwLIDJ2DsL6MtGb3g25t6M=
+        bh=htqqSuziJ3XS9X+MDWVgpvZ0mawTjFOdRU1/fBxrQ+s=;
+        b=pnHF7k6CQQbOV5RHgq7RrNLxWJrStiO8vlJjmGpwtxcxdRXPxV9qh10HYpis86wlkklfxx
+        r9UknxcH6JjrK6RDrLP/P0e64UHS5OsqnlcZ402Jw6HsZ8V4JjnF2P23tAhWilJ8kQTvZb
+        G2cqTXwc6VQe/dUAduYPQu+ZDaQy96Y=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B0DBDB00E;
-        Tue, 18 May 2021 11:08:28 +0000 (UTC)
-Date:   Tue, 18 May 2021 13:08:27 +0200
+        by mx2.suse.de (Postfix) with ESMTP id 15527B127;
+        Tue, 18 May 2021 11:17:45 +0000 (UTC)
+Date:   Tue, 18 May 2021 13:17:43 +0200
 From:   Michal Hocko <mhocko@suse.com>
 To:     David Hildenbrand <david@redhat.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Hagen Paul Pfeifer <hagen@jauu.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Oscar Salvador <osalvador@suse.de>,
         Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v19 5/8] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <YKOgK9eQSfgoz6eE@dhcp22.suse.cz>
-References: <20210513184734.29317-1-rppt@kernel.org>
- <20210513184734.29317-6-rppt@kernel.org>
- <b625c5d7-bfcc-9e95-1f79-fc8b61498049@redhat.com>
- <YKDJ1L7XpJRQgSch@kernel.org>
- <YKOP5x8PPbqzcsdK@dhcp22.suse.cz>
- <8e114f09-60e4-2343-1c42-1beaf540c150@redhat.com>
- <YKOXbNWvUsqM4uxb@dhcp22.suse.cz>
- <00644dd8-edac-d3fd-a080-0a175fa9bf13@redhat.com>
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
+Subject: Re: [PATCH resend v2 2/5] mm/madvise: introduce
+ MADV_POPULATE_(READ|WRITE) to prefault page tables
+Message-ID: <YKOiV9VkEdYFM9nB@dhcp22.suse.cz>
+References: <20210511081534.3507-1-david@redhat.com>
+ <20210511081534.3507-3-david@redhat.com>
+ <YKOR/8LzEaOgCvio@dhcp22.suse.cz>
+ <bb0e2ebb-e66d-176c-b20a-fbadd95cde98@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00644dd8-edac-d3fd-a080-0a175fa9bf13@redhat.com>
+In-Reply-To: <bb0e2ebb-e66d-176c-b20a-fbadd95cde98@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue 18-05-21 12:35:36, David Hildenbrand wrote:
-> On 18.05.21 12:31, Michal Hocko wrote:
-> > On Tue 18-05-21 12:06:42, David Hildenbrand wrote:
-> > > On 18.05.21 11:59, Michal Hocko wrote:
-> > > > On Sun 16-05-21 10:29:24, Mike Rapoport wrote:
-> > > > > On Fri, May 14, 2021 at 11:25:43AM +0200, David Hildenbrand wrote:
-> > > > [...]
-> > > > > > > +		if (!page)
-> > > > > > > +			return VM_FAULT_OOM;
-> > > > > > > +
-> > > > > > > +		err = set_direct_map_invalid_noflush(page, 1);
-> > > > > > > +		if (err) {
-> > > > > > > +			put_page(page);
-> > > > > > > +			return vmf_error(err);
-> > > > > > 
-> > > > > > Would we want to translate that to a proper VM_FAULT_..., which would most
-> > > > > > probably be VM_FAULT_OOM when we fail to allocate a pagetable?
-> > > > > 
-> > > > > That's what vmf_error does, it translates -ESOMETHING to VM_FAULT_XYZ.
-> > > > 
-> > > > I haven't read through the rest but this has just caught my attention.
-> > > > Is it really reasonable to trigger the oom killer when you cannot
-> > > > invalidate the direct mapping. From a quick look at the code it is quite
-> > > > unlikely to se ENOMEM from that path (it allocates small pages) but this
-> > > > can become quite sublte over time. Shouldn't this simply SIGBUS if it
-> > > > cannot manipulate the direct mapping regardless of the underlying reason
-> > > > for that?
-> > > > 
-> > > 
-> > > OTOH, it means our kernel zones are depleted, so we'd better reclaim somehow
-> > > ...
+On Tue 18-05-21 12:32:12, David Hildenbrand wrote:
+> On 18.05.21 12:07, Michal Hocko wrote:
+> > [sorry for a long silence on this]
 > > 
-> > Killing a userspace seems to be just a bad way around that.
+> > On Tue 11-05-21 10:15:31, David Hildenbrand wrote:
+> > [...]
 > > 
-> > Although I have to say openly that I am not a great fan of VM_FAULT_OOM
-> > in general. It is usually a a wrong way to tell the handle the failure
-> > because it happens outside of the allocation context so you lose all the
-> > details (e.g. allocation constrains, numa policy etc.). Also whenever
-> > there is ENOMEM then the allocation itself has already made sure that
-> > all the reclaim attempts have been already depleted. Just consider an
-> > allocation with GFP_NOWAIT/NO_RETRY or similar to fail and propagate
-> > ENOMEM up the call stack. Turning that into the OOM killer sounds like a
-> > bad idea to me.  But that is a more general topic. I have tried to bring
-> > this up in the past but there was not much of an interest to fix it as
-> > it was not a pressing problem...
-> > 
+> > Thanks for the extensive usecase description. That is certainly useful
+> > background. I am sorry to bring this up again but I am still not
+> > convinced that READ/WRITE variant are the best interface.
 > 
-> I'm certainly interested; it would mean that we actually want to try
-> recovering from VM_FAULT_OOM in various cases, and as you state, we might
-> have to supply more information to make that work reliably.
+> Thanks for having time to look into this.
+> 
+> > > While the use case for MADV_POPULATE_WRITE is fairly obvious (i.e.,
+> > > preallocate memory and prefault page tables for VMs), one issue is that
+> > > whenever we prefault pages writable, the pages have to be marked dirty,
+> > > because the CPU could dirty them any time. while not a real problem for
+> > > hugetlbfs or dax/pmem, it can be a problem for shared file mappings: each
+> > > page will be marked dirty and has to be written back later when evicting.
+> > > 
+> > > MADV_POPULATE_READ allows for optimizing this scenario: Pre-read a whole
+> > > mapping from backend storage without marking it dirty, such that eviction
+> > > won't have to write it back. As discussed above, shared file mappings
+> > > might require an explciit fallocate() upfront to achieve
+> > > preallcoation+prepopulation.
+> > 
+> > This means that you want to have two different uses depending on the
+> > underlying mapping type. MADV_POPULATE_READ seems rather weak for
+> > anonymous/private mappings. Memory backed by zero pages seems rather
+> > unhelpful as the PF would need to do all the heavy lifting anyway.
+> > Or is there any actual usecase when this is desirable?
+> 
+> Currently, userfaultfd-wp, which requires "some mapping" to be able to arm
+> successfully. In QEMU, we currently have to prefault the shared zeropage for
+> userfaultfd-wp to work as expected.
 
-Or maybe we want to get rid of VM_FAULT_OOM altogether... But this is
-really tangent to this discussion. The only relation is that this would
-be another place to check when somebody wants to go that direction.
+Just for clarification. The aim is to reduce the memory footprint at the
+same time, right? If that is really the case then this is worth adding.
 
-> Having that said, I guess what we have here is just the same as when our
-> process fails to allocate a generic page table in __handle_mm_fault(), when
-> we fail p4d_alloc() and friends ...
+> I expect that use case might vanish over
+> time (eventually with new kernels and updated user space), but it might
+> stick for a bit.
 
-From a quick look it is really similar in a sense that it effectively never
-happens and if it does then it certainly does the wrong thing. The point
-I was trying to make is that there is likely no need to go that way.
-Fundamentally, not being able to handle direct map for the page fault
-sounds like what SIGBUS should be used for. From my POV it is similar to
-ENOSPC when FS cannot allocate metadata on the storage.
+Could you elaborate some more please?
+
+> Apart from that, populating the shared zeropage might be relevant in some
+> corner cases: I remember there are sparse matrix algorithms that operate
+> heavily on the shared zeropage.
+
+I am not sure I see why this would be a useful interface for those? Zero
+page read fault is really low cost. Or are you worried about cummulative
+overhead by entering the kernel many times?
+
+> > So the split into these two modes seems more like gup interface
+> > shortcomings bubbling up to the interface. I do expect userspace only
+> > cares about pre-faulting the address range. No matter what the backing
+> > storage is.
+> > 
+> > Or do I still misunderstand all the usecases?
+> 
+> Let me give you an example where we really cannot tell what would be best
+> from a kernel perspective.
+> 
+> a) Mapping a file into a VM to be used as RAM. We might expect the guest
+> writing all memory immediately (e.g., booting Windows). We would want
+> MADV_POPULATE_WRITE as we expect a write access immediately.
+> 
+> b) Mapping a file into a VM to be used as fake-NVDIMM, for example, ROOTFS
+> or just data storage. We expect mostly reading from this memory, thus, we
+> would want MADV_POPULATE_READ.
+
+I am afraid I do not follow. Could you be more explicit about advantages
+of using those two modes for those example usecases? Is that to share
+resources (e.g. by not breaking CoW)?
+
+> Instead of trying to be smart in the kernel, I think for this case it makes
+> much more sense to provide user space the options. IMHO it doesn't really
+> hurt to let user space decide on what it thinks is best.
+
+I am mostly worried that this will turn out to be more confusing than
+helpful. People will need to grasp non trivial concepts and kernel
+internal implementation details about how read/write faults are handled.
+
+Thanks!
 -- 
 Michal Hocko
 SUSE Labs
