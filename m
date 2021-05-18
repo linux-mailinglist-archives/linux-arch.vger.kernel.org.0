@@ -2,116 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BA4387AE8
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 16:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DC2387BBD
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 16:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349918AbhEROUX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 10:20:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55694 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243610AbhEROUW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 10:20:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CA31661261;
-        Tue, 18 May 2021 14:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621347544;
-        bh=nrAiIQTKJqiGVWRN+fZiK7vfTpl+mh6GdbMLf8QWU6M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uO2nCdiW0NvUD3Oq2cx82BZG1aOLpwqISU2mJf1pn/41gmWeJwtJ3KwTWkPZOSffp
-         qtEeD+G01WQE2a6OLg6viaogVrTcoartVG2vRtYwIcq9FSRcV1egrAvYdgmA/X3tdB
-         m+P5YNb/2zoWb2ENaduSUYHTB0469Qb0Kj+2op5ABqhzmU5gjMCmQF2DbOGijvmPsZ
-         xCjeQ8txdUZYsP5uPuGPMjh0ckotg/LymHT4x6ecHUAo8zYTM6uAVSt2umBf2+GizG
-         +1ADzfu8zRcpU2xe1Of94E5AHIjxvrL1zbXxtiJz14yqM7TivZbQbYGDShT6WINj/N
-         peuu9A0lgQRXg==
-Received: by mail-wr1-f44.google.com with SMTP id j14so8694518wrq.5;
-        Tue, 18 May 2021 07:19:04 -0700 (PDT)
-X-Gm-Message-State: AOAM533iH7VBzIlnOuNZh8KObkGowvuqg209qCpHSe1GYY10O9Ap2071
-        YIwemHu4gzeOIo+zwLND8bzHA526So8jSfafqg8=
-X-Google-Smtp-Source: ABdhPJzFpyp1CPVwvL2JvI3KmHNWPOcV2naQQAKLVgR48kQxz5AWGK/oLA+ez9stiNWkfs+BeuLGyXYYTicjDNU1kEw=
-X-Received: by 2002:a5d:6dc4:: with SMTP id d4mr7586717wrz.105.1621347543476;
- Tue, 18 May 2021 07:19:03 -0700 (PDT)
+        id S243646AbhERO5y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 10:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240593AbhERO5y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 May 2021 10:57:54 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4FEC06175F
+        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 07:56:36 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id v5so11917479ljg.12
+        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 07:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2GIgWhqGcodNJt+bhmadIRku1GYGWA9BQY8QV+rt7Hg=;
+        b=SN/bhWDUJ2SkBrO/ViOth1isjAPZnYWzCwPZ44mO97QnaN+zuhO5YuiWSqpMCEBe32
+         eEnYvdyPJ4sVC4dfBW20qujRJ8QsR0Q+Ir7WBgaSE9L/1h6IgNSaa8lgmghnrhMEDf46
+         1m6lR628LVmKdGAvvXtGWXQWZawohBG0sHO9s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2GIgWhqGcodNJt+bhmadIRku1GYGWA9BQY8QV+rt7Hg=;
+        b=YW6O6ogyKyi+XPQ+57pLBSz8OGN+AVA7xRl1YzyLre5mq3zA4X29HG44qA3jO3Tuon
+         OKzZPhWkyf2T7fllDfzGeOdcgYA51CY8YSyymSEWliuYpWZj730+JYX3uAOFNkZsRFYA
+         YqIjl3zCmfwBDjTTdgkVNFfnRJhG1MMbKDl74/Q61ifIn/2mHMeLOEhb9FJunSYTIOFw
+         rHSvu5OLZqAIrXSP8+jY3okve6fR0q9RHwmn1G9+zRgaIvcEqlnoBCqF8ZnHXhnL2i9I
+         pmpmHrbyHTje4tnvzWxC1J1GCBi2eLXgWVx1psaHNgw9XPuaZtU2wH9CKBeP9nHOJf62
+         E4Lg==
+X-Gm-Message-State: AOAM533hczaF7Zl3l9OJQ8UxouRtgyzsAp8LMKmHL0rIORBuShMZ7Y1o
+        NXUYfRryF7ZeKI1K8Xhd/ztUF+JOpoqLyE2X
+X-Google-Smtp-Source: ABdhPJw/99kMxCwR0yFRx73jzv4gJj69z8EspYcbsKgYPbWtG8E04JDo+vAvZV310kqPy8vVDCVxLg==
+X-Received: by 2002:a2e:8646:: with SMTP id i6mr4309604ljj.391.1621349794120;
+        Tue, 18 May 2021 07:56:34 -0700 (PDT)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id k18sm2350657lfg.200.2021.05.18.07.56.32
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 May 2021 07:56:33 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id i22so14501635lfl.10
+        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 07:56:32 -0700 (PDT)
+X-Received: by 2002:a19:c3d1:: with SMTP id t200mr4305910lff.421.1621349792609;
+ Tue, 18 May 2021 07:56:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210517203343.3941777-1-arnd@kernel.org> <20210517203343.3941777-2-arnd@kernel.org>
- <m1bl982m8c.fsf@fess.ebiederm.org> <CAK8P3a27_z8zk6j5W4n+u3g2e90v-h+3AbaTZ6YjCQ0B7AbJaA@mail.gmail.com>
-In-Reply-To: <CAK8P3a27_z8zk6j5W4n+u3g2e90v-h+3AbaTZ6YjCQ0B7AbJaA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 18 May 2021 16:17:53 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a277VggQbBnXUzpwP7TKMj-S_z6rDMYYxfjyQmzGJdpCA@mail.gmail.com>
-Message-ID: <CAK8P3a277VggQbBnXUzpwP7TKMj-S_z6rDMYYxfjyQmzGJdpCA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] kexec: simplify compat_sys_kexec_load
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+References: <20210514100106.3404011-1-arnd@kernel.org> <20210514100106.3404011-8-arnd@kernel.org>
+ <YKLlyQnR+3uW4ETD@gmail.com> <CAK8P3a0iqe5V6uvaW+Eo0qiwzvyUVavVEfZGwXh4s8ad+0RdCg@mail.gmail.com>
+In-Reply-To: <CAK8P3a0iqe5V6uvaW+Eo0qiwzvyUVavVEfZGwXh4s8ad+0RdCg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 18 May 2021 07:56:15 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjjo+F8HVkq3eLg+=7hjZPF5mkA4JbgAU8FGE_oAw2MEg@mail.gmail.com>
+Message-ID: <CAHk-=wjjo+F8HVkq3eLg+=7hjZPF5mkA4JbgAU8FGE_oAw2MEg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/13] asm-generic: unaligned always use struct helpers
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, kexec@lists.infradead.org
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 18, 2021 at 4:05 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Tue, May 18, 2021 at 12:27 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > I wonder if the kernel should do the same, or whether there are still cases
+> > where memcpy() isn't compiled optimally.  armv6/7 used to be one such case, but
+> > it was fixed in gcc 6.
 >
-> On Tue, May 18, 2021 at 3:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> >
-> > Arnd Bergmann <arnd@kernel.org> writes:
-> >
-> > > From: Arnd Bergmann <arnd@arndb.de>KEXEC_ARCH_DEFAULT
-> > >
-> > > The compat version of sys_kexec_load() uses compat_alloc_user_space to
-> > > convert the user-provided arguments into the native format.
-> > >
-> > > Move the conversion into the regular implementation with
-> > > an in_compat_syscall() check to simplify it and avoid the
-> > > compat_alloc_user_space() call.
-> > >
-> > > compat_sys_kexec_load() now behaves the same as sys_kexec_load().
-> >
-> > Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> >KEXEC_ARCH_DEFAULT
-> > The patch is wrong.
-> >
-> > The logic between the compat entry point and the ordinary entry point
-> > are by necessity different.   This unifies the logic and breaks the compat
-> > entry point.
-> >
-> > The fundamentally necessity is that the code being loaded needs to know
-> > which mode the kernel is running in so it can safely transition to the
-> > new kernel.
-> >
-> > Given that the two entry points fundamentally need different logic,
-> > and that difference was not preserved and the goal of this patchset
-> > was to unify that which fundamentally needs to be different.  I don't
-> > think this patch series makes any sense for kexec.
->
-> Sorry, I'm not following that explanation. Can you clarify what different
-> modes of the kernel you are referring to here, and how my patch
-> changes this?
+> It would have to be memmove(), not memcpy() in this case, right?
 
-I think I figured it out now myself after comparing the two functions:
+No, it would simply be something like
 
---- a/kernel/kexec.c
-+++ b/kernel/kexec.c
-@@ -269,7 +269,8 @@ SYSCALL_DEFINE4(kexec_load, unsigned long, entry,
-unsigned long, nr_segments,
+  #define __get_unaligned_t(type, ptr) \
+        ({ type __val; memcpy(&__val, ptr, sizeof(type)); __val; })
 
-        /* Verify we are on the appropriate architecture */
-        if (((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH) &&
--               ((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH_DEFAULT))
-+               (in_compat_syscall() ||
-+               ((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH_DEFAULT)))
-                return -EINVAL;
+  #define get_unaligned(ptr) \
+        __get_unaligned_t(typeof(*(ptr)), ptr)
 
-        /* Because we write directly to the reserved memory
+but honestly, the likelihood that the compiler generates something
+horrible (possibly because of KASAN etc) is uncomfortably high.
 
-Not sure if that's the best way of doing it, but it looks like folding this
-in restores the current behavior.
+I'd prefer the __packed thing. We don't actually use -O3, and it's
+considered a bad idea, and the gcc bug is as such less likely than
+just  the above generating unacceptable code (we have several cases
+where "bad code generation" ends up being an actual bug, since we
+depend on inlining and depend on some code sequences not generating
+calls etc).
 
-        Arnd
+But I hate how gcc is buggy in so many places here, and the
+straightforward thing is made to explicitly not work.
+
+I absolutely despise compiler people who think it's ok to generate
+known bad code based on pointless "undefined behavior" arguments - and
+then those same clever optimizations break even when you do things
+properly.  It's basically intellectual dishonesty - doing known
+fragile things, blaming the user when it breaks, but then not
+acknowledging that the fragile shit they did was broken even when the
+user bent over backwards.
+
+                Linus
