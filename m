@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF8D387587
-	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 11:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126F5387591
+	for <lists+linux-arch@lfdr.de>; Tue, 18 May 2021 11:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348102AbhERJtW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 05:49:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49928 "EHLO mail.kernel.org"
+        id S1348116AbhERJta (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 05:49:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50024 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348106AbhERJtQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 05:49:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0C391613CE;
-        Tue, 18 May 2021 09:47:55 +0000 (UTC)
+        id S1348124AbhERJtU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 05:49:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 987FB613CA;
+        Tue, 18 May 2021 09:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621331279;
-        bh=EV9JgCxKjLj4KVtD7cKw871l26IXkBBXbX6fJNN8AkA=;
+        s=k20201202; t=1621331282;
+        bh=NvwSaFd4j1U9x7MuiRuhuzS0QYyzwo36gVpUtBca09k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QqN0MSxlEWysNMl3QzC9VV1pquDbqXqjrrvGQioYU6YK/JDHtOJmFhEn4e6Yz9pPn
-         krlxtnuEtmgB7W/xdaMVwHhPp2EFjsqVSWh9KzZJ7ixKZXtz7sprabF5LJuvT9aLqm
-         zXlIbJNaSAqN05og4Uev+SmBGglmP6/ifaR/Z6/0mv41joOk+ZyJiyT7KJa5hUsNCh
-         FHDpi7QSMs4GSKVLwtNkXznYWi/PAcTZ2KtJ3uIhrR+j/7yMp/3SZ/9Z7zAoJu+MBE
-         fQ4YekLvZPq0FsLtAyGntl6Ci5qj3Dyw6dCOD1RltEn7LhmiK97uvujTMP6B98bhvf
-         IXxQ9YVOktUPg==
+        b=PrnyXh5dDh1IBvExWmit09/FbBGiBbuPKeY+VMUJw8xXrf5z1gD6Mq5/GTrEf2e53
+         Ss1XprfORyl2NnRvt2oGg1RpmHMV4Sjwk3oZA/1j83FYtPvuXxNZlmJhlMNbUSwpwP
+         kE14LKvtyOjuJLTLLTA6KK+VT/JmdQbX/Ul4WJO7mqzTR43GDkfe+CAuBWI/8jbR6U
+         zQsSsD5Ykng8/nOF2AZ9uIo1azDZZUcBsMqZ9GCQ6MQGB9j6WjwXcFyHtp4pO8b6Z6
+         LmF2ljTd4DQIiYNwlltUyhN9v/4/J+y+n+oKeZzyXYC9X8mdtWS3U1Wavdlm3prYkT
+         7ArvJUG2dnRDg==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: [PATCH v6 06/21] sched: Introduce task_cpu_possible_mask() to limit fallback rq selection
-Date:   Tue, 18 May 2021 10:47:10 +0100
-Message-Id: <20210518094725.7701-7-will@kernel.org>
+Subject: [PATCH v6 07/21] cpuset: Don't use the cpu_possible_mask as a last resort for cgroup v1
+Date:   Tue, 18 May 2021 10:47:11 +0100
+Message-Id: <20210518094725.7701-8-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210518094725.7701-1-will@kernel.org>
 References: <20210518094725.7701-1-will@kernel.org>
@@ -53,77 +53,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Asymmetric systems may not offer the same level of userspace ISA support
-across all CPUs, meaning that some applications cannot be executed by
-some CPUs. As a concrete example, upcoming arm64 big.LITTLE designs do
-not feature support for 32-bit applications on both clusters.
+If the scheduler cannot find an allowed CPU for a task,
+cpuset_cpus_allowed_fallback() will widen the affinity to cpu_possible_mask
+if cgroup v1 is in use.
 
-On such a system, we must take care not to migrate a task to an
-unsupported CPU when forcefully moving tasks in select_fallback_rq()
-in response to a CPU hot-unplug operation.
+In preparation for allowing architectures to provide their own fallback
+mask, just return early if we're either using cgroup v1 or we're using
+cgroup v2 with a mask that contains invalid CPUs. This will allow
+select_fallback_rq() to figure out the mask by itself.
 
-Introduce a task_cpu_possible_mask() hook which, given a task argument,
-allows an architecture to return a cpumask of CPUs that are capable of
-executing that task. The default implementation returns the
-cpu_possible_mask, since sane machines do not suffer from per-cpu ISA
-limitations that affect scheduling. The new mask is used when selecting
-the fallback runqueue as a last resort before forcing a migration to the
-first active CPU.
-
+Cc: Li Zefan <lizefan@huawei.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
 Reviewed-by: Quentin Perret <qperret@google.com>
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- include/linux/mmu_context.h |  8 ++++++++
- kernel/sched/core.c         | 10 ++++++----
- 2 files changed, 14 insertions(+), 4 deletions(-)
+ include/linux/cpuset.h |  1 +
+ kernel/cgroup/cpuset.c | 12 ++++++++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/mmu_context.h b/include/linux/mmu_context.h
-index 03dee12d2b61..bc4ac3c525e6 100644
---- a/include/linux/mmu_context.h
-+++ b/include/linux/mmu_context.h
-@@ -14,4 +14,12 @@
- static inline void leave_mm(int cpu) { }
- #endif
+diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+index 04c20de66afc..ed6ec677dd6b 100644
+--- a/include/linux/cpuset.h
++++ b/include/linux/cpuset.h
+@@ -15,6 +15,7 @@
+ #include <linux/cpumask.h>
+ #include <linux/nodemask.h>
+ #include <linux/mm.h>
++#include <linux/mmu_context.h>
+ #include <linux/jump_label.h>
  
-+/*
-+ * CPUs that are capable of running task @p. By default, we assume a sane,
-+ * homogeneous system. Must contain at least one active CPU.
-+ */
-+#ifndef task_cpu_possible_mask
-+# define task_cpu_possible_mask(p)	cpu_possible_mask
-+#endif
+ #ifdef CONFIG_CPUSETS
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index a945504c0ae7..8c799260a4a2 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -3322,9 +3322,17 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
+ 
+ void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+ {
++	const struct cpumask *cs_mask;
++	const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
 +
- #endif
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 5226cc26a095..482f7fdca0e8 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1813,8 +1813,11 @@ static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
- 		return cpu_online(cpu);
+ 	rcu_read_lock();
+-	do_set_cpus_allowed(tsk, is_in_v2_mode() ?
+-		task_cs(tsk)->cpus_allowed : cpu_possible_mask);
++	cs_mask = task_cs(tsk)->cpus_allowed;
++
++	if (!is_in_v2_mode() || !cpumask_subset(cs_mask, possible_mask))
++		goto unlock; /* select_fallback_rq will try harder */
++
++	do_set_cpus_allowed(tsk, cs_mask);
++unlock:
+ 	rcu_read_unlock();
  
- 	/* Non kernel threads are not allowed during either online or offline. */
--	if (!(p->flags & PF_KTHREAD))
--		return cpu_active(cpu);
-+	if (!(p->flags & PF_KTHREAD)) {
-+		if (cpu_active(cpu))
-+			return cpumask_test_cpu(cpu, task_cpu_possible_mask(p));
-+		return false;
-+	}
- 
- 	/* KTHREAD_IS_PER_CPU is always allowed. */
- 	if (kthread_is_per_cpu(p))
-@@ -2792,10 +2795,9 @@ static int select_fallback_rq(int cpu, struct task_struct *p)
- 			 *
- 			 * More yuck to audit.
- 			 */
--			do_set_cpus_allowed(p, cpu_possible_mask);
-+			do_set_cpus_allowed(p, task_cpu_possible_mask(p));
- 			state = fail;
- 			break;
--
- 		case fail:
- 			BUG();
- 			break;
+ 	/*
 -- 
 2.31.1.751.gd2f1c929bd-goog
 
