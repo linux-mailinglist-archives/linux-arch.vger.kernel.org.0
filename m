@@ -2,132 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8883887FC
-	for <lists+linux-arch@lfdr.de>; Wed, 19 May 2021 09:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5375388802
+	for <lists+linux-arch@lfdr.de>; Wed, 19 May 2021 09:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237212AbhESHOq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 May 2021 03:14:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36636 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235329AbhESHOq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 May 2021 03:14:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 306EE6135B;
-        Wed, 19 May 2021 07:13:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621408407;
-        bh=Ki50aQXwD1+I3Hw9xcIirZa4MRm+9KRJ+IEPHMwhBkI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oYyy/RZh+KV4+OBVGMz4vRqytOJ3S6neHrNHLUg1kHLXII61rwPkBThjJAvrsmUZo
-         FjnPqLIJ5kAx/qeZGbRsU6kB8hQ4Hhb8cAmXfxBQtvxU8dgEHEV4y4yEtokhAPiKIr
-         /MuOkK56iFsIUVMsvkPHddFEnBeu4T4s7c6IPe+YOzaeJb9MlSBih46lnNG19GWJXN
-         Dr+Kz+dEZLJXS9T0HxuiavOJs0HPv1T3S1Qsh+y5zhmE6RBkRzoRn73O2mfgQvXLJ6
-         Y/WFNcW+0oFbapTux4HghodwAEaeJ7uRFxUxBZQ17d8823037Btr6+DWDVvpylUSU6
-         pxMi/n2f2auLQ==
-Date:   Wed, 19 May 2021 10:13:09 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Hagen Paul Pfeifer <hagen@jauu.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v19 5/8] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <YKS6herUjtCDz7ko@kernel.org>
-References: <20210513184734.29317-1-rppt@kernel.org>
- <20210513184734.29317-6-rppt@kernel.org>
- <b625c5d7-bfcc-9e95-1f79-fc8b61498049@redhat.com>
- <YKDJ1L7XpJRQgSch@kernel.org>
- <YKOP5x8PPbqzcsdK@dhcp22.suse.cz>
- <8e114f09-60e4-2343-1c42-1beaf540c150@redhat.com>
- <YKOXbNWvUsqM4uxb@dhcp22.suse.cz>
- <00644dd8-edac-d3fd-a080-0a175fa9bf13@redhat.com>
- <YKOgK9eQSfgoz6eE@dhcp22.suse.cz>
+        id S239404AbhESHQc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 May 2021 03:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239336AbhESHQb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 May 2021 03:16:31 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5E9C06175F
+        for <linux-arch@vger.kernel.org>; Wed, 19 May 2021 00:15:10 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id b7so6070705wmh.5
+        for <linux-arch@vger.kernel.org>; Wed, 19 May 2021 00:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9okw0AivC/GodUAOgdSjrzNrGvlF7i2iJnuU6Q7Ckhk=;
+        b=GLdq3bNPUG1jVbmGuXT/73WV/H4ct0JC+JPyO1eIGy+uxrXeIrrgUTBkgOyB79PHc7
+         wLFK19VrpLW3+QR7uumz7VfegumO/03BPjeaHthtleLjPv4rR5sZsZKmnwKaMZ0UMMQE
+         gr/wpNE/p3phdRl/HBhMBnnG7Ceqfv4Un6Qh9OMLUWnILbaOcsufq7QT6gVJNkALrDj5
+         LvEedY1AAT0Wpovo/BsutzLeeNlF70WhAFXjf5wfegQAs7idnoCE+88T76OnTfUMjnqY
+         mZBt11ZLbg81ZNLfNeOqHoJde6wljGw5DprysPeWSQuaCaOg7bKP+7E2aaqYKQ3qBy0R
+         wFLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9okw0AivC/GodUAOgdSjrzNrGvlF7i2iJnuU6Q7Ckhk=;
+        b=hozX1VkTC6I2Khfremz40hGHVpPb0pG+BbLNdDU9YQmAqsw27ZnSUILG6cXVmt1UQK
+         tKhLJEPmTEjYpGt/iRtUFaNRSVgYraMQ1T4EWgY1YKjq3x6oIF7Y1dsQzDH3ujY9vLrs
+         uS/yI3MEstlg/V8S1a3CprphStjXkBAqOHgX43KAuqSNFkClAaB1KZ6LBW8fAxrHKlJ5
+         NiBPPTAUbTJ5Yvjy8q9Vwx0Rcc7zv+PLshBP4BX+GurIfKCVnq0j0k0av2WgQoT2ThpB
+         A1Cy5O7RU80svw/4hybhRiP8IrYDk6xBbNrJFG8DWY2GxHn4574sBto+XcRfTuPm1nIF
+         qgLg==
+X-Gm-Message-State: AOAM5325YvNo8/rnCBRMvrCrqsjEGGhlX9gp2zS44ORZc6ShNhq9WSV2
+        Alt8/uBtdeX16SOqkg/GmQL6h+A6Bc0vIURZeC7Hdg==
+X-Google-Smtp-Source: ABdhPJw/naptBUbx4b3ptbfbXhmKN+TgrAcgi05rNO45VadkiPEcCxSc5SrssSarObHWl3KVpfRHtcRUN81TCIYDW3E=
+X-Received: by 2002:a1c:4e0b:: with SMTP id g11mr9882524wmh.3.1621408508509;
+ Wed, 19 May 2021 00:15:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YKOgK9eQSfgoz6eE@dhcp22.suse.cz>
+References: <1621400656-25678-1-git-send-email-guoren@kernel.org>
+ <20210519052048.GA24853@lst.de> <CAJF2gTR5838=Uwc5P6Xs=G7vk80k0yqWcSsNe0OFcwc9sDBBHg@mail.gmail.com>
+ <20210519060617.GA28397@lst.de> <20210519065431.GB3076809@x1>
+In-Reply-To: <20210519065431.GB3076809@x1>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 19 May 2021 12:44:55 +0530
+Message-ID: <CAAhSdy3C1owsbY_9gkxkhWfCXnL_noow7F4t=5+j7q+AJO3pZQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
+To:     Drew Fustini <drew@beagleboard.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>, wefu@redhat.com,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 18, 2021 at 01:08:27PM +0200, Michal Hocko wrote:
-> On Tue 18-05-21 12:35:36, David Hildenbrand wrote:
-> > On 18.05.21 12:31, Michal Hocko wrote:
-> > >
-> > > Although I have to say openly that I am not a great fan of VM_FAULT_OOM
-> > > in general. It is usually a a wrong way to tell the handle the failure
-> > > because it happens outside of the allocation context so you lose all the
-> > > details (e.g. allocation constrains, numa policy etc.). Also whenever
-> > > there is ENOMEM then the allocation itself has already made sure that
-> > > all the reclaim attempts have been already depleted. Just consider an
-> > > allocation with GFP_NOWAIT/NO_RETRY or similar to fail and propagate
-> > > ENOMEM up the call stack. Turning that into the OOM killer sounds like a
-> > > bad idea to me.  But that is a more general topic. I have tried to bring
-> > > this up in the past but there was not much of an interest to fix it as
-> > > it was not a pressing problem...
-> > > 
-> > 
-> > I'm certainly interested; it would mean that we actually want to try
-> > recovering from VM_FAULT_OOM in various cases, and as you state, we might
-> > have to supply more information to make that work reliably.
-> 
-> Or maybe we want to get rid of VM_FAULT_OOM altogether... But this is
-> really tangent to this discussion. The only relation is that this would
-> be another place to check when somebody wants to go that direction.
+On Wed, May 19, 2021 at 12:24 PM Drew Fustini <drew@beagleboard.org> wrote:
+>
+> On Wed, May 19, 2021 at 08:06:17AM +0200, Christoph Hellwig wrote:
+> > On Wed, May 19, 2021 at 02:05:00PM +0800, Guo Ren wrote:
+> > > Since the existing RISC-V ISA cannot solve this problem, it is better
+> > > to provide some configuration for the SOC vendor to customize.
+> >
+> > We've been talking about this problem for close to five years.  So no,
+> > if you don't manage to get the feature into the ISA it can't be
+> > supported.
+>
+> Isn't it a good goal for Linux to support the capabilities present in
+> the SoC that a currently being fab'd?
+>
+> I believe the CMO group only started last year [1] so the RV64GC SoCs
+> that are going into mass production this year would not have had the
+> opporuntiy of utilizing any RISC-V ISA extension for handling cache
+> management.
 
-If we are to get rid of VM_FAULT_OOM, vmf_error() would be updated and this
-place will get the update automagically.
+The current Linux RISC-V policy is to only accept patches for frozen or
+ratified ISA specs.
+(Refer, Documentation/riscv/patch-acceptance.rst)
 
-> > Having that said, I guess what we have here is just the same as when our
-> > process fails to allocate a generic page table in __handle_mm_fault(), when
-> > we fail p4d_alloc() and friends ...
-> 
-> From a quick look it is really similar in a sense that it effectively never
-> happens and if it does then it certainly does the wrong thing. The point
-> I was trying to make is that there is likely no need to go that way.
+This means even if emulate CMO instructions in OpenSBI, the Linux
+patches won't be taken by Palmer because CMO specification is
+still in draft stage.
 
-As David pointed out, failure to handle direct map in secretmem_fault() is
-like any allocation failure in page fault handling and most of them result
-in VM_FAULT_OOM, so I think that having vmf_error() in secretmem_fault() is
-more consistent with the rest of the code than using VM_FAULT_SIGBUS.
+Also, we all know how much time it takes for RISCV international
+to freeze some spec. Judging by that we are looking at another
+3-4 years at minimum.
 
-Besides if the direct map manipulation failures would result in errors
-other than -ENOMEM, having vmf_error() may prove useful.
-
--- 
-Sincerely yours,
-Mike.
+Regards,
+Anup
