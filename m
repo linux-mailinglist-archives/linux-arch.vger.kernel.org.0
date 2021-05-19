@@ -2,82 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20EC5389851
-	for <lists+linux-arch@lfdr.de>; Wed, 19 May 2021 23:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9175C389925
+	for <lists+linux-arch@lfdr.de>; Thu, 20 May 2021 00:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbhESVCl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 May 2021 17:02:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36210 "EHLO mail.kernel.org"
+        id S229801AbhESWQW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 May 2021 18:16:22 -0400
+Received: from mga04.intel.com ([192.55.52.120]:24024 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229556AbhESVCj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 May 2021 17:02:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 01BEC613AC;
-        Wed, 19 May 2021 21:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621458079;
-        bh=HPUf+kT+bmoTegnVvAKxBai2Dzy2bgMgMG0NwDVdbFo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=p52lxAzjRDlRk5H0cyupEgyG/s/wvmz1DOwXKgHig0/8Zbmjj1RH8iXq0oLDikz/c
-         OKyaxKpyZ2rIFZoozBsnpmuFub5QaJ57mfzHjC39xx9H0rq+1cbtR/mk+OkZXhqbb7
-         PN9WliBDpU7vcUDntXmxGgaAQDgbWAMG8QC/Xqg6xt3yA8V1nP+DrBLO01g0HICZJt
-         yvNl7RHiiymtILIkIf3Ar6s0Jq5zqXTCpUYEf+mhgMCB5sTc9qQnItCrn7eiB23MgS
-         46xEd0nOaBa8WbAL6kPv5lPgOnBReodEyPZvaJmKUhMrWElXyeymO7OZBsT9smRGuf
-         +OantGSRz9p+Q==
-Received: by mail-wm1-f44.google.com with SMTP id h3-20020a05600c3503b0290176f13c7715so4013991wmq.5;
-        Wed, 19 May 2021 14:01:18 -0700 (PDT)
-X-Gm-Message-State: AOAM530hKy6nvNB+KFLKIHq1sI+YcQAUx+akndUxcxSpFLbySOsJECh3
-        jA5HkCFE/l6NPrYDi9mkNgPNhwaos/2YT2EDpYE=
-X-Google-Smtp-Source: ABdhPJy8Jqwz5h6db1cg71p7uKoZ7HogbtRdnpq9dbBSg0UgdCTCX6yhxlQHb/+HU1db+XwapikKwx/NJqqXjPyM4bI=
-X-Received: by 2002:a7b:c344:: with SMTP id l4mr960591wmj.120.1621458077519;
- Wed, 19 May 2021 14:01:17 -0700 (PDT)
+        id S229512AbhESWQV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 May 2021 18:16:21 -0400
+IronPort-SDR: pkuOXVHZbA1qShTff2ljYedicsWZkHXCAq8D8z5RZFbgxbSMuQltZIGwJkWGSsyCHGVmKnNGTp
+ aQvIy+qzSAsA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9989"; a="199134411"
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="199134411"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2021 15:15:00 -0700
+IronPort-SDR: 4htN2xJSznuZVhLFhhbfFRkZUb4nixiLBd8DZWgrRmw3SzyxERNbqQvWzA8B9KUhCVR5lyo/+I
+ JW12+IiyJbFA==
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="467381111"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.169.18]) ([10.209.169.18])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2021 15:14:58 -0700
+Subject: Re: [PATCH v26 26/30] ELF: Introduce arch_setup_elf_property()
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
+ <20210427204315.24153-27-yu-cheng.yu@intel.com> <YKVUgzJ0MVNBgjDd@zn.tnic>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <c29348d8-caae-5226-d095-ae3992d88338@intel.com>
+Date:   Wed, 19 May 2021 15:14:58 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-References: <20210517203343.3941777-1-arnd@kernel.org> <20210517203343.3941777-5-arnd@kernel.org>
- <87h7iycvlo.ffs@nanos.tec.linutronix.de>
-In-Reply-To: <87h7iycvlo.ffs@nanos.tec.linutronix.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 19 May 2021 23:00:04 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0KULCWrGZt=C9uWDgqNf184KC-uaK9rN8ZXjTG1HAqsw@mail.gmail.com>
-Message-ID: <CAK8P3a0KULCWrGZt=C9uWDgqNf184KC-uaK9rN8ZXjTG1HAqsw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] compat: remove some compat entry points
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Brian Gerst <brgerst@gmail.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, kexec@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YKVUgzJ0MVNBgjDd@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 19, 2021 at 10:33 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Mon, May 17 2021 at 22:33, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > These are all handled correctly when calling the native
-> > system call entry point, so remove the special cases.
-> >  arch/x86/entry/syscall_x32.c              |  2 ++
-> >  arch/x86/entry/syscalls/syscall_32.tbl    |  6 ++--
-> >  arch/x86/entry/syscalls/syscall_64.tbl    |  4 +--
->
-> That conflicts with
->
->   https://lore.kernel.org/lkml/20210517073815.97426-1-masahiroy@kernel.org/
->
-> which I'm picking up. We have more changes in that area coming in.
+On 5/19/2021 11:10 AM, Borislav Petkov wrote:
+> On Tue, Apr 27, 2021 at 01:43:11PM -0700, Yu-cheng Yu wrote:
+>> @@ -1951,6 +1951,8 @@ config X86_SHADOW_STACK
+>>   	depends on AS_WRUSS
+>>   	depends on ARCH_HAS_SHADOW_STACK
+>>   	select ARCH_USES_HIGH_VMA_FLAGS
+>> +	select ARCH_USE_GNU_PROPERTY
+>> +	select ARCH_BINFMT_ELF_STATE
+> 		^^^^^^^^
+> 
+> What's that for? Isn't ARCH_USE_GNU_PROPERTY enough?
+> 
 
-Ok, thanks for the heads-up. I'll try a merge or rebase to see how this can be
-handled. If both the drivers/net and drivers/media get picked up for 5.14, maybe
-the rebased patches can go through -mm on top, along with the final
-removal of compat_alloc_user_space()/copy_in_user(). If not, I suppose these
-four patches can also wait another release.
+ARCH_USE_GNU_PROPERTY is for defining parsing functions, e.g.
+	arch_parse_elf_property(),
+	arch_setup_property().
 
-       Arnd
+ARCH_BINFMT_ELF_STATE is for defining "struct arch_elf_state".
+
+However, those parsing functions take (struct arch_elf_state *) as an 
+input.  It probably makes sense to have ARCH_USE_GNU_PROPERTY dependent 
+on ARCH_BINFMT_ELF_STATE.  It would be ok as-is too.  ARM people might 
+have other plans in mind.
+
+[...]
+
+> 
+>> diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+>> index 30f68b42eeb5..24ba55ba8278 100644
+>> --- a/include/uapi/linux/elf.h
+>> +++ b/include/uapi/linux/elf.h
+>> @@ -455,4 +455,13 @@ typedef struct elf64_note {
+>>   /* Bits for GNU_PROPERTY_AARCH64_FEATURE_1_BTI */
+>>   #define GNU_PROPERTY_AARCH64_FEATURE_1_BTI	(1U << 0)
+>>   
+>> +/* .note.gnu.property types for x86: */
+>> +#define GNU_PROPERTY_X86_FEATURE_1_AND		0xc0000002
+> 
+> Why not 0xc0000001? ARM64 is 0xc0000000...
+> 
+
+I just looked at the ABI document.
+
+ARM has GNU_PROPERTY_AARCH64_FEATURE_1_AND 0xc0000000
+
+X86 has:
+	GNU_PROPERTY_X86_ISA_1_USED	0xc0000000
+	GNU_PROPERTY_X86_ISA_1_NEEDED	0xc0000001
+	GNU_PROPERTY_X86_FEATURE_1_AND	0xc0000002
+
+Yu-cheng
