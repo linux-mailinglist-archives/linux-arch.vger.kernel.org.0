@@ -2,71 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D2F388A97
-	for <lists+linux-arch@lfdr.de>; Wed, 19 May 2021 11:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE65388B3B
+	for <lists+linux-arch@lfdr.de>; Wed, 19 May 2021 11:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239351AbhESJ03 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 May 2021 05:26:29 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:38084 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233718AbhESJ01 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 May 2021 05:26:27 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1621416306;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N5hyyTVe5YeXQBP2XNHi9Lw7C5p053Vt1WVMxgtgO04=;
-        b=eM+pft65GXBz9zKZ5JoZ4py64nNDUAWTbpwSP5HCAlcM329XX6KKOqWAwd7vNetHMTloaP
-        QRR7awJGvEz3ioTXAyy256ANc3y+H4GoHKFAGbYr6cWmZdwk94D5YUvRbn1dkxtbqLh80S
-        DlFy9pNelkWC0OlPGAFLU2BlTZTQvWdO8n8oHdn2emHCuXLyNIWUHC+9UDQhziAlLjSdYK
-        Tx/6BQWe68mCISnuJ2LFVqahnLr+0xZ37Q4JMqaAPLdRMMooSLy3eY04WpK/5GpVkFfAMm
-        wGgbJsRlPVo7O+XfSL5Oregv3js9P3anVHFuPAVqeQsiWL8vfZX0nJbqYhu/5A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1621416306;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N5hyyTVe5YeXQBP2XNHi9Lw7C5p053Vt1WVMxgtgO04=;
-        b=B1J0AbO593COcik+/xDRsqoIuw31G0QRt2dDoVM61Zwu/fH2GwMPWXHNMCe9V+c5pFdvU0
-        bZE35ICJP35H0qAQ==
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>, bp@suse.de,
-        mingo@kernel.org, luto@kernel.org, x86@kernel.org
-Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
-        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
-        carlos@redhat.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chang.seok.bae@intel.com
-Subject: Re: [PATCH v9 0/6] Improve Minimum Alternate Stack Size
-In-Reply-To: <20210518200320.17239-1-chang.seok.bae@intel.com>
-References: <20210518200320.17239-1-chang.seok.bae@intel.com>
-Date:   Wed, 19 May 2021 11:25:06 +0200
-Message-ID: <87sg2jcbyl.ffs@nanos.tec.linutronix.de>
+        id S1344970AbhESJ5l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 May 2021 05:57:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58390 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239269AbhESJ5k (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 May 2021 05:57:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 863CD610A1;
+        Wed, 19 May 2021 09:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621418179;
+        bh=sZokVnqgg00yP4zqIdHOGtJNBrDhc7J4zbJvv0Ja+io=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GYQJtAh0WaKxA6miEevGbUjT/mk3FvnIDKg/CajqjoSahOznMEGHCRzfEIrcVsIgw
+         jVonLhDVI3iO2i3b48e+LZgxHdDKmIXzTZmGy8LtB+vutYxuwIPD3D0SfNma2Dy8bH
+         fIaAfkbRt74xUeORaRxWYpDorVwd4ufaJvtD42xpkC7PBMC6VvqF0GH+RRw5BS9Y9F
+         V/XLOyj7zDVj9SRnU2xFjKcCjHrJhnvUImDYRi1Ao/BOX9t7RGebtf4046niW1Mxzw
+         6jRAK7SIiwi+H/pR2F0wkuhdZKh7EXx+LRh+Cy2bMyX9b9vO+N7Fcdjv0axjqcDG8o
+         QNbVDBUWvjxFg==
+Received: by mail-wr1-f53.google.com with SMTP id a4so13364466wrr.2;
+        Wed, 19 May 2021 02:56:19 -0700 (PDT)
+X-Gm-Message-State: AOAM531dYy8s1uPLEIP3jP1WMmCoOn6IeJm4Iq2/B6YOHtnmza8eUHk5
+        pvFhIrr7F+ECAsC+KvifBVO/8I6Bbyc2hrszHeQ=
+X-Google-Smtp-Source: ABdhPJxirDRKmtA1WHZsh+96IOOD39lg70KHdjcBxrpwvP9eC7gAvKJhLCHII5pv2yoe8aJ74qHdnQpI6dkT/Ni7pnk=
+X-Received: by 2002:adf:e589:: with SMTP id l9mr13892459wrm.361.1621418178204;
+ Wed, 19 May 2021 02:56:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20210517203343.3941777-1-arnd@kernel.org> <20210517203343.3941777-2-arnd@kernel.org>
+ <m1bl982m8c.fsf@fess.ebiederm.org> <CAK8P3a27_z8zk6j5W4n+u3g2e90v-h+3AbaTZ6YjCQ0B7AbJaA@mail.gmail.com>
+ <CAK8P3a277VggQbBnXUzpwP7TKMj-S_z6rDMYYxfjyQmzGJdpCA@mail.gmail.com> <m1y2cbzmnw.fsf@fess.ebiederm.org>
+In-Reply-To: <m1y2cbzmnw.fsf@fess.ebiederm.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 19 May 2021 11:55:05 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2kjF5v9OyNL+8m_855xqjcW3MWfRrigmWirAaEk1O6nw@mail.gmail.com>
+Message-ID: <CAK8P3a2kjF5v9OyNL+8m_855xqjcW3MWfRrigmWirAaEk1O6nw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] kexec: simplify compat_sys_kexec_load
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, kexec@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 18 2021 at 13:03, Chang S. Bae wrote:
-> During signal entry, the kernel pushes data onto the normal userspace
-> stack. On x86, the data pushed onto the user stack includes XSAVE state,
-> which has grown over time as new features and larger registers have been
-> added to the architecture.
+On Wed, May 19, 2021 at 12:45 AM Eric W. Biederman
+<ebiederm@xmission.com> wrote:
+> Arnd Bergmann <arnd@kernel.org> writes:
+> > On Tue, May 18, 2021 at 4:05 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >> On Tue, May 18, 2021 at 3:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
 >
-> MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
-> typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
-> compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
-> constant indicates to userspace how much data the kernel expects to push on
-> the user stack, [2][3].
+> I think something like the untested diff below is enough to get rid of
+> compat_alloc_user cleanly.
 >
-> However, this constant is much too small and does not reflect recent
-> additions to the architecture. For instance, when AVX-512 states are in
-> use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
->
-> The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
-> cause user stack overflow when delivering a signal.
+> Certainly it should be enough to give any idea what I am thinking.
 
-Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Yes, that looks sufficient to me. I had started a slightly different
+approach by trying
+to move the kimage_alloc_init() into the top-level entry points to
+avoid the extra
+kmalloc, but that got rather complicated, and your patch is simpler overall.
+
+The allocation could still be combined with kexec_load_check() into a new
+function to reduce the number of duplicate lines, but if you think the current
+version is ok, then I'll leave this part as it is.
+
+I've fixed a duplicate kfree() and some whitespace damage, and rebased the
+rest of my series on top of this to give it a spin on the build test boxes.
+I'll send a v4 series once I have made sure there are no build-time regressions.
+
+Can I add your Signed-off-by for the patch?
+Is there a set of tests I should run on it?
+
+      Arnd
