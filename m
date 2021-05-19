@@ -2,296 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B531388440
-	for <lists+linux-arch@lfdr.de>; Wed, 19 May 2021 03:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3577388475
+	for <lists+linux-arch@lfdr.de>; Wed, 19 May 2021 03:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbhESBOr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 21:14:47 -0400
-Received: from mga03.intel.com ([134.134.136.65]:57393 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231322AbhESBOq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 21:14:46 -0400
-IronPort-SDR: VB33BSvkJEjR6h4a3Txnv7N6P4TAyfXEGvFywX+OVySM3toS2NmijmlEnpZiJ7jdq7/X2VKtJF
- irysWd7KGcfw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9988"; a="200922000"
-X-IronPort-AV: E=Sophos;i="5.82,310,1613462400"; 
-   d="scan'208";a="200922000"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2021 18:13:27 -0700
-IronPort-SDR: 6I26iZ/4kST95kD6o+XyhLdabal85nb1pS9vaJuKRgzOjIiry9IFoaBytS0a4VpENOjIGe23zo
- PldUFuPsa+cw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,310,1613462400"; 
-   d="scan'208";a="461020798"
-Received: from lkp-server01.sh.intel.com (HELO ddd90b05c979) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 18 May 2021 18:13:25 -0700
-Received: from kbuild by ddd90b05c979 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1ljAm5-0002QP-2A; Wed, 19 May 2021 01:13:25 +0000
-Date:   Wed, 19 May 2021 09:13:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:asm-generic-compat-syscall] BUILD SUCCESS
- 3967cc93c536b9e7e8e3a62178d1c647c3f92904
-Message-ID: <60a46626.xO3UQ5iZIEhlEyCo%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233007AbhESBf3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 21:35:29 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:19802 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231689AbhESBf2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 May 2021 21:35:28 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14J14LBp095740;
+        Tue, 18 May 2021 21:32:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=TSIcUKlJKuIIr978ibfL+W5lJZ618kXPKibv8DMD+8w=;
+ b=C5kj5m8CJg96NebcO1bm9othMtFMyAinaRQ504k8x6EXkUmEb9ZuvrPGOZqTQNQ0g0Xv
+ Mwn2vhUdbL+JkHCIikF/YPjf1uZT134MQZakQfw76N/Z0HZ6QpRptSxKwdG86sVWFTw/
+ 3RDtLRiN5QDTGArFs0km0FVBKuxuVztvCuLdDVpEicvxcjGJyXAvTVyUMWP8r87Vq6G7
+ EyP+NjO2d3VB3bKNejrXwFxI/D1BQIpE0p3WDQ8roRlLOjydlA13sRNVW+eYVbv2FYGj
+ hIsjYjGbtCiZgQ8tJt139+MQ42d5SDmhyG7xo0cGdRGo+gzO2f6qTHbo5VMFSnuzR14M Lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38mqycs8de-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 May 2021 21:32:43 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 14J14MOc095896;
+        Tue, 18 May 2021 21:32:42 -0400
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38mqycs8d6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 May 2021 21:32:42 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14J1QwAw010620;
+        Wed, 19 May 2021 01:32:41 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02dal.us.ibm.com with ESMTP id 38j5x9j6ev-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 May 2021 01:32:41 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14J1Weni11076004
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 May 2021 01:32:40 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66A827805E;
+        Wed, 19 May 2021 01:32:40 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8BA5378066;
+        Wed, 19 May 2021 01:32:30 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.80.208.94])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 19 May 2021 01:32:30 +0000 (GMT)
+Message-ID: <d99864e677cec4ed83e52c4417c58bbe5fd728b1.camel@linux.ibm.com>
+Subject: Re: [PATCH v19 6/8] PM: hibernate: disable when there are active
+ secretmem users
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Date:   Tue, 18 May 2021 18:32:29 -0700
+In-Reply-To: <20210518102424.GD82842@C02TD0UTHF1T.local>
+References: <20210513184734.29317-1-rppt@kernel.org>
+         <20210513184734.29317-7-rppt@kernel.org>
+         <20210518102424.GD82842@C02TD0UTHF1T.local>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LznGIJm2lBQ6APrvvyeFq2Y4fBjyOunI
+X-Proofpoint-ORIG-GUID: 7e9L0ZhoY0K9faClVgEt7JR6P8qAFxb2
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-18_11:2021-05-18,2021-05-18 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 mlxlogscore=792 adultscore=0 phishscore=0 spamscore=0
+ mlxscore=0 impostorscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2105190004
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-compat-syscall
-branch HEAD: 3967cc93c536b9e7e8e3a62178d1c647c3f92904  compat: remove some compat entry points
+On Tue, 2021-05-18 at 11:24 +0100, Mark Rutland wrote:
+> On Thu, May 13, 2021 at 09:47:32PM +0300, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > It is unsafe to allow saving of secretmem areas to the hibernation
+> > snapshot as they would be visible after the resume and this
+> > essentially will defeat the purpose of secret memory mappings.
+> > 
+> > Prevent hibernation whenever there are active secret memory users.
+> 
+> Have we thought about how this is going to work in practice, e.g. on
+> mobile systems? It seems to me that there are a variety of common
+> applications which might want to use this which people don't expect
+> to inhibit hibernate (e.g. authentication agents, web browsers).
 
-elapsed time: 724m
+If mobile systems require hibernate, then the choice is to disable this
+functionality or implement a secure hibernation store.   I also thought
+most mobile hibernation was basically equivalent to S3, in which case
+there's no actual writing of ram into storage, in which case there's no
+security barrier and likely the inhibition needs to be made a bit more
+specific to the suspend to disk case?
 
-configs tested: 234
-configs skipped: 3
+> Are we happy to say that any userspace application can incidentally
+> inhibit hibernate?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Well, yes, for the laptop use case because we don't want suspend to
+disk to be able to compromise the secret area.  You can disable this
+for mobile if you like, or work out how to implement hibernate securely
+if you're really suspending to disk.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                        spear6xx_defconfig
-mips                           rs90_defconfig
-arm                           omap1_defconfig
-xtensa                       common_defconfig
-microblaze                      mmu_defconfig
-mips                        nlm_xlp_defconfig
-powerpc64                           defconfig
-m68k                          atari_defconfig
-powerpc                     ep8248e_defconfig
-alpha                               defconfig
-arm                          lpd270_defconfig
-parisc                           alldefconfig
-arm                        mini2440_defconfig
-arm                     am200epdkit_defconfig
-sh                   rts7751r2dplus_defconfig
-powerpc                      ppc44x_defconfig
-arm                       aspeed_g4_defconfig
-arc                         haps_hs_defconfig
-arm                         lubbock_defconfig
-sh                          rsk7201_defconfig
-sh                          landisk_defconfig
-arc                      axs103_smp_defconfig
-mips                           xway_defconfig
-csky                             alldefconfig
-powerpc                     tqm8555_defconfig
-sh                           se7722_defconfig
-mips                         mpc30x_defconfig
-um                            kunit_defconfig
-powerpc                      makalu_defconfig
-powerpc                 mpc8315_rdb_defconfig
-m68k                          hp300_defconfig
-powerpc                     pq2fads_defconfig
-powerpc                    socrates_defconfig
-arm                       imx_v6_v7_defconfig
-arm64                            alldefconfig
-arm                          gemini_defconfig
-sh                             espt_defconfig
-sh                        apsh4ad0a_defconfig
-sparc                       sparc32_defconfig
-sh                              ul2_defconfig
-sh                      rts7751r2d1_defconfig
-xtensa                generic_kc705_defconfig
-xtensa                    smp_lx200_defconfig
-i386                                defconfig
-sh                            hp6xx_defconfig
-powerpc                 mpc837x_mds_defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                     loongson2k_defconfig
-m68k                       m5475evb_defconfig
-powerpc                   lite5200b_defconfig
-arm                           u8500_defconfig
-um                                  defconfig
-mips                           ip28_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                      cm5200_defconfig
-arm                           viper_defconfig
-arc                        nsimosci_defconfig
-i386                             alldefconfig
-openrisc                  or1klitex_defconfig
-sh                          kfr2r09_defconfig
-mips                      malta_kvm_defconfig
-arm                             rpc_defconfig
-arm                          iop32x_defconfig
-ia64                            zx1_defconfig
-powerpc                 mpc834x_mds_defconfig
-mips                   sb1250_swarm_defconfig
-sh                          urquell_defconfig
-arm                        realview_defconfig
-mips                           ip32_defconfig
-arm                         socfpga_defconfig
-sh                               alldefconfig
-powerpc                   currituck_defconfig
-arm                            dove_defconfig
-arc                     nsimosci_hs_defconfig
-powerpc                     rainier_defconfig
-mips                        maltaup_defconfig
-m68k                         amcore_defconfig
-sh                           se7721_defconfig
-arm                         shannon_defconfig
-sh                   secureedge5410_defconfig
-mips                       rbtx49xx_defconfig
-arm                        multi_v7_defconfig
-m68k                         apollo_defconfig
-arm                           h3600_defconfig
-arm                      footbridge_defconfig
-arm                            hisi_defconfig
-arm                          exynos_defconfig
-sh                          polaris_defconfig
-alpha                            alldefconfig
-mips                        nlm_xlr_defconfig
-openrisc                    or1ksim_defconfig
-powerpc                    ge_imp3a_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                           se7343_defconfig
-arm                          pxa168_defconfig
-arm                         axm55xx_defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                         wii_defconfig
-arm                          simpad_defconfig
-powerpc                     tqm8541_defconfig
-mips                        qi_lb60_defconfig
-x86_64                            allnoconfig
-m68k                           sun3_defconfig
-nios2                         3c120_defconfig
-parisc                generic-64bit_defconfig
-x86_64                              defconfig
-arm                       multi_v4t_defconfig
-arm                      integrator_defconfig
-sparc                               defconfig
-arm                          ep93xx_defconfig
-arm                           h5000_defconfig
-xtensa                  nommu_kc705_defconfig
-arm                       aspeed_g5_defconfig
-powerpc                      ppc64e_defconfig
-sh                           se7206_defconfig
-x86_64                           allyesconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                       eiger_defconfig
-powerpc                        icon_defconfig
-powerpc                       maple_defconfig
-powerpc                     tqm5200_defconfig
-arm                        keystone_defconfig
-mips                       lemote2f_defconfig
-mips                        workpad_defconfig
-sh                          rsk7269_defconfig
-sh                         apsh4a3a_defconfig
-powerpc                      bamboo_defconfig
-riscv                             allnoconfig
-powerpc                     mpc83xx_defconfig
-xtensa                    xip_kc705_defconfig
-m68k                        mvme16x_defconfig
-powerpc                    klondike_defconfig
-powerpc                     tqm8560_defconfig
-microblaze                          defconfig
-powerpc                 mpc834x_itx_defconfig
-nds32                               defconfig
-s390                             allyesconfig
-arm                         assabet_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20210518
-x86_64               randconfig-a004-20210518
-x86_64               randconfig-a005-20210518
-x86_64               randconfig-a001-20210518
-x86_64               randconfig-a002-20210518
-x86_64               randconfig-a006-20210518
-i386                 randconfig-a003-20210518
-i386                 randconfig-a001-20210518
-i386                 randconfig-a005-20210518
-i386                 randconfig-a004-20210518
-i386                 randconfig-a002-20210518
-i386                 randconfig-a006-20210518
-i386                 randconfig-a003-20210519
-i386                 randconfig-a001-20210519
-i386                 randconfig-a005-20210519
-i386                 randconfig-a004-20210519
-i386                 randconfig-a002-20210519
-i386                 randconfig-a006-20210519
-x86_64               randconfig-a012-20210519
-x86_64               randconfig-a015-20210519
-x86_64               randconfig-a013-20210519
-x86_64               randconfig-a011-20210519
-x86_64               randconfig-a016-20210519
-x86_64               randconfig-a014-20210519
-i386                 randconfig-a014-20210519
-i386                 randconfig-a016-20210519
-i386                 randconfig-a011-20210519
-i386                 randconfig-a015-20210519
-i386                 randconfig-a012-20210519
-i386                 randconfig-a013-20210519
-i386                 randconfig-a014-20210518
-i386                 randconfig-a016-20210518
-i386                 randconfig-a011-20210518
-i386                 randconfig-a015-20210518
-i386                 randconfig-a012-20210518
-i386                 randconfig-a013-20210518
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                               allmodconfig
-um                               allyesconfig
-um                                allnoconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+James
 
-clang tested configs:
-x86_64               randconfig-b001-20210519
-x86_64               randconfig-b001-20210518
-x86_64               randconfig-a003-20210519
-x86_64               randconfig-a004-20210519
-x86_64               randconfig-a005-20210519
-x86_64               randconfig-a001-20210519
-x86_64               randconfig-a002-20210519
-x86_64               randconfig-a006-20210519
-x86_64               randconfig-a015-20210518
-x86_64               randconfig-a012-20210518
-x86_64               randconfig-a013-20210518
-x86_64               randconfig-a011-20210518
-x86_64               randconfig-a016-20210518
-x86_64               randconfig-a014-20210518
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
