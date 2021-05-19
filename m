@@ -2,73 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3577388475
-	for <lists+linux-arch@lfdr.de>; Wed, 19 May 2021 03:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61370388490
+	for <lists+linux-arch@lfdr.de>; Wed, 19 May 2021 03:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbhESBf3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 May 2021 21:35:29 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:19802 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231689AbhESBf2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 May 2021 21:35:28 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14J14LBp095740;
-        Tue, 18 May 2021 21:32:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=TSIcUKlJKuIIr978ibfL+W5lJZ618kXPKibv8DMD+8w=;
- b=C5kj5m8CJg96NebcO1bm9othMtFMyAinaRQ504k8x6EXkUmEb9ZuvrPGOZqTQNQ0g0Xv
- Mwn2vhUdbL+JkHCIikF/YPjf1uZT134MQZakQfw76N/Z0HZ6QpRptSxKwdG86sVWFTw/
- 3RDtLRiN5QDTGArFs0km0FVBKuxuVztvCuLdDVpEicvxcjGJyXAvTVyUMWP8r87Vq6G7
- EyP+NjO2d3VB3bKNejrXwFxI/D1BQIpE0p3WDQ8roRlLOjydlA13sRNVW+eYVbv2FYGj
- hIsjYjGbtCiZgQ8tJt139+MQ42d5SDmhyG7xo0cGdRGo+gzO2f6qTHbo5VMFSnuzR14M Lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 38mqycs8de-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 May 2021 21:32:43 -0400
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 14J14MOc095896;
-        Tue, 18 May 2021 21:32:42 -0400
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 38mqycs8d6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 May 2021 21:32:42 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14J1QwAw010620;
-        Wed, 19 May 2021 01:32:41 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma02dal.us.ibm.com with ESMTP id 38j5x9j6ev-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 May 2021 01:32:41 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14J1Weni11076004
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 May 2021 01:32:40 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66A827805E;
-        Wed, 19 May 2021 01:32:40 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8BA5378066;
-        Wed, 19 May 2021 01:32:30 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.80.208.94])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 19 May 2021 01:32:30 +0000 (GMT)
-Message-ID: <d99864e677cec4ed83e52c4417c58bbe5fd728b1.camel@linux.ibm.com>
+        id S234111AbhESBvO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 May 2021 21:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234075AbhESBvO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 May 2021 21:51:14 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD8DC061760
+        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 18:49:55 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b17so13470464ede.0
+        for <linux-arch@vger.kernel.org>; Tue, 18 May 2021 18:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oy9iy31YW42GgULMnDfqqrgoX8PmHZpkik30uv+f1aA=;
+        b=tvQ2E7Kd2+Hf+RN1JCJdnQu6RymaGP0zziznDt8ISnI+jG1I9F5rTtPCJWa6PikhKh
+         XFhKmAAqHeMsUAOgy6hUDl59IPnHpchWu1cnHTyyjxMolBXIohuKR723SkE7OCNxzAbK
+         oygZjSu1ZC0vRf3URWfxhzVNd3YMtTfsohBEjCi0q+/uREUxDQtHtMXYqH6q8d9eUBIB
+         218/C9Rmj+pEf1HRmaUjm/IPbnYkBLCQnR3DkYGpm/9v4+VmsDb6lUfsBZ8rq8wjdtNW
+         PEFTJvZlWna6c3qGn3K9JEbsQ5ZbIkKlwDebT3ZVImG1L8u/VdgWTl83Y5Z5wVd6ZNag
+         17jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oy9iy31YW42GgULMnDfqqrgoX8PmHZpkik30uv+f1aA=;
+        b=fETQ6f0d4U7A0XyqjRvETvqFD+vRMbWQ1WW+aq2mv6GLz4RzpEwLALoo+xeQuTKJp2
+         Ap2G0+1b2iosrNtTv1OaLvxPuDbrD4vnp34JVVDKzbt6q2zkiaT4M83iiqrPWTQcHle9
+         o3DYaRaEBAJTt/nGROwvFmLTDdvudWnbMMzBGwMnUVgBH//cQZ+KoIM3n7nmKtQkQ1RQ
+         ExyVr2zNimI9WZWe8RaZ1uJEDugIliFqmA1SKSnWXmxZVC2p8Cz0PlsUyXxy5mKxCfl/
+         VNyuLLYmCsCjz9YRkn9R1YDf6dAkfCpSwwLAsKUWCu4EyzeXU59EWA0+HcHRWOpmBPv+
+         kADQ==
+X-Gm-Message-State: AOAM532GFOqDiho1sx3T0jUl7RGk7Zp9X5Ml5aIz8Upxlwzy9mCOdu3/
+        +iuOfActvpuSR349z+CuxtmCzwAEUUeN4OR2znCNew==
+X-Google-Smtp-Source: ABdhPJzCebUO43WPo6zd3pAT6bxEi4LXjBLrk7zln8XX7z9KqzudweIVCjqD+YotU9S81wu4CFwPj9RiJ4aku6RH+xo=
+X-Received: by 2002:a50:ff13:: with SMTP id a19mr10495865edu.300.1621388993652;
+ Tue, 18 May 2021 18:49:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210513184734.29317-1-rppt@kernel.org> <20210513184734.29317-7-rppt@kernel.org>
+ <20210518102424.GD82842@C02TD0UTHF1T.local> <d99864e677cec4ed83e52c4417c58bbe5fd728b1.camel@linux.ibm.com>
+In-Reply-To: <d99864e677cec4ed83e52c4417c58bbe5fd728b1.camel@linux.ibm.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 18 May 2021 18:49:42 -0700
+Message-ID: <CAPcyv4hwZ2e-xzsySOjaJXDSXRKctsoGA5zW-enTn2Y9ezWPVw@mail.gmail.com>
 Subject: Re: [PATCH v19 6/8] PM: hibernate: disable when there are active
  secretmem users
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         David Hildenbrand <david@redhat.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
@@ -93,65 +85,58 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Date:   Tue, 18 May 2021 18:32:29 -0700
-In-Reply-To: <20210518102424.GD82842@C02TD0UTHF1T.local>
-References: <20210513184734.29317-1-rppt@kernel.org>
-         <20210513184734.29317-7-rppt@kernel.org>
-         <20210518102424.GD82842@C02TD0UTHF1T.local>
+        Yury Norov <yury.norov@gmail.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-riscv@lists.infradead.org, X86 ML <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LznGIJm2lBQ6APrvvyeFq2Y4fBjyOunI
-X-Proofpoint-ORIG-GUID: 7e9L0ZhoY0K9faClVgEt7JR6P8qAFxb2
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-18_11:2021-05-18,2021-05-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- priorityscore=1501 mlxlogscore=792 adultscore=0 phishscore=0 spamscore=0
- mlxscore=0 impostorscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2105190004
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2021-05-18 at 11:24 +0100, Mark Rutland wrote:
-> On Thu, May 13, 2021 at 09:47:32PM +0300, Mike Rapoport wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> > 
-> > It is unsafe to allow saving of secretmem areas to the hibernation
-> > snapshot as they would be visible after the resume and this
-> > essentially will defeat the purpose of secret memory mappings.
-> > 
-> > Prevent hibernation whenever there are active secret memory users.
-> 
-> Have we thought about how this is going to work in practice, e.g. on
-> mobile systems? It seems to me that there are a variety of common
-> applications which might want to use this which people don't expect
-> to inhibit hibernate (e.g. authentication agents, web browsers).
+On Tue, May 18, 2021 at 6:33 PM James Bottomley <jejb@linux.ibm.com> wrote:
+>
+> On Tue, 2021-05-18 at 11:24 +0100, Mark Rutland wrote:
+> > On Thu, May 13, 2021 at 09:47:32PM +0300, Mike Rapoport wrote:
+> > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > >
+> > > It is unsafe to allow saving of secretmem areas to the hibernation
+> > > snapshot as they would be visible after the resume and this
+> > > essentially will defeat the purpose of secret memory mappings.
+> > >
+> > > Prevent hibernation whenever there are active secret memory users.
+> >
+> > Have we thought about how this is going to work in practice, e.g. on
+> > mobile systems? It seems to me that there are a variety of common
+> > applications which might want to use this which people don't expect
+> > to inhibit hibernate (e.g. authentication agents, web browsers).
+>
+> If mobile systems require hibernate, then the choice is to disable this
+> functionality or implement a secure hibernation store.   I also thought
+> most mobile hibernation was basically equivalent to S3, in which case
+> there's no actual writing of ram into storage, in which case there's no
+> security barrier and likely the inhibition needs to be made a bit more
+> specific to the suspend to disk case?
+>
+> > Are we happy to say that any userspace application can incidentally
+> > inhibit hibernate?
+>
+> Well, yes, for the laptop use case because we don't want suspend to
+> disk to be able to compromise the secret area.  You can disable this
+> for mobile if you like, or work out how to implement hibernate securely
+> if you're really suspending to disk.
 
-If mobile systems require hibernate, then the choice is to disable this
-functionality or implement a secure hibernation store.   I also thought
-most mobile hibernation was basically equivalent to S3, in which case
-there's no actual writing of ram into storage, in which case there's no
-security barrier and likely the inhibition needs to be made a bit more
-specific to the suspend to disk case?
-
-> Are we happy to say that any userspace application can incidentally
-> inhibit hibernate?
-
-Well, yes, for the laptop use case because we don't want suspend to
-disk to be able to compromise the secret area.  You can disable this
-for mobile if you like, or work out how to implement hibernate securely
-if you're really suspending to disk.
-
-James
-
-
+Forgive me if this was already asked and answered. Why not document
+that secretmem is ephemeral in the case of hibernate and push the
+problem to userspace to disable hibernation? In other words
+hibernation causes applications to need to reload their secretmem, it
+will be destroyed on the way down and SIGBUS afterwards. That at least
+gives a system the flexibility to either sacrifice hibernate for
+secretmem (with a userspace controlled policy), or sacrifice secretmem
+using processes for hibernate.
