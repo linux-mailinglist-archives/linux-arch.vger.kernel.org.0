@@ -2,31 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97C138B581
-	for <lists+linux-arch@lfdr.de>; Thu, 20 May 2021 19:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26CE38B586
+	for <lists+linux-arch@lfdr.de>; Thu, 20 May 2021 19:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbhETRxM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 May 2021 13:53:12 -0400
-Received: from mga07.intel.com ([134.134.136.100]:2204 "EHLO mga07.intel.com"
+        id S235710AbhETRxj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 May 2021 13:53:39 -0400
+Received: from mga03.intel.com ([134.134.136.65]:36801 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231680AbhETRxM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 20 May 2021 13:53:12 -0400
-IronPort-SDR: vVhR/DwApdYxvjNHZAvNwK53gUSupAjObUSJ26PC9wg0RH9ElJReMaye6o0djQsBUHQ42aHG5N
- 6/vrJ6GWv+uA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9990"; a="265205147"
+        id S232971AbhETRxj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 20 May 2021 13:53:39 -0400
+IronPort-SDR: yIA/z2fNjGleDFa3+8xaiF7X8a7xDrnos3A0Pax3U+5BYi9qgC/SbPhGmp2QeXA9aKxcftUDJZ
+ bMcRdOr1wK4Q==
+X-IronPort-AV: E=McAfee;i="6200,9189,9990"; a="201347985"
 X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208";a="265205147"
+   d="scan'208";a="201347985"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 10:51:49 -0700
-IronPort-SDR: 8JNksvObprn0+tyfBq8A84G210WIVRliyNYxaJ3iN7nLYyaawky6DosNXGpWOzPzhSm+7a1qeV
- xZ169Yw7pVBQ==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 10:52:17 -0700
+IronPort-SDR: ubV1dR23fZlDz8Sl4x063SQ54XDoUp+GTBJetaZzXSZU0o/60mTcOtrSvgH0x1hH7/ek3qQ6NG
+ boZITUeOglsA==
 X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208";a="475295228"
+   d="scan'208";a="475295383"
 Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.167.234]) ([10.209.167.234])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 10:51:48 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 10:52:15 -0700
 Subject: Re: [PATCH v26 26/30] ELF: Introduce arch_setup_elf_property()
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -56,15 +57,15 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Catalin Marinas <catalin.marinas@arm.com>
 References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
  <20210427204315.24153-27-yu-cheng.yu@intel.com> <YKVUgzJ0MVNBgjDd@zn.tnic>
- <c29348d8-caae-5226-d095-ae3992d88338@intel.com> <YKYrQQ6tKfifjNjW@zn.tnic>
- <d04259f1-a869-ec1c-aa74-93cd6c2c2d7b@intel.com> <YKad0e5VDNZhBw+4@zn.tnic>
+ <c29348d8-caae-5226-d095-ae3992d88338@intel.com>
+ <YKaesoXCSBmCwD+4@casper.infradead.org>
 From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <3243001b-db72-3cd3-889f-6fe390276715@intel.com>
-Date:   Thu, 20 May 2021 10:51:48 -0700
+Message-ID: <89be0683-e1b3-d843-c4b4-ba351ede7427@intel.com>
+Date:   Thu, 20 May 2021 10:52:15 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.2
 MIME-Version: 1.0
-In-Reply-To: <YKad0e5VDNZhBw+4@zn.tnic>
+In-Reply-To: <YKaesoXCSBmCwD+4@casper.infradead.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,16 +73,28 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/20/2021 10:35 AM, Borislav Petkov wrote:
-> On Thu, May 20, 2021 at 10:18:10AM -0700, Yu, Yu-cheng wrote:
->> The latest pdf's are posted here.
+On 5/20/2021 10:38 AM, Matthew Wilcox wrote:
+> On Wed, May 19, 2021 at 03:14:58PM -0700, Yu, Yu-cheng wrote:
+>>>> +++ b/include/uapi/linux/elf.h
+>>>> @@ -455,4 +455,13 @@ typedef struct elf64_note {
+>>>>    /* Bits for GNU_PROPERTY_AARCH64_FEATURE_1_BTI */
+>>>>    #define GNU_PROPERTY_AARCH64_FEATURE_1_BTI	(1U << 0)
+>>>> +/* .note.gnu.property types for x86: */
+>>>> +#define GNU_PROPERTY_X86_FEATURE_1_AND		0xc0000002
+>>>
+>>> Why not 0xc0000001? ARM64 is 0xc0000000...
+>>>
 >>
->> https://gitlab.com/x86-psABIs/x86-64-ABI/-/wikis/x86-64-psABI
+>> I just looked at the ABI document.
+>>
+>> ARM has GNU_PROPERTY_AARCH64_FEATURE_1_AND 0xc0000000
+>>
+>> X86 has:
+>> 	GNU_PROPERTY_X86_ISA_1_USED	0xc0000000
+>> 	GNU_PROPERTY_X86_ISA_1_NEEDED	0xc0000001
+>> 	GNU_PROPERTY_X86_FEATURE_1_AND	0xc0000002
 > 
-> Ah, that document.
-> 
-> Please make sure it is specified over those defines from which document
-> they're coming from.
+> Please add all three, not just the last one.
 > 
 
-I will do that.
+Ok!
