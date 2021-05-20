@@ -2,55 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A601A38AD86
-	for <lists+linux-arch@lfdr.de>; Thu, 20 May 2021 14:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B72538AE7F
+	for <lists+linux-arch@lfdr.de>; Thu, 20 May 2021 14:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242399AbhETMFp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 May 2021 08:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242301AbhETMFe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 May 2021 08:05:34 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26405C06917C
-        for <linux-arch@vger.kernel.org>; Thu, 20 May 2021 03:34:03 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id u133so8865241wmg.1
-        for <linux-arch@vger.kernel.org>; Thu, 20 May 2021 03:34:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5n6riXCd1vkZQcoH0r5gYShL1+XQ6uXaF5ZA75ztkS4=;
-        b=hqF1evK4XE7TofUsWGxTL13k2AC6u5yfZPjf37ZMM6wuWy4eazgaoxsdsj4w7FSenB
-         Suqt0myWlzhpBr4iWL3CsiFkL/KE7Ot/esZP0uWdz+8wuYpAeWgNHUhcdGNl1UCxRO0o
-         xS7CdKhyi4jGanQWWI3xKFxQoVoLb0IgGRFJFihhHtx1/zac3eiqhaf4dQiBOq1/4wtv
-         NA81yyGUp5grSRuRZJXK9aOYqLiCPSGIBXZMPG+fCpkyfbmRJtHyQT5RogbOGlMwsNl9
-         J0kUIoAY1OFO8I9n2tDAiqXGl8FZmhYDVgkNikPJkpp1EwxNbAQeqAp+aiWzdWKTMlfH
-         K6oA==
+        id S234775AbhETMjo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 May 2021 08:39:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24026 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237019AbhETMjf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 20 May 2021 08:39:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1621514293;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H2EoGPNNHek5LA/HaoBsDmWfJRldrDqmUuCzE8A0ctw=;
+        b=H3YA8T0VUyESiBigdLS4ghZdyCIJ9Tp9AiS27WgsBLzDeN97aD31yriaL6ttPa9DOIOHeF
+        OwO9o1CpimNiLOSp9zuW3fFV48Sv3iI5+xSWuwziu4WNkxBw8D4fQHWyYk55Olmb3elHB3
+        G4lbDp/BbkHetCeNTbD3n7WE4NymJFk=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-441-v-wM0h5uOKOVxiZpIEYD6g-1; Thu, 20 May 2021 08:38:12 -0400
+X-MC-Unique: v-wM0h5uOKOVxiZpIEYD6g-1
+Received: by mail-ej1-f72.google.com with SMTP id k9-20020a17090646c9b029039d323bd239so4913860ejs.16
+        for <linux-arch@vger.kernel.org>; Thu, 20 May 2021 05:38:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=5n6riXCd1vkZQcoH0r5gYShL1+XQ6uXaF5ZA75ztkS4=;
-        b=Ihe5NCoQUxNS3dEVwXWsju3YN/RJyelaUjsmbG3y0+lGUYN+Mpi9UvaWkuo0nuOctp
-         htQJ0+gw1ym+JWzAw+fdNm91NIumrttrjUOCSOrVWt+VbBdowSr4tKlZHa7tsCp8KV+S
-         zQc/XOXFBHszhjmUfwjmi/7ppkY2A9NSyqjOpQt3KAno8lTygvCaqiNjZz962YMNmbcc
-         LaV2y9ASI/K+WB06t5S/aww88x9MfzYbLSjja7ag5LZznQBdTNAQWkvYzomSgOyoddat
-         GLdxjDVrI23DS06mvooB9Fsqn80a43c6U6fwUjWC01g+1ziAvXSAYlM+M/wJWlxShSqt
-         0RTA==
-X-Gm-Message-State: AOAM53011Ws3R+mbvPhnazSCHWhsBRrGZJqQZDMS5s+kqp7Ceu3fyGIk
-        KGWjvoSTaoctM1BWq1kZKH6QwA==
-X-Google-Smtp-Source: ABdhPJxq6/OQqdBrhuKZaLq+XaCRlIoDOoH49bUkTeQ3q8Q0V8pTmzOTJi3JYtKP3tAWP/lop7kWOg==
-X-Received: by 2002:a7b:cc15:: with SMTP id f21mr3398343wmh.86.1621506841514;
-        Thu, 20 May 2021 03:34:01 -0700 (PDT)
-Received: from google.com (105.168.195.35.bc.googleusercontent.com. [35.195.168.105])
-        by smtp.gmail.com with ESMTPSA id r1sm2649161wrt.67.2021.05.20.03.34.00
+        bh=H2EoGPNNHek5LA/HaoBsDmWfJRldrDqmUuCzE8A0ctw=;
+        b=aEtq94jzqemis0o1FCaqij8gIB54mAkLeWF8jnwoS/lnI+6bCjawBjiUr0chju2eVh
+         +u8kmz9nZsDbH9ewpv4W+WgZiF9TFuSn1tJIg9jaYHTdePXdV67hZSz2ssPuG0zBbaBc
+         mwBoNivpsXARMx2aBVligbpCVOV/vMKfDytA+sVOGoK6ztLYCjBZci59Q8NgaCnIesee
+         zwGpV2CdDkSTKitXDBKVOEwu6UTyl79fzYxvRWVoZDMmMq8J+IB5b5FQxfO3xRg6CVMV
+         +pHAZwfUSfsWg9Qv/WYaZHrtrHYPcuRBlIEMZdlfCntWbynJUWaZfg4tA6Nlr+2ICExa
+         nc1g==
+X-Gm-Message-State: AOAM532w6hmwuspeTm5EubKdTCibwLiLGW1zETUu5hG+L0i8La+pCBtX
+        zRgHyMSJ84aXWLdyTEo47kZDIOlI1AH6xa5q6EMnyLpGcEwnxoqPYrFJTHCbeZ7HHzWvZatsoAT
+        ktOboBSgqgWfM4/9/xjPpDg==
+X-Received: by 2002:a50:bae6:: with SMTP id x93mr4839710ede.48.1621514290947;
+        Thu, 20 May 2021 05:38:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzAZeB/EOTP1dDTwMk1xnI0rDau9TReXYikgiANp8pL0KOwU4KheOhp2p+q8xNWGxoGgMckLg==
+X-Received: by 2002:a50:bae6:: with SMTP id x93mr4839685ede.48.1621514290778;
+        Thu, 20 May 2021 05:38:10 -0700 (PDT)
+Received: from localhost.localdomain ([151.29.18.58])
+        by smtp.gmail.com with ESMTPSA id bw26sm1321519ejb.119.2021.05.20.05.38.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 03:34:00 -0700 (PDT)
-Date:   Thu, 20 May 2021 10:33:58 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Thu, 20 May 2021 05:38:10 -0700 (PDT)
+Date:   Thu, 20 May 2021 14:38:08 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -68,7 +71,7 @@ Cc:     Juri Lelli <juri.lelli@redhat.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>
 Subject: Re: [PATCH v6 13/21] sched: Admit forcefully-affined tasks into
  SCHED_DEADLINE
-Message-ID: <YKY7FvFeRlXVjcaA@google.com>
+Message-ID: <YKZYMKg8PPkwzJXm@localhost.localdomain>
 References: <20210518094725.7701-1-will@kernel.org>
  <20210518094725.7701-14-will@kernel.org>
  <YKOU9onXUxVLPGaB@google.com>
@@ -78,20 +81,25 @@ References: <20210518094725.7701-1-will@kernel.org>
  <YKO+9lPLQLPm4Nwt@google.com>
  <YKYoQ0ezahSC/RAg@localhost.localdomain>
  <20210520101640.GA10065@willie-the-truck>
+ <YKY7FvFeRlXVjcaA@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210520101640.GA10065@willie-the-truck>
+In-Reply-To: <YKY7FvFeRlXVjcaA@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thursday 20 May 2021 at 11:16:41 (+0100), Will Deacon wrote:
-> Ok, thanks for the insight. In which case, I'll go with what we discussed:
-> require admission control to be disabled for sched_setattr() but allow
-> execve() to a 32-bit task from a 64-bit deadline task with a warning (this
-> is probably similar to CPU hotplug?).
+On 20/05/21 10:33, Quentin Perret wrote:
+> On Thursday 20 May 2021 at 11:16:41 (+0100), Will Deacon wrote:
+> > Ok, thanks for the insight. In which case, I'll go with what we discussed:
+> > require admission control to be disabled for sched_setattr() but allow
+> > execve() to a 32-bit task from a 64-bit deadline task with a warning (this
+> > is probably similar to CPU hotplug?).
+> 
+> Still not sure that we can let execve go through ... It will break AC
+> all the same, so it should probably fail as well if AC is on IMO
+> 
 
-Still not sure that we can let execve go through ... It will break AC
-all the same, so it should probably fail as well if AC is on IMO
+Yeah, this was my thinking as well.
 
