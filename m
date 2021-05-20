@@ -2,99 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A26CE38B586
-	for <lists+linux-arch@lfdr.de>; Thu, 20 May 2021 19:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D34538B598
+	for <lists+linux-arch@lfdr.de>; Thu, 20 May 2021 19:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235710AbhETRxj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 May 2021 13:53:39 -0400
-Received: from mga03.intel.com ([134.134.136.65]:36801 "EHLO mga03.intel.com"
+        id S235425AbhETR4y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 May 2021 13:56:54 -0400
+Received: from foss.arm.com ([217.140.110.172]:56592 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232971AbhETRxj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 20 May 2021 13:53:39 -0400
-IronPort-SDR: yIA/z2fNjGleDFa3+8xaiF7X8a7xDrnos3A0Pax3U+5BYi9qgC/SbPhGmp2QeXA9aKxcftUDJZ
- bMcRdOr1wK4Q==
-X-IronPort-AV: E=McAfee;i="6200,9189,9990"; a="201347985"
-X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208";a="201347985"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 10:52:17 -0700
-IronPort-SDR: ubV1dR23fZlDz8Sl4x063SQ54XDoUp+GTBJetaZzXSZU0o/60mTcOtrSvgH0x1hH7/ek3qQ6NG
- boZITUeOglsA==
-X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208";a="475295383"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.167.234]) ([10.209.167.234])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 10:52:15 -0700
-Subject: Re: [PATCH v26 26/30] ELF: Introduce arch_setup_elf_property()
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        id S235086AbhETR4x (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 20 May 2021 13:56:53 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAA2A11B3;
+        Thu, 20 May 2021 10:55:31 -0700 (PDT)
+Received: from [192.168.1.16] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5EFE43F719;
+        Thu, 20 May 2021 10:55:28 -0700 (PDT)
+Subject: Re: [PATCH v6 13/21] sched: Admit forcefully-affined tasks into
+ SCHED_DEADLINE
+To:     Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
- <20210427204315.24153-27-yu-cheng.yu@intel.com> <YKVUgzJ0MVNBgjDd@zn.tnic>
- <c29348d8-caae-5226-d095-ae3992d88338@intel.com>
- <YKaesoXCSBmCwD+4@casper.infradead.org>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <89be0683-e1b3-d843-c4b4-ba351ede7427@intel.com>
-Date:   Thu, 20 May 2021 10:52:15 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
+References: <20210518094725.7701-1-will@kernel.org>
+ <20210518094725.7701-14-will@kernel.org> <YKOU9onXUxVLPGaB@google.com>
+ <20210518102833.GA7770@willie-the-truck> <YKObZ1GcfVIVWRWt@google.com>
+ <20210518105951.GC7770@willie-the-truck> <YKO+9lPLQLPm4Nwt@google.com>
+ <YKYoQ0ezahSC/RAg@localhost.localdomain>
+ <20210520101640.GA10065@willie-the-truck> <YKY7FvFeRlXVjcaA@google.com>
+ <f9d1a138-3150-d404-7cd5-ddf72e93837b@redhat.com>
+ <0dbdfe1e-dede-d33d-ca89-768a1fa3c907@arm.com>
+ <eff0f358-d5f3-47c7-539b-527814093f89@redhat.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <8bc24850-3a14-5dd2-fbc2-bf745616949f@arm.com>
+Date:   Thu, 20 May 2021 19:55:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <YKaesoXCSBmCwD+4@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <eff0f358-d5f3-47c7-539b-527814093f89@redhat.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/20/2021 10:38 AM, Matthew Wilcox wrote:
-> On Wed, May 19, 2021 at 03:14:58PM -0700, Yu, Yu-cheng wrote:
->>>> +++ b/include/uapi/linux/elf.h
->>>> @@ -455,4 +455,13 @@ typedef struct elf64_note {
->>>>    /* Bits for GNU_PROPERTY_AARCH64_FEATURE_1_BTI */
->>>>    #define GNU_PROPERTY_AARCH64_FEATURE_1_BTI	(1U << 0)
->>>> +/* .note.gnu.property types for x86: */
->>>> +#define GNU_PROPERTY_X86_FEATURE_1_AND		0xc0000002
+On 20/05/2021 18:00, Daniel Bristot de Oliveira wrote:
+> On 5/20/21 5:06 PM, Dietmar Eggemann wrote:
+>> On 20/05/2021 14:38, Daniel Bristot de Oliveira wrote:
+>>> On 5/20/21 12:33 PM, Quentin Perret wrote:
+>>>> On Thursday 20 May 2021 at 11:16:41 (+0100), Will Deacon wrote:
+>>>>> Ok, thanks for the insight. In which case, I'll go with what we discussed:
+>>>>> require admission control to be disabled for sched_setattr() but allow
+>>>>> execve() to a 32-bit task from a 64-bit deadline task with a warning (this
+>>>>> is probably similar to CPU hotplug?).
+>>>>
+>>>> Still not sure that we can let execve go through ... It will break AC
+>>>> all the same, so it should probably fail as well if AC is on IMO
+>>>>
 >>>
->>> Why not 0xc0000001? ARM64 is 0xc0000000...
+>>> If the cpumask of the 32-bit task is != of the 64-bit task that is executing it,
+>>> the admission control needs to be re-executed, and it could fail. So I see this
+>>> operation equivalent to sched_setaffinity(). This will likely be true for future
+>>> schedulers that will allow arbitrary affinities (AC should run on affinity
+>>> change, and could fail).
 >>>
+>>> I would vote with Juri: "I'd go with fail hard if AC is on, let it
+>>> pass if AC is off (supposedly the user knows what to do)," (also hope nobody
+>>> complains until we add better support for affinity, and use this as a motivation
+>>> to get back on this front).
+>>>
+>>> -- Daniel
 >>
->> I just looked at the ABI document.
+>> (1) # chrt -d -T 5000000 -P 16666666 0 ./32bit_app
 >>
->> ARM has GNU_PROPERTY_AARCH64_FEATURE_1_AND 0xc0000000
+>> (2) # ./32bit_app &
 >>
->> X86 has:
->> 	GNU_PROPERTY_X86_ISA_1_USED	0xc0000000
->> 	GNU_PROPERTY_X86_ISA_1_NEEDED	0xc0000001
->> 	GNU_PROPERTY_X86_FEATURE_1_AND	0xc0000002
+>>     # chrt -d -T 5000000 -P 16666666 -p 0 pid_of(32bit_app)
+>>
+>>
+>> Wouldn't the behaviour of (1) and (2) be different w/o this patch?
+>>
+>> In (1) __sched_setscheduler() happens before execve so it operates on
+>> p->cpus_ptr equal span.
+>>
+>> In (2) span != p->cpus_ptr so DL AC will fail.
+>>
 > 
-> Please add all three, not just the last one.
+> As far as I got, the case (1) would be spitted in two steps:
 > 
+>  - __sched_setscheduler() will work, then
+>  - execv() would fail because (span != p->cpus_ptr)
+> 
+> So... at the end, both (1) and (2) would result in a failure...
+> 
+> am I missing something?
 
-Ok!
+Not sure. Reading this thread I was under the assumption that the only
+change would be the drop of this patch. But I assume there is also this
+'if DL AC is on then let sched_setattr() fail for this 32bit task'.
+
+IMHO, the current patch-stack w/o this patch should let (1) succeed with
+DL AC.
