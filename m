@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7D138D09D
-	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 00:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF8C38D098
+	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 00:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbhEUWOb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S229782AbhEUWOb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Fri, 21 May 2021 18:14:31 -0400
-Received: from mga01.intel.com ([192.55.52.88]:15957 "EHLO mga01.intel.com"
+Received: from mga11.intel.com ([192.55.52.93]:40309 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229507AbhEUWO3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S229526AbhEUWO3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Fri, 21 May 2021 18:14:29 -0400
-IronPort-SDR: CACp6h9eguRUiPXF8MnSZJh3KQgIF7IR+Ynu2HwNA5rc9Oef4n2L2mYefL6r+7V3aFQ1EZ/tjM
- 7f/N9MT7MsYQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9991"; a="222696902"
+IronPort-SDR: LfxqOUykP/OM294VwqaXo0ftTY8d/CYPe8a/hx6MwWjQ9pJBz0uIfvV48L4iD7Q/k3p6DSS9kD
+ t8VNq09tpgXw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9991"; a="198500732"
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="222696902"
+   d="scan'208";a="198500732"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 15:13:05 -0700
-IronPort-SDR: A4I3vhU4bIstB3wZRv2YqtjI05AZRhoVp420cyBsxy76TyNKzkrjYkKrGsP9kZXLMePafEldLE
- eGLrEUtxP9MA==
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 15:13:05 -0700
+IronPort-SDR: 5VUq3zwpJx7ZR3WSyF45clsSIhzz0J9+mLaTOcARk7FJImC7pUjpg9m6dkaeanxCaULk1BfOdu
+ oF2xodOjNsGQ==
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="441116093"
+   d="scan'208";a="441116099"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 15:13:04 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -53,9 +53,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v27 01/31] Documentation/x86: Add CET description
-Date:   Fri, 21 May 2021 15:11:41 -0700
-Message-Id: <20210521221211.29077-2-yu-cheng.yu@intel.com>
+Subject: [PATCH v27 02/31] x86/cet/shstk: Add Kconfig option for Shadow Stack
+Date:   Fri, 21 May 2021 15:11:42 -0700
+Message-Id: <20210521221211.29077-3-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210521221211.29077-1-yu-cheng.yu@intel.com>
 References: <20210521221211.29077-1-yu-cheng.yu@intel.com>
@@ -65,190 +65,79 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Explain no_user_shstk/no_user_ibt kernel parameters, and introduce a new
-document on Control-flow Enforcement Technology (CET).
+Shadow Stack provides protection against function return address
+corruption.  It is active when the processor supports it, the kernel has
+CONFIG_X86_SHADOW_STACK enabled, and the application is built for the
+feature.  This is only implemented for the 64-bit kernel.  When it is
+enabled, legacy non-Shadow Stack applications continue to work, but without
+protection.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc: Kees Cook <keescook@chromium.org>
 ---
- .../admin-guide/kernel-parameters.txt         |   6 +
- Documentation/x86/index.rst                   |   1 +
- Documentation/x86/intel_cet.rst               | 137 ++++++++++++++++++
- 3 files changed, 143 insertions(+)
- create mode 100644 Documentation/x86/intel_cet.rst
+v25:
+- Remove X86_CET and use X86_SHADOW_STACK directly.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index cb89dbdedc46..c593686d4b36 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3259,6 +3259,12 @@
- 			noexec=on: enable non-executable mappings (default)
- 			noexec=off: disable non-executable mappings
+v24:
+- Update for the splitting X86_CET to X86_SHADOW_STACK and X86_IBT.
+
+ arch/x86/Kconfig           | 22 ++++++++++++++++++++++
+ arch/x86/Kconfig.assembler |  5 +++++
+ 2 files changed, 27 insertions(+)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 0045e1b44190..36309425d612 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -26,6 +26,7 @@ config X86_64
+ 	depends on 64BIT
+ 	# Options that are inherently 64-bit kernel only:
+ 	select ARCH_HAS_GIGANTIC_PAGE
++	select ARCH_HAS_SHADOW_STACK
+ 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+ 	select ARCH_USE_CMPXCHG_LOCKREF
+ 	select HAVE_ARCH_SOFT_DIRTY
+@@ -1948,6 +1949,27 @@ config X86_SGX
  
-+	no_user_shstk	[X86-64] Disable Shadow Stack for user-mode
-+			applications
+ 	  If unsure, say N.
+ 
++config ARCH_HAS_SHADOW_STACK
++	def_bool n
 +
-+	no_user_ibt	[X86-64] Disable Indirect Branch Tracking for user-mode
-+			applications
++config X86_SHADOW_STACK
++	prompt "Intel Shadow Stack"
++	def_bool n
++	depends on AS_WRUSS
++	depends on ARCH_HAS_SHADOW_STACK
++	select ARCH_USES_HIGH_VMA_FLAGS
++	help
++	  Shadow Stack protection is a hardware feature that detects function
++	  return address corruption.  This helps mitigate ROP attacks.
++	  Applications must be enabled to use it, and old userspace does not
++	  get protection "for free".
++	  Support for this feature is present on Tiger Lake family of
++	  processors released in 2020 or later.  Enabling this feature
++	  increases kernel text size by 3.7 KB.
++	  See Documentation/x86/intel_cet.rst for more information.
 +
- 	nosmap		[X86,PPC]
- 			Disable SMAP (Supervisor Mode Access Prevention)
- 			even if it is supported by processor.
-diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
-index 4693e192b447..cf5250a3cc70 100644
---- a/Documentation/x86/index.rst
-+++ b/Documentation/x86/index.rst
-@@ -21,6 +21,7 @@ x86-specific Documentation
-    tlb
-    mtrr
-    pat
-+   intel_cet
-    intel-iommu
-    intel_txt
-    amd-memory-encryption
-diff --git a/Documentation/x86/intel_cet.rst b/Documentation/x86/intel_cet.rst
-new file mode 100644
-index 000000000000..ae30c392994a
---- /dev/null
-+++ b/Documentation/x86/intel_cet.rst
-@@ -0,0 +1,137 @@
-+.. SPDX-License-Identifier: GPL-2.0
++	  If unsure, say N.
 +
-+=========================================
-+Control-flow Enforcement Technology (CET)
-+=========================================
+ config EFI
+ 	bool "EFI runtime service support"
+ 	depends on ACPI
+diff --git a/arch/x86/Kconfig.assembler b/arch/x86/Kconfig.assembler
+index 26b8c08e2fc4..00c79dd93651 100644
+--- a/arch/x86/Kconfig.assembler
++++ b/arch/x86/Kconfig.assembler
+@@ -19,3 +19,8 @@ config AS_TPAUSE
+ 	def_bool $(as-instr,tpause %ecx)
+ 	help
+ 	  Supported by binutils >= 2.31.1 and LLVM integrated assembler >= V7
 +
-+[1] Overview
-+============
-+
-+Control-flow Enforcement Technology (CET) is an Intel processor feature
-+that provides protection against return/jump-oriented programming (ROP)
-+attacks.  It can be set up to protect both applications and the kernel.
-+Only user-mode protection is implemented in the 64-bit kernel, including
-+shadow stack support for running legacy 32-bit applications.  IBT is not
-+supported for 32-bit applications.
-+
-+CET introduces Shadow Stack and Indirect Branch Tracking.  Shadow stack is
-+a secondary stack allocated from memory and cannot be directly modified by
-+applications.  When executing a CALL instruction, the processor pushes the
-+return address to both the normal stack and the shadow stack.  Upon
-+function return, the processor pops the shadow stack copy and compares it
-+to the normal stack copy.  If the two differ, the processor raises a
-+control-protection fault.  Indirect branch tracking verifies indirect
-+CALL/JMP targets are intended as marked by the compiler with 'ENDBR'
-+opcodes.
-+
-+There are two Kconfig options:
-+
-+    X86_SHADOW_STACK, and X86_IBT.
-+
-+To build a CET-enabled kernel, Binutils v2.31 and GCC v8.1 or LLVM v10.0.1
-+or later are required.  To build a CET-enabled application, GLIBC v2.28 or
-+later is also required.
-+
-+There are two command-line options for disabling CET features::
-+
-+    no_user_shstk - disables user shadow stack, and
-+    no_user_ibt   - disables user indirect branch tracking.
-+
-+At run time, /proc/cpuinfo shows CET features if the processor supports
-+CET.
-+
-+[2] Application Enabling
-+========================
-+
-+An application's CET capability is marked in its ELF header and can be
-+verified from readelf/llvm-readelf output:
-+
-+    readelf -n <application> | grep -a SHSTK
-+        properties: x86 feature: IBT, SHSTK
-+
-+If an application supports CET and is statically linked, it will run with
-+CET protection.  If the application needs any shared libraries, the loader
-+checks all dependencies and enables CET when all requirements are met.
-+
-+[3] Backward Compatibility
-+==========================
-+
-+GLIBC provides a few CET tunables via the GLIBC_TUNABLES environment
-+variable:
-+
-+GLIBC_TUNABLES=glibc.tune.hwcaps=-SHSTK,-IBT
-+    Turn off SHSTK/IBT.
-+
-+GLIBC_TUNABLES=glibc.tune.x86_shstk=<on, permissive>
-+    This controls how dlopen() handles SHSTK legacy libraries::
-+
-+        on         - continue with SHSTK enabled;
-+        permissive - continue with SHSTK off.
-+
-+Details can be found in the GLIBC manual pages.
-+
-+[4] CET arch_prctl()'s
-+======================
-+
-+Several arch_prctl()'s have been added for CET:
-+
-+arch_prctl(ARCH_X86_CET_STATUS, u64 *addr)
-+    Return CET feature status.
-+
-+    The parameter 'addr' is a pointer to a user buffer.
-+    On returning to the caller, the kernel fills the following
-+    information::
-+
-+        *addr       = shadow stack/indirect branch tracking status
-+        *(addr + 1) = shadow stack base address
-+        *(addr + 2) = shadow stack size
-+
-+arch_prctl(ARCH_X86_CET_DISABLE, unsigned int features)
-+    Disable shadow stack and/or indirect branch tracking as specified in
-+    'features'.  Return -EPERM if CET is locked.
-+
-+arch_prctl(ARCH_X86_CET_LOCK)
-+    Lock in all CET features.  They cannot be turned off afterwards.
-+
-+Note:
-+  There is no CET-enabling arch_prctl function.  By design, CET is enabled
-+  automatically if the binary and the system can support it.
-+
-+[5] The implementation of the Shadow Stack
-+==========================================
-+
-+Shadow Stack size
-+-----------------
-+
-+A task's shadow stack is allocated from memory to a fixed size of
-+MIN(RLIMIT_STACK, 4 GB).  In other words, the shadow stack is allocated to
-+the maximum size of the normal stack, but capped to 4 GB.  However,
-+a compat-mode application's address space is smaller, each of its thread's
-+shadow stack size is MIN(1/4 RLIMIT_STACK, 4 GB).
-+
-+Signal
-+------
-+
-+The main program and its signal handlers use the same shadow stack.
-+Because the shadow stack stores only return addresses, a large shadow
-+stack covers the condition that both the program stack and the signal
-+alternate stack run out.
-+
-+The kernel creates a restore token for the shadow stack restoring address
-+and verifies that token when restoring from the signal handler.
-+
-+Fork
-+----
-+
-+The shadow stack's vma has VM_SHADOW_STACK flag set; its PTEs are required
-+to be read-only and dirty.  When a shadow stack PTE is not RO and dirty, a
-+shadow access triggers a page fault with the shadow stack access bit set
-+in the page fault error code.
-+
-+When a task forks a child, its shadow stack PTEs are copied and both the
-+parent's and the child's shadow stack PTEs are cleared of the dirty bit.
-+Upon the next shadow stack access, the resulting shadow stack page fault
-+is handled by page copy/re-use.
-+
-+When a pthread child is created, the kernel allocates a new shadow stack
-+for the new thread.
++config AS_WRUSS
++	def_bool $(as-instr,wrussq %rax$(comma)(%rbx))
++	help
++	  Supported by binutils >= 2.31 and LLVM integrated assembler
 -- 
 2.21.0
 
