@@ -2,31 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE0238CA06
-	for <lists+linux-arch@lfdr.de>; Fri, 21 May 2021 17:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5C738CA91
+	for <lists+linux-arch@lfdr.de>; Fri, 21 May 2021 18:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbhEUPYX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 May 2021 11:24:23 -0400
-Received: from foss.arm.com ([217.140.110.172]:49722 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232199AbhEUPYX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 May 2021 11:24:23 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CEEB211B3;
-        Fri, 21 May 2021 08:22:59 -0700 (PDT)
-Received: from e107158-lin.cambridge.arm.com (unknown [10.1.195.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F8DD3F73B;
-        Fri, 21 May 2021 08:22:57 -0700 (PDT)
-Date:   Fri, 21 May 2021 16:22:55 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
+        id S232426AbhEUQGD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 May 2021 12:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229586AbhEUQGC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 May 2021 12:06:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264B8C061574;
+        Fri, 21 May 2021 09:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rOUSMzUazFVWTtdtGXWIZ9Ml1r75lqXoNz586zbgxOE=; b=nNRqUIHd25G1YFdETP5KXvxo6m
+        5UQvVEciIApRzCglIzquESH/jC97Kr9NVZNfUWodXMc0XYBhYYrSBZK29fE3tH5VFXKXGyQJZ1juI
+        ryVsHOxYFrH5q7LISOk3/00iqTR6hq/Q3cgCBzjzpzCgY9j7TeaNk1LM+DGNRlTqA6UJffy8w7T0B
+        +ee/iyr//K8+EcY5cIcWU3DldmkaGWfm3mjEvXVZyPnuQ8L6QFiVHgUlDFxen1TeeeJulIIY3ohqt
+        5ZQcHdEVSR+Ww2IGDuMCmEOxKR4/dGyVJCrik7zYMcX+SyWOGC8sRZ6WO5/FY4HJn9QNWg1U5C3Xs
+        QYVuzQRw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lk7co-0003fs-5O; Fri, 21 May 2021 16:03:49 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D90FE981F05; Fri, 21 May 2021 18:03:44 +0200 (CEST)
+Date:   Fri, 21 May 2021 18:03:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Will Deacon <will@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
         Marc Zyngier <maz@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
         Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
         Li Zefan <lizefan@huawei.com>,
@@ -35,40 +47,58 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: Re: [PATCH v6 02/21] arm64: Allow mismatched 32-bit EL0 support
-Message-ID: <20210521152255.tosr4jwok6cjg6sf@e107158-lin.cambridge.arm.com>
+Subject: Re: [PATCH v6 06/21] sched: Introduce task_cpu_possible_mask() to
+ limit fallback rq selection
+Message-ID: <20210521160344.GJ5618@worktop.programming.kicks-ass.net>
 References: <20210518094725.7701-1-will@kernel.org>
- <20210518094725.7701-3-will@kernel.org>
+ <20210518094725.7701-7-will@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210518094725.7701-3-will@kernel.org>
+In-Reply-To: <20210518094725.7701-7-will@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 05/18/21 10:47, Will Deacon wrote:
-> When confronted with a mixture of CPUs, some of which support 32-bit
-> applications and others which don't, we quite sensibly treat the system
-> as 64-bit only for userspace and prevent execve() of 32-bit binaries.
-> 
-> Unfortunately, some crazy folks have decided to build systems like this
-> with the intention of running 32-bit applications, so relax our
-> sanitisation logic to continue to advertise 32-bit support to userspace
-> on these systems and track the real 32-bit capable cores in a cpumask
-> instead. For now, the default behaviour remains but will be tied to
-> a command-line option in a later patch.
-> 
-> Signed-off-by: Will Deacon <will@kernel.org>
-> ---
->  arch/arm64/include/asm/cpucaps.h    |   3 +-
+On Tue, May 18, 2021 at 10:47:10AM +0100, Will Deacon wrote:
+> diff --git a/include/linux/mmu_context.h b/include/linux/mmu_context.h
+> index 03dee12d2b61..bc4ac3c525e6 100644
+> --- a/include/linux/mmu_context.h
+> +++ b/include/linux/mmu_context.h
+> @@ -14,4 +14,12 @@
+>  static inline void leave_mm(int cpu) { }
+>  #endif
+>  
+> +/*
+> + * CPUs that are capable of running task @p. By default, we assume a sane,
+> + * homogeneous system. Must contain at least one active CPU.
+> + */
+> +#ifndef task_cpu_possible_mask
+> +# define task_cpu_possible_mask(p)	cpu_possible_mask
+> +#endif
 
-Heads up. I just tried to apply this on 5.13-rc2 and it failed because cpucaps.
-was removed; it's autogenerated now.
+#ifndef task_cpu_possible_mask
+# define task_cpu_possible_mask(p)	cpu_possible_mask
+# define task_cpu_possible(cpu, p)	true
+#else
+# define task_cpu_possible(cpu, p)	cpumask_test_cpu((cpu), task_cpu_possible_mask(p))
+#endif
 
-See commit 0c6c2d3615ef: ()"arm64: Generate cpucaps.h")
+> +
+>  #endif
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 5226cc26a095..482f7fdca0e8 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -1813,8 +1813,11 @@ static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
+>  		return cpu_online(cpu);
+>  
+>  	/* Non kernel threads are not allowed during either online or offline. */
+>  	if (!(p->flags & PF_KTHREAD))
+> -		return cpu_active(cpu);
++		return cpu_active(cpu) && task_cpu_possible(cpu, p);
 
-Cheers
+>  	/* KTHREAD_IS_PER_CPU is always allowed. */
+>  	if (kthread_is_per_cpu(p))
 
---
-Qais Youesf
+Would something like that make sense?
