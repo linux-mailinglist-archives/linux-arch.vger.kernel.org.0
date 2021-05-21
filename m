@@ -2,103 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5C738CA91
-	for <lists+linux-arch@lfdr.de>; Fri, 21 May 2021 18:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A1238CAD6
+	for <lists+linux-arch@lfdr.de>; Fri, 21 May 2021 18:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbhEUQGD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 May 2021 12:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbhEUQGC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 May 2021 12:06:02 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264B8C061574;
-        Fri, 21 May 2021 09:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rOUSMzUazFVWTtdtGXWIZ9Ml1r75lqXoNz586zbgxOE=; b=nNRqUIHd25G1YFdETP5KXvxo6m
-        5UQvVEciIApRzCglIzquESH/jC97Kr9NVZNfUWodXMc0XYBhYYrSBZK29fE3tH5VFXKXGyQJZ1juI
-        ryVsHOxYFrH5q7LISOk3/00iqTR6hq/Q3cgCBzjzpzCgY9j7TeaNk1LM+DGNRlTqA6UJffy8w7T0B
-        +ee/iyr//K8+EcY5cIcWU3DldmkaGWfm3mjEvXVZyPnuQ8L6QFiVHgUlDFxen1TeeeJulIIY3ohqt
-        5ZQcHdEVSR+Ww2IGDuMCmEOxKR4/dGyVJCrik7zYMcX+SyWOGC8sRZ6WO5/FY4HJn9QNWg1U5C3Xs
-        QYVuzQRw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lk7co-0003fs-5O; Fri, 21 May 2021 16:03:49 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D90FE981F05; Fri, 21 May 2021 18:03:44 +0200 (CEST)
-Date:   Fri, 21 May 2021 18:03:44 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Li Zefan <lizefan@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: Re: [PATCH v6 06/21] sched: Introduce task_cpu_possible_mask() to
- limit fallback rq selection
-Message-ID: <20210521160344.GJ5618@worktop.programming.kicks-ass.net>
-References: <20210518094725.7701-1-will@kernel.org>
- <20210518094725.7701-7-will@kernel.org>
+        id S232346AbhEUQTZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 May 2021 12:19:25 -0400
+Received: from mga04.intel.com ([192.55.52.120]:15226 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231318AbhEUQTZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 21 May 2021 12:19:25 -0400
+IronPort-SDR: o+9RwqpsqLpqJR+lZh/NwfeQcDXpXKspzArxamWJez+xKsrlFC9a7FSSpfGQJf+ztj4Q/mQdgD
+ b3rvgdGraxDg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9991"; a="199576048"
+X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
+   d="scan'208";a="199576048"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 09:17:35 -0700
+IronPort-SDR: mZryhIX47sLJixgt8Qc9gLmzKgJ+SBzaiz6RVQKGwMt7tm3L2OaO0MqVZ1E/fkxF8q0Q1gVB29
+ ebFTGGc09p/A==
+X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
+   d="scan'208";a="434344646"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.254.177.76]) ([10.254.177.76])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 09:17:27 -0700
+Subject: Re: [PATCH v26 24/30] x86/cet/shstk: Introduce shadow stack token
+ setup/verify routines
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>
+References: <20210427204315.24153-1-yu-cheng.yu@intel.com>
+ <20210427204315.24153-25-yu-cheng.yu@intel.com> <YKIfIEyW+sR+bDCk@zn.tnic>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <c9121ca1-83cb-1c37-1a8e-edaafaa6fda2@intel.com>
+Date:   Fri, 21 May 2021 09:17:24 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210518094725.7701-7-will@kernel.org>
+In-Reply-To: <YKIfIEyW+sR+bDCk@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 18, 2021 at 10:47:10AM +0100, Will Deacon wrote:
-> diff --git a/include/linux/mmu_context.h b/include/linux/mmu_context.h
-> index 03dee12d2b61..bc4ac3c525e6 100644
-> --- a/include/linux/mmu_context.h
-> +++ b/include/linux/mmu_context.h
-> @@ -14,4 +14,12 @@
->  static inline void leave_mm(int cpu) { }
->  #endif
->  
-> +/*
-> + * CPUs that are capable of running task @p. By default, we assume a sane,
-> + * homogeneous system. Must contain at least one active CPU.
-> + */
-> +#ifndef task_cpu_possible_mask
-> +# define task_cpu_possible_mask(p)	cpu_possible_mask
-> +#endif
+On 5/17/2021 12:45 AM, Borislav Petkov wrote:
+> On Tue, Apr 27, 2021 at 01:43:09PM -0700, Yu-cheng Yu wrote:
 
-#ifndef task_cpu_possible_mask
-# define task_cpu_possible_mask(p)	cpu_possible_mask
-# define task_cpu_possible(cpu, p)	true
-#else
-# define task_cpu_possible(cpu, p)	cpumask_test_cpu((cpu), task_cpu_possible_mask(p))
-#endif
+[...]
 
-> +
->  #endif
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 5226cc26a095..482f7fdca0e8 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1813,8 +1813,11 @@ static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
->  		return cpu_online(cpu);
->  
->  	/* Non kernel threads are not allowed during either online or offline. */
->  	if (!(p->flags & PF_KTHREAD))
-> -		return cpu_active(cpu);
-+		return cpu_active(cpu) && task_cpu_possible(cpu, p);
+>> +
+>> +	if ((!ia32 && !IS_ALIGNED(ssp, 8)) || !IS_ALIGNED(ssp, 4))
+> 
+> Flip this logic:
+> 
+> 	if ((ia32 && !IS_ALIGNED(ssp, 4)) || !IS_ALIGNED(ssp, 8))
 
->  	/* KTHREAD_IS_PER_CPU is always allowed. */
->  	if (kthread_is_per_cpu(p))
+If !IS_ALIGNED(ssp, 4), then certainly !IS_ALIGNED(ssp, 8).
+This has to be as-is, I think.
 
-Would something like that make sense?
+Thanks,
+Yu-cheng
