@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BE738D11F
-	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 00:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5408D38D123
+	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 00:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbhEUWSj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 May 2021 18:18:39 -0400
-Received: from mga05.intel.com ([192.55.52.43]:55706 "EHLO mga05.intel.com"
+        id S230051AbhEUWSp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 May 2021 18:18:45 -0400
+Received: from mga05.intel.com ([192.55.52.43]:55754 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229755AbhEUWSe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 May 2021 18:18:34 -0400
-IronPort-SDR: tQfxeu0W+ZZPw2AXVOtH6J2qVv6TW5D1yKvylTvBEF6BqoTMjIQHcKPb3gvFXCWjfc+zrzETHT
- G9YALvtYDCFQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9991"; a="287124411"
+        id S229526AbhEUWSi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 21 May 2021 18:18:38 -0400
+IronPort-SDR: 9qJ/9xScfCNDMBW4WrhA2eTzJecEcItoFyZN/Dk4eQl+mgnbwAO8j1KfH0U3MPd+/1HBPxWWqZ
+ ckeJJzJiOFIQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9991"; a="287124412"
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="287124411"
+   d="scan'208";a="287124412"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 15:16:28 -0700
-IronPort-SDR: VeDJ4dRZPoXJ0JOgGY9taVtnV4mxx/Xzdzs1Zjsnf7gLo4dyvn4SAHdMx3DD+KScH2JnQHV9v1
- ZzN8ehK1AKSA==
+IronPort-SDR: Nb6khD/gChNyk4b0o0lWioO4018zGUysw4o/3Sxtym9lDO6UGtE9CwsE7VkFOBuA2EtCi7oRaR
+ +M1e3OSZLXGQ==
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="441269422"
+   d="scan'208";a="441269426"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 15:16:28 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -53,69 +53,87 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v27 00/10] Control-flow Enforcement: Indirect Branch Tracking
-Date:   Fri, 21 May 2021 15:15:21 -0700
-Message-Id: <20210521221531.30168-1-yu-cheng.yu@intel.com>
+Subject: [PATCH v27 01/10] x86/cet/ibt: Add Kconfig option for Indirect Branch Tracking
+Date:   Fri, 21 May 2021 15:15:22 -0700
+Message-Id: <20210521221531.30168-2-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20210521221531.30168-1-yu-cheng.yu@intel.com>
+References: <20210521221531.30168-1-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Control-flow Enforcement (CET) is a new Intel processor feature that blocks
-return/jump-oriented programming attacks.  Details are in "Intel 64 and
-IA-32 Architectures Software Developer's Manual" [1].
+Indirect Branch Tracking (IBT) provides protection against CALL-/JMP-
+oriented programming attacks.  It is active when the kernel has this
+feature enabled, and the processor and the application support it.
+When this feature is enabled, legacy non-IBT applications continue to
+work, but without IBT protection.
 
-This is the second part of CET and enables Indirect Branch Tracking (IBT).
-It is built on top of the shadow stack series.
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+---
+ arch/x86/Kconfig                         | 19 +++++++++++++++++++
+ arch/x86/include/asm/disabled-features.h |  8 +++++++-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
 
-Changes in v27:
-- Use a ucontext flag to save/restore IBT status.
-- Disable IBT support for IA32.
-- Rebase to Linus tree v5.13-rc2.
-
-[1] Intel 64 and IA-32 Architectures Software Developer's Manual:
-
-    https://software.intel.com/en-us/download/intel-64-and-ia-32-
-    architectures-sdm-combined-volumes-1-2a-2b-2c-2d-3a-3b-3c-3d-and-4
-
-[2] Indirect Branch Tracking patches v26:
-
-    https://lore.kernel.org/r/20210427204720.25007-1-yu-cheng.yu@intel.com/
-
-H.J. Lu (3):
-  x86/cet/ibt: Update arch_prctl functions for Indirect Branch Tracking
-  x86/vdso: Insert endbr32/endbr64 to vDSO
-  x86/vdso/32: Add ENDBR to __kernel_vsyscall entry point
-
-Yu-cheng Yu (7):
-  x86/cet/ibt: Add Kconfig option for Indirect Branch Tracking
-  x86/cet/ibt: Add user-mode Indirect Branch Tracking support
-  x86/cet/ibt: Handle signals for Indirect Branch Tracking
-  x86/cet/ibt: Disable IBT for ia32
-  x86/cet/ibt: Update ELF header parsing for Indirect Branch Tracking
-  x86/vdso: Introduce ENDBR macro
-  x86/vdso: Add ENDBR to __vdso_sgx_enter_enclave
-
- arch/x86/Kconfig                         | 19 +++++
- arch/x86/entry/vdso/Makefile             |  4 +
- arch/x86/entry/vdso/vdso32/system_call.S |  2 +
- arch/x86/entry/vdso/vsgx.S               |  4 +
- arch/x86/ia32/ia32_signal.c              | 22 +++++-
- arch/x86/include/asm/cet.h               | 13 ++++
- arch/x86/include/asm/disabled-features.h |  8 +-
- arch/x86/include/asm/elf.h               | 13 +++-
- arch/x86/include/asm/vdso.h              | 20 ++++-
- arch/x86/include/uapi/asm/ucontext.h     |  5 ++
- arch/x86/kernel/Makefile                 |  1 +
- arch/x86/kernel/cet_prctl.c              |  5 ++
- arch/x86/kernel/ibt.c                    | 95 ++++++++++++++++++++++++
- arch/x86/kernel/process_64.c             |  8 ++
- arch/x86/kernel/signal.c                 |  6 ++
- 15 files changed, 219 insertions(+), 6 deletions(-)
- create mode 100644 arch/x86/kernel/ibt.c
-
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index af1a096ed023..2e188d50f967 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1972,6 +1972,25 @@ config X86_SHADOW_STACK
+ 
+ 	  If unsure, say N.
+ 
++config X86_IBT
++	prompt "Intel Indirect Branch Tracking"
++	def_bool n
++	depends on X86_SHADOW_STACK
++	depends on $(cc-option,-fcf-protection)
++	help
++	  Indirect Branch Tracking (IBT) provides protection against
++	  CALL-/JMP-oriented programming attacks.  It is active when
++	  the kernel has this feature enabled, and the processor and
++	  the application support it.  When this feature is enabled,
++	  legacy non-IBT applications continue to work, but without
++	  IBT protection.
++	  Support for this feature is present on Tiger Lake family of
++	  processors released in 2020 or later.  Enabling this feature
++	  increases kernel text size by 3.7 KB.
++	  See Documentation/x86/intel_cet.rst for more information.
++
++	  If unsure, say N.
++
+ config EFI
+ 	bool "EFI runtime service support"
+ 	depends on ACPI
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index e5c6ed9373e8..07cc40d49947 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -74,6 +74,12 @@
+ #define DISABLE_SHSTK	(1 << (X86_FEATURE_SHSTK & 31))
+ #endif
+ 
++#ifdef CONFIG_X86_IBT
++#define DISABLE_IBT	0
++#else
++#define DISABLE_IBT	(1 << (X86_FEATURE_IBT & 31))
++#endif
++
+ /*
+  * Make sure to add features to the correct mask
+  */
+@@ -96,7 +102,7 @@
+ #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
+ 			 DISABLE_ENQCMD|DISABLE_SHSTK)
+ #define DISABLED_MASK17	0
+-#define DISABLED_MASK18	0
++#define DISABLED_MASK18	(DISABLE_IBT)
+ #define DISABLED_MASK19	0
+ #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 20)
+ 
 -- 
 2.21.0
 
