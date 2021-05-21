@@ -2,35 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EBC38D147
-	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 00:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D95438D179
+	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 00:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbhEUWTm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 May 2021 18:19:42 -0400
-Received: from mga05.intel.com ([192.55.52.43]:55754 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229507AbhEUWTW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 May 2021 18:19:22 -0400
-IronPort-SDR: E/ubeBjDuZp58I9y8NlF+xuEp7dpZONLLsUcAhuIoDkZ/y+yofvpNlH87Wp8yRyerCjIFjtLd9
- r/vcHD/NwdeQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9991"; a="287124422"
-X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="287124422"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 15:16:30 -0700
-IronPort-SDR: 1l69DAZyY78End//6ty+lXDAXAR/M4LFGsFa5D08zBRC6f/uigwN86g4Ts7u9QzSGnVqiSUIaU
- Py/4i8avNqnA==
-X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="441269472"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 15:16:30 -0700
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        id S229967AbhEUW1y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 May 2021 18:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229968AbhEUW1u (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 May 2021 18:27:50 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B63C0613ED
+        for <linux-arch@vger.kernel.org>; Fri, 21 May 2021 15:26:25 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id s7so5584676iov.2
+        for <linux-arch@vger.kernel.org>; Fri, 21 May 2021 15:26:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/XkWG9p3vuThMnzF5+jHBK0yD8kKyiYj1CsPVcIZG2k=;
+        b=NbxYYDnKLkoxAba68BqL9ZpD3lb2ScBJAQcY7Ca85CXetGoTwjl6vkFeBlTcN0YXWC
+         cakB/2NABQKb7tNbJ2MKqdWXSJWkXwDc/wdJ8H7ra+iLPE55/qTgRwSHMrd07MrYUY75
+         Kgl+MdH4q6qoh3P/D/eA9hwhI9aygyHy6++nMr5XZJFn3YbAGBkxb+ubQgrwI1dJD3OY
+         9vRWqUhp82BhFUfhdlge9Gw7weWCJYd2vfR0waS4FJhMBieNYCihC9+e4aQthIz0cPw7
+         nPcq/dSyh3TQ2iYZM3164IV6Hk3xNVVeEtw/KweHzEb/39DcVr+NmfeTkJfTD0gaB7bH
+         HDpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/XkWG9p3vuThMnzF5+jHBK0yD8kKyiYj1CsPVcIZG2k=;
+        b=LbpSI7ifBbPoNSFjCuSQbj0g1HjNruF0bVKekcKJ/NF0vLXJ3XXGT8WC3tdBdAA7DP
+         ofeHlcYBC17CFPDRoMzTaBodODqSckgF5sHHA4k4DiJ957AwPyAhqG9YaPacTtre94o/
+         2JJFrzk6YqqVRa3QPPvG9Z/gbgKFmJb/3pGqhX2JMGKzL/vtwGh3XCQwXh+ZSsM1+TJE
+         FyE5xhZebEGYTN2vqDqF3OUam26DCv4UhxB+yG84J6kiLL2KUs519Ev+5h9EV3nr7aKe
+         90nZMuD6F3ZeK1ei16m4MBkA4SLWuex2b4ujzYmdXPx/9CaTyy4Qs6HPiRk3In3uIS5U
+         sN6A==
+X-Gm-Message-State: AOAM530j+Ld7KhIMHrjoKHtOw82Tm8JPCn7DfmhyF2uc9wHQwiKFrdSm
+        7drdqZu82eaaV/sjyNl7v4I613mKM2HyKhPHuusJkA==
+X-Google-Smtp-Source: ABdhPJzlwY4snWFXpxBlNWlDJVr5O/yWYAqwfXJReVJK7U77qf3035eHhy3r6Qq2WuRy8RNFs9VDtvKPjIC+Z+H1LKQ=
+X-Received: by 2002:a02:aa85:: with SMTP id u5mr7968024jai.75.1621635984233;
+ Fri, 21 May 2021 15:26:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210521221211.29077-1-yu-cheng.yu@intel.com> <20210521221211.29077-14-yu-cheng.yu@intel.com>
+In-Reply-To: <20210521221211.29077-14-yu-cheng.yu@intel.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 21 May 2021 15:25:47 -0700
+Message-ID: <CAJHvVcjsecq-nOVE1ew1ctG2UpK0F0d0MjNncUgK0L=R4eyDqA@mail.gmail.com>
+Subject: Re: [PATCH v27 13/31] mm: Move VM_UFFD_MINOR_BIT from 37 to 38
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
+        Linux MM <linux-mm@kvack.org>, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -51,79 +77,45 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH v27 10/10] x86/vdso: Add ENDBR to __vdso_sgx_enter_enclave
-Date:   Fri, 21 May 2021 15:15:31 -0700
-Message-Id: <20210521221531.30168-11-yu-cheng.yu@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20210521221531.30168-1-yu-cheng.yu@intel.com>
-References: <20210521221531.30168-1-yu-cheng.yu@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Haitao Huang <haitao.huang@intel.com>,
+        Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ENDBR is a special new instruction for the Indirect Branch Tracking (IBT)
-component of CET.  IBT prevents attacks by ensuring that (most) indirect
-branches and function calls may only land at ENDBR instructions.  Branches
-that don't follow the rules will result in control flow (#CF) exceptions.
+This seems reasonable to me. The particular bit used isn't so
+important from my perspective. I can't think of a way this would break
+backward compatibility or such. So:
 
-ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
-instructions are inserted automatically by the compiler, but branch
-targets written in assembly must have ENDBR added manually.
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 
-Add ENDBR to __vdso_sgx_enter_enclave() branch targets.
-
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- arch/x86/entry/vdso/vsgx.S | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/x86/entry/vdso/vsgx.S b/arch/x86/entry/vdso/vsgx.S
-index 99dafac992e2..c7cb85d57b3f 100644
---- a/arch/x86/entry/vdso/vsgx.S
-+++ b/arch/x86/entry/vdso/vsgx.S
-@@ -4,6 +4,7 @@
- #include <asm/export.h>
- #include <asm/errno.h>
- #include <asm/enclu.h>
-+#include <asm/vdso.h>
- 
- #include "extable.h"
- 
-@@ -27,6 +28,7 @@
- SYM_FUNC_START(__vdso_sgx_enter_enclave)
- 	/* Prolog */
- 	.cfi_startproc
-+	ENDBR64
- 	push	%rbp
- 	.cfi_adjust_cfa_offset	8
- 	.cfi_rel_offset		%rbp, 0
-@@ -62,6 +64,7 @@ SYM_FUNC_START(__vdso_sgx_enter_enclave)
- .Lasync_exit_pointer:
- .Lenclu_eenter_eresume:
- 	enclu
-+	ENDBR64
- 
- 	/* EEXIT jumps here unless the enclave is doing something fancy. */
- 	mov	SGX_ENCLAVE_OFFSET_OF_RUN(%rbp), %rbx
-@@ -91,6 +94,7 @@ SYM_FUNC_START(__vdso_sgx_enter_enclave)
- 	jmp	.Lout
- 
- .Lhandle_exception:
-+	ENDBR64
- 	mov	SGX_ENCLAVE_OFFSET_OF_RUN(%rbp), %rbx
- 
- 	/* Set the exception info. */
--- 
-2.21.0
-
+On Fri, May 21, 2021 at 3:13 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>
+> To introduce VM_SHADOW_STACK as VM_HIGH_ARCH_BIT (37), and make all
+> VM_HIGH_ARCH_BITs stay together, move VM_UFFD_MINOR_BIT from 37 to 38.
+>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Cc: Axel Rasmussen <axelrasmussen@google.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  include/linux/mm.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index c274f75efcf9..923f89b9f1b5 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -373,7 +373,7 @@ extern unsigned int kobjsize(const void *objp);
+>  #endif
+>
+>  #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+> -# define VM_UFFD_MINOR_BIT     37
+> +# define VM_UFFD_MINOR_BIT     38
+>  # define VM_UFFD_MINOR         BIT(VM_UFFD_MINOR_BIT)  /* UFFD minor faults */
+>  #else /* !CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
+>  # define VM_UFFD_MINOR         VM_NONE
+> --
+> 2.21.0
+>
