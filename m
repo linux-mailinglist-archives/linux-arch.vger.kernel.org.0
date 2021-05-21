@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9563F38D13D
-	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 00:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DD138D141
+	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 00:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbhEUWTX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 May 2021 18:19:23 -0400
-Received: from mga05.intel.com ([192.55.52.43]:55699 "EHLO mga05.intel.com"
+        id S230244AbhEUWT1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 May 2021 18:19:27 -0400
+Received: from mga05.intel.com ([192.55.52.43]:55706 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229517AbhEUWTE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 May 2021 18:19:04 -0400
-IronPort-SDR: +uwhppb9cjiLZPW86hDQB03HB4ojDHR78s2KpwOx3WXLYl982saBzbsx8/oa+AYfa1bPpaabgl
- g8j9Xa4zW49w==
-X-IronPort-AV: E=McAfee;i="6200,9189,9991"; a="287124420"
+        id S230023AbhEUWTI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 21 May 2021 18:19:08 -0400
+IronPort-SDR: 178tWkGR9IsLY52PljQerXKxzg8rkVEX3yGvpB769dNByRz1x/dw5DexGUUJ9V1M9a4U+V/+NV
+ wIFfCXZF9EkA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9991"; a="287124421"
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="287124420"
+   d="scan'208";a="287124421"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 15:16:30 -0700
-IronPort-SDR: x6ExHnwI+3hUto9HSvZGb6Gq/IO8/NiRup+pQksgpGux8t8CuBK432UCz09lC0A94rPySD80S8
- i6Dc1Nlso6gw==
+IronPort-SDR: /rk/XekRvxxa6kQ91PownmMdhpdvv8W1JSCZzq/hlvloHpBKbcOJG4SIFGMU+/pnzLEodLA8fn
+ lbOPjpk81Mrw==
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="441269459"
+   d="scan'208";a="441269466"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 15:16:30 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -52,11 +52,10 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH v27 08/10] x86/vdso: Introduce ENDBR macro
-Date:   Fri, 21 May 2021 15:15:29 -0700
-Message-Id: <20210521221531.30168-9-yu-cheng.yu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v27 09/10] x86/vdso/32: Add ENDBR to __kernel_vsyscall entry point
+Date:   Fri, 21 May 2021 15:15:30 -0700
+Message-Id: <20210521221531.30168-10-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210521221531.30168-1-yu-cheng.yu@intel.com>
 References: <20210521221531.30168-1-yu-cheng.yu@intel.com>
@@ -65,6 +64,8 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
+
+From: "H.J. Lu" <hjl.tools@gmail.com>
 
 ENDBR is a special new instruction for the Indirect Branch Tracking (IBT)
 component of CET.  IBT prevents attacks by ensuring that (most) indirect
@@ -75,49 +76,36 @@ ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
 instructions are inserted automatically by the compiler, but branch
 targets written in assembly must have ENDBR added manually.
 
-Introduce ENDBR64/ENDBR32 macros.
+Add that to __kernel_vsyscall entry point.
 
+Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- arch/x86/include/asm/vdso.h | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ arch/x86/entry/vdso/vdso32/system_call.S | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/include/asm/vdso.h b/arch/x86/include/asm/vdso.h
-index 98aa103eb4ab..97358246e4c7 100644
---- a/arch/x86/include/asm/vdso.h
-+++ b/arch/x86/include/asm/vdso.h
-@@ -52,6 +52,24 @@ extern int map_vdso_once(const struct vdso_image *image, unsigned long addr);
- extern bool fixup_vdso_exception(struct pt_regs *regs, int trapnr,
- 				 unsigned long error_code,
- 				 unsigned long fault_addr);
--#endif /* __ASSEMBLER__ */
-+#else /* __ASSEMBLER__ */
-+
-+/*
-+ * ENDBR is an instruction for the Indirect Branch Tracking (IBT) component
-+ * of CET.  IBT prevents attacks by ensuring that (most) indirect branches
-+ * function calls may only land at ENDBR instructions.  Branches that don't
-+ * follow the rules will result in control flow (#CF) exceptions.
-+ * ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
-+ * instructions are inserted automatically by the compiler, but branch
-+ * targets written in assembly must have ENDBR added manually.
-+ */
-+#ifdef CONFIG_X86_IBT
-+#define ENDBR64 endbr64
-+#define ENDBR32 endbr32
-+#else
-+#define ENDBR64
-+#define ENDBR32
-+#endif
+diff --git a/arch/x86/entry/vdso/vdso32/system_call.S b/arch/x86/entry/vdso/vdso32/system_call.S
+index 6ddd7a937b3e..d321c2ded33a 100644
+--- a/arch/x86/entry/vdso/vdso32/system_call.S
++++ b/arch/x86/entry/vdso/vdso32/system_call.S
+@@ -7,6 +7,7 @@
+ #include <asm/dwarf2.h>
+ #include <asm/cpufeatures.h>
+ #include <asm/alternative.h>
++#include <asm/vdso.h>
  
-+#endif /* __ASSEMBLER__ */
- #endif /* _ASM_X86_VDSO_H */
+ 	.text
+ 	.globl __kernel_vsyscall
+@@ -14,6 +15,7 @@
+ 	ALIGN
+ __kernel_vsyscall:
+ 	CFI_STARTPROC
++	ENDBR32
+ 	/*
+ 	 * Reshuffle regs so that all of any of the entry instructions
+ 	 * will preserve enough state.
 -- 
 2.21.0
 
