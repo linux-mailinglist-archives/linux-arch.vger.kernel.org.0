@@ -2,106 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A9538D298
-	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 02:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DC238D2DB
+	for <lists+linux-arch@lfdr.de>; Sat, 22 May 2021 03:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbhEVAhp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 May 2021 20:37:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59376 "EHLO mail.kernel.org"
+        id S230484AbhEVB7l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 May 2021 21:59:41 -0400
+Received: from mga03.intel.com ([134.134.136.65]:6339 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230190AbhEVAhp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 May 2021 20:37:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C4302613FE;
-        Sat, 22 May 2021 00:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621643781;
-        bh=HaoAEb5QnxGwVYmtRURFgpSmH16cCBITcqMVRG2/0Gg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MPqbJhBH3RstH9EWKnNxymskz2Pl/C3W0gZMrlE5YCNKDUTrUUl6zCvDVB5k5XAYV
-         Y9reX8ayEACS9y0c/FUtyyh/u4B9uR1QqFmPsWzjNryQn+mrf9sJS0gsybWWjctN+6
-         8t3HtRVEAhAQbtaZt0m0Y2ipK9Ky6/a///tbh5LM0ggxxkxKSCYeUmhmxi04t5zUHH
-         3VoiVihlCbU5yRaTI00Hz9NhwohX5X6bXsnRYyv2VKYnPnCyVijAyx6eVeIE/4yuTU
-         2Obo3xiF4iJYCtUfU9lO4WLwiZEypzFDL6/ggllWhgtf/ABAN9PNqOCTmfMo2TyWaN
-         ElcxbVijfWhjQ==
-Received: by mail-lj1-f181.google.com with SMTP id a4so11172626ljd.5;
-        Fri, 21 May 2021 17:36:21 -0700 (PDT)
-X-Gm-Message-State: AOAM531IcwAKxtBqO6a+axvmrMG2S4Yc70gwzOzv2Xv5C2a94MNuoN6/
-        YOhv2OuSMBzXPTZRaFEyt7Qsigd8qojaq22Dd7Y=
-X-Google-Smtp-Source: ABdhPJw+FdoqB7wdUwCy62OFrQ1DY0Cf6ne6oubJWNeuhIRENTiVKgOFAcEA/5SJUwdF8GiK/Z3FCxIVMCSO7UivrSQ=
-X-Received: by 2002:a05:651c:502:: with SMTP id o2mr8602037ljp.105.1621643779980;
- Fri, 21 May 2021 17:36:19 -0700 (PDT)
+        id S230371AbhEVB7l (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 21 May 2021 21:59:41 -0400
+IronPort-SDR: tHeQdk5oT7sL4UaAgu8mD6ZspjcLNbF8qkxf1f1A7erTV42XuBd3g7fxtKwZOh9msq3p3vo3W5
+ usx89uXfcvww==
+X-IronPort-AV: E=McAfee;i="6200,9189,9991"; a="201660914"
+X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
+   d="scan'208";a="201660914"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 18:58:16 -0700
+IronPort-SDR: IS1a1WjJpDP/oMTDY7yRQl6/vLIwFp04ZRQAZ3ziPozZVC+dJYHKaJK5SF3eo2OzyVejVGMg9A
+ Ua3eWG277zeg==
+X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
+   d="scan'208";a="395558527"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.254.177.76]) ([10.254.177.76])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 18:58:14 -0700
+Subject: Re: [PATCH v27 13/31] mm: Move VM_UFFD_MINOR_BIT from 37 to 38
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
+        Linux MM <linux-mm@kvack.org>, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>,
+        Peter Xu <peterx@redhat.com>
+References: <20210521221211.29077-1-yu-cheng.yu@intel.com>
+ <20210521221211.29077-14-yu-cheng.yu@intel.com>
+ <CAJHvVcjsecq-nOVE1ew1ctG2UpK0F0d0MjNncUgK0L=R4eyDqA@mail.gmail.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <74057265-c148-98bf-9ada-21328b160227@intel.com>
+Date:   Fri, 21 May 2021 18:58:14 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-References: <1621400656-25678-1-git-send-email-guoren@kernel.org>
- <20210519052048.GA24853@lst.de> <CAJF2gTR5838=Uwc5P6Xs=G7vk80k0yqWcSsNe0OFcwc9sDBBHg@mail.gmail.com>
- <20210519060617.GA28397@lst.de> <20210519065431.GB3076809@x1> <CAAhSdy3C1owsbY_9gkxkhWfCXnL_noow7F4t=5+j7q+AJO3pZQ@mail.gmail.com>
-In-Reply-To: <CAAhSdy3C1owsbY_9gkxkhWfCXnL_noow7F4t=5+j7q+AJO3pZQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 22 May 2021 08:36:08 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTBAKTBY5AF9jd8tfT-33Y+McyFis_xk_aMvZZpLsvVxw@mail.gmail.com>
-Message-ID: <CAJF2gTTBAKTBY5AF9jd8tfT-33Y+McyFis_xk_aMvZZpLsvVxw@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Drew Fustini <drew@beagleboard.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Anup Patel <anup.patel@wdc.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>, wefu@redhat.com,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJHvVcjsecq-nOVE1ew1ctG2UpK0F0d0MjNncUgK0L=R4eyDqA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 19, 2021 at 3:15 PM Anup Patel <anup@brainfault.org> wrote:
->
-> On Wed, May 19, 2021 at 12:24 PM Drew Fustini <drew@beagleboard.org> wrote:
-> >
-> > On Wed, May 19, 2021 at 08:06:17AM +0200, Christoph Hellwig wrote:
-> > > On Wed, May 19, 2021 at 02:05:00PM +0800, Guo Ren wrote:
-> > > > Since the existing RISC-V ISA cannot solve this problem, it is better
-> > > > to provide some configuration for the SOC vendor to customize.
-> > >
-> > > We've been talking about this problem for close to five years.  So no,
-> > > if you don't manage to get the feature into the ISA it can't be
-> > > supported.
-> >
-> > Isn't it a good goal for Linux to support the capabilities present in
-> > the SoC that a currently being fab'd?
-> >
-> > I believe the CMO group only started last year [1] so the RV64GC SoCs
-> > that are going into mass production this year would not have had the
-> > opporuntiy of utilizing any RISC-V ISA extension for handling cache
-> > management.
->
-> The current Linux RISC-V policy is to only accept patches for frozen or
-> ratified ISA specs.
-> (Refer, Documentation/riscv/patch-acceptance.rst)
->
-> This means even if emulate CMO instructions in OpenSBI, the Linux
-> patches won't be taken by Palmer because CMO specification is
-> still in draft stage.
-Before CMO specification release, could we use a sbi_ecall to solve
-the current problem? This is not against the specification, when CMO
-is ready we could let users choose to use the new CMO in Linux.
+On 5/21/2021 3:25 PM, Axel Rasmussen wrote:
+> This seems reasonable to me. The particular bit used isn't so
+> important from my perspective. I can't think of a way this would break
+> backward compatibility or such. So:
+> 
+> Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 
-From a tech view, CMO trap emulation is the same as sbi_ecall.
+Thanks!
 
->
-> Also, we all know how much time it takes for RISCV international
-> to freeze some spec. Judging by that we are looking at another
-> 3-4 years at minimum.
->
-> Regards,
-> Anup
+Yu-cheng
 
+> 
+> On Fri, May 21, 2021 at 3:13 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>>
+>> To introduce VM_SHADOW_STACK as VM_HIGH_ARCH_BIT (37), and make all
+>> VM_HIGH_ARCH_BITs stay together, move VM_UFFD_MINOR_BIT from 37 to 38.
+>>
+>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+>> Cc: Axel Rasmussen <axelrasmussen@google.com>
+>> Cc: Peter Xu <peterx@redhat.com>
+>> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+>> ---
+>>   include/linux/mm.h | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>> index c274f75efcf9..923f89b9f1b5 100644
+>> --- a/include/linux/mm.h
+>> +++ b/include/linux/mm.h
+>> @@ -373,7 +373,7 @@ extern unsigned int kobjsize(const void *objp);
+>>   #endif
+>>
+>>   #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+>> -# define VM_UFFD_MINOR_BIT     37
+>> +# define VM_UFFD_MINOR_BIT     38
+>>   # define VM_UFFD_MINOR         BIT(VM_UFFD_MINOR_BIT)  /* UFFD minor faults */
+>>   #else /* !CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
+>>   # define VM_UFFD_MINOR         VM_NONE
+>> --
+>> 2.21.0
+>>
 
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
