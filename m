@@ -2,143 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BD138F370
-	for <lists+linux-arch@lfdr.de>; Mon, 24 May 2021 21:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60C438F440
+	for <lists+linux-arch@lfdr.de>; Mon, 24 May 2021 22:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbhEXTDW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 May 2021 15:03:22 -0400
-Received: from mga12.intel.com ([192.55.52.136]:4112 "EHLO mga12.intel.com"
+        id S233079AbhEXUXH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 May 2021 16:23:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48806 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233038AbhEXTDV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 May 2021 15:03:21 -0400
-IronPort-SDR: KsOQ6iihWiaMWpg9u29Abp0csjTSJibjasA371d8RikI0JSHe51+n/qqRUFYaqIsFP4RRHF4m0
- EnSjrdlTyntA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9993"; a="181645940"
-X-IronPort-AV: E=Sophos;i="5.82,325,1613462400"; 
-   d="scan'208";a="181645940"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 12:01:53 -0700
-IronPort-SDR: f2NKSKkNtLAQOGKQ/SQox+/Jw6D0hjpN+6PBQLNr2y/OYvAvHpL4bWaeDXnqhLPHZf+7BxKWLA
- kBPtNJtDgMJQ==
-X-IronPort-AV: E=Sophos;i="5.82,325,1613462400"; 
-   d="scan'208";a="435385683"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.255.72.237]) ([10.255.72.237])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 12:01:49 -0700
-Subject: Re: [PATCH v27 10/10] x86/vdso: Add ENDBR to __vdso_sgx_enter_enclave
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        id S233009AbhEXUXG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 24 May 2021 16:23:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 51BC7611B0;
+        Mon, 24 May 2021 20:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621887698;
+        bh=Ymn11eEpKHcjX1SZqD9F7FTWGqIxUhQLp7UIF/O1094=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uwc2iVTLCnyT6n6HdKA3DnNb0Oyzbg7bsovOWk7vRoYJnde/7zApoz4TcXvLOtxDH
+         ir+o6/Ou0BnEBnNsNHiaXNZvF+t0HjkaDk7sChT4aEorfLk/TYebrA0ldc8dmb6g1i
+         Tb9jHrVMBMUZU0ukEO5+uIJV/+iYqntISmCxtIw73ehiHbVYDxVXQHh0fgeXD9qVNG
+         ePf/21Kvy47yF0MF2u+ACqWvFXgBmP/SsglHGyIWv1pv7FgNChLCxIsXQbgDIMgZ3F
+         cfuZOqnnCCu9mhcJh/KmRfd2XTO8FRU7o5/UUFqKT/xIDtRYY8rzCpjBQZNFThqhH9
+         Sh5MHAlmLWqWA==
+Date:   Mon, 24 May 2021 21:21:32 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>
-References: <20210521221531.30168-1-yu-cheng.yu@intel.com>
- <20210521221531.30168-11-yu-cheng.yu@intel.com> <YKmJ6goXX9rxKnJA@kernel.org>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <32352b93-8aeb-db26-6018-c103a4f36dd8@intel.com>
-Date:   Mon, 24 May 2021 12:01:48 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
+Subject: Re: [PATCH v6 07/21] cpuset: Don't use the cpu_possible_mask as a
+ last resort for cgroup v1
+Message-ID: <20210524202131.GB15545@willie-the-truck>
+References: <20210518094725.7701-1-will@kernel.org>
+ <20210518094725.7701-8-will@kernel.org>
+ <20210521173934.pjcv37j63odtsrp6@e107158-lin.cambridge.arm.com>
 MIME-Version: 1.0
-In-Reply-To: <YKmJ6goXX9rxKnJA@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210521173934.pjcv37j63odtsrp6@e107158-lin.cambridge.arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/22/2021 3:47 PM, Jarkko Sakkinen wrote:
-> On Fri, May 21, 2021 at 03:15:31PM -0700, Yu-cheng Yu wrote:
->> ENDBR is a special new instruction for the Indirect Branch Tracking (IBT)
->> component of CET.  IBT prevents attacks by ensuring that (most) indirect
->> branches and function calls may only land at ENDBR instructions.  Branches
->> that don't follow the rules will result in control flow (#CF) exceptions.
->>
->> ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
->> instructions are inserted automatically by the compiler, but branch
->> targets written in assembly must have ENDBR added manually.
->>
->> Add ENDBR to __vdso_sgx_enter_enclave() branch targets.
->>
->> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
->> Reviewed-by: Kees Cook <keescook@chromium.org>
->> Cc: Andy Lutomirski <luto@kernel.org>
->> Cc: Borislav Petkov <bp@alien8.de>
->> Cc: Dave Hansen <dave.hansen@linux.intel.com>
->> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->> Cc: Peter Zijlstra <peterz@infradead.org>
-> 
-> 
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
->> ---
->>   arch/x86/entry/vdso/vsgx.S | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/arch/x86/entry/vdso/vsgx.S b/arch/x86/entry/vdso/vsgx.S
->> index 99dafac992e2..c7cb85d57b3f 100644
->> --- a/arch/x86/entry/vdso/vsgx.S
->> +++ b/arch/x86/entry/vdso/vsgx.S
->> @@ -4,6 +4,7 @@
->>   #include <asm/export.h>
->>   #include <asm/errno.h>
->>   #include <asm/enclu.h>
->> +#include <asm/vdso.h>
->>   
->>   #include "extable.h"
->>   
->> @@ -27,6 +28,7 @@
->>   SYM_FUNC_START(__vdso_sgx_enter_enclave)
->>   	/* Prolog */
->>   	.cfi_startproc
->> +	ENDBR64
->>   	push	%rbp
->>   	.cfi_adjust_cfa_offset	8
->>   	.cfi_rel_offset		%rbp, 0
->> @@ -62,6 +64,7 @@ SYM_FUNC_START(__vdso_sgx_enter_enclave)
->>   .Lasync_exit_pointer:
->>   .Lenclu_eenter_eresume:
->>   	enclu
->> +	ENDBR64
->>   
->>   	/* EEXIT jumps here unless the enclave is doing something fancy. */
->>   	mov	SGX_ENCLAVE_OFFSET_OF_RUN(%rbp), %rbx
->> @@ -91,6 +94,7 @@ SYM_FUNC_START(__vdso_sgx_enter_enclave)
->>   	jmp	.Lout
->>   
->>   .Lhandle_exception:
->> +	ENDBR64
->>   	mov	SGX_ENCLAVE_OFFSET_OF_RUN(%rbp), %rbx
->>   
->>   	/* Set the exception info. */
->> -- 
->> 2.21.0
->>
->>
-> 
-> /Jarkko
-> 
+Hi Qais,
 
-Thanks!
+On Fri, May 21, 2021 at 06:39:34PM +0100, Qais Yousef wrote:
+> On 05/18/21 10:47, Will Deacon wrote:
+> > diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> > index a945504c0ae7..8c799260a4a2 100644
+> > --- a/kernel/cgroup/cpuset.c
+> > +++ b/kernel/cgroup/cpuset.c
+> > @@ -3322,9 +3322,17 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
+> >  
+> >  void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+> >  {
+> > +	const struct cpumask *cs_mask;
+> > +	const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
+> > +
+> >  	rcu_read_lock();
+> > -	do_set_cpus_allowed(tsk, is_in_v2_mode() ?
+> > -		task_cs(tsk)->cpus_allowed : cpu_possible_mask);
+> > +	cs_mask = task_cs(tsk)->cpus_allowed;
+> > +
+> > +	if (!is_in_v2_mode() || !cpumask_subset(cs_mask, possible_mask))
+> > +		goto unlock; /* select_fallback_rq will try harder */
+> > +
+> > +	do_set_cpus_allowed(tsk, cs_mask);
+> 
+> Shouldn't we take the intersection with possible_mask like we discussed before?
+> 
+> 	https://lore.kernel.org/lkml/20201217145954.GA17881@willie-the-truck/
+
+Yes, and that's what the '!cpumask_subset()' check is doing above. Either
+we use the valid subset of the cpuset mask (which is the intersection with
+the possible mask) or we bail if that set is empty.
+
+Will
