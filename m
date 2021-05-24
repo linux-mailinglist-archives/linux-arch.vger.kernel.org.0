@@ -2,123 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A91B38F560
-	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 00:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F333038F5BC
+	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 00:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbhEXWK0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 May 2021 18:10:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57314 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232911AbhEXWKZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 May 2021 18:10:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36BC261422;
-        Mon, 24 May 2021 22:08:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621894137;
-        bh=Oatt+cQsAj6BlgXkTD8KfGq1ZFBx4jQ6AYSxfbEIcE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M9V949fxxagmQMMYs34rBQzn/XL0t61mDZLFrZEZPfWSgOZC2BowxFtw/cc8Hhc+/
-         +A8bCwwMRtb41y6/k4MmhGJV8rJ4IrrkDnMw3Rpm03yj7hwEeH7bIebB59g2z0idQW
-         cxOhkf3qdyRGzuF5ZLi+n6qOIGVj/qmJECJwhzjpRDhdRfY5hhSI9V6zpqPDwUyFBa
-         sxTDJB8usl4cxZDpa9sMcdazB4B4N6Wb+IonIvZMeW8glmZUT9+2RkfnKcSd4StsR4
-         w2iXtFgnbFSwbdeZNwB+uK1tKBEOy6ONrCxBuXXAaoX64efh7GlbR6OBUgvJncFeg7
-         i24S1zqBNHAuA==
-Date:   Mon, 24 May 2021 23:08:51 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S229547AbhEXWn0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 May 2021 18:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229539AbhEXWn0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 May 2021 18:43:26 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CC9C061574;
+        Mon, 24 May 2021 15:41:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=KZXb/tLr9YFiA/T3KrJSdP6LyxwsCT3QXewBPoMTKsE=; b=g5bGXx5OXeTJgLIdaHL7wrYzDy
+        ug/SzbkUytOW/Wo6NIcbnStWecwnmqr0wzFJgh1JKVyg2CvdKXQMLVAr3ZSQpzCmP8U4B8N9iUNKG
+        kGqziSr/xYr+DVSVKoi1VGlmJEnjJhj7etjnNpoE4cNUfB47DRJjyy1JaEeWAHc91Qx2CZK8xJ5fa
+        1PJyhf6SEb8drQ9c0fHHbknMOabnz7HMJXtnWfB+F+zlctGQEvpgv+1kng5rwvSRvQco5a6yMdOpZ
+        rsAJ3mf28iuhTS72wpjoQ+CGKg9cP6eLb1ZMNtHw+pJeB28VL60CaJSCc/HdJCK71HKsTiUIPdNDg
+        ayQYdgHA==;
+Received: from [2601:1c0:6280:3f0::7376] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1llJGi-002B2q-Cf; Mon, 24 May 2021 22:41:52 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Li Zefan <lizefan@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: Re: [PATCH v6 00/21] Add support for 32-bit tasks on asymmetric
- AArch32 systems
-Message-ID: <20210524220850.GJ15545@willie-the-truck>
-References: <20210518094725.7701-1-will@kernel.org>
- <20210521174542.2kojxgzrgdl6nqpx@e107158-lin.cambridge.arm.com>
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um@lists.infradead.org, Julian Braha <julianbraha@gmail.com>,
+        linux-arch@vger.kernel.org
+Subject: [PATCH v2] LOCKDEP: reduce LOCKDEP dependency list
+Date:   Mon, 24 May 2021 15:41:50 -0700
+Message-Id: <20210524224150.8009-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210521174542.2kojxgzrgdl6nqpx@e107158-lin.cambridge.arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 21, 2021 at 06:45:42PM +0100, Qais Yousef wrote:
-> Hi Will
-> 
-> On 05/18/21 10:47, Will Deacon wrote:
-> > Hi folks,
-> > 
-> > This is the long-awaited v6 of these patches which I last posted at the
-> > end of last year:
-> > 
-> >   v1: https://lore.kernel.org/r/20201027215118.27003-1-will@kernel.org
-> >   v2: https://lore.kernel.org/r/20201109213023.15092-1-will@kernel.org
-> >   v3: https://lore.kernel.org/r/20201113093720.21106-1-will@kernel.org
-> >   v4: https://lore.kernel.org/r/20201124155039.13804-1-will@kernel.org
-> >   v5: https://lore.kernel.org/r/20201208132835.6151-1-will@kernel.org
-> > 
-> > There was also a nice LWN writeup in case you've forgotten what this is
-> > about:
-> > 
-> > 	https://lwn.net/Articles/838339/
-> > 
-> > It's taken me a while to get a v6 of this together, partly due to
-> > addressing the review feedback on v5, but also because this has now seen
-> > testing on real hardware which threw up some surprises in suspend/resume,
-> > SCHED_DEADLINE and compat hwcap reporting. Thanks to Quentin for helping
-> > me to debug those issues.
-> > 
-> > The aim of this series is to allow 32-bit ARM applications to run on
-> > arm64 SoCs where not all of the CPUs support the 32-bit instruction set.
-> > Unfortunately, such SoCs are real and will continue to be productised
-> > over the next few years at least. I can assure you that I'm not just
-> > doing this for fun.
-> > 
-> > Changes in v6 include:
-> > 
-> >   * Save/restore the affinity mask across execve() to 32-bit and back to
-> >     64-bit again.
-> > 
-> >   * Allow 32-bit deadline tasks, but skip straight to fallback path when
-> >     determining new affinity mask on execve().
-> > 
-> >   * Fixed resume-from-suspend path when the resuming CPU is 64-bit-only
-> >     by deferring wake-ups for 32-bit tasks until the secondary CPUs are
-> >     back online.
-> > 
-> >   * Bug fixes (compat hwcaps, memory leak, cpuset fallback path).
-> > 
-> >   * Documentation for arm64. It's in the divisive .rst format, but please
-> >     take a look anyway!
-> > 
-> > I'm pretty happy with this now and it seems to do the right thing,
-> > although the new patches in this revision would certainly benefit from
-> > review. Series based on v5.13-rc1.
-> 
-> It's late Fri and I'm off next week (I'm starting to sense an omen here, it's
-> the 2nd or 3rd time the post syncs with my holiday), so a bit of a rushed
-> review but the series looks good to me. Feel free to stick my Reviewed-by for
-> the series, except patch 13 where I skipped it, given the few comments I had
-> are addressed.
+Some arches (um, sparc64, riscv, xtensa) cause a Kconfig warning for
+LOCKDEP.
+These arch-es select LOCKDEP_SUPPORT but they are not listed as one
+of the arch-es that LOCKDEP depends on.
 
-Thanks, Qais. I'm planning a v7 with quite a few changes, so it's probably
-best if you offer your Reviewed-by on individual patches when you're happy
-with them rather than me adding it to code that I'm still tweaking. But
-thanks for the offer!
+Since (16) arch-es define the Kconfig symbol LOCKDEP_SUPPORT if they
+intend to have LOCKDEP support, replace the awkward list of
+arch-es that LOCKDEP depends on with the LOCKDEP_SUPPORT symbol.
 
-Have a good week off,
+But wait. LOCKDEP_SUPPORT is included in LOCK_DEBUGGING_SUPPORT,
+which is already a dependency here, so LOCKDEP_SUPPORT is redundant
+and not needed.
+That leaves the FRAME_POINTER dependency, but it is part of an
+expression like this:
+	depends on (A && B) && (FRAME_POINTER || B')
+where B' is a dependency of B so if B is true then B' is true
+and the value of FRAME_POINTER does not matter.
+Thus we can also delete the FRAME_POINTER dependency.
 
-Will
+Fixes this kconfig warning: (for um, sparc64, riscv, xtensa)
+
+WARNING: unmet direct dependencies detected for LOCKDEP
+  Depends on [n]: DEBUG_KERNEL [=y] && LOCK_DEBUGGING_SUPPORT [=y] && (FRAME_POINTER [=n] || MIPS || PPC || S390 || MICROBLAZE || ARM || ARC || X86)
+  Selected by [y]:
+  - PROVE_LOCKING [=y] && DEBUG_KERNEL [=y] && LOCK_DEBUGGING_SUPPORT [=y]
+  - LOCK_STAT [=y] && DEBUG_KERNEL [=y] && LOCK_DEBUGGING_SUPPORT [=y]
+  - DEBUG_LOCK_ALLOC [=y] && DEBUG_KERNEL [=y] && LOCK_DEBUGGING_SUPPORT [=y]
+
+Link to v1: https://lore.kernel.org/lkml/20210517034430.9569-1-rdunlap@infradead.org/
+
+Fixes: 7d37cb2c912d ("lib: fix kconfig dependency on ARCH_WANT_FRAME_POINTERS")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: linux-xtensa@linux-xtensa.org
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: linux-um@lists.infradead.org
+Cc: Julian Braha <julianbraha@gmail.com>
+Cc: linux-arch@vger.kernel.org
+---
+@Julian: please take a look. I'm a little concerned about the
+  FRAME_POINTER dependency going away when our 2 patches are combined.
+
+v2: drop depends on LOCKDEP_SUPPORT for LOCKDEP; the use of
+    LOCK_DEBUGGING_SUPPORT already covers that dependency;
+    drop FRAME_POINTER dependency (thanks to Waiman Long
+    for both of these suggestions)
+v2: add CC: to linux-arch
+
+ lib/Kconfig.debug |    1 -
+ 1 file changed, 1 deletion(-)
+
+--- linux-next-20210524.orig/lib/Kconfig.debug
++++ linux-next-20210524/lib/Kconfig.debug
+@@ -1383,7 +1383,6 @@ config LOCKDEP
+ 	bool
+ 	depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
+ 	select STACKTRACE
+-	depends on FRAME_POINTER || MIPS || PPC || S390 || MICROBLAZE || ARM || ARC || X86
+ 	select KALLSYMS
+ 	select KALLSYMS_ALL
+ 
