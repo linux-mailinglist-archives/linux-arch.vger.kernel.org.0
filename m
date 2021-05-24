@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B460838E221
-	for <lists+linux-arch@lfdr.de>; Mon, 24 May 2021 10:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7100238E22B
+	for <lists+linux-arch@lfdr.de>; Mon, 24 May 2021 10:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbhEXIEu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 May 2021 04:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
+        id S232279AbhEXIOv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 May 2021 04:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbhEXIEu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 May 2021 04:04:50 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F99C061574
-        for <linux-arch@vger.kernel.org>; Mon, 24 May 2021 01:03:22 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id b7so13822205wmh.5
-        for <linux-arch@vger.kernel.org>; Mon, 24 May 2021 01:03:22 -0700 (PDT)
+        with ESMTP id S232266AbhEXIOv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 May 2021 04:14:51 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D00C061574
+        for <linux-arch@vger.kernel.org>; Mon, 24 May 2021 01:13:23 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id y184-20020a1ce1c10000b02901769b409001so10516907wmg.3
+        for <linux-arch@vger.kernel.org>; Mon, 24 May 2021 01:13:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=l+lXZOkJT9ztp2JCl1bPRf8G039aIWHo+Vabd2KIAvY=;
-        b=hE15bhqpuXbPdzqAazrfGMf6jpdb7Plfzzuf8Tg3BA6zCx8evuNi5OahN0lBSi6jy0
-         gmL2pDkRxR+V6YGQV9V5IG0mTSsDV2iuox0/5/1IQawdULfqWvOg6DWh4BJg4fEGeK2E
-         J2AQpGvMaXThT16y4SiEJuhqSbiUyYR3D+56Ik012/2/YQXTxBpjo/ebQAUY/pqFLjxY
-         BcdjFYg6YKXxY2YcIZEYYwL+gRPsD5CEaNAlKZvfXvlhshNwe8bLJc/Nr73JUMDjdOQK
-         ParA5bj6PXKxhEZ0fHTy1lfN+l7xXY9cQCLdHYnZ95OIjte1+fWjOUXB5M0A8iL1NkqS
-         qU8w==
+        bh=hkoJ4XU3fJYIUXpsvaVz4eo9jPqdu/8/7QTK7vX9wJM=;
+        b=pL2oo52tUpRLBy49VIx5zFQfFs5QoWz6wCdaZlOZynpDEiny/Ix3dTTLDNMS3jTgP+
+         CAvTt0KKu+xM5jHc9zloqeIu+MILVF1fS0tLdulYu0KHAhGdkXyg/ezsgjuFDshU/ipv
+         Nc6vA/sFhFWX0CtXzfB8q/dBybiq/y3SCsxnogvRPd8VgF5hhq3CT56rtSKRNN3rsHZ9
+         6xA8OndA1FmuRj6PzaoOaJ9Kr0EEIbMfvHcy78eF3jAhKwg9eXN9h0Cs+EykFPkbD5cP
+         6mo1yQO1u3Iqh6grda/3LMtWRo+eGmxP449xoKZhaNwwtAnAhYQJrtAzarXyd2pmiP4f
+         /DfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=l+lXZOkJT9ztp2JCl1bPRf8G039aIWHo+Vabd2KIAvY=;
-        b=OYEyOYpV2MJmavCjUI0LskfAot7hIC4O744ksQBBKgeaOh4p5T2+2kMhtmcOniuX2L
-         O3Rhj7iwqSgr+sc3FpeIykmuklvXCMi14igW2Ja/rw0pKI+Oa6MpwBSDfsQbQt6Ybvh6
-         UI/aPdW1etzU6ZkdE0oTKNmWK6zzLeMh6xe06doH9HEYfy/Yzw/w3IO6spzRSMXYtJnn
-         JlD40i9t1wzJwBsHSWPjsXGDcw6y0G6l2/9YEc7HXbbjGCurBbJvX5AJAmjsOaZrwiak
-         /WSt6JOZwHCj9N28j3vnYXgHgl5M0dfTzH9L/LuYZjpo0rQmUrPA8QVFdWAbGGqSDD5S
-         MaAw==
-X-Gm-Message-State: AOAM531bNCZKBFls1qe8Wt1+AxifYi2Ftz6Z4D4G945LEYSxzm3VuiHh
-        yr7pnbZy08wncuVtdxrCkt4i6HA3Up155lElOUOkCw==
-X-Google-Smtp-Source: ABdhPJyeURrTyE53pS9rjIrF1XyAYSlM5EIDZxsof/N3+lCkEYOm64yTb06OT7Z706TpnIKNx0pnoQ13EAD6f/Q4bPA=
-X-Received: by 2002:a05:600c:b44:: with SMTP id k4mr19148969wmr.152.1621843400672;
- Mon, 24 May 2021 01:03:20 -0700 (PDT)
+        bh=hkoJ4XU3fJYIUXpsvaVz4eo9jPqdu/8/7QTK7vX9wJM=;
+        b=fvbtefuQJNk69HLO8D6ihSMpcBLq86qiqMXiqe68LVzHC4pU0T4EuxXkk9/FKkHTXp
+         5R4YrvShzs9uYm9As4E+cLl+ovztGN6MrBCOwMkMpwJt69NMECiFd/6Jc4EoR4V2R/5W
+         Gg1ERs4BxW6RKfQ3WEDgalEVs2f8MH2ACM2WudfrWkTWCHmvijuyZ5w+KFS9qyGDbHE2
+         wFdbykG7hJa5wS9/GS1jGe8XRCubRMCLrA0FcU0ZFzdKKMp/duv3D1PBNe4yWeWT/Y5r
+         UWOv9Bq9akBl6TlOAcsQur12SOkVCFPtZYeVy5SJ71roM0ftUAuQb/fA3QdpEd89GwBV
+         s55w==
+X-Gm-Message-State: AOAM533tFj4CNrR0DLueNc70S/ydBrwUDClf5r9h2+WP1emSJpwiWehg
+        CLuzezwiO2j19zmyEUXBrIpbW7Uk650JjiYs2w/DuQ==
+X-Google-Smtp-Source: ABdhPJyC2jCu7SFxxUWfosx6Xigmxy1B2+g0gPGzW98vy1plPs28wHz7rs4SviVoeR8UnTFwEAYZZhBVno/WhE+51kM=
+X-Received: by 2002:a1c:4e0b:: with SMTP id g11mr18341827wmh.3.1621844001916;
+ Mon, 24 May 2021 01:13:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <1621839068-31738-1-git-send-email-guoren@kernel.org>
-In-Reply-To: <1621839068-31738-1-git-send-email-guoren@kernel.org>
+References: <1621839068-31738-1-git-send-email-guoren@kernel.org> <1621839068-31738-3-git-send-email-guoren@kernel.org>
+In-Reply-To: <1621839068-31738-3-git-send-email-guoren@kernel.org>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 24 May 2021 13:33:08 +0530
-Message-ID: <CAAhSdy3ORUGqyL-9oMQCKYCXnG8M=xrZ8q+AiWg8s+v6zsk=_A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] riscv: Fixup _PAGE_GLOBAL in _PAGE_KERNEL
+Date:   Mon, 24 May 2021 13:43:10 +0530
+Message-ID: <CAAhSdy16yXsuPRBv2Sn-OJwEhvs1UkdMUr1jqhB8qxXo+Mu7=w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] riscv: Use use_asid_allocator flush TLB
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Anup Patel <anup.patel@wdc.com>,
         Palmer Dabbelt <palmerdabbelt@google.com>,
@@ -67,43 +67,181 @@ On Mon, May 24, 2021 at 12:22 PM <guoren@kernel.org> wrote:
 >
 > From: Guo Ren <guoren@linux.alibaba.com>
 >
-> Kernel virtual address translation should avoid care asid or it'll
-> cause more TLB-miss and TLB-refill. Because the current asid in satp
-> belongs to the current process, but the target kernel va TLB entry's
-> asid still belongs to the previous process.
+> Use static_branch_unlikely(&use_asid_allocator) to keep the origin
+> tlb flush style, so it's no effect on the existing machine. Here
+> are the optimized functions:
+>  - flush_tlb_mm
+>  - flush_tlb_page
+>  - flush_tlb_range
+>
+> All above are based on the below new implement functions:
+>  - __sbi_tlb_flush_range_asid
+>  - local_flush_tlb_range_asid
 >
 > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > Cc: Anup Patel <anup.patel@wdc.com>
 > Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> ---
+>  arch/riscv/include/asm/mmu_context.h |  2 ++
+>  arch/riscv/include/asm/tlbflush.h    | 22 ++++++++++++++++++++
+>  arch/riscv/mm/context.c              |  2 +-
+>  arch/riscv/mm/tlbflush.c             | 40 +++++++++++++++++++++++++++++++++---
+>  4 files changed, 62 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/mmu_context.h b/arch/riscv/include/asm/mmu_context.h
+> index b065941..7030837 100644
+> --- a/arch/riscv/include/asm/mmu_context.h
+> +++ b/arch/riscv/include/asm/mmu_context.h
+> @@ -33,6 +33,8 @@ static inline int init_new_context(struct task_struct *tsk,
+>         return 0;
+>  }
+>
+> +DECLARE_STATIC_KEY_FALSE(use_asid_allocator);
+> +
+>  #include <asm-generic/mmu_context.h>
+>
+>  #endif /* _ASM_RISCV_MMU_CONTEXT_H */
+> diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/asm/tlbflush.h
+> index c84218a..9390319 100644
+> --- a/arch/riscv/include/asm/tlbflush.h
+> +++ b/arch/riscv/include/asm/tlbflush.h
+> @@ -8,6 +8,7 @@
+>  #define _ASM_RISCV_TLBFLUSH_H
+>
+>  #include <linux/mm_types.h>
+> +#include <asm/page.h>
+>  #include <asm/smp.h>
+>  #include <asm/errata_list.h>
+>
+> @@ -22,9 +23,30 @@ static inline void local_flush_tlb_page(unsigned long addr)
+>  {
+>         ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+>  }
+> +
+> +static inline void local_flush_tlb_range_asid(unsigned long start, unsigned long size,
+> +                                             unsigned long asid)
+> +{
+> +       unsigned long page_add = PAGE_DOWN(start);
+> +       unsigned long page_end = PAGE_UP(start + size);
 
-First of all thanks for doing this series, I had similar changes in mind
-as follow-up to the ASID allocator.
+Your PATCH2 is not correct because PAGE_UP(x) should in-fact
+return 0 when x == 0.
 
-I went through all three patches and at least I don't see any
-obvious issue but I think we should try testing it more on a few
-existing platforms.
+In fact, if both "start" and "size" are zero then both page_add and
+page_end should be zero so that no "sfence.vma" is executed.
+
+If you want at least one TLB entry to be invalidated when size == 0
+then you can simply set "size = 1" when size is zero which will force
+one TLB invalidation.
+
+Please drop your PATCH2 and the rest of the things look good to me.
 
 Reviewed-by: Anup Patel <anup@brainfault.org>
 
 Regards,
 Anup
 
-> ---
->  arch/riscv/include/asm/pgtable.h | 1 +
->  1 file changed, 1 insertion(+)
+> +
+> +       if (size == -1) {
+> +               __asm__ __volatile__ ("sfence.vma x0, %0" : : "r" (asid) : "memory");
+> +               return;
+> +       }
+> +
+> +       while(page_add < page_end) {
+> +               __asm__ __volatile__ ("sfence.vma %0, %1"
+> +                               :
+> +                               : "r" (page_add), "r" (asid)
+> +                               : "memory");
+> +               page_add += PAGE_SIZE;
+> +       }
+> +}
+>  #else /* CONFIG_MMU */
+>  #define local_flush_tlb_all()                  do { } while (0)
+>  #define local_flush_tlb_page(addr)             do { } while (0)
+> +#define local_flush_tlb_range_asid(addr)       do { } while (0)
+>  #endif /* CONFIG_MMU */
 >
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 78f2323..017da15 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -135,6 +135,7 @@
->                                 | _PAGE_PRESENT \
->                                 | _PAGE_ACCESSED \
->                                 | _PAGE_DIRTY \
-> +                               | _PAGE_GLOBAL \
->                                 | _PAGE_CACHE)
+>  #if defined(CONFIG_SMP) && defined(CONFIG_MMU)
+> diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+> index 68aa312..45c1b04 100644
+> --- a/arch/riscv/mm/context.c
+> +++ b/arch/riscv/mm/context.c
+> @@ -18,7 +18,7 @@
 >
->  #define PAGE_KERNEL            __pgprot(_PAGE_KERNEL)
+>  #ifdef CONFIG_MMU
+>
+> -static DEFINE_STATIC_KEY_FALSE(use_asid_allocator);
+> +DEFINE_STATIC_KEY_FALSE(use_asid_allocator);
+>
+>  static unsigned long asid_bits;
+>  static unsigned long num_asids;
+> diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+> index 720b443..69588dc 100644
+> --- a/arch/riscv/mm/tlbflush.c
+> +++ b/arch/riscv/mm/tlbflush.c
+> @@ -4,6 +4,7 @@
+>  #include <linux/smp.h>
+>  #include <linux/sched.h>
+>  #include <asm/sbi.h>
+> +#include <asm/mmu_context.h>
+>
+>  void flush_tlb_all(void)
+>  {
+> @@ -39,18 +40,51 @@ static void __sbi_tlb_flush_range(struct cpumask *cmask, unsigned long start,
+>         put_cpu();
+>  }
+>
+> +static void __sbi_tlb_flush_range_asid(struct cpumask *cmask, unsigned long start,
+> +                                      unsigned long size, unsigned long asid)
+> +{
+> +       struct cpumask hmask;
+> +       unsigned int cpuid;
+> +
+> +       if (cpumask_empty(cmask))
+> +               return;
+> +
+> +       cpuid = get_cpu();
+> +
+> +       if (cpumask_any_but(cmask, cpuid) >= nr_cpu_ids) {
+> +               local_flush_tlb_range_asid(start, size, asid);
+> +       } else {
+> +               riscv_cpuid_to_hartid_mask(cmask, &hmask);
+> +               sbi_remote_sfence_vma_asid(cpumask_bits(&hmask), start, size, asid);
+> +       }
+> +
+> +       put_cpu();
+> +}
+> +
+>  void flush_tlb_mm(struct mm_struct *mm)
+>  {
+> -       __sbi_tlb_flush_range(mm_cpumask(mm), 0, -1);
+> +       if (static_branch_unlikely(&use_asid_allocator))
+> +               __sbi_tlb_flush_range_asid(mm_cpumask(mm), 0, -1,
+> +                                          atomic_long_read(&mm->context.id));
+> +       else
+> +               __sbi_tlb_flush_range(mm_cpumask(mm), 0, -1);
+>  }
+>
+>  void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr)
+>  {
+> -       __sbi_tlb_flush_range(mm_cpumask(vma->vm_mm), addr, PAGE_SIZE);
+> +       if (static_branch_unlikely(&use_asid_allocator))
+> +               __sbi_tlb_flush_range_asid(mm_cpumask(vma->vm_mm), addr, PAGE_SIZE,
+> +                                          atomic_long_read(&vma->vm_mm->context.id));
+> +       else
+> +               __sbi_tlb_flush_range(mm_cpumask(vma->vm_mm), addr, PAGE_SIZE);
+>  }
+>
+>  void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
+>                      unsigned long end)
+>  {
+> -       __sbi_tlb_flush_range(mm_cpumask(vma->vm_mm), start, end - start);
+> +       if (static_branch_unlikely(&use_asid_allocator))
+> +               __sbi_tlb_flush_range_asid(mm_cpumask(vma->vm_mm), start, end - start,
+> +                                          atomic_long_read(&vma->vm_mm->context.id));
+> +       else
+> +               __sbi_tlb_flush_range(mm_cpumask(vma->vm_mm), start, end - start);
+>  }
 > --
 > 2.7.4
 >
