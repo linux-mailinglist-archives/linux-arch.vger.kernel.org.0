@@ -2,43 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F5338E237
-	for <lists+linux-arch@lfdr.de>; Mon, 24 May 2021 10:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE65038E444
+	for <lists+linux-arch@lfdr.de>; Mon, 24 May 2021 12:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbhEXIYa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 May 2021 04:24:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44948 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232279AbhEXIYa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 May 2021 04:24:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A8CA661151;
-        Mon, 24 May 2021 08:23:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621844582;
-        bh=+TDQoVOokc8WBAFuv0fWAuKnZ09Bvva98Z+VkeSiyYI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=V7BHr2cHba8OquErjEX+iEHS40AtGDmaVhe5QzR9Csdt4vq7ORsDL78UFibSuLxk/
-         8vEePM0DgKoR0c8ymNZ16ZtQHrnAbKGMYgi6jLqivEGbLUXOPcpup3aQf21ixsPYuR
-         3Jy2uUBrj47v2RTPFhuuaKLOphOCOGFlnt9rc/bJVo5S35GOmMZxy3eJ9PL/Ez7972
-         9HJ+ks6cJRZQ1u3k7GEOKKRX6ee9BGoy2ruJCIWZdP2TgAeNLSRy2HLPA98BZFDOl7
-         NAHUuEoWM/DAfVqIlYp1FWYlAyUvA71alreGu1DM66bKGrZ4IUqJJyDPb7NbXxqCoX
-         Jxec/u3jfcm9Q==
-Received: by mail-lj1-f176.google.com with SMTP id e2so26135834ljk.4;
-        Mon, 24 May 2021 01:23:02 -0700 (PDT)
-X-Gm-Message-State: AOAM530bNhRnRnhBfzAZ77EaS/C4dSOgjMo5JIIIAPwqY9uNfQzh1/27
-        uO7gO08HsWZDqyKtT11Ob5QYdUvwWFb/CN4qesk=
-X-Google-Smtp-Source: ABdhPJy3T3I9cqfLxcQ7H+a6WA92Atu9K4L0xECjGYqHAmb3IFmhkBTnK9bvoOswUChqlODJlN6h0jYJZUhV36hqF2Q=
-X-Received: by 2002:a2e:b557:: with SMTP id a23mr16493146ljn.238.1621844581046;
- Mon, 24 May 2021 01:23:01 -0700 (PDT)
+        id S232602AbhEXKoQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 May 2021 06:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232549AbhEXKoJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 May 2021 06:44:09 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99B2C061574
+        for <linux-arch@vger.kernel.org>; Mon, 24 May 2021 03:42:39 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id v12so28020806wrq.6
+        for <linux-arch@vger.kernel.org>; Mon, 24 May 2021 03:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/eUOrn9lE2HWE5uWnHqSiVPbmorQyM5RkNMwB1g8oIs=;
+        b=0yAdh939lZC+DNZj9zX08KI/2bh/2h7zmkHMSnczbPROY1mBpcwAmg0BQPTddC33YH
+         4poJ7dKhhKT4R4TGNXdtorC9bI2PVGH3oXRIPpAS/DKiuIxy/TzYsazkdd3Qpzv1SG/2
+         r9YwVzaeFmSJAJ3aqiEVi9Ry0XwMT4iGOOiqcC9zemBuKsWaAgalXyA5WRQrcMbcdMoY
+         sOdd9GnmW7iWCEJydL+7x3rrUSV+8pYIOL2gETTo15dqXQtU/3MvCuijaryNcvW2d3fA
+         DRH8il9kC3BqiomKign1XqgPFDcyL8bPJvmkWu1ndPqOrDtLgeCriIec0SZ8emwQGmU5
+         IH+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/eUOrn9lE2HWE5uWnHqSiVPbmorQyM5RkNMwB1g8oIs=;
+        b=FXxMlLAMcYaHlDCPJKM2hNKDfFUuYX6KlsvQU4vZvDXNgBBLywgMzqOOS7wynXaVah
+         LcCdaxVh2LkdYo/r1/J28IvdnyZuAFA7YbkpzTezPahJDBJcJ52f1qMG2ZW+34Z6rTL8
+         EWx/4Al2lHdXMMblhtVhzQNG8sCMk/spJRwTRLk33WL4skZ2c21WH8sUY+YQRaOmzZWC
+         VmStlSwCke906fMV5ad3kUQF+toxOJqfSe9kB7wy/672iUyXEmZLrdwaUiexCbceUQV9
+         W1rVjy6zfer2ZCskwENkPCbMBcXGPC8ztbPgyIE/Jfbbx3kTMSromRnWbS1iod4rY7Pt
+         ybhQ==
+X-Gm-Message-State: AOAM530VxaZpllWB00BNiSJBxt6RAHlzgn1ST2AM0f2d98gmIYWQqA9j
+        lmvIPEyY/mkGHN30ZoaD58QkwEGQp68gpTRiu+iE7A==
+X-Google-Smtp-Source: ABdhPJyWPhOVNAkgUqE7qc9+oTrs7UQSenUtFjVASUHEuOyt8RBQDzntOc1bcLlVhXlvtZH0j/l7d8a1Eumaxmy0RFw=
+X-Received: by 2002:a5d:6701:: with SMTP id o1mr22084731wru.390.1621852958251;
+ Mon, 24 May 2021 03:42:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <1621839068-31738-1-git-send-email-guoren@kernel.org> <CAAhSdy3ORUGqyL-9oMQCKYCXnG8M=xrZ8q+AiWg8s+v6zsk=_A@mail.gmail.com>
-In-Reply-To: <CAAhSdy3ORUGqyL-9oMQCKYCXnG8M=xrZ8q+AiWg8s+v6zsk=_A@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 24 May 2021 16:22:49 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQOimKQR8nL3SKgC6OP8OcsagFCADfehg4TEt96D9xVpQ@mail.gmail.com>
-Message-ID: <CAJF2gTQOimKQR8nL3SKgC6OP8OcsagFCADfehg4TEt96D9xVpQ@mail.gmail.com>
+References: <1621839068-31738-1-git-send-email-guoren@kernel.org>
+In-Reply-To: <1621839068-31738-1-git-send-email-guoren@kernel.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 24 May 2021 16:12:26 +0530
+Message-ID: <CAAhSdy1QsyddHG3u=+Sv3mrVmtB15pr-hvg7+UT1evmNSwyY1g@mail.gmail.com>
 Subject: Re: [PATCH 1/3] riscv: Fixup _PAGE_GLOBAL in _PAGE_KERNEL
-To:     Anup Patel <anup@brainfault.org>
+To:     Guo Ren <guoren@kernel.org>
 Cc:     Anup Patel <anup.patel@wdc.com>,
         Palmer Dabbelt <palmerdabbelt@google.com>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -51,66 +63,44 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Anup,
-
-On Mon, May 24, 2021 at 4:03 PM Anup Patel <anup@brainfault.org> wrote:
+On Mon, May 24, 2021 at 12:22 PM <guoren@kernel.org> wrote:
 >
-> On Mon, May 24, 2021 at 12:22 PM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Kernel virtual address translation should avoid care asid or it'll
-> > cause more TLB-miss and TLB-refill. Because the current asid in satp
-> > belongs to the current process, but the target kernel va TLB entry's
-> > asid still belongs to the previous process.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Cc: Anup Patel <anup.patel@wdc.com>
-> > Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> From: Guo Ren <guoren@linux.alibaba.com>
 >
-> First of all thanks for doing this series, I had similar changes in mind
-> as follow-up to the ASID allocator.
+> Kernel virtual address translation should avoid care asid or it'll
+> cause more TLB-miss and TLB-refill. Because the current asid in satp
+> belongs to the current process, but the target kernel va TLB entry's
+> asid still belongs to the previous process.
 >
-> I went through all three patches and at least I don't see any
-> obvious issue but I think we should try testing it more on a few
-> existing platforms.
-We've tested it on Allwinner D1 C906 and C910 SMP*4 for a long time,
-just hope it won't affect u540.
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Cc: Anup Patel <anup.patel@wdc.com>
+> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> ---
+>  arch/riscv/include/asm/pgtable.h | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 78f2323..017da15 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -135,6 +135,7 @@
+>                                 | _PAGE_PRESENT \
+>                                 | _PAGE_ACCESSED \
+>                                 | _PAGE_DIRTY \
+> +                               | _PAGE_GLOBAL \
+>                                 | _PAGE_CACHE)
 
-(In fact, C910 has used ASID allocator for more than two years with
-our own kernel-tree. I remember we've talked about it in 2019
-plumber.)
+It seems this patch is not based on the upstream kernel. The
+_PAGE_CACHE seems to be from your other patch series.
+
+Please rebase these patches on the latest upstream kernel without
+dependency on any other patch series.
+
+Regards,
+Anup
 
 >
-> Reviewed-by: Anup Patel <anup@brainfault.org>
+>  #define PAGE_KERNEL            __pgprot(_PAGE_KERNEL)
+> --
+> 2.7.4
 >
-> Regards,
-> Anup
->
-> > ---
-> >  arch/riscv/include/asm/pgtable.h | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> > index 78f2323..017da15 100644
-> > --- a/arch/riscv/include/asm/pgtable.h
-> > +++ b/arch/riscv/include/asm/pgtable.h
-> > @@ -135,6 +135,7 @@
-> >                                 | _PAGE_PRESENT \
-> >                                 | _PAGE_ACCESSED \
-> >                                 | _PAGE_DIRTY \
-> > +                               | _PAGE_GLOBAL \
-> >                                 | _PAGE_CACHE)
-> >
-> >  #define PAGE_KERNEL            __pgprot(_PAGE_KERNEL)
-> > --
-> > 2.7.4
-> >
-
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
