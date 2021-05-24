@@ -2,34 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C993938E650
-	for <lists+linux-arch@lfdr.de>; Mon, 24 May 2021 14:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F92E38E672
+	for <lists+linux-arch@lfdr.de>; Mon, 24 May 2021 14:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbhEXMLe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 May 2021 08:11:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52254 "EHLO mail.kernel.org"
+        id S232778AbhEXMTT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 May 2021 08:19:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54036 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232662AbhEXMLe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 May 2021 08:11:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 03CD9610A6;
-        Mon, 24 May 2021 12:10:02 +0000 (UTC)
+        id S232678AbhEXMTR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 24 May 2021 08:19:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E9C6261209;
+        Mon, 24 May 2021 12:17:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621858206;
-        bh=FKrYa9wRIMDhYZ616MV0mGehueLTvFDWOr+340TGuqA=;
+        s=k20201202; t=1621858669;
+        bh=teXbnvQA/9F8le8shlLhKROaQfKBflKP12itvlr6NDM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vesc9sRDCdI2+F9Nqo5LUge6k+kq8/zXd6yY2lML3vjNbzJqm5aFpnJmgKEJey4L7
-         oE58PDkTRRImcuawBLkvaCkK7YTyHhSWVSPkqxzlF6/XT7bPnxt7hwnCDhojSpT2G5
-         yDHYlBpl+Aktln9aiELBHf+khHFC5lrBXUuvSwaTI0FPYBMUnmv4/okfVaRnnLOAI2
-         GtI44mWwa4nA8YhrYOO+NYjPRZ9ocj8kBYAXfI0WSXsxSb5j+ezYKJgEvt1ECybPAC
-         MBhHlBDHbpukX5ulb7lIawVxd8sNrM49Un9AZfxoKGeFMO1T2mvTyOfRzBwKIjvsc0
-         r/8mzil5vgiSg==
-Date:   Mon, 24 May 2021 13:09:59 +0100
+        b=n9EzFsn5dgbYafkGAnH83DXTFT9rXqgvD6woQxgp/zRM42lpntgjsNnJ9EBz0pe/I
+         XZjedXwXuS7lp6oLxvheJqEThhwQInWq+dDnTYVC0iiLPrXEwCqrwJao6eq2cSz3z6
+         1Yi1rlh8b7hWw9gD5LGJ8/Y8D+V39pA8fL2SI4VCV71zwKHlze5995dCCMpiurWsg+
+         kKr8iswfH1CbKIXn3uvejF8r1k+/8KP21/JqDZ0sOb6bmFXn2GKr7NtwoptdURx+Vp
+         w5JM2OYBfaOmHTafGekf7wiN48UGOizAmsReN5yotDsYLv4mCFfnMQ/JSqQjI4ULc5
+         7uo1w5mMC3n2g==
+Date:   Mon, 24 May 2021 13:17:43 +0100
 From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
         Morten Rasmussen <morten.rasmussen@arm.com>,
         Qais Yousef <qais.yousef@arm.com>,
         Suren Baghdasaryan <surenb@google.com>,
@@ -40,37 +41,67 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
-Subject: Re: [PATCH v6 02/21] arm64: Allow mismatched 32-bit EL0 support
-Message-ID: <20210524120959.GB14913@willie-the-truck>
+Subject: Re: [PATCH v6 06/21] sched: Introduce task_cpu_possible_mask() to
+ limit fallback rq selection
+Message-ID: <20210524121743.GC14913@willie-the-truck>
 References: <20210518094725.7701-1-will@kernel.org>
- <20210518094725.7701-3-will@kernel.org>
- <20210521104155.GC6675@arm.com>
+ <20210518094725.7701-7-will@kernel.org>
+ <20210521160344.GJ5618@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210521104155.GC6675@arm.com>
+In-Reply-To: <20210521160344.GJ5618@worktop.programming.kicks-ass.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 21, 2021 at 11:41:56AM +0100, Catalin Marinas wrote:
-> On Tue, May 18, 2021 at 10:47:06AM +0100, Will Deacon wrote:
-> > +static int enable_mismatched_32bit_el0(unsigned int cpu)
-> > +{
-> > +	struct cpuinfo_arm64 *info = &per_cpu(cpu_data, cpu);
-> > +	bool cpu_32bit = id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0);
-> > +
-> > +	if (cpu_32bit) {
-> > +		cpumask_set_cpu(cpu, cpu_32bit_el0_mask);
-> > +		static_branch_enable_cpuslocked(&arm64_mismatched_32bit_el0);
+On Fri, May 21, 2021 at 06:03:44PM +0200, Peter Zijlstra wrote:
+> On Tue, May 18, 2021 at 10:47:10AM +0100, Will Deacon wrote:
+> > diff --git a/include/linux/mmu_context.h b/include/linux/mmu_context.h
+> > index 03dee12d2b61..bc4ac3c525e6 100644
+> > --- a/include/linux/mmu_context.h
+> > +++ b/include/linux/mmu_context.h
+> > @@ -14,4 +14,12 @@
+> >  static inline void leave_mm(int cpu) { }
+> >  #endif
+> >  
+> > +/*
+> > + * CPUs that are capable of running task @p. By default, we assume a sane,
+> > + * homogeneous system. Must contain at least one active CPU.
+> > + */
+> > +#ifndef task_cpu_possible_mask
+> > +# define task_cpu_possible_mask(p)	cpu_possible_mask
+> > +#endif
 > 
-> It may be worth only calling static_branch_enable_cpuslocked() if not
-> already set, in case you try this on a system with lots of CPUs.
+> #ifndef task_cpu_possible_mask
+> # define task_cpu_possible_mask(p)	cpu_possible_mask
+> # define task_cpu_possible(cpu, p)	true
+> #else
+> # define task_cpu_possible(cpu, p)	cpumask_test_cpu((cpu), task_cpu_possible_mask(p))
+> #endif
+> 
+> > +
+> >  #endif
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index 5226cc26a095..482f7fdca0e8 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -1813,8 +1813,11 @@ static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
+> >  		return cpu_online(cpu);
+> >  
+> >  	/* Non kernel threads are not allowed during either online or offline. */
+> >  	if (!(p->flags & PF_KTHREAD))
+> > -		return cpu_active(cpu);
+> +		return cpu_active(cpu) && task_cpu_possible(cpu, p);
+> 
+> >  	/* KTHREAD_IS_PER_CPU is always allowed. */
+> >  	if (kthread_is_per_cpu(p))
+> 
+> Would something like that make sense?
 
-static_key_enable_cpuslocked() already checks this early on, so I don't
-think we need another check here (note that we're not calling stop_machine()
-here _anyway_; the '_cpuslocked' suffix just says that we're already holding
-cpu_hotplug_lock via the notifier).
+I think this is probably the only place that we could use the helper, but
+it's also one of the places where architectures that don't have to worry
+about asymmetry end up with the check so, yes, I'll do that for v7.
 
 Will
