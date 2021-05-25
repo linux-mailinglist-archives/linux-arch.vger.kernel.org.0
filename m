@@ -2,75 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D993638FB67
-	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 09:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBAF38FDCC
+	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 11:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbhEYHKf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 May 2021 03:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbhEYHKf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 May 2021 03:10:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A942C061574;
-        Tue, 25 May 2021 00:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dhjMzEWRpEYCggzzWYWrO4NWQua4Pzy2IDHhRpCzSjQ=; b=IsVkGtA5ZB8YFvH3U7Ozmpf981
-        WwMu0lFeJ0raouKk6e2vDzvcl2Sa2JPGsHdv4CXl6cahCfQhnH3szKQVryfowloRe2sLxnCFuc00T
-        NF04BRtlyh+n/DNNPXkDAr9Zx2akQSc/zh6DY+tSpGeQhIpPYNBmLk0nbE7VFQMfSxyb0+5Z/HqVA
-        mevdbYvjKWgtCfdjIJY2rgKGpL3N3/mISgk/iyMgu2NDEQ/HsVmf+Og08XZQcqmvKv2dQmxApCidv
-        gxqemhfZUkTrSaL1wxFiRDRc3zUVoFX9nY9kZupiRZdiSsIfgYXY3NX5oNb+ZUIJG2GSGADGA51aj
-        a5+Kzp2A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1llRAr-003DRO-En; Tue, 25 May 2021 07:08:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 11E803001E4;
-        Tue, 25 May 2021 09:08:21 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0084731474567; Tue, 25 May 2021 09:08:20 +0200 (CEST)
-Date:   Tue, 25 May 2021 09:08:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Julian Braha <julianbraha@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2] LOCKDEP: reduce LOCKDEP dependency list
-Message-ID: <YKyiZBAGcbGMEjTc@hirez.programming.kicks-ass.net>
-References: <20210524224150.8009-1-rdunlap@infradead.org>
- <3398848.TK9RqziN78@ubuntu-mate-laptop>
+        id S232410AbhEYJaE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 May 2021 05:30:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52878 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232341AbhEYJaD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 May 2021 05:30:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A4F66141B;
+        Tue, 25 May 2021 09:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621934914;
+        bh=NW/6KeimjMY0HcsoXBOHeEH9IbSnm0X7Mg03MgNiLQI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k+XkKzp8W7RYdepnY+CdUapRNWYS46HCEdTPQBAHtzakaTPmtWxRr88Gxjg5q1XN+
+         KWAOlgbOehz4JrvYaKkB8ZBUun5SXeMB7eLlFnRyV7zqzJVElsEMMu5WjjOXLe0SGH
+         8/a9OKFlxdbBXV2BH1Ljb+M5fqNdYprDBrJbSCNH1wUt3c14FaVYYLm3PlP1j4fRjM
+         CEYWr4F52AVqBvgHhEVxrElNarmB7EZTegX8Eyn8H2YC3ai9S/Ib3XE74bPkFEakKW
+         9xkU2xGRhgdMtR5gHWpji6aPKkf5NxD/X7jCSaEPF4qf8Yyun3qtP+c6l4q0FWM6QV
+         Q3MC7G/MHQG0g==
+Received: by mail-lj1-f174.google.com with SMTP id p20so37228587ljj.8;
+        Tue, 25 May 2021 02:28:34 -0700 (PDT)
+X-Gm-Message-State: AOAM532UWZMemXomli4VDYjwfJ/MTj2RXmqwr1JjSzY9IvddyH+Zp2bt
+        ljfZuP4qhP+NL0bha70O8B1fTc0nvPCmjrKiu6k=
+X-Google-Smtp-Source: ABdhPJxYhRsXM1341LnsAQgXpZGbR4SUkmSohnNp5yRbddS+2fueSoTk8EvBgt/nUUs/mFId0Z2IEFYNOCLwZ8CIeik=
+X-Received: by 2002:a2e:501b:: with SMTP id e27mr19934531ljb.508.1621934912683;
+ Tue, 25 May 2021 02:28:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3398848.TK9RqziN78@ubuntu-mate-laptop>
+References: <1621839068-31738-1-git-send-email-guoren@kernel.org>
+ <1621839068-31738-2-git-send-email-guoren@kernel.org> <YKyae+8O25A8vxMS@infradead.org>
+In-Reply-To: <YKyae+8O25A8vxMS@infradead.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 25 May 2021 17:28:21 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRA=tUid7akgVXfk6MHOd0KmJpDQEZ2m9wRfhigBDzQTw@mail.gmail.com>
+Message-ID: <CAJF2gTRA=tUid7akgVXfk6MHOd0KmJpDQEZ2m9wRfhigBDzQTw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] riscv: Fixup PAGE_UP in asm/page.h
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Anup Patel <anup.patel@wdc.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 24, 2021 at 11:31:22PM -0400, Julian Braha wrote:
-> Hi Randy,
-> 
-> It seems I introduced a new unmet dependency bug
-> in my attempt to fix one :/
-> 
-> Anyway, I don't see why the dependency on FRAME_POINTER
-> was necessary in the first place, so LGTM.
+On Tue, May 25, 2021 at 2:34 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Mon, May 24, 2021 at 06:51:07AM +0000, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Current PAGE_UP implementation is wrong. PAGE_UP(0) should be
+> > 0x1000, but current implementation will give out 0.
+> >
+> > Although the current PAGE_UP isn't used, it will soon be used in
+> > tlb_flush optimization.
+>
+> Nak.  Please just remove the PAGE_UP/PAGE_DOWN macros just like they
+> have been removed from other architectures long ago and use the
+> generic DIV_ROUND_UP macro for your new code like everyone else.
 
-It might have been an attempt at ensuring sane backtraces; but I didn't
-dig into the history of the thing. Either way around, it's fairly
-out-dated if that was indeed the case.
+This patch has been dropped because it's wrong, ref Anup's reply.
+
+Remove PAGE_UP/DOWN is okay for me. How about:
+ static inline void local_flush_tlb_range_asid(unsigned long start,
+unsigned long size,
+                                              unsigned long asid)
+ {
+-       unsigned long page_add = PAGE_DOWN(start);
+-       unsigned long page_end = PAGE_UP(start + size);
++       unsigned long page_add = _ALIGN_DOWN(start, PAGE_SIZE);
++       unsigned long page_end = _ALIGN_UP(start + size, PAGE_SIZE);
+
+_ALIGN_XXX are also defined in arch/riscv/include/asm/page.h.
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
