@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C010E3904DA
-	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 17:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CCD3904DC
+	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 17:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbhEYPQq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 May 2021 11:16:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54224 "EHLO mail.kernel.org"
+        id S231617AbhEYPQu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 May 2021 11:16:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54262 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229610AbhEYPQq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 May 2021 11:16:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C1EBB6141C;
-        Tue, 25 May 2021 15:15:12 +0000 (UTC)
+        id S229610AbhEYPQt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 May 2021 11:16:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 80DAA61429;
+        Tue, 25 May 2021 15:15:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621955716;
-        bh=VuWyCYBd+Pcg6EfPgBrmBqLbQhO5LCy7WzJg2drhWmo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Babp0+Pg6rDUQiFi/JZ8jy7Nw2VJbsLcrtjBPzDIYB4mHOgzwQxaNF8UJeSqJ8Sht
-         HwOUafC9OuJAU3jxpATM0PTSXw54I8ocERBQlgksN2NEKHRHx7xJNC1ePbd2aohepB
-         6pwrC/ZabAEl0y8metSnXZw9ZOROdSLZFJmvA4r+inRqm1mN4z0pfIEIt3RSYNNGDN
-         cCQoNbykBc2hFKamG7VYXtyvRWRKGytZlBCqTBqpQdmYvtZQ4/uLne+Q7dOli1vSJP
-         qSG0IFYu47I5AOyeRRo6CKreQY2r6Vo8LGkt3W4Gl2WSEGTfKPw/aeURMGyJVPnv4F
-         aQGqtouWQD5Sw==
+        s=k20201202; t=1621955719;
+        bh=CaGYuHn+SqIHxXU6UGDKeLwnmsQSpMp2vSwKl8cv+Hs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nvmR/T+9ImdYkkQM1ZIkxS6tIN/uW8GD9TCkPdOWhJ3aEGz7iodQEj0jl299SBLmu
+         AqW+Sm2k4NLx6qCNcgNmpWR8xXGEiWmWahHD/NLhTJcvvbeBgNXy824r229OikQ0r2
+         U4QmE1KH1XElloVrc9LB9xRzwSJmAjfoqYCQuY+t2bpDDH6ou/T45Dr88vriiU9mUi
+         DkFl+Q35Q8hfvU+7LCPbKN7VwLVgkYVrSfrjrU24kqwVHSLYWO4sAE8WE3z+mCAcM2
+         7re0y70/gZq2/v1xHXibaIn8Gd9y4aXemC5Ei6EIxutr8ZVk+gqHl21iPPxJsiguCJ
+         ygvohKNFwCQCw==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -42,136 +42,97 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
-        kernel-team@android.com
-Subject: [PATCH v7 00/22] Add support for 32-bit tasks on asymmetric AArch32 systems
-Date:   Tue, 25 May 2021 16:14:10 +0100
-Message-Id: <20210525151432.16875-1-will@kernel.org>
+        kernel-team@android.com,
+        Valentin Schneider <valentin.schneider@arm.com>
+Subject: [PATCH v7 01/22] sched: Favour predetermined active CPU as migration destination
+Date:   Tue, 25 May 2021 16:14:11 +0100
+Message-Id: <20210525151432.16875-2-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210525151432.16875-1-will@kernel.org>
+References: <20210525151432.16875-1-will@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi all,
+Since commit 6d337eab041d ("sched: Fix migrate_disable() vs
+set_cpus_allowed_ptr()"), the migration stopper thread is left to
+determine the destination CPU of the running task being migrated, even
+though set_cpus_allowed_ptr() already identified a candidate target
+earlier on.
 
-Here is v7 of the asymmetric 32-bit support patches that I previously
-posted here:
+Unfortunately, the stopper doesn't check whether or not the new
+destination CPU is active or not, so __migrate_task() can leave the task
+sitting on a CPU that is outside of its affinity mask, even if the CPU
+originally chosen by SCA is still active.
 
-  v1: https://lore.kernel.org/r/20201027215118.27003-1-will@kernel.org
-  v2: https://lore.kernel.org/r/20201109213023.15092-1-will@kernel.org
-  v3: https://lore.kernel.org/r/20201113093720.21106-1-will@kernel.org
-  v4: https://lore.kernel.org/r/20201124155039.13804-1-will@kernel.org
-  v5: https://lore.kernel.org/r/20201208132835.6151-1-will@kernel.org
-  v6: https://lore.kernel.org/r/20210518094725.7701-1-will@kernel.org
+For example, with CONFIG_CPUSET=n:
 
-There was also a nice LWN writeup in case you've forgotten what this is
-about:
+ $ taskset -pc 0-2 $PID
+ # offline CPUs 3-4
+ $ taskset -pc 3-5 $PID
 
-	https://lwn.net/Articles/838339/
+Then $PID remains on its current CPU (one of 0-2) and does not get
+migrated to CPU 5.
 
-Changes since v6 include:
+Rework 'struct migration_arg' so that an optional pointer to an affinity
+mask can be provided to the stopper, allowing us to respect the
+original choice of destination CPU when migrating. Note that there is
+still the potential to race with a concurrent CPU hot-unplug of the
+destination CPU if the caller does not hold the hotplug lock.
 
-  * Bug fix for a pre-existing scheduler migration bug spotted by
-    Valentin (nice work!). I've put this patch at the start.
+Reported-by: Valentin Schneider <valentin.schneider@arm.com>
+Signed-off-by: Will Deacon <will@kernel.org>
+---
+ kernel/sched/core.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-  * Prevent execve() of a 32-bit program from a 64-bit deadline task if
-    the forced affinity would violate admission control
-
-  * Fixed a memory leak and missing rcu_read_lock() spotted by Qais
-    (thanks!)
-
-  * Handle race between forcing affinity on execve() and CPU hot-unplug
-
-  * Updated documentation
-
-  * Introduce task_cpu_possible() macro as suggested by Peter Z
-
-  * Added some acks/reviewed-by tags, although I didn't include these
-    where patches have changed significantly since last time.
-
-Series now based on v5.13-rc3 to avoid conflicting with arm64 cpucaps
-rework merged at -rc2.
-
-Cheers,
-
-Will
-
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Morten Rasmussen <morten.rasmussen@arm.com>
-Cc: Qais Yousef <qais.yousef@arm.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Quentin Perret <qperret@google.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: kernel-team@android.com
-
---->8
-
-Will Deacon (22):
-  sched: Favour predetermined active CPU as migration destination
-  arm64: cpuinfo: Split AArch32 registers out into a separate struct
-  arm64: Allow mismatched 32-bit EL0 support
-  KVM: arm64: Kill 32-bit vCPUs on systems with mismatched EL0 support
-  arm64: Kill 32-bit applications scheduled on 64-bit-only CPUs
-  arm64: Advertise CPUs capable of running 32-bit applications in sysfs
-  sched: Introduce task_cpu_possible_mask() to limit fallback rq
-    selection
-  cpuset: Don't use the cpu_possible_mask as a last resort for cgroup v1
-  cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()
-  sched: Reject CPU affinity changes based on task_cpu_possible_mask()
-  sched: Introduce task_struct::user_cpus_ptr to track requested
-    affinity
-  sched: Split the guts of sched_setaffinity() into a helper function
-  sched: Allow task CPU affinity to be restricted on asymmetric systems
-  sched: Introduce task_cpus_dl_admissible() to check proposed affinity
-  freezer: Add frozen_or_skipped() helper function
-  sched: Defer wakeup in ttwu() for unschedulable frozen tasks
-  arm64: Implement task_cpu_possible_mask()
-  arm64: exec: Adjust affinity for compat tasks with mismatched 32-bit
-    EL0
-  arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched
-    system
-  arm64: Hook up cmdline parameter to allow mismatched 32-bit EL0
-  arm64: Remove logic to kill 32-bit tasks on 64-bit-only cores
-  Documentation: arm64: describe asymmetric 32-bit support
-
- .../ABI/testing/sysfs-devices-system-cpu      |   9 +
- .../admin-guide/kernel-parameters.txt         |  11 +
- Documentation/arm64/asymmetric-32bit.rst      | 154 ++++++++
- Documentation/arm64/index.rst                 |   1 +
- arch/arm64/include/asm/cpu.h                  |  44 ++-
- arch/arm64/include/asm/cpufeature.h           |   8 +-
- arch/arm64/include/asm/elf.h                  |   6 +-
- arch/arm64/include/asm/mmu_context.h          |  13 +
- arch/arm64/kernel/cpufeature.c                | 227 ++++++++---
- arch/arm64/kernel/cpuinfo.c                   |  53 +--
- arch/arm64/kernel/process.c                   |  44 ++-
- arch/arm64/kvm/arm.c                          |  11 +-
- arch/arm64/tools/cpucaps                      |   3 +-
- include/linux/cpuset.h                        |   3 +-
- include/linux/freezer.h                       |   6 +
- include/linux/mmu_context.h                   |  11 +
- include/linux/sched.h                         |  21 ++
- init/init_task.c                              |   1 +
- kernel/cgroup/cpuset.c                        |  53 ++-
- kernel/fork.c                                 |   2 +
- kernel/freezer.c                              |  10 +-
- kernel/hung_task.c                            |   4 +-
- kernel/sched/core.c                           | 351 ++++++++++++++----
- kernel/sched/sched.h                          |   1 +
- 24 files changed, 850 insertions(+), 197 deletions(-)
- create mode 100644 Documentation/arm64/asymmetric-32bit.rst
-
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 5226cc26a095..1702a60d178d 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1869,6 +1869,7 @@ static struct rq *move_queued_task(struct rq *rq, struct rq_flags *rf,
+ struct migration_arg {
+ 	struct task_struct		*task;
+ 	int				dest_cpu;
++	const struct cpumask		*dest_mask;
+ 	struct set_affinity_pending	*pending;
+ };
+ 
+@@ -1917,6 +1918,7 @@ static int migration_cpu_stop(void *data)
+ 	struct set_affinity_pending *pending = arg->pending;
+ 	struct task_struct *p = arg->task;
+ 	int dest_cpu = arg->dest_cpu;
++	const struct cpumask *dest_mask = arg->dest_mask;
+ 	struct rq *rq = this_rq();
+ 	bool complete = false;
+ 	struct rq_flags rf;
+@@ -1956,12 +1958,8 @@ static int migration_cpu_stop(void *data)
+ 			complete = true;
+ 		}
+ 
+-		if (dest_cpu < 0) {
+-			if (cpumask_test_cpu(task_cpu(p), &p->cpus_mask))
+-				goto out;
+-
+-			dest_cpu = cpumask_any_distribute(&p->cpus_mask);
+-		}
++		if (dest_mask && (cpumask_test_cpu(task_cpu(p), dest_mask)))
++			goto out;
+ 
+ 		if (task_on_rq_queued(p))
+ 			rq = __migrate_task(rq, &rf, p, dest_cpu);
+@@ -2249,7 +2247,8 @@ static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flag
+ 			init_completion(&my_pending.done);
+ 			my_pending.arg = (struct migration_arg) {
+ 				.task = p,
+-				.dest_cpu = -1,		/* any */
++				.dest_cpu = dest_cpu,
++				.dest_mask = &p->cpus_mask,
+ 				.pending = &my_pending,
+ 			};
+ 
 -- 
 2.31.1.818.g46aad6cb9e-goog
 
