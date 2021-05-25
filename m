@@ -2,92 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D2A38FDF6
-	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 11:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C38438FE0C
+	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 11:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbhEYJhF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 May 2021 05:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbhEYJhF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 May 2021 05:37:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E9AC061574;
-        Tue, 25 May 2021 02:35:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=77alA0oNaOdxO9Nn5XAmzEZ6uOPGgpzTh0etFfYrlAM=; b=CJtzWCtnRisoGTNMJQCQYaQgVp
-        ZVGRtAAqogEkkwH9F9sBAGoaUIJqf8hyB4tWDL7yuZj/sqQh0U+BWtvZWmQGjuMN34YGl+CVRhKqY
-        SpUjecHol9ErWniyWlQeiZ55SyQ6f5qUrCbAB5OfKHdCF0QtETh17x5xH9Cm8rZZgktR5YKtOhTaY
-        BAo+VxbRlblic7Pi6monzUyPO9BA4KI29sePHIRFeDpFieohokdd8OHlD/lC11YmnpM9AjF2UhJvK
-        mi4DXoLwyN6+LX4/ewdxrfmy4NRfdBhlIaoT1r8+VKmnGA1IUj76nNdLFH4YSTQJZb4oPpyYKmINK
-        b2mPNq0A==;
-Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1llTSP-003LFb-Qx; Tue, 25 May 2021 09:34:52 +0000
-Date:   Tue, 25 May 2021 10:34:37 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH 2/3] riscv: Fixup PAGE_UP in asm/page.h
-Message-ID: <YKzErU3lpFO58hkY@infradead.org>
-References: <1621839068-31738-1-git-send-email-guoren@kernel.org>
- <1621839068-31738-2-git-send-email-guoren@kernel.org>
- <YKyae+8O25A8vxMS@infradead.org>
- <CAJF2gTRA=tUid7akgVXfk6MHOd0KmJpDQEZ2m9wRfhigBDzQTw@mail.gmail.com>
+        id S232576AbhEYJpV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 May 2021 05:45:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42472 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230508AbhEYJpV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 May 2021 05:45:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0E39B61409;
+        Tue, 25 May 2021 09:43:48 +0000 (UTC)
+Date:   Tue, 25 May 2021 10:43:46 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com
+Subject: Re: [PATCH v6 18/21] arm64: Prevent offlining first CPU with 32-bit
+ EL0 on mismatched system
+Message-ID: <20210525094346.GB15564@arm.com>
+References: <20210518094725.7701-1-will@kernel.org>
+ <20210518094725.7701-19-will@kernel.org>
+ <20210524154657.GE14645@arm.com>
+ <20210524203249.GD15545@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJF2gTRA=tUid7akgVXfk6MHOd0KmJpDQEZ2m9wRfhigBDzQTw@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20210524203249.GD15545@willie-the-truck>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 25, 2021 at 05:28:21PM +0800, Guo Ren wrote:
-> On Tue, May 25, 2021 at 2:34 PM Christoph Hellwig <hch@infradead.org> wrote:
-> >
-> > On Mon, May 24, 2021 at 06:51:07AM +0000, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Current PAGE_UP implementation is wrong. PAGE_UP(0) should be
-> > > 0x1000, but current implementation will give out 0.
-> > >
-> > > Although the current PAGE_UP isn't used, it will soon be used in
-> > > tlb_flush optimization.
-> >
-> > Nak.  Please just remove the PAGE_UP/PAGE_DOWN macros just like they
-> > have been removed from other architectures long ago and use the
-> > generic DIV_ROUND_UP macro for your new code like everyone else.
+On Mon, May 24, 2021 at 09:32:50PM +0100, Will Deacon wrote:
+> On Mon, May 24, 2021 at 04:46:58PM +0100, Catalin Marinas wrote:
+> > On Tue, May 18, 2021 at 10:47:22AM +0100, Will Deacon wrote:
+> > > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> > > index 959442f76ed7..72efdc611b14 100644
+> > > --- a/arch/arm64/kernel/cpufeature.c
+> > > +++ b/arch/arm64/kernel/cpufeature.c
+> > > @@ -2896,15 +2896,33 @@ void __init setup_cpu_features(void)
+> > >  
+> > >  static int enable_mismatched_32bit_el0(unsigned int cpu)
+> > >  {
+> > > +	static int lucky_winner = -1;
+> > > +
+> > >  	struct cpuinfo_arm64 *info = &per_cpu(cpu_data, cpu);
+> > >  	bool cpu_32bit = id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0);
+> > >  
+> > >  	if (cpu_32bit) {
+> > >  		cpumask_set_cpu(cpu, cpu_32bit_el0_mask);
+> > >  		static_branch_enable_cpuslocked(&arm64_mismatched_32bit_el0);
+> > > -		setup_elf_hwcaps(compat_elf_hwcaps);
+> > >  	}
+> > >  
+> > > +	if (cpumask_test_cpu(0, cpu_32bit_el0_mask) == cpu_32bit)
+> > > +		return 0;
+> > 
+> > I don't fully understand this early return. AFAICT, we still call
+> > setup_elf_hwcaps() via setup_cpu_features() if the system supports
+> > 32-bit EL0 (mismatched or not) at boot. For CPU hotplug, we can add the
+> > compat hwcaps later if we didn't set them up at boot. So this part is
+> > fine.
+> > 
+> > However, if CPU0 is 32-bit-capable, it looks like we'd never disable the
+> > offlining on any of the 32-bit-capable CPUs and there's nothing that
+> > prevents offlining CPU0.
 > 
-> This patch has been dropped because it's wrong, ref Anup's reply.
+> That is also deferred until we actually detect the mismatch. For example, if
+> CPU0 is 32-bit capable but none of the others are, then when we online CPU1
+> we will print:
 > 
-> Remove PAGE_UP/DOWN is okay for me. How about:
->  static inline void local_flush_tlb_range_asid(unsigned long start,
-> unsigned long size,
->                                               unsigned long asid)
->  {
-> -       unsigned long page_add = PAGE_DOWN(start);
-> -       unsigned long page_end = PAGE_UP(start + size);
-> +       unsigned long page_add = _ALIGN_DOWN(start, PAGE_SIZE);
-> +       unsigned long page_end = _ALIGN_UP(start + size, PAGE_SIZE);
+>   | CPU features: Asymmetric 32-bit EL0 support detected on CPU 1; CPU hot-unplug disabled on CPU 0
 > 
-> _ALIGN_XXX are also defined in arch/riscv/include/asm/page.h.
+> so the check above is really asking "Is the CPU being onlined mismatched wrt
+> the boot CPU?". If yes, then we need to make sure that we're keeping a
+> 32-bit-capable CPU around.
 
-And these also are leftovers from days gone by and should be removed.
+Got it now, the offlining will only be disabled if we detected a
+mismatch. For this patch:
 
-I think this should simply be:
-
-	
-	unsigned long page_add = start & PAGE_MASK;
-	unsigned long page_end = PAGE_ALIGN(start + size);
-
-(and page_add is a pretty horrible name as well..)
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
