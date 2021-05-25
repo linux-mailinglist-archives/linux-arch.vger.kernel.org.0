@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA5B3904FE
+	by mail.lfdr.de (Postfix) with ESMTP id 966133904FF
 	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 17:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbhEYPSQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 May 2021 11:18:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55278 "EHLO mail.kernel.org"
+        id S232364AbhEYPST (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 May 2021 11:18:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54936 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232523AbhEYPRp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 May 2021 11:17:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 82DA961438;
-        Tue, 25 May 2021 15:16:12 +0000 (UTC)
+        id S232173AbhEYPRt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 May 2021 11:17:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4AE7761436;
+        Tue, 25 May 2021 15:16:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621955775;
-        bh=9UU66YoFU+MWE+7w60LmGA05+Or0mzIHMNsG2tNk4ns=;
+        s=k20201202; t=1621955779;
+        bh=2Tu/2JiXMKcPPPKmdOfa8s5PZpHuaTBt8RxTqRmrXV8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dlgUzyKC5gdxYik6ckOtyZdo4wMazJjJMhXbLCAv5Wb6iDO8HuLImvRa49/rWpjdq
-         CIyHNVMBPrJvm2CwfaM09OvMd+bCWAtdcFd0mvmOT8cxCvuuCSLY88zTy79g8qbkKi
-         AP4WzYGTLOzJ79AFR8qcglc6lCIBivBAESmfVpdPzd+lSbxj/Dexmh1F8v/R9a0IU/
-         w3k/9zVEVNyHEsYrzgSAZ2vDf8ZotlgNwlrPAOW7hcSoIk10ydJci0SR5A2bhb4WEo
-         2p9LRqht6LJjJ3w0/1xiAwUuqZoVdSCG2k0Wa383AHvG9w7sorKn8QAsJ9d86n08V2
-         PncpM42zvfU5Q==
+        b=QjROUIYpRep4wk4NrxWkdXd9BKzpYBLggho3ynNEsiA7QOFn+2BsNSDSt8Bc5rRgn
+         U5zTEKARsOYWhGzW3bhHU7WspRpp+kK2IqA6p1yJsw702ImoI2d3jJMdmkNxOl77yc
+         IAhB3lCf++kFf7063e3+g3HG9eDGc+D0UV020MhLWq8f7c+Yu19aVGWdOqux6/eRYO
+         MyGaQg3+xLJ0KdKBO1acQVNRCnI8XDemC3ZWXStjSygTMMpY0TZeSUq9W4yA/26Uh/
+         Y/7oQAGTeOv+uz2swF+3qxWd6Pzww7VjOofJqK2qbl12lu+P4s/VoAfe3LinlsRGFM
+         WqWT2wKoXmPVw==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         kernel-team@android.com
-Subject: [PATCH v7 16/22] sched: Defer wakeup in ttwu() for unschedulable frozen tasks
-Date:   Tue, 25 May 2021 16:14:26 +0100
-Message-Id: <20210525151432.16875-17-will@kernel.org>
+Subject: [PATCH v7 17/22] arm64: Implement task_cpu_possible_mask()
+Date:   Tue, 25 May 2021 16:14:27 +0100
+Message-Id: <20210525151432.16875-18-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210525151432.16875-1-will@kernel.org>
 References: <20210525151432.16875-1-will@kernel.org>
@@ -55,96 +55,40 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Asymmetric systems may not offer the same level of userspace ISA support
-across all CPUs, meaning that some applications cannot be executed by
-some CPUs. As a concrete example, upcoming arm64 big.LITTLE designs do
-not feature support for 32-bit applications on both clusters.
+Provide an implementation of task_cpu_possible_mask() so that we can
+prevent 64-bit-only cores being added to the 'cpus_mask' for compat
+tasks on systems with mismatched 32-bit support at EL0,
 
-Although we take care to prevent explicit hot-unplug of all 32-bit
-capable CPUs on such a system, this is required when suspending on some
-SoCs where the firmware mandates that the suspend/resume operation is
-handled by CPU 0, which may not be capable of running 32-bit tasks.
-
-Consequently, there is a window on the resume path where no 32-bit
-capable CPUs are available for scheduling and waking up a 32-bit task
-will result in a scheduler BUG() due to failure of select_fallback_rq():
-
-  | kernel BUG at kernel/sched/core.c:2858!
-  | Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-  | ...
-  | Call trace:
-  |  select_fallback_rq+0x4b0/0x4e4
-  |  try_to_wake_up.llvm.4388853297126348405+0x460/0x5b0
-  |  default_wake_function+0x1c/0x30
-  |  autoremove_wake_function+0x1c/0x60
-  |  __wake_up_common.llvm.11763074518265335900+0x100/0x1b8
-  |  __wake_up+0x78/0xc4
-  |  ep_poll_callback+0x20c/0x3fc
-
-Prevent wakeups of unschedulable frozen tasks in ttwu() and instead
-defer the wakeup to __thaw_tasks(), which runs only once all the
-secondary CPUs are back online.
-
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- kernel/freezer.c    | 10 +++++++++-
- kernel/sched/core.c | 13 +++++++++++++
- 2 files changed, 22 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/mmu_context.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/kernel/freezer.c b/kernel/freezer.c
-index dc520f01f99d..8f3d950c2a87 100644
---- a/kernel/freezer.c
-+++ b/kernel/freezer.c
-@@ -11,6 +11,7 @@
- #include <linux/syscalls.h>
- #include <linux/freezer.h>
- #include <linux/kthread.h>
-+#include <linux/mmu_context.h>
- 
- /* total number of freezing conditions in effect */
- atomic_t system_freezing_cnt = ATOMIC_INIT(0);
-@@ -146,9 +147,16 @@ bool freeze_task(struct task_struct *p)
- void __thaw_task(struct task_struct *p)
- {
- 	unsigned long flags;
-+	const struct cpumask *mask = task_cpu_possible_mask(p);
- 
- 	spin_lock_irqsave(&freezer_lock, flags);
--	if (frozen(p))
-+	/*
-+	 * Wake up frozen tasks. On asymmetric systems where tasks cannot
-+	 * run on all CPUs, ttwu() may have deferred a wakeup generated
-+	 * before thaw_secondary_cpus() had completed so we generate
-+	 * additional wakeups here for tasks in the PF_FREEZER_SKIP state.
-+	 */
-+	if (frozen(p) || (frozen_or_skipped(p) && mask != cpu_possible_mask))
- 		wake_up_process(p);
- 	spin_unlock_irqrestore(&freezer_lock, flags);
+diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
+index d3cef9133539..bb9b7510f334 100644
+--- a/arch/arm64/include/asm/mmu_context.h
++++ b/arch/arm64/include/asm/mmu_context.h
+@@ -231,6 +231,19 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 	update_saved_ttbr0(tsk, next);
  }
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 42e2aecf087c..6cb9677d635a 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3529,6 +3529,19 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
- 	if (!(p->state & state))
- 		goto unlock;
  
-+#ifdef CONFIG_FREEZER
-+	/*
-+	 * If we're going to wake up a thread which may be frozen, then
-+	 * we can only do so if we have an active CPU which is capable of
-+	 * running it. This may not be the case when resuming from suspend,
-+	 * as the secondary CPUs may not yet be back online. See __thaw_task()
-+	 * for the actual wakeup.
-+	 */
-+	if (unlikely(frozen_or_skipped(p)) &&
-+	    !cpumask_intersects(cpu_active_mask, task_cpu_possible_mask(p)))
-+		goto unlock;
-+#endif
++static inline const struct cpumask *
++task_cpu_possible_mask(struct task_struct *p)
++{
++	if (!static_branch_unlikely(&arm64_mismatched_32bit_el0))
++		return cpu_possible_mask;
 +
- 	trace_sched_waking(p);
++	if (!is_compat_thread(task_thread_info(p)))
++		return cpu_possible_mask;
++
++	return system_32bit_el0_cpumask();
++}
++#define task_cpu_possible_mask	task_cpu_possible_mask
++
+ void verify_cpu_asid_bits(void);
+ void post_ttbr_update_workaround(void);
  
- 	/* We're going to change ->state: */
 -- 
 2.31.1.818.g46aad6cb9e-goog
 
