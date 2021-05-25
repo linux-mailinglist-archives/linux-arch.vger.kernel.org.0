@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CCD3904DC
-	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 17:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1086F3904DE
+	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 17:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbhEYPQu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 May 2021 11:16:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54262 "EHLO mail.kernel.org"
+        id S231805AbhEYPQ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 May 2021 11:16:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54340 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229610AbhEYPQt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 May 2021 11:16:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 80DAA61429;
-        Tue, 25 May 2021 15:15:16 +0000 (UTC)
+        id S231822AbhEYPQx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 May 2021 11:16:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 59B7C6142D;
+        Tue, 25 May 2021 15:15:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621955719;
-        bh=CaGYuHn+SqIHxXU6UGDKeLwnmsQSpMp2vSwKl8cv+Hs=;
+        s=k20201202; t=1621955723;
+        bh=732cwF8Iz8DasP4Nf4vVgWosVv6a8JLz5raQQCtclVc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nvmR/T+9ImdYkkQM1ZIkxS6tIN/uW8GD9TCkPdOWhJ3aEGz7iodQEj0jl299SBLmu
-         AqW+Sm2k4NLx6qCNcgNmpWR8xXGEiWmWahHD/NLhTJcvvbeBgNXy824r229OikQ0r2
-         U4QmE1KH1XElloVrc9LB9xRzwSJmAjfoqYCQuY+t2bpDDH6ou/T45Dr88vriiU9mUi
-         DkFl+Q35Q8hfvU+7LCPbKN7VwLVgkYVrSfrjrU24kqwVHSLYWO4sAE8WE3z+mCAcM2
-         7re0y70/gZq2/v1xHXibaIn8Gd9y4aXemC5Ei6EIxutr8ZVk+gqHl21iPPxJsiguCJ
-         ygvohKNFwCQCw==
+        b=FzB+SqTZCs0OmZEqLFfkw0EGKZRmoBu0T2KlJ+aiUiQAkzSEb4YCUo24rWI0iBOYU
+         Jdpy8G8kOHQhw4QJ0wLgwSY9kh1AK8Z6JJbNwrDlkX2SlguUp/0/mf0oxLyR6KaORv
+         /pAoUPi6rEHagAOuuy3p4hPJ6GZokVjhJ1XccHtOVh4a1ywpptbDV0YBHhX8Nxvibh
+         A76/KDGRUdWmlxoapq3ZhP2BO6tr/+8TjrEV0TngM+7HzDIkDzaZ0KQz8Sr5iCG3ud
+         nLg2Xo5uharF/cH89mpFF6Nn4VkHmo0twT2ZyZjtPpwwQNEZJQkY1wXY9+4wcvYeLH
+         TsPDQHpfyDSGA==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -42,11 +42,10 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
-        kernel-team@android.com,
-        Valentin Schneider <valentin.schneider@arm.com>
-Subject: [PATCH v7 01/22] sched: Favour predetermined active CPU as migration destination
-Date:   Tue, 25 May 2021 16:14:11 +0100
-Message-Id: <20210525151432.16875-2-will@kernel.org>
+        kernel-team@android.com
+Subject: [PATCH v7 02/22] arm64: cpuinfo: Split AArch32 registers out into a separate struct
+Date:   Tue, 25 May 2021 16:14:12 +0100
+Message-Id: <20210525151432.16875-3-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210525151432.16875-1-will@kernel.org>
 References: <20210525151432.16875-1-will@kernel.org>
@@ -56,83 +55,261 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since commit 6d337eab041d ("sched: Fix migrate_disable() vs
-set_cpus_allowed_ptr()"), the migration stopper thread is left to
-determine the destination CPU of the running task being migrated, even
-though set_cpus_allowed_ptr() already identified a candidate target
-earlier on.
+In preparation for late initialisation of the "sanitised" AArch32 register
+state, move the AArch32 registers out of 'struct cpuinfo' and into their
+own struct definition.
 
-Unfortunately, the stopper doesn't check whether or not the new
-destination CPU is active or not, so __migrate_task() can leave the task
-sitting on a CPU that is outside of its affinity mask, even if the CPU
-originally chosen by SCA is still active.
-
-For example, with CONFIG_CPUSET=n:
-
- $ taskset -pc 0-2 $PID
- # offline CPUs 3-4
- $ taskset -pc 3-5 $PID
-
-Then $PID remains on its current CPU (one of 0-2) and does not get
-migrated to CPU 5.
-
-Rework 'struct migration_arg' so that an optional pointer to an affinity
-mask can be provided to the stopper, allowing us to respect the
-original choice of destination CPU when migrating. Note that there is
-still the potential to race with a concurrent CPU hot-unplug of the
-destination CPU if the caller does not hold the hotplug lock.
-
-Reported-by: Valentin Schneider <valentin.schneider@arm.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- kernel/sched/core.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ arch/arm64/include/asm/cpu.h   | 44 +++++++++++----------
+ arch/arm64/kernel/cpufeature.c | 71 ++++++++++++++++++----------------
+ arch/arm64/kernel/cpuinfo.c    | 53 +++++++++++++------------
+ 3 files changed, 89 insertions(+), 79 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 5226cc26a095..1702a60d178d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1869,6 +1869,7 @@ static struct rq *move_queued_task(struct rq *rq, struct rq_flags *rf,
- struct migration_arg {
- 	struct task_struct		*task;
- 	int				dest_cpu;
-+	const struct cpumask		*dest_mask;
- 	struct set_affinity_pending	*pending;
- };
- 
-@@ -1917,6 +1918,7 @@ static int migration_cpu_stop(void *data)
- 	struct set_affinity_pending *pending = arg->pending;
- 	struct task_struct *p = arg->task;
- 	int dest_cpu = arg->dest_cpu;
-+	const struct cpumask *dest_mask = arg->dest_mask;
- 	struct rq *rq = this_rq();
- 	bool complete = false;
- 	struct rq_flags rf;
-@@ -1956,12 +1958,8 @@ static int migration_cpu_stop(void *data)
- 			complete = true;
- 		}
- 
--		if (dest_cpu < 0) {
--			if (cpumask_test_cpu(task_cpu(p), &p->cpus_mask))
--				goto out;
+diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
+index 7faae6ff3ab4..f4e01aa0f442 100644
+--- a/arch/arm64/include/asm/cpu.h
++++ b/arch/arm64/include/asm/cpu.h
+@@ -12,26 +12,7 @@
+ /*
+  * Records attributes of an individual CPU.
+  */
+-struct cpuinfo_arm64 {
+-	struct cpu	cpu;
+-	struct kobject	kobj;
+-	u32		reg_ctr;
+-	u32		reg_cntfrq;
+-	u32		reg_dczid;
+-	u32		reg_midr;
+-	u32		reg_revidr;
 -
--			dest_cpu = cpumask_any_distribute(&p->cpus_mask);
--		}
-+		if (dest_mask && (cpumask_test_cpu(task_cpu(p), dest_mask)))
-+			goto out;
+-	u64		reg_id_aa64dfr0;
+-	u64		reg_id_aa64dfr1;
+-	u64		reg_id_aa64isar0;
+-	u64		reg_id_aa64isar1;
+-	u64		reg_id_aa64mmfr0;
+-	u64		reg_id_aa64mmfr1;
+-	u64		reg_id_aa64mmfr2;
+-	u64		reg_id_aa64pfr0;
+-	u64		reg_id_aa64pfr1;
+-	u64		reg_id_aa64zfr0;
+-
++struct cpuinfo_32bit {
+ 	u32		reg_id_dfr0;
+ 	u32		reg_id_dfr1;
+ 	u32		reg_id_isar0;
+@@ -54,6 +35,29 @@ struct cpuinfo_arm64 {
+ 	u32		reg_mvfr0;
+ 	u32		reg_mvfr1;
+ 	u32		reg_mvfr2;
++};
++
++struct cpuinfo_arm64 {
++	struct cpu	cpu;
++	struct kobject	kobj;
++	u32		reg_ctr;
++	u32		reg_cntfrq;
++	u32		reg_dczid;
++	u32		reg_midr;
++	u32		reg_revidr;
++
++	u64		reg_id_aa64dfr0;
++	u64		reg_id_aa64dfr1;
++	u64		reg_id_aa64isar0;
++	u64		reg_id_aa64isar1;
++	u64		reg_id_aa64mmfr0;
++	u64		reg_id_aa64mmfr1;
++	u64		reg_id_aa64mmfr2;
++	u64		reg_id_aa64pfr0;
++	u64		reg_id_aa64pfr1;
++	u64		reg_id_aa64zfr0;
++
++	struct cpuinfo_32bit	aarch32;
  
- 		if (task_on_rq_queued(p))
- 			rq = __migrate_task(rq, &rf, p, dest_cpu);
-@@ -2249,7 +2247,8 @@ static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flag
- 			init_completion(&my_pending.done);
- 			my_pending.arg = (struct migration_arg) {
- 				.task = p,
--				.dest_cpu = -1,		/* any */
-+				.dest_cpu = dest_cpu,
-+				.dest_mask = &p->cpus_mask,
- 				.pending = &my_pending,
- 			};
+ 	/* pseudo-ZCR for recording maximum ZCR_EL1 LEN value: */
+ 	u64		reg_zcr;
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index efed2830d141..a4db25cd7122 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -863,6 +863,31 @@ static void __init init_cpu_hwcaps_indirect_list(void)
  
+ static void __init setup_boot_cpu_capabilities(void);
+ 
++static void __init init_32bit_cpu_features(struct cpuinfo_32bit *info)
++{
++	init_cpu_ftr_reg(SYS_ID_DFR0_EL1, info->reg_id_dfr0);
++	init_cpu_ftr_reg(SYS_ID_DFR1_EL1, info->reg_id_dfr1);
++	init_cpu_ftr_reg(SYS_ID_ISAR0_EL1, info->reg_id_isar0);
++	init_cpu_ftr_reg(SYS_ID_ISAR1_EL1, info->reg_id_isar1);
++	init_cpu_ftr_reg(SYS_ID_ISAR2_EL1, info->reg_id_isar2);
++	init_cpu_ftr_reg(SYS_ID_ISAR3_EL1, info->reg_id_isar3);
++	init_cpu_ftr_reg(SYS_ID_ISAR4_EL1, info->reg_id_isar4);
++	init_cpu_ftr_reg(SYS_ID_ISAR5_EL1, info->reg_id_isar5);
++	init_cpu_ftr_reg(SYS_ID_ISAR6_EL1, info->reg_id_isar6);
++	init_cpu_ftr_reg(SYS_ID_MMFR0_EL1, info->reg_id_mmfr0);
++	init_cpu_ftr_reg(SYS_ID_MMFR1_EL1, info->reg_id_mmfr1);
++	init_cpu_ftr_reg(SYS_ID_MMFR2_EL1, info->reg_id_mmfr2);
++	init_cpu_ftr_reg(SYS_ID_MMFR3_EL1, info->reg_id_mmfr3);
++	init_cpu_ftr_reg(SYS_ID_MMFR4_EL1, info->reg_id_mmfr4);
++	init_cpu_ftr_reg(SYS_ID_MMFR5_EL1, info->reg_id_mmfr5);
++	init_cpu_ftr_reg(SYS_ID_PFR0_EL1, info->reg_id_pfr0);
++	init_cpu_ftr_reg(SYS_ID_PFR1_EL1, info->reg_id_pfr1);
++	init_cpu_ftr_reg(SYS_ID_PFR2_EL1, info->reg_id_pfr2);
++	init_cpu_ftr_reg(SYS_MVFR0_EL1, info->reg_mvfr0);
++	init_cpu_ftr_reg(SYS_MVFR1_EL1, info->reg_mvfr1);
++	init_cpu_ftr_reg(SYS_MVFR2_EL1, info->reg_mvfr2);
++}
++
+ void __init init_cpu_features(struct cpuinfo_arm64 *info)
+ {
+ 	/* Before we start using the tables, make sure it is sorted */
+@@ -882,29 +907,8 @@ void __init init_cpu_features(struct cpuinfo_arm64 *info)
+ 	init_cpu_ftr_reg(SYS_ID_AA64PFR1_EL1, info->reg_id_aa64pfr1);
+ 	init_cpu_ftr_reg(SYS_ID_AA64ZFR0_EL1, info->reg_id_aa64zfr0);
+ 
+-	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0)) {
+-		init_cpu_ftr_reg(SYS_ID_DFR0_EL1, info->reg_id_dfr0);
+-		init_cpu_ftr_reg(SYS_ID_DFR1_EL1, info->reg_id_dfr1);
+-		init_cpu_ftr_reg(SYS_ID_ISAR0_EL1, info->reg_id_isar0);
+-		init_cpu_ftr_reg(SYS_ID_ISAR1_EL1, info->reg_id_isar1);
+-		init_cpu_ftr_reg(SYS_ID_ISAR2_EL1, info->reg_id_isar2);
+-		init_cpu_ftr_reg(SYS_ID_ISAR3_EL1, info->reg_id_isar3);
+-		init_cpu_ftr_reg(SYS_ID_ISAR4_EL1, info->reg_id_isar4);
+-		init_cpu_ftr_reg(SYS_ID_ISAR5_EL1, info->reg_id_isar5);
+-		init_cpu_ftr_reg(SYS_ID_ISAR6_EL1, info->reg_id_isar6);
+-		init_cpu_ftr_reg(SYS_ID_MMFR0_EL1, info->reg_id_mmfr0);
+-		init_cpu_ftr_reg(SYS_ID_MMFR1_EL1, info->reg_id_mmfr1);
+-		init_cpu_ftr_reg(SYS_ID_MMFR2_EL1, info->reg_id_mmfr2);
+-		init_cpu_ftr_reg(SYS_ID_MMFR3_EL1, info->reg_id_mmfr3);
+-		init_cpu_ftr_reg(SYS_ID_MMFR4_EL1, info->reg_id_mmfr4);
+-		init_cpu_ftr_reg(SYS_ID_MMFR5_EL1, info->reg_id_mmfr5);
+-		init_cpu_ftr_reg(SYS_ID_PFR0_EL1, info->reg_id_pfr0);
+-		init_cpu_ftr_reg(SYS_ID_PFR1_EL1, info->reg_id_pfr1);
+-		init_cpu_ftr_reg(SYS_ID_PFR2_EL1, info->reg_id_pfr2);
+-		init_cpu_ftr_reg(SYS_MVFR0_EL1, info->reg_mvfr0);
+-		init_cpu_ftr_reg(SYS_MVFR1_EL1, info->reg_mvfr1);
+-		init_cpu_ftr_reg(SYS_MVFR2_EL1, info->reg_mvfr2);
+-	}
++	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0))
++		init_32bit_cpu_features(&info->aarch32);
+ 
+ 	if (id_aa64pfr0_sve(info->reg_id_aa64pfr0)) {
+ 		init_cpu_ftr_reg(SYS_ZCR_EL1, info->reg_zcr);
+@@ -975,20 +979,12 @@ static void relax_cpu_ftr_reg(u32 sys_id, int field)
+ 	WARN_ON(!ftrp->width);
+ }
+ 
+-static int update_32bit_cpu_features(int cpu, struct cpuinfo_arm64 *info,
+-				     struct cpuinfo_arm64 *boot)
++static int update_32bit_cpu_features(int cpu, struct cpuinfo_32bit *info,
++				     struct cpuinfo_32bit *boot)
+ {
+ 	int taint = 0;
+ 	u64 pfr0 = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
+ 
+-	/*
+-	 * If we don't have AArch32 at all then skip the checks entirely
+-	 * as the register values may be UNKNOWN and we're not going to be
+-	 * using them for anything.
+-	 */
+-	if (!id_aa64pfr0_32bit_el0(pfr0))
+-		return taint;
+-
+ 	/*
+ 	 * If we don't have AArch32 at EL1, then relax the strictness of
+ 	 * EL1-dependent register fields to avoid spurious sanity check fails.
+@@ -1135,10 +1131,17 @@ void update_cpu_features(int cpu,
+ 	}
+ 
+ 	/*
++	 * If we don't have AArch32 at all then skip the checks entirely
++	 * as the register values may be UNKNOWN and we're not going to be
++	 * using them for anything.
++	 *
+ 	 * This relies on a sanitised view of the AArch64 ID registers
+ 	 * (e.g. SYS_ID_AA64PFR0_EL1), so we call it last.
+ 	 */
+-	taint |= update_32bit_cpu_features(cpu, info, boot);
++	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0)) {
++		taint |= update_32bit_cpu_features(cpu, &info->aarch32,
++						   &boot->aarch32);
++	}
+ 
+ 	/*
+ 	 * Mismatched CPU features are a recipe for disaster. Don't even
+diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
+index 51fcf99d5351..264c119a6cae 100644
+--- a/arch/arm64/kernel/cpuinfo.c
++++ b/arch/arm64/kernel/cpuinfo.c
+@@ -344,6 +344,32 @@ static void cpuinfo_detect_icache_policy(struct cpuinfo_arm64 *info)
+ 	pr_info("Detected %s I-cache on CPU%d\n", icache_policy_str[l1ip], cpu);
+ }
+ 
++static void __cpuinfo_store_cpu_32bit(struct cpuinfo_32bit *info)
++{
++	info->reg_id_dfr0 = read_cpuid(ID_DFR0_EL1);
++	info->reg_id_dfr1 = read_cpuid(ID_DFR1_EL1);
++	info->reg_id_isar0 = read_cpuid(ID_ISAR0_EL1);
++	info->reg_id_isar1 = read_cpuid(ID_ISAR1_EL1);
++	info->reg_id_isar2 = read_cpuid(ID_ISAR2_EL1);
++	info->reg_id_isar3 = read_cpuid(ID_ISAR3_EL1);
++	info->reg_id_isar4 = read_cpuid(ID_ISAR4_EL1);
++	info->reg_id_isar5 = read_cpuid(ID_ISAR5_EL1);
++	info->reg_id_isar6 = read_cpuid(ID_ISAR6_EL1);
++	info->reg_id_mmfr0 = read_cpuid(ID_MMFR0_EL1);
++	info->reg_id_mmfr1 = read_cpuid(ID_MMFR1_EL1);
++	info->reg_id_mmfr2 = read_cpuid(ID_MMFR2_EL1);
++	info->reg_id_mmfr3 = read_cpuid(ID_MMFR3_EL1);
++	info->reg_id_mmfr4 = read_cpuid(ID_MMFR4_EL1);
++	info->reg_id_mmfr5 = read_cpuid(ID_MMFR5_EL1);
++	info->reg_id_pfr0 = read_cpuid(ID_PFR0_EL1);
++	info->reg_id_pfr1 = read_cpuid(ID_PFR1_EL1);
++	info->reg_id_pfr2 = read_cpuid(ID_PFR2_EL1);
++
++	info->reg_mvfr0 = read_cpuid(MVFR0_EL1);
++	info->reg_mvfr1 = read_cpuid(MVFR1_EL1);
++	info->reg_mvfr2 = read_cpuid(MVFR2_EL1);
++}
++
+ static void __cpuinfo_store_cpu(struct cpuinfo_arm64 *info)
+ {
+ 	info->reg_cntfrq = arch_timer_get_cntfrq();
+@@ -371,31 +397,8 @@ static void __cpuinfo_store_cpu(struct cpuinfo_arm64 *info)
+ 	info->reg_id_aa64pfr1 = read_cpuid(ID_AA64PFR1_EL1);
+ 	info->reg_id_aa64zfr0 = read_cpuid(ID_AA64ZFR0_EL1);
+ 
+-	/* Update the 32bit ID registers only if AArch32 is implemented */
+-	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0)) {
+-		info->reg_id_dfr0 = read_cpuid(ID_DFR0_EL1);
+-		info->reg_id_dfr1 = read_cpuid(ID_DFR1_EL1);
+-		info->reg_id_isar0 = read_cpuid(ID_ISAR0_EL1);
+-		info->reg_id_isar1 = read_cpuid(ID_ISAR1_EL1);
+-		info->reg_id_isar2 = read_cpuid(ID_ISAR2_EL1);
+-		info->reg_id_isar3 = read_cpuid(ID_ISAR3_EL1);
+-		info->reg_id_isar4 = read_cpuid(ID_ISAR4_EL1);
+-		info->reg_id_isar5 = read_cpuid(ID_ISAR5_EL1);
+-		info->reg_id_isar6 = read_cpuid(ID_ISAR6_EL1);
+-		info->reg_id_mmfr0 = read_cpuid(ID_MMFR0_EL1);
+-		info->reg_id_mmfr1 = read_cpuid(ID_MMFR1_EL1);
+-		info->reg_id_mmfr2 = read_cpuid(ID_MMFR2_EL1);
+-		info->reg_id_mmfr3 = read_cpuid(ID_MMFR3_EL1);
+-		info->reg_id_mmfr4 = read_cpuid(ID_MMFR4_EL1);
+-		info->reg_id_mmfr5 = read_cpuid(ID_MMFR5_EL1);
+-		info->reg_id_pfr0 = read_cpuid(ID_PFR0_EL1);
+-		info->reg_id_pfr1 = read_cpuid(ID_PFR1_EL1);
+-		info->reg_id_pfr2 = read_cpuid(ID_PFR2_EL1);
+-
+-		info->reg_mvfr0 = read_cpuid(MVFR0_EL1);
+-		info->reg_mvfr1 = read_cpuid(MVFR1_EL1);
+-		info->reg_mvfr2 = read_cpuid(MVFR2_EL1);
+-	}
++	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0))
++		__cpuinfo_store_cpu_32bit(&info->aarch32);
+ 
+ 	if (IS_ENABLED(CONFIG_ARM64_SVE) &&
+ 	    id_aa64pfr0_sve(info->reg_id_aa64pfr0))
 -- 
 2.31.1.818.g46aad6cb9e-goog
 
