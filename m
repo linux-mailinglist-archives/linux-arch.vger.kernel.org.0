@@ -2,91 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 409D5390111
-	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 14:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3876E390187
+	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 15:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbhEYMh3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 May 2021 08:37:29 -0400
-Received: from verein.lst.de ([213.95.11.211]:58985 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232353AbhEYMh2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 May 2021 08:37:28 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 647BA6736F; Tue, 25 May 2021 14:35:56 +0200 (CEST)
-Date:   Tue, 25 May 2021 14:35:56 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     guoren@kernel.org
-Cc:     anup.patel@wdc.com, palmerdabbelt@google.com, arnd@arndb.de,
-        hch@lst.de, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V3 2/2] riscv: Use use_asid_allocator flush TLB
-Message-ID: <20210525123556.GB4842@lst.de>
-References: <1621945447-38820-1-git-send-email-guoren@kernel.org> <1621945447-38820-3-git-send-email-guoren@kernel.org>
+        id S233011AbhEYNDO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 May 2021 09:03:14 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41529 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232991AbhEYNDN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 May 2021 09:03:13 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14PCheeH098926;
+        Tue, 25 May 2021 09:01:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=heKL48jhTKHG+0Zf7GGx5pc2nTO7LUu6qGQW5p/pJiw=;
+ b=m+/4Csr7PprAgzVd7tgMLPdGfwtdhI119P5i2v1HdcKKhFo64NrJyc+6Ei9Ab7omwQZ7
+ B0bLzR/CDFgvT4MysPx8NzkYJ0ids4UnNh+vdyJgBmssuvpPbhk1Z9Drn6NRW1xUGO/U
+ xDp2cRIr6fh1CSmh2c+wpOBYck7IYDF1o1yBXkdra6DVuGc37u9FqO+lLCqrDo1ssJv8
+ sY6fEw4WQJumzHHRbVrSE2w8qQQWn86xQSAb4ZpwArFnBNb8th6CttmtXV8fN5QeuxU1
+ jeTWrwFRJm4yhs1aQw9N3Dub0dtJRkbkfhztnKekRGOFe6BijRefbpndUsF0aEfoM30j Fg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38s1g68kum-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 May 2021 09:01:35 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 14PD0KAf002901;
+        Tue, 25 May 2021 13:01:33 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 38s1r48016-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 May 2021 13:01:33 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14PD1VqW28705204
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 May 2021 13:01:31 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4A19BAE055;
+        Tue, 25 May 2021 13:01:31 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2DB9AE04D;
+        Tue, 25 May 2021 13:01:30 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 25 May 2021 13:01:30 +0000 (GMT)
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Subject: [PATCH 0/1] mm/debug_vm_pgtable: fix alignment for pmd/pud_advanced_tests()
+Date:   Tue, 25 May 2021 15:00:42 +0200
+Message-Id: <20210525130043.186290-1-gerald.schaefer@linux.ibm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1621945447-38820-3-git-send-email-guoren@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UaPDqLmwIwnWKJEQumuWDv4XxDdjtyjp
+X-Proofpoint-ORIG-GUID: UaPDqLmwIwnWKJEQumuWDv4XxDdjtyjp
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-25_06:2021-05-25,2021-05-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 impostorscore=0 clxscore=1011 phishscore=0 mlxlogscore=683
+ adultscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2105250077
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 25, 2021 at 12:24:07PM +0000, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Use static_branch_unlikely(&use_asid_allocator) to keep the origin
-> tlb flush style, so it's no effect on the existing machine. Here
-> are the optimized functions:
->  - flush_tlb_mm
->  - flush_tlb_page
->  - flush_tlb_range
-> 
-> All above are based on the below new implement functions:
->  - __sbi_tlb_flush_range_asid
->  - local_flush_tlb_range_asid
+We sometimes see a "BUG task_struct (Not tainted): Padding overwritten"
+on s390, directly after running debug_vm_pgtable. This is because of
+wrong vaddr alignment in pmd/pud_advanced_tests(), leading to memory
+corruption at least on s390, see patch description.
 
+At first glance, other architectures do not seem to care about vaddr in
+their xxx_get_and_clear() implementations, so they should not be affected.
+One exception is sparc, where the addr is passed over to some tlb_batch
+code, but I'm not sure what implication the wrongly aligned vaddr would
+have in this case.
 
-This mentiones what functions you're changing, but not what the
-substantial change is, and more importantly why you change it.
+Also adding linux-arch, just to make sure.
 
-> +static inline void local_flush_tlb_range_asid(unsigned long start, unsigned long size,
-> +					      unsigned long asid)
+Gerald Schaefer (1):
+  mm/debug_vm_pgtable: fix alignment for pmd/pud_advanced_tests()
 
-Crazy long line.  Should be:
+ mm/debug_vm_pgtable.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-static inline void local_flush_tlb_range_asid(unsigned long start,
-		unsigned long size, unsigned long asid)
+-- 
+2.25.1
 
-> +{
-> +	unsigned long tmp = start & PAGE_MASK;
-> +	unsigned long end = ALIGN(start + size, PAGE_SIZE);
-> +
-> +	if (size == -1) {
-> +		__asm__ __volatile__ ("sfence.vma x0, %0" : : "r" (asid) : "memory");
-> +		return;
-
-Please split the global (size == -1) case into separate helpers.
-
-> +	while(tmp < end) {
-
-Missing whitespace befre the (.
-
-Also I think this would read nicer as:
-
-	for (tmp = start & PAGE_MASK; tmp < end; tmp += PAGE_SIZE)
-
-> +static void __sbi_tlb_flush_range_asid(struct cpumask *cmask, unsigned long start,
-> +				       unsigned long size, unsigned long asid)
-
-Another overly long line.
-
-Also for all thee __sbi_* functions, why the __ prefix?
-
-> +	if (cpumask_any_but(cmask, cpuid) >= nr_cpu_ids) {
-> +		local_flush_tlb_range_asid(start, size, asid);
-> +	} else {
-> +		riscv_cpuid_to_hartid_mask(cmask, &hmask);
-> +		sbi_remote_sfence_vma_asid(cpumask_bits(&hmask), start, size, asid);
-
-Another long line (and a few more later).
