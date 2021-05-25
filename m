@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA54390507
-	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 17:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03218390508
+	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 17:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234278AbhEYPSg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 May 2021 11:18:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54798 "EHLO mail.kernel.org"
+        id S233733AbhEYPSi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 May 2021 11:18:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55426 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233476AbhEYPRx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 May 2021 11:17:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0140F61430;
-        Tue, 25 May 2021 15:16:19 +0000 (UTC)
+        id S233787AbhEYPR4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 May 2021 11:17:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AEB816141C;
+        Tue, 25 May 2021 15:16:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621955783;
-        bh=Rpqpc0SYApg4oyVbkj8g4oWZvRg7aFPkP29VROgy2Do=;
+        s=k20201202; t=1621955787;
+        bh=nSPy9SuPb1FO/mDztTPLt4/d9CdHbLFYERw4tXoz0Kw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nfYGvdyHQIUSHl/IkXr5tQbmPkNQ3Xln1tuLhKfhdksH2JPvtJMOMyK6suHC6vQAl
-         tKEJfxn95j9At/7/oenmNdOtacD9gHKDY089TYgHdKlEWRNvxZ67m7CQOOkQ5vbLLQ
-         AfmL4k6If26rsAMDMJ1DyL/irDtkCYY1PsIGk+/ZJ2exGBlLKUeX4TkzacNMlwH7dY
-         i5RUG/r2OMuITgtGGLayvO7AQ9xbKA/7d1KX1BiiueaJPWgAv3BjCJS6bzYBPK2GRy
-         LVOpVFTo5nMACd31WD1uP3J8Z+oa+MqkjlvFQpB8iE4yZGsFL/CMd55NCHUb8rEkOP
-         HlgE/rbLgyQzw==
+        b=BJ+pNO4rqX8DQBMEkPtuN0vy2sWPDrc/M+7cHmrCj4P4mgUDhRtJDPrtQgdXQ/Nqu
+         ZFD/JFAFCDoH2CkInfTtjAREMB+wvekyyDjT6grP2FTu5u8eoMq8dxdlxSovV3WnXS
+         m5zbN/RqIE0lTwos1bBeKb/k6kwZqMawypoFd1QT9/N74SEYZtKBSyGYisyP3qE82N
+         m9gCDuNZK1rFJemOea+/Zzm39lM7j9Gbi1xdp4I7EV0ESxz7rBDZPNaqG5cvdXNRMT
+         W1rM61F7T2R7Rk3MoA75ZH7MK+T0EWQyUm1lQs9uj8K/Y+Fi+AMuOI+nmJz+li7Fhr
+         pKsFDcXgooLyQ==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         kernel-team@android.com
-Subject: [PATCH v7 18/22] arm64: exec: Adjust affinity for compat tasks with mismatched 32-bit EL0
-Date:   Tue, 25 May 2021 16:14:28 +0100
-Message-Id: <20210525151432.16875-19-will@kernel.org>
+Subject: [PATCH v7 19/22] arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched system
+Date:   Tue, 25 May 2021 16:14:29 +0100
+Message-Id: <20210525151432.16875-20-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210525151432.16875-1-will@kernel.org>
 References: <20210525151432.16875-1-will@kernel.org>
@@ -55,102 +55,62 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When exec'ing a 32-bit task on a system with mismatched support for
-32-bit EL0, try to ensure that it starts life on a CPU that can actually
-run it.
+If we want to support 32-bit applications, then when we identify a CPU
+with mismatched 32-bit EL0 support we must ensure that we will always
+have an active 32-bit CPU available to us from then on. This is important
+for the scheduler, because is_cpu_allowed() will be constrained to 32-bit
+CPUs for compat tasks and forced migration due to a hotplug event will
+hang if no 32-bit CPUs are available.
 
-Similarly, when exec'ing a 64-bit task on such a system, try to restore
-the old affinity mask if it was previously restricted.
+On detecting a mismatch, prevent offlining of either the mismatching CPU
+if it is 32-bit capable, or find the first active 32-bit capable CPU
+otherwise.
 
-Reviewed-by: Quentin Perret <qperret@google.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- arch/arm64/include/asm/elf.h |  6 ++----
- arch/arm64/kernel/process.c  | 39 +++++++++++++++++++++++++++++++++++-
- 2 files changed, 40 insertions(+), 5 deletions(-)
+ arch/arm64/kernel/cpufeature.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-index 8d1c8dcb87fd..97932fbf973d 100644
---- a/arch/arm64/include/asm/elf.h
-+++ b/arch/arm64/include/asm/elf.h
-@@ -213,10 +213,8 @@ typedef compat_elf_greg_t		compat_elf_gregset_t[COMPAT_ELF_NGREG];
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 959442f76ed7..72efdc611b14 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -2896,15 +2896,33 @@ void __init setup_cpu_features(void)
  
- /* AArch32 EABI. */
- #define EF_ARM_EABI_MASK		0xff000000
--#define compat_elf_check_arch(x)	(system_supports_32bit_el0() && \
--					 ((x)->e_machine == EM_ARM) && \
--					 ((x)->e_flags & EF_ARM_EABI_MASK))
--
-+int compat_elf_check_arch(const struct elf32_hdr *);
-+#define compat_elf_check_arch		compat_elf_check_arch
- #define compat_start_thread		compat_start_thread
- /*
-  * Unlike the native SET_PERSONALITY macro, the compat version maintains
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index f4a91bf1ce0c..3aea06fdd1f9 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -22,6 +22,7 @@
- #include <linux/mman.h>
- #include <linux/mm.h>
- #include <linux/nospec.h>
-+#include <linux/sched.h>
- #include <linux/stddef.h>
- #include <linux/sysctl.h>
- #include <linux/unistd.h>
-@@ -638,6 +639,28 @@ unsigned long arch_align_stack(unsigned long sp)
- 	return sp & ~0xf;
- }
+ static int enable_mismatched_32bit_el0(unsigned int cpu)
+ {
++	static int lucky_winner = -1;
++
+ 	struct cpuinfo_arm64 *info = &per_cpu(cpu_data, cpu);
+ 	bool cpu_32bit = id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0);
  
-+#ifdef CONFIG_COMPAT
-+int compat_elf_check_arch(const struct elf32_hdr *hdr)
-+{
-+	if (!system_supports_32bit_el0())
-+		return false;
-+
-+	if ((hdr)->e_machine != EM_ARM)
-+		return false;
-+
-+	if (!((hdr)->e_flags & EF_ARM_EABI_MASK))
-+		return false;
-+
-+	/*
-+	 * Prevent execve() of a 32-bit program from a deadline task
-+	 * if the restricted affinity mask would be inadmissible on an
-+	 * asymmetric system.
-+	 */
-+	return !static_branch_unlikely(&arm64_mismatched_32bit_el0) ||
-+	       task_cpus_dl_admissible(current, system_32bit_el0_cpumask());
-+}
-+#endif
-+
- /*
-  * Called from setup_new_exec() after (COMPAT_)SET_PERSONALITY.
-  */
-@@ -647,8 +670,22 @@ void arch_setup_new_exec(void)
- 
- 	if (is_compat_task()) {
- 		mmflags = MMCF_AARCH32;
--		if (static_branch_unlikely(&arm64_mismatched_32bit_el0))
-+
-+		/*
-+		 * Restrict the CPU affinity mask for a 32-bit task so that
-+		 * it contains only 32-bit-capable CPUs.
-+		 *
-+		 * From the perspective of the task, this looks similar to
-+		 * what would happen if the 64-bit-only CPUs were hot-unplugged
-+		 * at the point of execve(), although we try a bit harder to
-+		 * honour the cpuset hierarchy.
-+		 */
-+		if (static_branch_unlikely(&arm64_mismatched_32bit_el0)) {
-+			force_compatible_cpus_allowed_ptr(current);
- 			set_tsk_thread_flag(current, TIF_NOTIFY_RESUME);
-+		}
-+	} else if (static_branch_unlikely(&arm64_mismatched_32bit_el0)) {
-+		relax_compatible_cpus_allowed_ptr(current);
+ 	if (cpu_32bit) {
+ 		cpumask_set_cpu(cpu, cpu_32bit_el0_mask);
+ 		static_branch_enable_cpuslocked(&arm64_mismatched_32bit_el0);
+-		setup_elf_hwcaps(compat_elf_hwcaps);
  	}
  
- 	current->mm->context.flags = mmflags;
++	if (cpumask_test_cpu(0, cpu_32bit_el0_mask) == cpu_32bit)
++		return 0;
++
++	if (lucky_winner >= 0)
++		return 0;
++
++	/*
++	 * We've detected a mismatch. We need to keep one of our CPUs with
++	 * 32-bit EL0 online so that is_cpu_allowed() doesn't end up rejecting
++	 * every CPU in the system for a 32-bit task.
++	 */
++	lucky_winner = cpu_32bit ? cpu : cpumask_any_and(cpu_32bit_el0_mask,
++							 cpu_active_mask);
++	get_cpu_device(lucky_winner)->offline_disabled = true;
++	setup_elf_hwcaps(compat_elf_hwcaps);
++	pr_info("Asymmetric 32-bit EL0 support detected on CPU %u; CPU hot-unplug disabled on CPU %u\n",
++		cpu, lucky_winner);
+ 	return 0;
+ }
+ 
 -- 
 2.31.1.818.g46aad6cb9e-goog
 
