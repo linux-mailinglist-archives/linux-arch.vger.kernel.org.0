@@ -2,86 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0FB38F8D5
-	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 05:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3E938FAFF
+	for <lists+linux-arch@lfdr.de>; Tue, 25 May 2021 08:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhEYDcy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 May 2021 23:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S230500AbhEYGgn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 May 2021 02:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbhEYDcy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 May 2021 23:32:54 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBE7C061574;
-        Mon, 24 May 2021 20:31:25 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id k19so22242497qta.2;
-        Mon, 24 May 2021 20:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pdMV+yTXBLYWIfGHPJPjvdA6uunEq8KJIbegmNZYD/c=;
-        b=nZxJS1GyMkdrUlXnZqsln0N1rgFwP5KPv3ofpoHXsLhT6K+NAPkAtSfonFlTC/lig9
-         yYlk+stDs8b9P9+j7994vhD8iBvGjCE02+jO5rvHz/LuB8DwyfJXiVXBkM3mu1Jbr7RR
-         H//i5ph3s2vAms7s6A/6fuJH8KeD28l7f/hk1yZvYvuyQjvTU9udpg8LAJr3NufvDRGt
-         m208NcrW3NqvzZuf+dVZJYj2xoaZjrAGsLCHqhh3Xhtut86df1vE4MFV7GXnuNAat+7e
-         mENwoirnXjizdCHjleDMawru2SmmRtUvpZEE0yrtjlar8sVVMWTEkA/CS4O9/HmhRM+S
-         KOeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=pdMV+yTXBLYWIfGHPJPjvdA6uunEq8KJIbegmNZYD/c=;
-        b=WzqFyanYzynFx+AjiOO/6wrfG843uDa3bXtWXY0ZkQcu22uIQAwW7zbmNeq9NVmj94
-         ViO/ijAZXDnRWQNvOeKD+L/+ZV+YsOZ+kMHhTP25vjq1NFXj+DWUhoyxh8anWBYAXPbK
-         aFqLZ2oN8qUf74Gc0TiDItrgkyE8RO5mJyFDeFMqOmMrztDMfyogsAu+CdQP6T5kMdS1
-         PO+zgKPPbcoDTZmOkd/IahUaRmbObyIr1IoC2bbv8IKrQ1UBI3tKYQlwZUAL2yHmUZTy
-         BYE1qt3jhL4XlA/EzgIFKKYT73wTKLwUFXBIRK+Tgc1+6V9tZheuNeWi3tJpfy4919Kx
-         hRgw==
-X-Gm-Message-State: AOAM532FME5okLSHp/s4NulLM3dLL/L/N05kGq5ZZRncxEiHpC9JGDAv
-        6K3g1VNWyV3ahtTXM5u+7pwrdWeOxkonWGr4
-X-Google-Smtp-Source: ABdhPJxctMF5GgRFn0qWe7B8O2au/fPXie++RSCdbuyNRzuiAxsSBTRdamsNVHfPPSqn/jPl8PoZRw==
-X-Received: by 2002:a05:622a:392:: with SMTP id j18mr30714495qtx.29.1621913484075;
-        Mon, 24 May 2021 20:31:24 -0700 (PDT)
-Received: from ubuntu-mate-laptop.localnet ([67.8.38.84])
-        by smtp.gmail.com with ESMTPSA id m15sm11473812qtn.47.2021.05.24.20.31.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 May 2021 20:31:23 -0700 (PDT)
-Sender: Julian Braha <julian.braha@gmail.com>
-From:   Julian Braha <julianbraha@gmail.com>
-To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2] LOCKDEP: reduce LOCKDEP dependency list
-Date:   Mon, 24 May 2021 23:31:22 -0400
-Message-ID: <3398848.TK9RqziN78@ubuntu-mate-laptop>
-In-Reply-To: <20210524224150.8009-1-rdunlap@infradead.org>
-References: <20210524224150.8009-1-rdunlap@infradead.org>
+        with ESMTP id S231197AbhEYGgl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 May 2021 02:36:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91595C061574;
+        Mon, 24 May 2021 23:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=l76PMWwpyUywZLSPQWxlVCkV0Gpx/Lj+papEoZT+usU=; b=nxMsfjJ56nJZsedt7pMMtsU2dQ
+        s66X+UHTPW9Pvr0NZFeGrpkRebz0bVJXAj3WwNMKN4BMYNNtm7QF8q/k4gireJ5A1/O0yIe6iHpf1
+        fNaEzyiT88Zio+afVonMcWw4AacHG94txCxY8e/BB9s3e1x99e5jtgaj80W/Ly5hGzqijngVgbn+4
+        Gquox9i4ezhDsq0BG2/77r09PwciTdFQ3Ma19fsTqnkX2Nr3pZycMg5b37lefHHng7Hcrc0EWOx2M
+        8eGIQQZ7JSsIPBCKMVMGQocha9Qv9qyzoDZPY6OJi4N8Z7ub+8+en2hmHKdgDcv8EX7Z5wBr9PUTx
+        P+dJps9A==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1llQeB-003C3l-RS; Tue, 25 May 2021 06:34:41 +0000
+Date:   Tue, 25 May 2021 07:34:35 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     guoren@kernel.org
+Cc:     anup.patel@wdc.com, palmerdabbelt@google.com, arnd@arndb.de,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH 2/3] riscv: Fixup PAGE_UP in asm/page.h
+Message-ID: <YKyae+8O25A8vxMS@infradead.org>
+References: <1621839068-31738-1-git-send-email-guoren@kernel.org>
+ <1621839068-31738-2-git-send-email-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1621839068-31738-2-git-send-email-guoren@kernel.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Randy,
+On Mon, May 24, 2021 at 06:51:07AM +0000, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Current PAGE_UP implementation is wrong. PAGE_UP(0) should be
+> 0x1000, but current implementation will give out 0.
+> 
+> Although the current PAGE_UP isn't used, it will soon be used in
+> tlb_flush optimization.
 
-It seems I introduced a new unmet dependency bug
-in my attempt to fix one :/
-
-Anyway, I don't see why the dependency on FRAME_POINTER
-was necessary in the first place, so LGTM.
-
-- Julian Braha
-
-
+Nak.  Please just remove the PAGE_UP/PAGE_DOWN macros just like they
+have been removed from other architectures long ago and use the
+generic DIV_ROUND_UP macro for your new code like everyone else.
