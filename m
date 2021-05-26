@@ -2,74 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67063918F9
-	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 15:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB3F391B0D
+	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 17:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbhEZNhy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 May 2021 09:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S235280AbhEZPEP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 May 2021 11:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbhEZNhy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 May 2021 09:37:54 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E8EC061574;
-        Wed, 26 May 2021 06:36:21 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id z38so2059587ybh.5;
-        Wed, 26 May 2021 06:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iFL5PNWXPS1rh53vwqSPIbk+0/gTsiYmqV4fuzzxBUA=;
-        b=FzT4OTBFNeRbMEDIl1/gOpXnFSWr1fmLO0y3S3SAfelHXi3E4MTdptws8/tgrn3BcD
-         Yz4UBZYic7J2ocmgSKoCYVIqTtd6DO3Xg7Uzek4YPa+5kbE7Lu0XgSe3uOy+lkYwoFM6
-         riinqBB1RW+Hr3bNvH0DKE7OK8a7zbSZdtlqomoZBHPKJIxzxpA5yTzh4ObW2gosjHp7
-         NtCJtKpz+i2FFcldBI21KRXHmU65Go2VnbPjqDBtqEaDdB/iAD1fnEpAh7fnzIAorL5G
-         fzpwtLGlYaJ7PuMrwZ0RVArfW/788ctt4L/mNnwfr6SWG5eNyalX4/Kq7XiOPx0NWH3k
-         +2pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iFL5PNWXPS1rh53vwqSPIbk+0/gTsiYmqV4fuzzxBUA=;
-        b=OdZO2Zbt0aSgtZrDH2MX0YBbc37kjDiC3lAn60C4oFrbwA7C7th2Oa+03/1OEP0icC
-         jzFUCUijoBLMP86XO3asExqIEb2LjafCAIT6EQ+NrOCBgdQjCh1alw8uhEUm3JIraNN5
-         hrDIDtRAzEk1rPQY3QQ4Suvnnfw7l3MvZmJEV1U1bwtu2R530/38zk9g1u2oZnC99fNz
-         xmCfqOBNr3fXxs3FKaaE7ArUvBxzizu5zD6BqZCa6glLtAG8RmQvIuEDdrhVL5XI0wS0
-         CIDt66V8MuNA514ccUs7KJgkiF7B+eCpLXFyurz1F0WlpEDEdEgNtfKoWE/bjlMCUP+x
-         FIZQ==
-X-Gm-Message-State: AOAM532q0CpGpgdYE80EC5hhd3LN5NuXxBqyducOLvlSyhU4RfHhIEZH
-        PWHURpM7Tbxg2GNUbI/rW6b++u0Z9BucgmeOr7c=
-X-Google-Smtp-Source: ABdhPJxDriuXtomCkO+vTu34Wdq2ggIF2h//mY2b7hbw86SINmkcT/Xha8Q9csfHatY/78s4PuJ6++W1rIW+pW6iefo=
-X-Received: by 2002:a25:3a41:: with SMTP id h62mr47838671yba.500.1622036180722;
- Wed, 26 May 2021 06:36:20 -0700 (PDT)
+        with ESMTP id S235279AbhEZPEP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 May 2021 11:04:15 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6A0C061574;
+        Wed, 26 May 2021 08:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EzQNpucbZRhOS6VlKl4EW+/nNhgUz3SdWpD1Xj7cd80=; b=axGXUB0m7TjyPDI5WGPN9TcpCB
+        zsGBpK64dDZcj69e9wqfhe30Acmr+x/5LnNB9oxaeIdSCHj77dwxc3oCr632D8hKQqp0gCy3Il9sL
+        DPsyMsrhFpOkDnTNiXAu+axxTKcOm9JoeF0xPQJ1IAKzm5UScHjBKpDojD5Oou4SCVo4Bik/6D1bV
+        4VsnHPQQWJciqrE5rc6J5bMZFz2IO1bOvloALOtrUFcrReiCddf98AgL5UxK9vltxqDT94Ew1UcN8
+        8VW7kS5GUiC2BfsWgUhRWKB+DstRhsAlRbKiD3OJ3Ovq7mJwPhkhXZS3UmISIURKXFto9T4shbNhc
+        iZLrrCgQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1llv31-000g9F-1s; Wed, 26 May 2021 15:02:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E27C9300242;
+        Wed, 26 May 2021 17:02:20 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C4714200D3A72; Wed, 26 May 2021 17:02:20 +0200 (CEST)
+Date:   Wed, 26 May 2021 17:02:20 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        kernel-team@android.com, Li Zefan <lizefan@huawei.com>
+Subject: Re: [PATCH v7 08/22] cpuset: Don't use the cpu_possible_mask as a
+ last resort for cgroup v1
+Message-ID: <YK5i/GQ/30hSsYBU@hirez.programming.kicks-ass.net>
+References: <20210525151432.16875-1-will@kernel.org>
+ <20210525151432.16875-9-will@kernel.org>
 MIME-Version: 1.0
-References: <20210525130043.186290-1-gerald.schaefer@linux.ibm.com>
- <20210525130043.186290-2-gerald.schaefer@linux.ibm.com> <CADxRZqxdPodO8y+u=R4HB_727pjmXZFt8M5PPhg_qSsT1S-saQ@mail.gmail.com>
- <3aadc76c-3a8c-d5d6-5ad2-e83c09f08213@arm.com>
-In-Reply-To: <3aadc76c-3a8c-d5d6-5ad2-e83c09f08213@arm.com>
-From:   Anatoly Pugachev <matorola@gmail.com>
-Date:   Wed, 26 May 2021 16:36:09 +0300
-Message-ID: <CADxRZqxWkUdSJJ61WbFCjBFTq1h7nkS3O932St8nMcMpzZy=jA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm/debug_vm_pgtable: fix alignment for pmd/pud_advanced_tests()
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210525151432.16875-9-will@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 26, 2021 at 3:35 PM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
-> spac64 does not enable ARCH_HAS_DEBUG_VM_PGTABLE, did you enable it
-> before running the test ? Did the entire test debug_vm_pgtable() run
-> successfully on sparc64 ?
+On Tue, May 25, 2021 at 04:14:18PM +0100, Will Deacon wrote:
+>  void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+>  {
+> +	const struct cpumask *cs_mask;
+> +	const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
+> +
+>  	rcu_read_lock();
+> +	cs_mask = task_cs(tsk)->cpus_allowed;
+> +
+> +	if (!is_in_v2_mode() || !cpumask_subset(cs_mask, possible_mask))
+> +		goto unlock; /* select_fallback_rq will try harder */
+> +
+> +	do_set_cpus_allowed(tsk, cs_mask);
+> +unlock:
 
-Ahh.. Sorry for the noise then... Thought that
-CONFIG_TRANSPARENT_HUGEPAGE would be enough...
+	if (is_in_v2_mode() && cpumask_subset(cs_mask, possible_mask))
+		do_set_cpus_allowed(tsk, cs_mask);
+
+perhaps?
+
