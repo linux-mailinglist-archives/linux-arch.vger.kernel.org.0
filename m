@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE28391D1F
-	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 18:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2679B391D7C
+	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 19:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234927AbhEZQhE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 May 2021 12:37:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42344 "EHLO mail.kernel.org"
+        id S233913AbhEZRDu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 May 2021 13:03:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46116 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234693AbhEZQhD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 May 2021 12:37:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8458B613CE;
-        Wed, 26 May 2021 16:35:28 +0000 (UTC)
+        id S233694AbhEZRDp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 May 2021 13:03:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A78C8613D7;
+        Wed, 26 May 2021 17:02:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622046931;
-        bh=RENKLcEHhu959JDvFspwaYEtf68i2Lx50KgXzCU65WQ=;
+        s=k20201202; t=1622048533;
+        bh=GCTzDVbHhIB2dVSmWs+GdL224HTZFecYBcEfT7zK7IA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aFk7znWTc04PVrql1zNgqykTtI/3LSeJa18g/JoMeOfVTpYCQ3B3+lQh64rYcBElS
-         M9cHSquWwUPVcIVRRfl2k4nRS7Nf45JJ/9ghznU9niPdlofALWbZ260qvGiZd3nWXi
-         ZihXHTRH0PVX8As6yAHFwirK4Rj1GKw2b+wenAHTwMrP7lyhGYl4c4qEDHyNeUluIA
-         qUPiXxtgmkdyGkJvPQ3N7tuDFm4cysHwCNAJv5qnIHZ0+uGqmKbKdPiBEoLUpRhM4d
-         2j23drlhmHaL+MjGA2w19b6l0rOUNnRUdPYXvJzBzumCqdXN+Vh7SPaWKSq1UIe2DF
-         q3jaG7017X/sA==
-Date:   Wed, 26 May 2021 17:35:25 +0100
+        b=gYqblIvys8lw3GCSXlPEL2PYKMcev0OROB2qn9Wj8kynBUZ/fF72oEBS6FVqh25Rd
+         Wl+R+5/zO+9k4vaGv+4dpmi1KjfrP4dCT6SxIuSyOWFCw4P8sU7dWYnkYLJAYLdpig
+         j4MGc8JX7tDHtfZTdzmmN0qX5U7OWTJlPZEsdpoVh3T4IEF8Wacl6HU9rArjCz3v2h
+         PGeaa2xslmuL27ULOUbz75vQBRWNEdXe2jqTtuSfyUE/8dgL5/Fl+mGHKTHhs1pu+H
+         E6WrI4UY+Swaf48ho0/zMxr9nmXT3V7VqOFGyejLps4MF7NkkwhrhtNx50W+X5fYw1
+         2B2nh7481ezzA==
+Date:   Wed, 26 May 2021 18:02:06 +0100
 From:   Will Deacon <will@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
@@ -45,43 +45,62 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         kernel-team@android.com
 Subject: Re: [PATCH v7 13/22] sched: Allow task CPU affinity to be restricted
  on asymmetric systems
-Message-ID: <20210526163523.GA19758@willie-the-truck>
+Message-ID: <20210526170206.GB19758@willie-the-truck>
 References: <20210525151432.16875-1-will@kernel.org>
  <20210525151432.16875-14-will@kernel.org>
- <YK51SSUvL2psb3OL@hirez.programming.kicks-ass.net>
+ <YK53kDtczHIYumDC@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YK51SSUvL2psb3OL@hirez.programming.kicks-ass.net>
+In-Reply-To: <YK53kDtczHIYumDC@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 26, 2021 at 06:20:25PM +0200, Peter Zijlstra wrote:
+On Wed, May 26, 2021 at 06:30:08PM +0200, Peter Zijlstra wrote:
 > On Tue, May 25, 2021 at 04:14:23PM +0100, Will Deacon wrote:
-> > +static int restrict_cpus_allowed_ptr(struct task_struct *p,
-> > +				     struct cpumask *new_mask,
-> > +				     const struct cpumask *subset_mask)
-> > +{
-> > +	struct rq_flags rf;
-> > +	struct rq *rq;
-> > +	int err;
-> > +	struct cpumask *user_mask = NULL;
+> > @@ -2426,20 +2421,166 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
+> >  
+> >  	__do_set_cpus_allowed(p, new_mask, flags);
+> >  
+> > -	return affine_move_task(rq, p, &rf, dest_cpu, flags);
+> > +	if (flags & SCA_USER)
+> > +		release_user_cpus_ptr(p);
 > > +
-> > +	if (!p->user_cpus_ptr) {
-> > +		user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
+> > +	return affine_move_task(rq, p, rf, dest_cpu, flags);
+> >  
+> >  out:
+> > -	task_rq_unlock(rq, p, &rf);
+> > +	task_rq_unlock(rq, p, rf);
+> >  
+> >  	return ret;
+> >  }
 > 
-> 		if (!user_mask)
-> 			return -ENOMEM;
-> 	}
+> So sys_sched_setaffinity() releases the user_cpus_ptr thingy ?! How does
+> that work?
+
+Right, I think if the task explicitly changes its affinity then it makes
+sense to forget about what it had before. It then behaves very similar to
+CPU hotplug, which is the analogy I've been trying to follow: if you call
+sched_setaffinity() with a mask containing offline CPUs then those CPUs
+are not added back to the affinity mask when they are onlined.
+
+> I thought the intended semantics were somethings like:
 > 
-> ?
+> 	A - 0xff			B
+> 
+> 	restrict(0xf) // user: 0xff eff: 0xf
+> 
+> 					sched_setaffinity(A, 0x3c) // user: 0x3c eff: 0xc
+> 
+> 	relax() // user: NULL, eff: 0x3c
 
-We won't blow up if we continue without user_mask here, but I agree that
-it's more straightforward to return an error and have
-force_compatible_cpus_allowed_ptr() noisily override the mask.
-
-We're in pretty deep trouble if we're failing this allocation anyway.
+If you go down this route you can get into _really_ weird situations where
+e.g. sys_sched_setaffinity() returns -EINVAL because the requested mask
+contains only 64-bit-only cores, yet we've updated the user mask. It also
+opens up some horrendous races between sched_setaffinity() and execve(),
+since the former can transiently set an invalid mask per the cpuset
+hierarchy.
 
 Will
