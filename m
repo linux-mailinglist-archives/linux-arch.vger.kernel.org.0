@@ -2,30 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E617391CBF
-	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 18:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B430391CE2
+	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 18:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234445AbhEZQO1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 May 2021 12:14:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60980 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232197AbhEZQO1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 May 2021 12:14:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C7E4F611BE;
-        Wed, 26 May 2021 16:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622045575;
-        bh=Lpj06ByCJmTxPWA4x0Oyba4e2Wlf4pynAXzKIJbruZI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mEBW4cmZTsN62rBVHYLfrVtCPnifgwsBV3ZCNcKdb20TQOulcn8BYboc5IsWdQ3/4
-         4KfVhE6HjNj91vCzYxvCaqh4MdYHyL1mUAEVeV+te/IsXinEpwhBb7J+JCm/J8mZ38
-         4OBP3BI6GJG8L1yXGVxIymXYBB5Bri5n43V2sIHu6jY7WNFktCa4eYP0d7wiFN2ljb
-         kjKWwbOuNK3qdDxgX9sFHOn2c/G9tOe6egcPfvwpkmy8eNdX9fJ62iIwzxqNuo0Vsl
-         uK83iTEg5j9iYCGFQdOyy+enF2fN6RrF0KpH16UQ+A2XcwRyYTXu5goBw7tVWRaXLl
-         t60xbZ5ma10AQ==
-Date:   Wed, 26 May 2021 17:12:49 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
+        id S233321AbhEZQXE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 May 2021 12:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232197AbhEZQXD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 May 2021 12:23:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2354FC061574;
+        Wed, 26 May 2021 09:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IFoSjDHrMWdi2TUI6YK2jTs5l6DaG7NO6Wy5qFgfnvE=; b=be/ttzz5/pCXA47SCWWock3PTI
+        wzzZsBgMcyifPb4Hx393/YedkBG5GLwrxlLXabX+PcaP/0rSIpGkb6ux8oQZYva3dmFaNNWNqtEmU
+        9J44W1EaY3jTQVrPidw3BJNctAWEqZktD1ZoD/8Jte5WZqarslzP2Rlp86LHCdSXQB+Jk75ZpyqH9
+        cAzzTKv9DnLccHODZI7trSIrX5vi/1H5tbLIO8fVqvTTQqh+inut9YsWh64rMqpfFH53q+n41Pvsl
+        F5jj57KrXeI0eH13mr6tJmtqlwDyxlJp/vDz/Naj71P5mm62kReaeZ1xD8XEyaA9RCMXEeVOC1qb0
+        seTZGBVQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1llwGg-004gxo-Vf; Wed, 26 May 2021 16:20:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A09FA300221;
+        Wed, 26 May 2021 18:20:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7B98A201D301D; Wed, 26 May 2021 18:20:25 +0200 (CEST)
+Date:   Wed, 26 May 2021 18:20:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Will Deacon <will@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -43,65 +55,69 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         kernel-team@android.com
-Subject: Re: [PATCH v7 10/22] sched: Reject CPU affinity changes based on
- task_cpu_possible_mask()
-Message-ID: <20210526161249.GD19691@willie-the-truck>
+Subject: Re: [PATCH v7 13/22] sched: Allow task CPU affinity to be restricted
+ on asymmetric systems
+Message-ID: <YK51SSUvL2psb3OL@hirez.programming.kicks-ass.net>
 References: <20210525151432.16875-1-will@kernel.org>
- <20210525151432.16875-11-will@kernel.org>
- <YK5mJxsmxosX1ciH@hirez.programming.kicks-ass.net>
+ <20210525151432.16875-14-will@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YK5mJxsmxosX1ciH@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210525151432.16875-14-will@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 26, 2021 at 05:15:51PM +0200, Peter Zijlstra wrote:
-> On Tue, May 25, 2021 at 04:14:20PM +0100, Will Deacon wrote:
-> > Reject explicit requests to change the affinity mask of a task via
-> > set_cpus_allowed_ptr() if the requested mask is not a subset of the
-> > mask returned by task_cpu_possible_mask(). This ensures that the
-> > 'cpus_mask' for a given task cannot contain CPUs which are incapable of
-> > executing it, except in cases where the affinity is forced.
-> > 
-> > Reviewed-by: Quentin Perret <qperret@google.com>
-> > Signed-off-by: Will Deacon <will@kernel.org>
-> > ---
-> >  kernel/sched/core.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 00ed51528c70..8ca7854747f1 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -2346,6 +2346,7 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
-> >  				  u32 flags)
-> >  {
-> >  	const struct cpumask *cpu_valid_mask = cpu_active_mask;
-> > +	const struct cpumask *cpu_allowed_mask = task_cpu_possible_mask(p);
-> >  	unsigned int dest_cpu;
-> >  	struct rq_flags rf;
-> >  	struct rq *rq;
-> > @@ -2366,6 +2367,9 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
-> >  		 * set_cpus_allowed_common() and actually reset p->cpus_ptr.
-> >  		 */
-> >  		cpu_valid_mask = cpu_online_mask;
-> > +	} else if (!cpumask_subset(new_mask, cpu_allowed_mask)) {
-> > +		ret = -EINVAL;
-> > +		goto out;
-> >  	}
-> 
-> So what about the case where the 32bit task is in-kernel and in
-> migrate-disable ? surely we ought to still validate the new mask against
-> task_cpu_possible_mask.
+On Tue, May 25, 2021 at 04:14:23PM +0100, Will Deacon wrote:
+> +static int restrict_cpus_allowed_ptr(struct task_struct *p,
+> +				     struct cpumask *new_mask,
+> +				     const struct cpumask *subset_mask)
+> +{
+> +	struct rq_flags rf;
+> +	struct rq *rq;
+> +	int err;
+> +	struct cpumask *user_mask = NULL;
+> +
+> +	if (!p->user_cpus_ptr) {
+> +		user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
 
-That's a good question.
+		if (!user_mask)
+			return -ENOMEM;
+	}
 
-Given that 32-bit tasks in the kernel are running in 64-bit mode, we can
-actually tolerate them moving around arbitrarily as long as they _never_ try
-to return to userspace on a 64-bit-only CPU. I think this should be the case
-as long as we don't try to return to userspace with migration disabled, no?
+?
 
-Will
+> +
+> +	rq = task_rq_lock(p, &rf);
+> +
+> +	/*
+> +	 * Forcefully restricting the affinity of a deadline task is
+> +	 * likely to cause problems, so fail and noisily override the
+> +	 * mask entirely.
+> +	 */
+> +	if (task_has_dl_policy(p) && dl_bandwidth_enabled()) {
+> +		err = -EPERM;
+> +		goto err_unlock;
+> +	}
+> +
+> +	if (!cpumask_and(new_mask, &p->cpus_mask, subset_mask)) {
+> +		err = -EINVAL;
+> +		goto err_unlock;
+> +	}
+> +
+> +	/*
+> +	 * We're about to butcher the task affinity, so keep track of what
+> +	 * the user asked for in case we're able to restore it later on.
+> +	 */
+> +	if (user_mask) {
+> +		cpumask_copy(user_mask, p->cpus_ptr);
+> +		p->user_cpus_ptr = user_mask;
+> +	}
+> +
+> +	return __set_cpus_allowed_ptr_locked(p, new_mask, 0, rq, &rf);
+> +
+> +err_unlock:
+> +	task_rq_unlock(rq, p, &rf);
+> +	kfree(user_mask);
+> +	return err;
+> +}
