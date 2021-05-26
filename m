@@ -2,47 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1310391B7A
-	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 17:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41992391C9A
+	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 18:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbhEZPS3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 May 2021 11:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235343AbhEZPS2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 May 2021 11:18:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B4CC061574;
-        Wed, 26 May 2021 08:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B480aaO2rxlrnIc+fI2c45cdJeBughiR9HhYUCJoqp4=; b=dkkSVZ57J19yhpw/Kd8ax12s27
-        wfbw3QtiaX0CKX2eY2/JpK1l/nzQqetSt7yExUXtufZ594v9dloXiYAg2tK60bwDotMfR4DSgeq1G
-        CPR5iwtxLi9Rmcs4eoJc4uPB8YvWznp4BonvXm8PdSag2DPdpw7kxKhdz0K/jw5tsHhHpoZi9bUsP
-        hbLhbE4RdBuPErMMvmOM4WyRSt/pItSzAKPWw/6oeO8jJv9gCGhf2WFDp5EdFoJTgAkNN/KI/uirv
-        mw3M47EWfn4E1JXupcfmaip0BglBgabrba6ufnudJAGGIsdCvGGSDHhMrAEoaxOKO/IOJyVsTyzsd
-        EofQrECQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1llvGC-004dwG-QY; Wed, 26 May 2021 15:16:13 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C21EB30022A;
-        Wed, 26 May 2021 17:15:51 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A4CEF200D3A72; Wed, 26 May 2021 17:15:51 +0200 (CEST)
-Date:   Wed, 26 May 2021 17:15:51 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Will Deacon <will@kernel.org>
+        id S234962AbhEZQCA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 May 2021 12:02:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57690 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234833AbhEZQCA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 May 2021 12:02:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6003D613D3;
+        Wed, 26 May 2021 16:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622044828;
+        bh=GMrxEkqQtBsqG4xbv4zJPQYEf5zKU65KN8uhmCqvKnU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vNOCNs4rdcNd40jifS0wBWkDQX8sn36ZWEkwjCN5CxhtYYhCTEOPxH4FU/g915two
+         6Utre0HKoDT2G8AgzkUTzZ/jAcpx/C1y6ORhCiVRmMkTjwW5Rs7GRs0FdecekzUJOy
+         UW3rwkqMr2hjh8ScSvMLdfhLn4mjtvdIqVfPHKs8aqL0nqF6IaXWkzEZl2i7JU30fG
+         DMtO/e4hS/KB8ckDUGW6yU8/y7mmrFVDa5qm5k446Wj4DQsSxU1qfKcj32xDHqV/TL
+         YvDE+Vh2iOFGHfYkfd+V0tQMQVaDW6tQMSbQsAR5LXPiIfK75VN0bCH8xXfUfAn5jP
+         zZx4IqUTCGp+A==
+Date:   Wed, 26 May 2021 17:00:22 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Morten Rasmussen <morten.rasmussen@arm.com>,
         Qais Yousef <qais.yousef@arm.com>,
         Suren Baghdasaryan <surenb@google.com>,
@@ -55,53 +43,97 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         kernel-team@android.com
-Subject: Re: [PATCH v7 10/22] sched: Reject CPU affinity changes based on
- task_cpu_possible_mask()
-Message-ID: <YK5mJxsmxosX1ciH@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH v7 22/22] Documentation: arm64: describe asymmetric
+ 32-bit support
+Message-ID: <20210526160021.GA19691@willie-the-truck>
 References: <20210525151432.16875-1-will@kernel.org>
- <20210525151432.16875-11-will@kernel.org>
+ <20210525151432.16875-23-will@kernel.org>
+ <877djmwxbd.wl-maz@kernel.org>
+ <20210525172703.GA17250@willie-the-truck>
+ <875yz6wun3.wl-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210525151432.16875-11-will@kernel.org>
+In-Reply-To: <875yz6wun3.wl-maz@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 25, 2021 at 04:14:20PM +0100, Will Deacon wrote:
-> Reject explicit requests to change the affinity mask of a task via
-> set_cpus_allowed_ptr() if the requested mask is not a subset of the
-> mask returned by task_cpu_possible_mask(). This ensures that the
-> 'cpus_mask' for a given task cannot contain CPUs which are incapable of
-> executing it, except in cases where the affinity is forced.
+On Tue, May 25, 2021 at 07:11:44PM +0100, Marc Zyngier wrote:
+> On Tue, 25 May 2021 18:27:03 +0100,
+> Will Deacon <will@kernel.org> wrote:
+> > 
+> > On Tue, May 25, 2021 at 06:13:58PM +0100, Marc Zyngier wrote:
+> > > On Tue, 25 May 2021 16:14:32 +0100,
+> > > Will Deacon <will@kernel.org> wrote:
+> > > > 
+> > > > Document support for running 32-bit tasks on asymmetric 32-bit systems
+> > > > and its impact on the user ABI when enabled.
+> > > > 
+> > > > Signed-off-by: Will Deacon <will@kernel.org>
+> > > > ---
+> > > >  .../admin-guide/kernel-parameters.txt         |   3 +
+> > > >  Documentation/arm64/asymmetric-32bit.rst      | 154 ++++++++++++++++++
+> > > >  Documentation/arm64/index.rst                 |   1 +
+> > > >  3 files changed, 158 insertions(+)
+> > > >  create mode 100644 Documentation/arm64/asymmetric-32bit.rst
+> > > >
+> > > 
+> > > [...]
+> > > 
+> > > > +KVM
+> > > > +---
+> > > > +
+> > > > +Although KVM will not advertise 32-bit EL0 support to any vCPUs on an
+> > > > +asymmetric system, a broken guest at EL1 could still attempt to execute
+> > > > +32-bit code at EL0. In this case, an exit from a vCPU thread in 32-bit
+> > > > +mode will return to host userspace with an ``exit_reason`` of
+> > > > +``KVM_EXIT_FAIL_ENTRY``.
+> > > 
+> > > Nit: there is a bit more to it. The vcpu will be left in a permanent
+> > > non-runnable state until KVM_ARM_VCPU_INIT is issued to reset the vcpu
+> > > into a saner state.
+> > 
+> > Thanks, I'll add "and will remain non-runnable until re-initialised by a
+> > subsequent KVM_ARM_VCPU_INIT operation".
 > 
-> Reviewed-by: Quentin Perret <qperret@google.com>
-> Signed-off-by: Will Deacon <will@kernel.org>
-> ---
->  kernel/sched/core.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 00ed51528c70..8ca7854747f1 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2346,6 +2346,7 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
->  				  u32 flags)
->  {
->  	const struct cpumask *cpu_valid_mask = cpu_active_mask;
-> +	const struct cpumask *cpu_allowed_mask = task_cpu_possible_mask(p);
->  	unsigned int dest_cpu;
->  	struct rq_flags rf;
->  	struct rq *rq;
-> @@ -2366,6 +2367,9 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
->  		 * set_cpus_allowed_common() and actually reset p->cpus_ptr.
->  		 */
->  		cpu_valid_mask = cpu_online_mask;
-> +	} else if (!cpumask_subset(new_mask, cpu_allowed_mask)) {
-> +		ret = -EINVAL;
-> +		goto out;
->  	}
+> Looks good.
 
-So what about the case where the 32bit task is in-kernel and in
-migrate-disable ? surely we ought to still validate the new mask against
-task_cpu_possible_mask.
+Cheers.
+
+> > Can the VMM tell that it needs to do that? I wonder if we should be
+> > setting 'hardware_entry_failure_reason' to distinguish this case.
+> 
+> The VMM should be able to notice that something is amiss, as any
+> subsequent KVM_RUN calls will result in -ENOEXEC being returned, and
+> we document this as "the vcpu hasn't been initialized or the guest
+> tried to execute instructions from device memory (arm64)".
+> 
+> However, there is another reason to get a "FAILED_ENTRY", and that if
+> we get an Illegal Exception Return exception when entering the
+> guest. That one should always be a KVM bug.
+> 
+> So yeah, maybe there is some ground to populate that structure with
+> the appropriate nastygram (completely untested).
+> 
+> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> index 24223adae150..cf50051a9412 100644
+> --- a/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> @@ -402,6 +402,10 @@ struct kvm_vcpu_events {
+>  #define KVM_PSCI_RET_INVAL		PSCI_RET_INVALID_PARAMS
+>  #define KVM_PSCI_RET_DENIED		PSCI_RET_DENIED
+>  
+> +/* KVM_EXIT_FAIL_ENTRY reasons */
+> +#define KVM_ARM64_FAILED_ENTRY_NO_AARCH32_ALLOWED	0xBADBAD32
+> +#define KVM_ARM64_FAILED_ENTRY_INTERNAL_ERROR		0xE1215BAD
+
+Heh, you and your magic numbers ;)
+
+I'll leave it up to you as to whether you want to populate this -- I just
+spotted it and thought it might help to indicate what went wrong. This is a
+pretty daft situation to end up in so whether anybody would realistically
+try to recover from it is another question entirely.
+
+Will
