@@ -2,99 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3DA391622
-	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 13:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4F039175B
+	for <lists+linux-arch@lfdr.de>; Wed, 26 May 2021 14:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbhEZLc1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 May 2021 07:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
+        id S232829AbhEZMet (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 May 2021 08:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbhEZLcS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 May 2021 07:32:18 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDC4C0612F1;
-        Wed, 26 May 2021 04:28:04 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id f9so1524717ybo.6;
-        Wed, 26 May 2021 04:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YPuysl1KFSsvhAfL1UPdXbZ2154bTQNbmbljxazcv9E=;
-        b=D/enDesMsLydsdWccL5EuuGiq+abApnQTnaT+qpKbSpEkWyz84NOkmEMPLslqCovwa
-         SK2AxixBK3IYyNoaiQ/CN0cFrpDiIDWdtfy+7UL4bcy+Z1uoM3IZTG16mkuaSI7jgke/
-         C1513z+uOf7ywRSfSZX3SjezOanodSfttgh4kYPK0zOBqSo3hXSmPFC77+MXpzKSPAFq
-         n+fatfmglO3YUh7lH/N2A7MzLKODBQJWHz2scquNy3Yflho0m3XaPzPbEd1YMbW21BQJ
-         Bv5a4JJUjqQINbKwlPQpSfwmA59+vyX8YmH5ygJ9EqeZ229AT6Z6VUWEfx6FWsZX9BnU
-         lQEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YPuysl1KFSsvhAfL1UPdXbZ2154bTQNbmbljxazcv9E=;
-        b=Zhke4OZA+aELYPy3JIRk1ve0H0Xcvu//M9dgzjuAqsAdvqpc4FTRjM5bh+k7xqA4zc
-         BPlcwWy2EYKHZ+/U/6diLcqhXKbCvgxEovdt/x125yf/ym7uGCzpkTT7i6flSGlCwV8C
-         5ICgJm1WSokdTrm6p8SD1tE43FnMY5ysjbl/iNuWGjmAq6LLJoRCTLKw4CLy0JXYXZs/
-         NDdei4LfdQq+gJPWBOflKHVV05hQKVUw8sTQwzCMDpaZr+ampEpTcDUKNXiP1k4QDxmW
-         cFZ9a9raQReB1Jo2R7an91sXju6tIgzCH410NHp+LcEbwZHJajwZ3Fhpgse7wWqUOALv
-         lnLg==
-X-Gm-Message-State: AOAM531KmK2xsiMdHiJYYWiks9wH9jyVbDTGKneyQHe0ye8igSr8vtbv
-        QOuvun1WByiyH+RKrqufzbBuFbfNJQAEHSz1lMc=
-X-Google-Smtp-Source: ABdhPJxcf0NDc02puTPTjlRoiMO/Z5BDI0CO5aTod/BOpMwDPy+iFkeahvntnN1mbq9VLsc5BnjSLNS4k4lC9jGuHvA=
-X-Received: by 2002:a25:c7c9:: with SMTP id w192mr12776060ybe.101.1622028483507;
- Wed, 26 May 2021 04:28:03 -0700 (PDT)
+        with ESMTP id S232808AbhEZMes (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 May 2021 08:34:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27367C061574;
+        Wed, 26 May 2021 05:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RzUqrNAT99P+Q/VTlGYT/bKmVQ5B0IFOwa9vVPGIyuk=; b=nI+87QSFA/Z8ANauzcCoB/LYzF
+        i+6MjAz0uIAqi7VdxQxnc5OLffT0ZejDtWb/upA79r2d3ZfCfUQyhgdwLBS8ZBrRyawsDUPwH2fPh
+        rjlDCG3XohUjg7h8Eo6dDScrnI9kvgp05Cdkz4BFJg99kOwXLENTiFTru2tOFzT3DHcKvVtqwr8FL
+        bFO1RSjQkM5EziurmA6wn4W1Gq749svk3TUkWWxO6Dfll2pkLruzyEzit9wYvP/JgqJSw36chxA7s
+        nHPXkIjgGstlUctf1UkB9BviJDR227lUWWFWyFHHk8ZPmHago7XzmuSTvVI/VLwLpZKohhBRuJ7mp
+        H0R8awoA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1llsiL-004Vn3-9h; Wed, 26 May 2021 12:32:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C0891300242;
+        Wed, 26 May 2021 14:32:43 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9E5F7201DB6C5; Wed, 26 May 2021 14:32:43 +0200 (CEST)
+Date:   Wed, 26 May 2021 14:32:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        kernel-team@android.com
+Subject: Re: [PATCH v7 01/22] sched: Favour predetermined active CPU as
+ migration destination
+Message-ID: <YK4/6+lX4WJxcLDw@hirez.programming.kicks-ass.net>
+References: <20210525151432.16875-1-will@kernel.org>
+ <20210525151432.16875-2-will@kernel.org>
+ <877djlhhmb.mognet@arm.com>
 MIME-Version: 1.0
-References: <20210525130043.186290-1-gerald.schaefer@linux.ibm.com> <20210525130043.186290-2-gerald.schaefer@linux.ibm.com>
-In-Reply-To: <20210525130043.186290-2-gerald.schaefer@linux.ibm.com>
-From:   Anatoly Pugachev <matorola@gmail.com>
-Date:   Wed, 26 May 2021 14:27:52 +0300
-Message-ID: <CADxRZqxdPodO8y+u=R4HB_727pjmXZFt8M5PPhg_qSsT1S-saQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm/debug_vm_pgtable: fix alignment for pmd/pud_advanced_tests()
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877djlhhmb.mognet@arm.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 25, 2021 at 4:03 PM Gerald Schaefer
-<gerald.schaefer@linux.ibm.com> wrote:
->
-> In pmd/pud_advanced_tests(), the vaddr is aligned up to the next pmd/pud
-> entry, and so it does not match the given pmdp/pudp and (aligned down) pfn
-> any more.
->
-> For s390, this results in memory corruption, because the IDTE instruction
-> used e.g. in xxx_get_and_clear() will take the vaddr for some calculations,
-> in combination with the given pmdp. It will then end up with a wrong table
-> origin, ending on ...ff8, and some of those wrongly set low-order bits will
-> also select a wrong pagetable level for the index addition. IDTE could
-> therefore invalidate (or 0x20) something outside of the page tables,
-> depending on the wrongly picked index, which in turn depends on the random
-> vaddr.
->
-> As result, we sometimes see "BUG task_struct (Not tainted): Padding
-> overwritten" on s390, where one 0x5a padding value got overwritten with
-> 0x7a.
->
-> Fix this by aligning down, similar to how the pmd/pud_aligned pfns are
-> calculated.
->
-> Fixes: a5c3b9ffb0f40 ("mm/debug_vm_pgtable: add tests validating advanced arch page table helpers")
-> Cc: <stable@vger.kernel.org> # v5.9+
-> Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+On Wed, May 26, 2021 at 12:14:20PM +0100, Valentin Schneider wrote:
+> On 25/05/21 16:14, Will Deacon wrote:
 
-boot tested on sparc64 with quick run of stress-ng ( --class memory
---sequential -1 --timeout 10s -v --pathological --oomable
---metrics-brief )
-stress-ng: debug: [371408] system: Linux ttip
-5.13.0-rc3-00043-gad9f25d33860-dirty #218 SMP Wed May 26 11:55:54 MSK
-2021 sparc64
+> > @@ -1956,12 +1958,8 @@ static int migration_cpu_stop(void *data)
+> >                       complete = true;
+> >               }
+> >
+> > -		if (dest_cpu < 0) {
+> > -			if (cpumask_test_cpu(task_cpu(p), &p->cpus_mask))
+> > -				goto out;
+> > -
+> > -			dest_cpu = cpumask_any_distribute(&p->cpus_mask);
+> > -		}
+> > +		if (dest_mask && (cpumask_test_cpu(task_cpu(p), dest_mask)))
+> > +			goto out;
+> >
+> 
+> IIRC the reason we deferred the pick to migration_cpu_stop() was because of
+> those insane races involving multiple SCA calls the likes of:
+> 
+>   p->cpus_mask = [0, 1]; p on CPU0
+> 
+>   CPUx                           CPUy                   CPU0
+> 
+>   SCA(p, [2])
+>     __do_set_cpus_allowed();
+>     queue migration_cpu_stop()
+>                                  SCA(p, [3])
+>                                    __do_set_cpus_allowed();
+>                                                         migration_cpu_stop()
+> 
+> The stopper needs to use the latest cpumask set by the second SCA despite
+> having an arg->pending set up by the first SCA. Doesn't this break here?
 
-Tested-by: Anatoly Pugachev <matorola@gmail.com>
+Yep.
+
+> I'm not sure I've paged back in all of the subtleties laying in ambush
+> here, but what about the below?
+> 
+> ---
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 5226cc26a095..cd447c9db61d 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+
+> @@ -1954,19 +1953,15 @@ static int migration_cpu_stop(void *data)
+>  		if (pending) {
+>  			p->migration_pending = NULL;
+>  			complete = true;
+>  
+>  			if (cpumask_test_cpu(task_cpu(p), &p->cpus_mask))
+>  				goto out;
+>  		}
+>  
+>  		if (task_on_rq_queued(p))
+> +			rq = __migrate_task(rq, &rf, p, arg->dest_cpu);
+
+> @@ -2249,7 +2244,7 @@ static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flag
+>  			init_completion(&my_pending.done);
+>  			my_pending.arg = (struct migration_arg) {
+>  				.task = p,
+> +				.dest_cpu = dest_cpu,
+>  				.pending = &my_pending,
+>  			};
+>  
+> @@ -2257,6 +2252,7 @@ static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flag
+>  		} else {
+>  			pending = p->migration_pending;
+>  			refcount_inc(&pending->refs);
+> +			pending->arg.dest_cpu = dest_cpu;
+>  		}
+>  	}
+
+Argh.. that might just work. But I'm thinking we wants comments this
+time around :-) This is even more subtle.
