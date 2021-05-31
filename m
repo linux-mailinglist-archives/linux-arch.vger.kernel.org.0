@@ -2,64 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB20395A76
-	for <lists+linux-arch@lfdr.de>; Mon, 31 May 2021 14:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF07395A7E
+	for <lists+linux-arch@lfdr.de>; Mon, 31 May 2021 14:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbhEaMYe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 May 2021 08:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S231492AbhEaM0q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 May 2021 08:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbhEaMYd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 May 2021 08:24:33 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5CBC061574
-        for <linux-arch@vger.kernel.org>; Mon, 31 May 2021 05:22:53 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id dj8so1015982edb.6
-        for <linux-arch@vger.kernel.org>; Mon, 31 May 2021 05:22:53 -0700 (PDT)
+        with ESMTP id S231464AbhEaM0k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 May 2021 08:26:40 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBCEC061761
+        for <linux-arch@vger.kernel.org>; Mon, 31 May 2021 05:25:00 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id qq22so8156541ejb.9
+        for <linux-arch@vger.kernel.org>; Mon, 31 May 2021 05:25:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=monstr-eu.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LNYYJ0npItOg2aTRTp7BxB+oXnJtRa8V64w9pv94XTA=;
-        b=BHx2yJ09rgOe6v6dVSNygRU9t2d6Vu6d+uRhC65wPtYXAx5Da+lU/j2IBvKBmohbdt
-         lFd2NWJhb4KwAr27ENIyyhL2ctK6MaYZThu7MJ6BPKgfXfHEisqnD/GEB8pO/sAMWPTZ
-         0KqxhzCajwS2POmzmRZgCDfRqs4oe/FUt3pQMiX6tlfn8+sBmH0N1lRqtXetInkFu0+m
-         /ADt1l/3RZI4qVbU4dsm60EllA5JGoDr3IE5BX7HTWbyE7gJWCnyxwfSLd5BH9qTfeAn
-         uolbOwdJyezVYWtpdV+37vpEUoNQahsz0ADnkuOroyE4dMLtV2Uwjx5uM5dJNgUHzho5
-         87ag==
+        bh=FW9/91oXBy6Mao6g/WQyoqZ2VlX3RS8bSdK17yEcolU=;
+        b=zeFMi410XXFAIk92KbRPsYvamk9jNcjSYzFyz8hyv0j66nyXqVGZ4aXT/Arsdk+n6b
+         p+XBFg5deVkez/9/judkzj3agLMeWTzkV6E16U2qRIiwSAb5Qz55SwyoJ/duSxaPbJgL
+         PAg6n4Bp9XFLgye5mUrLlElxVEVgDYhwqbrhTL8a55aS24pNLB81o4THCiSjgaEu3wZq
+         /PDzRXmk95xZNY3BzOjI1fWPV6LhHoK0jwPSK//an3mA7QJK3RX3iVThcWyn42kRmnoV
+         wcnYPsgQ8EmJIJHQaoCqAOoByUOvyldnoc76L4FNZ7VwBC0iF+Wu5ti9fDYIkB0Te8ON
+         Cb2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=LNYYJ0npItOg2aTRTp7BxB+oXnJtRa8V64w9pv94XTA=;
-        b=qGg/5KnxAdIqbyRV7P9nkvAdMesrY8xU/4cKxcvzy1+EOx7zP+fSKJHjKItf5CfA9B
-         0cnluvDtuiRGaCH4Lso/+4oouUYfWESwrAs/GVBZCwus5/S7xy7hLIOTHMRQGXDKMUwk
-         zy0BTpfioGKmL5tc3vEzslhINpw11BgTuAp/m5b7TCtSJkCEcOZp+ur4Qk8MTLa8ISeT
-         pZFrAaBgCkiKz99tVGDc8OnkuZPCnvZKNdIgt1mnvV03jpN+mfhrbP9krlhCuTuj80WF
-         KNozs6k4M8ll9sBPHw4pQjgWbEeHwIIdcRK7Q5rPTx4dyrojZfTIDwEThXjEHPffiuHo
-         +Q6g==
-X-Gm-Message-State: AOAM530zCB7QNnBKOwjTr8Vywqvpr2h59aSt0xarMk5FcQTxun9Xj8E0
-        yYN5bp8snUUG06jvl0eHpfcAsQ==
-X-Google-Smtp-Source: ABdhPJxMGAvE/AgLesq42O2yn1hoVTHsf6fV2XFs7RBODpYAuyE4hnridU5RIU2SJj1z36K2K6NYIg==
-X-Received: by 2002:aa7:d786:: with SMTP id s6mr24668971edq.239.1622463772286;
-        Mon, 31 May 2021 05:22:52 -0700 (PDT)
+        bh=FW9/91oXBy6Mao6g/WQyoqZ2VlX3RS8bSdK17yEcolU=;
+        b=TIhoMuuOgUZu58qpSmu7pEZT82F4eWOPKunJGSVukemTd2thMQd9t7UzNK2Me33F4y
+         DV41ehImlKcwcP9YQFne7w+tua6J+gX/iKtxPm/SLCYIX9oy7FnljFupuNNWwmohxbAG
+         eRomQeDVXOBecKBKKkRXFV0zNESbqFmeHsxeJLlRgIRXLZjpuFopawUMVGZLznSdZEU+
+         hBqPnR6tsOsZTPcGiIrhiO+IjRLFo3yY2kTMWff4hXvna+6wBk+9j/uyLivUzEdbf0/W
+         73EiLDVLs7UkDohZhHW7F/RKkI0cVL2j9iDnSkaO64LW0oLXB6PEK+rCEto6J0ibochB
+         50HQ==
+X-Gm-Message-State: AOAM5308D4aW9JRkTwK1vexXbre12s1z3HRvcE59ULul9/PbGuHw7K8V
+        kp07gaMstU9JRm+Kuv8ivpQrVA==
+X-Google-Smtp-Source: ABdhPJyDYlmkSLP3gas8rRrq3uvFjJoPBY9aCf31K4xNc/54kq9YOxBqvPi2P0P04x4KlgfPdlQgsg==
+X-Received: by 2002:a17:906:5d0c:: with SMTP id g12mr22408401ejt.447.1622463899056;
+        Mon, 31 May 2021 05:24:59 -0700 (PDT)
 Received: from ?IPv6:2a02:768:2307:40d6::45a? ([2a02:768:2307:40d6::45a])
-        by smtp.gmail.com with ESMTPSA id lb23sm4000220ejb.73.2021.05.31.05.22.51
+        by smtp.gmail.com with ESMTPSA id b22sm1235904eds.71.2021.05.31.05.24.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 May 2021 05:22:51 -0700 (PDT)
-Subject: Re: [PATCH] microblaze: Remove unused functions
-To:     guoren@kernel.org, arnd@arndb.de
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Mon, 31 May 2021 05:24:58 -0700 (PDT)
+Subject: Re: [PATCH V2 2/2] microblaze: Cleanup unused functions
+To:     guoren@kernel.org, anup.patel@wdc.com, palmerdabbelt@google.com,
+        arnd@arndb.de
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-sunxi@lists.linux.dev,
         Guo Ren <guoren@linux.alibaba.com>
-References: <1621701994-27650-1-git-send-email-guoren@kernel.org>
+References: <1622350408-44875-1-git-send-email-guoren@kernel.org>
+ <1622350408-44875-3-git-send-email-guoren@kernel.org>
 From:   Michal Simek <monstr@monstr.eu>
-Message-ID: <75cc31aa-6fe8-f3d7-94a8-4f43d95f1255@monstr.eu>
-Date:   Mon, 31 May 2021 14:22:51 +0200
+Message-ID: <73bf48c1-6692-795c-ba16-b7baeb11d3b9@monstr.eu>
+Date:   Mon, 31 May 2021 14:24:57 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.2
 MIME-Version: 1.0
-In-Reply-To: <1621701994-27650-1-git-send-email-guoren@kernel.org>
+In-Reply-To: <1622350408-44875-3-git-send-email-guoren@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -69,13 +72,16 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 
-On 5/22/21 6:46 PM, guoren@kernel.org wrote:
+On 5/30/21 6:53 AM, guoren@kernel.org wrote:
 > From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> PAGE_UP/DOWN are never used in linux, then the patch remove them
-> in asm/page.h.
+> These functions haven't been used, so just remove them. The patch
+> just uses grep to verify.
 > 
 > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
 > Cc: Arnd Bergmann <arnd@arndb.de>
 > Cc: Michal Simek <monstr@monstr.eu>
 > ---
@@ -98,7 +104,7 @@ On 5/22/21 6:46 PM, guoren@kernel.org wrote:
 >   * it is set to the kernel start address (aligned on a page boundary).
 > 
 
-Applied.
+Ah ok. you have sent v2. Will take this version instead of previous one.
 
 Thanks,
 Michal
