@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D95396EC8
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jun 2021 10:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC519397254
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jun 2021 13:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233300AbhFAIXM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Jun 2021 04:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S231726AbhFAL3y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Jun 2021 07:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbhFAIXJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Jun 2021 04:23:09 -0400
+        with ESMTP id S230288AbhFAL3x (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Jun 2021 07:29:53 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52B8C061574;
-        Tue,  1 Jun 2021 01:21:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD562C061574;
+        Tue,  1 Jun 2021 04:28:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aCxPSC7SPoTvYs+r8AURnsYGbBZddypl9FwAznbGRMQ=; b=raArRIPrdK1FCh5JpBZRTk9vjd
-        C2zm6nScj3ZgYxDapY3pPzOvel151cidOkXsYBtUDLQqNa6oInulfeTsicCxvZxHg0Zk1BOJtcUTh
-        aIQeunKlKan2kqb7PYpHenxflxBzPK+WADuyPXiAsEHi8tddwGSdyNe+giMJwn3tgoaFQ1tq94W0i
-        8hFbiMwziwC/M202vNxGf8w29PzBuhbfZFlR7oiLFZaKFGk46sOhj861JgD0l3ojp7nX8kfKDIv7T
-        iqqp/rY1MDsP1qTcul6W6A1WV3+zdNabwzljuQOajlyYZ/K2hy9CHMaSlZPG6tIKN+f8if31LFnVR
-        bAt3CVAw==;
+        bh=6k95mn5OA30wkBbHd3Cej14k/Nl83/wEbBpelepxgJA=; b=P5nsjzzpnhm0moIcF6q50QQsfM
+        SgICvI+biW2/1vc4uShtsf49KkNrCOGRYbkNS+BEKmcS08Bm8vIveVSnrhRPYhhAwHd2kwv9bp2qS
+        jgv/GkJbQN1AGtvR2ZEs/Xh/+rwC6JdoSVD7QYUsqHKjJEbTKVqHlSXDEIwaWbKoYR+V9Zi4nNIYs
+        mOnAesJvYkfhCnDtUEvFNFypwR8FjzumI69/Iu4xcpXzP8bPKRh1XT91nSyuu9Rk/3Fkol/0cetTx
+        Cdaabhsf0yLrcwIHLXfxFlC7GSGHw6U1vS6TxtKGcv6Vhf4EmAAUfBdjUpiI+faqyLiEGkPhJCu1B
+        3EH/pNig==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lnzeA-002VBb-0H; Tue, 01 Jun 2021 08:21:17 +0000
+        id 1lo2Yr-002YBC-Fu; Tue, 01 Jun 2021 11:28:00 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F4145300223;
-        Tue,  1 Jun 2021 10:21:15 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 561F6300269;
+        Tue,  1 Jun 2021 13:27:59 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D29402028F05A; Tue,  1 Jun 2021 10:21:15 +0200 (CEST)
-Date:   Tue, 1 Jun 2021 10:21:15 +0200
+        id 3E8A02011BE60; Tue,  1 Jun 2021 13:27:59 +0200 (CEST)
+Date:   Tue, 1 Jun 2021 13:27:59 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Will Deacon <will@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
@@ -55,78 +55,85 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         kernel-team@android.com
-Subject: [RFC][PATCH] freezer,sched: Rewrite core freezer logic
-Message-ID: <YLXt+/Wr5/KWymPC@hirez.programming.kicks-ass.net>
+Subject: Re: [RFC][PATCH] freezer,sched: Rewrite core freezer logic
+Message-ID: <YLYZv4v68OnAlx+3@hirez.programming.kicks-ass.net>
 References: <20210525151432.16875-1-will@kernel.org>
  <20210525151432.16875-17-will@kernel.org>
+ <YLXt+/Wr5/KWymPC@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210525151432.16875-17-will@kernel.org>
+In-Reply-To: <YLXt+/Wr5/KWymPC@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Jun 01, 2021 at 10:21:15AM +0200, Peter Zijlstra wrote:
+> 
+> Hi,
+> 
+> This here rewrites the core freezer to behave better wrt thawing. By
+> replacing PF_FROZEN with TASK_FROZEN, a special block state, it is
+> ensured frozen tasks stay frozen until woken and don't randomly wake up
+> early, as is currently possible.
+> 
+> As such, it does away with PF_FROZEN and PF_FREEZER_SKIP (yay).
+> 
+> It does however completely wreck kernel/cgroup/legacy_freezer.c and I've
+> not yet spend any time on trying to figure out that code, will do so
+> shortly.
+> 
+> Other than that, the freezer seems to work fine, I've tested it with:
+> 
+>   echo freezer > /sys/power/pm_test
+>   echo mem > /sys/power/state
+> 
+> Even while having a GDB session active, and that all works.
+> 
+> Another notable bit is in init/do_mounts_initrd.c; afaict that has been
+> 'broken' for quite a while and is simply removed.
+> 
+> Please have a look.
+> 
+> Somewhat-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Hi,
+cgroup crud now compiles, also fixed some allmodconfig fails.
 
-This here rewrites the core freezer to behave better wrt thawing. By
-replacing PF_FROZEN with TASK_FROZEN, a special block state, it is
-ensured frozen tasks stay frozen until woken and don't randomly wake up
-early, as is currently possible.
-
-As such, it does away with PF_FROZEN and PF_FREEZER_SKIP (yay).
-
-It does however completely wreck kernel/cgroup/legacy_freezer.c and I've
-not yet spend any time on trying to figure out that code, will do so
-shortly.
-
-Other than that, the freezer seems to work fine, I've tested it with:
-
-  echo freezer > /sys/power/pm_test
-  echo mem > /sys/power/state
-
-Even while having a GDB session active, and that all works.
-
-Another notable bit is in init/do_mounts_initrd.c; afaict that has been
-'broken' for quite a while and is simply removed.
-
-Please have a look.
-
-Somewhat-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- drivers/android/binder.c     |   4 +-
- drivers/media/pci/pt3/pt3.c  |   4 +-
- fs/cifs/inode.c              |   4 +-
- fs/cifs/transport.c          |   5 +-
- fs/coredump.c                |   4 +-
- fs/nfs/file.c                |   3 +-
- fs/nfs/inode.c               |  12 +--
- fs/nfs/nfs4proc.c            |  14 +--
- fs/nfs/nfs4state.c           |   3 +-
- fs/nfs/pnfs.c                |   4 +-
- fs/xfs/xfs_trans_ail.c       |   8 +-
- include/linux/completion.h   |   2 +
- include/linux/freezer.h      | 244 ++-----------------------------------------
- include/linux/sched.h        |   9 +-
- include/linux/sunrpc/sched.h |   7 +-
- include/linux/wait.h         |  39 +++++--
- init/do_mounts_initrd.c      |   7 +-
- kernel/exit.c                |   4 +-
- kernel/fork.c                |   4 +-
- kernel/freezer.c             | 102 ++++++++++++------
- kernel/futex.c               |   4 +-
- kernel/hung_task.c           |   4 +-
- kernel/power/main.c          |   5 +-
- kernel/power/process.c       |  10 +-
- kernel/sched/completion.c    |  16 +++
- kernel/sched/core.c          |   2 +-
- kernel/signal.c              |  14 +--
- kernel/time/hrtimer.c        |   4 +-
- mm/khugepaged.c              |   4 +-
- net/sunrpc/sched.c           |  12 +--
- net/unix/af_unix.c           |   8 +-
- 31 files changed, 202 insertions(+), 364 deletions(-)
+ drivers/android/binder.c       |   4 +-
+ drivers/media/pci/pt3/pt3.c    |   4 +-
+ fs/cifs/inode.c                |   4 +-
+ fs/cifs/transport.c            |   5 +-
+ fs/coredump.c                  |   4 +-
+ fs/nfs/file.c                  |   3 +-
+ fs/nfs/inode.c                 |  12 +-
+ fs/nfs/nfs3proc.c              |   3 +-
+ fs/nfs/nfs4proc.c              |  14 +--
+ fs/nfs/nfs4state.c             |   3 +-
+ fs/nfs/pnfs.c                  |   4 +-
+ fs/xfs/xfs_trans_ail.c         |   8 +-
+ include/linux/completion.h     |   2 +
+ include/linux/freezer.h        | 244 ++---------------------------------------
+ include/linux/sched.h          |   9 +-
+ include/linux/sunrpc/sched.h   |   7 +-
+ include/linux/wait.h           |  40 ++++++-
+ init/do_mounts_initrd.c        |   7 +-
+ kernel/cgroup/legacy_freezer.c |  23 ++--
+ kernel/exit.c                  |   4 +-
+ kernel/fork.c                  |   4 +-
+ kernel/freezer.c               | 115 +++++++++++++------
+ kernel/futex.c                 |   4 +-
+ kernel/hung_task.c             |   4 +-
+ kernel/power/main.c            |   5 +-
+ kernel/power/process.c         |  10 +-
+ kernel/sched/completion.c      |  16 +++
+ kernel/sched/core.c            |   2 +-
+ kernel/signal.c                |  14 +--
+ kernel/time/hrtimer.c          |   4 +-
+ mm/khugepaged.c                |   4 +-
+ net/sunrpc/sched.c             |  12 +-
+ net/unix/af_unix.c             |   8 +-
+ 33 files changed, 225 insertions(+), 381 deletions(-)
 
 diff --git a/drivers/android/binder.c b/drivers/android/binder.c
 index bcec598b89f2..70b1dbf2c2b1 100644
@@ -190,7 +197,7 @@ index 1dfa57982522..8fccf35392ec 100644
  		return rc;
  
 diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-index c1725b55f364..780aea1002e2 100644
+index c1725b55f364..9258101bafbb 100644
 --- a/fs/cifs/transport.c
 +++ b/fs/cifs/transport.c
 @@ -771,8 +771,9 @@ wait_for_response(struct TCP_Server_Info *server, struct mid_q_entry *midQ)
@@ -201,7 +208,7 @@ index c1725b55f364..780aea1002e2 100644
 -				    midQ->mid_state != MID_REQUEST_SUBMITTED);
 +	error = wait_event_state(server->response_q,
 +				 midQ->mid_state != MID_REQUEST_SUBMITTED,
-+				 TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
++				 (TASK_KILLABLE|TASK_FREEZABLE_UNSAFE));
  	if (error < 0)
  		return -ERESTARTSYS;
  
@@ -269,6 +276,20 @@ index 529c4099f482..df97984e9e5d 100644
  		if (ret)
  			goto out;
  		spin_lock(&inode->i_lock);
+diff --git a/fs/nfs/nfs3proc.c b/fs/nfs/nfs3proc.c
+index 5c4e23abc345..85043fc451e9 100644
+--- a/fs/nfs/nfs3proc.c
++++ b/fs/nfs/nfs3proc.c
+@@ -36,7 +36,8 @@ nfs3_rpc_wrapper(struct rpc_clnt *clnt, struct rpc_message *msg, int flags)
+ 		res = rpc_call_sync(clnt, msg, flags);
+ 		if (res != -EJUKEBOX)
+ 			break;
+-		freezable_schedule_timeout_killable_unsafe(NFS_JUKEBOX_RETRY_TIME);
++		__set_current_state(TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
++		schedule_timeout(NFS_JUKEBOX_RETRY_TIME);
+ 		res = -ERESTARTSYS;
+ 	} while (!fatal_signal_pending(current));
+ 	return res;
 diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
 index 87d04f2c9385..925c8bc217b5 100644
 --- a/fs/nfs/nfs4proc.c
@@ -762,7 +783,7 @@ index df696efdd675..4ecc7939997b 100644
  static inline const char * rpc_qname(const struct rpc_wait_queue *q)
  {
 diff --git a/include/linux/wait.h b/include/linux/wait.h
-index fe10e8570a52..88fe2c50637a 100644
+index fe10e8570a52..f017880c25f0 100644
 --- a/include/linux/wait.h
 +++ b/include/linux/wait.h
 @@ -335,8 +335,8 @@ do {										\
@@ -798,7 +819,7 @@ index fe10e8570a52..88fe2c50637a 100644
  
  #define wait_event_freezable_exclusive(wq, condition)				\
  ({										\
-@@ -905,6 +905,33 @@ extern int do_wait_intr_irq(wait_queue_head_t *, wait_queue_entry_t *);
+@@ -905,6 +905,34 @@ extern int do_wait_intr_irq(wait_queue_head_t *, wait_queue_entry_t *);
  	__ret;									\
  })
  
@@ -809,10 +830,11 @@ index fe10e8570a52..88fe2c50637a 100644
 + * wait_event_state - sleep until a condition gets true
 + * @wq_head: the waitqueue to wait on
 + * @condition: a C expression for the event to wait for
++ * @state: state to sleep in
 + *
-+ * The process is put to sleep (TASK_KILLABLE) until the
-+ * @condition evaluates to true or a signal is received.
-+ * The @condition is checked each time the waitqueue @wq_head is woken up.
++ * The process is put to sleep (@state) until the @condition evaluates to true
++ * or a signal is received.  The @condition is checked each time the waitqueue
++ * @wq_head is woken up.
 + *
 + * wake_up() has to be called after changing any variable that could
 + * change the result of the wait condition.
@@ -825,7 +847,7 @@ index fe10e8570a52..88fe2c50637a 100644
 +	int __ret = 0;								\
 +	might_sleep();								\
 +	if (!(condition))							\
-+		__ret = __wait_event_killable_freezable(wq_head, condition, state); \
++		__ret = __wait_event_state(wq_head, condition, state);		\
 +	__ret;									\
 +})
 +
@@ -858,6 +880,76 @@ index 533d81ed74d4..2f1227053694 100644
  	/* move initrd to rootfs' /old */
  	init_mount("..", ".", NULL, MS_MOVE, NULL);
  	/* switch root and cwd back to / of rootfs */
+diff --git a/kernel/cgroup/legacy_freezer.c b/kernel/cgroup/legacy_freezer.c
+index 08236798d173..1b6b21851e9d 100644
+--- a/kernel/cgroup/legacy_freezer.c
++++ b/kernel/cgroup/legacy_freezer.c
+@@ -113,7 +113,7 @@ static int freezer_css_online(struct cgroup_subsys_state *css)
+ 
+ 	if (parent && (parent->state & CGROUP_FREEZING)) {
+ 		freezer->state |= CGROUP_FREEZING_PARENT | CGROUP_FROZEN;
+-		atomic_inc(&system_freezing_cnt);
++		static_branch_inc(&freezer_active);
+ 	}
+ 
+ 	mutex_unlock(&freezer_mutex);
+@@ -134,7 +134,7 @@ static void freezer_css_offline(struct cgroup_subsys_state *css)
+ 	mutex_lock(&freezer_mutex);
+ 
+ 	if (freezer->state & CGROUP_FREEZING)
+-		atomic_dec(&system_freezing_cnt);
++		static_branch_dec(&freezer_active);
+ 
+ 	freezer->state = 0;
+ 
+@@ -179,6 +179,7 @@ static void freezer_attach(struct cgroup_taskset *tset)
+ 			__thaw_task(task);
+ 		} else {
+ 			freeze_task(task);
++
+ 			/* clear FROZEN and propagate upwards */
+ 			while (freezer && (freezer->state & CGROUP_FROZEN)) {
+ 				freezer->state &= ~CGROUP_FROZEN;
+@@ -271,16 +272,8 @@ static void update_if_frozen(struct cgroup_subsys_state *css)
+ 	css_task_iter_start(css, 0, &it);
+ 
+ 	while ((task = css_task_iter_next(&it))) {
+-		if (freezing(task)) {
+-			/*
+-			 * freezer_should_skip() indicates that the task
+-			 * should be skipped when determining freezing
+-			 * completion.  Consider it frozen in addition to
+-			 * the usual frozen condition.
+-			 */
+-			if (!frozen(task) && !freezer_should_skip(task))
+-				goto out_iter_end;
+-		}
++		if (freezing(task) && !frozen(task))
++			goto out_iter_end;
+ 	}
+ 
+ 	freezer->state |= CGROUP_FROZEN;
+@@ -357,7 +350,7 @@ static void freezer_apply_state(struct freezer *freezer, bool freeze,
+ 
+ 	if (freeze) {
+ 		if (!(freezer->state & CGROUP_FREEZING))
+-			atomic_inc(&system_freezing_cnt);
++			static_branch_inc(&freezer_active);
+ 		freezer->state |= state;
+ 		freeze_cgroup(freezer);
+ 	} else {
+@@ -366,9 +359,9 @@ static void freezer_apply_state(struct freezer *freezer, bool freeze,
+ 		freezer->state &= ~state;
+ 
+ 		if (!(freezer->state & CGROUP_FREEZING)) {
+-			if (was_freezing)
+-				atomic_dec(&system_freezing_cnt);
+ 			freezer->state &= ~CGROUP_FROZEN;
++			if (was_freezing)
++				static_branch_dec(&freezer_active);
+ 			unfreeze_cgroup(freezer);
+ 		}
+ 	}
 diff --git a/kernel/exit.c b/kernel/exit.c
 index fd1c04193e18..1a628f36c42a 100644
 --- a/kernel/exit.c
@@ -893,7 +985,7 @@ index e595e77913eb..cd332f6816c0 100644
  	if (killed) {
  		task_lock(child);
 diff --git a/kernel/freezer.c b/kernel/freezer.c
-index dc520f01f99d..c0eccb4b2aab 100644
+index dc520f01f99d..df235fba6989 100644
 --- a/kernel/freezer.c
 +++ b/kernel/freezer.c
 @@ -13,8 +13,8 @@
@@ -916,15 +1008,13 @@ index dc520f01f99d..c0eccb4b2aab 100644
   * and tests whether @p needs to enter and stay in frozen state.  Can be
   * called under any context.  The freezers are responsible for ensuring the
   * target tasks see the updated state.
-@@ -52,41 +52,56 @@ bool freezing_slow_path(struct task_struct *p)
+@@ -52,41 +52,67 @@ bool freezing_slow_path(struct task_struct *p)
  }
  EXPORT_SYMBOL(freezing_slow_path);
  
 +/* Recursion relies on tail-call optimization to not blow away the stack */
-+bool frozen(struct task_struct *p)
++static bool __frozen(struct task_struct *p)
 +{
-+	lockdep_assert_held(&tasklist_lock);
-+
 +	if (p->state == TASK_FROZEN)
 +		return true;
 +
@@ -932,15 +1022,26 @@ index dc520f01f99d..c0eccb4b2aab 100644
 +	 * If stuck in TRACED, and the ptracer is FROZEN, we're frozen too.
 +	 */
 +	if (task_is_traced(p))
-+		return frozen(p->parent);
++		return frozen(rcu_dereference(p->parent));
 +
 +	/*
 +	 * If stuck in STOPPED and the parent is FROZEN, we're frozen too.
 +	 */
 +	if (task_is_stopped(p))
-+		return frozen(p->real_parent);
++		return frozen(rcu_dereference(p->real_parent));
 +
 +	return false;
++}
++
++bool frozen(struct task_struct *p)
++{
++	bool ret;
++
++	rcu_read_lock();
++	ret = __frozen(p);
++	rcu_read_unlock();
++
++	return ret;
 +}
 +
  /* Refrigerator is place where frozen processes are stored :-). */
@@ -959,6 +1060,8 @@ index dc520f01f99d..c0eccb4b2aab 100644
  	for (;;) {
 -		set_current_state(TASK_UNINTERRUPTIBLE);
 +		bool freeze;
++
++		set_current_state(TASK_FROZEN);
  
  		spin_lock_irq(&freezer_lock);
 -		current->flags |= PF_FROZEN;
@@ -973,9 +1076,9 @@ index dc520f01f99d..c0eccb4b2aab 100644
  			break;
 +
  		was_frozen = true;
-+		set_current_state(TASK_FROZEN);
  		schedule();
  	}
++	__set_current_state(TASK_RUNNING);
  
  	pr_debug("%s left refrigerator\n", current->comm);
  
@@ -989,7 +1092,7 @@ index dc520f01f99d..c0eccb4b2aab 100644
  	return was_frozen;
  }
  EXPORT_SYMBOL(__refrigerator);
-@@ -101,6 +116,37 @@ static void fake_signal_wake_up(struct task_struct *p)
+@@ -101,6 +127,37 @@ static void fake_signal_wake_up(struct task_struct *p)
  	}
  }
  
@@ -1027,7 +1130,7 @@ index dc520f01f99d..c0eccb4b2aab 100644
  /**
   * freeze_task - send a freeze request to given task
   * @p: task to send the request to
-@@ -116,20 +162,8 @@ bool freeze_task(struct task_struct *p)
+@@ -116,20 +173,8 @@ bool freeze_task(struct task_struct *p)
  {
  	unsigned long flags;
  
@@ -1049,7 +1152,16 @@ index dc520f01f99d..c0eccb4b2aab 100644
  		spin_unlock_irqrestore(&freezer_lock, flags);
  		return false;
  	}
-@@ -148,8 +182,8 @@ void __thaw_task(struct task_struct *p)
+@@ -137,7 +182,7 @@ bool freeze_task(struct task_struct *p)
+ 	if (!(p->flags & PF_KTHREAD))
+ 		fake_signal_wake_up(p);
+ 	else
+-		wake_up_state(p, TASK_INTERRUPTIBLE);
++		wake_up_state(p, TASK_INTERRUPTIBLE); // TASK_NORMAL ?!?
+ 
+ 	spin_unlock_irqrestore(&freezer_lock, flags);
+ 	return true;
+@@ -148,8 +193,8 @@ void __thaw_task(struct task_struct *p)
  	unsigned long flags;
  
  	spin_lock_irqsave(&freezer_lock, flags);
