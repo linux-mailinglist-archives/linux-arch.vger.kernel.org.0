@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14419396D46
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jun 2021 08:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD764396D48
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jun 2021 08:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbhFAGY6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Jun 2021 02:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S233039AbhFAGZG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Jun 2021 02:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbhFAGY5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Jun 2021 02:24:57 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A80C061756;
-        Mon, 31 May 2021 23:23:15 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id y15so10579015pfn.13;
-        Mon, 31 May 2021 23:23:15 -0700 (PDT)
+        with ESMTP id S232971AbhFAGZE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Jun 2021 02:25:04 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08676C061756;
+        Mon, 31 May 2021 23:23:20 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id h12-20020a17090aa88cb029016400fd8ad8so1242941pjq.3;
+        Mon, 31 May 2021 23:23:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ecwzSsruDCg5HQ2i3NCpkmbXtWN83qkbLVUmQqDCWlk=;
-        b=YlsXlVsDWoYMGPxW+QyS762YHdFOjE7CxBcZfRMKkUnI2PFDKCy9EUcSexkxG0c6tc
-         JEOxq2/lzF3ffdvVbpz5kWXSrVKFyifnzzZzYWyhirC+Wl3O2KuMjuZe1++feSbhj221
-         a7jXtO00cFZrq5ZPUvJy+EZIuhgvZs8ffjQUkcF3fs5vG0jR70dh7b3/nPaDuA5S3xTF
-         IYMaQMFZcwU8LY4YhFmqsekoeC1QlNfSLRQlkxdl6VXaguYbigTo1wp/2pO3dXha7wM7
-         XnJrwdwqNReQ9QySyKo9rj2h0BQJIDEw9ISx0Rd4lrqILj5rW4LgeYMIdludaJaGFZyP
-         FpBw==
+        bh=B2ZM54o9Bp1W7ui49t2FYRDuyLvPHwC8Il/uTHhhdMs=;
+        b=XDJ2kYvmv/Z5M24qrG7KDMUE9p7aJ0RlQOBX1p/t2w4hIRyxR6UjTzA19/wWm8wdfC
+         2bssCYG5blnj9LMkj0KYjULkjvgmSvquyWjePNQYm//MxqhrHejkK0QcMGRIOOJbMpox
+         7lTAot474lVNko8WQIRuPXUlRf3A83o42kAVvfnakMYQ5V5QvGDcEzfdLv1MpTxUKbNv
+         e+S+jSKkwHUTddDHEL3mGYjuaQDAWQaGCy1sXxnPFkwfKdci8juvdPKPN8bYXqfSQPrI
+         UD3u5SitNYnPXIjG3reVtT1Z66MrR1ddVVxfrlRrOkUzRhQFpbERqoAxcac1BEAeYuRK
+         nDEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ecwzSsruDCg5HQ2i3NCpkmbXtWN83qkbLVUmQqDCWlk=;
-        b=k7QBHqTQy+pYM1WwrzgFLd0FqVHbJjMqgaJ8eEZvo89Mz4+FRFDceK3bCHLD/3Ixaj
-         khZRZG4DIlTPeU9IEXj94EfNgrVDWPjCe7Rige5o5YKNAOdsYiTxP67FHwhdyBPalIXa
-         zS/SD9bQVlkhQM/J/aABOTqmynzb1draFHP4WixmEr74tsrhIhNdDa6/WfBcr5xa2Xbw
-         oV6yq1tN6mlA/vOA4vRMM3m7DGQXhgF3F6BXfTdXww4TQwm3je2dxxeECUvb286BjXQJ
-         uqKCPeg4sTcE73qOx2Wjw5w3cb2Gw2hL7b0Xx0hS//Jqf442CM3esZ8NVrzx1q/rWWjS
-         aBvg==
-X-Gm-Message-State: AOAM531G7L9ItL3QgtFxz4W9B7eZvuNo3rpwYGgI2FirwGb2hNK6DIfU
-        DqjkJKPUFaRJ0v+brqkmHKI=
-X-Google-Smtp-Source: ABdhPJwCAsEtEKpT8K7Nr300NGB/ZvSukjJyFZA0oMZFNmXMIB8cLbka5YfgBrjsXWlgMYSF+dBsCQ==
-X-Received: by 2002:a63:da0a:: with SMTP id c10mr26585212pgh.255.1622528595531;
-        Mon, 31 May 2021 23:23:15 -0700 (PDT)
+        bh=B2ZM54o9Bp1W7ui49t2FYRDuyLvPHwC8Il/uTHhhdMs=;
+        b=BtgkB/UYmbtvVYw5kZteocobI+0sLEAmkxHujE59SjJKBuu2wZFpGzl6GqftyUsGde
+         RGuab/CLvUba2QeKdpZCRERItxI3gU2sOXnYBzFyF14ApbluJMtk8A+U0sV8Vznb/hRb
+         RZXv2sJXoHRNGxtIghex6TScsJu7pVnBiIS3vlqhWk6vbExMojzoHzp60A3QiD3yC1rQ
+         qXcJW3fLz3ujBGRPtwr5SOql8uaNTRRfCZvj2J6fMZMYOKI4GImes5/+P4FdDkoJ09qh
+         9JIFK3lyImAe0q1nQDX2h83hB9JCxn2W5ipyOGd9c+QyguNqM2eYPI4GzMxrqke/r8oj
+         T0YQ==
+X-Gm-Message-State: AOAM532U7p8Kv3JKRfK93lk+QWfsHAYcH9PV/IKpkRKFAt882dx2byrK
+        ecT4Hu3kJFPu5v0fHqwD2WA=
+X-Google-Smtp-Source: ABdhPJy2DUM8gibAhLieX5iGh16ca9VDqhVgs0t9sh7k8/bnT7er59ZtGvorelTu6yvv6DxaKgwUsw==
+X-Received: by 2002:a17:90b:3587:: with SMTP id mm7mr21958255pjb.71.1622528599607;
+        Mon, 31 May 2021 23:23:19 -0700 (PDT)
 Received: from bobo.ibm.com (60-241-69-122.static.tpgi.com.au. [60.241.69.122])
-        by smtp.gmail.com with ESMTPSA id h1sm12519100pfh.72.2021.05.31.23.23.11
+        by smtp.gmail.com with ESMTPSA id h1sm12519100pfh.72.2021.05.31.23.23.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 May 2021 23:23:15 -0700 (PDT)
+        Mon, 31 May 2021 23:23:19 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>,
@@ -55,9 +55,9 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
         Anton Blanchard <anton@ozlabs.org>,
         Andy Lutomirski <luto@kernel.org>
-Subject: [PATCH v3 1/4] lazy tlb: introduce lazy mm refcount helper functions
-Date:   Tue,  1 Jun 2021 16:23:00 +1000
-Message-Id: <20210601062303.3932513-2-npiggin@gmail.com>
+Subject: [PATCH v3 2/4] lazy tlb: allow lazy tlb mm switching to be configurable
+Date:   Tue,  1 Jun 2021 16:23:01 +1000
+Message-Id: <20210601062303.3932513-3-npiggin@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20210601062303.3932513-1-npiggin@gmail.com>
 References: <20210601062303.3932513-1-npiggin@gmail.com>
@@ -67,235 +67,219 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add explicit _lazy_tlb annotated functions for lazy mm refcounting.
-This makes lazy mm references more obvious, and allows explicit
-refcounting to be removed if it is not used.
+Add CONFIG_MMU_LAZY_TLB which can be configured out to disable the lazy
+tlb mechanism entirely, and switches to init_mm when switching to a
+kernel thread.
+
+NOMMU systems could easily go without this and save a bit of code and
+the refcount atomics, because their mm switch is a no-op. They have not
+been switched over by default because the arch code needs to be audited
+and tested for lazy tlb mm refcounting and converted to _lazy_tlb
+refcounting if necessary.
+
+CONFIG_MMU_LAZY_TLB_REFCOUNT is also added, but it must always be
+enabled if CONFIG_MMU_LAZY_TLB is enabled until the next patch which
+provides an alternate scheme.
 
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- arch/arm/mach-rpc/ecard.c            |  2 +-
- arch/powerpc/kernel/smp.c            |  2 +-
- arch/powerpc/mm/book3s64/radix_tlb.c |  4 ++--
- fs/exec.c                            |  4 ++--
- include/linux/sched/mm.h             | 11 +++++++++++
- kernel/cpu.c                         |  2 +-
- kernel/exit.c                        |  2 +-
- kernel/kthread.c                     | 11 +++++++----
- kernel/sched/core.c                  | 15 ++++++++-------
- 9 files changed, 34 insertions(+), 19 deletions(-)
+ arch/Kconfig             | 26 ++++++++++++++
+ include/linux/sched/mm.h | 13 +++++--
+ kernel/sched/core.c      | 75 ++++++++++++++++++++++++++++++----------
+ kernel/sched/sched.h     |  4 ++-
+ 4 files changed, 96 insertions(+), 22 deletions(-)
 
-diff --git a/arch/arm/mach-rpc/ecard.c b/arch/arm/mach-rpc/ecard.c
-index 827b50f1c73e..1b4a41aad793 100644
---- a/arch/arm/mach-rpc/ecard.c
-+++ b/arch/arm/mach-rpc/ecard.c
-@@ -253,7 +253,7 @@ static int ecard_init_mm(void)
- 	current->mm = mm;
- 	current->active_mm = mm;
- 	activate_mm(active_mm, mm);
--	mmdrop(active_mm);
-+	mmdrop_lazy_tlb(active_mm);
- 	ecard_init_pgtables(mm);
- 	return 0;
- }
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index 2e05c783440a..fb0bdfc67366 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1541,7 +1541,7 @@ void start_secondary(void *unused)
- {
- 	unsigned int cpu = raw_smp_processor_id();
+diff --git a/arch/Kconfig b/arch/Kconfig
+index c45b770d3579..276e1c1c0219 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -418,6 +418,32 @@ config ARCH_WANT_IRQS_OFF_ACTIVATE_MM
+ 	  irqs disabled over activate_mm. Architectures that do IPI based TLB
+ 	  shootdowns should enable this.
  
--	mmgrab(&init_mm);
-+	mmgrab_lazy_tlb(&init_mm);
- 	current->active_mm = &init_mm;
- 
- 	smp_store_cpu_info(cpu);
-diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
-index 409e61210789..2962082787c0 100644
---- a/arch/powerpc/mm/book3s64/radix_tlb.c
-+++ b/arch/powerpc/mm/book3s64/radix_tlb.c
-@@ -663,10 +663,10 @@ void exit_lazy_flush_tlb(struct mm_struct *mm, bool always_flush)
- 	if (current->active_mm == mm) {
- 		WARN_ON_ONCE(current->mm != NULL);
- 		/* Is a kernel thread and is using mm as the lazy tlb */
--		mmgrab(&init_mm);
-+		mmgrab_lazy_tlb(&init_mm);
- 		current->active_mm = &init_mm;
- 		switch_mm_irqs_off(mm, &init_mm, current);
--		mmdrop(mm);
-+		mmdrop_lazy_tlb(mm);
- 	}
- 
- 	/*
-diff --git a/fs/exec.c b/fs/exec.c
-index 18594f11c31f..ca0f8b1af23a 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1029,9 +1029,9 @@ static int exec_mmap(struct mm_struct *mm)
- 		setmax_mm_hiwater_rss(&tsk->signal->maxrss, old_mm);
- 		mm_update_next_owner(old_mm);
- 		mmput(old_mm);
--		return 0;
-+	} else {
-+		mmdrop_lazy_tlb(active_mm);
- 	}
--	mmdrop(active_mm);
- 	return 0;
- }
++# Enable "lazy TLB", which means a user->kernel thread context switch does not
++# switch the mm to init_mm and the kernel thread takes a reference to the user
++# mm to provide its kernel mapping. This is how Linux has traditionally worked
++# (see Documentation/vm/active_mm.rst), for performance. Switching to and from
++# idle thread is a performance-critical case.
++#
++# If mm context switches are inexpensive or free (in the case of NOMMU) then
++# this could be disabled.
++#
++# It would make sense to have this depend on MMU, but need to audit and test
++# the NOMMU architectures for lazy mm refcounting first.
++config MMU_LAZY_TLB
++	def_bool y
++	depends on !NO_MMU_LAZY_TLB
++
++# This allows archs to disable MMU_LAZY_TLB. mmgrab/mmdrop in arch/ code has
++# to be audited and switched to _lazy_tlb postfix as necessary.
++config NO_MMU_LAZY_TLB
++	def_bool n
++
++# Use normal mm refcounting for MMU_LAZY_TLB kernel thread references.
++# For now, this must be enabled if MMU_LAZY_TLB is enabled.
++config MMU_LAZY_TLB_REFCOUNT
++	def_bool y
++	depends on MMU_LAZY_TLB
++
+ config ARCH_HAVE_NMI_SAFE_CMPXCHG
+ 	bool
  
 diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index e24b1fe348e3..bfd1baca5266 100644
+index bfd1baca5266..29e4638ad124 100644
 --- a/include/linux/sched/mm.h
 +++ b/include/linux/sched/mm.h
-@@ -49,6 +49,17 @@ static inline void mmdrop(struct mm_struct *mm)
- 		__mmdrop(mm);
- }
- 
-+/* Helpers for lazy TLB mm refcounting */
-+static inline void mmgrab_lazy_tlb(struct mm_struct *mm)
-+{
-+	mmgrab(mm);
-+}
-+
-+static inline void mmdrop_lazy_tlb(struct mm_struct *mm)
-+{
-+	mmdrop(mm);
-+}
-+
- /**
-  * mmget() - Pin the address space associated with a &struct mm_struct.
-  * @mm: The address space to pin.
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index e538518556f4..e87a89824e6c 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -602,7 +602,7 @@ static int finish_cpu(unsigned int cpu)
- 	 */
- 	if (mm != &init_mm)
- 		idle->active_mm = &init_mm;
--	mmdrop(mm);
-+	mmdrop_lazy_tlb(mm);
- 	return 0;
- }
- 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index fd1c04193e18..8e87ec5f6be2 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -476,7 +476,7 @@ static void exit_mm(void)
- 		__set_current_state(TASK_RUNNING);
- 		mmap_read_lock(mm);
- 	}
+@@ -52,12 +52,21 @@ static inline void mmdrop(struct mm_struct *mm)
+ /* Helpers for lazy TLB mm refcounting */
+ static inline void mmgrab_lazy_tlb(struct mm_struct *mm)
+ {
 -	mmgrab(mm);
-+	mmgrab_lazy_tlb(mm);
- 	BUG_ON(mm != current->active_mm);
- 	/* more a memory barrier than a real lock */
- 	task_lock(current);
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index fe3f2a40d61e..b70e28431a01 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -1314,14 +1314,14 @@ void kthread_use_mm(struct mm_struct *mm)
- 	WARN_ON_ONCE(!(tsk->flags & PF_KTHREAD));
- 	WARN_ON_ONCE(tsk->mm);
- 
-+	mmgrab(mm);
-+
- 	task_lock(tsk);
- 	/* Hold off tlb flush IPIs while switching mm's */
- 	local_irq_disable();
- 	active_mm = tsk->active_mm;
--	if (active_mm != mm) {
--		mmgrab(mm);
-+	if (active_mm != mm)
- 		tsk->active_mm = mm;
--	}
- 	tsk->mm = mm;
- 	membarrier_update_current_mm(mm);
- 	switch_mm_irqs_off(active_mm, mm, tsk);
-@@ -1341,7 +1341,7 @@ void kthread_use_mm(struct mm_struct *mm)
- 	 * mmdrop(), or explicitly with smp_mb().
- 	 */
- 	if (active_mm != mm)
--		mmdrop(active_mm);
-+		mmdrop_lazy_tlb(active_mm);
- 	else
- 		smp_mb();
- 
-@@ -1375,10 +1375,13 @@ void kthread_unuse_mm(struct mm_struct *mm)
- 	local_irq_disable();
- 	tsk->mm = NULL;
- 	membarrier_update_current_mm(NULL);
-+	mmgrab_lazy_tlb(mm);
- 	/* active_mm is still 'mm' */
- 	enter_lazy_tlb(mm, tsk);
- 	local_irq_enable();
- 	task_unlock(tsk);
-+
-+	mmdrop(mm);
++	if (IS_ENABLED(CONFIG_MMU_LAZY_TLB_REFCOUNT))
++		mmgrab(mm);
  }
- EXPORT_SYMBOL_GPL(kthread_unuse_mm);
  
+ static inline void mmdrop_lazy_tlb(struct mm_struct *mm)
+ {
+-	mmdrop(mm);
++	if (IS_ENABLED(CONFIG_MMU_LAZY_TLB_REFCOUNT)) {
++		mmdrop(mm);
++	} else {
++		/*
++		 * mmdrop_lazy_tlb must provide a full memory barrier, see the
++		 * membarrier comment finish_task_switch which relies on this.
++		 */
++		smp_mb();
++	}
+ }
+ 
+ /**
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 5226cc26a095..e359c76ea2e2 100644
+index e359c76ea2e2..299c3eb12b2b 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -4229,13 +4229,14 @@ static struct rq *finish_task_switch(struct task_struct *prev)
- 	 * rq->curr, before returning to userspace, so provide them here:
- 	 *
- 	 * - a full memory barrier for {PRIVATE,GLOBAL}_EXPEDITED, implicitly
--	 *   provided by mmdrop(),
-+	 *   provided by mmdrop_lazy_tlb(),
- 	 * - a sync_core for SYNC_CORE.
- 	 */
- 	if (mm) {
- 		membarrier_mm_sync_core_before_usermode(mm);
--		mmdrop(mm);
-+		mmdrop_lazy_tlb(mm);
- 	}
-+
- 	if (unlikely(prev_state == TASK_DEAD)) {
- 		if (prev->sched_class->task_dead)
- 			prev->sched_class->task_dead(prev);
-@@ -4299,9 +4300,9 @@ context_switch(struct rq *rq, struct task_struct *prev,
+@@ -4171,7 +4171,7 @@ static struct rq *finish_task_switch(struct task_struct *prev)
+ 	__releases(rq->lock)
+ {
+ 	struct rq *rq = this_rq();
+-	struct mm_struct *mm = rq->prev_mm;
++	struct mm_struct *mm = NULL;
+ 	long prev_state;
  
  	/*
- 	 * kernel -> kernel   lazy + transfer active
--	 *   user -> kernel   lazy + mmgrab() active
-+	 *   user -> kernel   lazy + mmgrab_lazy_tlb() active
- 	 *
--	 * kernel ->   user   switch + mmdrop() active
-+	 * kernel ->   user   switch + mmdrop_lazy_tlb() active
- 	 *   user ->   user   switch
- 	 */
- 	if (!next->mm) {                                // to kernel
-@@ -4309,7 +4310,7 @@ context_switch(struct rq *rq, struct task_struct *prev,
+@@ -4190,7 +4190,10 @@ static struct rq *finish_task_switch(struct task_struct *prev)
+ 		      current->comm, current->pid, preempt_count()))
+ 		preempt_count_set(FORK_PREEMPT_COUNT);
  
- 		next->active_mm = prev->active_mm;
- 		if (prev->mm)                           // from user
--			mmgrab(prev->active_mm);
-+			mmgrab_lazy_tlb(prev->active_mm);
- 		else
- 			prev->active_mm = NULL;
- 	} else {                                        // to user
-@@ -4325,7 +4326,7 @@ context_switch(struct rq *rq, struct task_struct *prev,
+-	rq->prev_mm = NULL;
++#ifdef CONFIG_MMU_LAZY_TLB_REFCOUNT
++	mm = rq->prev_lazy_mm;
++	rq->prev_lazy_mm = NULL;
++#endif
+ 
+ 	/*
+ 	 * A task struct has one reference for the use as "current".
+@@ -4282,22 +4285,10 @@ asmlinkage __visible void schedule_tail(struct task_struct *prev)
+ 	calculate_sigpending();
+ }
+ 
+-/*
+- * context_switch - switch to the new MM and the new thread's register state.
+- */
+-static __always_inline struct rq *
+-context_switch(struct rq *rq, struct task_struct *prev,
+-	       struct task_struct *next, struct rq_flags *rf)
++static __always_inline void
++context_switch_mm(struct rq *rq, struct task_struct *prev,
++	       struct task_struct *next)
+ {
+-	prepare_task_switch(rq, prev, next);
+-
+-	/*
+-	 * For paravirt, this is coupled with an exit in switch_to to
+-	 * combine the page table reload and the switch backend into
+-	 * one hypercall.
+-	 */
+-	arch_start_context_switch(prev);
+-
+ 	/*
+ 	 * kernel -> kernel   lazy + transfer active
+ 	 *   user -> kernel   lazy + mmgrab_lazy_tlb() active
+@@ -4326,11 +4317,57 @@ context_switch(struct rq *rq, struct task_struct *prev,
  		switch_mm_irqs_off(prev->active_mm, next->mm, next);
  
  		if (!prev->mm) {                        // from kernel
--			/* will mmdrop() in finish_task_switch(). */
-+			/* will mmdrop_lazy_tlb() in finish_task_switch(). */
- 			rq->prev_mm = prev->active_mm;
+-			/* will mmdrop_lazy_tlb() in finish_task_switch(). */
+-			rq->prev_mm = prev->active_mm;
++#ifdef CONFIG_MMU_LAZY_TLB_REFCOUNT
++			/* Will mmdrop_lazy_tlb() in finish_task_switch(). */
++			rq->prev_lazy_mm = prev->active_mm;
  			prev->active_mm = NULL;
++#else
++			/*
++			 * Without MMU_LAZY_REFCOUNT there is no lazy
++			 * tracking (because no rq->prev_lazy_mm) in
++			 * finish_task_switch, so no mmdrop_lazy_tlb(),
++			 * so no memory barrier for membarrier (see the
++			 * membarrier comment in finish_task_switch()).
++			 * Do it here.
++			 */
++			smp_mb();
++#endif
  		}
-@@ -8239,7 +8240,7 @@ void __init sched_init(void)
- 	/*
- 	 * The boot idle thread does lazy MMU switching as well:
- 	 */
--	mmgrab(&init_mm);
-+	mmgrab_lazy_tlb(&init_mm);
- 	enter_lazy_tlb(&init_mm, current);
+ 	}
++}
++
++static __always_inline void
++context_switch_mm_nolazy(struct rq *rq, struct task_struct *prev,
++	       struct task_struct *next)
++{
++	if (!next->mm)
++		next->active_mm = &init_mm;
++	membarrier_switch_mm(rq, prev->active_mm, next->active_mm);
++	switch_mm_irqs_off(prev->active_mm, next->active_mm, next);
++	if (!prev->mm)
++		prev->active_mm = NULL;
++}
++
++/*
++ * context_switch - switch to the new MM and the new thread's register state.
++ */
++static __always_inline struct rq *
++context_switch(struct rq *rq, struct task_struct *prev,
++	       struct task_struct *next, struct rq_flags *rf)
++{
++	prepare_task_switch(rq, prev, next);
++
++	/*
++	 * For paravirt, this is coupled with an exit in switch_to to
++	 * combine the page table reload and the switch backend into
++	 * one hypercall.
++	 */
++	arch_start_context_switch(prev);
++
++	if (IS_ENABLED(CONFIG_MMU_LAZY_TLB))
++		context_switch_mm(rq, prev, next);
++	else
++		context_switch_mm_nolazy(rq, prev, next);
  
- 	/*
+ 	rq->clock_update_flags &= ~(RQCF_ACT_SKIP|RQCF_REQ_SKIP);
+ 
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index a189bec13729..0729cf19a987 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -961,7 +961,9 @@ struct rq {
+ 	struct task_struct	*idle;
+ 	struct task_struct	*stop;
+ 	unsigned long		next_balance;
+-	struct mm_struct	*prev_mm;
++#ifdef CONFIG_MMU_LAZY_TLB_REFCOUNT
++	struct mm_struct	*prev_lazy_mm;
++#endif
+ 
+ 	unsigned int		clock_update_flags;
+ 	u64			clock;
 -- 
 2.23.0
 
