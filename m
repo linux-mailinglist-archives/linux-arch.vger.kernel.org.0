@@ -2,168 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8501D39875C
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 12:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0C239884A
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 13:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbhFBK5k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Jun 2021 06:57:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39168 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232418AbhFBK4m (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Jun 2021 06:56:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DBD8F613BF;
-        Wed,  2 Jun 2021 10:54:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622631298;
-        bh=ma/qPYp7mz82OJZAZmF/GEYKPcXEUWNTcgVQZOnLIC4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rwy3DGcMOCdGl1BLxWRESW8Uz2imlSdwuk91sxxsj/H9opw1w+6+yWIBsY4N81oU6
-         Jnm/dcGgHXHUrbIwZIAg5uD1itVHgEPuALDY/B3YSh5UQ/z761Id/aDmauneXVEDL5
-         69c1KFHepoBfEshBv03/Wr9rfvHp56Ll7H9UPRuHGRszGTWYUdMwU9muOky+tf/fjI
-         rlD/NKYRhruG6ApGfVr1GJKPRF3Riz2/M20IfBuWqadyMGaqb4S7f23z6QwqkgDbsF
-         Ia9IAP4UtPixyM4Di5Qpb+lKPFRKJRpfvFK/Xdp9lGmMHM4nam66sJNOVuGfstBtOZ
-         f6Ljf6ZpQcEcQ==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+        id S232887AbhFBL17 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Jun 2021 07:27:59 -0400
+Received: from mail-ua1-f52.google.com ([209.85.222.52]:35815 "EHLO
+        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232946AbhFBL1U (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Jun 2021 07:27:20 -0400
+Received: by mail-ua1-f52.google.com with SMTP id n61so1093903uan.2;
+        Wed, 02 Jun 2021 04:25:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AV6hHV9w+Q9HOaDxt1MduQbvvUP04JEJ1UZD5l/XTkY=;
+        b=gc2Ix2WYXrd5WBa8hgBCxI97fp6w5lfgSq5y19jK6xflsjm/7Qi77LTamSm8IRE/vZ
+         lnVGmmHIYKQplMfJJVLivjdoBII+fcGDZXQIFroxtfBnu/RLUbZkCtLwK0XcdSpflOn+
+         xER2ZqTNbCQ0NCRucaAE6MlNe0/kI7sh73nUh/FWk8GeLaGfUiF3FwdD6+zrFuR+0ORf
+         K1CCdcfJ+XJ0xQKFMxoeLAvuJ26AHtIo80w4dZe33lMo2RCUovhhCDrjV8a81vMQpegO
+         qg5fCQxWEgo8pa/jjVdVqcH/m+lg/4ZdMb3vn8BJTpJAo4JHPXB7eev+FIxZUakZslDF
+         TSrg==
+X-Gm-Message-State: AOAM5326kVIsA7qV6Ik1uDmkr2fUbjOvpkXbVdz1tzudDiEm6BIC/rPA
+        w2ybBhMHmRFC9mAddyxm9vN17wr6GLWCdLUpMZY=
+X-Google-Smtp-Source: ABdhPJyzzWa9paQxXHYFBMFScAZBlkmtyILKANDBBOx9rPPA/yxyu03vLu3qpQ9izu7tVqpx2AMkJo4APWbgLQB/p8I=
+X-Received: by 2002:ab0:26d8:: with SMTP id b24mr14134972uap.58.1622633136111;
+ Wed, 02 Jun 2021 04:25:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210602105348.13387-1-rppt@kernel.org> <20210602105348.13387-5-rppt@kernel.org>
+In-Reply-To: <20210602105348.13387-5-rppt@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 2 Jun 2021 13:25:24 +0200
+Message-ID: <CAMuHMdUUzMNcWNXCjwZmH-VBC+jH1ShBpeg6EBCdRXv3mwHxsQ@mail.gmail.com>
+Subject: Re: [PATCH 4/9] m68k: remove support for DISCONTIGMEM
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Jonathan Corbet <corbet@lwn.net>,
         Matt Turner <mattst88@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Richard Henderson <rth@twiddle.net>,
         Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-Subject: [PATCH 9/9] mm: replace CONFIG_FLAT_NODE_MEM_MAP with CONFIG_FLATMEM
-Date:   Wed,  2 Jun 2021 13:53:48 +0300
-Message-Id: <20210602105348.13387-10-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210602105348.13387-1-rppt@kernel.org>
-References: <20210602105348.13387-1-rppt@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sparclinux <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+Hi Mike,
 
-After removal of the DISCONTIGMEM memory model the FLAT_NODE_MEM_MAP
-configuration option is equivalent to FLATMEM.
+On Wed, Jun 2, 2021 at 12:54 PM Mike Rapoport <rppt@kernel.org> wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+>
+> DISCONTIGMEM was replaced by FLATMEM with freeing of the unused memory map
+> in v5.11.
+>
+> Remove the support for DISCONTIGMEM entirely.
+>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 
-Drop CONFIG_FLAT_NODE_MEM_MAP and use CONFIG_FLATMEM instead.
+Thanks for your patch!
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- include/linux/mmzone.h | 4 ++--
- kernel/crash_core.c    | 2 +-
- mm/Kconfig             | 4 ----
- mm/page_alloc.c        | 6 +++---
- mm/page_ext.c          | 2 +-
- 5 files changed, 7 insertions(+), 11 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index ad42f440c704..2698cdbfbf75 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -775,7 +775,7 @@ typedef struct pglist_data {
- 	struct zonelist node_zonelists[MAX_ZONELISTS];
- 
- 	int nr_zones; /* number of populated zones in this node */
--#ifdef CONFIG_FLAT_NODE_MEM_MAP	/* means !SPARSEMEM */
-+#ifdef CONFIG_FLATMEM	/* means !SPARSEMEM */
- 	struct page *node_mem_map;
- #ifdef CONFIG_PAGE_EXTENSION
- 	struct page_ext *node_page_ext;
-@@ -865,7 +865,7 @@ typedef struct pglist_data {
- 
- #define node_present_pages(nid)	(NODE_DATA(nid)->node_present_pages)
- #define node_spanned_pages(nid)	(NODE_DATA(nid)->node_spanned_pages)
--#ifdef CONFIG_FLAT_NODE_MEM_MAP
-+#ifdef CONFIG_FLATMEM
- #define pgdat_page_nr(pgdat, pagenr)	((pgdat)->node_mem_map + (pagenr))
- #else
- #define pgdat_page_nr(pgdat, pagenr)	pfn_to_page((pgdat)->node_start_pfn + (pagenr))
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 53eb8bc6026d..2b8446ea7105 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -483,7 +483,7 @@ static int __init crash_save_vmcoreinfo_init(void)
- 	VMCOREINFO_OFFSET(page, compound_head);
- 	VMCOREINFO_OFFSET(pglist_data, node_zones);
- 	VMCOREINFO_OFFSET(pglist_data, nr_zones);
--#ifdef CONFIG_FLAT_NODE_MEM_MAP
-+#ifdef CONFIG_FLATMEM
- 	VMCOREINFO_OFFSET(pglist_data, node_mem_map);
- #endif
- 	VMCOREINFO_OFFSET(pglist_data, node_start_pfn);
-diff --git a/mm/Kconfig b/mm/Kconfig
-index bffe4bd859f3..ded98fb859ab 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -55,10 +55,6 @@ config FLATMEM
- 	def_bool y
- 	depends on !SPARSEMEM || FLATMEM_MANUAL
- 
--config FLAT_NODE_MEM_MAP
--	def_bool y
--	depends on !SPARSEMEM
--
- #
- # SPARSEMEM_EXTREME (which is the default) does some bootmem
- # allocations when sparse_init() is called.  If this cannot
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 8f08135d3eb4..f039736541eb 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6444,7 +6444,7 @@ static void __meminit zone_init_free_lists(struct zone *zone)
- 	}
- }
- 
--#if !defined(CONFIG_FLAT_NODE_MEM_MAP)
-+#if !defined(CONFIG_FLATMEM)
- /*
-  * Only struct pages that correspond to ranges defined by memblock.memory
-  * are zeroed and initialized by going through __init_single_page() during
-@@ -7241,7 +7241,7 @@ static void __init free_area_init_core(struct pglist_data *pgdat)
- 	}
- }
- 
--#ifdef CONFIG_FLAT_NODE_MEM_MAP
-+#ifdef CONFIG_FLATMEM
- static void __ref alloc_node_mem_map(struct pglist_data *pgdat)
- {
- 	unsigned long __maybe_unused start = 0;
-@@ -7289,7 +7289,7 @@ static void __ref alloc_node_mem_map(struct pglist_data *pgdat)
- }
- #else
- static void __ref alloc_node_mem_map(struct pglist_data *pgdat) { }
--#endif /* CONFIG_FLAT_NODE_MEM_MAP */
-+#endif /* CONFIG_FLATMEM */
- 
- #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
- static inline void pgdat_set_deferred_range(pg_data_t *pgdat)
-diff --git a/mm/page_ext.c b/mm/page_ext.c
-index df6f74aac8e1..293b2685fc48 100644
---- a/mm/page_ext.c
-+++ b/mm/page_ext.c
-@@ -191,7 +191,7 @@ void __init page_ext_init_flatmem(void)
- 	panic("Out of memory");
- }
- 
--#else /* CONFIG_FLAT_NODE_MEM_MAP */
-+#else /* CONFIG_FLATMEM */
- 
- struct page_ext *lookup_page_ext(const struct page *page)
- {
--- 
-2.28.0
+> --- a/arch/m68k/include/asm/page_mm.h
+> +++ b/arch/m68k/include/asm/page_mm.h
+> @@ -126,25 +126,7 @@ static inline void *__va(unsigned long x)
+>
+>  extern int m68k_virt_to_node_shift;
+>
+> -#ifndef CONFIG_DISCONTIGMEM
+>  #define __virt_to_node(addr)   (&pg_data_map[0])
 
+With pg_data_map[] removed, this definition can go as well.
+Seems to be a leftover from 1008a11590b966b4 ("m68k: switch to MEMBLOCK
+ + NO_BOOTMEM")
+
+There are a few more:
+arch/m68k/include/asm/mmzone.h:extern pg_data_t pg_data_map[];
+arch/m68k/include/asm/mmzone.h:#define NODE_DATA(nid)
+(&pg_data_map[nid])
+
+> -#else
+> -extern struct pglist_data *pg_data_table[];
+> -
+> -static inline __attribute_const__ int __virt_to_node_shift(void)
+> -{
+> -       int shift;
+> -
+> -       asm (
+> -               "1:     moveq   #0,%0\n"
+> -               m68k_fixup(%c1, 1b)
+> -               : "=d" (shift)
+> -               : "i" (m68k_fixup_vnode_shift));
+> -       return shift;
+> -}
+> -
+> -#define __virt_to_node(addr)   (pg_data_table[(unsigned long)(addr) >> __virt_to_node_shift()])
+> -#endif
+
+> --- a/arch/m68k/mm/init.c
+> +++ b/arch/m68k/mm/init.c
+> @@ -44,28 +44,8 @@ EXPORT_SYMBOL(empty_zero_page);
+>
+>  int m68k_virt_to_node_shift;
+>
+> -#ifdef CONFIG_DISCONTIGMEM
+> -pg_data_t pg_data_map[MAX_NUMNODES];
+> -EXPORT_SYMBOL(pg_data_map);
+> -
+> -pg_data_t *pg_data_table[65];
+> -EXPORT_SYMBOL(pg_data_table);
+> -#endif
+> -
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
