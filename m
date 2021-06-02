@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E816339904D
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 18:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB4439904F
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 18:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbhFBQtO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Jun 2021 12:49:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60620 "EHLO mail.kernel.org"
+        id S230353AbhFBQtT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Jun 2021 12:49:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60698 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230215AbhFBQtO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Jun 2021 12:49:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D76B860FEE;
-        Wed,  2 Jun 2021 16:47:27 +0000 (UTC)
+        id S230361AbhFBQtS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Jun 2021 12:49:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C2A7261A33;
+        Wed,  2 Jun 2021 16:47:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622652451;
-        bh=mHZIffR0DdrLEhnAmRnaMyrF2+gcxZ3dunFWbH0rWDA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=X8O9G15WXlPUIbsCT12lVtm4RjLJ4zKx9HySsNAGCx6+dztpHWyFTf/EZyKPUT9jW
-         K90QcC5TS/hhmiLFDbOJWHiGfdP9LVfnIXh8ziBf1Av26VhRnvfxuUM06+uv0ieNJr
-         /WemsMqoaEOhMwMwj9CAcjAXMi0vLjNAJnvl3JM12+T9U7ID41hxxmKjI5ikT/tzWU
-         g1mUG0tVkszEO0DHYLJC81eCOAoXQLmnGFZZUhqSGbaETa0WZ1SUwvOWPnTHUF5Ctp
-         po8TcQcjPb2FtI/eieTLbrNVfcRJMfPoFDpxUd2FDKMdHny3KKiJef0ehjy9VzpcBk
-         qNbIRY+j3Jg8g==
+        s=k20201202; t=1622652455;
+        bh=Vf1qh8wE1rccN+VhGmrKJz/EH6v2HGZRS++IECn7nlE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Xe0w0Ro77voKh6exs61xDWFF8eDIguO1DNQ5JVqtGQEA6E4N6e8VJBAy3FasAM6Ka
+         HR9aMg5T+ZzL9X5y6CM4S8r3A0iXSzi0eYDlpfrMgWI3U93bMqX8s5kDa7vHC+YQh7
+         ZVlRiuxhpzaIsBUXKD8RuP382JmnTWE9coXhtbW/z3sArvYBqFrF87BgVBSkl92kT/
+         qH2swoyM6wK+fidT20/btY7s4Ux0y1UgkA/QLy6fI6uJi96/v6Wayw5rnr5S0aHoqE
+         hDJVF8QKauB0nUAT4dQKcziz5k8NAYATmpm+H598QmUho/QXWpv6HugzMKombkowQo
+         xV4TDzfRa9R9g==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -44,131 +44,273 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <valentin.schneider@arm.com>,
         kernel-team@android.com
-Subject: [PATCH v8 00/19] Add support for 32-bit tasks on asymmetric AArch32 systems
-Date:   Wed,  2 Jun 2021 17:47:00 +0100
-Message-Id: <20210602164719.31777-1-will@kernel.org>
+Subject: [PATCH v8 01/19] arm64: cpuinfo: Split AArch32 registers out into a separate struct
+Date:   Wed,  2 Jun 2021 17:47:01 +0100
+Message-Id: <20210602164719.31777-2-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210602164719.31777-1-will@kernel.org>
+References: <20210602164719.31777-1-will@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi again folks,
+In preparation for late initialisation of the "sanitised" AArch32 register
+state, move the AArch32 registers out of 'struct cpuinfo' and into their
+own struct definition.
 
-Here is v8 of the asymmetric 32-bit support patches that I previously
-posted here:
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Will Deacon <will@kernel.org>
+---
+ arch/arm64/include/asm/cpu.h   | 44 +++++++++++----------
+ arch/arm64/kernel/cpufeature.c | 71 ++++++++++++++++++----------------
+ arch/arm64/kernel/cpuinfo.c    | 53 +++++++++++++------------
+ 3 files changed, 89 insertions(+), 79 deletions(-)
 
-  v1: https://lore.kernel.org/r/20201027215118.27003-1-will@kernel.org
-  v2: https://lore.kernel.org/r/20201109213023.15092-1-will@kernel.org
-  v3: https://lore.kernel.org/r/20201113093720.21106-1-will@kernel.org
-  v4: https://lore.kernel.org/r/20201124155039.13804-1-will@kernel.org
-  v5: https://lore.kernel.org/r/20201208132835.6151-1-will@kernel.org
-  v6: https://lore.kernel.org/r/20210518094725.7701-1-will@kernel.org
-  v7: https://lore.kernel.org/r/20210525151432.16875-1-will@kernel.org
-
-There was also a nice LWN writeup in case you've forgotten what this is
-about:
-
-	https://lwn.net/Articles/838339/
-
-Changes since v7 include:
-
-  * Dropped the scheduler migration fix, as Valentin has kindly fixed
-    this separately in -tip:
-
-    https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=sched/core&id=475ea6c60279e9f2ddf7e4cf2648cd8ae0608361
-
-  * Dropped the freezer/ttwu changes, as Peter is rewriting that:
-
-    https://lore.kernel.org/r/YLYZv4v68OnAlx+3@hirez.programming.kicks-ass.net
-
-  * Reworded documentation wrt KVM behaviour [maz]
-
-  * Tidied up control flow in cpuset_cpus_allowed_fallback() [peterz]
-
-  * Fixed interaction with migrate_disable() [peterz]
-
-  * Don't ignore allocation failure in restrict_cpus_allowed_ptr() [peterz]
-
-  * Reordered the patches to put arm64 prep work first
-
-  * Added some more acks/reviewed-by tags
-
-Cheers,
-
-Will
-
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Morten Rasmussen <morten.rasmussen@arm.com>
-Cc: Qais Yousef <qais.yousef@arm.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Quentin Perret <qperret@google.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Cc: kernel-team@android.com
-
---->8
-
-Will Deacon (19):
-  arm64: cpuinfo: Split AArch32 registers out into a separate struct
-  arm64: Allow mismatched 32-bit EL0 support
-  KVM: arm64: Kill 32-bit vCPUs on systems with mismatched EL0 support
-  arm64: Kill 32-bit applications scheduled on 64-bit-only CPUs
-  sched: Introduce task_cpu_possible_mask() to limit fallback rq
-    selection
-  cpuset: Don't use the cpu_possible_mask as a last resort for cgroup v1
-  cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()
-  sched: Reject CPU affinity changes based on task_cpu_possible_mask()
-  sched: Introduce task_struct::user_cpus_ptr to track requested
-    affinity
-  sched: Split the guts of sched_setaffinity() into a helper function
-  sched: Allow task CPU affinity to be restricted on asymmetric systems
-  sched: Introduce task_cpus_dl_admissible() to check proposed affinity
-  arm64: Implement task_cpu_possible_mask()
-  arm64: exec: Adjust affinity for compat tasks with mismatched 32-bit
-    EL0
-  arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched
-    system
-  arm64: Advertise CPUs capable of running 32-bit applications in sysfs
-  arm64: Hook up cmdline parameter to allow mismatched 32-bit EL0
-  arm64: Remove logic to kill 32-bit tasks on 64-bit-only cores
-  Documentation: arm64: describe asymmetric 32-bit support
-
- .../ABI/testing/sysfs-devices-system-cpu      |   9 +
- .../admin-guide/kernel-parameters.txt         |  11 +
- Documentation/arm64/asymmetric-32bit.rst      | 155 ++++++++
- Documentation/arm64/index.rst                 |   1 +
- arch/arm64/include/asm/cpu.h                  |  44 +--
- arch/arm64/include/asm/cpufeature.h           |   8 +-
- arch/arm64/include/asm/elf.h                  |   6 +-
- arch/arm64/include/asm/mmu_context.h          |  13 +
- arch/arm64/kernel/cpufeature.c                | 227 +++++++++---
- arch/arm64/kernel/cpuinfo.c                   |  53 +--
- arch/arm64/kernel/process.c                   |  44 ++-
- arch/arm64/kvm/arm.c                          |  11 +-
- arch/arm64/tools/cpucaps                      |   3 +-
- include/linux/cpuset.h                        |   3 +-
- include/linux/mmu_context.h                   |  11 +
- include/linux/sched.h                         |  21 ++
- init/init_task.c                              |   1 +
- kernel/cgroup/cpuset.c                        |  49 ++-
- kernel/fork.c                                 |   2 +
- kernel/sched/core.c                           | 334 ++++++++++++++----
- kernel/sched/sched.h                          |   1 +
- 21 files changed, 819 insertions(+), 188 deletions(-)
- create mode 100644 Documentation/arm64/asymmetric-32bit.rst
-
+diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
+index 7faae6ff3ab4..f4e01aa0f442 100644
+--- a/arch/arm64/include/asm/cpu.h
++++ b/arch/arm64/include/asm/cpu.h
+@@ -12,26 +12,7 @@
+ /*
+  * Records attributes of an individual CPU.
+  */
+-struct cpuinfo_arm64 {
+-	struct cpu	cpu;
+-	struct kobject	kobj;
+-	u32		reg_ctr;
+-	u32		reg_cntfrq;
+-	u32		reg_dczid;
+-	u32		reg_midr;
+-	u32		reg_revidr;
+-
+-	u64		reg_id_aa64dfr0;
+-	u64		reg_id_aa64dfr1;
+-	u64		reg_id_aa64isar0;
+-	u64		reg_id_aa64isar1;
+-	u64		reg_id_aa64mmfr0;
+-	u64		reg_id_aa64mmfr1;
+-	u64		reg_id_aa64mmfr2;
+-	u64		reg_id_aa64pfr0;
+-	u64		reg_id_aa64pfr1;
+-	u64		reg_id_aa64zfr0;
+-
++struct cpuinfo_32bit {
+ 	u32		reg_id_dfr0;
+ 	u32		reg_id_dfr1;
+ 	u32		reg_id_isar0;
+@@ -54,6 +35,29 @@ struct cpuinfo_arm64 {
+ 	u32		reg_mvfr0;
+ 	u32		reg_mvfr1;
+ 	u32		reg_mvfr2;
++};
++
++struct cpuinfo_arm64 {
++	struct cpu	cpu;
++	struct kobject	kobj;
++	u32		reg_ctr;
++	u32		reg_cntfrq;
++	u32		reg_dczid;
++	u32		reg_midr;
++	u32		reg_revidr;
++
++	u64		reg_id_aa64dfr0;
++	u64		reg_id_aa64dfr1;
++	u64		reg_id_aa64isar0;
++	u64		reg_id_aa64isar1;
++	u64		reg_id_aa64mmfr0;
++	u64		reg_id_aa64mmfr1;
++	u64		reg_id_aa64mmfr2;
++	u64		reg_id_aa64pfr0;
++	u64		reg_id_aa64pfr1;
++	u64		reg_id_aa64zfr0;
++
++	struct cpuinfo_32bit	aarch32;
+ 
+ 	/* pseudo-ZCR for recording maximum ZCR_EL1 LEN value: */
+ 	u64		reg_zcr;
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index efed2830d141..a4db25cd7122 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -863,6 +863,31 @@ static void __init init_cpu_hwcaps_indirect_list(void)
+ 
+ static void __init setup_boot_cpu_capabilities(void);
+ 
++static void __init init_32bit_cpu_features(struct cpuinfo_32bit *info)
++{
++	init_cpu_ftr_reg(SYS_ID_DFR0_EL1, info->reg_id_dfr0);
++	init_cpu_ftr_reg(SYS_ID_DFR1_EL1, info->reg_id_dfr1);
++	init_cpu_ftr_reg(SYS_ID_ISAR0_EL1, info->reg_id_isar0);
++	init_cpu_ftr_reg(SYS_ID_ISAR1_EL1, info->reg_id_isar1);
++	init_cpu_ftr_reg(SYS_ID_ISAR2_EL1, info->reg_id_isar2);
++	init_cpu_ftr_reg(SYS_ID_ISAR3_EL1, info->reg_id_isar3);
++	init_cpu_ftr_reg(SYS_ID_ISAR4_EL1, info->reg_id_isar4);
++	init_cpu_ftr_reg(SYS_ID_ISAR5_EL1, info->reg_id_isar5);
++	init_cpu_ftr_reg(SYS_ID_ISAR6_EL1, info->reg_id_isar6);
++	init_cpu_ftr_reg(SYS_ID_MMFR0_EL1, info->reg_id_mmfr0);
++	init_cpu_ftr_reg(SYS_ID_MMFR1_EL1, info->reg_id_mmfr1);
++	init_cpu_ftr_reg(SYS_ID_MMFR2_EL1, info->reg_id_mmfr2);
++	init_cpu_ftr_reg(SYS_ID_MMFR3_EL1, info->reg_id_mmfr3);
++	init_cpu_ftr_reg(SYS_ID_MMFR4_EL1, info->reg_id_mmfr4);
++	init_cpu_ftr_reg(SYS_ID_MMFR5_EL1, info->reg_id_mmfr5);
++	init_cpu_ftr_reg(SYS_ID_PFR0_EL1, info->reg_id_pfr0);
++	init_cpu_ftr_reg(SYS_ID_PFR1_EL1, info->reg_id_pfr1);
++	init_cpu_ftr_reg(SYS_ID_PFR2_EL1, info->reg_id_pfr2);
++	init_cpu_ftr_reg(SYS_MVFR0_EL1, info->reg_mvfr0);
++	init_cpu_ftr_reg(SYS_MVFR1_EL1, info->reg_mvfr1);
++	init_cpu_ftr_reg(SYS_MVFR2_EL1, info->reg_mvfr2);
++}
++
+ void __init init_cpu_features(struct cpuinfo_arm64 *info)
+ {
+ 	/* Before we start using the tables, make sure it is sorted */
+@@ -882,29 +907,8 @@ void __init init_cpu_features(struct cpuinfo_arm64 *info)
+ 	init_cpu_ftr_reg(SYS_ID_AA64PFR1_EL1, info->reg_id_aa64pfr1);
+ 	init_cpu_ftr_reg(SYS_ID_AA64ZFR0_EL1, info->reg_id_aa64zfr0);
+ 
+-	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0)) {
+-		init_cpu_ftr_reg(SYS_ID_DFR0_EL1, info->reg_id_dfr0);
+-		init_cpu_ftr_reg(SYS_ID_DFR1_EL1, info->reg_id_dfr1);
+-		init_cpu_ftr_reg(SYS_ID_ISAR0_EL1, info->reg_id_isar0);
+-		init_cpu_ftr_reg(SYS_ID_ISAR1_EL1, info->reg_id_isar1);
+-		init_cpu_ftr_reg(SYS_ID_ISAR2_EL1, info->reg_id_isar2);
+-		init_cpu_ftr_reg(SYS_ID_ISAR3_EL1, info->reg_id_isar3);
+-		init_cpu_ftr_reg(SYS_ID_ISAR4_EL1, info->reg_id_isar4);
+-		init_cpu_ftr_reg(SYS_ID_ISAR5_EL1, info->reg_id_isar5);
+-		init_cpu_ftr_reg(SYS_ID_ISAR6_EL1, info->reg_id_isar6);
+-		init_cpu_ftr_reg(SYS_ID_MMFR0_EL1, info->reg_id_mmfr0);
+-		init_cpu_ftr_reg(SYS_ID_MMFR1_EL1, info->reg_id_mmfr1);
+-		init_cpu_ftr_reg(SYS_ID_MMFR2_EL1, info->reg_id_mmfr2);
+-		init_cpu_ftr_reg(SYS_ID_MMFR3_EL1, info->reg_id_mmfr3);
+-		init_cpu_ftr_reg(SYS_ID_MMFR4_EL1, info->reg_id_mmfr4);
+-		init_cpu_ftr_reg(SYS_ID_MMFR5_EL1, info->reg_id_mmfr5);
+-		init_cpu_ftr_reg(SYS_ID_PFR0_EL1, info->reg_id_pfr0);
+-		init_cpu_ftr_reg(SYS_ID_PFR1_EL1, info->reg_id_pfr1);
+-		init_cpu_ftr_reg(SYS_ID_PFR2_EL1, info->reg_id_pfr2);
+-		init_cpu_ftr_reg(SYS_MVFR0_EL1, info->reg_mvfr0);
+-		init_cpu_ftr_reg(SYS_MVFR1_EL1, info->reg_mvfr1);
+-		init_cpu_ftr_reg(SYS_MVFR2_EL1, info->reg_mvfr2);
+-	}
++	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0))
++		init_32bit_cpu_features(&info->aarch32);
+ 
+ 	if (id_aa64pfr0_sve(info->reg_id_aa64pfr0)) {
+ 		init_cpu_ftr_reg(SYS_ZCR_EL1, info->reg_zcr);
+@@ -975,20 +979,12 @@ static void relax_cpu_ftr_reg(u32 sys_id, int field)
+ 	WARN_ON(!ftrp->width);
+ }
+ 
+-static int update_32bit_cpu_features(int cpu, struct cpuinfo_arm64 *info,
+-				     struct cpuinfo_arm64 *boot)
++static int update_32bit_cpu_features(int cpu, struct cpuinfo_32bit *info,
++				     struct cpuinfo_32bit *boot)
+ {
+ 	int taint = 0;
+ 	u64 pfr0 = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
+ 
+-	/*
+-	 * If we don't have AArch32 at all then skip the checks entirely
+-	 * as the register values may be UNKNOWN and we're not going to be
+-	 * using them for anything.
+-	 */
+-	if (!id_aa64pfr0_32bit_el0(pfr0))
+-		return taint;
+-
+ 	/*
+ 	 * If we don't have AArch32 at EL1, then relax the strictness of
+ 	 * EL1-dependent register fields to avoid spurious sanity check fails.
+@@ -1135,10 +1131,17 @@ void update_cpu_features(int cpu,
+ 	}
+ 
+ 	/*
++	 * If we don't have AArch32 at all then skip the checks entirely
++	 * as the register values may be UNKNOWN and we're not going to be
++	 * using them for anything.
++	 *
+ 	 * This relies on a sanitised view of the AArch64 ID registers
+ 	 * (e.g. SYS_ID_AA64PFR0_EL1), so we call it last.
+ 	 */
+-	taint |= update_32bit_cpu_features(cpu, info, boot);
++	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0)) {
++		taint |= update_32bit_cpu_features(cpu, &info->aarch32,
++						   &boot->aarch32);
++	}
+ 
+ 	/*
+ 	 * Mismatched CPU features are a recipe for disaster. Don't even
+diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
+index 51fcf99d5351..264c119a6cae 100644
+--- a/arch/arm64/kernel/cpuinfo.c
++++ b/arch/arm64/kernel/cpuinfo.c
+@@ -344,6 +344,32 @@ static void cpuinfo_detect_icache_policy(struct cpuinfo_arm64 *info)
+ 	pr_info("Detected %s I-cache on CPU%d\n", icache_policy_str[l1ip], cpu);
+ }
+ 
++static void __cpuinfo_store_cpu_32bit(struct cpuinfo_32bit *info)
++{
++	info->reg_id_dfr0 = read_cpuid(ID_DFR0_EL1);
++	info->reg_id_dfr1 = read_cpuid(ID_DFR1_EL1);
++	info->reg_id_isar0 = read_cpuid(ID_ISAR0_EL1);
++	info->reg_id_isar1 = read_cpuid(ID_ISAR1_EL1);
++	info->reg_id_isar2 = read_cpuid(ID_ISAR2_EL1);
++	info->reg_id_isar3 = read_cpuid(ID_ISAR3_EL1);
++	info->reg_id_isar4 = read_cpuid(ID_ISAR4_EL1);
++	info->reg_id_isar5 = read_cpuid(ID_ISAR5_EL1);
++	info->reg_id_isar6 = read_cpuid(ID_ISAR6_EL1);
++	info->reg_id_mmfr0 = read_cpuid(ID_MMFR0_EL1);
++	info->reg_id_mmfr1 = read_cpuid(ID_MMFR1_EL1);
++	info->reg_id_mmfr2 = read_cpuid(ID_MMFR2_EL1);
++	info->reg_id_mmfr3 = read_cpuid(ID_MMFR3_EL1);
++	info->reg_id_mmfr4 = read_cpuid(ID_MMFR4_EL1);
++	info->reg_id_mmfr5 = read_cpuid(ID_MMFR5_EL1);
++	info->reg_id_pfr0 = read_cpuid(ID_PFR0_EL1);
++	info->reg_id_pfr1 = read_cpuid(ID_PFR1_EL1);
++	info->reg_id_pfr2 = read_cpuid(ID_PFR2_EL1);
++
++	info->reg_mvfr0 = read_cpuid(MVFR0_EL1);
++	info->reg_mvfr1 = read_cpuid(MVFR1_EL1);
++	info->reg_mvfr2 = read_cpuid(MVFR2_EL1);
++}
++
+ static void __cpuinfo_store_cpu(struct cpuinfo_arm64 *info)
+ {
+ 	info->reg_cntfrq = arch_timer_get_cntfrq();
+@@ -371,31 +397,8 @@ static void __cpuinfo_store_cpu(struct cpuinfo_arm64 *info)
+ 	info->reg_id_aa64pfr1 = read_cpuid(ID_AA64PFR1_EL1);
+ 	info->reg_id_aa64zfr0 = read_cpuid(ID_AA64ZFR0_EL1);
+ 
+-	/* Update the 32bit ID registers only if AArch32 is implemented */
+-	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0)) {
+-		info->reg_id_dfr0 = read_cpuid(ID_DFR0_EL1);
+-		info->reg_id_dfr1 = read_cpuid(ID_DFR1_EL1);
+-		info->reg_id_isar0 = read_cpuid(ID_ISAR0_EL1);
+-		info->reg_id_isar1 = read_cpuid(ID_ISAR1_EL1);
+-		info->reg_id_isar2 = read_cpuid(ID_ISAR2_EL1);
+-		info->reg_id_isar3 = read_cpuid(ID_ISAR3_EL1);
+-		info->reg_id_isar4 = read_cpuid(ID_ISAR4_EL1);
+-		info->reg_id_isar5 = read_cpuid(ID_ISAR5_EL1);
+-		info->reg_id_isar6 = read_cpuid(ID_ISAR6_EL1);
+-		info->reg_id_mmfr0 = read_cpuid(ID_MMFR0_EL1);
+-		info->reg_id_mmfr1 = read_cpuid(ID_MMFR1_EL1);
+-		info->reg_id_mmfr2 = read_cpuid(ID_MMFR2_EL1);
+-		info->reg_id_mmfr3 = read_cpuid(ID_MMFR3_EL1);
+-		info->reg_id_mmfr4 = read_cpuid(ID_MMFR4_EL1);
+-		info->reg_id_mmfr5 = read_cpuid(ID_MMFR5_EL1);
+-		info->reg_id_pfr0 = read_cpuid(ID_PFR0_EL1);
+-		info->reg_id_pfr1 = read_cpuid(ID_PFR1_EL1);
+-		info->reg_id_pfr2 = read_cpuid(ID_PFR2_EL1);
+-
+-		info->reg_mvfr0 = read_cpuid(MVFR0_EL1);
+-		info->reg_mvfr1 = read_cpuid(MVFR1_EL1);
+-		info->reg_mvfr2 = read_cpuid(MVFR2_EL1);
+-	}
++	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0))
++		__cpuinfo_store_cpu_32bit(&info->aarch32);
+ 
+ 	if (IS_ENABLED(CONFIG_ARM64_SVE) &&
+ 	    id_aa64pfr0_sve(info->reg_id_aa64pfr0))
 -- 
 2.32.0.rc0.204.g9fa02ecfa5-goog
 
