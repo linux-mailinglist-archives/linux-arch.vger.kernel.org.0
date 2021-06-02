@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB61398735
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 12:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B565398740
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 12:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbhFBK4r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Jun 2021 06:56:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38842 "EHLO mail.kernel.org"
+        id S232602AbhFBK4x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Jun 2021 06:56:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38902 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231524AbhFBK4P (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Jun 2021 06:56:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8DC4E613DD;
-        Wed,  2 Jun 2021 10:54:26 +0000 (UTC)
+        id S232195AbhFBK4W (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Jun 2021 06:56:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 18C4F613D2;
+        Wed,  2 Jun 2021 10:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622631272;
-        bh=jRQLkpHVz/iMV5ADUND9kgIZltTm9P6Hoc5VQUTEzHw=;
+        s=k20201202; t=1622631279;
+        bh=qtLyGf4vOvwEQ4V6NpeybsroEnpC9HLrj/S5SXiLLF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ezo6lJJnkqDE0zhn9oI8ZPCQzzmmDS3pbuuxNQt4h8ieauW2gcB6l+CI+8F5lb/PJ
-         YAtbXfYXZQcuURxa6b8/zfIU0FURcRmdi6PvN9qFhzKpyoONdQ8cPutFsxH0yp4scY
-         FKL8xJKubqAValNIvImPCvCK9SY5SXfkeoojDF4NaKSO1lI9Gl+DJGHUurGw9x5ZlD
-         T+PhA6nZOYMM+iXGcuzp4WNHI6WsEzOIZ6AogZ9fyyFPNxh0wjGTwU6sS7+U9E8u8v
-         vfjWTMERIyxdYLjctBOMc8dshco/m8dZ7q2ekQ05Ss707pTbUwu6C+ifcAB+gInaN+
-         syrJ7J4gJ8xbA==
+        b=XGTCrtl72DxQNjMfUptZN20o65/I5/0M1iOFnuAmOeEF1SEzpfdscZVp+KHM34pDG
+         odAmU83IosYyQ6A8n/YSpLo8oQB6VZHjMR2FcFn7mvZNqjsOa6CV5TXGZao77PTin+
+         UI8kYltUfP+V3O9U8hmu00edpJC5kuUTXos62Hqf3Hcap6w8ii/eQGlCM8Oyl/Oy/O
+         /LXEHnEaN9jvVKkRs0py4jWksoKpkY6Kf2QtndwQGmBOl4hEs+hd26OKo3NKU3GevB
+         UXSfBa/zVl3r42Xjx7uWEBIh71qn4wE2uZXOZAnUryv1NyWLLiA2WWhulyN1Z9Uv7P
+         gfSU0GIggJELw==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -42,9 +42,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-Subject: [PATCH 5/9] mm: remove CONFIG_DISCONTIGMEM
-Date:   Wed,  2 Jun 2021 13:53:44 +0300
-Message-Id: <20210602105348.13387-6-rppt@kernel.org>
+Subject: [PATCH 6/9] arch, mm: remove stale mentions of DISCONIGMEM
+Date:   Wed,  2 Jun 2021 13:53:45 +0300
+Message-Id: <20210602105348.13387-7-rppt@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210602105348.13387-1-rppt@kernel.org>
 References: <20210602105348.13387-1-rppt@kernel.org>
@@ -56,201 +56,136 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-There are no architectures that support DISCONTIGMEM left.
+There are several places that mention DISCONIGMEM in comments or have stale
+code guarded by CONFIG_DISCONTIGMEM.
 
-Remove the configuration option and the dead code it was guarding in the
-generic memory management code.
+Remove the dead code and update the comments.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- include/asm-generic/memory_model.h | 37 ++++--------------------------
- include/linux/mmzone.h             |  4 ++--
- mm/Kconfig                         | 25 +++-----------------
- mm/memory.c                        |  3 +--
- mm/page_alloc.c                    | 13 -----------
- 5 files changed, 10 insertions(+), 72 deletions(-)
+ arch/ia64/kernel/topology.c     | 5 ++---
+ arch/ia64/mm/numa.c             | 5 ++---
+ arch/mips/include/asm/mmzone.h  | 6 ------
+ arch/mips/mm/init.c             | 3 ---
+ arch/nds32/include/asm/memory.h | 6 ------
+ arch/xtensa/include/asm/page.h  | 4 ----
+ include/linux/gfp.h             | 4 ++--
+ 7 files changed, 6 insertions(+), 27 deletions(-)
 
-diff --git a/include/asm-generic/memory_model.h b/include/asm-generic/memory_model.h
-index 7637fb46ba4f..a2c8ed60233a 100644
---- a/include/asm-generic/memory_model.h
-+++ b/include/asm-generic/memory_model.h
-@@ -6,47 +6,18 @@
- 
- #ifndef __ASSEMBLY__
- 
-+/*
-+ * supports 3 memory models.
-+ */
- #if defined(CONFIG_FLATMEM)
- 
- #ifndef ARCH_PFN_OFFSET
- #define ARCH_PFN_OFFSET		(0UL)
+diff --git a/arch/ia64/kernel/topology.c b/arch/ia64/kernel/topology.c
+index 09fc385c2acd..3639e0a7cb3b 100644
+--- a/arch/ia64/kernel/topology.c
++++ b/arch/ia64/kernel/topology.c
+@@ -3,9 +3,8 @@
+  * License.  See the file "COPYING" in the main directory of this archive
+  * for more details.
+  *
+- * This file contains NUMA specific variables and functions which can
+- * be split away from DISCONTIGMEM and are used on NUMA machines with
+- * contiguous memory.
++ * This file contains NUMA specific variables and functions which are used on
++ * NUMA machines with contiguous memory.
+  * 		2002/08/07 Erich Focht <efocht@ess.nec.de>
+  * Populate cpu entries in sysfs for non-numa systems as well
+  *  	Intel Corporation - Ashok Raj
+diff --git a/arch/ia64/mm/numa.c b/arch/ia64/mm/numa.c
+index 46b6e5f3a40f..d6579ec3ea32 100644
+--- a/arch/ia64/mm/numa.c
++++ b/arch/ia64/mm/numa.c
+@@ -3,9 +3,8 @@
+  * License.  See the file "COPYING" in the main directory of this archive
+  * for more details.
+  *
+- * This file contains NUMA specific variables and functions which can
+- * be split away from DISCONTIGMEM and are used on NUMA machines with
+- * contiguous memory.
++ * This file contains NUMA specific variables and functions which are used on
++ * NUMA machines with contiguous memory.
+  * 
+  *                         2002/08/07 Erich Focht <efocht@ess.nec.de>
+  */
+diff --git a/arch/mips/include/asm/mmzone.h b/arch/mips/include/asm/mmzone.h
+index b826b8473e95..7649ab45e80c 100644
+--- a/arch/mips/include/asm/mmzone.h
++++ b/arch/mips/include/asm/mmzone.h
+@@ -20,10 +20,4 @@
+ #define nid_to_addrbase(nid) 0
  #endif
  
--#elif defined(CONFIG_DISCONTIGMEM)
+-#ifdef CONFIG_DISCONTIGMEM
 -
--#ifndef arch_pfn_to_nid
--#define arch_pfn_to_nid(pfn)	pfn_to_nid(pfn)
--#endif
--
--#ifndef arch_local_page_offset
--#define arch_local_page_offset(pfn, nid)	\
--	((pfn) - NODE_DATA(nid)->node_start_pfn)
--#endif
+-#define pfn_to_nid(pfn)		pa_to_nid((pfn) << PAGE_SHIFT)
 -
 -#endif /* CONFIG_DISCONTIGMEM */
 -
--/*
-- * supports 3 memory models.
-- */
--#if defined(CONFIG_FLATMEM)
--
- #define __pfn_to_page(pfn)	(mem_map + ((pfn) - ARCH_PFN_OFFSET))
- #define __page_to_pfn(page)	((unsigned long)((page) - mem_map) + \
- 				 ARCH_PFN_OFFSET)
--#elif defined(CONFIG_DISCONTIGMEM)
--
--#define __pfn_to_page(pfn)			\
--({	unsigned long __pfn = (pfn);		\
--	unsigned long __nid = arch_pfn_to_nid(__pfn);  \
--	NODE_DATA(__nid)->node_mem_map + arch_local_page_offset(__pfn, __nid);\
--})
--
--#define __page_to_pfn(pg)						\
--({	const struct page *__pg = (pg);					\
--	struct pglist_data *__pgdat = NODE_DATA(page_to_nid(__pg));	\
--	(unsigned long)(__pg - __pgdat->node_mem_map) +			\
--	 __pgdat->node_start_pfn;					\
--})
+ #endif /* _ASM_MMZONE_H_ */
+diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
+index c36358758969..97f6ca341448 100644
+--- a/arch/mips/mm/init.c
++++ b/arch/mips/mm/init.c
+@@ -454,9 +454,6 @@ void __init mem_init(void)
+ 	BUILD_BUG_ON(IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT));
  
- #elif defined(CONFIG_SPARSEMEM_VMEMMAP)
- 
-@@ -70,7 +41,7 @@
- 	struct mem_section *__sec = __pfn_to_section(__pfn);	\
- 	__section_mem_map_addr(__sec) + __pfn;		\
- })
--#endif /* CONFIG_FLATMEM/DISCONTIGMEM/SPARSEMEM */
-+#endif /* CONFIG_FLATMEM/SPARSEMEM */
- 
- /*
-  * Convert a physical address to a Page Frame Number and back
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 0d53eba1c383..2b41e252a995 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -738,8 +738,8 @@ struct zonelist {
- 	struct zoneref _zonerefs[MAX_ZONES_PER_ZONELIST + 1];
- };
- 
--#ifndef CONFIG_DISCONTIGMEM
--/* The array of struct pages - for discontigmem use pgdat->lmem_map */
-+#ifdef CONFIG_FLATMEM
-+/* The array of struct pages for flatmem */
- extern struct page *mem_map;
- #endif
- 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 02d44e3420f5..218b96ccc84a 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -19,7 +19,7 @@ choice
- 
- config FLATMEM_MANUAL
- 	bool "Flat Memory"
--	depends on !(ARCH_DISCONTIGMEM_ENABLE || ARCH_SPARSEMEM_ENABLE) || ARCH_FLATMEM_ENABLE
-+	depends on !ARCH_SPARSEMEM_ENABLE || ARCH_FLATMEM_ENABLE
- 	help
- 	  This option is best suited for non-NUMA systems with
- 	  flat address space. The FLATMEM is the most efficient
-@@ -32,21 +32,6 @@ config FLATMEM_MANUAL
- 
- 	  If unsure, choose this option (Flat Memory) over any other.
- 
--config DISCONTIGMEM_MANUAL
--	bool "Discontiguous Memory"
--	depends on ARCH_DISCONTIGMEM_ENABLE
--	help
--	  This option provides enhanced support for discontiguous
--	  memory systems, over FLATMEM.  These systems have holes
--	  in their physical address spaces, and this option provides
--	  more efficient handling of these holes.
--
--	  Although "Discontiguous Memory" is still used by several
--	  architectures, it is considered deprecated in favor of
--	  "Sparse Memory".
--
--	  If unsure, choose "Sparse Memory" over this option.
--
- config SPARSEMEM_MANUAL
- 	bool "Sparse Memory"
- 	depends on ARCH_SPARSEMEM_ENABLE
-@@ -62,17 +47,13 @@ config SPARSEMEM_MANUAL
- 
- endchoice
- 
--config DISCONTIGMEM
--	def_bool y
--	depends on (!SELECT_MEMORY_MODEL && ARCH_DISCONTIGMEM_ENABLE) || DISCONTIGMEM_MANUAL
--
- config SPARSEMEM
- 	def_bool y
- 	depends on (!SELECT_MEMORY_MODEL && ARCH_SPARSEMEM_ENABLE) || SPARSEMEM_MANUAL
- 
- config FLATMEM
- 	def_bool y
--	depends on (!DISCONTIGMEM && !SPARSEMEM) || FLATMEM_MANUAL
-+	depends on !SPARSEMEM || FLATMEM_MANUAL
- 
- config FLAT_NODE_MEM_MAP
- 	def_bool y
-@@ -85,7 +66,7 @@ config FLAT_NODE_MEM_MAP
- #
- config NEED_MULTIPLE_NODES
- 	def_bool y
--	depends on DISCONTIGMEM || NUMA
-+	depends on NUMA
- 
- #
- # SPARSEMEM_EXTREME (which is the default) does some bootmem
-diff --git a/mm/memory.c b/mm/memory.c
-index 730daa00952b..7c7b6ea02504 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -90,8 +90,7 @@
- #warning Unfortunate NUMA and NUMA Balancing config, growing page-frame for last_cpupid.
- #endif
- 
--#ifndef CONFIG_NEED_MULTIPLE_NODES
--/* use the per-pgdat data instead for discontigmem - mbligh */
-+#ifdef CONFIG_FLATMEM
- unsigned long max_mapnr;
- EXPORT_SYMBOL(max_mapnr);
- 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index aaa1655cf682..6fc22482eaa8 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -331,20 +331,7 @@ compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS] = {
- 
- int min_free_kbytes = 1024;
- int user_min_free_kbytes = -1;
+ #ifdef CONFIG_HIGHMEM
 -#ifdef CONFIG_DISCONTIGMEM
--/*
-- * DiscontigMem defines memory ranges as separate pg_data_t even if the ranges
-- * are not on separate NUMA nodes. Functionally this works but with
-- * watermark_boost_factor, it can reclaim prematurely as the ranges can be
-- * quite small. By default, do not boost watermarks on discontigmem as in
-- * many cases very high-order allocations like THP are likely to be
-- * unsupported and the premature reclaim offsets the advantage of long-term
-- * fragmentation avoidance.
-- */
--int watermark_boost_factor __read_mostly;
--#else
- int watermark_boost_factor __read_mostly = 15000;
+-#error "CONFIG_HIGHMEM and CONFIG_DISCONTIGMEM dont work together yet"
 -#endif
- int watermark_scale_factor = 10;
+ 	max_mapnr = highend_pfn ? highend_pfn : max_low_pfn;
+ #else
+ 	max_mapnr = max_low_pfn;
+diff --git a/arch/nds32/include/asm/memory.h b/arch/nds32/include/asm/memory.h
+index 940d32842793..62faafbc28e4 100644
+--- a/arch/nds32/include/asm/memory.h
++++ b/arch/nds32/include/asm/memory.h
+@@ -76,18 +76,12 @@
+  *  virt_to_page(k)	convert a _valid_ virtual address to struct page *
+  *  virt_addr_valid(k)	indicates whether a virtual address is valid
+  */
+-#ifndef CONFIG_DISCONTIGMEM
+-
+ #define ARCH_PFN_OFFSET		PHYS_PFN_OFFSET
+ #define pfn_valid(pfn)		((pfn) >= PHYS_PFN_OFFSET && (pfn) < (PHYS_PFN_OFFSET + max_mapnr))
  
- static unsigned long nr_kernel_pages __initdata;
+ #define virt_to_page(kaddr)	(pfn_to_page(__pa(kaddr) >> PAGE_SHIFT))
+ #define virt_addr_valid(kaddr)	((unsigned long)(kaddr) >= PAGE_OFFSET && (unsigned long)(kaddr) < (unsigned long)high_memory)
+ 
+-#else /* CONFIG_DISCONTIGMEM */
+-#error CONFIG_DISCONTIGMEM is not supported yet.
+-#endif /* !CONFIG_DISCONTIGMEM */
+-
+ #define page_to_phys(page)	(page_to_pfn(page) << PAGE_SHIFT)
+ 
+ #endif
+diff --git a/arch/xtensa/include/asm/page.h b/arch/xtensa/include/asm/page.h
+index 37ce25ef92d6..493eb7083b1a 100644
+--- a/arch/xtensa/include/asm/page.h
++++ b/arch/xtensa/include/asm/page.h
+@@ -192,10 +192,6 @@ static inline unsigned long ___pa(unsigned long va)
+ #define pfn_valid(pfn) \
+ 	((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
+ 
+-#ifdef CONFIG_DISCONTIGMEM
+-# error CONFIG_DISCONTIGMEM not supported
+-#endif
+-
+ #define virt_to_page(kaddr)	pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
+ #define page_to_virt(page)	__va(page_to_pfn(page) << PAGE_SHIFT)
+ #define virt_addr_valid(kaddr)	pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
+diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+index 11da8af06704..dbe1f5fc901d 100644
+--- a/include/linux/gfp.h
++++ b/include/linux/gfp.h
+@@ -494,8 +494,8 @@ static inline int gfp_zonelist(gfp_t flags)
+  * There are two zonelists per node, one for all zones with memory and
+  * one containing just zones from the node the zonelist belongs to.
+  *
+- * For the normal case of non-DISCONTIGMEM systems the NODE_DATA() gets
+- * optimized to &contig_page_data at compile-time.
++ * For the case of non-NUMA systems the NODE_DATA() gets optimized to
++ * &contig_page_data at compile-time.
+  */
+ static inline struct zonelist *node_zonelist(int nid, gfp_t flags)
+ {
 -- 
 2.28.0
 
