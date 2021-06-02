@@ -2,89 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 735D53985FF
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 12:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D743986FF
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 12:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbhFBKL5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Jun 2021 06:11:57 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:44431 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbhFBKL4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Jun 2021 06:11:56 -0400
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N2Dks-1lOdY23GiU-013cUs for <linux-arch@vger.kernel.org>; Wed, 02 Jun 2021
- 12:10:12 +0200
-Received: by mail-wr1-f54.google.com with SMTP id l2so1696303wrw.6
-        for <linux-arch@vger.kernel.org>; Wed, 02 Jun 2021 03:10:11 -0700 (PDT)
-X-Gm-Message-State: AOAM533HKsMULQa9Br9h0+b8xxtyaH/FEJSFtZA9iMjJiOQepLrpnpHI
-        uRVO47jf0uZ/4eSqq8yNTSjePAioQk21e8pDY64=
-X-Google-Smtp-Source: ABdhPJwoA3PiZt2E7ctIEca12eOVYFadag6s8cXYgYkl0VBvQCgvgji6pQYpXwvfZIu2eEjVjiWC+qxzXQ119fy/z8c=
-X-Received: by 2002:a5d:5084:: with SMTP id a4mr673366wrt.286.1622628611529;
- Wed, 02 Jun 2021 03:10:11 -0700 (PDT)
+        id S231187AbhFBKzn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Jun 2021 06:55:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38344 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229745AbhFBKzm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Jun 2021 06:55:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A7462613B8;
+        Wed,  2 Jun 2021 10:53:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622631239;
+        bh=y04Os44exMBIW1Oj5as14/40OpMcFnf5BYhM91VeMF8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IEhFtfyiZrWl3O/lHICDDnQPCxbhh7le0oxMDdcE956zeFwuutavFE98cPQhAN3Tb
+         MS+0z8cAJdIWUVI8O3sVG0JRS++QBslPsnJw+3KBzPzOGqhfnDKfhgG2E3lQUvkQgb
+         U4HK86IALTVpok5dJHV5FJGv2u/pAI2+NR6w1EN3dv0kQ5VybgSLkvF/RWYfHfO8ld
+         oSmL9cAeen9wXpQhbHyPbH7rQ2tDffpLdnha53qaZPiC2WS7D2aeJaOw5ziEvrDUkZ
+         bz6vOk8nu9D6FUv1Ys08o5AILZj7Ue07McpXaWjgeCnhhfBDjcYc5GYcVel/pE6Mxt
+         wIIpWqcVnlJmQ==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
+Subject: [PATCH 0/9] Remove DISCINTIGMEM memory model
+Date:   Wed,  2 Jun 2021 13:53:39 +0300
+Message-Id: <20210602105348.13387-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <202106020243.YWyklbec-lkp@intel.com>
-In-Reply-To: <202106020243.YWyklbec-lkp@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 2 Jun 2021 12:08:32 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2EC5oWHufng-eHNwhpqzQGj8NS=OSR6H=WdYNwd3aP8w@mail.gmail.com>
-Message-ID: <CAK8P3a2EC5oWHufng-eHNwhpqzQGj8NS=OSR6H=WdYNwd3aP8w@mail.gmail.com>
-Subject: Re: [asm-generic:clkdev 5/7] arch/m68k/coldfire/m53xx.c:278:29:
- error: 'xC0000000' undeclared; did you mean 'B3000000'?
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:I1mV5TBneHfk6PLjptXsl5YM0hld7z4W/DLdN6Ac3qtKqbLgsUY
- XjzzakL0x4nOCazRadkurVGzD+yOnzqGq8WDP6BB0lmIqMXhDoDjp740c8gEDJkh58DhmQo
- QXd/1Qj3Rxqwhb0cFpmrSv/nPFuNX0IPpYLjT1Aw6kZ+vwm3N+iLVVU9Nbjf6gErfDDxmvQ
- y1ITgFjoWCjYEPCo/sN2g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KqwP+3sypPQ=:105Wiu2334ZCcHg6G4VF2U
- ExcrPF+7Ppa4tpjDpeTGSeEuJIFPv06rqXSFNyEVFjieSMwOgCpUnmDHqnWj9zM7u6KbfVGu5
- T9GLk1IVVkkvtv7TTI43Y/kIxGdpOuIpNy4RRtHNMxEW/A7K3HGjN8L3RY5iXeZO1/4S1yTPN
- mzTQFMqemOV4w6v/n7NPTWaomxbAAGyhL4lbm3Fcx5CRjn4kUqsw9LNEpEoeDxnegvjQBhvqy
- D1yKsBwb+38ZU9j6EiTa+RddTRqDdk6VAlDcL6DjaJ9UNZIeYYDEMqKQ35ItynsbnYxOdgJqj
- 9W/n0B4OlRAeHOOMXYbcW0PN3ULJ5oA1FQGLAebfAHQb6eBRhitOU5ncEgD1yxTAmyMYWZ8/D
- 4Ey+/p+fpY0sD8HaHSqtFjtZclV6DyXGJuRPpLLWNrx+/OZV+iT8pqAyGnsRoF/uB5fvRhUAJ
- Ol6gu4OrjE8gV2GRAA07esBkCVxEvgpir/o7TCdaYQo7OvQEJwhJD0pAtRK19N/krjAt4m4jR
- S1qAFqMwU6jMG6BRBiE5gg=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 1, 2021 at 8:40 PM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git clkdev
-> head:   2c79796a923663135ddaf8e9ddca4b46ac8e0113
-> commit: 5b2335ed6a67ea9f7894c2ffe27b2884ac46f39f [5/7] m68k: coldfire: remove private clk_get/clk_put
-> config: m68k-randconfig-r006-20210601 (attached as .config)
-> compiler: m68k-linux-gcc (GCC) 9.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=5b2335ed6a67ea9f7894c2ffe27b2884ac46f39f
->         git remote add asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
->         git fetch --no-tags asm-generic clkdev
->         git checkout 5b2335ed6a67ea9f7894c2ffe27b2884ac46f39f
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=m68k
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->    arch/m68k/coldfire/m53xx.c:294:24: warning: no previous prototype for 'sysinit' [-Wmissing-prototypes]
->      294 | asmlinkage void __init sysinit(void)
->          |                        ^~~~~~~
->    In file included from arch/m68k/include/asm/io.h:6,
->                     from include/linux/io.h:13,
->                     from arch/m68k/coldfire/m53xx.c:20:
->    arch/m68k/coldfire/m53xx.c: In function 'fbcs_init':
-> >> arch/m68k/coldfire/m53xx.c:278:29: error: 'xC0000000' undeclared (first use in this function); did you mean 'B3000000'?
->      278 | #define EXT_SRAM_ADDRESS (0,xC0000000)
->          |                             ^~~~~~~~~
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Fixed now, sorry for the typo. I'm going back to my normal input devices now ;-)
+Hi,
 
-        Arnd
+SPARSEMEM memory model was supposed to entirely replace DISCONTIGMEM a
+(long) while ago. The last architectures that used DISCONTIGMEM were
+updated to use other memory models in v5.11 and it is about the time to
+entirely remove DISCONTIGMEM from the kernel.
+
+This set removes DISCONTIGMEM from alpha, arc and m68k, simplifies memory
+model selection in mm/Kconfig and replaces usage of redundant
+CONFIG_NEED_MULTIPLE_NODES and CONFIG_FLAT_NODE_MEM_MAP with CONFIG_NUMA
+and CONFIG_FLATMEM respectively. 
+
+I've also removed NUMA support on alpha that was BROKEN for more than 15
+years.
+
+There were also minor updates all over arch/ to remove mentions of
+DISCONTIGMEM in comments and #ifdefs.
+
+Mike Rapoport (9):
+  alpha: remove DISCONTIGMEM and NUMA
+  arc: update comment about HIGHMEM implementation
+  arc: remove support for DISCONTIGMEM
+  m68k: remove support for DISCONTIGMEM
+  mm: remove CONFIG_DISCONTIGMEM
+  arch, mm: remove stale mentions of DISCONIGMEM
+  docs: remove description of DISCONTIGMEM
+  mm: replace CONFIG_NEED_MULTIPLE_NODES with CONFIG_NUMA
+  mm: replace CONFIG_FLAT_NODE_MEM_MAP with CONFIG_FLATMEM
+
+ Documentation/admin-guide/sysctl/vm.rst |  12 +-
+ Documentation/vm/memory-model.rst       |  45 +----
+ arch/alpha/Kconfig                      |  22 ---
+ arch/alpha/include/asm/machvec.h        |   6 -
+ arch/alpha/include/asm/mmzone.h         | 100 -----------
+ arch/alpha/include/asm/pgtable.h        |   4 -
+ arch/alpha/include/asm/topology.h       |  39 -----
+ arch/alpha/kernel/core_marvel.c         |  53 +-----
+ arch/alpha/kernel/core_wildfire.c       |  29 +--
+ arch/alpha/kernel/pci_iommu.c           |  29 ---
+ arch/alpha/kernel/proto.h               |   8 -
+ arch/alpha/kernel/setup.c               |  16 --
+ arch/alpha/kernel/sys_marvel.c          |   5 -
+ arch/alpha/kernel/sys_wildfire.c        |   5 -
+ arch/alpha/mm/Makefile                  |   2 -
+ arch/alpha/mm/init.c                    |   3 -
+ arch/alpha/mm/numa.c                    | 223 ------------------------
+ arch/arc/Kconfig                        |  13 --
+ arch/arc/include/asm/mmzone.h           |  40 -----
+ arch/arc/mm/init.c                      |  21 +--
+ arch/arm64/Kconfig                      |   2 +-
+ arch/ia64/Kconfig                       |   2 +-
+ arch/ia64/kernel/topology.c             |   5 +-
+ arch/ia64/mm/numa.c                     |   5 +-
+ arch/m68k/Kconfig.cpu                   |  10 --
+ arch/m68k/include/asm/page.h            |   2 +-
+ arch/m68k/include/asm/page_mm.h         |  33 ----
+ arch/m68k/mm/init.c                     |  20 ---
+ arch/mips/Kconfig                       |   2 +-
+ arch/mips/include/asm/mmzone.h          |   8 +-
+ arch/mips/include/asm/page.h            |   2 +-
+ arch/mips/mm/init.c                     |   7 +-
+ arch/nds32/include/asm/memory.h         |   6 -
+ arch/powerpc/Kconfig                    |   2 +-
+ arch/powerpc/include/asm/mmzone.h       |   4 +-
+ arch/powerpc/kernel/setup_64.c          |   2 +-
+ arch/powerpc/kernel/smp.c               |   2 +-
+ arch/powerpc/kexec/core.c               |   4 +-
+ arch/powerpc/mm/Makefile                |   2 +-
+ arch/powerpc/mm/mem.c                   |   4 +-
+ arch/riscv/Kconfig                      |   2 +-
+ arch/s390/Kconfig                       |   2 +-
+ arch/sh/include/asm/mmzone.h            |   4 +-
+ arch/sh/kernel/topology.c               |   2 +-
+ arch/sh/mm/Kconfig                      |   2 +-
+ arch/sh/mm/init.c                       |   2 +-
+ arch/sparc/Kconfig                      |   2 +-
+ arch/sparc/include/asm/mmzone.h         |   4 +-
+ arch/sparc/kernel/smp_64.c              |   2 +-
+ arch/sparc/mm/init_64.c                 |  12 +-
+ arch/x86/Kconfig                        |   2 +-
+ arch/x86/kernel/setup_percpu.c          |   6 +-
+ arch/x86/mm/init_32.c                   |   4 +-
+ arch/xtensa/include/asm/page.h          |   4 -
+ include/asm-generic/memory_model.h      |  37 +---
+ include/asm-generic/topology.h          |   2 +-
+ include/linux/gfp.h                     |   4 +-
+ include/linux/memblock.h                |   6 +-
+ include/linux/mm.h                      |   4 +-
+ include/linux/mmzone.h                  |  16 +-
+ kernel/crash_core.c                     |   4 +-
+ mm/Kconfig                              |  36 +---
+ mm/memblock.c                           |   8 +-
+ mm/memory.c                             |   3 +-
+ mm/page_alloc.c                         |  25 +--
+ mm/page_ext.c                           |   2 +-
+ 66 files changed, 98 insertions(+), 898 deletions(-)
+ delete mode 100644 arch/alpha/include/asm/mmzone.h
+ delete mode 100644 arch/alpha/mm/numa.c
+ delete mode 100644 arch/arc/include/asm/mmzone.h
+
+
+base-commit: c4681547bcce777daf576925a966ffa824edd09d
+-- 
+2.28.0
+
