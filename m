@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F81398720
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 12:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A801F39872C
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 12:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbhFBK4e (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Jun 2021 06:56:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38654 "EHLO mail.kernel.org"
+        id S232356AbhFBK4i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Jun 2021 06:56:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231974AbhFBK4C (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Jun 2021 06:56:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E38A613B8;
-        Wed,  2 Jun 2021 10:54:13 +0000 (UTC)
+        id S232111AbhFBK4I (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Jun 2021 06:56:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DEAE613AE;
+        Wed,  2 Jun 2021 10:54:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622631259;
-        bh=wiXTn//eiKgcS7LspEevBm9W4ghqhPpXnabDtNpHAWc=;
+        s=k20201202; t=1622631266;
+        bh=ABRwdf1ZSkT41VaIijSX6Aofx73KQpJ0Eh1mOZHecXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aenRwMba72rCI0f0+YNCvpuF+B89DZZZcNy9A9qwZOX6ztizS+NE4FPYA+R2Z5DXy
-         QYv8+KSCh6yjWLYdBikUAv7ieP4WMTl94vBwxzbYcnCTRTAGBIyKSVSP2gQG/05lMD
-         +DwqtVWXRXNkgKAw56m8CW6AJoabI3YW+EfCfTd9lrYhPayUhA0fOCDd0Yyijv33ox
-         /sBbmXZ8VZZpnfRgcKD9Jbkqxyp1ZCAEGc0kCUIWKXx5LhlqP653x+i94BLo0J2/Kb
-         PvtG19vRg2yFN7Z8DuxiaI0hWRcGrZDHaooM5xN0EpA7pMJUV4VvTcv6PXqzg7KKfh
-         G7quvwCN3TybQ==
+        b=jcGBWvEaHEgHKUWqorlbIK02J0RiVwFVqw7ykf/dGv0vUEzECTAS8ekN0sMHOx42B
+         HjBmF22RjLTSxkO33ZX+JVwdpfKVEKVhS2S7ZVnSn7V7SbJ2iGjfc7p4XPeWKteOlx
+         HtzW0ETLflf2G0Qvq+85e/ubO8SbxJ/ktzo3wWZ9h/sCAqope2FbG8PAZ8Y2AQcgJX
+         nRJ0j/ZuqKHbeAe5rtXZipu791dcxaF4dkjtgFXh3UUrvisu8NxYoMZg5taFPTqKEV
+         ek2oDFuiLI0bu4/wmooFYjbNHM7EeIFGiUPOTWVK9BSMPaSWvmWeY3czD6ohIq0RML
+         hz/Ah1ImrSs7g==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -42,9 +42,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-Subject: [PATCH 3/9] arc: remove support for DISCONTIGMEM
-Date:   Wed,  2 Jun 2021 13:53:42 +0300
-Message-Id: <20210602105348.13387-4-rppt@kernel.org>
+Subject: [PATCH 4/9] m68k: remove support for DISCONTIGMEM
+Date:   Wed,  2 Jun 2021 13:53:43 +0300
+Message-Id: <20210602105348.13387-5-rppt@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210602105348.13387-1-rppt@kernel.org>
 References: <20210602105348.13387-1-rppt@kernel.org>
@@ -63,115 +63,144 @@ Remove the support for DISCONTIGMEM entirely.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- arch/arc/Kconfig              | 13 ------------
- arch/arc/include/asm/mmzone.h | 40 -----------------------------------
- arch/arc/mm/init.c            |  8 -------
- 3 files changed, 61 deletions(-)
- delete mode 100644 arch/arc/include/asm/mmzone.h
+ arch/m68k/Kconfig.cpu           | 10 ----------
+ arch/m68k/include/asm/page.h    |  2 +-
+ arch/m68k/include/asm/page_mm.h | 33 ---------------------------------
+ arch/m68k/mm/init.c             | 20 --------------------
+ 4 files changed, 1 insertion(+), 64 deletions(-)
 
-diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
-index 2d98501c0897..d8f51eb8963b 100644
---- a/arch/arc/Kconfig
-+++ b/arch/arc/Kconfig
-@@ -62,10 +62,6 @@ config SCHED_OMIT_FRAME_POINTER
- config GENERIC_CSUM
- 	def_bool y
+diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
+index f4d23977d2a5..29e946394fdb 100644
+--- a/arch/m68k/Kconfig.cpu
++++ b/arch/m68k/Kconfig.cpu
+@@ -408,10 +408,6 @@ config SINGLE_MEMORY_CHUNK
+ 	  order" to save memory that could be wasted for unused memory map.
+ 	  Say N if not sure.
  
 -config ARCH_DISCONTIGMEM_ENABLE
--	def_bool n
 -	depends on BROKEN
+-	def_bool MMU && !SINGLE_MEMORY_CHUNK
 -
- config ARCH_FLATMEM_ENABLE
- 	def_bool y
- 
-@@ -344,15 +340,6 @@ config ARC_HUGEPAGE_16M
- 
- endchoice
+ config FORCE_MAX_ZONEORDER
+ 	int "Maximum zone order" if ADVANCED
+ 	depends on !SINGLE_MEMORY_CHUNK
+@@ -451,11 +447,6 @@ config M68K_L2_CACHE
+ 	depends on MAC
+ 	default y
  
 -config NODES_SHIFT
--	int "Maximum NUMA Nodes (as a power of 2)"
--	default "0" if !DISCONTIGMEM
--	default "1" if DISCONTIGMEM
--	depends on NEED_MULTIPLE_NODES
--	help
--	  Accessing memory beyond 1GB (with or w/o PAE) requires 2 memory
--	  zones.
+-	int
+-	default "3"
+-	depends on DISCONTIGMEM
 -
- config ARC_COMPACT_IRQ_LEVELS
- 	depends on ISA_ARCOMPACT
- 	bool "Setup Timer IRQ as high Priority"
-diff --git a/arch/arc/include/asm/mmzone.h b/arch/arc/include/asm/mmzone.h
-deleted file mode 100644
-index b86b9d1e54dc..000000000000
---- a/arch/arc/include/asm/mmzone.h
-+++ /dev/null
-@@ -1,40 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2016 Synopsys, Inc. (www.synopsys.com)
-- */
+ config CPU_HAS_NO_BITFIELDS
+ 	bool
+ 
+@@ -553,4 +544,3 @@ config CACHE_COPYBACK
+ 	  The ColdFire CPU cache is set into Copy-back mode.
+ endchoice
+ endif
 -
--#ifndef _ASM_ARC_MMZONE_H
--#define _ASM_ARC_MMZONE_H
--
--#ifdef CONFIG_DISCONTIGMEM
--
--extern struct pglist_data node_data[];
--#define NODE_DATA(nid) (&node_data[nid])
--
--static inline int pfn_to_nid(unsigned long pfn)
--{
--	int is_end_low = 1;
--
--	if (IS_ENABLED(CONFIG_ARC_HAS_PAE40))
--		is_end_low = pfn <= virt_to_pfn(0xFFFFFFFFUL);
--
--	/*
--	 * node 0: lowmem:             0x8000_0000   to 0xFFFF_FFFF
--	 * node 1: HIGHMEM w/o  PAE40: 0x0           to 0x7FFF_FFFF
--	 *         HIGHMEM with PAE40: 0x1_0000_0000 to ...
--	 */
--	if (pfn >= ARCH_PFN_OFFSET && is_end_low)
--		return 0;
--
--	return 1;
--}
--
--static inline int pfn_valid(unsigned long pfn)
--{
--	int nid = pfn_to_nid(pfn);
--
--	return (pfn <= node_end_pfn(nid));
--}
--#endif /* CONFIG_DISCONTIGMEM  */
--
--#endif
-diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
-index 397a201adfe3..abfeef7bf6f8 100644
---- a/arch/arc/mm/init.c
-+++ b/arch/arc/mm/init.c
-@@ -32,11 +32,6 @@ unsigned long arch_pfn_offset;
- EXPORT_SYMBOL(arch_pfn_offset);
+diff --git a/arch/m68k/include/asm/page.h b/arch/m68k/include/asm/page.h
+index 97087dd3ca6d..2f1c54e4725d 100644
+--- a/arch/m68k/include/asm/page.h
++++ b/arch/m68k/include/asm/page.h
+@@ -62,7 +62,7 @@ extern unsigned long _ramend;
+ #include <asm/page_no.h>
  #endif
  
--#ifdef CONFIG_DISCONTIGMEM
--struct pglist_data node_data[MAX_NUMNODES] __read_mostly;
--EXPORT_SYMBOL(node_data);
--#endif
+-#if !defined(CONFIG_MMU) || defined(CONFIG_DISCONTIGMEM)
++#ifndef CONFIG_MMU
+ #define __phys_to_pfn(paddr)	((unsigned long)((paddr) >> PAGE_SHIFT))
+ #define __pfn_to_phys(pfn)	PFN_PHYS(pfn)
+ #endif
+diff --git a/arch/m68k/include/asm/page_mm.h b/arch/m68k/include/asm/page_mm.h
+index 2411ea9ef578..ff8f8a3f7cac 100644
+--- a/arch/m68k/include/asm/page_mm.h
++++ b/arch/m68k/include/asm/page_mm.h
+@@ -126,25 +126,7 @@ static inline void *__va(unsigned long x)
+ 
+ extern int m68k_virt_to_node_shift;
+ 
+-#ifndef CONFIG_DISCONTIGMEM
+ #define __virt_to_node(addr)	(&pg_data_map[0])
+-#else
+-extern struct pglist_data *pg_data_table[];
 -
- long __init arc_get_mem_sz(void)
- {
- 	return low_mem_sz;
-@@ -147,9 +142,6 @@ void __init setup_arch_memory(void)
- 	 * to the hole is freed and ARC specific version of pfn_valid()
- 	 * handles the hole in the memory map.
- 	 */
--#ifdef CONFIG_DISCONTIGMEM
--	node_set_online(1);
+-static inline __attribute_const__ int __virt_to_node_shift(void)
+-{
+-	int shift;
+-
+-	asm (
+-		"1:	moveq	#0,%0\n"
+-		m68k_fixup(%c1, 1b)
+-		: "=d" (shift)
+-		: "i" (m68k_fixup_vnode_shift));
+-	return shift;
+-}
+-
+-#define __virt_to_node(addr)	(pg_data_table[(unsigned long)(addr) >> __virt_to_node_shift()])
 -#endif
  
- 	min_high_pfn = PFN_DOWN(high_mem_start);
- 	max_high_pfn = PFN_DOWN(high_mem_start + high_mem_sz);
+ #define virt_to_page(addr) ({						\
+ 	pfn_to_page(virt_to_pfn(addr));					\
+@@ -153,23 +135,8 @@ static inline __attribute_const__ int __virt_to_node_shift(void)
+ 	pfn_to_virt(page_to_pfn(page));					\
+ })
+ 
+-#ifdef CONFIG_DISCONTIGMEM
+-#define pfn_to_page(pfn) ({						\
+-	unsigned long __pfn = (pfn);					\
+-	struct pglist_data *pgdat;					\
+-	pgdat = __virt_to_node((unsigned long)pfn_to_virt(__pfn));	\
+-	pgdat->node_mem_map + (__pfn - pgdat->node_start_pfn);		\
+-})
+-#define page_to_pfn(_page) ({						\
+-	const struct page *__p = (_page);				\
+-	struct pglist_data *pgdat;					\
+-	pgdat = &pg_data_map[page_to_nid(__p)];				\
+-	((__p) - pgdat->node_mem_map) + pgdat->node_start_pfn;		\
+-})
+-#else
+ #define ARCH_PFN_OFFSET (m68k_memory[0].addr >> PAGE_SHIFT)
+ #include <asm-generic/memory_model.h>
+-#endif
+ 
+ #define virt_addr_valid(kaddr)	((unsigned long)(kaddr) >= PAGE_OFFSET && (unsigned long)(kaddr) < (unsigned long)high_memory)
+ #define pfn_valid(pfn)		virt_addr_valid(pfn_to_virt(pfn))
+diff --git a/arch/m68k/mm/init.c b/arch/m68k/mm/init.c
+index 1759ab875d47..5d749e188246 100644
+--- a/arch/m68k/mm/init.c
++++ b/arch/m68k/mm/init.c
+@@ -44,28 +44,8 @@ EXPORT_SYMBOL(empty_zero_page);
+ 
+ int m68k_virt_to_node_shift;
+ 
+-#ifdef CONFIG_DISCONTIGMEM
+-pg_data_t pg_data_map[MAX_NUMNODES];
+-EXPORT_SYMBOL(pg_data_map);
+-
+-pg_data_t *pg_data_table[65];
+-EXPORT_SYMBOL(pg_data_table);
+-#endif
+-
+ void __init m68k_setup_node(int node)
+ {
+-#ifdef CONFIG_DISCONTIGMEM
+-	struct m68k_mem_info *info = m68k_memory + node;
+-	int i, end;
+-
+-	i = (unsigned long)phys_to_virt(info->addr) >> __virt_to_node_shift();
+-	end = (unsigned long)phys_to_virt(info->addr + info->size - 1) >> __virt_to_node_shift();
+-	for (; i <= end; i++) {
+-		if (pg_data_table[i])
+-			pr_warn("overlap at %u for chunk %u\n", i, node);
+-		pg_data_table[i] = pg_data_map + node;
+-	}
+-#endif
+ 	node_set_online(node);
+ }
+ 
 -- 
 2.28.0
 
