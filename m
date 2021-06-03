@@ -2,258 +2,185 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D840399077
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Jun 2021 18:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095D73998E2
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Jun 2021 06:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbhFBQue (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Jun 2021 12:50:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33836 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231283AbhFBQu2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Jun 2021 12:50:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 433CE610C8;
-        Wed,  2 Jun 2021 16:48:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622652525;
-        bh=9utpeUrW+C9DC6WQcSR+1XfAaiQLrvZzZzt4L5np4OY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KFvMyi3gcXomigKhix29kPmA/Nbnv4X16nYnYGqBQO6RPSnloru/f3VJIozj0A0Bs
-         JUP/XUoSV7cD42kJiAzx5P2orIqypgGRF2DTeIKTgV+wvJ8caD9S1O8sDQLbB23RXf
-         YK2WFqPV/oOtOWrkTXNKjOLcOhtoThMGYHklTPp4iFmFPG05atxF4bYUAdo+qy8ZmL
-         YblLMEmykiysrN4ROAgD1OFOoCIrHeP31quG2+GmCMM7V5/DEcNOFiCWtt2vW+mM/n
-         TdfefxzdV5PoPpm0zejaUIFkQ/R75EavgFrV1dhmqpSTT+paRXRZRNy2QO4Fkq0/aS
-         bfe3UAIqSOfJQ==
-From:   Will Deacon <will@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        kernel-team@android.com
-Subject: [PATCH v8 19/19] Documentation: arm64: describe asymmetric 32-bit support
-Date:   Wed,  2 Jun 2021 17:47:19 +0100
-Message-Id: <20210602164719.31777-20-will@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210602164719.31777-1-will@kernel.org>
-References: <20210602164719.31777-1-will@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S229479AbhFCEQ2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Jun 2021 00:16:28 -0400
+Received: from mail-pj1-f51.google.com ([209.85.216.51]:54835 "EHLO
+        mail-pj1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbhFCEQ0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Jun 2021 00:16:26 -0400
+Received: by mail-pj1-f51.google.com with SMTP id g24so2869018pji.4
+        for <linux-arch@vger.kernel.org>; Wed, 02 Jun 2021 21:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id;
+        bh=mdQe7rcfBv/z++/4DywE65Kjg4R/h0ApRxAanaCZhPk=;
+        b=fd+ibb1AZny+F8WluQ/jIE1zbUfUvf9P+Lnr32S0iD+PghCPDh2X2uqJSxvmZ8/1IL
+         n8ROE/oO/fe7kZsF+WyG14vqVqE3FZjp2VMnXhWXkiwq53p5wObdEI9f2GQHH61kr7Ie
+         ax3ZmpAh6zdQhXyVC6/Niw8nCnJowg9RJKGvsXnhE9tpbJpPLwtKHopnBaA5fVrLzRcg
+         WDkUDJclcaCJG2p+mMuvw9hYxL+RpnNlSbJXa0vyEwAiSDyX+tsHniubp2yoQHhv60+F
+         6xY345bBCAf9+NDh9wSJBGz2MulrXgBdpGs6hkhoO+jKkNw968xbek1hakK9GopdyEsb
+         OCGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id;
+        bh=mdQe7rcfBv/z++/4DywE65Kjg4R/h0ApRxAanaCZhPk=;
+        b=FpCQiyF6kDx0p/h0f8NMrWquJ6sX3r2i9BEdlO6urs32ypZB8AtHFP3zSHVG3Aw2Fi
+         AAFxZ3BiNYjLgDCK7zbULd0h9vcRkuNKCntULEUOGLRjCC7VOH7OT7XPTwoJgGUxWdAM
+         OESz6dXuZZvQ7kxkOg7QWALCoeen9kUGguZy/9seKlre/qlAY2XdlW7zD6Kyu2W8VLTj
+         QX0Jqft4OP6G4KbGLvZDIO0yHgA/kbVnIbNxAekz9sOGDZF/dk6v4XhezgRXW3EdtRCx
+         R+2EjIeoFsEwNOD7BAuwxiGL1/oR+0M5HftoHzv669uQjU/dmgbYHDQw1FkffPp/vMi3
+         wXqw==
+X-Gm-Message-State: AOAM533N72152hkErm9JPckkBCtvFbmIteHQUcGH/7FZc3i4DmQxuD5n
+        dC3fYbUKZBG5SYWIFUdcv0XDug==
+X-Google-Smtp-Source: ABdhPJyhCDbdVRbt5r/8ORm86+o6k/4hlsjsYyPQRuc0fTEcbN0So+HCQlNKs9itq7iVgl7kUmYVmg==
+X-Received: by 2002:a17:902:eac1:b029:108:4a7c:ff2d with SMTP id p1-20020a170902eac1b02901084a7cff2dmr11472514pld.62.1622693608838;
+        Wed, 02 Jun 2021 21:13:28 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id q21sm934029pfn.81.2021.06.02.21.13.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jun 2021 21:13:28 -0700 (PDT)
+Date:   Wed, 02 Jun 2021 21:13:28 -0700 (PDT)
+X-Google-Original-Date: Wed, 02 Jun 2021 21:11:20 PDT (-0700)
+Subject:     Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
+In-Reply-To: <mhng-a5f8374f-350b-4c13-86e8-c6aa5e697454@palmerdabbelt-glaptop>
+CC:     anup@brainfault.org, drew@beagleboard.org,
+        Christoph Hellwig <hch@lst.de>,
+        Anup Patel <Anup.Patel@wdc.com>, wefu@redhat.com,
+        lazyparser@gmail.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, guoren@linux.alibaba.com,
+        Paul Walmsley <paul.walmsley@sifive.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-c0406cea-776b-49d2-a223-13a83d3a7433@palmerdabbelt-glaptop>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Document support for running 32-bit tasks on asymmetric 32-bit systems
-and its impact on the user ABI when enabled.
+On Sat, 29 May 2021 17:30:18 PDT (-0700), Palmer Dabbelt wrote:
+> On Fri, 21 May 2021 17:36:08 PDT (-0700), guoren@kernel.org wrote:
+>> On Wed, May 19, 2021 at 3:15 PM Anup Patel <anup@brainfault.org> wrote:
+>>>
+>>> On Wed, May 19, 2021 at 12:24 PM Drew Fustini <drew@beagleboard.org> wrote:
+>>> >
+>>> > On Wed, May 19, 2021 at 08:06:17AM +0200, Christoph Hellwig wrote:
+>>> > > On Wed, May 19, 2021 at 02:05:00PM +0800, Guo Ren wrote:
+>>> > > > Since the existing RISC-V ISA cannot solve this problem, it is better
+>>> > > > to provide some configuration for the SOC vendor to customize.
+>>> > >
+>>> > > We've been talking about this problem for close to five years.  So no,
+>>> > > if you don't manage to get the feature into the ISA it can't be
+>>> > > supported.
+>>> >
+>>> > Isn't it a good goal for Linux to support the capabilities present in
+>>> > the SoC that a currently being fab'd?
+>>> >
+>>> > I believe the CMO group only started last year [1] so the RV64GC SoCs
+>>> > that are going into mass production this year would not have had the
+>>> > opporuntiy of utilizing any RISC-V ISA extension for handling cache
+>>> > management.
+>>>
+>>> The current Linux RISC-V policy is to only accept patches for frozen or
+>>> ratified ISA specs.
+>>> (Refer, Documentation/riscv/patch-acceptance.rst)
+>>>
+>>> This means even if emulate CMO instructions in OpenSBI, the Linux
+>>> patches won't be taken by Palmer because CMO specification is
+>>> still in draft stage.
+>> Before CMO specification release, could we use a sbi_ecall to solve
+>> the current problem? This is not against the specification, when CMO
+>> is ready we could let users choose to use the new CMO in Linux.
+>>
+>> From a tech view, CMO trap emulation is the same as sbi_ecall.
+>>
+>>>
+>>> Also, we all know how much time it takes for RISCV international
+>>> to freeze some spec. Judging by that we are looking at another
+>>> 3-4 years at minimum.
+>
+> Sorry for being slow here, this thread got buried.
+>
+> I've been trying to work with a handful of folks at the RISC-V
+> foundation to try and get a subset of the various in-development
+> specifications (some simple CMOs, something about non-caching in the
+> page tables, and some way to prevent speculative accesse from generating
+> coherence traffic that will break non-coherent systems).  I'm not sure
+> we can get this together quickly, but I'd prefer to at least try before
+> we jump to taking vendor-specificed behavior here.  It's obviously an
+> up-hill battle to try and get specifications through the process and I'm
+> certainly not going to promise it will work, but I'm hoping that the
+> impending need to avoid forking the ISA will be sufficient to get people
+> behind producing some specifications in a timely fashion.
+>
+> I wasn't aware than this chip had non-coherent devices until I saw this
+> thread, so we'd been mostly focused on the Beagle V chip.  That was in a
+> sense an easier problem because the SiFive IP in it was never designed
+> to have non-coherent devices so we'd have to make anything work via a
+> series of slow workarounds, which would make emulating the eventually
+> standardized behavior reasonable in terms of performance (ie, everything
+> would be super slow so who really cares).
+>
+> I don't think relying on some sort of SBI call for the CMOs whould be
+> such a performance hit that it would prevent these systems from being
+> viable, but assuming you have reasonable performance on your non-cached
+> accesses then that's probably not going to be viable to trap and
+> emulate.  At that point it really just becomes silly to pretend that
+> we're still making things work by emulating the eventually ratified
+> behavior, as anyone who actually tries to use this thing to do IO would
+> need out of tree patches.  I'm not sure exactly what the plan is for the
+> page table bits in the specification right now, but if you can give me a
+> pointer to some documentation then I'm happy to try and push for
+> something compatible.
+>
+> If we can't make the process work at the foundation then I'd be strongly
+> in favor of just biting the bullet and starting to take vendor-specific
+> code that's been implemented in hardware and is necessarry to make
+> things work acceptably.  That's obviously a sub-optimal solution as
+> it'll lead to a bunch of ISA fragmentation, but at least we'll be able
+> to keep the software stack together.
+>
+> Can you tell us when these will be in the hands of users?  That's pretty
+> important here, as I don't want to be blocking real users from having
+> their hardware work.  IIRC there were some plans to distribute early
+> boards, but it looks like the foundation got involved and I guess I lost
+> the thread at that point.
+>
+> Sorry this is all such a headache, but hopefully we can get things
+> sorted out.
 
-Signed-off-by: Will Deacon <will@kernel.org>
----
- .../admin-guide/kernel-parameters.txt         |   3 +
- Documentation/arm64/asymmetric-32bit.rst      | 155 ++++++++++++++++++
- Documentation/arm64/index.rst                 |   1 +
- 3 files changed, 159 insertions(+)
- create mode 100644 Documentation/arm64/asymmetric-32bit.rst
+I talked with some of the RISC-V foundation folks, we're not going to 
+have an ISA specification for the non-coherent stuff any time soon.  I 
+took a look at this code and I definately don't want to take it as is, 
+but I'm not opposed to taking something that makes the hardware work as 
+long as it's a lot cleaner.  We've already got two of these non-coherent 
+chips, I'm sure more will come, and I'd rather have the extra headaches 
+than make everyone fork the software stack.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a2e453919bb6..5a1dc7e628a5 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -295,6 +295,9 @@
- 			EL0 is indicated by /sys/devices/system/cpu/aarch32_el0
- 			and hot-unplug operations may be restricted.
- 
-+			See Documentation/arm64/asymmetric-32bit.rst for more
-+			information.
-+
- 	amd_iommu=	[HW,X86-64]
- 			Pass parameters to the AMD IOMMU driver in the system.
- 			Possible values are:
-diff --git a/Documentation/arm64/asymmetric-32bit.rst b/Documentation/arm64/asymmetric-32bit.rst
-new file mode 100644
-index 000000000000..64a0b505da7d
---- /dev/null
-+++ b/Documentation/arm64/asymmetric-32bit.rst
-@@ -0,0 +1,155 @@
-+======================
-+Asymmetric 32-bit SoCs
-+======================
-+
-+Author: Will Deacon <will@kernel.org>
-+
-+This document describes the impact of asymmetric 32-bit SoCs on the
-+execution of 32-bit (``AArch32``) applications.
-+
-+Date: 2021-05-17
-+
-+Introduction
-+============
-+
-+Some Armv9 SoCs suffer from a big.LITTLE misfeature where only a subset
-+of the CPUs are capable of executing 32-bit user applications. On such
-+a system, Linux by default treats the asymmetry as a "mismatch" and
-+disables support for both the ``PER_LINUX32`` personality and
-+``execve(2)`` of 32-bit ELF binaries, with the latter returning
-+``-ENOEXEC``. If the mismatch is detected during late onlining of a
-+64-bit-only CPU, then the onlining operation fails and the new CPU is
-+unavailable for scheduling.
-+
-+Surprisingly, these SoCs have been produced with the intention of
-+running legacy 32-bit binaries. Unsurprisingly, that doesn't work very
-+well with the default behaviour of Linux.
-+
-+It seems inevitable that future SoCs will drop 32-bit support
-+altogether, so if you're stuck in the unenviable position of needing to
-+run 32-bit code on one of these transitionary platforms then you would
-+be wise to consider alternatives such as recompilation, emulation or
-+retirement. If neither of those options are practical, then read on.
-+
-+Enabling kernel support
-+=======================
-+
-+Since the kernel support is not completely transparent to userspace,
-+allowing 32-bit tasks to run on an asymmetric 32-bit system requires an
-+explicit "opt-in" and can be enabled by passing the
-+``allow_mismatched_32bit_el0`` parameter on the kernel command-line.
-+
-+For the remainder of this document we will refer to an *asymmetric
-+system* to mean an asymmetric 32-bit SoC running Linux with this kernel
-+command-line option enabled.
-+
-+Userspace impact
-+================
-+
-+32-bit tasks running on an asymmetric system behave in mostly the same
-+way as on a homogeneous system, with a few key differences relating to
-+CPU affinity.
-+
-+sysfs
-+-----
-+
-+The subset of CPUs capable of running 32-bit tasks is described in
-+``/sys/devices/system/cpu/aarch32_el0`` and is documented further in
-+``Documentation/ABI/testing/sysfs-devices-system-cpu``.
-+
-+**Note:** CPUs are advertised by this file as they are detected and so
-+late-onlining of 32-bit-capable CPUs can result in the file contents
-+being modified by the kernel at runtime. Once advertised, CPUs are never
-+removed from the file.
-+
-+``execve(2)``
-+-------------
-+
-+On a homogeneous system, the CPU affinity of a task is preserved across
-+``execve(2)``. This is not always possible on an asymmetric system,
-+specifically when the new program being executed is 32-bit yet the
-+affinity mask contains 64-bit-only CPUs. In this situation, the kernel
-+determines the new affinity mask as follows:
-+
-+  1. If the 32-bit-capable subset of the affinity mask is not empty,
-+     then the affinity is restricted to that subset and the old affinity
-+     mask is saved. This saved mask is inherited over ``fork(2)`` and
-+     preserved across ``execve(2)`` of 32-bit programs.
-+
-+     **Note:** This step does not apply to ``SCHED_DEADLINE`` tasks.
-+     See `SCHED_DEADLINE`_.
-+
-+  2. Otherwise, the cpuset hierarchy of the task is walked until an
-+     ancestor is found containing at least one 32-bit-capable CPU. The
-+     affinity of the task is then changed to match the 32-bit-capable
-+     subset of the cpuset determined by the walk.
-+
-+  3. On failure (i.e. out of memory), the affinity is changed to the set
-+     of all 32-bit-capable CPUs of which the kernel is aware.
-+
-+A subsequent ``execve(2)`` of a 64-bit program by the 32-bit task will
-+invalidate the affinity mask saved in (1) and attempt to restore the CPU
-+affinity of the task using the saved mask if it was previously valid.
-+This restoration may fail due to intervening changes to the deadline
-+policy or cpuset hierarchy, in which case the ``execve(2)`` continues
-+with the affinity unchanged.
-+
-+Calls to ``sched_setaffinity(2)`` for a 32-bit task will consider only
-+the 32-bit-capable CPUs of the requested affinity mask. On success, the
-+affinity for the task is updated and any saved mask from a prior
-+``execve(2)`` is invalidated.
-+
-+``SCHED_DEADLINE``
-+------------------
-+
-+Explicit admission of a 32-bit deadline task to the default root domain
-+(e.g. by calling ``sched_setattr(2)``) is rejected on an asymmetric
-+32-bit system unless admission control is disabled by writing -1 to
-+``/proc/sys/kernel/sched_rt_runtime_us``.
-+
-+``execve(2)`` of a 32-bit program from a 64-bit deadline task will
-+return ``-ENOEXEC`` if the root domain for the task contains any
-+64-bit-only CPUs and admission control is enabled. Concurrent offlining
-+of 32-bit-capable CPUs may still necessitate the procedure described in
-+`execve(2)`_, in which case step (1) is skipped and a warning is
-+emitted on the console.
-+
-+**Note:** It is recommended that a set of 32-bit-capable CPUs are placed
-+into a separate root domain if ``SCHED_DEADLINE`` is to be used with
-+32-bit tasks on an asymmetric system. Failure to do so is likely to
-+result in missed deadlines.
-+
-+Cpusets
-+-------
-+
-+The affinity of a 32-bit task on an asymmetric system may include CPUs
-+that are not explicitly allowed by the cpuset to which it is attached.
-+This can occur as a result of the following two situations:
-+
-+  - A 64-bit task attached to a cpuset which allows only 64-bit CPUs
-+    executes a 32-bit program.
-+
-+  - All of the 32-bit-capable CPUs allowed by a cpuset containing a
-+    32-bit task are offlined.
-+
-+In both of these cases, the new affinity is calculated according to step
-+(2) of the process described in `execve(2)`_ and the cpuset hierarchy is
-+unchanged irrespective of the cgroup version.
-+
-+CPU hotplug
-+-----------
-+
-+On an asymmetric system, the first detected 32-bit-capable CPU is
-+prevented from being offlined by userspace and any such attempt will
-+return ``-EPERM``. Note that suspend is still permitted even if the
-+primary CPU (i.e. CPU 0) is 64-bit-only.
-+
-+KVM
-+---
-+
-+Although KVM will not advertise 32-bit EL0 support to any vCPUs on an
-+asymmetric system, a broken guest at EL1 could still attempt to execute
-+32-bit code at EL0. In this case, an exit from a vCPU thread in 32-bit
-+mode will return to host userspace with an ``exit_reason`` of
-+``KVM_EXIT_FAIL_ENTRY`` and will remain non-runnable until successfully
-+re-initialised by a subsequent ``KVM_ARM_VCPU_INIT`` operation.
-diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-index 97d65ba12a35..4f840bac083e 100644
---- a/Documentation/arm64/index.rst
-+++ b/Documentation/arm64/index.rst
-@@ -10,6 +10,7 @@ ARM64 Architecture
-     acpi_object_usage
-     amu
-     arm-acpi
-+    asymmetric-32bit
-     booting
-     cpu-feature-registers
-     elf_hwcaps
--- 
-2.32.0.rc0.204.g9fa02ecfa5-goog
+After talking to Atish it looks like there's likely to be an SBI 
+extension to handle the CMOs, which should let us avoid the bulk of the 
+vendor-specific behavior in the kernel.  I know some people are worried 
+about adding to the SBI surface.  I'm worried about that too, but that's 
+way better than sticking a bunch of vendor-specific instructions into 
+the kernel.  The SBI extension should make for a straight-forward cache 
+flush implementation in Linux, so let's just plan on that getting 
+through quickly (as has been done before).
 
+Unfortunately we've yet to come up with a way to handle the 
+non-cacheable mappings without introducing a degree of vendor-specific 
+behavior or seriously impacting performance (mark them as not valid and 
+deal with them in the trap handler).  I'm not really sure it counts as 
+supporting the hardware if it's massively slow, so that really leaves us 
+with vendor-specific mappings as the only option to make these chips 
+work.
+
+This implementation, which adds some Kconfig entries that control page 
+table bits, definately isn't suitable for upstream.  Allowing users to 
+set arbitrary page table bits will eventually conflict with the 
+standard, and is just going to be a mess.  It'll also lead to kernels 
+that are only compatible with specific designs, which we're trying very 
+hard to avoid.  At a bare minimum we'll need some way to detect systems 
+with these page table bits before setting them, and some description of 
+what the bits actually do so we can reason about them.
