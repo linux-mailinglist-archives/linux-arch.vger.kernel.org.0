@@ -2,88 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A42639AA7C
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Jun 2021 20:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4552139B2D8
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 08:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbhFCSyd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Jun 2021 14:54:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56052 "EHLO mail.kernel.org"
+        id S229927AbhFDGvO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 02:51:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229629AbhFCSyd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 3 Jun 2021 14:54:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 90066613B1;
-        Thu,  3 Jun 2021 18:52:47 +0000 (UTC)
+        id S229799AbhFDGvN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 4 Jun 2021 02:51:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F86561407;
+        Fri,  4 Jun 2021 06:49:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622746368;
-        bh=Is0k9SqYzzEg6iUoT85CTKPOLjspeKtNSXUjMIgHgTE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VoHrCfHbxU1GRFpWit5W8STrNSkHBPL75hZIqJtpOyvLdOU91B2tvOTDmntPjFi4d
-         srQ51j3AnoO8XNNKJrfD1MZR8WBI7bgRtKCNC7CeSZV50KdfsSa3bzGFuYee1EMTh2
-         x4YlIdAE/cAB5L1c/a0bg2vTR+Gc+X0COQVgXfm5HtToY/9I8no1XzgG8EX6+thSc1
-         wxnaDFosPYX5ysc39hx648GwwOPRYWxxFDX7eNIffMXhnHlmYK1taMx3BRZJybod6z
-         DHIdS6Zvk/1iB4SeXWjVnf+yM8D3lbSntJgzsrOFh47pTYBytkncaNFtYeeziGpDVp
-         ZaXcJkltjGpGA==
-Date:   Thu, 3 Jun 2021 19:52:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org
-Subject: Re: [PATCH v1 1/2] elf: Allow architectures to parse properties on
- the main executable
-Message-ID: <20210603185236.GG4257@sirena.org.uk>
-References: <20210521144621.9306-1-broonie@kernel.org>
- <20210521144621.9306-2-broonie@kernel.org>
- <20210603154018.GG4187@arm.com>
+        s=k20201202; t=1622789367;
+        bh=KthqUglb+nC6623tWkfvh5H+9BVnVYgnX+fsls7NSQI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FPkh7u7zsbRYGcZJvxXgY/1+e0VcoeE6oUNzwZHn0L7C4hfp+UCz3v3M1G3BVjFo8
+         jRmgV1kFDiQmq8LnAjG0i+ptbq/s7j7syTBnI9+CBM5Xa3U6+OUQd3nn2wC/3jL92h
+         E25RlQI+dfP/ART5SU/K+3T3M7k/KA9qJl9p3bdadA5vN3MTOkLq0gNCkji5zfjuh8
+         z/UaNiomJuD82SDVlpF+BDaKnjo7bLolktLue1MKw7PH+ahqEtTIGruba/wWEXiP0h
+         e1k7JcCxLKK0YalV522yLE+V8eK+kv8aXBjMlNyfNxKOZPHRWjYuvfSszEFVfgGUaV
+         hFwY9CFMbHm4A==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
+Subject: [PATCH v2 0/9] Remove DISCINTIGMEM memory model
+Date:   Fri,  4 Jun 2021 09:49:07 +0300
+Message-Id: <20210604064916.26580-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Cp3Cp8fzgozWLBWL"
-Content-Disposition: inline
-In-Reply-To: <20210603154018.GG4187@arm.com>
-X-Cookie: Where am I?  Who am I?  Am I?  I
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+From: Mike Rapoport <rppt@linux.ibm.com>
 
---Cp3Cp8fzgozWLBWL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi,
 
-On Thu, Jun 03, 2021 at 04:40:24PM +0100, Dave Martin wrote:
-> On Fri, May 21, 2021 at 03:46:20PM +0100, Mark Brown wrote:
+SPARSEMEM memory model was supposed to entirely replace DISCONTIGMEM a
+(long) while ago. The last architectures that used DISCONTIGMEM were
+updated to use other memory models in v5.11 and it is about the time to
+entirely remove DISCONTIGMEM from the kernel.
 
-> > -		if (system_supports_bti() &&
-> > +		if (system_supports_bti() && is_interp &&
+This set removes DISCONTIGMEM from alpha, arc and m68k, simplifies memory
+model selection in mm/Kconfig and replaces usage of redundant
+CONFIG_NEED_MULTIPLE_NODES and CONFIG_FLAT_NODE_MEM_MAP with CONFIG_NUMA
+and CONFIG_FLATMEM respectively. 
 
-> Won't this cause BTI to be forced off for static binaries?
+I've also removed NUMA support on alpha that was BROKEN for more than 15
+years.
 
-> Perhaps this should be (has_interp == is_interp), as for
-> arch_elf_adjust_prot().  Seems gross though, since has_interp would
-> become useless after the next patch.  If there's no sensible way to
-> keep this bisectable, perhaps the patches can be merged instead.
+There were also minor updates all over arch/ to remove mentions of
+DISCONTIGMEM in comments and #ifdefs.
 
-Ugh, right.  I only tested the finished result.
+v2:
+* Fix build errors reported by kbuild bot
+* Add additional cleanups in m68k as suggested by Geert
 
---Cp3Cp8fzgozWLBWL
-Content-Type: application/pgp-signature; name="signature.asc"
+v1: Link: https://lore.kernel.org/lkml/20210602105348.13387-1-rppt@kernel.org
 
------BEGIN PGP SIGNATURE-----
+Mike Rapoport (9):
+  alpha: remove DISCONTIGMEM and NUMA
+  arc: update comment about HIGHMEM implementation
+  arc: remove support for DISCONTIGMEM
+  m68k: remove support for DISCONTIGMEM
+  mm: remove CONFIG_DISCONTIGMEM
+  arch, mm: remove stale mentions of DISCONIGMEM
+  docs: remove description of DISCONTIGMEM
+  mm: replace CONFIG_NEED_MULTIPLE_NODES with CONFIG_NUMA
+  mm: replace CONFIG_FLAT_NODE_MEM_MAP with CONFIG_FLATMEM
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmC5JPMACgkQJNaLcl1U
-h9D0mQf/c22l2rS//I8+ODmotld0j7iXm4/LORW1n46I6+RRKyRnWK+V+VhopPGY
-TNBJrVSKsr/zuPt8b2+qLAKzkjBVLo+D28g1jbgW8E4SOmAq6GrWLAJWQRRoFg8q
-W64peAJLIancE/epQi+pnvp7Hz1/NmO9DrMwsJoiONJBtLyuo7lmvy90nMjgkcZT
-s6L3o2SEIqPzWbvD2Nt6covnClVar+pP6G0cxrsvuth8NQ78npSjCPj+yHbwZYu0
-KP96wMRW9doehevQxUOBVYwzsLVNDrpj7xnVXeWbz1m+PRlhVD0UbgCb2lqJSBeA
-iAkGFBb1lgx0KNYUDEv4y8yyMcQeOQ==
-=CHn1
------END PGP SIGNATURE-----
+ Documentation/admin-guide/sysctl/vm.rst |  12 +-
+ Documentation/vm/memory-model.rst       |  45 +----
+ arch/alpha/Kconfig                      |  22 ---
+ arch/alpha/include/asm/machvec.h        |   6 -
+ arch/alpha/include/asm/mmzone.h         | 100 -----------
+ arch/alpha/include/asm/pgtable.h        |   4 -
+ arch/alpha/include/asm/topology.h       |  39 -----
+ arch/alpha/kernel/core_marvel.c         |  53 +-----
+ arch/alpha/kernel/core_wildfire.c       |  29 +--
+ arch/alpha/kernel/pci_iommu.c           |  29 ---
+ arch/alpha/kernel/proto.h               |   8 -
+ arch/alpha/kernel/setup.c               |  16 --
+ arch/alpha/kernel/sys_marvel.c          |   5 -
+ arch/alpha/kernel/sys_wildfire.c        |   5 -
+ arch/alpha/mm/Makefile                  |   2 -
+ arch/alpha/mm/init.c                    |   3 -
+ arch/alpha/mm/numa.c                    | 223 ------------------------
+ arch/arc/Kconfig                        |  13 --
+ arch/arc/include/asm/mmzone.h           |  40 -----
+ arch/arc/mm/init.c                      |  21 +--
+ arch/arm64/Kconfig                      |   2 +-
+ arch/ia64/Kconfig                       |   2 +-
+ arch/ia64/kernel/topology.c             |   5 +-
+ arch/ia64/mm/numa.c                     |   5 +-
+ arch/m68k/Kconfig.cpu                   |  10 --
+ arch/m68k/include/asm/mmzone.h          |  10 --
+ arch/m68k/include/asm/page.h            |   2 +-
+ arch/m68k/include/asm/page_mm.h         |  35 ----
+ arch/m68k/mm/init.c                     |  20 ---
+ arch/mips/Kconfig                       |   2 +-
+ arch/mips/include/asm/mmzone.h          |   8 +-
+ arch/mips/include/asm/page.h            |   2 +-
+ arch/mips/mm/init.c                     |   7 +-
+ arch/nds32/include/asm/memory.h         |   6 -
+ arch/powerpc/Kconfig                    |   2 +-
+ arch/powerpc/include/asm/mmzone.h       |   4 +-
+ arch/powerpc/kernel/setup_64.c          |   2 +-
+ arch/powerpc/kernel/smp.c               |   2 +-
+ arch/powerpc/kexec/core.c               |   4 +-
+ arch/powerpc/mm/Makefile                |   2 +-
+ arch/powerpc/mm/mem.c                   |   4 +-
+ arch/riscv/Kconfig                      |   2 +-
+ arch/s390/Kconfig                       |   2 +-
+ arch/sh/include/asm/mmzone.h            |   4 +-
+ arch/sh/kernel/topology.c               |   2 +-
+ arch/sh/mm/Kconfig                      |   2 +-
+ arch/sh/mm/init.c                       |   2 +-
+ arch/sparc/Kconfig                      |   2 +-
+ arch/sparc/include/asm/mmzone.h         |   4 +-
+ arch/sparc/kernel/smp_64.c              |   2 +-
+ arch/sparc/mm/init_64.c                 |  12 +-
+ arch/x86/Kconfig                        |   2 +-
+ arch/x86/kernel/setup_percpu.c          |   6 +-
+ arch/x86/mm/init_32.c                   |   4 +-
+ arch/xtensa/include/asm/page.h          |   4 -
+ include/asm-generic/memory_model.h      |  37 +---
+ include/asm-generic/topology.h          |   2 +-
+ include/linux/gfp.h                     |   4 +-
+ include/linux/memblock.h                |   6 +-
+ include/linux/mm.h                      |   4 +-
+ include/linux/mmzone.h                  |  20 ++-
+ kernel/crash_core.c                     |   4 +-
+ mm/Kconfig                              |  36 +---
+ mm/memblock.c                           |   8 +-
+ mm/page_alloc.c                         |  25 +--
+ mm/page_ext.c                           |   2 +-
+ 66 files changed, 100 insertions(+), 909 deletions(-)
+ delete mode 100644 arch/alpha/include/asm/mmzone.h
+ delete mode 100644 arch/alpha/mm/numa.c
+ delete mode 100644 arch/arc/include/asm/mmzone.h
+ delete mode 100644 arch/m68k/include/asm/mmzone.h
 
---Cp3Cp8fzgozWLBWL--
+
+base-commit: c4681547bcce777daf576925a966ffa824edd09d
+-- 
+2.28.0
+
