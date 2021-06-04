@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67DB39BC42
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 17:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E74D39BC4F
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 17:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbhFDPxe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 11:53:34 -0400
-Received: from gate.crashing.org ([63.228.1.57]:35730 "EHLO gate.crashing.org"
+        id S229925AbhFDP4c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 11:56:32 -0400
+Received: from gate.crashing.org ([63.228.1.57]:35782 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229809AbhFDPxe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 4 Jun 2021 11:53:34 -0400
+        id S229809AbhFDP4b (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 4 Jun 2021 11:56:31 -0400
 Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 154FlJPc021199;
-        Fri, 4 Jun 2021 10:47:19 -0500
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 154FoTb5021396;
+        Fri, 4 Jun 2021 10:50:29 -0500
 Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 154FlIM5021198;
-        Fri, 4 Jun 2021 10:47:18 -0500
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 154FoSDI021394;
+        Fri, 4 Jun 2021 10:50:28 -0500
 X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 4 Jun 2021 10:47:18 -0500
+Date:   Fri, 4 Jun 2021 10:50:28 -0500
 From:   Segher Boessenkool <segher@kernel.crashing.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Will Deacon <will@kernel.org>,
@@ -29,35 +29,23 @@ Cc:     Will Deacon <will@kernel.org>,
         akiyks@gmail.com, linux-kernel@vger.kernel.org,
         linux-toolchains@vger.kernel.org, linux-arch@vger.kernel.org
 Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210604154718.GE18427@gate.crashing.org>
-References: <YLn8dzbNwvqrqqp5@hirez.programming.kicks-ass.net> <20210604104359.GE2318@willie-the-truck> <YLoPJDzlTsvpjFWt@hirez.programming.kicks-ass.net>
+Message-ID: <20210604155028.GF18427@gate.crashing.org>
+References: <YLn8dzbNwvqrqqp5@hirez.programming.kicks-ass.net> <20210604104359.GE2318@willie-the-truck> <YLoPJDzlTsvpjFWt@hirez.programming.kicks-ass.net> <20210604134422.GA2793@willie-the-truck> <YLoxAOua/qsZXNmY@hirez.programming.kicks-ass.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YLoPJDzlTsvpjFWt@hirez.programming.kicks-ass.net>
+In-Reply-To: <YLoxAOua/qsZXNmY@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.4.2.3i
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 01:31:48PM +0200, Peter Zijlstra wrote:
-> On Fri, Jun 04, 2021 at 11:44:00AM +0100, Will Deacon wrote:
-> > > +{
-> > > +	asm_volatile_goto("cbnz %0, %l[l_yes]"
-> > > +			  : : "r" (cond) : "cc", "memory" : l_yes);
-> > > +	return 0;
-> > > +l_yes:
-> > > +	return 1;
-> > > +}
-> > 
-> > nit: you don't need the "cc" clobber here.
-> 
-> Yeah I know, "cc" is implied.
+On Fri, Jun 04, 2021 at 03:56:16PM +0200, Peter Zijlstra wrote:
+> Urgh, I see. Compiler can't really help in that case either I'm afraid.
+> They'll never want to modify loads that originate in an asm().
 
-It isn't needed at all here.  cbnz does not write to the condition
-register.  Neither does it change or access memory, but the "memory"
-clobber is to force a false dependency.  Writing "cc" as well looks a
-bit confusing, given that.
+We never *can* change an asm template.  That is part of the fundamental
+properties of inline asm.  We cannot even parse it!
 
 
 Segher
