@@ -2,138 +2,208 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ECE39BB16
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 16:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C8839BB21
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 16:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbhFDOtX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 10:49:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48182 "EHLO mail.kernel.org"
+        id S229978AbhFDOvj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 10:51:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48878 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229656AbhFDOtW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 4 Jun 2021 10:49:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E27661417;
-        Fri,  4 Jun 2021 14:47:36 +0000 (UTC)
+        id S229656AbhFDOvj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 4 Jun 2021 10:51:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F7C46140B;
+        Fri,  4 Jun 2021 14:49:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622818056;
-        bh=rR/M3AdUUihX1IBhGcTwd/czbJxTvbvVyCYM/Z+lUc0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lOABWOHg3awLYQt4uvo1RXkz/lTtLTGFbR/WRUTauRVH14R1ofsL2mPtdY+qc1vY5
-         M+xNF7GQWiRqpIbf1F4kOnOPLkOyUVoxsxjqClFfgsSxqEHWVgyH339FhOtZL30QYf
-         Lkb0vggPY1qz96ORb2Nf3H1uOLYKfVr9i/P9nMQCuH93E5FDDSXkbrEufIUQFdQZzC
-         cBc9uV1QfwNiYoTketvIhuV1xVZEt00XIAGgLed4NlljGE0lCwo0d1pQS9UkaxAhIL
-         noAm44tgDZpG1i6i1/gTXBpG/Y5lV3d0tNgjw28fueC0P0mwC7GOlpvjGPOQB7tpz2
-         uScpwirVnzKwg==
-Received: by mail-lf1-f42.google.com with SMTP id n12so7489801lft.10;
-        Fri, 04 Jun 2021 07:47:36 -0700 (PDT)
-X-Gm-Message-State: AOAM532WiYrzsfyY+ogqBp/hxjCfvuA2uiyk/8hpPWBrPeMbwR61MdHJ
-        B6Ht4BK6YqyUHXwziDnDvOMXlTGk33ApOvlM+FE=
-X-Google-Smtp-Source: ABdhPJxCtx4UJ1QpmojiNDq4Wb0bvxaMjenZ4RRwpSwqoQiYAFWz1tgIY5GuzMS/LrMuVE8dno80j5NrSM0QfUmA2b0=
-X-Received: by 2002:a05:6512:987:: with SMTP id w7mr2967857lft.41.1622818054362;
- Fri, 04 Jun 2021 07:47:34 -0700 (PDT)
+        s=k20201202; t=1622818193;
+        bh=rnFSlNaPq8u6wC/6QmquuOa136Onpb4MOEGa2hLgk9I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LwwJaCK2IwLxB9kyXGjYKVF9yzkzn7XRMKeQ8X72ltVfnmPF5p41UBu+e+05a9DAy
+         tZKeaBQHBAcKLB2Qe5TMvMpTImanf/IJol37sjCQauBE3/upu93O1L0ehCiz24v3Eo
+         sgkxYEhJA2jhJ1hXN8nOKaMM///ktUE3ni2XrsbrjomrPUTFManqUNJ/xUZvLqqjSH
+         FSVnaCBtBJhMvzfd0MKLff525QxHTp7w4mkKBDT0KOaGgN/fy/0yJ+Z0e/so6SnMiQ
+         P2u25M6Qqug84oEiWVQUttGG0bIXa2/7x8ISySiIyeKQCCUonmeBlNLWKV2nP78fa3
+         67XpLaAb4EoHQ==
+Date:   Fri, 4 Jun 2021 17:49:41 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
+Subject: Re: [PATCH v2 3/9] arc: remove support for DISCONTIGMEM
+Message-ID: <YLo9hb3yTeh3LBMg@kernel.org>
+References: <20210604064916.26580-1-rppt@kernel.org>
+ <20210604064916.26580-4-rppt@kernel.org>
+ <f1616f95-f99c-c387-4ed4-88961457a7c6@synopsys.com>
 MIME-Version: 1.0
-References: <CO6PR04MB7812D8905C6EEBDE8513866F8D3C9@CO6PR04MB7812.namprd04.prod.outlook.com>
- <mhng-3875d1bc-74dd-4dc8-b71d-18a8f004039a@palmerdabbelt-glaptop> <CAK8P3a03sxxnzpZPxNnXLtCFOFBZ6espEj4V5y=K+59dOLJc6A@mail.gmail.com>
-In-Reply-To: <CAK8P3a03sxxnzpZPxNnXLtCFOFBZ6espEj4V5y=K+59dOLJc6A@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 4 Jun 2021 22:47:22 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTpurWpPUcA2JkF0rOFztKQgFBhOF9zQyuyi_-sxszhRQ@mail.gmail.com>
-Message-ID: <CAJF2gTTpurWpPUcA2JkF0rOFztKQgFBhOF9zQyuyi_-sxszhRQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <Anup.Patel@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Christoph Hellwig <hch@lst.de>, wefu@redhat.com,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f1616f95-f99c-c387-4ed4-88961457a7c6@synopsys.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd & Palmer,
-
-Sorry for the delayed reply, I'm working on the next version of the patch.
-
-On Fri, Jun 4, 2021 at 5:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Jun 3, 2021 at 5:39 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
-> > On Wed, 02 Jun 2021 23:00:29 PDT (-0700), Anup Patel wrote:
-> > >> This implementation, which adds some Kconfig entries that control page table
-> > >> bits, definately isn't suitable for upstream.  Allowing users to set arbitrary
-> > >> page table bits will eventually conflict with the standard, and is just going to
-> > >> be a mess.  It'll also lead to kernels that are only compatible with specific
-> > >> designs, which we're trying very hard to avoid.  At a bare minimum we'll need
-> > >> some way to detect systems with these page table bits before setting them,
-> > >> and some description of what the bits actually do so we can reason about
-> > >> them.
-> > >
-> > > Yes, vendor specific Kconfig options are strict NO NO. We can't give-up the
-> > > goal of unified kernel image for all platforms.
-Okay,  Agree. Please help review the next version of the patch.
-
+On Fri, Jun 04, 2021 at 02:07:39PM +0000, Vineet Gupta wrote:
+> On 6/3/21 11:49 PM, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
 > >
-> > I think this is just a phrasing issue, but just to be sure:
+> > DISCONTIGMEM was replaced by FLATMEM with freeing of the unused memory map
+> > in v5.11.
 > >
-> > IMO it's not that they're vendor-specific Kconfig options, it's that
-> > turning them on will conflict with standard systems (and other vendors).
-> > We've already got the ability to select sets of Kconfig settings that
-> > will only boot on one vendor's system, which is fine, as long as there
-> > remains a set of Kconfig settings that will boot on all systems.
+> > Remove the support for DISCONTIGMEM entirely.
 > >
-> > An example here would be the errata: every system has errata of some
-> > sort, so if we start flipping off various vendor's errata Kconfigs
-> > you'll end up with kernels that only function properly on some systems.
-> > That's fine with me, as long as it's possible to turn on all vendor's
-> > errata Kconfigs at the same time and the resulting kernel functions
-> > correctly on all systems.
->
-> Yes, this is generally the goal, and it would be great to have that
-> working in a way where a 'defconfig' build just turns on all the options
-> that are needed to use any SoC specific features and drivers while
-> still working on all hardware. There are however limits you may run
-> into at some point, and other architectures usually only manage to span
-> some 10 to 15 years of hardware implementations with a single
-> kernel before it get really hard.
-I could follow the goal in the next version of the patchset. Please
-help review, thx.
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Looks non intrusive, but I'd still like to give this a spin on hardware 
+> - considering highmem on ARC has tendency to go sideways ;-)
+> Can you please share a branch !
 
->
-> To give some common examples that make it break down:
->
-> - 32-bit vs 64-bit already violates that rule on risc-v (as it does on
->   most other architectures)
->
-> - architectures that support both big-endian and little-endian kernels
->   tend to have platforms that require one or the other (e.g. mips,
->   though not arm). Not an issue for you.
->
-> - page table formats are the main cause of incompatibility: arm32
->   and x86-32 require three-level tables for certain features, but those
->   are incompatible with older cores, arm64 supports three different
->   page sizes, but none of them works on all cores (4KB almost works
->   everywhere).
->
-> - SMP-enabled ARMv7 kernels can be configured to run on either
->   ARMv6 or ARMv8, but not both, in this case because of incompatible
->   barrier instructions.
->
-> - 32-bit Arm has a couple more remaining features that require building
->   a machine specific kernel if enabled because they hardcode physical
->   addresses: early printk (debug_ll, not the normal earlycon), NOMMU,
->   and XIP.
->
->        Arnd
+Sure:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=memory-models/rm-discontig/v2
+ 
+> Acked-by: Vineet Gupta <vgupta@synopsys.com>
 
+Thanks!
+ 
+> Thx,
+> -Vineet
+> 
+> > ---
+> >   arch/arc/Kconfig              | 13 ------------
+> >   arch/arc/include/asm/mmzone.h | 40 -----------------------------------
+> >   arch/arc/mm/init.c            |  8 -------
+> >   3 files changed, 61 deletions(-)
+> >   delete mode 100644 arch/arc/include/asm/mmzone.h
+> >
+> > diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+> > index 2d98501c0897..d8f51eb8963b 100644
+> > --- a/arch/arc/Kconfig
+> > +++ b/arch/arc/Kconfig
+> > @@ -62,10 +62,6 @@ config SCHED_OMIT_FRAME_POINTER
+> >   config GENERIC_CSUM
+> >   	def_bool y
+> >   
+> > -config ARCH_DISCONTIGMEM_ENABLE
+> > -	def_bool n
+> > -	depends on BROKEN
+> > -
+> >   config ARCH_FLATMEM_ENABLE
+> >   	def_bool y
+> >   
+> > @@ -344,15 +340,6 @@ config ARC_HUGEPAGE_16M
+> >   
+> >   endchoice
+> >   
+> > -config NODES_SHIFT
+> > -	int "Maximum NUMA Nodes (as a power of 2)"
+> > -	default "0" if !DISCONTIGMEM
+> > -	default "1" if DISCONTIGMEM
+> > -	depends on NEED_MULTIPLE_NODES
+> > -	help
+> > -	  Accessing memory beyond 1GB (with or w/o PAE) requires 2 memory
+> > -	  zones.
+> > -
+> >   config ARC_COMPACT_IRQ_LEVELS
+> >   	depends on ISA_ARCOMPACT
+> >   	bool "Setup Timer IRQ as high Priority"
+> > diff --git a/arch/arc/include/asm/mmzone.h b/arch/arc/include/asm/mmzone.h
+> > deleted file mode 100644
+> > index b86b9d1e54dc..000000000000
+> > --- a/arch/arc/include/asm/mmzone.h
+> > +++ /dev/null
+> > @@ -1,40 +0,0 @@
+> > -/* SPDX-License-Identifier: GPL-2.0-only */
+> > -/*
+> > - * Copyright (C) 2016 Synopsys, Inc. (www.synopsys.com)
+> > - */
+> > -
+> > -#ifndef _ASM_ARC_MMZONE_H
+> > -#define _ASM_ARC_MMZONE_H
+> > -
+> > -#ifdef CONFIG_DISCONTIGMEM
+> > -
+> > -extern struct pglist_data node_data[];
+> > -#define NODE_DATA(nid) (&node_data[nid])
+> > -
+> > -static inline int pfn_to_nid(unsigned long pfn)
+> > -{
+> > -	int is_end_low = 1;
+> > -
+> > -	if (IS_ENABLED(CONFIG_ARC_HAS_PAE40))
+> > -		is_end_low = pfn <= virt_to_pfn(0xFFFFFFFFUL);
+> > -
+> > -	/*
+> > -	 * node 0: lowmem:             0x8000_0000   to 0xFFFF_FFFF
+> > -	 * node 1: HIGHMEM w/o  PAE40: 0x0           to 0x7FFF_FFFF
+> > -	 *         HIGHMEM with PAE40: 0x1_0000_0000 to ...
+> > -	 */
+> > -	if (pfn >= ARCH_PFN_OFFSET && is_end_low)
+> > -		return 0;
+> > -
+> > -	return 1;
+> > -}
+> > -
+> > -static inline int pfn_valid(unsigned long pfn)
+> > -{
+> > -	int nid = pfn_to_nid(pfn);
+> > -
+> > -	return (pfn <= node_end_pfn(nid));
+> > -}
+> > -#endif /* CONFIG_DISCONTIGMEM  */
+> > -
+> > -#endif
+> > diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
+> > index 397a201adfe3..abfeef7bf6f8 100644
+> > --- a/arch/arc/mm/init.c
+> > +++ b/arch/arc/mm/init.c
+> > @@ -32,11 +32,6 @@ unsigned long arch_pfn_offset;
+> >   EXPORT_SYMBOL(arch_pfn_offset);
+> >   #endif
+> >   
+> > -#ifdef CONFIG_DISCONTIGMEM
+> > -struct pglist_data node_data[MAX_NUMNODES] __read_mostly;
+> > -EXPORT_SYMBOL(node_data);
+> > -#endif
+> > -
+> >   long __init arc_get_mem_sz(void)
+> >   {
+> >   	return low_mem_sz;
+> > @@ -147,9 +142,6 @@ void __init setup_arch_memory(void)
+> >   	 * to the hole is freed and ARC specific version of pfn_valid()
+> >   	 * handles the hole in the memory map.
+> >   	 */
+> > -#ifdef CONFIG_DISCONTIGMEM
+> > -	node_set_online(1);
+> > -#endif
+> >   
+> >   	min_high_pfn = PFN_DOWN(high_mem_start);
+> >   	max_high_pfn = PFN_DOWN(high_mem_start + high_mem_sz);
+> 
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Sincerely yours,
+Mike.
