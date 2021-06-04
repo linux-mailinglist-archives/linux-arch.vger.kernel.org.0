@@ -2,28 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBC839BBFB
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 17:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2871639BC24
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 17:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbhFDPh4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 11:37:56 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:42531 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229675AbhFDPh4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Jun 2021 11:37:56 -0400
-Received: (qmail 1682974 invoked by uid 1000); 4 Jun 2021 11:36:09 -0400
-Date:   Fri, 4 Jun 2021 11:36:09 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        paulmck@kernel.org, parri.andrea@gmail.com, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com,
+        id S229886AbhFDPoZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 11:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229864AbhFDPoZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Jun 2021 11:44:25 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CE3C061766;
+        Fri,  4 Jun 2021 08:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lYzDRibLCqThmqO90LTJPfzqukmjHc6SQrjL7E3n9co=; b=a1RA1JaDWj/tVJWgwLfZMFuHG6
+        zKNZSU9Vy7EUDf1+08rvm5GLD53N2kAqCjEURivQjB54jD9mO+QYGDGKnkJftW1gfAzhZP7dJGPsG
+        onhJXXPNJq3eJB2b3q2bLKMe2THgfkEGCzkMxxyUs0YNq1G335PqG5xe0qwjMxLU6vawRlah5LIDu
+        D22+SS7rTdwjY0635BqApLwXFA1MvkTfTuO9vbr7DNg6wM1oTOHM8HYytLDN9AFFlS2EQiF9iua8W
+        BwD3065pK6TkTfsxXDy7QkM9F0zwv3slKJSR3AeBq9aclgTx2sqzfKsCj1iLCpehgjgQX+LDZHeiP
+        tMZBd/gw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1lpBxn-003TSd-45; Fri, 04 Jun 2021 15:42:30 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1677530018A;
+        Fri,  4 Jun 2021 17:42:29 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 02C2F2CCC7B87; Fri,  4 Jun 2021 17:42:28 +0200 (CEST)
+Date:   Fri, 4 Jun 2021 17:42:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, paulmck@kernel.org,
+        stern@rowland.harvard.edu, parri.andrea@gmail.com,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
         linux-kernel@vger.kernel.org, linux-toolchains@vger.kernel.org,
         linux-arch@vger.kernel.org
 Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210604153609.GF1676809@rowland.harvard.edu>
+Message-ID: <YLpJ5K6O52o1cAVT@hirez.programming.kicks-ass.net>
 References: <YLn8dzbNwvqrqqp5@hirez.programming.kicks-ass.net>
  <20210604104359.GE2318@willie-the-truck>
  <YLoPJDzlTsvpjFWt@hirez.programming.kicks-ass.net>
@@ -35,7 +57,6 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <YLpFHE5Cr45rWTUV@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -60,16 +81,7 @@ On Fri, Jun 04, 2021 at 05:22:04PM +0200, Peter Zijlstra wrote:
 > alas, we're not there yet :/ and the best we get to say at this point
 > is: don't do that then.
 
-This is an example of a "syntactic" dependency versus a "semantic" 
-dependency.  We shouldn't expect syntactic control dependencies to be 
-preserved.
+Ha! Fixed it for you:
 
-As a rule, people don't write non-semantic dependencies on purpose.  But 
-they can occur in some situations, thanks to definitions the programmer 
-isn't aware of.  One example would be:
+#define volatile_if(cond) if (({ bool __t = (cond); BUILD_BUG_ON(__builtin_constant_p(__t)); volatile_cond(__t); }))
 
-(In some obscure header file): #define NUM_FOO 1
-
-(Then in real code): if (READ_ONCE(*x) % NUM_FOO) ...
-
-Alan
