@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B477A39B7CC
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 13:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D8439B7D4
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 13:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbhFDLVg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 07:21:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57138 "EHLO mail.kernel.org"
+        id S230084AbhFDL0u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 07:26:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59336 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230185AbhFDLVf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 4 Jun 2021 07:21:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E0C661369;
-        Fri,  4 Jun 2021 11:19:48 +0000 (UTC)
+        id S230080AbhFDL0u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 4 Jun 2021 07:26:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7FBC2613FE;
+        Fri,  4 Jun 2021 11:25:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622805589;
-        bh=UxOvTvzvIffM4aLRyIgntP4GHd3vzv87L8DyM4UTxII=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P8vLqTwzrd2KfXDJNK1Kw4j0FrG7X7R1ILz84XvMUgYJS2V/EZpS9JAHFjxWTxEg4
-         OSwOd5+/u7xJZqAdUBDFMCLPMIfsaZ0cgTjy3IjgB9tvSCFdnA/Sh/8XTF32UfZjrA
-         m0ABT2Cs3PcI06tB5kzkiaXg+0J2IUitlNjvSjkkJ3qhI5K9Dan3i1OnyzFdgGSPTm
-         ZpE9jK7QDNFTIAcVvqtNjDEhsy8VAlxPKw+Z46y31kxftrl5KMxGSxqNl8gQ9JgcuN
-         viM1RZnQ8DSZSCeLYjsumrdPDGSyoeBPV7BVwOcddCnRjKED1BrUWwm1EGYzS+xI1h
-         6R7YK9GYjGvhw==
+        s=k20201202; t=1622805904;
+        bh=+xnPy6vKSA4JZpieqy9rOye/hz55CPiRF8qm7EZ7dLQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lxLcJceKydxUfkmUU/Lf5UobYZRkB7l8E8XOGnhjjzkj97JVBYrRce6E8m9+SYfhH
+         4hxId0Ed1K71tJio9z3Yr5Wcl73MCSavN7Kt4RbMlol45D3QsqCnSkVUFADT2pbsty
+         gdR/AE6oE2Q3ZgdEp3b4hoIQioWViCRUA8vO4akJX+Jvlo0gMedz41EfCOsyDtJdcz
+         XQEMjGS6/H5xenykYqpVW0F57rbjbAuFpibaSZLnmysKNHDFNTzcT+lkKdJ0N9ALHX
+         cikY0OYoKHgpXu+DS9/68XNN1X/YM1mDBGe/hxmyXvbYl0WufExm4B4HTvE3fkoAqX
+         4gre7wiylJUqw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>
@@ -33,77 +33,58 @@ Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Yu-cheng Yu <yu-cheng.yu@intel.com>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         libc-alpha@sourceware.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 3/3] elf: Remove has_interp property from arch_adjust_elf_prot()
-Date:   Fri,  4 Jun 2021 12:17:28 +0100
-Message-Id: <20210604111728.12052-4-broonie@kernel.org>
+Subject: [PATCH v2 0/3] arm64: Enable BTI for the executable as well as the interpreter
+Date:   Fri,  4 Jun 2021 12:24:47 +0100
+Message-Id: <20210604112450.13344-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210604111728.12052-1-broonie@kernel.org>
-References: <20210604111728.12052-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2180; h=from:subject; bh=UxOvTvzvIffM4aLRyIgntP4GHd3vzv87L8DyM4UTxII=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBgugvGgxS2Ievr7XanpFMsUXQrjmHCG+84nNMfLRYx Xh+d8u+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYLoLxgAKCRAk1otyXVSH0EvGB/ 0SiN3dB15TvJjFGpyBYQOl4uvmqL4yoqy5xVxvly1OeoKESMck3T9qgBRQjj7Jl2a59iC1HY/ZUofS AHUFsO7ig4+IWBmVOPoaQ5C9+k4QTpHMTOEDp0t+KconcL4gH5Et08MGvAKu0QfUYUYfXYFNcS5EFp 33wzB5/bH7X2doVm/EkhzRjXn43Lm0PZtgly5DrD0yb/BsAWzgWnphhoTbqlkH691fC46ROH2wBKwG zDQ7HmEa3Zh7S22JUpIEIht0wEWvKGXTwMteJXNBLfvy03Ipj0ZciRere40AdDdcknzZ0hyQ4gGjU8 h0FzzQMAWnEm6vIG03qNmvx/pHTdSl
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1935; h=from:subject; bh=+xnPy6vKSA4JZpieqy9rOye/hz55CPiRF8qm7EZ7dLQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBgug1/P0DyUOyeqjIBzn0tFkh5xzY2HcRp/M4GxMOy 7l9nn6GJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYLoNfwAKCRAk1otyXVSH0M4JB/ oCYpsh9QIw6zGh4hsBbAnGZXTxIBGgpmqKcoHdzJfdqIC1RHuvgoV9ogyktZossIvAC3Eto7QI9Afj DJfLcfPQI0zO48D0U9Ge9NpNN/8lG38ZVa5rKumludV0epWm+VghpilY0wwm6m4E1WejyeqfRsfSU6 jyJCN+0lYIo5uPUZjMXWIOsVFgpiZapNIADLiYbYysr0K0TnYttCMbk5xIApBqZGTO32S9fhcQpfSO 1n4Gr11eASSu9+5xsSSYW7FzTEJkWZQa2tykBmm9lVkEdIH4IU7JxhZgOa38SLAsuG4dv6E5xsf4Fw drI3jaegiD87No9WGWLji238b4n/PU
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since we have added an is_interp flag to arch_parse_elf_property() we can
-drop the has_interp flag from arch_elf_adjust_prot(), the only user was
-the arm64 code which no longer needs it and any future users will be able
-to use arch_parse_elf_properties() to determine if an interpreter is in
-use.
+Deployments of BTI on arm64 have run into issues interacting with
+systemd's MemoryDenyWriteExecute feature.  Currently for dynamically
+linked executables the kernel will only handle architecture specific
+properties like BTI for the interpreter, the expectation is that the
+interpreter will then handle any properties on the main executable.
+For BTI this means remapping the executable segments PROT_EXEC |
+PROT_BTI.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm64/kernel/process.c | 2 +-
- fs/binfmt_elf.c             | 2 +-
- include/linux/elf.h         | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+This interacts poorly with MemoryDenyWriteExecute since that is
+implemented using a seccomp filter which prevents setting PROT_EXEC on
+already mapped memory and lacks the context to be able to detect that
+memory is already mapped with PROT_EXEC.  This series resolves this by
+handling the BTI property for both the interpreter and the main
+executable.
 
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index f7fff4a4c99f..e51c4aa7e048 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -742,7 +742,7 @@ asmlinkage void __sched arm64_preempt_schedule_irq(void)
- 
- #ifdef CONFIG_BINFMT_ELF
- int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
--			 bool has_interp, bool is_interp)
-+			 bool is_interp)
- {
- 	if (prot & PROT_EXEC) {
- 		if (state->flags & ARM64_ELF_INTERP_BTI && is_interp)
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 253ca9969345..1aba4e50e651 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -580,7 +580,7 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
- 	if (p_flags & PF_X)
- 		prot |= PROT_EXEC;
- 
--	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
-+	return arch_elf_adjust_prot(prot, arch_state, is_interp);
- }
- 
- /* This is much more generalized than the library routine read function,
-diff --git a/include/linux/elf.h b/include/linux/elf.h
-index 1c45ecf29147..d8392531899d 100644
---- a/include/linux/elf.h
-+++ b/include/linux/elf.h
-@@ -101,11 +101,11 @@ extern int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
- 
- #ifdef CONFIG_ARCH_HAVE_ELF_PROT
- int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
--			 bool has_interp, bool is_interp);
-+			 bool is_interp);
- #else
- static inline int arch_elf_adjust_prot(int prot,
- 				       const struct arch_elf_state *state,
--				       bool has_interp, bool is_interp)
-+				       bool is_interp)
- {
- 	return prot;
- }
+This does mean that we may get more code with BTI enabled if running on
+a system without BTI support in the dynamic linker, this is expected to
+be a safe configuration and testing seems to confirm that. It also
+reduces the flexibility userspace has to disable BTI but it is expected
+that for cases where there are problems which require BTI to be disabled
+it is more likely that it will need to be disabled on a system level.
+
+v2:
+ - Add a patch dropping has_interp from arch_adjust_elf_prot()
+ - Fix bisection issue with static executables on arm64 in the first
+   patch.
+
+Mark Brown (3):
+  elf: Allow architectures to parse properties on the main executable
+  arm64: Enable BTI for main executable as well as the interpreter
+  elf: Remove has_interp property from arch_adjust_elf_prot()
+
+ arch/arm64/include/asm/elf.h | 13 ++++++++++---
+ arch/arm64/kernel/process.c  | 20 +++++++-------------
+ fs/binfmt_elf.c              | 29 ++++++++++++++++++++---------
+ include/linux/elf.h          |  8 +++++---
+ 4 files changed, 42 insertions(+), 28 deletions(-)
+
+
+base-commit: c4681547bcce777daf576925a966ffa824edd09d
 -- 
 2.20.1
 
