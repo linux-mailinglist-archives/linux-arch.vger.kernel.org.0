@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC6639B8AD
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 14:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCBD39B8D9
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 14:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbhFDMG0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 08:06:26 -0400
-Received: from foss.arm.com ([217.140.110.172]:37578 "EHLO foss.arm.com"
+        id S230162AbhFDMQV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 08:16:21 -0400
+Received: from foss.arm.com ([217.140.110.172]:37798 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229740AbhFDMG0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 4 Jun 2021 08:06:26 -0400
+        id S230030AbhFDMQV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 4 Jun 2021 08:16:21 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2ADBF2B;
-        Fri,  4 Jun 2021 05:04:40 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.6.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51AD43F73D;
-        Fri,  4 Jun 2021 05:04:35 -0700 (PDT)
-Date:   Fri, 4 Jun 2021 13:04:27 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A4292B;
+        Fri,  4 Jun 2021 05:14:34 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (unknown [10.1.195.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F17803F73D;
+        Fri,  4 Jun 2021 05:14:31 -0700 (PDT)
+Date:   Fri, 4 Jun 2021 13:14:29 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
         Marc Zyngier <maz@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -39,68 +39,131 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <valentin.schneider@arm.com>,
         kernel-team@android.com
-Subject: Re: [PATCH v8 02/19] arm64: Allow mismatched 32-bit EL0 support
-Message-ID: <20210604120352.GA67240@C02TD0UTHF1T.local>
+Subject: Re: [PATCH v8 15/19] arm64: Prevent offlining first CPU with 32-bit
+ EL0 on mismatched system
+Message-ID: <20210604121429.uzzutlkrnpgdzybs@e107158-lin.cambridge.arm.com>
 References: <20210602164719.31777-1-will@kernel.org>
- <20210602164719.31777-3-will@kernel.org>
- <20210603123715.GA48596@C02TD0UTHF1T.local>
- <20210603174413.GC1170@willie-the-truck>
- <20210604093808.GA64162@C02TD0UTHF1T.local>
- <20210604110526.GF2318@willie-the-truck>
+ <20210602164719.31777-16-will@kernel.org>
+ <20210603125856.GC48596@C02TD0UTHF1T.local>
+ <20210603174056.GB1170@willie-the-truck>
+ <20210604094926.GB64162@C02TD0UTHF1T.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210604110526.GF2318@willie-the-truck>
+In-Reply-To: <20210604094926.GB64162@C02TD0UTHF1T.local>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 12:05:27PM +0100, Will Deacon wrote:
-> On Fri, Jun 04, 2021 at 10:38:08AM +0100, Mark Rutland wrote:
-> > On Thu, Jun 03, 2021 at 06:44:14PM +0100, Will Deacon wrote:
-> > > On Thu, Jun 03, 2021 at 01:37:15PM +0100, Mark Rutland wrote:
-> > > > On Wed, Jun 02, 2021 at 05:47:02PM +0100, Will Deacon wrote:
-> > > > > diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-
-> > > > That said. I reckon this could be much cleaner if we maintained separate
-> > > > caps:
+On 06/04/21 10:49, Mark Rutland wrote:
+> On Thu, Jun 03, 2021 at 06:40:57PM +0100, Will Deacon wrote:
+> > On Thu, Jun 03, 2021 at 01:58:56PM +0100, Mark Rutland wrote:
+> > > On Wed, Jun 02, 2021 at 05:47:15PM +0100, Will Deacon wrote:
+> > > > If we want to support 32-bit applications, then when we identify a CPU
+> > > > with mismatched 32-bit EL0 support we must ensure that we will always
+> > > > have an active 32-bit CPU available to us from then on. This is important
+> > > > for the scheduler, because is_cpu_allowed() will be constrained to 32-bit
+> > > > CPUs for compat tasks and forced migration due to a hotplug event will
+> > > > hang if no 32-bit CPUs are available.
 > > > > 
-> > > > ARM64_ALL_CPUS_HAVE_32BIT_EL0
-> > > > ARM64_SOME_CPUS_HAVE_32BIT_EL0
+> > > > On detecting a mismatch, prevent offlining of either the mismatching CPU
+> > > > if it is 32-bit capable, or find the first active 32-bit capable CPU
+> > > > otherwise.
 > > > > 
-> > > > ... and allow arm64_mismatched_32bit_el0 to be set dependent on
-> > > > ARM64_SOME_CPUS_HAVE_32BIT_EL0. With that, this can be simplified to:
+> > > > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > > > Signed-off-by: Will Deacon <will@kernel.org>
+> > > > ---
+> > > >  arch/arm64/kernel/cpufeature.c | 20 +++++++++++++++++++-
+> > > >  1 file changed, 19 insertions(+), 1 deletion(-)
 > > > > 
-> > > > static inline bool system_supports_32bit_el0(void)
-> > > > {
-> > > > 	return (cpus_have_const_cap(ARM64_ALL_CPUS_HAVE_32BIT_EL0)) ||
-> > > > 		static_branch_unlikely(&arm64_mismatched_32bit_el0))
+> > > > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> > > > index 4194a47de62d..b31d7a1eaed6 100644
+> > > > --- a/arch/arm64/kernel/cpufeature.c
+> > > > +++ b/arch/arm64/kernel/cpufeature.c
+> > > > @@ -2877,15 +2877,33 @@ void __init setup_cpu_features(void)
+> > > >  
+> > > >  static int enable_mismatched_32bit_el0(unsigned int cpu)
+> > > >  {
+> > > > +	static int lucky_winner = -1;
 > > > 
-> > > Something similar was discussed in November last year but this falls
-> > > apart with late onlining because its not generally possible to tell whether
-> > > you've seen all the CPUs or not.
+> > > This is cute, but could we please give it a meaningful name, e.g.
+> > > `pinned_cpu` ?
 > > 
-> > Ah; is that for when your boot CPU set is all AArch32-capable, but a
-> > late-onlined CPU is not?
+> > I really don't see the problem, nor why it's "cute".
 > > 
-> > I assume that we require at least one of the set of boot CPUs to be
-> > AArch32 cpable, and don't settle the compat hwcaps after userspace has
-> > started.
+> > Tell you what, I'll add a comment instead:
+> > 
+> > 	/*
+> > 	 * The first 32-bit-capable CPU we detected and so can no longer
+> > 	 * be offlined by userspace. -1 indicates we haven't yet onlined
+> > 	 * a 32-bit-capable CPU.
+> > 	 */
 > 
-> Heh, you assume wrong :)
+> Thanks for the comment; that's helpful.
 > 
-> When we allow the mismatch, then we do actually defer initialisation of
-> the compat hwcaps until we see a 32-bit CPU. That's fine, as they won't
-> be visible to userspace until then anyway (PER_LINUX32 is unavailable).
+> However, my concern here is that when we inevitably have to discuss this
+> with others in future, "lucky winner" is jarring (and also unclear to
+> those where English is not their native language). For clarity, it would
+> be really nice to use a term like "cpu", "chosen_cpu", "pinned_cpu",
+> etc.
+> 
+> However, you're the maintainer; choose what you think is appropriate.
+> 
+> > > >  	struct cpuinfo_arm64 *info = &per_cpu(cpu_data, cpu);
+> > > >  	bool cpu_32bit = id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0);
+> > > >  
+> > > >  	if (cpu_32bit) {
+> > > >  		cpumask_set_cpu(cpu, cpu_32bit_el0_mask);
+> > > >  		static_branch_enable_cpuslocked(&arm64_mismatched_32bit_el0);
+> > > > -		setup_elf_hwcaps(compat_elf_hwcaps);
+> > > >  	}
+> > > >  
+> > > > +	if (cpumask_test_cpu(0, cpu_32bit_el0_mask) == cpu_32bit)
+> > > > +		return 0;
+> > > > +
+> > > > +	if (lucky_winner >= 0)
+> > > > +		return 0;
+> > > > +
+> > > > +	/*
+> > > > +	 * We've detected a mismatch. We need to keep one of our CPUs with
+> > > > +	 * 32-bit EL0 online so that is_cpu_allowed() doesn't end up rejecting
+> > > > +	 * every CPU in the system for a 32-bit task.
+> > > > +	 */
+> > > > +	lucky_winner = cpu_32bit ? cpu : cpumask_any_and(cpu_32bit_el0_mask,
+> > > > +							 cpu_active_mask);
+> > > > +	get_cpu_device(lucky_winner)->offline_disabled = true;
+> > > > +	setup_elf_hwcaps(compat_elf_hwcaps);
+> > > > +	pr_info("Asymmetric 32-bit EL0 support detected on CPU %u; CPU hot-unplug disabled on CPU %u\n",
+> > > > +		cpu, lucky_winner);
+> > > >  	return 0;
+> > > >  }
+> > > 
+> > > I guess this is going to play havoc with kexec and hibernate. :/
+> > 
+> > The kernel can still offline the CPUs (see the whole freezer mess that I
+> > linked to in the cover letter). What specific havoc are you thinking of?
+> 
+> Ah. If this is just inhibiting userspace-driven offlining, that sounds
+> fine.
+> 
+> For kexec, I was concerned that either this would inhibit kexec, or
+> smp_shutdown_nonboot_cpus() would fail to offline the pinned CPU, and
+> that'd trigger a BUG(), which would be unfortunate.
+> 
+> For hibernate, the equivalent is freeze_secondary_cpus(), which I guess
+> is dealt with by the freezer bits you mention.
 
-That sounds quite scary, to me, though I don't have a concrete problem
-to hand. :/
+()->offline_disabled will only block offline requests performed by
+device_offline(). kexec, hibernate, suspend/resume use cpu_online/offline()
+directly so won't be impacted by that. I have sent patches that make
+cpu_online/offline() 'private' and not used or exported outside of cpu
+subsystem and the odd support function for arch code. All other users use
+device_offline() or add/remove_cpu() now.
 
-Do we really need to support initializing that so late? For all other
-caps we've settled things when the boot CPUs come up, and it's
-unfortunate to have to treat this differently.
+I have made sure to test kexec, suspend to disk and ram in my older similar
+implementation in the past. So we should be good.
 
-I'll go see if there's anything that's liable to break today.
+Cheers
 
-Thanks,
-Mark
+--
+Qais Yousef
