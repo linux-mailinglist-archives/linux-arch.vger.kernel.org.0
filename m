@@ -2,154 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FFA39B63C
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 11:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F42439B645
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 11:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbhFDJvW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 05:51:22 -0400
-Received: from foss.arm.com ([217.140.110.172]:34468 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229930AbhFDJvV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 4 Jun 2021 05:51:21 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A71AC1063;
-        Fri,  4 Jun 2021 02:49:35 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.6.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 556D03F73D;
-        Fri,  4 Jun 2021 02:49:31 -0700 (PDT)
-Date:   Fri, 4 Jun 2021 10:49:26 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        kernel-team@android.com
-Subject: Re: [PATCH v8 15/19] arm64: Prevent offlining first CPU with 32-bit
- EL0 on mismatched system
-Message-ID: <20210604094926.GB64162@C02TD0UTHF1T.local>
-References: <20210602164719.31777-1-will@kernel.org>
- <20210602164719.31777-16-will@kernel.org>
- <20210603125856.GC48596@C02TD0UTHF1T.local>
- <20210603174056.GB1170@willie-the-truck>
+        id S229625AbhFDJ5T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 05:57:19 -0400
+Received: from mout.kundenserver.de ([212.227.17.13]:54809 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229612AbhFDJ5S (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Jun 2021 05:57:18 -0400
+Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MStT6-1lxFW92Wvm-00UIut; Fri, 04 Jun 2021 11:55:31 +0200
+Received: by mail-wr1-f46.google.com with SMTP id n4so8693614wrw.3;
+        Fri, 04 Jun 2021 02:55:31 -0700 (PDT)
+X-Gm-Message-State: AOAM530G01n//Al712oHcoMIMzVLTZxFDqgmFw0SjcZgKvc0CmI1nopl
+        uB5yQNLOdSO8sS8frGfs7BOsGpO7ZuloHmNwS5s=
+X-Google-Smtp-Source: ABdhPJxshE3+Uw6+fWuekuuwJhK8oE6TcJIBm0QrwrkRRuWDjLhV71VM+ZrxsXwvq+Gqd5ead+heu/mutRyeZaqbM2U=
+X-Received: by 2002:a5d:5084:: with SMTP id a4mr3045824wrt.286.1622800531222;
+ Fri, 04 Jun 2021 02:55:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210603174056.GB1170@willie-the-truck>
+References: <CO6PR04MB7812D8905C6EEBDE8513866F8D3C9@CO6PR04MB7812.namprd04.prod.outlook.com>
+ <mhng-3875d1bc-74dd-4dc8-b71d-18a8f004039a@palmerdabbelt-glaptop>
+In-Reply-To: <mhng-3875d1bc-74dd-4dc8-b71d-18a8f004039a@palmerdabbelt-glaptop>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 4 Jun 2021 11:53:48 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a03sxxnzpZPxNnXLtCFOFBZ6espEj4V5y=K+59dOLJc6A@mail.gmail.com>
+Message-ID: <CAK8P3a03sxxnzpZPxNnXLtCFOFBZ6espEj4V5y=K+59dOLJc6A@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Anup Patel <Anup.Patel@wdc.com>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Drew Fustini <drew@beagleboard.org>,
+        Christoph Hellwig <hch@lst.de>, wefu@redhat.com,
+        lazyparser@gmail.com,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ujRpXPvNy6Jxro+egqdLKAw5vJR180w7QwlpXdBCHfIrGqxinQz
+ nQR6+KvWR5sJYROEuH+FIIRH7X5P5IFQfZluaWm0Xb5kyNaV0B7BaOLps8CU3h3XVMBAM7P
+ sKR34naXwcGgeXlVXbcuOEoJERzv7eIIjYr6lcDFIOI20I1iBL0sUaGb9LCmNr3+vYkq44f
+ BZ6xm+eanWz4z78eCRBMQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jAKJ4I7p/2A=:QHvYiqwgjPgKFMmyiSeKYu
+ S5rKt7mk11ggGKf8g/VCPt+F29wFssyG7Zhp5YYohJ9JI/2fJTZQvxvzw+zZ/wgqSQF4Z52tY
+ U9yVnOv1UtRm0q0rxlVM9MOxjhgdAcaue1a1fBafAnvE689xK3+uhaFUzQ7xZIgK5KxtYc+aI
+ 2iSmArr6eOAYc2TNeB1usZ+tfqiLsaBEsC2EIhePp3JyzHTjE7fDQzNasEKXjc4dSasMs6ldR
+ OISdpDtE3rsZZfMH+XAB6G7FnwehxwB/e+ZIFULx6bGZRxD+DQxdTzWRKYXvkGOQJon6ypsZw
+ t84J0z8nlYGp6LQjIKZuxoxxA35HN04Lhj7/h1K1vCL7HpbRFC546GBkTjohKw7b0JS4SgKRd
+ feDXme/jATzM2I+OcM5vpnizamXT23ETgrBG5L+DDGZ3pjlWwPdYEm4FzhBDda23/l2stzWpG
+ 4d9+KVUP2VXyhjO8yItd5SJ67bXmCPRr0EtVgi6y2qzTHUd9R5YvnlgTO4+dM2IvoaOhBmVUK
+ pBmTQ/bOhEapuxjWmOINIdLUSH58z+cckD/Ouj653zmPU0SB24TxIL0OkE5nYFD68kZPuJBuK
+ iIChdF/JDVn2DCBObSi1NyQYbHAhNNT7+F83RYVjmwOcHYs0diCe8WSd0QbigeNUbjhzo/yJP
+ wkGM=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 03, 2021 at 06:40:57PM +0100, Will Deacon wrote:
-> On Thu, Jun 03, 2021 at 01:58:56PM +0100, Mark Rutland wrote:
-> > On Wed, Jun 02, 2021 at 05:47:15PM +0100, Will Deacon wrote:
-> > > If we want to support 32-bit applications, then when we identify a CPU
-> > > with mismatched 32-bit EL0 support we must ensure that we will always
-> > > have an active 32-bit CPU available to us from then on. This is important
-> > > for the scheduler, because is_cpu_allowed() will be constrained to 32-bit
-> > > CPUs for compat tasks and forced migration due to a hotplug event will
-> > > hang if no 32-bit CPUs are available.
-> > > 
-> > > On detecting a mismatch, prevent offlining of either the mismatching CPU
-> > > if it is 32-bit capable, or find the first active 32-bit capable CPU
-> > > otherwise.
-> > > 
-> > > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> > > Signed-off-by: Will Deacon <will@kernel.org>
-> > > ---
-> > >  arch/arm64/kernel/cpufeature.c | 20 +++++++++++++++++++-
-> > >  1 file changed, 19 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> > > index 4194a47de62d..b31d7a1eaed6 100644
-> > > --- a/arch/arm64/kernel/cpufeature.c
-> > > +++ b/arch/arm64/kernel/cpufeature.c
-> > > @@ -2877,15 +2877,33 @@ void __init setup_cpu_features(void)
-> > >  
-> > >  static int enable_mismatched_32bit_el0(unsigned int cpu)
-> > >  {
-> > > +	static int lucky_winner = -1;
-> > 
-> > This is cute, but could we please give it a meaningful name, e.g.
-> > `pinned_cpu` ?
-> 
-> I really don't see the problem, nor why it's "cute".
-> 
-> Tell you what, I'll add a comment instead:
-> 
-> 	/*
-> 	 * The first 32-bit-capable CPU we detected and so can no longer
-> 	 * be offlined by userspace. -1 indicates we haven't yet onlined
-> 	 * a 32-bit-capable CPU.
-> 	 */
+On Thu, Jun 3, 2021 at 5:39 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> On Wed, 02 Jun 2021 23:00:29 PDT (-0700), Anup Patel wrote:
+> >> This implementation, which adds some Kconfig entries that control page table
+> >> bits, definately isn't suitable for upstream.  Allowing users to set arbitrary
+> >> page table bits will eventually conflict with the standard, and is just going to
+> >> be a mess.  It'll also lead to kernels that are only compatible with specific
+> >> designs, which we're trying very hard to avoid.  At a bare minimum we'll need
+> >> some way to detect systems with these page table bits before setting them,
+> >> and some description of what the bits actually do so we can reason about
+> >> them.
+> >
+> > Yes, vendor specific Kconfig options are strict NO NO. We can't give-up the
+> > goal of unified kernel image for all platforms.
+>
+> I think this is just a phrasing issue, but just to be sure:
+>
+> IMO it's not that they're vendor-specific Kconfig options, it's that
+> turning them on will conflict with standard systems (and other vendors).
+> We've already got the ability to select sets of Kconfig settings that
+> will only boot on one vendor's system, which is fine, as long as there
+> remains a set of Kconfig settings that will boot on all systems.
+>
+> An example here would be the errata: every system has errata of some
+> sort, so if we start flipping off various vendor's errata Kconfigs
+> you'll end up with kernels that only function properly on some systems.
+> That's fine with me, as long as it's possible to turn on all vendor's
+> errata Kconfigs at the same time and the resulting kernel functions
+> correctly on all systems.
 
-Thanks for the comment; that's helpful.
+Yes, this is generally the goal, and it would be great to have that
+working in a way where a 'defconfig' build just turns on all the options
+that are needed to use any SoC specific features and drivers while
+still working on all hardware. There are however limits you may run
+into at some point, and other architectures usually only manage to span
+some 10 to 15 years of hardware implementations with a single
+kernel before it get really hard.
 
-However, my concern here is that when we inevitably have to discuss this
-with others in future, "lucky winner" is jarring (and also unclear to
-those where English is not their native language). For clarity, it would
-be really nice to use a term like "cpu", "chosen_cpu", "pinned_cpu",
-etc.
+To give some common examples that make it break down:
 
-However, you're the maintainer; choose what you think is appropriate.
+- 32-bit vs 64-bit already violates that rule on risc-v (as it does on
+  most other architectures)
 
-> > >  	struct cpuinfo_arm64 *info = &per_cpu(cpu_data, cpu);
-> > >  	bool cpu_32bit = id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0);
-> > >  
-> > >  	if (cpu_32bit) {
-> > >  		cpumask_set_cpu(cpu, cpu_32bit_el0_mask);
-> > >  		static_branch_enable_cpuslocked(&arm64_mismatched_32bit_el0);
-> > > -		setup_elf_hwcaps(compat_elf_hwcaps);
-> > >  	}
-> > >  
-> > > +	if (cpumask_test_cpu(0, cpu_32bit_el0_mask) == cpu_32bit)
-> > > +		return 0;
-> > > +
-> > > +	if (lucky_winner >= 0)
-> > > +		return 0;
-> > > +
-> > > +	/*
-> > > +	 * We've detected a mismatch. We need to keep one of our CPUs with
-> > > +	 * 32-bit EL0 online so that is_cpu_allowed() doesn't end up rejecting
-> > > +	 * every CPU in the system for a 32-bit task.
-> > > +	 */
-> > > +	lucky_winner = cpu_32bit ? cpu : cpumask_any_and(cpu_32bit_el0_mask,
-> > > +							 cpu_active_mask);
-> > > +	get_cpu_device(lucky_winner)->offline_disabled = true;
-> > > +	setup_elf_hwcaps(compat_elf_hwcaps);
-> > > +	pr_info("Asymmetric 32-bit EL0 support detected on CPU %u; CPU hot-unplug disabled on CPU %u\n",
-> > > +		cpu, lucky_winner);
-> > >  	return 0;
-> > >  }
-> > 
-> > I guess this is going to play havoc with kexec and hibernate. :/
-> 
-> The kernel can still offline the CPUs (see the whole freezer mess that I
-> linked to in the cover letter). What specific havoc are you thinking of?
+- architectures that support both big-endian and little-endian kernels
+  tend to have platforms that require one or the other (e.g. mips,
+  though not arm). Not an issue for you.
 
-Ah. If this is just inhibiting userspace-driven offlining, that sounds
-fine.
+- page table formats are the main cause of incompatibility: arm32
+  and x86-32 require three-level tables for certain features, but those
+  are incompatible with older cores, arm64 supports three different
+  page sizes, but none of them works on all cores (4KB almost works
+  everywhere).
 
-For kexec, I was concerned that either this would inhibit kexec, or
-smp_shutdown_nonboot_cpus() would fail to offline the pinned CPU, and
-that'd trigger a BUG(), which would be unfortunate.
+- SMP-enabled ARMv7 kernels can be configured to run on either
+  ARMv6 or ARMv8, but not both, in this case because of incompatible
+  barrier instructions.
 
-For hibernate, the equivalent is freeze_secondary_cpus(), which I guess
-is dealt with by the freezer bits you mention.
+- 32-bit Arm has a couple more remaining features that require building
+  a machine specific kernel if enabled because they hardcode physical
+  addresses: early printk (debug_ll, not the normal earlycon), NOMMU,
+  and XIP.
 
-Thanks,
-Mark.
+       Arnd
