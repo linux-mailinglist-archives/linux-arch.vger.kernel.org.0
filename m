@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9ED39B7CB
+	by mail.lfdr.de (Postfix) with ESMTP id B477A39B7CC
 	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 13:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbhFDLVe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 07:21:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57082 "EHLO mail.kernel.org"
+        id S230158AbhFDLVg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 07:21:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57138 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230200AbhFDLVd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 4 Jun 2021 07:21:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 759C361414;
-        Fri,  4 Jun 2021 11:19:46 +0000 (UTC)
+        id S230185AbhFDLVf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 4 Jun 2021 07:21:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E0C661369;
+        Fri,  4 Jun 2021 11:19:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622805587;
-        bh=YIMcXq5zjPTU6TnWkCaebLW4hx7QitAn2BiMS6aUhsU=;
+        s=k20201202; t=1622805589;
+        bh=UxOvTvzvIffM4aLRyIgntP4GHd3vzv87L8DyM4UTxII=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EVkXaJ3IikCummcZejRllEphZ+RKJcmEAyJvLQv19+ZRMS1euZigqcZVB0vrDE5+y
-         mjATEXv922NF6+EAxNw4sJWBciLtgl2DDu7MSHQJo+ET9cE0/astlE+yb32tNBm+aO
-         yRo+rLqNFl6wdEWYsXXWNaCFCnJf0WkjcXJoWMlGAAIjBInAKwB3hNcaxIsdzYkZN0
-         TE4nmS1pi06W5ZQ2Hg+c8I4RugdwPmv6QHe+ImRT7gW5eVDprNhCimu7zOJEg2JwSL
-         c62O607D85DMJSx0ZEXShbMLHU2Y8fsQMggab4HQHyxWGdmZuiXDKOoMR1J1ZxiSTn
-         DXdYLnuNpDhnw==
+        b=P8vLqTwzrd2KfXDJNK1Kw4j0FrG7X7R1ILz84XvMUgYJS2V/EZpS9JAHFjxWTxEg4
+         OSwOd5+/u7xJZqAdUBDFMCLPMIfsaZ0cgTjy3IjgB9tvSCFdnA/Sh/8XTF32UfZjrA
+         m0ABT2Cs3PcI06tB5kzkiaXg+0J2IUitlNjvSjkkJ3qhI5K9Dan3i1OnyzFdgGSPTm
+         ZpE9jK7QDNFTIAcVvqtNjDEhsy8VAlxPKw+Z46y31kxftrl5KMxGSxqNl8gQ9JgcuN
+         viM1RZnQ8DSZSCeLYjsumrdPDGSyoeBPV7BVwOcddCnRjKED1BrUWwm1EGYzS+xI1h
+         6R7YK9GYjGvhw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>
@@ -32,106 +32,76 @@ Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
         "H . J . Lu" <hjl.tools@gmail.com>,
         Yu-cheng Yu <yu-cheng.yu@intel.com>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org, Mark Brown <broonie@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>
-Subject: [PATCH v1 2/3] arm64: Enable BTI for main executable as well as the interpreter
-Date:   Fri,  4 Jun 2021 12:17:27 +0100
-Message-Id: <20210604111728.12052-3-broonie@kernel.org>
+        libc-alpha@sourceware.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 3/3] elf: Remove has_interp property from arch_adjust_elf_prot()
+Date:   Fri,  4 Jun 2021 12:17:28 +0100
+Message-Id: <20210604111728.12052-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210604111728.12052-1-broonie@kernel.org>
 References: <20210604111728.12052-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3182; h=from:subject; bh=YIMcXq5zjPTU6TnWkCaebLW4hx7QitAn2BiMS6aUhsU=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBgugvFd6SBiufM2R00KzOUZstotWdq3dPQbkCl/0c/ dJZN8kGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYLoLxQAKCRAk1otyXVSH0MW+B/ 4yqcJtFuYqviGWjfdRvSgY1i8gr0R6YPB1OB/1kItH5G67EBE6Jt9nEIxdnF8L+neLE+CWXb0+cJbz eB1K6ync2IvC83H8huyA+yX/zbtBd9+KraODNo0VsDbOl/2Z4DuVHEZDBSZMn7SapOJ0z26oD3QIlH 4TcH11vjuY8wfCByMnRnERUgPtQ2mWPENyIseZ8jd2kcR91sN9eNpn+w50RE7eZwfMUPhTFBwuCDse eWoB0onQLrPe8+H5QKvYIw4WaA7bzn3o5SBx3CzrafsXUf7EQNSoPpVAH12Ah3Pjvbf2jqs3SZIJHo G5vF+sdFKXBhUHNO3vR1/suuYNhEJm
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2180; h=from:subject; bh=UxOvTvzvIffM4aLRyIgntP4GHd3vzv87L8DyM4UTxII=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBgugvGgxS2Ievr7XanpFMsUXQrjmHCG+84nNMfLRYx Xh+d8u+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYLoLxgAKCRAk1otyXVSH0EvGB/ 0SiN3dB15TvJjFGpyBYQOl4uvmqL4yoqy5xVxvly1OeoKESMck3T9qgBRQjj7Jl2a59iC1HY/ZUofS AHUFsO7ig4+IWBmVOPoaQ5C9+k4QTpHMTOEDp0t+KconcL4gH5Et08MGvAKu0QfUYUYfXYFNcS5EFp 33wzB5/bH7X2doVm/EkhzRjXn43Lm0PZtgly5DrD0yb/BsAWzgWnphhoTbqlkH691fC46ROH2wBKwG zDQ7HmEa3Zh7S22JUpIEIht0wEWvKGXTwMteJXNBLfvy03Ipj0ZciRere40AdDdcknzZ0hyQ4gGjU8 h0FzzQMAWnEm6vIG03qNmvx/pHTdSl
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Currently for dynamically linked ELF executables we only enable BTI for
-the interpreter, expecting the interpreter to do this for the main
-executable. This is a bit inconsistent since we do map main executable and
-is causing issues with systemd's MemoryDenyWriteExecute feature which is
-implemented using a seccomp filter which prevents setting PROT_EXEC on
-already mapped memory and lacks the context to be able to detect that
-memory is already mapped with PROT_EXEC.
-
-Resolve this by checking the BTI property for the main executable and
-enabling BTI if it is present when doing the initial mapping. This does
-mean that we may get more code with BTI enabled if running on a system
-without BTI support in the dynamic linker, this is expected to be a safe
-configuration and testing seems to confirm that. It also reduces the
-flexibility userspace has to disable BTI but it is expected that for cases
-where there are problems which require BTI to be disabled it is more likely
-that it will need to be disabled on a system level.
+Since we have added an is_interp flag to arch_parse_elf_property() we can
+drop the has_interp flag from arch_elf_adjust_prot(), the only user was
+the arm64 code which no longer needs it and any future users will be able
+to use arch_parse_elf_properties() to determine if an interpreter is in
+use.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Dave Martin <Dave.Martin@arm.com>
 ---
- arch/arm64/include/asm/elf.h | 14 ++++++++++----
- arch/arm64/kernel/process.c  | 18 ++++++------------
- 2 files changed, 16 insertions(+), 16 deletions(-)
+ arch/arm64/kernel/process.c | 2 +-
+ fs/binfmt_elf.c             | 2 +-
+ include/linux/elf.h         | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-index a488a1329b16..9f86dbce2680 100644
---- a/arch/arm64/include/asm/elf.h
-+++ b/arch/arm64/include/asm/elf.h
-@@ -253,7 +253,8 @@ struct arch_elf_state {
- 	int flags;
- };
- 
--#define ARM64_ELF_BTI		(1 << 0)
-+#define ARM64_ELF_INTERP_BTI		(1 << 0)
-+#define ARM64_ELF_EXEC_BTI		(1 << 1)
- 
- #define INIT_ARCH_ELF_STATE {			\
- 	.flags = 0,				\
-@@ -274,9 +275,14 @@ static inline int arch_parse_elf_property(u32 type, const void *data,
- 		if (datasz != sizeof(*p))
- 			return -ENOEXEC;
- 
--		if (system_supports_bti() && has_interp == is_interp &&
--		    (*p & GNU_PROPERTY_AARCH64_FEATURE_1_BTI))
--			arch->flags |= ARM64_ELF_BTI;
-+		if (system_supports_bti() &&
-+		    (*p & GNU_PROPERTY_AARCH64_FEATURE_1_BTI)) {
-+			if (is_interp) {
-+				arch->flags |= ARM64_ELF_INTERP_BTI;
-+			} else {
-+				arch->flags |= ARM64_ELF_EXEC_BTI;
-+			}
-+		}
- 	}
- 
- 	return 0;
 diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index b4bb67f17a2c..f7fff4a4c99f 100644
+index f7fff4a4c99f..e51c4aa7e048 100644
 --- a/arch/arm64/kernel/process.c
 +++ b/arch/arm64/kernel/process.c
-@@ -744,19 +744,13 @@ asmlinkage void __sched arm64_preempt_schedule_irq(void)
+@@ -742,7 +742,7 @@ asmlinkage void __sched arm64_preempt_schedule_irq(void)
+ 
+ #ifdef CONFIG_BINFMT_ELF
  int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
- 			 bool has_interp, bool is_interp)
+-			 bool has_interp, bool is_interp)
++			 bool is_interp)
  {
--	/*
--	 * For dynamically linked executables the interpreter is
--	 * responsible for setting PROT_BTI on everything except
--	 * itself.
--	 */
--	if (is_interp != has_interp)
--		return prot;
-+	if (prot & PROT_EXEC) {
-+		if (state->flags & ARM64_ELF_INTERP_BTI && is_interp)
-+			prot |= PROT_BTI;
+ 	if (prot & PROT_EXEC) {
+ 		if (state->flags & ARM64_ELF_INTERP_BTI && is_interp)
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 253ca9969345..1aba4e50e651 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -580,7 +580,7 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
+ 	if (p_flags & PF_X)
+ 		prot |= PROT_EXEC;
  
--	if (!(state->flags & ARM64_ELF_BTI))
--		return prot;
--
--	if (prot & PROT_EXEC)
--		prot |= PROT_BTI;
-+		if (state->flags & ARM64_ELF_EXEC_BTI && !is_interp)
-+			prot |= PROT_BTI;
-+	}
+-	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
++	return arch_elf_adjust_prot(prot, arch_state, is_interp);
+ }
  
+ /* This is much more generalized than the library routine read function,
+diff --git a/include/linux/elf.h b/include/linux/elf.h
+index 1c45ecf29147..d8392531899d 100644
+--- a/include/linux/elf.h
++++ b/include/linux/elf.h
+@@ -101,11 +101,11 @@ extern int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
+ 
+ #ifdef CONFIG_ARCH_HAVE_ELF_PROT
+ int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
+-			 bool has_interp, bool is_interp);
++			 bool is_interp);
+ #else
+ static inline int arch_elf_adjust_prot(int prot,
+ 				       const struct arch_elf_state *state,
+-				       bool has_interp, bool is_interp)
++				       bool is_interp)
+ {
  	return prot;
  }
 -- 
