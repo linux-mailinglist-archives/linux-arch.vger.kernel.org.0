@@ -2,103 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6844A39C336
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Jun 2021 00:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 953D539C357
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Jun 2021 00:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbhFDWHv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 18:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbhFDWHs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Jun 2021 18:07:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F16C061766;
-        Fri,  4 Jun 2021 15:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=C6vKHA3xVyPVc71h+aqVjU0kS8fj+tvFZ8wJ00ZjTjU=; b=uinDlZpqBviYk1MDGUnitgDfDo
-        irMekxr8ru5A1xDgBy6cZ28d41IvJbf75SoG3uHEiY1W1kwq3IUpadmjAF5Wd+Woaoh/GDsPvEBi/
-        J9l6yt0dJ+XKKkfM+irkF/a2ZsCpO7tlOroxXdw8S50HKPCTDml76jCCAV1lYRIBNKpc6FYbfne3t
-        pgxWOY/Fmve7TM3kTp4fcL84JcEPJAMr8MOjdF074/bIp3rWBbaboMaUf5FNyJH/1kXac3LyKX4pH
-        1SEfQsMWQHGyVIFdp6Hj/fWYMiElPYB8cGQeEJNoRouOpfwu1fLQasDASeGEgCRrhIqQmlQRimtBX
-        hfTK58Sg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lpHwM-00DdL3-6H; Fri, 04 Jun 2021 22:05:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ACD64300223;
-        Sat,  5 Jun 2021 00:05:16 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 918412BC0001B; Sat,  5 Jun 2021 00:05:16 +0200 (CEST)
-Date:   Sat, 5 Jun 2021 00:05:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Will Deacon <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <YLqjnNBGhd320Ix9@hirez.programming.kicks-ass.net>
-References: <20210604151356.GC2793@willie-the-truck>
- <YLpFHE5Cr45rWTUV@hirez.programming.kicks-ass.net>
- <YLpJ5K6O52o1cAVT@hirez.programming.kicks-ass.net>
- <20210604155154.GG1676809@rowland.harvard.edu>
- <YLpSEM7sxSmsuc5t@hirez.programming.kicks-ass.net>
- <20210604182708.GB1688170@rowland.harvard.edu>
- <CAHk-=wiuLpmOGJyB385UyQioWMVKT6wN9UtyVXzt48AZittCKg@mail.gmail.com>
- <CAHk-=wik7T+FoDAfqFPuMGVp6HxKYOf8UeKt3+EmovfivSgQ2Q@mail.gmail.com>
- <20210604205600.GB4397@paulmck-ThinkPad-P17-Gen-1>
- <CAHk-=wgmUbU6XPHz=4NFoLMxH7j_SR-ky4sKzOBrckmvk5AJow@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgmUbU6XPHz=4NFoLMxH7j_SR-ky4sKzOBrckmvk5AJow@mail.gmail.com>
+        id S231169AbhFDWN1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 18:13:27 -0400
+Received: from mail-pg1-f171.google.com ([209.85.215.171]:40608 "EHLO
+        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229774AbhFDWN0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Jun 2021 18:13:26 -0400
+Received: by mail-pg1-f171.google.com with SMTP id j12so8933402pgh.7
+        for <linux-arch@vger.kernel.org>; Fri, 04 Jun 2021 15:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kl/E6sm1Hy5waa1ESIZ6GAoJ0uFLqC7+4leUJX1UReE=;
+        b=e1C3eBAJo533STH89elp7a4H+e6DnBllnlpNPkSJ37AUtSa9D2fSu0R9qPHRWFpoUB
+         dyKBlwyR2c9ha5qH37lC+zWEtaBtf/3ujqhuCkHBVKkpFXmVRfB052qGmbX6QEROyzD5
+         3piThQCpvPoTNvTgpwAYjppQ7qiFBb3tZhJuG3A4soIr6mSQh9a2WrqXG2sMAvkf4lAr
+         VShOLXtWlvCnxX+kxgqH+shj8nPlrteBjpNkyAbKPqD3c8r53ZkiFSt9/f1WtmOKJCE+
+         lnqhimh/cKxstXt7srO9gYkWhdjTgZ6M61MALsrXBsMcUtD9cVabUQh9b9yd6ovsvTxK
+         9GbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Kl/E6sm1Hy5waa1ESIZ6GAoJ0uFLqC7+4leUJX1UReE=;
+        b=Rp4cMpCpTyzefqJpuGV81ApJMMah4BnsiQ0BOUg3rg0LHMNTxdvoHg9htQBAF5Yf5W
+         CHlcfcvOWWOyQKndK7VLagRc6UZkf33BjloFHD4CRp+v0OUl64vsGsi4TueN5iVe81nY
+         vU4Z35yi283HDDV1geLzntGl5//TLshMHiSPX0f/R5NpeNn/HWraCxFT2pHDWm0S+LRm
+         CMwxFqcDOrfmP/2TOE4ZUwf99RzjIK5/u4uOKv8M2gqyHCKmpGXz4lQCaNlv8SrG+71e
+         k+9hTUbJipq4U03gqgG9JN6UTSpfSUQTvBpIMmWO8TBkZYqy0MWU0uuixtq07BTvqPNr
+         sjfA==
+X-Gm-Message-State: AOAM530+hZVOuy8La7Mqpju2dTId3SUnWH/g638igre+7CCGMKK8vO0I
+        aXD1eG+KelAqS0xVfnY6llzFRA==
+X-Google-Smtp-Source: ABdhPJx6gnUDtLRP5p/Mj/1tsX2DdzihHec2VB3/gPJAOwx7MOtdoF07gdAgTqrtYn6zBIaIbuTF9w==
+X-Received: by 2002:a05:6a00:139a:b029:2e3:db98:9ae3 with SMTP id t26-20020a056a00139ab02902e3db989ae3mr6785904pfg.81.1622844626154;
+        Fri, 04 Jun 2021 15:10:26 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id 35sm2768481pgq.91.2021.06.04.15.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Jun 2021 15:10:25 -0700 (PDT)
+Date:   Fri, 04 Jun 2021 15:10:25 -0700 (PDT)
+X-Google-Original-Date: Fri, 04 Jun 2021 15:10:24 PDT (-0700)
+Subject:     Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
+In-Reply-To: <CAK8P3a04C8HObpSHNYqQpe4V96MoSLs7sEpiPvp4OpvyAU1_fQ@mail.gmail.com>
+CC:     guoren@kernel.org, Anup Patel <Anup.Patel@wdc.com>,
+        anup@brainfault.org, drew@beagleboard.org,
+        Christoph Hellwig <hch@lst.de>, wefu@redhat.com,
+        lazyparser@gmail.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, guoren@linux.alibaba.com,
+        Paul Walmsley <paul.walmsley@sifive.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-82cca177-11c3-44d0-a0c3-37df6a40bb6b@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 02:27:49PM -0700, Linus Torvalds wrote:
-> On Fri, Jun 4, 2021 at 1:56 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > The usual way to prevent it is to use WRITE_ONCE().
-> 
-> The very *documentation example* for "volatile_if()" uses that WRITE_ONCE().
-> 
-> IOW, the patch that started this discussion has this comment in it:
-> 
-> +/**
-> + * volatile_if() - Provide a control-dependency
-> + *
-> + * volatile_if(READ_ONCE(A))
-> + *     WRITE_ONCE(B, 1);
-> + *
-> + * will ensure that the STORE to B happens after the LOAD of A.
+On Fri, 04 Jun 2021 14:26:11 PDT (-0700), Arnd Bergmann wrote:
+> On Fri, Jun 4, 2021 at 6:14 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>> >> To give some common examples that make it break down:
+>> >>
+>> >> - 32-bit vs 64-bit already violates that rule on risc-v (as it does on
+>> >>   most other architectures)
+>>
+>> Yes, and there's no way around that on RISC-V.  They're different base
+>> ISAs therefor re-define the same instructions, so we're essentially at
+>> two kernel binaries by that point.  The platform spec says rv64gc, so we
+>> can kind of punt on this one for now.  If rv32 hardware shows up
+>> we'll probably want a standard system there too, which is why we've
+>> avoided coupling kernel portability to XLEN.
+>
+> I would actually put 32-bit into the same category as NOMMU, XIP
+> and the built-in DTB:
+> Since it seems unrealistic to expect an rv32 Debian or Fedora build,
+> there is very little to gain by enforcing compatibility between machines.
+> This is different from 32-bit Arm, which is widely used across multiple
+> distros and many SoCs.
 
-We do actually have uses what use a 'regular' store, and not a
-WRITE_ONCE(). And I think for those the added barrier() might make a
-difference.
+OK, well, that's what the spec says already.  Maybe the right answer is 
+to just add that "be compatible with the platform spec" Kconfig and have 
+it also enforce rv64gc like the spec says.
 
-At the very least the perf ring-buffer case uses memcpy().
+>
+>> >> - architectures that support both big-endian and little-endian kernels
+>> >>   tend to have platforms that require one or the other (e.g. mips,
+>> >>   though not arm). Not an issue for you.
+>>
+>> It is now!  We've added big-endian to RISC-V.  There's no hardware yet
+>> and very little software support.  IMO the right answer is to ban that
+>> from the platform spec, but again it'll depnd on what vendors want to
+>> build (though anyone is listening, please don't make my life miserable
+>> ;)).
+>
+> I don't see any big-endian support in linux-next. This one does seem
+> worth enforcing to be kept out, as it would double the number of user
+> space ABIs, not just kernel configurations. On arm64, I think the general
+> feeling is now that we would have been better off not merging big-endian
+> support into the kernel as an option, but it still seemed important at the
+> time. Not that there is anything really wrong with big-endian by itself,
+> just that there is no use case that is worth the added complexity of
+> supporting both.
+>
+> Let me know if there are patches you want me to Nak in the future ;-)
 
-On my part I'm deeply distrusting some of the C language committee
-proposals I've seen regarding this stuff, and I'm maybe worrying too
-much, but I'd rather not have to debug anything like this when they do
-manage to make it go bad.
-
-On top of that, I think having the construct is good for documenting
-intent and possibly some of the concurrency analyzers can make use of
-it.
+Sorry, by "added big-endian to RISC-V" I meant to the ISA, not to Linux.  
+We haven't had any interesting in adding it to Linux.  The interest has 
+all been in the embedded space.
