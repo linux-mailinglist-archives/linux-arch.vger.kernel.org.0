@@ -2,203 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCF339B749
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 12:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A5139B786
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 13:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbhFDKpw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 06:45:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41770 "EHLO mail.kernel.org"
+        id S229980AbhFDLHU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 07:07:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229625AbhFDKpw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 4 Jun 2021 06:45:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C8F546141B;
-        Fri,  4 Jun 2021 10:44:03 +0000 (UTC)
+        id S229692AbhFDLHU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 4 Jun 2021 07:07:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 23FD861159;
+        Fri,  4 Jun 2021 11:05:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622803446;
-        bh=kmLcjElNf8/glHDMFalVj0RYS3e6e9GqQWiMhVHRSCM=;
+        s=k20201202; t=1622804734;
+        bh=F6qdZyzEiXprcFunaXrWBdEWvmBNTkX5sFnDNIAVD0c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XYsfXNCv/6U3yuS4wbHctDnUkMoq8ufOr8zFX1ltCshzq/Ww9eRSbxM0K98wG4PGB
-         VtpZrq7lKfu2t0+pPx2fAuerh5DD7VRuKrmkep/Z7pavXhf1ytV/o9JjaSjxRLbysq
-         bL3FOPJlbm64ofLBboosy/yFaTRI7UIVh18glxBwcjG6kyC3JreAKhQMd/YDgUyOYM
-         z2Vwbp3N9KJqS350XHdX2PeczC3QAZMQqP64ORb6OOj9+YWhPpHrh5bY1gmgbShCS5
-         hzY7hoA1QJ7rs1sbOGZM9zY5GJI/k3Jqw6RCW/fAVMdmJa195i+EpP5r2PSIjexmb/
-         dxDXB6LqHIUFQ==
-Date:   Fri, 4 Jun 2021 11:44:00 +0100
+        b=Xo760dFfoA6jHGH4cw6Kt7dVLtRAxU+GtKkqVqk+C0OnZu3tXlLwUkixPeVaZyi4A
+         K4zM2+iCl8dDTdB+ZDY8PGDD7yE491gP1glhtCdmKtimxTQqWIOoO+E1eUjcy4/PmR
+         QTh8+IufqjF8El+xZJqXV88SkNMLzNeUlJWqWed2Ojj7gYHRx++R3mM5a4LAFdAjuB
+         H7u9QLxkesGz+WGybxUwbQG2v7uGUiP6zVtM2YsnM6j5Py9BboKXP229KNN8fgVeCG
+         FRmZFipqlKpPHutqnc+Wzx9jUDXkb8LK5rPQVggALSfSyoFoBd7mfTvB8fFj0fPxYp
+         97TqtUP4rzn/g==
+Date:   Fri, 4 Jun 2021 12:05:27 +0100
 From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, paulmck@kernel.org,
-        stern@rowland.harvard.edu, parri.andrea@gmail.com,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        linux-kernel@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210604104359.GE2318@willie-the-truck>
-References: <YLn8dzbNwvqrqqp5@hirez.programming.kicks-ass.net>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        kernel-team@android.com
+Subject: Re: [PATCH v8 02/19] arm64: Allow mismatched 32-bit EL0 support
+Message-ID: <20210604110526.GF2318@willie-the-truck>
+References: <20210602164719.31777-1-will@kernel.org>
+ <20210602164719.31777-3-will@kernel.org>
+ <20210603123715.GA48596@C02TD0UTHF1T.local>
+ <20210603174413.GC1170@willie-the-truck>
+ <20210604093808.GA64162@C02TD0UTHF1T.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YLn8dzbNwvqrqqp5@hirez.programming.kicks-ass.net>
+In-Reply-To: <20210604093808.GA64162@C02TD0UTHF1T.local>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 12:12:07PM +0200, Peter Zijlstra wrote:
-> With optimizing compilers becoming more and more agressive and C so far
-> refusing to acknowledge the concept of control-dependencies even while
-> we keep growing the amount of reliance on them, things will eventually
-> come apart.
+On Fri, Jun 04, 2021 at 10:38:08AM +0100, Mark Rutland wrote:
+> On Thu, Jun 03, 2021 at 06:44:14PM +0100, Will Deacon wrote:
+> > On Thu, Jun 03, 2021 at 01:37:15PM +0100, Mark Rutland wrote:
+> > > On Wed, Jun 02, 2021 at 05:47:02PM +0100, Will Deacon wrote:
+> > > > diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+> > > > index 338840c00e8e..603bf4160cd6 100644
+> > > > --- a/arch/arm64/include/asm/cpufeature.h
+> > > > +++ b/arch/arm64/include/asm/cpufeature.h
+> > > > @@ -630,9 +630,15 @@ static inline bool cpu_supports_mixed_endian_el0(void)
+> > > >  	return id_aa64mmfr0_mixed_endian_el0(read_cpuid(ID_AA64MMFR0_EL1));
+> > > >  }
+> > > >  
+> > > > +const struct cpumask *system_32bit_el0_cpumask(void);
+> > > > +DECLARE_STATIC_KEY_FALSE(arm64_mismatched_32bit_el0);
+> > > > +
+> > > >  static inline bool system_supports_32bit_el0(void)
+> > > >  {
+> > > > -	return cpus_have_const_cap(ARM64_HAS_32BIT_EL0);
+> > > > +	u64 pfr0 = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
+> > > > +
+> > > > +	return static_branch_unlikely(&arm64_mismatched_32bit_el0) ||
+> > > > +	       id_aa64pfr0_32bit_el0(pfr0);
+> > > >  }
+> > > 
+> > > Note that read_sanitised_ftr_reg() has to do a bsearch() to find the
+> > > arm64_ftr_reg, so this will make system_32bit_el0_cpumask() a fair
+> > > amount more expensive than it needs to be.
+> > 
+> > I seriously doubt that it matters, but it did come up before and I proposed
+> > a potential solution if it's actually a concern:
+> > 
+> > https://lore.kernel.org/r/20201202172727.GC29813@willie-the-truck
+> > 
+> > so if you can show that it's a problem, we can resurrect something like
+> > that.
 > 
-> There have been talks with toolchain people on how to resolve this; one
-> suggestion was allowing the volatile qualifier on branch statements like
-> 'if', but so far no actual compiler has made any progress on this.
-> 
-> Rather than waiting any longer, provide our own construct based on that
-> suggestion. The idea is by Alan Stern and refined by Paul and myself.
-> 
-> Code generation is sub-optimal (for the weak architectures) since we're
-> forced to convert the condition into another and use a fixed conditional
-> branch instruction, but shouldn't be too bad.
-> 
-> Usage of volatile_if requires the @cond to be headed by a volatile load
-> (READ_ONCE() / atomic_read() etc..) such that the compiler is forced to
-> emit the load and the branch emitted will have the required
-> data-dependency. Furthermore, volatile_if() is a compiler barrier, which
-> should prohibit the compiler from lifting anything out of the selection
-> statement.
+> I'm happy to leave that for future. I raised this because elsewhere this
+> is an issue when we need to avoid instrumentation; if that's not a
+> concern here on any path then I am not aware of a functional issue.
 
-When building with LTO on arm64, we already upgrade READ_ONCE() to an RCpc
-acquire. In this case, it would be really good to avoid having the dummy
-conditional branch somehow, but I can't see a good way to achieve that.
+I can't think of a reason why instrumentation would be an issue for any of
+the current callers, but that's a good point to bear in mind.
 
-> This construct should place control dependencies on a stronger footing
-> until such time that the compiler folks get around to accepting them :-)
+> > > That said. I reckon this could be much cleaner if we maintained separate
+> > > caps:
+> > > 
+> > > ARM64_ALL_CPUS_HAVE_32BIT_EL0
+> > > ARM64_SOME_CPUS_HAVE_32BIT_EL0
+> > > 
+> > > ... and allow arm64_mismatched_32bit_el0 to be set dependent on
+> > > ARM64_SOME_CPUS_HAVE_32BIT_EL0. With that, this can be simplified to:
+> > > 
+> > > static inline bool system_supports_32bit_el0(void)
+> > > {
+> > > 	return (cpus_have_const_cap(ARM64_ALL_CPUS_HAVE_32BIT_EL0)) ||
+> > > 		static_branch_unlikely(&arm64_mismatched_32bit_el0))
+> > 
+> > Something similar was discussed in November last year but this falls
+> > apart with late onlining because its not generally possible to tell whether
+> > you've seen all the CPUs or not.
 > 
-> I've converted most architectures we care about, and the rest will get
-> an extra smp_mb() by means of the 'generic' fallback implementation (for
-> now).
+> Ah; is that for when your boot CPU set is all AArch32-capable, but a
+> late-onlined CPU is not?
 > 
-> I've converted the control dependencies I remembered and those found
-> with a search for smp_acquire__after_ctrl_dep(), there might be more.
-> 
-> Compile tested only (alpha, arm, arm64, x86_64, powerpc, powerpc64, s390
-> and sparc64).
-> 
-> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/arm/include/asm/barrier.h      | 11 +++++++++++
->  arch/arm64/include/asm/barrier.h    | 11 +++++++++++
->  arch/powerpc/include/asm/barrier.h  | 13 +++++++++++++
->  arch/s390/include/asm/barrier.h     |  3 +++
->  arch/sparc/include/asm/barrier_64.h |  3 +++
->  arch/x86/include/asm/barrier.h      | 16 ++++++++++++++++
->  include/asm-generic/barrier.h       | 38 ++++++++++++++++++++++++++++++++++++-
->  include/linux/refcount.h            |  2 +-
->  ipc/mqueue.c                        |  2 +-
->  ipc/msg.c                           |  2 +-
->  kernel/events/ring_buffer.c         |  8 ++++----
->  kernel/locking/rwsem.c              |  4 ++--
->  kernel/sched/core.c                 |  2 +-
->  kernel/smp.c                        |  2 +-
->  14 files changed, 105 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/arm/include/asm/barrier.h b/arch/arm/include/asm/barrier.h
-> index 83ae97c049d9..de8a61479268 100644
-> --- a/arch/arm/include/asm/barrier.h
-> +++ b/arch/arm/include/asm/barrier.h
-> @@ -97,6 +97,17 @@ static inline unsigned long array_index_mask_nospec(unsigned long idx,
->  #define array_index_mask_nospec array_index_mask_nospec
->  #endif
->  
-> +/* Guarantee a conditional branch that depends on @cond. */
-> +static __always_inline _Bool volatile_cond(_Bool cond)
-> +{
-> +	asm_volatile_goto("teq %0, #0; bne %l[l_yes]"
-> +			  : : "r" (cond) : "cc", "memory" : l_yes);
-> +	return 0;
-> +l_yes:
-> +	return 1;
-> +}
-> +#define volatile_cond volatile_cond
-> +
->  #include <asm-generic/barrier.h>
->  
->  #endif /* !__ASSEMBLY__ */
-> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> index 451e11e5fd23..2782a7013615 100644
-> --- a/arch/arm64/include/asm/barrier.h
-> +++ b/arch/arm64/include/asm/barrier.h
-> @@ -156,6 +156,17 @@ do {									\
->  	(typeof(*p))__u.__val;						\
->  })
->  
-> +/* Guarantee a conditional branch that depends on @cond. */
-> +static __always_inline _Bool volatile_cond(_Bool cond)
+> I assume that we require at least one of the set of boot CPUs to be
+> AArch32 cpable, and don't settle the compat hwcaps after userspace has
+> started.
 
-Is _Bool to fix some awful header mess?
+Heh, you assume wrong :)
 
-> +{
-> +	asm_volatile_goto("cbnz %0, %l[l_yes]"
-> +			  : : "r" (cond) : "cc", "memory" : l_yes);
-> +	return 0;
-> +l_yes:
-> +	return 1;
-> +}
-
-nit: you don't need the "cc" clobber here.
-
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index 640f09479bdf..a84833f1397b 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -187,6 +187,42 @@ do {									\
->  #define virt_store_release(p, v) __smp_store_release(p, v)
->  #define virt_load_acquire(p) __smp_load_acquire(p)
->  
-> +/*
-> + * 'Generic' wrapper to make volatile_if() below 'work'. Architectures are
-> + * encouraged to provide their own implementation. See x86 for TSO and arm64
-> + * for a weak example.
-> + */
-> +#ifndef volatile_cond
-> +#define volatile_cond(cond)	({ bool __t = (cond); smp_mb(); __t; })
-> +#endif
-> +
-> +/**
-> + * volatile_if() - Provide a control-dependency
-> + *
-> + * volatile_if(READ_ONCE(A))
-> + *	WRITE_ONCE(B, 1);
-> + *
-> + * will ensure that the STORE to B happens after the LOAD of A. Normally a
-> + * control dependency relies on a conditional branch having a data dependency
-> + * on the LOAD and an architecture's inability to speculate STOREs. IOW, this
-> + * provides a LOAD->STORE order.
-> + *
-> + * Due to optimizing compilers extra care is needed; as per the example above
-> + * the LOAD must be 'volatile' qualified in order to ensure the compiler
-> + * actually emits the load, such that the data-dependency to the conditional
-> + * branch can be formed.
-> + *
-> + * Secondly, the compiler must be prohibited from lifting anything out of the
-> + * selection statement, as this would obviously also break the ordering.
-> + *
-> + * Thirdly, and this is the tricky bit, architectures that allow the
-> + * LOAD->STORE reorder must ensure the compiler actually emits the conditional
-> + * branch instruction, this isn't possible in generic.
-> + *
-> + * See the volatile_cond() wrapper.
-> + */
-> +#define volatile_if(cond) if (volatile_cond(cond))
-
-The thing I really dislike about this is that, if the compiler _does_
-emit a conditional branch for the C 'if', then we get a pair of branch
-instructions in close proximity to each other which the predictor is likely
-to hate. I wouldn't be surprised if an RCpc acquire heading the dependency
-actually performs better on modern arm64 cores in the general case.
-
-So I think that's an argument for doing this in the compiler...
+When we allow the mismatch, then we do actually defer initialisation of
+the compat hwcaps until we see a 32-bit CPU. That's fine, as they won't
+be visible to userspace until then anyway (PER_LINUX32 is unavailable).
 
 Will
