@@ -2,69 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D7C39BEF6
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 19:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2140E39BF80
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Jun 2021 20:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbhFDRkt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 13:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbhFDRkt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Jun 2021 13:40:49 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF02C061766
-        for <linux-arch@vger.kernel.org>; Fri,  4 Jun 2021 10:39:02 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a1so5588299lfr.12
-        for <linux-arch@vger.kernel.org>; Fri, 04 Jun 2021 10:39:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n9fPMUfjUiK0FrRER6EH6PeTXMziUWqxljccly8zx7c=;
-        b=MJ0NfISVyYy/x/kclYN0s9fJRn5RliOT0U+w0BfCWBnLtWRtfPyvQRs2IIykEPgYRA
-         iPmdQbb2zzRdZQzIE2X5p3HF4kbmJgxzs1DJCeD2N6RMTL7zDRAxmbT8zPfNnpdiIRZD
-         KX2qRRFcTYEo6EAz4KL2o5iAZ1t2awg7AqCwY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n9fPMUfjUiK0FrRER6EH6PeTXMziUWqxljccly8zx7c=;
-        b=jS0YfUazdDsVpol1MxPzfTB7hSE5nfJJkPyhezJTo9J8C0dI6rqsopyw4vJ63hGna4
-         rzh2KMgDyqpe5UQo5opJCUm/vud0IdaGpkcDAI8w2Kd6tpwWRRa1cQX6AYp/T8wLHIYB
-         7tjVPn4UMmIcz+cNan17EAY6Qt3mPJu9MkeL515svHh6uyIrlJYIhHpsWNNiwx9alxNf
-         tSvS83sSlscRS8FKrbtdQU0+/EqQ32/yY7D/9OvYpf6D6w4ZTbBMVF+mtWObbwgIn6YM
-         e+JUPFR9ZwJGwsxW3QSsKb9FZH0XJU5nj8+4F41m6HM+Yk5yeDjk5GAeBTne6GbUqJtL
-         vG8A==
-X-Gm-Message-State: AOAM532ctHdDmK+e+fpRApHrgguTnuzW7wH2NYZJ1mA7U1V7evRCZ5m6
-        1bvKFonO01EHF7SExMqkxzGvDtttUzDMo6DX
-X-Google-Smtp-Source: ABdhPJyBiFl3SslHVjn+B3zhc/+y9eTetGWkMWH6gwz0Xk3yyYC/8h8p+eRwLJf1GFossDqs/o1quQ==
-X-Received: by 2002:a05:6512:3da8:: with SMTP id k40mr3497419lfv.450.1622828340654;
-        Fri, 04 Jun 2021 10:39:00 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id a1sm665920lff.215.2021.06.04.10.38.59
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Jun 2021 10:39:00 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id f11so15212669lfq.4
-        for <linux-arch@vger.kernel.org>; Fri, 04 Jun 2021 10:38:59 -0700 (PDT)
-X-Received: by 2002:a05:6512:baa:: with SMTP id b42mr3435945lfv.487.1622828339731;
- Fri, 04 Jun 2021 10:38:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <YLn8dzbNwvqrqqp5@hirez.programming.kicks-ass.net>
- <CAHk-=wievFk29DZgFLEFpH9yuZ0jfJqppLTJnOMvhe=+tDqgrw@mail.gmail.com>
- <YLpWwm1lDwBaUven@hirez.programming.kicks-ass.net> <CAHk-=wjf-VJZd3Uxv3T3pSJYYVzyfK2--znG0VEOnNRchMGgdQ@mail.gmail.com>
- <20210604172407.GJ18427@gate.crashing.org>
-In-Reply-To: <20210604172407.GJ18427@gate.crashing.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 4 Jun 2021 10:38:43 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj0Qvpn0pOOhJMGOim=psP3bhS2dEX1bAvQpmXs__vqiQ@mail.gmail.com>
-Message-ID: <CAHk-=wj0Qvpn0pOOhJMGOim=psP3bhS2dEX1bAvQpmXs__vqiQ@mail.gmail.com>
-Subject: Re: [RFC] LKMM: Add volatile_if()
-To:     Segher Boessenkool <segher@kernel.crashing.org>
+        id S230063AbhFDSZo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 14:25:44 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:58765 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229982AbhFDSZo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Jun 2021 14:25:44 -0400
+Received: (qmail 1689062 invoked by uid 1000); 4 Jun 2021 14:23:57 -0400
+Date:   Fri, 4 Jun 2021 14:23:57 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
         Andrea Parri <parri.andrea@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Nick Piggin <npiggin@gmail.com>,
@@ -75,55 +28,64 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-toolchains@vger.kernel.org,
         linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RFC] LKMM: Add volatile_if()
+Message-ID: <20210604182357.GA1688170@rowland.harvard.edu>
+References: <YLn8dzbNwvqrqqp5@hirez.programming.kicks-ass.net>
+ <CAHk-=wievFk29DZgFLEFpH9yuZ0jfJqppLTJnOMvhe=+tDqgrw@mail.gmail.com>
+ <YLpWwm1lDwBaUven@hirez.programming.kicks-ass.net>
+ <CAHk-=wjf-VJZd3Uxv3T3pSJYYVzyfK2--znG0VEOnNRchMGgdQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjf-VJZd3Uxv3T3pSJYYVzyfK2--znG0VEOnNRchMGgdQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 4, 2021 at 10:27 AM Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> > Of course, we might want to make sure that the compiler doesn't go
-> > "oh, empty asm, I can ignore it",
->
-> It isn't allowed to do that.  GCC has this arguable misfeature where it
-> doesn't show empty asm in the assembler output, but that has no bearing
-> on anything but how human-readable the output is.
+On Fri, Jun 04, 2021 at 10:10:29AM -0700, Linus Torvalds wrote:
+> On Fri, Jun 4, 2021 at 9:37 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > >
+> > > Why is "volatile_if()" not just
+> > >
+> > >        #define barier_true() ({ barrier(); 1; })
+> > >
+> > >        #define volatile_if(x) if ((x) && barrier_true())
+> >
+> > Because we weren't sure compilers weren't still allowed to optimize the
+> > branch away.
+> 
+> This isn't about some "compiler folks think".
+> 
+> The above CANNOT be compiled any other way than with a branch.
+> 
+> A compiler that optimizes a branch away is simply broken.
+> 
+> Of course, the actual condition (ie "x" above) has to be something
+> that the compiler cannot statically determine is a constant, but since
+> the whole - and only - point is that there will be a READ_ONCE() or
+> similar there, that's not an issue.
 
-That sounds about right, but we have had people talking about the
-compiler looking inside the asm string before.
+In fact there is one weird case where it is an issue (mentioned in 
+memory-barriers.txt):
 
-So it worries me that some compiler person might at some point go all
-breathy-voice on us and say "I am altering the deal. Pray I don't
-alter it any further".
+If some obscure arch-specific header file does:
 
-Side note: when grepping for what "barrier()" does on different
-architectures and different compilers, I note that yes, it really is
-just an empty asm volatile with a "memory" barrier. That should in all
-way sbe sufficient.
+	#define FOO	1
 
-BUT.
+and an unwitting programmer writes:
 
-There's this really odd comment in <linux/compiler-intel.h> that talks
-about some "ECC" compiler:
+	volatile_if (READ_ONCE(*y) % FOO == 0)
+		WRITE_ONCE(*z, 5);
 
-  /* Intel ECC compiler doesn't support gcc specific asm stmts.
-   * It uses intrinsics to do the equivalent things.
-   */
+then the compiler _can_ statically determine that the condition is a 
+constant, in spite of the READ_ONCE, but this fact isn't apparent to the 
+programmer.  The generated object code will include both the read and 
+the write, but there won't necessarily be any ordering between them.
 
-and it defines it as "__memory_barrier()". This seems to be an ia64 thing, but:
+I don't know if cases like this exist in the kernel.  It wouldn't be 
+surprising if they did though, particularly in situations where a 
+feature (like multi-level page tables) may be compiled away.
 
- - I cannot get google to find me any documentation on such an intrinsic
-
- - it seems to be bogus anyway, since we have "asm volatile" usage in
-at least arch/ia64/mm/tlb.c
-
-So I do note that "barrier()" has an odd definition in one odd ia64
-case, and I can't find the semantics for it.
-
-Admittedly I also cannot find it in myself to care. I don't think that
-"Intel ECC" compiler case actually exists, and even if it does I don't
-think itanium is relevant any more. But it was an odd detail on what
-"barrier()" actually might mean to the compiler.
-
-              Linus
+Alan
