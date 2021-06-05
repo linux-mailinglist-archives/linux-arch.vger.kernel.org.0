@@ -2,93 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDFC39C4DF
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Jun 2021 03:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C66839C54A
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Jun 2021 04:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbhFEBop (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Jun 2021 21:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbhFEBoo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Jun 2021 21:44:44 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C28C061767;
-        Fri,  4 Jun 2021 18:42:42 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id o9so6401760pgd.2;
-        Fri, 04 Jun 2021 18:42:42 -0700 (PDT)
+        id S230286AbhFECzR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Jun 2021 22:55:17 -0400
+Received: from mail-pg1-f169.google.com ([209.85.215.169]:37867 "EHLO
+        mail-pg1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230169AbhFECzQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Jun 2021 22:55:16 -0400
+Received: by mail-pg1-f169.google.com with SMTP id t9so9327503pgn.4;
+        Fri, 04 Jun 2021 19:53:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PZkiKtXqsSUWsFPxoaMD52BWVXcB9txjh0r70N9gfwg=;
-        b=WW4xgRVmullOrJwODXcaph9gCP7wl4/aB45NW6pjILZwERzHDpOslub+OyR7hv6vhX
-         MQF6HrAFrzeiZgWNqLnh7i5L5IUeCDNz4A5ttNpDA19cMy9/mGXcEJT0WbPyaayBmVSB
-         bVOuiJ/6Rsgfw8dJqWBlu/YAJYV8e3PSbOsa4f4K9eWKr2Xgo39e1CSlwj7VCjuDyqVY
-         S0LwDvr6wJcda9KLJjMBlr2BLG4r6PfTk2tg/qAZCN5xG7q7k/UhBG0CDq4/lfxkpqkm
-         0WECU+QAbnudJ7jXiUtvPGGgerN8eW0cwsDgFdV4SroQ2C6/rCsFRueDEuusyXuNkrHY
-         BuTQ==
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=JOIBq+kEIRNe1HY/dU/O4ueknvMC0Jdakk1cdBJSPGw=;
+        b=bmjRiedlJqGYPmfoB1i8FSdNGJRe69WfRRrbZKLnzmCjCN6oYAc7C+cA6rGIaualIa
+         l4qfmOQJIsm7mhy2xoCiiJH+FQPWEeFsp+EXdX5NbUH6NsMQaY+MlseKfd3Hvx4uOVGn
+         UXRafGp2Fj88+KWaP6+yFK6VGS1/vyvOtdyFE0a+tsXogRE4WZXsTm1ULstUvITaipP4
+         epBUGZ2XXQp+BJ0jYpiTueNcZ4TaFVTYz7io/EVMlyKqefZueRmwrZW5ZOgK9kQvVamJ
+         /MZu3JkZo3Q7ZQFVUbpZ+xH0misk9s54/+KbVu0/tQItvT6W0oLt0ZQJdJOPg0+V+cNY
+         fYFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PZkiKtXqsSUWsFPxoaMD52BWVXcB9txjh0r70N9gfwg=;
-        b=SfzRrxmgYspHlMh9tq8R3vP8n6lfn1RFOGkSA5nTB6xJX9+cYzXWAi9pd8sfNyjEhX
-         mqbAJejGYDZt4UN88WVwTnAiQwwUJ9Mky4bOEezw9TZs81IiKHRsprkmsIpKGy16dJ8U
-         eLYqCHf5JwrLXDW0GICqMk8YS100sbmpZ8u6gz8ABsM1in8ujjVbGYzxi5pWA1b8TTv3
-         0RWAhe3xCFJtMXt+YQSqfBO5nd5AHhaeuMRVjZqn30n7UryvhOx57AL/KmFdDqOPUTc6
-         H+RqYKe2Wo0u+piF2llIBPJqLfBwUZBBdbKsdIg98osMuLkfUXF49nClr9BBs47m/vNB
-         7yYA==
-X-Gm-Message-State: AOAM532fRw1VCiNQo7nPswV06xJfpcvtoGXFFt5KE8imA9uKzboZ0sQk
-        Mznqz9hBf50aAAmDDhy/xlE=
-X-Google-Smtp-Source: ABdhPJyb9zARpDDElBpR8QCJlNYPOxW79PfjHchqfbuf/vsgpBZ0bkxI9OwGFQqJfm5GHitbPo8Vnw==
-X-Received: by 2002:a62:3782:0:b029:2de:903d:8640 with SMTP id e124-20020a6237820000b02902de903d8640mr7135267pfa.40.1622857362398;
-        Fri, 04 Jun 2021 18:42:42 -0700 (PDT)
-Received: from bobo.ozlabs.ibm.com (60-242-147-73.tpgi.com.au. [60.242.147.73])
-        by smtp.gmail.com with ESMTPSA id q68sm5779056pjq.45.2021.06.04.18.42.38
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=JOIBq+kEIRNe1HY/dU/O4ueknvMC0Jdakk1cdBJSPGw=;
+        b=DZEOS0/9Afz8i8fqjnFVB2Z2id+sigeKBrLZPmBb+GnGUjVfSt8qxtQ2sKwFhcvcSC
+         ArynL0t7TyYw1ohbLSwVwW/dhQ+LgRLff7Ojip6e/D86hO6R0Aruv/nmm13g67aXN9ts
+         t6ppsiCIwO4LrfaMWxJzYdncsKl9hC5aFEBDyNuwUgrJV+6qnrVohWRnVDdIbCA2mlnr
+         qCimqX6cbWJ+MpRlBLcSJ2Pf/RmQkdiZYa5Dg6t2aqi8nG5plPqlyJzI+zqhqXO/dclG
+         GeEgHaRKeNlSslXopWvtw+9+3sS97Tib39fLHIOLj4a8pXdKgnY4zmgp35Eel+ZF0E7+
+         ooNQ==
+X-Gm-Message-State: AOAM531O5/S7l78mekJbs6N9IGJQSgELjKk0wdpHiP4moZCqMAApR9O0
+        8PhajBR0EB5GQwtd0k1r9aI=
+X-Google-Smtp-Source: ABdhPJxvqDGzb9ptMsdZWbbSUmPkKDSnpbG8bYthCJXvTG4JTcEDkvH65Y6fagb+39d85vOfUJU5mA==
+X-Received: by 2002:a62:7b4c:0:b029:2e9:cec2:e252 with SMTP id w73-20020a627b4c0000b02902e9cec2e252mr7446083pfc.56.1622861549693;
+        Fri, 04 Jun 2021 19:52:29 -0700 (PDT)
+Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
+        by smtp.gmail.com with ESMTPSA id iq15sm3337816pjb.53.2021.06.04.19.52.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 18:42:42 -0700 (PDT)
+        Fri, 04 Jun 2021 19:52:29 -0700 (PDT)
+Date:   Sat, 05 Jun 2021 12:52:23 +1000
 From:   Nicholas Piggin <npiggin@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
-        Anton Blanchard <anton@ozlabs.org>,
+Subject: Re: [PATCH v3 0/4] shoot lazy tlbs
+To:     Andrew Morton <akpm@linux-foundation.org>,
         Andy Lutomirski <luto@kernel.org>
-Subject: [PATCH v4 4/4] powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
-Date:   Sat,  5 Jun 2021 11:42:16 +1000
-Message-Id: <20210605014216.446867-5-npiggin@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20210605014216.446867-1-npiggin@gmail.com>
-References: <20210605014216.446867-1-npiggin@gmail.com>
+Cc:     Anton Blanchard <anton@ozlabs.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linuxppc-dev@lists.ozlabs.org, Randy Dunlap <rdunlap@infradead.org>
+References: <20210601062303.3932513-1-npiggin@gmail.com>
+        <603ffd67-3638-4c47-8067-c1bdfdf65f1b@kernel.org>
+        <991660c3-c2bf-c303-a55c-7454f0cc45f7@kernel.org>
+        <1622851909.wxi3vcx3m8.astroid@bobo.none>
+        <1622852601.xyhcpcfd7y.astroid@bobo.none>
+In-Reply-To: <1622852601.xyhcpcfd7y.astroid@bobo.none>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <1622861133.mb1njgfop9.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On a 16-socket 192-core POWER8 system, a context switching benchmark
-with as many software threads as CPUs (so each switch will go in and
-out of idle), upstream can achieve a rate of about 1 million context
-switches per second. After this patch it goes up to 118 million.
+Excerpts from Nicholas Piggin's message of June 5, 2021 10:26 am:
+> Excerpts from Nicholas Piggin's message of June 5, 2021 10:17 am:
+>> Excerpts from Andy Lutomirski's message of June 5, 2021 3:05 am:
+>>> On 6/4/21 9:54 AM, Andy Lutomirski wrote:
+>>>> On 5/31/21 11:22 PM, Nicholas Piggin wrote:
+>>>>> There haven't been objections to the series since last posting, this
+>>>>> is just a rebase and tidies up a few comments minor patch rearranging=
+.
+>>>>>
+>>>>=20
+>>>> I continue to object to having too many modes.  I like my more generic
+>>>> improvements better.  Let me try to find some time to email again.
+>>>>=20
+>>>=20
+>>> Specifically, this:
+>>>=20
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git/commit/?=
+h=3Dx86/mm
+>>=20
+>> That's worse than what powerpc does with the shoot lazies code so=20
+>> we wouldn't use it anyway.
+>>=20
+>> The fact is mm-cpumask and lazy mm is very architecture specific, so I=20
+>> don't really see that another "mode" is such a problem, it's for the=20
+>> most part "this is what powerpc does" -> "this is what powerpc does".
+>> The only mode in the context switch is just "take a ref on the lazy mm"
+>> or "don't take a ref". Surely that's not too onerous to add!?
+>>=20
+>> Actually the bigger part of it is actually the no-lazy mmu mode which
+>> is not yet used, I thought it was a neat little demonstrator of how code
+>> works with/without lazy but I will get rid of that for submission.
+>=20
+> I admit that does add a bit more churn than necessary maybe that was
+> the main objection.
+>=20
+> Here is the entire kernel/sched/core.c change after that is removed.
+> Pretty simple now. I'll resubmit.
 
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- arch/powerpc/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+If it gives you some concerns about a great complex new mode, I'll
+put it a different way -- all this allows is the arch to say that it
+does not use lazy tlb mms beyond their refcounted lifetime, so there
+is no need to refcount the lazy tlb reference.
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 088dd2afcfe4..8a092eedc692 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -252,6 +252,7 @@ config PPC
- 	select IRQ_FORCED_THREADING
- 	select MMU_GATHER_PAGE_SIZE
- 	select MMU_GATHER_RCU_TABLE_FREE
-+	select MMU_LAZY_TLB_SHOOTDOWN		if PPC_BOOK3S_64
- 	select MODULES_USE_ELF_RELA
- 	select NEED_DMA_MAP_STATE		if PPC64 || NOT_COHERENT_CACHE
- 	select NEED_SG_DMA_LENGTH
--- 
-2.23.0
+That's all it is. One implementation of that is shoot lazies, and that
+could be done entirely in arch/powerpc via destroy_context (I just put=20
+it in mm/ in case it is useful to others, but that's no real=20
+difference).
+
+So you see it's really just about management of lazies, the refcounting
+is just a bit on the side. And lazy management is highly arch specific,
+x86 being one of the really different complex ones there including
+very complex and unique interactions with membarrier ordering, so that
+can't be a fair objection.
+
+Thanks,
+Nick
 
