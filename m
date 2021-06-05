@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E25139C9E0
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Jun 2021 18:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7050339C9F0
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Jun 2021 18:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbhFEQee (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Jun 2021 12:34:34 -0400
-Received: from mout.gmx.net ([212.227.15.19]:53599 "EHLO mout.gmx.net"
+        id S230022AbhFEQz4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Jun 2021 12:55:56 -0400
+Received: from mout.gmx.net ([212.227.15.19]:36119 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229930AbhFEQee (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 5 Jun 2021 12:34:34 -0400
+        id S229938AbhFEQz4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 5 Jun 2021 12:55:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1622910700;
-        bh=d0ThzL6H3ZgX1iy++Zve4fg1GWGCL9gUNpUEh/9SJtk=;
+        s=badeba3b8450; t=1622912003;
+        bh=otmxS+gVRgDAzJeQxOs2w6E0luu3FW83ow2bhZxo5gQ=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=BuDP4OKL2j+CO6onsweK/K1KkYYu7I/kH+jhZ5PntqQFdTIH5E8AtMJIcqgrDvBVP
-         VvU7zSrKp+ubV7jeVznxxj8uhJ95HiQNaUsJmFq1kZPdS58nh04QD77n1icWS+x4Co
-         ywVo6FBtmOUJHa0SRZK8zoeb6HPdd4rnxOvUy4E8=
+        b=G5KbARdHQQQgNxI2FJvfcRscUaHQrno2MD/rSTc1sOcDqCu+W2cSs5q7ODICA39oD
+         OX18lDrwumasVhPx8MmJgy/v1yAcCg5E6HR2RS7KuVMY2nHwnEdRk2rM/FiE+jBvQo
+         rCDAPt4XCpFD+aQ+AwHw6aJ6q/Zx9R7lOf/L0lM0=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([83.52.228.41]) by mail.gmx.net
  (mrgmx005 [212.227.17.184]) with ESMTPSA (Nemesis) id
- 1MeU4s-1lHKJz3J9Y-00aT8a; Sat, 05 Jun 2021 18:31:40 +0200
+ 1MAfYw-1leWwF0r1M-00B0Vt; Sat, 05 Jun 2021 18:53:23 +0200
 From:   John Wood <john.wood@gmx.com>
 To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -42,247 +42,272 @@ Cc:     John Wood <john.wood@gmx.com>, Andi Kleen <ak@linux.intel.com>,
         linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-hardening@vger.kernel.org,
         kernel-hardening@lists.openwall.com
-Subject: [PATCH v8 4/8] security/brute: Mitigate a brute force attack
-Date:   Sat,  5 Jun 2021 17:04:01 +0200
-Message-Id: <20210605150405.6936-5-john.wood@gmx.com>
+Subject: [PATCH v8 5/8] security/brute: Notify to userspace "task killed"
+Date:   Sat,  5 Jun 2021 17:04:02 +0200
+Message-Id: <20210605150405.6936-6-john.wood@gmx.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210605150405.6936-1-john.wood@gmx.com>
 References: <20210605150405.6936-1-john.wood@gmx.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:eaoHbte0dcns/AzvPwU3vjWvzTt5OyHKFhMvw3CoF2yDAezUQXG
- HNL+Dz0RMocznxqLc/uqoDMWEiwIy9oVQAmVywfZcYdM0FqRELNwtjOp3/3Ez4hQkjUTbBe
- 3kE1mRljNdwia+or7ZFdi/nK+l1r97CttJ0H2x4emoeySF4meERwpAfOMWx4y+7eTpkASXL
- asnTW9LUdyzRx3OBp+gpQ==
+X-Provags-ID: V03:K1:uMv9ak4LGcurS/eU8qDGWIbV7ZOGW4XEx+44iIG6e1cPWgqWEGP
+ N+VtYyKNxdTodFiZDDUreZ0Lw/IpX7v1VxMLM6ib8SjyCDaE4Glk3bDXlSsJpB0Zkh9Nkgs
+ YHAH6jEyjdBBQXDTcpFNrYUrcWXKAiBec3gm7IdiuE3TeWdFaJNdO5/bK2W3GNfylflM/eC
+ GcVQPik7Oxw+qmi76Hi8Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Me4GWsjU9Io=:avuErcXWGckyfqeykMNLff
- v4oTeRj6F4cphQX08iNfKJbo7vA+WlE3ckHPPwaVQ6wN8qw+YEjPDb++wvEOD/tHdAo1MzILj
- 2DexURIr+Sb2AOWd/fF2RJTFpZzdOXenT4cKFcpQwA2ihfzVOqd5g33IxkUO9S6Z84liq797Z
- wIn+YwhKBnEUFgKUjn+WeBsDIBKB2zj3pcM3oJRI/OdsQVIqeYFmABL/ZLo6vH0yhJyLct1f/
- /ZkKOAZzQfawoB8d6Ur6KdJUJMvb7gcuvsBooEnDiqvrMoL9GYA1oZoXuXbUUJc2zVjQgxSzJ
- UzIe7Dh07sq9k3zh7ZTxw2gNIm7DNUZsKctYzHIwHtTPTFQBHW58tif6qwdeGwxKXcZvqH0J7
- 48GVCvMUJrA8KAaGXLTvSgkRT4tGkJddivRbIxSrw/q9GNsuHYmzONOko9Lz//1Mq5JLdYp8t
- YZ+qSODc7EIT2gnjhYMUCnN9OaEY9BzzZtQYUr5fK2QdeIovdOwpmJBdYopW9p5iL8gxj8PJx
- UsCctXYdxfbDnS0qyqXs1lWA1tpePBa5sHFKEiC/eoc5J1fa70wo187nk3pZsWF9vi2ebtAbm
- ttkry6c+SPJiTy4AKv9V6YnHW1O/1kWXzpIgm3007gmUVaxN7tqz0M3fzcWBptPKKlbuoPuuO
- X5T+73RnwlcVvuV7DxpeVAxTtMKYfcvNNMZsVLCcpW+DTL0hgkMh8bxQxM6Cxj+MpHvkruRgh
- Ur9pUukiUmy4UKsxoTkyGU5Tm7huEkMm0sN/ariuHZOwzfKsySy2E/2+XpW2tKqpU3wtSqDeP
- RRJNC+GohDqsTbpHVrHOjGH5dfELUurgOoX89iPvA9FqW+H0/2moxpITU2zDam6oH1oriN6qG
- bXbuPXLEqqhPt/dV+5/yzNzZfpHeH2NtoQzbAlrUVA7QRAhlQjPPltNDkntGt1oMRxzffpay5
- 4GjXCHAjJhqv+7IpIPrG3j+NYvjYt/GWIAq3zz5r1M67nbvynw8pHL3LKnVVMY9fWIjdrHqd+
- OqYMyUXnZnKywfcnKCAjX+3OeRGApG9iGv2Ju0y6hrZq9ZRzeA9aBpVCRON9jUrLAYC20rcQd
- CfSeyyC/3WD+4GONhvNRIpyVK5RBzbR5TZk
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dBg1cf3l2FQ=:eI4Ff6J8VEeAXIlSK8bfjf
+ JvIXuoaFJIwHbWyqbBddFSh61VfbnlACb5DLLeRkKDekuYtqo2z2+Xil6A9aq8M9Af8XKzq15
+ PISbhVm6du8fhWAzRvm/kKplKjonR3Ddp0VqF8111vt4tJ2lTymdWB7RjswWHJJZ+lpj2dfyk
+ oL2j5jRDyIjzWsLD7zQBA96sUzcfU/RW53vQdaX/i8YNTm2TZnMv6ujs0yQ7vbmwixaBd8cFq
+ i/Gh2IKDFb5teFZ58u78Jb2+B0YFfIVJ+Rwwvaiu2zbjgfiyCOTRUfQfxDUHnAkNp0Su/Lq5K
+ QQpFanD5gt2g3tEh6S3mVonERL7aFQq4WbqXAQKoGRyS+wcU2o9qnNXjHf3AOrTXMmBb9BnGw
+ cam6fX58C+wIH2kWIbgYCyNKvVLyppNt0XNIkI5156zDK3DIHpt4CVEUmXZAZcxHlmJFzywg7
+ W3Pca1XU29HSD0u1h3l1MmQmUbNr7ryQSBzW+iEiBO68RmpdhAffDDnETMxFuFVNnaHaBrkj1
+ jMEchE3fBTmsB99bmugtYYs63C+5RnswLfyjTJiuuGVrqKdKIWbigjDu6QFjAk23fjw3flu7D
+ Do0BxkGxvUVlNox7Kc5CdDhiMcE6H9cSS17O7agVmzpAunYc3DM91vjII3d5FkedJJtXw7BwV
+ bNhrTV3UMy2wwjlFRqhEBeDxPyYiQqiV26khAbaVyWF+jH9WWZfkX9/PHIjDFVwoYDk2VvZZ5
+ 9ufUQ6V1LeeC5StXzgrx88eIKw9KTp84VfT+uVUUK2A4ssNqPAjXjUNkqj/SZO1SXWC6BZxe5
+ 8ePpfD6brOcPXcB0i1xa06f9JBk2fn8P8NZeBvnYxi3m7zoY/N86odrHJ6ugQlTVQGVdjZu3Y
+ Ax9ZFGoBEJ+9ZssMQVgejuWAxbbXTagYVrh7n7BUR6oLSpjJKYrVlzDzaW/qVzS2c8Q+UCnbt
+ euj7oKJlO2FMXia604ARVnNV5LjEfo0eAvqFqE1vkGMzEvJK6LAU4pdN9h+0r4n9BV6M7c/Qt
+ CezP04VqsBqLbQrYf95Ng9qD0CHNinJYePv8QrU9GnmHKVCzTKCFsMLEo9zq++WButnFNoQED
+ so4TOFDtcJqRmv858pVip1oFdB7ggLegj8b
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When a brute force attack is detected all the offending tasks involved
-in the attack must be killed. In other words, it is necessary to kill
-all the tasks that are executing the same file that is running during
-the brute force attack.
+Add a new SIGCHLD si_code to notify to userspace, using the "waitid"
+system call, that a task has been killed by Brute LSM to mitigate a
+brute force attack.
 
-Also, to prevent the executable involved in the attack from being
-respawned by a supervisor, and thus prevent a brute force attack from
-being started again, test the "not_allowed" flag and avoid the file
-execution based on this.
+This is useful to supervisors in order to decide if a process that has
+been killed to avoid an attack needs to be respawned. This way, it is
+possible to avoid the scenario where a brute force attack can be
+continued due to the respawn of a process. Although the xattr of the
+executable is accessible from userspace, in complex daemons this file
+may not be visible directly by the supervisor as it may be run through
+some wrapper. So, the waitid notification is necessary.
 
+To achieve this, use the task_struct security blob to hold a flag that
+shows when a task has been killed by Brute LSM, and also, test this flag
+in the "wait_task_zombie" and "do_notify_parent" functions.
+
+Suggested-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: John Wood <john.wood@gmx.com>
 =2D--
- security/brute/brute.c | 113 +++++++++++++++++++++++++++++++++++++----
- 1 file changed, 102 insertions(+), 11 deletions(-)
+ arch/x86/kernel/signal_compat.c    |  2 +-
+ include/brute/brute.h              | 16 ++++++++
+ include/uapi/asm-generic/siginfo.h |  3 +-
+ kernel/exit.c                      |  6 ++-
+ kernel/signal.c                    |  4 +-
+ security/brute/brute.c             | 59 +++++++++++++++++++++++++++++-
+ 6 files changed, 85 insertions(+), 5 deletions(-)
+ create mode 100644 include/brute/brute.h
 
+diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_comp=
+at.c
+index 06743ec054d2..d4656f1b6341 100644
+=2D-- a/arch/x86/kernel/signal_compat.c
++++ b/arch/x86/kernel/signal_compat.c
+@@ -30,7 +30,7 @@ static inline void signal_compat_build_tests(void)
+ 	BUILD_BUG_ON(NSIGSEGV !=3D 9);
+ 	BUILD_BUG_ON(NSIGBUS  !=3D 5);
+ 	BUILD_BUG_ON(NSIGTRAP !=3D 6);
+-	BUILD_BUG_ON(NSIGCHLD !=3D 6);
++	BUILD_BUG_ON(NSIGCHLD !=3D 7);
+ 	BUILD_BUG_ON(NSIGSYS  !=3D 2);
+
+ 	/* This is part of the ABI and can never change in size: */
+diff --git a/include/brute/brute.h b/include/brute/brute.h
+new file mode 100644
+index 000000000000..8531a7038711
+=2D-- /dev/null
++++ b/include/brute/brute.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _BRUTE_H_
++#define _BRUTE_H_
++
++#include <linux/sched.h>
++
++#ifdef CONFIG_SECURITY_FORK_BRUTE
++bool brute_task_killed(const struct task_struct *task);
++#else
++static inline bool brute_task_killed(const struct task_struct *task)
++{
++	return false;
++}
++#endif
++
++#endif /* _BRUTE_H_ */
+diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic=
+/siginfo.h
+index 5a3c221f4c9d..ffc3ed2d4bce 100644
+=2D-- a/include/uapi/asm-generic/siginfo.h
++++ b/include/uapi/asm-generic/siginfo.h
+@@ -274,7 +274,8 @@ typedef struct siginfo {
+ #define CLD_TRAPPED	4	/* traced child has trapped */
+ #define CLD_STOPPED	5	/* child has stopped */
+ #define CLD_CONTINUED	6	/* stopped child has continued */
+-#define NSIGCHLD	6
++#define CLD_BRUTE	7	/* child was killed by brute LSM */
++#define NSIGCHLD	7
+
+ /*
+  * SIGPOLL (or any other signal without signal specific si_codes) si_code=
+s
+diff --git a/kernel/exit.c b/kernel/exit.c
+index fd1c04193e18..69bcbd00d277 100644
+=2D-- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -69,6 +69,8 @@
+ #include <asm/unistd.h>
+ #include <asm/mmu_context.h>
+
++#include <brute/brute.h>
++
+ static void __unhash_process(struct task_struct *p, bool group_dead)
+ {
+ 	nr_threads--;
+@@ -1001,6 +1003,7 @@ static int wait_task_zombie(struct wait_opts *wo, st=
+ruct task_struct *p)
+ 	pid_t pid =3D task_pid_vnr(p);
+ 	uid_t uid =3D from_kuid_munged(current_user_ns(), task_uid(p));
+ 	struct waitid_info *infop;
++	bool killed_by_brute =3D brute_task_killed(p);
+
+ 	if (!likely(wo->wo_flags & WEXITED))
+ 		return 0;
+@@ -1114,7 +1117,8 @@ static int wait_task_zombie(struct wait_opts *wo, st=
+ruct task_struct *p)
+ 			infop->cause =3D CLD_EXITED;
+ 			infop->status =3D status >> 8;
+ 		} else {
+-			infop->cause =3D (status & 0x80) ? CLD_DUMPED : CLD_KILLED;
++			infop->cause =3D (status & 0x80) ? CLD_DUMPED :
++				killed_by_brute ? CLD_BRUTE : CLD_KILLED;
+ 			infop->status =3D status & 0x7f;
+ 		}
+ 		infop->pid =3D pid;
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 4380763b3d8d..c85c091ecc27 100644
+=2D-- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -55,6 +55,8 @@
+ #include <asm/siginfo.h>
+ #include <asm/cacheflush.h>
+
++#include <brute/brute.h>
++
+ /*
+  * SLAB caches for signal bits.
+  */
+@@ -2012,7 +2014,7 @@ bool do_notify_parent(struct task_struct *tsk, int s=
+ig)
+ 	if (tsk->exit_code & 0x80)
+ 		info.si_code =3D CLD_DUMPED;
+ 	else if (tsk->exit_code & 0x7f)
+-		info.si_code =3D CLD_KILLED;
++		info.si_code =3D brute_task_killed(tsk) ? CLD_BRUTE : CLD_KILLED;
+ 	else {
+ 		info.si_code =3D CLD_EXITED;
+ 		info.si_status =3D tsk->exit_code >> 8;
 diff --git a/security/brute/brute.c b/security/brute/brute.c
-index 03bebfd1ed1f..4e0fd23990c8 100644
+index 4e0fd23990c8..e5c9098addf9 100644
 =2D-- a/security/brute/brute.c
 +++ b/security/brute/brute.c
-@@ -233,6 +233,88 @@ static inline void brute_print_attack_running(void)
- 		current->comm);
- }
+@@ -56,6 +56,59 @@ struct brute_raw_stats {
+ 	u8 flags;
+ } __packed;
 
 +/**
-+ * brute_print_file_not_allowed() - Warn about a file not allowed.
-+ * @dentry: The dentry of the file not allowed.
++ * struct brute_task - Task info.
++ * @killed: Task killed to mitigate a brute force attack.
 + */
-+static void brute_print_file_not_allowed(struct dentry *dentry)
++struct brute_task {
++	u8 killed : 1;
++};
++
++/*
++ * brute_blob_sizes - LSM blob sizes.
++ */
++static struct lsm_blob_sizes brute_blob_sizes __lsm_ro_after_init =3D {
++	.lbs_task =3D sizeof(struct brute_task),
++};
++
++/**
++ * brute_task() - Get the task info.
++ * @task: The task to get the info.
++ *
++ * Return: A pointer to the brute_task structure.
++ */
++static inline struct brute_task *brute_task(const struct task_struct *tas=
+k)
 +{
-+	char *buf, *path;
-+
-+	buf =3D __getname();
-+	if (WARN_ON_ONCE(!buf))
-+		return;
-+
-+	path =3D dentry_path_raw(dentry, buf, PATH_MAX);
-+	if (WARN_ON_ONCE(IS_ERR(path)))
-+		goto free;
-+
-+	pr_warn_ratelimited("%s not allowed\n", path);
-+free:
-+	__putname(buf);
++	return task->security + brute_blob_sizes.lbs_task;
 +}
 +
 +/**
-+ * brute_is_same_file() - Test if two files are the same.
-+ * @file1: First file to compare. Cannot be NULL.
-+ * @file2: Second file to compare. Cannot be NULL.
-+ *
-+ * Two files are the same if they have the same inode number and the same=
- block
-+ * device.
-+ *
-+ * Return: True if the two files are the same. False otherwise.
++ * brute_set_task_killed() - Set task killed to mitigate a brute force at=
+tack.
++ * @task: The task to set.
 + */
-+static inline bool brute_is_same_file(const struct file *file1,
-+				      const struct file *file2)
++static inline void brute_set_task_killed(struct task_struct *task)
 +{
-+	struct inode *inode1 =3D file_inode(file1);
-+	struct inode *inode2 =3D file_inode(file2);
++	struct brute_task *task_info;
 +
-+	return inode1->i_ino =3D=3D inode2->i_ino &&
-+		inode1->i_sb->s_dev =3D=3D inode2->i_sb->s_dev;
++	task_info =3D brute_task(task);
++	task_info->killed =3D true;
 +}
 +
 +/**
-+ * brute_kill_offending_tasks() - Kill the offending tasks.
-+ * @file: The file executed during a brute force attack. Cannot be NULL.
++ * brute_task_killed() - Test if a task has been killed to mitigate an at=
+tack.
++ * @task: The task to test.
 + *
-+ * When a brute force attack is detected all the offending tasks involved=
- in the
-+ * attack must be killed. In other words, it is necessary to kill all the=
- tasks
-+ * that are executing the same file that is running during the brute forc=
-e
-+ * attack. Moreover, the processes that have the same group_leader that t=
-he
-+ * current task must be avoided since they are in the path to be killed.
-+ *
-+ * The for_each_process loop is protected by the tasklist_lock acquired i=
-n read
-+ * mode instead of rcu_read_lock to avoid that the newly created processe=
-s
-+ * escape this RCU read lock.
++ * Return: True if the task has been killed to mitigate a brute force att=
+ack.
++ *         False otherwise.
 + */
-+static void brute_kill_offending_tasks(const struct file *file)
++inline bool brute_task_killed(const struct task_struct *task)
 +{
-+	struct task_struct *task;
-+	struct file *exe_file;
-+	bool is_same_file;
++	struct brute_task *task_info;
 +
-+	read_lock(&tasklist_lock);
-+	for_each_process(task) {
-+		if (task->group_leader =3D=3D current->group_leader)
-+			continue;
-+
-+		exe_file =3D get_task_exe_file(task);
-+		if (!exe_file)
-+			continue;
-+
-+		is_same_file =3D brute_is_same_file(exe_file, file);
-+		fput(exe_file);
-+		if (!is_same_file)
-+			continue;
-+
-+		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_PID);
-+		pr_warn_ratelimited("offending process %d [%s] killed\n",
-+				    task->pid, task->comm);
-+	}
-+	read_unlock(&tasklist_lock);
++	task_info =3D brute_task(task);
++	return task_info->killed;
 +}
 +
  /**
-  * brute_get_xattr_stats() - Get the stats from an extended attribute.
-  * @dentry: The dentry of the file to get the extended attribute.
-@@ -295,6 +377,10 @@ static int brute_set_xattr_stats(struct dentry *dentr=
-y, struct inode *inode,
-  * created. This way, the scenario where an application has not crossed a=
-ny
-  * privilege boundary is avoided since the existence of the extended attr=
-ibute
-  * denotes the crossing of bounds.
-+ *
-+ * Also, do not update the statistics if the execution of the file is not
-+ * allowed and kill all the offending tasks when a brute force attack is
-+ * detected.
-  */
- static void brute_update_xattr_stats(const struct file *file)
- {
-@@ -306,7 +392,7 @@ static void brute_update_xattr_stats(const struct file=
- *file)
- 	inode_lock(inode);
- 	rc =3D brute_get_xattr_stats(dentry, inode, &stats);
- 	WARN_ON_ONCE(rc && rc !=3D -ENODATA);
--	if (rc) {
-+	if (rc || (!rc && stats.not_allowed)) {
- 		inode_unlock(inode);
- 		return;
+  * brute_get_current_exe_file() - Get the current task's executable file.
+  *
+@@ -296,8 +349,10 @@ static void brute_kill_offending_tasks(const struct f=
+ile *file)
+
+ 	read_lock(&tasklist_lock);
+ 	for_each_process(task) {
+-		if (task->group_leader =3D=3D current->group_leader)
++		if (task->group_leader =3D=3D current->group_leader) {
++			brute_set_task_killed(task);
+ 			continue;
++		}
+
+ 		exe_file =3D get_task_exe_file(task);
+ 		if (!exe_file)
+@@ -311,6 +366,7 @@ static void brute_kill_offending_tasks(const struct fi=
+le *file)
+ 		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_PID);
+ 		pr_warn_ratelimited("offending process %d [%s] killed\n",
+ 				    task->pid, task->comm);
++		brute_set_task_killed(task);
  	}
-@@ -320,6 +406,9 @@ static void brute_update_xattr_stats(const struct file=
- *file)
- 	rc =3D brute_set_xattr_stats(dentry, inode, &stats);
- 	WARN_ON_ONCE(rc);
- 	inode_unlock(inode);
-+
-+	if (stats.not_allowed)
-+		brute_kill_offending_tasks(file);
+ 	read_unlock(&tasklist_lock);
  }
-
- /**
-@@ -433,21 +522,17 @@ static void brute_task_fatal_signal(const kernel_sig=
-info_t *siginfo)
-  * @bprm: Contains the linux_binprm structure.
-  * @file: Binary that will be executed without an interpreter.
-  *
-- * This hook is useful to mark that a privilege boundary (setuid/setgid p=
-rocess)
-- * has been crossed. This is done based on the "secureexec" flag.
-+ * If there are statistics, test the "not_allowed" flag and avoid the fil=
-e
-+ * execution based on this. Also, this hook is useful to mark that a priv=
-ilege
-+ * boundary (setuid/setgid process) has been crossed. This is done based =
-on the
-+ * "secureexec" flag.
-  *
-  * To be defensive return an error code if it is not possible to get or s=
-et the
-  * stats using an extended attribute since this blocks the execution of t=
-he
-  * file. This scenario is treated as an attack.
-  *
-- * It is important to note that here the brute_new_xattr_stats function c=
-ould be
-- * used with a previous test of the secureexec flag. However it is better=
- to use
-- * the basic xattr functions since in a future commit a test if the execu=
-tion is
-- * allowed (via the brute_stats::not_allowed flag) will be necessary. Thi=
-s way,
-- * the stats of the file will be get only once.
-- *
-- * Return: An error code if it is not possible to get or set the statisti=
-cal
-- *         data. Zero otherwise.
-+ * Return: -EPERM if the execution of the file is not allowed. An error c=
-ode if
-+ *         it is not possible to get or set the statistical data. Zero ot=
-herwise.
-  */
- static int brute_task_execve(struct linux_binprm *bprm, struct file *file=
-)
- {
-@@ -461,6 +546,12 @@ static int brute_task_execve(struct linux_binprm *bpr=
-m, struct file *file)
- 	if (WARN_ON_ONCE(rc && rc !=3D -ENODATA))
- 		goto unlock;
-
-+	if (!rc && stats.not_allowed) {
-+		brute_print_file_not_allowed(dentry);
-+		rc =3D -EPERM;
-+		goto unlock;
-+	}
-+
- 	if (rc =3D=3D -ENODATA && bprm->secureexec) {
- 		brute_reset_stats(&stats);
- 		rc =3D brute_set_xattr_stats(dentry, inode, &stats);
+@@ -735,4 +791,5 @@ static int __init brute_init(void)
+ DEFINE_LSM(brute) =3D {
+ 	.name =3D KBUILD_MODNAME,
+ 	.init =3D brute_init,
++	.blobs =3D &brute_blob_sizes,
+ };
 =2D-
 2.25.1
 
