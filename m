@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7659439CA2A
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Jun 2021 19:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A37239CA3C
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Jun 2021 19:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbhFERSS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Jun 2021 13:18:18 -0400
-Received: from mout.gmx.net ([212.227.17.20]:59473 "EHLO mout.gmx.net"
+        id S229978AbhFERjd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Jun 2021 13:39:33 -0400
+Received: from mout.gmx.net ([212.227.15.18]:35725 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229933AbhFERSR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 5 Jun 2021 13:18:17 -0400
+        id S229964AbhFERjc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 5 Jun 2021 13:39:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1622913309;
-        bh=n09vl0Qi955c0FFlwEbTMm5JhNR/MCo9V3zzQRkL+oI=;
+        s=badeba3b8450; t=1622914614;
+        bh=1hXV/yjZLA0wxI2MASfsKb+LCQQTwffVxcZC0DJ8vZc=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=TVdFfiFbg6tNuSDK1EnSO4mtTbjz/F9xIVSzvk/yY7yzGgvx9eMQz4wmWpjFfmlhK
-         Jz9snPAupOyOiIthsnxojbscFpimdIQkMq5ByPxLBIAPcbbBYSpAcDGw7caObxAtNI
-         XtbJtApZyAoc+AeO6HWOKZ8FPNW7NZkoS0b62l7k=
+        b=LZJs/HfrhXXEYrxoffCqJHPONff2AbYWO7ycBaQyxZ3War/piYaNNsKqSLF/7FJ1w
+         tzFS7umCnlXN+9Jm+yI35mAvFxV4M5A5XjfIHYWrY+WnOGDK0+/TMhAYgh46OPMMlr
+         OFQ/nfxFm7SqPgeUgG38Snlab6GR8GxcX4MgstFs=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([83.52.228.41]) by mail.gmx.net
- (mrgmx104 [212.227.17.174]) with ESMTPSA (Nemesis) id
- 1Mw9QC-1lZ10S3Npc-00s4aG; Sat, 05 Jun 2021 19:15:09 +0200
+ (mrgmx005 [212.227.17.184]) with ESMTPSA (Nemesis) id
+ 1Mel3n-1lH4QF0AxJ-00akS2; Sat, 05 Jun 2021 19:36:54 +0200
 From:   John Wood <john.wood@gmx.com>
 To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -42,1014 +42,551 @@ Cc:     John Wood <john.wood@gmx.com>, Andi Kleen <ak@linux.intel.com>,
         linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-hardening@vger.kernel.org,
         kernel-hardening@lists.openwall.com
-Subject: [PATCH v8 6/8] selftests/brute: Add tests for the Brute LSM
-Date:   Sat,  5 Jun 2021 17:04:03 +0200
-Message-Id: <20210605150405.6936-7-john.wood@gmx.com>
+Subject: [PATCH v8 7/8] Documentation: Add documentation for the Brute LSM
+Date:   Sat,  5 Jun 2021 17:04:04 +0200
+Message-Id: <20210605150405.6936-8-john.wood@gmx.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210605150405.6936-1-john.wood@gmx.com>
 References: <20210605150405.6936-1-john.wood@gmx.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:DtjoHAETHk4xGDZFpK9+7KXukSk5D6Su3506SD5xQyJNEHT/Msb
- C0+ipAxxT7EQtxPug3EGTNT471AZFtU/nhXAh+9Yukyj9xcB8SpKZltr4aP+gZPYcVLeLAN
- CJedZwSGUe2aDoI2xezzqGdkhrQFMo0ySy+FMobwT9nedex2ek0koSOQEV5XwNg1lstNQf9
- gQGj17Dc2mchjJPJ48grw==
+X-Provags-ID: V03:K1:0KL9tDrO6fCH0+oVpAMP680+/i0P5U/y+YiqVSYK3DibHnISQsk
+ ApRWspMjCltTb1smQIsTuiH1gj8a3MZ3Nk1qk6D0DkgkzyUmniVAgRCqb/u4ASwudQSG+hg
+ ezL0FgYqc7qvDnnA6nUcE4I0DDcliEjIJ8mD0rwSWyT5b+qrge1jPahM43lfT3HTcujxHun
+ fgH7iK8tok24hAG6EJtxg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dUgzQiRyfpU=:LrUUAWdlWwsuT+lDThaKc4
- vc6YBl8vTgX5Q3t10Q/NQGh3aRFvOj2hKbGu/AZ7m4kn3vHwQvWpQypUcod08Fl1wu5w+TLgK
- ISzWAp9a18UcRrGV1kPKe/KIQVKf7Kg5OCh6jYRHnVRuM2R20pCoytlV2C/hUQTpa0frPoxSf
- QKlupC+srZIGTD799PhxEfDtQ49KgJhjpKYzwMHDykTOdQrcXJtPXA2wHTH8I3GUanF6cgvJQ
- eKot2StW8eQ2b4spdLn72BBcWwMrjO+frA5unN9PkNX3ld9jlLTkZnHvIhFHsm88Cza8Ul/QG
- xL4eSnRO6q6j5RGiZzgmiyGnSovx4lP4IR0BWQJNGV9+0SLHPQ67IkYYVZ1QEA1wxYrx+PYPO
- cqpluXnN8nVDOr+tyhr3hp5s5/YjuVoHLD6VtxwBBIDbuZXIx+wuLMC5Cpy/mwIJfTNEMCYwk
- DJwCGzHL756OgwgZRGRCvRZ65ShUs6GoNJ9JdUZPcIxm/Iv3BNvo6jkScEJCUEGHxEDMkKxOn
- qlIb0vZ4smzx5gbsKA2789AztAmUsIsw6NAZHqECtARFxbbXIVHTVL18HieJDWYLtUvgMt39Q
- XZ5smKfL8WR9Gi/8cF1usL/sEOItdmm/n490sjoG2i+QsWxdBD7dccqIKb5B2aqs9B60Yli+Q
- 9SMG4x6EAVahGh3FGZwgfC3fVHt5xDralZMvnB1GU+7xyXRTnruFJJLGr7WrXD8PMNbSNsJj7
- b3C/NSRA+KYGDIZCJcBpXrGCm5mHe3z5wW4ZVti3kQe8PHJHsNNY7PcbTrcC+OieotJBJc/2s
- Be/GkgrJChFrd+ZD68tLsl0B3pX9Z1UogeVTzSKUlHaED1wuBY8dq4UZPGwieDMERgO1QhL96
- ggttYik8nqSbiYR/29Ih6qDIpyGlgbAQTExN/2n9TDk95l6SHnAGo98PkRDKWfoPrdYuteD2n
- WWZONe9XCsL+Bmsb9hunvr5B6z1MPAot0sYC2c0tSt68UFeQYbFxBj7Etcz7QwieZ6k7OsdJG
- NgT3M5cTamzxAUz7ELwYe0UDidYH0I+6lS4Rh+wqW8HhCtF7+vVuFSITzZACxzdkhFnf5nYlS
- fvtDDGhx+raVB0no97W8jNWnfQmPIXFG6iB
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jef2qRjYI5M=:bw6UHTDC/E2yoxW+Kxz/OF
+ Y0bMnMn71GilFvcfkFrZS5HMQn3np2kZVdA7o/HUMWNb12gmNv5xrgWV7mMdl7tGKYgM7pXBv
+ iO9dGd6L1tFuvsIZp4at/tOKtqIMfc+OCfY9ZTYp0ZbVT2ZQmJLG2OK0PdpaUpQK9fiL4xaFf
+ 3diJODOM5zsYe1DpM3cHdnKQy75My0A01v/EIyVanYyBRl51ndtF0IziLtnifU9iMC7EnJonr
+ vS1rDXhr7kqJFa5Dl4PLh6xPvjWnRsRcLlyyBeephHm6gtey/wkuvguNXLyFQUZoivVPg6cFs
+ 2Fo+B13T5XOh3OATuUdgaGHLPnh3UibGoHhhTxz72BUQ62Xq5U4wEoAFpOQLnWjnGxhJFqqY4
+ tb3MuersWSow0RL4sAUwBrJgr6Ieg7pCwATyXAxjAWB/ejzv4Gm3bZwuPavpprWlltt8OmdMa
+ PzgwpK6kR5R+UnwTDahZpS5g2KhZuQ8lbvmIVyTaVo6ZTei11vGVN6Rdf5pMjRCVpHePHeI4v
+ PilI+R4iCy1g28Xqej1OwZMki09e5S4DPgxyZAmVDCJfCAbuzXDqbQ65wCuSzzeFmwcbXCU+w
+ FwDm3mGgs/VrhtjwTt4aAh+ANLoosfPTUQnM4orRRwgmbAf/ytLx1WmuA5szL8b0pDvTHh5cA
+ WITBIQJJAsCwhjCKMth0TYa8narIj31ZJqY4qCR8GhtS8/rMn6EJh2MrlAGZ74YNSpqeKS5uf
+ 8FzFJN08McY26rYCj7W+9EbpGOb5RvUJCu42ACbcN8vEa6JPD0BiFiS9RCTR1ZMo29nwv8Xqq
+ bvZ0G5pUVFJag4u0hHn21bO3/Ely+x0kbEFItKybXJOeChgefu57o4Zr3TyY7IaZRjk/m6qYX
+ d4J5pcR9NHr4iznDB75dQ8k0zCBiUBx28thrDaNVhzhSlt80kmyV/wsV17VVu7dlLgYKH+SJJ
+ IigU2ovbnta/dZL9RJaUA+wrNLTSW/chs9L+sbznt8DNwTum7Bw9lGmVWEuyvg7J3yLVEVLep
+ zoX08B4QZb2g04hu33D2ZKhtYLPSGGhiqbfLE0Y9hUJsQRjHdRp5hCGFBShGo0Zu/4LH6PFY2
+ D7dY0tiPl9LjEaUrEsZEcMRJ6eb4kJov7Ur
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add tests to check the Brute LSM functionality and cover fork/exec brute
-force attacks crossing the following privilege boundaries:
-
-1.- setuid process
-2.- privilege changes
-3.- network to local
-
-Also, as a first step check that fork/exec brute force attacks without
-crossing any privilege boundary already commented doesn't trigger the
-detection and mitigation stage.
-
-Moreover, test if the userspace notification, via "waitid" system call,
-is sent when an attack is mitigated (to inform that all the offending
-tasks involved in the attack have been killed by Brute LSM).
-
-Once a brute force attack is detected, the "test" executable is marked
-as "not allowed". To start again a new test, use the "rmxattr" app to
-revert this state. This way, all the tests can be run using the same
-binary.
+Add some info detailing what is the Brute LSM, its motivation, weak
+points of existing implementations, proposed solutions, notifications,
+enabling, disabling, configuration and self-tests.
 
 Signed-off-by: John Wood <john.wood@gmx.com>
 =2D--
- tools/testing/selftests/Makefile         |   1 +
- tools/testing/selftests/brute/.gitignore |   3 +
- tools/testing/selftests/brute/Makefile   |   5 +
- tools/testing/selftests/brute/config     |   1 +
- tools/testing/selftests/brute/exec.c     |  46 ++
- tools/testing/selftests/brute/rmxattr.c  |  34 ++
- tools/testing/selftests/brute/test.c     | 507 +++++++++++++++++++++++
- tools/testing/selftests/brute/test.sh    | 269 ++++++++++++
- 8 files changed, 866 insertions(+)
- create mode 100644 tools/testing/selftests/brute/.gitignore
- create mode 100644 tools/testing/selftests/brute/Makefile
- create mode 100644 tools/testing/selftests/brute/config
- create mode 100644 tools/testing/selftests/brute/exec.c
- create mode 100644 tools/testing/selftests/brute/rmxattr.c
- create mode 100644 tools/testing/selftests/brute/test.c
- create mode 100755 tools/testing/selftests/brute/test.sh
+ Documentation/admin-guide/LSM/Brute.rst | 359 ++++++++++++++++++++++++
+ Documentation/admin-guide/LSM/index.rst |   1 +
+ security/brute/Kconfig                  |   3 +-
+ 3 files changed, 362 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/admin-guide/LSM/Brute.rst
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Ma=
-kefile
-index bc3299a20338..5c413a010849 100644
-=2D-- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -2,6 +2,7 @@
- TARGETS =3D arm64
- TARGETS +=3D bpf
- TARGETS +=3D breakpoints
-+TARGETS +=3D brute
- TARGETS +=3D capabilities
- TARGETS +=3D cgroup
- TARGETS +=3D clone3
-diff --git a/tools/testing/selftests/brute/.gitignore b/tools/testing/self=
-tests/brute/.gitignore
+diff --git a/Documentation/admin-guide/LSM/Brute.rst b/Documentation/admin=
+-guide/LSM/Brute.rst
 new file mode 100644
-index 000000000000..a02aa79249a1
+index 000000000000..087da9c07374
 =2D-- /dev/null
-+++ b/tools/testing/selftests/brute/.gitignore
-@@ -0,0 +1,3 @@
-+exec
-+rmxattr
-+test
-diff --git a/tools/testing/selftests/brute/Makefile b/tools/testing/selfte=
-sts/brute/Makefile
-new file mode 100644
-index 000000000000..3975338c1ecc
-=2D-- /dev/null
-+++ b/tools/testing/selftests/brute/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS +=3D -Wall -O2
-+TEST_PROGS :=3D test.sh
-+TEST_GEN_FILES :=3D exec rmxattr test
-+include ../lib.mk
-diff --git a/tools/testing/selftests/brute/config b/tools/testing/selftest=
-s/brute/config
-new file mode 100644
-index 000000000000..3587b7bf6c23
-=2D-- /dev/null
-+++ b/tools/testing/selftests/brute/config
-@@ -0,0 +1 @@
-+CONFIG_SECURITY_FORK_BRUTE=3Dy
-diff --git a/tools/testing/selftests/brute/exec.c b/tools/testing/selftest=
-s/brute/exec.c
-new file mode 100644
-index 000000000000..a7fc5705f97c
-=2D-- /dev/null
-+++ b/tools/testing/selftests/brute/exec.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <libgen.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+static __attribute__((noreturn)) void error_failure(const char *message)
-+{
-+	perror(message);
-+	exit(EXIT_FAILURE);
-+}
-+
-+#define PROG_NAME basename(argv[0])
-+#define CLD_BRUTE	7	/* child was killed by brute LSM */
-+
-+int main(int argc, char **argv)
-+{
-+	pid_t pid;
-+	int rc;
-+	siginfo_t siginfo;
-+
-+	if (argc < 2) {
-+		printf("Usage: %s <EXECUTABLE>\n", PROG_NAME);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	pid =3D fork();
-+	if (pid < 0)
-+		error_failure("fork");
-+
-+	/* Child process */
-+	if (!pid) {
-+		execve(argv[1], &argv[1], NULL);
-+		error_failure("execve");
-+	}
-+
-+	/* Parent process */
-+	rc =3D waitid(P_PID, pid, &siginfo, WEXITED);
-+	if (rc)
-+		error_failure("waitid");
-+
-+	return siginfo.si_code !=3D CLD_BRUTE;
-+}
-diff --git a/tools/testing/selftests/brute/rmxattr.c b/tools/testing/selft=
-ests/brute/rmxattr.c
-new file mode 100644
-index 000000000000..9ed90409d337
-=2D-- /dev/null
-+++ b/tools/testing/selftests/brute/rmxattr.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <libgen.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/xattr.h>
-+
-+static __attribute__((noreturn)) void error_failure(const char *message)
-+{
-+	perror(message);
-+	exit(EXIT_FAILURE);
-+}
-+
-+#define PROG_NAME basename(argv[0])
-+
-+#define XATTR_SECURITY_PREFIX "security."
-+#define XATTR_BRUTE_SUFFIX "brute"
-+#define XATTR_NAME_BRUTE XATTR_SECURITY_PREFIX XATTR_BRUTE_SUFFIX
-+
-+int main(int argc, char **argv)
-+{
-+	int rc;
-+
-+	if (argc < 2) {
-+		printf("Usage: %s <FILE>\n", PROG_NAME);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	rc =3D removexattr(argv[1], XATTR_NAME_BRUTE);
-+	if (rc)
-+		error_failure("removexattr");
-+
-+	return EXIT_SUCCESS;
-+}
-diff --git a/tools/testing/selftests/brute/test.c b/tools/testing/selftest=
-s/brute/test.c
-new file mode 100644
-index 000000000000..44c32f446dca
-=2D-- /dev/null
-+++ b/tools/testing/selftests/brute/test.c
-@@ -0,0 +1,507 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <arpa/inet.h>
-+#include <errno.h>
-+#include <libgen.h>
-+#include <pwd.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/socket.h>
-+#include <sys/time.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+static const char *message =3D "message";
-+
-+enum mode {
-+	MODE_NONE,
-+	MODE_CRASH,
-+	MODE_SERVER_CRASH,
-+	MODE_CLIENT,
-+};
-+
-+enum crash_after {
-+	CRASH_AFTER_NONE,
-+	CRASH_AFTER_FORK,
-+	CRASH_AFTER_EXEC,
-+};
-+
-+enum signal_from {
-+	SIGNAL_FROM_NONE,
-+	SIGNAL_FROM_USER,
-+	SIGNAL_FROM_KERNEL,
-+};
-+
-+struct args {
-+	uint32_t ip;
-+	uint16_t port;
-+	int counter;
-+	long timeout;
-+	enum mode mode;
-+	enum crash_after crash_after;
-+	enum signal_from signal_from;
-+	unsigned char has_counter : 1;
-+	unsigned char has_change_priv : 1;
-+	unsigned char has_ip : 1;
-+	unsigned char has_port : 1;
-+	unsigned char has_timeout : 1;
-+};
-+
-+#define OPT_STRING "hm:c:s:n:Ca:p:t:"
-+
-+static void usage(const char *prog)
-+{
-+	printf("Usage: %s <OPTIONS>\n", prog);
-+	printf("OPTIONS:\n");
-+	printf("  -h: Show this help and exit. Optional.\n");
-+	printf("  -m (crash | server_crash | client): Mode. Required.\n");
-+	printf("Options for crash mode:\n");
-+	printf("  -c (fork | exec): Crash after. Optional.\n");
-+	printf("  -s (user | kernel): Signal from. Required.\n");
-+	printf("  -n counter: Number of crashes.\n");
-+	printf("              Required if the option -c is used.\n");
-+	printf("              Not used without the option -c.\n");
-+	printf("              Range from 1 to INT_MAX.\n");
-+	printf("  -C: Change privileges before crash. Optional.\n");
-+	printf("Options for server_crash mode:\n");
-+	printf("  -a ip: Ip v4 address to accept. Required.\n");
-+	printf("  -p port: Port number. Required.\n");
-+	printf("           Range from 1 to UINT16_MAX.\n");
-+	printf("  -t secs: Accept timeout. Required.\n");
-+	printf("           Range from 1 to LONG_MAX.\n");
-+	printf("  -c (fork | exec): Crash after. Required.\n");
-+	printf("  -s (user | kernel): Signal from. Required.\n");
-+	printf("  -n counter: Number of crashes. Required.\n");
-+	printf("              Range from 1 to INT_MAX.\n");
-+	printf("Options for client mode:\n");
-+	printf("  -a ip: Ip v4 address to connect. Required.\n");
-+	printf("  -p port: Port number. Required.\n");
-+	printf("           Range from 1 to UINT16_MAX.\n");
-+	printf("  -t secs: Connect timeout. Required.\n");
-+	printf("           Range from 1 to LONG_MAX.\n");
-+}
-+
-+static __attribute__((noreturn)) void info_failure(const char *message,
-+						   const char *prog)
-+{
-+	printf("%s\n", message);
-+	usage(prog);
-+	exit(EXIT_FAILURE);
-+}
-+
-+static enum mode get_mode(const char *text, const char *prog)
-+{
-+	if (!strcmp(text, "crash"))
-+		return MODE_CRASH;
-+
-+	if (!strcmp(text, "server_crash"))
-+		return MODE_SERVER_CRASH;
-+
-+	if (!strcmp(text, "client"))
-+		return MODE_CLIENT;
-+
-+	info_failure("Invalid mode option [-m].", prog);
-+}
-+
-+static enum crash_after get_crash_after(const char *text, const char *pro=
-g)
-+{
-+	if (!strcmp(text, "fork"))
-+		return CRASH_AFTER_FORK;
-+
-+	if (!strcmp(text, "exec"))
-+		return CRASH_AFTER_EXEC;
-+
-+	info_failure("Invalid crash after option [-c].", prog);
-+}
-+
-+static enum signal_from get_signal_from(const char *text, const char *pro=
-g)
-+{
-+	if (!strcmp(text, "user"))
-+		return SIGNAL_FROM_USER;
-+
-+	if (!strcmp(text, "kernel"))
-+		return SIGNAL_FROM_KERNEL;
-+
-+	info_failure("Invalid signal from option [-s]", prog);
-+}
-+
-+static int get_counter(const char *text, const char *prog)
-+{
-+	int counter;
-+
-+	counter =3D atoi(text);
-+	if (counter > 0)
-+		return counter;
-+
-+	info_failure("Invalid counter option [-n].", prog);
-+}
-+
-+static __attribute__((noreturn)) void error_failure(const char *message)
-+{
-+	perror(message);
-+	exit(EXIT_FAILURE);
-+}
-+
-+static uint32_t get_ip(const char *text, const char *prog)
-+{
-+	int ret;
-+	uint32_t ip;
-+
-+	ret =3D inet_pton(AF_INET, text, &ip);
-+	if (!ret)
-+		info_failure("Invalid ip option [-a].", prog);
-+	else if (ret < 0)
-+		error_failure("inet_pton");
-+
-+	return ip;
-+}
-+
-+static uint16_t get_port(const char *text, const char *prog)
-+{
-+	long port;
-+
-+	port =3D atol(text);
-+	if ((port > 0) && (port <=3D UINT16_MAX))
-+		return htons(port);
-+
-+	info_failure("Invalid port option [-p].", prog);
-+}
-+
-+static long get_timeout(const char *text, const char *prog)
-+{
-+	long timeout;
-+
-+	timeout =3D atol(text);
-+	if (timeout > 0)
-+		return timeout;
-+
-+	info_failure("Invalid timeout option [-t].", prog);
-+}
-+
-+static void check_args(const struct args *args, const char *prog)
-+{
-+	if (args->mode =3D=3D MODE_CRASH && args->crash_after !=3D CRASH_AFTER_N=
-ONE &&
-+	    args->signal_from !=3D SIGNAL_FROM_NONE && args->has_counter &&
-+	    !args->has_ip && !args->has_port && !args->has_timeout)
-+		return;
-+
-+	if (args->mode =3D=3D MODE_CRASH && args->signal_from !=3D SIGNAL_FROM_N=
-ONE &&
-+	    args->crash_after =3D=3D CRASH_AFTER_NONE && !args->has_counter &&
-+	    !args->has_ip && !args->has_port && !args->has_timeout)
-+		return;
-+
-+	if (args->mode =3D=3D MODE_SERVER_CRASH && args->has_ip && args->has_por=
-t &&
-+	    args->has_timeout && args->crash_after !=3D CRASH_AFTER_NONE &&
-+	    args->signal_from !=3D SIGNAL_FROM_NONE && args->has_counter &&
-+	    !args->has_change_priv)
-+		return;
-+
-+	if (args->mode =3D=3D MODE_CLIENT && args->has_ip && args->has_port &&
-+	    args->has_timeout && args->crash_after =3D=3D CRASH_AFTER_NONE &&
-+	    args->signal_from =3D=3D SIGNAL_FROM_NONE && !args->has_counter &&
-+	    !args->has_change_priv)
-+		return;
-+
-+	info_failure("Invalid use of options.", prog);
-+}
-+
-+static uid_t get_non_root_uid(void)
-+{
-+	struct passwd *pwent;
-+	uid_t uid;
-+
-+	while (true) {
-+		errno =3D 0;
-+		pwent =3D getpwent();
-+		if (!pwent) {
-+			if (errno) {
-+				perror("getpwent");
-+				endpwent();
-+				exit(EXIT_FAILURE);
-+			}
-+			break;
-+		}
-+
-+		if (pwent->pw_uid) {
-+			uid =3D pwent->pw_uid;
-+			endpwent();
-+			return uid;
-+		}
-+	}
-+
-+	endpwent();
-+	printf("A user different of root is needed.\n");
-+	exit(EXIT_FAILURE);
-+}
-+
-+static inline void do_sigsegv(void)
-+{
-+	int *p =3D NULL;
-+	*p =3D 0;
-+}
-+
-+static void do_sigkill(void)
-+{
-+	int ret;
-+
-+	ret =3D kill(getpid(), SIGKILL);
-+	if (ret)
-+		error_failure("kill");
-+}
-+
-+static void crash(enum signal_from signal_from, bool change_priv)
-+{
-+	int ret;
-+
-+	if (change_priv) {
-+		ret =3D setuid(get_non_root_uid());
-+		if (ret)
-+			error_failure("setuid");
-+	}
-+
-+	if (signal_from =3D=3D SIGNAL_FROM_KERNEL)
-+		do_sigsegv();
-+
-+	do_sigkill();
-+}
-+
-+static void execve_crash(char *const argv[])
-+{
-+	execve(argv[0], argv, NULL);
-+	error_failure("execve");
-+}
-+
-+static void exec_crash_user(void)
-+{
-+	char *const argv[] =3D {
-+		"./test", "-m", "crash", "-s", "user", NULL,
-+	};
-+
-+	execve_crash(argv);
-+}
-+
-+static void exec_crash_user_change_priv(void)
-+{
-+	char *const argv[] =3D {
-+		"./test", "-m", "crash", "-s", "user", "-C", NULL,
-+	};
-+
-+	execve_crash(argv);
-+}
-+
-+static void exec_crash_kernel(void)
-+{
-+	char *const argv[] =3D {
-+		"./test", "-m", "crash", "-s", "kernel", NULL,
-+	};
-+
-+	execve_crash(argv);
-+}
-+
-+static void exec_crash_kernel_change_priv(void)
-+{
-+	char *const argv[] =3D {
-+		"./test", "-m", "crash", "-s", "kernel", "-C", NULL,
-+	};
-+
-+	execve_crash(argv);
-+}
-+
-+static void exec_crash(enum signal_from signal_from, bool change_priv)
-+{
-+	if (signal_from =3D=3D SIGNAL_FROM_USER && !change_priv)
-+		exec_crash_user();
-+	if (signal_from =3D=3D SIGNAL_FROM_USER && change_priv)
-+		exec_crash_user_change_priv();
-+	if (signal_from =3D=3D SIGNAL_FROM_KERNEL && !change_priv)
-+		exec_crash_kernel();
-+	if (signal_from =3D=3D SIGNAL_FROM_KERNEL && change_priv)
-+		exec_crash_kernel_change_priv();
-+}
-+
-+static void do_crash(enum crash_after crash_after, enum signal_from signa=
-l_from,
-+		     int counter, bool change_priv)
-+{
-+	pid_t pid;
-+	int status;
-+
-+	if (crash_after =3D=3D CRASH_AFTER_NONE)
-+		crash(signal_from, change_priv);
-+
-+	while (counter > 0) {
-+		pid =3D fork();
-+		if (pid < 0)
-+			error_failure("fork");
-+
-+		/* Child process */
-+		if (!pid) {
-+			if (crash_after =3D=3D CRASH_AFTER_FORK)
-+				crash(signal_from, change_priv);
-+
-+			exec_crash(signal_from, change_priv);
-+		}
-+
-+		/* Parent process */
-+		counter -=3D 1;
-+		pid =3D waitpid(pid, &status, 0);
-+		if (pid < 0)
-+			error_failure("waitpid");
-+	}
-+}
-+
-+static __attribute__((noreturn)) void error_close_failure(const char *mes=
-sage,
-+							  int fd)
-+{
-+	perror(message);
-+	close(fd);
-+	exit(EXIT_FAILURE);
-+}
-+
-+static void do_server(uint32_t ip, uint16_t port, long accept_timeout)
-+{
-+	int sockfd;
-+	int ret;
-+	struct sockaddr_in address;
-+	struct timeval timeout;
-+	int newsockfd;
-+
-+	sockfd =3D socket(AF_INET, SOCK_STREAM, 0);
-+	if (sockfd < 0)
-+		error_failure("socket");
-+
-+	address.sin_family =3D AF_INET;
-+	address.sin_addr.s_addr =3D ip;
-+	address.sin_port =3D port;
-+
-+	ret =3D bind(sockfd, (const struct sockaddr *)&address, sizeof(address))=
-;
-+	if (ret)
-+		error_close_failure("bind", sockfd);
-+
-+	ret =3D listen(sockfd, 1);
-+	if (ret)
-+		error_close_failure("listen", sockfd);
-+
-+	timeout.tv_sec =3D accept_timeout;
-+	timeout.tv_usec =3D 0;
-+	ret =3D setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO,
-+			 (const struct timeval *)&timeout, sizeof(timeout));
-+	if (ret)
-+		error_close_failure("setsockopt", sockfd);
-+
-+	newsockfd =3D accept(sockfd, NULL, NULL);
-+	if (newsockfd < 0)
-+		error_close_failure("accept", sockfd);
-+
-+	close(sockfd);
-+	close(newsockfd);
-+}
-+
-+static void do_client(uint32_t ip, uint16_t port, long connect_timeout)
-+{
-+	int sockfd;
-+	int ret;
-+	struct timeval timeout;
-+	struct sockaddr_in address;
-+
-+	sockfd =3D socket(AF_INET, SOCK_STREAM, 0);
-+	if (sockfd < 0)
-+		error_failure("socket");
-+
-+	timeout.tv_sec =3D connect_timeout;
-+	timeout.tv_usec =3D 0;
-+	ret =3D setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO,
-+			 (const struct timeval *)&timeout, sizeof(timeout));
-+	if (ret)
-+		error_close_failure("setsockopt", sockfd);
-+
-+	address.sin_family =3D AF_INET;
-+	address.sin_addr.s_addr =3D ip;
-+	address.sin_port =3D port;
-+
-+	ret =3D connect(sockfd, (const struct sockaddr *)&address,
-+		      sizeof(address));
-+	if (ret)
-+		error_close_failure("connect", sockfd);
-+
-+	ret =3D write(sockfd, message, strlen(message));
-+	if (ret < 0)
-+		error_close_failure("write", sockfd);
-+
-+	close(sockfd);
-+}
-+
-+#define PROG_NAME basename(argv[0])
-+
-+int main(int argc, char **argv)
-+{
-+	int opt;
-+	struct args args =3D {
-+		.mode =3D MODE_NONE,
-+		.crash_after =3D CRASH_AFTER_NONE,
-+		.signal_from =3D SIGNAL_FROM_NONE,
-+		.has_counter =3D false,
-+		.has_change_priv =3D false,
-+		.has_ip =3D false,
-+		.has_port =3D false,
-+		.has_timeout =3D false,
-+	};
-+
-+	while ((opt =3D getopt(argc, argv, OPT_STRING)) !=3D -1) {
-+		switch (opt) {
-+		case 'h':
-+			usage(PROG_NAME);
-+			return EXIT_SUCCESS;
-+		case 'm':
-+			args.mode =3D get_mode(optarg, PROG_NAME);
-+			break;
-+		case 'c':
-+			args.crash_after =3D get_crash_after(optarg, PROG_NAME);
-+			break;
-+		case 's':
-+			args.signal_from =3D get_signal_from(optarg, PROG_NAME);
-+			break;
-+		case 'n':
-+			args.counter =3D get_counter(optarg, PROG_NAME);
-+			args.has_counter =3D true;
-+			break;
-+		case 'C':
-+			args.has_change_priv =3D true;
-+			break;
-+		case 'a':
-+			args.ip =3D get_ip(optarg, PROG_NAME);
-+			args.has_ip =3D true;
-+			break;
-+		case 'p':
-+			args.port =3D get_port(optarg, PROG_NAME);
-+			args.has_port =3D true;
-+			break;
-+		case 't':
-+			args.timeout =3D get_timeout(optarg, PROG_NAME);
-+			args.has_timeout =3D true;
-+			break;
-+		default:
-+			usage(PROG_NAME);
-+			return EXIT_FAILURE;
-+		}
-+	}
-+
-+	check_args(&args, PROG_NAME);
-+
-+	if (args.mode =3D=3D MODE_CRASH) {
-+		do_crash(args.crash_after, args.signal_from, args.counter,
-+			 args.has_change_priv);
-+	} else if (args.mode =3D=3D MODE_SERVER_CRASH) {
-+		do_server(args.ip, args.port, args.timeout);
-+		do_crash(args.crash_after, args.signal_from, args.counter,
-+			 false);
-+	} else if (args.mode =3D=3D MODE_CLIENT) {
-+		do_client(args.ip, args.port, args.timeout);
-+	}
-+
-+	return EXIT_SUCCESS;
-+}
-diff --git a/tools/testing/selftests/brute/test.sh b/tools/testing/selftes=
-ts/brute/test.sh
-new file mode 100755
-index 000000000000..393b651ab635
-=2D-- /dev/null
-+++ b/tools/testing/selftests/brute/test.sh
-@@ -0,0 +1,269 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+TCID=3D"test.sh"
-+
-+KSFT_PASS=3D0
-+KSFT_FAIL=3D1
-+KSFT_SKIP=3D4
-+
-+errno=3D$KSFT_PASS
-+
-+check_root()
-+{
-+	local uid=3D$(id -u)
-+	if [ $uid -ne 0 ]; then
-+		echo $TCID: must be run as root >&2
-+		exit $KSFT_SKIP
-+	fi
-+}
-+
-+tmp_files_setup()
-+{
-+	DMESG=3D$(mktemp --tmpdir -t brute-dmesg-XXXXXX)
-+}
-+
-+tmp_files_cleanup()
-+{
-+	rm -f "$DMESG"
-+}
-+
-+save_dmesg()
-+{
-+	dmesg > "$DMESG"
-+}
-+
-+count_attack_matches()
-+{
-+	dmesg | comm --nocheck-order -13 "$DMESG" - | \
-+		grep "brute: fork brute force attack detected" | wc -l
-+}
-+
-+assert_equal()
-+{
-+	local val1=3D$1
-+	local val2=3D$2
-+
-+	if [ $val1 -eq $val2 ]; then
-+		echo "$TCID: $message [PASS]"
-+	else
-+		echo "$TCID: $message [FAIL]"
-+		errno=3D$KSFT_FAIL
-+	fi
-+}
-+
-+test_fork_user()
-+{
-+	COUNTER=3D20
-+
-+	save_dmesg
-+	./test -m crash -c fork -s user -n $COUNTER
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"fork attack (user signals, no bounds crossed)"
-+	assert_equal $count 0
-+}
-+
-+test_fork_kernel()
-+{
-+	save_dmesg
-+	./test -m crash -c fork -s kernel -n $COUNTER
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"fork attack (kernel signals, no bounds crossed)"
-+	assert_equal $count 0
-+}
-+
-+test_exec_user()
-+{
-+	save_dmesg
-+	./test -m crash -c exec -s user -n $COUNTER
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"exec attack (user signals, no bounds crossed)"
-+	assert_equal $count 0
-+}
-+
-+test_exec_kernel()
-+{
-+	save_dmesg
-+	./test -m crash -c exec -s kernel -n $COUNTER
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"exec attack (kernel signals, no bounds crossed)"
-+	assert_equal $count 0
-+}
-+
-+assert_not_equal()
-+{
-+	local val1=3D$1
-+	local val2=3D$2
-+
-+	if [ $val1 -ne $val2 ]; then
-+		echo $TCID: $message [PASS]
-+	else
-+		echo $TCID: $message [FAIL]
-+		errno=3D$KSFT_FAIL
-+	fi
-+}
-+
-+remove_xattr()
-+{
-+	./rmxattr test >/dev/null 2>&1
-+}
-+
-+test_fork_kernel_setuid()
-+{
-+	save_dmesg
-+	chmod u+s test
-+	./test -m crash -c fork -s kernel -n $COUNTER
-+	chmod u-s test
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"fork attack (kernel signals, setuid binary)"
-+	assert_not_equal $count 0
-+	remove_xattr
-+}
-+
-+test_exec_kernel_setuid()
-+{
-+	save_dmesg
-+	chmod u+s test
-+	./test -m crash -c exec -s kernel -n $COUNTER
-+	chmod u-s test
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"exec attack (kernel signals, setuid binary)"
-+	assert_not_equal $count 0
-+	remove_xattr
-+}
-+
-+test_fork_kernel_change_priv()
-+{
-+	save_dmesg
-+	./test -m crash -c fork -s kernel -n $COUNTER -C
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"fork attack (kernel signals, change privileges)"
-+	assert_not_equal $count 0
-+	remove_xattr
-+}
-+
-+test_exec_kernel_change_priv()
-+{
-+	save_dmesg
-+	./test -m crash -c exec -s kernel -n $COUNTER -C
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"exec attack (kernel signals, change privileges)"
-+	assert_not_equal $count 0
-+	remove_xattr
-+}
-+
-+network_ns_setup()
-+{
-+	local vnet_name=3D$1
-+	local veth_name=3D$2
-+	local ip_src=3D$3
-+	local ip_dst=3D$4
-+
-+	ip netns add $vnet_name
-+	ip link set $veth_name netns $vnet_name
-+	ip -n $vnet_name addr add $ip_src/24 dev $veth_name
-+	ip -n $vnet_name link set $veth_name up
-+	ip -n $vnet_name route add $ip_dst/24 dev $veth_name
-+}
-+
-+network_setup()
-+{
-+	VETH0_NAME=3Dveth0
-+	VNET0_NAME=3Dvnet0
-+	VNET0_IP=3D10.0.1.0
-+	VETH1_NAME=3Dveth1
-+	VNET1_NAME=3Dvnet1
-+	VNET1_IP=3D10.0.2.0
-+
-+	ip link add $VETH0_NAME type veth peer name $VETH1_NAME
-+	network_ns_setup $VNET0_NAME $VETH0_NAME $VNET0_IP $VNET1_IP
-+	network_ns_setup $VNET1_NAME $VETH1_NAME $VNET1_IP $VNET0_IP
-+}
-+
-+test_fork_kernel_network_to_local()
-+{
-+	INADDR_ANY=3D0.0.0.0
-+	PORT=3D65535
-+	TIMEOUT=3D5
-+
-+	save_dmesg
-+	ip netns exec $VNET0_NAME ./test -m server_crash -a $INADDR_ANY \
-+		-p $PORT -t $TIMEOUT -c fork -s kernel -n $COUNTER &
-+	sleep 1
-+	ip netns exec $VNET1_NAME ./test -m client -a $VNET0_IP -p $PORT \
-+		-t $TIMEOUT
-+	sleep 1
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"fork attack (kernel signals, network to local)"
-+	assert_not_equal $count 0
-+	remove_xattr
-+}
-+
-+test_exec_kernel_network_to_local()
-+{
-+	save_dmesg
-+	ip netns exec $VNET0_NAME ./test -m server_crash -a $INADDR_ANY \
-+		-p $PORT -t $TIMEOUT -c exec -s kernel -n $COUNTER &
-+	sleep 1
-+	ip netns exec $VNET1_NAME ./test -m client -a $VNET0_IP -p $PORT \
-+		-t $TIMEOUT
-+	sleep 1
-+	count=3D$(count_attack_matches)
-+
-+	message=3D"exec attack (kernel signals, network to local)"
-+	assert_not_equal $count 0
-+	remove_xattr
-+}
-+
-+network_cleanup()
-+{
-+	ip netns del $VNET0_NAME >/dev/null 2>&1
-+	ip netns del $VNET1_NAME >/dev/null 2>&1
-+	ip link delete $VETH0_NAME >/dev/null 2>&1
-+	ip link delete $VETH1_NAME >/dev/null 2>&1
-+}
-+
-+test_waitid()
-+{
-+	./exec test -m crash -c fork -s kernel -n $COUNTER -C
-+	local rc=3D$?
-+
-+	message=3D"notification to userspace via waitid system call"
-+	assert_equal $rc 0
-+	remove_xattr
-+}
-+
-+cleanup()
-+{
-+        network_cleanup
-+	tmp_files_cleanup
-+	chmod u-s test
-+	remove_xattr
-+}
-+trap cleanup EXIT
-+
-+check_root
-+tmp_files_setup
-+test_fork_user
-+test_fork_kernel
-+test_exec_user
-+test_exec_kernel
-+test_fork_kernel_setuid
-+test_exec_kernel_setuid
-+test_fork_kernel_change_priv
-+test_exec_kernel_change_priv
-+network_setup
-+test_fork_kernel_network_to_local
-+test_exec_kernel_network_to_local
-+network_cleanup
-+test_waitid
-+exit $errno
++++ b/Documentation/admin-guide/LSM/Brute.rst
+@@ -0,0 +1,359 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=3D=3D=3D=3D=3D
++Brute
++=3D=3D=3D=3D=3D
++
++Brute is a Linux Security Module that detects and mitigates fork brute fo=
+rce
++attacks against vulnerable userspace processes.
++
++
++Motivation
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++Attacks against vulnerable userspace applications with the purpose to bre=
+ak ASLR
++or bypass canaries traditionally use some level of brute force with the h=
+elp of
++the fork system call. This is possible since when creating a new process =
+using
++fork its memory contents are the same as those of the parent process (the
++process that called the fork system call). So, the attacker can test the =
+memory
++infinite times to find the correct memory values or the correct memory ad=
+dresses
++without worrying about crashing the application.
++
++Based on the above scenario it would be nice to have this detected and
++mitigated, and this is the goal of this implementation. Specifically the
++following attacks are expected to be detected:
++
++ 1. Launching (fork()/exec()) a setuid/setgid process repeatedly until a
++    desirable memory layout is got (e.g. Stack Clash).
++ 2. Connecting to an exec()ing network daemon (e.g. xinetd) repeatedly un=
+til a
++    desirable memory layout is got (e.g. what CTFs do for simple network
++    service).
++ 3. Launching processes without exec() (e.g. Android Zygote) and exposing=
+ state
++    to attack a sibling.
++ 4. Connecting to a fork()ing network daemon (e.g. apache) repeatedly unt=
+il the
++    previously shared memory layout of all the other children is exposed =
+(e.g.
++    kind of related to HeartBleed).
++
++In each case, a privilege boundary has been crossed:
++
++ | Case 1: setuid/setgid process
++ | Case 2: network to local
++ | Case 3: privilege changes
++ | Case 4: network to local
++
++So, what really needs to be detected are fork/exec brute force attacks th=
+at
++cross any of the commented bounds.
++
++
++Other implementations
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++The public version of grsecurity, as a summary, is based on the idea of d=
+elaying
++the fork system call if a child died due to some fatal signal (``SIGSEGV`=
+`,
++``SIGBUS``, ``SIGKILL`` or ``SIGILL``). This has some issues:
++
++Bad practices
++-------------
++
++Adding delays to the kernel is, in general, a bad idea.
++
++Scenarios not detected (false negatives)
++----------------------------------------
++
++This protection acts only when the fork system call is called after a chi=
+ld has
++crashed. So, it would still be possible for an attacker to fork a big amo=
+unt of
++children (in the order of thousands), then probe all of them, and finally=
+ wait
++the protection time before repeating the steps.
++
++Moreover, this method is based on the idea that the protection doesn't ac=
+t if
++the parent crashes. So, it would still be possible for an attacker to for=
+k a
++process and probe itself. Then, fork the child process and probe itself a=
+gain.
++This way, these steps can be repeated infinite times without any mitigati=
+on.
++
++Scenarios detected (false positives)
++------------------------------------
++
++Scenarios where an application rarely fails for reasons unrelated to a re=
+al
++attack.
++
++
++This implementation
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++The main idea behind this implementation is to improve the existing ones
++focusing on the weak points annotated before. Basically, the adopted solu=
+tion is
++to detect a fast crash rate instead of only one simple crash and to detec=
+t both
++the crash of parent and child processes. Also, fine tune the detection fo=
+cusing
++on privilege boundary crossing. And finally, as a mitigation method, kill=
+ all
++the offending tasks involved in the attack and mark the executable as "no=
+t
++allowed" (to block the following executions) instead of using delays.
++
++To achieve this goal, and going into more details, this implementation is=
+ based
++on the use of some statistical data shared across all the processes that =
+can
++have the same memory contents. Or in other words, a statistical data shar=
+ed
++between all the fork hierarchy processes after an execve system call.
++
++The purpose of these statistics is, basically, collect all the necessary =
+info to
++compute the application crash period in order to detect an attack. To tra=
+ck all
++this information, the extended attributes (xattr) of the executable files=
+ are
++used. More specifically, the name of the attribute is "brute" and uses th=
+e
++"security" namespace. So, the full xattr name for the Brute LSM is:
++
++ ``security.brute``
++
++The same can be achieved using a pointer to the fork hierarchy statistica=
+l data
++held by the ``task_struct`` structure, but this has an important drawback=
+: a
++brute force attack that happens through the execve system call losts the =
+faults
++info since these statistics are freed when the fork hierarchy disappears.=
+ Using
++the last method (pointer in the ``task_struct`` structure) makes not poss=
+ible to
++manage this attack type that can be successfully treated using extended
++attributes.
++
++To detect a brute force attack it is necessary that the statistics shared=
+ by all
++the fork hierarchy processes be updated in every fatal crash and the most
++important data to update is the application crash period.
++
++The crash period is the time between two consecutive faults, but this als=
+o has a
++drawback: if an application crashes twice in a short period of time for s=
+ome
++reason unrelated to a real attack, a false positive will be triggered. To=
+ avoid
++this scenario the exponential moving average (EMA) is used. This way, the
++application crash period will be a value that is not prone to change due =
+to
++spurious data and follows the real crash period.
++
++These statistics are stored in the executables using the extended attribu=
+tes
++feature. So, the detection and mitigation of brute force attacks using th=
+is LSM
++it is only feasible in filesystems that support xattr.
++
++.. kernel-doc:: security/brute/brute.c
++   :identifiers: brute_raw_stats
++
++This is a fixed sized struct with a very small footprint. So, in referenc=
+e to
++memory usage, it is not expected to have problems storing it as an extend=
+ed
++attribute.
++
++Concerning to access rights to this statistical data, as stated above, th=
+e
++"security" namespace is used. Since no custom policy, related to this ext=
+ended
++attribute, has been implemented for the Brute LSM, all processes have rea=
+d
++access to these statistics, and write access is limited to processes that=
+ have
++the ``CAP_SYS_ADMIN`` capability.
++
++Attack detection
++----------------
++
++There are two types of brute force attacks that need to be detected. The =
+first
++one is an attack that happens through the fork system call and the second=
+ one is
++an attack that happens through the execve system call. Moreover, these tw=
+o
++attack types have two variants. A slow brute force attack that is detecte=
+d if a
++maximum number of faults per fork hierarchy is reached and a fast brute f=
+orce
++attack that is detected if the application crash period falls below a cer=
+tain
++threshold.
++
++Attack mitigation
++-----------------
++
++Once an attack has been detected, this is mitigated killing all the offen=
+ding
++tasks involved. Or in other words, once an attack has been detected, this=
+ is
++mitigated killing all the processes that are executing the same file that=
+ is
++running during the brute force attack. Also, to prevent the executable in=
+volved
++in the attack from being respawned by a supervisor, and thus prevent a br=
+ute
++force attack from being started again, the file is marked as "not allowed=
+" and
++the following executions are avoided based on this mark. This method allo=
+ws
++supervisors to implement their own policy: they can read the statistics, =
+know if
++the executable is blocked by the Brute LSM and why, and act based on this
++information. If they want to respawn the offending executable it is only
++necessary to remove the "``security.brute``" extended attribute and thus =
+remove
++the statistical data.
++
++Fine tuning the attack detection
++--------------------------------
++
++To avoid false positives during the attack detection it is necessary to n=
+arrow
++the possible cases. To do so, and based on the threat scenarios that we w=
+ant to
++detect, this implementation also focuses on the crossing of privilege bou=
+nds.
++
++To be precise, only the following privilege bounds are taken into account=
+:
++
++ 1. setuid/setgid process
++ 2. network to local
++ 3. privilege changes
++
++Moreover, only the fatal signals delivered by the kernel are taken into a=
+ccount
++avoiding the fatal signals sent by userspace applications (with the excep=
+tion of
++the ``SIGABRT`` user signal since this is used by glibc for stack canary,
++malloc, etc. failures, which may indicate that a mitigation has been trig=
+gered).
++
++Userspace notification via waitid() system call
++-----------------------------------------------
++
++Although the xattr of the executable is accessible from userspace, in com=
+plex
++daemons this file may not be visible directly by the supervisor as it may=
+ be run
++through some wrapper. So, an extension to the ``waitid()`` system call ha=
+s been
++added.
++
++ ``int waitid(idtype_t idtype, id_t id, siginfo_t *infop, int options);``
++
++Upon successful return, ``waitid()`` fills in the ``siginfo_t`` structure
++pointed to by ``infop``, but now, the ``si_code`` field can be:
++
++ ``CLD_BRUTE``: child was killed by brute LSM. Defined as value 7.
++
++in addition to the following codes:
++
++ | ``CLD_EXITED``: child has called exit. Defined as value 1.
++ | ``CLD_KILLED``: child was killed by signal. Defined as value 2.
++ | ``CLD_DUMPED``: child terminated abnormally. Defined as value 3.
++ | ``CLD_TRAPPED``: traced child has trapped. Defined as value 4.
++ | ``CLD_STOPPED``: child has stopped. Defined as value 5.
++ | ``CLD_CONTINUED``: stopped child has continued. Defined as value 6.
++
++Exponential moving average (EMA)
++--------------------------------
++
++This kind of average defines a weight (between 0 and 1) for the new value=
+ to add
++and applies the remainder of the weight to the current average value. Thi=
+s way,
++some spurious data will not excessively modify the average and only if th=
+e new
++values are persistent, the moving average will tend towards them.
++
++Mathematically the application crash period's EMA can be expressed as fol=
+lows:
++
++ period_ema =3D period * weight + period_ema * (1 - weight)
++
++Related to the attack detection, the EMA must guarantee that not many cra=
+shes
++are needed. To demonstrate this, the scenario where an application has fa=
+iled
++and then has been running without any crashes for a month, will be used.
++
++The period's EMA can be written now as:
++
++ period_ema[i] =3D period[i] * weight + period_ema[i - 1] * (1 - weight)
++
++If the new crash periods have insignificant values related to the first c=
+rash
++period (a month in this case), the formula can be rewritten as:
++
++ period_ema[i] =3D period_ema[i - 1] * (1 - weight)
++
++And by extension:
++
++ | period_ema[i - 1] =3D period_ema[i - 2] * (1 - weight)
++ | period_ema[i - 2] =3D period_ema[i - 3] * (1 - weight)
++ | period_ema[i - 3] =3D period_ema[i - 4] * (1 - weight)
++
++So, if the substitution is made:
++
++ | period_ema[i] =3D period_ema[i - 1] * (1 - weight)
++ | period_ema[i] =3D period_ema[i - 2] * (1 - weight)\ :sup:`2`
++ | period_ema[i] =3D period_ema[i - 3] * (1 - weight)\ :sup:`3`
++ | period_ema[i] =3D period_ema[i - 4] * (1 - weight)\ :sup:`4`
++
++And in a more generic form:
++
++ period_ema[i] =3D period_ema[i - n] * (1 - weight)\ :sup:`n`
++
++Where "n" represents the number of iterations to obtain an EMA value. Or =
+in
++other words, the number of crashes to detect an attack.
++
++So, if we isolate the number of crashes:
++
++ | period_ema[i] / period_ema[i - n] =3D (1 - weight)\ :sup:`n`
++ | log(period_ema[i] / period_ema[i - n]) =3D log((1 - weight)\ :sup:`n`)
++ | log(period_ema[i] / period_ema[i - n]) =3D n * log(1 - weight)
++ | n =3D log(period_ema[i] / period_ema[i - n]) / log(1 - weight)
++
++Then, in the commented scenario (an application has failed and then has b=
+een
++running without any crashes for a month), the approximate number of crash=
+es to
++detect an attack (using the default implementation values for the weight =
+and the
++crash period threshold) is:
++
++ | weight =3D 7 / 10
++ | crash_period_threshold =3D 30 seconds
++
++ | n =3D log(crash_period_threshold / seconds_per_month) / log(1 - weight=
+)
++ | n =3D log(30 / (30 * 24 * 3600)) / log(1 - 0.7)
++ | n =3D 9.44
++
++So, with 10 crashes for this scenario an attack will be detected. If thes=
+e steps
++are repeated for different scenarios and the results are collected:
++
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++ time without any crashes number of crashes to detect an attack
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++ 1 month                  9.44
++ 1 year                   11.50
++ 10 years                 13.42
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++However, this computation has a drawback. The first data added to the EMA=
+ not
++obtains a real average showing a trend. So the solution is simple, the EM=
+A needs
++a minimum number of data to be able to be interpreted. This way, the case=
+ where
++a few first faults are fast enough followed by no crashes is avoided.
++
++Per system enabling/disabling
++-----------------------------
++
++This feature can be enabled at build time using the
++``CONFIG_SECURITY_FORK_BRUTE`` option or using the visual config applicat=
+ion
++under the following menu:
++
++ Security options  ``--->`` Fork brute force attack detection and mitigat=
+ion
++
++Also, at boot time, this feature can be disable too, by changing the "``l=
+sm=3D``"
++boot parameter.
++
++Per system configuration
++------------------------
++
++To customize the detection's sensibility there are five new sysctl attrib=
+utes
++for the Brute LSM that are accessible through the following path:
++
++ ``/proc/sys/kernel/brute/``
++
++More specifically, the files and their description are:
++
++**ema_weight_numerator**
++
++ .. kernel-doc:: security/brute/brute.c
++    :doc: brute_ema_weight_numerator
++
++**ema_weight_denominator**
++
++ .. kernel-doc:: security/brute/brute.c
++    :doc: brute_ema_weight_denominator
++
++**max_faults**
++
++ .. kernel-doc:: security/brute/brute.c
++    :doc: brute_max_faults
++
++**min_faults**
++
++ .. kernel-doc:: security/brute/brute.c
++    :doc: brute_min_faults
++
++**crash_period_threshold**
++
++ .. kernel-doc:: security/brute/brute.c
++    :doc: brute_crash_period_threshold
++
++Kernel selftests
++----------------
++
++To validate all the expectations about this implementation, there is a se=
+t of
++selftests. This tests cover fork/exec brute force attacks crossing the fo=
+llowing
++privilege boundaries:
++
++ 1. setuid process
++ 2. privilege changes
++ 3. network to local
++
++Also, there are some tests to check that fork/exec brute force attacks wi=
+thout
++crossing any privilege boundary already commented doesn't trigger the det=
+ection
++and mitigation stage. Moreover, a test to verify the userspace notificati=
+on via
++the ``waitid()`` system call has also been added.
++
++To build the tests:
++ ``make -C tools/testing/selftests/ TARGETS=3Dbrute``
++
++To run the tests:
++ ``make -C tools/testing/selftests TARGETS=3Dbrute run_tests``
++
++To package the tests:
++ ``make -C tools/testing/selftests TARGETS=3Dbrute gen_tar``
+diff --git a/Documentation/admin-guide/LSM/index.rst b/Documentation/admin=
+-guide/LSM/index.rst
+index a6ba95fbaa9f..1f68982bb330 100644
+=2D-- a/Documentation/admin-guide/LSM/index.rst
++++ b/Documentation/admin-guide/LSM/index.rst
+@@ -41,6 +41,7 @@ subdirectories.
+    :maxdepth: 1
+
+    apparmor
++   Brute
+    LoadPin
+    SELinux
+    Smack
+diff --git a/security/brute/Kconfig b/security/brute/Kconfig
+index 5da314d221aa..d2dd33b08642 100644
+=2D-- a/security/brute/Kconfig
++++ b/security/brute/Kconfig
+@@ -9,6 +9,7 @@ config SECURITY_FORK_BRUTE
+ 	  offending tasks are killed. Also, the executable file involved in the
+ 	  attack will be marked as "not allowed" and new execve system calls
+ 	  using this file will fail. Like capabilities, this security module
+-	  stacks with other LSMs.
++	  stacks with other LSMs. Further information can be found in
++	  Documentation/admin-guide/LSM/Brute.rst.
+
+ 	  If you are unsure how to answer this question, answer N.
 =2D-
 2.25.1
 
