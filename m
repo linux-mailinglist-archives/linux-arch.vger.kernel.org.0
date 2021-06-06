@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FB439CE4B
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 11:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095A939CE4E
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 11:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbhFFJH1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Jun 2021 05:07:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38170 "EHLO mail.kernel.org"
+        id S230355AbhFFJHi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Jun 2021 05:07:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38232 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230340AbhFFJHY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 6 Jun 2021 05:07:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 459E561420;
-        Sun,  6 Jun 2021 09:05:31 +0000 (UTC)
+        id S230348AbhFFJH1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 6 Jun 2021 05:07:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A6C7861426;
+        Sun,  6 Jun 2021 09:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622970335;
-        bh=HSjK8sb9rNp8fRAH1dUnUoJsw31olmcJ8Vy6Ym+Boxs=;
+        s=k20201202; t=1622970338;
+        bh=qph7YI4bBELR4x3cH34m49m6VFlBeHt4WLSEim7zato=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ToFie3H4Ftu8Li8fo8KSiPRR2dPZnYOYsbB3/3iMWbEhu4jX2HNne30ldox9bzZgQ
-         phI7JSwoclyv+6K2NVR6/U9VOQuGNVgkF3+jPBjSqv7aXm+EeuYOtP2JgutKKUV1No
-         58cEYOzFiRE59XdeqHhCV8ivTlDY1wEnLGeZx9iDz6WF0++8afEUxzCOLZPyHExBKA
-         gmbGqvWBLvdlQjPxQ5axvV6wnScCTrJMKqgTC3o7XHnBHmI3HH0COPzCi1fceCtGSl
-         LCqxdc2nTX4ewqFS4BPX3MBjDURNBL7dm3AN94b/4vuSZfqkRvbhkmzsVWic0/LqeQ
-         AN2oYO9JmiRhA==
+        b=Uet+WCvoJuyWL0SFrd+1jc6Ilaj8YMQJHj1VWC39aPQPAR+SPjI1wrb7V8fb3fGh2
+         MEB9ca1PE+TXAUNVnNV+22vcxI8/Aup5ue6UqIY9NcIfDUHC/pYiKDcvW8Bg17F98s
+         2fO0OdAMZbh8VkNxMEbWm4fdnEn6yMA0IjK1oZQYrhRB73d/9G8LS1U7f+ZJxGFVKu
+         ZqlIa8doFRapqKvNgCpGpw7NMHzRNu3cSBtDvH2WammdZLv0pYh/EudHQi7Q0bq/OM
+         gVN6DKpvmO5B14prT9gTCYwAFoKWE3OVODc8VPoIEeHbdWqoU91glJiqloi3KAOnEf
+         JnIQ2NHuhBKcw==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, anup.patel@wdc.com, palmerdabbelt@google.com,
         arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
@@ -31,10 +31,10 @@ To:     guoren@kernel.org, anup.patel@wdc.com, palmerdabbelt@google.com,
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-sunxi@lists.linux.dev,
         Guo Ren <guoren@linux.alibaba.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [RFC PATCH v2 07/11] riscv: cmo: Add dma-noncoherency support
-Date:   Sun,  6 Jun 2021 09:04:05 +0000
-Message-Id: <1622970249-50770-11-git-send-email-guoren@kernel.org>
+        Atish Patra <atish.patra@wdc.com>
+Subject: [RFC PATCH v2 08/11] riscv: cmo: Add vendor custom icache sync
+Date:   Sun,  6 Jun 2021 09:04:06 +0000
+Message-Id: <1622970249-50770-12-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622970249-50770-1-git-send-email-guoren@kernel.org>
 References: <1622970249-50770-1-git-send-email-guoren@kernel.org>
@@ -44,244 +44,180 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-To support DMA device in a non-coherent interconnect SOC system,
-we need the below facilities:
- - Changing a virtual memory mapping region attributes from
-   cacheable to noncache + strong order which used in DMA
-   descriptors.
- - Add noncache + weakorder virtual memory attributes for dma
-   mapping.
- - Syncing the cache with memory before DMA start and after DMA
-   end with vendor custom CMO instructions.
+It's a draft version to show you how T-HEAD C9xx work with the
+icache sync (We use hardware broadcast mechanism, and our icache
+is VIPT):
+ - icache.i(v/p)a will broadcast all harts' icache invalidtion
+ - sync.is will broadcast all harts' pipeline flush and ensure all
+   broadcasts finished.
 
-This patch enables linux kernel generic dma-noncoherency
-infrastructure and introduces new sbi_ecall API for dma_sync.
+This patch could improve the performance of OpenJDK on JIT and
+reduce flush_icache_all in linux.
 
-@@ -27,6 +27,7 @@ enum sbi_ext_id {
-+       SBI_EXT_DMA = 0xAB150401,
+Epecially:
+static inline void set_pte_at(struct mm_struct *mm,
+        unsigned long addr, pte_t *ptep, pte_t pteval)
+{
+	if (pte_present(pteval) && pte_exec(pteval))
+		flush_icache_pte(pteval);
+
+	set_pte(ptep, pteval);
+}
+
+Different from sbi_dma_sync, it can't be hidden in SBI and we must
+set up a framework to hold all vendors' implementations in
+linux/arch/riscv.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Liu Shaohua <liush@allwinnertech.com>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Christoph Hellwig <hch@lst.de>
 Cc: Anup Patel <anup.patel@wdc.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Atish Patra <atish.patra@wdc.com>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+Cc: Chen-Yu Tsai <wens@csie.org>
 Cc: Drew Fustini <drew@beagleboard.org>
+Cc: Maxime Ripard <maxime@cerno.tech>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
 Cc: Wei Fu <wefu@redhat.com>
 Cc: Wei Wu <lazyparser@gmail.com>
-Cc: Chen-Yu Tsai <wens@csie.org>
-Cc: Maxime Ripard <maxime@cerno.tech>
 ---
- arch/riscv/Kconfig               |  5 ++++
- arch/riscv/include/asm/pgtable.h | 26 ++++++++++++++++++++
- arch/riscv/include/asm/sbi.h     | 15 ++++++++++++
- arch/riscv/kernel/sbi.c          | 19 ++++++++++++++
- arch/riscv/mm/Makefile           |  1 +
- arch/riscv/mm/dma-mapping.c      | 53 ++++++++++++++++++++++++++++++++++++++++
- 6 files changed, 119 insertions(+)
- create mode 100644 arch/riscv/mm/dma-mapping.c
+ arch/riscv/include/asm/cacheflush.h   | 48 ++++++++++++++++++++++++++++++++++-
+ arch/riscv/kernel/vdso/flush_icache.S | 33 +++++++++++++++++++-----
+ arch/riscv/mm/cacheflush.c            |  3 ++-
+ 3 files changed, 76 insertions(+), 8 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 05c4976..817a9bb 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -20,6 +20,10 @@ config RISCV
- 	select ARCH_HAS_DEBUG_VM_PGTABLE
- 	select ARCH_HAS_DEBUG_VIRTUAL if MMU
- 	select ARCH_HAS_DEBUG_WX
-+	select ARCH_HAS_DMA_PREP_COHERENT
-+	select ARCH_HAS_SYNC_DMA_FOR_CPU
-+	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-+	select ARCH_HAS_DMA_WRITE_COMBINE
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_GIGANTIC_PAGE
-@@ -43,6 +47,7 @@ config RISCV
- 	select CLONE_BACKWARDS
- 	select CLINT_TIMER if !MMU
- 	select COMMON_CLK
-+	select DMA_DIRECT_REMAP
- 	select EDAC_SUPPORT
- 	select GENERIC_ARCH_TOPOLOGY if SMP
- 	select GENERIC_ATOMIC64 if !64BIT
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 6ddeb49..e1a82b6 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -462,6 +462,32 @@ static inline int ptep_clear_flush_young(struct vm_area_struct *vma,
- 	return ptep_test_and_clear_young(vma, address, ptep);
+diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+index 23ff703..2e2dba1 100644
+--- a/arch/riscv/include/asm/cacheflush.h
++++ b/arch/riscv/include/asm/cacheflush.h
+@@ -22,11 +22,57 @@ static inline void flush_dcache_page(struct page *page)
  }
+ #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
  
-+#define pgprot_noncached pgprot_noncached
-+static inline pgprot_t pgprot_noncached(pgprot_t _prot)
++#define ICACHE_IPA_X5   ".long 0x0382800b"
++#define ICACHE_IVA_X5   ".long 0x0302800b"
++#define SYNC_IS         ".long 0x01b0000b"
++
++static inline void flush_icache_range(unsigned long start, unsigned long end)
 +{
-+	unsigned long prot = pgprot_val(_prot);
++	register unsigned long tmp asm("x5") = start & (~(L1_CACHE_BYTES-1));
 +
-+	prot &= ~_PAGE_DMA_MASK;
-+	prot |= _PAGE_DMA_IO;
++	for (; tmp < ALIGN(end, L1_CACHE_BYTES); tmp += L1_CACHE_BYTES) {
++		__asm__ __volatile__ (
++				ICACHE_IVA_X5
++				:
++				: "r" (tmp)
++				: "memory");
++	}
 +
-+	return __pgprot(prot);
++	__asm__ __volatile__(SYNC_IS);
++
++	return;
 +}
 +
-+#define pgprot_writecombine pgprot_writecombine
-+static inline pgprot_t pgprot_writecombine(pgprot_t _prot)
++static inline void flush_icache_range_phy(unsigned long start, unsigned long end)
 +{
-+	unsigned long prot = pgprot_val(_prot);
++	register unsigned long tmp asm("x5") = start & (~(L1_CACHE_BYTES-1));
 +
-+	prot &= ~_PAGE_DMA_MASK;
-+	prot |= _PAGE_DMA_WC;
++	for (; tmp < ALIGN(end, L1_CACHE_BYTES); tmp += L1_CACHE_BYTES) {
++		__asm__ __volatile__ (
++				ICACHE_IPA_X5
++				:
++				: "r" (tmp)
++				: "memory");
++	}
 +
-+	return __pgprot(prot);
++	__asm__ __volatile__(SYNC_IS);
++
++	return;
 +}
 +
-+#define __HAVE_PHYS_MEM_ACCESS_PROT
-+extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
-+				     unsigned long size, pgprot_t vma_prot);
++static inline void __flush_icache_page(struct page *page) {
++	unsigned long start = PFN_PHYS(page_to_pfn(page));
++
++	flush_icache_range_phy(start, start + PAGE_SIZE);
++
++	return;
++}
 +
  /*
-  * Encode and decode a swap entry
-  *
-diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index 0d42693..133e88a 100644
---- a/arch/riscv/include/asm/sbi.h
-+++ b/arch/riscv/include/asm/sbi.h
-@@ -27,6 +27,7 @@ enum sbi_ext_id {
- 	SBI_EXT_IPI = 0x735049,
- 	SBI_EXT_RFENCE = 0x52464E43,
- 	SBI_EXT_HSM = 0x48534D,
-+	SBI_EXT_DMA = 0xAB150401,
- };
+  * RISC-V doesn't have an instruction to flush parts of the instruction cache,
+  * so instead we just flush the whole thing.
+  */
+-#define flush_icache_range(start, end) flush_icache_all()
++#define flush_icache_range(start, end) flush_icache_range(start, end)
+ #define flush_icache_user_page(vma, pg, addr, len) \
+ 	flush_icache_mm(vma->vm_mm, 0)
  
- enum sbi_ext_base_fid {
-@@ -63,6 +64,17 @@ enum sbi_ext_hsm_fid {
- 	SBI_EXT_HSM_HART_STATUS,
- };
+diff --git a/arch/riscv/kernel/vdso/flush_icache.S b/arch/riscv/kernel/vdso/flush_icache.S
+index 82f97d6..efb2d2e 100644
+--- a/arch/riscv/kernel/vdso/flush_icache.S
++++ b/arch/riscv/kernel/vdso/flush_icache.S
+@@ -5,18 +5,39 @@
  
-+enum sbi_ext_dma_fid {
-+	SBI_DMA_SYNC = 0,
-+};
+ #include <linux/linkage.h>
+ #include <asm/unistd.h>
++#include <asm/cache.h>
 +
-+enum sbi_dma_sync_data_direction {
-+	SBI_DMA_BIDIRECTIONAL = 0,
-+	SBI_DMA_TO_DEVICE = 1,
-+	SBI_DMA_FROM_DEVICE = 2,
-+	SBI_DMA_NONE = 3,
-+};
-+
- enum sbi_hsm_hart_status {
- 	SBI_HSM_HART_STATUS_STARTED = 0,
- 	SBI_HSM_HART_STATUS_STOPPED,
-@@ -128,6 +140,9 @@ int sbi_remote_hfence_vvma_asid(const unsigned long *hart_mask,
- 				unsigned long size,
- 				unsigned long asid);
- int sbi_probe_extension(int ext);
-+void sbi_dma_sync(unsigned long start,
-+		  unsigned long size,
-+		  enum sbi_dma_sync_data_direction dir);
++/*
++ * icache.ipa rs1
++ * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
++ *   0000001    11000      rs1       000      00000  0001011
++ *
++ * icache.iva rs1
++ * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
++ *   0000001    10000      rs1       000      00000  0001011
++ *
++ * sync.is
++ * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
++ *   0000000    11011     00000      000      00000  0001011
++ */
++#define ICACHE_IPA_X5	.long 0x0382800b
++#define ICACHE_IVA_X5	.long 0x0302800b
++#define SYNC_IS		.long 0x01b0000b
  
- /* Check if current SBI specification version is 0.1 or not */
- static inline int sbi_spec_is_0_1(void)
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index 7402a41..c936019 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -521,6 +521,25 @@ int sbi_probe_extension(int extid)
+ 	.text
+ /* int __vdso_flush_icache(void *start, void *end, unsigned long flags); */
+ ENTRY(__vdso_flush_icache)
+ 	.cfi_startproc
+-#ifdef CONFIG_SMP
+-	li a7, __NR_riscv_flush_icache
+-	ecall
+-#else
+-	fence.i
++	srli	t0, a0, L1_CACHE_SHIFT
++	slli	t0, t0, L1_CACHE_SHIFT
++	addi	a1, a1, (L1_CACHE_BYTES - 1)
++	srli	a1, a1, L1_CACHE_SHIFT
++	slli	a1, a1, L1_CACHE_SHIFT
++1:	ICACHE_IVA_X5
++	addi	t0, t0, L1_CACHE_BYTES
++	bne	t0, a1, 1b
++	SYNC_IS
+ 	li a0, 0
+-#endif
+ 	ret
+ 	.cfi_endproc
+ ENDPROC(__vdso_flush_icache)
+diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
+index 0941186..0fb8344 100644
+--- a/arch/riscv/mm/cacheflush.c
++++ b/arch/riscv/mm/cacheflush.c
+@@ -3,6 +3,7 @@
+  * Copyright (C) 2017 SiFive
+  */
+ 
++#include <linux/pfn.h>
+ #include <asm/cacheflush.h>
+ 
+ #ifdef CONFIG_SMP
+@@ -84,6 +85,6 @@ void flush_icache_pte(pte_t pte)
+ 	struct page *page = pte_page(pte);
+ 
+ 	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
+-		flush_icache_all();
++		__flush_icache_page(page);
  }
- EXPORT_SYMBOL(sbi_probe_extension);
- 
-+void sbi_dma_sync(unsigned long start,
-+		  unsigned long size,
-+		  enum sbi_dma_sync_data_direction dir)
-+{
-+#if 0
-+	sbi_ecall(SBI_EXT_DMA, SBI_DMA_SYNC, start, size, dir,
-+		  0, 0, 0);
-+#else
-+	/* Just for try, it should be in sbi ecall and will be removed before merged */
-+	register unsigned long i asm("a0") = start & ~(L1_CACHE_BYTES - 1);
-+
-+	for (; i < ALIGN(start + size, L1_CACHE_BYTES); i += L1_CACHE_BYTES)
-+		__asm__ __volatile__(".long 0x02b5000b");
-+
-+	__asm__ __volatile__(".long 0x01b0000b");
-+#endif
-+}
-+EXPORT_SYMBOL(sbi_dma_sync);
-+
- static long __sbi_base_ecall(int fid)
- {
- 	struct sbiret ret;
-diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
-index 7ebaef1..ca0ff90 100644
---- a/arch/riscv/mm/Makefile
-+++ b/arch/riscv/mm/Makefile
-@@ -13,6 +13,7 @@ obj-y += extable.o
- obj-$(CONFIG_MMU) += fault.o pageattr.o
- obj-y += cacheflush.o
- obj-y += context.o
-+obj-y += dma-mapping.o
- 
- ifeq ($(CONFIG_MMU),y)
- obj-$(CONFIG_SMP) += tlbflush.o
-diff --git a/arch/riscv/mm/dma-mapping.c b/arch/riscv/mm/dma-mapping.c
-new file mode 100644
-index 00000000..4afd9dc
---- /dev/null
-+++ b/arch/riscv/mm/dma-mapping.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/dma-map-ops.h>
-+#include <asm/sbi.h>
-+
-+void arch_dma_prep_coherent(struct page *page, size_t size)
-+{
-+	void *ptr = page_address(page);
-+
-+	memset(ptr, 0, size);
-+	sbi_dma_sync(page_to_phys(page), size, SBI_DMA_BIDIRECTIONAL);
-+}
-+
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
-+{
-+	switch (dir) {
-+	case DMA_TO_DEVICE:
-+	case DMA_FROM_DEVICE:
-+	case DMA_BIDIRECTIONAL:
-+		sbi_dma_sync(paddr, size, dir);
-+		break;
-+	default:
-+		BUG();
-+	}
-+}
-+
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
-+{
-+	switch (dir) {
-+	case DMA_TO_DEVICE:
-+		return;
-+	case DMA_FROM_DEVICE:
-+	case DMA_BIDIRECTIONAL:
-+		sbi_dma_sync(paddr, size, dir);
-+		break;
-+	default:
-+		BUG();
-+	}
-+}
-+
-+pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
-+			      unsigned long size, pgprot_t vma_prot)
-+{
-+	if (!pfn_valid(pfn))
-+		return pgprot_noncached(vma_prot);
-+	else if (file->f_flags & O_SYNC)
-+		return pgprot_writecombine(vma_prot);
-+
-+	return vma_prot;
-+}
-+EXPORT_SYMBOL(phys_mem_access_prot);
+ #endif /* CONFIG_MMU */
 -- 
 2.7.4
 
