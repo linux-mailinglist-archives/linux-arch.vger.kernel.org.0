@@ -2,156 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6F839CD00
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 06:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0A239CDFC
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 10:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbhFFEpX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Jun 2021 00:45:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45326 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229478AbhFFEpW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 6 Jun 2021 00:45:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D353B613F3;
-        Sun,  6 Jun 2021 04:43:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622954613;
-        bh=ma6WWTmP1DHkeB4vQDJtzJFakqdzhrp/V2kE3Y0HYM8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ZLQMe/4LxNwMpONfqG4j5pKWU1XLrYNM244TvDOmmE2BM4HjQ4rv9JC1uwhlkAt9l
-         pmWgOZY4BpCktFjikopqwqNx8FXbBMy/nbM0NsGGWveWiHWX235pv1cqJEqwp6tgQf
-         a4c2Eej9ZF2lowGDpCXQbnHtOBMIsORWyNwR7FmaIPH06FC0OiY3X8mS0wKmH3GMGz
-         yBPbMQGN5fxGzmr78YOGaLsd9duZZ6Va0NiDGfGQ0NTRy+wusgVcdkjcWLm00dT0dO
-         Ymma2bxNpO3/UTdKagtpfY/88GBn3fZBy8IY67BXygr478EyDqtBLCBBfKCM865dos
-         HtS7zOPAnHUOw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A64605C0991; Sat,  5 Jun 2021 21:43:33 -0700 (PDT)
-Date:   Sat, 5 Jun 2021 21:43:33 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210606044333.GI4397@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <CAHk-=wiuLpmOGJyB385UyQioWMVKT6wN9UtyVXzt48AZittCKg@mail.gmail.com>
- <CAHk-=wik7T+FoDAfqFPuMGVp6HxKYOf8UeKt3+EmovfivSgQ2Q@mail.gmail.com>
- <20210604205600.GB4397@paulmck-ThinkPad-P17-Gen-1>
- <CAHk-=wgmUbU6XPHz=4NFoLMxH7j_SR-ky4sKzOBrckmvk5AJow@mail.gmail.com>
- <20210604214010.GD4397@paulmck-ThinkPad-P17-Gen-1>
- <CAHk-=wg0w5L7-iJU_kvEh9stXZoh2srRF4jKToKmSKyHv-njvA@mail.gmail.com>
- <20210605145739.GB1712909@rowland.harvard.edu>
- <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
- <20210606012903.GA1723421@rowland.harvard.edu>
- <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com>
+        id S229508AbhFFIQh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Jun 2021 04:16:37 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:44467 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229465AbhFFIQh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Jun 2021 04:16:37 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3211A5C01A6;
+        Sun,  6 Jun 2021 04:14:48 -0400 (EDT)
+Received: from imap1 ([10.202.2.51])
+  by compute3.internal (MEProxy); Sun, 06 Jun 2021 04:14:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type:content-transfer-encoding; s=fm2; bh=EaIPF
+        erzWo7dyTRx8nz8Yo/O8mfUUiuXUZP1FN4Xfhg=; b=DiUwvm82+Gqvwz62RITbP
+        Q3MkBkHlZ7lSfSAHBYRmTRhbcGJF+pZMySQlHSX08QnLfdm4adQNhnWl0eRqUqcB
+        sXfEAwNkZfGt1bAAv2ChYfk2eAH9mS9H9M0IDLh5GEtD2e2NKKZVPUKdhAk+gf39
+        yLVRMLCjM7YgJffwuJHMAAM/6IMGUO+SkCLwRQoFFJJgmWZNkOr1UVZvW0omSIqU
+        00fIJ8QxF96hRf7JP5+iUJ+/izk23igkwbt/EVTzT5aieh/nnohwoFSN6u80N0xO
+        SlPRqBYIR4xTtQdyLq8nUbl0uW+1v/iJf+uEVSLFigdhkWmJDHGA5LpuwYqWrW7X
+        g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=EaIPFerzWo7dyTRx8nz8Yo/O8mfUUiuXUZP1FN4Xf
+        hg=; b=JInZWeeZvcm/sjW/I+xScGkMNftgYrt8Mb5iRLux35JevYzEXKEeKkLSV
+        yy+botV5nam1teI38CYxGv1Ijr5JwDAL+2m8I8bBg52HppUoXr423qWCtxtUR5IS
+        UIOFcyUmiT6WuBN/I4QXa+hAystzolsOndEBCT0AxMRgrz85fsfDSYmI0Yr9fB8W
+        DUieRer8ct//04Jjnou6ygmD80DikYfQbJOoTzdIGuKQiIJUCo+XO9E+7a80RinL
+        q5YiUI+O96XsBElTCcsSW9DG8i2gja5X7Htu5nCX6/8BWUIx1odLocimjGyCcYfB
+        4mIvTLB0fSngNkTAO9667ZUtGtMkw==
+X-ME-Sender: <xms:9oO8YOi-L4u6rbeRQLt6KpHDjza2nisVmpX6KDm3gOs5ot8KrXNJXw>
+    <xme:9oO8YPDUrp68YrxS4FKLH47bbo0IYbYoKBoaCQm3ZQurvgRn44Q-QvuTqKm4UtRcl
+    vVxXQSnZwd2hCDf6SI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedthedgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepjefhieehieeikedvvdeltddvvdffffdvveefudefgeev
+    ueehueevueegjeehueffnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigr
+    nhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:9oO8YGGiYAiZe5En-oyLW60kGrZbphPKenxQvKmmg_ZjuGKeSTolOQ>
+    <xmx:9oO8YHS1V3dVl9YE3nRg0zPmOV2wvzjqnVAIV64VgCvXr71pKIp2Ew>
+    <xmx:9oO8YLw-krhN-1r0yQc3FgpbY5r5C2TlMy2SRtUToFM3mQSy4gNMzQ>
+    <xmx:-IO8YGpsLybRefumPtCs9FRVWeHYLYd31K_JLtRsI1PNJNVu2xkDrw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D8610130005F; Sun,  6 Jun 2021 04:14:46 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-519-g27a961944e-fm-20210531.001-g27a96194
+Mime-Version: 1.0
+Message-Id: <2a51e6b8-37e5-43cb-b0b4-d6fdd1848fe3@www.fastmail.com>
+In-Reply-To: <20210605211529.GA2326325@bjorn-Precision-5520>
+References: <20210605211529.GA2326325@bjorn-Precision-5520>
+Date:   Sun, 06 Jun 2021 16:14:24 +0800
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Bjorn Helgaas" <helgaas@kernel.org>,
+        "Huacai Chen" <chenhuacai@loongson.cn>, arnd@kernel.org
+Cc:     "Bjorn Helgaas" <bhelgaas@google.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Huacai Chen" <chenhuacai@gmail.com>, linux-arch@vger.kernel.org
+Subject: =?UTF-8?Q?LoongArch_(was:_Re:_[PATCH_V2_2/4]_PCI:_Move_loongson_pci_quir?=
+ =?UTF-8?Q?ks_to_quirks.c)?=
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 05, 2021 at 08:41:00PM -0700, Linus Torvalds wrote:
-> On Sat, Jun 5, 2021 at 6:29 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > Interesting.  And changing one of the branches from barrier() to __asm__
-> > __volatile__("nop": : :"memory") also causes a branch to be emitted.  So
-> > even though the compiler doesn't "look inside" assembly code, it does
-> > compare two pieces at least textually and apparently assumes if they are
-> > identical then they do the same thing.
-> 
-> That's actually a feature in some cases, ie the ability to do CSE on
-> asm statements (ie the "always has the same output" optimization that
-> the docs talk about).
 
-Agreed, albeit reluctantly.  ;-)
 
-> So gcc has always looked at the asm string for that reason, afaik.
-> 
-> I think it's something of a bug when it comes to "asm volatile", but
-> the documentation isn't exactly super-specific.
-> 
-> There is a statement of "Under certain circumstances, GCC may
-> duplicate (or remove duplicates of) your assembly code when
-> optimizing" and a suggestion of using "%=" to generate a unique
-> instance of an asm.
+=E5=9C=A82021=E5=B9=B46=E6=9C=886=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8A=E5=
+=8D=885:15=EF=BC=8CBjorn Helgaas=E5=86=99=E9=81=93=EF=BC=9A
 
-So gcc might some day note a do-nothing asm and duplicate it for
-the sole purpose of collapsing the "then" and "else" clauses.  I
-guess I need to keep my paranoia for the time being, then.  :-/
++linux-arch and Arnd for arch related discussions
 
-> Which might actually be a good idea for "barrier()", just in case.
-> However, the problem with that is that I don't think we are guaranteed
-> to have a universal comment character for asm statements.
-> 
-> IOW, it might be a good idea to do something like
-> 
->    #define barrier() \
->         __asm__ __volatile__("# barrier %=": : :"memory")
-> 
-> but I'm  not 100% convinced that '#' is always a comment in asm code,
-> so the above might not actually build everywhere.
-> 
-> However, *testing* the above (in my config, where '#' does work as a
-> comment character) shows that gcc doesn't actually consider them to be
-> distinct EVEN THEN, and will still merge two barrier statements.
-> 
-> That's distressing.
+>=20
+> If you're moving these from device-specific file to a generic file,
+> these #defines now need to have device-specific names.
+>=20
+> But these appear to be for built-in hardware that can only be present
+> in Loongson (I assume mips?) systems.  If that's the case, maybe they
+> should go to a mips-specific file like arch/mips/pci/quirks.c?
+>=20
+> But I see you see you mention LoongArch above, so I don't know if
+> that's part of arch/mips, or if there's an arch/loongson coming, or
+> what.
 
-If I keep the old definition of barrier() and make a barrier1() as
-you defined above:
+As far as I read LoongArch should be a brand new RISC architecture.
+I saw Loongson release some documents[1] and code[2] regarding this
+new architecture.
 
-#define barrier1() __asm__ __volatile__("# barrier %=": : :"memory")
+Huacai, as you are submitting these code, does it mean Loongson intends
+to mainline LoongArch kernel?
+If so, I'm certain that there is a lot of drivers and other code can be
+reused between MIPS part and LoongArch part for Loongson chips.
+Could you please make an announcement about your plans?
 
-Then putting barrier() in the "then" clause and barrier1() in the
-"else" clause works, though clang 12 for whatever reason generates
-an extra jump in that case.  https://godbolt.org/z/YhbcsxsxG
+Thanks.
 
-Increasing the optimization level gets rid of the extra jump.
-
-Of course, there is no guarantee that gcc won't learn about
-assembler constants.  :-/
-
-> So the gcc docs are actively wrong, and %= does nothing - it will
-> still compare as the exact same inline asm, because the string
-> equality testing is apparently done before any expansion.
-> 
-> Something like this *does* seem to work:
-> 
->    #define ____barrier(id) __asm__ __volatile__("#" #id: : :"memory")
->    #define __barrier(id) ____barrier(id)
->    #define barrier() __barrier(__COUNTER__)
-> 
-> which is "interesting" or "disgusting" depending on how you happen to feel.
-> 
-> And again - the above works only as long as "#" is a valid comment
-> character in the assembler. And I have this very dim memory of us
-> having comments in inline asm, and it breaking certain configurations
-> (for when the assembler that the compiler uses is a special
-> human-unfriendly one that only accepts compiler output).
-> 
-> You could make even more disgusting hacks, and have it generate something like
-> 
->     .pushsection .discard.barrier
->     .long #id
->     .popsection
-> 
-> instead of a comment. We already expect that to work and have generic
-> inline asm cases that generate code like that.
-
-And that does the trick as well, at least with recent gcc and clang.
-https://godbolt.org/z/P8zPv9f9o
-
-							Thanx, Paul
+[1]: https://github.com/loongson/LoongArch-Documentation
+[2]: https://github.com/loongarch64
+--=20
+- Jiaxun
