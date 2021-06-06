@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F46539CF5C
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 15:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028B339CF5E
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 15:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbhFFNrY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Jun 2021 09:47:24 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:33349 "HELO
+        id S230003AbhFFNtk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Jun 2021 09:49:40 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:55005 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230091AbhFFNrY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Jun 2021 09:47:24 -0400
-Received: (qmail 1736478 invoked by uid 1000); 6 Jun 2021 09:45:32 -0400
-Date:   Sun, 6 Jun 2021 09:45:32 -0400
+        with SMTP id S230084AbhFFNtk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Jun 2021 09:49:40 -0400
+Received: (qmail 1736554 invoked by uid 1000); 6 Jun 2021 09:47:49 -0400
+Date:   Sun, 6 Jun 2021 09:47:49 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>,
         Andrea Parri <parri.andrea@gmail.com>,
@@ -30,9 +30,8 @@ Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         linux-toolchains@vger.kernel.org,
         linux-arch <linux-arch@vger.kernel.org>
 Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210606134532.GA1736178@rowland.harvard.edu>
-References: <CAHk-=wiuLpmOGJyB385UyQioWMVKT6wN9UtyVXzt48AZittCKg@mail.gmail.com>
- <CAHk-=wik7T+FoDAfqFPuMGVp6HxKYOf8UeKt3+EmovfivSgQ2Q@mail.gmail.com>
+Message-ID: <20210606134749.GB1736178@rowland.harvard.edu>
+References: <CAHk-=wik7T+FoDAfqFPuMGVp6HxKYOf8UeKt3+EmovfivSgQ2Q@mail.gmail.com>
  <20210604205600.GB4397@paulmck-ThinkPad-P17-Gen-1>
  <CAHk-=wgmUbU6XPHz=4NFoLMxH7j_SR-ky4sKzOBrckmvk5AJow@mail.gmail.com>
  <20210604214010.GD4397@paulmck-ThinkPad-P17-Gen-1>
@@ -40,40 +39,40 @@ References: <CAHk-=wiuLpmOGJyB385UyQioWMVKT6wN9UtyVXzt48AZittCKg@mail.gmail.com>
  <20210605145739.GB1712909@rowland.harvard.edu>
  <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
  <20210606012903.GA1723421@rowland.harvard.edu>
- <20210606115336.GS18427@gate.crashing.org>
+ <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com>
+ <20210606125955.GT18427@gate.crashing.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210606115336.GS18427@gate.crashing.org>
+In-Reply-To: <20210606125955.GT18427@gate.crashing.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jun 06, 2021 at 06:53:36AM -0500, Segher Boessenkool wrote:
-> On Sat, Jun 05, 2021 at 09:29:03PM -0400, Alan Stern wrote:
-> > Interesting.  And changing one of the branches from barrier() to __asm__ 
-> > __volatile__("nop": : :"memory") also causes a branch to be emitted.  So 
-> > even though the compiler doesn't "look inside" assembly code, it does 
-> > compare two pieces at least textually and apparently assumes if they are 
-> > identical then they do the same thing.
+On Sun, Jun 06, 2021 at 07:59:55AM -0500, Segher Boessenkool wrote:
+> On Sat, Jun 05, 2021 at 08:41:00PM -0700, Linus Torvalds wrote:
+> > On Sat, Jun 5, 2021 at 6:29 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > Interesting.  And changing one of the branches from barrier() to __asm__
+> > > __volatile__("nop": : :"memory") also causes a branch to be emitted.  So
+> > > even though the compiler doesn't "look inside" assembly code, it does
+> > > compare two pieces at least textually and apparently assumes if they are
+> > > identical then they do the same thing.
+> > 
+> > That's actually a feature in some cases, ie the ability to do CSE on
+> > asm statements (ie the "always has the same output" optimization that
+> > the docs talk about).
+> > 
+> > So gcc has always looked at the asm string for that reason, afaik.
 > 
-> And that is a simple fact, since the same assembler code (at the same
-> spot in the program) will do the same thing no matter how that ended up
-> there.
+> GCC does not pretend it can understand the asm.  But it can see when
+> two asm statements are identical.
 
-Sure.  But the same assembler code at two different spots in the program 
-might not do the same thing.  (Think of code that stores the current EIP 
-register's value into a variable.)
+How similar do two asm strings have to be before they are considered 
+identical?  For instance, do changes to the amount of leading or 
+trailing whitespace matter?
 
-So while de-duplicating such code may be allowed, it will give rise to 
-observable results at execution time.
+Or what about including an empty assembly statement in one but not the 
+other?
 
 Alan
-
-> And the compiler always is allowed to duplicate, join, delete, you name
-> it, inline assembler code.  The only thing that it cares about is
-> semantics of the code, just like for any other code.
-> 
-> 
-> Segher
