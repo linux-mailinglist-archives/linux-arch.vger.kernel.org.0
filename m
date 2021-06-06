@@ -2,92 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D0A39CEB6
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 13:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3AA39CEBB
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 13:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbhFFLnQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Jun 2021 07:43:16 -0400
-Received: from gate.crashing.org ([63.228.1.57]:59079 "EHLO gate.crashing.org"
+        id S229465AbhFFL7p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Jun 2021 07:59:45 -0400
+Received: from gate.crashing.org ([63.228.1.57]:56496 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229465AbhFFLnP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 6 Jun 2021 07:43:15 -0400
+        id S230127AbhFFL7o (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 6 Jun 2021 07:59:44 -0400
 Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 156Baslq023488;
-        Sun, 6 Jun 2021 06:36:54 -0500
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 156Brcoq023903;
+        Sun, 6 Jun 2021 06:53:38 -0500
 Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 156BapHt023485;
-        Sun, 6 Jun 2021 06:36:51 -0500
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 156Bra5W023901;
+        Sun, 6 Jun 2021 06:53:36 -0500
 X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Sun, 6 Jun 2021 06:36:51 -0500
+Date:   Sun, 6 Jun 2021 06:53:36 -0500
 From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        will@kernel.org, stern@rowland.harvard.edu, parri.andrea@gmail.com,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        linux-kernel@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        linux-arch@vger.kernel.org
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
 Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210606113651.GR18427@gate.crashing.org>
-References: <YLn8dzbNwvqrqqp5@hirez.programming.kicks-ass.net> <YLoSJaOVbzKXU4/7@hirez.programming.kicks-ass.net> <20210604153518.GD18427@gate.crashing.org> <YLpQj+S3vpTLX7cc@hirez.programming.kicks-ass.net> <20210604164047.GH18427@gate.crashing.org> <20210604185526.GW4397@paulmck-ThinkPad-P17-Gen-1> <20210604195301.GM18427@gate.crashing.org> <20210604204042.GZ4397@paulmck-ThinkPad-P17-Gen-1>
+Message-ID: <20210606115336.GS18427@gate.crashing.org>
+References: <20210604182708.GB1688170@rowland.harvard.edu> <CAHk-=wiuLpmOGJyB385UyQioWMVKT6wN9UtyVXzt48AZittCKg@mail.gmail.com> <CAHk-=wik7T+FoDAfqFPuMGVp6HxKYOf8UeKt3+EmovfivSgQ2Q@mail.gmail.com> <20210604205600.GB4397@paulmck-ThinkPad-P17-Gen-1> <CAHk-=wgmUbU6XPHz=4NFoLMxH7j_SR-ky4sKzOBrckmvk5AJow@mail.gmail.com> <20210604214010.GD4397@paulmck-ThinkPad-P17-Gen-1> <CAHk-=wg0w5L7-iJU_kvEh9stXZoh2srRF4jKToKmSKyHv-njvA@mail.gmail.com> <20210605145739.GB1712909@rowland.harvard.edu> <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1> <20210606012903.GA1723421@rowland.harvard.edu>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210604204042.GZ4397@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20210606012903.GA1723421@rowland.harvard.edu>
 User-Agent: Mutt/1.4.2.3i
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 01:40:42PM -0700, Paul E. McKenney wrote:
-> On Fri, Jun 04, 2021 at 02:53:01PM -0500, Segher Boessenkool wrote:
-> > On Fri, Jun 04, 2021 at 11:55:26AM -0700, Paul E. McKenney wrote:
-> > > On Fri, Jun 04, 2021 at 11:40:47AM -0500, Segher Boessenkool wrote:
-> > > > My point is that you ask compiler developers to paint themselves into a
-> > > > corner if you ask them to change such fundamental C syntax.
-> > > 
-> > > Once we have some experience with a language extension, the official
-> > > syntax for a standardized version of that extension can be bikeshedded.
-> > > Committees being what they are, what we use in the meantime will
-> > > definitely not be what is chosen, so there is not a whole lot of point
-> > > in worrying about the exact syntax in the meantime.  ;-)
-> > 
-> > I am only saying that it is unlikely any compiler that is used in
-> > production will want to experiment with "volatile if".
-> 
-> That unfortunately matches my experience over quite a few years.  But if
-> something can be implemented using existing extensions, the conversations
-> often get easier.  Especially given many more people are now familiar
-> with concurrency.
+On Sat, Jun 05, 2021 at 09:29:03PM -0400, Alan Stern wrote:
+> Interesting.  And changing one of the branches from barrier() to __asm__ 
+> __volatile__("nop": : :"memory") also causes a branch to be emitted.  So 
+> even though the compiler doesn't "look inside" assembly code, it does 
+> compare two pieces at least textually and apparently assumes if they are 
+> identical then they do the same thing.
 
-This was about the syntax "volatile if", not about the concept, let's
-call that "volatile_if".  And no, it was not me who brought this up :-)
+And that is a simple fact, since the same assembler code (at the same
+spot in the program) will do the same thing no matter how that ended up
+there.
 
-> > > Which is exactly why these conversations are often difficult.  There is
-> > > a tension between pushing the as-if rule as far as possible within the
-> > > compiler on the one hand and allowing developers to write code that does
-> > > what is needed on the other.  ;-)
-> > 
-> > There is a tension between what users expect from the compiler and what
-> > actually is promised.  The compiler is not pushing the as-if rule any
-> > further than it always has: it just becomes better at optimising over
-> > time.  The as-if rule is and always has been absolute.
-> 
-> Heh!  The fact that the compiler has become better at optimizing
-> over time is exactly what has been pushing the as-if rule further.
-> 
-> The underlying problem is that it is often impossible to write large
-> applications (such as the Linux kernel) completely within the confines of
-> the standard.  Thus, most large applications, and especially concurrent
-> applications, are vulnerable to either the compiler becoming better
-> at optimizing or compilers pushing the as-if rule, however you want to
-> say it.
-
-Oh definitely.  But there is nothing the compiler can do about most
-cases of undefined behaviour: it cannot detect it, and there is no way
-it *can* be handled sanely.  Take for example dereferencing a pointer
-that does not point to an object.
+And the compiler always is allowed to duplicate, join, delete, you name
+it, inline assembler code.  The only thing that it cares about is
+semantics of the code, just like for any other code.
 
 
 Segher
