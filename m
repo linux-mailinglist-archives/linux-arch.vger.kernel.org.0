@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CEE39CE45
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 11:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72A739CE47
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 11:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbhFFJHN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Jun 2021 05:07:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37902 "EHLO mail.kernel.org"
+        id S230319AbhFFJHR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Jun 2021 05:07:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37984 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230272AbhFFJHN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 6 Jun 2021 05:07:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DDA4061422;
-        Sun,  6 Jun 2021 09:05:20 +0000 (UTC)
+        id S230311AbhFFJHQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 6 Jun 2021 05:07:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B31861420;
+        Sun,  6 Jun 2021 09:05:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622970323;
-        bh=L8xajDumKH1Cg7eZ91SM48KqOMpWXfNl+mHnoCZQBpU=;
+        s=k20201202; t=1622970327;
+        bh=pFy+y/+bXIJMqxs4sackrvYzWSva1Mz5n5hReLvzQ2k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QEmXI3b7k0JcId3xCv4dEM2lO6p0ojmwnUagRx4hHFRbltGKWrXdKaUFGk6UUXmxD
-         S4NRtKgdwy7NSX0ztjbCdWBpn7Be6Pp9y3lw8F0pvTkVBooLvaE4v2cLjEVweyDd5D
-         YUellDH7CiZ6JxajGwYIdcTFqqEfYU3h/K3YOA1WVdlubGrb1n4uBs6lFaEQx23Y2J
-         NMBRJoeEpjRtduGzFkbgbWeQTkaCrtCbrQdZ8zy8NkJP1e66SeOBto5yK2EQFFy/b/
-         5NYfMeVWRalVgxRf8Nv7qdKn6e2j5OWdlzqtxNqRATxVbtptUsFQMO4tmHbstOpaKF
-         9Y3slo/pyf/xg==
+        b=CtpbA8AlU0ccA8OkNJspvbTidxcmnnf0kYjcDgXOvagHKFb/iQIxywysgS3xqUmhx
+         86++Ucgwzia8ZkT76nZj29/6Fh1oavydoS+ucW2ISCHEMkbWSdT96dcNeLtRaJmguK
+         mssRzhBlZnzLymiM/3WU2d3cxDd/8r01mDDC9jEE47oK/V7HnoKsiuUC+IjCtxXGtw
+         6LQqElbeGh/0eAyX8bRrQDzm6XY+qN6/CWT+sCyTkEgcAdczotesXDtBy+3ZyCu7dq
+         DRatX9jNRlY7hK5dYIFOo6/WgUxEyhNpW1htURh6JP5wuEXHiXm0gP8r6pr3PK+4w1
+         5lEPEXb+DAX5g==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, anup.patel@wdc.com, palmerdabbelt@google.com,
         arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
@@ -31,10 +31,11 @@ To:     guoren@kernel.org, anup.patel@wdc.com, palmerdabbelt@google.com,
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-sunxi@lists.linux.dev,
         Guo Ren <guoren@linux.alibaba.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [RFC PATCH v2 04/11] riscv: pgtable: Fixup _PAGE_CHG_MASK usage
-Date:   Sun,  6 Jun 2021 09:04:02 +0000
-Message-Id: <1622970249-50770-8-git-send-email-guoren@kernel.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Subject: [RFC PATCH v2 05/11] riscv: pgtable: Add custom protection_map init
+Date:   Sun,  6 Jun 2021 09:04:03 +0000
+Message-Id: <1622970249-50770-9-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622970249-50770-1-git-send-email-guoren@kernel.org>
 References: <1622970249-50770-1-git-send-email-guoren@kernel.org>
@@ -44,85 +45,106 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-We should masks all attributes BITS first, and then
-using '>> _PAGE_PFN_SHIFT' to get the final PFN value.
+Some RISC-V CPU vendors have defined their own PTE attributes to
+solve non-coherent DMA bus problems. That makes _P/SXXX definitions
+contain global variables which could be initialized at the early
+boot stage before setup_vm.
 
-Adding '& _PAGE_CHG_MASK' makes the code semantics more accurate.
+This patch is similar to 316d097c4cd4  (x86/pti: Filter at
+vma->vm_page_prot population) which give a choice for arch custom
+implementation.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Liu Shaohua <liush@allwinnertech.com>
-Cc: Anup Patel <anup.patel@wdc.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Chen-Yu Tsai <wens@csie.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Drew Fustini <drew@beagleboard.org>
-Cc: Maxime Ripard <maxime@cerno.tech>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Wei Fu <wefu@redhat.com>
-Cc: Wei Wu <lazyparser@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
 ---
- arch/riscv/include/asm/pgtable-64.h | 8 +++++---
- arch/riscv/include/asm/pgtable.h    | 6 +++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ arch/riscv/Kconfig   |  4 ++++
+ arch/riscv/mm/init.c | 22 ++++++++++++++++++++++
+ mm/mmap.c            |  4 ++++
+ 3 files changed, 30 insertions(+)
 
-diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-index f3b0da6..cbf9acf 100644
---- a/arch/riscv/include/asm/pgtable-64.h
-+++ b/arch/riscv/include/asm/pgtable-64.h
-@@ -62,12 +62,14 @@ static inline void pud_clear(pud_t *pudp)
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c5914e7..05c4976 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -25,6 +25,7 @@ config RISCV
+ 	select ARCH_HAS_GIGANTIC_PAGE
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_MMIOWB
++	select ARCH_HAS_PROTECTION_MAP_INIT
+ 	select ARCH_HAS_PTE_SPECIAL
+ 	select ARCH_HAS_SET_DIRECT_MAP
+ 	select ARCH_HAS_SET_MEMORY
+@@ -198,6 +199,9 @@ config GENERIC_HWEIGHT
+ config FIX_EARLYCON_MEM
+ 	def_bool MMU
  
- static inline unsigned long pud_page_vaddr(pud_t pud)
- {
--	return (unsigned long)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
-+	return (unsigned long)pfn_to_virt(
-+		(pud_val(pud) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
++config ARCH_HAS_PROTECTION_MAP_INIT
++	def_bool y
++
+ config PGTABLE_LEVELS
+ 	int
+ 	default 3 if 64BIT
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 4faf8bd..4b398c6 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -496,6 +496,26 @@ static void __init create_kernel_page_table(pgd_t *pgdir, uintptr_t map_size)
  }
+ #endif
  
- static inline struct page *pud_page(pud_t pud)
++static void __init setup_protection_map(void)
++{
++	protection_map[0]  = __P000;
++	protection_map[1]  = __P001;
++	protection_map[2]  = __P010;
++	protection_map[3]  = __P011;
++	protection_map[4]  = __P100;
++	protection_map[5]  = __P101;
++	protection_map[6]  = __P110;
++	protection_map[7]  = __P111;
++	protection_map[8]  = __S000;
++	protection_map[9]  = __S001;
++	protection_map[10] = __S010;
++	protection_map[11] = __S011;
++	protection_map[12] = __S100;
++	protection_map[13] = __S101;
++	protection_map[14] = __S110;
++	protection_map[15] = __S111;
++}
++
+ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
  {
--	return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
-+	return pfn_to_page(
-+		(pud_val(pud) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
- }
+ 	uintptr_t __maybe_unused pa;
+@@ -504,6 +524,8 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+ 	pmd_t fix_bmap_spmd, fix_bmap_epmd;
+ #endif
  
- static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
-@@ -77,7 +79,7 @@ static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
++	setup_protection_map();
++
+ #ifdef CONFIG_XIP_KERNEL
+ 	xiprom = (uintptr_t)CONFIG_XIP_PHYS_ADDR;
+ 	xiprom_sz = (uintptr_t)(&_exiprom) - (uintptr_t)(&_xiprom);
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 0584e54..0a86059 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -100,10 +100,14 @@ static void unmap_region(struct mm_struct *mm,
+  *								w: (no) no
+  *								x: (yes) yes
+  */
++#ifdef CONFIG_ARCH_HAS_PROTECTION_MAP_INIT
++pgprot_t protection_map[16] __ro_after_init;
++#else
+ pgprot_t protection_map[16] __ro_after_init = {
+ 	__P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
+ 	__S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
+ };
++#endif
  
- static inline unsigned long _pmd_pfn(pmd_t pmd)
- {
--	return pmd_val(pmd) >> _PAGE_PFN_SHIFT;
-+	return (pmd_val(pmd) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT;
- }
- 
- #define pmd_ERROR(e) \
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 346a3c6..13a79643 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -217,12 +217,12 @@ static inline unsigned long _pgd_pfn(pgd_t pgd)
- 
- static inline struct page *pmd_page(pmd_t pmd)
- {
--	return pfn_to_page(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
-+	return pfn_to_page((pmd_val(pmd) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
- }
- 
- static inline unsigned long pmd_page_vaddr(pmd_t pmd)
- {
--	return (unsigned long)pfn_to_virt(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
-+	return (unsigned long)pfn_to_virt((pmd_val(pmd) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
- }
- 
- static inline pte_t pmd_pte(pmd_t pmd)
-@@ -233,7 +233,7 @@ static inline pte_t pmd_pte(pmd_t pmd)
- /* Yields the page frame number (PFN) of a page table entry */
- static inline unsigned long pte_pfn(pte_t pte)
- {
--	return (pte_val(pte) >> _PAGE_PFN_SHIFT);
-+	return ((pte_val(pte) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
- }
- 
- #define pte_page(x)     pfn_to_page(pte_pfn(x))
+ #ifndef CONFIG_ARCH_HAS_FILTER_PGPROT
+ static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
 -- 
 2.7.4
 
