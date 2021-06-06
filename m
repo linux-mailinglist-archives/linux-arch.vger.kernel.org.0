@@ -2,100 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDF439D08A
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 20:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4093C39D08F
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 21:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbhFFTB2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Jun 2021 15:01:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53500 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229573AbhFFTB2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Jun 2021 15:01:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623005977;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=KXWrX6wBq5TioPWpDxBNh/+AQclSH0iG9b0SVz2qp/k=;
-        b=DhKM0XKu/hHLHiqCQagq2mzfRE1vhwt4+JvJlm0uE+DqG+UYCXuc5Dn3GLc+ykBginGXcJ
-        7KVQVFm6gE7s0TJpSIQpnRJBzTxsg5gG4e63eqrhMUcYxX8DUlAhoFNdxlRb48rGy8AH+3
-        bXE2JsF6X+OBG2K8gXQQG6EXY33QWo8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-377-2EurjrPUNo--k71WjI_Ddw-1; Sun, 06 Jun 2021 14:59:36 -0400
-X-MC-Unique: 2EurjrPUNo--k71WjI_Ddw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 550FD8015F5;
-        Sun,  6 Jun 2021 18:59:33 +0000 (UTC)
-Received: from tucnak.zalov.cz (ovpn-112-147.ams2.redhat.com [10.36.112.147])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9710E5D9C0;
-        Sun,  6 Jun 2021 18:59:32 +0000 (UTC)
-Received: from tucnak.zalov.cz (localhost [127.0.0.1])
-        by tucnak.zalov.cz (8.16.1/8.16.1) with ESMTPS id 156IxSJQ4093308
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sun, 6 Jun 2021 20:59:28 +0200
-Received: (from jakub@localhost)
-        by tucnak.zalov.cz (8.16.1/8.16.1/Submit) id 156IxMY94093305;
-        Sun, 6 Jun 2021 20:59:22 +0200
-Date:   Sun, 6 Jun 2021 20:59:22 +0200
-From:   Jakub Jelinek <jakub@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
+        id S229799AbhFFTDd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Jun 2021 15:03:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46490 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229573AbhFFTDc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 6 Jun 2021 15:03:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7FB2961242;
+        Sun,  6 Jun 2021 19:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623006101;
+        bh=UD3d62ix8ea/AUYQ+cmn/M6Fqg8QN4yqiHh5zNX5+RQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WR8UrFejD170GPHmeIKJTHA2xXvauQPEb29SbNZrIACn3nPvAm7NtWjk6X0LuTrsF
+         1bDfC11OTnq/qdf8P6M4AqiUqrIHEzDz5gqfu2WcfF4vPGaS8AUuw/a65DV23MoCo0
+         w3tv1VtgbLxzLREG9prrrJCca85jGqxYrQFbwBFpknJV5Y2b33DsmkJjMWVZ1wL3na
+         F4VADgGqkjxyh4RZajgOkgEpzsaQuMO4UGS9I5rAfOdBAbqYdSZDqiHD98FBP3pl8Y
+         GEXCZE01qwhMd1kIk/JSY1lsurCy/mKsIQCc81YgKzbcEv7B7qJh0krxsX2AQqUvzs
+         +6XkpRpdMVYXQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 536BF5C014A; Sun,  6 Jun 2021 12:01:41 -0700 (PDT)
+Date:   Sun, 6 Jun 2021 12:01:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        will@kernel.org, stern@rowland.harvard.edu, parri.andrea@gmail.com,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        linux-kernel@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        linux-arch@vger.kernel.org
 Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210606185922.GF7746@tucnak>
-Reply-To: Jakub Jelinek <jakub@redhat.com>
-References: <CAHk-=wiuLpmOGJyB385UyQioWMVKT6wN9UtyVXzt48AZittCKg@mail.gmail.com>
- <CAHk-=wik7T+FoDAfqFPuMGVp6HxKYOf8UeKt3+EmovfivSgQ2Q@mail.gmail.com>
- <20210604205600.GB4397@paulmck-ThinkPad-P17-Gen-1>
- <CAHk-=wgmUbU6XPHz=4NFoLMxH7j_SR-ky4sKzOBrckmvk5AJow@mail.gmail.com>
- <20210604214010.GD4397@paulmck-ThinkPad-P17-Gen-1>
- <CAHk-=wg0w5L7-iJU_kvEh9stXZoh2srRF4jKToKmSKyHv-njvA@mail.gmail.com>
- <20210605145739.GB1712909@rowland.harvard.edu>
- <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
- <20210606012903.GA1723421@rowland.harvard.edu>
- <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com>
+Message-ID: <20210606190141.GK4397@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <YLn8dzbNwvqrqqp5@hirez.programming.kicks-ass.net>
+ <YLoSJaOVbzKXU4/7@hirez.programming.kicks-ass.net>
+ <20210604153518.GD18427@gate.crashing.org>
+ <YLpQj+S3vpTLX7cc@hirez.programming.kicks-ass.net>
+ <20210604164047.GH18427@gate.crashing.org>
+ <20210604185526.GW4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210604195301.GM18427@gate.crashing.org>
+ <20210604204042.GZ4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210606113651.GR18427@gate.crashing.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20210606113651.GR18427@gate.crashing.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 05, 2021 at 08:41:00PM -0700, Linus Torvalds wrote:
-> Something like this *does* seem to work:
+On Sun, Jun 06, 2021 at 06:36:51AM -0500, Segher Boessenkool wrote:
+> On Fri, Jun 04, 2021 at 01:40:42PM -0700, Paul E. McKenney wrote:
+> > On Fri, Jun 04, 2021 at 02:53:01PM -0500, Segher Boessenkool wrote:
+> > > On Fri, Jun 04, 2021 at 11:55:26AM -0700, Paul E. McKenney wrote:
+> > > > On Fri, Jun 04, 2021 at 11:40:47AM -0500, Segher Boessenkool wrote:
+> > > > > My point is that you ask compiler developers to paint themselves into a
+> > > > > corner if you ask them to change such fundamental C syntax.
+> > > > 
+> > > > Once we have some experience with a language extension, the official
+> > > > syntax for a standardized version of that extension can be bikeshedded.
+> > > > Committees being what they are, what we use in the meantime will
+> > > > definitely not be what is chosen, so there is not a whole lot of point
+> > > > in worrying about the exact syntax in the meantime.  ;-)
+> > > 
+> > > I am only saying that it is unlikely any compiler that is used in
+> > > production will want to experiment with "volatile if".
+> > 
+> > That unfortunately matches my experience over quite a few years.  But if
+> > something can be implemented using existing extensions, the conversations
+> > often get easier.  Especially given many more people are now familiar
+> > with concurrency.
 > 
->    #define ____barrier(id) __asm__ __volatile__("#" #id: : :"memory")
->    #define __barrier(id) ____barrier(id)
->    #define barrier() __barrier(__COUNTER__)
+> This was about the syntax "volatile if", not about the concept, let's
+> call that "volatile_if".  And no, it was not me who brought this up :-)
+
+I agree that it is likely that the syntax "volatile if" would be at best
+a very reluctantly acquired taste among most of the committee.  But some
+might point to the evolving semantics of "auto" as a counter-example,
+to say nothing of the celebrated spaceship operator.  Me, I am not
+all that worried about the exact syntax.
+
+> > > > Which is exactly why these conversations are often difficult.  There is
+> > > > a tension between pushing the as-if rule as far as possible within the
+> > > > compiler on the one hand and allowing developers to write code that does
+> > > > what is needed on the other.  ;-)
+> > > 
+> > > There is a tension between what users expect from the compiler and what
+> > > actually is promised.  The compiler is not pushing the as-if rule any
+> > > further than it always has: it just becomes better at optimising over
+> > > time.  The as-if rule is and always has been absolute.
+> > 
+> > Heh!  The fact that the compiler has become better at optimizing
+> > over time is exactly what has been pushing the as-if rule further.
+> > 
+> > The underlying problem is that it is often impossible to write large
+> > applications (such as the Linux kernel) completely within the confines of
+> > the standard.  Thus, most large applications, and especially concurrent
+> > applications, are vulnerable to either the compiler becoming better
+> > at optimizing or compilers pushing the as-if rule, however you want to
+> > say it.
 > 
-> which is "interesting" or "disgusting" depending on how you happen to feel.
+> Oh definitely.  But there is nothing the compiler can do about most
+> cases of undefined behaviour: it cannot detect it, and there is no way
+> it *can* be handled sanely.  Take for example dereferencing a pointer
+> that does not point to an object.
 
-I think just
-#define barrier() __asm__ __volatile__("" : : "i" (__COUNTER__) : "memory")
-should be enough (or "X" instead of "i" if some arch uses -fpic and will not
-accept small constants in PIC code), for CSE gcc compares that the asm template
-string and all arguments are the same.
+Almost.
 
-As for volatile, that is implicit on asm without any output operands and
-it is about whether the inline asm can be DCEd, not whether it can be CSEd.
+The compiler's use of provenance allows detection in some cases.
+For a stupid example, please see https://godbolt.org/z/z9cWvqdhE.
 
-	Jakub
+Less stupidly, this sort of thing can be quite annoying to people trying
+to use ABA-tolerant concurrent algorithms.  See for example P1726R4
+[1] (update in progress) and for an even more controversial proposal,
+P2188R1 [2].  The Lifo Singly Linked Push algorithm described beginning
+on page 14 of [1] is a simple example of an ABA-tolerant algorithm that
+was already in use when I first programmed a computer.  ;-)
 
+							Thanx, Paul
+
+[1]	http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p1726r4.pdf
+[2]	http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p2188r1.html
