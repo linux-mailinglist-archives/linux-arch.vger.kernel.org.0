@@ -2,68 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1617C39D07C
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 20:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B99639D086
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 20:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbhFFSqL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Jun 2021 14:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbhFFSqI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Jun 2021 14:46:08 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C91C061766
-        for <linux-arch@vger.kernel.org>; Sun,  6 Jun 2021 11:44:02 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id n17so1771193ljg.2
-        for <linux-arch@vger.kernel.org>; Sun, 06 Jun 2021 11:44:02 -0700 (PDT)
+        id S229956AbhFFSvy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Jun 2021 14:51:54 -0400
+Received: from mail-lf1-f51.google.com ([209.85.167.51]:45770 "EHLO
+        mail-lf1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230178AbhFFSvw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Jun 2021 14:51:52 -0400
+Received: by mail-lf1-f51.google.com with SMTP id a1so12640328lfr.12
+        for <linux-arch@vger.kernel.org>; Sun, 06 Jun 2021 11:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=88Yv/LYvp60VsQk9yOiDgKMCUDAIuykorj8GNoJ/U0E=;
-        b=UHdEpFrtLxWVtrXy7kwuDY+KGS8bjCNedLu9LKPhKeT+VdP43ZkshBzIfgHgQ7Uecc
-         3NDhoA+WN2XsJl8bZdWK6GlNvsxfaHcZTojLAg9NHSNrEL1TZ4poA5OROApD2h5ZYcDD
-         JiC1es9r3QTWi2XYEJzOu4SCKuo0wFc2///20=
+        bh=RJCua1TpemFOI3glAj3fgLbjj5CxdDpoZVGdK1bpooE=;
+        b=eQFMVtzND83RNvBKe4gAJD9EpVFbNqfEo6XBgSpWhwW0OiuPD/lGFputn9h6YanwSf
+         ohx5NvMs8hu1wCWtc40QJv5O8HrmCChBxr1RnmVvLasDZe1r9HwPa/xSxXQQPQwSwk+2
+         CLsnEdpEEjSfN0HlTs+pdvfGZCV/grDccJwew=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=88Yv/LYvp60VsQk9yOiDgKMCUDAIuykorj8GNoJ/U0E=;
-        b=st316YkP3h3XkZTaWK0FXs8BcifyfAjSghaZN0ooqTLBQe+L8530dCzoYVo8UjwdU5
-         e7VELQ2530nwZ7RsAtP2rkOmcKw4O4Tpun/0b64pBN9Wbdd1CCgUh8weGZMBqcnXuIqz
-         9DEUWFXUxDX/7cetMTG6TD5pw7hU1EiSQ2evKa+GFETR32AnJe75Ss+mxANKAbK4SjaL
-         7EwUsRPdEFXgioZuCljJO3jmOiEJUTOS5tN8qqr+cd8JJGDCB6r5DK5cB3qukNoNXfJG
-         AqlxQI3s3rcpeqGBJspJjhJmfHyhBUmwnRvqLhMLyt3TvhPUSjvhmbnih//2RQQPHsVX
-         XRMA==
-X-Gm-Message-State: AOAM532MjbovFGD+XunVhMEq3kSH4Xs37yCgomjj2c+UhVokcpf4mjF5
-        4I5pZNCz9vdxUUKmwnghilBpcBetuoUDcR5XfDc=
-X-Google-Smtp-Source: ABdhPJzsvQ+mFSdPTRMUx8znsz2SaqLfFFIQ/5zOvOE/cqzz0HWLh2lhPjx+G26MoTvIZBy04OCYoQ==
-X-Received: by 2002:a2e:3e16:: with SMTP id l22mr12304966lja.336.1623005040225;
-        Sun, 06 Jun 2021 11:44:00 -0700 (PDT)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id o22sm1075362lji.122.2021.06.06.11.43.58
+        bh=RJCua1TpemFOI3glAj3fgLbjj5CxdDpoZVGdK1bpooE=;
+        b=mbdcyDZot67PEPFaQGJLUPz9f6nxepNGgNtUG0Uw8182PCkVKK67mkdANYiFFg7loN
+         9d2vyXLetvqUltis+b6mFo2eWuhQorOAEJvPnEiC5posOhvnZDArkiq11t0zs6ksubh8
+         aPmpFfU2ZHdSoeBwPXT8QV9qIRbP+AYjyN4EEvJcWtj3BTuRYhQaadf5AWIQPR0bOj17
+         8DxjaANe1EMQ1GB8z/lP5WadpUcJ/qW9ZluNzuKd2axI6+CSBe84ECbnnGhoSGra1VEW
+         nsfcm4spSnCgi+ST+Ob7lvAQV5Vh+QG0UkD8PkQm2DMw/dhA/3sEdsMSJvX1jdW2b69p
+         heNQ==
+X-Gm-Message-State: AOAM530fFtjgtvkt/xxG7k0qhYfu2N1T5fNPPpPMDctTWZYA2tXbi70H
+        0njRSJEf7YQPEOSMDQlvzpG3A6LM5KMi6h5ohWI=
+X-Google-Smtp-Source: ABdhPJwtiqS17zliUjX8wqEJa0k0jhF2KgNijyDxwEnY/vmqjMCrimjlvutPywDCngXF72w/xI3IyA==
+X-Received: by 2002:ac2:5551:: with SMTP id l17mr9724675lfk.534.1623005330654;
+        Sun, 06 Jun 2021 11:48:50 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id a14sm1223813lfs.108.2021.06.06.11.48.48
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Jun 2021 11:43:58 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id e2so18946741ljk.4
-        for <linux-arch@vger.kernel.org>; Sun, 06 Jun 2021 11:43:58 -0700 (PDT)
-X-Received: by 2002:a05:651c:383:: with SMTP id e3mr4013689ljp.220.1623005038268;
- Sun, 06 Jun 2021 11:43:58 -0700 (PDT)
+        Sun, 06 Jun 2021 11:48:49 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id v22so20991026lfa.3
+        for <linux-arch@vger.kernel.org>; Sun, 06 Jun 2021 11:48:48 -0700 (PDT)
+X-Received: by 2002:ac2:43b9:: with SMTP id t25mr9503593lfl.253.1623005328455;
+ Sun, 06 Jun 2021 11:48:48 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAHk-=wik7T+FoDAfqFPuMGVp6HxKYOf8UeKt3+EmovfivSgQ2Q@mail.gmail.com>
  <20210604205600.GB4397@paulmck-ThinkPad-P17-Gen-1> <CAHk-=wgmUbU6XPHz=4NFoLMxH7j_SR-ky4sKzOBrckmvk5AJow@mail.gmail.com>
  <20210604214010.GD4397@paulmck-ThinkPad-P17-Gen-1> <CAHk-=wg0w5L7-iJU_kvEh9stXZoh2srRF4jKToKmSKyHv-njvA@mail.gmail.com>
  <20210605145739.GB1712909@rowland.harvard.edu> <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
  <20210606012903.GA1723421@rowland.harvard.edu> <20210606115336.GS18427@gate.crashing.org>
- <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com> <20210606182213.GA1741684@rowland.harvard.edu>
-In-Reply-To: <20210606182213.GA1741684@rowland.harvard.edu>
+ <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com> <20210606184021.GY18427@gate.crashing.org>
+In-Reply-To: <20210606184021.GY18427@gate.crashing.org>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 6 Jun 2021 11:43:42 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
-Message-ID: <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
+Date:   Sun, 6 Jun 2021 11:48:32 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjEHbGifWgA+04Y4_m43s-o+3bXpL5qPQL3ECg+86XuLg@mail.gmail.com>
+Message-ID: <CAHk-=wjEHbGifWgA+04Y4_m43s-o+3bXpL5qPQL3ECg+86XuLg@mail.gmail.com>
 Subject: Re: [RFC] LKMM: Add volatile_if()
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>,
@@ -82,107 +79,37 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jun 6, 2021 at 11:22 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+On Sun, Jun 6, 2021 at 11:43 AM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
 >
-> To be fair, the same argument applies even without the asm code.  The
-> compiler will translate
+> You truly should have written a branch in tthe asm if you truly wanted
+> a branch instruction.
 
-Yes, yes.
+That's exactly what I don't want to do, and what the original patch by
+PeterZ did.
 
-But that is literally why the asm exists in the first place.
+Why?
 
-It's supposed to be the barrier that makes sure that doesn't happen.
+Because then we need to write that stupid pointless branch for every
+single architecture.
 
-So your point that "but this would happen without the asm" is missing
-the whole point. This is exactly the thing that the asm is supposed to
-avoid.
+And to work well, it needs "asm goto", which is so recent that a lot
+of compilers don't support it (thank God for clang dragging gcc
+kicking and screaming to implement it at all - I'd asked for it over a
+decade ago).
 
-And it actually works fine when just one side has the barrier, because
-then no merging can take place, because there is nothing to merge.
+So you get bad code generation in a lot of cases, which entirely
+obviates the _point_ of this all - which is that we can avoid an
+expensive operation (a memory barrier) by just doing clever code
+generation.
 
-That's why my suggested fix for "volatile_if()" was this #define
+So if we can't get the clever code generation, it's all pretty much
+moot, imnsho.
 
-    #define barrier_true() ({ barrier(); 1; })
-    #define volatile_if(x) if ((x) && barrier_true())
+A working barrier "just fixes it".
 
-because now code like
+I suspect the best we can do is to just work around the gcc badness
+with that __COUNTER__ trick of mine. The lack of a reliable comment
+character is the biggest issue with that trick.
 
-    volatile_if (READ_ONCE(a))
-        WRITE_ONCE(b, 1);
-    else
-        WRITE_ONCE(b, 1);
-
-would force that branch. And it's actually fine to merge the
-"WRITE(b,1)", as loing as the branch exists, so the above can (and
-does) compile to
-
-    LD A
-    BEQ over
-    "empty asm"
-over:
-    ST $1,B
-
-and the above is actually perfectly valid code and actually solves the
-problem, even if it admittedly looks entirely insane.
-
-With that crazy "conditional jump over nothing" the store to B is
-ordered wrt the load from A on real machines.
-
-And again: I do not believe we actually have this kind of code in the
-kernel. I could imagine some CPU turning "conditional branch over
-nothing" into a nop-op internally, and losing the ordering. And that's
-ok, exactly because the above kind of code that *only* does the
-WRITE_ONCE() and nothing else is crazy and stupid.
-
-So don't get hung up on the "branch over nothing", that's just for
-this insane unreal example.
-
-But I *could* see us having something where both branches do end up
-writing to "B", and it might even be the first thing both branches end
-up doing. Not the *only* thing they do, but "B" might be a flag for "I
-am actively working on this issue", and I could see a situation where
-we care that the read of "A" (which might be what specifies *what* the
-issue is) would need to be ordered with regards to that "I'm working
-on it" flag.
-
-IOW, another CPU might want to know *what* somebody is working on, and do
-
-    /* Is somebody working on this */
-    if (READ_ONCE(B)) {
-        smp_rmb();
-        READ_ONCE(A); <- this is what they are working on
-
-and the ordering requirement in this all is that B has to be written
-after A has been read.
-
-So while the example code is insane and pointless (and you shouldn't
-read *too* much into it), conceptually the notion of that pattern of
-
-    if (READ_ONCE(a)) {
-        WRITE_ONCE(b,1);
-        .. do something ..
-    } else {
-        WRITE_ONCE(b,1);
-        .. do something else ..
-    }
-
-is not insane or entirely unrealistic - the WRITE_ONCE() might
-basically be an ACK for "I have read the value of A and will act on
-it".
-
-Odd? Yes. Unusual? Yes. Do we do this now? No. But it does worry me
-that we don't seem to have a good way to add that required barrier.
-
-Adding it on one side is good, and works, but what if somebody then does
-
-    volatile_if (READ_ONCE(a))
-        WRITE_ONCE(b, 1);
-    else {
-        barrier();
-        WRITE_ONCE(b, 1);
-    }
-
-and now we end up with it on both sides again, and then the second
-barrier basically undoes the first one..
-
-              Linus
+                 Linus
