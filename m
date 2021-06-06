@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCEF39CE41
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 11:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E9639CE43
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 11:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbhFFJHG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Jun 2021 05:07:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37680 "EHLO mail.kernel.org"
+        id S230271AbhFFJHK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Jun 2021 05:07:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230261AbhFFJHG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 6 Jun 2021 05:07:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DED0F61422;
-        Sun,  6 Jun 2021 09:05:13 +0000 (UTC)
+        id S230272AbhFFJHJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 6 Jun 2021 05:07:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C79361435;
+        Sun,  6 Jun 2021 09:05:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622970316;
-        bh=wXjPzw/QbM1L1IzLq8JbsJfVZnJtz47t31tM5xC6P+c=;
+        s=k20201202; t=1622970320;
+        bh=7QeWtBcpmgX2h1U9CSCvY1o63rcwMf7sxdiWDnALUwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FFLCy3J/YoWqFz5YsQAbn6YwCuQjC2kcpjBmwZC9mHaj7H4d2Pk3pYkyu+VAtxLWq
-         j21MIjSlnEfbpmAttndB0rDQqCykVZKamOY4QY+didjTGNGpmV6isKTMLdd0W4NTyv
-         Gerl8NppZcmQj2IpZn2UjfuLDNZ3Z35cpw4HWN/RExRciHHsZb0mLJ+vvi83pc0JW9
-         bwG6Rcse0Gg7rCeTQ1eX8Uns3EjpKwneB0OLOILrV35YLNlkNq2cwj4VjCwV1jLNNc
-         0Bjg4sU4ls6I9T9gbVlqUbyf7nT5StXjXrdSfKdSH8v20yYCrAQOU0qVETL33McIWv
-         U29GZC0Eha/Sw==
+        b=i23GRSqfXkoo/eGZaRULdK7DvawwQzDF5zBSCkAYq/rmnc79U0ALzgVuyUrRRi0FP
+         F95ZBgZYpWZkMoyZZDUnNYfwQreCurVBnC69tVnjGmAEOXbKWnEUxUKDET9/WfaRi+
+         ob6yagG7m/UmLnAFY7CszwnncFhh0XuQmjmZwb7laJfw93z1ChQ31W+TjtIwMVtJkD
+         Wn2tVmwFSZVSDcOCq3fxOAwoVzUfhhj5l4MlDfes4iNK8Ee6yWl8Jfd7hYwFGeYg6+
+         cYWiMaC16nSlM+JVLt5ULt42JEzTVY3vzE2zjksegy7yRvcgGoxOJ8/DF/4ialnLGu
+         9ZO9l9B/Lcd0g==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, anup.patel@wdc.com, palmerdabbelt@google.com,
         arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
@@ -31,10 +31,11 @@ To:     guoren@kernel.org, anup.patel@wdc.com, palmerdabbelt@google.com,
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-sunxi@lists.linux.dev,
         Guo Ren <guoren@linux.alibaba.com>,
+        Christoph Hellwig <hch@lst.de>,
         Atish Patra <atish.patra@wdc.com>
-Subject: [RFC PATCH v2 03/11] riscv: asid: Optimize tlbflush coding convention
-Date:   Sun,  6 Jun 2021 09:04:00 +0000
-Message-Id: <1622970249-50770-6-git-send-email-guoren@kernel.org>
+Subject: [PATCH V5 3/3] riscv: tlbflush: Optimize coding convention
+Date:   Sun,  6 Jun 2021 09:04:01 +0000
+Message-Id: <1622970249-50770-7-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622970249-50770-1-git-send-email-guoren@kernel.org>
 References: <1622970249-50770-1-git-send-email-guoren@kernel.org>
@@ -55,16 +56,11 @@ flush once flushing more than a single page.
 
 Link: https://lore.kernel.org/linux-riscv/CAJF2gTQpDYtEdw6ZrTVZUYqxGdhLPs25RjuUiQtz=xN2oKs2fw@mail.gmail.com/T/#m30f7e8d02361f21f709bc3357b9f6ead1d47ed43
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Liu Shaohua <liush@allwinnertech.com>
 Co-Developed-by: Christoph Hellwig <hch@lst.de>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
 Cc: Anup Patel <anup.patel@wdc.com>
 Cc: Atish Patra <atish.patra@wdc.com>
-Cc: Chen-Yu Tsai <wens@csie.org>
-Cc: Drew Fustini <drew@beagleboard.org>
-Cc: Maxime Ripard <maxime@cerno.tech>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Wei Fu <wefu@redhat.com>
-Cc: Wei Wu <lazyparser@gmail.com>
 ---
  arch/riscv/mm/tlbflush.c | 91 ++++++++++++++++++++++--------------------------
  1 file changed, 41 insertions(+), 50 deletions(-)
