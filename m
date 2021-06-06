@@ -2,107 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A1C39CA5B
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Jun 2021 19:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5488C39CBD1
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 02:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbhFESBP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Jun 2021 14:01:15 -0400
-Received: from mout.gmx.net ([212.227.15.15]:41791 "EHLO mout.gmx.net"
+        id S230025AbhFFAQH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Jun 2021 20:16:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229964AbhFESBO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 5 Jun 2021 14:01:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1622915918;
-        bh=LJZMH4mKKG4Y4RH/IKRmcuoSuYAs3YZ6GSXZNks3Imw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=EXvn/Qe1G20n0eCfzE5oqH9nCio58KhDVyrKq87mvUn5a8gNLLkdFSi6kOi+BoMnY
-         1hDvjbSm7pE5rTXadLV9eQ8lFHUU+l7oMzrA0fvIEEgGuFDDUwD7mQLglDQSkSDCKk
-         7YpGopCJ5tA0g8uLT9Zl3u6SXCYduGi1BElJOQoY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([83.52.228.41]) by mail.gmx.net
- (mrgmx004 [212.227.17.184]) with ESMTPSA (Nemesis) id
- 1M9FnZ-1llRpx0p9T-006QJB; Sat, 05 Jun 2021 19:58:38 +0200
-From:   John Wood <john.wood@gmx.com>
-To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     John Wood <john.wood@gmx.com>, Andi Kleen <ak@linux.intel.com>,
-        valdis.kletnieks@vt.edu,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: [PATCH v8 8/8] MAINTAINERS: Add a new entry for the Brute LSM
-Date:   Sat,  5 Jun 2021 17:04:05 +0200
-Message-Id: <20210605150405.6936-9-john.wood@gmx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210605150405.6936-1-john.wood@gmx.com>
-References: <20210605150405.6936-1-john.wood@gmx.com>
+        id S230022AbhFFAQH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 5 Jun 2021 20:16:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 72070613F3;
+        Sun,  6 Jun 2021 00:14:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622938458;
+        bh=5zAebfKw3wGjoJ9snXmpScoW0ytD1mv0Hz2fwhZpB/M=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=PuqKNynFwhPXp3oCxNFlJ12YpG0p5s5e6Bjs1K5I9MVmZvc1b4D0ZtKzAFWZvlE2Y
+         3kPTw/sVtD3JLnb/i47qSvRD4uCoS+CHxSZQ8PdUmXgelA/pdQ11f1DzYQfVmlDTLD
+         6SOXzg7wPGFa73BZqiGEvxXLcAuPvufifO1IkU2VwNnnsqLbXIzyQI4J08Msk4K7nw
+         bihn6gYFkWlsA1s8prKb8aJ3rKwJRvouQp6OsstqT+NrhsOxmCEJPtOviP4SMHXl8z
+         FNkhyzO+IrUny2mxJ97ZKsH0q3O8UYcvMa6Rjr2cHKJRhhNnY+ofVkdC7CHcHljKjo
+         KwN4y3eD5T2Vw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2E0575C0991; Sat,  5 Jun 2021 17:14:18 -0700 (PDT)
+Date:   Sat, 5 Jun 2021 17:14:18 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+Message-ID: <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20210604155154.GG1676809@rowland.harvard.edu>
+ <YLpSEM7sxSmsuc5t@hirez.programming.kicks-ass.net>
+ <20210604182708.GB1688170@rowland.harvard.edu>
+ <CAHk-=wiuLpmOGJyB385UyQioWMVKT6wN9UtyVXzt48AZittCKg@mail.gmail.com>
+ <CAHk-=wik7T+FoDAfqFPuMGVp6HxKYOf8UeKt3+EmovfivSgQ2Q@mail.gmail.com>
+ <20210604205600.GB4397@paulmck-ThinkPad-P17-Gen-1>
+ <CAHk-=wgmUbU6XPHz=4NFoLMxH7j_SR-ky4sKzOBrckmvk5AJow@mail.gmail.com>
+ <20210604214010.GD4397@paulmck-ThinkPad-P17-Gen-1>
+ <CAHk-=wg0w5L7-iJU_kvEh9stXZoh2srRF4jKToKmSKyHv-njvA@mail.gmail.com>
+ <20210605145739.GB1712909@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:zkSY+Nk10Hb9RRhiRldy4BtP2AIFThepaw+IBLiQxGRKAu76Tfz
- u/xwkD/5Xjj+4nPrpcNbps49Prlmno1jLjtPMU0HsCFJ8K+bm+sJ7XuKlC6BGL7piwviohY
- sTlX6Cko1RB0w10cj7CJ1tXWloewJz9zjikX65FCu8KyF9jqJGcXtdHzxZDjQX0PCOxFvnd
- 7U8jbQRCot2JkQcmxsVhA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Zll4jERGK4o=:b0ECLFhKc1ov8XftBxIOl9
- Bm00CA3vk6hTwdngrb1VLwvu2bvhDT96UWxpd5QHIfH1c2O5zW+gq6YD8aknBSKHms6Dub/s5
- f7jMvDzfr5Mutwll/uQ5YbB8JC7nFGHTzf6hbcttzV66aa+9jlbs3/ABbaQDmtH+Ly+qYDQE6
- FJpIA61UHheW6K0IyVh8t2m1+jHn7my8B3BQhdc+PrMe0gQHPjEU+ZJis00K5/gvkyrxTuGHo
- 3iKblKo1mjMcUN1oGVKrRjirMb/TSVxwz7XTUB/P51Velw8SgxuMTg53j1FnpuIvvv+ZG7xcM
- rmG1oAg0tdheQ+pPQogFWskdNK4Ag8VyzweuZ0fUVY+dWaKKtmpBQ874+29gkw6Y3+70hvc1t
- jKfB8ckTMcibE9oDb6mKVl78uE1GRAIS8nhyb/kne1ua2bEqJ7tysrbjFc8360U1qjgPFE4a8
- kWRb0oTX6CQSAAeJ3YGCjz+WCiRyJYAMcfo4Gn83R2JOjPBXdJoPX6iGxF/2A24DJQBruU8hr
- Mt5TAwuaw/q+PHowLaTJbqCFVrXJ0aCas4utyh4tULM1nV2SfxU9vYtxtz598ePmrFz2Xgi0N
- dlWbtJrwwBzPMAiQBUv0awrFs6FmK0tviDCY30HkQcsnHvCZbJHH3BVCrJqzP/oRtfGvpjpF7
- R6w3tXo5XyxV95pQb8np03wgVP40n7oGErvs5Elsw1r2nS4zDRzQKQ/0CQgjA4tAH2DIAd8fn
- NzoaFJZg0jIvsi7Mx8a575YtGSGwFGOSaMS2YstcN/TkldgpaI0M9AGAxklmmiTQ9w0ZRsBAD
- zAAsVtzFlfXsBbPEYB16GqQVR1GfJw+QirLv+4i1jFPM6vcesajUz1HKeqxtFjkNlHVVEZzTY
- thwIgWTL1P9kdR7uy66I1xegj0nPCui+X1+xHTtLWMLfBk6Ci9RK2kI28meJyPq0ITYlS6OGv
- N3iR4UwFaRr2RLHQPZFXPZW46bgHRTI7sKQOtVwRVVSEGZCyTVyf/dR8zdcZig0VOlLAIWyvz
- OGAAlfnYKEtf+eT3FDxtEzVc1viYBZUKzCl716RqEIlhUc1D9FYU7g/5bQrWTIyT/wv1i6IbI
- PubMFX8o76gckRAj7fkDwA2yyiLtOqwYun5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210605145739.GB1712909@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In order to maintain the code for the Brute LSM add a new entry to the
-maintainers list.
+On Sat, Jun 05, 2021 at 10:57:39AM -0400, Alan Stern wrote:
+> On Fri, Jun 04, 2021 at 03:19:11PM -0700, Linus Torvalds wrote:
+> > Now, part of this is that I do think that in *general* we should never
+> > use this very suble load-cond-store pattern to begin with. We should
+> > strive to use more smp_load_acquire() and smp_store_release() if we
+> > care about ordering of accesses. They are typically cheap enough, and
+> > if there's much of an ordering issue, they are the right things to do.
+> > 
+> > I think the whole "load-to-store ordering" subtle non-ordered case is
+> > for very very special cases, when you literally don't have a general
+> > memory ordering, you just have an ordering for *one* very particular
+> > access. Like some of the very magical code in the rw-semaphore case,
+> > or that smp_cond_load_acquire().
+> > 
+> > IOW, I would expect that we have a handful of uses of this thing. And
+> > none of them have that "the conditional store is the same on both
+> > sides" pattern, afaik.
+> > 
+> > And immediately when the conditional store is different, you end up
+> > having a dependency on it that orders it.
+> > 
+> > But I guess I can accept the above made-up example as an "argument",
+> > even though I feel it is entirely irrelevant to the actual issues and
+> > uses we have.
+> 
+> Indeed, the expansion of the currently proposed version of
+> 
+> 	volatile_if (A) {
+> 		B;
+> 	} else {
+> 		C;
+> 	}
+> 
+> is basically the same as
+> 
+> 	if (A) {
+> 		barrier();
+> 		B;
+> 	} else {
+> 		barrier();
+> 		C;
+> 	}
+> 
+> which is just about as easy to write by hand.  (For some reason my 
+> fingers don't like typing "volatile_"; the letters tend to get 
+> scrambled.)
+> 
+> So given that:
+> 
+> 	1. Reliance on control dependencies is uncommon in the kernel,
+> 	   and
+> 
+> 	2. The loads in A could just be replaced with load_acquires
+> 	   at a low penalty (or store-releases could go into B and C),
+> 
+> it seems that we may not need volatile_if at all!  The only real reason 
+> for having it in the first place was to avoid the penalty of 
+> load-acquire on architectures where it has a significant cost, when the 
+> control dependency would provide the necessary ordering for free.  Such 
+> architectures are getting less and less common.
 
-Signed-off-by: John Wood <john.wood@gmx.com>
-=2D--
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+That does sound good, but...
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 503fd21901f1..665cd6aaadac 100644
-=2D-- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3847,6 +3847,14 @@ L:	netdev@vger.kernel.org
- S:	Supported
- F:	drivers/net/ethernet/brocade/bna/
+Current compilers beg to differ at -O2: https://godbolt.org/z/5K55Gardn
 
-+BRUTE SECURITY MODULE
-+M:	John Wood <john.wood@gmx.com>
-+S:	Maintained
-+F:	Documentation/admin-guide/LSM/Brute.rst
-+F:	include/brute/
-+F:	security/brute/
-+F:	tools/testing/selftests/brute/
-+
- BSG (block layer generic sg v4 driver)
- M:	FUJITA Tomonori <fujita.tomonori@lab.ntt.co.jp>
- L:	linux-scsi@vger.kernel.org
-=2D-
-2.25.1
+------------------------------------------------------------------------
+#define READ_ONCE(x) (*(volatile typeof(x) *)&(x))
+#define WRITE_ONCE(x, val) (READ_ONCE(x) = (val))
+#define barrier() __asm__ __volatile__("": : :"memory")
 
+int x, y;
+
+int main(int argc, char *argv[])
+{
+    if (READ_ONCE(x)) {
+        barrier();
+        WRITE_ONCE(y, 1);
+    } else {
+        barrier();
+        WRITE_ONCE(y, 1);
+    }
+    return 0;
+}
+------------------------------------------------------------------------
+
+Both gcc and clang generate a load followed by a store, with no branch.
+ARM gets the same results from both compilers.
+
+As Linus suggested, removing one (but not both!) invocations of barrier()
+does cause a branch to be emitted, so maybe that is a way forward.
+Assuming it is more than just dumb luck, anyway.  :-/
+
+							Thanx, Paul
