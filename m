@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E9639CE43
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 11:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CEE39CE45
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jun 2021 11:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbhFFJHK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Jun 2021 05:07:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37810 "EHLO mail.kernel.org"
+        id S230287AbhFFJHN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Jun 2021 05:07:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37902 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230272AbhFFJHJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 6 Jun 2021 05:07:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C79361435;
-        Sun,  6 Jun 2021 09:05:17 +0000 (UTC)
+        id S230272AbhFFJHN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 6 Jun 2021 05:07:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DDA4061422;
+        Sun,  6 Jun 2021 09:05:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622970320;
-        bh=7QeWtBcpmgX2h1U9CSCvY1o63rcwMf7sxdiWDnALUwM=;
+        s=k20201202; t=1622970323;
+        bh=L8xajDumKH1Cg7eZ91SM48KqOMpWXfNl+mHnoCZQBpU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i23GRSqfXkoo/eGZaRULdK7DvawwQzDF5zBSCkAYq/rmnc79U0ALzgVuyUrRRi0FP
-         F95ZBgZYpWZkMoyZZDUnNYfwQreCurVBnC69tVnjGmAEOXbKWnEUxUKDET9/WfaRi+
-         ob6yagG7m/UmLnAFY7CszwnncFhh0XuQmjmZwb7laJfw93z1ChQ31W+TjtIwMVtJkD
-         Wn2tVmwFSZVSDcOCq3fxOAwoVzUfhhj5l4MlDfes4iNK8Ee6yWl8Jfd7hYwFGeYg6+
-         cYWiMaC16nSlM+JVLt5ULt42JEzTVY3vzE2zjksegy7yRvcgGoxOJ8/DF/4ialnLGu
-         9ZO9l9B/Lcd0g==
+        b=QEmXI3b7k0JcId3xCv4dEM2lO6p0ojmwnUagRx4hHFRbltGKWrXdKaUFGk6UUXmxD
+         S4NRtKgdwy7NSX0ztjbCdWBpn7Be6Pp9y3lw8F0pvTkVBooLvaE4v2cLjEVweyDd5D
+         YUellDH7CiZ6JxajGwYIdcTFqqEfYU3h/K3YOA1WVdlubGrb1n4uBs6lFaEQx23Y2J
+         NMBRJoeEpjRtduGzFkbgbWeQTkaCrtCbrQdZ8zy8NkJP1e66SeOBto5yK2EQFFy/b/
+         5NYfMeVWRalVgxRf8Nv7qdKn6e2j5OWdlzqtxNqRATxVbtptUsFQMO4tmHbstOpaKF
+         9Y3slo/pyf/xg==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, anup.patel@wdc.com, palmerdabbelt@google.com,
         arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
@@ -31,11 +31,10 @@ To:     guoren@kernel.org, anup.patel@wdc.com, palmerdabbelt@google.com,
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-sunxi@lists.linux.dev,
         Guo Ren <guoren@linux.alibaba.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Atish Patra <atish.patra@wdc.com>
-Subject: [PATCH V5 3/3] riscv: tlbflush: Optimize coding convention
-Date:   Sun,  6 Jun 2021 09:04:01 +0000
-Message-Id: <1622970249-50770-7-git-send-email-guoren@kernel.org>
+        Christoph Hellwig <hch@lst.de>
+Subject: [RFC PATCH v2 04/11] riscv: pgtable: Fixup _PAGE_CHG_MASK usage
+Date:   Sun,  6 Jun 2021 09:04:02 +0000
+Message-Id: <1622970249-50770-8-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622970249-50770-1-git-send-email-guoren@kernel.org>
 References: <1622970249-50770-1-git-send-email-guoren@kernel.org>
@@ -45,157 +44,85 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Passing the mm_struct as the first argument, as we can derive both
-the cpumask and asid from it instead of doing that in the callers.
+We should masks all attributes BITS first, and then
+using '>> _PAGE_PFN_SHIFT' to get the final PFN value.
 
-But more importantly, the static branch check can be moved deeper
-into the code to avoid a lot of duplication.
+Adding '& _PAGE_CHG_MASK' makes the code semantics more accurate.
 
-Also add FIXME comment on the non-ASID code switches to a global
-flush once flushing more than a single page.
-
-Link: https://lore.kernel.org/linux-riscv/CAJF2gTQpDYtEdw6ZrTVZUYqxGdhLPs25RjuUiQtz=xN2oKs2fw@mail.gmail.com/T/#m30f7e8d02361f21f709bc3357b9f6ead1d47ed43
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Co-Developed-by: Christoph Hellwig <hch@lst.de>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+Signed-off-by: Liu Shaohua <liush@allwinnertech.com>
 Cc: Anup Patel <anup.patel@wdc.com>
-Cc: Atish Patra <atish.patra@wdc.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Drew Fustini <drew@beagleboard.org>
+Cc: Maxime Ripard <maxime@cerno.tech>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+Cc: Wei Fu <wefu@redhat.com>
+Cc: Wei Wu <lazyparser@gmail.com>
 ---
- arch/riscv/mm/tlbflush.c | 91 ++++++++++++++++++++++--------------------------
- 1 file changed, 41 insertions(+), 50 deletions(-)
+ arch/riscv/include/asm/pgtable-64.h | 8 +++++---
+ arch/riscv/include/asm/pgtable.h    | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
-index 87b4e52..facca6e 100644
---- a/arch/riscv/mm/tlbflush.c
-+++ b/arch/riscv/mm/tlbflush.c
-@@ -12,56 +12,59 @@ void flush_tlb_all(void)
+diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
+index f3b0da6..cbf9acf 100644
+--- a/arch/riscv/include/asm/pgtable-64.h
++++ b/arch/riscv/include/asm/pgtable-64.h
+@@ -62,12 +62,14 @@ static inline void pud_clear(pud_t *pudp)
+ 
+ static inline unsigned long pud_page_vaddr(pud_t pud)
+ {
+-	return (unsigned long)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
++	return (unsigned long)pfn_to_virt(
++		(pud_val(pud) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
  }
  
- /*
-- * This function must not be called with cmask being null.
-+ * This function must not be called with mm_cpumask(mm) being null.
-  * Kernel may panic if cmask is NULL.
-  */
--static void __sbi_tlb_flush_range(struct cpumask *cmask, unsigned long start,
-+static void __sbi_tlb_flush_range(struct mm_struct *mm,
-+				  unsigned long start,
- 				  unsigned long size)
+ static inline struct page *pud_page(pud_t pud)
  {
-+	struct cpumask *cmask = mm_cpumask(mm);
- 	struct cpumask hmask;
- 	unsigned int cpuid;
-+	bool local;
- 
- 	if (cpumask_empty(cmask))
- 		return;
- 
- 	cpuid = get_cpu();
- 
--	if (cpumask_any_but(cmask, cpuid) >= nr_cpu_ids) {
--		/* local cpu is the only cpu present in cpumask */
--		if (size <= PAGE_SIZE)
--			local_flush_tlb_page(start);
--		else
--			local_flush_tlb_all();
--	} else {
--		riscv_cpuid_to_hartid_mask(cmask, &hmask);
--		sbi_remote_sfence_vma(cpumask_bits(&hmask), start, size);
--	}
-+	/*
-+	 * check if the tlbflush needs to be sent to other CPUs, local
-+	 * cpu is the only cpu present in cpumask.
-+	 */
-+	local = !(cpumask_any_but(cmask, cpuid) < nr_cpu_ids);
- 
--	put_cpu();
--}
--
--static void __sbi_tlb_flush_range_asid(struct cpumask *cmask,
--				       unsigned long start,
--				       unsigned long size,
--				       unsigned long asid)
--{
--	struct cpumask hmask;
--	unsigned int cpuid;
--
--	if (cpumask_empty(cmask))
--		return;
--
--	cpuid = get_cpu();
-+	if (static_branch_likely(&use_asid_allocator)) {
-+		unsigned long asid = atomic_long_read(&mm->context.id);
- 
--	if (cpumask_any_but(cmask, cpuid) >= nr_cpu_ids) {
--		if (size == -1)
--			local_flush_tlb_all_asid(asid);
--		else
--			local_flush_tlb_range_asid(start, size, asid);
-+		if (likely(local)) {
-+			if (size == -1)
-+				local_flush_tlb_all_asid(asid);
-+			else
-+				local_flush_tlb_range_asid(start, size, asid);
-+		} else {
-+			riscv_cpuid_to_hartid_mask(cmask, &hmask);
-+			sbi_remote_sfence_vma_asid(cpumask_bits(&hmask),
-+						   start, size, asid);
-+		}
- 	} else {
--		riscv_cpuid_to_hartid_mask(cmask, &hmask);
--		sbi_remote_sfence_vma_asid(cpumask_bits(&hmask),
--					   start, size, asid);
-+		if (likely(local)) {
-+			/*
-+			 * FIXME: The non-ASID code switches to a global flush
-+			 * once flushing more than a single page. It's made by
-+			 * commit 6efb16b1d551 (RISC-V: Issue a tlb page flush
-+			 * if possible).
-+			 */
-+			if (size <= PAGE_SIZE)
-+				local_flush_tlb_page(start);
-+			else
-+				local_flush_tlb_all();
-+		} else {
-+			riscv_cpuid_to_hartid_mask(cmask, &hmask);
-+			sbi_remote_sfence_vma(cpumask_bits(&hmask),
-+					      start, size);
-+		}
- 	}
- 
- 	put_cpu();
-@@ -69,28 +72,16 @@ static void __sbi_tlb_flush_range_asid(struct cpumask *cmask,
- 
- void flush_tlb_mm(struct mm_struct *mm)
- {
--	if (static_branch_unlikely(&use_asid_allocator))
--		__sbi_tlb_flush_range_asid(mm_cpumask(mm), 0, -1,
--					   atomic_long_read(&mm->context.id));
--	else
--		__sbi_tlb_flush_range(mm_cpumask(mm), 0, -1);
-+	__sbi_tlb_flush_range(mm, 0, -1);
+-	return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
++	return pfn_to_page(
++		(pud_val(pud) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
  }
  
- void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr)
+ static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
+@@ -77,7 +79,7 @@ static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
+ 
+ static inline unsigned long _pmd_pfn(pmd_t pmd)
  {
--	if (static_branch_unlikely(&use_asid_allocator))
--		__sbi_tlb_flush_range_asid(mm_cpumask(vma->vm_mm), addr, PAGE_SIZE,
--					   atomic_long_read(&vma->vm_mm->context.id));
--	else
--		__sbi_tlb_flush_range(mm_cpumask(vma->vm_mm), addr, PAGE_SIZE);
-+	__sbi_tlb_flush_range(vma->vm_mm, addr, PAGE_SIZE);
+-	return pmd_val(pmd) >> _PAGE_PFN_SHIFT;
++	return (pmd_val(pmd) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT;
  }
  
- void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
- 		     unsigned long end)
+ #define pmd_ERROR(e) \
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 346a3c6..13a79643 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -217,12 +217,12 @@ static inline unsigned long _pgd_pfn(pgd_t pgd)
+ 
+ static inline struct page *pmd_page(pmd_t pmd)
  {
--	if (static_branch_unlikely(&use_asid_allocator))
--		__sbi_tlb_flush_range_asid(mm_cpumask(vma->vm_mm), start, end - start,
--					   atomic_long_read(&vma->vm_mm->context.id));
--	else
--		__sbi_tlb_flush_range(mm_cpumask(vma->vm_mm), start, end - start);
-+	__sbi_tlb_flush_range(vma->vm_mm, start, end - start);
+-	return pfn_to_page(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
++	return pfn_to_page((pmd_val(pmd) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
  }
+ 
+ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
+ {
+-	return (unsigned long)pfn_to_virt(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
++	return (unsigned long)pfn_to_virt((pmd_val(pmd) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
+ }
+ 
+ static inline pte_t pmd_pte(pmd_t pmd)
+@@ -233,7 +233,7 @@ static inline pte_t pmd_pte(pmd_t pmd)
+ /* Yields the page frame number (PFN) of a page table entry */
+ static inline unsigned long pte_pfn(pte_t pte)
+ {
+-	return (pte_val(pte) >> _PAGE_PFN_SHIFT);
++	return ((pte_val(pte) & _PAGE_CHG_MASK) >> _PAGE_PFN_SHIFT);
+ }
+ 
+ #define pte_page(x)     pfn_to_page(pte_pfn(x))
 -- 
 2.7.4
 
