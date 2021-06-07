@@ -2,156 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F46C39E026
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 17:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040BC39E043
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 17:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbhFGPXZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 11:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbhFGPXZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Jun 2021 11:23:25 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B514C061766;
-        Mon,  7 Jun 2021 08:21:34 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 22-20020a17090a0c16b0290164a5354ad0so12181445pjs.2;
-        Mon, 07 Jun 2021 08:21:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=AqJMsqQ4KNSlTkis4vnlFWwGNt3Bx7s+42JKf63F/jc=;
-        b=WsBdcRsefCiECb9IqTSuqCUv8coeVKPfrhSnmSii/c3l1gmGod3/U/htpg5pceudXy
-         aYMrb18s8dW7vOcfl+l3/JLyfgriswqTmUyfzOzd+MpR4PFDQBqNxGysTptsKMLLdnqS
-         jvqIZCDUxhyEXhn3kFG8PvvaL25gkKk9fhLU2Y6GVkr75vdb0Ve9OxPhhCsLOSZbZ46o
-         oReEyqo0bUD1A3JvfVwFOyoUdnbneVTJbIjly5SDJg+VKDoLMXo7YsQjaqCn4F5oQkI9
-         W8T56TKPKa5QxGA65hUQQsSol/AsF5UgHxkBXTE4sP50uacN6R0GzZbY+xLSbeosBWte
-         pywQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=AqJMsqQ4KNSlTkis4vnlFWwGNt3Bx7s+42JKf63F/jc=;
-        b=MeQeU2Ir03tCyqYM3rLAHeZ1yS4sXLoA8ylkw+16k39ilc1HdG5cyR4dP1AfYW+qEz
-         HO/ry9XUmE3SrAXs4DM59W5FAM8ids/qYGilbCcnBYRO5svd3nN2hRfjZIp+7y92qUIs
-         NLHJT2bgZ/unAZXnLA8SN1NvLverYScZ5SbzehioOt/Q+n6JLFj+kNKQW0eNvllH9iJS
-         JZDEp1V+avfwXlepJZrKDbDpnTNQyM5bELprAupcP1UpYgzyVnzHa0QoraTbHm2pVrp8
-         Bbb7tSKrT5umWfYPyyno+1oXqMt16Y8a1qg9nQPYXrK506ZhcyclTcSUFXGN5i8CJMM6
-         qArg==
-X-Gm-Message-State: AOAM530fLaBlDfCNWDPHYFAAnWlcGl95qFjcwbAjPc/c92hikvRMFdZl
-        7xSA7BZKUZM5Zj6YoMENaI0=
-X-Google-Smtp-Source: ABdhPJwKT7FVRh43L9EMp25B1edDg0633yW6Rnccv/gD+CMCio9gORsvm6jnf+jqiJgT4Bx7SQrrGw==
-X-Received: by 2002:a17:90a:c68a:: with SMTP id n10mr33294547pjt.32.1623079293798;
-        Mon, 07 Jun 2021 08:21:33 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id g63sm8507428pfb.55.2021.06.07.08.21.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Jun 2021 08:21:33 -0700 (PDT)
-Subject: Re: [RFC PATCH V3 10/11] HV/Netvsc: Add Isolation VM support for
- netvsc driver
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org,
-        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, Tianyu.Lan@microsoft.com,
-        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
-        xen-devel@lists.xenproject.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, thomas.lendacky@amd.com,
-        brijesh.singh@amd.com, sunilmut@microsoft.com
-References: <20210530150628.2063957-1-ltykernel@gmail.com>
- <20210530150628.2063957-11-ltykernel@gmail.com>
- <20210607065007.GE24478@lst.de>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <279cb4bf-c5b6-6db9-0f1e-9238e902c8f2@gmail.com>
-Date:   Mon, 7 Jun 2021 23:21:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230239AbhFGP1Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 11:27:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34618 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230212AbhFGP1Z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 11:27:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2BC0860C3D;
+        Mon,  7 Jun 2021 15:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623079534;
+        bh=xZEnrI7aJgHlHkDAZk2TG+DH/0IpNBw25vfcP+ltli4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=AjY3K2wqq2We6lmQTn0Zc8+dXN3DFbK57ZP3WwJok7WAX/ZtBrcugjbq3pVfKmTsn
+         liSsk7G+uMJrSkpCWH38VnBUOhwUkpojjwOR29Y1veQpGzBpSNPNSA4xGtefkmCWiy
+         +yNJlLMjbvg2lZytLiFqr0SEGh/nQKOBdrFQ1CRAArKtHLojAZBU90i+pUUu+r4jrc
+         aEpslhaVCiirV9uPofzDpezXnrxWcBs37mwNEEDFnyif4ncxiDIKkXq9Y4DO5AK7Ir
+         LnVggRSp+MWLGKBEUYp3+Z4kOxVb/t4kMWTPiml/sCOy1IQF3OSpJZpycrgUBe/NWW
+         ARCDZd2RuQpOQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EC68A5C0395; Mon,  7 Jun 2021 08:25:33 -0700 (PDT)
+Date:   Mon, 7 Jun 2021 08:25:33 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+Message-ID: <20210607152533.GQ4397@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <CAHk-=wg0w5L7-iJU_kvEh9stXZoh2srRF4jKToKmSKyHv-njvA@mail.gmail.com>
+ <20210605145739.GB1712909@rowland.harvard.edu>
+ <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210606012903.GA1723421@rowland.harvard.edu>
+ <20210606115336.GS18427@gate.crashing.org>
+ <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com>
+ <20210606182213.GA1741684@rowland.harvard.edu>
+ <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
+ <YL34NZ12mKoiSLvu@hirez.programming.kicks-ass.net>
+ <20210607115234.GA7205@willie-the-truck>
 MIME-Version: 1.0
-In-Reply-To: <20210607065007.GE24478@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210607115234.GA7205@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 6/7/2021 2:50 PM, Christoph Hellwig wrote:
-> On Sun, May 30, 2021 at 11:06:27AM -0400, Tianyu Lan wrote:
->> +	if (hv_isolation_type_snp()) {
->> +		pfns = kcalloc(buf_size / HV_HYP_PAGE_SIZE, sizeof(unsigned long),
->> +			       GFP_KERNEL);
->> +		for (i = 0; i < buf_size / HV_HYP_PAGE_SIZE; i++)
->> +			pfns[i] = virt_to_hvpfn(net_device->recv_buf + i * HV_HYP_PAGE_SIZE) +
->> +				(ms_hyperv.shared_gpa_boundary >> HV_HYP_PAGE_SHIFT);
->> +
->> +		vaddr = vmap_pfn(pfns, buf_size / HV_HYP_PAGE_SIZE, PAGE_KERNEL_IO);
->> +		kfree(pfns);
->> +		if (!vaddr)
->> +			goto cleanup;
->> +		net_device->recv_original_buf = net_device->recv_buf;
->> +		net_device->recv_buf = vaddr;
->> +	}
+On Mon, Jun 07, 2021 at 12:52:35PM +0100, Will Deacon wrote:
+> On Mon, Jun 07, 2021 at 12:43:01PM +0200, Peter Zijlstra wrote:
+> > On Sun, Jun 06, 2021 at 11:43:42AM -0700, Linus Torvalds wrote:
+> > > So while the example code is insane and pointless (and you shouldn't
+> > > read *too* much into it), conceptually the notion of that pattern of
+> > > 
+> > >     if (READ_ONCE(a)) {
+> > >         WRITE_ONCE(b,1);
+> > >         .. do something ..
+> > >     } else {
+> > >         WRITE_ONCE(b,1);
+> > >         .. do something else ..
+> > >     }
+> > 
+> > This is actually more tricky than it would appear (isn't it always).
+> > 
+> > The thing is, that normally we must avoid speculative stores, because
+> > they'll result in out-of-thin-air values.
+> > 
+> > *Except* in this case, where both branches emit the same store, then
+> > it's a given that the store will happen and it will not be OOTA.
+> > Someone's actually done the proof for that apparently (Will, you have a
+> > reference to Jade's paper?)
 > 
-> This probably wnats a helper to make the thing more readable.  But who
-> came up with this fucked up communication protocol where the host needs
-> to map random pfns into a contigous range?  Sometime I really have to
-> wonder what crack the hyper-v people take when comparing this to the
-> relatively sane approach others take.
-
-Agree. Will add a helper function.
+> I don't think there's a paper on this, but Jade and I are hoping to talk
+> about aspects of it at LPC (assuming the toolchain MC gets accepted).
 > 
->> +	for (i = 0; i < page_count; i++)
->> +		dma_unmap_single(&hv_dev->device, packet->dma_range[i].dma,
->> +				 packet->dma_range[i].mapping_size,
->> +				 DMA_TO_DEVICE);
->> +
->> +	kfree(packet->dma_range);
+> > There's apparently also a competition going on who can build the
+> > weakestest ARM64 implementation ever.
+> > 
+> > Combine the two, and you'll get a CPU that *will* emit the store early
+> > :/
 > 
-> Any reason this isn't simply using a struct scatterlist?
-
-I will have a look. Thanks to reminder scatterlist.
-
+> So there are a lot of important details missing here and, as above, I think
+> this is something worth discussing at LPC with Jade. The rough summary is
+> that the arm64 memory model recently (so recently that it's not yet landed
+> in the public docs) introduced something called "pick dependencies", which
+> are a bit like control dependencies only they don't create order to all
+> subsequent stores. These are useful for some conditional data-processing
+> instructions such as CSEL and CAS, but it's important to note here that
+> *conditional branch instructions behave exactly as you would expect*.
 > 
->> +	for (i = 0; i < page_count; i++) {
->> +		char *src = phys_to_virt((pb[i].pfn << HV_HYP_PAGE_SHIFT)
->> +					 + pb[i].offset);
->> +		u32 len = pb[i].len;
->> +
->> +		dma = dma_map_single(&hv_dev->device, src, len,
->> +				     DMA_TO_DEVICE);
+> <disclaimer; I don't work for Arm so any mistakes here are mine>
 > 
-> dma_map_single can only be used on page baked memory, and if this is
-> using page backed memory you wouldn't need to do thee phys_to_virt
-> tricks.  Can someone explain the mess here in more detail?
-
-Sorry. Could you elaborate the issue? These pages in the pb array are 
-not allocated by DMA API and using dma_map_single() here is to map these 
-pages' address to bounce buffer physical address.
-
+> To reiterate, in the code sequence at the top of this mail, if the compiler
+> emits something along the lines of:
 > 
->>   	struct rndis_device *dev = nvdev->extension;
->>   	struct rndis_request *request = NULL;
->> +	struct hv_device *hv_dev = ((struct net_device_context *)
->> +			netdev_priv(ndev))->device_ctx;
+> 	LDR
+> 	<conditional branch instruction>
+> 	STR
 > 
-> Why not use a net_device_context local variable instead of this cast
-> galore?
+> then the load *will* be ordered before the store, even if the same store
+> instruction is executed regardless of the branch direction. Yes, one can
+> fantasize about a CPU that executes both taken and non-taken paths and
+> figures out that the STR can be hoisted before the load, but that is not
+> allowed by the architecture today.
 > 
+> It's the conditional instructions that are more fun. For example, the CSEL
+> instruction:
+> 
+> 	CSEL	X0, X1, X2, <cond>
+> 
+> basically says:
+> 
+> 	if (cond)
+> 		X0 = X1;
+> 	else
+> 		X0 = X2;
+> 
+> these are just register-register operations, but the idea is that the CPU
+> can predict that "branching event" inside the CSEL instruction and
+> speculatively rename X0 while waiting for the condition to resolve.
+> 
+> So then you can add loads and stores to the mix along the lines of:
+> 
+> 	LDR	X0, [X1]		// X0 = *X1
+> 	CMP	X0, X2
+> 	CSEL	X3, X4, X5, EQ		// X3 = (X0 == X2) ? X4 : X5
+> 	STR	X3, [X6]		// MUST BE ORDERED AFTER THE LOAD
+> 	STR	X7, [X8]		// Can be reordered
+> 
+> (assuming X1, X6, X8 all point to different locations in memory)
+> 
+> So now we have a dependency from the load to the first store, but the
+> interesting part is that the last store is _not_ ordered wrt either of the
+> other two memory accesses, whereas it would be if we used a conditional
+> branch instead of the CSEL. Make sense?
 
-OK. I will update.
+And if I remember correctly, this is why LKMM orders loads in the
+"if" condition only with stores in the "then" and "else" clauses,
+not with stores after the end of the "if" statement.  Or is there
+some case that I am missing?
 
+> Now, obviously the compiler is blissfully unaware that conditional
+> data processing instructions can give rise to dependencies than
+> conditional branches, so the question really is how much do we need to
+> care in the kernel?
+> 
+> My preference is to use load-acquire instead of control dependencies so
+> that we don't have to worry about this, or any future relaxations to the
+> CPU architecture, at all.
 
-Thanks.
+From what I can see, ARMv8 has DMB(LD) and DMB(ST).  Does it have
+something like a DMB(LD,ST) that would act something like powerpc lwsync?
+
+Or are you proposing rewriting the "if" conditions to upgrade
+READ_ONCE() to smp_load_acquire()?  Or something else?
+
+Just trying to find out exactly what you are proposing.  ;-)
+
+						Thanx, Paul
+
+> Jade -- please can you correct me if I got any of this wrong?
+> 
+> Will
