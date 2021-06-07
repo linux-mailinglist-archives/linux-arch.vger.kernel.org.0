@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA9339D43E
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 07:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3A939D443
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 07:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbhFGFKm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 01:10:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46720 "EHLO mail.kernel.org"
+        id S229449AbhFGFPm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 01:15:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51032 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229449AbhFGFKl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 7 Jun 2021 01:10:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B11E26124B;
-        Mon,  7 Jun 2021 05:08:50 +0000 (UTC)
+        id S229436AbhFGFPl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 01:15:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 32BDB6124C;
+        Mon,  7 Jun 2021 05:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623042530;
-        bh=ePvPoJu7u2KF56QW4Q7kJycD7Jjr2uDNDzVglnc3XU0=;
+        s=k20201202; t=1623042831;
+        bh=fI16kZ5xsiBLuH71xO2b3UcXdOFx6qOOxVT9QnYCIC4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=o9lsnnTyWoR4siDcA7FUyweDVqt9Ajkftze8FaZhREHtUNakOlJZcj5Q7sjIZhZDj
-         WsfvZDoL7XzszCbx1DB+b32Tsobfkw+cWhf2k+eAQ6VWI6o3tcNJPDHTHCS/PNIF3y
-         vBU4w9tHCGrsSviywD9w73T0sKIAPXY1E7DTCYnUZ2dn2JCMOdaTRCRofHoWkmMlKD
-         YReEw06rGftHBqO2pD5PonOQzAOCSU3/CwHXWKgE0qfkr3DLIWnGQezjUknXqh53dL
-         95XpdsB8O/diiCUSXgS68pkFHmdU4WE0B1jmQrrOSZmWwVrlJ7kZRqI9EG5H0zGs4s
-         rkQYYrZ6EBapQ==
-Received: by mail-lj1-f181.google.com with SMTP id e2so20429142ljk.4;
-        Sun, 06 Jun 2021 22:08:50 -0700 (PDT)
-X-Gm-Message-State: AOAM533I0QC+OE4Oc39ynYuo2yHr6Fy8XyQcQHIRmQRPfvgRNRqkRi3i
-        9xTXw779SugKu/ce5udHpwlKzsTAxLbF3xqzTxQ=
-X-Google-Smtp-Source: ABdhPJwrbAiToCZ36Puj+93fheIEDlSZSjWJWUuQx1ObP9tpcF0aS0MdXZsUIPy3dkcMXDwBigg12WU2xvjTqL6lYS4=
-X-Received: by 2002:a05:651c:502:: with SMTP id o2mr13427682ljp.105.1623042528848;
- Sun, 06 Jun 2021 22:08:48 -0700 (PDT)
+        b=c8IbR0eDW0Mrv5I/Nxvv48mvUrrViPxO8hdlZVl9Ro7DFNosrIVTj3PzX42y1UzZB
+         LqwjFaJGc2A4XpW9W2+8QfE5XzzLInaZgn5Q9YJ/bN26M5m4xi8QC6Ti6ShYi7feKI
+         gHpxb3GFh4etkH3Yw27MxEYi90JSUJcf9l3R5acjqVYLa/L0BLmoVpwNHPJodSpQj0
+         2n8qOOhrXI1v/QRNgx+Dn8ywFTs8B6pkWIuzJFTfiHXYJDxpMbk1oYNuNwAQ648id0
+         LnKAitk8Q7+wxAWteKWMS5XQ5w1Vq0BIMA0e0eYoG2oX0j36hw1NpBRA5WshFYGQBZ
+         MWDsoXrAIDiSQ==
+Received: by mail-lj1-f175.google.com with SMTP id e2so20443366ljk.4;
+        Sun, 06 Jun 2021 22:13:51 -0700 (PDT)
+X-Gm-Message-State: AOAM530UtkRJQiPs/1EXitj2y59cDTrTl2s7sASc1jesIHJJO9YHq0qU
+        R5m7WdTzrCAbhV7Yh2yJR77sYG7HOiGTLBtnXQg=
+X-Google-Smtp-Source: ABdhPJyL1o4ghZz6BFG+zxEk3qS+UkdAZ3Jr3K5rSeIpg78hW4DQRsJVD2T1KKAUFcytnQQiEunN0AUAQqsb5ElIACk=
+X-Received: by 2002:a2e:b5d8:: with SMTP id g24mr13515380ljn.115.1623042829378;
+ Sun, 06 Jun 2021 22:13:49 -0700 (PDT)
 MIME-Version: 1.0
 References: <mhng-a5f8374f-350b-4c13-86e8-c6aa5e697454@palmerdabbelt-glaptop>
  <mhng-c0406cea-776b-49d2-a223-13a83d3a7433@palmerdabbelt-glaptop>
@@ -39,9 +39,9 @@ References: <mhng-a5f8374f-350b-4c13-86e8-c6aa5e697454@palmerdabbelt-glaptop>
  <CAJF2gTSgC2+ULpfSQKvan7phPf8VT+nxUiekfpHELNjsQYo=CA@mail.gmail.com> <CO6PR04MB7812D075519BCFBAF744DE7D8D389@CO6PR04MB7812.namprd04.prod.outlook.com>
 In-Reply-To: <CO6PR04MB7812D075519BCFBAF744DE7D8D389@CO6PR04MB7812.namprd04.prod.outlook.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 7 Jun 2021 13:08:36 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSdPgpr-X=dQbHNTp8uTdWzXD1XP6aCD60kq_4HULvjWw@mail.gmail.com>
-Message-ID: <CAJF2gTSdPgpr-X=dQbHNTp8uTdWzXD1XP6aCD60kq_4HULvjWw@mail.gmail.com>
+Date:   Mon, 7 Jun 2021 13:13:37 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRc_1nt9rMJNOMwU-j6etUhjuPxTYCRU8utxz=JHpUtgA@mail.gmail.com>
+Message-ID: <CAJF2gTRc_1nt9rMJNOMwU-j6etUhjuPxTYCRU8utxz=JHpUtgA@mail.gmail.com>
 Subject: Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
 To:     Anup Patel <Anup.Patel@wdc.com>
 Cc:     Atish Patra <atishp@atishpatra.org>,
@@ -61,6 +61,9 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
+
+:
+
 
 On Mon, Jun 7, 2021 at 12:47 PM Anup Patel <Anup.Patel@wdc.com> wrote:
 >
@@ -339,23 +342,6 @@ On Mon, Jun 7, 2021 at 12:47 PM Anup Patel <Anup.Patel@wdc.com> wrote:
 > The problem for Allwinner D1 is even worst than I thought. If such critical
 > high through-put devices are not cache coherent with CPU then I am
 > speechless about Allwinner D1 situation.
-Allwinner D1 is a cost-down product and there is no cache coherent
-device at all. Cache coherent interconnect will increase the chip
-design cost and the performance is enough in their scenario.
-
-So that why we need Srong Order + noncache & Weak Order + noncache to
-optimization.
-
-From T-HEAD side we could privide two kinds of solution of DMA coherent.
- - Let SOC vendor update coherent interconnect, and our CPU could
-support coherent protocal.
- - Let SOC vendor connect their DMA device with our CPU LL cache
-coherent interface.
-
-But we can't force them do that. They want how my origin soc works
-then make it work with your RV core. They know trade off coherency or
-non-coherency in their busisness scenario.
-
 >
 > > And that will triple the memory physical address which can't be accepted by
 > > our users from the hardware design cost view.
@@ -372,9 +358,6 @@ non-coherency in their busisness scenario.
 >
 > Unfortunately, the higher order bits which your implementation uses is
 > not for SoC vendor use as-per the RISC-V privilege spec.
-For a while, I had placed my hopes on C-bit, but my fantasy was
-disillusioned. -_-!
-
 >
 > >
 > > #ifndef _CACHE_CACHABLE_NO_WA
@@ -406,7 +389,8 @@ disillusioned. -_-!
 > We are trying to find a workable solution here so that we don't have
 > to deal with custom PTE attributes which are reserved for RISC-V priv
 > specification only.
-Thank you for your hard work in this regard, sincerely.
+How do think about my new patch of custom PTE attributes?
+https://lore.kernel.org/linux-riscv/610849b6f66e8d5a9653c9f62f46c48d@mailhost.ics.forth.gr/T/#mdc0dacba57346b5ac59a01961495c132b93cfcdb
 
 >
 > Regards,
