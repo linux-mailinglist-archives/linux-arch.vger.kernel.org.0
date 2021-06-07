@@ -2,105 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E8039DA2B
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 12:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E756E39DB3A
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 13:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbhFGKyP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 06:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbhFGKyP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Jun 2021 06:54:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682ACC061766;
-        Mon,  7 Jun 2021 03:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CilZXOP9zbhHcchPXMt+rpxQDZmaLzPt/6xhb1HEpow=; b=GuU3QdJoLbWCt1gG3CAPMW3Zoa
-        F319FAFLlxq50vE0gQFdzvBWeffQ7HgcVTs5T8PGTy/lwRkUqdCAkjPK2cwkAsdIJpXyfVenNVsIV
-        EDVX34zo/5rFlvFbTUlbUSp8q/MRci2vDzKZQgp7DQafbk8OhN7y2Sr1eVpDre/d8gCwKricdu573
-        HlWAQJQzAMRtv0BlIErGybNmfEDx5PhSh3yTEBynjtRmDAlLdLryC3P+exp/kChx8HDlK5RYwJEK4
-        ptkX7km2u4UzJc1gwHNRQ/e/erpSSq4kyEfxQ/O7Wv9retxft+Iil9qIwJ5IGdM1i+/VCo0T0fEmo
-        y7gZMiBA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lqCra-004MYx-Dq; Mon, 07 Jun 2021 10:52:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C900430018A;
-        Mon,  7 Jun 2021 12:52:15 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B17102D4D6621; Mon,  7 Jun 2021 12:52:15 +0200 (CEST)
-Date:   Mon, 7 Jun 2021 12:52:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
+        id S231177AbhFGL2a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 07:28:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:59188 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230139AbhFGL2a (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 07:28:30 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EB7511063;
+        Mon,  7 Jun 2021 04:26:38 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCD983F73D;
+        Mon,  7 Jun 2021 04:26:37 -0700 (PDT)
+Date:   Mon, 7 Jun 2021 12:25:38 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-arch@vger.kernel.org,
+        libc-alpha@sourceware.org, Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
         Will Deacon <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <YL36XzUxfs2YGlnw@hirez.programming.kicks-ass.net>
-References: <20210605145739.GB1712909@rowland.harvard.edu>
- <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
- <20210606012903.GA1723421@rowland.harvard.edu>
- <20210606115336.GS18427@gate.crashing.org>
- <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com>
- <20210606184021.GY18427@gate.crashing.org>
- <CAHk-=wjEHbGifWgA+04Y4_m43s-o+3bXpL5qPQL3ECg+86XuLg@mail.gmail.com>
- <20210606195242.GA18427@gate.crashing.org>
- <CAHk-=wgd+Gx9bcmTwxhHbPq=RYb_A_gf=GcmUNOU3vYR1RBxbA@mail.gmail.com>
- <20210606202616.GC18427@gate.crashing.org>
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 2/2] arm64: Enable BTI for main executable as well as
+ the interpreter
+Message-ID: <20210607112536.GI4187@arm.com>
+References: <20210521144621.9306-1-broonie@kernel.org>
+ <20210521144621.9306-3-broonie@kernel.org>
+ <20210603154034.GH4187@arm.com>
+ <20210603165134.GF4257@sirena.org.uk>
+ <20210603180429.GI20338@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210606202616.GC18427@gate.crashing.org>
+In-Reply-To: <20210603180429.GI20338@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jun 06, 2021 at 03:26:16PM -0500, Segher Boessenkool wrote:
-> On Sun, Jun 06, 2021 at 01:11:53PM -0700, Linus Torvalds wrote:
-
-> > We are very used to just making the compiler generate the code we
-> > need. That is, fundamentally, what any use of inline asm is all about.
-> > We want the compiler to generate all the common cases and all the
-> > regular instructions.
+On Thu, Jun 03, 2021 at 07:04:31PM +0100, Catalin Marinas via Libc-alpha wrote:
+> On Thu, Jun 03, 2021 at 05:51:34PM +0100, Mark Brown wrote:
+> > On Thu, Jun 03, 2021 at 04:40:35PM +0100, Dave Martin wrote:
+> > > Do we know how libcs will detect that they don't need to do the
+> > > mprotect() calls?  Do we need a detection mechanism at all?
+> > > 
+> > > Ignoring certain errors from mprotect() when ld.so is trying to set
+> > > PROT_BTI on the main executable's code pages is probably a reasonable,
+> > > backwards-compatible compromise here, but it seems a bit wasteful.
 > > 
-> > The conditional branch itself - and the instructions leading up to it
-> > - are exactly those "common regular instructions" that we'd want the
-> > compiler to generate. That is in fact more true here than for most
-> > inline asm, exactly because there are so many different possible
-> > combinations of conditional branches (equal, not equal, less than,..)
-> > and so many ways to generate the code that generates the condition.
-> > 
-> > So we are much better off letting the compiler do all that for us -
-> > it's very much what the compiler is good at.
+> > I think the theory was that they would just do the mprotect() calls and
+> > ignore any errors as they currently do, or declare that they depend on a
+> > new enough kernel version I guess (not an option for glibc but might be
+> > for others which didn't do BTI yet).
 > 
-> Yes, exactly.
-> 
-> I am saying that if you depend on that some C code you write will result
-> in some particular machine code, without actually *forcing* the compiler
-> to output that exact machine code, then you will be disappointed.  Maybe
-> not today, and maybe it will take years, if you are lucky.
-> 
-> (s/forcing/instructing/ of course, compilers have feelings too!)
+> I think we discussed the possibility of an AT_FLAGS bit. Until recently,
+> this field was 0 but it gained a new bit now. If we are to expose this
+> to arch-specific things, it may need some reservations. Anyway, that's
+> an optimisation that can be added subsequently.
 
-And hence the request for a language extension. Both compilers have a
-vast array of language extensions that are outside of the C spec (thank
-you!), so can we please get one more?
+I suppose so, but AT_FLAGS doesn't seem appropriate somehow.
 
+I wonder why we suddenly start considering adding a flag to AT_FLAGS
+every few months, when it had sat empty for decades.  This may say
+something about the current health of the kernel ABI, but I'm not sure
+exactly what.
 
+I think having mprotect() fail in a predictable way may be preferable
+for now: glibc still only needs to probe with a single call and could
+cache the knowledge after that.  Code outside libc / ld.so seems quite
+unlikely to care about this.
+
+Since only the executable segment(s) of the main binary need to be
+protected, this should require only a very small number of mprotect()
+calls in normal situations.  Although it feels a bit cruddy as a design,
+cost-wise I think that extra overhead would be swamped by other noise in
+realistic scenarios.  Often, there is just a single executable segment,
+so the common case would probably require just one mprotect() call.  I
+don't know if it ever gets much more complicated when using the
+standard linker scripts.
+
+Any ideas on how we would document this behaviour?  The kernel and libc
+behaviour are 100% clear: you _are_ allowed to twiddle PROT_BTI on
+executable mappings, and there is no legitimate (or even useful) reason
+to disallow this.  It's only systemd deliberately breaking the API that
+causes the behaviour seem by "userspace" to vary.
+
+Cheers
+---Dave
