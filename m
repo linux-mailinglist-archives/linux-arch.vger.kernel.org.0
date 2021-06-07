@@ -2,233 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 206D839E0BA
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 17:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C852439E16A
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 18:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbhFGPlo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 11:41:44 -0400
-Received: from mga18.intel.com ([134.134.136.126]:38495 "EHLO mga18.intel.com"
+        id S230514AbhFGQEu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 12:04:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38578 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230319AbhFGPlo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 7 Jun 2021 11:41:44 -0400
-IronPort-SDR: 625sZc+yuCfYs0SBsG8HP5awRZEVJf9INIKxBPu24NaUALAAmw9xQ0d0I+4nRK49dnhjO/V3Hn
- EeuJbHCbFgXQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="191973139"
-X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
-   d="scan'208";a="191973139"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 08:39:49 -0700
-IronPort-SDR: JEulWHbYEZ0vI+ChaCM0Jf62WFEqLfTtyUICPiiKAbbMQemuErGwBHuNSraEJ79byY2DnDuCVG
- Uirel1mH5lCQ==
-X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
-   d="scan'208";a="449130585"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 08:39:42 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lqHLm-000I2j-6H; Mon, 07 Jun 2021 18:39:38 +0300
-Date:   Mon, 7 Jun 2021 18:39:38 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Alexander Lobakin <alobakin@pm.me>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Richard Weinberger <richard@nod.at>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Will Deacon <will@kernel.org>, Yogesh Lal <ylal@codeaurora.org>
-Subject: Re: [PATCH] all: remove GENERIC_FIND_FIRST_BIT
-Message-ID: <YL49uhT6e2TlWzu8@smile.fi.intel.com>
-References: <20210510233421.18684-1-yury.norov@gmail.com>
+        id S230294AbhFGQEu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 12:04:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B3CB76108E;
+        Mon,  7 Jun 2021 16:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623081779;
+        bh=QS7X75IN+igUoh1ptcIfo9XF7KyeMHZPP9cfmN4i6vg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ByQC6QohKF5NbpdJsLjBDos9tGrBfUNfROouf5Wv6sJwMLkrKDcIVUkFbcwBDzxe3
+         GaJnCcYKqaW3reykXCzDW5fZX3tYWWg8RWmuWG0ZOR3YPEr6Tgp3Ttng6lusnts3WO
+         AJB7x2NEAIqqwGmQjYf1oPtFMoCn26YrE2+uu1rDDGvZZtgwu6qtrNDUmYx6nFwCdI
+         edvob/e1tS0HkyCOZ4LVCz5HHMycMEdOHu2VP3mtoF/Qb2l9li42+Y5GEPv05LHO5l
+         oKGNF3C1cKbPEz6+DnWxroKBChCTvQcwArfAa2JiFDR0/eyN9OyDNjZZO5t2mtxRez
+         ShSt1jop8LwPQ==
+Date:   Mon, 7 Jun 2021 17:02:53 +0100
+From:   Will Deacon <will@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+Message-ID: <20210607160252.GA7580@willie-the-truck>
+References: <20210605145739.GB1712909@rowland.harvard.edu>
+ <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210606012903.GA1723421@rowland.harvard.edu>
+ <20210606115336.GS18427@gate.crashing.org>
+ <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com>
+ <20210606182213.GA1741684@rowland.harvard.edu>
+ <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
+ <YL34NZ12mKoiSLvu@hirez.programming.kicks-ass.net>
+ <20210607115234.GA7205@willie-the-truck>
+ <20210607152533.GQ4397@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210510233421.18684-1-yury.norov@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210607152533.GQ4397@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 10, 2021 at 04:34:21PM -0700, Yury Norov wrote:
-> In the 5.12 cycle we enabled the GENERIC_FIND_FIRST_BIT config option
-> for ARM64 and MIPS. It increased performance and shrunk .text size; and
-> so far I didn't receive any negative feedback on the change.
+Hi Paul,
+
+On Mon, Jun 07, 2021 at 08:25:33AM -0700, Paul E. McKenney wrote:
+> On Mon, Jun 07, 2021 at 12:52:35PM +0100, Will Deacon wrote:
+> > It's the conditional instructions that are more fun. For example, the CSEL
+> > instruction:
+> > 
+> > 	CSEL	X0, X1, X2, <cond>
+> > 
+> > basically says:
+> > 
+> > 	if (cond)
+> > 		X0 = X1;
+> > 	else
+> > 		X0 = X2;
+> > 
+> > these are just register-register operations, but the idea is that the CPU
+> > can predict that "branching event" inside the CSEL instruction and
+> > speculatively rename X0 while waiting for the condition to resolve.
+> > 
+> > So then you can add loads and stores to the mix along the lines of:
+> > 
+> > 	LDR	X0, [X1]		// X0 = *X1
+> > 	CMP	X0, X2
+> > 	CSEL	X3, X4, X5, EQ		// X3 = (X0 == X2) ? X4 : X5
+> > 	STR	X3, [X6]		// MUST BE ORDERED AFTER THE LOAD
+> > 	STR	X7, [X8]		// Can be reordered
+> > 
+> > (assuming X1, X6, X8 all point to different locations in memory)
+> > 
+> > So now we have a dependency from the load to the first store, but the
+> > interesting part is that the last store is _not_ ordered wrt either of the
+> > other two memory accesses, whereas it would be if we used a conditional
+> > branch instead of the CSEL. Make sense?
 > 
-> https://lore.kernel.org/linux-arch/20210225135700.1381396-1-yury.norov@gmail.com/
+> And if I remember correctly, this is why LKMM orders loads in the
+> "if" condition only with stores in the "then" and "else" clauses,
+> not with stores after the end of the "if" statement.  Or is there
+> some case that I am missing?
+
+It's not clear to me that such a restriction prevents the compiler from
+using any of the arm64 conditional instructions in place of the conditional
+branch in such a way that you end up with an "independent" store in the
+assembly output constructed from two stores on the "then" and "else" paths
+which the compiler determined where the same.
+
+> > Now, obviously the compiler is blissfully unaware that conditional
+> > data processing instructions can give rise to dependencies than
+> > conditional branches, so the question really is how much do we need to
+> > care in the kernel?
+> > 
+> > My preference is to use load-acquire instead of control dependencies so
+> > that we don't have to worry about this, or any future relaxations to the
+> > CPU architecture, at all.
 > 
-> I think it's time to make all architectures use find_{first,last}_bit()
-> unconditionally and remove the corresponding config option.
+> From what I can see, ARMv8 has DMB(LD) and DMB(ST).  Does it have
+> something like a DMB(LD,ST) that would act something like powerpc lwsync?
 > 
-> This patch doesn't introduce functional changes for arc, arm64, mips,
-> s390 and x86 because they already enable GENERIC_FIND_FIRST_BIT. There
-> will be no changes for arm because it implements find_{first,last}_bit
-> in arch code. For other architectures I expect improvement both in
-> performance and .text size.
-
-Subject like s/all:/arch:/.
-
-> It would be great if people with an access to real hardware would share
-> the output of bloat-o-meter and lib/find_bit_benchmark.
-
-This is rather comment (should be below cutter '---' line).
-
-Anyway, seems good to my by the code:
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  arch/arc/Kconfig                  |  1 -
->  arch/arm64/Kconfig                |  1 -
->  arch/mips/Kconfig                 |  1 -
->  arch/s390/Kconfig                 |  1 -
->  arch/x86/Kconfig                  |  1 -
->  arch/x86/um/Kconfig               |  1 -
->  include/asm-generic/bitops/find.h | 12 ------------
->  lib/Kconfig                       |  3 ---
->  8 files changed, 21 deletions(-)
+> Or are you proposing rewriting the "if" conditions to upgrade
+> READ_ONCE() to smp_load_acquire()?  Or something else?
 > 
-> diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
-> index bc8d6aecfbbd..9c991ba50db3 100644
-> --- a/arch/arc/Kconfig
-> +++ b/arch/arc/Kconfig
-> @@ -19,7 +19,6 @@ config ARC
->  	select COMMON_CLK
->  	select DMA_DIRECT_REMAP
->  	select GENERIC_ATOMIC64 if !ISA_ARCV2 || !(ARC_HAS_LL64 && ARC_HAS_LLSC)
-> -	select GENERIC_FIND_FIRST_BIT
->  	# for now, we don't need GENERIC_IRQ_PROBE, CONFIG_GENERIC_IRQ_CHIP
->  	select GENERIC_IRQ_SHOW
->  	select GENERIC_PCI_IOMAP
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index e09a9591af45..9d5b36f7d981 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -108,7 +108,6 @@ config ARM64
->  	select GENERIC_CPU_AUTOPROBE
->  	select GENERIC_CPU_VULNERABILITIES
->  	select GENERIC_EARLY_IOREMAP
-> -	select GENERIC_FIND_FIRST_BIT
->  	select GENERIC_IDLE_POLL_SETUP
->  	select GENERIC_IRQ_IPI
->  	select GENERIC_IRQ_PROBE
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index b72458215d20..3ddae7918386 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -27,7 +27,6 @@ config MIPS
->  	select GENERIC_ATOMIC64 if !64BIT
->  	select GENERIC_CMOS_UPDATE
->  	select GENERIC_CPU_AUTOPROBE
-> -	select GENERIC_FIND_FIRST_BIT
->  	select GENERIC_GETTIMEOFDAY
->  	select GENERIC_IOMAP
->  	select GENERIC_IRQ_PROBE
-> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-> index c1ff874e6c2e..3a10ceb8a097 100644
-> --- a/arch/s390/Kconfig
-> +++ b/arch/s390/Kconfig
-> @@ -125,7 +125,6 @@ config S390
->  	select GENERIC_CPU_AUTOPROBE
->  	select GENERIC_CPU_VULNERABILITIES
->  	select GENERIC_ENTRY
-> -	select GENERIC_FIND_FIRST_BIT
->  	select GENERIC_GETTIMEOFDAY
->  	select GENERIC_PTDUMP
->  	select GENERIC_SMP_IDLE_THREAD
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index b83364a15d34..6a7d8305365e 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -123,7 +123,6 @@ config X86
->  	select GENERIC_CPU_VULNERABILITIES
->  	select GENERIC_EARLY_IOREMAP
->  	select GENERIC_ENTRY
-> -	select GENERIC_FIND_FIRST_BIT
->  	select GENERIC_IOMAP
->  	select GENERIC_IRQ_EFFECTIVE_AFF_MASK	if SMP
->  	select GENERIC_IRQ_MATRIX_ALLOCATOR	if X86_LOCAL_APIC
-> diff --git a/arch/x86/um/Kconfig b/arch/x86/um/Kconfig
-> index 95d26a69088b..40d6a06e41c8 100644
-> --- a/arch/x86/um/Kconfig
-> +++ b/arch/x86/um/Kconfig
-> @@ -8,7 +8,6 @@ endmenu
->  
->  config UML_X86
->  	def_bool y
-> -	select GENERIC_FIND_FIRST_BIT
->  
->  config 64BIT
->  	bool "64-bit kernel" if "$(SUBARCH)" = "x86"
-> diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
-> index 0d132ee2a291..8a7b70c79e15 100644
-> --- a/include/asm-generic/bitops/find.h
-> +++ b/include/asm-generic/bitops/find.h
-> @@ -95,8 +95,6 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
->  }
->  #endif
->  
-> -#ifdef CONFIG_GENERIC_FIND_FIRST_BIT
-> -
->  /**
->   * find_first_bit - find the first set bit in a memory region
->   * @addr: The address to start the search at
-> @@ -136,16 +134,6 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
->  
->  	return _find_first_zero_bit(addr, size);
->  }
-> -#else /* CONFIG_GENERIC_FIND_FIRST_BIT */
-> -
-> -#ifndef find_first_bit
-> -#define find_first_bit(addr, size) find_next_bit((addr), (size), 0)
-> -#endif
-> -#ifndef find_first_zero_bit
-> -#define find_first_zero_bit(addr, size) find_next_zero_bit((addr), (size), 0)
-> -#endif
-> -
-> -#endif /* CONFIG_GENERIC_FIND_FIRST_BIT */
->  
->  #ifndef find_last_bit
->  /**
-> diff --git a/lib/Kconfig b/lib/Kconfig
-> index a38cc61256f1..8346b3181214 100644
-> --- a/lib/Kconfig
-> +++ b/lib/Kconfig
-> @@ -59,9 +59,6 @@ config GENERIC_STRNLEN_USER
->  config GENERIC_NET_UTILS
->  	bool
->  
-> -config GENERIC_FIND_FIRST_BIT
-> -	bool
-> -
->  source "lib/math/Kconfig"
->  
->  config NO_GENERIC_PCI_IOPORT_MAP
-> -- 
-> 2.25.1
-> 
+> Just trying to find out exactly what you are proposing.  ;-)
 
--- 
-With Best Regards,
-Andy Shevchenko
+Some options are:
 
+ (1) Do nothing until something actually goes wrong (and hope we spot/debug it)
 
+ (2) Have volatile_if force a conditional branch, assuming that it solves
+     the problem and doesn't hurt codegen (I still haven't convinced myself
+     for either case)
+
+ (3) Upgrade READ_ONCE() to RCpc acquire, relaxed atomic RMWs to RCsc
+     acquire on arm64
+
+ (4) Introduce e.g. READ_ONCE_CTRL(), atomic_add_return_ctrl() etc
+     specifically for control dependencies and upgrade only those for
+     arm64
+
+ (5) Work to get toolchain support for dependency ordering and use that
+
+I'm suggesting (3) or (4) because, honestly, it feels like we're being
+squeezed from both sides with both the compiler and the hardware prepared
+to break control dependencies.
+
+Will
