@@ -2,108 +2,233 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B19FD39E051
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 17:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206D839E0BA
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 17:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbhFGPaB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 11:30:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36598 "EHLO mail.kernel.org"
+        id S230502AbhFGPlo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 11:41:44 -0400
+Received: from mga18.intel.com ([134.134.136.126]:38495 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230212AbhFGP36 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 7 Jun 2021 11:29:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A633B61107;
-        Mon,  7 Jun 2021 15:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623079686;
-        bh=+irQ4OfSn/B6So3CGtbHcUXwW+NtMEimNFyHIBqUBjs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=erJwQ9z21n0vQpmOSUgxYBNBRUEQljLOQvTy2TcYiCKL1RW//dElzpi2Yi1NBQb1m
-         eq3fBeN/ewjvsZPQ8WDg3vzFO+uSci2boCnj77F8B5stCgacfJsc4kKwAjuO8zulOl
-         HfimBd9N/Y5xGG6ywtecZYe9d63Cif0IhTyPdp2j92FTiDp7U8UysdARbOFR/IWp48
-         5mkUT23BvsIn0iLOXNtCDeIU68dVuhKEHM7zJMXue1ZWWV6uXq5sdT27gVCJRtW5hB
-         NjrDbSYlid9UZFpcuKcNIAkvuthDlhXHJpXJxIkRdmqnMarz5MhIBB7EyHAwW9ZDBM
-         thMmYpaZoKpUA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7E6175C0395; Mon,  7 Jun 2021 08:28:06 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 08:28:06 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Monakov <amonakov@ispras.ru>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210607152806.GS4397@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210605145739.GB1712909@rowland.harvard.edu>
- <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
- <20210606012903.GA1723421@rowland.harvard.edu>
- <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com>
- <20210606185922.GF7746@tucnak>
- <CAHk-=wis8zq3WrEupCY6wcBeW3bB0WMOzaUkXpb-CsKuxM=6-w@mail.gmail.com>
- <alpine.LNX.2.20.13.2106070017070.7184@monopod.intra.ispras.ru>
- <CAHk-=wjwXs5+SOZGTaZ0bP9nsoA+PymAcGE4CBDVX3edGUcVRg@mail.gmail.com>
- <alpine.LNX.2.20.13.2106070956310.7184@monopod.intra.ispras.ru>
- <CANpmjNMwq6ENUtBunP-rw9ZSrJvZnQw18rQ47U3JuqPEQZsaXA@mail.gmail.com>
+        id S230319AbhFGPlo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 11:41:44 -0400
+IronPort-SDR: 625sZc+yuCfYs0SBsG8HP5awRZEVJf9INIKxBPu24NaUALAAmw9xQ0d0I+4nRK49dnhjO/V3Hn
+ EeuJbHCbFgXQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="191973139"
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="191973139"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 08:39:49 -0700
+IronPort-SDR: JEulWHbYEZ0vI+ChaCM0Jf62WFEqLfTtyUICPiiKAbbMQemuErGwBHuNSraEJ79byY2DnDuCVG
+ Uirel1mH5lCQ==
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="449130585"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 08:39:42 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lqHLm-000I2j-6H; Mon, 07 Jun 2021 18:39:38 +0300
+Date:   Mon, 7 Jun 2021 18:39:38 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Alexander Lobakin <alobakin@pm.me>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Richard Weinberger <richard@nod.at>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Will Deacon <will@kernel.org>, Yogesh Lal <ylal@codeaurora.org>
+Subject: Re: [PATCH] all: remove GENERIC_FIND_FIRST_BIT
+Message-ID: <YL49uhT6e2TlWzu8@smile.fi.intel.com>
+References: <20210510233421.18684-1-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANpmjNMwq6ENUtBunP-rw9ZSrJvZnQw18rQ47U3JuqPEQZsaXA@mail.gmail.com>
+In-Reply-To: <20210510233421.18684-1-yury.norov@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 10:27:10AM +0200, Marco Elver wrote:
-> On Mon, 7 Jun 2021 at 10:02, Alexander Monakov <amonakov@ispras.ru> wrote:
-> > On Sun, 6 Jun 2021, Linus Torvalds wrote:
-> [...]
-> > > On Sun, Jun 6, 2021 at 2:19 PM Alexander Monakov <amonakov@ispras.ru> wrote:
-> [...]
-> > > Btw, since we have compiler people on line, the suggested 'barrier()'
-> > > isn't actually perfect for this particular use:
-> > >
-> > >    #define barrier() __asm__ __volatile__("" : : "i" (__COUNTER__) : "memory")
-> > >
-> > > in the general barrier case, we very much want to have that "memory"
-> > > clobber, because the whole point of the general barrier case is that
-> > > we want to make sure that the compiler doesn't cache memory state
-> > > across it (ie the traditional use was basically what we now use
-> > > "cpu_relax()" for, and you would use it for busy-looping on some
-> > > condition).
-> > >
-> > > In the case of "volatile_if()", we actually would like to have not a
-> > > memory clobber, but a "memory read". IOW, it would be a barrier for
-> > > any writes taking place, but reads can move around it.
-> > >
-> > > I don't know of any way to express that to the compiler. We've used
-> > > hacks for it before (in gcc, BLKmode reads turn into that kind of
-> > > barrier in practice, so you can do something like make the memory
-> > > input to the asm be a big array). But that turned out to be fairly
-> > > unreliable, so now we use memory clobbers even if we just mean "reads
-> > > random memory".
-> >
-> > So the barrier which is a compiler barrier but not a machine barrier is
-> > __atomic_signal_fence(model), but internally GCC will not treat it smarter
-> > than an asm-with-memory-clobber today.
+On Mon, May 10, 2021 at 04:34:21PM -0700, Yury Norov wrote:
+> In the 5.12 cycle we enabled the GENERIC_FIND_FIRST_BIT config option
+> for ARM64 and MIPS. It increased performance and shrunk .text size; and
+> so far I didn't receive any negative feedback on the change.
 > 
-> FWIW, Clang seems to be cleverer about it, and seems to do the optimal
-> thing if I use a __atomic_signal_fence(__ATOMIC_RELEASE):
-> https://godbolt.org/z/4v5xojqaY
+> https://lore.kernel.org/linux-arch/20210225135700.1381396-1-yury.norov@gmail.com/
+> 
+> I think it's time to make all architectures use find_{first,last}_bit()
+> unconditionally and remove the corresponding config option.
+> 
+> This patch doesn't introduce functional changes for arc, arm64, mips,
+> s390 and x86 because they already enable GENERIC_FIND_FIRST_BIT. There
+> will be no changes for arm because it implements find_{first,last}_bit
+> in arch code. For other architectures I expect improvement both in
+> performance and .text size.
 
-Indeed it does!  But I don't know of a guarantee for that helpful
-behavior.
+Subject like s/all:/arch:/.
 
-							Thanx, Paul
+> It would be great if people with an access to real hardware would share
+> the output of bloat-o-meter and lib/find_bit_benchmark.
+
+This is rather comment (should be below cutter '---' line).
+
+Anyway, seems good to my by the code:
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  arch/arc/Kconfig                  |  1 -
+>  arch/arm64/Kconfig                |  1 -
+>  arch/mips/Kconfig                 |  1 -
+>  arch/s390/Kconfig                 |  1 -
+>  arch/x86/Kconfig                  |  1 -
+>  arch/x86/um/Kconfig               |  1 -
+>  include/asm-generic/bitops/find.h | 12 ------------
+>  lib/Kconfig                       |  3 ---
+>  8 files changed, 21 deletions(-)
+> 
+> diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+> index bc8d6aecfbbd..9c991ba50db3 100644
+> --- a/arch/arc/Kconfig
+> +++ b/arch/arc/Kconfig
+> @@ -19,7 +19,6 @@ config ARC
+>  	select COMMON_CLK
+>  	select DMA_DIRECT_REMAP
+>  	select GENERIC_ATOMIC64 if !ISA_ARCV2 || !(ARC_HAS_LL64 && ARC_HAS_LLSC)
+> -	select GENERIC_FIND_FIRST_BIT
+>  	# for now, we don't need GENERIC_IRQ_PROBE, CONFIG_GENERIC_IRQ_CHIP
+>  	select GENERIC_IRQ_SHOW
+>  	select GENERIC_PCI_IOMAP
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index e09a9591af45..9d5b36f7d981 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -108,7 +108,6 @@ config ARM64
+>  	select GENERIC_CPU_AUTOPROBE
+>  	select GENERIC_CPU_VULNERABILITIES
+>  	select GENERIC_EARLY_IOREMAP
+> -	select GENERIC_FIND_FIRST_BIT
+>  	select GENERIC_IDLE_POLL_SETUP
+>  	select GENERIC_IRQ_IPI
+>  	select GENERIC_IRQ_PROBE
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index b72458215d20..3ddae7918386 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -27,7 +27,6 @@ config MIPS
+>  	select GENERIC_ATOMIC64 if !64BIT
+>  	select GENERIC_CMOS_UPDATE
+>  	select GENERIC_CPU_AUTOPROBE
+> -	select GENERIC_FIND_FIRST_BIT
+>  	select GENERIC_GETTIMEOFDAY
+>  	select GENERIC_IOMAP
+>  	select GENERIC_IRQ_PROBE
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index c1ff874e6c2e..3a10ceb8a097 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -125,7 +125,6 @@ config S390
+>  	select GENERIC_CPU_AUTOPROBE
+>  	select GENERIC_CPU_VULNERABILITIES
+>  	select GENERIC_ENTRY
+> -	select GENERIC_FIND_FIRST_BIT
+>  	select GENERIC_GETTIMEOFDAY
+>  	select GENERIC_PTDUMP
+>  	select GENERIC_SMP_IDLE_THREAD
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index b83364a15d34..6a7d8305365e 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -123,7 +123,6 @@ config X86
+>  	select GENERIC_CPU_VULNERABILITIES
+>  	select GENERIC_EARLY_IOREMAP
+>  	select GENERIC_ENTRY
+> -	select GENERIC_FIND_FIRST_BIT
+>  	select GENERIC_IOMAP
+>  	select GENERIC_IRQ_EFFECTIVE_AFF_MASK	if SMP
+>  	select GENERIC_IRQ_MATRIX_ALLOCATOR	if X86_LOCAL_APIC
+> diff --git a/arch/x86/um/Kconfig b/arch/x86/um/Kconfig
+> index 95d26a69088b..40d6a06e41c8 100644
+> --- a/arch/x86/um/Kconfig
+> +++ b/arch/x86/um/Kconfig
+> @@ -8,7 +8,6 @@ endmenu
+>  
+>  config UML_X86
+>  	def_bool y
+> -	select GENERIC_FIND_FIRST_BIT
+>  
+>  config 64BIT
+>  	bool "64-bit kernel" if "$(SUBARCH)" = "x86"
+> diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
+> index 0d132ee2a291..8a7b70c79e15 100644
+> --- a/include/asm-generic/bitops/find.h
+> +++ b/include/asm-generic/bitops/find.h
+> @@ -95,8 +95,6 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+>  }
+>  #endif
+>  
+> -#ifdef CONFIG_GENERIC_FIND_FIRST_BIT
+> -
+>  /**
+>   * find_first_bit - find the first set bit in a memory region
+>   * @addr: The address to start the search at
+> @@ -136,16 +134,6 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+>  
+>  	return _find_first_zero_bit(addr, size);
+>  }
+> -#else /* CONFIG_GENERIC_FIND_FIRST_BIT */
+> -
+> -#ifndef find_first_bit
+> -#define find_first_bit(addr, size) find_next_bit((addr), (size), 0)
+> -#endif
+> -#ifndef find_first_zero_bit
+> -#define find_first_zero_bit(addr, size) find_next_zero_bit((addr), (size), 0)
+> -#endif
+> -
+> -#endif /* CONFIG_GENERIC_FIND_FIRST_BIT */
+>  
+>  #ifndef find_last_bit
+>  /**
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index a38cc61256f1..8346b3181214 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -59,9 +59,6 @@ config GENERIC_STRNLEN_USER
+>  config GENERIC_NET_UTILS
+>  	bool
+>  
+> -config GENERIC_FIND_FIRST_BIT
+> -	bool
+> -
+>  source "lib/math/Kconfig"
+>  
+>  config NO_GENERIC_PCI_IOPORT_MAP
+> -- 
+> 2.25.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
