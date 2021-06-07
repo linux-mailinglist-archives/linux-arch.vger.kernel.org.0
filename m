@@ -2,29 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A686839E67B
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 20:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F44639E6A6
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 20:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbhFGSYv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 14:24:51 -0400
-Received: from gate.crashing.org ([63.228.1.57]:33191 "EHLO gate.crashing.org"
+        id S230374AbhFGS3n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 14:29:43 -0400
+Received: from gate.crashing.org ([63.228.1.57]:40897 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230450AbhFGSYu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 7 Jun 2021 14:24:50 -0400
+        id S230514AbhFGS3m (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 14:29:42 -0400
 Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 157IIP9d017401;
-        Mon, 7 Jun 2021 13:18:25 -0500
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 157INap3017668;
+        Mon, 7 Jun 2021 13:23:36 -0500
 Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 157IINkr017398;
-        Mon, 7 Jun 2021 13:18:23 -0500
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 157INZNS017666;
+        Mon, 7 Jun 2021 13:23:35 -0500
 X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 7 Jun 2021 13:18:23 -0500
+Date:   Mon, 7 Jun 2021 13:23:35 -0500
 From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Alexander Monakov <amonakov@ispras.ru>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jakub Jelinek <jakub@redhat.com>,
         Alan Stern <stern@rowland.harvard.edu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>,
         Andrea Parri <parri.andrea@gmail.com>,
@@ -38,33 +36,39 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-toolchains@vger.kernel.org,
         linux-arch <linux-arch@vger.kernel.org>
 Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210607181823.GH18427@gate.crashing.org>
-References: <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1> <20210606012903.GA1723421@rowland.harvard.edu> <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com> <20210606185922.GF7746@tucnak> <CAHk-=wis8zq3WrEupCY6wcBeW3bB0WMOzaUkXpb-CsKuxM=6-w@mail.gmail.com> <alpine.LNX.2.20.13.2106070017070.7184@monopod.intra.ispras.ru> <CAHk-=wjwXs5+SOZGTaZ0bP9nsoA+PymAcGE4CBDVX3edGUcVRg@mail.gmail.com> <alpine.LNX.2.20.13.2106070956310.7184@monopod.intra.ispras.ru> <20210607175200.GG18427@gate.crashing.org> <alpine.LNX.2.20.13.2106072103320.7184@monopod.intra.ispras.ru>
+Message-ID: <20210607182335.GI18427@gate.crashing.org>
+References: <20210606115336.GS18427@gate.crashing.org> <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com> <20210606184021.GY18427@gate.crashing.org> <CAHk-=wjEHbGifWgA+04Y4_m43s-o+3bXpL5qPQL3ECg+86XuLg@mail.gmail.com> <20210606195242.GA18427@gate.crashing.org> <CAHk-=wgd+Gx9bcmTwxhHbPq=RYb_A_gf=GcmUNOU3vYR1RBxbA@mail.gmail.com> <20210606202616.GC18427@gate.crashing.org> <20210606233729.GN4397@paulmck-ThinkPad-P17-Gen-1> <20210607141242.GD18427@gate.crashing.org> <20210607152712.GR4397@paulmck-ThinkPad-P17-Gen-1>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.LNX.2.20.13.2106072103320.7184@monopod.intra.ispras.ru>
+In-Reply-To: <20210607152712.GR4397@paulmck-ThinkPad-P17-Gen-1>
 User-Agent: Mutt/1.4.2.3i
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 09:07:58PM +0300, Alexander Monakov wrote:
-> On Mon, 7 Jun 2021, Segher Boessenkool wrote:
-> 
-> > > So the barrier which is a compiler barrier but not a machine barrier is
-> > > __atomic_signal_fence(model), but internally GCC will not treat it smarter
-> > > than an asm-with-memory-clobber today.
-> > 
-> > It will do nothing for relaxed ordering, and do blockage for everything
-> > else.  Can it do anything weaker than that?
-> 
-> It's a "blockage instruction" after transitioning to RTL, but before that,
-> on GIMPLE, the compiler sees it properly as a corresponding built-in, and
-> may optimize according to given memory model. And on RTL, well, if anyone
-> cares they'll need to invent RTL representation for it, I guess.
+On Mon, Jun 07, 2021 at 08:27:12AM -0700, Paul E. McKenney wrote:
+> > > > > The barrier() thing can work - all we need to do is to simply make it
+> > > > > impossible for gcc to validly create anything but a conditional
+> > > > > branch.
 
-My question was if anything weaker is *valid* :-)  (And if so, why!)
+> > > What would you suggest as a way of instructing the compiler to emit the
+> > > conditional branch that we are looking for?
+> > 
+> > You write it in the assembler code.
+> > 
+> > Yes, it sucks.  But it is the only way to get a branch if you really
+> > want one.  Now, you do not really need one here anyway, so there may be
+> > some other way to satisfy the actual requirements.
+> 
+> Hmmm...  What do you see Peter asking for that is different than what
+> I am asking for?  ;-)
+
+I don't know what you are referring to, sorry?
+
+I know what you asked for: literally some way to tell the compiler to
+emit a conditional branch.  If that is what you want, the only way to
+make sure that is what you get is by writing exactly that in assembler.
 
 
 Segher
