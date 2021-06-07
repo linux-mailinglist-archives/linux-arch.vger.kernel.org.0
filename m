@@ -2,91 +2,205 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B6439D642
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 09:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED08139D660
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 09:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbhFGHsU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 03:48:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52610 "EHLO mail.kernel.org"
+        id S230191AbhFGHz3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 03:55:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55092 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229436AbhFGHsU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 7 Jun 2021 03:48:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C26596127C;
-        Mon,  7 Jun 2021 07:46:29 +0000 (UTC)
+        id S229436AbhFGHz2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 03:55:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 678746120F;
+        Mon,  7 Jun 2021 07:53:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623051989;
-        bh=2HlV8yHs2q1qjoHRDtJoVGUfxTgO4byPz6D2uYNRljQ=;
+        s=k20201202; t=1623052417;
+        bh=bZf1oPujuHjZMOhIewYXXJEcGVTtrINZZrYSSOjle5w=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FxmLOZM5r4Z7GtFixysiILFJTjRWbjbsEs7+jojonhIuOUMLae2X86XjlksRQ5ItZ
-         Kp2HLKf3hcq7htEBpNBiljaaA0b8EQt5akMDMCJIotNGyl5UPwG+jI6yUpPh3et0b2
-         Nr4zEMKyO2dzXmvFuISpk7OjS+IoUa1mw+c32lciZ1Yz69tEKRHYivY0wXJB8VvxuV
-         2KACYptzrizLvKJH8Ke9yVZ7BXy3dT1r+E+my3CVoV61LYAgNUm5oWIMfGhVgRNc1l
-         GDHIoWE7a8/w4ZcUjJJZHCGPyL6q7GBOTQsOP+QqXJzGgdW7CR6Ol3csV4KeLNJqw8
-         aWtYQYO0/o0yg==
-Received: by mail-lj1-f173.google.com with SMTP id n17so3748857ljg.2;
-        Mon, 07 Jun 2021 00:46:29 -0700 (PDT)
-X-Gm-Message-State: AOAM531y3EwWMFNguwEO8o7tWaGMxeW4MoFgy+rAAi6ocSXDrpekQkLY
-        /Jx1XltuY6cz61rkwSyrwQBNcJzpdfyfVNqmGQA=
-X-Google-Smtp-Source: ABdhPJxL4zA7EQ2YHPHcUCPx8//5Y1q0itGfKI8bjok0Q3XogGDj6ywZVtGkP4ihvSlwi8LNJxqiz/MEyp7tBn9b04E=
-X-Received: by 2002:a2e:900f:: with SMTP id h15mr12585106ljg.285.1623051988136;
- Mon, 07 Jun 2021 00:46:28 -0700 (PDT)
+        b=NNznX+gSK1ubk2X3/IRC/NKUHBNtUpj3pIv/4c2uJBBiJUtAV/KhZcOXzgKlTc197
+         JoaqNhfMIWWrKQn+ytYhGSXvaYtI570te4Vf2QyUsmIwnEioZqlYZoWTtD3s/olZ1r
+         zXU5lkoWfLDBysgxbwtN+RMG+JJ6rSHG187xSFhIHkUpAhqI91/h8j7NLXHV+zL4Ya
+         kzZSX1foXTx99yEqWn2UEdMCZtAFdYIHFVjM5lYuzSOaV0RKUi40RbmSeLfz2PBK7X
+         uWdUT9XRikixdbajY+xQgkc2hyki1enBqAao5zY2bxSkhf1xV+/LbpZIJLfCEA4My/
+         KUsm9jil4LFGg==
+Received: by mail-lj1-f182.google.com with SMTP id d2so16745867ljj.11;
+        Mon, 07 Jun 2021 00:53:37 -0700 (PDT)
+X-Gm-Message-State: AOAM531rfeZGcq1+kM3rTS3rfR4v1pQcp+FkSr78r5f2nc3rP68Z5sD3
+        oo5ksIIUIQJbSowZ8hfeK7+gE0YSgenWzg9cllk=
+X-Google-Smtp-Source: ABdhPJwH/bIcZcv9bYZevLpASI9avmmDzuyYLA4C+R6RK/v/ZYHyxwKOcgETDO+RRKacBwp8wDxom+B3t+B9y1ptv1M=
+X-Received: by 2002:a2e:3506:: with SMTP id z6mr14531480ljz.238.1623052415598;
+ Mon, 07 Jun 2021 00:53:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAJF2gTTjwB4U-NxCtfgMA5aR2HzoQtA8a51W5UM1LHGRbjz9pg@mail.gmail.com>
- <20210519064435.GA3076809@x1> <20210519065352.GA31590@lst.de>
- <CAJF2gTR4FXRbp7oky-ypdVJba6btFHpp-+dPyJStRaQX_-5rzg@mail.gmail.com>
- <29733b0931d9dd6a2f0b6919067c7efe@mailhost.ics.forth.gr> <CAJF2gTTpSbNWS4VLHAu4XsV5-Vos=6R9MmPOx8-yzMFJu=wX4A@mail.gmail.com>
- <a8f2e68dcc1a6eb1ff3b95fcb8d0d0d2@mailhost.ics.forth.gr> <CAJF2gTQuQ5bE6HeGSoNaDynA0o3+KEo4snwft42YGzE=+DjKOQ@mail.gmail.com>
- <20210607062701.GB24060@lst.de> <CAJF2gTRZuER5YbTD=0xWLU0Np6eD8L_z3rZH0i_WXgENUD3nbQ@mail.gmail.com>
- <20210607065108.GA24872@lst.de>
-In-Reply-To: <20210607065108.GA24872@lst.de>
+References: <1622970249-50770-1-git-send-email-guoren@kernel.org>
+ <1622970249-50770-13-git-send-email-guoren@kernel.org> <2490489.OUOj5N01qN@jernej-laptop>
+ <CAJF2gTTDVy89R-gvWUS0sgpX=B14LnH5rDoGP7pv1=OSyJq28Q@mail.gmail.com> <20210607072709.ul4jdvtyspj6t4c6@gilmour>
+In-Reply-To: <20210607072709.ul4jdvtyspj6t4c6@gilmour>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 7 Jun 2021 15:46:16 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR2koLW2si-VsYDh5D9DCX=1e-tGvwgj=MExva94+gC4Q@mail.gmail.com>
-Message-ID: <CAJF2gTR2koLW2si-VsYDh5D9DCX=1e-tGvwgj=MExva94+gC4Q@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Nick Kossifidis <mick@ics.forth.gr>,
-        Drew Fustini <drew@beagleboard.org>,
+Date:   Mon, 7 Jun 2021 15:53:23 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS9+JYBg2dPEwQccNGku4_z_tv0qwgWQiFN8dQcQ=WweQ@mail.gmail.com>
+Message-ID: <CAJF2gTS9+JYBg2dPEwQccNGku4_z_tv0qwgWQiFN8dQcQ=WweQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 09/11] riscv: soc: Initial DTS for Allwinner D1
+ NeZha board
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
         Anup Patel <anup.patel@wdc.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>, wefu@redhat.com,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, Chen-Yu Tsai <wens@csie.org>,
+        Drew Fustini <drew@beagleboard.org>, liush@allwinnertech.com,
         =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+        wefu@redhat.com, linux-riscv <linux-riscv@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Benjamin Koch <snowball@c3pb.de>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        Wei Fu <tekkamanninja@gmail.com>
+        Atish Patra <atish.patra@wdc.com>,
+        Christoph Hellwig <hch@lst.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 7, 2021 at 2:51 PM Christoph Hellwig <hch@lst.de> wrote:
+Thx for the clarification.
+
+On Mon, Jun 7, 2021 at 3:27 PM Maxime Ripard <maxime@cerno.tech> wrote:
 >
-> On Mon, Jun 07, 2021 at 02:41:14PM +0800, Guo Ren wrote:
-> > Double/Triple the size of physical memory regions can't be accepted by
-> > SOC vendors, because it wastes HW resources.
-> > Some cost-down soc interconnects only have 32bit~34bit width of
-> > physical address, are you sure you could force them to expand it? (I
-> > can't)
+> On Mon, Jun 07, 2021 at 11:44:03AM +0800, Guo Ren wrote:
+> > On Mon, Jun 7, 2021 at 12:26 AM Jernej =C5=A0krabec <jernej.skrabec@gma=
+il.com> wrote:
+> > >
+> > > Hi!
+> > >
+> > > I didn't go through all details. After you fix all comments below, yo=
+u should
+> > > run "make dtbs_check" and fix all reported warnings too.
+> > >
+> > > Dne nedelja, 06. junij 2021 ob 11:04:07 CEST je guoren@kernel.org nap=
+isal(a):
+> > > > From: Guo Ren <guoren@linux.alibaba.com>
+> > > >
+> > > > Add initial DTS for Allwinner D1 NeZha board having only essential
+> > > > devices (uart, dummy, clock, reset, clint, plic, etc).
+> > > >
+> > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > > Co-Developed-by: Liu Shaohua <liush@allwinnertech.com>
+> > > > Signed-off-by: Liu Shaohua <liush@allwinnertech.com>
+> > > > Cc: Anup Patel <anup.patel@wdc.com>
+> > > > Cc: Atish Patra <atish.patra@wdc.com>
+> > > > Cc: Christoph Hellwig <hch@lst.de>
+> > > > Cc: Chen-Yu Tsai <wens@csie.org>
+> > > > Cc: Drew Fustini <drew@beagleboard.org>
+> > > > Cc: Maxime Ripard <maxime@cerno.tech>
+> > > > Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> > > > Cc: Wei Fu <wefu@redhat.com>
+> > > > Cc: Wei Wu <lazyparser@gmail.com>
+> > > > ---
+> > > >  arch/riscv/boot/dts/Makefile                       |  1 +
+> > > >  arch/riscv/boot/dts/allwinner/Makefile             |  2 +
+> > > >  .../boot/dts/allwinner/allwinner-d1-nezha-kit.dts  | 29 ++++++++
+> > > >  arch/riscv/boot/dts/allwinner/allwinner-d1.dtsi    | 84
+> > > > ++++++++++++++++++++++ 4 files changed, 116 insertions(+)
+> > > >  create mode 100644 arch/riscv/boot/dts/allwinner/Makefile
+> > > >  create mode 100644 arch/riscv/boot/dts/allwinner/allwinner-d1-nezh=
+a-kit.dts
+> > > > create mode 100644 arch/riscv/boot/dts/allwinner/allwinner-d1.dtsi
+> > > >
+> > > > diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Mak=
+efile
+> > > > index fe996b8..3e7b264 100644
+> > > > --- a/arch/riscv/boot/dts/Makefile
+> > > > +++ b/arch/riscv/boot/dts/Makefile
+> > > > @@ -2,5 +2,6 @@
+> > > >  subdir-y +=3D sifive
+> > > >  subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) +=3D canaan
+> > > >  subdir-y +=3D microchip
+> > > > +subdir-y +=3D allwinner
+> > > >
+> > > >  obj-$(CONFIG_BUILTIN_DTB) :=3D $(addsuffix /, $(subdir-y))
+> > > > diff --git a/arch/riscv/boot/dts/allwinner/Makefile
+> > > > b/arch/riscv/boot/dts/allwinner/Makefile new file mode 100644
+> > > > index 00000000..4adbf4b
+> > > > --- /dev/null
+> > > > +++ b/arch/riscv/boot/dts/allwinner/Makefile
+> > > > @@ -0,0 +1,2 @@
+> > > > +# SPDX-License-Identifier: GPL-2.0
+> > > > +dtb-$(CONFIG_SOC_SUNXI) +=3D allwinner-d1-nezha-kit.dtb
+> > > > diff --git a/arch/riscv/boot/dts/allwinner/allwinner-d1-nezha-kit.d=
+ts
+> > > > b/arch/riscv/boot/dts/allwinner/allwinner-d1-nezha-kit.dts new file=
+ mode
+> > > > 100644
+> > > > index 00000000..cd9f7c9
+> > > > --- /dev/null
+> > > > +++ b/arch/riscv/boot/dts/allwinner/allwinner-d1-nezha-kit.dts
+> > >
+> > > Board DT names are comprised of soc name and board name, in this case=
+ it would
+> > > be "sun20i-d1-nezha-kit.dts"
+> > >
+> > > > @@ -0,0 +1,29 @@
+> > > > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > >
+> > > Usually copyrights are added below spdx id.
+> > >
+> > > > +
+> > > > +/dts-v1/;
+> > > > +
+> > > > +#include "allwinner-d1.dtsi"
+> > > > +
+> > > > +/ {
+> > > > +     #address-cells =3D <2>;
+> > > > +     #size-cells =3D <2>;
+> > >
+> > > This should be part of SoC level DTSI.
+> > >
+> > > > +     model =3D "Allwinner D1 NeZha Kit";
+> > > > +     compatible =3D "allwinner,d1-nezha-kit";
+> > >
+> > > Board specific compatible string should be followed with SoC compatib=
+le, in
+> > > this case "allwinner,sun20i-d1".  You should document it too.
+> > >
+> > > > +
+> > > > +     chosen {
+> > > > +             bootargs =3D "console=3DttyS0,115200";
+> > >
+> > > Above line doesn't belong here. If anything, it should be added dynam=
+ically by
+> > > bootloader.
 > >
-> > > or somewhat dynamic.
-> > How can HW implement with dynamic modifying PMA? What's the granularity?
+> > After discussion, we still want to keep a default value here.
+> > Sometimes we could boot with jtag and parse dtb is hard for gdbinit
+> > script.
+> >
+> > >
+> > > > +             stdout-path =3D &serial0;
+> > > > +     };
+> > > > +
+> > > > +     memory@40000000 {
+> > > > +             device_type =3D "memory";
+> > > > +             reg =3D <0x0 0x40000000 0x0 0x20000000>;
+> > > > +     };
+> > >
+> > > Ditto for whole memory node.
+> >
+> > Ditto
 >
-> I'm just stating the requirements from the Linux DMA perspective.  You
-> also do not need tripple the address space, just double.
+> The thing is that there's never a good value for a default. Let's take
+> the memory node here: what would be a good default? If we want to make
+> it work everywhere it's going to be the lowest amount of memory
+> available on the D1 boards. It's going to be hard to maintain and very
+> likely to be overlooked, resulting in broken boards anyway.
+>
+> If someone is savvy enough to use JTAG, it's not really difficult to
+> modify the DT for their board when they need it.
+okay, I see. I'll follow the rule in the next version of the patchset.
 
-With double, you only got "strong order + non-cache" for the DMA
-descriptor. How about write-combine scenario?
-
-Even, double physical memory address space also wastes HW resources.
+>
+> Maxime
 
 
 
-
---
+--=20
 Best Regards
  Guo Ren
 
