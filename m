@@ -2,152 +2,174 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 727C539E4B9
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 19:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3533039E534
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 19:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbhFGRHK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 13:07:10 -0400
-Received: from mail-wm1-f44.google.com ([209.85.128.44]:39784 "EHLO
-        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbhFGRHJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Jun 2021 13:07:09 -0400
-Received: by mail-wm1-f44.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso114678wmh.4
-        for <linux-arch@vger.kernel.org>; Mon, 07 Jun 2021 10:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OMN53l5kgmJODOqHMs4OIt4N0K7fGpwPftPnoN3Bz5s=;
-        b=ZNM4gYUViZanj9/vAZduPYUXzYtUUR9b86JylUfgSNPzOL9DCNzReHk6Cj3AoQQE0W
-         cxKi298ibi3N+qxRhPVcej0+dn7POuWTWjcze4lDG9iDmifAP45btUNhGmV2NdZn3u63
-         JN8NWG1c3pFkxMIQ/6QlD4wLN4S7dPAzUdiFU3LrxhAsMl3R35s6sLCpG1fW+qJxXOem
-         Gidq9ARTuiQp7V2+IzS1A+jHcXpurImIpMiIUqR3yFOTLNDJmyhORTDS8uNBUHevz2+F
-         taibtSSlxD3v0kH6V6gewsmk24X6UDyy4yflm5UPO/5G8+Rj0DxGH1qBJQrJiGSREZek
-         TvPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OMN53l5kgmJODOqHMs4OIt4N0K7fGpwPftPnoN3Bz5s=;
-        b=nOeVrvN3QXaX8JPHOrEWsqY0LhYwq53jBBJfM2A/4x060OVkuyGJeVbY2fzN0JOoY1
-         WUWMtTF2RgqJH/fcQ6KX9y1AHD5YdkVxrA9yGQz7lZUUBHH2LgfsxY2v0NbPA9Tq49RJ
-         teC6LibRZoGH9JKXGtti7NJgKm6CTnbCcdwdRa195zK9mZsahlnGIavk0t4kqCdlSw28
-         UTmMSWR9lnPN1uKdvDgjEY9g9Hd6BRs5e8vkyiDXghjo1iFmjUi8IZI9Yjf+vGZadO3d
-         XRwGDWMe1E6dG1iorG8/QImw13sNIJAPwaxfLyZ6oa0NM7WuO/SdTHqncSUrkYFyTJ/g
-         s2pA==
-X-Gm-Message-State: AOAM530ZjYS2FtsgNpIJ25WhcOxFg07yS7fEINEpdrhNurwWDuwEV1xJ
-        WmBifRHL6OeJeOEfWVuk9QKwCw==
-X-Google-Smtp-Source: ABdhPJwhWLXmUu+DzAU028r37DJhwCFO6+ropbXNZ4fH0vKHNfRaTXn0Y9djsCFEWN8UMRWk0N5m0g==
-X-Received: by 2002:a7b:c189:: with SMTP id y9mr17858306wmi.106.1623085456693;
-        Mon, 07 Jun 2021 10:04:16 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:a68c:2469:3bfe:52b4])
-        by smtp.gmail.com with ESMTPSA id n8sm14697495wmi.16.2021.06.07.10.04.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 10:04:15 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 19:04:10 +0200
-From:   Marco Elver <elver@google.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Alexander Monakov <amonakov@ispras.ru>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
+        id S230252AbhFGRWk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 13:22:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48250 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230197AbhFGRWk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 13:22:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BF91C6102A;
+        Mon,  7 Jun 2021 17:20:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623086449;
+        bh=r9h4o/kynCaZiF+M69kKU6MUtwBfrU3/DUmwvrKAtmo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LO/fr8cnIuG5uhhmbCDNb9ilsVm6t8t2jCNSthItfooM9ejP4ia8DEGz7vPtxRSi3
+         Zq+5VjYMHwSdxh81XqBHlVf61sYG7uGIedqHg05ag03t0OrknA+fFjY7yBKlUzUzzB
+         uCPKRci0Ad8pjPpeBP4UkRwg6b8DbPbTx+S9/2r3ahAozYgW7BOOHSYuwnCsLPmuHV
+         UFjK0wuYVVMLtEf/6aDU2FUoA1P+EkTRX8TfU/Lb57+xeDpjfQPzUvDtfa2sQ+09Dg
+         5rV3yyfX03KLKMUqIwvRWy8m574kqyat4T+8EjqkagUKJ8GswcpirZCoIHvCTVyQD2
+         XVv6+p1KNXhcg==
+Date:   Mon, 7 Jun 2021 18:20:42 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <YL5Risa6sFgnvvnG@elver.google.com>
-References: <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
- <20210606012903.GA1723421@rowland.harvard.edu>
- <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com>
- <20210606185922.GF7746@tucnak>
- <CAHk-=wis8zq3WrEupCY6wcBeW3bB0WMOzaUkXpb-CsKuxM=6-w@mail.gmail.com>
- <alpine.LNX.2.20.13.2106070017070.7184@monopod.intra.ispras.ru>
- <CAHk-=wjwXs5+SOZGTaZ0bP9nsoA+PymAcGE4CBDVX3edGUcVRg@mail.gmail.com>
- <alpine.LNX.2.20.13.2106070956310.7184@monopod.intra.ispras.ru>
- <CANpmjNMwq6ENUtBunP-rw9ZSrJvZnQw18rQ47U3JuqPEQZsaXA@mail.gmail.com>
- <20210607152806.GS4397@paulmck-ThinkPad-P17-Gen-1>
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        kernel-team@android.com, Li Zefan <lizefan@huawei.com>
+Subject: Re: [PATCH v8 06/19] cpuset: Don't use the cpu_possible_mask as a
+ last resort for cgroup v1
+Message-ID: <20210607172042.GB7650@willie-the-truck>
+References: <20210602164719.31777-1-will@kernel.org>
+ <20210602164719.31777-7-will@kernel.org>
+ <877dj9ees8.mognet@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210607152806.GS4397@paulmck-ThinkPad-P17-Gen-1>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+In-Reply-To: <877dj9ees8.mognet@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 08:28AM -0700, Paul E. McKenney wrote:
-> On Mon, Jun 07, 2021 at 10:27:10AM +0200, Marco Elver wrote:
-> > On Mon, 7 Jun 2021 at 10:02, Alexander Monakov <amonakov@ispras.ru> wrote:
-> > > On Sun, 6 Jun 2021, Linus Torvalds wrote:
-> > [...]
-> > > > On Sun, Jun 6, 2021 at 2:19 PM Alexander Monakov <amonakov@ispras.ru> wrote:
-> > [...]
-> > > > Btw, since we have compiler people on line, the suggested 'barrier()'
-> > > > isn't actually perfect for this particular use:
-> > > >
-> > > >    #define barrier() __asm__ __volatile__("" : : "i" (__COUNTER__) : "memory")
-> > > >
-> > > > in the general barrier case, we very much want to have that "memory"
-> > > > clobber, because the whole point of the general barrier case is that
-> > > > we want to make sure that the compiler doesn't cache memory state
-> > > > across it (ie the traditional use was basically what we now use
-> > > > "cpu_relax()" for, and you would use it for busy-looping on some
-> > > > condition).
-> > > >
-> > > > In the case of "volatile_if()", we actually would like to have not a
-> > > > memory clobber, but a "memory read". IOW, it would be a barrier for
-> > > > any writes taking place, but reads can move around it.
-> > > >
-> > > > I don't know of any way to express that to the compiler. We've used
-> > > > hacks for it before (in gcc, BLKmode reads turn into that kind of
-> > > > barrier in practice, so you can do something like make the memory
-> > > > input to the asm be a big array). But that turned out to be fairly
-> > > > unreliable, so now we use memory clobbers even if we just mean "reads
-> > > > random memory".
-> > >
-> > > So the barrier which is a compiler barrier but not a machine barrier is
-> > > __atomic_signal_fence(model), but internally GCC will not treat it smarter
-> > > than an asm-with-memory-clobber today.
-> > 
-> > FWIW, Clang seems to be cleverer about it, and seems to do the optimal
-> > thing if I use a __atomic_signal_fence(__ATOMIC_RELEASE):
-> > https://godbolt.org/z/4v5xojqaY
+On Fri, Jun 04, 2021 at 06:11:03PM +0100, Valentin Schneider wrote:
+> On 02/06/21 17:47, Will Deacon wrote:
+> > @@ -3322,9 +3322,13 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
+> >
+> >  void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+> >  {
+> > +	const struct cpumask *cs_mask;
+> > +	const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
+> > +
+> >       rcu_read_lock();
+> > -	do_set_cpus_allowed(tsk, is_in_v2_mode() ?
+> > -		task_cs(tsk)->cpus_allowed : cpu_possible_mask);
+> > +	cs_mask = task_cs(tsk)->cpus_allowed;
+> > +	if (is_in_v2_mode() && cpumask_subset(cs_mask, possible_mask))
+> > +		do_set_cpus_allowed(tsk, cs_mask);
 > 
-> Indeed it does!  But I don't know of a guarantee for that helpful
-> behavior.
+> Since the task will still go through the is_cpu_allowed() loop in
+> select_fallback_rq() after this, is the subset check actually required
+> here?
 
-Is there a way we can interpret the standard in such a way that it
-should be guaranteed?
+Yes, I think it's needed. do_set_cpus_allowed() doesn't do any checking
+against the task_cpu_possible_mask, so if we returned to
+select_fallback_rq() with a mask containing a mixture of 32-bit-capable and
+64-bit-only CPUs then we'd end up setting an affinity mask for a 32-bit
+task which contains 64-bit-only cores.
 
-If yes, it should be easy to add tests to the compiler repos for
-snippets that the Linux kernel relies on (if we decide to use
-__atomic_signal_fence() for this).
+> It would have more merit if cpuset_cpus_allowed_fallback() returned whether
+> it actually changed the allowed mask or not, in which case we could branch
+> either to the is_cpu_allowed() loop (as we do unconditionally now), or to
+> the 'state == possible' switch case.
 
-If no, we can still try to add tests to the compiler repos, but may
-receive some push-back at the very latest when some optimization pass
-decides to break it. Because the argument then is that it's well within
-the language standard.
+I think this is a cleanup, so I can include it as a separate patch (see
+below).
 
-Adding language extensions will likely be met with resistance, because
-some compiler folks are afraid of creating language forks (the reason
-why we have '-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang').
-That could be solved if we declare Linux-C a "standard", and finally get
--std=linux or such, at which point asking for "volatile if" directly
-would probably be easier without jumping through hoops.
+Will
 
-The jumping-through-hoops variant would probably be asking for a
-__builtin primitive that allows constructing volatile_if() (if we can't
-bend existing primitives to do what we want).
+--->8
 
-Thanks,
--- Marco
+diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+index 414a8e694413..d2b9c41c8edf 100644
+--- a/include/linux/cpuset.h
++++ b/include/linux/cpuset.h
+@@ -59,7 +59,7 @@ extern void cpuset_wait_for_hotplug(void);
+ extern void cpuset_read_lock(void);
+ extern void cpuset_read_unlock(void);
+ extern void cpuset_cpus_allowed(struct task_struct *p, struct cpumask *mask);
+-extern void cpuset_cpus_allowed_fallback(struct task_struct *p);
++extern bool cpuset_cpus_allowed_fallback(struct task_struct *p);
+ extern nodemask_t cpuset_mems_allowed(struct task_struct *p);
+ #define cpuset_current_mems_allowed (current->mems_allowed)
+ void cpuset_init_current_mems_allowed(void);
+@@ -188,8 +188,9 @@ static inline void cpuset_cpus_allowed(struct task_struct *p,
+        cpumask_copy(mask, task_cpu_possible_mask(p));
+ }
+ 
+-static inline void cpuset_cpus_allowed_fallback(struct task_struct *p)
++static inline bool cpuset_cpus_allowed_fallback(struct task_struct *p)
+ {
++       return false;
+ }
+ 
+ static inline nodemask_t cpuset_mems_allowed(struct task_struct *p)
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 4e7c271e3800..a6bab2259f98 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -3327,17 +3327,22 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
+  * which will not contain a sane cpumask during cases such as cpu hotplugging.
+  * This is the absolute last resort for the scheduler and it is only used if
+  * _every_ other avenue has been traveled.
++ *
++ * Returns true if the affinity of @tsk was changed, false otherwise.
+  **/
+ 
+-void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
++bool cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+ {
+        const struct cpumask *cs_mask;
++       bool changed = false;
+        const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
+ 
+        rcu_read_lock();
+        cs_mask = task_cs(tsk)->cpus_allowed;
+-       if (is_in_v2_mode() && cpumask_subset(cs_mask, possible_mask))
++       if (is_in_v2_mode() && cpumask_subset(cs_mask, possible_mask)) {
+                do_set_cpus_allowed(tsk, cs_mask);
++               changed = true;
++       }
+        rcu_read_unlock();
+ 
+        /*
+@@ -3357,6 +3362,7 @@ void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+         * select_fallback_rq() will fix things ups and set cpu_possible_mask
+         * if required.
+         */
++       return changed;
+ }
+ 
+ void __init cpuset_init_current_mems_allowed(void)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index fc7de4f955cf..9d7a74a07632 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2951,8 +2951,7 @@ static int select_fallback_rq(int cpu, struct task_struct *p)
+                /* No more Mr. Nice Guy. */
+                switch (state) {
+                case cpuset:
+-                       if (IS_ENABLED(CONFIG_CPUSETS)) {
+-                               cpuset_cpus_allowed_fallback(p);
++                       if (cpuset_cpus_allowed_fallback(p)) {
+                                state = possible;
+                                break;
+                        }
+
