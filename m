@@ -2,92 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E756E39DB3A
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 13:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE2239DBBE
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 13:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbhFGL2a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 07:28:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:59188 "EHLO foss.arm.com"
+        id S230127AbhFGLyc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 07:54:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230139AbhFGL2a (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 7 Jun 2021 07:28:30 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EB7511063;
-        Mon,  7 Jun 2021 04:26:38 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCD983F73D;
-        Mon,  7 Jun 2021 04:26:37 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 12:25:38 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-arch@vger.kernel.org,
-        libc-alpha@sourceware.org, Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 2/2] arm64: Enable BTI for main executable as well as
- the interpreter
-Message-ID: <20210607112536.GI4187@arm.com>
-References: <20210521144621.9306-1-broonie@kernel.org>
- <20210521144621.9306-3-broonie@kernel.org>
- <20210603154034.GH4187@arm.com>
- <20210603165134.GF4257@sirena.org.uk>
- <20210603180429.GI20338@arm.com>
+        id S230097AbhFGLyc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 07:54:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C0053611AD;
+        Mon,  7 Jun 2021 11:52:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623066761;
+        bh=vwpihzZIXTIWmmZYnX4O3KxBcqJWM4KlIbiLxno6uL8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t+FRd+Im0EuGNSqThB3iZROqSeI/AhHQNNDOlvwxYvwwRplACIRU8QYUI2zERZT9h
+         FhDC9YjPAq4hC893NAZce2YMkJSwJ1pQQr7OiPeR+Ajk2bRFKanDYVGyKndi4J5xLb
+         jLaL2Nrf9Hko2SMASw1dYsJI+e/BhdjmAnEZguCoGk/hk2gTfQASpcb1tUYfjVk5YU
+         5bexnDndD70ysDi4P41ZXt3f+RvkAnDQCVLYVzi489ROJnfDg70Bov3DLNCS3J/ZRT
+         mKgBF5yjgCHRkJl18JqRnjSRRsaeCKp/V7q6fhELNyZi9o9LVFFHpJvEAIPecr2qMM
+         1xEaxf++qPvAw==
+Date:   Mon, 7 Jun 2021 12:52:35 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+Message-ID: <20210607115234.GA7205@willie-the-truck>
+References: <20210604214010.GD4397@paulmck-ThinkPad-P17-Gen-1>
+ <CAHk-=wg0w5L7-iJU_kvEh9stXZoh2srRF4jKToKmSKyHv-njvA@mail.gmail.com>
+ <20210605145739.GB1712909@rowland.harvard.edu>
+ <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210606012903.GA1723421@rowland.harvard.edu>
+ <20210606115336.GS18427@gate.crashing.org>
+ <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com>
+ <20210606182213.GA1741684@rowland.harvard.edu>
+ <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
+ <YL34NZ12mKoiSLvu@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210603180429.GI20338@arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <YL34NZ12mKoiSLvu@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 03, 2021 at 07:04:31PM +0100, Catalin Marinas via Libc-alpha wrote:
-> On Thu, Jun 03, 2021 at 05:51:34PM +0100, Mark Brown wrote:
-> > On Thu, Jun 03, 2021 at 04:40:35PM +0100, Dave Martin wrote:
-> > > Do we know how libcs will detect that they don't need to do the
-> > > mprotect() calls?  Do we need a detection mechanism at all?
-> > > 
-> > > Ignoring certain errors from mprotect() when ld.so is trying to set
-> > > PROT_BTI on the main executable's code pages is probably a reasonable,
-> > > backwards-compatible compromise here, but it seems a bit wasteful.
+On Mon, Jun 07, 2021 at 12:43:01PM +0200, Peter Zijlstra wrote:
+> On Sun, Jun 06, 2021 at 11:43:42AM -0700, Linus Torvalds wrote:
+> > So while the example code is insane and pointless (and you shouldn't
+> > read *too* much into it), conceptually the notion of that pattern of
 > > 
-> > I think the theory was that they would just do the mprotect() calls and
-> > ignore any errors as they currently do, or declare that they depend on a
-> > new enough kernel version I guess (not an option for glibc but might be
-> > for others which didn't do BTI yet).
+> >     if (READ_ONCE(a)) {
+> >         WRITE_ONCE(b,1);
+> >         .. do something ..
+> >     } else {
+> >         WRITE_ONCE(b,1);
+> >         .. do something else ..
+> >     }
 > 
-> I think we discussed the possibility of an AT_FLAGS bit. Until recently,
-> this field was 0 but it gained a new bit now. If we are to expose this
-> to arch-specific things, it may need some reservations. Anyway, that's
-> an optimisation that can be added subsequently.
+> This is actually more tricky than it would appear (isn't it always).
+> 
+> The thing is, that normally we must avoid speculative stores, because
+> they'll result in out-of-thin-air values.
+> 
+> *Except* in this case, where both branches emit the same store, then
+> it's a given that the store will happen and it will not be OOTA.
+> Someone's actually done the proof for that apparently (Will, you have a
+> reference to Jade's paper?)
 
-I suppose so, but AT_FLAGS doesn't seem appropriate somehow.
+I don't think there's a paper on this, but Jade and I are hoping to talk
+about aspects of it at LPC (assuming the toolchain MC gets accepted).
 
-I wonder why we suddenly start considering adding a flag to AT_FLAGS
-every few months, when it had sat empty for decades.  This may say
-something about the current health of the kernel ABI, but I'm not sure
-exactly what.
+> There's apparently also a competition going on who can build the
+> weakestest ARM64 implementation ever.
+> 
+> Combine the two, and you'll get a CPU that *will* emit the store early
+> :/
 
-I think having mprotect() fail in a predictable way may be preferable
-for now: glibc still only needs to probe with a single call and could
-cache the knowledge after that.  Code outside libc / ld.so seems quite
-unlikely to care about this.
+So there are a lot of important details missing here and, as above, I think
+this is something worth discussing at LPC with Jade. The rough summary is
+that the arm64 memory model recently (so recently that it's not yet landed
+in the public docs) introduced something called "pick dependencies", which
+are a bit like control dependencies only they don't create order to all
+subsequent stores. These are useful for some conditional data-processing
+instructions such as CSEL and CAS, but it's important to note here that
+*conditional branch instructions behave exactly as you would expect*.
 
-Since only the executable segment(s) of the main binary need to be
-protected, this should require only a very small number of mprotect()
-calls in normal situations.  Although it feels a bit cruddy as a design,
-cost-wise I think that extra overhead would be swamped by other noise in
-realistic scenarios.  Often, there is just a single executable segment,
-so the common case would probably require just one mprotect() call.  I
-don't know if it ever gets much more complicated when using the
-standard linker scripts.
+<disclaimer; I don't work for Arm so any mistakes here are mine>
 
-Any ideas on how we would document this behaviour?  The kernel and libc
-behaviour are 100% clear: you _are_ allowed to twiddle PROT_BTI on
-executable mappings, and there is no legitimate (or even useful) reason
-to disallow this.  It's only systemd deliberately breaking the API that
-causes the behaviour seem by "userspace" to vary.
+To reiterate, in the code sequence at the top of this mail, if the compiler
+emits something along the lines of:
 
-Cheers
----Dave
+	LDR
+	<conditional branch instruction>
+	STR
+
+then the load *will* be ordered before the store, even if the same store
+instruction is executed regardless of the branch direction. Yes, one can
+fantasize about a CPU that executes both taken and non-taken paths and
+figures out that the STR can be hoisted before the load, but that is not
+allowed by the architecture today.
+
+It's the conditional instructions that are more fun. For example, the CSEL
+instruction:
+
+	CSEL	X0, X1, X2, <cond>
+
+basically says:
+
+	if (cond)
+		X0 = X1;
+	else
+		X0 = X2;
+
+these are just register-register operations, but the idea is that the CPU
+can predict that "branching event" inside the CSEL instruction and
+speculatively rename X0 while waiting for the condition to resolve.
+
+So then you can add loads and stores to the mix along the lines of:
+
+	LDR	X0, [X1]		// X0 = *X1
+	CMP	X0, X2
+	CSEL	X3, X4, X5, EQ		// X3 = (X0 == X2) ? X4 : X5
+	STR	X3, [X6]		// MUST BE ORDERED AFTER THE LOAD
+	STR	X7, [X8]		// Can be reordered
+
+(assuming X1, X6, X8 all point to different locations in memory)
+
+So now we have a dependency from the load to the first store, but the
+interesting part is that the last store is _not_ ordered wrt either of the
+other two memory accesses, whereas it would be if we used a conditional
+branch instead of the CSEL. Make sense?
+
+Now, obviously the compiler is blissfully unaware that conditional
+data processing instructions can give rise to dependencies than
+conditional branches, so the question really is how much do we need to
+care in the kernel?
+
+My preference is to use load-acquire instead of control dependencies so
+that we don't have to worry about this, or any future relaxations to the
+CPU architecture, at all.
+
+Jade -- please can you correct me if I got any of this wrong?
+
+Will
