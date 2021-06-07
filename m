@@ -2,140 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0D339D6E0
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 10:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31A639D75F
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 10:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbhFGIR5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 04:17:57 -0400
-Received: from mail-pj1-f54.google.com ([209.85.216.54]:53199 "EHLO
-        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhFGIR4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Jun 2021 04:17:56 -0400
-Received: by mail-pj1-f54.google.com with SMTP id h16so9344558pjv.2;
-        Mon, 07 Jun 2021 01:15:50 -0700 (PDT)
+        id S230316AbhFGIal (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 04:30:41 -0400
+Received: from mail-oo1-f43.google.com ([209.85.161.43]:38597 "EHLO
+        mail-oo1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231285AbhFGIa1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Jun 2021 04:30:27 -0400
+Received: by mail-oo1-f43.google.com with SMTP id o66-20020a4a44450000b029020d44dea886so3935498ooa.5
+        for <linux-arch@vger.kernel.org>; Mon, 07 Jun 2021 01:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=c5tZw1PE5ja1kIfp0A9CThFtz7RTJJ96vn5JKsdn4zo=;
-        b=XoQyLvz24OoCRIOShkQNcu9DiR7bBkokC0zH2y0VsTYjxJfKw7R0siA80dncjT3YUK
-         wAQolPJ8LMP2QAHMUANfaqPmSCX0C5CGSEEQPtRRcQTl1EKUo8gRIPdRN/yizwXOvk7a
-         MyxLl0xOVUFh4CzE2lkyyns1y8zU/3BfW8wnjMepLuBa14dDIuRlcgHvnJy9KhXaOr8X
-         f1b1b3SWDcQzR8oj41QVFoJZ6XqUPNURZphda8kDAwgTk/UUkxjzRis3jA/H1Gt2YM49
-         MOGgQu1k2QTfbhGmrfPyoKrM3mYFHKWoquCiDY9UKYa1vj3gMvLKx5aFnrcD/cKhHcp4
-         J8+w==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+hJoek+dH6lRvIIEvtmpn8nrUNfH1I0O0qNY3ghdb8Q=;
+        b=LOIHafCIFA0IyhxDKrZXKOLD3XN7IJWm1jCQ89b3C8PBWRM0EWPXMpK+bU8j8FHAmx
+         zBCy3YmZZUZ0fh1b2Z5aX0OYihxljb5HWbZlX4ssC1etg2xnuwIyBZFo3x6KPeep+/Wd
+         SnRHtQ8wY7o3OjrI1m0igZ3dC/oE0Br9IevO15JvfcPCWzzX3kqULNHoI1FkxVckZK32
+         rLYr0klqfNunFl8K/I0SpyWocYXGUjbHb+0pc86I3lso8POqgvokDcwgGd59MRXOw6I5
+         vZ0BOFL85Empou7cWfk/hbPTnfuWqAQrZu4pefLvNpgya2FMLrMQrywZNbG33VKJY1cE
+         bQYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=c5tZw1PE5ja1kIfp0A9CThFtz7RTJJ96vn5JKsdn4zo=;
-        b=U5B5//UCw1NXbo2scwqBFg38TxwRH3IiycN05CUTa6Am23xPa9mLhy3mtLnJGvNv/Q
-         s42PMnrkoWbfp7t9Ryd7RFn4aVpXpDPyvHf520aKDpkiNSL/x2OyS6CKzpxTf3Anc4zj
-         8joYLjNtX2CqCr9PmkA2D5u9Zepe5ChMRSJO/BqtlijT6+K39sUD+RTCTSET7kc44taA
-         oxwbYtndMH4dTHzRn5QfFF76fWLvJDIO25FHvtV8IrSoZASfOt94QPZjA89R0g8gWPGK
-         csXopPcXTsn7ihQwWEiPZOgMs4PxqnvEBcrgfUvrdVKUcN79twhv4Gy3vwXptmFr3X9F
-         UVzg==
-X-Gm-Message-State: AOAM531xCCSZT9paFIA/Oe0RszpZIcYjNxmBHGU3BR9sy8HQWUC3s1yC
-        0wlKPicluEu0K5glcRAQaA0=
-X-Google-Smtp-Source: ABdhPJz5DsUF3lCnv8yQA4dIwCqwn7lOEnqmDAyx9VQ48+J+hBL0/9GZGiwWD3mDm4r9zCHOflaTmA==
-X-Received: by 2002:a17:902:9a42:b029:f5:1cf7:2e52 with SMTP id x2-20020a1709029a42b02900f51cf72e52mr16701852plv.25.1623053690127;
-        Mon, 07 Jun 2021 01:14:50 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id r11sm8236573pgl.34.2021.06.07.01.14.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Jun 2021 01:14:49 -0700 (PDT)
-Subject: Re: [RFC PATCH V3 01/11] x86/HV: Initialize GHCB page in Isolation VM
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org,
-        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, Tianyu.Lan@microsoft.com,
-        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
-        xen-devel@lists.xenproject.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, thomas.lendacky@amd.com,
-        brijesh.singh@amd.com, sunilmut@microsoft.com
-References: <20210530150628.2063957-1-ltykernel@gmail.com>
- <20210530150628.2063957-2-ltykernel@gmail.com>
- <20210607064142.GA24478@lst.de>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <37260f47-bd32-08f7-b006-f75f4d3c408a@gmail.com>
-Date:   Mon, 7 Jun 2021 16:14:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+hJoek+dH6lRvIIEvtmpn8nrUNfH1I0O0qNY3ghdb8Q=;
+        b=doMpyw52tMG/KKne6+0arJYjM1gSxp39haXUd7i8ls8McX+Hb9A9GFeO2HjmQDY82/
+         cplFoFLN3KYM/ylmHgMaV/Ei5z1UAZi7eh2FKVDmfO74HzinC+6ajpJhmhA8w9V6soN8
+         ZAHePmMBHZDtCAZblsr0IRjL1/GWZdLAdmCNmdFmoY2W49w4+XOmD0km6y2kdSttZGzW
+         xWW5r4YqJDnDtlPPYSsQDaKuhBMlz53jKEZN9Npt4p8nfrD6Fvuw574JpfgU/h1Ah4AX
+         /eg/7ep64K5pZfw4fe3NAJOiArUSuDfDKxRaaHHuZgUWv1IjDYdaIR7dk07FgNwIqAV7
+         maOA==
+X-Gm-Message-State: AOAM531OQKdkSu2TWNCKN7tnzldejKIYzmOtVatSSn/mZi829yAXcWw2
+        C2SzACX+q6aKVSOpWSNmNdEt8pQebtC55MMjWZVJbQ==
+X-Google-Smtp-Source: ABdhPJwhAqSuRQaCfX2Zb3geQjaQVw22GWcI4D506b+J4A3lSdAExBnrgHThzMCaxjPiiDa1vckJdt5mZ70A9Xmoo0Y=
+X-Received: by 2002:a4a:1145:: with SMTP id 66mr12558163ooc.14.1623054443861;
+ Mon, 07 Jun 2021 01:27:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210607064142.GA24478@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAHk-=wiuLpmOGJyB385UyQioWMVKT6wN9UtyVXzt48AZittCKg@mail.gmail.com>
+ <CAHk-=wik7T+FoDAfqFPuMGVp6HxKYOf8UeKt3+EmovfivSgQ2Q@mail.gmail.com>
+ <20210604205600.GB4397@paulmck-ThinkPad-P17-Gen-1> <CAHk-=wgmUbU6XPHz=4NFoLMxH7j_SR-ky4sKzOBrckmvk5AJow@mail.gmail.com>
+ <20210604214010.GD4397@paulmck-ThinkPad-P17-Gen-1> <CAHk-=wg0w5L7-iJU_kvEh9stXZoh2srRF4jKToKmSKyHv-njvA@mail.gmail.com>
+ <20210605145739.GB1712909@rowland.harvard.edu> <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210606012903.GA1723421@rowland.harvard.edu> <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com>
+ <20210606185922.GF7746@tucnak> <CAHk-=wis8zq3WrEupCY6wcBeW3bB0WMOzaUkXpb-CsKuxM=6-w@mail.gmail.com>
+ <alpine.LNX.2.20.13.2106070017070.7184@monopod.intra.ispras.ru>
+ <CAHk-=wjwXs5+SOZGTaZ0bP9nsoA+PymAcGE4CBDVX3edGUcVRg@mail.gmail.com> <alpine.LNX.2.20.13.2106070956310.7184@monopod.intra.ispras.ru>
+In-Reply-To: <alpine.LNX.2.20.13.2106070956310.7184@monopod.intra.ispras.ru>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 7 Jun 2021 10:27:10 +0200
+Message-ID: <CANpmjNMwq6ENUtBunP-rw9ZSrJvZnQw18rQ47U3JuqPEQZsaXA@mail.gmail.com>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+To:     Alexander Monakov <amonakov@ispras.ru>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Christoph:
-	Thanks for your review.
+On Mon, 7 Jun 2021 at 10:02, Alexander Monakov <amonakov@ispras.ru> wrote:
+> On Sun, 6 Jun 2021, Linus Torvalds wrote:
+[...]
+> > On Sun, Jun 6, 2021 at 2:19 PM Alexander Monakov <amonakov@ispras.ru> wrote:
+[...]
+> > Btw, since we have compiler people on line, the suggested 'barrier()'
+> > isn't actually perfect for this particular use:
+> >
+> >    #define barrier() __asm__ __volatile__("" : : "i" (__COUNTER__) : "memory")
+> >
+> > in the general barrier case, we very much want to have that "memory"
+> > clobber, because the whole point of the general barrier case is that
+> > we want to make sure that the compiler doesn't cache memory state
+> > across it (ie the traditional use was basically what we now use
+> > "cpu_relax()" for, and you would use it for busy-looping on some
+> > condition).
+> >
+> > In the case of "volatile_if()", we actually would like to have not a
+> > memory clobber, but a "memory read". IOW, it would be a barrier for
+> > any writes taking place, but reads can move around it.
+> >
+> > I don't know of any way to express that to the compiler. We've used
+> > hacks for it before (in gcc, BLKmode reads turn into that kind of
+> > barrier in practice, so you can do something like make the memory
+> > input to the asm be a big array). But that turned out to be fairly
+> > unreliable, so now we use memory clobbers even if we just mean "reads
+> > random memory".
+>
+> So the barrier which is a compiler barrier but not a machine barrier is
+> __atomic_signal_fence(model), but internally GCC will not treat it smarter
+> than an asm-with-memory-clobber today.
 
-On 6/7/2021 2:41 PM, Christoph Hellwig wrote:
-> On Sun, May 30, 2021 at 11:06:18AM -0400, Tianyu Lan wrote:
->> +	if (ms_hyperv.ghcb_base) {
->> +		rdmsrl(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
->> +
->> +		ghcb_va = ioremap_cache(ghcb_gpa, HV_HYP_PAGE_SIZE);
->> +		if (!ghcb_va)
->> +			return -ENOMEM;
-> 
-> Can you explain this a bit more?  We've very much deprecated
-> ioremap_cache in favor of memremap.  Why yo you need a __iomem address
-> here?  Why do we need the remap here at all? >
+FWIW, Clang seems to be cleverer about it, and seems to do the optimal
+thing if I use a __atomic_signal_fence(__ATOMIC_RELEASE):
+https://godbolt.org/z/4v5xojqaY
 
-GHCB physical address is an address in extra address space which is 
-above shared gpa boundary reported by Hyper-V CPUID. The addresses below
-shared gpa boundary treated as encrypted and the one above is treated as 
-decrypted. System memory is remapped in the extra address space and it 
-starts from the boundary. The shared memory with host needs to use 
-address in the extra address(pa + shared_gpa_boundary) in Linux guest.
-
-Here is to map ghcb page for the communication operations with 
-Hypervisor(e.g, hypercall and read/write MSR) via GHCB page.
-
-memremap() will go through iomem_resource list and the address in extra 
-address space will not be in the list. So I used ioremap_cache(). I will
-memremap() instead of ioremap() here.
-
-> Does the data structure at this address not have any types that we
-> could use a struct for?
-
-The struct will be added in the following patch. I will refresh the 
-following patch and use the struct hv_ghcb for the mapped point.
-> 
->> +
->> +		rdmsrl(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
->> +		ghcb_va = ioremap_cache(ghcb_gpa, HV_HYP_PAGE_SIZE);
->> +		if (!ghcb_va) {
-> 
-> This seems to duplicate the above code.
-
-The above is to map ghcb for BSP and here does the same thing for APs
-Will add a new function to avoid the duplication.
-
-> 
->> +bool hv_isolation_type_snp(void)
->> +{
->> +	return static_branch_unlikely(&isolation_type_snp);
->> +}
->> +EXPORT_SYMBOL_GPL(hv_isolation_type_snp);
-> 
-> This probably wants a kerneldoc explaining when it should be used. >
-
-OK. I will add.
-
+Thanks,
+-- Marco
