@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DBD39D54A
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 08:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E46339D55F
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 08:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbhFGGr5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 02:47:57 -0400
-Received: from verein.lst.de ([213.95.11.211]:44650 "EHLO verein.lst.de"
+        id S230178AbhFGGwE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 02:52:04 -0400
+Received: from verein.lst.de ([213.95.11.211]:44679 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230198AbhFGGr4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 7 Jun 2021 02:47:56 -0400
+        id S230155AbhFGGwE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 02:52:04 -0400
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 619F368AFE; Mon,  7 Jun 2021 08:46:03 +0200 (CEST)
-Date:   Mon, 7 Jun 2021 08:46:03 +0200
+        id 6BD7A68AFE; Mon,  7 Jun 2021 08:50:07 +0200 (CEST)
+Date:   Mon, 7 Jun 2021 08:50:07 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Tianyu Lan <ltykernel@gmail.com>
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
@@ -34,28 +34,66 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
         vkuznets@redhat.com, thomas.lendacky@amd.com,
         brijesh.singh@amd.com, sunilmut@microsoft.com
-Subject: Re: [RFC PATCH V3 11/11] HV/Storvsc: Add Isolation VM support for
- storvsc driver
-Message-ID: <20210607064603.GD24478@lst.de>
-References: <20210530150628.2063957-1-ltykernel@gmail.com> <20210530150628.2063957-12-ltykernel@gmail.com>
+Subject: Re: [RFC PATCH V3 10/11] HV/Netvsc: Add Isolation VM support for
+ netvsc driver
+Message-ID: <20210607065007.GE24478@lst.de>
+References: <20210530150628.2063957-1-ltykernel@gmail.com> <20210530150628.2063957-11-ltykernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210530150628.2063957-12-ltykernel@gmail.com>
+In-Reply-To: <20210530150628.2063957-11-ltykernel@gmail.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, May 30, 2021 at 11:06:28AM -0400, Tianyu Lan wrote:
-> +				for (i = 0; i < request->hvpg_count; i++)
-> +					dma_unmap_page(&device->device,
-> +							request->dma_range[i].dma,
-> +							request->dma_range[i].mapping_size,
-> +							request->vstor_packet.vm_srb.data_in
-> +							     == READ_TYPE ?
-> +							DMA_FROM_DEVICE : DMA_TO_DEVICE);
-> +				kfree(request->dma_range);
+On Sun, May 30, 2021 at 11:06:27AM -0400, Tianyu Lan wrote:
+> +	if (hv_isolation_type_snp()) {
+> +		pfns = kcalloc(buf_size / HV_HYP_PAGE_SIZE, sizeof(unsigned long),
+> +			       GFP_KERNEL);
+> +		for (i = 0; i < buf_size / HV_HYP_PAGE_SIZE; i++)
+> +			pfns[i] = virt_to_hvpfn(net_device->recv_buf + i * HV_HYP_PAGE_SIZE) +
+> +				(ms_hyperv.shared_gpa_boundary >> HV_HYP_PAGE_SHIFT);
+> +
+> +		vaddr = vmap_pfn(pfns, buf_size / HV_HYP_PAGE_SIZE, PAGE_KERNEL_IO);
+> +		kfree(pfns);
+> +		if (!vaddr)
+> +			goto cleanup;
+> +		net_device->recv_original_buf = net_device->recv_buf;
+> +		net_device->recv_buf = vaddr;
+> +	}
 
-Unreadably long lines.  You probably want to factor the quoted code into
-a little readable helper and do the same for the map side.
+This probably wnats a helper to make the thing more readable.  But who
+came up with this fucked up communication protocol where the host needs
+to map random pfns into a contigous range?  Sometime I really have to
+wonder what crack the hyper-v people take when comparing this to the
+relatively sane approach others take.
+
+> +	for (i = 0; i < page_count; i++)
+> +		dma_unmap_single(&hv_dev->device, packet->dma_range[i].dma,
+> +				 packet->dma_range[i].mapping_size,
+> +				 DMA_TO_DEVICE);
+> +
+> +	kfree(packet->dma_range);
+
+Any reason this isn't simply using a struct scatterlist?
+
+> +	for (i = 0; i < page_count; i++) {
+> +		char *src = phys_to_virt((pb[i].pfn << HV_HYP_PAGE_SHIFT)
+> +					 + pb[i].offset);
+> +		u32 len = pb[i].len;
+> +
+> +		dma = dma_map_single(&hv_dev->device, src, len,
+> +				     DMA_TO_DEVICE);
+
+dma_map_single can only be used on page baked memory, and if this is
+using page backed memory you wouldn't need to do thee phys_to_virt
+tricks.  Can someone explain the mess here in more detail?
+
+>  	struct rndis_device *dev = nvdev->extension;
+>  	struct rndis_request *request = NULL;
+> +	struct hv_device *hv_dev = ((struct net_device_context *)
+> +			netdev_priv(ndev))->device_ctx;
+
+Why not use a net_device_context local variable instead of this cast
+galore?
