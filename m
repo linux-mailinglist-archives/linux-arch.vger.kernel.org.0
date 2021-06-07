@@ -2,157 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB9E39E637
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 20:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C50839E63F
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Jun 2021 20:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbhFGSKV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Jun 2021 14:10:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54302 "EHLO mail.kernel.org"
+        id S230233AbhFGSOI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Jun 2021 14:14:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230479AbhFGSKT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 7 Jun 2021 14:10:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A1186100B;
-        Mon,  7 Jun 2021 18:08:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623089306;
-        bh=NwgiKp1vePEOmgz/sNu7+oR/y96zqS8ePq3897GVbuc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ID4Iv5JGnQ9ws3tx5Mf86eop9S5Ra2xHBeozexaeDzzX8Q8ZVFt3Jxr7AeFPX8RfX
-         RRHGNlK5gsUj2PbS5KFZ9JAO6TGAd9uaFuSVvfCdJj5LGzdTJViMHAAxRUv2RqjRxk
-         KARkNZx+bstLIhbvsU6exw01mVC+ZMGFIAy9mmeO8XR1Bj+nc/5BEkL+NWWuPCZBY6
-         JDpprBeKOybKKGnFpdynlxqixFSXRDcIXmo0M0qSsA8905+JpmoyW8X4kLR14GOf3/
-         uMf6/YDCJgJ568KTSi9WO02WfR0aD322D937wC6a/8kJI8FU+GmGZpf/pX2L3/jXyH
-         KAgSY2tgIPerg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 496BC5C0395; Mon,  7 Jun 2021 11:08:26 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 11:08:26 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210607180826.GV4397@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
- <20210606012903.GA1723421@rowland.harvard.edu>
- <20210606115336.GS18427@gate.crashing.org>
- <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com>
- <20210606182213.GA1741684@rowland.harvard.edu>
- <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
- <YL34NZ12mKoiSLvu@hirez.programming.kicks-ass.net>
- <20210607115234.GA7205@willie-the-truck>
- <20210607152533.GQ4397@paulmck-ThinkPad-P17-Gen-1>
- <20210607160252.GA7580@willie-the-truck>
+        id S230212AbhFGSOI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Jun 2021 14:14:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C2E2261003;
+        Mon,  7 Jun 2021 18:12:15 +0000 (UTC)
+Date:   Mon, 7 Jun 2021 19:12:13 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-arch@vger.kernel.org,
+        libc-alpha@sourceware.org, Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 2/2] arm64: Enable BTI for main executable as well as
+ the interpreter
+Message-ID: <20210607181212.GD17957@arm.com>
+References: <20210521144621.9306-1-broonie@kernel.org>
+ <20210521144621.9306-3-broonie@kernel.org>
+ <20210603154034.GH4187@arm.com>
+ <20210603165134.GF4257@sirena.org.uk>
+ <20210603180429.GI20338@arm.com>
+ <20210607112536.GI4187@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210607160252.GA7580@willie-the-truck>
+In-Reply-To: <20210607112536.GI4187@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 05:02:53PM +0100, Will Deacon wrote:
-> Hi Paul,
-> 
-> On Mon, Jun 07, 2021 at 08:25:33AM -0700, Paul E. McKenney wrote:
-> > On Mon, Jun 07, 2021 at 12:52:35PM +0100, Will Deacon wrote:
-> > > It's the conditional instructions that are more fun. For example, the CSEL
-> > > instruction:
+On Mon, Jun 07, 2021 at 12:25:38PM +0100, Dave P Martin wrote:
+> On Thu, Jun 03, 2021 at 07:04:31PM +0100, Catalin Marinas via Libc-alpha wrote:
+> > On Thu, Jun 03, 2021 at 05:51:34PM +0100, Mark Brown wrote:
+> > > On Thu, Jun 03, 2021 at 04:40:35PM +0100, Dave Martin wrote:
+> > > > Do we know how libcs will detect that they don't need to do the
+> > > > mprotect() calls?  Do we need a detection mechanism at all?
+> > > > 
+> > > > Ignoring certain errors from mprotect() when ld.so is trying to set
+> > > > PROT_BTI on the main executable's code pages is probably a reasonable,
+> > > > backwards-compatible compromise here, but it seems a bit wasteful.
 > > > 
-> > > 	CSEL	X0, X1, X2, <cond>
-> > > 
-> > > basically says:
-> > > 
-> > > 	if (cond)
-> > > 		X0 = X1;
-> > > 	else
-> > > 		X0 = X2;
-> > > 
-> > > these are just register-register operations, but the idea is that the CPU
-> > > can predict that "branching event" inside the CSEL instruction and
-> > > speculatively rename X0 while waiting for the condition to resolve.
-> > > 
-> > > So then you can add loads and stores to the mix along the lines of:
-> > > 
-> > > 	LDR	X0, [X1]		// X0 = *X1
-> > > 	CMP	X0, X2
-> > > 	CSEL	X3, X4, X5, EQ		// X3 = (X0 == X2) ? X4 : X5
-> > > 	STR	X3, [X6]		// MUST BE ORDERED AFTER THE LOAD
-> > > 	STR	X7, [X8]		// Can be reordered
-> > > 
-> > > (assuming X1, X6, X8 all point to different locations in memory)
-> > > 
-> > > So now we have a dependency from the load to the first store, but the
-> > > interesting part is that the last store is _not_ ordered wrt either of the
-> > > other two memory accesses, whereas it would be if we used a conditional
-> > > branch instead of the CSEL. Make sense?
+> > > I think the theory was that they would just do the mprotect() calls and
+> > > ignore any errors as they currently do, or declare that they depend on a
+> > > new enough kernel version I guess (not an option for glibc but might be
+> > > for others which didn't do BTI yet).
 > > 
-> > And if I remember correctly, this is why LKMM orders loads in the
-> > "if" condition only with stores in the "then" and "else" clauses,
-> > not with stores after the end of the "if" statement.  Or is there
-> > some case that I am missing?
+> > I think we discussed the possibility of an AT_FLAGS bit. Until recently,
+> > this field was 0 but it gained a new bit now. If we are to expose this
+> > to arch-specific things, it may need some reservations. Anyway, that's
+> > an optimisation that can be added subsequently.
 > 
-> It's not clear to me that such a restriction prevents the compiler from
-> using any of the arm64 conditional instructions in place of the conditional
-> branch in such a way that you end up with an "independent" store in the
-> assembly output constructed from two stores on the "then" and "else" paths
-> which the compiler determined where the same.
+> I suppose so, but AT_FLAGS doesn't seem appropriate somehow.
 > 
-> > > Now, obviously the compiler is blissfully unaware that conditional
-> > > data processing instructions can give rise to dependencies than
-> > > conditional branches, so the question really is how much do we need to
-> > > care in the kernel?
-> > > 
-> > > My preference is to use load-acquire instead of control dependencies so
-> > > that we don't have to worry about this, or any future relaxations to the
-> > > CPU architecture, at all.
-> > 
-> > From what I can see, ARMv8 has DMB(LD) and DMB(ST).  Does it have
-> > something like a DMB(LD,ST) that would act something like powerpc lwsync?
-> > 
-> > Or are you proposing rewriting the "if" conditions to upgrade
-> > READ_ONCE() to smp_load_acquire()?  Or something else?
-> > 
-> > Just trying to find out exactly what you are proposing.  ;-)
+> I wonder why we suddenly start considering adding a flag to AT_FLAGS
+> every few months, when it had sat empty for decades.  This may say
+> something about the current health of the kernel ABI, but I'm not sure
+> exactly what.
 > 
-> Some options are:
-> 
->  (1) Do nothing until something actually goes wrong (and hope we spot/debug it)
-> 
->  (2) Have volatile_if force a conditional branch, assuming that it solves
->      the problem and doesn't hurt codegen (I still haven't convinced myself
->      for either case)
-> 
->  (3) Upgrade READ_ONCE() to RCpc acquire, relaxed atomic RMWs to RCsc
->      acquire on arm64
-> 
->  (4) Introduce e.g. READ_ONCE_CTRL(), atomic_add_return_ctrl() etc
->      specifically for control dependencies and upgrade only those for
->      arm64
-> 
->  (5) Work to get toolchain support for dependency ordering and use that
-> 
-> I'm suggesting (3) or (4) because, honestly, it feels like we're being
-> squeezed from both sides with both the compiler and the hardware prepared
-> to break control dependencies.
+> I think having mprotect() fail in a predictable way may be preferable
+> for now: glibc still only needs to probe with a single call and could
+> cache the knowledge after that.  Code outside libc / ld.so seems quite
+> unlikely to care about this.
 
-I will toss out this as well:
+I think that's the expected approach for now. If anyone complains about
+an extra syscall, we can look into options but I wouldn't rush on doing
+something.
 
-  (6) Create a volatile_if() that does not support an "else" clause,
-      thus covering all current use cases and avoiding some of the
-      same-store issues.  Which in the end might or might not help,
-      but perhaps worth looking into.
+> Any ideas on how we would document this behaviour?  The kernel and libc
+> behaviour are 100% clear: you _are_ allowed to twiddle PROT_BTI on
+> executable mappings, and there is no legitimate (or even useful) reason
+> to disallow this.  It's only systemd deliberately breaking the API that
+> causes the behaviour seem by "userspace" to vary.
 
-							Thanx, Paul
+I don't think we can document all the filters that can be added on top
+various syscalls, so I'd leave it undocumented (or part of the systemd
+documentation). It was a user space program (systemd) breaking another
+user space program (well, anything with a new enough glibc). The kernel
+ABI was still valid when /sbin/init started ;).
+
+-- 
+Catalin
