@@ -2,140 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 594EA39F4DD
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 13:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8024B39F507
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 13:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbhFHL0S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Jun 2021 07:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbhFHL0S (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Jun 2021 07:26:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B054BC061574;
-        Tue,  8 Jun 2021 04:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UNAlibUDpLLDX1KGFQEYjEdmHvc7ohyIDGXvDQ+DvHA=; b=ba+NSooc4JLoWZ7eNvZsLS0naT
-        9hfvDe3vU8rUQlf0Uqu6tIqJsEoX3R6MbmUiEw47HmRx07zM3nrD6XVUK6o2szDv7DfCoRvVDqfuu
-        zrJC27G4D6VdE9xS4tpNGE9f7/ncwJTol8OFaN3CKH36WFm1rjwTI15Gojfu9xmALpCr4D79MGMMv
-        HiWU/evjC48blz+xIAiq4jjnS3HwiEjocRU0ybUu3V0CGzr+cxqreQ8yfvD6y6Wobuh9v7hH8v+KU
-        dxfhWjMBbq/yO9gIzQqhlylwxmgGTHsFgwFnlHerv5TwsHce02KokYq1ebh8yd6y9vN01uZTI3EsM
-        ZrTZH7zg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lqZoz-00GsA3-II; Tue, 08 Jun 2021 11:23:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F002F3001E3;
-        Tue,  8 Jun 2021 13:22:58 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CFD5420245F9F; Tue,  8 Jun 2021 13:22:58 +0200 (CEST)
-Date:   Tue, 8 Jun 2021 13:22:58 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alexander Monakov <amonakov@ispras.ru>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
+        id S231922AbhFHLf0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Jun 2021 07:35:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34654 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231630AbhFHLfZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 8 Jun 2021 07:35:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 77BAA6128A;
+        Tue,  8 Jun 2021 11:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623152013;
+        bh=QzbcLiB/1N7DzVrdDjK7OIq1u6I9+VzWWocOiQGnpk8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gl9vC8a4foBMWq2vzc5Me8TxdKRjcfkiQzlTmLPHsJp459vNNrFZ5usv/qQn2R2/T
+         RSypUzzCWPm0uMUsGAmGOXTdNCCxfELZKQo9z0Rx7Pwj/DZxtw5mC7S2spC20SxQHx
+         Z0K8JY4xACpLYsHQ+gX4XsJB1/VnC5M7Z8iEFsZH+GoBTVAamFxEU3cu/XYK9hlZTD
+         Q+CJXINa0mVtvY1hYZa5jqTKkiL3XxG5rvWOkRPFoDLjYSHdojyVOMaxaly57ysSN4
+         LGstvsRTsIs06sJrxyWIOGl2XFItMOTd8NjqeD5/EtLFDAyaEJVUTBnvUaH0LWygiK
+         0E+gTdavN+6vg==
+Date:   Tue, 8 Jun 2021 12:33:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Dave Martin <Dave.Martin@arm.com>, linux-arch@vger.kernel.org,
+        libc-alpha@sourceware.org, Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
         Will Deacon <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <YL9TEqealhxBBhoS@hirez.programming.kicks-ass.net>
-References: <CAHk-=wgUsReyz4uFymB8mmpphuP0vQ3DktoWU_x4u6impbzphg@mail.gmail.com>
- <20210606185922.GF7746@tucnak>
- <CAHk-=wis8zq3WrEupCY6wcBeW3bB0WMOzaUkXpb-CsKuxM=6-w@mail.gmail.com>
- <alpine.LNX.2.20.13.2106070017070.7184@monopod.intra.ispras.ru>
- <CAHk-=wjwXs5+SOZGTaZ0bP9nsoA+PymAcGE4CBDVX3edGUcVRg@mail.gmail.com>
- <alpine.LNX.2.20.13.2106070956310.7184@monopod.intra.ispras.ru>
- <CANpmjNMwq6ENUtBunP-rw9ZSrJvZnQw18rQ47U3JuqPEQZsaXA@mail.gmail.com>
- <20210607152806.GS4397@paulmck-ThinkPad-P17-Gen-1>
- <YL5Risa6sFgnvvnG@elver.google.com>
- <CANpmjNNtDX+eBEpuP9-NgT6RAwHK5OgbQHT9b+8LZQJtwWpvPg@mail.gmail.com>
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 2/2] arm64: Enable BTI for main executable as well as
+ the interpreter
+Message-ID: <20210608113318.GA4200@sirena.org.uk>
+References: <20210521144621.9306-1-broonie@kernel.org>
+ <20210521144621.9306-3-broonie@kernel.org>
+ <20210603154034.GH4187@arm.com>
+ <20210603165134.GF4257@sirena.org.uk>
+ <20210603180429.GI20338@arm.com>
+ <20210607112536.GI4187@arm.com>
+ <20210607181212.GD17957@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r5Pyd7+fXNt84Ff3"
 Content-Disposition: inline
-In-Reply-To: <CANpmjNNtDX+eBEpuP9-NgT6RAwHK5OgbQHT9b+8LZQJtwWpvPg@mail.gmail.com>
+In-Reply-To: <20210607181212.GD17957@arm.com>
+X-Cookie: Auction:
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 11:30:36AM +0200, Marco Elver wrote:
 
-> The cleaner approach would be an expression wrapper, e.g. "if
-> (ctrl_depends(A) && B) { ... }".
-> 
-> I imagine syntactically it'd be similar to __builtin_expect(..). I
-> think that's also easier to request an extension for, say
-> __builtin_ctrl_depends(expr). (If that is appealing, we can try and
-> propose it as std::ctrl_depends() along with std::dependent_ptr<>.)
-> 
-> Thoughts?
+--r5Pyd7+fXNt84Ff3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Works for me; and note how it mirrors how we implemented volatile_if()
-in the first place, by doing an expression wrapper.
+On Mon, Jun 07, 2021 at 07:12:13PM +0100, Catalin Marinas wrote:
 
-__builtin_ctrl_depends(expr) would have to:
+> I don't think we can document all the filters that can be added on top
+> various syscalls, so I'd leave it undocumented (or part of the systemd
+> documentation). It was a user space program (systemd) breaking another
+> user space program (well, anything with a new enough glibc). The kernel
+> ABI was still valid when /sbin/init started ;).
 
- - ensure !__builtin_const_p(expr)	(A)
- - imply an acquire compiler fence	(B)
- - ensure cond-branch is emitted	(C)
+Indeed.  I think from a kernel point of view the main thing is to look
+at why userspace feels the need to do things like this and see if
+there's anything we can improve or do better with in future APIs, part
+of the original discussion here was figuring out that there's not really
+any other reasonable options for userspace to implement this check at
+the minute.
 
-*OR*
+--r5Pyd7+fXNt84Ff3
+Content-Type: application/pgp-signature; name="signature.asc"
 
- - ensure !__builtin_const_p(expr);		(A)
- - upgrade the load in @expr to load-acquire	(D)
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmC/VX0ACgkQJNaLcl1U
+h9DQdwf/TJzRu5jKdbqqqnTM5IaKtyqziQkJFXblDjDZkzBny7xN1VI86c6IS5XZ
+YJnZD8prye0EfXsoTHSdNIETekQK1x+O4DrjEp4e8qyLjhAbfimRgga2/diZ8zUt
+DlsaHmN+vdbPaH/AoGj/Ni810TgpbtKgeqpbZt3MYDUf2EvlhjUBrBhNNAe1S3Gu
+rOGCkI7R3RoaBIcyATK0H/78jrIFRNu0qEKKqWK2QwLGbfuC5ADmuRGikY+VeL2J
+MvGIJoQUDw+BBL9mE1SKkZn5mz/z32EweV5rOZ8BvIYOjXgdZY4I3qA1qt9m8MiN
+tJ22aBfXneqJgDNPxML7pJUW2iT2Gg==
+=6iZf
+-----END PGP SIGNATURE-----
 
-A)
-
-This all hinges on there actually being a LOAD, if expr is constant, we
-have a malformed program and can emit a compiler error.
-
-B)
-
-We want to capture any store, not just volatile stores that come after.
-
-The example here is a ring-buffer that loads the (head and) tail pointer
-to check for space and then writes data elements. It would be
-'cumbersome' to have all the data writes as volatile.
-
-C)
-
-We depend on the load-to-branch data dependency to guard the store to
-provide the LOAD->STORE memory order.
-
-D)
-
-Upgrading LOAD to LOAD-ACQUIRE also provides LOAD->STORE ordering, but
-it does require that the compiler has access to the LOAD in the first
-place, which isn't a given seeing how much asm() we have around. Also
-the achitecture should have a sheep LOAD-ACQUIRE in the first place,
-otherwise there's no point.
-
-If this is done, the branch is allowed to be optimized away if the
-compiler so wants.
-
-Now, Will will also want to allow the load-acquire to be run-time
-patched between the RCsc and RCpc variant depending on what ARMv8
-extentions are available, which will be 'interesting' (although I can
-think of ways to actually do that, one would be to keep a special
-section that tracks the location of these __builtin_ctrl_depends()
-generated load-acquire instruction).
-
-
+--r5Pyd7+fXNt84Ff3--
