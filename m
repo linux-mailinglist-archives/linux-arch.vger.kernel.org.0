@@ -2,97 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F21CF39F9D0
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 17:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D1A39FA3C
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 17:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbhFHPCP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Jun 2021 11:02:15 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:58297 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232833AbhFHPCO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Jun 2021 11:02:14 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-162-9RBwFXs0Nk6I40uBzgaFIw-1; Tue, 08 Jun 2021 16:00:19 +0100
-X-MC-Unique: 9RBwFXs0Nk6I40uBzgaFIw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.18; Tue, 8 Jun 2021 16:00:17 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.018; Tue, 8 Jun 2021 16:00:17 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>, Guo Ren <guoren@kernel.org>
-CC:     Nick Kossifidis <mick@ics.forth.gr>,
-        Drew Fustini <drew@beagleboard.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        "wefu@redhat.com" <wefu@redhat.com>,
-        =?utf-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Benjamin Koch <snowball@c3pb.de>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        Wei Fu <tekkamanninja@gmail.com>
-Subject: RE: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
-Thread-Topic: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
-Thread-Index: AQHXW2Yf+E+HbgFRkkm3Xv2DTkp7y6sKNaKQ
-Date:   Tue, 8 Jun 2021 15:00:17 +0000
-Message-ID: <2db975b5f24149b19191120b9f0f506b@AcuMS.aculab.com>
-References: <1621400656-25678-1-git-send-email-guoren@kernel.org>
- <20210519052048.GA24853@lst.de>
- <CAJF2gTTjwB4U-NxCtfgMA5aR2HzoQtA8a51W5UM1LHGRbjz9pg@mail.gmail.com>
- <20210519064435.GA3076809@x1> <20210519065352.GA31590@lst.de>
- <CAJF2gTR4FXRbp7oky-ypdVJba6btFHpp-+dPyJStRaQX_-5rzg@mail.gmail.com>
- <29733b0931d9dd6a2f0b6919067c7efe@mailhost.ics.forth.gr>
- <CAJF2gTTpSbNWS4VLHAu4XsV5-Vos=6R9MmPOx8-yzMFJu=wX4A@mail.gmail.com>
- <a8f2e68dcc1a6eb1ff3b95fcb8d0d0d2@mailhost.ics.forth.gr>
- <CAJF2gTQuQ5bE6HeGSoNaDynA0o3+KEo4snwft42YGzE=+DjKOQ@mail.gmail.com>
- <20210607062701.GB24060@lst.de>
-In-Reply-To: <20210607062701.GB24060@lst.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S231199AbhFHPWN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Jun 2021 11:22:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:33356 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230462AbhFHPWM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 8 Jun 2021 11:22:12 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72F346D;
+        Tue,  8 Jun 2021 08:20:19 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 565963F73D;
+        Tue,  8 Jun 2021 08:20:18 -0700 (PDT)
+Date:   Tue, 8 Jun 2021 16:19:18 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arch@vger.kernel.org, libc-alpha@sourceware.org,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 2/2] arm64: Enable BTI for main executable as well as
+ the interpreter
+Message-ID: <20210608151914.GJ4187@arm.com>
+References: <20210521144621.9306-1-broonie@kernel.org>
+ <20210521144621.9306-3-broonie@kernel.org>
+ <20210603154034.GH4187@arm.com>
+ <20210603165134.GF4257@sirena.org.uk>
+ <20210603180429.GI20338@arm.com>
+ <20210607112536.GI4187@arm.com>
+ <20210607181212.GD17957@arm.com>
+ <20210608113318.GA4200@sirena.org.uk>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210608113318.GA4200@sirena.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQ2hyaXN0b3BoIEhlbGx3aWcNCj4gU2VudDogMDcgSnVuZSAyMDIxIDA3OjI3DQo+IA0K
-PiBPbiBNb24sIEp1biAwNywgMjAyMSBhdCAxMToxOTowM0FNICswODAwLCBHdW8gUmVuIHdyb3Rl
-Og0KPiA+ID5Gcm9tIExpbnV4IG5vbi1jb2hlcmVuY3kgdmlldywgd2UgbmVlZDoNCj4gPiAgLSBO
-b24tY2FjaGUgKyBTdHJvbmcgT3JkZXIgUFRFIGF0dHJpYnV0ZXMgdG8gZGVhbCB3aXRoIGRyaXZl
-cnMnIERNQSBkZXNjcmlwdG9ycw0KPiA+ICAtIE5vbi1jYWNoZSArIHdlYWsgb3JkZXIgdG8gZGVh
-bCB3aXRoIGZyYW1lYnVmZmVyIGRyaXZlcnMNCj4gPiAgLSBDTU8gZG1hX3N5bmMgdG8gc3luYyBj
-YWNoZSB3aXRoIERNQSBkZXZpY2VzDQo+IA0KPiBUaGlzIGlzIG5vdCBzdHJpY3RseSB0cnVlLiAg
-QXQgdGhlIHZlcnkgbWluaW11bSB5b3Ugb25seSBuZWVkIGNhY2hlDQo+IGludmFsaWRhdGlvbiBh
-bmQgd3JpdGViYWNrIGluc3RydWN0aW9ucy4gIEZvciBleGFtcGxlIGVhcmx5IHBhcmlzYw0KPiBD
-UFVzIGFuZCBzb21lIG02OGtub21tdSBTT0NzIGhhdmUgbm8gc3VwcG9ydCBmb3IgdW5jYWNoZWQg
-YXJlYXMgYXQgYWxsLA0KPiBhbmQgTGludXggd29ya3MuICBCdXQgdG8gYmUgZmFpciB0aGlzIGlz
-IHZlcnkgcGFpbmZ1bCBhbmQgc3VwcG9ydHMgb25seQ0KPiB2ZXJ5IGxpbWl0ZWQgcGVyaXBoYWxz
-LiAgU28gZm9yIG1vZGVybiBmdWxsIExpbnV4IHN1cHBvcnQgc29tZSB1bmNhaGVkDQo+IG1lbW9y
-eSBpcyBhZHZpc2FibGUuICBCdXQgdGhhdCBkb2Vzbid0IGhhdmUgdG8gYmUgdXNpbmcgUFRFIGF0
-dHJpYnV0ZXMuDQo+IEl0IGNvdWxkIGFsc28gYmUgcGh5c2ljYWwgbWVtb3J5IHJlZ2lvbnMgdGhh
-dCBhcmUgZWl0aGVyIHRvdGFsbHkgZml4ZWQNCj4gb3Igc29tZXdoYXQgZHluYW1pYy4NCg0KSXQg
-aXMgYWxtb3N0IGltcG9zc2libGUgdG8gaW50ZXJmYWNlIHRvIG1hbnkgZXRoZXJuZXQgY2hpcHMg
-d2l0aG91dA0KZWl0aGVyIGNvaGVyZW50IG9yIHVuY2FjaGVkIG1lbW9yeSBmb3IgdGhlIGRlc2Ny
-aXB0b3IgcmluZ3MuDQpUaGUgc3RhdHVzIGJpdHMgb24gdGhlIHRyYW5zbWl0IHJpbmcgYXJlIHBh
-cnRpY3VsYXJseSBwcm9ibGVtYXRpYy4NCg0KVGhlIHJlY2VpdmUgcmluZyBjYW4gYmUgZG9uZSB3
-aXRoIHdyaXRlYmFjaytpbnZhbGlkYXRlIHByb3ZpZGVkIHlvdQ0KZmlsbCBhIGNhY2hlIGxpbmUg
-YXQgYSB0aW1lLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBC
-cmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdp
-c3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Tue, Jun 08, 2021 at 12:33:18PM +0100, Mark Brown via Libc-alpha wrote:
+> On Mon, Jun 07, 2021 at 07:12:13PM +0100, Catalin Marinas wrote:
+> 
+> > I don't think we can document all the filters that can be added on top
+> > various syscalls, so I'd leave it undocumented (or part of the systemd
+> > documentation). It was a user space program (systemd) breaking another
+> > user space program (well, anything with a new enough glibc). The kernel
+> > ABI was still valid when /sbin/init started ;).
+> 
+> Indeed.  I think from a kernel point of view the main thing is to look
+> at why userspace feels the need to do things like this and see if
+> there's anything we can improve or do better with in future APIs, part
+> of the original discussion here was figuring out that there's not really
+> any other reasonable options for userspace to implement this check at
+> the minute.
 
+Ack, that would be my policy -- just wanted to make it explicit.
+It would be good if there were better dialogue between the systemd
+and kernel folks on this kind of thing.
+
+SECCOMP makes it rather easy to (attempt to) paper over kernel/user API
+design problems, which probably reduces the chance of the API ever being
+fixed properly, if we're not careful...
+
+Cheers
+---Dave
