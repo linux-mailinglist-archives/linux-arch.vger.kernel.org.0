@@ -2,130 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A932239EE4B
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 07:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC0839EF24
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 08:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbhFHFrM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Jun 2021 01:47:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55326 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229507AbhFHFrL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 8 Jun 2021 01:47:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C5D8361029;
-        Tue,  8 Jun 2021 05:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623131119;
-        bh=49fVzdt4MSY+UspP64EgJQ791zimRP1gxTciSlJZXt4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G0Rtshf8pvTrv3vEhpsoWQuj5JjeNYokUzfYJ5STkCXI/OnFwZ+jzE319giZq9upk
-         Ip6wZYmg/mXX1RsKoBHJISuKRrHfu3i7LKK8o6lrdj3F/wsMYKU4KSiTq0yf0Te/9Y
-         EXkEDnDuymhI/7Es9g0unojNazWzSj6FWZpsSVsuRv7SkD+TKqrUPOkH42sn/s2o3k
-         YyeAtmie679nER7vSNNhYu+t0T8vpaLE8THVLmZUT2dI3k363OIVX5xgUfeXV7EiTs
-         ihyAaoDmjCZhWOCiJEmXQBaJ0yMnS1SK6yRX7SpN+JL1ZvqVGV5DXW68K81QTP/SNc
-         ubRqN6fNQU7pg==
-Date:   Tue, 8 Jun 2021 08:45:07 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matt Turner <mattst88@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        sparclinux <sparclinux@vger.kernel.org>
-Subject: Re: [PATCH v2 8/9] mm: replace CONFIG_NEED_MULTIPLE_NODES with
- CONFIG_NUMA
-Message-ID: <YL8D47Ty8iXZJsK3@kernel.org>
-References: <20210604064916.26580-1-rppt@kernel.org>
- <20210604064916.26580-9-rppt@kernel.org>
- <CAMuHMdVa29gUQAdHjKh-qDNpOJaoGwXtUkBM2qnOTi1DWV70xA@mail.gmail.com>
+        id S229678AbhFHHBD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Jun 2021 03:01:03 -0400
+Received: from mail-vs1-f44.google.com ([209.85.217.44]:34685 "EHLO
+        mail-vs1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229657AbhFHHBD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Jun 2021 03:01:03 -0400
+Received: by mail-vs1-f44.google.com with SMTP id q2so2934789vsr.1;
+        Mon, 07 Jun 2021 23:58:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+FZhDB5g+zrC7pU7NdoL3gO/mOIESA4Y/Utk2Yrzo0M=;
+        b=NvfXJUbbLSGU718P0YPLgPztu2uiWzB/vehF0IeReh1ZwCPgvc/09vYgqrrtvW18Gx
+         DJeGkwgkzi3X+4QikyL9tmp8YtI+X0CBa3sWX4IgUWPAQ2PKg2pRqCt8Hiwd3zEeUQJy
+         F2QxxtDFJ01qGT8arvLcaWFHWMXqCIavTOL2ZUURILQLUanlg6/eO3v9oohZIPJWbMp1
+         7SLpbO9dbHleDkstQImlfu7Zwq9/GeL85aXLjP1zc9GzMlVpqWqm1+kegYIg8sdfQ8EE
+         vgOw+Us+W8YjgY2n+aAKQDJo0rAPEovRNV53tDc99Nwx9xaqzqhxsB0+on8apOighcN7
+         NF2w==
+X-Gm-Message-State: AOAM5308i+KxuYn6Fwmy8aw+JVEnOdIbWcKPxT3/qv2jiMkmSYS2G8hJ
+        npaCk5I5U///use82aDjQBX4Kqu5OhykA4VnwgY=
+X-Google-Smtp-Source: ABdhPJz+kLqwZnPCS0BrIEbrML2xAox56vYXpHSSbBiyrAEZD83tbPAAws3L+b0gWUN+eb7OrpWA3ibw2diJNui3SYU=
+X-Received: by 2002:a05:6102:c4c:: with SMTP id y12mr7383918vss.18.1623135534863;
+ Mon, 07 Jun 2021 23:58:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVa29gUQAdHjKh-qDNpOJaoGwXtUkBM2qnOTi1DWV70xA@mail.gmail.com>
+References: <1623130327-13325-1-git-send-email-anshuman.khandual@arm.com>
+In-Reply-To: <1623130327-13325-1-git-send-email-anshuman.khandual@arm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 8 Jun 2021 08:58:43 +0200
+Message-ID: <CAMuHMdWVrUgfXAud_3fpjfO-1yqXzf75Jtk6SNqqcR39-ZzQJA@mail.gmail.com>
+Subject: Re: [PATCH] mm/thp: Define default pmd_pgtable()
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Chris Zankel <chris@zankel.net>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+Hi Anshuman,
 
-On Mon, Jun 07, 2021 at 10:53:08AM +0200, Geert Uytterhoeven wrote:
-> Hi Mike,
-> 
-> On Fri, Jun 4, 2021 at 8:50 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> >
-> > After removal of DISCINTIGMEM the NEED_MULTIPLE_NODES and NUMA
-> > configuration options are equivalent.
-> >
-> > Drop CONFIG_NEED_MULTIPLE_NODES and use CONFIG_NUMA instead.
-> >
-> > Done with
-> >
-> >         $ sed -i 's/CONFIG_NEED_MULTIPLE_NODES/CONFIG_NUMA/' \
-> >                 $(git grep -wl CONFIG_NEED_MULTIPLE_NODES)
-> >         $ sed -i 's/NEED_MULTIPLE_NODES/NUMA/' \
-> >                 $(git grep -wl NEED_MULTIPLE_NODES)
-> >
-> > with manual tweaks afterwards.
-> >
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> Thanks for your patch!
-> 
-> As you dropped the following hunk from v2 of PATCH 5/9, there's now
-> one reference left of CONFIG_NEED_MULTIPLE_NODES
-> (plus the discontigmem comment):
+On Tue, Jun 8, 2021 at 7:31 AM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+> Currently most platforms define pmd_pgtable() as pmd_page() duplicating the
+> same code all over. Instead just define a default value i.e pmd_page() for
+> pmd_pgtable() and let platforms override when required via <asm/pgtable.h>.
+> All the existing platform that override pmd_pgtable() have been moved into
+> their respective <asm/pgtable.h> header in order to precede before the new
+> generic definition. This makes it much cleaner with reduced code.
 
-Aargh, indeed. Thanks for catching this.
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-And I wondered why you suggested to fix spelling in cover letter for v3 :)
- 
-> -diff --git a/mm/memory.c b/mm/memory.c
-> -index f3ffab9b9e39157b..fd0ebb63be3304f5 100644
-> ---- a/mm/memory.c
-> -+++ b/mm/memory.c
-> -@@ -90,8 +90,7 @@
-> - #warning Unfortunate NUMA and NUMA Balancing config, growing
-> page-frame for last_cpupid.
-> - #endif
+Thanks for your patch!
+
+> This patch has been built tested across multiple platforms. But the m68k
+> changes in particular might not be optimal, followed the existing switch
+> from (arch/m68k/include/asm/pgalloc.h).
+
+Indeed.  Why not move them to the existing
+arch/m68k/asm/{sun3,mcf,motorola}_pgtable.h>, instead of introducing
+yet another #if/#elif/#else/#endif block?
+
+> --- a/arch/m68k/include/asm/mcf_pgalloc.h
+> +++ b/arch/m68k/include/asm/mcf_pgalloc.h
+> @@ -32,8 +32,6 @@ extern inline pmd_t *pmd_alloc_kernel(pgd_t *pgd, unsigned long address)
+>
+>  #define pmd_populate_kernel pmd_populate
+>
+> -#define pmd_pgtable(pmd) pfn_to_virt(pmd_val(pmd) >> PAGE_SHIFT)
 > -
-> --#ifndef CONFIG_NEED_MULTIPLE_NODES
-> --/* use the per-pgdat data instead for discontigmem - mbligh */
-> -+#ifdef CONFIG_FLATMEM
-> - unsigned long max_mapnr;
-> - EXPORT_SYMBOL(max_mapnr);
-> -
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+>  static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pgtable,
+>                                   unsigned long address)
+>  {
+> diff --git a/arch/m68k/include/asm/motorola_pgalloc.h b/arch/m68k/include/asm/motorola_pgalloc.h
+> index b4fc3b4f6bb3..74a817d9387f 100644
+> --- a/arch/m68k/include/asm/motorola_pgalloc.h
+> +++ b/arch/m68k/include/asm/motorola_pgalloc.h
+> @@ -88,7 +88,6 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd, pgtable_t page
+>  {
+>         pmd_set(pmd, page);
+>  }
+> -#define pmd_pgtable(pmd) ((pgtable_t)pmd_page_vaddr(pmd))
+>
+>  static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
+>  {
+> diff --git a/arch/m68k/include/asm/pgtable.h b/arch/m68k/include/asm/pgtable.h
+> index ad15d655a9bf..7be5e5e712b2 100644
+> --- a/arch/m68k/include/asm/pgtable.h
+> +++ b/arch/m68k/include/asm/pgtable.h
+> @@ -4,3 +4,12 @@
+>  #else
+>  #include <asm/pgtable_mm.h>
+>  #endif
+> +
+> +
+> +#if defined(CONFIG_COLDFIRE)
+> +#define pmd_pgtable(pmd) pfn_to_virt(pmd_val(pmd) >> PAGE_SHIFT)
+> +#elif defined(CONFIG_SUN3)
+> +#define pmd_pgtable(pmd) pmd_page(pmd)
+> +#else
+> +#define pmd_pgtable(pmd) ((pgtable_t)pmd_page_vaddr(pmd))
+> +#endif
+> diff --git a/arch/m68k/include/asm/sun3_pgalloc.h b/arch/m68k/include/asm/sun3_pgalloc.h
+> index 000f64869b91..198036aff519 100644
+> --- a/arch/m68k/include/asm/sun3_pgalloc.h
+> +++ b/arch/m68k/include/asm/sun3_pgalloc.h
+> @@ -32,7 +32,6 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd, pgtable_t page
+>  {
+>         pmd_val(*pmd) = __pa((unsigned long)page_address(page));
+>  }
+> -#define pmd_pgtable(pmd) pmd_page(pmd)
+>
+>  /*
+>   * allocating and freeing a pmd is trivial: the 1-entry pmd is
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Sincerely yours,
-Mike.
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
