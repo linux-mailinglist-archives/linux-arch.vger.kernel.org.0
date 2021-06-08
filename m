@@ -2,85 +2,234 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE0139FB0E
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 17:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8714C39FB93
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 18:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbhFHPok (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Jun 2021 11:44:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:33942 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231165AbhFHPoj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 8 Jun 2021 11:44:39 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E847D6E;
-        Tue,  8 Jun 2021 08:42:46 -0700 (PDT)
-Received: from [192.168.122.166] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F1ACF3F73D;
-        Tue,  8 Jun 2021 08:42:45 -0700 (PDT)
-Subject: Re: [PATCH v1 2/2] arm64: Enable BTI for main executable as well as
- the interpreter
-To:     Dave Martin <Dave.Martin@arm.com>, Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arch@vger.kernel.org, libc-alpha@sourceware.org,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20210521144621.9306-1-broonie@kernel.org>
- <20210521144621.9306-3-broonie@kernel.org> <20210603154034.GH4187@arm.com>
- <20210603165134.GF4257@sirena.org.uk> <20210603180429.GI20338@arm.com>
- <20210607112536.GI4187@arm.com> <20210607181212.GD17957@arm.com>
- <20210608113318.GA4200@sirena.org.uk> <20210608151914.GJ4187@arm.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-Message-ID: <2318f36a-0b81-0e6c-cf6e-ce4167471c82@arm.com>
-Date:   Tue, 8 Jun 2021 10:42:41 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S233716AbhFHQDH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Jun 2021 12:03:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27925 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233695AbhFHQDF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Jun 2021 12:03:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623168072;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ny0GQOcOMIJ9f9GtQNBSHCKyJm/TZJpAh/jRCTYyLxE=;
+        b=VhaNSBSVb4jHaq2EckzEVHFOZSGnmlnIZpU8X35kUOjRBdI/CGQneuZV5Wv5a0/H37RNwS
+        F2zPzNnPed9fYMWgM3RxJ0QpAjBMPZCwwumqz9LCeoZ0cJuV6hzijQ1JopueVkN+LfhDLN
+        f+C1B09sEp1IFDD2bbV525HsinfMVEo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-8-4Lo9xQCRPVGWI_y5gK4qVQ-1; Tue, 08 Jun 2021 12:01:08 -0400
+X-MC-Unique: 4Lo9xQCRPVGWI_y5gK4qVQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EB2EC501F4;
+        Tue,  8 Jun 2021 16:01:04 +0000 (UTC)
+Received: from t480s.redhat.com (ovpn-115-132.ams2.redhat.com [10.36.115.132])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F1584189C7;
+        Tue,  8 Jun 2021 16:00:49 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
+Subject: [PATCH] madvise.2: Document MADV_POPULATE_READ and MADV_POPULATE_WRITE
+Date:   Tue,  8 Jun 2021 18:00:49 +0200
+Message-Id: <20210608160049.24685-1-david@redhat.com>
+In-Reply-To: <20210511081534.3507-1-david@redhat.com>
+References: <20210511081534.3507-1-david@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20210608151914.GJ4187@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/8/21 10:19 AM, Dave Martin wrote:
-> On Tue, Jun 08, 2021 at 12:33:18PM +0100, Mark Brown via Libc-alpha wrote:
->> On Mon, Jun 07, 2021 at 07:12:13PM +0100, Catalin Marinas wrote:
->>
->>> I don't think we can document all the filters that can be added on top
->>> various syscalls, so I'd leave it undocumented (or part of the systemd
->>> documentation). It was a user space program (systemd) breaking another
->>> user space program (well, anything with a new enough glibc). The kernel
->>> ABI was still valid when /sbin/init started ;).
->>
->> Indeed.  I think from a kernel point of view the main thing is to look
->> at why userspace feels the need to do things like this and see if
->> there's anything we can improve or do better with in future APIs, part
->> of the original discussion here was figuring out that there's not really
->> any other reasonable options for userspace to implement this check at
->> the minute.
-> 
-> Ack, that would be my policy -- just wanted to make it explicit.
-> It would be good if there were better dialogue between the systemd
-> and kernel folks on this kind of thing.
-> 
-> SECCOMP makes it rather easy to (attempt to) paper over kernel/user API
-> design problems, which probably reduces the chance of the API ever being
-> fixed properly, if we're not careful...
+Let's document MADV_POPULATE_READ and MADV_POPULATE_WRITE behavior and
+error conditions.
 
-Well IMHO the problem is larger than just BTI here, what systemd is 
-trying to do by fixing the exec state of a service is admirable but its 
-a 90% solution without the entire linker/loader being in a more 
-privileged context. While BTI makes finding a generic gadget that can 
-call mprotect harder, it still seems like it might just be a little too 
-easy. The secomp filter is providing a nice bonus by removing the 
-ability to disable BTI via mprotect without also disabling X. So without 
-moving more of the linker into the kernel its hard to see how one can 
-really lock down X only pages.
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Jann Horn <jannh@google.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Dave Hansen <dave.hansen@intel.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Michael S. Tsirkin <mst@redhat.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Richard Henderson <rth@twiddle.net>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Rolf Eike Beer <eike-kernel@sf-tec.de>
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linux-arch@vger.kernel.org
+Cc: Linux API <linux-api@vger.kernel.org>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
 
-Anyway, i'm testing this on rawhide now.
+Not for upstream man pages yet, only for linux-mm and linux-api review
+purposes. Once/if the linux changes are merged upstream, I'll send it to
+the proper man list/maintainers.
 
-Thanks!
+---
+ man2/madvise.2 | 80 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
+diff --git a/man2/madvise.2 b/man2/madvise.2
+index f1f384c0c..3ec8c53a7 100644
+--- a/man2/madvise.2
++++ b/man2/madvise.2
+@@ -469,6 +469,59 @@ If a page is file-backed and dirty, it will be written back to the backing
+ storage.
+ The advice might be ignored for some pages in the range when it is not
+ applicable.
++.TP
++.BR MADV_POPULATE_READ " (since Linux 5.14)
++Populate (prefault) page tables readable for the whole range without actually
++reading. Depending on the underlying mapping, map the shared zeropage,
++preallocate memory or read the underlying file; files with holes might or
++might not preallocate blocks.
++Do not generate
++.B SIGBUS
++when populating fails, return an error instead.
++.IP
++If
++.B MADV_POPULATE_READ
++succeeds, all page tables have been populated (prefaulted) readable once.
++If
++.B MADV_POPULATE_READ
++fails, some page tables might have been populated.
++.IP
++.B MADV_POPULATE_READ
++cannot be applied to mappings without read permissions
++and special mappings marked with the kernel-internal
++.B VM_PFNMAP
++and
++.BR VM_IO .
++.IP
++Note that with
++.BR MADV_POPULATE_READ ,
++the process can be killed at any moment when the system runs out of memory.
++.TP
++.BR MADV_POPULATE_WRITE " (since Linux 5.14)
++Populate (prefault) page tables writable for the whole range without actually
++writing. Depending on the underlying mapping, preallocate memory or read the
++underlying file; files with holes will preallocate blocks.
++Do not generate
++.B SIGBUS
++when populating fails, return an error instead.
++.IP
++If
++.B MADV_POPULATE_WRITE
++succeeds, all page tables have been populated (prefaulted) writable once.
++If
++.B MADV_POPULATE_WRITE
++fails, some page tables might have been populated.
++.IP
++.B MADV_POPULATE_WRITE
++cannot be applied to mappings without write permissions
++and special mappings marked with the kernel-internal
++.B VM_PFNMAP
++and
++.BR VM_IO .
++.IP
++Note that
++.BR MADV_POPULATE_WRITE ,
++the process can be killed at any moment when the system runs out of memory.
+ .SH RETURN VALUE
+ On success,
+ .BR madvise ()
+@@ -533,6 +586,17 @@ or
+ .BR VM_PFNMAP
+ ranges.
+ .TP
++.B EINVAL
++.I advice
++is
++.B MADV_POPULATE_READ
++or
++.BR MADV_POPULATE_WRITE ,
++but the specified address range includes ranges with insufficient permissions,
++.B VM_IO
++or
++.BR VM_PFNMAP.
++.TP
+ .B EIO
+ (for
+ .BR MADV_WILLNEED )
+@@ -548,6 +612,14 @@ Not enough memory: paging in failed.
+ Addresses in the specified range are not currently
+ mapped, or are outside the address space of the process.
+ .TP
++.B ENOMEM
++.I advice
++is
++.B MADV_POPULATE_READ
++or
++.BR MADV_POPULATE_WRITE ,
++but populating (prefaulting) page tables failed.
++.TP
+ .B EPERM
+ .I advice
+ is
+@@ -555,6 +627,14 @@ is
+ but the caller does not have the
+ .B CAP_SYS_ADMIN
+ capability.
++.TP
++.B EHWPOISON
++.I advice
++is
++.B MADV_POPULATE_READ
++or
++.BR MADV_POPULATE_WRITE ,
++and a HW poisoned page is encountered.
+ .SH VERSIONS
+ Since Linux 3.18,
+ .\" commit d3ac21cacc24790eb45d735769f35753f5b56ceb
+-- 
+2.31.1
 
