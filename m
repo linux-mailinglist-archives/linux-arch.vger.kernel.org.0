@@ -2,48 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C048E3A07BA
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 01:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78B63A07DA
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 01:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbhFHXWo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Jun 2021 19:22:44 -0400
-Received: from mail-pf1-f175.google.com ([209.85.210.175]:42978 "EHLO
-        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235381AbhFHXWn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Jun 2021 19:22:43 -0400
-Received: by mail-pf1-f175.google.com with SMTP id s14so16028242pfd.9
-        for <linux-arch@vger.kernel.org>; Tue, 08 Jun 2021 16:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UYnHXpjkxY6uN8Q/wAdT4oZuTb3kldbBA0o55ZnXLbI=;
-        b=VDGAYt9zeOJIjafEo+B67uPbBGKQhrSGnf7Qo9Ch6H/mTASRST0oDv92Nf7ui6OeS8
-         iB3NOQV0MMtCh2uBcA+Npibc6zFdC9xeu4KT1yRo8M0w7oGssOjX8MMlaVOz2EjWKrbi
-         wCpTzbJv8yEONP8oFpas7EKEl1l7Ccqy2QOmo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UYnHXpjkxY6uN8Q/wAdT4oZuTb3kldbBA0o55ZnXLbI=;
-        b=FmfN/QZCPV4tR5GVbjRnig7l7/qp1MHQP8hbArOeOG+pObYKqAtjn2kZHfUmJV8QCJ
-         Zdsh09ScWfCmmIDB/u/G6zGaLAApYx6ybv9lazwFeN+tjJNlAaCFN+lC2+sqpVhrB+MG
-         G6b9W1C0INg6Z/ze6xbK4fGhUaf2XDxur9nDO0BVrgxnheO+scZHl1+u+76lf+Q67Dd+
-         gCSw6lbZ6aSqsYa3WPx+nb+OJ2mniA+TbFA+eHcXRcMxscGxBV25VquV1bSU3eoQb4g6
-         b7pW14OyKI9CZQH/r3WLRg1TT2t55Hr5h6/YUZV02H3VWhqq5ObLqg7yq2XniNjoHqvu
-         pJ1g==
-X-Gm-Message-State: AOAM530lxJ5a5X9MURbiJov7CejOLdEbTdI1bYwoePoDzA1E6xJVu9sc
-        iXth880DOZvaLLcANyydi7kEbw==
-X-Google-Smtp-Source: ABdhPJy13j1j0ODNi7LI1+2LKQunbW8Wx/i0jcdBN55+DupC2NcBqv+Cq0yP0XhoUlI386xpojybKg==
-X-Received: by 2002:a62:be03:0:b029:2e9:fe8c:effe with SMTP id l3-20020a62be030000b02902e9fe8ceffemr2325280pff.34.1623194373956;
-        Tue, 08 Jun 2021 16:19:33 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m2sm16400257pjf.24.2021.06.08.16.19.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 16:19:32 -0700 (PDT)
-Date:   Tue, 8 Jun 2021 16:19:31 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     John Wood <john.wood@gmx.com>
+        id S234752AbhFHXkM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Jun 2021 19:40:12 -0400
+Received: from mga04.intel.com ([192.55.52.120]:25117 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234187AbhFHXkM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 8 Jun 2021 19:40:12 -0400
+IronPort-SDR: PhVfYU3yM+kKGfCbOtWah/c4y+TTHybZCU1QC/l4xGNJS9Tsdqv4F+Y9vh4yf7pt76JsfAyJ2U
+ O3AYQrc9uweQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10009"; a="203113719"
+X-IronPort-AV: E=Sophos;i="5.83,259,1616482800"; 
+   d="scan'208";a="203113719"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2021 16:38:16 -0700
+IronPort-SDR: pE4bdvjF0J9Yr2v3Y5b0EYAhXyF61Gs96zOXtSka7ND8veuaNykb0Auifm2a4kdYM6xKQUkwk/
+ irwRg3JJ0msA==
+X-IronPort-AV: E=Sophos;i="5.83,259,1616482800"; 
+   d="scan'208";a="551784529"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.24.11]) ([10.209.24.11])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2021 16:38:15 -0700
+Subject: Re: [PATCH v8 0/8] Fork brute force attack mitigation
+To:     Kees Cook <keescook@chromium.org>, John Wood <john.wood@gmx.com>
 Cc:     Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
@@ -51,8 +33,7 @@ Cc:     Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>,
-        valdis.kletnieks@vt.edu,
+        Arnd Bergmann <arnd@arndb.de>, valdis.kletnieks@vt.edu,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -61,38 +42,44 @@ Cc:     Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
         linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-hardening@vger.kernel.org,
         kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v8 0/8] Fork brute force attack mitigation
-Message-ID: <202106081616.EC17DC1D0D@keescook>
 References: <20210605150405.6936-1-john.wood@gmx.com>
+ <202106081616.EC17DC1D0D@keescook>
+From:   Andi Kleen <ak@linux.intel.com>
+Message-ID: <cbfd306b-6e37-a697-ebdb-4a5029d36583@linux.intel.com>
+Date:   Tue, 8 Jun 2021 16:38:15 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210605150405.6936-1-john.wood@gmx.com>
+In-Reply-To: <202106081616.EC17DC1D0D@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 05, 2021 at 05:03:57PM +0200, John Wood wrote:
-> [...]
-> the kselftest to avoid the detection ;) ). So, in this version, to track
-> all the statistical data (info related with application crashes), the
-> extended attributes feature for the executable files are used. The xattr is
-> also used to mark the executables as "not allowed" when an attack is
-> detected. Then, the execve system call rely on this flag to avoid following
-> executions of this file.
 
-I have some concerns about this being actually usable and not creating
-DoS situations. For example, let's say an attacker had found a hard-to-hit
-bug in "sudo", and starts brute forcing it. When the brute LSM notices,
-it'll make "sudo" unusable for the entire system, yes?
+On 6/8/2021 4:19 PM, Kees Cook wrote:
+> On Sat, Jun 05, 2021 at 05:03:57PM +0200, John Wood wrote:
+>> [...]
+>> the kselftest to avoid the detection ;) ). So, in this version, to track
+>> all the statistical data (info related with application crashes), the
+>> extended attributes feature for the executable files are used. The xattr is
+>> also used to mark the executables as "not allowed" when an attack is
+>> detected. Then, the execve system call rely on this flag to avoid following
+>> executions of this file.
+> I have some concerns about this being actually usable and not creating
+> DoS situations. For example, let's say an attacker had found a hard-to-hit
+> bug in "sudo", and starts brute forcing it. When the brute LSM notices,
+> it'll make "sudo" unusable for the entire system, yes?
+>
+> And a reboot won't fix it, either, IIUC.
+>
+The whole point of the mitigation is to trade potential attacks against DOS.
 
-And a reboot won't fix it, either, IIUC.
+If you're worried about DOS the whole thing is not for you.
 
-It seems like there is a need to track "user" running "prog", and have
-that be timed out. Are there use-cases here where that wouldn't be
-sufficient?
+-Andi
 
--Kees
 
--- 
-Kees Cook
+
