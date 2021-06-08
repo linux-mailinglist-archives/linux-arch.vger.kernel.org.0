@@ -2,234 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8714C39FB93
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 18:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE6C39FC20
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 18:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbhFHQDH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Jun 2021 12:03:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27925 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233695AbhFHQDF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Jun 2021 12:03:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623168072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ny0GQOcOMIJ9f9GtQNBSHCKyJm/TZJpAh/jRCTYyLxE=;
-        b=VhaNSBSVb4jHaq2EckzEVHFOZSGnmlnIZpU8X35kUOjRBdI/CGQneuZV5Wv5a0/H37RNwS
-        F2zPzNnPed9fYMWgM3RxJ0QpAjBMPZCwwumqz9LCeoZ0cJuV6hzijQ1JopueVkN+LfhDLN
-        f+C1B09sEp1IFDD2bbV525HsinfMVEo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-8-4Lo9xQCRPVGWI_y5gK4qVQ-1; Tue, 08 Jun 2021 12:01:08 -0400
-X-MC-Unique: 4Lo9xQCRPVGWI_y5gK4qVQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EB2EC501F4;
-        Tue,  8 Jun 2021 16:01:04 +0000 (UTC)
-Received: from t480s.redhat.com (ovpn-115-132.ams2.redhat.com [10.36.115.132])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F1584189C7;
-        Tue,  8 Jun 2021 16:00:49 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
-Subject: [PATCH] madvise.2: Document MADV_POPULATE_READ and MADV_POPULATE_WRITE
-Date:   Tue,  8 Jun 2021 18:00:49 +0200
-Message-Id: <20210608160049.24685-1-david@redhat.com>
-In-Reply-To: <20210511081534.3507-1-david@redhat.com>
-References: <20210511081534.3507-1-david@redhat.com>
+        id S230261AbhFHQNd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Jun 2021 12:13:33 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:21881 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232240AbhFHQNL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Jun 2021 12:13:11 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-234-62pR9OyRO-SSSIbw5JosqQ-1; Tue, 08 Jun 2021 17:11:16 +0100
+X-MC-Unique: 62pR9OyRO-SSSIbw5JosqQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.18; Tue, 8 Jun 2021 17:11:15 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.018; Tue, 8 Jun 2021 17:11:15 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>
+CC:     Guo Ren <guoren@kernel.org>, Nick Kossifidis <mick@ics.forth.gr>,
+        "Drew Fustini" <drew@beagleboard.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        "Palmer Dabbelt" <palmerdabbelt@google.com>,
+        "wefu@redhat.com" <wefu@redhat.com>,
+        =?utf-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Benjamin Koch <snowball@c3pb.de>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        Wei Fu <tekkamanninja@gmail.com>
+Subject: RE: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
+Thread-Topic: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
+Thread-Index: AQHXW2Yf+E+HbgFRkkm3Xv2DTkp7y6sKNaKQ///5qoCAABnpEA==
+Date:   Tue, 8 Jun 2021 16:11:15 +0000
+Message-ID: <7a11939f4c7f4494a7d86b8d5f1bb702@AcuMS.aculab.com>
+References: <CAJF2gTTjwB4U-NxCtfgMA5aR2HzoQtA8a51W5UM1LHGRbjz9pg@mail.gmail.com>
+ <20210519064435.GA3076809@x1> <20210519065352.GA31590@lst.de>
+ <CAJF2gTR4FXRbp7oky-ypdVJba6btFHpp-+dPyJStRaQX_-5rzg@mail.gmail.com>
+ <29733b0931d9dd6a2f0b6919067c7efe@mailhost.ics.forth.gr>
+ <CAJF2gTTpSbNWS4VLHAu4XsV5-Vos=6R9MmPOx8-yzMFJu=wX4A@mail.gmail.com>
+ <a8f2e68dcc1a6eb1ff3b95fcb8d0d0d2@mailhost.ics.forth.gr>
+ <CAJF2gTQuQ5bE6HeGSoNaDynA0o3+KEo4snwft42YGzE=+DjKOQ@mail.gmail.com>
+ <20210607062701.GB24060@lst.de>
+ <2db975b5f24149b19191120b9f0f506b@AcuMS.aculab.com>
+ <20210608153203.GA6802@lst.de>
+In-Reply-To: <20210608153203.GA6802@lst.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Let's document MADV_POPULATE_READ and MADV_POPULATE_WRITE behavior and
-error conditions.
-
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Minchan Kim <minchan@kernel.org>
-Cc: Jann Horn <jannh@google.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Michael S. Tsirkin <mst@redhat.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Richard Henderson <rth@twiddle.net>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Rolf Eike Beer <eike-kernel@sf-tec.de>
-Cc: linux-alpha@vger.kernel.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: linux-xtensa@linux-xtensa.org
-Cc: linux-arch@vger.kernel.org
-Cc: Linux API <linux-api@vger.kernel.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-
-Not for upstream man pages yet, only for linux-mm and linux-api review
-purposes. Once/if the linux changes are merged upstream, I'll send it to
-the proper man list/maintainers.
-
----
- man2/madvise.2 | 80 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
-
-diff --git a/man2/madvise.2 b/man2/madvise.2
-index f1f384c0c..3ec8c53a7 100644
---- a/man2/madvise.2
-+++ b/man2/madvise.2
-@@ -469,6 +469,59 @@ If a page is file-backed and dirty, it will be written back to the backing
- storage.
- The advice might be ignored for some pages in the range when it is not
- applicable.
-+.TP
-+.BR MADV_POPULATE_READ " (since Linux 5.14)
-+Populate (prefault) page tables readable for the whole range without actually
-+reading. Depending on the underlying mapping, map the shared zeropage,
-+preallocate memory or read the underlying file; files with holes might or
-+might not preallocate blocks.
-+Do not generate
-+.B SIGBUS
-+when populating fails, return an error instead.
-+.IP
-+If
-+.B MADV_POPULATE_READ
-+succeeds, all page tables have been populated (prefaulted) readable once.
-+If
-+.B MADV_POPULATE_READ
-+fails, some page tables might have been populated.
-+.IP
-+.B MADV_POPULATE_READ
-+cannot be applied to mappings without read permissions
-+and special mappings marked with the kernel-internal
-+.B VM_PFNMAP
-+and
-+.BR VM_IO .
-+.IP
-+Note that with
-+.BR MADV_POPULATE_READ ,
-+the process can be killed at any moment when the system runs out of memory.
-+.TP
-+.BR MADV_POPULATE_WRITE " (since Linux 5.14)
-+Populate (prefault) page tables writable for the whole range without actually
-+writing. Depending on the underlying mapping, preallocate memory or read the
-+underlying file; files with holes will preallocate blocks.
-+Do not generate
-+.B SIGBUS
-+when populating fails, return an error instead.
-+.IP
-+If
-+.B MADV_POPULATE_WRITE
-+succeeds, all page tables have been populated (prefaulted) writable once.
-+If
-+.B MADV_POPULATE_WRITE
-+fails, some page tables might have been populated.
-+.IP
-+.B MADV_POPULATE_WRITE
-+cannot be applied to mappings without write permissions
-+and special mappings marked with the kernel-internal
-+.B VM_PFNMAP
-+and
-+.BR VM_IO .
-+.IP
-+Note that
-+.BR MADV_POPULATE_WRITE ,
-+the process can be killed at any moment when the system runs out of memory.
- .SH RETURN VALUE
- On success,
- .BR madvise ()
-@@ -533,6 +586,17 @@ or
- .BR VM_PFNMAP
- ranges.
- .TP
-+.B EINVAL
-+.I advice
-+is
-+.B MADV_POPULATE_READ
-+or
-+.BR MADV_POPULATE_WRITE ,
-+but the specified address range includes ranges with insufficient permissions,
-+.B VM_IO
-+or
-+.BR VM_PFNMAP.
-+.TP
- .B EIO
- (for
- .BR MADV_WILLNEED )
-@@ -548,6 +612,14 @@ Not enough memory: paging in failed.
- Addresses in the specified range are not currently
- mapped, or are outside the address space of the process.
- .TP
-+.B ENOMEM
-+.I advice
-+is
-+.B MADV_POPULATE_READ
-+or
-+.BR MADV_POPULATE_WRITE ,
-+but populating (prefaulting) page tables failed.
-+.TP
- .B EPERM
- .I advice
- is
-@@ -555,6 +627,14 @@ is
- but the caller does not have the
- .B CAP_SYS_ADMIN
- capability.
-+.TP
-+.B EHWPOISON
-+.I advice
-+is
-+.B MADV_POPULATE_READ
-+or
-+.BR MADV_POPULATE_WRITE ,
-+and a HW poisoned page is encountered.
- .SH VERSIONS
- Since Linux 3.18,
- .\" commit d3ac21cacc24790eb45d735769f35753f5b56ceb
--- 
-2.31.1
+RnJvbTogJ0NocmlzdG9waCBIZWxsd2lnJw0KPiBTZW50OiAwOCBKdW5lIDIwMjEgMTY6MzINCj4g
+DQo+IE9uIFR1ZSwgSnVuIDA4LCAyMDIxIGF0IDAzOjAwOjE3UE0gKzAwMDAsIERhdmlkIExhaWdo
+dCB3cm90ZToNCj4gPiBJdCBpcyBhbG1vc3QgaW1wb3NzaWJsZSB0byBpbnRlcmZhY2UgdG8gbWFu
+eSBldGhlcm5ldCBjaGlwcyB3aXRob3V0DQo+ID4gZWl0aGVyIGNvaGVyZW50IG9yIHVuY2FjaGVk
+IG1lbW9yeSBmb3IgdGhlIGRlc2NyaXB0b3IgcmluZ3MuDQo+ID4gVGhlIHN0YXR1cyBiaXRzIG9u
+IHRoZSB0cmFuc21pdCByaW5nIGFyZSBwYXJ0aWN1bGFybHkgcHJvYmxlbWF0aWMuDQo+ID4NCj4g
+PiBUaGUgcmVjZWl2ZSByaW5nIGNhbiBiZSBkb25lIHdpdGggd3JpdGViYWNrK2ludmFsaWRhdGUg
+cHJvdmlkZWQgeW91DQo+ID4gZmlsbCBhIGNhY2hlIGxpbmUgYXQgYSB0aW1lLg0KPiANCj4gSXQg
+aXMgaG9ycmlibGUsIGJ1dCBpdCBoYXMgYmVlbiBkb25lLiAgVGFrZSBhIGxvb2sgYXQ6DQo+IA0K
+PiBkcml2ZXJzL25ldC9ldGhlcm5ldC9pODI1eHgvbGFzaV84MjU5Ni5jIGFuZA0KPiBkcml2ZXJz
+L25ldC9ldGhlcm5ldC9zZWVxL3NnaXNlZXEuYw0KDQpJIGd1ZXNzIHRoYXQgZWFjaCB0cmFuc21p
+dCBoYXMgdG8gYmUgc3BsaXQgaW50byBlbm91Z2gNCmZyYWdtZW50cyB0aGF0IHRoZXkgZmlsbCBh
+IGNhY2hlIGxpbmUuDQpUaGF0IHdvbid0IHdvcmsgd2l0aCBzb21lIChwcm9iYWJseSBvbGQgbm93
+KSBkZXZpY2VzIHRoYXQNCnJlcXVpcmUgdGhlIGZpcnN0IGZyYWdtZW50IHRvIGJlIDY0IGJ5dGVz
+IGJlY2F1c2UgaXQgd29uJ3QNCmJhY2stdXAgdGhlIGRlc2NyaXB0b3JzIGFmdGVyIGEgY29sbGlz
+aW9uLg0KDQpJdCdzIGFsbCBhcyBob3JyaWQgYXMgYSBEU1Agd2UgaGF2ZSB0aGF0IGNhbid0IHJl
+Y2VpdmUgZXRoZXJuZXQNCmZyYW1lcyBvbnRvIGEgNG4rMiBib3VuZGFyeSBhbmQgZG9lc24ndCBz
+dXBwb3J0IG1pc2FsaWduZWQgYWNjZXNzZXMuDQoNCk1pbmQgeW91LCBTdW4ncyBvcmlnaW5hbCBT
+YnVzIGV0aGVybmV0IGJvYXJkIGhhZCB0byBiZSBnaXZlbg0KYSA0biBhbGlnbmVkIHJ4IGJ1ZmZl
+ciBhbmQgdGhlbiBhIG1pc2FsaWduZWQgY29weSBkb25lIGluIGtlcm5lbA0KaW4gb3JkZXIgdG8g
+bm90IGRyb3AgcGFja2V0cyENCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtl
+c2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBV
+Sw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
