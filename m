@@ -2,73 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D1A39FA3C
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 17:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A0439FAD1
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Jun 2021 17:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbhFHPWN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Jun 2021 11:22:13 -0400
-Received: from foss.arm.com ([217.140.110.172]:33356 "EHLO foss.arm.com"
+        id S232803AbhFHPgZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Jun 2021 11:36:25 -0400
+Received: from gate.crashing.org ([63.228.1.57]:34923 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230462AbhFHPWM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 8 Jun 2021 11:22:12 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72F346D;
-        Tue,  8 Jun 2021 08:20:19 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 565963F73D;
-        Tue,  8 Jun 2021 08:20:18 -0700 (PDT)
-Date:   Tue, 8 Jun 2021 16:19:18 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arch@vger.kernel.org, libc-alpha@sourceware.org,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
+        id S231842AbhFHPgY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 8 Jun 2021 11:36:24 -0400
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 158FStNV014004;
+        Tue, 8 Jun 2021 10:28:55 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 158FSp5w013994;
+        Tue, 8 Jun 2021 10:28:51 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Tue, 8 Jun 2021 10:28:51 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexander Monakov <amonakov@ispras.ru>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 2/2] arm64: Enable BTI for main executable as well as
- the interpreter
-Message-ID: <20210608151914.GJ4187@arm.com>
-References: <20210521144621.9306-1-broonie@kernel.org>
- <20210521144621.9306-3-broonie@kernel.org>
- <20210603154034.GH4187@arm.com>
- <20210603165134.GF4257@sirena.org.uk>
- <20210603180429.GI20338@arm.com>
- <20210607112536.GI4187@arm.com>
- <20210607181212.GD17957@arm.com>
- <20210608113318.GA4200@sirena.org.uk>
-MIME-Version: 1.0
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+Message-ID: <20210608152851.GX18427@gate.crashing.org>
+References: <20210606185922.GF7746@tucnak> <CAHk-=wis8zq3WrEupCY6wcBeW3bB0WMOzaUkXpb-CsKuxM=6-w@mail.gmail.com> <alpine.LNX.2.20.13.2106070017070.7184@monopod.intra.ispras.ru> <CAHk-=wjwXs5+SOZGTaZ0bP9nsoA+PymAcGE4CBDVX3edGUcVRg@mail.gmail.com> <alpine.LNX.2.20.13.2106070956310.7184@monopod.intra.ispras.ru> <CANpmjNMwq6ENUtBunP-rw9ZSrJvZnQw18rQ47U3JuqPEQZsaXA@mail.gmail.com> <20210607152806.GS4397@paulmck-ThinkPad-P17-Gen-1> <YL5Risa6sFgnvvnG@elver.google.com> <CANpmjNNtDX+eBEpuP9-NgT6RAwHK5OgbQHT9b+8LZQJtwWpvPg@mail.gmail.com> <YL9TEqealhxBBhoS@hirez.programming.kicks-ass.net>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210608113318.GA4200@sirena.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <YL9TEqealhxBBhoS@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.4.2.3i
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 12:33:18PM +0100, Mark Brown via Libc-alpha wrote:
-> On Mon, Jun 07, 2021 at 07:12:13PM +0100, Catalin Marinas wrote:
+On Tue, Jun 08, 2021 at 01:22:58PM +0200, Peter Zijlstra wrote:
+> Works for me; and note how it mirrors how we implemented volatile_if()
+> in the first place, by doing an expression wrapper.
 > 
-> > I don't think we can document all the filters that can be added on top
-> > various syscalls, so I'd leave it undocumented (or part of the systemd
-> > documentation). It was a user space program (systemd) breaking another
-> > user space program (well, anything with a new enough glibc). The kernel
-> > ABI was still valid when /sbin/init started ;).
+> __builtin_ctrl_depends(expr) would have to:
 > 
-> Indeed.  I think from a kernel point of view the main thing is to look
-> at why userspace feels the need to do things like this and see if
-> there's anything we can improve or do better with in future APIs, part
-> of the original discussion here was figuring out that there's not really
-> any other reasonable options for userspace to implement this check at
-> the minute.
+>  - ensure !__builtin_const_p(expr)	(A)
 
-Ack, that would be my policy -- just wanted to make it explicit.
-It would be good if there were better dialogue between the systemd
-and kernel folks on this kind of thing.
+Why would it be an error if __builtin_constant_p(expr)?  In many
+programs the compiler can figure out some expression does never change.
+Having a control dependency on sometthing like that is not erroneous.
 
-SECCOMP makes it rather easy to (attempt to) paper over kernel/user API
-design problems, which probably reduces the chance of the API ever being
-fixed properly, if we're not careful...
+>  - imply an acquire compiler fence	(B)
+>  - ensure cond-branch is emitted	(C)
 
-Cheers
----Dave
+(C) is almost impossible to do.  This should be reformulated to talk
+about the effect of the generated code, instead.
+
+> *OR*
+> 
+>  - ensure !__builtin_const_p(expr);		(A)
+>  - upgrade the load in @expr to load-acquire	(D)
+
+So that will only work if there is exactly one read from memory in expr?
+That is problematic.
+
+This needs some work.
+
+
+Segher
