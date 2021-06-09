@@ -2,107 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A6F3A17E3
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 16:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0313A18A3
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 17:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238265AbhFIOw4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Jun 2021 10:52:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59320 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238257AbhFIOw4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Jun 2021 10:52:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2163C6128A;
-        Wed,  9 Jun 2021 14:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623250261;
-        bh=svcXYr1x4uog0gl91R41ozY2Q0KNDzZmG4YRGTMMy2A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YkHX/JVfHqUvpWvWXkgg3rdrkk7agHtEIKqaX0vfSpX504lTGaDjO7Qz7iARqzkGp
-         DWsHVY+tAbRsBUSVBkbhVjgZvGY6y/wRIXGMo+CgzooB/zqPomfgnsHX9y3mgTbMXc
-         xGiW+RangNEk+pKIT8UX8w6paGaFQZLDQ+McKqTpjqFKueMHIVGMXJpalfW0Fph76r
-         Lcm2WPwzewVnde/Vu5ujWTdQssxwNbFghUliAxp8Ku3YbSQHaHnLbkGz+awfGrnWGJ
-         yu4qANQoP9p9s4/vzkSPeJiYpDnHVlRdjW4xbBVW2tivL4go8M8laNS3QaNsdGKKc0
-         R1JEjjJpSG45g==
-Date:   Wed, 9 Jun 2021 17:50:50 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matt Turner <mattst88@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        sparclinux <sparclinux@vger.kernel.org>
-Subject: Re: [PATCH v2 0/9] Remove DISCINTIGMEM memory model
-Message-ID: <YMDVSu00xXGmdCtC@kernel.org>
-References: <20210604064916.26580-1-rppt@kernel.org>
- <CAK8P3a2tZDJDqgr9-1vJrnbDhd_36eKq8LMEznDkU7rvuAnAag@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2tZDJDqgr9-1vJrnbDhd_36eKq8LMEznDkU7rvuAnAag@mail.gmail.com>
+        id S235996AbhFIPLc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Jun 2021 11:11:32 -0400
+Received: from flippie-beckerswealth-sa.xyz ([62.173.147.2]:56138 "EHLO
+        host.flippie-beckerswealth-sa.xyz" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235672AbhFIPL1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Jun 2021 11:11:27 -0400
+X-Greylist: delayed 9165 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Jun 2021 11:11:26 EDT
+Received: from flippie-beckerswealth-sa.xyz (ec2-3-131-99-163.us-east-2.compute.amazonaws.com [3.131.99.163])
+        by host.flippie-beckerswealth-sa.xyz (Postfix) with ESMTPA id 4F87C30A22A6
+        for <linux-arch@vger.kernel.org>; Wed,  9 Jun 2021 15:10:26 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz 4F87C30A22A6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240627;
+        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=BZbclbvIt7+Ze+UARiETwdCroL73azrftJJKsicEzj/gBGJTz46XzSsPsqF2KVLH3
+         ShYgfm0pLZVQ7cgdRe7ZwOpxjL0s+M9bmbG4ytoVZWMAsMtiNtsGsy3LtDryXvEu6N
+         J5lpREnTBt8mfuCaSvIvzQBo33Dk8KzOytrb3XZI=
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz 4F87C30A22A6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240627;
+        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=BZbclbvIt7+Ze+UARiETwdCroL73azrftJJKsicEzj/gBGJTz46XzSsPsqF2KVLH3
+         ShYgfm0pLZVQ7cgdRe7ZwOpxjL0s+M9bmbG4ytoVZWMAsMtiNtsGsy3LtDryXvEu6N
+         J5lpREnTBt8mfuCaSvIvzQBo33Dk8KzOytrb3XZI=
+Reply-To: jmasuku40@flippiebeckerwealthservices.com
+From:   Jotham Masuku <jmasuku40@flippie-beckerswealth-sa.xyz>
+To:     linux-arch@vger.kernel.org
+Subject: Proposal
+Date:   09 Jun 2021 12:10:25 +0000
+Message-ID: <20210609121025.FF60A2D62FB899DF@flippie-beckerswealth-sa.xyz>
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd,
+Hello there,
 
-On Wed, Jun 09, 2021 at 01:30:39PM +0200, Arnd Bergmann wrote:
-> On Fri, Jun 4, 2021 at 8:49 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> >
-> > Hi,
-> >
-> > SPARSEMEM memory model was supposed to entirely replace DISCONTIGMEM a
-> > (long) while ago. The last architectures that used DISCONTIGMEM were
-> > updated to use other memory models in v5.11 and it is about the time to
-> > entirely remove DISCONTIGMEM from the kernel.
-> >
-> > This set removes DISCONTIGMEM from alpha, arc and m68k, simplifies memory
-> > model selection in mm/Kconfig and replaces usage of redundant
-> > CONFIG_NEED_MULTIPLE_NODES and CONFIG_FLAT_NODE_MEM_MAP with CONFIG_NUMA
-> > and CONFIG_FLATMEM respectively.
-> >
-> > I've also removed NUMA support on alpha that was BROKEN for more than 15
-> > years.
-> >
-> > There were also minor updates all over arch/ to remove mentions of
-> > DISCONTIGMEM in comments and #ifdefs.
-> 
-> Hi Mike and Andrew,
-> 
-> It looks like everyone is happy with this version so far. How should we merge it
-> for linux-next? I'm happy to take it through the asm-generic tree, but linux-mm
-> would fit at least as well. In case we go for linux-mm, feel free to add
+I hope this message finds you in good spirits especially during=20
+this challenging time of coronavirus pandemic. I hope you and=20
+your family are well and keeping safe. Anyway, I am Jotham=20
+Masuku, a broker working with Flippiebecker Wealth. I got your=20
+contact (along with few other contacts) through an online=20
+business directory and I thought I should contact you to see if=20
+you are interested in this opportunity. I am contacting you=20
+because one of my high profile clients is interested in investing=20
+abroad and has asked me to look for individuals and companies=20
+with interesting business ideas and projects that he can invest=20
+in. He wants to invest a substantial amount of asset abroad.
 
-Andrew already took to mmotm.
- 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
+Please kindly respond back to this email if you are interested in=20
+this opportunity. Once I receive your response, I will give you=20
+more details and we can plan a strategy that will be beneficial=20
+to all parties.
 
-Thanks!
+Best regards
 
-> for the whole series.
-
--- 
-Sincerely yours,
-Mike.
+J Masuku
+Flippiebecker Wealth
