@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E27193A11D5
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 12:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DCC3A11DA
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 12:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238498AbhFIK5q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Jun 2021 06:57:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:30975 "EHLO
+        id S238041AbhFIK6D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Jun 2021 06:58:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45470 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238512AbhFIK5l (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Jun 2021 06:57:41 -0400
+        by vger.kernel.org with ESMTP id S238599AbhFIK57 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Jun 2021 06:57:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623236147;
+        s=mimecast20190719; t=1623236164;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8eJ75jP8VswGGJerrw0vTcQbjnv4lkuutS1tqnKekIs=;
-        b=FPG8TD8moaSOEPvgSgepRE2nXpZ7Ng8goUh9oRSExPNUyNf36sUkLRmBKldJYSeVf9WY69
-        MO/58tSzB7OCf3TPuQ4zIs0Kv5YZDNBQX9i9gsgHVG2G0lXTHMvlKNuxrTN9JCUcmoyyzL
-        GbYjp4H06VAMOfvzhUA3jPbnHQym3YI=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-561-dxGbZ3m1N-qd0FNkRHuiwg-1; Wed, 09 Jun 2021 06:55:44 -0400
-X-MC-Unique: dxGbZ3m1N-qd0FNkRHuiwg-1
-Received: by mail-wr1-f71.google.com with SMTP id f22-20020a5d58f60000b029011634e39889so10572063wrd.7
-        for <linux-arch@vger.kernel.org>; Wed, 09 Jun 2021 03:55:43 -0700 (PDT)
+        bh=1eqcq/7KVFIFfww4JdqqnK/TUbif/qCxlnaAkIZ26tg=;
+        b=XhbkTzLIxP/kCPYbdPkz2lNjcWWrTTwywSkuukPJX/ZGLAYCdC1RPoHuQWS0UbqoDw+MHH
+        zHDpk7smthFA9q0TfeDrDNVCaxlhFEUKjKiwLCRw6HYWaBAwW6ECJIbHwP6wu40yxFzrK1
+        x3ggkJKDQZ3GflUqR9fny9V7F4193AU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-164-9gGH4t77McCr2liFkE1Pvg-1; Wed, 09 Jun 2021 06:56:03 -0400
+X-MC-Unique: 9gGH4t77McCr2liFkE1Pvg-1
+Received: by mail-wr1-f70.google.com with SMTP id k25-20020a5d52590000b0290114dee5b660so10621899wrc.16
+        for <linux-arch@vger.kernel.org>; Wed, 09 Jun 2021 03:56:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:organization
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=8eJ75jP8VswGGJerrw0vTcQbjnv4lkuutS1tqnKekIs=;
-        b=JWiXqKrYZhEU99aH+NrXwJ8tCQEUrbk9ZgRqc0LbmKkSUkYn7dOfNt5mGXZfTGUL0m
-         xuJPv7a9rWsoXkql4Csx8lFj9D1xXZCc08zzjEqF+6lHQV+Akh3VYhA5NPAh/7/NROCH
-         5ed6ZO9QUiMFThqRjsTQnSSnubpvcgeYpSPg5RVC3dWH57Bb/atsODO7YOHkO+QohyUg
-         FtzMrXGU0q3rfUOjMEabU6A2dWXKJWU4drkLPp9B5e5rPT9hnAceqQpqdmma+2eWq3Bh
-         L487gJnXO34WCLeUxGulVnVjfHokdeJWMklrbkVjlEAx9ladS0YMr/AKtMhyFg+p7s5B
-         g8ww==
-X-Gm-Message-State: AOAM533QaGss7spPE0GHZ9LuGLS1AzmwgAw6Cuk7rhkZY/VbRCV7ZjYD
-        1+cuj9mFgpaLrrjnwHk3h7l/nj3/UamV8l6sund4WpiqsO3QWdLtPqOqYKzc0pZYkN3B1V39/N8
-        PPokuRwwnfENqtmIT02Hb4w==
-X-Received: by 2002:a5d:5986:: with SMTP id n6mr17137252wri.60.1623236142824;
-        Wed, 09 Jun 2021 03:55:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwIGfmTwGC2TpIXNbv+PWtjaoi8HXZHgLLq9CIfPD3MO+tKk1vjDrGMDkIUZv5ZbdxqYiN+vw==
-X-Received: by 2002:a5d:5986:: with SMTP id n6mr17137201wri.60.1623236142550;
-        Wed, 09 Jun 2021 03:55:42 -0700 (PDT)
+        bh=1eqcq/7KVFIFfww4JdqqnK/TUbif/qCxlnaAkIZ26tg=;
+        b=pnfpYOVWIOaPgMF0LN4GaFyl3FemYeIjfz5TwhVYr7X8/22eToOH5JHk5bXeX7zCnV
+         3cjwcFFx+gFq/Y+n4adwHd+oqNFRMlfQA4BERne0ZE9mr/Ll4RlHQrf+acNAy3ebaw6U
+         q5TQqd++ljOzJRwZgr9/C/hXHbYAbX9fuYRedP+1DLcwHI9q/tMVB1ye2lm8tSWhN+L4
+         kdm7BUbgrlU/XZ6LqPdxi1qQCVXlnnolFOReEOGohiJbaFkmdi0rAydYoWtzKJzRFNlJ
+         mNlueZ72ezagostoHKQoh2RrMIs0/jMYZNM1Fs87DacpHnfpOLEjoOgsxNIv6LHvLS+a
+         rzNw==
+X-Gm-Message-State: AOAM530ux5T27ICH8x0G+qvnAUm/nb6fXtLT+F4zNjjXaJRGRPR1fFkD
+        teSKOjjVb/AtZ5rtljftchCY/2ym62aOg4zAJHqfRam51luyhM9XNoDD+VLJpsGNqPZkaNegVPL
+        2mMWzMlunUmda3YeR+kcP2g==
+X-Received: by 2002:adf:ee46:: with SMTP id w6mr28365898wro.345.1623236162280;
+        Wed, 09 Jun 2021 03:56:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzQ49r+tRbGd1wOHU0mXbY7urMjvAihHVmP4oVaZtHRm+k2OFRov+Lj+Vo8CLpAoo+a81y7uQ==
+X-Received: by 2002:adf:ee46:: with SMTP id w6mr28365871wro.345.1623236162032;
+        Wed, 09 Jun 2021 03:56:02 -0700 (PDT)
 Received: from [192.168.3.132] (p5b0c611d.dip0.t-ipconnect.de. [91.12.97.29])
-        by smtp.gmail.com with ESMTPSA id v17sm15896527wrp.36.2021.06.09.03.55.41
+        by smtp.gmail.com with ESMTPSA id a4sm21295711wme.45.2021.06.09.03.56.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Jun 2021 03:55:42 -0700 (PDT)
-Subject: Re: [PATCH 6/9] arch, mm: remove stale mentions of DISCONIGMEM
+        Wed, 09 Jun 2021 03:56:01 -0700 (PDT)
+Subject: Re: [PATCH 7/9] docs: remove description of DISCONTIGMEM
 To:     Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -71,15 +71,15 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
 References: <20210602105348.13387-1-rppt@kernel.org>
- <20210602105348.13387-7-rppt@kernel.org>
+ <20210602105348.13387-8-rppt@kernel.org>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-Message-ID: <84999e8d-fb52-a6a2-e467-f8cc7ac84325@redhat.com>
-Date:   Wed, 9 Jun 2021 12:55:41 +0200
+Message-ID: <6b92d273-dd0b-d67f-c2f6-cce13a33afd1@redhat.com>
+Date:   Wed, 9 Jun 2021 12:56:00 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <20210602105348.13387-7-rppt@kernel.org>
+In-Reply-To: <20210602105348.13387-8-rppt@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -90,136 +90,104 @@ X-Mailing-List: linux-arch@vger.kernel.org
 On 02.06.21 12:53, Mike Rapoport wrote:
 > From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> There are several places that mention DISCONIGMEM in comments or have stale
-> code guarded by CONFIG_DISCONTIGMEM.
-> 
-> Remove the dead code and update the comments.
+> Remove description of DISCONTIGMEM from the "Memory Models" document and
+> update VM sysctl description so that it won't mention DISCONIGMEM.
 > 
 > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 > ---
->   arch/ia64/kernel/topology.c     | 5 ++---
->   arch/ia64/mm/numa.c             | 5 ++---
->   arch/mips/include/asm/mmzone.h  | 6 ------
->   arch/mips/mm/init.c             | 3 ---
->   arch/nds32/include/asm/memory.h | 6 ------
->   arch/xtensa/include/asm/page.h  | 4 ----
->   include/linux/gfp.h             | 4 ++--
->   7 files changed, 6 insertions(+), 27 deletions(-)
+>   Documentation/admin-guide/sysctl/vm.rst | 12 +++----
+>   Documentation/vm/memory-model.rst       | 45 ++-----------------------
+>   2 files changed, 8 insertions(+), 49 deletions(-)
 > 
-> diff --git a/arch/ia64/kernel/topology.c b/arch/ia64/kernel/topology.c
-> index 09fc385c2acd..3639e0a7cb3b 100644
-> --- a/arch/ia64/kernel/topology.c
-> +++ b/arch/ia64/kernel/topology.c
-> @@ -3,9 +3,8 @@
->    * License.  See the file "COPYING" in the main directory of this archive
->    * for more details.
->    *
-> - * This file contains NUMA specific variables and functions which can
-> - * be split away from DISCONTIGMEM and are used on NUMA machines with
-> - * contiguous memory.
-> + * This file contains NUMA specific variables and functions which are used on
-> + * NUMA machines with contiguous memory.
->    * 		2002/08/07 Erich Focht <efocht@ess.nec.de>
->    * Populate cpu entries in sysfs for non-numa systems as well
->    *  	Intel Corporation - Ashok Raj
-> diff --git a/arch/ia64/mm/numa.c b/arch/ia64/mm/numa.c
-> index 46b6e5f3a40f..d6579ec3ea32 100644
-> --- a/arch/ia64/mm/numa.c
-> +++ b/arch/ia64/mm/numa.c
-> @@ -3,9 +3,8 @@
->    * License.  See the file "COPYING" in the main directory of this archive
->    * for more details.
->    *
-> - * This file contains NUMA specific variables and functions which can
-> - * be split away from DISCONTIGMEM and are used on NUMA machines with
-> - * contiguous memory.
-> + * This file contains NUMA specific variables and functions which are used on
-> + * NUMA machines with contiguous memory.
->    *
->    *                         2002/08/07 Erich Focht <efocht@ess.nec.de>
->    */
-> diff --git a/arch/mips/include/asm/mmzone.h b/arch/mips/include/asm/mmzone.h
-> index b826b8473e95..7649ab45e80c 100644
-> --- a/arch/mips/include/asm/mmzone.h
-> +++ b/arch/mips/include/asm/mmzone.h
-> @@ -20,10 +20,4 @@
->   #define nid_to_addrbase(nid) 0
->   #endif
+> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+> index 586cd4b86428..ddbd71d592e0 100644
+> --- a/Documentation/admin-guide/sysctl/vm.rst
+> +++ b/Documentation/admin-guide/sysctl/vm.rst
+> @@ -936,12 +936,12 @@ allocations, THP and hugetlbfs pages.
 >   
-> -#ifdef CONFIG_DISCONTIGMEM
-> -
-> -#define pfn_to_nid(pfn)		pa_to_nid((pfn) << PAGE_SHIFT)
-> -
-> -#endif /* CONFIG_DISCONTIGMEM */
-> -
->   #endif /* _ASM_MMZONE_H_ */
-> diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
-> index c36358758969..97f6ca341448 100644
-> --- a/arch/mips/mm/init.c
-> +++ b/arch/mips/mm/init.c
-> @@ -454,9 +454,6 @@ void __init mem_init(void)
->   	BUILD_BUG_ON(IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT));
+>   To make it sensible with respect to the watermark_scale_factor
+>   parameter, the unit is in fractions of 10,000. The default value of
+> -15,000 on !DISCONTIGMEM configurations means that up to 150% of the high
+> -watermark will be reclaimed in the event of a pageblock being mixed due
+> -to fragmentation. The level of reclaim is determined by the number of
+> -fragmentation events that occurred in the recent past. If this value is
+> -smaller than a pageblock then a pageblocks worth of pages will be reclaimed
+> -(e.g.  2MB on 64-bit x86). A boost factor of 0 will disable the feature.
+> +15,000 means that up to 150% of the high watermark will be reclaimed in the
+> +event of a pageblock being mixed due to fragmentation. The level of reclaim
+> +is determined by the number of fragmentation events that occurred in the
+> +recent past. If this value is smaller than a pageblock then a pageblocks
+> +worth of pages will be reclaimed (e.g.  2MB on 64-bit x86). A boost factor
+> +of 0 will disable the feature.
 >   
->   #ifdef CONFIG_HIGHMEM
-> -#ifdef CONFIG_DISCONTIGMEM
-> -#error "CONFIG_HIGHMEM and CONFIG_DISCONTIGMEM dont work together yet"
-> -#endif
->   	max_mapnr = highend_pfn ? highend_pfn : max_low_pfn;
->   #else
->   	max_mapnr = max_low_pfn;
-> diff --git a/arch/nds32/include/asm/memory.h b/arch/nds32/include/asm/memory.h
-> index 940d32842793..62faafbc28e4 100644
-> --- a/arch/nds32/include/asm/memory.h
-> +++ b/arch/nds32/include/asm/memory.h
-> @@ -76,18 +76,12 @@
->    *  virt_to_page(k)	convert a _valid_ virtual address to struct page *
->    *  virt_addr_valid(k)	indicates whether a virtual address is valid
->    */
-> -#ifndef CONFIG_DISCONTIGMEM
+>   
+>   watermark_scale_factor
+> diff --git a/Documentation/vm/memory-model.rst b/Documentation/vm/memory-model.rst
+> index ce398a7dc6cd..30e8fbed6914 100644
+> --- a/Documentation/vm/memory-model.rst
+> +++ b/Documentation/vm/memory-model.rst
+> @@ -14,15 +14,11 @@ for the CPU. Then there could be several contiguous ranges at
+>   completely distinct addresses. And, don't forget about NUMA, where
+>   different memory banks are attached to different CPUs.
+>   
+> -Linux abstracts this diversity using one of the three memory models:
+> -FLATMEM, DISCONTIGMEM and SPARSEMEM. Each architecture defines what
+> +Linux abstracts this diversity using one of the two memory models:
+> +FLATMEM and SPARSEMEM. Each architecture defines what
+>   memory models it supports, what the default memory model is and
+>   whether it is possible to manually override that default.
+>   
+> -.. note::
+> -   At time of this writing, DISCONTIGMEM is considered deprecated,
+> -   although it is still in use by several architectures.
 > -
->   #define ARCH_PFN_OFFSET		PHYS_PFN_OFFSET
->   #define pfn_valid(pfn)		((pfn) >= PHYS_PFN_OFFSET && (pfn) < (PHYS_PFN_OFFSET + max_mapnr))
+>   All the memory models track the status of physical page frames using
+>   struct page arranged in one or more arrays.
 >   
->   #define virt_to_page(kaddr)	(pfn_to_page(__pa(kaddr) >> PAGE_SHIFT))
->   #define virt_addr_valid(kaddr)	((unsigned long)(kaddr) >= PAGE_OFFSET && (unsigned long)(kaddr) < (unsigned long)high_memory)
+> @@ -63,43 +59,6 @@ straightforward: `PFN - ARCH_PFN_OFFSET` is an index to the
+>   The `ARCH_PFN_OFFSET` defines the first page frame number for
+>   systems with physical memory starting at address different from 0.
 >   
-> -#else /* CONFIG_DISCONTIGMEM */
-> -#error CONFIG_DISCONTIGMEM is not supported yet.
-> -#endif /* !CONFIG_DISCONTIGMEM */
+> -DISCONTIGMEM
+> -============
 > -
->   #define page_to_phys(page)	(page_to_pfn(page) << PAGE_SHIFT)
->   
->   #endif
-> diff --git a/arch/xtensa/include/asm/page.h b/arch/xtensa/include/asm/page.h
-> index 37ce25ef92d6..493eb7083b1a 100644
-> --- a/arch/xtensa/include/asm/page.h
-> +++ b/arch/xtensa/include/asm/page.h
-> @@ -192,10 +192,6 @@ static inline unsigned long ___pa(unsigned long va)
->   #define pfn_valid(pfn) \
->   	((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
->   
-> -#ifdef CONFIG_DISCONTIGMEM
-> -# error CONFIG_DISCONTIGMEM not supported
-> -#endif
+> -The DISCONTIGMEM model treats the physical memory as a collection of
+> -`nodes` similarly to how Linux NUMA support does. For each node Linux
+> -constructs an independent memory management subsystem represented by
+> -`struct pglist_data` (or `pg_data_t` for short). Among other
+> -things, `pg_data_t` holds the `node_mem_map` array that maps
+> -physical pages belonging to that node. The `node_start_pfn` field of
+> -`pg_data_t` is the number of the first page frame belonging to that
+> -node.
 > -
->   #define virt_to_page(kaddr)	pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
->   #define page_to_virt(page)	__va(page_to_pfn(page) << PAGE_SHIFT)
->   #define virt_addr_valid(kaddr)	pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index 11da8af06704..dbe1f5fc901d 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -494,8 +494,8 @@ static inline int gfp_zonelist(gfp_t flags)
->    * There are two zonelists per node, one for all zones with memory and
->    * one containing just zones from the node the zonelist belongs to.
->    *
-> - * For the normal case of non-DISCONTIGMEM systems the NODE_DATA() gets
-> - * optimized to &contig_page_data at compile-time.
-> + * For the case of non-NUMA systems the NODE_DATA() gets optimized to
-> + * &contig_page_data at compile-time.
->    */
->   static inline struct zonelist *node_zonelist(int nid, gfp_t flags)
->   {
+> -The architecture setup code should call :c:func:`free_area_init_node` for
+> -each node in the system to initialize the `pg_data_t` object and its
+> -`node_mem_map`.
+> -
+> -Every `node_mem_map` behaves exactly as FLATMEM's `mem_map` -
+> -every physical page frame in a node has a `struct page` entry in the
+> -`node_mem_map` array. When DISCONTIGMEM is enabled, a portion of the
+> -`flags` field of the `struct page` encodes the node number of the
+> -node hosting that page.
+> -
+> -The conversion between a PFN and the `struct page` in the
+> -DISCONTIGMEM model became slightly more complex as it has to determine
+> -which node hosts the physical page and which `pg_data_t` object
+> -holds the `struct page`.
+> -
+> -Architectures that support DISCONTIGMEM provide :c:func:`pfn_to_nid`
+> -to convert PFN to the node number. The opposite conversion helper
+> -:c:func:`page_to_nid` is generic as it uses the node number encoded in
+> -page->flags.
+> -
+> -Once the node number is known, the PFN can be used to index
+> -appropriate `node_mem_map` array to access the `struct page` and
+> -the offset of the `struct page` from the `node_mem_map` plus
+> -`node_start_pfn` is the PFN of that page.
+> -
+>   SPARSEMEM
+>   =========
+>   
 > 
 
 Reviewed-by: David Hildenbrand <david@redhat.com>
