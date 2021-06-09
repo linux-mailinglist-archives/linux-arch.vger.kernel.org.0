@@ -2,115 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6383A0CA7
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 08:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB37D3A0CB6
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 08:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbhFIGqU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Jun 2021 02:46:20 -0400
-Received: from mail-vs1-f52.google.com ([209.85.217.52]:41858 "EHLO
-        mail-vs1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233539AbhFIGqT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Jun 2021 02:46:19 -0400
-Received: by mail-vs1-f52.google.com with SMTP id c1so5870817vsh.8;
-        Tue, 08 Jun 2021 23:44:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=47baV1P3SWK5Bn+j5B4OfUEOCRj033QYxRPMFVA0Gg8=;
-        b=VZHf5R03geRru5zwdLqecjeEgdu8XttW2LpaxKYIVazsxwjnwM/xU1vlyN6ZJfMjjv
-         aqQAnBsIfmcjqFCcYv4T5/N7j/eKxJegP8lGeUC2Wgg0i35OXY3BgAJeOfKi/T7VuPr0
-         ChgF+MFV5KZr0/OulZzTliaXPzmtt3vW3tyzWLTGiuNyaCK2jT9u018bUJg1oDXpSbjX
-         kV32WBoCIj9n2sb5JQmrjjw80biszH8NrUu+BDAOrzmHq1PWS0lrvzltoC9aGm0l8Apo
-         OBVI1aqUaEWJXjksxOMQLK+gd99y0s5FUpD1OSQa44n87ffJZzhR4fIWhfPB0ZwJWe+t
-         89Gg==
-X-Gm-Message-State: AOAM533/Awl+qyO0GFTV9DTpkVOL3xo6Y7CPWdBWyZoqEOV85xPJ2+ek
-        987U7ofV11oLubiHdh5+QroKyC8A6FMPEAjm9lo=
-X-Google-Smtp-Source: ABdhPJxgZoIMbN5GFh2VWpL6EzDYRXy63LPTY3UqoHKfLRG9A/qZOe2ycSYBUB4Pbup17C6x2oVs/4epAGglyIbvzWw=
-X-Received: by 2002:a67:efd6:: with SMTP id s22mr3458501vsp.3.1623221059463;
- Tue, 08 Jun 2021 23:44:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <1623214799-29817-1-git-send-email-anshuman.khandual@arm.com>
-In-Reply-To: <1623214799-29817-1-git-send-email-anshuman.khandual@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Jun 2021 08:44:08 +0200
-Message-ID: <CAMuHMdWXHsJWa24qbj_T0tzRm5CobUrP03P4Wn9WY2VtqLVQmg@mail.gmail.com>
-Subject: Re: [PATCH V2] mm/thp: Define default pmd_pgtable()
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Hu <nickhu@andestech.com>,
+        id S232807AbhFIGyQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Jun 2021 02:54:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49094 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231660AbhFIGyP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Jun 2021 02:54:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F40D661249;
+        Wed,  9 Jun 2021 06:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623221541;
+        bh=1NOcR9X1qrsVWC8pZ+WOBsJYlerWmKCJZFjAHZSyi1g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R3Ua7SSrAmPcigjQENQSeeEMj920XMPbd0mRAH+B4DHPNXP+taIOYwYUWcVIXb5j6
+         VJBySmzsOYZnbE6P4kMoE9ZvUpFBLiddGWhEYtU+E0KEUzEdWHkJqeLVtgBH6jO4C9
+         Pe9x2UVR5RoSXUB4d6262LpkrrGlAOAE5RSKB4ZbL931VU3fcHDPQIgBFXazdDNmx0
+         KYGm7I3vStPQPXah/NfmgtdSVOkJw8ewGPxvh3kYk2hvG8vZe26iLuJ3PqURc/rI07
+         p6tkwWjdfIcQ6IB7Wn8wiS2wG0e2oDGZCpnQAvL+zgWVSStPrtFhj2bz5Vv7w2pP3G
+         OCNYfrxKsGSKw==
+Date:   Wed, 9 Jun 2021 09:52:08 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         Richard Henderson <rth@twiddle.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jeff Dike <jdike@addtoit.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Chris Zankel <chris@zankel.net>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v3 8/9] mm: replace CONFIG_NEED_MULTIPLE_NODES with
+ CONFIG_NUMA
+Message-ID: <YMBlGBxaWDPV1ouT@kernel.org>
+References: <20210608091316.3622-1-rppt@kernel.org>
+ <20210608091316.3622-9-rppt@kernel.org>
+ <20210608172544.d9bf17549565d866fbb18451@linux-foundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210608172544.d9bf17549565d866fbb18451@linux-foundation.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Anshuman,
+On Tue, Jun 08, 2021 at 05:25:44PM -0700, Andrew Morton wrote:
+> On Tue,  8 Jun 2021 12:13:15 +0300 Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > After removal of DISCINTIGMEM the NEED_MULTIPLE_NODES and NUMA
+> > configuration options are equivalent.
+> > 
+> > Drop CONFIG_NEED_MULTIPLE_NODES and use CONFIG_NUMA instead.
+> > 
+> > Done with
+> > 
+> > 	$ sed -i 's/CONFIG_NEED_MULTIPLE_NODES/CONFIG_NUMA/' \
+> > 		$(git grep -wl CONFIG_NEED_MULTIPLE_NODES)
+> > 	$ sed -i 's/NEED_MULTIPLE_NODES/NUMA/' \
+> > 		$(git grep -wl NEED_MULTIPLE_NODES)
+> > 
+> > with manual tweaks afterwards.
+> > 
+> > ...
+> >
+> > --- a/include/linux/mmzone.h
+> > +++ b/include/linux/mmzone.h
+> > @@ -987,7 +987,7 @@ extern int movable_zone;
+> >  #ifdef CONFIG_HIGHMEM
+> >  static inline int zone_movable_is_highmem(void)
+> >  {
+> > -#ifdef CONFIG_NEED_MULTIPLE_NODES
+> > +#ifdef CONFIG_NUMA
+> >  	return movable_zone == ZONE_HIGHMEM;
+> >  #else
+> >  	return (ZONE_MOVABLE - 1) == ZONE_HIGHMEM;
+> 
+> I dropped this hunk - your "mm/mmzone.h: simplify is_highmem_idx()"
+> removed zone_movable_is_highmem().  
 
-On Wed, Jun 9, 2021 at 6:59 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
-> Currently most platforms define pmd_pgtable() as pmd_page() duplicating the
-> same code all over. Instead just define a default value i.e pmd_page() for
-> pmd_pgtable() and let platforms override when required via <asm/pgtable.h>.
-> All the existing platform that override pmd_pgtable() have been moved into
-> their respective <asm/pgtable.h> header in order to precede before the new
-> generic definition. This makes it much cleaner with reduced code.
-
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
-> This patch applies on linux-next (20210608) as there is a merge conflict
-> dependency on the following commit.
->
-> 40762590e8be ("mm: define default value for FIRST_USER_ADDRESS").
->
-> This patch has been built tested across multiple platforms.
->
-> Changes in V2:
->
-> - Changed m68k per Geert
-
-Thanks for the update!
-
->  arch/m68k/include/asm/mcf_pgalloc.h      | 2 --
->  arch/m68k/include/asm/mcf_pgtable.h      | 2 ++
->  arch/m68k/include/asm/motorola_pgalloc.h | 1 -
->  arch/m68k/include/asm/motorola_pgtable.h | 2 ++
->  arch/m68k/include/asm/sun3_pgalloc.h     | 1 -
->  arch/m68k/include/asm/sun3_pgtable.h     | 2 ++
-
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Ah, right.
+Thanks!
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Sincerely yours,
+Mike.
