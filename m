@@ -2,87 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 909363A1499
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 14:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772DF3A14BA
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 14:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbhFIMk3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Jun 2021 08:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232932AbhFIMk2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Jun 2021 08:40:28 -0400
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC14C061574;
-        Wed,  9 Jun 2021 05:38:33 -0700 (PDT)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 99A0E36A; Wed,  9 Jun 2021 14:38:30 +0200 (CEST)
-Date:   Wed, 9 Jun 2021 14:38:29 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org,
-        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, Tianyu.Lan@microsoft.com,
-        konrad.wilk@oracle.com, hch@lst.de, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, will@kernel.org,
-        xen-devel@lists.xenproject.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, thomas.lendacky@amd.com,
-        brijesh.singh@amd.com, sunilmut@microsoft.com
-Subject: Re: [RFC PATCH V3 01/11] x86/HV: Initialize GHCB page in Isolation VM
-Message-ID: <YMC2RSr/J1WYCvtz@8bytes.org>
-References: <20210530150628.2063957-1-ltykernel@gmail.com>
- <20210530150628.2063957-2-ltykernel@gmail.com>
+        id S229705AbhFIMpv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Jun 2021 08:45:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52940 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229588AbhFIMpv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Jun 2021 08:45:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AC74E613BC;
+        Wed,  9 Jun 2021 12:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623242636;
+        bh=10QiHmdISEb61jB5RWmOiBIlcBu20xh90lnX4V4t658=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=np63E2gLpqH2koO1sA8ouLSSpC5l15+gBFl6+tWS96shPTdNepYNSn9cDSH/uvA9y
+         iqwMawHznNJuDnZBDAJygJJxFKosRf8hQetp6ufT8EQ+TG9Hx3zQQDkFk/TS14Jlp/
+         w1t5fxf4TWd+lKiXS2DrJfiMqguIKgFwYNf+Me7oO9nDLwkoj+kUkc5eE3BQ49kDKi
+         EYy7NqMcB5S56mhY1v2FB9T512g+Bx2i/aPIMTOtai05lTAYvjzGjsXRGOHqrlVgFr
+         1Imj5zRfZv12UODH98O9MTB/PYHwhgqUM/2FR9hAafvLcjKbGOEVSAIV73rjJ8IcZy
+         u85/1m9Ee5UAA==
+Received: by mail-lj1-f172.google.com with SMTP id s22so11050291ljg.5;
+        Wed, 09 Jun 2021 05:43:56 -0700 (PDT)
+X-Gm-Message-State: AOAM531XBC2Q4Jq1hYTwkUPZUOPhnLmaUIxnNECzoMfXU+ype/ky4HG8
+        1gq2BTZXIijNudk36SdtmdjIsW33XxHBNZ1+70k=
+X-Google-Smtp-Source: ABdhPJwaURGU3O5Ijy4ZAJhrS1dz1Pr8wQ0Y85BdkXWeynG0YUhR28g4jNQRqhR4QWRMjatsBLaORSkBBJxkyOyBss8=
+X-Received: by 2002:a2e:900f:: with SMTP id h15mr20711283ljg.285.1623242634796;
+ Wed, 09 Jun 2021 05:43:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210530150628.2063957-2-ltykernel@gmail.com>
+References: <1621400656-25678-1-git-send-email-guoren@kernel.org>
+ <20210519052048.GA24853@lst.de> <CAJF2gTTjwB4U-NxCtfgMA5aR2HzoQtA8a51W5UM1LHGRbjz9pg@mail.gmail.com>
+ <20210519064435.GA3076809@x1> <20210519065352.GA31590@lst.de>
+ <CAJF2gTR4FXRbp7oky-ypdVJba6btFHpp-+dPyJStRaQX_-5rzg@mail.gmail.com>
+ <29733b0931d9dd6a2f0b6919067c7efe@mailhost.ics.forth.gr> <CAJF2gTQ5271AP8aw42yvfOg0LjtnmPD8j_Uza6NH2nHxVz_QgQ@mail.gmail.com>
+ <78f544f739120f5b541238a1d5f6e23b@mailhost.ics.forth.gr>
+In-Reply-To: <78f544f739120f5b541238a1d5f6e23b@mailhost.ics.forth.gr>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 9 Jun 2021 20:43:43 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSko9yu_Hqgu3vOzjS=uPKC8jaLdgkAXx1BW2k26uuJRg@mail.gmail.com>
+Message-ID: <CAJF2gTSko9yu_Hqgu3vOzjS=uPKC8jaLdgkAXx1BW2k26uuJRg@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
+To:     Nick Kossifidis <mick@ics.forth.gr>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Drew Fustini <drew@beagleboard.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>, wefu@redhat.com,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Benjamin Koch <snowball@c3pb.de>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        Wei Fu <tekkamanninja@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, May 30, 2021 at 11:06:18AM -0400, Tianyu Lan wrote:
-> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> 
-> Hyper-V exposes GHCB page via SEV ES GHCB MSR for SNP guest
-> to communicate with hypervisor. Map GHCB page for all
-> cpus to read/write MSR register and submit hvcall request
-> via GHCB.
-> 
-> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> ---
->  arch/x86/hyperv/hv_init.c       | 60 ++++++++++++++++++++++++++++++---
->  arch/x86/include/asm/mshyperv.h |  2 ++
->  include/asm-generic/mshyperv.h  |  2 ++
->  3 files changed, 60 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index bb0ae4b5c00f..dc74d01cb859 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -60,6 +60,9 @@ static int hv_cpu_init(unsigned int cpu)
->  	struct hv_vp_assist_page **hvp = &hv_vp_assist_page[smp_processor_id()];
->  	void **input_arg;
->  	struct page *pg;
-> +	u64 ghcb_gpa;
-> +	void *ghcb_va;
-> +	void **ghcb_base;
+On Wed, Jun 9, 2021 at 5:45 PM Nick Kossifidis <mick@ics.forth.gr> wrote:
+>
+> =CE=A3=CF=84=CE=B9=CF=82 2021-06-09 06:28, Guo Ren =CE=AD=CE=B3=CF=81=CE=
+=B1=CF=88=CE=B5:
+> > On Mon, Jun 7, 2021 at 2:14 AM Nick Kossifidis <mick@ics.forth.gr>
+> > wrote:
+> >>
+> >> =CE=A3=CF=84=CE=B9=CF=82 2021-05-20 04:45, Guo Ren =CE=AD=CE=B3=CF=81=
+=CE=B1=CF=88=CE=B5:
+> >> > On Wed, May 19, 2021 at 2:53 PM Christoph Hellwig <hch@lst.de> wrote=
+:
+> >> >>
+> >> >> On Tue, May 18, 2021 at 11:44:35PM -0700, Drew Fustini wrote:
+> >> >> > This patch series looks like it might be useful for the StarFive =
+JH7100
+> >> >> > [1] [2] too as it has peripherals on a non-coherent interconnect.=
+ GMAC,
+> >> >> > USB and SDIO require that the L2 cache must be manually flushed a=
+fter
+> >> >> > DMA operations if the data is intended to be shared with U74 core=
+s [2].
+> >> >>
+> >> >> Not too much, given that the SiFive lineage CPUs have an uncached
+> >> >> window, that is a totally different way to allocate uncached memory=
+.
+> >> > It's a very big MIPS smell. What's the attribute of the uncached
+> >> > window? (uncached + strong-order/ uncached + weak, most vendors stil=
+l
+> >> > use AXI interconnect, how to deal with a bufferable attribute?) In
+> >> > fact, customers' drivers use different ways to deal with DMA memory =
+in
+> >> > non-coherent SOC. Most riscv SOC vendors are from ARM, so giving the=
+m
+> >> > the same way in DMA memory is a smart choice. So using PTE attribute=
+s
+> >> > is more suitable.
+> >> >
+> >> > See:
+> >> > https://github.com/riscv/virtual-memory/blob/main/specs/611-virtual-=
+memory-diff.pdf
+> >> > 4.4.1
+> >> > The draft supports custom attribute bits in PTE.
+> >> >
+> >>
+> >> Not only it doesn't support custom attributes on PTEs:
+> >>
+> >> "Bits63=E2=80=9354 are reserved for future standard use and must be ze=
+roed by
+> >> software for forward compatibility."
+> >>
+> >> It also goes further to say that:
+> >>
+> >> "if any of these bits are set, a page-fault exception is raised"
+> > Agree, when our processor's mmu works in compatible mmu, we must keep
+> > "Bits63=E2=80=9354 bit" zero in Linux.
+> > So, I think this is the first version of the PTE format.
+> >
+> > If the "PBMT" extension proposal is approved, it will cause the second
+> > version of the PTE format.
+> >
+> > Maybe in the future, we'll get more versions of the PTE formats.
+> >
+> > So, seems Linux must support multi versions of PTE formats with one
+> > Image, right?
+> >
+> > Okay, we could stop arguing with the D1 PTE format. And talk about how
+> > to let Linux support multi versions of PTE formats that come from the
+> > future RISC-V privilege spec.
+>
+> The RISC-V ISA specs are meant to be backwards compatible, so newer PTE
+> versions should work on older devices (note that the spec says that
+> software must set those bits to zero for "forward compatibility" and are
+> "reserved for future use" so current implementations must ignore them).
+> Obviously the proposed "if any of these bits are set, a page-fault
+> exception is raised" will break backwards compatibility which is why we
+> need to ask for it to be removed from the draft.
+>
+> As an example the PBMT proposal uses bits 62:61 that on older hw should
+> be ignored ("reserved for future use"), if Linux uses those bits we
+> won't need a different code path for supporting older hw/older PTE
+> versions, we'll just set them and older hw will ignore them. Because of
+> the guarantee that ISA specs maintain backwards compatibility, the
+> functionality of bits 62:61 is guaranteed to remain backwards
+> compatible.
+the spec says that software must set those bits to zero for "forward
+compatibility". So how older hw ignore them?
+If an older hw follow the current spec requires software to set those
+bits to zero, how we put any PBMT bits without different Linux PTE
+formats?
 
-Any reason you can't reuse the SEV-ES support code in the Linux kernel?
-It already has code to setup GHCBs for all vCPUs.
+>
+> In other words we don't need any special handling of multiple PTE
+> formats, we just need to support the latest Priv. Spec and the Spec
+> itself will guarantee backwards compatibility.
+Nak, totally no Logically self-consistent.
 
-I see that you don't need #VC handling in your SNP VMs because of the
-paravisor running underneath it, but just re-using the GHCB setup code
-shouldn't be too hard.
+--=20
+Best Regards
+ Guo Ren
 
-Regards,
-
-	Joerg
+ML: https://lore.kernel.org/linux-csky/
