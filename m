@@ -2,165 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 772DF3A14BA
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 14:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0923A14C4
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Jun 2021 14:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbhFIMpv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Jun 2021 08:45:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52940 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229588AbhFIMpv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Jun 2021 08:45:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC74E613BC;
-        Wed,  9 Jun 2021 12:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623242636;
-        bh=10QiHmdISEb61jB5RWmOiBIlcBu20xh90lnX4V4t658=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=np63E2gLpqH2koO1sA8ouLSSpC5l15+gBFl6+tWS96shPTdNepYNSn9cDSH/uvA9y
-         iqwMawHznNJuDnZBDAJygJJxFKosRf8hQetp6ufT8EQ+TG9Hx3zQQDkFk/TS14Jlp/
-         w1t5fxf4TWd+lKiXS2DrJfiMqguIKgFwYNf+Me7oO9nDLwkoj+kUkc5eE3BQ49kDKi
-         EYy7NqMcB5S56mhY1v2FB9T512g+Bx2i/aPIMTOtai05lTAYvjzGjsXRGOHqrlVgFr
-         1Imj5zRfZv12UODH98O9MTB/PYHwhgqUM/2FR9hAafvLcjKbGOEVSAIV73rjJ8IcZy
-         u85/1m9Ee5UAA==
-Received: by mail-lj1-f172.google.com with SMTP id s22so11050291ljg.5;
-        Wed, 09 Jun 2021 05:43:56 -0700 (PDT)
-X-Gm-Message-State: AOAM531XBC2Q4Jq1hYTwkUPZUOPhnLmaUIxnNECzoMfXU+ype/ky4HG8
-        1gq2BTZXIijNudk36SdtmdjIsW33XxHBNZ1+70k=
-X-Google-Smtp-Source: ABdhPJwaURGU3O5Ijy4ZAJhrS1dz1Pr8wQ0Y85BdkXWeynG0YUhR28g4jNQRqhR4QWRMjatsBLaORSkBBJxkyOyBss8=
-X-Received: by 2002:a2e:900f:: with SMTP id h15mr20711283ljg.285.1623242634796;
- Wed, 09 Jun 2021 05:43:54 -0700 (PDT)
+        id S231150AbhFIMr3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Jun 2021 08:47:29 -0400
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:40912 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231152AbhFIMr2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Jun 2021 08:47:28 -0400
+Received: by mail-ot1-f51.google.com with SMTP id l13-20020a9d708d0000b02903fca0eacd15so844185otj.7
+        for <linux-arch@vger.kernel.org>; Wed, 09 Jun 2021 05:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3yJJiLIio1keCrN3sS6SLKCpX1mujUdD6B7dJpQDmZw=;
+        b=ClaMFpHvFaLfrDBK3kLKjFrPN25oDeFJ8tj4sFgK8pktGD85GvHUBtvOEsfyTrqG+I
+         X43sS+oC0NRnqBvv8fR1xouf7sOrSY40TyPaku3k/CIFeBOer4oWe3WdkZs3Y87sDPi1
+         nwgQ20qYboPzcGIJAvt5TjOrlRETQHfZEUR7OltE3NHxr3c9RcnfZ3cmaJf/dPCYX3ef
+         fMHflwpyJCzqjK1hMUJMR9iwk1xuXRiFUVpKHGOUwyUgHq/A6y5pIbcT6NAUY4R14aqL
+         ifxOAIMzLy60OeGyhY9jogUi7U8CrYZT4aUt6xV0uk0KViOaVef+3MfdSSup8dQZllAj
+         1xUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3yJJiLIio1keCrN3sS6SLKCpX1mujUdD6B7dJpQDmZw=;
+        b=Oi8PO6HBOSFoIvSxyrPaarvtNadljfvDkff0nI7ohDDtKe7STzzIYW8taEIqZElaSQ
+         D+ZwkD/ABIzxDtciaWIXELLf3Wpo4MW/EyFuWtUdBNjI3xpfWgQ4/XSlZ+WRe47SP/9K
+         QLjRJxVrYhp3sRane02rZWKMlvj9PqEkKed8GHlrD7/crAWeVuy8c08PObxwJSHoev1i
+         ERF+kvLFNY9sthFv8dtTarhxWGmn6vWQRwCfuy3BWKtNl62uqKqUT0kp1eM4k9/RtN6l
+         LEoyWcSmpg0nef1G7d3VW2kTGZsWCbvxi01BdF2B6UEfjPGQNtdgFvITfVuEV4OcOwqg
+         b3SA==
+X-Gm-Message-State: AOAM5302F2XzmntEzu7sbUgKCUkKeO7SpTQdy+aoSS721iXo4t+7boAG
+        xSnFIy2WhcICOWrOTTJA+hki6XKMTSW4PdSoIStyjQ==
+X-Google-Smtp-Source: ABdhPJxBngznJ5I05L+XqEpGWWmBHExE9k9EYf3tqXEM9hX0sUuoP3RiU+g6XBrDr9Ttmz3Cfu1d39mD+4FznXHJW8c=
+X-Received: by 2002:a05:6830:1c7b:: with SMTP id s27mr8892653otg.233.1623242660230;
+ Wed, 09 Jun 2021 05:44:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <1621400656-25678-1-git-send-email-guoren@kernel.org>
- <20210519052048.GA24853@lst.de> <CAJF2gTTjwB4U-NxCtfgMA5aR2HzoQtA8a51W5UM1LHGRbjz9pg@mail.gmail.com>
- <20210519064435.GA3076809@x1> <20210519065352.GA31590@lst.de>
- <CAJF2gTR4FXRbp7oky-ypdVJba6btFHpp-+dPyJStRaQX_-5rzg@mail.gmail.com>
- <29733b0931d9dd6a2f0b6919067c7efe@mailhost.ics.forth.gr> <CAJF2gTQ5271AP8aw42yvfOg0LjtnmPD8j_Uza6NH2nHxVz_QgQ@mail.gmail.com>
- <78f544f739120f5b541238a1d5f6e23b@mailhost.ics.forth.gr>
-In-Reply-To: <78f544f739120f5b541238a1d5f6e23b@mailhost.ics.forth.gr>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 9 Jun 2021 20:43:43 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSko9yu_Hqgu3vOzjS=uPKC8jaLdgkAXx1BW2k26uuJRg@mail.gmail.com>
-Message-ID: <CAJF2gTSko9yu_Hqgu3vOzjS=uPKC8jaLdgkAXx1BW2k26uuJRg@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/3] riscv: Add DMA_COHERENT support
-To:     Nick Kossifidis <mick@ics.forth.gr>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Drew Fustini <drew@beagleboard.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>, wefu@redhat.com,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+References: <20210606185922.GF7746@tucnak> <CAHk-=wis8zq3WrEupCY6wcBeW3bB0WMOzaUkXpb-CsKuxM=6-w@mail.gmail.com>
+ <alpine.LNX.2.20.13.2106070017070.7184@monopod.intra.ispras.ru>
+ <CAHk-=wjwXs5+SOZGTaZ0bP9nsoA+PymAcGE4CBDVX3edGUcVRg@mail.gmail.com>
+ <alpine.LNX.2.20.13.2106070956310.7184@monopod.intra.ispras.ru>
+ <CANpmjNMwq6ENUtBunP-rw9ZSrJvZnQw18rQ47U3JuqPEQZsaXA@mail.gmail.com>
+ <20210607152806.GS4397@paulmck-ThinkPad-P17-Gen-1> <YL5Risa6sFgnvvnG@elver.google.com>
+ <CANpmjNNtDX+eBEpuP9-NgT6RAwHK5OgbQHT9b+8LZQJtwWpvPg@mail.gmail.com>
+ <YL9TEqealhxBBhoS@hirez.programming.kicks-ass.net> <20210608152851.GX18427@gate.crashing.org>
+In-Reply-To: <20210608152851.GX18427@gate.crashing.org>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 9 Jun 2021 14:44:08 +0200
+Message-ID: <CANpmjNPJaDT4vBqkTw8XaRfKgDuwh71qmrvNfq-vx-Zyp4ugNg@mail.gmail.com>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexander Monakov <amonakov@ispras.ru>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Will Deacon <will@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-sunxi@lists.linux.dev, Guo Ren <guoren@linux.alibaba.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Benjamin Koch <snowball@c3pb.de>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        Wei Fu <tekkamanninja@gmail.com>
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 9, 2021 at 5:45 PM Nick Kossifidis <mick@ics.forth.gr> wrote:
+On Tue, 8 Jun 2021 at 17:30, Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
+> On Tue, Jun 08, 2021 at 01:22:58PM +0200, Peter Zijlstra wrote:
+> > Works for me; and note how it mirrors how we implemented volatile_if()
+> > in the first place, by doing an expression wrapper.
+> >
+> > __builtin_ctrl_depends(expr) would have to:
+> >
+> >  - ensure !__builtin_const_p(expr)    (A)
 >
-> =CE=A3=CF=84=CE=B9=CF=82 2021-06-09 06:28, Guo Ren =CE=AD=CE=B3=CF=81=CE=
-=B1=CF=88=CE=B5:
-> > On Mon, Jun 7, 2021 at 2:14 AM Nick Kossifidis <mick@ics.forth.gr>
-> > wrote:
-> >>
-> >> =CE=A3=CF=84=CE=B9=CF=82 2021-05-20 04:45, Guo Ren =CE=AD=CE=B3=CF=81=
-=CE=B1=CF=88=CE=B5:
-> >> > On Wed, May 19, 2021 at 2:53 PM Christoph Hellwig <hch@lst.de> wrote=
-:
-> >> >>
-> >> >> On Tue, May 18, 2021 at 11:44:35PM -0700, Drew Fustini wrote:
-> >> >> > This patch series looks like it might be useful for the StarFive =
-JH7100
-> >> >> > [1] [2] too as it has peripherals on a non-coherent interconnect.=
- GMAC,
-> >> >> > USB and SDIO require that the L2 cache must be manually flushed a=
-fter
-> >> >> > DMA operations if the data is intended to be shared with U74 core=
-s [2].
-> >> >>
-> >> >> Not too much, given that the SiFive lineage CPUs have an uncached
-> >> >> window, that is a totally different way to allocate uncached memory=
-.
-> >> > It's a very big MIPS smell. What's the attribute of the uncached
-> >> > window? (uncached + strong-order/ uncached + weak, most vendors stil=
-l
-> >> > use AXI interconnect, how to deal with a bufferable attribute?) In
-> >> > fact, customers' drivers use different ways to deal with DMA memory =
-in
-> >> > non-coherent SOC. Most riscv SOC vendors are from ARM, so giving the=
-m
-> >> > the same way in DMA memory is a smart choice. So using PTE attribute=
-s
-> >> > is more suitable.
-> >> >
-> >> > See:
-> >> > https://github.com/riscv/virtual-memory/blob/main/specs/611-virtual-=
-memory-diff.pdf
-> >> > 4.4.1
-> >> > The draft supports custom attribute bits in PTE.
-> >> >
-> >>
-> >> Not only it doesn't support custom attributes on PTEs:
-> >>
-> >> "Bits63=E2=80=9354 are reserved for future standard use and must be ze=
-roed by
-> >> software for forward compatibility."
-> >>
-> >> It also goes further to say that:
-> >>
-> >> "if any of these bits are set, a page-fault exception is raised"
-> > Agree, when our processor's mmu works in compatible mmu, we must keep
-> > "Bits63=E2=80=9354 bit" zero in Linux.
-> > So, I think this is the first version of the PTE format.
-> >
-> > If the "PBMT" extension proposal is approved, it will cause the second
-> > version of the PTE format.
-> >
-> > Maybe in the future, we'll get more versions of the PTE formats.
-> >
-> > So, seems Linux must support multi versions of PTE formats with one
-> > Image, right?
-> >
-> > Okay, we could stop arguing with the D1 PTE format. And talk about how
-> > to let Linux support multi versions of PTE formats that come from the
-> > future RISC-V privilege spec.
+> Why would it be an error if __builtin_constant_p(expr)?  In many
+> programs the compiler can figure out some expression does never change.
+> Having a control dependency on sometthing like that is not erroneous.
 >
-> The RISC-V ISA specs are meant to be backwards compatible, so newer PTE
-> versions should work on older devices (note that the spec says that
-> software must set those bits to zero for "forward compatibility" and are
-> "reserved for future use" so current implementations must ignore them).
-> Obviously the proposed "if any of these bits are set, a page-fault
-> exception is raised" will break backwards compatibility which is why we
-> need to ask for it to be removed from the draft.
+> >  - imply an acquire compiler fence    (B)
+> >  - ensure cond-branch is emitted      (C)
 >
-> As an example the PBMT proposal uses bits 62:61 that on older hw should
-> be ignored ("reserved for future use"), if Linux uses those bits we
-> won't need a different code path for supporting older hw/older PTE
-> versions, we'll just set them and older hw will ignore them. Because of
-> the guarantee that ISA specs maintain backwards compatibility, the
-> functionality of bits 62:61 is guaranteed to remain backwards
-> compatible.
-the spec says that software must set those bits to zero for "forward
-compatibility". So how older hw ignore them?
-If an older hw follow the current spec requires software to set those
-bits to zero, how we put any PBMT bits without different Linux PTE
-formats?
+> (C) is almost impossible to do.  This should be reformulated to talk
+> about the effect of the generated code, instead.
+>
+> > *OR*
+> >
+> >  - ensure !__builtin_const_p(expr);           (A)
+> >  - upgrade the load in @expr to load-acquire  (D)
+>
+> So that will only work if there is exactly one read from memory in expr?
+> That is problematic.
+>
+> This needs some work.
 
->
-> In other words we don't need any special handling of multiple PTE
-> formats, we just need to support the latest Priv. Spec and the Spec
-> itself will guarantee backwards compatibility.
-Nak, totally no Logically self-consistent.
+There is a valid concern that something at the level of the memory
+model requires very precise specification in terms of language
+semantics and not generated code. Otherwise it seems difficult to get
+compiler folks onboard. And coming up with such a specification may
+take a while, especially if we have to venture in the realm of the
+C11/C++11 memory model while still trying to somehow make it work for
+the LKMM. That seems like a very tricky maze we may want to avoid.
 
---=20
-Best Regards
- Guo Ren
+An alternative design would be to use a statement attribute to only
+enforce (C) ("__attribute__((mustcontrol))" ?). The rest can be
+composed through existing primitives I think (the compiler barriers
+need optimizing though), which should give us ctrl_depends().
 
-ML: https://lore.kernel.org/linux-csky/
+At least for Clang, it should be doable: https://reviews.llvm.org/D103958
+
+Thanks,
+-- Marco
