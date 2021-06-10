@@ -2,83 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D529D3A2939
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 12:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5853A293B
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 12:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbhFJKVe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Jun 2021 06:21:34 -0400
-Received: from mail.chalver.com.ec ([186.3.12.10]:43209 "EHLO
-        mail.chalver.com.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbhFJKVd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Jun 2021 06:21:33 -0400
-Received: from mail.chalver.com.ec (localhost.localdomain [127.0.0.1])
-        by mail.chalver.com.ec (Postfix) with ESMTPS id 234C01F2590F;
-        Thu, 10 Jun 2021 03:58:29 -0500 (ECT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.chalver.com.ec (Postfix) with ESMTP id EAAD61F24E21;
-        Thu, 10 Jun 2021 02:56:53 -0500 (ECT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.chalver.com.ec EAAD61F24E21
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chalver.com.ec;
-        s=E2A417BC-DDA7-11E6-85F6-38495636B764; t=1623311814;
-        bh=PxMh0SAMbBGlctefOH2OhvTlJNlHw25bONEEE7Ldp0I=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=eHmdSCVvngWWLH9A/leFnS/BTauay0N8ZJIqQzEOmN8Ti33z5rskgyNu/jQ8GKnSC
-         KB9lldDoGwCazhUvbXpB5TEUC98sWPaA+jeRMNn5sFG1oPBuG/bu8XZ29s3WwAn2ag
-         mzwxGZWLsra8e7kdJU4w3cP2s3H5haIiCKJRz0n1i6defoDp/dUb3tKcPF1BdcJzNL
-         60TtNw5Zwk685HHi6bMnuq6hql513ZLUswA/spkwy2ZBA2xfsQlOiYCSFVN3/OhNLF
-         CpHlwRhpppWwJB4LnpDWTQm5RO1MBcHSWd2yN5YiSpDGDYXJ3ipLNwu0I8UrJpnrNl
-         l6udoH8nL7J+w==
-X-Virus-Scanned: amavisd-new at chalver.com.ec
-Received: from mail.chalver.com.ec ([127.0.0.1])
-        by localhost (mail.chalver.com.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 68ga9a4KTXRl; Thu, 10 Jun 2021 02:56:53 -0500 (ECT)
-Received: from cris-PC.wifi (unknown [105.9.120.116])
-        by mail.chalver.com.ec (Postfix) with ESMTPSA id 20B481F25946;
-        Thu, 10 Jun 2021 02:56:42 -0500 (ECT)
-Content-Type: text/plain; charset="utf-8"
+        id S229966AbhFJKWN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Jun 2021 06:22:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:56162 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229937AbhFJKWN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 10 Jun 2021 06:22:13 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AAF67D6E;
+        Thu, 10 Jun 2021 03:20:16 -0700 (PDT)
+Received: from e113632-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A2933F694;
+        Thu, 10 Jun 2021 03:20:13 -0700 (PDT)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        kernel-team@android.com, Li Zefan <lizefan@huawei.com>
+Subject: Re: [PATCH v8 06/19] cpuset: Don't use the cpu_possible_mask as a last resort for cgroup v1
+In-Reply-To: <20210607172042.GB7650@willie-the-truck>
+References: <20210602164719.31777-1-will@kernel.org> <20210602164719.31777-7-will@kernel.org> <877dj9ees8.mognet@arm.com> <20210607172042.GB7650@willie-the-truck>
+Date:   Thu, 10 Jun 2021 11:20:09 +0100
+Message-ID: <87fsxqc97q.mognet@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
-To:     Recipients <mpaucar@chalver.com.ec>
-From:   ''Tayeb souami'' <mpaucar@chalver.com.ec>
-Date:   Thu, 10 Jun 2021 10:03:57 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20210610075643.20B481F25946@mail.chalver.com.ec>
-X-Laboratorios-Chalver-MailScanner-Information: Please contact the ISP for more information
-X-Laboratorios-Chalver-MailScanner-ID: 20B481F25946.AF379
-X-Laboratorios-Chalver-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 07/06/21 18:20, Will Deacon wrote:
+> On Fri, Jun 04, 2021 at 06:11:03PM +0100, Valentin Schneider wrote:
+>> On 02/06/21 17:47, Will Deacon wrote:
+>> > @@ -3322,9 +3322,13 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
+>> >
+>> >  void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+>> >  {
+>> > +	const struct cpumask *cs_mask;
+>> > +	const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
+>> > +
+>> >       rcu_read_lock();
+>> > -	do_set_cpus_allowed(tsk, is_in_v2_mode() ?
+>> > -		task_cs(tsk)->cpus_allowed : cpu_possible_mask);
+>> > +	cs_mask = task_cs(tsk)->cpus_allowed;
+>> > +	if (is_in_v2_mode() && cpumask_subset(cs_mask, possible_mask))
+>> > +		do_set_cpus_allowed(tsk, cs_mask);
+>>
+>> Since the task will still go through the is_cpu_allowed() loop in
+>> select_fallback_rq() after this, is the subset check actually required
+>> here?
+>
+> Yes, I think it's needed. do_set_cpus_allowed() doesn't do any checking
+> against the task_cpu_possible_mask, so if we returned to
+> select_fallback_rq() with a mask containing a mixture of 32-bit-capable and
+> 64-bit-only CPUs then we'd end up setting an affinity mask for a 32-bit
+> task which contains 64-bit-only cores.
+>
 
-Lieber Freund,
-
-Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der =
-Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zu=
-f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
-il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
-meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
-und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
-Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
- spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen, sehen Sie bitte meine Y=
-ou Tube Seite unten.
-
-UHR MICH HIER: https://www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks
-
-
-
-Das ist dein Spendencode: [TS530342018]
-
-
-
-Antworten Sie mit dem SPENDE-CODE an diese
-
-E-Mail:Tayebsouam.spende@gmail.com
-
-
-Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
-
-Gr=C3=BC=C3=9Fe
-Herr Tayeb Souami
+Once again, you're right :-)
