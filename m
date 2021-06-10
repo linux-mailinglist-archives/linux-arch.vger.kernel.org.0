@@ -2,53 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C10963A2DCB
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 16:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28E53A2DD8
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 16:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbhFJOP5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Jun 2021 10:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbhFJOP4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Jun 2021 10:15:56 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AE7C061574;
-        Thu, 10 Jun 2021 07:13:47 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id u18so1715544pfk.11;
-        Thu, 10 Jun 2021 07:13:47 -0700 (PDT)
+        id S230267AbhFJOS4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Jun 2021 10:18:56 -0400
+Received: from mail-pf1-f180.google.com ([209.85.210.180]:41944 "EHLO
+        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229941AbhFJOS4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Jun 2021 10:18:56 -0400
+Received: by mail-pf1-f180.google.com with SMTP id x73so1729697pfc.8;
+        Thu, 10 Jun 2021 07:17:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uVvPHfIwriaeCqaGS4SWF2JfjGEeCNMTseqgcHKL0PY=;
-        b=ot0iffXK2/znAlvDWUx0DvEHPs9Hu42jQhvk3aHGx+T2NhWFpnwKA1vIkYGIy+cgYb
-         LxEbfgCrbULtFd7nVuJsfQAH+IMqZIL2R35dwiAl9sJZz1GKTswJr7viHRHzd8ec6z9L
-         cpBdHTN6hAjfnZCW/MdapYStRdZ2pSAmS2zSYAlKj+wqby1v1sKfa0Z3IJGU1Q2S8YcP
-         HqfC/opPsY22Z36tiTPSUNG8yLuAg9Bq77HzKuJDM2mT1cANyfp9SOlXy6wpSwett2B6
-         yucBibCk75zJ2NzA/8lMhfuq11vR41IllnpzmIyKLTH/P3wGLWQCIUfWmxQ4zGD/3HTx
-         tacA==
+        bh=Z06P6xfCZfBoLzLGshR2eXD11imPLnqUoouenixaYFw=;
+        b=APiM6yjkYAKij1RjMOo9hW4vLGKN36RaoDPpCZzJkgCIWIc5bNnUPRKfG+5uelh6im
+         ZwmwB/K2y2Z+UnBHFw6Ok84giPqAWtESqJu7RLH3vi1s6Wmdl12YoCN5FEDC7FxVL8S3
+         xBQJ/O0hMPtGsBtUowS8mRCmJHg4qC1j99bvIODTP9XmlSIGPDf9QrQ49kI/Ur72auK8
+         XR3tyDiPInVQQ5Wc5igpAdJ+WpQK2Nh7QdvgHpHFXPPDhb1Z06nj6QGPTXJjDDNCczPn
+         w4fJFgDDWFpzxBgC5Dh+DND5ldxosu/Bv7P7MHz+0qfPe5TrP3iyAg6tpfZqrx3I67eW
+         JLfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=uVvPHfIwriaeCqaGS4SWF2JfjGEeCNMTseqgcHKL0PY=;
-        b=Ob5AjVJlmewWgR91C2iGfH32rqVp9W5EnF11+BLWmpEgtRimFpEQMaBysOyo7RcTVj
-         kvxM2SaGFg8t5sfZ0L6oqoxpQjkqb7ySAyb9AFHodVAL9+Q8Z5jiZKjH9JAeNUFNeeKq
-         oYwL/EVQzB5PZX307pQc+Z1dcVZr09VYTuAbSCmARcFaDgDyZwFTv/oUze7mKDo27IId
-         zdrUSWdvZ6rQZ+a0M5xP8L82dq/cSAqGONkxuMCVmtwV/exS+dccGbDtkwIXsz+8T8Om
-         lyrwZspUfEnEq4X191QY4ap5ptVgz2zhFRZnhbEP0NbU0nTigIrw9MXypsXQAf8jnKP1
-         MC/w==
-X-Gm-Message-State: AOAM530It9T+D/oLpTv3sg30GnJpQoKABxSxMfca/I5TP5FZrDaRkoBG
-        bk4gPaWYunVAN/RQi3+Ix3s=
-X-Google-Smtp-Source: ABdhPJz4FYgWX1XRVYnd1fLznm93BCcmg2/a4wkuQ7x2l90mgEwjIr25Q5mcrDlHBGTMoQXHYCH6CA==
-X-Received: by 2002:a05:6a00:2353:b029:2f2:987a:5da2 with SMTP id j19-20020a056a002353b02902f2987a5da2mr3220673pfj.58.1623334427380;
-        Thu, 10 Jun 2021 07:13:47 -0700 (PDT)
+        bh=Z06P6xfCZfBoLzLGshR2eXD11imPLnqUoouenixaYFw=;
+        b=XaP2yxf6p0EKCIuof+I1AqN4D/9Nx4D2xw7u8xYntXSH91lcr4myNhjC4mmDZC96RG
+         U1bO1045DXmOevKYWy9O744XeV7r+vMCKIGzaB20RRJYzrACfpgc/g0l5wuaV1Rd2Ugn
+         SY5ujf2YsrLo8rJyU7L4oAUUB4zD7wuka/HXYvh12QAgLobHx3FKsCJLX3cXVOCqro8O
+         QU/6MTNKZl90+coDG1RqvWTbsVWFQ7VsTPNcNxNJIkhFHumA4Dk0TIPyw0paIUrMzfAU
+         zndeZwTJKW6yJtUJuUNF9d1WLFK+XWuc/7h8k5R/DVh2qloFW5EFxFqruoRY8dzI8T+h
+         t4YA==
+X-Gm-Message-State: AOAM530QGmpWMdaEDaWdIkTebSHZMq8xdXNpxUFwmOZnCTnt6C8wSKp1
+        4Fl1mygSDSxHdoRe8RgENSE=
+X-Google-Smtp-Source: ABdhPJzmTLyJiMIH7/kQoP6L+VhlUA+7RnmijLx7oWBaXhPdpzGgcAEZV6BSepEVhxfy3ZoxIY2hkg==
+X-Received: by 2002:a63:4e20:: with SMTP id c32mr5182730pgb.104.1623334560354;
+        Thu, 10 Jun 2021 07:16:00 -0700 (PDT)
 Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id h12sm3035510pgn.54.2021.06.10.07.13.34
+        by smtp.gmail.com with ESMTPSA id f6sm2629239pfb.28.2021.06.10.07.15.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Jun 2021 07:13:46 -0700 (PDT)
-Subject: Re: [RFC PATCH V3 01/11] x86/HV: Initialize GHCB page in Isolation VM
+        Thu, 10 Jun 2021 07:15:59 -0700 (PDT)
+Subject: Re: [RFC PATCH V3 04/11] HV: Add Write/Read MSR registers via ghcb
 To:     Joerg Roedel <joro@8bytes.org>
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
@@ -69,60 +66,61 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         vkuznets@redhat.com, thomas.lendacky@amd.com,
         brijesh.singh@amd.com, sunilmut@microsoft.com
 References: <20210530150628.2063957-1-ltykernel@gmail.com>
- <20210530150628.2063957-2-ltykernel@gmail.com> <YMC2RSr/J1WYCvtz@8bytes.org>
+ <20210530150628.2063957-5-ltykernel@gmail.com> <YMC4JdtYO+eLDKh5@8bytes.org>
 From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <c9a7eaa8-a8b3-3ed3-c52c-7a2cea3c95bc@gmail.com>
-Date:   Thu, 10 Jun 2021 22:13:32 +0800
+Message-ID: <bd84a1a1-1dae-1dc0-8175-ed8bf19e705c@gmail.com>
+Date:   Thu, 10 Jun 2021 22:15:46 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <YMC2RSr/J1WYCvtz@8bytes.org>
+In-Reply-To: <YMC4JdtYO+eLDKh5@8bytes.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Joerg：
-	Thanks for your review.
 
 
-On 6/9/2021 8:38 PM, Joerg Roedel wrote:
-> On Sun, May 30, 2021 at 11:06:18AM -0400, Tianyu Lan wrote:
->> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
->>
->> Hyper-V exposes GHCB page via SEV ES GHCB MSR for SNP guest
->> to communicate with hypervisor. Map GHCB page for all
->> cpus to read/write MSR register and submit hvcall request
->> via GHCB.
->>
->> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
->> ---
->>   arch/x86/hyperv/hv_init.c       | 60 ++++++++++++++++++++++++++++++---
->>   arch/x86/include/asm/mshyperv.h |  2 ++
->>   include/asm-generic/mshyperv.h  |  2 ++
->>   3 files changed, 60 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
->> index bb0ae4b5c00f..dc74d01cb859 100644
->> --- a/arch/x86/hyperv/hv_init.c
->> +++ b/arch/x86/hyperv/hv_init.c
->> @@ -60,6 +60,9 @@ static int hv_cpu_init(unsigned int cpu)
->>   	struct hv_vp_assist_page **hvp = &hv_vp_assist_page[smp_processor_id()];
->>   	void **input_arg;
->>   	struct page *pg;
->> +	u64 ghcb_gpa;
->> +	void *ghcb_va;
+On 6/9/2021 8:46 PM, Joerg Roedel wrote:
+> On Sun, May 30, 2021 at 11:06:21AM -0400, Tianyu Lan wrote:
+>> +void hv_ghcb_msr_write(u64 msr, u64 value)
+>> +{
+>> +	union hv_ghcb *hv_ghcb;
 >> +	void **ghcb_base;
+>> +	unsigned long flags;
+>> +
+>> +	if (!ms_hyperv.ghcb_base)
+>> +		return;
+>> +
+>> +	local_irq_save(flags);
+>> +	ghcb_base = (void **)this_cpu_ptr(ms_hyperv.ghcb_base);
+>> +	hv_ghcb = (union hv_ghcb *)*ghcb_base;
+>> +	if (!hv_ghcb) {
+>> +		local_irq_restore(flags);
+>> +		return;
+>> +	}
+>> +
+>> +	memset(hv_ghcb, 0x00, HV_HYP_PAGE_SIZE);
+>> +
+>> +	hv_ghcb->ghcb.protocol_version = 1;
+>> +	hv_ghcb->ghcb.ghcb_usage = 0;
+>> +
+>> +	ghcb_set_sw_exit_code(&hv_ghcb->ghcb, SVM_EXIT_MSR);
+>> +	ghcb_set_rcx(&hv_ghcb->ghcb, msr);
+>> +	ghcb_set_rax(&hv_ghcb->ghcb, lower_32_bits(value));
+>> +	ghcb_set_rdx(&hv_ghcb->ghcb, value >> 32);
+>> +	ghcb_set_sw_exit_info_1(&hv_ghcb->ghcb, 1);
+>> +	ghcb_set_sw_exit_info_2(&hv_ghcb->ghcb, 0);
+>> +
+>> +	VMGEXIT();
 > 
-> Any reason you can't reuse the SEV-ES support code in the Linux kernel?
-> It already has code to setup GHCBs for all vCPUs.
-> 
-> I see that you don't need #VC handling in your SNP VMs because of the
-> paravisor running underneath it, but just re-using the GHCB setup code
-> shouldn't be too hard.
+> This is not safe to use from NMI context. You need at least some
+> checking or WARN_ON/assertion/whatever to catch cases where this is
+> violated. Otherwise it will result in some hard to debug bug reports.
 > 
 
-Thanks for your suggestion. I will have a try to use SEV-ES code.
+Nice catch. Will update in the next version.
 
+Thanks.
