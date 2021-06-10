@@ -2,132 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D561B3A2E13
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 16:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3823A2F6C
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 17:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbhFJO1h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Jun 2021 10:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbhFJO1g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Jun 2021 10:27:36 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867CFC061574;
-        Thu, 10 Jun 2021 07:25:24 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id k22-20020a17090aef16b0290163512accedso5574790pjz.0;
-        Thu, 10 Jun 2021 07:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9LfruKTSmGsaKr3T0KtsgMI2g1V5D5r+FfKoliRoTY8=;
-        b=c3W9IY55kAGRSZQMUKIse7CYjATOc/WNsezUixaF5fWDkVciqS0+iWaZcHtL2rFFUw
-         q6Af9zyVo5zJyfySRvKv8k+huR+szVR1Xb8GDyTonmbkQ3V0MoPt+EBqk/fvrUpoIhu0
-         FpoCg5T+vTYyaf/IELWrWdHqeg6MOtolC1d7jn3ifj33bWYJ1rAiXRMyOW50J2wlpwFG
-         OzCk7HbGROQ8oMztcbHmPooQ1M2yg6rOw9Gp0rsVbF3wVqRpT60yIqJM59aQu50FPywK
-         5PKEXQwlOBjWNljf/CAPll8LJKaf8zXSJtCqfJmCU42oGpqB5i4sk/wWojxWFZDHy/Ps
-         2toA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9LfruKTSmGsaKr3T0KtsgMI2g1V5D5r+FfKoliRoTY8=;
-        b=T2G4mEfYrGXXBVm8dgrZKagV13bFY1A1h5Qq4PACuqFfIl5QWe1xp4uwe4SnckpWDZ
-         OSFrJ82BHaCkdmhlYo2sK+D7VgKZU0VsSsdfH6v3owDUZcBa5pPg/5ehXFTWSu5LJOGM
-         4oC8qT1/4BvnWnVdSMsQonN4LsXOPpO2aC/ng8IPEpRJgh5a2byoSZNClYvMGnZ5ogpv
-         +GdYb8110SMZTCMI/fsWCyhVFpjNtdAaxT9Zs1jxPqhhhGg8HYWt1XjSSVcACAwzxuiK
-         tQKd+GByD1vxHJVirQIl3USitpTOWN3t16Xd830rqrDksPcdB/mMKhm3UhtxFXcbITYR
-         PhyQ==
-X-Gm-Message-State: AOAM530EL4WiVuZJrwHe6k5KGYiiGLTdFc+l0/GqHytLu9oSLQ6VjrFz
-        vHYFGzLDx4ENRmclKn5FuRE=
-X-Google-Smtp-Source: ABdhPJzdwp2MX3HMzPasMcsmUlDqisDdNAsXcZ2anZ9ouahX31714ETLaZ+TtT/Nrt8h3xRgpVym6w==
-X-Received: by 2002:a17:90a:7bce:: with SMTP id d14mr3702065pjl.38.1623335123951;
-        Thu, 10 Jun 2021 07:25:23 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id 1sm8338487pjm.8.2021.06.10.07.25.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Jun 2021 07:25:23 -0700 (PDT)
-Subject: Re: [RFC PATCH V3 08/11] swiotlb: Add bounce buffer remap address
- setting function
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org,
-        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, Tianyu.Lan@microsoft.com,
-        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
-        xen-devel@lists.xenproject.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, thomas.lendacky@amd.com,
-        brijesh.singh@amd.com, sunilmut@microsoft.com
-References: <20210530150628.2063957-1-ltykernel@gmail.com>
- <20210530150628.2063957-9-ltykernel@gmail.com>
- <20210607064312.GB24478@lst.de>
- <48516ce3-564c-419e-b355-0ce53794dcb1@gmail.com>
-Message-ID: <9c05f7fd-6460-5d4a-aa83-08626839d18e@gmail.com>
-Date:   Thu, 10 Jun 2021 22:25:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231665AbhFJPh1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Jun 2021 11:37:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:34732 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230366AbhFJPh0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 10 Jun 2021 11:37:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 173C2106F;
+        Thu, 10 Jun 2021 08:35:30 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B89CF3F719;
+        Thu, 10 Jun 2021 08:35:28 -0700 (PDT)
+Date:   Thu, 10 Jun 2021 16:34:28 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org
+Subject: Re: [PATCH v2 2/3] arm64: Enable BTI for main executable as well as
+ the interpreter
+Message-ID: <20210610153426.GP4187@arm.com>
+References: <20210604112450.13344-1-broonie@kernel.org>
+ <20210604112450.13344-3-broonie@kernel.org>
+ <20210609151713.GL4187@arm.com>
+ <YMIRSSMnP3UMwdRy@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <48516ce3-564c-419e-b355-0ce53794dcb1@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YMIRSSMnP3UMwdRy@sirena.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Jun 10, 2021 at 02:19:05PM +0100, Mark Brown wrote:
+> On Wed, Jun 09, 2021 at 04:17:13PM +0100, Dave Martin wrote:
+> > On Fri, Jun 04, 2021 at 12:24:49PM +0100, Mark Brown wrote:
+> 
+> > > -		if (system_supports_bti() && has_interp == is_interp &&
+> > > -		    (*p & GNU_PROPERTY_AARCH64_FEATURE_1_BTI))
+> > > -			arch->flags |= ARM64_ELF_BTI;
+> > > +		if (system_supports_bti() &&
+> > > +		    (*p & GNU_PROPERTY_AARCH64_FEATURE_1_BTI)) {
+> > > +			if (is_interp) {
+> > > +				arch->flags |= ARM64_ELF_INTERP_BTI;
+> > > +			} else {
+> > > +				arch->flags |= ARM64_ELF_EXEC_BTI;
+> > > +			}
+> 
+> > Nit: surplus curlies? (coding-style.rst does actually say to drop them
+> > when all branches of an if are single-statement one-liners -- I had
+> > presumed I was just being pedantic...)
+> 
+> I really think this hurts readability with the nested if inside
+> another if with a multi-line condition.
 
+So long as there is a reason rather than it being purely an accident of
+editing, that's fine.
 
-On 6/7/2021 10:56 PM, Tianyu Lan wrote:
-> 
-> On 6/7/2021 2:43 PM, Christoph Hellwig wrote:
->> On Sun, May 30, 2021 at 11:06:25AM -0400, Tianyu Lan wrote:
->>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
->>>
->>> For Hyper-V isolation VM with AMD SEV SNP, the bounce buffer(shared 
->>> memory)
->>> needs to be accessed via extra address space(e.g address above bit39).
->>> Hyper-V code may remap extra address space outside of swiotlb. swiotlb_
->>> bounce() needs to use remap virtual address to copy data from/to bounce
->>> buffer. Add new interface swiotlb_set_bounce_remap() to do that.
->>
->> Why can't you use the bus_dma_region ranges to remap to your preferred
->> address?
->>
-> 
-> Thanks for your suggestion.
-> 
-> These addresses in extra address space works as system memory mirror. 
-> The shared memory with host in Isolation VM needs to be accessed via 
-> extra address space which is above shared gpa boundary. During 
-> initializing swiotlb bounce buffer pool, only address bellow shared gpa 
-> boundary can be accepted by swiotlb API because it is treated as system 
-> memory and managed by memory management. This is why Hyper-V swiotlb 
-> bounce buffer pool needs to be allocated in Hyper-V code and map
-> associated physical address in extra address space. The patch target is
-> to add the new interface to set start virtual address of bounce buffer
-> pool and let swiotlb boucne buffer copy function to use right virtual 
-> address for extra address space.
-> 
-> bus_dma_region is to translate cpu physical address to dma address.
-> It can't modify the virtual address of bounce buffer pool and let
-> swiotlb code to copy data with right address. If some thing missed,
-> please correct me.
-> 
+(Though if the nested if can be flattened so that this becomes a non-
+issue, that's good too :)
 
-Hi Christoph:
-	Sorry to bother you. Could you have a look at my previous reply?
-I try figuring out the right way.
+> > > -	if (prot & PROT_EXEC)
+> > > -		prot |= PROT_BTI;
+> > > +		if (state->flags & ARM64_ELF_EXEC_BTI && !is_interp)
+> > > +			prot |= PROT_BTI;
+> > > +	}
+> 
+> > Is it worth adding () around the bitwise-& expressions?  I'm always a
+> > little uneasy about the operator precedence of binary &, although
+> > without looking it up I think you're correct.
+> 
+> Sure.  I'm fairly sure the compiler would've complained about
+> this case if it were ambiguous, I'm vaguely surprised it didn't
+> already.
 
-Thanks.
+I was vaguely surprised too -- though I didn't try to compile this
+myself yet.  Anyway, not a huge deal.  Adding a helper to generate the
+appropriate mask would make this issue go away in any case, but so long
+as you're confident this is being evaluated as intended I can take your
+word for it.
+
+> > Feel free to adopt if this appeals to you, otherwise I'm also fine with
+> > your version.)
+> 
+> I'll see what I think when I get back to looking at this
+> properly.
+
+Ack -- again, this was just a suggestion.  I can also live with your
+original code if you ultimately decide to stick with that.
+
+Cheers
+---Dave
