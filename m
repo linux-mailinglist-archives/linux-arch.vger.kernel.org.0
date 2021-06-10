@@ -2,80 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EA93A2DEE
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 16:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D561B3A2E13
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 16:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbhFJOV5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Jun 2021 10:21:57 -0400
-Received: from mail-pf1-f173.google.com ([209.85.210.173]:40837 "EHLO
-        mail-pf1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbhFJOV4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Jun 2021 10:21:56 -0400
-Received: by mail-pf1-f173.google.com with SMTP id q25so1744617pfh.7;
-        Thu, 10 Jun 2021 07:20:00 -0700 (PDT)
+        id S231320AbhFJO1h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Jun 2021 10:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230153AbhFJO1g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Jun 2021 10:27:36 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867CFC061574;
+        Thu, 10 Jun 2021 07:25:24 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id k22-20020a17090aef16b0290163512accedso5574790pjz.0;
+        Thu, 10 Jun 2021 07:25:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=S7U7wM1689XPFk0ln7YagGhi2kwC7oBCIYjLHGTATmA=;
-        b=j1ssCm/VIao3T0Xc2kwXH6tQqWfrySQ1IoYffbIUZhSffD09z3SFuktT6padpAZaa/
-         O6dOSr9MfmJ3BaiaCjc0PA9hj1D56rpnhXvTnUEKbRnxOiqwlkMuTGEQqMho8+laNO3A
-         Ps4g2Ewhuj5lqgG3+vb3Pr6h4xORMt0ouVqwcSeoFvA+lTlqRvdEpC++3hJnHyetmZQS
-         Y1STui7T1ekgTq6zzEkx3p9dSbyB7UT0DfPgF2o16fgVpJiH+bKr87Q/n9chxbr1Li1Z
-         sUz1mgnrmF2Vvd/rNoSeF09YxbBnVBhhC9qN6Rqm62kNLgrUCEgGYVPXMjW1fXotfIvd
-         p8kw==
+        bh=9LfruKTSmGsaKr3T0KtsgMI2g1V5D5r+FfKoliRoTY8=;
+        b=c3W9IY55kAGRSZQMUKIse7CYjATOc/WNsezUixaF5fWDkVciqS0+iWaZcHtL2rFFUw
+         q6Af9zyVo5zJyfySRvKv8k+huR+szVR1Xb8GDyTonmbkQ3V0MoPt+EBqk/fvrUpoIhu0
+         FpoCg5T+vTYyaf/IELWrWdHqeg6MOtolC1d7jn3ifj33bWYJ1rAiXRMyOW50J2wlpwFG
+         OzCk7HbGROQ8oMztcbHmPooQ1M2yg6rOw9Gp0rsVbF3wVqRpT60yIqJM59aQu50FPywK
+         5PKEXQwlOBjWNljf/CAPll8LJKaf8zXSJtCqfJmCU42oGpqB5i4sk/wWojxWFZDHy/Ps
+         2toA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=S7U7wM1689XPFk0ln7YagGhi2kwC7oBCIYjLHGTATmA=;
-        b=kWJ0n92EMSemDX8LCjIXl8nXzyu0NXPmNfJA/KwwaLVT59wFJ6d9CXrx+1thVckuQm
-         OloP7fD0zPnEPSKzo++vi2GpXMKgMFR/69Qr5ezRaGS7CT3OhhJOraSAJ1899mXft0ke
-         sbA8v7XnLGOa65igfE9KGrhkGaGO57CB9CpaADqu8QKMlv4xBpEtLL3wX5/xdLkcBro/
-         kT9X8WOy5QW5ISwoWH+0SuOyacepYUq/T2TupIAwYzL+P1cejLGpBoYqCt73P8PEvvay
-         cBUDhpdVdZWwmxPf4okrjk+DLXa9pab5VZTbSZii8ZYigACwvLmaAqoMQ2p6eQO4oEQE
-         dsrg==
-X-Gm-Message-State: AOAM530Bxq8Bw8GdvqHfhlwO8NSPrVUZZD9qoYds0///pQywi5vf1hvT
-        0I3PrlCNQA8LquJmQjTlWO0=
-X-Google-Smtp-Source: ABdhPJykpYU7kOZkoptn+vRUH+LpqhlVAnDQIkp8KIQpRwT8RFYkpZNT1LtsR90ESObN7s+cfunBTA==
-X-Received: by 2002:a63:7404:: with SMTP id p4mr5123864pgc.405.1623334740224;
-        Thu, 10 Jun 2021 07:19:00 -0700 (PDT)
+        bh=9LfruKTSmGsaKr3T0KtsgMI2g1V5D5r+FfKoliRoTY8=;
+        b=T2G4mEfYrGXXBVm8dgrZKagV13bFY1A1h5Qq4PACuqFfIl5QWe1xp4uwe4SnckpWDZ
+         OSFrJ82BHaCkdmhlYo2sK+D7VgKZU0VsSsdfH6v3owDUZcBa5pPg/5ehXFTWSu5LJOGM
+         4oC8qT1/4BvnWnVdSMsQonN4LsXOPpO2aC/ng8IPEpRJgh5a2byoSZNClYvMGnZ5ogpv
+         +GdYb8110SMZTCMI/fsWCyhVFpjNtdAaxT9Zs1jxPqhhhGg8HYWt1XjSSVcACAwzxuiK
+         tQKd+GByD1vxHJVirQIl3USitpTOWN3t16Xd830rqrDksPcdB/mMKhm3UhtxFXcbITYR
+         PhyQ==
+X-Gm-Message-State: AOAM530EL4WiVuZJrwHe6k5KGYiiGLTdFc+l0/GqHytLu9oSLQ6VjrFz
+        vHYFGzLDx4ENRmclKn5FuRE=
+X-Google-Smtp-Source: ABdhPJzdwp2MX3HMzPasMcsmUlDqisDdNAsXcZ2anZ9ouahX31714ETLaZ+TtT/Nrt8h3xRgpVym6w==
+X-Received: by 2002:a17:90a:7bce:: with SMTP id d14mr3702065pjl.38.1623335123951;
+        Thu, 10 Jun 2021 07:25:23 -0700 (PDT)
 Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id s22sm2725797pfd.94.2021.06.10.07.18.47
+        by smtp.gmail.com with ESMTPSA id 1sm8338487pjm.8.2021.06.10.07.25.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Jun 2021 07:18:59 -0700 (PDT)
-Subject: Re: [RFC PATCH V3 03/11] x86/Hyper-V: Add new hvcall guest address
- host visibility support
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        akpm@linux-foundation.org, kirill.shutemov@linux.intel.com,
-        rppt@kernel.org, hannes@cmpxchg.org, cai@lca.pw,
-        krish.sadhukhan@oracle.com, saravanand@fb.com,
-        Tianyu.Lan@microsoft.com, konrad.wilk@oracle.com, hch@lst.de,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        boris.ostrovsky@oracle.com, jgross@suse.com,
+        Thu, 10 Jun 2021 07:25:23 -0700 (PDT)
+Subject: Re: [RFC PATCH V3 08/11] swiotlb: Add bounce buffer remap address
+ setting function
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
+        peterz@infradead.org, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, rppt@kernel.org,
+        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
+        saravanand@fb.com, Tianyu.Lan@microsoft.com,
+        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, boris.ostrovsky@oracle.com, jgross@suse.com,
         sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
         xen-devel@lists.xenproject.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com,
-        sunilmut@microsoft.com
+        vkuznets@redhat.com, thomas.lendacky@amd.com,
+        brijesh.singh@amd.com, sunilmut@microsoft.com
 References: <20210530150628.2063957-1-ltykernel@gmail.com>
- <20210530150628.2063957-4-ltykernel@gmail.com>
- <878s3iyrtg.fsf@vitty.brq.redhat.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <2a0170a9-e4d5-1c63-7901-416094f6ab64@gmail.com>
-Date:   Thu, 10 Jun 2021 22:18:45 +0800
+ <20210530150628.2063957-9-ltykernel@gmail.com>
+ <20210607064312.GB24478@lst.de>
+ <48516ce3-564c-419e-b355-0ce53794dcb1@gmail.com>
+Message-ID: <9c05f7fd-6460-5d4a-aa83-08626839d18e@gmail.com>
+Date:   Thu, 10 Jun 2021 22:25:10 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <878s3iyrtg.fsf@vitty.brq.redhat.com>
+In-Reply-To: <48516ce3-564c-419e-b355-0ce53794dcb1@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -83,37 +87,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Vitaly:
-	Thanks for your review.
 
-On 6/10/2021 5:47 PM, Vitaly Kuznetsov wrote:
->> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
->> index 606f5cc579b2..632281b91b44 100644
->> --- a/arch/x86/include/asm/hyperv-tlfs.h
->> +++ b/arch/x86/include/asm/hyperv-tlfs.h
->> @@ -262,6 +262,17 @@ enum hv_isolation_type {
->>   #define HV_X64_MSR_TIME_REF_COUNT	HV_REGISTER_TIME_REF_COUNT
->>   #define HV_X64_MSR_REFERENCE_TSC	HV_REGISTER_REFERENCE_TSC
->>   
->> +/* Hyper-V GPA map flags */
->> +#define HV_MAP_GPA_PERMISSIONS_NONE            0x0
->> +#define HV_MAP_GPA_READABLE                    0x1
->> +#define HV_MAP_GPA_WRITABLE                    0x2
->> +
->> +enum vmbus_page_visibility {
->> +	VMBUS_PAGE_NOT_VISIBLE = 0,
->> +	VMBUS_PAGE_VISIBLE_READ_ONLY = 1,
->> +	VMBUS_PAGE_VISIBLE_READ_WRITE = 3
->> +};
->> +
-> Why do we need both flags and the enum? I don't see HV_MAP_GPA_* being
-> used anywhere and VMBUS_PAGE_VISIBLE_READ_WRITE looks like
-> HV_MAP_GPA_READABLE | HV_MAP_GPA_WRITABLE.
+
+On 6/7/2021 10:56 PM, Tianyu Lan wrote:
 > 
-> As this is used to communicate with the host, I'd suggest to avoid using
-> enum and just use flags everywhere.
+> On 6/7/2021 2:43 PM, Christoph Hellwig wrote:
+>> On Sun, May 30, 2021 at 11:06:25AM -0400, Tianyu Lan wrote:
+>>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>>>
+>>> For Hyper-V isolation VM with AMD SEV SNP, the bounce buffer(shared 
+>>> memory)
+>>> needs to be accessed via extra address space(e.g address above bit39).
+>>> Hyper-V code may remap extra address space outside of swiotlb. swiotlb_
+>>> bounce() needs to use remap virtual address to copy data from/to bounce
+>>> buffer. Add new interface swiotlb_set_bounce_remap() to do that.
+>>
+>> Why can't you use the bus_dma_region ranges to remap to your preferred
+>> address?
+>>
+> 
+> Thanks for your suggestion.
+> 
+> These addresses in extra address space works as system memory mirror. 
+> The shared memory with host in Isolation VM needs to be accessed via 
+> extra address space which is above shared gpa boundary. During 
+> initializing swiotlb bounce buffer pool, only address bellow shared gpa 
+> boundary can be accepted by swiotlb API because it is treated as system 
+> memory and managed by memory management. This is why Hyper-V swiotlb 
+> bounce buffer pool needs to be allocated in Hyper-V code and map
+> associated physical address in extra address space. The patch target is
+> to add the new interface to set start virtual address of bounce buffer
+> pool and let swiotlb boucne buffer copy function to use right virtual 
+> address for extra address space.
+> 
+> bus_dma_region is to translate cpu physical address to dma address.
+> It can't modify the virtual address of bounce buffer pool and let
+> swiotlb code to copy data with right address. If some thing missed,
+> please correct me.
 > 
 
-Nice catch. Will update in the next version.
+Hi Christoph:
+	Sorry to bother you. Could you have a look at my previous reply?
+I try figuring out the right way.
 
 Thanks.
