@@ -2,109 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B75EA3A28DF
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 12:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D529D3A2939
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 12:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbhFJKBz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Jun 2021 06:01:55 -0400
-Received: from foss.arm.com ([217.140.110.172]:55696 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229770AbhFJKBz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Jun 2021 06:01:55 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2EA0ED6E;
-        Thu, 10 Jun 2021 02:59:59 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D0BA63F694;
-        Thu, 10 Jun 2021 02:59:57 -0700 (PDT)
-Date:   Thu, 10 Jun 2021 10:58:57 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, libc-alpha@sourceware.org
-Subject: Re: [PATCH v2 3/3] elf: Remove has_interp property from
- arch_adjust_elf_prot()
-Message-ID: <20210610095853.GN4187@arm.com>
-References: <20210604112450.13344-1-broonie@kernel.org>
- <20210604112450.13344-4-broonie@kernel.org>
- <20210609151724.GM4187@arm.com>
- <6e0b1dbd-688c-aba6-e376-91ce9440d741@intel.com>
+        id S229961AbhFJKVe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Jun 2021 06:21:34 -0400
+Received: from mail.chalver.com.ec ([186.3.12.10]:43209 "EHLO
+        mail.chalver.com.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229937AbhFJKVd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Jun 2021 06:21:33 -0400
+Received: from mail.chalver.com.ec (localhost.localdomain [127.0.0.1])
+        by mail.chalver.com.ec (Postfix) with ESMTPS id 234C01F2590F;
+        Thu, 10 Jun 2021 03:58:29 -0500 (ECT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.chalver.com.ec (Postfix) with ESMTP id EAAD61F24E21;
+        Thu, 10 Jun 2021 02:56:53 -0500 (ECT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.chalver.com.ec EAAD61F24E21
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chalver.com.ec;
+        s=E2A417BC-DDA7-11E6-85F6-38495636B764; t=1623311814;
+        bh=PxMh0SAMbBGlctefOH2OhvTlJNlHw25bONEEE7Ldp0I=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=eHmdSCVvngWWLH9A/leFnS/BTauay0N8ZJIqQzEOmN8Ti33z5rskgyNu/jQ8GKnSC
+         KB9lldDoGwCazhUvbXpB5TEUC98sWPaA+jeRMNn5sFG1oPBuG/bu8XZ29s3WwAn2ag
+         mzwxGZWLsra8e7kdJU4w3cP2s3H5haIiCKJRz0n1i6defoDp/dUb3tKcPF1BdcJzNL
+         60TtNw5Zwk685HHi6bMnuq6hql513ZLUswA/spkwy2ZBA2xfsQlOiYCSFVN3/OhNLF
+         CpHlwRhpppWwJB4LnpDWTQm5RO1MBcHSWd2yN5YiSpDGDYXJ3ipLNwu0I8UrJpnrNl
+         l6udoH8nL7J+w==
+X-Virus-Scanned: amavisd-new at chalver.com.ec
+Received: from mail.chalver.com.ec ([127.0.0.1])
+        by localhost (mail.chalver.com.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 68ga9a4KTXRl; Thu, 10 Jun 2021 02:56:53 -0500 (ECT)
+Received: from cris-PC.wifi (unknown [105.9.120.116])
+        by mail.chalver.com.ec (Postfix) with ESMTPSA id 20B481F25946;
+        Thu, 10 Jun 2021 02:56:42 -0500 (ECT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6e0b1dbd-688c-aba6-e376-91ce9440d741@intel.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients <mpaucar@chalver.com.ec>
+From:   ''Tayeb souami'' <mpaucar@chalver.com.ec>
+Date:   Thu, 10 Jun 2021 10:03:57 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210610075643.20B481F25946@mail.chalver.com.ec>
+X-Laboratorios-Chalver-MailScanner-Information: Please contact the ISP for more information
+X-Laboratorios-Chalver-MailScanner-ID: 20B481F25946.AF379
+X-Laboratorios-Chalver-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 09:55:36AM -0700, Yu, Yu-cheng wrote:
-> On 6/9/2021 8:17 AM, Dave Martin wrote:
-> >On Fri, Jun 04, 2021 at 12:24:50PM +0100, Mark Brown wrote:
-> >>Since we have added an is_interp flag to arch_parse_elf_property() we can
-> >>drop the has_interp flag from arch_elf_adjust_prot(), the only user was
-> >>the arm64 code which no longer needs it and any future users will be able
-> >>to use arch_parse_elf_properties() to determine if an interpreter is in
-> >>use.
-> >
-> >So far so good, but can we also drop the has_interp argument from
-> >arch_parse_elf_properties()?
-> >
-> >Cross-check with Yu-Cheng Yu's series, but I don't see this being used
-> >any more (except for passthrough in binfmt_elf.c).
-> >
-> >Since we are treating the interpreter and main executable orthogonally
-> >to each other now, I don't think we should need a has_interp argument to
-> >pass knowledge between the interpreter and executable handling phases
-> >here.
-> >
-> 
-> For CET, arch_parse_elf_property() needs to know has_interp and is_interp.
-> Like the following, on top of your patches:
-> 
-> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> index 607b782afe2c..9e6f142b5cef 100644
-> --- a/arch/x86/kernel/process_64.c
-> +++ b/arch/x86/kernel/process_64.c
-> @@ -837,8 +837,15 @@ unsigned long KSTK_ESP(struct task_struct *task)
->  }
-> 
->  int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
-> -			    bool compat, struct arch_elf_state *state)
-> +			    bool compat, bool has_interp, bool is_interp,
-> +			    struct arch_elf_state *state)
->  {
-> +	/*
-> +	 * Parse static-linked executable or the loader.
-> +	 */
-> +	if (has_interp != is_interp)
-> +		return 0;
-> +
 
-[...]
+Lieber Freund,
 
-Ah, sorry, I did attempt to check this with your series, but I didn't
-attempt to build it.  I must have missed this somehow.
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der =
+Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zu=
+f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
+il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
+meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
+und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
+Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
+ spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen, sehen Sie bitte meine Y=
+ou Tube Seite unten.
 
-But: does x86 actually need to do this?
+UHR MICH HIER: https://www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks
 
-For arm64, we've discovered that it is better to treat the ELF
-interpreter and main executable independently when applying the ELF
-properties.
 
-So, can x86 actually port away from this?  arch_parse_elf_properties()
-and arch_adjust_elf_prot() would still know whether the interpreter is
-being considered or not, via the is_interp argument to both functions.
-This allows interpreter and main executable info to be stashed
-independently in the arch_elf_state.
 
-If x86 really needs to carry on following the existing model then that's
-fine, but we should try to keep x86 and arm64 aligned if at all possible.
+Das ist dein Spendencode: [TS530342018]
 
-Cheers
----Dave
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
+
+Gr=C3=BC=C3=9Fe
+Herr Tayeb Souami
