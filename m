@@ -2,87 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EC43A2F8B
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 17:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3793A3155
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 18:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbhFJPnG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Jun 2021 11:43:06 -0400
-Received: from foss.arm.com ([217.140.110.172]:34884 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231678AbhFJPnD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Jun 2021 11:43:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A207B1396;
-        Thu, 10 Jun 2021 08:41:06 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 502E23F719;
-        Thu, 10 Jun 2021 08:41:05 -0700 (PDT)
-Date:   Thu, 10 Jun 2021 16:40:04 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org
-Subject: Re: [PATCH v2 3/3] elf: Remove has_interp property from
- arch_adjust_elf_prot()
-Message-ID: <20210610154004.GQ4187@arm.com>
-References: <20210604112450.13344-1-broonie@kernel.org>
- <20210604112450.13344-4-broonie@kernel.org>
- <20210609151724.GM4187@arm.com>
- <YMIUy3oMQNboKoeg@sirena.org.uk>
+        id S230134AbhFJQvR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Jun 2021 12:51:17 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:33987 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231410AbhFJQvP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Jun 2021 12:51:15 -0400
+X-Greylist: delayed 568 seconds by postgrey-1.27 at vger.kernel.org; Thu, 10 Jun 2021 12:51:14 EDT
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4G18p640mYz1qtQ2;
+        Thu, 10 Jun 2021 18:39:42 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4G18p626MNz1qr43;
+        Thu, 10 Jun 2021 18:39:42 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id UWj4Zzhp75L1; Thu, 10 Jun 2021 18:39:40 +0200 (CEST)
+X-Auth-Info: uOvEB6x6tEBbFu4rjQpXHZh4ihXcEo6qHZ3hLcNwGzcQDLB3o4xhP8eA0qGjKLTp
+Received: from igel.home (ppp-46-244-161-203.dynamic.mnet-online.de [46.244.161.203])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Thu, 10 Jun 2021 18:39:40 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id 031D22C36A3; Thu, 10 Jun 2021 18:39:39 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Alex Ghiti <alex@ghiti.fr>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, corbet@lwn.net,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        aryabinin@virtuozzo.com, glider@google.com, dvyukov@google.com,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v5 1/3] riscv: Move kernel mapping outside of linear
+ mapping
+References: <mhng-90fff6bd-5a70-4927-98c1-a515a7448e71@palmerdabbelt-glaptop>
+        <76353fc0-f734-db47-0d0c-f0f379763aa0@ghiti.fr>
+        <a58c4616-572f-4a0b-2ce9-fd00735843be@ghiti.fr>
+        <7b647da1-b3aa-287f-7ca8-3b44c5661cb8@ghiti.fr>
+X-Yow:  Quick, sing me the BUDAPEST NATIONAL ANTHEM!!
+Date:   Thu, 10 Jun 2021 18:39:39 +0200
+In-Reply-To: <7b647da1-b3aa-287f-7ca8-3b44c5661cb8@ghiti.fr> (Alex Ghiti's
+        message of "Sun, 18 Apr 2021 07:38:09 -0400")
+Message-ID: <87fsxphdx0.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YMIUy3oMQNboKoeg@sirena.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 02:34:03PM +0100, Mark Brown wrote:
-> On Wed, Jun 09, 2021 at 04:17:24PM +0100, Dave Martin wrote:
-> > On Fri, Jun 04, 2021 at 12:24:50PM +0100, Mark Brown wrote:
-> 
-> > > Since we have added an is_interp flag to arch_parse_elf_property() we can
-> > > drop the has_interp flag from arch_elf_adjust_prot(), the only user was
-> > > the arm64 code which no longer needs it and any future users will be able
-> > > to use arch_parse_elf_properties() to determine if an interpreter is in
-> > > use.
-> 
-> > So far so good, but can we also drop the has_interp argument from
-> > arch_parse_elf_properties()?
-> 
-> > Cross-check with Yu-Cheng Yu's series, but I don't see this being used
-> > any more (except for passthrough in binfmt_elf.c).
-> 
-> > Since we are treating the interpreter and main executable orthogonally
-> > to each other now, I don't think we should need a has_interp argument to
-> > pass knowledge between the interpreter and executable handling phases
-> > here.
-> 
-> My thinking was that it might be useful for handling of some
-> future property in the architecture code to know if there is an
-> interpreter, providing the information at parse time would let it
-> set up whatever is needed.  We've been doing this with the arm64
-> BTI handling and while we're moving away from doing that I could
-> imagine that there may be some other case where it makes sense,
-> and it sounds like CET is one.
+On Apr 18 2021, Alex Ghiti wrote:
 
-It might be useful, but if the use cases are purely hypothetical then it
-would still seem preferable to remove it so that it doesn't just hang
-around forever as cruft.
+> To sum up, there are 3 patches that fix this series:
+>
+> https://patchwork.kernel.org/project/linux-riscv/patch/20210415110426.2238-1-alex@ghiti.fr/
+>
+> https://patchwork.kernel.org/project/linux-riscv/patch/20210417172159.32085-1-alex@ghiti.fr/
+>
+> https://patchwork.kernel.org/project/linux-riscv/patch/20210418112856.15078-1-alex@ghiti.fr/
 
-I guess we need to wait and see whether x86 really needs this, or just
-uses it as a side-effect of following the arm64 code initially.
+Has this been fixed yet?  Booting is still broken here.
 
-If it is quicker to stabilise this series heeping the has_interps in,
-then I guess we have the option to do that and remove them later on once
-we're satisfied they're unlikely to be useful (or not).
+Andreas.
 
-Cheers
----Dave
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
