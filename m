@@ -2,107 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A893B3A32B4
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 20:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BCE3A32E5
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jun 2021 20:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbhFJSKU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Jun 2021 14:10:20 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:32897 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbhFJSKQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Jun 2021 14:10:16 -0400
-Received: from [192.168.1.155] ([95.115.39.199]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MAOa3-1m2Ar83JKV-00Bw0l; Thu, 10 Jun 2021 20:07:57 +0200
-Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
-To:     David Hildenbrand <david@redhat.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Greg KH <greg@kroah.com>, Christoph Lameter <cl@gentwo.de>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Jiri Kosina <jikos@kernel.org>,
-        ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
-References: <YH2hs6EsPTpDAqXc@mit.edu>
- <nycvar.YFH.7.76.2104281228350.18270@cbobk.fhfr.pm>
- <YIx7R6tmcRRCl/az@mit.edu>
- <alpine.DEB.2.22.394.2105271522320.172088@gentwo.de>
- <YK+esqGjKaPb+b/Q@kroah.com>
- <c46dbda64558ab884af060f405e3f067112b9c8a.camel@HansenPartnership.com>
- <b32c8672-06ee-bf68-7963-10aeabc0596c@redhat.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Message-ID: <5038827c-463f-232d-4dec-da56c71089bd@metux.net>
-Date:   Thu, 10 Jun 2021 20:07:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S229823AbhFJSTG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Jun 2021 14:19:06 -0400
+Received: from mga02.intel.com ([134.134.136.20]:60641 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230212AbhFJSTF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 10 Jun 2021 14:19:05 -0400
+IronPort-SDR: ZcbcqeSGPfyQIAd+okr/QyfG3JQ9/MFwk6Mj3ttFuJTkMWReI+L0O2EO51HRTpV8I0jvlv/h09
+ TAPo/nEs6qrg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="192476047"
+X-IronPort-AV: E=Sophos;i="5.83,264,1616482800"; 
+   d="scan'208";a="192476047"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 11:17:08 -0700
+IronPort-SDR: bzxZKBu+iuyDQIVXTTpDDymxZqOLtfT/zL9wNgqKXdUI9wY1Q7YLaapAuzUGCstPeX+TEBh2K5
+ 2QRP1ak+IlLA==
+X-IronPort-AV: E=Sophos;i="5.83,264,1616482800"; 
+   d="scan'208";a="552447883"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.32.188]) ([10.212.32.188])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 11:17:07 -0700
+Subject: Re: [PATCH v2 3/3] elf: Remove has_interp property from
+ arch_adjust_elf_prot()
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, libc-alpha@sourceware.org
+References: <20210604112450.13344-1-broonie@kernel.org>
+ <20210604112450.13344-4-broonie@kernel.org> <20210609151724.GM4187@arm.com>
+ <6e0b1dbd-688c-aba6-e376-91ce9440d741@intel.com>
+ <20210610095853.GN4187@arm.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <aa43ec0d-e02b-8d0e-f97f-7e61b0639a5f@intel.com>
+Date:   Thu, 10 Jun 2021 11:17:06 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <b32c8672-06ee-bf68-7963-10aeabc0596c@redhat.com>
+In-Reply-To: <20210610095853.GN4187@arm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: tl
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:h3TsVFZQW1eeWxWIwEU03AV+gSVwsiMLM6JxbsYr4WP0Fwq23A2
- CiXWNpTQ5rJyN4lnIlW3kNqu1QDJHOU9jXONXeRpeKHiJh149DjgQM0E2BKk2DnTypFbthH
- r0BSBnK2DPiDCypN8o4dp/TEYuXShTv8MoV3a1LIiFYVPq/F68NtDYbwRsf40mUoOx6kkFA
- jJOwRV273/dupW+JPy8Fg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:RPR8u21hQiQ=:WMPCtJcTv+xnqOrRaqItdg
- pTQrLFmyOswfSwUDFdlHDGFylEX4TtOn0b9LskM+UqYiTWSbFD9p76i03ghY4Ke2PgXAKBZ75
- q6ytFDizMVPHn6Zg+ZGzSq7vHCvS2xWn0u2B0YIhlTEAjiJd4bA+9rPrK0T1dcfGT6Mox8pkR
- mtm1+Fw3thU+HLx+oKF7kfQyE8xMXqSnA3d4Ita5jpsrf/fTFJtUxSoPBPG+a8SZCFpdc9wvZ
- 9/jlKkBDy/73YvOT/02BbZPep5/H51zO1ivWiWWbFcgC3bDLYQr8zXwsT/YU0Cmgv6M6zfq3j
- 2TZ7gcubdef2OOqLR+t0vEVuQtJcNVHtDduwWi6dR9ofvNkrsewfSwcQi8w2Wr8P3olZ8aeWB
- FfsQGDokItv2hz1feciWckHCLE/IBKROay7Om69AlP+YItfgS/W83MMpmR9PFn8f5dSIAdGWz
- qH1svdZS7+V9gaDRw6uNwheFQ8HuFct02guXK9Gnh33W6t/+Gn84C5N7VIV/d2X/VbKAvg1vp
- Ty6S/JHRodXa4AeYpvQH04=
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 09.06.21 12:37, David Hildenbrand wrote:
-> On 28.05.21 16:58, James Bottomley wrote:
->> On Thu, 2021-05-27 at 15:29 +0200, Greg KH wrote:
->>> On Thu, May 27, 2021 at 03:23:03PM +0200, Christoph Lameter wrote:
->>>> On Fri, 30 Apr 2021, Theodore Ts'o wrote:
->>>>
->>>>> I know we're all really hungry for some in-person meetups and
->>>>> discussions, but at least for LPC, Kernel Summit, and
->>>>> Maintainer's Summit, we're going to have to wait for another
->>>>> year,
->>>>
->>>> Well now that we are vaccinated: Can we still change it?
->>>>
+On 6/10/2021 2:58 AM, Dave Martin wrote:
+> On Wed, Jun 09, 2021 at 09:55:36AM -0700, Yu, Yu-cheng wrote:
+>> On 6/9/2021 8:17 AM, Dave Martin wrote:
+>>> On Fri, Jun 04, 2021 at 12:24:50PM +0100, Mark Brown wrote:
+>>>> Since we have added an is_interp flag to arch_parse_elf_property() we can
+>>>> drop the has_interp flag from arch_elf_adjust_prot(), the only user was
+>>>> the arm64 code which no longer needs it and any future users will be able
+>>>> to use arch_parse_elf_properties() to determine if an interpreter is in
+>>>> use.
 >>>
->>> Speak for yourself, remember that Europe and other parts of the world
->>> are not as "flush" with vaccines as the US currently is :(
+>>> So far so good, but can we also drop the has_interp argument from
+>>> arch_parse_elf_properties()?
+>>>
+>>> Cross-check with Yu-Cheng Yu's series, but I don't see this being used
+>>> any more (except for passthrough in binfmt_elf.c).
+>>>
+>>> Since we are treating the interpreter and main executable orthogonally
+>>> to each other now, I don't think we should need a has_interp argument to
+>>> pass knowledge between the interpreter and executable handling phases
+>>> here.
+>>>
 >>
->> The rollout is accelerating in Europe.  At least in Germany, I know
->> people younger than me are already vaccinated. 
+>> For CET, arch_parse_elf_property() needs to know has_interp and is_interp.
+>> Like the following, on top of your patches:
+>>
+>> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+>> index 607b782afe2c..9e6f142b5cef 100644
+>> --- a/arch/x86/kernel/process_64.c
+>> +++ b/arch/x86/kernel/process_64.c
+>> @@ -837,8 +837,15 @@ unsigned long KSTK_ESP(struct task_struct *task)
+>>   }
+>>
+>>   int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
+>> -			    bool compat, struct arch_elf_state *state)
+>> +			    bool compat, bool has_interp, bool is_interp,
+>> +			    struct arch_elf_state *state)
+>>   {
+>> +	/*
+>> +	 * Parse static-linked executable or the loader.
+>> +	 */
+>> +	if (has_interp != is_interp)
+>> +		return 0;
+>> +
 > 
-> And I know people younger than you in Germany personally ( ;) ) that are 
-> not vaccinated yet and might not even get the first shot before 
-> September, not even dreaming about a second one + waiting until the 
-> vaccine is fully in effect.
+> [...]
+> 
+> Ah, sorry, I did attempt to check this with your series, but I didn't
+> attempt to build it.  I must have missed this somehow.
+> 
+> But: does x86 actually need to do this?
+> 
+> For arm64, we've discovered that it is better to treat the ELF
+> interpreter and main executable independently when applying the ELF
+> properties.
+> 
+> So, can x86 actually port away from this?  arch_parse_elf_properties()
+> and arch_adjust_elf_prot() would still know whether the interpreter is
+> being considered or not, via the is_interp argument to both functions.
+> This allows interpreter and main executable info to be stashed
+> independently in the arch_elf_state.
+> 
+> If x86 really needs to carry on following the existing model then that's
+> fine, but we should try to keep x86 and arm64 aligned if at all possible.
+>
 
-And I know *a lot* of people who will never take part in this generic
-human experiment that basically creates a new humanoid race (people
-who generate and exhaust the toxic spike proteine, whose gene sequence
-doesn't look quote natural). I'm one of them, as my whole family.
+Yes, for CET's purpose, that should be fine.
 
-> So yes, sure, nobody can stop people that think the pandemic is over 
-> ("we are vaccinated") from meeting in person. 
-
-Pandemic ? Did anybody look at the actual scientific data instead of
-just watching corporate tv ? #faucigate
-
-
---mtx
-
--- 
----
-Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
-werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
-GPG/PGP-Schlüssel zu.
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Thanks,
+Yu-cheng
