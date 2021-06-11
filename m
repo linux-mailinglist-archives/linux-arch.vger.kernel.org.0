@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A923A3E03
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 10:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591903A3E14
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 10:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbhFKIcp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Jun 2021 04:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        id S231482AbhFKIgl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Jun 2021 04:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231283AbhFKIco (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Jun 2021 04:32:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D0BC0613A2;
-        Fri, 11 Jun 2021 01:30:46 -0700 (PDT)
+        with ESMTP id S231246AbhFKIgl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Jun 2021 04:36:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9ACC0613A3;
+        Fri, 11 Jun 2021 01:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=R/t9249KjOk7BzHG3fb6t1iMLVk7GKUGrbpwGaTWoSY=; b=OW/sUr9rbPFATW4+5HC6fa2IbA
-        We0BzmW4lu2Y80OgCJzv8Btjpvozfiujbo6RzKR9fScXCw1hv+Z/KMURvZYOoCVzhRcXBdLMPmJgz
-        cDBOQqk8sIll8ZFvT5bHqblgf7QThHQBeYu/osalJtaISNZo1CJpDOAd3DiV0ddEydoJLiKCwM67H
-        0za8uf381bPHa4TBer+UKSXV12yZgmco7UewJTfWseLcZEA0FRmx46D0PmSOFpW+UzDe6Sh97vu8d
-        jxVLDE4eu6Ng8u2dly3Nf1v2p22aFE3Ho7YP0+s8hesv3fLQlDPPDjcbzC5aUjiREXHVvsxa2xTgm
-        XKQj3aig==;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=jhqe0ycYUE5W2gexDEZiW6HAUbaWg7hOOf8Y34psToY=; b=UUD2r/QHpuvuNjmNerfzyTwC5n
+        xZP9I7W52jePJxsw3SYw+mHl7nw8lGnCl47v5JPqtTkTzVhxaKXB0WuMpv9M5fbvGKTYXLr+WhlBL
+        E55WPGZUPo/6k5au+h9WC5eS9CbxeXRi6Ps+hiM2XzzE5cxIz+DPHzv/dFSO10sH2MlW10Mceux3V
+        V5Kd0MpFgnntvjNC9L07SJkGwDE083P5/e8H6RvQ7DpW06e+d2P5fHs4ObVC8+pLZfDSgAFB83w//
+        UihBTgoYtD0Y5rWF6XqNuQc8x+w41ZYwdEixCaBpLK0D0kEmkEQVO/39VHXP6StNBCPmCqKXkXGDH
+        /zqUKGtA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lrcXt-005p84-Rx; Fri, 11 Jun 2021 08:29:48 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lrcY0-002ZVv-JM; Fri, 11 Jun 2021 08:30:07 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3CD7E300593;
-        Fri, 11 Jun 2021 10:29:43 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E98C73001E3;
+        Fri, 11 Jun 2021 10:29:42 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id F388A2BCF3935; Fri, 11 Jun 2021 10:29:42 +0200 (CEST)
-Message-ID: <20210611082838.409696194@infradead.org>
+        id DCBB52BCF392F; Fri, 11 Jun 2021 10:29:42 +0200 (CEST)
+Message-ID: <20210611082810.970791107@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 11 Jun 2021 10:28:15 +0200
+Date:   Fri, 11 Jun 2021 10:28:10 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
@@ -83,36 +83,37 @@ Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Davidlohr Bueso <dbueso@suse.de>
-Subject: [PATCH v2 5/7] sched,timer: Use __set_current_state()
-References: <20210611082810.970791107@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH v2 0/7] Cleanup task_struct::state
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-There's an existing helper for setting TASK_RUNNING; must've gotten
-lost last time we did this cleanup.
+Hi!
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Davidlohr Bueso <dbueso@suse.de>
-Acked-by: Will Deacon <will@kernel.org>
----
- kernel/time/timer.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The task_struct::state variable is a bit odd in a number of ways:
 
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1879,7 +1879,7 @@ signed long __sched schedule_timeout(sig
- 			printk(KERN_ERR "schedule_timeout: wrong timeout "
- 				"value %lx\n", timeout);
- 			dump_stack();
--			current->state = TASK_RUNNING;
-+			__set_current_state(TASK_RUNNING);
- 			goto out;
- 		}
- 	}
+ - it's declared 'volatile' (against current practises);
+ - it's 'unsigned long' which is a weird size;
+ - it's type is inconsistent when used for function arguments.
 
+These patches clean that up by making it consistently 'unsigned int', and
+replace (almost) all accesses with READ_ONCE()/WRITE_ONCE(). In order to not
+miss any, the variable is renamed, ensuring a missed conversion results in a
+compile error.
+
+The first few patches fix a number of pre-existing errors and introduce a few
+helpers to make the final conversion less painful.
+
+This series applies on top of tip/master, and has been having the all-clear
+from the robots for the past week.
+
+Since v1:
+ - fixed a whole bunch of compile fail on !x86
+ - collected tags
+ - (slightly) smaller Cc list
+
+
+The plan is to stick them in tip/sched/core early next week, I'm hoping this
+won't cause too much pain for sfr.
 
