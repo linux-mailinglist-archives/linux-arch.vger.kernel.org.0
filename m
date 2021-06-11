@@ -2,83 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A453A40D7
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 13:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF4E3A421E
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 14:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbhFKLMR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Jun 2021 07:12:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22445 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231545AbhFKLMP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 11 Jun 2021 07:12:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623409817;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dh0bJRcSaHuNu8U4NSShPd3vbPRVolZwKmUYsaTKAQw=;
-        b=dotiEiwy4aaU3Y4UEvLZkayeanyp8SjZCnTBwv8evA2IIUgk+mFhvHVVuLsZRJjv5oeXqu
-        w2qMqDBU9lhLOQwFAAAAq0CoOduBmsKZuhHEew3IS7XWA47F80r1vtDZvwLMjO/mkIm0pg
-        jG8/N0ChnYTA7CvzmYYdPVzYrnNj4Fs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-284-7nA1G_z5PKijruvWiu4UjA-1; Fri, 11 Jun 2021 07:10:13 -0400
-X-MC-Unique: 7nA1G_z5PKijruvWiu4UjA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C87B08BB401;
-        Fri, 11 Jun 2021 11:10:11 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-112-32.rdu2.redhat.com [10.10.112.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CCFA81001281;
-        Fri, 11 Jun 2021 11:10:08 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <YLEIKk7IuWu6W4Sy@casper.infradead.org>
-References: <YLEIKk7IuWu6W4Sy@casper.infradead.org> <YH2hs6EsPTpDAqXc@mit.edu> <nycvar.YFH.7.76.2104281228350.18270@cbobk.fhfr.pm> <YIx7R6tmcRRCl/az@mit.edu> <alpine.DEB.2.22.394.2105271522320.172088@gentwo.de> <YK+esqGjKaPb+b/Q@kroah.com> <c46dbda64558ab884af060f405e3f067112b9c8a.camel@HansenPartnership.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dhowells@redhat.com,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Greg KH <greg@kroah.com>, Christoph Lameter <cl@gentwo.de>,
-        Theodore Ts'o <tytso@mit.edu>, Jiri Kosina <jikos@kernel.org>,
-        ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
-Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
+        id S230291AbhFKMmZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Jun 2021 08:42:25 -0400
+Received: from mail-qt1-f175.google.com ([209.85.160.175]:46663 "EHLO
+        mail-qt1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230188AbhFKMmZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Jun 2021 08:42:25 -0400
+Received: by mail-qt1-f175.google.com with SMTP id a15so2384574qtx.13
+        for <linux-arch@vger.kernel.org>; Fri, 11 Jun 2021 05:40:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=sF12HuTwuQWIQcOi4fBmOGdwoaNfTF5WnwopOSc9w0I=;
+        b=IChp6dZbWJvF8JKfls69c9vf042NhOQI2MEWUn0l27p+Nh2LsXWYNmjYUotSdl7rsO
+         k0AIkaKhIo0inkNXJj4KscBKq/Vv858FAfTAcXDIOOvv+JMLkXdRQG4f1O5RzRlwm/KL
+         EM3lsEmljmWQfYtkhhhnv5Q3vj0d2i4m4CWtVJU2Dha7pSTio8op7vnt/ZIe/IltiXRB
+         wgm+pQG3cY7j+T36398GgKaJEKkUyDSecqcI8ozltVCH5QtaApCb8pIGa086V0WJEyn1
+         FneCPGqDQCf5hPz/J0u/G3YCLOfmZC3qJX92dUTj94qtN959TLhuvvtGy8bjlowgMogo
+         LctQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=sF12HuTwuQWIQcOi4fBmOGdwoaNfTF5WnwopOSc9w0I=;
+        b=XrLwptHQiLIm2QHUTl54a4KeJJwCHLrkvHFGqrnbPmNnqn3IuJBXQuCr0GAKl8FQID
+         8nzpH108WEfBUZyw8ycPVrQAC+r5yDkQDx24er1SCsTXT4WgKkCr8LiHEOFGD5Wtvpr8
+         twM78OxJr3dG0ImASD3XLkl9fhXjZjqXlnqzRcGdKreA6KUct6vN7UoWCL9spTHNtJsP
+         Qfa9lTnk7tVN5CoWZ8z6L6ZyY04mKxN21dfeglg7fII2k+dHqSUJoU7l/fzapKMJqfu0
+         iTM7QcWN/+f52Fi+ix2MfRfnsp+MvGEgt6k+wFN7n/sYr/3CH74Lk53lojHYNb7JmJLb
+         uPhw==
+X-Gm-Message-State: AOAM531Y8xPRVtdbwev5oiKLic1wla1JIC/fOoBN8GMmYEVwyaC/vyoO
+        6dlMRg8YsaBnGFTk3rdJmwth+K7fNMQZs+O4sqw=
+X-Google-Smtp-Source: ABdhPJyDDSvoCQMSqCmlyFfppPxI2FS9Z4LggldveiMO4fI90BNmDG623CkC16hff3/A7jp3j+y4p32ZXmzsMqbkdOA=
+X-Received: by 2002:ac8:7f14:: with SMTP id f20mr3464060qtk.166.1623415152332;
+ Fri, 11 Jun 2021 05:39:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1745325.1623409807.1@warthog.procyon.org.uk>
-Date:   Fri, 11 Jun 2021 12:10:07 +0100
-Message-ID: <1745326.1623409807@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Received: by 2002:a0c:d6d1:0:0:0:0:0 with HTTP; Fri, 11 Jun 2021 05:39:11
+ -0700 (PDT)
+Reply-To: mrkasimmohamed15@gmail.com
+From:   Mr Kasim Mohamed <samiramohamed018@gmail.com>
+Date:   Fri, 11 Jun 2021 05:39:11 -0700
+Message-ID: <CAEqKzcM1dNRkWK9Cq_TEtVBPGMjwgzwR4eAmGc3ufTjQP8eFTQ@mail.gmail.com>
+Subject: Good Day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> wrote:
+I am Mr Kasim Mohamed
 
-> Umm.  Let's remember that the vaccines are 33-93% effective [1],
-> which means that there's approximately a 100% certainty that at least
-> one person arriving at the event from a trans-atlantic flight has been
-> exposed to someone who has the virus.  I'm not convinced that holding a
-> "more relaxed protocol" event is a great idea.
-
-One thing that concerns me about flying to the US is going through multiple
-busy international airports - take Heathrow which didn't separate incoming
-travellers from red-listed countries from those of amber- or green- until like
-a week ago.
-
-Would it be practical/economical to charter a plane to fly, say, from a less
-busy airport in Europe to a less busy airport in the US and back again if we
-could get enough delegates together to make it worthwhile?
-
-Chartering seems to be costed on miles flown rather than passenger count, but
-I've only looked into it very briefly.
-
-David
-
+Hi Friend I am a bank director of the UBA Bank Plc bf .I want to
+transfer an abandoned sum of 27.5 millions USD  to you through ATM
+VISA CARD .50% will be for you. No risk involved. Contact me for more
+details. Kindly reply me back to my alternative email
+address(mrkasimmohamed15@gmail.com) Mr kasim mohamed
