@@ -2,119 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB8E3A402A
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 12:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C49FD3A40B4
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 12:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbhFKK2u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Jun 2021 06:28:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54374 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230321AbhFKK2t (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 11 Jun 2021 06:28:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 90901613DE;
-        Fri, 11 Jun 2021 10:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623407211;
-        bh=uwYHPJSg++x6nayJxNLyMIhWvBZRZ31Cc/mjNWAEOW0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l6Ps2bJf8EUFGrwM/uLjxcqpZtDtHrV8QoI1ui3ts/NpKYm+8ny2k+aLdy46dnb/g
-         wCAJY3LyZMTz2oVbfNhBVQ6P7gz551Fa4dFwzB+7x9PEv0sQZXpBGSxyLGqe79EhrT
-         Lu2kjHyVwkyC9eV2Mqa4qVTL543VpUgDDqDQ0q980NeXEXearpNN2FmPkKuTmdEhEQ
-         YfRhP00b1vz/D2QpBjnhvMd6dzMSBroOWJtUz1FDaCjBMyCExdD0haXxmQUAIiBDPR
-         bfspzxTWQ0eiewqLYzLXQoRMK0FVI+O81KmPBGeaOqZF1rZyRRNNjPSz1ldxidS1VM
-         B6FphYs0NCgug==
-Date:   Fri, 11 Jun 2021 11:26:41 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 2/7] sched: Introduce task_is_running()
-Message-ID: <20210611102640.GA15274@willie-the-truck>
-References: <20210611082810.970791107@infradead.org>
- <20210611082838.222401495@infradead.org>
+        id S231294AbhFKLBq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Jun 2021 07:01:46 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:51773 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231515AbhFKLBS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Jun 2021 07:01:18 -0400
+Received: from [192.168.1.155] ([95.115.52.72]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MPosX-1ldaEj40EF-00Mtt2; Fri, 11 Jun 2021 12:58:51 +0200
+Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        David Hildenbrand <david@redhat.com>, Greg KH <greg@kroah.com>,
+        Christoph Lameter <cl@gentwo.de>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Jiri Kosina <jikos@kernel.org>,
+        ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
+References: <YH2hs6EsPTpDAqXc@mit.edu>
+ <nycvar.YFH.7.76.2104281228350.18270@cbobk.fhfr.pm>
+ <YIx7R6tmcRRCl/az@mit.edu>
+ <alpine.DEB.2.22.394.2105271522320.172088@gentwo.de>
+ <YK+esqGjKaPb+b/Q@kroah.com>
+ <c46dbda64558ab884af060f405e3f067112b9c8a.camel@HansenPartnership.com>
+ <b32c8672-06ee-bf68-7963-10aeabc0596c@redhat.com>
+ <e993d6c84c79d083ecfe5a8c8edabef9e9caa3ce.camel@HansenPartnership.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Message-ID: <6d8299e4-2707-7edf-ebe4-f5ca7b7ee8ca@metux.net>
+Date:   Fri, 11 Jun 2021 12:58:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210611082838.222401495@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <e993d6c84c79d083ecfe5a8c8edabef9e9caa3ce.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: tl
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:W1CuRBv9b9vfO/cntxLvE7zRNUCd1/dUgLqWvl6KCwi7Sw23ByG
+ lxCAe9Q91/0vR2PyBETRIzab+l26EBWvYSHZ0LUnS9cubvCX5xzUC+CV5JjFwPCWXQxaQOo
+ 5taiouS8C+FKLJ+dmpW4iHuaNuDY6rfJXKdICti+cmqPwkBEzGu+ypcMKrurkTnsQ34K6rI
+ 06GNiokz08qz4bFDbl2SA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Hq+AqsHvTCw=:QA0c4LdeomjvdgpT+WeCnm
+ fvybeHcu/cjr4qkbFb37AHeWQkFDtgzJzer94ls3YhCWt+DHTcRYat2Xw0bDzC571L64go0Zn
+ S47+PKyO7iqLbN5ux7Q1bobJkmQyzd4AVn+mJY+DPRWcavypMr61kqgdFjuX6IrVfAowwYiyw
+ ly4+mDH127ZO25ThonvdPqnoC09zxMXWofSvrJHTIPF4vPxkQXahO8ZHchkVwwHh8tFFS9JUo
+ vw0Lc1EfnmgDoFqHS8P6BW62s3Uh3KwIa5lpH9LO079r/sMc5j3UnvF0meS+/OFKTSylXL8pQ
+ fF4Yn/2vfs6qyTFzVGrX0PFL6LNgcYXVDEO0NdXW2C5RLxtOyj3d1JvZqKDgzj4z6+zsBCtiK
+ +vjMQtcEEILeH+OmBOdGnY90xLmBJgEiytsBww27KXXtF3L8mJhAPmUpYrzB6flKlq1MN5TEr
+ gKbkU+qWBdVtrKAW68yo2YXTIZpiR3DPgifLAb24jDy5gkRZPhn17QKUazkuebWViJSbKQTtF
+ v7QlP+4xZ/23ZVOX5McNNQ=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 10:28:12AM +0200, Peter Zijlstra wrote:
-> Replace a bunch of 'p->state == TASK_RUNNING' with a new helper:
-> task_is_running(p).
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Acked-by: Davidlohr Bueso <dave@stgolabs.net>
-> ---
->  arch/alpha/kernel/process.c    |    2 +-
->  arch/arc/kernel/stacktrace.c   |    2 +-
->  arch/arm/kernel/process.c      |    2 +-
->  arch/arm64/kernel/process.c    |    2 +-
->  arch/csky/kernel/stacktrace.c  |    2 +-
->  arch/h8300/kernel/process.c    |    2 +-
->  arch/hexagon/kernel/process.c  |    2 +-
->  arch/ia64/kernel/process.c     |    4 ++--
->  arch/m68k/kernel/process.c     |    2 +-
->  arch/mips/kernel/process.c     |    2 +-
->  arch/nds32/kernel/process.c    |    2 +-
->  arch/nios2/kernel/process.c    |    2 +-
->  arch/parisc/kernel/process.c   |    4 ++--
->  arch/powerpc/kernel/process.c  |    4 ++--
->  arch/riscv/kernel/stacktrace.c |    2 +-
->  arch/s390/kernel/process.c     |    2 +-
->  arch/s390/mm/fault.c           |    2 +-
->  arch/sh/kernel/process_32.c    |    2 +-
->  arch/sparc/kernel/process_32.c |    3 +--
->  arch/sparc/kernel/process_64.c |    3 +--
->  arch/um/kernel/process.c       |    2 +-
->  arch/x86/kernel/process.c      |    4 ++--
->  arch/xtensa/kernel/process.c   |    2 +-
+On 09.06.21 21:23, James Bottomley wrote:
 
-Cheers for adding the missing arch bits:
+> but the US is definitely moving
+> to a regime that says once you're vaccinated it's pretty much over for
 
-Acked-by: Will Deacon <will@kernel.org>
+As far as I see (watching from the other side of the globe), for most
+states it already is over, no matter whether somebody got a shot or not.
+(actually, getting reports of people *with* the shot get increasing
+trouble, eg. kept out of stores, schools, planes, ...).
 
-Will
+FL and TX seem to be the most relaxed states in this regard.
+Maybe ask DeStantis and Abbot whether they'd support such a conference
+in their states, maybe they'd even open their cheque books ;-)
+
+> you and I don't see a problem with taking advantage of that for hybrid
+> style events.  However, even with the best will in the world, I can't
+> see much of a way around the problem that remote people at hybrid
+> events will always be at a disadvantage ... suggestions for improving
+> this are always welcome.
+
+Looking from a totally different angle, I believe the hybrid approach
+could even be a benefit. For example, longer talks - IMHO - are easier
+to do (and for the audience) when just recorded, so people can listen to
+them any time (and as often one wants to). Spontanous questions right
+after, I guess, are only helpful for a small minority that's already 
+deep in that particular topic - in those cases I'd prefer a more 
+personal conversation. Another scenario are expert working groups, where
+people already involved into certain topic talk closely - IMHO something
+where direct (group) calls are a good medium, and probably working
+better outside the strict time frames of such an event.
+
+Maybe it's good idea to jump back to square one and ask the question,
+what people actually expect from and try to achieve from such an event,
+before going into some actual planning. (I could only express my very
+personal view, but that's probably far from being representative)
+
+
+--mtx
+
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
