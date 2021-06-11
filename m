@@ -2,118 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 195E93A3E50
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 10:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B423A3ED4
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 11:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbhFKIwG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Jun 2021 04:52:06 -0400
-Received: from mail-ua1-f51.google.com ([209.85.222.51]:43627 "EHLO
-        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbhFKIwF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Jun 2021 04:52:05 -0400
-Received: by mail-ua1-f51.google.com with SMTP id f1so2310733uaj.10;
-        Fri, 11 Jun 2021 01:50:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ifAGUPWDxWLdwD/TBCG2zW8z6+MGYCS4uLUux0tgU4s=;
-        b=cwSVbedGPH1HoQRU7LcjJut5OAMax5Vs/AvytjLY3x/2sZEmG9MoY0UsaxTSmXNqq3
-         fL6Zg20JQOObNHDt2GHNX710V8AwHqKTNqYE9ZgWwwGEKkclYj0bTq/HXIK31uFEN1p8
-         tF/ZC0OjuKzWvT/tklFjA/3gZfY/TKhIpLYPSaT7DzvRxT/CPOTfZVTuPz1k2c4XHFsp
-         fVIkmEoe723W5sqFll1Okfs30WseGcZ76CKAPviz46jEkpZeTTIpIkCEhW0Va6YdZUs/
-         WWjb46LCrPBh+xRII+666+17FCbe1tVk2d1I5TZkac/pdtkT/ILpvGIBPLumuEQxdeWm
-         jkpw==
-X-Gm-Message-State: AOAM532g7/zohzVsjVaFYTs+9/5/D7NF5NCla8gKugvmiL9ZLIRLlo67
-        mNuCw2K8b5sXrZ/bC/YnKqVN2ciP4f8HZQtyoqE=
-X-Google-Smtp-Source: ABdhPJzbyPX5gPeNCkUUxGlNBv5MPjCTQnfbsIAbZJkKiL21UsU0PKAX3/X6PRWC2NYqV9JQbybafT1XLL5zi6s4hwQ=
-X-Received: by 2002:ab0:484b:: with SMTP id c11mr1936247uad.100.1623401407055;
- Fri, 11 Jun 2021 01:50:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210611082810.970791107@infradead.org> <20210611082838.222401495@infradead.org>
-In-Reply-To: <20210611082838.222401495@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 11 Jun 2021 10:49:56 +0200
-Message-ID: <CAMuHMdWg=Z47A=WEQegn9W_FU-WFDWvmNOWDVm5Kge=d_-GYhA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] sched: Introduce task_is_running()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        id S231657AbhFKJPN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Jun 2021 05:15:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35134 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231609AbhFKJPM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 11 Jun 2021 05:15:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E431D60FDA;
+        Fri, 11 Jun 2021 09:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623402794;
+        bh=0Tv6dk09LYXtiWu3+YyS09NcTBZcnmopruN7Ttw2A3c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qCE0A2hE5eLvV8SAX8VsVaLsmx7G+YhwHIGuIbtiETIq98w68vFvtv3s1bhzDjAJ1
+         zAwEklDt1RkuJy4xO1mhyVGn5CoqoCJlfqGcOzbWGGdCb/cl21ED/qg6om4QDr6Qgw
+         hAsXyCGbL1jtQZUE1mmW8Fz57Pe8pBJAijmfw+8qSkasiv7gs8Bn4yv5Nf3uQnoBiX
+         zxb7Zjkljrgndxxd99Pyb9NRcFNuEpikSsPzNHA+8Ye4WGjHy7LoVAmriVbgeAzAuX
+         sIG1CoqZMtlY/m4KJAESInsxp1yQtkOqy6u3nFjtUmy8jmmfx5n/O/lOLN4k8Jv3p4
+         6ODFKkgxpj1ug==
+Date:   Fri, 11 Jun 2021 11:13:07 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
+        David Hildenbrand <david@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Greg KH <greg@kroah.com>, Christoph Lameter <cl@gentwo.de>,
+        "Theodore Ts'o" <tytso@mit.edu>, Jiri Kosina <jikos@kernel.org>,
+        ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
+Message-ID: <20210611111248.250e6da8@coco.lan>
+In-Reply-To: <20210611025942.GE25638@1wt.eu>
+References: <alpine.DEB.2.22.394.2105271522320.172088@gentwo.de>
+        <YK+esqGjKaPb+b/Q@kroah.com>
+        <c46dbda64558ab884af060f405e3f067112b9c8a.camel@HansenPartnership.com>
+        <b32c8672-06ee-bf68-7963-10aeabc0596c@redhat.com>
+        <5038827c-463f-232d-4dec-da56c71089bd@metux.net>
+        <20210610182318.jrxe3avfhkqq7xqn@nitro.local>
+        <YMJcdbRaQYAgI9ER@pendragon.ideasonboard.com>
+        <20210610152633.7e4a7304@oasis.local.home>
+        <37e8d1a5-7c32-8e77-bb05-f851c87a1004@linuxfoundation.org>
+        <87tum5uyrq.fsf@toke.dk>
+        <20210611025942.GE25638@1wt.eu>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hoi Peter,
+Em Fri, 11 Jun 2021 04:59:42 +0200
+Willy Tarreau <w@1wt.eu> escreveu:
 
-Thanks for your patch!
+> On Fri, Jun 11, 2021 at 12:43:05AM +0200, Toke H=C3=B8iland-J=C3=B8rgense=
+n wrote:
+> > Shuah Khan <skhan@linuxfoundation.org> writes: =20
+> > > I have a
+> > > couple of ideas on how we might be able to improve remote experience
+> > > without restricting in-person experience.
+> > >
+> > > - Have one or two moderators per session to watch chat and Q&A to ena=
+ble
+> > >    remote participants to chime in and participate.
+> > > - Moderators can make sure remote participation doesn't go unnoticed =
+and
+> > >    enable taking turns for remote vs. people participating in person.
+> > >
+> > > It will be change in the way we interact in all in-person sessions for
+> > > sure, however it might enhance the experience for remote attendees. =
+=20
+> >=20
+> > This is basically how IETF meetings function: At the beginning of every
+> > session, a volunteer "jabber scribe" is selected to watch the chat and
+> > relay any questions to a microphone in the room. And the video streaming
+> > platform has a "virtual queue" that remove participants can enter and
+> > the session chairs are then responsible for giving people a chance to
+> > speak. Works reasonably well, I'd say :) =20
+>=20
+> I was about to say the same. In addition, local participants line up
+> at a microphone and do not interrupt the speaker, but the organiser
+> gives them the signal to ask a question. This allows to maintain a
+> good balance between local and remote participants. Also it's common
+> to see some locals go back to their seat because someone else just
+> asked the same question. And when remote questions are asked using
+> pure text, it's easy for the organiser to skip them if already
+> responded as well.
+>=20
+> This method is rather efficient because it doesn't require to keep the
+> questions for the end of the session, yet questions do not interrupt
+> the speaker. It also solves the problem of people not speaking in the
+> microphone. The only thing is that it can be quite intimidating for
+> local participants who are too shy of standing up in front of a
+> microphone and everyone else.
 
-On Fri, Jun 11, 2021 at 10:36 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> Replace a bunch of 'p->state == TASK_RUNNING' with a new helper:
-> task_is_running(p).
+If someone is shy, he/she could simply type the question as a
+remote participant would do.
 
-You're also sticking a READ_ONCE() in the helper, which wasn't done
-by any of the old implementations? Care to mention why?
+This should work fine for a normal speech, but for BoFs and the
+usual "round table" discussions we have at Kernel Maintainers,
+this may not work well for local participants.
 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Acked-by: Davidlohr Bueso <dave@stgolabs.net>
+I guess that, for such kind of discussions, I can see two
+possible alternatives:
 
->  arch/m68k/kernel/process.c     |    2 +-
+1. everyone would use their laptop cameras/mics;
+2. every round table would have their on camera/mic set.
 
-Regardless:
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+(1) is probably simpler to implement, but may provide a worse
+experience for local participants. (2) is probably harder to
+implement, as the usual conference logistics company may not
+have cameras.
 
-Gr{oetje,eeting}s,
+In either case, a moderator (or some moderating software) is needed
+in order queue requests for speech. So, basically, when someone
+(either in a table or remote) wants to speak, it adds its name to
+a queue, which will then be parsed at the queue's order. This is not
+as natural as a physical meeting, but I guess it won't bring too
+much burden to local people.
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Mauro
