@@ -2,108 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C49FD3A40B4
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 12:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467823A40BF
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Jun 2021 13:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbhFKLBq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Jun 2021 07:01:46 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:51773 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbhFKLBS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Jun 2021 07:01:18 -0400
-Received: from [192.168.1.155] ([95.115.52.72]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MPosX-1ldaEj40EF-00Mtt2; Fri, 11 Jun 2021 12:58:51 +0200
-Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        David Hildenbrand <david@redhat.com>, Greg KH <greg@kroah.com>,
-        Christoph Lameter <cl@gentwo.de>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Jiri Kosina <jikos@kernel.org>,
-        ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
-References: <YH2hs6EsPTpDAqXc@mit.edu>
- <nycvar.YFH.7.76.2104281228350.18270@cbobk.fhfr.pm>
- <YIx7R6tmcRRCl/az@mit.edu>
- <alpine.DEB.2.22.394.2105271522320.172088@gentwo.de>
- <YK+esqGjKaPb+b/Q@kroah.com>
- <c46dbda64558ab884af060f405e3f067112b9c8a.camel@HansenPartnership.com>
- <b32c8672-06ee-bf68-7963-10aeabc0596c@redhat.com>
- <e993d6c84c79d083ecfe5a8c8edabef9e9caa3ce.camel@HansenPartnership.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Message-ID: <6d8299e4-2707-7edf-ebe4-f5ca7b7ee8ca@metux.net>
-Date:   Fri, 11 Jun 2021 12:58:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S230392AbhFKLDc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Jun 2021 07:03:32 -0400
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:41781 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229969AbhFKLDa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Jun 2021 07:03:30 -0400
+Received: by mail-oi1-f180.google.com with SMTP id t40so5398869oiw.8;
+        Fri, 11 Jun 2021 04:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QJ/vQZOVwDNIecKs4rsjKD7AQHx1NJ2yzEFPPDK+J9o=;
+        b=Buh9x/rvJlBSIbMQ0zE7v3bcZij4O3E9JJdkW3tqQmI5JqNTnMAZcWJvs7vmuWVTFn
+         Htbr/HY/hYikk5hZJNolCU4Qo1cOtl8NYOqaWaNdci28W5oTEVyYTT3IHJO8Q5v1MC7f
+         YXrRO50UGWmBsOjmZ1mm1u0fM/24aJmJ1WPFHa2KFRP47wyonLYRi7m5H9flGM04AMr1
+         mivLE9NqWgK9BYwn8Uu3ae5a7yaryLvMO4iXofDygDgIQJEvvTkKETWjbLvWcXwSaxgt
+         jm6VxYYvkYEci2mhTsVcvpa1sbobwZjXcxqRH6xMY9x+oRjHYLBWmgVaPyZzXjZq+SF7
+         BBEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=QJ/vQZOVwDNIecKs4rsjKD7AQHx1NJ2yzEFPPDK+J9o=;
+        b=bwLFiUINBLNflWuzmb4PyNIMBubTP2XpKE6SAD4/eE42Z/Pbfh3I6ncuouuER5mMZg
+         b1NBH7xxcbIPlztAN/fjBHurU92ENwyBYEBy9S80AfueFe9kjVIlZwvvgqGv5CHIuTWi
+         mDyydJCSlwF2WLWyGiUlplx8ADYL8zdqmtEmD9FWEU/0B/jubVZINv1tBc73E7jrsZus
+         /yLsNDcppc0Tx7CXlxotDz50AQ2KwJLUda5NJDaytoiAOLMDR3c4l0rjFqbVPH7r1Qol
+         /ynuingU+qYTPU9sd6Pu2PbmoZtY2cpcKI4rP+OMEAvluic8h5I+HOceeG9x0vSyrILv
+         0Zsg==
+X-Gm-Message-State: AOAM533U1sMnbCX98WXhawCzYWTf4Scx1FMR/crwFUMmIzAiHkjpMQ63
+        PYpbmR+SLBLjJmf8y1SvZjY=
+X-Google-Smtp-Source: ABdhPJy1JDA7tpiIOi/hC6erHzFJVX3BV15RGKQ1aLuwDtD3eWsiOz/a3NhK02aokWP5to0aGTLXJg==
+X-Received: by 2002:aca:c441:: with SMTP id u62mr12904876oif.31.1623409220901;
+        Fri, 11 Jun 2021 04:00:20 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q1sm1101652oog.46.2021.06.11.04.00.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jun 2021 04:00:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 11 Jun 2021 04:00:19 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andreas Schwab <schwab@linux-m68k.org>
+Cc:     Alex Ghiti <alex@ghiti.fr>, Palmer Dabbelt <palmer@dabbelt.com>,
+        corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        aryabinin@virtuozzo.com, glider@google.com, dvyukov@google.com,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v5 1/3] riscv: Move kernel mapping outside of linear
+ mapping
+Message-ID: <20210611110019.GA579376@roeck-us.net>
+References: <mhng-90fff6bd-5a70-4927-98c1-a515a7448e71@palmerdabbelt-glaptop>
+ <76353fc0-f734-db47-0d0c-f0f379763aa0@ghiti.fr>
+ <a58c4616-572f-4a0b-2ce9-fd00735843be@ghiti.fr>
+ <7b647da1-b3aa-287f-7ca8-3b44c5661cb8@ghiti.fr>
+ <87fsxphdx0.fsf@igel.home>
+ <20210610171025.GA3861769@roeck-us.net>
+ <87bl8dhcfp.fsf@igel.home>
+ <20210610172035.GA3862815@roeck-us.net>
+ <877dj1hbmc.fsf@igel.home>
 MIME-Version: 1.0
-In-Reply-To: <e993d6c84c79d083ecfe5a8c8edabef9e9caa3ce.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: tl
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:W1CuRBv9b9vfO/cntxLvE7zRNUCd1/dUgLqWvl6KCwi7Sw23ByG
- lxCAe9Q91/0vR2PyBETRIzab+l26EBWvYSHZ0LUnS9cubvCX5xzUC+CV5JjFwPCWXQxaQOo
- 5taiouS8C+FKLJ+dmpW4iHuaNuDY6rfJXKdICti+cmqPwkBEzGu+ypcMKrurkTnsQ34K6rI
- 06GNiokz08qz4bFDbl2SA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Hq+AqsHvTCw=:QA0c4LdeomjvdgpT+WeCnm
- fvybeHcu/cjr4qkbFb37AHeWQkFDtgzJzer94ls3YhCWt+DHTcRYat2Xw0bDzC571L64go0Zn
- S47+PKyO7iqLbN5ux7Q1bobJkmQyzd4AVn+mJY+DPRWcavypMr61kqgdFjuX6IrVfAowwYiyw
- ly4+mDH127ZO25ThonvdPqnoC09zxMXWofSvrJHTIPF4vPxkQXahO8ZHchkVwwHh8tFFS9JUo
- vw0Lc1EfnmgDoFqHS8P6BW62s3Uh3KwIa5lpH9LO079r/sMc5j3UnvF0meS+/OFKTSylXL8pQ
- fF4Yn/2vfs6qyTFzVGrX0PFL6LNgcYXVDEO0NdXW2C5RLxtOyj3d1JvZqKDgzj4z6+zsBCtiK
- +vjMQtcEEILeH+OmBOdGnY90xLmBJgEiytsBww27KXXtF3L8mJhAPmUpYrzB6flKlq1MN5TEr
- gKbkU+qWBdVtrKAW68yo2YXTIZpiR3DPgifLAb24jDy5gkRZPhn17QKUazkuebWViJSbKQTtF
- v7QlP+4xZ/23ZVOX5McNNQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877dj1hbmc.fsf@igel.home>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 09.06.21 21:23, James Bottomley wrote:
+On Thu, Jun 10, 2021 at 07:29:15PM +0200, Andreas Schwab wrote:
+> On Jun 10 2021, Guenter Roeck wrote:
+> 
+> > On Thu, Jun 10, 2021 at 07:11:38PM +0200, Andreas Schwab wrote:
+> >> On Jun 10 2021, Guenter Roeck wrote:
+> >> 
+> >> > On Thu, Jun 10, 2021 at 06:39:39PM +0200, Andreas Schwab wrote:
+> >> >> On Apr 18 2021, Alex Ghiti wrote:
+> >> >> 
+> >> >> > To sum up, there are 3 patches that fix this series:
+> >> >> >
+> >> >> > https://patchwork.kernel.org/project/linux-riscv/patch/20210415110426.2238-1-alex@ghiti.fr/
+> >> >> >
+> >> >> > https://patchwork.kernel.org/project/linux-riscv/patch/20210417172159.32085-1-alex@ghiti.fr/
+> >> >> >
+> >> >> > https://patchwork.kernel.org/project/linux-riscv/patch/20210418112856.15078-1-alex@ghiti.fr/
+> >> >> 
+> >> >> Has this been fixed yet?  Booting is still broken here.
+> >> >> 
+> >> >
+> >> > In -next ?
+> >> 
+> >> No, -rc5.
+> >> 
+> > Booting v5.13-rc5 in qemu works for me for riscv32 and riscv64,
+> > but of course that doesn't mean much. Just wondering, not knowing
+> > the context - did you provide details ?
+> 
+> Does that work for you:
+> 
+> https://github.com/openSUSE/kernel-source/blob/master/config/riscv64/default
+> 
 
-> but the US is definitely moving
-> to a regime that says once you're vaccinated it's pretty much over for
+That isn't an upstream kernel configuration; it looks like includes suse
+patches. But, yes, it does crash almost immediately if I build an upstream
+kernel based on it and try to run that kernel in qemu. I did not try to
+track it down further; after all, it might just be that the configuration
+is inappropriate for use with qemu. But the configuration isn't really
+what I had asked.
 
-As far as I see (watching from the other side of the globe), for most
-states it already is over, no matter whether somebody got a shot or not.
-(actually, getting reports of people *with* the shot get increasing
-trouble, eg. kept out of stores, schools, planes, ...).
-
-FL and TX seem to be the most relaxed states in this regard.
-Maybe ask DeStantis and Abbot whether they'd support such a conference
-in their states, maybe they'd even open their cheque books ;-)
-
-> you and I don't see a problem with taking advantage of that for hybrid
-> style events.  However, even with the best will in the world, I can't
-> see much of a way around the problem that remote people at hybrid
-> events will always be at a disadvantage ... suggestions for improving
-> this are always welcome.
-
-Looking from a totally different angle, I believe the hybrid approach
-could even be a benefit. For example, longer talks - IMHO - are easier
-to do (and for the audience) when just recorded, so people can listen to
-them any time (and as often one wants to). Spontanous questions right
-after, I guess, are only helpful for a small minority that's already 
-deep in that particular topic - in those cases I'd prefer a more 
-personal conversation. Another scenario are expert working groups, where
-people already involved into certain topic talk closely - IMHO something
-where direct (group) calls are a good medium, and probably working
-better outside the strict time frames of such an event.
-
-Maybe it's good idea to jump back to square one and ask the question,
-what people actually expect from and try to achieve from such an event,
-before going into some actual planning. (I could only express my very
-personal view, but that's probably far from being representative)
-
-
---mtx
-
--- 
----
-Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
-werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
-GPG/PGP-Schlüssel zu.
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Guenter
