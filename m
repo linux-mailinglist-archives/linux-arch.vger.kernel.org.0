@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3403A4ED4
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Jun 2021 14:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0603A4ED0
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Jun 2021 14:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbhFLMi6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Jun 2021 08:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S230526AbhFLMir (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Jun 2021 08:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbhFLMi6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Jun 2021 08:38:58 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7C2C061574;
-        Sat, 12 Jun 2021 05:36:45 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id ew3so1834554qvb.13;
-        Sat, 12 Jun 2021 05:36:45 -0700 (PDT)
+        with ESMTP id S230470AbhFLMiq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Jun 2021 08:38:46 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65950C061767;
+        Sat, 12 Jun 2021 05:36:47 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id i67so33865467qkc.4;
+        Sat, 12 Jun 2021 05:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TsrrNxvqr0ZVyyHIEhpRBEc6nR3RPUyX6D/adRK9t7c=;
-        b=kQy3FMTZw31dJK7+ceEfeRjNFZcKYVle64U+QOKWZaFd9kaP90pEkX7eF8NqhMfO3C
-         PKIHBAbDuKBEANuW5x/gbmHGymEHDRtoBQjG0Bc69jro9fq5LxQdffPPEtjlO8XrjI2V
-         Zd4JNOS3AWQm5+b47fI/JkDYuOGku5cXsEYRwkFj+tq59tfhtBynt/XHPlN+0qA/p9zR
-         py8Etw2QygNagX/i4XMkDAUOyalXSHXSvYtshdVTQUq21Aq6/aVo5Aby81lMeJq5oJ8z
-         ZiRf4ZSUqll2V0nKuzgRB/ws13eX66sLz2XpRJATxZMPW+Zbp2pbpGDcCUGLt159mNZV
-         cEHQ==
+        bh=DE2uGcyognsqUK5a+kjmtRMZ8LKRFECrTdhcl5wHUr4=;
+        b=fPGyp/0CsGrCUzL9sGvIJoeG5Rqa7rPCpjv7jS6jio5vxLpXLrhUdUfrMxQ32QAQr5
+         PJ/ydOqx2ukNEEgk172VfvkBcO+DhdLImMJ5wNAU5c0lsvRxnc6Yk6y3T17DBk6jFzgO
+         2RM7DiLV65iKK/sxvDUVknIYz7NdrgnijkckuR6Rsf+rt4qucj6IQqeUkaJiunZS1z3Y
+         9DbuXGQFbj92T7CDoNy/7hXV5K1jokKsM18/lFdKXnqdZtDKwcjzNCbS52fLJSrc9Gfb
+         SvgTPQIEzPk/0+YUUSlpU7nAWAQZ1tIUoMOjqUizlJ2pC7y+pmEQPfMVN0uI6C4kor4A
+         g6cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TsrrNxvqr0ZVyyHIEhpRBEc6nR3RPUyX6D/adRK9t7c=;
-        b=sGTB/geS9Xx0KWMdnignrxxhg67qQ/ndZNQgnFirYlQPVJVC8aAFHT2dwKDe9UGz59
-         ab42YsQGIMK4w+Z++HuEXmnXA5QeYSQhDQQ48Zj6MtZTwPwfCrmxT9ks3gH4aBCOoDtS
-         Cqw899l8nfcoo1xCCS4q404z82mWOKWpkGkMNwuzgajitlp2H8XolObhotEF+77N46cl
-         CLK+b9BJyeOvHYP421OXOmhG5Kf5v1cLhNyApo9I3ynQev18klMk7qqc/502XYX/Fe99
-         u4E49Td7oCODh/tl+3uGPCRmJxDTUWoMyj2l8YQ3PzV/CgewGOaOOtf+K0eP02k/S8H7
-         +h5w==
-X-Gm-Message-State: AOAM53304TPb32rhWVrLjkeiKpK9GU+Eaa8TJgivfi66+yuGlNJgJMCW
-        l0fNiOeq7Mp6gCoSUmIjoUL9fI8eSZpBww==
-X-Google-Smtp-Source: ABdhPJyGmmW9UlWc6YCiOYMRnBakAtj6/HBbmRgJ9ZBVdGlvS+DCOnOpJnNsDWajoOkJPn4P3NRsbA==
-X-Received: by 2002:a05:6214:1791:: with SMTP id ct17mr9405660qvb.21.1623501404873;
-        Sat, 12 Jun 2021 05:36:44 -0700 (PDT)
+        bh=DE2uGcyognsqUK5a+kjmtRMZ8LKRFECrTdhcl5wHUr4=;
+        b=r/30DyAFl4jN27g507+mkL9GqsSzJLWl3N6oBtZG3Kwls5NxSJQpIDKPK5X9eQarBW
+         SD+NIPH0tcfuXbruDJn5pNCA+bns3T8JANu3wVksJCR8hOGa6yEFNMuFnUMRJ83fQhNr
+         k9r2JQPZ/alKxthUBrrFxhMI7vY7Eu3VttI417OTBti7h4wqXvCTVHgibtzU032QITCF
+         AvXWYz/jt9Z4u2WSGOzxE3TO80ZLZFlu2d4Q0tPJDvYlnBmz2TxoRzsXMXw4tonExCgF
+         BtmhPUbJ5n58JFLTJ8s+BXuKXLOqoeVyIVvpPx8p6pEgrXqCC0+fa23Xec0Yc4OSgoIW
+         xCRQ==
+X-Gm-Message-State: AOAM533vAZGaebNu7uzPOnHJBktWndUGzlm0reBpyyFJFF3S3yxM/U8J
+        yM5tpoJ1w+u74asnOD39GlakDKzor/TDZg==
+X-Google-Smtp-Source: ABdhPJye1XAZdtRzrrOjvaCMTUDkGmX8khjv+qzUZKq4Op5+wwRBcpQNf1nnC4NtJR5UBBq+gwVJCQ==
+X-Received: by 2002:a37:6084:: with SMTP id u126mr8358831qkb.294.1623501406350;
+        Sat, 12 Jun 2021 05:36:46 -0700 (PDT)
 Received: from localhost ([70.127.84.75])
-        by smtp.gmail.com with ESMTPSA id 144sm6283699qkk.103.2021.06.12.05.36.44
+        by smtp.gmail.com with ESMTPSA id y195sm204067qkb.69.2021.06.12.05.36.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Jun 2021 05:36:44 -0700 (PDT)
+        Sat, 12 Jun 2021 05:36:45 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -74,11 +74,10 @@ To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Alexey Klimov <aklimov@redhat.com>,
         Ingo Molnar <mingo@redhat.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH 1/8] bitops: protect find_first_{,zero}_bit properly
-Date:   Sat, 12 Jun 2021 05:36:32 -0700
-Message-Id: <20210612123639.329047-2-yury.norov@gmail.com>
+Cc:     Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH 2/8] bitops: move find_bit_*_le functions from le.h to find.h
+Date:   Sat, 12 Jun 2021 05:36:33 -0700
+Message-Id: <20210612123639.329047-3-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210612123639.329047-1-yury.norov@gmail.com>
 References: <20210612123639.329047-1-yury.norov@gmail.com>
@@ -88,47 +87,180 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-find_first_bit() and find_first_zero_bit() are not protected with
-ifdefs as other functions in find.h. It causes build errors on some
-platforms if CONFIG_GENERIC_FIND_FIRST_BIT is enabled.
+It's convenient to have all find_bit declarations in one place.
 
-Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/asm-generic/bitops/find.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/asm-generic/bitops/find.h | 69 +++++++++++++++++++++++++++++++
+ include/asm-generic/bitops/le.h   | 64 ----------------------------
+ 2 files changed, 69 insertions(+), 64 deletions(-)
 
 diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
-index 0d132ee2a291..835f959a25f2 100644
+index 835f959a25f2..91b1b23f2b0c 100644
 --- a/include/asm-generic/bitops/find.h
 +++ b/include/asm-generic/bitops/find.h
-@@ -97,6 +97,7 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+@@ -190,4 +190,73 @@ extern unsigned long find_next_clump8(unsigned long *clump,
+ #define find_first_clump8(clump, bits, size) \
+ 	find_next_clump8((clump), (bits), (size), 0)
  
- #ifdef CONFIG_GENERIC_FIND_FIRST_BIT
- 
-+#ifndef find_first_bit
- /**
-  * find_first_bit - find the first set bit in a memory region
-  * @addr: The address to start the search at
-@@ -116,7 +117,9 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
- 
- 	return _find_first_bit(addr, size);
- }
-+#endif
- 
-+#ifndef find_first_zero_bit
- /**
-  * find_first_zero_bit - find the first cleared bit in a memory region
-  * @addr: The address to start the search at
-@@ -136,6 +139,8 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
- 
- 	return _find_first_zero_bit(addr, size);
- }
++#if defined(__LITTLE_ENDIAN)
++
++static inline unsigned long find_next_zero_bit_le(const void *addr,
++		unsigned long size, unsigned long offset)
++{
++	return find_next_zero_bit(addr, size, offset);
++}
++
++static inline unsigned long find_next_bit_le(const void *addr,
++		unsigned long size, unsigned long offset)
++{
++	return find_next_bit(addr, size, offset);
++}
++
++static inline unsigned long find_first_zero_bit_le(const void *addr,
++		unsigned long size)
++{
++	return find_first_zero_bit(addr, size);
++}
++
++#elif defined(__BIG_ENDIAN)
++
++#ifndef find_next_zero_bit_le
++static inline
++unsigned long find_next_zero_bit_le(const void *addr, unsigned
++		long size, unsigned long offset)
++{
++	if (small_const_nbits(size)) {
++		unsigned long val = *(const unsigned long *)addr;
++
++		if (unlikely(offset >= size))
++			return size;
++
++		val = swab(val) | ~GENMASK(size - 1, offset);
++		return val == ~0UL ? size : ffz(val);
++	}
++
++	return _find_next_bit(addr, NULL, size, offset, ~0UL, 1);
++}
 +#endif
 +
- #else /* CONFIG_GENERIC_FIND_FIRST_BIT */
++#ifndef find_next_bit_le
++static inline
++unsigned long find_next_bit_le(const void *addr, unsigned
++		long size, unsigned long offset)
++{
++	if (small_const_nbits(size)) {
++		unsigned long val = *(const unsigned long *)addr;
++
++		if (unlikely(offset >= size))
++			return size;
++
++		val = swab(val) & GENMASK(size - 1, offset);
++		return val ? __ffs(val) : size;
++	}
++
++	return _find_next_bit(addr, NULL, size, offset, 0UL, 1);
++}
++#endif
++
++#ifndef find_first_zero_bit_le
++#define find_first_zero_bit_le(addr, size) \
++	find_next_zero_bit_le((addr), (size), 0)
++#endif
++
++#else
++#error "Please fix <asm/byteorder.h>"
++#endif
++
+ #endif /*_ASM_GENERIC_BITOPS_FIND_H_ */
+diff --git a/include/asm-generic/bitops/le.h b/include/asm-generic/bitops/le.h
+index 5a28629cbf4d..d51beff60375 100644
+--- a/include/asm-generic/bitops/le.h
++++ b/include/asm-generic/bitops/le.h
+@@ -2,83 +2,19 @@
+ #ifndef _ASM_GENERIC_BITOPS_LE_H_
+ #define _ASM_GENERIC_BITOPS_LE_H_
  
- #ifndef find_first_bit
+-#include <asm-generic/bitops/find.h>
+ #include <asm/types.h>
+ #include <asm/byteorder.h>
+-#include <linux/swab.h>
+ 
+ #if defined(__LITTLE_ENDIAN)
+ 
+ #define BITOP_LE_SWIZZLE	0
+ 
+-static inline unsigned long find_next_zero_bit_le(const void *addr,
+-		unsigned long size, unsigned long offset)
+-{
+-	return find_next_zero_bit(addr, size, offset);
+-}
+-
+-static inline unsigned long find_next_bit_le(const void *addr,
+-		unsigned long size, unsigned long offset)
+-{
+-	return find_next_bit(addr, size, offset);
+-}
+-
+-static inline unsigned long find_first_zero_bit_le(const void *addr,
+-		unsigned long size)
+-{
+-	return find_first_zero_bit(addr, size);
+-}
+-
+ #elif defined(__BIG_ENDIAN)
+ 
+ #define BITOP_LE_SWIZZLE	((BITS_PER_LONG-1) & ~0x7)
+ 
+-#ifndef find_next_zero_bit_le
+-static inline
+-unsigned long find_next_zero_bit_le(const void *addr, unsigned
+-		long size, unsigned long offset)
+-{
+-	if (small_const_nbits(size)) {
+-		unsigned long val = *(const unsigned long *)addr;
+-
+-		if (unlikely(offset >= size))
+-			return size;
+-
+-		val = swab(val) | ~GENMASK(size - 1, offset);
+-		return val == ~0UL ? size : ffz(val);
+-	}
+-
+-	return _find_next_bit(addr, NULL, size, offset, ~0UL, 1);
+-}
+-#endif
+-
+-#ifndef find_next_bit_le
+-static inline
+-unsigned long find_next_bit_le(const void *addr, unsigned
+-		long size, unsigned long offset)
+-{
+-	if (small_const_nbits(size)) {
+-		unsigned long val = *(const unsigned long *)addr;
+-
+-		if (unlikely(offset >= size))
+-			return size;
+-
+-		val = swab(val) & GENMASK(size - 1, offset);
+-		return val ? __ffs(val) : size;
+-	}
+-
+-	return _find_next_bit(addr, NULL, size, offset, 0UL, 1);
+-}
+ #endif
+ 
+-#ifndef find_first_zero_bit_le
+-#define find_first_zero_bit_le(addr, size) \
+-	find_next_zero_bit_le((addr), (size), 0)
+-#endif
+-
+-#else
+-#error "Please fix <asm/byteorder.h>"
+-#endif
+ 
+ static inline int test_bit_le(int nr, const void *addr)
+ {
 -- 
 2.30.2
 
