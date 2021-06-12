@@ -2,126 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A5D3A510D
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Jun 2021 23:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5473A5166
+	for <lists+linux-arch@lfdr.de>; Sun, 13 Jun 2021 01:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbhFLVuE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Jun 2021 17:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbhFLVuD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Jun 2021 17:50:03 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2333C061574;
-        Sat, 12 Jun 2021 14:47:47 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id p13so7489562pfw.0;
-        Sat, 12 Jun 2021 14:47:47 -0700 (PDT)
+        id S231548AbhFLXla (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Jun 2021 19:41:30 -0400
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:35565 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231479AbhFLXla (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Jun 2021 19:41:30 -0400
+Received: by mail-pl1-f181.google.com with SMTP id x19so4671776pln.2
+        for <linux-arch@vger.kernel.org>; Sat, 12 Jun 2021 16:39:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=93BDk6ii6Pzm95rLYvyCEAhPCJypbard9KLuegJmtkA=;
-        b=tdOajCxOaB1QVuqnE5e2BJncjyoNLaur2vmkKimf73qd0dGIu0pNcmGci50BlaN6JS
-         Q604+FNuaj/LxqmBBI57CQt0pFAnGt4OToX+VMhO9IoxDzyVfAbcGwRR4TmsYs5/R7jm
-         7ek8fAgWHq1w9+5fmrzvBKv0hmUoyFyetZ/cllmSuymPanj0WKNgHZ6sDqw3+1c64r2t
-         MQbAg6Pm8YETs+L4ETcqD+G57R1+xbEnOYVehOWFNnuDWQEOHJ+sx+ZUJ+xKQ43Q3Zr4
-         CGZDfjU1YIfYP1d+NBPDLZJSUCtmLmWUqeZQuJl3pOxE7/+gjWIZmEZU1eHd6wiXqkSl
-         8z3w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=6DYIKrUXMcsL4MIVy/dc7Q9toGqp4qAGWl+gq54bqdk=;
+        b=N53F1VinuVv0AWyAoc7M3J+1r59cTqMdDJ4f4JVqPQeMdsbm546Tpx6LTzuBd9/gTz
+         L7HxF/MbrHGnrtAwIF/LL/FWQCxLEfRaf1X16VvkC/33S3oHeEtCRz3zgVejelgpmw26
+         pduA5sUg8/2G7hRi5j/J0Zy+pPisYuhVPqfgZbSkkWJ7cMCvZ8ShqWxFTmMHfUrs1RbN
+         o3ZwlAqMIIrRB8XQjLzIrtkX1bVuoK/xm4jhdLlN8r1euWxALcI/jwit0VauIIF/3wC2
+         n9h/zs/A25hWBrMjPk9LFdDXIGNQPxCIoWtVXovWUvy11+e7nXMzNVe4P9o05kzezxp5
+         5hUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=93BDk6ii6Pzm95rLYvyCEAhPCJypbard9KLuegJmtkA=;
-        b=M8hUh2jR0pH+P1s5A09yuGCe7QctNSVuoLmTKzNcz2jDfNgHoCdhYCgRz2qfMEm7cl
-         M3vdd2uhxTVBhZ+tVVKYC8+fF71qAEb4tpLx5tNRv6nyHC4dg0EYks/6CbdJx1LvBTG5
-         eojd1vLU5dhgfdYMlsow0cVX+GFsXN/fhsojXlvvjBvVbFya1MYDaj1eMF0h38bXyWwY
-         sgJ2P8He+HJgtH9kJAkh+d8Z7RVfe3jBWku1KRJz1sqscF7pABRNGJ2RH3ZRa5q3hTfG
-         CdQq5TwLiNjg/qL4RM50LFS99WByLv63eW5bDuiw1Apz2Y6XKJGLdC6UbOF9xpN/riIa
-         jW6w==
-X-Gm-Message-State: AOAM533i4OW22MjNm316tKTxKnRVaRC3KyNyCzD3wiemBAx6M974WfMg
-        nXkVmjAvxVXnn4x0ZDts2rWpeGWLb5m2RExYJiA=
-X-Google-Smtp-Source: ABdhPJwEUrc8Jgbcf8aITJR5mWDcB4sziIvoDhteE1kfD9qINugQ1zcYbFRHNih3Yvhl8ag/iqVI9Bc0MrSMFVJg9jI=
-X-Received: by 2002:a63:4145:: with SMTP id o66mr10139317pga.4.1623534467337;
- Sat, 12 Jun 2021 14:47:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210612123639.329047-1-yury.norov@gmail.com> <20210612123639.329047-8-yury.norov@gmail.com>
-In-Reply-To: <20210612123639.329047-8-yury.norov@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 13 Jun 2021 00:47:31 +0300
-Message-ID: <CAHp75VerU1NJMweWCR7MsE9hiMFZyJP8m751OFKmGrJ1gVhMWw@mail.gmail.com>
-Subject: Re: [PATCH 7/8] all: replace find_next{,_zero}_bit with
- find_first{,_zero}_bit where appropriate
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=6DYIKrUXMcsL4MIVy/dc7Q9toGqp4qAGWl+gq54bqdk=;
+        b=pt/rTx9/V50eoUhvo1QEu2qP3IrcXcMlbizp0uVkCN67IRW4ofu9goyIjdFeyJHZnw
+         CDiUxfaw3RHN6ft/TxPbT5pGqdVHQE8JInKqLJ/GxXX7GfBTjBfuLy/fb6jJdOfZewcF
+         g/8KDInxfzdVlQ7obX108KQMHFUnJMFLO77mHo8yAgndz92CuXRRR3dfNw//kC8iusGc
+         N8mvAdLmomAstYeb4fos/flPuDK4gzKX+1Y1yZsHT+m+baprWW0PR0imPGfTspXTyiyG
+         UeYiK6gfTyAlGmPCJRlAKRT0n4Yt/1UCQoCJKwZtaEA/Cumfqsdkn0L9nuJMnk8HYmNy
+         3feA==
+X-Gm-Message-State: AOAM531Jm2CleWfK2aNwMK3fAN5LHBcQZJrKpyXoCfOhXQ3OVFOSEZSV
+        moJ0Yma4Vl405r9ImDSKgXs=
+X-Google-Smtp-Source: ABdhPJwU4fpMmMl7S0gj2YqbLjrsWqvDhDcG/GGfh6anjev0C45OjP7b3hwW0Kpk2L8MmhLfZcGNmg==
+X-Received: by 2002:a17:90a:17c8:: with SMTP id q66mr16070296pja.154.1623541103926;
+        Sat, 12 Jun 2021 16:38:23 -0700 (PDT)
+Received: from xplor.waratah.dyndns.org (222-152-189-137-fibre.sparkbb.co.nz. [222.152.189.137])
+        by smtp.gmail.com with ESMTPSA id j9sm7876809pjy.25.2021.06.12.16.38.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 12 Jun 2021 16:38:23 -0700 (PDT)
+Received: by xplor.waratah.dyndns.org (Postfix, from userid 1000)
+        id CE17736040F; Sun, 13 Jun 2021 11:38:19 +1200 (NZST)
+From:   Michael Schmitz <schmitzmic@gmail.com>
+To:     geert@linux-m68k.org, linux-arch@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org
+Cc:     ebiederm@xmission.com, torvalds@linux-foundation.org,
+        schwab@linux-m68k.org, Michael Schmitz <schmitzmic@gmail.com>
+Subject: [PATCH v1] m68k: save extra registers on sys_exit and sys_exit_group syscall entry
+Date:   Sun, 13 Jun 2021 11:38:18 +1200
+Message-Id: <1623541098-6532-1-git-send-email-schmitzmic@gmail.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <87sg1p30a1.fsf@disp2133>
+References: <87sg1p30a1.fsf@disp2133>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 12, 2021 at 3:39 PM Yury Norov <yury.norov@gmail.com> wrote:
->
-> find_first{,_zero}_bit is a more effective analogue of 'next' version if
-> start == 0. This patch replaces 'next' with 'first' where things look
-> trivial.
+do_exit() calls prace_stop() which may require access to all saved
+registers. We only save those registers not preserved by C code
+currently.
 
-Depending on the maintainers (but I think there will be at least few
-in this case) they would like to have this be split on a per-driver
-basis.
-I counted 17 patches. I would split.
+Provide a special syscall entry for exit and exit_group syscalls
+similar to that used by clone and clone3, which have the same
+requirements.
 
-Since many of them are independent you may send without Cc'ing all
-non-relevant people in each case.
+No fix to io_uring appears to be needed, because m68k copy_thread
+treats kernel threads the same as e.g. alpha does, and copies only
+a subset of registers in that case.
 
->  arch/powerpc/platforms/pasemi/dma_lib.c |  4 ++--
->  arch/s390/kvm/kvm-s390.c                |  2 +-
->  drivers/block/rnbd/rnbd-clt.c           |  2 +-
->  drivers/dma/ti/edma.c                   |  2 +-
->  drivers/iio/adc/ad7124.c                |  2 +-
->  drivers/infiniband/hw/irdma/hw.c        | 16 ++++++++--------
->  drivers/media/cec/core/cec-core.c       |  2 +-
->  drivers/media/mc/mc-devnode.c           |  2 +-
->  drivers/pci/controller/dwc/pci-dra7xx.c |  2 +-
->  drivers/scsi/lpfc/lpfc_sli.c            | 10 +++++-----
->  drivers/soc/ti/k3-ringacc.c             |  4 ++--
->  drivers/tty/n_tty.c                     |  2 +-
->  drivers/virt/acrn/ioreq.c               |  3 +--
->  fs/f2fs/segment.c                       |  8 ++++----
->  fs/ocfs2/cluster/heartbeat.c            |  2 +-
->  fs/ocfs2/dlm/dlmdomain.c                |  4 ++--
->  fs/ocfs2/dlm/dlmmaster.c                | 18 +++++++++---------
->  fs/ocfs2/dlm/dlmrecovery.c              |  2 +-
->  fs/ocfs2/dlm/dlmthread.c                |  2 +-
->  lib/genalloc.c                          |  2 +-
->  net/ncsi/ncsi-manage.c                  |  4 ++--
->  21 files changed, 47 insertions(+), 48 deletions(-)
+CC: Eric W. Biederman <ebiederm@xmission.com>
+CC: Linus Torvalds <torvalds@linux-foundation.org>
+CC: Andreas Schwab <schwab@linux-m68k.org>
+Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
+---
+ arch/m68k/kernel/entry.S              | 14 ++++++++++++++
+ arch/m68k/kernel/process.c            | 16 ++++++++++++++++
+ arch/m68k/kernel/syscalls/syscall.tbl |  4 ++--
+ 3 files changed, 32 insertions(+), 2 deletions(-)
 
-
+diff --git a/arch/m68k/kernel/entry.S b/arch/m68k/kernel/entry.S
+index 9dd76fb..1e067e6 100644
+--- a/arch/m68k/kernel/entry.S
++++ b/arch/m68k/kernel/entry.S
+@@ -76,6 +76,20 @@ ENTRY(__sys_clone3)
+ 	lea	%sp@(28),%sp
+ 	rts
+ 
++ENTRY(__sys_exit)
++	SAVE_SWITCH_STACK
++	pea	%sp@(SWITCH_STACK_SIZE)
++	jbsr	m68k_exit
++	lea	%sp@(28),%sp
++	rts
++
++ENTRY(__sys_exit_group)
++	SAVE_SWITCH_STACK
++	pea	%sp@(SWITCH_STACK_SIZE)
++	jbsr	m68k_exit_group
++	lea	%sp@(28),%sp
++	rts
++
+ ENTRY(sys_sigreturn)
+ 	SAVE_SWITCH_STACK
+ 	movel	%sp,%sp@-		  | switch_stack pointer
+diff --git a/arch/m68k/kernel/process.c b/arch/m68k/kernel/process.c
+index da83cc8..df4e5f1 100644
+--- a/arch/m68k/kernel/process.c
++++ b/arch/m68k/kernel/process.c
+@@ -138,6 +138,22 @@ asmlinkage int m68k_clone3(struct pt_regs *regs)
+ 	return sys_clone3((struct clone_args __user *)regs->d1, regs->d2);
+ }
+ 
++/*
++ * Because extra registers are saved on the stack after the sys_exit()
++ * arguments, this C wrapper extracts them from pt_regs * and then calls the
++ * generic sys_exit() implementation.
++ */
++asmlinkage int m68k_exit(struct pt_regs *regs)
++{
++	return sys_exit(regs->d1);
++}
++
++/* Same for sys_exit_group ... */
++asmlinkage int m68k_exit_group(struct pt_regs *regs)
++{
++	return sys_exit_group(regs->d1);
++}
++
+ int copy_thread(unsigned long clone_flags, unsigned long usp, unsigned long arg,
+ 		struct task_struct *p, unsigned long tls)
+ {
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index 0dd019d..3d5b6fbc 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -8,7 +8,7 @@
+ # The <abi> is always "common" for this file
+ #
+ 0	common	restart_syscall			sys_restart_syscall
+-1	common	exit				sys_exit
++1	common	exit				__sys_exit
+ 2	common	fork				__sys_fork
+ 3	common	read				sys_read
+ 4	common	write				sys_write
+@@ -254,7 +254,7 @@
+ 244	common	io_submit			sys_io_submit
+ 245	common	io_cancel			sys_io_cancel
+ 246	common	fadvise64			sys_fadvise64
+-247	common	exit_group			sys_exit_group
++247	common	exit_group			__sys_exit_group
+ 248	common	lookup_dcookie			sys_lookup_dcookie
+ 249	common	epoll_create			sys_epoll_create
+ 250	common	epoll_ctl			sys_epoll_ctl
 -- 
-With Best Regards,
-Andy Shevchenko
+2.7.4
+
