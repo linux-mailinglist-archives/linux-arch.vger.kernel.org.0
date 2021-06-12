@@ -2,48 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE8B3A4EDA
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Jun 2021 14:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3403A4ED4
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Jun 2021 14:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbhFLMjn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Jun 2021 08:39:43 -0400
-Received: from mail-qk1-f174.google.com ([209.85.222.174]:41512 "EHLO
-        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbhFLMjn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Jun 2021 08:39:43 -0400
-Received: by mail-qk1-f174.google.com with SMTP id c124so33891944qkd.8;
-        Sat, 12 Jun 2021 05:37:44 -0700 (PDT)
+        id S231311AbhFLMi6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Jun 2021 08:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230470AbhFLMi6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Jun 2021 08:38:58 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7C2C061574;
+        Sat, 12 Jun 2021 05:36:45 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id ew3so1834554qvb.13;
+        Sat, 12 Jun 2021 05:36:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T2AOegu4kmOp+uckc/oXupIgYX7RqKTst12dJ0Jl2c8=;
-        b=gGYPLwX8NizCoZ3oxegKQzTBS2jNEpXBnjUHrJ5FTstg/L8Gc77Z82pivLGNvAmkSP
-         nYlCTx+f1XGarsSh9o4c5ii1UpouOIgd5w6uLmiVElEYZiHObF9cm9fN9NMcvye3bFoL
-         Ho1zcoYeoB2R2fs/S9PDxeW7pfMhN9L5XMhAXxJhGypH0Xy0phj+EYp2bWyn+BKzvSwZ
-         0t0Af4pKkKTtKFJLiEhhp9/mrpvrnyfcnB6n5aP7Sooi53zGA52ofOw7PLUSwlTOO238
-         tf1ZZ7wXhzGqpNx45/bYE0yeP2jNWx9b0s/JXf6PV7bDjv59ydof29L6MEpsloUtDMgp
-         Bikg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TsrrNxvqr0ZVyyHIEhpRBEc6nR3RPUyX6D/adRK9t7c=;
+        b=kQy3FMTZw31dJK7+ceEfeRjNFZcKYVle64U+QOKWZaFd9kaP90pEkX7eF8NqhMfO3C
+         PKIHBAbDuKBEANuW5x/gbmHGymEHDRtoBQjG0Bc69jro9fq5LxQdffPPEtjlO8XrjI2V
+         Zd4JNOS3AWQm5+b47fI/JkDYuOGku5cXsEYRwkFj+tq59tfhtBynt/XHPlN+0qA/p9zR
+         py8Etw2QygNagX/i4XMkDAUOyalXSHXSvYtshdVTQUq21Aq6/aVo5Aby81lMeJq5oJ8z
+         ZiRf4ZSUqll2V0nKuzgRB/ws13eX66sLz2XpRJATxZMPW+Zbp2pbpGDcCUGLt159mNZV
+         cEHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T2AOegu4kmOp+uckc/oXupIgYX7RqKTst12dJ0Jl2c8=;
-        b=ZMP8zo33qv995ZmwS41bwKXJzZRAmtO3e5ZWLPRZnm45dMNtH+NefnluoGnpY2PSG2
-         bgimhuFcm/6v6Kqqwr4RrVix5vXr3PhsPqh8z6lxO1Z8ZHNPN+Et32pL5OvhfaQhimgL
-         EMkIin/cthEq9proBLslBRpH8rBCpea6sMz1gcDXgF6z52+DcDMtydTpQ51JTW0D5K7F
-         vprdqxzRgHiQ3sN7rQx8qzOXGFTadbI2ECJC01nsslF80p+NAozUsQjwF4R6SI5a/O84
-         cN6dT7plUosVSY+n15cy0JOlyJAMLICnopKzcQftGjDPYsbR+ghDw8Ys4+IgKI/dad2R
-         vpIQ==
-X-Gm-Message-State: AOAM532uyX6GZGxF/MAzMi+hHOwsJGGIAjGuTv9Uxn3KKYCce2msbMAc
-        wrNTSPjERXDUe1swmqWuMH02JvyafzqeFA==
-X-Google-Smtp-Source: ABdhPJw94DZ1WW/KEGRHhbhUFOJ07uSJUlekmAzQWmw5V+sL7Hz9S6Nqwb3kJhCZpFu1tjCKozKq0A==
-X-Received: by 2002:a37:2cc3:: with SMTP id s186mr8266165qkh.330.1623501403378;
-        Sat, 12 Jun 2021 05:36:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TsrrNxvqr0ZVyyHIEhpRBEc6nR3RPUyX6D/adRK9t7c=;
+        b=sGTB/geS9Xx0KWMdnignrxxhg67qQ/ndZNQgnFirYlQPVJVC8aAFHT2dwKDe9UGz59
+         ab42YsQGIMK4w+Z++HuEXmnXA5QeYSQhDQQ48Zj6MtZTwPwfCrmxT9ks3gH4aBCOoDtS
+         Cqw899l8nfcoo1xCCS4q404z82mWOKWpkGkMNwuzgajitlp2H8XolObhotEF+77N46cl
+         CLK+b9BJyeOvHYP421OXOmhG5Kf5v1cLhNyApo9I3ynQev18klMk7qqc/502XYX/Fe99
+         u4E49Td7oCODh/tl+3uGPCRmJxDTUWoMyj2l8YQ3PzV/CgewGOaOOtf+K0eP02k/S8H7
+         +h5w==
+X-Gm-Message-State: AOAM53304TPb32rhWVrLjkeiKpK9GU+Eaa8TJgivfi66+yuGlNJgJMCW
+        l0fNiOeq7Mp6gCoSUmIjoUL9fI8eSZpBww==
+X-Google-Smtp-Source: ABdhPJyGmmW9UlWc6YCiOYMRnBakAtj6/HBbmRgJ9ZBVdGlvS+DCOnOpJnNsDWajoOkJPn4P3NRsbA==
+X-Received: by 2002:a05:6214:1791:: with SMTP id ct17mr9405660qvb.21.1623501404873;
+        Sat, 12 Jun 2021 05:36:44 -0700 (PDT)
 Received: from localhost ([70.127.84.75])
-        by smtp.gmail.com with ESMTPSA id g2sm6098525qtb.63.2021.06.12.05.36.42
+        by smtp.gmail.com with ESMTPSA id 144sm6283699qkk.103.2021.06.12.05.36.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Jun 2021 05:36:43 -0700 (PDT)
+        Sat, 12 Jun 2021 05:36:44 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -71,100 +74,61 @@ To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Alexey Klimov <aklimov@redhat.com>,
         Ingo Molnar <mingo@redhat.com>
-Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 0/8] all: use find_next_*_bit() instead of find_first_*_bit() where possible
-Date:   Sat, 12 Jun 2021 05:36:31 -0700
-Message-Id: <20210612123639.329047-1-yury.norov@gmail.com>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH 1/8] bitops: protect find_first_{,zero}_bit properly
+Date:   Sat, 12 Jun 2021 05:36:32 -0700
+Message-Id: <20210612123639.329047-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210612123639.329047-1-yury.norov@gmail.com>
+References: <20210612123639.329047-1-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-find_first_*_bit() is simpler and faster than 'next' version [1], and they
-work identically if start == 0. But in many cases kernel code uses the
-'next' version where 'first' can be used. This series addresses this issue.
+find_first_bit() and find_first_zero_bit() are not protected with
+ifdefs as other functions in find.h. It causes build errors on some
+platforms if CONFIG_GENERIC_FIND_FIRST_BIT is enabled.
 
-Patches 1-3 move find.h under include/linux as it simplifies development.
-Patches 4-8 switch the kernel and tools to find_first_*_bit() implementation
-where appropriate. 
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ include/asm-generic/bitops/find.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Yury Norov (8):
-  bitops: protect find_first_{,zero}_bit properly
-  bitops: move find_bit_*_le functions from le.h to find.h
-  include: move find.h from asm_generic to linux
-  arch: remove GENERIC_FIND_FIRST_BIT entirely
-  lib: add find_first_and_bit()
-  cpumask: use find_first_and_bit()
-  all: replace find_next{,_zero}_bit with find_first{,_zero}_bit where
-    appropriate
-  tools: sync tools/bitmap with mother linux
-
- MAINTAINERS                                   |   4 +-
- arch/alpha/include/asm/bitops.h               |   2 -
- arch/arc/Kconfig                              |   1 -
- arch/arc/include/asm/bitops.h                 |   1 -
- arch/arm/include/asm/bitops.h                 |   1 -
- arch/arm64/Kconfig                            |   1 -
- arch/arm64/include/asm/bitops.h               |   1 -
- arch/csky/include/asm/bitops.h                |   1 -
- arch/h8300/include/asm/bitops.h               |   1 -
- arch/hexagon/include/asm/bitops.h             |   1 -
- arch/ia64/include/asm/bitops.h                |   2 -
- arch/m68k/include/asm/bitops.h                |   2 -
- arch/mips/Kconfig                             |   1 -
- arch/mips/include/asm/bitops.h                |   1 -
- arch/openrisc/include/asm/bitops.h            |   1 -
- arch/parisc/include/asm/bitops.h              |   2 -
- arch/powerpc/include/asm/bitops.h             |   2 -
- arch/powerpc/platforms/pasemi/dma_lib.c       |   4 +-
- arch/riscv/include/asm/bitops.h               |   1 -
- arch/s390/Kconfig                             |   1 -
- arch/s390/include/asm/bitops.h                |   1 -
- arch/s390/kvm/kvm-s390.c                      |   2 +-
- arch/sh/include/asm/bitops.h                  |   1 -
- arch/sparc/include/asm/bitops_32.h            |   1 -
- arch/sparc/include/asm/bitops_64.h            |   2 -
- arch/x86/Kconfig                              |   1 -
- arch/x86/include/asm/bitops.h                 |   2 -
- arch/x86/um/Kconfig                           |   1 -
- arch/xtensa/include/asm/bitops.h              |   1 -
- drivers/block/rnbd/rnbd-clt.c                 |   2 +-
- drivers/dma/ti/edma.c                         |   2 +-
- drivers/iio/adc/ad7124.c                      |   2 +-
- drivers/infiniband/hw/irdma/hw.c              |  16 +-
- drivers/media/cec/core/cec-core.c             |   2 +-
- drivers/media/mc/mc-devnode.c                 |   2 +-
- drivers/pci/controller/dwc/pci-dra7xx.c       |   2 +-
- drivers/scsi/lpfc/lpfc_sli.c                  |  10 +-
- drivers/soc/ti/k3-ringacc.c                   |   4 +-
- drivers/tty/n_tty.c                           |   2 +-
- drivers/virt/acrn/ioreq.c                     |   3 +-
- fs/f2fs/segment.c                             |   8 +-
- fs/ocfs2/cluster/heartbeat.c                  |   2 +-
- fs/ocfs2/dlm/dlmdomain.c                      |   4 +-
- fs/ocfs2/dlm/dlmmaster.c                      |  18 +--
- fs/ocfs2/dlm/dlmrecovery.c                    |   2 +-
- fs/ocfs2/dlm/dlmthread.c                      |   2 +-
- include/asm-generic/bitops.h                  |   1 -
- include/asm-generic/bitops/le.h               |  64 --------
- include/linux/bitmap.h                        |   1 +
- include/linux/cpumask.h                       |  30 ++--
- .../bitops => include/linux}/find.h           | 149 +++++++++++++++++-
- lib/Kconfig                                   |   3 -
- lib/find_bit.c                                |  21 +++
- lib/find_bit_benchmark.c                      |  21 +++
- lib/genalloc.c                                |   2 +-
- net/ncsi/ncsi-manage.c                        |   4 +-
- tools/include/asm-generic/bitops.h            |   1 -
- tools/include/linux/bitmap.h                  |   7 +-
- .../bitops => tools/include/linux}/find.h     |  54 +++++--
- tools/lib/find_bit.c                          |  20 +++
- 60 files changed, 319 insertions(+), 185 deletions(-)
- rename {tools/include/asm-generic/bitops => include/linux}/find.h (50%)
- rename {include/asm-generic/bitops => tools/include/linux}/find.h (83%)
-
+diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
+index 0d132ee2a291..835f959a25f2 100644
+--- a/include/asm-generic/bitops/find.h
++++ b/include/asm-generic/bitops/find.h
+@@ -97,6 +97,7 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+ 
+ #ifdef CONFIG_GENERIC_FIND_FIRST_BIT
+ 
++#ifndef find_first_bit
+ /**
+  * find_first_bit - find the first set bit in a memory region
+  * @addr: The address to start the search at
+@@ -116,7 +117,9 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+ 
+ 	return _find_first_bit(addr, size);
+ }
++#endif
+ 
++#ifndef find_first_zero_bit
+ /**
+  * find_first_zero_bit - find the first cleared bit in a memory region
+  * @addr: The address to start the search at
+@@ -136,6 +139,8 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+ 
+ 	return _find_first_zero_bit(addr, size);
+ }
++#endif
++
+ #else /* CONFIG_GENERIC_FIND_FIRST_BIT */
+ 
+ #ifndef find_first_bit
 -- 
 2.30.2
 
