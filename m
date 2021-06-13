@@ -2,58 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2410E3A5A59
-	for <lists+linux-arch@lfdr.de>; Sun, 13 Jun 2021 22:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7723A5A5E
+	for <lists+linux-arch@lfdr.de>; Sun, 13 Jun 2021 22:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbhFMU33 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 13 Jun 2021 16:29:29 -0400
-Received: from mail-lf1-f49.google.com ([209.85.167.49]:44819 "EHLO
-        mail-lf1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbhFMU32 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Jun 2021 16:29:28 -0400
-Received: by mail-lf1-f49.google.com with SMTP id r198so17486841lff.11
-        for <linux-arch@vger.kernel.org>; Sun, 13 Jun 2021 13:27:26 -0700 (PDT)
+        id S232076AbhFMUfm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 13 Jun 2021 16:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232075AbhFMUfm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Jun 2021 16:35:42 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB23C061766
+        for <linux-arch@vger.kernel.org>; Sun, 13 Jun 2021 13:33:24 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bp38so17605251lfb.0
+        for <linux-arch@vger.kernel.org>; Sun, 13 Jun 2021 13:33:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=XoxaxoB26KFydlJxQzuZvQHGdzSalMGqJq/x7smY/qY=;
-        b=Gp7j+VvfY/4cuumVaNyAmX8ySEzBlwhHdWraceOv8BOU+XYEAbhNbgTKhOsOZb0bO+
-         ye/TCZI/fSfKUkGaStZ8Ds5Q9amNYicT7CY3sXFFJsSx8ywQRQuLTtKlflHkJEfYFuAy
-         Dnp/jNycuDBJOpKvXmPpO5TtTzK6A36x2uVHk=
+        bh=VC5cDZGWEYWXdqFfbXDpqSf2zZYlr3PKXrJxtfAkz2M=;
+        b=cd5cBp/Yn7qqbIqUiv2KvlvBMaJ5y5QFxGvkESukJAqrMM4dzGnqOa91I9VnWf3Fjo
+         /OioPPbJRTvwXRUkb+EEK4PA61DyFEcGBYFDAujv6jWzpVc3aN5rGCrtGE411PZs1nqv
+         Ek2jx/dgIpb6/RQbggoVhe9JasBuxKt2UD2Zw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XoxaxoB26KFydlJxQzuZvQHGdzSalMGqJq/x7smY/qY=;
-        b=g/SNsrwAe61B120TefdJX7WmumR/rQfb5rPO/LGzt8fBp9ixDSbdjHkRyqlokmk23Z
-         u4iuRhmfJktRGht3ek6srirXLC/fUJESZhPYeZsMEm3ImNUmOJ9pmbUlHo4ERgLoVLoj
-         qV3SQS5VCYow1jdkStekY69jU/+Ur8W7o41V9wsY+3MaOIMBGZaitCTJpoE4KTdYKh8+
-         x+IuYIQrUsz80aJSYjM7EAyGNQbMdluLcN6Thzi8K9U/ITFAU4qNcmSV8p+0N9qcnNjq
-         9gdxenh49qMcpaN1yGHf6E4pJODWSBF93G8Vz/AsbimkZe/vGsjvjv54JgFNBTaFibmt
-         dPkQ==
-X-Gm-Message-State: AOAM5339Y3UQNY+QUZJhXKwyauufg64tAZelpz/8FFq4Srz0dn81gDmv
-        0Nv1as7JIDGV8raBB03RLKTXDMycl28Kzf+H
-X-Google-Smtp-Source: ABdhPJz8anh7a3o6RtwEjg9NEsZrO//UjjfEMkirBS6kT2HQizePvox3Ia6ObFFmDG97+zGYvw898Q==
-X-Received: by 2002:ac2:4902:: with SMTP id n2mr9567347lfi.413.1623615985674;
-        Sun, 13 Jun 2021 13:26:25 -0700 (PDT)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id f14sm1553977ljk.42.2021.06.13.13.26.25
+        bh=VC5cDZGWEYWXdqFfbXDpqSf2zZYlr3PKXrJxtfAkz2M=;
+        b=olBM+yLgwZohgMNZ78nZ9v/YkO44HpQ+LkKgg39VkBQ8vm5QL/XjoOuPST6Ew/xToI
+         qDIZrdgfQ3sdni5HIcdSiXQZ0h4z8ZAlzvN+R1i9wIQ581rP8JhdXzCnDwxqK1+Gr+H4
+         sn7b54c1yziux2cG77xYzwWyMGwbY9zb3QOF2rKPg0kbvQL5aNARviga3va6MaNzE6Oz
+         sXXvX8W6wOY8EbB7grV+9MVFu/Di7dbB1qscAD63fL1mlRHUDQOA847ef6fId7dp74F0
+         pyzkC5DMUFpUubEoqW/P6/Qvd4sW6++8ct+1LHEfcl7WcwhbGY6umoR5JUrfk8npq57J
+         qEag==
+X-Gm-Message-State: AOAM533U7OpLK5rHri1QC4q32a85tsKjSQSfPqn211eUyIx5nxEo11gV
+        FO3T9203aV0uVRN7fIRSQFTp7LyyXFXVnfvk
+X-Google-Smtp-Source: ABdhPJwDBHoRBOhWHccqr8sCMIPmQTaU+LuvnvvuWWaRud4S90aBJkITpIRHkDNF1cKIW28HxgF61w==
+X-Received: by 2002:a05:6512:6cc:: with SMTP id u12mr9647658lff.32.1623616402096;
+        Sun, 13 Jun 2021 13:33:22 -0700 (PDT)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id w8sm1272839lfp.209.2021.06.13.13.33.21
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Jun 2021 13:26:25 -0700 (PDT)
-Received: by mail-lj1-f181.google.com with SMTP id d2so17123442ljj.11
-        for <linux-arch@vger.kernel.org>; Sun, 13 Jun 2021 13:26:25 -0700 (PDT)
-X-Received: by 2002:a2e:964f:: with SMTP id z15mr7499352ljh.251.1623615984931;
- Sun, 13 Jun 2021 13:26:24 -0700 (PDT)
+        Sun, 13 Jun 2021 13:33:21 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id r16so17190383ljk.9
+        for <linux-arch@vger.kernel.org>; Sun, 13 Jun 2021 13:33:21 -0700 (PDT)
+X-Received: by 2002:a2e:b618:: with SMTP id r24mr6031999ljn.48.1623616401345;
+ Sun, 13 Jun 2021 13:33:21 -0700 (PDT)
 MIME-Version: 1.0
 References: <87sg1p30a1.fsf@disp2133> <1623541098-6532-1-git-send-email-schmitzmic@gmail.com>
- <CAHk-=wi2KnsPbv2BOKHa+hb3CmyxsWRQBmSrzqzNezZ=vxH6bg@mail.gmail.com> <0a96ad37-dedb-67f3-3b27-1ff521c41083@gmail.com>
-In-Reply-To: <0a96ad37-dedb-67f3-3b27-1ff521c41083@gmail.com>
+ <CAHk-=wi2KnsPbv2BOKHa+hb3CmyxsWRQBmSrzqzNezZ=vxH6bg@mail.gmail.com>
+ <0a96ad37-dedb-67f3-3b27-1ff521c41083@gmail.com> <CAHk-=whO6fK4xCuEYDmDMVg_WKxP8cu429x7qjEO_k5sYVoMhg@mail.gmail.com>
+In-Reply-To: <CAHk-=whO6fK4xCuEYDmDMVg_WKxP8cu429x7qjEO_k5sYVoMhg@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 13 Jun 2021 13:26:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whO6fK4xCuEYDmDMVg_WKxP8cu429x7qjEO_k5sYVoMhg@mail.gmail.com>
-Message-ID: <CAHk-=whO6fK4xCuEYDmDMVg_WKxP8cu429x7qjEO_k5sYVoMhg@mail.gmail.com>
+Date:   Sun, 13 Jun 2021 13:33:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wje1Y3hVoQX-jZNQcscUuXO7Fe9tNQBcfyLJNUDMegT4g@mail.gmail.com>
+Message-ID: <CAHk-=wje1Y3hVoQX-jZNQcscUuXO7Fe9tNQBcfyLJNUDMegT4g@mail.gmail.com>
 Subject: Re: [PATCH v1] m68k: save extra registers on sys_exit and
  sys_exit_group syscall entry
 To:     Michael Schmitz <schmitzmic@gmail.com>
@@ -67,38 +71,24 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jun 13, 2021 at 1:07 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+On Sun, Jun 13, 2021 at 1:26 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> I'd love that, too. My test rig doesn't allow dumping of registers by
-> strace, but someone else may have that capacity.
+> and then in gdb you just do
+>
+>         b main
+>         run
 
-I think doing it manually with gdb should be fairly straightforward.
+Btw, this extra stage is unnecessary, but if I just do that "catch
+syscall group:process" before the process has even started, gdb gets
+confused at the start.
 
-Something like
+You could skip this and just do "catch syscall exit_group" and then "run".
 
-        gdb /bin/true
+I used that "group:process" just to catch both the legacy "exit" and
+the new "exit_group", but then it catches fork/execve too, and I think
+that's what confuses gdb when it happens as you start the process.
 
-and then in gdb you just do
-
-        b main
-        run
-
-and then
-
-        catch syscall group:process
-        c
-
-and it should stop at the exit_group or exit system call.
-
-At that point you can just do
-
-        info registers
-
-and see if they match what user space *should* be. They'll probably be
-complete garbage without the fix.
-
-I do not have an alpha or m68k machine to test (and not the
-energy/inclination to set up some virtual environment in qemu either).
-But it should be easy if you already have that environment.
+Just to clarify why I did that odd thing.
 
              Linus
