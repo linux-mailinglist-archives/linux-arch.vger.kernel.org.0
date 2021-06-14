@@ -2,232 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6164B3A5AEC
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Jun 2021 01:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AA83A5B33
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Jun 2021 02:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbhFMXSn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 13 Jun 2021 19:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbhFMXSm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Jun 2021 19:18:42 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E76AC061574;
-        Sun, 13 Jun 2021 16:16:25 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id l3so12522288qvl.0;
-        Sun, 13 Jun 2021 16:16:25 -0700 (PDT)
+        id S232230AbhFNAsl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 13 Jun 2021 20:48:41 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:43920 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232076AbhFNAsl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Jun 2021 20:48:41 -0400
+Received: by mail-pg1-f173.google.com with SMTP id e22so7286524pgv.10;
+        Sun, 13 Jun 2021 17:46:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cjTHkIEpJqk5aUrMUgYRpsHx71rKhZcwzOTeKST6Rqw=;
-        b=e862F756VO4NyIWUzzGE5k2oSlSvmv4449B2yWjvoQYmTZmc2sXr1dQbBEx49aZm3O
-         fo2NL8gLZt9+zgfjNEcm41Mot76fDak5YTGlEev+N/p9jRzZIoigLwvWrRV7uRIHWRAp
-         KeuF7CgmbA98Ww22CtABakCxBmDln1ZmPjEbPVAa57eEbmSL9R5+PZdSXQlDTQeBlYYn
-         YRvIYxntQvle0++sTX0D/hAu4wlWAQPEwcBQng/mgQOptiCOZFNTUp9k+xPt0KsFYuzo
-         GydpoG2yzWOiDiH0Q4e/XQHEQ6IFsCDtS/gbrC3/dIyzPeh4QVLOeTuTZ5tNidZoiX+/
-         aNZw==
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=XxuG7Ca+3NTnEr0aQpNCozkotiEBll347Hs/ZeeBTEE=;
+        b=mm2A1acBjDH7g2IowT4ikVA0PGuvvUKAqKzu0e1WiA7lFyUa/IlSllbZTfUlcwYGgI
+         SwY2xIh2GjsYJSZkx8ezsCjaRxCJeKFP0aBwLHlECyiXyLU3CQsShC9mUFO88Jo2GW7j
+         jHkGQsMV153/u1T9xp86sMn5EyV+97RBdP+HkwVmjTTcpG7/AwiY6g0VhXL00nWz6Ikz
+         E6UhlEfr1QOet/Kb36AM9BRuYqt4j0SORqJJ4Ja0XHE13zOobYtwVo2w1hZS7ifKGRQG
+         jrIlNZOrfeETCuB9HlDjdKurGlFn369VV65lIgM1JiNWrQ3vmKG7pG6rg48DFQu3FPjt
+         wAkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cjTHkIEpJqk5aUrMUgYRpsHx71rKhZcwzOTeKST6Rqw=;
-        b=rtNmPc97nRSOLiE0xFziNR+0DXzYtYFtvU0HM3+tFUkpUzpQbaBj5iKNWbx86O9tks
-         oyncQlGQS17PBLE7LJiQWEMDhtEXusXP6AH40mSm8dI/4ZYf5VJz4uPMe4tKwAWJn4SQ
-         ZPn/bCSxX2sdGDcWdwdP+7+/NtMcstsJiUJw3gptNgPuRmTpenVHK2lt+/W8NmPUWktM
-         QW0LnyaGiwoJfbKTCFcsOGsto746z4vaRVMsV7ZrpNqMwyCreP8g5mkQkVDqQlnv4+w6
-         XIFG1Hmfv12wDcxaeacOcm7tj9tGp9Wanj7cNrdFbaUUzrvRzq/PJNSJHNAt82IktOKF
-         8Zkg==
-X-Gm-Message-State: AOAM532m1BWWh9km+JbbO25yop51tI1voe97TFqOtteSsi1RKXQpZGhY
-        bewq5w1v7C9k3RXZiCfI6etsARxGl28twg==
-X-Google-Smtp-Source: ABdhPJzZY6yuRUfSWuRRmrdO02OdJXgjm/QZ5nDyadq65x0Km1X2acHl6L7CmSnD+Olo1Mm8pq8+lg==
-X-Received: by 2002:ad4:5008:: with SMTP id s8mr15909135qvo.34.1623626184159;
-        Sun, 13 Jun 2021 16:16:24 -0700 (PDT)
-Received: from localhost ([12.21.13.160])
-        by smtp.gmail.com with ESMTPSA id s69sm7445809qke.115.2021.06.13.16.16.23
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=XxuG7Ca+3NTnEr0aQpNCozkotiEBll347Hs/ZeeBTEE=;
+        b=Xz6zxRs4hW7Jn5dRE0Jd1a02/HIvS75Mn3wJ+6n4n3+ngFCcgiwsSlqMIyGgUNC2Ln
+         JGMG/OpAXOp1CRM/iytc6BQz+tFrnSSSmkgtmHSYRCwA1t0dSASvY0MyLo/HLg9Ci0l5
+         VmjZBeOD2oukjHg76EvfPA61Tbpvt2J9ALipZkjarZBd/cxvbiirTzkxNYX+NW4hjqGB
+         OqOFcZbqgcdb/LaFTGFxYJOHF+eshfZSLGrz4H0vPB9iRE+j2dqb93r730dTOWpzheXI
+         3EVEQMobnc5JoKzQ80vc/4U5LvxIC5pAsTRYGcrKzy+5RqBPQJzE6c6fBNiSZtW5nAOz
+         RY9Q==
+X-Gm-Message-State: AOAM532tyIzgJy3I0UDzILLyCo/XWAOhGEAvxIHGShsTxxv3x3hJ+U+i
+        TGlK3ctS6T83X9G606GEGTM=
+X-Google-Smtp-Source: ABdhPJx0cMBzdEpBTdoXhdRfERuKep5LD+E6eqItgLbvkLf7+nCitT8/U5nRSCNsZiXV0o1/PEHbmw==
+X-Received: by 2002:a62:bd14:0:b029:2de:8bf7:2df8 with SMTP id a20-20020a62bd140000b02902de8bf72df8mr19268697pff.60.1623631527972;
+        Sun, 13 Jun 2021 17:45:27 -0700 (PDT)
+Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
+        by smtp.gmail.com with ESMTPSA id em22sm2575307pjb.27.2021.06.13.17.45.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Jun 2021 16:16:23 -0700 (PDT)
-Date:   Sun, 13 Jun 2021 16:16:22 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH] cpumask: replace cpumask_next_* with cpumask_first_* where
- appropriate
-Message-ID: <YMaRxsfCOgkc6gjO@yury-ThinkPad>
-References: <20210612123639.329047-1-yury.norov@gmail.com>
+        Sun, 13 Jun 2021 17:45:27 -0700 (PDT)
+Date:   Mon, 14 Jun 2021 10:45:22 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v4 2/4] lazy tlb: allow lazy tlb mm refcounting to be
+ configurable
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Anton Blanchard <anton@ozlabs.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20210605014216.446867-1-npiggin@gmail.com>
+        <20210605014216.446867-3-npiggin@gmail.com>
+        <8ac1d420-b861-f586-bacf-8c3949e9b5c4@kernel.org>
+In-Reply-To: <8ac1d420-b861-f586-bacf-8c3949e9b5c4@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210612123639.329047-1-yury.norov@gmail.com>
+Message-Id: <1623629185.fxzl5xdab6.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-cpumask_first() is a more effective analogue of 'next' version if n == -1
-(which means start == 0). This patch replaces 'next' with 'first' where
-things look trivial.
+Excerpts from Andy Lutomirski's message of June 9, 2021 2:20 am:
+> On 6/4/21 6:42 PM, Nicholas Piggin wrote:
+>> Add CONFIG_MMU_TLB_REFCOUNT which enables refcounting of the lazy tlb mm
+>> when it is context switched. This can be disabled by architectures that
+>> don't require this refcounting if they clean up lazy tlb mms when the
+>> last refcount is dropped. Currently this is always enabled, which is
+>> what existing code does, so the patch is effectively a no-op.
+>>=20
+>> Rename rq->prev_mm to rq->prev_lazy_mm, because that's what it is.
+>=20
+> I am in favor of this approach, but I would be a lot more comfortable
+> with the resulting code if task->active_mm were at least better
+> documented and possibly even guarded by ifdefs.
 
-There's no cpumask_first_zero() function, so create it.
+active_mm is fairly well documented in Documentation/active_mm.rst IMO.
+I don't think anything has changed in 20 years, I don't know what more
+is needed, but if you can add to documentation that would be nice. Maybe
+moving a bit of that into .c and .h files?
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
-I found another ~10 spots where people use find_next_bit() instead
-of find_first_bit(). This patch should be added to the series.
+> x86 bare metal currently does not need the core lazy mm refcounting, and
+> x86 bare metal *also* does not need ->active_mm.  Under the x86 scheme,
+> if lazy mm refcounting were configured out, ->active_mm could become a
+> dangling pointer, and this makes me extremely uncomfortable.
+>=20
+> So I tend to think that, depending on config, the core code should
+> either keep ->active_mm [1] alive or get rid of it entirely.
 
- arch/powerpc/include/asm/cputhreads.h |  2 +-
- block/blk-mq.c                        |  2 +-
- drivers/net/virtio_net.c              |  2 +-
- drivers/soc/fsl/qbman/bman_portal.c   |  2 +-
- drivers/soc/fsl/qbman/qman_portal.c   |  2 +-
- include/linux/cpumask.h               | 16 ++++++++++++++++
- kernel/time/clocksource.c             |  4 ++--
- 7 files changed, 23 insertions(+), 7 deletions(-)
+I don't actually know what you mean.
 
-diff --git a/arch/powerpc/include/asm/cputhreads.h b/arch/powerpc/include/asm/cputhreads.h
-index 98c8bd155bf9..fb5bb080e5cd 100644
---- a/arch/powerpc/include/asm/cputhreads.h
-+++ b/arch/powerpc/include/asm/cputhreads.h
-@@ -52,7 +52,7 @@ static inline cpumask_t cpu_thread_mask_to_cores(const struct cpumask *threads)
- 	for (i = 0; i < NR_CPUS; i += threads_per_core) {
- 		cpumask_shift_left(&tmp, &threads_core_mask, i);
- 		if (cpumask_intersects(threads, &tmp)) {
--			cpu = cpumask_next_and(-1, &tmp, cpu_online_mask);
-+			cpu = cpumask_first_and(&tmp, cpu_online_mask);
- 			if (cpu < nr_cpu_ids)
- 				cpumask_set_cpu(cpu, &res);
- 		}
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 4261adee9964..99644209d693 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2547,7 +2547,7 @@ static bool blk_mq_hctx_has_requests(struct blk_mq_hw_ctx *hctx)
- static inline bool blk_mq_last_cpu_in_hctx(unsigned int cpu,
- 		struct blk_mq_hw_ctx *hctx)
- {
--	if (cpumask_next_and(-1, hctx->cpumask, cpu_online_mask) != cpu)
-+	if (cpumask_first_and(hctx->cpumask, cpu_online_mask) != cpu)
- 		return false;
- 	if (cpumask_next_and(cpu, hctx->cpumask, cpu_online_mask) < nr_cpu_ids)
- 		return false;
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 21ff7b9e49c2..2608e51fe6e9 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2080,7 +2080,7 @@ static void virtnet_set_affinity(struct virtnet_info *vi)
- 	stragglers = num_cpu >= vi->curr_queue_pairs ?
- 			num_cpu % vi->curr_queue_pairs :
- 			0;
--	cpu = cpumask_next(-1, cpu_online_mask);
-+	cpu = cpumask_first(cpu_online_mask);
- 
- 	for (i = 0; i < vi->curr_queue_pairs; i++) {
- 		group_size = stride + (i < stragglers ? 1 : 0);
-diff --git a/drivers/soc/fsl/qbman/bman_portal.c b/drivers/soc/fsl/qbman/bman_portal.c
-index acda8a5637c5..4d7b9caee1c4 100644
---- a/drivers/soc/fsl/qbman/bman_portal.c
-+++ b/drivers/soc/fsl/qbman/bman_portal.c
-@@ -155,7 +155,7 @@ static int bman_portal_probe(struct platform_device *pdev)
- 	}
- 
- 	spin_lock(&bman_lock);
--	cpu = cpumask_next_zero(-1, &portal_cpus);
-+	cpu = cpumask_first_zero(&portal_cpus);
- 	if (cpu >= nr_cpu_ids) {
- 		__bman_portals_probed = 1;
- 		/* unassigned portal, skip init */
-diff --git a/drivers/soc/fsl/qbman/qman_portal.c b/drivers/soc/fsl/qbman/qman_portal.c
-index 96f74a1dc603..e23b60618c1a 100644
---- a/drivers/soc/fsl/qbman/qman_portal.c
-+++ b/drivers/soc/fsl/qbman/qman_portal.c
-@@ -248,7 +248,7 @@ static int qman_portal_probe(struct platform_device *pdev)
- 	pcfg->pools = qm_get_pools_sdqcr();
- 
- 	spin_lock(&qman_lock);
--	cpu = cpumask_next_zero(-1, &portal_cpus);
-+	cpu = cpumask_first_zero(&portal_cpus);
- 	if (cpu >= nr_cpu_ids) {
- 		__qman_portals_probed = 1;
- 		/* unassigned portal, skip init */
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 6bee58600946..7831f406cad2 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -123,6 +123,11 @@ static inline unsigned int cpumask_first(const struct cpumask *srcp)
- 	return 0;
- }
- 
-+static inline unsigned int cpumask_first_zero(const struct cpumask *srcp)
-+{
-+	return 0;
-+}
-+
- static inline unsigned int cpumask_first_and(const struct cpumask *srcp1,
- 					     const struct cpumask *srcp2)
- {
-@@ -201,6 +206,17 @@ static inline unsigned int cpumask_first(const struct cpumask *srcp)
- 	return find_first_bit(cpumask_bits(srcp), nr_cpumask_bits);
- }
- 
-+/**
-+ * cpumask_first_zero - get the first unset cpu in a cpumask
-+ * @srcp: the cpumask pointer
-+ *
-+ * Returns >= nr_cpu_ids if all cpus are set.
-+ */
-+static inline unsigned int cpumask_first_zero(const struct cpumask *srcp)
-+{
-+	return find_first_zero_bit(cpumask_bits(srcp), nr_cpumask_bits);
-+}
-+
- /**
-  * cpumask_first_and - return the first cpu from *srcp1 & *srcp2
-  * @src1p: the first input
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index 4485635b69f5..61f429fd9c0e 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -256,7 +256,7 @@ static void clocksource_verify_choose_cpus(void)
- 		return;
- 
- 	/* Make sure to select at least one CPU other than the current CPU. */
--	cpu = cpumask_next(-1, cpu_online_mask);
-+	cpu = cpumask_first(cpu_online_mask);
- 	if (cpu == smp_processor_id())
- 		cpu = cpumask_next(cpu, cpu_online_mask);
- 	if (WARN_ON_ONCE(cpu >= nr_cpu_ids))
-@@ -278,7 +278,7 @@ static void clocksource_verify_choose_cpus(void)
- 		cpu = prandom_u32() % nr_cpu_ids;
- 		cpu = cpumask_next(cpu - 1, cpu_online_mask);
- 		if (cpu >= nr_cpu_ids)
--			cpu = cpumask_next(-1, cpu_online_mask);
-+			cpu = cpumask_first(cpu_online_mask);
- 		if (!WARN_ON_ONCE(cpu >= nr_cpu_ids))
- 			cpumask_set_cpu(cpu, &cpus_chosen);
- 	}
--- 
-2.30.2
+core code needs the concept of an "active_mm". This is the mm that your=20
+kernel threads are using, even in the unmerged CONFIG_LAZY_TLB=3Dn patch,
+active_mm still points to init_mm for kernel threads.
 
+We could hide that idea behind an active_mm() function that would always=20
+return &init_mm if mm=3D=3DNULL, but you still have the concept of an activ=
+e
+mm and a pointer that callers must not access after free (because some
+cases will be CONFIG_LAZY_TLB=3Dy).
+
+> [1] I don't really think it belongs in task_struct at all.  It's not a
+> property of the task.  It's the *per-cpu* mm that the core code is
+> keeping alive for lazy purposes.  How about consolidating it with the
+> copy in rq?
+
+I agree it's conceptually a per-cpu property. I don't know why it was=20
+done this way, maybe it was just convenient and works well for mm and=20
+active_mm to be adjacent. Linus might have a better insight.
+
+> I guess the short summary of my opinion is that I like making this
+> configurable, but I do not like the state of the code.
+
+I don't think I'd object to moving active_mm to rq and converting all
+usages to active_mm() while we're there, it would make things a bit
+more configurable. But I don't see it making core code fundamentally
+less complex... if you're referring to the x86 mm switching monstrosity,
+then that's understandable, but I admit I haven't spent enough time
+looking at it to make a useful comment. A patch would be enlightening,
+I have the leftover CONFIG_LAZY_TLB=3Dn patch if you were thinking of=20
+building on that I can send it to you.
+
+Thanks,
+Nick
