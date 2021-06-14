@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F3C3A71F6
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 00:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847E13A71F7
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 00:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbhFNWfQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Jun 2021 18:35:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52180 "EHLO mail.kernel.org"
+        id S229829AbhFNWfT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Jun 2021 18:35:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52220 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229781AbhFNWfP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 14 Jun 2021 18:35:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 02B52611CE;
-        Mon, 14 Jun 2021 22:33:11 +0000 (UTC)
+        id S229939AbhFNWfS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 14 Jun 2021 18:35:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B398461350;
+        Mon, 14 Jun 2021 22:33:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623709992;
-        bh=fCxAxBsrdCysAQR8O0YHtW9cXxwUrKw65hU1mQ0qWk0=;
+        s=k20201202; t=1623709995;
+        bh=dADxCcnOfO3ZUnZ9a2fEumgqIOKICC14vf9CSy6vgv0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MJA72SOIQ01jNlRC27EKVdasYKprLJOrD1tzu4aQ6r4GenG2ayV26NYRWeyKdkzKe
-         DYHyYHRcXFQBZSNZ3bs18397h3Hy3pl9+Gt+3gYmxmGlRrwze+ou7PWEFrT9Qu2kLV
-         QaMkl8lPvnsFxlizQtPtpuF9MnIVEp/Lp6GWNjnvND9x2ZmHmD74trzwRt4TMD9fb5
-         cHcosRyz8CIogWD/6CeGOyx6g33s77dCLMfHvc/B5DI+TgfgZZ7rrwkjj2bHVWUAik
-         2ZHsx7zZ9RyS60tBHW68HKOWxelcmMNHs/RdvNrWvlxUkPjVXCin7UDtcWds1wDV34
-         4utHSLiqHKukg==
+        b=qGypQ71abbJTgI5upU7DehXGtS18qXrDm8e3xLXfvJCuSXYn9ycfqT3/IccI/P/iN
+         yK/DVQBPar7K+e9A1ymKzj/WRcyQ9irrZK5K0F/fYH5UR2MVnfzBcx8vwDv+PUs+a+
+         Z25DdgtJnGDpnGM6d5EKYMB4pQ+dIhWn9fuTSCNBgxWgfKWHJLyMXAQVsudUqK8Rr5
+         82eLcyDmAkbmAfnPI/0SORZGv83zLoWXZingxp7eoyaTazvME6LRnZB3wydeSKrfDp
+         BpvNP1Dg3WdQGKAD15DBDjz9+z4u0OK11NC4YVZmtxEuLFhYaPbRrNVDitdXtkmXxp
+         zeS2HQ0/ytKDA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>
@@ -33,77 +33,78 @@ Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Yu-cheng Yu <yu-cheng.yu@intel.com>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         libc-alpha@sourceware.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 3/4] elf: Remove has_interp property from arch_adjust_elf_prot()
-Date:   Mon, 14 Jun 2021 23:32:13 +0100
-Message-Id: <20210614223214.39011-4-broonie@kernel.org>
+Subject: [PATCH v3 4/4] elf: Remove has_interp property from arch_parse_elf_property()
+Date:   Mon, 14 Jun 2021 23:32:14 +0100
+Message-Id: <20210614223214.39011-5-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210614223214.39011-1-broonie@kernel.org>
 References: <20210614223214.39011-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2151; h=from:subject; bh=fCxAxBsrdCysAQR8O0YHtW9cXxwUrKw65hU1mQ0qWk0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBgx9jscT/tjOsyDA4fqAk63t8+zhdRqo/okAQGtBab 6GkwKRSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYMfY7AAKCRAk1otyXVSH0Fv8B/ 9n4MxOkwE08+s1KuYDbXW8HmGkcSrRsnbokMnx4O6yqCfYunlNP76yiYDisbWcziywvhtxfnNfd3pG MYFI38kzyTwwFnUI+avkO91uGTO1ywrvkZ67dJ+h+cfIK/FJDWy5v3ZGvmeAIZPwqUgtZ16HDp75PD ckdcB5aWS9v8nFz5mMJYUPBcpX7ZqmkNSqJlwoJ3qc4gx4jqYMKuh6PDucY6ZsCa7Qnu/8Qfig+4jL DYu83xz4morL6efeTNRbXvgPcD+gECGDAck4Ty62ZNxVeqK7yKCoilNmzgWQh3cKmFaW/tE9e3ED08 05qalJGq9fFljHagQoBM6gIFC4qGSB
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2046; h=from:subject; bh=dADxCcnOfO3ZUnZ9a2fEumgqIOKICC14vf9CSy6vgv0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBgx9jthwgmlfRA1jM91GkX7mG7mC714J/VsA8WtqyN FwHJzzqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYMfY7QAKCRAk1otyXVSH0Px6B/ 9ZQmIoNj/Fsbx5yBcfBfa7aW1jNFB1wAIMpAythc7L3lyflO+/Uo83KH38OzRCi72aZPXNs89O8hk/ z5KFmFFHmgUhxh++V1Uv6+JML3VbsAk4QeaW6LNwE1JlfMB6WPk4lKdlqRW1V0jo8Wl5zL2CbzsKlq skmLKgudOy6QdcUTdZ62XOROXUIDtYl9HIBqx0295UpAcHTYH7XnrUWz571gJH1RozGZPoz0/gQcRJ rQvOGo3ncDf6amtTmrO4k7JyO0rtQ5op4tXC6y6fyJ9rr8se4lVLKkDWs1rPvewsDj42iVEY86NJoT cj0wVnj4CIRpZ8Mn2W4lcJTDzZl4Nb
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since we have added an is_interp flag to arch_parse_elf_property() we can
-drop the has_interp flag from arch_elf_adjust_prot(), the only user was
-the arm64 code which no longer needs it and any future users will be able
-to use arch_parse_elf_properties() to determine if an interpreter is in
-use.
+Since all current users of arch_parse_elf_property() are able to treat the
+interpreter and main executable orthogonaly the has_interp argument is now
+redundant so remove it.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kernel/process.c | 2 +-
- fs/binfmt_elf.c             | 2 +-
- include/linux/elf.h         | 4 ++--
+ arch/arm64/include/asm/elf.h | 2 +-
+ fs/binfmt_elf.c              | 2 +-
+ include/linux/elf.h          | 4 ++--
  3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 21f1f0997c43..2b952593534a 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -751,7 +751,7 @@ static inline int arm64_elf_bti_flag(bool is_interp)
+diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
+index 9f86dbce2680..a6e9032b951a 100644
+--- a/arch/arm64/include/asm/elf.h
++++ b/arch/arm64/include/asm/elf.h
+@@ -262,7 +262,7 @@ struct arch_elf_state {
  
- 
- int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
--			 bool has_interp, bool is_interp)
-+			 bool is_interp)
+ static inline int arch_parse_elf_property(u32 type, const void *data,
+ 					  size_t datasz, bool compat,
+-					  bool has_interp, bool is_interp,
++					  bool is_interp,
+ 					  struct arch_elf_state *arch)
  {
- 	if ((prot & PROT_EXEC) &&
- 	    (state->flags & arm64_elf_bti_flag(is_interp)))
+ 	/* No known properties for AArch32 yet */
 diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index c0d4f35c80f6..ffe38d54308b 100644
+index ffe38d54308b..5509ae63c2e1 100644
 --- a/fs/binfmt_elf.c
 +++ b/fs/binfmt_elf.c
-@@ -580,7 +580,7 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
- 	if (p_flags & PF_X)
- 		prot |= PROT_EXEC;
+@@ -753,7 +753,7 @@ static int parse_elf_property(const char *data, size_t *off, size_t datasz,
  
--	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
-+	return arch_elf_adjust_prot(prot, arch_state, is_interp);
- }
+ 	ret = arch_parse_elf_property(pr->pr_type, data + o,
+ 				      pr->pr_datasz, ELF_COMPAT,
+-				      has_interp, is_interp, arch);
++				      is_interp, arch);
+ 	if (ret)
+ 		return ret;
  
- /* This is much more generalized than the library routine read function,
 diff --git a/include/linux/elf.h b/include/linux/elf.h
-index 1c45ecf29147..d8392531899d 100644
+index d8392531899d..cdb080d4b34a 100644
 --- a/include/linux/elf.h
 +++ b/include/linux/elf.h
-@@ -101,11 +101,11 @@ extern int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
- 
- #ifdef CONFIG_ARCH_HAVE_ELF_PROT
- int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
--			 bool has_interp, bool is_interp);
-+			 bool is_interp);
- #else
- static inline int arch_elf_adjust_prot(int prot,
- 				       const struct arch_elf_state *state,
--				       bool has_interp, bool is_interp)
-+				       bool is_interp)
+@@ -88,14 +88,14 @@ struct arch_elf_state;
+ #ifndef CONFIG_ARCH_USE_GNU_PROPERTY
+ static inline int arch_parse_elf_property(u32 type, const void *data,
+ 					  size_t datasz, bool compat,
+-					  bool has_interp, bool is_interp,
++					  bool is_interp,
+ 					  struct arch_elf_state *arch)
  {
- 	return prot;
+ 	return 0;
  }
+ #else
+ extern int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
+-				   bool compat, bool has_interp, bool is_interp,
++				   bool compat, bool is_interp,
+ 				   struct arch_elf_state *arch);
+ #endif
+ 
 -- 
 2.20.1
 
