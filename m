@@ -2,34 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 058033A889A
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 20:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8E23A88AC
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 20:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbhFOSdF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 14:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S231689AbhFOSgO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 14:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbhFOSdE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 14:33:04 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FFDC061574;
-        Tue, 15 Jun 2021 11:30:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LdNeCQqk9KCm4jhNoZuBIHJ86WosU4CQPfm1SU3padI=; b=KO1IdRXvN+FrSa4LuXBQM5beAj
-        p6M9jwGEipbsxZZ5ZhfG9ektCNttJlPZgj6rtVgRjI/2oNQtEhx1T7e5aJRHb0UdT7hhuNdpaU4Ue
-        lxyuh0pw2Y0wQnnEYiINPswBwZMvCgXM9QardUkii8XsOpypMJgS/y8ScYyE/aiwlGoaT5xLL9EE4
-        0BA+1HHt2bvvTThMm/UPmFFtB30VWws5gH7o/Mfpfwf83ZdotS8ftqSlXphUO1EBACUqSENSntgUl
-        7Tzee91mKhcO1T9mh6mF1mFW3mSZ4rWu7YHp3rKbAH5tmME6OcBqzCW8zNIiP1y0QaOjwJBde3/NS
-        59ZrMfCg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ltDp2-0077zr-Mq; Tue, 15 Jun 2021 18:30:05 +0000
-Date:   Tue, 15 Jun 2021 19:30:00 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Cc:     David Howells <dhowells@redhat.com>,
+        with ESMTP id S231666AbhFOSgO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 14:36:14 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE60C0613A2
+        for <linux-arch@vger.kernel.org>; Tue, 15 Jun 2021 11:34:08 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id c10so173247qvo.9
+        for <linux-arch@vger.kernel.org>; Tue, 15 Jun 2021 11:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Ci8pTDsI4+1dl8hd8DPpx4lfE/2PNymYi+7s+L/rCno=;
+        b=PK99xqIi4vOJCiwjyFx7sp/rvE4QciQ9VOYWadYlda8ip8BShy10QYGLAjNTlX6yj4
+         NpuPKMftibD60GvE085PX/7Drph1xMAHMwToXAmI5pJhp1P0RgnZCkkOHwQ3/vJaU+1W
+         ctUknv+wA4Cnp1nbxaQurmpCYJZtTHdtSBrJc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ci8pTDsI4+1dl8hd8DPpx4lfE/2PNymYi+7s+L/rCno=;
+        b=Mj/rHQTv2bVnUpgt2c6pAx/F6I7tVxLGyqIir+cBW70T+bqbRopYu11+hhaJJY+8u3
+         JwUrowc1DejPqIt73N6eaSQgaVV/Z3Pe7CWkEgcbgTIgW7NMArjWPIDXls4MThjRbj3V
+         edGrGUAQnTMZpHhiFRIYfsn4lGTywLQIUIPQM8y8d2Q1xv0ncWps8iygl6aqHjV1hGbm
+         26LHxhlAZQ9AOTgtso42AAYOPLMgVdtnVtsKkN84bCSZD5JJ0W2LAZAcTvXKp4N1l07j
+         ufeTan0ZvZUw/JPkzQt+I3hS4kuExxgW9TjgpnS0v9gGoctxKinyTv/v1Xb68Q/B3ScG
+         IJ1A==
+X-Gm-Message-State: AOAM531i6+pPuR3teDsgcU2kjhCKlkUyQsBDXvjlgvMl5nMQ5qaaxGpE
+        DUz/8CpHU+U/vjPjYZTbp0O66Q==
+X-Google-Smtp-Source: ABdhPJyHWGn07W9hcHEIH999jGrYf+wW2jw6aRdNw2u5boIr2c5TmIFSEKWlZQrl7KeRgxw5C3vtRg==
+X-Received: by 2002:a0c:e8cd:: with SMTP id m13mr6841876qvo.52.1623782047319;
+        Tue, 15 Jun 2021 11:34:07 -0700 (PDT)
+Received: from nitro.local ([89.36.78.230])
+        by smtp.gmail.com with ESMTPSA id g24sm11940010qts.60.2021.06.15.11.34.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jun 2021 11:34:06 -0700 (PDT)
+Date:   Tue, 15 Jun 2021 14:34:05 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
+        David Howells <dhowells@redhat.com>,
         James Bottomley <James.Bottomley@hansenpartnership.com>,
         Greg KH <greg@kroah.com>, Christoph Lameter <cl@gentwo.de>,
         Theodore Ts'o <tytso@mit.edu>, Jiri Kosina <jikos@kernel.org>,
@@ -38,7 +57,7 @@ Cc:     David Howells <dhowells@redhat.com>,
         linux-mm@kvack.org, netdev@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-api@vger.kernel.org
 Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
-Message-ID: <YMjxqEY25A6bm47s@casper.infradead.org>
+Message-ID: <20210615183405.rchiaaybuhx244qa@nitro.local>
 References: <YLEIKk7IuWu6W4Sy@casper.infradead.org>
  <YH2hs6EsPTpDAqXc@mit.edu>
  <nycvar.YFH.7.76.2104281228350.18270@cbobk.fhfr.pm>
@@ -48,29 +67,28 @@ References: <YLEIKk7IuWu6W4Sy@casper.infradead.org>
  <c46dbda64558ab884af060f405e3f067112b9c8a.camel@HansenPartnership.com>
  <1745326.1623409807@warthog.procyon.org.uk>
  <e47706ee-3e4b-8f15-963f-292b5e47cb1d@metux.net>
+ <YMjxqEY25A6bm47s@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e47706ee-3e4b-8f15-963f-292b5e47cb1d@metux.net>
+In-Reply-To: <YMjxqEY25A6bm47s@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 08:23:55PM +0200, Enrico Weigelt, metux IT consult wrote:
-> On 11.06.21 13:10, David Howells wrote:
+On Tue, Jun 15, 2021 at 07:30:00PM +0100, Matthew Wilcox wrote:
+> > Wouldn't just taking prophylatic meds like CDS or HCQ and/or hi-dose
+> > vitamins (C, D3+K2) be way more cost effective and flexible than to
+> > charter a whole plane ?
 > 
-> > One thing that concerns me about flying to the US is going through multiple
-> > busy international airports - take Heathrow which didn't separate incoming
-> > travellers from red-listed countries from those of amber- or green- until like
-> > a week ago.
-> > 
-> > Would it be practical/economical to charter a plane to fly, say, from a less
-> > busy airport in Europe to a less busy airport in the US and back again if we
-> > could get enough delegates together to make it worthwhile?
-> 
-> Wouldn't just taking prophylatic meds like CDS or HCQ and/or hi-dose
-> vitamins (C, D3+K2) be way more cost effective and flexible than to
-> charter a whole plane ?
+> Why don't you just shine a bright light up your arse?  It'll have the
+> same effect.
 
-Why don't you just shine a bright light up your arse?  It'll have the
-same effect.
+Please stop.
+
+I do not have ability to ban people across all cc'd lists, but I will for sure
+start adding people to block filters on the infra to which I have access if
+this wildly off-topic discussion continues and especially if things continue
+to deteriorate into name-calling.
+
+-K
