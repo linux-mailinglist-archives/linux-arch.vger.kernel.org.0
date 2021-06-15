@@ -2,113 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 475403A82E3
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 16:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF673A83D8
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 17:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbhFOOdv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 10:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbhFOOdu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 10:33:50 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0C5C061574;
-        Tue, 15 Jun 2021 07:31:45 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id a127so7581321pfa.10;
-        Tue, 15 Jun 2021 07:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=09f7flVgvhf5eQwpZCIbvOGTARFj7yeM2HilMpzlWLk=;
-        b=jk2oxSkqx62fHfzZ2Td3CQMKVDfVLX5soiM/JukpALSNJHJr6bPDtlz3KWKAxXo94O
-         s/hllSh2es9DhRUKAKUitklZDcf/EnVOKXhkOj9PYfOCpVShjA/ALCwL9qmhEU6/Uawa
-         XK557NRD7ifNeZzvRQOvgq1OjZVLzX0tIkT8t770jqHE0cKYFvqhPHbZNRgnhaDUZKFF
-         qX9q9wmOAxzVgsgD1wpLoriKUlqy7RCPkNZ1jG4aLxQucHRt8DEitzL0SOUV96Pc1UDE
-         2mXJY2Jw/0wFzqk5I0o9iVdLMmeZJJ8WeATZpVLS5cPgmlZCB/DeT8DlSYdBw+t/FiNV
-         Ts4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=09f7flVgvhf5eQwpZCIbvOGTARFj7yeM2HilMpzlWLk=;
-        b=LwuxIzy9pg+zHfZXKOoMDDHdPL4iwbga1lkeOmj8z4a79H6tthZ6VmA1omj3bvfPYk
-         5ibSpIwbNCIwENqu+YVo/qllWVn4NhlHHJgYxq4ryoM2eSdwSBjlg1Sx+OrMNq7NdojQ
-         4afvgvbx27WSSvpTJ+o8A4gtoyMR+rBpedb4qNAa62n6I2QLnhisGLW3W3/VB79tpzUM
-         iv8lV/ReZRwuGM31Tkxw04qTCMJM8YgcZIkb0jBA7hc/DKPJXfYEYWTJgkoIMtKbXOr9
-         uHCHHFuYVIXNkskgWrp4D5ACeEyXLXkR1V16t7/ndKa038mxFM4lkuthDRk6g02mid8L
-         gKoQ==
-X-Gm-Message-State: AOAM530h9mUzaqcVFQgJjN/YMhjBL3L9+NqQb84sdq35JVWwm1ozNr4X
-        2qmv7sTBnjoEo9c3hTmoqyY=
-X-Google-Smtp-Source: ABdhPJyHvlYi58GrVtZOOV1UUSDfdDdKTtRA2DlWTeNf7j5KzC+iOROVnZire7W4JyUnDsrG1dvTzA==
-X-Received: by 2002:a65:550e:: with SMTP id f14mr22678348pgr.160.1623767504841;
-        Tue, 15 Jun 2021 07:31:44 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id fy16sm2711030pjb.49.2021.06.15.07.31.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Jun 2021 07:31:44 -0700 (PDT)
-Subject: Re: [RFC PATCH V3 10/11] HV/Netvsc: Add Isolation VM support for
- netvsc driver
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org,
-        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, Tianyu.Lan@microsoft.com,
-        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
-        xen-devel@lists.xenproject.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, thomas.lendacky@amd.com,
-        brijesh.singh@amd.com, sunilmut@microsoft.com
-References: <20210530150628.2063957-1-ltykernel@gmail.com>
- <20210530150628.2063957-11-ltykernel@gmail.com>
- <20210607065007.GE24478@lst.de>
- <279cb4bf-c5b6-6db9-0f1e-9238e902c8f2@gmail.com>
- <20210614070903.GA29976@lst.de>
- <e10c2696-23c3-befe-4f4d-25e18918132f@gmail.com>
- <20210614153339.GB1741@lst.de>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <7d86307f-83ff-03ad-c6e9-87b455c559b8@gmail.com>
-Date:   Tue, 15 Jun 2021 22:31:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230463AbhFOPZP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 11:25:15 -0400
+Received: from foss.arm.com ([217.140.110.172]:38298 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230076AbhFOPZO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 15 Jun 2021 11:25:14 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7EE9D6E;
+        Tue, 15 Jun 2021 08:23:09 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B17323F70D;
+        Tue, 15 Jun 2021 08:23:08 -0700 (PDT)
+Date:   Tue, 15 Jun 2021 16:22:06 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>, libc-alpha@sourceware.org,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 0/3] arm64: Enable BTI for the executable as well as
+ the interpreter
+Message-ID: <20210615152203.GR4187@arm.com>
+References: <20210604112450.13344-1-broonie@kernel.org>
+ <43e67d7b-aab9-db1f-f74b-a87ba7442d47@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20210614153339.GB1741@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43e67d7b-aab9-db1f-f74b-a87ba7442d47@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/14/2021 11:33 PM, Christoph Hellwig wrote:
-> On Mon, Jun 14, 2021 at 10:04:06PM +0800, Tianyu Lan wrote:
->> The pages in the hv_page_buffer array here are in the kernel linear
->> mapping. The packet sent to host will contain an array which contains
->> transaction data. In the isolation VM, data in the these pages needs to be
->> copied to bounce buffer and so call dma_map_single() here to map these data
->> pages with bounce buffer. The vmbus has ring buffer where the send/receive
->> packets are copied to/from. The ring buffer has been remapped to the extra
->> space above shared gpa boundary/vTom during probing Netvsc driver and so
->> not call dma map function for vmbus ring
->> buffer.
+On Thu, Jun 10, 2021 at 11:28:12AM -0500, Jeremy Linton via Libc-alpha wrote:
+> Hi,
 > 
-> So why do we have all that PFN magic instead of using struct page or
-> the usual kernel I/O buffers that contain a page pointer?
+> On 6/4/21 6:24 AM, Mark Brown wrote:
+> >Deployments of BTI on arm64 have run into issues interacting with
+> >systemd's MemoryDenyWriteExecute feature.  Currently for dynamically
+> >linked executables the kernel will only handle architecture specific
+> >properties like BTI for the interpreter, the expectation is that the
+> >interpreter will then handle any properties on the main executable.
+> >For BTI this means remapping the executable segments PROT_EXEC |
+> >PROT_BTI.
+> >
+> >This interacts poorly with MemoryDenyWriteExecute since that is
+> >implemented using a seccomp filter which prevents setting PROT_EXEC on
+> >already mapped memory and lacks the context to be able to detect that
+> >memory is already mapped with PROT_EXEC.  This series resolves this by
+> >handling the BTI property for both the interpreter and the main
+> >executable.
 > 
+> I've got a Fedora34 system booting in qemu or a model with BTI enabled. On
+> that system I took the systemd-resolved executable, which is one of the
+> services with MDWE enabled, and replaced a number of the bti's with nops. I
+> expect the service to continue to work with the fedora or mainline 5.13
+> kernel and it does. If instead I boot with MDWE=no for the service, it
+> should fail to start given either of those kernels, and it does.
+> 
+> Thus, I expect that with his patch applied to 5.13 the service will fail to
+> start regardless of the state of MDWE, but it seems to continue starting
+> when I set MDWE=yes. Same behavior with v1 FWTW.
+> 
+> Of course, there is a good chance I've messed something up or i'm missing
+> something. I should really validate the /lib/ld-linux behavior itself too. I
+> guess this could just as well be a glibc issue (f34 has glibc 2.33-5 which
+> appears to have the re-mmap on failure patch). Either way, systemd-resolved
+> is a LSB PIE, with /lib/ld-linux as its interpreter. I've not dug too deep
+> into debugging this, cause I've got a couple other things I need to deal
+> with in the next couple days, and I strongly dislike booting a full
+> debug+system on the model. chuckle, sorry...
 
-These PFNs originally is part of Hyper-V protocol data and will be sent
-to host. Host accepts these GFN and copy data from/to guest memory. The 
-translation from va to pa is done by caller that populates the 
-hv_page_buffer array. I will try calling dma map function before 
-populating struct hv_page_buffer and this can avoid redundant 
-translation between PA and VA.
+[...]
+
+If the failure we're trying to detect is that BTI is undesirably left
+off for the main executable, surely replacing BTIs with NOPs will make
+no differenece?  The behaviour with PROT_BTI clear is strictly more
+permissive than with PROT_BTI set, so I'm not sure we can test the
+behaviour this way.
+
+Maybe I'm missing sometihng / confused myself somewhere.
+
+Looking at /proc/<pid>/maps after the process starts up may be a more
+reliable approach, so see what the actual prot value is on the main
+executable's text pages.
+
+Cheers
+---Dave
