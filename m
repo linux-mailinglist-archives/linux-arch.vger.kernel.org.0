@@ -2,107 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B843A83E1
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 17:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D563A840C
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 17:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbhFOP1P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 11:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbhFOP1P (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 11:27:15 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C46C061574;
-        Tue, 15 Jun 2021 08:25:09 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id v7so3002476pgl.2;
-        Tue, 15 Jun 2021 08:25:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=phyWWBHzkBpxWNeuQJLinu+go2K8vm0IQjBk4bPOC5o=;
-        b=lLzyvAx1eLMBBQ9Nv6UWlyfS7bq09JfNMuTSA72Pidzs3ADzEJh5UZNx1+KXAA3QS7
-         9qLwmHEZw5Xk+RHIQHD4WFV677p8Yi8BHKdEaKAbO078PZhHBwsAaiGPsQh7STbxJ28j
-         3L9M/FShV9IoCoZ9A/Eh9ROBNoQr5F07JQAgtoeaUjtdIexg1Nk9GrQcrUXxHc9NNgOV
-         D2nJiITYw2LCAuwzkpdFMOLcTULHsDylV5FWGHXPlqFv03pjAoTRz+TNqy9uLL90+fK0
-         edPtBl2ZDPRtYC3zVnWadcZFdsLes9V2OCmaC/x9ZwogRVqJGjkXmr9UDyWpPbPkMxE8
-         xgYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=phyWWBHzkBpxWNeuQJLinu+go2K8vm0IQjBk4bPOC5o=;
-        b=r/+D0eo5vByu6Z5a5LdMbGRd1WPYAHS+JolUben3rfWchrPihzES/s2APVCiLTXZgY
-         xEWRlLhc2MaMrHSkbU5nPyIyKrHfbgZ2OAdCGP23qV74boRXi8Lr7WE0ht4PNaDXYktT
-         Fr2GutsYE2nChwuvTMCbp1HM4cxTfS0sMSQQhEctxDgj6sRrJ/3OCkFsbGu/AMecZoQa
-         W9rvqtMPILmZtrICGHcaO4J1QM2mEgAwmaG+9MUB3C6Oc8Pm0bKulf7ZYhfxJqidBHrW
-         UtKjAnwEsK+WJxqsFRPAcoDkRjvzRO9zlQ+3D/qf2hfTjFVp839p2VHn+yqA/iN01rUz
-         +guA==
-X-Gm-Message-State: AOAM533/8P0U7U6zvTbi75I1f3Bxx1m4Dn0I6HneBCii/K9iZhBS40R+
-        ghBTh0MhWDSnKsLGIu1DtBk=
-X-Google-Smtp-Source: ABdhPJwV2uWurEEhhhqeCwFEjPg+6PpMse5GS6lAolB+VF7P2QpHJP+RpOWgZ5BBFF0RzwB+7lXyqg==
-X-Received: by 2002:a65:6481:: with SMTP id e1mr85503pgv.140.1623770709416;
-        Tue, 15 Jun 2021 08:25:09 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id u2sm15258266pfg.67.2021.06.15.08.24.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Jun 2021 08:25:09 -0700 (PDT)
-Subject: Re: [RFC PATCH V3 08/11] swiotlb: Add bounce buffer remap address
- setting function
-To:     Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org,
-        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, Tianyu.Lan@microsoft.com,
-        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
-        boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
-        xen-devel@lists.xenproject.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, thomas.lendacky@amd.com,
-        brijesh.singh@amd.com, sunilmut@microsoft.com
-References: <20210530150628.2063957-1-ltykernel@gmail.com>
- <20210530150628.2063957-9-ltykernel@gmail.com>
- <20210607064312.GB24478@lst.de>
- <94038087-a33c-93c5-27bf-7ec1f6f5f0e3@arm.com> <20210614153252.GA1741@lst.de>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <9e347c4c-d4b9-129c-10d2-0d7ff1b917cc@gmail.com>
-Date:   Tue, 15 Jun 2021 23:24:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231495AbhFOPgE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 11:36:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40492 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230076AbhFOPgE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 15 Jun 2021 11:36:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A27F61628;
+        Tue, 15 Jun 2021 15:33:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623771239;
+        bh=q8BZ1n+o1weaYiyieYWAIsKfcyyZyn64y14iR2bzbn8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m8fY8vjOO0Kr6eZs42TZeSsIidyQQ/MWtBuSus8HpUDznidfxpFvYW0zrrWnugIlj
+         jVaXwWmjApZRfyat/yPjBFA0XEtiSLFBhTiRsyh4AX18gkTDkKNm+T3yQXYBFbQaD0
+         4FIUEzF0dFeGEqQIBWmTvvp1aIVFn66vk3MxH0VwcpeattZeGV2gX6ny8vplcNwuJK
+         tvBeSAsYBQl2jfc4Yzjm/JfEylX/S7lh2WZzfOIhr3QJz/73n8TiWP47kihjXvps7Q
+         gMm/6DUUGntast53CjQwRnu97GeXHWbO0/AVBkxVybpC1A3J+Yr5YPcr4T4L/QGegV
+         b+1YtPTW2a9tA==
+Date:   Tue, 15 Jun 2021 16:33:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Jeremy Linton <jeremy.linton@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>, libc-alpha@sourceware.org,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 0/3] arm64: Enable BTI for the executable as well as
+ the interpreter
+Message-ID: <20210615153341.GI5149@sirena.org.uk>
+References: <20210604112450.13344-1-broonie@kernel.org>
+ <43e67d7b-aab9-db1f-f74b-a87ba7442d47@arm.com>
+ <20210615152203.GR4187@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20210614153252.GA1741@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rCb8EA+9TsBVtA92"
+Content-Disposition: inline
+In-Reply-To: <20210615152203.GR4187@arm.com>
+X-Cookie: See store for details.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/14/2021 11:32 PM, Christoph Hellwig wrote:
-> On Mon, Jun 14, 2021 at 02:49:51PM +0100, Robin Murphy wrote:
->> FWIW, I think a better generalisation for this would be allowing
->> set_memory_decrypted() to return an address rather than implicitly
->> operating in-place, and hide all the various hypervisor hooks behind that.
-> 
-> Yes, something like that would be a good idea.  As-is
-> set_memory_decrypted is a pretty horribly API anyway due to passing
-> the address as void, and taking a size parameter while it works in units
-> of pages.  So I'd very much welcome a major overhaul of this API.
-> 
 
-Hi Christoph and Robin:
-	Thanks for your suggestion. I will try this idea in the next version. 
-Besides make the address translation into set_memory_
-decrypted() and return address, do you want to make other changes to the 
-API in order to make it more reasonable(e.g size parameter)?
+--rCb8EA+9TsBVtA92
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks
+On Tue, Jun 15, 2021 at 04:22:06PM +0100, Dave Martin wrote:
+> On Thu, Jun 10, 2021 at 11:28:12AM -0500, Jeremy Linton via Libc-alpha wrote:
+
+> > Thus, I expect that with his patch applied to 5.13 the service will fail to
+> > start regardless of the state of MDWE, but it seems to continue starting
+> > when I set MDWE=yes. Same behavior with v1 FWTW.
+
+> If the failure we're trying to detect is that BTI is undesirably left
+> off for the main executable, surely replacing BTIs with NOPs will make
+> no differenece?  The behaviour with PROT_BTI clear is strictly more
+> permissive than with PROT_BTI set, so I'm not sure we can test the
+> behaviour this way.
+
+> Maybe I'm missing sometihng / confused myself somewhere.
+
+The issue this patch series is intended to address is that BTI gets
+left off since the dynamic linker is unable to enable PROT_BTI on the
+main executable.  We're looking to see that we end up with the stricter
+permissions checking of BTI, with the issue present landing pads
+replaced by NOPs will not fault but once the issue is addressed they
+should start faulting.
+
+> Looking at /proc/<pid>/maps after the process starts up may be a more
+> reliable approach, so see what the actual prot value is on the main
+> executable's text pages.
+
+smaps rather than maps but yes, executable pages show up as "ex" and BTI
+adds a "bt" tag in VmFlags.
+
+--rCb8EA+9TsBVtA92
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDIyFQACgkQJNaLcl1U
+h9Ch1wf/Uux07QpS16OkwvekpnneqAZWCv9/h9QzbYGAeINqO/tnpqDOts/LmiC+
+DqG/hs3yJt+XitSG9I6FNIZ0aKi0Kde0INaI0J5DJpnT80f2CMSmRKBFIFlsfObL
+ay9wNsVxyWnKWYHX85TLmZorbsWLk9LyD1yxgxyhtf07kvIdU+uRlIBCAHm9eEKW
+htVj0GSsWI1AbwQhtaxXUy3dMe7QAx8BgCGmETogsvaTca2I4duUN4e8zT6y4FN4
+Y8sbxIG9vQJ0DH3nkkEMbHdVelJoa9uwQBBHXY7tbPf38N8U4MeNuY6busAYWNxp
+3lgeDigJd90wHBR9IkHIAWlisTJHmw==
+=8dZi
+-----END PGP SIGNATURE-----
+
+--rCb8EA+9TsBVtA92--
