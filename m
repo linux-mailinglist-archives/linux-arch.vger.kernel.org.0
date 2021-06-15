@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 180C03A7F9F
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 15:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB4B3A7FAB
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 15:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbhFONax (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 09:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
+        id S231491AbhFONbJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 09:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbhFONat (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 09:30:49 -0400
+        with ESMTP id S231543AbhFONbC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 09:31:02 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37457C061574;
-        Tue, 15 Jun 2021 06:28:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAF3C0613A4;
+        Tue, 15 Jun 2021 06:28:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=fwYY4cSIlXZUYhtFYDVp8X4pn3Su5FY8BPl+PlDQj0g=; b=o9rlvoNlNXNdcekDmTn200bHY3
-        du7q+hb5J/7l7Mmff9Frg7gGmQSc1zn1ny8mabmMdI1BR1VvKpaSCb2W3kFfgmB5Wn0ypoLANru6K
-        0JyShqr627zVnXx3hdSjEHc5BRqaxcSXp6Lv41q3Vlpz9bnuGI+IDYeMnY+/4hXs2q0cqYlOfXVY0
-        qWfc4SgsvwzQszydwfkZOw+gVh4V8ZlrQTPw5FSbbhfjFqbbTuUSS97XHewV2dusDFIBy8Y/ssZNq
-        j5kIz+H15DstpmzoIdDZzwETQ220TxaVmb4fr0nBQwM2aPWzWB+SyYB9LT1e3W4NDUUJhbhy2WEM6
-        DAhmxf9A==;
+        bh=gCdUfdryXX9J3CwMxmwyJL5seb86z6Ov9FawmIkvAKE=; b=Kaaj+w5sQBoBqkokmlMCbw4thd
+        Y7RDcQBgSPtWiunihfvmP4ESXOvhqtDJoTqJoE/9zJZprhgvpjDifd84KWd+McMZbcjtKZXFVlJUN
+        jQg6z+ZJ54Tz4G17iB1ZeKnFbcbf9O+F+c28OwF/47Tcch64az3DF3QiXEebGtjAucaT1r0tIgSvE
+        CY3C3GkjI8ZtiKGXJSYcKIMth7IL2aHU47vDbyksvE6tWslM8x9Dh1MmU4C3uNhLT/izjphPsnF20
+        CiWAlkUponb1AsZWsfz5+tjnNExbaWSCT5bk2MDSTan/yAXXEiELwPjfQkKmiuYUy/NJjXyM7lrBM
+        oj39iSdw==;
 Received: from [2001:4bb8:19b:fdce:9045:1e63:20f0:ca9] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lt962-006o4C-KU; Tue, 15 Jun 2021 13:27:19 +0000
+        id 1lt96I-006o5s-Gs; Tue, 15 Jun 2021 13:27:36 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>, Thomas Gleixner <tglx@linutronix.de>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -40,9 +40,9 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         ceph-devel@vger.kernel.org, linux-arch@vger.kernel.org,
         Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Subject: [PATCH 07/18] bvec: add memcpy_{from,to}_bvec and memzero_bvec helper
-Date:   Tue, 15 Jun 2021 15:24:45 +0200
-Message-Id: <20210615132456.753241-8-hch@lst.de>
+Subject: [PATCH 08/18] block: use memzero_page in zero_fill_bio
+Date:   Tue, 15 Jun 2021 15:24:46 +0200
+Message-Id: <20210615132456.753241-9-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210615132456.753241-1-hch@lst.de>
 References: <20210615132456.753241-1-hch@lst.de>
@@ -53,57 +53,39 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add helpers to perform common memory operation on a bvec.
+Use memzero_bvec to zero each segment in the bio instead of manually
+mapping and zeroing the data.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 ---
- include/linux/bvec.h | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ block/bio.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/bvec.h b/include/linux/bvec.h
-index f8710af18eef..f9fa43b940ff 100644
---- a/include/linux/bvec.h
-+++ b/include/linux/bvec.h
-@@ -196,4 +196,37 @@ static inline void *bvec_kmap_local(struct bio_vec *bvec)
- 	return kmap_local_page(bvec->bv_page) + bvec->bv_offset;
- }
+diff --git a/block/bio.c b/block/bio.c
+index 44205dfb6b60..1d7abdb83a39 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -495,16 +495,11 @@ EXPORT_SYMBOL(bio_kmalloc);
  
-+/**
-+ * memcpy_from_bvec - copy data from a bvec
-+ * @bvec: bvec to copy from
-+ *
-+ * Must be called on single-page bvecs only.
-+ */
-+static inline void memcpy_from_bvec(char *to, struct bio_vec *bvec)
-+{
-+	memcpy_from_page(to, bvec->bv_page, bvec->bv_offset, bvec->bv_len);
-+}
-+
-+/**
-+ * memcpy_to_bvec - copy data to a bvec
-+ * @bvec: bvec to copy to
-+ *
-+ * Must be called on single-page bvecs only.
-+ */
-+static inline void memcpy_to_bvec(struct bio_vec *bvec, const char *from)
-+{
-+	memcpy_to_page(bvec->bv_page, bvec->bv_offset, from, bvec->bv_len);
-+}
-+
-+/**
-+ * memzero_bvec - zero all data in a bvec
-+ * @bvec: bvec to zero
-+ *
-+ * Must be called on single-page bvecs only.
-+ */
-+static inline void memzero_bvec(struct bio_vec *bvec)
-+{
-+	memzero_page(bvec->bv_page, bvec->bv_offset, bvec->bv_len);
-+}
-+
- #endif /* __LINUX_BVEC_H */
+ void zero_fill_bio(struct bio *bio)
+ {
+-	unsigned long flags;
+ 	struct bio_vec bv;
+ 	struct bvec_iter iter;
+ 
+-	bio_for_each_segment(bv, bio, iter) {
+-		char *data = bvec_kmap_irq(&bv, &flags);
+-		memset(data, 0, bv.bv_len);
+-		flush_dcache_page(bv.bv_page);
+-		bvec_kunmap_irq(data, &flags);
+-	}
++	bio_for_each_segment(bv, bio, iter)
++		memzero_bvec(&bv);
+ }
+ EXPORT_SYMBOL(zero_fill_bio);
+ 
 -- 
 2.30.2
 
