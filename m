@@ -2,96 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101AB3A813D
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 15:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 475403A82E3
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 16:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbhFONrc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 09:47:32 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37894 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbhFONr3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 09:47:29 -0400
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9BF3420B6AEE;
-        Tue, 15 Jun 2021 06:45:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9BF3420B6AEE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1623764724;
-        bh=7UULkM9VpH3Wm7vWsgwZVD3p39+NvKKLXs8u9XWsGBo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Oq4u01Z10/CBCJu1HPj1Vvu1ftm2kYNH8idZjB5WxkhgjgnbVMq39iDdAuuSQLAKZ
-         VpLVpJEDIigDfAepMNu7TJYWdwBEnpDnzMtuRsyP711OYly94uxU2aKOYJp+2iOD13
-         muGQXPdC0UaG2FxC5mIDCKB+7DBU9tQHsbH7EBnM=
-Received: by mail-pg1-f170.google.com with SMTP id w31so8981943pga.6;
-        Tue, 15 Jun 2021 06:45:24 -0700 (PDT)
-X-Gm-Message-State: AOAM531vgRD2KSxrHohSGbWTI+4qqhm4tf4GxHppwEDyTSeik/fwiDDT
-        1N3bQ2ZTd6+YLPf6CK0LoESRwNXlFVL9ITMPLrM=
-X-Google-Smtp-Source: ABdhPJyzNMA1hikc4GzmgcUaRxwOH9kITpR2EgDgak8cpnVdiiCAfUiybdtEp1A5PpHdPahqGVJBiDJhevSMLxRuI3Q=
-X-Received: by 2002:a63:1703:: with SMTP id x3mr22496302pgl.421.1623764724145;
- Tue, 15 Jun 2021 06:45:24 -0700 (PDT)
+        id S230187AbhFOOdv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 10:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230076AbhFOOdu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 10:33:50 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0C5C061574;
+        Tue, 15 Jun 2021 07:31:45 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id a127so7581321pfa.10;
+        Tue, 15 Jun 2021 07:31:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=09f7flVgvhf5eQwpZCIbvOGTARFj7yeM2HilMpzlWLk=;
+        b=jk2oxSkqx62fHfzZ2Td3CQMKVDfVLX5soiM/JukpALSNJHJr6bPDtlz3KWKAxXo94O
+         s/hllSh2es9DhRUKAKUitklZDcf/EnVOKXhkOj9PYfOCpVShjA/ALCwL9qmhEU6/Uawa
+         XK557NRD7ifNeZzvRQOvgq1OjZVLzX0tIkT8t770jqHE0cKYFvqhPHbZNRgnhaDUZKFF
+         qX9q9wmOAxzVgsgD1wpLoriKUlqy7RCPkNZ1jG4aLxQucHRt8DEitzL0SOUV96Pc1UDE
+         2mXJY2Jw/0wFzqk5I0o9iVdLMmeZJJ8WeATZpVLS5cPgmlZCB/DeT8DlSYdBw+t/FiNV
+         Ts4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=09f7flVgvhf5eQwpZCIbvOGTARFj7yeM2HilMpzlWLk=;
+        b=LwuxIzy9pg+zHfZXKOoMDDHdPL4iwbga1lkeOmj8z4a79H6tthZ6VmA1omj3bvfPYk
+         5ibSpIwbNCIwENqu+YVo/qllWVn4NhlHHJgYxq4ryoM2eSdwSBjlg1Sx+OrMNq7NdojQ
+         4afvgvbx27WSSvpTJ+o8A4gtoyMR+rBpedb4qNAa62n6I2QLnhisGLW3W3/VB79tpzUM
+         iv8lV/ReZRwuGM31Tkxw04qTCMJM8YgcZIkb0jBA7hc/DKPJXfYEYWTJgkoIMtKbXOr9
+         uHCHHFuYVIXNkskgWrp4D5ACeEyXLXkR1V16t7/ndKa038mxFM4lkuthDRk6g02mid8L
+         gKoQ==
+X-Gm-Message-State: AOAM530h9mUzaqcVFQgJjN/YMhjBL3L9+NqQb84sdq35JVWwm1ozNr4X
+        2qmv7sTBnjoEo9c3hTmoqyY=
+X-Google-Smtp-Source: ABdhPJyHvlYi58GrVtZOOV1UUSDfdDdKTtRA2DlWTeNf7j5KzC+iOROVnZire7W4JyUnDsrG1dvTzA==
+X-Received: by 2002:a65:550e:: with SMTP id f14mr22678348pgr.160.1623767504841;
+        Tue, 15 Jun 2021 07:31:44 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
+        by smtp.gmail.com with ESMTPSA id fy16sm2711030pjb.49.2021.06.15.07.31.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jun 2021 07:31:44 -0700 (PDT)
+Subject: Re: [RFC PATCH V3 10/11] HV/Netvsc: Add Isolation VM support for
+ netvsc driver
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
+        peterz@infradead.org, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, rppt@kernel.org,
+        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
+        saravanand@fb.com, Tianyu.Lan@microsoft.com,
+        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, boris.ostrovsky@oracle.com, jgross@suse.com,
+        sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
+        xen-devel@lists.xenproject.org, davem@davemloft.net,
+        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, thomas.lendacky@amd.com,
+        brijesh.singh@amd.com, sunilmut@microsoft.com
+References: <20210530150628.2063957-1-ltykernel@gmail.com>
+ <20210530150628.2063957-11-ltykernel@gmail.com>
+ <20210607065007.GE24478@lst.de>
+ <279cb4bf-c5b6-6db9-0f1e-9238e902c8f2@gmail.com>
+ <20210614070903.GA29976@lst.de>
+ <e10c2696-23c3-befe-4f4d-25e18918132f@gmail.com>
+ <20210614153339.GB1741@lst.de>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <7d86307f-83ff-03ad-c6e9-87b455c559b8@gmail.com>
+Date:   Tue, 15 Jun 2021 22:31:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210615023812.50885-1-mcroce@linux.microsoft.com>
- <20210615023812.50885-2-mcroce@linux.microsoft.com> <6cff2a895db94e6fadd4ddffb8906a73@AcuMS.aculab.com>
- <CAEUhbmV+Vi0Ssyzq1B2RTkbjMpE21xjdj2MSKdLydgW6WuCKtA@mail.gmail.com> <1632006872b04c64be828fa0c4e4eae0@AcuMS.aculab.com>
-In-Reply-To: <1632006872b04c64be828fa0c4e4eae0@AcuMS.aculab.com>
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-Date:   Tue, 15 Jun 2021 15:44:48 +0200
-X-Gmail-Original-Message-ID: <CAFnufp208bY29Zs9w7OtMtK0vcFOs1OosO2U6tJzm6ju-Awe4g@mail.gmail.com>
-Message-ID: <CAFnufp208bY29Zs9w7OtMtK0vcFOs1OosO2U6tJzm6ju-Awe4g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] riscv: optimized memcpy
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Bin Meng <bmeng.cn@gmail.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210614153339.GB1741@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 3:18 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Bin Meng
-> > Sent: 15 June 2021 14:09
-> >
-> > On Tue, Jun 15, 2021 at 4:57 PM David Laight <David.Laight@aculab.com> wrote:
-> > >
-> ...
-> > > I'm surprised that the C loop:
-> > >
-> > > > +             for (; count >= bytes_long; count -= bytes_long)
-> > > > +                     *d.ulong++ = *s.ulong++;
-> > >
-> > > ends up being faster than the ASM 'read lots' - 'write lots' loop.
-> >
-> > I believe that's because the assembly version has some unaligned
-> > access cases, which end up being trap-n-emulated in the OpenSBI
-> > firmware, and that is a big overhead.
->
-> Ah, that would make sense since the asm user copy code
-> was broken for misaligned copies.
-> I suspect memcpy() was broken the same way.
->
-> I'm surprised IP_NET_ALIGN isn't set to 2 to try to
-> avoid all these misaligned copies in the network stack.
-> Although avoiding 8n+4 aligned data is rather harder.
->
+On 6/14/2021 11:33 PM, Christoph Hellwig wrote:
+> On Mon, Jun 14, 2021 at 10:04:06PM +0800, Tianyu Lan wrote:
+>> The pages in the hv_page_buffer array here are in the kernel linear
+>> mapping. The packet sent to host will contain an array which contains
+>> transaction data. In the isolation VM, data in the these pages needs to be
+>> copied to bounce buffer and so call dma_map_single() here to map these data
+>> pages with bounce buffer. The vmbus has ring buffer where the send/receive
+>> packets are copied to/from. The ring buffer has been remapped to the extra
+>> space above shared gpa boundary/vTom during probing Netvsc driver and so
+>> not call dma map function for vmbus ring
+>> buffer.
+> 
+> So why do we have all that PFN magic instead of using struct page or
+> the usual kernel I/O buffers that contain a page pointer?
+> 
 
-That's up to the network driver, indeed I have a patch already for the
-BeagleV one:
-
-https://lore.kernel.org/netdev/20210615012107.577ead86@linux.microsoft.com/T/
-
-> Misaligned copies are just best avoided - really even on x86.
-> The 'real fun' is when the access crosses TLB boundaries.
->
-
--- 
-per aspera ad upstream
+These PFNs originally is part of Hyper-V protocol data and will be sent
+to host. Host accepts these GFN and copy data from/to guest memory. The 
+translation from va to pa is done by caller that populates the 
+hv_page_buffer array. I will try calling dma map function before 
+populating struct hv_page_buffer and this can avoid redundant 
+translation between PA and VA.
