@@ -2,93 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C0A3A801E
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 15:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101AB3A813D
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 15:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbhFONf4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 09:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbhFONfg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 09:35:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC565C0613A4;
-        Tue, 15 Jun 2021 06:33:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=1vl+lJtrWoiUzzKH0COLUmHTJyPccdOEl/SXPdFbHq8=; b=orcVM4ZS+23ndu19ILV+oG8Kdb
-        EYq30bY5COpSe8j73G1ZSpdxCnZvGUug6zi+n3PtNKTIYr2gdrB6nrERB3vHdIIR4hPOT/UpTCyWs
-        AYodO6/zr9y0OT7KoRpqlRoey1MBbGiUTgoxOd/kcm4TRjkQ8E3XYxEkGCrC8InktD++/3VespVyQ
-        FAP7MeVYaSA+NqHbe0Hkisx+6r4BLNLdkNjC0eQtKEFztNzuWuVCAheweEjtcFUDpKAbuCLRmg4/G
-        EVnQKf6DqMMaY9iFPuJi82thdu+6gkEtdThFuqtrkl3pXuuSly/nPtwkQFcg10SnbFD7sIkGMm4qc
-        1ysBDTTA==;
-Received: from [2001:4bb8:19b:fdce:9045:1e63:20f0:ca9] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lt9Ae-006obD-98; Tue, 15 Jun 2021 13:32:08 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geoff Levand <geoff@infradead.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Dongsheng Yang <dongsheng.yang@easystack.cn>,
-        Mike Snitzer <snitzer@redhat.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Ira Weiny <ira.weiny@intel.com>, dm-devel@redhat.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        ceph-devel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 18/18] block: use bvec_kmap_local in bio_integrity_process
-Date:   Tue, 15 Jun 2021 15:24:56 +0200
-Message-Id: <20210615132456.753241-19-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210615132456.753241-1-hch@lst.de>
-References: <20210615132456.753241-1-hch@lst.de>
+        id S230225AbhFONrc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 09:47:32 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37894 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230208AbhFONr3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 09:47:29 -0400
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9BF3420B6AEE;
+        Tue, 15 Jun 2021 06:45:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9BF3420B6AEE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1623764724;
+        bh=7UULkM9VpH3Wm7vWsgwZVD3p39+NvKKLXs8u9XWsGBo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Oq4u01Z10/CBCJu1HPj1Vvu1ftm2kYNH8idZjB5WxkhgjgnbVMq39iDdAuuSQLAKZ
+         VpLVpJEDIigDfAepMNu7TJYWdwBEnpDnzMtuRsyP711OYly94uxU2aKOYJp+2iOD13
+         muGQXPdC0UaG2FxC5mIDCKB+7DBU9tQHsbH7EBnM=
+Received: by mail-pg1-f170.google.com with SMTP id w31so8981943pga.6;
+        Tue, 15 Jun 2021 06:45:24 -0700 (PDT)
+X-Gm-Message-State: AOAM531vgRD2KSxrHohSGbWTI+4qqhm4tf4GxHppwEDyTSeik/fwiDDT
+        1N3bQ2ZTd6+YLPf6CK0LoESRwNXlFVL9ITMPLrM=
+X-Google-Smtp-Source: ABdhPJyzNMA1hikc4GzmgcUaRxwOH9kITpR2EgDgak8cpnVdiiCAfUiybdtEp1A5PpHdPahqGVJBiDJhevSMLxRuI3Q=
+X-Received: by 2002:a63:1703:: with SMTP id x3mr22496302pgl.421.1623764724145;
+ Tue, 15 Jun 2021 06:45:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+References: <20210615023812.50885-1-mcroce@linux.microsoft.com>
+ <20210615023812.50885-2-mcroce@linux.microsoft.com> <6cff2a895db94e6fadd4ddffb8906a73@AcuMS.aculab.com>
+ <CAEUhbmV+Vi0Ssyzq1B2RTkbjMpE21xjdj2MSKdLydgW6WuCKtA@mail.gmail.com> <1632006872b04c64be828fa0c4e4eae0@AcuMS.aculab.com>
+In-Reply-To: <1632006872b04c64be828fa0c4e4eae0@AcuMS.aculab.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Tue, 15 Jun 2021 15:44:48 +0200
+X-Gmail-Original-Message-ID: <CAFnufp208bY29Zs9w7OtMtK0vcFOs1OosO2U6tJzm6ju-Awe4g@mail.gmail.com>
+Message-ID: <CAFnufp208bY29Zs9w7OtMtK0vcFOs1OosO2U6tJzm6ju-Awe4g@mail.gmail.com>
+Subject: Re: [PATCH 1/3] riscv: optimized memcpy
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Bin Meng <bmeng.cn@gmail.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Using local kmaps slightly reduces the chances to stray writes, and
-the bvec interface cleans up the code a little bit.
+On Tue, Jun 15, 2021 at 3:18 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Bin Meng
+> > Sent: 15 June 2021 14:09
+> >
+> > On Tue, Jun 15, 2021 at 4:57 PM David Laight <David.Laight@aculab.com> wrote:
+> > >
+> ...
+> > > I'm surprised that the C loop:
+> > >
+> > > > +             for (; count >= bytes_long; count -= bytes_long)
+> > > > +                     *d.ulong++ = *s.ulong++;
+> > >
+> > > ends up being faster than the ASM 'read lots' - 'write lots' loop.
+> >
+> > I believe that's because the assembly version has some unaligned
+> > access cases, which end up being trap-n-emulated in the OpenSBI
+> > firmware, and that is a big overhead.
+>
+> Ah, that would make sense since the asm user copy code
+> was broken for misaligned copies.
+> I suspect memcpy() was broken the same way.
+>
+> I'm surprised IP_NET_ALIGN isn't set to 2 to try to
+> avoid all these misaligned copies in the network stack.
+> Although avoiding 8n+4 aligned data is rather harder.
+>
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- block/bio-integrity.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+That's up to the network driver, indeed I have a patch already for the
+BeagleV one:
 
-diff --git a/block/bio-integrity.c b/block/bio-integrity.c
-index 4b4eb8964a6f..8f54d49dc500 100644
---- a/block/bio-integrity.c
-+++ b/block/bio-integrity.c
-@@ -172,18 +172,16 @@ static blk_status_t bio_integrity_process(struct bio *bio,
- 	iter.prot_buf = prot_buf;
- 
- 	__bio_for_each_segment(bv, bio, bviter, *proc_iter) {
--		void *kaddr = kmap_atomic(bv.bv_page);
-+		void *kaddr = bvec_kmap_local(&bv);
- 
--		iter.data_buf = kaddr + bv.bv_offset;
-+		iter.data_buf = kaddr;
- 		iter.data_size = bv.bv_len;
--
- 		ret = proc_fn(&iter);
--		if (ret) {
--			kunmap_atomic(kaddr);
--			return ret;
--		}
-+		kunmap_local(kaddr);
-+
-+		if (ret)
-+			break;
- 
--		kunmap_atomic(kaddr);
- 	}
- 	return ret;
- }
+https://lore.kernel.org/netdev/20210615012107.577ead86@linux.microsoft.com/T/
+
+> Misaligned copies are just best avoided - really even on x86.
+> The 'real fun' is when the access crosses TLB boundaries.
+>
+
 -- 
-2.30.2
-
+per aspera ad upstream
