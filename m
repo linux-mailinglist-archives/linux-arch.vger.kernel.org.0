@@ -2,69 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 198853A7951
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 10:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A899D3A794F
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 10:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbhFOIts (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 04:49:48 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:59837 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbhFOIts (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 04:49:48 -0400
-Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MdwRi-1lLfir10Eg-00b5Va; Tue, 15 Jun 2021 10:47:43 +0200
-Received: by mail-wm1-f53.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso1170424wmh.4;
-        Tue, 15 Jun 2021 01:47:43 -0700 (PDT)
-X-Gm-Message-State: AOAM5330EjP6WWHsltiDv2xyBKLUHYXumQJ69RM7gt6B5CQR0P9Gueu8
-        GK/322yCMRloyydR1dO01cyYQQ54boSikRHb9J8=
-X-Google-Smtp-Source: ABdhPJwlOlvyBnTmdbYYrL60W15jGBG2tOZQL5Qf0MNgMdBpE8tHfalX5VQTsaiojZvIPdI3ABttEP6/qcGwH98RFS8=
-X-Received: by 2002:a1c:28a:: with SMTP id 132mr2715045wmc.120.1623746862894;
- Tue, 15 Jun 2021 01:47:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210614153712.313707-1-marcin@juszkiewicz.com.pl> <20210614164454.GC29751@quack2.suse.cz>
-In-Reply-To: <20210614164454.GC29751@quack2.suse.cz>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 15 Jun 2021 10:45:38 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3XbbJ8WnzdsE5f4Uk-O5Z_mBsjc21E6AKuVavvF-_3Cw@mail.gmail.com>
-Message-ID: <CAK8P3a3XbbJ8WnzdsE5f4Uk-O5Z_mBsjc21E6AKuVavvF-_3Cw@mail.gmail.com>
-Subject: Re: [PATCH] quota: finish disable quotactl_path syscall
-To:     Jan Kara <jack@suse.cz>
-Cc:     Marcin Juszkiewicz <marcin@juszkiewicz.com.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S231168AbhFOIte (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 04:49:34 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:41400 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231161AbhFOIte (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 04:49:34 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 236491FD55;
+        Tue, 15 Jun 2021 08:47:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1623746849; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qsvBIKoBBDJEgHaKCzoXt6uHkCjR8pMwpup6Tl3TIWY=;
+        b=WwJmRcCYbA8r2cbd0yxaLSp4lsozxpCGL6nszt9InMByAVOLQ/Z5d+2k2XuFYFh9HPjXJD
+        ZodOGPzRpVMMb+SBx07LnMHJGoFS8aBCCnfqwQQHjppmJdh5iubbNnO5S+9AxJSi+GvAWD
+        WFdnDJP4wNe97E9c7jicUkbKP4kyxSM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1623746849;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qsvBIKoBBDJEgHaKCzoXt6uHkCjR8pMwpup6Tl3TIWY=;
+        b=PYlBYDzM/Z9Ap6CCtY2GQf8IZ/Q159Cmyb0cRvl9Ay1zffhPvWJ8EV5idnd2VUgJOBjczc
+        i1zl/1p02vC2Q5DQ==
+Received: from quack2.suse.cz (unknown [10.100.200.198])
+        by relay2.suse.de (Postfix) with ESMTP id 12232A3BA5;
+        Tue, 15 Jun 2021 08:47:29 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id C9A6F1F2C88; Tue, 15 Jun 2021 10:47:28 +0200 (CEST)
+Date:   Tue, 15 Jun 2021 10:47:28 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Marcin Juszkiewicz <marcin@juszkiewicz.com.pl>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
         Christian Brauner <christian.brauner@ubuntu.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:KkbO7KzbEuX4jWx+R8lfjIckfLNoYmrZriVAoSBECDqAS6Qw2V4
- Czt9hWtaGxBHVSTq+6fBoVxr7WqCmy8XZRLeC2s14kjAsvmQ83qmCP0t45OQRXNZ4XosLjX
- QHY2ygrefDUekWJpjwg40Nz7g9QIEPtFzXZjQ68XLNYqVep/cBnFFf4OZg5C4pqt72viWBi
- QF9B8iR77171claJHQJ+w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:J0cL1T0iGeE=:q0VTqCjwi2OsH24nZIEnmn
- q5doy+eIaGss//hXX8FMoG+Kun0t6FEZK6WTkd1H0Wkzg6WTJah051KK845DcBkXoAh9z1guK
- hWbrs5Z8o5rlT7UaGl3E0qQQxYE4wvxfTkl8UH2S3SX7S7rtJYjkjZnlYrNowv4JDej29ZbKR
- j+9IvVPLzLzQtGXucju5VAf8MaRhEQlB0mgwzV8udqzPZbB9CcjJDYHFQqYuE9H2npXFcaHX+
- cop+6l1dHCfyOKfgAKyvODVTYwKuX8Sz2fxHYSSsPHs6qp78BBgYIo6Voglh418HHxMzZex4B
- 3ypuUybf3bDqg4Qh0KYn43N7h6JG+WIDgvt4A0BN1nktB6sVH5qSoEwgBw4p0T1SWV9IwI0nA
- XfAuohviQDrbAQ6E7IBW+R6bWV78CXglTpeFntTjX2ubvawooyFctzQ/u+oldR+nCZd7pcFFJ
- vLVD/gJE3IpPuwKh+K+h/bCKtlf/3VYr5qiqGIS3LGv9CBu3I9xW0t9dikkUWT3OCoDALUfkd
- SF1gf+De13CJxhATbIWfnB2fA8tmvpoPYuvyrzd/eVMTRVVI0jBjjA6GMMQUgd0tynHbrRyV3
- gJgJ8dvNwWxKkLZYlDoGZ2m6nmzY6f8kuuh9/7eiVEV3QEexE3g6dLZpCjzEceNTBsPeJ/Db/
- pjkU=
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH] quota: finish disable quotactl_path syscall
+Message-ID: <20210615084728.GG29751@quack2.suse.cz>
+References: <20210614153712.313707-1-marcin@juszkiewicz.com.pl>
+ <20210614164454.GC29751@quack2.suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210614164454.GC29751@quack2.suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 14, 2021 at 6:45 PM Jan Kara <jack@suse.cz> wrote:
->
+On Mon 14-06-21 18:44:54, Jan Kara wrote:
 > On Mon 14-06-21 17:37:12, Marcin Juszkiewicz wrote:
 > > In commit 5b9fedb31e47 ("quota: Disable quotactl_path syscall") Jan Kara
 > > disabled quotactl_path syscall on several architectures.
-> >
+> > 
 > > This commit disables it on all architectures using unified list of
 > > system calls:
-> >
+> > 
 > > - arm64
 > > - arc
 > > - csky
@@ -74,18 +73,42 @@ On Mon, Jun 14, 2021 at 6:45 PM Jan Kara <jack@suse.cz> wrote:
 > > - nios2
 > > - openrisc
 > > - riscv (32/64)
-> >
+> > 
 > > CC: Jan Kara <jack@suse.cz>
 > > CC: Christian Brauner <christian.brauner@ubuntu.com>
 > > CC: Sascha Hauer <s.hauer@pengutronix.de>
 > > Link: https://lore.kernel.org/lkml/20210512153621.n5u43jsytbik4yze@wittgenstein
-> >
+> > 
 > > Signed-off-by: Marcin Juszkiewicz <marcin@juszkiewicz.com.pl>
->
+> 
 > Aha, I've missed that one. Thanks for catching this. Arnd, will you take
 > this patch or should I take it through my tree?
 
-I don't have any other fixes for 5.13 at the moment, so I would prefer it if
-you could pick it up.
+OK, I want this to make it for rc7 so I've pulled this patch to my tree and
+will push it to Linus in a few days.
 
-       Arnd
+								Honza
+
+> > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> > index 6de5a7fc066b..d2a942086fcb 100644
+> > --- a/include/uapi/asm-generic/unistd.h
+> > +++ b/include/uapi/asm-generic/unistd.h
+> > @@ -863,8 +863,7 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
+> >  __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
+> >  #define __NR_mount_setattr 442
+> >  __SYSCALL(__NR_mount_setattr, sys_mount_setattr)
+> > -#define __NR_quotactl_path 443
+> > -__SYSCALL(__NR_quotactl_path, sys_quotactl_path)
+> > +/* 443 is reserved for quotactl_path */
+> >  
+> >  #define __NR_landlock_create_ruleset 444
+> >  __SYSCALL(__NR_landlock_create_ruleset, sys_landlock_create_ruleset)
+> > -- 
+> > 2.31.1
+> > 
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
