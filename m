@@ -2,96 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF673A83D8
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 17:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B843A83E1
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 17:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbhFOPZP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 11:25:15 -0400
-Received: from foss.arm.com ([217.140.110.172]:38298 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230076AbhFOPZO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 15 Jun 2021 11:25:14 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7EE9D6E;
-        Tue, 15 Jun 2021 08:23:09 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B17323F70D;
-        Tue, 15 Jun 2021 08:23:08 -0700 (PDT)
-Date:   Tue, 15 Jun 2021 16:22:06 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>, libc-alpha@sourceware.org,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/3] arm64: Enable BTI for the executable as well as
- the interpreter
-Message-ID: <20210615152203.GR4187@arm.com>
-References: <20210604112450.13344-1-broonie@kernel.org>
- <43e67d7b-aab9-db1f-f74b-a87ba7442d47@arm.com>
+        id S231357AbhFOP1P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 11:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231307AbhFOP1P (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 11:27:15 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C46C061574;
+        Tue, 15 Jun 2021 08:25:09 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id v7so3002476pgl.2;
+        Tue, 15 Jun 2021 08:25:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=phyWWBHzkBpxWNeuQJLinu+go2K8vm0IQjBk4bPOC5o=;
+        b=lLzyvAx1eLMBBQ9Nv6UWlyfS7bq09JfNMuTSA72Pidzs3ADzEJh5UZNx1+KXAA3QS7
+         9qLwmHEZw5Xk+RHIQHD4WFV677p8Yi8BHKdEaKAbO078PZhHBwsAaiGPsQh7STbxJ28j
+         3L9M/FShV9IoCoZ9A/Eh9ROBNoQr5F07JQAgtoeaUjtdIexg1Nk9GrQcrUXxHc9NNgOV
+         D2nJiITYw2LCAuwzkpdFMOLcTULHsDylV5FWGHXPlqFv03pjAoTRz+TNqy9uLL90+fK0
+         edPtBl2ZDPRtYC3zVnWadcZFdsLes9V2OCmaC/x9ZwogRVqJGjkXmr9UDyWpPbPkMxE8
+         xgYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=phyWWBHzkBpxWNeuQJLinu+go2K8vm0IQjBk4bPOC5o=;
+        b=r/+D0eo5vByu6Z5a5LdMbGRd1WPYAHS+JolUben3rfWchrPihzES/s2APVCiLTXZgY
+         xEWRlLhc2MaMrHSkbU5nPyIyKrHfbgZ2OAdCGP23qV74boRXi8Lr7WE0ht4PNaDXYktT
+         Fr2GutsYE2nChwuvTMCbp1HM4cxTfS0sMSQQhEctxDgj6sRrJ/3OCkFsbGu/AMecZoQa
+         W9rvqtMPILmZtrICGHcaO4J1QM2mEgAwmaG+9MUB3C6Oc8Pm0bKulf7ZYhfxJqidBHrW
+         UtKjAnwEsK+WJxqsFRPAcoDkRjvzRO9zlQ+3D/qf2hfTjFVp839p2VHn+yqA/iN01rUz
+         +guA==
+X-Gm-Message-State: AOAM533/8P0U7U6zvTbi75I1f3Bxx1m4Dn0I6HneBCii/K9iZhBS40R+
+        ghBTh0MhWDSnKsLGIu1DtBk=
+X-Google-Smtp-Source: ABdhPJwV2uWurEEhhhqeCwFEjPg+6PpMse5GS6lAolB+VF7P2QpHJP+RpOWgZ5BBFF0RzwB+7lXyqg==
+X-Received: by 2002:a65:6481:: with SMTP id e1mr85503pgv.140.1623770709416;
+        Tue, 15 Jun 2021 08:25:09 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
+        by smtp.gmail.com with ESMTPSA id u2sm15258266pfg.67.2021.06.15.08.24.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jun 2021 08:25:09 -0700 (PDT)
+Subject: Re: [RFC PATCH V3 08/11] swiotlb: Add bounce buffer remap address
+ setting function
+To:     Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
+        peterz@infradead.org, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, rppt@kernel.org,
+        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
+        saravanand@fb.com, Tianyu.Lan@microsoft.com,
+        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
+        boris.ostrovsky@oracle.com, jgross@suse.com,
+        sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
+        xen-devel@lists.xenproject.org, davem@davemloft.net,
+        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, thomas.lendacky@amd.com,
+        brijesh.singh@amd.com, sunilmut@microsoft.com
+References: <20210530150628.2063957-1-ltykernel@gmail.com>
+ <20210530150628.2063957-9-ltykernel@gmail.com>
+ <20210607064312.GB24478@lst.de>
+ <94038087-a33c-93c5-27bf-7ec1f6f5f0e3@arm.com> <20210614153252.GA1741@lst.de>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <9e347c4c-d4b9-129c-10d2-0d7ff1b917cc@gmail.com>
+Date:   Tue, 15 Jun 2021 23:24:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43e67d7b-aab9-db1f-f74b-a87ba7442d47@arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20210614153252.GA1741@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 11:28:12AM -0500, Jeremy Linton via Libc-alpha wrote:
-> Hi,
+On 6/14/2021 11:32 PM, Christoph Hellwig wrote:
+> On Mon, Jun 14, 2021 at 02:49:51PM +0100, Robin Murphy wrote:
+>> FWIW, I think a better generalisation for this would be allowing
+>> set_memory_decrypted() to return an address rather than implicitly
+>> operating in-place, and hide all the various hypervisor hooks behind that.
 > 
-> On 6/4/21 6:24 AM, Mark Brown wrote:
-> >Deployments of BTI on arm64 have run into issues interacting with
-> >systemd's MemoryDenyWriteExecute feature.  Currently for dynamically
-> >linked executables the kernel will only handle architecture specific
-> >properties like BTI for the interpreter, the expectation is that the
-> >interpreter will then handle any properties on the main executable.
-> >For BTI this means remapping the executable segments PROT_EXEC |
-> >PROT_BTI.
-> >
-> >This interacts poorly with MemoryDenyWriteExecute since that is
-> >implemented using a seccomp filter which prevents setting PROT_EXEC on
-> >already mapped memory and lacks the context to be able to detect that
-> >memory is already mapped with PROT_EXEC.  This series resolves this by
-> >handling the BTI property for both the interpreter and the main
-> >executable.
+> Yes, something like that would be a good idea.  As-is
+> set_memory_decrypted is a pretty horribly API anyway due to passing
+> the address as void, and taking a size parameter while it works in units
+> of pages.  So I'd very much welcome a major overhaul of this API.
 > 
-> I've got a Fedora34 system booting in qemu or a model with BTI enabled. On
-> that system I took the systemd-resolved executable, which is one of the
-> services with MDWE enabled, and replaced a number of the bti's with nops. I
-> expect the service to continue to work with the fedora or mainline 5.13
-> kernel and it does. If instead I boot with MDWE=no for the service, it
-> should fail to start given either of those kernels, and it does.
-> 
-> Thus, I expect that with his patch applied to 5.13 the service will fail to
-> start regardless of the state of MDWE, but it seems to continue starting
-> when I set MDWE=yes. Same behavior with v1 FWTW.
-> 
-> Of course, there is a good chance I've messed something up or i'm missing
-> something. I should really validate the /lib/ld-linux behavior itself too. I
-> guess this could just as well be a glibc issue (f34 has glibc 2.33-5 which
-> appears to have the re-mmap on failure patch). Either way, systemd-resolved
-> is a LSB PIE, with /lib/ld-linux as its interpreter. I've not dug too deep
-> into debugging this, cause I've got a couple other things I need to deal
-> with in the next couple days, and I strongly dislike booting a full
-> debug+system on the model. chuckle, sorry...
 
-[...]
+Hi Christoph and Robin:
+	Thanks for your suggestion. I will try this idea in the next version. 
+Besides make the address translation into set_memory_
+decrypted() and return address, do you want to make other changes to the 
+API in order to make it more reasonable(e.g size parameter)?
 
-If the failure we're trying to detect is that BTI is undesirably left
-off for the main executable, surely replacing BTIs with NOPs will make
-no differenece?  The behaviour with PROT_BTI clear is strictly more
-permissive than with PROT_BTI set, so I'm not sure we can test the
-behaviour this way.
-
-Maybe I'm missing sometihng / confused myself somewhere.
-
-Looking at /proc/<pid>/maps after the process starts up may be a more
-reliable approach, so see what the actual prot value is on the main
-executable's text pages.
-
-Cheers
----Dave
+Thanks
