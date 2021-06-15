@@ -2,113 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A899D3A794F
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 10:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C902D3A79A6
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 10:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbhFOIte (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 04:49:34 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:41400 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbhFOIte (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 04:49:34 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 236491FD55;
-        Tue, 15 Jun 2021 08:47:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1623746849; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qsvBIKoBBDJEgHaKCzoXt6uHkCjR8pMwpup6Tl3TIWY=;
-        b=WwJmRcCYbA8r2cbd0yxaLSp4lsozxpCGL6nszt9InMByAVOLQ/Z5d+2k2XuFYFh9HPjXJD
-        ZodOGPzRpVMMb+SBx07LnMHJGoFS8aBCCnfqwQQHjppmJdh5iubbNnO5S+9AxJSi+GvAWD
-        WFdnDJP4wNe97E9c7jicUkbKP4kyxSM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1623746849;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qsvBIKoBBDJEgHaKCzoXt6uHkCjR8pMwpup6Tl3TIWY=;
-        b=PYlBYDzM/Z9Ap6CCtY2GQf8IZ/Q159Cmyb0cRvl9Ay1zffhPvWJ8EV5idnd2VUgJOBjczc
-        i1zl/1p02vC2Q5DQ==
-Received: from quack2.suse.cz (unknown [10.100.200.198])
-        by relay2.suse.de (Postfix) with ESMTP id 12232A3BA5;
-        Tue, 15 Jun 2021 08:47:29 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id C9A6F1F2C88; Tue, 15 Jun 2021 10:47:28 +0200 (CEST)
-Date:   Tue, 15 Jun 2021 10:47:28 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Marcin Juszkiewicz <marcin@juszkiewicz.com.pl>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH] quota: finish disable quotactl_path syscall
-Message-ID: <20210615084728.GG29751@quack2.suse.cz>
-References: <20210614153712.313707-1-marcin@juszkiewicz.com.pl>
- <20210614164454.GC29751@quack2.suse.cz>
+        id S230455AbhFOI7P convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 15 Jun 2021 04:59:15 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:57063 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230332AbhFOI7P (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 15 Jun 2021 04:59:15 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-68-ED9ugU7XN0-kOTjofplO1Q-1; Tue, 15 Jun 2021 09:57:08 +0100
+X-MC-Unique: ED9ugU7XN0-kOTjofplO1Q-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 15 Jun
+ 2021 09:57:07 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.018; Tue, 15 Jun 2021 09:57:07 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matteo Croce' <mcroce@linux.microsoft.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>
+Subject: RE: [PATCH 1/3] riscv: optimized memcpy
+Thread-Topic: [PATCH 1/3] riscv: optimized memcpy
+Thread-Index: AQHXYY/3XkdMIImxVUmoQbZ37iIZIqsUw3ig
+Date:   Tue, 15 Jun 2021 08:57:07 +0000
+Message-ID: <6cff2a895db94e6fadd4ddffb8906a73@AcuMS.aculab.com>
+References: <20210615023812.50885-1-mcroce@linux.microsoft.com>
+ <20210615023812.50885-2-mcroce@linux.microsoft.com>
+In-Reply-To: <20210615023812.50885-2-mcroce@linux.microsoft.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210614164454.GC29751@quack2.suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon 14-06-21 18:44:54, Jan Kara wrote:
-> On Mon 14-06-21 17:37:12, Marcin Juszkiewicz wrote:
-> > In commit 5b9fedb31e47 ("quota: Disable quotactl_path syscall") Jan Kara
-> > disabled quotactl_path syscall on several architectures.
-> > 
-> > This commit disables it on all architectures using unified list of
-> > system calls:
-> > 
-> > - arm64
-> > - arc
-> > - csky
-> > - h8300
-> > - hexagon
-> > - nds32
-> > - nios2
-> > - openrisc
-> > - riscv (32/64)
-> > 
-> > CC: Jan Kara <jack@suse.cz>
-> > CC: Christian Brauner <christian.brauner@ubuntu.com>
-> > CC: Sascha Hauer <s.hauer@pengutronix.de>
-> > Link: https://lore.kernel.org/lkml/20210512153621.n5u43jsytbik4yze@wittgenstein
-> > 
-> > Signed-off-by: Marcin Juszkiewicz <marcin@juszkiewicz.com.pl>
+From: Matteo Croce
+> Sent: 15 June 2021 03:38
 > 
-> Aha, I've missed that one. Thanks for catching this. Arnd, will you take
-> this patch or should I take it through my tree?
+> Write a C version of memcpy() which uses the biggest data size allowed,
+> without generating unaligned accesses.
 
-OK, I want this to make it for rc7 so I've pulled this patch to my tree and
-will push it to Linus in a few days.
+I'm surprised that the C loop:
 
-								Honza
+> +		for (; count >= bytes_long; count -= bytes_long)
+> +			*d.ulong++ = *s.ulong++;
 
-> > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> > index 6de5a7fc066b..d2a942086fcb 100644
-> > --- a/include/uapi/asm-generic/unistd.h
-> > +++ b/include/uapi/asm-generic/unistd.h
-> > @@ -863,8 +863,7 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
-> >  __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
-> >  #define __NR_mount_setattr 442
-> >  __SYSCALL(__NR_mount_setattr, sys_mount_setattr)
-> > -#define __NR_quotactl_path 443
-> > -__SYSCALL(__NR_quotactl_path, sys_quotactl_path)
-> > +/* 443 is reserved for quotactl_path */
-> >  
-> >  #define __NR_landlock_create_ruleset 444
-> >  __SYSCALL(__NR_landlock_create_ruleset, sys_landlock_create_ruleset)
-> > -- 
-> > 2.31.1
-> > 
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+ends up being faster than the ASM 'read lots' - 'write lots' loop.
+
+Especially since there was an earlier patch to convert
+copy_to/from_user() to use the ASM 'read lots' - 'write lots' loop
+instead of a tight single register copy loop.
+
+I'd also guess that the performance needs to be measured on
+different classes of riscv cpu.
+
+A simple cpu will behave differently to one that can execute
+multiple instructions per clock.
+Any form of 'out of order' execution also changes things.
+The other big change is whether the cpu can to a memory
+read and write in the same clock.
+
+I'd guess that riscv exist with some/all of those features.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
