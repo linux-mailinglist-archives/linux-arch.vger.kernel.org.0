@@ -2,119 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E05213A773B
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 08:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AC03A7765
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 08:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbhFOGnb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 02:43:31 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:15402 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230199AbhFOGnW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 15 Jun 2021 02:43:22 -0400
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4G3zH21dXgzB9CC;
-        Tue, 15 Jun 2021 08:41:02 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dzEpTriwX5Bz; Tue, 15 Jun 2021 08:41:02 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4G3zH20pPHzB9BM;
-        Tue, 15 Jun 2021 08:41:02 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CC08A8B7A3;
-        Tue, 15 Jun 2021 08:41:01 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id fa3HmGORbATw; Tue, 15 Jun 2021 08:41:01 +0200 (CEST)
-Received: from po9473vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 97E9E8B7A2;
-        Tue, 15 Jun 2021 08:41:01 +0200 (CEST)
-Received: by po9473vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 709556627B; Tue, 15 Jun 2021 06:41:01 +0000 (UTC)
-Message-Id: <684939dcfef612fac573d1b983a977215b71f64d.1623739212.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <b813c1f4d3dab2f51300eac44d99029aa8e57830.1623739212.git.christophe.leroy@csgroup.eu>
-References: <b813c1f4d3dab2f51300eac44d99029aa8e57830.1623739212.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH 5/7] signal: Add unsafe_copy_siginfo_to_user()
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        id S229493AbhFOGzM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 02:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229488AbhFOGzL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 02:55:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C298C061574;
+        Mon, 14 Jun 2021 23:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HjqockSIfBbywK4+NYwBOmrFJ3f5fy0pM7CjjlotpPw=; b=Hb/kwJ8t4jmHWjBHR9cw2/GUN0
+        Za3ApHmavr4okvhH8OnZ7KI18mt0S8WR5Oz704W/FyQE3AuTOB8AKlA2rcp9DLO/R5JXk7+sIOgph
+        WoYvfoRo+6sFmU4D80e+bzpxWQDpG+Zrrj4MKwsVgOY0evtx3fXRmyRbKVXEIDMUxThsuDzFCcVwf
+        3j0ZbgnP6g3RCwBFADY+pjBI3VTItkFEVufT+aRspwgmYgYaOora+BorDssyLfspLkNCnLepSr6vR
+        ABLQFcJc+EYyKXop476njYyvnCoods/Xzw4x+Zzz+K61xP54T7Ic1qB3sF1nBpoG3GxBeYLxAGgGd
+        WMrQFy/Q==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lt2w6-006BMm-9v; Tue, 15 Jun 2021 06:52:37 +0000
+Date:   Tue, 15 Jun 2021 07:52:34 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arch@vger.kernel.org
-Date:   Tue, 15 Jun 2021 06:41:01 +0000 (UTC)
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] signal: Add unsafe_copy_siginfo_to_user()
+Message-ID: <YMhOMoKKvew0YYCt@infradead.org>
+References: <b813c1f4d3dab2f51300eac44d99029aa8e57830.1623739212.git.christophe.leroy@csgroup.eu>
+ <684939dcfef612fac573d1b983a977215b71f64d.1623739212.git.christophe.leroy@csgroup.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <684939dcfef612fac573d1b983a977215b71f64d.1623739212.git.christophe.leroy@csgroup.eu>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In the same spirit as commit fb05121fd6a2 ("signal: Add
-unsafe_get_compat_sigset()"), implement an 'unsafe' version of
-copy_siginfo_to_user() in order to use it within user access blocks.
+On Tue, Jun 15, 2021 at 06:41:01AM +0000, Christophe Leroy wrote:
+> +	unsafe_copy_to_user(__ucs_to, __ucs_from,			\
+> +			    sizeof(struct kernel_siginfo), label);	\
+> +	unsafe_clear_user(__ucs_expansion, SI_EXPANSION_SIZE, label);	\
+> +} while (0)
 
-For that, also add an 'unsafe' version of clear_user().
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- include/linux/signal.h  | 15 +++++++++++++++
- include/linux/uaccess.h |  1 +
- kernel/signal.c         |  5 -----
- 3 files changed, 16 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/signal.h b/include/linux/signal.h
-index 201f88e3738b..beac7b5e4acc 100644
---- a/include/linux/signal.h
-+++ b/include/linux/signal.h
-@@ -35,6 +35,21 @@ static inline void copy_siginfo_to_external(siginfo_t *to,
- int copy_siginfo_to_user(siginfo_t __user *to, const kernel_siginfo_t *from);
- int copy_siginfo_from_user(kernel_siginfo_t *to, const siginfo_t __user *from);
- 
-+static __always_inline char __user *si_expansion(const siginfo_t __user *info)
-+{
-+	return ((char __user *)info) + sizeof(struct kernel_siginfo);
-+}
-+
-+#define unsafe_copy_siginfo_to_user(to, from, label) do {		\
-+	siginfo_t __user *__ucs_to = to;				\
-+	const kernel_siginfo_t *__ucs_from = from;			\
-+	char __user *__ucs_expansion = si_expansion(__ucs_to);		\
-+									\
-+	unsafe_copy_to_user(__ucs_to, __ucs_from,			\
-+			    sizeof(struct kernel_siginfo), label);	\
-+	unsafe_clear_user(__ucs_expansion, SI_EXPANSION_SIZE, label);	\
-+} while (0)
-+
- enum siginfo_layout {
- 	SIL_KILL,
- 	SIL_TIMER,
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index c05e903cef02..37073caac474 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -398,6 +398,7 @@ long strnlen_user_nofault(const void __user *unsafe_addr, long count);
- #define unsafe_put_user(x,p,e) unsafe_op_wrap(__put_user(x,p),e)
- #define unsafe_copy_to_user(d,s,l,e) unsafe_op_wrap(__copy_to_user(d,s,l),e)
- #define unsafe_copy_from_user(d,s,l,e) unsafe_op_wrap(__copy_from_user(d,s,l),e)
-+#define unsafe_clear_user(d, l, e) unsafe_op_wrap(__clear_user(d, l), e)
- static inline unsigned long user_access_save(void) { return 0UL; }
- static inline void user_access_restore(unsigned long flags) { }
- #endif
-diff --git a/kernel/signal.c b/kernel/signal.c
-index f7c6ffcbd044..7a366331d2b7 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -3286,11 +3286,6 @@ enum siginfo_layout siginfo_layout(unsigned sig, int si_code)
- 	return layout;
- }
- 
--static inline char __user *si_expansion(const siginfo_t __user *info)
--{
--	return ((char __user *)info) + sizeof(struct kernel_siginfo);
--}
--
- int copy_siginfo_to_user(siginfo_t __user *to, const kernel_siginfo_t *from)
- {
- 	char __user *expansion = si_expansion(to);
--- 
-2.25.0
-
+unsafe_clear_user does not exist at this point, and even your later
+patch only adds it for powerpc.
