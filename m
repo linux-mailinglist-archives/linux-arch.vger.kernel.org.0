@@ -2,80 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E59713A8620
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 18:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9453B3A8883
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 20:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbhFOQOs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 12:14:48 -0400
-Received: from mail-yb1-f178.google.com ([209.85.219.178]:37863 "EHLO
-        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbhFOQOr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 12:14:47 -0400
-Received: by mail-yb1-f178.google.com with SMTP id b13so21314600ybk.4;
-        Tue, 15 Jun 2021 09:12:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/Wv7CHWzkockHzF8pGG/3fcdtGeJKMuare4U3i4RVgA=;
-        b=UCGRMHje62eyMwKro/B+MJhQjmxxSp5Rm821t9QFKYUhWbT59WOvtDVarRAatvjTXk
-         1icJkJmsz9XvlX3b3KYN//zZe1N/i9eDq2rYTpiAiVxcn9ebv2Z3cb2lYUgHpXPvxxMU
-         Gw+98wBkXd75EW0ZXXoUypN8rWtKWZVse+jwyRGden7n1dveo1He/FMSsfwy+LQCOZrL
-         jWw3BgXAEAXMv5ZCiOk+rw50ZeRChid4u6sRh4t7Azl43Vx0psK+7b2mvrbO7ECGAB5p
-         H2mMJs2LwEsJoY8ID9kXQVUuI3NWrzPwp2k50lbPJP/GD1Yakogr9AZQPWMZVdmQuomh
-         BptQ==
-X-Gm-Message-State: AOAM530oei9rFdjuELizIlJ6B9kYnkxHDM8UT5xWcU1DOjpztr6YfWPb
-        BXU1jt/f/VyZT/xHNZNihuK265q29Kmo/wCWSyw=
-X-Google-Smtp-Source: ABdhPJzem0nOOYC0h+0gvK/9pLOrRYLo1iiurmeFo4Dna/ffTj8redI7Hw0vk+bc5/9Buy9+CHwRZcgMNeRx5wRB8ac=
-X-Received: by 2002:a5b:d11:: with SMTP id y17mr33994254ybp.18.1623773562254;
- Tue, 15 Jun 2021 09:12:42 -0700 (PDT)
+        id S231380AbhFOS0k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 14:26:40 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:50967 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231176AbhFOS0k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 14:26:40 -0400
+Received: from [192.168.1.155] ([95.115.9.120]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MS4WT-1lixGP0g7H-00TTUD; Tue, 15 Jun 2021 20:23:58 +0200
+Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
+To:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Greg KH <greg@kroah.com>, Christoph Lameter <cl@gentwo.de>,
+        Theodore Ts'o <tytso@mit.edu>, Jiri Kosina <jikos@kernel.org>,
+        ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
+References: <YLEIKk7IuWu6W4Sy@casper.infradead.org> <YH2hs6EsPTpDAqXc@mit.edu>
+ <nycvar.YFH.7.76.2104281228350.18270@cbobk.fhfr.pm>
+ <YIx7R6tmcRRCl/az@mit.edu>
+ <alpine.DEB.2.22.394.2105271522320.172088@gentwo.de>
+ <YK+esqGjKaPb+b/Q@kroah.com>
+ <c46dbda64558ab884af060f405e3f067112b9c8a.camel@HansenPartnership.com>
+ <1745326.1623409807@warthog.procyon.org.uk>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Message-ID: <e47706ee-3e4b-8f15-963f-292b5e47cb1d@metux.net>
+Date:   Tue, 15 Jun 2021 20:23:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-References: <20210615023812.50885-1-mcroce@linux.microsoft.com>
- <20210615023812.50885-2-mcroce@linux.microsoft.com> <6cff2a895db94e6fadd4ddffb8906a73@AcuMS.aculab.com>
- <CAEUhbmV+Vi0Ssyzq1B2RTkbjMpE21xjdj2MSKdLydgW6WuCKtA@mail.gmail.com>
- <1632006872b04c64be828fa0c4e4eae0@AcuMS.aculab.com> <CAEUhbmU0cPkawmFfDd_sPQnc9V-cfYd32BCQo4Cis3uBKZDpXw@mail.gmail.com>
-In-Reply-To: <CAEUhbmU0cPkawmFfDd_sPQnc9V-cfYd32BCQo4Cis3uBKZDpXw@mail.gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Tue, 15 Jun 2021 18:12:31 +0200
-Message-ID: <CANBLGcxi2mEA5MnV-RL2zFpB2T+OytiHyOLKjOrMXgmAh=fHAw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] riscv: optimized memcpy
-To:     Bin Meng <bmeng.cn@gmail.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Gary Guo <gary@garyguo.net>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1745326.1623409807@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: tl
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:l1dWw5GINi5d9D6KdR/MfM5/FegWRbfl0vjxnR2yUdW9Vwv9oLT
+ MEAHr8PyP8YcC6o+Yqn4LF4f1dF2zEYvYGt60YROchUahACz9shvV58vHwPsKWuLb8rGm3P
+ IR2CxVWI5mN7CFH8hcq3ue3m5Nn8F7oX0u8tjkhXfP1fB4XQ+9VueDbHjcVaZZ82YsvanSM
+ rftvqMwBTus20ymBQFk4Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ic+UfAApxeg=:xMi+C1LWXRsimoNEKsnwKG
+ 5mxcU0vHtj9Zm5HEjCy9h9sUq5qPtpjfzWgy0mhHsk86qbr9dJQfN7QAj9Quv1JbUcrcCRzdl
+ bUfQvSEb0KC+9hi+WwMlV38TArCl/DAouSqiCQNao7pvtjN1M9CC8E86nLAHtrAMf6E9XI1dc
+ tCA5UBAou1Z1Dm02ZUCUDV1JdZcL91ADBpOOiJ64NaVXgv2BB42jpmTg8pubJ2MJSkM4dDY1G
+ wrLS0oWdW9mIun9Og6RY3Bg0NUo09Wl5QXxyzpWw8WVYkbSpnHxhumPCGcbJMAJyLToVBeWwi
+ AC8dECaRBRfRBTG4medz4Eow5RSIuY6dBBIXI+dkdb/zBvt60HeWrL9FU76+szy+iBNrtxLYd
+ Du0Z+O4kxMoxbR+xZ9b3KnABes+BV82fRKnWKuHb9E3I6whEmhwV3KVhx3wDjdJwqTyaMePQi
+ zx08rCWC2amopXPxWcwFxvphs2Mox2d2bgIaZWix19xu5b2A6NEeZ9Y/RDvnpxnGWOKM5t0td
+ cE2C39N+fJT2AJRCXYwZLE=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 15 Jun 2021 at 15:29, Bin Meng <bmeng.cn@gmail.com> wrote:
-> ...
-> Yes, Gary Guo sent one patch long time ago against the broken assembly
-> version, but that patch was still not applied as of today.
-> https://patchwork.kernel.org/project/linux-riscv/patch/20210216225555.4976-1-gary@garyguo.net/
->
-> I suggest Matteo re-test using Gary's version.
+On 11.06.21 13:10, David Howells wrote:
 
-That's a good idea, but if you read the replies to Gary's original patch
-https://lore.kernel.org/linux-riscv/20210216225555.4976-1-gary@garyguo.net/
-.. both Gary, Palmer and David would rather like a C-based version.
-This is one attempt at providing that.
+> One thing that concerns me about flying to the US is going through multiple
+> busy international airports - take Heathrow which didn't separate incoming
+> travellers from red-listed countries from those of amber- or green- until like
+> a week ago.
+> 
+> Would it be practical/economical to charter a plane to fly, say, from a less
+> busy airport in Europe to a less busy airport in the US and back again if we
+> could get enough delegates together to make it worthwhile?
 
-> > I'm surprised IP_NET_ALIGN isn't set to 2 to try to
-> > avoid all these misaligned copies in the network stack.
-> > Although avoiding 8n+4 aligned data is rather harder.
-> >
-> > Misaligned copies are just best avoided - really even on x86.
-> > The 'real fun' is when the access crosses TLB boundaries.
->
-> Regards,
-> Bin
+Wouldn't just taking prophylatic meds like CDS or HCQ and/or hi-dose
+vitamins (C, D3+K2) be way more cost effective and flexible than to
+charter a whole plane ?
+
+Don't have personal experience w/ HCQ yet, but CDS is pretty cheap and
+easy to use (prescription free). Of course, one should dig a bit into
+the specialist literature, before playing around - and take a few days
+for finding the right personal dose. especially when one's cumbered w/ 
+parasites (herxheimer)
+
+
+--mtx
+
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
