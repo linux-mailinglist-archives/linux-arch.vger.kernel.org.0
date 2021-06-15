@@ -2,99 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 939E03A77F8
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 09:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198853A7951
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jun 2021 10:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbhFOHbD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Jun 2021 03:31:03 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:11663 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229908AbhFOHbC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 15 Jun 2021 03:31:02 -0400
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4G40LK5WyBzBBQy;
-        Tue, 15 Jun 2021 09:28:57 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id utAMxQNL3e0X; Tue, 15 Jun 2021 09:28:57 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4G40LK2Q82zBBDH;
-        Tue, 15 Jun 2021 09:28:57 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 364218B7A3;
-        Tue, 15 Jun 2021 09:28:57 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id HMyoXwMPJYV4; Tue, 15 Jun 2021 09:28:57 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BFA318B7A2;
-        Tue, 15 Jun 2021 09:28:56 +0200 (CEST)
-Subject: Re: [PATCH 5/7] signal: Add unsafe_copy_siginfo_to_user()
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-References: <b813c1f4d3dab2f51300eac44d99029aa8e57830.1623739212.git.christophe.leroy@csgroup.eu>
- <684939dcfef612fac573d1b983a977215b71f64d.1623739212.git.christophe.leroy@csgroup.eu>
- <YMhOMoKKvew0YYCt@infradead.org>
- <7061fbee-cc82-2699-cf12-e5a4ae46940f@csgroup.eu>
- <YMhU3Df7foVo9BaM@infradead.org>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <ce8f56c6-3312-8fb6-7389-1498d6bb9cb7@csgroup.eu>
-Date:   Tue, 15 Jun 2021 09:28:54 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230519AbhFOIts (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Jun 2021 04:49:48 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:59837 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231161AbhFOIts (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Jun 2021 04:49:48 -0400
+Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MdwRi-1lLfir10Eg-00b5Va; Tue, 15 Jun 2021 10:47:43 +0200
+Received: by mail-wm1-f53.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso1170424wmh.4;
+        Tue, 15 Jun 2021 01:47:43 -0700 (PDT)
+X-Gm-Message-State: AOAM5330EjP6WWHsltiDv2xyBKLUHYXumQJ69RM7gt6B5CQR0P9Gueu8
+        GK/322yCMRloyydR1dO01cyYQQ54boSikRHb9J8=
+X-Google-Smtp-Source: ABdhPJwlOlvyBnTmdbYYrL60W15jGBG2tOZQL5Qf0MNgMdBpE8tHfalX5VQTsaiojZvIPdI3ABttEP6/qcGwH98RFS8=
+X-Received: by 2002:a1c:28a:: with SMTP id 132mr2715045wmc.120.1623746862894;
+ Tue, 15 Jun 2021 01:47:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YMhU3Df7foVo9BaM@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+References: <20210614153712.313707-1-marcin@juszkiewicz.com.pl> <20210614164454.GC29751@quack2.suse.cz>
+In-Reply-To: <20210614164454.GC29751@quack2.suse.cz>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 15 Jun 2021 10:45:38 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3XbbJ8WnzdsE5f4Uk-O5Z_mBsjc21E6AKuVavvF-_3Cw@mail.gmail.com>
+Message-ID: <CAK8P3a3XbbJ8WnzdsE5f4Uk-O5Z_mBsjc21E6AKuVavvF-_3Cw@mail.gmail.com>
+Subject: Re: [PATCH] quota: finish disable quotactl_path syscall
+To:     Jan Kara <jack@suse.cz>
+Cc:     Marcin Juszkiewicz <marcin@juszkiewicz.com.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:KkbO7KzbEuX4jWx+R8lfjIckfLNoYmrZriVAoSBECDqAS6Qw2V4
+ Czt9hWtaGxBHVSTq+6fBoVxr7WqCmy8XZRLeC2s14kjAsvmQ83qmCP0t45OQRXNZ4XosLjX
+ QHY2ygrefDUekWJpjwg40Nz7g9QIEPtFzXZjQ68XLNYqVep/cBnFFf4OZg5C4pqt72viWBi
+ QF9B8iR77171claJHQJ+w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:J0cL1T0iGeE=:q0VTqCjwi2OsH24nZIEnmn
+ q5doy+eIaGss//hXX8FMoG+Kun0t6FEZK6WTkd1H0Wkzg6WTJah051KK845DcBkXoAh9z1guK
+ hWbrs5Z8o5rlT7UaGl3E0qQQxYE4wvxfTkl8UH2S3SX7S7rtJYjkjZnlYrNowv4JDej29ZbKR
+ j+9IvVPLzLzQtGXucju5VAf8MaRhEQlB0mgwzV8udqzPZbB9CcjJDYHFQqYuE9H2npXFcaHX+
+ cop+6l1dHCfyOKfgAKyvODVTYwKuX8Sz2fxHYSSsPHs6qp78BBgYIo6Voglh418HHxMzZex4B
+ 3ypuUybf3bDqg4Qh0KYn43N7h6JG+WIDgvt4A0BN1nktB6sVH5qSoEwgBw4p0T1SWV9IwI0nA
+ XfAuohviQDrbAQ6E7IBW+R6bWV78CXglTpeFntTjX2ubvawooyFctzQ/u+oldR+nCZd7pcFFJ
+ vLVD/gJE3IpPuwKh+K+h/bCKtlf/3VYr5qiqGIS3LGv9CBu3I9xW0t9dikkUWT3OCoDALUfkd
+ SF1gf+De13CJxhATbIWfnB2fA8tmvpoPYuvyrzd/eVMTRVVI0jBjjA6GMMQUgd0tynHbrRyV3
+ gJgJ8dvNwWxKkLZYlDoGZ2m6nmzY6f8kuuh9/7eiVEV3QEexE3g6dLZpCjzEceNTBsPeJ/Db/
+ pjkU=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Jun 14, 2021 at 6:45 PM Jan Kara <jack@suse.cz> wrote:
+>
+> On Mon 14-06-21 17:37:12, Marcin Juszkiewicz wrote:
+> > In commit 5b9fedb31e47 ("quota: Disable quotactl_path syscall") Jan Kara
+> > disabled quotactl_path syscall on several architectures.
+> >
+> > This commit disables it on all architectures using unified list of
+> > system calls:
+> >
+> > - arm64
+> > - arc
+> > - csky
+> > - h8300
+> > - hexagon
+> > - nds32
+> > - nios2
+> > - openrisc
+> > - riscv (32/64)
+> >
+> > CC: Jan Kara <jack@suse.cz>
+> > CC: Christian Brauner <christian.brauner@ubuntu.com>
+> > CC: Sascha Hauer <s.hauer@pengutronix.de>
+> > Link: https://lore.kernel.org/lkml/20210512153621.n5u43jsytbik4yze@wittgenstein
+> >
+> > Signed-off-by: Marcin Juszkiewicz <marcin@juszkiewicz.com.pl>
+>
+> Aha, I've missed that one. Thanks for catching this. Arnd, will you take
+> this patch or should I take it through my tree?
 
+I don't have any other fixes for 5.13 at the moment, so I would prefer it if
+you could pick it up.
 
-Le 15/06/2021 à 09:21, Christoph Hellwig a écrit :
-> On Tue, Jun 15, 2021 at 09:03:42AM +0200, Christophe Leroy wrote:
->>
->>
->> Le 15/06/2021 ?? 08:52, Christoph Hellwig a ??crit??:
->>> On Tue, Jun 15, 2021 at 06:41:01AM +0000, Christophe Leroy wrote:
->>>> +	unsafe_copy_to_user(__ucs_to, __ucs_from,			\
->>>> +			    sizeof(struct kernel_siginfo), label);	\
->>>> +	unsafe_clear_user(__ucs_expansion, SI_EXPANSION_SIZE, label);	\
->>>> +} while (0)
->>>
->>> unsafe_clear_user does not exist at this point, and even your later
->>> patch only adds it for powerpc.
->>>
->>
->> You missed below chunck I guess:
->>
->>> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
->>> index c05e903cef02..37073caac474 100644
->>> --- a/include/linux/uaccess.h
->>> +++ b/include/linux/uaccess.h
->>> @@ -398,6 +398,7 @@ long strnlen_user_nofault(const void __user *unsafe_addr, long count);
->>>    #define unsafe_put_user(x,p,e) unsafe_op_wrap(__put_user(x,p),e)
->>>    #define unsafe_copy_to_user(d,s,l,e) unsafe_op_wrap(__copy_to_user(d,s,l),e)
->>>    #define unsafe_copy_from_user(d,s,l,e) unsafe_op_wrap(__copy_from_user(d,s,l),e)
->>> +#define unsafe_clear_user(d, l, e) unsafe_op_wrap(__clear_user(d, l), e)
-> 
-> That doesn't help with architectures that define user_access_begin but
-> do not define unsafe_clear_user. (i.e. x86).
-> 
-
-Yes, the day they want to use unsafe_copy_siginfo_to_user() they'll have to implement 
-unsafe_clear_user().
-
-Until that day, they don't need unsafe_clear_user() and I'm sure the result would be disastrous if a 
-poor powerpc guy like me was trying to implement some low level x86 code.
-
-Similar to unsafe_get_compat_sigset(), an arch wanting to use it has to implement 
-unsafe_copy_from_user().
+       Arnd
