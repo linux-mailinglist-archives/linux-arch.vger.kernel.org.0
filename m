@@ -2,100 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3BE3A9104
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 07:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADF73A9430
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 09:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbhFPFOU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Jun 2021 01:14:20 -0400
-Received: from foss.arm.com ([217.140.110.172]:54974 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231189AbhFPFOT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 16 Jun 2021 01:14:19 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9374212FC;
-        Tue, 15 Jun 2021 22:12:13 -0700 (PDT)
-Received: from [192.168.122.166] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC8403F719;
-        Tue, 15 Jun 2021 22:12:12 -0700 (PDT)
-Subject: Re: [PATCH v2 0/3] arm64: Enable BTI for the executable as well as
- the interpreter
-To:     Dave Martin <Dave.Martin@arm.com>, Mark Brown <broonie@kernel.org>
-Cc:     linux-arch@vger.kernel.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        libc-alpha@sourceware.org, Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20210604112450.13344-1-broonie@kernel.org>
- <43e67d7b-aab9-db1f-f74b-a87ba7442d47@arm.com>
- <20210615152203.GR4187@arm.com> <20210615153341.GI5149@sirena.org.uk>
- <20210615154106.GS4187@arm.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-Message-ID: <6a371853-1f48-3a69-6532-ca5c178cb3dc@arm.com>
-Date:   Wed, 16 Jun 2021 00:12:08 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231730AbhFPHkk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Jun 2021 03:40:40 -0400
+Received: from mail-vk1-f172.google.com ([209.85.221.172]:40567 "EHLO
+        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231187AbhFPHkj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 03:40:39 -0400
+Received: by mail-vk1-f172.google.com with SMTP id i17so407993vkd.7;
+        Wed, 16 Jun 2021 00:38:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oYkI/zG40URv+m/LERapdYdXE8mdGOgDXjJQ7nWdKJQ=;
+        b=hSydv50Be21Z9io2d5aYTlJC0pqLDajaC4OV/GbBaoVCS69QWl7tBtBg6133ta3HB2
+         GxMBGue8XramZqlfoFghbKwrW/8RCaqJdOYlz7aVhFEapHoygUkjYHcv5kMGmymiWNCe
+         nMbauQ8ePyF3j7M2nQKgYM0zShlaD0H4XB+yVsZkBUe4kG4EhhgqMECb+X7cPiISqdCm
+         7tmQkr36MS5Sf73LReF9GJrRprICg0iN9i8nC1oN0ef4buBZBwrvAxS03hHCxM8494RM
+         WzJO8WR2apjyFa7EWztmOmyHGRE8VFrQEHJ7luZYYge1to8dMX+yrWRNjO4REBwqyCOl
+         DGXA==
+X-Gm-Message-State: AOAM531x5+nuni9NlNByuwomCGd09EM5Ru0B8OttCdFd3nmHKtNJKn6P
+        +ki5u50Dkz2TmT+/SdNA2wJ/PRAcSSTlVrj1m5c=
+X-Google-Smtp-Source: ABdhPJzufbJykYOmxZN0p1SAxGmJWo5X7VotLxBsWJYFnoUcAIbLyiwJ2blqdHa1Jr10POv3l3B1Oi8N3GGoHXROasQ=
+X-Received: by 2002:a1f:9505:: with SMTP id x5mr8101727vkd.6.1623829113459;
+ Wed, 16 Jun 2021 00:38:33 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210615154106.GS4187@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <87sg1p30a1.fsf@disp2133> <CAHk-=wjiBXCZBxLiCG5hxpd0vMkMjiocenponWygG5SCG6DXNw@mail.gmail.com>
+ <87pmwsytb3.fsf@disp2133> <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
+ <87sg1lwhvm.fsf@disp2133> <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
+ <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com> <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
+ <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com> <87fsxjorgs.fsf@disp2133>
+In-Reply-To: <87fsxjorgs.fsf@disp2133>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 16 Jun 2021 09:38:22 +0200
+Message-ID: <CAMuHMdUkhbq+tOyrpyd5hKGGcpYduBnbnXKFBwEfCGjw5XGYVA@mail.gmail.com>
+Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Michael Schmitz <schmitzmic@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+Hi Eric,
 
-On 6/15/21 10:41 AM, Dave Martin wrote:
-> On Tue, Jun 15, 2021 at 04:33:41PM +0100, Mark Brown via Libc-alpha wrote:
->> On Tue, Jun 15, 2021 at 04:22:06PM +0100, Dave Martin wrote:
->>> On Thu, Jun 10, 2021 at 11:28:12AM -0500, Jeremy Linton via Libc-alpha wrote:
->>
->>>> Thus, I expect that with his patch applied to 5.13 the service will fail to
->>>> start regardless of the state of MDWE, but it seems to continue starting
->>>> when I set MDWE=yes. Same behavior with v1 FWTW.
->>
->>> If the failure we're trying to detect is that BTI is undesirably left
->>> off for the main executable, surely replacing BTIs with NOPs will make
->>> no differenece?  The behaviour with PROT_BTI clear is strictly more
->>> permissive than with PROT_BTI set, so I'm not sure we can test the
->>> behaviour this way.
->>
->>> Maybe I'm missing sometihng / confused myself somewhere.
->>
->> The issue this patch series is intended to address is that BTI gets
->> left off since the dynamic linker is unable to enable PROT_BTI on the
->> main executable.  We're looking to see that we end up with the stricter
->> permissions checking of BTI, with the issue present landing pads
->> replaced by NOPs will not fault but once the issue is addressed they
->> should start faulting.
-> 
-> Ah, right -- I got the test backwards in my head.  Yes, that sounds
-> reasonable.
+On Tue, Jun 15, 2021 at 9:32 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Do you happen to know if there is userspace that will run
+> in qemu-system-m68k that can be used for testing?
 
-Yes, the good thing about doing both the success and failure cases 
-rather than just checking smaps is that one can be assured the emulation 
-env and all the pieces are working correctly, not just the mappings,
+There's a link to an image in Laurent's patch series "[PATCH 0/2]
+m68k: Add Virtual M68k Machine"
+https://lore.kernel.org/linux-m68k/20210323221430.3735147-1-laurent@vivier.eu/
 
+Gr{oetje,eeting}s,
 
-Anyway, it looks like v3 is behaving as expected, I'm going to let it 
-run a few more tests and presumably post a tested-by on the set tomorrow.
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Thanks,
-
-> 
->>> Looking at /proc/<pid>/maps after the process starts up may be a more
->>> reliable approach, so see what the actual prot value is on the main
->>> executable's text pages.
->>
->> smaps rather than maps but yes, executable pages show up as "ex" and BTI
->> adds a "bt" tag in VmFlags.
-> 
-> Fumbled that -- yes, I meant smaps!
-> 
-> Ignore me...
-> 
-> Cheers
-> ---Dave
-> 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
