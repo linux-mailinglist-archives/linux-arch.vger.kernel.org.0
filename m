@@ -2,56 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6663AA479
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 21:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C863AA4E3
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 22:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232637AbhFPTnO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Jun 2021 15:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
+        id S232873AbhFPUDT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Jun 2021 16:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbhFPTnN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 15:43:13 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96131C061574;
-        Wed, 16 Jun 2021 12:41:07 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id x19so1658468pln.2;
-        Wed, 16 Jun 2021 12:41:07 -0700 (PDT)
+        with ESMTP id S231490AbhFPUDS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 16:03:18 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0D6C061574
+        for <linux-arch@vger.kernel.org>; Wed, 16 Jun 2021 13:01:11 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id q20so6305879lfo.2
+        for <linux-arch@vger.kernel.org>; Wed, 16 Jun 2021 13:01:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=qb5d+U0Id8lIqAWfxQheAcWONeEcboJpT5+z508o/Ww=;
-        b=HQF8dUO0vj/JLY5AGo7v2s8QQaIzYV63qYOxawNXAC3aRARyE+nU5hzCMBYgwpOUA+
-         q8nRzMkhc/tm6xxqwnopRUIz9WhF/HjXQjuanWT1+4mEkJ0UbKeZivFfZx94lhKOnQOP
-         Ts7ZOjGA+YuFjIs9CLzBW3fINp+e9Um330Lz/Ig9wIZRxuRqLJJQam+5oQ2mzJV7WY1H
-         yGwhgdKL8GJ1aWOeIyR1DNwwTwqNOo7pvB7p1J30SaPr82rNVxB7EhI/vk2o1PYt2hoc
-         pp4iCipOjQ4/v83k/wL7M+dB89WD9kEBv4C8g2FUeiatzg/lKnEzH/64bvnzamhh106y
-         ef/w==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y0sGanNeM+6nVMH7hMipVVh7kfFvtaj9v71nplXpGOQ=;
+        b=W2AITzayliTdBtw+P2eGCat6m1fvimytrfbjpYp3F+ZqA7U78mdL6p9s1QlqYnA0Cu
+         HmuuCHptbwVi95FtTdSDCMlLPBnLl9I3IjPOnYExv6QFeCUpcrP5yEPGt2AUEAL6rQRa
+         AVA3P5mSOxUsuokFD59yB5+vElkaqAzJ+n8vs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=qb5d+U0Id8lIqAWfxQheAcWONeEcboJpT5+z508o/Ww=;
-        b=iYENDc5yElHPjw4YOGF82Qg2SfN9ravFncjx0gC0p/ww89ZHuTJVcq2Lc51syH/G1o
-         rws5ujpPSHK4QLJj4NyCsTd42pdfCJR9zmwvs+f94SSj7TSk21IVqjb6OHV2bOfA8CQr
-         YMHyyaBzHfusBYIC630haeUMfkKIReyNCi3SqZxMn3BS/l352VpR7pcj389sna7LOK+c
-         wp07OXWOdTsEqeYgQ0r0CRzaVPdzirska+/pCBnvSCmKPo9gV91KEUfJOh2X1vU4n1Y+
-         HekSh3bZG8tuLF+4EJvjR4QfH5aMIrIZi4zTBRJFj0fNZlaZ7t4nmK+QYqsQOFqhpBeg
-         bpPw==
-X-Gm-Message-State: AOAM531djmFcUav1tZQxXOEN4EKJ/ofDpnkdmU3ahvOX9pBRt7Wm+wl6
-        LUiub79CTJBjU7K35m75zX7uZRpocHJeTw==
-X-Google-Smtp-Source: ABdhPJzC0pt4q7UA0ciR0y49Yot7y5oDh8kUDh16LPHavXhtDkCpQ2gTyxwhSMJ+vZZwvexZYwYg7w==
-X-Received: by 2002:a17:90a:9f8f:: with SMTP id o15mr1473325pjp.55.1623872467040;
-        Wed, 16 Jun 2021 12:41:07 -0700 (PDT)
-Received: from ?IPv6:2001:df0:0:200c:9d12:c2c8:273e:6ffd? ([2001:df0:0:200c:9d12:c2c8:273e:6ffd])
-        by smtp.gmail.com with ESMTPSA id c14sm3086391pgv.86.2021.06.16.12.40.59
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y0sGanNeM+6nVMH7hMipVVh7kfFvtaj9v71nplXpGOQ=;
+        b=plWnqe/+8X2xEWEyoJZ6IytOGivUwCFbu2wJOyUvQ22ZiPGDIcZcJvUPJRwXhP97T3
+         KlqTKpApveFHBgWSko859o1b1VSAlri58inUXF7FktOTdlqF59Q0z4o8uckq+WN6k6bx
+         GBnmmSAvB9RdisN2fwLRfA7qFfPUsl9SBnSkywJGj5NiZuNOtYEk7UhSg5K9AEJcOysG
+         JzV3P1Mm/4HNCwBLntFMnoVy3uJbcdresrLgz+DSyyZnLRF+dEExhvrtYXlgFABGQ8i/
+         JC2qiRgXpvoCIw64yz5v50B6VMWcCYHiP4z09nn9jHidIGycEvKKBeedI2Qua9cdkpEb
+         eNRA==
+X-Gm-Message-State: AOAM531n91L4TOxdn5tbv7GinLOUuyphwJon7LuXJZdC1MwfymeTZUZ6
+        mjUb3sgXagKxw774YfdMWI3opipQVTac34YFkWk=
+X-Google-Smtp-Source: ABdhPJw+lDLw4//0skb98U/8oIG/e9p7zIpXjr2ieQkaDs2wML/jZuBXBWBVUHrggNVdqbgjMnZJCg==
+X-Received: by 2002:ac2:4959:: with SMTP id o25mr1053940lfi.659.1623873669836;
+        Wed, 16 Jun 2021 13:01:09 -0700 (PDT)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id i124sm344158lfd.62.2021.06.16.13.01.08
+        for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jun 2021 12:41:06 -0700 (PDT)
-Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Wed, 16 Jun 2021 13:01:09 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id r5so6301063lfr.5
+        for <linux-arch@vger.kernel.org>; Wed, 16 Jun 2021 13:01:08 -0700 (PDT)
+X-Received: by 2002:a05:6512:3d13:: with SMTP id d19mr1037501lfv.41.1623873668703;
+ Wed, 16 Jun 2021 13:01:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <87sg1p30a1.fsf@disp2133> <CAHk-=wjiBXCZBxLiCG5hxpd0vMkMjiocenponWygG5SCG6DXNw@mail.gmail.com>
+ <87pmwsytb3.fsf@disp2133> <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
+ <87sg1lwhvm.fsf@disp2133> <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
+ <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com> <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
+ <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
+ <87fsxjorgs.fsf@disp2133> <87zgvqor7d.fsf_-_@disp2133> <CAHk-=wir2P6h+HKtswPEGDh+GKLMM6_h8aovpMcUHyQv2zJ5Og@mail.gmail.com>
+ <87mtrpg47k.fsf@disp2133> <87pmwlek8d.fsf_-_@disp2133> <87k0mtek4n.fsf_-_@disp2133>
+In-Reply-To: <87k0mtek4n.fsf_-_@disp2133>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 16 Jun 2021 13:00:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiTEZN_3ipf51sh-csdusW4uGzAXq9m1JcMHu_c8OJ+pQ@mail.gmail.com>
+Message-ID: <CAHk-=wiTEZN_3ipf51sh-csdusW4uGzAXq9m1JcMHu_c8OJ+pQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] alpha/ptrace: Record and handle the absence of switch_stack
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Michael Schmitz <schmitzmic@gmail.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
@@ -60,58 +73,29 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
         alpha <linux-alpha@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         Arnd Bergmann <arnd@kernel.org>,
         Ley Foon Tan <ley.foon.tan@intel.com>,
         Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
-References: <87sg1p30a1.fsf@disp2133>
- <CAHk-=wjiBXCZBxLiCG5hxpd0vMkMjiocenponWygG5SCG6DXNw@mail.gmail.com>
- <87pmwsytb3.fsf@disp2133>
- <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
- <87sg1lwhvm.fsf@disp2133>
- <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
- <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com>
- <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com> <87eed4v2dc.fsf@disp2133>
- <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com> <87fsxjorgs.fsf@disp2133>
- <CAMuHMdUkhbq+tOyrpyd5hKGGcpYduBnbnXKFBwEfCGjw5XGYVA@mail.gmail.com>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <594ca040-3ad3-5cfe-2b9e-8e7804c199b5@gmail.com>
-Date:   Thu, 17 Jun 2021 07:40:57 +1200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <CAMuHMdUkhbq+tOyrpyd5hKGGcpYduBnbnXKFBwEfCGjw5XGYVA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Geert,
-
-On 16/06/21 7:38 pm, Geert Uytterhoeven wrote:
-> Hi Eric,
+On Wed, Jun 16, 2021 at 11:32 AM Eric W. Biederman
+<ebiederm@xmission.com> wrote:
 >
-> On Tue, Jun 15, 2021 at 9:32 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->> Do you happen to know if there is userspace that will run
->> in qemu-system-m68k that can be used for testing?
-> There's a link to an image in Laurent's patch series "[PATCH 0/2]
-> m68k: Add Virtual M68k Machine"
-> https://lore.kernel.org/linux-m68k/20210323221430.3735147-1-laurent@vivier.eu/
+> Prevent security holes by recording when all of the registers are
+> available so generic code changes do not result in security holes
+> on alpha.
 
-Thanks, I'll try that one.
+Please no, not this way. ldl/stc is extremely expensive on some alpha cpus.
 
-I'll try and implement a few of the solutions Eric came up with for 
-alpha, unless someone beats me to it (Andreas?).
+I really think thatTIF_ALLREGS_SAVED bit isn't worth it, except
+perhaps for debugging.
 
-Cheers,
+And even for debugging, I think it would be both easier and cheaper to
+just add a magic word to the entry stack instead.
 
-     Michael
-
-
->
-> Gr{oetje,eeting}s,
->
->                          Geert
->
+              Linus
