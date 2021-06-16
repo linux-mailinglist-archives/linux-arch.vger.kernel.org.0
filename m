@@ -2,86 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6AD3AA1D2
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 18:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7D73AA330
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 20:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbhFPQya (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Jun 2021 12:54:30 -0400
-Received: from mail-pj1-f52.google.com ([209.85.216.52]:56291 "EHLO
-        mail-pj1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbhFPQya (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 12:54:30 -0400
-Received: by mail-pj1-f52.google.com with SMTP id k7so2065225pjf.5;
-        Wed, 16 Jun 2021 09:52:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8MKUHbuhcvvAbyVmhGO6tF9OydsRY8Yh0Heff4psMcU=;
-        b=Qx1uZvn6htngZ1WWlJ23cxY8+02jmvVndZRS5HfNm6PhPMNmp8kyOwKrvxvWwGoine
-         9pr3U2gpJQNLvBKbAIGO/1gYwBvjA5gjpCOilIOY+IA+sClaHqRlDfQj1XR4QwQ3FbW8
-         3G5UvXz0vHQELf3NJ9fAZCjWKl9nkW5mwFOzFZhF3QZ7NMh95VMqeDbqDAFGrzGEO0BO
-         s95K0r3Z7FEi+vssdwtjB5ZrXfbpPcEINoLNfGiEGmJKq33XXmHvYKR4sri872wUhPLj
-         +4JmWQ1iApPivj/qrUmcVhxsign5XTu2hKmgxEu6zD5cr2llCvn+krPnGweV5rByC3PN
-         yWPw==
-X-Gm-Message-State: AOAM531oMH2N4zNWcyVBLilmcdDWzJnL8cabQWQ4b006bwS2MvsMoL1w
-        /G0Qder6MW3ULapRNiqyittjfGjB7A0=
-X-Google-Smtp-Source: ABdhPJyzx+UQa7eUy6fLX7IIzx1UxFuf2kpE8zutUL05jvc6Tbl3mGv+6//eteoO9Q90ulyVAqOUPQ==
-X-Received: by 2002:a17:902:6a84:b029:f3:f285:7d8 with SMTP id n4-20020a1709026a84b02900f3f28507d8mr457172plk.57.1623862342073;
-        Wed, 16 Jun 2021 09:52:22 -0700 (PDT)
-Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id w7sm2574738pjy.11.2021.06.16.09.52.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jun 2021 09:52:21 -0700 (PDT)
-Subject: Re: [dm-devel] [PATCH 06/18] bvec: add a bvec_kmap_local helper
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-arch@vger.kernel.org, linux-block@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Geoff Levand <geoff@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
-        Dongsheng Yang <dongsheng.yang@easystack.cn>,
-        linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        dm-devel@redhat.com, Ilya Dryomov <idryomov@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>, ceph-devel@vger.kernel.org
-References: <20210615132456.753241-1-hch@lst.de>
- <20210615132456.753241-7-hch@lst.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <244b92f2-7921-7f33-b83f-66f3fff57696@acm.org>
-Date:   Wed, 16 Jun 2021 09:52:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231838AbhFPScy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Jun 2021 14:32:54 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:33884 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231352AbhFPScy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 14:32:54 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ltaJF-00A84z-5r; Wed, 16 Jun 2021 12:30:41 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=email.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ltaJE-000z9Q-7B; Wed, 16 Jun 2021 12:30:40 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Michael Schmitz <schmitzmic@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
+References: <87sg1p30a1.fsf@disp2133>
+        <CAHk-=wjiBXCZBxLiCG5hxpd0vMkMjiocenponWygG5SCG6DXNw@mail.gmail.com>
+        <87pmwsytb3.fsf@disp2133>
+        <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
+        <87sg1lwhvm.fsf@disp2133>
+        <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
+        <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com>
+        <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
+        <87eed4v2dc.fsf@disp2133>
+        <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
+        <87fsxjorgs.fsf@disp2133> <87zgvqor7d.fsf_-_@disp2133>
+        <CAHk-=wir2P6h+HKtswPEGDh+GKLMM6_h8aovpMcUHyQv2zJ5Og@mail.gmail.com>
+        <87mtrpg47k.fsf@disp2133>
+Date:   Wed, 16 Jun 2021 13:29:38 -0500
+In-Reply-To: <87mtrpg47k.fsf@disp2133> (Eric W. Biederman's message of "Wed,
+        16 Jun 2021 11:32:47 -0500")
+Message-ID: <87pmwlek8d.fsf_-_@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20210615132456.753241-7-hch@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-XM-SPF: eid=1ltaJE-000z9Q-7B;;;mid=<87pmwlek8d.fsf_-_@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/QcGeYYkSKc73XnoZZIXFLvqc9Us7t81k=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TooManySym_01,T_XMDrugObfuBody_08,XMNoVowels
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  1.0 T_XMDrugObfuBody_08 obfuscated drug references
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 351 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 11 (3.2%), b_tie_ro: 10 (2.7%), parse: 1.21
+        (0.3%), extract_message_metadata: 3.2 (0.9%), get_uri_detail_list:
+        0.56 (0.2%), tests_pri_-1000: 4.9 (1.4%), tests_pri_-950: 1.37 (0.4%),
+        tests_pri_-900: 1.14 (0.3%), tests_pri_-90: 110 (31.3%), check_bayes:
+        108 (30.8%), b_tokenize: 7 (1.9%), b_tok_get_all: 6 (1.9%),
+        b_comp_prob: 2.0 (0.6%), b_tok_touch_all: 89 (25.5%), b_finish: 0.93
+        (0.3%), tests_pri_0: 199 (56.7%), check_dkim_signature: 0.58 (0.2%),
+        check_dkim_adsp: 3.7 (1.1%), poll_dns_idle: 1.43 (0.4%), tests_pri_10:
+        2.2 (0.6%), tests_pri_500: 8 (2.2%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 0/2] alpha/ptrace: Improved switch_stack handling
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/15/21 6:24 AM, Christoph Hellwig wrote:
-> +/**
-> + * bvec_kmap_local - map a bvec into the kernel virtual address space
-> + * @bvec: bvec to map
-> + *
-> + * Must be called on single-page bvecs only.  Call kunmap_local on the returned
-> + * address to unmap.
-> + */
-> +static inline void *bvec_kmap_local(struct bio_vec *bvec)
-> +{
-> +	return kmap_local_page(bvec->bv_page) + bvec->bv_offset;
-> +}
 
-Hi Christoph,
+This pair of changes has not received anything beyond build and boot
+testing.  I am posting these changes as they do a much better job of
+warning of problems and shutting down the security hole.  Making them
+a much better pattern than the my last patch.
 
-Would it be appropriate to add WARN_ON_ONCE(bvec->bv_offset >=
-PAGE_SIZE) in this function?
+I hope to get the test cases soon.
 
-Thanks,
+ arch/alpha/include/asm/thread_info.h   |  2 ++
+ arch/alpha/kernel/entry.S              | 62 ++++++++++++++++++++++++++--------
+ arch/alpha/kernel/process.c            |  3 ++
+ arch/alpha/kernel/ptrace.c             | 13 +++++--
+ arch/alpha/kernel/syscalls/syscall.tbl |  8 ++---
+ 5 files changed, 67 insertions(+), 21 deletions(-)
 
-Bart.
+Eric W. Biederman (2):
+      alpha/ptrace: Record and handle the absence of switch_stack
+      alpha/ptrace: Add missing switch_stack frames
+
