@@ -2,148 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF7B3AA3E0
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 21:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6663AA479
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 21:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbhFPTJU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Jun 2021 15:09:20 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:40004 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbhFPTJU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 15:09:20 -0400
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D4FD820B6C50;
-        Wed, 16 Jun 2021 12:07:13 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D4FD820B6C50
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1623870433;
-        bh=pMMmTT3PXQgTrevuxlj2F3JLlcd4EM9l6Fepj29X/Bg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=et5fmwABi16nTifeqv5owKDbpO8Upojx4jogULjH35iG+VU2qzgIOkQSB+40B0esG
-         Wam6aYGNXbuJ3uQm6BvTW69sFa4xi4qmwEIBwkn8G5wv6OmR+8OomBdF99AwSZvJc1
-         Uf510fCV9WWV72wjblSHguWSQzdzsPUtxfXw9eOo=
-Received: by mail-pf1-f182.google.com with SMTP id p13so3021834pfw.0;
-        Wed, 16 Jun 2021 12:07:13 -0700 (PDT)
-X-Gm-Message-State: AOAM531oszfqMbna3A53N1neh5zAbBL8+6I7kkBR9p1OJ6K17L7M1EhD
-        GirYLhPt57YmA1CjaYGTSvs0IwTzaAuAHMlQ1kI=
-X-Google-Smtp-Source: ABdhPJx9sD4Hv60I5h6KAYTe91Zo1s5HoDH8VwMli9/OBjeUKnpAHtllS55ebWXOgWb1A5g5i1Y5vWiMz6iFCmYlJ6k=
-X-Received: by 2002:a05:6a00:24d0:b029:2ed:c309:8b0f with SMTP id
- d16-20020a056a0024d0b02902edc3098b0fmr1281204pfv.41.1623870433450; Wed, 16
- Jun 2021 12:07:13 -0700 (PDT)
+        id S232637AbhFPTnO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Jun 2021 15:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231262AbhFPTnN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 15:43:13 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96131C061574;
+        Wed, 16 Jun 2021 12:41:07 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id x19so1658468pln.2;
+        Wed, 16 Jun 2021 12:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=qb5d+U0Id8lIqAWfxQheAcWONeEcboJpT5+z508o/Ww=;
+        b=HQF8dUO0vj/JLY5AGo7v2s8QQaIzYV63qYOxawNXAC3aRARyE+nU5hzCMBYgwpOUA+
+         q8nRzMkhc/tm6xxqwnopRUIz9WhF/HjXQjuanWT1+4mEkJ0UbKeZivFfZx94lhKOnQOP
+         Ts7ZOjGA+YuFjIs9CLzBW3fINp+e9Um330Lz/Ig9wIZRxuRqLJJQam+5oQ2mzJV7WY1H
+         yGwhgdKL8GJ1aWOeIyR1DNwwTwqNOo7pvB7p1J30SaPr82rNVxB7EhI/vk2o1PYt2hoc
+         pp4iCipOjQ4/v83k/wL7M+dB89WD9kEBv4C8g2FUeiatzg/lKnEzH/64bvnzamhh106y
+         ef/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=qb5d+U0Id8lIqAWfxQheAcWONeEcboJpT5+z508o/Ww=;
+        b=iYENDc5yElHPjw4YOGF82Qg2SfN9ravFncjx0gC0p/ww89ZHuTJVcq2Lc51syH/G1o
+         rws5ujpPSHK4QLJj4NyCsTd42pdfCJR9zmwvs+f94SSj7TSk21IVqjb6OHV2bOfA8CQr
+         YMHyyaBzHfusBYIC630haeUMfkKIReyNCi3SqZxMn3BS/l352VpR7pcj389sna7LOK+c
+         wp07OXWOdTsEqeYgQ0r0CRzaVPdzirska+/pCBnvSCmKPo9gV91KEUfJOh2X1vU4n1Y+
+         HekSh3bZG8tuLF+4EJvjR4QfH5aMIrIZi4zTBRJFj0fNZlaZ7t4nmK+QYqsQOFqhpBeg
+         bpPw==
+X-Gm-Message-State: AOAM531djmFcUav1tZQxXOEN4EKJ/ofDpnkdmU3ahvOX9pBRt7Wm+wl6
+        LUiub79CTJBjU7K35m75zX7uZRpocHJeTw==
+X-Google-Smtp-Source: ABdhPJzC0pt4q7UA0ciR0y49Yot7y5oDh8kUDh16LPHavXhtDkCpQ2gTyxwhSMJ+vZZwvexZYwYg7w==
+X-Received: by 2002:a17:90a:9f8f:: with SMTP id o15mr1473325pjp.55.1623872467040;
+        Wed, 16 Jun 2021 12:41:07 -0700 (PDT)
+Received: from ?IPv6:2001:df0:0:200c:9d12:c2c8:273e:6ffd? ([2001:df0:0:200c:9d12:c2c8:273e:6ffd])
+        by smtp.gmail.com with ESMTPSA id c14sm3086391pgv.86.2021.06.16.12.40.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Jun 2021 12:41:06 -0700 (PDT)
+Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
+References: <87sg1p30a1.fsf@disp2133>
+ <CAHk-=wjiBXCZBxLiCG5hxpd0vMkMjiocenponWygG5SCG6DXNw@mail.gmail.com>
+ <87pmwsytb3.fsf@disp2133>
+ <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
+ <87sg1lwhvm.fsf@disp2133>
+ <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
+ <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com>
+ <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com> <87eed4v2dc.fsf@disp2133>
+ <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com> <87fsxjorgs.fsf@disp2133>
+ <CAMuHMdUkhbq+tOyrpyd5hKGGcpYduBnbnXKFBwEfCGjw5XGYVA@mail.gmail.com>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <594ca040-3ad3-5cfe-2b9e-8e7804c199b5@gmail.com>
+Date:   Thu, 17 Jun 2021 07:40:57 +1200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210615023812.50885-1-mcroce@linux.microsoft.com>
- <20210615023812.50885-2-mcroce@linux.microsoft.com> <6cff2a895db94e6fadd4ddffb8906a73@AcuMS.aculab.com>
- <CAEUhbmV+Vi0Ssyzq1B2RTkbjMpE21xjdj2MSKdLydgW6WuCKtA@mail.gmail.com>
- <1632006872b04c64be828fa0c4e4eae0@AcuMS.aculab.com> <CAEUhbmU0cPkawmFfDd_sPQnc9V-cfYd32BCQo4Cis3uBKZDpXw@mail.gmail.com>
- <CANBLGcxi2mEA5MnV-RL2zFpB2T+OytiHyOLKjOrMXgmAh=fHAw@mail.gmail.com>
- <CAEUhbmX_wsfU9FfRJoOPE0gjUX=Bp7OZWOZDyMNfO6=M-fX_0A@mail.gmail.com>
- <20210616040132.7fbdf6fe@linux.microsoft.com> <db7a011867a742528beb6ec17b692842@AcuMS.aculab.com>
-In-Reply-To: <db7a011867a742528beb6ec17b692842@AcuMS.aculab.com>
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-Date:   Wed, 16 Jun 2021 21:06:37 +0200
-X-Gmail-Original-Message-ID: <CAFnufp2OiF6-ta5og9u-foKDT2fqE171NvfowFkUr2jc4KJEDQ@mail.gmail.com>
-Message-ID: <CAFnufp2OiF6-ta5og9u-foKDT2fqE171NvfowFkUr2jc4KJEDQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] riscv: optimized memcpy
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Bin Meng <bmeng.cn@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Gary Guo <gary@garyguo.net>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAMuHMdUkhbq+tOyrpyd5hKGGcpYduBnbnXKFBwEfCGjw5XGYVA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 10:24 AM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Matteo Croce
-> > Sent: 16 June 2021 03:02
-> ...
-> > > > That's a good idea, but if you read the replies to Gary's original
-> > > > patch
-> > > > https://lore.kernel.org/linux-riscv/20210216225555.4976-1-gary@garyguo.net/
-> > > > .. both Gary, Palmer and David would rather like a C-based version.
-> > > > This is one attempt at providing that.
-> > >
-> > > Yep, I prefer C as well :)
-> > >
-> > > But if you check commit 04091d6, the assembly version was introduced
-> > > for KASAN. So if we are to change it back to C, please make sure KASAN
-> > > is not broken.
-> > >
-> ...
-> > Leaving out the first memcpy/set of every test which is always slower, (maybe
-> > because of a cache miss?), the current implementation copies 260 Mb/s when
-> > the low order bits match, and 114 otherwise.
-> > Memset is stable at 278 Mb/s.
-> >
-> > Gary's implementation is much faster, copies still 260 Mb/s when euqlly placed,
-> > and 230 Mb/s otherwise. Memset is the same as the current one.
->
-> Any idea what the attainable performance is for the cpu you are using?
-> Since both memset and memcpy are running at much the same speed
-> I suspect it is all limited by the writes.
->
-> 272MB/s is only 34M writes/sec.
-> This seems horribly slow for a modern cpu.
-> So is this actually really limited by the cache writes to physical memory?
->
-> You might want to do some tests (userspace is fine) where you
-> check much smaller lengths that definitely sit within the data cache.
->
+Hi Geert,
 
-I get similar results in userspace, this tool write to RAM with
-variable data width:
-
-root@beaglev:~/src# ./unalign_check 1 0 1
-size:           1 Mb
-write size:      8 bit
-unalignment:    0 byte
-elapsed time:   0.01 sec
-throughput:     124.36 Mb/s
-
-# ./unalign_check 1 0 8
-size:           1 Mb
-write size:      64 bit
-unalignment:    0 byte
-elapsed time:   0.00 sec
-throughput:     252.12 Mb/s
-
-> It is also worth checking how much overhead there is for
-> short copies - they are almost certainly more common than
-> you might expect.
-> This is one problem with excessive loop unrolling - the 'special
-> cases' for the ends of the buffer start having a big effect
-> on small copies.
+On 16/06/21 7:38 pm, Geert Uytterhoeven wrote:
+> Hi Eric,
 >
+> On Tue, Jun 15, 2021 at 9:32 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>> Do you happen to know if there is userspace that will run
+>> in qemu-system-m68k that can be used for testing?
+> There's a link to an image in Laurent's patch series "[PATCH 0/2]
+> m68k: Add Virtual M68k Machine"
+> https://lore.kernel.org/linux-m68k/20210323221430.3735147-1-laurent@vivier.eu/
 
-I too believe that they are much more common than long ones.
-Indeed, I wish to reduce the MIN_THRESHOLD value from 64 to 32 or even 16.
-Or having it dependend on the word size, e.g. sizeof(long) * 2.
+Thanks, I'll try that one.
 
-Suggestions?
+I'll try and implement a few of the solutions Eric came up with for 
+alpha, unless someone beats me to it (Andreas?).
 
-> For cpu that support misaligned memory accesses, one 'trick'
-> for transfers longer than a 'word' is to do a (probably) misaligned
-> transfer of the last word of the buffer first followed by the
-> transfer of the rest of the buffer (overlapping a few bytes at the end).
-> This saves on conditionals and temporary values.
+Cheers,
+
+     Michael
+
+
 >
->         David
+> Gr{oetje,eeting}s,
 >
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+>                          Geert
 >
-
-Regards,
--- 
-per aspera ad upstream
