@@ -2,81 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADF73A9430
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 09:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F7F3A94E8
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jun 2021 10:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbhFPHkk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Jun 2021 03:40:40 -0400
-Received: from mail-vk1-f172.google.com ([209.85.221.172]:40567 "EHLO
-        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbhFPHkj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 03:40:39 -0400
-Received: by mail-vk1-f172.google.com with SMTP id i17so407993vkd.7;
-        Wed, 16 Jun 2021 00:38:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oYkI/zG40URv+m/LERapdYdXE8mdGOgDXjJQ7nWdKJQ=;
-        b=hSydv50Be21Z9io2d5aYTlJC0pqLDajaC4OV/GbBaoVCS69QWl7tBtBg6133ta3HB2
-         GxMBGue8XramZqlfoFghbKwrW/8RCaqJdOYlz7aVhFEapHoygUkjYHcv5kMGmymiWNCe
-         nMbauQ8ePyF3j7M2nQKgYM0zShlaD0H4XB+yVsZkBUe4kG4EhhgqMECb+X7cPiISqdCm
-         7tmQkr36MS5Sf73LReF9GJrRprICg0iN9i8nC1oN0ef4buBZBwrvAxS03hHCxM8494RM
-         WzJO8WR2apjyFa7EWztmOmyHGRE8VFrQEHJ7luZYYge1to8dMX+yrWRNjO4REBwqyCOl
-         DGXA==
-X-Gm-Message-State: AOAM531x5+nuni9NlNByuwomCGd09EM5Ru0B8OttCdFd3nmHKtNJKn6P
-        +ki5u50Dkz2TmT+/SdNA2wJ/PRAcSSTlVrj1m5c=
-X-Google-Smtp-Source: ABdhPJzufbJykYOmxZN0p1SAxGmJWo5X7VotLxBsWJYFnoUcAIbLyiwJ2blqdHa1Jr10POv3l3B1Oi8N3GGoHXROasQ=
-X-Received: by 2002:a1f:9505:: with SMTP id x5mr8101727vkd.6.1623829113459;
- Wed, 16 Jun 2021 00:38:33 -0700 (PDT)
+        id S231889AbhFPI0x convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 16 Jun 2021 04:26:53 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:41359 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231334AbhFPI0w (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 16 Jun 2021 04:26:52 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-87-_scVxX6UNMWzThH1QiY4nA-1; Wed, 16 Jun 2021 09:24:44 +0100
+X-MC-Unique: _scVxX6UNMWzThH1QiY4nA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 16 Jun
+ 2021 09:24:43 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.018; Wed, 16 Jun 2021 09:24:43 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matteo Croce' <mcroce@linux.microsoft.com>,
+        Bin Meng <bmeng.cn@gmail.com>
+CC:     Emil Renner Berthing <kernel@esmil.dk>,
+        Gary Guo <gary@garyguo.net>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>
+Subject: RE: [PATCH 1/3] riscv: optimized memcpy
+Thread-Topic: [PATCH 1/3] riscv: optimized memcpy
+Thread-Index: AQHXYlOHXkdMIImxVUmoQbZ37iIZIqsWSUKQ
+Date:   Wed, 16 Jun 2021 08:24:43 +0000
+Message-ID: <db7a011867a742528beb6ec17b692842@AcuMS.aculab.com>
+References: <20210615023812.50885-1-mcroce@linux.microsoft.com>
+        <20210615023812.50885-2-mcroce@linux.microsoft.com>
+        <6cff2a895db94e6fadd4ddffb8906a73@AcuMS.aculab.com>
+        <CAEUhbmV+Vi0Ssyzq1B2RTkbjMpE21xjdj2MSKdLydgW6WuCKtA@mail.gmail.com>
+        <1632006872b04c64be828fa0c4e4eae0@AcuMS.aculab.com>
+        <CAEUhbmU0cPkawmFfDd_sPQnc9V-cfYd32BCQo4Cis3uBKZDpXw@mail.gmail.com>
+        <CANBLGcxi2mEA5MnV-RL2zFpB2T+OytiHyOLKjOrMXgmAh=fHAw@mail.gmail.com>
+        <CAEUhbmX_wsfU9FfRJoOPE0gjUX=Bp7OZWOZDyMNfO6=M-fX_0A@mail.gmail.com>
+ <20210616040132.7fbdf6fe@linux.microsoft.com>
+In-Reply-To: <20210616040132.7fbdf6fe@linux.microsoft.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <87sg1p30a1.fsf@disp2133> <CAHk-=wjiBXCZBxLiCG5hxpd0vMkMjiocenponWygG5SCG6DXNw@mail.gmail.com>
- <87pmwsytb3.fsf@disp2133> <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
- <87sg1lwhvm.fsf@disp2133> <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
- <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com> <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
- <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com> <87fsxjorgs.fsf@disp2133>
-In-Reply-To: <87fsxjorgs.fsf@disp2133>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 16 Jun 2021 09:38:22 +0200
-Message-ID: <CAMuHMdUkhbq+tOyrpyd5hKGGcpYduBnbnXKFBwEfCGjw5XGYVA@mail.gmail.com>
-Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Michael Schmitz <schmitzmic@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Eric,
+From: Matteo Croce
+> Sent: 16 June 2021 03:02
+...
+> > > That's a good idea, but if you read the replies to Gary's original
+> > > patch
+> > > https://lore.kernel.org/linux-riscv/20210216225555.4976-1-gary@garyguo.net/
+> > > .. both Gary, Palmer and David would rather like a C-based version.
+> > > This is one attempt at providing that.
+> >
+> > Yep, I prefer C as well :)
+> >
+> > But if you check commit 04091d6, the assembly version was introduced
+> > for KASAN. So if we are to change it back to C, please make sure KASAN
+> > is not broken.
+> >
+...
+> Leaving out the first memcpy/set of every test which is always slower, (maybe
+> because of a cache miss?), the current implementation copies 260 Mb/s when
+> the low order bits match, and 114 otherwise.
+> Memset is stable at 278 Mb/s.
+> 
+> Gary's implementation is much faster, copies still 260 Mb/s when euqlly placed,
+> and 230 Mb/s otherwise. Memset is the same as the current one.
 
-On Tue, Jun 15, 2021 at 9:32 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Do you happen to know if there is userspace that will run
-> in qemu-system-m68k that can be used for testing?
+Any idea what the attainable performance is for the cpu you are using?
+Since both memset and memcpy are running at much the same speed
+I suspect it is all limited by the writes.
 
-There's a link to an image in Laurent's patch series "[PATCH 0/2]
-m68k: Add Virtual M68k Machine"
-https://lore.kernel.org/linux-m68k/20210323221430.3735147-1-laurent@vivier.eu/
+272MB/s is only 34M writes/sec.
+This seems horribly slow for a modern cpu.
+So is this actually really limited by the cache writes to physical memory?
 
-Gr{oetje,eeting}s,
+You might want to do some tests (userspace is fine) where you
+check much smaller lengths that definitely sit within the data cache.
 
-                        Geert
+It is also worth checking how much overhead there is for
+short copies - they are almost certainly more common than
+you might expect.
+This is one problem with excessive loop unrolling - the 'special
+cases' for the ends of the buffer start having a big effect
+on small copies.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+For cpu that support misaligned memory accesses, one 'trick'
+for transfers longer than a 'word' is to do a (probably) misaligned
+transfer of the last word of the buffer first followed by the
+transfer of the rest of the buffer (overlapping a few bytes at the end).
+This saves on conditionals and temporary values.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
