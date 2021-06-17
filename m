@@ -2,316 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E13833AA892
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Jun 2021 03:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7761D3AA945
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Jun 2021 04:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbhFQB1s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Jun 2021 21:27:48 -0400
-Received: from mail-ej1-f42.google.com ([209.85.218.42]:46073 "EHLO
-        mail-ej1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbhFQB1q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 21:27:46 -0400
-Received: by mail-ej1-f42.google.com with SMTP id hv20so894899ejc.12;
-        Wed, 16 Jun 2021 18:25:38 -0700 (PDT)
+        id S230267AbhFQDAv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Jun 2021 23:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230238AbhFQDAu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 23:00:50 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA2DC061574
+        for <linux-arch@vger.kernel.org>; Wed, 16 Jun 2021 19:58:43 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id g22so3748867pgk.1
+        for <linux-arch@vger.kernel.org>; Wed, 16 Jun 2021 19:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pAetusrXJOJzWSJzpj/wpmSbSm54E0/FhIpgunOB9fg=;
+        b=ukzHIYxmdKkIQf64rUee88mkx/YVndIKeGyPC7juZMCTOHOZ8juq16b0buUyJHPM1A
+         JMaWUp7K63bjpALA1waqiGlhBxCR8a4CHnAM/noOylfw+06z1WpT34aH6757NHmsot31
+         4DoLbtGvHOiketrzTVIwOeGCGQ6DkFSlPBuFdofL4i9OREH6Qz719CfpP53p26U8YieQ
+         gNVM/M5rIQrk5tpUeZqypINbwENqGSXKtKrEY43EyRky19Q/YUhUB3I3ifozlbN2t+se
+         zihwN6OigL/4NHZ1Ue/JDuMOZdDDELwua7YPbob6N/xqagVBi6bXI1GBQGQPuLkyvo1f
+         y9Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=K2nUdE+zFaOC4M7wlsDFBdoa4IQTxGHeVsnzz+mQcNA=;
-        b=qRhfF42uPMJZOGZZiYRiCm6Tw16pcVY7ic/d/XUjDkXnGT/KW3C6oN1YdVISZq947l
-         a7A62detuUW74obcnuwRAqr99O06Gkm6jJ6TvP3Rl4JE2iNI8b4ADcWbeDed/g7PT6+k
-         sqssXFlueRzFVqB4D1bCaivWjp5e6RP4q6S4c8PHDFGDVV4NyWaSrOLDFusFf7IwE0dT
-         c5Y54QnSQtQ+Cb0vSAlCnZ9T7r+XQGvbKFkkFhGsij8iIf9nEn5WEZZaeQGtbV8MY/zd
-         xuSF2+Zm+sF9anKwZu9h8tUfFb/XOMiUVEAnBPRBAbnXXTbwH0x2iqNYVB8cisiD3N4B
-         jNrA==
-X-Gm-Message-State: AOAM532z6GwTzjQjHyWV5YC39USuK5IKQM5dhzFaxhRElObxGejXIIXy
-        9g7IaVnYXAB0QKuDeYdIO4w=
-X-Google-Smtp-Source: ABdhPJzOt4uOX3dPIz9Eg78SUHdcUE2OfFcxMyt/NyH3WQpF/LpExbS8m5BY2/fMCqqAbeDc7r5LDA==
-X-Received: by 2002:a17:906:22c8:: with SMTP id q8mr2308245eja.12.1623893137563;
-        Wed, 16 Jun 2021 18:25:37 -0700 (PDT)
-Received: from msft-t490s.teknoraver.net (net-37-119-128-179.cust.vodafonedsl.it. [37.119.128.179])
-        by smtp.gmail.com with ESMTPSA id lu21sm2624721ejb.31.2021.06.16.18.25.36
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=pAetusrXJOJzWSJzpj/wpmSbSm54E0/FhIpgunOB9fg=;
+        b=c8ssKvDwv8R0Hhb5sR6LPvBrEzVrpowiBC6ia/YbAGt22ZgQzcgJjSBFwGNP3VZa4r
+         1SMsOguE9cG71noAGfu/ctkQT6tQO6c1EvlDMz/80lFyGakhrkTGgQqjsKciCax50BSN
+         d6s4HRHhT08dBGb8istANnRbKZUlFvKBBrWn0TvvptX9DlIyC7QzUVmqRWGxWlNkKhzA
+         FQ4q+NTNxbYW9a8Ryn4uBS9WMEu6PrbMSSyagUVFGrLJtpOBviefh5SMDDL8Dqw6h7wn
+         cnPSsUWPdao5IrtMrPHOqYNKwB5NHlAfzcBUFQoA5dd7mkXblX7xvEgJR5df0WMhyCgR
+         b3+A==
+X-Gm-Message-State: AOAM532EqO9aeS05/wUcH7/IVuPbVq+cQcVkvLXkoB/0cR79QPvjv6HK
+        120nIw9Vt/LZHaFGZzNJvC27EQ==
+X-Google-Smtp-Source: ABdhPJxM8YGfhTyvdc1ihezx3Yt6LpJ2Zg7c25L7/ASVxuUM6An10/lYTrBBK2BJS6+69kGdNj0Eyg==
+X-Received: by 2002:a05:6a00:c2:b029:2ee:9cfc:af85 with SMTP id e2-20020a056a0000c2b02902ee9cfcaf85mr3098604pfj.78.1623898721881;
+        Wed, 16 Jun 2021 19:58:41 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id u9sm3633698pgp.90.2021.06.16.19.58.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 18:25:37 -0700 (PDT)
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-To:     linux-riscv@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Wed, 16 Jun 2021 19:58:41 -0700 (PDT)
+Date:   Wed, 16 Jun 2021 19:58:41 -0700 (PDT)
+X-Google-Original-Date: Wed, 16 Jun 2021 19:58:38 PDT (-0700)
+Subject:     Re: [PATCH v5 1/3] riscv: Move kernel mapping outside of linear mapping
+In-Reply-To: <20210611110019.GA579376@roeck-us.net>
+CC:     schwab@linux-m68k.org, alex@ghiti.fr, corbet@lwn.net,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH v2 3/3] riscv: optimized memset
-Date:   Thu, 17 Jun 2021 03:25:09 +0200
-Message-Id: <20210617012509.34265-4-mcroce@linux.microsoft.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210617012509.34265-1-mcroce@linux.microsoft.com>
-References: <20210617012509.34265-1-mcroce@linux.microsoft.com>
-MIME-Version: 1.0
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        aryabinin@virtuozzo.com, glider@google.com, dvyukov@google.com,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     schwab@linux-m68k.org, linux@roeck-us.net
+Message-ID: <mhng-569bbfda-00d0-4c1f-9a88-69021f258f7e@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Matteo Croce <mcroce@microsoft.com>
+On Fri, 11 Jun 2021 04:00:19 PDT (-0700), linux@roeck-us.net wrote:
+> On Thu, Jun 10, 2021 at 07:29:15PM +0200, Andreas Schwab wrote:
+>> On Jun 10 2021, Guenter Roeck wrote:
+>>
+>> > On Thu, Jun 10, 2021 at 07:11:38PM +0200, Andreas Schwab wrote:
+>> >> On Jun 10 2021, Guenter Roeck wrote:
+>> >>
+>> >> > On Thu, Jun 10, 2021 at 06:39:39PM +0200, Andreas Schwab wrote:
+>> >> >> On Apr 18 2021, Alex Ghiti wrote:
+>> >> >>
+>> >> >> > To sum up, there are 3 patches that fix this series:
+>> >> >> >
+>> >> >> > https://patchwork.kernel.org/project/linux-riscv/patch/20210415110426.2238-1-alex@ghiti.fr/
+>> >> >> >
+>> >> >> > https://patchwork.kernel.org/project/linux-riscv/patch/20210417172159.32085-1-alex@ghiti.fr/
+>> >> >> >
+>> >> >> > https://patchwork.kernel.org/project/linux-riscv/patch/20210418112856.15078-1-alex@ghiti.fr/
+>> >> >>
+>> >> >> Has this been fixed yet?  Booting is still broken here.
+>> >> >>
+>> >> >
+>> >> > In -next ?
+>> >>
+>> >> No, -rc5.
+>> >>
+>> > Booting v5.13-rc5 in qemu works for me for riscv32 and riscv64,
+>> > but of course that doesn't mean much. Just wondering, not knowing
+>> > the context - did you provide details ?
+>>
+>> Does that work for you:
+>>
+>> https://github.com/openSUSE/kernel-source/blob/master/config/riscv64/default
+>>
+>
+> That isn't an upstream kernel configuration; it looks like includes suse
+> patches. But, yes, it does crash almost immediately if I build an upstream
+> kernel based on it and try to run that kernel in qemu. I did not try to
+> track it down further; after all, it might just be that the configuration
+> is inappropriate for use with qemu. But the configuration isn't really
+> what I had asked.
 
-The generic memset is defined as a byte at time write. This is always
-safe, but it's slower than a 4 byte or even 8 byte write.
+This seems a long way off from defconfig.  It's entirly possible I'm 
+missing something, but at least CONFIG_SOC_VIRT is jumping out as 
+something that's disabled in the SUSE config but enabled upstream.  That 
+alone shouldn't actually do anything, but it does ensure we have all the 
+drivers necessary to boot on QEMU.
 
-Write a generic memset which fills the data one byte at time until the
-destination is aligned, then fills using the largest size allowed,
-and finally fills the remaining data one byte at time.
-
-Signed-off-by: Matteo Croce <mcroce@microsoft.com>
----
- arch/riscv/include/asm/string.h |  10 +--
- arch/riscv/kernel/Makefile      |   1 -
- arch/riscv/kernel/riscv_ksyms.c |  13 ----
- arch/riscv/lib/Makefile         |   1 -
- arch/riscv/lib/memset.S         | 113 --------------------------------
- arch/riscv/lib/string.c         |  42 ++++++++++++
- 6 files changed, 45 insertions(+), 135 deletions(-)
- delete mode 100644 arch/riscv/kernel/riscv_ksyms.c
- delete mode 100644 arch/riscv/lib/memset.S
-
-diff --git a/arch/riscv/include/asm/string.h b/arch/riscv/include/asm/string.h
-index 25d9b9078569..90500635035a 100644
---- a/arch/riscv/include/asm/string.h
-+++ b/arch/riscv/include/asm/string.h
-@@ -6,14 +6,10 @@
- #ifndef _ASM_RISCV_STRING_H
- #define _ASM_RISCV_STRING_H
- 
--#include <linux/types.h>
--#include <linux/linkage.h>
--
--#define __HAVE_ARCH_MEMSET
--extern asmlinkage void *memset(void *, int, size_t);
--extern asmlinkage void *__memset(void *, int, size_t);
--
- #ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
-+#define __HAVE_ARCH_MEMSET
-+extern void *memset(void *s, int c, size_t count);
-+extern void *__memset(void *s, int c, size_t count);
- #define __HAVE_ARCH_MEMCPY
- extern void *memcpy(void *dest, const void *src, size_t count);
- extern void *__memcpy(void *dest, const void *src, size_t count);
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index d3081e4d9600..e635ce1e5645 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -31,7 +31,6 @@ obj-y	+= syscall_table.o
- obj-y	+= sys_riscv.o
- obj-y	+= time.o
- obj-y	+= traps.o
--obj-y	+= riscv_ksyms.o
- obj-y	+= stacktrace.o
- obj-y	+= cacheinfo.o
- obj-y	+= patch.o
-diff --git a/arch/riscv/kernel/riscv_ksyms.c b/arch/riscv/kernel/riscv_ksyms.c
-deleted file mode 100644
-index 361565c4db7e..000000000000
---- a/arch/riscv/kernel/riscv_ksyms.c
-+++ /dev/null
-@@ -1,13 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (C) 2017 Zihao Yu
-- */
--
--#include <linux/export.h>
--#include <linux/uaccess.h>
--
--/*
-- * Assembly functions that may be used (directly or indirectly) by modules
-- */
--EXPORT_SYMBOL(memset);
--EXPORT_SYMBOL(__memset);
-diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
-index 484f5ff7b508..e33263cc622a 100644
---- a/arch/riscv/lib/Makefile
-+++ b/arch/riscv/lib/Makefile
-@@ -1,6 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- lib-y			+= delay.o
--lib-y			+= memset.o
- lib-$(CONFIG_MMU)	+= uaccess.o
- lib-$(CONFIG_64BIT)	+= tishift.o
- lib-$(CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE) += string.o
-diff --git a/arch/riscv/lib/memset.S b/arch/riscv/lib/memset.S
-deleted file mode 100644
-index 34c5360c6705..000000000000
---- a/arch/riscv/lib/memset.S
-+++ /dev/null
-@@ -1,113 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2013 Regents of the University of California
-- */
--
--
--#include <linux/linkage.h>
--#include <asm/asm.h>
--
--/* void *memset(void *, int, size_t) */
--ENTRY(__memset)
--WEAK(memset)
--	move t0, a0  /* Preserve return value */
--
--	/* Defer to byte-oriented fill for small sizes */
--	sltiu a3, a2, 16
--	bnez a3, 4f
--
--	/*
--	 * Round to nearest XLEN-aligned address
--	 * greater than or equal to start address
--	 */
--	addi a3, t0, SZREG-1
--	andi a3, a3, ~(SZREG-1)
--	beq a3, t0, 2f  /* Skip if already aligned */
--	/* Handle initial misalignment */
--	sub a4, a3, t0
--1:
--	sb a1, 0(t0)
--	addi t0, t0, 1
--	bltu t0, a3, 1b
--	sub a2, a2, a4  /* Update count */
--
--2: /* Duff's device with 32 XLEN stores per iteration */
--	/* Broadcast value into all bytes */
--	andi a1, a1, 0xff
--	slli a3, a1, 8
--	or a1, a3, a1
--	slli a3, a1, 16
--	or a1, a3, a1
--#ifdef CONFIG_64BIT
--	slli a3, a1, 32
--	or a1, a3, a1
--#endif
--
--	/* Calculate end address */
--	andi a4, a2, ~(SZREG-1)
--	add a3, t0, a4
--
--	andi a4, a4, 31*SZREG  /* Calculate remainder */
--	beqz a4, 3f            /* Shortcut if no remainder */
--	neg a4, a4
--	addi a4, a4, 32*SZREG  /* Calculate initial offset */
--
--	/* Adjust start address with offset */
--	sub t0, t0, a4
--
--	/* Jump into loop body */
--	/* Assumes 32-bit instruction lengths */
--	la a5, 3f
--#ifdef CONFIG_64BIT
--	srli a4, a4, 1
--#endif
--	add a5, a5, a4
--	jr a5
--3:
--	REG_S a1,        0(t0)
--	REG_S a1,    SZREG(t0)
--	REG_S a1,  2*SZREG(t0)
--	REG_S a1,  3*SZREG(t0)
--	REG_S a1,  4*SZREG(t0)
--	REG_S a1,  5*SZREG(t0)
--	REG_S a1,  6*SZREG(t0)
--	REG_S a1,  7*SZREG(t0)
--	REG_S a1,  8*SZREG(t0)
--	REG_S a1,  9*SZREG(t0)
--	REG_S a1, 10*SZREG(t0)
--	REG_S a1, 11*SZREG(t0)
--	REG_S a1, 12*SZREG(t0)
--	REG_S a1, 13*SZREG(t0)
--	REG_S a1, 14*SZREG(t0)
--	REG_S a1, 15*SZREG(t0)
--	REG_S a1, 16*SZREG(t0)
--	REG_S a1, 17*SZREG(t0)
--	REG_S a1, 18*SZREG(t0)
--	REG_S a1, 19*SZREG(t0)
--	REG_S a1, 20*SZREG(t0)
--	REG_S a1, 21*SZREG(t0)
--	REG_S a1, 22*SZREG(t0)
--	REG_S a1, 23*SZREG(t0)
--	REG_S a1, 24*SZREG(t0)
--	REG_S a1, 25*SZREG(t0)
--	REG_S a1, 26*SZREG(t0)
--	REG_S a1, 27*SZREG(t0)
--	REG_S a1, 28*SZREG(t0)
--	REG_S a1, 29*SZREG(t0)
--	REG_S a1, 30*SZREG(t0)
--	REG_S a1, 31*SZREG(t0)
--	addi t0, t0, 32*SZREG
--	bltu t0, a3, 3b
--	andi a2, a2, SZREG-1  /* Update count */
--
--4:
--	/* Handle trailing misalignment */
--	beqz a2, 6f
--	add a3, t0, a2
--5:
--	sb a1, 0(t0)
--	addi t0, t0, 1
--	bltu t0, a3, 5b
--6:
--	ret
--END(__memset)
-diff --git a/arch/riscv/lib/string.c b/arch/riscv/lib/string.c
-index c932401e365b..3f243a9f6f6c 100644
---- a/arch/riscv/lib/string.c
-+++ b/arch/riscv/lib/string.c
-@@ -118,3 +118,45 @@ void *__memmove(void *dest, const void *src, size_t count)
- 	return memmove(dest, src, count);
- }
- EXPORT_SYMBOL(__memmove);
-+
-+void __weak *memset(void *s, int c, size_t count)
-+{
-+	union types dest = { .u8 = s };
-+
-+	if (count >= MIN_THRESHOLD) {
-+		const int bytes_long = BITS_PER_LONG / 8;
-+		unsigned long cu = (unsigned long)c;
-+
-+		/* Compose an ulong with 'c' repeated 4/8 times */
-+		cu |= cu << 8;
-+		cu |= cu << 16;
-+#if BITS_PER_LONG == 64
-+		cu |= cu << 32;
-+#endif
-+
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-+		/* Fill the buffer one byte at time until the destination
-+		 * is aligned on a 32/64 bit boundary.
-+		 */
-+		for (; count && dest.uptr % bytes_long; count--)
-+			*dest.u8++ = c;
-+#endif
-+
-+		/* Copy using the largest size allowed */
-+		for (; count >= bytes_long; count -= bytes_long)
-+			*dest.ulong++ = cu;
-+	}
-+
-+	/* copy the remainder */
-+	while (count--)
-+		*dest.u8++ = c;
-+
-+	return s;
-+}
-+EXPORT_SYMBOL(memset);
-+
-+void *__memset(void *s, int c, size_t count)
-+{
-+	return memset(s, c, count);
-+}
-+EXPORT_SYMBOL(__memset);
--- 
-2.31.1
-
+It's entierly possible there's a real bug here, though, as I don't 
+really see what these relocatable patches would have to do with that.
