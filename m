@@ -2,313 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5383AB780
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Jun 2021 17:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B13A3ABC50
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Jun 2021 21:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233336AbhFQPar (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Jun 2021 11:30:47 -0400
-Received: from mail-ed1-f44.google.com ([209.85.208.44]:38907 "EHLO
-        mail-ed1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbhFQPac (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Jun 2021 11:30:32 -0400
-Received: by mail-ed1-f44.google.com with SMTP id t7so4571179edd.5;
-        Thu, 17 Jun 2021 08:28:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dR71mgWuSrKuBRDcO+pO0oyyX07xDs1ZIGNvdSRJDyk=;
-        b=HWvsFHbuiJVl5uokqbR1EPClXvZUlCysjE+hPJphEM0qHxB6yHNBnYJbYFFMnX2pCZ
-         y3EeIzkhnFgeR0LU2KlT0XGMDoQB2tqN8/cmbdziyyLisdJXkQTXysDNEqeVNfGyYZ+e
-         nhM1Aboc0cm1u/vPzu0V7avTWU1TkdDyX9XG8nuE/jzHmZMI4KsAx6ZjFWBV0mtucbDL
-         7LTKg/8Mt15JQjiV1s7p81QJBQoxC2mxNrW0v9/sqkg/Y3skIq9w8Viv2LD3n1V8XUm3
-         ChOWPFGm+rwKl4qc2BnCEMsGk7aJzPiDE1WSR440RGm0/f5PLNhBuV2s7RBoUFtMblOQ
-         BxHg==
-X-Gm-Message-State: AOAM531thnUcHrD5+i2xoG/HfRO2GRJZ62qfH/4DBop4Vz1dTU2tOtW/
-        IUYJcCLCXrk6o7YpuJ08JV0=
-X-Google-Smtp-Source: ABdhPJyghzMD4UFbsUqxDry2kTArzJbHDeI7jbuZSaPtMZIbTcaErWBhhij5IvbkjeAL5cuz1NmHVg==
-X-Received: by 2002:aa7:c547:: with SMTP id s7mr7137201edr.239.1623943703800;
-        Thu, 17 Jun 2021 08:28:23 -0700 (PDT)
-Received: from msft-t490s.teknoraver.net (net-37-119-128-179.cust.vodafonedsl.it. [37.119.128.179])
-        by smtp.gmail.com with ESMTPSA id g11sm4497850edz.12.2021.06.17.08.28.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 08:28:23 -0700 (PDT)
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-To:     linux-riscv@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH v3 3/3] riscv: optimized memset
-Date:   Thu, 17 Jun 2021 17:27:54 +0200
-Message-Id: <20210617152754.17960-4-mcroce@linux.microsoft.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210617152754.17960-1-mcroce@linux.microsoft.com>
-References: <20210617152754.17960-1-mcroce@linux.microsoft.com>
+        id S232803AbhFQTHL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Jun 2021 15:07:11 -0400
+Received: from foss.arm.com ([217.140.110.172]:58744 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232508AbhFQTHK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 17 Jun 2021 15:07:10 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63D4113A1;
+        Thu, 17 Jun 2021 12:05:02 -0700 (PDT)
+Received: from [192.168.122.166] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D0833F694;
+        Thu, 17 Jun 2021 12:05:02 -0700 (PDT)
+Subject: Re: [PATCH v3 0/4] arm64: Enable BTI for the executable as well as
+ the interpreter
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Dave Martin <dave.martin@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org
+References: <20210614223214.39011-1-broonie@kernel.org>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+Message-ID: <10f9df55-47e4-f230-e1b4-73113daa9791@arm.com>
+Date:   Thu, 17 Jun 2021 14:05:01 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210614223214.39011-1-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Matteo Croce <mcroce@microsoft.com>
+Hi,
 
-The generic memset is defined as a byte at time write. This is always
-safe, but it's slower than a 4 byte or even 8 byte write.
+On 6/14/21 5:32 PM, Mark Brown wrote:
+> Deployments of BTI on arm64 have run into issues interacting with
+> systemd's MemoryDenyWriteExecute feature.  Currently for dynamically
+> linked executables the kernel will only handle architecture specific
+> properties like BTI for the interpreter, the expectation is that the
+> interpreter will then handle any properties on the main executable.
+> For BTI this means remapping the executable segments PROT_EXEC |
+> PROT_BTI.
+> 
+> This interacts poorly with MemoryDenyWriteExecute since that is
+> implemented using a seccomp filter which prevents setting PROT_EXEC on
+> already mapped memory and lacks the context to be able to detect that
+> memory is already mapped with PROT_EXEC.  This series resolves this by
+> handling the BTI property for both the interpreter and the main
+> executable.
+> 
+> This does mean that we may get more code with BTI enabled if running on
+> a system without BTI support in the dynamic linker, this is expected to
+> be a safe configuration and testing seems to confirm that. It also
+> reduces the flexibility userspace has to disable BTI but it is expected
+> that for cases where there are problems which require BTI to be disabled
+> it is more likely that it will need to be disabled on a system level.
 
-Write a generic memset which fills the data one byte at time until the
-destination is aligned, then fills using the largest size allowed,
-and finally fills the remaining data one byte at time.
+It looks like its working as expected now (the previously detailed test 
+is now failing) in a MDWE enviroment, and the smaps/etc looks as 
+expected too.
 
-Signed-off-by: Matteo Croce <mcroce@microsoft.com>
----
- arch/riscv/include/asm/string.h |  10 +--
- arch/riscv/kernel/Makefile      |   1 -
- arch/riscv/kernel/riscv_ksyms.c |  13 ----
- arch/riscv/lib/Makefile         |   1 -
- arch/riscv/lib/memset.S         | 113 --------------------------------
- arch/riscv/lib/string.c         |  39 +++++++++++
- 6 files changed, 42 insertions(+), 135 deletions(-)
- delete mode 100644 arch/riscv/kernel/riscv_ksyms.c
- delete mode 100644 arch/riscv/lib/memset.S
+Thanks for fixing this!
 
-diff --git a/arch/riscv/include/asm/string.h b/arch/riscv/include/asm/string.h
-index 25d9b9078569..90500635035a 100644
---- a/arch/riscv/include/asm/string.h
-+++ b/arch/riscv/include/asm/string.h
-@@ -6,14 +6,10 @@
- #ifndef _ASM_RISCV_STRING_H
- #define _ASM_RISCV_STRING_H
- 
--#include <linux/types.h>
--#include <linux/linkage.h>
--
--#define __HAVE_ARCH_MEMSET
--extern asmlinkage void *memset(void *, int, size_t);
--extern asmlinkage void *__memset(void *, int, size_t);
--
- #ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
-+#define __HAVE_ARCH_MEMSET
-+extern void *memset(void *s, int c, size_t count);
-+extern void *__memset(void *s, int c, size_t count);
- #define __HAVE_ARCH_MEMCPY
- extern void *memcpy(void *dest, const void *src, size_t count);
- extern void *__memcpy(void *dest, const void *src, size_t count);
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index d3081e4d9600..e635ce1e5645 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -31,7 +31,6 @@ obj-y	+= syscall_table.o
- obj-y	+= sys_riscv.o
- obj-y	+= time.o
- obj-y	+= traps.o
--obj-y	+= riscv_ksyms.o
- obj-y	+= stacktrace.o
- obj-y	+= cacheinfo.o
- obj-y	+= patch.o
-diff --git a/arch/riscv/kernel/riscv_ksyms.c b/arch/riscv/kernel/riscv_ksyms.c
-deleted file mode 100644
-index 361565c4db7e..000000000000
---- a/arch/riscv/kernel/riscv_ksyms.c
-+++ /dev/null
-@@ -1,13 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (C) 2017 Zihao Yu
-- */
--
--#include <linux/export.h>
--#include <linux/uaccess.h>
--
--/*
-- * Assembly functions that may be used (directly or indirectly) by modules
-- */
--EXPORT_SYMBOL(memset);
--EXPORT_SYMBOL(__memset);
-diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
-index 484f5ff7b508..e33263cc622a 100644
---- a/arch/riscv/lib/Makefile
-+++ b/arch/riscv/lib/Makefile
-@@ -1,6 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- lib-y			+= delay.o
--lib-y			+= memset.o
- lib-$(CONFIG_MMU)	+= uaccess.o
- lib-$(CONFIG_64BIT)	+= tishift.o
- lib-$(CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE) += string.o
-diff --git a/arch/riscv/lib/memset.S b/arch/riscv/lib/memset.S
-deleted file mode 100644
-index 34c5360c6705..000000000000
---- a/arch/riscv/lib/memset.S
-+++ /dev/null
-@@ -1,113 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2013 Regents of the University of California
-- */
--
--
--#include <linux/linkage.h>
--#include <asm/asm.h>
--
--/* void *memset(void *, int, size_t) */
--ENTRY(__memset)
--WEAK(memset)
--	move t0, a0  /* Preserve return value */
--
--	/* Defer to byte-oriented fill for small sizes */
--	sltiu a3, a2, 16
--	bnez a3, 4f
--
--	/*
--	 * Round to nearest XLEN-aligned address
--	 * greater than or equal to start address
--	 */
--	addi a3, t0, SZREG-1
--	andi a3, a3, ~(SZREG-1)
--	beq a3, t0, 2f  /* Skip if already aligned */
--	/* Handle initial misalignment */
--	sub a4, a3, t0
--1:
--	sb a1, 0(t0)
--	addi t0, t0, 1
--	bltu t0, a3, 1b
--	sub a2, a2, a4  /* Update count */
--
--2: /* Duff's device with 32 XLEN stores per iteration */
--	/* Broadcast value into all bytes */
--	andi a1, a1, 0xff
--	slli a3, a1, 8
--	or a1, a3, a1
--	slli a3, a1, 16
--	or a1, a3, a1
--#ifdef CONFIG_64BIT
--	slli a3, a1, 32
--	or a1, a3, a1
--#endif
--
--	/* Calculate end address */
--	andi a4, a2, ~(SZREG-1)
--	add a3, t0, a4
--
--	andi a4, a4, 31*SZREG  /* Calculate remainder */
--	beqz a4, 3f            /* Shortcut if no remainder */
--	neg a4, a4
--	addi a4, a4, 32*SZREG  /* Calculate initial offset */
--
--	/* Adjust start address with offset */
--	sub t0, t0, a4
--
--	/* Jump into loop body */
--	/* Assumes 32-bit instruction lengths */
--	la a5, 3f
--#ifdef CONFIG_64BIT
--	srli a4, a4, 1
--#endif
--	add a5, a5, a4
--	jr a5
--3:
--	REG_S a1,        0(t0)
--	REG_S a1,    SZREG(t0)
--	REG_S a1,  2*SZREG(t0)
--	REG_S a1,  3*SZREG(t0)
--	REG_S a1,  4*SZREG(t0)
--	REG_S a1,  5*SZREG(t0)
--	REG_S a1,  6*SZREG(t0)
--	REG_S a1,  7*SZREG(t0)
--	REG_S a1,  8*SZREG(t0)
--	REG_S a1,  9*SZREG(t0)
--	REG_S a1, 10*SZREG(t0)
--	REG_S a1, 11*SZREG(t0)
--	REG_S a1, 12*SZREG(t0)
--	REG_S a1, 13*SZREG(t0)
--	REG_S a1, 14*SZREG(t0)
--	REG_S a1, 15*SZREG(t0)
--	REG_S a1, 16*SZREG(t0)
--	REG_S a1, 17*SZREG(t0)
--	REG_S a1, 18*SZREG(t0)
--	REG_S a1, 19*SZREG(t0)
--	REG_S a1, 20*SZREG(t0)
--	REG_S a1, 21*SZREG(t0)
--	REG_S a1, 22*SZREG(t0)
--	REG_S a1, 23*SZREG(t0)
--	REG_S a1, 24*SZREG(t0)
--	REG_S a1, 25*SZREG(t0)
--	REG_S a1, 26*SZREG(t0)
--	REG_S a1, 27*SZREG(t0)
--	REG_S a1, 28*SZREG(t0)
--	REG_S a1, 29*SZREG(t0)
--	REG_S a1, 30*SZREG(t0)
--	REG_S a1, 31*SZREG(t0)
--	addi t0, t0, 32*SZREG
--	bltu t0, a3, 3b
--	andi a2, a2, SZREG-1  /* Update count */
--
--4:
--	/* Handle trailing misalignment */
--	beqz a2, 6f
--	add a3, t0, a2
--5:
--	sb a1, 0(t0)
--	addi t0, t0, 1
--	bltu t0, a3, 5b
--6:
--	ret
--END(__memset)
-diff --git a/arch/riscv/lib/string.c b/arch/riscv/lib/string.c
-index 9c7009d43c39..1fb4de351516 100644
---- a/arch/riscv/lib/string.c
-+++ b/arch/riscv/lib/string.c
-@@ -112,3 +112,42 @@ EXPORT_SYMBOL(__memmove);
- 
- void *memmove(void *dest, const void *src, size_t count) __weak __alias(__memmove);
- EXPORT_SYMBOL(memmove);
-+
-+void *__memset(void *s, int c, size_t count)
-+{
-+	union types dest = { .u8 = s };
-+
-+	if (count >= MIN_THRESHOLD) {
-+		const int bytes_long = BITS_PER_LONG / 8;
-+		unsigned long cu = (unsigned long)c;
-+
-+		/* Compose an ulong with 'c' repeated 4/8 times */
-+		cu |= cu << 8;
-+		cu |= cu << 16;
-+#if BITS_PER_LONG == 64
-+		cu |= cu << 32;
-+#endif
-+
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-+		/* Fill the buffer one byte at time until the destination
-+		 * is aligned on a 32/64 bit boundary.
-+		 */
-+		for (; count && dest.uptr % bytes_long; count--)
-+			*dest.u8++ = c;
-+#endif
-+
-+		/* Copy using the largest size allowed */
-+		for (; count >= bytes_long; count -= bytes_long)
-+			*dest.ulong++ = cu;
-+	}
-+
-+	/* copy the remainder */
-+	while (count--)
-+		*dest.u8++ = c;
-+
-+	return s;
-+}
-+EXPORT_SYMBOL(__memset);
-+
-+void *memset(void *s, int c, size_t count) __weak __alias(__memset);
-+EXPORT_SYMBOL(memset);
--- 
-2.31.1
+tested-by: Jeremy Linton <jeremy.linton@arm.com>
+
+
+> 
+> v3:
+>   - Fix passing of properties for parsing by the main executable.
+>   - Drop has_interp from arch_parse_elf_property().
+>   - Coding style tweaks.
+> v2:
+>   - Add a patch dropping has_interp from arch_adjust_elf_prot()
+>   - Fix bisection issue with static executables on arm64 in the first
+>     patch.
+> 
+> Mark Brown (4):
+>    elf: Allow architectures to parse properties on the main executable
+>    arm64: Enable BTI for main executable as well as the interpreter
+>    elf: Remove has_interp property from arch_adjust_elf_prot()
+>    elf: Remove has_interp property from arch_parse_elf_property()
+> 
+>   arch/arm64/include/asm/elf.h | 13 ++++++++++---
+>   arch/arm64/kernel/process.c  | 23 +++++++++++------------
+>   fs/binfmt_elf.c              | 33 ++++++++++++++++++++++++---------
+>   include/linux/elf.h          |  8 +++++---
+>   4 files changed, 50 insertions(+), 27 deletions(-)
+> 
+> 
+> base-commit: c4681547bcce777daf576925a966ffa824edd09d
+> 
 
