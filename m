@@ -2,143 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 634BC3ABE54
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Jun 2021 23:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582963ABE5C
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Jun 2021 23:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbhFQVqJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Jun 2021 17:46:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39798 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231365AbhFQVqF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 17 Jun 2021 17:46:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623966236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M4/8ZsrnV9kT518dUAoy2KJrq344KI7QjcpIIYk0eZg=;
-        b=QmPH11wyidqMxdZSuSJbjZ//b9qDoRBkzKYPasUONtsIQqaSMgNXppK+wbutr3WtDiNADf
-        QbS0Zs2+zgMUDqTXlPNYIHBd9ivgkoOTJe+webgeeaLv25jDHDwi90fLsr7G40fQovaFfl
-        DB5xtUgltIFqrG9z9hHHrePfffLY6FQ=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-351-O71J_Fk_NQOUpZRVE7w-jQ-1; Thu, 17 Jun 2021 17:43:55 -0400
-X-MC-Unique: O71J_Fk_NQOUpZRVE7w-jQ-1
-Received: by mail-oi1-f200.google.com with SMTP id u6-20020aca47060000b02901ff152f8393so3057112oia.4
-        for <linux-arch@vger.kernel.org>; Thu, 17 Jun 2021 14:43:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=M4/8ZsrnV9kT518dUAoy2KJrq344KI7QjcpIIYk0eZg=;
-        b=QK8Zmvn2/IBk+obLxAnJkjJb8lies4UBj8vm0o09toU/awLcNM2WK4KEWAfhTRci0B
-         1OLVOIL338In/EtuYSUSnVUv8uvG5uaeGeevXySeDSd10i7Eb4kW97XsUxPfW7RCoINx
-         sVjwPDTMtjnYjQSF0QXqxFNytowHr8OMNIWzZ2D2NVsRom5jcoIJk0+ejWmQZEQDPBv3
-         R/r46mIhqIWY26oFKmYP7ghP839Fa0LnfgsppZhShhfYCbgOL9I5QNH0VKQ+r0ugeNUy
-         IAZrRMfFpl+pM0r5ZhDE88uObPaExPTRZ6v6PXL5AQgJ9kPmJf9X/P5j6e6RKzFSvlVB
-         0wYQ==
-X-Gm-Message-State: AOAM5338k3s677FT0p2Z5pUPQdyTHLf3L6Vy0bhlceiogVs1988gELFQ
-        lnG2MkHY75/g4KbLCt6E3wKQJ3yaMKvsMT+tg+lPL48MIymvjN24cCYRFMwHKyDEvv6p5odQZI7
-        s+OS/UPPzjBHitzNCYrynXg==
-X-Received: by 2002:a9d:12a9:: with SMTP id g38mr6810616otg.114.1623966234748;
-        Thu, 17 Jun 2021 14:43:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx/MpfIdnRaMMuXLpXImcZSfOF2dMx/96uo+/FPPE6d05WXuSqepKcSIyq07IAiSgtXhdFX7Q==
-X-Received: by 2002:a9d:12a9:: with SMTP id g38mr6810607otg.114.1623966234593;
-        Thu, 17 Jun 2021 14:43:54 -0700 (PDT)
-Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 15sm1366313oij.26.2021.06.17.14.43.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 14:43:54 -0700 (PDT)
-From:   trix@redhat.com
-To:     arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH 1/1] bug: mark generic BUG() as unreachable
-Date:   Thu, 17 Jun 2021 14:43:28 -0700
-Message-Id: <20210617214328.3501174-3-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20210617214328.3501174-1-trix@redhat.com>
-References: <20210617214328.3501174-1-trix@redhat.com>
+        id S229915AbhFQVvQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Jun 2021 17:51:16 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:41018 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231181AbhFQVvQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Jun 2021 17:51:16 -0400
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E508420B83FA;
+        Thu, 17 Jun 2021 14:49:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E508420B83FA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1623966547;
+        bh=iOxmam1hxsYf6Bv7Bb3oOlwGwzgEo/722mgFg6/iGpE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ibSIfbBmyJYDw8/UWYKpUQGxmHNuDu0MRvAyGNy+c95/BnDOp7ZTW9zNpKxPLts19
+         55NTE3ZXCYEnTQtGM6ekpqtH/wNPoAHdCCpkShwRMFY/T9Or3HT+s/tqiH1SqxhxqB
+         h9CoAbLv2b8xsr//Egwd30wlGBPyEax2qpzc4XbU=
+Received: by mail-pf1-f182.google.com with SMTP id k15so909580pfp.6;
+        Thu, 17 Jun 2021 14:49:07 -0700 (PDT)
+X-Gm-Message-State: AOAM531a4dNrHsjMuKyEOP/P48vrde16mjYzga9GRW2EVUuD5yMuStaA
+        pbuFrrz1zv3TfpZKdf1z/1eq7YVkIA7OZYZEmVE=
+X-Google-Smtp-Source: ABdhPJyke/C7KbeDnN/bSq8cETCQLuetyQe+T++OgpvF6JWJDrzSnoEja5DxSnRQ8F98Myf3zBKubi+N4iHqVOpCEZo=
+X-Received: by 2002:a63:d053:: with SMTP id s19mr6823948pgi.326.1623966547451;
+ Thu, 17 Jun 2021 14:49:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210615023812.50885-1-mcroce@linux.microsoft.com>
+ <20210615023812.50885-2-mcroce@linux.microsoft.com> <CAJF2gTTreOvQYYXHBYxznB9+vMaASKg8vwA5mkqVo1T6=eVhzw@mail.gmail.com>
+ <CAFnufp1OHdRd-tbB+Hi0UnXARtxGPdkK6MJktnaNCNt65d3Oew@mail.gmail.com> <f9b78350d9504e889813fc47df41f3fe@AcuMS.aculab.com>
+In-Reply-To: <f9b78350d9504e889813fc47df41f3fe@AcuMS.aculab.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Thu, 17 Jun 2021 23:48:31 +0200
+X-Gmail-Original-Message-ID: <CAFnufp1CA7g=poF3UpKjX7YYz569Wxc1YORSv+uhpU5847xuXw@mail.gmail.com>
+Message-ID: <CAFnufp1CA7g=poF3UpKjX7YYz569Wxc1YORSv+uhpU5847xuXw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] riscv: optimized memcpy
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Guo Ren <guoren@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Thu, Jun 17, 2021 at 11:30 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Matteo Croce
+> > Sent: 16 June 2021 19:52
+> > To: Guo Ren <guoren@kernel.org>
+> >
+> > On Wed, Jun 16, 2021 at 1:46 PM Guo Ren <guoren@kernel.org> wrote:
+> > >
+> > > Hi Matteo,
+> > >
+> > > Have you tried Glibc generic implementation code?
+> > > ref: https://lore.kernel.org/linux-arch/20190629053641.3iBfk9-
+> > I_D29cDp9yJnIdIg7oMtHNZlDmhLQPTumhEc@z/#t
+> > >
+> > > If Glibc codes have the same performance in your hardware, then you
+> > > could give a generic implementation first.
+>
+> Isn't that a byte copy loop - the performance of that ought to be terrible.
+> ...
+>
+> > I had a look, it seems that it's a C unrolled version with the
+> > 'register' keyword.
+> > The same one was already merged in nios2:
+> > https://elixir.bootlin.com/linux/latest/source/arch/nios2/lib/memcpy.c#L68
+>
+> I know a lot about the nios2 instruction timings.
+> (I've looked at code execution in the fpga's intel 'logic analiser.)
+> It is a very simple 4-clock pipeline cpu with a 2-clock delay
+> before a value read from 'tightly coupled memory' (aka cache)
+> can be used in another instruction.
+> There is also a subtle pipeline stall if a read follows a write
+> to the same memory block because the write is executed one
+> clock later - and would collide with the read.
+> Since it only ever executes one instruction per clock loop
+> unrolling does help - since you never get the loop control 'for free'.
+> OTOH you don't need to use that many registers.
+> But an unrolled loop should approach 2 bytes/clock (32bit cpu).
+>
+> > I copied _wordcopy_fwd_aligned() from Glibc, and I have a very similar
+> > result of the other versions:
+> >
+> > [  563.359126] Strings selftest: memcpy(src+7, dst+7): 257 Mb/s
+>
+> What clock speed is that running at?
+> It seems very slow for a 64bit cpu (that isn't an fpga soft-cpu).
+>
+> While the small riscv cpu might be similar to the nios2 (and mips
+> for that matter), there are also bigger/faster cpu.
+> I'm sure these can execute multiple instructions/clock
+> and possible even read and write at the same time.
+> Unless they also support significant instruction re-ordering
+> the trivial copy loops are going to be slow on such cpu.
+>
 
-This spurious error is reported for powerpc64, CONFIG_BUG=n
+It's running at 1 GHz.
 
-fs/afs/dir.c: In function 'afs_dir_set_page_dirty':
-fs/afs/dir.c:51:1: error: no return statement in
-  function returning non-void [-Werror=return-type]
-   51 | }
-      | ^
+I get 257 Mb/s with a memcpy, a bit more with a memset,
+but I get 1200 Mb/s with a cyle which just reads memory with 64 bit addressing.
 
-When CONFIG_BUG=y is BUG is expanded from
-  #define BUG() do {
- 	BUG_ENTRY("twi 31, 0, 0", 0);
- 	unreachable();
-   } while (0)
-
-to
-
-static int afs_dir_set_page_dirty(struct page *page)
-{
- do { __asm__ __volatile__( "1:	" "twi 31, 0, 0"  ...
-   do { ; asm volatile(""); __builtin_unreachable(); } while (0);
- } while (0);
-}
-
-When CONFIG_BUG=n, the generic BUG() is used which
-expands out to
-
-static int afs_dir_set_page_dirty(struct page *page)
-{
- do {} while (1);
-}
-
-Without the __builtin_unreachable(), gcc reports the
-warning
-
-ref: gcc docs https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
-" ... without the __builtin_unreachable, GCC issues a
-  warning that control reaches the end of a non-void function."
-
-So add an unreachable() to the generic BUG(), the resulting
-expansiion will be
-
-static int afs_dir_set_page_dirty(struct page *page)
-{
- do {
-   do {} while (1);
-   do { ; asm volatile(""); __builtin_unreachable(); } while (0);
- } while (0);
-}
-
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- include/asm-generic/bug.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index f152b9bb916fc..b250e06d7de26 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -177,7 +177,10 @@ void __warn(const char *file, int line, void *caller, unsigned taint,
- 
- #else /* !CONFIG_BUG */
- #ifndef HAVE_ARCH_BUG
--#define BUG() do {} while (1)
-+#define BUG() do {						\
-+		do {} while (1);				\
-+		unreachable();					\
-+	} while (0)
- #endif
- 
- #ifndef HAVE_ARCH_BUG_ON
 -- 
-2.26.3
-
+per aspera ad upstream
