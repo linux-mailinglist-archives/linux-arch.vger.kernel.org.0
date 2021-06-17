@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3963AA88D
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Jun 2021 03:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAB93AA88F
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Jun 2021 03:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbhFQB1Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Jun 2021 21:27:25 -0400
-Received: from mail-ej1-f48.google.com ([209.85.218.48]:46904 "EHLO
-        mail-ej1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbhFQB1V (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 21:27:21 -0400
-Received: by mail-ej1-f48.google.com with SMTP id he7so6773318ejc.13;
-        Wed, 16 Jun 2021 18:25:13 -0700 (PDT)
+        id S231971AbhFQB1o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Jun 2021 21:27:44 -0400
+Received: from mail-ej1-f49.google.com ([209.85.218.49]:46073 "EHLO
+        mail-ej1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229722AbhFQB1n (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Jun 2021 21:27:43 -0400
+Received: by mail-ej1-f49.google.com with SMTP id hv20so894760ejc.12;
+        Wed, 16 Jun 2021 18:25:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=77paSv1vfUnmhsAZFukXy1zk5MAOuc8TBznUAIk9l+0=;
-        b=rTCtRMPI08xficmOwe8Fqy7gefLcZ6io9/IjubWAW+63GDBZVXncyevlwLAtEZ/tmC
-         1D4YXJB77EuO5aIu2N3xFDeLMS9LQFas1QBDk4v2/unPZ9yMceBkp2oAq0Nl7OxrsDYG
-         3qIBMi8Y0uzVZ4rtakL1kC9e2VMDo8Qr+U/5uUzHWERuWtmBaymx0DyAFTMBD7+atFMB
-         S5gqHOFOxwT93ZqMqAN9gnOE7qDM3vuk3phvC9Sf8cmR6PyECSW/WuFltdyF/mS4fMWY
-         jqNOMLaiU68/GQ+65S6JrVrBfoFBduPhDL4QUGEKD5f1ywWHk3oFdr8CP+qRapLKnRmV
-         3ziQ==
-X-Gm-Message-State: AOAM533h6khEO3F4z9NGhl/IL4e0H+k/pZoONiOiozuguRRtfwoSm4KB
-        PDGsKHqSLr9n9zXzXzqLjrI=
-X-Google-Smtp-Source: ABdhPJzIDqhwqbWaknEWaMKhzG/aVdOya/Gu7PhYtIOmdbXoWZZbJ0up5/cW8MXQtJo1WIlrq0OsGQ==
-X-Received: by 2002:a17:906:dff2:: with SMTP id lc18mr2364636ejc.371.1623893112431;
-        Wed, 16 Jun 2021 18:25:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1kXXO+5g5l6+iUfiCjP9lQ84R1jCEmv5Og/RNhUIH/8=;
+        b=MyuWRgRPYfVzcPWOQb+akqtqhKlOqolPDlsSD3Vcdmw46cF0lgqJbWPT1zCMQqn2i4
+         4yFJZ6DNqIXJutxykSuzKkE2+NIvLCnsuke2T7efpstGgeMlsLs8zJEOve80tkYa3awa
+         YDhcx8d3bxva7YtF9WnybYWTzsR9AVtrj7Xxi7nhaYcKVbBxHY4vKWgXU47ZqWkV6EZn
+         pVJ6WIucW4o7IqrMN6QTb0wIMK7b1tG2TqmO3ohvHOI3/DEJMbIh3E4d0f9vRzIwsv5S
+         5agmt0g+xQSk3VNSyDriQKpfAMxMjIZ5js3H0xExYmcjGGlL7g2XFenMkfBVTauJuNjQ
+         G9Bg==
+X-Gm-Message-State: AOAM532uaenGr9oKRNIVknOLCRBKiMZvwoY9z2SSudUky65nM/jUsBXu
+        cKXpGkEf+2nHaFrE4eWcb/Y=
+X-Google-Smtp-Source: ABdhPJzh01XSiDSo2DGb6CHVRZPbOJNfLqYeAUWMm2XIC1sXzz3qempfimHSR3S76Z+S8QS64Crz1g==
+X-Received: by 2002:a17:906:7946:: with SMTP id l6mr2367078ejo.50.1623893135340;
+        Wed, 16 Jun 2021 18:25:35 -0700 (PDT)
 Received: from msft-t490s.teknoraver.net (net-37-119-128-179.cust.vodafonedsl.it. [37.119.128.179])
-        by smtp.gmail.com with ESMTPSA id lu21sm2624721ejb.31.2021.06.16.18.25.11
+        by smtp.gmail.com with ESMTPSA id lu21sm2624721ejb.31.2021.06.16.18.25.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 18:25:11 -0700 (PDT)
+        Wed, 16 Jun 2021 18:25:34 -0700 (PDT)
 From:   Matteo Croce <mcroce@linux.microsoft.com>
 To:     linux-riscv@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -46,10 +46,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Bin Meng <bmeng.cn@gmail.com>,
         David Laight <David.Laight@aculab.com>,
         Guo Ren <guoren@kernel.org>
-Subject: [PATCH v2 0/3] riscv: optimized mem* functions
-Date:   Thu, 17 Jun 2021 03:25:06 +0200
-Message-Id: <20210617012509.34265-1-mcroce@linux.microsoft.com>
+Subject: [PATCH v2 1/3] riscv: optimized memcpy
+Date:   Thu, 17 Jun 2021 03:25:07 +0200
+Message-Id: <20210617012509.34265-2-mcroce@linux.microsoft.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210617012509.34265-1-mcroce@linux.microsoft.com>
+References: <20210617012509.34265-1-mcroce@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -58,39 +60,354 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Matteo Croce <mcroce@microsoft.com>
 
-Replace the assembly mem{cpy,move,set} with C equivalent.
+Write a C version of memcpy() which uses the biggest data size allowed,
+without generating unaligned accesses.
 
-Try to access RAM with the largest bit width possible, but without
-doing unaligned accesses.
+The procedure is made of three steps:
+First copy data one byte at time until the destination buffer is aligned
+to a long boundary.
+Then copy the data one long at time shifting the current and the next u8
+to compose a long at every cycle.
+Finally, copy the remainder one byte at time.
 
-Tested on a BeagleV Starlight with a SiFive U74 core, where the
-improvement is noticeable.
+On a BeagleV, the TCP RX throughput increased by 45%:
 
-v1 -> v2:
-- reduce the threshold from 64 to 16 bytes
-- fix KASAN build
-- optimize memset
+before:
 
-Matteo Croce (3):
-  riscv: optimized memcpy
-  riscv: optimized memmove
-  riscv: optimized memset
+$ iperf3 -c beaglev
+Connecting to host beaglev, port 5201
+[  5] local 192.168.85.6 port 44840 connected to 192.168.85.48 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  76.4 MBytes   641 Mbits/sec   27    624 KBytes
+[  5]   1.00-2.00   sec  72.5 MBytes   608 Mbits/sec    0    708 KBytes
+[  5]   2.00-3.00   sec  73.8 MBytes   619 Mbits/sec   10    451 KBytes
+[  5]   3.00-4.00   sec  72.5 MBytes   608 Mbits/sec    0    564 KBytes
+[  5]   4.00-5.00   sec  73.8 MBytes   619 Mbits/sec    0    658 KBytes
+[  5]   5.00-6.00   sec  73.8 MBytes   619 Mbits/sec   14    522 KBytes
+[  5]   6.00-7.00   sec  73.8 MBytes   619 Mbits/sec    0    621 KBytes
+[  5]   7.00-8.00   sec  72.5 MBytes   608 Mbits/sec    0    706 KBytes
+[  5]   8.00-9.00   sec  73.8 MBytes   619 Mbits/sec   20    580 KBytes
+[  5]   9.00-10.00  sec  73.8 MBytes   619 Mbits/sec    0    672 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.00  sec   736 MBytes   618 Mbits/sec   71             sender
+[  5]   0.00-10.01  sec   733 MBytes   615 Mbits/sec                  receiver
 
- arch/riscv/include/asm/string.h |  18 ++--
- arch/riscv/kernel/Makefile      |   1 -
- arch/riscv/kernel/riscv_ksyms.c |  17 ----
- arch/riscv/lib/Makefile         |   4 +-
- arch/riscv/lib/memcpy.S         | 108 ---------------------
- arch/riscv/lib/memmove.S        |  64 -------------
- arch/riscv/lib/memset.S         | 113 ----------------------
- arch/riscv/lib/string.c         | 162 ++++++++++++++++++++++++++++++++
- 8 files changed, 172 insertions(+), 315 deletions(-)
- delete mode 100644 arch/riscv/kernel/riscv_ksyms.c
+after:
+
+$ iperf3 -c beaglev
+Connecting to host beaglev, port 5201
+[  5] local 192.168.85.6 port 44864 connected to 192.168.85.48 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   109 MBytes   912 Mbits/sec   48    559 KBytes
+[  5]   1.00-2.00   sec   108 MBytes   902 Mbits/sec    0    690 KBytes
+[  5]   2.00-3.00   sec   106 MBytes   891 Mbits/sec   36    396 KBytes
+[  5]   3.00-4.00   sec   108 MBytes   902 Mbits/sec    0    567 KBytes
+[  5]   4.00-5.00   sec   106 MBytes   891 Mbits/sec    0    699 KBytes
+[  5]   5.00-6.00   sec   106 MBytes   891 Mbits/sec   32    414 KBytes
+[  5]   6.00-7.00   sec   106 MBytes   891 Mbits/sec    0    583 KBytes
+[  5]   7.00-8.00   sec   106 MBytes   891 Mbits/sec    0    708 KBytes
+[  5]   8.00-9.00   sec   106 MBytes   891 Mbits/sec   28    433 KBytes
+[  5]   9.00-10.00  sec   108 MBytes   902 Mbits/sec    0    591 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.00  sec  1.04 GBytes   897 Mbits/sec  144             sender
+[  5]   0.00-10.01  sec  1.04 GBytes   894 Mbits/sec                  receiver
+
+And the decreased CPU time of the memcpy() is observable with perf top.
+This is the `perf top -Ue task-clock` output when doing the test:
+
+before:
+
+Overhead  Shared O  Symbol
+  42.22%  [kernel]  [k] memcpy
+  35.00%  [kernel]  [k] __asm_copy_to_user
+   3.50%  [kernel]  [k] sifive_l2_flush64_range
+   2.30%  [kernel]  [k] stmmac_napi_poll_rx
+   1.11%  [kernel]  [k] memset
+
+after:
+
+Overhead  Shared O  Symbol
+  45.69%  [kernel]  [k] __asm_copy_to_user
+  29.06%  [kernel]  [k] memcpy
+   4.09%  [kernel]  [k] sifive_l2_flush64_range
+   2.77%  [kernel]  [k] stmmac_napi_poll_rx
+   1.24%  [kernel]  [k] memset
+
+Signed-off-by: Matteo Croce <mcroce@microsoft.com>
+---
+ arch/riscv/include/asm/string.h |   8 ++-
+ arch/riscv/kernel/riscv_ksyms.c |   2 -
+ arch/riscv/lib/Makefile         |   2 +-
+ arch/riscv/lib/memcpy.S         | 108 --------------------------------
+ arch/riscv/lib/string.c         |  94 +++++++++++++++++++++++++++
+ 5 files changed, 101 insertions(+), 113 deletions(-)
  delete mode 100644 arch/riscv/lib/memcpy.S
- delete mode 100644 arch/riscv/lib/memmove.S
- delete mode 100644 arch/riscv/lib/memset.S
  create mode 100644 arch/riscv/lib/string.c
 
+diff --git a/arch/riscv/include/asm/string.h b/arch/riscv/include/asm/string.h
+index 909049366555..6b5d6fc3eab4 100644
+--- a/arch/riscv/include/asm/string.h
++++ b/arch/riscv/include/asm/string.h
+@@ -12,9 +12,13 @@
+ #define __HAVE_ARCH_MEMSET
+ extern asmlinkage void *memset(void *, int, size_t);
+ extern asmlinkage void *__memset(void *, int, size_t);
++
++#ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+ #define __HAVE_ARCH_MEMCPY
+-extern asmlinkage void *memcpy(void *, const void *, size_t);
+-extern asmlinkage void *__memcpy(void *, const void *, size_t);
++extern void *memcpy(void *dest, const void *src, size_t count);
++extern void *__memcpy(void *dest, const void *src, size_t count);
++#endif
++
+ #define __HAVE_ARCH_MEMMOVE
+ extern asmlinkage void *memmove(void *, const void *, size_t);
+ extern asmlinkage void *__memmove(void *, const void *, size_t);
+diff --git a/arch/riscv/kernel/riscv_ksyms.c b/arch/riscv/kernel/riscv_ksyms.c
+index 5ab1c7e1a6ed..3f6d512a5b97 100644
+--- a/arch/riscv/kernel/riscv_ksyms.c
++++ b/arch/riscv/kernel/riscv_ksyms.c
+@@ -10,8 +10,6 @@
+  * Assembly functions that may be used (directly or indirectly) by modules
+  */
+ EXPORT_SYMBOL(memset);
+-EXPORT_SYMBOL(memcpy);
+ EXPORT_SYMBOL(memmove);
+ EXPORT_SYMBOL(__memset);
+-EXPORT_SYMBOL(__memcpy);
+ EXPORT_SYMBOL(__memmove);
+diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
+index 25d5c9664e57..2ffe85d4baee 100644
+--- a/arch/riscv/lib/Makefile
++++ b/arch/riscv/lib/Makefile
+@@ -1,9 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ lib-y			+= delay.o
+-lib-y			+= memcpy.o
+ lib-y			+= memset.o
+ lib-y			+= memmove.o
+ lib-$(CONFIG_MMU)	+= uaccess.o
+ lib-$(CONFIG_64BIT)	+= tishift.o
++lib-$(CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE) += string.o
+ 
+ obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
+diff --git a/arch/riscv/lib/memcpy.S b/arch/riscv/lib/memcpy.S
+deleted file mode 100644
+index 51ab716253fa..000000000000
+--- a/arch/riscv/lib/memcpy.S
++++ /dev/null
+@@ -1,108 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2013 Regents of the University of California
+- */
+-
+-#include <linux/linkage.h>
+-#include <asm/asm.h>
+-
+-/* void *memcpy(void *, const void *, size_t) */
+-ENTRY(__memcpy)
+-WEAK(memcpy)
+-	move t6, a0  /* Preserve return value */
+-
+-	/* Defer to byte-oriented copy for small sizes */
+-	sltiu a3, a2, 128
+-	bnez a3, 4f
+-	/* Use word-oriented copy only if low-order bits match */
+-	andi a3, t6, SZREG-1
+-	andi a4, a1, SZREG-1
+-	bne a3, a4, 4f
+-
+-	beqz a3, 2f  /* Skip if already aligned */
+-	/*
+-	 * Round to nearest double word-aligned address
+-	 * greater than or equal to start address
+-	 */
+-	andi a3, a1, ~(SZREG-1)
+-	addi a3, a3, SZREG
+-	/* Handle initial misalignment */
+-	sub a4, a3, a1
+-1:
+-	lb a5, 0(a1)
+-	addi a1, a1, 1
+-	sb a5, 0(t6)
+-	addi t6, t6, 1
+-	bltu a1, a3, 1b
+-	sub a2, a2, a4  /* Update count */
+-
+-2:
+-	andi a4, a2, ~((16*SZREG)-1)
+-	beqz a4, 4f
+-	add a3, a1, a4
+-3:
+-	REG_L a4,       0(a1)
+-	REG_L a5,   SZREG(a1)
+-	REG_L a6, 2*SZREG(a1)
+-	REG_L a7, 3*SZREG(a1)
+-	REG_L t0, 4*SZREG(a1)
+-	REG_L t1, 5*SZREG(a1)
+-	REG_L t2, 6*SZREG(a1)
+-	REG_L t3, 7*SZREG(a1)
+-	REG_L t4, 8*SZREG(a1)
+-	REG_L t5, 9*SZREG(a1)
+-	REG_S a4,       0(t6)
+-	REG_S a5,   SZREG(t6)
+-	REG_S a6, 2*SZREG(t6)
+-	REG_S a7, 3*SZREG(t6)
+-	REG_S t0, 4*SZREG(t6)
+-	REG_S t1, 5*SZREG(t6)
+-	REG_S t2, 6*SZREG(t6)
+-	REG_S t3, 7*SZREG(t6)
+-	REG_S t4, 8*SZREG(t6)
+-	REG_S t5, 9*SZREG(t6)
+-	REG_L a4, 10*SZREG(a1)
+-	REG_L a5, 11*SZREG(a1)
+-	REG_L a6, 12*SZREG(a1)
+-	REG_L a7, 13*SZREG(a1)
+-	REG_L t0, 14*SZREG(a1)
+-	REG_L t1, 15*SZREG(a1)
+-	addi a1, a1, 16*SZREG
+-	REG_S a4, 10*SZREG(t6)
+-	REG_S a5, 11*SZREG(t6)
+-	REG_S a6, 12*SZREG(t6)
+-	REG_S a7, 13*SZREG(t6)
+-	REG_S t0, 14*SZREG(t6)
+-	REG_S t1, 15*SZREG(t6)
+-	addi t6, t6, 16*SZREG
+-	bltu a1, a3, 3b
+-	andi a2, a2, (16*SZREG)-1  /* Update count */
+-
+-4:
+-	/* Handle trailing misalignment */
+-	beqz a2, 6f
+-	add a3, a1, a2
+-
+-	/* Use word-oriented copy if co-aligned to word boundary */
+-	or a5, a1, t6
+-	or a5, a5, a3
+-	andi a5, a5, 3
+-	bnez a5, 5f
+-7:
+-	lw a4, 0(a1)
+-	addi a1, a1, 4
+-	sw a4, 0(t6)
+-	addi t6, t6, 4
+-	bltu a1, a3, 7b
+-
+-	ret
+-
+-5:
+-	lb a4, 0(a1)
+-	addi a1, a1, 1
+-	sb a4, 0(t6)
+-	addi t6, t6, 1
+-	bltu a1, a3, 5b
+-6:
+-	ret
+-END(__memcpy)
+diff --git a/arch/riscv/lib/string.c b/arch/riscv/lib/string.c
+new file mode 100644
+index 000000000000..694352d21c21
+--- /dev/null
++++ b/arch/riscv/lib/string.c
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * String functions optimized for hardware which doesn't
++ * handle unaligned memory accesses efficiently.
++ *
++ * Copyright (C) 2021 Matteo Croce
++ */
++
++#include <linux/types.h>
++#include <linux/module.h>
++
++/* Minimum size for a word copy to be convenient */
++#define MIN_THRESHOLD (BITS_PER_LONG / 8 * 2)
++
++/* convenience union to avoid cast between different pointer types */
++union types {
++	u8 *u8;
++	unsigned long *ulong;
++	uintptr_t uptr;
++};
++
++union const_types {
++	const u8 *u8;
++	unsigned long *ulong;
++};
++
++void __weak *memcpy(void *dest, const void *src, size_t count)
++{
++	const int bytes_long = BITS_PER_LONG / 8;
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
++	const int mask = bytes_long - 1;
++	const int distance = (src - dest) & mask;
++#endif
++	union const_types s = { .u8 = src };
++	union types d = { .u8 = dest };
++
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
++	if (count < MIN_THRESHOLD)
++		goto copy_remainder;
++
++	/* copy a byte at time until destination is aligned */
++	for (; count && d.uptr & mask; count--)
++		*d.u8++ = *s.u8++;
++
++	if (distance) {
++		unsigned long last, next;
++
++		/* move s backward to the previous alignment boundary */
++		s.u8 -= distance;
++
++		/* 32/64 bit wide copy from s to d.
++		 * d is aligned now but s is not, so read s alignment wise,
++		 * and do proper shift to get the right value.
++		 * Works only on Little Endian machines.
++		 */
++		for (next = s.ulong[0]; count >= bytes_long + mask; count -= bytes_long) {
++			last = next;
++			next = s.ulong[1];
++
++			d.ulong[0] = last >> (distance * 8) |
++				     next << ((bytes_long - distance) * 8);
++
++			d.ulong++;
++			s.ulong++;
++		}
++
++		/* restore s with the original offset */
++		s.u8 += distance;
++	} else
++#endif
++	{
++		/* if the source and dest lower bits are the same, do a simple
++		 * 32/64 bit wide copy.
++		 */
++		for (; count >= bytes_long; count -= bytes_long)
++			*d.ulong++ = *s.ulong++;
++	}
++
++	/* suppress warning when CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y */
++	goto copy_remainder;
++
++copy_remainder:
++	while (count--)
++		*d.u8++ = *s.u8++;
++
++	return dest;
++}
++EXPORT_SYMBOL(memcpy);
++
++void *__memcpy(void *dest, const void *src, size_t count)
++{
++	return memcpy(dest, src, count);
++}
++EXPORT_SYMBOL(__memcpy);
 -- 
 2.31.1
 
