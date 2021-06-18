@@ -2,123 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 765933AD10B
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Jun 2021 19:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9998F3AD124
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Jun 2021 19:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbhFRRU1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Jun 2021 13:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbhFRRU1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Jun 2021 13:20:27 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B96C06175F
-        for <linux-arch@vger.kernel.org>; Fri, 18 Jun 2021 10:18:17 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id m21so17786132lfg.13
-        for <linux-arch@vger.kernel.org>; Fri, 18 Jun 2021 10:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nBnuJCjQE+aAZPwJSd9bJXr2Ds6ZThaAzMpjQA51kUI=;
-        b=F1P+lKociosdfPcWBId6Ys43KUatGPrylEYc2ZkgaQSaIwYVTH2vl+FTSZsWUNtS2S
-         xCB0wytuIkmaIt/KIgw7pVq9/rGNTKHWukrdulsisjI9kiH2RhIFD/Maq8/t/3Zc/+yP
-         OBhR+UrWjvPrDLgpXfflpIry4l57W+y+y6Jd0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nBnuJCjQE+aAZPwJSd9bJXr2Ds6ZThaAzMpjQA51kUI=;
-        b=RoQHLwjgZmbJ0HKd9Dxwl7w7CzaQKg9SUlPLakVQ/OIHxR/HoF/6bpDNgM9+26X8T8
-         DZxaBfPaQGD094sHAx81EihvMQJHWLvJ3aSVHXXu1csIUnk2ROpjBwbmXjIVeeIYKaKq
-         tUjVXaKpV0bO229VCXFDR1r9l1j/Di2Upwzwyj9JprTBzTH0/QM5I+b5t6kIsVsH2der
-         81LnNGvbtgQSxiA0UYXrB1qrPccpY9aaa1ZteLPjiFQdBFRRAb7PevGcB+VaP/3sbLVA
-         jDqEq0bHGTg28fbGrC1z9vXa8QsiPwBJdW6iPgR8QwFGy/OZIlEn94Sf7yEv9A2+vq5v
-         CmWw==
-X-Gm-Message-State: AOAM531/LiYvoiMBW8cZ/wYgDXCjL3Ap6WAJbaDqUxnyOlKpsoM5Znp1
-        l2EeVxJ2p2KrtK8z0nO3A1+V3IWzrOrqfYsg
-X-Google-Smtp-Source: ABdhPJzy5p53WktnrubJ0sALlI8l7mT9NuA0LKTFFTJg/19jlrXe/KFJGN5pSqg1YeFgrWjkOG8dkA==
-X-Received: by 2002:a19:c211:: with SMTP id l17mr3872915lfc.500.1624036694798;
-        Fri, 18 Jun 2021 10:18:14 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id bi2sm1052300lfb.190.2021.06.18.10.18.14
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Jun 2021 10:18:14 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id k8so14897704lja.4
-        for <linux-arch@vger.kernel.org>; Fri, 18 Jun 2021 10:18:14 -0700 (PDT)
-X-Received: by 2002:a2e:2ac6:: with SMTP id q189mr10211514ljq.61.1624036693648;
- Fri, 18 Jun 2021 10:18:13 -0700 (PDT)
+        id S234238AbhFRR2p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Jun 2021 13:28:45 -0400
+Received: from mail.efficios.com ([167.114.26.124]:48982 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230387AbhFRR2o (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Jun 2021 13:28:44 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 7AEE0345C4E;
+        Fri, 18 Jun 2021 13:26:34 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id TuF5gIHS_P9W; Fri, 18 Jun 2021 13:26:33 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 39D64346030;
+        Fri, 18 Jun 2021 13:26:33 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 39D64346030
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1624037193;
+        bh=RVU1L7Bs5o8SF/s3fQLWZ2mgUojZ65JgsimVBayw7WM=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=QxaZv37PI2T8k93cxNlviHuor7Eo1jdIh84JQW8lKtRqEnYg+leveVO3V0WFWrykT
+         MvqRXaDcPeJ0eAiUxm+yvxtY3zYscfcARDn2rN0ViMIPWwVcsj7n0OufUs3b9Z1+9R
+         oEl+McAQbfLVbznVaLyI+IjT8OEOZRe3hMWnqTSYXPrFjcy1639fmawQUsbPISdolV
+         vzjbXySgml575Cim3yIEQOpynXR/OAVs0L+ob5PmJZT2AamgShg4nH+wblsIvv+a9o
+         2rIOi5IDZ47uAsVlnSrTmJsFS38xpSUbGgJqwa7YawAOIt4JkaTWO/VI7k6xNPxC35
+         h+2QpUFHgBE5Q==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id aQITEBiYLT6c; Fri, 18 Jun 2021 13:26:33 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 1BA0A346100;
+        Fri, 18 Jun 2021 13:26:33 -0400 (EDT)
+Date:   Fri, 18 Jun 2021 13:26:32 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        maged michael <maged.michael@gmail.com>,
+        Dave Watson <davejwatson@fb.com>,
+        Will Deacon <will.deacon@arm.com>,
+        "Russell King, ARM Linux" <linux@armlinux.org.uk>,
+        David Sehr <sehr@google.com>,
+        Paul Mackerras <paulus@samba.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arch <linux-arch@vger.kernel.org>, x86 <x86@kernel.org>,
+        Andrew Hunter <ahh@google.com>,
+        Greg Hackmann <ghackmann@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Paul <paulmck@linux.vnet.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Avi Kivity <avi@scylladb.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-api <linux-api@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <2077369633.12794.1624037192994.JavaMail.zimbra@efficios.com>
+In-Reply-To: <8b200dd5-f37b-b208-82fb-2775df7bcd49@csgroup.eu>
+References: <20180129202020.8515-1-mathieu.desnoyers@efficios.com> <20180129202020.8515-3-mathieu.desnoyers@efficios.com> <8b200dd5-f37b-b208-82fb-2775df7bcd49@csgroup.eu>
+Subject: Re: [PATCH for 4.16 v7 02/11] powerpc: membarrier: Skip memory
+ barrier in switch_mm()
 MIME-Version: 1.0
-References: <1623979642-14983-1-git-send-email-schmitzmic@gmail.com>
-In-Reply-To: <1623979642-14983-1-git-send-email-schmitzmic@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 18 Jun 2021 10:17:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whTKf6UFr6YneXsPU4=8dTs+eEX_861ugESTE3CmZtFUg@mail.gmail.com>
-Message-ID: <CAHk-=whTKf6UFr6YneXsPU4=8dTs+eEX_861ugESTE3CmZtFUg@mail.gmail.com>
-Subject: Re: [PATCH v2] m68k: save extra registers on more syscall entry points
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andreas Schwab <schwab@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4018 (ZimbraWebClient - FF89 (Linux)/8.8.15_GA_4026)
+Thread-Topic: powerpc: membarrier: Skip memory barrier in switch_mm()
+Thread-Index: CQE5LhemvVU5Lc+W1e2QOiB/EG3b7A==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 6:27 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
->
-> I'd need specific test cases to exercise io_uring_setup in
-> particular, to see whether stack offsets for pt_regs and the
-> switch stack have been messed up.
+----- On Jun 18, 2021, at 1:13 PM, Christophe Leroy christophe.leroy@csgroup.eu wrote:
+[...]
+> 
+> I don't understand all that complexity to just replace a simple
+> 'smp_mb__after_unlock_lock()'.
+> 
+> #define smp_mb__after_unlock_lock()	smp_mb()
+> #define smp_mb()	barrier()
+> # define barrier() __asm__ __volatile__("": : :"memory")
+> 
+> 
+> Am I missing some subtility ?
 
-I don't think doing this for io_uring_setup() will help any - the
-problem is not in that system call thread itself, it's purely in the
-kernel thread that it then starts.
+On powerpc CONFIG_SMP, smp_mb() is actually defined as:
 
-And the fact that io_uring_setup() has the full stack frame won't then
-help that kernel thread, for exactly the same reason that was true on
-alpha: copy_thread() will actually _create_ the full stack, but when
-we switch to it (through switch_to() -> resume()), the resume code in
-arch/m68k/kernel/entry.S will switch to that stack, and then do
-RESTORE_SWITCH_STACK which will consume it again.
+#define smp_mb()        __smp_mb()
+#define __smp_mb()      mb()
+#define mb()   __asm__ __volatile__ ("sync" : : : "memory")
 
-So I think m68k should do the same thing as Eric's patch for alpha: do
-the full stack for exit and exit_group, and for kernel thread creation
-- or at least PF_IO_WORKER), do an extra stack frame on the kernel
-stack, so that even after resume() we'll still have another copy of
-the frame.
+So the original motivation here was to skip a "sync" instruction whenever
+switching between threads which are part of the same process. But based on
+recent discussions, I suspect my implementation may be inaccurately doing
+so though.
 
-The alternative would be to do what x86 does: see __switch_to_asm().
-Instead of doing that normal kernel entry/exit stack (with
-SAVE_SWITCH_STACK and RESTORE_SWITCH_STACK), x86 has it's own very
-special "only for task switching" stack frame thing, and leaves the
-pt_regs etc entirely alone.
+Thanks,
 
-Of course, that "only for task switching" is _kind_of_ what the whole
-SAVE_SWITCH_STACK is for - it's part of the name after all - but the
-difference is that on alpha and m68k, it's also (and primarily) the
-"full state" stack frame, used not just for task switching, but for
-signal handling state and for ptrace too.
+Mathieu
 
-So in theory, it would be good to split this up:
 
- (a) have the signal handling and ptrace stack be one thing (maybe
-rename the "SWITCH" part of the operations to something else, like
-"EXTRA" or "SIGNAL" or whatever)
+> 
+> Thanks
+> Christophe
 
- (b) make a separate "for task switching only" stack frame, which is
-used by that switch_to() -> resume() sequence, and that copy_thread()
-has a "struct inactive_task_frame" thing for..
-
-That way, the pt_regs/extra_regs stack frame that copy_thread()
-creates wouldn't then be eaten up by the task switch.
-
-But while that sounds like the right thing to do, it would be a rather
-bigger change. I'm not entirely sure it's worth it.
-
-Eric, comments?
-
-                Linus
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
