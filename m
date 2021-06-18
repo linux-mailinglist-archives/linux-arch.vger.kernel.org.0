@@ -2,122 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7D63ACC82
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Jun 2021 15:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0683ACCA6
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Jun 2021 15:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbhFRNp3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Jun 2021 09:45:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42114 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232427AbhFRNp2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Jun 2021 09:45:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624023798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/gNZOYxvHRh8WAbiF0tOQgle1Sg6oiAk/FOL9PrzSRM=;
-        b=Gl1W5TEbPphPbjyDl1Yp/1vjpdOXpZXiR9aV2SLgW3dGuZ++D4GYq4+2uMoK17xjjZoGIg
-        nPhTwv5PuZDEPMLkLseCAn34FRWgdV/gr1FVM7FQgvAmdxmFP1zleb7n1q7d3LzLy3Ugwf
-        qJ+54Y9CrPxbtZ4fFEQ3ylhMXWB43ko=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-488-NBszeYc8PQGqwzpTJuvCjw-1; Fri, 18 Jun 2021 09:43:17 -0400
-X-MC-Unique: NBszeYc8PQGqwzpTJuvCjw-1
-Received: by mail-ot1-f69.google.com with SMTP id e28-20020a9d491c0000b02903daf90867beso5931657otf.11
-        for <linux-arch@vger.kernel.org>; Fri, 18 Jun 2021 06:43:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=/gNZOYxvHRh8WAbiF0tOQgle1Sg6oiAk/FOL9PrzSRM=;
-        b=OxvrA74wgJImgEnprJFGhbGHdiynlf+aG28g8NIRSLQ+QrSRBxIC4cUefPKWoXMdXe
-         zVkt/Q5ZyzqSY+FFEXxJr+ofSTw6nA3m6FRpqcymHSv6bWmoaRO96MtUPkHHsjbw+jOY
-         OH3K4uJBVlakOyh3f/WhAN6oDPeABb0jC0rGqYMTRCtjogxfDwywjv+DcuqG1FxT2DJo
-         D2prO6b6+8CX6Ri0SImEw3oIaIoTHfK7TxhE1As0WnZNoCPCeaFADxXp7xFrJX620O/g
-         cLS7+O1UIdeb2EXRFz++PhbjMRXD+jUxHDm4bwlbfVyDx0nykx//AYhXnJhsUnNZzFSi
-         rO4w==
-X-Gm-Message-State: AOAM533kwloiqtYBHjBOENf3+sUg903ekulx3cfoOspEv7RIU9B/XvW7
-        s3mPiy0ICMMKnNcohYy2tHwnS848snuHzwwGBgco9RCL19d1aTZY/efslhxRmO8ebFx+Sf1UO9X
-        Se8CVwuhQGHyf+QB3518wkA==
-X-Received: by 2002:aca:ac02:: with SMTP id v2mr15154526oie.154.1624023796412;
-        Fri, 18 Jun 2021 06:43:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJziRuflZC5sU6xUXnHTciiKmLsXNlfJiyZE+R44W4RRLT5GaeC5ScAnNM3vfwinOxZJbgTjdA==
-X-Received: by 2002:aca:ac02:: with SMTP id v2mr15154517oie.154.1624023796250;
-        Fri, 18 Jun 2021 06:43:16 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id w11sm1786875oov.19.2021.06.18.06.43.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Jun 2021 06:43:15 -0700 (PDT)
-Subject: Re: [PATCH 1/1] bug: mark generic BUG() as unreachable
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20210617214328.3501174-1-trix@redhat.com>
- <20210617214328.3501174-3-trix@redhat.com>
- <CAK8P3a14uKvDZ4OevR5z2+AJervkepDcPjGWwstTo5antbQyXA@mail.gmail.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <312e5b85-bfa5-e7f1-c1f7-a13a5d2583b8@redhat.com>
-Date:   Fri, 18 Jun 2021 06:43:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S233615AbhFRNs7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Jun 2021 09:48:59 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:44192 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229782AbhFRNs6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Jun 2021 09:48:58 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5244B3F0;
+        Fri, 18 Jun 2021 15:46:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1624024007;
+        bh=cjgy0YmI5JAdyKuANvJ+TssuRnMgzRk5Q7NIsLwYWWk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tx57mkgNHFv6d3FeiSUt8xE1/yVBTvCL4VS67xaDuQl/c1RwfsCXJ9q7o+KBjt+Nt
+         u9J0NCrM5jVwPknKzctQXqaG6fIX7PJ3XZEydx7KT6UvCQF20lCgZtH1u6I6Bvr8+Q
+         Kea3fe7mOtrkryycL+OGWkQoYi27BwgtLqbGwHAE=
+Date:   Fri, 18 Jun 2021 16:46:23 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
+        David Hildenbrand <david@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Greg KH <greg@kroah.com>, Christoph Lameter <cl@gentwo.de>,
+        Theodore Ts'o <tytso@mit.edu>, Jiri Kosina <jikos@kernel.org>,
+        ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
+Message-ID: <YMyjryXiAfKgS6BY@pendragon.ideasonboard.com>
+References: <YIx7R6tmcRRCl/az@mit.edu>
+ <alpine.DEB.2.22.394.2105271522320.172088@gentwo.de>
+ <YK+esqGjKaPb+b/Q@kroah.com>
+ <c46dbda64558ab884af060f405e3f067112b9c8a.camel@HansenPartnership.com>
+ <b32c8672-06ee-bf68-7963-10aeabc0596c@redhat.com>
+ <5038827c-463f-232d-4dec-da56c71089bd@metux.net>
+ <20210610182318.jrxe3avfhkqq7xqn@nitro.local>
+ <YMJcdbRaQYAgI9ER@pendragon.ideasonboard.com>
+ <20210610152633.7e4a7304@oasis.local.home>
+ <37e8d1a5-7c32-8e77-bb05-f851c87a1004@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a14uKvDZ4OevR5z2+AJervkepDcPjGWwstTo5antbQyXA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <37e8d1a5-7c32-8e77-bb05-f851c87a1004@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Shuah,
 
-On 6/18/21 1:20 AM, Arnd Bergmann wrote:
-> On Thu, Jun 17, 2021 at 11:44 PM <trix@redhat.com> wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> This spurious error is reported for powerpc64, CONFIG_BUG=n
->>
->> diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
->> index f152b9bb916fc..b250e06d7de26 100644
->> --- a/include/asm-generic/bug.h
->> +++ b/include/asm-generic/bug.h
->> @@ -177,7 +177,10 @@ void __warn(const char *file, int line, void *caller, unsigned taint,
->>
->>   #else /* !CONFIG_BUG */
->>   #ifndef HAVE_ARCH_BUG
->> -#define BUG() do {} while (1)
->> +#define BUG() do {                                             \
->> +               do {} while (1);                                \
->> +               unreachable();                                  \
->> +       } while (0)
->>   #endif
-> Please let's not go back to this version, we had good reasons to use
-> the infinite loop,
-> mostly to avoid undefined behavior that would lead to the compiler producing
-> completely random output in code paths that lead to a BUG() statement. Those
-> do cause other kinds of warnings from objtool and from other compilers.
->
-> The obvious workaround here would be to add a return statement locally, but
-> it may also help to figure out what exactly triggers the warning, as I don't see
-> it in my randconfig builds and it may be that there is a bug elsewhere.
->
-> I've tried a simple reproducer on https://godbolt.org/z/341P949bG that did not
-> show this warning in any of the compilers I tried. Can you try to narrow down
-> the exact compiler versions and commmand line options that produce the
-> warning? https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/ has
-> most of the supported gcc versions in case you need those.
+On Thu, Jun 10, 2021 at 01:55:23PM -0600, Shuah Khan wrote:
+> On 6/10/21 1:26 PM, Steven Rostedt wrote:
+> > On Thu, 10 Jun 2021 21:39:49 +0300 Laurent Pinchart wrote:
+> > 
+> >> There will always be more informal discussions between on-site
+> >> participants. After all, this is one of the benefits of conferences, by
+> >> being all together we can easily organize ad-hoc discussions. This is
+> >> traditionally done by finding a not too noisy corner in the conference
+> >> center, would it be useful to have more break-out rooms with A/V
+> >> equipment than usual ?
+> > 
+> > I've been giving this quite some thought too, and I've come to the
+> > understanding (and sure I can be wrong, but I don't think that I am),
+> > is that when doing a hybrid event, the remote people will always be
+> > "second class citizens" with respect to the communication that is going
+> > on. Saying that we can make it the same is not going to happen unless
+> > you start restricting what people can do that are present, and that
+> > will just destroy the conference IMO.
+> > 
+> > That said, I think we should add more to make the communication better
+> > for those that are not present. Maybe an idea is to have break outs
+> > followed by the presentation and evening events that include remote
+> > attendees to discuss with those that are there about what they might
+> > have missed. Have incentives at these break outs (free stacks and
+> > beer?) to encourage the live attendees to attend and have a discussion
+> > with the remote attendees.
+> > 
+> > The presentations would have remote access, where remote attendees can
+> > at the very least write in some chat their questions or comments. If
+> > video and connectivity is good enough, perhaps have a screen where they
+> > can show up and talk, but that may have logistical limitations.
+> > 
+> 
+> You are absolutely right that the remote people will have a hard time
+> participating and keeping up with in-person participants. I have a
+> couple of ideas on how we might be able to improve remote experience
+> without restricting in-person experience.
+> 
+> - Have one or two moderators per session to watch chat and Q&A to enable
+>    remote participants to chime in and participate.
+> - Moderators can make sure remote participation doesn't go unnoticed and
+>    enable taking turns for remote vs. people participating in person.
+> 
+> It will be change in the way we interact in all in-person sessions for
+> sure, however it might enhance the experience for remote attendees.
 
-Please follow the link in the cover letter to the original issue 
-reported for fs/afs/dir + gcc ppc64 9.x / 10.3.1
+A moderator to watch online chat and relay questions is I believe very
+good for presentations, it's hard for a presenter to keep an eye on a
+screen while having to manage the interaction with the audience in the
+room (there's the usual joke of the difference between an introvert and
+an extrovert open-source developer is that the extrovert looks at *your*
+shoes when talking to you, but in many presentations the speaker
+nowadays does a fairly good job as watching the audience, at least from
+time to time :-)).
 
-Adding the return was the first, rejected solution.
+For workshop or brainstorming types of sessions, the highest barrier to
+participation for remote attendees is local attendees not speaking in
+microphones. That's the number one rule that moderators would need to
+enforce, I think all the rest depends on it. This may require a larger
+number of microphones in the room than usual.
 
-Tom
+-- 
+Regards,
 
->
->        Arnd
->
-
+Laurent Pinchart
