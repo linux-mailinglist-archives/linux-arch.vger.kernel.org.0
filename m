@@ -2,144 +2,263 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01ADF3AC06D
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Jun 2021 03:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45EF3AC089
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Jun 2021 03:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbhFRBIJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Jun 2021 21:08:09 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:36646 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbhFRBIJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Jun 2021 21:08:09 -0400
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0E63420B83FE;
-        Thu, 17 Jun 2021 18:06:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0E63420B83FE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1623978361;
-        bh=bcgnjvQBfThviAfC+nD0r2UT09RJuWAKCqEqQjpA3Og=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fUL6DWKLJQUl6vGWhBUXX+k/2dBmtGWCQxF7DjcAdmRLWwjVd1iZZDodMcxjpTpdf
-         5qheHDrPcxAEBOmU2QOutsCe9ZY+2rSDqtIUnXNkbCXXFHAGCjk7vGLkx6r1krTRrK
-         v9LKbFrGUrExxaaqW8kNvsOShTkFnuIj9ewAOX9c=
-Received: by mail-pj1-f51.google.com with SMTP id o10-20020a17090aac0ab029016e92770073so4881643pjq.5;
-        Thu, 17 Jun 2021 18:06:00 -0700 (PDT)
-X-Gm-Message-State: AOAM531TmHof7tRwKrRpZFLHYzy8VRM76ErnQEBG8d9NPNfSK6rMVIL4
-        AyFaQhUTS4gvgRUxSgLuP7IUBouhObHkazrv8hE=
-X-Google-Smtp-Source: ABdhPJy1CyLirX67m04udv8UHON+e5LssQwZjwMZGuMURb8bRjcpQvLKYFf0zMAVsCblD14Q5nNYc/2Dk/zxdAQjUN4=
-X-Received: by 2002:a17:90a:650b:: with SMTP id i11mr8254024pjj.39.1623978360544;
- Thu, 17 Jun 2021 18:06:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210615023812.50885-1-mcroce@linux.microsoft.com>
- <20210615023812.50885-2-mcroce@linux.microsoft.com> <CAJF2gTTreOvQYYXHBYxznB9+vMaASKg8vwA5mkqVo1T6=eVhzw@mail.gmail.com>
- <CAFnufp1OHdRd-tbB+Hi0UnXARtxGPdkK6MJktnaNCNt65d3Oew@mail.gmail.com>
- <f9b78350d9504e889813fc47df41f3fe@AcuMS.aculab.com> <CAFnufp1CA7g=poF3UpKjX7YYz569Wxc1YORSv+uhpU5847xuXw@mail.gmail.com>
- <CAFnufp2LmXxs6+aH7cjH=T4Ye_Yo6yvJpF93JcY+HtVvXB44oQ@mail.gmail.com>
-In-Reply-To: <CAFnufp2LmXxs6+aH7cjH=T4Ye_Yo6yvJpF93JcY+HtVvXB44oQ@mail.gmail.com>
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-Date:   Fri, 18 Jun 2021 03:05:24 +0200
-X-Gmail-Original-Message-ID: <CAFnufp0qjJG4fr=rcAHYrZp3CVfSs0TBuDN_eAOwOM-K804yow@mail.gmail.com>
-Message-ID: <CAFnufp0qjJG4fr=rcAHYrZp3CVfSs0TBuDN_eAOwOM-K804yow@mail.gmail.com>
-Subject: Re: [PATCH 1/3] riscv: optimized memcpy
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Guo Ren <guoren@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S233524AbhFRB3h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Jun 2021 21:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233475AbhFRB3g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Jun 2021 21:29:36 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5923CC061574
+        for <linux-arch@vger.kernel.org>; Thu, 17 Jun 2021 18:27:28 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id q25so6410734pfh.7
+        for <linux-arch@vger.kernel.org>; Thu, 17 Jun 2021 18:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=XSTHhCaBsJt3mNAtVlBQxPXwkNlyk/T9G5vdaaRvwQA=;
+        b=Yuxmy9lvIOTJ+DSak2qwgkVm2cPHcAsH8oCCLJBjReVBYq+tLDFFjOazOAHo8xdInx
+         ZZj86VDMPeuaeg2Xv3jcGxSFLk+OcmSEOP44/85iBODr6UOczwS4gmFLta5MX9WDdaeS
+         qfQySiMNHaX0mVl1tNvu4tmV2IDQdzEX3Zt3UfKZ7Ps8ZbkNjw9DCHGmLtmo4uSSJF8M
+         ZyateXt2HzgjrDcHiuKzcIWHcgG/splJHd8SqmhnSzAL1iXNlBtzvjtqdyaJ94dXBMHO
+         bWwb9OT6Hogb1SYhrdVMYXsp0JqVvmhkRHvQHPJ8ilalpZ6RKUq709zBw60JhO8i3PfF
+         VuEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=XSTHhCaBsJt3mNAtVlBQxPXwkNlyk/T9G5vdaaRvwQA=;
+        b=gCfOi+lucPNKOPjCeIhbKkhUcib2kyL5+lsMcD6X8l/RrS/lrHMj97c7uKMuenebnF
+         GPcYPxp7ypZI+EaFE4TCMEjByoFtxOezEtvmzfH44WJewJP8NWnQC9pUIXbnmNTKyZCX
+         iiGrkFQheTiPOKTaoVbLuqEfkg7yRpNVt/29ZihPmff5z+uWBe6pudzVYHRWUT4tBtSY
+         qe0zDGXXp2stHNLW5LkGO+4Alpql3K/9K4TGQYK2A6XXfPOuHFkyn3fFuFyszUHX4vWf
+         egqVklLCg4rx8w4pHNGZ5+Ni3VUbtgGVuD2F+FVsHm5r3jqJBRGoApf9LBMas9BlgK7o
+         5CcA==
+X-Gm-Message-State: AOAM532u1G5hBBAsB883eqO94793d3WWVM4YZ1nX3XFaUujyfUBSfLWJ
+        g1lG4F3fnvBy7bfychxW06dYVgrKNpl7sQ==
+X-Google-Smtp-Source: ABdhPJw0SxEC/W/anhO8amMuGDuGZo9MCJArdet+AS6JgCUoX35MrG5NieCe9gByeVkwlm3LHdko+w==
+X-Received: by 2002:a05:6a00:238e:b029:2ef:839b:adc7 with SMTP id f14-20020a056a00238eb02902ef839badc7mr2576582pfc.54.1623979647914;
+        Thu, 17 Jun 2021 18:27:27 -0700 (PDT)
+Received: from xplor.waratah.dyndns.org (222-152-189-137-fibre.sparkbb.co.nz. [222.152.189.137])
+        by smtp.gmail.com with ESMTPSA id w71sm6091512pfc.164.2021.06.17.18.27.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Jun 2021 18:27:27 -0700 (PDT)
+Received: by xplor.waratah.dyndns.org (Postfix, from userid 1000)
+        id F120C3603D8; Fri, 18 Jun 2021 13:27:23 +1200 (NZST)
+From:   Michael Schmitz <schmitzmic@gmail.com>
+To:     geert@linux-m68k.org, linux-arch@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org
+Cc:     ebiederm@xmission.com, torvalds@linux-foundation.org,
+        schwab@linux-m68k.org, Michael Schmitz <schmitzmic@gmail.com>
+Subject: [PATCH v2] m68k: save extra registers on more syscall entry points
+Date:   Fri, 18 Jun 2021 13:27:22 +1200
+Message-Id: <1623979642-14983-1-git-send-email-schmitzmic@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 18, 2021 at 2:32 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
->
-> On Thu, Jun 17, 2021 at 11:48 PM Matteo Croce
-> <mcroce@linux.microsoft.com> wrote:
-> >
-> > On Thu, Jun 17, 2021 at 11:30 PM David Laight <David.Laight@aculab.com> wrote:
-> > >
-> > > From: Matteo Croce
-> > > > Sent: 16 June 2021 19:52
-> > > > To: Guo Ren <guoren@kernel.org>
-> > > >
-> > > > On Wed, Jun 16, 2021 at 1:46 PM Guo Ren <guoren@kernel.org> wrote:
-> > > > >
-> > > > > Hi Matteo,
-> > > > >
-> > > > > Have you tried Glibc generic implementation code?
-> > > > > ref: https://lore.kernel.org/linux-arch/20190629053641.3iBfk9-
-> > > > I_D29cDp9yJnIdIg7oMtHNZlDmhLQPTumhEc@z/#t
-> > > > >
-> > > > > If Glibc codes have the same performance in your hardware, then you
-> > > > > could give a generic implementation first.
-> > >
-> > > Isn't that a byte copy loop - the performance of that ought to be terrible.
-> > > ...
-> > >
-> > > > I had a look, it seems that it's a C unrolled version with the
-> > > > 'register' keyword.
-> > > > The same one was already merged in nios2:
-> > > > https://elixir.bootlin.com/linux/latest/source/arch/nios2/lib/memcpy.c#L68
-> > >
-> > > I know a lot about the nios2 instruction timings.
-> > > (I've looked at code execution in the fpga's intel 'logic analiser.)
-> > > It is a very simple 4-clock pipeline cpu with a 2-clock delay
-> > > before a value read from 'tightly coupled memory' (aka cache)
-> > > can be used in another instruction.
-> > > There is also a subtle pipeline stall if a read follows a write
-> > > to the same memory block because the write is executed one
-> > > clock later - and would collide with the read.
-> > > Since it only ever executes one instruction per clock loop
-> > > unrolling does help - since you never get the loop control 'for free'.
-> > > OTOH you don't need to use that many registers.
-> > > But an unrolled loop should approach 2 bytes/clock (32bit cpu).
-> > >
-> > > > I copied _wordcopy_fwd_aligned() from Glibc, and I have a very similar
-> > > > result of the other versions:
-> > > >
-> > > > [  563.359126] Strings selftest: memcpy(src+7, dst+7): 257 Mb/s
-> > >
-> > > What clock speed is that running at?
-> > > It seems very slow for a 64bit cpu (that isn't an fpga soft-cpu).
-> > >
-> > > While the small riscv cpu might be similar to the nios2 (and mips
-> > > for that matter), there are also bigger/faster cpu.
-> > > I'm sure these can execute multiple instructions/clock
-> > > and possible even read and write at the same time.
-> > > Unless they also support significant instruction re-ordering
-> > > the trivial copy loops are going to be slow on such cpu.
-> > >
-> >
-> > It's running at 1 GHz.
-> >
-> > I get 257 Mb/s with a memcpy, a bit more with a memset,
-> > but I get 1200 Mb/s with a cyle which just reads memory with 64 bit addressing.
-> >
->
-> Err, I forget a mlock() before accessing the memory in userspace.
->
-> The real speed here is:
->
-> 8 bit read: 155.42 Mb/s
-> 64 bit read: 277.29 Mb/s
-> 8 bit write: 138.57 Mb/s
-> 64 bit write: 239.21 Mb/s
->
+Multiple syscalls are liable to PTRACE_EVENT_* tracing and thus
+require full user context saved on the kernel stack. We only
+save those registers not preserved by C code currently.
 
-Anyway, thanks for the info on nio2 timings.
-If you think that an unrolled loop would help, we can achieve the same in C.
-I think we could code something similar to a Duff device (or with jump
-labels) to unroll the loop but at the same time doing efficient small copies.
+do_exit() calls ptrace_stop() which may require access to all
+saved registers. Add code to save additional registers in the
+switch_stack struct for exit and exit_group syscalls (similar
+to what is already done for fork, vfork and clone3). According
+to Eric's analysis, execve and execveat can be traced as well,
+so have been given the same treatment.
 
-Regards,
+I'm not sure what to do about io_uring_setup - added code to
+save full context on entry, and some more code to save/restore
+additional registers on the switch stack around the kworker thread
+call in ret_from_kernel_thread, but this may well be redundant.
+
+I'd need specific test cases to exercise io_uring_setup in
+particular, to see whether stack offsets for pt_regs and the
+switch stack have been messed up.
+
+Boot tested on ARAnym - earlier version including io_uring entry
+save also tested on real hardware unter heavy IO load.
+
+CC: Eric W. Biederman <ebiederm@xmission.com>
+CC: Linus Torvalds <torvalds@linux-foundation.org>
+CC: Andreas Schwab <schwab@linux-m68k.org>
+Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
 
 --
-per aspera ad upstream
+Changes from v1:
+
+- added exec, execve and io_uring_setup syscalls
+- save extra registers around kworker thread calls
+---
+ arch/m68k/kernel/entry.S              | 41 ++++++++++++++++++++++++++++++++++-
+ arch/m68k/kernel/process.c            | 39 +++++++++++++++++++++++++++++++++
+ arch/m68k/kernel/syscalls/syscall.tbl | 10 ++++-----
+ 3 files changed, 84 insertions(+), 6 deletions(-)
+
+diff --git a/arch/m68k/kernel/entry.S b/arch/m68k/kernel/entry.S
+index 9dd76fb..02bf2a1 100644
+--- a/arch/m68k/kernel/entry.S
++++ b/arch/m68k/kernel/entry.S
+@@ -76,6 +76,41 @@ ENTRY(__sys_clone3)
+ 	lea	%sp@(28),%sp
+ 	rts
+ 
++ENTRY(__sys_exit)
++	SAVE_SWITCH_STACK
++	pea	%sp@(SWITCH_STACK_SIZE)
++	jbsr	m68k_exit
++	lea	%sp@(28),%sp
++	rts
++
++ENTRY(__sys_exit_group)
++	SAVE_SWITCH_STACK
++	pea	%sp@(SWITCH_STACK_SIZE)
++	jbsr	m68k_exit_group
++	lea	%sp@(28),%sp
++	rts
++
++ENTRY(__sys_execve)
++	SAVE_SWITCH_STACK
++	pea	%sp@(SWITCH_STACK_SIZE)
++	jbsr	m68k_execve
++	lea	%sp@(28),%sp
++	rts
++
++ENTRY(__sys_execveat)
++	SAVE_SWITCH_STACK
++	pea	%sp@(SWITCH_STACK_SIZE)
++	jbsr	m68k_execveat
++	lea	%sp@(28),%sp
++	rts
++
++ENTRY(__sys_io_uring_setup)
++	SAVE_SWITCH_STACK
++	pea	%sp@(SWITCH_STACK_SIZE)
++	jbsr	m68k_io_uring_setup
++	lea	%sp@(28),%sp
++	rts
++
+ ENTRY(sys_sigreturn)
+ 	SAVE_SWITCH_STACK
+ 	movel	%sp,%sp@-		  | switch_stack pointer
+@@ -123,9 +158,13 @@ ENTRY(ret_from_kernel_thread)
+ 	| a3 contains the kernel thread payload, d7 - its argument
+ 	movel	%d1,%sp@-
+ 	jsr	schedule_tail
+-	movel	%d7,(%sp)
++	addql	#4,%sp
++	| kernel threads can be traced!
++	SAVE_SWITCH_STACK
++	movel	%d7,%sp@-
+ 	jsr	%a3@
+ 	addql	#4,%sp
++	RESTORE_SWITCH_STACK
+ 	jra	ret_from_exception
+ 
+ #if defined(CONFIG_COLDFIRE) || !defined(CONFIG_MMU)
+diff --git a/arch/m68k/kernel/process.c b/arch/m68k/kernel/process.c
+index da83cc8..298ac99 100644
+--- a/arch/m68k/kernel/process.c
++++ b/arch/m68k/kernel/process.c
+@@ -138,6 +138,45 @@ asmlinkage int m68k_clone3(struct pt_regs *regs)
+ 	return sys_clone3((struct clone_args __user *)regs->d1, regs->d2);
+ }
+ 
++/*
++ * Because extra registers are saved on the stack after the sys_exit()
++ * arguments, this C wrapper extracts them from pt_regs * and then calls the
++ * generic sys_exit() implementation.
++ */
++asmlinkage int m68k_exit(struct pt_regs *regs)
++{
++	return sys_exit(regs->d1);
++}
++
++/* Same for sys_exit_group ... */
++asmlinkage int m68k_exit_group(struct pt_regs *regs)
++{
++	return sys_exit_group(regs->d1);
++}
++
++/* Same for sys_exit_group ... */
++asmlinkage int m68k_execve(struct pt_regs *regs)
++{
++	return sys_execve((const char __user *)regs->d1,
++			(const char __user *const __user*)regs->d2,
++			(const char __user *const __user*)regs->d3);
++}
++
++/* Same for sys_exit_group ... */
++asmlinkage int m68k_execveat(struct pt_regs *regs)
++{
++	return sys_execveat(regs->d1, (const char __user *)regs->d2,
++			(const char __user *const __user*)regs->d3,
++			(const char __user *const __user*)regs->d4,
++			regs->d5);
++}
++
++/* and for sys_io_uring_create */
++asmlinkage int m68k_io_uring_setup(struct pt_regs *regs)
++{
++	return sys_io_uring_setup(regs->d1,(struct io_uring_params __user *)regs->d2);
++}
++
+ int copy_thread(unsigned long clone_flags, unsigned long usp, unsigned long arg,
+ 		struct task_struct *p, unsigned long tls)
+ {
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index 0dd019d..4a1ba1d 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -8,7 +8,7 @@
+ # The <abi> is always "common" for this file
+ #
+ 0	common	restart_syscall			sys_restart_syscall
+-1	common	exit				sys_exit
++1	common	exit				__sys_exit
+ 2	common	fork				__sys_fork
+ 3	common	read				sys_read
+ 4	common	write				sys_write
+@@ -18,7 +18,7 @@
+ 8	common	creat				sys_creat
+ 9	common	link				sys_link
+ 10	common	unlink				sys_unlink
+-11	common	execve				sys_execve
++11	common	execve				__sys_execve
+ 12	common	chdir				sys_chdir
+ 13	common	time				sys_time32
+ 14	common	mknod				sys_mknod
+@@ -254,7 +254,7 @@
+ 244	common	io_submit			sys_io_submit
+ 245	common	io_cancel			sys_io_cancel
+ 246	common	fadvise64			sys_fadvise64
+-247	common	exit_group			sys_exit_group
++247	common	exit_group			__sys_exit_group
+ 248	common	lookup_dcookie			sys_lookup_dcookie
+ 249	common	epoll_create			sys_epoll_create
+ 250	common	epoll_ctl			sys_epoll_ctl
+@@ -362,7 +362,7 @@
+ 352	common	getrandom			sys_getrandom
+ 353	common	memfd_create			sys_memfd_create
+ 354	common	bpf				sys_bpf
+-355	common	execveat			sys_execveat
++355	common	execveat			__sys_execveat
+ 356	common	socket				sys_socket
+ 357	common	socketpair			sys_socketpair
+ 358	common	bind				sys_bind
+@@ -424,7 +424,7 @@
+ 422	common	futex_time64			sys_futex
+ 423	common	sched_rr_get_interval_time64	sys_sched_rr_get_interval
+ 424	common	pidfd_send_signal		sys_pidfd_send_signal
+-425	common	io_uring_setup			sys_io_uring_setup
++425	common	io_uring_setup			__sys_io_uring_setup
+ 426	common	io_uring_enter			sys_io_uring_enter
+ 427	common	io_uring_register		sys_io_uring_register
+ 428	common	open_tree			sys_open_tree
+-- 
+2.7.4
+
