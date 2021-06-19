@@ -2,187 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C6B3AD69A
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Jun 2021 04:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D94F3AD69E
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Jun 2021 04:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234544AbhFSCQ1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Jun 2021 22:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S235541AbhFSCTl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Jun 2021 22:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbhFSCQ1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Jun 2021 22:16:27 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8698C06175F
-        for <linux-arch@vger.kernel.org>; Fri, 18 Jun 2021 19:14:16 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id k8so16406832lja.4
-        for <linux-arch@vger.kernel.org>; Fri, 18 Jun 2021 19:14:16 -0700 (PDT)
+        with ESMTP id S235506AbhFSCTj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Jun 2021 22:19:39 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A02C061574
+        for <linux-arch@vger.kernel.org>; Fri, 18 Jun 2021 19:17:25 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id g192so1436220pfb.6
+        for <linux-arch@vger.kernel.org>; Fri, 18 Jun 2021 19:17:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PlUr2dj/mPpBImS62lo8f1D6lIrU3rKWetXXOvmPDow=;
-        b=NrfTthomeCk7Zy2BhRIdRjdjMXvqIUZUQIiC26wC3z0llHdFvgiwxg2Wv0E0XqyyFn
-         ChuquI4lQJlE+oTwPNlnR03/BmN+VzWeTMj4n8Duf6yDqAgb+ks9bqfWkHL9UA4/4fyc
-         b254IzqR73JuzFI8AM2B/IDFi0OM7X+hkh8W8=
+        d=gmail.com; s=20161025;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=e4DB3o74a84xyzv+F58mWak5ZIBVKPGvUjIOnua/xDM=;
+        b=f5bW50XIwU5uYdtY7CnuL5lJohpg8emnxifiv5R8ftJjzkNKrebUaTM/TLYo/cQ3Hs
+         0zr2h+95U4z6wQbIlwH67wmkOxBTFB7QZ27v6H0tyxynKrV7/UsF0pTSF+2aRwGrELTb
+         y7m/u1pTnTY8EXCO2/e6bzgJHQNx5PacZTHRBEgrQKEvRRBpQPAyzMpSwz/BbYEGoQtE
+         uxV2N+gn13WqCrf96IMSxVEIblyjJ1hdQ2fxKop0UATn0D1WwUVx2TcwrZqU/zEY0Szc
+         7KQOV282sxPvJAJxf8YRDogIZBVCH/n81YtsIwQtSqAPV7OIqyD/pCPhGEiy5g333cyj
+         /B4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PlUr2dj/mPpBImS62lo8f1D6lIrU3rKWetXXOvmPDow=;
-        b=S0sw7SiaICV/3giWTWxsU8oV5wKAcjIJmnPx7iVmaFdx1W6BkzgxNY2XPYSk68yI5f
-         bb6VEBogNg+yrGeFqGCF/8epkkvcHkPCWnvhCiMaWhtCbqMF5tY/foETX3xDx03KGoGw
-         GGH6blEBlIYqxBIg3BerwnwdfPLL9Y/Kq2Sjdmoxh4/zBpyoAsDMby9Vfy1qljUdgtVo
-         um/WyasQ9A5aZCxzc4kwP3kNsZhfft5HOWn2VM0g7XkQwrurddYNAUJoumhJIPg3GyOs
-         tF1pISK6wiW+Je3zAfb5TB1Aqa4w7m0BidMJ3G4XXz36sVgEgpmkfxKrov/nPK0qg5Hy
-         sntQ==
-X-Gm-Message-State: AOAM531k8Lm1MS0kgs3EQ/KhOtzFooHDo/lRpX+EO2vHS4CZFVPiC0Pw
-        uM5OqJ5SJfQnUHOmG5bAFE6L9V6M4YC1quoW
-X-Google-Smtp-Source: ABdhPJw2wjGVyZRKOzyIhzHwrJvGp4/Y5tLQZbVIZuAtaGjYI72bLpNdCgKFuqLSRMGL6fggtW1xWA==
-X-Received: by 2002:a2e:2c19:: with SMTP id s25mr5378407ljs.361.1624068855043;
-        Fri, 18 Jun 2021 19:14:15 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id p15sm394502ljg.28.2021.06.18.19.14.14
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Jun 2021 19:14:14 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id h15so1140024lfv.12
-        for <linux-arch@vger.kernel.org>; Fri, 18 Jun 2021 19:14:14 -0700 (PDT)
-X-Received: by 2002:a05:6512:3d13:: with SMTP id d19mr5376578lfv.41.1624068854147;
- Fri, 18 Jun 2021 19:14:14 -0700 (PDT)
-MIME-Version: 1.0
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=e4DB3o74a84xyzv+F58mWak5ZIBVKPGvUjIOnua/xDM=;
+        b=boSdt9hXBvlpHGbUUH7+O8rs7CFHX1D/WzMGTA5Hr9riLnz38t6ix6MMnyfTeA/3/S
+         BC1g2mFubmoasIW0mD0vVQ/siZs7EJEZj+W8NGZFU2q+MqJC5AYjGkzg8nHqZikYsulw
+         BL6DP1p7W+eI07dE/jIHSP66R2NFLd8et1Z2T00RDdqVdlaJivm5bQmwbbXZRbtyV93J
+         yWmojtuBrpwb+Wds/LhmnIecR1gAkV46LhXlGJUcmyLGcLcDRwCdPcbGb8Iz1yNlgNb4
+         Z9V6HpdOGgX0tc8gDMDt4ypo/mWdOKIhMyWVG9k2IbYQojQO9ocLZjIG1fcUwCNJ/E9C
+         c53Q==
+X-Gm-Message-State: AOAM533Au5VSL9aQQiFMEP7u9AFZlKG8Sak6OrjZ1Q27grAhzO8DaMxB
+        rXsDUWzsMuhY5GF7Sg6Aftg=
+X-Google-Smtp-Source: ABdhPJwYqzbmiGJc+M716hkkRLPt2L8WcKqr1/1Q6sZYAlVY/qu1RICs65uzLK8KtJa2KLCuJIa7vw==
+X-Received: by 2002:aa7:8090:0:b029:300:18db:4e11 with SMTP id v16-20020aa780900000b029030018db4e11mr5998599pff.22.1624069044869;
+        Fri, 18 Jun 2021 19:17:24 -0700 (PDT)
+Received: from [10.1.1.25] (222-152-189-137-fibre.sparkbb.co.nz. [222.152.189.137])
+        by smtp.gmail.com with ESMTPSA id x2sm9275150pfp.155.2021.06.18.19.17.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Jun 2021 19:17:24 -0700 (PDT)
+Subject: Re: [PATCH v2] m68k: save extra registers on more syscall entry
+ points
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 References: <1623979642-14983-1-git-send-email-schmitzmic@gmail.com>
  <CAHk-=whTKf6UFr6YneXsPU4=8dTs+eEX_861ugESTE3CmZtFUg@mail.gmail.com>
- <91865b90-c597-6119-5e14-dfe521a33489@gmail.com> <CAHk-=whjJappNkdsrmsRoA4QUiu0_NNqa9Y_ct0A21m2XT5+YA@mail.gmail.com>
- <2b2ba866-104c-afea-9c29-145e9d80c2d5@gmail.com> <CAHk-=wjFG7zfO7RXu8RUOkuRPE59-OuqzBFsH-Zk1ieSKYbrYA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjFG7zfO7RXu8RUOkuRPE59-OuqzBFsH-Zk1ieSKYbrYA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 18 Jun 2021 19:13:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgJkOSXKTL8L9Pv1k0T5tfUmCogsSGfbBdU_3ekS0dW7w@mail.gmail.com>
-Message-ID: <CAHk-=wgJkOSXKTL8L9Pv1k0T5tfUmCogsSGfbBdU_3ekS0dW7w@mail.gmail.com>
-Subject: Re: [PATCH v2] m68k: save extra registers on more syscall entry points
-To:     Michael Schmitz <schmitzmic@gmail.com>
+ <91865b90-c597-6119-5e14-dfe521a33489@gmail.com>
+ <CAHk-=whjJappNkdsrmsRoA4QUiu0_NNqa9Y_ct0A21m2XT5+YA@mail.gmail.com>
+ <2b2ba866-104c-afea-9c29-145e9d80c2d5@gmail.com>
+ <CAHk-=wjFG7zfO7RXu8RUOkuRPE59-OuqzBFsH-Zk1ieSKYbrYA@mail.gmail.com>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         Andreas Schwab <schwab@linux-m68k.org>
-Content-Type: multipart/mixed; boundary="00000000000024960405c514ffcb"
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <596b6fa5-a533-7c80-0138-5d0de756e707@gmail.com>
+Date:   Sat, 19 Jun 2021 14:17:18 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <CAHk-=wjFG7zfO7RXu8RUOkuRPE59-OuqzBFsH-Zk1ieSKYbrYA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---00000000000024960405c514ffcb
-Content-Type: text/plain; charset="UTF-8"
+Hi Linus,
 
-On Fri, Jun 18, 2021 at 6:54 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+Am 19.06.2021 um 13:54 schrieb Linus Torvalds:
+> On Fri, Jun 18, 2021 at 6:32 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+>>
+>> *** FORMAT ERROR ***   FORMAT=0
+>> Current process id is 1
+>> BAD KERNEL TRAP: 00000000
+>> Modules linked in:
+>> PC: [<00002af0>] resume_userspace+0x14/0x16
+>> SR: 2204  SP: (ptrval)  a2: 00000000
+>> d0: 00000000    d1: 00000000    d2: 00000000    d3: 00000000
+>> d4: 00000000    d5: 00000000    a0: 00000000    a1: 00000000
+>
+> Yeah, so that's presumably the rte that causes an exception due to
+> garbage on the stack.
 >
 > The registers being zero at that point is actually expected, so that's
 > not much of a hint. But yeah, clearly I got some stack initialization
 > offset or something wrong there, and I don't know modern m68k nearly
 > well enough to even guess where I screwed up.
 
-Oh. I think I might have an idea.
+It might have been me screwing up - I hand applied the patch on top of 
+my last one and fat fingered one bit (forgot to remove the addql #4,sp@ 
+I had added before the switch stack save).
 
-In that ret_from_kernel_thread code, after it returns from thge kernel
-thread, I did
+With the patch correctly applied, I get this dump:
 
-        addql   #4,%sp
-        RESTORE_SWITCH_STACK
-        jra     ret_from_exception
+Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+CPU: 0 PID: 1 Comm: init Not tainted 5.13.0-rc1-atari-fpuemu-exitfix+ #1126
+Stack from 0081be08:
+         0081be08 003363d8 003363d8 002aebaa 000000ff 00000001 0002fa64 
+00818a90
+         0081a000 0000000b 0081be70 00028610 0032df62 0000000b 0000000b 
+0002e0d2
+         0002fa64 00000001 001a978c 0000000b 0081bf30 0081daf8 0081bf44 
+00000000
+         00000000 00000000 0081ec40 00029458 0000000b 0081a007 00030504 
+0000000b
+         00000000 00000000 00000000 00000000 00818550 00000000 0081bf90 
+0081bf30
+         00000000 0081bf68 00030066 0081da30 000042c4 0081bf30 00000000 
+00000000
+Call Trace: [<002aebaa>] panic+0xc0/0x282
+  [<0002fa64>] do_signal_stop+0x0/0x14a
+  [<00028610>] do_exit+0x152/0x6f4
+  [<0002e0d2>] recalc_sigpending+0x0/0x1e
+  [<0002fa64>] do_signal_stop+0x0/0x14a
+  [<001a978c>] memcpy+0x0/0x88
+  [<00029458>] do_group_exit+0x40/0x7e
+  [<00030504>] get_signal+0x22c/0x510
+  [<00030066>] force_sig_info_to_task+0x7e/0x8a
+  [<000042c4>] do_notify_resume+0x3c/0x484
+  [<000302b2>] force_sig_fault_to_task+0x30/0x3c
+  [<000302d2>] force_sig_fault+0x14/0x1a
+  [<00005eb8>] send_fault_sig+0x24/0x86
+  [<00002b14>] do_signal_return+0x10/0x1a
+  [<00007008>] atari_reset+0x90/0xbc
+  [<0000c000>] clr_mant+0x8/0x14
 
-where that "RESTORE_SWITCH_STACK" loads the user space registers from
-the user-space switch stack.
+No registers dumped at all - no idea how that happened.
 
-BUT.
+I'll try your latest patch next ... bear with me, got a 9-year old 
+chewing my ear off to entertain in between tests.
 
-The switch stack also has that "retpc", and that one should just be popped.
+Cheers,
 
-So I think that code should read
+	Michael
 
-        addql   #4,%sp
-        RESTORE_SWITCH_STACK
-        addql   #4,%sp
-        jra     ret_from_exception
 
-because we want to restore the switch stack registers (they'll all be
-0) but we then want to get rid of retpc too before we jump to
-ret_from_exception, which will do the RESTORE_ALL.
-
-(The first 'addql' is to remove the argument we've pushed on the stack
-earlier in ret_from_kernel_thread, the second addql is to remove
-retpc).
-
- All the *normal* uses of RESTORE_SWITCH_STACK will just do "rts", but
-that's because they were called from the shallower stack. The
-ret_from_kernel_thread case is kind of special, because it had that
-stack frame layout built up manually, rather than have a call to it.
-
-In that sense, it's a bit more like the 'do_trace_entry/exit' code,
-which builds that switch stack using
-
-        subql   #4,%sp
-        SAVE_SWITCH_STACK
-
-and then undoes it using that same
-
-        RESTORE_SWITCH_STACK
-        addql   #4,%sp
-
-sequence that I _should_ have done in ret_from_kernel_thread. (Also,
-see ret_from_signal)
-
-I've attached an updated patch just in case my incoherent ramblings
-above didn't explain what I meant. It's the same as the previous
-patch, it just has that one extra stack update there.
-
-Does _this_ one perhaps work?
-
-                 Linus
-
---00000000000024960405c514ffcb
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kq34nhz80>
-X-Attachment-Id: f_kq34nhz80
-
-IGFyY2gvbTY4ay9rZXJuZWwvZW50cnkuUyAgIHwgMTEgKysrKysrKysrKysKIGFyY2gvbTY4ay9r
-ZXJuZWwvcHJvY2Vzcy5jIHwgMTQgKysrKysrKysrLS0tLS0KIDIgZmlsZXMgY2hhbmdlZCwgMjAg
-aW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9hcmNoL202OGsva2Vy
-bmVsL2VudHJ5LlMgYi9hcmNoL202OGsva2VybmVsL2VudHJ5LlMKaW5kZXggOWRkNzZmYmI3YzZi
-Li44OGZlMGUxYTM3OTMgMTAwNjQ0Ci0tLSBhL2FyY2gvbTY4ay9rZXJuZWwvZW50cnkuUworKysg
-Yi9hcmNoL202OGsva2VybmVsL2VudHJ5LlMKQEAgLTExOSw2ICsxMTksMTUgQEAgRU5UUlkocmV0
-X2Zyb21fZm9yaykKIAlhZGRxbAkjNCwlc3AKIAlqcmEJcmV0X2Zyb21fZXhjZXB0aW9uCiAKKwl8
-IEEga2VybmVsIHRocmVhZCB3aWxsIGp1bXAgaGVyZSBkaXJlY3RseSBmcm9tIHJlc3VtZSwKKwl8
-IHdpdGggdGhlIHN0YWNrIGNvbnRhaW5pbmcgdGhlIGZ1bGwgcmVnaXN0ZXIgc3RhdGUKKwl8IChw
-dF9yZWdzIGFuZCBzd2l0Y2hfc3RhY2spLgorCXwKKwl8IFRoZSBhcmd1bWVudCB3aWxsIGJlIGlu
-IGQ3LCBhbmQgdGhlIGtlcm5lbCBmdW5jdGlvbgorCXwgdG8gY2FsbCB3aWxsIGJlIGluIGEzLgor
-CXwKKwl8IElmIHRoZSBrZXJuZWwgZnVuY3Rpb24gcmV0dXJucywgd2Ugd2FudCB0byByZXR1cm4K
-Kwl8IHRvIHVzZXIgc3BhY2UgLSBpdCBoYXMgZG9uZSBhIGtlcm5lbF9leGVjdmUoKS4KIEVOVFJZ
-KHJldF9mcm9tX2tlcm5lbF90aHJlYWQpCiAJfCBhMyBjb250YWlucyB0aGUga2VybmVsIHRocmVh
-ZCBwYXlsb2FkLCBkNyAtIGl0cyBhcmd1bWVudAogCW1vdmVsCSVkMSwlc3BALQpAQCAtMTI2LDYg
-KzEzNSw4IEBAIEVOVFJZKHJldF9mcm9tX2tlcm5lbF90aHJlYWQpCiAJbW92ZWwJJWQ3LCglc3Ap
-CiAJanNyCSVhM0AKIAlhZGRxbAkjNCwlc3AKKwlSRVNUT1JFX1NXSVRDSF9TVEFDSworCWFkZHFs
-CSM0LCVzcAogCWpyYQlyZXRfZnJvbV9leGNlcHRpb24KIAogI2lmIGRlZmluZWQoQ09ORklHX0NP
-TERGSVJFKSB8fCAhZGVmaW5lZChDT05GSUdfTU1VKQpkaWZmIC0tZ2l0IGEvYXJjaC9tNjhrL2tl
-cm5lbC9wcm9jZXNzLmMgYi9hcmNoL202OGsva2VybmVsL3Byb2Nlc3MuYwppbmRleCBkYTgzY2M4
-M2U3OTEuLjA3MDVmMTQ4NzFhMyAxMDA2NDQKLS0tIGEvYXJjaC9tNjhrL2tlcm5lbC9wcm9jZXNz
-LmMKKysrIGIvYXJjaC9tNjhrL2tlcm5lbC9wcm9jZXNzLmMKQEAgLTE1OCwxMyArMTU4LDE3IEBA
-IGludCBjb3B5X3RocmVhZCh1bnNpZ25lZCBsb25nIGNsb25lX2ZsYWdzLCB1bnNpZ25lZCBsb25n
-IHVzcCwgdW5zaWduZWQgbG9uZyBhcmcsCiAJcC0+dGhyZWFkLmZzID0gZ2V0X2ZzKCkuc2VnOwog
-CiAJaWYgKHVubGlrZWx5KHAtPmZsYWdzICYgKFBGX0tUSFJFQUQgfCBQRl9JT19XT1JLRVIpKSkg
-ewotCQkvKiBrZXJuZWwgdGhyZWFkICovCi0JCW1lbXNldChmcmFtZSwgMCwgc2l6ZW9mKHN0cnVj
-dCBmb3JrX2ZyYW1lKSk7CisJCXN0cnVjdCBzd2l0Y2hfc3RhY2sgKmtzdHAgPSAmZnJhbWUtPnN3
-IC0gMTsKKworCQkvKiBrZXJuZWwgdGhyZWFkIC0gYSBrZXJuZWwtc2lkZSBzd2l0Y2gtc3RhY2sg
-YW5kIHRoZSBmdWxsIHVzZXIgZm9ya19mcmFtZSAqLworCQltZW1zZXQoa3N0cCwgMCwgc2l6ZW9m
-KHN0cnVjdCBzd2l0Y2hfc3RhY2spICsgc2l6ZW9mKHN0cnVjdCBmb3JrX2ZyYW1lKSk7CisKIAkJ
-ZnJhbWUtPnJlZ3Muc3IgPSBQU19TOwotCQlmcmFtZS0+c3cuYTMgPSB1c3A7IC8qIGZ1bmN0aW9u
-ICovCi0JCWZyYW1lLT5zdy5kNyA9IGFyZzsKLQkJZnJhbWUtPnN3LnJldHBjID0gKHVuc2lnbmVk
-IGxvbmcpcmV0X2Zyb21fa2VybmVsX3RocmVhZDsKKwkJa3N0cC0+YTMgPSB1c3A7IC8qIGZ1bmN0
-aW9uICovCisJCWtzdHAtPmQ3ID0gYXJnOworCQlrc3RwLT5yZXRwYyA9ICh1bnNpZ25lZCBsb25n
-KXJldF9mcm9tX2tlcm5lbF90aHJlYWQ7CiAJCXAtPnRocmVhZC51c3AgPSAwOworCQlwLT50aHJl
-YWQua3NwID0gKHVuc2lnbmVkIGxvbmcpa3N0cDsKIAkJcmV0dXJuIDA7CiAJfQogCW1lbWNweShm
-cmFtZSwgY29udGFpbmVyX29mKGN1cnJlbnRfcHRfcmVncygpLCBzdHJ1Y3QgZm9ya19mcmFtZSwg
-cmVncyksCg==
---00000000000024960405c514ffcb--
+>
+>              Linus
+>
