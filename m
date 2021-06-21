@@ -2,56 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E823AF943
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Jun 2021 01:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F7D3AF985
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Jun 2021 01:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbhFUX1X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Jun 2021 19:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
+        id S232123AbhFUXjJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Jun 2021 19:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231566AbhFUX1X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Jun 2021 19:27:23 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E69FC061574;
-        Mon, 21 Jun 2021 16:25:07 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id y21so3553725plb.4;
-        Mon, 21 Jun 2021 16:25:07 -0700 (PDT)
+        with ESMTP id S232075AbhFUXjH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Jun 2021 19:39:07 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA60C061574
+        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 16:36:51 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id m21so32896737lfg.13
+        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 16:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=r0VwenRqskFTDoxa2BG069i4DjqqTYGW10YD8Bvo/q0=;
-        b=F+xHU0Aq6hmH1YvvN8TsIaDZ+1YxE0TAC/D7AUDfDVD99ivp1J2/ZEe+x6H78uyvXj
-         E3ihUPFI1h6CinFlQiMGG9N/FK57sYaQBEHYKmbxomJfPEevCH3VNE9VvZYCh2EFsghE
-         f/HFVrKLPWMR/AoMFOGbraO2smRAYLfRB9g2p0gs6svzmnCwmD2LKKhlymdV7bvrAyiF
-         bZ5H+34iH1uRaGrMDypbUXzPC99bK1vJS/SsOQ1yuMsrhStJouJdPbuOTjsC4KacgFq7
-         zNn+nXPzUDdD/SjHRFw34nmjK53kw1U/2GRYEOaSyDHA8Wp7EQ+lOYrEvt5YlvltZ1kq
-         7nPw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fqBMFMkh+3vsj4PE2zy4sOG9Di6zkfuPgmZeKyRMggk=;
+        b=FwTzGNcpDtlrI1kY0RIGO3zETGbXVETw5XVSJFPsLGj6Xz/SJV56ObDVCGf2pDuQ1Z
+         igDUi27LyzA/lOjip7sVylirPYT+bZ/hF+sKh406iS7GyB+Vq1L8K8GDXIUSy1RHLXYZ
+         859pKuXlceGLPjaK41xP26kUTIY685CWI4qnY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=r0VwenRqskFTDoxa2BG069i4DjqqTYGW10YD8Bvo/q0=;
-        b=HnhapqjeeD2GU5PXqrRKLUUQb3Aw14gUH16s+rLQU1K+c412ngbxSMu+/MkiKS6Gxh
-         famaqzKl065AhSf+j1sbJQLryW9HHy2/PglQ+CG0WG2tzUlY8B21gXoNQSLMSjq4YJVg
-         pCUMbZ4vbt8/1fjVreatp1uv6ISMqvp+aD0wpOjjECJhmSmYuMTvPO5SUTd6QL4ruYJ5
-         0O7jRZ2stQBzwHRe9jyqWy1g4TVqVC9x8Bm/Y/YL4kPdXYWum0x+fUnhiVMAeuVq2s5d
-         qHEqC6li6wokp5YGVxoC054TyccH7v1n0QM4YNDXe98RspOL/EYL1goYo2zJBLTqn7TY
-         5tHg==
-X-Gm-Message-State: AOAM532MFDj8YW/o1kSganGiVgnvlH+knOkHZpaFmXdMrcg0cGYgLyu+
-        txl5NDkShBwiQvwymxsvsH4=
-X-Google-Smtp-Source: ABdhPJxZXn+aC1eJ8kEUSL89QiRwAcF2SYH1ok/wnVJVoR/0d2Q7ch0UBMjyXnIPBipspF93KtOPVg==
-X-Received: by 2002:a17:90a:1541:: with SMTP id y1mr701499pja.74.1624317907229;
-        Mon, 21 Jun 2021 16:25:07 -0700 (PDT)
-Received: from ?IPv6:2001:df0:0:200c:2114:f868:6a99:ac19? ([2001:df0:0:200c:2114:f868:6a99:ac19])
-        by smtp.gmail.com with ESMTPSA id m4sm252608pjv.41.2021.06.21.16.25.00
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fqBMFMkh+3vsj4PE2zy4sOG9Di6zkfuPgmZeKyRMggk=;
+        b=fhyD12FRe7BBg5gLSio4GfHPc3Dc2bCW7fii4Fsu5dII4rShrP36ukKxau5cdYrVZA
+         FSkCK9sbk48BA/hYp19b9umSfDkj/COreuk5cRw5ePPbLvQv9eyruDaf5mLPgDnBvFNR
+         dMjUm5z4AFskBcgE7VaqJyGMJijku6SooG5AP3SR6Au6h5bxJyRODrr/fZbQdUDdS+5o
+         rrZQSjSvU0glRc4m4oRRAA/ePoMkCNgh9wF/rowhqN7arwumyQ2Zfwlw4D4uy8S47uGb
+         vAxXxZvUwwlHmpCb7hn6O7olohw1SsNSK1A6C5Yrd+pskLierfKw6IQompsfygZmPzU2
+         ZrNA==
+X-Gm-Message-State: AOAM532Kj/PJsqbvOFVEYdj20WbsYHvUadzDumDoEmco3I/pErE80t4V
+        XH0KzjL4zbBdJU4gdAAK/YrWucsJEZOZ/6H9Z3E=
+X-Google-Smtp-Source: ABdhPJzpA0qUOcxXjhplHjCUwQDB/9wS6kFzRSKQQ4Bvkx2SZHfDJ6LVGyEkgA/Uz+RGkWuE6qiYuQ==
+X-Received: by 2002:a19:7506:: with SMTP id y6mr532163lfe.629.1624318610208;
+        Mon, 21 Jun 2021 16:36:50 -0700 (PDT)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id br5sm671398lfb.82.2021.06.21.16.36.49
+        for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 16:25:06 -0700 (PDT)
+        Mon, 21 Jun 2021 16:36:49 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id s22so27548390ljg.5
+        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 16:36:49 -0700 (PDT)
+X-Received: by 2002:a2e:22c4:: with SMTP id i187mr544552lji.251.1624318609289;
+ Mon, 21 Jun 2021 16:36:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
+ <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
+ <87fsxjorgs.fsf@disp2133> <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
+ <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk> <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
+ <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
+ <YNDsYk6kbisbNy3I@zeniv-ca.linux.org.uk> <CAHk-=wh82uJ5Poqby3brn-D7xWbCMnGv-JnwfO0tuRfCvsVgXA@mail.gmail.com>
+ <YNEfXhi80e/VXgc9@zeniv-ca.linux.org.uk>
+In-Reply-To: <YNEfXhi80e/VXgc9@zeniv-ca.linux.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 21 Jun 2021 16:36:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjtagi3g5thA-T8ooM8AXcy3brdHzugCPU0itdbpDYH_A@mail.gmail.com>
+Message-ID: <CAHk-=wjtagi3g5thA-T8ooM8AXcy3brdHzugCPU0itdbpDYH_A@mail.gmail.com>
 Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Michael Schmitz <schmitzmic@gmail.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -63,75 +77,37 @@ Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         Arnd Bergmann <arnd@kernel.org>,
         Ley Foon Tan <ley.foon.tan@intel.com>,
-        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
-References: <87sg1lwhvm.fsf@disp2133>
- <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
- <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com>
- <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com> <87eed4v2dc.fsf@disp2133>
- <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com> <87fsxjorgs.fsf@disp2133>
- <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
- <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
- <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
- <YNDnY0niP+IfSx+X@zeniv-ca.linux.org.uk>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <d8105fc4-9551-c80a-37f4-2c57b3173283@gmail.com>
-Date:   Tue, 22 Jun 2021 11:24:57 +1200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <YNDnY0niP+IfSx+X@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Al,
-
-On 22/06/21 7:24 am, Al Viro wrote:
+On Mon, Jun 21, 2021 at 4:23 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 >
->> 	There's a large mess around do_exit() - we have a bunch of
->> callers all over arch/*; if nothing else, I very much doubt that really
->> want to let tracer play with a thread in the middle of die_if_kernel()
->> or similar.
->>
->> We sure as hell do not want to arrange for anything on the kernel
->> stack in such situations, no matter what's done in exit(2)...
-> FWIW, on alpha it's die_if_kernel(), do_entUna() and do_page_fault(),
-> all in not-from-userland cases.  On m68k - die_if_kernel(), do_page_fault()
-> (both for non-from-userland cases) and something really odd - fpsp040_die().
-> Exception handling for floating point stuff on 68040?  Looks like it has
-Exception handling for emulated floating point instructions, really - 
-exceptions happening when excecuting FPU instructions on hardware will 
-do the normal exception processing.
-> an open-coded copy_to_user()/copy_from_user(), with faults doing hard
-> do_exit(SIGSEGV) instead of raising a signal and trying to do something
-> sane...
+>         How would it help e.g. oopsen on the way out of timer interrupts?
+> IMO we simply shouldn't allow ptrace access if the tracee is in that kind
+> of state, on any architecture...
 
-Yes, that's what it does. Not pretty ... though all that using m68k 
-copy_to_user()/copy_from_user() would change is returning how many bytes 
-could not copied. In contrast to the ifpsp060 code, we could not pass on 
-that return status to callers of copyin/copyout in fpsp040, so I don't 
-see what sane thing could be done if a fault happens.
+Yeah no, we can't do the "wait for ptrace" when the exit is due to an
+oops. Although honestly, we have other cases like that where do_exit()
+isn't 100% robust if you kill something in an interrupt. Like all the
+locks it leaves locked etc.
 
-(I'd expect the MMU would have raised a bus error and resolved the 
-problem by a page fault if possible, before we ever get to this point?)
+So do_exit() from a timer interrupt is going to cause problems
+regardless. I agree it's probably a good idea to try to avoid causing
+even more with the odd ptrace thing, but I don't think ptrace_event is
+some really "fundamental" problem at that point - it's just one detail
+among many many.
 
-> I really don't want to try and figure out how painful would it be to
-> teach that code how to deal with faults - _testing_ anything in that
-> area sure as hell will be.  IIRC, details of recovery from FPU exceptions
-> on 68040 in the manual left impression of a minefield...
+So I was more thinking of the debug patch for m68k to catch all the
+_regular_ cases, and all the other random cases of ptrace_event() or
+ptrace_notify().
 
-This is only about faults when moving data from/to user space. FPU 
-exceptions are handled elsewhere in the code. So we at least don't have 
-to deal with that particular minefield.
+Although maybe we've really caught them all. The exit case was clearly
+missing, and the thread fork case was scrogged. There are patches for
+the known problems. The patches I really don't like are the
+verification ones to find any unknown ones..
 
-Teaching the fpsp040 code to deal with access faults looks horrible 
-indeed... let's not go there.
-
-Cheers,
-
-     Michael
-
-
+            Linus
