@@ -2,206 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D633AEAD0
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Jun 2021 16:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50233AEAF9
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Jun 2021 16:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbhFUONd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Jun 2021 10:13:33 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:50473 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230205AbhFUONb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 21 Jun 2021 10:13:31 -0400
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4G7rzl1TYPzBDBX;
-        Mon, 21 Jun 2021 16:11:15 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5rSJmp-MP7YS; Mon, 21 Jun 2021 16:11:15 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4G7rzl0PmszBDBM;
-        Mon, 21 Jun 2021 16:11:15 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C90BC8B7A3;
-        Mon, 21 Jun 2021 16:11:14 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id NPGP5zm3RQSE; Mon, 21 Jun 2021 16:11:14 +0200 (CEST)
-Received: from [172.25.230.102] (po15451.idsi0.si.c-s.fr [172.25.230.102])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6258B8B78E;
-        Mon, 21 Jun 2021 16:11:14 +0200 (CEST)
-Subject: Re: [PATCH for 4.16 v7 02/11] powerpc: membarrier: Skip memory
- barrier in switch_mm()
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        maged michael <maged.michael@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Watson <davejwatson@fb.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Andrew Hunter <ahh@google.com>, David Sehr <sehr@google.com>,
-        Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arch <linux-arch@vger.kernel.org>, x86 <x86@kernel.org>,
-        "Russell King, ARM Linux" <linux@armlinux.org.uk>,
-        Greg Hackmann <ghackmann@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Paul <paulmck@linux.vnet.ibm.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Avi Kivity <avi@scylladb.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-api <linux-api@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <20180129202020.8515-1-mathieu.desnoyers@efficios.com>
- <20180129202020.8515-3-mathieu.desnoyers@efficios.com>
- <8b200dd5-f37b-b208-82fb-2775df7bcd49@csgroup.eu>
- <2077369633.12794.1624037192994.JavaMail.zimbra@efficios.com>
- <4d2026cc-28e1-7781-fc95-e6160bd8db86@csgroup.eu>
- <20210619150202.GZ5077@gate.crashing.org>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <52451ce4-3eb2-e14b-81a9-99da2c0a2328@csgroup.eu>
-Date:   Mon, 21 Jun 2021 16:11:04 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230170AbhFUOSt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Jun 2021 10:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230076AbhFUOSr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Jun 2021 10:18:47 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB70C061574;
+        Mon, 21 Jun 2021 07:16:32 -0700 (PDT)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1lvKir-00Ar4K-2D; Mon, 21 Jun 2021 14:16:21 +0000
+Date:   Mon, 21 Jun 2021 14:16:21 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
+Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
+Message-ID: <YNCfNWC1UMvuE5d5@zeniv-ca.linux.org.uk>
+References: <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
+ <87sg1lwhvm.fsf@disp2133>
+ <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
+ <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com>
+ <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
+ <87eed4v2dc.fsf@disp2133>
+ <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
+ <87fsxjorgs.fsf@disp2133>
+ <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
+ <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20210619150202.GZ5077@gate.crashing.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 19/06/2021 à 17:02, Segher Boessenkool a écrit :
-> On Sat, Jun 19, 2021 at 11:35:34AM +0200, Christophe Leroy wrote:
->>
->>
->> Le 18/06/2021 à 19:26, Mathieu Desnoyers a écrit :
->>> ----- On Jun 18, 2021, at 1:13 PM, Christophe Leroy
->>> christophe.leroy@csgroup.eu wrote:
->>> [...]
->>>>
->>>> I don't understand all that complexity to just replace a simple
->>>> 'smp_mb__after_unlock_lock()'.
->>>>
->>>> #define smp_mb__after_unlock_lock()	smp_mb()
->>>> #define smp_mb()	barrier()
->>>> # define barrier() __asm__ __volatile__("": : :"memory")
->>>>
->>>>
->>>> Am I missing some subtility ?
->>>
->>> On powerpc CONFIG_SMP, smp_mb() is actually defined as:
->>>
->>> #define smp_mb()        __smp_mb()
->>> #define __smp_mb()      mb()
->>> #define mb()   __asm__ __volatile__ ("sync" : : : "memory")
->>>
->>> So the original motivation here was to skip a "sync" instruction whenever
->>> switching between threads which are part of the same process. But based on
->>> recent discussions, I suspect my implementation may be inaccurately doing
->>> so though.
->>>
->>
->> I see.
->>
->> Then, if you think a 'sync' is a concern, shouldn't we try and remove the
->> forest of 'sync' in the I/O accessors ?
->>
->> I can't really understand why we need all those 'sync' and 'isync' and
->> 'twi' around the accesses whereas I/O memory is usually mapped as 'Guarded'
->> so memory access ordering is already garantied.
->>
->> I'm sure we'll save a lot with that.
+On Mon, Jun 21, 2021 at 01:54:56PM +0000, Al Viro wrote:
+> On Tue, Jun 15, 2021 at 02:58:12PM -0700, Linus Torvalds wrote:
 > 
-> The point of the twi in the I/O accessors was to make things easier to
-> debug if the accesses fail: for the twi insn to complete the load will
-> have to have completed as well.  On a correctly working system you never
-> should need this (until something fails ;-) )
+> > And I think our horrible "kernel threads return to user space when
+> > done" is absolutely horrifically nasty. Maybe of the clever sort, but
+> > mostly of the historical horror sort.
 > 
-> Without the twi you might need to enforce ordering in some cases still.
-> The twi is a very heavy hammer, but some of that that gives us is no
-> doubt actually needed.
+> How would you prefer to handle that, then?  Separate magical path from
+> kernel_execve() to switch to userland?  We used to have something of
+> that sort, and that had been a real horror...
 > 
+> As it is, it's "kernel thread is spawned at the point similar to
+> ret_from_fork(), runs the payload (which almost never returns) and
+> then proceeds out to userland, same way fork(2) would've done."
+> That way kernel_execve() doesn't have to do anything magical.
+> 
+> Al, digging through the old notes and current call graph...
 
-Well, I've always been quite perplex about that. According to the documentation of the 8xx, if a bus 
-error or something happens on an I/O access, the exception will be accounted on the instruction 
-which does the access. But based on the following function, I understand that some version of 
-powerpc do generate the trap on the instruction which was being executed at the time the I/O access 
-failed, not the instruction that does the access itself ?
+	FWIW, the major assumption back then had been that get_signal(),
+signal_delivered() and all associated machinery (including coredumps)
+runs *only* from SIGPENDING/NOTIFY_SIGNAL handling.
 
-/*
-  * I/O accesses can cause machine checks on powermacs.
-  * Check if the NIP corresponds to the address of a sync
-  * instruction for which there is an entry in the exception
-  * table.
-  *  -- paulus.
-  */
-static inline int check_io_access(struct pt_regs *regs)
-{
-#ifdef CONFIG_PPC32
-	unsigned long msr = regs->msr;
-	const struct exception_table_entry *entry;
-	unsigned int *nip = (unsigned int *)regs->nip;
-
-	if (((msr & 0xffff0000) == 0 || (msr & (0x80000 | 0x40000)))
-	    && (entry = search_exception_tables(regs->nip)) != NULL) {
-		/*
-		 * Check that it's a sync instruction, or somewhere
-		 * in the twi; isync; nop sequence that inb/inw/inl uses.
-		 * As the address is in the exception table
-		 * we should be able to read the instr there.
-		 * For the debug message, we look at the preceding
-		 * load or store.
-		 */
-		if (*nip == PPC_INST_NOP)
-			nip -= 2;
-		else if (*nip == PPC_INST_ISYNC)
-			--nip;
-		if (*nip == PPC_INST_SYNC || (*nip >> 26) == OP_TRAP) {
-			unsigned int rb;
-
-			--nip;
-			rb = (*nip >> 11) & 0x1f;
-			printk(KERN_DEBUG "%s bad port %lx at %p\n",
-			       (*nip & 0x100)? "OUT to": "IN from",
-			       regs->gpr[rb] - _IO_BASE, nip);
-			regs->msr |= MSR_RI;
-			regs->nip = extable_fixup(entry);
-			return 1;
-		}
-	}
-#endif /* CONFIG_PPC32 */
-	return 0;
-}
-
-Am I right ?
-
-It is not only the twi which bother's me in the I/O accessors but also the sync/isync and stuff.
-
-A write typically is
-
-	sync
-	stw
-
-A read is
-
-	sync
-	lwz
-	twi
-	isync
-
-Taking into account that HW ordering is garanteed by the fact that __iomem is guarded, isn't the 
-'memory' clobber enough as a barrier ?
-
-Thanks
-Christophe
+	And "has complete registers on stack" is only a part of that;
+there was other fun stuff in the area ;-/  Do we want coredumps for
+those, and if we do, will the de_thread stuff work there?
