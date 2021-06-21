@@ -2,68 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 673C63AF938
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Jun 2021 01:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BAE3AF90F
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Jun 2021 01:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbhFUXXd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Jun 2021 19:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S231597AbhFUXSO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Jun 2021 19:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbhFUXXb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Jun 2021 19:23:31 -0400
+        with ESMTP id S231373AbhFUXSM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Jun 2021 19:18:12 -0400
 Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9919C061574
-        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 16:21:13 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id r5so32923874lfr.5
-        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 16:21:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDD6C061756
+        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 16:15:56 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id d16so25383066lfn.3
+        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 16:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cSpCTvtqwlFJ06T40MsJFhKBN6aTybvqDQph3piqU3c=;
-        b=ej8PSbPXAb0zIPa9apzD7OWAABcayKzztY2Gl8qbjCjYcakYI2cbU1Xi2FhqAdGS23
-         7NquMnu4HBnT8zfyZ8CSmagToFSLIKrWjMMs8/+Ru7rfccWvgOKMc4CMWM1hXZDx2u2Y
-         vd34mqkS+oueuqgdEbosrH2qeR1zCtN6Gblvo=
+        bh=stNy8kLF5vctj8WXK363X+Ab+aWkvJsrhuAKRgNlaFY=;
+        b=IL1c66HdRAXSPTueb6HvT7WAQ+hVTgraIpPVGrRtYIIPrdMk6idOyB+d7hgkhCbE/J
+         WSDn2K6/KFlAr4ZepO/VZSbAHdCjsBoc9mInrjOrnW0t0J2Sklo0eRJQKmRh1FXkY2rP
+         httftVRSDPt4omCrZhGPE4bzB66yBCzHc25jk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cSpCTvtqwlFJ06T40MsJFhKBN6aTybvqDQph3piqU3c=;
-        b=CC3I2ejqkwPjJA0gOzbT5EbBFe2MqAQ0/CCGlJ1tqjxrd4osGcnfNELB4EVzUftlop
-         zbZaxf9olgfh6ebkilbobs91OifIlFabDfZZC9SHgP8p+e7ePGl4qCEeim4chaqJiPK4
-         mMQCIAcCI5B3/w6cI11Yq75AVM4L7tfEnQ77ODOW/3WWXYRkHLRQIPN/5w2rWgFdpuIb
-         P/vWBGOJUSZTwUu+IWcgNd8X7OVaGK9TGmWJ9T2I7P0oA2p+V/c9i7VdMbrPoEuWC9mW
-         NU3WwIQg2quiSnPTcNIdDIRmLUAAZzwyRwHKm2aWJJd58WBDavkPpwkQnLVuB0VhhP+u
-         4kcg==
-X-Gm-Message-State: AOAM532fNxajvwGH4POavdOmKgql/vlWu7HW0+Yzf7wwi7Ik6/HWEoeX
-        Xn+NrZpe5uw5Nqs4VHx4M/T8pSEjvk1znErxZso=
-X-Google-Smtp-Source: ABdhPJzTUe2Tpiq1+XzgkHV67GR/OsCEwo1sqla4cRtMvXPNo35aYJbGwvCMHx0+bfAwsa+9vEkrig==
-X-Received: by 2002:ac2:548e:: with SMTP id t14mr485026lfk.617.1624317671942;
-        Mon, 21 Jun 2021 16:21:11 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id y7sm2266289ljp.69.2021.06.21.16.21.11
+        bh=stNy8kLF5vctj8WXK363X+Ab+aWkvJsrhuAKRgNlaFY=;
+        b=kPL7Mljn3aMCQQ6ULs7HLjmu1U9wLWzcc/pq4MlwLaXw4kFeP3gV+F6M3I9JXXJ+cj
+         syOVi0WgdK8ODTw8V1wCHzBjeoNgCQHXd+pY8cY0yoEJFA1SwmdImT0ABHMt15wQO4KF
+         hqchFhCC5oz442DatnbK0yhs3mV/xR/r8jIrVqkSKXehUgfCNTbCkO6Pr/V10JPzdn4A
+         H1wr9tz9ar5kR3861eLAoozqFHEn4X+Dss1wUjofhV6XKvobuImIPvE13kY81rOCItkk
+         YcRmpf3bFtrR+APba1hWa1kUJ7WMQPU+eQcMdX0fkl283S1VMOoSFhj+AT5qoFob6RRG
+         u89w==
+X-Gm-Message-State: AOAM5339E8HaChxdLe1gEsxV8zfGI1d4CFrRZFYFSKJzNLYGolMUcJ0k
+        z0/Ju1eDpKQ1YTmTPxu0xmwgqyI97hDwfemmkGk=
+X-Google-Smtp-Source: ABdhPJwZArWk+RsDg6TZhRJQkuV8//95aE9VE62TrfYo9RW9O5FKym/1boRDdO78mnZTaPexqw0Fjg==
+X-Received: by 2002:a19:8c03:: with SMTP id o3mr465253lfd.499.1624317354356;
+        Mon, 21 Jun 2021 16:15:54 -0700 (PDT)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
+        by smtp.gmail.com with ESMTPSA id n15sm2009230lft.169.2021.06.21.16.15.53
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 16:21:11 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id x24so32847237lfr.10
-        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 16:21:11 -0700 (PDT)
-X-Received: by 2002:a05:6512:374b:: with SMTP id a11mr470683lfs.377.1624317291959;
- Mon, 21 Jun 2021 16:14:51 -0700 (PDT)
+        Mon, 21 Jun 2021 16:15:53 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id a11so19804529lfg.11
+        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 16:15:53 -0700 (PDT)
+X-Received: by 2002:a05:6512:15a2:: with SMTP id bp34mr498972lfb.40.1624317352941;
+ Mon, 21 Jun 2021 16:15:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
+References: <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
+ <87sg1lwhvm.fsf@disp2133> <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
  <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com> <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
  <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
  <87fsxjorgs.fsf@disp2133> <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
  <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk> <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
- <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com> <YNDsYk6kbisbNy3I@zeniv-ca.linux.org.uk>
-In-Reply-To: <YNDsYk6kbisbNy3I@zeniv-ca.linux.org.uk>
+ <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com> <87a6njf0ia.fsf@disp2133>
+In-Reply-To: <87a6njf0ia.fsf@disp2133>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 21 Jun 2021 16:14:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh82uJ5Poqby3brn-D7xWbCMnGv-JnwfO0tuRfCvsVgXA@mail.gmail.com>
-Message-ID: <CAHk-=wh82uJ5Poqby3brn-D7xWbCMnGv-JnwfO0tuRfCvsVgXA@mail.gmail.com>
+Date:   Mon, 21 Jun 2021 16:15:37 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh4_iMRmWcao6a8kCvR0Hhdrz+M9L+q4Bfcwx9E9D0huw@mail.gmail.com>
+Message-ID: <CAHk-=wh4_iMRmWcao6a8kCvR0Hhdrz+M9L+q4Bfcwx9E9D0huw@mail.gmail.com>
 Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Michael Schmitz <schmitzmic@gmail.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
@@ -76,79 +77,19 @@ Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         Arnd Bergmann <arnd@kernel.org>,
         Ley Foon Tan <ley.foon.tan@intel.com>,
-        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 12:45 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > Looks like sys_exit() and do_group_exit() would be the two places to
-> > do it (do_group_exit() would handle the signal case and
-> > sys_group_exit()).
+On Mon, Jun 21, 2021 at 1:04 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
 >
-> Maybe...  I'm digging through that pile right now, will follow up when
-> I get a reasonably complete picture
+> For other ptrace_event calls I am playing with seeing if I can split
+> them in two.  Like sending a signal.  So that we can have perform all
+> of the work in get_signal.
 
-We might have another possible way to solve this:
+That sounds like the right model, but I don't think it works.
+Particularly not for exit(). The second phase will never happen.
 
- (a) make it the rule that everybody always saves the full (integer)
-register set in pt_regs
-
- (b) make m68k just always create that switch-stack for all system
-calls (it's really not that big, I think it's like six words or
-something)
-
- (c) admit that alpha is broken, but nobody really cares
-
-> In the meanwhile, do kernel/kthread.c uses look even remotely sane?
-> Intentional - sure, but it really looks wrong to use thread exit code
-> as communication channel there...
-
-I really doubt that it is even "intentional".
-
-I think it's "use some errno as a random exit code" and nobody ever
-really thought about it, or thought about how that doesn't really
-work. People are used to the error numbers, not thinking about how
-do_exit() doesn't take an error number, but a signal number (and an
-8-bit positive error code in bits 8-15).
-
-Because no, it's not even remotely sane.
-
-I think the do_exit(-EINTR) could be do_exit(SIGINT) and it would make
-more sense. And the -ENOMEM might be SIGBUS, perhaps.
-
-It does look like the usermode-helper code does save the exit code
-with things like
-
-                kernel_wait(pid, &sub_info->retval);
-
-and I see call_usermodehelper_exec() doing
-
-        retval = sub_info->retval;
-
-and treating it as an error code. But I think those have never been
-tested with that (bogus) exit code thing from kernel_wait(), because
-it wouldn't have worked.  It has only ever been tested with the (real)
-exit code things like
-
-                if (pid < 0) {
-                        sub_info->retval = pid;
-
-which does actually assign a negative error code to it.
-
-So I think that
-
-                kernel_wait(pid, &sub_info->retval);
-
-line is buggy, and should be something like
-
-                int wstatus;
-                kernel_wait(pid, &wstatus);
-                sub_info->retval = WEXITSTATUS(wstatus) ? -EINVAL : 0;
-
-or something.
-
-            Linus
+              Linus
