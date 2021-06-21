@@ -2,108 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 702153AECBE
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Jun 2021 17:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A6E3AED19
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Jun 2021 18:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbhFUPso (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Jun 2021 11:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S230326AbhFUQI4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Jun 2021 12:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbhFUPso (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Jun 2021 11:48:44 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A194CC061574
-        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 08:46:28 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id u11so14938389ljh.2
-        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 08:46:28 -0700 (PDT)
+        with ESMTP id S230059AbhFUQI4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Jun 2021 12:08:56 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8A4C061756
+        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 09:06:41 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a11so18031106lfg.11
+        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 09:06:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=R/gsr/Z80fSxEB0qmGqShvDUtlhm4ESakW3xcimnUEw=;
-        b=a39nbPZCP+nWMeIZ/x5qt0slwYnbNb/TvhmNaAml5kNvhs0i32rgF44OFGvy4ACZ5M
-         SfNAyRTK1aJ1m7aW6sC2No3kMhETcLZ7kUjianICGGeVyVPSyizOAaXDDMbjMew6KcRK
-         SAT8eIJUsUOJFoDNwA7oyYdllQrDrIWi08wng=
+        bh=grhn+4m03Hl/IKclIMEKcZj1BLiA+WR5DwYi+XwSseA=;
+        b=Q+nWm9WmmmSMbAxOkMaCB9u9prznIbKgUSttcPTWKdMtZ0odlvJvuPtW7JSazKaLeU
+         cUPduhuCaDSDV5BTOvqkmm6hpl1DHLT5xIUhJ6DyinLbPrgEFXS3Mk2MEy94+LkhkW80
+         T4Lwo23p+PNIoBoAY6ZkmX/O+y56kyOcECF3A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=R/gsr/Z80fSxEB0qmGqShvDUtlhm4ESakW3xcimnUEw=;
-        b=QonTiHiRzAXQUPszAS9SO+SmCe/WLj9UM1qoxpq1L3DVgL37NSmqcywYUVFv4H0xZr
-         BT79cRBsTNrnqeEce174Op0bYAXA85prK6OCTpRv96yLiGBNaPUvvXLAKcvMKkrs9Yfs
-         JPYmwsMc6KNp4RkDUgLRWr7FL5fzVYvNBvAx4Fw4yvsNZQAGTNINkpex5xUXFadEFpc4
-         BFv7rXNFGOh4zntOUiutsinFi9g79DgRZgczXPStW83ZxcErboMoQOoOtULSilrswPVq
-         0iiXdeY7os0NF+SduJhryuCTbiY/v+hOSHtf+czc+FkKur2NZ88rAEvX0KfJeMUosiEJ
-         5eOA==
-X-Gm-Message-State: AOAM532FlDgHfKlSTNoHK9xgk976u2D/CQiQCjTwnqNgty1XpjGV4vVh
-        /+6+6nz0Sb2Jxc70GNeODnAAzxHdI0xbzJU8VKE=
-X-Google-Smtp-Source: ABdhPJz8ltQZ/LYDjr5xShlh0Me2Gvbwpt+4u3IqqqoM40/I/bgS+bgEFrU2LyAw9ms17r3pg7mrYg==
-X-Received: by 2002:a2e:2a43:: with SMTP id q64mr21968332ljq.375.1624290386741;
-        Mon, 21 Jun 2021 08:46:26 -0700 (PDT)
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
-        by smtp.gmail.com with ESMTPSA id h20sm617520lfu.212.2021.06.21.08.46.26
+        bh=grhn+4m03Hl/IKclIMEKcZj1BLiA+WR5DwYi+XwSseA=;
+        b=EjiCBLp22a8OyiFKmwZvmEAm2NY1EOCiJhpuLRtJgJkKKcDeIB68U/CgZGI00H0xOz
+         YwLDWtAnUC569CQKTMVYSTUEbm8UBSaU0xZONQu6d3WPGiv85PmXUxYXQUGQUSjVWaZf
+         y8UGm7cEdCJf30FYu1ZYRqB15UIFlO6Ab+VYspjXZqy9ub/QcwEgk1I64g1ry8AriKS8
+         DZ025Ln8BV8YT3JGa9CQmn0OpXQ6CZ0gJ3AVmUpJ9Jv9sryx6KmfhAazAhTi+TqIdtTf
+         OCJhQTWTn/QFpOAgGXURuwDL9kECkn9ZSc47RUJzuQo9vmIvJWGMzdcWTmZVmB2KQiu8
+         m1eQ==
+X-Gm-Message-State: AOAM5304DqfXLQJZQxtcCcpGST7DcdUdGME+9TLYtyswGnNDxn4EnJx5
+        DS2gB9yYPhKkSRYQ70DQC0NcnTCUZzS0y0lnZA0=
+X-Google-Smtp-Source: ABdhPJwuFDaalfW/Gc5lnAc+LQUSZmYmu9p5UcfuItPnCDU7bLP1dhVfp2Wyf/s9NgIoPzoEvI9f8Q==
+X-Received: by 2002:a05:6512:3592:: with SMTP id m18mr2863885lfr.389.1624291599344;
+        Mon, 21 Jun 2021 09:06:39 -0700 (PDT)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id z30sm1916367lfu.42.2021.06.21.09.06.38
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 08:46:26 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id k8so25713147lja.4
-        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 08:46:26 -0700 (PDT)
-X-Received: by 2002:a2e:b618:: with SMTP id r24mr22042332ljn.48.1624289909978;
- Mon, 21 Jun 2021 08:38:29 -0700 (PDT)
+        Mon, 21 Jun 2021 09:06:38 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id x24so31056844lfr.10
+        for <linux-arch@vger.kernel.org>; Mon, 21 Jun 2021 09:06:38 -0700 (PDT)
+X-Received: by 2002:a05:6512:baa:: with SMTP id b42mr14369828lfv.487.1624291598641;
+ Mon, 21 Jun 2021 09:06:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <87pmwsytb3.fsf@disp2133> <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
- <87sg1lwhvm.fsf@disp2133> <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
- <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com> <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
- <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
- <87fsxjorgs.fsf@disp2133> <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
- <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
-In-Reply-To: <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
+References: <1624176865-15570-1-git-send-email-schmitzmic@gmail.com>
+ <1624176865-15570-3-git-send-email-schmitzmic@gmail.com> <1547f9bc-441-6cfb-ad7c-57f7584dd63@linux-m68k.org>
+In-Reply-To: <1547f9bc-441-6cfb-ad7c-57f7584dd63@linux-m68k.org>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 21 Jun 2021 08:38:14 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjC_=iwj61vSZ0orPGjrxhDK3Ob2D4eaRpXXFdAbF6coQ@mail.gmail.com>
-Message-ID: <CAHk-=wjC_=iwj61vSZ0orPGjrxhDK3Ob2D4eaRpXXFdAbF6coQ@mail.gmail.com>
-Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
+Date:   Mon, 21 Jun 2021 09:06:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh2COuoJM822vRSxu8Wny6Qpe-XvpSyJhPJKMeXdYXe5w@mail.gmail.com>
+Message-ID: <CAHk-=wh2COuoJM822vRSxu8Wny6Qpe-XvpSyJhPJKMeXdYXe5w@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] m68k: correctly handle IO worker stack frame set-up
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Michael Schmitz <schmitzmic@gmail.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andreas Schwab <schwab@linux-m68k.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 6:55 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Sun, Jun 20, 2021 at 8:57 PM Finn Thain <fthain@linux-m68k.org> wrote:
 >
-> On Tue, Jun 15, 2021 at 02:58:12PM -0700, Linus Torvalds wrote:
->
-> > And I think our horrible "kernel threads return to user space when
-> > done" is absolutely horrifically nasty. Maybe of the clever sort, but
-> > mostly of the historical horror sort.
->
-> How would you prefer to handle that, then?  Separate magical path from
-> kernel_execve() to switch to userland?  We used to have something of
-> that sort, and that had been a real horror...
+> When the patch author is not the message sender, the message (commit log
+> entry) would normally begin with "From: Author <author@example.com>".
 
-Hmm. Maybe the alternatives would all be worse. The current thing is
-clever, and shares the return path with the normal case. It's just
-also a bit surprising, in that a kernel thread normally must not
-return - with the magical exception of "if it had done a
-kernel_execve() at some point, then returning is magically the way you
-actually start user mode".
+Yes,. But in this case (as, honestly, with most of the trial patches I
+send out) I'm perfectly happy to not get authorship attribution.
+That's particularly true for something that I can't even test, and is
+to code that I don't really know all that well.
 
-So it all feels very special, and there's not even a comment about it.
+I'm a big believer in trying to make sure people get proper credit and
+attribution, but I'm also the one exception to the rule.
 
-I think we only have two users of that thing (the very first 'init',
-and user-mode-helpr), So I guess it doesn't really matter.
+I get too much credit already, I don't need it for the patches that I
+send out that are "I think something like this should work" and then
+others do the heavy lifting of actually testing them and making sure
+everything is good.
 
-            Linus
+                 Linus
