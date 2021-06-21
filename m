@@ -2,65 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A06C3AE1E4
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Jun 2021 05:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 169923AE1E6
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Jun 2021 05:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbhFUDjH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 20 Jun 2021 23:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S229984AbhFUDjz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 20 Jun 2021 23:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbhFUDjH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Jun 2021 23:39:07 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010FDC061574;
-        Sun, 20 Jun 2021 20:36:52 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id x16so12546951pfa.13;
-        Sun, 20 Jun 2021 20:36:52 -0700 (PDT)
+        with ESMTP id S229968AbhFUDjy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Jun 2021 23:39:54 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B30C061574
+        for <linux-arch@vger.kernel.org>; Sun, 20 Jun 2021 20:37:40 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id d13so22995944ljg.12
+        for <linux-arch@vger.kernel.org>; Sun, 20 Jun 2021 20:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=xLiu6z7n8Nm4pgvs/bW2NXTNeK55NaWWpQGLLIvDVng=;
-        b=S5rqecO5NnewVMiMgfEHBfVJRZG9DzFsYkSVQ/EFVweec1CqVq+fziE2JAteDFz7hb
-         gw7srdiAAkBuFrsn8uyX3zPk1OLrFCbSRHe5kRgRTu9nPpcsrJGJ2CmehyJoJTz73Q/n
-         CIIplHkKDn/X9xYpzxQHk1uC7tHbMq0bnAs+TFiWbtcgL3zZIO/K2cXgVv3wgeR970/W
-         P8TZLmviFCrV1teriIklo40jrRJOoO3donZvc79Vkyz7IptxOVwgC1YmUnH6UOqmiaS/
-         2dEG1K+YrBe3F+VsnA55g2h3uQrQgfc057DDfipoELXgQBCjs5Mtnfr+FUO2ZC5BUHmN
-         iWHg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1+HtUJLugMh1gE/Pq8w2A+iKsdZnPrpQbbhzWMAu6G8=;
+        b=CguqVrwfLz3sZcjWNSP9u4srUE9fQXJpZYNDvur7BjH1Wa9iE+6JLPbb6gu1bHRbzP
+         lhuXpf4aJ6FAM06cgPcFG8165A9ru2Rghgmk3cWS8VmtaMrnFl6vfe5YF+lxxVFXRiLZ
+         rAtq4O0Gb8NYZTtOP3OEjIKCqz0zBbzRqM0Fw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=xLiu6z7n8Nm4pgvs/bW2NXTNeK55NaWWpQGLLIvDVng=;
-        b=D7Nxk8iXoGTcRNBSLGVCZHLPKelB2G2wf1z3QseeGifPifWUhkd0e7XhwrTo3mKmvt
-         yMDxFNK/w9eApEObVJTyZ+LD7cvc/QZE1m9SAAUvz1z+hn2qu/3AS+gI+yraVAmSKQPw
-         zMbCnzZHqwzEPTLfohYO5+veqnTEOlikZ0s5iWaUzFwCqEatnZrwfSaDs0foNnJJLVaP
-         SSurwKfMOd4oRffVfzZfh6DMqybfxCAQhq89YmFCMI2+wKqrQDMw07gFgb3T3UK3nH1x
-         bUxVYKk86X3EuVBf7BtPXrlVpTShdLlqcnfGHWJYhDKvxUlLP+RossXWAg50Kbj54TnT
-         7sMg==
-X-Gm-Message-State: AOAM530LJ5c4SwX10YfLRXFI47vRowaua9xaBjSn3TCU+cNMvtqXtSNH
-        Jxp8SNAtSCxT1QD3SQGm14g=
-X-Google-Smtp-Source: ABdhPJxVBdwsRiX1C8pmBuP+luLGE83oud1sbsqsWQaBPVj49ppFiH84WMPluWwEQgGhK3WPEUFq5w==
-X-Received: by 2002:aa7:8244:0:b029:2ec:968d:c1b4 with SMTP id e4-20020aa782440000b02902ec968dc1b4mr17307756pfn.32.1624246612404;
-        Sun, 20 Jun 2021 20:36:52 -0700 (PDT)
-Received: from [10.1.1.25] (222-152-189-137-fibre.sparkbb.co.nz. [222.152.189.137])
-        by smtp.gmail.com with ESMTPSA id b5sm11515267pgh.41.2021.06.20.20.36.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 20 Jun 2021 20:36:52 -0700 (PDT)
-Subject: Re: [PATCH 1/2] alpha/ptrace: Record and handle the absence of
- switch_stack
-To:     Al Viro <viro@zeniv.linux.org.uk>
-References: <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1+HtUJLugMh1gE/Pq8w2A+iKsdZnPrpQbbhzWMAu6G8=;
+        b=jqkCyT43VCorJ9MdldjRqWv8QFXoLhW3LVL4VNTx779HhEhgtP/4AcOjl+zEzWQkhV
+         JTQ8vqS6zKIcfrtkC5PJpcyQJb7A2Gj989x3+OE8eepw0EPw6CLJc443q5LbALFRVrt+
+         L2ZJAQRcm/wedwvelwks/7ffY6NEDvX6ujEP5jheZhZC3mtimLgsTDPsa5SnZUWyMq81
+         YuWBWdjORSpKweqwKTTSEMO4Shg2yn0ybt7l53Qsbbksv7mDe9uAebkewUgTTDs7FCZz
+         aaf+CV5XZjXsPB80eg684l+9YUXS6cWtQePvJpmCIjbOyl8Hjg+Q/eA6WBFTfiPWzR4y
+         xENQ==
+X-Gm-Message-State: AOAM533fWwQfXOFPRnNQn3Z0wJEF7L7EpkI1xpmc+8y8QYn9Jl51y6++
+        KLvC5FuPOr0ccgfk9ll+jGVn15CTFUwyuRo0
+X-Google-Smtp-Source: ABdhPJzprPuUYGUtYhrNIZxLYTWuxYGv97aGfHrVrckYfbEbaDHnu5z0JulZDuKeXm9LgQQa0AJdRg==
+X-Received: by 2002:a2e:9bcf:: with SMTP id w15mr19617122ljj.77.1624246659168;
+        Sun, 20 Jun 2021 20:37:39 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id d4sm1716269lfk.295.2021.06.20.20.37.38
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Jun 2021 20:37:39 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id c11so23066134ljd.6
+        for <linux-arch@vger.kernel.org>; Sun, 20 Jun 2021 20:37:38 -0700 (PDT)
+X-Received: by 2002:a2e:9ad5:: with SMTP id p21mr20479953ljj.220.1624246658595;
+ Sun, 20 Jun 2021 20:37:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <87sg1p30a1.fsf@disp2133> <CAHk-=wjiBXCZBxLiCG5hxpd0vMkMjiocenponWygG5SCG6DXNw@mail.gmail.com>
+ <87pmwsytb3.fsf@disp2133> <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
+ <87sg1lwhvm.fsf@disp2133> <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
+ <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com> <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
  <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
- <87fsxjorgs.fsf@disp2133> <87zgvqor7d.fsf_-_@disp2133>
- <CAHk-=wir2P6h+HKtswPEGDh+GKLMM6_h8aovpMcUHyQv2zJ5Og@mail.gmail.com>
- <87mtrpg47k.fsf@disp2133> <87pmwlek8d.fsf_-_@disp2133>
- <87k0mtek4n.fsf_-_@disp2133> <393c37de-5edf-effc-3d06-d7e63f34a317@gmail.com>
- <YM/5KAlgTtR6ncOl@zeniv-ca.linux.org.uk>
+ <87fsxjorgs.fsf@disp2133> <87zgvqor7d.fsf_-_@disp2133> <CAHk-=wir2P6h+HKtswPEGDh+GKLMM6_h8aovpMcUHyQv2zJ5Og@mail.gmail.com>
+ <87mtrpg47k.fsf@disp2133> <87pmwlek8d.fsf_-_@disp2133> <87k0mtek4n.fsf_-_@disp2133>
+ <393c37de-5edf-effc-3d06-d7e63f34a317@gmail.com> <CAHk-=wip8KgrNUcU68wsLZqbWV+3NWg9kqqQwygHGAA8-xOwMA@mail.gmail.com>
+ <60c0fe00-b966-6385-d348-f6dd45277113@gmail.com>
+In-Reply-To: <60c0fe00-b966-6385-d348-f6dd45277113@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 20 Jun 2021 20:37:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgTGW0Q0BzpSJcLhseui1fH7Gbasvsz81Z89CMSAHE-Bw@mail.gmail.com>
+Message-ID: <CAHk-=wgTGW0Q0BzpSJcLhseui1fH7Gbasvsz81Z89CMSAHE-Bw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] alpha/ptrace: Record and handle the absence of switch_stack
+To:     Michael Schmitz <schmitzmic@gmail.com>
 Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Richard Henderson <rth@twiddle.net>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
@@ -71,52 +80,41 @@ Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Arnd Bergmann <arnd@kernel.org>,
         Ley Foon Tan <ley.foon.tan@intel.com>,
         Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <9db8096e-677f-3852-6ca4-28143a228ec3@gmail.com>
-Date:   Mon, 21 Jun 2021 15:36:41 +1200
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <YM/5KAlgTtR6ncOl@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Al,
-
-
-Am 21.06.2021 um 14:27 schrieb Al Viro:
-> On Mon, Jun 21, 2021 at 02:01:18PM +1200, Michael Schmitz wrote:
->> Hi Eric,
->>
->> instrumenting get_reg on m68k and using a similar patch to yours to warn
->> when unsaved registers are accessed on the switch stack, I get a hit from
->> getegid and getegid32, just by running a simple ptrace on ls.
->>
->> Going to wack those two moles now ...
+On Sun, Jun 20, 2021 at 8:18 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
 >
-> Explain, please.  get_reg() is called by tracer; whose state are you checking?
+> I hope that makes more sense?
 
-The check is only triggered when syscall tracing (I set a flag on trace 
-entry, and clear that on trace exit)... From the WARN_ONCE stack dump, 
-it appears that I get the warning from inside the syscall, not 
-syscall_trace().
+So the problem is in your debug patch: you don't set that
+TIS_SWITCH_STACK in nearly enough places.
 
-> Because you are *not* accessing the switch stack of the caller of get_reg().
-> And tracee should be in something like syscall_trace() or do_notify_resume();
-> both have SAVE_SWITCH_STACK done by the glue...
+In this particular example, I think it's that you don't set it in
+do_trace_exit, so when you strace the process, the system call exit -
+which is where the return value will be picked up - gets that warning.
 
-And that's where my problem may be - I stupidly forgot to set the 'all 
-registers saved' flag before calling syscall_trace() ...
+You did set TIS_SWITCH_STACK on trace_entry, but then it's cleared
+again during the system call, and not set at the trace_exit path.
+Oddly, your debug patch also _clears_ it on the exit path, but it
+doesn't set it when do_trace_exit does the SAVE_SWITCH_STACK.
 
-I'll fix that and try again. Sorry for the noise!
+You oddly also set it for __sys_exit, but not all the other special
+system calls that also do that SAVE_SWITCH_STACK.
 
-Cheers,
+Really, pretty much every single case of SAVE_SWITCH_STACK would need
+to set it. Not just do_trace_enter/exit
 
-	Michael
+It's why I didn't like Eric's debug patch either. It's quite expensive
+to do, partly because you look up that curptr thing. All very nasty.
 
+It would be *much* better to make the flag be part of the stack frame,
+but sadly at least on alpha we had exported the format of that stack
+frame to user space.
 
+Anyway, I think these debug patches are not just expensive but the
+m68k one most definitely is also very incomplete.
 
->
+             Linus
