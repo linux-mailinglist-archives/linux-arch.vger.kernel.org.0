@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C44A3B0F9C
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Jun 2021 23:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571273B0FAD
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Jun 2021 23:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbhFVVvH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Jun 2021 17:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
+        id S230103AbhFVV7v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Jun 2021 17:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbhFVVvG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Jun 2021 17:51:06 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8EAC061574;
-        Tue, 22 Jun 2021 14:48:50 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id o21so253pll.6;
-        Tue, 22 Jun 2021 14:48:50 -0700 (PDT)
+        with ESMTP id S229501AbhFVV7v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Jun 2021 17:59:51 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FD3C061756;
+        Tue, 22 Jun 2021 14:57:33 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id c7-20020a17090ad907b029016faeeab0ccso2542627pjv.4;
+        Tue, 22 Jun 2021 14:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=/a89jzJmhEpzXyHwVhCcKZ9uKv9DiUWiMoXSo4IAqPE=;
-        b=Fj7WoX0NrdmFtDXSPbtKbFgnFmECG0CoEZ4apdWVK9HbJGRvJ+ZBhc5XMlidFXofUP
-         RWjfmZvk+mM6RhZumcg0dSaV1oUyKYulB5H/nEg0lJ3cvPqePy77b0IcPVxSDSISJnIJ
-         dcpLcgeGt3kO1NwuKcgE8BzaK4Y1D7n4IalQxNKpU5rzjl/3eO9988IoJHBxOWH99sio
-         dlNfD9HjdJ+dm7+L/b4tD3GXwtXFTQ3R6hStNTzps39P1kALUFKhlDTgPPlxApk+m7OQ
-         VpgUUKRGveGFPy/XEon+N+/Hos5/Mvs0VE2YkMq1h73qmm76/kJqcqRlEt8oA52XTgfJ
-         01bA==
+        bh=q3sSzRhIYRc08dnfAfmCyTORkqMDLuhDq0YQcDshAkw=;
+        b=b7F/isKgmlnCGn7ktKvQiwQaGkX//vxpblPW5Aj3zNKiPyoIi7L6xPA0H+VD3mmaV2
+         KK3ZmsT5Kx0XYBSi6rAJB6yf4y+ypdpaF4k8xNGxuXiRoWYyzkzKrFOsZB2bTfuWyz1V
+         pIZ6u6YjIWAFEzdxEpXck55WHYWnXfeO9tM4jXryNbRGP8x9lTwwMV7z1J5rYgQIb11J
+         bwCo2XoKzw1Byt5bpTGrEVmHlrjyhQd9lRLB1mkL3qgJ/mZ4MLBh6HcydQ5giJyPyUg0
+         o3lLcUur7tND7+LxDLyXT5AbbRNWGXXKNCuI54z4x98prRHyaHRJSFwZZyGaonB77FJq
+         fE8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=/a89jzJmhEpzXyHwVhCcKZ9uKv9DiUWiMoXSo4IAqPE=;
-        b=OY7nl6c2C8p16cZX4GpaApJy6oNDJ9a0D3LZmehRIiCDaiMB4lHjboIab61F8Plh5X
-         STx9RJkSRlIrCfpX/8L2dnwdo6hsG2+fKcH+Os7eE/9BfvmPCf5cGzJWrdxjA+xsufPw
-         Uku1tRIj0R3v03xr34RUglyaNKLaQErUfdR5bqTxVq1J/bVrdDgy/z0IOoY+02LOPNAJ
-         qMKJKb7kpptjrrykSI0EMXJLOWYXMiRBXF7URaNhwUNWLEPNjxHeeTmGdre60YpalTOv
-         F9XA5/9GU5vRA4Spv3tOp0dKRhXXfDWa0EJcYEbddNxqSyBeiQ/Jm05e85JxM6l0ftNI
-         EKkg==
-X-Gm-Message-State: AOAM530PmI98/4nFM6P7Y28V/xKufVmuUoMEuAN75bZFJIX2jvA4fax9
-        o0G/OP4UmfJbT8MROp/BQM0=
-X-Google-Smtp-Source: ABdhPJw+gMEGSzEnPbcnU3MiJb3IdawpSAN47vBFTQm/yTkfUTWC0p+OyLrxu2Ea+wAxyHlWayJTZg==
-X-Received: by 2002:a17:90a:f211:: with SMTP id bs17mr1473026pjb.74.1624398530003;
-        Tue, 22 Jun 2021 14:48:50 -0700 (PDT)
+        bh=q3sSzRhIYRc08dnfAfmCyTORkqMDLuhDq0YQcDshAkw=;
+        b=WP/CrrTo8XaACEBNUMQrZpjOUT61SUPd4t3q/Y6YkCCnPikoO+qGLxIpC8G8kW7JFM
+         yeh4fU8hZ+KxGcZCi632kJtytUH/LhgbRWgyyN/Kb1CeBk3L//9IUfBnFd6f9eA+Yubk
+         /f+zXz6xsR0wgARthk6cB23F7ZVbAG4o4qLwlcH94f8Xj8VaNZ5D9R+F8hQ7IdqLS3ft
+         hoAfO4/I5ZsQLEe4o1K0rqCMoNK6MmkcCe9Dw/5NPRyB/umV0oPtKdDAA62Z9rjcN9wV
+         0R1UNKEm/fma1WeNBDCzxP/mTngh7WHnsax5Nd7D4Lw1QMNiAFbtNlgRC+GD1ebEouik
+         dqoQ==
+X-Gm-Message-State: AOAM531iePzEY5IT25Vv7IGiAd2UbSwWGjp+u4IOfUSh79Qs/RS2qGTa
+        wSNIjhQHkpfuKsE5EceWOiM=
+X-Google-Smtp-Source: ABdhPJwlKwvoG5Z9DeeMyE3mjGfDMy5eHoV3xhucGbnHdUQlgp85EV7UAlHh9fZyxo3tpwvOVevOAg==
+X-Received: by 2002:a17:90b:3581:: with SMTP id mm1mr5936783pjb.98.1624399053199;
+        Tue, 22 Jun 2021 14:57:33 -0700 (PDT)
 Received: from ?IPv6:2001:df0:0:200c:9491:40e4:164d:6ab3? ([2001:df0:0:200c:9491:40e4:164d:6ab3])
-        by smtp.gmail.com with ESMTPSA id 195sm250960pfw.133.2021.06.22.14.48.43
+        by smtp.gmail.com with ESMTPSA id z9sm270622pfa.2.2021.06.22.14.57.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jun 2021 14:48:49 -0700 (PDT)
+        Tue, 22 Jun 2021 14:57:32 -0700 (PDT)
 Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -64,26 +64,24 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Arnd Bergmann <arnd@kernel.org>, Tejun Heo <tj@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-References: <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
- <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
- <87fsxjorgs.fsf@disp2133>
+        Andreas Schwab <schwab@linux-m68k.org>
+References: <87eed4v2dc.fsf@disp2133>
+ <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com> <87fsxjorgs.fsf@disp2133>
  <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
  <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
  <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
  <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
  <YNDsYk6kbisbNy3I@zeniv-ca.linux.org.uk>
  <CAHk-=wh82uJ5Poqby3brn-D7xWbCMnGv-JnwfO0tuRfCvsVgXA@mail.gmail.com>
- <YNEfXhi80e/VXgc9@zeniv-ca.linux.org.uk>
- <CAHk-=wjtagi3g5thA-T8ooM8AXcy3brdHzugCPU0itdbpDYH_A@mail.gmail.com>
- <87h7hpbojt.fsf@disp2133>
+ <de5f0132-eed4-f1d0-ddd2-f65a62de6b81@gmail.com>
+ <YNJFr5xUOm91Vy1r@zeniv-ca.linux.org.uk>
 From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <20c787ec-4a3c-061c-c649-5bc3e7ef0464@gmail.com>
-Date:   Wed, 23 Jun 2021 09:48:40 +1200
+Message-ID: <8badff67-64c9-ca03-7af1-de73d0d75285@gmail.com>
+Date:   Wed, 23 Jun 2021 09:57:23 +1200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <87h7hpbojt.fsf@disp2133>
+In-Reply-To: <YNJFr5xUOm91Vy1r@zeniv-ca.linux.org.uk>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -91,42 +89,46 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Eric,
+Hi Al,
 
-On 23/06/21 9:02 am, Eric W. Biederman wrote:
-> Linus Torvalds <torvalds@linux-foundation.org> writes:
+On 23/06/21 8:18 am, Al Viro wrote:
+> On Wed, Jun 23, 2021 at 08:04:11AM +1200, Michael Schmitz wrote:
 >
-> So I was more thinking of the debug patch for m68k to catch all the
-> _regular_ cases, and all the other random cases of ptrace_event() or
-> ptrace_notify().
->
-> Although maybe we've really caught them all. The exit case was clearly
-> missing, and the thread fork case was scrogged. There are patches for
-> the known problems. The patches I really don't like are the
-> verification ones to find any unknown ones..
-> We still have nios2 which copied the m68k logic at some point.  I think
-> that is a processor that is still ``shipping'' and that people might
-> still be using in new designs.
->
-> I haven't looked closely enough to see what the other architectures with
-> caller saved registers are doing.
->
-> The challenging ones are /proc/pid/syscall and seccomp which want to see
-> all of the system call arguments.  I think every architecture always
-> saves the system call arguments unconditionally, so those cases are
-> probably not as interesting.  But they certain look like they could be
-> trouble.
+>> All syscalls that _do_ save the switch stack are currently called through
+>> wrappers which pull the syscall arguments out of the saved pt_regs on the
+>> stack (pushing the switch stack after the SAVE_ALL saved stuff buries the
+>> syscall arguments on the stack, see comment about m68k_clone(). We'd have to
+>> push the switch stack _first_ when entering system_call to leave the syscall
+>> arguments in place, but that will require further changes to the syscall
+>> exit path (currently shared with the interrupt exit path). Not to mention
+>> the register offset calculations in arch/m68k/kernel/ptrace.c, and perhaps a
+>> few other dependencies that don't come to mind immediately.
+>>
+>> We have both pt_regs and switch_stack in uapi/asm/ptrace.h, but the ordering
+>> of the two is only mentioned in a comment. Can we reorder them on the stack,
+>> as long as we don't change the struct definitions proper?
+>>
+>> This will take a little more time to work out and test - certainly not
+>> before the weekend. I'll send a corrected version of my debug patch before
+>> that.
+> This is insane, *especially* on m68k where you have the mess with different
+> frame layouts and associated ->stkadj crap (see mangle_kernel_stack() for
+> the (very) full barfbag).
 
-Seccomp hasn't yet been implemented on m68k, though I'm working on that 
-with Adrian. The sole secure_computing() call will happen in 
-syscall_trace_enter(), so all system call arguments have been saved on 
-the stack.
+Indeed - that's one of the uses of pt_regs and switch_stack that I 
+hadn't yet seen.
 
-Haven't looked at /proc/pid/syscall yet ...
+So it's either leave the stack layout in system calls unchanged (aside 
+from the ones that need the extra registers) and protect against 
+accidental misuse of registers that weren't saved, with the overhead of 
+playing with thread_info->status bits, or tackle the mess of redoing the 
+stack layout to save all registers, always (did I already mention that 
+I'd need a _lot_ of help from someone more conversant with m68k assembly 
+coding for that option?).
+
+Which one of these two barf bags is the fuller one?
 
 Cheers,
 
      Michael
 
-> Eric
->
