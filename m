@@ -2,133 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 571273B0FAD
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Jun 2021 23:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054A93B0FC3
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Jun 2021 00:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhFVV7v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Jun 2021 17:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbhFVV7v (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Jun 2021 17:59:51 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FD3C061756;
-        Tue, 22 Jun 2021 14:57:33 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id c7-20020a17090ad907b029016faeeab0ccso2542627pjv.4;
-        Tue, 22 Jun 2021 14:57:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=q3sSzRhIYRc08dnfAfmCyTORkqMDLuhDq0YQcDshAkw=;
-        b=b7F/isKgmlnCGn7ktKvQiwQaGkX//vxpblPW5Aj3zNKiPyoIi7L6xPA0H+VD3mmaV2
-         KK3ZmsT5Kx0XYBSi6rAJB6yf4y+ypdpaF4k8xNGxuXiRoWYyzkzKrFOsZB2bTfuWyz1V
-         pIZ6u6YjIWAFEzdxEpXck55WHYWnXfeO9tM4jXryNbRGP8x9lTwwMV7z1J5rYgQIb11J
-         bwCo2XoKzw1Byt5bpTGrEVmHlrjyhQd9lRLB1mkL3qgJ/mZ4MLBh6HcydQ5giJyPyUg0
-         o3lLcUur7tND7+LxDLyXT5AbbRNWGXXKNCuI54z4x98prRHyaHRJSFwZZyGaonB77FJq
-         fE8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=q3sSzRhIYRc08dnfAfmCyTORkqMDLuhDq0YQcDshAkw=;
-        b=WP/CrrTo8XaACEBNUMQrZpjOUT61SUPd4t3q/Y6YkCCnPikoO+qGLxIpC8G8kW7JFM
-         yeh4fU8hZ+KxGcZCi632kJtytUH/LhgbRWgyyN/Kb1CeBk3L//9IUfBnFd6f9eA+Yubk
-         /f+zXz6xsR0wgARthk6cB23F7ZVbAG4o4qLwlcH94f8Xj8VaNZ5D9R+F8hQ7IdqLS3ft
-         hoAfO4/I5ZsQLEe4o1K0rqCMoNK6MmkcCe9Dw/5NPRyB/umV0oPtKdDAA62Z9rjcN9wV
-         0R1UNKEm/fma1WeNBDCzxP/mTngh7WHnsax5Nd7D4Lw1QMNiAFbtNlgRC+GD1ebEouik
-         dqoQ==
-X-Gm-Message-State: AOAM531iePzEY5IT25Vv7IGiAd2UbSwWGjp+u4IOfUSh79Qs/RS2qGTa
-        wSNIjhQHkpfuKsE5EceWOiM=
-X-Google-Smtp-Source: ABdhPJwlKwvoG5Z9DeeMyE3mjGfDMy5eHoV3xhucGbnHdUQlgp85EV7UAlHh9fZyxo3tpwvOVevOAg==
-X-Received: by 2002:a17:90b:3581:: with SMTP id mm1mr5936783pjb.98.1624399053199;
-        Tue, 22 Jun 2021 14:57:33 -0700 (PDT)
-Received: from ?IPv6:2001:df0:0:200c:9491:40e4:164d:6ab3? ([2001:df0:0:200c:9491:40e4:164d:6ab3])
-        by smtp.gmail.com with ESMTPSA id z9sm270622pfa.2.2021.06.22.14.57.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jun 2021 14:57:32 -0700 (PDT)
-Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Arnd Bergmann <arnd@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Andreas Schwab <schwab@linux-m68k.org>
-References: <87eed4v2dc.fsf@disp2133>
- <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com> <87fsxjorgs.fsf@disp2133>
- <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
- <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
- <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
- <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
- <YNDsYk6kbisbNy3I@zeniv-ca.linux.org.uk>
- <CAHk-=wh82uJ5Poqby3brn-D7xWbCMnGv-JnwfO0tuRfCvsVgXA@mail.gmail.com>
- <de5f0132-eed4-f1d0-ddd2-f65a62de6b81@gmail.com>
- <YNJFr5xUOm91Vy1r@zeniv-ca.linux.org.uk>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <8badff67-64c9-ca03-7af1-de73d0d75285@gmail.com>
-Date:   Wed, 23 Jun 2021 09:57:23 +1200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S230268AbhFVWDB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Jun 2021 18:03:01 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:48778 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230292AbhFVWC7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Jun 2021 18:02:59 -0400
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A6A9B20B83F5;
+        Tue, 22 Jun 2021 15:00:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A6A9B20B83F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1624399242;
+        bh=t0zy+aEJbbWfr+b93GwBhrR1JhR/zUqTNz5gXaWTwg0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SthROkxDDu/QhydPs+YRpFqCj5N7QPI564vrNLrGm2nU8AvseLaV1Hpft4Ul4nWkb
+         jU9o73zefEx59IGK6yNySyKHHfaJtm+q76mAUOd4OS9rKIUBo8HEinBp76qGvYa+qL
+         8ntS0oZORP+7/XTu1pGZr7lINneFoErlFY+KFfCg=
+Received: by mail-pl1-f180.google.com with SMTP id m17so11425plx.7;
+        Tue, 22 Jun 2021 15:00:42 -0700 (PDT)
+X-Gm-Message-State: AOAM5339bJcHDNBiW42PW5sybvHNYF2YGI8Ad1wtBJOj5YGQQqPURx1I
+        Mlc03melbrjL+UoPejPhJXjQrcjG6n/2nXu8LkE=
+X-Google-Smtp-Source: ABdhPJyv1SBZhrTityd2+MnaNiG0YScqu6u6GGO+94AaR/jITunJ/1zxDMO/c+aBvN9vVivCQaTUKtAo1Zcegix/+ug=
+X-Received: by 2002:a17:902:e9d5:b029:124:926:7971 with SMTP id
+ 21-20020a170902e9d5b029012409267971mr13690483plk.19.1624399242143; Tue, 22
+ Jun 2021 15:00:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YNJFr5xUOm91Vy1r@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20210617152754.17960-1-mcroce@linux.microsoft.com>
+ <20210617152754.17960-2-mcroce@linux.microsoft.com> <YNChl0tkofSGzvIX@infradead.org>
+In-Reply-To: <YNChl0tkofSGzvIX@infradead.org>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Wed, 23 Jun 2021 00:00:06 +0200
+X-Gmail-Original-Message-ID: <CAFnufp2UaAEq8FCxSeX5xCOZYu4wJ783gy35RZF-D626XiF8MQ@mail.gmail.com>
+Message-ID: <CAFnufp2UaAEq8FCxSeX5xCOZYu4wJ783gy35RZF-D626XiF8MQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] riscv: optimized memcpy
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Guo Ren <guoren@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Al,
-
-On 23/06/21 8:18 am, Al Viro wrote:
-> On Wed, Jun 23, 2021 at 08:04:11AM +1200, Michael Schmitz wrote:
+On Mon, Jun 21, 2021 at 4:26 PM Christoph Hellwig <hch@infradead.org> wrote:
 >
->> All syscalls that _do_ save the switch stack are currently called through
->> wrappers which pull the syscall arguments out of the saved pt_regs on the
->> stack (pushing the switch stack after the SAVE_ALL saved stuff buries the
->> syscall arguments on the stack, see comment about m68k_clone(). We'd have to
->> push the switch stack _first_ when entering system_call to leave the syscall
->> arguments in place, but that will require further changes to the syscall
->> exit path (currently shared with the interrupt exit path). Not to mention
->> the register offset calculations in arch/m68k/kernel/ptrace.c, and perhaps a
->> few other dependencies that don't come to mind immediately.
->>
->> We have both pt_regs and switch_stack in uapi/asm/ptrace.h, but the ordering
->> of the two is only mentioned in a comment. Can we reorder them on the stack,
->> as long as we don't change the struct definitions proper?
->>
->> This will take a little more time to work out and test - certainly not
->> before the weekend. I'll send a corrected version of my debug patch before
->> that.
-> This is insane, *especially* on m68k where you have the mess with different
-> frame layouts and associated ->stkadj crap (see mangle_kernel_stack() for
-> the (very) full barfbag).
+> On Thu, Jun 17, 2021 at 05:27:52PM +0200, Matteo Croce wrote:
+> > +extern void *memcpy(void *dest, const void *src, size_t count);
+> > +extern void *__memcpy(void *dest, const void *src, size_t count);
+>
+> No need for externs.
+>
 
-Indeed - that's one of the uses of pt_regs and switch_stack that I 
-hadn't yet seen.
+Right.
 
-So it's either leave the stack layout in system calls unchanged (aside 
-from the ones that need the extra registers) and protect against 
-accidental misuse of registers that weren't saved, with the overhead of 
-playing with thread_info->status bits, or tackle the mess of redoing the 
-stack layout to save all registers, always (did I already mention that 
-I'd need a _lot_ of help from someone more conversant with m68k assembly 
-coding for that option?).
+> > +++ b/arch/riscv/lib/string.c
+>
+> Nothing in her looks RISC-V specific.  Why doesn't this go into lib/ so
+> that other architectures can use it as well.
+>
 
-Which one of these two barf bags is the fuller one?
+Technically it could go into lib/ and be generic.
+If you think it's worth it, I have just to handle the different
+left/right shift because of endianness.
 
-Cheers,
+> > +#include <linux/module.h>
+>
+> I think you only need export.h.
+>
 
-     Michael
+Nice.
 
+> > +void *__memcpy(void *dest, const void *src, size_t count)
+> > +{
+> > +     const int bytes_long = BITS_PER_LONG / 8;
+> > +#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+> > +     const int mask = bytes_long - 1;
+> > +     const int distance = (src - dest) & mask;
+> > +#endif
+> > +     union const_types s = { .u8 = src };
+> > +     union types d = { .u8 = dest };
+> > +
+> > +#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+> > +     if (count < MIN_THRESHOLD)
+>
+> Using IS_ENABLED we can avoid a lot of the mess in this
+> function.
+>
+>         int distance = 0;
+>
+>         if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
+>                 if (count < MIN_THRESHOLD)
+>                         goto copy_remainder;
+>
+>                 /* copy a byte at time until destination is aligned */
+>                 for (; count && d.uptr & mask; count--)
+>                         *d.u8++ = *s.u8++;
+>                 distance = (src - dest) & mask;
+>         }
+>
+
+Cool. What about putting this check in the very start:
+
+        if (count < MIN_THRESHOLD)
+                goto copy_remainder;
+
+And since count is at least twice bytes_long, remove count from the check below?
+Also, setting distance after d is aligned is as simple as getting the
+lower bits of s:
+
+        if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
+                /* Copy a byte at time until destination is aligned. */
+                for (; d.uptr & mask; count--)
+                        *d.u8++ = *s.u8++;
+
+                distance = s.uptr & mask;
+        }
+
+>         if (distance) {
+>                 ...
+>
+> > +             /* 32/64 bit wide copy from s to d.
+> > +              * d is aligned now but s is not, so read s alignment wise,
+> > +              * and do proper shift to get the right value.
+> > +              * Works only on Little Endian machines.
+> > +              */
+>
+> Normal kernel comment style always start with a:
+>
+
+Right, I was used to netdev ones :)
+
+>                 /*
+>
+>
+> > +             for (next = s.ulong[0]; count >= bytes_long + mask; count -= bytes_long) {
+>
+> Please avoid the pointlessly overlong line.  And (just as a matter of
+> personal preference) I find for loop that don't actually use a single
+> iterator rather confusing.  Wjy not simply:
+>
+>                 next = s.ulong[0];
+>                 while (count >= bytes_long + mask) {
+>                         ...
+>                         count -= bytes_long;
+>                 }
+
+My fault, in a previous version it was:
+
+    next = s.ulong[0];
+    for (; count >= bytes_long + mask; count -= bytes_long) {
+
+So to have a single `count` counter for the loop.
+
+Regards,
+-- 
+per aspera ad upstream
