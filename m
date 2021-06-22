@@ -2,189 +2,228 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A3E3B10A1
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Jun 2021 01:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1583B3B10AB
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Jun 2021 01:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbhFVXgJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Jun 2021 19:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbhFVXgI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Jun 2021 19:36:08 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B943AC061766
-        for <linux-arch@vger.kernel.org>; Tue, 22 Jun 2021 16:33:51 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id b5so828314ilc.12
-        for <linux-arch@vger.kernel.org>; Tue, 22 Jun 2021 16:33:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FDnxriAkAs3WYRO9xpOUrYS828idlFB2knO2vwsUSvg=;
-        b=QJp6/9lUz9fJ5U6y2HUgJa7Sj+zgXCAyP8rFy6A3tRUdsTNwtpE1lRwSa6HBQ7/PEW
-         qq+20ws1w6cBSxmeNaX9dlTkAwg0rEsCoPQRrZK1PeH+YbxrtCe0pMym/UgkM/2iJhoi
-         MZ+KedbRWDwjdkjJlhIPVWqN2VaoPXiZuOXM0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FDnxriAkAs3WYRO9xpOUrYS828idlFB2knO2vwsUSvg=;
-        b=Zgja4RwgSqEgJvqpbTPSXEpSd51PAPz+15iV75HjMhCtbvZFfT87zQkxt2eYMrBkX7
-         pfoRBSm6qMXR4inh7jHbb9PZtUUZu8tlXx6PkmRo0UdCCj5xCiAtgs27QWB5H1CFG8kP
-         vWruiANXeRvzu0z+S0Ej3LwT00Q/pbbYRJEpxv7MgUurzAtZU+nd3OgRHMLF5xqpJwdL
-         aebipW9ghgGEQCJBkdIAspcHJGg8nIin3mSE5JnrIzvJkD6KB4aKErrd3hI0WTDfvS9F
-         wkGtJfI52peNqtX8l9tpoRxfEcIfenIbDv/V2KLLgxRw/Y4M6kN57G9oeJ/3J4J692Dn
-         2S2Q==
-X-Gm-Message-State: AOAM533j+/a1YqbM09+FZst5PjsTLKRRZoL4Sop3UCk2DnC6MSYtkFI1
-        gBhyfFa/dkUuAW61Yci/+upzUQ==
-X-Google-Smtp-Source: ABdhPJw7keBbdI2oGPoqc6E/70YMOq7h5FAYPCK0uMP9DTLguDw3tyBjdv2Nb3LVTbHrhG9kIVx6Fw==
-X-Received: by 2002:a92:a304:: with SMTP id a4mr798253ili.197.1624404830816;
-        Tue, 22 Jun 2021 16:33:50 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id s8sm3047598ilj.51.2021.06.22.16.33.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jun 2021 16:33:50 -0700 (PDT)
-Subject: Re: Maintainers / Kernel Summit 2021 planning kick-off
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
-        David Hildenbrand <david@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Greg KH <greg@kroah.com>, Christoph Lameter <cl@gentwo.de>,
-        Theodore Ts'o <tytso@mit.edu>, Jiri Kosina <jikos@kernel.org>,
-        ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <YK+esqGjKaPb+b/Q@kroah.com>
- <c46dbda64558ab884af060f405e3f067112b9c8a.camel@HansenPartnership.com>
- <b32c8672-06ee-bf68-7963-10aeabc0596c@redhat.com>
- <5038827c-463f-232d-4dec-da56c71089bd@metux.net>
- <20210610182318.jrxe3avfhkqq7xqn@nitro.local>
- <YMJcdbRaQYAgI9ER@pendragon.ideasonboard.com>
- <20210610152633.7e4a7304@oasis.local.home>
- <37e8d1a5-7c32-8e77-bb05-f851c87a1004@linuxfoundation.org>
- <YMyjryXiAfKgS6BY@pendragon.ideasonboard.com>
- <ae51f636-8fb5-20b7-bbc5-37e22edb9a02@linuxfoundation.org>
- <YNJrZIMs7RvqRBSG@pendragon.ideasonboard.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3bfbe45c-2356-6db0-e1b8-11b7e37ae858@linuxfoundation.org>
-Date:   Tue, 22 Jun 2021 17:33:49 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S229667AbhFVXiw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Jun 2021 19:38:52 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:60492 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229915AbhFVXiw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Jun 2021 19:38:52 -0400
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7A87820B83F2;
+        Tue, 22 Jun 2021 16:36:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A87820B83F2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1624404995;
+        bh=sbj5HIp4xJpRCiR6qVH+qNxqoKYrQm16hkrJ8Ci8owA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iETFZt5/lRZ/8BTZByARg+ERVKWkTbk+eqrO6mH7uWjdIqdt/rU7eHketabJGeRch
+         eGMDrvb5bx3J4BbkeyaGrfFIjhgV8+ZUVq6I7CeT8/dyf94g3WA8rSUDJFYkFTkhxJ
+         c2IKISNylmGLmTxemsFI32FvjdYBkBXsKMSj6Mfw=
+Received: by mail-pl1-f178.google.com with SMTP id v12so111481plo.10;
+        Tue, 22 Jun 2021 16:36:35 -0700 (PDT)
+X-Gm-Message-State: AOAM531+QU0lbk39+aUbhBRa/4BJD8fBpmMRn9Xo9GP6yejuNsM9X70I
+        aIKM2e5+EVbrlUPlEwu6t7MRCIsHK70P1I5AgkA=
+X-Google-Smtp-Source: ABdhPJzJ/12H4j0kvVazrTUlwFMjCdoEf5U0mhOYx6FiB6v9DtkVqSO4D7wVK5OaLf5i8qBy3oCZnMdRev/C+dtZnBE=
+X-Received: by 2002:a17:90b:4b49:: with SMTP id mi9mr6191693pjb.187.1624404994991;
+ Tue, 22 Jun 2021 16:36:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YNJrZIMs7RvqRBSG@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210617152754.17960-1-mcroce@linux.microsoft.com>
+ <20210617152754.17960-2-mcroce@linux.microsoft.com> <87f2cf0e98c5c5560cfb591b4f4b29c8@mailhost.ics.forth.gr>
+In-Reply-To: <87f2cf0e98c5c5560cfb591b4f4b29c8@mailhost.ics.forth.gr>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Wed, 23 Jun 2021 01:35:58 +0200
+X-Gmail-Original-Message-ID: <CAFnufp0JuAvrOA89KDbcbhMeMvovoS96STVV+r53PLGJV4r0aw@mail.gmail.com>
+Message-ID: <CAFnufp0JuAvrOA89KDbcbhMeMvovoS96STVV+r53PLGJV4r0aw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] riscv: optimized memcpy
+To:     Nick Kossifidis <mick@ics.forth.gr>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Guo Ren <guoren@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/22/21 4:59 PM, Laurent Pinchart wrote:
-> Hi Shuah,
-> 
-> On Tue, Jun 22, 2021 at 04:33:22PM -0600, Shuah Khan wrote:
->> On 6/18/21 7:46 AM, Laurent Pinchart wrote:
->>> On Thu, Jun 10, 2021 at 01:55:23PM -0600, Shuah Khan wrote:
->>>> On 6/10/21 1:26 PM, Steven Rostedt wrote:
->>>>> On Thu, 10 Jun 2021 21:39:49 +0300 Laurent Pinchart wrote:
->>>>>
->>>>>> There will always be more informal discussions between on-site
->>>>>> participants. After all, this is one of the benefits of conferences, by
->>>>>> being all together we can easily organize ad-hoc discussions. This is
->>>>>> traditionally done by finding a not too noisy corner in the conference
->>>>>> center, would it be useful to have more break-out rooms with A/V
->>>>>> equipment than usual ?
->>>>>
->>>>> I've been giving this quite some thought too, and I've come to the
->>>>> understanding (and sure I can be wrong, but I don't think that I am),
->>>>> is that when doing a hybrid event, the remote people will always be
->>>>> "second class citizens" with respect to the communication that is going
->>>>> on. Saying that we can make it the same is not going to happen unless
->>>>> you start restricting what people can do that are present, and that
->>>>> will just destroy the conference IMO.
->>>>>
->>>>> That said, I think we should add more to make the communication better
->>>>> for those that are not present. Maybe an idea is to have break outs
->>>>> followed by the presentation and evening events that include remote
->>>>> attendees to discuss with those that are there about what they might
->>>>> have missed. Have incentives at these break outs (free stacks and
->>>>> beer?) to encourage the live attendees to attend and have a discussion
->>>>> with the remote attendees.
->>>>>
->>>>> The presentations would have remote access, where remote attendees can
->>>>> at the very least write in some chat their questions or comments. If
->>>>> video and connectivity is good enough, perhaps have a screen where they
->>>>> can show up and talk, but that may have logistical limitations.
->>>>>
->>>>
->>>> You are absolutely right that the remote people will have a hard time
->>>> participating and keeping up with in-person participants. I have a
->>>> couple of ideas on how we might be able to improve remote experience
->>>> without restricting in-person experience.
->>>>
->>>> - Have one or two moderators per session to watch chat and Q&A to enable
->>>>      remote participants to chime in and participate.
->>>> - Moderators can make sure remote participation doesn't go unnoticed and
->>>>      enable taking turns for remote vs. people participating in person.
->>>>
->>>> It will be change in the way we interact in all in-person sessions for
->>>> sure, however it might enhance the experience for remote attendees.
->>>
->>> A moderator to watch online chat and relay questions is I believe very
->>> good for presentations, it's hard for a presenter to keep an eye on a
->>> screen while having to manage the interaction with the audience in the
->>> room (there's the usual joke of the difference between an introvert and
->>> an extrovert open-source developer is that the extrovert looks at *your*
->>> shoes when talking to you, but in many presentations the speaker
->>> nowadays does a fairly good job as watching the audience, at least from
->>> time to time :-)).
->>>
->>> For workshop or brainstorming types of sessions, the highest barrier to
->>> participation for remote attendees is local attendees not speaking in
->>> microphones. That's the number one rule that moderators would need to
->>> enforce, I think all the rest depends on it. This may require a larger
->>> number of microphones in the room than usual.
->>>
->>
->> Absolutely. Moderator has to make sure the following things happen for
->> this to be effective:
->>
->> - Watch chat and Q&A, Raise hand from remote participants
->> - Enforce some kind of taking turns to allow fairness in
->>     participation
->> - Have the speaker repeat questions asked in the room (we do that now
->>     in some talks - both remote and in-person - chat and Q&A needs
->>     reading out for recording)
->> - Explore live Transcription features available in the virtual conf.
->>     platform. You still need humans watching the transcription.
->> - Have a running session notes combined with transcription.
->>
->> Any of these options aren't sustainable when large number of people
->> are participating remotely or in-person. In general a small number of
->> people participate either in person or remote in any case, based on
->> my observation in remote and in-person settings.
->>
->> Maybe we can experiment with one or two workshops this time around
->> and see how it works out. If we can figure an effective way, it would
->> be beneficial for people that can't travel for one reason or the
->> other.
-> 
-> Can we nominate moderators ahead of time ? For workshop-style
-> discussions, they need to be a person who won't participate actively in
-> the discussions, as it's impossible to both contribute and moderate at
-> the same time.
-> 
+On Tue, Jun 22, 2021 at 2:15 AM Nick Kossifidis <mick@ics.forth.gr> wrote:
+>
+> Hello Matteo and thanks for the patch,
+>
+> =CE=A3=CF=84=CE=B9=CF=82 2021-06-17 18:27, Matteo Croce =CE=AD=CE=B3=CF=
+=81=CE=B1=CF=88=CE=B5:
+> >
+> > @@ -0,0 +1,91 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * String functions optimized for hardware which doesn't
+> > + * handle unaligned memory accesses efficiently.
+> > + *
+> > + * Copyright (C) 2021 Matteo Croce
+> > + */
+> > +
+> > +#include <linux/types.h>
+> > +#include <linux/module.h>
+> > +
+> > +/* Minimum size for a word copy to be convenient */
+> > +#define MIN_THRESHOLD (BITS_PER_LONG / 8 * 2)
+> > +
+> > +/* convenience union to avoid cast between different pointer types */
+> > +union types {
+> > +     u8 *u8;
+>
+> You are using a type as a name, I'd go with as_bytes/as_ulong/as_uptr
+> which makes it easier for the reader to understand what you are trying
+> to do.
+>
 
-Correct. It will be impossible to participate and moderate in workshop
-setting. We have to ask for volunteers and nominate moderators ahead of
-time.
+Makes sense
 
-thanks,
--- Shuah
+> > +     unsigned long *ulong;
+> > +     uintptr_t uptr;
+> > +};
+> > +
+> > +union const_types {
+> > +     const u8 *u8;
+> > +     unsigned long *ulong;
+> > +};
+> > +
+>
+> I suggest you define those unions inside the function body, no one else
+> is using them.
+>
 
+They will be used in memset(), in patch 3/3
 
+> > +void *__memcpy(void *dest, const void *src, size_t count)
+> > +{
+> > +     const int bytes_long =3D BITS_PER_LONG / 8;
+> > +#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+> > +     const int mask =3D bytes_long - 1;
+> > +     const int distance =3D (src - dest) & mask;
+>
+> Why not unsigned ints ?
+>
+
+Ok.
+
+> > +#endif
+> > +     union const_types s =3D { .u8 =3D src };
+> > +     union types d =3D { .u8 =3D dest };
+> > +
+> > +#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+>
+> If you want to be compliant with memcpy you should check for overlapping
+> regions here since "The memory areas must not overlap", and do nothing
+> about it because according to POSIX this leads to undefined behavior.
+> That's why recent libc implementations use memmove in any case (memcpy
+> is an alias to memmove), which is the suggested approach.
+>
+
+Mmm which memcpy arch implementation does this check?
+I guess that noone is currently doing it.
+
+> > +     if (count < MIN_THRESHOLD)
+> > +             goto copy_remainder;
+> > +
+> > +     /* copy a byte at time until destination is aligned */
+> > +     for (; count && d.uptr & mask; count--)
+> > +             *d.u8++ =3D *s.u8++;
+> > +
+>
+> You should check for !IS_ENABLED(CONFIG_CPU_BIG_ENDIAN) here.
+>
+
+I tought that only Little Endian RISC-V machines were supported in Linux.
+Should I add a BUILD_BUG_ON()?
+Anyway, if this is going in generic lib/, I'll take care of the endianness.
+
+> > +     if (distance) {
+> > +             unsigned long last, next;
+> > +
+> > +             /* move s backward to the previous alignment boundary */
+> > +             s.u8 -=3D distance;
+>
+> It'd help here to explain that since s is distance bytes ahead relative
+> to d, and d reached the alignment boundary above, s is now aligned but
+> the data needs to be shifted to compensate for distance, in order to do
+> word-by-word copy.
+>
+> > +
+> > +             /* 32/64 bit wide copy from s to d.
+> > +              * d is aligned now but s is not, so read s alignment wis=
+e,
+> > +              * and do proper shift to get the right value.
+> > +              * Works only on Little Endian machines.
+> > +              */
+>
+> This commend is misleading because s is aligned or else s.ulong[0]/[1]
+> below would result an unaligned access.
+>
+
+Yes, those two comments should be rephrased, merged and put above.
+
+> > +             for (next =3D s.ulong[0]; count >=3D bytes_long + mask; c=
+ount -=3D
+> > bytes_long) {
+> > +                     last =3D next;
+> > +                     next =3D s.ulong[1];
+> > +
+> > +                     d.ulong[0] =3D last >> (distance * 8) |
+> > +                                  next << ((bytes_long - distance) * 8=
+);
+> > +
+> > +                     d.ulong++;
+> > +                     s.ulong++;
+> > +             }
+> > +
+> > +             /* restore s with the original offset */
+> > +             s.u8 +=3D distance;
+> > +     } else
+> > +#endif
+> > +     {
+> > +             /* if the source and dest lower bits are the same, do a s=
+imple
+> > +              * 32/64 bit wide copy.
+> > +              */
+>
+> A while() loop would make more sense here.
+>
+
+Ok.
+
+> > +             for (; count >=3D bytes_long; count -=3D bytes_long)
+> > +                     *d.ulong++ =3D *s.ulong++;
+> > +     }
+> > +
+> > +     /* suppress warning when CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=
+=3Dy */
+> > +     goto copy_remainder;
+> > +
+> > +copy_remainder:
+> > +     while (count--)
+> > +             *d.u8++ =3D *s.u8++;
+> > +
+> > +     return dest;
+> > +}
+> > +EXPORT_SYMBOL(__memcpy);
+> > +
+> > +void *memcpy(void *dest, const void *src, size_t count) __weak
+> > __alias(__memcpy);
+> > +EXPORT_SYMBOL(memcpy);
+
+Regards,
+--=20
+per aspera ad upstream
