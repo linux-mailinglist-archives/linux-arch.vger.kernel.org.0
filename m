@@ -2,187 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 909FD3B1146
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Jun 2021 03:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED4D3B1334
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Jun 2021 07:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbhFWBRa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Jun 2021 21:17:30 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:44100 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbhFWBR3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Jun 2021 21:17:29 -0400
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4100C20B83DE;
-        Tue, 22 Jun 2021 18:15:13 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4100C20B83DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1624410913;
-        bh=l5w3e6a6uV45UCOPO09+HzRVeLGtrESc4iOLHXlLq40=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eeYWpJspNWBJwXVAAozA8nBj+r/ixX8Dlm+JJh+n64jeFEUJ7S/qji3vdmFeyzQbt
-         o2riDk6C172kqvkolzAULl0Prm52N4EhZD+iNa6WslrYt/Zk2nv49Tgs7oXLEOlbUM
-         SA+1cOODscth8UflP4gI2UwYnyL9Sma4U9qTv0kk=
-Received: by mail-pj1-f51.google.com with SMTP id pf4-20020a17090b1d84b029016f6699c3f2so2830143pjb.0;
-        Tue, 22 Jun 2021 18:15:13 -0700 (PDT)
-X-Gm-Message-State: AOAM531HN9tl4pq5T/zalL6tlu0N2nme0etR/T3KGdk4iimkbQkexN5m
-        l/CkOpe20Hnna7uOJt9X0VRF0oyayITVJ1mPTdk=
-X-Google-Smtp-Source: ABdhPJzLLexTZpICwihNJqNqUYtS2rIt+NYxLY8qUvXTajsE+vUnH89AEaOgxElegimr8XtRQl94Vvtz1Ub5nK9dW5E=
-X-Received: by 2002:a17:90a:650b:: with SMTP id i11mr6657767pjj.39.1624410912716;
- Tue, 22 Jun 2021 18:15:12 -0700 (PDT)
+        id S229688AbhFWF2w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Jun 2021 01:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229660AbhFWF2v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Jun 2021 01:28:51 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE00C061574;
+        Tue, 22 Jun 2021 22:26:33 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id h23so846148pjv.2;
+        Tue, 22 Jun 2021 22:26:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=cn5envrgx5GAtu7W+COJVqITqJD+Wu8CREApOZRkqO8=;
+        b=F04KpScvxEheYc8J+kj6npBZrB1QkG3uPUJUEAd9HSr+Fr/FOVvBk+txbsFbiCy0Dl
+         1rXk5hFjSNLWjBumIazVLVTJqxFdQg/Rh0vPJxAQnDgB1TGnfVZ9WHCdaD/QrBoR4otC
+         Mk65Lz7xwkKYaBJVQ7c9lOaD+sp/MW0rmUsV6cYp/VCjUxBHv9dAiXbMFHnsz64pkdJE
+         jQTKq2GiiLcDZ3fxss/KUXQW1G2jmA5JodTwGY5rGuTDfMI2TcOchMGpAJpeXf9uIW8v
+         Yx78DKad7rEWxzb8DJeOag8tt+C9WrJNjigo5zxsu0PCnFiGtLJeLYErU9YRfInKkpYO
+         RVTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=cn5envrgx5GAtu7W+COJVqITqJD+Wu8CREApOZRkqO8=;
+        b=jMa+XGXYXsb5FyyTHC/vNRtI1zSNWg0LDplzm8DSOGLBrjSDi5xFTrNdpgdbPzLgG7
+         gBe2LRrKxjvvfEID/txk0jLx5ix8q0nQBYQkSB/5v6wjln8nnrvTPoBsnpiVtBNwmM1h
+         GEQjwTU4S0Wi8OU+NdmJP88QAt5JLWKWaEicBROU1Wsg+v/hz8M8CPs7aBOPjXlHV2DZ
+         kLKv2LOpZMucxxWkTzBr9HgZyBuIzMZy9ZeY+HpQGYEY5hRem6qYx2chawYRM8G52d4m
+         9PLyRxyfYqS7+5VWhOw4EQUsipKIAztw/tZUkyOzM4zUCyCZ+XmEJ/0locbpe3yohKto
+         9LlQ==
+X-Gm-Message-State: AOAM533lOHHzduYYzyTjUx2DuuVBjHMkrwDpQhSsitAtEFbhoH5JV6vp
+        EpHo2h8xvFr1EX8BLS5EzQc=
+X-Google-Smtp-Source: ABdhPJwtTPgr9/TC5SCNAt/BhMKJv8yHF4vp9bxraRVqz1W/jpRTDwopkssngp94CqTqDkWNRFJKMw==
+X-Received: by 2002:a17:902:da84:b029:126:2a2:cb89 with SMTP id j4-20020a170902da84b029012602a2cb89mr8971220plx.6.1624425993509;
+        Tue, 22 Jun 2021 22:26:33 -0700 (PDT)
+Received: from [10.1.1.25] (222-152-189-137-fibre.sparkbb.co.nz. [222.152.189.137])
+        by smtp.gmail.com with ESMTPSA id o1sm994113pfk.152.2021.06.22.22.26.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 22 Jun 2021 22:26:32 -0700 (PDT)
+Subject: Re: Kernel stack read with PTRACE_EVENT_EXIT and io_uring threads
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
+ <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
+ <87fsxjorgs.fsf@disp2133>
+ <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
+ <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
+ <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
+ <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
+ <YNDsYk6kbisbNy3I@zeniv-ca.linux.org.uk>
+ <CAHk-=wh82uJ5Poqby3brn-D7xWbCMnGv-JnwfO0tuRfCvsVgXA@mail.gmail.com>
+ <YNEfXhi80e/VXgc9@zeniv-ca.linux.org.uk>
+ <CAHk-=wjtagi3g5thA-T8ooM8AXcy3brdHzugCPU0itdbpDYH_A@mail.gmail.com>
+ <87h7hpbojt.fsf@disp2133> <20c787ec-4a3c-061c-c649-5bc3e7ef0464@gmail.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <55bdad37-187b-e1f5-a359-c5206b20ff4d@gmail.com>
+Date:   Wed, 23 Jun 2021 17:26:22 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-References: <20210617152754.17960-1-mcroce@linux.microsoft.com>
- <20210617152754.17960-4-mcroce@linux.microsoft.com> <17cd289430f08f2b75b7f04242c646f6@mailhost.ics.forth.gr>
- <d0f11655f21243ad983bd24381cdc245@AcuMS.aculab.com>
-In-Reply-To: <d0f11655f21243ad983bd24381cdc245@AcuMS.aculab.com>
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-Date:   Wed, 23 Jun 2021 03:14:36 +0200
-X-Gmail-Original-Message-ID: <CAFnufp1XeKM-N1MdWsNpU6NnF-dYUgGXL1W9r_DDWazTMyRHVA@mail.gmail.com>
-Message-ID: <CAFnufp1XeKM-N1MdWsNpU6NnF-dYUgGXL1W9r_DDWazTMyRHVA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] riscv: optimized memset
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Nick Kossifidis <mick@ics.forth.gr>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>, Guo Ren <guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20c787ec-4a3c-061c-c649-5bc3e7ef0464@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 10:38 AM David Laight <David.Laight@aculab.com> wro=
-te:
+Hi Eric,
+
+Am 23.06.2021 um 09:48 schrieb Michael Schmitz:
+>>
+>> The challenging ones are /proc/pid/syscall and seccomp which want to see
+>> all of the system call arguments.  I think every architecture always
+>> saves the system call arguments unconditionally, so those cases are
+>> probably not as interesting.  But they certain look like they could be
+>> trouble.
 >
-> From: Nick Kossifidis
-> > Sent: 22 June 2021 02:08
-> >
-> > =CE=A3=CF=84=CE=B9=CF=82 2021-06-17 18:27, Matteo Croce =CE=AD=CE=B3=CF=
-=81=CE=B1=CF=88=CE=B5:
-> > > +
-> > > +void *__memset(void *s, int c, size_t count)
-> > > +{
-> > > +   union types dest =3D { .u8 =3D s };
-> > > +
-> > > +   if (count >=3D MIN_THRESHOLD) {
-> > > +           const int bytes_long =3D BITS_PER_LONG / 8;
-> >
-> > You could make 'const int bytes_long =3D BITS_PER_LONG / 8;'
+> Seccomp hasn't yet been implemented on m68k, though I'm working on that
+> with Adrian. The sole secure_computing() call will happen in
+> syscall_trace_enter(), so all system call arguments have been saved on
+> the stack.
 >
-> What is wrong with sizeof (long) ?
-> ...
+> Haven't looked at /proc/pid/syscall yet ...
 
-Nothing, I guess that BITS_PER_LONG is just (sizeof(long) * 8) anyway
+Not supported at present (no HAVE_ARCH_TRACEHOOK for m68k). And the 
+syscall_get_arguments I wrote for seccomp support only copies the first 
+five data registers, which are always saved.
 
-> > > +           unsigned long cu =3D (unsigned long)c;
-> > > +
-> > > +           /* Compose an ulong with 'c' repeated 4/8 times */
-> > > +           cu |=3D cu << 8;
-> > > +           cu |=3D cu << 16;
-> > > +#if BITS_PER_LONG =3D=3D 64
-> > > +           cu |=3D cu << 32;
-> > > +#endif
-> > > +
-> >
-> > You don't have to create cu here, you'll fill dest buffer with 'c'
-> > anyway so after filling up enough 'c's to be able to grab an aligned
-> > word full of them from dest, you can just grab that word and keep
-> > filling up dest with it.
->
-> That will be a lot slower - especially if run on something like x86.
-> A write-read of the same size is optimised by the store-load forwarder.
-> But the byte write, word read will have to go via the cache.
->
-> You can just write:
->         cu =3D (unsigned long)c * 0x0101010101010101ull;
-> and let the compiler sort out the best way to generate the constant.
->
+Cheers,
 
-Interesting. I see that most compilers do an integer multiplication,
-is it faster than three shift and three or?
-
-clang on riscv generates even more instructions to create the immediate:
-
-unsigned long repeat_shift(int c)
-{
-  unsigned long cu =3D (unsigned long)c;
-  cu |=3D cu << 8;
-  cu |=3D cu << 16;
-  cu |=3D cu << 32;
-
-  return cu;
-}
-
-unsigned long repeat_mul(int c)
-{
-  return (unsigned long)c * 0x0101010101010101ull;
-}
-
-repeat_shift:
-  slli a1, a0, 8
-  or a0, a0, a1
-  slli a1, a0, 16
-  or a0, a0, a1
-  slli a1, a0, 32
-  or a0, a0, a1
-  ret
-
-repeat_mul:
-  lui a1, 4112
-  addiw a1, a1, 257
-  slli a1, a1, 16
-  addi a1, a1, 257
-  slli a1, a1, 16
-  addi a1, a1, 257
-  mul a0, a0, a1
-  ret
-
-> >
-> > > +#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-> > > +           /* Fill the buffer one byte at time until the destination
-> > > +            * is aligned on a 32/64 bit boundary.
-> > > +            */
-> > > +           for (; count && dest.uptr % bytes_long; count--)
-> >
-> > You could reuse & mask here instead of % bytes_long.
-> >
-> > > +                   *dest.u8++ =3D c;
-> > > +#endif
-> >
-> > I noticed you also used CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS on your
-> > memcpy patch, is it worth it here ? To begin with riscv doesn't set it
-> > and even if it did we are talking about a loop that will run just a few
-> > times to reach the alignment boundary (worst case scenario it'll run 7
-> > times), I don't think we gain much here, even for archs that have
-> > efficient unaligned access.
->
-> With CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS it probably isn't worth
-> even checking the alignment.
-> While aligning the copy will be quicker for an unaligned buffer they
-> almost certainly don't happen often enough to worry about.
-> In any case you'd want to do a misaligned word write to the start
-> of the buffer - not separate byte writes.
-> Provided the buffer is long enough you can also do a misaligned write
-> to the end of the buffer before filling from the start.
->
-
-I don't understand this one, a misaligned write here is ~30x slower
-than an aligned one because it gets trapped and emulated in SBI.
-How can this be convenient?
-
-> I suspect you may need either barrier() or use a ptr to packed
-> to avoid the perverted 'undefined behaviour' fubar.'
->
-
-Which UB are you referring to?
-
-Regards,
---
-per aspera ad upstream
+	Michael
