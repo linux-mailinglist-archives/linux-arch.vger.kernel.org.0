@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D50F3B1FAE
+	by mail.lfdr.de (Postfix) with ESMTP id C780E3B1FAF
 	for <lists+linux-arch@lfdr.de>; Wed, 23 Jun 2021 19:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhFWRla (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Jun 2021 13:41:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36024 "EHLO mail.kernel.org"
+        id S229996AbhFWRlc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Jun 2021 13:41:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229959AbhFWRl0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 23 Jun 2021 13:41:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 832A261220;
-        Wed, 23 Jun 2021 17:39:05 +0000 (UTC)
+        id S229916AbhFWRlb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 23 Jun 2021 13:41:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9E2A611CB;
+        Wed, 23 Jun 2021 17:39:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624469949;
-        bh=5Ymqz7+dfCEdV4LpMjbEdgXWNoISuPRvOh+2+wrrHvA=;
+        s=k20201202; t=1624469953;
+        bh=XvhUI22KCWdadFes3lQB7XTm/HPj63vHhDt+RM3Mht0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I/oteDY7V63qhKbb+cXbE3z58I/O5UA83juHinSKkHEoBr5A0ZEOTpFDLRzwVhBMj
-         KA7UtbHiHviZi6cN6jbytrImqHKRHqrPSsjG/v80TzG090Q/MDWBDlq1BXs5+yMsTs
-         UurLu3viM9vj7UxMI2aR5pM167G4Wp7lkTeiabrdvl5i999s6zJc9Wni3yDRSZG8v0
-         isbXbIEqxkdW+cEK45i/N5kF7mMG88M+gqo6E3hsAd6KF/H1SCxdOXwbOHeMsUEyGd
-         u7LMtU4uj8izv7LNpnZldP92C5whTfWAeSh7sXlW8fQPsHANJnkkUO4MUIqrU1p9wD
-         0ofI3dsoyjVqQ==
+        b=L+FaATX7FPwkpd19t2kzVhSKZaYZCECFQbkoqA7VGmKTaauyaWZPqT1ybKZYZzYwO
+         1xerV01J0gTKb1FvgScoEMw90Oc4egb02PVahHTXtE2EB6wfdFfc/h0l9PXawuRBpD
+         xwjS8AuzoCgmxl7EUqpaUa2X1qxdTUOcMg6c4c40xGS8qfMjrrSTHwMcYix6WwR+Si
+         I+vT6GoPnln56DiADOxmeLU41mQn+Y7RAUxJ/ttHs6uH/XGx4mfEzQt8g5Qt5qf5zb
+         EPy6PFOH2YViXOW9l6e2lI4GVhIGOgT4oCo3/U0jGC8v3ckgSihz6lMfJh+ud/a658
+         +PllsBLXR1C6g==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -43,11 +43,10 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <valentin.schneider@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, kernel-team@android.com,
-        Valentin Schneider <Valentin.Schneider@arm.com>
-Subject: [PATCH v10 03/16] cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()
-Date:   Wed, 23 Jun 2021 18:38:35 +0100
-Message-Id: <20210623173848.318-4-will@kernel.org>
+        Mark Rutland <mark.rutland@arm.com>, kernel-team@android.com
+Subject: [PATCH v10 04/16] cpuset: Cleanup cpuset_cpus_allowed_fallback() use in select_fallback_rq()
+Date:   Wed, 23 Jun 2021 18:38:36 +0100
+Message-Id: <20210623173848.318-5-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210623173848.318-1-will@kernel.org>
 References: <20210623173848.318-1-will@kernel.org>
@@ -57,127 +56,99 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Asymmetric systems may not offer the same level of userspace ISA support
-across all CPUs, meaning that some applications cannot be executed by
-some CPUs. As a concrete example, upcoming arm64 big.LITTLE designs do
-not feature support for 32-bit applications on both clusters.
+select_fallback_rq() only needs to recheck for an allowed CPU if the
+affinity mask of the task has changed since the last check.
 
-Modify guarantee_online_cpus() to take task_cpu_possible_mask() into
-account when trying to find a suitable set of online CPUs for a given
-task. This will avoid passing an invalid mask to set_cpus_allowed_ptr()
-during ->attach() and will subsequently allow the cpuset hierarchy to be
-taken into account when forcefully overriding the affinity mask for a
-task which requires migration to a compatible CPU.
+Return a 'bool' from cpuset_cpus_allowed_fallback() to indicate whether
+the affinity mask was updated, and use this to elide the allowed check
+when the mask has been left alone.
 
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Reviewed-by: Valentin Schneider <Valentin.Schneider@arm.com>
+No functional change.
+
+Suggested-by: Valentin Schneider <valentin.schneider@arm.com>
+Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- include/linux/cpuset.h |  2 +-
- kernel/cgroup/cpuset.c | 43 +++++++++++++++++++++++++-----------------
- 2 files changed, 27 insertions(+), 18 deletions(-)
+ include/linux/cpuset.h |  5 +++--
+ kernel/cgroup/cpuset.c | 10 ++++++++--
+ kernel/sched/core.c    |  3 +--
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
-index ed6ec677dd6b..414a8e694413 100644
+index 414a8e694413..d2b9c41c8edf 100644
 --- a/include/linux/cpuset.h
 +++ b/include/linux/cpuset.h
-@@ -185,7 +185,7 @@ static inline void cpuset_read_unlock(void) { }
- static inline void cpuset_cpus_allowed(struct task_struct *p,
- 				       struct cpumask *mask)
- {
--	cpumask_copy(mask, cpu_possible_mask);
-+	cpumask_copy(mask, task_cpu_possible_mask(p));
+@@ -59,7 +59,7 @@ extern void cpuset_wait_for_hotplug(void);
+ extern void cpuset_read_lock(void);
+ extern void cpuset_read_unlock(void);
+ extern void cpuset_cpus_allowed(struct task_struct *p, struct cpumask *mask);
+-extern void cpuset_cpus_allowed_fallback(struct task_struct *p);
++extern bool cpuset_cpus_allowed_fallback(struct task_struct *p);
+ extern nodemask_t cpuset_mems_allowed(struct task_struct *p);
+ #define cpuset_current_mems_allowed (current->mems_allowed)
+ void cpuset_init_current_mems_allowed(void);
+@@ -188,8 +188,9 @@ static inline void cpuset_cpus_allowed(struct task_struct *p,
+ 	cpumask_copy(mask, task_cpu_possible_mask(p));
  }
  
- static inline void cpuset_cpus_allowed_fallback(struct task_struct *p)
+-static inline void cpuset_cpus_allowed_fallback(struct task_struct *p)
++static inline bool cpuset_cpus_allowed_fallback(struct task_struct *p)
+ {
++	return false;
+ }
+ 
+ static inline nodemask_t cpuset_mems_allowed(struct task_struct *p)
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 6ec7303d5b1f..4e7c271e3800 100644
+index 4e7c271e3800..a6bab2259f98 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -372,18 +372,29 @@ static inline bool is_in_v2_mode(void)
- }
+@@ -3327,17 +3327,22 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
+  * which will not contain a sane cpumask during cases such as cpu hotplugging.
+  * This is the absolute last resort for the scheduler and it is only used if
+  * _every_ other avenue has been traveled.
++ *
++ * Returns true if the affinity of @tsk was changed, false otherwise.
+  **/
  
- /*
-- * Return in pmask the portion of a cpusets's cpus_allowed that
-- * are online.  If none are online, walk up the cpuset hierarchy
-- * until we find one that does have some online cpus.
-+ * Return in pmask the portion of a task's cpusets's cpus_allowed that
-+ * are online and are capable of running the task.  If none are found,
-+ * walk up the cpuset hierarchy until we find one that does have some
-+ * appropriate cpus.
-  *
-  * One way or another, we guarantee to return some non-empty subset
-  * of cpu_online_mask.
-  *
-  * Call with callback_lock or cpuset_mutex held.
-  */
--static void guarantee_online_cpus(struct cpuset *cs, struct cpumask *pmask)
-+static void guarantee_online_cpus(struct task_struct *tsk,
-+				  struct cpumask *pmask)
+-void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
++bool cpuset_cpus_allowed_fallback(struct task_struct *tsk)
  {
--	while (!cpumask_intersects(cs->effective_cpus, cpu_online_mask)) {
-+	const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
-+	struct cpuset *cs;
-+
-+	if (WARN_ON(!cpumask_and(pmask, possible_mask, cpu_online_mask)))
-+		cpumask_copy(pmask, cpu_online_mask);
-+
-+	rcu_read_lock();
-+	cs = task_cs(tsk);
-+
-+	while (!cpumask_intersects(cs->effective_cpus, pmask)) {
- 		cs = parent_cs(cs);
- 		if (unlikely(!cs)) {
- 			/*
-@@ -393,11 +404,13 @@ static void guarantee_online_cpus(struct cpuset *cs, struct cpumask *pmask)
- 			 * cpuset's effective_cpus is on its way to be
- 			 * identical to cpu_online_mask.
- 			 */
--			cpumask_copy(pmask, cpu_online_mask);
--			return;
-+			goto out_unlock;
- 		}
- 	}
--	cpumask_and(pmask, cs->effective_cpus, cpu_online_mask);
-+	cpumask_and(pmask, pmask, cs->effective_cpus);
-+
-+out_unlock:
-+	rcu_read_unlock();
+ 	const struct cpumask *cs_mask;
++	bool changed = false;
+ 	const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
+ 
+ 	rcu_read_lock();
+ 	cs_mask = task_cs(tsk)->cpus_allowed;
+-	if (is_in_v2_mode() && cpumask_subset(cs_mask, possible_mask))
++	if (is_in_v2_mode() && cpumask_subset(cs_mask, possible_mask)) {
+ 		do_set_cpus_allowed(tsk, cs_mask);
++		changed = true;
++	}
+ 	rcu_read_unlock();
+ 
+ 	/*
+@@ -3357,6 +3362,7 @@ void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+ 	 * select_fallback_rq() will fix things ups and set cpu_possible_mask
+ 	 * if required.
+ 	 */
++	return changed;
  }
  
- /*
-@@ -2199,15 +2212,13 @@ static void cpuset_attach(struct cgroup_taskset *tset)
- 
- 	percpu_down_write(&cpuset_rwsem);
- 
--	/* prepare for attach */
--	if (cs == &top_cpuset)
--		cpumask_copy(cpus_attach, cpu_possible_mask);
--	else
--		guarantee_online_cpus(cs, cpus_attach);
--
- 	guarantee_online_mems(cs, &cpuset_attach_nodemask_to);
- 
- 	cgroup_taskset_for_each(task, css, tset) {
-+		if (cs != &top_cpuset)
-+			guarantee_online_cpus(task, cpus_attach);
-+		else
-+			cpumask_copy(cpus_attach, task_cpu_possible_mask(task));
- 		/*
- 		 * can_attach beforehand should guarantee that this doesn't
- 		 * fail.  TODO: have a better way to handle failure here
-@@ -3302,9 +3313,7 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&callback_lock, flags);
--	rcu_read_lock();
--	guarantee_online_cpus(task_cs(tsk), pmask);
--	rcu_read_unlock();
-+	guarantee_online_cpus(tsk, pmask);
- 	spin_unlock_irqrestore(&callback_lock, flags);
- }
- 
+ void __init cpuset_init_current_mems_allowed(void)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 0c1b6f1a6c91..9e75cb3fbc9c 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2779,8 +2779,7 @@ static int select_fallback_rq(int cpu, struct task_struct *p)
+ 		/* No more Mr. Nice Guy. */
+ 		switch (state) {
+ 		case cpuset:
+-			if (IS_ENABLED(CONFIG_CPUSETS)) {
+-				cpuset_cpus_allowed_fallback(p);
++			if (cpuset_cpus_allowed_fallback(p)) {
+ 				state = possible;
+ 				break;
+ 			}
 -- 
 2.32.0.93.g670b81a890-goog
 
