@@ -2,178 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 928933B36EF
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Jun 2021 21:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5B53B378B
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Jun 2021 22:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232829AbhFXT12 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Jun 2021 15:27:28 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:31468 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232995AbhFXT1D (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 24 Jun 2021 15:27:03 -0400
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4G9qp2207VzBD3X;
-        Thu, 24 Jun 2021 21:24:42 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YITgDW9CgO7X; Thu, 24 Jun 2021 21:24:42 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4G9qp20n50zBCf1;
-        Thu, 24 Jun 2021 21:24:42 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E621E8B7EC;
-        Thu, 24 Jun 2021 21:24:41 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id lffGXMs8fonU; Thu, 24 Jun 2021 21:24:41 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 26E218B764;
-        Thu, 24 Jun 2021 21:24:41 +0200 (CEST)
-Subject: Re: [PATCH v2 1/4] mm: pagewalk: Fix walk for hugepage tables
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>, akpm@linux-foundation.org
-Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Paul Mackerras <paulus@samba.org>, dja@axtens.net,
-        Steven Price <steven.price@arm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-References: <cover.1618828806.git.christophe.leroy@csgroup.eu>
- <db6981c69f96a8c9c6dcf688b7f485e15993ddef.1618828806.git.christophe.leroy@csgroup.eu>
-Message-ID: <d22d196a-45ea-0960-b748-caab0e996c7c@csgroup.eu>
-Date:   Thu, 24 Jun 2021 21:24:35 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232753AbhFXUHI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Jun 2021 16:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232178AbhFXUHH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Jun 2021 16:07:07 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A5CC061574
+        for <linux-arch@vger.kernel.org>; Thu, 24 Jun 2021 13:04:46 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id z22so9372278ljh.8
+        for <linux-arch@vger.kernel.org>; Thu, 24 Jun 2021 13:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dpe9lEwhUIwO0xWlospxCxEaXe3xRtOW0AcnGSWOsWM=;
+        b=V94FyFfUNYCwwe5Eb2/5kXStEjd/SAXTGvq9l3G716GpB3crhuLMAj4BaMF1jfEK7l
+         hV9Mh/oX2jaBezpijTHMrktNaoBzZ2MLDXYRj+Z1Tsy6ssSFue4MMET/K4ItVOa7I6ly
+         u5rW/mU/nBnbe/kLYL8ohoz+2IaV4nvB4PYLw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dpe9lEwhUIwO0xWlospxCxEaXe3xRtOW0AcnGSWOsWM=;
+        b=skfLezWmHX5DhdCWIT63ykxPnd+YaIuGhmPR83hUmS4xokbfWYwE84JUx8PFx7g2zP
+         ueQt08LwRIII8VG45n2HTsWPm/Y5kVWwkQG3xsDQu/RLtYx744xi7mhZnU3a8p3RjIIX
+         VZkYbv57dM40mjpL5cCJuYf478AW6Vykb2J0hNruskWxena+Hy+2kPvDlDhaf9nDeIpV
+         4AsNrNZDK3GxwEl1cUYzAOWynHqEuDrpSijKoFvVKoou+VfarCcFHlbcG36IUb9JaA5q
+         JoXGmKvwjlmmVJTmHzw64v+PF6ohXsstjfoCTxBRAbYwE4nJcrCEnDC/f+fMkKzeDniG
+         1cqA==
+X-Gm-Message-State: AOAM531+jUoBhzF0tunOXkuxrVVsn0vlUI4K89/yhy3mO84AWgPAcWdE
+        zOM3zTN4uJDxqj9op4AeTgTbt/eZXCJdyAtp
+X-Google-Smtp-Source: ABdhPJwlib/tfBIakml9h4sY6iK6tJdhlGhxYzjqW254XPhdSBhtolgFVGaWue9PNvUsZcjhTwR9eQ==
+X-Received: by 2002:a2e:90cf:: with SMTP id o15mr5152017ljg.451.1624565084466;
+        Thu, 24 Jun 2021 13:04:44 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id c7sm346126lfm.50.2021.06.24.13.04.41
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Jun 2021 13:04:42 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id u11so9376141ljh.2
+        for <linux-arch@vger.kernel.org>; Thu, 24 Jun 2021 13:04:41 -0700 (PDT)
+X-Received: by 2002:a2e:850e:: with SMTP id j14mr3525901lji.251.1624565080001;
+ Thu, 24 Jun 2021 13:04:40 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <db6981c69f96a8c9c6dcf688b7f485e15993ddef.1618828806.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+References: <CAHk-=wgdO5VwSUFjfF9g=DAQNYmVxzTq73NtdisYErzdZKqDGg@mail.gmail.com>
+ <87sg1lwhvm.fsf@disp2133> <CAHk-=wgsnMTr0V-0F4FOk30Q1h7CeT8wLvR1MSnjack7EpyWtQ@mail.gmail.com>
+ <6e47eff8-d0a4-8390-1222-e975bfbf3a65@gmail.com> <924ec53c-2fd9-2e1c-bbb1-3fda49809be4@gmail.com>
+ <87eed4v2dc.fsf@disp2133> <5929e116-fa61-b211-342a-c706dcb834ca@gmail.com>
+ <87fsxjorgs.fsf@disp2133> <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
+ <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk> <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
+ <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
+ <87a6njf0ia.fsf@disp2133> <CAHk-=wh4_iMRmWcao6a8kCvR0Hhdrz+M9L+q4Bfcwx9E9D0huw@mail.gmail.com>
+ <87tulpbp19.fsf@disp2133> <CAHk-=wi_kQAff1yx2ufGRo2zApkvqU8VGn7kgPT-Kv71FTs=AA@mail.gmail.com>
+ <87zgvgabw1.fsf@disp2133> <875yy3850g.fsf_-_@disp2133> <87czsb6q9r.fsf_-_@disp2133>
+In-Reply-To: <87czsb6q9r.fsf_-_@disp2133>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 24 Jun 2021 13:04:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi2OpVrBD38A5Re4=rSSWnjwg3GcmsxtAPeHVSmQZy1VA@mail.gmail.com>
+Message-ID: <CAHk-=wi2OpVrBD38A5Re4=rSSWnjwg3GcmsxtAPeHVSmQZy1VA@mail.gmail.com>
+Subject: Re: [PATCH 4/9] signal: Factor start_group_exit out of complete_signal
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Michael,
+I don't really mind the patch, but this patch doesn't actually do what
+it says it does.
 
-Le 19/04/2021 à 12:47, Christophe Leroy a écrit :
-> Pagewalk ignores hugepd entries and walk down the tables
-> as if it was traditionnal entries, leading to crazy result.
-> 
-> Add walk_hugepd_range() and use it to walk hugepage tables.
+It factors out start_group_exit_locked() - which all looks good.
 
-I see you took patch 2 and 3 of the series.
+But then it also creates that new start_group_exit() function and
+makes the declaration for it, and nothing actually uses it. Yet.
 
-Do you expect Andrew to take patch 1 via mm tree, and then you'll take patch 4 once mm tree is merged ?
+I'd do that second part later when you actually introduce the use in
+the next patch (5/9).
 
-Christophe
+Hmm?
 
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
-> v2:
-> - Add a guard for NULL ops->pte_entry
-> - Take mm->page_table_lock when walking hugepage table, as suggested by follow_huge_pd()
-> ---
->   mm/pagewalk.c | 58 ++++++++++++++++++++++++++++++++++++++++++++++-----
->   1 file changed, 53 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-> index e81640d9f177..9b3db11a4d1d 100644
-> --- a/mm/pagewalk.c
-> +++ b/mm/pagewalk.c
-> @@ -58,6 +58,45 @@ static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
->   	return err;
->   }
->   
-> +#ifdef CONFIG_ARCH_HAS_HUGEPD
-> +static int walk_hugepd_range(hugepd_t *phpd, unsigned long addr,
-> +			     unsigned long end, struct mm_walk *walk, int pdshift)
-> +{
-> +	int err = 0;
-> +	const struct mm_walk_ops *ops = walk->ops;
-> +	int shift = hugepd_shift(*phpd);
-> +	int page_size = 1 << shift;
-> +
-> +	if (!ops->pte_entry)
-> +		return 0;
-> +
-> +	if (addr & (page_size - 1))
-> +		return 0;
-> +
-> +	for (;;) {
-> +		pte_t *pte;
-> +
-> +		spin_lock(&walk->mm->page_table_lock);
-> +		pte = hugepte_offset(*phpd, addr, pdshift);
-> +		err = ops->pte_entry(pte, addr, addr + page_size, walk);
-> +		spin_unlock(&walk->mm->page_table_lock);
-> +
-> +		if (err)
-> +			break;
-> +		if (addr >= end - page_size)
-> +			break;
-> +		addr += page_size;
-> +	}
-> +	return err;
-> +}
-> +#else
-> +static int walk_hugepd_range(hugepd_t *phpd, unsigned long addr,
-> +			     unsigned long end, struct mm_walk *walk, int pdshift)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->   static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
->   			  struct mm_walk *walk)
->   {
-> @@ -108,7 +147,10 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
->   				goto again;
->   		}
->   
-> -		err = walk_pte_range(pmd, addr, next, walk);
-> +		if (is_hugepd(__hugepd(pmd_val(*pmd))))
-> +			err = walk_hugepd_range((hugepd_t *)pmd, addr, next, walk, PMD_SHIFT);
-> +		else
-> +			err = walk_pte_range(pmd, addr, next, walk);
->   		if (err)
->   			break;
->   	} while (pmd++, addr = next, addr != end);
-> @@ -157,7 +199,10 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
->   		if (pud_none(*pud))
->   			goto again;
->   
-> -		err = walk_pmd_range(pud, addr, next, walk);
-> +		if (is_hugepd(__hugepd(pud_val(*pud))))
-> +			err = walk_hugepd_range((hugepd_t *)pud, addr, next, walk, PUD_SHIFT);
-> +		else
-> +			err = walk_pmd_range(pud, addr, next, walk);
->   		if (err)
->   			break;
->   	} while (pud++, addr = next, addr != end);
-> @@ -189,7 +234,9 @@ static int walk_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
->   			if (err)
->   				break;
->   		}
-> -		if (ops->pud_entry || ops->pmd_entry || ops->pte_entry)
-> +		if (is_hugepd(__hugepd(p4d_val(*p4d))))
-> +			err = walk_hugepd_range((hugepd_t *)p4d, addr, next, walk, P4D_SHIFT);
-> +		else if (ops->pud_entry || ops->pmd_entry || ops->pte_entry)
->   			err = walk_pud_range(p4d, addr, next, walk);
->   		if (err)
->   			break;
-> @@ -224,8 +271,9 @@ static int walk_pgd_range(unsigned long addr, unsigned long end,
->   			if (err)
->   				break;
->   		}
-> -		if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry ||
-> -		    ops->pte_entry)
-> +		if (is_hugepd(__hugepd(pgd_val(*pgd))))
-> +			err = walk_hugepd_range((hugepd_t *)pgd, addr, next, walk, PGDIR_SHIFT);
-> +		else if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry || ops->pte_entry)
->   			err = walk_p4d_range(pgd, addr, next, walk);
->   		if (err)
->   			break;
-> 
+           Linus
