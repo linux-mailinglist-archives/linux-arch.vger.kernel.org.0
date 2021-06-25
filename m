@@ -2,118 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2426B3B3A50
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jun 2021 03:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFA73B3BB9
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jun 2021 06:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbhFYBE4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Jun 2021 21:04:56 -0400
-Received: from mail-ej1-f42.google.com ([209.85.218.42]:42820 "EHLO
-        mail-ej1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbhFYBEw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Jun 2021 21:04:52 -0400
-Received: by mail-ej1-f42.google.com with SMTP id bg14so12382911ejb.9;
-        Thu, 24 Jun 2021 18:02:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PTl2a45oK7ererAoqlIPpBJuapGCJZ6anTugsk9TTSQ=;
-        b=hm5wTy3q6g0A2cHvPxRyPMBk9cnkqHfwIev5BnRaTkWNMTY9sZHTmKirIrIEwJ0Gm8
-         atrr1l5gcmQGbT35CBN06ZtptMGFRlVren+VP0hn13Nob258EDbouRMdqqWMPTIC6uZi
-         G0vlhubmn240wZnsJlSpId87tUgw9K5Ng1oDdvIefstxEuJRxZv6X9HN7tlcACKSGOnK
-         5T8zrULsGEvcbxyYXIRWCNX6+S7uKJJ69HqwdDkaGCZvaK1aRdazfkOWAFlym2Dl4sF/
-         +Ab7cFzCT/Nz9MqeGWxPtGkYmqWeudQK2Y35XUKiVMj4Lb6h5IlixoeAG0MbNibiJYqb
-         t62g==
-X-Gm-Message-State: AOAM5314HeSdM5lhAX1g6etMYYIcri50hZzDbMD3Ca3HILNKD9/KjYPC
-        m4vpvn2O49SgQux4JdmuMAkg/VZuVweb7Q==
-X-Google-Smtp-Source: ABdhPJxVCiXfkPACT3+y9E9wzhTSnrJLbSJnilSAXh81SgJREFTyL7yrttPSEAYBAPGeBAxl1Ro+MQ==
-X-Received: by 2002:a17:906:c1d0:: with SMTP id bw16mr8146696ejb.146.1624582950900;
-        Thu, 24 Jun 2021 18:02:30 -0700 (PDT)
-Received: from msft-t490s.home (host-95-251-17-240.retail.telecomitalia.it. [95.251.17.240])
-        by smtp.gmail.com with ESMTPSA id yc29sm1921909ejb.106.2021.06.24.18.02.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 18:02:30 -0700 (PDT)
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org, Nick Kossifidis <mick@ics.forth.gr>,
-        Guo Ren <guoren@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Drew Fustini <drew@beagleboard.org>
-Cc:     linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH 3/3] lib/string: optimized memset
-Date:   Fri, 25 Jun 2021 03:02:00 +0200
-Message-Id: <20210625010200.362755-4-mcroce@linux.microsoft.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210625010200.362755-1-mcroce@linux.microsoft.com>
-References: <20210625010200.362755-1-mcroce@linux.microsoft.com>
+        id S230097AbhFYEsE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Jun 2021 00:48:04 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:55087 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229458AbhFYEsE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 25 Jun 2021 00:48:04 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GB4FK3w17z9sW8;
+        Fri, 25 Jun 2021 14:45:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1624596343;
+        bh=uVkWgUgdzjG7EIytkJ0IMCXeV3RaBwOniskWOKBd278=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=JDhyVLTamP1ZDt17AIQgSDO8ma1v5gjn/ofgmOOsF4J5sDyV1yWXA5F963cwK7sYM
+         5IW0BtJI1sHEG8k6TSOcu7N/ZCDWUN0seVheP5ao0lJWwAGcRWbo2KOhcA2S7ji6gW
+         yRSsekFuyqKXevNI3PnmcY5dKUmt+c7ukfh0BqQzwzF70U0MwZo1WJkW4Z/TGDxnnG
+         S4Hq66yS0g13tjLOxcy5xXMa0TwD6t1Fp4VrGaTUH72ZeI4bAGB1YtIf++f9G0lQkw
+         dAd/Qdk8IBfUvZVDV97I6670A0H1AGsl4o+7ItxnsdLMNeiayGnZCXRVjC/WAPqZo4
+         fsiwrBIx9ex5w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        akpm@linux-foundation.org
+Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Oliver O'Halloran <oohall@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Paul Mackerras <paulus@samba.org>, dja@axtens.net,
+        Steven Price <steven.price@arm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Subject: Re: [PATCH v2 1/4] mm: pagewalk: Fix walk for hugepage tables
+In-Reply-To: <d22d196a-45ea-0960-b748-caab0e996c7c@csgroup.eu>
+References: <cover.1618828806.git.christophe.leroy@csgroup.eu>
+ <db6981c69f96a8c9c6dcf688b7f485e15993ddef.1618828806.git.christophe.leroy@csgroup.eu>
+ <d22d196a-45ea-0960-b748-caab0e996c7c@csgroup.eu>
+Date:   Fri, 25 Jun 2021 14:45:37 +1000
+Message-ID: <874kdm1rim.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Matteo Croce <mcroce@microsoft.com>
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Hi Michael,
+>
+> Le 19/04/2021 =C3=A0 12:47, Christophe Leroy a =C3=A9crit=C2=A0:
+>> Pagewalk ignores hugepd entries and walk down the tables
+>> as if it was traditionnal entries, leading to crazy result.
+>>=20
+>> Add walk_hugepd_range() and use it to walk hugepage tables.
+>
+> I see you took patch 2 and 3 of the series.
 
-The generic memset is defined as a byte at time write. This is always
-safe, but it's slower than a 4 byte or even 8 byte write.
+Yeah I decided those were bug fixes so could be taken separately.
 
-Write a generic memset which fills the data one byte at time until the
-destination is aligned, then fills using the largest size allowed,
-and finally fills the remaining data one byte at time.
+> Do you expect Andrew to take patch 1 via mm tree, and then you'll take
+> patch 4 once mm tree is merged ?
 
-Signed-off-by: Matteo Croce <mcroce@microsoft.com>
----
- lib/string.c | 30 ++++++++++++++++++++++++++++--
- 1 file changed, 28 insertions(+), 2 deletions(-)
+I didn't feel I could take patch 1 via the powerpc tree without risking
+conflicts.
 
-diff --git a/lib/string.c b/lib/string.c
-index 69adec252597..598ece5434e9 100644
---- a/lib/string.c
-+++ b/lib/string.c
-@@ -811,10 +811,36 @@ EXPORT_SYMBOL(__sysfs_match_string);
-  */
- void *memset(void *s, int c, size_t count)
- {
--	char *xs = s;
-+	union types dest = { .as_u8 = s };
- 
-+	if (count >= MIN_THRESHOLD) {
-+		unsigned long cu = (unsigned long)c;
-+
-+		/* Compose an ulong with 'c' repeated 4/8 times */
-+		cu |= cu << 8;
-+		cu |= cu << 16;
-+#if BITS_PER_LONG == 64
-+		cu |= cu << 32;
-+#endif
-+
-+		if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
-+			/*
-+			 * Fill the buffer one byte at time until
-+			 * the destination is word aligned.
-+			 */
-+			for (; count && dest.as_uptr & word_mask; count--)
-+				*dest.as_u8++ = c;
-+		}
-+
-+		/* Copy using the largest size allowed */
-+		for (; count >= bytes_long; count -= bytes_long)
-+			*dest.as_ulong++ = cu;
-+	}
-+
-+	/* copy the remainder */
- 	while (count--)
--		*xs++ = c;
-+		*dest.as_u8++ = c;
-+
- 	return s;
- }
- EXPORT_SYMBOL(memset);
--- 
-2.31.1
+Andrew could take patch 1 and 4 via mm, though he might not want to pick
+them up this late.
 
+I guess step one would be to repost 1 and 4 as a new series. Either they
+can go via mm, or for 5.15 I could probably take them both as long as I
+pick them up early enough.
+
+cheers
