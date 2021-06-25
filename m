@@ -2,96 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 494E93B4948
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jun 2021 21:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1613B4AEC
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Jun 2021 01:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbhFYTlF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Jun 2021 15:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhFYTlD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Jun 2021 15:41:03 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC3EC061767
-        for <linux-arch@vger.kernel.org>; Fri, 25 Jun 2021 12:38:41 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id c8so6325929ybq.1
-        for <linux-arch@vger.kernel.org>; Fri, 25 Jun 2021 12:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2HpyCQpwgrc/aHBUoC6zr6QEL1NXeYoH0TAbwDDPVvg=;
-        b=rCKUqWmA8BR+GD7NPd5osBBesTgg+evmAfXhrRF8zb4z8ZMK0qCgFyAA7LUe27T8P7
-         TSf3Uv+f+ECGua1fdB5rglTVz1nwjNSe93+OrA+QThSAmYR/Eal2ozgqx63auaRIgxld
-         4FadkGkwTeG85tJBJTsFk+X6KKa3QprzdpV0+zfxK4YAXtZfp4eh0y6ZjawnEmcdo21T
-         UMxvvC66okxP3/PJIpsOq8yo885nyGi/ZeWNuZP2OL/Fd2G8VaPQLrJhp60UgR+Xo8Al
-         Qm4e5ErJkggRj1Qyt9e7JrajXErvsvXf5P6c6fDGfa42tuUouTgoz0oXgZDC+wc619wd
-         1cuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=2HpyCQpwgrc/aHBUoC6zr6QEL1NXeYoH0TAbwDDPVvg=;
-        b=TxECRxAu/AsZFrxp7j1cXfcTtr65BaFUCE2RgW9oxofDHxAPLcFte/ZOs0woivEqWl
-         N8SV7pH9cpY6xq0Qg7qixlxtWpqzxdEjkOy6OzJ5n0btRDcZwut5c+0sW2DkyBLPrw7Q
-         JShRWeTWnJgldPyQvzkea0fpeDtRazipiDVbRtpnTqwYOZQFp0GDoXrrRGqKi6hu3bE8
-         aJbCvzvcho3tCZk8DTdt6LIK8Zr4mKzMy+LN8FWgV3TnrxaHhsnYJYE8AbacIAA7gbw2
-         rpGrvNRolOxRPt3E5Usz2GEK0QcRc9s0wl1tJAu9Wv/eVg/fWngrdx3MLJz2ZUAURjOW
-         DTdg==
-X-Gm-Message-State: AOAM5319bY9uQtNJaHcpWQZ/eMN4uEeWVbxsg/0ZAuAQRMlHgjbXlvaO
-        da/0Z448ZPLHyThTvnYSjJ90Q368OG35BU2ViNo=
-X-Google-Smtp-Source: ABdhPJwWrQNuNZxJVRgZ6OyCpXU7UMd7juCG0/SNLsqNYboCpkG5Ko4xGq2mmulw/dsxHVnF0g6HKsb6XujKmniOeCw=
-X-Received: by 2002:a25:ace1:: with SMTP id x33mr12941360ybd.28.1624649920336;
- Fri, 25 Jun 2021 12:38:40 -0700 (PDT)
+        id S229889AbhFYXdg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Jun 2021 19:33:36 -0400
+Received: from mga07.intel.com ([134.134.136.100]:40509 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229826AbhFYXdf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 25 Jun 2021 19:33:35 -0400
+IronPort-SDR: pKAMUGstilS92Fa3/M2bs29zeobz/2en4wpJ42E8ebejmuc7v6sXlxCCsDt7WP9P/YT/pxM1FI
+ BAmc/1lv0xvg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10026"; a="271612195"
+X-IronPort-AV: E=Sophos;i="5.83,300,1616482800"; 
+   d="scan'208";a="271612195"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2021 16:31:13 -0700
+IronPort-SDR: KdN4vs8+bgdyV534hmve1fq/tVteJ+UOPaeCL9MSbMDN0PqO6HEIWprSM4iVrVMXiKNLf+1w+F
+ EBxQcKVM+j0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,300,1616482800"; 
+   d="scan'208";a="407529066"
+Received: from irsmsx605.ger.corp.intel.com ([163.33.146.138])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jun 2021 16:31:12 -0700
+Received: from tjmaciei-mobl1.localnet (10.212.209.179) by
+ IRSMSX605.ger.corp.intel.com (163.33.146.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Sat, 26 Jun 2021 00:31:10 +0100
+From:   Thiago Macieira <thiago.macieira@intel.com>
+To:     <fweimer@redhat.com>
+CC:     <hjl.tools@gmail.com>, <libc-alpha@sourceware.org>,
+        <linux-api@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <x86@kernel.org>
+Subject: Re: x86 CPU features detection for applications (and AMX)
+Date:   Fri, 25 Jun 2021 16:31:06 -0700
+Message-ID: <22261946.eFiGugXE7Z@tjmaciei-mobl1>
+Organization: Intel Corporation
+In-Reply-To: <87tulo39ms.fsf@oldenburg.str.redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:7420:b029:be:3f87:f344 with HTTP; Fri, 25 Jun 2021
- 12:38:40 -0700 (PDT)
-Reply-To: lukaszjanuszjanuszewski@gmail.com
-From:   =?UTF-8?Q?=C5=81ukasz_Janusz_Januszewski?= 
-        <prof.charles087@gmail.com>
-Date:   Fri, 25 Jun 2021 12:38:40 -0700
-Message-ID: <CAAQ5Uk6DvT6ebxiTn8WnZ0JaNYSmcj7Xii0NpWT-gzVeTR7+CQ@mail.gmail.com>
-Subject: Business Offer!!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [10.212.209.179]
+X-ClientProxiedBy: orsmsx603.amr.corp.intel.com (10.22.229.16) To
+ IRSMSX605.ger.corp.intel.com (163.33.146.138)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Dear Friend,
+On 23 Jun 2021 17:04:27 +0200, Florian Weimer wrote:
+> We have an interface in glibc to query CPU features:
+> X86-specific Facilities
+> <https://www.gnu.org/software/libc/manual/html_node/X86.html>
+>
+> CPU_FEATURE_USABLE all preconditions for a feature are met,
+> HAS_CPU_FEATURE means it's in silicon but possibly dormant.
+> CPU_FEATURE_USABLE is supposed to look at XCR0, AT_HWCAP2 etc. before
+> enabling the relevant bit (so it cannot pass through any unknown bits).
 
-My sincere apologies for sending you this unsolicited e-mail, but
-based on strong instincts and deep conviction that you are a matured,
-trustworthy and reliable person, I am compelled to write you and seek
-your hand/co-operation in an investment/business scheme that will be
-mutually beneficial.
+It's a nice initiative, but it doesn't help library and applications that need 
+to be either cross-platform or backwards compatible.
 
-My name is =C5=81ukasz Janusz Januszewski, Markets & Investment Banking,
-Raiffeisen Bank International AG, Vienna, Austria. I by virtue of my
-position have some good substantial sums of money in a private coded
-bank account and I am seeking someone like you who will help me to
-receive and have it invested in a profitable business venture in your
-country.
+The first problem is the cross-platformness need. Because we library and 
+application developers need to support other OSes, we'll need to deploy our 
+own CPUID-based detection. It's far better to use common code everywhere, 
+where one developer working on Linux can fix bugs in FreeBSD, macOS or Windows 
+or any of the permutations. Every platform-specific deviation adds to 
+maintenance requirements and is a source of potential latent bugs, now or in 
+the future due to refactoring. That is why doing everything in the form of 
+instructions would be far better and easier, rather than system calls.
 
-Meanwhile, be rest assured that this offer is RISK-FREE but due to my
-status in the society, you are required to keep this offer strictly
-confidential and top secret. Kindly oblige me your full names, private
-e-mail address, your age, contact phone number, your profession and
-nationality.
+[Unless said system calls were standardised and actually deployed. Making this 
+a cross-platform library that is not part of libc would be a major step in 
+that direction]
 
-Upon receipt of your positive response, I will oblige you fuller
-details in my next e-mail correspondence, as it is said, "the taste of
-the pudding is in the eating" so join hands with me to make this
-once-in-a-life-opportunity a resounding success. Please have total
-faith on this offer and TRUST me on this too!
+The second problem is going to be backwards compatibility. Applications and 
+libraries may want to ship precompiled binaries that make use of the new CPU 
+features, whether they are open source or not. It comes as no surprise to 
+anyone that we CPU makers will have made software that use those features and 
+want to have it ready on Day 1 of the HW being available for the market (if 
+we're doing our jobs right). That often involves precompiling because everyone 
+who installed their compilers more than one year ago will not have the 
+necessary tools to build. That runs counter to the need to use a libc 
+interface that didn't exist until recently.
 
-Thank you very much.
+And by "recently", I mean "anything since the glibc that came with Red Hat 
+Enterprise Linux 7" (2.17).
 
-Sincerely,
+So no, application and library developers will not use libc functions they 
+don't need to, especially if it adds to their problems, unless there's no way 
+around it.
 
-=C5=81ukasz Janusz Januszewski,
-Markets & Investment Banking,
-Raiffeisen Bank International AG,
-Vienna, Austria.
+> Previously kernel developers have expressed dismay that we didn't
+> coordinate the interface with them.  This is why I want raise this now.
+
+You also need to coordinate with your users.
+
+A platform-specific API to solve a problem that is already solved is "knock 
+yourself out, we're not going to use this." So my first suggestion is to 
+remove the "platform-specific" part and make this a cross-platform solution.
+
+-- 
+Thiago Macieira - thiago.macieira (AT) intel.com
+  Software Architect - Intel DPG Cloud Engineering
+
+
