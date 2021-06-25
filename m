@@ -2,170 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D68A53B3BF0
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jun 2021 07:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA233B3FB1
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jun 2021 10:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbhFYFMf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Jun 2021 01:12:35 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:57087 "EHLO pegase1.c-s.fr"
+        id S230251AbhFYIs7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Jun 2021 04:48:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55404 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230097AbhFYFMf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 25 Jun 2021 01:12:35 -0400
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4GB4nd4BRpzBCCQ;
-        Fri, 25 Jun 2021 07:10:13 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id G3DmZA-oQBa0; Fri, 25 Jun 2021 07:10:13 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4GB4nd3CRPzBCBq;
-        Fri, 25 Jun 2021 07:10:13 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 590C28B7F4;
-        Fri, 25 Jun 2021 07:10:13 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 73AMpCVsNCbN; Fri, 25 Jun 2021 07:10:13 +0200 (CEST)
-Received: from po9473vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 11DE88B7F0;
-        Fri, 25 Jun 2021 07:10:13 +0200 (CEST)
-Received: by po9473vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id BCAC566396; Fri, 25 Jun 2021 05:10:12 +0000 (UTC)
-Message-Id: <38d04410700c8d02f28ba37e020b62c55d6f3d2c.1624597695.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH v3] mm: pagewalk: Fix walk for hugepage tables
-To:     Steven Price <steven.price@arm.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, dja@axtens.net,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 25 Jun 2021 05:10:12 +0000 (UTC)
+        id S229839AbhFYIs6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 25 Jun 2021 04:48:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C89E6141C;
+        Fri, 25 Jun 2021 08:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1624610798;
+        bh=k0YWqkCUy3RGtdCsOBfK8gvBJN3ud9zj7lvL3kFNjAY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VDR5ci+oNRMJ4uzMyayoa0PvasYVgTmfXR2pSWETboH7V7+cS51AASr0Z6aR92gAN
+         MTCp5Vjd4rERsvOesewcd8MV1yCzn/AvJJJpTCuRHy90L1OJRHkBwrL6/BuYj1ivLq
+         ol2b4fBev5kO1MLHZLiBIdcNpQuP8WWv5vbblAdA=
+Date:   Fri, 25 Jun 2021 10:46:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>, kernel-team@android.com
+Subject: Re: [PATCH v10 13/16] arm64: Advertise CPUs capable of running
+ 32-bit applications in sysfs
+Message-ID: <YNWX64TIVkGyNsbs@kroah.com>
+References: <20210623173848.318-1-will@kernel.org>
+ <20210623173848.318-14-will@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210623173848.318-14-will@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Pagewalk ignores hugepd entries and walk down the tables
-as if it was traditionnal entries, leading to crazy result.
+On Wed, Jun 23, 2021 at 06:38:45PM +0100, Will Deacon wrote:
+> Since 32-bit applications will be killed if they are caught trying to
+> execute on a 64-bit-only CPU in a mismatched system, advertise the set
+> of 32-bit capable CPUs to userspace in sysfs.
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Signed-off-by: Will Deacon <will@kernel.org>
+> ---
+>  .../ABI/testing/sysfs-devices-system-cpu      |  9 +++++++++
+>  arch/arm64/kernel/cpufeature.c                | 19 +++++++++++++++++++
+>  2 files changed, 28 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> index fe13baa53c59..899377b2715a 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> @@ -494,6 +494,15 @@ Description:	AArch64 CPU registers
+>  		'identification' directory exposes the CPU ID registers for
+>  		identifying model and revision of the CPU.
+>  
+> +What:		/sys/devices/system/cpu/aarch32_el0
+> +Date:		May 2021
+> +Contact:	Linux ARM Kernel Mailing list <linux-arm-kernel@lists.infradead.org>
+> +Description:	Identifies the subset of CPUs in the system that can execute
+> +		AArch32 (32-bit ARM) applications. If present, the same format as
+> +		/sys/devices/system/cpu/{offline,online,possible,present} is used.
+> +		If absent, then all or none of the CPUs can execute AArch32
+> +		applications and execve() will behave accordingly.
+> +
+>  What:		/sys/devices/system/cpu/cpu#/cpu_capacity
+>  Date:		December 2016
+>  Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index 2f9fe57ead97..23eaa7f06f76 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -67,6 +67,7 @@
+>  #include <linux/crash_dump.h>
+>  #include <linux/sort.h>
+>  #include <linux/stop_machine.h>
+> +#include <linux/sysfs.h>
+>  #include <linux/types.h>
+>  #include <linux/minmax.h>
+>  #include <linux/mm.h>
+> @@ -1319,6 +1320,24 @@ const struct cpumask *system_32bit_el0_cpumask(void)
+>  	return cpu_possible_mask;
+>  }
+>  
+> +static ssize_t aarch32_el0_show(struct device *dev,
+> +				struct device_attribute *attr, char *buf)
+> +{
+> +	const struct cpumask *mask = system_32bit_el0_cpumask();
+> +
+> +	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(mask));
+> +}
+> +static const DEVICE_ATTR_RO(aarch32_el0);
 
-Add walk_hugepd_range() and use it to walk hugepage tables.
+I just realized that we have a problem with this type of representation
+overflowing PAGE_SIZE on larger systems.  There is ongoing work to fix
+this up but that requires converting these to binary sysfs files, which
+is a pain to preserve the original format here.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Reviewed-by: Steven Price <steven.price@arm.com>
----
-v3:
-- Rebased on next-20210624 (no change since v2)
-- Added Steven's Reviewed-by
-- Sent as standalone for merge via mm
+Yes, for now you will be fine on these arm32 systems, but in the future
+this will have to be changed.  Because of that, should you just make
+this an individual cpu attribute (one file per cpu) and not a single
+file that lists all cpus?
 
-v2:
-- Add a guard for NULL ops->pte_entry
-- Take mm->page_table_lock when walking hugepage table, as suggested by follow_huge_pd()
----
- mm/pagewalk.c | 58 ++++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 53 insertions(+), 5 deletions(-)
+what tool is going to read this and why can't they just pick it up from
+the individual cpu files instead?
 
-diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-index e81640d9f177..9b3db11a4d1d 100644
---- a/mm/pagewalk.c
-+++ b/mm/pagewalk.c
-@@ -58,6 +58,45 @@ static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
- 	return err;
- }
- 
-+#ifdef CONFIG_ARCH_HAS_HUGEPD
-+static int walk_hugepd_range(hugepd_t *phpd, unsigned long addr,
-+			     unsigned long end, struct mm_walk *walk, int pdshift)
-+{
-+	int err = 0;
-+	const struct mm_walk_ops *ops = walk->ops;
-+	int shift = hugepd_shift(*phpd);
-+	int page_size = 1 << shift;
-+
-+	if (!ops->pte_entry)
-+		return 0;
-+
-+	if (addr & (page_size - 1))
-+		return 0;
-+
-+	for (;;) {
-+		pte_t *pte;
-+
-+		spin_lock(&walk->mm->page_table_lock);
-+		pte = hugepte_offset(*phpd, addr, pdshift);
-+		err = ops->pte_entry(pte, addr, addr + page_size, walk);
-+		spin_unlock(&walk->mm->page_table_lock);
-+
-+		if (err)
-+			break;
-+		if (addr >= end - page_size)
-+			break;
-+		addr += page_size;
-+	}
-+	return err;
-+}
-+#else
-+static int walk_hugepd_range(hugepd_t *phpd, unsigned long addr,
-+			     unsigned long end, struct mm_walk *walk, int pdshift)
-+{
-+	return 0;
-+}
-+#endif
-+
- static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
- 			  struct mm_walk *walk)
- {
-@@ -108,7 +147,10 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
- 				goto again;
- 		}
- 
--		err = walk_pte_range(pmd, addr, next, walk);
-+		if (is_hugepd(__hugepd(pmd_val(*pmd))))
-+			err = walk_hugepd_range((hugepd_t *)pmd, addr, next, walk, PMD_SHIFT);
-+		else
-+			err = walk_pte_range(pmd, addr, next, walk);
- 		if (err)
- 			break;
- 	} while (pmd++, addr = next, addr != end);
-@@ -157,7 +199,10 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
- 		if (pud_none(*pud))
- 			goto again;
- 
--		err = walk_pmd_range(pud, addr, next, walk);
-+		if (is_hugepd(__hugepd(pud_val(*pud))))
-+			err = walk_hugepd_range((hugepd_t *)pud, addr, next, walk, PUD_SHIFT);
-+		else
-+			err = walk_pmd_range(pud, addr, next, walk);
- 		if (err)
- 			break;
- 	} while (pud++, addr = next, addr != end);
-@@ -189,7 +234,9 @@ static int walk_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
- 			if (err)
- 				break;
- 		}
--		if (ops->pud_entry || ops->pmd_entry || ops->pte_entry)
-+		if (is_hugepd(__hugepd(p4d_val(*p4d))))
-+			err = walk_hugepd_range((hugepd_t *)p4d, addr, next, walk, P4D_SHIFT);
-+		else if (ops->pud_entry || ops->pmd_entry || ops->pte_entry)
- 			err = walk_pud_range(p4d, addr, next, walk);
- 		if (err)
- 			break;
-@@ -224,8 +271,9 @@ static int walk_pgd_range(unsigned long addr, unsigned long end,
- 			if (err)
- 				break;
- 		}
--		if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry ||
--		    ops->pte_entry)
-+		if (is_hugepd(__hugepd(pgd_val(*pgd))))
-+			err = walk_hugepd_range((hugepd_t *)pgd, addr, next, walk, PGDIR_SHIFT);
-+		else if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry || ops->pte_entry)
- 			err = walk_p4d_range(pgd, addr, next, walk);
- 		if (err)
- 			break;
--- 
-2.25.0
+thanks,
 
+greg k-h
