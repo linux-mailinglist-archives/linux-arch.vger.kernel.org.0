@@ -2,89 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E763B4D65
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Jun 2021 09:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFB73B4E18
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Jun 2021 12:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbhFZH3i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 26 Jun 2021 03:29:38 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:5437 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbhFZH33 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Jun 2021 03:29:29 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GBljH58MFz74Wq;
-        Sat, 26 Jun 2021 15:23:47 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 26 Jun 2021 15:27:02 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 26 Jun 2021 15:27:01 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Arnd Bergmann <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        <iommu@lists.linux-foundation.org>
-Subject: [PATCH 9/9] dma-debug: Use memory_intersects() directly
-Date:   Sat, 26 Jun 2021 15:34:39 +0800
-Message-ID: <20210626073439.150586-10-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210626073439.150586-1-wangkefeng.wang@huawei.com>
-References: <20210626073439.150586-1-wangkefeng.wang@huawei.com>
+        id S230005AbhFZKlT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 26 Jun 2021 06:41:19 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44925 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229949AbhFZKlQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 26 Jun 2021 06:41:16 -0400
+Received: by ozlabs.org (Postfix, from userid 1034)
+        id 4GBr2P2tvPz9sxS; Sat, 26 Jun 2021 20:38:53 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Paul Mackerras <paulus@samba.org>,
+        Steven Price <steven.price@arm.com>, akpm@linux-foundation.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>, dja@axtens.net
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Oliver O'Halloran <oohall@gmail.com>
+In-Reply-To: <cover.1618828806.git.christophe.leroy@csgroup.eu>
+References: <cover.1618828806.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v2 0/4] Convert powerpc to GENERIC_PTDUMP
+Message-Id: <162470383963.3589875.4353977558954497976.b4-ty@ellerman.id.au>
+Date:   Sat, 26 Jun 2021 20:37:19 +1000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Use memory_intersects() directly instead of private overlap() function.
+On Mon, 19 Apr 2021 10:47:24 +0000 (UTC), Christophe Leroy wrote:
+> This series converts powerpc to generic PTDUMP.
+> 
+> For that, we first need to add missing hugepd support
+> to pagewalk and ptdump.
+> 
+> v2:
+> - Reworked the pagewalk modification to add locking and check ops->pte_entry
+> - Modified powerpc early IO mapping to have gaps between mappings
+> - Removed the logic that checked for contiguous physical memory
+> - Removed the articial level calculation in ptdump_pte_entry(), level 4 is ok for all.
+> - Removed page_size argument to note_page()
+> 
+> [...]
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: iommu@lists.linux-foundation.org
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- kernel/dma/debug.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+Patches 2 and 4 pplied to powerpc/next.
 
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index 14de1271463f..8ef737223999 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -1066,20 +1066,10 @@ static void check_for_stack(struct device *dev,
- 	}
- }
- 
--static inline bool overlap(void *addr, unsigned long len, void *start, void *end)
--{
--	unsigned long a1 = (unsigned long)addr;
--	unsigned long b1 = a1 + len;
--	unsigned long a2 = (unsigned long)start;
--	unsigned long b2 = (unsigned long)end;
--
--	return !(b1 <= a2 || a1 >= b2);
--}
--
- static void check_for_illegal_area(struct device *dev, void *addr, unsigned long len)
- {
--	if (overlap(addr, len, _stext, _etext) ||
--	    overlap(addr, len, __start_rodata, __end_rodata))
-+	if (memory_intersects(_stext, _etext, addr, len) ||
-+	    memory_intersects(__start_rodata, __end_rodata, addr, len))
- 		err_printk(dev, NULL, "device driver maps memory from kernel text or rodata [addr=%p] [len=%lu]\n", addr, len);
- }
- 
--- 
-2.26.2
+[2/4] powerpc/mm: Leave a gap between early allocated IO areas
+      https://git.kernel.org/powerpc/c/57307f1b6edd781fba2bf9f7ec5f4d17a881ea54
+[3/4] powerpc/mm: Properly coalesce pages in ptdump
+      https://git.kernel.org/powerpc/c/6ca6512c716afd6e37281372c4c35aa6afd71d10
 
+cheers
