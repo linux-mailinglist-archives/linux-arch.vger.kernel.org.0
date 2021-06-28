@@ -2,112 +2,79 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9103B6A16
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 23:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5483B6B30
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Jun 2021 01:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237855AbhF1VVJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Jun 2021 17:21:09 -0400
-Received: from mail-vk1-f175.google.com ([209.85.221.175]:34459 "EHLO
-        mail-vk1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237034AbhF1VVD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Jun 2021 17:21:03 -0400
-Received: by mail-vk1-f175.google.com with SMTP id n131so4282310vke.1;
-        Mon, 28 Jun 2021 14:18:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YAPeZCiuZX0F/GKB9DHzWgF67b8W80bULssMkRJhBdU=;
-        b=fxcAshYCRPc99lPxZBXPRVLRefbFiWZPU2EA664OrK17tjcyJJRnqjn9ZpP/KXkjth
-         Hv3Z84Ro/B5PxsyVM6GVm9bxMwv5M5wckVLYotKZbwv33lY2QxhF3oZTVB+a0HJjBlTx
-         mm+dv2BdyI8CtMJbdkvdD2gxHU8bR//Ad+rL5tEc6YAcreHfPnkzTcAzH5Myod0xV809
-         SDUP6DsGza7wASStMKBdt6xTtHi+17yI4bHcRkQv9+R6Tv9sIgRkH2OLAnhWiqPC1RwF
-         I8qCVVZPNXbIDUx1EIJGgpx8VDpwArECdDZ99xARTxMltG6tRrVkXjvFKtL6OEWi240A
-         SJeQ==
-X-Gm-Message-State: AOAM530WTcjnkB0c5h/1xDjJTrUQ3QGijk4gSXYVGT1+d3+YjZ1SqGHa
-        X+GM/UfNfDNpvzNh+KrKhqezVvN5qL+RIjfdUIw=
-X-Google-Smtp-Source: ABdhPJz02C8/Rqz1MLP5OMvzVz4lWfCJWP2GqRlYIlNT7pCBifFG/TCv8TYML8eH38S4XLZXJKY6x0w/FrLjgKnSEck=
-X-Received: by 2002:a05:6122:b72:: with SMTP id h18mr16635065vkf.1.1624915116084;
- Mon, 28 Jun 2021 14:18:36 -0700 (PDT)
+        id S236642AbhF1XMk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Jun 2021 19:12:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41884 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233868AbhF1XMi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 28 Jun 2021 19:12:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id F030261CFC;
+        Mon, 28 Jun 2021 23:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624921812;
+        bh=KuR2fedHwessyLJGLMs1REPFgMlo/LKyKF4zV0jeyr0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AYCulH4t91lp1K6DiW/HG0rSRwt/mK+hMmjGYaXeoq0slBtSSrYAGnKQj2PGJ++ZJ
+         eBf8lSoQmUP6Xe95BMkeib0RzicuHhXFC0OD2bwULwa2UyA3DMXYLPOn76zPR5seAf
+         mACAB8s6oguusMteyFKXAlumgvFRVxwpg9FHEUJJ9BsEa+ToB2UZ3hAijJG+UQHJGM
+         F9wOiJTJrQNx7fMRNfgMdA1Dy0ef4w6vGCZsbQ+RJp4bDmxuBYGR8FM16XoIvf3n3U
+         5DNXeiS4G3HqcwQ1wQmVl9UlXLBgi3WiccyCj5zif0Yh363VwJCz5/H/R2DSJQN4Wu
+         GjlYAodsL6L2Q==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DBF5E60A3A;
+        Mon, 28 Jun 2021 23:10:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk> <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
- <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
- <87a6njf0ia.fsf@disp2133> <CAHk-=wh4_iMRmWcao6a8kCvR0Hhdrz+M9L+q4Bfcwx9E9D0huw@mail.gmail.com>
- <87tulpbp19.fsf@disp2133> <CAHk-=wi_kQAff1yx2ufGRo2zApkvqU8VGn7kgPT-Kv71FTs=AA@mail.gmail.com>
- <87zgvgabw1.fsf@disp2133> <875yy3850g.fsf_-_@disp2133> <YNULA+Ff+eB66bcP@zeniv-ca.linux.org.uk>
- <YNj4DItToR8FphxC@zeniv-ca.linux.org.uk> <6e283d24-7121-ae7c-d5ad-558f85858a09@gmail.com>
- <CAMuHMdXSU6_98NbC1UWTT_kmwxD=6Ha5LJxFAtbSuD=y78nASg@mail.gmail.com>
- <7ad6c3a9-b983-46a5-fc95-f961b636d3fe@gmail.com> <CAMuHMdUi5Ri=GmWzS8hb7dkfPyAE=HpQHg6OsKSLDse_364E=g@mail.gmail.com>
- <dbb4ca2d-a857-84f0-f167-5ad4e06aa52b@gmail.com>
-In-Reply-To: <dbb4ca2d-a857-84f0-f167-5ad4e06aa52b@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Jun 2021 23:18:24 +0200
-Message-ID: <CAMuHMdVKdZNBU-cTUY0zotA5DmtQ=dxH+iFY0_GX=4DzqpycZQ@mail.gmail.com>
-Subject: Re: [PATCH 0/9] Refactoring exit
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Arnd Bergmann <arnd@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/2] net: update netdev_rx_csum_fault() print dump
+ only once
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162492181189.29625.7224175103290860557.git-patchwork-notify@kernel.org>
+Date:   Mon, 28 Jun 2021 23:10:11 +0000
+References: <20210628135007.1358909-1-tannerlove.kernel@gmail.com>
+In-Reply-To: <20210628135007.1358909-1-tannerlove.kernel@gmail.com>
+To:     Tanner Love <tannerlove.kernel@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, maheshb@google.com, djwong@kernel.org,
+        arnd@arndb.de, pmladek@suse.com, senozhatsky@chromium.org,
+        rostedt@goodmis.org, john.ogness@linutronix.de, mingo@redhat.com,
+        kuba@kernel.org, andriin@fb.com, atenart@kernel.org,
+        alobakin@pm.me, weiwan@google.com, ap420073@gmail.com,
+        linyunsheng@huawei.com, willemb@google.com, tannerlove@google.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Michael,
+Hello:
 
-On Mon, Jun 28, 2021 at 10:13 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> On 29/06/21 7:17 am, Geert Uytterhoeven wrote:
-> >>> The warning is printed when using filesys-ELF-2.0.x-1400K-2.gz,
-> >>> which is a very old ramdisk from right after the m68k a.out to ELF
-> >>> transition:
-> >>>
-> >>>      warning: process `update' used the obsolete bdflush system call
-> >>>      Fix your initscripts?
-> >>>
-> >>> I still boot it, once in a while.
-> >> OK; you take the cake. That ramdisk came to mind when I thought about
-> >> where I'd last seen bdflush, but I've not used it in ages (not sure 14
-> >> MB are enough for that).
-> > Of course it will work on your 14 MiB machine!  It fits on a floppy, _after_
-> > decompression.  It was used by people to install Linux on the hard disks
-> > of their beefy m68k machines, after they had set up the family Christmas
-> > tree, in December 1996.
->
-> Been there, done that. Wrote the HOWTO for ext2 filesystem byte-swapping.
+This series was applied to netdev/net-next.git (refs/heads/master):
 
-I knew I could revive your memory ;-)
+On Mon, 28 Jun 2021 09:50:05 -0400 you wrote:
+> From: Tanner Love <tannerlove@google.com>
+> 
+> First patch implements DO_ONCE_LITE to abstract uses of the ".data.once"
+> trick. It is defined in its own, new header file  -- rather than
+> alongside the existing DO_ONCE in include/linux/once.h -- because
+> include/linux/once.h includes include/linux/jump_label.h, and this
+> causes the build to break for some architectures if
+> include/linux/once.h is included in include/linux/printk.h or
+> include/asm-generic/bug.h.
+> 
+> [...]
 
-> > I also have a slightly larger one, built from OpenWRT when I did my first
-> > experiments on that.  Unlike filesys-ELF-2.0.x-1400K-2.gz, it does open
-> > a shell on the serial console, so it is more useful to me.
-> >
-> >> The question then is - will bdflush fail gracefully, or spin retrying
-> >> the syscall?
-> > Will add to my todo list...
-> > BTW, you can boot this ramdisk on ARAnyM, too.
->
-> True. I can't find that ramdisk image anywhere - if you can point me to
-> some archive, I'll give that a try.
+Here is the summary with links:
+  - [net-next,v3,1/2] once: implement DO_ONCE_LITE for non-fast-path "do once" functionality
+    https://git.kernel.org/netdev/net-next/c/a358f40600b3
+  - [net-next,v3,2/2] net: update netdev_rx_csum_fault() print dump only once
+    https://git.kernel.org/netdev/net-next/c/127d7355abb3
 
-http://ftp.mac.linux-m68k.org/pub/linux-mac68k/initrd/
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Gr{oetje,eeting}s,
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
