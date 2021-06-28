@@ -2,104 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A63F3B67ED
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 19:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62273B68CA
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 21:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbhF1Rr6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Jun 2021 13:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbhF1Rr6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Jun 2021 13:47:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A826C061574;
-        Mon, 28 Jun 2021 10:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wnF6ygE3BEKF+lX8atfhFJ5A2+kLhgDPuQhHnJimzGI=; b=k772z4bHFtUoC+RYLp9jsZU8VX
-        lGk3HzWc1f6BaTm8BWsNXPJIPvJ5aQk+6pDaYN79RC1o6JKKVhIpLvzNiwYpCxEne3pDHtrFpdTqK
-        KoVbXBeeTHKpToY8nNip3zjuLl/2mRR6h1YLJoC/U9DC+nWuYKjRwFzjnOBHhjTPGXQOwxB3ETdME
-        S6wiimB+btHEBhlSOChTBGWudfOWUUIyDKvvAIrad0v3552LgRxRlvsik8FqBoWSxX85Qo0SpdP2t
-        GwzbeMGYJZZ0Mg7IUhrP37x8qNyJpP7j/Dbsd+KTA0CGrgt2qLKkLPgvGBaQdcjawyC4JhCRwqyWK
-        QNXiZivQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lxvIT-003InL-Pm; Mon, 28 Jun 2021 17:43:57 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1F61C982D9E; Mon, 28 Jun 2021 19:43:48 +0200 (CEST)
-Date:   Mon, 28 Jun 2021 19:43:47 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thiago Macieira <thiago.macieira@intel.com>
-Cc:     fweimer@redhat.com,
-        "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
-        hjl.tools@gmail.com, libc-alpha@sourceware.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: x86 CPU features detection for applications (and AMX)
-Message-ID: <20210628174347.GB13401@worktop.programming.kicks-ass.net>
-References: <22261946.eFiGugXE7Z@tjmaciei-mobl1>
- <2379132.fg5cGID6mU@tjmaciei-mobl1>
- <YNnqXCSVUhYhzT6T@hirez.programming.kicks-ass.net>
- <2094802.S4rhTtsRBG@tjmaciei-mobl1>
+        id S235878AbhF1TGC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Jun 2021 15:06:02 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:33324 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233101AbhF1TGA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Jun 2021 15:06:00 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51]:48296)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1lxwXY-00FZtO-Fr; Mon, 28 Jun 2021 13:03:28 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:38704 helo=email.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1lxwXX-00Gdx8-9L; Mon, 28 Jun 2021 13:03:28 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>
+References: <CAHk-=wj5cJjpjAmDptmP9u4__6p3Y93SCQHG8Ef4+h=cnLiCsA@mail.gmail.com>
+        <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
+        <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
+        <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
+        <87a6njf0ia.fsf@disp2133>
+        <CAHk-=wh4_iMRmWcao6a8kCvR0Hhdrz+M9L+q4Bfcwx9E9D0huw@mail.gmail.com>
+        <87tulpbp19.fsf@disp2133>
+        <CAHk-=wi_kQAff1yx2ufGRo2zApkvqU8VGn7kgPT-Kv71FTs=AA@mail.gmail.com>
+        <87zgvgabw1.fsf@disp2133> <875yy3850g.fsf_-_@disp2133>
+        <YNULA+Ff+eB66bcP@zeniv-ca.linux.org.uk>
+Date:   Mon, 28 Jun 2021 14:02:50 -0500
+In-Reply-To: <YNULA+Ff+eB66bcP@zeniv-ca.linux.org.uk> (Al Viro's message of
+        "Thu, 24 Jun 2021 22:45:23 +0000")
+Message-ID: <87v95xx15x.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2094802.S4rhTtsRBG@tjmaciei-mobl1>
+Content-Type: text/plain
+X-XM-SPF: eid=1lxwXX-00Gdx8-9L;;;mid=<87v95xx15x.fsf@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18JERu3BMiKmUMjDvvelGV7aJUlVNLWdXI=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa08.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels,
+        XM_Body_Dirty_Words autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa08 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  1.0 XM_Body_Dirty_Words Contains a dirty word
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Al Viro <viro@zeniv.linux.org.uk>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 577 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 14 (2.4%), b_tie_ro: 12 (2.0%), parse: 0.98
+        (0.2%), extract_message_metadata: 13 (2.2%), get_uri_detail_list: 1.59
+        (0.3%), tests_pri_-1000: 9 (1.5%), tests_pri_-950: 1.33 (0.2%),
+        tests_pri_-900: 1.13 (0.2%), tests_pri_-90: 194 (33.7%), check_bayes:
+        190 (33.0%), b_tokenize: 7 (1.2%), b_tok_get_all: 10 (1.7%),
+        b_comp_prob: 3.1 (0.5%), b_tok_touch_all: 164 (28.5%), b_finish: 1.53
+        (0.3%), tests_pri_0: 330 (57.2%), check_dkim_signature: 0.49 (0.1%),
+        check_dkim_adsp: 3.1 (0.5%), poll_dns_idle: 0.90 (0.2%), tests_pri_10:
+        2.2 (0.4%), tests_pri_500: 8 (1.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 0/9] Refactoring exit
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 28, 2021 at 09:13:29AM -0700, Thiago Macieira wrote:
+Al Viro <viro@zeniv.linux.org.uk> writes:
 
-> Anyway, what's the current thinking on what the arch_prctl() should be? Is 
-> that a per-thread state or will it affect the entire process group? And is it 
-> a sticky functionality, or are we talking about ref/deref?
+> On Thu, Jun 24, 2021 at 01:57:35PM -0500, Eric W. Biederman wrote:
+>
+>> So far the code has been lightly tested, and the descriptions of some
+>> of the patches are a bit light, but I think this shows the direction
+>> I am aiming to travel for sorting out exit(2) and exit_group(2).
+>
+> FWIW, here's the current picture for do_exit(), aside of exit(2) and do_exit_group():
+>
+> 1) stuff that is clearly oops-like -
+>         alpha:die_if_kernel() alpha:do_entUna() alpha:do_page_fault() arm:oops_end()
+>         arm:__do_kernel_fault() arm64:die() arm64:die_kernel_fault() csky:alignment()
+>         csky:die() csky:no_context() h8300:die() h8300:do_page_fault() hexagon:die()
+>         ia64:die() i64:ia64_do_page_fault() m68k:die_if_kernel() m68k:send_fault_sig()
+>         microblaze:die() mips:die() nds32:handle_fpu_exception() nds32:die()
+>         nds32:unhandled_interruption() nds32:unhandled_exceptions() nds32:do_revinsn()
+>         nds32:do_page_fault() nios:die() openrisc:die() openrisc:do_page_fault()
+>         parisc:die_if_kernel() ppc:oops_end() riscv:die() riscv:die_kernel_fault()
+>         s390:die() s390:do_no_context() s390:do_low_address() sh:die()
+>         sparc32:die_if_kernel() sparc32:do_sparc_fault() sparc64:die_if_kernel()
+>         x86:rewind_stack_do_exit() xtensa:die() xtensa:bad_page_fault()
+> We really do not want ptrace anywhere near any of those and we do not want
+> any of that to return; this shit would better be handled right there and
+> there - no "post a fatal signal" would do.
 
-So I didn't follow the initial discussion too well; so I might be
-getting this wrong. In which case I'm hoping Thomas and/or Andy will
-correct me.
+Thanks that makes a good start for digging into these.
 
-But I think the proposal was per process. Having this per thread would
-be really unfortunate IMO.
+I think the distinction I would make is:
+- If the kernel is broken use do_task_dead.
+- Otherwise cleanup the semantics by using start_group_exit,
+  start_task_exit or by just cleaning up the code.
+  
 
-> Maybe in order to answer that, we need to understand what the worst case 
-> scenario we need to support is. What are they?
-> 
-> 1) alt-stack signal handlers, usually for crashing signals (to catch a stack 
-> overflow)
-> 
-> 2) cooperative user-space task schedulers, e.g. coroutines
-> 
-> 3) preemptive user-space task schedulers (I don't know if such software exists 
-> or even if it is possible)
+Looking at the reboot case it looks like we the code
+should have become do_group_exit in 2.5.  I have a suspicion
+we have a bunch of similar cases that want to terminate the
+entire process, but we simply never updated to deal with
+multi-thread processes.
 
-I think it's been done; use sigsetmask()/pthread_sigmask() as 'IRQ'
-disable, and run a preemption tick off of SIGALRM or something.
+I suspect in the reboot case panic if machine_halt or
+or machine_power_off fails is more likely the correct
+handling.  But we do have funny semantics sometimes.
 
-> 4) combination of 1 and 3
+I will see what I can do to expand my patchset to handle all of these
+various callers of do_exit.
 
-None of those I think. The worst case is old executables using
-MINSIGSTKSZ and not using the magic signal context at all, just regular
-old signals. If you run them on an AVX512 enabled machine, they overflow
-their stack and cause memory corruption.
-
-AFAICT the only feasible way forward with that is some sysctl which
-default disables AVX512 and add the prctl() and have some unsafe wrapper
-that enables AVX512 for select 'legacy' programs for as long as they
-exist :/
-
-That is, binaries/libraries compiled against a static (and small)
-MINSIGSTKSZ are the enemy. Which brings us to:
-
-> 5) #4, in which each part is comes from a separate library with no knowledge 
-> of each other, and initialised concurrently in different threads
-
-That's terrible... library init should *NEVER* spawn threads (I know,
-don't start).
-
-Anything that does this is basically unfixable, because we can't
-guarantee the AMX prctl() gets done before the first thread.
-
-So yes, worst case I suppose...
+Eric
