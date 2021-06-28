@@ -2,115 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 474AC3B59C5
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 09:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAD93B5BF2
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 12:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbhF1HeO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Jun 2021 03:34:14 -0400
-Received: from mail-ua1-f50.google.com ([209.85.222.50]:47006 "EHLO
-        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbhF1HeO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Jun 2021 03:34:14 -0400
-Received: by mail-ua1-f50.google.com with SMTP id x37so2142551uac.13;
-        Mon, 28 Jun 2021 00:31:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YwIJEG/rO0Ceg2ym/ezfAo5dwUkYJUNngLzGb8y4q34=;
-        b=TZrn3J1nkgSsIYp5BrAGZ13uiO0UnOBvRiq+ZhmD4NL0iaCRChNO0J6o7/2CnOavc+
-         v/mqysX6dt4Bs6YPv/+Ynr6cNjTRpk3nAl53kqvAapksERUHxu39hWe5ziMjhR/C7TCN
-         IesIG8Kr9NJDyNTW5H6nAAZex2+8vVg8MEx3aAK48Ge5kmQjm49AHmcnJ2DRQurx/qnH
-         1H0oaAKd6PVCa0AxNds/+fLE04Odc5dW9+DJ81mbZgxFZnW0v4njRxOK80nDO/nvYXH7
-         pnyoVacC0Vv3MElWT1ZT07cKUt597hRmqj2O/sqSq1WXRjP619/wErhwJoaN1+6T4PdY
-         oKNw==
-X-Gm-Message-State: AOAM530bEsSV1GATZlyak6MoGXtn5T6RW4LUTpuBt0lHHzyL8Ge2XPaX
-        XWtUL6mwjVfrpzviT/Au87lNly8OyDWA5etEY2M=
-X-Google-Smtp-Source: ABdhPJzYCFkqI6XO8XkluCeuBx9LnwBi5juJUkv7ROdktEW/OX3bMPqqTtRpjrN4il7UKs8a0PGwlEAC4EpisNoB+x4=
-X-Received: by 2002:ab0:647:: with SMTP id f65mr19209348uaf.4.1624865507461;
- Mon, 28 Jun 2021 00:31:47 -0700 (PDT)
+        id S232517AbhF1KFF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Jun 2021 06:05:05 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4304 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232664AbhF1KFE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 28 Jun 2021 06:05:04 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15S9Ws1F114753;
+        Mon, 28 Jun 2021 06:02:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=kyL2mVIJzs+HDFn1txhBWQuxASTtAL4NK+sQHR9/M6w=;
+ b=nlhmKcLJUCCyLIB4qbT56v44PyBoB93JSwEOFbliY1ABdDDC2qQiEBobAN7uVXxWVpG5
+ fAN+9TL1iFKJ8OcMRrCgsisK9a2F9eUT6cHPoH61tR0IY62g8uQe4VrhkNlfK2W6vMEC
+ rWgCkWNt6CgrAjmAjQaShlrvFizPefYxUtARNDx3sfZWy1JYIknD7gMqnvnisEYAOaDl
+ NzjUV7hFWg0CfClwn2aeVwqO3IFcrcYQZZwlSg7i7RQ5AMzP4jBNLdyUtM8Zx8UwnjDa
+ NFpBKv1Wp4mtyIbeRkVhYVtSw7aiHu2gzXuQNL9TLaKwineHuHP7XrwuOKQWNMHt1idD 4g== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39f9m34saf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Jun 2021 06:02:32 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15SA2TwB008458;
+        Mon, 28 Jun 2021 10:02:29 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 39duv8gq80-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Jun 2021 10:02:29 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15SA2QUG22020388
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Jun 2021 10:02:26 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9BE9411CC68;
+        Mon, 28 Jun 2021 10:02:24 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5550E11CC4A;
+        Mon, 28 Jun 2021 10:02:24 +0000 (GMT)
+Received: from osiris (unknown [9.145.26.242])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 28 Jun 2021 10:02:24 +0000 (GMT)
+Date:   Mon, 28 Jun 2021 12:02:22 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH 7/9] s390: kprobes: Use is_kernel() helper
+Message-ID: <YNmeLhfWf3Rs6yRA@osiris>
+References: <20210626073439.150586-1-wangkefeng.wang@huawei.com>
+ <20210626073439.150586-8-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-References: <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk> <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
- <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
- <87a6njf0ia.fsf@disp2133> <CAHk-=wh4_iMRmWcao6a8kCvR0Hhdrz+M9L+q4Bfcwx9E9D0huw@mail.gmail.com>
- <87tulpbp19.fsf@disp2133> <CAHk-=wi_kQAff1yx2ufGRo2zApkvqU8VGn7kgPT-Kv71FTs=AA@mail.gmail.com>
- <87zgvgabw1.fsf@disp2133> <875yy3850g.fsf_-_@disp2133> <YNULA+Ff+eB66bcP@zeniv-ca.linux.org.uk>
- <YNj4DItToR8FphxC@zeniv-ca.linux.org.uk> <6e283d24-7121-ae7c-d5ad-558f85858a09@gmail.com>
-In-Reply-To: <6e283d24-7121-ae7c-d5ad-558f85858a09@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Jun 2021 09:31:36 +0200
-Message-ID: <CAMuHMdXSU6_98NbC1UWTT_kmwxD=6Ha5LJxFAtbSuD=y78nASg@mail.gmail.com>
-Subject: Re: [PATCH 0/9] Refactoring exit
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Arnd Bergmann <arnd@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210626073439.150586-8-wangkefeng.wang@huawei.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8I-ro_vE4lHJmKJVPRaA2OAWE_TQiwbE
+X-Proofpoint-GUID: 8I-ro_vE4lHJmKJVPRaA2OAWE_TQiwbE
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-28_07:2021-06-25,2021-06-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ mlxscore=0 mlxlogscore=770 priorityscore=1501 adultscore=0 phishscore=0
+ bulkscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2106280066
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Michael,
+On Sat, Jun 26, 2021 at 03:34:37PM +0800, Kefeng Wang wrote:
+> Use is_kernel() helper instead of is_kernel_addr().
+> 
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  arch/s390/kernel/kprobes.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+...
+> -static inline int is_kernel_addr(void *addr)
+> -{
+> -	return addr < (void *)_end;
+> -}
+> -
+>  static int s390_get_insn_slot(struct kprobe *p)
+>  {
+>  	/*
+> @@ -105,7 +100,7 @@ static int s390_get_insn_slot(struct kprobe *p)
+>  	 * field can be patched and executed within the insn slot.
+>  	 */
+>  	p->ainsn.insn = NULL;
+> -	if (is_kernel_addr(p->addr))
+> +	if (is_kernel(p->addr))
+>  		p->ainsn.insn = get_s390_insn_slot();
+>  	else if (is_module_addr(p->addr))
+>  		p->ainsn.insn = get_insn_slot();
+> @@ -117,7 +112,7 @@ static void s390_free_insn_slot(struct kprobe *p)
+>  {
+>  	if (!p->ainsn.insn)
+>  		return;
+> -	if (is_kernel_addr(p->addr))
+> +	if (is_kernel(p->addr))
+>  		free_s390_insn_slot(p->ainsn.insn, 0);
+>  	else
+>  		free_insn_slot(p->ainsn.insn, 0);
 
-On Mon, Jun 28, 2021 at 1:00 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> On 28/06/21 10:13 am, Al Viro wrote:
-> > On Thu, Jun 24, 2021 at 10:45:23PM +0000, Al Viro wrote:
-> >
-> >> 13) there's bdflush(1, whatever), which is equivalent to exit(0).
-> >> IMO it's long past the time to simply remove the sucker.
-> > Incidentally, calling that from ptraced process on alpha leads to
-> > the same headache for tracer.  _If_ we leave it around, this is
-> > another candidate for "hit yourself with that special signal" -
-> > both alpha and m68k have that syscall, and IMO adding an asm
-> > wrapper for that one is over the top.
-> >
-> > Said that, we really ought to bury that thing:
-> >
-> > commit 2f268ee88abb33968501a44368db55c63adaad40
-> > Author: Andrew Morton <akpm@digeo.com>
-> > Date:   Sat Dec 14 03:16:29 2002 -0800
-> >
-> >      [PATCH] deprecate use of bdflush()
-> >
-> >      Patch from Robert Love <rml@tech9.net>
-> >
-> >      We can never get rid of it if we do not deprecate it - so do so and
-> >      print a stern warning to those who still run bdflush daemons.
-> >
-> > Deprecated for 18.5 years by now - I seriously suspect that we have
-> > some contributors younger than that...
->
-> Haven't found that warning in over 7 years' worth of console logs, and
-> I'm a good candidate for running the oldest userland in existence for m68k.
->
-> Time to let it go.
+Given that this makes sense its own, and I can't follow the discussion
+of the patch series due to missing cc, I applied this to the s390 tree
+- and also fixed up the missing unsigned long casts.
 
-The warning is printed when using filesys-ELF-2.0.x-1400K-2.gz,
-which is a very old ramdisk from right after the m68k a.out to ELF
-transition:
-
-    warning: process `update' used the obsolete bdflush system call
-    Fix your initscripts?
-
-I still boot it, once in a while.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks!
