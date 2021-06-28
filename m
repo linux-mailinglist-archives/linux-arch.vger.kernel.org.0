@@ -2,70 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFDC3B5C88
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 12:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7E43B5CF4
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 13:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbhF1KkE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Jun 2021 06:40:04 -0400
-Received: from flippiebeckerswealthmgr.xyz ([62.173.147.16]:42646 "EHLO
-        host.flippiebeckerswealthmgr.xyz" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232575AbhF1KkD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 28 Jun 2021 06:40:03 -0400
-Received: from flippiebeckerswealthmgr.xyz (ec2-54-157-176-210.compute-1.amazonaws.com [54.157.176.210])
-        by host.flippiebeckerswealthmgr.xyz (Postfix) with ESMTPA id BC4E2E8997
-        for <linux-arch@vger.kernel.org>; Mon, 28 Jun 2021 13:13:36 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippiebeckerswealthmgr.xyz BC4E2E8997
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flippiebeckerswealthmgr.xyz; s=default; t=1624875217;
-        bh=G3PrS2ssLE6xKmHDCm5hvScMpvbJPlyTw8R1AuPMkGc=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=Ovd9CmJJf4b2CXRDZp4pvQ0e0MusJR9pDrvc4+c7iV0Pz4QTDthGkWEv0gpezW6o8
-         0LqO6aUhf9ZxqAJctsaF/zm8qkcBsqUwjJyDU0w7dySPM5w5TpoBaO2dKtTwG2T+A+
-         zHYImmN4fEg4h75e9p6FKLpndcGTSYLpyPB4Od58=
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippiebeckerswealthmgr.xyz BC4E2E8997
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flippiebeckerswealthmgr.xyz; s=default; t=1624875217;
-        bh=G3PrS2ssLE6xKmHDCm5hvScMpvbJPlyTw8R1AuPMkGc=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=Ovd9CmJJf4b2CXRDZp4pvQ0e0MusJR9pDrvc4+c7iV0Pz4QTDthGkWEv0gpezW6o8
-         0LqO6aUhf9ZxqAJctsaF/zm8qkcBsqUwjJyDU0w7dySPM5w5TpoBaO2dKtTwG2T+A+
-         zHYImmN4fEg4h75e9p6FKLpndcGTSYLpyPB4Od58=
-Reply-To: jmasuku09@flippiebecker.com
-From:   Jotham Masuku <jmasuku09@flippiebeckerswealthmgr.xyz>
-To:     linux-arch@vger.kernel.org
-Subject: Projects
-Date:   28 Jun 2021 10:13:36 +0000
-Message-ID: <20210628101336.5ABFFD7A80883193@flippiebeckerswealthmgr.xyz>
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        id S232798AbhF1LLr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Jun 2021 07:11:47 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:5819 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232781AbhF1LLq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Jun 2021 07:11:46 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GD4VV3Ky7zXjFY;
+        Mon, 28 Jun 2021 19:04:02 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 28 Jun 2021 19:09:19 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 28 Jun 2021 19:09:19 +0800
+Subject: Re: [PATCH 7/9] s390: kprobes: Use is_kernel() helper
+To:     Heiko Carstens <hca@linux.ibm.com>
+CC:     Arnd Bergmann <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
+        "Christian Borntraeger" <borntraeger@de.ibm.com>,
+        <linux-s390@vger.kernel.org>
+References: <20210626073439.150586-1-wangkefeng.wang@huawei.com>
+ <20210626073439.150586-8-wangkefeng.wang@huawei.com>
+ <YNmeLhfWf3Rs6yRA@osiris>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+Message-ID: <33b1d13e-a13c-44e0-bae6-3d8394892bbc@huawei.com>
+Date:   Mon, 28 Jun 2021 19:09:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <YNmeLhfWf3Rs6yRA@osiris>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello there,
 
-I hope this message finds you in good spirits especially during=20
-this challenging time of coronavirus pandemic. I hope you and=20
-your family are well and keeping safe. Anyway, I am Jotham=20
-Masuku, a broker working with Flippiebecker Wealth. I got your=20
-contact through an online business directory and I thought I=20
-should contact you to see if you are interested in this=20
-opportunity. I am contacting you because one of my high profile=20
-clients is interested in investing abroad and has asked me to=20
-look for individuals and companies in your country with=20
-interesting business ideas and projects that he can invest in. He=20
-wants to invest a substantial amount of asset abroad.
+On 2021/6/28 18:02, Heiko Carstens wrote:
+> On Sat, Jun 26, 2021 at 03:34:37PM +0800, Kefeng Wang wrote:
+>> Use is_kernel() helper instead of is_kernel_addr().
+>>
+>> Cc: Heiko Carstens <hca@linux.ibm.com>
+>> Cc: Vasily Gorbik <gor@linux.ibm.com>
+>> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+>> Cc: linux-s390@vger.kernel.org
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> ---
+>>   arch/s390/kernel/kprobes.c | 9 ++-------
+>>   1 file changed, 2 insertions(+), 7 deletions(-)
+> ...
+>> -static inline int is_kernel_addr(void *addr)
+>> -{
+>> -	return addr < (void *)_end;
+>> -}
+>> -
+>>   static int s390_get_insn_slot(struct kprobe *p)
+>>   {
+>>   	/*
+>> @@ -105,7 +100,7 @@ static int s390_get_insn_slot(struct kprobe *p)
+>>   	 * field can be patched and executed within the insn slot.
+>>   	 */
+>>   	p->ainsn.insn = NULL;
+>> -	if (is_kernel_addr(p->addr))
+>> +	if (is_kernel(p->addr))
+>>   		p->ainsn.insn = get_s390_insn_slot();
+>>   	else if (is_module_addr(p->addr))
+>>   		p->ainsn.insn = get_insn_slot();
+>> @@ -117,7 +112,7 @@ static void s390_free_insn_slot(struct kprobe *p)
+>>   {
+>>   	if (!p->ainsn.insn)
+>>   		return;
+>> -	if (is_kernel_addr(p->addr))
+>> +	if (is_kernel(p->addr))
+>>   		free_s390_insn_slot(p->ainsn.insn, 0);
+>>   	else
+>>   		free_insn_slot(p->ainsn.insn, 0);
+> Given that this makes sense its own, and I can't follow the discussion
+> of the patch series due to missing cc, I applied this to the s390 tree
+> - and also fixed up the missing unsigned long casts.
 
-I have decided to keep this brief for now but please kindly=20
-respond back to this email if you are interested in this=20
-opportunity. Once I receive your response, I will give you more=20
-details and we can plan a strategy that will be beneficial to all=20
-parties.
+Thanks Heiko, I got some tips(someone says, not send all patches to all 
+the people who maybe not care
 
-Best regards
+about the other patches), so I only send this one to you,  but the 
+patches is cc to all the maillist,
 
-J Masuku
-Flippiebecker Wealth
+and it could be check from 
+https://lore.kernel.org/linux-arch/20210626073439.150586-1-wangkefeng.wang@huawei.com
+
+>
+> Thanks!
+> .
+>
