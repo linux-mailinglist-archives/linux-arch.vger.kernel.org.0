@@ -2,62 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B31AE3B5921
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 08:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474AC3B59C5
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 09:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbhF1GcL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Jun 2021 02:32:11 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:12082 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbhF1GcL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Jun 2021 02:32:11 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GCyLR1SLNzZkht;
-        Mon, 28 Jun 2021 14:26:39 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 28 Jun 2021 14:29:43 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 28 Jun 2021 14:29:43 +0800
-Subject: Re: [PATCH 9/9] dma-debug: Use memory_intersects() directly
-To:     Christoph Hellwig <hch@lst.de>
-CC:     Arnd Bergmann <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        <iommu@lists.linux-foundation.org>
-References: <20210626073439.150586-1-wangkefeng.wang@huawei.com>
- <20210626073439.150586-10-wangkefeng.wang@huawei.com>
- <20210628061123.GA23316@lst.de>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-Message-ID: <bfdf4359-d98d-a675-b6d9-56280200ea81@huawei.com>
-Date:   Mon, 28 Jun 2021 14:29:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S232406AbhF1HeO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Jun 2021 03:34:14 -0400
+Received: from mail-ua1-f50.google.com ([209.85.222.50]:47006 "EHLO
+        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232312AbhF1HeO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Jun 2021 03:34:14 -0400
+Received: by mail-ua1-f50.google.com with SMTP id x37so2142551uac.13;
+        Mon, 28 Jun 2021 00:31:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YwIJEG/rO0Ceg2ym/ezfAo5dwUkYJUNngLzGb8y4q34=;
+        b=TZrn3J1nkgSsIYp5BrAGZ13uiO0UnOBvRiq+ZhmD4NL0iaCRChNO0J6o7/2CnOavc+
+         v/mqysX6dt4Bs6YPv/+Ynr6cNjTRpk3nAl53kqvAapksERUHxu39hWe5ziMjhR/C7TCN
+         IesIG8Kr9NJDyNTW5H6nAAZex2+8vVg8MEx3aAK48Ge5kmQjm49AHmcnJ2DRQurx/qnH
+         1H0oaAKd6PVCa0AxNds/+fLE04Odc5dW9+DJ81mbZgxFZnW0v4njRxOK80nDO/nvYXH7
+         pnyoVacC0Vv3MElWT1ZT07cKUt597hRmqj2O/sqSq1WXRjP619/wErhwJoaN1+6T4PdY
+         oKNw==
+X-Gm-Message-State: AOAM530bEsSV1GATZlyak6MoGXtn5T6RW4LUTpuBt0lHHzyL8Ge2XPaX
+        XWtUL6mwjVfrpzviT/Au87lNly8OyDWA5etEY2M=
+X-Google-Smtp-Source: ABdhPJzYCFkqI6XO8XkluCeuBx9LnwBi5juJUkv7ROdktEW/OX3bMPqqTtRpjrN4il7UKs8a0PGwlEAC4EpisNoB+x4=
+X-Received: by 2002:ab0:647:: with SMTP id f65mr19209348uaf.4.1624865507461;
+ Mon, 28 Jun 2021 00:31:47 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210628061123.GA23316@lst.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+References: <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk> <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
+ <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
+ <87a6njf0ia.fsf@disp2133> <CAHk-=wh4_iMRmWcao6a8kCvR0Hhdrz+M9L+q4Bfcwx9E9D0huw@mail.gmail.com>
+ <87tulpbp19.fsf@disp2133> <CAHk-=wi_kQAff1yx2ufGRo2zApkvqU8VGn7kgPT-Kv71FTs=AA@mail.gmail.com>
+ <87zgvgabw1.fsf@disp2133> <875yy3850g.fsf_-_@disp2133> <YNULA+Ff+eB66bcP@zeniv-ca.linux.org.uk>
+ <YNj4DItToR8FphxC@zeniv-ca.linux.org.uk> <6e283d24-7121-ae7c-d5ad-558f85858a09@gmail.com>
+In-Reply-To: <6e283d24-7121-ae7c-d5ad-558f85858a09@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Jun 2021 09:31:36 +0200
+Message-ID: <CAMuHMdXSU6_98NbC1UWTT_kmwxD=6Ha5LJxFAtbSuD=y78nASg@mail.gmail.com>
+Subject: Re: [PATCH 0/9] Refactoring exit
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Michael,
 
-On 2021/6/28 14:11, Christoph Hellwig wrote:
-> You've sent me a patch 9 out of 9 without the previous 8 patches.  There
-> is no way I can sensibly review this series.
+On Mon, Jun 28, 2021 at 1:00 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> On 28/06/21 10:13 am, Al Viro wrote:
+> > On Thu, Jun 24, 2021 at 10:45:23PM +0000, Al Viro wrote:
+> >
+> >> 13) there's bdflush(1, whatever), which is equivalent to exit(0).
+> >> IMO it's long past the time to simply remove the sucker.
+> > Incidentally, calling that from ptraced process on alpha leads to
+> > the same headache for tracer.  _If_ we leave it around, this is
+> > another candidate for "hit yourself with that special signal" -
+> > both alpha and m68k have that syscall, and IMO adding an asm
+> > wrapper for that one is over the top.
+> >
+> > Said that, we really ought to bury that thing:
+> >
+> > commit 2f268ee88abb33968501a44368db55c63adaad40
+> > Author: Andrew Morton <akpm@digeo.com>
+> > Date:   Sat Dec 14 03:16:29 2002 -0800
+> >
+> >      [PATCH] deprecate use of bdflush()
+> >
+> >      Patch from Robert Love <rml@tech9.net>
+> >
+> >      We can never get rid of it if we do not deprecate it - so do so and
+> >      print a stern warning to those who still run bdflush daemons.
+> >
+> > Deprecated for 18.5 years by now - I seriously suspect that we have
+> > some contributors younger than that...
+>
+> Haven't found that warning in over 7 years' worth of console logs, and
+> I'm a good candidate for running the oldest userland in existence for m68k.
+>
+> Time to let it go.
 
-The full patches is 
-https://lore.kernel.org/linux-arch/20210626073439.150586-1-wangkefeng.wang@huawei.com/T/#t
+The warning is printed when using filesys-ELF-2.0.x-1400K-2.gz,
+which is a very old ramdisk from right after the m68k a.out to ELF
+transition:
 
-This patch is not very relevant about the above 8 patches, only use the 
-existing function to simplify code.
+    warning: process `update' used the obsolete bdflush system call
+    Fix your initscripts?
 
+I still boot it, once in a while.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
