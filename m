@@ -2,154 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A16CD3B669A
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 18:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165DD3B675B
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 19:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbhF1QXG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Jun 2021 12:23:06 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:44410 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbhF1QXG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Jun 2021 12:23:06 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1lxtzw-005KQR-Lg; Mon, 28 Jun 2021 10:20:36 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:35662 helo=email.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1lxtzu-00FZAh-9G; Mon, 28 Jun 2021 10:20:36 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Michael Schmitz <schmitzmic@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Arnd Bergmann <arnd@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-References: <YNCaMDQVYB04bk3j@zeniv-ca.linux.org.uk>
-        <YNDhdb7XNQE6zQzL@zeniv-ca.linux.org.uk>
-        <CAHk-=whAsWXcJkpMM8ji77DkYkeJAT4Cj98WBX-S6=GnMQwhzg@mail.gmail.com>
-        <87a6njf0ia.fsf@disp2133>
-        <CAHk-=wh4_iMRmWcao6a8kCvR0Hhdrz+M9L+q4Bfcwx9E9D0huw@mail.gmail.com>
-        <87tulpbp19.fsf@disp2133>
-        <CAHk-=wi_kQAff1yx2ufGRo2zApkvqU8VGn7kgPT-Kv71FTs=AA@mail.gmail.com>
-        <87zgvgabw1.fsf@disp2133> <875yy3850g.fsf_-_@disp2133>
-        <YNULA+Ff+eB66bcP@zeniv-ca.linux.org.uk>
-        <YNj4DItToR8FphxC@zeniv-ca.linux.org.uk>
-        <6e283d24-7121-ae7c-d5ad-558f85858a09@gmail.com>
-        <CAMuHMdXSU6_98NbC1UWTT_kmwxD=6Ha5LJxFAtbSuD=y78nASg@mail.gmail.com>
-Date:   Mon, 28 Jun 2021 11:20:03 -0500
-In-Reply-To: <CAMuHMdXSU6_98NbC1UWTT_kmwxD=6Ha5LJxFAtbSuD=y78nASg@mail.gmail.com>
-        (Geert Uytterhoeven's message of "Mon, 28 Jun 2021 09:31:36 +0200")
-Message-ID: <87pmw6yn9o.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S232110AbhF1RNz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Jun 2021 13:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233056AbhF1RNz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Jun 2021 13:13:55 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A14C061574;
+        Mon, 28 Jun 2021 10:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=N8xCdH0ayOU0iwwLcN7/GpC9KeGAtQxK6HyluXNHYec=; b=TZBFAh8SnqwcMvQ1YA7uePM/24
+        4FoZGKYAv9fHbLCyiVbs296M9LmK3RyZLXN/f5DGYubktGJMN2oZXHqNXjreRXzq7+AiQYN3f/Qod
+        eX2jV+OSBUtLh1IUgHkoJDJPyasuCHbaWmqx8JyMvA7Yd2MchD/Pv4bav82L4qcyRgehvzFlTdbbK
+        Wp6pQ+RjLJARnJLtDb2RKvuQoVUgQ64Y2DfCMuyPnWcpzuBwwey0wRIJIj9nJQPfSiw2SWVg9QQce
+        WYf8l1jjapiqCnMlEFxl7EF+D/1+7D8WfLfa4T9mTun92p7mT/AKQ15gXcE2oPpwEWwS//vono0tj
+        YCkydJ4g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1lxumz-00Cc0B-Af; Mon, 28 Jun 2021 17:11:17 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 395B0982D9E; Mon, 28 Jun 2021 19:11:16 +0200 (CEST)
+Date:   Mon, 28 Jun 2021 19:11:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thiago Macieira <thiago.macieira@intel.com>
+Cc:     fweimer@redhat.com,
+        "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
+        hjl.tools@gmail.com, libc-alpha@sourceware.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: x86 CPU features detection for applications (and AMX)
+Message-ID: <20210628171115.GA13401@worktop.programming.kicks-ass.net>
+References: <22261946.eFiGugXE7Z@tjmaciei-mobl1>
+ <2379132.fg5cGID6mU@tjmaciei-mobl1>
+ <YNnqXCSVUhYhzT6T@hirez.programming.kicks-ass.net>
+ <2094802.S4rhTtsRBG@tjmaciei-mobl1>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1lxtzu-00FZAh-9G;;;mid=<87pmw6yn9o.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/RdRCKClJS+touOsX/B9XRKKgr5ULM6Cg=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa03.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels autolearn=disabled
-        version=3.4.2
-X-Spam-Virus: No
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa03 1397; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Geert Uytterhoeven <geert@linux-m68k.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1762 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.7 (0.2%), b_tie_ro: 2.5 (0.1%), parse: 1.15
-        (0.1%), extract_message_metadata: 21 (1.2%), get_uri_detail_list: 2.0
-        (0.1%), tests_pri_-1000: 24 (1.4%), tests_pri_-950: 1.39 (0.1%),
-        tests_pri_-900: 1.23 (0.1%), tests_pri_-90: 158 (8.9%), check_bayes:
-        150 (8.5%), b_tokenize: 12 (0.7%), b_tok_get_all: 9 (0.5%),
-        b_comp_prob: 3.1 (0.2%), b_tok_touch_all: 122 (6.9%), b_finish: 0.77
-        (0.0%), tests_pri_0: 292 (16.6%), check_dkim_signature: 0.41 (0.0%),
-        check_dkim_adsp: 1.85 (0.1%), poll_dns_idle: 1242 (70.5%),
-        tests_pri_10: 1.65 (0.1%), tests_pri_500: 1255 (71.2%), rewrite_mail:
-        0.00 (0.0%)
-Subject: Re: [PATCH 0/9] Refactoring exit
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2094802.S4rhTtsRBG@tjmaciei-mobl1>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Geert Uytterhoeven <geert@linux-m68k.org> writes:
+On Mon, Jun 28, 2021 at 09:13:29AM -0700, Thiago Macieira wrote:
+> On Monday, 28 June 2021 08:27:24 PDT Peter Zijlstra wrote:
+> > > That's what cpuid is for. With GCC function multi-versioning or equivalent
+> > > manually-rolled solutions, you can get exactly what you're asking for.
+> > 
+> > Right, lots of self-modifying code solutions there, some of which can be
+> > linker driven, some not. In the kernel we use alternative() to replace
+> > short code sequences depending on CPUID.
+> > 
+> > Userspace *could* do the same, rewriting code before first execution is
+> > fairly straight forward.
+> 
+> Userspace shouldn't do SMC. It's bad enough that JITs without caching exist, 
+> but having pure paged code is better. Pure pages are shared as needed by the 
+> kernel.
 
-> Hi Michael,
->
-> On Mon, Jun 28, 2021 at 1:00 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
->> On 28/06/21 10:13 am, Al Viro wrote:
->> > On Thu, Jun 24, 2021 at 10:45:23PM +0000, Al Viro wrote:
->> >
->> >> 13) there's bdflush(1, whatever), which is equivalent to exit(0).
->> >> IMO it's long past the time to simply remove the sucker.
->> > Incidentally, calling that from ptraced process on alpha leads to
->> > the same headache for tracer.  _If_ we leave it around, this is
->> > another candidate for "hit yourself with that special signal" -
->> > both alpha and m68k have that syscall, and IMO adding an asm
->> > wrapper for that one is over the top.
->> >
->> > Said that, we really ought to bury that thing:
->> >
->> > commit 2f268ee88abb33968501a44368db55c63adaad40
->> > Author: Andrew Morton <akpm@digeo.com>
->> > Date:   Sat Dec 14 03:16:29 2002 -0800
->> >
->> >      [PATCH] deprecate use of bdflush()
->> >
->> >      Patch from Robert Love <rml@tech9.net>
->> >
->> >      We can never get rid of it if we do not deprecate it - so do so and
->> >      print a stern warning to those who still run bdflush daemons.
->> >
->> > Deprecated for 18.5 years by now - I seriously suspect that we have
->> > some contributors younger than that...
->>
->> Haven't found that warning in over 7 years' worth of console logs, and
->> I'm a good candidate for running the oldest userland in existence for m68k.
->>
->> Time to let it go.
->
-> The warning is printed when using filesys-ELF-2.0.x-1400K-2.gz,
-> which is a very old ramdisk from right after the m68k a.out to ELF
-> transition:
->
->     warning: process `update' used the obsolete bdflush system call
->     Fix your initscripts?
->
-> I still boot it, once in a while.
+I don't feel that strongly; if SMC gets you measurable performance
+gains, go for it. If you're short on memory, buy more.
 
-The only thing left in bdflush is func == 1 calls do_exit(0);
+> All you need is a simple bit test. You can then either branch to different 
+> code paths or write to a function pointer so it'll go there directly the next 
+> time. You can also choose to load different plugins depending on what CPU 
+> features were found.
 
-Which is a hack introduced in 2.3.23 aka October of 1999 to force the
-userspace process calling bdflush to exit, instead of repeatedly calling
-sys_bdflush.
+Both bit tests and indirect function calls suffer the extra memory load,
+which is not free.
 
-Can you try deleting that func == 1 call and seeing if your old ramdisk
-works?
+> Consequence: CPU feature checking is done *very* early, often before main().
 
-I suspect userspace used to get into a tight spin calling bdflush
-func == 1, when that function stopped doing anything.  That was back in
-1999 so we are probably safe with out it.
-
-Eric
+For the linker based ones, yes. IIRC the ifunc() attribute is
+particularly useful here.
