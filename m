@@ -2,91 +2,218 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB693B58D2
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 07:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF57A3B58EB
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Jun 2021 08:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbhF1F6x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Jun 2021 01:58:53 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:60420 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232172AbhF1F6w (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 28 Jun 2021 01:58:52 -0400
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4GCxgV1Yc3zBBlp;
-        Mon, 28 Jun 2021 07:56:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id XDK_m3pCk78b; Mon, 28 Jun 2021 07:56:22 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4GCxgV0d9PzBBgx;
-        Mon, 28 Jun 2021 07:56:22 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id ECF008B776;
-        Mon, 28 Jun 2021 07:56:21 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id QcdPGwq5KisL; Mon, 28 Jun 2021 07:56:21 +0200 (CEST)
-Received: from [172.25.230.102] (po15451.idsi0.si.c-s.fr [172.25.230.102])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B1C728B763;
-        Mon, 28 Jun 2021 07:56:21 +0200 (CEST)
-Subject: Re: [PATCH v3] mm: pagewalk: Fix walk for hugepage tables
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Steven Price <steven.price@arm.com>, linux-mm@kvack.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        id S232168AbhF1GGm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Jun 2021 02:06:42 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16944 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232140AbhF1GGm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 28 Jun 2021 02:06:42 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15S63bVB028683;
+        Mon, 28 Jun 2021 02:03:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=CSe8oBYUzmv2QLg981RIoKEM76oSxvVA2+PI2FyhoyI=;
+ b=Dtq68a0x+Hmh0Ts8QHV8JF0TzYf/rzdEHXTzi6bXu5vnRSXXvY+ItS3yrS2plg2F5HNM
+ bXJvNo59Kqf3k+/LgfS3qV8TIN5BIPX+jOQWUhBbSDCkUb/3jYMn3UVNLeBmXCBKZtOD
+ Ejf9JtEYx2miHV0W0PODYeXsmF/gH+moIjlCWcBsQoBKQr1YRdqKILaTX4D/xRNwXH8h
+ qPGC8ghphw+gdfeVu8JIA8zWxeiPlh5ITAy4SfZy8ce/T1Vft8EOY061xTwIBBth2eyX
+ LeOsLVKPUgSYj1LCeYz1MssBrdNiROcVepEv/jawKdzRkfLMY2yy42jaUz1Y8Gce24RP nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39f6sfakyy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Jun 2021 02:03:45 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15S63ftY029070;
+        Mon, 28 Jun 2021 02:03:44 -0400
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39f6sfakyk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Jun 2021 02:03:44 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15S63AZ2021970;
+        Mon, 28 Jun 2021 06:03:43 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04dal.us.ibm.com with ESMTP id 39ekx9f83b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Jun 2021 06:03:43 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15S63gRr13107526
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Jun 2021 06:03:42 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 04384C605F;
+        Mon, 28 Jun 2021 06:03:42 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 271FEC6055;
+        Mon, 28 Jun 2021 06:03:38 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.85.91.177])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 28 Jun 2021 06:03:37 +0000 (GMT)
+X-Mailer: emacs 28.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Steven Price <steven.price@arm.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>, dja@axtens.net,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
+        "Oliver O'Halloran" <oohall@gmail.com>, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm: pagewalk: Fix walk for hugepage tables
+In-Reply-To: <38d04410700c8d02f28ba37e020b62c55d6f3d2c.1624597695.git.christophe.leroy@csgroup.eu>
 References: <38d04410700c8d02f28ba37e020b62c55d6f3d2c.1624597695.git.christophe.leroy@csgroup.eu>
- <20210627181226.983d899cc30c02420e1a6af5@linux-foundation.org>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <ecf71f68-d25e-c0c6-4c2a-b181b836ac43@csgroup.eu>
-Date:   Mon, 28 Jun 2021 07:56:20 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+Date:   Mon, 28 Jun 2021 11:33:35 +0530
+Message-ID: <87bl7qle4o.fsf@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20210627181226.983d899cc30c02420e1a6af5@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RC-M6h30cdQaqCwwTmW44E92686JJ4Af
+X-Proofpoint-GUID: B71VDKPLLizhblFHH34Gd7exK_gUjFhy
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-28_03:2021-06-25,2021-06-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 phishscore=0 mlxscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2106280042
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
 
+> Pagewalk ignores hugepd entries and walk down the tables
+> as if it was traditionnal entries, leading to crazy result.
 
-Le 28/06/2021 à 03:12, Andrew Morton a écrit :
-> On Fri, 25 Jun 2021 05:10:12 +0000 (UTC) Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
-> 
->> Pagewalk ignores hugepd entries and walk down the tables
->> as if it was traditionnal entries, leading to crazy result.
->>
->> Add walk_hugepd_range() and use it to walk hugepage tables.
-> 
-> More details, please?  I assume "crazy result" is userspace visible?
-> For how long has this bug existed?  Is a -stable backport needed?  Has
-> a Fixes: commit been identified?  etcetera!
-> 
+But we do handle hugetlb separately
 
-I discovered the problem while porting powerpc to generic page table dump.
-The generic page table dump uses walk_page_range_novma() .
+	if (vma && is_vm_hugetlb_page(vma)) {
+		if (ops->hugetlb_entry)
+			err = walk_hugetlb_range(start, end, walk);
+	} else
+		err = walk_pgd_range(start, end, walk);
 
-Yes, "crazy result" is that when dumping /sys/kernel/debug/kernel_page_tables, you get random 
-entries because at the time being the pagewalk code sees huge page directories as standard page tables.
+Are we using hugepd format for non hugetlb entries?
 
-The bug has always existed as far as I can see, but as no other architectures than powerpc use huge 
-page directories, it only pops up now when powerpc is trying to use that generic page walking code.
-
-So I don't think it is worth a backport to -stable, and about a Fixes: tag I don't know.
-
-IIUC, hugepd was introduced for the first time in mm by commit cbd34da7dc9a ("mm: move the powerpc 
-hugepd code to mm/gup.c")
-
-Before that, hugepd was internal to powerpc.
-
-I guess you are asking about Fixes: tag and backporting because of the patch subject.
-Should I reword the page subject to something like "mm: enable the generic page walk code to walk 
-huge page directories" ?
+>
+> Add walk_hugepd_range() and use it to walk hugepage tables.
+>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Reviewed-by: Steven Price <steven.price@arm.com>
+> ---
+> v3:
+> - Rebased on next-20210624 (no change since v2)
+> - Added Steven's Reviewed-by
+> - Sent as standalone for merge via mm
+>
+> v2:
+> - Add a guard for NULL ops->pte_entry
+> - Take mm->page_table_lock when walking hugepage table, as suggested by follow_huge_pd()
+> ---
+>  mm/pagewalk.c | 58 ++++++++++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 53 insertions(+), 5 deletions(-)
+>
+> diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+> index e81640d9f177..9b3db11a4d1d 100644
+> --- a/mm/pagewalk.c
+> +++ b/mm/pagewalk.c
+> @@ -58,6 +58,45 @@ static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+>  	return err;
+>  }
+>  
+> +#ifdef CONFIG_ARCH_HAS_HUGEPD
+> +static int walk_hugepd_range(hugepd_t *phpd, unsigned long addr,
+> +			     unsigned long end, struct mm_walk *walk, int pdshift)
+> +{
+> +	int err = 0;
+> +	const struct mm_walk_ops *ops = walk->ops;
+> +	int shift = hugepd_shift(*phpd);
+> +	int page_size = 1 << shift;
+> +
+> +	if (!ops->pte_entry)
+> +		return 0;
+> +
+> +	if (addr & (page_size - 1))
+> +		return 0;
+> +
+> +	for (;;) {
+> +		pte_t *pte;
+> +
+> +		spin_lock(&walk->mm->page_table_lock);
+> +		pte = hugepte_offset(*phpd, addr, pdshift);
+> +		err = ops->pte_entry(pte, addr, addr + page_size, walk);
+> +		spin_unlock(&walk->mm->page_table_lock);
+> +
+> +		if (err)
+> +			break;
+> +		if (addr >= end - page_size)
+> +			break;
+> +		addr += page_size;
+> +	}
+> +	return err;
+> +}
+> +#else
+> +static int walk_hugepd_range(hugepd_t *phpd, unsigned long addr,
+> +			     unsigned long end, struct mm_walk *walk, int pdshift)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+>  static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+>  			  struct mm_walk *walk)
+>  {
+> @@ -108,7 +147,10 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+>  				goto again;
+>  		}
+>  
+> -		err = walk_pte_range(pmd, addr, next, walk);
+> +		if (is_hugepd(__hugepd(pmd_val(*pmd))))
+> +			err = walk_hugepd_range((hugepd_t *)pmd, addr, next, walk, PMD_SHIFT);
+> +		else
+> +			err = walk_pte_range(pmd, addr, next, walk);
+>  		if (err)
+>  			break;
+>  	} while (pmd++, addr = next, addr != end);
+> @@ -157,7 +199,10 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
+>  		if (pud_none(*pud))
+>  			goto again;
+>  
+> -		err = walk_pmd_range(pud, addr, next, walk);
+> +		if (is_hugepd(__hugepd(pud_val(*pud))))
+> +			err = walk_hugepd_range((hugepd_t *)pud, addr, next, walk, PUD_SHIFT);
+> +		else
+> +			err = walk_pmd_range(pud, addr, next, walk);
+>  		if (err)
+>  			break;
+>  	} while (pud++, addr = next, addr != end);
+> @@ -189,7 +234,9 @@ static int walk_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
+>  			if (err)
+>  				break;
+>  		}
+> -		if (ops->pud_entry || ops->pmd_entry || ops->pte_entry)
+> +		if (is_hugepd(__hugepd(p4d_val(*p4d))))
+> +			err = walk_hugepd_range((hugepd_t *)p4d, addr, next, walk, P4D_SHIFT);
+> +		else if (ops->pud_entry || ops->pmd_entry || ops->pte_entry)
+>  			err = walk_pud_range(p4d, addr, next, walk);
+>  		if (err)
+>  			break;
+> @@ -224,8 +271,9 @@ static int walk_pgd_range(unsigned long addr, unsigned long end,
+>  			if (err)
+>  				break;
+>  		}
+> -		if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry ||
+> -		    ops->pte_entry)
+> +		if (is_hugepd(__hugepd(pgd_val(*pgd))))
+> +			err = walk_hugepd_range((hugepd_t *)pgd, addr, next, walk, PGDIR_SHIFT);
+> +		else if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry || ops->pte_entry)
+>  			err = walk_p4d_range(pgd, addr, next, walk);
+>  		if (err)
+>  			break;
+> -- 
+> 2.25.0
