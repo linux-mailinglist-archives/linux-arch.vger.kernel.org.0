@@ -2,92 +2,221 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9263B9166
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Jul 2021 13:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862483B99CC
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Jul 2021 01:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236361AbhGAMCO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Jul 2021 08:02:14 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:41773 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236364AbhGAMCO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jul 2021 08:02:14 -0400
-Received: from [192.168.1.155] ([95.117.176.189]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1M9Frj-1lti9x12jn-006R94; Thu, 01 Jul 2021 13:59:34 +0200
-Subject: Re: x86 CPU features detection for applications (and AMX)
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Thiago Macieira <thiago.macieira@intel.com>, hjl.tools@gmail.com,
-        libc-alpha@sourceware.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, x86@kernel.org
-References: <22261946.eFiGugXE7Z@tjmaciei-mobl1>
- <3c5c29e2-1b52-3576-eda2-018fb1e58ff9@metux.net>
- <2379132.fg5cGID6mU@tjmaciei-mobl1>
- <e07294c9-b02a-e1c5-3620-7fae7269fdf1@metux.net>
- <87pmw3ifpv.fsf@oldenburg.str.redhat.com>
- <030f1462-2bf9-39bc-d620-6d9fbe454a27@metux.net>
- <87lf6ricqg.fsf@oldenburg.str.redhat.com>
- <4ba30cb7-6854-0691-fad6-4ca9ce674ac2@metux.net>
- <878s2qh2bb.fsf@oldenburg.str.redhat.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Message-ID: <034dcf9b-1f8c-23ee-86a6-791122bc0f8c@metux.net>
-Date:   Thu, 1 Jul 2021 13:59:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S234312AbhGAX6f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Jul 2021 19:58:35 -0400
+Received: from mail-0201.mail-europe.com ([51.77.79.158]:41754 "EHLO
+        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234063AbhGAX6f (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jul 2021 19:58:35 -0400
+Date:   Thu, 01 Jul 2021 23:55:14 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1625183728; bh=vHKTUFhjrBhE16qbi5KjG4YoGMyuu2TJDAhJMIvSDHc=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=ZWl1K/duuR6AkGbFqdy6cxxNtf7pKljObHGE4X/oR6EYdDyUwWCwF2Ff/bEdjc9nX
+         ef/FbVZ++YU88xuXpiILi13tx+OleonACFBno8YKNjjiKfNTD0zGi/qFQzQvSjRHyJ
+         4ZWqP8fqn77rZH37BgnXHbwSt20DAWMhVpdgLvjTOQhfS9WlQ6UZmhaeYxxxmLJZP9
+         rHo2jA5qUmZnHl6/dCDgriCLD8rKyIsu1vFt8y2qlUhsd/OgtjpZ2oaMhsJRzv1aO+
+         vzPRrkg/9OdFkwIV2Pk3+FSTQ1/RAtbrOfbUMHwDRlq54u89NrK8RoJsrvDeWwfvIO
+         ewHvePbW8p0tQ==
+To:     John Wood <john.wood@gmx.com>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Arnd Bergmann <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>,
+        valdis.kletnieks@vt.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH v8 3/8] security/brute: Detect a brute force attack
+Message-ID: <20210701234807.50453-1-alobakin@pm.me>
 MIME-Version: 1.0
-In-Reply-To: <878s2qh2bb.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: tl
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:yrIhHVBkyeQUmrUAbNBdH57c14ndQpRwW0g3SJYcM7nPaEhvs+9
- wKa0zGh20qrmugmIuA4P9vJCeA2XSW5HhAI2sxloXcThdYd6ltSBt1yK0JIzhqIBOZL4Xf3
- FSLB3gDXr5JMyEWsoswFTvjniNKBDDtah0wicV6K09Wixg1E4GDwD6H/R6ZsXLWTQRDcOw8
- L02pRUeImwD7gOD+9kTaQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GOa+F/xu6gc=:kTj0e2FFcmC0xavUgUvh9D
- 08y2L85aPpsUvlhoa+PeCQUt/olDwNbhroJWHyVnRsQy2hff+paqpfMMX3xlXU4a+3w3vPQdu
- 9RLs9GVVxuSXwZVya+da2bYnEocHQGoeGCqQoIWuuTRZfL9AG68BGPTf6L6riM6IIe7+1iX1W
- cSYH3LJu7pv4yw9WgNiOyEQD+Tmgp6UIEVMLahuEFnx3mUCu4TAXvb7Yku2nTE8Pnjix+YbYb
- GfHD0fQgijzyYkN7MDefH/Q1Z/e0UaxQK9+d7yjeUZr2OwWF605OAxGeyT4RrpSm05LF/e7Gb
- ZblmAR8RkEWP/B2khU9shfCwyH3legBzSwo8r1BW4GDxHFYSyrpWvHBD5jmTjkrPzJ4flmeD/
- CSS0AujMi9Sd/EHpV+dDJM6s+4oJxEJfous0tcqJTLPVShadnhqpoJ3iP8RqcMQhOzlFfs6NB
- VgeczPBa0h7DPc6iX7YuQuoGjTPj9xetpGGfswaRl1cik+CHoBVSQFPYVdVVXPXmb81xsbc/n
- q2g+pmghpQxsfP9K5BnQBJqqjmGxy3kq5U+7FZQS6Irp/QyQPZv4eUOBPEalNWZYteNQXaLuv
- jvlRRM6+1XY9gmaP1DZEC0VnLCm3yh8t40JN0sbJbeMM+nVUXDHjmxk27yOC9CygmmMVTP48k
- QYwG0WM1zsjPqnFpB+QxRAlFg3pg39y5dQ2RXqL5MRiAyzgVFd1dW68HhBCMjR3PyOs2AZD+I
- ab2G2tho4ZISseNFDkt2OnpEwaKyshamDoJnVYNKoc8qPZrI0c5qzo9cKKRtFvDUV4RSHu9MU
- lIDOHOV1OvMsFTfZazr2Wg1tQzMPZLKeEk7wBZEa22FNv7MVRRfdPNteObO5W1zVhNmF3BJ
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 01.07.21 10:21, Florian Weimer wrote:
-> * Enrico Weigelt:
-> 
->> And I'm repeating my previous questions: can you name some actual real
->> world (not hypothetical or academical) scenarios where:
->>
->> somebody really needs some binary-only application &&
->> needs those extra modules *into that* application &&
->> cannot recompile these modules into the applications's prefix &&
->> needs AMX in that application &&
->> cannot just use chroot &&
->> cannot put it into container ?
-> 
-> There are no real-world scenarios yet which involve AMX, so I'm not sure
-> what you are after with this question.
+Hi,
 
-Okay, let's take AMX out of the equation (until it actually arrives
-in the field). How does it look like then ?
+From: John Wood <john.wood@gmx.com>
+Date: Sat, 5 Jun 2021 17:04:00 +0200
 
+> For a correct management of a fork brute force attack it is necessary to
+> track all the information related to the application crashes. To do so,
+> use the extended attributes (xattr) of the executable files and define a
+> statistical data structure to hold all the necessary information shared
+> by all the fork hierarchy processes. This info is the number of crashes,
+> the last crash timestamp and the crash period's moving average.
+>
+> The same can be achieved using a pointer to the fork hierarchy
+> statistical data held by the task_struct structure. But this has an
+> important drawback: a brute force attack that happens through the execve
+> system call losts the faults info since these statistics are freed when
+> the fork hierarchy disappears. Using this method makes not possible to
+> manage this attack type that can be successfully treated using extended
+> attributes.
+>
+> Also, to avoid false positives during the attack detection it is
+> necessary to narrow the possible cases. So, only the following scenarios
+> are taken into account:
+>
+> 1.- Launching (fork()/exec()) a setuid/setgid process repeatedly until a
+>     desirable memory layout is got (e.g. Stack Clash).
+> 2.- Connecting to an exec()ing network daemon (e.g. xinetd) repeatedly
+>     until a desirable memory layout is got (e.g. what CTFs do for simple
+>     network service).
+> 3.- Launching processes without exec() (e.g. Android Zygote) and
+>     exposing state to attack a sibling.
+> 4.- Connecting to a fork()ing network daemon (e.g. apache) repeatedly
+>     until the previously shared memory layout of all the other children
+>     is exposed (e.g. kind of related to HeartBleed).
+>
+> In each case, a privilege boundary has been crossed:
+>
+> Case 1: setuid/setgid process
+> Case 2: network to local
+> Case 3: privilege changes
+> Case 4: network to local
+>
+> To mark that a privilege boundary has been crossed it is only necessary
+> to create a new stats for the executable file via the extended attribute
+> and only if it has no previous statistical data. This is done using four
+> different LSM hooks, one per privilege boundary:
+>
+> setuid/setgid process --> bprm_creds_from_file hook (based on secureexec
+>                           flag).
+> network to local -------> socket_accept hook (taking into account only
+>                           external connections).
+> privilege changes ------> task_fix_setuid and task_fix_setgid hooks.
+>
+> To detect a brute force attack it is necessary that the executable file
+> statistics be updated in every fatal crash and the most important data
+> to update is the application crash period. To do so, use the new
+> "task_fatal_signal" LSM hook added in a previous step.
+>
+> The application crash period must be a value that is not prone to change
+> due to spurious data and follows the real crash period. So, to compute
+> it, the exponential moving average (EMA) is used.
+>
+> Based on the updated statistics two different attacks can be handled. A
+> slow brute force attack that is detected if the maximum number of faults
+> per fork hierarchy is reached and a fast brute force attack that is
+> detected if the application crash period falls below a certain
+> threshold.
+>
+> Moreover, only the signals delivered by the kernel are taken into
+> account with the exception of the SIGABRT signal since the latter is
+> used by glibc for stack canary, malloc, etc failures, which may indicate
+> that a mitigation has been triggered.
+>
+> Signed-off-by: John Wood <john.wood@gmx.com>
+>
+> <snip>
+>
+> +static int brute_get_xattr_stats(struct dentry *dentry, struct inode *in=
+ode,
+> +=09=09=09=09 struct brute_stats *stats)
+> +{
+> +=09int rc;
+> +=09struct brute_raw_stats raw_stats;
+> +
+> +=09rc =3D __vfs_getxattr(dentry, inode, XATTR_NAME_BRUTE, &raw_stats,
+> +=09=09=09    sizeof(raw_stats));
+> +=09if (rc < 0)
+> +=09=09return rc;
+> +
+> +=09stats->faults =3D le32_to_cpu(raw_stats.faults);
+> +=09stats->nsecs =3D le64_to_cpu(raw_stats.nsecs);
+> +=09stats->period =3D le64_to_cpu(raw_stats.period);
+> +=09stats->flags =3D raw_stats.flags;
+> +=09return 0;
+> +}
+>
+> <snip>
+>
+> +static int brute_task_execve(struct linux_binprm *bprm, struct file *fil=
+e)
+> +{
+> +=09struct dentry *dentry =3D file_dentry(bprm->file);
+> +=09struct inode *inode =3D file_inode(bprm->file);
+> +=09struct brute_stats stats;
+> +=09int rc;
+> +
+> +=09inode_lock(inode);
+> +=09rc =3D brute_get_xattr_stats(dentry, inode, &stats);
+> +=09if (WARN_ON_ONCE(rc && rc !=3D -ENODATA))
+> +=09=09goto unlock;
 
---mtx
+I think I caught a problem here. Have you tested this with
+initramfs?
 
--- 
----
-Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
-werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
-GPG/PGP-Schlüssel zu.
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+According to init/do_mount.c's
+init_rootfs()/rootfs_init_fs_context(), when `root=3D` cmdline
+parameter is not empty, kernel creates rootfs of type ramfs
+(tmpfs otherwise).
+The thing about ramfs is that it doesn't support xattrs.
+
+I'm running this v8 on a regular PC with initramfs and having
+`root=3D` in cmdline, and Brute doesn't allow the kernel to run
+any init processes (/init, /sbin/init, ...) with err =3D=3D -95
+(-EOPNOTSUPP) -- I'm getting a
+
+WARNING: CPU: 0 PID: 173 at brute_task_execve+0x15d/0x200
+<snip>
+Failed to execute /init (error -95)
+
+and so on (and a panic at the end).
+
+If I omit `root=3D` from cmdline, then the kernel runs init process
+just fine -- I guess because initramfs is then placed inside tmpfs
+with xattr support.
+
+As for me, this ramfs/tmpfs selection based on `root=3D` presence
+is ridiculous and I don't see or know any reasons behind that.
+But that's another story, and ramfs might be not the only one
+system without xattr support.
+I think Brute should have a fallback here, e.g. it could simply
+ignore files from xattr-incapable filesystems instead of such
+WARNING splats and stuff.
+
+> +
+> +=09if (rc =3D=3D -ENODATA && bprm->secureexec) {
+> +=09=09brute_reset_stats(&stats);
+> +=09=09rc =3D brute_set_xattr_stats(dentry, inode, &stats);
+> +=09=09if (WARN_ON_ONCE(rc))
+> +=09=09=09goto unlock;
+> +=09}
+> +
+> +=09rc =3D 0;
+> +unlock:
+> +=09inode_unlock(inode);
+> +=09return rc;
+> +}
+> +
+>
+> <snip>
+
+Thanks,
+Al
+
