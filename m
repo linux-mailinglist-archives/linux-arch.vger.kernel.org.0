@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C6E3BA06A
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Jul 2021 14:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDF33BA06D
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Jul 2021 14:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbhGBMez (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Jul 2021 08:34:55 -0400
-Received: from mail-ej1-f42.google.com ([209.85.218.42]:41651 "EHLO
-        mail-ej1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbhGBMey (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Jul 2021 08:34:54 -0400
-Received: by mail-ej1-f42.google.com with SMTP id b2so15878161ejg.8;
-        Fri, 02 Jul 2021 05:32:21 -0700 (PDT)
+        id S232200AbhGBMfB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Jul 2021 08:35:01 -0400
+Received: from mail-ej1-f52.google.com ([209.85.218.52]:39597 "EHLO
+        mail-ej1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232228AbhGBMfA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Jul 2021 08:35:00 -0400
+Received: by mail-ej1-f52.google.com with SMTP id hp26so3136983ejc.6;
+        Fri, 02 Jul 2021 05:32:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=T4puU0S79nYZVJxL5330o71fJ7BCxyuoFiktDEi3Ycs=;
-        b=G8FKl5fhTxHwOR0rGYgi3IkEc3cbBP5z3W8XuXrgShfuhqcg7eDGRdFrnjhPjhLtPC
-         /vmeInZ77PC+5dMb+AL0/9xebCGV+62606RHfugB423iKtlF78aPlD5DhdAMRs1kHCg4
-         T2VxBy+a76XEaedo674FRRgvMHcE8NGkIBvA/rdKy7EVJkwVvaFToXc7rOhDr0Dg9Ch4
-         xe65V5rCdQC5d0XvYGwGsefyin4rAYtdEHOgUgHp2ev79/JnJ5ojLoX4YQRJhRnOrpQ1
-         KuyuFFualQU5e/dRUzOdLcnhi4zQ1tYKoWGn9x3MVD1MLjazqKFFoaj7wgRS2R5RvaTZ
-         BbkQ==
-X-Gm-Message-State: AOAM530Kc22Fx6ZmlHQJtIMYAsXlJSQpt1ZpLbEm2a1mXAjJYFd9eerr
-        sCCpzOHS0M6VPBspT2ZfTsYKZhaMi+hC/A==
-X-Google-Smtp-Source: ABdhPJzVbfW2f5ok3CMI+LmMsoURAHir44e7S77s4RVSljg6S5X+t1PvRrH04Og7dFUH6Z5AD+3Xug==
-X-Received: by 2002:a17:906:2bd9:: with SMTP id n25mr5046575ejg.513.1625229140622;
-        Fri, 02 Jul 2021 05:32:20 -0700 (PDT)
+        bh=o6ZDZDCvhi/aYSH4+o4WB0jbVOX9Yf7JZyqDclGvSvg=;
+        b=RxLVEXFe1ZOqlo95ZCKImSbLkM93C3aTVIrD1jipfq0PYcGC6u0bMuOMcnaWXq/A03
+         emTFg+3AwnvEffV2+CLG8riG2g1Zj1qlpm3ivBKQa3sWSCMbsKTcYeu9UxM3r13b0bcF
+         Y0E2XzP6u2se5IvtQfeyULy3o2/HfsHkudXhGO8e8GxCl5uDkwo25DVa0++FYb0WqGm6
+         mUjDmOMxf1Xho+0OLnDAnSH5aaZA+Ey9eXSbLYmhqqTT5as+tV68+j7T0HM8/IvALLe/
+         64uIpW2YYHQdoVZUzIcOu7puQzd+g4ut+uSIi6MaLkkfun4/aE0ACtYSm4HwD3StG3Z6
+         xFow==
+X-Gm-Message-State: AOAM530GPvH1ItIC2Dn/8RJW6xAGRaPAEMzFaYX02BXsVQKvhB1k5rN3
+        8t0sNg9dumy6lJM4lu+y2F7uZ/ab2nIN4Q==
+X-Google-Smtp-Source: ABdhPJwQrfzQ1h6zczBdfLb25MTXk3GdnKc5nFaDGxDMgWYbUpCHG31dhKgZ9CSECScHKbbT4BunVg==
+X-Received: by 2002:a17:906:9b86:: with SMTP id dd6mr4909110ejc.100.1625229142346;
+        Fri, 02 Jul 2021 05:32:22 -0700 (PDT)
 Received: from msft-t490s.fritz.box (host-80-182-89-242.retail.telecomitalia.it. [80.182.89.242])
-        by smtp.gmail.com with ESMTPSA id c3sm1290189edy.0.2021.07.02.05.32.19
+        by smtp.gmail.com with ESMTPSA id c3sm1290189edy.0.2021.07.02.05.32.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jul 2021 05:32:20 -0700 (PDT)
+        Fri, 02 Jul 2021 05:32:21 -0700 (PDT)
 From:   Matteo Croce <mcroce@linux.microsoft.com>
 To:     linux-kernel@vger.kernel.org, Nick Kossifidis <mick@ics.forth.gr>,
         Guo Ren <guoren@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     linux-arch@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v2 2/3] lib/string: optimized memmove
-Date:   Fri,  2 Jul 2021 14:31:52 +0200
-Message-Id: <20210702123153.14093-3-mcroce@linux.microsoft.com>
+Subject: [PATCH v2 3/3] lib/string: optimized memset
+Date:   Fri,  2 Jul 2021 14:31:53 +0200
+Message-Id: <20210702123153.14093-4-mcroce@linux.microsoft.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210702123153.14093-1-mcroce@linux.microsoft.com>
 References: <20210702123153.14093-1-mcroce@linux.microsoft.com>
@@ -59,48 +59,69 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Matteo Croce <mcroce@microsoft.com>
 
-When the destination buffer is before the source one, or when the
-buffers doesn't overlap, it's safe to use memcpy() instead, which is
-optimized to use a bigger data size possible.
+The generic memset is defined as a byte at time write. This is always
+safe, but it's slower than a 4 byte or even 8 byte write.
 
-This "optimization" only covers a common case. In future, proper code
-which does the same thing as memcpy() does but backwards can be done.
+Write a generic memset which fills the data one byte at time until the
+destination is aligned, then fills using the largest size allowed,
+and finally fills the remaining data one byte at time.
+
+On a RISC-V machine the speed goes from 140 Mb/s to 241 Mb/s,
+and this the binary size increase according to bloat-o-meter:
+
+Function     old     new   delta
+memset        32     148    +116
 
 Signed-off-by: Matteo Croce <mcroce@microsoft.com>
 ---
- lib/string.c | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+ lib/string.c | 32 ++++++++++++++++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
 diff --git a/lib/string.c b/lib/string.c
-index caeef4264c43..108b83c34cec 100644
+index 108b83c34cec..264821f0e795 100644
 --- a/lib/string.c
 +++ b/lib/string.c
-@@ -975,19 +975,13 @@ EXPORT_SYMBOL(memcpy);
+@@ -810,10 +810,38 @@ EXPORT_SYMBOL(__sysfs_match_string);
   */
- void *memmove(void *dest, const void *src, size_t count)
+ void *memset(void *s, int c, size_t count)
  {
--	char *tmp;
--	const char *s;
-+	if (dest < src || src + count <= dest)
-+		return memcpy(dest, src, count);
-+
-+	if (dest > src) {
-+		const char *s = src + count;
-+		char *tmp = dest + count;
+-	char *xs = s;
++	union types dest = { .as_u8 = s };
  
--	if (dest <= src) {
--		tmp = dest;
--		s = src;
--		while (count--)
--			*tmp++ = *s++;
--	} else {
--		tmp = dest;
--		tmp += count;
--		s = src;
--		s += count;
- 		while (count--)
- 			*--tmp = *--s;
- 	}
++	if (count >= MIN_THRESHOLD) {
++		unsigned long cu = (unsigned long)c;
++
++		/* Compose an ulong with 'c' repeated 4/8 times */
++#ifdef CONFIG_ARCH_HAS_FAST_MULTIPLIER
++		cu *= 0x0101010101010101UL;
++#else
++		cu |= cu << 8;
++		cu |= cu << 16;
++		/* Suppress warning on 32 bit machines */
++		cu |= (cu << 16) << 16;
++#endif
++		if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
++			/*
++			 * Fill the buffer one byte at time until
++			 * the destination is word aligned.
++			 */
++			for (; count && dest.as_uptr & WORD_MASK; count--)
++				*dest.as_u8++ = c;
++		}
++
++		/* Copy using the largest size allowed */
++		for (; count >= BYTES_LONG; count -= BYTES_LONG)
++			*dest.as_ulong++ = cu;
++	}
++
++	/* copy the remainder */
+ 	while (count--)
+-		*xs++ = c;
++		*dest.as_u8++ = c;
++
+ 	return s;
+ }
+ EXPORT_SYMBOL(memset);
 -- 
 2.31.1
 
