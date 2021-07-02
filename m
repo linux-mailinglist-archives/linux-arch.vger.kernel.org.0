@@ -2,126 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDF33BA06D
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Jul 2021 14:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6EA3BA192
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Jul 2021 15:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbhGBMfB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Jul 2021 08:35:01 -0400
-Received: from mail-ej1-f52.google.com ([209.85.218.52]:39597 "EHLO
-        mail-ej1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbhGBMfA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Jul 2021 08:35:00 -0400
-Received: by mail-ej1-f52.google.com with SMTP id hp26so3136983ejc.6;
-        Fri, 02 Jul 2021 05:32:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=o6ZDZDCvhi/aYSH4+o4WB0jbVOX9Yf7JZyqDclGvSvg=;
-        b=RxLVEXFe1ZOqlo95ZCKImSbLkM93C3aTVIrD1jipfq0PYcGC6u0bMuOMcnaWXq/A03
-         emTFg+3AwnvEffV2+CLG8riG2g1Zj1qlpm3ivBKQa3sWSCMbsKTcYeu9UxM3r13b0bcF
-         Y0E2XzP6u2se5IvtQfeyULy3o2/HfsHkudXhGO8e8GxCl5uDkwo25DVa0++FYb0WqGm6
-         mUjDmOMxf1Xho+0OLnDAnSH5aaZA+Ey9eXSbLYmhqqTT5as+tV68+j7T0HM8/IvALLe/
-         64uIpW2YYHQdoVZUzIcOu7puQzd+g4ut+uSIi6MaLkkfun4/aE0ACtYSm4HwD3StG3Z6
-         xFow==
-X-Gm-Message-State: AOAM530GPvH1ItIC2Dn/8RJW6xAGRaPAEMzFaYX02BXsVQKvhB1k5rN3
-        8t0sNg9dumy6lJM4lu+y2F7uZ/ab2nIN4Q==
-X-Google-Smtp-Source: ABdhPJwQrfzQ1h6zczBdfLb25MTXk3GdnKc5nFaDGxDMgWYbUpCHG31dhKgZ9CSECScHKbbT4BunVg==
-X-Received: by 2002:a17:906:9b86:: with SMTP id dd6mr4909110ejc.100.1625229142346;
-        Fri, 02 Jul 2021 05:32:22 -0700 (PDT)
-Received: from msft-t490s.fritz.box (host-80-182-89-242.retail.telecomitalia.it. [80.182.89.242])
-        by smtp.gmail.com with ESMTPSA id c3sm1290189edy.0.2021.07.02.05.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jul 2021 05:32:21 -0700 (PDT)
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org, Nick Kossifidis <mick@ics.forth.gr>,
-        Guo Ren <guoren@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Drew Fustini <drew@beagleboard.org>
-Cc:     linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v2 3/3] lib/string: optimized memset
-Date:   Fri,  2 Jul 2021 14:31:53 +0200
-Message-Id: <20210702123153.14093-4-mcroce@linux.microsoft.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210702123153.14093-1-mcroce@linux.microsoft.com>
-References: <20210702123153.14093-1-mcroce@linux.microsoft.com>
+        id S232563AbhGBNuk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Jul 2021 09:50:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49980 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232386AbhGBNuk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 2 Jul 2021 09:50:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 910436142B;
+        Fri,  2 Jul 2021 13:48:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625233688;
+        bh=2sqvaKpsBfNMgq83CEar15dETBn3QWs27Pt8LM/rCwM=;
+        h=From:Date:Subject:To:Cc:From;
+        b=rc62/bOo5T2jDzR4RHPSTBU9uRAByYE4yKqqeivveY0JA8eJssOJVIEfs4EEX9KR4
+         IrPz2C1OHXFxfio5zL9ScYUVfVpHi+OjIZlwgHNng3KBYm8KKAL+dYGLu889KvdIss
+         fVFNvo7E+VSwodDiRF+vWIF4GJDR3Zy+uNmCHZ7vaEazMC3DpeWUDWUVlwaDhSqKcx
+         QMu8wJv7wuaNTcicgKSOeNP+BaC1q/oUQKf/u0QWsAc2DHQsPrc4+Eep50U/kLxyhq
+         umlzUc/4pDN/spuMUbKadOeONFFU/IcYgJTX1atZh8dGPu9YZwT2y3EJSMHgQDUxPa
+         Fpxib2ruZpQNQ==
+Received: by mail-wr1-f42.google.com with SMTP id a13so12520603wrf.10;
+        Fri, 02 Jul 2021 06:48:08 -0700 (PDT)
+X-Gm-Message-State: AOAM531HmZiGYBoh4yGtqDG8rEH7cLPaeeQKb4FsoqEaMP3mIm/oV+SN
+        M003SqBHeS269JAKkVMVYp8i4/Nmzd2ixxRW/Ko=
+X-Google-Smtp-Source: ABdhPJxjuAcWk+fUW2iebkdnRr3QNskMI/RshqdGsVxS1+zazUtNB4DLWU+IzcKQARqYjKSwvSI4o2tSJmitDSPbyTM=
+X-Received: by 2002:adf:ee10:: with SMTP id y16mr6057171wrn.99.1625233687201;
+ Fri, 02 Jul 2021 06:48:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 2 Jul 2021 15:47:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+Message-ID: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+Subject: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Matteo Croce <mcroce@microsoft.com>
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
-The generic memset is defined as a byte at time write. This is always
-safe, but it's slower than a 4 byte or even 8 byte write.
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 
-Write a generic memset which fills the data one byte at time until the
-destination is aligned, then fills using the largest size allowed,
-and finally fills the remaining data one byte at time.
+are available in the Git repository at:
 
-On a RISC-V machine the speed goes from 140 Mb/s to 241 Mb/s,
-and this the binary size increase according to bloat-o-meter:
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+tags/asm-generic-pci-ioport-5.14
 
-Function     old     new   delta
-memset        32     148    +116
+for you to fetch changes up to 5ae6eadfdaf431f47adbdf1754f3b5a5fd638de2:
 
-Signed-off-by: Matteo Croce <mcroce@microsoft.com>
----
- lib/string.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
+  asm-generic/io.h: warn in inb() and friends with undefined
+PCI_IOBASE (2021-05-10 17:37:55 +0200)
 
-diff --git a/lib/string.c b/lib/string.c
-index 108b83c34cec..264821f0e795 100644
---- a/lib/string.c
-+++ b/lib/string.c
-@@ -810,10 +810,38 @@ EXPORT_SYMBOL(__sysfs_match_string);
-  */
- void *memset(void *s, int c, size_t count)
- {
--	char *xs = s;
-+	union types dest = { .as_u8 = s };
- 
-+	if (count >= MIN_THRESHOLD) {
-+		unsigned long cu = (unsigned long)c;
-+
-+		/* Compose an ulong with 'c' repeated 4/8 times */
-+#ifdef CONFIG_ARCH_HAS_FAST_MULTIPLIER
-+		cu *= 0x0101010101010101UL;
-+#else
-+		cu |= cu << 8;
-+		cu |= cu << 16;
-+		/* Suppress warning on 32 bit machines */
-+		cu |= (cu << 16) << 16;
-+#endif
-+		if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
-+			/*
-+			 * Fill the buffer one byte at time until
-+			 * the destination is word aligned.
-+			 */
-+			for (; count && dest.as_uptr & WORD_MASK; count--)
-+				*dest.as_u8++ = c;
-+		}
-+
-+		/* Copy using the largest size allowed */
-+		for (; count >= BYTES_LONG; count -= BYTES_LONG)
-+			*dest.as_ulong++ = cu;
-+	}
-+
-+	/* copy the remainder */
- 	while (count--)
--		*xs++ = c;
-+		*dest.as_u8++ = c;
-+
- 	return s;
- }
- EXPORT_SYMBOL(memset);
--- 
-2.31.1
+----------------------------------------------------------------
+asm-generic: rework PCI I/O space access
 
+A rework for PCI I/O space access from Niklas Schnelle:
+
+  "This is version 5 of my attempt to get rid of a clang
+  -Wnull-pointer-arithmetic warning for the use of PCI_IOBASE in
+  asm-generic/io.h. This was originally found on s390 but should apply to
+  all platforms leaving PCI_IOBASE undefined while making use of the inb()
+  and friends helpers from asm-generic/io.h.
+
+  This applies cleanly and was compile tested on top of v5.12 for the
+  previously broken ARC, nds32, h8300 and risc-v architecture. It also
+  applies cleanly on v5.13-rc1 for which I boot tested it on s390.
+
+  I did boot test this only on x86_64 and s390x the former implements
+  inb() itself while the latter would emit a WARN_ONCE() but no drivers
+  use inb().
+
+Link: https://lore.kernel.org/lkml/20210510145234.594814-1-schnelle@linux.ibm.com/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Niklas Schnelle (3):
+      sparc: explicitly set PCI_IOBASE to 0
+      risc-v: Use generic io.h helpers for nommu
+      asm-generic/io.h: warn in inb() and friends with undefined PCI_IOBASE
+
+ arch/riscv/include/asm/io.h |  5 +++--
+ arch/sparc/include/asm/io.h |  8 ++++++++
+ include/asm-generic/io.h    | 68
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 75 insertions(+), 6 deletions(-)
