@@ -2,60 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFCD3BA491
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Jul 2021 22:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929263BA84D
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Jul 2021 13:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbhGBUQN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Jul 2021 16:16:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39586 "EHLO mail.kernel.org"
+        id S230196AbhGCLDm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 3 Jul 2021 07:03:42 -0400
+Received: from mout.gmx.net ([212.227.17.21]:53219 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231157AbhGBUQM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 2 Jul 2021 16:16:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 46C4961413;
-        Fri,  2 Jul 2021 20:13:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625256820;
-        bh=HUOZ+C2wIyg73qzEvZVd6hqiaAxDw34zAvWf1aRunpA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=r09QVE0lPh+yu/QTnvUTIh/0JmANf+wMamx6Fl+IXoEfN1NgaKCyGEeun4kOlMYmT
-         uhKnSc1cRPhDuKUMRd5Iez9Qwdv1XAXubnprTFjacNJC8U8VSRBaOyWVZko+z7U8ka
-         QHZi/D6C+j8xh5eicPbdFeCskQUigNcYO9xxzTklAuAjcugC9NYJ/FUsqmL8RvRafQ
-         DOH/1m/ByBONBB/qgYGNHzBAbgIW9Wj3M76Y7OHyZRehgKdDHtLT6nhe9VpiE1Va0R
-         a6kwMLY25WMFBJ0ZhBVTFpbzVs/bqKJl88GJoPwV4LfNi/wQLvJuSMQ+kycJKabRRt
-         JuwpkY7V8GyOA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3F288609E4;
-        Fri,  2 Jul 2021 20:13:40 +0000 (UTC)
-Subject: Re: [GIT PULL 2/2] asm-generic: Unify asm/unaligned.h around struct helper
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a3Y1FHaS0yRAeBYmq0Z-yXtvHBRRiO1tNHKf-TaWVrFzQ@mail.gmail.com>
-References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com> <CAK8P3a3Y1FHaS0yRAeBYmq0Z-yXtvHBRRiO1tNHKf-TaWVrFzQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAK8P3a3Y1FHaS0yRAeBYmq0Z-yXtvHBRRiO1tNHKf-TaWVrFzQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-unaligned-5.14
-X-PR-Tracked-Commit-Id: 803f4e1eab7a8938ba3a3c30dd4eb5e9eeef5e63
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4cad67197989c81417810b89f09a3549b75a2441
-Message-Id: <162525682025.6172.3953171867366042769.pr-tracker-bot@kernel.org>
-Date:   Fri, 02 Jul 2021 20:13:40 +0000
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S230114AbhGCLDm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 3 Jul 2021 07:03:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1625309984;
+        bh=x6a2MKj2i7ny1X6EqqStry+6FExFMd0ABQRz2nQeLYo=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Wiw7YHneNAj0vRJgTC3prnFX86jII+xEDVN++I+m01JfvLFWKYMxNJThVpPmfNaMr
+         0l1XkxxecRdMGd/ExVwB/L5tXY2XP/EGhE0aQbXZspLThbZgfj0sACe7WncRlHxXDF
+         B6jPov8MEaN5iDIh2XMcRMHpdZpAmshp2gYuSPWM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ubuntu ([83.52.228.41]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MC34X-1luSIn2S7R-00CSAc; Sat, 03
+ Jul 2021 12:59:44 +0200
+Date:   Sat, 3 Jul 2021 12:59:28 +0200
+From:   John Wood <john.wood@gmx.com>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     John Wood <john.wood@gmx.com>, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Arnd Bergmann <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>,
+        valdis.kletnieks@vt.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: Re: [PATCH v8 3/8] security/brute: Detect a brute force attack
+Message-ID: <20210703105928.GA2830@ubuntu>
+References: <20210701234807.50453-1-alobakin@pm.me>
+ <20210702145954.GA4513@ubuntu>
+ <20210702170101.16116-1-alobakin@pm.me>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210702170101.16116-1-alobakin@pm.me>
+X-Provags-ID: V03:K1:IYa/f7HkDU74IlmbpIDqxZ4UnHLocuh2xK/SRcmGwjgHVE0HPwO
+ uvk+ZKPo3XYM/EQ0BhfLQneFfb/z4C4sbQPYymJxVpCLHfTj4keZV746Dag/i+ohT+Tx1/V
+ AzMPePnTmSZE/IiVBtMBldhthrEDhpmLHPUvlxEw3x6L7ewUJ/S8yXJnOJgUuMKIApCRwsB
+ 4agKpfVPAEAY+DauJZ2HA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DDK8tn1k2vk=:EF86SSfY5Vi1KOs8AADY/a
+ 3Cq2nb4xqxxZWH6qOL0VjCqZO9d4DZ7Xx/yAQlHXGZaBU+BQ//fuZI6ljkHqeWhwUkyLivscc
+ qJgrFJ313EhAax10IlN6i1M2HXjw7HFxHekHYXtWwHUYHiWGVHeFwp3HWdCHEbX21FM/z6bXL
+ zbscFiWSbWbcUUPbI4VBKkn12UFjq4r/w+sJ3Wkjny6xTDMx8wbkpoSBxAt0PC2QPFtFZPuM2
+ sSm+saVCm0M1Eiqc9eizWMW64iyInEgBFtl/OJgcUzWq32x9bffwJ2rRgCSnXY24TrNgA0eo9
+ JuqFZjKk3zr/20QNa8alL/Szxz+uUm5vc26NKd1EUyj67cJ+MxBKjcZfRJ4UMeSWIz2rK2H/Y
+ uNP6v0PiZxFM2+MrI8UWw4WB74DT8jySibpghnRylZJs0Zpxj488MnwjJpEcugPNQyH6TkvoV
+ XyV+/H9qAca+7u803Q3j9Vd/CFiLjyg7/nNcVpWALQe2Yu6R/6OE8VjwSTFFj37xS7ZDhtQ29
+ xdJuoIZO7calbQyUhmUsCL2R38DX+T5ozjbZMc9nKiaTIWhqS70cw/HDnyAi+SYt+STd8Dc3h
+ xeIMzJmj5dh47yDhj3YDLxvhLR1toQzatbzLPCnFzt8FflC/wTt5aLeCUlhgUjQXmEqCPKtKb
+ 7klmaSE/q595gmB8f2vi9R2LVvqG1UnyniXMCPW8nK0M0fLu4A45lUI3YpltthQPiHyO6nFKq
+ Q/EeJiCLhjlyXwrEVTEE0KXA0n7zeYn6YN8h+xbC5dVYHOuiyi/eHBVur9KI9YV8lvxIYngGL
+ VhgBJG4qW9KikFkNqMW1vmycs/t4n3KK0LaIZ0mIWF9WbTi7L5Vmd5EddLHnus9fnZQ9uUMcJ
+ Knw313I1cIzVHCWrbb2vGYEOmMWa+3833cxeeRkazB2b9GD8HV4otN6tlw0/5zPjSVSoNlDhn
+ Vevn56H0Y2whovHFCeakw8UqVk0gBkGsJSAMKzdVigvQcZYJ1B2lvCBf4/KiJYCrBwLPc0M/t
+ CVgINq6H165/dOQ56gS1Fn1YxsFGT8XM0HMzCXZPplvjeA2uDcschlVNk3gPtiXpax5kZoD76
+ SG2hbzUGdtKbMfttCXBP3mz/FXlbgtHans7
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The pull request you sent on Fri, 2 Jul 2021 15:49:30 +0200:
+Hi,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-unaligned-5.14
+On Fri, Jul 02, 2021 at 05:08:09PM +0000, Alexander Lobakin wrote:
+>
+> On the other hand, it leaves a potentional window for attackers to
+> perform brute force from xattr-incapable filesystems. So at the end
+> of the day I think that the current implementation (a strong
+> rejection of such filesystems) is way more secure than having
+> a fallback I proposed.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4cad67197989c81417810b89f09a3549b75a2441
+I've been thinking more about this: that the Brute LSM depends on xattr
+support and I don't like this part. I want that brute force attacks can
+be detected and mitigated on every system (with minimal dependencies).
+So, now I am working in a solution without this drawback. I have some
+ideas but I need to work on it.
 
-Thank you!
+> I'm planning to make a patch which will eliminate such weird rootfs
+> type selection and just always use more feature-rich tmpfs if it's
+> compiled in. So, as an alternative, you could add it to your series
+> as a preparatory change and just add a Kconfig dependency on
+> CONFIG_TMPFS && CONFIG_TMPFS_XATTR to CONFIG_SECURITY_FORK_BRUTE
+> without messing with any fallbacks at all.
+> What do you think?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Great. But I hope this patch will not be necessary for Brute LSM :)
+
+Thanks,
+John Wood
