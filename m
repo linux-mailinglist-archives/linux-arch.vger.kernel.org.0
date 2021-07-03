@@ -2,108 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 929263BA84D
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Jul 2021 13:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF7B3BA8A8
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Jul 2021 14:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbhGCLDm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 3 Jul 2021 07:03:42 -0400
-Received: from mout.gmx.net ([212.227.17.21]:53219 "EHLO mout.gmx.net"
+        id S230221AbhGCMPR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 3 Jul 2021 08:15:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59394 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230114AbhGCLDm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 3 Jul 2021 07:03:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1625309984;
-        bh=x6a2MKj2i7ny1X6EqqStry+6FExFMd0ABQRz2nQeLYo=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Wiw7YHneNAj0vRJgTC3prnFX86jII+xEDVN++I+m01JfvLFWKYMxNJThVpPmfNaMr
-         0l1XkxxecRdMGd/ExVwB/L5tXY2XP/EGhE0aQbXZspLThbZgfj0sACe7WncRlHxXDF
-         B6jPov8MEaN5iDIh2XMcRMHpdZpAmshp2gYuSPWM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ubuntu ([83.52.228.41]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MC34X-1luSIn2S7R-00CSAc; Sat, 03
- Jul 2021 12:59:44 +0200
-Date:   Sat, 3 Jul 2021 12:59:28 +0200
-From:   John Wood <john.wood@gmx.com>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     John Wood <john.wood@gmx.com>, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>,
-        valdis.kletnieks@vt.edu,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v8 3/8] security/brute: Detect a brute force attack
-Message-ID: <20210703105928.GA2830@ubuntu>
-References: <20210701234807.50453-1-alobakin@pm.me>
- <20210702145954.GA4513@ubuntu>
- <20210702170101.16116-1-alobakin@pm.me>
+        id S230209AbhGCMPR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 3 Jul 2021 08:15:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 092FA61934;
+        Sat,  3 Jul 2021 12:12:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625314364;
+        bh=1mLMGaBe3T8PNBo9Ly3kN5L7hm+00YAjMpTfySrZV6c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oFAhw8N4IyGvi+9Wdqp1rBC20SM5p55/NOmWMbKMhsxdFEaI2fUVVfmLo0tUtEokC
+         20R3S9EpwD2vZRpPjVDTkargqOVbOe33P3EhxOwhuNMZZY45WVmUpYiGuqDDDndg8i
+         6sFCbeJFaM0C7BePLbRhJqwkO1KmQECBYOvUO0zmW28SuHzZ9qoSRyN2fq1j5IUKBx
+         ICTlU80cr/+o2MJmaEjD4ad8nU8RYE303v4dnliAZSxnk5pEJOiFzIylay/7/dQNb8
+         2Y3EZgjS4sHhhvXr/guu9l1MWIG2/7QUUP6YOJIdqkpdStR1z7DBYCEtFySPkSO3bq
+         OyDFkHDIQhwaw==
+Received: by mail-wr1-f51.google.com with SMTP id m18so15902732wrv.2;
+        Sat, 03 Jul 2021 05:12:43 -0700 (PDT)
+X-Gm-Message-State: AOAM53177Q7+34ieDTtHC6Hhe+qNGCWwV+r58LD2qdeh6gwrG/gCIi6W
+        +iZewo6JIXHanKXruX05Wh4RhphtQWU2eWq9qpw=
+X-Google-Smtp-Source: ABdhPJwS6gLKtPhQQw/E1An+ku1VAUkH19/T5eobnv1cwbE+QhHFDXqG/Y51TtT8umGbGQ6iIX6J8dC+VcwxiT/GBZk=
+X-Received: by 2002:a5d:6485:: with SMTP id o5mr5183612wri.286.1625314362622;
+ Sat, 03 Jul 2021 05:12:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210702170101.16116-1-alobakin@pm.me>
-X-Provags-ID: V03:K1:IYa/f7HkDU74IlmbpIDqxZ4UnHLocuh2xK/SRcmGwjgHVE0HPwO
- uvk+ZKPo3XYM/EQ0BhfLQneFfb/z4C4sbQPYymJxVpCLHfTj4keZV746Dag/i+ohT+Tx1/V
- AzMPePnTmSZE/IiVBtMBldhthrEDhpmLHPUvlxEw3x6L7ewUJ/S8yXJnOJgUuMKIApCRwsB
- 4agKpfVPAEAY+DauJZ2HA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DDK8tn1k2vk=:EF86SSfY5Vi1KOs8AADY/a
- 3Cq2nb4xqxxZWH6qOL0VjCqZO9d4DZ7Xx/yAQlHXGZaBU+BQ//fuZI6ljkHqeWhwUkyLivscc
- qJgrFJ313EhAax10IlN6i1M2HXjw7HFxHekHYXtWwHUYHiWGVHeFwp3HWdCHEbX21FM/z6bXL
- zbscFiWSbWbcUUPbI4VBKkn12UFjq4r/w+sJ3Wkjny6xTDMx8wbkpoSBxAt0PC2QPFtFZPuM2
- sSm+saVCm0M1Eiqc9eizWMW64iyInEgBFtl/OJgcUzWq32x9bffwJ2rRgCSnXY24TrNgA0eo9
- JuqFZjKk3zr/20QNa8alL/Szxz+uUm5vc26NKd1EUyj67cJ+MxBKjcZfRJ4UMeSWIz2rK2H/Y
- uNP6v0PiZxFM2+MrI8UWw4WB74DT8jySibpghnRylZJs0Zpxj488MnwjJpEcugPNQyH6TkvoV
- XyV+/H9qAca+7u803Q3j9Vd/CFiLjyg7/nNcVpWALQe2Yu6R/6OE8VjwSTFFj37xS7ZDhtQ29
- xdJuoIZO7calbQyUhmUsCL2R38DX+T5ozjbZMc9nKiaTIWhqS70cw/HDnyAi+SYt+STd8Dc3h
- xeIMzJmj5dh47yDhj3YDLxvhLR1toQzatbzLPCnFzt8FflC/wTt5aLeCUlhgUjQXmEqCPKtKb
- 7klmaSE/q595gmB8f2vi9R2LVvqG1UnyniXMCPW8nK0M0fLu4A45lUI3YpltthQPiHyO6nFKq
- Q/EeJiCLhjlyXwrEVTEE0KXA0n7zeYn6YN8h+xbC5dVYHOuiyi/eHBVur9KI9YV8lvxIYngGL
- VhgBJG4qW9KikFkNqMW1vmycs/t4n3KK0LaIZ0mIWF9WbTi7L5Vmd5EddLHnus9fnZQ9uUMcJ
- Knw313I1cIzVHCWrbb2vGYEOmMWa+3833cxeeRkazB2b9GD8HV4otN6tlw0/5zPjSVSoNlDhn
- Vevn56H0Y2whovHFCeakw8UqVk0gBkGsJSAMKzdVigvQcZYJ1B2lvCBf4/KiJYCrBwLPc0M/t
- CVgINq6H165/dOQ56gS1Fn1YxsFGT8XM0HMzCXZPplvjeA2uDcschlVNk3gPtiXpax5kZoD76
- SG2hbzUGdtKbMfttCXBP3mz/FXlbgtHans7
-Content-Transfer-Encoding: quoted-printable
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
+In-Reply-To: <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 3 Jul 2021 14:12:26 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
+Message-ID: <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On Fri, Jul 02, 2021 at 05:08:09PM +0000, Alexander Lobakin wrote:
+On Fri, Jul 2, 2021 at 9:42 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> On the other hand, it leaves a potentional window for attackers to
-> perform brute force from xattr-incapable filesystems. So at the end
-> of the day I think that the current implementation (a strong
-> rejection of such filesystems) is way more secure than having
-> a fallback I proposed.
+> On Fri, Jul 2, 2021 at 6:48 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > A rework for PCI I/O space access from Niklas Schnelle:
+>
+> I pulled this, but then I ended up unpulling.
+>
+> I don't absolutely _hate_ the concept, but I really find this to be
+> very unpalatable:
+>
+>   #if !defined(inb) && !defined(_inb)
+>   #define _inb _inb
+>   static inline u8 _inb(unsigned long addr)
+>   {
+>   #ifdef PCI_IOBASE
+>         u8 val;
+>
+>         __io_pbr();
+>         val = __raw_readb(PCI_IOBASE + addr);
+>         __io_par(val);
+>         return val;
+>   #else
+>         WARN_ONCE(1, "No I/O port support\n");
+>         return ~0;
+>   #endif
+>   }
+>   #endif
+>
+> because honestly, the notion of a run-time warning for a compile-time
+> "this cannot work" is just wrong.
 
-I've been thinking more about this: that the Brute LSM depends on xattr
-support and I don't like this part. I want that brute force attacks can
-be detected and mitigated on every system (with minimal dependencies).
-So, now I am working in a solution without this drawback. I have some
-ideas but I need to work on it.
+Ok, fair enough, back to the drawing board then.
 
-> I'm planning to make a patch which will eliminate such weird rootfs
-> type selection and just always use more feature-rich tmpfs if it's
-> compiled in. So, as an alternative, you could add it to your series
-> as a preparatory change and just add a Kconfig dependency on
-> CONFIG_TMPFS && CONFIG_TMPFS_XATTR to CONFIG_SECURITY_FORK_BRUTE
-> without messing with any fallbacks at all.
-> What do you think?
+> If the platform doesn't have inb/outb, and you compile some driver
+> that uses them, you don't want a run-time warning. Particularly since
+> in many cases nobody will ever run it, and the main use case was to do
+> compile-testing across a wide number of platforms.
+>
+> So if the platform doesn't have inb/outb, they simply should not be
+> declared, and there should be a *compile-time* error. That is
+> literally a lot more useful, and it avoids this extra code.
 
-Great. But I hope this patch will not be necessary for Brute LSM :)
+I tried adding a Kconfig option over a decade ago, but at the time
+gave up when I couldn't still get drivers/ide and the 8250 uart driver
+to build in a sensible way that would still allow the MMIO based
+variants to work, but leave out the PIO accessors. With drivers/ide
+gone, and the drivers/tty/serial/ having gone through many changes,
+it's probably easier now.
 
-Thanks,
-John Wood
+I could imagine adding a CONFIG_LEGACY_PCI that controls
+whether we have any pre-PCIe devices or those PCIe drivers
+that need PIO accessors other than ioport_map()/pci_iomap().
+
+This can then select a CONFIG_IOPORT, which controls whether
+inb/outb etc are provided. x86 and anything that uses inb/outb for
+non-PCI devices would select it as well.
+
+> Extra code that not only doesn't add value, but that actually
+> *subtracts* value is not code I really want to pull.
+
+What happened here specifically is that the asm-generic version
+is definitely broken and can cause a NULL pointer dereference
+on platforms that used to fall back to NULL PCI_IOBASE.
+
+The latest clang does complain about those drivers with a
+correct warning (not an error) that shows up in s390 allmodconfig
+builds. Niklas' original version of the patch tried to shut up the
+warning but did not address the dangerous behavior, which I
+did not find sufficient either.
+
+The version we got here makes it no longer crash the kernel, but
+I see your point that the runtime warning is still wrong. I'll have
+a look at what it would take to guard all inb/outb callers with a
+Kconfig conditional, and will report back after that.
+
+      Arnd
