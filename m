@@ -2,218 +2,193 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4483D3BBA48
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Jul 2021 11:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0413BBAD1
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Jul 2021 12:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbhGEJka (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Jul 2021 05:40:30 -0400
-Received: from mail-eopbgr130040.outbound.protection.outlook.com ([40.107.13.40]:43899
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230262AbhGEJk3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 5 Jul 2021 05:40:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QGu+Wgrr7fTiNWJGdQK4CPFAp1VS2nacHmCoiJpSFVU=;
- b=JtITY0I04uPKAksqcL+YGqfyRcHzvtO21RTFEChwAwm3uZjuHE1dnpRoV2MnUMQTm2U9aRtDiZCdWpgWz7xZQCrZvGMk6BSAlUdST6ax+DlEB9COksbaqe+HkNbqbzZ64MdAjnlTWaSZ+ISymdGrIEJzd1BE986UGw6r28V/PBk=
-Received: from AM3PR07CA0118.eurprd07.prod.outlook.com (2603:10a6:207:7::28)
- by AM4PR08MB2849.eurprd08.prod.outlook.com (2603:10a6:205:5::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22; Mon, 5 Jul
- 2021 09:37:47 +0000
-Received: from VE1EUR03FT017.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:207:7:cafe::f1) by AM3PR07CA0118.outlook.office365.com
- (2603:10a6:207:7::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.8 via Frontend
- Transport; Mon, 5 Jul 2021 09:37:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; vger.kernel.org; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;vger.kernel.org; dmarc=pass action=none
- header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- VE1EUR03FT017.mail.protection.outlook.com (10.152.18.90) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4287.22 via Frontend Transport; Mon, 5 Jul 2021 09:37:47 +0000
-Received: ("Tessian outbound 80741586f868:v97"); Mon, 05 Jul 2021 09:37:45 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: eb09c4d84db3cfcf
-X-CR-MTA-TID: 64aa7808
-Received: from 2bbe664f9182.2
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id AFC73072-F32A-4A16-A8C1-35F1EC587D2F.1;
-        Mon, 05 Jul 2021 09:37:04 +0000
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 2bbe664f9182.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Mon, 05 Jul 2021 09:37:04 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HsRQ57pz7smkRXZJsUQBkkjCfVl5By5GGW/LVniBc5IJPTc0UDvOvfVpyIGsyffL6jS/BXPo2uZ2vtZ4KArGrK3abJAo+a+Mpyx4r5lIItIlMlAnlon03H4Ntl33MqFLq4wpAQ7l9QBkd45mX3xuDRo8iGGidRgWjnl1mZc5Lg3StY28MLTl0O5wyOLp6hwOrm3qeEYXlcRx6uaUMQfpxcIooJdNXHeB5/CbH2rjmDcTAsZVZ1h7f1gW1zqHqoQoTrYOtIYgbHPHX+reakdCvD03TTjfXc9zxYLWG/yB782JKfTSWv7t+xQ57rAyf3QQ88mT3t3qxcLpE3Npx1o8wA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QGu+Wgrr7fTiNWJGdQK4CPFAp1VS2nacHmCoiJpSFVU=;
- b=n8850A0L1jaKGAq6h5ras9uSgtSDcbW+uomIl9KKXGfVq+LQcfO2spRM3rE3YA+JrWwIGOBKghlPjhXARZ8qLS663Z34BXWcvaS/LOd3rQidVsHEey9N3S2OuUacxR7qS3es/+lNDV4LSJcB5C/0pzoqfYK7B0zN5+OZqHPwzE7/ycU+fXRd+0ghPiQ+2bBIp8uxWAal82bKZNa0TMUPl7b3c3QruYE1RR/Rw5KU8JrbyaPFHT89CVn6bBVosSEhKr27JSlDiyqupoCtq5E3puDwLp5u2GXSshUmCXk28X7x462ofTv+53s6/zrA/qPMUHnC8fi9dFkUFTF/eoapsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QGu+Wgrr7fTiNWJGdQK4CPFAp1VS2nacHmCoiJpSFVU=;
- b=JtITY0I04uPKAksqcL+YGqfyRcHzvtO21RTFEChwAwm3uZjuHE1dnpRoV2MnUMQTm2U9aRtDiZCdWpgWz7xZQCrZvGMk6BSAlUdST6ax+DlEB9COksbaqe+HkNbqbzZ64MdAjnlTWaSZ+ISymdGrIEJzd1BE986UGw6r28V/PBk=
-Authentication-Results-Original: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=arm.com;
-Received: from PA4PR08MB6320.eurprd08.prod.outlook.com (2603:10a6:102:e5::9)
- by PA4PR08MB6189.eurprd08.prod.outlook.com (2603:10a6:102:ef::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.31; Mon, 5 Jul
- 2021 09:36:59 +0000
-Received: from PA4PR08MB6320.eurprd08.prod.outlook.com
- ([fe80::ac83:9f8b:1a5:2c33]) by PA4PR08MB6320.eurprd08.prod.outlook.com
- ([fe80::ac83:9f8b:1a5:2c33%5]) with mapi id 15.20.4287.027; Mon, 5 Jul 2021
- 09:36:59 +0000
-Date:   Mon, 5 Jul 2021 10:36:56 +0100
-From:   Szabolcs Nagy <szabolcs.nagy@arm.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-audit/audit-kernel 
-        <reply+ADSN7RXLQ62LNLD2MK5HFHF65GIU3EVBNHHDPMBXHU@reply.github.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        bobo.shaobowang@huawei.com,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Adam Borowski <kilobyte@angband.pl>,
-        Alexander Graf <agraf@suse.de>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Andreas Schwab <schwab@suse.de>,
-        Andrew Pinski <pinskia@gmail.com>,
-        Bamvor Zhangjian <bamv2005@gmail.com>,
-        Chris Metcalf <cmetcalf@mellanox.com>,
-        Christoph Muellner <christoph.muellner@theobroma-systems.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        James Hogan <james.hogan@imgtec.com>,
-        James Morse <james.morse@arm.com>,
-        Joseph Myers <joseph@codesourcery.com>,
-        Lin Yongting <linyongting@huawei.com>,
-        Manuel Montezelo <manuel.montezelo@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
-        Nathan_Lynch <Nathan_Lynch@mentor.com>,
-        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
-        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
-        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
-        Steve Ellcey <sellcey@caviumnetworks.com>
-Subject: Re: [linux-audit/audit-kernel] BUG: audit_classify_syscall() fails
- to properly handle 64-bit syscalls when executing as 32-bit application on
- ARM (#131)
-Message-ID: <20210705093656.GJ14854@arm.com>
-References: <linux-audit/audit-kernel/issues/131@github.com>
- <linux-audit/audit-kernel/issues/131/872191450@github.com>
- <YN9V/qM0mxIYXt3h@yury-ThinkPad>
- <87zgv4y3wd.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87zgv4y3wd.fsf@oldenburg.str.redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [217.140.106.55]
-X-ClientProxiedBy: LO2P265CA0084.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:8::24) To PA4PR08MB6320.eurprd08.prod.outlook.com
- (2603:10a6:102:e5::9)
+        id S230450AbhGEKJx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Jul 2021 06:09:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38904 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230442AbhGEKJw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 5 Jul 2021 06:09:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FFB3613D1;
+        Mon,  5 Jul 2021 10:07:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625479636;
+        bh=mDmSqc1ZHT5JQPxFFbw6bbExIYM08SRlNrojKMaW1NU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CrSJd3SJnIoFW2JNrjOqlCuTXPln9sRlTwpQWF2uP/gRGaLNCLThs2wtVkfLNtIgT
+         gm2iArLVhPmhfe8rFuHRO4FkJydanGvdvu+ESFKXR949xOP6Z32V0Z8oi9QSsH4oY7
+         Ly3vEYVKSCApSuP67Kl7LclmSbhVd+etbW/bAVJ33nbcKCJ4v5UDET9TQJGdE9j5J2
+         0AmKX08yVZO/6zKmcHAVBagOkSbBPfCPQeXRDPd/hJWHNaLLehMb6Dc5OZhTlUleGS
+         5OfaozSL/UVbgmF+cgufkrTZQGlWg20iQ+u4U0aLNI9y2tRNA/HqEIFVonbSxvsAPc
+         dRROT+6QFn1OA==
+Received: by mail-wr1-f47.google.com with SMTP id t15so18025008wry.11;
+        Mon, 05 Jul 2021 03:07:16 -0700 (PDT)
+X-Gm-Message-State: AOAM530BBMFfo+Z9PivdchcAArrgBo7jClTuIYRa1vHofxgdPzxrv4XK
+        Vw0gdLmU77Utb/Rz99u+NEd16PQ24yY9VI71ung=
+X-Google-Smtp-Source: ABdhPJyCa40n4qbdSBQQCcJYoIOkZncVk0WfewkiU841b5++uzOxojqVhIO++2Yq7kLIzSpJsQxK433dNXjd2d2xb9k=
+X-Received: by 2002:adf:e107:: with SMTP id t7mr14857043wrz.165.1625479634719;
+ Mon, 05 Jul 2021 03:07:14 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from arm.com (217.140.106.55) by LO2P265CA0084.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:8::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22 via Frontend Transport; Mon, 5 Jul 2021 09:36:58 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f8a82ec9-c9f0-4a0c-3133-08d93f988ca7
-X-MS-TrafficTypeDiagnostic: PA4PR08MB6189:|AM4PR08MB2849:
-X-LD-Processed: f34e5979-57d9-4aaa-ad4d-b122a662184d,ExtAddr
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM4PR08MB28494A90156E552AAB5C4C6BED1C9@AM4PR08MB2849.eurprd08.prod.outlook.com>
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: WTtbaNILuwVuMsUo48s37ZXswqLYBZPEOtBfVt5CevzlfY1n3eoChrh8tHoNY+ZfP/ROpy5umFBR9/kVWksDdBJvDC7rzbIHxRB+BdA+d9Ttki1ouGoqwP99AOD+LM/FNViBTKcQbT1fDT3s4KjNaJ3yxhcd2w/1nZUEsR8DrOJHbAOnXIs8ryMRjvEObhF71zNAdGUsCjG52ChzfpxS0Um6ApNDBl7xWeEyEcQ4/7SPTuDKvMxkyqg7QrbMEkHFkYEwm0N0rr2Q5asCdpejOjPccL1a/Tb959cz13qcm+ZjgxHrU9S0DzOU+nLhiVyZut0D6LbNaXlghVG6yDQna+/dKsm9/893XmLWyRVKVHcddVtpE39pgNRCUZkutOSC6NghyBvLdKWEOYGyNjpKqkRrmhfmI+yFXN8DYOXoAsgzsbaamFOTQjo8i8McPKqP5wO9LvuiRpSrYdz2XAqTGoCituxuusndhvnAdLgob9IlIYW9lKWIPLvmDv/Yq+l9+gUbcfBZI//tfaRKv6dNYsR5ndEzygFSBGsDrdUrTGoTja6ACQRumxuTc4pCMzEBB5R8SGNCqvrxGFDmJdRKJVRJYGx3Ze/2y/B0byDp3hhwT3FFKc8lih2i/BVUalWLtVDMVmRUec7Cp/n8ZdFeqHdJyifyCrXY/0VzC7Ynz/BQD3oi2eTqenmuX7puQPXZk1A5EUW2pXRmcHN3udzdMA==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR08MB6320.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(366004)(396003)(39850400004)(136003)(7406005)(7416002)(55016002)(86362001)(66946007)(66476007)(66556008)(1076003)(38100700002)(38350700002)(54906003)(4326008)(2906002)(316002)(4744005)(44832011)(8886007)(6916009)(52116002)(26005)(956004)(5660300002)(36756003)(33656002)(8936002)(16526019)(186003)(8676002)(2616005)(7696005)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ejlPUWR4SFh6dTg1ajAyMFlTMzl6c0F6Rkw1QUdpa1VPSy9mUnBZTEpWTW03?=
- =?utf-8?B?S2dpb2lTK2dFaFBWQWtLeDFXT2Y3U0NGNWtxS0d1d3lvcVZKVDg4ai9TeWtD?=
- =?utf-8?B?WUp1Z1Z4SUFFMEtxcU1BVHE2N0pBTGp4UTRCK3lsZE0yTm5KeTIyRWVRWUZy?=
- =?utf-8?B?djBoQ2FkSDhMVEJRM0JwZjFUYlgxbkt6bG4zUkp1WWQraEt6NWtIY252K2V1?=
- =?utf-8?B?dm9lM2M2TXVpTlFubkc0UjRLeFFGUVBuWFdBbjA0REhUK3FIWUYwRjJtZTdq?=
- =?utf-8?B?WGEwaWMwMUZmUFJPSXhWamN5Q2s4Z3dGNFNpSlNVbkJQNnRZSHhHTVFLUUI5?=
- =?utf-8?B?UEVILzRqa3ZxbEFuRE5NdllLeUt6c0Jaa0huWmY3dHhMWmd6Y2k2cG1iNjhL?=
- =?utf-8?B?Y2RGeVhPTm92Mm1UU1hqOVQzWlJrMDUyZ2tueU9ScXg0dUc0M3FORmZJVHBD?=
- =?utf-8?B?dzdOb3RFZzhmeTVTd1VYZXhFdCtBSzVJS2dZQ01RUzhxdGsxdWl3L2hyL0Vr?=
- =?utf-8?B?TE4wemZhWlBvSUowRVprcnNGSnNhNWp3amtIdnVHM2JXaWlZTHJhVnpQa1E1?=
- =?utf-8?B?ejE0eE8yUG9XWHFBeGpodjNGVUdkKzZNd2RiWU94cW9TOFRuOEFQYlhVK3dQ?=
- =?utf-8?B?OUxmcGQ3MFBrTzBxSTJUeFlIejdRN2E5NkNCQlZXUHFXQVEzdXVYbExHamUx?=
- =?utf-8?B?bkw2a3FvU3Q3cXBNV041QmhzUlhGTDA0VDljazRxUUxwZkFaamxuT2wxQnRs?=
- =?utf-8?B?RDU5U2grYy9uU0JDd0NtVHRGb0FRZitCRmovZEVFcWRvbHhOVitWcGhFcjhD?=
- =?utf-8?B?cGNCMHJTSHJ4N2dvdDRrQVhUb3VyYjhQazNWajJha3lyS1ozUVJJZTRmL3Zj?=
- =?utf-8?B?SjBjbUJ0NmE1NnBXdTQvclZsSG5veDlqTjJsNWxWWXdjKzJoQTNqTTdCcE1U?=
- =?utf-8?B?TzVzTE5hcEczd3lJSHc3MG56dXloWlJCR0lFaTkrK2VMbi9oM0FKeElWV0Fw?=
- =?utf-8?B?SXBlOUdjcDlwa0pVbnpqN3JsVFFTOTliSnhtMjlSQmR3WU82RUgxdnZKT3JT?=
- =?utf-8?B?dkRYeXlrYmRsdmdtUnRhRlpjcWdNWUgzd0g5RktVMlRYVG9yOENuWlRsVmJJ?=
- =?utf-8?B?WXZrSkxiOENlclB4ZnlNb2Fwdnd4Q3J3SUhnay9oTXdJMnpNanF2QlRzbFcx?=
- =?utf-8?B?UHFmdmpEc2Q0dDRDcktzNm9YYk8vWElvUERUQ1BVMEdVWWRrV05nZ2lhYU4w?=
- =?utf-8?B?cjdkZjJ6a0pXQ2x2SFhEM3ZMS0pzbDh6aWg3bDQwQ1AvM1NsblRtRGZYVEFI?=
- =?utf-8?B?TFJLQm1NeWRPUGthYUVYdUNKZGhuT3VKazE3cE5CSkRkQXI1dHY1NVdaWHZW?=
- =?utf-8?B?NURGdWhDTWR2K2h1SWhKSjQvWkR2cVB6WkpKZzhvUC93Wmh2dWp2SklBUFRY?=
- =?utf-8?B?TENrcnBBL2RDSFZUQ0p3Z3puNnlNTGV3d213ZXhGQnRaaWFVaTRlVktVby9R?=
- =?utf-8?B?dGl0Z2JVTitsVDIyNURKT0ZWRTkzcGYvUTlOemhqTjBzdDlOMnR0WXdndk8y?=
- =?utf-8?B?NUx0YzFtbjJWNjVpL01ScjB4dXJFajdQWXJXUUxjZlpkNlBIaXFjNXNzR3c5?=
- =?utf-8?B?a1RuOFdoakRuQ0hwdVNwenFMQWI5bEdJY01Vemk3OElIR1VlanVjemVjQ3Z1?=
- =?utf-8?B?czgvTENJZlU1OFhFc2dIVVFmYTlqV2liSXNhRVY3NDFSNk5DRU9DNk1JMXpH?=
- =?utf-8?Q?MhjBKbAa+/UyH17kG86+ajJy3ej96H5ze+uWBaV?=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB6189
-Original-Authentication-Results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR03FT017.eop-EUR03.prod.protection.outlook.com
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 4542ff81-d470-4aa2-6807-08d93f986f94
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iVbxDlY2+JKGbdnKhk7U9yCpwKeYjmzshgW9N21ClaAnOdSRe6FSFlM7pP5WK0f5Fz84AmZW1rAIrONlttL6uftW0wD2jtv0tPbkWTQuEs/8URr53URfGyDjhC4v5DwY63EbrmaAy+tI76bf9vDr3TB5d2OGvCIM9HNUn/qYLvAl4FLWuHZI6N6ZI7KThAmnMN7xDy+BR/BOZuOlJMM7tnPBSaY6prQnqsUIUB8JATnPN3nOWT8xMm7HKuxCBuUe57NbzkQ2VsVYKgoZcfMnYK+mSOQCvBW7nRJmW4fjS/UYG6nDEQkqTLBx6ifbOc2bu4RvkPCMlXSyatnZ8tq2fif2MGwTONmiJFEjpsni+aV3VuKdTy7vWj/u2ClZWy7rhp18pgLU+zg+pm4iXfhxNhpgLVC7Q0geAgfOx884Ibnivxz5wKCeffGXW9iuK22SJPU5BtcgkWbxZu8JEQevhRgwdJs1cO6S3MkJGu/Z/HqQCugjRspnM7mBTP6PrQjc4bxjMNYP96eG04z1SypHrQlRpg7SpStEg7ZLPrQKlnGlTVTVwzxIXNhwXsoCNZAUTCAUCOkVUfTv9ql8HbYWpb03XbK20sBYOHz3ZRLGkHK1yd/69oxZRHbXzGUAAmJ6Ncj4u20fftw6VfLBnkHSsMc1QH0YdI+LT54JFuAr9m3vNZTJUuZJ14KlbZR8Zw/MzKp8CzAEB6bxcrHg6FhcHg==
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(4636009)(396003)(39850400004)(376002)(346002)(136003)(46966006)(36840700001)(1076003)(8676002)(450100002)(47076005)(8936002)(54906003)(336012)(2906002)(316002)(8886007)(81166007)(33656002)(186003)(16526019)(26005)(36756003)(82310400003)(356005)(36860700001)(4744005)(70586007)(107886003)(7696005)(55016002)(82740400003)(44832011)(86362001)(70206006)(5660300002)(4326008)(956004)(6862004)(2616005)(478600001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2021 09:37:47.4561
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8a82ec9-c9f0-4a0c-3133-08d93f988ca7
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT017.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR08MB2849
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com> <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
+In-Reply-To: <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 5 Jul 2021 12:06:58 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
+Message-ID: <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        John Garry <john.garry@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The 07/02/2021 20:19, Florian Weimer wrote:
-> * Yury Norov:
-> > At least Marvell, Samsung, Huawei, Cisco and Weiyuchen's employer
-> > actively use and develop arm64/ilp32. I receive feedback / bugrepotrs
-> > on ilp32 every 4-6 month. Is that enough for you to reconsider
-> > including the project into the mainline?
-> 
-> I believe that glibc has the infrastructure now to integrate an ILP32
-> port fairly cleanly, although given that it would be first
-> post-libpthread work, it would have to absorb some of the cleanup work
-> for such a configuration.
+On Sat, Jul 3, 2021 at 2:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> The version we got here makes it no longer crash the kernel, but
+> I see your point that the runtime warning is still wrong. I'll have
+> a look at what it would take to guard all inb/outb callers with a
+> Kconfig conditional, and will report back after that.
 
-time64 would require syscall abi design changes.
-(that's likely an abi break compared to what the
-listed users do)
+I created a preliminary patch and got it to cleanly build on my randconfig box,
+here is what that involved:
+
+- added 89 Kconfig dependencies on HAS_IOPORT for PC-style devices
+  that are not on a PCI card.
+- added 188 Kconfig dependencies on LEGACY_PCI for PCI drivers that
+  require port I/O. The idea is to have that control drivers for both pre-PCIe
+  devices and and PCIe devices that require long-deprecated features like
+  I/O resources, but possibly other features as well.
+- The ACPI subsystem needs access to I/O ports, so that also gets a
+  dependency.
+- CONFIG_INDIRECT_PIO requires HAS_IOPORT
+-  /dev/ioport needs an #ifdef around it
+- several graphics drivers need workarounds instead of a 'depends on'
+  because they are used in virtual machines: vgaconsole, bochs, qxl,
+  cirrus. They work with or without port I/O
+- A usb-uhci rework to split pci from non-pci support
+- Minor workarounds for optional I/O port usage in libata, ipmi, tpm,
+  dmi-firmware, altera-stapl, parport, vga
+- lots of #ifdefs in 8250
+- some drivers/pci/ quirks are #ifdef'd
+- drivers using ioport_map()/pci_iomap() to access ports could be
+  kept working when I/O ports are memory mapped
+
+I tested the patch on a 5.13-rc4 snapshot that already has other
+patches applied as a baseline for randconfig testing, so it doesn't
+apply as-is.
+
+Linus, if you like this approach, then I can work on splitting it up into
+meaningful patches and submit it for a future release. I think the
+CONFIG_LEGACY_PCI option has value on its own, but the others
+do introduce some churn.
+
+Full patch (120KB): https://pastebin.com/yaFSmAuY
+
+diffstat:
+ drivers/accessibility/speakup/Kconfig        |   1 +
+ drivers/acpi/Kconfig                         |   1 +
+ drivers/ata/Kconfig                          |  34 ++++++++++-----------
+ drivers/ata/ata_generic.c                    |   3 +-
+ drivers/ata/libata-sff.c                     |   2 ++
+ drivers/bus/Kconfig                          |   2 +-
+ drivers/char/Kconfig                         |   3 +-
+ drivers/char/ipmi/Makefile                   |  11 +++----
+ drivers/char/ipmi/ipmi_si_intf.c             |   3 +-
+ drivers/char/ipmi/ipmi_si_pci.c              |   3 ++
+ drivers/char/mem.c                           |   6 +++-
+ drivers/char/tpm/Kconfig                     |   1 +
+ drivers/char/tpm/tpm_infineon.c              |  14 ++++++---
+ drivers/char/tpm/tpm_tis_core.c              |  19 +++++-------
+ drivers/comedi/Kconfig                       |  53
++++++++++++++++++++++++++++++++++
+ drivers/firmware/dmi-sysfs.c                 |   4 +++
+ drivers/gpio/Kconfig                         |   2 +-
+ drivers/gpu/drm/bochs/Kconfig                |   1 +
+ drivers/gpu/drm/bochs/bochs_hw.c             |  24 ++++++++-------
+ drivers/gpu/drm/qxl/Kconfig                  |   1 +
+ drivers/gpu/drm/tiny/cirrus.c                |   2 ++
+ drivers/hwmon/Kconfig                        |  23 +++++++++++++--
+ drivers/i2c/busses/Kconfig                   |  31 ++++++++++---------
+ drivers/ide/Kconfig                          |   1 +
+ drivers/iio/adc/Kconfig                      |   2 +-
+ drivers/input/gameport/Kconfig               |   6 ++--
+ drivers/input/serio/Kconfig                  |   2 ++
+ drivers/input/touchscreen/Kconfig            |   1 +
+ drivers/isdn/hardware/mISDN/Kconfig          |  14 ++++-----
+ drivers/leds/Kconfig                         |   2 +-
+ drivers/media/cec/platform/Kconfig           |   2 +-
+ drivers/media/pci/dm1105/Kconfig             |   2 +-
+ drivers/media/radio/Kconfig                  |  15 +++++++++-
+ drivers/media/rc/Kconfig                     |   9 +++++-
+ drivers/message/fusion/Kconfig               |   8 ++---
+ drivers/misc/altera-stapl/Makefile           |   3 +-
+ drivers/misc/altera-stapl/altera.c           |   6 +++-
+ drivers/net/Kconfig                          |   2 +-
+ drivers/net/arcnet/Kconfig                   |   2 +-
+ drivers/net/can/cc770/Kconfig                |   1 +
+ drivers/net/can/sja1000/Kconfig              |   1 +
+ drivers/net/ethernet/8390/Kconfig            |   2 +-
+ drivers/net/ethernet/amd/Kconfig             |   2 +-
+ drivers/net/ethernet/intel/Kconfig           |   4 +--
+ drivers/net/ethernet/sis/Kconfig             |   6 ++--
+ drivers/net/ethernet/ti/Kconfig              |   4 +--
+ drivers/net/ethernet/via/Kconfig             |   5 ++--
+ drivers/net/fddi/Kconfig                     |   4 +--
+ drivers/net/hamradio/Kconfig                 |   6 ++--
+ drivers/net/wan/Kconfig                      |   2 +-
+ drivers/net/wireless/atmel/Kconfig           |   4 +--
+ drivers/net/wireless/intersil/hostap/Kconfig |   4 +--
+ drivers/parport/Kconfig                      |   2 +-
+ drivers/pci/pci-sysfs.c                      |  16 ++++++++++
+ drivers/pci/quirks.c                         |   2 ++
+ drivers/pcmcia/Kconfig                       |   2 +-
+ drivers/platform/chrome/Kconfig              |   1 +
+ drivers/platform/chrome/wilco_ec/Kconfig     |   1 +
+ drivers/pnp/isapnp/Kconfig                   |   2 +-
+ drivers/power/reset/Kconfig                  |   1 +
+ drivers/rtc/Kconfig                          |   4 ++-
+ drivers/scsi/Kconfig                         |  21 ++++++-------
+ drivers/scsi/aic7xxx/Kconfig.aic79xx         |   2 +-
+ drivers/scsi/aic7xxx/Kconfig.aic7xxx         |   2 +-
+ drivers/scsi/aic94xx/Kconfig                 |   2 +-
+ drivers/scsi/megaraid/Kconfig.megaraid       |   2 +-
+ drivers/scsi/mvsas/Kconfig                   |   2 +-
+ drivers/scsi/qla2xxx/Kconfig                 |   2 +-
+ drivers/spi/Kconfig                          |   1 +
+ drivers/staging/kpc2000/Kconfig              |   2 +-
+ drivers/staging/sm750fb/Kconfig              |   2 +-
+ drivers/staging/vt6655/Kconfig               |   2 +-
+ drivers/tty/Kconfig                          |   2 +-
+ drivers/tty/serial/8250/8250_early.c         |   4 +++
+ drivers/tty/serial/8250/8250_pci.c           |  19 ++++++++++--
+ drivers/tty/serial/8250/8250_port.c          |  22 ++++++++++++--
+ drivers/tty/serial/8250/Kconfig              |   1 +
+ drivers/tty/serial/Kconfig                   |   2 +-
+ drivers/usb/core/hcd-pci.c                   |   4 +--
+ drivers/usb/host/Kconfig                     |   4 +--
+ drivers/usb/host/pci-quirks.c                | 128
++++++++++++++++++++++++++++++++++++++++++--------------------------------------
+ drivers/usb/host/pci-quirks.h                |  33 ++++++++++++++++-----
+ drivers/usb/host/uhci-hcd.c                  |   2 +-
+ drivers/usb/host/uhci-hcd.h                  |  77
++++++++++++++++++++++++++++++++----------------
+ drivers/video/console/Kconfig                |   4 ++-
+ drivers/video/fbdev/Kconfig                  |  24 +++++++--------
+ drivers/watchdog/Kconfig                     |   6 ++--
+ include/asm-generic/io.h                     |   6 ++++
+ include/linux/gameport.h                     |   9 ++++--
+ include/linux/parport.h                      |   2 +-
+ include/video/vga.h                          |   8 +++++
+ lib/Kconfig                                  |   4 +++
+ lib/Kconfig.kgdb                             |   1 +
+ sound/drivers/Kconfig                        |   3 ++
+ sound/isa/Kconfig                            |   1 +
+ sound/pci/Kconfig                            |  44 ++++++++++++++++++++++-----
+ 96 files changed, 575 insertions(+), 272 deletions(-)
