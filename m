@@ -2,49 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA6A3BBB8A
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Jul 2021 12:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712653BBC76
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Jul 2021 13:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbhGEKvW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Jul 2021 06:51:22 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:54528 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbhGEKvW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Jul 2021 06:51:22 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DBDD81FE56;
-        Mon,  5 Jul 2021 10:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1625482123; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cPw5944SyLvk8fb9DSeAYLp7rlJlKtCBdZpqaW/av88=;
-        b=m3MKKUkS4eJfg01Dg3u0+FE7BI5AGUOW9VLhuf6+yhcvE6QF1UJ82MEqXIJt2UlTgl6+AR
-        tnghOS98SWBr8e7maYhnnERk8vMYn/eraTtKSPpWtCj4v9dltSkFJSg/B6MsTTFUnPzERF
-        Rlp4gVL9H7LnS5bpPhEl1S0hoEhLMaI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1625482123;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cPw5944SyLvk8fb9DSeAYLp7rlJlKtCBdZpqaW/av88=;
-        b=v7HzFsoUGvAn2gSPetwqHR1/O5eJF5zi8P9YhBQo+Td7s6lpG9nqnynmgvCjlMGkwZUWoA
-        Y7NVI0xqS+doxbBQ==
-Received: from hawking.suse.de (hawking.suse.de [10.160.4.0])
-        by relay2.suse.de (Postfix) with ESMTP id 35F48A3B8F;
-        Mon,  5 Jul 2021 10:48:43 +0000 (UTC)
-Received: by hawking.suse.de (Postfix, from userid 17005)
-        id 08759446184; Mon,  5 Jul 2021 12:48:42 +0200 (CEST)
-From:   Andreas Schwab <schwab@suse.de>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-audit/audit-kernel 
+        id S231240AbhGEL6C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Jul 2021 07:58:02 -0400
+Received: from mout.kundenserver.de ([212.227.17.13]:41509 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231159AbhGEL6C (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Jul 2021 07:58:02 -0400
+Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MzQTm-1lDkmx1MlU-00vLN6; Mon, 05 Jul 2021 13:55:23 +0200
+Received: by mail-wr1-f46.google.com with SMTP id a8so10082241wrp.5;
+        Mon, 05 Jul 2021 04:55:23 -0700 (PDT)
+X-Gm-Message-State: AOAM533DoJ3k5//oLMDdosliMiWm28gBaTae+3+SzjhVZZnHRsQXJDRJ
+        CY7mMMGxYbmPxHSG3JO0AFCPvObiEu9UsXvfvX8=
+X-Google-Smtp-Source: ABdhPJxhCFK1xZGxnW+/y3QiBf/eE9gPROL0Gg3Kf/pqB3DdVNd8R5s6QK1EFCPNARtCYpet1/e6uxBKc31OislpVx4=
+X-Received: by 2002:adf:ee10:: with SMTP id y16mr15288976wrn.99.1625486122912;
+ Mon, 05 Jul 2021 04:55:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <linux-audit/audit-kernel/issues/131@github.com>
+ <linux-audit/audit-kernel/issues/131/872191450@github.com>
+ <YN9V/qM0mxIYXt3h@yury-ThinkPad> <87zgv4y3wd.fsf@oldenburg.str.redhat.com> <20210705093656.GJ14854@arm.com>
+In-Reply-To: <20210705093656.GJ14854@arm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 5 Jul 2021 13:55:06 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1D-NvZ2Z8r3RnxKVoT7yPnnqN-ZLrMa9UM13y8==OK6A@mail.gmail.com>
+Message-ID: <CAK8P3a1D-NvZ2Z8r3RnxKVoT7yPnnqN-ZLrMa9UM13y8==OK6A@mail.gmail.com>
+Subject: Re: [linux-audit/audit-kernel] BUG: audit_classify_syscall() fails to
+ properly handle 64-bit syscalls when executing as 32-bit application on ARM (#131)
+To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc:     Florian Weimer <fweimer@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "linux-audit/audit-kernel" 
         <reply+ADSN7RXLQ62LNLD2MK5HFHF65GIU3EVBNHHDPMBXHU@reply.github.com>,
-        linux-audit/audit-kernel <audit-kernel@noreply.github.com>,
-        Mention <mention@noreply.github.com>,
         Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        bobo.shaobowang@huawei.com,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
@@ -54,13 +49,13 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Adam Borowski <kilobyte@angband.pl>,
         Alexander Graf <agraf@suse.de>,
         Alexey Klimov <klimov.linux@gmail.com>,
+        Andreas Schwab <schwab@suse.de>,
         Andrew Pinski <pinskia@gmail.com>,
         Bamvor Zhangjian <bamv2005@gmail.com>,
         Chris Metcalf <cmetcalf@mellanox.com>,
         Christoph Muellner <christoph.muellner@theobroma-systems.com>,
         Dave Martin <Dave.Martin@arm.com>,
         "David S . Miller" <davem@davemloft.net>,
-        Florian Weimer <fweimer@redhat.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         James Hogan <james.hogan@imgtec.com>,
@@ -75,37 +70,53 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
         Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
         Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
-        Steve Ellcey <sellcey@caviumnetworks.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>
-Subject: Re: [linux-audit/audit-kernel] BUG: audit_classify_syscall() fails
- to properly handle 64-bit syscalls when executing as 32-bit application on
- ARM (#131)
-References: <linux-audit/audit-kernel/issues/131@github.com>
-        <linux-audit/audit-kernel/issues/131/872191450@github.com>
-        <YN9V/qM0mxIYXt3h@yury-ThinkPad>
-X-Yow:  I like the way ONLY their mouths move..  They look like DYING OYSTERS
-Date:   Mon, 05 Jul 2021 12:48:42 +0200
-In-Reply-To: <YN9V/qM0mxIYXt3h@yury-ThinkPad> (Yury Norov's message of "Fri, 2
-        Jul 2021 11:07:58 -0700")
-Message-ID: <mvm7di59gtx.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
+        Steve Ellcey <sellcey@caviumnetworks.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:irPqV3H5S9rsMtdd45zffH7Pz09R6aCqMBa1mvCyRYsiW0NqwBM
+ 0ffWBwSP+4PcRRqmidDnYlpn5EkDMdUzO0NTeF+sZJXPpZ+pKckvKeAGhzn2QOtSQmQN46C
+ h4gYiTHMj49j5IVptTFerJTHnV9x8EPzRTT+V6MqJFpByk0hTFqfIG8vOCZkl1y1JFTYXkV
+ Dmu+aCklN7ExC4SFtlv2A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:G83A7wPXIs0=:eZUyXrcgiZVyYsDAJuwMhJ
+ AJmJ+RFJWrMW2KHx8+jHR+O7m6Ytro8iH53xZtW1DjdvoA4jt/mVzxo0u6Vct91n3H7NkCXzT
+ 8fcCt+vJq3k/0lE97oh41DIli3HzKbV0pVa8j8XU6GSuWUFd1TMUrRE188DEqN8UNfcIqoqZY
+ G3tR0nJDz+vJdTLm1tZMHI+Ae2vNHnNOkwuU7zu6UcITzOTSzMOat0xLkplPL47H9lcgzSryA
+ jm/EJBNZoP6dq2523rTYX4Cow5yiuSAWW/jDGk53FVc2j5yO2Uch1xg6ZsXNe1TkmsbUmLRqG
+ ytIUymr+Zr16Nex/DaV6WjlCXo5kSLIXZbIwrLFFGluEuP8a16OkdFt3DTpxdVrhLtHK84ZIc
+ dRX/7QFVF1CZpJbwC5/78S1O6uQNk0E0ppZvYw2csZZs6hIDbYTF0hMzfdlByo23zpSsaE9aR
+ 2golIwkLrUweTyFeibUdN1ZWdTvx2HlQyIlrru/CMW433WF39KN7TJEJXou3ox8gE+pTgkJ2S
+ 1JoZKeGsawqxdDY6K++RMRHJTI7ix7OzyQkqtztRiBQdNoTI8ZqDrXI2W5DF92BiQThHgP64O
+ VkRDoLeVwN6as0xgWFqkU+0nC82pj0B1rFPWzqjp7BSxJxSwgS/+rAKwpL/+Vy1T2EZSxJPVH
+ EQx4qKn1nH8kgYw1FX7DitDfZzSbNdGHQnpiUHoJltjaQExbLMdZYwVMeL15gSufbv/Jv/enQ
+ vwq+cy8FVs56KvqagK673FzgklidjijpfFwpYrAXVJR+uZj4gG7VHpr8ySWr6KmKgbjfbt0YS
+ qEhTBecr6IV+7Nu/JwAIiKgYKZjZOMcMsqNWPFSvQMu4+YfW8bobPzmbxVWGOFq/aFfb7COIH
+ Q5qfPMirmrongGnq+PID3Ey50LwJWMWNEoNxkwRxdjY3itpe2l3ch7ZanrWc6AJLY9+m40vP6
+ X+ksVlVsghkiXoH7q109tLl2kFXwJcJ22GWAuMhkTOOI4gzsGL4Rb
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Jul 02 2021, Yury Norov wrote:
+On Mon, Jul 5, 2021 at 11:36 AM Szabolcs Nagy <szabolcs.nagy@arm.com> wrote:
+> The 07/02/2021 20:19, Florian Weimer wrote:
+> > * Yury Norov:
+> > > At least Marvell, Samsung, Huawei, Cisco and Weiyuchen's employer
+> > > actively use and develop arm64/ilp32. I receive feedback / bugrepotrs
+> > > on ilp32 every 4-6 month. Is that enough for you to reconsider
+> > > including the project into the mainline?
+> >
+> > I believe that glibc has the infrastructure now to integrate an ILP32
+> > port fairly cleanly, although given that it would be first
+> > post-libpthread work, it would have to absorb some of the cleanup work
+> > for such a configuration.
+>
+> time64 would require syscall abi design changes.
+> (that's likely an abi break compared to what the
+> listed users do)
 
-> At least Marvell, Samsung, Huawei, Cisco and Weiyuchen's employer
-> actively use and develop arm64/ilp32.
+The kernel port uses the generic syscall ABI, and has done so from the start,
+so both time32 and time64 syscalls are supported in principle, as they are
+on any other 32-bit architecture these days (except rv32, which dropped
+the time32 variant, and x32, which uses the time64 calling conventions but
+the time32 syscall names).
 
-This is good to know.  Where can I get the uptodate kernel patches for
-ILP32?
-
-Andreas.
-
--- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+       Arnd
