@@ -2,117 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 701363BBD21
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Jul 2021 14:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFA23BBD9B
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Jul 2021 15:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbhGEMzM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Jul 2021 08:55:12 -0400
-Received: from mail-40136.protonmail.ch ([185.70.40.136]:29575 "EHLO
-        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbhGEMzL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Jul 2021 08:55:11 -0400
-Date:   Mon, 05 Jul 2021 12:52:23 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1625489553; bh=dq32cO+ZKMc2KufqrF4+FnLvbFSGJWzWZn6wbfbMESE=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=NsJzHSo68u3RONXSa1dsHMZ0kieV61sNhU2UxI7md1kCzE+xhhP+TgNVVpxDRdRQb
-         Sn3LLQT//Pmu3Ib0/flMZLDnR1bLKSB+7xpaeoo4JVSm14ld2ueHbTXw/Xt77Pel75
-         8i/oU66Blr2WCYv2KvXa31TJpaWuOv7TIpwxjmZqASWU1VVdbLLzZAAXD3edz9Evi/
-         j8DcH69GHS2ETAUUOXgVEEiT0ikHTY1FdFGNuOaEWHBrjsr3DT4ki70+lfwMuOiPt3
-         DVKHAEGwM9c9yY7xz9u1iKDGIagPe2Kb/ly9UAoWpctS+tNYsNKPEl1pLRosWbX28a
-         nKzSr5FL3ojLw==
-To:     John Wood <john.wood@gmx.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>,
-        valdis.kletnieks@vt.edu,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH v8 3/8] security/brute: Detect a brute force attack
-Message-ID: <20210705124446.45320-1-alobakin@pm.me>
-In-Reply-To: <20210704140108.GA2742@ubuntu>
-References: <20210701234807.50453-1-alobakin@pm.me> <20210702145954.GA4513@ubuntu> <20210702170101.16116-1-alobakin@pm.me> <20210703105928.GA2830@ubuntu> <20210704140108.GA2742@ubuntu>
+        id S231209AbhGENnN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Jul 2021 09:43:13 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:39139 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231208AbhGENnM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Jul 2021 09:43:12 -0400
+Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N3K9E-1l0UWe1aM6-010IjX; Mon, 05 Jul 2021 15:40:34 +0200
+Received: by mail-wr1-f53.google.com with SMTP id a8so10464501wrp.5;
+        Mon, 05 Jul 2021 06:40:34 -0700 (PDT)
+X-Gm-Message-State: AOAM5312NSuiTRLaXwtWGn3ouRkovfw5RGiLfxR7t1USIXWU7nIa8lMO
+        37VMDtuuzEb/AUW+7a4OvYLxygpymMkUG5hCX0g=
+X-Google-Smtp-Source: ABdhPJyNk0E58GdhdijG+SWnLfymVKXZ/4Aj/5fDKjXY6B+nWTKh9KhTnS5biw+IyDgpCND/EK/0PkvZ8uhiQ+fkLjc=
+X-Received: by 2002:adf:fd8e:: with SMTP id d14mr16484625wrr.361.1625492433851;
+ Mon, 05 Jul 2021 06:40:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+References: <linux-audit/audit-kernel/issues/131@github.com>
+ <linux-audit/audit-kernel/issues/131/872191450@github.com> <YN9V/qM0mxIYXt3h@yury-ThinkPad>
+In-Reply-To: <YN9V/qM0mxIYXt3h@yury-ThinkPad>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 5 Jul 2021 15:40:17 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0L4YU2q6WCZviNJGzAuQniwrZDKc7w1nHMB276hZzG6Q@mail.gmail.com>
+Message-ID: <CAK8P3a0L4YU2q6WCZviNJGzAuQniwrZDKc7w1nHMB276hZzG6Q@mail.gmail.com>
+Subject: Re: [linux-audit/audit-kernel] BUG: audit_classify_syscall() fails to
+ properly handle 64-bit syscalls when executing as 32-bit application on ARM (#131)
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        "linux-audit/audit-kernel" 
+        <reply+ADSN7RXLQ62LNLD2MK5HFHF65GIU3EVBNHHDPMBXHU@reply.github.com>,
+        "linux-audit/audit-kernel" <audit-kernel@noreply.github.com>,
+        Mention <mention@noreply.github.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Alexander Graf <agraf@suse.de>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Andreas Schwab <schwab@suse.de>,
+        Andrew Pinski <pinskia@gmail.com>,
+        Bamvor Zhangjian <bamv2005@gmail.com>,
+        Chris Metcalf <cmetcalf@mellanox.com>,
+        Christoph Muellner <christoph.muellner@theobroma-systems.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        James Hogan <james.hogan@imgtec.com>,
+        James Morse <james.morse@arm.com>,
+        Joseph Myers <joseph@codesourcery.com>,
+        Lin Yongting <linyongting@huawei.com>,
+        Manuel Montezelo <manuel.montezelo@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+        Nathan_Lynch <Nathan_Lynch@mentor.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
+        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
+        Steve Ellcey <sellcey@caviumnetworks.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:4neMM1Yflvb8OYyphwzh3kNyrS00gfy3pXY+JOvgQOo2HdCol4T
+ OoSWKtp+/a6zVxNFHFIlN7DKcHI4ypXElXuRdPACfRqxUnN2rR7/yOaZ/i+af3vYULyskau
+ tlFH1A2oVc9mOGCnLTYa9cjuylhsGPmplEUqJDhYACYGEzCveILkTtMe2wzLnw20XPCq45t
+ +UMqMDdjNldhgWu9Hm6sA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vwfYswzw0Fc=:IZluxWwcJlLRV+zd98tvzP
+ dYsBLW5fOMQ9eSu59bQQtsUccti8o3+Dbwu0RkNUnTICiW4WNv+WjLnKZNwKS+McN1W1g26H5
+ EyTSvmsSuzhSR4FckbRT6our87By9Y6ukU5W0gfqU/y8/FSqxESuu/Oe81Y0nOH1D1Jgu95uR
+ RmSfMZyfi6oOSEvWBrPqXrSw6OrwZS9s4lQYTjL/dA54n/YC8esPwZ86LfCl/qtExSADszUrT
+ 8lLcyzWdD9/kDMxEpxZKNITKg1JbVwaJstQTA/fqXI4MPae1r0eYC+0Znir4Uva0vJ8fhkK+r
+ G7abCiUvwt/mx5nzuUNqxKISHJ9nQT2T/O6M1ZDZbgzxSlJQw4HTyBfwW7UknA9CB95rflbi0
+ F1ZgX1ujXl70R1Fgg6aacJjgNdfHXvDDxFBAI2O1sWCaBFrTebEIfxdsPyXg9AKIFLmZq1owD
+ WwIUsM9TdADVu/vBEmBmxigVK297HDhy21CWDor4Ctrj7oKcmJjQM/ugEo2thN4EBHV2sIRNH
+ Ol2b5/F+bf2QRnEtYn4vLeCkFCz73SUz5LWzrv391IBF+EZEcTNWsk69/d6P4y999G6p8Y6JS
+ eDU8Fh8FCc0iEadTpnHumeisPMDV1bsxLKCGJtTXVqlqzMAtLVztKuSlo0njZOxPL2TwLQvlQ
+ g8C9x7AX0NehAiZjRQgWLYB0JdzyARnMnRHyPiKuNl/UgfqTMsR6Z8KVXhtkL2h4SoI3Pgk1Y
+ GFY0nb3VDm69OtdZwpCOhBxK7eGggHAtqbVN2R62lTVe1AlzFdj23AtfnOKqCwsHL6vQkIZ1G
+ uEZRMAZIrxROd0nAccYD/SJs5uDRn80ttvBOWu05VQx2EciasQwhwdkL6AOwH9oa94xhp1bqi
+ y1/mahy1bG0LuzwoOILYzB0zsdEPdJI0+UZMf7BBgnKy4w1Uqy96E03IFUtJMorZXctrsqsg1
+ Q7NPpC8Z+V7gzGEUI8GsmG/InCBK6cZiUaNJ5R79xCkJMhgjY4h8p
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: John Wood <john.wood@gmx.com>
-Date: Sun, 4 Jul 2021 16:01:08 +0200
-
-> On Sat, Jul 03, 2021 at 12:59:28PM +0200, John Wood wrote:
-> > Hi,
-> >
-> > On Fri, Jul 02, 2021 at 05:08:09PM +0000, Alexander Lobakin wrote:
-> > >
-> > > On the other hand, it leaves a potentional window for attackers to
-> > > perform brute force from xattr-incapable filesystems. So at the end
-> > > of the day I think that the current implementation (a strong
-> > > rejection of such filesystems) is way more secure than having
-> > > a fallback I proposed.
-> >
-> > I've been thinking more about this: that the Brute LSM depends on xattr
-> > support and I don't like this part. I want that brute force attacks can
-> > be detected and mitigated on every system (with minimal dependencies).
-> > So, now I am working in a solution without this drawback. I have some
-> > ideas but I need to work on it.
+On Fri, Jul 2, 2021 at 8:07 PM Yury Norov <yury.norov@gmail.com> wrote:
+> On Thu, Jul 01, 2021 at 05:08:45AM -0700, Paul Moore wrote:
 >
-> I have been coding and testing a bit my ideas but:
+> To Catalin, Arnd:
 >
-> Trying to track the applications faults info using kernel memory ends up
-> in an easy to abuse system (denied of service due to large amount of memo=
-r=3D
-> y
-> in use) :(
+> At least Marvell, Samsung, Huawei, Cisco and Weiyuchen's employer
+> actively use and develop arm64/ilp32. I receive feedback / bugrepotrs
+> on ilp32 every 4-6 month. Is that enough for you to reconsider
+> including the project into the mainline?
 >
-> So, I continue with the v8 idea: xattr to track application crashes info.
->
-> > > I'm planning to make a patch which will eliminate such weird rootfs
-> > > type selection and just always use more feature-rich tmpfs if it's
-> > > compiled in. So, as an alternative, you could add it to your series
-> > > as a preparatory change and just add a Kconfig dependency on
-> > > CONFIG_TMPFS && CONFIG_TMPFS_XATTR to CONFIG_SECURITY_FORK_BRUTE
-> > > without messing with any fallbacks at all.
-> > > What do you think?
-> >
-> > Great. But I hope this patch will not be necessary for Brute LSM :)
->
-> My words are no longer valid ;)
+> For me, having different versions of ILP32 is more dangerous in this
+> situation, than upstreaming the project and fixing 2-3 bugs a year.
 
-Ok, so here's the patch that prefers tmpfs for rootfs over ramfs
-if it's built-in (which is true for 99% of systems): [0]
+I think the overall tradeoff is not that different from what it was in the
+past. Keeping it out of the tree clearly creates extra work both for you
+and the users, but reduces the overhead for everyone else, who
+can ignore that corner case. We have tried removing both x86-x32
+support and arm64 big-endian support from the kernel not that long
+ago. Both have considerably more impact on kernel maintenance than
+your aarch64-ilp32 work, and they probably even have fewer users,
+but we always ended up keeping the status quo.
 
-For now it hasn't been reviewed by anyone yet, will see. I'm running
-my system with this patch for several days already and there were no
-issues with rootfs or Brute so far.
+However, there are clearly some changes that happened over the
+past few years that may be relevant here:
 
-[0] https://lore.kernel.org/lkml/20210702233727.21301-1-alobakin@pm.me/
+- The expectation in the past was that ilp32 support would eventually
+   go away as users move on to full 64-bit support. It has survived a
+   lot longer than I would have guessed, but I still find it hard to tell
+   whether this would continue. What's more important than the current
+   number of users is how many of those you expect to run linux-6.x
+   or linux-7.x with aarch64-ilp32 in the future.
 
-> Thanks,
-> John Wood
+- Another thing that has changed is that we now have a rough timeline
+  for aarch32 support to be removed from future Arm processors. If
+  no Armv9 processors after 2022 support Aarch32 mode, we may see
+  interest in ilp32 mode go up between 2025 and 2030 when those
+  processors make it into more markets.
 
-Thanks,
-Al
+- On the other hand, interest in not just 32-bit hardware running Linux
+  but also in 32-bit user space is already declining overall. We'll
+  probably still see some 10 to 20 years of 32-bit user space
+  deployments on (mostly) memory constrained systems, but this
+  is getting increasingly obscure as more applications run into
+  virtual memory space restrictions (3GB or 4GB typically) before
+  they exceed the available RAM. On RV64 and ARCv3, there is
+  already a conclusion that they will not support 32-bit user space,
+  neither ilp32 style on 64-bit instructions nor with hardware support
+  for RV32/ARC32 binaries. I expect the same for Loongarch.
 
+          Arnd
