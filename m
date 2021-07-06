@@ -2,80 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E093BCB6B
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 13:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AAF3BCF2A
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 13:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbhGFLM1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 07:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbhGFLM0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 07:12:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AF4C061574
-        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 04:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BSHS6F3wvtOuYIjqUXgu407Qc57oWUO1LePitIyGwuQ=; b=g35Tk8fsz6Uyn7UEMXTxREw+uj
-        cEWgmHhtaZ/qeXdQarqiDNe9qIz1C8AkBvA5jmNzd2rxZK9PnChN50IDefG6inm4OoiT+eZ6fMSNY
-        oDuuSrjcwpQKnsDp5lgbe3QcVQQYlF1LelVJdWKYQgBsp0WllAnuCS3PedgCiC/xnra02gQonl+Ck
-        TnXaZyzi+z1aK4yJhaMnPW5g3I4t5XpAilifQXk1XDt+hWr/RTIEb1nH3wrdwzOd74SCK+oknCLtk
-        kzfrKfV7t5R3UROUrhox3I6Ai1PWwxwCVfE2x/UoWy/+V9bhgWuMdNAe8adVJRwkH9/uqcPU4FtWN
-        7ASzm6UA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m0iwv-00BAXZ-2J; Tue, 06 Jul 2021 11:09:11 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DC70E300056;
-        Tue,  6 Jul 2021 13:09:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C6F50200843AD; Tue,  6 Jul 2021 13:09:04 +0200 (CEST)
-Date:   Tue, 6 Jul 2021 13:09:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 07/19] LoongArch: Add process management
-Message-ID: <YOQ50HDzj0+y00sR@hirez.programming.kicks-ass.net>
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-8-chenhuacai@loongson.cn>
- <CAK8P3a3FJSX6U9i0KYDKGVgPxi=OnrJJg73d74=KOkbEBoVa+g@mail.gmail.com>
+        id S234611AbhGFL2O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 07:28:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55940 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233349AbhGFLWU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:22:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5539A61CD8;
+        Tue,  6 Jul 2021 11:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625570274;
+        bh=KOu7qrupT3Xq1MPcezUqH3okfRUfVTjKqiEIPZ1rfEU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YN/lNI0u9PIMQ+tLXGiql6tKPJFmBMLIwNUm+lCFvexBYRI+bztqiMjGM96JcIhTd
+         YqO1XJvTYSha1a5EiBKbkMivpDEbnbA/4thf9fm3uAXKnvySUVfIM3gOKL4i11vqY7
+         2fRFL1fBPv2kqro/yQXN/aTcxD9j6x22ZJ4L0CX9SLsDW89gf1e1MsrBKi0HvAPxol
+         xPwgezk1vd+Yfcvl2za9DUJZj+EyhJsdwkk87KB2KwHtw9IAkqzDaikKo07ksojlrj
+         eJmdHHAQXaafuz6ysmKGAsUAyiIL9pVLcPFndwIxklnXwTpbiL5Dt30JPCX29o5Jfg
+         KUwokFVr1tS2A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Martynas Pumputis <m@lambda.lt>, Lorenz Bauer <lmb@cloudflare.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 167/189] net: retrieve netns cookie via getsocketopt
+Date:   Tue,  6 Jul 2021 07:13:47 -0400
+Message-Id: <20210706111409.2058071-167-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210706111409.2058071-1-sashal@kernel.org>
+References: <20210706111409.2058071-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a3FJSX6U9i0KYDKGVgPxi=OnrJJg73d74=KOkbEBoVa+g@mail.gmail.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 06, 2021 at 12:16:37PM +0200, Arnd Bergmann wrote:
-> On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> 
-> > +void arch_cpu_idle(void)
-> > +{
-> > +       local_irq_enable();
-> > +       __arch_cpu_idle();
-> > +}
-> 
-> This looks racy: What happens if an interrupt is pending and hits before
-> entering __arch_cpu_idle()?
+From: Martynas Pumputis <m@lambda.lt>
 
-They fix it up in their interrupt handler by moving the IP over the
-actual IDLE instruction..
+[ Upstream commit e8b9eab99232c4e62ada9d7976c80fd5e8118289 ]
 
-Still the above is broken in that local_irq_enable() will have all sorts
-of tracing, but RCU is disabled at this point, so it is still very much
-broken.
+It's getting more common to run nested container environments for
+testing cloud software. One of such examples is Kind [1] which runs a
+Kubernetes cluster in Docker containers on a single host. Each container
+acts as a Kubernetes node, and thus can run any Pod (aka container)
+inside the former. This approach simplifies testing a lot, as it
+eliminates complicated VM setups.
+
+Unfortunately, such a setup breaks some functionality when cgroupv2 BPF
+programs are used for load-balancing. The load-balancer BPF program
+needs to detect whether a request originates from the host netns or a
+container netns in order to allow some access, e.g. to a service via a
+loopback IP address. Typically, the programs detect this by comparing
+netns cookies with the one of the init ns via a call to
+bpf_get_netns_cookie(NULL). However, in nested environments the latter
+cannot be used given the Kubernetes node's netns is outside the init ns.
+To fix this, we need to pass the Kubernetes node netns cookie to the
+program in a different way: by extending getsockopt() with a
+SO_NETNS_COOKIE option, the orchestrator which runs in the Kubernetes
+node netns can retrieve the cookie and pass it to the program instead.
+
+Thus, this is following up on Eric's commit 3d368ab87cf6 ("net:
+initialize net->net_cookie at netns setup") to allow retrieval via
+SO_NETNS_COOKIE.  This is also in line in how we retrieve socket cookie
+via SO_COOKIE.
+
+  [1] https://kind.sigs.k8s.io/
+
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Signed-off-by: Martynas Pumputis <m@lambda.lt>
+Cc: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/alpha/include/uapi/asm/socket.h  | 2 ++
+ arch/mips/include/uapi/asm/socket.h   | 2 ++
+ arch/parisc/include/uapi/asm/socket.h | 2 ++
+ arch/sparc/include/uapi/asm/socket.h  | 2 ++
+ include/uapi/asm-generic/socket.h     | 2 ++
+ net/core/sock.c                       | 7 +++++++
+ 6 files changed, 17 insertions(+)
+
+diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+index 57420356ce4c..6b3daba60987 100644
+--- a/arch/alpha/include/uapi/asm/socket.h
++++ b/arch/alpha/include/uapi/asm/socket.h
+@@ -127,6 +127,8 @@
+ #define SO_PREFER_BUSY_POLL	69
+ #define SO_BUSY_POLL_BUDGET	70
+ 
++#define SO_NETNS_COOKIE		71
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+index 2d949969313b..cdf404a831b2 100644
+--- a/arch/mips/include/uapi/asm/socket.h
++++ b/arch/mips/include/uapi/asm/socket.h
+@@ -138,6 +138,8 @@
+ #define SO_PREFER_BUSY_POLL	69
+ #define SO_BUSY_POLL_BUDGET	70
+ 
++#define SO_NETNS_COOKIE		71
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+index f60904329bbc..5b5351cdcb33 100644
+--- a/arch/parisc/include/uapi/asm/socket.h
++++ b/arch/parisc/include/uapi/asm/socket.h
+@@ -119,6 +119,8 @@
+ #define SO_PREFER_BUSY_POLL	0x4043
+ #define SO_BUSY_POLL_BUDGET	0x4044
+ 
++#define SO_NETNS_COOKIE		0x4045
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+index 848a22fbac20..92675dc380fa 100644
+--- a/arch/sparc/include/uapi/asm/socket.h
++++ b/arch/sparc/include/uapi/asm/socket.h
+@@ -120,6 +120,8 @@
+ #define SO_PREFER_BUSY_POLL	 0x0048
+ #define SO_BUSY_POLL_BUDGET	 0x0049
+ 
++#define SO_NETNS_COOKIE          0x0050
++
+ #if !defined(__KERNEL__)
+ 
+ 
+diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+index 4dcd13d097a9..d588c244ec2f 100644
+--- a/include/uapi/asm-generic/socket.h
++++ b/include/uapi/asm-generic/socket.h
+@@ -122,6 +122,8 @@
+ #define SO_PREFER_BUSY_POLL	69
+ #define SO_BUSY_POLL_BUDGET	70
+ 
++#define SO_NETNS_COOKIE		71
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 946888afef88..2003c5ebb4c2 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1622,6 +1622,13 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
+ 		v.val = sk->sk_bound_dev_if;
+ 		break;
+ 
++	case SO_NETNS_COOKIE:
++		lv = sizeof(u64);
++		if (len != lv)
++			return -EINVAL;
++		v.val64 = sock_net(sk)->net_cookie;
++		break;
++
+ 	default:
+ 		/* We implement the SO_SNDLOWAT etc to not be settable
+ 		 * (1003.1g 7).
+-- 
+2.30.2
+
