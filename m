@@ -2,73 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0413BD9F5
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 17:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D383BD9F8
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 17:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbhGFPUd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 11:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S232775AbhGFPUg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 11:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbhGFPUb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 11:20:31 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480C6C061768
-        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 06:48:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vodS0GYG9U+aXbQ03KOG+hJY9dpu9Fhs8KgbyaghQRQ=; b=cJ6aYQ/+2P/YLO6yhXdXdacEXj
-        LYvqOxFGSajIPxFWcs5digTe2QK+JJNiIzt+Dl6F+eK4i8oy5K2troVE95Qchi1przF8qTq6tD5JY
-        G+mVMnabSul1Nwf5cngjx/U6BbtVyztPmsw0gN15FTUyHWsX6ezfUHOtOIxpq6qnbl6ZBBcZ/lsvp
-        EdgNPXxgXi2qY4wfZB2jntSfJG5DiTpt93hisagStPSso65X3Wvjk/46mXduRFWfKhb3qOCTZcdkQ
-        ln7gUvPlZ/CHWdFTxZQ4w9o+BusfTu8ijEcjLUtHYsdDxaAchZs8NNOoJ9CpSLTpUp2be29L5rjvO
-        ZgODuC6A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m0lRG-00F3Vj-Sk; Tue, 06 Jul 2021 13:48:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3745F300056;
-        Tue,  6 Jul 2021 15:48:37 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 218AE200E16C1; Tue,  6 Jul 2021 15:48:37 +0200 (CEST)
-Date:   Tue, 6 Jul 2021 15:48:37 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        with ESMTP id S232741AbhGFPUc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 11:20:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78387C0613DB
+        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 06:51:26 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1625579481;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=I7YDanFK9pzB5Y+m5EjpM3UimxNDTwFAGgiErt/H6CQ=;
+        b=pc/29rOQzrRcPCmO0jGZLFRHrJ8klbjFgJxTTnR7ATLueW9bz9nFbgnTABmZyU+9L3USFQ
+        IOYW/uUOQwBvnusmbp0iW0ku015f/WwDr7YJNLkhqw6kazSb4E+X4szNHYz6XxkCxNdvHR
+        RKNY9xXpzbLx6LEPVDJzT9t4w6/La67Zmn7dxmiz8qEaAdMqvnFH8Pxg/gxTtKdjgUQcmW
+        ddrvUcHUrcnL5ZouiaYHVS2Ftz1HfbeKB+nGKACI3Pel1tnLv0rNaccj9weOxVeJotKIzo
+        rJRA6FHtjm1ZR0FMOgdC1p5XEfErWqyZXbKWyMUBVutyped8LFeTXGJYEb0SHg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1625579481;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=I7YDanFK9pzB5Y+m5EjpM3UimxNDTwFAGgiErt/H6CQ=;
+        b=MxG7xoJ4CEth/g3h3Wk+8SU8YGJ0ZnUeTkqiA9rzOl3r+PGwzjTbqVM1RtnIS8BF8Z/4R2
+        SLXcI+2lxzR7myCw==
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 17/19] LoongArch: Add multi-processor (SMP) support
-Message-ID: <YORfNeAKG8tvOvjm@hirez.programming.kicks-ass.net>
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-18-chenhuacai@loongson.cn>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH 09/19] LoongArch: Add system call support
+In-Reply-To: <20210706041820.1536502-10-chenhuacai@loongson.cn>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-10-chenhuacai@loongson.cn>
+Date:   Tue, 06 Jul 2021 15:51:21 +0200
+Message-ID: <87tul7r1nq.ffs@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210706041820.1536502-18-chenhuacai@loongson.cn>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 06, 2021 at 12:18:18PM +0800, Huacai Chen wrote:
-> +/*
-> + * Loongson-3's SFB (Store-Fill-Buffer) may buffer writes indefinitely when a
-> + * tight read loop is executed, because reads take priority over writes & the
-> + * hardware (incorrectly) doesn't ensure that writes will eventually occur.
-> + *
-> + * Since spin loops of any kind should have a cpu_relax() in them, force an SFB
-> + * flush from cpu_relax() such that any pending writes will become visible as
-> + * expected.
-> + */
-> +#define cpu_relax()	smp_mb()
+Chen!
 
-Guys! You've not fixed that utter trainwreck ?!? You've taped out a
-whole new architecture and you're keeping this?
+On Tue, Jul 06 2021 at 12:18, Huacai Chen wrote:
+> +	li.d	t1, _TIF_WORK_SYSCALL_ENTRY
+> +	LONG_L	t0, tp, TI_FLAGS	# syscall tracing enabled?
+> +	and	t0, t1, t0
+> +	bnez	t0, syscall_trace_entry
+> +
+> +syscall_common:
+> +	/* Check to make sure we don't jump to a bogus syscall number. */
+> +	li.w	t0, __NR_syscalls
+> +	sub.d	t2, a7, t0
+> +	bgez	t2, illegal_syscall
+> +
+> +	/* Syscall number held in a7 */
+> +	slli.d	t0, a7, 3		# offset into table
+> +	la	t2, sys_call_table
+> +	add.d	t0, t2, t0
+> +	ld.d	t2, t0, 0		#syscall routine
+> +	beqz    t2, illegal_syscall
+> +
+> +	jalr	t2			# Do The Real Thing (TM)
+> +
+> +	ld.d	t1, sp, PT_R11		# syscall number
+> +	addi.d	t1, t1, 1		# +1 for handle_signal
+> +	st.d	t1, sp, PT_R0		# save it for syscall restarting
+> +	st.d	v0, sp, PT_R4		# result
+
+Please do not add _again_ TIF handling in ASM. Please use the generic
+entry code infrastructure for this. It handles the complete set of TIF
+bits (if enabled in config) out of the box and it does so correctly.
+
+Thanks,
+
+        tglx
+
+
