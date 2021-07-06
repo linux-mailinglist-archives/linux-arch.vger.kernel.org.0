@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 065913BC958
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327943BC960
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbhGFKTs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 06:19:48 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:34787 "EHLO
+        id S231393AbhGFKUC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 06:20:02 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:45371 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbhGFKTs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 06:19:48 -0400
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MLRI3-1lk0V52pV5-00IQXB for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021
- 12:17:08 +0200
-Received: by mail-wr1-f50.google.com with SMTP id t6so15486045wrm.9
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:17:08 -0700 (PDT)
-X-Gm-Message-State: AOAM532Lt1JmPWkxiWiXDgcHjEfVB1POs7kfyWuO9fkzjPELTicVwvQZ
-        0IWZALBnLh5uJfIvq+cFWvZzSSSYeXekPK98ESQ=
-X-Google-Smtp-Source: ABdhPJxSSRGEkOTBwRyc83HoZfff9aIidMO/vDnjHhdpAbxlk36ybOHy/Gy5VKls8tTuCCmQnRVhrbPx9OB9TquWdm0=
-X-Received: by 2002:a5d:6485:: with SMTP id o5mr21542838wri.286.1625566628331;
- Tue, 06 Jul 2021 03:17:08 -0700 (PDT)
+        with ESMTP id S231282AbhGFKUB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 06:20:01 -0400
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MYN7M-1lfJf129cg-00VOGH for <linux-arch@vger.kernel.org>; Tue, 06 Jul
+ 2021 12:17:21 +0200
+Received: by mail-wr1-f54.google.com with SMTP id l5so8671340wrv.7
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:17:21 -0700 (PDT)
+X-Gm-Message-State: AOAM532hPDNkiVdZvHlPefM0EUsX4zD4M0jRtrGQulb9BLuKQJpocJOx
+        jvXakmoKAhqeQCAa2W5K4Cv2FZB+s5Pz4rG8hFg=
+X-Google-Smtp-Source: ABdhPJxQzbgavwYELdgoe8eQfw9ugekTjXeay2rD7sYBJUJGICVbToMqeZuSSOCELBlk4fXT8MQPmW00O5ik8D8v0uA=
+X-Received: by 2002:adf:fd8e:: with SMTP id d14mr21699896wrr.361.1625566641147;
+ Tue, 06 Jul 2021 03:17:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-9-chenhuacai@loongson.cn>
-In-Reply-To: <20210706041820.1536502-9-chenhuacai@loongson.cn>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-10-chenhuacai@loongson.cn>
+In-Reply-To: <20210706041820.1536502-10-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 6 Jul 2021 12:16:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Hr7TbuO6LBVC5p5AghWc3j-NCSi8rwd3aq5o8g=Jk1w@mail.gmail.com>
-Message-ID: <CAK8P3a2Hr7TbuO6LBVC5p5AghWc3j-NCSi8rwd3aq5o8g=Jk1w@mail.gmail.com>
-Subject: Re: [PATCH 08/19] LoongArch: Add memory management
+Date:   Tue, 6 Jul 2021 12:17:05 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0n+HcPhevh4ifNMmsv+MUtGn1wky-HWZpyNT1GVSq4+Q@mail.gmail.com>
+Message-ID: <CAK8P3a0n+HcPhevh4ifNMmsv+MUtGn1wky-HWZpyNT1GVSq4+Q@mail.gmail.com>
+Subject: Re: [PATCH 09/19] LoongArch: Add system call support
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -42,109 +42,100 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:jq+n9LgDVteEdiuwzDDJ0+pvSgdnMD2V9lez2ZFxgZE6VsAYPwf
- FRZdcl6pccs6ynb2KP6Ia6fVAOHrZ8Qv34Pw0t3mj7pNtaVAdDjX6PwUOnERqDuqAtR1SwI
- mjjG3DZL2HDUUVkb1ostLQRrnwMbjnBOALKo8IDBetgfAHUA/4fZowdGZ4srWet+xdf1Qo8
- e0YCONS35jLjqR+6rYGMA==
+X-Provags-ID: V03:K1:aATH8LKLD5DxlKm09OI0i9AwA3YgE1/i1MbNzn0Kcx4P8mMnp6e
+ e1V7O9Pw8RAWNc+9/G+aqPZenZd0acPa2fdr+vzlVbD5JiZWhP7/F2ugK4wQIU+ygbeRLUC
+ ky5gMlxjj6Xr4r+DCv+WVTL+tIAhpVnVbSUGrt0iHvurqqj0hNLQxxYkfDwAD+S2UuVTW6C
+ spTbf3VszenKcwJ/ZkgHQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xRgO3ie1NS8=:2aARujORU6teoMj5Z3OZip
- 8m2ubTqnc9Qoe3HdS/a9isacN/Pkfgm0YNulEZWzqUyKrjD3MUMwoAg4JUPl7IBE3zUynAYFG
- 43NffkQdOPacBuUBs+yX9Yf9jM9/mI2S9rCSfzuzUDKNrkLkblSpwUreQLCH06VPBfB2ilkoi
- i7HuArTYanXGvocMFKgQNS8l1ncyMzZlbS2utiwe7kegq1gsBzlhS9c23RBHiv2lVjmOi3JKO
- FQK1ec/ZHpr5LtdadvAxmxAn3nC2eBOU6+OqvG39mm+0Jn+oDF5lKfk0fP/z6sHWjFTyUu3M9
- QqVnmae+Per7wLpbwJ/RF034mpxZH9XcqvM94A9XIk5F27wHGTiovasoBNdJjG0pflmzrRB3z
- reKjs1n889yl6OFZdcERzR1sKgjFqQXu7+US3/hbrfBHnM3EGEHNdXeRNHlZ1A1Jh/piDkNHl
- TJqyJ4q3Up2WasPhhKhHn4zBI1UCvhb48rAqkxyfsBJrJext6VX/6t/j4e7xFouVTHxizWftM
- Jx6Fc3r7z+5eQ2wZQAqmXNfRDk+XQUSsqUK7j0JwTAM9Qqw2QQ/51oSPZD390kf+WhFp6ltY2
- rDhZXRVj15I/s9Hjh5leacWODaEvdCWdTcqALMjgje5mZY5zy2xxaVbiD/HzH6EBTpYjrj1sC
- CRnqE0RG5z+QYcIEQ3Yyl/a3DQOyxgeZBzhCwZT2PSo9d8pLj/KAx5rxx/EWXhf88Gnd3Df9J
- boX1qMZ+uLn/T5nK/61LIeGc60aiP1E8qsoZq3PNCPQU1EIwYlERUPiWyDSdL6AGaDvICAJ7U
- wzoYvYLeg7qle05d2daXmDPFC5icvBkY6EpakaXpWPF6j7/58WEp2w58j2ueDuIIaOwk5GM/Q
- 9D0/epuA7B6vp4Y4YczYHCq8wk3KJ5Z3NcG4pLwiKO3ryJVI6Pylpm9i7iuZXiHfKMhE4yWZN
- L3z0j3oiVyo5NvEafoGCvSpo2f5ZrIHTQtMaLPpV14VrhhgjU0Pdn
+X-UI-Out-Filterresults: notjunk:1;V03:K0:f+f0Bo5ZjYc=:VTz/9Oq+sViSlAJcj3LFRx
+ vNFtwMH6jikzY/H/IDvtu1SmA6oJlmMHeRJ8ezEDpDkSEqknXPJgfX+U16LqfMqUyiFyXPfI5
+ JANUlE7g/cs1Wy945gtvZbspjCDd7sR7zUtcmN7FJcB45+Es3rxybd+CxQu0tVfIDnFmdE97+
+ ptrkEHb83nO1QuCLNHUcbigVhuunAxoBtrM5660v0poiDDAaQyF3haoepXwegZrutQ0Ok0RFp
+ gHNwfgLWqNzujzI3G+rXgCpBGpenhU+fuwCECQqOmZTWbFf9wf64bXeXl8Yp7GzMZCRPwJ6E1
+ 9t/29sL2ZW7bCNDcJO4P+moOccwFkM9fxhi6gWgSqkCkC3gLD/rE0KXDSTTPNE06FYGtdKx5U
+ QIKVMdWuNgmIfEtZrba5B6fSQIqFpSnlbnl4r81m729S1NGG5PiWkt1Yi7N7PyjF6/fTsNZNp
+ R9hkboSDqi5rDDgEGlO5ooGN/xYSzyqO724y+33I3zUhJji5c+xv6G4GtndDthYlU5v+Ekujh
+ M9PAHCPWMuWVn7kWjlKcVe2x4YD4pb+4KDM73+RhZLD1cB9acFPS9eFsUy8AG5yP6/MTtJtZ/
+ uGgULAw0SZU/It06Xg6hGlobyH7y1FuMYdZJkYt06ep2zogXChcYqXOl6r+BHpPUeOvpIQAwV
+ qYNYiwLsDhi728Rii3ZGQRVfqF0yzlC31acNS2oIA8/7ZGioPvPMrdoO0RxaTOETkkWTWluhp
+ PpsvRBnLN2Wm6wnfC55orceUB+VhjfRqkzJatPyniC4sIG7dNENI4pPZ32ihBP8m/JIFiyBZq
+ F5P+94HtqTJZG/PzsX/XXJE9G9o5ZQ+N8lOJYZIHtpGPD201Dq3trZerQ4FTe6vBwpboSKxJL
+ iFQQ0IJIMYafYhMiU1UWVXuCUnzjw0RnYDYYNXLRBXdQ4I95c5b7JChjeVebJsECgjlO0WPd/
+ VDl9NuQH6Q/dZjQ/Mg6+m7ZodxnBQW+6g2TQTZSy7R9rDA1VLH2ba
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
 
-> diff --git a/arch/loongarch/include/asm/kmalloc.h b/arch/loongarch/include/asm/kmalloc.h
+> diff --git a/arch/loongarch/include/asm/seccomp.h b/arch/loongarch/include/asm/seccomp.h
 > new file mode 100644
-> index 000000000000..b318c41520d8
+> index 000000000000..220c885f5478
 > --- /dev/null
-> +++ b/arch/loongarch/include/asm/kmalloc.h
-> @@ -0,0 +1,10 @@
+> +++ b/arch/loongarch/include/asm/seccomp.h
+> @@ -0,0 +1,9 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-> + */
-> +#ifndef __ASM_KMALLOC_H
-> +#define __ASM_KMALLOC_H
+> +#ifndef __ASM_SECCOMP_H
+> +#define __ASM_SECCOMP_H
 > +
-> +#define ARCH_DMA_MINALIGN L1_CACHE_BYTES
+> +#include <linux/unistd.h>
 > +
-> +#endif /* __ASM_KMALLOC_H */
+> +#include <asm-generic/seccomp.h>
+> +
+> +#endif /* __ASM_SECCOMP_H */
 
-You wrote elsewhere that DMA is cache-coherent, so this should not
-be needed at all.
+I would expect this file to not be needed.
 
-> diff --git a/arch/loongarch/include/asm/shmparam.h b/arch/loongarch/include/asm/shmparam.h
+> diff --git a/arch/loongarch/include/asm/uaccess.h b/arch/loongarch/include/asm/uaccess.h
 > new file mode 100644
-> index 000000000000..f726ac537710
+> index 000000000000..b760aa0a3bc6
 > --- /dev/null
-> +++ b/arch/loongarch/include/asm/shmparam.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
+> +++ b/arch/loongarch/include/asm/uaccess.h
+> @@ -0,0 +1,453 @@
+> + * The fs value determines whether argument validity checking should be
+> + * performed or not.  If get_fs() == USER_DS, checking is performed, with
+> + * get_fs() == KERNEL_DS, checking is bypassed.
+> + *
+> + * For historical reasons, these macros are grossly misnamed.
 > + */
-> +#ifndef _ASM_SHMPARAM_H
-> +#define _ASM_SHMPARAM_H
-> +
-> +#define __ARCH_FORCE_SHMLBA    1
-> +
-> +#define        SHMLBA  (4 * PAGE_SIZE)          /* attach addr a multiple of this */
-> +
-> +#endif /* _ASM_SHMPARAM_H */
 
-I think this needs to be defined in a way that is independent of the configured
-page size to minimize the differences between kernel configuration visible to
-user space.
+You removed set_fs()/get_fs(), which is good, but you forgot to remove
+the comment.
 
-Maybe make it always 64KB?
-
-> diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
+> diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
 > new file mode 100644
-> index 000000000000..9b57dc69f523
+> index 000000000000..6c194d740ed0
 > --- /dev/null
-> +++ b/arch/loongarch/include/asm/sparsemem.h
-> @@ -0,0 +1,21 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LOONGARCH_SPARSEMEM_H
-> +#define _LOONGARCH_SPARSEMEM_H
-> +
-> +#ifdef CONFIG_SPARSEMEM
-> +
-> +/*
-> + * SECTION_SIZE_BITS           2^N: how big each section will be
-> + * MAX_PHYSMEM_BITS            2^N: how much memory we can have in that space
-> + */
-> +#define SECTION_SIZE_BITS      29
-> +#define MAX_PHYSMEM_BITS       48
+> +++ b/arch/loongarch/include/uapi/asm/unistd.h
+> @@ -0,0 +1,7 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#define __ARCH_WANT_NEW_STAT
 
-Maybe add a comment to explain how you got to '29'?
+Why do you need newstat? I think now that we have statx and the libc
+emulation code on top of it, there is probably no need to support both
+on the kernel side.
 
-> +
-> +#ifdef CONFIG_PAGE_SIZE_4KB
-> +#define PAGE_SHIFT      12
-> +#endif
-> +#ifdef CONFIG_PAGE_SIZE_16KB
-> +#define PAGE_SHIFT      14
-> +#endif
-> +#ifdef CONFIG_PAGE_SIZE_64KB
-> +#define PAGE_SHIFT      16
-> +#endif
+> +#define __ARCH_WANT_SYS_CLONE
+> +#define __ARCH_WANT_SYS_CLONE3
 
-Shouldn't these be defined in some header?
+Similarly, if you have clone3, you should not need clone.
 
-        Arnd
+> +#define __ARCH_WANT_SET_GET_RLIMIT
+
+And here for prlimit64
+
+
+> +void *sys_call_table[__NR_syscalls] = {
+> +       [0 ... __NR_syscalls - 1] = sys_ni_syscall,
+> +#include <asm/unistd.h>
+> +       __SYSCALL(__NR_clone, __sys_clone)
+> +       __SYSCALL(__NR_clone3, __sys_clone3)
+> +};
+
+I would suggest expressing this as
+
+#defined sys_clone3 __sys_clone3
+
+instead of overriding the other entries.
+
+          Arnd
