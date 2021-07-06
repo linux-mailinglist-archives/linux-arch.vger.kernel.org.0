@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 889543BC966
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3189B3BC967
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbhGFKVA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 06:21:00 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:58539 "EHLO
+        id S231223AbhGFKVJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 06:21:09 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:60523 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbhGFKVA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 06:21:00 -0400
-Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mna0x-1lHzCb4BRF-00jbJz for <linux-arch@vger.kernel.org>; Tue, 06 Jul
- 2021 12:18:21 +0200
-Received: by mail-wm1-f53.google.com with SMTP id j39-20020a05600c1c27b029020028e48b8fso1337129wms.0
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:18:20 -0700 (PDT)
-X-Gm-Message-State: AOAM5310u0Ifd9fPQxJVqLsdu1iHCts9oWj5ziN1ZcDDbg1zw+EOLAN+
-        kpvXBRO+38MZhmMIyj5G6F26s2n4PQzFTtXRWIA=
-X-Google-Smtp-Source: ABdhPJy3PAPMlhJaaFOH+rBGp4Qg6DocjuhXRxvZxuuRK2egXavJUwFC+M+bh8iq+33R5NrVbjHExEkVd19Pw6y/amM=
-X-Received: by 2002:a05:600c:4101:: with SMTP id j1mr3967081wmi.84.1625566700718;
- Tue, 06 Jul 2021 03:18:20 -0700 (PDT)
+        with ESMTP id S231216AbhGFKVJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 06:21:09 -0400
+Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MSKq6-1lcXQk1LPE-00Sbul for <linux-arch@vger.kernel.org>; Tue, 06 Jul
+ 2021 12:18:30 +0200
+Received: by mail-wr1-f43.google.com with SMTP id p8so25449083wrr.1
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:18:30 -0700 (PDT)
+X-Gm-Message-State: AOAM530c8FDWZfwqI2lOPVPw6oYPZvDf2ppJiXp1dm3279C3kztvuY+h
+        sNTRb/xu59MRXbZJAyjDj+m11UKm2zzE4YnqG3s=
+X-Google-Smtp-Source: ABdhPJxNHkmLmXGOO/8FvJHNm4B4biB/wRRdj0bsldiZwekKlGulL4v8OhjBpjifcnRMdjB7Xn5RkQp0kEcRO4UmNQA=
+X-Received: by 2002:adf:e107:: with SMTP id t7mr20931797wrz.165.1625566710070;
+ Tue, 06 Jul 2021 03:18:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-19-chenhuacai@loongson.cn>
-In-Reply-To: <20210706041820.1536502-19-chenhuacai@loongson.cn>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-20-chenhuacai@loongson.cn>
+In-Reply-To: <20210706041820.1536502-20-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 6 Jul 2021 12:18:05 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2444qoaDJFvp-t2EzrZ2W6T-m_DPJbDAdJeSB-auV8gA@mail.gmail.com>
-Message-ID: <CAK8P3a2444qoaDJFvp-t2EzrZ2W6T-m_DPJbDAdJeSB-auV8gA@mail.gmail.com>
-Subject: Re: [PATCH 18/19] LoongArch: Add Non-Uniform Memory Access (NUMA) support
+Date:   Tue, 6 Jul 2021 12:18:14 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2J+axpXoP_P+PApo90upUqn57=6_wY5RPZv6oNVV7oUA@mail.gmail.com>
+Message-ID: <CAK8P3a2J+axpXoP_P+PApo90upUqn57=6_wY5RPZv6oNVV7oUA@mail.gmail.com>
+Subject: Re: [PATCH 19/19] LoongArch: Add Loongson-3 default config file
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -42,56 +42,107 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:s6C/4yDjgFIhzPp96V2o9xMG/HdurkENkJ2iSLItmGsgmsNsiAK
- NhAY4XnE5wBif8lg1SkN3TuJzokeuUZBkTF6Fy4XDHYBekfn49xuVEdTNO19uBh4iAnKBm/
- yPJ9lrFk0YT9xY8ur3b2qs95ggKO7Tv0qaf9O3692a5RAStS0AZY863XmrYeInlkiGsM9ZN
- vKDRrMe/KCQb3gkUD3ZyQ==
+X-Provags-ID: V03:K1:llhN9c/mvVee+eym3wzyVdLjXAQlTk82topTE8saQlXPzx55UFt
+ aC8wwl8TACUZWTG+wiHBrEYuaeOKI2wjgIvWD1Iq4+xrRLXkMDo9d0a+adjUriDKU3E2TWO
+ 2t/WdGLXwOQZUHya2tkSBH6RG85TwdZPc75HHloTqXdGRyGh0uFEUlriKOWdFCQUqbK5IWb
+ 7l+/WGhhUm4LFGPIICr3Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aOB/j8PnNqQ=:DgB1mFSgw0ucdh80J5Zumj
- rQwCiAvboTXPwyGSkcgmoyarvG+UccZl2FQEAeX8dnfUUYWUyVRJ+521yhwmXU5noqM0Sevr9
- GRR/5DQJKPbenKomnUfCcwcQ1f4DfltcWqJkwP4PAnlVBkgRJ19rmgZ9zDb3eu4ZwqWCjYdnj
- 6NVOz6cAOnhjiNJnayURJ5XJG/ueQN4FjIw65N0J1piTG8vXOYohklw1OuRcSIvhtThsZStHh
- YMv3Z4D6LkuLeF5RsbNt98l8DThVxeo0rYf+eV+If05OIAO+EYkYw0xycoms1ILqIiyxJ3SeA
- LzKmPQNS7c6zay4NaflvBZXwNMZacZZK8Z/xhCkTYcu9tTQxUSdtNLEKkK1zSk8921vaQYtpl
- jwuhQsxRf4zWG8bfgq50UnR77Jj5F+9eDZnIKwls2YC2MpJcevnlujg8aD49vgLXX23fPlivM
- I9P4CmtLHhz0xEI8ccJJh1fuPjxNnSHZVn2PJCOywgGZq5jqNtlYJW0oEWWVlmQo2qy6nw0UL
- U7L//cEyebIg261a3gN2QjNXcbqKdlLosXk2kIglCpLKevKYTbmTV4WWXeDiWg9501pMvffkf
- ApSk7x24zg1Qf8+Ed9ETdYJSltJMtTAhhhJKlod/d6CAz/V3wBdytP1UuWeedIKufdF5nNh1I
- V25oj+6DNoqStMDrfMMgFM6utW3JepRga4UqXtjN7cVi6NOtP+5OaS3Q8KEy/JoJhdYWtWWi7
- nVC/bRRG/M02AnO+OdCT7vj8XkinwskdFtzExPSOWFSLMsI4/W07hHy6VPiaO6Jr/LV/HgxiC
- aowxJtx/GfIU51US1D1owPqfQjiwUZQbioVc6gBQ82ds/kwFtDtmirsXyFOQKksJV7VROmeGX
- l8WvhMtmbzFPquG/s3QJu9zes+XFmcfx03oAKG36MKSgs79r3nx3GP8iilfEGLu9/xkWG43vJ
- SfQAyT2/nJq2yaowo7YiZWYhp6uB5Zs5XT5r4qt2cekaav/Y3z7Qg
+X-UI-Out-Filterresults: notjunk:1;V03:K0:EluYE6EqtS4=:KSOz4oyXPTCoJGziJbkQbc
+ wEVZ1JFQIc4P7GWdepFejHxv1Q5tYLUkLqxSpjckPkDRQKLZbs7UnOclzuNhxpbzBI11F0NJ+
+ bxnA/9NVP22U7p08qIPrKNmYk3jiT9aA/4PqCJzX5IUKlNqcCMfR2V2b8jY6yjoh0KZW9NsQM
+ tLmKRxF5qy+zFO1PuHZ8PG22T8AtKHy3pMDKH8gTWJGdCqeukSptt0Ime330iIJHKC+R86P0W
+ 7g7TCC+VCr6lK48IJ0ObZ9EZw87UXrAQUeEInUbEZ9kCe2ag1sOxi9jBWuU075OQnXNaBfZQa
+ Rcl8EnTp8tpssEAfeSqhFRrO3mhtPkdVK30Um1EtMa5/dlOTidSyhH/KrMYr211CKXuq2S4KF
+ Y4ji1b9u19YWiEylbhpMxg85pwIwY267C6PQ+/7EmPYmaUMb1jScubodKFu+0mFXmbFVzVbeH
+ HQhGw4NcudDKP2A7Hr6Lc6EAwIbZiSQUbq9CXJfPO7WK8X280W5r3Cd3yql/qaVDrI/UROINo
+ LC2s2egDuMwYFm+NJ2SylT+ggUcx6xsumQUcbKtF7Z2t+Mj1k+9j/9vUjHMOhPgXtalR/bdoF
+ b8/uTyu61B6vkPGWi93nUYwaT0KWDjN9HL12Hh17uv+o46r5ps3kr23KSy7YIdZD89A9aFR5h
+ rMYQlaEye4tvX9TswS/xcoXHVeqmbnfn8FTpH1XK0Bc5Z/OvVnWE2XL1jO3MM9qY0/9g/CPUD
+ CV4pDT6oICJH1d6W0dlz04DpY31EkZvfFyVJJndiWonhTp9Jk1q5XK8l07IgRvRfPLasmuAoH
+ +J4s+5itU882AJhgexXuIUPw1uD7eSnaTI6anQs4af5CTL0TfzM7Pg9jNSyGq3lNQY+3P6WGo
+ w3ObHE3TVQ+kDq9dfCntWrpXezI9v26XG62yEv9tgAn0CMt5deDJJ75lN3T1kpAviWBFpqIG7
+ eO8hLPdoDeh8Zr6W2jAqrnTdzlNPN9A/tfuwyKkXS5beXpi4QZDS3
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
 
-> +#ifdef CONFIG_SWIOTLB
-> +/*
-> + * Optional platform hook to call swiotlb_setup().
-> + */
-> +extern void plat_swiotlb_setup(void);
-> +
-> +#else
-> +
-> +static inline void plat_swiotlb_setup(void) {}
-> +
-> +#endif /* CONFIG_SWIOTLB */
+> +CONFIG_EMBEDDED=y
 
-I guess this accidentally slipped into the wrong patch? It doesn't appear to be
-NUMA related.
+You probably should not set this one.
 
-> diff --git a/arch/loongarch/loongson64/dma.c b/arch/loongarch/loongson64/dma.c
-> new file mode 100644
-> index 000000000000..f259f70c75fa
-> --- /dev/null
-> +++ b/arch/loongarch/loongson64/dma.c
-> @@ -0,0 +1,59 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +CONFIG_CAIF=y
 
-Same for this file.
+And almost certainly not this one.
+
+> +CONFIG_PCCARD=m
+> +CONFIG_YENTA=m
+> +CONFIG_RAPIDIO=y
+> +CONFIG_RAPIDIO_TSI721=y
+
+These seem unlikely as well. Can you confirm that you have both old-style
+PC-Card support and RAPIDIO support on your most common hardware?
+
+> +CONFIG_PARPORT=y
+> +CONFIG_PARPORT_PC=y
+> +CONFIG_PARPORT_SERIAL=y
+> +CONFIG_PARPORT_PC_FIFO=y
+> +CONFIG_PRINTER=m
+
+Is this an on-board PCI device you actually have?
+What do you connect to the PC parport? Most printers
+in the past 15 years only have USB or network connections.
+
+> +CONFIG_8139CP=m
+> +CONFIG_8139TOO=m
+
+Do you actually support legacy PCI slots?
+
+> +CONFIG_SERIAL_8250=y
+> +CONFIG_SERIAL_8250_CONSOLE=y
+> +CONFIG_SERIAL_8250_NR_UARTS=16
+> +CONFIG_SERIAL_8250_RUNTIME_UARTS=16
+> +CONFIG_SERIAL_8250_EXTENDED=y
+> +CONFIG_SERIAL_8250_MANY_PORTS=y
+> +CONFIG_SERIAL_8250_SHARE_IRQ=y
+> +CONFIG_SERIAL_8250_RSA=y
+> +CONFIG_SERIAL_OF_PLATFORM=y
+
+I don't see any device tree support in your patches, so I think the
+SERIAL_OF_PLATFORM is not needed.
+
+> +CONFIG_RAW_DRIVER=m
+
+This is gone now.
+
+> +CONFIG_INFINIBAND=m
+
+You don't seem to enable any infiniband host drivers, so the core
+layer can probably remain turned off
+
+> +CONFIG_RTC_CLASS=y
+> +CONFIG_RTC_DRV_EFI=y
+> +CONFIG_UIO=m
+
+same for UIO.
+
+> +CONFIG_EXT2_FS=y
+> +CONFIG_EXT2_FS_XATTR=y
+> +CONFIG_EXT2_FS_POSIX_ACL=y
+> +CONFIG_EXT2_FS_SECURITY=y
+> +CONFIG_EXT3_FS=y
+> +CONFIG_EXT3_FS_POSIX_ACL=y
+> +CONFIG_EXT3_FS_SECURITY=y
+
+I would generally recommend using EXT4 over EXT2 or EXT3
+
+> +CONFIG_FRAME_WARN=1024
+
+On 64-bit platforms, you probably want to increase this a bit,
+otherwise you get extra warnings about code that works as
+intended. The default is 2048, but you should be able to get by
+with 1280, if that lets you build a defconfig kernel without warnings.
 
 
-         Arnd
+      Arnd
