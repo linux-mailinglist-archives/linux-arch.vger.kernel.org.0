@@ -2,17 +2,17 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C927A3BC53E
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 06:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5437F3BC53F
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 06:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbhGFEWs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 00:22:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46790 "EHLO mail.kernel.org"
+        id S229953AbhGFEXO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 00:23:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46852 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229550AbhGFEWs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Jul 2021 00:22:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B9C561416;
-        Tue,  6 Jul 2021 04:20:07 +0000 (UTC)
+        id S229550AbhGFEXN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Jul 2021 00:23:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 99D6D60238;
+        Tue,  6 Jul 2021 04:20:32 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -24,9 +24,9 @@ Cc:     linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH 14/19] LoongArch: Add 64-bit Loongson platform
-Date:   Tue,  6 Jul 2021 12:18:15 +0800
-Message-Id: <20210706041820.1536502-15-chenhuacai@loongson.cn>
+Subject: [PATCH 15/19] LoongArch: Add PCI controller support
+Date:   Tue,  6 Jul 2021 12:18:16 +0800
+Message-Id: <20210706041820.1536502-16-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210706041820.1536502-1-chenhuacai@loongson.cn>
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
@@ -36,1128 +36,813 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Currently, LoongArch has two types of processors: 32-bit Loongson and
-64-bit Loongson. This patch adds the 64-bit Loongson platform support,
-including platform-specific init, setup, irq and reset code.
+Loongson64 based systems are PC-like systems which use PCI/PCIe as its
+I/O bus, This patch adds the PCI host controller support for LoongArch.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- .../include/asm/mach-loongson64/boot_param.h  |  91 ++++++++++
- .../include/asm/mach-loongson64/irq.h         |  77 ++++++++
- .../include/asm/mach-loongson64/loongson.h    | 167 +++++++++++++++++
- arch/loongarch/loongson64/boardinfo.c         |  36 ++++
- arch/loongarch/loongson64/env.c               | 170 ++++++++++++++++++
- arch/loongarch/loongson64/init.c              | 138 ++++++++++++++
- arch/loongarch/loongson64/irq.c               |  84 +++++++++
- arch/loongarch/loongson64/mem.c               |  87 +++++++++
- arch/loongarch/loongson64/msi.c               |  41 +++++
- arch/loongarch/loongson64/reset.c             |  54 ++++++
- arch/loongarch/loongson64/rtc.c               |  36 ++++
- arch/loongarch/loongson64/setup.c             |  37 ++++
- 12 files changed, 1018 insertions(+)
- create mode 100644 arch/loongarch/include/asm/mach-loongson64/boot_param.h
- create mode 100644 arch/loongarch/include/asm/mach-loongson64/irq.h
- create mode 100644 arch/loongarch/include/asm/mach-loongson64/loongson.h
- create mode 100644 arch/loongarch/loongson64/boardinfo.c
- create mode 100644 arch/loongarch/loongson64/env.c
- create mode 100644 arch/loongarch/loongson64/init.c
- create mode 100644 arch/loongarch/loongson64/irq.c
- create mode 100644 arch/loongarch/loongson64/mem.c
- create mode 100644 arch/loongarch/loongson64/msi.c
- create mode 100644 arch/loongarch/loongson64/reset.c
- create mode 100644 arch/loongarch/loongson64/rtc.c
- create mode 100644 arch/loongarch/loongson64/setup.c
+ arch/loongarch/include/asm/pci.h  | 124 ++++++++++++++++++
+ arch/loongarch/pci/acpi.c         | 194 ++++++++++++++++++++++++++++
+ arch/loongarch/pci/mmconfig.c     | 105 +++++++++++++++
+ arch/loongarch/pci/pci-loongson.c | 130 +++++++++++++++++++
+ arch/loongarch/pci/pci.c          | 207 ++++++++++++++++++++++++++++++
+ 5 files changed, 760 insertions(+)
+ create mode 100644 arch/loongarch/include/asm/pci.h
+ create mode 100644 arch/loongarch/pci/acpi.c
+ create mode 100644 arch/loongarch/pci/mmconfig.c
+ create mode 100644 arch/loongarch/pci/pci-loongson.c
+ create mode 100644 arch/loongarch/pci/pci.c
 
-diff --git a/arch/loongarch/include/asm/mach-loongson64/boot_param.h b/arch/loongarch/include/asm/mach-loongson64/boot_param.h
+diff --git a/arch/loongarch/include/asm/pci.h b/arch/loongarch/include/asm/pci.h
 new file mode 100644
-index 000000000000..0598cc7c8203
+index 000000000000..0b73a1e76280
 --- /dev/null
-+++ b/arch/loongarch/include/asm/mach-loongson64/boot_param.h
-@@ -0,0 +1,91 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_MACH_LOONGSON64_BOOT_PARAM_H_
-+#define __ASM_MACH_LOONGSON64_BOOT_PARAM_H_
-+
-+#ifdef CONFIG_VT
-+#include <linux/screen_info.h>
-+#endif
-+
-+#define ADDRESS_TYPE_SYSRAM	1
-+#define ADDRESS_TYPE_RESERVED	2
-+#define ADDRESS_TYPE_ACPI	3
-+#define ADDRESS_TYPE_NVS	4
-+#define ADDRESS_TYPE_PMEM	5
-+
-+#define LOONGSON3_BOOT_MEM_MAP_MAX 128
-+
-+#define LOONGSON_EFIBOOT_SIGNATURE	"BPI"
-+#define LOONGSON_MEM_LINKLIST		"MEM"
-+#define LOONGSON_VBIOS_LINKLIST		"VBIOS"
-+#define LOONGSON_SCREENINFO_LINKLIST	"SINFO"
-+
-+/* Values for Version BPI */
-+enum bpi_version {
-+	BPI_VERSION_V1 = 1000, /* Signature="BPI01000" */
-+	BPI_VERSION_V2 = 1001, /* Signature="BPI01001" */
-+};
-+
-+/* Flags in bootparamsinterface */
-+#define BPI_FLAGS_UEFI_SUPPORTED BIT(0)
-+
-+struct _extention_list_hdr {
-+	u64	signature;
-+	u32	length;
-+	u8	revision;
-+	u8	checksum;
-+	struct	_extention_list_hdr *next;
-+} __packed;
-+
-+struct bootparamsinterface {
-+	u64	signature;	/* {"B", "P", "I", "0", "1", ... } */
-+	void	*systemtable;
-+	struct	_extention_list_hdr *extlist;
-+	u64	flags;
-+} __packed;
-+
-+struct loongsonlist_mem_map {
-+	struct	_extention_list_hdr header;	/* {"M", "E", "M"} */
-+	u8	map_count;
-+	struct	loongson_mem_map {
-+		u32 mem_type;
-+		u64 mem_start;
-+		u64 mem_size;
-+	} __packed map[LOONGSON3_BOOT_MEM_MAP_MAX];
-+} __packed;
-+
-+struct loongsonlist_vbios {
-+	struct	_extention_list_hdr header;	/* {"V", "B", "I", "O", "S"} */
-+	u64	vbios_addr;
-+} __packed;
-+
-+struct loongsonlist_screeninfo {
-+	struct	_extention_list_hdr header;	/* {"S", "I", "N", "F", "O"} */
-+	struct	screen_info si;
-+} __packed;
-+
-+struct loongson_board_info {
-+	int bios_size;
-+	char *bios_vendor;
-+	char *bios_version;
-+	char *bios_release_date;
-+	char *board_name;
-+	char *board_vendor;
-+};
-+
-+struct loongson_system_configuration {
-+	int bpi_ver;
-+	int nr_cpus;
-+	int nr_nodes;
-+	int nr_pch_pics;
-+	int boot_cpu_id;
-+	int cores_per_node;
-+	int cores_per_package;
-+	char *cpuname;
-+	u64 vgabios_addr;
-+};
-+
-+extern struct loongson_board_info b_info;
-+extern struct bootparamsinterface *efi_bp;
-+extern struct loongsonlist_mem_map *loongson_mem_map;
-+extern struct loongson_system_configuration loongson_sysconf;
-+#endif
-diff --git a/arch/loongarch/include/asm/mach-loongson64/irq.h b/arch/loongarch/include/asm/mach-loongson64/irq.h
-new file mode 100644
-index 000000000000..9e03a960e7b6
---- /dev/null
-+++ b/arch/loongarch/include/asm/mach-loongson64/irq.h
-@@ -0,0 +1,77 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_MACH_LOONGSON64_IRQ_H_
-+#define __ASM_MACH_LOONGSON64_IRQ_H_
-+
-+#define NR_IRQS	(64 + 256)
-+
-+#define LOONGSON_CPU_UART0_VEC		10 /* CPU UART0 */
-+#define LOONGSON_CPU_THSENS_VEC		14 /* CPU Thsens */
-+#define LOONGSON_CPU_HT0_VEC		16 /* CPU HT0 irq vector base number */
-+#define LOONGSON_CPU_HT1_VEC		24 /* CPU HT1 irq vector base number */
-+
-+/* IRQ number definitions */
-+#define LOONGSON_LPC_IRQ_BASE		0
-+#define LOONGSON_LPC_LAST_IRQ		(LOONGSON_LPC_IRQ_BASE + 15)
-+
-+#define LOONGSON_CPU_IRQ_BASE		16
-+#define LOONGSON_LINTC_IRQ		(LOONGSON_CPU_IRQ_BASE + 2) /* IP2 for CPU local interrupt controller */
-+#define LOONGSON_BRIDGE_IRQ		(LOONGSON_CPU_IRQ_BASE + 3) /* IP3 for bridge */
-+#define LOONGSON_TIMER_IRQ		(LOONGSON_CPU_IRQ_BASE + 11) /* IP11 CPU Timer */
-+#define LOONGSON_CPU_LAST_IRQ		(LOONGSON_CPU_IRQ_BASE + 14)
-+
-+#define LOONGSON_PCH_IRQ_BASE		64
-+#define LOONGSON_PCH_ACPI_IRQ		(LOONGSON_PCH_IRQ_BASE + 47)
-+#define LOONGSON_PCH_LAST_IRQ		(LOONGSON_PCH_IRQ_BASE + 64 - 1)
-+
-+#define LOONGSON_MSI_IRQ_BASE		(LOONGSON_PCH_IRQ_BASE + 64)
-+#define LOONGSON_MSI_LAST_IRQ		(LOONGSON_PCH_IRQ_BASE + 256 - 1)
-+
-+#define GSI_MIN_CPU_IRQ		LOONGSON_CPU_IRQ_BASE
-+#define GSI_MAX_CPU_IRQ		(LOONGSON_CPU_IRQ_BASE + 48 - 1)
-+#define GSI_MIN_PCH_IRQ		LOONGSON_PCH_IRQ_BASE
-+#define GSI_MAX_PCH_IRQ		(LOONGSON_PCH_IRQ_BASE + 256 - 1)
-+
-+#define MAX_PCH_PICS 4
-+
-+extern int find_pch_pic(u32 gsi);
-+
-+static inline void eiointc_enable(void)
-+{
-+	uint64_t misc;
-+
-+	misc = iocsr_readq(LOONGARCH_IOCSR_MISC_FUNC);
-+	misc |= IOCSR_MISC_FUNC_EXT_IOI_EN;
-+	iocsr_writeq(misc, LOONGARCH_IOCSR_MISC_FUNC);
-+}
-+
-+struct acpi_madt_lio_pic;
-+struct acpi_madt_eio_pic;
-+struct acpi_madt_ht_pic;
-+struct acpi_madt_bio_pic;
-+struct acpi_madt_msi_pic;
-+struct acpi_madt_lpc_pic;
-+
-+struct fwnode_handle *liointc_acpi_init(struct acpi_madt_lio_pic *acpi_liointc);
-+struct fwnode_handle *eiointc_acpi_init(struct acpi_madt_eio_pic *acpi_eiointc);
-+
-+struct fwnode_handle *htvec_acpi_init(struct fwnode_handle *parent,
-+					struct acpi_madt_ht_pic *acpi_htvec);
-+struct fwnode_handle *pch_lpc_acpi_init(struct fwnode_handle *parent,
-+					struct acpi_madt_lpc_pic *acpi_pchlpc);
-+struct fwnode_handle *pch_msi_acpi_init(struct fwnode_handle *parent,
-+					struct acpi_madt_msi_pic *acpi_pchmsi);
-+struct fwnode_handle *pch_pic_acpi_init(struct fwnode_handle *parent,
-+					struct acpi_madt_bio_pic *acpi_pchpic);
-+
-+extern struct acpi_madt_lio_pic *acpi_liointc;
-+extern struct acpi_madt_eio_pic *acpi_eiointc;
-+extern struct acpi_madt_ht_pic *acpi_htintc;
-+extern struct acpi_madt_lpc_pic *acpi_pchlpc;
-+extern struct acpi_madt_msi_pic *acpi_pchmsi;
-+extern struct acpi_madt_bio_pic *acpi_pchpic[MAX_PCH_PICS];
-+
-+extern struct fwnode_handle *acpi_liointc_handle;
-+extern struct fwnode_handle *acpi_msidomain_handle;
-+extern struct fwnode_handle *acpi_picdomain_handle[MAX_PCH_PICS];
-+
-+#endif /* __ASM_MACH_LOONGSON64_IRQ_H_ */
-diff --git a/arch/loongarch/include/asm/mach-loongson64/loongson.h b/arch/loongarch/include/asm/mach-loongson64/loongson.h
-new file mode 100644
-index 000000000000..f003fa204185
---- /dev/null
-+++ b/arch/loongarch/include/asm/mach-loongson64/loongson.h
-@@ -0,0 +1,167 @@
++++ b/arch/loongarch/include/asm/pci.h
+@@ -0,0 +1,124 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
++#ifndef _ASM_PCI_H
++#define _ASM_PCI_H
 +
-+#ifndef __ASM_MACH_LOONGSON64_LOONGSON_H
-+#define __ASM_MACH_LOONGSON64_LOONGSON_H
++#include <linux/mm.h>
 +
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/irq.h>
-+#include <linux/pci.h>
-+#include <asm/addrspace.h>
++#ifdef __KERNEL__
 +
-+#include <boot_param.h>
-+
-+extern const struct plat_smp_ops loongson3_smp_ops;
-+
-+/* loongson-specific command line, env and memory initialization */
-+extern void __init fw_init_environ(void);
-+extern void __init fw_init_memory(void);
-+extern void __init fw_init_numa_memory(void);
-+
-+#define LOONGSON_REG(x) \
-+	(*(volatile u32 *)((char *)TO_UNCAC(LOONGSON_REG_BASE) + (x)))
-+
-+#define LOONGSON_LIO_BASE	0x18000000
-+#define LOONGSON_LIO_SIZE	0x00100000	/* 1M */
-+#define LOONGSON_LIO_TOP	(LOONGSON_LIO_BASE+LOONGSON_LIO_SIZE-1)
-+
-+#define LOONGSON_BOOT_BASE	0x1c000000
-+#define LOONGSON_BOOT_SIZE	0x02000000	/* 32M */
-+#define LOONGSON_BOOT_TOP	(LOONGSON_BOOT_BASE+LOONGSON_BOOT_SIZE-1)
-+
-+#define LOONGSON_REG_BASE	0x1fe00000
-+#define LOONGSON_REG_SIZE	0x00100000	/* 1M */
-+#define LOONGSON_REG_TOP	(LOONGSON_REG_BASE+LOONGSON_REG_SIZE-1)
-+
-+/* GPIO Regs - r/w */
-+
-+#define LOONGSON_GPIODATA		LOONGSON_REG(0x11c)
-+#define LOONGSON_GPIOIE			LOONGSON_REG(0x120)
-+#define LOONGSON_REG_GPIO_BASE          (LOONGSON_REG_BASE + 0x11c)
-+
-+#define MAX_PACKAGES 16
-+
-+/* Chip Config registor of each physical cpu package */
-+extern u64 loongson_chipcfg[MAX_PACKAGES];
-+#define LOONGSON_CHIPCFG(id) (*(volatile u32 *)(loongson_chipcfg[id]))
-+
-+/* Chip Temperature registor of each physical cpu package */
-+extern u64 loongson_chiptemp[MAX_PACKAGES];
-+#define LOONGSON_CHIPTEMP(id) (*(volatile u32 *)(loongson_chiptemp[id]))
-+
-+/* Freq Control register of each physical cpu package */
-+extern u64 loongson_freqctrl[MAX_PACKAGES];
-+#define LOONGSON_FREQCTRL(id) (*(volatile u32 *)(loongson_freqctrl[id]))
-+
-+#define xconf_readl(addr) readl(addr)
-+#define xconf_readq(addr) readq(addr)
-+
-+static inline void xconf_writel(u32 val, volatile void __iomem *addr)
-+{
-+	asm volatile (
-+	"	st.w	%[v], %[hw], 0	\n"
-+	"	ld.b	$r0, %[hw], 0	\n"
-+	:
-+	: [hw] "r" (addr), [v] "r" (val)
-+	);
-+}
-+
-+static inline void xconf_writeq(u64 val64, volatile void __iomem *addr)
-+{
-+	asm volatile (
-+	"	st.d	%[v], %[hw], 0	\n"
-+	"	ld.b	$r0, %[hw], 0	\n"
-+	:
-+	: [hw] "r" (addr),  [v] "r" (val64)
-+	);
-+}
-+
-+/* ============== LS7A registers =============== */
-+#define LS7A_PCH_REG_BASE		0x10000000UL
-+/* LPC regs */
-+#define LS7A_LPC_REG_BASE		(LS7A_PCH_REG_BASE + 0x00002000)
-+/* CHIPCFG regs */
-+#define LS7A_CHIPCFG_REG_BASE		(LS7A_PCH_REG_BASE + 0x00010000)
-+/* MISC reg base */
-+#define LS7A_MISC_REG_BASE		(LS7A_PCH_REG_BASE + 0x00080000)
-+/* ACPI regs */
-+#define LS7A_ACPI_REG_BASE		(LS7A_MISC_REG_BASE + 0x00050000)
-+/* RTC regs */
-+#define LS7A_RTC_REG_BASE		(LS7A_MISC_REG_BASE + 0x00050100)
-+
-+#define LS7A_DMA_CFG			(void *)TO_UNCAC(LS7A_CHIPCFG_REG_BASE + 0x041c)
-+#define LS7A_DMA_NODE_SHF		8
-+#define LS7A_DMA_NODE_MASK		0x1F00
-+
-+#define LS7A_INT_MASK_REG		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x020)
-+#define LS7A_INT_EDGE_REG		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x060)
-+#define LS7A_INT_CLEAR_REG		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x080)
-+#define LS7A_INT_HTMSI_EN_REG		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x040)
-+#define LS7A_INT_ROUTE_ENTRY_REG	(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x100)
-+#define LS7A_INT_HTMSI_VEC_REG		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x200)
-+#define LS7A_INT_STATUS_REG		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x3a0)
-+#define LS7A_INT_POL_REG		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x3e0)
-+#define LS7A_LPC_INT_CTL		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x2000)
-+#define LS7A_LPC_INT_ENA		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x2004)
-+#define LS7A_LPC_INT_STS		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x2008)
-+#define LS7A_LPC_INT_CLR		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x200c)
-+#define LS7A_LPC_INT_POL		(void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x2010)
-+
-+#define LS7A_PMCON_SOC_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x000)
-+#define LS7A_PMCON_RESUME_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x004)
-+#define LS7A_PMCON_RTC_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x008)
-+#define LS7A_PM1_EVT_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x00c)
-+#define LS7A_PM1_ENA_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x010)
-+#define LS7A_PM1_CNT_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x014)
-+#define LS7A_PM1_TMR_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x018)
-+#define LS7A_P_CNT_REG			(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x01c)
-+#define LS7A_GPE0_STS_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x028)
-+#define LS7A_GPE0_ENA_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x02c)
-+#define LS7A_RST_CNT_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x030)
-+#define LS7A_WD_SET_REG			(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x034)
-+#define LS7A_WD_TIMER_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x038)
-+#define LS7A_THSENS_CNT_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x04c)
-+#define LS7A_GEN_RTC_1_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x050)
-+#define LS7A_GEN_RTC_2_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x054)
-+#define LS7A_DPM_CFG_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x400)
-+#define LS7A_DPM_STS_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x404)
-+#define LS7A_DPM_CNT_REG		(void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x408)
-+
-+typedef enum {
-+	ACPI_PCI_HOTPLUG_STATUS	= 1 << 1,
-+	ACPI_CPU_HOTPLUG_STATUS	= 1 << 2,
-+	ACPI_MEM_HOTPLUG_STATUS	= 1 << 3,
-+	ACPI_POWERBUTTON_STATUS	= 1 << 8,
-+	ACPI_RTC_WAKE_STATUS	= 1 << 10,
-+	ACPI_PCI_WAKE_STATUS	= 1 << 14,
-+	ACPI_ANY_WAKE_STATUS	= 1 << 15,
-+} AcpiEventStatusBits;
-+
-+#define HT1LO_OFFSET		0xe0000000000UL
-+
-+/* PCI Configuration Space Base */
-+#define HT1LO_PCICFG_BASE	0xefdfe000000UL
-+#define HT1LO_PCICFG_BASE_TP1	0xefdff000000UL
-+
-+#define MCFG_EXT_PCICFG_BASE		0xefe00000000UL
-+#define HT1LO_EXT_PCICFG_BASE		(((struct pci_controller *)(bus)->sysdata)->mcfg_addr)
-+#define HT1LO_EXT_PCICFG_BASE_TP1	(HT1LO_EXT_PCICFG_BASE + 0x10000000)
-+
-+/* REG ACCESS*/
-+#define ls7a_readb(addr)			  (*(volatile unsigned char  *)TO_UNCAC(addr))
-+#define ls7a_readw(addr)			  (*(volatile unsigned short *)TO_UNCAC(addr))
-+#define ls7a_readl(addr)			  (*(volatile unsigned int   *)TO_UNCAC(addr))
-+#define ls7a_readq(addr)			  (*(volatile unsigned long  *)TO_UNCAC(addr))
-+#define ls7a_writeb(val, addr)		*(volatile unsigned char  *)TO_UNCAC(addr) = (val)
-+#define ls7a_writew(val, addr)		*(volatile unsigned short *)TO_UNCAC(addr) = (val)
-+#define ls7a_writel(val, addr)		ls7a_write_type(val, addr, uint32_t)
-+#define ls7a_writeq(val, addr)		ls7a_write_type(val, addr, uint64_t)
-+#define ls7a_write(val, addr)		ls7a_write_type(val, addr, uint64_t)
-+
-+extern struct pci_ops ls7a_pci_ops;
-+
-+#endif /* __ASM_MACH_LOONGSON64_LOONGSON_H */
-diff --git a/arch/loongarch/loongson64/boardinfo.c b/arch/loongarch/loongson64/boardinfo.c
-new file mode 100644
-index 000000000000..67ffba105ebd
---- /dev/null
-+++ b/arch/loongarch/loongson64/boardinfo.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ * This file essentially defines the interface between board specific
++ * PCI code and LoongArch common PCI code. Should potentially put into
++ * include/asm/pci.h file.
 + */
-+#include <linux/efi.h>
-+#include <linux/init.h>
-+#include <linux/kobject.h>
 +
-+#include <boot_param.h>
++#include <linux/ioport.h>
++#include <linux/list.h>
 +
-+static ssize_t boardinfo_show(struct kobject *kobj,
-+			      struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf,
-+		"BIOS Information\n"
-+		"Vendor\t\t\t: %s\n"
-+		"Version\t\t\t: %s\n"
-+		"ROM Size\t\t: %d KB\n"
-+		"Release Date\t\t: %s\n\n"
-+		"Board Information\n"
-+		"Manufacturer\t\t: %s\n"
-+		"Board Name\t\t: %s\n"
-+		"Family\t\t\t: LOONGSON3\n\n",
-+		b_info.bios_vendor, b_info.bios_version,
-+		b_info.bios_size, b_info.bios_release_date,
-+		b_info.board_vendor, b_info.board_name);
-+}
++extern const struct pci_ops *__read_mostly loongarch_pci_ops;
 +
-+static struct kobj_attribute boardinfo_attr = __ATTR(boardinfo, 0444,
-+						     boardinfo_show, NULL);
-+
-+static int __init boardinfo_init(void)
-+{
-+	return sysfs_create_file(efi_kobj, &boardinfo_attr.attr);
-+}
-+late_initcall(boardinfo_init);
-diff --git a/arch/loongarch/loongson64/env.c b/arch/loongarch/loongson64/env.c
-new file mode 100644
-index 000000000000..e6752ddbefc2
---- /dev/null
-+++ b/arch/loongarch/loongson64/env.c
-@@ -0,0 +1,170 @@
-+// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ * Each pci channel is a top-level PCI bus seem by CPU.	 A machine  with
++ * multiple PCI channels may have multiple PCI host controllers or a
++ * single controller supporting multiple channels.
 + */
-+#include <linux/export.h>
-+#include <linux/acpi.h>
-+#include <linux/efi.h>
-+#include <asm/fw.h>
-+#include <asm/time.h>
-+#include <asm/bootinfo.h>
-+#include <loongson.h>
++struct pci_controller {
++	struct list_head list;
++	struct pci_bus *bus;
++	struct device_node *of_node;
 +
-+struct bootparamsinterface *efi_bp;
-+struct loongsonlist_mem_map *loongson_mem_map;
-+struct loongsonlist_vbios *pvbios;
-+struct loongson_system_configuration loongson_sysconf;
-+EXPORT_SYMBOL(loongson_sysconf);
++	struct pci_ops *pci_ops;
++	struct resource *mem_resource;
++	unsigned long mem_offset;
++	struct resource *io_resource;
++	unsigned long io_offset;
++	unsigned long io_map_base;
++	struct resource *busn_resource;
 +
-+u64 loongson_chipcfg[MAX_PACKAGES];
-+u64 loongson_chiptemp[MAX_PACKAGES];
-+u64 loongson_freqctrl[MAX_PACKAGES];
-+unsigned long long smp_group[MAX_PACKAGES];
-+
-+static void __init register_addrs_set(u64 *registers, const u64 addr, int num)
-+{
-+	u64 i;
-+
-+	for (i = 0; i < num; i++) {
-+		*registers = (i << 44) | addr;
-+		registers++;
-+	}
-+}
-+
-+u8 ext_listhdr_checksum(u8 *buffer, u32 length)
-+{
-+	u8 sum = 0;
-+	u8 *end = buffer + length;
-+
-+	while (buffer < end) {
-+		sum = (u8)(sum + *(buffer++));
-+	}
-+
-+	return (sum);
-+}
-+
-+int parse_mem(struct _extention_list_hdr *head)
-+{
-+	loongson_mem_map = (struct loongsonlist_mem_map *)head;
-+	if (ext_listhdr_checksum((u8 *)loongson_mem_map, head->length)) {
-+		pr_warn("mem checksum error\n");
-+		return -EPERM;
-+	}
-+
-+	return 0;
-+}
-+
-+int parse_vbios(struct _extention_list_hdr *head)
-+{
-+	pvbios = (struct loongsonlist_vbios *)head;
-+
-+	if (ext_listhdr_checksum((u8 *)pvbios, head->length)) {
-+		pr_warn("vbios_addr checksum error\n");
-+		return -EPERM;
-+	}
-+
-+	loongson_sysconf.vgabios_addr = pvbios->vbios_addr;
-+
-+	return 0;
-+}
-+
-+static int parse_screeninfo(struct _extention_list_hdr *head)
-+{
-+	struct loongsonlist_screeninfo *pscreeninfo;
-+
-+	pscreeninfo = (struct loongsonlist_screeninfo *)head;
-+	if (ext_listhdr_checksum((u8 *)pscreeninfo, head->length)) {
-+		pr_warn("screeninfo_addr checksum error\n");
-+		return -EPERM;
-+	}
-+
-+	memcpy(&screen_info, &pscreeninfo->si, sizeof(screen_info));
-+
-+	return 0;
-+}
-+
-+static int list_find(struct _extention_list_hdr *head)
-+{
-+	struct _extention_list_hdr *fhead = head;
-+
-+	if (fhead == NULL) {
-+		pr_warn("the link is empty!\n");
-+		return -1;
-+	}
-+
-+	while (fhead != NULL) {
-+		if (memcmp(&(fhead->signature), LOONGSON_MEM_LINKLIST, 3) == 0) {
-+			if (parse_mem(fhead) != 0) {
-+				pr_warn("parse mem failed\n");
-+				return -EPERM;
-+			}
-+		} else if (memcmp(&(fhead->signature), LOONGSON_VBIOS_LINKLIST, 5) == 0) {
-+			if (parse_vbios(fhead) != 0) {
-+				pr_warn("parse vbios failed\n");
-+				return -EPERM;
-+			}
-+		} else if (memcmp(&(fhead->signature), LOONGSON_SCREENINFO_LINKLIST, 5) == 0) {
-+			if (parse_screeninfo(fhead) != 0) {
-+				pr_warn("parse screeninfo failed\n");
-+				return -EPERM;
-+			}
-+		}
-+		fhead = fhead->next;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __init parse_bpi_flags(void)
-+{
-+	if (efi_bp->flags & BPI_FLAGS_UEFI_SUPPORTED)
-+		set_bit(EFI_BOOT, &efi.flags);
-+	else
-+		clear_bit(EFI_BOOT, &efi.flags);
-+}
-+
-+static int get_bpi_version(void *signature)
-+{
-+	char data[8];
-+	int r, version = 0;
-+
-+	memset(data, 0, 8);
-+	memcpy(data, signature + 4, 4);
-+	r = kstrtoint(data, 0, &version);
-+
-+	if (r < 0 || version < BPI_VERSION_V1)
-+		panic("Fatal error, invalid BPI version: %d\n", version);
-+
-+	if (version >= BPI_VERSION_V2)
-+		parse_bpi_flags();
-+
-+	return version;
-+}
-+
-+void __init fw_init_environ(void)
-+{
-+	efi_bp = (struct bootparamsinterface *)_fw_envp;
-+	loongson_sysconf.bpi_ver = get_bpi_version(&efi_bp->signature);
-+
-+	register_addrs_set(smp_group, TO_UNCAC(0x1fe01000), 16);
-+	register_addrs_set(loongson_chipcfg, TO_UNCAC(0x1fe00180), 16);
-+	register_addrs_set(loongson_chiptemp, TO_UNCAC(0x1fe0019c), 16);
-+	register_addrs_set(loongson_freqctrl, TO_UNCAC(0x1fe001d0), 16);
-+
-+	if (list_find(efi_bp->extlist))
-+		pr_warn("Scan bootparam failed\n");
-+}
-+
-+static int __init init_cpu_fullname(void)
-+{
-+	int cpu;
-+
-+	if (loongson_sysconf.cpuname && !strncmp(loongson_sysconf.cpuname, "Loongson", 8)) {
-+		for (cpu = 0; cpu < NR_CPUS; cpu++)
-+			__cpu_full_name[cpu] = loongson_sysconf.cpuname;
-+	}
-+	return 0;
-+}
-+arch_initcall(init_cpu_fullname);
-diff --git a/arch/loongarch/loongson64/init.c b/arch/loongarch/loongson64/init.c
-new file mode 100644
-index 000000000000..3fedebbbf665
---- /dev/null
-+++ b/arch/loongarch/loongson64/init.c
-@@ -0,0 +1,138 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/dmi.h>
-+#include <linux/efi.h>
-+#include <linux/memblock.h>
-+#include <asm/acpi.h>
-+#include <asm/bootinfo.h>
-+#include <asm/cacheflush.h>
-+#include <asm/efi.h>
-+#include <asm/fw.h>
-+#include <asm/time.h>
-+
-+#include <loongson.h>
-+
-+#define SMBIOS_BIOSSIZE_OFFSET		0x09
-+#define SMBIOS_BIOSEXTERN_OFFSET	0x13
-+#define SMBIOS_FREQLOW_OFFSET		0x16
-+#define SMBIOS_FREQHIGH_OFFSET		0x17
-+#define SMBIOS_FREQLOW_MASK		0xFF
-+#define SMBIOS_CORE_PACKAGE_OFFSET	0x23
-+#define LOONGSON_EFI_ENABLE		(1 << 3)
-+
-+struct loongson_board_info b_info;
-+static const char dmi_empty_string[] = "        ";
-+
-+const char *dmi_string_parse(const struct dmi_header *dm, u8 s)
-+{
-+	const u8 *bp = ((u8 *) dm) + dm->length;
-+
-+	if (s) {
-+		s--;
-+		while (s > 0 && *bp) {
-+			bp += strlen(bp) + 1;
-+			s--;
-+		}
-+
-+		if (*bp != 0) {
-+			size_t len = strlen(bp)+1;
-+			size_t cmp_len = len > 8 ? 8 : len;
-+
-+			if (!memcmp(bp, dmi_empty_string, cmp_len))
-+				return dmi_empty_string;
-+
-+			return bp;
-+		}
-+	}
-+
-+	return "";
-+
-+}
-+
-+static void __init parse_cpu_table(const struct dmi_header *dm)
-+{
-+	long freq_temp = 0;
-+	char *dmi_data = (char *)dm;
-+
-+	freq_temp = ((*(dmi_data + SMBIOS_FREQHIGH_OFFSET) << 8) +
-+			((*(dmi_data + SMBIOS_FREQLOW_OFFSET)) & SMBIOS_FREQLOW_MASK));
-+	cpu_clock_freq = freq_temp * 1000000;
-+
-+	loongson_sysconf.cpuname = (void *)dmi_string_parse(dm, dmi_data[16]);
-+	loongson_sysconf.cores_per_package = *(dmi_data + SMBIOS_CORE_PACKAGE_OFFSET);
-+
-+	pr_info("CpuClock = %llu\n", cpu_clock_freq);
-+
-+}
-+
-+static void __init parse_bios_table(const struct dmi_header *dm)
-+{
-+	int bios_extern;
-+	char *dmi_data = (char *)dm;
-+
-+	bios_extern = *(dmi_data + SMBIOS_BIOSEXTERN_OFFSET);
-+	b_info.bios_size = *(dmi_data + SMBIOS_BIOSSIZE_OFFSET);
-+
-+	if (bios_extern & LOONGSON_EFI_ENABLE)
-+		set_bit(EFI_BOOT, &efi.flags);
-+	else
-+		clear_bit(EFI_BOOT, &efi.flags);
-+}
-+
-+static void __init find_tokens(const struct dmi_header *dm, void *dummy)
-+{
-+	switch (dm->type) {
-+	case 0x0: /* Extern BIOS */
-+		parse_bios_table(dm);
-+		break;
-+	case 0x4: /* Calling interface */
-+		parse_cpu_table(dm);
-+		break;
-+	}
-+}
-+static void __init smbios_parse(void)
-+{
-+	b_info.bios_vendor = (void *)dmi_get_system_info(DMI_BIOS_VENDOR);
-+	b_info.bios_version = (void *)dmi_get_system_info(DMI_BIOS_VERSION);
-+	b_info.bios_release_date = (void *)dmi_get_system_info(DMI_BIOS_DATE);
-+	b_info.board_vendor = (void *)dmi_get_system_info(DMI_BOARD_VENDOR);
-+	b_info.board_name = (void *)dmi_get_system_info(DMI_BOARD_NAME);
-+	dmi_walk(find_tokens, NULL);
-+}
-+
-+void __init early_init(void)
-+{
-+	fw_init_cmdline();
-+	fw_init_environ();
-+	early_memblock_init();
-+}
-+
-+void __init platform_init(void)
-+{
-+	/* init base address of io space */
-+	set_io_port_base((unsigned long)
-+		ioremap(LOONGSON_LIO_BASE, LOONGSON_LIO_SIZE));
-+
-+	efi_init();
-+#ifdef CONFIG_ACPI_TABLE_UPGRADE
-+	acpi_table_upgrade();
-+#endif
++	unsigned int node;
++	unsigned int index;
++	unsigned int need_domain_info;
 +#ifdef CONFIG_ACPI
-+	acpi_gbl_use_default_register_widths = false;
-+	acpi_boot_table_init();
-+	acpi_boot_init();
++	struct acpi_device *companion;
 +#endif
-+	loongarch_pci_ops = &ls7a_pci_ops;
++	phys_addr_t mcfg_addr;
++};
 +
-+	fw_init_memory();
-+	dmi_setup();
-+	smbios_parse();
-+	pr_info("The BIOS Version: %s\n", b_info.bios_version);
++extern void pcibios_add_root_resources(struct list_head *resources);
 +
-+	efi_runtime_init();
++extern phys_addr_t mcfg_addr_init(int domain);
++
++#ifdef CONFIG_PCI_DOMAINS
++static inline void set_pci_need_domain_info(struct pci_controller *hose,
++					    int need_domain_info)
++{
++	hose->need_domain_info = need_domain_info;
 +}
-diff --git a/arch/loongarch/loongson64/irq.c b/arch/loongarch/loongson64/irq.c
-new file mode 100644
-index 000000000000..aabe457570ce
---- /dev/null
-+++ b/arch/loongarch/loongson64/irq.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0
++#endif /* CONFIG_PCI_DOMAINS */
++
 +/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ * Can be used to override the logic in pci_scan_bus for skipping
++ * already-configured bus numbers - to be used for buggy BIOSes
++ * or architectures with incomplete PCI setup by the loader
 + */
-+#include <linux/compiler.h>
-+#include <linux/delay.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/irqchip.h>
-+#include <linux/irqdomain.h>
-+#include <linux/mm.h>
-+#include <linux/module.h>
-+#include <linux/stddef.h>
-+#include <asm/irq.h>
-+#include <asm/setup.h>
-+#include <asm/loongarchregs.h>
-+#include <loongson.h>
-+
-+struct acpi_madt_lio_pic *acpi_liointc;
-+struct acpi_madt_eio_pic *acpi_eiointc;
-+struct acpi_madt_ht_pic *acpi_htintc;
-+struct acpi_madt_lpc_pic *acpi_pchlpc;
-+struct acpi_madt_msi_pic *acpi_pchmsi;
-+struct acpi_madt_bio_pic *acpi_pchpic[MAX_PCH_PICS];
-+
-+struct fwnode_handle *acpi_liointc_handle;
-+struct fwnode_handle *acpi_msidomain_handle;
-+struct fwnode_handle *acpi_picdomain_handle[MAX_PCH_PICS];
-+
-+int find_pch_pic(u32 gsi)
++static inline unsigned int pcibios_assign_all_busses(void)
 +{
-+	int i, start, end;
-+
-+	/* Find the PCH_PIC that manages this GSI. */
-+	for (i = 0; i < loongson_sysconf.nr_pch_pics; i++) {
-+		struct acpi_madt_bio_pic *irq_cfg = acpi_pchpic[i];
-+
-+		start = irq_cfg->gsi_base;
-+		end   = irq_cfg->gsi_base + irq_cfg->size;
-+		if (gsi >= start && gsi < end)
-+			return i;
-+	}
-+
-+	pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
-+	return -1;
++	return 1;
 +}
 +
-+void __init setup_IRQ(void)
-+{
-+	int i;
-+	struct fwnode_handle *pch_parent_handle;
++#define PCIBIOS_MIN_IO		0
++#define PCIBIOS_MIN_MEM		0x20000000
++#define PCIBIOS_MIN_CARDBUS_IO	0x4000
 +
-+	if (!acpi_eiointc)
-+		cpu_data[0].options &= ~LOONGARCH_CPU_EXTIOI;
++#define HAVE_PCI_MMAP
++#define ARCH_GENERIC_PCI_MMAP_RESOURCE
++#define HAVE_ARCH_PCI_RESOURCE_TO_USER
 +
-+	loongarch_cpu_irq_init(NULL, NULL);
-+	acpi_liointc_handle = liointc_acpi_init(acpi_liointc);
-+
-+	if (cpu_has_extioi) {
-+		pr_info("Using EIOINTC interrupt mode\n");
-+		pch_parent_handle = eiointc_acpi_init(acpi_eiointc);
-+	} else {
-+		pr_info("Using HTVECINTC interrupt mode\n");
-+		pch_parent_handle = htvec_acpi_init(acpi_liointc_handle, acpi_htintc);
-+	}
-+
-+	for (i = 0; i < loongson_sysconf.nr_pch_pics; i++)
-+		acpi_picdomain_handle[i] = pch_pic_acpi_init(pch_parent_handle, acpi_pchpic[i]);
-+
-+	acpi_msidomain_handle = pch_msi_acpi_init(pch_parent_handle, acpi_pchmsi);
-+	irq_set_default_host(irq_find_matching_fwnode(acpi_picdomain_handle[0], DOMAIN_BUS_ANY));
-+
-+	pch_lpc_acpi_init(acpi_picdomain_handle[0], acpi_pchlpc);
-+}
-+
-+void __init arch_init_irq(void)
-+{
-+	clear_csr_ecfg(ECFG0_IM);
-+	clear_csr_estat(ESTATF_IP);
-+
-+	setup_IRQ();
-+
-+	set_csr_ecfg(ECFGF_IP0 | ECFGF_IP1 | ECFGF_IPI | ECFGF_PC);
-+}
-diff --git a/arch/loongarch/loongson64/mem.c b/arch/loongarch/loongson64/mem.c
-new file mode 100644
-index 000000000000..2e0b60642326
---- /dev/null
-+++ b/arch/loongarch/loongson64/mem.c
-@@ -0,0 +1,87 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ * Dynamic DMA mapping stuff.
++ * LoongArch has everything mapped statically.
 + */
-+#include <linux/fs.h>
-+#include <linux/mm.h>
-+#include <linux/memblock.h>
 +
-+#include <asm/bootinfo.h>
-+#include <asm/sections.h>
-+
-+#include <loongson.h>
-+#include <boot_param.h>
-+
-+void __init early_memblock_init(void)
-+{
-+	int i;
-+	u32 mem_type;
-+	u64 mem_start, mem_end, mem_size;
-+
-+	/* parse memory information */
-+	for (i = 0; i < loongson_mem_map->map_count; i++) {
-+		mem_type = loongson_mem_map->map[i].mem_type;
-+		mem_start = loongson_mem_map->map[i].mem_start;
-+		mem_size = loongson_mem_map->map[i].mem_size;
-+		mem_end = mem_start + mem_size;
-+
-+		switch (mem_type) {
-+		case ADDRESS_TYPE_SYSRAM:
-+			memblock_add(mem_start, mem_size);
-+			if (max_low_pfn < (mem_end >> PAGE_SHIFT))
-+				max_low_pfn = mem_end >> PAGE_SHIFT;
-+			break;
-+		}
-+	}
-+	memblock_set_current_limit(PFN_PHYS(max_low_pfn));
-+}
-+
-+void __init fw_init_memory(void)
-+{
-+	int i;
-+	u32 mem_type;
-+	u64 mem_start, mem_end, mem_size;
-+	unsigned long start_pfn, end_pfn;
-+	static unsigned long num_physpages;
-+
-+	/* parse memory information */
-+	for (i = 0; i < loongson_mem_map->map_count; i++) {
-+		mem_type = loongson_mem_map->map[i].mem_type;
-+		mem_start = loongson_mem_map->map[i].mem_start;
-+		mem_size = loongson_mem_map->map[i].mem_size;
-+		mem_end = mem_start + mem_size;
-+
-+		switch (mem_type) {
-+		case ADDRESS_TYPE_SYSRAM:
-+			mem_start = PFN_ALIGN(mem_start);
-+			mem_end = PFN_ALIGN(mem_end - PAGE_SIZE + 1);
-+			num_physpages += (mem_size >> PAGE_SHIFT);
-+			memblock_add(loongson_mem_map->map[i].mem_start,
-+				     loongson_mem_map->map[i].mem_size);
-+			memblock_set_node(mem_start, mem_size, &memblock.memory, 0);
-+			break;
-+		case ADDRESS_TYPE_ACPI:
-+		case ADDRESS_TYPE_RESERVED:
-+			memblock_reserve(loongson_mem_map->map[i].mem_start,
-+					 loongson_mem_map->map[i].mem_size);
-+			break;
-+		}
-+	}
-+
-+	get_pfn_range_for_nid(0, &start_pfn, &end_pfn);
-+	pr_info("start_pfn=0x%lx, end_pfn=0x%lx, num_physpages:0x%lx\n",
-+				start_pfn, end_pfn, num_physpages);
-+
-+	NODE_DATA(0)->node_start_pfn = start_pfn;
-+	NODE_DATA(0)->node_spanned_pages = end_pfn - start_pfn;
-+
-+	/* used by finalize_initrd() */
-+	max_low_pfn = end_pfn;
-+
-+	/* Reserve the first 2MB */
-+	memblock_reserve(PHYS_OFFSET, 0x200000);
-+
-+	/* Reserve the kernel text/data/bss */
-+	memblock_reserve(__pa_symbol(&_text),
-+			 __pa_symbol(&_end) - __pa_symbol(&_text));
-+}
-diff --git a/arch/loongarch/loongson64/msi.c b/arch/loongarch/loongson64/msi.c
-new file mode 100644
-index 000000000000..26b7a59cba85
---- /dev/null
-+++ b/arch/loongarch/loongson64/msi.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/msi.h>
-+#include <linux/pci.h>
-+#include <linux/spinlock.h>
-+
-+static bool msix_enable = 1;
-+core_param(msix, msix_enable, bool, 0664);
-+
-+int arch_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
-+{
-+	struct irq_domain *msi_domain;
-+
-+	if (!pci_msi_enabled())
-+		return -ENOSPC;
-+
-+	if (type == PCI_CAP_ID_MSIX && !msix_enable)
-+		return -ENOSPC;
-+
-+	if (type == PCI_CAP_ID_MSI && nvec > 1)
-+		return 1;
-+
-+	msi_domain = irq_find_matching_fwnode(acpi_msidomain_handle, DOMAIN_BUS_PCI_MSI);
-+	if (!msi_domain)
-+		return -ENOSPC;
-+
-+	return msi_domain_alloc_irqs(msi_domain, &dev->dev, nvec);
-+
-+}
-+
-+void arch_teardown_msi_irq(unsigned int irq)
-+{
-+	struct irq_domain *msi_domain;
-+
-+	msi_domain = irq_find_matching_fwnode(acpi_msidomain_handle, DOMAIN_BUS_PCI_MSI);
-+	if (msi_domain)
-+		irq_domain_free_irqs(irq, 1);
-+}
-diff --git a/arch/loongarch/loongson64/reset.c b/arch/loongarch/loongson64/reset.c
-new file mode 100644
-index 000000000000..0ca20679a0a7
---- /dev/null
-+++ b/arch/loongarch/loongson64/reset.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Author: Huacai Chen, chenhuacai@loongson.cn
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#include <linux/acpi.h>
-+#include <linux/cpu.h>
-+#include <linux/delay.h>
-+#include <linux/efi.h>
-+#include <linux/init.h>
-+#include <linux/pm.h>
++#include <linux/types.h>
 +#include <linux/slab.h>
-+#include <acpi/reboot.h>
-+#include <asm/bootinfo.h>
-+#include <asm/delay.h>
-+#include <asm/idle.h>
-+#include <asm/reboot.h>
-+#include <boot_param.h>
++#include <linux/scatterlist.h>
++#include <linux/string.h>
++#include <asm/io.h>
 +
-+static void loongson_restart(void)
++#ifdef CONFIG_PCI_DOMAINS
++#define pci_domain_nr(bus) (((struct pci_controller *)(bus)->sysdata)->index)
++
++static inline int pci_proc_domain(struct pci_bus *bus)
 +{
-+#ifdef CONFIG_EFI
-+	if (efi_capsule_pending(NULL))
-+		efi_reboot(REBOOT_WARM, NULL);
-+	else
-+		efi_reboot(REBOOT_COLD, NULL);
-+#endif
-+	if (!acpi_disabled)
-+		acpi_reboot();
++	struct pci_controller *hose = bus->sysdata;
 +
-+	while (1) {
-+		__arch_cpu_idle();
++	return hose->need_domain_info;
++}
++#endif /* CONFIG_PCI_DOMAINS */
++
++/* mmconfig.c */
++
++#ifdef CONFIG_PCI_MMCONFIG
++struct pci_mmcfg_region {
++	struct list_head list;
++	phys_addr_t address;
++	u16 segment;
++	u8 start_bus;
++	u8 end_bus;
++};
++
++extern phys_addr_t pci_mmconfig_addr(u16 seg, u8 start);
++extern int pci_mmconfig_delete(u16 seg, u8 start, u8 end);
++extern struct pci_mmcfg_region *pci_mmconfig_lookup(int segment, int bus);
++extern struct list_head pci_mmcfg_list;
++#endif /*CONFIG_PCI_MMCONFIG*/
++
++#endif /* __KERNEL__ */
++
++/* generic pci stuff */
++#include <asm-generic/pci.h>
++
++#endif /* _ASM_PCI_H */
+diff --git a/arch/loongarch/pci/acpi.c b/arch/loongarch/pci/acpi.c
+new file mode 100644
+index 000000000000..68e4c3f5e88f
+--- /dev/null
++++ b/arch/loongarch/pci/acpi.c
+@@ -0,0 +1,194 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#include <linux/pci.h>
++#include <linux/acpi.h>
++#include <linux/init.h>
++#include <linux/irq.h>
++#include <linux/dmi.h>
++#include <linux/slab.h>
++#include <linux/pci-acpi.h>
++
++#include <asm/pci.h>
++#include <loongson.h>
++
++struct pci_root_info {
++	struct acpi_pci_root_info common;
++	struct pci_controller pc;
++#ifdef CONFIG_PCI_MMCONFIG
++	bool mcfg_added;
++	u8 start_bus;
++	u8 end_bus;
++#endif
++};
++
++void pcibios_add_bus(struct pci_bus *bus)
++{
++	acpi_pci_add_bus(bus);
++}
++
++int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
++{
++	struct pci_controller *pc = bridge->bus->sysdata;
++
++	ACPI_COMPANION_SET(&bridge->dev, pc->companion);
++	return 0;
++}
++
++#ifdef CONFIG_PCI_MMCONFIG
++static void teardown_mcfg(struct acpi_pci_root_info *ci)
++{
++	struct pci_root_info *info;
++
++	info = container_of(ci, struct pci_root_info, common);
++	if (info->mcfg_added) {
++		pci_mmconfig_delete(info->pc.index,
++				    info->start_bus, info->end_bus);
++		info->mcfg_added = false;
++	}
++}
++#else
++static void teardown_mcfg(struct acpi_pci_root_info *ci)
++{
++}
++#endif
++
++static void acpi_release_root_info(struct acpi_pci_root_info *info)
++{
++	if (info) {
++		teardown_mcfg(info);
++		kfree(container_of(info, struct pci_root_info, common));
 +	}
 +}
 +
-+static void loongson_poweroff(void)
++static int acpi_prepare_root_resources(struct acpi_pci_root_info *ci)
 +{
-+#ifdef CONFIG_EFI
-+	efi.reset_system(EFI_RESET_SHUTDOWN, EFI_SUCCESS, 0, NULL);
-+#endif
-+	while (1) {
-+		__arch_cpu_idle();
-+	}
-+}
++	struct acpi_device *device = ci->bridge;
++	struct resource_entry *entry, *tmp;
++	int status;
 +
-+static int __init loongarch_reboot_setup(void)
-+{
-+	pm_restart = loongson_restart;
-+	pm_power_off = loongson_poweroff;
++	status = acpi_pci_probe_root_resources(ci);
++	if (status > 0)
++		return status;
++
++	resource_list_for_each_entry_safe(entry, tmp, &ci->resources) {
++		dev_dbg(&device->dev,
++			   "host bridge window %pR (ignored)\n", entry->res);
++		resource_list_destroy_entry(entry);
++	}
++
++	pcibios_add_root_resources(&ci->resources);
 +
 +	return 0;
 +}
 +
-+arch_initcall(loongarch_reboot_setup);
-diff --git a/arch/loongarch/loongson64/rtc.c b/arch/loongarch/loongson64/rtc.c
++static int pci_read(struct pci_bus *bus,
++		unsigned int devfn,
++		int where, int size, u32 *value)
++{
++	return loongarch_pci_ops->read(bus,
++				 devfn, where, size, value);
++}
++
++static int pci_write(struct pci_bus *bus,
++		unsigned int devfn,
++		int where, int size, u32 value)
++{
++	return loongarch_pci_ops->write(bus,
++				  devfn, where, size, value);
++}
++
++struct pci_ops pci_root_ops = {
++	.read = pci_read,
++	.write = pci_write,
++};
++static struct acpi_pci_root_ops acpi_pci_root_ops = {
++	.pci_ops = &pci_root_ops,
++	.release_info = acpi_release_root_info,
++	.prepare_resources = acpi_prepare_root_resources,
++};
++
++static void init_controller_resources(struct pci_controller *controller,
++		struct pci_bus *bus)
++{
++	struct resource_entry *entry, *tmp;
++	struct resource *res;
++
++	controller->io_map_base = loongarch_io_port_base;
++
++	resource_list_for_each_entry_safe(entry, tmp, &bus->resources) {
++		res = entry->res;
++		if (res->flags & IORESOURCE_MEM)
++			controller->mem_resource = res;
++		else if (res->flags & IORESOURCE_IO)
++			controller->io_resource = res;
++		else
++			continue;
++	}
++}
++
++struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root)
++{
++	struct pci_bus *bus;
++	struct pci_root_info *info;
++	struct pci_controller *controller;
++	int domain = root->segment;
++	int busnum = root->secondary.start;
++	static int need_domain_info;
++	struct acpi_device *device = root->device;
++
++	info = kzalloc(sizeof(*info), GFP_KERNEL);
++	if (!info) {
++		pr_warn("pci_bus %04x:%02x: ignored (out of memory)\n", domain, busnum);
++		return NULL;
++	}
++
++	controller = &info->pc;
++	controller->companion = device;
++	controller->index = domain;
++
++#ifdef CONFIG_PCI_MMCONFIG
++	root->mcfg_addr = pci_mmconfig_addr(domain, busnum);
++	controller->mcfg_addr = pci_mmconfig_addr(domain, busnum);
++#endif
++	if (!controller->mcfg_addr)
++		controller->mcfg_addr = mcfg_addr_init(controller->index);
++
++	controller->node = 0;
++
++	bus = pci_find_bus(domain, busnum);
++	if (bus) {
++		memcpy(bus->sysdata, controller, sizeof(struct pci_controller));
++		kfree(info);
++	} else {
++		bus = acpi_pci_root_create(root, &acpi_pci_root_ops,
++					   &info->common, controller);
++		if (bus) {
++			need_domain_info = need_domain_info || pci_domain_nr(bus);
++			set_pci_need_domain_info(controller, need_domain_info);
++			init_controller_resources(controller, bus);
++
++			/*
++			 * We insert PCI resources into the iomem_resource
++			 * and ioport_resource trees in either
++			 * pci_bus_claim_resources() or
++			 * pci_bus_assign_resources().
++			 */
++			if (pci_has_flag(PCI_PROBE_ONLY)) {
++				pci_bus_claim_resources(bus);
++			} else {
++				struct pci_bus *child;
++
++				pci_bus_size_bridges(bus);
++				pci_bus_assign_resources(bus);
++				list_for_each_entry(child, &bus->children, node)
++					pcie_bus_configure_settings(child);
++			}
++		} else {
++			kfree(info);
++		}
++	}
++
++	return bus;
++}
+diff --git a/arch/loongarch/pci/mmconfig.c b/arch/loongarch/pci/mmconfig.c
 new file mode 100644
-index 000000000000..645a4b40dcc0
+index 000000000000..d65820e3068a
 --- /dev/null
-+++ b/arch/loongarch/loongson64/rtc.c
-@@ -0,0 +1,36 @@
++++ b/arch/loongarch/pci/mmconfig.c
+@@ -0,0 +1,105 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+
++#include <linux/pci.h>
++#include <linux/acpi.h>
 +#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/platform_device.h>
++#include <linux/dmi.h>
++#include <linux/slab.h>
++#include <linux/pci-acpi.h>
++#include <asm/pci.h>
 +#include <loongson.h>
 +
-+#define RTC_TOYREAD0    0x2C
-+#define RTC_YEAR        0x30
++#define PREFIX "PCI: "
 +
-+unsigned long loongson_get_rtc_time(void)
++static DEFINE_MUTEX(pci_mmcfg_lock);
++
++LIST_HEAD(pci_mmcfg_list);
++
++struct pci_mmcfg_region *pci_mmconfig_lookup(int segment, int bus)
 +{
-+	unsigned int year, mon, day, hour, min, sec;
-+	unsigned int value;
++	struct pci_mmcfg_region *cfg;
 +
-+	value = ls7a_readl(LS7A_RTC_REG_BASE + RTC_TOYREAD0);
-+	sec = (value >> 4) & 0x3f;
-+	min = (value >> 10) & 0x3f;
-+	hour = (value >> 16) & 0x1f;
-+	day = (value >> 21) & 0x1f;
-+	mon = (value >> 26) & 0x3f;
-+	year = ls7a_readl(LS7A_RTC_REG_BASE + RTC_YEAR);
++	list_for_each_entry(cfg, &pci_mmcfg_list, list)
++		if (cfg->segment == segment &&
++		    cfg->start_bus <= bus && bus <= cfg->end_bus)
++			return cfg;
 +
-+	year = 1900 + year;
-+
-+	return mktime64(year, mon, day, hour, min, sec);
++	return NULL;
 +}
 +
-+void read_persistent_clock64(struct timespec64 *ts)
++static int __init pci_parse_mcfg(struct acpi_table_header *header)
 +{
-+	ts->tv_sec = loongson_get_rtc_time();
-+	ts->tv_nsec = 0;
++	struct acpi_table_mcfg *mcfg;
++	struct acpi_mcfg_allocation *cfg_table, *cfg;
++	struct pci_mmcfg_region *new, *arr;
++	unsigned long i;
++	int entries;
++
++	if (header->length < sizeof(struct acpi_table_mcfg))
++		return -EINVAL;
++
++	/* how many config structures do we have */
++	entries = (header->length - sizeof(struct acpi_table_mcfg)) /
++				sizeof(struct acpi_mcfg_allocation);
++
++
++	mcfg = (struct acpi_table_mcfg *)header;
++	cfg_table = (struct acpi_mcfg_allocation *) &mcfg[1];
++
++	arr = kcalloc(entries, sizeof(*arr), GFP_KERNEL);
++	if (!arr)
++		return -ENOMEM;
++
++	for (i = 0, new = arr; i < entries; i++, new++) {
++		cfg = &cfg_table[i];
++		new->address = cfg->address;
++		new->segment = cfg->pci_segment;
++		new->start_bus = cfg->start_bus_number;
++		new->end_bus = cfg->end_bus_number;
++
++		list_add(&new->list, &pci_mmcfg_list);
++		pr_info(PREFIX
++		       "MMCONFIG for domain %04x [bus %02x-%02x](base %#lx)\n",
++		       new->segment, new->start_bus, new->end_bus, (unsigned long)(new->address));
++	}
++
++	return 0;
 +}
-diff --git a/arch/loongarch/loongson64/setup.c b/arch/loongarch/loongson64/setup.c
++
++void __init pci_mmcfg_late_init(void)
++{
++	int err;
++
++	err = acpi_table_parse(ACPI_SIG_MCFG, pci_parse_mcfg);
++	if (err)
++		pr_err("Failed to parse MCFG (%d)\n", err);
++}
++
++phys_addr_t pci_mmconfig_addr(u16 seg, u8 start)
++{
++	struct pci_mmcfg_region *cfg;
++
++	cfg = pci_mmconfig_lookup(seg, start);
++	if (!cfg)
++		return (phys_addr_t)NULL;
++
++	return cfg->address;
++}
++
++/* Delete MMCFG information for host bridges */
++int pci_mmconfig_delete(u16 seg, u8 start, u8 end)
++{
++	struct pci_mmcfg_region *cfg;
++
++	list_for_each_entry(cfg, &pci_mmcfg_list, list)
++		if (cfg->segment == seg && cfg->start_bus == start &&
++		    cfg->end_bus == end) {
++			list_del(&cfg->list);
++			kfree(cfg);
++			return 0;
++		}
++
++	return -ENOENT;
++}
+diff --git a/arch/loongarch/pci/pci-loongson.c b/arch/loongarch/pci/pci-loongson.c
 new file mode 100644
-index 000000000000..941089d40c43
+index 000000000000..e74f887a330e
 --- /dev/null
-+++ b/arch/loongarch/loongson64/setup.c
-@@ -0,0 +1,37 @@
++++ b/arch/loongarch/pci/pci-loongson.c
+@@ -0,0 +1,130 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Author: Huacai Chen <chenhuacai@loongson.cn>
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+#include <linux/export.h>
-+#include <linux/init.h>
-+#include <asm/bootinfo.h>
 +
-+#ifdef CONFIG_VT
-+#include <linux/console.h>
-+#include <linux/screen_info.h>
-+#include <linux/platform_device.h>
-+#endif
++#include <linux/types.h>
++#include <linux/pci.h>
++#include <linux/vgaarb.h>
 +
 +#include <loongson.h>
 +
-+const char *get_system_type(void)
++#define PCI_ACCESS_READ  0
++#define PCI_ACCESS_WRITE 1
++
++static int ls7a_pci_config_access(unsigned char access_type,
++		struct pci_bus *bus, unsigned int devfn,
++		int where, u32 *data)
 +{
-+	return "generic-loongson-machine";
++	unsigned char busnum = bus->number;
++	int device = PCI_SLOT(devfn);
++	int function = PCI_FUNC(devfn);
++	int reg = where & ~3;
++	u_int64_t addr;
++	void *addrp;
++
++	/*
++	 * Filter out non-supported devices.
++	 * device 2: misc, device 21: confbus
++	 */
++	if (where < PCI_CFG_SPACE_SIZE) { /* standard config */
++		addr = (busnum << 16) | (device << 11) | (function << 8) | reg;
++		if (busnum == 0) {
++			if (device > 23 || (device >= 9 && device <= 20 && function == 1))
++				return PCIBIOS_DEVICE_NOT_FOUND;
++			addrp = (void *)TO_UNCAC(HT1LO_PCICFG_BASE | addr);
++		} else {
++			addrp = (void *)TO_UNCAC(HT1LO_PCICFG_BASE_TP1 | addr);
++		}
++	} else if (where < PCI_CFG_SPACE_EXP_SIZE) {  /* extended config */
++		reg = (reg & 0xff) | ((reg & 0xf00) << 16);
++		addr = (busnum << 16) | (device << 11) | (function << 8) | reg;
++		if (busnum == 0) {
++			if (device > 23 || (device >= 9 && device <= 20 && function == 1))
++				return PCIBIOS_DEVICE_NOT_FOUND;
++			addrp = (void *)TO_UNCAC(HT1LO_EXT_PCICFG_BASE | addr);
++		} else {
++			addrp = (void *)TO_UNCAC(HT1LO_EXT_PCICFG_BASE_TP1 | addr);
++		}
++	} else {
++		return PCIBIOS_DEVICE_NOT_FOUND;
++	}
++
++	if (access_type == PCI_ACCESS_WRITE)
++		writel(*data, addrp);
++	else {
++		*data = readl(addrp);
++		if (*data == 0xffffffff) {
++			*data = -1;
++			return PCIBIOS_DEVICE_NOT_FOUND;
++		}
++	}
++
++	return PCIBIOS_SUCCESSFUL;
 +}
 +
-+void __init plat_mem_setup(void)
++static int ls7a_pci_pcibios_read(struct pci_bus *bus, unsigned int devfn,
++				 int where, int size, u32 *val)
 +{
++	u32 data = 0;
++	int ret = ls7a_pci_config_access(PCI_ACCESS_READ,
++			bus, devfn, where, &data);
++
++	if (size == 1)
++		*val = (data >> ((where & 3) << 3)) & 0xff;
++	else if (size == 2)
++		*val = (data >> ((where & 3) << 3)) & 0xffff;
++	else
++		*val = data;
++
++	return ret;
 +}
 +
-+static int __init register_gop_device(void)
++static int ls7a_pci_pcibios_write(struct pci_bus *bus, unsigned int devfn,
++				  int where, int size, u32 val)
 +{
-+	void *pd;
++	int ret;
++	u32 data = 0;
 +
-+	if (screen_info.orig_video_isVGA != VIDEO_TYPE_EFI)
++	if (size == 4)
++		data = val;
++	else {
++		ret = ls7a_pci_config_access(PCI_ACCESS_READ,
++				bus, devfn, where, &data);
++		if (ret != PCIBIOS_SUCCESSFUL)
++			return ret;
++
++		if (size == 1)
++			data = (data & ~(0xff << ((where & 3) << 3))) |
++			    (val << ((where & 3) << 3));
++		else if (size == 2)
++			data = (data & ~(0xffff << ((where & 3) << 3))) |
++			    (val << ((where & 3) << 3));
++	}
++
++	ret = ls7a_pci_config_access(PCI_ACCESS_WRITE,
++			bus, devfn, where, &data);
++
++	return ret;
++}
++
++struct pci_ops ls7a_pci_ops = {
++	.read = ls7a_pci_pcibios_read,
++	.write = ls7a_pci_pcibios_write
++};
++
++static void pci_fixup_vgadev(struct pci_dev *pdev)
++{
++	struct pci_dev *devp = NULL;
++
++	while ((devp = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, devp))) {
++		if (devp->vendor != PCI_VENDOR_ID_LOONGSON) {
++			vga_set_default_device(devp);
++			dev_info(&pdev->dev,
++				"Overriding boot device as %X:%X\n",
++				devp->vendor, devp->device);
++		}
++	}
++}
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DC, pci_fixup_vgadev);
+diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
+new file mode 100644
+index 000000000000..afdf70fc8770
+--- /dev/null
++++ b/arch/loongarch/pci/pci.c
+@@ -0,0 +1,207 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#include <linux/kernel.h>
++#include <linux/mm.h>
++#include <linux/export.h>
++#include <linux/init.h>
++#include <linux/acpi.h>
++#include <linux/types.h>
++#include <linux/pci.h>
++#include <linux/of_address.h>
++#include <loongson.h>
++
++const struct pci_ops *__read_mostly loongarch_pci_ops;
++
++int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
++						int reg, int len, u32 *val)
++{
++	struct pci_bus *bus_tmp = pci_find_bus(domain, bus);
++
++	if (bus_tmp)
++		return bus_tmp->ops->read(bus_tmp, devfn, reg, len, val);
++	return -EINVAL;
++}
++
++int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
++						int reg, int len, u32 val)
++{
++	struct pci_bus *bus_tmp = pci_find_bus(domain, bus);
++
++	if (bus_tmp)
++		return bus_tmp->ops->write(bus_tmp, devfn, reg, len, val);
++	return -EINVAL;
++}
++
++void pci_resource_to_user(const struct pci_dev *dev, int bar,
++			  const struct resource *rsrc, resource_size_t *start,
++			  resource_size_t *end)
++{
++	phys_addr_t size = resource_size(rsrc);
++
++	*start = rsrc->start;
++	*end = rsrc->start + size - 1;
++}
++
++/*
++ * We need to avoid collisions with `mirrored' VGA ports
++ * and other strange ISA hardware, so we always want the
++ * addresses to be allocated in the 0x000-0x0ff region
++ * modulo 0x400.
++ *
++ * Why? Because some silly external IO cards only decode
++ * the low 10 bits of the IO address. The 0x00-0xff region
++ * is reserved for motherboard devices that decode all 16
++ * bits, so it's ok to allocate at, say, 0x2800-0x28ff,
++ * but we want to try to avoid allocating at 0x2900-0x2bff
++ * which might have be mirrored at 0x0100-0x03ff..
++ */
++resource_size_t
++pcibios_align_resource(void *data, const struct resource *res,
++		       resource_size_t size, resource_size_t align)
++{
++	struct pci_dev *dev = data;
++	struct pci_controller *hose = dev->sysdata;
++	resource_size_t start = res->start;
++
++	if (res->flags & IORESOURCE_IO) {
++		/* Make sure we start at our min on all hoses */
++		if (start < PCIBIOS_MIN_IO + hose->io_resource->start)
++			start = PCIBIOS_MIN_IO + hose->io_resource->start;
++
++		/*
++		 * Put everything into 0x00-0xff region modulo 0x400
++		 */
++		if (start & 0x300)
++			start = (start + 0x3ff) & ~0x3ff;
++	} else if (res->flags & IORESOURCE_MEM) {
++		/* Make sure we start at our min on all hoses */
++		if (start < PCIBIOS_MIN_MEM)
++			start = PCIBIOS_MIN_MEM;
++	}
++
++	return start;
++}
++
++phys_addr_t mcfg_addr_init(int domain)
++{
++	return (((u64) domain << 44) | MCFG_EXT_PCICFG_BASE);
++}
++
++static struct resource pci_mem_resource = {
++	.name	= "pci memory space",
++	.flags	= IORESOURCE_MEM,
++};
++
++static struct resource pci_io_resource = {
++	.name	= "pci io space",
++	.flags	= IORESOURCE_IO,
++};
++
++void pcibios_add_root_resources(struct list_head *resources)
++{
++	if (resources) {
++		pci_add_resource(resources, &pci_mem_resource);
++		pci_add_resource(resources, &pci_io_resource);
++	}
++}
++
++static int __init pcibios_set_cache_line_size(void)
++{
++	unsigned int lsize;
++
++	/*
++	 * Set PCI cacheline size to that of the highest level in the
++	 * cache hierarchy.
++	 */
++	lsize = cpu_dcache_line_size();
++	lsize = cpu_vcache_line_size() ? : lsize;
++	lsize = cpu_scache_line_size() ? : lsize;
++
++	BUG_ON(!lsize);
++
++	pci_dfl_cache_line_size = lsize >> 2;
++
++	pr_debug("PCI: pci_cache_line_size set to %d bytes\n", lsize);
++
++	return 0;
++}
++
++static int __init pcibios_init(void)
++{
++	return pcibios_set_cache_line_size();
++}
++
++subsys_initcall(pcibios_init);
++
++static int pcibios_enable_resources(struct pci_dev *dev, int mask)
++{
++	int idx;
++	u16 cmd, old_cmd;
++	struct resource *r;
++
++	pci_read_config_word(dev, PCI_COMMAND, &cmd);
++	old_cmd = cmd;
++
++	for (idx = 0; idx < PCI_NUM_RESOURCES; idx++) {
++		/* Only set up the requested stuff */
++		if (!(mask & (1<<idx)))
++			continue;
++
++		r = &dev->resource[idx];
++		if (!(r->flags & (IORESOURCE_IO | IORESOURCE_MEM)))
++			continue;
++		if ((idx == PCI_ROM_RESOURCE) &&
++				(!(r->flags & IORESOURCE_ROM_ENABLE)))
++			continue;
++		if (!r->start && r->end) {
++			pci_err(dev,
++				"can't enable device: resource collisions\n");
++			return -EINVAL;
++		}
++		if (r->flags & IORESOURCE_IO)
++			cmd |= PCI_COMMAND_IO;
++		if (r->flags & IORESOURCE_MEM)
++			cmd |= PCI_COMMAND_MEMORY;
++	}
++
++	if (cmd != old_cmd) {
++		pci_info(dev, "enabling device (%04x -> %04x)\n", old_cmd, cmd);
++		pci_write_config_word(dev, PCI_COMMAND, cmd);
++	}
++
++	return 0;
++}
++
++int pcibios_dev_init(struct pci_dev *dev)
++{
++#ifdef CONFIG_ACPI
++	if (acpi_disabled)
 +		return 0;
-+	pd = platform_device_register_data(NULL, "efi-framebuffer", 0,
-+			&screen_info, sizeof(screen_info));
-+	return PTR_ERR_OR_ZERO(pd);
++	if (pci_dev_msi_enabled(dev))
++		return 0;
++	return acpi_pci_irq_enable(dev);
++#endif
 +}
-+subsys_initcall(register_gop_device);
++
++int pcibios_enable_device(struct pci_dev *dev, int mask)
++{
++	int err;
++
++	err = pcibios_enable_resources(dev, mask);
++	if (err < 0)
++		return err;
++
++	return pcibios_dev_init(dev);
++}
++
++void pcibios_fixup_bus(struct pci_bus *bus)
++{
++	struct pci_dev *dev = bus->self;
++
++	if (pci_has_flag(PCI_PROBE_ONLY) && dev &&
++	    (dev->class >> 8) == PCI_CLASS_BRIDGE_PCI) {
++		pci_read_bridge_bases(bus);
++	}
++}
 -- 
 2.27.0
 
