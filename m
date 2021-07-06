@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8B43BCB57
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 13:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60AF3BCB59
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 13:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbhGFLF0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 07:05:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38116 "EHLO mail.kernel.org"
+        id S231357AbhGFLGB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 07:06:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39212 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231357AbhGFLF0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:05:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EE8C661A33
-        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 11:02:47 +0000 (UTC)
+        id S231216AbhGFLGA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:06:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B28C61A2D
+        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 11:03:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625569368;
-        bh=rM7tOvVAdZwLlj1DOtVoGYGzfBztfGCPo6NxHNt7xFw=;
+        s=k20201202; t=1625569402;
+        bh=ud7aIy2xW6L/GOYeoo39u49rPYI3dll7lq+wQ+ciOe4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FG3ddK2DDIEp2/Z8xQ4yGS2psC/3HLhVDjrpVGEEBBTCr21ehtDVQgHUIJ2bs94mA
-         tEC25ist9FzADQ1Q4XrgJRy/3r560zWQs0VJ0hIZC3JqonB1TfGCLXAuFIQJ8EdQE5
-         nSgKEijTHu65qmJoPE3yR7Wa9zxUkawNtFK168GXLV8D/vLkGbU+0I+f9Ck64LYrq0
-         9EyTu+u04m4U1Wa9NynD/OCML32h4jZfdqfdPOMhvBNdxaSpa24IPeDHYMvSZT/8Ud
-         7UYxstPmvN7O9dVf/uNkW/qnWosBed8R5fRrs+1l6zFKWAEV0GhghZvPDLG4K6arKw
-         eAXhJ0qYfKF0Q==
-Received: by mail-wr1-f52.google.com with SMTP id p8so25601138wrr.1
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 04:02:47 -0700 (PDT)
-X-Gm-Message-State: AOAM532Hd4YC4lsSjAqdrulaIrUHa1RdJfZzlYuApJzVewYExptwZBOA
-        3VjNvVEVIE7iTtQ/nF0bNkkd2M2MMwyo9W2cVBE=
-X-Google-Smtp-Source: ABdhPJwJqkRCxJaVzYBNAg4aARmvVxhzgVvMdR2anL3jo4X4/9qvBcNNFhB9t/AOUdtOcHRWQrAoE5NlR2gReDBiRwA=
-X-Received: by 2002:a5d:448c:: with SMTP id j12mr21992043wrq.105.1625569366523;
- Tue, 06 Jul 2021 04:02:46 -0700 (PDT)
+        b=BQbuUdnDgQtcLJXpPJc4sZanYppBNtQwa2DxmyPrJdXN2XzivPmqBQUZDkxYMEoSE
+         VJmmxKgZjcKuKeyjAJ6QKNtw0Sud1XK83e4+nz6+fqeoHmq+8NvPcTV3ZwkBzmLQB0
+         y1S8Sr0aH5KFsN83/3OoxVkhHvmdMPHTEshJvZ8dCTDqnSkFaM2VXkYnnD1Td8i/ec
+         A7jg/8awWL67P01rjt3SOcVi8F4fVXLd5K3Lrvj28NAuXCBx3+Yxr5/oqaZ4BjcC4t
+         tboReKLgRk3Krh1rYdgrb4i179fgJ/mg+BWOrKzN8+nZK9lzrKUmkkmx+Pa6ObfMLE
+         M+tgf9R4agl7Q==
+Received: by mail-wm1-f47.google.com with SMTP id a5-20020a7bc1c50000b02901e3bbe0939bso1972766wmj.0
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 04:03:22 -0700 (PDT)
+X-Gm-Message-State: AOAM533eibFknDOHqHvTkTxMpxp+h4btNc0u07Cjn425nFHUF+t3tZiy
+        lUvKwefgDJhYi8zepS8NXzMFfczCCwpc2t11Mjc=
+X-Google-Smtp-Source: ABdhPJwl55C2KALILVSU+EPcVRmd3GczOpWAh6wKG3mCaKFhiYZaS2IoO4Lm3jf8lCB6OkVaR85eGcqaEqFoxDApb5k=
+X-Received: by 2002:a05:600c:3205:: with SMTP id r5mr4046217wmp.75.1625569401122;
+ Tue, 06 Jul 2021 04:03:21 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-17-chenhuacai@loongson.cn> <CAK8P3a10NN4mZYtzEEiYv8jqPZbMH-LH406cZV6M4HXhr-Z9yQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a10NN4mZYtzEEiYv8jqPZbMH-LH406cZV6M4HXhr-Z9yQ@mail.gmail.com>
+ <20210706041820.1536502-18-chenhuacai@loongson.cn> <CAK8P3a3Do4NModPfJkZTbOqgXedVjJfqwWMyK0FjFAv2v6RjhQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a3Do4NModPfJkZTbOqgXedVjJfqwWMyK0FjFAv2v6RjhQ@mail.gmail.com>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 6 Jul 2021 13:02:30 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0Oa77Dyz3fHOTrjtkfk_qtXQkre=ABHy1hTphDiiFp8Q@mail.gmail.com>
-Message-ID: <CAK8P3a0Oa77Dyz3fHOTrjtkfk_qtXQkre=ABHy1hTphDiiFp8Q@mail.gmail.com>
-Subject: Re: [PATCH 16/19] LoongArch: Add VDSO and VSYSCALL support
+Date:   Tue, 6 Jul 2021 13:03:05 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0ssHnPAt8jnRgqk3aXJeyt4+dZQxKDy=8RrL9BNRAsmg@mail.gmail.com>
+Message-ID: <CAK8P3a0ssHnPAt8jnRgqk3aXJeyt4+dZQxKDy=8RrL9BNRAsmg@mail.gmail.com>
+Subject: Re: [PATCH 17/19] LoongArch: Add multi-processor (SMP) support
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -56,33 +56,27 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> This patch adds VDSO and VSYSCALL support (gettimeofday and its friends)
-> for LoongArch.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/loongarch/include/asm/vdso.h             |  50 +++
->  arch/loongarch/include/asm/vdso/clocksource.h |   8 +
->  .../loongarch/include/asm/vdso/gettimeofday.h | 101 ++++++
->  arch/loongarch/include/asm/vdso/processor.h   |  14 +
->  arch/loongarch/include/asm/vdso/vdso.h        |  42 +++
->  arch/loongarch/include/asm/vdso/vsyscall.h    |  27 ++
->  arch/loongarch/kernel/vdso.c                  | 132 ++++++++
->  arch/loongarch/vdso/Makefile                  |  97 ++++++
->  arch/loongarch/vdso/elf.S                     |  15 +
->  arch/loongarch/vdso/genvdso.c                 | 311 ++++++++++++++++++
->  arch/loongarch/vdso/genvdso.h                 | 122 +++++++
->  arch/loongarch/vdso/sigreturn.S               |  24 ++
->  arch/loongarch/vdso/vdso.lds.S                |  65 ++++
->  arch/loongarch/vdso/vgettimeofday.c           |  26 ++
 
-I fear you may have copied the wrong one here, the MIPS implementation seems
-more complex than the rv64 or arm64 versions, and you should not need that
-complexity.
+> +const struct plat_smp_ops loongson3_smp_ops = {
+> +       .send_ipi_single = loongson3_send_ipi_single,
+> +       .send_ipi_mask = loongson3_send_ipi_mask,
+> +       .smp_setup = loongson3_smp_setup,
+> +       .prepare_cpus = loongson3_prepare_cpus,
+> +       .boot_secondary = loongson3_boot_secondary,
+> +       .init_secondary = loongson3_init_secondary,
+> +       .smp_finish = loongson3_smp_finish,
+> +#ifdef CONFIG_HOTPLUG_CPU
+> +       .cpu_disable = loongson3_cpu_disable,
+> +       .cpu_die = loongson3_cpu_die,
+> +#endif
+> +};
 
-Can you try removing the genvdso.c  file completely? To be honest I don't
-see why this is needed here, so I may be missing something, but the other
-ones don't have it either.
+I would hope that these functions can be used across platforms without
+an abstraction layer in-between. Are these not all part of the either the
+CPU architecture definition or the firmware interface?
 
-       Arnd
+Do you even expect to see non-SMP systems deployed widely enough that
+SMP support must be optional? On arch/arm64 we ended up always
+building SMP support into the kernel because practically everyone wants it.
+
+      Arnd
