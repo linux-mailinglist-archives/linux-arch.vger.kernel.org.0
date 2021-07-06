@@ -2,17 +2,17 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AADD3BC538
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 06:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBF43BC53A
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 06:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbhGFEWE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 00:22:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46552 "EHLO mail.kernel.org"
+        id S229990AbhGFEWJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 00:22:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46602 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229550AbhGFEWE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Jul 2021 00:22:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 796236198D;
-        Tue,  6 Jul 2021 04:19:23 +0000 (UTC)
+        id S229550AbhGFEWJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Jul 2021 00:22:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1718F61416;
+        Tue,  6 Jul 2021 04:19:27 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -24,9 +24,9 @@ Cc:     linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH 10/19] LoongArch: Add signal handling support
-Date:   Tue,  6 Jul 2021 12:18:11 +0800
-Message-Id: <20210706041820.1536502-11-chenhuacai@loongson.cn>
+Subject: [PATCH 11/19] LoongArch: Add elf and module support
+Date:   Tue,  6 Jul 2021 12:18:12 +0800
+Message-Id: <20210706041820.1536502-12-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210706041820.1536502-1-chenhuacai@loongson.cn>
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
@@ -36,118 +36,445 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds signal handling support for LoongArch.
+This patch adds elf definition and module relocate codes.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/sigcontext.h      |  10 +
- arch/loongarch/include/asm/signal.h          |  16 +
- arch/loongarch/include/uapi/asm/sigcontext.h |  40 ++
- arch/loongarch/include/uapi/asm/siginfo.h    |  19 +
- arch/loongarch/include/uapi/asm/signal.h     | 115 ++++
- arch/loongarch/include/uapi/asm/ucontext.h   |  46 ++
- arch/loongarch/kernel/signal-common.h        |  52 ++
- arch/loongarch/kernel/signal.c               | 583 +++++++++++++++++++
- 8 files changed, 881 insertions(+)
- create mode 100644 arch/loongarch/include/asm/sigcontext.h
- create mode 100644 arch/loongarch/include/asm/signal.h
- create mode 100644 arch/loongarch/include/uapi/asm/sigcontext.h
- create mode 100644 arch/loongarch/include/uapi/asm/siginfo.h
- create mode 100644 arch/loongarch/include/uapi/asm/signal.h
- create mode 100644 arch/loongarch/include/uapi/asm/ucontext.h
- create mode 100644 arch/loongarch/kernel/signal-common.h
- create mode 100644 arch/loongarch/kernel/signal.c
+ arch/loongarch/include/asm/cpufeature.h  |  24 +
+ arch/loongarch/include/asm/elf.h         | 311 +++++++++++
+ arch/loongarch/include/asm/exec.h        |  10 +
+ arch/loongarch/include/asm/module.h      |  15 +
+ arch/loongarch/include/asm/vermagic.h    |  19 +
+ arch/loongarch/include/uapi/asm/auxvec.h |  17 +
+ arch/loongarch/include/uapi/asm/hwcap.h  |  20 +
+ arch/loongarch/kernel/elf.c              |  41 ++
+ arch/loongarch/kernel/module.c           | 652 +++++++++++++++++++++++
+ 9 files changed, 1109 insertions(+)
+ create mode 100644 arch/loongarch/include/asm/cpufeature.h
+ create mode 100644 arch/loongarch/include/asm/elf.h
+ create mode 100644 arch/loongarch/include/asm/exec.h
+ create mode 100644 arch/loongarch/include/asm/module.h
+ create mode 100644 arch/loongarch/include/asm/vermagic.h
+ create mode 100644 arch/loongarch/include/uapi/asm/auxvec.h
+ create mode 100644 arch/loongarch/include/uapi/asm/hwcap.h
+ create mode 100644 arch/loongarch/kernel/elf.c
+ create mode 100644 arch/loongarch/kernel/module.c
 
-diff --git a/arch/loongarch/include/asm/sigcontext.h b/arch/loongarch/include/asm/sigcontext.h
+diff --git a/arch/loongarch/include/asm/cpufeature.h b/arch/loongarch/include/asm/cpufeature.h
 new file mode 100644
-index 000000000000..c8d46213ad98
+index 000000000000..7e4c6a769830
 --- /dev/null
-+++ b/arch/loongarch/include/asm/sigcontext.h
++++ b/arch/loongarch/include/asm/cpufeature.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * CPU feature definitions for module loading, used by
++ * module_cpu_feature_match(), see uapi/asm/hwcap.h for LoongArch CPU features.
++ *
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++
++#ifndef __ASM_CPUFEATURE_H
++#define __ASM_CPUFEATURE_H
++
++#include <uapi/asm/hwcap.h>
++#include <asm/elf.h>
++
++#define MAX_CPU_FEATURES (8 * sizeof(elf_hwcap))
++
++#define cpu_feature(x)		ilog2(HWCAP_ ## x)
++
++static inline bool cpu_have_feature(unsigned int num)
++{
++	return elf_hwcap & (1UL << num);
++}
++
++#endif /* __ASM_CPUFEATURE_H */
+diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/elf.h
+new file mode 100644
+index 000000000000..b74e55823c29
+--- /dev/null
++++ b/arch/loongarch/include/asm/elf.h
+@@ -0,0 +1,311 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_ELF_H
++#define _ASM_ELF_H
++
++#include <linux/auxvec.h>
++#include <linux/fs.h>
++#include <linux/mm_types.h>
++
++#include <uapi/linux/elf.h>
++
++#include <asm/current.h>
++
++/* ELF header e_flags defines. */
++
++/* The ABI of a file. */
++#define EF_LARCH_ABI_LP32		0x00000001	/* LP32 ABI.  */
++#define EF_LARCH_ABI_LPX32		0x00000002	/* LPX32 ABI  */
++#define EF_LARCH_ABI_LP64		0x00000003	/* LP64 ABI  */
++#define EF_LARCH_ABI			0x00000003
++
++/* LoongArch relocation types used by the dynamic linker */
++#define R_LARCH_NONE				0
++#define R_LARCH_32				1
++#define R_LARCH_64				2
++#define R_LARCH_RELATIVE			3
++#define R_LARCH_COPY				4
++#define R_LARCH_JUMP_SLOT			5
++#define R_LARCH_TLS_DTPMOD32			6
++#define R_LARCH_TLS_DTPMOD64			7
++#define R_LARCH_TLS_DTPREL32			8
++#define R_LARCH_TLS_DTPREL64			9
++#define R_LARCH_TLS_TPREL32			10
++#define R_LARCH_TLS_TPREL64			11
++#define R_LARCH_IRELATIVE			12
++#define R_LARCH_MARK_LA				20
++#define R_LARCH_MARK_PCREL			21
++#define R_LARCH_SOP_PUSH_PCREL			22
++#define R_LARCH_SOP_PUSH_ABSOLUTE		23
++#define R_LARCH_SOP_PUSH_DUP			24
++#define R_LARCH_SOP_PUSH_GPREL			25
++#define R_LARCH_SOP_PUSH_TLS_TPREL		26
++#define R_LARCH_SOP_PUSH_TLS_GOT		27
++#define R_LARCH_SOP_PUSH_TLS_GD			28
++#define R_LARCH_SOP_PUSH_PLT_PCREL		29
++#define R_LARCH_SOP_ASSERT			30
++#define R_LARCH_SOP_NOT				31
++#define R_LARCH_SOP_SUB				32
++#define R_LARCH_SOP_SL				33
++#define R_LARCH_SOP_SR				34
++#define R_LARCH_SOP_ADD				35
++#define R_LARCH_SOP_AND				36
++#define R_LARCH_SOP_IF_ELSE			37
++#define R_LARCH_SOP_POP_32_S_10_5		38
++#define R_LARCH_SOP_POP_32_U_10_12		39
++#define R_LARCH_SOP_POP_32_S_10_12		40
++#define R_LARCH_SOP_POP_32_S_10_16		41
++#define R_LARCH_SOP_POP_32_S_10_16_S2		42
++#define R_LARCH_SOP_POP_32_S_5_20		43
++#define R_LARCH_SOP_POP_32_S_0_5_10_16_S2	44
++#define R_LARCH_SOP_POP_32_S_0_10_10_16_S2	45
++#define R_LARCH_SOP_POP_32_U			46
++#define R_LARCH_ADD8				47
++#define R_LARCH_ADD16				48
++#define R_LARCH_ADD24				49
++#define R_LARCH_ADD32				50
++#define R_LARCH_ADD64				51
++#define R_LARCH_SUB8				52
++#define R_LARCH_SUB16				53
++#define R_LARCH_SUB24				54
++#define R_LARCH_SUB32				55
++#define R_LARCH_SUB64				56
++#define R_LARCH_GNU_VTINHERIT			57
++#define R_LARCH_GNU_VTENTRY			58
++#define R_LARCH_PC16				64
++#define R_LARCH_PC21				65
++#define R_LARCH_PC26				66
++
++#ifndef ELF_ARCH
++
++/* ELF register definitions */
++
++/*
++ * General purpose have the following registers:
++ *	Register	Number
++ *	GPRs		32
++ *	EPC		1
++ *	BADVADDR	1
++ *	CRMD		1
++ *	PRMD		1
++ *	EUEN		1
++ *	ECFG		1
++ *	ESTAT		1
++ *	Reserved	6
++ */
++#define ELF_NGREG	45
++
++/*
++ * Floating point have the following registers:
++ *	Register	Number
++ *	FPR		32
++ *	FCC		1
++ *	FCSR		1
++ */
++#define ELF_NFPREG	34
++
++typedef unsigned long elf_greg_t;
++typedef elf_greg_t elf_gregset_t[ELF_NGREG];
++
++typedef double elf_fpreg_t;
++typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
++
++void loongarch_dump_regs64(u64 *uregs, const struct pt_regs *regs);
++
++#ifdef CONFIG_32BIT
++/*
++ * This is used to ensure we don't load something for the wrong architecture.
++ */
++#define elf_check_arch elf32_check_arch
++
++/*
++ * These are used to set parameters in the core dumps.
++ */
++#define ELF_CLASS	ELFCLASS32
++
++#define ELF_CORE_COPY_REGS(dest, regs) \
++	loongarch_dump_regs32((u32 *)&(dest), (regs));
++
++#endif /* CONFIG_32BIT */
++
++#ifdef CONFIG_64BIT
++/*
++ * This is used to ensure we don't load something for the wrong architecture.
++ */
++#define elf_check_arch elf64_check_arch
++
++/*
++ * These are used to set parameters in the core dumps.
++ */
++#define ELF_CLASS	ELFCLASS64
++
++#define ELF_CORE_COPY_REGS(dest, regs) \
++	loongarch_dump_regs64((u64 *)&(dest), (regs));
++
++#endif /* CONFIG_64BIT */
++
++/*
++ * These are used to set parameters in the core dumps.
++ */
++#define ELF_DATA	ELFDATA2LSB
++#define ELF_ARCH	EM_LOONGARCH
++
++#endif /* !defined(ELF_ARCH) */
++
++#define loongarch_elf_check_machine(x) ((x)->e_machine == EM_LOONGARCH)
++
++#define vmcore_elf32_check_arch loongarch_elf_check_machine
++#define vmcore_elf64_check_arch loongarch_elf_check_machine
++
++/*
++ * Return non-zero if HDR identifies an 32bit ELF binary.
++ */
++#define elf32_check_arch(hdr)						\
++({									\
++	int __res = 1;							\
++	struct elfhdr *__h = (hdr);					\
++									\
++	if (!loongarch_elf_check_machine(__h))				\
++		__res = 0;						\
++	if (__h->e_ident[EI_CLASS] != ELFCLASS32)			\
++		__res = 0;						\
++									\
++	__res;								\
++})
++
++/*
++ * Return non-zero if HDR identifies an 64bit ELF binary.
++ */
++#define elf64_check_arch(hdr)						\
++({									\
++	int __res = 1;							\
++	struct elfhdr *__h = (hdr);					\
++									\
++	if (!loongarch_elf_check_machine(__h))				\
++		__res = 0;						\
++	if (__h->e_ident[EI_CLASS] != ELFCLASS64)			\
++		__res = 0;						\
++									\
++	__res;								\
++})
++
++struct loongarch_abi;
++extern struct loongarch_abi loongarch_abi;
++
++#ifdef CONFIG_32BIT
++
++#define SET_PERSONALITY2(ex, state)					\
++do {									\
++	current->thread.abi = &loongarch_abi;				\
++									\
++	loongarch_set_personality_fcsr(state);				\
++									\
++	if (personality(current->personality) != PER_LINUX)		\
++		set_personality(PER_LINUX);				\
++} while (0)
++
++#endif /* CONFIG_32BIT */
++
++#ifdef CONFIG_64BIT
++
++#define SET_PERSONALITY2(ex, state)					\
++do {									\
++	unsigned int p;							\
++									\
++	clear_thread_flag(TIF_32BIT_REGS);				\
++	clear_thread_flag(TIF_32BIT_ADDR);				\
++									\
++	current->thread.abi = &loongarch_abi;			\
++	loongarch_set_personality_fcsr(state);				\
++									\
++	p = personality(current->personality);				\
++	if (p != PER_LINUX32 && p != PER_LINUX)				\
++		set_personality(PER_LINUX);				\
++} while (0)
++
++#endif /* CONFIG_64BIT */
++
++#define CORE_DUMP_USE_REGSET
++#define ELF_EXEC_PAGESIZE	PAGE_SIZE
++
++/*
++ * This yields a mask that user programs can use to figure out what
++ * instruction set this cpu supports. This could be done in userspace,
++ * but it's not easy, and we've already done it here.
++ */
++
++#define ELF_HWCAP	(elf_hwcap)
++extern unsigned int elf_hwcap;
++#include <asm/hwcap.h>
++
++/*
++ * This yields a string that ld.so will use to load implementation
++ * specific libraries for optimization.	 This is more specific in
++ * intent than poking at uname or /proc/cpuinfo.
++ */
++
++#define ELF_PLATFORM  __elf_platform
++extern const char *__elf_platform;
++
++/* The regs[11] (a7) holds the syscall number and should not cleared */
++#define ELF_PLAT_INIT(_r, load_addr)	do { \
++	_r->regs[1] = _r->regs[2] = _r->regs[3] = _r->regs[4] = 0;	\
++	_r->regs[5] = _r->regs[6] = _r->regs[7] = _r->regs[8] = 0;	\
++	_r->regs[9] = _r->regs[10] = _r->regs[12] = _r->regs[13] = 0;	\
++	_r->regs[14] = _r->regs[15] = _r->regs[16] = _r->regs[17] = 0;	\
++	_r->regs[18] = _r->regs[19] = _r->regs[20] = _r->regs[21] = 0;	\
++	_r->regs[22] = _r->regs[23] = _r->regs[24] = _r->regs[25] = 0;	\
++	_r->regs[26] = _r->regs[27] = _r->regs[28] = _r->regs[29] = 0;	\
++	_r->regs[30] = _r->regs[31] = 0;				\
++} while (0)
++
++/*
++ * This is the location that an ET_DYN program is loaded if exec'ed. Typical
++ * use of this is to invoke "./ld.so someprog" to test out a new version of
++ * the loader. We need to make sure that it is out of the way of the program
++ * that it will "exec", and that there is sufficient room for the brk.
++ */
++
++#ifndef ELF_ET_DYN_BASE
++#define ELF_ET_DYN_BASE		(TASK_SIZE / 3 * 2)
++#endif
++
++/* update AT_VECTOR_SIZE_ARCH if the number of NEW_AUX_ENT entries changes */
++#define ARCH_DLINFO							\
++do {									\
++	NEW_AUX_ENT(AT_SYSINFO_EHDR,					\
++		    (unsigned long)current->mm->context.vdso);		\
++} while (0)
++
++#define ARCH_HAS_SETUP_ADDITIONAL_PAGES 1
++struct linux_binprm;
++extern int arch_setup_additional_pages(struct linux_binprm *bprm,
++				       int uses_interp);
++
++struct arch_elf_state {
++	int fp_abi;
++	int interp_fp_abi;
++};
++
++#define LOONGARCH_ABI_FP_ANY	(0)
++
++#define INIT_ARCH_ELF_STATE {			\
++	.fp_abi = LOONGARCH_ABI_FP_ANY,		\
++	.interp_fp_abi = LOONGARCH_ABI_FP_ANY,	\
++}
++
++
++extern int arch_elf_pt_proc(void *ehdr, void *phdr, struct file *elf,
++			    bool is_interp, struct arch_elf_state *state);
++
++extern int arch_check_elf(void *ehdr, bool has_interpreter, void *interp_ehdr,
++			  struct arch_elf_state *state);
++
++extern void loongarch_set_personality_fcsr(struct arch_elf_state *state);
++
++#define elf_read_implies_exec(ex, stk) loongarch_elf_read_implies_exec(&(ex), stk)
++extern int loongarch_elf_read_implies_exec(void *elf_ex, int exstack);
++
++#endif /* _ASM_ELF_H */
+diff --git a/arch/loongarch/include/asm/exec.h b/arch/loongarch/include/asm/exec.h
+new file mode 100644
+index 000000000000..00df07ce3529
+--- /dev/null
++++ b/arch/loongarch/include/asm/exec.h
 @@ -0,0 +1,10 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+#ifndef _ASM_SIGCONTEXT_H
-+#define _ASM_SIGCONTEXT_H
++#ifndef _ASM_EXEC_H
++#define _ASM_EXEC_H
 +
-+#include <uapi/asm/sigcontext.h>
++extern unsigned long arch_align_stack(unsigned long sp);
 +
-+#endif /* _ASM_SIGCONTEXT_H */
-diff --git a/arch/loongarch/include/asm/signal.h b/arch/loongarch/include/asm/signal.h
++#endif /* _ASM_EXEC_H */
+diff --git a/arch/loongarch/include/asm/module.h b/arch/loongarch/include/asm/module.h
 new file mode 100644
-index 000000000000..530805184ce5
+index 000000000000..6df72c6228e0
 --- /dev/null
-+++ b/arch/loongarch/include/asm/signal.h
-@@ -0,0 +1,16 @@
++++ b/arch/loongarch/include/asm/module.h
+@@ -0,0 +1,15 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+#ifndef _ASM_SIGNAL_H
-+#define _ASM_SIGNAL_H
++#ifndef _ASM_MODULE_H
++#define _ASM_MODULE_H
 +
-+#include <uapi/asm/signal.h>
++#include <asm-generic/module.h>
 +
-+#ifndef __ASSEMBLY__
++#define RELA_STACK_DEPTH 16
 +
-+#include <asm/sigcontext.h>
-+#undef __HAVE_ARCH_SIG_BITOPS
-+
-+#endif /* __ASSEMBLY__ */
-+#endif /* _ASM_SIGNAL_H */
-diff --git a/arch/loongarch/include/uapi/asm/sigcontext.h b/arch/loongarch/include/uapi/asm/sigcontext.h
-new file mode 100644
-index 000000000000..da0e5bac2d80
---- /dev/null
-+++ b/arch/loongarch/include/uapi/asm/sigcontext.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-+/*
-+ * Author: Hanlu Li <lihanlu@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#ifndef _UAPI_ASM_SIGCONTEXT_H
-+#define _UAPI_ASM_SIGCONTEXT_H
-+
-+#include <linux/types.h>
-+#include <asm/processor.h>
-+
-+/* scalar FP context was used */
-+#define USED_FP			(1 << 0)
-+
-+/* extended context was used, see struct extcontext for details */
-+#define USED_EXTCONTEXT		(1 << 1)
-+
-+#include <linux/posix_types.h>
-+/*
-+ * Keep this struct definition in sync with the sigcontext fragment
-+ * in arch/loongarch/kernel/asm-offsets.c
-+ *
-+ */
-+struct sigcontext {
-+	__u64	sc_pc;
-+	__u64	sc_regs[32];
-+	__u32	sc_flags;
-+
-+	__u32	sc_fcsr;
-+	__u32	sc_vcsr;
-+	__u64	sc_fcc;
-+	__u64	sc_scr[4];
-+
-+	union fpureg sc_fpregs[32] FPU_ALIGN;
-+	__u8	sc_reserved[4096] __attribute__((__aligned__(16)));
++struct mod_arch_specific {
 +};
 +
-+#endif /* _UAPI_ASM_SIGCONTEXT_H */
-diff --git a/arch/loongarch/include/uapi/asm/siginfo.h b/arch/loongarch/include/uapi/asm/siginfo.h
++#endif /* _ASM_MODULE_H */
+diff --git a/arch/loongarch/include/asm/vermagic.h b/arch/loongarch/include/asm/vermagic.h
 new file mode 100644
-index 000000000000..11287ad78138
+index 000000000000..9882dfd4702a
 --- /dev/null
-+++ b/arch/loongarch/include/uapi/asm/siginfo.h
++++ b/arch/loongarch/include/asm/vermagic.h
 @@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_VERMAGIC_H
++#define _ASM_VERMAGIC_H
++
++#define MODULE_PROC_FAMILY "LOONGARCH "
++
++#ifdef CONFIG_32BIT
++#define MODULE_KERNEL_TYPE "32BIT "
++#elif defined CONFIG_64BIT
++#define MODULE_KERNEL_TYPE "64BIT "
++#endif
++
++#define MODULE_ARCH_VERMAGIC \
++	MODULE_PROC_FAMILY MODULE_KERNEL_TYPE
++
++#endif /* _ASM_VERMAGIC_H */
+diff --git a/arch/loongarch/include/uapi/asm/auxvec.h b/arch/loongarch/include/uapi/asm/auxvec.h
+new file mode 100644
+index 000000000000..5a2200fd75bf
+--- /dev/null
++++ b/arch/loongarch/include/uapi/asm/auxvec.h
+@@ -0,0 +1,17 @@
 +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
 +/*
 + * Author: Hanlu Li <lihanlu@loongson.cn>
@@ -155,838 +482,747 @@ index 000000000000..11287ad78138
 + *
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+#ifndef _UAPI_ASM_SIGINFO_H
-+#define _UAPI_ASM_SIGINFO_H
 +
-+#if _LOONGARCH_SZLONG == 32
-+#define __ARCH_SI_PREAMBLE_SIZE (3 * sizeof(int))
-+#else
-+#define __ARCH_SI_PREAMBLE_SIZE (4 * sizeof(int))
-+#endif
++#ifndef __ASM_AUXVEC_H
++#define __ASM_AUXVEC_H
 +
-+#include <asm-generic/siginfo.h>
++/* Location of VDSO image. */
++#define AT_SYSINFO_EHDR		33
 +
-+#endif /* _UAPI_ASM_SIGINFO_H */
-diff --git a/arch/loongarch/include/uapi/asm/signal.h b/arch/loongarch/include/uapi/asm/signal.h
++#define AT_VECTOR_SIZE_ARCH 1 /* entries in ARCH_DLINFO */
++
++#endif /* __ASM_AUXVEC_H */
+diff --git a/arch/loongarch/include/uapi/asm/hwcap.h b/arch/loongarch/include/uapi/asm/hwcap.h
 new file mode 100644
-index 000000000000..2254aef35402
+index 000000000000..8840b72fa8e8
 --- /dev/null
-+++ b/arch/loongarch/include/uapi/asm/signal.h
-@@ -0,0 +1,115 @@
-+/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-+/*
-+ * Author: Hanlu Li <lihanlu@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#ifndef _UAPI_ASM_SIGNAL_H
-+#define _UAPI_ASM_SIGNAL_H
-+
-+#include <linux/types.h>
-+
-+#ifndef _NSIG
-+#define _NSIG		128
-+#endif
-+#define _NSIG_BPW	__BITS_PER_LONG
-+#define _NSIG_WORDS	(_NSIG / _NSIG_BPW)
-+
-+#define SIGHUP		 1
-+#define SIGINT		 2
-+#define SIGQUIT		 3
-+#define SIGILL		 4
-+#define SIGTRAP		 5
-+#define SIGABRT		 6
-+#define SIGIOT		 6
-+#define SIGBUS		 7
-+#define SIGFPE		 8
-+#define SIGKILL		 9
-+#define SIGUSR1		10
-+#define SIGSEGV		11
-+#define SIGUSR2		12
-+#define SIGPIPE		13
-+#define SIGALRM		14
-+#define SIGTERM		15
-+#define SIGSTKFLT	16
-+#define SIGCHLD		17
-+#define SIGCONT		18
-+#define SIGSTOP		19
-+#define SIGTSTP		20
-+#define SIGTTIN		21
-+#define SIGTTOU		22
-+#define SIGURG		23
-+#define SIGXCPU		24
-+#define SIGXFSZ		25
-+#define SIGVTALRM	26
-+#define SIGPROF		27
-+#define SIGWINCH	28
-+#define SIGIO		29
-+#define SIGPOLL		SIGIO
-+#define SIGPWR		30
-+#define SIGSYS		31
-+#define	SIGUNUSED	31
-+
-+/* These should not be considered constants from userland.  */
-+#define SIGRTMIN	32
-+#ifndef SIGRTMAX
-+#define SIGRTMAX	_NSIG
-+#endif
-+
-+/*
-+ * SA_FLAGS values:
-+ *
-+ * SA_ONSTACK indicates that a registered stack_t will be used.
-+ * SA_RESTART flag to get restarting signals (which were the default long ago)
-+ * SA_NOCLDSTOP flag to turn off SIGCHLD when children stop.
-+ * SA_RESETHAND clears the handler when the signal is delivered.
-+ * SA_NOCLDWAIT flag on SIGCHLD to inhibit zombies.
-+ * SA_NODEFER prevents the current signal from being masked in the handler.
-+ *
-+ * SA_ONESHOT and SA_NOMASK are the historical Linux names for the Single
-+ * Unix names RESETHAND and NODEFER respectively.
-+ */
-+#define SA_NOCLDSTOP	0x00000001
-+#define SA_NOCLDWAIT	0x00000002
-+#define SA_SIGINFO	0x00000004
-+#define SA_ONSTACK	0x08000000
-+#define SA_RESTART	0x10000000
-+#define SA_NODEFER	0x40000000
-+#define SA_RESETHAND	0x80000000
-+
-+#define SA_NOMASK	SA_NODEFER
-+#define SA_ONESHOT	SA_RESETHAND
-+
-+#if !defined MINSIGSTKSZ || !defined SIGSTKSZ
-+#define MINSIGSTKSZ	2048
-+#define SIGSTKSZ	8192
-+#endif
-+
-+#ifndef __ASSEMBLY__
-+typedef struct {
-+	unsigned long sig[_NSIG_WORDS];
-+} sigset_t;
-+
-+/* not actually used, but required for linux/syscalls.h */
-+typedef unsigned long old_sigset_t;
-+
-+#include <asm-generic/signal-defs.h>
-+
-+#ifndef __KERNEL__
-+struct sigaction {
-+	__sighandler_t sa_handler;
-+	unsigned long sa_flags;
-+	sigset_t sa_mask;		/* mask last for extensibility */
-+};
-+#endif
-+
-+typedef struct sigaltstack {
-+	void __user *ss_sp;
-+	int ss_flags;
-+	size_t ss_size;
-+} stack_t;
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* _UAPI_ASM_SIGNAL_H */
-diff --git a/arch/loongarch/include/uapi/asm/ucontext.h b/arch/loongarch/include/uapi/asm/ucontext.h
-new file mode 100644
-index 000000000000..e3814b5fbce8
---- /dev/null
-+++ b/arch/loongarch/include/uapi/asm/ucontext.h
-@@ -0,0 +1,46 @@
++++ b/arch/loongarch/include/uapi/asm/hwcap.h
+@@ -0,0 +1,20 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef __LOONGARCH_UAPI_ASM_UCONTEXT_H
-+#define __LOONGARCH_UAPI_ASM_UCONTEXT_H
++#ifndef _UAPI_ASM_HWCAP_H
++#define _UAPI_ASM_HWCAP_H
 +
-+/**
-+ * struct extcontext - extended context header structure
-+ * @magic:	magic value identifying the type of extended context
-+ * @size:	the size in bytes of the enclosing structure
-+ *
-+ * Extended context structures provide context which does not fit within struct
-+ * sigcontext. They are placed sequentially in memory at the end of struct
-+ * ucontext and struct sigframe, with each extended context structure beginning
-+ * with a header defined by this struct. The type of context represented is
-+ * indicated by the magic field. Userland may check each extended context
-+ * structure against magic values that it recognises. The size field allows any
-+ * unrecognised context to be skipped, allowing for future expansion. The end
-+ * of the extended context data is indicated by the magic value
-+ * END_EXTCONTEXT_MAGIC.
-+ */
-+struct extcontext {
-+	unsigned int		magic;
-+	unsigned int		size;
-+};
++/* HWCAP flags */
++#define HWCAP_LOONGARCH_CPUCFG		(1 << 0)
++#define HWCAP_LOONGARCH_LAM		(1 << 1)
++#define HWCAP_LOONGARCH_UAL		(1 << 2)
++#define HWCAP_LOONGARCH_FPU		(1 << 3)
++#define HWCAP_LOONGARCH_LSX		(1 << 4)
++#define HWCAP_LOONGARCH_LASX		(1 << 5)
++#define HWCAP_LOONGARCH_CRC32		(1 << 6)
++#define HWCAP_LOONGARCH_COMPLEX		(1 << 7)
++#define HWCAP_LOONGARCH_CRYPTO		(1 << 8)
++#define HWCAP_LOONGARCH_LVZ		(1 << 9)
++#define HWCAP_LOONGARCH_LBT_X86		(1 << 10)
++#define HWCAP_LOONGARCH_LBT_ARM		(1 << 11)
++#define HWCAP_LOONGARCH_LBT_MIPS	(1 << 12)
 +
-+/**
-+ * struct ucontext - user context structure
-+ * @uc_flags:
-+ * @uc_link:
-+ * @uc_stack:
-+ * @uc_mcontext:	holds basic processor state
-+ * @uc_sigmask:
-+ * @uc_extcontext:	holds extended processor state
-+ */
-+struct ucontext {
-+	/* Historic fields matching asm-generic */
-+	unsigned long		uc_flags;
-+	struct ucontext		*uc_link;
-+	stack_t			uc_stack;
-+	struct sigcontext	uc_mcontext;
-+	sigset_t		uc_sigmask;
-+
-+	/* Extended context structures may follow ucontext */
-+	unsigned long long	uc_extcontext[0];
-+};
-+
-+#endif /* __LOONGARCH_UAPI_ASM_UCONTEXT_H */
-diff --git a/arch/loongarch/kernel/signal-common.h b/arch/loongarch/kernel/signal-common.h
++#endif /* _UAPI_ASM_HWCAP_H */
+diff --git a/arch/loongarch/kernel/elf.c b/arch/loongarch/kernel/elf.c
 new file mode 100644
-index 000000000000..c0ce90f988e5
+index 000000000000..072dfd40f0b5
 --- /dev/null
-+++ b/arch/loongarch/kernel/signal-common.h
-@@ -0,0 +1,52 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
++++ b/arch/loongarch/kernel/elf.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Author: Hanlu Li <lihanlu@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ *
++ * Author: Huacai Chen <chenhuacai@loongson.cn>
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
 +
-+#ifndef __SIGNAL_COMMON_H
-+#define __SIGNAL_COMMON_H
++#include <linux/binfmts.h>
++#include <linux/elf.h>
++#include <linux/export.h>
++#include <linux/sched.h>
 +
-+/* #define DEBUG_SIG */
++#include <asm/cpu-features.h>
++#include <asm/cpu-info.h>
 +
-+#ifdef DEBUG_SIG
-+#  define DEBUGP(fmt, args...) printk("%s: " fmt, __func__, ##args)
-+#else
-+#  define DEBUGP(fmt, args...)
-+#endif
++int arch_elf_pt_proc(void *_ehdr, void *_phdr, struct file *elf,
++		     bool is_interp, struct arch_elf_state *state)
++{
++	return 0;
++}
 +
-+/*
-+ * Determine which stack to use..
-+ */
-+extern void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
-+				 size_t frame_size);
-+/* Check and clear pending FPU exceptions in saved CSR */
-+extern int fpcsr_pending(unsigned int __user *fpcsr);
++int arch_check_elf(void *_ehdr, bool has_interpreter, void *_interp_ehdr,
++		   struct arch_elf_state *state)
++{
++	return 0;
++}
 +
-+/* Make sure we will not lose FPU ownership */
-+#define lock_fpu_owner()	({ preempt_disable(); pagefault_disable(); })
-+#define unlock_fpu_owner()	({ pagefault_enable(); preempt_enable(); })
++void loongarch_set_personality_fcsr(struct arch_elf_state *state)
++{
++	current->thread.fpu.fcsr = boot_cpu_data.fpu_csr0;
++}
 +
-+/* Assembly functions to move context to/from the FPU */
-+extern asmlinkage int
-+_save_fp_context(void __user *fpregs, void __user *fcc, void __user *csr);
-+extern asmlinkage int
-+_restore_fp_context(void __user *fpregs, void __user *fcc, void __user *csr);
-+extern asmlinkage int
-+_save_lsx_context(void __user *fpregs, void __user *fcc, void __user *fcsr,
-+	void __user *vcsr);
-+extern asmlinkage int
-+_restore_lsx_context(void __user *fpregs, void __user *fcc, void __user *fcsr,
-+	void __user *vcsr);
-+extern asmlinkage int
-+_save_lasx_context(void __user *fpregs, void __user *fcc, void __user *fcsr,
-+	void __user *vcsr);
-+extern asmlinkage int
-+_restore_lasx_context(void __user *fpregs, void __user *fcc, void __user *fcsr,
-+	void __user *vcsr);
-+extern asmlinkage int _save_lsx_all_upper(void __user *buf);
-+extern asmlinkage int _restore_lsx_all_upper(void __user *buf);
++int loongarch_elf_read_implies_exec(void *elf_ex, int exstack)
++{
++	if (exstack != EXSTACK_DISABLE_X) {
++		/* The binary doesn't request a non-executable stack */
++		return 1;
++	}
 +
-+#endif	/* __SIGNAL_COMMON_H */
-diff --git a/arch/loongarch/kernel/signal.c b/arch/loongarch/kernel/signal.c
++	return 0;
++}
++EXPORT_SYMBOL(loongarch_elf_read_implies_exec);
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
 new file mode 100644
-index 000000000000..b722b9e7c380
+index 000000000000..af7c403b032b
 --- /dev/null
-+++ b/arch/loongarch/kernel/signal.c
-@@ -0,0 +1,583 @@
++++ b/arch/loongarch/kernel/module.c
+@@ -0,0 +1,652 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
 + * Author: Hanlu Li <lihanlu@loongson.cn>
 + *         Huacai Chen <chenhuacai@loongson.cn>
++ *
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+#include <linux/audit.h>
-+#include <linux/cache.h>
-+#include <linux/context_tracking.h>
-+#include <linux/irqflags.h>
-+#include <linux/sched.h>
++
++#undef DEBUG
++
++#include <linux/moduleloader.h>
++#include <linux/elf.h>
 +#include <linux/mm.h>
-+#include <linux/personality.h>
-+#include <linux/smp.h>
++#include <linux/vmalloc.h>
++#include <linux/slab.h>
++#include <linux/fs.h>
++#include <linux/string.h>
 +#include <linux/kernel.h>
-+#include <linux/signal.h>
-+#include <linux/errno.h>
-+#include <linux/wait.h>
-+#include <linux/ptrace.h>
-+#include <linux/unistd.h>
-+#include <linux/uprobes.h>
-+#include <linux/compiler.h>
-+#include <linux/syscalls.h>
-+#include <linux/uaccess.h>
-+#include <linux/tracehook.h>
 +
-+#include <asm/abi.h>
-+#include <asm/asm.h>
-+#include <asm/cacheflush.h>
-+#include <asm/fpu.h>
-+#include <asm/ucontext.h>
-+#include <asm/cpu-features.h>
-+#include <asm/inst.h>
-+
-+#include "signal-common.h"
-+
-+static int (*save_fp_context)(void __user *sc);
-+static int (*restore_fp_context)(void __user *sc);
-+
-+struct sigframe {
-+	u32 sf_ass[4];		/* argument save space for o32 */
-+	u32 sf_pad[2];		/* Was: signal trampoline */
-+
-+	/* Matches struct ucontext from its uc_mcontext field onwards */
-+	struct sigcontext sf_sc;
-+	sigset_t sf_mask;
-+	unsigned long long sf_extcontext[0];
-+};
-+
-+struct rt_sigframe {
-+	u32 rs_ass[4];		/* argument save space for o32 */
-+	u32 rs_pad[2];		/* Was: signal trampoline */
-+	struct siginfo rs_info;
-+	struct ucontext rs_uc;
-+};
-+
-+/*
-+ * Thread saved context copy to/from a signal context presumed to be on the
-+ * user stack, and therefore accessed with appropriate macros from uaccess.h.
-+ */
-+static int copy_fp_to_sigcontext(void __user *sc)
++static int rela_stack_push(s64 stack_value, s64 *rela_stack, size_t *rela_stack_top)
 +{
-+	struct loongarch_abi *abi = current->thread.abi;
-+	uint64_t __user *fpregs = sc + abi->off_sc_fpregs;
-+	uint64_t __user *fcc = sc + abi->off_sc_fcc;
-+	uint32_t __user *csr = sc + abi->off_sc_fcsr;
-+	int i;
-+	int err = 0;
-+	int inc = 1;
++	if (*rela_stack_top >= RELA_STACK_DEPTH)
++		return -ENOEXEC;
 +
-+	for (i = 0; i < NUM_FPU_REGS; i += inc) {
-+		err |=
-+		    __put_user(get_fpr64(&current->thread.fpu.fpr[i], 0),
-+			       &fpregs[4*i]);
-+	}
-+	err |= __put_user(current->thread.fpu.fcsr, csr);
-+	err |= __put_user(current->thread.fpu.fcc, fcc);
++	rela_stack[(*rela_stack_top)++] = stack_value;
++	pr_debug("%s stack_value = 0x%llx\n", __func__, stack_value);
 +
-+	return err;
++	return 0;
 +}
 +
-+static int copy_fp_from_sigcontext(void __user *sc)
++static int rela_stack_pop(s64 *stack_value, s64 *rela_stack, size_t *rela_stack_top)
 +{
-+	struct loongarch_abi *abi = current->thread.abi;
-+	uint64_t __user *fpregs = sc + abi->off_sc_fpregs;
-+	uint64_t __user *fcc = sc + abi->off_sc_fcc;
-+	uint32_t __user *csr = sc + abi->off_sc_fcsr;
-+	int i;
-+	int err = 0;
-+	int inc = 1;
-+	u64 fpr_val;
++	if (*rela_stack_top == 0)
++		return -ENOEXEC;
 +
-+	for (i = 0; i < NUM_FPU_REGS; i += inc) {
-+		err |= __get_user(fpr_val, &fpregs[4*i]);
-+		set_fpr64(&current->thread.fpu.fpr[i], 0, fpr_val);
-+	}
-+	err |= __get_user(current->thread.fpu.fcsr, csr);
-+	err |= __get_user(current->thread.fpu.fcc, fcc);
++	*stack_value = rela_stack[--(*rela_stack_top)];
++	pr_debug("%s stack_value = 0x%llx\n", __func__, *stack_value);
 +
-+	return err;
++	return 0;
 +}
 +
-+/*
-+ * Wrappers for the assembly _{save,restore}_fp_context functions.
-+ */
-+static int save_hw_fp_context(void __user *sc)
-+{
-+	struct loongarch_abi *abi = current->thread.abi;
-+	uint64_t __user *fpregs = sc + abi->off_sc_fpregs;
-+	uint64_t __user *fcc = sc + abi->off_sc_fcc;
-+	uint32_t __user *fcsr = sc + abi->off_sc_fcsr;
-+
-+	return _save_fp_context(fpregs, fcc, fcsr);
-+}
-+
-+static int restore_hw_fp_context(void __user *sc)
-+{
-+	struct loongarch_abi *abi = current->thread.abi;
-+	uint64_t __user *fpregs = sc + abi->off_sc_fpregs;
-+	uint64_t __user *fcc = sc + abi->off_sc_fcc;
-+	uint32_t __user *csr = sc + abi->off_sc_fcsr;
-+
-+	return _restore_fp_context(fpregs, fcc, csr);
-+}
-+
-+/*
-+ * Extended context handling.
-+ */
-+
-+static inline void __user *sc_to_extcontext(void __user *sc)
-+{
-+	struct ucontext __user *uc;
-+
-+	/*
-+	 * We can just pretend the sigcontext is always embedded in a struct
-+	 * ucontext here, because the offset from sigcontext to extended
-+	 * context is the same in the struct sigframe case.
-+	 */
-+	uc = container_of(sc, struct ucontext, uc_mcontext);
-+	return &uc->uc_extcontext;
-+}
-+
-+static int save_extcontext(void __user *buf)
++static int apply_r_larch_none(struct module *me, u32 *location, Elf_Addr v,
++				s64 *rela_stack, size_t *rela_stack_top)
 +{
 +	return 0;
 +}
 +
-+static int restore_extcontext(void __user *buf)
++static int apply_r_larch_32(struct module *me, u32 *location, Elf_Addr v,
++				s64 *rela_stack, size_t *rela_stack_top)
++{
++	*location = v;
++	return 0;
++}
++
++static int apply_r_larch_64(struct module *me, u32 *location, Elf_Addr v,
++				s64 *rela_stack, size_t *rela_stack_top)
++{
++	*(Elf_Addr *)location = v;
++	return 0;
++}
++
++static int apply_r_larch_mark_la(struct module *me, u32 *location, Elf_Addr v,
++					s64 *rela_stack, size_t *rela_stack_top)
 +{
 +	return 0;
 +}
 +
-+/*
-+ * Helper routines
-+ */
-+int protected_save_fp_context(void __user *sc)
++static int apply_r_larch_mark_pcrel(struct module *me, u32 *location, Elf_Addr v,
++					s64 *rela_stack, size_t *rela_stack_top)
++{
++	return 0;
++}
++
++static int apply_r_larch_sop_push_pcrel(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
++{
++	return rela_stack_push(v - (u64)location, rela_stack, rela_stack_top);
++}
++
++static int apply_r_larch_sop_push_absolute(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
++{
++	return rela_stack_push(v, rela_stack, rela_stack_top);
++}
++
++static int apply_r_larch_sop_push_dup(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
 +{
 +	int err = 0;
-+	unsigned int used, ext_sz;
-+	struct loongarch_abi *abi = current->thread.abi;
-+	uint64_t __user *fpregs = sc + abi->off_sc_fpregs;
-+	uint32_t __user *fcc = sc + abi->off_sc_fcsr;
-+	uint32_t __user *fcsr = sc + abi->off_sc_fcsr;
-+	uint32_t __user *vcsr = sc + abi->off_sc_vcsr;
-+	uint32_t __user *flags = sc + abi->off_sc_flags;
++	s64 opr1;
 +
-+	used = used_math() ? USED_FP : 0;
-+	if (!used)
-+		goto fp_done;
-+
-+	while (1) {
-+		lock_fpu_owner();
-+		if (is_fpu_owner())
-+			err = save_fp_context(sc);
-+		else
-+			err |= copy_fp_to_sigcontext(sc);
-+		unlock_fpu_owner();
-+		if (likely(!err))
-+			break;
-+		/* touch the sigcontext and try again */
-+		err = __put_user(0, &fpregs[0]) |
-+			__put_user(0, &fpregs[31*4]) |
-+			__put_user(0, fcc) |
-+			__put_user(0, fcsr) |
-+			__put_user(0, vcsr);
-+		if (err)
-+			return err;	/* really bad sigcontext */
-+	}
-+
-+fp_done:
-+	ext_sz = err = save_extcontext(sc_to_extcontext(sc));
-+	if (err < 0)
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
 +		return err;
-+	used |= ext_sz ? USED_EXTCONTEXT : 0;
-+
-+	return __put_user(used, flags);
-+}
-+
-+int protected_restore_fp_context(void __user *sc)
-+{
-+	unsigned int used;
-+	int err = 0, sig = 0, tmp __maybe_unused;
-+	struct loongarch_abi *abi = current->thread.abi;
-+	uint64_t __user *fpregs = sc + abi->off_sc_fpregs;
-+	uint32_t __user *fcsr = sc + abi->off_sc_fcsr;
-+	uint32_t __user *fcc = sc + abi->off_sc_fcsr;
-+	uint32_t __user *vcsr = sc + abi->off_sc_vcsr;
-+	uint32_t __user *flags = sc + abi->off_sc_flags;
-+
-+	err = __get_user(used, flags);
-+	conditional_used_math(used & USED_FP);
-+
-+	/*
-+	 * The signal handler may have used FPU; give it up if the program
-+	 * doesn't want it following sigreturn.
-+	 */
-+	if (err || !(used & USED_FP))
-+		lose_fpu(0);
-+
++	err = rela_stack_push(opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_push(opr1, rela_stack, rela_stack_top);
 +	if (err)
 +		return err;
 +
-+	if (!(used & USED_FP))
-+		goto fp_done;
++	return 0;
++}
 +
-+	err = sig = fpcsr_pending(fcsr);
-+	if (err < 0)
++static int apply_r_larch_sop_push_plt_pcrel(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
++{
++	return apply_r_larch_sop_push_pcrel(me, location, v, rela_stack, rela_stack_top);
++}
++
++static int apply_r_larch_sop_sub(struct module *me, u32 *location, Elf_Addr v,
++					s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1, opr2;
++
++	err = rela_stack_pop(&opr2, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_push(opr1 - opr2, rela_stack, rela_stack_top);
++	if (err)
 +		return err;
 +
-+	while (1) {
-+		lock_fpu_owner();
-+		if (is_fpu_owner())
-+			err = restore_fp_context(sc);
-+		else
-+			err |= copy_fp_from_sigcontext(sc);
-+		unlock_fpu_owner();
-+		if (likely(!err))
-+			break;
-+		/* touch the sigcontext and try again */
-+		err = __get_user(tmp, &fpregs[0]) |
-+			__get_user(tmp, &fpregs[31*4]) |
-+			__get_user(tmp, fcc) |
-+			__get_user(tmp, fcsr) |
-+			__get_user(tmp, vcsr);
-+		if (err)
-+			break;	/* really bad sigcontext */
-+	}
-+
-+fp_done:
-+	if (!err && (used & USED_EXTCONTEXT))
-+		err = restore_extcontext(sc_to_extcontext(sc));
-+
-+	return err ?: sig;
++	return 0;
 +}
 +
-+int setup_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
++static int apply_r_larch_sop_sl(struct module *me, u32 *location, Elf_Addr v,
++					s64 *rela_stack, size_t *rela_stack_top)
 +{
 +	int err = 0;
-+	int i;
++	s64 opr1, opr2;
 +
-+	err |= __put_user(regs->csr_epc, &sc->sc_pc);
-+
-+	err |= __put_user(0, &sc->sc_regs[0]);
-+	for (i = 1; i < 32; i++)
-+		err |= __put_user(regs->regs[i], &sc->sc_regs[i]);
-+
-+	/*
-+	 * Save FPU state to signal context. Signal handler
-+	 * will "inherit" current FPU state.
-+	 */
-+	err |= protected_save_fp_context(sc);
-+
-+	return err;
-+}
-+
-+static size_t extcontext_max_size(void)
-+{
-+	size_t sz = 0;
-+
-+	/*
-+	 * The assumption here is that between this point & the point at which
-+	 * the extended context is saved the size of the context should only
-+	 * ever be able to shrink (if the task is preempted), but never grow.
-+	 * That is, what this function returns is an upper bound on the size of
-+	 * the extended context for the current task at the current time.
-+	 */
-+
-+	/* If any context is saved then we'll append the end marker */
-+	if (sz)
-+		sz += sizeof(((struct extcontext *)NULL)->magic);
-+
-+	return sz;
-+}
-+
-+int fpcsr_pending(unsigned int __user *fpcsr)
-+{
-+	int err, sig = 0;
-+	unsigned int csr, enabled;
-+
-+	err = __get_user(csr, fpcsr);
-+	enabled = ((csr & FPU_CSR_ALL_E) << 24);
-+	/*
-+	 * If the signal handler set some FPU exceptions, clear it and
-+	 * send SIGFPE.
-+	 */
-+	if (csr & enabled) {
-+		csr &= ~enabled;
-+		err |= __put_user(csr, fpcsr);
-+		sig = SIGFPE;
-+	}
-+	return err ?: sig;
-+}
-+
-+int restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
-+{
-+	int err = 0;
-+	int i;
-+
-+	/* Always make any pending restarted system calls return -EINTR */
-+	current->restart_block.fn = do_no_restart_syscall;
-+
-+	err |= __get_user(regs->csr_epc, &sc->sc_pc);
-+
-+	for (i = 1; i < 32; i++)
-+		err |= __get_user(regs->regs[i], &sc->sc_regs[i]);
-+
-+	return err ?: protected_restore_fp_context(sc);
-+}
-+
-+void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
-+			  size_t frame_size)
-+{
-+	unsigned long sp;
-+
-+	/* Leave space for potential extended context */
-+	frame_size += extcontext_max_size();
-+
-+	/* Default to using normal stack */
-+	sp = regs->regs[3];
-+
-+	/*
-+	 * FPU emulator may have it's own trampoline active just
-+	 * above the user stack, 16-bytes before the next lowest
-+	 * 16 byte boundary.  Try to avoid trashing it.
-+	 */
-+	sp -= 32;
-+
-+	sp = sigsp(sp, ksig);
-+
-+	return (void __user *)((sp - frame_size) & ALMASK);
-+}
-+
-+/*
-+ * Atomically swap in the new signal mask, and wait for a signal.
-+ */
-+
-+asmlinkage void sys_rt_sigreturn(void)
-+{
-+	struct rt_sigframe __user *frame;
-+	struct pt_regs *regs;
-+	sigset_t set;
-+	int sig;
-+
-+	regs = current_pt_regs();
-+	frame = (struct rt_sigframe __user *)regs->regs[3];
-+	if (!access_ok(frame, sizeof(*frame)))
-+		goto badframe;
-+	if (__copy_from_user(&set, &frame->rs_uc.uc_sigmask, sizeof(set)))
-+		goto badframe;
-+
-+	set_current_blocked(&set);
-+
-+	sig = restore_sigcontext(regs, &frame->rs_uc.uc_mcontext);
-+	if (sig < 0)
-+		goto badframe;
-+	else if (sig)
-+		force_sig(sig);
-+
-+	if (restore_altstack(&frame->rs_uc.uc_stack))
-+		goto badframe;
-+
-+	/*
-+	 * Don't let your children do this ...
-+	 */
-+	__asm__ __volatile__(
-+		"or\t$sp, $zero, %0\n\t"
-+		"b\tsyscall_exit"
-+		: /* no outputs */
-+		: "r" (regs));
-+	/* Unreached */
-+
-+badframe:
-+	force_sig(SIGSEGV);
-+}
-+
-+static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
-+			  struct pt_regs *regs, sigset_t *set)
-+{
-+	struct rt_sigframe __user *frame;
-+	int err = 0;
-+
-+	frame = get_sigframe(ksig, regs, sizeof(*frame));
-+	if (!access_ok(frame, sizeof(*frame)))
-+		return -EFAULT;
-+
-+	/* Create siginfo.  */
-+	err |= copy_siginfo_to_user(&frame->rs_info, &ksig->info);
-+
-+	/* Create the ucontext.	 */
-+	err |= __put_user(0, &frame->rs_uc.uc_flags);
-+	err |= __put_user(NULL, &frame->rs_uc.uc_link);
-+	err |= __save_altstack(&frame->rs_uc.uc_stack, regs->regs[3]);
-+	err |= setup_sigcontext(regs, &frame->rs_uc.uc_mcontext);
-+	err |= __copy_to_user(&frame->rs_uc.uc_sigmask, set, sizeof(*set));
-+
++	err = rela_stack_pop(&opr2, rela_stack, rela_stack_top);
 +	if (err)
-+		return -EFAULT;
-+
-+	/*
-+	 * Arguments to signal handler:
-+	 *
-+	 *   a0 = signal number
-+	 *   a1 = 0 (should be cause)
-+	 *   a2 = pointer to ucontext
-+	 *
-+	 * $25 and c0_epc point to the signal handler, $29 points to
-+	 * the struct rt_sigframe.
-+	 */
-+	regs->regs[4] = ksig->sig;
-+	regs->regs[5] = (unsigned long) &frame->rs_info;
-+	regs->regs[6] = (unsigned long) &frame->rs_uc;
-+	regs->regs[3] = (unsigned long) frame;
-+	regs->regs[1] = (unsigned long) sig_return;
-+	regs->csr_epc = (unsigned long) ksig->ka.sa.sa_handler;
-+
-+	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
-+	       current->comm, current->pid,
-+	       frame, regs->csr_epc, regs->regs[1]);
++		return err;
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_push(opr1 << opr2, rela_stack, rela_stack_top);
++	if (err)
++		return err;
 +
 +	return 0;
 +}
 +
-+struct loongarch_abi loongarch_abi = {
-+	.setup_rt_frame = setup_rt_frame,
-+	.restart	= __NR_restart_syscall,
-+#ifdef CONFIG_32BIT
-+	.audit_arch	= AUDIT_ARCH_LOONGARCH32,
-+#else
-+	.audit_arch	= AUDIT_ARCH_LOONGARCH64,
-+#endif
++static int apply_r_larch_sop_sr(struct module *me, u32 *location, Elf_Addr v,
++					s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1, opr2;
 +
-+	.off_sc_fpregs = offsetof(struct sigcontext, sc_fpregs),
-+	.off_sc_fcc = offsetof(struct sigcontext, sc_fcc),
-+	.off_sc_fcsr = offsetof(struct sigcontext, sc_fcsr),
-+	.off_sc_flags = offsetof(struct sigcontext, sc_flags),
-+	.off_sc_vcsr = offsetof(struct sigcontext, sc_vcsr),
++	err = rela_stack_pop(&opr2, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_push(opr1 >> opr2, rela_stack, rela_stack_top);
++	if (err)
++		return err;
 +
-+	.vdso		= &vdso_image,
++	return 0;
++}
++
++static int apply_r_larch_sop_add(struct module *me, u32 *location, Elf_Addr v,
++					s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1, opr2;
++
++	err = rela_stack_pop(&opr2, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_push(opr1 + opr2, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	return 0;
++}
++static int apply_r_larch_sop_and(struct module *me, u32 *location, Elf_Addr v,
++					s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1, opr2;
++
++	err = rela_stack_pop(&opr2, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_push(opr1 & opr2, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	return 0;
++}
++
++static int apply_r_larch_sop_if_else(struct module *me, u32 *location, Elf_Addr v,
++					s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1, opr2, opr3;
++
++	err = rela_stack_pop(&opr3, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_pop(&opr2, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++	err = rela_stack_push(opr1 ? opr2 : opr3, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	return 0;
++}
++
++static int apply_r_larch_sop_pop_32_s_10_5(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1;
++
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	/* check 5-bit signed */
++	if ((opr1 & ~(u64)0xf) &&
++	    (opr1 & ~(u64)0xf) != ~(u64)0xf) {
++		pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	/* (*(uint32_t *) PC) [14 ... 10] = opr [4 ... 0] */
++	*location = (*location & (~(u32)0x7c00)) | ((opr1 & 0x1f) << 10);
++
++	return 0;
++}
++
++static int apply_r_larch_sop_pop_32_u_10_12(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1;
++
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	/* check 12-bit unsigned */
++	if (opr1 & ~(u64)0xfff) {
++		pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	/* (*(uint32_t *) PC) [21 ... 10] = opr [11 ... 0] */
++	*location = (*location & (~(u32)0x3ffc00)) | ((opr1 & 0xfff) << 10);
++
++	return 0;
++}
++
++static int apply_r_larch_sop_pop_32_s_10_12(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1;
++
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	/* check 12-bit signed */
++	if ((opr1 & ~(u64)0x7ff) &&
++	    (opr1 & ~(u64)0x7ff) != ~(u64)0x7ff) {
++		pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	/* (*(uint32_t *) PC) [21 ... 10] = opr [11 ... 0] */
++	*location = (*location & (~(u32)0x3ffc00)) | ((opr1 & 0xfff) << 10);
++
++	return 0;
++}
++
++static int apply_r_larch_sop_pop_32_s_10_16(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1;
++
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	/* check 16-bit signed */
++	if ((opr1 & ~(u64)0x7fff) &&
++	    (opr1 & ~(u64)0x7fff) != ~(u64)0x7fff) {
++		pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	/* (*(uint32_t *) PC) [25 ... 10] = opr [15 ... 0] */
++	*location = (*location & 0xfc0003ff) | ((opr1 & 0xffff) << 10);
++
++	return 0;
++}
++
++static int apply_r_larch_sop_pop_32_s_10_16_s2(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1;
++
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	/* check 4-aligned */
++	if (opr1 % 4) {
++		pr_err("module %s: opr1 = 0x%llx unaligned! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	opr1 >>= 2;
++	/* check 18-bit signed */
++	if ((opr1 & ~(u64)0x7fff) &&
++	    (opr1 & ~(u64)0x7fff) != ~(u64)0x7fff) {
++		pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	/* (*(uint32_t *) PC) [25 ... 10] = opr [17 ... 2] */
++	*location = (*location & 0xfc0003ff) | ((opr1 & 0xffff) << 10);
++
++	return 0;
++}
++
++static int apply_r_larch_sop_pop_32_s_5_20(struct module *me, u32 *location, Elf_Addr v,
++						s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1;
++
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	/* check 20-bit signed */
++	if ((opr1 & ~(u64)0x7ffff) &&
++	    (opr1 & ~(u64)0x7ffff) != ~(u64)0x7ffff) {
++		pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	/* (*(uint32_t *) PC) [24 ... 5] = opr [19 ... 0] */
++	*location = (*location & (~(u32)0x1ffffe0)) | ((opr1 & 0xfffff) << 5);
++
++	return 0;
++}
++
++static int apply_r_larch_sop_pop_32_s_0_5_10_16_s2(struct module *me, u32 *location, Elf_Addr v,
++							s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1;
++
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	/* check 4-aligned */
++	if (opr1 % 4) {
++		pr_err("module %s: opr1 = 0x%llx unaligned! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	opr1 >>= 2;
++	/* check 23-bit signed */
++	if ((opr1 & ~(u64)0xfffff) &&
++	    (opr1 & ~(u64)0xfffff) != ~(u64)0xfffff) {
++		pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	/*
++	 * (*(uint32_t *) PC) [4 ... 0] = opr [22 ... 18]
++	 * (*(uint32_t *) PC) [25 ... 10] = opr [17 ... 2]
++	 */
++	*location = (*location & 0xfc0003e0)
++		| ((opr1 & 0x1f0000) >> 16) | ((opr1 & 0xffff) << 10);
++
++	return 0;
++}
++
++static int apply_r_larch_sop_pop_32_s_0_10_10_16_s2(struct module *me, u32 *location, Elf_Addr v,
++							s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1;
++
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	/* check 4-aligned */
++	if (opr1 % 4) {
++		pr_err("module %s: opr1 = 0x%llx unaligned! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	opr1 >>= 2;
++	/* check 28-bit signed */
++	if ((opr1 & ~(u64)0x1ffffff) &&
++	    (opr1 & ~(u64)0x1ffffff) != ~(u64)0x1ffffff) {
++		pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	/*
++	 * (*(uint32_t *) PC) [9 ... 0] = opr [27 ... 18]
++	 * (*(uint32_t *) PC) [25 ... 10] = opr [17 ... 2]
++	 */
++	*location = (*location & 0xfc000000)
++		| ((opr1 & 0x3ff0000) >> 16) | ((opr1 & 0xffff) << 10);
++
++	return 0;
++}
++
++static int apply_r_larch_sop_pop_32_u(struct module *me, u32 *location, Elf_Addr v,
++					s64 *rela_stack, size_t *rela_stack_top)
++{
++	int err = 0;
++	s64 opr1;
++
++	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
++	if (err)
++		return err;
++
++	/* check 32-bit unsigned */
++	if (opr1 & ~(u64)0xffffffff) {
++		pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s relocation\n",
++			me->name, opr1, __func__);
++		return -ENOEXEC;
++	}
++
++	/* (*(uint32_t *) PC) = opr */
++	*location = (u32)opr1;
++
++	return 0;
++}
++
++static int apply_r_larch_add32(struct module *me, u32 *location, Elf_Addr v,
++				s64 *rela_stack, size_t *rela_stack_top)
++{
++	*(s32 *)location += v;
++	return 0;
++}
++
++static int apply_r_larch_add64(struct module *me, u32 *location, Elf_Addr v,
++				s64 *rela_stack, size_t *rela_stack_top)
++{
++	*(s64 *)location += v;
++	return 0;
++}
++
++static int apply_r_larch_sub32(struct module *me, u32 *location, Elf_Addr v,
++				s64 *rela_stack, size_t *rela_stack_top)
++{
++	*(s32 *)location -= v;
++	return 0;
++}
++
++static int apply_r_larch_sub64(struct module *me, u32 *location, Elf_Addr v,
++				s64 *rela_stack, size_t *rela_stack_top)
++{
++	*(s64 *)location -= v;
++	return 0;
++}
++
++/*
++ * reloc_handlers_rela() - Apply a particular relocation to a module
++ * @me: the module to apply the reloc to
++ * @location: the address at which the reloc is to be applied
++ * @v: the value of the reloc, with addend for RELA-style
++ * @rela_stack: the stack used for store relocation info, LOCAL to THIS module
++ * @rela_stac_top: where the stack operation(pop/push) applies to
++ *
++ * Return: 0 upon success, else -ERRNO
++ */
++typedef int (*reloc_rela_handler)(struct module *me, u32 *location, Elf_Addr v,
++				s64 *rela_stack, size_t *rela_stack_top);
++
++/* The handlers for known reloc types */
++static reloc_rela_handler reloc_rela_handlers[] = {
++	[R_LARCH_NONE]				= apply_r_larch_none,
++	[R_LARCH_32]				= apply_r_larch_32,
++	[R_LARCH_64]				= apply_r_larch_64,
++	[R_LARCH_MARK_LA]			= apply_r_larch_mark_la,
++	[R_LARCH_MARK_PCREL]			= apply_r_larch_mark_pcrel,
++	[R_LARCH_SOP_PUSH_PCREL]		= apply_r_larch_sop_push_pcrel,
++	[R_LARCH_SOP_PUSH_ABSOLUTE]		= apply_r_larch_sop_push_absolute,
++	[R_LARCH_SOP_PUSH_DUP]			= apply_r_larch_sop_push_dup,
++	[R_LARCH_SOP_PUSH_PLT_PCREL]		= apply_r_larch_sop_push_plt_pcrel,
++	[R_LARCH_SOP_SUB]			= apply_r_larch_sop_sub,
++	[R_LARCH_SOP_SL]			= apply_r_larch_sop_sl,
++	[R_LARCH_SOP_SR]			= apply_r_larch_sop_sr,
++	[R_LARCH_SOP_ADD]			= apply_r_larch_sop_add,
++	[R_LARCH_SOP_AND]			= apply_r_larch_sop_and,
++	[R_LARCH_SOP_IF_ELSE]			= apply_r_larch_sop_if_else,
++	[R_LARCH_SOP_POP_32_S_10_5]		= apply_r_larch_sop_pop_32_s_10_5,
++	[R_LARCH_SOP_POP_32_U_10_12]		= apply_r_larch_sop_pop_32_u_10_12,
++	[R_LARCH_SOP_POP_32_S_10_12]		= apply_r_larch_sop_pop_32_s_10_12,
++	[R_LARCH_SOP_POP_32_S_10_16]		= apply_r_larch_sop_pop_32_s_10_16,
++	[R_LARCH_SOP_POP_32_S_10_16_S2]		= apply_r_larch_sop_pop_32_s_10_16_s2,
++	[R_LARCH_SOP_POP_32_S_5_20]		= apply_r_larch_sop_pop_32_s_5_20,
++	[R_LARCH_SOP_POP_32_S_0_5_10_16_S2]	= apply_r_larch_sop_pop_32_s_0_5_10_16_s2,
++	[R_LARCH_SOP_POP_32_S_0_10_10_16_S2]	= apply_r_larch_sop_pop_32_s_0_10_10_16_s2,
++	[R_LARCH_SOP_POP_32_U]			= apply_r_larch_sop_pop_32_u,
++	[R_LARCH_ADD32]				= apply_r_larch_add32,
++	[R_LARCH_ADD64]				= apply_r_larch_add64,
++	[R_LARCH_SUB32]				= apply_r_larch_sub32,
++	[R_LARCH_SUB64]				= apply_r_larch_sub64,
 +};
 +
-+static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
++int apply_relocate(Elf_Shdr *sechdrs, const char *strtab,
++		   unsigned int symindex, unsigned int relsec,
++		   struct module *me)
 +{
-+	sigset_t *oldset = sigmask_to_save();
-+	int ret;
-+	struct loongarch_abi *abi = current->thread.abi;
-+	void *vdso = current->mm->context.vdso;
++	int i, err;
++	unsigned int type;
++	s64 rela_stack[RELA_STACK_DEPTH];
++	size_t rela_stack_top = 0;
++	reloc_rela_handler handler;
++	void *location;
++	Elf_Addr v;
++	Elf_Sym *sym;
++	Elf_Rel *rel = (void *) sechdrs[relsec].sh_addr;
 +
-+	/* Are we from a system call? */
-+	if (regs->regs[0]) {
-+		switch (regs->regs[4]) {
-+		case -ERESTART_RESTARTBLOCK:
-+		case -ERESTARTNOHAND:
-+			regs->regs[4] = -EINTR;
-+			break;
-+		case -ERESTARTSYS:
-+			if (!(ksig->ka.sa.sa_flags & SA_RESTART)) {
-+				regs->regs[4] = -EINTR;
-+				break;
-+			}
-+			fallthrough;
-+		case -ERESTARTNOINTR:
-+			regs->regs[4] = regs->orig_a0;
-+			regs->csr_epc -= 4;
++	pr_debug("%s: Applying relocate section %u to %u\n", __func__, relsec,
++	       sechdrs[relsec].sh_info);
++
++	rela_stack_top = 0;
++	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
++		/* This is where to make the change */
++		location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr + rel[i].r_offset;
++		/* This is the symbol it is referring to */
++		sym = (Elf_Sym *)sechdrs[symindex].sh_addr + ELF_R_SYM(rel[i].r_info);
++		if (IS_ERR_VALUE(sym->st_value)) {
++			/* Ignore unresolved weak symbol */
++			if (ELF_ST_BIND(sym->st_info) == STB_WEAK)
++				continue;
++			pr_warn("%s: Unknown symbol %s\n", me->name, strtab + sym->st_name);
++			return -ENOENT;
 +		}
 +
-+		regs->regs[0] = 0;		/* Don't deal with this again.	*/
-+	}
++		type = ELF_R_TYPE(rel[i].r_info);
 +
-+	rseq_signal_deliver(ksig, regs);
++		if (type < ARRAY_SIZE(reloc_rela_handlers))
++			handler = reloc_rela_handlers[type];
++		else
++			handler = NULL;
 +
-+	ret = abi->setup_rt_frame(vdso + abi->vdso->off_rt_sigreturn,
-+				  ksig, regs, oldset);
-+
-+	signal_setup_done(ret, ksig, 0);
-+}
-+
-+static void do_signal(struct pt_regs *regs)
-+{
-+	struct ksignal ksig;
-+
-+	if (get_signal(&ksig)) {
-+		/* Whee!  Actually deliver the signal.	*/
-+		handle_signal(&ksig, regs);
-+		return;
-+	}
-+
-+	/* Are we from a system call? */
-+	if (regs->regs[0]) {
-+		switch (regs->regs[4]) {
-+		case -ERESTARTNOHAND:
-+		case -ERESTARTSYS:
-+		case -ERESTARTNOINTR:
-+			regs->regs[4] = regs->orig_a0;
-+			regs->csr_epc -= 4;
-+			break;
-+
-+		case -ERESTART_RESTARTBLOCK:
-+			regs->regs[4] = regs->orig_a0;
-+			regs->regs[11] = current->thread.abi->restart;
-+			regs->csr_epc -= 4;
-+			break;
++		if (!handler) {
++			pr_err("%s: Unknown relocation type %u\n", me->name, type);
++			return -EINVAL;
 +		}
-+		regs->regs[0] = 0;	/* Don't deal with this again.	*/
-+	}
 +
-+	/*
-+	 * If there's no signal to deliver, we just put the saved sigmask
-+	 * back
-+	 */
-+	restore_saved_sigmask();
-+}
-+
-+/*
-+ * notification of userspace execution resumption
-+ * - triggered by the TIF_WORK_MASK flags
-+ */
-+asmlinkage void do_notify_resume(struct pt_regs *regs, void *unused,
-+	__u32 thread_info_flags)
-+{
-+	local_irq_enable();
-+
-+	user_exit();
-+
-+	if (thread_info_flags & _TIF_UPROBE)
-+		uprobe_notify_resume(regs);
-+
-+	/* deal with pending signal delivery */
-+	if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
-+		do_signal(regs);
-+
-+	if (thread_info_flags & _TIF_NOTIFY_RESUME) {
-+		clear_thread_flag(TIF_NOTIFY_RESUME);
-+		tracehook_notify_resume(regs);
-+		rseq_handle_notify_resume(NULL, regs);
-+	}
-+
-+	user_enter();
-+}
-+
-+static int signal_setup(void)
-+{
-+	/*
-+	 * The offset from sigcontext to extended context should be the same
-+	 * regardless of the type of signal, such that userland can always know
-+	 * where to look if it wishes to find the extended context structures.
-+	 */
-+	BUILD_BUG_ON((offsetof(struct sigframe, sf_extcontext) -
-+		      offsetof(struct sigframe, sf_sc)) !=
-+		     (offsetof(struct rt_sigframe, rs_uc.uc_extcontext) -
-+		      offsetof(struct rt_sigframe, rs_uc.uc_mcontext)));
-+
-+	if (cpu_has_fpu) {
-+		save_fp_context = save_hw_fp_context;
-+		restore_fp_context = restore_hw_fp_context;
-+	} else {
-+		save_fp_context = copy_fp_to_sigcontext;
-+		restore_fp_context = copy_fp_from_sigcontext;
++		v = sym->st_value;
++		err = handler(me, location, v, rela_stack, &rela_stack_top);
++		if (err)
++			return err;
 +	}
 +
 +	return 0;
 +}
 +
-+arch_initcall(signal_setup);
++int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
++		       unsigned int symindex, unsigned int relsec,
++		       struct module *me)
++{
++	int i, err;
++	unsigned int type;
++	s64 rela_stack[RELA_STACK_DEPTH];
++	size_t rela_stack_top = 0;
++	reloc_rela_handler handler;
++	void *location;
++	Elf_Addr v;
++	Elf_Sym *sym;
++	Elf_Rela *rel = (void *) sechdrs[relsec].sh_addr;
++
++	pr_debug("%s: Applying relocate section %u to %u\n", __func__, relsec,
++	       sechdrs[relsec].sh_info);
++
++	rela_stack_top = 0;
++	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
++		/* This is where to make the change */
++		location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr + rel[i].r_offset;
++		/* This is the symbol it is referring to */
++		sym = (Elf_Sym *)sechdrs[symindex].sh_addr + ELF_R_SYM(rel[i].r_info);
++		if (IS_ERR_VALUE(sym->st_value)) {
++			/* Ignore unresolved weak symbol */
++			if (ELF_ST_BIND(sym->st_info) == STB_WEAK)
++				continue;
++			pr_warn("%s: Unknown symbol %s\n", me->name, strtab + sym->st_name);
++			return -ENOENT;
++		}
++
++		type = ELF_R_TYPE(rel[i].r_info);
++
++		if (type < ARRAY_SIZE(reloc_rela_handlers))
++			handler = reloc_rela_handlers[type];
++		else
++			handler = NULL;
++
++		if (!handler) {
++			pr_err("%s: Unknown relocation type %u\n", me->name, type);
++			return -EINVAL;
++		}
++
++		pr_debug("type %d st_value %llx r_addend %llx loc %llx\n",
++		       (int)ELF64_R_TYPE(rel[i].r_info),
++		       sym->st_value, rel[i].r_addend, (u64)location);
++
++		v = sym->st_value + rel[i].r_addend;
++		err = handler(me, location, v, rela_stack, &rela_stack_top);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
 -- 
 2.27.0
 
