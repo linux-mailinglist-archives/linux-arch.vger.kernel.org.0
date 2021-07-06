@@ -2,71 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB0A3BD438
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 14:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98EA3BD439
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 14:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237757AbhGFMFh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 08:05:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47600 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237142AbhGFLf5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:35:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C8ED61CC3
-        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 11:25:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570743;
-        bh=NMv1p7GNORLOIb0kQ+W5gY4yPE7n7BoPYBjrqQwuwck=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nnqX9nJpa3TJ7q2f3P1Jf2mMl+RNSjWwe2dvbujwRd+wyL52ZCAGLMkqeNTHD3/gs
-         q/2Cm4OOsbKcWfe0Hxp9C6o0nsvz3+U4EWuEng3x8u/SMbxaVWuQ1Saa7DuRZ62Yy8
-         /4sQKeCOW9sDLfnUiq9mqROo65C8TvxMnAU9iH/ZmGsF9ln8q+ncZFw8iDPQ6FgTAz
-         MIUDFTkjM1BgWlo7j9mr4FBJSPNjV4aEfbkmP5kbQb3rJbnYAt17/t4X/IylzineMo
-         985mzvQ2MkHbySD3jd7/MK2i5RHeqomQBwwcXa0o2Bcbeg21mlMcub4ybgfIUVTVPB
-         Ob2BHotSLzovA==
-Received: by mail-wm1-f54.google.com with SMTP id j34so13303196wms.5
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 04:25:43 -0700 (PDT)
-X-Gm-Message-State: AOAM530vZpnLxeaj3wDVlrb2Nrw5C6aiYq1te4tLaIuj/oy7QEbyvJ6w
-        LZtEDlWeAmAbAWzpmU6bfzHJJoRrIkRxO1+MT40=
-X-Google-Smtp-Source: ABdhPJw+3FtSynYnJGuSEZt6aCd17GeHOnQEnp/Dn+R4qP7dDbpZKK+ItcabATZBODUCtppZycBiSSuZkR2IRVESEXA=
-X-Received: by 2002:a1c:c90f:: with SMTP id f15mr4149832wmb.142.1625569051717;
- Tue, 06 Jul 2021 03:57:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-8-chenhuacai@loongson.cn> <CAK8P3a3FJSX6U9i0KYDKGVgPxi=OnrJJg73d74=KOkbEBoVa+g@mail.gmail.com>
-In-Reply-To: <CAK8P3a3FJSX6U9i0KYDKGVgPxi=OnrJJg73d74=KOkbEBoVa+g@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 6 Jul 2021 12:57:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Q+vPhWZRSUs4jSZuX-mryHpPgQBgzjHQogjKh-X_TmQ@mail.gmail.com>
-Message-ID: <CAK8P3a2Q+vPhWZRSUs4jSZuX-mryHpPgQBgzjHQogjKh-X_TmQ@mail.gmail.com>
-Subject: Re: [PATCH 07/19] LoongArch: Add process management
+        id S240634AbhGFMFm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 08:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237718AbhGFLg5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 07:36:57 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A53DC0A8878
+        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 04:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Rx9zsygjVKO6Fd94HbJP1bvxBX1w6e7olzywzjqToVI=; b=CYKtm9goucH5L0MK2NHyqLkIam
+        GYPxdPr6Ue/lhK/4pBiXnWaJWMClqPFZYPmjPswk7IliqaWdQYd4niBiG3jSym3Tj4F+KF22W1jaW
+        Snq9E8Ij078g++7C70WPt+en92sAy7MzVSrqJ1MA2HDN23m975ojKd2DOhNUlEPeo8ZpDEB8Av+Ot
+        EBqFKMIYXdVL5cx9eZ+Brsw2XPzyiPWpeOh9I1pPI+nimNCQ4FhUB91z5icRWHUDrDBpMv03qU53S
+        p7oixBkmG3xp9sKXDkD7BiOtoR/NYiVi4Gn5QFWXkC8yKIdiWNevh8KJNQtHbCqY443sNU9CypB07
+        q0EXQ7UQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m0jAo-00F1ox-0v; Tue, 06 Jul 2021 11:23:30 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 76240300233;
+        Tue,  6 Jul 2021 13:23:28 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 46EC4200843AD; Tue,  6 Jul 2021 13:23:28 +0200 (CEST)
+Date:   Tue, 6 Jul 2021 13:23:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Andy Lutomirski <luto@kernel.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 04/19] LoongArch: Add common headers
+Message-ID: <YOQ9MGbTrPKWl1N/@hirez.programming.kicks-ass.net>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-5-chenhuacai@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210706041820.1536502-5-chenhuacai@loongson.cn>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-
-> +void arch_cpu_idle(void)
+On Tue, Jul 06, 2021 at 12:18:05PM +0800, Huacai Chen wrote:
+> +/* CSR */
+> +static inline u32 csr_readl(u32 reg)
 > +{
-> +       local_irq_enable();
-> +       __arch_cpu_idle();
+> +	return __csrrd(reg);
+> +}
+> +
+> +static inline u64 csr_readq(u32 reg)
+> +{
+> +	return __dcsrrd(reg);
+> +}
+> +
+> +static inline void csr_writel(u32 val, u32 reg)
+> +{
+> +	__csrwr(val, reg);
+> +}
+> +
+> +static inline void csr_writeq(u64 val, u32 reg)
+> +{
+> +	__dcsrwr(val, reg);
+> +}
+> +
+> +static inline u32 csr_xchgl(u32 val, u32 mask, u32 reg)
+> +{
+> +	return __csrxchg(val, mask, reg);
+> +}
+> +
+> +static inline u64 csr_xchgq(u64 val, u64 mask, u32 reg)
+> +{
+> +	return __dcsrxchg(val, mask, reg);
 > +}
 
-This looks racy: What happens if an interrupt is pending and hits before
-entering __arch_cpu_idle()?
-
-Usually CPU idle instructions are designed to be called with interrupts disabled
-and wait until an interrupt happens, including one that was already pending.
-
-           Arnd
+What are these __csrfoo() things, I cannot seem to find a definition of
+them anywhere..
