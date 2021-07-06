@@ -2,35 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2398F3BCB3F
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 13:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50A53BCB55
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 13:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbhGFLDY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 07:03:24 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:59619 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbhGFLDX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 07:03:23 -0400
-Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mf0Ru-1lYneD1X4c-00gZjw for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021
- 13:00:43 +0200
-Received: by mail-wm1-f54.google.com with SMTP id u8-20020a7bcb080000b02901e44e9caa2aso1940798wmj.4
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 04:00:43 -0700 (PDT)
-X-Gm-Message-State: AOAM533+1d9Vh2sKUYJvkQmf9jkty7IFA6A+g1KI1K/TJU/KcdcBU4UV
-        vUOUI7YBwL8S+7ZA//mqJfNey1a9hLr6pKvNnpE=
-X-Google-Smtp-Source: ABdhPJwfPsE0HJ0CRgOYXcjW9DwzJiD8gAKdr6d763+cI8UE14T5mhZdaI1frCtPCihOOyX8X2wDbirb/b4ppRmI184=
-X-Received: by 2002:a05:600c:4101:: with SMTP id j1mr4163125wmi.84.1625569243018;
- Tue, 06 Jul 2021 04:00:43 -0700 (PDT)
+        id S231504AbhGFLEw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 07:04:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37136 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231469AbhGFLEw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:04:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E950261A2B
+        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 11:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625569333;
+        bh=48LgFH3oPLoKHDbGLyMxfKJj3kIYo5QKUKl4btuEwHc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WC3pPDI2+71Uh9QeRFksg2CHO4Z6ezOWFakVuTVKrjRwcus0DHIpH3fUOJb4or7js
+         0/EOrOFDuLI67U2j8Z9YHlBzXrGuUV2GdHIIotRUbNfvDB92PHdz/4oGVJQgZs/h9S
+         ipBf2eKw4BZNUAlHbPP+L6nUxWp1yeaqJuInr3tkz/r516kZ0ksXsYwh4GIbpVLXIp
+         Xzo5tt6NnTf9Gu59NpVYsZjkosIFfe0MBtz95K4r7AYnEx80nBFtdSsiQ19x7fomUu
+         QfXwts4KFyoNJ8jWCWESFU5SXEu40COlMFKrVWCcrnw44U0lAkTb8H8+nnuc46i5u/
+         RAzymlnr7Z6fg==
+Received: by mail-wr1-f46.google.com with SMTP id n9so8231576wrs.13
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 04:02:13 -0700 (PDT)
+X-Gm-Message-State: AOAM532ZcIfU9BdGm0+0PKWm+1AxKm5hEjjSS5CxdL6m991JEYvvfLtU
+        onIh1kQysewhomQMJK1Ey0SDwj6MeZDxK6avLLw=
+X-Google-Smtp-Source: ABdhPJxK7YdY2Wibir4c9gP7F1/qaw6WLaFt7GxVKqm3HslamfRg0rREfskLFl26yPQcpxahq42JiaLjsEquA3VK2lE=
+X-Received: by 2002:adf:ee10:: with SMTP id y16mr21029383wrn.99.1625569332516;
+ Tue, 06 Jul 2021 04:02:12 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-14-chenhuacai@loongson.cn> <CAK8P3a2sCqqYC8pUPOyp-D48EOWbcryTO4pWFptftciWcWDk3Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a2sCqqYC8pUPOyp-D48EOWbcryTO4pWFptftciWcWDk3Q@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 6 Jul 2021 13:00:27 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1OMgEb5kyWDgDR6_C+9m9d-be_rXgKoJVXK+oaO+bFJA@mail.gmail.com>
-Message-ID: <CAK8P3a1OMgEb5kyWDgDR6_C+9m9d-be_rXgKoJVXK+oaO+bFJA@mail.gmail.com>
-Subject: Re: [PATCH 13/19] LoongArch: Add some library functions
+ <20210706041820.1536502-16-chenhuacai@loongson.cn> <CAK8P3a35-46xOdVFCo=ta6x6FfU9+drERsK=OdUxR3uSRJRcQw@mail.gmail.com>
+In-Reply-To: <CAK8P3a35-46xOdVFCo=ta6x6FfU9+drERsK=OdUxR3uSRJRcQw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 6 Jul 2021 13:01:56 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2jOTEsZZAWtrCOF2v1-YypoLmGRYY9iovQYCdcEMHqtw@mail.gmail.com>
+Message-ID: <CAK8P3a2jOTEsZZAWtrCOF2v1-YypoLmGRYY9iovQYCdcEMHqtw@mail.gmail.com>
+Subject: Re: [PATCH 15/19] LoongArch: Add PCI controller support
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -43,60 +51,167 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Ei7I/N/2UXEFjGdR7KGN7fpfmRE3Er8Uwu49MsCbhxXFoJXlKWr
- KH7MpcgqP6XJWKBy461a2D8Ra1baSrwIE+pAkeh+YvpVaTmbR5ymtxYP3ROuSCVvAVxcrpy
- W04BCSOF8kCTBVg+a5vhE0d/NjdoTOaYkJRV3GDv2VZu1nN0VXtyy8KUqQQ9v98dU/4DEFo
- 2tBoweXs9kP7Xm8ssJPhg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gnfhZR/vz7g=:oEA+h/a6HhgG15oyLnss9I
- 8R0KiUMWXSLUfzTBfo7/jmKJNDIsoqC8+Z2WPobgH+KNpdRJTnrjcf7lgwseDQe7IdaDmo4Z6
- 5d0YDh8fOEPrqFgX3tiO26hVuEKhz0jgKaTJUlzsC0qxsRcB8hW2yV3+StmqIfRi+XX4bLL3h
- fr7OIEhtYy89slhNi/J2R1oNc8t6763Wd55QHyMbiXwQsnltsV2HUkO9Brx9k3pNJPr2xLSB4
- 8mEQQHRTq5rsY/W304zreoIa9Y0wD04v0aGr5UZjGg+Fn7o6frmTRlUKu7Awn008O4j93YG+6
- IlG9o8nXV28h8Qg+uNLVyGoDM5WrLrsk0CaC59w1kWcFS4OsZ1WO06mUZtKPbZo8XkftLNR/8
- qw+Z9F6Aa1YzoTCtVgAkso2mOedA1WrfLmB4sLGQC22csd8/X9j4HUxxzGKkMqCoZjsf7g9JR
- FAzhPzYOUd8QmeePzOaTV9VyYbdjeYr/y1os0XOrIj0t/3fCM3/ltKwYtBqUhlVZxqDqO79AO
- wcElxkHZsoddp92NG9np9OGY6R8NhC2wQUsRbZl9mvPgvoSvHe54KTfvqnY0EFmfVyVHcMUG7
- qrHle4TRRcpBs8HX+ZYZ1zF7Shp8gOvrcJXQBQdMtYDcEZ+LWFiscWPLMBCu+FvpUwVOXMNnD
- +ZDOvMR+RAQDkKIdXUULQXee8JRR0DzB/5zRwoHaaI8ROmKg2IesV+7L5PecISOdz6lxfrKwJ
- 75sxQZq1QTu31Ya+202F3/Qn+kAmSOQA+w91ikmMtGAouYmK+pl6hyNVPyW67VOrriOA9nvV1
- ZJlY/QVXae9ExP+cI+Sx+NsmlvTXhHaDoOwztYqDj2TjI51kDWsuP98Zf0Iy4BGAznTc7GH2y
- E0ueeNDFF14QfgI8tsasklWrKaof8lob64K8zfQQSZyrJhzSE0AYVnb5NSi8V7DwsI/wdwp/T
- vrC+rOtRNnAFG4zQAWiEZK6Wra5ak2jTPm1igLUhmNOjaWp8xjHAm
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
 >
+> Loongson64 based systems are PC-like systems which use PCI/PCIe as its
+> I/O bus, This patch adds the PCI host controller support for LoongArch.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/include/asm/pci.h  | 124 ++++++++++++++++++
+>  arch/loongarch/pci/acpi.c         | 194 ++++++++++++++++++++++++++++
+>  arch/loongarch/pci/mmconfig.c     | 105 +++++++++++++++
+>  arch/loongarch/pci/pci-loongson.c | 130 +++++++++++++++++++
+>  arch/loongarch/pci/pci.c          | 207 ++++++++++++++++++++++++++++++
+
+PCI controller support should generally live in drivers/pci/controller/ and
+get reviewed by the subsystem maintainers.
+
 > +/*
-> + * long __strncpy_from_user(char *to, const char *from, long len)
-> + *
-> + * a0: to
-> + * a1: from
-> + * a2: len
+> + * This file essentially defines the interface between board specific
+> + * PCI code and LoongArch common PCI code. Should potentially put into
+> + * include/asm/pci.h file.
 > + */
-> +SYM_FUNC_START(__strncpy_from_user)
-> +       move    a3, zero
 > +
+> +#include <linux/ioport.h>
+> +#include <linux/list.h>
+> +
+> +extern const struct pci_ops *__read_mostly loongarch_pci_ops;
 
-I doubt this is better than the C version in lib/strncpy_from_user.c
+There is already an abstraction for this in the common code, don't add another.
 
-> diff --git a/arch/loongarch/lib/strnlen_user.S b/arch/loongarch/lib/strnlen_user.S
-> new file mode 100644
-> index 000000000000..9288a5ad294e
-> --- /dev/null
-> +++ b/arch/loongarch/lib/strnlen_user.S
-> @@ -0,0 +1,47 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
-> + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
+> + * Each pci channel is a top-level PCI bus seem by CPU.         A machine  with
+> + * multiple PCI channels may have multiple PCI host controllers or a
+> + * single controller supporting multiple channels.
 > + */
+> +struct pci_controller {
+> +       struct list_head list;
+> +       struct pci_bus *bus;
+> +       struct device_node *of_node;
+> +
+> +       struct pci_ops *pci_ops;
+> +       struct resource *mem_resource;
+> +       unsigned long mem_offset;
+> +       struct resource *io_resource;
+> +       unsigned long io_offset;
+> +       unsigned long io_map_base;
+> +       struct resource *busn_resource;
+> +
+> +       unsigned int node;
+> +       unsigned int index;
+> +       unsigned int need_domain_info;
+> +#ifdef CONFIG_ACPI
+> +       struct acpi_device *companion;
+> +#endif
+> +       phys_addr_t mcfg_addr;
+> +};
+> +
+> +extern void pcibios_add_root_resources(struct list_head *resources);
+> +
+> +extern phys_addr_t mcfg_addr_init(int domain);
+> +
+> +#ifdef CONFIG_PCI_DOMAINS
+> +static inline void set_pci_need_domain_info(struct pci_controller *hose,
+> +                                           int need_domain_info)
+> +{
+> +       hose->need_domain_info = need_domain_info;
+> +}
+> +#endif /* CONFIG_PCI_DOMAINS */
 
-Same here.
+Just use PCI_DOMAINS unconditionally
 
-Have you done any measurement to show that the asm version actually helps
-here? If not, just use the generic version.
+> +
+> +/*
+> + * Can be used to override the logic in pci_scan_bus for skipping
+> + * already-configured bus numbers - to be used for buggy BIOSes
+> + * or architectures with incomplete PCI setup by the loader
+> + */
+> +static inline unsigned int pcibios_assign_all_busses(void)
+> +{
+> +       return 1;
+> +}
+
+Since you use ACPI, the BIOS should be responsible for assigning the
+buses, otherwise the ACPI data may be mismatched with the PCI
+device locations that the kernel sees.
+
+> +#define PCIBIOS_MIN_IO         0
+
+I think this means PCI devices can reuse ports that are reserved
+for ISA devices. Since you claim to support ISA, I think this should
+be 0x1000
+
+> +
+> +int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
+> +                                               int reg, int len, u32 *val)
+> +{
+> +       struct pci_bus *bus_tmp = pci_find_bus(domain, bus);
+> +
+> +       if (bus_tmp)
+> +               return bus_tmp->ops->read(bus_tmp, devfn, reg, len, val);
+> +       return -EINVAL;
+> +}
+> +
+> +int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
+> +                                               int reg, int len, u32 val)
+> +{
+> +       struct pci_bus *bus_tmp = pci_find_bus(domain, bus);
+> +
+> +       if (bus_tmp)
+> +               return bus_tmp->ops->write(bus_tmp, devfn, reg, len, val);
+> +       return -EINVAL;
+> +}
+
+This looks like you copied from arch/arm64. I think the code really
+needs to be generalized more. Maybe move the arm64 implementation
+to drivers/acpi/ so it can be shared with loongarch?
+
+> +/*
+> + * We need to avoid collisions with `mirrored' VGA ports
+> + * and other strange ISA hardware, so we always want the
+> + * addresses to be allocated in the 0x000-0x0ff region
+> + * modulo 0x400.
+> + *
+> + * Why? Because some silly external IO cards only decode
+> + * the low 10 bits of the IO address. The 0x00-0xff region
+> + * is reserved for motherboard devices that decode all 16
+> + * bits, so it's ok to allocate at, say, 0x2800-0x28ff,
+> + * but we want to try to avoid allocating at 0x2900-0x2bff
+> + * which might have be mirrored at 0x0100-0x03ff..
+> + */
+> +resource_size_t
+> +pcibios_align_resource(void *data, const struct resource *res,
+> +                      resource_size_t size, resource_size_t align)
+> +{
+> +       struct pci_dev *dev = data;
+> +       struct pci_controller *hose = dev->sysdata;
+> +       resource_size_t start = res->start;
+> +
+> +       if (res->flags & IORESOURCE_IO) {
+> +               /* Make sure we start at our min on all hoses */
+> +               if (start < PCIBIOS_MIN_IO + hose->io_resource->start)
+> +                       start = PCIBIOS_MIN_IO + hose->io_resource->start;
+> +
+> +               /*
+> +                * Put everything into 0x00-0xff region modulo 0x400
+> +                */
+> +               if (start & 0x300)
+> +                       start = (start + 0x3ff) & ~0x3ff;
+> +       } else if (res->flags & IORESOURCE_MEM) {
+> +               /* Make sure we start at our min on all hoses */
+> +               if (start < PCIBIOS_MIN_MEM)
+> +                       start = PCIBIOS_MIN_MEM;
+> +       }
+> +
+> +       return start;
+> +}
+
+Same here, please don't add another copy of this function.
 
 
        Arnd
