@@ -2,42 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8CB3BCA09
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E7A3BCA2A
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbhGFKgv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 06:36:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60380 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231216AbhGFKgv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Jul 2021 06:36:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D3294619B6
-        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 10:34:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625567652;
-        bh=Xq+2Q7faFG1FmDVhft9w4npiFKNUwoJGUSYLQceBZgg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OYjYcxAOyYVtiN92CgJ9xuvfv/OJRX3UDycI944qXzqiXzbEnX8a7eNNYj4+t9xF7
-         yNuMklK1om7MdU64mnUHgl+mnkeN/Z8QogmMyoeT+/8fka9S+xnPRFzGSs5f9nLc6w
-         xF8zEFJlmKdFO1GPsOI+zp053m2HGV9zY8RDKCODtwTkoIYh7P4CoL/gO7N7xAvqQV
-         lltjJEwbsEZNX3HLqYgq0YDsYE0a3vhpCojaFmJCf6nu/haoY2Ule+2ebd/2Z5SoBX
-         /7o81N1UALFKY1G3ngLHGsms6Z+76uFQVHhM4DmOdbL6hVyrA4i27wuNXBt/4367O/
-         qGJqV6P7hn1LQ==
-Received: by mail-wr1-f48.google.com with SMTP id d2so1847987wrn.0
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:34:12 -0700 (PDT)
-X-Gm-Message-State: AOAM531j0HTsMlfcR+7Q6WlaQSpcPC3GWbejy7tKpohAr+bCgjkoSgqo
-        7P9cw01SJquqhY7nmXsSzJuFsOBv8pRft8oUNs8=
-X-Google-Smtp-Source: ABdhPJz0Vg8XCxb7nlGz7/JuhNN5WrUYcHYZeEeR7u77fnhZfEgdB+6XBrs91uu4tK5OLcnAjpx/2Q14mW1Ervxv+Kc=
-X-Received: by 2002:adf:e107:: with SMTP id t7mr21011079wrz.165.1625567651364;
- Tue, 06 Jul 2021 03:34:11 -0700 (PDT)
+        id S231431AbhGFKit (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 06:38:49 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:40883 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231460AbhGFKit (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 06:38:49 -0400
+Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MQusJ-1lnIRq2dFf-00Nwwk for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021
+ 12:36:09 +0200
+Received: by mail-wr1-f53.google.com with SMTP id q17so5097494wrv.2
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:36:09 -0700 (PDT)
+X-Gm-Message-State: AOAM531Hu1T6FbobutElsfb6+mCiSE2xqTs/Wb+5XdhRK9ktC3d3X/wj
+        TCHYWdNhZKuaDV0v8sNp5v8bx93OHIKrYcL7Tew=
+X-Google-Smtp-Source: ABdhPJwzGchqKKDzES9W2MJ46AViuI59XwhpxDqEwbVLg3oVwsT1PB71wt7D5xCUXyBGIk519cq5bYKuCTK9y3qSdyg=
+X-Received: by 2002:adf:fd8e:: with SMTP id d14mr21798736wrr.361.1625567769318;
+ Tue, 06 Jul 2021 03:36:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
-In-Reply-To: <20210706041820.1536502-1-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 6 Jul 2021 12:33:55 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Qu_BUcGFpgktXOwsomuhN6aje6mB6EwTka0GBaoL4hw@mail.gmail.com>
-Message-ID: <CAK8P3a2Qu_BUcGFpgktXOwsomuhN6aje6mB6EwTka0GBaoL4hw@mail.gmail.com>
-Subject: Re: [PATCH 00/19] arch: Add basic LoongArch support
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-4-chenhuacai@loongson.cn>
+In-Reply-To: <20210706041820.1536502-4-chenhuacai@loongson.cn>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 6 Jul 2021 12:35:53 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1TTuzpOUELWhmFwo8LNmyt9QT8TVdoRFCisXBt1yr=5g@mail.gmail.com>
+Message-ID: <CAK8P3a1TTuzpOUELWhmFwo8LNmyt9QT8TVdoRFCisXBt1yr=5g@mail.gmail.com>
+Subject: Re: [PATCH 03/19] LoongArch: Add build infrastructure
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -48,84 +40,221 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Chen Zhu <zhuchen@loongson.cn>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:TrtwAoMJrh4J9un8nCNY0+wKBuy8WSgPRJKKUOZKUwpi+G6P8BO
+ j/A8SHF9sQlkwkN7x3m9xtHWse/lvbmhj27DyLkskMrNPPaBX3QpyKfyaXRzWU32SRBoo6R
+ 3OqhSgc/rDDvvv0uLTYVYGGqF4bLx7bI55nth6ozcbp9gnlLAuKaZAV2JCUQu51k6PVDTCi
+ Fn8G5mv1cGDI9LopL0TmA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:V7Lb1SpRuo0=:/DHNpI1xygqyRk9lPNAiuP
+ n5uYhL8oKl8UmQvBM+ZXDvVMwSe384gSAoVSvGjHGampj3xYgmjabxlMjGG3RVK5MnRStsznI
+ 2Fz4hPNlrxXgZqvgH4d1ccB1nZ45/kiRb1ZBhwsmyXRhotyxuKL0P52FJG0GDumCs/RdMcBAu
+ Fsp9sFLrYn6OIZbNNGdDSMLO4NVByymUS3OeL0e1fSers2moLOguF7oxohCCwS1hSwpk2T/OJ
+ bz0dfyTDHsBQ22SL1MMSgGWqf9oR378xTvonOZRzbUVZIKAJqxBgbdCB3LJRHlSvKiR2r4txl
+ h9FaA4FpNQirgnfTDaUyNEEqrme7QmloKpfOzAxEsY21CznEpsIQg3+kUYPD/IZWMq3j3Sn79
+ F+F6y+Yyj2L8uN0Gp5eWs7BnHPXyB0jJKIfCMr+8WRDHmUjWlhVH+FswzYe0ynrtkLpTVw7qv
+ HMsnFCFHEsbnz/hgJhjujYTYHs9vQfers9pfLI5pRqGy4wta7IwWDKymfv2gBQaJjUjYVHFH1
+ Yo/1yOxtqTn5ZaQzhuaiB8E3r8cFzH4LIqzBUa9NUdeCG0p7uKmC3vhEUtNN42P6XQueUiWMA
+ bD43Pvjj2q2V3+cawRoBmSV3bf/pN/RlUcvj5uEyRc2JLodY46szvu2ASNBHLhoyI8XusVkDR
+ WLMi3z6+UAzufdRWXkXiVv5yh7noRIW/TWR73EwYpMwvgExi6q8jV+hae+hnA3OBZOChgyHUA
+ 2SmRRi879knDTLSSfdZvWQYms7PzJB8cqOsMOnfnnAYMFJ+84sif5ZEcDxxlAiypA0HWLN5pj
+ Hltj0LHmXDYxCEHYhNE4On/mGsi3zFp/fw97103xxSJ8Wfm5/9RJNvYjIXftd+Mzza62WDQpF
+ DewbKKlzdx8SmAHmg8pV+x93DkxgiEtfXAnk8L+ss6Gdmxv87klDe2mkru8uJCOpviJ04gXJ5
+ cfYW1mCg1lmweYWtP5JrA33Kh1ra2zYPlvTzq/hpE6jWJXcrkBuYl
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
-> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
-> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
-> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
-> are already added in the next revision of ACPI Specification (current
-> revision is 6.4).
->
-> This patchset is adding basic LoongArch support in mainline kernel, we
-> can see a complete snapshot here:
-> https://github.com/loongson/linux/tree/loongarch-next
->
-> Cross-compile tool chain to build kernel:
-> https://github.com/loongson/build-tools/releases
->
-> Loongson and LoongArch documentations:
-> https://github.com/loongson/LoongArch-Documentation
->
-> LoongArch-specific interrupt controllers:
-> https://mantis.uefi.org/mantis/view.php?id=2203
+Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
 
-(sorry for sending duplicate emails, it appears that the provide of my
-arnd@arndb.de address gets spam-filtered once more, so sending all my
-replies again from arnd@kernel.org)
+> --- /dev/null
+> +++ b/arch/loongarch/Kbuild
+> @@ -0,0 +1,21 @@
+> +# Fail on warnings - also for files referenced in subdirs
+> +# -Werror can be disabled for specific files using:
+> +# CFLAGS_<file.o> := -Wno-error
+> +ifeq ($(W),)
+> +subdir-ccflags-y := -Werror
+> +endif
 
-Thanks a lot for your submission, I've been waiting for this, and have just
-completed an initial quick review, will send out the individual replies in a
-bit.
+This tends to break building with 'make W=12' or similar, I would recommend not
+adding -Werror. It is a good idea though to have your CI systems build
+with -Werror enabled on the command line though.
 
-I have a few high-level comments about things that need to be improved
-before merging:
+> +# platform specific definitions
+> +include arch/loongarch/Kbuild.platforms
+> +obj-y := $(platform-y)
+> +
 
-1. Copyright statements: I can see that you copied a lot of code from arch/mips,
- and then a bit from arch/arm64 and possibly arch/riscv/, but every file just
- lists loongson as the copyright holder and one or more employees as authors.
- This clearly has to be resolved by listing the original authors as well.
+I would recommend not planning on having platform specific files. The way
+we do it on modern platforms (arm64, rv64) is to have all the device drivers
+in the driver subsystems instead.
 
-2. Reducing the amount of copied code: my impression is that the bits you
-   wrote yourself are generally of higher quality than the bits you copied from
-   mips, usually because those have grown over a long time to accommodate
-   cases you should not worry about. In cases where there was no generic
-   implementation, we should try to come up with a version that can be shared
-   instead of adding another copy.
+> +       select GENERIC_IOMAP
 
-3. 32-bit support: There are small bits of code for 32-bit support everywhere
-   throughout the code base, but there is also code that does not look like
-   it would work in that configuration. I would suggest you split out all 32-bit
-   code into a separate patch, the way you have done for SMP and NUMA
-   support. That way it can be reviewed separately, or deferred until when
-   you actually add support for a 32-bit platform. Please also clarify which
-   modes you plan to support: should every 64-bit kernel be able to run
-   LA32R and LA32S user space binaries, or do you require running the same
-   instruction set in both kernel and user space as RISC-V does?
-   Do you plan to have MIPS N32 style user space on 64-bit kernels?
+GENERIC_IOMAP is one of those you probably don't want here. If PCI I/O
+space is mapped into MMIO registers, just do what arm64 has and make
+ioport_map() return a pointer, then make ioread32() an alias for readl().
 
-4. Toolchain sources: I see you only have binaries for an older gcc-8.3
-    release and no sources so far. I assume you are already busy porting
-    the internal patches to the latest gcc and will post that soon, but my
-    feeling is that the kernel port should not get merged until we have a
-    confirmation from the toolchain maintainers that they plan to merge
-    support for their following release. We should however make sure that
-    your kernel port is completely reviewed and can just get merged once
-    we get there.
+> +       select HAVE_CBPF_JIT if !64BIT
+> +       select HAVE_EBPF_JIT if 64BIT
 
-5. Platform support: You have copied the underlying logic from arch/mips,
-    but that still uses a method where most platforms (not the new
-    "generic" version) are mutually exclusive. Since you only support
-    one platform right now, it would be best to just simplify it to the point
-    where no platform specific code is needed in arch/loongarch/ and
-    it just works. If you add 32-bit support later on, that obviously requires
-    making a choice between two or three incompatible options.
+These look like you incorrectly copied them from MIPS. I don't see any EBPF_JIT
+implemementation (I may have missed that, as I'm still starting), but
+you probably
+don't want the CBPF version for 32-bit anyway.
 
-        Arnd
+> +       select HAVE_IDE
+
+drivers/ide/ was just removed,so this line can go as well.
+
+> +       select VIRT_TO_BUS
+
+Remove this: if you still require a driver that fails to use the dma-mapping
+API, fix the driver instead so it can work with IOMMUs.
+
+> +menu "Machine selection"
+> +
+> +choice
+> +       prompt "System type"
+> +       default MACH_LOONGSON64
+> +
+> +config MACH_LOONGSON64
+> +       bool "Loongson 64-bit family of machines"
+
+There should generally not be a 'choice' menu to select between
+different machine types, but instead the kernel should be able
+to run on all platforms that have the same instruction set.
+
+Maybe just make this a silent option and use 'select
+MACH_LOONGSON64' so you can pick up the device drivers
+that mips uses.
+
+> +       select ARCH_MIGHT_HAVE_PC_PARPORT
+> +       select ARCH_MIGHT_HAVE_PC_SERIO
+> +       select GENERIC_ISA_DMA
+> +       select ISA
+
+Do you actually have ISA-style add-on cards? If not, then
+remove the ISA options. If you do, which drivers are they?
+
+
+> +config CPU_LOONGSON64
+> +       bool "Loongson 64-bit CPU"
+> +       depends on SYS_HAS_CPU_LOONGSON64
+> +       select CPU_SUPPORTS_64BIT_KERNEL
+> +       select GPIOLIB
+> +       select SWIOTLB
+> +       select ARCH_SUPPORTS_ATOMIC_RMW
+> +       help
+> +         The Loongson 64-bit processor implements the LoongArch64 (the 64-bit
+> +         version of LoongArch) instruction set.
+> +
+> +endchoice
+> +
+> +config SYS_HAS_CPU_LOONGSON64
+> +       bool
+> +
+> +endmenu
+> +
+> +config SYS_SUPPORTS_32BIT_KERNEL
+> +       bool
+> +config SYS_SUPPORTS_64BIT_KERNEL
+> +       bool
+> +config CPU_SUPPORTS_32BIT_KERNEL
+> +       bool
+> +config CPU_SUPPORTS_64BIT_KERNEL
+> +       bool
+
+Same for the CPUs: I would suggest you keep this simple until you get
+to the point of actually having multiple CPUs that you need to distinguish.
+
+Different 64-bit CPUs are hopefully going to be compatible with one
+another, so they should not be listed as mutually exclusive in a
+'choice' statement. The complexity with two levels of 32/64 support
+is probably not going to be helpful here either.
+
+The 'select' statements that you have under CPU_LOONGSON64
+ook like they should just be in the top level.
+
+GPIOLIB and SWIOTLB could just be left user selectable, if turning
+them off results only in run-time loss of functionality but not a
+build failure.
+
+> +menu "Kernel type"
+> +
+> +choice
+> +       prompt "Kernel code model"
+> +       help
+> +         You should only select this option if you have a workload that
+> +         actually benefits from 64-bit processing or if your machine has
+> +         large memory.  You will only be presented a single option in this
+> +         menu if your system does not support both 32-bit and 64-bit kernels.
+> +
+> +config 32BIT
+> +       bool "32-bit kernel"
+> +       depends on CPU_SUPPORTS_32BIT_KERNEL && SYS_SUPPORTS_32BIT_KERNEL
+> +       help
+> +         Select this option if you want to build a 32-bit kernel.
+> +
+> +config 64BIT
+> +       bool "64-bit kernel"
+> +       depends on CPU_SUPPORTS_64BIT_KERNEL && SYS_SUPPORTS_64BIT_KERNEL
+> +       help
+> +         Select this option if you want to build a 64-bit kernel.
+> +
+> +endchoice
+
+Since you don't support any 32-bit target at the moment, just make CONFIG_64BIT
+a default-on statement, and make it user-selectable only when you add a 32-bit
+target.
+
+
+> +choice
+> +       prompt "Kernel page size"
+> +       default PAGE_SIZE_16KB
+> +
+> +config PAGE_SIZE_4KB
+> +       bool "4kB"
+> +       help
+> +         This option select the standard 4kB Linux page size.
+> +
+> +config PAGE_SIZE_16KB
+> +       bool "16kB"
+> +       help
+> +         This option select the standard 16kB Linux page size.
+> +
+> +config PAGE_SIZE_64KB
+> +       bool "64kB"
+> +       help
+> +         This option select the standard 64kB Linux page size.
+> +
+> +endchoice
+> +
+> +choice
+> +       prompt "Virtual memory address space bits"
+> +       default VA_BITS_40
+> +       help
+> +         Allows choosing one of multiple possible virtual memory
+> +         address space bits for applications. The level of page
+> +         translation table is determined by a combination of page
+> +         size and virtual memory address space bits.
+> +
+> +config VA_BITS_40
+> +       bool "40-bits"
+> +       depends on 64BIT
+> +       help
+> +         Support a maximum at least 40 bits of application virtual memory.
+> +
+> +config VA_BITS_48
+> +       bool "48-bits"
+> +       depends on 64BIT
+> +       help
+> +         Support a maximum at least 48 bits of application virtual memory.
+> +
+> +endchoice
+
+Isn't the size of the address space tied to the page size?
+
+         Arnd
