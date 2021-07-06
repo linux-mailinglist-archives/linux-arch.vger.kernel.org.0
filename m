@@ -2,42 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E719C3BCB07
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB133BCB12
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbhGFK6j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 06:58:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57704 "EHLO mail.kernel.org"
+        id S231624AbhGFK7p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 06:59:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59236 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231391AbhGFK6j (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Jul 2021 06:58:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BF35C619CD
-        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 10:56:00 +0000 (UTC)
+        id S231516AbhGFK7p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Jul 2021 06:59:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 20961619F1
+        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 10:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625568960;
-        bh=Uak+xie8FDU1H+A0lNKbOKrOXp89Q/VpGhUa2lOZVJo=;
+        s=k20201202; t=1625569027;
+        bh=LmxEK85ZlHQvIsHOeKU443Ouv/MnOGHkYSbny2fs6Vw=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=a8HuKISQkxcB5uQ3XrOdfD/TwxQkSpq30jqzymVH4XqLmtbRFoIvSHesG0ZSiEjcj
-         60CJjXumrKrQLMY2P9DDCjDuogGucSTg1WC6LJ9HqM9MBf1Kez6+dCvIEFzexFnhke
-         poLyyX6IZsNpNpnKUrgOUiffKw7EunqZ7jszhQiUKe7oC66Jvz2kiJc5F8+Aga2rGY
-         km5nNEZLmiTsmEoMWtWrHSt/41GCSqd2CWzinXa6OQJtttjObqrrFfh3EPE/6ZODH1
-         PCUTxM8m+HL2tB+3xHcsIPIbHqQ0ZNDqViPzOmSV7y59HMv6koNf+EQPaeHJx3Hx05
-         0wIdOzUAhNXNQ==
-Received: by mail-wm1-f43.google.com with SMTP id k16-20020a05600c1c90b02901f4ed0fcfe7so1930634wms.5
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:56:00 -0700 (PDT)
-X-Gm-Message-State: AOAM531n4M7KTiUG/zm7BTtqZMRjwrTKlNbSrr/9KIItVMU3JahL7ehY
-        u2zsCk4M0UbRC8zIrVxleQbIzcpLhD2jweupwQE=
-X-Google-Smtp-Source: ABdhPJy44bLn25NDyALwSyQF0sAIYQeHrr6aEa+JDP2AOz6XJW5wwSM6A6QMkYvdX0yZAopUBtRpnJbjJH/UJrMnoOI=
-X-Received: by 2002:a05:600c:4896:: with SMTP id j22mr1192609wmp.43.1625568959396;
- Tue, 06 Jul 2021 03:55:59 -0700 (PDT)
+        b=FnQ8fStL7AHYLZdlpWUGrsbkexxTUZcalof8nd+kz66bgWeUOuNRWT1CqpQP7ienr
+         nipxY0GrupQDfaNOGvWC39ME2j3ngEXenWoWfh7aa/5rdEj7o/QjGQQ2Z8K+ZXw7Ay
+         rsVfzIo+hOsr7Sb90ZijnTiN/mVZlYbyjrl0SHZhGuPPZWmhYtnWlIoDq4c9//K94/
+         TlQnPHR48BQ7NQCF9LIbBZN3070qvtULN8yVf/gBPeZiTuaEMYOvFUE719F+VtUYj/
+         QpR/lK+DsgblC8YQzHXkdyAzkPLB2MjNjoh3rQDcTF2MI3ipLBzppC/jjhaKK209n/
+         rVaMLI17sMytg==
+Received: by mail-wr1-f50.google.com with SMTP id l5so8806873wrv.7
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:57:07 -0700 (PDT)
+X-Gm-Message-State: AOAM531AvIsP7WbtODzgwoQYVWvEwh+lg30KiMiPHFrAAPp6N54uW7HL
+        qlONMWF4g8jlmRLD5tCfqwiOvEtWnYaiidKx5Nw=
+X-Google-Smtp-Source: ABdhPJwj4oNr1Bn7DHLF2dhAof/eSE3cUrCSqTg5+puUWADI3qdWBUZbsiAX0pnexbt0DJB13FFkaB274831i64kZTk=
+X-Received: by 2002:adf:e107:: with SMTP id t7mr21120756wrz.165.1625569025734;
+ Tue, 06 Jul 2021 03:57:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-6-chenhuacai@loongson.cn>
-In-Reply-To: <20210706041820.1536502-6-chenhuacai@loongson.cn>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-7-chenhuacai@loongson.cn> <CAK8P3a3UZE51FaqPHYf6_Qwyf+szVusezoceMZwHuvVTO6S39w@mail.gmail.com>
+In-Reply-To: <CAK8P3a3UZE51FaqPHYf6_Qwyf+szVusezoceMZwHuvVTO6S39w@mail.gmail.com>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 6 Jul 2021 12:55:43 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1A5yDPfLWXeo98Oz1MUayETZO9aR80zE1T3h4C7ZxBXg@mail.gmail.com>
-Message-ID: <CAK8P3a1A5yDPfLWXeo98Oz1MUayETZO9aR80zE1T3h4C7ZxBXg@mail.gmail.com>
-Subject: Re: [PATCH 05/19] LoongArch: Add boot and setup routines
+Date:   Tue, 6 Jul 2021 12:56:50 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1=CnMm0+cZVrfEm+aub1dqcoF=O=+E8p3SUnXaCAbFsw@mail.gmail.com>
+Message-ID: <CAK8P3a1=CnMm0+cZVrfEm+aub1dqcoF=O=+E8p3SUnXaCAbFsw@mail.gmail.com>
+Subject: Re: [PATCH 06/19] LoongArch: Add exception/interrupt handling
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -56,70 +57,65 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
 
+> diff --git a/arch/loongarch/include/asm/break.h b/arch/loongarch/include/asm/break.h
+> new file mode 100644
+> index 000000000000..109d0c85c582
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/break.h
+> @@ -0,0 +1,10 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
+> + */
+> +#ifndef __ASM_BREAK_H
+> +#define __ASM_BREAK_H
 > +
-> +#ifdef CONFIG_64BIT
-> +       /* Guess if the sign extension was forgotten by bootloader */
-> +       if (start < CAC_BASE)
-> +               start = (int)start;
-> +#endif
-> +       initrd_start = start;
-> +       initrd_end += start;
-> +       return 0;
-> +}
-> +early_param("rd_start", rd_start_early);
+> +#include <uapi/asm/break.h>
 > +
-> +static int __init rd_size_early(char *p)
-> +{
-> +       initrd_end += memparse(p, &p);
-> +       return 0;
-> +}
-> +early_param("rd_size", rd_size_early);
+> +#endif /* __ASM_BREAK_H */
 
-The early parameters should not be used for this, I'm fairly sure the UEFI
-boot protocol already has ways to communicate all necessary information.
+The file can be removed.
 
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/debug.h
+> @@ -0,0 +1,18 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
+> + */
 > +
-> +#ifdef CONFIG_ACPI
-> +       init_initrd();
-> +#endif
-
-Why is the initrd support tied to ACPI? Can you actually boot without ACPI?
-
-> +#if defined(CONFIG_VT)
-> +#if defined(CONFIG_VGA_CONSOLE)
-> +       conswitchp = &vga_con;
-> +#elif defined(CONFIG_DUMMY_CONSOLE)
-> +       conswitchp = &dummy_con;
-> +#endif
-> +#endif
-
-The VGA console seems rather outdated. If you have UEFI, why not use
-the provided framebuffer for the console?
-
-> +u64 cpu_clock_freq;
-> +EXPORT_SYMBOL(cpu_clock_freq);
-> +u64 const_clock_freq;
-> +EXPORT_SYMBOL(const_clock_freq);
-
-You should generally not rely on the CPU clock frequency being fixed
-like this, as this breaks down as soon as you add a drivers/cpufreq/ driver.
-
-What code uses these?
-
-> +void __init time_init(void)
-> +{
-> +       if (!cpu_has_cpucfg)
-> +               const_clock_freq = cpu_clock_freq;
-> +       else
-> +               const_clock_freq = calc_const_freq();
+> +#ifndef __LOONGARCH_ASM_DEBUG_H__
+> +#define __LOONGARCH_ASM_DEBUG_H__
 > +
-> +       init_timeval = drdtime() - csr_readq(LOONGARCH_CSR_CNTC);
+> +#include <linux/dcache.h>
 > +
-> +       constant_clockevent_init();
-> +       constant_clocksource_init();
-> +}
+> +/*
+> + * loongarch_debugfs_dir corresponds to the "loongarch" directory at the top
+> + * level of the DebugFS hierarchy. LoongArch-specific DebugFS entries should
+> + * be placed beneath this directory.
+> + */
+> +extern struct dentry *loongarch_debugfs_dir;
 
-Clocksource and clockevents drivers should be located in drivers/clocksource
-and reviewed by its maintainers.
+I see this one is used for the alignment trap handling, which on other
+architectures
+is part of sysctl. Try to see what the most common implementation is
+across architectures and use that instead.
 
-         Arnd
+I think there also needs to be a discussion about how to handle alignment traps
+in general, so maybe split out all alignment handling into a separate patch.
+
+> diff --git a/arch/loongarch/kernel/unaligned.c b/arch/loongarch/kernel/unaligned.c
+> new file mode 100644
+> index 000000000000..d66e453297da
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/unaligned.c
+> @@ -0,0 +1,461 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Handle unaligned accesses by emulation.
+
+Can you explain in this comment what the CPU can or cannot do? Are all
+memory accesses assumed to be naturally aligned? Is any of the CPU
+implementation dependent?
+
+        Arnd
