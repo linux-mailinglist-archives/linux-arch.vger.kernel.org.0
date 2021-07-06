@@ -2,34 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3189B3BC967
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8CB3BCA09
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbhGFKVJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 06:21:09 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:60523 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbhGFKVJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 06:21:09 -0400
-Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MSKq6-1lcXQk1LPE-00Sbul for <linux-arch@vger.kernel.org>; Tue, 06 Jul
- 2021 12:18:30 +0200
-Received: by mail-wr1-f43.google.com with SMTP id p8so25449083wrr.1
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:18:30 -0700 (PDT)
-X-Gm-Message-State: AOAM530c8FDWZfwqI2lOPVPw6oYPZvDf2ppJiXp1dm3279C3kztvuY+h
-        sNTRb/xu59MRXbZJAyjDj+m11UKm2zzE4YnqG3s=
-X-Google-Smtp-Source: ABdhPJxNHkmLmXGOO/8FvJHNm4B4biB/wRRdj0bsldiZwekKlGulL4v8OhjBpjifcnRMdjB7Xn5RkQp0kEcRO4UmNQA=
-X-Received: by 2002:adf:e107:: with SMTP id t7mr20931797wrz.165.1625566710070;
- Tue, 06 Jul 2021 03:18:30 -0700 (PDT)
+        id S231407AbhGFKgv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 06:36:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60380 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231216AbhGFKgv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Jul 2021 06:36:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D3294619B6
+        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 10:34:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625567652;
+        bh=Xq+2Q7faFG1FmDVhft9w4npiFKNUwoJGUSYLQceBZgg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OYjYcxAOyYVtiN92CgJ9xuvfv/OJRX3UDycI944qXzqiXzbEnX8a7eNNYj4+t9xF7
+         yNuMklK1om7MdU64mnUHgl+mnkeN/Z8QogmMyoeT+/8fka9S+xnPRFzGSs5f9nLc6w
+         xF8zEFJlmKdFO1GPsOI+zp053m2HGV9zY8RDKCODtwTkoIYh7P4CoL/gO7N7xAvqQV
+         lltjJEwbsEZNX3HLqYgq0YDsYE0a3vhpCojaFmJCf6nu/haoY2Ule+2ebd/2Z5SoBX
+         /7o81N1UALFKY1G3ngLHGsms6Z+76uFQVHhM4DmOdbL6hVyrA4i27wuNXBt/4367O/
+         qGJqV6P7hn1LQ==
+Received: by mail-wr1-f48.google.com with SMTP id d2so1847987wrn.0
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:34:12 -0700 (PDT)
+X-Gm-Message-State: AOAM531j0HTsMlfcR+7Q6WlaQSpcPC3GWbejy7tKpohAr+bCgjkoSgqo
+        7P9cw01SJquqhY7nmXsSzJuFsOBv8pRft8oUNs8=
+X-Google-Smtp-Source: ABdhPJz0Vg8XCxb7nlGz7/JuhNN5WrUYcHYZeEeR7u77fnhZfEgdB+6XBrs91uu4tK5OLcnAjpx/2Q14mW1Ervxv+Kc=
+X-Received: by 2002:adf:e107:: with SMTP id t7mr21011079wrz.165.1625567651364;
+ Tue, 06 Jul 2021 03:34:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-20-chenhuacai@loongson.cn>
-In-Reply-To: <20210706041820.1536502-20-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 6 Jul 2021 12:18:14 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2J+axpXoP_P+PApo90upUqn57=6_wY5RPZv6oNVV7oUA@mail.gmail.com>
-Message-ID: <CAK8P3a2J+axpXoP_P+PApo90upUqn57=6_wY5RPZv6oNVV7oUA@mail.gmail.com>
-Subject: Re: [PATCH 19/19] LoongArch: Add Loongson-3 default config file
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+In-Reply-To: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 6 Jul 2021 12:33:55 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2Qu_BUcGFpgktXOwsomuhN6aje6mB6EwTka0GBaoL4hw@mail.gmail.com>
+Message-ID: <CAK8P3a2Qu_BUcGFpgktXOwsomuhN6aje6mB6EwTka0GBaoL4hw@mail.gmail.com>
+Subject: Re: [PATCH 00/19] arch: Add basic LoongArch support
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -40,109 +48,84 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Chen Zhu <zhuchen@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:llhN9c/mvVee+eym3wzyVdLjXAQlTk82topTE8saQlXPzx55UFt
- aC8wwl8TACUZWTG+wiHBrEYuaeOKI2wjgIvWD1Iq4+xrRLXkMDo9d0a+adjUriDKU3E2TWO
- 2t/WdGLXwOQZUHya2tkSBH6RG85TwdZPc75HHloTqXdGRyGh0uFEUlriKOWdFCQUqbK5IWb
- 7l+/WGhhUm4LFGPIICr3Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:EluYE6EqtS4=:KSOz4oyXPTCoJGziJbkQbc
- wEVZ1JFQIc4P7GWdepFejHxv1Q5tYLUkLqxSpjckPkDRQKLZbs7UnOclzuNhxpbzBI11F0NJ+
- bxnA/9NVP22U7p08qIPrKNmYk3jiT9aA/4PqCJzX5IUKlNqcCMfR2V2b8jY6yjoh0KZW9NsQM
- tLmKRxF5qy+zFO1PuHZ8PG22T8AtKHy3pMDKH8gTWJGdCqeukSptt0Ime330iIJHKC+R86P0W
- 7g7TCC+VCr6lK48IJ0ObZ9EZw87UXrAQUeEInUbEZ9kCe2ag1sOxi9jBWuU075OQnXNaBfZQa
- Rcl8EnTp8tpssEAfeSqhFRrO3mhtPkdVK30Um1EtMa5/dlOTidSyhH/KrMYr211CKXuq2S4KF
- Y4ji1b9u19YWiEylbhpMxg85pwIwY267C6PQ+/7EmPYmaUMb1jScubodKFu+0mFXmbFVzVbeH
- HQhGw4NcudDKP2A7Hr6Lc6EAwIbZiSQUbq9CXJfPO7WK8X280W5r3Cd3yql/qaVDrI/UROINo
- LC2s2egDuMwYFm+NJ2SylT+ggUcx6xsumQUcbKtF7Z2t+Mj1k+9j/9vUjHMOhPgXtalR/bdoF
- b8/uTyu61B6vkPGWi93nUYwaT0KWDjN9HL12Hh17uv+o46r5ps3kr23KSy7YIdZD89A9aFR5h
- rMYQlaEye4tvX9TswS/xcoXHVeqmbnfn8FTpH1XK0Bc5Z/OvVnWE2XL1jO3MM9qY0/9g/CPUD
- CV4pDT6oICJH1d6W0dlz04DpY31EkZvfFyVJJndiWonhTp9Jk1q5XK8l07IgRvRfPLasmuAoH
- +J4s+5itU882AJhgexXuIUPw1uD7eSnaTI6anQs4af5CTL0TfzM7Pg9jNSyGq3lNQY+3P6WGo
- w3ObHE3TVQ+kDq9dfCntWrpXezI9v26XG62yEv9tgAn0CMt5deDJJ75lN3T1kpAviWBFpqIG7
- eO8hLPdoDeh8Zr6W2jAqrnTdzlNPN9A/tfuwyKkXS5beXpi4QZDS3
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> are already added in the next revision of ACPI Specification (current
+> revision is 6.4).
+>
+> This patchset is adding basic LoongArch support in mainline kernel, we
+> can see a complete snapshot here:
+> https://github.com/loongson/linux/tree/loongarch-next
+>
+> Cross-compile tool chain to build kernel:
+> https://github.com/loongson/build-tools/releases
+>
+> Loongson and LoongArch documentations:
+> https://github.com/loongson/LoongArch-Documentation
+>
+> LoongArch-specific interrupt controllers:
+> https://mantis.uefi.org/mantis/view.php?id=2203
 
-> +CONFIG_EMBEDDED=y
+(sorry for sending duplicate emails, it appears that the provide of my
+arnd@arndb.de address gets spam-filtered once more, so sending all my
+replies again from arnd@kernel.org)
 
-You probably should not set this one.
+Thanks a lot for your submission, I've been waiting for this, and have just
+completed an initial quick review, will send out the individual replies in a
+bit.
 
-> +CONFIG_CAIF=y
+I have a few high-level comments about things that need to be improved
+before merging:
 
-And almost certainly not this one.
+1. Copyright statements: I can see that you copied a lot of code from arch/mips,
+ and then a bit from arch/arm64 and possibly arch/riscv/, but every file just
+ lists loongson as the copyright holder and one or more employees as authors.
+ This clearly has to be resolved by listing the original authors as well.
 
-> +CONFIG_PCCARD=m
-> +CONFIG_YENTA=m
-> +CONFIG_RAPIDIO=y
-> +CONFIG_RAPIDIO_TSI721=y
+2. Reducing the amount of copied code: my impression is that the bits you
+   wrote yourself are generally of higher quality than the bits you copied from
+   mips, usually because those have grown over a long time to accommodate
+   cases you should not worry about. In cases where there was no generic
+   implementation, we should try to come up with a version that can be shared
+   instead of adding another copy.
 
-These seem unlikely as well. Can you confirm that you have both old-style
-PC-Card support and RAPIDIO support on your most common hardware?
+3. 32-bit support: There are small bits of code for 32-bit support everywhere
+   throughout the code base, but there is also code that does not look like
+   it would work in that configuration. I would suggest you split out all 32-bit
+   code into a separate patch, the way you have done for SMP and NUMA
+   support. That way it can be reviewed separately, or deferred until when
+   you actually add support for a 32-bit platform. Please also clarify which
+   modes you plan to support: should every 64-bit kernel be able to run
+   LA32R and LA32S user space binaries, or do you require running the same
+   instruction set in both kernel and user space as RISC-V does?
+   Do you plan to have MIPS N32 style user space on 64-bit kernels?
 
-> +CONFIG_PARPORT=y
-> +CONFIG_PARPORT_PC=y
-> +CONFIG_PARPORT_SERIAL=y
-> +CONFIG_PARPORT_PC_FIFO=y
-> +CONFIG_PRINTER=m
+4. Toolchain sources: I see you only have binaries for an older gcc-8.3
+    release and no sources so far. I assume you are already busy porting
+    the internal patches to the latest gcc and will post that soon, but my
+    feeling is that the kernel port should not get merged until we have a
+    confirmation from the toolchain maintainers that they plan to merge
+    support for their following release. We should however make sure that
+    your kernel port is completely reviewed and can just get merged once
+    we get there.
 
-Is this an on-board PCI device you actually have?
-What do you connect to the PC parport? Most printers
-in the past 15 years only have USB or network connections.
+5. Platform support: You have copied the underlying logic from arch/mips,
+    but that still uses a method where most platforms (not the new
+    "generic" version) are mutually exclusive. Since you only support
+    one platform right now, it would be best to just simplify it to the point
+    where no platform specific code is needed in arch/loongarch/ and
+    it just works. If you add 32-bit support later on, that obviously requires
+    making a choice between two or three incompatible options.
 
-> +CONFIG_8139CP=m
-> +CONFIG_8139TOO=m
-
-Do you actually support legacy PCI slots?
-
-> +CONFIG_SERIAL_8250=y
-> +CONFIG_SERIAL_8250_CONSOLE=y
-> +CONFIG_SERIAL_8250_NR_UARTS=16
-> +CONFIG_SERIAL_8250_RUNTIME_UARTS=16
-> +CONFIG_SERIAL_8250_EXTENDED=y
-> +CONFIG_SERIAL_8250_MANY_PORTS=y
-> +CONFIG_SERIAL_8250_SHARE_IRQ=y
-> +CONFIG_SERIAL_8250_RSA=y
-> +CONFIG_SERIAL_OF_PLATFORM=y
-
-I don't see any device tree support in your patches, so I think the
-SERIAL_OF_PLATFORM is not needed.
-
-> +CONFIG_RAW_DRIVER=m
-
-This is gone now.
-
-> +CONFIG_INFINIBAND=m
-
-You don't seem to enable any infiniband host drivers, so the core
-layer can probably remain turned off
-
-> +CONFIG_RTC_CLASS=y
-> +CONFIG_RTC_DRV_EFI=y
-> +CONFIG_UIO=m
-
-same for UIO.
-
-> +CONFIG_EXT2_FS=y
-> +CONFIG_EXT2_FS_XATTR=y
-> +CONFIG_EXT2_FS_POSIX_ACL=y
-> +CONFIG_EXT2_FS_SECURITY=y
-> +CONFIG_EXT3_FS=y
-> +CONFIG_EXT3_FS_POSIX_ACL=y
-> +CONFIG_EXT3_FS_SECURITY=y
-
-I would generally recommend using EXT4 over EXT2 or EXT3
-
-> +CONFIG_FRAME_WARN=1024
-
-On 64-bit platforms, you probably want to increase this a bit,
-otherwise you get extra warnings about code that works as
-intended. The default is 2048, but you should be able to get by
-with 1280, if that lets you build a defconfig kernel without warnings.
-
-
-      Arnd
+        Arnd
