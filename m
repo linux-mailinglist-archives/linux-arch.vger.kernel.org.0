@@ -2,120 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB133BCB12
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2003BCB17
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbhGFK7p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 06:59:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59236 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231516AbhGFK7p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Jul 2021 06:59:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 20961619F1
-        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 10:57:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625569027;
-        bh=LmxEK85ZlHQvIsHOeKU443Ouv/MnOGHkYSbny2fs6Vw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FnQ8fStL7AHYLZdlpWUGrsbkexxTUZcalof8nd+kz66bgWeUOuNRWT1CqpQP7ienr
-         nipxY0GrupQDfaNOGvWC39ME2j3ngEXenWoWfh7aa/5rdEj7o/QjGQQ2Z8K+ZXw7Ay
-         rsVfzIo+hOsr7Sb90ZijnTiN/mVZlYbyjrl0SHZhGuPPZWmhYtnWlIoDq4c9//K94/
-         TlQnPHR48BQ7NQCF9LIbBZN3070qvtULN8yVf/gBPeZiTuaEMYOvFUE719F+VtUYj/
-         QpR/lK+DsgblC8YQzHXkdyAzkPLB2MjNjoh3rQDcTF2MI3ipLBzppC/jjhaKK209n/
-         rVaMLI17sMytg==
-Received: by mail-wr1-f50.google.com with SMTP id l5so8806873wrv.7
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:57:07 -0700 (PDT)
-X-Gm-Message-State: AOAM531AvIsP7WbtODzgwoQYVWvEwh+lg30KiMiPHFrAAPp6N54uW7HL
-        qlONMWF4g8jlmRLD5tCfqwiOvEtWnYaiidKx5Nw=
-X-Google-Smtp-Source: ABdhPJwj4oNr1Bn7DHLF2dhAof/eSE3cUrCSqTg5+puUWADI3qdWBUZbsiAX0pnexbt0DJB13FFkaB274831i64kZTk=
-X-Received: by 2002:adf:e107:: with SMTP id t7mr21120756wrz.165.1625569025734;
- Tue, 06 Jul 2021 03:57:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-7-chenhuacai@loongson.cn> <CAK8P3a3UZE51FaqPHYf6_Qwyf+szVusezoceMZwHuvVTO6S39w@mail.gmail.com>
-In-Reply-To: <CAK8P3a3UZE51FaqPHYf6_Qwyf+szVusezoceMZwHuvVTO6S39w@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 6 Jul 2021 12:56:50 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1=CnMm0+cZVrfEm+aub1dqcoF=O=+E8p3SUnXaCAbFsw@mail.gmail.com>
-Message-ID: <CAK8P3a1=CnMm0+cZVrfEm+aub1dqcoF=O=+E8p3SUnXaCAbFsw@mail.gmail.com>
-Subject: Re: [PATCH 06/19] LoongArch: Add exception/interrupt handling
+        id S231628AbhGFK77 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 06:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231565AbhGFK77 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 06:59:59 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B99C061574
+        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 03:57:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0ED2wyQ0c4Rxfv+xmvJo7P2JNd2XceomdovbEDcGj0g=; b=MGx3k6OGxPcxkj4wr+2yVS1A6h
+        Mk3BRQWn8SbbC+k6TB2BadHmWyvimWOwDpIH+BibBP8/foj7H+2Gitg7j+jPCI6gkNn5uhpic8NZx
+        yK8Fw9Gv8EeyI79Vitcr4IiytNVvvxKt1XJFAEubUibCx+Xn3Lf64LBH5ejlxtkDvbHurfsJ1/bpW
+        WwWW7TFIC0YJmbLZ9Hotdu0is2XN9aU3luoGY4oU0AiTniRL0FDnQ0r0IGmTGEiNUBolMBqA38Bny
+        Rk/BtwUM0JRo3kquXgNpbvrA4uV2Vz8PI7FpGxtHWm8IZkCN945343jrpLZshdSh1ObiyGT5ii0Ar
+        DB6VJjIQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m0ilE-00F1Sr-97; Tue, 06 Jul 2021 10:57:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F2D73300233;
+        Tue,  6 Jul 2021 12:57:00 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DDAF0200D9D6C; Tue,  6 Jul 2021 12:57:00 +0200 (CEST)
+Date:   Tue, 6 Jul 2021 12:57:00 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Andy Lutomirski <luto@kernel.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 04/19] LoongArch: Add common headers
+Message-ID: <YOQ2/Dx3+r/R5jmu@hirez.programming.kicks-ass.net>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-5-chenhuacai@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210706041820.1536502-5-chenhuacai@loongson.cn>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-
-> diff --git a/arch/loongarch/include/asm/break.h b/arch/loongarch/include/asm/break.h
+On Tue, Jul 06, 2021 at 12:18:05PM +0800, Huacai Chen wrote:
+> diff --git a/arch/loongarch/include/asm/barrier.h b/arch/loongarch/include/asm/barrier.h
 > new file mode 100644
-> index 000000000000..109d0c85c582
+> index 000000000000..8ab8d8f15b88
 > --- /dev/null
-> +++ b/arch/loongarch/include/asm/break.h
-> @@ -0,0 +1,10 @@
+> +++ b/arch/loongarch/include/asm/barrier.h
+> @@ -0,0 +1,53 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 > + */
-> +#ifndef __ASM_BREAK_H
-> +#define __ASM_BREAK_H
+> +#ifndef __ASM_BARRIER_H
+> +#define __ASM_BARRIER_H
 > +
-> +#include <uapi/asm/break.h>
+> +#include <asm/addrspace.h>
 > +
-> +#endif /* __ASM_BREAK_H */
-
-The file can be removed.
-
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/debug.h
-> @@ -0,0 +1,18 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-> + */
+> +#define __sync()	__asm__ __volatile__("dbar 0" : : : "memory")
 > +
-> +#ifndef __LOONGARCH_ASM_DEBUG_H__
-> +#define __LOONGARCH_ASM_DEBUG_H__
+> +#define fast_wmb()	__sync()
+> +#define fast_rmb()	__sync()
+> +#define fast_mb()	__sync()
+> +#define fast_iob()	__sync()
+> +#define wbflush()	__sync()
 > +
-> +#include <linux/dcache.h>
-> +
-> +/*
-> + * loongarch_debugfs_dir corresponds to the "loongarch" directory at the top
-> + * level of the DebugFS hierarchy. LoongArch-specific DebugFS entries should
-> + * be placed beneath this directory.
-> + */
-> +extern struct dentry *loongarch_debugfs_dir;
+> +#define wmb()		fast_wmb()
+> +#define rmb()		fast_rmb()
+> +#define mb()		fast_mb()
+> +#define iob()		fast_iob()
 
-I see this one is used for the alignment trap handling, which on other
-architectures
-is part of sysctl. Try to see what the most common implementation is
-across architectures and use that instead.
+Is there any actual documentation about memory ordering for this
+architecture? Or are you going to do the MIPS trainwreck?
 
-I think there also needs to be a discussion about how to handle alignment traps
-in general, so maybe split out all alignment handling into a separate patch.
-
-> diff --git a/arch/loongarch/kernel/unaligned.c b/arch/loongarch/kernel/unaligned.c
-> new file mode 100644
-> index 000000000000..d66e453297da
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/unaligned.c
-> @@ -0,0 +1,461 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Handle unaligned accesses by emulation.
-
-Can you explain in this comment what the CPU can or cannot do? Are all
-memory accesses assumed to be naturally aligned? Is any of the CPU
-implementation dependent?
-
-        Arnd
+Having a single full memory barrier for everything is very sad for a new
+architecture, we're in 2021, not 1990s.
