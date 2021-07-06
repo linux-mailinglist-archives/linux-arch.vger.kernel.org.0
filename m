@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2641E3BCB33
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98E33BCB35
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbhGFLBN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 07:01:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60482 "EHLO mail.kernel.org"
+        id S231504AbhGFLCE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 07:02:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231569AbhGFLBM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:01:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 69336619D4
-        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 10:58:34 +0000 (UTC)
+        id S231449AbhGFLCD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:02:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8720061A14
+        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 10:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625569114;
-        bh=HPPt1Em5oYLcEt8CxrluPTLqH77qcHF5mqnyiQTyehk=;
+        s=k20201202; t=1625569165;
+        bh=tVtaM8z27KITOygRbvcEMEeePrYZbSGgKEc1FPnRQ/Q=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nnljzY2LCOi/Fd1JQ4iWlVVuJaiOqY5NsSR6sSSOgwtYtmRzA4o5AaDjBu3myaQdH
-         PL2glztKCjiN/zOklYM9hofym0gQQagFhMzghlN+EpQs6WKBaJ6G1Ire0F84Ds50uw
-         S1x3epHVcB2H/HHai3QxDl7rJ6lSvQlrtLQRjOxG8qj4JJOK6AzOnM1VVZkOWDT/zW
-         wInrzZNx3a5v4p+V1HajeV8oalzM1a7Z/DUrBwarXAPIaAIgEOgoGHmOaPaXBtxjft
-         VO++s8hizusJW3IidLm3pYGjdxkXmpSxClSGLcwF2a0dSTPcD/TcULd3kvI0Kb0Lch
-         dPUAkDXeBSAPw==
-Received: by mail-wm1-f49.google.com with SMTP id i2-20020a05600c3542b02902058529ea07so1941681wmq.3
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:58:34 -0700 (PDT)
-X-Gm-Message-State: AOAM530W+cFBiTbIV1HmVfgbMw3fI4ul2cz5zaW5Ut/K8AUmkHSK2aux
-        Z5iXAbMAJKrUFeAfVsqaTit112SyVeLMSysBrCE=
-X-Google-Smtp-Source: ABdhPJzVigLh1CiFXo5+2pnz3+1eMiM3+lakhbLUlJV6WSMiow8O2iZlBNZ08qFDosPIiTaFks+JS1PA/0dZo4/19Nc=
-X-Received: by 2002:a1c:c90f:: with SMTP id f15mr4154453wmb.142.1625569112989;
- Tue, 06 Jul 2021 03:58:32 -0700 (PDT)
+        b=ixddJH3ZaLa6EVLphVjszxjHmRySVGqTSHwKWMOwuhavIBoxkicdldPB0Jgg4N05E
+         gGDQLgkYeeBZ0eOOhJsNlGYCC3jsKQUhq+x3FeFFLum7ks4v54t8oQBX+Fji71p8Pe
+         zu87wd4kYGZJ3Gnfcdz+TYOy+ATvji9l+To2XxDGTzaRAECKH35xqrttYiOWbD+FY0
+         s4WFtuxTUqVsC3cFW9wof+NeSZLDz+tXlY2nUzdXloDUYjcebCY3Zf4mysbdQgs6B7
+         vBONUpTk6isFRxn2aTFcfkLB7TWuOJSYVaCNQ6gAp81q61Ekhb6rZjazO7Ha2IcLjP
+         KUleAHnWTVaFQ==
+Received: by mail-wr1-f53.google.com with SMTP id t6so15628736wrm.9
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:59:25 -0700 (PDT)
+X-Gm-Message-State: AOAM5335KQdWy2J+YQTwLcG5/DKcXv75QE73WNSwEbxsdikDkSihFpn0
+        k8xlBxt0ygx/H829apq2BflSWIz2j7we0ZRkb3w=
+X-Google-Smtp-Source: ABdhPJwayYNnjp5whAiOTItSD+GXAtZHe7Ca55ezeI/apbpTDAy8ac+CLFiRi1GsLT35jBVVwfFyqcDo1RlL/dP0OyY=
+X-Received: by 2002:adf:fd8e:: with SMTP id d14mr21914697wrr.361.1625569164145;
+ Tue, 06 Jul 2021 03:59:24 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-10-chenhuacai@loongson.cn> <CAK8P3a0n+HcPhevh4ifNMmsv+MUtGn1wky-HWZpyNT1GVSq4+Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a0n+HcPhevh4ifNMmsv+MUtGn1wky-HWZpyNT1GVSq4+Q@mail.gmail.com>
+ <20210706041820.1536502-11-chenhuacai@loongson.cn> <CAK8P3a0zkiFrn9K14Hg8C-rfCk-GbyTGMnq_DFBd8o28q99tRg@mail.gmail.com>
+In-Reply-To: <CAK8P3a0zkiFrn9K14Hg8C-rfCk-GbyTGMnq_DFBd8o28q99tRg@mail.gmail.com>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 6 Jul 2021 12:58:17 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0cN=U+RaGhCUDHf0JNisGQXukC5q8Eoe09nhj3pUdXxA@mail.gmail.com>
-Message-ID: <CAK8P3a0cN=U+RaGhCUDHf0JNisGQXukC5q8Eoe09nhj3pUdXxA@mail.gmail.com>
-Subject: Re: [PATCH 09/19] LoongArch: Add system call support
+Date:   Tue, 6 Jul 2021 12:59:08 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a18XN1X=mz+5TMmsvHuiggDybenyod18SMh0kQ2kwTqYA@mail.gmail.com>
+Message-ID: <CAK8P3a18XN1X=mz+5TMmsvHuiggDybenyod18SMh0kQ2kwTqYA@mail.gmail.com>
+Subject: Re: [PATCH 10/19] LoongArch: Add signal handling support
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -49,81 +49,97 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> This patch adds signal handling support for LoongArch.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
-> diff --git a/arch/loongarch/include/asm/seccomp.h b/arch/loongarch/include/asm/seccomp.h
-> new file mode 100644
-> index 000000000000..220c885f5478
+Eric Biederman should review this part as well.
+
 > --- /dev/null
-> +++ b/arch/loongarch/include/asm/seccomp.h
-> @@ -0,0 +1,9 @@
+> +++ b/arch/loongarch/include/asm/sigcontext.h
+> @@ -0,0 +1,10 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_SECCOMP_H
-> +#define __ASM_SECCOMP_H
-> +
-> +#include <linux/unistd.h>
-> +
-> +#include <asm-generic/seccomp.h>
-> +
-> +#endif /* __ASM_SECCOMP_H */
-
-I would expect this file to not be needed.
-
-> diff --git a/arch/loongarch/include/asm/uaccess.h b/arch/loongarch/include/asm/uaccess.h
-> new file mode 100644
-> index 000000000000..b760aa0a3bc6
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/uaccess.h
-> @@ -0,0 +1,453 @@
-> + * The fs value determines whether argument validity checking should be
-> + * performed or not.  If get_fs() == USER_DS, checking is performed, with
-> + * get_fs() == KERNEL_DS, checking is bypassed.
-> + *
-> + * For historical reasons, these macros are grossly misnamed.
+> +/*
+> + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 > + */
+> +#ifndef _ASM_SIGCONTEXT_H
+> +#define _ASM_SIGCONTEXT_H
+> +
+> +#include <uapi/asm/sigcontext.h>
+> +
+> +#endif /* _ASM_SIGCONTEXT_H */
 
-You removed set_fs()/get_fs(), which is good, but you forgot to remove
-the comment.
+Remove this file
 
-> diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
-> new file mode 100644
-> index 000000000000..6c194d740ed0
-> --- /dev/null
-> +++ b/arch/loongarch/include/uapi/asm/unistd.h
-> @@ -0,0 +1,7 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#define __ARCH_WANT_NEW_STAT
+> + */
+> +#ifndef _UAPI_ASM_SIGINFO_H
+> +#define _UAPI_ASM_SIGINFO_H
+> +
+> +#if _LOONGARCH_SZLONG == 32
+> +#define __ARCH_SI_PREAMBLE_SIZE (3 * sizeof(int))
+> +#else
+> +#define __ARCH_SI_PREAMBLE_SIZE (4 * sizeof(int))
+> +#endif
 
-Why do you need newstat? I think now that we have statx and the libc
-emulation code on top of it, there is probably no need to support both
-on the kernel side.
+These are no longer used.
 
-> +#define __ARCH_WANT_SYS_CLONE
-> +#define __ARCH_WANT_SYS_CLONE3
+> +
+> +#ifndef _NSIG
+> +#define _NSIG          128
+> +#endif
 
-Similarly, if you have clone3, you should not need clone.
+Everything else uses 64 here, except for MIPS.
 
-> +#define __ARCH_WANT_SET_GET_RLIMIT
 
-And here for prlimit64
+> +#define _NSIG_BPW      __BITS_PER_LONG
+> +#define _NSIG_WORDS    (_NSIG / _NSIG_BPW)
+> +
+> +#define SIGHUP          1
+> +#define SIGINT          2
+> +#define SIGQUIT                 3
+> +#define SIGILL          4
+> +#define SIGTRAP                 5
+> +#define SIGABRT                 6
+> +#define SIGIOT          6
+> +#define SIGBUS          7
+> +#define SIGFPE          8
+> +#define SIGKILL                 9
+> +#define SIGUSR1                10
+> +#define SIGSEGV                11
+> +#define SIGUSR2                12
+> +#define SIGPIPE                13
+> +#define SIGALRM                14
+> +#define SIGTERM                15
+> +#define SIGSTKFLT      16
+> +#define SIGCHLD                17
+> +#define SIGCONT                18
+> +#define SIGSTOP                19
+> +#define SIGTSTP                20
+> +#define SIGTTIN                21
+> +#define SIGTTOU                22
+> +#define SIGURG         23
+> +#define SIGXCPU                24
+> +#define SIGXFSZ                25
+> +#define SIGVTALRM      26
+> +#define SIGPROF                27
+> +#define SIGWINCH       28
+> +#define SIGIO          29
+> +#define SIGPOLL                SIGIO
+> +#define SIGPWR         30
+> +#define SIGSYS         31
+> +#define        SIGUNUSED       31
 
-> +void *sys_call_table[__NR_syscalls] = {
-> +       [0 ... __NR_syscalls - 1] = sys_ni_syscall,
-> +#include <asm/unistd.h>
-> +       __SYSCALL(__NR_clone, __sys_clone)
-> +       __SYSCALL(__NR_clone3, __sys_clone3)
-> +};
+Please try to use the asm-generic version of these definitions instead
+copying them. If you need something different, you can add an #ifdef there,
+and then we can discuss whether the difference makes sense.
 
-I would suggest expressing this as
-
-#defined sys_clone3 __sys_clone3
-
-instead of overriding the other entries.
-
-          Arnd
+        Arnd
