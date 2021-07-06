@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 285163BC965
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889543BC966
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jul 2021 12:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbhGFKUw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 06:20:52 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:49895 "EHLO
+        id S231282AbhGFKVA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 06:21:00 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:58539 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbhGFKUw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 06:20:52 -0400
-Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MDQqk-1lrKDa2Dzy-00AXla for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021
- 12:18:12 +0200
-Received: by mail-wm1-f54.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso1303645wmh.4
-        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:18:12 -0700 (PDT)
-X-Gm-Message-State: AOAM533QVXF8urQnd8IvVNCVRzdiXi0YSk9hujXvxQfSQ1mPcLMCKw3/
-        KP6FjxAkZnoCm5Wa6ZQD2ospdjzqV0OIZHvpQcs=
-X-Google-Smtp-Source: ABdhPJyajd3pZWSIUUyt0K/ZfOS8tTwR1+lfvBr1Mxxy0fi9pY3uLUOgj/OC+APfWsjnTG5yKCizfhccr/Np4QHkBRk=
-X-Received: by 2002:a1c:c90f:: with SMTP id f15mr3968165wmb.142.1625566692239;
- Tue, 06 Jul 2021 03:18:12 -0700 (PDT)
+        with ESMTP id S231216AbhGFKVA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 06:21:00 -0400
+Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mna0x-1lHzCb4BRF-00jbJz for <linux-arch@vger.kernel.org>; Tue, 06 Jul
+ 2021 12:18:21 +0200
+Received: by mail-wm1-f53.google.com with SMTP id j39-20020a05600c1c27b029020028e48b8fso1337129wms.0
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 03:18:20 -0700 (PDT)
+X-Gm-Message-State: AOAM5310u0Ifd9fPQxJVqLsdu1iHCts9oWj5ziN1ZcDDbg1zw+EOLAN+
+        kpvXBRO+38MZhmMIyj5G6F26s2n4PQzFTtXRWIA=
+X-Google-Smtp-Source: ABdhPJy3PAPMlhJaaFOH+rBGp4Qg6DocjuhXRxvZxuuRK2egXavJUwFC+M+bh8iq+33R5NrVbjHExEkVd19Pw6y/amM=
+X-Received: by 2002:a05:600c:4101:: with SMTP id j1mr3967081wmi.84.1625566700718;
+ Tue, 06 Jul 2021 03:18:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-18-chenhuacai@loongson.cn>
-In-Reply-To: <20210706041820.1536502-18-chenhuacai@loongson.cn>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <20210706041820.1536502-19-chenhuacai@loongson.cn>
+In-Reply-To: <20210706041820.1536502-19-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 6 Jul 2021 12:17:56 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3Do4NModPfJkZTbOqgXedVjJfqwWMyK0FjFAv2v6RjhQ@mail.gmail.com>
-Message-ID: <CAK8P3a3Do4NModPfJkZTbOqgXedVjJfqwWMyK0FjFAv2v6RjhQ@mail.gmail.com>
-Subject: Re: [PATCH 17/19] LoongArch: Add multi-processor (SMP) support
+Date:   Tue, 6 Jul 2021 12:18:05 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2444qoaDJFvp-t2EzrZ2W6T-m_DPJbDAdJeSB-auV8gA@mail.gmail.com>
+Message-ID: <CAK8P3a2444qoaDJFvp-t2EzrZ2W6T-m_DPJbDAdJeSB-auV8gA@mail.gmail.com>
+Subject: Re: [PATCH 18/19] LoongArch: Add Non-Uniform Memory Access (NUMA) support
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -42,56 +42,56 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:4PybfqygAlvFOpGQv5FHwMpf12YE5HrVKZmZdptIjPl2PsSUBDy
- kSbl9LONqmvqNueTmyCIgkhD8RVtQhAdLratWrH4/PNVsravyvtiNVYhjE5gXBMIqUkUB8Z
- dLAmQwxbOWa/61aoqmZNewaKXCo98Ef/jEAgQ67huvqefySNEjRLlJx/SQ52IMFoQ17wIFD
- 1PWXQBo3/LDvwYyIj5jWg==
+X-Provags-ID: V03:K1:s6C/4yDjgFIhzPp96V2o9xMG/HdurkENkJ2iSLItmGsgmsNsiAK
+ NhAY4XnE5wBif8lg1SkN3TuJzokeuUZBkTF6Fy4XDHYBekfn49xuVEdTNO19uBh4iAnKBm/
+ yPJ9lrFk0YT9xY8ur3b2qs95ggKO7Tv0qaf9O3692a5RAStS0AZY863XmrYeInlkiGsM9ZN
+ vKDRrMe/KCQb3gkUD3ZyQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4ijKHfIspEA=:QO53gO6Vm0dofysygBUDIy
- 1ZkH1VloK8n5OvkLDj22HNCgriMDT4zG0EPRU7WaanW6gCgDuZue8NpPaedbgMPE2qYeUirTL
- gu0sN0nzAYFSQum5bkDDUlHYaLNQP0PBQShe34Ly8SVtF60qBMGPWGJMQy3NutefzqnjwZwkX
- n8ASf+Lib0UW0IWyoAqIWljPOcmxgeo/01NH2NEVTA+YtqEK1AOR0T8mzftlihqeC7BuWG6Mf
- dNnV7YG7/5rY/nrXvK3Ovc5lHoFRSzuQ4GiajSc/bcKXhQtkW0AqQcRIhLM/TBC1akcxPHLF8
- O2a1+NaSVodzSAd+bsIBgItKl6rL8aMBSTgEsBtYz39GT7FEgdsRdtwQV/FQe9/WZD0g1FVWs
- GMkj68RKidJRKPXQrWPyZvG4vnz3G/uDreQyqRLCtNqWqSA9Fa7bdtI6EgeCEGf/N3EbFQ6zW
- 32TrdYLLt5Uc5UG+7abuvWrxEzk235U/T5wrP2LOd7eumcO7kSMVm2KJPP5TLhAQ+ViYwjQom
- eezxbi+vu81JNMYyYpI4tiBwxSmsZ11tFwU9FQhyDOmbSrWyWE1Jed/dXzTFcXIvCbHf6ysrD
- NPwG8AuixVU+Ggiqe7l9UlJY/TG7sm9pjEtHqW1z+664NBUwBQSfrSt1i26oWuGTLlvMH5f8U
- zhQgx98hI0dBusk8Rl1MTDbqWfqQ4nYh9E1IYoS9l3GO8oCs00oVbhMe69KVTRxt0eZwlo0Ph
- 7Jrq1Ax5p0EkFB7FCPpFr1PF/kzWvCPV133oap/4eKxh/MLn+oxWuMdd6AGZZyf+WrkseGFWi
- 8FbebZAOf09uAfMfLHfsClmGSeb79RyxGBGMxsLaR6GdcjFLA+8CwLrKs4ssP30JayQJ+xHts
- bPJX+XcydUfjj3nDO723q5NVJy/1j0BSD9RyO/cN14aMz5mAhIseLlGOoTmXXFxhpRQHGFIrJ
- OgJXz+YF0esR4N2wjXkuJGmmfogVtlmJxSYOJRQT8WQTElaisXY1v
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aOB/j8PnNqQ=:DgB1mFSgw0ucdh80J5Zumj
+ rQwCiAvboTXPwyGSkcgmoyarvG+UccZl2FQEAeX8dnfUUYWUyVRJ+521yhwmXU5noqM0Sevr9
+ GRR/5DQJKPbenKomnUfCcwcQ1f4DfltcWqJkwP4PAnlVBkgRJ19rmgZ9zDb3eu4ZwqWCjYdnj
+ 6NVOz6cAOnhjiNJnayURJ5XJG/ueQN4FjIw65N0J1piTG8vXOYohklw1OuRcSIvhtThsZStHh
+ YMv3Z4D6LkuLeF5RsbNt98l8DThVxeo0rYf+eV+If05OIAO+EYkYw0xycoms1ILqIiyxJ3SeA
+ LzKmPQNS7c6zay4NaflvBZXwNMZacZZK8Z/xhCkTYcu9tTQxUSdtNLEKkK1zSk8921vaQYtpl
+ jwuhQsxRf4zWG8bfgq50UnR77Jj5F+9eDZnIKwls2YC2MpJcevnlujg8aD49vgLXX23fPlivM
+ I9P4CmtLHhz0xEI8ccJJh1fuPjxNnSHZVn2PJCOywgGZq5jqNtlYJW0oEWWVlmQo2qy6nw0UL
+ U7L//cEyebIg261a3gN2QjNXcbqKdlLosXk2kIglCpLKevKYTbmTV4WWXeDiWg9501pMvffkf
+ ApSk7x24zg1Qf8+Ed9ETdYJSltJMtTAhhhJKlod/d6CAz/V3wBdytP1UuWeedIKufdF5nNh1I
+ V25oj+6DNoqStMDrfMMgFM6utW3JepRga4UqXtjN7cVi6NOtP+5OaS3Q8KEy/JoJhdYWtWWi7
+ nVC/bRRG/M02AnO+OdCT7vj8XkinwskdFtzExPSOWFSLMsI4/W07hHy6VPiaO6Jr/LV/HgxiC
+ aowxJtx/GfIU51US1D1owPqfQjiwUZQbioVc6gBQ82ds/kwFtDtmirsXyFOQKksJV7VROmeGX
+ l8WvhMtmbzFPquG/s3QJu9zes+XFmcfx03oAKG36MKSgs79r3nx3GP8iilfEGLu9/xkWG43vJ
+ SfQAyT2/nJq2yaowo7YiZWYhp6uB5Zs5XT5r4qt2cekaav/Y3z7Qg
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
 
-> +const struct plat_smp_ops loongson3_smp_ops = {
-> +       .send_ipi_single = loongson3_send_ipi_single,
-> +       .send_ipi_mask = loongson3_send_ipi_mask,
-> +       .smp_setup = loongson3_smp_setup,
-> +       .prepare_cpus = loongson3_prepare_cpus,
-> +       .boot_secondary = loongson3_boot_secondary,
-> +       .init_secondary = loongson3_init_secondary,
-> +       .smp_finish = loongson3_smp_finish,
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +       .cpu_disable = loongson3_cpu_disable,
-> +       .cpu_die = loongson3_cpu_die,
-> +#endif
-> +};
+> +#ifdef CONFIG_SWIOTLB
+> +/*
+> + * Optional platform hook to call swiotlb_setup().
+> + */
+> +extern void plat_swiotlb_setup(void);
+> +
+> +#else
+> +
+> +static inline void plat_swiotlb_setup(void) {}
+> +
+> +#endif /* CONFIG_SWIOTLB */
 
-I would hope that these functions can be used across platforms without
-an abstraction
-layer in-between. Are these not all part of the either the CPU
-architecture definition or
-the firmware interface?
+I guess this accidentally slipped into the wrong patch? It doesn't appear to be
+NUMA related.
 
-Do you even expect to see non-SMP systems deployed widely enough that
-SMP support
-must be optional? On arch/arm64 we ended up always building SMP support into
-the kernel because practically everyone wants it.
+> diff --git a/arch/loongarch/loongson64/dma.c b/arch/loongarch/loongson64/dma.c
+> new file mode 100644
+> index 000000000000..f259f70c75fa
+> --- /dev/null
+> +++ b/arch/loongarch/loongson64/dma.c
+> @@ -0,0 +1,59 @@
+> +// SPDX-License-Identifier: GPL-2.0
+
+Same for this file.
 
 
-      Arnd
+         Arnd
