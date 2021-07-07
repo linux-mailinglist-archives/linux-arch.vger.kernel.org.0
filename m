@@ -2,214 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA763BDFFC
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Jul 2021 02:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28A53BE143
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Jul 2021 05:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbhGGAD3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Jul 2021 20:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
+        id S230003AbhGGDHp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Jul 2021 23:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbhGGAD3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 20:03:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91293C061574
-        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 17:00:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=c5t3rh7LynbnlM1uMCXYtKJ3QWdrf1PdPq9CVzO0MBI=; b=IC+AQE91GwaZVIvefNmGVpiA3k
-        y9Zg7Nie3+kN1VZWVIZgTiMGo4Jvs/e9ALcIbgnRYuH7PWSfxdY2FOZSVxHlARXzKcAhsYtjSHsGk
-        SHLE+4ZZhObwvfB38ufx/Iz0AiB7QHPjYN5PLf/dLrvnQBCGnt+lxB81kEYo8P4/EJ9W2VghTqW1k
-        LNZzW9LY2nQkmIE6HOm08mpFWUgKX5uFXednfHmY4YyKEmNweR4v5buIWcvzNfoIr4Hs9Y7tqfa0+
-        HOurCniKvj+RWqfWnLQHckoI0FVIgIjN3Ubr9LOLcEhJhZaBsCppr0mcwt3Vqe6Nl/BJULuDnBnXp
-        98gM9+3g==;
-Received: from [2601:1c0:6280:3f0::aefb]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m0uza-00D46q-7J; Wed, 07 Jul 2021 00:00:42 +0000
-Subject: Re: [PATCH 03/19] LoongArch: Add build infrastructure
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S229894AbhGGDHo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Jul 2021 23:07:44 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCDBC06175F
+        for <linux-arch@vger.kernel.org>; Tue,  6 Jul 2021 20:05:04 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id h6so1229780iok.6
+        for <linux-arch@vger.kernel.org>; Tue, 06 Jul 2021 20:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tNh614jocMWheD92rk85riRpsMx3rhGNPpPR4yP/ZDs=;
+        b=QfoRhS9jNcCwnzNT6WDXEGD4gMtlpEjXUaN4Os4kBwls/8rCUozx9K71C++V0p8HJq
+         YEbgjX0Ph7fnprjooFPd65y3jpHL+J+71ycisL+EoYvUJTuqFDC921LQd85Jn8vrlSMu
+         AUJoR0Xl5ut6oNJGH56mP/WFjWfFHS/sHWMguOsiPGlD4JBLK42KLdzQsBpPmKnV/Y+B
+         hTThk0MFDs+kAk/jG3aA7+nVMjpRjWcEFlYIejVXecWSlj7uoi8rcl186/Y52ZC3B5HO
+         ozXBPYs1F06Qd+D2Tx7whxLUb+1hP4sxuPqYS3olyB+RCJ/7MJUhqB1nPWYrauojvE6b
+         uGow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tNh614jocMWheD92rk85riRpsMx3rhGNPpPR4yP/ZDs=;
+        b=iazcGCRzwhHAPx9g+bOpGbftQIaQx5zfX+E/ZlwUTNl/QMZaNDDU9ynY2xgsNm3aWQ
+         ZzF/Q56aEspzF0fkTCMmzLh9EMDLEmmWog+B/76hhQqyFmD6vigmmAoqhRGGO3fCupoD
+         hXesw6zzqZcbyxlAD4OwW3ilurNrVLmuwYyw10pMSNtIoiYPqc1fWmaxMTt07ByaD1hJ
+         urFBiSDnY7yuj5tisAWTrIpGRaLm64N8cTE1p4nDiyZmTbSnNpajI1iRpAzVpYjIHWkp
+         s8+W6t0PXwHqcCgsuIQAEyzd0oo2okofxIKQyuAxoV7eohWfwfCgSIXSRNhLPJ6vC0Hi
+         o2AQ==
+X-Gm-Message-State: AOAM533Kg/hDIaUwbFPSNCKwaYnUyN+KEKewJ7SwhsOw6afARoN0qzCQ
+        2EJhgEmgFyJTiP1lnOaUAWbNhDfzTHjhpII/lyU=
+X-Google-Smtp-Source: ABdhPJx9mPW+K19X3hkT0qR6Ph1uOTJsceY0yUvKrefJab2QY4RF6iI3SS0quR/2mT7iYQasF0x4m+owGFRDHTnhxJU=
+X-Received: by 2002:a5e:a80b:: with SMTP id c11mr18450451ioa.94.1625627103611;
+ Tue, 06 Jul 2021 20:05:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn> <CAK8P3a0o1bniPG+pocGtMGV-RVEGVJrQDLmz6SyZ-2NGcq2WnQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a0o1bniPG+pocGtMGV-RVEGVJrQDLmz6SyZ-2NGcq2WnQ@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Wed, 7 Jul 2021 11:04:51 +0800
+Message-ID: <CAAhV-H7Cq10OcQMAGCODoByy+3z7_TQv9vASH0AMt+v2dtrp9A@mail.gmail.com>
+Subject: Re: [PATCH 00/19] arch: Add basic LoongArch support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-4-chenhuacai@loongson.cn>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <00abb0cc-6a82-e4fd-c554-7cf7c039ded3@infradead.org>
-Date:   Tue, 6 Jul 2021 17:00:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210706041820.1536502-4-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Chen Zhu <zhuchen@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+Hi, Arnd,
 
-On 7/5/21 9:18 PM, Huacai Chen wrote:
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> new file mode 100644
-> index 000000000000..7d5889a264c6
-> --- /dev/null
-> +++ b/arch/loongarch/Kconfig
-> @@ -0,0 +1,403 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +config LOONGARCH
-> +	bool
-> +	default y
+On Tue, Jul 6, 2021 at 6:12 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >
+> > LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> > LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> > version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> > boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> > are already added in the next revision of ACPI Specification (current
+> > revision is 6.4).
+> >
+> > This patchset is adding basic LoongArch support in mainline kernel, we
+> > can see a complete snapshot here:
+> > https://github.com/loongson/linux/tree/loongarch-next
+> >
+> > Cross-compile tool chain to build kernel:
+> > https://github.com/loongson/build-tools/releases
+> >
+> > Loongson and LoongArch documentations:
+> > https://github.com/loongson/LoongArch-Documentation
+> >
+> > LoongArch-specific interrupt controllers:
+> > https://mantis.uefi.org/mantis/view.php?id=2203
+>
+> Thanks a lot for your submission, I've been waiting for this, and have just
+> completed an initial quick review, will send out the individual replies in a
+> bit.
+Thanks for your reply. I will reply to other mails with some delays
+because I need some time to absorb so much information.
 
-Some arch/ maintainers prefer to keep this list in alphabetical order...
-It may make it easier to find entries -- prevent duplicates from being added.
+>
+> I have a few high-level comments about things that need to be improved
+> before merging:
+>
+> 1. Copyright statements: I can see that you copied a lot of code from arch/mips,
+>  and then a bit from arch/arm64 and possibly arch/riscv/, but every file just
+>  lists loongson as the copyright holder and one or more employees as authors.
+>  This clearly has to be resolved by listing the original authors as well.
+As you know, old Loongson processors are based on MIPS, so we are
+familiar with MIPS, from hardware designer to software developer. This
+is the root cause why we copy so much code from MIPS, and LoongArch
+actually has many similarities as MIPS. But anyway, it is our fault to
+remove the copyright holders, so this will be resolved, of course.
 
-> +	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
-> +	select ARCH_BINFMT_ELF_STATE
-> +	select ARCH_DISCARD_MEMBLOCK
-> +	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
-> +	select ARCH_HAS_ELF_RANDOMIZE
-> +	select ARCH_HAS_PTE_SPECIAL if !32BIT
-> +	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
-> +	select ARCH_INLINE_READ_LOCK if !PREEMPTION
-> +	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
-> +	select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
-> +	select ARCH_INLINE_READ_LOCK_IRQSAVE if !PREEMPTION
-> +	select ARCH_INLINE_READ_UNLOCK if !PREEMPTION
-> +	select ARCH_INLINE_READ_UNLOCK_BH if !PREEMPTION
-> +	select ARCH_INLINE_READ_UNLOCK_IRQ if !PREEMPTION
-> +	select ARCH_INLINE_READ_UNLOCK_IRQRESTORE if !PREEMPTION
-> +	select ARCH_INLINE_WRITE_LOCK if !PREEMPTION
-> +	select ARCH_INLINE_WRITE_LOCK_BH if !PREEMPTION
-> +	select ARCH_INLINE_WRITE_LOCK_IRQ if !PREEMPTION
-> +	select ARCH_INLINE_WRITE_LOCK_IRQSAVE if !PREEMPTION
-> +	select ARCH_INLINE_WRITE_UNLOCK if !PREEMPTION
-> +	select ARCH_INLINE_WRITE_UNLOCK_BH if !PREEMPTION
-> +	select ARCH_INLINE_WRITE_UNLOCK_IRQ if !PREEMPTION
-> +	select ARCH_INLINE_WRITE_UNLOCK_IRQRESTORE if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_TRYLOCK if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_TRYLOCK_BH if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_LOCK if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_LOCK_BH if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_LOCK_IRQ if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_LOCK_IRQSAVE if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_UNLOCK if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_UNLOCK_BH if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
-> +	select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
-> +	select ARCH_SUPPORTS_ACPI
-> +	select ARCH_SUPPORTS_HUGETLBFS
-> +	select ARCH_USE_BUILTIN_BSWAP
-> +	select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
-> +	select ARCH_USE_QUEUED_RWLOCKS
-> +	select ARCH_USE_QUEUED_SPINLOCKS
-> +	select BUILDTIME_TABLE_SORT
-> +	select GENERIC_ATOMIC64 if !64BIT
-> +	select GENERIC_CLOCKEVENTS
-> +	select GENERIC_CMOS_UPDATE
-> +	select GENERIC_CPU_AUTOPROBE
-> +	select GENERIC_GETTIMEOFDAY
-> +	select GENERIC_IOMAP
-> +	select GENERIC_IRQ_PROBE
-> +	select GENERIC_IRQ_SHOW
-> +	select GENERIC_LIB_ASHLDI3
-> +	select GENERIC_LIB_ASHRDI3
-> +	select GENERIC_LIB_CMPDI2
-> +	select GENERIC_LIB_LSHRDI3
-> +	select GENERIC_LIB_UCMPDI2
-> +	select GENERIC_TIME_VSYSCALL
-> +	select HANDLE_DOMAIN_IRQ
-> +	select HAVE_ARCH_AUDITSYSCALL
-> +	select HAVE_ARCH_COMPILER_H
-> +	select HAVE_ARCH_MMAP_RND_BITS if MMU
-> +	select HAVE_ARCH_SECCOMP_FILTER
-> +	select HAVE_ARCH_TRACEHOOK
-> +	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
-> +	select HAVE_ASM_MODVERSIONS
-> +	select HAVE_CBPF_JIT if !64BIT
-> +	select HAVE_EBPF_JIT if 64BIT
-> +	select HAVE_CONTEXT_TRACKING
-> +	select HAVE_COPY_THREAD_TLS
-> +	select HAVE_DEBUG_KMEMLEAK
-> +	select HAVE_DEBUG_STACKOVERFLOW
-> +	select HAVE_DMA_CONTIGUOUS
-> +	select HAVE_EXIT_THREAD
-> +	select HAVE_FAST_GUP
-> +	select HAVE_FUTEX_CMPXCHG if FUTEX
-> +	select HAVE_GENERIC_VDSO
-> +	select HAVE_IDE
-> +	select HAVE_IOREMAP_PROT
-> +	select HAVE_IRQ_EXIT_ON_IRQ_STACK
-> +	select HAVE_IRQ_TIME_ACCOUNTING
-> +	select HAVE_MEMBLOCK
-> +	select HAVE_MEMBLOCK_NODE_MAP
-> +	select HAVE_MOD_ARCH_SPECIFIC
-> +	select HAVE_NMI
-> +	select HAVE_PERF_EVENTS
-> +	select HAVE_REGS_AND_STACK_ACCESS_API
-> +	select HAVE_RSEQ
-> +	select HAVE_SYSCALL_TRACEPOINTS
-> +	select HAVE_VIRT_CPU_ACCOUNTING_GEN if 64BIT
-> +	select IRQ_FORCED_THREADING
-> +	select MODULES_USE_ELF_RELA if MODULES && 64BIT
-> +	select MODULES_USE_ELF_REL if MODULES
-> +	select PCI_DOMAINS if PCI
-> +	select PCI_MSI_ARCH_FALLBACKS
-> +	select PERF_USE_VMALLOC
-> +	select RTC_LIB
-> +	select SYSCTL_EXCEPTION_TRACE
-> +	select VIRT_TO_BUS
-> +
-> +menu "Machine selection"
-> +
-> +choice
-> +	prompt "System type"
-> +	default MACH_LOONGSON64
-> +
-> +config MACH_LOONGSON64
+>
+> 2. Reducing the amount of copied code: my impression is that the bits you
+>    wrote yourself are generally of higher quality than the bits you copied from
+>    mips, usually because those have grown over a long time to accommodate
+>    cases you should not worry about. In cases where there was no generic
+>    implementation, we should try to come up with a version that can be shared
+>    instead of adding another copy.
+We know MIPS is out of date, but our knowledge is not enough, so we
+are not able to find the best way always, and the MIPS code "just
+works". This will be improved in future versions.
 
+>
+> 3. 32-bit support: There are small bits of code for 32-bit support everywhere
+>    throughout the code base, but there is also code that does not look like
+>    it would work in that configuration. I would suggest you split out all 32-bit
+>    code into a separate patch, the way you have done for SMP and NUMA
+>    support. That way it can be reviewed separately, or deferred until when
+>    you actually add support for a 32-bit platform. Please also clarify which
+>    modes you plan to support: should every 64-bit kernel be able to run
+>    LA32R and LA32S user space binaries, or do you require running the same
+>    instruction set in both kernel and user space as RISC-V does?
+>    Do you plan to have MIPS N32 style user space on 64-bit kernels?
+No N32 style user space in our current plan, but the 64-bit kernel is
+supposed to run 32-bit applications in the near future.
 
-[...]
+>
+> 4. Toolchain sources: I see you only have binaries for an older gcc-8.3
+>     release and no sources so far. I assume you are already busy porting
+>     the internal patches to the latest gcc and will post that soon, but my
+>     feeling is that the kernel port should not get merged until we have a
+>     confirmation from the toolchain maintainers that they plan to merge
+>     support for their following release. We should however make sure that
+>     your kernel port is completely reviewed and can just get merged once
+>     we get there.
+Toolchain is maintained by other developers, it will be open source of
+course, I hope it won't be too late. :)
 
-> +choice
-> +	prompt "Kernel page size"
-> +	default PAGE_SIZE_16KB
-> +
-> +config PAGE_SIZE_4KB
-> +	bool "4kB"
-> +	help
-> +	  This option select the standard 4kB Linux page size.
+>
+> 5. Platform support: You have copied the underlying logic from arch/mips,
+>     but that still uses a method where most platforms (not the new
+>     "generic" version) are mutually exclusive. Since you only support
+>     one platform right now, it would be best to just simplify it to the point
+>     where no platform specific code is needed in arch/loongarch/ and
+>     it just works. If you add 32-bit support later on, that obviously requires
+>     making a choice between two or three incompatible options.
+I will improve it, and I will need some help for this.
 
-	              selects
-
-> +
-> +config PAGE_SIZE_16KB
-> +	bool "16kB"
-> +	help
-> +	  This option select the standard 16kB Linux page size.
-
-	              selects
-
-> +
-> +config PAGE_SIZE_64KB
-> +	bool "64kB"
-> +	help
-> +	  This option select the standard 64kB Linux page size.
-
-	              selects
-
-> +
-> +endchoice
-
-
--- 
-~Randy
-
+Huacai
+>
+>         Arnd
