@@ -2,67 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CEA3BE827
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Jul 2021 14:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15803BE91C
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Jul 2021 15:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbhGGMpn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Jul 2021 08:45:43 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:41946 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbhGGMpn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Jul 2021 08:45:43 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 0D07D223DD;
-        Wed,  7 Jul 2021 12:43:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1625661782; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7e/V26zjWSQZD4CXv1EiNsTo6/Z5qJ2tHTwoPa+mcvg=;
-        b=ZuF0O3JFWlK9/1PLIueOIhY5LpS2HaHUtldnpEObkRncg95v7rIPLnX8FeGZectYtbqDfA
-        uxhgxdtZ8ybdLTbXqwHpFpzTziz6kiYy0Q6skdJtIxmM40C2zh51laJ9BlStlDtou85yA2
-        e781mqV+jpmkoP0xxVwFPsJeu/QXS4g=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id EAF01A3C75;
-        Wed,  7 Jul 2021 12:43:00 +0000 (UTC)
-Date:   Wed, 7 Jul 2021 14:43:00 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Subject: Re: [PATCH 2/9] kallsyms: Fix address-checks for kernel related range
-Message-ID: <YOWhVPvglf6FTZgD@alley>
-References: <20210626073439.150586-1-wangkefeng.wang@huawei.com>
- <20210626073439.150586-3-wangkefeng.wang@huawei.com>
+        id S231681AbhGGN7Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Jul 2021 09:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231472AbhGGN7Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Jul 2021 09:59:25 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA37C061574
+        for <linux-arch@vger.kernel.org>; Wed,  7 Jul 2021 06:56:44 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id d9-20020a17090ae289b0290172f971883bso3173805pjz.1
+        for <linux-arch@vger.kernel.org>; Wed, 07 Jul 2021 06:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=7fv4uLttZwhDSsC+EExeOU5dzSADAjT7ErLk7BLY1tw=;
+        b=btgIhUwz6FzHYUD0mLFwLra0cEdNzy8tVLR42Sj34JUGlRW0WA+9QGnpRup6PFBSUG
+         1uPFJkqT8xApcTEHxiXm22oEHL681FlwPVopXtYwpHu15W46NVAm1bxcevV7jnqwtPKd
+         DxyDKvB1FA+XGCbEkJlPXkFRHp+9bEKZ4CohB5ixa+OCRFWZRDwM/E9FNpDzK26HIIhu
+         z95WWVWDPv4lnVNPMB79fPt/Uunmd6jIQ7fQA9nRUQKVato7aTAUYG7ycEYrEDhxWAcc
+         DCvw3xGoo7drIiG9IHJGdKDT/3XlK+R7cjSLeg7e29H5FFypRbZ9R9APyq9nubKEiAJb
+         PTsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=7fv4uLttZwhDSsC+EExeOU5dzSADAjT7ErLk7BLY1tw=;
+        b=NS3R+TXFmgf4tCQQYEuvPLCiGbj8cSYLChlaoQxgjidYLx7C9eEz0q7YWHTNB0PCvp
+         eyJg+C3DrllilSzyOMt+6xnaU/TIG4Sm9sphFKEZk4moPP7vpzrPY5l1AdmOfTunQc20
+         snLF/kyj8RfI3Sj9czQkhqirKpxmCDYVHvQYsE2lWC1RQo+XRnKIC6ZGkKuBUrxRhUj5
+         S1GSEdrBtJJtwLyICl6HtgdWDMM300IiXcBCbOe3Mj8Sxwsqc/Mn8kVYLZLS1Uxzb3q5
+         bs2Y93H6aXlvRd4GI7V7fMr1dUJtO9dVdnzQDpDsMZde6RqbWiINvSJf+8sRBpaNpML4
+         MRPA==
+X-Gm-Message-State: AOAM5318hT1tp9GownawigcQo7ErSCgBgGy7rw0VAzyZbYnZsxMhIN7B
+        GUlukBy+aGe62BEvfSysTZk=
+X-Google-Smtp-Source: ABdhPJzJYjw5AaA6VzAzi+7p+GdXb/YH8brisEJIVk3hrAZN6YAMgwWEfS+kf3WxjxAsNvf5oHHG+g==
+X-Received: by 2002:a17:90a:ee8e:: with SMTP id i14mr6175408pjz.29.1625666204064;
+        Wed, 07 Jul 2021 06:56:44 -0700 (PDT)
+Received: from localhost (14-203-186-173.tpgi.com.au. [14.203.186.173])
+        by smtp.gmail.com with ESMTPSA id q5sm13398648pgt.46.2021.07.07.06.56.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jul 2021 06:56:43 -0700 (PDT)
+Date:   Wed, 07 Jul 2021 23:56:37 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 06/19] LoongArch: Add exception/interrupt handling
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     David Airlie <airlied@linux.ie>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+        <20210706041820.1536502-7-chenhuacai@loongson.cn>
+        <YOQ5UBa0xYf7kAjg@hirez.programming.kicks-ass.net>
+In-Reply-To: <YOQ5UBa0xYf7kAjg@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210626073439.150586-3-wangkefeng.wang@huawei.com>
+Message-Id: <1625665981.7hbs7yesxx.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat 2021-06-26 15:34:32, Kefeng Wang wrote:
-> The is_kernel_inittext/is_kernel_text/is_kernel function should not
-> include the end address(the labels _einittext, _etext and _end) when
-> check the address range.
+Excerpts from Peter Zijlstra's message of July 6, 2021 9:06 pm:
+> On Tue, Jul 06, 2021 at 12:18:07PM +0800, Huacai Chen wrote:
+>> +	.align	5	/* 32 byte rollback region */
+>> +SYM_FUNC_START(__arch_cpu_idle)
+>> +	/* start of rollback region */
+>> +	LONG_L	t0, tp, TI_FLAGS
+>> +	nop
+>> +	andi	t0, t0, _TIF_NEED_RESCHED
+>> +	bnez	t0, 1f
+>> +	nop
+>> +	nop
+>> +	nop
+>> +	idle	0
+>> +	/* end of rollback region */
+>> +1:
+>> +	jirl	zero, ra, 0
+>> +SYM_FUNC_END(__arch_cpu_idle)
+>=20
+>> +/*
+>> + * Common Vectored Interrupt
+>> + * Complete the register saves and invoke the do_vi() handler
+>> + */
+>> +SYM_FUNC_START(except_vec_vi_handler)
+>> +	la	t1, __arch_cpu_idle
+>> +	LONG_L  t0, sp, PT_EPC
+>> +	/* 32 byte rollback region */
+>> +	ori	t0, t0, 0x1f
+>> +	xori	t0, t0, 0x1f
+>> +	bne	t0, t1, 1f
+>> +	LONG_S  t0, sp, PT_EPC
+>=20
+> Seriously, you're having your interrupt handler recover from the idle
+> race? On a *new* architecture?
 
-Great catch!
+It's heavily derived from MIPS (does that make the wholesale replacement=20
+of arch/mips copyright headers a bit questionable?).
 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Fixes: 04b8eb7a4ccd ("symbol lookup: introduce dereference_symbol_descriptor()")
+I don't think it's such a bad trick though -- restartable sequences=20
+before they were cool. It can let you save an irq disable in some
+cases (depending on the arch of course).
 
-This commit just moved the code from kernel/kallsyms.c. It was broken
-even before the git history ;-)
-
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Best Regards,
-Petr
+Thanks,
+Nick
