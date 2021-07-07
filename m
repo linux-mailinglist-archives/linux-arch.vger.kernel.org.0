@@ -2,57 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2153BE358
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Jul 2021 09:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0EE03BE38C
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Jul 2021 09:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbhGGHDW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Jul 2021 03:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbhGGHDW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Jul 2021 03:03:22 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA44C061574
-        for <linux-arch@vger.kernel.org>; Wed,  7 Jul 2021 00:00:42 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id o8so1286507ilf.12
-        for <linux-arch@vger.kernel.org>; Wed, 07 Jul 2021 00:00:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5mpTLJzPwrt1pWZbQLdLXK5Oe5hgFV4L0J4qUsVqnFI=;
-        b=NievUoylqlG5lTwOQdpCPXre00MIHKNGrUsMgvaKaiXSrJexiVaBKBHlMdb6HDHIoN
-         UXBib/jcZYOTpooquiakNjWtAdSDUMie2ETRvqlSOJ7cTjX5LuEIQ6gz2GEWhxCcZUfb
-         CXDcF68Vdgr43UoMpCSQJ0NiBcl58In4ehICx+aFeRRM8iWdP61Nb/Z3PTJhKenJtjrc
-         hKbXkgOor3FfzrBsDDabJuK7YP7UhWEcJriglsT/4L3+mAyPEXSxicAvSd0MkFmlFEl/
-         xVr9WGR3r1DeRszsY9fTKZZEXipEPGQR48/SkdiNvfVwC9xWtvbM9A3Q3eRvKtJF/uiS
-         B+iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5mpTLJzPwrt1pWZbQLdLXK5Oe5hgFV4L0J4qUsVqnFI=;
-        b=UeFJ77Jq0k9RVearZM5OYdoODKScNLf+RrVI6/XuwJnQqKlyp6q78XxC/yh8dX/orn
-         G4GgY1/SrejuCh7HTdS1bHEpf/ta5Y1WQ1mOBV8GifWbuPd5SKmkifEg72AB/Udl/5cz
-         xdUUekedGwXLZ7LqKtamOgVtOJUfHVAwuAo5KsbqIN8mvK2QmLrgc8P+ZVcQSDKwYHbD
-         NzG1GR/iUhrqLDze7vmQ5B7TcZLcesk3+hK6mWs6og8LOW+jzwI+A6hhAMaM0LT1o33f
-         h8239DsgM86CI4ZOLp9h8e00Nq+SpsttI+dW3dlITRhobHGF9UYap1giTHXWbJg/QZe8
-         0Qwg==
-X-Gm-Message-State: AOAM533mXKRWUCMs8wrVk+z/WZUCeuftnC9WqBSXw5nFCbVbs53VvIQw
-        S3jCAXHjOhSOHr+HqrmCHCSmnro5b39tee8VSes=
-X-Google-Smtp-Source: ABdhPJxC4gJdMgnMrUR7LvINYtg5PJq+geSPmUVbY2xAeJFcKbFnM2BnaVyhtTRo4byxHEzEQDoKLSfilrMQ2qAdO2w=
-X-Received: by 2002:a92:a00e:: with SMTP id e14mr17350998ili.126.1625641241504;
- Wed, 07 Jul 2021 00:00:41 -0700 (PDT)
+        id S230327AbhGGHbF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Jul 2021 03:31:05 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:41033 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230341AbhGGHbF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Jul 2021 03:31:05 -0400
+Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mgw7n-1lXBGs2lWn-00hNow for <linux-arch@vger.kernel.org>; Wed, 07 Jul
+ 2021 09:28:23 +0200
+Received: by mail-wr1-f41.google.com with SMTP id d2so1908805wrn.0
+        for <linux-arch@vger.kernel.org>; Wed, 07 Jul 2021 00:28:23 -0700 (PDT)
+X-Gm-Message-State: AOAM533nE4fu3ZONZhLoiu25VvzGBwlOn/Bvpcl+Dcjj0fNCU3nsvfRk
+        XDXcWFFq5k+icz5qMXw7235S/hoCud8RMmGnjEo=
+X-Google-Smtp-Source: ABdhPJxsUgAH1CkTFj6ejnQ02/kmlaCxj4lV4bBqNGUcrcq+j/so4Py3s172LjsDh6Y5SDW29pBef79uEBiTS8wZuRI=
+X-Received: by 2002:a5d:6485:: with SMTP id o5mr27139936wri.286.1625642903292;
+ Wed, 07 Jul 2021 00:28:23 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-10-chenhuacai@loongson.cn> <CAK8P3a0n+HcPhevh4ifNMmsv+MUtGn1wky-HWZpyNT1GVSq4+Q@mail.gmail.com>
- <CAAhV-H6q8Cz0bGBZo6dUESwk1wfa75TL6YH+YS1kQe9UzHB=Tg@mail.gmail.com> <CAK8P3a3E2a1PQ5+pD3sDs4vbQiwx3Z9vAQOG7akd645B86AYHg@mail.gmail.com>
-In-Reply-To: <CAK8P3a3E2a1PQ5+pD3sDs4vbQiwx3Z9vAQOG7akd645B86AYHg@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Wed, 7 Jul 2021 15:00:29 +0800
-Message-ID: <CAAhV-H5Q3iQ38-WPsxk-XPitNJfGje9=O07g4KQycPJ0ikB6Lw@mail.gmail.com>
-Subject: Re: [PATCH 09/19] LoongArch: Add system call support
-To:     Arnd Bergmann <arnd@arndb.de>
+ <CAK8P3a0o1bniPG+pocGtMGV-RVEGVJrQDLmz6SyZ-2NGcq2WnQ@mail.gmail.com> <CAAhV-H7Cq10OcQMAGCODoByy+3z7_TQv9vASH0AMt+v2dtrp9A@mail.gmail.com>
+In-Reply-To: <CAAhV-H7Cq10OcQMAGCODoByy+3z7_TQv9vASH0AMt+v2dtrp9A@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 7 Jul 2021 09:28:07 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2a8R+pMZykCP5zFCPUzRqdPiBpJuCkmQdMuzL+34DFuw@mail.gmail.com>
+Message-ID: <CAK8P3a2a8R+pMZykCP5zFCPUzRqdPiBpJuCkmQdMuzL+34DFuw@mail.gmail.com>
+Subject: Re: [PATCH 00/19] arch: Add basic LoongArch support
+To:     Huacai Chen <chenhuacai@gmail.com>
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -62,60 +41,88 @@ Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Chen Zhu <zhuchen@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:HnBpKsmiV0wDT6PtUqhqaUnTSkjAMHWrfCfrJPlUIV0ywsUR7FH
+ sWz46XiZQyPJZAqdnuwwqNVnohmdHDVjXEgs/+dD+sw1JvOpL9B4xrzgSTWtqrkRPZAAcm2
+ WD+QjfwOi5z83/Vt2+pFAyrgTQ7fyO25pMBcU8NWSbhGHLR46Yew5lN03wJXxlU1IrwuZiP
+ +9vuzoEvA4hPhzgl5fb1Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dZgP40owpaA=:tGE/cX53Dos4dfXx+Fq1Ak
+ 9w2HbZ3YdBrMiiEXGPU/WppZFgY0MlPGiFZJZcq1zOj3+DkHJgBDF23710iYTincCbjl2PueR
+ vOni+n1/tHMga9jYkXvbKOCm6g4JRZ00lnRqE/k63rS5tyiN3ZbQR3vSRkRvEt/Bw4vun0tkH
+ OpHGVQfID9WuCN5bJ52lz3iOPZrF9RVpH5zhora9ww9k5qGY/nUCqm0esFnXvnszhv8p8WiOy
+ YNKJq53teXIWpn0oao5m0jF6byUsq7YcaIB5WjDnTL1wywQDA+GzWPOOeFF6Vjnd8fzy0acH/
+ XFqoKN7zBuGxuGVrUz+hIR4UL3hMd51GA6Qh/JBwJcEK8p2FH3oKUAz3Ral/b5emjImamvHBc
+ Vi0juktFbffj6XfinkvHFI3rcL+q4aj2uiVXRz2avy09WEkrlzQ7lkjxOfDRtyKNOZ06eM5G1
+ sed9zOUcjrdnBCpWXmBiVkDg32D4V+84KFQ4AGngprKBZNcKYw7xML4uyzQQBVCIvTMNQO81E
+ itvFSWoM0U++vEmwn8nyYJUO5GSEe7umDjCSFTScXxrIZWdlw4Zc1vXJC1lMkbBBCT0lo0vTz
+ 0ZxWsQWYTZ01AiMp6xOu+MN/ZDSo9Wq1G8pMN5DQZpJxllvB2qn73aUifZOqjcrgkWC2IwH4w
+ nFdp5yyZq34pnoY1bwo8qod/OiUY/S/wHMhO0vh4Vnfl3nw951RyayRujElUHws4Aqd4eVtLN
+ O9e8cPr0C1hRZjXAnbx0MnK5z4kaqyS3SzuOa5ogKczokckk5kS6hkOZk+oxKZf91YuivaYiz
+ 1y7JqU1WruMkNcA9tTFg52Ote5HfR7zGv/b6zqmE9ObAjSU3QsP4gfvtRgNokSQbPcCo7aoxq
+ GqhjfDQadiDswXH3JuFlmgoFz5oAVinee7t4sc3+btGhXGam/kS/Xgb4TeIbhMscyiFLF2o5r
+ hOO00U+0g/2ymhcX1CQRvoaLFzvdb+qzy5SdaaG+U1qIaX4g24th6
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
+On Wed, Jul 7, 2021 at 5:04 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> On Tue, Jul 6, 2021 at 6:12 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > 3. 32-bit support: There are small bits of code for 32-bit support everywhere
+> >    throughout the code base, but there is also code that does not look like
+> >    it would work in that configuration. I would suggest you split out all 32-bit
+> >    code into a separate patch, the way you have done for SMP and NUMA
+> >    support. That way it can be reviewed separately, or deferred until when
+> >    you actually add support for a 32-bit platform. Please also clarify which
+> >    modes you plan to support: should every 64-bit kernel be able to run
+> >    LA32R and LA32S user space binaries, or do you require running the same
+> >    instruction set in both kernel and user space as RISC-V does?
+> >    Do you plan to have MIPS N32 style user space on 64-bit kernels?
+> No N32 style user space in our current plan, but the 64-bit kernel is
+> supposed to run 32-bit applications in the near future.
 
-On Wed, Jul 7, 2021 at 2:44 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Jul 7, 2021 at 6:24 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > On Tue, Jul 6, 2021 at 6:17 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
-> > > > new file mode 100644
-> > > > index 000000000000..6c194d740ed0
-> > > > --- /dev/null
-> > > > +++ b/arch/loongarch/include/uapi/asm/unistd.h
-> > > > @@ -0,0 +1,7 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > > > +#define __ARCH_WANT_NEW_STAT
-> > >
-> > > Why do you need newstat? I think now that we have statx and the libc
-> > > emulation code on top of it, there is probably no need to support both
-> > > on the kernel side.
-> > >
-> > > > +#define __ARCH_WANT_SYS_CLONE
-> > > > +#define __ARCH_WANT_SYS_CLONE3
-> > >
-> > > Similarly, if you have clone3, you should not need clone.
-> > >
-> > > > +#define __ARCH_WANT_SET_GET_RLIMIT
-> > >
-> > > And here for prlimit64
-> >
-> > Is newstat()/clone()/setrlimit() completely unacceptable in a new
-> > arch? If not, I want to keep it here for compatibility, because there
-> > are some existing distros.
->
-> I'd say they should go. None of these are normally called directly by
-> applications, so if you just update the C library to redirect the user
-> level interfaces to the new system calls, I expect no major problems
-> here as long as you update libc along with the kernel in the existing
-> distros.
-> Any application using seccomp to allow only the old system calls
-> may need a small update, but it would need that anyway to work
-> with future libc implementations.
->
-> Generally speaking there should be no expectation that the
-> system call interface is stable until the port is upstream. Note that
-> you will face a similar problem with the libc port, which may also
-> change its interface from what you are using internally.
-OK, I know, thanks.
+Ok, sounds good. Adding compat support for a native 32-bit ABI has gotten
+a lot easier over time.
 
-Huacai
+On that note, what are the requirements to the kernel for supporting LBT
+with aarch64/mips/x86 tasks? Does this involve handling the system calls
+(ioctl in particular) for those architectures in the kernel as well, or do you
+expect this to be done entirely in user space?
+
+The same topic has come up in the past, as there are at least three projects
+that need support for emulating foreign-architecture system calls (qemu,
+fex and tango). If there is sufficient demand, we may end up generalizing the
+kernel's compat layer to support multiple such ABIs instead of just native
+and compat.
+
+> > 4. Toolchain sources: I see you only have binaries for an older gcc-8.3
+> >     release and no sources so far. I assume you are already busy porting
+> >     the internal patches to the latest gcc and will post that soon, but my
+> >     feeling is that the kernel port should not get merged until we have a
+> >     confirmation from the toolchain maintainers that they plan to merge
+> >     support for their following release. We should however make sure that
+> >     your kernel port is completely reviewed and can just get merged once
+> >     we get there.
 >
->        Arnd
+> Toolchain is maintained by other developers, it will be open source of
+> course, I hope it won't be too late. :)
+
+Right, I meant 'you' as in someone @loongson.cn, not necessarily you
+personally.
+
+> > 5. Platform support: You have copied the underlying logic from arch/mips,
+> >     but that still uses a method where most platforms (not the new
+> >     "generic" version) are mutually exclusive. Since you only support
+> >     one platform right now, it would be best to just simplify it to the point
+> >     where no platform specific code is needed in arch/loongarch/ and
+> >     it just works. If you add 32-bit support later on, that obviously requires
+> >     making a choice between two or three incompatible options.
+>
+> I will improve it, and I will need some help for this.
+
+It should be mostly covered by the comments I made on the individual
+comments already, but let me know if you have more specific questions.
+
+       Arnd
