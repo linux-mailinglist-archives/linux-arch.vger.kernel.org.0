@@ -2,117 +2,174 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C15803BE91C
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Jul 2021 15:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836E43BEABD
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Jul 2021 17:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbhGGN7Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Jul 2021 09:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S231882AbhGGPhq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Jul 2021 11:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbhGGN7Z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Jul 2021 09:59:25 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA37C061574
-        for <linux-arch@vger.kernel.org>; Wed,  7 Jul 2021 06:56:44 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id d9-20020a17090ae289b0290172f971883bso3173805pjz.1
-        for <linux-arch@vger.kernel.org>; Wed, 07 Jul 2021 06:56:44 -0700 (PDT)
+        with ESMTP id S231516AbhGGPhp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Jul 2021 11:37:45 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65455C061574;
+        Wed,  7 Jul 2021 08:35:04 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id w22so2508366pff.5;
+        Wed, 07 Jul 2021 08:35:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=7fv4uLttZwhDSsC+EExeOU5dzSADAjT7ErLk7BLY1tw=;
-        b=btgIhUwz6FzHYUD0mLFwLra0cEdNzy8tVLR42Sj34JUGlRW0WA+9QGnpRup6PFBSUG
-         1uPFJkqT8xApcTEHxiXm22oEHL681FlwPVopXtYwpHu15W46NVAm1bxcevV7jnqwtPKd
-         DxyDKvB1FA+XGCbEkJlPXkFRHp+9bEKZ4CohB5ixa+OCRFWZRDwM/E9FNpDzK26HIIhu
-         z95WWVWDPv4lnVNPMB79fPt/Uunmd6jIQ7fQA9nRUQKVato7aTAUYG7ycEYrEDhxWAcc
-         DCvw3xGoo7drIiG9IHJGdKDT/3XlK+R7cjSLeg7e29H5FFypRbZ9R9APyq9nubKEiAJb
-         PTsQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jkolUPwi5vmrrny8Lv1Ra8OVYttbBuLIiyALxAjfV3U=;
+        b=uMrytKrdPPAXlONXoKnZbDo6E2aSYBoFVoQVDqkbtkCONIx0wfe5zboS/QgKGbqPlK
+         HS7DtVjHbxLaSrJiY3p/LKmA3t54P4RWelPEkaOkO8stQ7CAdvAy7zQxCEhobAKO24Uc
+         yzBRueqU/xom01Q9hKCy71J3KiVnkJ5uKwhY48+BfUMU4AbwU4AHP4T0qES8oolzCvTS
+         TR/u5P+44atse+4WTf8EAqCmkpOdPJMPQcSu8WGo5Hw7d5AOnMUTkIvh5Nho1JiSvb7Y
+         Ull2Bm5sux8+oXfXdMFGsGaeiQSo5wus3T4DkOI5mIPdsA0acl20F6nCBoK1W6wpKLxn
+         8ZDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=7fv4uLttZwhDSsC+EExeOU5dzSADAjT7ErLk7BLY1tw=;
-        b=NS3R+TXFmgf4tCQQYEuvPLCiGbj8cSYLChlaoQxgjidYLx7C9eEz0q7YWHTNB0PCvp
-         eyJg+C3DrllilSzyOMt+6xnaU/TIG4Sm9sphFKEZk4moPP7vpzrPY5l1AdmOfTunQc20
-         snLF/kyj8RfI3Sj9czQkhqirKpxmCDYVHvQYsE2lWC1RQo+XRnKIC6ZGkKuBUrxRhUj5
-         S1GSEdrBtJJtwLyICl6HtgdWDMM300IiXcBCbOe3Mj8Sxwsqc/Mn8kVYLZLS1Uxzb3q5
-         bs2Y93H6aXlvRd4GI7V7fMr1dUJtO9dVdnzQDpDsMZde6RqbWiINvSJf+8sRBpaNpML4
-         MRPA==
-X-Gm-Message-State: AOAM5318hT1tp9GownawigcQo7ErSCgBgGy7rw0VAzyZbYnZsxMhIN7B
-        GUlukBy+aGe62BEvfSysTZk=
-X-Google-Smtp-Source: ABdhPJzJYjw5AaA6VzAzi+7p+GdXb/YH8brisEJIVk3hrAZN6YAMgwWEfS+kf3WxjxAsNvf5oHHG+g==
-X-Received: by 2002:a17:90a:ee8e:: with SMTP id i14mr6175408pjz.29.1625666204064;
-        Wed, 07 Jul 2021 06:56:44 -0700 (PDT)
-Received: from localhost (14-203-186-173.tpgi.com.au. [14.203.186.173])
-        by smtp.gmail.com with ESMTPSA id q5sm13398648pgt.46.2021.07.07.06.56.42
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jkolUPwi5vmrrny8Lv1Ra8OVYttbBuLIiyALxAjfV3U=;
+        b=CUMj9W3aL8lU2QnQkjLQZXa/8d3NKOx8Vh9Bg3H1+ZhelrN2msyf0holaYSdJkWL3c
+         XKPg9559X/e07MfY1rHPQPXYvyVE3w2IIAWMnzbOOzxm71TOBwgxyXsgYAY4/zkYEDCs
+         FhwRjNpfi4RUvlNWx0BdmrR6B6x7w/JQM5Y3LuFwgksJfFqYhSgV/cL7vr+0751X3MR0
+         7ocE1glg1s6b7C8Aky+2eGDwd0XYo2S6o0gzvxdtTEP+f5FULn65mcL//lyYoXfwbcP3
+         e/HtssXnGG1deHOl9vDrBn6judlm+G/Vw36eS9ogxHqBQNHi8V87+AavZHMFEBLZNw7x
+         7qGQ==
+X-Gm-Message-State: AOAM533yZlmQ26bFPPMC0okqHj6LLmMxubzZ79nC0LNqofszEsNagUlS
+        xWc8t8m/o3sRGbjsgoofSl0=
+X-Google-Smtp-Source: ABdhPJyD+VDToE/d2GDA5bL79Z5IjrRMQN05lni8aQ82HOiaAKMvr6K+0cHHIUktpTxzsCLuEpzwiw==
+X-Received: by 2002:a62:5547:0:b029:2ec:8f20:4e2 with SMTP id j68-20020a6255470000b02902ec8f2004e2mr26077347pfb.71.1625672103921;
+        Wed, 07 Jul 2021 08:35:03 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:0:6b7f:cf3e:bbf2:d229])
+        by smtp.gmail.com with ESMTPSA id y11sm21096877pfo.160.2021.07.07.08.35.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jul 2021 06:56:43 -0700 (PDT)
-Date:   Wed, 07 Jul 2021 23:56:37 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 06/19] LoongArch: Add exception/interrupt handling
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     David Airlie <airlied@linux.ie>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
-        <20210706041820.1536502-7-chenhuacai@loongson.cn>
-        <YOQ5UBa0xYf7kAjg@hirez.programming.kicks-ass.net>
-In-Reply-To: <YOQ5UBa0xYf7kAjg@hirez.programming.kicks-ass.net>
+        Wed, 07 Jul 2021 08:35:03 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        Tianyu.Lan@microsoft.com, rppt@kernel.org,
+        kirill.shutemov@linux.intel.com, akpm@linux-foundation.org,
+        thomas.lendacky@amd.com, ardb@kernel.org,
+        nramas@linux.microsoft.com, robh@kernel.org, keescook@chromium.org,
+        martin.b.radev@gmail.com, pgonda@google.com, hannes@cmpxchg.org,
+        krish.sadhukhan@oracle.com, saravanand@fb.com,
+        xen-devel@lists.xenproject.org, rientjes@google.com, tj@kernel.org,
+        michael.h.kelley@microsoft.com
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, anparri@microsoft.com
+Subject: [RFC PATCH V4 00/12] x86/Hyper-V: Add Hyper-V Isolation VM support
+Date:   Wed,  7 Jul 2021 11:34:41 -0400
+Message-Id: <20210707153456.3976348-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-Id: <1625665981.7hbs7yesxx.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Peter Zijlstra's message of July 6, 2021 9:06 pm:
-> On Tue, Jul 06, 2021 at 12:18:07PM +0800, Huacai Chen wrote:
->> +	.align	5	/* 32 byte rollback region */
->> +SYM_FUNC_START(__arch_cpu_idle)
->> +	/* start of rollback region */
->> +	LONG_L	t0, tp, TI_FLAGS
->> +	nop
->> +	andi	t0, t0, _TIF_NEED_RESCHED
->> +	bnez	t0, 1f
->> +	nop
->> +	nop
->> +	nop
->> +	idle	0
->> +	/* end of rollback region */
->> +1:
->> +	jirl	zero, ra, 0
->> +SYM_FUNC_END(__arch_cpu_idle)
->=20
->> +/*
->> + * Common Vectored Interrupt
->> + * Complete the register saves and invoke the do_vi() handler
->> + */
->> +SYM_FUNC_START(except_vec_vi_handler)
->> +	la	t1, __arch_cpu_idle
->> +	LONG_L  t0, sp, PT_EPC
->> +	/* 32 byte rollback region */
->> +	ori	t0, t0, 0x1f
->> +	xori	t0, t0, 0x1f
->> +	bne	t0, t1, 1f
->> +	LONG_S  t0, sp, PT_EPC
->=20
-> Seriously, you're having your interrupt handler recover from the idle
-> race? On a *new* architecture?
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-It's heavily derived from MIPS (does that make the wholesale replacement=20
-of arch/mips copyright headers a bit questionable?).
+Hyper-V provides two kinds of Isolation VMs. VBS(Virtualization-based
+security) and AMD SEV-SNP unenlightened Isolation VMs. This patchset
+is to add support for these Isolation VM support in Linux.
 
-I don't think it's such a bad trick though -- restartable sequences=20
-before they were cool. It can let you save an irq disable in some
-cases (depending on the arch of course).
+The memory of these vms are encrypted and host can't access guest
+memory directly. Hyper-V provides new host visibility hvcall and
+the guest needs to call new hvcall to mark memory visible to host
+before sharing memory with host. For security, all network/storage
+stack memory should not be shared with host and so there is bounce
+buffer requests.
 
-Thanks,
-Nick
+Vmbus channel ring buffer already plays bounce buffer role because
+all data from/to host needs to copy from/to between the ring buffer
+and IO stack memory. So mark vmbus channel ring buffer visible.
+
+There are two exceptions - packets sent by vmbus_sendpacket_
+pagebuffer() and vmbus_sendpacket_mpb_desc(). These packets
+contains IO stack memory address and host will access these memory.
+So add allocation bounce buffer support in vmbus for these packets.
+
+For SNP isolation VM, guest needs to access the shared memory via
+extra address space which is specified by Hyper-V CPUID HYPERV_CPUID_
+ISOLATION_CONFIG. The access physical address of the shared memory
+should be bounce buffer memory GPA plus with shared_gpa_boundary
+reported by CPUID.
+
+Change since v3:
+       - Add interface set_memory_decrypted_map() to decrypt memory and
+         map bounce buffer in extra address space 
+       - Remove swiotlb remap function and store the remap address
+         returned by set_memory_decrypted_map() in swiotlb mem data structure.
+       - Introduce hv_set_mem_enc() to make code more readable in the __set_memory_enc_dec().
+
+Change since v2:
+       - Remove not UIO driver in Isolation VM patch
+       - Use vmap_pfn() to replace ioremap_page_range function in
+       order to avoid exposing symbol ioremap_page_range() and
+       ioremap_page_range()
+       - Call hv set mem host visibility hvcall in set_memory_encrypted/decrypted()
+       - Enable swiotlb force mode instead of adding Hyper-V dma map/unmap hook
+       - Fix code style
+
+Tianyu Lan (12):
+  x86/HV: Initialize shared memory boundary in the Isolation VM.
+  x86/HV: Add new hvcall guest address host visibility support
+  HV: Mark vmbus ring buffer visible to host in Isolation VM
+  HV: Add Write/Read MSR registers via ghcb page
+  HV: Add ghcb hvcall support for SNP VM
+  HV/Vmbus: Add SNP support for VMbus channel initiate message
+  HV/Vmbus: Initialize VMbus ring buffer for Isolation VM
+  x86/Swiotlb/HV: Add Swiotlb bounce buffer remap function for HV IVM
+  HV/IOMMU: Enable swiotlb bounce buffer for Isolation VM
+  HV/Netvsc: Add Isolation VM support for netvsc driver
+  HV/Storvsc: Add Isolation VM support for storvsc driver
+  x86/HV: Not set memory decrypted/encrypted during kexec alloc/free
+    page in IVM
+
+ arch/x86/hyperv/Makefile           |   2 +-
+ arch/x86/hyperv/hv_init.c          |  25 +--
+ arch/x86/hyperv/ivm.c              | 299 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h |  18 ++
+ arch/x86/include/asm/mshyperv.h    |  84 +++++++-
+ arch/x86/include/asm/set_memory.h  |   2 +
+ arch/x86/include/asm/sev-es.h      |   4 +
+ arch/x86/kernel/cpu/mshyperv.c     |   5 +
+ arch/x86/kernel/machine_kexec_64.c |   5 +-
+ arch/x86/kernel/sev-es-shared.c    |  21 +-
+ arch/x86/mm/pat/set_memory.c       |  34 +++-
+ arch/x86/xen/pci-swiotlb-xen.c     |   3 +-
+ drivers/hv/Kconfig                 |   1 +
+ drivers/hv/channel.c               |  48 ++++-
+ drivers/hv/connection.c            |  71 ++++++-
+ drivers/hv/hv.c                    | 129 +++++++++----
+ drivers/hv/hyperv_vmbus.h          |   3 +
+ drivers/hv/ring_buffer.c           |  84 ++++++--
+ drivers/hv/vmbus_drv.c             |   3 +
+ drivers/iommu/hyperv-iommu.c       |  62 ++++++
+ drivers/net/hyperv/hyperv_net.h    |   6 +
+ drivers/net/hyperv/netvsc.c        | 144 +++++++++++++-
+ drivers/net/hyperv/rndis_filter.c  |   2 +
+ drivers/scsi/storvsc_drv.c         |  68 ++++++-
+ include/asm-generic/hyperv-tlfs.h  |   1 +
+ include/asm-generic/mshyperv.h     |  53 ++++-
+ include/linux/hyperv.h             |  16 ++
+ include/linux/swiotlb.h            |   4 +
+ kernel/dma/swiotlb.c               |  11 +-
+ 29 files changed, 1097 insertions(+), 111 deletions(-)
+ create mode 100644 arch/x86/hyperv/ivm.c
+
+-- 
+2.25.1
+
