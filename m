@@ -2,218 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE113BFA9D
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 14:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566F13C13C8
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 15:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbhGHMvx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Jul 2021 08:51:53 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:62296 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229659AbhGHMvw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jul 2021 08:51:52 -0400
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 168CgdrD001761;
-        Thu, 8 Jul 2021 12:48:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2020-01-29;
- bh=VRUFYsMd0FPpWrz6g5RTo9ra+BrWkXz4S09+sR2p0kQ=;
- b=w3HrA5EbBl1YlwfjJ1Yl/KvKEOc2/VRKxwjP97JJ/x2dfW27TJPDntApISHMUIR274pt
- At9FLfXSSb2uCmoyS3ynOdAFkf80oBstmm5K08qgZDbbLkGcmwwcWt7kCQmT9OgGHTLv
- nvTcpkLkPTUxLsWhBzslrw1H+8lSSCVheB4QESLLD3LxYR4MXymFn5tAxtiFtYNFlbi4
- NHyQjV8F2TS+GjF0EkvTDNm2A2JQj3BxAcbrzfGMiJ7kaNYuJAHB7XIlFphTt+2Bkk3T
- gTV7eWjkAgalNtEe2aq4bhZq0TmeMR63dcdIE/8AAPw9LycXgHywlqEmNCz473YIrkW3 UQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39nbsxtd2c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 08 Jul 2021 12:48:10 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 168CicwL098474;
-        Thu, 8 Jul 2021 12:48:09 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
-        by aserp3030.oracle.com with ESMTP id 39nbg47gjr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 08 Jul 2021 12:48:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eVsf1IHOoi13fv6bwKAbgR2YOFxKXWm9MQ5WlC4d2S88xBokNLPBnZv9/8pU9ufL0S491ZRisKKXJeID5ToXWUJ5X7Fjtt39BJjTqAwbDJqf6CTmueJEbEWmpGBKXiwkef3Ck1V+DWwA0p9hMWSaftGRzsqExtXbJVB36CXcM+O+3sJKi4X63g0CM4DWWzgaILDzDtFNUYa8BXV6Ut7L7gWMl0zrmBWk+qZpeJWQ0Pn3As1HwBdqRl0/B5JbRUaLdyTAEYSFzdBP2kepO+joJcL2bZjam7UIv3yMxV+g4lur8H+tywv+6Krxgo8lH6tYtpmzQtwNoweB9cErzaBPxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k6D+1iE6BBJCy3s6qoddiTii2ouCZ37lzfbhfCMG5ak=;
- b=Oi7uLvmOSUgwrD4ovR07F5OV4FjIfx1YKUUo1XaCqPQojKZYW6W3YQ+hH4CLDxSHuz/ItUEMBIvuwPWunLGE0oQgbJ3LUfrkFf//cZ/S1rRgOnL6gVKfhYrsVTd4F5DArXDfsfFmuoLZCkefwNn2YmW1zCVDciheOaYt51Q05gxcxirKCIcXeyDJ+z/tTRqGPQhefrNwLUywILsgg3mK8hNhHQe99LwXl4RnTHHs3L/jWkeiNI2qMUw+AztJw6UythY0Gl+pB+E+/LTeDI6TQSrubrWcsUX7poWMv1XMR7AFRrvFwD78NooZXHRHJGg+eJMG62srywQjI6zLra/8lA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        id S231544AbhGHNH0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Jul 2021 09:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230080AbhGHNHZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jul 2021 09:07:25 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D445C061574
+        for <linux-arch@vger.kernel.org>; Thu,  8 Jul 2021 06:04:44 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id k6so6522539ilo.3
+        for <linux-arch@vger.kernel.org>; Thu, 08 Jul 2021 06:04:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k6D+1iE6BBJCy3s6qoddiTii2ouCZ37lzfbhfCMG5ak=;
- b=AhmpPjnEYL4G0/JwQIAgyDjVVt8d9QAPDP2wycetSFr7b5NrqNI6XtNZ3k6pRzmLGYS4oUU0JxiTf7bPIpLwAC7O29iM5XMo5mT0/hUau4QcNdr6Q2nyElKDCbclDhV1/okqWj7kNQdtSDCDoCl3k7oQsTKylt+DL6QfoHvlHrg=
-Authentication-Results: oracle.com; dkim=none (message not signed)
- header.d=none;oracle.com; dmarc=none action=none header.from=oracle.com;
-Received: from BYAPR10MB3240.namprd10.prod.outlook.com (2603:10b6:a03:155::17)
- by BY5PR10MB3939.namprd10.prod.outlook.com (2603:10b6:a03:1f7::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.20; Thu, 8 Jul
- 2021 12:48:06 +0000
-Received: from BYAPR10MB3240.namprd10.prod.outlook.com
- ([fe80::59e7:5c8c:71fb:a6ba]) by BYAPR10MB3240.namprd10.prod.outlook.com
- ([fe80::59e7:5c8c:71fb:a6ba%7]) with mapi id 15.20.4287.034; Thu, 8 Jul 2021
- 12:48:06 +0000
-Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
-To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>, Anthony Yznaga <anthony.yznaga@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org
-Cc:     mhocko@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org, arnd@arndb.de,
-        ebiederm@xmission.com, keescook@chromium.org, gerg@linux-m68k.org,
-        ktkhai@virtuozzo.com, christian.brauner@ubuntu.com,
-        peterz@infradead.org, esyr@redhat.com, jgg@ziepe.ca,
-        christian@kellner.me, areber@redhat.com, cyphar@cyphar.com,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>
-References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
- <cc714571-4461-c9e0-7b24-e213664caa54@huawei.com>
-From:   Steven Sistare <steven.sistare@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <43471cbb-67c6-f189-ef12-0f8302e81b06@oracle.com>
-Date:   Thu, 8 Jul 2021 08:48:01 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-In-Reply-To: <cc714571-4461-c9e0-7b24-e213664caa54@huawei.com>
-Content-Type: text/plain; charset=gbk
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SN4PR0701CA0004.namprd07.prod.outlook.com
- (2603:10b6:803:28::14) To BYAPR10MB3240.namprd10.prod.outlook.com
- (2603:10b6:a03:155::17)
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gZZs/jQW3zF4g0NWP+W7KfpidpABwMLYSHBH2t2Xoz8=;
+        b=QiWX9Nq8k5qKAgqp6rQsqpClO8iBEtinEWIvb64N3YIMgQEoi0LOOPQCHSXI+jvLH+
+         LBUo8I1Y7hfuUZM3difrmeINtTWzFy/PBbmLwxvtwFa0jbmkkxfyPSNNaOL0vINZQvxz
+         pwX74svID+TOj8p4+yaYnp53purF3nPJi74QUvSg7J7NUGDbEm1DKAv9jYRBw6H14Kvb
+         ArvqhHRvQSe00xtibklMJUEgMG/hcZSPHF7xrU0uhA/pWRjUOlgFDImN2joBk6ctariw
+         tXA/hy7NS62JtACTPypZHEwUjNXLwmXtxfV7tbGLYHo2aF2OHHWqbb2Rs+b0bMm+PEhp
+         fmdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gZZs/jQW3zF4g0NWP+W7KfpidpABwMLYSHBH2t2Xoz8=;
+        b=UBdQGg0/pYkOTAn0Oej0oLlSsPYJE3esmzfLJJVg+xlBxWngmg1mw4bAqtlsLAQKCX
+         27Nf9rfzNH8kKXNlbvMoq2MaUPFdG2TjXvjNcgGmSbje8wHGMZKs+uAf93B0TBPPqquS
+         szJl6pwuwPYi5qFOM2KnmUn3ygG90PNYTctT6zZ7KUZ1pgV5qfFTT4ZRe7Cn0HBxcnMn
+         lSfauMSMIFo9evhNy8HENso/QSaN/JaVcfQtQf65XYrAyawufnyfEiu7c+8x2HQvIsjt
+         YqiqHSpxd0ynw1KyzR9qOY3jVPyC5g2hoQR/RbVp/mgm6ZTTdQDqE1ezGUR/6K/+jtRn
+         ccOQ==
+X-Gm-Message-State: AOAM533NJGTDqW8dX+NklXeRB1/mXeBWZ3CFVsd3YSCjMQCNeNVz+gop
+        fgD/95p21KjPeNIMyQISZi/R1ap6CBcqdbNkys0=
+X-Google-Smtp-Source: ABdhPJyl8IuDBgZShZUYGiUBbx1mttiGQihViF/q7anhmbf97zVMe//c8rPnceVmV+jQ4TnS3pZkS77LriZVQ6r0yOI=
+X-Received: by 2002:a92:a00e:: with SMTP id e14mr22215656ili.126.1625749483754;
+ Thu, 08 Jul 2021 06:04:43 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.1.92] (24.62.106.7) by SN4PR0701CA0004.namprd07.prod.outlook.com (2603:10b6:803:28::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.19 via Frontend Transport; Thu, 8 Jul 2021 12:48:03 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 15a722fa-63c0-464e-05ef-08d9420ea1ac
-X-MS-TrafficTypeDiagnostic: BY5PR10MB3939:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR10MB3939C2069B6806DD58B23846F9199@BY5PR10MB3939.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WLCu6ICqMrvAY0Wu6SsiWg7yyNloGLbS8s8ElRn7aSev7aJ2dGqkGJ4qYAZ/GJ8bAmrUdBK/2OvdIE5RGd71kdzJnza0f3RlRIA7mVOe0jnqGjLCaNtrobXmcP82za0S7dYrnMZdknleiMlMEDTBlWASpe+3GjZ+Nmfi5lTVJ50/R5KELIVZS+c4Ed+x0Vph64SWL5FvgmVYzVUDLdChCMKZKjTqodrJfWSD2K7J3YZ6AXG7VVNl2Y8bXpJnck9Ro8DHdRqwhMiFbQ7lIM5x5A2yTFYL86I+idV9LJXybfu4WBIRRwPDXagNXV7B0/R+YR2eGk0DDrTi+eZ3HiEmj/Ngny+iqweTh30BMK7Q5HVT8gIutBv4pBLiKq1A5n+X0hAbkNN3SM4jzYU8ZUxIfnS0gAafMckRtMnrf+Jh5RPns7kJA8EFbr2KuGIS4+L+YvHFbAk0SISzZntmIVM6QF5aBBu5cXeUGzIiDZWp6FK1GlEmec5zXrSUxbqX101NdBfKm6TrhSNcFgKIS4tEowG+S+rpoTxiVKkZZzTjNcBdtd/ZlmmjoLr0tQDM/dAJEZAUpS00EuHNqPpaiQRw4gw+GBxVOrBVPjMjUB+/vDJlaxA2XwSpSmDkKvmyokiYCAdpUkTMUcmpSDhE1231V7JdPk2dYbpV3D+Sag8soWvwJO5cHQkzeywmeeFMmmFVk5ccKWZ0zkCQwLcUyVE4xQMq9L1VJJ9uCv710b+67cY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3240.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(39860400002)(136003)(366004)(346002)(396003)(83380400001)(53546011)(16576012)(4326008)(31696002)(86362001)(316002)(7416002)(110136005)(5660300002)(36756003)(478600001)(36916002)(6486002)(8676002)(186003)(26005)(2616005)(956004)(31686004)(38100700002)(2906002)(8936002)(66946007)(66556008)(44832011)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?gb2312?B?bWxwV01yU3dBN0d4VG1mNGZtYXlyOHJiNDNReGRiK0c4WVBZRDVlQmFtL3Vj?=
- =?gb2312?B?SEVOdXdFaUNEak5JNDZTcU5CNStHak02YklmcVFHd1FRN1ZKREtpYkpMMGYz?=
- =?gb2312?B?djdwdm55YW5UTHRMb2J0S2J5ZEtrTDBNZDJieXAxZE1PZjZzQVJ1dmp1RXdl?=
- =?gb2312?B?MDJqZC9WSkZUM2F5RjQvN0d2SHpIMjRidHlFM1RuYTA0eUczRVFRR2pZOHdo?=
- =?gb2312?B?WXBDYXpKYlBJTEZFNm5Qb1V2a0NPK3c1UXBtYlJrSnNYWWRINTNlcXE5TVJs?=
- =?gb2312?B?OVM3V0EzSzhoeWFZcG9LeXhqVWtpdWd3RFRpclJzalN1Vjdibzh1YlZzbEIr?=
- =?gb2312?B?SGRUUDZvSlRqNE1rS1pZNHBvZTU3S2NYNTd4MEZVZEJCRmVXaUdJek5WQ0JR?=
- =?gb2312?B?UTc3SlpHajZSWnhlVEdkditBNWhuU3JXVEIvY0M4bG9MNkw4cWdpQUF5cWRl?=
- =?gb2312?B?eEpCNU9ETU1NampZc29pT3Vrck1IQW9TSXAxQlVKQnRqUXFpY1hCU2V6WCts?=
- =?gb2312?B?dDZ4VHFpa2xqa1lDU2llZFgyVXdKaVBsbDNmbEtFVDQwM0c5eGRXaHFqVm4y?=
- =?gb2312?B?emZjNjRvL2FnMEFPQ3lnb1UybVpWSENnenRJaW5aRDIwa29kSDJCZkd2VGg2?=
- =?gb2312?B?d2NRaCtRcVh0VzIwcnJNK1NBckkyMFcxd2ZjVUN3aG9jRGJPRHQ1NCtacUhk?=
- =?gb2312?B?Wm9HaC9oTS9Dd0txQUlBcm9nYWJrQlNkMkpJRlRpcmZTbWlUUUhsdkx4L0V4?=
- =?gb2312?B?OTlERmlNT01VQVYvbCs5Y3RmcUQrWEVRL2dPdUVzNFl3Umt2dlhkN3h3cnd1?=
- =?gb2312?B?SndiVGY4VVF2aTMvMUdHVGJXNmlvVHNTTy8zVWVvVTR1OWQ5RFpFTERCaC96?=
- =?gb2312?B?WEk4SDVjUHpJTG0xSjlWZ29sWHBSb1ZnMlA5WVpGMTdpMGpPS1BCZEtXcEdW?=
- =?gb2312?B?N0NWUlZFd1NNT2ROQXFpTkhPcTVEQjN4cmVKa29Cb0ovelNaejB4ZlFHa2ZG?=
- =?gb2312?B?TDJucVpGS0tKZEtjM1NLMnozUnhSd2s0akJYUXExZTdwbklMcU5aNXZwM3Zl?=
- =?gb2312?B?UnZseFI3SktzaXlEV254NGJhT1Q5Vko2aktmMXJyNkRsbDJzNmJKVE5QRkl5?=
- =?gb2312?B?UitvUGlYVXRrTzZnb1FUMHNJN0d2dWExSVN1NER3cml3NjR5VXU2c1hoRkNu?=
- =?gb2312?B?bVFjai91OEprczl5VGxYa1ZDYTZFRmpqYU1WaWdQWVNuUkRiK2hZVStpWGhN?=
- =?gb2312?B?RE1qVTRpRkt4ZDNTVzE2M3Yvbks0U1VwQjN6QWJCVW5Ld1I4OHdXSWsyc2ta?=
- =?gb2312?B?Q3lkb240SkU0QlUwVUdnNkpERkk5cEpTdVlSemRaRzRoSmtDeHNlMkZtZTlN?=
- =?gb2312?B?bHZ6cEx4OXc4MDJlTElLdGQxMmEvTnZxaFJjQ3V4WGJUOU5Qc0tZb2NwM2s0?=
- =?gb2312?B?TnhYUDAxQlB2US9EOExZVmg3d1c4bW1rNVhpbUlZVW45YUNPaEVuYXdBUDk5?=
- =?gb2312?B?ektBaXZNNm4vQlJxRW1jM3dIRklMVWFrQlQ2RkJ0b3IyeUZGOHdQemE3QzJz?=
- =?gb2312?B?VE5palpaamV3K21mS0hVdnZwcHBpdkFIQTZGUVlLYmdGN0g5bzVNa2k5alMz?=
- =?gb2312?B?WFpMeGtwZjlmaFhuRCtJWEJ1dThqRHQwYStGRDBWQ2c2Qm5pdmM4NUxraXkz?=
- =?gb2312?B?dTljbGNFYkNkUEp1RUVDK2IwR0RzRzRuQytwWGxscnJrV0l3cE53R2JVdlpG?=
- =?gb2312?Q?OZc/xEfNfwhXrwv9bo4iCfK37YLiSOssTB/s808?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15a722fa-63c0-464e-05ef-08d9420ea1ac
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3240.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2021 12:48:06.3474
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8A/CkzU7VSn4UxEQiZQ7edIyF9r76lr/4yuJlq5OWIVJsbI/InqOmEXVEJ/cJczF/Px24eEcOd4dRgjxiKCd5znBkHy3fBZkzokyYfXZuWc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB3939
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10038 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
- phishscore=0 adultscore=0 suspectscore=0 spamscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107080071
-X-Proofpoint-ORIG-GUID: omFRdClSznxRcEgac497l4JIB_6bwinC
-X-Proofpoint-GUID: omFRdClSznxRcEgac497l4JIB_6bwinC
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-11-chenhuacai@loongson.cn> <CAK8P3a0zkiFrn9K14Hg8C-rfCk-GbyTGMnq_DFBd8o28q99tRg@mail.gmail.com>
+In-Reply-To: <CAK8P3a0zkiFrn9K14Hg8C-rfCk-GbyTGMnq_DFBd8o28q99tRg@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 8 Jul 2021 21:04:32 +0800
+Message-ID: <CAAhV-H4WtGqgYF_zDhaS9+Ja7k=Zs8O2qWo5GqHDDf5cKw-zow@mail.gmail.com>
+Subject: Re: [PATCH 10/19] LoongArch: Add signal handling support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/8/2021 5:52 AM, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
-> Hi Anthony and Steven,
-> 
-> ÔÚ 2020/7/28 1:11, Anthony Yznaga Ð´µÀ:
->> This patchset adds support for preserving an anonymous memory range across
->> exec(3) using a new madvise MADV_DOEXEC argument.  The primary benefit for
->> sharing memory in this manner, as opposed to re-attaching to a named shared
->> memory segment, is to ensure it is mapped at the same virtual address in
->> the new process as it was in the old one.  An intended use for this is to
->> preserve guest memory for guests using vfio while qemu exec's an updated
->> version of itself.  By ensuring the memory is preserved at a fixed address,
->> vfio mappings and their associated kernel data structures can remain valid.
->> In addition, for the qemu use case, qemu instances that back guest RAM with
->> anonymous memory can be updated.
-> 
-> We have a requirement like yours, but ours seems more complex. We want to
-> isolate some memory regions from the VM's memory space and the start a child
-> process who will using these memory regions.
-> 
-> I've wrote a draft to support this feature, but I just find that my draft is
-> pretty like yours.
-> 
-> It seems that you've already abandoned this patchset, why ?
+Hi Arnd,
 
-Hi Longpeng,
-  The reviewers did not like the proposal for several reasons, but the showstopper
-was that they did not want to add complexity to the exec path in the kernel.  You
-can read the email archive for details.
+On Tue, Jul 6, 2021 at 6:17 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >
+> > This patch adds signal handling support for LoongArch.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>
+> Eric Biederman should review this part as well.
+>
+> > --- /dev/null
+> > +++ b/arch/loongarch/include/asm/sigcontext.h
+> > @@ -0,0 +1,10 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
+> > + */
+> > +#ifndef _ASM_SIGCONTEXT_H
+> > +#define _ASM_SIGCONTEXT_H
+> > +
+> > +#include <uapi/asm/sigcontext.h>
+> > +
+> > +#endif /* _ASM_SIGCONTEXT_H */
+>
+> Remove this file
+OK, thanks.
 
-We solved part of our problem by adding new vfio interfaces: VFIO_DMA_UNMAP_FLAG_VADDR
-and VFIO_DMA_MAP_FLAG_VADDR.  That solves the vfio problem for shared memory, but not
-for mmap MAP_ANON memory.
+>
+> > + */
+> > +#ifndef _UAPI_ASM_SIGINFO_H
+> > +#define _UAPI_ASM_SIGINFO_H
+> > +
+> > +#if _LOONGARCH_SZLONG == 32
+> > +#define __ARCH_SI_PREAMBLE_SIZE (3 * sizeof(int))
+> > +#else
+> > +#define __ARCH_SI_PREAMBLE_SIZE (4 * sizeof(int))
+> > +#endif
+>
+> These are no longer used.
+OK, thanks.
 
-- Steve
+>
+> > +
+> > +#ifndef _NSIG
+> > +#define _NSIG          128
+> > +#endif
+>
+> Everything else uses 64 here, except for MIPS.
+Once before we also wanted to use 64, but we also want to use LBT to
+execute X86/MIPS/ARM binaries, so we chose the largest value (128).
+Some applications, such as sighold02 in LTP, will fail if _NSIG is not
+big enough.
 
->> Patches 1 and 2 ensure that loading of ELF load segments does not silently
->> clobber existing VMAS, and remove assumptions that the stack is the only
->> VMA in the mm when the stack is set up.  Patch 1 re-introduces the use of
->> MAP_FIXED_NOREPLACE to load ELF binaries that addresses the previous issues
->> and could be considered on its own.
->>
->> Patches 3, 4, and 5 introduce the feature and an opt-in method for its use
->> using an ELF note.
->>
->> Anthony Yznaga (5):
->>   elf: reintroduce using MAP_FIXED_NOREPLACE for elf executable mappings
->>   mm: do not assume only the stack vma exists in setup_arg_pages()
->>   mm: introduce VM_EXEC_KEEP
->>   exec, elf: require opt-in for accepting preserved mem
->>   mm: introduce MADV_DOEXEC
->>
->>  arch/x86/Kconfig                       |   1 +
->>  fs/binfmt_elf.c                        | 196 +++++++++++++++++++++++++--------
->>  fs/exec.c                              |  33 +++++-
->>  include/linux/binfmts.h                |   7 +-
->>  include/linux/mm.h                     |   5 +
->>  include/uapi/asm-generic/mman-common.h |   3 +
->>  kernel/fork.c                          |   2 +-
->>  mm/madvise.c                           |  25 +++++
->>  mm/mmap.c                              |  47 ++++++++
->>  9 files changed, 266 insertions(+), 53 deletions(-)
->>
-> 
+Huacai
+>
+> > +#define _NSIG_BPW      __BITS_PER_LONG
+> > +#define _NSIG_WORDS    (_NSIG / _NSIG_BPW)
+> > +
+> > +#define SIGHUP          1
+> > +#define SIGINT          2
+> > +#define SIGQUIT                 3
+> > +#define SIGILL          4
+> > +#define SIGTRAP                 5
+> > +#define SIGABRT                 6
+> > +#define SIGIOT          6
+> > +#define SIGBUS          7
+> > +#define SIGFPE          8
+> > +#define SIGKILL                 9
+> > +#define SIGUSR1                10
+> > +#define SIGSEGV                11
+> > +#define SIGUSR2                12
+> > +#define SIGPIPE                13
+> > +#define SIGALRM                14
+> > +#define SIGTERM                15
+> > +#define SIGSTKFLT      16
+> > +#define SIGCHLD                17
+> > +#define SIGCONT                18
+> > +#define SIGSTOP                19
+> > +#define SIGTSTP                20
+> > +#define SIGTTIN                21
+> > +#define SIGTTOU                22
+> > +#define SIGURG         23
+> > +#define SIGXCPU                24
+> > +#define SIGXFSZ                25
+> > +#define SIGVTALRM      26
+> > +#define SIGPROF                27
+> > +#define SIGWINCH       28
+> > +#define SIGIO          29
+> > +#define SIGPOLL                SIGIO
+> > +#define SIGPWR         30
+> > +#define SIGSYS         31
+> > +#define        SIGUNUSED       31
+>
+> Please try to use the asm-generic version of these definitions instead
+> copying them. If you need something different, you can add an #ifdef there,
+> and then we can discuss whether the difference makes sense.
+>
+>
+>         Arnd
