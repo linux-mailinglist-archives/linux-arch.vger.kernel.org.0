@@ -2,98 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B16B63C15BE
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 17:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0EA3C18BC
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 19:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbhGHPQe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Jul 2021 11:16:34 -0400
-Received: from mga12.intel.com ([192.55.52.136]:22808 "EHLO mga12.intel.com"
+        id S229619AbhGHSAL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Jul 2021 14:00:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53746 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229738AbhGHPQe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 8 Jul 2021 11:16:34 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10039"; a="189204135"
-X-IronPort-AV: E=Sophos;i="5.84,224,1620716400"; 
-   d="scan'208";a="189204135"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 08:13:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,224,1620716400"; 
-   d="scan'208";a="461805621"
-Received: from irsmsx605.ger.corp.intel.com ([163.33.146.138])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Jul 2021 08:13:51 -0700
-Received: from tjmaciei-mobl1.localnet (10.212.151.102) by
- IRSMSX605.ger.corp.intel.com (163.33.146.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.4; Thu, 8 Jul 2021 16:13:49 +0100
-From:   Thiago Macieira <thiago.macieira@intel.com>
+        id S229469AbhGHSAL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 8 Jul 2021 14:00:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E52E617ED;
+        Thu,  8 Jul 2021 17:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625767049;
+        bh=GILCJAp3zw/ucw1JtpTq1F7yp7aHgc2Sdtt5l0resgM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LPT/OEJ2jJpsgU4tCIMtc4yIluW6OaIdSrHAXr4Ka8mVuj9/fscFvB8UrtelEm948
+         EcxGUANYkq3K/yM7ByIBr0JM4X8AMX2ejbAHzE8JYF3NGj3cWiTJQBY6Zp5sOggo0K
+         kH6L0FuiES0tZTLA16MT18XBVL2VmiKnY6tKMWWbwx/AT25vMvoI2pnk5hw/PXSKXr
+         2ov3JkEzfUrvfoGOEKSlJwv/HT3rqxcFtAC8kMm9iE6pSjui8VaSMSdtfsMSEb8urB
+         IaoH7an8aWAaicxa6weiFregKyDACpQpulXn/ljL4BncyewTXB2qj+q9oj5rJqrtwA
+         a5b4KuPqwVVyg==
+Date:   Thu, 8 Jul 2021 18:56:55 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Florian Weimer <fweimer@redhat.com>
-CC:     <hjl.tools@gmail.com>, <libc-alpha@sourceware.org>,
-        <linux-api@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <x86@kernel.org>
+Cc:     libc-alpha@sourceware.org, linux-api@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
 Subject: Re: x86 CPU features detection for applications (and AMX)
-Date:   Thu, 8 Jul 2021 08:13:45 -0700
-Message-ID: <1881978.gRoq7Scb6J@tjmaciei-mobl1>
-Organization: Intel Corporation
-In-Reply-To: <878s2hxoyn.fsf@oldenburg.str.redhat.com>
-References: <22261946.eFiGugXE7Z@tjmaciei-mobl1> <878s2hxoyn.fsf@oldenburg.str.redhat.com>
+Message-ID: <20210708175655.GA33786@sirena.org.uk>
+References: <87tulo39ms.fsf@oldenburg.str.redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [10.212.151.102]
-X-ClientProxiedBy: orsmsx603.amr.corp.intel.com (10.22.229.16) To
- IRSMSX605.ger.corp.intel.com (163.33.146.138)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
+Content-Disposition: inline
+In-Reply-To: <87tulo39ms.fsf@oldenburg.str.redhat.com>
+X-Cookie: "Elvis is my copilot."
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thursday, 8 July 2021 00:08:16 PDT Florian Weimer wrote:
-> > The first problem is the cross-platformness need. Because we library and
-> > application developers need to support other OSes, we'll need to deploy
-> > our
-> > own CPUID-based detection. It's far better to use common code everywhere,
-> > where one developer working on Linux can fix bugs in FreeBSD, macOS or
-> > Windows or any of the permutations. Every platform-specific deviation
-> > adds to maintenance requirements and is a source of potential latent
-> > bugs, now or in the future due to refactoring. That is why doing
-> > everything in the form of instructions would be far better and easier,
-> > rather than system calls.
-> I must say this is a rather application-specific view.  Sure, you get
-> consistency within the application across different targets, but for
-> those who work on multiple applications (but perhaps on a single
-> distribution/OS), things are very inconsistent.
 
-Why would they be inconsistent, if the library is cross-platform?
+--5vNYLRcllDrimb99
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> And the reason why I started this is that CPUID-based feature detection
-> is dead anyway (assuming the kernel developers do not implement lazy
-> initialization of the AMX state).  CPUID (and ancillary data such as
-> XCR0) will say that AMX support is there, but it will not work unless
-> some (yet to decided) steps are executed by the userspace thread.
-> 
-> While I consider the CPUID-based model a success (and the cross-OS
-> consistency may have contributed to that), its days seem to be over.
+On Wed, Jun 23, 2021 at 05:04:27PM +0200, Florian Weimer wrote:
 
-Well, we need to design the API of this library such that we can accommodate 
-the various possibilities. For all CPU possibilities, the library needs to be 
-able to tell what the state of support is, among a state of "already enabled", 
-"possible but not enabled" and "impossible", along with a call to enable them. 
-The latter should be supported at least for AVX512 and AMX states. On Linux, 
-only AMX will be tristate, but on macOS we need the tristate for AVX512 too.
+Copying in Catalin & Will.
 
-This library would then wrap all the necessary checking for OSXSAVE and XCR0, 
-so the user doesn't need to worry about them or how the OS enables them, only 
-the features they're interested in.
+> We have an interface in glibc to query CPU features:
 
-Additionally, I'd like the library to also have constant expression paths that 
-evaluate to constant true if the feature was already enabled at compile time 
-(e.g., -march=x86-64-v3 sets __AVX2__ and __FMA__, so you can always run AVX2 
-and FMA code, without checking). But that's just icing on top.
+>   X86-specific Facilities
+>   <https://www.gnu.org/software/libc/manual/html_node/X86.html>
 
-(it won't come as a surprise that I already have code for most of this)
+> CPU_FEATURE_USABLE all preconditions for a feature are met,
+> HAS_CPU_FEATURE means it's in silicon but possibly dormant.
+> CPU_FEATURE_USABLE is supposed to look at XCR0, AT_HWCAP2 etc. before
+> enabling the relevant bit (so it cannot pass through any unknown bits).
 
--- 
-Thiago Macieira - thiago.macieira (AT) intel.com
-  Software Architect - Intel DPG Cloud Engineering
+...
 
+> When we designed this glibc interface, we assumed that bits would be
+> static during the life-time of the process, initialized at process
+> start.  That follows the model of previous x86 CPU feature enablement.
 
+...
 
+> This still wouldn't cover the enable/disable side, but at least it would
+> work for CPU features which are modal and come and go.  The fact that we
+> tell GCC to cache the returned pointer from that internal function, but
+> not that the data is immutable works to our advantage here.
+
+> On the other hand, maybe there is a way to give users a better
+> interface.  Obviously we want to avoid a syscall for a simple CPU
+> feature check.  And we also need something to enable/disable CPU
+> features.
+
+This enabling and disabling of CPU features sounds like something that
+might also become relevant for arm64, for example I can see a use case
+for having something that allows some of the more expensive features
+to be masked from some userspace processes for resource management
+purposes.  This sounds like a bit of a different use case to x86 AIUI
+but I think there's overlap in the actual operations that would be
+needed.
+
+--5vNYLRcllDrimb99
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDnPGYACgkQJNaLcl1U
+h9CmMAgAgoVAsCnhVpOX+qfExOdJuwLQ3o0KisscXB9Lbg7xX4PiM7hCBDnFpVSP
+Ik+oZKueIi66qoFc/ca/UhQFI5wWBGdL2Ih3FfVOx5LJTjMNmkUR+vgJqy/G4qwP
+lHbN3J52gSsRoXov3LF85GE2KUCax+r/XyHY7++/VmC9ylEOzSXhItUheL6YUqhn
+AYxplSFPHP8Gha2gqN/Hc4Zzi2wpe6TNaHujDzTE6SVPdJi2PupWT+gQj6nAmyOg
+czDzchCbkyHxPvvEH4bUFrvwPKJXFx5aoMcUOLR2nQk98MauMUb2D8bhBRxLnmP+
+ZW1JhazXCO6p23WXdhGY47vx58/xiQ==
+=wOfR
+-----END PGP SIGNATURE-----
+
+--5vNYLRcllDrimb99--
