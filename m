@@ -2,99 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9A83BF5FB
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 09:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318213BF661
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 09:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbhGHHLE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Jul 2021 03:11:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31683 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229838AbhGHHLE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jul 2021 03:11:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625728102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GEplN6PPVWnKiacZuxrNB8nQ+DkJqElBemBx73k30F4=;
-        b=PRjpEoFpjqU+M6rr8YH+9vTm9C54Sd6xGtOKmfZZeXMK0cTP0VCToyAC72UA/sZViHcOOK
-        v6usH9TF9Ug6vzb8RxILwQ/lMdHzzXKEAbLW3fNGBIszN+GagJSTgm2FCtt+WejhzwqcGx
-        UJU3tM5sJzbBJr1t8aByAhW7S70nip4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-58-Fp4q-RhJNQ6weHlme5jdPQ-1; Thu, 08 Jul 2021 03:08:21 -0400
-X-MC-Unique: Fp4q-RhJNQ6weHlme5jdPQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 51BC58030B0;
-        Thu,  8 Jul 2021 07:08:20 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (ovpn-115-5.ams2.redhat.com [10.36.115.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A86EC5C1C2;
-        Thu,  8 Jul 2021 07:08:18 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Thiago Macieira <thiago.macieira@intel.com>
-Cc:     <hjl.tools@gmail.com>, <libc-alpha@sourceware.org>,
-        <linux-api@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <x86@kernel.org>
-Subject: Re: x86 CPU features detection for applications (and AMX)
-References: <22261946.eFiGugXE7Z@tjmaciei-mobl1>
-Date:   Thu, 08 Jul 2021 09:08:16 +0200
-In-Reply-To: <22261946.eFiGugXE7Z@tjmaciei-mobl1> (Thiago Macieira's message
-        of "Fri, 25 Jun 2021 16:31:06 -0700")
-Message-ID: <878s2hxoyn.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        id S230437AbhGHHmu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Jul 2021 03:42:50 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:11526 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229838AbhGHHmt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jul 2021 03:42:49 -0400
+X-Greylist: delayed 348 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 03:42:48 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1625729648;
+    s=strato-dkim-0002; d=aepfle.de;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Ie8bhNxcgTEIyaHnXue+qUsCeFcFU7OWzE+Hs21wg9g=;
+    b=nKxlYYk9ExTxZ9BuI9EhfpAje6vEfx0GVmBer00VZb2GlgTta4a3e6mEReme+AVLKJ
+    x1g28GBLyGoFvM6gaG5z7b+cV6ZJFLoem/obwXB9+z0+SoPV6pwNVVIIk3/UOPHsneyg
+    GWLwYXUqnjer9VpKH4m9Cx5Kv703S9RZFcbTVNL6kEIMVP91SRDKJaQgZM42hrAkVc4e
+    lmSSydRxnY+lu4pZdDi8VibLUhPOJminze/kIh5/0FPTHkurK2p5a/EfuKxM/KIN1xWG
+    WfgjyRn1yLU1J5t4Nvhf0XjMie6PdfNUCxeSR2W7CoeJ26/3wkjbXCgr0r3rPyjQAbxh
+    dA9w==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2EQZWCpfu+qG7CngxMFH1J+3q8wa/QDiZbDmui9LcK/RdXt7GAQpV1nK0bLlEYINdoY/p1XzQbc+3kk9TsJTnzSvdM+YSIzPms="
+X-RZG-CLASS-ID: mo00
+Received: from aepfle.de
+    by smtp.strato.de (RZmta 47.28.1 AUTH)
+    with ESMTPSA id 30791cx687Y4Yio
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 8 Jul 2021 09:34:04 +0200 (CEST)
+Date:   Thu, 8 Jul 2021 09:34:00 +0200
+From:   Olaf Hering <olaf@aepfle.de>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        rppt@kernel.org, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, Tianyu.Lan@microsoft.com,
+        thomas.lendacky@amd.com, ardb@kernel.org,
+        nramas@linux.microsoft.com, robh@kernel.org, keescook@chromium.org,
+        rientjes@google.com, pgonda@google.com, martin.b.radev@gmail.com,
+        hannes@cmpxchg.org, saravanand@fb.com, krish.sadhukhan@oracle.com,
+        xen-devel@lists.xenproject.org, tj@kernel.org,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
+        anparri@microsoft.com
+Subject: Re: [RFC PATCH V4 01/12] x86/HV: Initialize shared memory boundary
+ in the Isolation VM.
+Message-ID: <20210708073400.GA28528@aepfle.de>
+References: <20210707153456.3976348-1-ltykernel@gmail.com>
+ <20210707153456.3976348-2-ltykernel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210707153456.3976348-2-ltykernel@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Thiago Macieira:
+On Wed, Jul 07, Tianyu Lan wrote:
 
-> On 23 Jun 2021 17:04:27 +0200, Florian Weimer wrote:
->> We have an interface in glibc to query CPU features:
->> X86-specific Facilities
->> <https://www.gnu.org/software/libc/manual/html_node/X86.html>
->>
->> CPU_FEATURE_USABLE all preconditions for a feature are met,
->> HAS_CPU_FEATURE means it's in silicon but possibly dormant.
->> CPU_FEATURE_USABLE is supposed to look at XCR0, AT_HWCAP2 etc. before
->> enabling the relevant bit (so it cannot pass through any unknown bits).
->
-> It's a nice initiative, but it doesn't help library and applications that need 
-> to be either cross-platform or backwards compatible.
->
-> The first problem is the cross-platformness need. Because we library and 
-> application developers need to support other OSes, we'll need to deploy our 
-> own CPUID-based detection. It's far better to use common code everywhere, 
-> where one developer working on Linux can fix bugs in FreeBSD, macOS or Windows 
-> or any of the permutations. Every platform-specific deviation adds to 
-> maintenance requirements and is a source of potential latent bugs, now or in 
-> the future due to refactoring. That is why doing everything in the form of 
-> instructions would be far better and easier, rather than system calls.
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -34,8 +34,18 @@ struct ms_hyperv_info {
 
-I must say this is a rather application-specific view.  Sure, you get
-consistency within the application across different targets, but for
-those who work on multiple applications (but perhaps on a single
-distribution/OS), things are very inconsistent.
+>  	void  __percpu **ghcb_base;
 
-And the reason why I started this is that CPUID-based feature detection
-is dead anyway (assuming the kernel developers do not implement lazy
-initialization of the AMX state).  CPUID (and ancillary data such as
-XCR0) will say that AMX support is there, but it will not work unless
-some (yet to decided) steps are executed by the userspace thread.
-
-While I consider the CPUID-based model a success (and the cross-OS
-consistency may have contributed to that), its days seem to be over.
-
-> [Unless said system calls were standardised and actually
-> deployed. Making this a cross-platform library that is not part of
-> libc would be a major step in that direction]
-
-That won't help with AMX, as far as I can tell.
+It would be cool if the cover letter states which commit id this series is based on.
 
 Thanks,
-Florian
-
+Olaf
