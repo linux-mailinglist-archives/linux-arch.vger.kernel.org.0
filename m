@@ -2,73 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECEB3BF6D5
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 10:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E933BF7CD
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 11:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbhGHIUo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 8 Jul 2021 04:20:44 -0400
-Received: from mail8.turbodal.cl ([200.27.120.195]:56109 "EHLO
-        debian.turbodal.cl" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230509AbhGHIUn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jul 2021 04:20:43 -0400
-X-Greylist: delayed 5568 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 04:20:43 EDT
-Received: from mail4.turbodal.cl (unknown [192.100.110.128])
-        by debian.turbodal.cl (Postfix) with ESMTPS id 2C4EB169EC3;
-        Thu,  8 Jul 2021 02:16:53 -0400 (-04)
-Received: from mail4.turbodal.cl (localhost [127.0.0.1])
-        by mail4.turbodal.cl (Postfix) with ESMTPS id D7DB062E041B;
-        Thu,  8 Jul 2021 02:17:18 -0400 (-04)
-Received: from localhost (localhost [127.0.0.1])
-        by mail4.turbodal.cl (Postfix) with ESMTP id C26C462E0201;
-        Thu,  8 Jul 2021 02:17:18 -0400 (-04)
-Received: from mail4.turbodal.cl ([127.0.0.1])
-        by localhost (mail4.turbodal.cl [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id pFx_549--fzl; Thu,  8 Jul 2021 02:17:18 -0400 (-04)
-Received: from cris-PC.wifi (unknown [105.9.19.190])
-        by mail4.turbodal.cl (Postfix) with ESMTPSA id 623F262E058D;
-        Thu,  8 Jul 2021 02:17:09 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S231392AbhGHJzC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Jul 2021 05:55:02 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:10432 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231360AbhGHJzC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jul 2021 05:55:02 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GLBMP60LjzZpW0;
+        Thu,  8 Jul 2021 17:49:05 +0800 (CST)
+Received: from dggpeml500016.china.huawei.com (7.185.36.70) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 8 Jul 2021 17:52:18 +0800
+Received: from [10.174.148.223] (10.174.148.223) by
+ dggpeml500016.china.huawei.com (7.185.36.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 8 Jul 2021 17:52:17 +0800
+Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
+To:     Anthony Yznaga <anthony.yznaga@oracle.com>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-arch@vger.kernel.org>
+CC:     <mhocko@kernel.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <x86@kernel.org>, <hpa@zytor.com>,
+        <viro@zeniv.linux.org.uk>, <akpm@linux-foundation.org>,
+        <arnd@arndb.de>, <ebiederm@xmission.com>, <keescook@chromium.org>,
+        <gerg@linux-m68k.org>, <ktkhai@virtuozzo.com>,
+        <christian.brauner@ubuntu.com>, <peterz@infradead.org>,
+        <esyr@redhat.com>, <jgg@ziepe.ca>, <christian@kellner.me>,
+        <areber@redhat.com>, <cyphar@cyphar.com>,
+        <steven.sistare@oracle.com>,
+        "Gonglei (Arei)" <arei.gonglei@huawei.com>
+References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
+From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>
+Message-ID: <cc714571-4461-c9e0-7b24-e213664caa54@huawei.com>
+Date:   Thu, 8 Jul 2021 17:52:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsfonds_von_2=2C000=2C000_euro?=
-To:     Recipients <fae.eva@ptt.cl>
-From:   ''Charles jackson'' <fae.eva@ptt.cl>
-Date:   Thu, 08 Jul 2021 08:16:54 +0200
-Reply-To: charlesjacksonjr001@gmail.com
-Message-Id: <20210708061710.623F262E058D@mail4.turbodal.cl>
+In-Reply-To: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.148.223]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500016.china.huawei.com (7.185.36.70)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Lieber Freund,
+Hi Anthony and Steven,
 
+ÔÚ 2020/7/28 1:11, Anthony Yznaga Ð´µÀ:
+> This patchset adds support for preserving an anonymous memory range across
+> exec(3) using a new madvise MADV_DOEXEC argument.  The primary benefit for
+> sharing memory in this manner, as opposed to re-attaching to a named shared
+> memory segment, is to ensure it is mapped at the same virtual address in
+> the new process as it was in the old one.  An intended use for this is to
+> preserve guest memory for guests using vfio while qemu exec's an updated
+> version of itself.  By ensuring the memory is preserved at a fixed address,
+> vfio mappings and their associated kernel data structures can remain valid.
+> In addition, for the qemu use case, qemu instances that back guest RAM with
+> anonymous memory can be updated.
+> 
 
+We have a requirement like yours, but ours seems more complex. We want to
+isolate some memory regions from the VM's memory space and the start a child
+process who will using these memory regions.
 
- Ich bin Herr Charles W Jackson, North Carolina, Vereinigte Staaten von
-Amerika, der Mega-Gewinner von 344 Millionen US-Dollar. Beim
-Mega-Millions-Jackpot spende ich an 5 zuf&auml;llige Personen. Wenn
-Sie diese E-Mail erhalten, wurde Ihre E-Mail zu einem Spinball, den ich
-am h&auml;ufigsten verteilt habe von meinem Verm&ouml;gen an
-eine Reihe von Wohlt&auml;tigkeitsorganisationen. Ich habe mich
- freiwillig entschlossen, Ihnen als einer der ausgew&auml;hlten 5
-einen Betrag von &euro; 2.000.000,00 zu spenden, um meine Gewinne zu
- &uuml;berpr&uuml;fen.
+I've wrote a draft to support this feature, but I just find that my draft is
+pretty like yours.
 
- Dies ist Ihr Spendencode: [CJ530342019]
+It seems that you've already abandoned this patchset, why ?
 
+> Patches 1 and 2 ensure that loading of ELF load segments does not silently
+> clobber existing VMAS, and remove assumptions that the stack is the only
+> VMA in the mm when the stack is set up.  Patch 1 re-introduces the use of
+> MAP_FIXED_NOREPLACE to load ELF binaries that addresses the previous issues
+> and could be considered on its own.
+> 
+> Patches 3, 4, and 5 introduce the feature and an opt-in method for its use
+> using an ELF note.
+> 
+> Anthony Yznaga (5):
+>   elf: reintroduce using MAP_FIXED_NOREPLACE for elf executable mappings
+>   mm: do not assume only the stack vma exists in setup_arg_pages()
+>   mm: introduce VM_EXEC_KEEP
+>   exec, elf: require opt-in for accepting preserved mem
+>   mm: introduce MADV_DOEXEC
+> 
+>  arch/x86/Kconfig                       |   1 +
+>  fs/binfmt_elf.c                        | 196 +++++++++++++++++++++++++--------
+>  fs/exec.c                              |  33 +++++-
+>  include/linux/binfmts.h                |   7 +-
+>  include/linux/mm.h                     |   5 +
+>  include/uapi/asm-generic/mman-common.h |   3 +
+>  kernel/fork.c                          |   2 +-
+>  mm/madvise.c                           |  25 +++++
+>  mm/mmap.c                              |  47 ++++++++
+>  9 files changed, 266 insertions(+), 53 deletions(-)
+> 
 
-
- www.youtube.com/watch?v=BSr8myiLPMQ
-
-
-
-Antworten Sie auf diese E-Mail mit dem SPENDER-CODE:
-
-charlesjacksonjr001@gmail.com
-
- Ich hoffe, Sie und Ihre Familie gl&uuml;cklich zu machen
-
- Sch&ouml;ne Gr&uuml;&szlig;e
-
- Mr. Charles Jackson 
+-- 
+Sincerely yours,
+Longpeng(Mike)
