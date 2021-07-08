@@ -2,122 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BB23C1543
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 16:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE0B3C1554
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 16:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbhGHOj3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Jul 2021 10:39:29 -0400
-Received: from mga06.intel.com ([134.134.136.31]:44691 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231872AbhGHOj1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 8 Jul 2021 10:39:27 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10038"; a="270628632"
-X-IronPort-AV: E=Sophos;i="5.84,224,1620716400"; 
-   d="scan'208";a="270628632"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 07:36:45 -0700
-X-IronPort-AV: E=Sophos;i="5.84,224,1620716400"; 
-   d="scan'208";a="645929650"
-Received: from kezheong-mobl.gar.corp.intel.com (HELO [10.212.152.178]) ([10.212.152.178])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 07:36:44 -0700
-Subject: Re: x86 CPU features detection for applications (and AMX)
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     libc-alpha@sourceware.org, linux-api@vger.kernel.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        "H.J. Lu" <hjl.tools@gmail.com>, linux-kernel@vger.kernel.org
-References: <87tulo39ms.fsf@oldenburg.str.redhat.com>
- <e376bcb9-cd79-7665-5859-ae808dd286f1@intel.com>
- <878s2hz6g3.fsf@oldenburg.str.redhat.com>
- <b3b104cd-72d9-7f5c-116b-414c6ebf448d@intel.com>
- <87sg0oswqn.fsf@oldenburg.str.redhat.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <ba004c50-a630-27f4-5fb0-c6ad2b1f1e06@intel.com>
-Date:   Thu, 8 Jul 2021 07:36:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231933AbhGHOnY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Jul 2021 10:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229738AbhGHOnX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jul 2021 10:43:23 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBC2C061574;
+        Thu,  8 Jul 2021 07:40:40 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id v7so6189183pgl.2;
+        Thu, 08 Jul 2021 07:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YXjZj7OhvPZJaAtT6Qwq7/8ZjjZCmfNtMSr8qDj8MRU=;
+        b=ayW8QQM2efuvpdH0iOtsj9sDatgzjNkhl4+y/ouwe04BZcpt7tSpZSztZE1HcOshdP
+         QXaUNAf/1sngsBP+5ZL0dubNDykY4vKK6b9Wmf6V3NS5iLDuzZvWuWys1GP5fH3k/OTC
+         tYDRBkngjXQYqPF3DQewzYEvp4aC50Y/xFZW27B7I7FoSeruMrEakyjTyq4nU9lq5OXG
+         9pEOEVcjBjM/2JuAGoOCNl8yharry3mPga7LZqh8ptcnsE3cQjXBDpSs+J18TjrzoZin
+         UJfMRAaQiH9cX09/xDZhBpWcjIM9jra7EdcFVO0s5QSQNR3e2+qLq6ocQLn3NXgEDy83
+         /jFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YXjZj7OhvPZJaAtT6Qwq7/8ZjjZCmfNtMSr8qDj8MRU=;
+        b=KY3IZP+h3AWsRkeE4s9gY9cY43Evi421zJH5RBBFZBybGM7r4r8RUU1jYi8gHH97qL
+         9vne1E7MW6n3DHCdSfm2jGVqmkMeIYeV4dGWoaoggmukovV/foWZpRpNJdtAL6eyHOZI
+         kzttcE4fWJ95uKQmg9EnWJfGh1jhDu4zH7uVofyCxf5IakG9Xc9Iv144g9fxxx9NZYbb
+         PG1hQYnB1OaB7RSk94f+JwKfqi/A2nSj4HSaMh6LRa96ymGs6sqDuJtWMs1zgy4GqY47
+         MzCoNu7eenoovkmzzRAEO6XYW29fSmLU/TfKDJ1wsXm8aY8+wApJdd8/Bo4lorvvKxOL
+         vkEw==
+X-Gm-Message-State: AOAM530jAu/5I7cDPcuflCVWU5ES5W4xDO4+lKDBYYiCrOFQpq8w3uX8
+        PjJy5MjpQSMUdLJnyD9x3n4=
+X-Google-Smtp-Source: ABdhPJwsdOgUCGltloBXaOdJeRrQgvHkqG47NpBLcd9gNcAJ5PSk2V3aVVR6tD13omBoKJiA4S0mBQ==
+X-Received: by 2002:aa7:818a:0:b029:309:a073:51cb with SMTP id g10-20020aa7818a0000b0290309a07351cbmr31830476pfi.40.1625755240540;
+        Thu, 08 Jul 2021 07:40:40 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:18:efec::4b1])
+        by smtp.gmail.com with ESMTPSA id h20sm3216729pfn.173.2021.07.08.07.40.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jul 2021 07:40:39 -0700 (PDT)
+Subject: Re: [RFC PATCH V4 01/12] x86/HV: Initialize shared memory boundary in
+ the Isolation VM.
+To:     Olaf Hering <olaf@aepfle.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        rppt@kernel.org, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, Tianyu.Lan@microsoft.com,
+        thomas.lendacky@amd.com, ardb@kernel.org,
+        nramas@linux.microsoft.com, robh@kernel.org, keescook@chromium.org,
+        rientjes@google.com, pgonda@google.com, martin.b.radev@gmail.com,
+        hannes@cmpxchg.org, saravanand@fb.com, krish.sadhukhan@oracle.com,
+        xen-devel@lists.xenproject.org, tj@kernel.org,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
+        anparri@microsoft.com
+References: <20210707153456.3976348-1-ltykernel@gmail.com>
+ <20210707153456.3976348-2-ltykernel@gmail.com>
+ <20210708073400.GA28528@aepfle.de>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <9b5d6843-67c5-066e-0997-995ec77e06b2@gmail.com>
+Date:   Thu, 8 Jul 2021 22:40:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <87sg0oswqn.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210708073400.GA28528@aepfle.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/8/21 7:31 AM, Florian Weimer wrote:
->> OK, so if I call CPU_FEATURE_USABLE(PKS) on a system *WITH* PKS
->> supported in the operating system, I'll get false from an interface that
->> claims to be:
->>
->>> This macro returns a nonzero value (true) if the processor has the
->>> feature name and the feature is supported by the operating system.
->> The interface just seems buggy by *design*.
-> Yes, but that is largely a documentation matter.  We should have said
-> something about “userspace” there, and that the bit needs to be known to
-> glibc.  There is another exception: FSGSBASE, and that's a real bug we
-> need to fix (it has to go through AT_HWCAP2).
+Hi Olaf:
+
+On 7/8/2021 3:34 PM, Olaf Hering wrote:
+> On Wed, Jul 07, Tianyu Lan wrote:
 > 
-> If we want to avoid that, we need to go down the road of a curated set
-> of CPUID bits, where a bit only exists if we have taught glibc its
-> semantics.  You still might get a false negative by running against an
-> older glibc than the application was built for.  (We are not going to
-> force applications that e.g. look for FSGSBASE only run with a glibc
-> that is at least of that version which implemented semantics for the
-> FSGSBASE bit.)
+>> +++ b/include/asm-generic/mshyperv.h
+>> @@ -34,8 +34,18 @@ struct ms_hyperv_info {
+> 
+>>   	void  __percpu **ghcb_base;
+> 
+> It would be cool if the cover letter states which commit id this series is based on.
 
-That's kinda my whole point.
-
-These *MUST* be curated to be meaningful.  Right now, someone just
-dumped a set of CPUID bits into the documentation.
-
-The interface really needs *three* modes:
-
-1. Yes, the CPU/OS supports this feature
-2. No, the CPU/OS doesn't support this feature
-3. Hell if I know, never heard of this feature
-	
-The interface really conflates 2 and 3.  To me, that makes it
-fundamentally flawed.
+Thanks for your reminder. I will add this in the later version.
+This patchset is rebased on Hyper-V next branch with Swiotlb 
+“Restricted DMA“ patches from Claire Chang <tientzu@chromium.org>
+ 
+https://lore.kernel.org/lkml/20210624155526.2775863-1-tientzu@chromium.org/
