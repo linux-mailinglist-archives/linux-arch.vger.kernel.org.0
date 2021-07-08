@@ -2,83 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 318213BF661
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 09:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECEB3BF6D5
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 10:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbhGHHmu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Jul 2021 03:42:50 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:11526 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbhGHHmt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jul 2021 03:42:49 -0400
-X-Greylist: delayed 348 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 03:42:48 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1625729648;
-    s=strato-dkim-0002; d=aepfle.de;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=Ie8bhNxcgTEIyaHnXue+qUsCeFcFU7OWzE+Hs21wg9g=;
-    b=nKxlYYk9ExTxZ9BuI9EhfpAje6vEfx0GVmBer00VZb2GlgTta4a3e6mEReme+AVLKJ
-    x1g28GBLyGoFvM6gaG5z7b+cV6ZJFLoem/obwXB9+z0+SoPV6pwNVVIIk3/UOPHsneyg
-    GWLwYXUqnjer9VpKH4m9Cx5Kv703S9RZFcbTVNL6kEIMVP91SRDKJaQgZM42hrAkVc4e
-    lmSSydRxnY+lu4pZdDi8VibLUhPOJminze/kIh5/0FPTHkurK2p5a/EfuKxM/KIN1xWG
-    WfgjyRn1yLU1J5t4Nvhf0XjMie6PdfNUCxeSR2W7CoeJ26/3wkjbXCgr0r3rPyjQAbxh
-    dA9w==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2EQZWCpfu+qG7CngxMFH1J+3q8wa/QDiZbDmui9LcK/RdXt7GAQpV1nK0bLlEYINdoY/p1XzQbc+3kk9TsJTnzSvdM+YSIzPms="
-X-RZG-CLASS-ID: mo00
-Received: from aepfle.de
-    by smtp.strato.de (RZmta 47.28.1 AUTH)
-    with ESMTPSA id 30791cx687Y4Yio
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 8 Jul 2021 09:34:04 +0200 (CEST)
-Date:   Thu, 8 Jul 2021 09:34:00 +0200
-From:   Olaf Hering <olaf@aepfle.de>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
-        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
-        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
-        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        rppt@kernel.org, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, Tianyu.Lan@microsoft.com,
-        thomas.lendacky@amd.com, ardb@kernel.org,
-        nramas@linux.microsoft.com, robh@kernel.org, keescook@chromium.org,
-        rientjes@google.com, pgonda@google.com, martin.b.radev@gmail.com,
-        hannes@cmpxchg.org, saravanand@fb.com, krish.sadhukhan@oracle.com,
-        xen-devel@lists.xenproject.org, tj@kernel.org,
-        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
-        anparri@microsoft.com
-Subject: Re: [RFC PATCH V4 01/12] x86/HV: Initialize shared memory boundary
- in the Isolation VM.
-Message-ID: <20210708073400.GA28528@aepfle.de>
-References: <20210707153456.3976348-1-ltykernel@gmail.com>
- <20210707153456.3976348-2-ltykernel@gmail.com>
+        id S231144AbhGHIUo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 8 Jul 2021 04:20:44 -0400
+Received: from mail8.turbodal.cl ([200.27.120.195]:56109 "EHLO
+        debian.turbodal.cl" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230509AbhGHIUn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jul 2021 04:20:43 -0400
+X-Greylist: delayed 5568 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 04:20:43 EDT
+Received: from mail4.turbodal.cl (unknown [192.100.110.128])
+        by debian.turbodal.cl (Postfix) with ESMTPS id 2C4EB169EC3;
+        Thu,  8 Jul 2021 02:16:53 -0400 (-04)
+Received: from mail4.turbodal.cl (localhost [127.0.0.1])
+        by mail4.turbodal.cl (Postfix) with ESMTPS id D7DB062E041B;
+        Thu,  8 Jul 2021 02:17:18 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by mail4.turbodal.cl (Postfix) with ESMTP id C26C462E0201;
+        Thu,  8 Jul 2021 02:17:18 -0400 (-04)
+Received: from mail4.turbodal.cl ([127.0.0.1])
+        by localhost (mail4.turbodal.cl [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id pFx_549--fzl; Thu,  8 Jul 2021 02:17:18 -0400 (-04)
+Received: from cris-PC.wifi (unknown [105.9.19.190])
+        by mail4.turbodal.cl (Postfix) with ESMTPSA id 623F262E058D;
+        Thu,  8 Jul 2021 02:17:09 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210707153456.3976348-2-ltykernel@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsfonds_von_2=2C000=2C000_euro?=
+To:     Recipients <fae.eva@ptt.cl>
+From:   ''Charles jackson'' <fae.eva@ptt.cl>
+Date:   Thu, 08 Jul 2021 08:16:54 +0200
+Reply-To: charlesjacksonjr001@gmail.com
+Message-Id: <20210708061710.623F262E058D@mail4.turbodal.cl>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 07, Tianyu Lan wrote:
+Lieber Freund,
 
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -34,8 +34,18 @@ struct ms_hyperv_info {
 
->  	void  __percpu **ghcb_base;
 
-It would be cool if the cover letter states which commit id this series is based on.
+ Ich bin Herr Charles W Jackson, North Carolina, Vereinigte Staaten von
+Amerika, der Mega-Gewinner von 344 Millionen US-Dollar. Beim
+Mega-Millions-Jackpot spende ich an 5 zuf&auml;llige Personen. Wenn
+Sie diese E-Mail erhalten, wurde Ihre E-Mail zu einem Spinball, den ich
+am h&auml;ufigsten verteilt habe von meinem Verm&ouml;gen an
+eine Reihe von Wohlt&auml;tigkeitsorganisationen. Ich habe mich
+ freiwillig entschlossen, Ihnen als einer der ausgew&auml;hlten 5
+einen Betrag von &euro; 2.000.000,00 zu spenden, um meine Gewinne zu
+ &uuml;berpr&uuml;fen.
 
-Thanks,
-Olaf
+ Dies ist Ihr Spendencode: [CJ530342019]
+
+
+
+ www.youtube.com/watch?v=BSr8myiLPMQ
+
+
+
+Antworten Sie auf diese E-Mail mit dem SPENDER-CODE:
+
+charlesjacksonjr001@gmail.com
+
+ Ich hoffe, Sie und Ihre Familie gl&uuml;cklich zu machen
+
+ Sch&ouml;ne Gr&uuml;&szlig;e
+
+ Mr. Charles Jackson 
