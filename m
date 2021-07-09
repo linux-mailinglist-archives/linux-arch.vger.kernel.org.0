@@ -2,57 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 980503C2100
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Jul 2021 10:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBBF3C2184
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Jul 2021 11:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbhGIIrs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Jul 2021 04:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
+        id S231519AbhGIJ1j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Jul 2021 05:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbhGIIrq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jul 2021 04:47:46 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6EBC0613DD
-        for <linux-arch@vger.kernel.org>; Fri,  9 Jul 2021 01:45:03 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id o8so9470966ilf.12
-        for <linux-arch@vger.kernel.org>; Fri, 09 Jul 2021 01:45:03 -0700 (PDT)
+        with ESMTP id S231725AbhGIJ1j (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jul 2021 05:27:39 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD20C0613DD
+        for <linux-arch@vger.kernel.org>; Fri,  9 Jul 2021 02:24:56 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id k11so11760903ioa.5
+        for <linux-arch@vger.kernel.org>; Fri, 09 Jul 2021 02:24:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MQcrFZfGoEUKQRvfZb5BdVn66QI0fqMmpjL918kSXsw=;
-        b=QxfURs+1MDuCE3UfAZAiAgWcuOdHlsVu4n8PoAHbV6yxbI/BMuM5Bt8IawIhqi66kT
-         ya+EIC7jQ2lcbubpmL6c7HO4CWQqkk/AuYqGxiU/qOS5IzGXf0MpbL6YJa17cfv1Hk+k
-         efHwtexNZb9lL8sUtTTnEX3Hh14xAhFDmvj/jmjnkA31x54ea0ooN/KlPAXH8FUWeaMB
-         O8QxywwcOnHDjL53oYZBL55akMefY7KEeKlHq6xqK1P9j3ElVyN6b7zdJRcVspm7sZk2
-         D6Od9nckCg2XzCuRIkEfPVLElnMNv9PWbdBmonNPz9fzIfG9qUPEd/p4YHsHWer6ZjQc
-         REFQ==
+        bh=r5Ob00/jKbmKkG1HdKeEb25b3wYm0hP9FPlKP1Yr52w=;
+        b=n+tE8nEXg8f4jKNmIDeXsFoXfoFc7ZboXynMEpa+yctf30H5HCeNxp/IcaJQl3XVok
+         yI7rik75p/W7E4QOEMlzToDoGMYiZ8gil8aUdb2QjhDRnCXzYNHEVX3CoODUegdh+JEb
+         +M57mRZ9zSKfpXSXp6Ug9frfcqrzOKqG3Rfsonb4hg5PK1kHIprKgQ/CLvfju7wh1ciZ
+         9MszWvXEts/k5qz393Py4dqfb5wt5cIRfmWcUXZxBXcdV09Sp0VpXuEvSjyRU9s50B4o
+         gXeAB0F/a/rikzDimUlU2BlQS5wtB9YtQ3FKYVXaxBrcXNJeuJoDzUNn4LDNhArximvM
+         WgVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MQcrFZfGoEUKQRvfZb5BdVn66QI0fqMmpjL918kSXsw=;
-        b=MudFXJhsdJxsn80tY+vu8UmcEdr5M4hOt8nn3nfNVFnspnVeDURx33bwcvMzWE4vsX
-         6iK7JsSIsIpVePu5PnuJ5jNduawVKb5QozWzAUfwGo+oJ0M6FfY9qj81oEeYjDi931VI
-         i3swa8oCDFEkfbARWf8914o2y51K86ItLw3FqyOTaFypJwi4PrwbPIjvTKc2oBualRVc
-         YruRwDgu3xtyCivsf4p5abnOllJhtx9upMi22Y2453MIxUbyjazxCl81u0qL6BUbAiPt
-         8f8R9/FJAMYRswEz9zK3zFBaO9VrAWsmkNwPEzP3Yw31Y9S6XShVKu8xWLyw9KxIWShy
-         J/LA==
-X-Gm-Message-State: AOAM530YWpROF/HM+z0G2o00hJX5MtiidiOUHDLkAlpGUtHNs026lo47
-        vkKOgRnn06bf5DYDrN7shFsWbb/neDiEbfnLy5EnrN+QuTfE92xj
-X-Google-Smtp-Source: ABdhPJzSQFhUkGkDP1dkZqtL5iXKL9TLgQIPIsuk5bl+TIT/zxXoyLXELP3KzZhPf6rhPLZMhY/6V7JeUx+RLaY394o=
-X-Received: by 2002:a92:6509:: with SMTP id z9mr25976829ilb.184.1625820303248;
- Fri, 09 Jul 2021 01:45:03 -0700 (PDT)
+        bh=r5Ob00/jKbmKkG1HdKeEb25b3wYm0hP9FPlKP1Yr52w=;
+        b=Td7zi2TL3Q5daldDK7PP3aHVDPJHKfX4dwtyBd2It9/uh3tjYMppRDlmMdtHM7ip5k
+         UA56QyYt9XiUshRABqCPEvjcqt7RVv9yaaKX06bD4w1q93axGF0ToV4GcoL0I+wA5aR+
+         X8smjhZDIuhWRCZj5DoH88MNP0+c6fkguDnhoIchQTmozJ+VWAimn0PLyCEYKUSTucq4
+         0z1mg5oojDanSMGTFV8wvFRLRH74WTuAGZdHAMp3vgtGJE5sFSZJYYXdzM4oLzS/6nIq
+         eW4We4+jfieYXiU1bOMJG6SFmNYzmI2bmEYhJZTOaIaYDWRQ9KiOm2t5oxP5JVGv3dQc
+         wiHQ==
+X-Gm-Message-State: AOAM533jN0dPpKRfoP8eNtbMIs4UQLYjsZvZK1sBiYVoiRwCh7jHBM0H
+        rmHn7tPDoO2/B6HY/EnQeBHu8LnA2657pyaMSfW1YYm2UJGq2Sjo
+X-Google-Smtp-Source: ABdhPJwS6POnzcsBP0UHV8xem8Waml0Kj+ej5BD3m4EC/t8gLbNwpENcO4jYMoVgeFOLGeRl6zQzkmIqg3sJjpES/Jw=
+X-Received: by 2002:a5e:8612:: with SMTP id z18mr11072835ioj.38.1625822695634;
+ Fri, 09 Jul 2021 02:24:55 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-10-chenhuacai@loongson.cn> <CAK8P3a0n+HcPhevh4ifNMmsv+MUtGn1wky-HWZpyNT1GVSq4+Q@mail.gmail.com>
- <CAAhV-H6q8Cz0bGBZo6dUESwk1wfa75TL6YH+YS1kQe9UzHB=Tg@mail.gmail.com> <CAK8P3a3E2a1PQ5+pD3sDs4vbQiwx3Z9vAQOG7akd645B86AYHg@mail.gmail.com>
-In-Reply-To: <CAK8P3a3E2a1PQ5+pD3sDs4vbQiwx3Z9vAQOG7akd645B86AYHg@mail.gmail.com>
+ <20210706041820.1536502-11-chenhuacai@loongson.cn> <CAK8P3a0zkiFrn9K14Hg8C-rfCk-GbyTGMnq_DFBd8o28q99tRg@mail.gmail.com>
+ <CAAhV-H4WtGqgYF_zDhaS9+Ja7k=Zs8O2qWo5GqHDDf5cKw-zow@mail.gmail.com> <CAK8P3a1GQ=P-kNB5+wUkyqV0uD11uHCJZSQ7gbkwjev0GhuJTQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a1GQ=P-kNB5+wUkyqV0uD11uHCJZSQ7gbkwjev0GhuJTQ@mail.gmail.com>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 9 Jul 2021 16:44:51 +0800
-Message-ID: <CAAhV-H5RKGPz2OJbb58vJ8GBMjZnEnnFEfbFRKqmmP1eJ+GHYQ@mail.gmail.com>
-Subject: Re: [PATCH 09/19] LoongArch: Add system call support
-To:     Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 9 Jul 2021 17:24:44 +0800
+Message-ID: <CAAhV-H4Yqo090vmy0Y7hGzguP9Q_C+EuZvsq7D43dA=J0f_1qA@mail.gmail.com>
+Subject: Re: [PATCH 10/19] LoongArch: Add signal handling support
+To:     Arnd Bergmann <arnd@arndb.de>, yili0568@gmail.com
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -62,7 +62,8 @@ Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -70,59 +71,32 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi, Arnd,
 
-On Wed, Jul 7, 2021 at 2:44 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Thu, Jul 8, 2021 at 9:30 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Wed, Jul 7, 2021 at 6:24 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> On Thu, Jul 8, 2021 at 3:04 PM Huacai Chen <chenhuacai@gmail.com> wrote:
 > > On Tue, Jul 6, 2021 at 6:17 PM Arnd Bergmann <arnd@arndb.de> wrote:
 > > > On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
-> > > > new file mode 100644
-> > > > index 000000000000..6c194d740ed0
-> > > > --- /dev/null
-> > > > +++ b/arch/loongarch/include/uapi/asm/unistd.h
-> > > > @@ -0,0 +1,7 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > > > +#define __ARCH_WANT_NEW_STAT
+> > > > +
+> > > > +#ifndef _NSIG
+> > > > +#define _NSIG          128
+> > > > +#endif
 > > >
-> > > Why do you need newstat? I think now that we have statx and the libc
-> > > emulation code on top of it, there is probably no need to support both
-> > > on the kernel side.
-> > >
-> > > > +#define __ARCH_WANT_SYS_CLONE
-> > > > +#define __ARCH_WANT_SYS_CLONE3
-> > >
-> > > Similarly, if you have clone3, you should not need clone.
-> > >
-> > > > +#define __ARCH_WANT_SET_GET_RLIMIT
-> > >
-> > > And here for prlimit64
+> > > Everything else uses 64 here, except for MIPS.
 > >
-> > Is newstat()/clone()/setrlimit() completely unacceptable in a new
-> > arch? If not, I want to keep it here for compatibility, because there
-> > are some existing distros.
+> > Once before we also wanted to use 64, but we also want to use LBT to
+> > execute X86/MIPS/ARM binaries, so we chose the largest value (128).
+> > Some applications, such as sighold02 in LTP, will fail if _NSIG is not
+> > big enough.
 >
-> I'd say they should go. None of these are normally called directly by
-> applications, so if you just update the C library to redirect the user
-> level interfaces to the new system calls, I expect no major problems
-> here as long as you update libc along with the kernel in the existing
-> distros.
-> Any application using seccomp to allow only the old system calls
-> may need a small update, but it would need that anyway to work
-> with future libc implementations.
->
-> Generally speaking there should be no expectation that the
-> system call interface is stable until the port is upstream. Note that
-> you will face a similar problem with the libc port, which may also
-> change its interface from what you are using internally.
-I found that the latest glibc is not ready for clone3, the last
-patchset [1] still breaks something, so I think we should keep clone.
-For newstat, I found that the latest glibc only use statx for 32bit
-kernel, while 64bit kernel still use newstat.
-
-So, it seems that we can only remove __ARCH_WANT_SET_GET_RLIMIT.
-
-[1] https://patchwork.sourceware.org/project/glibc/patch/20210601145516.3553627-2-hjl.tools@gmail.com/
+> Have you tried separating the in-kernel _NSIG from the number used
+> in the loongarch ABI? This may require a few changes to architecture
+> independent signal handling code, but I think it would be a cleaner
+> solution, and make it easier to port existing software without having
+> to special-case loongarch along with mips.
+Jun Yi (yili0568@gmail.com) is my colleague who develops LBT software,
+he has some questions about how to "separate the in-kernel _NSIG from
+the number used in the LoongArch ABI".
 
 Huacai
 >
->        Arnd
+>       Arnd
