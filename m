@@ -2,162 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C6C3C2734
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Jul 2021 18:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9465B3C2A33
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Jul 2021 22:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbhGIQDB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Jul 2021 12:03:01 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:55757 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbhGIQCz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jul 2021 12:02:55 -0400
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M9Wqa-1m7N6c1xkC-005c7F for <linux-arch@vger.kernel.org>; Fri, 09 Jul 2021
- 18:00:10 +0200
-Received: by mail-wr1-f53.google.com with SMTP id d2so12858053wrn.0
-        for <linux-arch@vger.kernel.org>; Fri, 09 Jul 2021 09:00:10 -0700 (PDT)
-X-Gm-Message-State: AOAM531uxdjdrgx/KPFfkLn2TjZL4ZzoKDqWsHCI91OG8YWe58Ev8J1z
-        3K5sUOoTZZQmCnZnlpqgw7DqOFLK6rCFY1FwtR0=
-X-Google-Smtp-Source: ABdhPJwJMHz+qMlnSRT6OiX05vjkdJtMQE1SrecsCgghAwfOUUkCCIxQHMm11RcYwJuGivR5LVpznhOls8jN4xa/jMo=
-X-Received: by 2002:a5d:6485:: with SMTP id o5mr43724729wri.286.1625846409370;
- Fri, 09 Jul 2021 09:00:09 -0700 (PDT)
+        id S229546AbhGIUQx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Jul 2021 16:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbhGIUQv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jul 2021 16:16:51 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AECC0613DD
+        for <linux-arch@vger.kernel.org>; Fri,  9 Jul 2021 13:14:06 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id p1so25526150lfr.12
+        for <linux-arch@vger.kernel.org>; Fri, 09 Jul 2021 13:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=om3/tquiPRwJI5801Mk3pfJdMWk5Se4hEpSuQIq2E5o=;
+        b=SHsg7Kb2mZywnx6e9hjPTlLtdEPpLsMsoHarQnq0jiVIQC0DgR2QQV0qk+QVOz3Ra/
+         JI/f8tWVABGsMcGLlt6j+dpiomdXIMzTS3+NkMkW7+LYbPy/lpPDZp/43bYZ+fVyYOf0
+         S7PasHQlzdEqLBn1ZMEv26ThxnzN+yGbh5UQI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=om3/tquiPRwJI5801Mk3pfJdMWk5Se4hEpSuQIq2E5o=;
+        b=EeojxIUGT9HK3rQSBjDQQAVjWXmG2H25b79p/BQGd8V3FVIqmtZPKyKTVPM1T8Ru0h
+         0j8fN/N/QlelJomOKa67h9EcsjDa9iYmkAXfDrP/53IUb58Smz+TVEBcPl6mgyO74KL0
+         HcNt1qeXypZaqs5Ihkty44oQnfeUxEBAa6QsqiaDoZr525svSWVkWTc0DDXSERyD61X/
+         gmNRwIpAkHfw1aEi68D/+I4PYh84CA+rphVn2WKUJEtTQvZWVh/nUnwRcor81a7XNyp1
+         zV8kVQEC1n3XcAYAbNA9EBvZbZU1+eftAyfZ18z9+9elWT3Q9BhOTtDME0MXL9Z1307d
+         L9ig==
+X-Gm-Message-State: AOAM531iWDCT7PoCOSBJI9HhO7IpcBQslkfm3mZTiZdRdKHYX7Qqgj13
+        Ut0j8bGu4yXNs0j2WUbSNMvwxulBBDhbmnSt
+X-Google-Smtp-Source: ABdhPJzEEDB7PsGVB/0r1INdzxFxmqjAUyp4kW9jGd3jQQ9kaDcdWjaVi6ezulV7dhAA5HW71KgaiA==
+X-Received: by 2002:a05:6512:3186:: with SMTP id i6mr29987274lfe.291.1625861644152;
+        Fri, 09 Jul 2021 13:14:04 -0700 (PDT)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id x24sm651785ljd.78.2021.07.09.13.14.03
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jul 2021 13:14:03 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id 8so13892303lfp.9
+        for <linux-arch@vger.kernel.org>; Fri, 09 Jul 2021 13:14:03 -0700 (PDT)
+X-Received: by 2002:a05:6512:404:: with SMTP id u4mr3195956lfk.40.1625861642795;
+ Fri, 09 Jul 2021 13:14:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-11-chenhuacai@loongson.cn> <CAK8P3a0zkiFrn9K14Hg8C-rfCk-GbyTGMnq_DFBd8o28q99tRg@mail.gmail.com>
- <CAAhV-H4WtGqgYF_zDhaS9+Ja7k=Zs8O2qWo5GqHDDf5cKw-zow@mail.gmail.com>
- <CAK8P3a1GQ=P-kNB5+wUkyqV0uD11uHCJZSQ7gbkwjev0GhuJTQ@mail.gmail.com>
- <CAAhV-H4Yqo090vmy0Y7hGzguP9Q_C+EuZvsq7D43dA=J0f_1qA@mail.gmail.com>
- <CAK8P3a0QYcKaCSt9gfvDxDYOhBywihba+wWozspzytssmkx3tw@mail.gmail.com> <875yxjee55.fsf@disp2133>
-In-Reply-To: <875yxjee55.fsf@disp2133>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 9 Jul 2021 17:59:53 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1Dp7kiAqJJjTN_dxX_P-VO8+4Macrw3w-E-fGfU-XejQ@mail.gmail.com>
-Message-ID: <CAK8P3a1Dp7kiAqJJjTN_dxX_P-VO8+4Macrw3w-E-fGfU-XejQ@mail.gmail.com>
-Subject: Re: [PATCH 10/19] LoongArch: Add signal handling support
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Huacai Chen <chenhuacai@gmail.com>, yili0568@gmail.com,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20210708043145.GB17672@lst.de> <38991687-7b33-994b-b7d3-22400872a45a@gmail.com>
+ <20210708045804.GA18249@lst.de> <147ffcbd-f946-bb6c-b7bc-35c0672572ce@gmail.com>
+ <20210708125751.GA11898@lst.de> <bf4ad0a4-5cd4-4e82-8513-64ab47d5e522@gmail.com>
+ <21557cf4-e1a7-69c3-7c67-c7d4e5a6fbf7@gmail.com> <20210709042219.GA13558@lst.de>
+ <CAMuHMdVu-GU55bR60yEfWunGm1NiGL6bxS2eM5hHJtWyKxiW9Q@mail.gmail.com>
+ <1a3c9c70-1858-0f95-56a4-b0bd82fc7045@gmail.com> <20210709085324.GA23590@lst.de>
+ <061de3e3-91df-2c23-116f-250f579a664e@gmail.com> <CAMuHMdVWuHfHdNjMLq1LG0cQ0jq2w-XodvJPOK+Q4Dhy807fuA@mail.gmail.com>
+ <d3f23781-1968-d936-2a1a-6d964dbcb860@gmail.com> <34ba1bc1-9e15-3d14-55ec-a5b4ca118e63@gmail.com>
+ <CAHk-=wgK9tKr4EG9B0YhW28XDUOUTc5-Ds1=pa1wtvFyNbExhw@mail.gmail.com>
+In-Reply-To: <CAHk-=wgK9tKr4EG9B0YhW28XDUOUTc5-Ds1=pa1wtvFyNbExhw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 9 Jul 2021 13:13:46 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj4OM6wWh14y+AEOh2rwTz-61jviB5kyFYUY0ndc0q3gw@mail.gmail.com>
+Message-ID: <CAHk-=wj4OM6wWh14y+AEOh2rwTz-61jviB5kyFYUY0ndc0q3gw@mail.gmail.com>
+Subject: Re: [PATCH RFC v2] m68k: remove get_fs()/set_fs()
+To:     Michael Schmitz <schmitzmic@gmail.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:UKK/dMBUzafL/8YqW/gTmmkyzlI/pmluKoMucEntczwn8lF/a5I
- iOZtuLBIste7rwFBc93e/KjDb39MYN3lWg1nVyW+jEEioUHomuBIJflrvazTp9jd9E6OaRl
- P6pk/LjmlS3ZlPFqhqUNCphKPDYNxi41WnZWnQCid07nYmEtiVs8QWfCx5WhpLvEAQmIaP1
- IMhEQ20vmjkXPRAdRckJA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0w3J5tFh9Fs=:n6jv5CQHfJEobmJ9us7Q4/
- F1zL4npndhEepLzWGgtzvKCWVHK6JowlH8LY2Ww8zRP360bfH6JZwvaCyP7XHUu8j5RwErVpf
- qSLIPZeo6Hcb64SPNJQZU+6CtaFpzZlZg+hQe5/4MVQJ/QEaBxm0Lel+Q2m8LC5kiIXmSc23a
- VneVV+GjtCxJZkNNe4Fic5G6iLt5V7K/SmzUZDxwBBBwJRPqYbO5gBMaQib4N+P6LiO+zRJoO
- ds5TlBaxssOa5I6Y2Yo4OExKN6L4nKtxVT8rQlxrx7paZGazF2siceNs9alvv1LFMOJ+17G6A
- OFn8YHb1HzOG/ONaJTZD1ae8oiz17Df0FtFtWPeq7P+E1LsrvAiP45KBP0WChK8P6VGCe5iCH
- be+X+et6Rmy4gGY+F24wHXVFNgkV1CzFoSoFHFenq51ACKrJzQYD7oqfg9pruTVOFLOD7ewkk
- H5PfQNvxXakF6JzZWrulJ7HUqsyD+xxN55dHsYvCMUt56YWA5L+MzgCT8yFw13A+Ur01i3Tow
- VNsoTtSXuaH4macSsZgnJV1nJcHe+m8hhfGycmzK5TnipXw/dAP9T/fuhdZ2JRPrc40diPEXI
- RK9bdo9kdek1F7PMipG1nyfIeqM2clQbj8Fy7p9lLoUQhJgQugYIe0G3lkVOuJPazIHKZTTrp
- 6Mdn+YBJAS0f8V59ojTw28RSzAae0X+rfLPCTSBLqUXNIdXrmR3dXLhvHOj/7seu1MOwBYCGU
- /oTRXwDZcW8JaypCtH7PJLcqQOcxio2Na6ax8WV91osTSrxmP1Tu+ML2P/WQ/Gfz13iIopOtz
- CPCoS2bpWu5XO0BE2xYZISrNLQc5CFlWg2uWVOgybZk7I52p5YHZyQ9hEtRImRjqwnSJs5D5l
- 9NV3FaYk68FmohZ5giAuHNYn3nu9VMbena9U7foupoNud/H3ZLYR6wbAznlot3hgPQGG/tb8D
- sw4IOLaoKBgRxjNd9iz6M145yy49KdTvpg/N1U4VJYtoIP7ej7xMf
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 9, 2021 at 4:49 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Arnd Bergmann <arnd@arndb.de> writes:
-> > On Fri, Jul 9, 2021 at 11:24 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> >> On Thu, Jul 8, 2021 at 9:30 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > Most such system calls currently go through set_user_sigmask or
-> > set_compat_user_sigmask, which only differ on big-endian.
-> > I would actually like to see these merged together and have a single
-> > helper checking for in_compat_syscall() to decide whether to do
-> > the word-swap for 32-bit bit-endian tasks or not, but that's a separate
-> > discussion (and I suspect that Eric won't like that version, based on
-> > other discussions we've had).
+On Fri, Jul 9, 2021 at 1:03 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Reading through get_compat_sigset is the best argument I have ever seen
-> for getting rid of big endian architectures.  My gut reaction is we
-> should just sweep all of the big endian craziness into a corner and let
-> it disappear as the big endian architectures are retired.
-
-A nice thought, but not going to happen any time soon as long as IBM
-makes money from s390.
-
-> Perhaps we generalize the non-compat version of the system calls and
-> only have a compat version of the system call for the big endian
-> architectures.
+> Except maybe there's some 32-bit architecture that doesn't support
+> 8-byte get/put_user(), which may be why it's a copy_to_user().
 >
-> I really hope loongarch and any new architectures added to the tree all
-> are little endian.
+> I _think_ we made the rule be that everybody had to support 1/2/4/8
+> byte accesses, but maybe I remember incorrectly.
 
-It is. Most of the architectures merged over the last years only support
-little-endian kernels, even those that can theoretically do both in hardware
-(c-sky, riscv). arm64 and arc support big-endian in theory, but this is
-rarely used.
+We're _almost_ correct.
 
-Most of the server and workstation class hardware from the last
-century is big-endian though. OpenRISC was the last architecture
-we support that is big-endian only, but this was designed 21 years
-ago now.
+nios2 doesn't seem to support 8-byte user accesses.
 
-> > What I think you need for loongarch though is to change
-> > set_user_sigmask(), get_compat_sigset() and similar functions to
-> > behave differently depending on the user space execution context,
-> > converting the 64-bit masks for loongarch/x86/arm64 tasks into
-> > 128-bit in-kernel masks, while copying the 128-bit mips masks
-> > as-is. This also requires changing the sigset_t and _NSIG
-> > definitions so you get a 64-bit mask in user space, but a 128-bit
-> > mask in kernel space.
-> >
-> > There are multiple ways of achieving this, either by generalizing
-> > the common code, or by providing an architecture specific
-> > implementation to replace it for loongarch only. I think you need to
-> > try out which of those is the most maintainable.
->
-> I believe all of the modern versions of the system calls that
-> take a sigset_t in the kernel also take a sigsetsize.  So the most
-> straight forward thing to do is to carefully define what happens
-> to sigsets that are too big or too small when set.
->
-> Something like defining that if a sigset is larger than the kernel's
-> sigset size all of the additional bits must be zero, and if the sigset
-> is smaller than the kernel's sigset size all of the missing bits
-> will be set to zero in the kernel's sigset_t.  There may be cases
-> I am missing bug for SIG_SETMASK, SIG_BLOCK, and SIG_UNBLOCK those
-> look like the correct definitions.
+Everybody else does seem to have a 'case 8:' at least according to my
+simplistic grep (but that grep might have been _too_ simplistic).
 
-Right, that would work as well. It is a change in behavior though,
-since currently kernels just reject any non-default sigsetsize, and there
-is a chance that this causes problems when some project relies on
-being able to pass an arbitrary sigsetsize value, and then someone
-tries running this on an older kernel.
+Added nios2 and the arch list.
 
-> Another option would be to simply have whatever translates the system
-> calls in userspace to perform the work of verifying the extra bits in
-> the bitmap are unused before calling system calls that take a sigset_t
-> and just ignoring the extra bits.
+I think we could easily just say "you have to support a 8-byte
+get/put_user()". At worst, an architecture can just implement it using
+copy_from_user() like some already do, ie something like
 
-This is why I asked about how the current loongarch code does it.
-qemu must already be doing something like this to run mips code on
-non-mips architectures or vice-versa. FEX is another project doing
-this, but they also want to add support for foreign syscalls (x86 on
-arm64 mainly).
+        case 8: {                                                       \
+                u64 __x;                                                \
+                if (unlikely(copy_from_user(&__x, ptr, 8))) {         \
+                        retval = -EFAULT;                               \
+                        (x) = (__typeof__(*(ptr)))0;                    \
+                } else {                                                \
+                        (x) = *(__force __typeof__(*(ptr)) *)&__x;      \
+                }                                                       \
+                break;                                                  \
+        }                                                               \
 
-Based on previous discussions, I can see us coming up with a more
-general way to handle ioctl() commands using some lookup table
-to decide which commands need what kind of translation (32-bit
-compat, foreign architecture, usercopy, ...). This needs some more
-planning and discussion, but if we end up doing it, it would be
-plausible to have a more general way for dealing with more than two
-ABIs in a syscall.
+so if somebody wants to make 'sys_llseek()' use put_user(), I'm ok with that.
 
-       Arnd
+              Linus
