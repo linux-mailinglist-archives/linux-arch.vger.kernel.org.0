@@ -2,107 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0EA3C18BC
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jul 2021 19:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980503C2100
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Jul 2021 10:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbhGHSAL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Jul 2021 14:00:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53746 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229469AbhGHSAL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 8 Jul 2021 14:00:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E52E617ED;
-        Thu,  8 Jul 2021 17:57:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625767049;
-        bh=GILCJAp3zw/ucw1JtpTq1F7yp7aHgc2Sdtt5l0resgM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LPT/OEJ2jJpsgU4tCIMtc4yIluW6OaIdSrHAXr4Ka8mVuj9/fscFvB8UrtelEm948
-         EcxGUANYkq3K/yM7ByIBr0JM4X8AMX2ejbAHzE8JYF3NGj3cWiTJQBY6Zp5sOggo0K
-         kH6L0FuiES0tZTLA16MT18XBVL2VmiKnY6tKMWWbwx/AT25vMvoI2pnk5hw/PXSKXr
-         2ov3JkEzfUrvfoGOEKSlJwv/HT3rqxcFtAC8kMm9iE6pSjui8VaSMSdtfsMSEb8urB
-         IaoH7an8aWAaicxa6weiFregKyDACpQpulXn/ljL4BncyewTXB2qj+q9oj5rJqrtwA
-         a5b4KuPqwVVyg==
-Date:   Thu, 8 Jul 2021 18:56:55 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     libc-alpha@sourceware.org, linux-api@vger.kernel.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: x86 CPU features detection for applications (and AMX)
-Message-ID: <20210708175655.GA33786@sirena.org.uk>
-References: <87tulo39ms.fsf@oldenburg.str.redhat.com>
+        id S231494AbhGIIrs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Jul 2021 04:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231361AbhGIIrq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jul 2021 04:47:46 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6EBC0613DD
+        for <linux-arch@vger.kernel.org>; Fri,  9 Jul 2021 01:45:03 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id o8so9470966ilf.12
+        for <linux-arch@vger.kernel.org>; Fri, 09 Jul 2021 01:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MQcrFZfGoEUKQRvfZb5BdVn66QI0fqMmpjL918kSXsw=;
+        b=QxfURs+1MDuCE3UfAZAiAgWcuOdHlsVu4n8PoAHbV6yxbI/BMuM5Bt8IawIhqi66kT
+         ya+EIC7jQ2lcbubpmL6c7HO4CWQqkk/AuYqGxiU/qOS5IzGXf0MpbL6YJa17cfv1Hk+k
+         efHwtexNZb9lL8sUtTTnEX3Hh14xAhFDmvj/jmjnkA31x54ea0ooN/KlPAXH8FUWeaMB
+         O8QxywwcOnHDjL53oYZBL55akMefY7KEeKlHq6xqK1P9j3ElVyN6b7zdJRcVspm7sZk2
+         D6Od9nckCg2XzCuRIkEfPVLElnMNv9PWbdBmonNPz9fzIfG9qUPEd/p4YHsHWer6ZjQc
+         REFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MQcrFZfGoEUKQRvfZb5BdVn66QI0fqMmpjL918kSXsw=;
+        b=MudFXJhsdJxsn80tY+vu8UmcEdr5M4hOt8nn3nfNVFnspnVeDURx33bwcvMzWE4vsX
+         6iK7JsSIsIpVePu5PnuJ5jNduawVKb5QozWzAUfwGo+oJ0M6FfY9qj81oEeYjDi931VI
+         i3swa8oCDFEkfbARWf8914o2y51K86ItLw3FqyOTaFypJwi4PrwbPIjvTKc2oBualRVc
+         YruRwDgu3xtyCivsf4p5abnOllJhtx9upMi22Y2453MIxUbyjazxCl81u0qL6BUbAiPt
+         8f8R9/FJAMYRswEz9zK3zFBaO9VrAWsmkNwPEzP3Yw31Y9S6XShVKu8xWLyw9KxIWShy
+         J/LA==
+X-Gm-Message-State: AOAM530YWpROF/HM+z0G2o00hJX5MtiidiOUHDLkAlpGUtHNs026lo47
+        vkKOgRnn06bf5DYDrN7shFsWbb/neDiEbfnLy5EnrN+QuTfE92xj
+X-Google-Smtp-Source: ABdhPJzSQFhUkGkDP1dkZqtL5iXKL9TLgQIPIsuk5bl+TIT/zxXoyLXELP3KzZhPf6rhPLZMhY/6V7JeUx+RLaY394o=
+X-Received: by 2002:a92:6509:: with SMTP id z9mr25976829ilb.184.1625820303248;
+ Fri, 09 Jul 2021 01:45:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
-Content-Disposition: inline
-In-Reply-To: <87tulo39ms.fsf@oldenburg.str.redhat.com>
-X-Cookie: "Elvis is my copilot."
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-10-chenhuacai@loongson.cn> <CAK8P3a0n+HcPhevh4ifNMmsv+MUtGn1wky-HWZpyNT1GVSq4+Q@mail.gmail.com>
+ <CAAhV-H6q8Cz0bGBZo6dUESwk1wfa75TL6YH+YS1kQe9UzHB=Tg@mail.gmail.com> <CAK8P3a3E2a1PQ5+pD3sDs4vbQiwx3Z9vAQOG7akd645B86AYHg@mail.gmail.com>
+In-Reply-To: <CAK8P3a3E2a1PQ5+pD3sDs4vbQiwx3Z9vAQOG7akd645B86AYHg@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Fri, 9 Jul 2021 16:44:51 +0800
+Message-ID: <CAAhV-H5RKGPz2OJbb58vJ8GBMjZnEnnFEfbFRKqmmP1eJ+GHYQ@mail.gmail.com>
+Subject: Re: [PATCH 09/19] LoongArch: Add system call support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi, Arnd,
 
---5vNYLRcllDrimb99
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Wed, Jul 7, 2021 at 2:44 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Wed, Jul 7, 2021 at 6:24 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > On Tue, Jul 6, 2021 at 6:17 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
+> > > > new file mode 100644
+> > > > index 000000000000..6c194d740ed0
+> > > > --- /dev/null
+> > > > +++ b/arch/loongarch/include/uapi/asm/unistd.h
+> > > > @@ -0,0 +1,7 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > > > +#define __ARCH_WANT_NEW_STAT
+> > >
+> > > Why do you need newstat? I think now that we have statx and the libc
+> > > emulation code on top of it, there is probably no need to support both
+> > > on the kernel side.
+> > >
+> > > > +#define __ARCH_WANT_SYS_CLONE
+> > > > +#define __ARCH_WANT_SYS_CLONE3
+> > >
+> > > Similarly, if you have clone3, you should not need clone.
+> > >
+> > > > +#define __ARCH_WANT_SET_GET_RLIMIT
+> > >
+> > > And here for prlimit64
+> >
+> > Is newstat()/clone()/setrlimit() completely unacceptable in a new
+> > arch? If not, I want to keep it here for compatibility, because there
+> > are some existing distros.
+>
+> I'd say they should go. None of these are normally called directly by
+> applications, so if you just update the C library to redirect the user
+> level interfaces to the new system calls, I expect no major problems
+> here as long as you update libc along with the kernel in the existing
+> distros.
+> Any application using seccomp to allow only the old system calls
+> may need a small update, but it would need that anyway to work
+> with future libc implementations.
+>
+> Generally speaking there should be no expectation that the
+> system call interface is stable until the port is upstream. Note that
+> you will face a similar problem with the libc port, which may also
+> change its interface from what you are using internally.
+I found that the latest glibc is not ready for clone3, the last
+patchset [1] still breaks something, so I think we should keep clone.
+For newstat, I found that the latest glibc only use statx for 32bit
+kernel, while 64bit kernel still use newstat.
 
-On Wed, Jun 23, 2021 at 05:04:27PM +0200, Florian Weimer wrote:
+So, it seems that we can only remove __ARCH_WANT_SET_GET_RLIMIT.
 
-Copying in Catalin & Will.
+[1] https://patchwork.sourceware.org/project/glibc/patch/20210601145516.3553627-2-hjl.tools@gmail.com/
 
-> We have an interface in glibc to query CPU features:
-
->   X86-specific Facilities
->   <https://www.gnu.org/software/libc/manual/html_node/X86.html>
-
-> CPU_FEATURE_USABLE all preconditions for a feature are met,
-> HAS_CPU_FEATURE means it's in silicon but possibly dormant.
-> CPU_FEATURE_USABLE is supposed to look at XCR0, AT_HWCAP2 etc. before
-> enabling the relevant bit (so it cannot pass through any unknown bits).
-
-...
-
-> When we designed this glibc interface, we assumed that bits would be
-> static during the life-time of the process, initialized at process
-> start.  That follows the model of previous x86 CPU feature enablement.
-
-...
-
-> This still wouldn't cover the enable/disable side, but at least it would
-> work for CPU features which are modal and come and go.  The fact that we
-> tell GCC to cache the returned pointer from that internal function, but
-> not that the data is immutable works to our advantage here.
-
-> On the other hand, maybe there is a way to give users a better
-> interface.  Obviously we want to avoid a syscall for a simple CPU
-> feature check.  And we also need something to enable/disable CPU
-> features.
-
-This enabling and disabling of CPU features sounds like something that
-might also become relevant for arm64, for example I can see a use case
-for having something that allows some of the more expensive features
-to be masked from some userspace processes for resource management
-purposes.  This sounds like a bit of a different use case to x86 AIUI
-but I think there's overlap in the actual operations that would be
-needed.
-
---5vNYLRcllDrimb99
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDnPGYACgkQJNaLcl1U
-h9CmMAgAgoVAsCnhVpOX+qfExOdJuwLQ3o0KisscXB9Lbg7xX4PiM7hCBDnFpVSP
-Ik+oZKueIi66qoFc/ca/UhQFI5wWBGdL2Ih3FfVOx5LJTjMNmkUR+vgJqy/G4qwP
-lHbN3J52gSsRoXov3LF85GE2KUCax+r/XyHY7++/VmC9ylEOzSXhItUheL6YUqhn
-AYxplSFPHP8Gha2gqN/Hc4Zzi2wpe6TNaHujDzTE6SVPdJi2PupWT+gQj6nAmyOg
-czDzchCbkyHxPvvEH4bUFrvwPKJXFx5aoMcUOLR2nQk98MauMUb2D8bhBRxLnmP+
-ZW1JhazXCO6p23WXdhGY47vx58/xiQ==
-=wOfR
------END PGP SIGNATURE-----
-
---5vNYLRcllDrimb99--
+Huacai
+>
+>        Arnd
