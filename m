@@ -2,240 +2,185 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C1A3C2314
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Jul 2021 13:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4436D3C2646
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Jul 2021 16:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbhGILqb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Jul 2021 07:46:31 -0400
-Received: from mail-wr1-f51.google.com ([209.85.221.51]:36505 "EHLO
-        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbhGILqb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jul 2021 07:46:31 -0400
-Received: by mail-wr1-f51.google.com with SMTP id v5so11776225wrt.3;
-        Fri, 09 Jul 2021 04:43:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VqfQYRujiVCbvUET1tYexxAXm4pSzM0r3WLnNjfOptI=;
-        b=m1sdojjtR04TNGeKVR/Mj40Ewpq5JpRDH2WZdnTps+lIz/xvlAFgym0IfB2YCr+2oi
-         Cv/1Yz0XCnfujRFsXfcO5VfUXDK1sBC50JEl4rZdWejCS2nOUEtoL2Ji+c55AgrSs0bF
-         EOqBjddaIrwkyJNJk+EXNv8HFy4D6VSHjO71LOvpgE0nwbXkz1C0r/Dlilg7NeJXU1JE
-         Z8IWGxVTZQ56YPnfANI6AopIW9fqz+VLtirepX++pm8OKNzwRwkcBYfvCdnw0eEBsWD2
-         0oeT9nfGXMlmOJ4ApYo0zHHazbCwhM0wa6hRRMPmQg2y4rDRLXJIfG5tGimIXqzg/4ty
-         o9uA==
-X-Gm-Message-State: AOAM5321C4gaFrHtJk+A/majBsHD8YX7UXOzJg7fn3ni707qdzTlEXq5
-        apg/yGXdPLRXAc2zk5PkV4eIVm3ADDk=
-X-Google-Smtp-Source: ABdhPJzTfUo92LrowcMjqWS+KOE462K/u/SLNsywE9CFgnM+fi00+32FwUU6Cdi+A+onLquTkeMJQQ==
-X-Received: by 2002:a5d:4fd2:: with SMTP id h18mr16414039wrw.289.1625831025339;
-        Fri, 09 Jul 2021 04:43:45 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2.j3c5onc20sse1dnehy4noqpfcg.zx.internal.cloudapp.net ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id z12sm4896849wrs.39.2021.07.09.04.43.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 04:43:45 -0700 (PDT)
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linux on Hyper-V List <linux-hyperv@vger.kernel.org>
-Cc:     virtualization@lists.linux-foundation.org,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        kumarpraveen@linux.microsoft.com, pasha.tatashin@soleen.com,
-        Wei Liu <wei.liu@kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
-Subject: [RFC v1 2/8] asm-generic/hyperv: add device domain definitions
-Date:   Fri,  9 Jul 2021 11:43:33 +0000
-Message-Id: <20210709114339.3467637-3-wei.liu@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210709114339.3467637-1-wei.liu@kernel.org>
-References: <20210709114339.3467637-1-wei.liu@kernel.org>
+        id S232230AbhGIOwn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Jul 2021 10:52:43 -0400
+Received: from out02.mta.xmission.com ([166.70.13.232]:55144 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231921AbhGIOwn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jul 2021 10:52:43 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1m1rpD-00A8qA-70; Fri, 09 Jul 2021 08:49:55 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:56964 helo=email.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1m1rpB-00F0wm-2v; Fri, 09 Jul 2021 08:49:54 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@gmail.com>, yili0568@gmail.com,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+        <20210706041820.1536502-11-chenhuacai@loongson.cn>
+        <CAK8P3a0zkiFrn9K14Hg8C-rfCk-GbyTGMnq_DFBd8o28q99tRg@mail.gmail.com>
+        <CAAhV-H4WtGqgYF_zDhaS9+Ja7k=Zs8O2qWo5GqHDDf5cKw-zow@mail.gmail.com>
+        <CAK8P3a1GQ=P-kNB5+wUkyqV0uD11uHCJZSQ7gbkwjev0GhuJTQ@mail.gmail.com>
+        <CAAhV-H4Yqo090vmy0Y7hGzguP9Q_C+EuZvsq7D43dA=J0f_1qA@mail.gmail.com>
+        <CAK8P3a0QYcKaCSt9gfvDxDYOhBywihba+wWozspzytssmkx3tw@mail.gmail.com>
+Date:   Fri, 09 Jul 2021 09:49:10 -0500
+In-Reply-To: <CAK8P3a0QYcKaCSt9gfvDxDYOhBywihba+wWozspzytssmkx3tw@mail.gmail.com>
+        (Arnd Bergmann's message of "Fri, 9 Jul 2021 12:22:42 +0200")
+Message-ID: <875yxjee55.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-XM-SPF: eid=1m1rpB-00F0wm-2v;;;mid=<875yxjee55.fsf@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/1M7Km3cPABMWNGArCi61yOmDh3o+GL1w=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels,XM_B_SpammyWords
+        autolearn=disabled version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Arnd Bergmann <arnd@arndb.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1115 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 4.1 (0.4%), b_tie_ro: 2.9 (0.3%), parse: 0.74
+        (0.1%), extract_message_metadata: 12 (1.1%), get_uri_detail_list: 2.5
+        (0.2%), tests_pri_-1000: 5 (0.5%), tests_pri_-950: 1.08 (0.1%),
+        tests_pri_-900: 0.83 (0.1%), tests_pri_-90: 77 (6.9%), check_bayes: 76
+        (6.8%), b_tokenize: 9 (0.8%), b_tok_get_all: 11 (1.0%), b_comp_prob:
+        2.4 (0.2%), b_tok_touch_all: 50 (4.5%), b_finish: 0.63 (0.1%),
+        tests_pri_0: 460 (41.3%), check_dkim_signature: 0.42 (0.0%),
+        check_dkim_adsp: 2.4 (0.2%), poll_dns_idle: 523 (46.9%), tests_pri_10:
+        2.6 (0.2%), tests_pri_500: 549 (49.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 10/19] LoongArch: Add signal handling support
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-These definitions are for the IOMMU device domain interfaces exposed by
-Microsoft Hyperivsor. We will use them to implement DMA remapping.
+Arnd Bergmann <arnd@arndb.de> writes:
 
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
----
- include/asm-generic/hyperv-tlfs.h | 144 ++++++++++++++++++++++++++++++
- 1 file changed, 144 insertions(+)
+> On Fri, Jul 9, 2021 at 11:24 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+>> On Thu, Jul 8, 2021 at 9:30 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>> > On Thu, Jul 8, 2021 at 3:04 PM Huacai Chen <chenhuacai@gmail.com> wrote:
+>> > > On Tue, Jul 6, 2021 at 6:17 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>> > > > On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>> > > > > +
+>> > > > > +#ifndef _NSIG
+>> > > > > +#define _NSIG          128
+>> > > > > +#endif
+>> > > >
+>> > > > Everything else uses 64 here, except for MIPS.
+>> > >
+>> > > Once before we also wanted to use 64, but we also want to use LBT to
+>> > > execute X86/MIPS/ARM binaries, so we chose the largest value (128).
+>> > > Some applications, such as sighold02 in LTP, will fail if _NSIG is not
+>> > > big enough.
+>> >
+>> > Have you tried separating the in-kernel _NSIG from the number used
+>> > in the loongarch ABI? This may require a few changes to architecture
+>> > independent signal handling code, but I think it would be a cleaner
+>> > solution, and make it easier to port existing software without having
+>> > to special-case loongarch along with mips.
+>>
+>> Jun Yi (yili0568@gmail.com) is my colleague who develops LBT software,
+>> he has some questions about how to "separate the in-kernel _NSIG from
+>> the number used in the LoongArch ABI".
+>
+> This ties in with how the foreign syscall implementation is done for LBT,
+> and I don't know what you have today, on that side, since it is not part
+> of the initial submission.
+>
+> I think what this means in the end is that any system call that takes
+> a sigset_t argument will have to behave differently based on the
+> architecture. At the moment, we have
+>
+> - compat_old_sigset_t (always 32-bit)
+> - old_sigset_t (always word size: 32 or 64)
+> - sigset_t (always 64, except on mips)
+>
+> The code dealing with old_sigset_t/compat_old_sigset_t shows how
+> a kernel can deal with having different sigset sizes in user space, but
+> now we need the same thing for sigset_t as well, if you have a kernel
+> that needs to deal with both 128-bit and 64-bit masks in user space.
+>
+> Most such system calls currently go through set_user_sigmask or
+> set_compat_user_sigmask, which only differ on big-endian.
+> I would actually like to see these merged together and have a single
+> helper checking for in_compat_syscall() to decide whether to do
+> the word-swap for 32-bit bit-endian tasks or not, but that's a separate
+> discussion (and I suspect that Eric won't like that version, based on
+> other discussions we've had).
 
-diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index c1d3424f9e00..a39b0e6393f2 100644
---- a/include/asm-generic/hyperv-tlfs.h
-+++ b/include/asm-generic/hyperv-tlfs.h
-@@ -93,6 +93,13 @@
- #define HV_ENABLE_EXTENDED_HYPERCALLS		BIT(20)
- #define HV_ISOLATION				BIT(22)
- 
-+/*
-+ * Group D features
-+ */
-+#define HV_DEVICE_DOMAIN_AVAILABLE		BIT(24)
-+#define HV_S1_DEVICE_DOMAIN_AVAILABLE		BIT(25)
-+
-+
- /*
-  * TSC page layout.
-  */
-@@ -179,6 +186,17 @@ struct ms_hyperv_tsc_page {
- #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
- #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
- #define HVCALL_GET_GPA_PAGES_ACCESS_STATES 0x00c9
-+#define HVCALL_CREATE_DEVICE_DOMAIN		0x00b1
-+#define HVCALL_ATTACH_DEVICE_DOMAIN		0x00b2
-+#define HVCALL_MAP_DEVICE_GPA_PAGES		0x00b3
-+#define HVCALL_UNMAP_DEVICE_GPA_PAGES		0x00b4
-+#define HVCALL_DETACH_DEVICE_DOMAIN		0x00c4
-+#define HVCALL_DELETE_DEVICE_DOMAIN		0x00c5
-+#define HVCALL_QUERY_DEVICE_DOMAIN		0x00c6
-+#define HVCALL_MAP_SPARSE_DEVICE_GPA_PAGES	0x00c7
-+#define HVCALL_UNMAP_SPARSE_DEVICE_GPA_PAGES	0x00c8
-+#define HVCALL_CONFIGURE_DEVICE_DOMAIN		0x00ce
-+#define HVCALL_FLUSH_DEVICE_DOMAIN		0x00d0
- #define HVCALL_MAP_VP_STATE_PAGE			0x00e1
- #define HVCALL_GET_VP_STATE				0x00e3
- #define HVCALL_SET_VP_STATE				0x00e4
-@@ -1069,4 +1087,130 @@ union hv_disconnect_port {
- 		u32 reserved: 31;
- 	};
- } __packed;
-+
-+/* Device domain types */
-+#define HV_DEVICE_DOMAIN_TYPE_S2  0 /* Stage 2 domain */
-+#define HV_DEVICE_DOMAIN_TYPE_S1  1 /* Stage 1 domain */
-+#define HV_DEVICE_DOMAIN_TYPE_SOC 2 /* SOC domain */
-+
-+/* ID for stage 2 default domain and NULL domain */
-+#define HV_DEVICE_DOMAIN_ID_S2_DEFAULT 0
-+#define HV_DEVICE_DOMAIN_ID_S2_NULL    0xFFFFFFFFULL
-+
-+union hv_device_domain_id {
-+	u64 as_uint64;
-+	struct {
-+		u32 type: 4;
-+		u32 reserved: 28;
-+		u32 id;
-+	};
-+} __packed;
-+
-+union hv_input_vtl {
-+	u8 as_uint8;
-+	struct {
-+		u8 target_vtl: 4;
-+		u8 use_target_vtl: 1;
-+		u8 reserved_z: 3;
-+	};
-+} __packed;
-+
-+struct hv_input_device_domain {
-+	u64 partition_id;
-+	union hv_input_vtl owner_vtl;
-+	u8 padding[7];
-+	union hv_device_domain_id domain_id;
-+} __packed;
-+
-+union hv_create_device_domain_flags {
-+	u32 as_uint32;
-+	struct {
-+		u32 forward_progress_required: 1;
-+		u32 inherit_owning_vtl: 1;
-+		u32 reserved: 30;
-+	};
-+} __packed;
-+
-+struct hv_input_create_device_domain {
-+	struct hv_input_device_domain device_domain;
-+	union hv_create_device_domain_flags create_device_domain_flags;
-+} __packed;
-+
-+struct hv_input_delete_device_domain {
-+	struct hv_input_device_domain device_domain;
-+} __packed;
-+
-+struct hv_input_attach_device_domain {
-+	struct hv_input_device_domain device_domain;
-+	union hv_device_id device_id;
-+} __packed;
-+
-+struct hv_input_detach_device_domain {
-+	u64 partition_id;
-+	union hv_device_id device_id;
-+} __packed;
-+
-+struct hv_input_map_device_gpa_pages {
-+	struct hv_input_device_domain device_domain;
-+	union hv_input_vtl target_vtl;
-+	u8 padding[3];
-+	u32 map_flags;
-+	u64 target_device_va_base;
-+	u64 gpa_page_list[];
-+} __packed;
-+
-+struct hv_input_unmap_device_gpa_pages {
-+	struct hv_input_device_domain device_domain;
-+	u64 target_device_va_base;
-+} __packed;
-+
-+struct hv_input_query_device_domain {
-+	struct hv_input_device_domain device_domain;
-+	u64 target_device_va_list[];
-+} __packed;
-+
-+struct hv_device_va_mapping {
-+	u64 target_device_va;
-+	u64 gpa_page_number;
-+} __packed;
-+
-+struct hv_input_map_sparse_device_gpa_pages {
-+	struct hv_input_device_domain device_domain;
-+	union hv_input_vtl target_vtl;
-+	u32 map_flags;
-+	struct hv_device_va_mapping page_list[];
-+} __packed;
-+
-+struct hv_input_unmap_sparse_device_gpa_pages {
-+	struct hv_input_device_domain device_domain;
-+	u64 target_device_va_list[];
-+} __packed;
-+
-+struct hv_device_domain_settings_x64 {
-+	struct {
-+		/*
-+		 * Enable translations. If not enabled, all transaction bypass
-+		 * S1 translations.
-+		 */
-+		u64 translation_enabled: 1;
-+		u64 reserved: 63;
-+	} flags;
-+	/* Page attribute table */
-+	u64 pat;
-+	/* Address of translation table */
-+	u64 page_table_root;
-+} __packed;
-+
-+struct hv_device_domain_settings {
-+	union {
-+		struct hv_device_domain_settings_x64 x64;
-+		/* ARM TBD */
-+	};
-+} __packed;
-+
-+struct hv_input_configure_device_domain {
-+	struct hv_input_device_domain device_domain;
-+	struct hv_device_domain_settings settings;
-+} __packed;
-+
- #endif
--- 
-2.30.2
+Reading through get_compat_sigset is the best argument I have ever seen
+for getting rid of big endian architectures.  My gut reaction is we
+should just sweep all of the big endian craziness into a corner and let
+it disappear as the big endian architectures are retired.
 
+Perhaps we generalize the non-compat version of the system calls and
+only have a compat version of the system call for the big endian
+architectures.
+
+I really hope loongarch and any new architectures added to the tree all
+are little endian.
+
+> What I think you need for loongarch though is to change
+> set_user_sigmask(), get_compat_sigset() and similar functions to
+> behave differently depending on the user space execution context,
+> converting the 64-bit masks for loongarch/x86/arm64 tasks into
+> 128-bit in-kernel masks, while copying the 128-bit mips masks
+> as-is. This also requires changing the sigset_t and _NSIG
+> definitions so you get a 64-bit mask in user space, but a 128-bit
+> mask in kernel space.
+>
+> There are multiple ways of achieving this, either by generalizing
+> the common code, or by providing an architecture specific
+> implementation to replace it for loongarch only. I think you need to
+> try out which of those is the most maintainable.
+
+I believe all of the modern versions of the system calls that
+take a sigset_t in the kernel also take a sigsetsize.  So the most
+straight forward thing to do is to carefully define what happens
+to sigsets that are too big or too small when set.
+
+Something like defining that if a sigset is larger than the kernel's
+sigset size all of the additional bits must be zero, and if the sigset
+is smaller than the kernel's sigset size all of the missing bits
+will be set to zero in the kernel's sigset_t.  There may be cases
+I am missing bug for SIG_SETMASK, SIG_BLOCK, and SIG_UNBLOCK those
+look like the correct definitions.
+
+Another option would be to simply have whatever translates the system
+calls in userspace to perform the work of verifying the extra bits in
+the bitmap are unused before calling system calls that take a sigset_t
+and just ignoring the extra bits.
+
+Eric
