@@ -2,840 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 496063C8A03
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Jul 2021 19:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72973C8AFE
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Jul 2021 20:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbhGNRsD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Jul 2021 13:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbhGNRsD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Jul 2021 13:48:03 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402D0C06175F;
-        Wed, 14 Jul 2021 10:45:11 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id h8so4283532eds.4;
-        Wed, 14 Jul 2021 10:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7kKquISYHicDtSbcUKgpEyWu8aMQWPZhSquVGhDWzRs=;
-        b=dVGZCXZ8/2qImy60b4rlEtItaMIu6e6stG9JqBr74jaMmv2xMlOMpLFVj4uoAzZe+c
-         4zHLfSol608CKrQ1EPT6SFrR48i9exr/hBdTr7I038nekt1l844zCTf7yAunaX2lSSpI
-         YdUTyYe709Ufo6AC5STvUiu6+RFnF8gflig96xmvL7DEjdyBMFN9eCXn2FpJHudXB6Yq
-         DMt0isKaOJJgo0uQNoCpNN3oedXGoXnX8SztCDR0jv2L//fUO0OrjgGqjOmmUPoC79BJ
-         wrAE6FN7Hzy+tVJWaAzQH4w1dsSMFB9vpL3LWZjRCs9L3CXO/zi9rfkBJyLM+s0Yu4QY
-         fxpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7kKquISYHicDtSbcUKgpEyWu8aMQWPZhSquVGhDWzRs=;
-        b=KQ4e8JPaXwkJype3OwnGeYSWQZPXsDbP80X+98IFyYm830i7RHdtGrAJtYyIqPE7LJ
-         Vv45GsiR0Ti66XsygtpD4w2kfOVv7fIhYEddlHzv5aFE7SGDVC53mnRDnL5mBS0lUcix
-         J4XdmQlQ9Wa7FwLPyCFPLg4c8IinnxJvL2Qsi/ffMxgSzbapfDJ97l5B6VfD5jLvoZaA
-         Cawfai4/Pk1zvHiwTBDvx8mJiYR1kQ8MPrn8HheOGBx51K9wy7NQeAOiV4la+RFBt8Ts
-         XVseFScJBf2iNO9qAd5uZdGLho822Z4tO3zRMAQPKcosQS9GGrpSEhQVm6yj5akPVaM6
-         NIhA==
-X-Gm-Message-State: AOAM532XD3SCYyEJ+Og3VTQ5a5np9lZsEAoUWQEVN1lBSQ+dJzXekx92
-        GkRrIFGWk2MBTihojUt9Kg==
-X-Google-Smtp-Source: ABdhPJxVAyHi0rSKfFEz/ag4yXB3ARUbyBzUizwt292Q/e4kla6SNDMmr6rBMG1G6hfNlkXvM3+TyA==
-X-Received: by 2002:aa7:da06:: with SMTP id r6mr15502650eds.38.1626284709702;
-        Wed, 14 Jul 2021 10:45:09 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.253.115])
-        by smtp.gmail.com with ESMTPSA id m8sm1321240eds.10.2021.07.14.10.45.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 10:45:09 -0700 (PDT)
-Date:   Wed, 14 Jul 2021 20:45:07 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, arnd@arndb.de, masahiroy@kernel.org,
-        hch@infradead.org
-Subject: [PATCH v2] Decouple build from userspace headers
-Message-ID: <YO8ioz4sHwcUAkdt@localhost.localdomain>
-References: <YO3txvw87MjKfdpq@localhost.localdomain>
+        id S230211AbhGNSiD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Jul 2021 14:38:03 -0400
+Received: from mail-bn7nam10on2104.outbound.protection.outlook.com ([40.107.92.104]:37967
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229603AbhGNSiD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 14 Jul 2021 14:38:03 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Exe+U80WiDLESHlPTpu5Mh9w24oQ/MFhbWQMsJz1M1+2MSlyK9YNWE1qb/9/6vqkEMGjjXXUWeWJIYSabbgV8jpmadAjvkMzwFTUGsoxg3+dTZK5VMtyQRXR05wI4bPFU/hajyVgl4Qx755+PZmxXAKp3LvnNKDJWtY4YBT+3FkkDdwYyDPlxd2kU4xbibs5kahx3MSzjivpmwAxNJba2W9bj/VNrG5rQDLejHvdQ8+WLZYeSq4X4C+ZPeDQYzeJIyUnFuYi10bz8gJ7s2uHt7JXvtDuLpY4Sc1x7VJzFmRDpjoOCx/bu+Z8PwBUtV5lkwAtV/jrXBJDeiyF+NIe1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gtFTw4/3OS6kFFlSBZViTlQn82jDewwJQKsTMdHxMfk=;
+ b=ZLM1GxyrrNS8RKD61MqeqkTHKdNHRV5cU84uOelmwnNaeRSniHVqwXKefJ2+hRgYJ7LHPce9PATceeToikuEJSz5+vSKUiff4l3GEzMupuSOsh7nusylV3J2eCeyH//5wWI/C77JOODZ8CAstDHoIKqhWKgivepviUbRu00PAXO2QDFcyvq87/4cf+B33ErC4iV/uUwm7BqLy9fPysuleSkeGc9H8p/+BNywvXgsGJMrDsOROiPkWkz+7ytTCPMHZW22F794cs8hHJoVeLz5t2tvkLu/9zET1h50ZHRUIvkbzZqh1ynaU4meLucNxcTU/nO+bUV1TdPpGqo6y6713Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gtFTw4/3OS6kFFlSBZViTlQn82jDewwJQKsTMdHxMfk=;
+ b=g8xX+bjGq80NdfClK/09rElKlRh2FL19YXIR4Tr/fTgP2lnZ+A2uDp5TuFglYB96W3WGNFz+Pp+AKFGbV1ThEFchVvOSywMNdrCtK6quleRtXB2WYun4et/27hKKcH8c7KOw2efAtTtUqpRmF8mFPjqEzYTPJGLrvIgYanT3UFc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
+ by DM5PR2101MB1061.namprd21.prod.outlook.com (2603:10b6:4:9e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.2; Wed, 14 Jul
+ 2021 18:35:08 +0000
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::95e7:356d:2d7d:5a89]) by DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::95e7:356d:2d7d:5a89%6]) with mapi id 15.20.4352.008; Wed, 14 Jul 2021
+ 18:35:08 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+Cc:     mikelley@microsoft.com, linux-arch@vger.kernel.org
+Subject: [PATCH v2 0/3] Additional refactoring of Hyper-V arch specific code
+Date:   Wed, 14 Jul 2021 11:34:44 -0700
+Message-Id: <1626287687-2045-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR03CA0022.namprd03.prod.outlook.com
+ (2603:10b6:303:8f::27) To DM6PR21MB1514.namprd21.prod.outlook.com
+ (2603:10b6:5:22d::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YO3txvw87MjKfdpq@localhost.localdomain>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from mhkdev.corp.microsoft.com (131.107.160.16) by MW4PR03CA0022.namprd03.prod.outlook.com (2603:10b6:303:8f::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.22 via Frontend Transport; Wed, 14 Jul 2021 18:35:07 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 956f60e2-111c-43a7-d593-08d946f61b27
+X-MS-TrafficTypeDiagnostic: DM5PR2101MB1061:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM5PR2101MB1061392811EA328A34F4DFABD7139@DM5PR2101MB1061.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4w2vhVTwsp99cPVc8GtHYsu51IXLLVmLM4Gf+gBtmLZArQNPdACrw49rsj5ZBDjhgCgZygeAekbmvhEAjoRu/2L+PYr93g/0oAy+upbBnLfKsvgXJ/TLP2hV6Js2HkJcnztr3TebZGMMDfmjMq8zJd3Yk0aLrsfHNW+fCni6HoR8vI+Y0QU9yFw3jXinJUYUII+C7LZg1NgNVKpGWpYqkF48cQLrsdOUx+60heU+TMwUwJrmIIuc8G6wjGPiKTQnX/nzT1/7Za1a+pc4DWR3dCVy/EdfUDtJ7U5jU2k4YPsoQu8kIV3035cwcmVBBolyCHwP35wPEQVvRGA1QYKwAVMIRAhDUsJRHFz4zvkVSTjPq4pcza8XOgxPyrB2ZdMT3dlxL6tBUx7TUgrjxMazgTYlSA3ypefAu8hcFiR08qmdvdw8W/bnmq02R3spOFzYQU45feZq36xQqeRUog6bc10cZ2VVde5Wb9YjVVSa/jwh+e7ygmHJlGh41j2EhtpYjE8cQ9sc8Pk6szOLEcx8TgL/VSdqweQiG8VrlnBOz7SY2wK3mG36Ln71i9q8pnf/j21yYcuAASE8yUIWb9mnJbdhDddYfZHakTx2HJXG9cDfV+P575khVtjiB+QzWWbfR/GDQJ2WfTNnctX+m6EUkndZxKLNHoUJbUT5KLR1p/nq6r5XDrLlPCKdfkQnEtJLMgaNN9+3QmXlfoEFHqfw8DCSBxNezzsyottTSBD5tMI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(83380400001)(38350700002)(36756003)(6666004)(66476007)(316002)(10290500003)(26005)(921005)(38100700002)(5660300002)(82960400001)(6486002)(7696005)(66556008)(82950400001)(2616005)(956004)(4326008)(8676002)(86362001)(186003)(52116002)(2906002)(8936002)(478600001)(7416002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pNeG7rYMZx2+QJ0ThuFF2hCD+js7AxtybOLFDhARpS2a2vK56whubEH5yIMg?=
+ =?us-ascii?Q?P+odTcapJ4VsGOMGdOJEIpFPDps2yZpNftuKSKnxo/UVapDWYDPKrhk8pspG?=
+ =?us-ascii?Q?Y1MIvsSsNpMIomS+tDC4sQaIXBrHXSQW+5aholYPZEl7hw3bdihtUe74flHS?=
+ =?us-ascii?Q?mXc7Wb7mWcQuZlrw3u1FMSpzO1n9alTjqSjo2d9vhRei3SfhkmXA7ZQGI1sI?=
+ =?us-ascii?Q?a3h95+Tzlxy7oZDEnCPat/8nc3e1lpkRp1AxzpxbrfF6YKdZqKpLTCzMl3+j?=
+ =?us-ascii?Q?C2zkz82tBSYktMftCrvt5RIcRxj0cXh4v1ckwVrYaLg5AA4tVBbHH2cVhHbp?=
+ =?us-ascii?Q?uIx1Cs6mrwpjwtEn5uPlgu5KQD21iZGrjGX/kVlG8OhVBDjs7oPoNI5bduYO?=
+ =?us-ascii?Q?apQOuVf6TX60cUTIdOCsXTskvKO2SySXKKG2/eBOst7FgMbCDJbTYlcGOZte?=
+ =?us-ascii?Q?R9ooGy9JAgJC3LpljegBuWfFBGM9by5dleSmCXSosBNAwU+NSbx086u7gYjg?=
+ =?us-ascii?Q?2NztuJVx/fw0sBVXYlM2ZU8+s70a8AlyL6aMK258grogp05Cit5+4os/YMtu?=
+ =?us-ascii?Q?51TjjjuvQ+t01myhv/sYjb7x9EjuCQ0iHPNVvOX5xSbZPqQWJafW4RHsK+hW?=
+ =?us-ascii?Q?zwfg+dbVOvh2Vs/78HRkO2JiShcH/4pdPHuXsUfe8pe8blO6k1U30XHsZykj?=
+ =?us-ascii?Q?nEOrx0fJhkLm9VoHvfL4o0snTKLu10aRdZssFGWLHj2+EDwDEt5fQ8vXjBDF?=
+ =?us-ascii?Q?lp1P9D858wKOKj2T8id0SMpH4icMktbvKfyiJnJRqnNsfuo4wIHYGJXuP5qF?=
+ =?us-ascii?Q?FvaXobxFq5El+fs70zJyivgMiMb2bNDk2VTwGLg4qXXnOND8nSQEQ07JcyB5?=
+ =?us-ascii?Q?7Zx8YGRlMeA+ETN64/fARlKt0Vo9nW0kXJoYc2/o0aUemAG2pyf87gwrG1o5?=
+ =?us-ascii?Q?cEsebCwkcFGMQeHw0Dtbg7lp5VGJgBuprH6wjRHdButFEnYY+UmFeM41lRgv?=
+ =?us-ascii?Q?3yzZ5vhwf6981IOmTfg7L0KIigAmbjNNq/qRGXIbr6us2vowvnrWqt1Wce3t?=
+ =?us-ascii?Q?2V08aDdlzVW46BH3LLnLE/RBTQkwr1FyvtwZhOq6i69+nvAEnILPlFQ9rx2j?=
+ =?us-ascii?Q?D2EPemfApXFdUMEkkootB4ttsv2cTTJ67Ipvo0A0Q3QTihk+zFyxvPoLKS3Q?=
+ =?us-ascii?Q?W6iIEXuYs8jVNwqukybJtQCWEd1P707UDCoHo5wOqUfYk+ghFLrj6GX5pnWH?=
+ =?us-ascii?Q?Dw0sVbdXU2qXVJ5X8kz17L6e7d7KQ4sQcaMfKaWuQZn0leA/plNr4QxH8l/Z?=
+ =?us-ascii?Q?3B8V6RhRvQE+H7iOSisohdmq?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 956f60e2-111c-43a7-d593-08d946f61b27
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2021 18:35:08.2743
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: K9VzqD71sbKYKeNowyREw8lZH3lv0pgL6NkcTmgXhkB3SYTSfaOHEeKhlScITxJLvgYMydVsd4BEYuKyqijVWQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR2101MB1061
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-First, userspace headers can be under incompatible license.
+This patch set moves additional Hyper-V code under arch/x86 into
+arch-neutral hv_common.c where it can be shared by x86 and
+and ARM64 implementations.  The move reduces the overall lines
+of code across both architectures, and removes code under
+arch/ that isn't really architecture-specific.
 
-Second, kernel doesn't require userspace to operate and should not
-require anything from userspace to be built other than compiler.
-We would use -ffreestanding too if not builtin function shenanigans.
+The code is moved into hv_common.c because it must be
+built-in to the kernel image, and not be part of a module.
 
-To decouple:
+No functional changes are intended.
 
-* ship minimal stdarg.h as <linux/stdarg.h>,
-	1 type, 4 macros
-
-GPL 2 version of <stdarg.h> can be extracted from
-http://archive.debian.org/debian/pool/main/g/gcc-4.2/gcc-4.2_4.2.4.orig.tar.gz
-
-* delete "-isystem" from command line arguments,
-	this is what enables header leakage
-
-* fixup/delete include directives where necessary.
-
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
 ---
+Changes in v2:
+* Fixed problem when building with CONFIG_HYPERV=n
+  (reported by kernel test robot <lkp@intel.com>)
 
- Makefile                                                                 |    2 -
- arch/arm/kernel/process.c                                                |    2 -
- arch/arm/mach-bcm/bcm_kona_smc.c                                         |    2 -
- arch/arm64/kernel/process.c                                              |    3 --
- arch/openrisc/kernel/process.c                                           |    2 -
- arch/parisc/kernel/firmware.c                                            |    2 -
- arch/parisc/kernel/process.c                                             |    3 --
- arch/powerpc/kernel/prom.c                                               |    1 
- arch/powerpc/kernel/prom_init.c                                          |    2 -
- arch/powerpc/kernel/rtas.c                                               |    2 -
- arch/powerpc/kernel/udbg.c                                               |    2 -
- arch/s390/boot/pgm_check_info.c                                          |    2 -
- arch/sparc/kernel/process_32.c                                           |    3 --
- arch/sparc/kernel/process_64.c                                           |    3 --
- arch/um/include/shared/irq_user.h                                        |    1 
- arch/um/include/shared/os.h                                              |    1 
- arch/um/os-Linux/signal.c                                                |    2 -
- arch/um/os-Linux/util.c                                                  |    1 
- arch/x86/boot/boot.h                                                     |    2 -
- crypto/aegis128-neon-inner.c                                             |    2 -
- drivers/block/xen-blkback/xenbus.c                                       |    1 
- drivers/firmware/efi/libstub/efi-stub-helper.c                           |    2 -
- drivers/firmware/efi/libstub/vsprintf.c                                  |    2 -
- drivers/gpu/drm/amd/display/dc/dc_helper.c                               |    2 -
- drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h                          |    1 
- drivers/gpu/drm/drm_print.c                                              |    2 -
- drivers/gpu/drm/msm/disp/msm_disp_snapshot.h                             |    1 
- drivers/isdn/capi/capiutil.c                                             |    2 -
- drivers/macintosh/macio-adb.c                                            |    1 
- drivers/macintosh/via-cuda.c                                             |    2 -
- drivers/macintosh/via-macii.c                                            |    2 -
- drivers/macintosh/via-pmu.c                                              |    2 -
- drivers/net/wireless/intersil/orinoco/hermes.c                           |    1 
- drivers/net/wwan/iosm/iosm_ipc_imem.h                                    |    1 
- drivers/pinctrl/aspeed/pinmux-aspeed.h                                   |    1 
- drivers/scsi/elx/efct/efct_driver.h                                      |    1 
- drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h   |    2 -
- drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h   |    2 -
- drivers/staging/media/atomisp/pci/ia_css_env.h                           |    2 -
- drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h |    2 -
- drivers/staging/media/atomisp/pci/sh_css_internal.h                      |    2 -
- drivers/xen/xen-scsiback.c                                               |    2 -
- fs/befs/debug.c                                                          |    2 -
- fs/reiserfs/prints.c                                                     |    2 -
- fs/ufs/super.c                                                           |    2 -
- include/acpi/platform/acgcc.h                                            |    2 -
- include/linux/filter.h                                                   |    2 -
- include/linux/kernel.h                                                   |    2 -
- include/linux/mISDNif.h                                                  |    1 
- include/linux/printk.h                                                   |    2 -
- include/linux/stdarg.h                                                   |   11 ++++++++++
- include/linux/string.h                                                   |    2 -
- kernel/debug/kdb/kdb_support.c                                           |    1 
- lib/debug_info.c                                                         |    3 --
- lib/kasprintf.c                                                          |    2 -
- lib/kunit/string-stream.h                                                |    2 -
- lib/vsprintf.c                                                           |    2 -
- mm/kfence/report.c                                                       |    2 -
- net/batman-adv/log.c                                                     |    2 -
- sound/aoa/codecs/onyx.h                                                  |    1 
- sound/aoa/codecs/tas.c                                                   |    1 
- sound/core/info.c                                                        |    1 
- 62 files changed, 44 insertions(+), 77 deletions(-)
 
---- a/Makefile
-+++ b/Makefile
-@@ -978,7 +978,7 @@ KBUILD_CFLAGS += -falign-functions=64
- endif
- 
- # arch Makefile may override CC so keep this after arch Makefile is included
--NOSTDINC_FLAGS += -nostdinc -isystem $(shell $(CC) -print-file-name=include)
-+NOSTDINC_FLAGS += -nostdinc
- 
- # warn about C99 declaration after statement
- KBUILD_CFLAGS += -Wdeclaration-after-statement
---- a/arch/arm/kernel/process.c
-+++ b/arch/arm/kernel/process.c
-@@ -5,8 +5,6 @@
-  *  Copyright (C) 1996-2000 Russell King - Converted to ARM.
-  *  Original Copyright (C) 1995  Linus Torvalds
-  */
--#include <stdarg.h>
--
- #include <linux/export.h>
- #include <linux/sched.h>
- #include <linux/sched/debug.h>
---- a/arch/arm/mach-bcm/bcm_kona_smc.c
-+++ b/arch/arm/mach-bcm/bcm_kona_smc.c
-@@ -10,8 +10,6 @@
-  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  */
--
--#include <stdarg.h>
- #include <linux/smp.h>
- #include <linux/io.h>
- #include <linux/ioport.h>
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -6,9 +6,6 @@
-  * Copyright (C) 1996-2000 Russell King - Converted to ARM.
-  * Copyright (C) 2012 ARM Ltd.
-  */
--
--#include <stdarg.h>
--
- #include <linux/compat.h>
- #include <linux/efi.h>
- #include <linux/elf.h>
---- a/arch/openrisc/kernel/process.c
-+++ b/arch/openrisc/kernel/process.c
-@@ -14,8 +14,6 @@
-  */
- 
- #define __KERNEL_SYSCALLS__
--#include <stdarg.h>
--
- #include <linux/errno.h>
- #include <linux/sched.h>
- #include <linux/sched/debug.h>
---- a/arch/parisc/kernel/firmware.c
-+++ b/arch/parisc/kernel/firmware.c
-@@ -51,7 +51,7 @@
-  *					prumpf	991016	
-  */
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- #include <linux/delay.h>
- #include <linux/init.h>
---- a/arch/parisc/kernel/process.c
-+++ b/arch/parisc/kernel/process.c
-@@ -17,9 +17,6 @@
-  *    Copyright (C) 2001-2014 Helge Deller <deller@gmx.de>
-  *    Copyright (C) 2002 Randolph Chung <tausq with parisc-linux.org>
-  */
--
--#include <stdarg.h>
--
- #include <linux/elf.h>
- #include <linux/errno.h>
- #include <linux/kernel.h>
---- a/arch/powerpc/kernel/prom.c
-+++ b/arch/powerpc/kernel/prom.c
-@@ -11,7 +11,6 @@
- 
- #undef DEBUG
- 
--#include <stdarg.h>
- #include <linux/kernel.h>
- #include <linux/string.h>
- #include <linux/init.h>
---- a/arch/powerpc/kernel/prom_init.c
-+++ b/arch/powerpc/kernel/prom_init.c
-@@ -14,7 +14,7 @@
- /* we cannot use FORTIFY as it brings in new symbols */
- #define __NO_FORTIFY
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/kernel.h>
- #include <linux/string.h>
- #include <linux/init.h>
---- a/arch/powerpc/kernel/rtas.c
-+++ b/arch/powerpc/kernel/rtas.c
-@@ -7,7 +7,7 @@
-  * Copyright (C) 2001 IBM.
-  */
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/spinlock.h>
---- a/arch/powerpc/kernel/udbg.c
-+++ b/arch/powerpc/kernel/udbg.c
-@@ -5,7 +5,7 @@
-  * c 2001 PPC 64 Team, IBM Corp
-  */
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/types.h>
- #include <linux/sched.h>
- #include <linux/console.h>
---- a/arch/s390/boot/pgm_check_info.c
-+++ b/arch/s390/boot/pgm_check_info.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/kernel.h>
-+#include <linux/stdarg.h>
- #include <linux/string.h>
- #include <linux/ctype.h>
- #include <asm/stacktrace.h>
-@@ -8,7 +9,6 @@
- #include <asm/setup.h>
- #include <asm/sclp.h>
- #include <asm/uv.h>
--#include <stdarg.h>
- #include "boot.h"
- 
- const char hex_asc[] = "0123456789abcdef";
---- a/arch/sparc/kernel/process_32.c
-+++ b/arch/sparc/kernel/process_32.c
-@@ -8,9 +8,6 @@
- /*
-  * This file handles the architecture-dependent parts of process handling..
-  */
--
--#include <stdarg.h>
--
- #include <linux/elfcore.h>
- #include <linux/errno.h>
- #include <linux/module.h>
---- a/arch/sparc/kernel/process_64.c
-+++ b/arch/sparc/kernel/process_64.c
-@@ -9,9 +9,6 @@
- /*
-  * This file handles the architecture-dependent parts of process handling..
-  */
--
--#include <stdarg.h>
--
- #include <linux/errno.h>
- #include <linux/export.h>
- #include <linux/sched.h>
---- a/arch/um/include/shared/irq_user.h
-+++ b/arch/um/include/shared/irq_user.h
-@@ -7,7 +7,6 @@
- #define __IRQ_USER_H__
- 
- #include <sysdep/ptrace.h>
--#include <stdbool.h>
- 
- enum um_irq_type {
- 	IRQ_READ,
---- a/arch/um/include/shared/os.h
-+++ b/arch/um/include/shared/os.h
-@@ -8,7 +8,6 @@
- #ifndef __OS_H__
- #define __OS_H__
- 
--#include <stdarg.h>
- #include <irq_user.h>
- #include <longjmp.h>
- #include <mm_id.h>
---- a/arch/um/os-Linux/signal.c
-+++ b/arch/um/os-Linux/signal.c
-@@ -67,7 +67,7 @@ int signals_enabled;
- #ifdef UML_CONFIG_UML_TIME_TRAVEL_SUPPORT
- static int signals_blocked;
- #else
--#define signals_blocked false
-+#define signals_blocked 0
- #endif
- static unsigned int signals_pending;
- static unsigned int signals_active = 0;
---- a/arch/um/os-Linux/util.c
-+++ b/arch/um/os-Linux/util.c
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2000 - 2007 Jeff Dike (jdike@{addtoit,linux.intel}.com)
-  */
- 
-+#include <stdarg.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <unistd.h>
---- a/arch/x86/boot/boot.h
-+++ b/arch/x86/boot/boot.h
-@@ -18,7 +18,7 @@
- 
- #ifndef __ASSEMBLY__
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/types.h>
- #include <linux/edd.h>
- #include <asm/setup.h>
---- a/crypto/aegis128-neon-inner.c
-+++ b/crypto/aegis128-neon-inner.c
-@@ -15,8 +15,6 @@
- 
- #define AEGIS_BLOCK_SIZE	16
- 
--#include <stddef.h>
--
- extern int aegis128_have_aes_insn;
- 
- void *memcpy(void *dest, const void *src, size_t n);
---- a/drivers/block/xen-blkback/xenbus.c
-+++ b/drivers/block/xen-blkback/xenbus.c
-@@ -8,7 +8,6 @@
- 
- #define pr_fmt(fmt) "xen-blkback: " fmt
- 
--#include <stdarg.h>
- #include <linux/module.h>
- #include <linux/kthread.h>
- #include <xen/events.h>
---- a/drivers/firmware/efi/libstub/efi-stub-helper.c
-+++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
-@@ -7,7 +7,7 @@
-  * Copyright 2011 Intel Corporation; author Matt Fleming
-  */
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- #include <linux/ctype.h>
- #include <linux/efi.h>
---- a/drivers/firmware/efi/libstub/vsprintf.c
-+++ b/drivers/firmware/efi/libstub/vsprintf.c
-@@ -10,7 +10,7 @@
-  * Oh, it's a waste of space, but oh-so-yummy for debugging.
-  */
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- #include <linux/compiler.h>
- #include <linux/ctype.h>
---- a/drivers/gpu/drm/amd/display/dc/dc_helper.c
-+++ b/drivers/gpu/drm/amd/display/dc/dc_helper.c
-@@ -28,9 +28,9 @@
-  */
- 
- #include <linux/delay.h>
-+#include <linux/stdarg.h>
- 
- #include "dm_services.h"
--#include <stdarg.h>
- 
- #include "dc.h"
- #include "dc_dmub_srv.h"
---- a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-+++ b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-@@ -39,7 +39,6 @@
- #include <linux/types.h>
- #include <linux/string.h>
- #include <linux/delay.h>
--#include <stdarg.h>
- 
- #include "atomfirmware.h"
- 
---- a/drivers/gpu/drm/drm_print.c
-+++ b/drivers/gpu/drm/drm_print.c
-@@ -25,7 +25,7 @@
- 
- #define DEBUG /* for pr_debug() */
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- #include <linux/io.h>
- #include <linux/moduleparam.h>
---- a/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
-+++ b/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
-@@ -25,7 +25,6 @@
- #include <linux/pm_runtime.h>
- #include <linux/kthread.h>
- #include <linux/devcoredump.h>
--#include <stdarg.h>
- #include "msm_kms.h"
- 
- #define MSM_DISP_SNAPSHOT_MAX_BLKS		10
---- a/drivers/isdn/capi/capiutil.c
-+++ b/drivers/isdn/capi/capiutil.c
-@@ -379,7 +379,7 @@ static char *pnames[] =
- 	/*2f */ "Useruserdata"
- };
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- /*-------------------------------------------------------*/
- static _cdebbuf *bufprint(_cdebbuf *cdb, char *fmt, ...)
---- a/drivers/macintosh/macio-adb.c
-+++ b/drivers/macintosh/macio-adb.c
-@@ -2,7 +2,6 @@
- /*
-  * Driver for the ADB controller in the Mac I/O (Hydra) chip.
-  */
--#include <stdarg.h>
- #include <linux/types.h>
- #include <linux/errno.h>
- #include <linux/kernel.h>
---- a/drivers/macintosh/via-cuda.c
-+++ b/drivers/macintosh/via-cuda.c
-@@ -9,7 +9,7 @@
-  *
-  * Copyright (C) 1996 Paul Mackerras.
-  */
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/types.h>
- #include <linux/errno.h>
- #include <linux/kernel.h>
---- a/drivers/macintosh/via-macii.c
-+++ b/drivers/macintosh/via-macii.c
-@@ -23,8 +23,6 @@
-  * Apple's "ADB Analyzer" bus sniffer is invaluable:
-  *   ftp://ftp.apple.com/developer/Tool_Chest/Devices_-_Hardware/Apple_Desktop_Bus/
-  */
--
--#include <stdarg.h>
- #include <linux/types.h>
- #include <linux/errno.h>
- #include <linux/kernel.h>
---- a/drivers/macintosh/via-pmu.c
-+++ b/drivers/macintosh/via-pmu.c
-@@ -18,7 +18,7 @@
-  *    a sleep or a freq. switch
-  *
-  */
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/mutex.h>
- #include <linux/types.h>
- #include <linux/errno.h>
---- a/drivers/net/wireless/intersil/orinoco/hermes.c
-+++ b/drivers/net/wireless/intersil/orinoco/hermes.c
-@@ -79,7 +79,6 @@
- 
- #undef HERMES_DEBUG
- #ifdef HERMES_DEBUG
--#include <stdarg.h>
- 
- #define DEBUG(lvl, stuff...) if ((lvl) <= HERMES_DEBUG) DMSG(stuff)
- 
---- a/drivers/net/wwan/iosm/iosm_ipc_imem.h
-+++ b/drivers/net/wwan/iosm/iosm_ipc_imem.h
-@@ -7,7 +7,6 @@
- #define IOSM_IPC_IMEM_H
- 
- #include <linux/skbuff.h>
--#include <stdbool.h>
- 
- #include "iosm_ipc_mmio.h"
- #include "iosm_ipc_pcie.h"
---- a/drivers/pinctrl/aspeed/pinmux-aspeed.h
-+++ b/drivers/pinctrl/aspeed/pinmux-aspeed.h
-@@ -5,7 +5,6 @@
- #define ASPEED_PINMUX_H
- 
- #include <linux/regmap.h>
--#include <stdbool.h>
- 
- /*
-  * The ASPEED SoCs provide typically more than 200 pins for GPIO and other
---- a/drivers/scsi/elx/efct/efct_driver.h
-+++ b/drivers/scsi/elx/efct/efct_driver.h
-@@ -10,7 +10,6 @@
- /***************************************************************************
-  * OS specific includes
-  */
--#include <stdarg.h>
- #include <linux/module.h>
- #include <linux/debugfs.h>
- #include <linux/firmware.h>
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h
-@@ -16,8 +16,6 @@
- #ifndef __ISP_LOCAL_H_INCLUDED__
- #define __ISP_LOCAL_H_INCLUDED__
- 
--#include <stdbool.h>
--
- #include "isp_global.h"
- 
- #include <isp2400_support.h>
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h
-@@ -16,7 +16,7 @@
- #ifndef __PRINT_SUPPORT_H_INCLUDED__
- #define __PRINT_SUPPORT_H_INCLUDED__
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- extern int (*sh_css_printf)(const char *fmt, va_list args);
- /* depends on host supplied print function in ia_css_init() */
---- a/drivers/staging/media/atomisp/pci/ia_css_env.h
-+++ b/drivers/staging/media/atomisp/pci/ia_css_env.h
-@@ -17,7 +17,7 @@
- #define __IA_CSS_ENV_H
- 
- #include <type_support.h>
--#include <stdarg.h> /* va_list */
-+#include <linux/stdarg.h> /* va_list */
- #include "ia_css_types.h"
- #include "ia_css_acc_types.h"
- 
---- a/drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h
-+++ b/drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h
-@@ -19,7 +19,7 @@
- /*! \file */
- 
- #include <type_support.h>
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include "ia_css_types.h"
- #include "ia_css_binary.h"
- #include "ia_css_frame_public.h"
---- a/drivers/staging/media/atomisp/pci/sh_css_internal.h
-+++ b/drivers/staging/media/atomisp/pci/sh_css_internal.h
-@@ -20,7 +20,7 @@
- #include <math_support.h>
- #include <type_support.h>
- #include <platform_support.h>
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- #if !defined(ISP2401)
- #include "input_formatter.h"
---- a/drivers/xen/xen-scsiback.c
-+++ b/drivers/xen/xen-scsiback.c
-@@ -33,8 +33,6 @@
- 
- #define pr_fmt(fmt) "xen-pvscsi: " fmt
- 
--#include <stdarg.h>
--
- #include <linux/module.h>
- #include <linux/utsname.h>
- #include <linux/interrupt.h>
---- a/fs/befs/debug.c
-+++ b/fs/befs/debug.c
-@@ -14,7 +14,7 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- #ifdef __KERNEL__
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/string.h>
- #include <linux/spinlock.h>
- #include <linux/kernel.h>
---- a/fs/reiserfs/prints.c
-+++ b/fs/reiserfs/prints.c
-@@ -8,7 +8,7 @@
- #include <linux/string.h>
- #include <linux/buffer_head.h>
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- static char error_buf[1024];
- static char fmt_buf[1024];
---- a/fs/ufs/super.c
-+++ b/fs/ufs/super.c
-@@ -70,7 +70,7 @@
- #include <linux/module.h>
- #include <linux/bitops.h>
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- #include <linux/uaccess.h>
- 
---- a/include/acpi/platform/acgcc.h
-+++ b/include/acpi/platform/acgcc.h
-@@ -22,7 +22,7 @@ typedef __builtin_va_list va_list;
- #define va_arg(v, l)            __builtin_va_arg(v, l)
- #define va_copy(d, s)           __builtin_va_copy(d, s)
- #else
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #endif
- #endif
- 
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -5,8 +5,6 @@
- #ifndef __LINUX_FILTER_H__
- #define __LINUX_FILTER_H__
- 
--#include <stdarg.h>
--
- #include <linux/atomic.h>
- #include <linux/refcount.h>
- #include <linux/compat.h>
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -2,7 +2,7 @@
- #ifndef _LINUX_KERNEL_H
- #define _LINUX_KERNEL_H
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/align.h>
- #include <linux/limits.h>
- #include <linux/linkage.h>
---- a/include/linux/mISDNif.h
-+++ b/include/linux/mISDNif.h
-@@ -18,7 +18,6 @@
- #ifndef mISDNIF_H
- #define mISDNIF_H
- 
--#include <stdarg.h>
- #include <linux/types.h>
- #include <linux/errno.h>
- #include <linux/socket.h>
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -2,7 +2,7 @@
- #ifndef __KERNEL_PRINTK__
- #define __KERNEL_PRINTK__
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/init.h>
- #include <linux/kern_levels.h>
- #include <linux/linkage.h>
-new file mode 100644
---- /dev/null
-+++ b/include/linux/stdarg.h
-@@ -0,0 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+#ifndef _LINUX_STDARG_H
-+#define _LINUX_STDARG_H
-+
-+typedef __builtin_va_list va_list;
-+#define va_start(v, l)	__builtin_va_start(v, l)
-+#define va_end(v)	__builtin_va_end(v)
-+#define va_arg(v, T)	__builtin_va_arg(v, T)
-+#define va_copy(d, s)	__builtin_va_copy(d, s)
-+
-+#endif
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -6,7 +6,7 @@
- #include <linux/types.h>	/* for size_t */
- #include <linux/stddef.h>	/* for NULL */
- #include <linux/errno.h>	/* for E2BIG */
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <uapi/linux/string.h>
- 
- extern char *strndup_user(const char __user *, long);
---- a/kernel/debug/kdb/kdb_support.c
-+++ b/kernel/debug/kdb/kdb_support.c
-@@ -10,7 +10,6 @@
-  * 03/02/13    added new 2.5 kallsyms <xavier.bru@bull.net>
-  */
- 
--#include <stdarg.h>
- #include <linux/types.h>
- #include <linux/sched.h>
- #include <linux/mm.h>
---- a/lib/debug_info.c
-+++ b/lib/debug_info.c
-@@ -5,8 +5,6 @@
-  * CONFIG_DEBUG_INFO_REDUCED. Please do not add actual code. However,
-  * adding appropriate #includes is fine.
-  */
--#include <stdarg.h>
--
- #include <linux/cred.h>
- #include <linux/crypto.h>
- #include <linux/dcache.h>
-@@ -22,6 +20,7 @@
- #include <linux/net.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-+#include <linux/stdarg.h>
- #include <linux/types.h>
- #include <net/addrconf.h>
- #include <net/sock.h>
---- a/lib/kasprintf.c
-+++ b/lib/kasprintf.c
-@@ -5,7 +5,7 @@
-  *  Copyright (C) 1991, 1992  Linus Torvalds
-  */
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/export.h>
- #include <linux/slab.h>
- #include <linux/types.h>
---- a/lib/kunit/string-stream.h
-+++ b/lib/kunit/string-stream.h
-@@ -11,7 +11,7 @@
- 
- #include <linux/spinlock.h>
- #include <linux/types.h>
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- struct string_stream_fragment {
- 	struct kunit *test;
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -17,7 +17,7 @@
-  * - scnprintf and vscnprintf
-  */
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- #include <linux/build_bug.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
---- a/mm/kfence/report.c
-+++ b/mm/kfence/report.c
-@@ -5,7 +5,7 @@
-  * Copyright (C) 2020, Google LLC.
-  */
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- #include <linux/kernel.h>
- #include <linux/lockdep.h>
---- a/net/batman-adv/log.c
-+++ b/net/batman-adv/log.c
-@@ -7,7 +7,7 @@
- #include "log.h"
- #include "main.h"
- 
--#include <stdarg.h>
-+#include <linux/stdarg.h>
- 
- #include "trace.h"
- 
---- a/sound/aoa/codecs/onyx.h
-+++ b/sound/aoa/codecs/onyx.h
-@@ -6,7 +6,6 @@
-  */
- #ifndef __SND_AOA_CODEC_ONYX_H
- #define __SND_AOA_CODEC_ONYX_H
--#include <stddef.h>
- #include <linux/i2c.h>
- #include <asm/pmac_low_i2c.h>
- #include <asm/prom.h>
---- a/sound/aoa/codecs/tas.c
-+++ b/sound/aoa/codecs/tas.c
-@@ -58,7 +58,6 @@
-  *    and up to the hardware designer to not wire
-  *    them up in some weird unusable way.
-  */
--#include <stddef.h>
- #include <linux/i2c.h>
- #include <asm/pmac_low_i2c.h>
- #include <asm/prom.h>
---- a/sound/core/info.c
-+++ b/sound/core/info.c
-@@ -16,7 +16,6 @@
- #include <linux/utsname.h>
- #include <linux/proc_fs.h>
- #include <linux/mutex.h>
--#include <stdarg.h>
- 
- int snd_info_check_reserved_words(const char *str)
- {
+Michael Kelley (3):
+  Drivers: hv: Make portions of Hyper-V init code be arch neutral
+  Drivers: hv: Add arch independent default functions for some Hyper-V
+    handlers
+  Drivers: hv: Move Hyper-V misc functionality to arch-neutral code
+
+ arch/x86/hyperv/hv_init.c       | 101 +++-----------------
+ arch/x86/include/asm/mshyperv.h |   4 -
+ arch/x86/kernel/cpu/mshyperv.c  |  20 ----
+ drivers/hv/hv_common.c          | 205 ++++++++++++++++++++++++++++++++++++++++
+ include/asm-generic/mshyperv.h  |  10 ++
+ 5 files changed, 226 insertions(+), 114 deletions(-)
+
+-- 
+1.8.3.1
+
