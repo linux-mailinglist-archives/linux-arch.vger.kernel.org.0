@@ -2,107 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26AFA3CAD46
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jul 2021 21:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8833CAE63
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jul 2021 23:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343544AbhGOT42 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Jul 2021 15:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S229498AbhGOVSM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Jul 2021 17:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346301AbhGOTvQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Jul 2021 15:51:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED02C0251B1;
-        Thu, 15 Jul 2021 12:17:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fMdK5kwbGT8Ucs5zmQxr/NzmYbZf7pMhdeOpiEPMJ0A=; b=Tf/modV75F/lM+05pVz6LFMq2e
-        fSW6cVLxK8tmbhYa2Hd6+nfQD0TbDxbu4c4dskRDLhcz/ZYhzpj4yomIRueL06/OutQnuyzccFFU6
-        kG9qAgrQoj6P5kmH0fI8Rr68nMux2MjqA1PQF7XD8THV40XbKDh6i3DwhJ99CL2dx1Vs6I0gfPshY
-        xB/VwKxt0kDpblWkR6EuAn3bqMHBYip9pn6M+4KUm07JZ/lf48hfLkBjkwa9faBfPBog/nIhj2tX7
-        6CTMF+V/NYCfQr+I67RNVY4iLyhaVSiN+kdMJoGit6jGK612ZVA+fGppzB4rZDn5TPCN8aK273aPm
-        Wnv1H0jQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m46qE-003ga4-Hi; Thu, 15 Jul 2021 19:16:50 +0000
-Date:   Thu, 15 Jul 2021 20:16:14 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     linux-arch@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] arm: Rename PMD_ORDER to PMD_TABLE_ORDER
-Message-ID: <YPCJftSTUBEnq2lI@casper.infradead.org>
-References: <20210715134612.809280-1-willy@infradead.org>
- <20210715134612.809280-2-willy@infradead.org>
- <20210715164740.GN22278@shell.armlinux.org.uk>
- <YPB6Lu2YiAWC7rDc@casper.infradead.org>
- <20210715183727.GP22278@shell.armlinux.org.uk>
+        with ESMTP id S229472AbhGOVSL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Jul 2021 17:18:11 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32BFC06175F;
+        Thu, 15 Jul 2021 14:15:17 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id c17so11567114ejk.13;
+        Thu, 15 Jul 2021 14:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MY7GzL0TTJagxyhj55uchZnvkM+R3iPX/iP1Zqm7Osw=;
+        b=PuM9n6MYBfm1aFJtknucOtEaOfKFhT7rJ6prxgaTq0tMGzhCFoviRXGAqrZy2Vwfmi
+         RV23t2HL4fIsxnG/IbfKlygk9jd3+dVn1PfWpuJ0EvTHWQFwkt108UBhR2OZluQlh6vh
+         Z2HJ23ac+Xh/KC1s6Dq7XeutsO3x8fEMhmKsCfK6rtmbcftmuEG19n4uQTnDKtjxiV5B
+         GIbQyI7as3SFztgYKnQwedqqU1AZEA23xqp/iuoeN73AJax/NWEucu0yP9QEYMW46lok
+         NPIAKwOz66m1ce36uVfPjYBqV0v1Kv2Pz7lHHwqiosq8GzlOnm/alCW+70DYJ/1e7gDd
+         NdnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MY7GzL0TTJagxyhj55uchZnvkM+R3iPX/iP1Zqm7Osw=;
+        b=nahonw7jTvU+6S3rM8KErq686d3XnhmjwIx9dXVARbgDzt6LqTMkGnJ+7w6DP0fXzA
+         cxCBY029NC/OGSMu4Ts8bDh48bnN7eo14ddsDAaiV11SxHUa/QKYIcKoM2a4KcR7yF0H
+         PEI6S7Q/JmBsE9oQD8/5A2beb1GmuOSf32vxIc5dY4t1WCni79AlY7AoQb0W7WlJV9Wa
+         NAtxIEe0AyxYf5IYeN0HZivfpUk8MTII+XqQ0FTolmU6khddn/g3YxMrq+kkeoQxwGCW
+         XTcvQVW+9nAa1IHoF/+Gkvy3ADgtIf6GBRSBCRTRCUUUzZK/ZD0AMAWc9ErV44Y5/dLr
+         51LA==
+X-Gm-Message-State: AOAM5306msMe53VNTwwQ2fUBolMLWpMZbGxvB1+G8d2bO+CrHOaLR5qw
+        +mYtTa0h4dg3pC2LgZXpRQ==
+X-Google-Smtp-Source: ABdhPJyL9295442DxPEmIT8SI9QQ0D0GD/wcPGwkJVIVtqECxQqrr393yEsK8duFbXwb3VYfVZUY5A==
+X-Received: by 2002:a17:907:1b29:: with SMTP id mp41mr7432276ejc.459.1626383716565;
+        Thu, 15 Jul 2021 14:15:16 -0700 (PDT)
+Received: from localhost.localdomain ([46.53.253.48])
+        by smtp.gmail.com with ESMTPSA id hq9sm2136434ejc.0.2021.07.15.14.15.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jul 2021 14:15:16 -0700 (PDT)
+Date:   Fri, 16 Jul 2021 00:15:14 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, arnd@arndb.de, masahiroy@kernel.org,
+        hch@infradead.org
+Subject: [PATCH -mm] fixup "Decouple build from userspace headers"
+Message-ID: <YPClYgoJOTUn4V0w@localhost.localdomain>
+References: <YO3txvw87MjKfdpq@localhost.localdomain>
+ <YO8ioz4sHwcUAkdt@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210715183727.GP22278@shell.armlinux.org.uk>
+In-Reply-To: <YO8ioz4sHwcUAkdt@localhost.localdomain>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 15, 2021 at 07:37:27PM +0100, Russell King (Oracle) wrote:
-> On Thu, Jul 15, 2021 at 07:10:54PM +0100, Matthew Wilcox wrote:
-> > On Thu, Jul 15, 2021 at 05:47:41PM +0100, Russell King (Oracle) wrote:
-> > > On Thu, Jul 15, 2021 at 02:46:10PM +0100, Matthew Wilcox (Oracle) wrote:
-> > > > This is the order of the page table allocation, not the order of a PMD.
-> > > > -#define PMD_ORDER	3
-> > > > +#define PMD_TABLE_ORDER	3
-> > > >  #else
-> > > >  #define PG_DIR_SIZE	0x4000
-> > > > -#define PMD_ORDER	2
-> > > > +#define PMD_TABLE_ORDER	2
-> > > 
-> > > I think PMD_ENTRY_ORDER would make more sense here - this is the
-> > > power-of-2 of an individual PMD entry, not of the entire table.
-> > 
-> > But ... we have two kinds of PMD entries.  We have the direct entry that
-> > points to a 1-16MB sized chunk of memory, and we have the table entry that
-> > points to a 4k-32k chunk of memory that contains PTEs.  So I don't think
-> > calling it 'entry' order actually disambiguates anything.  That's why
-> > I went with 'table' -- I can't think of anything else to call it!
-> > PMD_PTE_ARRAY_ORDER doesn't seem like an improvement to me ...
-> 
-> There may be two kinds of PMD entries, but that isn't relevant here.
-> Going back to the original terminology, 1 << PMD_ORDER here is the
-> size of each PMD entry. It doesn't have anything to do with how much
-> memory is being mapped by each entry.
+Allow to find SIMD headers where necessary.
 
-Oh.  Oh!  So, 'order' is usually a shift that is _added on to_ the
-PAGE_SHIFT in order to find how many bytes are in question.  See
-include/asm-generic/getorder.h.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+---
 
-Now, PMD_SHIFT is already in use, but perhaps what is meant here is
-PMD_ENTRY_SHIFT?
+	fold into decouple-build-from-userspace-headers.patch
 
-> I think what is confusing you is stuff like:
-> 
->         add     r0, r4, #KERNEL_OFFSET >> (SECTION_SHIFT - PMD_ORDER)
-> 
-> r4 is the base address of the page tables, and r0 is the address of
-> the entry we want to manipulate for "KERNEL_OFFSET" - which is the
-> virtual address. 1 << SECTION_SHIFT is how much memory each entry
-> maps (and this is fixed here - there's no variability as you suggest
-> above.)
+ arch/arm64/lib/Makefile   |    2 +-
+ arch/powerpc/lib/Makefile |    2 +-
+ lib/raid6/Makefile        |    4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-(the variability I intended above was more to accommodate architectural
-differences; I hate to use x86-specific numbers like 4KiB and 2MiB)
-
-> Effectively, the calculation above is:
-> 
-> 	index = KERNEL_OFFSET >> SECTION_SHIFT;
-> 	pmd_entry_size = 1 << PMD_ORDER;
-> 	r0 = base + index * pmd_entry_size;
-> 
-> but in a single instruction as we can be sure that KERNEL_OFFSET will
-> have zeros as the low bits after shifting by SECTION_SHIFT - PMD_ORDER.
-> 
-> Hope this helps to explain what this PMD_ORDER is actually doing here.
-
-Thank you, yes, I was terminally confused.
+--- a/arch/arm64/lib/Makefile
++++ b/arch/arm64/lib/Makefile
+@@ -8,7 +8,7 @@ lib-y		:= clear_user.o delay.o copy_from_user.o		\
+ ifeq ($(CONFIG_KERNEL_MODE_NEON), y)
+ obj-$(CONFIG_XOR_BLOCKS)	+= xor-neon.o
+ CFLAGS_REMOVE_xor-neon.o	+= -mgeneral-regs-only
+-CFLAGS_xor-neon.o		+= -ffreestanding
++CFLAGS_xor-neon.o		+= -ffreestanding -isystem $(shell $(CC) -print-file-name=include)
+ endif
+ 
+ lib-$(CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE) += uaccess_flushcache.o
+--- a/arch/powerpc/lib/Makefile
++++ b/arch/powerpc/lib/Makefile
+@@ -64,6 +64,6 @@ obj-$(CONFIG_PPC_LIB_RHEAP) += rheap.o
+ obj-$(CONFIG_FTR_FIXUP_SELFTEST) += feature-fixups-test.o
+ 
+ obj-$(CONFIG_ALTIVEC)	+= xor_vmx.o xor_vmx_glue.o
+-CFLAGS_xor_vmx.o += -maltivec $(call cc-option,-mabi=altivec)
++CFLAGS_xor_vmx.o += -maltivec $(call cc-option,-mabi=altivec) -isystem $(shell $(CC) -print-file-name=include)
+ 
+ obj-$(CONFIG_PPC64) += $(obj64-y)
+--- a/lib/raid6/Makefile
++++ b/lib/raid6/Makefile
+@@ -13,7 +13,7 @@ raid6_pq-$(CONFIG_S390) += s390vx8.o recov_s390xc.o
+ hostprogs	+= mktables
+ 
+ ifeq ($(CONFIG_ALTIVEC),y)
+-altivec_flags := -maltivec $(call cc-option,-mabi=altivec)
++altivec_flags := -maltivec $(call cc-option,-mabi=altivec) -isystem $(shell $(CC) -print-file-name=include)
+ 
+ ifdef CONFIG_CC_IS_CLANG
+ # clang ppc port does not yet support -maltivec when -msoft-float is
+@@ -33,7 +33,7 @@ endif
+ # The GCC option -ffreestanding is required in order to compile code containing
+ # ARM/NEON intrinsics in a non C99-compliant environment (such as the kernel)
+ ifeq ($(CONFIG_KERNEL_MODE_NEON),y)
+-NEON_FLAGS := -ffreestanding
++NEON_FLAGS := -ffreestanding -isystem $(shell $(CC) -print-file-name=include)
+ ifeq ($(ARCH),arm)
+ NEON_FLAGS += -march=armv7-a -mfloat-abi=softfp -mfpu=neon
+ endif
