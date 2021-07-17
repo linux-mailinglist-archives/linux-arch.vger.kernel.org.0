@@ -2,131 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1DC3CBAFF
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Jul 2021 19:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7053CC168
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Jul 2021 07:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbhGPRTH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Jul 2021 13:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S229969AbhGQFlH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 17 Jul 2021 01:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbhGPRTG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Jul 2021 13:19:06 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A983C061764
-        for <linux-arch@vger.kernel.org>; Fri, 16 Jul 2021 10:16:08 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id m14-20020a4a240e0000b029025e4d9b0a3dso2596284oof.6
-        for <linux-arch@vger.kernel.org>; Fri, 16 Jul 2021 10:16:08 -0700 (PDT)
+        with ESMTP id S229379AbhGQFlH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Jul 2021 01:41:07 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A12C06175F
+        for <linux-arch@vger.kernel.org>; Fri, 16 Jul 2021 22:38:10 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 37so12160613pgq.0
+        for <linux-arch@vger.kernel.org>; Fri, 16 Jul 2021 22:38:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jWbVndvTFPt8BOcGSAnZdQeZBgwQ39VLXMDadBgw6kk=;
-        b=kycsT8OTIWrycyqND/lL5jUMQFDjltZ92oujogdg2Ndlkp+0StM8kAIg7tLjtQfeG1
-         YtQp0RLCivg5nlV/zFSc1mTULVPHjZTq7Ex+9U/i2yTDKpEG7bpkN+bJ8s8tT1JaBqwM
-         y2TLzY9HoTp/Uz4id24PK7R/mXY9Jq6r81ZebQ+l6yf4sVQAbW1lEdfkLQRpnnjyDDmt
-         bgikzUbY3QcdoaR5eMFhAPwFnx5Vw+ejdfPoUKSNgoBP0WsPICAy2cHDBYAdl8Ac/wYr
-         kP06C8cTP2tL3t0qMqlAqnL33Dxo7e9FDTC/AFaZehjspePkLl7z/2H0fI4s4//TTHjd
-         wV8Q==
+        d=gmail.com; s=20161025;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=ufZLoU++KwzTLrSeOiNHYHKkFRVcvivHEu5YkyD6pFM=;
+        b=bvVTP4elDiw5wrqRF917W8S6tLCfHIxaLKkqWeUzQNzC90aVtuY8f/3iRmfo+Btalb
+         ZuRyd+bypUChxdxIBqPhWdKugitLldEIZmysifsRvacOx1j5d4Ka3muiMBmgt1HXZW9b
+         1F+7RCs4gMXA4nWzDdE/wdaY3zoqX8YlFeNVQElgHfrM7hogA73VGWkVCQsyuynElbbR
+         k5yNV+DSXDZgaHkPZlY6OCQ6vjp8AFvkqR9ScvieqgO8JqjqAEgjUbMyXPiwZ2BadkSM
+         9TlAx7eOj9fBAwnNffQbitbiZhr8LdUe9Bu/iD9vCD69OcpUPL6DatiRZGcZfIsuTr2o
+         pvXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jWbVndvTFPt8BOcGSAnZdQeZBgwQ39VLXMDadBgw6kk=;
-        b=sxEpbqlDYh3wjtiJmwBv4xsSHJQy4MnMSLLaez14HcBIU8NuT3X51H8XIhVOXQAGRZ
-         kOHNHK8oX20y07W+C5/DaJvPNPz5+UM/Zmd5trssj8kA9DeRt1V+J7m8IMqRwcn5YSue
-         TNRwXu0t0Mf3jVUyIftpdZ2wybVSg6BrtGu16X2AW6ab7WTpJFJVDyIawGNjRL1l8fe1
-         ixPmVSHGRXF9bcDX096vEdQOm4PxoWaa34LzKK107x3R5ohS29aLRIJqqrw9pBKIjd0l
-         NpS8jEl8+nljh8kTX84C1F4WRepVLgbd7PN3Yp0hjKw28iuHMdapbD87JO0/S10MN1aX
-         ognQ==
-X-Gm-Message-State: AOAM533icQ6QPxdNxTVQ6e4D+Z0U+oLOggkNJNkBTE70d7kNILh5v18Y
-        us3S1IzSTluMGiM+8quT6iQRZHyeWkRGl4RZqg0JRg==
-X-Google-Smtp-Source: ABdhPJx9gk24ziK+bUUPctrm/fDAn5x21MphrWbNdm5y/1f6NtI1GUnsZkQdW2dgVWs4fHcFQbpBeYfuinN/+cxYnXU=
-X-Received: by 2002:a4a:956f:: with SMTP id n44mr8396820ooi.54.1626455767094;
- Fri, 16 Jul 2021 10:16:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <YIpkvGrBFGlB5vNj@elver.google.com> <m11rat9f85.fsf@fess.ebiederm.org>
- <CAK8P3a0+uKYwL1NhY6Hvtieghba2hKYGD6hcKx5n8=4Gtt+pHA@mail.gmail.com>
- <m15z031z0a.fsf@fess.ebiederm.org> <YIxVWkT03TqcJLY3@elver.google.com>
- <m1zgxfs7zq.fsf_-_@fess.ebiederm.org> <87a6mnzbx2.fsf_-_@disp2133>
- <YPFybJQ7eviet341@elver.google.com> <87tukuw8a3.fsf@disp2133>
-In-Reply-To: <87tukuw8a3.fsf@disp2133>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 16 Jul 2021 19:15:55 +0200
-Message-ID: <CANpmjNMAxk5--iAmL3fL8XpPuDDFdufu1T=r0USnO+6Rn-A95A@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Final si_trapno bits
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=ufZLoU++KwzTLrSeOiNHYHKkFRVcvivHEu5YkyD6pFM=;
+        b=nGSRkXQBtHo95HbAh0RN7PMoy2VCkfJv3I0dFqIu+KjFJOF7SpZAEdIxP1rXVoCFAj
+         WPeHJ/4dcamtQiSWT24RsGjHD7+0b9UQEBHasDE6lBsYow/t5E/uGQJHltZvEaA+/Tu8
+         TCxJq7H4bCMN7Z7A9oYmlgf9o1MNS3pUaoiLce8dLwmQE25NW9k63W5c6rSVXEMLcq84
+         jdee7+DAd1UJxtfxaxTEwV0NA+i5fjFoNDC8+wySfrxhnuhnd9kQ4+qY462g432R1T6q
+         x10PBmA79qmP7kuvSLWVR1IAto0jFnKeo4g2yYdYHrANrYe0uiDU/pnMGGLYUNTtiwCT
+         XwIg==
+X-Gm-Message-State: AOAM533gcMDMBR44WFel5xJ0B4QCWLyrNSAZEHor9AQ5lYRdSyiBVwLF
+        SAVJSBwkzBacVqi2jj6fjER6v6O/EkE=
+X-Google-Smtp-Source: ABdhPJwefctfw8nGpJeddfKU/GJyORZWYibARYL0WRzSQ8gucpY3XgMp9rjp+Ka3lgQRYuciF872Tg==
+X-Received: by 2002:a63:2308:: with SMTP id j8mr9411051pgj.166.1626500289745;
+        Fri, 16 Jul 2021 22:38:09 -0700 (PDT)
+Received: from [10.1.1.25] (222-152-189-37-fibre.sparkbb.co.nz. [222.152.189.37])
+        by smtp.gmail.com with ESMTPSA id j20sm11824131pfc.203.2021.07.16.22.38.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 16 Jul 2021 22:38:09 -0700 (PDT)
+Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Florian Weimer <fweimer@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Collingbourne <pcc@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
+ <87zgunzovm.fsf@disp2133> <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
+Cc:     geert@linux-m68k.org, linux-arch@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, torvalds@linux-foundation.org,
+        schwab@linux-m68k.org
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com>
+Date:   Sat, 17 Jul 2021 17:38:01 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 16 Jul 2021 at 18:09, Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Marco Elver <elver@google.com> writes:
-> > On Thu, Jul 15, 2021 at 01:09PM -0500, Eric W. Biederman wrote:
-> >> As a part of a fix for the ABI of the newly added SIGTRAP TRAP_PERF a
-> >> si_trapno was reduced to an ordinary extention of the _sigfault case
-> >> of struct siginfo.
-> >>
-> >> When Linus saw the complete set of changes come in as a fix he requested
-> >> that the set of changes be trimmed down to just what was necessary to
-> >> fix the SIGTRAP TRAP_PERF ABI.
-> >>
-> >> I had intended to get the rest of the changes into the merge window for
-> >> v5.14 but I dropped the ball.
-> >>
-> >> I have made the changes to stop using __ARCH_SI_TRAPNO be per
-> >> architecture so they are easier to review.  In doing so I found one
-> >> place on alpha where I used send_sig_fault instead of
-> >> send_sig_fault_trapno(... si_trapno = 0).  That would not have changed
-> >> the userspace behavior but it did make the kernel code less clear.
-> >>
-> >> My rule in these patches is everywhere that siginfo layout calls
-> >> for SIL_FAULT_TRAPNO the code uses either force_sig_fault_trapno
-> >> or send_sig_fault_trapno.
-> >>
-> >> And of course I have rebased and compile tested Marco's compile time
-> >> assert patches.
-> >>
-> >> Eric
-> >>
-> >>
-> >> Eric W. Biederman (3):
-> >>       signal/sparc: si_trapno is only used with SIGILL ILL_ILLTRP
-> >>       signal/alpha: si_trapno is only used with SIGFPE and SIGTRAP TRAP_UNK
-> >>       signal: Remove the generic __ARCH_SI_TRAPNO support
-> >>
-> >> Marco Elver (3):
-> >>       sparc64: Add compile-time asserts for siginfo_t offsets
-> >>       arm: Add compile-time asserts for siginfo_t offsets
-> >>       arm64: Add compile-time asserts for siginfo_t offsets
-> >
-> > Nice, thanks for the respin. If I diffed it right, I see this is almost
-> > (modulo what you mentioned above) equivalent to:
-> >   https://lore.kernel.org/linux-api/m1tuni8ano.fsf_-_@fess.ebiederm.org/
-> > + what's already in mainline. It's only missing:
-> >
-> >       signal: Verify the alignment and size of siginfo_t
-> >       signal: Rename SIL_PERF_EVENT SIL_FAULT_PERF_EVENT for consistency
-> >
-> > Would this be appropriate for this series, or rather separately, or
-> > dropped completely?
+Am 16.07.2021 um 11:10 schrieb Michael Schmitz:
+> Eric,
 >
-> Appropriate I just overlooked them.
+> On 16/07/21 1:29 am, Eric W. Biederman wrote:
+>>
+>> I have been digging into this some more and I have found one place
+>> that I am having a challenge dealing with.
+>>
+>> In arch/m68k/fpsp040/skeleton.S there is an assembly version of
+>> copy_from_user that calls fpsp040_die when the bytes can not be read.
+>>
+>> Now fpsp040_die is just:
+>>
+>> /*
+>>   * This function is called if an error occur while accessing
+>>   * user-space from the fpsp040 code.
+>>   */
+>> asmlinkage void fpsp040_die(void)
+>> {
+>>     do_exit(SIGSEGV);
+>> }
+>> The problem here is the instruction emulation performed in the fpsp040
+>> code performs a very minimal saving of registers.  I don't think even
+>> the normal system call entry point registers that are saved are present
+>> at that point.
+>>
+>> Is there any chance you can help me figure out how to get a stack frame
+>> with all of the registers present before fpsp040_die is called?
+>
+> I suppose adding the following code (untested) to entry.S:
+>
+> ENTRY(fpsp040_die)
+>         SAVE_ALL_INT
+>         jbsr    fpsp040_die_c
+>         jra     ret_from_exception
+>
+> along with renaming above C entry point to fpsp040_die_c would add the
+> basic saved registers, but these would not necessarily reflect the state
+> of the processor when the fpsp040 trap was called. Is that what you're
+> after?
 
-Full series with the 2 patches just sent looks good to me.
+I should have looked more closely at skeleton.S - most FPU exceptions 
+handled there call trap_c the same way as is done for generic traps, 
+i.e. SAVE_ALL_INT before, ret_from_exception after.
 
-Thanks,
--- Marco
+Instead of adding code to entry.S, much better to add it in skeleton.S. 
+I'll try to come up with a way to test this code path (calling 
+fpsp040_die from the dz exception hander seems much the easiest way) to 
+make sure this doesn't have side effects.
+
+Does do_exit() ever return?
+
+Cheers,
+
+	Michael
