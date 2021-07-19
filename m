@@ -2,118 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D2A3CCC8D
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Jul 2021 05:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0233CCEB4
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Jul 2021 09:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbhGSDSw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 18 Jul 2021 23:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233720AbhGSDSv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 18 Jul 2021 23:18:51 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3886C061762
-        for <linux-arch@vger.kernel.org>; Sun, 18 Jul 2021 20:15:52 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id my10so10532176pjb.1
-        for <linux-arch@vger.kernel.org>; Sun, 18 Jul 2021 20:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=A0RwgPQGJrc23vgBFxOPp4E1hoFr61XtuLyv5X/G1b4=;
-        b=r3SJ8BZWR20u9aJjNmUQ5SDbgL4Y24EtCIr/jbWPjsCb8PgpBTpL+wJ4/7OVx0mXRi
-         Cekir0U8s+VReASNOnWajbYpy5VUjV4Lqa6Q/DlRd12ud4HBGxZcptLLjLBXxoiLTxKx
-         X9PARsWeen3Wkk1SAtoxcFdLNm/uX+AcX3GCLiWdSc+THshSUoOuKw2I34RujkbAN1iE
-         CYaHupXR1tW5io/uDKVB6tfbHWfHcx443tLZFeduB3o/rLcmiwmLAVJp6ciAfCELEdgm
-         2DohpVL28HDFtQX/hojilfxySfTZiuytFzk5YhvmA5nEbQpSMSp8f9iBMoxfYIADX3LW
-         yKJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=A0RwgPQGJrc23vgBFxOPp4E1hoFr61XtuLyv5X/G1b4=;
-        b=mlfRfgCjlz+2Dl0tn9RnIpDB1uxqupAZN++02DHIcoXmBXs6Pxbtf3IwugI3XzXxCH
-         lXkVyLwy5jbKieyC4DbRh2mkUNBL7OEJxxfCUHBDXcS6Ir9nfgcVe/aM1FnaHlQR48S4
-         3yeKkp24mA3tLchCcg1nJuJTgONI1d655dCTJAuQsIUhJzjdD3Ag1rZGlrWMM9cWvXgT
-         9chtf0uL1wERbfP/R+ppBkwOG8+y2Cgg0yN9sAvjkLkTh3Ep/OXAGmEQG6DSCVrYKz4x
-         2FYN2LPEmyN2m0woNU7rSEn4Nsu6wYxRUpygqq4mrrpavTufgAenWYTOi+ZEK7RSW0No
-         TsRw==
-X-Gm-Message-State: AOAM532kmh18wek0PAt45bnUAdFsjSI0BuqMUdUmp7n/HOsTnyeoUBlj
-        KED54lX5kDUanQAu7hu5XnU=
-X-Google-Smtp-Source: ABdhPJwxQVnbf6De3mHEV80Kfnfk/WVI0UOwdDLQxwgZEyZQ7W31qteUxNBBqSYWWsrAl1TnEaoa7A==
-X-Received: by 2002:a17:90a:642:: with SMTP id q2mr27991332pje.205.1626664552208;
-        Sun, 18 Jul 2021 20:15:52 -0700 (PDT)
-Received: from [10.1.1.25] (222-152-189-37-fibre.sparkbb.co.nz. [222.152.189.37])
-        by smtp.gmail.com with ESMTPSA id g27sm19150222pgl.19.2021.07.18.20.15.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 18 Jul 2021 20:15:51 -0700 (PDT)
-Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
-To:     Brad Boyer <flar@allandria.com>
-References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
- <87zgunzovm.fsf@disp2133> <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
- <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com> <8735scvklk.fsf@disp2133>
- <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
- <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com> <87a6mj99vf.fsf@igel.home>
- <1ebfb9de-de16-d05c-ea15-a110857fe284@gmail.com>
- <20210718205956.GA802@allandria.com>
-Cc:     Andreas Schwab <schwab@linux-m68k.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, geert@linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        torvalds@linux-foundation.org
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <47fb6c7e-30e2-0525-9b2a-c8430a9bfa38@gmail.com>
-Date:   Mon, 19 Jul 2021 15:15:44 +1200
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+        id S234816AbhGSHqi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Jul 2021 03:46:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51682 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233759AbhGSHqh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 19 Jul 2021 03:46:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6A8056109E
+        for <linux-arch@vger.kernel.org>; Mon, 19 Jul 2021 07:43:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626680618;
+        bh=x+abu/zf7wALqS3BxwxkcPH14k9QI2BPBLIcIASmlk4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iuPx0mpkhm44LpOcVzsab9cRy6NylH5yGgbIBu4EdgEhytZQn4hX1/wBlp9WK1nSm
+         pzgyATszQrkpsowOLcspvzh0H6xKZzMQIQ7JX31kvTIpS1Vm8jK2ugaLhrNx8NzvDQ
+         HQCqNZK/dMg4H5xXLPo+gJ0RJEbeS0ctQ8CY5rwaYv92KuPrDiAEC1atCxTZxd/cMn
+         bcJ24A6NaSxDGufbXg5Ylq9X3zAV1sjOMgUuewmFUdbgtDW73E2lJZnMOZeW/r0xMn
+         tQnusNTfJrMxGtfUBvWiytY9gKRkczEbSnXpmchubyGb4as2y7X1UH8SiMk+R/QKKt
+         ss5ElAMVZIL1A==
+Received: by mail-wm1-f41.google.com with SMTP id p15-20020a05600c358fb0290245467f26a4so1624391wmq.0
+        for <linux-arch@vger.kernel.org>; Mon, 19 Jul 2021 00:43:38 -0700 (PDT)
+X-Gm-Message-State: AOAM5320OwwseAxsfjmiUZGKU/VnhSVBu5ovknqllMSPin9DA11j5WiB
+        X1Hq/IRtL64lF2PMVGnQ3jzf/NvgipZiLzgCEv0=
+X-Google-Smtp-Source: ABdhPJx2EoeVgfVl38yWrk3sFd1kJb+IvR1WzApPp9iCEK+lJkuOWBX50L2OJx6x+7jGaRTOHQsCzUynt0/W2bMT6KQ=
+X-Received: by 2002:a1c:4e0c:: with SMTP id g12mr30577134wmh.120.1626680617033;
+ Mon, 19 Jul 2021 00:43:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210718205956.GA802@allandria.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-4-chenhuacai@loongson.cn> <CAK8P3a0RHFvzvGXMrJ369gDVC7fpH5XJp+AX-ZiAu0JskTzZqg@mail.gmail.com>
+ <CAAhV-H796UQNaRkiaJhYRHsO-36KE_5d6sT=sJaKXCKfHtP-Mg@mail.gmail.com>
+In-Reply-To: <CAAhV-H796UQNaRkiaJhYRHsO-36KE_5d6sT=sJaKXCKfHtP-Mg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 19 Jul 2021 09:43:21 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1kX_wHz_BpdD=pB-Fd2Cy3_xDvTsRKVvKR+_9GP0NSmA@mail.gmail.com>
+Message-ID: <CAK8P3a1kX_wHz_BpdD=pB-Fd2Cy3_xDvTsRKVvKR+_9GP0NSmA@mail.gmail.com>
+Subject: Re: [PATCH 03/19] LoongArch: Add build infrastructure
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Brad,
+On Mon, Jul 19, 2021 at 3:26 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> On Tue, Jul 6, 2021 at 6:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >  Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > --- /dev/null
+> > > +++ b/arch/loongarch/Kbuild
+> > > @@ -0,0 +1,21 @@
+> > > +# Fail on warnings - also for files referenced in subdirs
+> > > +# -Werror can be disabled for specific files using:
+> > > +# CFLAGS_<file.o> := -Wno-error
+> > > +ifeq ($(W),)
+> > > +subdir-ccflags-y := -Werror
+> > > +endif
+> >
+> > This tends to break building with 'make W=12' or similar, I would recommend not
+> > adding -Werror. It is a good idea though to have your CI systems build
+> > with -Werror
+> > enabled on the command line though.
+> If we use W=???, corresponding flags will be used; if we don't use
+> W=???, -Werrer flag is used here. So it seems not break the building.
 
-Am 19.07.2021 um 08:59 schrieb Brad Boyer:
-> On Mon, Jul 19, 2021 at 07:47:19AM +1200, Michael Schmitz wrote:
->> Somewhere in entry.S is
->>
->> addql   #8,%sp
->> addql   #4,%sp
->>
->> - is that faster than
->>
->> lea     12(%sp),%sp ?
->
-> On the 68040 the timing can depend on the other instructions around
-> it. Each of those addql instructions is listed as 1 and 1 for
-> fetch/execute, while that lea is listed as 2 and 1L+1 meaning that
-> it could potentially be faster depending on the behavior of the
-> instruction that preceded it thorough the execute stage. That one
-> free cycle if the stage is busy (due to the 1L) could make it
-> effectively faster since the first addql would have to wait that
-> extra cycle in that case.
->
-> On the 68060, it looks like the lea version is the clear winner,
-> although the timing description is obviously much more complicated
-> and thus I might have missed something. From a quick look, it
-> seems that lea takes the same time as just the first addql.
->
-> On CPU32, the lea version loses due to the extra 3 cycles from
-> the addressing mode, even though the base cycles of lea are the
-> same as for addql (2 cycles each). The lea might be even worse
-> if it can't take advantage of overlapping the surrounding
-> instructions (1 cycle before and 1 after).
->
-> Those are the only ones I already have the documentation in my
-> hands. I haven't checked older classic cores or coldfire, but
-> it does seem like it is specific to each chip which is faster.
->
-> Obviously both versions would be the same size (2 words).
+The thing is that we get three new compiler releases every year, one gcc
+and two llvm. Usually every release introduces new warnings, so even if
+you quickly address those in mainline kernels, anyone using an older kernel
+will find themselves unable to build it with a newer compiler.
 
-Thanks, best leave it as is then.
+> > > +       select ARCH_MIGHT_HAVE_PC_PARPORT
+> > > +       select ARCH_MIGHT_HAVE_PC_SERIO
+> > > +       select GENERIC_ISA_DMA
+> > > +       select ISA
+> >
+> > Do you actually have ISA-style add-on cards? If not, then
+> > remove the ISA options. If you do, which drivers are they?
+> Yes, there is an LPC controller in LS7A, and superio is connected on
+> it for laptops.
 
-Cheers,
+CONFIG_ISA only refers to actual 16-bit add-on cards, not LPC
+style on-board devices. Sometimes the options are used inconsistently,
+but unless you need an original Soundblaster or NE2000 card, this
+should not be needed. Note that some older x86-64 and arm64 have
+LPC as well, but do not support CONFIG_ISA.
 
-	Michael
+For GENERIC_ISA_DMA, I suppose that could be used for the parallel
+port driver, but even if you have one of those, it might be easier to leave
+it out and just no longer support Zip drives or dot matrix printers attached
+to them.
+
+ARCH_MIGHT_HAVE_PC_SERIO is probably needed if this is how
+you attach your keyboard and trackball, but it should work without the
+others.
+
+       Arnd
