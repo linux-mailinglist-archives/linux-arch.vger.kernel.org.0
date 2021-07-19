@@ -2,129 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EEBC3CD563
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Jul 2021 15:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2264A3CE689
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Jul 2021 19:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237072AbhGSMVm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Jul 2021 08:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237046AbhGSMVm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Jul 2021 08:21:42 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BD8C061574
-        for <linux-arch@vger.kernel.org>; Mon, 19 Jul 2021 05:21:28 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id p186so19795307iod.13
-        for <linux-arch@vger.kernel.org>; Mon, 19 Jul 2021 06:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0XT1rftsceASPZek6TfqeMDtP7+haDAJIWhlgNtS1qc=;
-        b=D1wxlC/fE0F7kmOoJFyEHcAVDiPTB4aRYPRq1H3VteimxycDsaZ8JEjmAQQSnwLbIj
-         MlgoDmx+IAGuVql/1cOj7wc+G2F3+RGHFQx8sMbgKn/Z81BAjmobAhNFHYWg1psh9pwY
-         2LTr7n09/1EPHC/ZR8TFK7ORegZ3lgkFI90vdgkn3rmIXJXGlIvzSC6KA/uIRUydQX2s
-         oKqly5lrzHiNfw/WLzvhFvYY380+uyIAAz26oaihcnAnz//yqezUMf1+gXZrnhKd6ZIS
-         a2Eh2N8VC9yOIiSGP0FJipXphUHgR3gNviQFWwSbNFYQ+qiySStFIvm298V/KHqfGA4c
-         nfTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0XT1rftsceASPZek6TfqeMDtP7+haDAJIWhlgNtS1qc=;
-        b=eX77ox+tIXZpuY+BIWsHWUcPzhyZKeTtsy7dD3L8FeB7mTG/cL43p5935h8AhXrn1x
-         HyhfEQXrwJSFMOhelbA80OSOsn3WN4TNtZhIZXRQ/Y0fJxsfRfSCMlLrDmXqDPIXbyCK
-         j20yq3yt4UTawGP1xoUdpmVXGU2nf3fNK9gFR9PCqzKLDAsTRplDV+iH5RHjrAGM7Tk1
-         lJMDGYlSiB7WEsCxZd6k8q5WcdT+KevMyw07WOkkZFe04eqzMleeFq48HW3AQkENKAh8
-         PxC6TKg8loBAe+P6mOunW9CAzI+85nMibIjwJgm9iFuDkjLhVI+rGyvNrD8l/EwbluoG
-         IH0A==
-X-Gm-Message-State: AOAM5301jsVSA/KCZZouM1zKSD6XYYuS49R7hIou7zzvAQzY86zY9m1F
-        4r/g4yjuJoS18fjCXtEWkwJ4B1q5p4+T5tB//cE=
-X-Google-Smtp-Source: ABdhPJxHNUOjQBYiGRdpqFS1fo8rR3YVf6XI/cn87Zq7ez2iot8DDQaJNNH+uzS0++uE1gWOpN0GBNQeHTMRY6471jQ=
-X-Received: by 2002:a05:6602:2406:: with SMTP id s6mr13611406ioa.159.1626699740927;
- Mon, 19 Jul 2021 06:02:20 -0700 (PDT)
+        id S245357AbhGSQIA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Jul 2021 12:08:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39904 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347933AbhGSQGB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 19 Jul 2021 12:06:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 04B0861166;
+        Mon, 19 Jul 2021 16:46:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626713167;
+        bh=BuNpEVw0Z7QF7T6Pg1Y4iSPkryr1pnhL0UsAdhxfVKQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MBXPEv7c0GX2eb+FcIRSUiE4ipyJFODuf0n8N/RKSemTAvhHtyxd713lOBVXW6cpS
+         kGNcMnNsMsEEGjtygw7l29BCGTw+2e9Zovu6Bzq+8j/poNlSenwj87QSJmVs0kIqZP
+         Jy2oB4wTRfWfnxDuhgo4bGsiw9GYH95BzdOLLaOuwIW14MdC71olpyBOnKfpvHdGb9
+         vE3dFQ7SYZq7K8iQQPzSTOfy6Bwvl1j9rw/sF37Bkh1bfbg7jzTRBM1rldWtCndhfv
+         +96eF3kWM6cEyyjXc3ugEZo1lHAj2Rp3ASHw3Y060CrAiEQufA4n3LAk7IB0pWMySH
+         s7KPX/QZL5Ouw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Dave Martin <dave.martin@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v5 0/4] arm64: Enable BTI for the executable as well as the interpreter
+Date:   Mon, 19 Jul 2021 17:45:32 +0100
+Message-Id: <20210719164536.19143-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-4-chenhuacai@loongson.cn> <CAK8P3a0RHFvzvGXMrJ369gDVC7fpH5XJp+AX-ZiAu0JskTzZqg@mail.gmail.com>
- <CAAhV-H796UQNaRkiaJhYRHsO-36KE_5d6sT=sJaKXCKfHtP-Mg@mail.gmail.com> <CAK8P3a1kX_wHz_BpdD=pB-Fd2Cy3_xDvTsRKVvKR+_9GP0NSmA@mail.gmail.com>
-In-Reply-To: <CAK8P3a1kX_wHz_BpdD=pB-Fd2Cy3_xDvTsRKVvKR+_9GP0NSmA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Mon, 19 Jul 2021 21:02:10 +0800
-Message-ID: <CAAhV-H4iBVTbJPagY3btFrAmwNgqqrYDAY6oMoE-1gb21Jpptg@mail.gmail.com>
-Subject: Re: [PATCH 03/19] LoongArch: Add build infrastructure
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2311; h=from:subject; bh=BuNpEVw0Z7QF7T6Pg1Y4iSPkryr1pnhL0UsAdhxfVKQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBg9awsKt64aeGMJqs+SFgkYb2M102fvMXDFSgSE/pz XyqRHxuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYPWsLAAKCRAk1otyXVSH0Mq7B/ 9LyoRg5d1BWXInbLMROy7vixqHG8dTgSGcnxpFWRikeVZT5UKgZ8V9QItAlMVaEppYaBRw98PfBkDq kQEQWmcgg+Aghu8ifnM1pCArevFtntF3Oa0jgYRVPOXLr9rOteR+1UkQYFSycaTvWrWnD1Epv2BuL8 WDOczzWGZLhkE+oVhpkwKm9sUNtKGZb3N3+Z7HqOGA/mBxAVho58BbGlpQLndfyqljSr3n9xdFac4f 1Megg/C2xlo2/JoyS70SjWDMQhSR02sPRDwwPDyKlR0VEc9tHaylGooFLp8WU7j2Wge+5EQyfOkcpC kJ3SD34oIISkfqQmYV2q1DNVwc3bRV
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
+Deployments of BTI on arm64 have run into issues interacting with
+systemd's MemoryDenyWriteExecute feature.  Currently for dynamically
+linked executables the kernel will only handle architecture specific
+properties like BTI for the interpreter, the expectation is that the
+interpreter will then handle any properties on the main executable.
+For BTI this means remapping the executable segments PROT_EXEC |
+PROT_BTI.
 
-On Mon, Jul 19, 2021 at 3:43 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Mon, Jul 19, 2021 at 3:26 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > On Tue, Jul 6, 2021 at 6:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > >  Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > --- /dev/null
-> > > > +++ b/arch/loongarch/Kbuild
-> > > > @@ -0,0 +1,21 @@
-> > > > +# Fail on warnings - also for files referenced in subdirs
-> > > > +# -Werror can be disabled for specific files using:
-> > > > +# CFLAGS_<file.o> := -Wno-error
-> > > > +ifeq ($(W),)
-> > > > +subdir-ccflags-y := -Werror
-> > > > +endif
-> > >
-> > > This tends to break building with 'make W=12' or similar, I would recommend not
-> > > adding -Werror. It is a good idea though to have your CI systems build
-> > > with -Werror
-> > > enabled on the command line though.
-> > If we use W=???, corresponding flags will be used; if we don't use
-> > W=???, -Werrer flag is used here. So it seems not break the building.
->
-> The thing is that we get three new compiler releases every year, one gcc
-> and two llvm. Usually every release introduces new warnings, so even if
-> you quickly address those in mainline kernels, anyone using an older kernel
-> will find themselves unable to build it with a newer compiler.
-OK, I know.
+This interacts poorly with MemoryDenyWriteExecute since that is
+implemented using a seccomp filter which prevents setting PROT_EXEC on
+already mapped memory and lacks the context to be able to detect that
+memory is already mapped with PROT_EXEC.  This series resolves this by
+handling the BTI property for both the interpreter and the main
+executable.
 
->
-> > > > +       select ARCH_MIGHT_HAVE_PC_PARPORT
-> > > > +       select ARCH_MIGHT_HAVE_PC_SERIO
-> > > > +       select GENERIC_ISA_DMA
-> > > > +       select ISA
-> > >
-> > > Do you actually have ISA-style add-on cards? If not, then
-> > > remove the ISA options. If you do, which drivers are they?
-> > Yes, there is an LPC controller in LS7A, and superio is connected on
-> > it for laptops.
->
-> CONFIG_ISA only refers to actual 16-bit add-on cards, not LPC
-> style on-board devices. Sometimes the options are used inconsistently,
-> but unless you need an original Soundblaster or NE2000 card, this
-> should not be needed. Note that some older x86-64 and arm64 have
-> LPC as well, but do not support CONFIG_ISA.
->
-> For GENERIC_ISA_DMA, I suppose that could be used for the parallel
-> port driver, but even if you have one of those, it might be easier to leave
-> it out and just no longer support Zip drives or dot matrix printers attached
-> to them.
->
-> ARCH_MIGHT_HAVE_PC_SERIO is probably needed if this is how
-> you attach your keyboard and trackball, but it should work without the
-> others.
-OK, I'll remove ISA and GENERIC_ISA_DMA.
+This does mean that we may get more code with BTI enabled if running on
+a system without BTI support in the dynamic linker, this is expected to
+be a safe configuration and testing seems to confirm that. It also
+reduces the flexibility userspace has to disable BTI but it is expected
+that for cases where there are problems which require BTI to be disabled
+it is more likely that it will need to be disabled on a system level.
 
-Huacai
->
->        Arnd
+v5:
+ - Rebase onto v5.14-rc2.
+ - Tweak changelog on patch 1.
+ - Use the helper for interpreter/executable flag in elf.h as well.
+v4:
+ - Rebase onto v5.14-rc1.
+v3:
+ - Fix passing of properties for parsing by the main executable.
+ - Drop has_interp from arch_parse_elf_property().
+ - Coding style tweaks.
+v2:
+ - Add a patch dropping has_interp from arch_adjust_elf_prot()
+ - Fix bisection issue with static executables on arm64 in the first
+   patch.
+
+Mark Brown (4):
+  elf: Allow architectures to parse properties on the main executable
+  arm64: Enable BTI for main executable as well as the interpreter
+  elf: Remove has_interp property from arch_adjust_elf_prot()
+  elf: Remove has_interp property from arch_parse_elf_property()
+
+ arch/arm64/include/asm/elf.h | 14 ++++++++++++--
+ arch/arm64/kernel/process.c  | 16 +++-------------
+ fs/binfmt_elf.c              | 29 ++++++++++++++++++++---------
+ include/linux/elf.h          |  8 +++++---
+ 4 files changed, 40 insertions(+), 27 deletions(-)
+
+
+base-commit: 2734d6c1b1a089fb593ef6a23d4b70903526fe0c
+-- 
+2.20.1
+
