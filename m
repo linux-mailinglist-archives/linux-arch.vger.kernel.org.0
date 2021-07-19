@@ -2,236 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEEE3CCBF6
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Jul 2021 03:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D2A3CCC8D
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Jul 2021 05:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbhGSBbX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 18 Jul 2021 21:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S233807AbhGSDSw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 18 Jul 2021 23:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbhGSBbX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 18 Jul 2021 21:31:23 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CB1C061762
-        for <linux-arch@vger.kernel.org>; Sun, 18 Jul 2021 18:28:24 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id v26so18131171iom.11
-        for <linux-arch@vger.kernel.org>; Sun, 18 Jul 2021 18:28:24 -0700 (PDT)
+        with ESMTP id S233720AbhGSDSv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 18 Jul 2021 23:18:51 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3886C061762
+        for <linux-arch@vger.kernel.org>; Sun, 18 Jul 2021 20:15:52 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id my10so10532176pjb.1
+        for <linux-arch@vger.kernel.org>; Sun, 18 Jul 2021 20:15:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6Pd7eY6FDwjAP/yjrCCPVN7E5zY4tRma9TYQTxYcKHk=;
-        b=guJ4FL+M5iYfp6VCmSIITZa+PFWj/l8ccQgVY+mjZCracGpsSPIPYcta0SKrDaGHmb
-         9ei+q3Six/jA0bkyP14MSU07300tSq9kzYhsLkAi0ma7WozXN3UaxyWLKSl/0CR91OSj
-         nPZSqjif5/BiJIvS3/q4Xj0sUJyh7yYBOVzgXIkzKVHoR8U+63IphTCRsrneQn3c9Xdo
-         eOFQG8feAQG9buVG58dyCJMdYPbA2D800eX7QOTJqCveDpMoufQO/5TTvIYGeCwgOjTy
-         0PU924+Yb05w/CueDon8/wOLkNcV9fnGlHpb+VhOk5hWv08wEpduyPcePfEvImsr04VI
-         r52A==
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=A0RwgPQGJrc23vgBFxOPp4E1hoFr61XtuLyv5X/G1b4=;
+        b=r3SJ8BZWR20u9aJjNmUQ5SDbgL4Y24EtCIr/jbWPjsCb8PgpBTpL+wJ4/7OVx0mXRi
+         Cekir0U8s+VReASNOnWajbYpy5VUjV4Lqa6Q/DlRd12ud4HBGxZcptLLjLBXxoiLTxKx
+         X9PARsWeen3Wkk1SAtoxcFdLNm/uX+AcX3GCLiWdSc+THshSUoOuKw2I34RujkbAN1iE
+         CYaHupXR1tW5io/uDKVB6tfbHWfHcx443tLZFeduB3o/rLcmiwmLAVJp6ciAfCELEdgm
+         2DohpVL28HDFtQX/hojilfxySfTZiuytFzk5YhvmA5nEbQpSMSp8f9iBMoxfYIADX3LW
+         yKJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6Pd7eY6FDwjAP/yjrCCPVN7E5zY4tRma9TYQTxYcKHk=;
-        b=Jdt4f2vCkVrA4JhPppWweBDKewiXoYIQqZ5IFA7ufJ5W9VMZG/Tvt+Z7WoMAFFMwc3
-         qb+Qb1u6A2VIZUMCo9HfAJtzF/9ASBdh4tQyzSKvME93zcvzr4tARiiFkb2p6H+kAPZu
-         x+eaDytf0vFgE6zoI5ulMU6N6fu2E8IM5hTWR8QHKTkuFz7xWnswSDdBRrGgpoiP0ria
-         aAD3/aXBpy+gRaMMJfaAyQlRBUcbSUcgkCF9D8Bcs6J462hL62KNlYkrgC5BsaYVPiH4
-         AHxFte8Tgx/Zw2lvGtVu+9h0xD/DmWbTZp/fN2a66mvtaQdrQ8H0liV7t+a3rbikWAPQ
-         8D+g==
-X-Gm-Message-State: AOAM530xzaYYRKS9s0z8lYblucFw1oZLbify7xUZgDTDiCT/AjhIVQIn
-        Rq0Q2/6SxkC6nQG/DnntZrDBPBirNFeH9JUo55Y=
-X-Google-Smtp-Source: ABdhPJzWcDjQAELj19a9iiMMvNYgLp84mQe5vKjU/tbH4Ufrn1DgtEwAUVCbZn8zSdTun9Xc3CZoqgRl+78dvoNSoUw=
-X-Received: by 2002:a05:6602:190:: with SMTP id m16mr16912125ioo.14.1626658104086;
- Sun, 18 Jul 2021 18:28:24 -0700 (PDT)
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=A0RwgPQGJrc23vgBFxOPp4E1hoFr61XtuLyv5X/G1b4=;
+        b=mlfRfgCjlz+2Dl0tn9RnIpDB1uxqupAZN++02DHIcoXmBXs6Pxbtf3IwugI3XzXxCH
+         lXkVyLwy5jbKieyC4DbRh2mkUNBL7OEJxxfCUHBDXcS6Ir9nfgcVe/aM1FnaHlQR48S4
+         3yeKkp24mA3tLchCcg1nJuJTgONI1d655dCTJAuQsIUhJzjdD3Ag1rZGlrWMM9cWvXgT
+         9chtf0uL1wERbfP/R+ppBkwOG8+y2Cgg0yN9sAvjkLkTh3Ep/OXAGmEQG6DSCVrYKz4x
+         2FYN2LPEmyN2m0woNU7rSEn4Nsu6wYxRUpygqq4mrrpavTufgAenWYTOi+ZEK7RSW0No
+         TsRw==
+X-Gm-Message-State: AOAM532kmh18wek0PAt45bnUAdFsjSI0BuqMUdUmp7n/HOsTnyeoUBlj
+        KED54lX5kDUanQAu7hu5XnU=
+X-Google-Smtp-Source: ABdhPJwxQVnbf6De3mHEV80Kfnfk/WVI0UOwdDLQxwgZEyZQ7W31qteUxNBBqSYWWsrAl1TnEaoa7A==
+X-Received: by 2002:a17:90a:642:: with SMTP id q2mr27991332pje.205.1626664552208;
+        Sun, 18 Jul 2021 20:15:52 -0700 (PDT)
+Received: from [10.1.1.25] (222-152-189-37-fibre.sparkbb.co.nz. [222.152.189.37])
+        by smtp.gmail.com with ESMTPSA id g27sm19150222pgl.19.2021.07.18.20.15.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 18 Jul 2021 20:15:51 -0700 (PDT)
+Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
+To:     Brad Boyer <flar@allandria.com>
+References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
+ <87zgunzovm.fsf@disp2133> <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
+ <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com> <8735scvklk.fsf@disp2133>
+ <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
+ <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com> <87a6mj99vf.fsf@igel.home>
+ <1ebfb9de-de16-d05c-ea15-a110857fe284@gmail.com>
+ <20210718205956.GA802@allandria.com>
+Cc:     Andreas Schwab <schwab@linux-m68k.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, geert@linux-m68k.org,
+        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        torvalds@linux-foundation.org
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <47fb6c7e-30e2-0525-9b2a-c8430a9bfa38@gmail.com>
+Date:   Mon, 19 Jul 2021 15:15:44 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-4-chenhuacai@loongson.cn> <00abb0cc-6a82-e4fd-c554-7cf7c039ded3@infradead.org>
-In-Reply-To: <00abb0cc-6a82-e4fd-c554-7cf7c039ded3@infradead.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Mon, 19 Jul 2021 09:28:09 +0800
-Message-ID: <CAAhV-H4nt16ZFwV6kgyTmFhUCUSgkDvrV1tKOSW=3Yq3Rw0=DQ@mail.gmail.com>
-Subject: Re: [PATCH 03/19] LoongArch: Add build infrastructure
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210718205956.GA802@allandria.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Randy,
+Hi Brad,
 
-On Wed, Jul 7, 2021 at 8:00 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+Am 19.07.2021 um 08:59 schrieb Brad Boyer:
+> On Mon, Jul 19, 2021 at 07:47:19AM +1200, Michael Schmitz wrote:
+>> Somewhere in entry.S is
+>>
+>> addql   #8,%sp
+>> addql   #4,%sp
+>>
+>> - is that faster than
+>>
+>> lea     12(%sp),%sp ?
 >
-> Hi,
+> On the 68040 the timing can depend on the other instructions around
+> it. Each of those addql instructions is listed as 1 and 1 for
+> fetch/execute, while that lea is listed as 2 and 1L+1 meaning that
+> it could potentially be faster depending on the behavior of the
+> instruction that preceded it thorough the execute stage. That one
+> free cycle if the stage is busy (due to the 1L) could make it
+> effectively faster since the first addql would have to wait that
+> extra cycle in that case.
 >
-> On 7/5/21 9:18 PM, Huacai Chen wrote:
-> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> > new file mode 100644
-> > index 000000000000..7d5889a264c6
-> > --- /dev/null
-> > +++ b/arch/loongarch/Kconfig
-> > @@ -0,0 +1,403 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +config LOONGARCH
-> > +     bool
-> > +     default y
+> On the 68060, it looks like the lea version is the clear winner,
+> although the timing description is obviously much more complicated
+> and thus I might have missed something. From a quick look, it
+> seems that lea takes the same time as just the first addql.
 >
-> Some arch/ maintainers prefer to keep this list in alphabetical order...
-> It may make it easier to find entries -- prevent duplicates from being added.
-I will try my best, but I will still keep function groups placed together.
+> On CPU32, the lea version loses due to the extra 3 cycles from
+> the addressing mode, even though the base cycles of lea are the
+> same as for addql (2 cycles each). The lea might be even worse
+> if it can't take advantage of overlapping the surrounding
+> instructions (1 cycle before and 1 after).
+>
+> Those are the only ones I already have the documentation in my
+> hands. I haven't checked older classic cores or coldfire, but
+> it does seem like it is specific to each chip which is faster.
+>
+> Obviously both versions would be the same size (2 words).
 
->
-> > +     select ACPI_SYSTEM_POWER_STATES_SUPPORT if ACPI
-> > +     select ARCH_BINFMT_ELF_STATE
-> > +     select ARCH_DISCARD_MEMBLOCK
-> > +     select ARCH_HAS_ACPI_TABLE_UPGRADE      if ACPI
-> > +     select ARCH_HAS_ELF_RANDOMIZE
-> > +     select ARCH_HAS_PTE_SPECIAL if !32BIT
-> > +     select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
-> > +     select ARCH_INLINE_READ_LOCK if !PREEMPTION
-> > +     select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
-> > +     select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
-> > +     select ARCH_INLINE_READ_LOCK_IRQSAVE if !PREEMPTION
-> > +     select ARCH_INLINE_READ_UNLOCK if !PREEMPTION
-> > +     select ARCH_INLINE_READ_UNLOCK_BH if !PREEMPTION
-> > +     select ARCH_INLINE_READ_UNLOCK_IRQ if !PREEMPTION
-> > +     select ARCH_INLINE_READ_UNLOCK_IRQRESTORE if !PREEMPTION
-> > +     select ARCH_INLINE_WRITE_LOCK if !PREEMPTION
-> > +     select ARCH_INLINE_WRITE_LOCK_BH if !PREEMPTION
-> > +     select ARCH_INLINE_WRITE_LOCK_IRQ if !PREEMPTION
-> > +     select ARCH_INLINE_WRITE_LOCK_IRQSAVE if !PREEMPTION
-> > +     select ARCH_INLINE_WRITE_UNLOCK if !PREEMPTION
-> > +     select ARCH_INLINE_WRITE_UNLOCK_BH if !PREEMPTION
-> > +     select ARCH_INLINE_WRITE_UNLOCK_IRQ if !PREEMPTION
-> > +     select ARCH_INLINE_WRITE_UNLOCK_IRQRESTORE if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_TRYLOCK if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_TRYLOCK_BH if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_LOCK if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_LOCK_BH if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_LOCK_IRQ if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_LOCK_IRQSAVE if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_UNLOCK if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_UNLOCK_BH if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
-> > +     select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
-> > +     select ARCH_SUPPORTS_ACPI
-> > +     select ARCH_SUPPORTS_HUGETLBFS
-> > +     select ARCH_USE_BUILTIN_BSWAP
-> > +     select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
-> > +     select ARCH_USE_QUEUED_RWLOCKS
-> > +     select ARCH_USE_QUEUED_SPINLOCKS
-> > +     select BUILDTIME_TABLE_SORT
-> > +     select GENERIC_ATOMIC64 if !64BIT
-> > +     select GENERIC_CLOCKEVENTS
-> > +     select GENERIC_CMOS_UPDATE
-> > +     select GENERIC_CPU_AUTOPROBE
-> > +     select GENERIC_GETTIMEOFDAY
-> > +     select GENERIC_IOMAP
-> > +     select GENERIC_IRQ_PROBE
-> > +     select GENERIC_IRQ_SHOW
-> > +     select GENERIC_LIB_ASHLDI3
-> > +     select GENERIC_LIB_ASHRDI3
-> > +     select GENERIC_LIB_CMPDI2
-> > +     select GENERIC_LIB_LSHRDI3
-> > +     select GENERIC_LIB_UCMPDI2
-> > +     select GENERIC_TIME_VSYSCALL
-> > +     select HANDLE_DOMAIN_IRQ
-> > +     select HAVE_ARCH_AUDITSYSCALL
-> > +     select HAVE_ARCH_COMPILER_H
-> > +     select HAVE_ARCH_MMAP_RND_BITS if MMU
-> > +     select HAVE_ARCH_SECCOMP_FILTER
-> > +     select HAVE_ARCH_TRACEHOOK
-> > +     select HAVE_ARCH_TRANSPARENT_HUGEPAGE
-> > +     select HAVE_ASM_MODVERSIONS
-> > +     select HAVE_CBPF_JIT if !64BIT
-> > +     select HAVE_EBPF_JIT if 64BIT
-> > +     select HAVE_CONTEXT_TRACKING
-> > +     select HAVE_COPY_THREAD_TLS
-> > +     select HAVE_DEBUG_KMEMLEAK
-> > +     select HAVE_DEBUG_STACKOVERFLOW
-> > +     select HAVE_DMA_CONTIGUOUS
-> > +     select HAVE_EXIT_THREAD
-> > +     select HAVE_FAST_GUP
-> > +     select HAVE_FUTEX_CMPXCHG if FUTEX
-> > +     select HAVE_GENERIC_VDSO
-> > +     select HAVE_IDE
-> > +     select HAVE_IOREMAP_PROT
-> > +     select HAVE_IRQ_EXIT_ON_IRQ_STACK
-> > +     select HAVE_IRQ_TIME_ACCOUNTING
-> > +     select HAVE_MEMBLOCK
-> > +     select HAVE_MEMBLOCK_NODE_MAP
-> > +     select HAVE_MOD_ARCH_SPECIFIC
-> > +     select HAVE_NMI
-> > +     select HAVE_PERF_EVENTS
-> > +     select HAVE_REGS_AND_STACK_ACCESS_API
-> > +     select HAVE_RSEQ
-> > +     select HAVE_SYSCALL_TRACEPOINTS
-> > +     select HAVE_VIRT_CPU_ACCOUNTING_GEN if 64BIT
-> > +     select IRQ_FORCED_THREADING
-> > +     select MODULES_USE_ELF_RELA if MODULES && 64BIT
-> > +     select MODULES_USE_ELF_REL if MODULES
-> > +     select PCI_DOMAINS if PCI
-> > +     select PCI_MSI_ARCH_FALLBACKS
-> > +     select PERF_USE_VMALLOC
-> > +     select RTC_LIB
-> > +     select SYSCTL_EXCEPTION_TRACE
-> > +     select VIRT_TO_BUS
-> > +
-> > +menu "Machine selection"
-> > +
-> > +choice
-> > +     prompt "System type"
-> > +     default MACH_LOONGSON64
-> > +
-> > +config MACH_LOONGSON64
->
->
-> [...]
->
-> > +choice
-> > +     prompt "Kernel page size"
-> > +     default PAGE_SIZE_16KB
-> > +
-> > +config PAGE_SIZE_4KB
-> > +     bool "4kB"
-> > +     help
-> > +       This option select the standard 4kB Linux page size.
->
->                       selects
->
-> > +
-> > +config PAGE_SIZE_16KB
-> > +     bool "16kB"
-> > +     help
-> > +       This option select the standard 16kB Linux page size.
->
->                       selects
->
-> > +
-> > +config PAGE_SIZE_64KB
-> > +     bool "64kB"
-> > +     help
-> > +       This option select the standard 64kB Linux page size.
->
->                       selects
-OK, thanks.
+Thanks, best leave it as is then.
 
-Huacai
->
-> > +
-> > +endchoice
->
->
-> --
-> ~Randy
->
+Cheers,
+
+	Michael
