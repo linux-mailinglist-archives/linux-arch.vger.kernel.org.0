@@ -2,199 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C22BD3CD46A
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Jul 2021 14:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEBC3CD563
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Jul 2021 15:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236571AbhGSLbT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Jul 2021 07:31:19 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:1380 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S236829AbhGSLbT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 19 Jul 2021 07:31:19 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16JC4ST6194535;
-        Mon, 19 Jul 2021 08:11:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=IbwvhhQ3m/v8Z9ZwaQawHv93yzco477LrN3X2MVHuBs=;
- b=XiJJr3Oqa9mcw4Zgu79/s54sACNwPIVi5WEZMiWHT1PRfgELHkjq9o1ZOg2lJGpoghHP
- W36sQoEe7HYxiTdA1Z4KsLysjCkAgXo29Eqmr12JD4HivQ83QNzCcwB53tik8mgsoh02
- 4BHm9+Yexc0b4PaJfSJA4X4mhn9fmDfaU7fTpr/Q9R3PXs0+vToyeJZUwq/1J9GCjDCx
- LZSZdjzNbMzzsJco38PCsFeTlaH9gd1k+ka4CqSV8ClV0YxF2grYaUk+8+qBFeNw9C3Y
- dazBvwCi5fFpXBhBeam/nEfTisPp1dfkhaLbB3+oGUXB7phQAp8HRq+aaMS6zuHqEJrq JQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 39w91hgdk9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jul 2021 08:11:53 -0400
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16JC4chc195676;
-        Mon, 19 Jul 2021 08:11:53 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 39w91hgdjd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jul 2021 08:11:52 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16JC2Vtu016802;
-        Mon, 19 Jul 2021 12:11:51 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 39upu88prp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jul 2021 12:11:51 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16JCBmx924904012
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Jul 2021 12:11:48 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C303C11C0E1;
-        Mon, 19 Jul 2021 12:11:48 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 77BF311C0D9;
-        Mon, 19 Jul 2021 12:11:48 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 19 Jul 2021 12:11:48 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] PCI: Move pci_dev_is/assign_added() to pci.h
-Date:   Mon, 19 Jul 2021 14:11:48 +0200
-Message-Id: <20210719121148.2403239-1-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.25.1
+        id S237072AbhGSMVm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Jul 2021 08:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237046AbhGSMVm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Jul 2021 08:21:42 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BD8C061574
+        for <linux-arch@vger.kernel.org>; Mon, 19 Jul 2021 05:21:28 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id p186so19795307iod.13
+        for <linux-arch@vger.kernel.org>; Mon, 19 Jul 2021 06:02:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0XT1rftsceASPZek6TfqeMDtP7+haDAJIWhlgNtS1qc=;
+        b=D1wxlC/fE0F7kmOoJFyEHcAVDiPTB4aRYPRq1H3VteimxycDsaZ8JEjmAQQSnwLbIj
+         MlgoDmx+IAGuVql/1cOj7wc+G2F3+RGHFQx8sMbgKn/Z81BAjmobAhNFHYWg1psh9pwY
+         2LTr7n09/1EPHC/ZR8TFK7ORegZ3lgkFI90vdgkn3rmIXJXGlIvzSC6KA/uIRUydQX2s
+         oKqly5lrzHiNfw/WLzvhFvYY380+uyIAAz26oaihcnAnz//yqezUMf1+gXZrnhKd6ZIS
+         a2Eh2N8VC9yOIiSGP0FJipXphUHgR3gNviQFWwSbNFYQ+qiySStFIvm298V/KHqfGA4c
+         nfTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0XT1rftsceASPZek6TfqeMDtP7+haDAJIWhlgNtS1qc=;
+        b=eX77ox+tIXZpuY+BIWsHWUcPzhyZKeTtsy7dD3L8FeB7mTG/cL43p5935h8AhXrn1x
+         HyhfEQXrwJSFMOhelbA80OSOsn3WN4TNtZhIZXRQ/Y0fJxsfRfSCMlLrDmXqDPIXbyCK
+         j20yq3yt4UTawGP1xoUdpmVXGU2nf3fNK9gFR9PCqzKLDAsTRplDV+iH5RHjrAGM7Tk1
+         lJMDGYlSiB7WEsCxZd6k8q5WcdT+KevMyw07WOkkZFe04eqzMleeFq48HW3AQkENKAh8
+         PxC6TKg8loBAe+P6mOunW9CAzI+85nMibIjwJgm9iFuDkjLhVI+rGyvNrD8l/EwbluoG
+         IH0A==
+X-Gm-Message-State: AOAM5301jsVSA/KCZZouM1zKSD6XYYuS49R7hIou7zzvAQzY86zY9m1F
+        4r/g4yjuJoS18fjCXtEWkwJ4B1q5p4+T5tB//cE=
+X-Google-Smtp-Source: ABdhPJxHNUOjQBYiGRdpqFS1fo8rR3YVf6XI/cn87Zq7ez2iot8DDQaJNNH+uzS0++uE1gWOpN0GBNQeHTMRY6471jQ=
+X-Received: by 2002:a05:6602:2406:: with SMTP id s6mr13611406ioa.159.1626699740927;
+ Mon, 19 Jul 2021 06:02:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: iVz62Q30GlTNsZVqNUE9lREkTHvZX6iA
-X-Proofpoint-GUID: jiSA7etyPQeuxkqsjh2oPwDQkktdY5vB
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-19_05:2021-07-16,2021-07-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- malwarescore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0 bulkscore=0
- adultscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107190069
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-4-chenhuacai@loongson.cn> <CAK8P3a0RHFvzvGXMrJ369gDVC7fpH5XJp+AX-ZiAu0JskTzZqg@mail.gmail.com>
+ <CAAhV-H796UQNaRkiaJhYRHsO-36KE_5d6sT=sJaKXCKfHtP-Mg@mail.gmail.com> <CAK8P3a1kX_wHz_BpdD=pB-Fd2Cy3_xDvTsRKVvKR+_9GP0NSmA@mail.gmail.com>
+In-Reply-To: <CAK8P3a1kX_wHz_BpdD=pB-Fd2Cy3_xDvTsRKVvKR+_9GP0NSmA@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Mon, 19 Jul 2021 21:02:10 +0800
+Message-ID: <CAAhV-H4iBVTbJPagY3btFrAmwNgqqrYDAY6oMoE-1gb21Jpptg@mail.gmail.com>
+Subject: Re: [PATCH 03/19] LoongArch: Add build infrastructure
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The helper function pci_dev_is_added() from drivers/pci/pci.h is used in
-PCI arch code of both s390 and powerpc leading to awkward relative
-includes. Move it to the global include/linux/pci.h and get rid of these
-includes just for that one function.
+Hi, Arnd,
 
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- arch/powerpc/platforms/powernv/pci-sriov.c |  3 ---
- arch/powerpc/platforms/pseries/setup.c     |  1 -
- arch/s390/pci/pci_sysfs.c                  |  2 --
- drivers/pci/hotplug/acpiphp_glue.c         |  1 -
- drivers/pci/pci.h                          | 15 ---------------
- include/linux/pci.h                        | 13 +++++++++++++
- 6 files changed, 13 insertions(+), 22 deletions(-)
+On Mon, Jul 19, 2021 at 3:43 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> On Mon, Jul 19, 2021 at 3:26 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > On Tue, Jul 6, 2021 at 6:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > >  Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > --- /dev/null
+> > > > +++ b/arch/loongarch/Kbuild
+> > > > @@ -0,0 +1,21 @@
+> > > > +# Fail on warnings - also for files referenced in subdirs
+> > > > +# -Werror can be disabled for specific files using:
+> > > > +# CFLAGS_<file.o> := -Wno-error
+> > > > +ifeq ($(W),)
+> > > > +subdir-ccflags-y := -Werror
+> > > > +endif
+> > >
+> > > This tends to break building with 'make W=12' or similar, I would recommend not
+> > > adding -Werror. It is a good idea though to have your CI systems build
+> > > with -Werror
+> > > enabled on the command line though.
+> > If we use W=???, corresponding flags will be used; if we don't use
+> > W=???, -Werrer flag is used here. So it seems not break the building.
+>
+> The thing is that we get three new compiler releases every year, one gcc
+> and two llvm. Usually every release introduces new warnings, so even if
+> you quickly address those in mainline kernels, anyone using an older kernel
+> will find themselves unable to build it with a newer compiler.
+OK, I know.
 
-diff --git a/arch/powerpc/platforms/powernv/pci-sriov.c b/arch/powerpc/platforms/powernv/pci-sriov.c
-index 28aac933a439..2e0ca5451e85 100644
---- a/arch/powerpc/platforms/powernv/pci-sriov.c
-+++ b/arch/powerpc/platforms/powernv/pci-sriov.c
-@@ -9,9 +9,6 @@
- 
- #include "pci.h"
- 
--/* for pci_dev_is_added() */
--#include "../../../../drivers/pci/pci.h"
--
- /*
-  * The majority of the complexity in supporting SR-IOV on PowerNV comes from
-  * the need to put the MMIO space for each VF into a separate PE. Internally
-diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platforms/pseries/setup.c
-index 631a0d57b6cd..17585ec9f955 100644
---- a/arch/powerpc/platforms/pseries/setup.c
-+++ b/arch/powerpc/platforms/pseries/setup.c
-@@ -74,7 +74,6 @@
- #include <asm/hvconsole.h>
- 
- #include "pseries.h"
--#include "../../../../drivers/pci/pci.h"
- 
- DEFINE_STATIC_KEY_FALSE(shared_processor);
- EXPORT_SYMBOL_GPL(shared_processor);
-diff --git a/arch/s390/pci/pci_sysfs.c b/arch/s390/pci/pci_sysfs.c
-index 6e2450c2b9c1..8dbe54ef8f8e 100644
---- a/arch/s390/pci/pci_sysfs.c
-+++ b/arch/s390/pci/pci_sysfs.c
-@@ -13,8 +13,6 @@
- #include <linux/stat.h>
- #include <linux/pci.h>
- 
--#include "../../../drivers/pci/pci.h"
--
- #include <asm/sclp.h>
- 
- #define zpci_attr(name, fmt, member)					\
-diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
-index f031302ad401..4cb963f88183 100644
---- a/drivers/pci/hotplug/acpiphp_glue.c
-+++ b/drivers/pci/hotplug/acpiphp_glue.c
-@@ -38,7 +38,6 @@
- #include <linux/slab.h>
- #include <linux/acpi.h>
- 
--#include "../pci.h"
- #include "acpiphp.h"
- 
- static LIST_HEAD(bridge_list);
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index 93dcdd431072..a159cd0f6f05 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -383,21 +383,6 @@ static inline bool pci_dev_is_disconnected(const struct pci_dev *dev)
- 	return dev->error_state == pci_channel_io_perm_failure;
- }
- 
--/* pci_dev priv_flags */
--#define PCI_DEV_ADDED 0
--#define PCI_DPC_RECOVERED 1
--#define PCI_DPC_RECOVERING 2
--
--static inline void pci_dev_assign_added(struct pci_dev *dev, bool added)
--{
--	assign_bit(PCI_DEV_ADDED, &dev->priv_flags, added);
--}
--
--static inline bool pci_dev_is_added(const struct pci_dev *dev)
--{
--	return test_bit(PCI_DEV_ADDED, &dev->priv_flags);
--}
--
- #ifdef CONFIG_PCIEAER
- #include <linux/aer.h>
- 
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 540b377ca8f6..b3b7bafa17e5 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -507,6 +507,19 @@ struct pci_dev {
- 	unsigned long	priv_flags;	/* Private flags for the PCI driver */
- };
- 
-+/* pci_dev priv_flags */
-+#define PCI_DEV_ADDED 0
-+
-+static inline void pci_dev_assign_added(struct pci_dev *dev, bool added)
-+{
-+	assign_bit(PCI_DEV_ADDED, &dev->priv_flags, added);
-+}
-+
-+static inline bool pci_dev_is_added(const struct pci_dev *dev)
-+{
-+	return test_bit(PCI_DEV_ADDED, &dev->priv_flags);
-+}
-+
- static inline struct pci_dev *pci_physfn(struct pci_dev *dev)
- {
- #ifdef CONFIG_PCI_IOV
--- 
-2.25.1
+>
+> > > > +       select ARCH_MIGHT_HAVE_PC_PARPORT
+> > > > +       select ARCH_MIGHT_HAVE_PC_SERIO
+> > > > +       select GENERIC_ISA_DMA
+> > > > +       select ISA
+> > >
+> > > Do you actually have ISA-style add-on cards? If not, then
+> > > remove the ISA options. If you do, which drivers are they?
+> > Yes, there is an LPC controller in LS7A, and superio is connected on
+> > it for laptops.
+>
+> CONFIG_ISA only refers to actual 16-bit add-on cards, not LPC
+> style on-board devices. Sometimes the options are used inconsistently,
+> but unless you need an original Soundblaster or NE2000 card, this
+> should not be needed. Note that some older x86-64 and arm64 have
+> LPC as well, but do not support CONFIG_ISA.
+>
+> For GENERIC_ISA_DMA, I suppose that could be used for the parallel
+> port driver, but even if you have one of those, it might be easier to leave
+> it out and just no longer support Zip drives or dot matrix printers attached
+> to them.
+>
+> ARCH_MIGHT_HAVE_PC_SERIO is probably needed if this is how
+> you attach your keyboard and trackball, but it should work without the
+> others.
+OK, I'll remove ISA and GENERIC_ISA_DMA.
 
+Huacai
+>
+>        Arnd
