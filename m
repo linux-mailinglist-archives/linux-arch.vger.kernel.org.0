@@ -2,223 +2,217 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BEA3D0241
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jul 2021 21:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8D63D0378
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jul 2021 22:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbhGTTF3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Jul 2021 15:05:29 -0400
-Received: from mga18.intel.com ([134.134.136.126]:58430 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229706AbhGTTFK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 20 Jul 2021 15:05:10 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10051"; a="198588176"
-X-IronPort-AV: E=Sophos;i="5.84,255,1620716400"; 
-   d="scan'208";a="198588176"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2021 12:45:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,255,1620716400"; 
-   d="scan'208";a="500879191"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jul 2021 12:45:39 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10; Tue, 20 Jul 2021 12:45:39 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10; Tue, 20 Jul 2021 12:45:38 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10 via Frontend Transport; Tue, 20 Jul 2021 12:45:38 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.170)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.10; Tue, 20 Jul 2021 12:45:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nA7GM8olQ5hiMeNVn2mL87B6coSmxieej82G0XTqmQ8oN8y7TKDW1D42F+D2jB+IZxHguFaM0v0agTk5sJ/BWEfRt8L5d2ETnP17J2vtpYxMkSWCG1orJO0JAn3qBtw2PMy0ajbdnTNp44tM9kzTyOesHOvtfICWwlcXUt6onMUPUkCET4Bbz4Z3rFAXvcqilf8hUtT2Ox+1amgsBdZTaGFiS2ipyUN7EzmKtLaXFJLtXxOoYn2X4BB56OPk8tJwFUnmBXq4Hva+riY6ANOjHKj4HPM6vHCOmEUDY7wLpTiYtbFIS2T5vtuWOQsLf7ML9cWiW9TMPOLV5LNG9ipXRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QUNGOfAezCO/67HcFVZlN8bhzb2wVbu/wRVqr7fP560=;
- b=khVCPHysQRqDKxcYfzLjS0Nz7s/iwyA8svU4veosqvMtO/ui7Pxl9ix+y9W7/FTpMjr0yPvYuipIo6j1g2hr84uMiQJ+Zun+IsbBEd8dH/Eh6ShUFxMuxqKLMOJec/nNcz/0eju9u/5NsUwgVv07ODdnEzh8aZNEGbKuq4DhVyVYG24az9N6ajI4MuQptLrlPcYoV81fFBk/XCQ5VNwrWwuY7mqX5P+FeUM0BfnDXTmMugtuJkxS57HOoMmdgpSqVoO3zCgq+MqgZEfhVpVCjrof8CSbe9iC4e6toDMghkPr9xFMwvbiazvJ4BNBSsp/VBbvDp07e6EkcOPfY58fKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QUNGOfAezCO/67HcFVZlN8bhzb2wVbu/wRVqr7fP560=;
- b=HBJh9/bsa7Am5jEbX6clS8BdZ+d4bBD3QWKFlFqOIncGJs/73Ykm56t2BCQenjm0yyOmLBypkrQfF563wOyCyqUB3fAu05q7Dw4N2BK5eQiyZ/t21b2EXJAqkukC6mTCD7iij6gDUNe0sbeVTeBWhYiRjvIDkyG/WW3WYnX5B+A=
-Received: from SN6PR11MB3184.namprd11.prod.outlook.com (2603:10b6:805:bd::17)
- by SN6PR11MB3373.namprd11.prod.outlook.com (2603:10b6:805:c6::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.30; Tue, 20 Jul
- 2021 19:45:29 +0000
-Received: from SN6PR11MB3184.namprd11.prod.outlook.com
- ([fe80::4046:c957:f6a9:27db]) by SN6PR11MB3184.namprd11.prod.outlook.com
- ([fe80::4046:c957:f6a9:27db%5]) with mapi id 15.20.4331.034; Tue, 20 Jul 2021
- 19:45:29 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "vedvyas.shanbhogue@intel.com" <vedvyas.shanbhogue@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "esyr@redhat.com" <esyr@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v27 06/10] x86/cet/ibt: Update arch_prctl functions for
- Indirect Branch Tracking
-Thread-Topic: [PATCH v27 06/10] x86/cet/ibt: Update arch_prctl functions for
- Indirect Branch Tracking
-Thread-Index: AQHXfLzqqlbuDRHG5ECh81TtFyLv96tKnFOAgAF+Q4CAACuFAA==
-Date:   Tue, 20 Jul 2021 19:45:29 +0000
-Message-ID: <9ff5f160b54f48870ac16f698d32a476c3fd3424.camel@intel.com>
-References: <20210521221531.30168-1-yu-cheng.yu@intel.com>
-         <20210521221531.30168-7-yu-cheng.yu@intel.com>
-         <31008f559a7263d2a4042f9c061efcd4e86b5a69.camel@intel.com>
-         <964c71f8-1dcf-4eb5-1858-e985e77e5b6d@intel.com>
-In-Reply-To: <964c71f8-1dcf-4eb5-1858-e985e77e5b6d@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.38.4 (3.38.4-1.fc33) 
-authentication-results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b4db3468-48c0-40bb-8233-08d94bb6edf5
-x-ms-traffictypediagnostic: SN6PR11MB3373:
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SN6PR11MB3373F08A83EA4E134AD5C0ABC9E29@SN6PR11MB3373.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pnz6Gp9fzaFomN9fuDUIxwBsuyETWAN85d+PBgJhgBavudFCsI6hGmaaFKNUvXH6/4IKqRrbx+SjsKx0VRyDhSx5q54sGbpfjSU8QfIH9hrw/xeamroRlGBTmoYso5nyd4bhyCZPgJUFfiWHtJhc0ujvElreGo/5gYsIFAVBfVrZp/u3E23Vc+GF3B3zg4vTGdF1cBkbpK93Y6yHb6C2AEa1w8LBr6YnUyhTSeXp4n58YmPWl14b4DnIjsBD3IJJEokX8+xJLCFBFRaPQsehuIJ990NFhhpASaA15aMtUV7WbJE4lOVZNFd2eZF5MvhvomPB4DYLJMmNE8aaMcnRtt5L4AJueXzDXM5oEv8AC27g0Nyhs6ETjCymaaX6pbKQq4D5MeFFDPBA0ihmYZ3dLRFHM3cOXOiHqK7k8c+/uic5GT0nRrMgfjQqIFKfzpgjb3HzPZes3KzRJvVuEzQjI/EjNtGjGPNIjyv+JbtElE8EejOrrls4+WFQrGh8JQS0HxT8LLkZApkcGDiFo0wBQgM3P3u5cUxk3UDzsoDw70d3vU/bN+GIMyJbUTUSDYtOhE6ap+ttVLSBpaTNBtNXytL3Iv813UaU7muTS5tx729NgkuQH69W4lDcicZPgU1H4N7zwZ88Q3UQHAng5zjYyZiz9D9iUzWmGMokWOp96XJiba2jJ13/+RFyD+J1aLOTQUnTnpimLUkouLaMSTEO4FF/l8V2/0PW6o2EzOLTb6o=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3184.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(366004)(136003)(346002)(396003)(316002)(6486002)(110136005)(478600001)(5660300002)(6512007)(8676002)(921005)(2616005)(83380400001)(26005)(8936002)(2906002)(186003)(36756003)(76116006)(6506007)(91956017)(71200400001)(53546011)(15650500001)(64756008)(66556008)(7416002)(66946007)(122000001)(38100700002)(66446008)(66476007)(86362001)(38070700004);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZFBRdHVLZXBScjIwdUJqTVZTd21wWFR6VjZyblBUSjExQ2ZtUlJBWXVBYW1n?=
- =?utf-8?B?czk3ZS9GL1pqVEhqbDJyamhUWGlveUZ5TkxJN0l1Zk8xTExwcU5tNFdsQisr?=
- =?utf-8?B?REgxeXV4MDhlU0F5WGZ5ejl0RFdUM2d3d3FTbUtPVktaemlEaWdDZm9yUWV0?=
- =?utf-8?B?VUxtbTRMZERUS1dnV3Bjd2xlY3NZTDV0bklLTmxKR3p4cTVZTWJZcFlaZGU3?=
- =?utf-8?B?TndTVERDMHZPUzlSeGkrb3h1MWFYYXE5MzVFZXlsMGpQR0hkTlVXTUJkSGtP?=
- =?utf-8?B?Z290WERXNkpjcXNrbzFCWlBHNFU4bWwyYnRkcmZVeUdxbCtoaFZ6Sm1QSzNM?=
- =?utf-8?B?YVh0Y2NoeSs5VkpMYjEzd2pEWmNqQzZVVG5FWGo2dG4yWHVuTlduejhDVFRR?=
- =?utf-8?B?U3ZLUk52ZndxVHNaVUdSNlMzSDkxdnpnYm5kOE9jaWN6MGdYU0RmSVFvb01L?=
- =?utf-8?B?RjZYQ0FOUkxHQzR6c1RERW9acVB2UkdFTGthUkhvd09oL3d1UFh3eDNKWVlX?=
- =?utf-8?B?NEwyV3NaYlYwSGFtLzJrME9uRFYvRW1scnlTbDBSSDhScFNBbTZKVE01aXFC?=
- =?utf-8?B?dEFxQ2pVZTBINTRtWksxR2ErZXZUVWhXTzJwc0lOMmIxdkRrQWlBN2lkM3Zl?=
- =?utf-8?B?UjNERXd5NHFPMEh3WTB3QU82WngrTVFkVjhmOVVUR2liZ1BJbnE4YmtrZkJN?=
- =?utf-8?B?MGVJS2JUWXRFdDFzNE9idWpBZzJlRC81NjlsVkV4Ukg5VXZIeWR5aUpiQWhj?=
- =?utf-8?B?ZlZ4Y3FDMnpSYTJqSUMvUlpqbFVZaEprR2tFSnNrTklIYmczdGtjNUJId3or?=
- =?utf-8?B?c1RCLzBpR291WDdOK1U1aEJzVmh6SjU0Mnh3L3duS1N5V2RsMWgybmxmRDFJ?=
- =?utf-8?B?aEE3clVhWjFWVHBvUmRxQU5Ob25HU2hTamtLd3JCSTVJKytwcUVXanlFMXF5?=
- =?utf-8?B?U2kwcysrNndrSzVQYkRUNlRjckV3OFcxbFhWKzhHbFAwVStmanpTQTFrSGFw?=
- =?utf-8?B?N25qdDVsNXRseHFibjZMNmhuSEdDTUlIWU5mWmhSZlphemV5ZVFQT3RMMnpS?=
- =?utf-8?B?Wm44Tlh2VUxzOGpDUEZCWURuVVptVWxFZHNaRmxmV2ZCUVNiV05YeXoyNDJL?=
- =?utf-8?B?NEpzMUdPc21ZYjY0aVhTbHhvMUFXOWY0ZjdCWTUrRlAvYUdNVkcvS0pTZXVx?=
- =?utf-8?B?aC9mbkxMdmZTTm1kbFhkQWNwcHJLRnluR1JRUUoveGRtbVJXUFF6bGg1N2I3?=
- =?utf-8?B?UDBubTBNQ0k1MmtzRytRbjJKZU41M3NRcG84VkNoSlFLa1hxQjBKZ3k2TzZB?=
- =?utf-8?B?K0lkUjF2WlFpOWNHbDdZSkZKdjc3Sy95WmJRSEttYXFaSFllQVRSdldvTjVh?=
- =?utf-8?B?a1Jxdno1b2VhczNvQTFZaWtsK3VlL2FycmJZRk9vM2xPeHdqNStDWkVuUFUy?=
- =?utf-8?B?b1ZsQWdpZVVNVzlJQlc3dCtkOWhMaExFNkJabzJ5RlhEVTMrZC9xNkZLNTFC?=
- =?utf-8?B?UEN6Z0paRmNweDVjQjFWTHZBWjRiWUNlUS9IOU5BV3cxblpCNXpaWm93ODdQ?=
- =?utf-8?B?UTlVL3ptbTVOUWNXQ1NtaW9hNFNSOXdRa2xLVFBGd0pSZ2UwUjFJd2swM2lL?=
- =?utf-8?B?S3pYNFUyeEFIbDlHOVk4QlJtMzViZy9LbUpkYk1TelJKdFh3aytNSWJLQTZu?=
- =?utf-8?B?UW5CMnlsbmRpOVBsVjMxQzJLTFVRbTVPQ1FWS2NxdVpGcVpUZlMzakFRUEkw?=
- =?utf-8?Q?jg3JxTyZx51NaYC4FTKobXInXJMTGYBnN1baq++?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0ECC66F76E68FD4E9959B0FF540F30BE@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S235966AbhGTUKN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Jul 2021 16:10:13 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:47172 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237675AbhGTTyP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jul 2021 15:54:15 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52]:57780)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1m5wRx-00F8R2-FB; Tue, 20 Jul 2021 14:34:45 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:57530 helo=email.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1m5wRw-004pTa-0c; Tue, 20 Jul 2021 14:34:44 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     geert@linux-m68k.org, linux-arch@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, torvalds@linux-foundation.org,
+        schwab@linux-m68k.org
+References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
+        <87zgunzovm.fsf@disp2133>
+        <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
+        <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com>
+        <8735scvklk.fsf@disp2133>
+        <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
+        <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com>
+Date:   Tue, 20 Jul 2021 15:32:33 -0500
+In-Reply-To: <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com> (Michael
+        Schmitz's message of "Sun, 18 Jul 2021 11:04:31 +1200")
+Message-ID: <87h7gopvz2.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3184.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4db3468-48c0-40bb-8233-08d94bb6edf5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2021 19:45:29.5987
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wS4HZBGccOY0BdaTCt8n/aI/HPql1cHhSOlSqVlspeum/OtoApRamLD2fE2+OzHscwrV4MjF8qUmMv2RbU/2XHJAxM1GnkIffDyNf2LlK8Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3373
-X-OriginatorOrg: intel.com
+Content-Type: text/plain
+X-XM-SPF: eid=1m5wRw-004pTa-0c;;;mid=<87h7gopvz2.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18ZdlMbrFUjqew0rwldYtfxp3fjzeeEkZs=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.4 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,FVGT_m_MULTI_ODD,T_TM2_M_HEADER_IN_MSG,
+        XM_B_SpammyWords autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4987]
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.4 FVGT_m_MULTI_ODD Contains multiple odd letter combinations
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Michael Schmitz <schmitzmic@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 510 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 10 (1.9%), b_tie_ro: 8 (1.7%), parse: 0.95 (0.2%),
+         extract_message_metadata: 11 (2.1%), get_uri_detail_list: 2.5 (0.5%),
+        tests_pri_-1000: 11 (2.2%), tests_pri_-950: 1.05 (0.2%),
+        tests_pri_-900: 0.84 (0.2%), tests_pri_-90: 59 (11.5%), check_bayes:
+        58 (11.3%), b_tokenize: 9 (1.7%), b_tok_get_all: 10 (1.9%),
+        b_comp_prob: 2.9 (0.6%), b_tok_touch_all: 33 (6.5%), b_finish: 0.74
+        (0.1%), tests_pri_0: 399 (78.2%), check_dkim_signature: 0.61 (0.1%),
+        check_dkim_adsp: 2.6 (0.5%), poll_dns_idle: 0.98 (0.2%), tests_pri_10:
+        2.2 (0.4%), tests_pri_500: 12 (2.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTA3LTIwIGF0IDEwOjA5IC0wNzAwLCBZdSwgWXUtY2hlbmcgd3JvdGU6DQo+
-IE9uIDcvMTkvMjAyMSAxMToyMSBBTSwgRWRnZWNvbWJlLCBSaWNrIFAgd3JvdGU6DQo+ID4gT24g
-RnJpLCAyMDIxLTA1LTIxIGF0IDE1OjE1IC0wNzAwLCBZdS1jaGVuZyBZdSB3cm90ZToNCj4gPiA+
-IEZyb206ICJILkouIEx1IiA8aGpsLnRvb2xzQGdtYWlsLmNvbT4NCj4gPiA+IA0KPiA+ID4gVXBk
-YXRlIEFSQ0hfWDg2X0NFVF9TVEFUVVMgYW5kIEFSQ0hfWDg2X0NFVF9ESVNBQkxFIGZvciBJbmRp
-cmVjdA0KPiA+ID4gQnJhbmNoDQo+ID4gPiBUcmFja2luZy4NCj4gPiA+IA0KPiA+ID4gU2lnbmVk
-LW9mZi1ieTogSC5KLiBMdSA8aGpsLnRvb2xzQGdtYWlsLmNvbT4NCj4gPiA+IFNpZ25lZC1vZmYt
-Ynk6IFl1LWNoZW5nIFl1IDx5dS1jaGVuZy55dUBpbnRlbC5jb20+DQo+ID4gPiBSZXZpZXdlZC1i
-eTogS2VlcyBDb29rIDxrZWVzY29va0BjaHJvbWl1bS5vcmc+DQo+ID4gPiAtLS0NCj4gPiA+IMKg
-wqBhcmNoL3g4Ni9rZXJuZWwvY2V0X3ByY3RsLmMgfCA1ICsrKysrDQo+ID4gPiDCoMKgMSBmaWxl
-IGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKQ0KPiA+ID4gDQo+ID4gPiBkaWZmIC0tZ2l0IGEvYXJj
-aC94ODYva2VybmVsL2NldF9wcmN0bC5jDQo+ID4gPiBiL2FyY2gveDg2L2tlcm5lbC9jZXRfcHJj
-dGwuYw0KPiA+ID4gaW5kZXggYjQyNmQyMDBlMDcwLi5iZDNjODBkNDAyZTcgMTAwNjQ0DQo+ID4g
-PiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY2V0X3ByY3RsLmMNCj4gPiA+ICsrKyBiL2FyY2gveDg2
-L2tlcm5lbC9jZXRfcHJjdGwuYw0KPiA+ID4gQEAgLTIyLDYgKzIyLDkgQEAgc3RhdGljIGludCBj
-ZXRfY29weV9zdGF0dXNfdG9fdXNlcihzdHJ1Y3QNCj4gPiA+IHRocmVhZF9zaHN0ayAqc2hzdGss
-IHU2NCBfX3VzZXIgKnVidWYpDQo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgYnVmWzJdID0gc2hzdGstPnNpemU7DQo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqB9DQo+ID4g
-PiDCoCANCj4gPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChzaHN0ay0+aWJ0KQ0KPiA+ID4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJ1ZlswXSB8PSBHTlVfUFJPUEVSVFlfWDg2X0ZFQVRV
-UkVfMV9JQlQ7DQo+ID4gPiArDQo+ID4gQ2FuIHlvdSBoYXZlIElCVCBlbmFibGVkIGJ1dCBub3Qg
-c2hhZG93IHN0YWNrIHZpYSBrZXJuZWwNCj4gPiBwYXJhbWV0ZXJzPw0KPiA+IE91dHNpZGUgdGhp
-cyBkaWZmIGl0IGhhczoNCj4gPiBpZiAoIWNwdV9mZWF0dXJlX2VuYWJsZWQoWDg2X0ZFQVRVUkVf
-U0hTVEspKQ0KPiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gLUVOT1RTVVBQOw0KPiANCj4gSWYg
-c2hhZG93IHN0YWNrIGlzIGRpc2FibGVkIGJ5IHRoZSBrZXJuZWwgcGFyYW1ldGVyLCBJQlQgaXMg
-YWxzbw0KPiBkaXNhYmxlZC4NClRoYW5rcyBmb3IgdGhlIGNsYXJpZmljYXRpb24uDQoNCj4gDQo+
-ID4gU28gaWYgIm5vX3VzZXJfc2hzdGsiIGlzIHNldCwgdGhpcyBjYW4ndCBiZSB1c2VkIGZvciBJ
-QlQuIEJ1dCB0aGUNCj4gPiBrZXJuZWwgd291bGQgYXR0ZW1wdCB0byBlbmFibGUgSUJULg0KPiAN
-Cj4gSXQgd2lsbCBub3QuDQpPaCB5ZWEsIEkgc2VlIHRoZSBjcHVpZF9kZXBzIHBhcnQgbm93LiBT
-b3JyeS4NCg0KPiANCj4gPiBBbHNvIGlmIHNvLCB0aGUgQ1I0IGJpdCBlbmFibGluZyBsb2dpYyBu
-ZWVkcyBhZGp1c3RpbmcgaW4gdGhpcyBJQlQNCj4gPiBzZXJpZXMuIElmIG5vdCwgd2Ugc2hvdWxk
-IHByb2JhYmx5IG1lbnRpb24gdGhpcyBpbiB0aGUgZG9jcyBhbmQNCj4gPiBlbmZvcmNlDQo+ID4g
-aXQuIEl0IHdvdWxkIHRoZW4gZm9sbG93IHRoZSBsb2dpYyBpbiBLY29uZmlnLCBzbyBtYXliZSB0
-aGUNCj4gPiBzaW1wbGVzdC4NCj4gPiBMaWtlIG1heWJlIGluc3RlYWQgb2Ygbm9fdXNlcl9zaHN0
-aywganVzdCBub191c2VyX2NldD8NCj4gDQo+IElmIHNoYWRvdyBzdGFjayBpcyBkaXNhYmxlZCAo
-ZnJvbSBlaXRoZXIgS2NvbmZpZyBvciBrZXJuZWwgDQo+IGNvbW1hbmQtbGluZSksIHRoZW4gSUJU
-IGlzIGFsc28gZGlzYWJsZWQuwqAgSG93ZXZlciwgd2Ugc3RpbGwgbmVlZCB0d28NCj4ga2VybmVs
-IHBhcmFtZXRlcnMgYmVjYXVzZSBub191c2VyX2lidCBjYW4gYmUgdXNlZnVsIHNvbWV0aW1lcy7C
-oCBJDQo+IHdpbGwgDQo+IGFkZCBhIHNlbnRlbmNlIGluIHRoZSBkb2N1bWVudCB0byBpbmRpY2F0
-ZSB0aGF0IElCVCBkZXBlbmRzIG9uIHNoYWRvdw0KPiBzdGFjay4NCj4gDQo+IA0KWWVhLCBub191
-c2VyX2lidCBzZWVtcyB1c2VmdWwuIEkgbWVhbnQgdGhhdCByZW5hbWluZyBub191c2VyX3Noc3Rr
-IHRvDQpub191c2VyX2NldCAob3Igc2ltaWxhcikgd291bGQgYmUgbW9yZSBjbGVhciBhbmQgc2Vs
-ZiBkb2N1bWVudGluZywNCnNpbmNlIGl0IGludGVuZHMgdG8gZGlzYWJsZSBhbGwgdXNlciBjZXQg
-ZmVhdHVyZXMgYW5kIG5vdCBqdXN0DQpzaGFkb3dzdGFjay4gQW5kIGxlYXZpbmcgbm9fdXNlcl9p
-YnQgYXMgaXMuIERvY3VtZW50YXRpb24gd29ya3MgYXMgd2VsbA0KdGhvdWdoLiBOb3QgbWFqb3Ig
-aW4gYW55IGNhc2UuDQoNCg==
+Michael Schmitz <schmitzmic@gmail.com> writes:
+
+> Am 18.07.2021 um 08:09 schrieb Michael Schmitz:
+>> Hi Eric,
+>>
+>> Am 18.07.2021 um 06:52 schrieb Eric W. Biederman:
+>>>> I should have looked more closely at skeleton.S - most FPU exceptions
+>>>> handled there call trap_c the same way as is done for generic traps,
+>>>> i.e. SAVE_ALL_INT before, ret_from_exception after.
+>>>>
+>>>> Instead of adding code to entry.S, much better to add it in
+>>>> skeleton.S. I'll try to come up with a way to test this code path
+>>>> (calling fpsp040_die from the dz exception hander seems much the
+>>>> easiest way) to make sure this doesn't have side effects.
+>>>>
+>>>> Does do_exit() ever return?
+>>>
+>>> No.  The function do_exit never returns.
+>>
+>> Fine - nothing to worry about as regards restoring the stack pointer
+>> correctly then.
+>>
+>>> If it is not too much difficulty I would be in favor of having the code
+>>> do force_sigsegv(SIGSEGV), instead of calling do_exit directly.
+>>
+>> That _would_ force a return, right? The exception handling in skeleton.S
+>> won't be set up for that.
+>
+> See attached patch - note that when you change fpsp040_die() to call
+> force_sig(SIGSEGV), the access exception handler will return to whatever
+> function in fpsp040 attempted the user space access, and continue that operation
+> with quite likely bogus data. That may well force another FPU trap before the
+> SIGSEGV is delivered (will force_sig() immediately force a trap, or wait until
+> returning to user space?).
+>
+> Compile tested - haven't found an easy way to execute that code path yet.
+>
+> Cheers,
+>
+> 	Michael
+>
+>
+>>
+>>> Looking at that code I have not been able to figure out the call paths
+>>> that get into skeleton.S.  I am not certain saving all of the registers
+>>> on an the exceptions that reach there make sense.  In practice I suspect
+>>
+>> The registers are saved only so trap_c has a stack frame to work with.
+>> In that sense, adding a stack frame before calling fpsp040_die is no
+>> different.
+>>
+>>> taking an exception is much more expensive than saving the registers
+>>> so it
+>>> might not make any difference.  But this definitely looks like code that
+>>> is performance sensitive.
+>>
+>> We're only planning to add a stack frame save before calling out of the
+>> user access exception handler, right? I doubt that will be called very
+>> often.
+>>
+>>> My sense when I was reading through skeleton.S was just one or two
+>>> registers were saved before the instruction emulation was called.
+>>
+>> skeleton.S only contains the entry points for code to handle FPU
+>> exceptions, from what I've seen (plus the user space access code).
+>>
+>> Wherever that exception handling requires calling into the C exception
+>> handler (trap_c), a stack frame is added.
+>>
+>> Cheers,
+>>
+>>     Michael
+>>
+>>>
+>
+> From 1e9be9238fb88dc0b87a7ffdd48068f944d8626c Mon Sep 17 00:00:00 2001
+> From: Michael Schmitz <schmitzmic@gmail.com>
+> Date: Sun, 18 Jul 2021 10:31:42 +1200
+> Subject: [PATCH] m68k/fpsp040 - save full stack frame before calling
+>  fpsp040_die
+>
+> The FPSP040 floating point support code does not know how to
+> handle user space access faults gracefully, and just calls
+> do_exit(SIGSEGV) indirectly on these faults to abort.
+>
+> do_exit() may stop if traced, and needs a full stack frame
+> available to avoid exposing kernel data.
+>
+> Add the current stack frame before calling do_exit() from the
+> fpsp040 user access exception handler. Unwind the stack frame
+> and return to caller once done, in case do_exit() is replaced
+> by force_sig() later on.
+>
+> CC: Eric W. Biederman <ebiederm@xmission.com>
+> Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
+> ---
+>  arch/m68k/fpsp040/skeleton.S | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
+> index a8f4161..6c92d38 100644
+> --- a/arch/m68k/fpsp040/skeleton.S
+> +++ b/arch/m68k/fpsp040/skeleton.S
+> @@ -502,7 +502,17 @@ in_ea:
+>  	.section .fixup,#alloc,#execinstr
+>  	.even
+>  1:
+> +
+> +	SAVE_ALL_INT
+> +	SAVE_SWITCH_STACK
+        ^^^^^^^^^^
+
+I don't think this saves the registers in the well known fixed location
+on the stack because some registers are saved at the exception entry
+point.
+
+Without being saved at the well known fixed location if some process
+stops in PTRACE_EVENT_EXIT in do_exit we likely get some complete
+gibberish.
+
+That is probably safe.
+
+>  	jbra	fpsp040_die
+> +	addql   #8,%sp
+> +	addql   #8,%sp
+> +	addql   #8,%sp
+> +	addql   #8,%sp
+> +	addql   #8,%sp
+> +	addql   #4,%sp
+> +	rts
+
+Especially as everything after jumping to fpsp040_die does not execute.
+
+Eric
+
+
+>  
+>  	.section __ex_table,#alloc
+>  	.align	4
