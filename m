@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C79533CFE00
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jul 2021 17:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEDD3CFE01
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jul 2021 17:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242402AbhGTPBP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Jul 2021 11:01:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36046 "EHLO mail.kernel.org"
+        id S242399AbhGTPBT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Jul 2021 11:01:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36048 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240451AbhGTOaw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S240444AbhGTOaw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Tue, 20 Jul 2021 10:30:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C831261009;
-        Tue, 20 Jul 2021 15:09:55 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D0306610C7;
+        Tue, 20 Jul 2021 15:09:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626793798;
-        bh=0ftlNhQC5zX39Pp6c6oQeEbeKpMs33orrDCC3oWnehk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ujuk6myyjpUAQdS3/sLzDpjpfPv7BKz1QCj0sf8kmzBRK+6ORPzNmIo2tH9FH5ZUg
-         dqqY+vi2LY0wm6lVmCuQqyQUKAns8Q6ucdNyMCarp1ksm1DA+I/NNkTu381i5YvgIa
-         ONkNKWgXkrCVbeh376Uy+6h8151Iy9iWMxcXlyG+WixGnJVexCVwrSvzPsCKVAsDY0
-         BTUi29CNxb8NkTNCc1r6GwAG7cuslfUf/Lpb/OAYAywz4Hl3kcleo8bclZpyQ25AWn
-         N9pZAylKCNCK8tM6fjRtxA8iMrmnybJGuSEvL6YJBeovNW3+H86JSHiEzRORIR45EQ
-         29lvm8+jOTRJA==
+        s=k20201202; t=1626793801;
+        bh=VG8mYKeaN6zpY3H4xqfPQ3oOb4jYn6Rtk1kwDRGEwmY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TRVXEstmbXvgIPowqqpERgHQbA/Ms1tCvt6eKaE2uXkZySZcsrr3vr+KWYX/jB0xW
+         +vEoRAELksjNfDpltvLQlzLCqyjjfTzI28qs/ywoeu9FH/GMeghRN5QQtsSfU0B/e0
+         LCTSp9e1mWCEgF9XoNitj58W0fR92SS9xyUFsDv7yFoaX8FAyqzaTCMBlxAfCvNAal
+         Pvo1YP11fVnlvJrpw3BShr49ag/EdRDsh8x7l8z9XykjCgq2vDBOHgVe/wL7SWZ9/2
+         4TgghmQLtkja4py3HkGsEVHaXrj/MfNJ1Htbdp0FRHkKeSz+TPbetLLOKR82jjjUuO
+         ghYfcXHffJKaw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arch@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -38,10 +38,12 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
         kexec@lists.infradead.org
-Subject: [PATCH v4 0/4] compat: remove compat_alloc_user_space callers
-Date:   Tue, 20 Jul 2021 17:09:46 +0200
-Message-Id: <20210720150950.3669610-1-arnd@kernel.org>
+Subject: [PATCH v4 1/4] kexec: avoid compat_alloc_user_space
+Date:   Tue, 20 Jul 2021 17:09:47 +0200
+Message-Id: <20210720150950.3669610-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210720150950.3669610-1-arnd@kernel.org>
+References: <20210720150950.3669610-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -50,78 +52,227 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Going through compat_alloc_user_space() to convert indirect system call
-arguments tends to add complexity compared to handling the native and
-compat logic in the same code.
+The compat version of sys_kexec_load() uses compat_alloc_user_space to
+convert the user-provided arguments into the native format, and it is
+one of the last system calls to do this after almost all other ones have
+been converted to a different solution.
 
-The drivers/media portion of the longer series is already merged,
-and I just resubmitted the net/core and drivers/net portions, so this
-is the last main bit.
+Change do_kexec_load_locked() to instead take a kernel pointer,
+and do the conversion of the compat format in the two entry points
+for native and compat mode.
 
-       Arnd
+This approach was suggested by Eric Biederman, who posted the initial
+version as an alternative to a different patch from Arnd.
+
+Link: https://lore.kernel.org/lkml/m1y2cbzmnw.fsf@fess.ebiederm.org/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
+ kernel/kexec.c | 116 +++++++++++++++++++++++++------------------------
+ 1 file changed, 59 insertions(+), 57 deletions(-)
 
-Changes in v4:
-
-- Rebase to v5.14-rc2
-- Replace the kexec patch with a version based on Eric Biederman's
-  prototype
-
-Changes in v3:
-
-- fix whitespace as pointed out by Christoph Hellwig
-- minor build fixes
-- rebase to v5.13-rc1
-
-Link: https://lore.kernel.org/lkml/20210517203343.3941777-1-arnd@kernel.org/
-
-Changes in v2:
-
-- address review comments from Christoph Hellwig
-- split syscall removal into a separate patch
-- replace __X32_COND_SYSCALL() with individual macros for x32
-
-Link: https://lore.kernel.org/lkml/20201208150614.GA15765@infradead.org/
-
-Arnd Bergmann (4):
-  kexec: avoid compat_alloc_user_space
-  mm: simplify compat_sys_move_pages
-  mm: simplify compat numa syscalls
-  compat: remove some compat entry points
-
- arch/arm64/include/asm/unistd32.h         |  10 +-
- arch/mips/kernel/syscalls/syscall_n32.tbl |  10 +-
- arch/mips/kernel/syscalls/syscall_o32.tbl |  10 +-
- arch/parisc/kernel/syscalls/syscall.tbl   |   8 +-
- arch/powerpc/kernel/syscalls/syscall.tbl  |  10 +-
- arch/s390/kernel/syscalls/syscall.tbl     |  10 +-
- arch/sparc/kernel/syscalls/syscall.tbl    |  10 +-
- arch/x86/entry/syscalls/syscall_32.tbl    |   4 +-
- arch/x86/entry/syscalls/syscall_64.tbl    |   2 +-
- include/linux/compat.h                    |  37 +---
- include/uapi/asm-generic/unistd.h         |  10 +-
- kernel/kexec.c                            | 116 ++++++-------
- kernel/sys_ni.c                           |   5 -
- mm/mempolicy.c                            | 196 +++++-----------------
- mm/migrate.c                              |  50 +++---
- 15 files changed, 182 insertions(+), 306 deletions(-)
-
+diff --git a/kernel/kexec.c b/kernel/kexec.c
+index c82c6c06f051..4eae5f2aa159 100644
+--- a/kernel/kexec.c
++++ b/kernel/kexec.c
+@@ -19,26 +19,21 @@
+ 
+ #include "kexec_internal.h"
+ 
+-static int copy_user_segment_list(struct kimage *image,
++static void copy_user_segment_list(struct kimage *image,
+ 				  unsigned long nr_segments,
+-				  struct kexec_segment __user *segments)
++				  struct kexec_segment *segments)
+ {
+-	int ret;
+ 	size_t segment_bytes;
+ 
+ 	/* Read in the segments */
+ 	image->nr_segments = nr_segments;
+ 	segment_bytes = nr_segments * sizeof(*segments);
+-	ret = copy_from_user(image->segment, segments, segment_bytes);
+-	if (ret)
+-		ret = -EFAULT;
+-
+-	return ret;
++	memcpy(image->segment, segments, segment_bytes);
+ }
+ 
+ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
+ 			     unsigned long nr_segments,
+-			     struct kexec_segment __user *segments,
++			     struct kexec_segment *segments,
+ 			     unsigned long flags)
+ {
+ 	int ret;
+@@ -59,9 +54,7 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
+ 
+ 	image->start = entry;
+ 
+-	ret = copy_user_segment_list(image, nr_segments, segments);
+-	if (ret)
+-		goto out_free_image;
++	copy_user_segment_list(image, nr_segments, segments);
+ 
+ 	if (kexec_on_panic) {
+ 		/* Enable special crash kernel control page alloc policy. */
+@@ -103,8 +96,8 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
+ 	return ret;
+ }
+ 
+-static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
+-		struct kexec_segment __user *segments, unsigned long flags)
++static int do_kexec_load_locked(unsigned long entry, unsigned long nr_segments,
++			struct kexec_segment *segments, unsigned long flags)
+ {
+ 	struct kimage **dest_image, *image;
+ 	unsigned long i;
+@@ -174,6 +167,27 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
+ 	return ret;
+ }
+ 
++static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
++			struct kexec_segment *segments, unsigned long flags)
++{
++	int result;
++
++	/* Because we write directly to the reserved memory
++	 * region when loading crash kernels we need a mutex here to
++	 * prevent multiple crash  kernels from attempting to load
++	 * simultaneously, and to prevent a crash kernel from loading
++	 * over the top of a in use crash kernel.
++	 *
++	 * KISS: always take the mutex.
++	 */
++	if (!mutex_trylock(&kexec_mutex))
++		return -EBUSY;
++
++	result = do_kexec_load_locked(entry, nr_segments, segments, flags);
++	mutex_unlock(&kexec_mutex);
++	return result;
++}
++
+ /*
+  * Exec Kernel system call: for obvious reasons only root may call it.
+  *
+@@ -224,6 +238,11 @@ static inline int kexec_load_check(unsigned long nr_segments,
+ 	if ((flags & KEXEC_FLAGS) != (flags & ~KEXEC_ARCH_MASK))
+ 		return -EINVAL;
+ 
++	/* Verify we are on the appropriate architecture */
++	if (((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH) &&
++	    ((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH_DEFAULT))
++		return -EINVAL;
++
+ 	/* Put an artificial cap on the number
+ 	 * of segments passed to kexec_load.
+ 	 */
+@@ -236,32 +255,26 @@ static inline int kexec_load_check(unsigned long nr_segments,
+ SYSCALL_DEFINE4(kexec_load, unsigned long, entry, unsigned long, nr_segments,
+ 		struct kexec_segment __user *, segments, unsigned long, flags)
+ {
+-	int result;
++	struct kexec_segment *ksegments;
++	unsigned long bytes, result;
+ 
+ 	result = kexec_load_check(nr_segments, flags);
+ 	if (result)
+ 		return result;
+ 
+-	/* Verify we are on the appropriate architecture */
+-	if (((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH) &&
+-		((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH_DEFAULT))
+-		return -EINVAL;
+-
+-	/* Because we write directly to the reserved memory
+-	 * region when loading crash kernels we need a mutex here to
+-	 * prevent multiple crash  kernels from attempting to load
+-	 * simultaneously, and to prevent a crash kernel from loading
+-	 * over the top of a in use crash kernel.
+-	 *
+-	 * KISS: always take the mutex.
+-	 */
+-	if (!mutex_trylock(&kexec_mutex))
+-		return -EBUSY;
++	bytes = nr_segments * sizeof(ksegments[0]);
++	ksegments = kmalloc(bytes, GFP_KERNEL);
++	if (!ksegments)
++		return -ENOMEM;
+ 
+-	result = do_kexec_load(entry, nr_segments, segments, flags);
++	result = copy_from_user(ksegments, segments, bytes);
++	if (result)
++		goto fail;
+ 
+-	mutex_unlock(&kexec_mutex);
++	result = do_kexec_load(entry, nr_segments, ksegments, flags);
+ 
++fail:
++	kfree(ksegments);
+ 	return result;
+ }
+ 
+@@ -272,8 +285,8 @@ COMPAT_SYSCALL_DEFINE4(kexec_load, compat_ulong_t, entry,
+ 		       compat_ulong_t, flags)
+ {
+ 	struct compat_kexec_segment in;
+-	struct kexec_segment out, __user *ksegments;
+-	unsigned long i, result;
++	struct kexec_segment *ksegments;
++	unsigned long bytes, i, result;
+ 
+ 	result = kexec_load_check(nr_segments, flags);
+ 	if (result)
+@@ -285,37 +298,26 @@ COMPAT_SYSCALL_DEFINE4(kexec_load, compat_ulong_t, entry,
+ 	if ((flags & KEXEC_ARCH_MASK) == KEXEC_ARCH_DEFAULT)
+ 		return -EINVAL;
+ 
+-	ksegments = compat_alloc_user_space(nr_segments * sizeof(out));
++	bytes = nr_segments * sizeof(ksegments[0]);
++	ksegments = kmalloc(bytes, GFP_KERNEL);
++	if (!ksegments)
++		return -ENOMEM;
++
+ 	for (i = 0; i < nr_segments; i++) {
+ 		result = copy_from_user(&in, &segments[i], sizeof(in));
+ 		if (result)
+-			return -EFAULT;
+-
+-		out.buf   = compat_ptr(in.buf);
+-		out.bufsz = in.bufsz;
+-		out.mem   = in.mem;
+-		out.memsz = in.memsz;
++			goto fail;
+ 
+-		result = copy_to_user(&ksegments[i], &out, sizeof(out));
+-		if (result)
+-			return -EFAULT;
++		ksegments[i].buf   = compat_ptr(in.buf);
++		ksegments[i].bufsz = in.bufsz;
++		ksegments[i].mem   = in.mem;
++		ksegments[i].memsz = in.memsz;
+ 	}
+ 
+-	/* Because we write directly to the reserved memory
+-	 * region when loading crash kernels we need a mutex here to
+-	 * prevent multiple crash  kernels from attempting to load
+-	 * simultaneously, and to prevent a crash kernel from loading
+-	 * over the top of a in use crash kernel.
+-	 *
+-	 * KISS: always take the mutex.
+-	 */
+-	if (!mutex_trylock(&kexec_mutex))
+-		return -EBUSY;
+-
+ 	result = do_kexec_load(entry, nr_segments, ksegments, flags);
+ 
+-	mutex_unlock(&kexec_mutex);
+-
++fail:
++	kfree(ksegments);
+ 	return result;
+ }
+ #endif
 -- 
 2.29.2
 
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: linux-arch <linux-arch@vger.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andy Lutomirski <luto@kernel.org
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Brian Gerst <brgerst@gmail.com>
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: Linux-MM <linux-mm@kvack.org>
-Cc: kexec@lists.infradead.org
