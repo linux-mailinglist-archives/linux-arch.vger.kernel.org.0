@@ -2,183 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BD03CF03C
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jul 2021 01:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D323CF62B
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jul 2021 10:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239164AbhGSXHV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Jul 2021 19:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354299AbhGSUXp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Jul 2021 16:23:45 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9E3C061787;
-        Mon, 19 Jul 2021 14:02:34 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id j199so17677115pfd.7;
-        Mon, 19 Jul 2021 14:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M5VbLoDXsQD50yQzjB6TT1EHQn/LEejS2HSUVl4nV+E=;
-        b=jTIxdQWErN7a9362DzqyPp3w7keD5GTAVGG3eVJmU+FejkSbGQ1esSQDtyy/6HgHUD
-         aqwGSD4qlS1YjFzh95Lneq02admIGC+Pd0eruJewo+423PBbHBTVQTw1ImjrBoFQEzlI
-         5uIoGj8vCISnehbzlPGaWD6C9HXsf9GJJ3VUPw4+UjPfkLUI2p2a+YKWNELpFJSDsoZz
-         HVXRynus4sXds1S8C/EdTBdDBD3Dbc4PAsLY7JWHw8zjBktowS8mMGoIzUqgCn/0+pwM
-         njWvoe1/R+K2hObnO8HBZJRSA5GpMoBZ0kZ0fUXngYf0xSOuuZrxcGNrD3rUMThluN/a
-         I7og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M5VbLoDXsQD50yQzjB6TT1EHQn/LEejS2HSUVl4nV+E=;
-        b=P7apoH97kKoE/tLVfQiQY2/kp7sm1qSi6NdXeqoiIG5Jxm8zEGeINrhnUuTciLXwQg
-         tzS/igHB8fb8aUDng8rdLM0MdA0A/t9v8xJX2E4TLAcI5sPmrXUr98qq7xyMD7Y+IDKT
-         +YZRwTTfL8kNRbvDYvnxd/H4bOH2odEenoKDWQdpLRKdth612S6qTz+YvQ9Gqfq9owwT
-         Cf9zmBzH/waU6hIazrJn74+DSsG31uBZscP1rpKzCDDEZQ+fCFkVexvfqaA23wdcoWye
-         fblIVdm3lAFgH3IDeg3QEWsjLIXihopFzqOPm6okbpUl/Xu5ses2I+JLn8T++v8WGZ+l
-         7r7A==
-X-Gm-Message-State: AOAM531zZkAJyLPGWbJhsGWVGP5x1MR2CEjZIDRmHSyL749V1GrgUhIw
-        wXf3rNPVkYMsIwA63eKxIYoQlqinwlYiiPKh
-X-Google-Smtp-Source: ABdhPJzQrhbnl6q5d88XYxVJ2SDt2acFjbzYFNmTZC7RiLUV2Umt6AF8ZOyXVDdRcQzGl/XNojBPbw==
-X-Received: by 2002:a62:5a86:0:b029:334:567b:d80e with SMTP id o128-20020a625a860000b0290334567bd80emr21479115pfb.44.1626728601684;
-        Mon, 19 Jul 2021 14:03:21 -0700 (PDT)
-Received: from localhost.localdomain ([2604:a880:1:20::1f:7001])
-        by smtp.gmail.com with ESMTPSA id i8sm390396pjh.36.2021.07.19.14.03.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jul 2021 14:03:21 -0700 (PDT)
-From:   Wende Tan <twd2.me@gmail.com>
-To:     arnd@arndb.de, linux-arch@vger.kernel.org
-Cc:     Wende Tan <twd2.me@gmail.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] arch: Move page table config macros out of `#ifndef __ASSEMBLY__` condition
-Date:   Mon, 19 Jul 2021 21:03:18 +0000
-Message-Id: <20210719210318.1023754-1-twd2.me@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S233602AbhGTHy0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Jul 2021 03:54:26 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15850 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234314AbhGTHyX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 20 Jul 2021 03:54:23 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16K8X8nm082229;
+        Tue, 20 Jul 2021 04:34:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Kmd0NCneQRO+ciEUF6cKsoYHvG4BwX5CNaYsPFWuCUo=;
+ b=EfaApuk3JH7dlqLqYcfhNN6Fz0oJdpSCGrfchAzBOXmhejt/Jyz0+vKgh8OcbFxuxZcS
+ 0owW5r9cUqsybMwL771Xm9Jquwwf1T84gpe3t8S6igyxfeWflG9VxRpo8yUyLRarrK0+
+ c/seHPFzmZijsNALCoOer84jsaIbM3tFfU4u38llLJtA6V7wEZtSrFA6ej+aKLncO6lz
+ nyn9moQaQ44RC0LZKAolEk42rQotp64MTyAc1KKL13CHHaU7VVLStieS1LWBJrAEOfYx
+ BO5/12RYjQ+b9+q1Qaa+wbHV+4DGi+2112cBh1ITlcMc5QGiiZTiJTzDYnWKNqAbGstd /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39wr5d53hk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jul 2021 04:34:54 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16K8YHE9087688;
+        Tue, 20 Jul 2021 04:34:53 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39wr5d53gk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jul 2021 04:34:53 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16K8YThI027499;
+        Tue, 20 Jul 2021 08:34:52 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 39upu88ntg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jul 2021 08:34:51 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16K8YnR717105304
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Jul 2021 08:34:49 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 550F8A4051;
+        Tue, 20 Jul 2021 08:34:49 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F3509A4040;
+        Tue, 20 Jul 2021 08:34:48 +0000 (GMT)
+Received: from sig-9-145-150-42.de.ibm.com (unknown [9.145.150.42])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 20 Jul 2021 08:34:48 +0000 (GMT)
+Message-ID: <bd731ed627344a3a2eaeffabff21d499c4e2c3fd.camel@linux.ibm.com>
+Subject: Re: [PATCH] PCI: Move pci_dev_is/assign_added() to pci.h
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Date:   Tue, 20 Jul 2021 10:34:48 +0200
+In-Reply-To: <20210719121148.2403239-1-schnelle@linux.ibm.com>
+References: <20210719121148.2403239-1-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NH8bXqJo4bUpl19zSPOzUDOvoHBldX6w
+X-Proofpoint-ORIG-GUID: 5VMbc7ngO_SRBHdTLdoT6EIGkyIDvx33
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-20_04:2021-07-19,2021-07-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 mlxlogscore=999 priorityscore=1501 bulkscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 adultscore=0 suspectscore=0
+ phishscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104190000 definitions=main-2107200051
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Move page table configuration macros like `P4D_SHIFT` out of
-`#ifndef __ASSEMBLY__` condition, so that they can be used by assembly
-code or linker scripts.  For example, the `TEXT_CFI_JT` macro in
-`include/asm-generic/vmlinux.lds.h` needs `PMD_SIZE` when Clang CFI is
-enabled.
+On Mon, 2021-07-19 at 14:11 +0200, Niklas Schnelle wrote:
+> The helper function pci_dev_is_added() from drivers/pci/pci.h is used in
+> PCI arch code of both s390 and powerpc leading to awkward relative
+> includes. Move it to the global include/linux/pci.h and get rid of these
+> includes just for that one function.
+> 
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+> 
+... snip ...
+>  
+>  static LIST_HEAD(bridge_list);
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 93dcdd431072..a159cd0f6f05 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -383,21 +383,6 @@ static inline bool pci_dev_is_disconnected(const struct pci_dev *dev)
+>  	return dev->error_state == pci_channel_io_perm_failure;
+>  }
+>  
+> -/* pci_dev priv_flags */
+> -#define PCI_DEV_ADDED 0
+> -#define PCI_DPC_RECOVERED 1
+> -#define PCI_DPC_RECOVERING 2
 
-Signed-off-by: Wende Tan <twd2.me@gmail.com>
----
- include/asm-generic/pgtable-nop4d.h | 10 ++++++----
- include/asm-generic/pgtable-nopmd.h | 19 ++++++++++---------
- include/asm-generic/pgtable-nopud.h | 15 ++++++++-------
- 3 files changed, 24 insertions(+), 20 deletions(-)
+Sorry, the above two PCI_DPC_* lines should remain in drivers/pci/pci.h
+I messed this up on rebasing to v5.14-rc1 and it didn't lead to
+problems on either s390x defconfig, nor pp64_defconfig but breaks ppc
+allyesconfig. Will resend a fixed version.
 
-diff --git a/include/asm-generic/pgtable-nop4d.h b/include/asm-generic/pgtable-nop4d.h
-index 03b7dae47dd4..a3de2e358ebc 100644
---- a/include/asm-generic/pgtable-nop4d.h
-+++ b/include/asm-generic/pgtable-nop4d.h
-@@ -2,17 +2,19 @@
- #ifndef _PGTABLE_NOP4D_H
- #define _PGTABLE_NOP4D_H
- 
--#ifndef __ASSEMBLY__
-+#include <linux/const.h>
- 
- #define __PAGETABLE_P4D_FOLDED 1
- 
--typedef struct { pgd_t pgd; } p4d_t;
--
- #define P4D_SHIFT		PGDIR_SHIFT
- #define PTRS_PER_P4D		1
--#define P4D_SIZE		(1UL << P4D_SHIFT)
-+#define P4D_SIZE		(_UL(1) << P4D_SHIFT)
- #define P4D_MASK		(~(P4D_SIZE-1))
- 
-+#ifndef __ASSEMBLY__
-+
-+typedef struct { pgd_t pgd; } p4d_t;
-+
- /*
-  * The "pgd_xxx()" functions here are trivial for a folded two-level
-  * setup: the p4d is never bad, and a p4d always exists (as it's folded
-diff --git a/include/asm-generic/pgtable-nopmd.h b/include/asm-generic/pgtable-nopmd.h
-index 10789cf51d16..cacaa454f97b 100644
---- a/include/asm-generic/pgtable-nopmd.h
-+++ b/include/asm-generic/pgtable-nopmd.h
-@@ -2,14 +2,20 @@
- #ifndef _PGTABLE_NOPMD_H
- #define _PGTABLE_NOPMD_H
- 
--#ifndef __ASSEMBLY__
--
- #include <asm-generic/pgtable-nopud.h>
--
--struct mm_struct;
-+#include <linux/const.h>
- 
- #define __PAGETABLE_PMD_FOLDED 1
- 
-+#define PMD_SHIFT	PUD_SHIFT
-+#define PTRS_PER_PMD	1
-+#define PMD_SIZE  	(_UL(1) << PMD_SHIFT)
-+#define PMD_MASK  	(~(PMD_SIZE-1))
-+
-+#ifndef __ASSEMBLY__
-+
-+struct mm_struct;
-+
- /*
-  * Having the pmd type consist of a pud gets the size right, and allows
-  * us to conceptually access the pud entry that this pmd is folded into
-@@ -17,11 +23,6 @@ struct mm_struct;
-  */
- typedef struct { pud_t pud; } pmd_t;
- 
--#define PMD_SHIFT	PUD_SHIFT
--#define PTRS_PER_PMD	1
--#define PMD_SIZE  	(1UL << PMD_SHIFT)
--#define PMD_MASK  	(~(PMD_SIZE-1))
--
- /*
-  * The "pud_xxx()" functions here are trivial for a folded two-level
-  * setup: the pmd is never bad, and a pmd always exists (as it's folded
-diff --git a/include/asm-generic/pgtable-nopud.h b/include/asm-generic/pgtable-nopud.h
-index eb70c6d7ceff..dd9239073a86 100644
---- a/include/asm-generic/pgtable-nopud.h
-+++ b/include/asm-generic/pgtable-nopud.h
-@@ -2,12 +2,18 @@
- #ifndef _PGTABLE_NOPUD_H
- #define _PGTABLE_NOPUD_H
- 
--#ifndef __ASSEMBLY__
--
- #include <asm-generic/pgtable-nop4d.h>
-+#include <linux/const.h>
- 
- #define __PAGETABLE_PUD_FOLDED 1
- 
-+#define PUD_SHIFT	P4D_SHIFT
-+#define PTRS_PER_PUD	1
-+#define PUD_SIZE  	(_UL(1) << PUD_SHIFT)
-+#define PUD_MASK  	(~(PUD_SIZE-1))
-+
-+#ifndef __ASSEMBLY__
-+
- /*
-  * Having the pud type consist of a p4d gets the size right, and allows
-  * us to conceptually access the p4d entry that this pud is folded into
-@@ -15,11 +21,6 @@
-  */
- typedef struct { p4d_t p4d; } pud_t;
- 
--#define PUD_SHIFT	P4D_SHIFT
--#define PTRS_PER_PUD	1
--#define PUD_SIZE  	(1UL << PUD_SHIFT)
--#define PUD_MASK  	(~(PUD_SIZE-1))
--
- /*
-  * The "p4d_xxx()" functions here are trivial for a folded two-level
-  * setup: the pud is never bad, and a pud always exists (as it's folded
--- 
-2.25.1
+> 
+
+.. snip ..
 
