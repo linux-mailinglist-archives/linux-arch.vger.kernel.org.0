@@ -2,40 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F223D18C3
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Jul 2021 23:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A77B3D18C1
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Jul 2021 23:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbhGUU3b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Jul 2021 16:29:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36742 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229553AbhGUU33 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S229508AbhGUU33 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Wed, 21 Jul 2021 16:29:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 421DE61222;
+Received: from mail.kernel.org ([198.145.29.99]:36758 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229738AbhGUU33 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Jul 2021 16:29:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 485756124C;
         Wed, 21 Jul 2021 21:10:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1626901805;
-        bh=en754w73iFqTn89Z6AhHNd60Ce4arYxw9aIjHkrE69E=;
+        bh=K0FZkmUcEZ4/fCLtNhjbMKfDZH5fd8ksaaC0kfTu25I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c4Zlh6JurAtz9AhlNdCGTi6AfqUYPMmN9j9MovAScPSW8OxO3v95wsNVzNU7oJzJO
-         l6r8Bmf49Bg4iB2SQkYmOyoHD+boLQH8cRwwcCjgLXuy0hSlisQIc9b8cAeE+Rh/wp
-         vlIL/RPvZn1XDVicv+/rgMmyctMulQ/hTEbkqI0fM8w/8B1pBQHz7DCLz/n/A4jWSo
-         ibp0AWw3z7BcDhXp40J/DFTeQyeZmEmbxpVlFnG3cdrRytLkXd8B5yCN+9cu1vxMTL
-         btckhySf3apIZ53v+5zH/rMaebAaPpk9Ello2GfU/WJYEGjt5vTEEKD+4N4ZUZ67c4
-         FIv2s2bdpn1LA==
+        b=nvAPEYLHTI+7ew1wudLdNWzDhDaSyIOMxl+HH7KhZFHAJ39BqN0bSL8+A5wYFrACd
+         H4T6HdKsi+htQ3m44zCMyNB01Uc+LOjzYIoBWozMtgVUZM3OB8xpLt77mpJxOkut2C
+         nmdWbep1jt45N7JuiFAZiU4Nh5ON8GzkAlqhejJxqN7e0B/jJ8eETDpaoNeB0dlHg5
+         BW4Ft4JgO99TVIqQaHBPr1esIb9TFEi5VV404j/8UIQo905mOLSUDfAUH3sbM8FA6C
+         PgZvDM8du/Adv9SosYMN7828FqJEddUhUqy4T71cVreR6qek05iSA/+w5Sq7jI4m+i
+         dhCfk42fGFCeA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 127345C0A03; Wed, 21 Jul 2021 14:10:05 -0700 (PDT)
+        id 166675C0A11; Wed, 21 Jul 2021 14:10:05 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
         peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
         dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, Manfred Spraul <manfred@colorfullife.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH memory-model 3/4] tools/memory-model: Heuristics using data_race() must handle all values
-Date:   Wed, 21 Jul 2021 14:10:02 -0700
-Message-Id: <20210721211003.869892-3-paulmck@kernel.org>
+        akiyks@gmail.com, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH memory-model 4/4] tools/memory-model: Document data_race(READ_ONCE())
+Date:   Wed, 21 Jul 2021 14:10:03 -0700
+Message-Id: <20210721211003.869892-4-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20210721210726.GA828672@paulmck-ThinkPad-P17-Gen-1>
 References: <20210721210726.GA828672@paulmck-ThinkPad-P17-Gen-1>
@@ -45,37 +44,92 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Manfred Spraul <manfred@colorfullife.com>
+It is possible to cause KCSAN to ignore marked accesses by applying
+__no_kcsan to the function or applying data_race() to the marked accesses.
+These approaches allow the developer to restrict compiler optimizations
+while also causing KCSAN to ignore diagnostic accesses.
 
-Data loaded for use by some sorts of heuristics can tolerate the
-occasional erroneous value.  In this case the loads may use data_race()
-to give the compiler full freedom to optimize while also informing KCSAN
-of the intent.  However, for this to work, the heuristic needs to be
-able to tolerate any erroneous value that could possibly arise.  This
-commit therefore adds a paragraph spelling this out.
+This commit therefore updates the documentation accordingly.
 
-Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/memory-model/Documentation/access-marking.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../Documentation/access-marking.txt          | 49 +++++++++++++------
+ 1 file changed, 35 insertions(+), 14 deletions(-)
 
 diff --git a/tools/memory-model/Documentation/access-marking.txt b/tools/memory-model/Documentation/access-marking.txt
-index be7d507997cf8..fe4ad6d12d24c 100644
+index fe4ad6d12d24c..a3dcc32e27b44 100644
 --- a/tools/memory-model/Documentation/access-marking.txt
 +++ b/tools/memory-model/Documentation/access-marking.txt
-@@ -126,6 +126,11 @@ consistent errors, which in turn are quite capable of breaking heuristics.
- Therefore use of data_race() should be limited to cases where some other
- code (such as a barrier() call) will force the occasional reload.
+@@ -37,7 +37,9 @@ compiler's use of code-motion and common-subexpression optimizations.
+ Therefore, if a given access is involved in an intentional data race,
+ using READ_ONCE() for loads and WRITE_ONCE() for stores is usually
+ preferable to data_race(), which in turn is usually preferable to plain
+-C-language accesses.
++C-language accesses.  It is permissible to combine #2 and #3, for example,
++data_race(READ_ONCE(a)), which will both restrict compiler optimizations
++and disable KCSAN diagnostics.
  
-+Note that this use case requires that the heuristic be able to handle
-+any possible error.  In contrast, if the heuristics might be fatally
-+confused by one or more of the possible erroneous values, use READ_ONCE()
-+instead of data_race().
+ KCSAN will complain about many types of data races involving plain
+ C-language accesses, but marking all accesses involved in a given data
+@@ -86,6 +88,10 @@ that fail to exclude the updates.  In this case, it is important to use
+ data_race() for the diagnostic reads because otherwise KCSAN would give
+ false-positive warnings about these diagnostic reads.
+ 
++If it is necessary to both restrict compiler optimizations and disable
++KCSAN diagnostics, use both data_race() and READ_ONCE(), for example,
++data_race(READ_ONCE(a)).
 +
  In theory, plain C-language loads can also be used for this use case.
  However, in practice this will have the disadvantage of causing KCSAN
  to generate false positives because KCSAN will have no way of knowing
+@@ -279,19 +285,34 @@ tells KCSAN that data races are expected, and should be silently
+ ignored.  This data_race() also tells the human reading the code that
+ read_foo_diagnostic() might sometimes return a bogus value.
+ 
+-However, please note that your kernel must be built with
+-CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=n in order for KCSAN to
+-detect a buggy lockless write.  If you need KCSAN to detect such a
+-write even if that write did not change the value of foo, you also
+-need CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY=n.  If you need KCSAN to
+-detect such a write happening in an interrupt handler running on the
+-same CPU doing the legitimate lock-protected write, you also need
+-CONFIG_KCSAN_INTERRUPT_WATCHER=y.  With some or all of these Kconfig
+-options set properly, KCSAN can be quite helpful, although it is not
+-necessarily a full replacement for hardware watchpoints.  On the other
+-hand, neither are hardware watchpoints a full replacement for KCSAN
+-because it is not always easy to tell hardware watchpoint to conditionally
+-trap on accesses.
++If it is necessary to suppress compiler optimization and also detect
++buggy lockless writes, read_foo_diagnostic() can be updated as follows:
++
++	void read_foo_diagnostic(void)
++	{
++		pr_info("Current value of foo: %d\n", data_race(READ_ONCE(foo)));
++	}
++
++Alternatively, given that KCSAN is to ignore all accesses in this function,
++this function can be marked __no_kcsan and the data_race() can be dropped:
++
++	void __no_kcsan read_foo_diagnostic(void)
++	{
++		pr_info("Current value of foo: %d\n", READ_ONCE(foo));
++	}
++
++However, in order for KCSAN to detect buggy lockless writes, your kernel
++must be built with CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=n.  If you
++need KCSAN to detect such a write even if that write did not change
++the value of foo, you also need CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY=n.
++If you need KCSAN to detect such a write happening in an interrupt handler
++running on the same CPU doing the legitimate lock-protected write, you
++also need CONFIG_KCSAN_INTERRUPT_WATCHER=y.  With some or all of these
++Kconfig options set properly, KCSAN can be quite helpful, although
++it is not necessarily a full replacement for hardware watchpoints.
++On the other hand, neither are hardware watchpoints a full replacement
++for KCSAN because it is not always easy to tell hardware watchpoint to
++conditionally trap on accesses.
+ 
+ 
+ Lock-Protected Writes With Lockless Reads
 -- 
 2.31.1.189.g2e36527f23
 
