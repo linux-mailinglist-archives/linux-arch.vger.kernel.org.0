@@ -2,32 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B433D1679
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Jul 2021 20:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3730E3D17C8
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Jul 2021 22:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbhGUR52 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Jul 2021 13:57:28 -0400
-Received: from mga05.intel.com ([192.55.52.43]:28452 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230269AbhGUR52 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Jul 2021 13:57:28 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10052"; a="297055867"
-X-IronPort-AV: E=Sophos;i="5.84,258,1620716400"; 
-   d="scan'208";a="297055867"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 11:38:04 -0700
-X-IronPort-AV: E=Sophos;i="5.84,258,1620716400"; 
-   d="scan'208";a="576781537"
-Received: from aannamal-mobl.amr.corp.intel.com (HELO [10.212.140.253]) ([10.212.140.253])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 11:38:02 -0700
+        id S229791AbhGUTek (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Jul 2021 15:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229591AbhGUTej (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jul 2021 15:34:39 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF68C061575;
+        Wed, 21 Jul 2021 13:15:14 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id k4-20020a17090a5144b02901731c776526so579977pjm.4;
+        Wed, 21 Jul 2021 13:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SOGnEDYj6+aPEFG0m6p/HdJZ6lLy+2oB11LH/GMIPe8=;
+        b=DQfgQO3uCJmeqfPd4GrrnMGsak6ZUiMipZ5qwGZtq+Y4GnbN+3ZveORbh7uh+P7+E5
+         Ku/Q0UMDjt7U15df32VENimOMh3ZwtrJcN0sYnZvDr+UbOp39zxNBXTzGgEeIORNtAXY
+         1Ye1OkKig6CHdJD/D5zeG4cOXQodWG4c90noX+n+xKnNY3so0BtSPU6o8pWYlVHiN3B3
+         ENX5NV2ASXhgf6aPSywQx8ik2OzP6OW+ni11VnAaLtdMavEltJs0/pz1h1E2SViLf8SV
+         uxLJfKNjZM7W0PMTRmpnPtaH3PSFofI4UyzIRQwKlnFTHOvaN/+kU7pndu/ledNmiCC3
+         GZGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SOGnEDYj6+aPEFG0m6p/HdJZ6lLy+2oB11LH/GMIPe8=;
+        b=U7MyZGcKOsr/FTrVDzvkIku2RCnfehlz9zRML6VGeJPc0mNolX+dpJCwLtkuEGZRXv
+         4FwdjuwVfcVALIgJe+cgDN9l6BtSpx+jk2+E2ma0D6Qq81XqQRemluoK8hSXgdExYc0I
+         GUzx63VjeH4wFhg/o7HW79OBV765KLyLKQfKnV540iZoo95loijPP972OYLp1mHdoUGA
+         MxT0/Mlhgab/z5xMMpuVPJTwKJjpJVLAbI+gF4x7PyLNej2hJwc2kAmO5Hwxh8Ai4QYy
+         pSVl7oMterHS0S59l0AUSvSoSPfBNf1VJ7jwH44MOveA9HsCFBt0MyQhCffQdBPRvxYn
+         zJZA==
+X-Gm-Message-State: AOAM530gK3pgkSnG9aEu+9JEImScTh1akb8YThC68WoC7+cIJVz/x/Ub
+        JsxhnwdCr1Im7r3s5q4tUpywNgQKa8Btu8h29dQ=
+X-Google-Smtp-Source: ABdhPJx640ylm2KAYp8SewF8Z1tD2mQcn3QMu2iUcvhaFtOAx0ZMixA4m1wVyyq0Dg6aSdjc6BVMPAJP4hkVR2M1HcU=
+X-Received: by 2002:a63:58e:: with SMTP id 136mr6723399pgf.37.1626898513639;
+ Wed, 21 Jul 2021 13:15:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210521221211.29077-1-yu-cheng.yu@intel.com> <20210521221211.29077-25-yu-cheng.yu@intel.com>
+ <YPhkIHJ0guc4UNoO@AUS-LX-JohALLEN.amd.com>
+In-Reply-To: <YPhkIHJ0guc4UNoO@AUS-LX-JohALLEN.amd.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Wed, 21 Jul 2021 13:14:37 -0700
+Message-ID: <CAMe9rOqwe8Mr2pkf0yopWj_F7yZLj9_nmz97+AmFkkmd2U=-fg@mail.gmail.com>
 Subject: Re: [PATCH v27 24/31] x86/cet/shstk: Handle thread shadow stack
-To:     John Allen <john.allen@amd.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+To:     John Allen <john.allen@amd.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
@@ -36,8 +70,7 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
@@ -50,99 +83,121 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
-References: <20210521221211.29077-1-yu-cheng.yu@intel.com>
- <20210521221211.29077-25-yu-cheng.yu@intel.com>
- <YPhkIHJ0guc4UNoO@AUS-LX-JohALLEN.amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <cd064202-2c5f-b1d5-2970-9bff0a762a95@intel.com>
-Date:   Wed, 21 Jul 2021 11:37:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <YPhkIHJ0guc4UNoO@AUS-LX-JohALLEN.amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/21/21 11:14 AM, John Allen wrote:
->> +int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
->> +			     unsigned long stack_size)
->> +{
->> +	struct thread_shstk *shstk = &tsk->thread.shstk;
->> +	struct cet_user_state *state;
->> +	unsigned long addr;
->> +
->> +	if (!stack_size)
->> +		return -EINVAL;
+On Wed, Jul 21, 2021 at 11:15 AM John Allen <john.allen@amd.com> wrote:
+>
+> On Fri, May 21, 2021 at 03:12:04PM -0700, Yu-cheng Yu wrote:
+> > diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> > index 5ea2b494e9f9..8e5f772181b9 100644
+> > --- a/arch/x86/kernel/shstk.c
+> > +++ b/arch/x86/kernel/shstk.c
+> > @@ -71,6 +71,53 @@ int shstk_setup(void)
+> >       return 0;
+> >  }
+> >
+> > +int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
+> > +                          unsigned long stack_size)
+> > +{
+> > +     struct thread_shstk *shstk = &tsk->thread.shstk;
+> > +     struct cet_user_state *state;
+> > +     unsigned long addr;
+> > +
+> > +     if (!stack_size)
+> > +             return -EINVAL;
+>
 > I've been doing some light testing on AMD hardware and I've found that
 > this version of the patchset doesn't boot for me. It appears that when
 > systemd processes start spawning, they hit the above case, return
 > -EINVAL, and the fork fails. In these cases, copy_thread has been passed
 > 0 for both sp and stack_size.
+>
+> For previous versions of the patchset, I can still boot. When the
+> stack_size check was last, the function would always return before
+> completing the check, hitting one of the two cases below.
+>
+> At the very least, it would seem that on some systems, it isn't valid to
+> rely on the stack_size passed from clone3, though I'm unsure what the
+> correct behavior should be here. If the passed stack_size == 0 and sp ==
+> 0, is this a case where we want to alloc a shadow stack for this thread
+> with some capped size? Alternatively, is this a case that isn't valid to
+> alloc a shadow stack and we should simply return 0 instead of -EINVAL?
+>
+> I'm running Fedora 34 which satisfies the required versions of gcc,
+> binutils, and glibc.
+>
+> Please let me know if there is any additional information I can provide.
 
-A few tangential things I noticed:
+FWIW, I have been maintaining stable CET kernels at:
 
-This hunk is not mentioned in the version changelog at all.  I also
-don't see any feedback that might have prompted it.  This is one reason
-per-patch changelogs are preferred.
+https://github.com/hjl-tools/linux/
 
-As a general rule, new features should strive to be implemented in a way
-that it's *obvious* that they won't break old code.
-shstk_alloc_thread_stack() fails that test for me.  If it had:
+The current CET kernel is on hjl/cet/linux-5.13.y branch.
 
-	if (!cpu_feature_enabled(X86_FEATURE_SHSTK)) // or whatever
-		return 0;
+> Thanks,
+> John
+>
+> > +
+> > +     if (!shstk->size)
+> > +             return 0;
+> > +
+> > +     /*
+> > +      * For CLONE_VM, except vfork, the child needs a separate shadow
+> > +      * stack.
+> > +      */
+> > +     if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
+> > +             return 0;
+> > +
+> > +     state = get_xsave_addr(&tsk->thread.fpu.state.xsave, XFEATURE_CET_USER);
+> > +     if (!state)
+> > +             return -EINVAL;
+> > +
+> > +     /*
+> > +      * Compat-mode pthreads share a limited address space.
+> > +      * If each function call takes an average of four slots
+> > +      * stack space, allocate 1/4 of stack size for shadow stack.
+> > +      */
+> > +     if (in_compat_syscall())
+> > +             stack_size /= 4;
+> > +
+> > +     stack_size = round_up(stack_size, PAGE_SIZE);
+> > +     addr = alloc_shstk(stack_size);
+> > +     if (IS_ERR_VALUE(addr)) {
+> > +             shstk->base = 0;
+> > +             shstk->size = 0;
+> > +             return PTR_ERR((void *)addr);
+> > +     }
+> > +
+> > +     fpu__prepare_write(&tsk->thread.fpu);
+> > +     state->user_ssp = (u64)(addr + stack_size);
+> > +     shstk->base = addr;
+> > +     shstk->size = stack_size;
+> > +     return 0;
+> > +}
+> > +
+> >  void shstk_free(struct task_struct *tsk)
+> >  {
+> >       struct thread_shstk *shstk = &tsk->thread.shstk;
+> > @@ -80,7 +127,13 @@ void shstk_free(struct task_struct *tsk)
+> >           !shstk->base)
+> >               return;
+> >
+> > -     if (!tsk->mm)
+> > +     /*
+> > +      * When fork() with CLONE_VM fails, the child (tsk) already has a
+> > +      * shadow stack allocated, and exit_thread() calls this function to
+> > +      * free it.  In this case the parent (current) and the child share
+> > +      * the same mm struct.
+> > +      */
+> > +     if (!tsk->mm || tsk->mm != current->mm)
+> >               return;
+> >
+> >       while (1) {
 
-in the function, it would be obviously harmless.  Better yet would be
-doing the feature check at the shstk_alloc_thread_stack() call site,
-that way even the function call can be optimized out.
 
-Further, this confused me because the changelog didn't even mention the
-arg -> stack_size rename.  That would have been nice for another patch,
-or an extra sentence in the changelog.
+
+-- 
+H.J.
