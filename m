@@ -2,145 +2,206 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7AF3D0462
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Jul 2021 00:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6516B3D0DB5
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Jul 2021 13:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbhGTVgh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Jul 2021 17:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S237159AbhGUKvm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Jul 2021 06:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234499AbhGTVgd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jul 2021 17:36:33 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416D2C061767
-        for <linux-arch@vger.kernel.org>; Tue, 20 Jul 2021 15:16:11 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id g6-20020a17090adac6b029015d1a9a6f1aso2578449pjx.1
-        for <linux-arch@vger.kernel.org>; Tue, 20 Jul 2021 15:16:11 -0700 (PDT)
+        with ESMTP id S238399AbhGUJtQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jul 2021 05:49:16 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7E0C0613DE;
+        Wed, 21 Jul 2021 03:29:05 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y4so1876672pfi.9;
+        Wed, 21 Jul 2021 03:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=HMP4hOg3SpK+nsKtMUngLG5eW2U79IIKIlymfzgnAXs=;
-        b=hXUjgTVkiGDcwRj0K05Ze1rB4fS2Tk8YOBWplqcHc/RigtxHWeA743PNhvx6dnYMnq
-         ePnWoKM6/hjh5nXSS3yKHnFlNiJLuAE4xb8Htd8G9e+81G51Mjc4yqzSsIlpLz2puMfs
-         CiUSQEsh4GELOi0RKKxG4HvBpzIZC6HC4D9Ozk+T7oJ3R9lVK9+z29LKinq9yhF2M1UE
-         tHL6vkX40Xx2LPjW287pN5LNzoTHQ5KB0KrDi46QPn0J89XdTc7CxqXavBkDzKGMm0nR
-         OYDWlh8tkedWHon/t845oVJx/81lHguh5HVyzz8ifyZnJgP9sutebEgpV4x2fkNlz/fU
-         cQqQ==
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=crPkDkWQEoNERdMjzIoNvDVdZYJX2jUbiteH/e0Of1o=;
+        b=dpQF0qK/cZ1PBWjC1lNEtBNPQIY0ndTZOqudg/5nG+laJtg1EvtFbUy2df++wHmiLi
+         c6BCC2uROfhvdYwDWYWD1jecOacp6hyTQ93iH+xQCYDh0nO8befGldO1/+g9lnr74Jsv
+         CmOUB7aNlqIYBSVTdBy1KAz3fTJhPWw+/jwvvEOOadVZwZ+pWi0tv3SIK/XfCdM4Yw0C
+         CMWaIHisnetIQUkh+1i2GqoZdEdpLDithfUWVY4II/1DHvEJRJ2d7y6Gld4xfxrZsKbY
+         6Msig5LVrt5yFu08e+wuLM0X3juclFNnUEU2LztUJ2yenbExU+zvtkxD1pUa0R4LM97z
+         RFOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=HMP4hOg3SpK+nsKtMUngLG5eW2U79IIKIlymfzgnAXs=;
-        b=F9ElXyR+bi4BJ2ktcvgixugk0pk712pK3b4FSdLcmEr7S1rShsrqzWnnsjkZRgFDtq
-         A6SWSjEuWGaOl2d91iV6JEYgghbfEMZDNaTbsDtv/y4zj4f61lHqgpOYZG4y+XLaoMGb
-         uSEfTvSZ78meJKi+rY/gWQAoULEaY3l+QpjfDeaYp9Eq3Dx8PHYLzOjjMqZP7xsvyqTU
-         TV6q2dUI3jOVykHtJyMNGH7urxDk8loKvbbqisioogL4UhJeySL9InhknfvPycJsrIbQ
-         MUC8A1malNiDIA2Ubmgg+SbCP9+IBl27YFl7mXIOKWR4oSxFPGhCc1uw5wms9SSN9q9J
-         vmHA==
-X-Gm-Message-State: AOAM531h3C1Cy77jvCu0GSNb2beQMcHXyNyFD1njIqbTR3meugApOtxE
-        vapkwwrs1zwc5EiyS0AeLBs=
-X-Google-Smtp-Source: ABdhPJwEPgQZE7JpUgmFjH+qkNOCJb48z+MSJu0/zjqro44n6IkH2fjA3vP8tuRIgejRIs6b0U8zqw==
-X-Received: by 2002:a17:90a:2906:: with SMTP id g6mr31523081pjd.100.1626819370838;
-        Tue, 20 Jul 2021 15:16:10 -0700 (PDT)
-Received: from ?IPv6:2001:df0:0:200c:9497:db03:a72f:4a88? ([2001:df0:0:200c:9497:db03:a72f:4a88])
-        by smtp.gmail.com with ESMTPSA id s36sm12519531pgl.8.2021.07.20.15.16.07
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=crPkDkWQEoNERdMjzIoNvDVdZYJX2jUbiteH/e0Of1o=;
+        b=BGoM8rWEoFRz3ZFStBFzvULs6PV+o0kMohNo8Q/+wbZxq/+Iqn0SLdGDUEqFXz66mw
+         vn29lhlCQYArzWBu/CcKbQ049PV5TJka1Oi7qdjh4D6BAJl334EzbW78ivZIRz03CoUg
+         xZSfAwMCkgkKt0nI4ywk7xoFRtusPyf2+6ZtFaldppntdmr6Eh0LNBlK6lPXfa2fkK93
+         m28UOubUIa6tzvnhIfYPr4ZQTmjRdZaeOjmzz7E3i1xQQ193DkJ/EEcMjlQanc6lTtaZ
+         OPfLwEwK4m9zriep0PHsf6AFLKIiqdfeAIilHguwCzg5dYhY/Q5qD/LfpqbXJP+VXyva
+         dzPQ==
+X-Gm-Message-State: AOAM532DS6SvJ2XDxwRhiIR1Mu+lFnJE0dO86GxK8lbh5LD2kxGXTUGZ
+        ckgTnEP8QFEAvL4uepBJ57s=
+X-Google-Smtp-Source: ABdhPJwGK1w7GFZui+UX4nxgbHVeI56Iu2D5hjeSldD82+ip3NkTL1jWcNoRnxoO7LnJTjwfoGvugw==
+X-Received: by 2002:a65:6187:: with SMTP id c7mr35068030pgv.349.1626863345481;
+        Wed, 21 Jul 2021 03:29:05 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:18:efec::4b1])
+        by smtp.gmail.com with ESMTPSA id t37sm26803912pfg.14.2021.07.21.03.28.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jul 2021 15:16:10 -0700 (PDT)
-Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     geert@linux-m68k.org, linux-arch@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, torvalds@linux-foundation.org,
-        schwab@linux-m68k.org
-References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
- <87zgunzovm.fsf@disp2133> <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
- <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com> <8735scvklk.fsf@disp2133>
- <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
- <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com> <87h7gopvz2.fsf@disp2133>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com>
-Date:   Wed, 21 Jul 2021 10:16:05 +1200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Wed, 21 Jul 2021 03:29:05 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+Subject: Re: [Resend RFC PATCH V4 09/13] x86/Swiotlb/HV: Add Swiotlb bounce
+ buffer remap function for HV IVM
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        kirill.shutemov@linux.intel.com, akpm@linux-foundation.org,
+        rppt@kernel.org, Tianyu.Lan@microsoft.com, thomas.lendacky@amd.com,
+        ardb@kernel.org, robh@kernel.org, nramas@linux.microsoft.com,
+        pgonda@google.com, martin.b.radev@gmail.com, david@redhat.com,
+        krish.sadhukhan@oracle.com, saravanand@fb.com,
+        xen-devel@lists.xenproject.org, keescook@chromium.org,
+        rientjes@google.com, hannes@cmpxchg.org,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
+        anparri@microsoft.com
+References: <20210707154629.3977369-1-ltykernel@gmail.com>
+ <20210707154629.3977369-10-ltykernel@gmail.com>
+ <20210720135437.GA13554@lst.de>
+Message-ID: <8f1a285d-4b67-8041-d326-af565b2756c0@gmail.com>
+Date:   Wed, 21 Jul 2021 18:28:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <87h7gopvz2.fsf@disp2133>
+In-Reply-To: <20210720135437.GA13554@lst.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Eric,
+Thanks for review.
 
-On 21/07/21 8:32 am, Eric W. Biederman wrote:
->
->> diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
->> index a8f4161..6c92d38 100644
->> --- a/arch/m68k/fpsp040/skeleton.S
->> +++ b/arch/m68k/fpsp040/skeleton.S
->> @@ -502,7 +502,17 @@ in_ea:
->>   	.section .fixup,#alloc,#execinstr
->>   	.even
->>   1:
+On 7/20/2021 9:54 PM, Christoph Hellwig wrote:
+> 
+> Please split the swiotlb changes into a separate patch from the
+> consumer.
+
+OK. Will update.
+
+> 
+>>   }
 >> +
->> +	SAVE_ALL_INT
->> +	SAVE_SWITCH_STACK
->          ^^^^^^^^^^
->
-> I don't think this saves the registers in the well known fixed location
-> on the stack because some registers are saved at the exception entry
-> point.
+>> +/*
+>> + * hv_map_memory - map memory to extra space in the AMD SEV-SNP Isolation VM.
+>> + */
+>> +unsigned long hv_map_memory(unsigned long addr, unsigned long size)
+>> +{
+>> +	unsigned long *pfns = kcalloc(size / HV_HYP_PAGE_SIZE,
+>> +				      sizeof(unsigned long),
+>> +		       GFP_KERNEL);
+>> +	unsigned long vaddr;
+>> +	int i;
+>> +
+>> +	if (!pfns)
+>> +		return (unsigned long)NULL;
+>> +
+>> +	for (i = 0; i < size / HV_HYP_PAGE_SIZE; i++)
+>> +		pfns[i] = virt_to_hvpfn((void *)addr + i * HV_HYP_PAGE_SIZE) +
+>> +			(ms_hyperv.shared_gpa_boundary >> HV_HYP_PAGE_SHIFT);
+>> +
+>> +	vaddr = (unsigned long)vmap_pfn(pfns, size / HV_HYP_PAGE_SIZE,
+>> +					PAGE_KERNEL_IO);
+>> +	kfree(pfns);
+>> +
+>> +	return vaddr;
+> 
+> This seems to miss a 'select VMAP_PFN'. 
 
-The FPU exception entry points are not using the exception entry code in 
-head.S. These entry points are stored in the exception vector table 
-directly. No saving of a syscall stack frame happens there. The FPU 
-places its exception frame on the stack, and that is what the FPU 
-exception handlers use.
+VMAP_PFN has been selected in the previous patch "RFC PATCH V4 08/13]
+HV/Vmbus: Initialize VMbus ring buffer for Isolation VM"
 
-(If these have to call out to the generic exception handlers again, they 
-will build a minimal stack frame, see code in skeleton.S.)
+> But more importantly I don't
+> think this actually works.  Various DMA APIs do expect a struct page
+> backing, so how is this going to work with say dma_mmap_attrs or
+> dma_get_sgtable_attrs?
 
-Calling fpsp040_die() is no different from calling a syscall that may 
-need to have access to the full stack frame. The 'fixed location' is 
-just 'on the stack before calling  fpsp040_die()', again this is no 
-different from calling e.g. sys_fork() which does not take a pointer to 
-the begin of the stack frame as an argument.
+dma_mmap_attrs() and dma_get_sgtable_attrs() get input virtual address
+belonging to backing memory with struct page and returns bounce buffer
+dma physical address which is below shared_gpa_boundary(vTOM) and passed
+to Hyper-V via vmbus protocol.
 
-I must admit I never looked at how do_exit() figures out where the stack 
-frame containing the saved registers is stored, I just assumed it 
-unwinds the stack up to the point where the caller syscall was made, and 
-works from there. The same strategy ought to work here.
+The new map virtual address is only to access bounce buffer in swiotlb
+code and will not be used other places. It's stored in the mem->vstart.
+So the new API set_memory_decrypted_map() in this series is only called
+in the swiotlb code. Other platforms may replace set_memory_decrypted()
+with set_memory_decrypted_map() as requested.
 
->
-> Without being saved at the well known fixed location if some process
-> stops in PTRACE_EVENT_EXIT in do_exit we likely get some complete
-> gibberish.
->
-> That is probably safe.
->
->>   	jbra	fpsp040_die
->> +	addql   #8,%sp
->> +	addql   #8,%sp
->> +	addql   #8,%sp
->> +	addql   #8,%sp
->> +	addql   #8,%sp
->> +	addql   #4,%sp
->> +	rts
-> Especially as everything after jumping to fpsp040_die does not execute.
+> 
+>> +static unsigned long __map_memory(unsigned long addr, unsigned long size)
+>> +{
+>> +	if (hv_is_isolation_supported())
+>> +		return hv_map_memory(addr, size);
+>> +
+>> +	return addr;
+>> +}
+>> +
+>> +static void __unmap_memory(unsigned long addr)
+>> +{
+>> +	if (hv_is_isolation_supported())
+>> +		hv_unmap_memory(addr);
+>> +}
+>> +
+>> +unsigned long set_memory_decrypted_map(unsigned long addr, unsigned long size)
+>> +{
+>> +	if (__set_memory_enc_dec(addr, size / PAGE_SIZE, false))
+>> +		return (unsigned long)NULL;
+>> +
+>> +	return __map_memory(addr, size);
+>> +}
+>> +
+>> +int set_memory_encrypted_unmap(unsigned long addr, unsigned long size)
+>> +{
+>> +	__unmap_memory(addr);
+>> +	return __set_memory_enc_dec(addr, size / PAGE_SIZE, true);
+>> +}
+> 
+> Why this obsfucation into all kinds of strange helpers?  Also I think
+> we want an ops vectors (or alternative calls) instead of the random
+> if checks here.
 
-Unless we change fpsp040_die() to call force_sig(SIGSEGV).
+Yes, agree and will add ops for different platforms to map/unmap memory.
 
-Cheers,
+> 
+>> + * @vstart:	The virtual start address of the swiotlb memory pool. The swiotlb
+>> + *		memory pool may be remapped in the memory encrypted case and store
+> 
+> Normall we'd call this vaddr or cpu_addr.
 
-     Michael
+OK. Will update.
 
+> 
+>> -	set_memory_decrypted((unsigned long)vaddr, bytes >> PAGE_SHIFT);
+>> -	memset(vaddr, 0, bytes);
+>> +	mem->vstart = (void *)set_memory_decrypted_map((unsigned long)vaddr, bytes);
+> 
+> Please always pass kernel virtual addresses as pointers.
+> 
+> And I think these APIs might need better names, e.g.
+> 
+> arch_dma_map_decrypted and arch_dma_unmap_decrypted.
+> 
+> Also these will need fallback versions for non-x86 architectures that
+> currently use memory encryption.
 
->
-> Eric
->
->
->>   
->>   	.section __ex_table,#alloc
->>   	.align	4
+Sure. Will update in the next version.
+
