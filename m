@@ -2,25 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD053D2EB9
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 23:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D546A3D2EE4
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 23:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbhGVU1i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 16:27:38 -0400
-Received: from mga04.intel.com ([192.55.52.120]:21084 "EHLO mga04.intel.com"
+        id S231260AbhGVUfD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 16:35:03 -0400
+Received: from mga07.intel.com ([134.134.136.100]:56216 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230455AbhGVU1h (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Jul 2021 16:27:37 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="209847801"
+        id S230455AbhGVUfD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Jul 2021 16:35:03 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="275564231"
 X-IronPort-AV: E=Sophos;i="5.84,262,1620716400"; 
-   d="scan'208";a="209847801"
+   d="scan'208";a="275564231"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 14:08:09 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 14:15:23 -0700
 X-IronPort-AV: E=Sophos;i="5.84,262,1620716400"; 
-   d="scan'208";a="454879819"
+   d="scan'208";a="454881931"
 Received: from mjang2-mobl1.amr.corp.intel.com (HELO [10.209.3.78]) ([10.209.3.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 14:08:08 -0700
-Subject: Re: [PATCH v28 00/32] Control-flow Enforcement: Shadow Stack
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 14:15:22 -0700
+Subject: Re: [PATCH v28 26/32] x86/cet/shstk: Introduce shadow stack token
+ setup/verify routines
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -51,6 +52,7 @@ To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Haitao Huang <haitao.huang@intel.com>,
         Rick P Edgecombe <rick.p.edgecombe@intel.com>
 References: <20210722205219.7934-1-yu-cheng.yu@intel.com>
+ <20210722205219.7934-27-yu-cheng.yu@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
  xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
@@ -95,33 +97,37 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
  ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
  z5cecg==
-Message-ID: <dbad8677-bad3-a940-276b-dc2b6abf8b28@intel.com>
-Date:   Thu, 22 Jul 2021 14:08:07 -0700
+Message-ID: <6cff5396-dff3-8db2-0883-62125252741c@intel.com>
+Date:   Thu, 22 Jul 2021 14:15:19 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210722205219.7934-1-yu-cheng.yu@intel.com>
+In-Reply-To: <20210722205219.7934-27-yu-cheng.yu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/22/21 1:51 PM, Yu-cheng Yu wrote:
-> Linux distributions with CET are available now, and Intel processors with CET
-> are already on the market.  It would be nice if CET support can be accepted
-> into the kernel.
-> 
-> Changes in v28:
-> - Rebase to Linus tree v5.14-rc2.
-> - Patch #1: Update Document to indicate no-user-shstk also disables IBT.
-> - Patch #23: Update shstk_setup() with wrmsrl_safe().  Update return value.
-> - Patch #25: Split out copy_thread() changes.  Add support for old clone().
->   Add comments.
-> - Add comments for get_xsave_addr() (Patch #25, #26).
+On 7/22/21 1:52 PM, Yu-cheng Yu wrote:
+> +	if (fpregs_state_valid(fpu, smp_processor_id())) {
+> +		rdmsrl(MSR_IA32_PL3_SSP, ssp);
+> +	} else {
+> +		struct cet_user_state *p;
+> +
+> +		/*
+> +		 * When !fpregs_state_valid() and get_xsave_addr() returns
+> +		 * null, XFEAUTRE_CET_USER is in init state.  Shadow stack
+> +		 * pointer is null in this case, so return zero.
+> +		 */
+> +		p = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
+> +		if (p)
+> +			ssp = p->user_ssp;
+> +	}
+> +
+> +	fpregs_unlock();
 
-Could you characterize where this whole thing is?
-
-Are we at the point where the feedback is slowing down?  What kind of
-feedback are you getting?  How stable is the ABI versus the last revision?
+Why are we even calling into this code if shadow stacks might be
+disabled?  Seems like we should have just errored out long before
+getting here.
