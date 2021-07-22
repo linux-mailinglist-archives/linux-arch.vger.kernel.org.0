@@ -2,77 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F193D2498
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 15:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5CB3D24FD
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 15:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbhGVMra (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 08:47:30 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:33013 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbhGVMr3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jul 2021 08:47:29 -0400
-Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MGyl3-1ltaAy0ilX-00E9lL for <linux-arch@vger.kernel.org>; Thu, 22 Jul
- 2021 15:28:03 +0200
-Received: by mail-wr1-f46.google.com with SMTP id i94so5950828wri.4
-        for <linux-arch@vger.kernel.org>; Thu, 22 Jul 2021 06:28:03 -0700 (PDT)
-X-Gm-Message-State: AOAM533Lldmb74X32djIN79YroIcFVutLXFy8UPvIwhaX3Rz5B8KFXql
-        BJDEDNDYGyka/rZpugWXAjIkklKC5XkK+9lIs7o=
-X-Google-Smtp-Source: ABdhPJyEeRh/i7uy8XM9NvCuzeD2SadMHGpmQsjRneZJUju2Crztab4RhvWfH6JSCd3qCw/c6BFO+frodmECiKxCuHg=
-X-Received: by 2002:adf:f2c6:: with SMTP id d6mr49636087wrp.286.1626960482848;
- Thu, 22 Jul 2021 06:28:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <202107222016.1Ulr7QC7-lkp@intel.com>
-In-Reply-To: <202107222016.1Ulr7QC7-lkp@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 22 Jul 2021 15:27:46 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0qym+oh_dQB-Mis1wnQVZRf6VGNys_o8EZdPE9Ft=SDg@mail.gmail.com>
-Message-ID: <CAK8P3a0qym+oh_dQB-Mis1wnQVZRf6VGNys_o8EZdPE9Ft=SDg@mail.gmail.com>
-Subject: Re: [asm-generic:asm-generic-uaccess-5 1/8] arch/um/kernel/skas/uaccess.c:246:17:
- error: 'src' undeclared
-To:     kernel test robot <lkp@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kbuild-all@lists.01.org,
-        linux-arch <linux-arch@vger.kernel.org>
+        id S232177AbhGVNSg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 09:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232105AbhGVNSg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jul 2021 09:18:36 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82173C061575;
+        Thu, 22 Jul 2021 06:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=NNcV9llPrdlEYkKe7+LBF3xFYLJpZdKYVGYe+A5Q+4I=;
+        t=1626962351; x=1628171951; b=S42X4+0j590vY4yyWmE9Z6M2vfPMqU6ZVMC2NpDqG24s75X
+        p0VZ8+yPU7I8uMB2QbDCZIQ7OJA8yoYCNeFdQ5UqXC/Idybgz5gps27YZ+QR3rh+AMb1OWtUbbZQm
+        2ssk/Dr1IEv1rXw45C4ldEf+xi0ArjFqXXHtP9O1VtD32/0BbUZzOwRxxPBwQxOCzBnlNDCypoDZv
+        9x0cWOUr/h0K/snr4No81FkSnb+J5iULPldNGBxi8glSLKV6+9yYyASglCaRxtYXNoa0fYMTjenpS
+        JIUvnJ/0MIX77P07mRDjzRwlrE6v/Zn86xf+2RgfyG+F3i5gjtghrRspjZ3Pk4Cg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1m6ZAW-0007sj-NN; Thu, 22 Jul 2021 15:57:59 +0200
+Message-ID: <29adc1c164805e355b37d1d4668ebda9fb7fa872.camel@sipsolutions.net>
+Subject: Re: [PATCH v3 9/9] asm-generic: reverse GENERIC_{STRNCPY_FROM,
+ STRNLEN}_USER symbols
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Brian Cain <bcain@codeaurora.org>,
+        Chris Zankel <chris@zankel.net>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, Jeff Dike <jdike@addtoit.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Richard Weinberger <richard@nod.at>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        uclinux-h8-devel@lists.sourceforge.jp
+Date:   Thu, 22 Jul 2021 15:57:56 +0200
+In-Reply-To: <20210722124814.778059-10-arnd@kernel.org>
+References: <20210722124814.778059-1-arnd@kernel.org>
+         <20210722124814.778059-10-arnd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:EgmUbsycbriTiOeGk0oMWUFX6GaOUR216QGYvWCtkv4AYOLnSiS
- QHtKHQAg8kxLvIOtIikCbu46GnWyzdb4CqQK4NXzsdSTZZIR1bmnuJliRDZWEPQN0N7LOiT
- ov253pbUo1k3GklPbweoNBrzDpiAOtr59wGv0vE+aRKn+IlK61xrvvV+Na6LzHsWVuJw591
- 5YTz9x/0iPs5dI6dMnj0w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:FD9omCeXbuQ=:AgVlClhKgHouwHePEorYaO
- xnJZpLqJvnkmLEFaErVHry1Cbhu39JtRnRS6vRXIkSrTt9aUNRvlUBGO9et2l1xnXOrAylzLt
- xrlSxLA2xOqd1lvWx/tzopHFtED600Lb+zDxboV2lcpoozzBMVzlT1vR2gqXMBvWdB7Uj/Qnj
- LxAwDnCi74ob106XGI/tldvKTmGrTiPfmAxvTaGX/MV2JkvS4vzPCNEIO8grO3IbY29v17HXi
- jYfkB0wx9k8svib+WgR3u+2nKvB2olrtYVNTSU7I46c/tj4sG4QZCf804kDP+PSvg6NebsKXM
- 9y9a6vmM/aqW3JyWXzknU9aDZ3zuUXt/8WFOTZigq79WeHOUlP00pIpKJW9NU4HU2zPSSpKyC
- 2Njsi9QynU+pjz0CbBcS7a1MD9qJ3aB2DZfEPEHGDGN1FxyVK3ARYbEqqD/qM3rds/nIW8PKn
- GebuHt56lTIAU9Z0kOyAJkZ5OWxoOql9JqVw8f4Yhpa9EpVCADzy0ZePngd7m6/dFxmwb+F72
- JIQcy5SOiM6hNVLjvuSVwzYgKY2Tb9HlAKU11w6B2IJx6auGk2ZJSnJPKI1a2OnlVPS+Z1hXq
- HsXBYmYOP6D1Es1oeZKw1eaWf+5SglVSERUr94TWwfwDwYk0Nl9S5vqETpxf7NykkaegXccEw
- e8lV1aFLIc2bnaZ8WZiRsU3BfRybjUPz9URu/VQXlYHbYHjAmyNuMxRgTWFl6JhHX4oSQu8R4
- VnCdZCyNdHitCCSExWcZViuBcXaSooMt3XwgJpx2xRyi1+Tgt7XSqb6259hQSuK2GpnBfzFqt
- JwjhUTwi/hC5d5WXAF2ccKxiCXVObVHrlX5wgGO620y3ypnhSRQ6APNrUD6oirc8XQCw8wx
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 22, 2021 at 2:43 PM kernel test robot <lkp@intel.com> wrote:
->
->    In file included from arch/um/include/asm/uaccess.h:39,
->                     from include/linux/uaccess.h:11,
->                     from include/linux/sched/task.h:11,
->                     from include/linux/sched/signal.h:9,
->                     from include/linux/rcuwait.h:6,
->                     from include/linux/percpu-rwsem.h:7,
->                     from include/linux/fs.h:33,
->                     from include/linux/highmem.h:5,
->                     from arch/um/kernel/skas/uaccess.c:7:
->    arch/um/kernel/skas/uaccess.c: In function 'strnlen_user':
-> >> arch/um/kernel/skas/uaccess.c:246:17: error: 'src' undeclared (first use in this function)
->      246 |  if (!access_ok(src, 1))
->          |                 ^~~
+> 
+> The remaining architectures at the moment are: ia64, mips, parisc,
+> s390, um and xtensa. We should probably convert these as well, but
 
-Thanks for the report, fixed now.
+I'm not sure it makes sense to convert um, the implementation uses
+strncpy(), and that should use the libc implementation, which is tuned
+for the actual hardware that the binary is running on, so performance
+wise that might be better.
 
-      Arnd
+OTOH, maybe this is all in the noise given the huge syscall overhead in
+um, so maybe unifying it would make more sense.
+
+johannes
+
