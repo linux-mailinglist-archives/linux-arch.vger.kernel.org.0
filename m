@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDC83D2E3C
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 22:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11323D2E43
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 22:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbhGVUMt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 16:12:49 -0400
-Received: from mga07.intel.com ([134.134.136.100]:54382 "EHLO mga07.intel.com"
+        id S231925AbhGVUMz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 16:12:55 -0400
+Received: from mga07.intel.com ([134.134.136.100]:54383 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231314AbhGVUM2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Jul 2021 16:12:28 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="275560622"
+        id S231318AbhGVUM3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Jul 2021 16:12:29 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="275560625"
 X-IronPort-AV: E=Sophos;i="5.84,262,1620716400"; 
-   d="scan'208";a="275560622"
+   d="scan'208";a="275560625"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 13:53:03 -0700
 X-IronPort-AV: E=Sophos;i="5.84,262,1620716400"; 
-   d="scan'208";a="502035502"
+   d="scan'208";a="502035505"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 13:53:03 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -50,9 +50,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Haitao Huang <haitao.huang@intel.com>,
         Rick P Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v28 24/32] x86/process: Change copy_thread() argument 'arg' to 'stack_size'
-Date:   Thu, 22 Jul 2021 13:52:11 -0700
-Message-Id: <20210722205219.7934-25-yu-cheng.yu@intel.com>
+Subject: [PATCH v28 25/32] x86/cet/shstk: Handle thread shadow stack
+Date:   Thu, 22 Jul 2021 13:52:12 -0700
+Message-Id: <20210722205219.7934-26-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210722205219.7934-1-yu-cheng.yu@intel.com>
 References: <20210722205219.7934-1-yu-cheng.yu@intel.com>
@@ -62,49 +62,184 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The single call site of copy_thread() passes stack size in 'arg'.  To make
-this clear and in preparation of using this argument for shadow stack
-allocation, change 'arg' to 'stack_size'.  No functional changes.
+For clone() with CLONE_VM, except vfork, the child and the parent must have
+separate shadow stacks.  Thus, the kernel allocates, and frees on thread
+exit a new shadow stack for the child.
+
+Use stack_size passed from clone3() syscall for thread shadow stack size.
+A compat-mode thread shadow stack size is further reduced to 1/4.  This
+allows more threads to run in a 32-bit address space.
+
+The earlier version of clone() did not have stack_size passed in.  In that
+case, use RLIMIT_STACK size and cap to 4 GB.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/kernel/process.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+v28:
+- Split out copy_thread() argument name changes to a new patch.
+- Add compatibility for earlier clone(), which does not pass stack_size.
+- Add comment for get_xsave_addr(), explain the handling of null return
+  value.
 
+ arch/x86/include/asm/cet.h         |  5 +++
+ arch/x86/include/asm/mmu_context.h |  3 ++
+ arch/x86/kernel/process.c          |  6 +++
+ arch/x86/kernel/shstk.c            | 63 +++++++++++++++++++++++++++++-
+ 4 files changed, 76 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+index 6432baf4de1f..4314a41ab3c9 100644
+--- a/arch/x86/include/asm/cet.h
++++ b/arch/x86/include/asm/cet.h
+@@ -17,10 +17,15 @@ struct thread_shstk {
+ 
+ #ifdef CONFIG_X86_SHADOW_STACK
+ int shstk_setup(void);
++int shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
++			     unsigned long stack_size);
+ void shstk_free(struct task_struct *p);
+ void shstk_disable(void);
+ #else
+ static inline int shstk_setup(void) { return 0; }
++static inline int shstk_alloc_thread_stack(struct task_struct *p,
++					   unsigned long clone_flags,
++					   unsigned long stack_size) { return 0; }
+ static inline void shstk_free(struct task_struct *p) {}
+ static inline void shstk_disable(void) {}
+ #endif
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index 27516046117a..e1dd083261a5 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -12,6 +12,7 @@
+ #include <asm/tlbflush.h>
+ #include <asm/paravirt.h>
+ #include <asm/debugreg.h>
++#include <asm/cet.h>
+ 
+ extern atomic64_t last_mm_ctx_id;
+ 
+@@ -146,6 +147,8 @@ do {						\
+ #else
+ #define deactivate_mm(tsk, mm)			\
+ do {						\
++	if (!tsk->vfork_done)			\
++		shstk_free(tsk);		\
+ 	load_gs_index(0);			\
+ 	loadsegment(fs, 0);			\
+ } while (0)
 diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 1d9463e3096b..e6e4d8bc9023 100644
+index e6e4d8bc9023..bade6a594d63 100644
 --- a/arch/x86/kernel/process.c
 +++ b/arch/x86/kernel/process.c
-@@ -116,8 +116,9 @@ static int set_new_tls(struct task_struct *p, unsigned long tls)
- 		return do_set_thread_area_64(p, ARCH_SET_FS, tls);
+@@ -43,6 +43,7 @@
+ #include <asm/io_bitmap.h>
+ #include <asm/proto.h>
+ #include <asm/frame.h>
++#include <asm/cet.h>
+ 
+ #include "process.h"
+ 
+@@ -103,6 +104,7 @@ void exit_thread(struct task_struct *tsk)
+ 
+ 	free_vm86(t);
+ 
++	shstk_free(tsk);
+ 	fpu__drop(fpu);
  }
  
--int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
--		struct task_struct *p, unsigned long tls)
-+int copy_thread(unsigned long clone_flags, unsigned long sp,
-+		unsigned long stack_size, struct task_struct *p,
-+		unsigned long tls)
+@@ -200,6 +202,10 @@ int copy_thread(unsigned long clone_flags, unsigned long sp,
+ 	if (clone_flags & CLONE_SETTLS)
+ 		ret = set_new_tls(p, tls);
+ 
++	/* Allocate a new shadow stack for pthread */
++	if (!ret)
++		ret = shstk_alloc_thread_stack(p, clone_flags, stack_size);
++
+ 	if (!ret && unlikely(test_tsk_thread_flag(current, TIF_IO_BITMAP)))
+ 		io_bitmap_share(p);
+ 
+diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+index 5993aa8db338..a3fecd608388 100644
+--- a/arch/x86/kernel/shstk.c
++++ b/arch/x86/kernel/shstk.c
+@@ -75,6 +75,61 @@ int shstk_setup(void)
+ 	return err;
+ }
+ 
++int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
++			     unsigned long stack_size)
++{
++	struct thread_shstk *shstk = &tsk->thread.shstk;
++	struct cet_user_state *state;
++	unsigned long addr;
++
++	/*
++	 * Earlier clone() does not pass stack_size.  Use RLIMIT_STACK and
++	 * cap to 4 GB.
++	 */
++	if (!stack_size)
++		stack_size = min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G);
++
++	if (!shstk->size)
++		return 0;
++
++	/*
++	 * For CLONE_VM, except vfork, the child needs a separate shadow
++	 * stack.
++	 */
++	if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
++		return 0;
++
++	/*
++	 * This is in clone() syscall and fpu__copy() already copies xstates
++	 * from the parent.  If get_xsave_addr() returns null, then XFEATURE_
++	 * CET_USER is still in init state, which certainly is an error.
++	 */
++	state = get_xsave_addr(&tsk->thread.fpu.state.xsave, XFEATURE_CET_USER);
++	if (!state)
++		return -EINVAL;
++
++	/*
++	 * Compat-mode pthreads share a limited address space.
++	 * If each function call takes an average of four slots
++	 * stack space, allocate 1/4 of stack size for shadow stack.
++	 */
++	if (in_compat_syscall())
++		stack_size /= 4;
++
++	stack_size = round_up(stack_size, PAGE_SIZE);
++	addr = alloc_shstk(stack_size);
++	if (IS_ERR_VALUE(addr)) {
++		shstk->base = 0;
++		shstk->size = 0;
++		return PTR_ERR((void *)addr);
++	}
++
++	state->user_ssp = (u64)(addr + stack_size);
++	shstk->base = addr;
++	shstk->size = stack_size;
++	return 0;
++}
++
+ void shstk_free(struct task_struct *tsk)
  {
- 	struct inactive_task_frame *frame;
- 	struct fork_frame *fork_frame;
-@@ -158,7 +159,7 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
- 	if (unlikely(p->flags & PF_KTHREAD)) {
- 		p->thread.pkru = pkru_get_init_value();
- 		memset(childregs, 0, sizeof(struct pt_regs));
--		kthread_frame_init(frame, sp, arg);
-+		kthread_frame_init(frame, sp, stack_size);
- 		return 0;
- 	}
+ 	struct thread_shstk *shstk = &tsk->thread.shstk;
+@@ -84,7 +139,13 @@ void shstk_free(struct task_struct *tsk)
+ 	    !shstk->base)
+ 		return;
  
-@@ -191,7 +192,7 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
- 		 */
- 		childregs->sp = 0;
- 		childregs->ip = 0;
--		kthread_frame_init(frame, sp, arg);
-+		kthread_frame_init(frame, sp, stack_size);
- 		return 0;
- 	}
+-	if (!tsk->mm)
++	/*
++	 * When fork() with CLONE_VM fails, the child (tsk) already has a
++	 * shadow stack allocated, and exit_thread() calls this function to
++	 * free it.  In this case the parent (current) and the child share
++	 * the same mm struct.
++	 */
++	if (!tsk->mm || tsk->mm != current->mm)
+ 		return;
  
+ 	while (1) {
 -- 
 2.21.0
 
