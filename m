@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A923D23B2
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 14:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E743D23B8
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 14:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbhGVMIx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 08:08:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33074 "EHLO mail.kernel.org"
+        id S231960AbhGVMIy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 08:08:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33226 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232031AbhGVMIq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Jul 2021 08:08:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D64A61376;
-        Thu, 22 Jul 2021 12:49:16 +0000 (UTC)
+        id S232029AbhGVMIw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Jul 2021 08:08:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E2C5061370;
+        Thu, 22 Jul 2021 12:49:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626958161;
-        bh=9x/D2B8Ckh9kJKg3NBeTbDgPlisGTuKwHHdZXpMw9jQ=;
+        s=k20201202; t=1626958167;
+        bh=XPhpdi27QaAvcGbuFvwNEkCwvX3l5IQMstM8g6NJxdY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AfeS6riJnkQc2D4GLt6Kqrrw2LRawAfLu2rVqZJU0uN7PtqARUEVZtQ60sf5rZvTT
-         aSmuwWQaD1/7o+/UzcXjVSuimNjLYSll9JhUOtwUxQ+W8XVgO8xB9c7/ykuS9EUTNM
-         uxDMEzwhhqieVob8FLOrQC4PtORDcTAXja4KzwN3tOPprSiS7XWzKvubSI4B9eOq1u
-         73m7vLmCAOHLK51W/qVhOXKjRgAYOt5rdoz0Ip3+3sWWkKPUsqYFMrLyejJmr/2U14
-         AgNDwnt3niJNGpuiLrhhtalDDP4K7phdFQlukCSDkom4AyjTw7yqX1zimm1d7VtsSe
-         YJA+suLjgStEg==
+        b=USR3dk0Q8tG5ik9xAyJYZrNv8LbCR+3r7vdnwRLGKKoOLXR8P4ECDNPHiwwRi2Mov
+         i6qrDRkPYkuPOI8yo7LVTNpZo7Yd3YzOxYsnbsnnsBTPxNP4R6rN7USAoHqIdpuxB7
+         I1Wqwa7z4JFt4i7Y1hCnoOHN7AWeBrZsc0OXvbH+JbXz1Zhge1X8+P/RVU5lW+Najz
+         MI4I2Vp+8VqC8OWI990QG7sZmflfV5Der3f0kDAU9dzin+MvvApEYr/aXtnZHznBwp
+         P7sLZATtdORXSI/Yswi4H2b8hOpd4seSyPqxAaU+17PNUdIvIYE07dlMPgAsknxhjH
+         kSyR9u43pih9A==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arch@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -49,9 +49,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
         linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
         uclinux-h8-devel@lists.sourceforge.jp
-Subject: [PATCH v3 5/9] csky: use generic strncpy/strnlen from_user
-Date:   Thu, 22 Jul 2021 14:48:10 +0200
-Message-Id: <20210722124814.778059-6-arnd@kernel.org>
+Subject: [PATCH v3 6/9] microblaze: use generic strncpy/strnlen from_user
+Date:   Thu, 22 Jul 2021 14:48:11 +0200
+Message-Id: <20210722124814.778059-7-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210722124814.778059-1-arnd@kernel.org>
 References: <20210722124814.778059-1-arnd@kernel.org>
@@ -63,167 +63,182 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Remove the csky implemenation of strncpy/strnlen and instead use the
-generic versions.  The csky version is fairly slow because it always does
-byte accesses even for aligned data, and it lacks a checks for
-user_addr_max().
+Remove the microblaze implemenation of strncpy/strnlen and instead use
+the generic versions.  The microblaze version is fairly slow because it
+always does byte accesses even for aligned data, and it lacks a checks
+for user_addr_max().
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/csky/Kconfig               |   2 +
- arch/csky/include/asm/uaccess.h |   6 --
- arch/csky/lib/usercopy.c        | 108 --------------------------------
- 3 files changed, 2 insertions(+), 114 deletions(-)
+ arch/microblaze/Kconfig                   |  2 +
+ arch/microblaze/include/asm/uaccess.h     | 19 +----
+ arch/microblaze/kernel/microblaze_ksyms.c |  3 -
+ arch/microblaze/lib/uaccess_old.S         | 90 -----------------------
+ 4 files changed, 4 insertions(+), 110 deletions(-)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 2716f6395ba7..5043e221ced4 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -35,6 +35,8 @@ config CSKY
- 	select GENERIC_IRQ_MULTI_HANDLER
+diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
+index 14a67a42fcae..10dfa7b4feff 100644
+--- a/arch/microblaze/Kconfig
++++ b/arch/microblaze/Kconfig
+@@ -21,6 +21,8 @@ config MICROBLAZE
+ 	select GENERIC_IRQ_SHOW
+ 	select GENERIC_PCI_IOMAP
  	select GENERIC_SCHED_CLOCK
- 	select GENERIC_SMP_IDLE_THREAD
 +	select GENERIC_STRNCPY_FROM_USER
 +	select GENERIC_STRNLEN_USER
- 	select GENERIC_TIME_VSYSCALL
- 	select GENERIC_VDSO_32
- 	select GENERIC_GETTIMEOFDAY
-diff --git a/arch/csky/include/asm/uaccess.h b/arch/csky/include/asm/uaccess.h
-index e17c02a6709f..c40f06ee8d3e 100644
---- a/arch/csky/include/asm/uaccess.h
-+++ b/arch/csky/include/asm/uaccess.h
-@@ -209,12 +209,6 @@ unsigned long raw_copy_to_user(void *to, const void *from, unsigned long n);
- unsigned long __clear_user(void __user *to, unsigned long n);
- #define __clear_user __clear_user
- 
--long strncpy_from_user(char *dst, const char *src, long count);
--#define strncpy_from_user strncpy_from_user
--
--long strnlen_user(const char *s, long n);
--#define strnlen_user strnlen_user
--
- #include <asm/segment.h>
- #include <asm-generic/uaccess.h>
- 
-diff --git a/arch/csky/lib/usercopy.c b/arch/csky/lib/usercopy.c
-index 938b750d2fb1..3c01c54421ca 100644
---- a/arch/csky/lib/usercopy.c
-+++ b/arch/csky/lib/usercopy.c
-@@ -142,114 +142,6 @@ unsigned long raw_copy_to_user(void *to, const void *from,
- }
- EXPORT_SYMBOL(raw_copy_to_user);
- 
--/*
-- * __strncpy_from_user: - Copy a NUL terminated string from userspace,
-- * with less checking.
-- * @dst:   Destination address, in kernel space.  This buffer must be at
-- *         least @count bytes long.
-- * @src:   Source address, in user space.
-- * @count: Maximum number of bytes to copy, including the trailing NUL.
-- *
-- * Copies a NUL-terminated string from userspace to kernel space.
-- * Caller must check the specified block with access_ok() before calling
-- * this function.
-- *
-- * On success, returns the length of the string (not including the trailing
-- * NUL).
-- *
-- * If access to userspace fails, returns -EFAULT (some data may have been
-- * copied).
-- *
-- * If @count is smaller than the length of the string, copies @count bytes
-- * and returns @count.
-- */
--long strncpy_from_user(char *dst, const char *src, long count)
--{
--	long res, faultres;
--	int tmp;
--
--	if (!access_ok(src, 1))
--		return -EFAULT;
--
--	__asm__ __volatile__(
--	"       cmpnei  %3, 0           \n"
--	"       bf      4f              \n"
--	"1:     cmpnei  %1, 0          	\n"
--	"       bf      5f              \n"
--	"2:     ldb     %4, (%3, 0)     \n"
--	"       stb     %4, (%2, 0)     \n"
--	"       cmpnei  %4, 0           \n"
--	"       bf      3f              \n"
--	"       addi    %3,  1          \n"
--	"       addi    %2,  1          \n"
--	"       subi    %1,  1          \n"
--	"       br      1b              \n"
--	"3:     subu	%0, %1          \n"
--	"       br      5f              \n"
--	"4:     mov     %0, %5          \n"
--	"       br      5f              \n"
--	".section __ex_table, \"a\"     \n"
--	".align   2                     \n"
--	".long    2b, 4b                \n"
--	".previous                      \n"
--	"5:                             \n"
--	: "=r"(res), "=r"(count), "=r"(dst),
--	  "=r"(src), "=r"(tmp), "=r"(faultres)
--	: "5"(-EFAULT), "0"(count), "1"(count),
--	  "2"(dst), "3"(src)
--	: "memory");
--
--	return res;
--}
--EXPORT_SYMBOL(strncpy_from_user);
--
--/*
-- * strnlen_user: - Get the size of a string in user space.
-- * @str: The string to measure.
-- * @n:   The maximum valid length
-- *
-- * Get the size of a NUL-terminated string in user space.
-- *
-- * Returns the size of the string INCLUDING the terminating NUL.
-- * On exception, returns 0.
-- * If the string is too long, returns a value greater than @n.
-- */
--long strnlen_user(const char *s, long n)
--{
--	unsigned long res, tmp;
--
--	if (!access_ok(src, 1))
--		return -EFAULT;
--
--	__asm__ __volatile__(
--	"       cmpnei  %1, 0           \n"
--	"       bf      3f              \n"
--	"1:     cmpnei  %0, 0           \n"
--	"       bf      3f              \n"
--	"2:     ldb     %3, (%1, 0)     \n"
--	"       cmpnei  %3, 0           \n"
--	"       bf      3f              \n"
--	"       subi    %0,  1          \n"
--	"       addi    %1,  1          \n"
--	"       br      1b              \n"
--	"3:     subu    %2, %0          \n"
--	"       addi    %2,  1          \n"
--	"       br      5f              \n"
--	"4:     movi    %0, 0           \n"
--	"       br      5f              \n"
--	".section __ex_table, \"a\"     \n"
--	".align   2                     \n"
--	".long    2b, 4b                \n"
--	".previous                      \n"
--	"5:                             \n"
--	: "=r"(n), "=r"(s), "=r"(res), "=r"(tmp)
--	: "0"(n), "1"(s), "2"(n)
--	: "memory");
--
--	return res;
--}
--EXPORT_SYMBOL(strnlen_user);
--
+ 	select HAVE_ARCH_HASH
+ 	select HAVE_ARCH_KGDB
+ 	select HAVE_ARCH_SECCOMP
+diff --git a/arch/microblaze/include/asm/uaccess.h b/arch/microblaze/include/asm/uaccess.h
+index c44b59470e45..bbe39fe00461 100644
+--- a/arch/microblaze/include/asm/uaccess.h
++++ b/arch/microblaze/include/asm/uaccess.h
+@@ -296,28 +296,13 @@ raw_copy_to_user(void __user *to, const void *from, unsigned long n)
  /*
-  * __clear_user: - Zero a block of memory in user space, with less checking.
-  * @to:   Destination address, in user space.
+  * Copy a null terminated string from userspace.
+  */
+-extern int __strncpy_user(char *to, const char __user *from, int len);
+-
+-static inline long
+-strncpy_from_user(char *dst, const char __user *src, long count)
+-{
+-	if (!access_ok(src, 1))
+-		return -EFAULT;
+-	return __strncpy_user(dst, src, count);
+-}
++extern long strncpy_from_user(char *dst, const char __user *src, long count);
+ 
+ /*
+  * Return the size of a string (including the ending 0)
+  *
+  * Return 0 on exception, a value greater than N if too long
+  */
+-extern int __strnlen_user(const char __user *sstr, int len);
+-
+-static inline long strnlen_user(const char __user *src, long n)
+-{
+-	if (!access_ok(src, 1))
+-		return 0;
+-	return __strnlen_user(src, n);
+-}
++extern long strnlen_user(const char __user *sstr, int len);
+ 
+ #endif /* _ASM_MICROBLAZE_UACCESS_H */
+diff --git a/arch/microblaze/kernel/microblaze_ksyms.c b/arch/microblaze/kernel/microblaze_ksyms.c
+index 303aaf13573b..14e0f2100c41 100644
+--- a/arch/microblaze/kernel/microblaze_ksyms.c
++++ b/arch/microblaze/kernel/microblaze_ksyms.c
+@@ -25,9 +25,6 @@ EXPORT_SYMBOL(_mcount);
+ /*
+  * Assembly functions that may be used (directly or indirectly) by modules
+  */
+-EXPORT_SYMBOL(__copy_tofrom_user);
+-EXPORT_SYMBOL(__strncpy_user);
+-
+ #ifdef CONFIG_OPT_LIB_ASM
+ EXPORT_SYMBOL(memcpy);
+ EXPORT_SYMBOL(memmove);
+diff --git a/arch/microblaze/lib/uaccess_old.S b/arch/microblaze/lib/uaccess_old.S
+index eca290090038..dd5f3bfbc2c5 100644
+--- a/arch/microblaze/lib/uaccess_old.S
++++ b/arch/microblaze/lib/uaccess_old.S
+@@ -12,96 +12,6 @@
+ #include <linux/linkage.h>
+ #include <asm/page.h>
+ 
+-/*
+- * int __strncpy_user(char *to, char *from, int len);
+- *
+- * Returns:
+- *  -EFAULT  for an exception
+- *  len      if we hit the buffer limit
+- *  bytes copied
+- */
+-
+-	.text
+-.globl __strncpy_user;
+-.type  __strncpy_user, @function
+-.align 4;
+-__strncpy_user:
+-
+-	/*
+-	 * r5 - to
+-	 * r6 - from
+-	 * r7 - len
+-	 * r3 - temp count
+-	 * r4 - temp val
+-	 */
+-	beqid	r7,3f
+-	addik	r3,r7,0		/* temp_count = len */
+-1:
+-	lbu	r4,r6,r0
+-	beqid	r4,2f
+-	sb	r4,r5,r0
+-
+-	addik	r5,r5,1
+-	addik	r6,r6,1		/* delay slot */
+-
+-	addik	r3,r3,-1
+-	bnei	r3,1b		/* break on len */
+-2:
+-	rsubk	r3,r3,r7	/* temp_count = len - temp_count */
+-3:
+-	rtsd	r15,8
+-	nop
+-	.size   __strncpy_user, . - __strncpy_user
+-
+-	.section	.fixup, "ax"
+-	.align	2
+-4:
+-	brid	3b
+-	addik	r3,r0, -EFAULT
+-
+-	.section	__ex_table, "a"
+-	.word	1b,4b
+-
+-/*
+- * int __strnlen_user(char __user *str, int maxlen);
+- *
+- * Returns:
+- *  0 on error
+- *  maxlen + 1  if no NUL byte found within maxlen bytes
+- *  size of the string (including NUL byte)
+- */
+-
+-	.text
+-.globl __strnlen_user;
+-.type  __strnlen_user, @function
+-.align 4;
+-__strnlen_user:
+-	beqid	r6,3f
+-	addik	r3,r6,0
+-1:
+-	lbu	r4,r5,r0
+-	beqid	r4,2f		/* break on NUL */
+-	addik	r3,r3,-1	/* delay slot */
+-
+-	bneid	r3,1b
+-	addik	r5,r5,1		/* delay slot */
+-
+-	addik	r3,r3,-1	/* for break on len */
+-2:
+-	rsubk	r3,r3,r6
+-3:
+-	rtsd	r15,8
+-	nop
+-	.size   __strnlen_user, . - __strnlen_user
+-
+-	.section	.fixup,"ax"
+-4:
+-	brid	3b
+-	addk	r3,r0,r0
+-
+-	.section	__ex_table,"a"
+-	.word	1b,4b
+-
+ /* Loop unrolling for __copy_tofrom_user */
+ #define COPY(offset)	\
+ 1:	lwi	r4 , r6, 0x0000 + offset;	\
 -- 
 2.29.2
 
