@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D7A3D2E8B
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 22:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B883D2E8D
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 22:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbhGVURd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 16:17:33 -0400
-Received: from mga03.intel.com ([134.134.136.65]:15252 "EHLO mga03.intel.com"
+        id S231462AbhGVURc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 16:17:32 -0400
+Received: from mga03.intel.com ([134.134.136.65]:15258 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231239AbhGVURa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S231241AbhGVURa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Thu, 22 Jul 2021 16:17:30 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="211800514"
+X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="211800521"
 X-IronPort-AV: E=Sophos;i="5.84,262,1620716400"; 
-   d="scan'208";a="211800514"
+   d="scan'208";a="211800521"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 13:58:04 -0700
 X-IronPort-AV: E=Sophos;i="5.84,262,1620716400"; 
-   d="scan'208";a="433273360"
+   d="scan'208";a="433273364"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 13:58:03 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -49,9 +49,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Haitao Huang <haitao.huang@intel.com>,
         Rick P Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v28 02/10] x86/cet/ibt: Add user-mode Indirect Branch Tracking support
-Date:   Thu, 22 Jul 2021 13:57:15 -0700
-Message-Id: <20210722205723.9476-3-yu-cheng.yu@intel.com>
+Subject: [PATCH v28 03/10] x86/cet/ibt: Handle signals for Indirect Branch Tracking
+Date:   Thu, 22 Jul 2021 13:57:16 -0700
+Message-Id: <20210722205723.9476-4-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210722205723.9476-1-yu-cheng.yu@intel.com>
 References: <20210722205723.9476-1-yu-cheng.yu@intel.com>
@@ -61,130 +61,195 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce user-mode Indirect Branch Tracking (IBT) support.  Add routines
-for the setup/disable of IBT.
+IBT state machine tracks CALL/JMP instructions.  When a such instruction is
+executed and before arriving at an ENDBR, it is in WAIT_FOR_ENDBR state,
+which can be read from CET_WAIT_ENDBR bit of MSR_IA32_U_CET.
+
+Further details are described in Intel SDM Vol. 1, Sec. 18.3.
+
+In handling signals, WAIT_FOR_ENDBR state is saved/restored with a new
+UC_WAIT_ENDBR flag being introduced.
+
+A legacy IA32 signal frame does not have ucontext, and cannot be supported
+with a uc flag.  Thus, IBT feature is not supported for ia32 app's, which
+is handled in a separate patch.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Cyrill Gorcunov <gorcunov@gmail.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: H. Peter Anvin <hpa@zytor.com>
 Cc: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/linux-api/f6e61dae-9805-c855-8873-7481ceb7ea79@intel.com/
 ---
-v28:
-- When IBT feature is not present, make ibt_setup() return success,
-  since this is a setup function, and if IBT feature is not present there
-  is no need for setup.
+ arch/x86/ia32/ia32_signal.c          | 15 ++++++++--
+ arch/x86/include/asm/cet.h           |  4 +++
+ arch/x86/include/uapi/asm/ucontext.h |  5 ++++
+ arch/x86/kernel/ibt.c                | 41 ++++++++++++++++++++++++++++
+ arch/x86/kernel/signal.c             |  6 ++++
+ 5 files changed, 68 insertions(+), 3 deletions(-)
 
-v27:
-- Change struct thread_shstk: ibt_enabled to ibt.
-- Create a helper for set/clear bits of MSR_IA32_U_CET.
-
- arch/x86/include/asm/cet.h |  9 ++++++
- arch/x86/kernel/Makefile   |  1 +
- arch/x86/kernel/ibt.c      | 58 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 68 insertions(+)
- create mode 100644 arch/x86/kernel/ibt.c
-
+diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
+index d7a30bc98e66..77d0fa90cc19 100644
+--- a/arch/x86/ia32/ia32_signal.c
++++ b/arch/x86/ia32/ia32_signal.c
+@@ -129,6 +129,7 @@ COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
+ {
+ 	struct pt_regs *regs = current_pt_regs();
+ 	struct rt_sigframe_ia32 __user *frame;
++	unsigned int uc_flags;
+ 	sigset_t set;
+ 
+ 	frame = (struct rt_sigframe_ia32 __user *)(regs->sp - 4);
+@@ -137,6 +138,11 @@ COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
+ 		goto badframe;
+ 	if (__get_user(set.sig[0], (__u64 __user *)&frame->uc.uc_sigmask))
+ 		goto badframe;
++	if (__get_user(uc_flags, &frame->uc.uc_flags))
++		goto badframe;
++
++	if (uc_flags & UC_WAIT_ENDBR)
++		ibt_set_wait_endbr();
+ 
+ 	set_current_blocked(&set);
+ 
+@@ -312,6 +318,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
+ 			compat_sigset_t *set, struct pt_regs *regs)
+ {
+ 	struct rt_sigframe_ia32 __user *frame;
++	unsigned int uc_flags = 0;
+ 	void __user *restorer;
+ 	void __user *fp = NULL;
+ 
+@@ -339,6 +346,9 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
+ 	if (setup_signal_shadow_stack(1, restorer))
+ 		return -EFAULT;
+ 
++	if (ibt_get_clear_wait_endbr())
++		uc_flags |= UC_WAIT_ENDBR;
++
+ 	if (!user_access_begin(frame, sizeof(*frame)))
+ 		return -EFAULT;
+ 
+@@ -348,9 +358,8 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
+ 
+ 	/* Create the ucontext.  */
+ 	if (static_cpu_has(X86_FEATURE_XSAVE))
+-		unsafe_put_user(UC_FP_XSTATE, &frame->uc.uc_flags, Efault);
+-	else
+-		unsafe_put_user(0, &frame->uc.uc_flags, Efault);
++		uc_flags |= UC_FP_XSTATE;
++	unsafe_put_user(uc_flags, &frame->uc.uc_flags, Efault);
+ 	unsafe_put_user(0, &frame->uc.uc_link, Efault);
+ 	unsafe_compat_save_altstack(&frame->uc.uc_stack, regs->sp, Efault);
+ 
 diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-index c76a85fbd59f..3dfca29a7c0b 100644
+index 3dfca29a7c0b..2618faf3fda5 100644
 --- a/arch/x86/include/asm/cet.h
 +++ b/arch/x86/include/asm/cet.h
-@@ -14,6 +14,7 @@ struct thread_shstk {
- 	u64	base;
- 	u64	size;
- 	u64	locked:1;
-+	u64	ibt:1;
- };
- 
- #ifdef CONFIG_X86_SHADOW_STACK
-@@ -42,6 +43,14 @@ static inline int setup_signal_shadow_stack(int ia32, void __user *restorer) { r
- static inline int restore_signal_shadow_stack(void) { return 0; }
+@@ -46,9 +46,13 @@ static inline int restore_signal_shadow_stack(void) { return 0; }
+ #ifdef CONFIG_X86_IBT
+ int ibt_setup(void);
+ void ibt_disable(void);
++int ibt_get_clear_wait_endbr(void);
++int ibt_set_wait_endbr(void);
+ #else
+ static inline int ibt_setup(void) { return 0; }
+ static inline void ibt_disable(void) {}
++static inline int ibt_get_clear_wait_endbr(void) { return 0; }
++static inline int ibt_set_wait_endbr(void) { return 0; }
  #endif
  
-+#ifdef CONFIG_X86_IBT
-+int ibt_setup(void);
-+void ibt_disable(void);
-+#else
-+static inline int ibt_setup(void) { return 0; }
-+static inline void ibt_disable(void) {}
-+#endif
-+
  #ifdef CONFIG_X86_SHADOW_STACK
- int prctl_cet(int option, u64 arg2);
- #else
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 39e826b5cabd..cce07a920fec 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -152,6 +152,7 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
- obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
- obj-$(CONFIG_X86_SHADOW_STACK)		+= shstk.o
- obj-$(CONFIG_X86_SHADOW_STACK)		+= shstk.o cet_prctl.o
-+obj-$(CONFIG_X86_IBT)			+= ibt.o
- ###
- # 64 bit specific files
- ifeq ($(CONFIG_X86_64),y)
-diff --git a/arch/x86/kernel/ibt.c b/arch/x86/kernel/ibt.c
-new file mode 100644
-index 000000000000..4ab7af33b274
---- /dev/null
-+++ b/arch/x86/kernel/ibt.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/arch/x86/include/uapi/asm/ucontext.h b/arch/x86/include/uapi/asm/ucontext.h
+index 5657b7a49f03..905419de2cc7 100644
+--- a/arch/x86/include/uapi/asm/ucontext.h
++++ b/arch/x86/include/uapi/asm/ucontext.h
+@@ -51,6 +51,11 @@
+ #define UC_STRICT_RESTORE_SS	0x4
+ #endif
+ 
 +/*
-+ * ibt.c - Intel Indirect Branch Tracking support
-+ *
-+ * Copyright (c) 2021, Intel Corporation.
-+ * Yu-cheng Yu <yu-cheng.yu@intel.com>
++ * Indicates IBT WAIT-ENDBR status.
 + */
++#define UC_WAIT_ENDBR		0x08
 +
-+#include <linux/user.h>
-+#include <asm/fpu/internal.h>
-+#include <asm/fpu/xstate.h>
-+#include <asm/fpu/types.h>
-+#include <asm/msr.h>
-+#include <asm/cet.h>
+ #include <asm-generic/ucontext.h>
+ 
+ #endif /* _ASM_X86_UCONTEXT_H */
+diff --git a/arch/x86/kernel/ibt.c b/arch/x86/kernel/ibt.c
+index 4ab7af33b274..5ab8632a1f7e 100644
+--- a/arch/x86/kernel/ibt.c
++++ b/arch/x86/kernel/ibt.c
+@@ -56,3 +56,44 @@ void ibt_disable(void)
+ 	ibt_set_clear_msr_bits(0, CET_ENDBR_EN);
+ 	current->thread.shstk.ibt = 0;
+ }
 +
-+static int ibt_set_clear_msr_bits(u64 set, u64 clear)
++int ibt_get_clear_wait_endbr(void)
 +{
-+	u64 msr;
-+	int r;
++	u64 msr_val = 0;
++
++	if (!current->thread.shstk.ibt)
++		return 0;
 +
 +	fpregs_lock();
 +
-+	if (test_thread_flag(TIF_NEED_FPU_LOAD))
-+		fpregs_restore_userregs();
++	if (!test_thread_flag(TIF_NEED_FPU_LOAD)) {
++		if (!rdmsrl_safe(MSR_IA32_U_CET, &msr_val))
++			wrmsrl(MSR_IA32_U_CET, msr_val & ~CET_WAIT_ENDBR);
++	} else {
++		struct cet_user_state *cet;
 +
-+	r = rdmsrl_safe(MSR_IA32_U_CET, &msr);
-+	if (!r) {
-+		msr = (msr & ~clear) | set;
-+		r = wrmsrl_safe(MSR_IA32_U_CET, msr);
++		/*
++		 * If !TIF_NEED_FPU_LOAD and get_xsave_addr() returns zero,
++		 * XFEATURE_CET_USER is in init state (cet is not active).
++		 * Return zero status.
++		 */
++		cet = get_xsave_addr(&current->thread.fpu.state.xsave,
++				     XFEATURE_CET_USER);
++		if (cet) {
++			msr_val = cet->user_cet;
++			cet->user_cet = msr_val & ~CET_WAIT_ENDBR;
++		}
 +	}
 +
 +	fpregs_unlock();
 +
-+	return r;
++	return msr_val & CET_WAIT_ENDBR;
 +}
 +
-+int ibt_setup(void)
-+{
-+	int r;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_IBT))
-+		return 0;
-+
-+	r = ibt_set_clear_msr_bits(CET_ENDBR_EN | CET_NO_TRACK_EN, 0);
-+	if (!r)
-+		current->thread.shstk.ibt = 1;
-+
-+	return r;
-+}
-+
-+void ibt_disable(void)
++int ibt_set_wait_endbr(void)
 +{
 +	if (!current->thread.shstk.ibt)
-+		return;
++		return 0;
 +
-+	ibt_set_clear_msr_bits(0, CET_ENDBR_EN);
-+	current->thread.shstk.ibt = 0;
++	return ibt_set_clear_msr_bits(CET_WAIT_ENDBR, 0);
 +}
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index 661e46803b84..a1285650852e 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -135,6 +135,9 @@ static int restore_sigcontext(struct pt_regs *regs,
+ 	 */
+ 	if (unlikely(!(uc_flags & UC_STRICT_RESTORE_SS) && user_64bit_mode(regs)))
+ 		force_valid_ss(regs);
++
++	if (uc_flags & UC_WAIT_ENDBR)
++		ibt_set_wait_endbr();
+ #endif
+ 
+ 	return fpu__restore_sig((void __user *)sc.fpstate,
+@@ -455,6 +458,9 @@ static unsigned long frame_uc_flags(struct pt_regs *regs)
+ 	if (likely(user_64bit_mode(regs)))
+ 		flags |= UC_STRICT_RESTORE_SS;
+ 
++	if (ibt_get_clear_wait_endbr())
++		flags |= UC_WAIT_ENDBR;
++
+ 	return flags;
+ }
+ 
 -- 
 2.21.0
 
