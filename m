@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CC93D23C3
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 14:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE9E3D23D6
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 14:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbhGVMJG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 08:09:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33360 "EHLO mail.kernel.org"
+        id S231928AbhGVMKp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 08:10:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232072AbhGVMI6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Jul 2021 08:08:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A342061248;
-        Thu, 22 Jul 2021 12:49:27 +0000 (UTC)
+        id S232049AbhGVMJD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Jul 2021 08:09:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C5356135B;
+        Thu, 22 Jul 2021 12:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626958173;
-        bh=sbFUoNBeqxQyz+PoOvMtvTqFiIliAD9FROV/pedTT4o=;
+        s=k20201202; t=1626958178;
+        bh=Lb/DGS9E/FUSMtSHAOCH5rcc8a7ucnqACx5B/SB9r64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HsOLil3/+9VmaYbtHSQRgpLmxFSE3bBBio3nSPGemC+GYEG1bOZAk4AFpp2qCsJ8L
-         iSy9J6Krq522LD+k2cVVGxJMx67i1VQqFVs8GL9DJhOT4vPueJ0kCQhD6/tXlIs8oz
-         vHfb6tY7nUOeLU2ngNR7QkQRw1M4yHxWgNAOOZKjwcHyjjk5CmSZcaw24EBbc796MD
-         Czg56vYWKr4zEzXrUlQbcPErVFIZqbYOo/i19WN0uQbSs58zjWzGYMFCnv8efowCuT
-         J0qsO+PiMOqS0q/SKUVcHnBPNWWDCmZiVlKn6k9EhG00thh7YCD+APPA6hXNsz+XsK
-         DJwvW+din+56Q==
+        b=DlDQQcJWBtu8uGwZq7CjQmNgX2T8xiLFz36rrnffGFNmyFcUbDzmYO8Dh1wVzhQBj
+         mXfyYN6rNAtyWUhbW+eOeaAzsVBPOcm5/g36yS1ZuD3Y8G6hbwWT+q5xi4L4Q7G7uv
+         7MB6QaWeQInRe7HQtjzXXBdvuhQlK9V4yt29fc+frxRGN8Po290okXM214yrvvxv0s
+         31IA+WAE0UQD5EilOPMtZz59mPbvNLCaeeNh22wHNjOWOrT2hS70tkXDkJUVmbY+fQ
+         4Dt+2v4eU/DdXKOkQoEVP3549Vc2kQ2Df5tw3ubn4NIgoLCPnr7hNUn1jxPJxJXRmG
+         HoHVd+rT8j/Pw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arch@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -48,11 +48,10 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
         linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v3 7/9] asm-generic: uaccess: remove inline strncpy_from_user/strnlen_user
-Date:   Thu, 22 Jul 2021 14:48:12 +0200
-Message-Id: <20210722124814.778059-8-arnd@kernel.org>
+        uclinux-h8-devel@lists.sourceforge.jp
+Subject: [PATCH v3 8/9] asm-generic: remove extra strn{cpy_from,len}_user declarations
+Date:   Thu, 22 Jul 2021 14:48:13 +0200
+Message-Id: <20210722124814.778059-9-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210722124814.778059-1-arnd@kernel.org>
 References: <20210722124814.778059-1-arnd@kernel.org>
@@ -64,138 +63,71 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The inline version is used on three NOMMU architectures and is
-particularly inefficient when it scans the string one byte at a time
-twice. It also lacks a check for user_addr_max(), but this is
-probably ok on NOMMU targets.
+As these are now in asm-generic, it's no longer necessary to
+declare them in the architecture.
 
-Consolidate the asm-generic implementation with the library version
-that is used everywhere else.  This version is generalized enough to
-work efficiently on both MMU and NOMMU targets, and using the
-same code everywhere reduces the potential for subtle bugs.
-
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/h8300/Kconfig            |  2 ++
- arch/m68k/Kconfig             |  4 +--
- arch/riscv/Kconfig            |  4 +--
- include/asm-generic/uaccess.h | 46 ++++++-----------------------------
- 4 files changed, 14 insertions(+), 42 deletions(-)
+ arch/arc/include/asm/uaccess.h     | 5 -----
+ arch/hexagon/include/asm/uaccess.h | 6 ------
+ arch/um/include/asm/uaccess.h      | 5 +----
+ 3 files changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/arch/h8300/Kconfig b/arch/h8300/Kconfig
-index 3e3e0f16f7e0..53dfd2d47e0e 100644
---- a/arch/h8300/Kconfig
-+++ b/arch/h8300/Kconfig
-@@ -11,6 +11,8 @@ config H8300
- 	select GENERIC_IRQ_SHOW
- 	select FRAME_POINTER
- 	select GENERIC_CPU_DEVICES
-+	select GENERIC_STRNCPY_FROM_USER
-+	select GENERIC_STRNLEN_USER
- 	select MODULES_USE_ELF_RELA
- 	select COMMON_CLK
- 	select ARCH_WANT_FRAME_POINTERS
-diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-index 96989ad46f66..37a65bed6dfa 100644
---- a/arch/m68k/Kconfig
-+++ b/arch/m68k/Kconfig
-@@ -16,8 +16,8 @@ config M68K
- 	select GENERIC_CPU_DEVICES
- 	select GENERIC_IOMAP
- 	select GENERIC_IRQ_SHOW
--	select GENERIC_STRNCPY_FROM_USER if MMU
--	select GENERIC_STRNLEN_USER if MMU
-+	select GENERIC_STRNCPY_FROM_USER
-+	select GENERIC_STRNLEN_USER
- 	select HAVE_AOUT if MMU
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_DEBUG_BUGVERBOSE
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 8fcceb8eda07..47bbbcab91b2 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -56,8 +56,8 @@ config RISCV
- 	select GENERIC_PTDUMP if MMU
- 	select GENERIC_SCHED_CLOCK
- 	select GENERIC_SMP_IDLE_THREAD
--	select GENERIC_STRNCPY_FROM_USER if MMU
--	select GENERIC_STRNLEN_USER if MMU
-+	select GENERIC_STRNCPY_FROM_USER
-+	select GENERIC_STRNLEN_USER
- 	select GENERIC_TIME_VSYSCALL if MMU && 64BIT
- 	select HANDLE_DOMAIN_IRQ
- 	select HAVE_ARCH_AUDITSYSCALL
-diff --git a/include/asm-generic/uaccess.h b/include/asm-generic/uaccess.h
-index 2f8a5d3bbd57..df60871ce2e8 100644
---- a/include/asm-generic/uaccess.h
-+++ b/include/asm-generic/uaccess.h
-@@ -119,6 +119,11 @@ static inline void set_fs(mm_segment_t fs)
- #ifndef uaccess_kernel
- #define uaccess_kernel() (get_fs().seg == KERNEL_DS.seg)
+diff --git a/arch/arc/include/asm/uaccess.h b/arch/arc/include/asm/uaccess.h
+index 754a23f26736..783bfdb3bfa3 100644
+--- a/arch/arc/include/asm/uaccess.h
++++ b/arch/arc/include/asm/uaccess.h
+@@ -667,11 +667,6 @@ extern unsigned long arc_clear_user_noinline(void __user *to,
+ #define __clear_user(d, n)		arc_clear_user_noinline(d, n)
  #endif
+ 
+-extern long strncpy_from_user(char *dst, const char __user *src, long count);
+-#define strncpy_from_user(d, s, n)	strncpy_from_user(d, s, n)
+-extern long strnlen_user(const char __user *src, long n);
+-#define strnlen_user(s, n)		strnlen_user(s, n)
+-
+ #include <asm/segment.h>
+ #include <asm-generic/uaccess.h>
+ 
+diff --git a/arch/hexagon/include/asm/uaccess.h b/arch/hexagon/include/asm/uaccess.h
+index d950df12d8c5..ef5bfef8d490 100644
+--- a/arch/hexagon/include/asm/uaccess.h
++++ b/arch/hexagon/include/asm/uaccess.h
+@@ -57,12 +57,6 @@ unsigned long raw_copy_to_user(void __user *to, const void *from,
+ __kernel_size_t __clear_user_hexagon(void __user *dest, unsigned long count);
+ #define __clear_user(a, s) __clear_user_hexagon((a), (s))
+ 
+-extern long strnlen_user(const char __user *src, long n);
+-#define strnlen_user strnlen_user
+-
+-extern long strncpy_from_user(char *dst, const char __user *src, long n)
+-#define strncpy_from_user strncpy_from_user
+-
+ #include <asm-generic/uaccess.h>
+ 
+ 
+diff --git a/arch/um/include/asm/uaccess.h b/arch/um/include/asm/uaccess.h
+index 3bf209f683f8..191ef36dd543 100644
+--- a/arch/um/include/asm/uaccess.h
++++ b/arch/um/include/asm/uaccess.h
+@@ -23,16 +23,13 @@
+ 
+ extern unsigned long raw_copy_from_user(void *to, const void __user *from, unsigned long n);
+ extern unsigned long raw_copy_to_user(void __user *to, const void *from, unsigned long n);
+-extern long strncpy_from_user(char *dst, const char __user *src, long count);
+-extern long strnlen_user(const void __user *str, long len);
+ extern unsigned long __clear_user(void __user *mem, unsigned long len);
+ static inline int __access_ok(unsigned long addr, unsigned long size);
+ 
+ /* Teach asm-generic/uaccess.h that we have C functions for these. */
+ #define __access_ok __access_ok
+ #define __clear_user __clear_user
+-#define strnlen_user strnlen_user
+-#define strncpy_from_user strncpy_from_user
 +
-+#ifndef user_addr_max
-+#define user_addr_max() (uaccess_kernel() ? ~0UL : TASK_SIZE)
-+#endif
-+
- #endif /* CONFIG_SET_FS */
+ #define INLINE_COPY_FROM_USER
+ #define INLINE_COPY_TO_USER
  
- #define access_ok(addr, size) __access_ok((unsigned long)(addr),(size))
-@@ -243,44 +248,6 @@ static inline int __get_user_fn(size_t size, const void __user *ptr, void *x)
- 
- extern int __get_user_bad(void) __attribute__((noreturn));
- 
--/*
-- * Copy a null terminated string from userspace.
-- */
--#ifndef strncpy_from_user
--static inline long
--strncpy_from_user(char *dst, const char __user *src, long count)
--{
--	char *tmp;
--
--	if (!access_ok(src, 1))
--		return -EFAULT;
--
--	strncpy(dst, (const char __force *)src, count);
--	for (tmp = dst; *tmp && count > 0; tmp++, count--)
--		;
--	return (tmp - dst);
--}
--#endif
--
--#ifndef strnlen_user
--/*
-- * Return the size of a string (including the ending 0)
-- *
-- * Return 0 on exception, a value greater than N if too long
-- *
-- * Unlike strnlen, strnlen_user includes the nul terminator in
-- * its returned count. Callers should check for a returned value
-- * greater than N as an indication the string is too long.
-- */
--static inline long strnlen_user(const char __user *src, long n)
--{
--	if (!access_ok(src, 1))
--		return 0;
--
--	return strnlen(src, n) + 1;
--}
--#endif
--
- /*
-  * Zero Userspace
-  */
-@@ -305,4 +272,7 @@ clear_user(void __user *to, unsigned long n)
- 
- #include <asm/extable.h>
- 
-+long strncpy_from_user(char *dst, const char __user *src, long count);
-+long strnlen_user(const char __user *src, long n);
-+
- #endif /* __ASM_GENERIC_UACCESS_H */
 -- 
 2.29.2
 
