@@ -2,99 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D6E3D250E
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 16:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52B13D25B6
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 16:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbhGVNVX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 09:21:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37064 "EHLO mail.kernel.org"
+        id S232257AbhGVNsn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 09:48:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231925AbhGVNVX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Jul 2021 09:21:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2101B6128A;
-        Thu, 22 Jul 2021 14:01:58 +0000 (UTC)
+        id S229934AbhGVNsm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Jul 2021 09:48:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6FE1A6101E;
+        Thu, 22 Jul 2021 14:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626962518;
-        bh=RmFOlaV6cy8f6I9NP3ukwHIYeNH7OwEP2FaF3KMVtFM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FAJNHnFo1L7vDVOiC5UpRkaDx4pid4TNdNlKZLrXeCR+FFSWM3S5SOfKHU3NBCcgi
-         x/mbKRZuCP5sBZWLRH0QyC3jTezIcTdgPNuJkn722HgIPBdCNBSTL40ELD6XBnTs/y
-         1ZjVc7/Oq6j6jnQceie9Da0nul67XzXgLTZj2GmS3GDKLgwa7unHRN+n/B9s9iygfR
-         gHGpjMzt0PFMYc3FrdBQF57NRhZXStlwHBGM47znuAnJK24bV4xEdnVgYTuM2O9Q9l
-         cPPu7vcO0sT3ruel4hr978oxdF6OQbMo96r5w0ZtG5V3ocVCUbJ85hWT9lKdyIIY8o
-         uhvj1YnfZDenA==
-Received: by mail-wr1-f42.google.com with SMTP id c15so6078609wrs.5;
-        Thu, 22 Jul 2021 07:01:58 -0700 (PDT)
-X-Gm-Message-State: AOAM531dTsLBoyXY46jXwvz5czFANrce3/1ohs2mSfcIRgYYh2V2YWfX
-        anOKN93+gKWUubFcGJ5kbFbKeL8DFH7/BeQeBE0=
-X-Google-Smtp-Source: ABdhPJwKEmOULt07FXrSo8OqydMhW6AyGqw3Y4ZL7MXTHJEhxOwFXM5UwB4aLTKy+iIlhqkT2HtTedqadCpqLwCc8hw=
-X-Received: by 2002:a5d:438c:: with SMTP id i12mr49853wrq.99.1626962516717;
- Thu, 22 Jul 2021 07:01:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210722124814.778059-1-arnd@kernel.org> <20210722124814.778059-10-arnd@kernel.org>
- <29adc1c164805e355b37d1d4668ebda9fb7fa872.camel@sipsolutions.net>
-In-Reply-To: <29adc1c164805e355b37d1d4668ebda9fb7fa872.camel@sipsolutions.net>
+        s=k20201202; t=1626964157;
+        bh=zM04WpA1f7iRwT47P4olhNDO3hfO6UH/Gt2Ynkv7aOQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cqbniFsd8XOi4XfrJjOLuySlDUQ7CBCdF3SdSpwbfun3l4gP0pHz9Wd5SRJfmw01D
+         rciF8Kv7FW46A5EwjsN3Vyf/5Rvh5E4R1qbfRkNj4Ah7m15FA70xcCyR2lJGOf7ydu
+         jIYTxKhsUR7/+TFmf1JMvzJem8QxdQDfXl9JoKgQvi8CA3aKTBIcT5vNSJ16PLNIQn
+         2iB22HcT9QKEsx04GsH092Gr337HqpBpxy1s9QDpdG8P/ZwhVhh5Akiv/OktZiNros
+         oQ4kaV5Pav2/o+o+R2LAoMB29VqRD9QNkOwZ0w8PFM5LeRC8/XOeJCgqB1Y3+bIYtV
+         oT1Qe8xs2kF/Q==
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 22 Jul 2021 16:01:39 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0xZAHknG8_kc62aaKrKdzD-QwQYHT61_wTbFDYADu-zw@mail.gmail.com>
-Message-ID: <CAK8P3a0xZAHknG8_kc62aaKrKdzD-QwQYHT61_wTbFDYADu-zw@mail.gmail.com>
-Subject: Re: [PATCH v3 9/9] asm-generic: reverse GENERIC_{STRNCPY_FROM,
- STRNLEN}_USER symbols
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Brian Cain <bcain@codeaurora.org>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>, Jeff Dike <jdike@addtoit.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Richard Weinberger <richard@nod.at>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>
-Content-Type: text/plain; charset="UTF-8"
+To:     netdev@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, Christoph Hellwig <hch@lst.de>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH net-next v6 0/6] remove compat_alloc_user_space()
+Date:   Thu, 22 Jul 2021 16:28:57 +0200
+Message-Id: <20210722142903.213084-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 22, 2021 at 3:57 PM Johannes Berg <johannes@sipsolutions.net> wrote:
->
-> >
-> > The remaining architectures at the moment are: ia64, mips, parisc,
-> > s390, um and xtensa. We should probably convert these as well, but
->
-> I'm not sure it makes sense to convert um, the implementation uses
-> strncpy(), and that should use the libc implementation, which is tuned
-> for the actual hardware that the binary is running on, so performance
-> wise that might be better.
->
-> OTOH, maybe this is all in the noise given the huge syscall overhead in
-> um, so maybe unifying it would make more sense.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Right, makes sense. I suppose if we end up converting mips and s390,
-we should just do arch/um and the others as well for consistency, even
-if that adds some overhead.
+This is the fifth version of my series, now spanning four patches
+instead of two, with a new approach for handling struct ifreq
+compatibility after I realized that my earlier approach introduces
+additional problems.
+
+The idea here is to always push down the compat conversion
+deeper into the call stack: rather than pretending to be
+native mode with a modified copy of the original data on
+the user space stack, have the code that actually works on
+the data understand the difference between native and compat
+versions.
+
+I have spent a long time looking at all drivers that implement
+an ndo_do_ioctl callback to verify that my assumptions are
+correct. This has led to a series of ~30 additional patches
+that I am not including here but will post separately, fixing
+a number of bugs in SIOCDEVPRIVATE ioctls, removing dead
+code, and splitting ndo_do_ioctl into multiple new ndo callbacks
+for private and ethernet specific commands.
 
       Arnd
+
+Link: https://lore.kernel.org/netdev/20201124151828.169152-1-arnd@kernel.org/
+
+Changes in v6:
+ - Split out and expand linux/compat.h rework
+ - Split ifconf change into two patches
+ - Rebase on latest net-next/master
+
+Changes in v5:
+ - Rebase to v5.14-rc2
+ - Fix a few build issues
+
+Changes in v4:
+ - build fix without CONFIG_INET
+ - build fix without CONFIG_COMPAT
+ - style fixes pointed out by hch
+
+Changes in v3:
+ - complete rewrite of the series
+
+Arnd Bergmann (6):
+  compat: make linux/compat.h available everywhere
+  ethtool: improve compat ioctl handling
+  net: socket: rework SIOC?IFMAP ioctls
+  net: socket: remove register_gifconf
+  net: socket: simplify dev_ifconf handling
+  net: socket: rework compat_ifreq_ioctl()
+
+ arch/arm64/include/asm/compat.h   |  14 +-
+ arch/mips/include/asm/compat.h    |  24 ++-
+ arch/parisc/include/asm/compat.h  |  14 +-
+ arch/powerpc/include/asm/compat.h |  11 --
+ arch/s390/include/asm/compat.h    |  14 +-
+ arch/sparc/include/asm/compat.h   |  14 +-
+ arch/x86/include/asm/compat.h     |  14 +-
+ arch/x86/include/asm/signal.h     |   1 +
+ include/asm-generic/compat.h      |  17 ++
+ include/linux/compat.h            |  32 ++--
+ include/linux/ethtool.h           |   4 -
+ include/linux/inetdevice.h        |   9 +
+ include/linux/netdevice.h         |  12 +-
+ net/appletalk/ddp.c               |   4 +-
+ net/core/dev_ioctl.c              | 153 +++++++++-------
+ net/ethtool/ioctl.c               | 136 ++++++++++++--
+ net/ieee802154/socket.c           |   4 +-
+ net/ipv4/af_inet.c                |   6 +-
+ net/ipv4/devinet.c                |   4 +-
+ net/qrtr/qrtr.c                   |   4 +-
+ net/socket.c                      | 292 +++++++-----------------------
+ 21 files changed, 352 insertions(+), 431 deletions(-)
+
+-- 
+2.29.2
+
+Cc: Al Viro <viro@zeniv.linux.org.uk> 
+Cc: Andrew Lunn <andrew@lunn.ch> 
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: David Ahern <dsahern@kernel.org> 
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org> 
+Cc: Jakub Kicinski <kuba@kernel.org> 
+Cc: Kees Cook <keescook@chromium.org> 
+Cc: Marco Elver <elver@google.com> 
+Cc: linux-kernel@vger.kernel.org 
+Cc: linux-arch@vger.kernel.org 
+Cc: netdev@vger.kernel.org 
