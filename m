@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5BD3D23F5
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 14:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF993D23FE
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 15:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbhGVMTQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 08:19:16 -0400
-Received: from verein.lst.de ([213.95.11.211]:33984 "EHLO verein.lst.de"
+        id S231965AbhGVMTb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 08:19:31 -0400
+Received: from verein.lst.de ([213.95.11.211]:34005 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231840AbhGVMTM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Jul 2021 08:19:12 -0400
+        id S231950AbhGVMT2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Jul 2021 08:19:28 -0400
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id DF90B67373; Thu, 22 Jul 2021 14:59:41 +0200 (CEST)
-Date:   Thu, 22 Jul 2021 14:59:41 +0200
+        id 712DF68AFE; Thu, 22 Jul 2021 15:00:00 +0200 (CEST)
+Date:   Thu, 22 Jul 2021 14:59:59 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
@@ -40,22 +40,26 @@ Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
         linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
         uclinux-h8-devel@lists.sourceforge.jp
-Subject: Re: [PATCH v3 1/9] asm-generic/uaccess.h: remove
- __strncpy_from_user/__strnlen_user
-Message-ID: <20210722125941.GA26225@lst.de>
-References: <20210722124814.778059-1-arnd@kernel.org> <20210722124814.778059-2-arnd@kernel.org>
+Subject: Re: [PATCH v3 2/9] h8300: remove stale strncpy_from_user
+Message-ID: <20210722125959.GB26225@lst.de>
+References: <20210722124814.778059-1-arnd@kernel.org> <20210722124814.778059-3-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210722124814.778059-2-arnd@kernel.org>
+In-Reply-To: <20210722124814.778059-3-arnd@kernel.org>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Jul 22, 2021 at 02:48:07PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This function is never called because h8300 uses the asm-generic
+> inline function version.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
 Looks good,
 
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-
-Note that the uml version has a minor conflict with my pending set_fs()
-removal for uml, but that should be easy to resolve.
