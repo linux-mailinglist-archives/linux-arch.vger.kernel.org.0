@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA113D2EB2
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 23:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD053D2EB9
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jul 2021 23:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbhGVUY7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 16:24:59 -0400
-Received: from mga12.intel.com ([192.55.52.136]:47534 "EHLO mga12.intel.com"
+        id S231169AbhGVU1i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 16:27:38 -0400
+Received: from mga04.intel.com ([192.55.52.120]:21084 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230455AbhGVUY6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Jul 2021 16:24:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="191331588"
+        id S230455AbhGVU1h (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Jul 2021 16:27:37 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="209847801"
 X-IronPort-AV: E=Sophos;i="5.84,262,1620716400"; 
-   d="scan'208";a="191331588"
+   d="scan'208";a="209847801"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 14:05:33 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 14:08:09 -0700
 X-IronPort-AV: E=Sophos;i="5.84,262,1620716400"; 
-   d="scan'208";a="454879230"
+   d="scan'208";a="454879819"
 Received: from mjang2-mobl1.amr.corp.intel.com (HELO [10.209.3.78]) ([10.209.3.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 14:05:31 -0700
-Subject: Re: [PATCH v28 25/32] x86/cet/shstk: Handle thread shadow stack
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 14:08:08 -0700
+Subject: Re: [PATCH v28 00/32] Control-flow Enforcement: Shadow Stack
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -51,7 +51,6 @@ To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Haitao Huang <haitao.huang@intel.com>,
         Rick P Edgecombe <rick.p.edgecombe@intel.com>
 References: <20210722205219.7934-1-yu-cheng.yu@intel.com>
- <20210722205219.7934-26-yu-cheng.yu@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
  xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
@@ -96,12 +95,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
  ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
  z5cecg==
-Message-ID: <9b5eb1a8-fc75-d1e4-36c4-e83ab0ce682b@intel.com>
-Date:   Thu, 22 Jul 2021 14:05:29 -0700
+Message-ID: <dbad8677-bad3-a940-276b-dc2b6abf8b28@intel.com>
+Date:   Thu, 22 Jul 2021 14:08:07 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210722205219.7934-26-yu-cheng.yu@intel.com>
+In-Reply-To: <20210722205219.7934-1-yu-cheng.yu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -109,43 +108,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/22/21 1:52 PM, Yu-cheng Yu wrote:
-> +	if (!stack_size)
-> +		stack_size = min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G);
-> +
-> +	if (!shstk->size)
-> +		return 0;
-> +
-> +	/*
-> +	 * For CLONE_VM, except vfork, the child needs a separate shadow
-> +	 * stack.
-> +	 */
-> +	if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
-> +		return 0;
-> +
-> +	/*
-> +	 * This is in clone() syscall and fpu__copy() already copies xstates
-> +	 * from the parent.  If get_xsave_addr() returns null, then XFEATURE_
-> +	 * CET_USER is still in init state, which certainly is an error.
-> +	 */
-> +	state = get_xsave_addr(&tsk->thread.fpu.state.xsave, XFEATURE_CET_USER);
-> +	if (!state)
-> +		return -EINVAL;
+On 7/22/21 1:51 PM, Yu-cheng Yu wrote:
+> Linux distributions with CET are available now, and Intel processors with CET
+> are already on the market.  It would be nice if CET support can be accepted
+> into the kernel.
+> 
+> Changes in v28:
+> - Rebase to Linus tree v5.14-rc2.
+> - Patch #1: Update Document to indicate no-user-shstk also disables IBT.
+> - Patch #23: Update shstk_setup() with wrmsrl_safe().  Update return value.
+> - Patch #25: Split out copy_thread() changes.  Add support for old clone().
+>   Add comments.
+> - Add comments for get_xsave_addr() (Patch #25, #26).
 
-I don't care much for that comment.
+Could you characterize where this whole thing is?
 
-This code is meant to copy shadow stack config information into children
-when it is already enabled.  We *just* checked for that above in the
-"shstk->size" check.  The fact that this is called from clone() is
-irrelevant.  The shadow stack enabling status *is*.
-
-I think I'd rather this be more along the lines of:
-
-	/*
-	 * 'tsk' is configured with a shadow stack and the fpu.state is
-	 * up to date since it was just copied from the parent.  There
-	 * must be a valid non-init CET state location in the buffer.
-	 */
-
-There is also a strong enough assumption violation that I'd probably
-WARN() in addition to returning -EINVAL.
+Are we at the point where the feedback is slowing down?  What kind of
+feedback are you getting?  How stable is the ABI versus the last revision?
