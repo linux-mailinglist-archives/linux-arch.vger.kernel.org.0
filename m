@@ -2,181 +2,219 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDA13D3185
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Jul 2021 04:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE32C3D3384
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Jul 2021 06:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbhGWB2N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jul 2021 21:28:13 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:37355 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233116AbhGWB2N (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jul 2021 21:28:13 -0400
-Received: (qmail 27014 invoked by uid 1000); 22 Jul 2021 22:08:46 -0400
-Date:   Thu, 22 Jul 2021 22:08:46 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@fb.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com,
-        Manfred Spraul <manfred@colorfullife.com>
-Subject: Re: [PATCH memory-model 2/4] tools/memory-model: Add example for
- heuristic lockless reads
-Message-ID: <20210723020846.GA26397@rowland.harvard.edu>
-References: <20210721210726.GA828672@paulmck-ThinkPad-P17-Gen-1>
- <20210721211003.869892-2-paulmck@kernel.org>
+        id S233671AbhGWDm4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jul 2021 23:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233558AbhGWDmp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jul 2021 23:42:45 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE39C061757
+        for <linux-arch@vger.kernel.org>; Thu, 22 Jul 2021 21:23:18 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id mt6so527165pjb.1
+        for <linux-arch@vger.kernel.org>; Thu, 22 Jul 2021 21:23:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=WsiAS3z4oAzigWGNyrDdXuhw9uHB2q0vdBc/ZxtadIc=;
+        b=RCD9kPFJuFifpir8xRlxehiCOuy2mroN+w4M6ciZUGqBRUZMWDJwB7BGVOI7yPVdPR
+         D/FuhNMGcAM8wYLwiYmX8csMQVHOvVOH3jgxwGLUNMg7O1gf/IZ8pk01AByD50zsqZTx
+         dc/UsK/vhaWW8FVfy7GvrPnD06/jsePnB3lYaWthd45TpkFwhIQEbt867WHWsz21SsOh
+         /T0vlx+njtLMOUQyEwhnU5PAJtWJi2Qn0Lo1WcW33wkOMzJVoKIn4u184Ub7SKBUUTVg
+         AYHV1qFTwEOqlNZLT/gSuTGKYgWB+MP+KJmDIG0yJgl5ZLXxqUP+yYuTsJQEOiaC0WKn
+         VjrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=WsiAS3z4oAzigWGNyrDdXuhw9uHB2q0vdBc/ZxtadIc=;
+        b=WJggQpJFDXGa3qFAqdf+IXwWJinqy+pEFLVh/fnI8t/lyXMHHF6ZHIv7q6tGlQYpsD
+         eOfRRCQI8VVc+3Xy2llZKI0tBSMChPkibg8x1j44rxOXTrAoAnAEVViv33py47x+VAno
+         GgwgLkMBoCuRj/+uB/4P7MibzIOP7vvEkuY/zn70MyH8gw87yFwMkufe0OP/yuLAXzZW
+         4QCpO3R6VAERkJ49/lm9tFkM+iOEcPV7ifqwlTN/l5xWFfA1lWqXO8zsXArYQA3wVDVY
+         6NIn6hyb8xp+vRQZw5wlePbqUVlBd+O6VLl7OfQkTHit7GRFDeBPk4ZemUKwqYhkNdNI
+         VlIw==
+X-Gm-Message-State: AOAM532MrpjdkE6naqXOlKC8qMjWxpYcS63e5n7Ra8OBGJzt+KN0mm/4
+        TyLZqpOBxMHwr2m5S3ksneY=
+X-Google-Smtp-Source: ABdhPJyBJTjfadBKKXYpbAsw9v0hBHT4b7S4vNjUNOeU+s7zqCB0CIl0hLbFDzGy3j18GQ2HCZE5EQ==
+X-Received: by 2002:a17:90a:a087:: with SMTP id r7mr12253320pjp.84.1627014198181;
+        Thu, 22 Jul 2021 21:23:18 -0700 (PDT)
+Received: from [10.1.1.25] (222-152-189-37-fibre.sparkbb.co.nz. [222.152.189.37])
+        by smtp.gmail.com with ESMTPSA id s36sm21208469pgl.8.2021.07.22.21.23.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 22 Jul 2021 21:23:17 -0700 (PDT)
+Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
+ <87zgunzovm.fsf@disp2133> <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
+ <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com> <8735scvklk.fsf@disp2133>
+ <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
+ <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com> <87h7gopvz2.fsf@disp2133>
+ <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com> <877dhio13t.fsf@disp2133>
+Cc:     geert@linux-m68k.org, linux-arch@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, torvalds@linux-foundation.org,
+        schwab@linux-m68k.org
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <12992a3c-0740-f90e-aa4e-1ec1d8ea38f6@gmail.com>
+Date:   Fri, 23 Jul 2021 16:23:12 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210721211003.869892-2-paulmck@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <877dhio13t.fsf@disp2133>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 21, 2021 at 02:10:01PM -0700, Paul E. McKenney wrote:
-> This commit adds example code for heuristic lockless reads, based loosely
-> on the sem_lock() and sem_unlock() functions.
-> 
-> Reported-by: Manfred Spraul <manfred@colorfullife.com>
-> [ paulmck: Update per Manfred Spraul and Hillf Danton feedback. ]
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> ---
->  .../Documentation/access-marking.txt          | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
-> 
-> diff --git a/tools/memory-model/Documentation/access-marking.txt b/tools/memory-model/Documentation/access-marking.txt
-> index 58bff26198767..be7d507997cf8 100644
-> --- a/tools/memory-model/Documentation/access-marking.txt
-> +++ b/tools/memory-model/Documentation/access-marking.txt
-> @@ -319,6 +319,100 @@ of the ASSERT_EXCLUSIVE_WRITER() is to allow KCSAN to check for a buggy
->  concurrent lockless write.
->  
->  
-> +Lock-Protected Writes With Heuristic Lockless Reads
-> +---------------------------------------------------
-> +
-> +For another example, suppose that the code can normally make use of
-> +a per-data-structure lock, but there are times when a global lock
-> +is required.  These times are indicated via a global flag.  The code
-> +might look as follows, and is based loosely on nf_conntrack_lock(),
-> +nf_conntrack_all_lock(), and nf_conntrack_all_unlock():
-> +
-> +	bool global_flag;
-> +	DEFINE_SPINLOCK(global_lock);
-> +	struct foo {
-> +		spinlock_t f_lock;
-> +		int f_data;
-> +	};
-> +
-> +	/* All foo structures are in the following array. */
-> +	int nfoo;
-> +	struct foo *foo_array;
-> +
-> +	void do_something_locked(struct foo *fp)
-> +	{
-> +		bool gf = true;
-> +
-> +		/* IMPORTANT: Heuristic plus spin_lock()! */
-> +		if (!data_race(global_flag)) {
-> +			spin_lock(&fp->f_lock);
-> +			if (!smp_load_acquire(&global_flag)) {
-> +				do_something(fp);
-> +				spin_unlock(&fp->f_lock);
-> +				return;
-> +			}
-> +			spin_unlock(&fp->f_lock);
-> +		}
-> +		spin_lock(&global_lock);
-> +		/* Lock held, thus global flag cannot change. */
-> +		if (!global_flag) {
+Hi Eric,
 
-How can global_flag ever be true at this point?  The only line of code 
-that sets it is in begin_global() below, it only runs while global_lock 
-is held, and global_flag is set back to false before the lock is 
-released.
+Am 23.07.2021 um 02:49 schrieb Eric W. Biederman:
+> Michael Schmitz <schmitzmic@gmail.com> writes:
+>
+>> Hi Eric,
+>>
+>> On 21/07/21 8:32 am, Eric W. Biederman wrote:
+>>>
+>>>> diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
+>>>> index a8f4161..6c92d38 100644
+>>>> --- a/arch/m68k/fpsp040/skeleton.S
+>>>> +++ b/arch/m68k/fpsp040/skeleton.S
+>>>> @@ -502,7 +502,17 @@ in_ea:
+>>>>   	.section .fixup,#alloc,#execinstr
+>>>>   	.even
+>>>>   1:
+>>>> +
+>>>> +	SAVE_ALL_INT
+>>>> +	SAVE_SWITCH_STACK
+>>>          ^^^^^^^^^^
+>>>
+>>> I don't think this saves the registers in the well known fixed location
+>>> on the stack because some registers are saved at the exception entry
+>>> point.
+>>
+>> The FPU exception entry points are not using the exception entry code in
+>> head.S. These entry points are stored in the exception vector table directly. No
+>> saving of a syscall stack frame happens there. The FPU places its exception
+>> frame on the stack, and that is what the FPU exception handlers use.
+>>
+>> (If these have to call out to the generic exception handlers again, they will
+>> build a minimal stack frame, see code in skeleton.S.)
+>>
+>> Calling fpsp040_die() is no different from calling a syscall that may need to
+>> have access to the full stack frame. The 'fixed location' is just 'on the stack
+>> before calling  fpsp040_die()', again this is no different from calling
+>> e.g. sys_fork() which does not take a pointer to the begin of the stack frame as
+>> an argument.
+>>
+>> I must admit I never looked at how do_exit() figures out where the stack frame
+>> containing the saved registers is stored, I just assumed it unwinds the stack up
+>> to the point where the caller syscall was made, and works from there. The same
+>> strategy ought to work here.
+>
+> For do_exit the part we need to be careful with is PTRACE_EVENT_EXIT,
+> which means it is ptrace that we need to look at.
+>
+> For m68k the code in put_reg and get_reg finds the registers by looking
+> at task->thread.esp0.
 
-> +			spin_lock(&fp->f_lock);
-> +			spin_unlock(&global_lock);
-> +			gf = false;
-> +		}
-> +		do_something(fp);
-> +		if (fg)
+Thanks, that's what I was missing here.
+>
+> I was expecting m68k to use the same technique as alpha which expects a
+> fixed offset from task_stack_page(task).
+>
+> So your code will work if you add code to update task->thread.esp0 which
+> is also known as THREAD_ESP0 in entry.S
 
-Should be gf, not fg.
+Shoving
 
-> +			spin_unlock(&global_lock);
-> +		else
-> +			spin_lock(&fp->f_lock);
-> +	}
-> +
-> +	void begin_global(void)
-> +	{
-> +		int i;
-> +
-> +		spin_lock(&global_lock);
-> +		WRITE_ONCE(global_flag, true);
+movel   %sp,%curptr@(TASK_THREAD+THREAD_ESP0)
 
-Why does this need to be WRITE_ONCE?  It still races with the first read 
-of global_flag above.
+in between the SAVE_ALL_INT and SAVE_SWITCH_STACK ought to do the trick 
+there.
 
-> +		for (i = 0; i < nfoo; i++) {
-> +			/* Wait for pre-existing local locks. */
-> +			spin_lock(&fp->f_lock);
-> +			spin_unlock(&fp->f_lock);
+>
+>>> Without being saved at the well known fixed location if some process
+>>> stops in PTRACE_EVENT_EXIT in do_exit we likely get some complete
+>>> gibberish.
+>>>
+>>> That is probably safe.
+>>>
+>>>>   	jbra	fpsp040_die
+>>>> +	addql   #8,%sp
+>>>> +	addql   #8,%sp
+>>>> +	addql   #8,%sp
+>>>> +	addql   #8,%sp
+>>>> +	addql   #8,%sp
+>>>> +	addql   #4,%sp
+>>>> +	rts
+>>> Especially as everything after jumping to fpsp040_die does not execute.
+>>
+>> Unless we change fpsp040_die() to call force_sig(SIGSEGV).
+>
+> Yes.  I think we would probably need to have it also call get_signal and
+> all of that, because I don't think the very light call path for that
+> exception includes testing if signals are pending.
 
-Why not acquire all the locks here and release all of them in 
-end_global()?  Then global_flag wouldn't need acquire-release 
-sychronization.
+As far as I can see, there is a test for pending signals:
 
-> +		}
-> +	}
-> +
-> +	void end_global(void)
-> +	{
-> +		smp_store_release(&global_flag, false);
-> +		/* Pre-existing global lock acquisitions will recheck. */
+ENTRY(ret_from_exception)
+.Lret_from_exception:
+         btst    #5,%sp@(PT_OFF_SR)      | check if returning to kernel
+         bnes    1f                      | if so, skip resched, signals
+         | only allow interrupts when we are really the last one on the
+         | kernel stack, otherwise stack overflow can occur during
+         | heavy interrupt load
+         andw    #ALLOWINT,%sr
 
-What does that comment mean?  How can there be any pre-existing global 
-lock acquisitions when we hold the lock right now?
+resume_userspace:
+         movel   %curptr@(TASK_STACK),%a1
+         moveb   %a1@(TINFO_FLAGS+3),%d0	| bits 0-7 of TINFO_FLAGS
+         jne     exit_work		| any bit set? -> exit_work
+1:      RESTORE_ALL
 
-> +		spin_unlock(&global_lock);
-> +	}
-> +
-> +All code paths leading from the do_something_locked() function's first
-> +read from global_flag acquire a lock, so endless load fusing cannot
-> +happen.
-> +
-> +If the value read from global_flag is true, then global_flag is rechecked
-> +while holding global_lock, which prevents global_flag from changing.
-> +If this recheck finds that global_flag is now false, the acquisition
+exit_work:
+         | save top of frame
+         movel   %sp,%curptr@(TASK_THREAD+THREAD_ESP0)
+         lslb    #1,%d0			| shift out TIF_NEED_RESCHED
+         jne     do_signal_return	| any remaining bit 
+(signal/notify_resume)? -> do_signal_return
+         pea     resume_userspace
+         jra     schedule
 
-Again, how can't global_flag be false now?
+As long as TIF_NOTIFY_SIGNAL or TIF_SIGPENDING are set, do_signal_return 
+will be called.
 
-Did you originally have in mind some sort of scheme in which 
-begin_global() would release global_lock before returning and 
-end_global() would acquire global_lock before clearing global_flag?  But 
-I don't see how that could work without changes to do_something_locked().
 
-> +of ->f_lock prior to the release of global_lock will result in any subsequent
-> +begin_global() invocation waiting to acquire ->f_lock.
-> +
-> +On the other hand, if the value read from global_flag is false, then
-> +global_flag, then rechecking under ->f_lock combined with synchronization
----^^^^^^^^^^^^^^^^^^
+>
+> The way the code is structured it is actively incorrect to return from
+> fpsp040_die, as the code does not know what to do if it reads a byte
+> from userspace and there is nothing there.
 
-Typo?
+Correct - my hope is that upon return from the FPU exception (that 
+continued after a dodgy read or write), we get the signal delivered and 
+will die then.
 
-> +with begin_global() guarantees than any erroneous read will cause the
-> +do_something_locked() function's first do_something() invocation to happen
-> +before begin_global() returns.  The combination of the smp_load_acquire()
-> +in do_something_locked() and the smp_store_release() in end_global()
-> +guarantees that either the do_something_locked() function's first
-> +do_something() invocation happens after the call to end_global() or that
-> +do_something_locked() acquires global_lock() and rechecks under the lock.
+>
+> So instead of handling -EFAULT like most pieces of kernel code the code
+> just immediately calls do_exit, and does not even attempt to handle
+> the error.
+>
+> That is not my favorite strategy at all, but I suspect it isn't worth
+> it, or safe to update the skeleton.S to handle errors.  Especially as we
+> have not even figured out how to test that code yet.
 
-This last sentence also makes no sense unless you imagine dropping 
-global_lock between begin_global() and end_global().
+That's bothering me more than a little, but I need to find out whether 
+the emulator even handles FPU exceptions correctly ...
 
-Alan
+Cheers,
+
+	Michael
+
+>
+> Eric
+>
