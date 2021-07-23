@@ -2,148 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCEC3D39B5
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Jul 2021 13:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A113D3A57
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Jul 2021 14:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbhGWLDP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Jul 2021 07:03:15 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:37267 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbhGWLDO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Jul 2021 07:03:14 -0400
-Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M597s-1m803T1ZlU-001DD1 for <linux-arch@vger.kernel.org>; Fri, 23 Jul 2021
- 13:43:47 +0200
-Received: by mail-wm1-f42.google.com with SMTP id m20-20020a05600c4f54b029024e75a15716so480940wmq.2
-        for <linux-arch@vger.kernel.org>; Fri, 23 Jul 2021 04:43:47 -0700 (PDT)
-X-Gm-Message-State: AOAM5325+uqFY95eiuIsQbkg/SSG9I3daEnoMQq9uCQn2jk24mSKT6g8
-        4AFEaMI1GEzUNQLDcfJP4PKJVCds+r0r7LKh72E=
-X-Google-Smtp-Source: ABdhPJzmeuHBO9nGu8sL6IPNddEk6IBY4du6yjZ3we5158of97huB3QHDB34brQA+PTEeHB1cjCP8RfqSgzn9J+ZiJU=
-X-Received: by 2002:a1c:c90f:: with SMTP id f15mr13753836wmb.142.1627040627011;
- Fri, 23 Jul 2021 04:43:47 -0700 (PDT)
+        id S234845AbhGWLz7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Jul 2021 07:55:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58956 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234774AbhGWLz7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 23 Jul 2021 07:55:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 001EC60E8C
+        for <linux-arch@vger.kernel.org>; Fri, 23 Jul 2021 12:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627043793;
+        bh=kbqkjgZx0i2FNjnLd6NpL865j7k342XTF3ZhEzzvM1I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mJDf1QIhCz+3Yc8Tph2qv8iddezTqScB88SEMBzWOzcyIJMCp+D9MSfOYK/RmF0ID
+         7yXAaTzjIX4C11GoM3IffCnuxjvj1C3M7clCDlZEsP2M7ZSmVOM3qNsxdQs9vJlO6R
+         uANaDgTGpktsbZ5OYX/gAqiZkjoDAneSRuqjvmv0XR2uRgJr+plmCR2NkbsHl7GwCF
+         6YywCVE8My3gbj9YKPwrpDJ916iQGCetj5M3/+uBFLCKnq0UDrt6DSXhLFexbczDBJ
+         RPt4p+7LbWMMKilq5sCvzVmKNGzA2IK7JhSBJmWrDFuA1aTUk9rdOzM9FeDBFMTuMi
+         rBaG15DItO9JQ==
+Received: by mail-wr1-f52.google.com with SMTP id t17so2238296wrq.2
+        for <linux-arch@vger.kernel.org>; Fri, 23 Jul 2021 05:36:32 -0700 (PDT)
+X-Gm-Message-State: AOAM532li0AjI31iPFHG/V/AeSdJS8D644VSmN/CIZYGAFosyRSmJA0t
+        K49mT9AAsBkWGxbWnAROW+iIsRG4wARFAVGfH/Y=
+X-Google-Smtp-Source: ABdhPJyS3rDvYit1p6RxOd1UAJoAFsisDeTbOIdhA8V643oGeu3wjE5idj91qtvL4RXUfv+/CdiF0RPvL3k+vf5Op1Y=
+X-Received: by 2002:a5d:65cb:: with SMTP id e11mr5304315wrw.105.1627043791659;
+ Fri, 23 Jul 2021 05:36:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-13-chenhuacai@loongson.cn> <CAK8P3a0+jk=09mGdnWu9c+JWkwDKM+ffv=QvJs2uMY7WOg85AQ@mail.gmail.com>
- <CAAhV-H6PDr=YZdc=2NJ6hceE7HoKB-WcUHi3GEgtfO8nbxOV3g@mail.gmail.com>
-In-Reply-To: <CAAhV-H6PDr=YZdc=2NJ6hceE7HoKB-WcUHi3GEgtfO8nbxOV3g@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 23 Jul 2021 13:43:30 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a02R988LdN4Cshhp=sAnwKS+GOwwWwRfvprm36eTb2YqQ@mail.gmail.com>
-Message-ID: <CAK8P3a02R988LdN4Cshhp=sAnwKS+GOwwWwRfvprm36eTb2YqQ@mail.gmail.com>
-Subject: Re: [PATCH 12/19] LoongArch: Add misc common routines
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20210722124814.778059-7-arnd@kernel.org> <202107230453.Cz16fInO-lkp@intel.com>
+In-Reply-To: <202107230453.Cz16fInO-lkp@intel.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 23 Jul 2021 14:36:15 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a22AEb+Sn6ZXPnMt4WykwjizNv3O6fXOtMjD4egA257VA@mail.gmail.com>
+Message-ID: <CAK8P3a22AEb+Sn6ZXPnMt4WykwjizNv3O6fXOtMjD4egA257VA@mail.gmail.com>
+Subject: Re: [PATCH v3 6/9] microblaze: use generic strncpy/strnlen from_user
+To:     kernel test robot <lkp@intel.com>, Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>
+Cc:     kbuild-all@lists.01.org
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:UIiOIgdBsDfR4jfxMrnWzrey3QWi+1JQjA9mRgDblr8/dGWU5dQ
- fM5ktcleVsKZdw6somkSgj4UZAtZQ1q2YOyS+DGLys/Ol9QbZGBDuW0q11Q4f4Woj1TWQAH
- F9rwx4csB9ZL1x9pHSOBtHC6F24o40mJvTuEV2pi1QKD6fi1BcTtVS5+CdvON5H6doDa+BY
- fhvbaQGd0pvGUUBP4zXIQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DxmUaBmgsmA=:84TD1/h7rwx7JmziHa7YGO
- RU+OoHRpPJrk7DdzYUQA3RFcMnK2hhMyOJXa8iaWhaqTwIAfVodd/x7MG2dXa0yiAxWxnaAvD
- 2RkcK/j531thsrvrqhLQsWNYNXtMqVEI7rceSJa1DJP9JB8/+5lHnSY9trjpR7IDgYixEpLiW
- 5m4p0zLdOk6vNulx+bsQ9jKq+am9je+gDa55tQDFM9QOdZP+ZZBag4pJ5Dhsb4YK8dGLNUJNe
- t/cpQSduxnmBq/qIVlKMdF/1q/qaABOBw/GfQE8JCp2MdmtlUbntBnUBNg7wwlTxu8f2iUmub
- g4HGM00LvgavWQkuyIEAPamZurkuHCt09svvBlsHh6/+VlSkAT/sPL0w0njXoLoGMnyRQDRGx
- O/yAT7N/+OLv2hHj+w+OAJwHm4klDgUjN+0lVB9vVUwajvhklu5dYRtQsbydod6JOAhPQDj3d
- lq5WXp/Z/wniXnHlFifHVDacQkU3xF23zVXUV7eU9AoxihRthJFgglyAlozIm6ZAiB76kS4Ql
- oPiq/2L2uIlIZEv+wLJQtYgaG5r14CAWlXCEdKBn+DvN4nAjk0/nGy3l11wBiy97AUkN4xGal
- kzDZFHvPKXUsPnHp2dp4eMQrQuEN3AKWZdlFDIWdHQGdqQ+KzsZWXazokZ1DUvs+Ro0DSxmYS
- ItfdBcVJ6W77sSPMwceE9EjcEf23NdfPpaGxLL4ZCd/nTs7eZnz0hfAA7C3n5cUIGnyp8jchm
- pWZx/+OO4xSEVuh0A0xa7Drmpv1icjLjFkFD8P4yv4BRMkkcyRJVMWxO10sUs4Gtbp3lZl8pj
- ktryRTR7C1c1AC+GWTM2xNml4p2jnRkjXO/wG+PhlBjr1899MYGDcvd+v7y88yUo1xZFgXBu8
- efH/tbWZ6udLbKYB08+GuHRWx7K0euV8JgLr/RWeXpVZFGOpszim2LkZL/xWzvLdxqCONCLln
- WkJiXSH041DVknznn6VHCtuVgY9No+5FJDh0ZJdOzcuzwvNm5EXd4
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 23, 2021 at 12:41 PM Huacai Chen <chenhuacai@gmail.com> wrote:
-> On Tue, Jul 6, 2021 at 6:22 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > +static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
-> > > +                                     unsigned long new, unsigned int size)
-> > > +{
-> > > +       switch (size) {
-> > > +       case 1:
-> > > +       case 2:
-> > > +               return __cmpxchg_small(ptr, old, new, size);
-> >
-> > Same here.
+On Thu, Jul 22, 2021 at 10:48 PM kernel test robot <lkp@intel.com> wrote:
 >
-> 16bit cmpxchg is used by qspinlock. Yes, you suggest we should not use
-> qspinlock, but our test results show that ticket spinlock is even
-> worse... So, we want to keep cmpxchg_small() and qspinlock.
-
-Can you explain in detail how that cmpxchg loop provides the necessary
-forward progress guarantees to make qspinlock reliable?
-
-As Peter keeps pointing out, usually this is not actually the case, so
-faster-but-broken is not a replacement for a simple working version.
-
-If you already have the ticket spinlock implementation, maybe start out
-by using that for the initial submission, and then provide an extra
-patch to convert it to qspinlock as a follow-up that can be debated
-in more detail regarding correctness and performance.
-
-> > > +static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
-> > > +       unsigned long prot_val)
-> > > +{
-> > > +       /* This only works for !HIGHMEM currently */
-> >
-> > Do you support highmem? I would expect new architectures to no longer
-> > implement that. Just use a 64-bit kernel on systems with lots of ram.
+> All errors (new ones prefixed by >>):
 >
-> Emmm, 64-bit kernel doesn't need highmem.
+>    lib/strncpy_from_user.c: In function 'strncpy_from_user':
+> >> lib/strncpy_from_user.c:123:13: error: implicit declaration of function 'user_addr_max' [-Werror=implicit-function-declaration]
+>      123 |  max_addr = user_addr_max();
+>          |             ^~~~~~~~~~~~~
+>    cc1: some warnings being treated as errors
 
-Yes, that was my point: 32-bit user space is fine if you care a lot about
-size constraints of DDR2 or older memory. For any system that has
-enough memory to require highmem, it is better to just pick a 64-bit
-kernel to start with, if the CPU allows it.
+> --
+> >> lib/strnlen_user.c:92:6: error: conflicting types for 'strnlen_user'
+>       92 | long strnlen_user(const char __user *str, long count)
+>          |      ^~~~~~~~~~~~
+>    In file included from include/linux/uaccess.h:11,
+>                     from lib/strnlen_user.c:4:
+>    arch/microblaze/include/asm/uaccess.h:306:13: note: previous declaration of 'strnlen_user' was here
+>      306 | extern long strnlen_user(const char __user *sstr, int len);
 
-> > > +#define ioremap(offset, size)                                  \
-> > > +       ioremap_prot((offset), (size), _CACHE_SUC)
-> > > +#define ioremap_uc ioremap
-> >
-> > Remove ioremap_uc(), it should never be called here.
-> It is used by lib/devres.c.
+Fixed both now, thanks for the report.
 
-There is a default implementation in include/asm-generic/io.h
-that just returns NULL here.
+I had to add a user_addr_max() definition here, which unfortunately
+will also conflict
+with the get_fs() removal if Christoph plans to have that merged
+through the microblaze
+tree.
 
-> > > +#define __BUILD_MEMORY_SINGLE(pfx, bwlq, type)                         \
-> > > +                                                                       \
-> > > +static inline void pfx##write##bwlq(type val,                          \
-> > > +                                   volatile void __iomem *mem)         \
-> > > +{                                                                      \
-> >
-> > Please don't add another copy of these macros. Use the version from
-> > include/asm-generic, or modify it as needed if it doesn't quite work.
->
-> On Loongson platform, we should put a wmb() before MMIO write. The
-> generic readw()/readl()/outw()/outl() have wmb(), but the __raw
-> versions don't have. I want to know what is the design goal of the
-> __raw version, are they supposed to be used in scenarios that the
-> ordering needn't be cared?
+If this becomes a problem, I could merge both series through the
+asm-generic tree.
 
-The __raw versions are mainly meant for accessing memory from
-platform specific driver code. They don't provide any particular
-endianness or ordering guarantees and generally cannot be used
-in portable drivers.
-
-Note that a full wmb() should not be needed, you only have to serialize
-between prior memory accesses and a DMA triggered by the device,
-but not between multiple CPUs here.
-
-      Arnd
+     Arnd
