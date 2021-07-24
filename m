@@ -2,78 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF12F3D4785
-	for <lists+linux-arch@lfdr.de>; Sat, 24 Jul 2021 14:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0263D47A5
+	for <lists+linux-arch@lfdr.de>; Sat, 24 Jul 2021 14:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbhGXLZ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 24 Jul 2021 07:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbhGXLZ3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 24 Jul 2021 07:25:29 -0400
-Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2977CC061757
-        for <linux-arch@vger.kernel.org>; Sat, 24 Jul 2021 05:06:01 -0700 (PDT)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4GX4dv1Wbmz1s8dB;
-        Sat, 24 Jul 2021 14:05:55 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4GX4dv0mSsz1rmXb;
-        Sat, 24 Jul 2021 14:05:55 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 2xuYAc97Wpu0; Sat, 24 Jul 2021 14:05:54 +0200 (CEST)
-X-Auth-Info: wO77jCK918RBVEMr6+v4ZlIa9eW1scqsY6nuBaDN4jL38SnGw0deMAm8W/mynhLG
-Received: from igel.home (ppp-46-244-175-70.dynamic.mnet-online.de [46.244.175.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Sat, 24 Jul 2021 14:05:54 +0200 (CEST)
-Received: by igel.home (Postfix, from userid 1000)
-        id BBEE02C24BA; Sat, 24 Jul 2021 14:05:53 +0200 (CEST)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, geert@linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        torvalds@linux-foundation.org
-Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
-References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
-        <87zgunzovm.fsf@disp2133>
-        <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
-        <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com>
-        <8735scvklk.fsf@disp2133>
-        <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
-        <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com>
-        <87h7gopvz2.fsf@disp2133>
-        <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com>
-        <877dhio13t.fsf@disp2133>
-        <12992a3c-0740-f90e-aa4e-1ec1d8ea38f6@gmail.com>
-        <87tukkk6h3.fsf@disp2133>
-        <df6618bf-d1bc-4759-2d14-934c22d54a83@gmail.com>
-X-Yow:  YOW!!  I am having FUN!!
-Date:   Sat, 24 Jul 2021 14:05:53 +0200
-In-Reply-To: <df6618bf-d1bc-4759-2d14-934c22d54a83@gmail.com> (Michael
-        Schmitz's message of "Sat, 24 Jul 2021 11:52:38 +1200")
-Message-ID: <87eebn7w7y.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        id S231938AbhGXLzY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 24 Jul 2021 07:55:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37516 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231511AbhGXLzX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 24 Jul 2021 07:55:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 841BB60F25;
+        Sat, 24 Jul 2021 12:35:52 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
+        linux-arch@vger.kernel.org, Rui Wang <wangrui@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH RFC 1/2] arch: Introduce ARCH_HAS_HW_XCHG_SMALL
+Date:   Sat, 24 Jul 2021 20:36:16 +0800
+Message-Id: <20210724123617.3525377-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Jul 24 2021, Michael Schmitz wrote:
+Introduce a new Kconfig option ARCH_HAS_HW_XCHG_SMALL, which means arch
+has hardware sub-word xchg/cmpxchg support. This option will be used as
+an indicator to select the bit-field definition in the qspinlock data
+structure.
 
-> According to my understanding, you can't get a F-line exception on
-> 68040.
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/Kconfig       | 4 ++++
+ arch/arm/Kconfig   | 1 +
+ arch/arm64/Kconfig | 1 +
+ arch/ia64/Kconfig  | 1 +
+ arch/m68k/Kconfig  | 1 +
+ arch/x86/Kconfig   | 1 +
+ 6 files changed, 9 insertions(+)
 
-The F-line exeception vector is used for all FPU illegal and
-unimplemented insns.
-
-Andreas.
-
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 129df498a8e1..ba5ed867b813 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -228,6 +228,10 @@ config ARCH_HAS_FORTIFY_SOURCE
+ 	  An architecture should select this when it can successfully
+ 	  build and run with CONFIG_FORTIFY_SOURCE.
+ 
++# Select if arch has hardware sub-word xchg/cmpxchg support
++config ARCH_HAS_HW_XCHG_SMALL
++	bool
++
+ #
+ # Select if the arch provides a historic keepinit alias for the retain_initrd
+ # command line option
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 82f908fa5676..fc374ab3b5c7 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -8,6 +8,7 @@ config ARM
+ 	select ARCH_HAS_DMA_WRITE_COMBINE if !ARM_DMA_MEM_BUFFERABLE
+ 	select ARCH_HAS_ELF_RANDOMIZE
+ 	select ARCH_HAS_FORTIFY_SOURCE
++	select ARCH_HAS_HW_XCHG_SMALL
+ 	select ARCH_HAS_KEEPINITRD
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index b5b13a932561..393cbe1a6d85 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -25,6 +25,7 @@ config ARM64
+ 	select ARCH_HAS_FORTIFY_SOURCE
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_GIGANTIC_PAGE
++	select ARCH_HAS_HW_XCHG_SMALL
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_KEEPINITRD
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+index cf425c2c63af..a0a31fd8d9be 100644
+--- a/arch/ia64/Kconfig
++++ b/arch/ia64/Kconfig
+@@ -9,6 +9,7 @@ menu "Processor type and features"
+ config IA64
+ 	bool
+ 	select ARCH_HAS_DMA_MARK_CLEAN
++	select ARCH_HAS_HW_XCHG_SMALL
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+ 	select ARCH_MIGHT_HAVE_PC_SERIO
+ 	select ACPI
+diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+index 96989ad46f66..324c2a42ec00 100644
+--- a/arch/m68k/Kconfig
++++ b/arch/m68k/Kconfig
+@@ -5,6 +5,7 @@ config M68K
+ 	select ARCH_32BIT_OFF_T
+ 	select ARCH_HAS_BINFMT_FLAT
+ 	select ARCH_HAS_DMA_PREP_COHERENT if HAS_DMA && MMU && !COLDFIRE
++	select ARCH_HAS_HW_XCHG_SMALL
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if HAS_DMA
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if RMW_INSNS
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT if ISA
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 49270655e827..0f3f24502c70 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -77,6 +77,7 @@ config X86
+ 	select ARCH_HAS_FILTER_PGPROT
+ 	select ARCH_HAS_FORTIFY_SOURCE
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
++	select ARCH_HAS_HW_XCHG_SMALL
+ 	select ARCH_HAS_KCOV			if X86_64 && STACK_VALIDATION
+ 	select ARCH_HAS_MEM_ENCRYPT
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
 -- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+2.27.0
+
