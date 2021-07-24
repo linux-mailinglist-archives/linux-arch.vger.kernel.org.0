@@ -2,17 +2,17 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0263D47A5
-	for <lists+linux-arch@lfdr.de>; Sat, 24 Jul 2021 14:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE803D47A6
+	for <lists+linux-arch@lfdr.de>; Sat, 24 Jul 2021 14:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbhGXLzY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 24 Jul 2021 07:55:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37516 "EHLO mail.kernel.org"
+        id S231993AbhGXLz3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 24 Jul 2021 07:55:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37574 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231511AbhGXLzX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 24 Jul 2021 07:55:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 841BB60F25;
-        Sat, 24 Jul 2021 12:35:52 +0000 (UTC)
+        id S231511AbhGXLz3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 24 Jul 2021 07:55:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 843E360E98;
+        Sat, 24 Jul 2021 12:35:58 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
@@ -24,106 +24,64 @@ Cc:     Waiman Long <longman@redhat.com>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH RFC 1/2] arch: Introduce ARCH_HAS_HW_XCHG_SMALL
-Date:   Sat, 24 Jul 2021 20:36:16 +0800
-Message-Id: <20210724123617.3525377-1-chenhuacai@loongson.cn>
+Subject: [PATCH RFC 2/2] qspinlock: Use ARCH_HAS_HW_XCHG_SMALL to select _Q_PENDING_BITS definition
+Date:   Sat, 24 Jul 2021 20:36:17 +0800
+Message-Id: <20210724123617.3525377-2-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210724123617.3525377-1-chenhuacai@loongson.cn>
+References: <20210724123617.3525377-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce a new Kconfig option ARCH_HAS_HW_XCHG_SMALL, which means arch
-has hardware sub-word xchg/cmpxchg support. This option will be used as
-an indicator to select the bit-field definition in the qspinlock data
-structure.
+There are two types of bitfield definition in qspinlock data structues:
+
+     * When NR_CPUS < 16K
+     *  0- 7: locked byte
+     *     8: pending
+     *  9-15: not used
+     * 16-17: tail index
+     * 18-31: tail cpu (+1)
+     *
+     * When NR_CPUS >= 16K
+     *  0- 7: locked byte
+     *     8: pending
+     *  9-10: tail index
+     * 11-31: tail cpu (+1)
+
+_Q_PENDING_BITS is 8 or 1 for the two types respectively. The second
+type is a universal definition while the first type is an optimization
+for NR_CPUS < 16K, but it relies on hardware 16bit xchg/cmpxchg support.
+
+Unfortunately, some architectures don't have hardware sub-word xchg/
+cmpxchg support. Though these archs can use software emulation (e.g.,
+MIPS), but the cost is too expensive, and they have no benefits from
+_Q_PENDING_BITS=8. So we only allow archs with ARCH_HAS_HW_XCHG_SMALL
+to select _Q_PENDING_BITS=8.
+
+This patch can let CSKY, RISC-V and other similar archs use qspinlock to
+replace existing ticket spinlock.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/Kconfig       | 4 ++++
- arch/arm/Kconfig   | 1 +
- arch/arm64/Kconfig | 1 +
- arch/ia64/Kconfig  | 1 +
- arch/m68k/Kconfig  | 1 +
- arch/x86/Kconfig   | 1 +
- 6 files changed, 9 insertions(+)
+ include/asm-generic/qspinlock_types.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 129df498a8e1..ba5ed867b813 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -228,6 +228,10 @@ config ARCH_HAS_FORTIFY_SOURCE
- 	  An architecture should select this when it can successfully
- 	  build and run with CONFIG_FORTIFY_SOURCE.
+diff --git a/include/asm-generic/qspinlock_types.h b/include/asm-generic/qspinlock_types.h
+index 2fd1fb89ec36..458e5d941c92 100644
+--- a/include/asm-generic/qspinlock_types.h
++++ b/include/asm-generic/qspinlock_types.h
+@@ -71,7 +71,7 @@ typedef struct qspinlock {
+ #define _Q_LOCKED_MASK		_Q_SET_MASK(LOCKED)
  
-+# Select if arch has hardware sub-word xchg/cmpxchg support
-+config ARCH_HAS_HW_XCHG_SMALL
-+	bool
-+
- #
- # Select if the arch provides a historic keepinit alias for the retain_initrd
- # command line option
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 82f908fa5676..fc374ab3b5c7 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -8,6 +8,7 @@ config ARM
- 	select ARCH_HAS_DMA_WRITE_COMBINE if !ARM_DMA_MEM_BUFFERABLE
- 	select ARCH_HAS_ELF_RANDOMIZE
- 	select ARCH_HAS_FORTIFY_SOURCE
-+	select ARCH_HAS_HW_XCHG_SMALL
- 	select ARCH_HAS_KEEPINITRD
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b5b13a932561..393cbe1a6d85 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -25,6 +25,7 @@ config ARM64
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_GIGANTIC_PAGE
-+	select ARCH_HAS_HW_XCHG_SMALL
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_KEEPINITRD
- 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index cf425c2c63af..a0a31fd8d9be 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -9,6 +9,7 @@ menu "Processor type and features"
- config IA64
- 	bool
- 	select ARCH_HAS_DMA_MARK_CLEAN
-+	select ARCH_HAS_HW_XCHG_SMALL
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select ACPI
-diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-index 96989ad46f66..324c2a42ec00 100644
---- a/arch/m68k/Kconfig
-+++ b/arch/m68k/Kconfig
-@@ -5,6 +5,7 @@ config M68K
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_HAS_BINFMT_FLAT
- 	select ARCH_HAS_DMA_PREP_COHERENT if HAS_DMA && MMU && !COLDFIRE
-+	select ARCH_HAS_HW_XCHG_SMALL
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if HAS_DMA
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if RMW_INSNS
- 	select ARCH_MIGHT_HAVE_PC_PARPORT if ISA
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 49270655e827..0f3f24502c70 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -77,6 +77,7 @@ config X86
- 	select ARCH_HAS_FILTER_PGPROT
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-+	select ARCH_HAS_HW_XCHG_SMALL
- 	select ARCH_HAS_KCOV			if X86_64 && STACK_VALIDATION
- 	select ARCH_HAS_MEM_ENCRYPT
- 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+ #define _Q_PENDING_OFFSET	(_Q_LOCKED_OFFSET + _Q_LOCKED_BITS)
+-#if CONFIG_NR_CPUS < (1U << 14)
++#if (CONFIG_NR_CPUS < (1U << 14)) && defined(CONFIG_ARCH_HAS_HW_XCHG_SMALL)
+ #define _Q_PENDING_BITS		8
+ #else
+ #define _Q_PENDING_BITS		1
 -- 
 2.27.0
 
