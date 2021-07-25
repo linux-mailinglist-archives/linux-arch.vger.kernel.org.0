@@ -2,94 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450803D4C8F
-	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 09:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08953D4D09
+	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 12:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbhGYHD7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 25 Jul 2021 03:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbhGYHDs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jul 2021 03:03:48 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D570C061757
-        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 00:44:18 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id ds11-20020a17090b08cbb0290172f971883bso15213974pjb.1
-        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 00:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=+1CbdclIXuS1P33C/qOefRO4xRhZbvNeuMXF7mLBa/s=;
-        b=aDPvLHd+7NX40ZNQoGa9jAavZjPCXEHcyA0+ZqYOnaoHL7F9A2v23PivByt1lM9TGw
-         /sYZQYl1JbQ8W9iV87dr6PT5hHAhgtgTjpyx1SnCmYdZ6FtAdno5HHkSVAcKArF+tU6w
-         9WjVKMGvngbXXW/dHwpDHRCWPp7h/TF0Eb9Y4ymzTH7pjd3wZ1vM5wpONu0I2Wkbj3Tl
-         IsSjL6nzLXH8we71PbgxBA6wN9IxthU8bTFCZXecolnbDoVu7LUOzAMyy2ads3ODka3c
-         ia7ZHadxoJsUSJO1W2MbdwG147tagPaJOeEdvzb/w5k3AeMau01wI9vk5oiGqQXxPIEO
-         l+sQ==
+        id S230461AbhGYJZI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 25 Jul 2021 05:25:08 -0400
+Received: from mail-vk1-f172.google.com ([209.85.221.172]:39481 "EHLO
+        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230370AbhGYJZI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jul 2021 05:25:08 -0400
+Received: by mail-vk1-f172.google.com with SMTP id f1so1379263vkk.6
+        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 03:05:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=+1CbdclIXuS1P33C/qOefRO4xRhZbvNeuMXF7mLBa/s=;
-        b=gDxX2abRynFIxLyXSKpPUWDvlFe6uXxDPU9fEeyJoD8IZETOAUdQ2RADa6HXKNPIvU
-         f8x9AexwYS6glRSXDmBCdWf9SFr1HSjbsYQ/s0szJRD416yAK0Jpt8jIkR1Z8snVeY+i
-         3blgkXwZzeglq1XBBeimA90BPpOtghJDOV50cqZY6Y2SHG9q/eMn21tOsL4WsgXcuhMW
-         8liSETSGbpRr0j6jczTNHjXPPwv9b7uk6hYaQvLyLJduaUTTDm+IONXcJlo3kDhnkqRD
-         BEb263D42zql6xDLGpXQemNH41awEjChDqALVxETQVG0wN6NTMmknX1dx8tePrfVhH1M
-         OxTA==
-X-Gm-Message-State: AOAM533E3Zm+/mbpMzqfg5Hy6tAaqT1qSPMphXbIJH/RdLChjUTlUBH4
-        FXw1ybplWDu8ZGRv82UE+QU=
-X-Google-Smtp-Source: ABdhPJxttcbg9hC5V+iz0fNwTi+hh/7+6jW7G99v9FTUrNl20QgnDLuW3tGew4ZkT9Vqe7bBUjXYRg==
-X-Received: by 2002:a17:90b:209:: with SMTP id fy9mr11546856pjb.187.1627199057549;
-        Sun, 25 Jul 2021 00:44:17 -0700 (PDT)
-Received: from [10.1.1.25] (222-152-189-37-fibre.sparkbb.co.nz. [222.152.189.37])
-        by smtp.gmail.com with ESMTPSA id f11sm45050500pga.61.2021.07.25.00.44.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 25 Jul 2021 00:44:17 -0700 (PDT)
-Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
-To:     Andreas Schwab <schwab@linux-m68k.org>
-References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
- <87zgunzovm.fsf@disp2133> <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
- <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com> <8735scvklk.fsf@disp2133>
- <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
- <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com> <87h7gopvz2.fsf@disp2133>
- <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com> <877dhio13t.fsf@disp2133>
- <12992a3c-0740-f90e-aa4e-1ec1d8ea38f6@gmail.com> <87tukkk6h3.fsf@disp2133>
- <df6618bf-d1bc-4759-2d14-934c22d54a83@gmail.com> <87eebn7w7y.fsf@igel.home>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, geert@linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        torvalds@linux-foundation.org
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <db43bef1-7938-4fc1-853d-c20d66521329@gmail.com>
-Date:   Sun, 25 Jul 2021 19:44:11 +1200
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XHyqWT5T8EnnHCYAwXfDHN6CTdT91ozwfA6Z/DQ/7N8=;
+        b=hyh/Y061JVhYgDZZ5GFHZhIAddProdK+0LmFzgLc5H2/Ekgrjo1GhH6ibR+/+Lvz5Q
+         l/qF6GxNn4KrWMlzpYuPp7jxZcp+iZS10sSPkYAdgbeUzNXwufhTtzmQANKzL4rmBx1f
+         R+9Bt5b8EWHr/BsZ4Xo+765xNXc6HcFy4gSoN18fftBD4w+AR33LcjqFmI9xQYUuL11N
+         Iwtw0EFN7cQffAmZq2tTkD4GDtK81ipwvYvUYJQ21pjQxNYhOjxS92fB+4yxDpnbtykc
+         0PDPdn4v5UDq4XuJWsno565aVSj/1caVjLyAYQdy0RmRhfwz9IkXGpNgfNx0v0pJEwPg
+         HTaA==
+X-Gm-Message-State: AOAM532+MV68O5SFCjiDcoEKVRxTHq1ScK8k2FSrLgtUwwQDB0XoHv/U
+        kERyGlQusi33jXLGwHPlHVGd6u6FJdfOB1VxYMY=
+X-Google-Smtp-Source: ABdhPJzQKq4M8f7Z5qDbOveUgVw3PiuXDpF00/PNMEaRAbyNIAhtUEl8Hf0fNN11BiGeW9PYKobK+69rnZDtrCXfnl8=
+X-Received: by 2002:ac5:cd9b:: with SMTP id i27mr7805690vka.1.1627207537068;
+ Sun, 25 Jul 2021 03:05:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <87eebn7w7y.fsf@igel.home>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com> <1624407696-20180-4-git-send-email-schmitzmic@gmail.com>
+In-Reply-To: <1624407696-20180-4-git-send-email-schmitzmic@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 25 Jul 2021 12:05:26 +0200
+Message-ID: <CAMuHMdVA5d7z6awGrpJ+Tb3PRxz7Nczd_SLXZ=cAwsS8tFU_vg@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] m68k: track syscalls being traced with shallow
+ user context stack
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andreas Schwab <schwab@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Andreas,
+Hi Michael,
 
-Am 25.07.2021 um 00:05 schrieb Andreas Schwab:
-> On Jul 24 2021, Michael Schmitz wrote:
+On Wed, Jun 23, 2021 at 2:21 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> Add 'status' field to thread_info struct to hold syscall trace
+> status info.
 >
->> According to my understanding, you can't get a F-line exception on
->> 68040.
+> Set flag bit in thread_info->status at syscall trace entry, clear
+> flag bit on trace exit.
 >
-> The F-line exeception vector is used for all FPU illegal and
-> unimplemented insns.
+> Set another flag bit on entering syscall where the full stack
+> frame has been saved. These flags can be checked whenever a
+> syscall calls ptrace_stop().
+>
+> Check flag bits in get_reg()/put_reg() and prevent access to
+> registers that are saved on the switch stack, in case the
+> syscall did not actually save these registers on the switch
+> stack.
+>
+> Tested on ARAnyM only - boots and survives running strace on a
+> binary, nothing fancy.
+>
+> CC: Eric W. Biederman <ebiederm@xmission.com>
+> CC: Linus Torvalds <torvalds@linux-foundation.org>
+> CC: Andreas Schwab <schwab@linux-m68k.org>
+> Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
 
-Thanks - now from my reading of the fpsp040 code (which has mislead me 
-in the past), it would seem that operations like sin() and exp() ought 
-to raise that exception then. I don't see that in ARAnyM.
-Is there any emulator that correctly emulates the 68040 FPU in that regard?
+Thanks for your patch!
 
-Cheers,
+> --- a/arch/m68k/kernel/entry.S
+> +++ b/arch/m68k/kernel/entry.S
+> @@ -51,75 +51,115 @@
+>
+>  .text
+>  ENTRY(__sys_fork)
+> +       movel   %curptr@(TASK_STACK),%a1
+> +       orb     #TIS_SWITCH_STACK, %a1@(TINFO_STATUS+3)
 
-	Michael
+This doesn't work on Coldfire:
 
+arch/m68k/kernel/entry.S:55: Error: invalid instruction for this
+architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001,
+68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k,
+68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32
+[68330, 68331, 68332,
+ 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) --
+statement `orb #(1<<1),%a1@(16+3)' ignored
+
+>         SAVE_SWITCH_STACK
+>         jbsr    sys_fork
+>         lea     %sp@(24),%sp
+> +       movel   %curptr@(TASK_STACK),%a1
+> +       andb    #TIS_NO_SWITCH_STACK, %a1@(TINFO_STATUS+3)
+
+arch/m68k/kernel/entry.S:60: Error: invalid instruction for this
+architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001,
+68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k,
+68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32
+[68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349,
+68360], fidoa [fido]) -- statement `andb #(~((1<<1))),%a1@(16+3)'
+ignored
+
+>         rts
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
