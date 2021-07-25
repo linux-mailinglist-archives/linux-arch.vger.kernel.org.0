@@ -2,122 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C08953D4D09
-	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 12:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760023D4D0C
+	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 12:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbhGYJZI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 25 Jul 2021 05:25:08 -0400
-Received: from mail-vk1-f172.google.com ([209.85.221.172]:39481 "EHLO
-        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbhGYJZI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jul 2021 05:25:08 -0400
-Received: by mail-vk1-f172.google.com with SMTP id f1so1379263vkk.6
-        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 03:05:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XHyqWT5T8EnnHCYAwXfDHN6CTdT91ozwfA6Z/DQ/7N8=;
-        b=hyh/Y061JVhYgDZZ5GFHZhIAddProdK+0LmFzgLc5H2/Ekgrjo1GhH6ibR+/+Lvz5Q
-         l/qF6GxNn4KrWMlzpYuPp7jxZcp+iZS10sSPkYAdgbeUzNXwufhTtzmQANKzL4rmBx1f
-         R+9Bt5b8EWHr/BsZ4Xo+765xNXc6HcFy4gSoN18fftBD4w+AR33LcjqFmI9xQYUuL11N
-         Iwtw0EFN7cQffAmZq2tTkD4GDtK81ipwvYvUYJQ21pjQxNYhOjxS92fB+4yxDpnbtykc
-         0PDPdn4v5UDq4XuJWsno565aVSj/1caVjLyAYQdy0RmRhfwz9IkXGpNgfNx0v0pJEwPg
-         HTaA==
-X-Gm-Message-State: AOAM532+MV68O5SFCjiDcoEKVRxTHq1ScK8k2FSrLgtUwwQDB0XoHv/U
-        kERyGlQusi33jXLGwHPlHVGd6u6FJdfOB1VxYMY=
-X-Google-Smtp-Source: ABdhPJzQKq4M8f7Z5qDbOveUgVw3PiuXDpF00/PNMEaRAbyNIAhtUEl8Hf0fNN11BiGeW9PYKobK+69rnZDtrCXfnl8=
-X-Received: by 2002:ac5:cd9b:: with SMTP id i27mr7805690vka.1.1627207537068;
- Sun, 25 Jul 2021 03:05:37 -0700 (PDT)
+        id S230483AbhGYJ2e convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Sun, 25 Jul 2021 05:28:34 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:48749 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230370AbhGYJ2e (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jul 2021 05:28:34 -0400
+Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mrggc-1lKBsR3Gtw-00nkfb for <linux-arch@vger.kernel.org>; Sun, 25 Jul
+ 2021 12:09:03 +0200
+Received: by mail-wm1-f42.google.com with SMTP id 9-20020a05600c26c9b02901e44e9caa2aso4334895wmv.4
+        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 03:09:03 -0700 (PDT)
+X-Gm-Message-State: AOAM532XNr6XG35ebqncDGSWTpdYb6fN0warEt8faWJUDIEz5o4zZUpd
+        /SbpzLbWSw2b9ganahiUe7MfRL/pu1NAhsHTQ30=
+X-Google-Smtp-Source: ABdhPJwKkuq9IyT9ix9adMAIBJvApSkY0aVFSbpXN2wXNtPNLvh2TJXlAkOVna8U7GvDUui15zMpNgHsagBC8nPgQNU=
+X-Received: by 2002:a1c:c90f:: with SMTP id f15mr22048881wmb.142.1627207743442;
+ Sun, 25 Jul 2021 03:09:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com> <1624407696-20180-4-git-send-email-schmitzmic@gmail.com>
-In-Reply-To: <1624407696-20180-4-git-send-email-schmitzmic@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 25 Jul 2021 12:05:26 +0200
-Message-ID: <CAMuHMdVA5d7z6awGrpJ+Tb3PRxz7Nczd_SLXZ=cAwsS8tFU_vg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] m68k: track syscalls being traced with shallow
- user context stack
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andreas Schwab <schwab@linux-m68k.org>
+References: <20210724123617.3525377-1-chenhuacai@loongson.cn>
+ <CAK8P3a0ZabB0cBR_SnOhi2=qxdQOYPGPEJeOqV0em1+bsvZKWw@mail.gmail.com> <ec727497-7fe9-a52c-3063-ccd0459159fe@flygoat.com>
+In-Reply-To: <ec727497-7fe9-a52c-3063-ccd0459159fe@flygoat.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sun, 25 Jul 2021 12:08:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a15Naj5R6nti-s0R-NRoB3SB_kMpix-ymjjrFhRghpAGw@mail.gmail.com>
+Message-ID: <CAK8P3a15Naj5R6nti-s0R-NRoB3SB_kMpix-ymjjrFhRghpAGw@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/2] arch: Introduce ARCH_HAS_HW_XCHG_SMALL
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Rui Wang <wangrui@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:eHQMSulQF/NycijIbi7tjP/4EhnMZ+PawpSqQvXIh5Z3Olnkzg0
+ 1ffiMLo6uoDGUBXfhbgWzMq8HMRjhVlSzkpI/NVv0Q+wnFEGbySFROdmhOXYCi8oq7Kz834
+ oryovAT0Gprdq3vnVa5YmycjdHZ6KQt8uvfW8VxKQochzeyb8iYgoYFb5zqimRp3AN5ZSh/
+ v2O0Qs42y614bTNDCRgww==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:v1ycOAy8bU0=:hJd4UqfYzXINxCHJo8J4AH
+ k6DY+Till4MvQXz0YRZpW9KzIGTO2u0yR9TMIG5//x2lQ8sOnrxkLj9jY0YuqRqgdWkW+wBqV
+ pVEybVJisU94iLlRlbHhtlXsA+XAwU3IBzTuGGX1CnQ0obRNDrcg+RM6EQD7xttvOsPq3DRnm
+ 0sgX1OD7TzZba8prouh3IS2ImTVmH8NJeFW+cXTq2lWSA+OU0Rx15WQS1K/8QVRuA/pBN+Sim
+ 1XE14906/JL+XjcbqqZ7HkoaY3N9hVm4xgvKBzaEqHblSXJiCa7cat+6g/DxkkNId09syugIA
+ vgDCbqRsmpWJqF60ROr7KIdfthPcOMckTblBf8YFms7ra5w7Bn2XWfXZg9qCObfHAEsM9ZCY9
+ ZuGmK2otYwBICxzLJiDUNTLziI6be0TxoXEsk1btMsO4AVRSVHzb33JM8Nry9C4ZEzfAdWy/T
+ oO9F2OMXtQhLnAv7WtZGhJ6Sgck4wCxoJkVFZiUe5rJ1NWfZdxnWc2efw++FkPrjvmjsjppd7
+ ZFE9RqtwHZtfifZ4Wcpb4ZsyedBulN+k+rhRWFDrFu+X4546EKNUTue3XhtWBI3LAsXDgm/5P
+ cgJ5bskasKjio2+57B65s3CPmSgvZ9AP0MpbQmv1xnYberAvt1GIkfW1cAIDtD09glPsSiMPX
+ i4X+R0zqeHjM4gmBoGS0/x5Vh5JK9y9kEgFedZFhMUWePM1GwoiZMe1Flv5X9owJy5Zd+fGoO
+ 6+oofjs8jIhBqpiFC2mXo13LHuAY74I5PCXK15hvfbNb7Cq8Jrujr+ma0TNy2K5zIGY9BkF1x
+ dM9R1EQSw8s7Pcpxwo2rNODtEhVpvcHn6+Z0WljCNdUGyCsV8FVe7VvxfJSZ07pZpymdbv7T+
+ qMIPDAnJkEE1gOOBQZ3sVQzO/PE1XE5P+5EmlVZcGq+qpMTegg7oH8wXWffI6gTZJIU1pz+IH
+ fjh0K+vj/I7YnAuWX7QhVNoTQMOup7LXujw2ZUbe5TcrJ9mkWgBLa
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Michael,
-
-On Wed, Jun 23, 2021 at 2:21 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> Add 'status' field to thread_info struct to hold syscall trace
-> status info.
+On Sun, Jul 25, 2021 at 5:06 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> 在 2021/7/25 上午3:24, Arnd Bergmann 写道:
+> > - If I remember correctly, there were some concerns about whether using
+> >    this information for picking the qspinlock implementation is a good idea.
+> We've checked previous attempt made by Guo Ren about
+> ARCH_USE_QUEUED_SPINLOCKS_XCHG32[1], the concerns of potential livelock
+> do exist.
 >
-> Set flag bit in thread_info->status at syscall trace entry, clear
-> flag bit on trace exit.
->
-> Set another flag bit on entering syscall where the full stack
-> frame has been saved. These flags can be checked whenever a
-> syscall calls ptrace_stop().
->
-> Check flag bits in get_reg()/put_reg() and prevent access to
-> registers that are saved on the switch stack, in case the
-> syscall did not actually save these registers on the switch
-> stack.
->
-> Tested on ARAnyM only - boots and survives running strace on a
-> binary, nothing fancy.
->
-> CC: Eric W. Biederman <ebiederm@xmission.com>
-> CC: Linus Torvalds <torvalds@linux-foundation.org>
-> CC: Andreas Schwab <schwab@linux-m68k.org>
-> Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
+> So in this patch Huacai took another, dropping the whole standalone
+> tailing logic to remove the usage of sub-word xchg. It could be understood as
+> partial revert of 69f9cae9 ("locking/qspinlock: Optimize for smaller NR_CPUS")
+> [2] on these architectures.
 
-Thanks for your patch!
+Ok, I see. Let's see what Peter thinks about it.
 
-> --- a/arch/m68k/kernel/entry.S
-> +++ b/arch/m68k/kernel/entry.S
-> @@ -51,75 +51,115 @@
->
->  .text
->  ENTRY(__sys_fork)
-> +       movel   %curptr@(TASK_STACK),%a1
-> +       orb     #TIS_SWITCH_STACK, %a1@(TINFO_STATUS+3)
-
-This doesn't work on Coldfire:
-
-arch/m68k/kernel/entry.S:55: Error: invalid instruction for this
-architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001,
-68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k,
-68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32
-[68330, 68331, 68332,
- 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) --
-statement `orb #(1<<1),%a1@(16+3)' ignored
-
->         SAVE_SWITCH_STACK
->         jbsr    sys_fork
->         lea     %sp@(24),%sp
-> +       movel   %curptr@(TASK_STACK),%a1
-> +       andb    #TIS_NO_SWITCH_STACK, %a1@(TINFO_STATUS+3)
-
-arch/m68k/kernel/entry.S:60: Error: invalid instruction for this
-architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001,
-68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k,
-68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32
-[68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349,
-68360], fidoa [fido]) -- statement `andb #(~((1<<1))),%a1@(16+3)'
-ignored
-
->         rts
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+        Arnd
