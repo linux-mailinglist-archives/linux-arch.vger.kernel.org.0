@@ -2,73 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B31323D4D44
-	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 14:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6933D5000
+	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 22:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbhGYLVh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 25 Jul 2021 07:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S230479AbhGYUIJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 25 Jul 2021 16:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbhGYLVh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jul 2021 07:21:37 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC7DC061757
-        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 05:02:06 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id a26so10059803lfr.11
-        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 05:02:06 -0700 (PDT)
+        with ESMTP id S230477AbhGYUII (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jul 2021 16:08:08 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953ECC061757
+        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 13:48:37 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id a20so9440446plm.0
+        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 13:48:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=bcEfT/vrLlIQCPr3dk0boAox1n9A2J0pCxj5Bn3PIR8=;
-        b=iRlbg3+tuJ9MCENv505571DeJ9embx4Qot25GmLB7kW75/TZLyDe9y/0Bobd6aH3ud
-         J6RbF+3BgGre6IbO6rV90bsW+JLUt2cNDCJdWvhXUWayLMOBtHays87Cu/unO9Fj059Y
-         5IvH0TO4dmqIuNVNsQFR+YI4j4WiKwq38JRvBSNFHLemo6yNRWuiUIZTLRH36vv4GgxT
-         sMNG6facWPi9qsXRxsp3o8FuBLAkgx65qDBkT1qJtRMKZKsdE/NeSpRMnVxe7lRdns0P
-         AtKVXlfcOHoWLM8hdV7HRl40dZ7lz8H6AOzF5AQLRL2jsu6sYRhs2bxQT8Szne/0UgdT
-         1fFw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=+soFvlggdNemFNXTJHD7EfeCnCEyuBk0Q2su2ig+5L8=;
+        b=YbUUTDNk7o/e5YA1/aFcqfEKITpxP2h0EuKnA5r7WqwXnMivekCIcIQmbg1iwboQka
+         fMNAUchCEEB35l1T/bMYGc4Sco/iTnVs4acwuzDgPrUskiEFpXE7Wo7xeXm4WQ1ueKgZ
+         gpW4VqTCNPsKW2jzcpV9HwJ++paEjxxpS0eLdAAZQXnhUOezgKhIZxwQDlQIdDYuVJuM
+         J04nWgVmTOynoPC36dUcrRFZvLSu2oPivRCcC6GpKNEeN5Crtj4eM4KLw/79ufVw0Ra7
+         sC2yRovewpVjZboSunDlpEPTPt71zdToIv2FgNvAJE304e8VsiLCfXGcmAAI3ibkNOGl
+         uVvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=bcEfT/vrLlIQCPr3dk0boAox1n9A2J0pCxj5Bn3PIR8=;
-        b=rd+s48/IHZhFdE1rX7OIxFF+GXKUJE4zoiB2mgKjWxfJux0Sxlp2GYsMxnQMB9r17k
-         61bHFHnEcElEIATlD9IH4nVl6W8puUBuP0i/A8M0cUU1qhLfU28V7KdvIACMgC0Rxk7b
-         iwEr9VxBNQ3sISnkTYJfihYo0RzmHoxEL98BNuitLp+l1IdqZkGrf96OpsfsjGy5oNqU
-         b0oohzSldN6H4ha8xGI19PtFwNcEoNE/E0KQWp+QzDKev46PmgUcWSapscaY86cnLVka
-         j/kqui/sXP4SLgnUHRkYy3H1sawDCX5FOuWPeCUx0UV/BCubxnNz/mlQHkbXXPX8dtdx
-         kwFQ==
-X-Gm-Message-State: AOAM533CwqRcxXse89lQa89TQCubl6SluxSkTWF0ouMDwDdEeU4KHvkw
-        O3/aCphdLfsu6j5ncpeMPT3kasIJ9zx5ctY/fMo=
-X-Google-Smtp-Source: ABdhPJzFDRN/W7RdLTy7x366/DM4W9yZR165kpYSNgdo8ner8706OrePaTuPREUvDeLYdzhb73eXEz5IrrFZ0khMHvM=
-X-Received: by 2002:a05:6512:b88:: with SMTP id b8mr9467744lfv.563.1627214524710;
- Sun, 25 Jul 2021 05:02:04 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=+soFvlggdNemFNXTJHD7EfeCnCEyuBk0Q2su2ig+5L8=;
+        b=piLlpWqQakzsYLNxyBlA/MI55ZrT9bHMf6HqaM0an5cMKgAizS1qgXrGYkDsaazlzX
+         Bree95th52qmHEsxAxmtyFQcRio+tWyKo4nSKJaKCkgPyYTcAVXg/slvzPzLFdH1+afL
+         dlLEIIs/X4F3GTk45yGUr6DroPCAV+xc3vY06Jl85NE4urFFt7BGLapwpb+GeMyetkcf
+         ogdAQvtPJblCdw+GN4RPiqxvVJ/0Bgo6GYKQ2Dzu+Bn3Xjbm2+KGeOAilJXEI1xcpLbW
+         NPiHXCcS83jLLjvhf+h7K3GsQHkMmnopUNt2hQIdcOPugO+9eobzrAsj8NRnl2AcfDRj
+         QxxQ==
+X-Gm-Message-State: AOAM531t1flS5arKzeKT5FpZfrVOuxdqd8XNxd/7DfXHFbquQM86Oz0c
+        m4+UOwNs5M54eY1JeXfnmkY=
+X-Google-Smtp-Source: ABdhPJxAwUjtf6aH2nU8kNF07zj4jThELQp/vaYPpNBhwADETnR0gtGwQwM2yIarqctVz6Yes5QGZg==
+X-Received: by 2002:a62:15c5:0:b029:32c:ea9f:a5ed with SMTP id 188-20020a6215c50000b029032cea9fa5edmr14360945pfv.27.1627246117087;
+        Sun, 25 Jul 2021 13:48:37 -0700 (PDT)
+Received: from ?IPv6:2001:df0:0:200c:29ad:8fa7:168b:a8c8? ([2001:df0:0:200c:29ad:8fa7:168b:a8c8])
+        by smtp.gmail.com with ESMTPSA id r128sm12785460pfc.155.2021.07.25.13.48.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jul 2021 13:48:36 -0700 (PDT)
+Subject: Re: [PATCH v4 3/3] m68k: track syscalls being traced with shallow
+ user context stack
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andreas Schwab <schwab@linux-m68k.org>
+References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
+ <1624407696-20180-4-git-send-email-schmitzmic@gmail.com>
+ <CAMuHMdVA5d7z6awGrpJ+Tb3PRxz7Nczd_SLXZ=cAwsS8tFU_vg@mail.gmail.com>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <f99d3d82-150b-62fc-3b38-141710a4826e@gmail.com>
+Date:   Mon, 26 Jul 2021 08:48:30 +1200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Received: by 2002:a19:f507:0:0:0:0:0 with HTTP; Sun, 25 Jul 2021 05:02:04
- -0700 (PDT)
-Reply-To: sroomf70@gmail.com
-From:   "Mrs. Missaly Favour Desmond" <missfavourkip@gmail.com>
-Date:   Sun, 25 Jul 2021 05:02:04 -0700
-Message-ID: <CAJc0UUm+wPfTYXgmVFFPdrDzCBpmhqX1itk8Q+8OjQjYgHNGLg@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAMuHMdVA5d7z6awGrpJ+Tb3PRxz7Nczd_SLXZ=cAwsS8tFU_vg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
--- 
-Greetings,
-From Mrs. Missaly Favour Desmond, we notify you through our official
-mail but no respond from you before sending you with this private
-email hope you Received the Fund that was paid to your account? do not
-hesitate to keep us notice as soon as possible to enable us make the
-balance transfer into your nominated account. awaiting your urgent
-notification.
+Hi Geert,
 
-Thanks
-Mrs. Missaly Favour Desmond,
-Foreign Remittance
+thanks for the feedback!
 
-Best regards
-Prof. Dr Diane
-Head of Foreign Operation
+As far as I understand, Eric's 'refactor exit()' patch series has 
+obsoleted this band-aid fix of mine. The last remnant of code using 
+do_exit() is our fpsp040 copyin/copyout exception handling, and there's 
+another patch in testing for that. (I'd need access to a 040 hardware 
+setup to properly test that one, but that's a different matter.)
+
+Eric, Andreas - please correct me if I'm wrong (again).
+
+Just out of interest - what would be the correct way to set/clear a 
+single bit on Coldfire? Add/subtract the 1<<bit value?
+
+Cheers,
+
+     Michael
+
+
+On 25/07/21 10:05 pm, Geert Uytterhoeven wrote:
+> Hi Michael,
+>
+> On Wed, Jun 23, 2021 at 2:21 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+>> Add 'status' field to thread_info struct to hold syscall trace
+>> status info.
+>>
+>> Set flag bit in thread_info->status at syscall trace entry, clear
+>> flag bit on trace exit.
+>>
+>> Set another flag bit on entering syscall where the full stack
+>> frame has been saved. These flags can be checked whenever a
+>> syscall calls ptrace_stop().
+>>
+>> Check flag bits in get_reg()/put_reg() and prevent access to
+>> registers that are saved on the switch stack, in case the
+>> syscall did not actually save these registers on the switch
+>> stack.
+>>
+>> Tested on ARAnyM only - boots and survives running strace on a
+>> binary, nothing fancy.
+>>
+>> CC: Eric W. Biederman <ebiederm@xmission.com>
+>> CC: Linus Torvalds <torvalds@linux-foundation.org>
+>> CC: Andreas Schwab <schwab@linux-m68k.org>
+>> Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
+> Thanks for your patch!
+>
+>> --- a/arch/m68k/kernel/entry.S
+>> +++ b/arch/m68k/kernel/entry.S
+>> @@ -51,75 +51,115 @@
+>>
+>>   .text
+>>   ENTRY(__sys_fork)
+>> +       movel   %curptr@(TASK_STACK),%a1
+>> +       orb     #TIS_SWITCH_STACK, %a1@(TINFO_STATUS+3)
+> This doesn't work on Coldfire:
+>
+> arch/m68k/kernel/entry.S:55: Error: invalid instruction for this
+> architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001,
+> 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k,
+> 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32
+> [68330, 68331, 68332,
+>   68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) --
+> statement `orb #(1<<1),%a1@(16+3)' ignored
+>
+>>          SAVE_SWITCH_STACK
+>>          jbsr    sys_fork
+>>          lea     %sp@(24),%sp
+>> +       movel   %curptr@(TASK_STACK),%a1
+>> +       andb    #TIS_NO_SWITCH_STACK, %a1@(TINFO_STATUS+3)
+> arch/m68k/kernel/entry.S:60: Error: invalid instruction for this
+> architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001,
+> 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k,
+> 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32
+> [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349,
+> 68360], fidoa [fido]) -- statement `andb #(~((1<<1))),%a1@(16+3)'
+> ignored
+>
+>>          rts
+> Gr{oetje,eeting}s,
+>
+>                          Geert
+>
