@@ -2,71 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDFF3D4D11
-	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 12:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7923D4D3E
+	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 13:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbhGYJca (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 25 Jul 2021 05:32:30 -0400
-Received: from cynthia.allandria.com ([50.242.82.17]:42350 "EHLO
-        cynthia.allandria.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbhGYJc3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jul 2021 05:32:29 -0400
-Received: from flar by cynthia.allandria.com with local (Exim 4.84_2)
-        (envelope-from <flar@allandria.com>)
-        id 1m7b7t-0001kc-HR; Sun, 25 Jul 2021 03:12:53 -0700
-Date:   Sun, 25 Jul 2021 03:12:53 -0700
-From:   Brad Boyer <flar@allandria.com>
+        id S229538AbhGYLNZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 25 Jul 2021 07:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbhGYLNY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jul 2021 07:13:24 -0400
+Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1184C061757
+        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 04:53:54 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4GXhKX0PYNz1sByw;
+        Sun, 25 Jul 2021 13:53:52 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4GXhKW6r5Tz1rmXH;
+        Sun, 25 Jul 2021 13:53:51 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id B999Aqp59t7s; Sun, 25 Jul 2021 13:53:51 +0200 (CEST)
+X-Auth-Info: vXVOpj1x91SB9Ld/lYLuTCpSpXFNLeU0TFEGPZzfTlIM+Uw675N3m0ZDXWsRFUc0
+Received: from igel.home (ppp-46-244-170-80.dynamic.mnet-online.de [46.244.170.80])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Sun, 25 Jul 2021 13:53:51 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id AFD792C2589; Sun, 25 Jul 2021 13:53:50 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
 To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Andreas Schwab <schwab@linux-m68k.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, geert@linux-m68k.org,
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, geert@linux-m68k.org,
         linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
         torvalds@linux-foundation.org
 Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
-Message-ID: <20210725101253.GA6096@allandria.com>
-References: <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
- <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com>
- <87h7gopvz2.fsf@disp2133>
- <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com>
- <877dhio13t.fsf@disp2133>
- <12992a3c-0740-f90e-aa4e-1ec1d8ea38f6@gmail.com>
- <87tukkk6h3.fsf@disp2133>
- <df6618bf-d1bc-4759-2d14-934c22d54a83@gmail.com>
- <87eebn7w7y.fsf@igel.home>
- <db43bef1-7938-4fc1-853d-c20d66521329@gmail.com>
+References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
+        <87zgunzovm.fsf@disp2133>
+        <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
+        <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com>
+        <8735scvklk.fsf@disp2133>
+        <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
+        <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com>
+        <87h7gopvz2.fsf@disp2133>
+        <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com>
+        <877dhio13t.fsf@disp2133>
+        <12992a3c-0740-f90e-aa4e-1ec1d8ea38f6@gmail.com>
+        <87tukkk6h3.fsf@disp2133>
+        <df6618bf-d1bc-4759-2d14-934c22d54a83@gmail.com>
+        <87eebn7w7y.fsf@igel.home>
+        <db43bef1-7938-4fc1-853d-c20d66521329@gmail.com>
+X-Yow:  SANTA CLAUS comes down a FIRE ESCAPE wearing bright
+ blue LEG WARMERS..  He scrubs the POPE with a mild
+ soap or detergent for 15 minutes, starring JANE FONDA!!
+Date:   Sun, 25 Jul 2021 13:53:50 +0200
+In-Reply-To: <db43bef1-7938-4fc1-853d-c20d66521329@gmail.com> (Michael
+        Schmitz's message of "Sun, 25 Jul 2021 19:44:11 +1200")
+Message-ID: <87y29u4njl.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <db43bef1-7938-4fc1-853d-c20d66521329@gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jul 25, 2021 at 07:44:11PM +1200, Michael Schmitz wrote:
-> Am 25.07.2021 um 00:05 schrieb Andreas Schwab:
-> >On Jul 24 2021, Michael Schmitz wrote:
-> >
-> >>According to my understanding, you can't get a F-line exception on
-> >>68040.
-> >
-> >The F-line exception vector is used for all FPU illegal and
-> >unimplemented insns.
-> 
-> Thanks - now from my reading of the fpsp040 code (which has mislead me in
-> the past), it would seem that operations like sin() and exp() ought to raise
-> that exception then. I don't see that in ARAnyM.
+On Jul 25 2021, Michael Schmitz wrote:
 
-Yes, according to the 68040 user's manual, unimplemented and illegal F-line
-instructions trigger the standard F-line exception vector (11) but have
-separate stack frame formats so the fpsp040 code gets some extra data.
-The CPU does a bunch of the prep work so that part doesn't need to be
-emulated in software.
+> I don't see that in ARAnyM.
 
-The ARAnyM docs appear to claim a strange combination that wouldn't
-exist in hardware by implementing a full 68882 instead of the limited
-subset found on a real 68040. Strangely, that might have been easier to
-implement. However, it would also completely bypass any use of fpsp040.
+ARAnyM lacks a lot in its fpu emulation.
 
-	Brad Boyer
-	flar@allandria.com
+Andreas.
 
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
