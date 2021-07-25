@@ -2,130 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAF53D4B1B
-	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 05:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450803D4C8F
+	for <lists+linux-arch@lfdr.de>; Sun, 25 Jul 2021 09:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbhGYCZt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 24 Jul 2021 22:25:49 -0400
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:41679 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229609AbhGYCZs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 24 Jul 2021 22:25:48 -0400
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.west.internal (Postfix) with ESMTP id C24C62B0117B;
-        Sat, 24 Jul 2021 23:06:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sat, 24 Jul 2021 23:06:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=Y
-        0C2NEWyArUxSdY7/JsNw6bRjfSzmv0TzsC81VlPyAA=; b=o12QDCitBfNqIdYks
-        l5hTFNOc8KVRK502MYwa9+hKFuKgKtfjIddbmduHdJH/YTS7Iw5zM4PRbLk2nCiZ
-        H3MhD+HUyuesvefHaoELK7u8viFLYau6tOmkSkuH4sa6bBVl5m/FHLE03wxqoUR4
-        OMp1+rtcI9lI3/SgANSuBktNtrjjJzT3ZCAMUttPv4l2twjx8/8Wr3yCvcNjJXlJ
-        7vtSCOZB0oZTI3rbKlITlsb2W1ioDhV7pFqWtezS8RLyzcswdrzcpjAgkLNN0gGw
-        Pk2P0AbssxTWwLJIMjHjaC0wRy9lRwlsj3lWSgqMZ79ryawbtBY5eF2tZMTlrYdE
-        fdgjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=Y0C2NEWyArUxSdY7/JsNw6bRjfSzmv0TzsC81VlPy
-        AA=; b=iz7KAXLJR7LpD1P5sTtN/4lMCha5jryj+NC2/GdajH6RIRuSvp8b33h4u
-        0GjGbwoCQsY7YtV0X4qThNqeBP44DF1FsFyFYxPf2K+wOwMnXG0g9i8ku7N15wzv
-        xbYusqFxpimmMBStC59/nNz8BM3ZFS8yuKH/OeainZg84QwqCTclw6Gr6oLfqgr9
-        AKkeHHEkrxe9705/KP0AKoYJ3FezkSl2yQboCGBjBNj4t+5ilKN0nHFOdkcj5B3w
-        od7oS8ptNrC4h2AO0OVp2I8EL0VDi9RREABsf50VSC90iK6QCgRbdSRmEmZSON/J
-        xvKt++olE3d5omzHxEnLJpdbxZO4A==
-X-ME-Sender: <xms:KNX8YIA3JWQ0jlakIYu-efqIVeDo-07Je-BWtui56DGaZeM3Ardg2w>
-    <xme:KNX8YKi9q4WSC2uuNpEZPvzwU8UaJ2mLhmq3gncLsv4xsfWExE9TpVMewqOcGa8SG
-    GQ-SzYOHJ4xpunITLc>
-X-ME-Received: <xmr:KNX8YLkIxbRDbZgVNkh6boPKAVnARdf70L5YkaHZGZ2iCXIJhTPpmb-rNCPpse63>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrgedugdeiudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnheptdduffeifefhhfeiudejhefhlefgiefhudeuheejhefhvdduvefh
-    hffgieejledunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
-    lhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:KNX8YOxYKrt_uBAdwymLYNfDgJomjS6LgEwHy4JeILC45m-fuVAj9w>
-    <xmx:KNX8YNSov5oQeh7Wic6HFgtIWIts2a0CVqdqyVCdWeO10QvrqCe2yQ>
-    <xmx:KNX8YJb2nxFfJFXUPqMIrjSmxEtCY-k0YOPESmIXA3X_gOu471aPIQ>
-    <xmx:KtX8YCIYclo3EezqwdFP-A3Ouft3MvqSQbNZBmZ4XORA3zjoylRm7szOOZ4>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 24 Jul 2021 23:06:12 -0400 (EDT)
-Subject: Re: [PATCH RFC 1/2] arch: Introduce ARCH_HAS_HW_XCHG_SMALL
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Rui Wang <wangrui@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>
-References: <20210724123617.3525377-1-chenhuacai@loongson.cn>
- <CAK8P3a0ZabB0cBR_SnOhi2=qxdQOYPGPEJeOqV0em1+bsvZKWw@mail.gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <ec727497-7fe9-a52c-3063-ccd0459159fe@flygoat.com>
-Date:   Sun, 25 Jul 2021 11:06:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S230240AbhGYHD7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 25 Jul 2021 03:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230272AbhGYHDs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jul 2021 03:03:48 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D570C061757
+        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 00:44:18 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id ds11-20020a17090b08cbb0290172f971883bso15213974pjb.1
+        for <linux-arch@vger.kernel.org>; Sun, 25 Jul 2021 00:44:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=+1CbdclIXuS1P33C/qOefRO4xRhZbvNeuMXF7mLBa/s=;
+        b=aDPvLHd+7NX40ZNQoGa9jAavZjPCXEHcyA0+ZqYOnaoHL7F9A2v23PivByt1lM9TGw
+         /sYZQYl1JbQ8W9iV87dr6PT5hHAhgtgTjpyx1SnCmYdZ6FtAdno5HHkSVAcKArF+tU6w
+         9WjVKMGvngbXXW/dHwpDHRCWPp7h/TF0Eb9Y4ymzTH7pjd3wZ1vM5wpONu0I2Wkbj3Tl
+         IsSjL6nzLXH8we71PbgxBA6wN9IxthU8bTFCZXecolnbDoVu7LUOzAMyy2ads3ODka3c
+         ia7ZHadxoJsUSJO1W2MbdwG147tagPaJOeEdvzb/w5k3AeMau01wI9vk5oiGqQXxPIEO
+         l+sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=+1CbdclIXuS1P33C/qOefRO4xRhZbvNeuMXF7mLBa/s=;
+        b=gDxX2abRynFIxLyXSKpPUWDvlFe6uXxDPU9fEeyJoD8IZETOAUdQ2RADa6HXKNPIvU
+         f8x9AexwYS6glRSXDmBCdWf9SFr1HSjbsYQ/s0szJRD416yAK0Jpt8jIkR1Z8snVeY+i
+         3blgkXwZzeglq1XBBeimA90BPpOtghJDOV50cqZY6Y2SHG9q/eMn21tOsL4WsgXcuhMW
+         8liSETSGbpRr0j6jczTNHjXPPwv9b7uk6hYaQvLyLJduaUTTDm+IONXcJlo3kDhnkqRD
+         BEb263D42zql6xDLGpXQemNH41awEjChDqALVxETQVG0wN6NTMmknX1dx8tePrfVhH1M
+         OxTA==
+X-Gm-Message-State: AOAM533E3Zm+/mbpMzqfg5Hy6tAaqT1qSPMphXbIJH/RdLChjUTlUBH4
+        FXw1ybplWDu8ZGRv82UE+QU=
+X-Google-Smtp-Source: ABdhPJxttcbg9hC5V+iz0fNwTi+hh/7+6jW7G99v9FTUrNl20QgnDLuW3tGew4ZkT9Vqe7bBUjXYRg==
+X-Received: by 2002:a17:90b:209:: with SMTP id fy9mr11546856pjb.187.1627199057549;
+        Sun, 25 Jul 2021 00:44:17 -0700 (PDT)
+Received: from [10.1.1.25] (222-152-189-37-fibre.sparkbb.co.nz. [222.152.189.37])
+        by smtp.gmail.com with ESMTPSA id f11sm45050500pga.61.2021.07.25.00.44.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 25 Jul 2021 00:44:17 -0700 (PDT)
+Subject: Re: [PATCH v4 0/3] m68k: Improved switch stack handling
+To:     Andreas Schwab <schwab@linux-m68k.org>
+References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
+ <87zgunzovm.fsf@disp2133> <3b4f287b-7be2-0e7b-ae5a-6c11972601fb@gmail.com>
+ <1b656c02-925c-c4ba-03d3-f56075cdfac5@gmail.com> <8735scvklk.fsf@disp2133>
+ <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
+ <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com> <87h7gopvz2.fsf@disp2133>
+ <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com> <877dhio13t.fsf@disp2133>
+ <12992a3c-0740-f90e-aa4e-1ec1d8ea38f6@gmail.com> <87tukkk6h3.fsf@disp2133>
+ <df6618bf-d1bc-4759-2d14-934c22d54a83@gmail.com> <87eebn7w7y.fsf@igel.home>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, geert@linux-m68k.org,
+        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        torvalds@linux-foundation.org
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <db43bef1-7938-4fc1-853d-c20d66521329@gmail.com>
+Date:   Sun, 25 Jul 2021 19:44:11 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a0ZabB0cBR_SnOhi2=qxdQOYPGPEJeOqV0em1+bsvZKWw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <87eebn7w7y.fsf@igel.home>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Andreas,
 
-
-在 2021/7/25 上午3:24, Arnd Bergmann 写道:
-> On Sat, Jul 24, 2021 at 2:36 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->> Introduce a new Kconfig option ARCH_HAS_HW_XCHG_SMALL, which means arch
->> has hardware sub-word xchg/cmpxchg support. This option will be used as
->> an indicator to select the bit-field definition in the qspinlock data
->> structure.
->>
->> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> Adding a Kconfig conditional sounds like a good idea, but I have two
-> concerns about the specific implementation:
+Am 25.07.2021 um 00:05 schrieb Andreas Schwab:
+> On Jul 24 2021, Michael Schmitz wrote:
 >
-> - I think we should have separate symbols for 8-bit, 16-bit and 64-bit
->    cmpxchg(). I think every architecture needs to support at least 32-bit
->    cmpxchg() and 64-bit architectures also need to support cmpxchg64().
->    I actually have a prototype patch that introduces cmpxchg8() and
->    cmpxchg16() helpers with the purpose of no longer supporting these
->    width in the normal cmpxchg(), but that is mostly independent of
->    whether we want a conditional or not.
-Yeah that seems a better solution to make supporting status clear,
-
+>> According to my understanding, you can't get a F-line exception on
+>> 68040.
 >
-> - If I remember correctly, there were some concerns about whether using
->    this information for picking the qspinlock implementation is a good idea.
-We've checked previous attempt made by Guo Ren about
-ARCH_USE_QUEUED_SPINLOCKS_XCHG32[1], the concerns of potential livelock 
-do exist.
+> The F-line exeception vector is used for all FPU illegal and
+> unimplemented insns.
 
-So in this patch Huacai took another, dropping the whole standalone 
-tailing logic to remove
-the usage of sub-word xchg. It could be understood as partial revert of  
-69f9cae9 ("
-locking/qspinlock: Optimize for smaller NR_CPUS") [2] on these 
-architectures.
+Thanks - now from my reading of the fpsp040 code (which has mislead me 
+in the past), it would seem that operations like sin() and exp() ought 
+to raise that exception then. I don't see that in ARAnyM.
+Is there any emulator that correctly emulates the 68040 FPU in that regard?
 
->
->           Arnd
-[1]: 
-https://lore.kernel.org/linux-csky/1617201040-83905-2-git-send-email-guoren@kernel.org/
-[2]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=69f9cae90907e09af95fb991ed384670cef8dd32
+Cheers,
 
-Thanks.
+	Michael
 
-- Jiaxun
