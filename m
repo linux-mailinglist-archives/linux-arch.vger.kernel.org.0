@@ -2,155 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9583B3D688E
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Jul 2021 23:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001153D6896
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Jul 2021 23:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbhGZUkb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Jul 2021 16:40:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57356 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232504AbhGZUkb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Jul 2021 16:40:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1627334458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xim6bdht22BrjCKEPJR4zAHmqMdradXeETF8ZAhZEOg=;
-        b=Ao93IhJhQZTABtFe00817BwFn4GthnreMo2EpceLmQpp/PNQ8oxSh4DGAaNkQqJ6GCaJwG
-        mq/REmzE5dJo1uswmlVlWilFse3Ogw5O26ovgP60xizTkWSjIF7FQgZ7nbBm7kNS9ra6pK
-        bNIz2tyk8bdAg3OVgHxpEmxlisMOTXA=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-577-6JKuS40WO-6pA1F-LukwWQ-1; Mon, 26 Jul 2021 17:20:57 -0400
-X-MC-Unique: 6JKuS40WO-6pA1F-LukwWQ-1
-Received: by mail-qk1-f197.google.com with SMTP id c5-20020a05620a2005b02903b8d1e253a9so10004521qka.11
-        for <linux-arch@vger.kernel.org>; Mon, 26 Jul 2021 14:20:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Xim6bdht22BrjCKEPJR4zAHmqMdradXeETF8ZAhZEOg=;
-        b=BHSJr8K9GknNU3I8fEzRgXdzj7Wox6pwTevvkCuVoCxwOpRSJiwqz+2dWrA8c2cG03
-         FccrwoXBdBiHZjkMqTE4JMPNEw+Obuy+IndID+HJ1wHrR1GgrJ0GyROr1NCTPO2fgneM
-         leftLpGIVKjEgePf/NFrQgrt/gPrP80x36d7hdnrMrr4fiABLAM4QWg6gQqJ+H/jXc/L
-         8TtTbeoHH1yxXX3N2c37dXfPAC+GVKtKTR7dPUYV/Y0drx8obvY7Hyrb46q3K5ww8YWd
-         w2B6pLeYeR6SOSv+R7IqUl0INCb5XfyJs76pkFRJHn5Ir1T5VS/EMcUh3QbV/2Ar52nQ
-         hxtQ==
-X-Gm-Message-State: AOAM533A+wIalmEURBZOUe9z63/xPkynvcbaKxCR3QssZ2AR1cscmAWz
-        YNL1yseHVD0kJY9bGYrh+J/x6ezxU/lG3f2OaRPyQvB238P2WbDsYYH8a4A+5ZOKO6gEOh0uXpq
-        ku6EEhK1KyGDoG0mwIYgtuw==
-X-Received: by 2002:a37:9ec1:: with SMTP id h184mr19403559qke.0.1627334457358;
-        Mon, 26 Jul 2021 14:20:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyixwr222cEEqcKMj8DdxDsQTDpmMX49mnyTQgvlZhoUw0TsyPgGGpabnW0lxAAyoDWi8BuqQ==
-X-Received: by 2002:a37:9ec1:: with SMTP id h184mr19403545qke.0.1627334457143;
-        Mon, 26 Jul 2021 14:20:57 -0700 (PDT)
-Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
-        by smtp.gmail.com with ESMTPSA id x7sm506931qtw.24.2021.07.26.14.20.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jul 2021 14:20:56 -0700 (PDT)
-From:   Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH RFC 1/2] arch: Introduce ARCH_HAS_HW_XCHG_SMALL
-To:     Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>
-Cc:     Huacai Chen <chenhuacai@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Rui Wang <wangrui@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20210724123617.3525377-1-chenhuacai@loongson.cn>
- <CAMuHMdU8o2r0Tybz_z3hKLoMyNqL5A_RZ9DnCYR0pHeRMpgvWA@mail.gmail.com>
- <CAAhV-H4aNr2BuG1imx6RcfEQtarjbrUU+-_PbGRg4jX5ygr_iA@mail.gmail.com>
- <YP6Q3s5Kpg2A1NRZ@boqun-archlinux>
- <CAJF2gTQ98v8H3SYt8K0Mnq73xXtZ-2Ja7jOaP2Uo-fX+ZqYZBw@mail.gmail.com>
- <YP7q5GBweaeWgvcs@boqun-archlinux>
-Message-ID: <77e83baf-030c-1332-609c-6d3f01bd422a@redhat.com>
-Date:   Mon, 26 Jul 2021 17:20:55 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231250AbhGZUox (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Jul 2021 16:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230235AbhGZUox (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jul 2021 16:44:53 -0400
+Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F350C061757
+        for <linux-arch@vger.kernel.org>; Mon, 26 Jul 2021 14:25:21 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4GYXyQ4PWMz1s9Mk;
+        Mon, 26 Jul 2021 23:25:18 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4GYXyQ360Mz1qrx7;
+        Mon, 26 Jul 2021 23:25:18 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id ORS6_E4pAZpo; Mon, 26 Jul 2021 23:25:17 +0200 (CEST)
+X-Auth-Info: bt9SpAPZSXKmc/Df0lqQWngVGpecbke5Io7yK3vnUyPmzvu9mSI8stysQH1k6lUS
+Received: from igel.home (ppp-46-244-163-183.dynamic.mnet-online.de [46.244.163.183])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Mon, 26 Jul 2021 23:25:17 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id 2AA562C2604; Mon, 26 Jul 2021 23:25:17 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     ebiederm@xmission.com (Eric W. Biederman)
+Cc:     Michael Schmitz <schmitzmic@gmail.com>,
+        Brad Boyer <flar@allandria.com>, geert@linux-m68k.org,
+        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        torvalds@linux-foundation.org
+Subject: Re: [RFC][PATCH] signal/m68k: Use force_sigsegv(SIGSEGV) in
+ fpsp040_die
+References: <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
+        <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com>
+        <87h7gopvz2.fsf@disp2133>
+        <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com>
+        <877dhio13t.fsf@disp2133>
+        <12992a3c-0740-f90e-aa4e-1ec1d8ea38f6@gmail.com>
+        <87tukkk6h3.fsf@disp2133>
+        <df6618bf-d1bc-4759-2d14-934c22d54a83@gmail.com>
+        <87eebn7w7y.fsf@igel.home>
+        <db43bef1-7938-4fc1-853d-c20d66521329@gmail.com>
+        <20210725101253.GA6096@allandria.com>
+        <be3ddf9a-745e-4798-17a7-a9d0ddd7eef7@gmail.com>
+        <87a6m8kgtx.fsf_-_@disp2133> <875yww7s01.fsf@igel.home>
+        <87k0lcizu7.fsf@disp2133>
+X-Yow:  Can you MAIL a BEAN CAKE?
+Date:   Mon, 26 Jul 2021 23:25:17 +0200
+In-Reply-To: <87k0lcizu7.fsf@disp2133> (Eric W. Biederman's message of "Mon,
+        26 Jul 2021 15:29:04 -0500")
+Message-ID: <871r7k7ooy.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <YP7q5GBweaeWgvcs@boqun-archlinux>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/26/21 1:03 PM, Boqun Feng wrote:
-> On Tue, Jul 27, 2021 at 12:41:34AM +0800, Guo Ren wrote:
->> On Mon, Jul 26, 2021 at 6:39 PM Boqun Feng <boqun.feng@gmail.com> wrote:
->>> On Mon, Jul 26, 2021 at 04:56:49PM +0800, Huacai Chen wrote:
->>>> Hi, Geert,
->>>>
->>>> On Mon, Jul 26, 2021 at 4:36 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>>>> Hi Huacai,
->>>>>
->>>>> On Sat, Jul 24, 2021 at 2:36 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->>>>>> Introduce a new Kconfig option ARCH_HAS_HW_XCHG_SMALL, which means arch
->>>>>> has hardware sub-word xchg/cmpxchg support. This option will be used as
->>>>>> an indicator to select the bit-field definition in the qspinlock data
->>>>>> structure.
->>>>>>
->>>>>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->>>>> Thanks for your patch!
->>>>>
->>>>>> --- a/arch/Kconfig
->>>>>> +++ b/arch/Kconfig
->>>>>> @@ -228,6 +228,10 @@ config ARCH_HAS_FORTIFY_SOURCE
->>>>>>            An architecture should select this when it can successfully
->>>>>>            build and run with CONFIG_FORTIFY_SOURCE.
->>>>>>
->>>>>> +# Select if arch has hardware sub-word xchg/cmpxchg support
->>>>>> +config ARCH_HAS_HW_XCHG_SMALL
->>>>> What do you mean by "hardware"?
->>>>> Does a software fallback count?
->>>> This new option is supposed as an indicator to select bit-field
->>>> definition of qspinlock, software fallback is not helpful in this
->>>> case.
->>>>
->>> I don't think this is true. IIUC, the rationale of the config is that
->>> for some architectures, since the architectural cmpxchg doesn't provide
->>> forward-progress guarantee then using cmpxchg of machine-word to
->>> implement xchg{8,16}() may cause livelock, therefore these architectures
->>> don't want to provide xchg{8,16}(), as a result they cannot work with
->>> qspinlock when _Q_PENDING_BITS is 8.
->>>
->>> So as long as an architecture can provide and has already provided an
->>> implementation of xchg{8,16}() which guarantee forward-progress (even
->>> though the implementation is using a machine-word size cmpxchg), the
->>> architecture doesn't need to select ARCH_HAS_HW_XCHG_SMALL.
->> Seems only atomic could provide forward progress, isn't it? And lr/sc
->> couldn't implement xchg/cmpxchg primitive properly.
->>
-> I'm missing you point here, a) ll/sc can provide forward progress and b)
-> ll/sc instructions are used to implement xchg/cmpxchg (see ARM64 and
-> PPC).
->
->> How to make CPU guarantee  "load + cmpxchg" forward-progress? Fusion
->> these instructions and lock the snoop channel?
->> Maybe hardware guys would think that it's easier to implement cas +
->> dcas + amo(short & byte).
->>
-> Please note that if _Q_PENDING_BITS == 1, then the xchg_tail() is
-> implemented as a "load + cmpxchg", so if "load + cmpxchg" implementation
-> of xchg16() doesn't provide forward-progress in an architecture, neither
-> does xchg_tail().
+On Jul 26 2021, Eric W. Biederman wrote:
 
-Agreed. The xchg_tail() for the "_Q_PENDING_BITS == 1" case is a 
-software emulation of xchg16(). Pure software emulation like that does 
-not provide forward progress guarantee. This is usually not a big 
-problem for non-RT kernel for which occasional long latency is 
-acceptable, but it is not good for RT kernel.
+> I could not find a reference mentioning jbra.  Do I need to look in the
+> gas source or do you know if there is a better source?
 
-Cheers,
-Longman
+It's a pseudo insn that is relaxed to the optimal branch insn.
 
+Andreas.
+
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
