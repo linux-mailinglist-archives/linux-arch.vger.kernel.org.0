@@ -2,149 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C2F3D686F
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Jul 2021 23:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9583B3D688E
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Jul 2021 23:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbhGZU2U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Jul 2021 16:28:20 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:56696 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbhGZU2U (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jul 2021 16:28:20 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51]:47134)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1m87qB-00CAWV-Bw; Mon, 26 Jul 2021 15:08:47 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:44848 helo=email.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1m87qA-0043Mq-8s; Mon, 26 Jul 2021 15:08:46 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Brad Boyer <flar@allandria.com>,
-        Andreas Schwab <schwab@linux-m68k.org>, geert@linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        torvalds@linux-foundation.org
-References: <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
-        <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com>
-        <87h7gopvz2.fsf@disp2133>
-        <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com>
-        <877dhio13t.fsf@disp2133>
-        <12992a3c-0740-f90e-aa4e-1ec1d8ea38f6@gmail.com>
-        <87tukkk6h3.fsf@disp2133>
-        <df6618bf-d1bc-4759-2d14-934c22d54a83@gmail.com>
-        <87eebn7w7y.fsf@igel.home>
-        <db43bef1-7938-4fc1-853d-c20d66521329@gmail.com>
-        <20210725101253.GA6096@allandria.com>
-        <be3ddf9a-745e-4798-17a7-a9d0ddd7eef7@gmail.com>
-        <87a6m8kgtx.fsf_-_@disp2133>
-        <33327fd4-47fc-2eab-04e4-242697a23d5f@gmail.com>
-Date:   Mon, 26 Jul 2021 16:08:39 -0500
-In-Reply-To: <33327fd4-47fc-2eab-04e4-242697a23d5f@gmail.com> (Michael
-        Schmitz's message of "Tue, 27 Jul 2021 08:29:33 +1200")
-Message-ID: <87tukghjfs.fsf_-_@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S231502AbhGZUkb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Jul 2021 16:40:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57356 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232504AbhGZUkb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 26 Jul 2021 16:40:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627334458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xim6bdht22BrjCKEPJR4zAHmqMdradXeETF8ZAhZEOg=;
+        b=Ao93IhJhQZTABtFe00817BwFn4GthnreMo2EpceLmQpp/PNQ8oxSh4DGAaNkQqJ6GCaJwG
+        mq/REmzE5dJo1uswmlVlWilFse3Ogw5O26ovgP60xizTkWSjIF7FQgZ7nbBm7kNS9ra6pK
+        bNIz2tyk8bdAg3OVgHxpEmxlisMOTXA=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-577-6JKuS40WO-6pA1F-LukwWQ-1; Mon, 26 Jul 2021 17:20:57 -0400
+X-MC-Unique: 6JKuS40WO-6pA1F-LukwWQ-1
+Received: by mail-qk1-f197.google.com with SMTP id c5-20020a05620a2005b02903b8d1e253a9so10004521qka.11
+        for <linux-arch@vger.kernel.org>; Mon, 26 Jul 2021 14:20:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=Xim6bdht22BrjCKEPJR4zAHmqMdradXeETF8ZAhZEOg=;
+        b=BHSJr8K9GknNU3I8fEzRgXdzj7Wox6pwTevvkCuVoCxwOpRSJiwqz+2dWrA8c2cG03
+         FccrwoXBdBiHZjkMqTE4JMPNEw+Obuy+IndID+HJ1wHrR1GgrJ0GyROr1NCTPO2fgneM
+         leftLpGIVKjEgePf/NFrQgrt/gPrP80x36d7hdnrMrr4fiABLAM4QWg6gQqJ+H/jXc/L
+         8TtTbeoHH1yxXX3N2c37dXfPAC+GVKtKTR7dPUYV/Y0drx8obvY7Hyrb46q3K5ww8YWd
+         w2B6pLeYeR6SOSv+R7IqUl0INCb5XfyJs76pkFRJHn5Ir1T5VS/EMcUh3QbV/2Ar52nQ
+         hxtQ==
+X-Gm-Message-State: AOAM533A+wIalmEURBZOUe9z63/xPkynvcbaKxCR3QssZ2AR1cscmAWz
+        YNL1yseHVD0kJY9bGYrh+J/x6ezxU/lG3f2OaRPyQvB238P2WbDsYYH8a4A+5ZOKO6gEOh0uXpq
+        ku6EEhK1KyGDoG0mwIYgtuw==
+X-Received: by 2002:a37:9ec1:: with SMTP id h184mr19403559qke.0.1627334457358;
+        Mon, 26 Jul 2021 14:20:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyixwr222cEEqcKMj8DdxDsQTDpmMX49mnyTQgvlZhoUw0TsyPgGGpabnW0lxAAyoDWi8BuqQ==
+X-Received: by 2002:a37:9ec1:: with SMTP id h184mr19403545qke.0.1627334457143;
+        Mon, 26 Jul 2021 14:20:57 -0700 (PDT)
+Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
+        by smtp.gmail.com with ESMTPSA id x7sm506931qtw.24.2021.07.26.14.20.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jul 2021 14:20:56 -0700 (PDT)
+From:   Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH RFC 1/2] arch: Introduce ARCH_HAS_HW_XCHG_SMALL
+To:     Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>
+Cc:     Huacai Chen <chenhuacai@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Rui Wang <wangrui@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20210724123617.3525377-1-chenhuacai@loongson.cn>
+ <CAMuHMdU8o2r0Tybz_z3hKLoMyNqL5A_RZ9DnCYR0pHeRMpgvWA@mail.gmail.com>
+ <CAAhV-H4aNr2BuG1imx6RcfEQtarjbrUU+-_PbGRg4jX5ygr_iA@mail.gmail.com>
+ <YP6Q3s5Kpg2A1NRZ@boqun-archlinux>
+ <CAJF2gTQ98v8H3SYt8K0Mnq73xXtZ-2Ja7jOaP2Uo-fX+ZqYZBw@mail.gmail.com>
+ <YP7q5GBweaeWgvcs@boqun-archlinux>
+Message-ID: <77e83baf-030c-1332-609c-6d3f01bd422a@redhat.com>
+Date:   Mon, 26 Jul 2021 17:20:55 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1m87qA-0043Mq-8s;;;mid=<87tukghjfs.fsf_-_@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19drJEYipypgJOmRvDQyo51PDNy7OOsad8=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.4 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,FVGT_m_MULTI_ODD,TR_Symld_Words,
-        T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,
-        XMSubLong autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        *  0.7 XMSubLong Long Subject
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.4 FVGT_m_MULTI_ODD Contains multiple odd letter combinations
-        *  0.0 T_TooManySym_03 6+ unique symbols in subject
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Michael Schmitz <schmitzmic@gmail.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 547 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 13 (2.3%), b_tie_ro: 11 (2.0%), parse: 1.72
-        (0.3%), extract_message_metadata: 16 (3.0%), get_uri_detail_list: 2.4
-        (0.4%), tests_pri_-1000: 18 (3.3%), tests_pri_-950: 1.53 (0.3%),
-        tests_pri_-900: 1.20 (0.2%), tests_pri_-90: 257 (46.9%), check_bayes:
-        255 (46.5%), b_tokenize: 8 (1.5%), b_tok_get_all: 7 (1.2%),
-        b_comp_prob: 2.4 (0.4%), b_tok_touch_all: 234 (42.7%), b_finish: 1.18
-        (0.2%), tests_pri_0: 226 (41.3%), check_dkim_signature: 0.71 (0.1%),
-        check_dkim_adsp: 3.4 (0.6%), poll_dns_idle: 0.79 (0.1%), tests_pri_10:
-        2.1 (0.4%), tests_pri_500: 7 (1.3%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH] signal/m68k: Use force_sigsegv(SIGSEGV) in fpsp040_die
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+In-Reply-To: <YP7q5GBweaeWgvcs@boqun-archlinux>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 7/26/21 1:03 PM, Boqun Feng wrote:
+> On Tue, Jul 27, 2021 at 12:41:34AM +0800, Guo Ren wrote:
+>> On Mon, Jul 26, 2021 at 6:39 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+>>> On Mon, Jul 26, 2021 at 04:56:49PM +0800, Huacai Chen wrote:
+>>>> Hi, Geert,
+>>>>
+>>>> On Mon, Jul 26, 2021 at 4:36 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>>>> Hi Huacai,
+>>>>>
+>>>>> On Sat, Jul 24, 2021 at 2:36 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>>>>>> Introduce a new Kconfig option ARCH_HAS_HW_XCHG_SMALL, which means arch
+>>>>>> has hardware sub-word xchg/cmpxchg support. This option will be used as
+>>>>>> an indicator to select the bit-field definition in the qspinlock data
+>>>>>> structure.
+>>>>>>
+>>>>>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>>>>> Thanks for your patch!
+>>>>>
+>>>>>> --- a/arch/Kconfig
+>>>>>> +++ b/arch/Kconfig
+>>>>>> @@ -228,6 +228,10 @@ config ARCH_HAS_FORTIFY_SOURCE
+>>>>>>            An architecture should select this when it can successfully
+>>>>>>            build and run with CONFIG_FORTIFY_SOURCE.
+>>>>>>
+>>>>>> +# Select if arch has hardware sub-word xchg/cmpxchg support
+>>>>>> +config ARCH_HAS_HW_XCHG_SMALL
+>>>>> What do you mean by "hardware"?
+>>>>> Does a software fallback count?
+>>>> This new option is supposed as an indicator to select bit-field
+>>>> definition of qspinlock, software fallback is not helpful in this
+>>>> case.
+>>>>
+>>> I don't think this is true. IIUC, the rationale of the config is that
+>>> for some architectures, since the architectural cmpxchg doesn't provide
+>>> forward-progress guarantee then using cmpxchg of machine-word to
+>>> implement xchg{8,16}() may cause livelock, therefore these architectures
+>>> don't want to provide xchg{8,16}(), as a result they cannot work with
+>>> qspinlock when _Q_PENDING_BITS is 8.
+>>>
+>>> So as long as an architecture can provide and has already provided an
+>>> implementation of xchg{8,16}() which guarantee forward-progress (even
+>>> though the implementation is using a machine-word size cmpxchg), the
+>>> architecture doesn't need to select ARCH_HAS_HW_XCHG_SMALL.
+>> Seems only atomic could provide forward progress, isn't it? And lr/sc
+>> couldn't implement xchg/cmpxchg primitive properly.
+>>
+> I'm missing you point here, a) ll/sc can provide forward progress and b)
+> ll/sc instructions are used to implement xchg/cmpxchg (see ARM64 and
+> PPC).
+>
+>> How to make CPU guarantee  "load + cmpxchg" forward-progress? Fusion
+>> these instructions and lock the snoop channel?
+>> Maybe hardware guys would think that it's easier to implement cas +
+>> dcas + amo(short & byte).
+>>
+> Please note that if _Q_PENDING_BITS == 1, then the xchg_tail() is
+> implemented as a "load + cmpxchg", so if "load + cmpxchg" implementation
+> of xchg16() doesn't provide forward-progress in an architecture, neither
+> does xchg_tail().
 
-In the fpsp040 code when copyin or copyout fails call
-force_sigsegv(SIGSEGV) instead of do_exit(SIGSEGV).
+Agreed. The xchg_tail() for the "_Q_PENDING_BITS == 1" case is a 
+software emulation of xchg16(). Pure software emulation like that does 
+not provide forward progress guarantee. This is usually not a big 
+problem for non-RT kernel for which occasional long latency is 
+acceptable, but it is not good for RT kernel.
 
-This solves a couple of problems.  Because do_exit embeds the ptrace
-stop PTRACE_EVENT_EXIT a complete stack frame needs to be present for
-that to work correctly.  There is always the information needed for a
-ptrace stop where get_signal is called.  So exiting with a signal
-solves the ptrace issue.
-
-Further exiting with a signal ensures that all of the threads in a
-process are killed not just the thread that malfunctioned.  Which
-avoids confusing userspace.
-
-To make force_sigsegv(SIGSEGV) work in fpsp040_die modify the code to
-save all of the registers and jump to ret_from_exception (which
-ultimately calls get_signal) after fpsp040_die returns.
-
-v2: Updated the branches to use gas's pseudo ops that automatically
-    calculate the best branch instruction to use for the purpose.
-
-v1: Link: https://lkml.kernel.org/r/87a6m8kgtx.fsf_-_@disp2133
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- arch/m68k/fpsp040/skeleton.S | 3 ++-
- arch/m68k/kernel/traps.c     | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
-index a8f41615d94a..439395aa6fb4 100644
---- a/arch/m68k/fpsp040/skeleton.S
-+++ b/arch/m68k/fpsp040/skeleton.S
-@@ -502,7 +502,8 @@ in_ea:
- 	.section .fixup,#alloc,#execinstr
- 	.even
- 1:
--	jbra	fpsp040_die
-+	jbsr	fpsp040_die
-+	jbra	.Lnotkern
- 
- 	.section __ex_table,#alloc
- 	.align	4
-diff --git a/arch/m68k/kernel/traps.c b/arch/m68k/kernel/traps.c
-index 9e1261462bcc..5b19fcdcd69e 100644
---- a/arch/m68k/kernel/traps.c
-+++ b/arch/m68k/kernel/traps.c
-@@ -1150,7 +1150,7 @@ asmlinkage void set_esp0(unsigned long ssp)
-  */
- asmlinkage void fpsp040_die(void)
- {
--	do_exit(SIGSEGV);
-+	force_sigsegv(SIGSEGV);
- }
- 
- #ifdef CONFIG_M68KFPU_EMU
--- 
-2.20.1
+Cheers,
+Longman
 
