@@ -2,77 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 652713D5B8D
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Jul 2021 16:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628EA3D5C9C
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Jul 2021 17:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbhGZNrL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Jul 2021 09:47:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47300 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233657AbhGZNrL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Jul 2021 09:47:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7401E60F37;
-        Mon, 26 Jul 2021 14:27:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627309660;
-        bh=Hny3S4bK8lPLJq0Ngo4+VpBfahxBW1AWq54BVJylhv0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Dujh/cNBaldi8s6+idkZZoUGvjLI9S7O619ejgOTnjTxNf6z+g2pKyly9iZ/EHPuB
-         LHLUCMkPj/5igWle3VWmSJa9aSOlXa+cIKHmH/AhJX3+Z6e1dUOIaypOW4ALhfAFL/
-         t2+vqlybWCGGBzltmZWLoYZ6bGCFld39F0GdprjGGS8azpTmGAd/9If3zEe6ne7HWL
-         Wa4mphphZoGxbI4ais/ssFOhTf4+bbccZ+B/bQZT6LKtE1MBwENnbmUkBCmjJYtbsp
-         jALr3DBZcZwBr49ssjzIbzoWLKh+1aKaL9m8tbhnkSRHehF1YgWd1/QbRVNOl2G9Wx
-         cZjK+ApCFOn6Q==
-Subject: Re: [PATCH v4 3/3] m68k: track syscalls being traced with shallow
- user context stack
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andreas Schwab <schwab@linux-m68k.org>
-References: <1624407696-20180-1-git-send-email-schmitzmic@gmail.com>
- <1624407696-20180-4-git-send-email-schmitzmic@gmail.com>
- <CAMuHMdVA5d7z6awGrpJ+Tb3PRxz7Nczd_SLXZ=cAwsS8tFU_vg@mail.gmail.com>
- <f99d3d82-150b-62fc-3b38-141710a4826e@gmail.com>
- <CAHk-=wgVFUJAD62jtpbbKddu1ZeGF+nR4VuTGzQjS_ncCa5nQQ@mail.gmail.com>
-From:   Greg Ungerer <gerg@kernel.org>
-Message-ID: <c7945741-ec10-afc0-065f-35dcdf5924ea@kernel.org>
-Date:   Tue, 27 Jul 2021 00:27:35 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S234017AbhGZO1g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Jul 2021 10:27:36 -0400
+Received: from dvalin.narfation.org ([213.160.73.56]:36718 "EHLO
+        dvalin.narfation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234922AbhGZOZU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jul 2021 10:25:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+        s=20121; t=1627311889;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FB7N7rq21xp/nnAQByo9qJVUIV2tvc1AOLArJeuzsQM=;
+        b=pMy5HgEpcsSJE9jhYzbwLizffyYK1r9q5HCoR92MN3gzyYMO1dSjRbQUrj77/MYsOSdrd6
+        8DKGKpWG7m+3lrFIaRp0GW87sZnsVPEzvVizWufEcaHclzCM2VrhuNA/Fk+mPIJY/iKpV6
+        rf7JxhYJ1cgT8pWLS2CzyCOULzOsqYg=
+From:   Sven Eckelmann <sven@narfation.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, b.a.t.m.a.n@lists.open-mesh.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] asm-generic: avoid sparse {get,put}_unaligned warning
+Date:   Mon, 26 Jul 2021 17:04:46 +0200
+Message-ID: <3234493.RMHOAZ7QyG@ripper>
+In-Reply-To: <CAK8P3a2MVQMFFBUzudy+yrcp4Md8mm=NcvX7YzGVz4C8W61sgQ@mail.gmail.com>
+References: <20210724162429.394792-1-sven@narfation.org> <YPxHYW/HPI/LLMXx@zeniv-ca.linux.org.uk> <CAK8P3a2MVQMFFBUzudy+yrcp4Md8mm=NcvX7YzGVz4C8W61sgQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=wgVFUJAD62jtpbbKddu1ZeGF+nR4VuTGzQjS_ncCa5nQQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="nextPart14162632.04HtDE0LN9"; micalg="pgp-sha512"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+--nextPart14162632.04HtDE0LN9
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+To: Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@arndb.de>, b.a.t.m.a.n@lists.open-mesh.org, linux-arch <linux-arch@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] asm-generic: avoid sparse {get,put}_unaligned warning
+Date: Mon, 26 Jul 2021 17:04:46 +0200
+Message-ID: <3234493.RMHOAZ7QyG@ripper>
+In-Reply-To: <CAK8P3a2MVQMFFBUzudy+yrcp4Md8mm=NcvX7YzGVz4C8W61sgQ@mail.gmail.com>
+References: <20210724162429.394792-1-sven@narfation.org> <YPxHYW/HPI/LLMXx@zeniv-ca.linux.org.uk> <CAK8P3a2MVQMFFBUzudy+yrcp4Md8mm=NcvX7YzGVz4C8W61sgQ@mail.gmail.com>
 
-On 26/7/21 7:00 am, Linus Torvalds wrote:
-> On Sun, Jul 25, 2021 at 1:48 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
->>
->> Just out of interest - what would be the correct way to set/clear a
->> single bit on Coldfire? Add/subtract the 1<<bit value?
+On Monday, 26 July 2021 14:57:31 CEST Arnd Bergmann wrote:
+> >
+> > > The special attribute force must be used in such statements when the cast
+> > > is known to be safe to avoid these warnings.
 > 
-> I think BSET/BCLR are the way to go.
+> I can see why this would warn, but I'm having trouble reproducing the
+> warning on linux-next.
 
-Yep, they are available on all ColdFire revisions.
-I think they are the best choice here.
+I have sparse 0.6.3 on an Debian bullseye amd64 system. Sources are from 
+linux-next next-20210723
+
+    make allnoconfig
+    cat >> .config << "EOF"
+    CONFIG_NET=y
+    CONFIG_INET=y
+    CONFIG_BATMAN_ADV=y
+    CONFIG_BATMAN_ADV_DAT=y
+    EOF
+    make olddefconfig
+    make CHECK="sparse -Wbitwise-pointer" C=1
+
+I should maybe have made this clearer in the last sentence of the first 
+paragraph: "This is also true for pointers to variables with this type when
+-Wbitwise-pointer is activated."
+
+Kind regards,
+	Sven
+
+--nextPart14162632.04HtDE0LN9
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmD+zw8ACgkQXYcKB8Em
+e0aOSRAAloaA/kixLrh1I6C0K83aQTfaTxmxPCTKk6X9ohZmXNCc7wcIRM97zONy
+D3/QFzdFBoCLJRyluykO/M+50/SXAgSu538aA/wjzkosb6aYliz0wNybS/F05XsO
+3GxmwuZknqUmiQT6yEbfCBGFx44MqSF29FBCmbib0TN4w0h8fUGR4aExdmM9Mihd
+PSQ07dP+icQC0tpG4FPH9Sd6tulSlCdA89nrnF+uHq3qQeraa17caBjIwSSMCXnO
+L80OX+cHT8KPWII+eHRS9s5QjmY/gvmCuIhkJpPw2Aqz0xjYhSK8eMOb64dfXptK
+WZR7bBgQzI709Cunf75GCMy3pfkXUgbm+ogXUpydfOqzmadAw7g1xnN8vfobs4D0
+rNkPa+A5qe5OxVgtlZZ3QR2LNo1W535AuOsNBoTW50TLTSiKo6bYVKwQYge0I+q5
+FyAzNOe+UxF75XTx+Wzac/RwOL7345HXfHFYPEc8Gc16PQ/gNij+5tC2JMkm1U9H
+PFJ+SYwNeT5axt9teMjmzASBv/3W6I3/d/EbB6RN46CPiGXVbhcik/o/rxyuDVvM
+M44jzl9QyO/3Xsh+yKJdDbWUTPDc4V53YxFLqvyJvDz/ONm+GVhPU9d5iCbgsb0D
+3Z3akAfv1iJlILU4Jufo7j2C6piAXbr1Fzxrx5F/XyQ/f91290g=
+=6aMm
+-----END PGP SIGNATURE-----
+
+--nextPart14162632.04HtDE0LN9--
 
 
-> Or, alternatively, put the constant in a register, and use a longword
-> memory access. The arithmetic ops don't do immediates _and_ memory
-> operands in Coldfire, and they don't do byte ops.
-> 
-> Or something like that.
-
-Yes, that is right with one exception. You can use addq with immediates
-of value 1 to 8 with memory operands.
-
-Regards
-Greg
 
