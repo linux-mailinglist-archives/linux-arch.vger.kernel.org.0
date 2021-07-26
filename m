@@ -2,149 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EF83D62F7
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Jul 2021 18:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707EE3D64C5
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Jul 2021 18:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238374AbhGZPmt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Jul 2021 11:42:49 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:57273 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237511AbhGZPmA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jul 2021 11:42:00 -0400
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N9MlI-1l2jt831jY-015EtT; Mon, 26 Jul 2021 18:22:18 +0200
-Received: by mail-wr1-f50.google.com with SMTP id p5so6681919wro.7;
-        Mon, 26 Jul 2021 09:22:18 -0700 (PDT)
-X-Gm-Message-State: AOAM533VQV99cc+dxxLIjJxZGXNngbz3hCJjNiuXNSOrkmHkz5bTC4gJ
-        4DCqCyJ5F6ho0TLxzQQUzh3DNN+3SGrtNWwSFK0=
-X-Google-Smtp-Source: ABdhPJye/ed6/FsM5yNUWTWtPJo/Xm2xrm3gGSltDPBIF+Kg8Q/ZjELHmN1WQSWO+r1dLUQThBaEPvfiDXicJHijpKc=
-X-Received: by 2002:adf:e107:: with SMTP id t7mr20157064wrz.165.1627316538300;
- Mon, 26 Jul 2021 09:22:18 -0700 (PDT)
+        id S234214AbhGZQBl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Jul 2021 12:01:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46134 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231646AbhGZQBS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 26 Jul 2021 12:01:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8059960F6B
+        for <linux-arch@vger.kernel.org>; Mon, 26 Jul 2021 16:41:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627317707;
+        bh=spfQSbIbG/dEabyzVnNh6etSmGofBgaYcYQY6DeO7tI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=b3Q7scC+FJ9D/ASXNtUZUn0SUd9hLVP2URhpHrhB0lRjR9P/W2oYtZVYQQUokPDhG
+         eawZqmgDN3mf8GGtdCwtiXQ6B6YWM/mr6dIvgX2XD0pc3Og56U8WG06xmNpi82//e3
+         l83XtITUZxCgPxkPm0Ay+Q6HnGSOffEYjWbIh2iR5OgH+EDlBKgmhJ+lxpAafSJ1te
+         5nG7CA+ScjOzh8G9TkY0GWy0v8S1VI2XXifn8rUJr9RD4OMFPeMe4HlPAivuZOevit
+         Q9y15VxBWeww6YGJ+dgC3LMdB4yiKKYvvfpNdw2EtH66kjUuGBS8YXfWtPaslQg7zc
+         9cYSUL9UvxEXQ==
+Received: by mail-lf1-f41.google.com with SMTP id d17so16687436lfv.0
+        for <linux-arch@vger.kernel.org>; Mon, 26 Jul 2021 09:41:47 -0700 (PDT)
+X-Gm-Message-State: AOAM5323h531m886Z2UZxqHcc1m++isrbsIV0mLa8FGefDmdMj6p15zB
+        5KmZCG+CgJpSEJh44jKswLoL1ayFPPo71HWG1B0=
+X-Google-Smtp-Source: ABdhPJz57z35Lc2sghQK1ixuPhEJMOVnDcwzWtrXAlFzBDgzpytyZViu7HJoUXgiCrjMW52I7qBDrL6DN4Fk58uvpOs=
+X-Received: by 2002:a19:c3c1:: with SMTP id t184mr9137646lff.41.1627317705883;
+ Mon, 26 Jul 2021 09:41:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210724162429.394792-1-sven@narfation.org> <YPxHYW/HPI/LLMXx@zeniv-ca.linux.org.uk>
- <CAK8P3a2MVQMFFBUzudy+yrcp4Md8mm=NcvX7YzGVz4C8W61sgQ@mail.gmail.com> <3234493.RMHOAZ7QyG@ripper>
-In-Reply-To: <3234493.RMHOAZ7QyG@ripper>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 26 Jul 2021 18:22:02 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a35PNhsMQNU11RCaKm-o3-oG8pOXG836aoubxQMpTyVNQ@mail.gmail.com>
-Message-ID: <CAK8P3a35PNhsMQNU11RCaKm-o3-oG8pOXG836aoubxQMpTyVNQ@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic: avoid sparse {get,put}_unaligned warning
-To:     Sven Eckelmann <sven@narfation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
-        b.a.t.m.a.n@lists.open-mesh.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20210724123617.3525377-1-chenhuacai@loongson.cn>
+ <CAMuHMdU8o2r0Tybz_z3hKLoMyNqL5A_RZ9DnCYR0pHeRMpgvWA@mail.gmail.com>
+ <CAAhV-H4aNr2BuG1imx6RcfEQtarjbrUU+-_PbGRg4jX5ygr_iA@mail.gmail.com> <YP6Q3s5Kpg2A1NRZ@boqun-archlinux>
+In-Reply-To: <YP6Q3s5Kpg2A1NRZ@boqun-archlinux>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 27 Jul 2021 00:41:34 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ98v8H3SYt8K0Mnq73xXtZ-2Ja7jOaP2Uo-fX+ZqYZBw@mail.gmail.com>
+Message-ID: <CAJF2gTQ98v8H3SYt8K0Mnq73xXtZ-2Ja7jOaP2Uo-fX+ZqYZBw@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/2] arch: Introduce ARCH_HAS_HW_XCHG_SMALL
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Huacai Chen <chenhuacai@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Waiman Long <longman@redhat.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Rui Wang <wangrui@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:VvZ46d4HcbQ9Yh9Wr5KJMJAA4QGmLQUzmw70t+kcPBYI7iDts0y
- JcuvTpoimJpWvw1X2jgnk/cJlJnK/oj8KBFj/fEohjsDbmt7BBFPFuK9K0D+3Hs47W4f9Ut
- 1goQ3FsZhIEbYaicnKjucgcLS/Z5yvmluJP6Yz44n+1pylkq151u36+7Wojy4ekcS+6ein2
- N4hg6Maf5n3XQbkC6pqQg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UKpcsJUq4AU=:euwYip+Am0oMSvCjo6DqXU
- Igr9R25Zgk7EqGMu/+p7xf/Q29Ks7ZAthvrJhLt9uQ3Rt76Gt6IPRE/3YbptYeP5+vkaAYkVH
- nhAD6fKFUQ/vuxZZhXw2OHC3y2aQaEgTigXUzoPm5whAtNe57pMwT1BYF6DsPi/+82osTklkM
- oaLIg7fG2U70nv7c3cSWYi2pAKlkEWmGQp0x+/hv9tIkt7hqr0XL8lTgrGbrMJfkXPIhlk6sy
- C3OSMxx2QwohU7hEnTb+mfAXGoXDZ/cjrKplAg5JBf0m/UzAoaKg1QdwDITnNjcPnI9bhS4HY
- KP5i+uE3E0jL0mpFKZD/tT1FvfhMdb3RQ13mbqwU6NRtQ6R5ohotwnN8UWx/o/Zv3yNCU4QV4
- s7CnjkO3b/P3SOCXczn1hV2/fgiXneN3JO1CRgroA+xKkQhQ31HsOcH1viqeS4y6j1jqdLdHy
- 1qJ0Z4Me+a4M97/t+wtRnGkCvMneeuIwABAz9l+/zPbLlyK3GpUdZMvGlL+Y1IuHWds9NpPnP
- oFDfJNdKxL40ew1O0AIV5/RkIgGY4ayjLoCfzL4Hn/Z/fGfhL7nKSgc2zFcwuOvwjBKsBsnk0
- A08lCrlKWGemysbqWTPBSOt+CLFJgUIQXrlqAgHTrrRWTplTPoHKUsfo2xV5HfTMkvYKKTDEO
- Vm+boK7/E5jODDubIqGst1IpgUEiF3NZSjTGEciYo3kE8WV2WFYFzMvmmPeIIrKwvD9PlWAVp
- utyFjS5YSBGYWjYNppy3bdRfhDpNekJu7aF1MKZPyBtTx/Y2d76cnN5DsmAdI8G46cKU2D8f7
- mWiFg3o92haUB+8oaiYYynAk6jqH834cjO3sldD0PmEd3jjM/OV/txfDCv0batLOejDIFZz
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 26, 2021 at 5:04 PM Sven Eckelmann <sven@narfation.org> wrote:
+On Mon, Jul 26, 2021 at 6:39 PM Boqun Feng <boqun.feng@gmail.com> wrote:
 >
-> On Monday, 26 July 2021 14:57:31 CEST Arnd Bergmann wrote:
-> > >
-> > > > The special attribute force must be used in such statements when the cast
-> > > > is known to be safe to avoid these warnings.
+> On Mon, Jul 26, 2021 at 04:56:49PM +0800, Huacai Chen wrote:
+> > Hi, Geert,
 > >
-> > I can see why this would warn, but I'm having trouble reproducing the
-> > warning on linux-next.
+> > On Mon, Jul 26, 2021 at 4:36 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > >
+> > > Hi Huacai,
+> > >
+> > > On Sat, Jul 24, 2021 at 2:36 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > Introduce a new Kconfig option ARCH_HAS_HW_XCHG_SMALL, which means arch
+> > > > has hardware sub-word xchg/cmpxchg support. This option will be used as
+> > > > an indicator to select the bit-field definition in the qspinlock data
+> > > > structure.
+> > > >
+> > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > >
+> > > Thanks for your patch!
+> > >
+> > > > --- a/arch/Kconfig
+> > > > +++ b/arch/Kconfig
+> > > > @@ -228,6 +228,10 @@ config ARCH_HAS_FORTIFY_SOURCE
+> > > >           An architecture should select this when it can successfully
+> > > >           build and run with CONFIG_FORTIFY_SOURCE.
+> > > >
+> > > > +# Select if arch has hardware sub-word xchg/cmpxchg support
+> > > > +config ARCH_HAS_HW_XCHG_SMALL
+> > >
+> > > What do you mean by "hardware"?
+> > > Does a software fallback count?
+> > This new option is supposed as an indicator to select bit-field
+> > definition of qspinlock, software fallback is not helpful in this
+> > case.
+> >
 >
-> I have sparse 0.6.3 on an Debian bullseye amd64 system. Sources are from
-> linux-next next-20210723
+> I don't think this is true. IIUC, the rationale of the config is that
+> for some architectures, since the architectural cmpxchg doesn't provide
+> forward-progress guarantee then using cmpxchg of machine-word to
+> implement xchg{8,16}() may cause livelock, therefore these architectures
+> don't want to provide xchg{8,16}(), as a result they cannot work with
+> qspinlock when _Q_PENDING_BITS is 8.
 >
->     make allnoconfig
->     cat >> .config << "EOF"
->     CONFIG_NET=y
->     CONFIG_INET=y
->     CONFIG_BATMAN_ADV=y
->     CONFIG_BATMAN_ADV_DAT=y
->     EOF
->     make olddefconfig
->     make CHECK="sparse -Wbitwise-pointer" C=1
+> So as long as an architecture can provide and has already provided an
+> implementation of xchg{8,16}() which guarantee forward-progress (even
+> though the implementation is using a machine-word size cmpxchg), the
+> architecture doesn't need to select ARCH_HAS_HW_XCHG_SMALL.
+Seems only atomic could provide forward progress, isn't it? And lr/sc
+couldn't implement xchg/cmpxchg primitive properly.
+
+How to make CPU guarantee  "load + cmpxchg" forward-progress? Fusion
+these instructions and lock the snoop channel?
+Maybe hardware guys would think that it's easier to implement cas +
+dcas + amo(short & byte).
+
 >
-> I should maybe have made this clearer in the last sentence of the first
-> paragraph: "This is also true for pointers to variables with this type when
-> -Wbitwise-pointer is activated."
+> Regards,
+> Boqun
+>
+> > >
+> > > > --- a/arch/m68k/Kconfig
+> > > > +++ b/arch/m68k/Kconfig
+> > > > @@ -5,6 +5,7 @@ config M68K
+> > > >         select ARCH_32BIT_OFF_T
+> > > >         select ARCH_HAS_BINFMT_FLAT
+> > > >         select ARCH_HAS_DMA_PREP_COHERENT if HAS_DMA && MMU && !COLDFIRE
+> > > > +       select ARCH_HAS_HW_XCHG_SMALL
+> > >
+> > > M68k CPUs which support the CAS (Compare And Set) instruction do
+> > > support this on 8-bit, 16-bit, and 32-bit quantities.
+> > > M68k CPUs which lack CAS use a software implementation, which
+> > > supports the same quantities.
+> > >
+> > > As CAS is used only if CONFIG_RMW_INSNS=y, perhaps this needs
+> > > a dependency?
+> > OK, I think this dependency is needed.
+> >
+> > Huacai
+> >
+> > >
+> > >    select ARCH_HAS_HW_XCHG_SMALL if RMW_INSNS
+> > >
+> > > Gr{oetje,eeting}s,
+> > >
+> > >                         Geert
+> > >
+> > > --
+> > > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > >
+> > > In personal conversations with technical people, I call myself a hacker. But
+> > > when I'm talking to journalists I just say "programmer" or something like that.
+> > >                                 -- Linus Torvalds
 
-Ok, got it. I assumed this would be turned on by an 'allmodconfig' build.
 
-> > If both work equally well, I'd prefer Sven's patch since that only
-> > expands 'type' once, while container_of() expands it three more times
 
-Not sure what I was thinking here, as it's not 'type' that gets expanded
-here but 'ptr'. We could do Al's suggestion to avoid the __force without
-multiple expansions, using
+-- 
+Best Regards
+ Guo Ren
 
-diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligned.h
-index 1c4242416c9f..d138dc5fd8e3 100644
---- a/include/asm-generic/unaligned.h
-+++ b/include/asm-generic/unaligned.h
-@@ -10,17 +10,25 @@
- #include <asm/byteorder.h>
-
- #define __get_unaligned_t(type, ptr) ({
-                 \
--       const struct { type x; } __packed *__pptr =
-(typeof(__pptr))(ptr);      \
-+       const struct { type x; } __packed *__pptr =
-         \
-+                               container_of(ptr, typeof(*__pptr), x);
-         \
-        __pptr->x;
-         \
- })
-
- #define __put_unaligned_t(type, val, ptr) do {
-         \
--       struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);
-         \
-+       struct { type x; } __packed *__pptr =
-         \
-+                               container_of(ptr, typeof(*__pptr), x);
-         \
-        __pptr->x = (val);
-         \
- } while (0)
-
--#define get_unaligned(ptr)     __get_unaligned_t(typeof(*(ptr)), (ptr))
--#define put_unaligned(val, ptr) __put_unaligned_t(typeof(*(ptr)), (val), (ptr))
-+#define get_unaligned(ptr)     ({
-         \
-+       __auto_type _ptr = (ptr);
-         \
-+       __get_unaligned_t(typeof(*(_ptr)), (_ptr));
-         \
-+})
-+#define put_unaligned(val, ptr)        ({
-                 \
-+       __auto_type _ptr = (ptr);
-         \
-+       __put_unaligned_t(typeof(*(_ptr)), (val), (_ptr));
-         \
-+})
-
- static inline u16 get_unaligned_le16(const void *p)
- {
-
-Not sure if this is any better.
-
-        Arnd
+ML: https://lore.kernel.org/linux-csky/
