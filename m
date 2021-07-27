@@ -2,61 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6C73D7C1F
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jul 2021 19:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CFD3D7C58
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jul 2021 19:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbhG0R3Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jul 2021 13:29:24 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10858 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229453AbhG0R3Y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Jul 2021 13:29:24 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16RH8XT8135522;
-        Tue, 27 Jul 2021 13:27:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=6bEhk6CA8+q+IY9gEhnRgyDjoAcMWP97ymU6QSxJwgM=;
- b=Szegunf0HGyFNV2b8yLhhTiTbB2G11ULeAsSAs5IS8IBQ5XC2o9b4a/j9PiJsezf/SKf
- 0BOR+eMlWzlDOmqZ9ccsvpqu8Ay0wDblV5m9FD2Uz4WCiTsFvja7DFv+sRM4YLe7/fpg
- 9RfojCcPO1OiZi5uQZXTtvondsM0TMO2JY225Dsx1llsyv3lzbT6NiZgMtFn7h0MdwJn
- G0hkj7TK3W6/IYODaFXW6l1VkmrkAOkyGP/SI9NQ2FwZipFi2yxS4r9CQ+fXoVeiEnp8
- F2sTEFx/5xGJlYijzakq3eLf+nz68ZpvM4fxXGg3kfBbMtGCtFJQGYj5F1rM0I0xyfBd tA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3a2p1xs0sr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 13:27:29 -0400
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16RHLP22195489;
-        Tue, 27 Jul 2021 13:27:28 -0400
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3a2p1xs0ru-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 13:27:28 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16RHRQ0Z015888;
-        Tue, 27 Jul 2021 17:27:26 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3a235prc4f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 17:27:26 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16RHOgEM27001256
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jul 2021 17:24:42 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 666B1A4051;
-        Tue, 27 Jul 2021 17:27:22 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3EE6AA404D;
-        Tue, 27 Jul 2021 17:27:21 +0000 (GMT)
-Received: from osiris (unknown [9.145.19.157])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 27 Jul 2021 17:27:21 +0000 (GMT)
-Date:   Tue, 27 Jul 2021 19:27:19 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>
+        id S229607AbhG0Rkf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jul 2021 13:40:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39180 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229529AbhG0Rkf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Jul 2021 13:40:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B6F4C60FD8;
+        Tue, 27 Jul 2021 17:40:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627407634;
+        bh=PrLaVhJtnv8oDcD5hqybwz9YD9godDZatvRa/JhR9M0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=riMxmf/dvTU1hsiSKcoJ+WSIQNPHXeV+hqeXTH2OUTRPYzLKb9j4cnM1BcbEXRnuE
+         jN2rxmHRCaJTDsHvxWPWBBOVAKmNoE94I3BOILUILCqWTChKj0mp3PjVawv1wkhHf/
+         tTs5v16S61BPAvtwC/lVATzCerShaYn9n/W7G0vnRtOrOxVtkEoczgL1i8oAKAA28u
+         372rOdIIWyiFU+DgtS1Avpu5Zv2si7xK4ueSbRYcbooZbBakZA0sKOT5PgJGqdh+Qf
+         AaT1Mk6zQfipgEzaEXKqjuHs32RYGm4woOKqrmStF/NVBUGNazEM0LaB0Wz4HcLM3d
+         +HbR57EMZ1Iqg==
+Received: by mail-wr1-f49.google.com with SMTP id c16so6292586wrp.13;
+        Tue, 27 Jul 2021 10:40:34 -0700 (PDT)
+X-Gm-Message-State: AOAM530EYyiFjLb5Mwkk/dBfZ2g36HGylI7keaFk+yTSokVvfMOhPaJS
+        Jl88YiDW6hCN9SGG7DZSFe8tnhCjeVFqf4SuqxA=
+X-Google-Smtp-Source: ABdhPJwS3rT+yAdjePDzQkl1JqnECPTPxX9jMsyrg697T6BrM+4lIuGtTERdp1j5XGkArSly5ovA2pWeExL5zNS/vV0=
+X-Received: by 2002:adf:f446:: with SMTP id f6mr13242430wrp.361.1627407622867;
+ Tue, 27 Jul 2021 10:40:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210727144859.4150043-1-arnd@kernel.org> <20210727144859.4150043-5-arnd@kernel.org>
+ <YQBB9yteAwtG2xyp@osiris>
+In-Reply-To: <YQBB9yteAwtG2xyp@osiris>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 27 Jul 2021 19:40:05 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3itgCyc4jDBodTOcwG+XXsDYspZqQVBmy88cGXevY5Yw@mail.gmail.com>
+Message-ID: <CAK8P3a3itgCyc4jDBodTOcwG+XXsDYspZqQVBmy88cGXevY5Yw@mail.gmail.com>
+Subject: Re: [PATCH v5 4/6] mm: simplify compat numa syscalls
+To:     Heiko Carstens <hca@linux.ibm.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -72,56 +55,56 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         Christoph Hellwig <hch@infradead.org>,
         Feng Tang <feng.tang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v5 4/6] mm: simplify compat numa syscalls
-Message-ID: <YQBB9yteAwtG2xyp@osiris>
-References: <20210727144859.4150043-1-arnd@kernel.org>
- <20210727144859.4150043-5-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210727144859.4150043-5-arnd@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Mscltp_EWBx0evJ9yR5nijJF9sLL6ZBk
-X-Proofpoint-ORIG-GUID: Zo0_7XKq5kYAI3uc1Uuw3gP06noaQbBO
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-27_10:2021-07-27,2021-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 clxscore=1011 adultscore=0 mlxscore=0
- priorityscore=1501 spamscore=0 phishscore=0 malwarescore=0 mlxlogscore=911
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2107270103
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 04:48:57PM +0200, Arnd Bergmann wrote:
-> ---
->  include/linux/compat.h |  17 ++--
->  mm/mempolicy.c         | 175 +++++++++++++----------------------------
->  2 files changed, 63 insertions(+), 129 deletions(-)
-...
-> +static int get_bitmap(unsigned long *mask, const unsigned long __user *nmask,
-> +		      unsigned long maxnode)
-> +{
-> +	unsigned long nlongs = BITS_TO_LONGS(maxnode);
-> +	int ret;
-> +
-> +	if (in_compat_syscall())
-> +		ret = compat_get_bitmap(mask,
-> +					(const compat_ulong_t __user *)nmask,
-> +					maxnode);
+On Tue, Jul 27, 2021 at 7:27 PM Heiko Carstens <hca@linux.ibm.com> wrote:
+>
+> On Tue, Jul 27, 2021 at 04:48:57PM +0200, Arnd Bergmann wrote:
+> > ---
+> >  include/linux/compat.h |  17 ++--
+> >  mm/mempolicy.c         | 175 +++++++++++++----------------------------
+> >  2 files changed, 63 insertions(+), 129 deletions(-)
+> ...
+> > +static int get_bitmap(unsigned long *mask, const unsigned long __user *nmask,
+> > +                   unsigned long maxnode)
+> > +{
+> > +     unsigned long nlongs = BITS_TO_LONGS(maxnode);
+> > +     int ret;
+> > +
+> > +     if (in_compat_syscall())
+> > +             ret = compat_get_bitmap(mask,
+> > +                                     (const compat_ulong_t __user *)nmask,
+> > +                                     maxnode);
+>
+> compat_ptr() conversion for e.g. nmask is missing with the next patch
+> which removes the compat system calls.
+> Is that intended or am I missing something?
 
-compat_ptr() conversion for e.g. nmask is missing with the next patch
-which removes the compat system calls.
-Is that intended or am I missing something?
+I don't think it's needed here, since the pointer comes from the system
+call argument, which has the compat_ptr() conversion applied in
+arch/s390/include/asm/syscall_wrapper.h, not from a compat_uptr_t
+that gets passed indirectly. The compat_get_bitmap() conversion
+is only needed for byte order adjustment, not for converting pointers.
+
+It's also possible that I'm the one who's missing something.
+
+        Arnd
