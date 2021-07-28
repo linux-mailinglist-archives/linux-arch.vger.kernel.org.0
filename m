@@ -2,70 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9307B3D8BA8
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 12:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E763D8C12
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 12:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbhG1KZD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Jul 2021 06:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S235417AbhG1KlM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Jul 2021 06:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbhG1KZD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jul 2021 06:25:03 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3487AC061757
-        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 03:25:01 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id j21so2369522ioo.6
-        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 03:25:01 -0700 (PDT)
+        with ESMTP id S231238AbhG1KlL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jul 2021 06:41:11 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89561C061757
+        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 03:41:09 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id r18so2448526iot.4
+        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 03:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lR86CumlSscoNTZZ/SBgia1YwuLd5hb6wb2zb/k7e2Y=;
-        b=PC8BfjLbUXEQqDTrnOQKAcqt73VmKW2leci5nCdRGkaORkVOdWfFCHEiI+HCJ3Jxax
-         ixgCVnJH6IItli9qv7XEXUwkIZVb8gyl0KVFuzlbtUpo3bYg+OhAmt1SYKQrXgmzJntK
-         XWam5EDEHuRKHZY/skqP6MpVzF/WUbg0tmhJocWiHgt6q5bQPvAUxzcnfsLT74UJ4IJ9
-         iC/WGflNibQQVBBSXnknPMxXBayuooxSfzPw8QP4DKhUaNhB9d537G5T+TiO3xJ+kqB9
-         Rrf/pGTjzpaF0YpZcE45DEQz0VmbtiKn/4W0l5DtTMsuzE3yliCeAapwLF59oyLluNOs
-         huxw==
+        bh=Q+NgCmBU6kJvzpP1rKQiBcGQxks7MZw3KVXSzh/evjc=;
+        b=lhvg8KrhPQS/qUlOd6+DGWZAIeLrgFRaLneNsvlOkWs9Q8EnrOG9sVf35wS5u/K20R
+         bO1Q97bJFTyPQQnutPI6G3B3yZMiXZyn/jFVbpRA3k2kgJAyoUcVWSH76TQtG7qMfU3W
+         P4c26qDJi+4GGGUBmrmQUg24CyNN73ZTvbOPmLI/GelRTWd//lh14EaeHg65mioioaQd
+         Z15X4okpKpnJru3pP5+67wQkCWXCyjd7EWcmcErmogxmzIv/82GjMQe/qvN99OxxR7yx
+         ICTlT6iPUmLE4TJnA86IxA+l5rGjQZXMUGXu0KiYFJPZ19EehVJSpC9IBS8ZILj/vYFx
+         i1qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lR86CumlSscoNTZZ/SBgia1YwuLd5hb6wb2zb/k7e2Y=;
-        b=r5oXu9fYxSWyj9/wdhhMYE01Rs++HgUsjHQGLJhZtQRzWMM98HVA0IXyFeWL7xgiDa
-         +A8jW+PtcwNK5tFbha0b0x62XNJNjLQhuab1RXVX579fURtM+kLKZ7EKywkZmfPPMCY2
-         HzKQv/IHpOZGyKxPC/n3hdZBnBkGm40XjVqfclwxwH2imbW3d4K8jB9s8/YDVNtDqwbD
-         pSDMv5xKh5FdcOHwolkYYffbCF0q+1tb3h8tzCiW07HuTGpBjLoe8Als2KHd3nX0mQB3
-         1l8Wym6sLJ4QonvHxqdwqPZopexUo4BeSok3wXj5PXjPivHx6EDcyyAYSdxdMVG9HGab
-         GJKg==
-X-Gm-Message-State: AOAM533FZSLqTvwZp02PaTpSh6AaGGSrQ4OCoBXcwkujAeIj0BZVW+x5
-        yk7HjW9yC3IRoVSpKZ28Xj4JJTTeoKOaYlfB16Y=
-X-Google-Smtp-Source: ABdhPJypTkTZ0FLNf1C590pa980w0mrv5KuxsvaDFAQBeehOZ2gTU0k069UnD+6aYeyZe3IHyoTgN08m8sn9ooEnZAg=
-X-Received: by 2002:a05:6638:338f:: with SMTP id h15mr25684809jav.135.1627467900441;
- Wed, 28 Jul 2021 03:25:00 -0700 (PDT)
+        bh=Q+NgCmBU6kJvzpP1rKQiBcGQxks7MZw3KVXSzh/evjc=;
+        b=B3ghd6ctJen+Q4+nQO6eSODNEuhBwtebDDZVE0wyBCtlb4U9oICMi2tcq1OiamfM/C
+         EbHrYMS5gz8lzRCdr5P1yKDgd2KVjji5ZPiu4Gw9y+jRQfrIfGZbcctMThyAbN0FFyPn
+         4/jxwcW+FM3vahedTXGMR40+e3PRqx/HLgwPOujhoIXzcNayB7e92Qi7VWW/2t8PCH+f
+         CaxrwN3twSYgTUq00/VwZAtiy6AeoaqR+tfIL2q+gno1YvARclQb1AW2IinfoEppQf5q
+         TtITuo5oT5NwRwS3HGmRjxylVyBu5CHtHBIeU/Pbx1hnCgG+9h3NNsAWiWerjql4BGOa
+         dehw==
+X-Gm-Message-State: AOAM533bpum+siIQNT7phZwoilC+sfIT1NknBWwVOmCs4cOKJXg9E4Dr
+        +O7F1JSeBGupSNxYrr6oJT6Css0+u+3SMMWaWz3sDPBZVlg=
+X-Google-Smtp-Source: ABdhPJyxjFCLGZiEWi7NVqc0mmXi/VunOob5B7JG7W8rM6zKvIBRYEghGiScbE8iRumoly2Nm0mXLvgr8ewHQHwwPRw=
+X-Received: by 2002:a05:6602:48c:: with SMTP id y12mr19298491iov.14.1627468869033;
+ Wed, 28 Jul 2021 03:41:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-6-chenhuacai@loongson.cn> <CAK8P3a1w2Dz_7J1qrGmTYwUqpu=Mc4ew2TMmLynjvyvoEXMd7Q@mail.gmail.com>
- <CAAhV-H4HrcfmLmgxB765CyU72FGsAx1kEzV+yjfgKUO+9KiCNw@mail.gmail.com>
- <CAK8P3a3WdXOrsg6wYShr9KU7PFn2mUHz4dwOTNhYtw53WiwT1A@mail.gmail.com>
- <CAMj1kXGCMcy5qTmjg_Ejg2eXBo2zhDrK+d-yrsQXmF_A4CVcDg@mail.gmail.com>
- <CAK8P3a3kRum-qZBdwJ0bAKbxL2iDfmCgzNeoJk8zEr_Zc_J1Fg@mail.gmail.com>
- <CAMj1kXGUfAZ79N7Xtsyh3P+HubVhgLgnrBuJT1U3z80z569uag@mail.gmail.com> <CAK8P3a0zYMrZ7muts2sR==_Ca=Vx-MjOQXmzteAcj6Oqmtiufw@mail.gmail.com>
-In-Reply-To: <CAK8P3a0zYMrZ7muts2sR==_Ca=Vx-MjOQXmzteAcj6Oqmtiufw@mail.gmail.com>
+References: <20210724123617.3525377-1-chenhuacai@loongson.cn>
+ <CAMuHMdU8o2r0Tybz_z3hKLoMyNqL5A_RZ9DnCYR0pHeRMpgvWA@mail.gmail.com>
+ <CAAhV-H4aNr2BuG1imx6RcfEQtarjbrUU+-_PbGRg4jX5ygr_iA@mail.gmail.com>
+ <YP6Q3s5Kpg2A1NRZ@boqun-archlinux> <CAJF2gTQ98v8H3SYt8K0Mnq73xXtZ-2Ja7jOaP2Uo-fX+ZqYZBw@mail.gmail.com>
+ <YP7q5GBweaeWgvcs@boqun-archlinux> <77e83baf-030c-1332-609c-6d3f01bd422a@redhat.com>
+ <CAJF2gTQcmN0TdX2dMT5mqKBp2HJ15_7KzDnaM5VyHaCArrnfGA@mail.gmail.com>
+ <YP9vp8/acj9TpwyZ@boqun-archlinux> <YP/oYc1A39bMS87H@hirez.programming.kicks-ass.net>
+In-Reply-To: <YP/oYc1A39bMS87H@hirez.programming.kicks-ass.net>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Wed, 28 Jul 2021 18:24:49 +0800
-Message-ID: <CAAhV-H4Y46_a-Bx2aL=f3ZrrEWgXw_26D_6LnFq-F3u4fUdPtg@mail.gmail.com>
-Subject: Re: [PATCH 05/19] LoongArch: Add boot and setup routines
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
+Date:   Wed, 28 Jul 2021 18:40:54 +0800
+Message-ID: <CAAhV-H7Jnoa3AOTjG_=+WvxkcjqDxYVU4jAudjnu8WMtAVyPCw@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/2] arch: Introduce ARCH_HAS_HW_XCHG_SMALL
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
+        Waiman Long <llong@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Rui Wang <wangrui@loongson.cn>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -73,53 +72,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd and Ard,
+Hi, Peter,
 
-On Wed, Jul 28, 2021 at 1:54 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, Jul 27, 2021 at 7:06 PM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> On Tue, Jul 27, 2021 at 6:22 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > On Tue, 27 Jul 2021 at 15:14, Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Tue, Jul 27, 2021 at 2:51 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > On Tue, 27 Jul 2021 at 14:41, Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > > On Tue, Jul 27, 2021 at 1:53 PM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > > > >
-> > > How is other information passed from grub to the efi stub
-> > > and from there to the kernel on loongarch?
+> On Tue, Jul 27, 2021 at 10:29:59AM +0800, Boqun Feng wrote:
+>
+> > > "How to implement xchg_tail" shouldn't force with _Q_PENDING_BITS, but
+> > > the arch could choose.
 > >
-> > I don't think this architecture boots via EFI at all - it looks like a
-> > data structure is created in memory that looks like an EFI system
-> > table, and provided to the kernel proper without going through the
-> > stub. This is not surprising, given that the stub turns the kernel
-> > into a PE/COFF executable, and the PE/COFF spec nor the EFI spec
-> > support the LoongSon architecture.
+> > I actually agree with this part, but this patchset failed to provide
+> > enough evidences on why we should choose xchg_tail() implementation
+> > based on whether hardware has xchg16, more precisely, for an archtecture
+> > which doesn't have a hardware xchg16, why cmpxchg emulated xchg16() is
+> > worse than a "load+cmpxchg) implemeneted xchg_tail()? If it's a
+> > performance reason, please show some numbers.
 >
-> A lot of upstream projects are still missing loongarch support completely.
-> I already pointed out the lack of kernel support when the musl and
-> qemu patches got posted first, and the lack of toolchain support for the
-> kernel, so it's possible this one is just another missing dependency that
-> they plan to post later but really should have sooner.
->
-> > This is problematic from a maintenance point of view, given that the
-> > interface between the kernel proper and the EFI stub is being promoted
-> > from an internal interface that we can freely modify to one that needs
-> > to remain stable for compatibility of new kernels with older firmware.
-> > I don't think we should be going down this path tbh.
->
-> Agreed. Having a reliable boot interface is definitely important here,
-> and copying from arch/mips was probably not the best choice in this
-> regard. They can probably look at what was needed for RISC-V to
-> add this properly, as that was done fairly recently.
-Now the boot information passed to kernel is like this:
-1, kernel get a0, a1 and a2 from bootloader.
-2, a0 is "argc", a1 is "argc", so "cmdline" comes from a0/a1
-3, a2 is "envrion", which is a pointer to a "struct bootparamsinterface"
-4, "struct bootparamsinterface" include "systemtable" pointer, whose
-type is "efi_system_table_t". Most information, include ACPI tables,
-come from here.
-5, initrd path is specified in grub.cfg, but its load address and size
-is calculated dynamically by grub, so grub appends parameters to
-cmdline.
+> Right. Their problem is their broken xchg16() implementation.
+
+Please correct me if I'm wrong. Now my understanding is like this:
+1, _Q_PENDING_BITS=1 qspinlock can be used by all archs, though it may
+be not optimized.
+2, _Q_PENDING_BITS=8 qspinlock can be used if hardware supports
+sub-word xchg/cmpxchg, or the software emulation is correctly
+implemented. But the current MIPS emulation is not correct.
+
+If so, I want to rename ARCH_HAS_HW_XCHG_SMALL to
+ARCH_HAS_FAST_XCHG_SMALL, and let these archs select it:
+1, X86, ARM, ARM64, IA64, M68K, because they have hardware support.
+2, Other archs who select qspinlock currently (including MIPS),
+because their current behavior is use _Q_PENDING_BITS=8 qspinlock and
+we don't want to change anything in this patch. If their emulation is
+broken or not as "fast" as expected, we can make new patches to
+unselect the ARCH_HAS_FAST_XCHG_SMALL option.
 
 Huacai
->
->         Arnd
