@@ -2,101 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B863D8561
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 03:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FECD3D8966
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 10:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234662AbhG1Bbh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jul 2021 21:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234616AbhG1Bbh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jul 2021 21:31:37 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040D1C061765
-        for <linux-arch@vger.kernel.org>; Tue, 27 Jul 2021 18:31:36 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id mt6so2756628pjb.1
-        for <linux-arch@vger.kernel.org>; Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yHc64D7GeFGFvPKcL3/klEXdsXGAyEbOGkW4X7dqYZk=;
-        b=fhSYS231qJ3sqkIYNi8KPw8MsfS0+ziEaNeUJJgkWRoGnsw+X6Zela3vLGucwxsOnQ
-         T/2eQecJMaDAtj1/fJv4pRgNYPjG5MBwhmQRzKVK7XHucRr9VlsyFnemk7Az0cFRvaoj
-         SXA55eSG8LWFjpI5M4/vVkrChJvWZRFUIvXxtX/YyI6Hetmvo8xUU0IsYqW0uPaYORh+
-         7fbNsmk6bU1nDAoUQ8bBanH/4Fg5DnH45lOS4h8rnJCcsSof3DVR671BuFi4Ezu9qGFc
-         pniezhy1QlK6TDYbbPRo+6/gzTozJcEPXqbmDtUTOLhYVoF+8NtbsE0cFeksRw7VSH/K
-         7dzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yHc64D7GeFGFvPKcL3/klEXdsXGAyEbOGkW4X7dqYZk=;
-        b=FyqJYLBNMEtsZhPrfEpki3cknx68TsXn92Z6CBM8EBTEcZTOfguTVB2yneZx08+N0Q
-         n4suwdvWDytwPbolpQ6PdcjSEncFnLR7ZRi0uFrrsYnn8rZ/INglUVBPa2tzmo0Jalnr
-         z4SIDgpVTBwpbeshxGEpRwc/cxTefBZTHEKaVseA0ldoVVy12Tua0R4B8icrm+kwXA7O
-         pKRzMUvSPt0vneOYLETV286U8aZhhlHYKpi4D6RoJ2uS8SLzrtifaWVmqQglwmH4Ibmc
-         M0sh9riIzhK8txZffKm5l9AYiEVGRN8es6is+Pdg3QKR79YPC/XQNo3uUeyJ5iRlLXWj
-         yLvQ==
-X-Gm-Message-State: AOAM5331Z5QTxkH/FxJSXzZX3dZxZOo6PTaBL4zND9+mj7PAo3iAAhjH
-        6FQwYtE+lRp9jGY5EmZdq+KzW4w5nc0Liwk1
-X-Google-Smtp-Source: ABdhPJzWMYJQkYrSLemCw68WHvxxx2yrrdVHcAiwavOx0x2TeSqkNy6ZylLwTbIdJTyjO+rAuqNUqw==
-X-Received: by 2002:a62:b414:0:b029:317:52d:7fd5 with SMTP id h20-20020a62b4140000b0290317052d7fd5mr25840599pfn.30.1627435895354;
-        Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
-Received: from [192.168.1.116] ([198.8.77.61])
-        by smtp.gmail.com with ESMTPSA id a16sm5054336pfo.66.2021.07.27.18.31.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jul 2021 18:31:34 -0700 (PDT)
-Subject: Re: switch the block layer to use kmap_local_page v3
-To:     Christoph Hellwig <hch@lst.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Geoff Levand <geoff@infradead.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Dongsheng Yang <dongsheng.yang@easystack.cn>,
-        Mike Snitzer <snitzer@redhat.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Ira Weiny <ira.weiny@intel.com>, dm-devel@redhat.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        ceph-devel@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20210727055646.118787-1-hch@lst.de>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <eba0b98f-5b0e-32c4-3b09-fa1946192517@kernel.dk>
-Date:   Tue, 27 Jul 2021 19:31:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S235033AbhG1IHO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Jul 2021 04:07:14 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:12324 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234508AbhG1IHO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jul 2021 04:07:14 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4GZR3673wVz7yfB;
+        Wed, 28 Jul 2021 16:02:26 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 28 Jul 2021 16:07:10 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 28 Jul 2021 16:07:09 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <rostedt@goodmis.org>, <mingo@redhat.com>, <davem@davemloft.net>,
+        <ast@kernel.org>, <ryabinin.a.a@gmail.com>
+CC:     <mpe@ellerman.id.au>, <benh@kernel.crashing.org>,
+        <paulus@samba.org>, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        <linux-s390@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <bpf@vger.kernel.org>
+Subject: [PATCH v2 0/7] sections: Unify kernel sections range check and use
+Date:   Wed, 28 Jul 2021 16:13:13 +0800
+Message-ID: <20210728081320.20394-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20210727055646.118787-1-hch@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/26/21 11:56 PM, Christoph Hellwig wrote:
-> Hi all,
-> 
-> this series switches the core block layer code and all users of the
-> existing bvec kmap helpers to use kmap_local_page.  Drivers that
-> currently use open coded kmap_atomic calls will converted in a follow
-> on series.
-> 
-> To do so a new kunmap variant is added that calls
-> flush_kernel_dcache_page.  I'm not entirely sure where to call
-> flush_dcache_page vs flush_kernel_dcache_page, so I've tried to follow
-> the documentation here, but additional feedback would be welcome.
-> 
-> Note that the ps3disk has a minir conflict with the
-> flush_kernel_dcache_page removal in linux-next through the -mm tree.
-> I had hoped that change would go into 5.14, but it seems like it is
-> being held for 5.15.
+There are three head files(kallsyms.h, kernel.h and sections.h) which
+include the kernel sections range check, let's make some cleanup and
+unify them.
 
-Applied for 5.15, thanks.
+1. cleanup arch specific text/data check and fix address boundary check
+   in kallsyms.h
+2. make all the basic/core kernel range check function into sections.h
+3. update all the callers, and use the helper in sections.h to simplify
+   the code
+
+After this series, we have 5 APIs about kernel sections range check in
+sections.h
+
+ * is_kernel_core_data()	--- come from core_kernel_data() in kernel.h
+ * is_kernel_rodata()		--- already in sections.h
+ * is_kernel_text()		--- come from kallsyms.h
+ * is_kernel_inittext()		--- come from kernel.h and kallsyms.h
+ * is_kernel()			--- come from kallsyms.h
+
+
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-arch@vger.kernel.org 
+Cc: iommu@lists.linux-foundation.org
+Cc: bpf@vger.kernel.org 
+
+v2:
+- add ACK/RW to patch2, and drop inappropriate fix tag
+- keep 'core' to check kernel data, suggestted by Steven Rostedt
+  <rostedt@goodmis.org>, rename is_kernel_data() to is_kernel_core_data()
+- drop patch8 which is merged
+- drop patch9 which is resend independently
+
+v1:
+https://lore.kernel.org/linux-arch/20210626073439.150586-1-wangkefeng.wang@huawei.com
+
+Kefeng Wang (7):
+  kallsyms: Remove arch specific text and data check
+  kallsyms: Fix address-checks for kernel related range
+  sections: Move and rename core_kernel_data() to is_kernel_core_data()
+  sections: Move is_kernel_inittext() into sections.h
+  kallsyms: Rename is_kernel() and is_kernel_text()
+  sections: Add new is_kernel() and is_kernel_text()
+  powerpc/mm: Use is_kernel_text() and is_kernel_inittext() helper
+
+ arch/powerpc/mm/pgtable_32.c   |  7 +---
+ arch/x86/kernel/unwind_orc.c   |  2 +-
+ arch/x86/net/bpf_jit_comp.c    |  2 +-
+ include/asm-generic/sections.h | 71 ++++++++++++++++++++++++++--------
+ include/linux/kallsyms.h       | 21 +++-------
+ include/linux/kernel.h         |  2 -
+ kernel/cfi.c                   |  2 +-
+ kernel/extable.c               | 33 ++--------------
+ kernel/locking/lockdep.c       |  3 --
+ kernel/trace/ftrace.c          |  2 +-
+ mm/kasan/report.c              |  2 +-
+ net/sysctl_net.c               |  2 +-
+ 12 files changed, 72 insertions(+), 77 deletions(-)
 
 -- 
-Jens Axboe
+2.26.2
 
