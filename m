@@ -2,121 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA633D933A
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 18:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AB43D93F5
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 19:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbhG1Q2L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Jul 2021 12:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbhG1Q2K (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jul 2021 12:28:10 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C084DC061757;
-        Wed, 28 Jul 2021 09:28:07 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id f11so3630581ioj.3;
-        Wed, 28 Jul 2021 09:28:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=AF4TJrGWFJFMtVLuei7JHJB4Gj1GjFvl4JwVKfpCTQg=;
-        b=N4dFDdweMRNGIxbTls1wouDVv77PoGKNvdayOSofsdxbOx+HYtPYODvvE2cufKyswB
-         2lABzznnLC/fwRL1Ev/ZT2LJgrwE3FCxHwkBgcGhxeTLrpUhiLzWfNDPWeNtOMHCw2MT
-         VUknTvdIAHPjj/xH8t/G9d0MN6m5wJPWid7c92vAT4ji6dX/duT14dYthsuv5AiTcCQm
-         vzq0Km+9MmKJCe7GROt/D5Qm++HHzhvlXaPUXkAMKi4ojMOa6pfWxkdE/pLFaIIP9pPY
-         S8RlROTfGWLoS/AdI/ch+nmftRxakXYe04STS9mICjkUYsYEqTE3QwtKrPSoFTe1f2yH
-         vU+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=AF4TJrGWFJFMtVLuei7JHJB4Gj1GjFvl4JwVKfpCTQg=;
-        b=CRxtWONnzmvLZEPqmbraQQbtDmo13TzvtSovhKvk2u0cKiOscF1OVAg5NhQwXu/I6m
-         iy3bw345zAekMIG9aABpA/DyHRxH/5zGIB+bG4Pl+6z8nIjSHp/u03fHnGcL0InHurWp
-         xao6p0qcI/KAEDeqJWPsRBjEU0AgKztcGlE3BIj2Usk4voQ+EBchr/FksW3+xYB9cJ+S
-         bp44/qPrQfrROCuoyo/XE9VXdqC9h8dACfImcpH6gY72VRlF/G1DLLco4hQZfaZQu7/0
-         oSqZx4tu4oTqywzLmOR3Qz36vDu+vc8qsPzcQQNj0VrUM7A0GOkcP+KjmyjI2wKrExqk
-         +snQ==
-X-Gm-Message-State: AOAM530Uk263JmI24dlAmvQxa1TRE+Il7odMLcIQAVs802ORiNbOCdex
-        nvlCBP05BIsTgqjWzD5El3c=
-X-Google-Smtp-Source: ABdhPJy59XDX6D0NjCNN5Abp58chFAMk9RYToI8QqF65aTuJCga7stE7tEYRvATnalm4oQ854CaD/A==
-X-Received: by 2002:a05:6602:2424:: with SMTP id g4mr217928iob.189.1627489687199;
-        Wed, 28 Jul 2021 09:28:07 -0700 (PDT)
-Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id w14sm275939ioa.47.2021.07.28.09.28.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 09:28:06 -0700 (PDT)
-Date:   Wed, 28 Jul 2021 09:28:05 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH 0/8] all: use find_next_*_bit() instead of
- find_first_*_bit() where possible
-Message-ID: <YQGFlSSCKPVCdSo7@yury-ThinkPad>
-References: <20210612123639.329047-1-yury.norov@gmail.com>
- <YQFxJnB+cH4SU9I3@yury-ThinkPad>
- <7fd3eda0658e7ef4ba0463ecd39f7a17dbd4e5c3.camel@perches.com>
- <YQF97Q1a0NL9VBr9@yury-ThinkPad>
- <911b290063ecab50aef8da606ddbc2e27dffa6d7.camel@perches.com>
+        id S230249AbhG1RHQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Jul 2021 13:07:16 -0400
+Received: from mga17.intel.com ([192.55.52.151]:32424 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229567AbhG1RHQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Jul 2021 13:07:16 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10059"; a="192989419"
+X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
+   d="scan'208";a="192989419"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 10:06:51 -0700
+X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
+   d="scan'208";a="517613242"
+Received: from sobsiex-desk2.amr.corp.intel.com (HELO [10.212.198.197]) ([10.212.198.197])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 10:06:46 -0700
+Subject: Re: [PATCH 03/13] x86/HV: Add new hvcall guest address host
+ visibility support
+To:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
+        Tianyu.Lan@microsoft.com, rientjes@google.com,
+        martin.b.radev@gmail.com, akpm@linux-foundation.org,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        aneesh.kumar@linux.ibm.com, krish.sadhukhan@oracle.com,
+        saravanand@fb.com, xen-devel@lists.xenproject.org,
+        pgonda@google.com, david@redhat.com, keescook@chromium.org,
+        hannes@cmpxchg.org, sfr@canb.auug.org.au,
+        michael.h.kelley@microsoft.com
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, anparri@microsoft.com
+References: <20210728145232.285861-1-ltykernel@gmail.com>
+ <20210728145232.285861-4-ltykernel@gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <a2444c36-0103-8e1c-7005-d97f77f90e85@intel.com>
+Date:   Wed, 28 Jul 2021 10:06:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <20210728145232.285861-4-ltykernel@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <911b290063ecab50aef8da606ddbc2e27dffa6d7.camel@perches.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 09:06:18AM -0700, Joe Perches wrote:
-> On Wed, 2021-07-28 at 08:55 -0700, Yury Norov wrote:
-> > On Wed, Jul 28, 2021 at 08:13:32AM -0700, Joe Perches wrote:
-> > > On Wed, 2021-07-28 at 08:00 -0700, Yury Norov wrote:
-> > > > Ping again.
-> > > > 
-> > > > The rebased series together with other bitmap patches can be found
-> > > > here:
-> > > > 
-> > > > https://github.com/norov/linux/tree/bitmap-20210716
-> > > []
-> > > > >  .../bitops => include/linux}/find.h           | 149 +++++++++++++++++-
-> > > 
-> > > A file named find.h in a directory named bitops seems relatively sensible,
-> > > but a bitops specific file named find.h in include/linux does not.
-> >  
-> > 
-> > I'm OK with any name, it's not supposed to be included directly. What
-> > do you think about bitmap_find.h, or can you suggest a better name?
-> 
-> Dunno.
-> 
-> But I'm a bit curious about the duplicate function naming (conflicts?)
-> with functions in include/linux/bitmap.h
+On 7/28/21 7:52 AM, Tianyu Lan wrote:
+> @@ -1986,7 +1988,9 @@ static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
+>  	int ret;
+>  
+>  	/* Nothing to do if memory encryption is not active */
+> -	if (!mem_encrypt_active())
+> +	if (hv_is_isolation_supported())
+> +		return hv_set_mem_enc(addr, numpages, enc);
+> +	else if (!mem_encrypt_active())
+>  		return 0;
 
-What names duplicate?
+One more thing.  If you're going to be patching generic code, please
+start using feature checks that can get optimized away at runtime.
+hv_is_isolation_supported() doesn't look like the world's cheapest
+check.  It can't be inlined and costs at least a function call.
+
+These checks could, with basically no effort be wrapped in a header like
+this:
+
+static inline bool hv_is_isolation_supported(void)
+{
+	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+		return 0;
+
+	// out of line function call:
+	return __hv_is_isolation_supported();
+}	
+
+I don't think it would be the end of the world to add an
+X86_FEATURE_HYPERV_GUEST, either.  There are plenty of bits allocated
+for Xen and VMWare.
