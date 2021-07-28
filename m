@@ -2,55 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5DD3D9261
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 17:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26E33D92BE
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 18:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbhG1Pzb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Jul 2021 11:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbhG1Pzb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jul 2021 11:55:31 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB1EC061757;
-        Wed, 28 Jul 2021 08:55:28 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id 190so2622912qkk.12;
-        Wed, 28 Jul 2021 08:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Hdboj5BmSVR+1HeROwEzl5Ukj+Hr+t08Y2X+nFridI0=;
-        b=aYMicwx69WgyFWxh7agbW+s82ivWqpQPCfgcNw+cAuI/BGrZzD7CtQ3ncLw8993c5i
-         40w+kYHlS4qaGbE+FH07f1ZNE8bqtl2ucsP0cjROUwr0K/SsYfa44eXWKjqP8X5UdmcK
-         +gIKi3R9/UVsuBiQ/gjD4mtuLtFZdFIZAdy4rDLiydRRwbDTa/pR4z2aE7q9c3p1Y+vE
-         Sl+lQqX4Xs0M7nO4t6xRReAN8s+qmaFerqkch1uHPMaXMe9mvP0nNFHQ2ALb45fHgLzZ
-         NnpyaZeMleQrgQI7Cki7vEpDlYVgoDckyb/7u15gxJHXpKufm+DDBmgl4BQDwTgjQLTn
-         7j+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Hdboj5BmSVR+1HeROwEzl5Ukj+Hr+t08Y2X+nFridI0=;
-        b=ZAlSSG7kpTXr4bEKc4qFrI3KaITEniBSBoofQhiX2KzgBX9AUsOB9A/K7o813EhvFO
-         7+Xh9ns/aeyKGH1bn+D/rPEMTOVDlCDD7IFOya4RSd7NNr1eTYYoaUZGWHDPWODrPOmi
-         TF4Mn2ZiAHgZbeMtK6MWhHHjuXNvxWPxAtTg2YsMlpTb5QsGbVJ+fcED8f0I5UqGLF71
-         bXVxGvQ5+e9i/Nz/h52zg/NKb5O1SsqpsiM4GZ8CYpcg6II8L/jENCmjG0VRTppdiTn1
-         cXq37VjA2cZmOPg9iRxeNRVfgSecZaX+kmK1t97TCioMub8ZCOm9ce0WO6koLMbqfzq8
-         Zr0Q==
-X-Gm-Message-State: AOAM531SZjqlRrS8VkL9JK83EFJbV69P11gl7ds7uABVNWcPPRuu7hi1
-        u4qPkJtORoUCeJfHoTwybbY=
-X-Google-Smtp-Source: ABdhPJyd0jl/DUwla2N2a5WMSdgvoClWOrKxHMWdX5oToyct2CKjdkdAPr1Vr3+HnTcKouwvopnBFw==
-X-Received: by 2002:a05:620a:1907:: with SMTP id bj7mr295089qkb.315.1627487727636;
-        Wed, 28 Jul 2021 08:55:27 -0700 (PDT)
-Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id l12sm108101qtx.45.2021.07.28.08.55.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 08:55:27 -0700 (PDT)
-Date:   Wed, 28 Jul 2021 08:55:25 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Joe Perches <joe@perches.com>
+        id S237352AbhG1QIF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Jul 2021 12:08:05 -0400
+Received: from smtprelay0094.hostedemail.com ([216.40.44.94]:48740 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237707AbhG1QHD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Jul 2021 12:07:03 -0400
+Received: from omf08.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id BD60A183C7631;
+        Wed, 28 Jul 2021 16:06:26 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 38B461A29FA;
+        Wed, 28 Jul 2021 16:06:20 +0000 (UTC)
+Message-ID: <911b290063ecab50aef8da606ddbc2e27dffa6d7.camel@perches.com>
+Subject: Re: [PATCH 0/8] all: use find_next_*_bit() instead of
+ find_first_*_bit() where possible
+From:   Joe Perches <joe@perches.com>
+To:     Yury Norov <yury.norov@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -77,34 +48,50 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Alexey Klimov <aklimov@redhat.com>,
         Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH 0/8] all: use find_next_*_bit() instead of
- find_first_*_bit() where possible
-Message-ID: <YQF97Q1a0NL9VBr9@yury-ThinkPad>
+Date:   Wed, 28 Jul 2021 09:06:18 -0700
+In-Reply-To: <YQF97Q1a0NL9VBr9@yury-ThinkPad>
 References: <20210612123639.329047-1-yury.norov@gmail.com>
- <YQFxJnB+cH4SU9I3@yury-ThinkPad>
- <7fd3eda0658e7ef4ba0463ecd39f7a17dbd4e5c3.camel@perches.com>
+         <YQFxJnB+cH4SU9I3@yury-ThinkPad>
+         <7fd3eda0658e7ef4ba0463ecd39f7a17dbd4e5c3.camel@perches.com>
+         <YQF97Q1a0NL9VBr9@yury-ThinkPad>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7fd3eda0658e7ef4ba0463ecd39f7a17dbd4e5c3.camel@perches.com>
+X-Rspamd-Queue-Id: 38B461A29FA
+X-Spam-Status: No, score=-0.56
+X-Stat-Signature: aj4gi8ripoqgyzad7npab69s56hu9a3c
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+FrxhVqumFzssxLoZaxyh5do3Usq3FKbI=
+X-HE-Tag: 1627488380-718719
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 08:13:32AM -0700, Joe Perches wrote:
-> On Wed, 2021-07-28 at 08:00 -0700, Yury Norov wrote:
-> > Ping again.
+On Wed, 2021-07-28 at 08:55 -0700, Yury Norov wrote:
+> On Wed, Jul 28, 2021 at 08:13:32AM -0700, Joe Perches wrote:
+> > On Wed, 2021-07-28 at 08:00 -0700, Yury Norov wrote:
+> > > Ping again.
+> > > 
+> > > The rebased series together with other bitmap patches can be found
+> > > here:
+> > > 
+> > > https://github.com/norov/linux/tree/bitmap-20210716
+> > []
+> > > >  .../bitops => include/linux}/find.h           | 149 +++++++++++++++++-
 > > 
-> > The rebased series together with other bitmap patches can be found
-> > here:
-> > 
-> > https://github.com/norov/linux/tree/bitmap-20210716
-> []
-> > >  .../bitops => include/linux}/find.h           | 149 +++++++++++++++++-
+> > A file named find.h in a directory named bitops seems relatively sensible,
+> > but a bitops specific file named find.h in include/linux does not.
+>  
 > 
-> A file named find.h in a directory named bitops seems relatively sensible,
-> but a bitops specific file named find.h in include/linux does not.
- 
-I'm OK with any name, it's not supposed to be included directly. What
-do you think about bitmap_find.h, or can you suggest a better name?
+> I'm OK with any name, it's not supposed to be included directly. What
+> do you think about bitmap_find.h, or can you suggest a better name?
+
+Dunno.
+
+But I'm a bit curious about the duplicate function naming (conflicts?)
+with functions in include/linux/bitmap.h
+
+
+
