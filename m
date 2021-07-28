@@ -2,87 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E13993D91BE
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 17:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1DB3D91D7
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 17:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235559AbhG1PVU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Jul 2021 11:21:20 -0400
-Received: from smtprelay0191.hostedemail.com ([216.40.44.191]:38684 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235457AbhG1PVU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 28 Jul 2021 11:21:20 -0400
-X-Greylist: delayed 455 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Jul 2021 11:21:19 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave08.hostedemail.com (Postfix) with ESMTP id A42F11811BA23
-        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 15:13:44 +0000 (UTC)
-Received: from omf14.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 42E6D182CF666;
-        Wed, 28 Jul 2021 15:13:41 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 349B1268E38;
-        Wed, 28 Jul 2021 15:13:34 +0000 (UTC)
-Message-ID: <7fd3eda0658e7ef4ba0463ecd39f7a17dbd4e5c3.camel@perches.com>
-Subject: Re: [PATCH 0/8] all: use find_next_*_bit() instead of
- find_first_*_bit() where possible
-From:   Joe Perches <joe@perches.com>
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>
-Date:   Wed, 28 Jul 2021 08:13:32 -0700
-In-Reply-To: <YQFxJnB+cH4SU9I3@yury-ThinkPad>
-References: <20210612123639.329047-1-yury.norov@gmail.com>
-         <YQFxJnB+cH4SU9I3@yury-ThinkPad>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
+        id S237067AbhG1P2l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Jul 2021 11:28:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43882 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236793AbhG1P2l (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Jul 2021 11:28:41 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ED58260F91;
+        Wed, 28 Jul 2021 15:28:37 +0000 (UTC)
+Date:   Wed, 28 Jul 2021 11:28:36 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <mingo@redhat.com>, <davem@davemloft.net>, <ast@kernel.org>,
+        <ryabinin.a.a@gmail.com>, <mpe@ellerman.id.au>,
+        <benh@kernel.crashing.org>, <paulus@samba.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "Nathan Chancellor" <nathan@kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH v2 5/7] kallsyms: Rename is_kernel() and
+ is_kernel_text()
+Message-ID: <20210728112836.289865f5@oasis.local.home>
+In-Reply-To: <20210728081320.20394-6-wangkefeng.wang@huawei.com>
+References: <20210728081320.20394-1-wangkefeng.wang@huawei.com>
+        <20210728081320.20394-6-wangkefeng.wang@huawei.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 349B1268E38
-X-Spam-Status: No, score=0.48
-X-Stat-Signature: 6uu1mm4qmzqhb9fr9w8hcpruiaippn7o
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19Yky/kvvqPA1H4x41Kh0vsDjYybApUtnQ=
-X-HE-Tag: 1627485214-180011
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2021-07-28 at 08:00 -0700, Yury Norov wrote:
-> Ping again.
-> 
-> The rebased series together with other bitmap patches can be found
-> here:
-> 
-> https://github.com/norov/linux/tree/bitmap-20210716
-[]
-> >  .../bitops => include/linux}/find.h           | 149 +++++++++++++++++-
+On Wed, 28 Jul 2021 16:13:18 +0800
+Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 
-A file named find.h in a directory named bitops seems relatively sensible,
-but a bitops specific file named find.h in include/linux does not.
+> The is_kernel[_text]() function check the address whether or not
+> in kernel[_text] ranges, also they will check the address whether
+> or not in gate area, so use better name.
 
+Do you know what a gate area is?
 
+Because I believe gate area is kernel text, so the rename just makes it
+redundant and more confusing.
 
+-- Steve
