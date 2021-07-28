@@ -2,117 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B063D9029
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 16:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1733A3D90E6
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 16:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236686AbhG1OMz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Jul 2021 10:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236671AbhG1OMz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jul 2021 10:12:55 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B700CC061757
-        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 07:12:53 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id go31so4846024ejc.6
-        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 07:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hev-cc.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/kKRjCxopM8CkRMr4454ANstYPAv6D8HKTh0ZierECM=;
-        b=L2uJr1MQKghT3ab4sSk4dze+O9j9Xgbz6p7ykN5TpJQtSXGd5Ra2mXQepbnEg3CsWd
-         BUs28X/bc3+ABhDPkhiBwAUFzJOB+a65wRVU0hvAsSfDoEO4tp0rg90s7jhd4V0BFcB6
-         34Cew36g7LMtFDAyq6gV+Qw5mCme1rdtj+8rBjtO9Rhx2Nb21cSviQsmKCSTG6BZgeSM
-         YqsuRd6BQCDBOw9Bcorf+Gou7G0PfzCzFagvEMYXQuy3rFvE05w7gtdPjnq9wBQGRYbH
-         5zFuPHgc/7SbaIlKXu66oaajtTa8aGKumdsLZZ6H8QzK2tPX4OVx3jdt0kr+yEJksurP
-         CnEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/kKRjCxopM8CkRMr4454ANstYPAv6D8HKTh0ZierECM=;
-        b=oOVFkEGC1luCdIQBKyLE8HD4nqa3aewfNgZCL26xQyciOI0XejRJstCcjb7Ax/lWa0
-         Q2zVMDG/AT2Rw2YVu8kDkFGP7e91nvdnAs24Q6//wo8kNOuGp733PVz1JeWBqtL8pMGA
-         P7y+f47swoaeIMLCt76lev38nPRMarVLxHrgDvIDFwFHRjqHJz/c7/Jcfl20sBYlEbSM
-         3bxv4XFSliADMvWg7zV9VLEX8ruv1prE92ZgSjrcXE3wjwaAeOaZ/W+nnjrRd219hjb1
-         4ev2H0BLJXVdAoBiWoHiv7mS49GVUWcEr4qYMOS6uvg/I2xD50ZYchcTVO8hpFYXBFLG
-         G9nQ==
-X-Gm-Message-State: AOAM533793+M99N3Y9OqTvbOQFrk4U3H2LFTzc5K1hNnSxycE6BbNc6N
-        r6n4bTeIJdn9N48qqIGXaRhokYm73PNG+DjfOoq1Eg==
-X-Google-Smtp-Source: ABdhPJyIsQJ99idYHjog4sLH7SuUbrJrJj5wlhQV0jtVGnHGdvRupAYNriNUkcK6hQhfLu1z58/mSd0pxgw58i8M0+A=
-X-Received: by 2002:a17:906:c0d1:: with SMTP id bn17mr17229751ejb.511.1627481572316;
- Wed, 28 Jul 2021 07:12:52 -0700 (PDT)
+        id S236959AbhG1Oqw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Jul 2021 10:46:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54864 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235521AbhG1Oqw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Jul 2021 10:46:52 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4215C60527;
+        Wed, 28 Jul 2021 14:46:49 +0000 (UTC)
+Date:   Wed, 28 Jul 2021 10:46:42 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <mingo@redhat.com>, <davem@davemloft.net>, <ast@kernel.org>,
+        <ryabinin.a.a@gmail.com>, <mpe@ellerman.id.au>,
+        <benh@kernel.crashing.org>, <paulus@samba.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Sergey Senozhatsky" <senozhatsky@chromium.org>
+Subject: Re: [PATCH v2 2/7] kallsyms: Fix address-checks for kernel related
+ range
+Message-ID: <20210728104642.7ae75442@oasis.local.home>
+In-Reply-To: <20210728081320.20394-3-wangkefeng.wang@huawei.com>
+References: <20210728081320.20394-1-wangkefeng.wang@huawei.com>
+        <20210728081320.20394-3-wangkefeng.wang@huawei.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20210728114822.1243-1-wangrui@loongson.cn> <YQFKNcyHHWph8SjO@boqun-archlinux>
-In-Reply-To: <YQFKNcyHHWph8SjO@boqun-archlinux>
-From:   Hev <r@hev.cc>
-Date:   Wed, 28 Jul 2021 22:12:41 +0800
-Message-ID: <CAHirt9irQ8bio3HE-xTtQcDa5wJB1yXhZ4BJsgU7vW-FEYhLcA@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 1/5] locking/atomic: Implement atomic_fetch_and_or
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Rui Wang <wangrui@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Waiman Long <longman@redhat.com>, Guo Ren <guoren@kernel.org>,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Boqun,
+On Wed, 28 Jul 2021 16:13:15 +0800
+Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 
-On Wed, Jul 28, 2021 at 8:15 PM Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> Hi,
->
-> Thanks for the patchset. Seems that your git send-email command doesn't
-> add the "In-Reply-to" tag for patch #2 to #5, so they are not threaded
-> to patch #1. Not a big deal, but archives or email clients use that
-> information to organize emails. You may want to check the command. Also,
-> note that you can always use "--dry-run" option to preview the headers
-> of your patchset ("--dry-run" won't do the actual send).
-Thanks for your advice.
+> The is_kernel_inittext/is_kernel_text/is_kernel function should not
+> include the end address(the labels _einittext, _etext and _end) when
+> check the address range, the issue exists since Linux v2.6.12.
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Acked-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
->
-> On Wed, Jul 28, 2021 at 07:48:22PM +0800, Rui Wang wrote:
-> > From: wangrui <wangrui@loongson.cn>
-> >
-> > This patch introduce a new atomic primitive 'and_or', It may be have three
-> > types of implemeations:
-> >
-> >  * The generic implementation is based on arch_cmpxchg.
-> >  * The hardware supports atomic 'and_or' of single instruction.
-> >  * The hardware supports LL/SC style atomic operations:
-> >
-> >    1:  ll  v1, mem
-> >        and t1, v1, arg1
-> >        or  t1, t1, arg2
-> >        sc  t1, mem
-> >        beq t1, 0, 1b
-> >
-> > Now that all the architectures have implemented it.
-> >
-> > Signed-by-off: Rui Wang <wangrui@loongson.cn>
-> > Signed-by-off: hev <r@hev.cc>
->
-> First, this should be "Signed-off-by" ;-) Second, is the second
-> "Signed-off-by" a mistake?
-Beginner's luck :-)
+Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
->
-> I will look into this for a review, in the meanwhile, but please add
-> some tests in lib/atomic64_test.c, not only it will do the test at
-> runtime, also it will generate asm code which helps people to review.
->
-> Regards,
-> Boqun
->
+-- Steve
 
-Regards,
-Rui
+> ---
+>  include/linux/kallsyms.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+> index 2a241e3f063f..b016c62f30a6 100644
+> --- a/include/linux/kallsyms.h
+> +++ b/include/linux/kallsyms.h
+> @@ -27,21 +27,21 @@ struct module;
+>  static inline int is_kernel_inittext(unsigned long addr)
+>  {
+>  	if (addr >= (unsigned long)_sinittext
+> -	    && addr <= (unsigned long)_einittext)
+> +	    && addr < (unsigned long)_einittext)
+>  		return 1;
+>  	return 0;
+>  }
+>  
+>  static inline int is_kernel_text(unsigned long addr)
+>  {
+> -	if ((addr >= (unsigned long)_stext && addr <= (unsigned long)_etext))
+> +	if ((addr >= (unsigned long)_stext && addr < (unsigned long)_etext))
+>  		return 1;
+>  	return in_gate_area_no_mm(addr);
+>  }
+>  
+>  static inline int is_kernel(unsigned long addr)
+>  {
+> -	if (addr >= (unsigned long)_stext && addr <= (unsigned long)_end)
+> +	if (addr >= (unsigned long)_stext && addr < (unsigned long)_end)
+>  		return 1;
+>  	return in_gate_area_no_mm(addr);
+>  }
+
