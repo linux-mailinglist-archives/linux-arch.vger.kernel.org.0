@@ -2,136 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AB43D93F5
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 19:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452983D946E
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 19:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbhG1RHQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Jul 2021 13:07:16 -0400
-Received: from mga17.intel.com ([192.55.52.151]:32424 "EHLO mga17.intel.com"
+        id S229635AbhG1Rk5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Jul 2021 13:40:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59984 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229567AbhG1RHQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 28 Jul 2021 13:07:16 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10059"; a="192989419"
-X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
-   d="scan'208";a="192989419"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 10:06:51 -0700
-X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
-   d="scan'208";a="517613242"
-Received: from sobsiex-desk2.amr.corp.intel.com (HELO [10.212.198.197]) ([10.212.198.197])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 10:06:46 -0700
-Subject: Re: [PATCH 03/13] x86/HV: Add new hvcall guest address host
- visibility support
-To:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
-        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
-        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
-        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
-        Tianyu.Lan@microsoft.com, rientjes@google.com,
-        martin.b.radev@gmail.com, akpm@linux-foundation.org,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        aneesh.kumar@linux.ibm.com, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, xen-devel@lists.xenproject.org,
-        pgonda@google.com, david@redhat.com, keescook@chromium.org,
-        hannes@cmpxchg.org, sfr@canb.auug.org.au,
-        michael.h.kelley@microsoft.com
-Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, anparri@microsoft.com
-References: <20210728145232.285861-1-ltykernel@gmail.com>
- <20210728145232.285861-4-ltykernel@gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <a2444c36-0103-8e1c-7005-d97f77f90e85@intel.com>
-Date:   Wed, 28 Jul 2021 10:06:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229603AbhG1Rk5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Jul 2021 13:40:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B3F6A60238;
+        Wed, 28 Jul 2021 17:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627494055;
+        bh=4ubaP3xAeTeUiJRqybWFV/LSjFpv/srCYUsWlwLVoNA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=caJb4tX2QUDhE4l30ZFZHwbuwgdR4mKqQQfeyia16umy2cpqnC3GtFznHOEFHDgWm
+         rFQxInaXMp1O2+XOUyVgl4M9sl5E/jcuAuonO2u80fFgCjK54+kIEN1pU3u3GRzFk9
+         MBcmot6lTIknQR6EVH52hYlGdHuplVC8c8W0Esd4OgcICA4Jv27aYjVCM6im7ya5oZ
+         huOPaDKzw2QQggjdssBuyT1u1XDkJSyFDE/v8ORKJsszb0mPnjBt+CrBXrmYxIfzkn
+         r0nMr1Nuw0AZ4bE4dQSVb3Zh6AlwcPZIDjItvqawTqZ6gOyigG4efTWmJ34hKf7Y+X
+         PZl1Bg0lmAQfA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7A5FA5C048D; Wed, 28 Jul 2021 10:40:55 -0700 (PDT)
+Date:   Wed, 28 Jul 2021 10:40:55 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, mingo@kernel.org
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, Manfred Spraul <manfred@colorfullife.com>
+Subject: [PATCH v2 memory-model 2/4] tools/memory-model: Add example for
+ heuristic lockless reads
+Message-ID: <20210728174055.GA9718@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20210721210726.GA828672@paulmck-ThinkPad-P17-Gen-1>
+ <20210721211003.869892-2-paulmck@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210728145232.285861-4-ltykernel@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210721211003.869892-2-paulmck@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/28/21 7:52 AM, Tianyu Lan wrote:
-> @@ -1986,7 +1988,9 @@ static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
->  	int ret;
->  
->  	/* Nothing to do if memory encryption is not active */
-> -	if (!mem_encrypt_active())
-> +	if (hv_is_isolation_supported())
-> +		return hv_set_mem_enc(addr, numpages, enc);
-> +	else if (!mem_encrypt_active())
->  		return 0;
+This commit adds example code for heuristic lockless reads, based loosely
+on the sem_lock() and sem_unlock() functions.
 
-One more thing.  If you're going to be patching generic code, please
-start using feature checks that can get optimized away at runtime.
-hv_is_isolation_supported() doesn't look like the world's cheapest
-check.  It can't be inlined and costs at least a function call.
+[ paulmck: Apply Alan Stern and Manfred Spraul feedback. ]
 
-These checks could, with basically no effort be wrapped in a header like
-this:
+Reported-by: Manfred Spraul <manfred@colorfullife.com>
+[ paulmck: Update per Manfred Spraul and Hillf Danton feedback. ]
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-static inline bool hv_is_isolation_supported(void)
-{
-	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-		return 0;
-
-	// out of line function call:
-	return __hv_is_isolation_supported();
-}	
-
-I don't think it would be the end of the world to add an
-X86_FEATURE_HYPERV_GUEST, either.  There are plenty of bits allocated
-for Xen and VMWare.
+diff --git a/tools/memory-model/Documentation/access-marking.txt b/tools/memory-model/Documentation/access-marking.txt
+index 58bff26198767..d96fe20ed582a 100644
+--- a/tools/memory-model/Documentation/access-marking.txt
++++ b/tools/memory-model/Documentation/access-marking.txt
+@@ -319,6 +319,99 @@ of the ASSERT_EXCLUSIVE_WRITER() is to allow KCSAN to check for a buggy
+ concurrent lockless write.
+ 
+ 
++Lock-Protected Writes With Heuristic Lockless Reads
++---------------------------------------------------
++
++For another example, suppose that the code can normally make use of
++a per-data-structure lock, but there are times when a global lock
++is required.  These times are indicated via a global flag.  The code
++might look as follows, and is based loosely on nf_conntrack_lock(),
++nf_conntrack_all_lock(), and nf_conntrack_all_unlock():
++
++	bool global_flag;
++	DEFINE_SPINLOCK(global_lock);
++	struct foo {
++		spinlock_t f_lock;
++		int f_data;
++	};
++
++	/* All foo structures are in the following array. */
++	int nfoo;
++	struct foo *foo_array;
++
++	void do_something_locked(struct foo *fp)
++	{
++		/* This works even if data_race() returns nonsense. */
++		if (!data_race(global_flag)) {
++			spin_lock(&fp->f_lock);
++			if (!smp_load_acquire(&global_flag)) {
++				do_something(fp);
++				spin_unlock(&fp->f_lock);
++				return;
++			}
++			spin_unlock(&fp->f_lock);
++		}
++		spin_lock(&global_lock);
++		/* global_lock held, thus global flag cannot be set. */
++		spin_lock(&fp->f_lock);
++		spin_unlock(&global_lock);
++		/*
++		 * global_flag might be set here, but begin_global()
++		 * will wait for ->f_lock to be released.
++		 */
++		do_something(fp);
++		spin_unlock(&fp->f_lock);
++	}
++
++	void begin_global(void)
++	{
++		int i;
++
++		spin_lock(&global_lock);
++		WRITE_ONCE(global_flag, true);
++		for (i = 0; i < nfoo; i++) {
++			/*
++			 * Wait for pre-existing local locks.  One at
++			 * a time to avoid lockdep limitations.
++			 */
++			spin_lock(&fp->f_lock);
++			spin_unlock(&fp->f_lock);
++		}
++	}
++
++	void end_global(void)
++	{
++		smp_store_release(&global_flag, false);
++		spin_unlock(&global_lock);
++	}
++
++All code paths leading from the do_something_locked() function's first
++read from global_flag acquire a lock, so endless load fusing cannot
++happen.
++
++If the value read from global_flag is true, then global_flag is
++rechecked while holding ->f_lock, which, if global_flag is now false,
++prevents begin_global() from completing.  It is therefore safe to invoke
++do_something().
++
++Otherwise, if either value read from global_flag is true, then after
++global_lock is acquired global_flag must be false.  The acquisition of
++->f_lock will prevent any call to begin_global() from returning, which
++means that it is safe to release global_lock and invoke do_something().
++
++For this to work, only those foo structures in foo_array[] may be passed
++to do_something_locked().  The reason for this is that the synchronization
++with begin_global() relies on momentarily holding the lock of each and
++every foo structure.
++
++The smp_load_acquire() and smp_store_release() are required because
++changes to a foo structure between calls to begin_global() and
++end_global() are carried out without holding that structure's ->f_lock.
++The smp_load_acquire() and smp_store_release() ensure that the next
++invocation of do_something() from do_something_locked() will see those
++changes.
++
++
+ Lockless Reads and Writes
+ -------------------------
+ 
