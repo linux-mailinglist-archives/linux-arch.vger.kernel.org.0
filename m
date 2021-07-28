@@ -2,152 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CAA43D8B96
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 12:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9307B3D8BA8
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 12:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbhG1KRD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Jul 2021 06:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
+        id S231504AbhG1KZD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Jul 2021 06:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbhG1KRC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jul 2021 06:17:02 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16DCC061757
-        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 03:17:00 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id l126so2316671ioa.12
-        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 03:17:00 -0700 (PDT)
+        with ESMTP id S229574AbhG1KZD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jul 2021 06:25:03 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3487AC061757
+        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 03:25:01 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id j21so2369522ioo.6
+        for <linux-arch@vger.kernel.org>; Wed, 28 Jul 2021 03:25:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Z6hRWpZ78wbXvPLe7seihYElF19Rbq1YOoOpz7HjqhU=;
-        b=bwLuB2V5H1LuGQi/fT1RngnqmblipQg3gpoWwLf0VubE1/ScEa9fbgNLOzjz2VnPyq
-         Pf5ArkLrbsplq2COWwMut53IWj0Xu4Ro5SgkP0LGOhrr8Rd+nm3aa/g28af9vvZGnIMZ
-         2o+C53/P73Q/gMVM8uNuMbk6yiCc+gU8/+JiQxVnSuHq4wfQ3XRGDUhSRY77WHjximG5
-         bmqtYOBrxbLV50KM9is80HFcQptaAb/BUus7SBv3db8P/8T51BvPsTdoXzMRS59hHn8z
-         ZbksLnII0sSQk6q0yGsRENqFaS/vUj/XGBSy56/9LKW7AnZgGfNd7+M10MSzcPlRBqEE
-         P4kg==
+        bh=lR86CumlSscoNTZZ/SBgia1YwuLd5hb6wb2zb/k7e2Y=;
+        b=PC8BfjLbUXEQqDTrnOQKAcqt73VmKW2leci5nCdRGkaORkVOdWfFCHEiI+HCJ3Jxax
+         ixgCVnJH6IItli9qv7XEXUwkIZVb8gyl0KVFuzlbtUpo3bYg+OhAmt1SYKQrXgmzJntK
+         XWam5EDEHuRKHZY/skqP6MpVzF/WUbg0tmhJocWiHgt6q5bQPvAUxzcnfsLT74UJ4IJ9
+         iC/WGflNibQQVBBSXnknPMxXBayuooxSfzPw8QP4DKhUaNhB9d537G5T+TiO3xJ+kqB9
+         Rrf/pGTjzpaF0YpZcE45DEQz0VmbtiKn/4W0l5DtTMsuzE3yliCeAapwLF59oyLluNOs
+         huxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Z6hRWpZ78wbXvPLe7seihYElF19Rbq1YOoOpz7HjqhU=;
-        b=G0zGx2hBtC4YGEZ/ISam+IWRvtI47+TbQ9RcyldZ/Q+ZBUWGUH1C86rF4NV42lg6m/
-         4+b4ETkngAZogxrzz259An7nzJoviStQ5uii90ifHmINMUCjFmmyGZ4T89b2hFvppj1i
-         CnBAMJbTZ7cJ9Ra2NEL4tqq4hqTEyv2uKKd7eNHLdjHXGLQBZCigkuvpmX7sfEIcR9B+
-         x8bobU/nfPPytxuQRxBj0P1cqK9F9DlbT/oEtcpWk+h68tMloXGF8JcppXNDERiQZbPU
-         9C4Pzk1X3IQdLk99Tvoy35IWFcNxIV1U4RWlDnzZu5C3mfFg4NRanDtF0wFRcjS9i+WI
-         UXEw==
-X-Gm-Message-State: AOAM531d1Dm9+tFW03DHtFGMlT0fSXDEFOAQvx6sOjyTaFRflSP4KgHT
-        ZOiafSfdps5JOucGacTYlRJ3UK01bEoiHCTCVwU=
-X-Google-Smtp-Source: ABdhPJwOrQyY+ezeMbXDRhxwhzXFsEOngZuqVZL3A8UQVp+ThE7dTANPk+fYKiPDweGslkBoeCF0cxz22KSAd5EpX4Y=
-X-Received: by 2002:a6b:510c:: with SMTP id f12mr22500609iob.59.1627467420438;
- Wed, 28 Jul 2021 03:17:00 -0700 (PDT)
+        bh=lR86CumlSscoNTZZ/SBgia1YwuLd5hb6wb2zb/k7e2Y=;
+        b=r5oXu9fYxSWyj9/wdhhMYE01Rs++HgUsjHQGLJhZtQRzWMM98HVA0IXyFeWL7xgiDa
+         +A8jW+PtcwNK5tFbha0b0x62XNJNjLQhuab1RXVX579fURtM+kLKZ7EKywkZmfPPMCY2
+         HzKQv/IHpOZGyKxPC/n3hdZBnBkGm40XjVqfclwxwH2imbW3d4K8jB9s8/YDVNtDqwbD
+         pSDMv5xKh5FdcOHwolkYYffbCF0q+1tb3h8tzCiW07HuTGpBjLoe8Als2KHd3nX0mQB3
+         1l8Wym6sLJ4QonvHxqdwqPZopexUo4BeSok3wXj5PXjPivHx6EDcyyAYSdxdMVG9HGab
+         GJKg==
+X-Gm-Message-State: AOAM533FZSLqTvwZp02PaTpSh6AaGGSrQ4OCoBXcwkujAeIj0BZVW+x5
+        yk7HjW9yC3IRoVSpKZ28Xj4JJTTeoKOaYlfB16Y=
+X-Google-Smtp-Source: ABdhPJypTkTZ0FLNf1C590pa980w0mrv5KuxsvaDFAQBeehOZ2gTU0k069UnD+6aYeyZe3IHyoTgN08m8sn9ooEnZAg=
+X-Received: by 2002:a05:6638:338f:: with SMTP id h15mr25684809jav.135.1627467900441;
+ Wed, 28 Jul 2021 03:25:00 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-7-chenhuacai@loongson.cn> <YOQ5UBa0xYf7kAjg@hirez.programming.kicks-ass.net>
- <1625665981.7hbs7yesxx.astroid@bobo.none> <YQATv/MahhrKUu8Z@hirez.programming.kicks-ass.net>
- <CAK8P3a1RduCKfRG34hf-Aia8n_2pThZ-s0D-m+qABMs2o3=bMw@mail.gmail.com>
-In-Reply-To: <CAK8P3a1RduCKfRG34hf-Aia8n_2pThZ-s0D-m+qABMs2o3=bMw@mail.gmail.com>
+ <20210706041820.1536502-6-chenhuacai@loongson.cn> <CAK8P3a1w2Dz_7J1qrGmTYwUqpu=Mc4ew2TMmLynjvyvoEXMd7Q@mail.gmail.com>
+ <CAAhV-H4HrcfmLmgxB765CyU72FGsAx1kEzV+yjfgKUO+9KiCNw@mail.gmail.com>
+ <CAK8P3a3WdXOrsg6wYShr9KU7PFn2mUHz4dwOTNhYtw53WiwT1A@mail.gmail.com>
+ <CAMj1kXGCMcy5qTmjg_Ejg2eXBo2zhDrK+d-yrsQXmF_A4CVcDg@mail.gmail.com>
+ <CAK8P3a3kRum-qZBdwJ0bAKbxL2iDfmCgzNeoJk8zEr_Zc_J1Fg@mail.gmail.com>
+ <CAMj1kXGUfAZ79N7Xtsyh3P+HubVhgLgnrBuJT1U3z80z569uag@mail.gmail.com> <CAK8P3a0zYMrZ7muts2sR==_Ca=Vx-MjOQXmzteAcj6Oqmtiufw@mail.gmail.com>
+In-Reply-To: <CAK8P3a0zYMrZ7muts2sR==_Ca=Vx-MjOQXmzteAcj6Oqmtiufw@mail.gmail.com>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Wed, 28 Jul 2021 18:16:49 +0800
-Message-ID: <CAAhV-H5bfYc849Z2QGkztxfPQ7V-ZkHOhS8gbqA0k3=8teTCGA@mail.gmail.com>
-Subject: Re: [PATCH 06/19] LoongArch: Add exception/interrupt handling
+Date:   Wed, 28 Jul 2021 18:24:49 +0800
+Message-ID: <CAAhV-H4Y46_a-Bx2aL=f3ZrrEWgXw_26D_6LnFq-F3u4fUdPtg@mail.gmail.com>
+Subject: Re: [PATCH 05/19] LoongArch: Add boot and setup routines
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Huacai Chen <chenhuacai@loongson.cn>,
-        David Airlie <airlied@linux.ie>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd and Peter,
+Hi, Arnd and Ard,
 
-On Tue, Jul 27, 2021 at 11:08 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Wed, Jul 28, 2021 at 1:54 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Tue, Jul 27, 2021 at 4:10 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > On Wed, Jul 07, 2021 at 11:56:37PM +1000, Nicholas Piggin wrote:
-> > > >> +/*
-> > > >> + * Common Vectored Interrupt
-> > > >> + * Complete the register saves and invoke the do_vi() handler
-> > > >> + */
-> > > >> +SYM_FUNC_START(except_vec_vi_handler)
-> > > >> +  la      t1, __arch_cpu_idle
-> > > >> +  LONG_L  t0, sp, PT_EPC
-> > > >> +  /* 32 byte rollback region */
-> > > >> +  ori     t0, t0, 0x1f
-> > > >> +  xori    t0, t0, 0x1f
-> > > >> +  bne     t0, t1, 1f
-> > > >> +  LONG_S  t0, sp, PT_EPC
-> > > >
-> > > > Seriously, you're having your interrupt handler recover from the idle
-> > > > race? On a *new* architecture?
-> > >
-> > > It's heavily derived from MIPS (does that make the wholesale replacement
-> > > of arch/mips copyright headers a bit questionable?).
-> > >
-> > > I don't think it's such a bad trick though -- restartable sequences
-> > > before they were cool. It can let you save an irq disable in some
-> > > cases (depending on the arch of course).
+> On Tue, Jul 27, 2021 at 6:22 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > On Tue, 27 Jul 2021 at 15:14, Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Tue, Jul 27, 2021 at 2:51 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > On Tue, 27 Jul 2021 at 14:41, Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > > On Tue, Jul 27, 2021 at 1:53 PM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > >
+> > > How is other information passed from grub to the efi stub
+> > > and from there to the kernel on loongarch?
 > >
-> > In this case you're making *every* interrupt slower. Simply adding a new
-> > idle instruction, one that can be called with interrupts disabled and
-> > will terminate on a pending interrupt, would've solved the issues much
-> > nicer and reclaimed the cycles spend on this restart trick.
+> > I don't think this architecture boots via EFI at all - it looks like a
+> > data structure is created in memory that looks like an EFI system
+> > table, and provided to the kernel proper without going through the
+> > stub. This is not surprising, given that the stub turns the kernel
+> > into a PE/COFF executable, and the PE/COFF spec nor the EFI spec
+> > support the LoongSon architecture.
 >
-> Are we actually sure that loongarch /needs/ this version?
+> A lot of upstream projects are still missing loongarch support completely.
+> I already pointed out the lack of kernel support when the musl and
+> qemu patches got posted first, and the lack of toolchain support for the
+> kernel, so it's possible this one is just another missing dependency that
+> they plan to post later but really should have sooner.
 >
-> The code was clearly copied from the mips default r4k_wait()
-> function, but mips also has this one:
+> > This is problematic from a maintenance point of view, given that the
+> > interface between the kernel proper and the EFI stub is being promoted
+> > from an internal interface that we can freely modify to one that needs
+> > to remain stable for compatibility of new kernels with older firmware.
+> > I don't think we should be going down this path tbh.
 >
-> /*
->  * This variant is preferable as it allows testing need_resched and going to
->  * sleep depending on the outcome atomically.  Unfortunately the "It is
->  * implementation-dependent whether the pipeline restarts when a non-enabled
->  * interrupt is requested" restriction in the MIPS32/MIPS64 architecture makes
->  * using this version a gamble.
->  */
-> void __cpuidle r4k_wait_irqoff(void)
-> {
->         if (!need_resched())
->                 __asm__(
->                 "       .set    push            \n"
->                 "       .set    arch=r4000      \n"
->                 "       wait                    \n"
->                 "       .set    pop             \n");
->         raw_local_irq_enable();
-> }
->
->         case CPU_LOONGSON64:
->                 if ((c->processor_id & (PRID_IMP_MASK | PRID_REV_MASK)) >=
->                                 (PRID_IMP_LOONGSON_64C |
-> PRID_REV_LOONGSON3A_R2_0) ||
->                                 (c->processor_id & PRID_IMP_MASK) ==
-> PRID_IMP_LOONGSON_64R)
->                         cpu_wait = r4k_wait;
-> ...
->                 cpu_wait = r4k_wait;
->                 if (read_c0_config7() & MIPS_CONF7_WII)
->                         cpu_wait = r4k_wait_irqoff;
->                 if (cpu_has_mips_r6) {
->                         cpu_wait = r4k_wait_irqoff;
->
-> So a lot of the newer mips variants already get the fixed
-> version. Maybe the hardware developers fixed it without telling
-> the kernel people about it?
-Very very unfortunately, the idle instruction of LoongArch cannot
-executed with irq disabled. In other word, LoongArch should use a
-variant like r4k_wait(), not r4k_wait_irqoff().
+> Agreed. Having a reliable boot interface is definitely important here,
+> and copying from arch/mips was probably not the best choice in this
+> regard. They can probably look at what was needed for RISC-V to
+> add this properly, as that was done fairly recently.
+Now the boot information passed to kernel is like this:
+1, kernel get a0, a1 and a2 from bootloader.
+2, a0 is "argc", a1 is "argc", so "cmdline" comes from a0/a1
+3, a2 is "envrion", which is a pointer to a "struct bootparamsinterface"
+4, "struct bootparamsinterface" include "systemtable" pointer, whose
+type is "efi_system_table_t". Most information, include ACPI tables,
+come from here.
+5, initrd path is specified in grub.cfg, but its load address and size
+is calculated dynamically by grub, so grub appends parameters to
+cmdline.
 
 Huacai
 >
->          Arnd
+>         Arnd
