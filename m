@@ -2,88 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2533D8061
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jul 2021 23:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B863D8561
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jul 2021 03:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbhG0VC4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jul 2021 17:02:56 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:60325 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbhG0VC2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jul 2021 17:02:28 -0400
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MrOq7-1mwtSX3Ahz-00oXnv for <linux-arch@vger.kernel.org>; Tue, 27 Jul 2021
- 23:02:26 +0200
-Received: by mail-wr1-f54.google.com with SMTP id e2so16730542wrq.6
-        for <linux-arch@vger.kernel.org>; Tue, 27 Jul 2021 14:02:26 -0700 (PDT)
-X-Gm-Message-State: AOAM532P8EPETsuu21uHSfGHMydvqjzA/utJy5GP+hdswEr5dZFC3QsS
-        Ye/be9R5mq/m3jvRvyqLKQoIcBWKawPe1ou+358=
-X-Google-Smtp-Source: ABdhPJyhZY+p6Bwnl2AuFwzcWetN6D4/ApK/TKrNY0tJ6UlXMhrHKgAG/bk24aRBZDD4El3dh4iT4w0SwHT9ZBj+t8c=
-X-Received: by 2002:adf:fd90:: with SMTP id d16mr3017648wrr.105.1627419746403;
- Tue, 27 Jul 2021 14:02:26 -0700 (PDT)
+        id S234662AbhG1Bbh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jul 2021 21:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234616AbhG1Bbh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jul 2021 21:31:37 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040D1C061765
+        for <linux-arch@vger.kernel.org>; Tue, 27 Jul 2021 18:31:36 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mt6so2756628pjb.1
+        for <linux-arch@vger.kernel.org>; Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yHc64D7GeFGFvPKcL3/klEXdsXGAyEbOGkW4X7dqYZk=;
+        b=fhSYS231qJ3sqkIYNi8KPw8MsfS0+ziEaNeUJJgkWRoGnsw+X6Zela3vLGucwxsOnQ
+         T/2eQecJMaDAtj1/fJv4pRgNYPjG5MBwhmQRzKVK7XHucRr9VlsyFnemk7Az0cFRvaoj
+         SXA55eSG8LWFjpI5M4/vVkrChJvWZRFUIvXxtX/YyI6Hetmvo8xUU0IsYqW0uPaYORh+
+         7fbNsmk6bU1nDAoUQ8bBanH/4Fg5DnH45lOS4h8rnJCcsSof3DVR671BuFi4Ezu9qGFc
+         pniezhy1QlK6TDYbbPRo+6/gzTozJcEPXqbmDtUTOLhYVoF+8NtbsE0cFeksRw7VSH/K
+         7dzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yHc64D7GeFGFvPKcL3/klEXdsXGAyEbOGkW4X7dqYZk=;
+        b=FyqJYLBNMEtsZhPrfEpki3cknx68TsXn92Z6CBM8EBTEcZTOfguTVB2yneZx08+N0Q
+         n4suwdvWDytwPbolpQ6PdcjSEncFnLR7ZRi0uFrrsYnn8rZ/INglUVBPa2tzmo0Jalnr
+         z4SIDgpVTBwpbeshxGEpRwc/cxTefBZTHEKaVseA0ldoVVy12Tua0R4B8icrm+kwXA7O
+         pKRzMUvSPt0vneOYLETV286U8aZhhlHYKpi4D6RoJ2uS8SLzrtifaWVmqQglwmH4Ibmc
+         M0sh9riIzhK8txZffKm5l9AYiEVGRN8es6is+Pdg3QKR79YPC/XQNo3uUeyJ5iRlLXWj
+         yLvQ==
+X-Gm-Message-State: AOAM5331Z5QTxkH/FxJSXzZX3dZxZOo6PTaBL4zND9+mj7PAo3iAAhjH
+        6FQwYtE+lRp9jGY5EmZdq+KzW4w5nc0Liwk1
+X-Google-Smtp-Source: ABdhPJzWMYJQkYrSLemCw68WHvxxx2yrrdVHcAiwavOx0x2TeSqkNy6ZylLwTbIdJTyjO+rAuqNUqw==
+X-Received: by 2002:a62:b414:0:b029:317:52d:7fd5 with SMTP id h20-20020a62b4140000b0290317052d7fd5mr25840599pfn.30.1627435895354;
+        Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
+Received: from [192.168.1.116] ([198.8.77.61])
+        by smtp.gmail.com with ESMTPSA id a16sm5054336pfo.66.2021.07.27.18.31.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jul 2021 18:31:34 -0700 (PDT)
+Subject: Re: switch the block layer to use kmap_local_page v3
+To:     Christoph Hellwig <hch@lst.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Geoff Levand <geoff@infradead.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Mike Snitzer <snitzer@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Ira Weiny <ira.weiny@intel.com>, dm-devel@redhat.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        ceph-devel@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20210727055646.118787-1-hch@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <eba0b98f-5b0e-32c4-3b09-fa1946192517@kernel.dk>
+Date:   Tue, 27 Jul 2021 19:31:30 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <202107280408.RxUr38St-lkp@intel.com>
-In-Reply-To: <202107280408.RxUr38St-lkp@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 27 Jul 2021 23:02:10 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a27oMWeKz+kGr1fkZ+bmrOxXX_+az5yKr_qPxbfBkG96Q@mail.gmail.com>
-Message-ID: <CAK8P3a27oMWeKz+kGr1fkZ+bmrOxXX_+az5yKr_qPxbfBkG96Q@mail.gmail.com>
-Subject: Re: [asm-generic:asm-generic-uaccess-6 6/10] ERROR: modpost:
- "__copy_tofrom_user" [net/bridge/bridge.ko] undefined!
-To:     kernel test robot <lkp@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kbuild-all@lists.01.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:88mZXfdxuCp7p5BvnV0EIGiJQUe6K1w7ygxVDqvmQa/PPR2p0gO
- DcnJjFzSoGkF1WRrwA9QIlYV7r9yQqlACKaODSSnbwXwerNm1mRR7EnGvFnOv7n/ZN1bB2A
- NJjm2j0gR1uNQRcNq4AW0snAv4fi215i7UaxV36rBAgK6ysoP+3fDQWswU/7+XqJScf6Nkq
- jjkOSqTJIlY81fC4e/b1Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5Y0+5PLNVpc=:qHNGclUlRp4b/CJ/BUk2Cn
- QUMMzkxsH+a2R9QFZBaT7txn+/JMuQutlCyQ6i1SjomiCR9Q1uprH4/mhmpXI8qSbhJ5AkFmf
- 7PpuIK5y6gfv4lLhErkILLbtX5YQ4lT5Euvr2n/BtB/GPHnDS8c70G4Iyy8TeorqtjWjSuGZH
- PPgV/ZT9W3j/n9+nyNhQC6TcQXcFhbtN0HM6wS9THeU/F7NuA/vQNLufSRVZATVqD7uby6ITG
- gLXDlPcs4Zd8R3hYgJigg5la3JTawX83HXV7w2pX9LOQd8UIcVCL1LKONuz/WhVLTseg7makx
- xScehMzxO9pUQh2trMcmBDUdqYkXKEZSNkYJiewesERnrqpONFAysa3U2hEC33k355v1nULSl
- DPqhk0+biGsKZE3nXLM7ZsfxskcVsj3iHkYjEVLVVqm3QFlzL/b2A4ArFvAqMPaP5aRGwEBE1
- 9q4/uavcYeemEh+y2zi37rgONFeiAvYoJhNp7Ehjbwl97IOvrpZK9/CqmC+4ibOr9qQMVsHr+
- dMqlzNDZkvmm0cbskH3KYhgJbGq7MXI2/Cm5jDJCtS8zXpw8HuP1PQ3x2k/NQz4l3x2JAkxuq
- abH1701NG0QAI+rvwQ8PPt8lSz8T3Gv9vFYIEeWR/Igo53MInDEjWfWvXpYhDVthXI6c+wp5b
- wCrNiuJyf0Qmplv4+bLHa3+/sJq9jc12yfrolZoDKOLpA0e8s7t8cM0QCXHLK4hQE+JO6b6DY
- bT/4/N6eoPJ8C0grd3Hlu0E+Qgyymmp8Z6r5ka5FFmJGywUsc+b/5w5t/o/gKiTKOfFB2i5hE
- 7yndpoGTR02LZa5TOCUKgwvaCDVJgsEEeIyxekH/gQwNP5qAFunCb8Z3HGapXinZnfhg97nyS
- 4IBgTg7uktOyW6m8H6LNzdZ+BlhdlNeJ5X/rdYYt5EE1LrIBJJXRweLCrm8TgnUefFDMQihes
- tV3IIkCZI0MXX40HUg8ZUoaZBxs8v5glsm4k4l89vnO0o8wI13J3f
+In-Reply-To: <20210727055646.118787-1-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 10:27 PM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-uaccess-6
-> head:   725a40b8ebf55a6b95e11a6b35717a99afc8ac98
-> commit: 8ea805cb5e3294c8890c4781f82c03d6cc417bf5 [6/10] microblaze: use generic strncpy/strnlen from_user
-> config: microblaze-mmu_defconfig (attached as .config)
-> compiler: microblaze-linux-gcc (GCC) 10.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=8ea805cb5e3294c8890c4781f82c03d6cc417bf5
->         git remote add asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
->         git fetch --no-tags asm-generic asm-generic-uaccess-6
->         git checkout 8ea805cb5e3294c8890c4781f82c03d6cc417bf5
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-10.3.0 make.cross ARCH=microblaze
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
->
-> >> ERROR: modpost: "__copy_tofrom_user" [net/bridge/bridge.ko] undefined!
+On 7/26/21 11:56 PM, Christoph Hellwig wrote:
+> Hi all,
+> 
+> this series switches the core block layer code and all users of the
+> existing bvec kmap helpers to use kmap_local_page.  Drivers that
+> currently use open coded kmap_atomic calls will converted in a follow
+> on series.
+> 
+> To do so a new kunmap variant is added that calls
+> flush_kernel_dcache_page.  I'm not entirely sure where to call
+> flush_dcache_page vs flush_kernel_dcache_page, so I've tried to follow
+> the documentation here, but additional feedback would be welcome.
+> 
+> Note that the ps3disk has a minir conflict with the
+> flush_kernel_dcache_page removal in linux-next through the -mm tree.
+> I had hoped that change would go into 5.14, but it seems like it is
+> being held for 5.15.
 
-Ah, I removed the wrong export, fixed now.
+Applied for 5.15, thanks.
 
-        Arnd
+-- 
+Jens Axboe
+
