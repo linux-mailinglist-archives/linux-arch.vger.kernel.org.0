@@ -2,115 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B8C3DA367
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jul 2021 14:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD913DA3A3
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Jul 2021 15:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236888AbhG2MyB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Jul 2021 08:54:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42986 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237422AbhG2Mx3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 29 Jul 2021 08:53:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 135CA60524;
-        Thu, 29 Jul 2021 12:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627563180;
-        bh=EBPVJJdd9xALLAy/0l0GOskPXiTVkDK/C8C184dXf90=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jC6MBh+wkm2PdMpa8nHxiOCMNVIhNQRTQr3fdp608hCQ+vhcHoAhKMLw65LS/o2IF
-         pa8Dw+gEe8HMDoYCCOI+4npXUK0jTv2E4weowLc44NZ0xTBDn8oFq0sa+NwAiaeHoV
-         y+YsD6cd/WCygpOjLAaesl1HJWvVIJ96XDJvj8FYBZ5ZAyOf0n4/Xvp8cfqYPEF18L
-         4j0IzEI/ta7OY9UOXVDliMSMPeGxWu6NTssWN6bg1GLYRxlPTwWC4UvdkPDf/bWTXZ
-         QEUNhCzdr//+Gy4gb6M9F0Py1isNfCjOZcEynzAT1U4lefgGNVJUQDvRTEwNwvI7QV
-         XtsE1duSgYuIA==
-Date:   Thu, 29 Jul 2021 13:52:54 +0100
-From:   Will Deacon <will@kernel.org>
-To:     hev <r@hev.cc>
-Cc:     Rui Wang <wangrui@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [RFC PATCH v1 1/5] locking/atomic: Implement atomic_fetch_and_or
-Message-ID: <20210729125254.GC21766@willie-the-truck>
-References: <20210728114822.1243-1-wangrui@loongson.cn>
- <20210729093923.GD21151@willie-the-truck>
- <CAHirt9hNxsHPVWPa+RpUC6av0tcHPESb4Pr20ovAixwNEh4hrQ@mail.gmail.com>
+        id S237383AbhG2NCL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jul 2021 09:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237222AbhG2NCK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jul 2021 09:02:10 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83771C061765;
+        Thu, 29 Jul 2021 06:02:06 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f13so6921510plj.2;
+        Thu, 29 Jul 2021 06:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xWZDnZQ7Uje44tOvyd+WhPXcE6YbxVNUTkV2DmxlC/I=;
+        b=ExonRuvAP6deeZWP4ARMhx8XszTEeQWKqexdxGr8TsuL+Bz8VPrFj6Y730SphdAQDC
+         84Fqe2zxnVuAY/b+yUA8Eq195vN/ev0qbH1bKyG9MpEY83Z3AAYzJOmRRNOSb1q264YH
+         H1r0MDXkAlN2lmoLmNB9pMzmaE8qMyQJV2yXvzwM4lU7+cUmxyAefZ33Vtx/QsvY0B2Y
+         7299cOKI8WViF8nwItNn9KeFY/6ShDYN3GG/09Lm/PkrJetdxTquTYKbp14IyHKNKJri
+         w4KULmdKqUg3LoIRw+FRYrv+H/B2Jf9av5u6lx3SllYemnIcK4W70fMX/uAcJnqsyzu9
+         1r1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xWZDnZQ7Uje44tOvyd+WhPXcE6YbxVNUTkV2DmxlC/I=;
+        b=OKSsg36e2e0ZcnJpSj2aoLw7c6+REdPtjvpZ/b1IqKRyUvsRcP9N16R+FrCqK8UK/f
+         7AekgCk+pEXIGbjUJsosowiKw/P/z35J3ic/Cflhq9jJtTgnZF75LMCdHTbFNrJy+GeM
+         jbmkvPs72e2YdwAagE83Q3/SWQAHGBW4H2aXdNGH/PSgcXoW+mT3dB0U7N5liIQFfVI4
+         7DnEyCfvAN15hvQ8MWRKpYrysmhUjCt4nslMC5XDTb5S58Ekv7PbHh19d4isTs5yGPMD
+         vqe6U+klAS2j6e5MAP/UPP/eNRA6YXyYCadPUK9W0SvIBcpEvAxuPko3UXywvSmxZLAL
+         QRsA==
+X-Gm-Message-State: AOAM531dX/7sgntf3H/1rq+UMQYYzdKThFIzYGN5cG46iWGxyJnYZgSA
+        nz1rxUK/zGspf/yvmlWd5o0=
+X-Google-Smtp-Source: ABdhPJyrI/P/7aQeOr7fGMy78ZxY6RcR1Rwj4jALXoPGmX2VorLJRrRMQ6J111Dxy7HnP0DgW7LcpA==
+X-Received: by 2002:a05:6a00:24c6:b029:332:6773:165c with SMTP id d6-20020a056a0024c6b02903326773165cmr4937276pfv.33.1627563725957;
+        Thu, 29 Jul 2021 06:02:05 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
+        by smtp.gmail.com with ESMTPSA id w2sm9730504pjt.14.2021.07.29.06.01.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jul 2021 06:02:05 -0700 (PDT)
+Subject: Re: [PATCH 03/13] x86/HV: Add new hvcall guest address host
+ visibility support
+To:     Dave Hansen <dave.hansen@intel.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
+        Tianyu.Lan@microsoft.com, rientjes@google.com,
+        martin.b.radev@gmail.com, akpm@linux-foundation.org,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        aneesh.kumar@linux.ibm.com, krish.sadhukhan@oracle.com,
+        saravanand@fb.com, xen-devel@lists.xenproject.org,
+        pgonda@google.com, david@redhat.com, keescook@chromium.org,
+        hannes@cmpxchg.org, sfr@canb.auug.org.au,
+        michael.h.kelley@microsoft.com
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, anparri@microsoft.com
+References: <20210728145232.285861-1-ltykernel@gmail.com>
+ <20210728145232.285861-4-ltykernel@gmail.com>
+ <a2444c36-0103-8e1c-7005-d97f77f90e85@intel.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <0d956a05-7d24-57a0-f4a9-dccc849b52fc@gmail.com>
+Date:   Thu, 29 Jul 2021 21:01:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHirt9hNxsHPVWPa+RpUC6av0tcHPESb4Pr20ovAixwNEh4hrQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <a2444c36-0103-8e1c-7005-d97f77f90e85@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 06:18:28PM +0800, hev wrote:
-> On Thu, Jul 29, 2021 at 5:39 PM Will Deacon <will@kernel.org> wrote:
-> >
-> > On Wed, Jul 28, 2021 at 07:48:22PM +0800, Rui Wang wrote:
-> > > From: wangrui <wangrui@loongson.cn>
-> > >
-> > > This patch introduce a new atomic primitive 'and_or', It may be have three
-> > > types of implemeations:
-> > >
-> > >  * The generic implementation is based on arch_cmpxchg.
-> > >  * The hardware supports atomic 'and_or' of single instruction.
-> >
-> > Do any architectures actually support this instruction?
-> No, I'm not sure now.
+On 7/29/2021 1:06 AM, Dave Hansen wrote:
+> On 7/28/21 7:52 AM, Tianyu Lan wrote:
+>> @@ -1986,7 +1988,9 @@ static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
+>>   	int ret;
+>>   
+>>   	/* Nothing to do if memory encryption is not active */
+>> -	if (!mem_encrypt_active())
+>> +	if (hv_is_isolation_supported())
+>> +		return hv_set_mem_enc(addr, numpages, enc);
+>> +	else if (!mem_encrypt_active())
+>>   		return 0;
 > 
-> >
-> > On arm64, we can clear arbitrary bits and we can set arbitrary bits, but we
-> > can't combine the two in a fashion which provides atomicity and
-> > forward-progress guarantees.
-> >
-> > Please can you explain how this new primitive will be used, in case there's
-> > an alternative way of doing it which maps better to what CPUs can actually
-> > do?
-> I think we can easily exchange arbitrary bits of a machine word with atomic
-> andnot_or/and_or. Otherwise, we can only use xchg8/16 to do it. It depends on
-> hardware support, and the key point is that the bits to be exchanged
-> must be in the
-> same sub-word. qspinlock adjusted memory layout for this reason, and waste some
-> bits(_Q_PENDING_BITS == 8).
+> One more thing.  If you're going to be patching generic code, please
+> start using feature checks that can get optimized away at runtime.
+> hv_is_isolation_supported() doesn't look like the world's cheapest
+> check.  It can't be inlined and costs at least a function call.
 
-No, it's not about wasting bits -- short xchg() is exactly what you want to
-do here, it's just that when you get more than 13 bits of CPU number (which
-is, err, unusual) then we need more space in the lockword to track the tail,
-and so the other fields end up sharing bytes.
+Yes, you are right. How about adding a static branch key for the check 
+of isolation VM? This may reduce the check cost.
 
-> In the case of qspinlock xchg_tail, I think there is no change in the
-> assembly code
-> after switching to atomic andnot_or, for the architecture that
-> supports CAS instructions.
-> But for LL/SC style architectures, We can implement xchg for sub-word
-> better with new
-> primitive and clear[1]. And in fact, it reduces the number of retries
-> when the two memory
-> load values are not equal.
 
-The only system using LL/SC with this many CPUs is probably Power, and their
-atomics are dirt slow anyway.
-
-> If the hardware supports this atomic semantics, we will get better
-> performance and flexibility.
-> I think the hardware is easy to support.
-
-The issue I have is exposing these new functions as first-class members of
-the atomics API. On architectures with AMO instructions, falling back to
-cmpxchg() will have a radically different performance profile when compared
-to many of the other atomics operations and so I don't think we should add
-them without very good justification.
-
-At the very least, we could update the atomics documentation to call out
-unconditional functions which are likely to loop around cmpxchg()
-internally. We already have things like atomic_add_unless() and
-atomic_dec_if_positive() but their conditional nature makes it much less
-surprising than something like atomic_and_or() imo.
-
-Will
