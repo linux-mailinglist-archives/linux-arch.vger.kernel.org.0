@@ -2,60 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CE33DA742
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jul 2021 17:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40A03DA873
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Jul 2021 18:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237560AbhG2PNd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Jul 2021 11:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbhG2PNc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jul 2021 11:13:32 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D712C061765;
-        Thu, 29 Jul 2021 08:13:29 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id mz5-20020a17090b3785b0290176ecf64922so16094041pjb.3;
-        Thu, 29 Jul 2021 08:13:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=akMNdPJ4WS5nbnxgvsvMYm/zRUHwcBCfIsow9Ks6kis=;
-        b=dLioqOpBl2TpGowMKGZzRjcLFx0fZ0sBHYpCjAxABGEJkW9CgwGvHYqQ7apVDck0xx
-         W5FuDqVbCnNd70/DtkMCPd4nqMpezuT6upxl41IkUNtJlgdLrD+RhjExDK3z3ce7yAyi
-         4T3pGiS49Fpux5+3O0k15LkGMg6tQKFB1XgNeZAHuGRcTvc6EBLKsj3eNAVBiUHKR1xX
-         /CgKKN3LRKSV3ywoC91cZi4VtcHW9BdxphQdF31SCJLo1LkxTmqp53t070UtFqT4mdev
-         zb6GH16wdrsVQodoRsmLapOWCa0r0OH1HB0WqtJ3jUF4EHVlDutR3ypdLueHvAxYkwe8
-         3NDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=akMNdPJ4WS5nbnxgvsvMYm/zRUHwcBCfIsow9Ks6kis=;
-        b=Rf0LXdqe35DIX0CeL4+eXovGkojd7PyjM6TJkmS3RxQuadOe4KoRRY5esbULUo6naa
-         faBGdl4gcIyjxY0Cg/TlnuqLsaar8RzKvM4U8hTbColvlAS82Puwz06b9CJ4yJ+lRvRE
-         L/FGno6GhuY+tYpMQvx9MbierLOilZSdXuKrfWc7WukWQarUdLixCtBI09GQTc8mbvSb
-         8PlaypJ9QIWmO4l3pffNmBLf0c2sSkS82WH04BdNZ0XbqWrBYFxF5Ncu6PKsP1uc2uoM
-         dSbG68XdTpW/tL3scYwhwZPZ8X860fg0CwgbEkdJNvvieOsfxtdV80/Eby6m3YyeZUVc
-         8F/A==
-X-Gm-Message-State: AOAM532Qu9OdkWouio9FtnI25wpAYjCsi2W4gACDVOA3ING1q3HdoyQY
-        JWTCZsUTlYmtSTmRnhKohAc=
-X-Google-Smtp-Source: ABdhPJz+1u+t4XYMb612jZVRZC2eq6EVWswZWptItrWPSpDVi083nnf1kcuFDG/7rvR4ghR/eM6m5A==
-X-Received: by 2002:a63:5505:: with SMTP id j5mr4265664pgb.250.1627571608984;
-        Thu, 29 Jul 2021 08:13:28 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id c7sm4247137pgq.22.2021.07.29.08.13.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jul 2021 08:13:28 -0700 (PDT)
-Subject: Re: [PATCH 09/13] DMA: Add dma_map_decrypted/dma_unmap_encrypted()
- function
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, anparri@microsoft.com, kys@microsoft.com,
+        id S232906AbhG2QHe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jul 2021 12:07:34 -0400
+Received: from mga02.intel.com ([134.134.136.20]:36019 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234601AbhG2QHI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 29 Jul 2021 12:07:08 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10060"; a="200094052"
+X-IronPort-AV: E=Sophos;i="5.84,278,1620716400"; 
+   d="scan'208";a="200094052"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2021 09:05:41 -0700
+X-IronPort-AV: E=Sophos;i="5.84,278,1620716400"; 
+   d="scan'208";a="476455054"
+Received: from lixi1-mobl.amr.corp.intel.com (HELO [10.212.184.150]) ([10.212.184.150])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2021 09:05:36 -0700
+Subject: Re: [PATCH 03/13] x86/HV: Add new hvcall guest address host
+ visibility support
+To:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
         haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
         decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, x86@kernel.org, hpa@zytor.com,
@@ -64,7 +31,7 @@ Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
         jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
         will@kernel.org, davem@davemloft.net, kuba@kernel.org,
         jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
         thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
         Tianyu.Lan@microsoft.com, rientjes@google.com,
         martin.b.radev@gmail.com, akpm@linux-foundation.org,
@@ -74,113 +41,95 @@ Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
         pgonda@google.com, david@redhat.com, keescook@chromium.org,
         hannes@cmpxchg.org, sfr@canb.auug.org.au,
         michael.h.kelley@microsoft.com
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, anparri@microsoft.com
 References: <20210728145232.285861-1-ltykernel@gmail.com>
- <20210728145232.285861-10-ltykernel@gmail.com>
-Message-ID: <da69c920-c12a-b4ad-7554-68b9e99bb6ce@gmail.com>
-Date:   Thu, 29 Jul 2021 23:13:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+ <20210728145232.285861-4-ltykernel@gmail.com>
+ <a2444c36-0103-8e1c-7005-d97f77f90e85@intel.com>
+ <0d956a05-7d24-57a0-f4a9-dccc849b52fc@gmail.com>
+ <ec1d4cfd-bbbc-e27a-7589-e85d9f0438f4@intel.com>
+ <8df2845d-ee90-56d0-1228-adebb103ec37@gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <7a2ddcca-e249-ba63-8709-e355fcef2d41@intel.com>
+Date:   Thu, 29 Jul 2021 09:05:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210728145232.285861-10-ltykernel@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <8df2845d-ee90-56d0-1228-adebb103ec37@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 7/29/21 8:02 AM, Tianyu Lan wrote:
+>>
+> 
+> There is x86_hyper_type to identify hypervisor type and we may check
+> this variable after checking X86_FEATURE_HYPERVISOR.
+> 
+> static inline bool hv_is_isolation_supported(void)
+> {
+>     if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+>         return 0;
+> 
+>         if (x86_hyper_type != X86_HYPER_MS_HYPERV)
+>                 return 0;
+> 
+>     // out of line function call:
+>     return __hv_is_isolation_supported();
+> }   
 
-Hi Christoph:
-      Could you have a look at this patch and the following patch
-"[PATCH 10/13] x86/Swiotlb: Add Swiotlb bounce buffer remap function
-for HV IVM" These two patches follows your previous comments and add 
-dma_map_decrypted/dma_unmap_decrypted(). I don't add arch prefix because 
-each platform may populate their callbacks into dma memory decrypted ops.
+Looks fine.  You just might want to use this existing helper:
 
-Thanks.
+static inline bool hypervisor_is_type(enum x86_hypervisor_type type)
+{
+        return x86_hyper_type == type;
+}
 
-On 7/28/2021 10:52 PM, Tianyu Lan wrote:
-> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> 
-> In Hyper-V Isolation VM with AMD SEV, swiotlb boucne buffer
-> needs to be mapped into address space above vTOM and so
-> introduce dma_map_decrypted/dma_unmap_encrypted() to map/unmap
-> bounce buffer memory. The platform can populate man/unmap callback
-> in the dma memory decrypted ops.
-> 
-> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> ---
->   include/linux/dma-map-ops.h |  9 +++++++++
->   kernel/dma/mapping.c        | 22 ++++++++++++++++++++++
->   2 files changed, 31 insertions(+)
-> 
-> diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-> index 0d53a96a3d64..01d60a024e45 100644
-> --- a/include/linux/dma-map-ops.h
-> +++ b/include/linux/dma-map-ops.h
-> @@ -71,6 +71,11 @@ struct dma_map_ops {
->   	unsigned long (*get_merge_boundary)(struct device *dev);
->   };
->   
-> +struct dma_memory_decrypted_ops {
-> +	void *(*map)(void *addr, unsigned long size);
-> +	void (*unmap)(void *addr);
-> +};
-> +
->   #ifdef CONFIG_DMA_OPS
->   #include <asm/dma-mapping.h>
->   
-> @@ -374,6 +379,10 @@ static inline void debug_dma_dump_mappings(struct device *dev)
->   }
->   #endif /* CONFIG_DMA_API_DEBUG */
->   
-> +void *dma_map_decrypted(void *addr, unsigned long size);
-> +int dma_unmap_decrypted(void *addr, unsigned long size);
-> +
->   extern const struct dma_map_ops dma_dummy_ops;
-> +extern struct dma_memory_decrypted_ops dma_memory_generic_decrypted_ops;
->   
->   #endif /* _LINUX_DMA_MAP_OPS_H */
-> diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-> index 2b06a809d0b9..6fb150dc1750 100644
-> --- a/kernel/dma/mapping.c
-> +++ b/kernel/dma/mapping.c
-> @@ -13,11 +13,13 @@
->   #include <linux/of_device.h>
->   #include <linux/slab.h>
->   #include <linux/vmalloc.h>
-> +#include <asm/set_memory.h>
->   #include "debug.h"
->   #include "direct.h"
->   
->   bool dma_default_coherent;
->   
-> +struct dma_memory_decrypted_ops dma_memory_generic_decrypted_ops;
->   /*
->    * Managed DMA API
->    */
-> @@ -736,3 +738,23 @@ unsigned long dma_get_merge_boundary(struct device *dev)
->   	return ops->get_merge_boundary(dev);
->   }
->   EXPORT_SYMBOL_GPL(dma_get_merge_boundary);
-> +
-> +void *dma_map_decrypted(void *addr, unsigned long size)
-> +{
-> +	if (set_memory_decrypted((unsigned long)addr,
-> +				 size / PAGE_SIZE))
-> +		return NULL;
-> +
-> +	if (dma_memory_generic_decrypted_ops.map)
-> +		return dma_memory_generic_decrypted_ops.map(addr, size);
-> +	else
-> +		return addr;
-> +}
-> +
-> +int dma_unmap_encrypted(void *addr, unsigned long size)
-> +{
-> +	if (dma_memory_generic_decrypted_ops.unmap)
-> +		dma_memory_generic_decrypted_ops.unmap(addr);
-> +
-> +	return set_memory_encrypted((unsigned long)addr, size / PAGE_SIZE);
-> +}
-> 
