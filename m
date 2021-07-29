@@ -2,64 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EF63DA0F9
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jul 2021 12:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7803DA1A8
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Jul 2021 12:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235598AbhG2KSr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Jul 2021 06:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S236457AbhG2K7U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jul 2021 06:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234616AbhG2KSn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jul 2021 06:18:43 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6F4C061757
-        for <linux-arch@vger.kernel.org>; Thu, 29 Jul 2021 03:18:40 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id da26so7496018edb.1
-        for <linux-arch@vger.kernel.org>; Thu, 29 Jul 2021 03:18:40 -0700 (PDT)
+        with ESMTP id S236401AbhG2K7S (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jul 2021 06:59:18 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF34C0613CF
+        for <linux-arch@vger.kernel.org>; Thu, 29 Jul 2021 03:59:14 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id h8so7623051ede.4
+        for <linux-arch@vger.kernel.org>; Thu, 29 Jul 2021 03:59:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=hev-cc.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Q21ODLUfYfZZXaZYE2CyrU4oAp6N6kYf6Hk6ch9e6pg=;
-        b=2DJDMZo2Du/7RDlLbS/NWmQc2EYY2+27oCV5mpGVUwJ4bG25ANinbQ27msqIe9hXqC
-         uJ8Dt2tbTOt5AvHKiShD0deKlVeVcuz6dj3yegP4d7smysyVHHHfJOHsrOuAyCC71T3a
-         /YimQIjFZTPhVXo3wgS6KZfTE8MLRb77V5ZhAlbYFkdn6GpY0vIJ9Q++Cnlfb5KO/cq6
-         oTeApCo9+WCLAaO99K65hw5Fru0Mto+CMo9KbolzPv+zwLAR76ksssbEtwKx4KAMjkSj
-         xloTNRZYd45tI2lIzKlhR9l0LbK2X4x3g47UKB9twooKp8sgZxTYa5DGYrf50XSXAncA
-         b+ZQ==
+        bh=cqjLFNVfBDWAnhToFHoZWvbNeERTdn0BoKdbQkjb8Lo=;
+        b=eCt1VY/bP2pVbt0ZgN5ZfGDJmAqrjEE+qlEID+dEqfmef5hWpQl6F+yBsIGgGhLyF4
+         Bz3jVcRHSsGWSLJi+6x2S2OuO6IP47x123Hk4wxe/7I+X7YvYthgqoJpxMfWqYf9DUW1
+         sb7NxXHPLyEX3qVZKjkFmpYk6bq9BGVH4F+IKPqQTnxBuHFOY9xPf+LGAl9SI8WNi8rE
+         UpkkbbW4dKfjxBC45JtI8giYqRyKAgR5xUQOnaUh20n9h5wcpm/UfGinIMoBsI+UmqIt
+         sJN2/phVXhgVzs06VYNQM+2RAhDVqj4aZurHaXK6Pca8CE2RRyNLiYt8CyJTvlmj4365
+         +rtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Q21ODLUfYfZZXaZYE2CyrU4oAp6N6kYf6Hk6ch9e6pg=;
-        b=eadATvXncyZG59EqAegCA67I2NtKSQGWTxS9hDkoGw9MqKNLWPsad0GR+Hy1G+d+nM
-         m4Nu1ZscruieYMX9u+edxYUxjjyymEr5xqltk/BdoIV3d/JiB23zajFY9rAfpyjTPWXF
-         pThio93u9GUC20E0Z/4AXBDhijWfF8k0e9f/SGvyqgjc8btsjICGXirV9n/wMKgsCovu
-         VFjLx3nojwCDzn4ywyhtLgPz9KCeypOAKaIXt3shBHHsBTd/V4F7C3/Umok5RZ25NuGy
-         oIJgP413wslo6h8jdROw2dH3HbD8X/l/EUi4v6NO/YT1uwg893Ar8nY9fiJy3DA6oVn1
-         vT4w==
-X-Gm-Message-State: AOAM530FnmIazGQnKYVhnvgvcUMgTM7VmT55jSrYbVjesbOFBpe9vC8O
-        DkQjPsd8w9f3IvzyLml1HteRJKxrNuf6Zz4QlvXcEYAdSRzRcilnhx7L4HquGK4=
-X-Google-Smtp-Source: ABdhPJxR0w/F9MlQ94qW1H+ySICs1OGm38uhnc7DUHpMxm8EPLQ6KUE2iTG9bqZ8POfoNzUuk+DUwaUsgT7XPNITOVw=
-X-Received: by 2002:a50:954c:: with SMTP id v12mr5106042eda.313.1627553919549;
- Thu, 29 Jul 2021 03:18:39 -0700 (PDT)
+        bh=cqjLFNVfBDWAnhToFHoZWvbNeERTdn0BoKdbQkjb8Lo=;
+        b=iSQGN36YDpRngrtdI/pzLQ58PEtKtO6PFtytRx22ALWv4VcOnwfPy/4cmC7OlxhPf6
+         pJswUJKXJNFv3kl26FERS4N1GhmQ1lyg+TelEtldgk8g/Irt8Hn5JaGPid1TE6Nqy/8N
+         MfXPbVimx68Y8Kk9owGriSXE1WvfAANE8aB76oHR9OSV6fmji5qG7w7NFIzHRxCeGGPT
+         RKv46JwkfC+GChjrMVRx7TB11WxiGx8tqjYIYYJi2rkxoRYJAPXwuX8BDLxk3bnMNMXw
+         JoSFbAHW1ePN0LiwkG6kcQyBngNlIzgh2uZfJP4aCfKuOw9rkbjQIG4EH4kNJZPVX/jH
+         BerA==
+X-Gm-Message-State: AOAM532XiPZFc7awkPxnYSALDhF0gKP3bTw1NHW/Y/9pVFIg+F4f8Izj
+        XCb3GZxZ6bmfS47BqR+pXvwfIgT+7yec8JE+QLNGPw==
+X-Google-Smtp-Source: ABdhPJxkguyURA9a6iefXWLZvRL5hydiVvuH8w5gi+2Q6zxsNLdJa+ccYesHTZ4iYu+TX9+XAVWGGXim9zt6sfTg0To=
+X-Received: by 2002:a05:6402:516f:: with SMTP id d15mr5526812ede.210.1627556353053;
+ Thu, 29 Jul 2021 03:59:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210728114822.1243-1-wangrui@loongson.cn> <20210729093923.GD21151@willie-the-truck>
-In-Reply-To: <20210729093923.GD21151@willie-the-truck>
+References: <20210729093003.146166-1-wangrui@loongson.cn> <20210729095551.GE21151@willie-the-truck>
+In-Reply-To: <20210729095551.GE21151@willie-the-truck>
 From:   hev <r@hev.cc>
-Date:   Thu, 29 Jul 2021 18:18:28 +0800
-Message-ID: <CAHirt9hNxsHPVWPa+RpUC6av0tcHPESb4Pr20ovAixwNEh4hrQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 1/5] locking/atomic: Implement atomic_fetch_and_or
+Date:   Thu, 29 Jul 2021 18:58:59 +0800
+Message-ID: <CAHirt9j+UJiNpgmeSOMnUnYomOLgi1oD44ZCzEWA9OAzrnAMaw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3] locking/atomic: Implement atomic{,64,_long}_{fetch_,}{andnot_or}{,_relaxed,_acquire,_release}()
 To:     Will Deacon <will@kernel.org>
 Cc:     Rui Wang <wangrui@loongson.cn>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
+        Huacai Chen <chenhuacai@loongson.cn>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -67,55 +69,59 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi, Will,
 
-On Thu, Jul 29, 2021 at 5:39 PM Will Deacon <will@kernel.org> wrote:
+On Thu, Jul 29, 2021 at 5:55 PM Will Deacon <will@kernel.org> wrote:
 >
-> On Wed, Jul 28, 2021 at 07:48:22PM +0800, Rui Wang wrote:
-> > From: wangrui <wangrui@loongson.cn>
+> On Thu, Jul 29, 2021 at 05:30:03PM +0800, Rui Wang wrote:
+> > This patch introduce a new atomic primitive andnot_or:
 > >
-> > This patch introduce a new atomic primitive 'and_or', It may be have three
-> > types of implemeations:
+> >  * atomic_andnot_or
+> >  * atomic_fetch_andnot_or
+> >  * atomic_fetch_andnot_or_relaxed
+> >  * atomic_fetch_andnot_or_acquire
+> >  * atomic_fetch_andnot_or_release
+> >  * atomic64_andnot_or
+> >  * atomic64_fetch_andnot_or
+> >  * atomic64_fetch_andnot_or_relaxed
+> >  * atomic64_fetch_andnot_or_acquire
+> >  * atomic64_fetch_andnot_or_release
+> >  * atomic_long_andnot_or
+> >  * atomic_long_fetch_andnot_or
+> >  * atomic_long_fetch_andnot_or_relaxed
+> >  * atomic_long_fetch_andnot_or_acquire
+> >  * atomic_long_fetch_andnot_or_release
 > >
-> >  * The generic implementation is based on arch_cmpxchg.
-> >  * The hardware supports atomic 'and_or' of single instruction.
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Rui Wang <wangrui@loongson.cn>
+> > ---
+> >  include/asm-generic/atomic-instrumented.h |  72 +++++-
+> >  include/asm-generic/atomic-long.h         |  62 ++++-
+> >  include/linux/atomic-arch-fallback.h      | 262 +++++++++++++++++++++-
+> >  lib/atomic64_test.c                       |  92 ++++----
+> >  scripts/atomic/atomics.tbl                |   1 +
+> >  scripts/atomic/fallbacks/andnot_or        |  25 +++
+> >  6 files changed, 471 insertions(+), 43 deletions(-)
+> >  create mode 100755 scripts/atomic/fallbacks/andnot_or
 >
-> Do any architectures actually support this instruction?
-No, I'm not sure now.
-
+> Please see my other comments on the other patches you posted:
 >
-> On arm64, we can clear arbitrary bits and we can set arbitrary bits, but we
-> can't combine the two in a fashion which provides atomicity and
-> forward-progress guarantees.
+> https://lore.kernel.org/r/20210729093923.GD21151@willie-the-truck
 >
-> Please can you explain how this new primitive will be used, in case there's
-> an alternative way of doing it which maps better to what CPUs can actually
-> do?
-I think we can easily exchange arbitrary bits of a machine word with atomic
-andnot_or/and_or. Otherwise, we can only use xchg8/16 to do it. It depends on
-hardware support, and the key point is that the bits to be exchanged
-must be in the
-same sub-word. qspinlock adjusted memory layout for this reason, and waste some
-bits(_Q_PENDING_BITS == 8).
-
-In the case of qspinlock xchg_tail, I think there is no change in the
-assembly code
-after switching to atomic andnot_or, for the architecture that
-supports CAS instructions.
-But for LL/SC style architectures, We can implement xchg for sub-word
-better with new
-primitive and clear[1]. And in fact, it reduces the number of retries
-when the two memory
-load values are not equal.
-
-If the hardware supports this atomic semantics, we will get better
-performance and flexibility.
-I think the hardware is easy to support.
-
-[1] https://github.com/heiher/linux/commit/f77e1c6e4e579543177010bef2b394479c50b6cf
-
-Regards
-Rui
-
+> Overall, I'm not thrilled to bits by extending the atomics API with
+> operations that cannot be implemented efficiently on any (?) architectures
+> and are only used by the qspinlock slowpath on machines with more than 16K
+> CPUs.
 >
-> Cheers,
+> I also think we're lacking documentation justifying when you would use this
+> new primitive over e.g. a sub-word WRITE_ONCE() on architectures that
+> support those, especially for the non-returning variants.
 >
 > Will
+
+I have tried to explain in another thread. At the beginning, I thought
+about implementing xchg_mask for the sub-word xchg, but now I agree
+that atomic andnot_or is clearer and more general.
+
+Peter, what do you think?
+
+Regards,
+Rui
