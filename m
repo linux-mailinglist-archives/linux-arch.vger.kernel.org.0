@@ -2,86 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDFE3DBFC4
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 22:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34D73DBFDD
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 22:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbhG3UZR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 16:25:17 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:40917 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbhG3UZQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 16:25:16 -0400
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MybbH-1n6EjQ1BVt-00yxAf; Fri, 30 Jul 2021 22:25:09 +0200
-Received: by mail-wr1-f53.google.com with SMTP id h14so12753397wrx.10;
-        Fri, 30 Jul 2021 13:25:09 -0700 (PDT)
-X-Gm-Message-State: AOAM5315+rOt0KT0RFoRIqZvq6t91E8amaXdBcZtN6rWbeFkCm5IGtby
-        FZkcotPGfV9eCpYfdaIZDIDyR2emDAYWJ7EhCzk=
-X-Google-Smtp-Source: ABdhPJydjP+7odFyRa/w2F1ajXLQgnxb9It6F1g9WV5LDUJxgnSj2Epm5hz5bw27f5YBnQ21NajiiS14IFKwX0G87TA=
-X-Received: by 2002:adf:f7c5:: with SMTP id a5mr5029131wrq.99.1627676708937;
- Fri, 30 Jul 2021 13:25:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <YQQr+twAYHk2jXs6@boqun-archlinux> <CAK8P3a0w09Ga_OXAqhA0JcgR-LBc32a296dZhpTyPDwVSgaNkw@mail.gmail.com>
- <YQQ3KAXrPN1CuglL@boqun-archlinux>
-In-Reply-To: <YQQ3KAXrPN1CuglL@boqun-archlinux>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 30 Jul 2021 22:24:53 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3_pgtUWrg-MpaVyVqhffeuvQECHCmSCLyudfSwuEcP_g@mail.gmail.com>
-Message-ID: <CAK8P3a3_pgtUWrg-MpaVyVqhffeuvQECHCmSCLyudfSwuEcP_g@mail.gmail.com>
-Subject: Re: [Question] Alignment requirement for readX() and writeX()
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        id S231276AbhG3Ufr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 16:35:47 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46761 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230418AbhG3Ufr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 16:35:47 -0400
+Received: (qmail 265720 invoked by uid 1000); 30 Jul 2021 16:35:41 -0400
+Date:   Fri, 30 Jul 2021 16:35:41 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jade Alglave <j.alglave@ucl.ac.uk>
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Hector Martin <marcan@marcan.st>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fzDyyLeWbcAxAmieJIsO2gKWi+iVo3SuUeVgP2Aw5YwZqkIn/CF
- hdjJelbJWEroTKziLrdJilr1/m6bI/VyAz71UqDbpSYConiJgu9e4Y2fka2AS4w59/0yioA
- OneuED3Scvy7mFJ0X6OcyNOZ7K9BBe6Qhw2fzpbl31Yfg2izO2TGVFIi76VRBpLnlTT33kw
- LHwkB6sqySMAWdPDhTSMw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:uYtGdo0JCuM=:eYOiOLqbHDJ1V665Pj5vX8
- E4jyj/oyr7GVQXGRgYjGyBDya4pZ1UjcRmWw4drs8PzN4qt1U9oQn8T2v2gUVjTuY1MW1XDsY
- TqgmUsff5H3rhFawLn1Ikl715mBIqqBFdN3dOD+tIKbfVwMYEJqF+Z/E/gV3GMcoqp+8YDXTA
- byXoyIUmND+Dm2sNjFNbnmxu5zQASKcdgX17OOxfcUAJdssTQ5p5rPrj3pqUMm/WwDlkndblx
- YHu2/ahsV/TrCCASGrkB89aWSK72c/XuECVwFpx06IKEeTtu1o3zOkMNMgn7iDJ2sKIsiVn/T
- 20H9dvErjG54uFd6rpLild7mjbSC1T5viNclI0wLA4sIXfnZjrgrIsM/h8JO9xgXeBlJOsWC3
- jOMkaf4Ih9R/uixtnzWmwZO6Y5aO2nXwrdSM1dvowT+HP+1APPR/nomCDylBnGyJs95YtqINa
- 0PhXc7ErzbX/EbOPSlYmcll7sIoo2XeeCATi8/JkrWwmtXtdteVRLHG2ME0qVx5qLzgmD6RLK
- CPw16TueaWrV20KNOLTeTBsC9qdkHk4LKh29RKSSlBV6kyNH1KIgM5xDfN6oAreC0jsF/o2lG
- m0f1JmczU3WMMHc2AazGLRFnw0IIxDPlSE9DQ/Neguz/8hie7Ft3rGyNOBEf1nvyRbnPjPsct
- uea1KxHHoVBYES+iyirv4ZFbMcgRXGkQbvn7bO7JCCtJ0xF8iZSy4YpqwDHmhSs0RpzhRjznc
- qaHQQN2FRhs5osVWPzQEKXuK3hqDSwvwGHlmnJlZrxe0UU+FcLWdOYbXTBKJCumxSsOflTlpP
- iJBRqb8CyEqxJU3kwjJ1E/Rd3ZGuaOFiLCVbSswRwrwqNg60bkWUDHVoZbBP4aUs1vRa3qG
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+Message-ID: <20210730203541.GA262784@rowland.harvard.edu>
+References: <20210605145739.GB1712909@rowland.harvard.edu>
+ <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210606012903.GA1723421@rowland.harvard.edu>
+ <20210606115336.GS18427@gate.crashing.org>
+ <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com>
+ <20210606182213.GA1741684@rowland.harvard.edu>
+ <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
+ <YL34NZ12mKoiSLvu@hirez.programming.kicks-ass.net>
+ <20210607115234.GA7205@willie-the-truck>
+ <20210730172020.GA32396@knuckles.cs.ucl.ac.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210730172020.GA32396@knuckles.cs.ucl.ac.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 7:31 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> On Fri, Jul 30, 2021 at 06:58:30PM +0200, Arnd Bergmann wrote:
->
-> If we want to check, I'd expect we do the checks inside
-> readX()/writeX(), for example, readl() could be implemented as:
->
->         #define readl(c)                                        \
->         ({                                                      \
->                 u32 __v;                                        \
->                                                                 \
->                 /* alignment checking */                        \
->                 BUG_ON(c & (sizeof(__v) - 1));                  \
->                 __v = readl_relaxed(c);                         \
->                 __iormb(__v);                                   \
->                 __v;                                            \
->         })
->
-> It's a runtime check, so if anyone hates it I can understand ;-)
+On Fri, Jul 30, 2021 at 06:20:22PM +0100, Jade Alglave wrote:
+> Dear all,
 
-Right, I really don't think that adds any value, this just replaces one
-oops message with a more different oops message, while adding
-some overhead.
+> Sincere apologies in taking so long to reply. I attach a technical
+> report which describes the status of dependencies in the Arm memory
+> model. 
+> 
+> I have also released the corresponding cat files and a collection of
+> interesting litmus tests over here:
+> https://github.com/herd/herdtools7/commit/f80bd7c2e49d7d3adad22afc62ff4768d65bf830
+> 
+> I hope this material can help inform this conversation and I would love
+> to hear your thoughts.
 
-        Arnd
+Jade:
+
+Here are a few very preliminary reactions (I haven't finished reading the 
+entire paper yet).
+
+P.2: Typo: "the register X1 contains the address x" should be "the 
+register X1 contains the address of x".
+
+P.4 and later: Several complicated instructions (including CSEL, CAS, and 
+SWP) are mentioned but not explained; the text assumes that the reader 
+already understands what these instructions do.  A brief description of 
+their effects would help readers like me who aren't very familiar with the 
+ARM instruction set.
+
+P.4: The text describing Instrinsic dependencies in CSEL instructions says 
+that if cond is true then there is an Intrinsic control dependencies from 
+the read of PSTATE.NZCV to the read of Xm.  Why is this so?  Can't the CPU 
+read Xm unconditionally before it knows whether the value will be used?
+
+P.17: The definition of "Dependency through registers" uses the acronym 
+"PE", but the acronym isn't defined anywhere.
+
+P.14: In the description of Figure 18, I wasn't previously aware -- 
+although perhaps I should have been -- that ARM could speculatively place 
+a Store in a local store buffer, allowing it to be forwarded to a po-later 
+Read.  Why doesn't the same mechanism apply to Figure 20, allowing the 
+Store in D to be speculatively placed in a local store buffer and 
+forwarded to E?  Is this because conditional branches are predicted but 
+loads aren't?  If so, that is a significant difference.
+
+More to come...
+
+Alan
