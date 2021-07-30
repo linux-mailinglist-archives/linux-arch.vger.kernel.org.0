@@ -2,154 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 710303DC13C
-	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 00:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC47D3DC15D
+	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 00:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbhG3WnP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 18:43:15 -0400
-Received: from mga06.intel.com ([134.134.136.31]:25420 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233121AbhG3WnP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Jul 2021 18:43:15 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10061"; a="274249974"
-X-IronPort-AV: E=Sophos;i="5.84,283,1620716400"; 
-   d="scan'208";a="274249974"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2021 15:43:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,283,1620716400"; 
-   d="scan'208";a="477203275"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jul 2021 15:43:07 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1m9bDf-000APM-9X; Fri, 30 Jul 2021 22:43:07 +0000
-Date:   Sat, 31 Jul 2021 06:42:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:asm-generic-uaccess-7] BUILD SUCCESS
- e6226997ec5ac272fa76274c3675bd5b7b437c53
-Message-ID: <61048044.aaHJoo17JztAohmM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233571AbhG3W7t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 18:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233491AbhG3W7s (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 18:59:48 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A80C0613C1
+        for <linux-arch@vger.kernel.org>; Fri, 30 Jul 2021 15:59:42 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id a20so12898093plm.0
+        for <linux-arch@vger.kernel.org>; Fri, 30 Jul 2021 15:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=V2dvuvNFpryb1cvQLGlVrhhfsTfSnu/5+tUDbUkQolo=;
+        b=sCMXYE8BPVu/dKEp3RQsjKh5BuJC1zZZb4+9CntVolv0Jbrb/288cSPWlbgdYB6uV8
+         WJXTQDArwMcZuEtSPpFWbXRWRAWq6AvaG6OKGWySn3W8iDAsfRyVvtdb1/efkiAlUIUW
+         n7KgCTW1pAQ8LyKDcl2tVh/E5CWElNXrwCZmEevGnBD7Pn0mnmpbVXIjrhbcv4C5m963
+         eoeYNJGNPQUSRSipE7Kfd9amGgFWJIUqyeyILlgygBlypxHV+pfv0CgeLk7sG0mF4Lc/
+         MdIVR+f/eT+lmsmqc7z9fRROYhrxD8JPegsJJ+4ESDXsUCKfqNjW34r9okUBJARXwgH9
+         6rUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V2dvuvNFpryb1cvQLGlVrhhfsTfSnu/5+tUDbUkQolo=;
+        b=MXxRditRkkHjS3MGNbj+2xvSy6+zogQbh/wW+nHEAX4VVHqewLs/om2bQ2S/8BHPXs
+         h58XSmdQL/sMuBsNpC057e/bPy+vuFxMBE4hlAnAtJyTc30GzOIcu/nBDPrjjpEWWqt8
+         nbK9zAlDsEEcUq+6GuQ7Tf3cFYBBgEOIWtt1I0UrxcGI88/Xlpr7CLwzxdWw+I7WoEjO
+         bCbrvw8zh071B0JutN+0c973KrHC1kPoxU2sQtVIzlBbdj0FLpXQ7W/uUDB/KFWUsjY/
+         /Vl5Gs3TPu3VTRHbA9Akg7AqPxIpVqvIFZBnkONMEOBiI+ktw84o3afX/mdxq17MDwhZ
+         AcdQ==
+X-Gm-Message-State: AOAM532RN1OSznoVlV+lfXTHu26iKENzmoSLctW0vIyc/q9D8RXeLDYX
+        QWtnVDyOOXTuLgO7vxNwnJ7ntw==
+X-Google-Smtp-Source: ABdhPJy5fOXlF8mlpIqzL8jUb2C6BgbXxOZyyEYs4oEPgoSBaa6t7Y9gQXLYxESft75tpRgo3kepEw==
+X-Received: by 2002:a17:902:b713:b029:12b:b249:693f with SMTP id d19-20020a170902b713b029012bb249693fmr4511815pls.17.1627685981632;
+        Fri, 30 Jul 2021 15:59:41 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:200:160:995:7f22:dc59])
+        by smtp.gmail.com with ESMTPSA id a20sm3235150pjh.46.2021.07.30.15.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jul 2021 15:59:40 -0700 (PDT)
+Date:   Fri, 30 Jul 2021 15:59:36 -0700
+From:   Fangrui Song <maskray@google.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, clang-built-linux@googlegroups.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] vmlinux.lds.h: Handle clang's module.{c,d}tor sections
+Message-ID: <20210730225936.ce3hcjdg2sptvbh7@google.com>
+References: <20210730223815.1382706-1-nathan@kernel.org>
+ <CAKwvOdnJ9VMZfZrZprD6k0oWxVJVSNePUM7fbzFTJygXfO24Pw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdnJ9VMZfZrZprD6k0oWxVJVSNePUM7fbzFTJygXfO24Pw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-uaccess-7
-branch HEAD: e6226997ec5ac272fa76274c3675bd5b7b437c53  asm-generic: reverse GENERIC_{STRNCPY_FROM,STRNLEN}_USER symbols
+On 2021-07-30, Nick Desaulniers wrote:
+>On Fri, Jul 30, 2021 at 3:38 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> A recent change in LLVM causes module_{c,d}tor sections to appear when
+>> CONFIG_K{A,C}SAN are enabled, which results in orphan section warnings
+>> because these are not handled anywhere:
+>>
+>> ld.lld: warning: arch/x86/pci/built-in.a(legacy.o):(.text.asan.module_ctor) is being placed in '.text.asan.module_ctor'
+>> ld.lld: warning: arch/x86/pci/built-in.a(legacy.o):(.text.asan.module_dtor) is being placed in '.text.asan.module_dtor'
+>> ld.lld: warning: arch/x86/pci/built-in.a(legacy.o):(.text.tsan.module_ctor) is being placed in '.text.tsan.module_ctor'
+>
+>^ .text.tsan.*
 
-elapsed time: 726m
+I was wondering why the orphan section warning only arose recently.
+Now I see: the function asan.module_ctor has the SHF_GNU_RETAIN flag, so
+it is in a separate section even with -fno-function-sections (default).
 
-configs tested: 96
-configs skipped: 3
+It seems that with -ffunction-sections the issue should have been caught
+much earlier.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>>
+>> Place them in the TEXT_TEXT section so that these technologies continue
+>> to work with the newer compiler versions. All of the KASAN and KCSAN
+>> KUnit tests continue to pass after this change.
+>>
+>> Cc: stable@vger.kernel.org
+>> Link: https://github.com/ClangBuiltLinux/linux/issues/1432
+>> Link: https://github.com/llvm/llvm-project/commit/7b789562244ee941b7bf2cefeb3fc08a59a01865
+>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>> ---
+>>  include/asm-generic/vmlinux.lds.h | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+>> index 17325416e2de..3b79b1e76556 100644
+>> --- a/include/asm-generic/vmlinux.lds.h
+>> +++ b/include/asm-generic/vmlinux.lds.h
+>> @@ -586,6 +586,7 @@
+>>                 NOINSTR_TEXT                                            \
+>>                 *(.text..refcount)                                      \
+>>                 *(.ref.text)                                            \
+>> +               *(.text.asan .text.asan.*)                              \
+>
+>Will this match .text.tsan.module_ctor?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210730
-sh                  sh7785lcr_32bit_defconfig
-m68k                        stmark2_defconfig
-arm                        clps711x_defconfig
-arm                         bcm2835_defconfig
-m68k                        m5307c3_defconfig
-sh                          sdk7786_defconfig
-mips                         mpc30x_defconfig
-mips                           ci20_defconfig
-arm                         socfpga_defconfig
-arm                           h3600_defconfig
-powerpc                    klondike_defconfig
-arm                      footbridge_defconfig
-arm                            mps2_defconfig
-nios2                         10m50_defconfig
-sh                          r7780mp_defconfig
-arm                         palmz72_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                 mpc8315_rdb_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210730
-i386                 randconfig-a004-20210730
-i386                 randconfig-a003-20210730
-i386                 randconfig-a002-20210730
-i386                 randconfig-a006-20210730
-i386                 randconfig-a001-20210730
-x86_64               randconfig-a015-20210730
-x86_64               randconfig-a014-20210730
-x86_64               randconfig-a013-20210730
-x86_64               randconfig-a011-20210730
-x86_64               randconfig-a012-20210730
-x86_64               randconfig-a016-20210730
-i386                 randconfig-a013-20210730
-i386                 randconfig-a016-20210730
-i386                 randconfig-a012-20210730
-i386                 randconfig-a011-20210730
-i386                 randconfig-a014-20210730
-i386                 randconfig-a015-20210730
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+asan.module_ctor is the only function AddressSanitizer synthesizes in the instrumented translation unit.
+There is no function called "asan".
 
-clang tested configs:
-x86_64               randconfig-c001-20210730
-x86_64               randconfig-a001-20210730
-x86_64               randconfig-a006-20210730
-x86_64               randconfig-a005-20210730
-x86_64               randconfig-a004-20210730
-x86_64               randconfig-a002-20210730
-x86_64               randconfig-a003-20210730
+(Even if a function "asan" exists due to -ffunction-sections
+-funique-section-names, TEXT_MAIN will match .text.asan, so the
+.text.asan pattern will match nothing.)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>Do we want to add these conditionally on
+>CONFIG_KASAN_GENERIC/CONFIG_KCSAN like we do for SANITIZER_DISCARDS?
+>
+>>                 TEXT_CFI_JT                                             \
+>>         MEM_KEEP(init.text*)                                            \
+>>         MEM_KEEP(exit.text*)                                            \
+>>
+>> base-commit: 4669e13cd67f8532be12815ed3d37e775a9bdc16
+>> --
+>
+>
+>-- 
+>Thanks,
+>~Nick Desaulniers
