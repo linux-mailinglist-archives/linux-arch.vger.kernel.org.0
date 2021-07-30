@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3AD3DB7CB
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 13:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1903DB7CD
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 13:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238802AbhG3LZz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 07:25:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37110 "EHLO mail.kernel.org"
+        id S238727AbhG3L0C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 07:26:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37160 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238697AbhG3LZs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Jul 2021 07:25:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D69761055;
-        Fri, 30 Jul 2021 11:25:40 +0000 (UTC)
+        id S238772AbhG3LZw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Jul 2021 07:25:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C38061052;
+        Fri, 30 Jul 2021 11:25:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627644343;
-        bh=VcjaQPzybbGlvtzMZMZPB8b5mPi8TxhDPTMLtmuqXPU=;
+        s=k20201202; t=1627644347;
+        bh=TCVWFCgzUBmJBt37TzROmSpk2UW8evs3tu2IpPF1E/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uPJLNBAq9EWh5Ch+oqsURAMrDIMMJZJ0bHbeueS0fIIKjv+VuBdXp9WWHI7r05VSp
-         vNf+qMi0pfqDEm2XlU4JVuXCOMlFs+dj4a3tWWpHqVAnRxGMikDDAU9JLTMYRbtoZZ
-         UEmFwv9nWdLdiDGQvIu1/zG+n3808lISU6eodl+5HgJTwWbOHHRomS1i7f5h+7dLNm
-         asuerZzynWzfMk4HTtUlZ/eQyllQDEyoq1q75WdFinOfmIl9kGTp1XOFm9pp8rp4RV
-         qXdCa3Ni0Yh/iVvc3FIpVjPNcacdGn7EvNV9uVHGuMSYMq9ds/DyR32apaIhgamfYX
-         iojvukfFf37yQ==
+        b=pRhw08r1vUHHmuR84BHVI846ZNn3oCtHdEaaEwLKcTognoC+dHe9WgIDmGOs6Gzwo
+         089IvMeq6Mkl/DO/7ZYR0x8ZsLr0CZkT8ArsGeFRMwWYBW9vUhfr/Mj7yg4wMBXtfL
+         2kd+8WYGTvybi43xB0rdO2lk7N0AoaHV1PrUNsZsu3NxOhWe3QLm8X0OH93D1vrRHu
+         sfUugggl+7x/i2Qbu/ApCk3n2brOfPTOwsZQUa8ZKtow0mP7pgYXzsWqmmJlfyELBY
+         uWCPmiVO1wvEhxbXUWA6AnnNb/wgAkL9LT4zd9EwU1bukeuptZYuK5B9e2E51Ld4fk
+         6tOZ6F/luICVg==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -44,9 +44,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Mark Rutland <mark.rutland@arm.com>, kernel-team@android.com
-Subject: [PATCH v11 13/16] arm64: Advertise CPUs capable of running 32-bit applications in sysfs
-Date:   Fri, 30 Jul 2021 12:24:40 +0100
-Message-Id: <20210730112443.23245-14-will@kernel.org>
+Subject: [PATCH v11 14/16] arm64: Hook up cmdline parameter to allow mismatched 32-bit EL0
+Date:   Fri, 30 Jul 2021 12:24:41 +0100
+Message-Id: <20210730112443.23245-15-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210730112443.23245-1-will@kernel.org>
 References: <20210730112443.23245-1-will@kernel.org>
@@ -56,75 +56,53 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since 32-bit applications will be killed if they are caught trying to
-execute on a 64-bit-only CPU in a mismatched system, advertise the set
-of 32-bit capable CPUs to userspace in sysfs.
+Allow systems with mismatched 32-bit support at EL0 to run 32-bit
+applications based on a new kernel parameter.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- .../ABI/testing/sysfs-devices-system-cpu      |  9 +++++++++
- arch/arm64/kernel/cpufeature.c                | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt | 8 ++++++++
+ arch/arm64/kernel/cpufeature.c                  | 7 +++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index 160b10c029c0..69edbd99e0b7 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -494,6 +494,15 @@ Description:	AArch64 CPU registers
- 		'identification' directory exposes the CPU ID registers for
- 		identifying model and revision of the CPU.
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index bdb22006f713..6ab625dea8c0 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -287,6 +287,14 @@
+ 			do not want to use tracing_snapshot_alloc() as it needs
+ 			to be done where GFP_KERNEL allocations are allowed.
  
-+What:		/sys/devices/system/cpu/aarch32_el0
-+Date:		May 2021
-+Contact:	Linux ARM Kernel Mailing list <linux-arm-kernel@lists.infradead.org>
-+Description:	Identifies the subset of CPUs in the system that can execute
-+		AArch32 (32-bit ARM) applications. If present, the same format as
-+		/sys/devices/system/cpu/{offline,online,possible,present} is used.
-+		If absent, then all or none of the CPUs can execute AArch32
-+		applications and execve() will behave accordingly.
++	allow_mismatched_32bit_el0 [ARM64]
++			Allow execve() of 32-bit applications and setting of the
++			PER_LINUX32 personality on systems where only a strict
++			subset of the CPUs support 32-bit EL0. When this
++			parameter is present, the set of CPUs supporting 32-bit
++			EL0 is indicated by /sys/devices/system/cpu/aarch32_el0
++			and hot-unplug operations may be restricted.
 +
- What:		/sys/devices/system/cpu/cpu#/cpu_capacity
- Date:		December 2016
- Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
+ 	amd_iommu=	[HW,X86-64]
+ 			Pass parameters to the AMD IOMMU driver in the system.
+ 			Possible values are:
 diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index d99a29f52aa1..7ee1095a4585 100644
+index 7ee1095a4585..a306ed5a6549 100644
 --- a/arch/arm64/kernel/cpufeature.c
 +++ b/arch/arm64/kernel/cpufeature.c
-@@ -67,6 +67,7 @@
- #include <linux/crash_dump.h>
- #include <linux/sort.h>
- #include <linux/stop_machine.h>
-+#include <linux/sysfs.h>
- #include <linux/types.h>
- #include <linux/minmax.h>
- #include <linux/mm.h>
-@@ -1320,6 +1321,24 @@ const struct cpumask *system_32bit_el0_cpumask(void)
+@@ -1321,6 +1321,13 @@ const struct cpumask *system_32bit_el0_cpumask(void)
  	return cpu_possible_mask;
  }
  
-+static ssize_t aarch32_el0_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
++static int __init parse_32bit_el0_param(char *str)
 +{
-+	const struct cpumask *mask = system_32bit_el0_cpumask();
-+
-+	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(mask));
++	allow_mismatched_32bit_el0 = true;
++	return 0;
 +}
-+static const DEVICE_ATTR_RO(aarch32_el0);
++early_param("allow_mismatched_32bit_el0", parse_32bit_el0_param);
 +
-+static int __init aarch32_el0_sysfs_init(void)
-+{
-+	if (!allow_mismatched_32bit_el0)
-+		return 0;
-+
-+	return device_create_file(cpu_subsys.dev_root, &dev_attr_aarch32_el0);
-+}
-+device_initcall(aarch32_el0_sysfs_init);
-+
- static bool has_32bit_el0(const struct arm64_cpu_capabilities *entry, int scope)
+ static ssize_t aarch32_el0_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
  {
- 	if (!has_cpuid_feature(entry, scope))
 -- 
 2.32.0.402.g57bb445576-goog
 
