@@ -2,169 +2,264 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 116243DB668
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 11:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54893DB770
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 12:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238230AbhG3Jvw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 05:51:52 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21702 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S238223AbhG3Jvv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Jul 2021 05:51:51 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16U9Wma0032673;
-        Fri, 30 Jul 2021 05:49:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=RYVrVB0Cv2/R3lfmKnDGtLWGBHS277MIQR61B43z3uM=;
- b=dGwRHMW+dV44draTp+TTntVOVZQoJjo0X1i/5LdgoAcqjM8JLU7lkDxlZoaKCMUKaNvy
- M+ZjKdhpw34/vrKYLtUjIcBj6RIwv6+gThIzOeXw63W5RhwZ8jEpeJ8lUJRSg2zz7PKT
- zOASTY1gTLrCWIjcz6bYSEGewtcDHLwf8Fzcaot81sFOXT7yz2HvFqBZo3EV+0ejZ807
- GKQxJOKRmMFhInRW8OmWGMh92ydIzQl4xBQTCE6PhqZ4pcTf9HFmQHnHKz/7RK4PlcBW
- De6pJGr9HrSc0qCw+yczs0r3u8j6/ghV1t4+xXF8c6L5aVgh19eC+7GvSO/OXLM2ZsPF Kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3a4e9j1cme-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jul 2021 05:49:24 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16U9WmsP032691;
-        Fri, 30 Jul 2021 05:49:23 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3a4e9j1ckr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jul 2021 05:49:23 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16U9lRKT013772;
-        Fri, 30 Jul 2021 09:49:21 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06fra.de.ibm.com with ESMTP id 3a235kjwrx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jul 2021 09:49:21 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16U9kYNh23789872
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jul 2021 09:46:34 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ABB9742052;
-        Fri, 30 Jul 2021 09:49:17 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 77B664203F;
-        Fri, 30 Jul 2021 09:49:16 +0000 (GMT)
-Received: from osiris (unknown [9.145.161.212])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 30 Jul 2021 09:49:16 +0000 (GMT)
-Date:   Fri, 30 Jul 2021 11:49:15 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        id S238461AbhG3Kyb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 06:54:31 -0400
+Received: from mail-vi1eur05on2108.outbound.protection.outlook.com ([40.107.21.108]:32693
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238383AbhG3Kya (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Jul 2021 06:54:30 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bNvp61XbEc+mEd93wnxTi4oFTTlSO475slngOBaH5KAKEbC3CgU3fo+CscYnV5bqyjRnO+bhAtEyOaI8ntdl15tlBD5G9YA2D4+opBXazGqRH027dyfnyNzyKu4xLO+mGDUAnZWN8buqNFc0/m+twhg4ZY8s6kPJymGGgXiMKR7HMlxLULdzWT7/N+qnV7JvJmoUBCvAGX/kiH8lcuQV6idm7p4yIMORV8iN8nBPq0sV65TBSZCOSU1enuYJJmhiTBykBp5FT1gUg4uoSI7Pyyvwr2IqDLYYmMWZZKmOo18khMwDssADTSDcyVpUQF5Ho30ytQwjHyneaYWa9pF1eQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZTpOjemCEesseaiWSKgeTXEqbENhG4LCitDCqtpHPtk=;
+ b=lZwqJ8J3q6lRP1iP1r2PBH4ws+IKqxevYgT5Ndj9dYPhyKdqhCzC7OqMRVSYwzpqAFCEnXu2kR5KPJMD1EkV0Ab59r9vxUKihuWEpjY987lJ2KCGsz/mTkhctXDYsqQobfMDyYvkrrGHftkVGYwCPQjSi9YmTi/tgFWNCYtYDRe6gF3M9X5pD7PRJQnb5L6DW/OdXuknJ0PBOATHavReVz+ZEwsr2vtvH+ECvFaQ/XEu0+NnHTIBMMdu8/EqVh1gCr8e5+nYV1mSmbXWCL6Qsy08hHOoM9DRmVP77OfIqpPlckxXgg6VaZSA38RGeUBRLy4XzUEJ5oni4LARWEhElw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZTpOjemCEesseaiWSKgeTXEqbENhG4LCitDCqtpHPtk=;
+ b=u7wBewbkPMTrXfwsDJeJl/sg8moU4E38GKGkDX+6SpdLW5Zi05P1EqRHrlyjfKxI0LBV9T/RsgJjvISo4OfEyNhK3uxq79/kxNCLGkAOplc/oaUBS2Cr2KLmIKNp5fc6JiW4dOyyWIDULCZjbi/gsDlPzjviBk4gpoXzBQCLfCk=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=virtuozzo.com;
+Received: from VE1PR08MB4989.eurprd08.prod.outlook.com (2603:10a6:803:114::19)
+ by VE1PR08MB5694.eurprd08.prod.outlook.com (2603:10a6:800:1a3::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18; Fri, 30 Jul
+ 2021 10:54:21 +0000
+Received: from VE1PR08MB4989.eurprd08.prod.outlook.com
+ ([fe80::c402:b828:df33:5694]) by VE1PR08MB4989.eurprd08.prod.outlook.com
+ ([fe80::c402:b828:df33:5694%7]) with mapi id 15.20.4373.022; Fri, 30 Jul 2021
+ 10:54:21 +0000
+From:   Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Feng Tang <feng.tang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v5 0/6] compat: remove compat_alloc_user_space
-Message-ID: <YQPLG20V3dmOfq3a@osiris>
-References: <20210727144859.4150043-1-arnd@kernel.org>
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Subject: [PATCH] sock: allow reading and changing sk_userlocks with setsockopt
+Date:   Fri, 30 Jul 2021 13:54:06 +0300
+Message-Id: <20210730105406.318726-1-ptikhomirov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PR2PR09CA0017.eurprd09.prod.outlook.com
+ (2603:10a6:101:16::29) To VE1PR08MB4989.eurprd08.prod.outlook.com
+ (2603:10a6:803:114::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210727144859.4150043-1-arnd@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zR7p1uPVJVzE85QHjW8aYnuNusoUj_ko
-X-Proofpoint-GUID: cr8jFOyeRsqaNkR-GlUmXQX1PdWeweCa
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-30_05:2021-07-29,2021-07-30 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=697 impostorscore=0 suspectscore=0 adultscore=0 spamscore=0
- priorityscore=1501 mlxscore=0 clxscore=1015 phishscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2107300057
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from fedora.sw.ru (46.39.230.13) by PR2PR09CA0017.eurprd09.prod.outlook.com (2603:10a6:101:16::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.21 via Frontend Transport; Fri, 30 Jul 2021 10:54:20 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 043ce6f3-75bf-4d3f-2ab4-08d95348630d
+X-MS-TrafficTypeDiagnostic: VE1PR08MB5694:
+X-LD-Processed: 0bc7f26d-0264-416e-a6fc-8352af79c58f,ExtAddr
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VE1PR08MB5694E767F683E5C91B616CDCB7EC9@VE1PR08MB5694.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yQHmbwpZCw8+GxdSBdeBghuxdzkYNiE/glFjRo2MnOtXvkanOZTlFDoNODf09utF8hOziCYYg6xCJERSjjhsa9DwhmijOMU1WRls9r0v9zOtGiJhc1A/boWDcV9S3cNig6pRbjAhG8/tSRrwVzSwnHhg+JyXmK7doweQMUq3wSeoKjggoSwX8Nc1dtZWr6+4c0T3htZmcT8A0wbbW6e3TQ5wqsdesIE5V+WmGT5ImztXNC07G6inqvDYVkJjTdPyNU/X+Bw+X3RLf8kad6W7VfklsYSPBOe9gVGCulvKAdlU3XG4mH3jnnixQrCyxbTNJYPOJuh9Yvq4WxAO4APTR9cx1gUXkaFtJVyTjJsi5mCRaXs4r4Qxp38qiSa8c5yqb5ImByn5cLaqJaQZhckMV96nQZfqSeHSKypwXVglZ032H8wt+e+n1v6f9PX2t9KzJmxUtubBmKjVodo4s2rOqcxtxiR7mZ5CliHE2vjZcYEcIC54Ih2+0KTVBlQi6onAS2sz3xGx+eKOPYdKrOXPvVXry0MPWxfxStJBaE6i48Xz5w/7blhloZ3XOI9+rqCHHxOcQCSaxQQpwCk/UUg26x4211b5lp97AWEkcBGffki60nHRF4voW1QAcQ9QeYI2sSAlV69A4arBJ2VBl7eTETH40BZQo2pTsuVmqr8nstQ7nYnabLgb6Nq0jxjnHha9OrVbH1+96XyNjOrk8R7yynRC0XnFjAaslJ5eRDSCrkRqgXxLVokC4mbpnBneA5ee4mjUnlfp6WXzYYLkZQAHLA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4989.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39840400004)(376002)(136003)(346002)(366004)(966005)(2906002)(8936002)(83380400001)(478600001)(186003)(86362001)(38350700002)(5660300002)(6916009)(956004)(38100700002)(66476007)(66556008)(66946007)(6486002)(107886003)(6506007)(7416002)(26005)(54906003)(4326008)(2616005)(316002)(6512007)(8676002)(36756003)(6666004)(52116002)(1076003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LemC+54JyMGw81PoMbs3kqxw+nk66+LSKsu869Dl0mIukn10jhBRR3IaxBJm?=
+ =?us-ascii?Q?zbWvo8B0Y7aZ6/efu1qBLgKFuFcnyoe7+0SPAl9xf6Ft3id2/pvf++dTqCvj?=
+ =?us-ascii?Q?sYA0nxBhDb7fBAa0Vsihsc4QLKAZ6bOCfgW7m2jlCopjf3UBpd4NDSwGRQjX?=
+ =?us-ascii?Q?Kx/5RffJ0tEm2doQDwKmlPiF4FHvjOp5RtK1WsHvHrfJotUKHfuGCwq2quw8?=
+ =?us-ascii?Q?8w4te2UES6HJcd6mcIA/UlyaIgzQHp6M43B3wYz63F9CDozdTdnp+uAwN9D0?=
+ =?us-ascii?Q?wmY7uM28I6Hsd9M2x0Jo0uRoPeUVVw3cCcDjMmo/ifovvYlqGR4ipks9N8IE?=
+ =?us-ascii?Q?s6Z/7xvlxQEnTn1cO+jJhDr1JIULd1P+glZ/sllIRZfgRcpR+VuwJMG7xma4?=
+ =?us-ascii?Q?0NZVRWgVjYmUS1KkanuEdysfL5usGaeqp4zmzmzfK+2hWckiFV19M5YhozAc?=
+ =?us-ascii?Q?0kYeTuJR79pkiFcdJKSOrX041DRYVLTDKG94TgCDaZ3bu1VVBQjKcWGU7Gnr?=
+ =?us-ascii?Q?ZP7ZVCfTI+x+dWoe5eULVLBb36kTIeuFqzn0Xp51G9WtoEwt/FxteZflsEVM?=
+ =?us-ascii?Q?CsOsECdUbkf6kWnOlzV+XskJsfkKNYOi9Bbi1PgZcj9k6E+2KmSwBxQc3fL/?=
+ =?us-ascii?Q?ELgiwgvqqDrPSipjFb5/+dNSnqMFMdi8RE75JCsu+TtljhWZeVApBAjOPG65?=
+ =?us-ascii?Q?p6BAAn1rCxGRhbA0gjo7NBiFaFqgsKKYI6UM+2K3k2vGQy4fkXPktxOl7QzP?=
+ =?us-ascii?Q?NTY5zp7nKA5tczAD8KwKXTSx2myoueEcrCl6hsDFS2dhsZBVdbX+kVPEbF5T?=
+ =?us-ascii?Q?S0I3wldsBiSVwzjXWYQANhpi2UMUGHSmAg/Ldvukt4u9aArL61AmfKoxEZAW?=
+ =?us-ascii?Q?sFiBcpy93SpOzT31sTFXx2ABrcLk4K1zNVa536ULamY0myetDsd5vgoiE6X5?=
+ =?us-ascii?Q?KW3XvDLNkLh5h3hs8nN6mT0uKS/kz6hIW9OKTMZpief5mzhinSIDoEO0Lcjw?=
+ =?us-ascii?Q?64cG6kbfgluAAcy9MWCzmrgLM7Qfr5zWwApPWfLFJLJkoBWi8K8OUje8szfV?=
+ =?us-ascii?Q?6GPLvIGjyUqthMtmM2418nmWMsth0gbSgh1ir7siAJlkk9i9f0qidZvsAChf?=
+ =?us-ascii?Q?m0RjzIk4xOj1nyvQfKWm0oTI9PIpbh5u2irBkuo3gzpctqF8klArqvVUCrTR?=
+ =?us-ascii?Q?9QtKOudL8djOZsmxgKLD/lqKXjlFOvvjYWZGmwBcTglykvTkxGkCfs8+WUDy?=
+ =?us-ascii?Q?BSdooQPb8OZbZFAXN44DyIbelWyS12r2SdhPb6fuwpJl3VlmzHgaee1Cnz8S?=
+ =?us-ascii?Q?1uz12Vboyd+fgO+AUmNNUWDM?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 043ce6f3-75bf-4d3f-2ab4-08d95348630d
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4989.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2021 10:54:21.6242
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DDEoMa+iCpnvIF9ZlHSN6Jegq2GycJ43MFVMPKBJywawmTPsKKrfsHJ080J+saAyRGVlsb1GtfwaOo9aDrqFF8XXyE69/EjD3OCnRoSmbtk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR08MB5694
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 04:48:53PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Going through compat_alloc_user_space() to convert indirect system call
-> arguments tends to add complexity compared to handling the native and
-> compat logic in the same code.
-> 
-> Out of the other remaining callers, the linux-media series went into
-> v5.14, and the network ioctl handling is now fixed in net-next, so
-> these are the last remaining users, and I now include the final
-> patch to remove the definitions as well.
-> 
-> Since these patches are now all that remains, it would be nice to
-> merge it all through Andrew's Linux-mm tree, which is already based
-> on top of linux-next.
-...
-> 
-> Arnd Bergmann (6):
->   kexec: move locking into do_kexec_load
->   kexec: avoid compat_alloc_user_space
->   mm: simplify compat_sys_move_pages
->   mm: simplify compat numa syscalls
->   compat: remove some compat entry points
->   arch: remove compat_alloc_user_space
+SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK flags disable automatic socket
+buffers adjustment done by kernel (see tcp_fixup_rcvbuf() and
+tcp_sndbuf_expand()). If we've just created a new socket this adjustment
+is enabled on it, but if one changes the socket buffer size by
+setsockopt(SO_{SND,RCV}BUF*) it becomes disabled.
 
-Our CI reports this with linux-next and running strace selftest in
-compat mode:
+CRIU needs to call setsockopt(SO_{SND,RCV}BUF*) on each socket on
+restore as it first needs to increase buffer sizes for packet queues
+restore and second it needs to restore back original buffer sizes. So
+after CRIU restore all sockets become non-auto-adjustable, which can
+decrease network performance of restored applications significantly.
 
-Unable to handle kernel pointer dereference in virtual kernel address space
-Failing address: 0000038003e7c000 TEID: 0000038003e7c803
-Fault in home space mode while using kernel ASCE.
-AS:00000001fb388007 R3:000000008021c007 S:0000000082142000 P:0000000000000400 
-Oops: 0011 ilc:3 [#1] SMP 
-CPU: 0 PID: 1017495 Comm: get_mempolicy Tainted: G           OE     5.14.0-20210730.rc3.git0.4ccc9e2db7ac.300.fc34.s390x+next #1
-Hardware name: IBM 2827 H66 708 (LPAR)
-Krnl PSW : 0704e00180000000 00000001f9f11000 (compat_put_bitmap+0x48/0xd0)
-           R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
-Krnl GPRS: 0000000000810000 0000000000000000 000000007d9df1c0 0000038003e7c008
-           0000000000000004 000000007d9df1c4 0000038003e7be40 0000000000010000
-           0000000000008000 0000000000000000 0000000000000390 00000000000001c8
-           000000020d6ea000 000002aa00401a48 00000001fa0a85fa 0000038003e7bd50
-Krnl Code: 00000001f9f10ff4: a7bb0001            aghi    %r11,1
-           00000001f9f10ff8: 41303008            la      %r3,8(%r3)
-          #00000001f9f10ffc: 41502004            la      %r5,4(%r2)
-          >00000001f9f11000: e3103ff8ff04        lg      %r1,-8(%r3)
-           00000001f9f11006: 5010f0a4            st      %r1,164(%r15)
-           00000001f9f1100a: a50e0081            llilh   %r0,129
-           00000001f9f1100e: c8402000f0a4        mvcos   0(%r2),164(%r15),%r4
-           00000001f9f11014: 1799                xr      %r9,%r9
-Call Trace:
- [<00000001f9f11000>] compat_put_bitmap+0x48/0xd0 
- [<00000001fa0a85fa>] kernel_get_mempolicy+0x102/0x178 
- [<00000001fa0a86b0>] __s390_sys_get_mempolicy+0x40/0x50 
- [<00000001fa92be30>] __do_syscall+0x1c0/0x1e8 
- [<00000001fa939148>] system_call+0x78/0xa0 
-Last Breaking-Event-Address:
- [<0000038003e7bc00>] 0x38003e7bc00
-Kernel panic - not syncing: Fatal exception: panic_on_oops
+CRIU need to be able to restore sockets with enabled/disabled adjustment
+to the same state it was before dump, so let's add special setsockopt
+for it.
 
-Note: I did not try to bisect this, since it looks to me like this
-patch series causes the problem. Also, please don't get confused with
-the kernel version name. The date encoded is the build date, not the
-linux-next version.
-linux-next commit 4ccc9e2db7ac ("Add linux-next specific files for
-20210729") was used to build the kernel (s390 defconfig).
+Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+---
+Here is a corresponding CRIU commits using these new feature to fix slow
+download speed problem after migration:
+https://github.com/checkpoint-restore/criu/pull/1568 
+
+Origin of the problem:
+
+We have a customer in Virtuozzo who mentioned that nginx server becomes
+slower after container migration. Especially it is easy to mention when
+you wget some big file via localhost from the same container which was
+just migrated. 
+ 
+By strace-ing all nginx processes I see that nginx worker process before
+c/r sends data to local wget with big chunks ~1.5Mb, but after c/r it
+only succeeds to send by small chunks ~64Kb.
+
+Before: 
+sendfile(12, 13, [7984974] => [9425600], 11479629) = 1440626 <0.000180> 
+ 
+After: 
+sendfile(8, 13, [1507275] => [1568768], 17957328) = 61493 <0.000675> 
+
+Smaller buffer can explain the decrease in download speed. So as a POC I
+just commented out all buffer setting manipulations and that helped.
+
+---
+ arch/alpha/include/uapi/asm/socket.h  |  2 ++
+ arch/mips/include/uapi/asm/socket.h   |  2 ++
+ arch/parisc/include/uapi/asm/socket.h |  2 ++
+ arch/sparc/include/uapi/asm/socket.h  |  2 ++
+ include/uapi/asm-generic/socket.h     |  2 ++
+ net/core/sock.c                       | 12 ++++++++++++
+ 6 files changed, 22 insertions(+)
+
+diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+index 6b3daba60987..1dd9baf4a6c2 100644
+--- a/arch/alpha/include/uapi/asm/socket.h
++++ b/arch/alpha/include/uapi/asm/socket.h
+@@ -129,6 +129,8 @@
+ 
+ #define SO_NETNS_COOKIE		71
+ 
++#define SO_BUF_LOCK		72
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+index cdf404a831b2..1eaf6a1ca561 100644
+--- a/arch/mips/include/uapi/asm/socket.h
++++ b/arch/mips/include/uapi/asm/socket.h
+@@ -140,6 +140,8 @@
+ 
+ #define SO_NETNS_COOKIE		71
+ 
++#define SO_BUF_LOCK		72
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+index 5b5351cdcb33..8baaad52d799 100644
+--- a/arch/parisc/include/uapi/asm/socket.h
++++ b/arch/parisc/include/uapi/asm/socket.h
+@@ -121,6 +121,8 @@
+ 
+ #define SO_NETNS_COOKIE		0x4045
+ 
++#define SO_BUF_LOCK		0x4046
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+index 92675dc380fa..e80ee8641ac3 100644
+--- a/arch/sparc/include/uapi/asm/socket.h
++++ b/arch/sparc/include/uapi/asm/socket.h
+@@ -122,6 +122,8 @@
+ 
+ #define SO_NETNS_COOKIE          0x0050
+ 
++#define SO_BUF_LOCK              0x0051
++
+ #if !defined(__KERNEL__)
+ 
+ 
+diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+index d588c244ec2f..1f0a2b4864e4 100644
+--- a/include/uapi/asm-generic/socket.h
++++ b/include/uapi/asm-generic/socket.h
+@@ -124,6 +124,8 @@
+ 
+ #define SO_NETNS_COOKIE		71
+ 
++#define SO_BUF_LOCK		72
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+diff --git a/net/core/sock.c b/net/core/sock.c
+index a3eea6e0b30a..843094f069f3 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1357,6 +1357,14 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
+ 		ret = sock_bindtoindex_locked(sk, val);
+ 		break;
+ 
++	case SO_BUF_LOCK:
++		{
++		int mask = SOCK_SNDBUF_LOCK | SOCK_RCVBUF_LOCK;
++
++		sk->sk_userlocks = (sk->sk_userlocks & ~mask) | (val & mask);
++		break;
++		}
++
+ 	default:
+ 		ret = -ENOPROTOOPT;
+ 		break;
+@@ -1719,6 +1727,10 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
+ 		v.val64 = sock_net(sk)->net_cookie;
+ 		break;
+ 
++	case SO_BUF_LOCK:
++		v.val = sk->sk_userlocks & (SOCK_SNDBUF_LOCK | SOCK_RCVBUF_LOCK);
++		break;
++
+ 	default:
+ 		/* We implement the SO_SNDLOWAT etc to not be settable
+ 		 * (1003.1g 7).
+-- 
+2.31.1
+
