@@ -2,96 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB293DC00A
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 22:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B293DC3DB
+	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 08:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbhG3Uuk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 16:50:40 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:58559 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbhG3Uuj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 16:50:39 -0400
-Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MTigN-1mbFMj379x-00U1oJ for <linux-arch@vger.kernel.org>; Fri, 30 Jul
- 2021 22:50:32 +0200
-Received: by mail-wr1-f44.google.com with SMTP id b7so12862469wri.8
-        for <linux-arch@vger.kernel.org>; Fri, 30 Jul 2021 13:50:32 -0700 (PDT)
-X-Gm-Message-State: AOAM533qIE9ewxlJemQmgkToup7H/bAoLsRqOKbZcNTBP1eiMk32MmIK
-        K5n6T9fuajuPETM8Bkluu8mIH95SssfvtrfiOcc=
-X-Google-Smtp-Source: ABdhPJw6WSmttc95b2x6DQ9hXdSmmaa82QFTWnPh5f3dzt776aMKtNL+al5JEBjLenAr6HTIME5mHl2rfpF2eMTpNpg=
-X-Received: by 2002:a5d:44c7:: with SMTP id z7mr5269445wrr.286.1627678232366;
- Fri, 30 Jul 2021 13:50:32 -0700 (PDT)
+        id S231768AbhGaGNs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 31 Jul 2021 02:13:48 -0400
+Received: from mail.cmac.md ([188.237.172.100]:55880 "EHLO mail.cmac.md"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236749AbhGaGNs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 31 Jul 2021 02:13:48 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.cmac.md (Postfix) with ESMTP id C14A762A76C;
+        Sat, 31 Jul 2021 00:32:29 +0300 (EEST)
+Received: from mail.cmac.md ([127.0.0.1])
+        by localhost (mail.cmac.md [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id bJZOsxCxgTwg; Sat, 31 Jul 2021 00:32:29 +0300 (EEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.cmac.md (Postfix) with ESMTP id 52113628D29;
+        Sat, 31 Jul 2021 00:32:27 +0300 (EEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.cmac.md 52113628D29
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cmac.md;
+        s=A7EBCE9A-F7D5-11E8-BEB1-DB694232E4A3; t=1627680747;
+        bh=iYoLZrSIVCZd9p9Z+IgPN5XCzo2KXLChmA90eXokM3M=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=nl3APydSXln9txtVH2IhVtIuZT1m6k2V6jTnSjHlPFrvs0lvBp3dMBsSVwLr4p0KT
+         CXcl7u08x38uSfa3zSXzwcXXA+8j5DIQPnVS1XbhXGqUHXMBbHpMajNXpk/KiWIM2G
+         3vo+RI/wpI/FYyR6Nf47/vfGEnzKXKxysRo3g20Afg0hgxW53Yj7OZ+FYehVsuV+2b
+         ap57ghDaz6rL6TiDuQW/TmuLSEODx6fBJmrzvj5MmewLijSQhxaIRhS4LHyoPntaUy
+         fmfNElXI/Zrm1ncVT8Ji9ywm4YVYfDpGxZxhqJwgSdqYv4JyK3EehJowH/t0RMTMrI
+         sicvl0arwDRJA==
+X-Virus-Scanned: amavisd-new at mail.cmac.md
+Received: from mail.cmac.md ([127.0.0.1])
+        by localhost (mail.cmac.md [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id qxVG2P0paLiz; Sat, 31 Jul 2021 00:32:27 +0300 (EEST)
+Received: from DESKTOP-JSQ933K.realtek (unknown [175.140.56.2])
+        by mail.cmac.md (Postfix) with ESMTPSA id CE12F628F63;
+        Sat, 31 Jul 2021 00:32:18 +0300 (EEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <CAK8P3a0o1bniPG+pocGtMGV-RVEGVJrQDLmz6SyZ-2NGcq2WnQ@mail.gmail.com>
- <CAAhV-H7Cq10OcQMAGCODoByy+3z7_TQv9vASH0AMt+v2dtrp9A@mail.gmail.com>
- <CAK8P3a2a8R+pMZykCP5zFCPUzRqdPiBpJuCkmQdMuzL+34DFuw@mail.gmail.com> <CAAhV-H7BYczyM4Eor5T2i9M5j-xRumQwKmb9T+UH+eHt9QY58A@mail.gmail.com>
-In-Reply-To: <CAAhV-H7BYczyM4Eor5T2i9M5j-xRumQwKmb9T+UH+eHt9QY58A@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 30 Jul 2021 22:50:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3ccmVm9Dtv_8=NHyPfLGdpFg-C2y16nCaaT_yJAE5EMQ@mail.gmail.com>
-Message-ID: <CAK8P3a3ccmVm9Dtv_8=NHyPfLGdpFg-C2y16nCaaT_yJAE5EMQ@mail.gmail.com>
-Subject: Re: [PATCH 00/19] arch: Add basic LoongArch support
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Chen Zhu <zhuchen@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:67kjGOHZyCFtS8Yp6rpPteA2fRIUzPLxgaIsuTqDJGo6ws/iryv
- ef9ycpWl2r6F/4TO2jgJ0ut2UpX/4AcF50ToNS9afT9OZPy27T+fe04dYDLc4tsjcoZkXEz
- f8oh2p8m2/CuAjJmTffQLvf3uNk/TbYTgiuIfqVS6bc0qQUA8wBv5JxQ4iDkPBohbkaF+bv
- d89qRomtthfgdA/BLbLdQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cXZcGsB3AvQ=:ELiYN8VTxPeFHT/QS8qRHE
- Pa6a1lk8aW6hzZF9nkpXVBszI55MRouvBdmtsvPdsgFUE6Vg2UZ44VXDxRtqZEb3uqHJ7hZdC
- 3j+tzFcd4t+aWlwgwpZcFzVxFDxGf3PC4aFqQruh9Y4jgs2bC37gvOGM1n2urS4hPhbdYtvOv
- dKD0xQueCz852DmR+QJTC1uyk+jseUJ7NWgORARm1zcIBCD/1kLiXxfjiUNvg26Eq4Pwq9QlG
- 7LzN2ADsG7+PZMZ6st4yQJ/ExwVUxOZVJokFnvATaB7/n55ArVrZ1oEf8tGrlOh0Cz+LxYJwx
- qQoe+MbiAqaN/ttFBhuaWbxLW7UxBN2RZe2tDXhfc+bcyzjkSjbcOhTMPsX/Ii3PXLQseAdGf
- 9CrgjvqXte9o6vB8/SZKfk7NgJvM1sjKwPq44v6/49bLVLE22UAIdrADeOKvYj9BZiCCKNtbV
- lBl+/WAtONzNW3S/XlHCxkG/MtN1W4jQhrIH09d9V4euAF7XJsTXhSKfieifCa4bU9wk2K7Wh
- NIvdfLGAuyxrq9ZqXfeK/NBVPG175tHH1KNY9k+BAtZihmnd7s+FFTSx2nWutmLigi7MKsRdu
- 9+SjpQtOfVFMPb4u7qkePTiDAxcn4CQ+T0TVQMoe83RFCDdehN0U2l9J+k6eLfCWZBmMpr77A
- 740AJ88do00ZUAOZobMBtkDKpFq/eNlbT+TjVrgOtFD4K8QmLnJcljerW4bUae6uUMFb/3CTM
- bKAErDmeAmA4WHL3KupkbYyLzvJd8ZkE2lwQ5IYSKS8auP831lBlTHLqx40iVQQkB0jO/NOf3
- EqxgHJfWv8xGZm2Jvq5EC19DbPvsKUviDIBrMARTtXSHJouhwvkWBZONF3r81Tm4XiI5qs/fj
- hV6RrOfxCmf4KrvS7quXxsRzmLfIbYTHw6x/PGuYQWZEUoBNwe0MB22ipLL4c1/1pJT6ISTby
- Tky1nz6owT+lQ2pjs46vPWKH8kWgRL3J/5BnhSxH6WGam90+0mq30
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re: Congratulations
+To:     Recipients <info@cmac.md>
+From:   "Coca Cola" <info@cmac.md>
+Date:   Sat, 31 Jul 2021 05:32:03 +0800
+Reply-To: europedepotcocacola@gmail.com
+Message-Id: <20210730213218.CE12F628F63@mail.cmac.md>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 6:48 PM Huacai Chen <chenhuacai@gmail.com> wrote:
-> On Wed, Jul 7, 2021 at 3:28 PM Arnd Bergmann <arnd@arndb.de> wrote:
+Congratulation To You
 
-> Now toolchain of LoongArch is open, please take a look at it. I think
-> there are also something need to change. In order to reduce
-> compatiability problems in future, please focus on those things
-> interactive with Linux kernel. Thank you very much!
->
-> https://github.com/loongson/glibc/tree/loongarch_2_33
-> https://github.com/loongson/binutils-gdb/tree/loongarch-2_37
-> https://github.com/loongson/gcc/tree/loongarch-12
+You have won $1,500,000.00 in Coca Cola Promotion 2021 Edition
 
-Thanks a lot for letting me know. I won't actually review the code since I'm
-not familiar with the code base, but having gcc and binutils available
-is definitely
-a requirement for the kernel merge.
+Claim your payment now by contacting us via email: coca.cola2021@groupmail.=
+com.
 
-Conversely, the glibc bits should just follow whatever we do for the kernel
-in the syscall ABI. I have not built any gcc-12 binaries for
-https://mirrors.edge.kernel.org/pub/tools/crosstool/ yet, but when we get
-closer to merging the loongarch kernel portions, I can take your latest
-snapshot and build that for all target architectures to publish there.
+For any assistance, you can call our customer toll free helpline number +1(=
+607) 948-9239.
 
-       Arnd
+Sincerely,
+Sir. Jan S. Gustavsson.
+Director Strategic Dev/Secy/Gen Cnsl, Coca-Cola HBC AG.
