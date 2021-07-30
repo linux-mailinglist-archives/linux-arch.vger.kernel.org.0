@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 896F23DB7C2
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 13:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E9D3DB7C4
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 13:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238661AbhG3LZe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 07:25:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36778 "EHLO mail.kernel.org"
+        id S238740AbhG3LZm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 07:25:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36914 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238738AbhG3LZc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Jul 2021 07:25:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 460B26101C;
-        Fri, 30 Jul 2021 11:25:24 +0000 (UTC)
+        id S238745AbhG3LZg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Jul 2021 07:25:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 42F9C61042;
+        Fri, 30 Jul 2021 11:25:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627644327;
-        bh=kCuwgKXzoXBcro+Ij+LOlC2qKGyVspA9C9To3M75IWw=;
+        s=k20201202; t=1627644331;
+        bh=41tFYtagGI1Lhiz3zWu2NlhWV1lTY0kbWv/RrqQ/NNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U+7htRhfZ0BZMQ4K1VLVCMPwr2rQKWP4+Rh6vjhdb8xQe4gQUUIIm9piXoHW410nu
-         azUcBu3SLHBvQf7oHdgWcjH9J/mEcShpiARucX6q8iwFRZLpBnO+smgZO0EffeN74O
-         zFP++MdFVoUVrEqGeTBT3JO6UINqMTvBCFjUTjTDTVB7PnVeydcrSx5fiv2ZCIrvEI
-         hVJ60dzL29lnmfhbVH4gUfGIlQaw25KC/Hh4gHs8+nd+fUWrpyp0FfPWXf0QgnOEnv
-         GbcPte3tDE6d6FIXoB0g3VW92fjCKEKIvo+BhNkSc/wVMgAS/9GxNosw9yj4O44BYn
-         G93Qx3uQ6nvQg==
+        b=txOI8EoYqTcyfYriEygEnpS9AUmzRS/hTVAMDDtPpJAOyk+pBnKsszcKdnWVETGKH
+         RGxgHIhsmbHsRm/HBH3DtIZSKP90plIeYjtDiDFHw2FC6H0XQGNZUNC7F3RKsNBokF
+         znlajlq4J94PvqVbJ1hJStn8e+7G5o5DpvBZAzJlsrWyw37a/ufBc7fGtTAogXuYTR
+         AP4UAjopdDNR3KfKC7y1013aTpz2/QbALkTsI334N5DY3r4179mjP33AKFZEkKHEV4
+         w0TWsT82jr3z6oLc/lZaJPjWiSPuyntp28F2pzPlXvm8C9qq2Z3aNoZU3D22JVIG65
+         wP/YciuWaYtWw==
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -44,9 +44,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Mark Rutland <mark.rutland@arm.com>, kernel-team@android.com
-Subject: [PATCH v11 09/16] sched: Introduce dl_task_check_affinity() to check proposed affinity
-Date:   Fri, 30 Jul 2021 12:24:36 +0100
-Message-Id: <20210730112443.23245-10-will@kernel.org>
+Subject: [PATCH v11 10/16] arm64: Implement task_cpu_possible_mask()
+Date:   Fri, 30 Jul 2021 12:24:37 +0100
+Message-Id: <20210730112443.23245-11-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210730112443.23245-1-will@kernel.org>
 References: <20210730112443.23245-1-will@kernel.org>
@@ -56,106 +56,40 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In preparation for restricting the affinity of a task during execve()
-on arm64, introduce a new dl_task_check_affinity() helper function to
-give an indication as to whether the restricted mask is admissible for
-a deadline task.
+Provide an implementation of task_cpu_possible_mask() so that we can
+prevent 64-bit-only cores being added to the 'cpus_mask' for compat
+tasks on systems with mismatched 32-bit support at EL0,
 
-Reviewed-by: Daniel Bristot de Oliveira <bristot@redhat.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- include/linux/sched.h |  6 ++++++
- kernel/sched/core.c   | 46 +++++++++++++++++++++++++++----------------
- 2 files changed, 35 insertions(+), 17 deletions(-)
+ arch/arm64/include/asm/mmu_context.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 2ebe3d6f8f0c..6ecd02e2ca1e 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1708,6 +1708,7 @@ extern void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new
- extern int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask);
- extern int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src, int node);
- extern void release_user_cpus_ptr(struct task_struct *p);
-+extern int dl_task_check_affinity(struct task_struct *p, const struct cpumask *mask);
- extern void force_compatible_cpus_allowed_ptr(struct task_struct *p);
- extern void relax_compatible_cpus_allowed_ptr(struct task_struct *p);
- #else
-@@ -1730,6 +1731,11 @@ static inline void release_user_cpus_ptr(struct task_struct *p)
- {
- 	WARN_ON(p->user_cpus_ptr);
- }
-+
-+static inline int dl_task_check_affinity(struct task_struct *p, const struct cpumask *mask)
-+{
-+	return 0;
-+}
- #endif
- 
- extern int yield_to(struct task_struct *p, bool preempt);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index aec75ec1d257..9f576a67bc31 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -7726,6 +7726,32 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, struct sched_attr __user *, uattr,
- 	return retval;
+diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
+index eeb210997149..f4ba93d4ffeb 100644
+--- a/arch/arm64/include/asm/mmu_context.h
++++ b/arch/arm64/include/asm/mmu_context.h
+@@ -231,6 +231,19 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 	update_saved_ttbr0(tsk, next);
  }
  
-+#ifdef CONFIG_SMP
-+int dl_task_check_affinity(struct task_struct *p, const struct cpumask *mask)
++static inline const struct cpumask *
++task_cpu_possible_mask(struct task_struct *p)
 +{
-+	int ret = 0;
++	if (!static_branch_unlikely(&arm64_mismatched_32bit_el0))
++		return cpu_possible_mask;
 +
-+	/*
-+	 * If the task isn't a deadline task or admission control is
-+	 * disabled then we don't care about affinity changes.
-+	 */
-+	if (!task_has_dl_policy(p) || !dl_bandwidth_enabled())
-+		return 0;
++	if (!is_compat_thread(task_thread_info(p)))
++		return cpu_possible_mask;
 +
-+	/*
-+	 * Since bandwidth control happens on root_domain basis,
-+	 * if admission test is enabled, we only admit -deadline
-+	 * tasks allowed to run on all the CPUs in the task's
-+	 * root_domain.
-+	 */
-+	rcu_read_lock();
-+	if (!cpumask_subset(task_rq(p)->rd->span, mask))
-+		ret = -EBUSY;
-+	rcu_read_unlock();
-+	return ret;
++	return system_32bit_el0_cpumask();
 +}
-+#endif
++#define task_cpu_possible_mask	task_cpu_possible_mask
 +
- static int
- __sched_setaffinity(struct task_struct *p, const struct cpumask *mask)
- {
-@@ -7743,23 +7769,9 @@ __sched_setaffinity(struct task_struct *p, const struct cpumask *mask)
- 	cpuset_cpus_allowed(p, cpus_allowed);
- 	cpumask_and(new_mask, mask, cpus_allowed);
+ void verify_cpu_asid_bits(void);
+ void post_ttbr_update_workaround(void);
  
--	/*
--	 * Since bandwidth control happens on root_domain basis,
--	 * if admission test is enabled, we only admit -deadline
--	 * tasks allowed to run on all the CPUs in the task's
--	 * root_domain.
--	 */
--#ifdef CONFIG_SMP
--	if (task_has_dl_policy(p) && dl_bandwidth_enabled()) {
--		rcu_read_lock();
--		if (!cpumask_subset(task_rq(p)->rd->span, new_mask)) {
--			retval = -EBUSY;
--			rcu_read_unlock();
--			goto out_free_new_mask;
--		}
--		rcu_read_unlock();
--	}
--#endif
-+	retval = dl_task_check_affinity(p, new_mask);
-+	if (retval)
-+		goto out_free_new_mask;
- again:
- 	retval = __set_cpus_allowed_ptr(p, new_mask, SCA_CHECK | SCA_USER);
- 	if (retval)
 -- 
 2.32.0.402.g57bb445576-goog
 
