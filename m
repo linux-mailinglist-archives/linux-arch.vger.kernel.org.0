@@ -2,66 +2,79 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B293DC3DB
-	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 08:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C042B3DC12B
+	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 00:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbhGaGNs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 31 Jul 2021 02:13:48 -0400
-Received: from mail.cmac.md ([188.237.172.100]:55880 "EHLO mail.cmac.md"
+        id S229604AbhG3Wic (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 18:38:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59820 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236749AbhGaGNs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 31 Jul 2021 02:13:48 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.cmac.md (Postfix) with ESMTP id C14A762A76C;
-        Sat, 31 Jul 2021 00:32:29 +0300 (EEST)
-Received: from mail.cmac.md ([127.0.0.1])
-        by localhost (mail.cmac.md [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id bJZOsxCxgTwg; Sat, 31 Jul 2021 00:32:29 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.cmac.md (Postfix) with ESMTP id 52113628D29;
-        Sat, 31 Jul 2021 00:32:27 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.cmac.md 52113628D29
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cmac.md;
-        s=A7EBCE9A-F7D5-11E8-BEB1-DB694232E4A3; t=1627680747;
-        bh=iYoLZrSIVCZd9p9Z+IgPN5XCzo2KXLChmA90eXokM3M=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=nl3APydSXln9txtVH2IhVtIuZT1m6k2V6jTnSjHlPFrvs0lvBp3dMBsSVwLr4p0KT
-         CXcl7u08x38uSfa3zSXzwcXXA+8j5DIQPnVS1XbhXGqUHXMBbHpMajNXpk/KiWIM2G
-         3vo+RI/wpI/FYyR6Nf47/vfGEnzKXKxysRo3g20Afg0hgxW53Yj7OZ+FYehVsuV+2b
-         ap57ghDaz6rL6TiDuQW/TmuLSEODx6fBJmrzvj5MmewLijSQhxaIRhS4LHyoPntaUy
-         fmfNElXI/Zrm1ncVT8Ji9ywm4YVYfDpGxZxhqJwgSdqYv4JyK3EehJowH/t0RMTMrI
-         sicvl0arwDRJA==
-X-Virus-Scanned: amavisd-new at mail.cmac.md
-Received: from mail.cmac.md ([127.0.0.1])
-        by localhost (mail.cmac.md [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qxVG2P0paLiz; Sat, 31 Jul 2021 00:32:27 +0300 (EEST)
-Received: from DESKTOP-JSQ933K.realtek (unknown [175.140.56.2])
-        by mail.cmac.md (Postfix) with ESMTPSA id CE12F628F63;
-        Sat, 31 Jul 2021 00:32:18 +0300 (EEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S232672AbhG3Wib (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Jul 2021 18:38:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B00660F42;
+        Fri, 30 Jul 2021 22:38:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627684706;
+        bh=h7U1QIc72tE4CAGhduMNUTNeCMPsFA5JtAr1vUAT8I4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CBLwAqSqBb7fxSm9K3Ld4ESWOoyItdQ6tjS4JfQTlvIDAfQwugcR9JwqW31Up5r5a
+         cV+iPS6ECYBjGxngiivQDzMpglK/Gt65JqCLWUO1bAXMvZJFkBU/KZaAreVT2bDlpC
+         DTCEGRE0QBcaoaPDRKiQHogWhlHzG5ZSXWcRw3eJUPCzKe5PnCfvD+yWcAIgZgz6ax
+         ux9+ufcDwqt5bk5PryujtVbiby9SXXJ/NS2S2Z0VMq64vwi4u/vfGMqelnhQY9nDua
+         NQTLgVl13KUNrBtT52b8SjJuFyHO3MqCn6CVKhv1LLOeHkbdy7zG79o5IK2q+1z0FO
+         X9TIza7z1MK2w==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Fangrui Song <maskray@google.com>, Marco Elver <elver@google.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, clang-built-linux@googlegroups.com,
+        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH] vmlinux.lds.h: Handle clang's module.{c,d}tor sections
+Date:   Fri, 30 Jul 2021 15:38:15 -0700
+Message-Id: <20210730223815.1382706-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.32.0.264.g75ae10bc75
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re: Congratulations
-To:     Recipients <info@cmac.md>
-From:   "Coca Cola" <info@cmac.md>
-Date:   Sat, 31 Jul 2021 05:32:03 +0800
-Reply-To: europedepotcocacola@gmail.com
-Message-Id: <20210730213218.CE12F628F63@mail.cmac.md>
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Congratulation To You
+A recent change in LLVM causes module_{c,d}tor sections to appear when
+CONFIG_K{A,C}SAN are enabled, which results in orphan section warnings
+because these are not handled anywhere:
 
-You have won $1,500,000.00 in Coca Cola Promotion 2021 Edition
+ld.lld: warning: arch/x86/pci/built-in.a(legacy.o):(.text.asan.module_ctor) is being placed in '.text.asan.module_ctor'
+ld.lld: warning: arch/x86/pci/built-in.a(legacy.o):(.text.asan.module_dtor) is being placed in '.text.asan.module_dtor'
+ld.lld: warning: arch/x86/pci/built-in.a(legacy.o):(.text.tsan.module_ctor) is being placed in '.text.tsan.module_ctor'
 
-Claim your payment now by contacting us via email: coca.cola2021@groupmail.=
-com.
+Place them in the TEXT_TEXT section so that these technologies continue
+to work with the newer compiler versions. All of the KASAN and KCSAN
+KUnit tests continue to pass after this change.
 
-For any assistance, you can call our customer toll free helpline number +1(=
-607) 948-9239.
+Cc: stable@vger.kernel.org
+Link: https://github.com/ClangBuiltLinux/linux/issues/1432
+Link: https://github.com/llvm/llvm-project/commit/7b789562244ee941b7bf2cefeb3fc08a59a01865
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ include/asm-generic/vmlinux.lds.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sincerely,
-Sir. Jan S. Gustavsson.
-Director Strategic Dev/Secy/Gen Cnsl, Coca-Cola HBC AG.
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 17325416e2de..3b79b1e76556 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -586,6 +586,7 @@
+ 		NOINSTR_TEXT						\
+ 		*(.text..refcount)					\
+ 		*(.ref.text)						\
++		*(.text.asan .text.asan.*)				\
+ 		TEXT_CFI_JT						\
+ 	MEM_KEEP(init.text*)						\
+ 	MEM_KEEP(exit.text*)						\
+
+base-commit: 4669e13cd67f8532be12815ed3d37e775a9bdc16
+-- 
+2.32.0.264.g75ae10bc75
+
