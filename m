@@ -2,109 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0783DA981
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jul 2021 18:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACCD3DB151
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 04:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbhG2Q4r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Jul 2021 12:56:47 -0400
-Received: from mail-wm1-f46.google.com ([209.85.128.46]:44613 "EHLO
-        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbhG2Q4q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jul 2021 12:56:46 -0400
-Received: by mail-wm1-f46.google.com with SMTP id d131-20020a1c1d890000b02902516717f562so4502160wmd.3;
-        Thu, 29 Jul 2021 09:56:41 -0700 (PDT)
+        id S235396AbhG3CvL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jul 2021 22:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230172AbhG3CvK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jul 2021 22:51:10 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7E1C061765
+        for <linux-arch@vger.kernel.org>; Thu, 29 Jul 2021 19:51:06 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id v21so14099054ejg.1
+        for <linux-arch@vger.kernel.org>; Thu, 29 Jul 2021 19:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hev-cc.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RBVECk4Cf8zNQ/paNSAey4afTOvfduBc6GZ0rSNn0hE=;
+        b=vpWrE9KO4tHiiCYQjSVFBolVW7yjOwQUOv3Vw/UpWP1G4jOXNfNfvuKanQeDkD4+v2
+         QZJ17x+GjYpdBxMHHED04X8ToVGTDbUzohC0T4Q7JnTWn9PytuurRD6lNZBVCBITinXc
+         U6xHO8ggtGfuAT01YAEt0bl+X7DEDHVOgCyg/f/uM0EWUxrzfXl67B9HJ+d8GUiU2dIv
+         QBr6F3mDJCeomwaEsWDVeWLQz+lxye/5FaWBiL02saXweGHzNwE6eN5yJ0PyIT0BLXyd
+         NjfOHc88X0Xy2U9s1zBTMC0oA/KTQLlapD3Bg+/8RLr+5eWntQ/w4unNShGvM/ACU/XC
+         wzTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iAOr1eTi2QbZFnOFfALjz4TbmFhPPA7Bn3lPJeG08eE=;
-        b=GgwafQx4+gpsLxU4D8qPW85iEahhD+KpsZPorEOogzi3tiBGJ0WZ0FuSY38Gx5Vls+
-         qXdveLl4FvUSPyNnb6j56g6wAhEpLHPcvzNyr/nA5X93jrSIys4aQeh3m18REcJE1gEh
-         1/qddAObi+E+XhWHxB6LojxG8rMFx9ZWbqjYlWxVl0rGT0IipI8XA3W0rEswTXhl5hX/
-         9iLRQu6FjmjyDcyq408KKkNOcbthwjp1AKAwyuRYK0WU1OkHdWfKlQiztSeZm440oCpk
-         tdCNtBgMhlbxcBxXUBD2EcsElNzmSIcPJyGDg7f4z1aPvxMI4hTWalKqJ8suqdwFdoq8
-         59CA==
-X-Gm-Message-State: AOAM532ZWU1Kz7CNsBfiMs4c8WeTDGh+M8kOQPU+YLr53oEAtkkmiwsr
-        csksqtsbVQHLBHi5qbDbdy0=
-X-Google-Smtp-Source: ABdhPJyfCfq044i2vz5ul0cBAcnLD2W5dYBIRUnQdt4zr5u4bLe7WSQpPLQIvGhwXP2+rJ3hRrPI9Q==
-X-Received: by 2002:a1c:7419:: with SMTP id p25mr15030397wmc.160.1627577800978;
-        Thu, 29 Jul 2021 09:56:40 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id p22sm8806377wmq.44.2021.07.29.09.56.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jul 2021 09:56:40 -0700 (PDT)
-Date:   Thu, 29 Jul 2021 16:56:38 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Siddharth Chandrasekaran <sidcha@amazon.de>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Siddharth Chandrasekaran <sidcha.dev@gmail.com>,
-        Liran Alon <liran@amazon.com>,
-        Ioannis Aslanidis <iaslan@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] asm-generic/hyperv: Fix struct hv_message_header ordering
-Message-ID: <20210729165638.f5idr2ag3pdbpd6u@liuwe-devbox-debian-v2>
-References: <20210729133702.11383-1-sidcha@amazon.de>
- <87eebh9qhd.fsf@vitty.brq.redhat.com>
- <20210729140705.wj5tokeq6lkxm2yy@liuwe-devbox-debian-v2>
- <20210729142652.GA25242@uc8bbc9586ea454.ant.amazon.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RBVECk4Cf8zNQ/paNSAey4afTOvfduBc6GZ0rSNn0hE=;
+        b=fPAl582dLyS1xsIIhT+1RcLV8SLpZMKvFgvIqCH9LaVnluuzmRtni0kucXSKOO8JRv
+         LiDfYsM198BQ1MbVbvWnGXwUH1uaw6x/QLENoz7g8L0XuN++WoKto32m8DsR4EieNBAP
+         CeAaVGwysfIury/9nkekU9MbFEUfsI0yDBz9lz69LnMFH7P+ELUEDPcJNFmpNVaVUz13
+         z+0EKkY68G/n+USo6Zovqw+qQbbaieUy/DXJhaJ1TLkQ10bnbxkb3x3ib6jzcjPRFSGO
+         2QHRQLTZfXkZpwHZ2VsBohRAd42UY/i4QjWzi3Ir/pZJvHwDPMkXsrCqlcO0Yw7PbFx+
+         b3Dw==
+X-Gm-Message-State: AOAM533+diZStR17TtUdbQpRSvQhmQK1LtM/nd6w4qtz7yZB5gROBYGf
+        7ln1l97JL8QcKqkuPXc6DMC8lb9ZX7Hxo4O9zM3XZg==
+X-Google-Smtp-Source: ABdhPJy3+a+e2wwQdj59UrZ9/47KrLg15NfqpJAqivUuCzE5Y3HU1JK8vKlH+vv055cXM5hWqFF4SzJhA7qdu/3x8Tk=
+X-Received: by 2002:a17:906:f20a:: with SMTP id gt10mr439083ejb.267.1627613464372;
+ Thu, 29 Jul 2021 19:51:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210729142652.GA25242@uc8bbc9586ea454.ant.amazon.com>
+References: <20210729093003.146166-1-wangrui@loongson.cn> <20210729095551.GE21151@willie-the-truck>
+ <CAK8P3a3ru0VSYLohoFOd=P=Fjb8BS=1qpMGSf4jdxF4oxmH-ag@mail.gmail.com> <20210729123522.GB21766@willie-the-truck>
+In-Reply-To: <20210729123522.GB21766@willie-the-truck>
+From:   hev <r@hev.cc>
+Date:   Fri, 30 Jul 2021 10:50:53 +0800
+Message-ID: <CAHirt9iYhmQPjMNn_RxBib8fumR0RhjVoBN1ggGm-9MSMHu4Rw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3] locking/atomic: Implement atomic{,64,_long}_{fetch_,}{andnot_or}{,_relaxed,_acquire,_release}()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Rui Wang <wangrui@loongson.cn>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 04:26:54PM +0200, Siddharth Chandrasekaran wrote:
-> On Thu, Jul 29, 2021 at 02:07:05PM +0000, Wei Liu wrote:
-> > On Thu, Jul 29, 2021 at 03:52:46PM +0200, Vitaly Kuznetsov wrote:
-> > > Siddharth Chandrasekaran <sidcha@amazon.de> writes:
-> > >
-> > > > According to Hyper-V TLFS Version 6.0b, struct hv_message_header members
-> > > > should be defined in the order:
-> > > >
-> > > >     message_type, reserved, message_flags, payload_size
-> > > >
-> > > > but we have it defined in the order:
-> > > >
-> > > >     message_type, payload_size, message_flags, reserved
-> > > >
-> > > > that is, the payload_size and reserved members swapped.
-> > >
-> > > Indeed,
-> > >
-> > > typedef struct
-> > > {
-> > >       HV_MESSAGE_TYPE MessageType;
-> > >       UINT16 Reserved;
-> > >       HV_MESSAGE_FLAGS MessageFlags;
-> > >       UINT8 PayloadSize;
-> > >       union
-> > >       {
-> > >               UINT64 OriginationId;
-> > >               HV_PARTITION_ID Sender;
-> > >               HV_PORT_ID Port;
-> > >       };
-> > > } HV_MESSAGE_HEADER;
-> > 
-> > Well. I think TLFS is wrong. Let me ask around.
-> 
-> TBH, I hadn't considered that possibility :). I assumed it was a
-> regression on our side. But I spent some time tracing the history of that
-> struct all the way back to when it was in staging (in 2009) and now I'm
-> inclined to believe a later version of TLFS is at fault here.
-> 
-> Based on what we decide in this thread, I will open an issue on the TLFS
-> GitHub repository.
-> 
+Hi,
 
-I have confirmation TLFS is wrong and shall be fixed. Feel free to open
-an issue on GitHub too.
+On Thu, Jul 29, 2021 at 8:35 PM Will Deacon <will@kernel.org> wrote:
+>
+> On Thu, Jul 29, 2021 at 01:43:41PM +0200, Arnd Bergmann wrote:
+> > On Thu, Jul 29, 2021 at 11:56 AM Will Deacon <will@kernel.org> wrote:
+> > > On Thu, Jul 29, 2021 at 05:30:03PM +0800, Rui Wang wrote:
+> > > > This patch introduce a new atomic primitive andnot_or:
+> > >
+> > > Please see my other comments on the other patches you posted:
+> > >
+> > > https://lore.kernel.org/r/20210729093923.GD21151@willie-the-truck
+> > >
+> > > Overall, I'm not thrilled to bits by extending the atomics API with
+> > > operations that cannot be implemented efficiently on any (?) architectures
+> > > and are only used by the qspinlock slowpath on machines with more than 16K
+> > > CPUs.
+> >
+> > Wouldn't this also help improve set_mask_bits()? That one at least has
+> > a handful of users in the kernel.
+>
+> For pure LL/SC architectures, yes, but I don't think it helps anybody else.
+>
+> Afaict, an architecture can already override set_mask_bits, so why do we
+> need to add this primitive to the atomic API?
+>
+> Will
 
-Wei.
+So what's next?
+
+Now the set_mask_bits return oldval, return newval before 5.0. :-D
+commit 1db604f676b("include/linux/bitops.h: set_mask_bits() to return
+old value")
+
+Regards,
+Rui
