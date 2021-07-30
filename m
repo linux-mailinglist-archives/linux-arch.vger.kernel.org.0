@@ -2,156 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C44B23DBDB7
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 19:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BC63DBE74
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 20:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbhG3Rav (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 13:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbhG3Rau (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 13:30:50 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176AFC061765;
-        Fri, 30 Jul 2021 10:30:46 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id r18so12386701iot.4;
-        Fri, 30 Jul 2021 10:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oHsMKNhV7OwL5/mb1IIZfkjAk7SLD17GCn8Ec+XEXAM=;
-        b=OwX4txoExZtKsbvkkF3Ty6YMuO0yiLRNADxSTrBEyhilKdRpl6xCcv7WkjW6RJRGpE
-         uV8PwyhqtWgQVhC+0iQBxeXYGX8nKrnZSP44r1BEaVmHnF++10IH30K3fyNENz6ek0PL
-         gfUzMyYpc4N3/9FdQHAnBupLvNbj7+JHoPz55094D3xG80xOj4j/u/NJJIkEcaLAZHC6
-         dP1rm0BliBlzr9Jj02c4XcjvIIG6gaySoJMxn+pVopB85MGd3jVSN+Aoq6nn+M8wTZGH
-         n6ixyNv4L/8jn0ZOOEFEf5G+kupxTRew4Woj6z3HKB4RDWdrc2gLYgogpgxquD/6+mEF
-         02GA==
+        id S230239AbhG3Skl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 14:40:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39584 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229773AbhG3Skj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Jul 2021 14:40:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627670432;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O3VUm09HRjzyVdvGrdFxz4pkI4m7bmJUChTQiJGRYAM=;
+        b=ZtakFV3NMEzKdN61e8I8qE5bU4xtknXHqY103XpR6jk53jReUObNeKhvh8Et3pMBUpEXEY
+        qK6Zn/W/3Fn4skEQHYbbEa9/P4tR+IXI4Yz/veNiE+R3R6yB2xrEwysIV91jO0dzHrvd9b
+        gWADbhhIjPbwWgtrJQuLzOo3yaJF+YA=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-546-w8sipduXNPuARMiRnnssAQ-1; Fri, 30 Jul 2021 14:40:31 -0400
+X-MC-Unique: w8sipduXNPuARMiRnnssAQ-1
+Received: by mail-qt1-f199.google.com with SMTP id g10-20020ac8768a0000b029023c90fba3dcso4841399qtr.7
+        for <linux-arch@vger.kernel.org>; Fri, 30 Jul 2021 11:40:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oHsMKNhV7OwL5/mb1IIZfkjAk7SLD17GCn8Ec+XEXAM=;
-        b=r1xK25hd5xXF4GEREbNs0ZGrSgn5XOftLqWFrfUyI+e9+fmDRXK3NbMvmSJJlYmnco
-         I4KwvbTpWAV80IkgZmbwvZOcE9vSO7uzV8EaO5PLcOGjX84lZKH5GEcFHUf2Xta2DVZZ
-         /hZr2v3KY1RzXDTjeOjHjhHm1Zb+UKx3Qjisu0P5d/Hj4xoJMbk6IgEOBY43TvY+dz3c
-         59Cve8fIECQoPvd6iCAAnUmk9UhpwFy6IFNNkgiZ7WSYiSMepKCju7Q4KIyA1kKOI/75
-         KHbYACcQz8Dw1e6vRJ+IiZfQ8143ecy0ORvvfheyIxQM8XvceTdI+5t88oIznjKksJrs
-         0L1w==
-X-Gm-Message-State: AOAM531iLyuc0jA3ES0GEoBFAx+NTF186wTnV1Tk+3xTtiz5MXqHyM4B
-        VLdGDyxm+dchF3E5uVT9sjY=
-X-Google-Smtp-Source: ABdhPJx4HDV95l8buFg8Ixg+PTIBRNjxRXBAh8Ozz2Gb4aE52xoZ8NNGTH8LL1Q7pXoqbIO3xozI6A==
-X-Received: by 2002:a6b:f707:: with SMTP id k7mr1005465iog.125.1627666245515;
-        Fri, 30 Jul 2021 10:30:45 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id e9sm1163567ils.61.2021.07.30.10.30.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jul 2021 10:30:45 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 7D5A127C005B;
-        Fri, 30 Jul 2021 13:30:44 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 30 Jul 2021 13:30:44 -0400
-X-ME-Sender: <xms:QzcEYQIbmQamGupiogWro6i4Wilby76fK1-G1vO4kiHiSDzDxHp36g>
-    <xme:QzcEYQJoQkcEdGoIC7RzJT65Wv2xGxP8-xMRJFgzzR8mKn-JWtn6sW5LU_kX4hX_p
-    a7_1BSBes97go0j-Q>
-X-ME-Received: <xmr:QzcEYQtt8JVs8rredBOBkK6rwxFt0d0vBtmGQ7_PWLAvxO-9Mm9XW3giz0g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrheehgddutdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhepheekveejhedujeffudetiedtveeufefhjeeivdfhgfeuuddttdeghedtudei
-    tefgnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhp
-    vghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrd
-    hfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:QzcEYda7XS5ykQPuUALQWEOMi43Qn0Vr6JAA7eCzE3Vy8BB3aYxuqQ>
-    <xmx:QzcEYXYCN-7XAEOk2Bl4EXm84JvKaiPttDKQII4fwDC1xx0Mn0c96g>
-    <xmx:QzcEYZCsUPNJNujha7WdawB3K_k-uad7t-sbcYBvC9muwd6LH-ph6A>
-    <xmx:RDcEYb72_W_BHoRvnDYAHqhL8MobAwC9qspa-VABOJx-NLPzYzQULw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Jul 2021 13:30:42 -0400 (EDT)
-Date:   Sat, 31 Jul 2021 01:30:16 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Hector Martin <marcan@marcan.st>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [Question] Alignment requirement for readX() and writeX()
-Message-ID: <YQQ3KAXrPN1CuglL@boqun-archlinux>
-References: <YQQr+twAYHk2jXs6@boqun-archlinux>
- <CAK8P3a0w09Ga_OXAqhA0JcgR-LBc32a296dZhpTyPDwVSgaNkw@mail.gmail.com>
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=O3VUm09HRjzyVdvGrdFxz4pkI4m7bmJUChTQiJGRYAM=;
+        b=B65WB/SuFixd6TNAYGQ2qrPmXhK2+YbGEg3n6h+OlxcySNCDk7RoVbEeHwHn9ADAuh
+         H60n+jo05QaDHK/Mx0Ts6AbgxU9VBcNtRqtr7wM+mgCtlnvdVxOYpa2JSMrzx17Dhesg
+         UDjacO2FSmg/ctFmrmXD+Jph6kkwrToomPJTCapldVIUF5tFlcMAbwG63ujf6qQRhj5c
+         D+Ss+8QKhYswD5xHxKpLHbyyvDieYcmXW6C1LdDP0V1+zyXHrglNfn+e+spTAJQQv6JR
+         8oo5DXl0lMBi9z+rB48tp3ztzTCaHqRydn+dQ5NnOBKHSw+ujvSqW77I9otB2q3BFOEN
+         F8rQ==
+X-Gm-Message-State: AOAM531MrX2HWlIdGRq4KidaYljWCgxJPcNuZxiArMjADy2Eu63q+Pqn
+        R/BxJ6DD0B+LcrNbSjOWZoKHfecgOctz3fbZoDw4n2PoosV68rcXUKEWZ5xq0uG/pS7sgvLI1jd
+        v3CnhtNYjAHE58ZL0iv2NMQ==
+X-Received: by 2002:a37:66d6:: with SMTP id a205mr3578713qkc.422.1627670430641;
+        Fri, 30 Jul 2021 11:40:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJydbZCs5e0C+UMhJz4Fc/mmq/3srHUfTYT5Xwt5gdhhZaC0GVFt4OJ9O5WHjTkxZ8kPPI0wew==
+X-Received: by 2002:a37:66d6:: with SMTP id a205mr3578703qkc.422.1627670430446;
+        Fri, 30 Jul 2021 11:40:30 -0700 (PDT)
+Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
+        by smtp.gmail.com with ESMTPSA id v5sm1310192qkh.39.2021.07.30.11.40.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jul 2021 11:40:29 -0700 (PDT)
+From:   Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Subject: Re: [RFC PATCH v1 1/5] locking/atomic: Implement atomic_fetch_and_or
+To:     hev <r@hev.cc>, Will Deacon <will@kernel.org>
+Cc:     Rui Wang <wangrui@loongson.cn>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <20210728114822.1243-1-wangrui@loongson.cn>
+ <20210729093923.GD21151@willie-the-truck>
+ <CAHirt9hNxsHPVWPa+RpUC6av0tcHPESb4Pr20ovAixwNEh4hrQ@mail.gmail.com>
+Message-ID: <7574da60-fb71-dad2-b099-a815a0a18c22@redhat.com>
+Date:   Fri, 30 Jul 2021 14:40:28 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0w09Ga_OXAqhA0JcgR-LBc32a296dZhpTyPDwVSgaNkw@mail.gmail.com>
+In-Reply-To: <CAHirt9hNxsHPVWPa+RpUC6av0tcHPESb4Pr20ovAixwNEh4hrQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 06:58:30PM +0200, Arnd Bergmann wrote:
-> On Fri, Jul 30, 2021 at 6:43 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > The background is that I'm reviewing Wedson's PR on IoMem for
-> > Rust-for-Linux project:
-> >
-> >         https://github.com/Rust-for-Linux/linux/pull/462
-> >
-> > readX() and writeX() are used to provide Rust code to read/write IO
-> > memory. And I want to find whether we need to check the alignment of the
-> > pointer. I wonder whether the addresses passed to readX() and writeX()
-> > need to be aligned to the size of the accesses (e.g. the parameter of
-> > readl() has to be a 4-byte aligned pointer).
-> >
-> > The only related information I get so far is the following quote in
-> > Documentation/driver-io/device-io.rst:
-> >
-> >         On many platforms, I/O accesses must be aligned with respect to
-> >         the access size; failure to do so will result in an exception or
-> >         unpredictable results.
-> >
-> > Does it mean all readX() and writeX() need to use aligned addresses?
-> > Or the alignment requirement is arch-dependent, i.e. if the architecture
-> > supports and has enabled misalignment load and store, no alignment
-> > requirement on readX() and writeX(), otherwise still need to use aligned
-> > addresses.
-> >
-> > I know different archs have their own alignment requirement on memory
-> > accesses, just want to make sure the requirement of the readX() and
-> > writeX() APIs.
-> 
-> I am not aware of any driver that requires unaligned access on __iomem
-> pointers, and since it definitely doesn't work on most architectures, I think
-> having an unconditional alignment check makes sense.
-> 
-> What would the alignment check look like? Is there a way to annotate
-> a pointer that is 'void __iomem *' in C as having a minimum alignment
-> when it gets passed into a function that uses readl()/writel() on it?
-> 
+On 7/29/21 6:18 AM, hev wrote:
+> Hi, Will,
+>
+> On Thu, Jul 29, 2021 at 5:39 PM Will Deacon <will@kernel.org> wrote:
+>> On Wed, Jul 28, 2021 at 07:48:22PM +0800, Rui Wang wrote:
+>>> From: wangrui <wangrui@loongson.cn>
+>>>
+>>> This patch introduce a new atomic primitive 'and_or', It may be have three
+>>> types of implemeations:
+>>>
+>>>   * The generic implementation is based on arch_cmpxchg.
+>>>   * The hardware supports atomic 'and_or' of single instruction.
+>> Do any architectures actually support this instruction?
+> No, I'm not sure now.
+>
+>> On arm64, we can clear arbitrary bits and we can set arbitrary bits, but we
+>> can't combine the two in a fashion which provides atomicity and
+>> forward-progress guarantees.
+>>
+>> Please can you explain how this new primitive will be used, in case there's
+>> an alternative way of doing it which maps better to what CPUs can actually
+>> do?
+> I think we can easily exchange arbitrary bits of a machine word with atomic
+> andnot_or/and_or. Otherwise, we can only use xchg8/16 to do it. It depends on
+> hardware support, and the key point is that the bits to be exchanged
+> must be in the
+> same sub-word. qspinlock adjusted memory layout for this reason, and waste some
+> bits(_Q_PENDING_BITS == 8).
 
-If we want to check, I'd expect we do the checks inside
-readX()/writeX(), for example, readl() could be implemented as:
+It is not actually a waste of bits. With _Q_PENDING_BITS==8, more 
+optimized code can be used for pending bit processing. It is only in the 
+rare case that NR_CPUS >= 16k - 1 that we have to fall back to 
+_Q_PENDING_BITS==1. In fact, that should be the only condition that will 
+make _Q_PENDING_BITS=1.
 
-	#define readl(c) 					\
-	({							\
-		u32 __v;					\
-								\
-		/* alignment checking */			\
-		BUG_ON(c & (sizeof(__v) - 1));			\
-		__v = readl_relaxed(c);				\
-		__iormb(__v);					\
-		__v;						\
-	})
+Cheers,
+Longman
 
-It's a runtime check, so if anyone hates it I can understand ;-)
-
-Regards,
-Boqun
-
->        Arnd
