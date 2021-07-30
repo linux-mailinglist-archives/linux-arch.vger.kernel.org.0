@@ -2,258 +2,215 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 421DA3DB7D0
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 13:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EB13DB919
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 15:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238821AbhG3L0J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 07:26:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37418 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238827AbhG3L0A (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Jul 2021 07:26:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 37BBE6101C;
-        Fri, 30 Jul 2021 11:25:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627644355;
-        bh=58RaxNDrM4Q3j9mW7XXfbQ/URRqdiy8OCrN2808XFlI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gimJjdxCpcP5+6drREnkcJJDzRCfAXoQR2MMMtMbaOSNCr3wJKzskSjnV8QKAa4lQ
-         4gKcKXvG4TXMAHtSiNvNgg5K8LpVwNdO/tOvm9Yu18gJolVy5iDcjf5e0uL6zsJsXE
-         da/rsLR5xEm+1Jx5gtn4tk4NIrCXQvqgNlHQTwiHwMrQTTHSrARtyEuR012iLx/AhY
-         sbp30F8XYhs6DYIHMaGi5//T/VpgpuQQZrfDD2XT67IfXgxc3tQ4dhNJKCmvztzsDw
-         HaRtpchcBI9Yp7Kq5J0Nvm8O9lCDjPI3cDcCA2iHE6qW90LwGd/CjkYto8vbBgUMfW
-         592bCND5pSZIA==
-From:   Will Deacon <will@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, kernel-team@android.com
-Subject: [PATCH v11 16/16] Documentation: arm64: describe asymmetric 32-bit support
-Date:   Fri, 30 Jul 2021 12:24:43 +0100
-Message-Id: <20210730112443.23245-17-will@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210730112443.23245-1-will@kernel.org>
-References: <20210730112443.23245-1-will@kernel.org>
+        id S238925AbhG3NNn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 09:13:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56059 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230441AbhG3NNm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Jul 2021 09:13:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627650817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DvyXapxVzn+zrn+bjqa/tYPCaA3lgxakfkU7dEkt2Gk=;
+        b=N/glq5dWiufBFcqIXf41uSBX8hakjkXggDZ/AwZM/eiro+hyM2zMQTWlXVJzOhyo8gYU+G
+        JTEE3gV90ZnP7qttyp1i0+aPAuPIqtMyYSD4qSOo447UShLjq45fmI8WcE22/iEV5meHcs
+        1/JKFcv72ZwITNlKH93b6YyJOAIG0Hw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-139-cKPaHnLHMkacJmeD8DRfzQ-1; Fri, 30 Jul 2021 09:13:36 -0400
+X-MC-Unique: cKPaHnLHMkacJmeD8DRfzQ-1
+Received: by mail-wm1-f70.google.com with SMTP id j11-20020a05600c190bb02902190142995dso3183327wmq.4
+        for <linux-arch@vger.kernel.org>; Fri, 30 Jul 2021 06:13:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=DvyXapxVzn+zrn+bjqa/tYPCaA3lgxakfkU7dEkt2Gk=;
+        b=VikP86IqpQ/hx7iCfEkKH8g+D1D7osDQE/J56I5osb8IYWbX/jXplb/nOHzVuWGFFn
+         JjNd5lHJAoXDMpHm/hNXOoA+Sxaf3d+7/NHcOg3N/HnBoZWhfibdBdCHJUQv+ew1RAfg
+         uhLWOGUBoYDoTE9N566wRY8Zanf/vG75HFKC11ZOW9mMYqT9vDlHqTyTP2nGyxKA7OnZ
+         ANm0Hc14NOjfalFjy6iLGao2U91rpnBUv0gQz1nZoBqTYr+0E1L76JzM1kScwb6w/n4s
+         UwsHEiffjTwsZDJofpzB7qcqxjp9pcANLDE9idSAXLiFyYLEeX2MkwaSc1RphiXwCP7U
+         cS6w==
+X-Gm-Message-State: AOAM5329FJRlArgiGmvW25xklo7qTpHy829ySmtC05J1EcY+9tDwteaR
+        TWVO6wwJC3r8udGKBHAawYmkbQoSmeihyk3f5pA/nLFTq3zvNIvYEurb34H69mXIL9gzmXYX0RK
+        nJpa05j2SICBIyCtj7OFkqg==
+X-Received: by 2002:a5d:504d:: with SMTP id h13mr1681137wrt.132.1627650815262;
+        Fri, 30 Jul 2021 06:13:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwD2MsKHFFU4eOyDr26wAYTuvNeP0131zeNhnr5KNwTAgbS7faVz5h/KI8ty6cYFADK7C8aww==
+X-Received: by 2002:a5d:504d:: with SMTP id h13mr1681103wrt.132.1627650815058;
+        Fri, 30 Jul 2021 06:13:35 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-97-57.dyn.eolo.it. [146.241.97.57])
+        by smtp.gmail.com with ESMTPSA id x12sm1775128wrt.35.2021.07.30.06.13.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jul 2021 06:13:34 -0700 (PDT)
+Message-ID: <bc53b476f8a3a1bafb73c2f5072c0bad03bc1709.camel@redhat.com>
+Subject: Re: [PATCH] sock: allow reading and changing sk_userlocks with
+ setsockopt
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, Andrei Vagin <avagin@gmail.com>
+Date:   Fri, 30 Jul 2021 15:13:31 +0200
+In-Reply-To: <20210730105406.318726-1-ptikhomirov@virtuozzo.com>
+References: <20210730105406.318726-1-ptikhomirov@virtuozzo.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Document support for running 32-bit tasks on asymmetric 32-bit systems
-and its impact on the user ABI when enabled.
+On Fri, 2021-07-30 at 13:54 +0300, Pavel Tikhomirov wrote:
+> SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK flags disable automatic socket
+> buffers adjustment done by kernel (see tcp_fixup_rcvbuf() and
+> tcp_sndbuf_expand()). If we've just created a new socket this adjustment
+> is enabled on it, but if one changes the socket buffer size by
+> setsockopt(SO_{SND,RCV}BUF*) it becomes disabled.
+> 
+> CRIU needs to call setsockopt(SO_{SND,RCV}BUF*) on each socket on
+> restore as it first needs to increase buffer sizes for packet queues
+> restore and second it needs to restore back original buffer sizes. So
+> after CRIU restore all sockets become non-auto-adjustable, which can
+> decrease network performance of restored applications significantly.
 
-Signed-off-by: Will Deacon <will@kernel.org>
----
- .../admin-guide/kernel-parameters.txt         |   3 +
- Documentation/arm64/asymmetric-32bit.rst      | 155 ++++++++++++++++++
- Documentation/arm64/index.rst                 |   1 +
- 3 files changed, 159 insertions(+)
- create mode 100644 Documentation/arm64/asymmetric-32bit.rst
+I'm wondering if you could just tune tcp_rmem instead?
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6ab625dea8c0..b2f5dd4ea805 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -295,6 +295,9 @@
- 			EL0 is indicated by /sys/devices/system/cpu/aarch32_el0
- 			and hot-unplug operations may be restricted.
- 
-+			See Documentation/arm64/asymmetric-32bit.rst for more
-+			information.
-+
- 	amd_iommu=	[HW,X86-64]
- 			Pass parameters to the AMD IOMMU driver in the system.
- 			Possible values are:
-diff --git a/Documentation/arm64/asymmetric-32bit.rst b/Documentation/arm64/asymmetric-32bit.rst
-new file mode 100644
-index 000000000000..64a0b505da7d
---- /dev/null
-+++ b/Documentation/arm64/asymmetric-32bit.rst
-@@ -0,0 +1,155 @@
-+======================
-+Asymmetric 32-bit SoCs
-+======================
-+
-+Author: Will Deacon <will@kernel.org>
-+
-+This document describes the impact of asymmetric 32-bit SoCs on the
-+execution of 32-bit (``AArch32``) applications.
-+
-+Date: 2021-05-17
-+
-+Introduction
-+============
-+
-+Some Armv9 SoCs suffer from a big.LITTLE misfeature where only a subset
-+of the CPUs are capable of executing 32-bit user applications. On such
-+a system, Linux by default treats the asymmetry as a "mismatch" and
-+disables support for both the ``PER_LINUX32`` personality and
-+``execve(2)`` of 32-bit ELF binaries, with the latter returning
-+``-ENOEXEC``. If the mismatch is detected during late onlining of a
-+64-bit-only CPU, then the onlining operation fails and the new CPU is
-+unavailable for scheduling.
-+
-+Surprisingly, these SoCs have been produced with the intention of
-+running legacy 32-bit binaries. Unsurprisingly, that doesn't work very
-+well with the default behaviour of Linux.
-+
-+It seems inevitable that future SoCs will drop 32-bit support
-+altogether, so if you're stuck in the unenviable position of needing to
-+run 32-bit code on one of these transitionary platforms then you would
-+be wise to consider alternatives such as recompilation, emulation or
-+retirement. If neither of those options are practical, then read on.
-+
-+Enabling kernel support
-+=======================
-+
-+Since the kernel support is not completely transparent to userspace,
-+allowing 32-bit tasks to run on an asymmetric 32-bit system requires an
-+explicit "opt-in" and can be enabled by passing the
-+``allow_mismatched_32bit_el0`` parameter on the kernel command-line.
-+
-+For the remainder of this document we will refer to an *asymmetric
-+system* to mean an asymmetric 32-bit SoC running Linux with this kernel
-+command-line option enabled.
-+
-+Userspace impact
-+================
-+
-+32-bit tasks running on an asymmetric system behave in mostly the same
-+way as on a homogeneous system, with a few key differences relating to
-+CPU affinity.
-+
-+sysfs
-+-----
-+
-+The subset of CPUs capable of running 32-bit tasks is described in
-+``/sys/devices/system/cpu/aarch32_el0`` and is documented further in
-+``Documentation/ABI/testing/sysfs-devices-system-cpu``.
-+
-+**Note:** CPUs are advertised by this file as they are detected and so
-+late-onlining of 32-bit-capable CPUs can result in the file contents
-+being modified by the kernel at runtime. Once advertised, CPUs are never
-+removed from the file.
-+
-+``execve(2)``
-+-------------
-+
-+On a homogeneous system, the CPU affinity of a task is preserved across
-+``execve(2)``. This is not always possible on an asymmetric system,
-+specifically when the new program being executed is 32-bit yet the
-+affinity mask contains 64-bit-only CPUs. In this situation, the kernel
-+determines the new affinity mask as follows:
-+
-+  1. If the 32-bit-capable subset of the affinity mask is not empty,
-+     then the affinity is restricted to that subset and the old affinity
-+     mask is saved. This saved mask is inherited over ``fork(2)`` and
-+     preserved across ``execve(2)`` of 32-bit programs.
-+
-+     **Note:** This step does not apply to ``SCHED_DEADLINE`` tasks.
-+     See `SCHED_DEADLINE`_.
-+
-+  2. Otherwise, the cpuset hierarchy of the task is walked until an
-+     ancestor is found containing at least one 32-bit-capable CPU. The
-+     affinity of the task is then changed to match the 32-bit-capable
-+     subset of the cpuset determined by the walk.
-+
-+  3. On failure (i.e. out of memory), the affinity is changed to the set
-+     of all 32-bit-capable CPUs of which the kernel is aware.
-+
-+A subsequent ``execve(2)`` of a 64-bit program by the 32-bit task will
-+invalidate the affinity mask saved in (1) and attempt to restore the CPU
-+affinity of the task using the saved mask if it was previously valid.
-+This restoration may fail due to intervening changes to the deadline
-+policy or cpuset hierarchy, in which case the ``execve(2)`` continues
-+with the affinity unchanged.
-+
-+Calls to ``sched_setaffinity(2)`` for a 32-bit task will consider only
-+the 32-bit-capable CPUs of the requested affinity mask. On success, the
-+affinity for the task is updated and any saved mask from a prior
-+``execve(2)`` is invalidated.
-+
-+``SCHED_DEADLINE``
-+------------------
-+
-+Explicit admission of a 32-bit deadline task to the default root domain
-+(e.g. by calling ``sched_setattr(2)``) is rejected on an asymmetric
-+32-bit system unless admission control is disabled by writing -1 to
-+``/proc/sys/kernel/sched_rt_runtime_us``.
-+
-+``execve(2)`` of a 32-bit program from a 64-bit deadline task will
-+return ``-ENOEXEC`` if the root domain for the task contains any
-+64-bit-only CPUs and admission control is enabled. Concurrent offlining
-+of 32-bit-capable CPUs may still necessitate the procedure described in
-+`execve(2)`_, in which case step (1) is skipped and a warning is
-+emitted on the console.
-+
-+**Note:** It is recommended that a set of 32-bit-capable CPUs are placed
-+into a separate root domain if ``SCHED_DEADLINE`` is to be used with
-+32-bit tasks on an asymmetric system. Failure to do so is likely to
-+result in missed deadlines.
-+
-+Cpusets
-+-------
-+
-+The affinity of a 32-bit task on an asymmetric system may include CPUs
-+that are not explicitly allowed by the cpuset to which it is attached.
-+This can occur as a result of the following two situations:
-+
-+  - A 64-bit task attached to a cpuset which allows only 64-bit CPUs
-+    executes a 32-bit program.
-+
-+  - All of the 32-bit-capable CPUs allowed by a cpuset containing a
-+    32-bit task are offlined.
-+
-+In both of these cases, the new affinity is calculated according to step
-+(2) of the process described in `execve(2)`_ and the cpuset hierarchy is
-+unchanged irrespective of the cgroup version.
-+
-+CPU hotplug
-+-----------
-+
-+On an asymmetric system, the first detected 32-bit-capable CPU is
-+prevented from being offlined by userspace and any such attempt will
-+return ``-EPERM``. Note that suspend is still permitted even if the
-+primary CPU (i.e. CPU 0) is 64-bit-only.
-+
-+KVM
-+---
-+
-+Although KVM will not advertise 32-bit EL0 support to any vCPUs on an
-+asymmetric system, a broken guest at EL1 could still attempt to execute
-+32-bit code at EL0. In this case, an exit from a vCPU thread in 32-bit
-+mode will return to host userspace with an ``exit_reason`` of
-+``KVM_EXIT_FAIL_ENTRY`` and will remain non-runnable until successfully
-+re-initialised by a subsequent ``KVM_ARM_VCPU_INIT`` operation.
-diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-index 97d65ba12a35..4f840bac083e 100644
---- a/Documentation/arm64/index.rst
-+++ b/Documentation/arm64/index.rst
-@@ -10,6 +10,7 @@ ARM64 Architecture
-     acpi_object_usage
-     amu
-     arm-acpi
-+    asymmetric-32bit
-     booting
-     cpu-feature-registers
-     elf_hwcaps
--- 
-2.32.0.402.g57bb445576-goog
+> CRIU need to be able to restore sockets with enabled/disabled adjustment
+> to the same state it was before dump, so let's add special setsockopt
+> for it.
+> 
+> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+> ---
+> Here is a corresponding CRIU commits using these new feature to fix slow
+> download speed problem after migration:
+> https://github.com/checkpoint-restore/criu/pull/1568 
+> 
+> Origin of the problem:
+> 
+> We have a customer in Virtuozzo who mentioned that nginx server becomes
+> slower after container migration. Especially it is easy to mention when
+> you wget some big file via localhost from the same container which was
+> just migrated. 
+>  
+> By strace-ing all nginx processes I see that nginx worker process before
+> c/r sends data to local wget with big chunks ~1.5Mb, but after c/r it
+> only succeeds to send by small chunks ~64Kb.
+> 
+> Before: 
+> sendfile(12, 13, [7984974] => [9425600], 11479629) = 1440626 <0.000180> 
+>  
+> After: 
+> sendfile(8, 13, [1507275] => [1568768], 17957328) = 61493 <0.000675> 
+> 
+> Smaller buffer can explain the decrease in download speed. So as a POC I
+> just commented out all buffer setting manipulations and that helped.
+> 
+> ---
+>  arch/alpha/include/uapi/asm/socket.h  |  2 ++
+>  arch/mips/include/uapi/asm/socket.h   |  2 ++
+>  arch/parisc/include/uapi/asm/socket.h |  2 ++
+>  arch/sparc/include/uapi/asm/socket.h  |  2 ++
+>  include/uapi/asm-generic/socket.h     |  2 ++
+>  net/core/sock.c                       | 12 ++++++++++++
+>  6 files changed, 22 insertions(+)
+> 
+> diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+> index 6b3daba60987..1dd9baf4a6c2 100644
+> --- a/arch/alpha/include/uapi/asm/socket.h
+> +++ b/arch/alpha/include/uapi/asm/socket.h
+> @@ -129,6 +129,8 @@
+>  
+>  #define SO_NETNS_COOKIE		71
+>  
+> +#define SO_BUF_LOCK		72
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64
+> diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+> index cdf404a831b2..1eaf6a1ca561 100644
+> --- a/arch/mips/include/uapi/asm/socket.h
+> +++ b/arch/mips/include/uapi/asm/socket.h
+> @@ -140,6 +140,8 @@
+>  
+>  #define SO_NETNS_COOKIE		71
+>  
+> +#define SO_BUF_LOCK		72
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64
+> diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+> index 5b5351cdcb33..8baaad52d799 100644
+> --- a/arch/parisc/include/uapi/asm/socket.h
+> +++ b/arch/parisc/include/uapi/asm/socket.h
+> @@ -121,6 +121,8 @@
+>  
+>  #define SO_NETNS_COOKIE		0x4045
+>  
+> +#define SO_BUF_LOCK		0x4046
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64
+> diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+> index 92675dc380fa..e80ee8641ac3 100644
+> --- a/arch/sparc/include/uapi/asm/socket.h
+> +++ b/arch/sparc/include/uapi/asm/socket.h
+> @@ -122,6 +122,8 @@
+>  
+>  #define SO_NETNS_COOKIE          0x0050
+>  
+> +#define SO_BUF_LOCK              0x0051
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  
+> diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+> index d588c244ec2f..1f0a2b4864e4 100644
+> --- a/include/uapi/asm-generic/socket.h
+> +++ b/include/uapi/asm-generic/socket.h
+> @@ -124,6 +124,8 @@
+>  
+>  #define SO_NETNS_COOKIE		71
+>  
+> +#define SO_BUF_LOCK		72
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index a3eea6e0b30a..843094f069f3 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -1357,6 +1357,14 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
+>  		ret = sock_bindtoindex_locked(sk, val);
+>  		break;
+>  
+> +	case SO_BUF_LOCK:
+> +		{
+> +		int mask = SOCK_SNDBUF_LOCK | SOCK_RCVBUF_LOCK;
+
+What about define a marco with the above mask, and avoid the local
+variable declaration and brackets??!
+
+Thanks!
+
+Paolo
 
