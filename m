@@ -2,120 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7133DB214
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 06:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3175E3DB61C
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jul 2021 11:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbhG3ELQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 00:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229465AbhG3ELQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 00:11:16 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18321C061765;
-        Thu, 29 Jul 2021 21:11:11 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id k1so9492125plt.12;
-        Thu, 29 Jul 2021 21:11:11 -0700 (PDT)
+        id S238232AbhG3JgU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 05:36:20 -0400
+Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:1163 "EHLO
+        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238200AbhG3JgT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 05:36:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qJu6CB2LN4QTrxCEOBdOuFEubSp0osjxUw486lmLCCE=;
-        b=ZDBlqPk7rrZwfBnBjR5AX1bDAs/03F78a8y9TTalCyS6aeo4BVkIxfh1ObzxANaAgE
-         HW8wbFpOlmHwbaCPm5cRL/enrnPzB27Dnubwd4H3F+8zFrVlyM1Smb2LawbtRzGY3LRC
-         Gb93dNjedTrLXFAZ6ab+LBvUZZSxiYikb+dLVy6ty9M5d/daHgOsw8Q+y0rAzywv5rJ1
-         9vUlTT3Rv5WnELmp/i+W4sb7zRlI3Awvh+AERZBSYUZe0JKeGzcixyqH3H8gStqkO4Ji
-         /TjYveizM/zetfPUG8Kk34aKNf2XAzZdOlHSD7bm+KS1YwZA/iLQszfwSj+JpCnElXrL
-         5VoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qJu6CB2LN4QTrxCEOBdOuFEubSp0osjxUw486lmLCCE=;
-        b=NhZbm4qE0y8PHoUerwDq4y3U6M2jXrhtlWOwKOSNlYe0ahrd0Ix8V7j2HznFId6b66
-         MkEhaNAhCvVKqpF4acPbpANrpUnGjuVCMm6KLaR0ZISpYE494rrTpSDzpFgsfSYxrA7C
-         LsfOXxv8VJpjDMET9n6EAHUuU2J6ObGkNYTeoBk94NowpytPuSbyUl8YiNHACVUxpCCu
-         VW+2qj8AHXCcmERjsVXni8Q+I+fAbHrWrVQ7DuJJydq9ajGbkKdCpjb61/wjO5Nc2dVE
-         4fy+sPpOnsLYIHvrniYhF1gUv8NL4+ioM+v79VG9H9FfSQZrAmEUGyeRuM7MisnExdFr
-         0ItA==
-X-Gm-Message-State: AOAM530/og5KYoU95IJ2MeBl/97lgE6G57hWm9y5q6ZHzsEaJ7t4oSJw
-        j97q814A3uMZ1ufYSV9eu0o=
-X-Google-Smtp-Source: ABdhPJz3KIEE78AyymdsWAIZFHiwRfrHYC57wifeuRqjNg3M8sSkO4co7S92ZJfiJ7qm9o4/XVu3Vw==
-X-Received: by 2002:a17:90a:b795:: with SMTP id m21mr872416pjr.143.1627618270672;
-        Thu, 29 Jul 2021 21:11:10 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:18:efec::4b1])
-        by smtp.gmail.com with ESMTPSA id s7sm418969pfk.12.2021.07.29.21.10.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jul 2021 21:11:10 -0700 (PDT)
-Subject: Re: [PATCH 10/13] x86/Swiotlb: Add Swiotlb bounce buffer remap
- function for HV IVM
-To:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, arnd@arndb.de, hch@lst.de,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
-        Tianyu.Lan@microsoft.com, rientjes@google.com,
-        martin.b.radev@gmail.com, akpm@linux-foundation.org,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        aneesh.kumar@linux.ibm.com, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, xen-devel@lists.xenproject.org,
-        pgonda@google.com, david@redhat.com, keescook@chromium.org,
-        hannes@cmpxchg.org, sfr@canb.auug.org.au,
-        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, vkuznets@redhat.com, anparri@microsoft.com
-References: <20210728145232.285861-1-ltykernel@gmail.com>
- <20210728145232.285861-11-ltykernel@gmail.com> <YQLXYVaWWdBfF7Sm@fedora>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <7afbbc7f-8f02-ca6c-0c8c-bbf01fae70ea@gmail.com>
-Date:   Fri, 30 Jul 2021 12:10:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1627637775; x=1659173775;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=cP+JhXq5Nalma4gVWY0bx4G6vVp3XZYSMJqhpGkBToc=;
+  b=K4gWx3xuRC3u6e1IWMd6ov2gCBbM/JIXwaZWvjVbQTQHkJonXCWpZrP+
+   m/bZod786THzGvnNdTguEd7hfePQhHrmIp10CA5T9xS374lPb+YQllFN7
+   tlbqDf3iWxROXLmJbdto07yNgS+u4wQ8g20duNVwUqIQQ16TAWQJRr09k
+   E=;
+X-IronPort-AV: E=Sophos;i="5.84,281,1620691200"; 
+   d="scan'208";a="15928374"
+Subject: Re: [PATCH] asm-generic/hyperv: Fix struct hv_message_header ordering
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-2a-d0be17ee.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 30 Jul 2021 09:36:07 +0000
+Received: from EX13D28EUC003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-2a-d0be17ee.us-west-2.amazon.com (Postfix) with ESMTPS id D6F42A2241;
+        Fri, 30 Jul 2021 09:36:06 +0000 (UTC)
+Received: from u366d62d47e3651.ant.amazon.com (10.43.160.85) by
+ EX13D28EUC003.ant.amazon.com (10.43.164.43) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.23; Fri, 30 Jul 2021 09:36:01 +0000
+Date:   Fri, 30 Jul 2021 11:35:57 +0200
+From:   Siddharth Chandrasekaran <sidcha@amazon.de>
+To:     Wei Liu <wei.liu@kernel.org>
+CC:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Siddharth Chandrasekaran <sidcha.dev@gmail.com>,
+        Liran Alon <liran@amazon.com>,
+        Ioannis Aslanidis <iaslan@amazon.de>,
+        <linux-hyperv@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>, Arnd Bergmann <arnd@arndb.de>
+Message-ID: <20210730091649.GA13442@u366d62d47e3651.ant.amazon.com>
+References: <20210729133702.11383-1-sidcha@amazon.de>
+ <87eebh9qhd.fsf@vitty.brq.redhat.com>
+ <20210729140705.wj5tokeq6lkxm2yy@liuwe-devbox-debian-v2>
+ <20210729142652.GA25242@uc8bbc9586ea454.ant.amazon.com>
+ <20210729165638.f5idr2ag3pdbpd6u@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
-In-Reply-To: <YQLXYVaWWdBfF7Sm@fedora>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210729165638.f5idr2ag3pdbpd6u@liuwe-devbox-debian-v2>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.43.160.85]
+X-ClientProxiedBy: EX13D38UWC001.ant.amazon.com (10.43.162.170) To
+ EX13D28EUC003.ant.amazon.com (10.43.164.43)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Konrad:
-      Thanks for your review.
-
-On 7/30/2021 12:29 AM, Konrad Rzeszutek Wilk wrote:
->> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
->> index 1fa81c096c1d..6866e5784b53 100644
->> --- a/kernel/dma/swiotlb.c
->> +++ b/kernel/dma/swiotlb.c
->> @@ -194,8 +194,13 @@ static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, phys_addr_t start,
->>   		mem->slots[i].alloc_size = 0;
->>   	}
->>   
->> -	set_memory_decrypted((unsigned long)vaddr, bytes >> PAGE_SHIFT);
->> -	memset(vaddr, 0, bytes);
->> +	mem->vaddr = dma_map_decrypted(vaddr, bytes);
->> +	if (!mem->vaddr) {
->> +		pr_err("Failed to decrypt memory.\n");
-> I am wondering if it would be worth returning an error code in this
-> function instead of just printing an error?
-
-Yes, this is good idea and will update in the next version.
-
+On Thu, Jul 29, 2021 at 04:56:38PM +0000, Wei Liu wrote:
+> On Thu, Jul 29, 2021 at 04:26:54PM +0200, Siddharth Chandrasekaran wrote:
+> > On Thu, Jul 29, 2021 at 02:07:05PM +0000, Wei Liu wrote:
+> > > On Thu, Jul 29, 2021 at 03:52:46PM +0200, Vitaly Kuznetsov wrote:
+> > > > Siddharth Chandrasekaran <sidcha@amazon.de> writes:
+> > > >
+> > > > > According to Hyper-V TLFS Version 6.0b, struct hv_message_header members
+> > > > > should be defined in the order:
+> > > > >
+> > > > >     message_type, reserved, message_flags, payload_size
+> > > > >
+> > > > > but we have it defined in the order:
+> > > > >
+> > > > >     message_type, payload_size, message_flags, reserved
+> > > > >
+> > > > > that is, the payload_size and reserved members swapped.
+> > > >
+> > > > Indeed,
+> > > >
+> > > > typedef struct
+> > > > {
+> > > >       HV_MESSAGE_TYPE MessageType;
+> > > >       UINT16 Reserved;
+> > > >       HV_MESSAGE_FLAGS MessageFlags;
+> > > >       UINT8 PayloadSize;
+> > > >       union
+> > > >       {
+> > > >               UINT64 OriginationId;
+> > > >               HV_PARTITION_ID Sender;
+> > > >               HV_PORT_ID Port;
+> > > >       };
+> > > > } HV_MESSAGE_HEADER;
+> > >
+> > > Well. I think TLFS is wrong. Let me ask around.
+> >
+> > TBH, I hadn't considered that possibility :). I assumed it was a
+> > regression on our side. But I spent some time tracing the history of that
+> > struct all the way back to when it was in staging (in 2009) and now I'm
+> > inclined to believe a later version of TLFS is at fault here.
+> >
+> > Based on what we decide in this thread, I will open an issue on the TLFS
+> > GitHub repository.
+> >
 > 
-> For this patch I think it is Ok, but perhaps going forward this would be
-> better done as I am thinking - is there some global guest->hyperv
-> reporting mechanism so that if this fails - it ends up being bubbled up
-> to the HyperV console-ish?
+> I have confirmation TLFS is wrong and shall be fixed. Feel free to open
+> an issue on GitHub too.
 
-Hyper-V has such panic page report mechanism. Guest can pass one page 
-log to host during crash.
+Thanks for the confirmation, I created an issue [1] to track this.
+
+~ Sid.
+
+[1]: https://github.com/MicrosoftDocs/Virtualization-Documentation/issues/1624
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
 
