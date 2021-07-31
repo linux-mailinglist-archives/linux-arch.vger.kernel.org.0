@@ -2,129 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9366A3DC288
-	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 03:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44953DC2BD
+	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 04:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbhGaBvn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 21:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbhGaBvm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 21:51:42 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5A3C06175F;
-        Fri, 30 Jul 2021 18:51:36 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id r5so11188831ilc.13;
-        Fri, 30 Jul 2021 18:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=m1SHKy5hexFk2I9Nf/8HsQX5Jd6mF6IvHmx4tMHAEV8=;
-        b=F0RM9J10Y6gLe53NWCR7Tsd8sTL7s/1xf0EbbPlzB6v3DHqR9+LrRvQ32zN17DTnTn
-         x1ftAUAZExm0soRfMEgzXFk06P9cKp+y+fXZ95zjWIW05GtQyF1wGdE6bf2FVGts1gwH
-         Lgwc3ejm4WXjdS9laeLFD8E7vCtJhNJn1vk6gAcWQsrrhE7E0jrQ+e39kCBRiXkSb1W/
-         MScOCbFfmbGS9UznZvMXZ4/bgc0+Sb6MKK8RTwFNkfgZt/ViUL/h7nYPjJ+6Ed+pB5vV
-         u3GaN464x8Ghb5z0pYoWhNIs7GvjFrxPsF7+gdUXmhppFYyBJX+rOHZxehzzwGIfqe6u
-         npCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m1SHKy5hexFk2I9Nf/8HsQX5Jd6mF6IvHmx4tMHAEV8=;
-        b=ebf1+tPiAcN+6Dd1YooqZwoiBqEMnUhbMCHNglGpbq3Lg9fsPjONX2ANk7lTKobc8v
-         Fl86V5gWGFrsIEgPLu2MEFNsn+bR9LQi3de7/vBb+oVzNY86HTqhfdrypMcx99jYtmAf
-         llJNhNxJfMFkIa4sypD1XBcAlGpK0iys8YRHSzro0hLAX9lpNjERnpa/EceGJTCvhC/R
-         P0GlZ1NJH39TgEoywKNmVIgAYzvM170CdV7Um/tbpVAG1Hk6xiXmQtoyCJd5kt0oUGvJ
-         mjCUFdaikkcc9s8pE6omC9b0fB+WuseyWJ0WA8m7ZbRe3Bw87eoROeKKey2jncNpclv+
-         JbZQ==
-X-Gm-Message-State: AOAM531e1X15hie7GyY0vltO4HQI1JlpA28X92cHg5hRUEX+Zn2jb2s2
-        BXKvz/pNHTYUxoK/ZwbNcpA=
-X-Google-Smtp-Source: ABdhPJyn/tYN5Z/GRoMRw6hRGtBKNTaELrqCtNh7R56Z3uYF95ZwtIllPdDTvJXhz2mVlxUZ93LWOQ==
-X-Received: by 2002:a92:da86:: with SMTP id u6mr2325722iln.265.1627696295747;
-        Fri, 30 Jul 2021 18:51:35 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id u16sm2047220iob.41.2021.07.30.18.51.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jul 2021 18:51:35 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 4EE3527C0054;
-        Fri, 30 Jul 2021 21:51:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 30 Jul 2021 21:51:34 -0400
-X-ME-Sender: <xms:pKwEYeRGRGDqRamBCEzxaEqzZDHBJXjIJnnKgi8BPamVFeeheScRiQ>
-    <xme:pKwEYTwj6a705TqrPFQeYLOj1w9CxSJT3PfUVgyPl0Fl3YC6CtTer2VGkWGz52h7d
-    T8mHiTcAXxOCZC9fg>
-X-ME-Received: <xmr:pKwEYb1AnGmMfU1AFbokw9vF_PrlskmJGVTx_0-pF7XFQfLXVCVmCWoQ4zc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrheeigdehtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
-    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
-    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
-    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
-    gvrdhnrghmvg
-X-ME-Proxy: <xmx:pKwEYaDK0DIwv0simMgsjeUmo3dUk0IwvkTRbMqZYxlW73PIzZsdSw>
-    <xmx:pKwEYXjKtQBUxJSIaFaNzLj0DjWFAEMygPwUF6VAdSLs2p5g5A8_WA>
-    <xmx:pKwEYWqh1djR_7Yh5l5pOU8mPaas-l_BX7Zs2CkBT2ZE-M9YrmoSNA>
-    <xmx:pawEYXj0EaWHgFf_p5A2IXrYC641YUSIzbs7C5n5vGsyEAyjCLxBvA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Jul 2021 21:51:32 -0400 (EDT)
-Date:   Sat, 31 Jul 2021 09:51:05 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Hector Martin <marcan@marcan.st>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [Question] Alignment requirement for readX() and writeX()
-Message-ID: <YQSsiacvJHFKk3Cj@boqun-archlinux>
-References: <YQQr+twAYHk2jXs6@boqun-archlinux>
- <CAK8P3a0w09Ga_OXAqhA0JcgR-LBc32a296dZhpTyPDwVSgaNkw@mail.gmail.com>
- <YQQ3KAXrPN1CuglL@boqun-archlinux>
- <CAK8P3a3_pgtUWrg-MpaVyVqhffeuvQECHCmSCLyudfSwuEcP_g@mail.gmail.com>
+        id S235929AbhGaCdI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 22:33:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41576 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231335AbhGaCdI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Jul 2021 22:33:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C86D60C40;
+        Sat, 31 Jul 2021 02:33:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627698782;
+        bh=Q2i5nn81+sm0ERvomOS12lhN2v/shipoGDhhZxGH/fk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GcAdi55tZN1A4sHtM26ll/BNUgwRcqocDQJkZUNoOsWbRI4GqWCtnh//VcdlEpSgK
+         kjyW7yJq3HEw1Mxbp4d4lVzyoJGv9zRh1lKV3foHoluc8v3VqqnFQZUFXMZcEhejnn
+         PF1BoIl5pb1jK/Ld+hMdIJkePDz1V8Jswn5KT+qoERkgsJtq9vZNeoPOBaMh7aTl5e
+         3pqRVtMTycLAhC600vhQXJlsAmqZVHmsOdUPT52JQPhkdSZCxFygG+HsfCpmz4Kkm2
+         qztnFxJLke1YdMMQpwQKD3+PQIwAE0Uw2MOqqoE6gpeGWC6PknpTJhMGmLfoiXy2vO
+         QBKkUWrP6D+yQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Fangrui Song <maskray@google.com>, Marco Elver <elver@google.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, clang-built-linux@googlegroups.com,
+        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH v2] vmlinux.lds.h: Handle clang's module.{c,d}tor sections
+Date:   Fri, 30 Jul 2021 19:31:08 -0700
+Message-Id: <20210731023107.1932981-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.32.0.264.g75ae10bc75
+In-Reply-To: <20210730223815.1382706-1-nathan@kernel.org>
+References: <20210730223815.1382706-1-nathan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a3_pgtUWrg-MpaVyVqhffeuvQECHCmSCLyudfSwuEcP_g@mail.gmail.com>
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 10:24:53PM +0200, Arnd Bergmann wrote:
-> On Fri, Jul 30, 2021 at 7:31 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> > On Fri, Jul 30, 2021 at 06:58:30PM +0200, Arnd Bergmann wrote:
-> >
-> > If we want to check, I'd expect we do the checks inside
-> > readX()/writeX(), for example, readl() could be implemented as:
-> >
-> >         #define readl(c)                                        \
-> >         ({                                                      \
-> >                 u32 __v;                                        \
-> >                                                                 \
-> >                 /* alignment checking */                        \
-> >                 BUG_ON(c & (sizeof(__v) - 1));                  \
-> >                 __v = readl_relaxed(c);                         \
-> >                 __iormb(__v);                                   \
-> >                 __v;                                            \
-> >         })
-> >
-> > It's a runtime check, so if anyone hates it I can understand ;-)
-> 
-> Right, I really don't think that adds any value, this just replaces one
-> oops message with a more different oops message, while adding
-> some overhead.
-> 
+A recent change in LLVM causes module_{c,d}tor sections to appear when
+CONFIG_K{A,C}SAN are enabled, which results in orphan section warnings
+because these are not handled anywhere:
 
-Agreed. I wasn't planning to propose this kind of checks for C code.
-Just want to understand better on the alignment requirement of these
-APIs. Thanks  ;-)
+ld.lld: warning: arch/x86/pci/built-in.a(legacy.o):(.text.asan.module_ctor) is being placed in '.text.asan.module_ctor'
+ld.lld: warning: arch/x86/pci/built-in.a(legacy.o):(.text.asan.module_dtor) is being placed in '.text.asan.module_dtor'
+ld.lld: warning: arch/x86/pci/built-in.a(legacy.o):(.text.tsan.module_ctor) is being placed in '.text.tsan.module_ctor'
 
-Regards,
-Boqun
+Fangrui explains: "the function asan.module_ctor has the SHF_GNU_RETAIN
+flag, so it is in a separate section even with -fno-function-sections
+(default)".
 
->         Arnd
+Place them in the TEXT_TEXT section so that these technologies continue
+to work with the newer compiler versions. All of the KASAN and KCSAN
+KUnit tests continue to pass after this change.
+
+Cc: stable@vger.kernel.org
+Link: https://github.com/ClangBuiltLinux/linux/issues/1432
+Link: https://github.com/llvm/llvm-project/commit/7b789562244ee941b7bf2cefeb3fc08a59a01865
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+
+v1 -> v2:
+
+* Fix inclusion of .text.tsan.* (Nick)
+
+* Drop .text.asan as it does not exist plus it would be handled by a
+  different line (Fangrui)
+
+* Add Fangrui's explanation about why the LLVM commit caused these
+  sections to appear.
+
+ include/asm-generic/vmlinux.lds.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 17325416e2de..62669b36a772 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -586,6 +586,7 @@
+ 		NOINSTR_TEXT						\
+ 		*(.text..refcount)					\
+ 		*(.ref.text)						\
++		*(.text.asan.* .text.tsan.*)				\
+ 		TEXT_CFI_JT						\
+ 	MEM_KEEP(init.text*)						\
+ 	MEM_KEEP(exit.text*)						\
+
+base-commit: 4669e13cd67f8532be12815ed3d37e775a9bdc16
+-- 
+2.32.0.264.g75ae10bc75
+
