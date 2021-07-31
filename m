@@ -2,135 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EAB3DC1FF
-	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 02:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B83E3DC22D
+	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 03:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234357AbhGaAcl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 20:32:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48794 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234448AbhGaAck (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Jul 2021 20:32:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E0A260FE7;
-        Sat, 31 Jul 2021 00:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627691555;
-        bh=o+PLNhrJjYzJClkCiD1x2ngH38naHAhxH0uspRMZAk0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Fob9LrC7lLW8/Nupz+JnUcvUWuJy7rdK6mqt5l6vB9mpv9tbhBMqv5bfxWvURlr30
-         5lIc/NL9RSkw9Yq4Bw6ak54rXQL1e1dj7ZFX1ltvJZSNqYl8S7GCfOub7XDUQzEspn
-         cgsvmB0nKl1fUej7/1Ycak74kHxKaGDHrlRlEIxrpr0BLvvK3B2tIiaVkdiqDfRqSC
-         AHyBHuqGs3vBL5G07jo9fgiKBmpFxO3DoolQonsPYsczpYTlS3fakoJnJjzct+qs5S
-         WQxiXn+VNJbA9JTOiFyLZd7CSR6jddfaTUukpSu3cXq0Kkp75O+App2GDM3hZ+KY5E
-         CUJ9C95gyztiw==
-Subject: Re: [PATCH] vmlinux.lds.h: Handle clang's module.{c,d}tor sections
-To:     Fangrui Song <maskray@google.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, clang-built-linux@googlegroups.com,
-        stable@vger.kernel.org
-References: <20210730223815.1382706-1-nathan@kernel.org>
- <CAKwvOdnJ9VMZfZrZprD6k0oWxVJVSNePUM7fbzFTJygXfO24Pw@mail.gmail.com>
- <20210730225936.ce3hcjdg2sptvbh7@google.com>
-From:   Nathan Chancellor <nathan@kernel.org>
-Message-ID: <baf67422-8662-02f2-0bbf-6afb141875af@kernel.org>
-Date:   Fri, 30 Jul 2021 17:32:33 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S235028AbhGaBEE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 21:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231337AbhGaBED (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 21:04:03 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B84C0613C1
+        for <linux-arch@vger.kernel.org>; Fri, 30 Jul 2021 18:03:57 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id u2so4796984plg.10
+        for <linux-arch@vger.kernel.org>; Fri, 30 Jul 2021 18:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=GEiqTcwIYygHUUwapLNNYA1FZwL2ut2yHDf7Ce3qLZs=;
+        b=u0i7LTzBU5KFPrBFKb7Fg2bc/TYl7MA68y+JOM3UaYFihIGPGL6mn7yX2tP8aOoziO
+         5IOzBTpy3W7SBErixudKeUZs/7+GRQg1ukw3cL+egOyzZKyUfWiqm+yBRxX4V4yomTX2
+         wr6dx2MX+M1UjhOVYgCscH9Cet7lAXsbO2kR0ZeoJt46pVnn/rFUlkwdJJ7iXTyi63Hw
+         If5Oy8lGL48308x1q5ZjBDF4yRNap1YBf8u9xxVXcbmolMxDMd6mdjXadUqDQJN+Hgee
+         J5VgjdRisjrQJ9z9A5RTinRdHtWeLuHQCUX8EVs1V525Jb/SSABupY+eEaePgyMVggFH
+         56LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=GEiqTcwIYygHUUwapLNNYA1FZwL2ut2yHDf7Ce3qLZs=;
+        b=a2QHeKzax5zjQCTjDy5PiQ15PxVDLt+AZtAjF5apNqOT0hyRV2b7eIRMt5ClHbbbbi
+         XD7OabwAmWvzX4QSMsuyBq/Cb+vJmepPkT4L9158F8Vtn/GI27lCPXNKCt/W2dvbnbKZ
+         KQE7w8VJj5apUUUYpuLJXmSLFrSfEuLrUBPviaF9HfqgeDCbxkzqvFUrIlwpvoVoGWCb
+         srrDIg0+D4iBzJYfMvW0D99gPccaPXBttwRPmW2peP44BooqESTbtnFL86/hP8SBlcbG
+         786Zw1zypi2zc/hBKkg7d0Ps0As7lswZssr0sasYm+KQJ2/pMf97ZLdyOYhTGiZqE14M
+         H+Lg==
+X-Gm-Message-State: AOAM531MQnDR7erjtZk/c6Oo4cqZTjfoLIrWK/pBO8p5zrcRBW3HQ/Qc
+        LHSo/CXp6rlM5LDi1wQ8SdPEU5aQKG8JQUTFNvc=
+X-Google-Smtp-Source: ABdhPJx8QHq8FjKO0lXpb8z42WltyW1muQmGiPcNPOATcaaaoASrqzt2yjztq87CE1f0/gwKpZM1aCpnUm6dSeCHOpg=
+X-Received: by 2002:a63:b4d:: with SMTP id a13mr1780658pgl.404.1627693437243;
+ Fri, 30 Jul 2021 18:03:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210730225936.ce3hcjdg2sptvbh7@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7300:c08:b029:26:4f0d:a0ef with HTTP; Fri, 30 Jul 2021
+ 18:03:56 -0700 (PDT)
+Reply-To: sroomf70@gmail.com
+From:   "Mr. Pierre Eldaher" <pierre.eldaher57@gmail.com>
+Date:   Fri, 30 Jul 2021 18:03:56 -0700
+Message-ID: <CAGZKiwpcjt8=HBX-Dxz3fCwpXMYZFQdjHgGT1fex65FjjvYrLQ@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/30/2021 3:59 PM, Fangrui Song wrote:
-> On 2021-07-30, Nick Desaulniers wrote:
->> On Fri, Jul 30, 2021 at 3:38 PM Nathan Chancellor <nathan@kernel.org> 
->> wrote:
->>>
->>> A recent change in LLVM causes module_{c,d}tor sections to appear when
->>> CONFIG_K{A,C}SAN are enabled, which results in orphan section warnings
->>> because these are not handled anywhere:
->>>
->>> ld.lld: warning: 
->>> arch/x86/pci/built-in.a(legacy.o):(.text.asan.module_ctor) is being 
->>> placed in '.text.asan.module_ctor'
->>> ld.lld: warning: 
->>> arch/x86/pci/built-in.a(legacy.o):(.text.asan.module_dtor) is being 
->>> placed in '.text.asan.module_dtor'
->>> ld.lld: warning: 
->>> arch/x86/pci/built-in.a(legacy.o):(.text.tsan.module_ctor) is being 
->>> placed in '.text.tsan.module_ctor'
->>
->> ^ .text.tsan.*
-> 
-> I was wondering why the orphan section warning only arose recently.
-> Now I see: the function asan.module_ctor has the SHF_GNU_RETAIN flag, so
-> it is in a separate section even with -fno-function-sections (default).
+-- 
+Greetings,
+From Mr. Pierre Herald, we notify you through our official mail but no
+respond from you before sending you with this private email hope you
+Received the Fund that was paid to your account? do not hesitate to
+keep us notice as soon as possible to enable us make the balance
+transfer into your nominated account. awaiting your urgent
+notification.
 
-Thanks for the explanation, I will add this to the commit message.
+Thanks
+Mr. Pierre Eldaher,
+Foreign Remittance
 
-> It seems that with -ffunction-sections the issue should have been caught
-> much earlier.
-> 
->>>
->>> Place them in the TEXT_TEXT section so that these technologies continue
->>> to work with the newer compiler versions. All of the KASAN and KCSAN
->>> KUnit tests continue to pass after this change.
->>>
->>> Cc: stable@vger.kernel.org
->>> Link: https://github.com/ClangBuiltLinux/linux/issues/1432
->>> Link: 
->>> https://github.com/llvm/llvm-project/commit/7b789562244ee941b7bf2cefeb3fc08a59a01865 
->>>
->>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->>> ---
->>>  include/asm-generic/vmlinux.lds.h | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/include/asm-generic/vmlinux.lds.h 
->>> b/include/asm-generic/vmlinux.lds.h
->>> index 17325416e2de..3b79b1e76556 100644
->>> --- a/include/asm-generic/vmlinux.lds.h
->>> +++ b/include/asm-generic/vmlinux.lds.h
->>> @@ -586,6 +586,7 @@
->>>                 
->>> NOINSTR_TEXT                                            \
->>>                 
->>> *(.text..refcount)                                      \
->>>                 
->>> *(.ref.text)                                            \
->>> +               *(.text.asan 
->>> .text.asan.*)                              \
->>
->> Will this match .text.tsan.module_ctor?
-
-No, I forgot to test CONFIG_KCSAN with this version, rather than the 
-prior one I had on GitHub so I will send v2 shortly.
-
-> asan.module_ctor is the only function AddressSanitizer synthesizes in 
-> the instrumented translation unit.
-> There is no function called "asan".
-> 
-> (Even if a function "asan" exists due to -ffunction-sections
-> -funique-section-names, TEXT_MAIN will match .text.asan, so the
-> .text.asan pattern will match nothing.)
-
-Sounds good, I will update it to remove the .text.asan and replace it 
-with .text.tsan.*
-
->> Do we want to add these conditionally on
->> CONFIG_KASAN_GENERIC/CONFIG_KCSAN like we do for SANITIZER_DISCARDS?
-
-I do not think there is a point in doing so but I can if others feel 
-strongly.
-
-Thank you both for the comments for the comments!
-
-Cheers,
-Nathan
+Best regards
+Prof. Dr Diane
+Head of Foreign Operation
