@@ -2,113 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9752B3DC282
-	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 03:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9366A3DC288
+	for <lists+linux-arch@lfdr.de>; Sat, 31 Jul 2021 03:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbhGaBqz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jul 2021 21:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S231425AbhGaBvn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jul 2021 21:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbhGaBqz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 21:46:55 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2195C06175F
-        for <linux-arch@vger.kernel.org>; Fri, 30 Jul 2021 18:46:48 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id hw6so6092723ejc.10
-        for <linux-arch@vger.kernel.org>; Fri, 30 Jul 2021 18:46:48 -0700 (PDT)
+        with ESMTP id S231335AbhGaBvm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jul 2021 21:51:42 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5A3C06175F;
+        Fri, 30 Jul 2021 18:51:36 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id r5so11188831ilc.13;
+        Fri, 30 Jul 2021 18:51:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hev-cc.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KqIm8Zx3pH/8PTwn/CTBJTXMqgv5eudoeGRkjwQqxtc=;
-        b=L/QSVVezt0cqXjQPE9US2gRjgmtfl+TAERp/86G+EX4lbcznP8MEdi7R6VAO5BqDDm
-         HaLOlczk8i7EpxboZYhJYH9Jzyi0zXfu23mXgC5uKWRAVfRlPQQq0FvePJFmBLZiMHXp
-         g0QSrHDDOAgYJr6MmJeY4ZrKe97ZK3Z5M077KhjitlCDXlfkSUDRE/aX4a2TVndvU+rR
-         LQCGvJu9cXXjTf3isZx+6gJMAZ+GKV8qKuJQBK+LfmbcC62C1yRF7B7JmK16qF8Cv7dO
-         yFoGbLPApoel6pgaZEiqDnxkqu7qRMSQvAlR6y93l4ZQLaZPEGrawB1lt3wLN+l2foZb
-         H8nQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=m1SHKy5hexFk2I9Nf/8HsQX5Jd6mF6IvHmx4tMHAEV8=;
+        b=F0RM9J10Y6gLe53NWCR7Tsd8sTL7s/1xf0EbbPlzB6v3DHqR9+LrRvQ32zN17DTnTn
+         x1ftAUAZExm0soRfMEgzXFk06P9cKp+y+fXZ95zjWIW05GtQyF1wGdE6bf2FVGts1gwH
+         Lgwc3ejm4WXjdS9laeLFD8E7vCtJhNJn1vk6gAcWQsrrhE7E0jrQ+e39kCBRiXkSb1W/
+         MScOCbFfmbGS9UznZvMXZ4/bgc0+Sb6MKK8RTwFNkfgZt/ViUL/h7nYPjJ+6Ed+pB5vV
+         u3GaN464x8Ghb5z0pYoWhNIs7GvjFrxPsF7+gdUXmhppFYyBJX+rOHZxehzzwGIfqe6u
+         npCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KqIm8Zx3pH/8PTwn/CTBJTXMqgv5eudoeGRkjwQqxtc=;
-        b=IaW/ZwQ7zRzjxgANYsdfW7j65M8suSSxpAla2R1WSHBb/0wfpezrKY/MhHxeHDoboi
-         wAJByKsKDgQMvBSizoo1ie+3WRU8P16YIHFMpCty9I4diNOkZ0Q63gGhpgjlp3LvCM2M
-         NQ0R0sSyTjEEtC/2uOkEkqh8Y3WXJ5IUBBJA6+KkbS3BzG9NdMiIzdJkBqNJ/hVjNyNP
-         imZrkh/9eMHw8OSZ6ZcRyYxxqjJegH5VFYq0WqBuho/BSd+f8p79CLZZVUFrzdBtQx4J
-         RV4IVifxnq9jEydDD/Ey8fFpkcctMMDbDCOO3ej9kM8DYcjWXsJHS24uUt5jUSSaCxCP
-         jyag==
-X-Gm-Message-State: AOAM530iiA8t6nz5kL9EE198vISYsSWjGMKW+CyzHPmiSbJLtOTuv14M
-        7neqbfMqMD6WsQ522moFComZ5SKHre0rvjZUe0RPbg==
-X-Google-Smtp-Source: ABdhPJwvlrI/hzUx9/Wrzz8E2F7f0aafIG816hhuftMtSl4WLttOCjFi/OIxxz3hEv+ZiFPmUfn3pFcWzmo29ZiWthM=
-X-Received: by 2002:a17:906:f15:: with SMTP id z21mr5595441eji.177.1627696006842;
- Fri, 30 Jul 2021 18:46:46 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=m1SHKy5hexFk2I9Nf/8HsQX5Jd6mF6IvHmx4tMHAEV8=;
+        b=ebf1+tPiAcN+6Dd1YooqZwoiBqEMnUhbMCHNglGpbq3Lg9fsPjONX2ANk7lTKobc8v
+         Fl86V5gWGFrsIEgPLu2MEFNsn+bR9LQi3de7/vBb+oVzNY86HTqhfdrypMcx99jYtmAf
+         llJNhNxJfMFkIa4sypD1XBcAlGpK0iys8YRHSzro0hLAX9lpNjERnpa/EceGJTCvhC/R
+         P0GlZ1NJH39TgEoywKNmVIgAYzvM170CdV7Um/tbpVAG1Hk6xiXmQtoyCJd5kt0oUGvJ
+         mjCUFdaikkcc9s8pE6omC9b0fB+WuseyWJ0WA8m7ZbRe3Bw87eoROeKKey2jncNpclv+
+         JbZQ==
+X-Gm-Message-State: AOAM531e1X15hie7GyY0vltO4HQI1JlpA28X92cHg5hRUEX+Zn2jb2s2
+        BXKvz/pNHTYUxoK/ZwbNcpA=
+X-Google-Smtp-Source: ABdhPJyn/tYN5Z/GRoMRw6hRGtBKNTaELrqCtNh7R56Z3uYF95ZwtIllPdDTvJXhz2mVlxUZ93LWOQ==
+X-Received: by 2002:a92:da86:: with SMTP id u6mr2325722iln.265.1627696295747;
+        Fri, 30 Jul 2021 18:51:35 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id u16sm2047220iob.41.2021.07.30.18.51.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jul 2021 18:51:35 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 4EE3527C0054;
+        Fri, 30 Jul 2021 21:51:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 30 Jul 2021 21:51:34 -0400
+X-ME-Sender: <xms:pKwEYeRGRGDqRamBCEzxaEqzZDHBJXjIJnnKgi8BPamVFeeheScRiQ>
+    <xme:pKwEYTwj6a705TqrPFQeYLOj1w9CxSJT3PfUVgyPl0Fl3YC6CtTer2VGkWGz52h7d
+    T8mHiTcAXxOCZC9fg>
+X-ME-Received: <xmr:pKwEYb1AnGmMfU1AFbokw9vF_PrlskmJGVTx_0-pF7XFQfLXVCVmCWoQ4zc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrheeigdehtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
+    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvg
+X-ME-Proxy: <xmx:pKwEYaDK0DIwv0simMgsjeUmo3dUk0IwvkTRbMqZYxlW73PIzZsdSw>
+    <xmx:pKwEYXjKtQBUxJSIaFaNzLj0DjWFAEMygPwUF6VAdSLs2p5g5A8_WA>
+    <xmx:pKwEYWqh1djR_7Yh5l5pOU8mPaas-l_BX7Zs2CkBT2ZE-M9YrmoSNA>
+    <xmx:pawEYXj0EaWHgFf_p5A2IXrYC641YUSIzbs7C5n5vGsyEAyjCLxBvA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 30 Jul 2021 21:51:32 -0400 (EDT)
+Date:   Sat, 31 Jul 2021 09:51:05 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Hector Martin <marcan@marcan.st>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [Question] Alignment requirement for readX() and writeX()
+Message-ID: <YQSsiacvJHFKk3Cj@boqun-archlinux>
+References: <YQQr+twAYHk2jXs6@boqun-archlinux>
+ <CAK8P3a0w09Ga_OXAqhA0JcgR-LBc32a296dZhpTyPDwVSgaNkw@mail.gmail.com>
+ <YQQ3KAXrPN1CuglL@boqun-archlinux>
+ <CAK8P3a3_pgtUWrg-MpaVyVqhffeuvQECHCmSCLyudfSwuEcP_g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210728114822.1243-1-wangrui@loongson.cn> <20210729093923.GD21151@willie-the-truck>
- <CAHirt9hNxsHPVWPa+RpUC6av0tcHPESb4Pr20ovAixwNEh4hrQ@mail.gmail.com> <7574da60-fb71-dad2-b099-a815a0a18c22@redhat.com>
-In-Reply-To: <7574da60-fb71-dad2-b099-a815a0a18c22@redhat.com>
-From:   hev <r@hev.cc>
-Date:   Sat, 31 Jul 2021 09:46:35 +0800
-Message-ID: <CAHirt9jzXZbUc5bA6X_fHNNRAeTFWcykQyZk15Gnv1n5tUwCQw@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 1/5] locking/atomic: Implement atomic_fetch_and_or
-To:     Waiman Long <llong@redhat.com>
-Cc:     Will Deacon <will@kernel.org>, Rui Wang <wangrui@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a3_pgtUWrg-MpaVyVqhffeuvQECHCmSCLyudfSwuEcP_g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On Sat, Jul 31, 2021 at 2:40 AM Waiman Long <llong@redhat.com> wrote:
->
-> On 7/29/21 6:18 AM, hev wrote:
-> > Hi, Will,
+On Fri, Jul 30, 2021 at 10:24:53PM +0200, Arnd Bergmann wrote:
+> On Fri, Jul 30, 2021 at 7:31 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+> > On Fri, Jul 30, 2021 at 06:58:30PM +0200, Arnd Bergmann wrote:
 > >
-> > On Thu, Jul 29, 2021 at 5:39 PM Will Deacon <will@kernel.org> wrote:
-> >> On Wed, Jul 28, 2021 at 07:48:22PM +0800, Rui Wang wrote:
-> >>> From: wangrui <wangrui@loongson.cn>
-> >>>
-> >>> This patch introduce a new atomic primitive 'and_or', It may be have three
-> >>> types of implemeations:
-> >>>
-> >>>   * The generic implementation is based on arch_cmpxchg.
-> >>>   * The hardware supports atomic 'and_or' of single instruction.
-> >> Do any architectures actually support this instruction?
-> > No, I'm not sure now.
+> > If we want to check, I'd expect we do the checks inside
+> > readX()/writeX(), for example, readl() could be implemented as:
 > >
-> >> On arm64, we can clear arbitrary bits and we can set arbitrary bits, but we
-> >> can't combine the two in a fashion which provides atomicity and
-> >> forward-progress guarantees.
-> >>
-> >> Please can you explain how this new primitive will be used, in case there's
-> >> an alternative way of doing it which maps better to what CPUs can actually
-> >> do?
-> > I think we can easily exchange arbitrary bits of a machine word with atomic
-> > andnot_or/and_or. Otherwise, we can only use xchg8/16 to do it. It depends on
-> > hardware support, and the key point is that the bits to be exchanged
-> > must be in the
-> > same sub-word. qspinlock adjusted memory layout for this reason, and waste some
-> > bits(_Q_PENDING_BITS == 8).
->
-> It is not actually a waste of bits. With _Q_PENDING_BITS==8, more
-> optimized code can be used for pending bit processing. It is only in the
-> rare case that NR_CPUS >= 16k - 1 that we have to fall back to
-> _Q_PENDING_BITS==1. In fact, that should be the only condition that will
-> make _Q_PENDING_BITS=1.
+> >         #define readl(c)                                        \
+> >         ({                                                      \
+> >                 u32 __v;                                        \
+> >                                                                 \
+> >                 /* alignment checking */                        \
+> >                 BUG_ON(c & (sizeof(__v) - 1));                  \
+> >                 __v = readl_relaxed(c);                         \
+> >                 __iormb(__v);                                   \
+> >                 __v;                                            \
+> >         })
+> >
+> > It's a runtime check, so if anyone hates it I can understand ;-)
+> 
+> Right, I really don't think that adds any value, this just replaces one
+> oops message with a more different oops message, while adding
+> some overhead.
+> 
 
-Yes, you are right. The memory layout is adjusted so that
-locked/pending and tail do ont share bits, so normal store
-instructions can be used to clear_pending and
-clear_pending_set_locked. It's faster than atomic.
+Agreed. I wasn't planning to propose this kind of checks for C code.
+Just want to understand better on the alignment requirement of these
+APIs. Thanks  ;-)
 
 Regards,
-Rui
+Boqun
+
+>         Arnd
