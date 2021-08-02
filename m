@@ -2,495 +2,532 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A4A3DE0D4
+	by mail.lfdr.de (Postfix) with ESMTP id C9F2F3DE0D5
 	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 22:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbhHBUk5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Aug 2021 16:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S232173AbhHBUk6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Aug 2021 16:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbhHBUk5 (ORCPT
+        with ESMTP id S231324AbhHBUk5 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Aug 2021 16:40:57 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABA4C06175F;
-        Mon,  2 Aug 2021 13:40:46 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id c9so2636674wri.8;
-        Mon, 02 Aug 2021 13:40:46 -0700 (PDT)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F5EC061760;
+        Mon,  2 Aug 2021 13:40:47 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id m12so18117654wru.12;
+        Mon, 02 Aug 2021 13:40:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9f1fHUSofILygvSvwa5PdsUgTn//y3hRgWZ0Zx8U/sA=;
-        b=oXdGX3sLIo1n5nn9M8lV6pCqa9ac/Op4egIbuBkFTuQCvPq0AvgOfT25s+d19ZmVrA
-         n1LCt4A+fObUVa2llXyAEzFU/ntA1+mZgrY8ORU4WEknY9/uHgWP4T51Sdha5xp+PYJJ
-         IjFd/DjX1hdbt42QP929yQ8KPMG0qlNXBnfoefNy02xS68iS/IFanEmcPlztdfpdgUmi
-         Ia3iP96tWfG9DYfS9g4wcobBhipd1B8ZJO8m+U8WiU6rc+/M6NuIitl1TrteLpWdzqDl
-         5hrtTJQf/IOxZ6wjLloUPz2GhZ2+mbdGdf8chrYBSNm1til4wd2oHweJpgShU4Owc2/Z
-         dz1w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KjCJg2UUzg8jdkZ9RfnQCdEF0aZJIalKooxaKzsovWU=;
+        b=cfQMBiX2DZJNbW7KjlfBc+e6iqp9QNUAg2POQ4H7q7WRE2q43o2eIP66BXcEszkDGk
+         PNHTG+pK19N4UcWjTMW2q9l4+6j5V4Ev1y7Q412yG0IKUQLgzpUkN4mbXFPYiB5onaLy
+         6DL51WN0jINWuy5S61l9tdGtw1tn+i39iZKN+ThaLmMZpLws317+akVE8Ja0R7o0PleX
+         gHHVfalsHvjEhPJd+6t+/AYlWxe71Z54IQh4WSHhjeJYzhd9GSg4UvIPzFitWC5F6i0B
+         eeL36BCfIJ7N8KzeYoaT5y4+/VtsPIqERW0SMqbcGAWpymNyuLkkqZBmkZ+Ajk22MyJG
+         ojJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9f1fHUSofILygvSvwa5PdsUgTn//y3hRgWZ0Zx8U/sA=;
-        b=Zj9PMQzuwmoXnaep1tejvHKJ4yMKLfGHvCTAt56i8YJwlktdVuCLaq7lm2TmaLb5Rw
-         lFyIHmkGEj2aEhynDoobv4SkD/FZfv4Dd9eNFlqDhOAHhD7KKxd2K/QA77pD+bf7OK+S
-         WeZYzzdEM3z8KOtI6dSNdkEhHK/HMHomm8nQvy4bsfqMC49WaA2SqKUzrAOezldQnSSO
-         1v9LhWIdjsiQ6l27Xl7f+jBdJWzlRBrB9cPEwtMjpY1MNLr195FNt/tQ5EOJtBCvmJju
-         V0j+yrCNlPW3ugLqa/+s20i1uqvas+/ouKZqBEJ9N5Y6vx6mKArDstbZjjsugCbwkgqj
-         /hOw==
-X-Gm-Message-State: AOAM531KKOBp7PwWZF4xKfVA/eFhHgebDzwExSTktVDHeYJ9oCpeXweU
-        gYQJzXlRkpwKgK4HAxAQBw==
-X-Google-Smtp-Source: ABdhPJwWht/3f81dDDQWoFxv3NRvORggZPNpt9+UedqZAOUBQWGYbYBMsdNWp/q+GEal2I66IbQMOw==
-X-Received: by 2002:adf:f485:: with SMTP id l5mr18946093wro.8.1627936844886;
-        Mon, 02 Aug 2021 13:40:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KjCJg2UUzg8jdkZ9RfnQCdEF0aZJIalKooxaKzsovWU=;
+        b=YD1afwYJBShCvwRyRjDq3v1TnmfurkUd9mdv/XhMQ53nr4Im4G6biW9VzExh7qkI16
+         tZpnlz0jl6QmLbN1r6DGJs2ZUtncidZs7zf+7lxpzu2imd876CcI0h2hIscQUa5jqlCg
+         hwwIXkkBwAkE0W45WQEwAFcgXDqy7zuiNtP8hrdHVqmKBjlV5Isj428xuUOm0y8dqLF8
+         ktJlXe/SXyMyUtYXy8XBx3mc1ceDbm+KIhpyL9OwauYx9jcif4mpwvwj4FvOWnCcntQL
+         p2ih2vP21SYr8u5hStn2nZkI0lmMf1QHtTthYz0m0nauZlGEWz+gcHj9nr1z5M9R0OFF
+         q21g==
+X-Gm-Message-State: AOAM533vzSN5QQ/9duCqR0RofhyJ3b+4+GrKAprUPwvgbpaQcZOdb98P
+        dhPdVgnGX7bpwMO1P1RrDDdAw1MRkQ==
+X-Google-Smtp-Source: ABdhPJyR2apIDf2Z5ForU7OGEwDs52PGgOcv9oEe51RnMgJYAZy1t6LmnCV0lKYC7h8Iimu8zz+Hyw==
+X-Received: by 2002:adf:e6cf:: with SMTP id y15mr19112727wrm.217.1627936845773;
+        Mon, 02 Aug 2021 13:40:45 -0700 (PDT)
 Received: from localhost.localdomain ([46.53.249.181])
-        by smtp.gmail.com with ESMTPSA id v15sm11763604wmj.11.2021.08.02.13.40.44
+        by smtp.gmail.com with ESMTPSA id v15sm11763604wmj.11.2021.08.02.13.40.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Aug 2021 13:40:44 -0700 (PDT)
+        Mon, 02 Aug 2021 13:40:45 -0700 (PDT)
 From:   Alexey Dobriyan <adobriyan@gmail.com>
 To:     akpm@linux-foundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         masahiroy@kernel.org, Alexey Dobriyan <adobriyan@gmail.com>
-Subject: [PATCH v2 1/3] isystem: trim/fixup stdarg.h and other headers
-Date:   Mon,  2 Aug 2021 23:40:31 +0300
-Message-Id: <20210802204033.466861-1-adobriyan@gmail.com>
+Subject: [PATCH v2 2/3] isystem: ship and use stdarg.h
+Date:   Mon,  2 Aug 2021 23:40:32 +0300
+Message-Id: <20210802204033.466861-2-adobriyan@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210802204033.466861-1-adobriyan@gmail.com>
+References: <20210802204033.466861-1-adobriyan@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Delete/fixup few includes in anticipation of global -isystem compile
-option removal.
+Ship minimal stdarg.h (1 type, 4 macros) as <linux/stdarg.h>.
+stdarg.h is the only userspace header commonly used in the kernel.
 
-Note: crypto/aegis128-neon-inner.c keeps <stddef.h> due to redefinition
-of uintptr_t error (one definition comes from <stddef.h>, another from
-<linux/types.h>).
+GPL 2 version of <stdarg.h> can be extracted from
+http://archive.debian.org/debian/pool/main/g/gcc-4.2/gcc-4.2_4.2.4.orig.tar.gz
 
 Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
 ---
- arch/arm/kernel/process.c                                      | 2 --
- arch/arm/mach-bcm/bcm_kona_smc.c                               | 2 --
- arch/arm64/kernel/process.c                                    | 3 ---
- arch/openrisc/kernel/process.c                                 | 2 --
- arch/parisc/kernel/process.c                                   | 3 ---
- arch/powerpc/kernel/prom.c                                     | 1 -
- arch/sparc/kernel/process_32.c                                 | 3 ---
- arch/sparc/kernel/process_64.c                                 | 3 ---
- arch/um/drivers/rtc_user.c                                     | 1 +
- arch/um/drivers/vector_user.c                                  | 1 +
- arch/um/include/shared/irq_user.h                              | 1 -
- arch/um/include/shared/os.h                                    | 1 -
- arch/um/os-Linux/signal.c                                      | 2 +-
- arch/um/os-Linux/util.c                                        | 1 +
- drivers/block/xen-blkback/xenbus.c                             | 1 -
- drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h                | 1 -
- drivers/gpu/drm/msm/disp/msm_disp_snapshot.h                   | 1 -
- drivers/macintosh/macio-adb.c                                  | 1 -
- drivers/macintosh/via-macii.c                                  | 2 --
- drivers/net/wireless/intersil/orinoco/hermes.c                 | 1 -
- drivers/net/wwan/iosm/iosm_ipc_imem.h                          | 1 -
- drivers/pinctrl/aspeed/pinmux-aspeed.h                         | 1 -
- drivers/scsi/elx/efct/efct_driver.h                            | 1 -
- .../media/atomisp/pci/hive_isp_css_common/host/isp_local.h     | 2 --
- drivers/xen/xen-scsiback.c                                     | 2 --
- include/linux/filter.h                                         | 2 --
- include/linux/mISDNif.h                                        | 1 -
- kernel/debug/kdb/kdb_support.c                                 | 1 -
- sound/aoa/codecs/onyx.h                                        | 1 -
- sound/aoa/codecs/tas.c                                         | 1 -
- sound/core/info.c                                              | 1 -
- 31 files changed, 4 insertions(+), 43 deletions(-)
+ arch/parisc/kernel/firmware.c                         |  2 +-
+ arch/powerpc/kernel/prom_init.c                       |  2 +-
+ arch/powerpc/kernel/rtas.c                            |  2 +-
+ arch/powerpc/kernel/udbg.c                            |  2 +-
+ arch/s390/boot/pgm_check_info.c                       |  2 +-
+ arch/x86/boot/boot.h                                  |  2 +-
+ drivers/firmware/efi/libstub/efi-stub-helper.c        |  2 +-
+ drivers/firmware/efi/libstub/vsprintf.c               |  2 +-
+ drivers/gpu/drm/amd/display/dc/dc_helper.c            |  2 +-
+ drivers/gpu/drm/drm_print.c                           |  2 +-
+ drivers/isdn/capi/capiutil.c                          |  2 +-
+ drivers/macintosh/via-cuda.c                          |  2 +-
+ drivers/macintosh/via-pmu.c                           |  2 +-
+ .../atomisp/pci/hive_isp_css_include/print_support.h  |  2 +-
+ drivers/staging/media/atomisp/pci/ia_css_env.h        |  2 +-
+ .../pci/runtime/debug/interface/ia_css_debug.h        |  2 +-
+ drivers/staging/media/atomisp/pci/sh_css_internal.h   |  2 +-
+ fs/befs/debug.c                                       |  2 +-
+ fs/reiserfs/prints.c                                  |  2 +-
+ fs/ufs/super.c                                        |  2 +-
+ include/acpi/platform/acgcc.h                         |  2 +-
+ include/linux/kernel.h                                |  2 +-
+ include/linux/printk.h                                |  2 +-
+ include/linux/stdarg.h                                | 11 +++++++++++
+ include/linux/string.h                                |  2 +-
+ lib/debug_info.c                                      |  3 +--
+ lib/kasprintf.c                                       |  2 +-
+ lib/kunit/string-stream.h                             |  2 +-
+ lib/vsprintf.c                                        |  2 +-
+ mm/kfence/report.c                                    |  2 +-
+ net/batman-adv/log.c                                  |  2 +-
+ 31 files changed, 41 insertions(+), 31 deletions(-)
+ create mode 100644 include/linux/stdarg.h
 
-diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
-index fc9e8b37eaa8..bb5ad8a6a4c3 100644
---- a/arch/arm/kernel/process.c
-+++ b/arch/arm/kernel/process.c
-@@ -5,8 +5,6 @@
-  *  Copyright (C) 1996-2000 Russell King - Converted to ARM.
-  *  Original Copyright (C) 1995  Linus Torvalds
-  */
--#include <stdarg.h>
--
- #include <linux/export.h>
- #include <linux/sched.h>
- #include <linux/sched/debug.h>
-diff --git a/arch/arm/mach-bcm/bcm_kona_smc.c b/arch/arm/mach-bcm/bcm_kona_smc.c
-index 43a16f922b53..43829e49ad93 100644
---- a/arch/arm/mach-bcm/bcm_kona_smc.c
-+++ b/arch/arm/mach-bcm/bcm_kona_smc.c
-@@ -10,8 +10,6 @@
-  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  */
--
--#include <stdarg.h>
- #include <linux/smp.h>
- #include <linux/io.h>
- #include <linux/ioport.h>
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index c8989b999250..5f7ac9a0f9a3 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -6,9 +6,6 @@
-  * Copyright (C) 1996-2000 Russell King - Converted to ARM.
-  * Copyright (C) 2012 ARM Ltd.
-  */
--
--#include <stdarg.h>
--
- #include <linux/compat.h>
- #include <linux/efi.h>
- #include <linux/elf.h>
-diff --git a/arch/openrisc/kernel/process.c b/arch/openrisc/kernel/process.c
-index eb62429681fc..b0698d9ce14f 100644
---- a/arch/openrisc/kernel/process.c
-+++ b/arch/openrisc/kernel/process.c
-@@ -14,8 +14,6 @@
+diff --git a/arch/parisc/kernel/firmware.c b/arch/parisc/kernel/firmware.c
+index 665b70086685..7034227dbdf3 100644
+--- a/arch/parisc/kernel/firmware.c
++++ b/arch/parisc/kernel/firmware.c
+@@ -51,7 +51,7 @@
+  *					prumpf	991016	
   */
  
- #define __KERNEL_SYSCALLS__
 -#include <stdarg.h>
--
- #include <linux/errno.h>
- #include <linux/sched.h>
- #include <linux/sched/debug.h>
-diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
-index 184ec3c1eae4..38ec4ae81239 100644
---- a/arch/parisc/kernel/process.c
-+++ b/arch/parisc/kernel/process.c
-@@ -17,9 +17,6 @@
-  *    Copyright (C) 2001-2014 Helge Deller <deller@gmx.de>
-  *    Copyright (C) 2002 Randolph Chung <tausq with parisc-linux.org>
-  */
--
--#include <stdarg.h>
--
- #include <linux/elf.h>
- #include <linux/errno.h>
- #include <linux/kernel.h>
-diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-index f620e04dc9bf..a1e7ba0fad09 100644
---- a/arch/powerpc/kernel/prom.c
-+++ b/arch/powerpc/kernel/prom.c
-@@ -11,7 +11,6 @@
++#include <linux/stdarg.h>
  
- #undef DEBUG
+ #include <linux/delay.h>
+ #include <linux/init.h>
+diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
+index a5bf355ce1d6..10664633f7e3 100644
+--- a/arch/powerpc/kernel/prom_init.c
++++ b/arch/powerpc/kernel/prom_init.c
+@@ -14,7 +14,7 @@
+ /* we cannot use FORTIFY as it brings in new symbols */
+ #define __NO_FORTIFY
  
 -#include <stdarg.h>
++#include <linux/stdarg.h>
  #include <linux/kernel.h>
  #include <linux/string.h>
  #include <linux/init.h>
-diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_32.c
-index 93983d6d431d..bbbe0cfef746 100644
---- a/arch/sparc/kernel/process_32.c
-+++ b/arch/sparc/kernel/process_32.c
-@@ -8,9 +8,6 @@
- /*
-  * This file handles the architecture-dependent parts of process handling..
+diff --git a/arch/powerpc/kernel/rtas.c b/arch/powerpc/kernel/rtas.c
+index 99f2cce635fb..ff80bbad22a5 100644
+--- a/arch/powerpc/kernel/rtas.c
++++ b/arch/powerpc/kernel/rtas.c
+@@ -7,7 +7,7 @@
+  * Copyright (C) 2001 IBM.
   */
--
--#include <stdarg.h>
--
- #include <linux/elfcore.h>
- #include <linux/errno.h>
- #include <linux/module.h>
-diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_64.c
-index d33c58a58d4f..0cabcdfb23fd 100644
---- a/arch/sparc/kernel/process_64.c
-+++ b/arch/sparc/kernel/process_64.c
-@@ -9,9 +9,6 @@
- /*
-  * This file handles the architecture-dependent parts of process handling..
-  */
--
--#include <stdarg.h>
--
- #include <linux/errno.h>
- #include <linux/export.h>
- #include <linux/sched.h>
-diff --git a/arch/um/drivers/rtc_user.c b/arch/um/drivers/rtc_user.c
-index 4016bc1d577e..7c3cec4c68cf 100644
---- a/arch/um/drivers/rtc_user.c
-+++ b/arch/um/drivers/rtc_user.c
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2020 Intel Corporation
-  * Author: Johannes Berg <johannes@sipsolutions.net>
-  */
-+#include <stdbool.h>
- #include <os.h>
- #include <errno.h>
- #include <sched.h>
-diff --git a/arch/um/drivers/vector_user.c b/arch/um/drivers/vector_user.c
-index bae53220ce26..e4ffeb9a1fa4 100644
---- a/arch/um/drivers/vector_user.c
-+++ b/arch/um/drivers/vector_user.c
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2001 - 2007 Jeff Dike (jdike@{addtoit,linux.intel}.com)
-  */
- 
-+#include <stdbool.h>
- #include <stdio.h>
- #include <unistd.h>
- #include <stdarg.h>
-diff --git a/arch/um/include/shared/irq_user.h b/arch/um/include/shared/irq_user.h
-index 065829f443ae..86a8a573b65c 100644
---- a/arch/um/include/shared/irq_user.h
-+++ b/arch/um/include/shared/irq_user.h
-@@ -7,7 +7,6 @@
- #define __IRQ_USER_H__
- 
- #include <sysdep/ptrace.h>
--#include <stdbool.h>
- 
- enum um_irq_type {
- 	IRQ_READ,
-diff --git a/arch/um/include/shared/os.h b/arch/um/include/shared/os.h
-index 60b84edc8a68..96d400387c93 100644
---- a/arch/um/include/shared/os.h
-+++ b/arch/um/include/shared/os.h
-@@ -8,7 +8,6 @@
- #ifndef __OS_H__
- #define __OS_H__
  
 -#include <stdarg.h>
- #include <irq_user.h>
- #include <longjmp.h>
- #include <mm_id.h>
-diff --git a/arch/um/os-Linux/signal.c b/arch/um/os-Linux/signal.c
-index 6de99bb16113..6cf098c23a39 100644
---- a/arch/um/os-Linux/signal.c
-+++ b/arch/um/os-Linux/signal.c
-@@ -67,7 +67,7 @@ int signals_enabled;
- #ifdef UML_CONFIG_UML_TIME_TRAVEL_SUPPORT
- static int signals_blocked;
- #else
--#define signals_blocked false
-+#define signals_blocked 0
- #endif
- static unsigned int signals_pending;
- static unsigned int signals_active = 0;
-diff --git a/arch/um/os-Linux/util.c b/arch/um/os-Linux/util.c
-index 07327425d06e..41297ec404bf 100644
---- a/arch/um/os-Linux/util.c
-+++ b/arch/um/os-Linux/util.c
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2000 - 2007 Jeff Dike (jdike@{addtoit,linux.intel}.com)
-  */
- 
-+#include <stdarg.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <unistd.h>
-diff --git a/drivers/block/xen-blkback/xenbus.c b/drivers/block/xen-blkback/xenbus.c
-index 125b22205d38..33eba3df4dd9 100644
---- a/drivers/block/xen-blkback/xenbus.c
-+++ b/drivers/block/xen-blkback/xenbus.c
-@@ -8,7 +8,6 @@
- 
- #define pr_fmt(fmt) "xen-blkback: " fmt
- 
--#include <stdarg.h>
- #include <linux/module.h>
- #include <linux/kthread.h>
- #include <xen/events.h>
-diff --git a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-index 7c4734f905d9..68fd451aca23 100644
---- a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-+++ b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-@@ -39,7 +39,6 @@
++#include <linux/stdarg.h>
+ #include <linux/kernel.h>
  #include <linux/types.h>
+ #include <linux/spinlock.h>
+diff --git a/arch/powerpc/kernel/udbg.c b/arch/powerpc/kernel/udbg.c
+index 01595e8cafe7..b1544b2f6321 100644
+--- a/arch/powerpc/kernel/udbg.c
++++ b/arch/powerpc/kernel/udbg.c
+@@ -5,7 +5,7 @@
+  * c 2001 PPC 64 Team, IBM Corp
+  */
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #include <linux/types.h>
+ #include <linux/sched.h>
+ #include <linux/console.h>
+diff --git a/arch/s390/boot/pgm_check_info.c b/arch/s390/boot/pgm_check_info.c
+index 3a46abed2549..b7d8dd88bbf2 100644
+--- a/arch/s390/boot/pgm_check_info.c
++++ b/arch/s390/boot/pgm_check_info.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/kernel.h>
++#include <linux/stdarg.h>
  #include <linux/string.h>
+ #include <linux/ctype.h>
+ #include <asm/stacktrace.h>
+@@ -8,7 +9,6 @@
+ #include <asm/setup.h>
+ #include <asm/sclp.h>
+ #include <asm/uv.h>
+-#include <stdarg.h>
+ #include "boot.h"
+ 
+ const char hex_asc[] = "0123456789abcdef";
+diff --git a/arch/x86/boot/boot.h b/arch/x86/boot/boot.h
+index ca866f1cca2e..34c9dbb6a47d 100644
+--- a/arch/x86/boot/boot.h
++++ b/arch/x86/boot/boot.h
+@@ -18,7 +18,7 @@
+ 
+ #ifndef __ASSEMBLY__
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #include <linux/types.h>
+ #include <linux/edd.h>
+ #include <asm/setup.h>
+diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
+index ae87dded989d..d489bdc645fe 100644
+--- a/drivers/firmware/efi/libstub/efi-stub-helper.c
++++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
+@@ -7,7 +7,7 @@
+  * Copyright 2011 Intel Corporation; author Matt Fleming
+  */
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ #include <linux/ctype.h>
+ #include <linux/efi.h>
+diff --git a/drivers/firmware/efi/libstub/vsprintf.c b/drivers/firmware/efi/libstub/vsprintf.c
+index 1088e288c04d..71c71c222346 100644
+--- a/drivers/firmware/efi/libstub/vsprintf.c
++++ b/drivers/firmware/efi/libstub/vsprintf.c
+@@ -10,7 +10,7 @@
+  * Oh, it's a waste of space, but oh-so-yummy for debugging.
+  */
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ #include <linux/compiler.h>
+ #include <linux/ctype.h>
+diff --git a/drivers/gpu/drm/amd/display/dc/dc_helper.c b/drivers/gpu/drm/amd/display/dc/dc_helper.c
+index a612ba6dc389..ab6bc5d79012 100644
+--- a/drivers/gpu/drm/amd/display/dc/dc_helper.c
++++ b/drivers/gpu/drm/amd/display/dc/dc_helper.c
+@@ -28,9 +28,9 @@
+  */
+ 
  #include <linux/delay.h>
++#include <linux/stdarg.h>
+ 
+ #include "dm_services.h"
 -#include <stdarg.h>
  
- #include "atomfirmware.h"
+ #include "dc.h"
+ #include "dc_dmub_srv.h"
+diff --git a/drivers/gpu/drm/drm_print.c b/drivers/gpu/drm/drm_print.c
+index 111b932cf2a9..f783d4963d4b 100644
+--- a/drivers/gpu/drm/drm_print.c
++++ b/drivers/gpu/drm/drm_print.c
+@@ -25,7 +25,7 @@
  
-diff --git a/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h b/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
-index c92a9508c8d3..0f9a5364cd86 100644
---- a/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
-+++ b/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
-@@ -25,7 +25,6 @@
- #include <linux/pm_runtime.h>
- #include <linux/kthread.h>
- #include <linux/devcoredump.h>
+ #define DEBUG /* for pr_debug() */
+ 
 -#include <stdarg.h>
- #include "msm_kms.h"
++#include <linux/stdarg.h>
  
- #define MSM_DISP_SNAPSHOT_MAX_BLKS		10
-diff --git a/drivers/macintosh/macio-adb.c b/drivers/macintosh/macio-adb.c
-index d4759db002c6..dc634c2932fd 100644
---- a/drivers/macintosh/macio-adb.c
-+++ b/drivers/macintosh/macio-adb.c
-@@ -2,7 +2,6 @@
- /*
-  * Driver for the ADB controller in the Mac I/O (Hydra) chip.
+ #include <linux/io.h>
+ #include <linux/moduleparam.h>
+diff --git a/drivers/isdn/capi/capiutil.c b/drivers/isdn/capi/capiutil.c
+index f26bf3c66d7e..d7ae42edc4a8 100644
+--- a/drivers/isdn/capi/capiutil.c
++++ b/drivers/isdn/capi/capiutil.c
+@@ -379,7 +379,7 @@ static char *pnames[] =
+ 	/*2f */ "Useruserdata"
+ };
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ /*-------------------------------------------------------*/
+ static _cdebbuf *bufprint(_cdebbuf *cdb, char *fmt, ...)
+diff --git a/drivers/macintosh/via-cuda.c b/drivers/macintosh/via-cuda.c
+index 3581abfb0c6a..cd267392289c 100644
+--- a/drivers/macintosh/via-cuda.c
++++ b/drivers/macintosh/via-cuda.c
+@@ -9,7 +9,7 @@
+  *
+  * Copyright (C) 1996 Paul Mackerras.
   */
 -#include <stdarg.h>
++#include <linux/stdarg.h>
  #include <linux/types.h>
  #include <linux/errno.h>
  #include <linux/kernel.h>
-diff --git a/drivers/macintosh/via-macii.c b/drivers/macintosh/via-macii.c
-index 060e03f2264b..db9270da5b8e 100644
---- a/drivers/macintosh/via-macii.c
-+++ b/drivers/macintosh/via-macii.c
-@@ -23,8 +23,6 @@
-  * Apple's "ADB Analyzer" bus sniffer is invaluable:
-  *   ftp://ftp.apple.com/developer/Tool_Chest/Devices_-_Hardware/Apple_Desktop_Bus/
-  */
--
--#include <stdarg.h>
- #include <linux/types.h>
- #include <linux/errno.h>
- #include <linux/kernel.h>
-diff --git a/drivers/net/wireless/intersil/orinoco/hermes.c b/drivers/net/wireless/intersil/orinoco/hermes.c
-index 6d4b7f64efcf..256946552742 100644
---- a/drivers/net/wireless/intersil/orinoco/hermes.c
-+++ b/drivers/net/wireless/intersil/orinoco/hermes.c
-@@ -79,7 +79,6 @@
- 
- #undef HERMES_DEBUG
- #ifdef HERMES_DEBUG
--#include <stdarg.h>
- 
- #define DEBUG(lvl, stuff...) if ((lvl) <= HERMES_DEBUG) DMSG(stuff)
- 
-diff --git a/drivers/net/wwan/iosm/iosm_ipc_imem.h b/drivers/net/wwan/iosm/iosm_ipc_imem.h
-index 0d2f10e4cbc8..dc65b0712261 100644
---- a/drivers/net/wwan/iosm/iosm_ipc_imem.h
-+++ b/drivers/net/wwan/iosm/iosm_ipc_imem.h
-@@ -7,7 +7,6 @@
- #define IOSM_IPC_IMEM_H
- 
- #include <linux/skbuff.h>
--#include <stdbool.h>
- 
- #include "iosm_ipc_mmio.h"
- #include "iosm_ipc_pcie.h"
-diff --git a/drivers/pinctrl/aspeed/pinmux-aspeed.h b/drivers/pinctrl/aspeed/pinmux-aspeed.h
-index b69ba6b360a2..4d7548686f39 100644
---- a/drivers/pinctrl/aspeed/pinmux-aspeed.h
-+++ b/drivers/pinctrl/aspeed/pinmux-aspeed.h
-@@ -5,7 +5,6 @@
- #define ASPEED_PINMUX_H
- 
- #include <linux/regmap.h>
--#include <stdbool.h>
- 
- /*
-  * The ASPEED SoCs provide typically more than 200 pins for GPIO and other
-diff --git a/drivers/scsi/elx/efct/efct_driver.h b/drivers/scsi/elx/efct/efct_driver.h
-index dab8eac4f243..0e3c931db7c2 100644
---- a/drivers/scsi/elx/efct/efct_driver.h
-+++ b/drivers/scsi/elx/efct/efct_driver.h
-@@ -10,7 +10,6 @@
- /***************************************************************************
-  * OS specific includes
+diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
+index 4bdd4c45e7a7..4b98bc26a94b 100644
+--- a/drivers/macintosh/via-pmu.c
++++ b/drivers/macintosh/via-pmu.c
+@@ -18,7 +18,7 @@
+  *    a sleep or a freq. switch
+  *
   */
 -#include <stdarg.h>
- #include <linux/module.h>
- #include <linux/debugfs.h>
- #include <linux/firmware.h>
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h
-index eceeb5d160ad..4dbec4063b3d 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h
-@@ -16,8 +16,6 @@
- #ifndef __ISP_LOCAL_H_INCLUDED__
- #define __ISP_LOCAL_H_INCLUDED__
- 
--#include <stdbool.h>
--
- #include "isp_global.h"
- 
- #include <isp2400_support.h>
-diff --git a/drivers/xen/xen-scsiback.c b/drivers/xen/xen-scsiback.c
-index 61ce0d142eea..0c5e565aa8cf 100644
---- a/drivers/xen/xen-scsiback.c
-+++ b/drivers/xen/xen-scsiback.c
-@@ -33,8 +33,6 @@
- 
- #define pr_fmt(fmt) "xen-pvscsi: " fmt
- 
--#include <stdarg.h>
--
- #include <linux/module.h>
- #include <linux/utsname.h>
- #include <linux/interrupt.h>
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 472f97074da0..45785fc231a8 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -5,8 +5,6 @@
- #ifndef __LINUX_FILTER_H__
- #define __LINUX_FILTER_H__
- 
--#include <stdarg.h>
--
- #include <linux/atomic.h>
- #include <linux/refcount.h>
- #include <linux/compat.h>
-diff --git a/include/linux/mISDNif.h b/include/linux/mISDNif.h
-index a7330eb3ec64..7dd1f01ec4f9 100644
---- a/include/linux/mISDNif.h
-+++ b/include/linux/mISDNif.h
-@@ -18,7 +18,6 @@
- #ifndef mISDNIF_H
- #define mISDNIF_H
- 
--#include <stdarg.h>
- #include <linux/types.h>
- #include <linux/errno.h>
- #include <linux/socket.h>
-diff --git a/kernel/debug/kdb/kdb_support.c b/kernel/debug/kdb/kdb_support.c
-index 9f50d22d68e6..4f9950678e7b 100644
---- a/kernel/debug/kdb/kdb_support.c
-+++ b/kernel/debug/kdb/kdb_support.c
-@@ -10,7 +10,6 @@
-  * 03/02/13    added new 2.5 kallsyms <xavier.bru@bull.net>
-  */
- 
--#include <stdarg.h>
- #include <linux/types.h>
- #include <linux/sched.h>
- #include <linux/mm.h>
-diff --git a/sound/aoa/codecs/onyx.h b/sound/aoa/codecs/onyx.h
-index 8a32c3c3d716..6c31b7373b78 100644
---- a/sound/aoa/codecs/onyx.h
-+++ b/sound/aoa/codecs/onyx.h
-@@ -6,7 +6,6 @@
-  */
- #ifndef __SND_AOA_CODEC_ONYX_H
- #define __SND_AOA_CODEC_ONYX_H
--#include <stddef.h>
- #include <linux/i2c.h>
- #include <asm/pmac_low_i2c.h>
- #include <asm/prom.h>
-diff --git a/sound/aoa/codecs/tas.c b/sound/aoa/codecs/tas.c
-index ac246dd3ab49..ab19a37e2a68 100644
---- a/sound/aoa/codecs/tas.c
-+++ b/sound/aoa/codecs/tas.c
-@@ -58,7 +58,6 @@
-  *    and up to the hardware designer to not wire
-  *    them up in some weird unusable way.
-  */
--#include <stddef.h>
- #include <linux/i2c.h>
- #include <asm/pmac_low_i2c.h>
- #include <asm/prom.h>
-diff --git a/sound/core/info.c b/sound/core/info.c
-index 9fec3070f8ba..a451b24199c3 100644
---- a/sound/core/info.c
-+++ b/sound/core/info.c
-@@ -16,7 +16,6 @@
- #include <linux/utsname.h>
- #include <linux/proc_fs.h>
++#include <linux/stdarg.h>
  #include <linux/mutex.h>
--#include <stdarg.h>
+ #include <linux/types.h>
+ #include <linux/errno.h>
+diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h b/drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h
+index 540b405cc0f7..a3c7f3de6d17 100644
+--- a/drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h
++++ b/drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h
+@@ -16,7 +16,7 @@
+ #ifndef __PRINT_SUPPORT_H_INCLUDED__
+ #define __PRINT_SUPPORT_H_INCLUDED__
  
- int snd_info_check_reserved_words(const char *str)
- {
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ extern int (*sh_css_printf)(const char *fmt, va_list args);
+ /* depends on host supplied print function in ia_css_init() */
+diff --git a/drivers/staging/media/atomisp/pci/ia_css_env.h b/drivers/staging/media/atomisp/pci/ia_css_env.h
+index 6b38723b27cd..3b89bbd837a0 100644
+--- a/drivers/staging/media/atomisp/pci/ia_css_env.h
++++ b/drivers/staging/media/atomisp/pci/ia_css_env.h
+@@ -17,7 +17,7 @@
+ #define __IA_CSS_ENV_H
+ 
+ #include <type_support.h>
+-#include <stdarg.h> /* va_list */
++#include <linux/stdarg.h> /* va_list */
+ #include "ia_css_types.h"
+ #include "ia_css_acc_types.h"
+ 
+diff --git a/drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h b/drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h
+index 5e6e7447ae00..e37ef4232c55 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h
++++ b/drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h
+@@ -19,7 +19,7 @@
+ /*! \file */
+ 
+ #include <type_support.h>
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #include "ia_css_types.h"
+ #include "ia_css_binary.h"
+ #include "ia_css_frame_public.h"
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_internal.h b/drivers/staging/media/atomisp/pci/sh_css_internal.h
+index 3c669ec79b68..496faa7297a5 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_internal.h
++++ b/drivers/staging/media/atomisp/pci/sh_css_internal.h
+@@ -20,7 +20,7 @@
+ #include <math_support.h>
+ #include <type_support.h>
+ #include <platform_support.h>
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ #if !defined(ISP2401)
+ #include "input_formatter.h"
+diff --git a/fs/befs/debug.c b/fs/befs/debug.c
+index eb7bd6c692c7..02fa66fb82c2 100644
+--- a/fs/befs/debug.c
++++ b/fs/befs/debug.c
+@@ -14,7 +14,7 @@
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ #ifdef __KERNEL__
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #include <linux/string.h>
+ #include <linux/spinlock.h>
+ #include <linux/kernel.h>
+diff --git a/fs/reiserfs/prints.c b/fs/reiserfs/prints.c
+index 500f2000eb41..30319dc33c18 100644
+--- a/fs/reiserfs/prints.c
++++ b/fs/reiserfs/prints.c
+@@ -8,7 +8,7 @@
+ #include <linux/string.h>
+ #include <linux/buffer_head.h>
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ static char error_buf[1024];
+ static char fmt_buf[1024];
+diff --git a/fs/ufs/super.c b/fs/ufs/super.c
+index 74028b5a7b0a..00a01471ea05 100644
+--- a/fs/ufs/super.c
++++ b/fs/ufs/super.c
+@@ -70,7 +70,7 @@
+ #include <linux/module.h>
+ #include <linux/bitops.h>
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ #include <linux/uaccess.h>
+ 
+diff --git a/include/acpi/platform/acgcc.h b/include/acpi/platform/acgcc.h
+index f6656be81760..fb172a03a753 100644
+--- a/include/acpi/platform/acgcc.h
++++ b/include/acpi/platform/acgcc.h
+@@ -22,7 +22,7 @@ typedef __builtin_va_list va_list;
+ #define va_arg(v, l)            __builtin_va_arg(v, l)
+ #define va_copy(d, s)           __builtin_va_copy(d, s)
+ #else
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #endif
+ #endif
+ 
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index 1b2f0a7e00d6..2776423a587e 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -2,7 +2,7 @@
+ #ifndef _LINUX_KERNEL_H
+ #define _LINUX_KERNEL_H
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #include <linux/align.h>
+ #include <linux/limits.h>
+ #include <linux/linkage.h>
+diff --git a/include/linux/printk.h b/include/linux/printk.h
+index e834d78f0478..9f3f29ea348e 100644
+--- a/include/linux/printk.h
++++ b/include/linux/printk.h
+@@ -2,7 +2,7 @@
+ #ifndef __KERNEL_PRINTK__
+ #define __KERNEL_PRINTK__
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #include <linux/init.h>
+ #include <linux/kern_levels.h>
+ #include <linux/linkage.h>
+diff --git a/include/linux/stdarg.h b/include/linux/stdarg.h
+new file mode 100644
+index 000000000000..c8dc7f4f390c
+--- /dev/null
++++ b/include/linux/stdarg.h
+@@ -0,0 +1,11 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++#ifndef _LINUX_STDARG_H
++#define _LINUX_STDARG_H
++
++typedef __builtin_va_list va_list;
++#define va_start(v, l)	__builtin_va_start(v, l)
++#define va_end(v)	__builtin_va_end(v)
++#define va_arg(v, T)	__builtin_va_arg(v, T)
++#define va_copy(d, s)	__builtin_va_copy(d, s)
++
++#endif
+diff --git a/include/linux/string.h b/include/linux/string.h
+index b48d2d28e0b1..5e96d656be7a 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -6,7 +6,7 @@
+ #include <linux/types.h>	/* for size_t */
+ #include <linux/stddef.h>	/* for NULL */
+ #include <linux/errno.h>	/* for E2BIG */
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #include <uapi/linux/string.h>
+ 
+ extern char *strndup_user(const char __user *, long);
+diff --git a/lib/debug_info.c b/lib/debug_info.c
+index 36daf753293c..cc4723c74af5 100644
+--- a/lib/debug_info.c
++++ b/lib/debug_info.c
+@@ -5,8 +5,6 @@
+  * CONFIG_DEBUG_INFO_REDUCED. Please do not add actual code. However,
+  * adding appropriate #includes is fine.
+  */
+-#include <stdarg.h>
+-
+ #include <linux/cred.h>
+ #include <linux/crypto.h>
+ #include <linux/dcache.h>
+@@ -22,6 +20,7 @@
+ #include <linux/net.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
++#include <linux/stdarg.h>
+ #include <linux/types.h>
+ #include <net/addrconf.h>
+ #include <net/sock.h>
+diff --git a/lib/kasprintf.c b/lib/kasprintf.c
+index bacf7b83ccf0..cd2f5974ed98 100644
+--- a/lib/kasprintf.c
++++ b/lib/kasprintf.c
+@@ -5,7 +5,7 @@
+  *  Copyright (C) 1991, 1992  Linus Torvalds
+  */
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #include <linux/export.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
+diff --git a/lib/kunit/string-stream.h b/lib/kunit/string-stream.h
+index 5e94b623454f..43f9508a55b4 100644
+--- a/lib/kunit/string-stream.h
++++ b/lib/kunit/string-stream.h
+@@ -11,7 +11,7 @@
+ 
+ #include <linux/spinlock.h>
+ #include <linux/types.h>
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ struct string_stream_fragment {
+ 	struct kunit *test;
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 26c83943748a..3bcb7be03f93 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -17,7 +17,7 @@
+  * - scnprintf and vscnprintf
+  */
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ #include <linux/build_bug.h>
+ #include <linux/clk.h>
+ #include <linux/clk-provider.h>
+diff --git a/mm/kfence/report.c b/mm/kfence/report.c
+index 2a319c21c939..4b891dd75650 100644
+--- a/mm/kfence/report.c
++++ b/mm/kfence/report.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2020, Google LLC.
+  */
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ #include <linux/kernel.h>
+ #include <linux/lockdep.h>
+diff --git a/net/batman-adv/log.c b/net/batman-adv/log.c
+index f0e5d1429662..7a93a1e94c40 100644
+--- a/net/batman-adv/log.c
++++ b/net/batman-adv/log.c
+@@ -7,7 +7,7 @@
+ #include "log.h"
+ #include "main.h"
+ 
+-#include <stdarg.h>
++#include <linux/stdarg.h>
+ 
+ #include "trace.h"
+ 
 -- 
 2.31.1
 
