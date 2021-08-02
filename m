@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F32CB3DD627
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 14:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5658F3DD63B
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 14:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbhHBM6m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Aug 2021 08:58:42 -0400
-Received: from 8bytes.org ([81.169.241.247]:52982 "EHLO theia.8bytes.org"
+        id S233781AbhHBM7z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Aug 2021 08:59:55 -0400
+Received: from 8bytes.org ([81.169.241.247]:53006 "EHLO theia.8bytes.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232629AbhHBM6m (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 2 Aug 2021 08:58:42 -0400
+        id S233718AbhHBM7y (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 2 Aug 2021 08:59:54 -0400
 Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 9AD29379; Mon,  2 Aug 2021 14:58:30 +0200 (CEST)
-Date:   Mon, 2 Aug 2021 14:58:26 +0200
+        id D9F01379; Mon,  2 Aug 2021 14:59:43 +0200 (CEST)
+Date:   Mon, 2 Aug 2021 14:59:42 +0200
 From:   Joerg Roedel <joro@8bytes.org>
 To:     Tianyu Lan <ltykernel@gmail.com>
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
@@ -37,62 +37,25 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         netdev@vger.kernel.org, vkuznets@redhat.com, anparri@microsoft.com
-Subject: Re: [PATCH 07/13] HV/Vmbus: Add SNP support for VMbus channel
- initiate message
-Message-ID: <YQfr8lsaghth8Zix@8bytes.org>
+Subject: Re: [PATCH 04/13] HV: Mark vmbus ring buffer visible to host in
+ Isolation VM
+Message-ID: <YQfsPv1WC7dnHGDu@8bytes.org>
 References: <20210728145232.285861-1-ltykernel@gmail.com>
- <20210728145232.285861-8-ltykernel@gmail.com>
+ <20210728145232.285861-5-ltykernel@gmail.com>
+ <YQfgH04t2SqacnHn@8bytes.org>
+ <173823d1-280c-d34e-be2c-157b55bb6bc3@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210728145232.285861-8-ltykernel@gmail.com>
+In-Reply-To: <173823d1-280c-d34e-be2c-157b55bb6bc3@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 10:52:22AM -0400, Tianyu Lan wrote:
-> +	if (hv_is_isolation_supported()) {
-> +		vmbus_connection.monitor_pages_va[0]
-> +			= vmbus_connection.monitor_pages[0];
-> +		vmbus_connection.monitor_pages[0]
-> +			= memremap(msg->monitor_page1, HV_HYP_PAGE_SIZE,
-> +				   MEMREMAP_WB);
-> +		if (!vmbus_connection.monitor_pages[0])
-> +			return -ENOMEM;
-> +
-> +		vmbus_connection.monitor_pages_va[1]
-> +			= vmbus_connection.monitor_pages[1];
-> +		vmbus_connection.monitor_pages[1]
-> +			= memremap(msg->monitor_page2, HV_HYP_PAGE_SIZE,
-> +				   MEMREMAP_WB);
-> +		if (!vmbus_connection.monitor_pages[1]) {
-> +			memunmap(vmbus_connection.monitor_pages[0]);
-> +			return -ENOMEM;
-> +		}
-> +
-> +		memset(vmbus_connection.monitor_pages[0], 0x00,
-> +		       HV_HYP_PAGE_SIZE);
-> +		memset(vmbus_connection.monitor_pages[1], 0x00,
-> +		       HV_HYP_PAGE_SIZE);
-> +	}
+On Mon, Aug 02, 2021 at 08:56:29PM +0800, Tianyu Lan wrote:
+> Both second and third are HV_GPADL_RING type. One is send ring and the
+> other is receive ring. The driver keeps the order to allocate rx and
+> tx buffer. You are right this is not robust and will add a mutex to keep
+> the order.
 
-Okay, let me see if I got this right. In Hyper-V Isolation VMs, when the
-guest wants to make memory shared, it does":
-
-	- Call to the Hypervisor the mark the pages shared. The
-	  Hypervisor will do the RMP update and remap the pages at
-	  (VTOM + pa)
-
-	- The guest maps the memory again into its page-table, so that
-	  the entries point to the correct GPA (which is above VTOM
-	  now).
-
-Or in other words, Hyper-V implements a hardware-independent and
-configurable c-bit position, as the VTOM value is always power-of-two
-aligned. Is that correct?
-This would at least explain why there is no separate
-allocation/dealloction of memory for the shared range.
-
-Thanks,
-
-	Joerg
+Or you introduce fixed indexes for the RX and TX buffers?
