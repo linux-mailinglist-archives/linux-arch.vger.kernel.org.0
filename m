@@ -2,254 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D53B83DD6A9
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 15:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65143DD6C9
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 15:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233823AbhHBNLy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Aug 2021 09:11:54 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:41816 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233718AbhHBNLx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Aug 2021 09:11:53 -0400
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0C75D20071;
-        Mon,  2 Aug 2021 13:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1627909903; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kVvvMCaLfdL2noqwE76KqdfFlSHXOIph1g9v34D8x+s=;
-        b=cw9HNxQCps1p9/pLB+uDVVATN7RFCb5I6kTIQzdKJ4CguG6NQOFJd1o5YXN8dRLnwS+jID
-        ofBLXI+VwMFePO+2J1bm+YNoxs9+J0PMx4EKeyRBaAYwFz6e4HrybCf3/lI7E51czWMXVO
-        zejo4/+kjvj/Zv+LizOLxE7k9ftT0+E=
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id AB1A113983;
-        Mon,  2 Aug 2021 13:11:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id lsiEKA3vB2EKYQAAGKfGzw
-        (envelope-from <jgross@suse.com>); Mon, 02 Aug 2021 13:11:41 +0000
-Subject: Re: [PATCH 03/13] x86/HV: Add new hvcall guest address host
- visibility support
-To:     Joerg Roedel <joro@8bytes.org>, Dave Hansen <dave.hansen@intel.com>
-Cc:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        id S233686AbhHBNSp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Aug 2021 09:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233621AbhHBNSp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Aug 2021 09:18:45 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE61C06175F;
+        Mon,  2 Aug 2021 06:18:34 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id k2so2014040plk.13;
+        Mon, 02 Aug 2021 06:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NCI3lHDyDwNRa9nHRAWUMeIv6E94OBk/ArQgKFFM5dk=;
+        b=PML2k1Dht8uODKlH3PjAFdc6s/CTDMJQb0vSXp+tWKBkOZKDTm+GB/eR8aVXQ70FAX
+         jEcnBX+WXP5rLcq4W5X5HFrW9hJ51Vmvgvy8hGNIdNIWJPbXr/Z0woDD3x3PwhBautYj
+         f/s264QOiroQXi9rnewmDedviFD+3T3gC4ei7Z5FsKr/y65Ls/dYfdoaKAM+Ec2wHvVd
+         aA36ny4fOTLJxiB1mC/JAk1BfVfacZyAbJGrI98dEdqVsjhB5uZtuVM6yydcCZZA8s9D
+         eyWMrETGzJOpt/w2FVnHDuzrREi+J5sEiaxqqYpsUx4zqF5/iQRjwnI3UJJpHaysMi13
+         lAfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NCI3lHDyDwNRa9nHRAWUMeIv6E94OBk/ArQgKFFM5dk=;
+        b=khpHzfdb9tFSzqyN0wiW5r4TqwVMhp2UUlSP/aVzzTwFp5M3PTr+4Mz+visrQkvPQS
+         TQO+X45KPzP8NnmaRUw3n8xHw8pvEo0sCPHWZ6eixqIdSeXnuDD1EVVBKl6zwi9C0sSn
+         N71ZpMrkNueSj7AVFI42RQf9AlyrMNdfhtQcLtLyyxes9baPlo1Ctb9jJ2hBCkyWgVvk
+         MCBr88ZhSEPQ6N7MTUVhOEsSQAujk1Vd5m5Vb2QjcQrUH/K1s5vG965mOrHT/BV7gCQM
+         kpVahJwmwY6bpf1b5ZlarLPEx/e77pWavTvA2nT3GeNxAb54M57xjuev2N3iCG+CCnQi
+         utnw==
+X-Gm-Message-State: AOAM533mFDFVR8VbjYD4p5efbmsQMovwecA9fHQaED3gQ9aMZdLJkLd9
+        6YMPVNhnCAW7Vk/pQ8llkk0=
+X-Google-Smtp-Source: ABdhPJzFSB7pHIeqEWjNLoxbHlaMRkkWu5nfzAixwCVuwFPeXy4oAXbwBpyGfDBS8UB6XOVjOVOqpg==
+X-Received: by 2002:a62:5587:0:b029:3af:776c:2d02 with SMTP id j129-20020a6255870000b02903af776c2d02mr16019093pfb.11.1627910314492;
+        Mon, 02 Aug 2021 06:18:34 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
+        by smtp.gmail.com with ESMTPSA id e13sm12540053pfd.11.2021.08.02.06.18.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Aug 2021 06:18:32 -0700 (PDT)
+Subject: Re: [PATCH 05/13] HV: Add Write/Read MSR registers via ghcb page
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
         dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
         konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
-        sstabellini@kernel.org, will@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        arnd@arndb.de, hch@lst.de, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, thomas.lendacky@amd.com,
-        brijesh.singh@amd.com, ardb@kernel.org, Tianyu.Lan@microsoft.com,
-        rientjes@google.com, martin.b.radev@gmail.com,
-        akpm@linux-foundation.org, rppt@kernel.org,
-        kirill.shutemov@linux.intel.com, aneesh.kumar@linux.ibm.com,
-        krish.sadhukhan@oracle.com, saravanand@fb.com,
-        xen-devel@lists.xenproject.org, pgonda@google.com,
-        david@redhat.com, keescook@chromium.org, hannes@cmpxchg.org,
-        sfr@canb.auug.org.au, michael.h.kelley@microsoft.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, anparri@microsoft.com
+        jgross@suse.com, sstabellini@kernel.org, will@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, arnd@arndb.de, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
+        Tianyu.Lan@microsoft.com, rientjes@google.com,
+        martin.b.radev@gmail.com, akpm@linux-foundation.org,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        aneesh.kumar@linux.ibm.com, krish.sadhukhan@oracle.com,
+        saravanand@fb.com, xen-devel@lists.xenproject.org,
+        pgonda@google.com, david@redhat.com, keescook@chromium.org,
+        hannes@cmpxchg.org, sfr@canb.auug.org.au,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, anparri@microsoft.com
 References: <20210728145232.285861-1-ltykernel@gmail.com>
- <20210728145232.285861-4-ltykernel@gmail.com>
- <c00e269c-da4c-c703-0182-0221c73a76cc@intel.com>
- <YQfepYTC4n6agq9z@8bytes.org>
-From:   Juergen Gross <jgross@suse.com>
-Message-ID: <5badc0cb-3038-2eff-a4bf-022ce8fc51d7@suse.com>
-Date:   Mon, 2 Aug 2021 15:11:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ <20210728145232.285861-6-ltykernel@gmail.com> <YQfk9G+k0Tj8ihyu@8bytes.org>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <988f20e4-821f-b493-c25d-ca9107a6e891@gmail.com>
+Date:   Mon, 2 Aug 2021 21:18:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <YQfepYTC4n6agq9z@8bytes.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="6QoUicHSwDgMfYyEE95G98YrCRDodiK4T"
+In-Reply-To: <YQfk9G+k0Tj8ihyu@8bytes.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---6QoUicHSwDgMfYyEE95G98YrCRDodiK4T
-Content-Type: multipart/mixed; boundary="Q8kndzyNPSJWNnMRXKERSCRNX9KvLdc3e";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Joerg Roedel <joro@8bytes.org>, Dave Hansen <dave.hansen@intel.com>
-Cc: Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
- haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- x86@kernel.org, hpa@zytor.com, dave.hansen@linux.intel.com, luto@kernel.org,
- peterz@infradead.org, konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
- sstabellini@kernel.org, will@kernel.org, davem@davemloft.net,
- kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
- arnd@arndb.de, hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
- thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
- Tianyu.Lan@microsoft.com, rientjes@google.com, martin.b.radev@gmail.com,
- akpm@linux-foundation.org, rppt@kernel.org, kirill.shutemov@linux.intel.com,
- aneesh.kumar@linux.ibm.com, krish.sadhukhan@oracle.com, saravanand@fb.com,
- xen-devel@lists.xenproject.org, pgonda@google.com, david@redhat.com,
- keescook@chromium.org, hannes@cmpxchg.org, sfr@canb.auug.org.au,
- michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
- linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
- netdev@vger.kernel.org, vkuznets@redhat.com, anparri@microsoft.com
-Message-ID: <5badc0cb-3038-2eff-a4bf-022ce8fc51d7@suse.com>
-Subject: Re: [PATCH 03/13] x86/HV: Add new hvcall guest address host
- visibility support
-References: <20210728145232.285861-1-ltykernel@gmail.com>
- <20210728145232.285861-4-ltykernel@gmail.com>
- <c00e269c-da4c-c703-0182-0221c73a76cc@intel.com>
- <YQfepYTC4n6agq9z@8bytes.org>
-In-Reply-To: <YQfepYTC4n6agq9z@8bytes.org>
+On 8/2/2021 8:28 PM, Joerg Roedel wrote:
+> On Wed, Jul 28, 2021 at 10:52:20AM -0400, Tianyu Lan wrote:
+>> +void hv_ghcb_msr_write(u64 msr, u64 value)
+>> +{
+>> +	union hv_ghcb *hv_ghcb;
+>> +	void **ghcb_base;
+>> +	unsigned long flags;
+>> +
+>> +	if (!ms_hyperv.ghcb_base)
+>> +		return;
+>> +
+>> +	WARN_ON(in_nmi());
+>> +
+>> +	local_irq_save(flags);
+>> +	ghcb_base = (void **)this_cpu_ptr(ms_hyperv.ghcb_base);
+>> +	hv_ghcb = (union hv_ghcb *)*ghcb_base;
+>> +	if (!hv_ghcb) {
+>> +		local_irq_restore(flags);
+>> +		return;
+>> +	}
+>> +
+>> +	memset(hv_ghcb, 0x00, HV_HYP_PAGE_SIZE);
+> 
+> Do you really need to zero out the whole 4k? The validation bitmap
+> should be enough, there are no secrets on the page anyway.
+> Same in hv_ghcb_msr_read().
 
---Q8kndzyNPSJWNnMRXKERSCRNX9KvLdc3e
-Content-Type: multipart/mixed;
- boundary="------------39BD9DF23E5C4BB3D3E4101D"
-Content-Language: en-US
+OK. Thanks for suggestion. I will have a try.
 
-This is a multi-part message in MIME format.
---------------39BD9DF23E5C4BB3D3E4101D
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+> 
+>> +enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+>> +				   struct es_em_ctxt *ctxt,
+>> +				   u64 exit_code, u64 exit_info_1,
+>> +				   u64 exit_info_2)
+>>   {
+>>   	enum es_result ret;
+>>   
+>> @@ -109,7 +109,16 @@ static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+>>   	ghcb_set_sw_exit_info_1(ghcb, exit_info_1);
+>>   	ghcb_set_sw_exit_info_2(ghcb, exit_info_2);
+>>   
+>> -	sev_es_wr_ghcb_msr(__pa(ghcb));
+>> +	/*
+>> +	 * Hyper-V runs paravisor with SEV. Ghcb page is allocated by
+>> +	 * paravisor and not needs to be updated in the Linux guest.
+>> +	 * Otherwise, the ghcb page's PA reported by paravisor is above
+>> +	 * VTOM. Hyper-V use this function with NULL for ctxt point and
+>> +	 * skip setting ghcb page in such case.
+>> +	 */
+>> +	if (ctxt)
+>> +		sev_es_wr_ghcb_msr(__pa(ghcb));
+> 
+> No, do not make this function work with ctxt==NULL. Instead, factor out
+> a helper function which contains what Hyper-V needs and use that in
+> sev_es_ghcb_hv_call() and Hyper-V code.
+> 
 
-On 02.08.21 14:01, Joerg Roedel wrote:
-> On Wed, Jul 28, 2021 at 08:29:41AM -0700, Dave Hansen wrote:
->> __set_memory_enc_dec() is turning into a real mess.  SEV, TDX and now
->> Hyper-V are messing around in here.
->=20
-> I was going to suggest a PV_OPS call where the fitting implementation
-> for the guest environment can be plugged in at boot. There is TDX and a=
-n
-> SEV(-SNP) case, a Hyper-V case, and likely more coming up from other
-> cloud/hypervisor vendors. Hiding all these behind feature checks is not=
+OK. Will update.
 
-> going to make things cleaner.
+>> +union hv_ghcb {
+>> +	struct ghcb ghcb;
+>> +} __packed __aligned(PAGE_SIZE);
+> 
+> I am curious what this will end up being good for.
+> 
 
-As those cases are all mutually exclusive, wouldn't a static_call() be
-the appropriate solution?
-
-
-Juergen
-
---------------39BD9DF23E5C4BB3D3E4101D
-Content-Type: application/pgp-keys;
- name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Transfer-Encoding: quoted-printable
-Content-Description: OpenPGP public key
-Content-Disposition: attachment;
- filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOBy=
-cWx
-w3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJvedYm8O=
-f8Z
-d621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y=
-9bf
-IhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xq=
-G7/
-377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR=
-3Jv
-c3MgPGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDA=
-QIe
-AQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4FUGNQH2lvWAUy+dnyT=
-hpw
-dtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3TyevpB0CA3dbBQp0OW0fgCetToGIQrg0=
-MbD
-1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbv=
-oPH
-Z8SlM4KWm8rG+lIkGurqqu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v=
-5QL
-+qHI3EIPtyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVyZ=
-2Vu
-IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJCAcDAgEGFQgCC=
-QoL
-BBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4RF7HoZhPVPogNVbC4YA6lW7Dr=
-Wf0
-teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz78X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC=
-/nu
-AFVGy+67q2DH8As3KPu0344TBDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0Lh=
-ITT
-d9jLzdDad1pQSToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLm=
-XBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkMnQfvUewRz=
-80h
-SnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMBAgAjBQJTjHDXAhsDBwsJC=
-AcD
-AgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJn=
-FOX
-gMLdBQgBlVPO3/D9R8LtF9DBAFPNhlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1=
-jnD
-kfJZr6jrbjgyoZHiw/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0=
-N51
-N5JfVRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwPOoE+l=
-otu
-fe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK/1xMI3/+8jbO0tsn1=
-tqS
-EUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuZGU+wsB5BBMBAgAjBQJTjHDrA=
-hsD
-BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3=
-g3O
-ZUEBmDHVVbqMtzwlmNC4k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5=
-dM7
-wRqzgJpJwK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu5=
-D+j
-LRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzBTNh30FVKK1Evm=
-V2x
-AKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37IoN1EblHI//x/e2AaIHpzK5h88N=
-Eaw
-QsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpW=
-nHI
-s98ndPUDpnoxWQugJ6MpMncr0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZR=
-wgn
-BC5mVM6JjQ5xDk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNV=
-bVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mmwe0icXKLk=
-pEd
-IXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0Iv3OOImwTEe4co3c1mwARA=
-QAB
-wsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMvQ/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEw=
-Tbe
-8YFsw2V/Buv6Z4Mysln3nQK5ZadD534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1=
-vJz
-Q1fOU8lYFpZXTXIHb+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8=
-VGi
-wXvTyJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqcsuylW=
-svi
-uGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5BjR/i1DG86lem3iBDX=
-zXs
-ZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------39BD9DF23E5C4BB3D3E4101D--
-
---Q8kndzyNPSJWNnMRXKERSCRNX9KvLdc3e--
-
---6QoUicHSwDgMfYyEE95G98YrCRDodiK4T
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmEH7w0FAwAAAAAACgkQsN6d1ii/Ey8O
-cwf/Z28QeGVZIGz31NNRqq7VV5CXkLYX1cUqFxQSudrbhTCktu/VZqlOeXIVEw++Pqj10zm2u/cE
-xnC1502TYLBLivHkTuEI7jc1vYpOs9bgzrwCRyVnpnrbnMlLrkUvAXkyssLl1TpA9qYaXPZ86RJ/
-C/cQPpcei562xhfYEbZgN1U3VboMDeDUkFShNLRCqV6iTW6IeyK/ScjU8626DPpOA7LBZB9zepaZ
-7QzBrjNZ1i+IQYHHU+ff4ervjBuxPOR7GWWPRGG1IWkyIWyDChyd9hduiFcwuhW8AgPf5oXwU5MO
-1EIG/xZ8eQYJXqu0bt6qVQk9B4gI4uSltgvNc+VSlA==
-=jTBa
------END PGP SIGNATURE-----
-
---6QoUicHSwDgMfYyEE95G98YrCRDodiK4T--
+Hyper-V introduces a specific hypercall request in GHCB page and use 
+same union in the Linux Hyper-V code to read/write MSR and call the new 
+hypercall request.
