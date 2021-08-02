@@ -2,107 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C6E3DDAD9
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 16:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB403DDD4C
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 18:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235199AbhHBOWo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Aug 2021 10:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235963AbhHBOWj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Aug 2021 10:22:39 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412A2C0701F8;
-        Mon,  2 Aug 2021 07:09:00 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id t3so17633081plg.9;
-        Mon, 02 Aug 2021 07:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/cdM8HpdDM3Yh7GGE7exLVKVMbD9iA/9tyiszM+STgg=;
-        b=EyGzIbCm/4WfGRl2TIpRtI8exR5hEZdzfziWgkyJF2rPPiSQ75H+98IAopMmYevfFk
-         Ov/fJ43JIQnILsE3s/0qzNMc0nrf6uUXE2j26BExy5g7B3BpTmvtolJxygg5zsp4OzjQ
-         /7pE2ruUo+gM4LDOxH4S0QCLE3cZn8HjYiXLd7zaPCzN5tcqN75mDO2ycYHk5nf3h82W
-         fzBmyU3qV/42PwBr8KexEQmrjqnx6SCVYEPtgGSjDXNVb1Uffuv26Hb9ID8hcdFyzcOI
-         2ZeoAyGM+UdW1S66kVSqZMjoR5QEIes/nzm112DtVAisubEuzui0RUvnkB/UUMAP1zyE
-         JLjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/cdM8HpdDM3Yh7GGE7exLVKVMbD9iA/9tyiszM+STgg=;
-        b=KCWguRI6XpOC4NANbUmdJU8A2dKRuK8R8fYdNL+T/y2i5pq1CEhNeHe45HxKcHKw7Z
-         86ge4xwUvuutP+xU1LxjDEeMvvNjEsVWu2kVa3U1QxxpQMMqARf+5y4M5fp/khkhQT23
-         WayH5FKCOBE0JERAK67O8grW/MY7MUbLdbbWxBbVYcVSUcyh3kvrpJ027G0GPXcFrgJd
-         UpAq0gShQ9irj3syRYMy17jpzm0mTlxc4mw7VdyGEl2MeNxeiaz/fntlkl+o3aK2BXvW
-         IafCL2rZu5XdS8ynS5ivAMw16b68P7ejnCqw++4vWtdbqJ+rzfAWUBmbl4xjDMNqrhOw
-         FRkw==
-X-Gm-Message-State: AOAM531p54V5x9dsA35BewNi8pOllVsm8IvlHH0EVAzNGznsHIXa1fAx
-        kOnx+1AHhY0DeljgNcI3H8g=
-X-Google-Smtp-Source: ABdhPJz9/oIt1d6cc74gFPmQ4IHl6g1R2CxfQ4Ko9VZ15V7BmdIE77nzkycqmmDE/JgZuYIJykKPEQ==
-X-Received: by 2002:aa7:8148:0:b029:31b:10b4:f391 with SMTP id d8-20020aa781480000b029031b10b4f391mr16506898pfn.69.1627913339735;
-        Mon, 02 Aug 2021 07:08:59 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:18:efec::4b1])
-        by smtp.gmail.com with ESMTPSA id fz10sm11071046pjb.40.2021.08.02.07.08.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Aug 2021 07:08:59 -0700 (PDT)
-Subject: Re: [PATCH 13/13] HV/Storvsc: Add Isolation VM support for storvsc
- driver
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
-        jgross@suse.com, sstabellini@kernel.org, will@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, arnd@arndb.de, hch@lst.de,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
-        Tianyu.Lan@microsoft.com, rientjes@google.com,
-        martin.b.radev@gmail.com, akpm@linux-foundation.org,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        aneesh.kumar@linux.ibm.com, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, xen-devel@lists.xenproject.org,
-        pgonda@google.com, david@redhat.com, keescook@chromium.org,
-        hannes@cmpxchg.org, sfr@canb.auug.org.au,
-        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, vkuznets@redhat.com, anparri@microsoft.com
-References: <20210728145232.285861-1-ltykernel@gmail.com>
- <20210728145232.285861-14-ltykernel@gmail.com> <YQfxA/AYfOqyqNh0@8bytes.org>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <eaeb75b7-7e98-ad2d-0e2c-0565b9db79dd@gmail.com>
-Date:   Mon, 2 Aug 2021 22:08:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S232532AbhHBQLN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Aug 2021 12:11:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34374 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232524AbhHBQLN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 2 Aug 2021 12:11:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AE5F60F58;
+        Mon,  2 Aug 2021 16:11:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627920663;
+        bh=yfVAU2+U7wpt2YMmE79sPe/T4DFxPBTA0ytzHgKV31I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ChHMkaLCqCFmaMpkB4M3EkQVg2+PuSyzXDhNMsUXXGS9o9xFGeI37VI3l1kyMiVpH
+         AMJ/NSWwXeZezwnPngPbRbfmxYs1mXbr7hXLtCWLBKFvvvZur+p2VIc9e7KKwRvwnn
+         aNP5AZIgurwFlGW1qu3JWx7JslJkWZhVL7cWbf+seW3uGYF9woQlynxNrQer9vP7C/
+         5bSRRmhs05hXftoyeD2+jI5lFDy7vzH1K7sm/gzwI8O1cq/qJyO2daGFvPYZ7Od1sr
+         SyzmnJKAyx8X5Db5jcs2W5zsZHHyOKW3im6Xh3QX053ND3GpYW0SXuDuRWjfEGiJB0
+         40EiGnozfhP8Q==
+Date:   Mon, 2 Aug 2021 09:11:02 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v2] sock: allow reading and changing sk_userlocks with
+ setsockopt
+Message-ID: <20210802091102.314fa0f6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <9ead0d04-f243-b637-355c-af11af45fb5a@virtuozzo.com>
+References: <20210730160708.6544-1-ptikhomirov@virtuozzo.com>
+        <20210730094631.106b8bec@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <9ead0d04-f243-b637-355c-af11af45fb5a@virtuozzo.com>
 MIME-Version: 1.0
-In-Reply-To: <YQfxA/AYfOqyqNh0@8bytes.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/2/2021 9:20 PM, Joerg Roedel wrote:
-> On Wed, Jul 28, 2021 at 10:52:28AM -0400, Tianyu Lan wrote:
->> In Isolation VM, all shared memory with host needs to mark visible
->> to host via hvcall. vmbus_establish_gpadl() has already done it for
->> storvsc rx/tx ring buffer. The page buffer used by vmbus_sendpacket_
->> mpb_desc() still need to handle. Use DMA API to map/umap these
->> memory during sending/receiving packet and Hyper-V DMA ops callback
->> will use swiotlb function to allocate bounce buffer and copy data
->> from/to bounce buffer.
+On Mon, 2 Aug 2021 11:26:09 +0300 Pavel Tikhomirov wrote:
+> On 30.07.2021 19:46, Jakub Kicinski wrote:
+> > On Fri, 30 Jul 2021 19:07:08 +0300 Pavel Tikhomirov wrote:  
+> >> SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK flags disable automatic socket
+> >> buffers adjustment done by kernel (see tcp_fixup_rcvbuf() and
+> >> tcp_sndbuf_expand()). If we've just created a new socket this adjustment
+> >> is enabled on it, but if one changes the socket buffer size by
+> >> setsockopt(SO_{SND,RCV}BUF*) it becomes disabled.
+> >>
+> >> CRIU needs to call setsockopt(SO_{SND,RCV}BUF*) on each socket on
+> >> restore as it first needs to increase buffer sizes for packet queues
+> >> restore and second it needs to restore back original buffer sizes. So
+> >> after CRIU restore all sockets become non-auto-adjustable, which can
+> >> decrease network performance of restored applications significantly.
+> >>
+> >> CRIU need to be able to restore sockets with enabled/disabled adjustment
+> >> to the same state it was before dump, so let's add special setsockopt
+> >> for it.
+> >>
+> >> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>  
+> > 
+> > The patchwork bot is struggling to ingest this, please double check it
+> > applies cleanly to net-next.  
 > 
-> I am wondering why you dont't use DMA-API unconditionally? It provides
-> enough abstraction to do the right thing for isolated and legacy VMs.
+> I checked that it applies cleanly to net-next:
 > 
+> [snorch@fedora linux]$ git am 
+> ~/Downloads/patches/ptikhomirov/setsockopt-sk_userlocks/\[PATCH\ v2\]\ 
+> sock\:\ allow\ reading\ and\ changing\ sk_userlocks\ with\ setsockopt.eml
+> 
+> [snorch@fedora linux]$ git log --oneline
+> c339520aadd5 (HEAD -> net-next) sock: allow reading and changing 
+> sk_userlocks with setsockopt
+> 
+> d39e8b92c341 (net-next/master) Merge 
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next
+> 
+> Probably it was some temporary problem and now it's OK? 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20210730160708.6544-1-ptikhomirov@virtuozzo.com/
 
-In VMbus, there is already a similar bounce buffer design and so there 
-is no need to call DMA-API for such buffer. Calling DMA-API is to use
-swiotlb bounce buffer for those buffer which hasn't been covered. This
-is why need to conditionally call DMA API.
+Indeed, must have been resolved by the merge of net into net-next which
+happened on Saturday? Regardless, would you mind reposting? There is no
+way for me to retry the patchwork checks.
+
+And one more thing..
+
+> +	case SO_BUF_LOCK:
+> +		sk->sk_userlocks = (sk->sk_userlocks & ~SOCK_BUF_LOCK_MASK) |
+> +				   (val & SOCK_BUF_LOCK_MASK);
+
+What's the thinking on silently ignoring unsupported flags on set
+rather than rejecting? I feel like these days we lean towards explicit
+rejects.
+
+> +	case SO_BUF_LOCK:
+> +		v.val = sk->sk_userlocks & (SOCK_SNDBUF_LOCK | SOCK_RCVBUF_LOCK);
+> +		break;
+
+The mask could you be used here.
+
+Just to double check - is the expectation that the value returned is
+completely opaque to the user space? The defines in question are not
+part of uAPI.
