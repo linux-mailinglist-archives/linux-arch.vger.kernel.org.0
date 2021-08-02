@@ -2,69 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED5F3DD21E
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 10:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC4B3DD4F6
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 13:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbhHBIhQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Aug 2021 04:37:16 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:58772 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232656AbhHBIhQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Aug 2021 04:37:16 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-162-VSQlMBHJP8uFUMwjOp7oTQ-1; Mon, 02 Aug 2021 09:37:05 +0100
-X-MC-Unique: VSQlMBHJP8uFUMwjOp7oTQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.23; Mon, 2 Aug 2021 09:37:02 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.023; Mon, 2 Aug 2021 09:37:02 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>
-CC:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Hector Martin <marcan@marcan.st>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: RE: [Question] Alignment requirement for readX() and writeX()
-Thread-Topic: [Question] Alignment requirement for readX() and writeX()
-Thread-Index: AQHXhWQsVwxTTLVBq060hnEUvvCVsqtf5hLQ
-Date:   Mon, 2 Aug 2021 08:37:02 +0000
-Message-ID: <7353d0d46f9f4a908b73ac0ff1c070fc@AcuMS.aculab.com>
-References: <YQQr+twAYHk2jXs6@boqun-archlinux>
- <CAK8P3a0w09Ga_OXAqhA0JcgR-LBc32a296dZhpTyPDwVSgaNkw@mail.gmail.com>
-In-Reply-To: <CAK8P3a0w09Ga_OXAqhA0JcgR-LBc32a296dZhpTyPDwVSgaNkw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S233483AbhHBLxp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Aug 2021 07:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233341AbhHBLxo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Aug 2021 07:53:44 -0400
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB45C06175F;
+        Mon,  2 Aug 2021 04:53:35 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 835EB379; Mon,  2 Aug 2021 13:53:32 +0200 (CEST)
+Date:   Mon, 2 Aug 2021 13:53:26 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, will@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, arnd@arndb.de, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
+        Tianyu.Lan@microsoft.com, rientjes@google.com,
+        martin.b.radev@gmail.com, akpm@linux-foundation.org,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        aneesh.kumar@linux.ibm.com, krish.sadhukhan@oracle.com,
+        saravanand@fb.com, xen-devel@lists.xenproject.org,
+        pgonda@google.com, david@redhat.com, keescook@chromium.org,
+        hannes@cmpxchg.org, sfr@canb.auug.org.au,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, anparri@microsoft.com
+Subject: Re: [PATCH 01/13] x86/HV: Initialize GHCB page in Isolation VM
+Message-ID: <YQfctjRm16IP0qZy@8bytes.org>
+References: <20210728145232.285861-1-ltykernel@gmail.com>
+ <20210728145232.285861-2-ltykernel@gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210728145232.285861-2-ltykernel@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAzMCBKdWx5IDIwMjEgMTc6NTkNCi4uLg0KPiBJ
-IGFtIG5vdCBhd2FyZSBvZiBhbnkgZHJpdmVyIHRoYXQgcmVxdWlyZXMgdW5hbGlnbmVkIGFjY2Vz
-cyBvbiBfX2lvbWVtDQo+IHBvaW50ZXJzLCBhbmQgc2luY2UgaXQgZGVmaW5pdGVseSBkb2Vzbid0
-IHdvcmsgb24gbW9zdCBhcmNoaXRlY3R1cmVzLCAuLi4NCg0KVW5hbGlnbmVkIGFjY2Vzc2VzIGlu
-dG8gUENJZSBzcGFjZSBjYW4gZ2VuZXJhdGUgYSBUTFAgdGhhdCByZXF1ZXN0cw0Kb25seSBzb21l
-IGJ5dGVzIG9mIHRoZSBmaXJzdCBhbmQgbGFzdCAzMmJpdCB3b3JkcyBiZSB0cmFuc2ZlcnJlZC4N
-ClRoZSB0YXJnZXQgaXMgZXhwZWN0ZWQgdG8gaG9ub3VyIHN1Y2ggcmVxdWVzdHMuDQoNCk9uIHRo
-ZSB4ODYgc3lzdGVtcyB3aGVyZSBJJ3ZlIGxvb2tlZCBhdCBhIFRMUCB0cmFjZSBtaXNhbGlnbmVk
-DQphY2Nlc3NlcyBhcmUgZXZlbiBhdG9taWMgcHJvdmlkZWQgdGhlIHRhcmdldCBkb2Vzbid0IGxl
-dCBhIGxvY2FsDQpyZXF1ZXN0IGludGVybGVhdmUuDQoNCk9UT0ggZHJpdmVycyBhcmUgdW5saWtl
-bHkgdG8gbWFrZSBzdWNoIHJlcXVlc3RzLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
-ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
-MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Wed, Jul 28, 2021 at 10:52:16AM -0400, Tianyu Lan wrote:
+> +static int hyperv_init_ghcb(void)
+> +{
+> +	u64 ghcb_gpa;
+> +	void *ghcb_va;
+> +	void **ghcb_base;
+> +
+> +	if (!ms_hyperv.ghcb_base)
+> +		return -EINVAL;
+> +
+> +	rdmsrl(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
+> +	ghcb_va = memremap(ghcb_gpa, HV_HYP_PAGE_SIZE, MEMREMAP_WB);
+
+This deserves a comment. As I understand it, the GHCB pa is set by
+Hyper-V or the paravisor, so the page does not need to be allocated by
+Linux.
+And it is not mapped unencrypted because the GHCB page is allocated
+above the VTOM boundary?
+
+> @@ -167,6 +190,31 @@ static int hv_cpu_die(unsigned int cpu)
+>  {
+>  	struct hv_reenlightenment_control re_ctrl;
+>  	unsigned int new_cpu;
+> +	unsigned long flags;
+> +	void **input_arg;
+> +	void *pg;
+> +	void **ghcb_va = NULL;
+> +
+> +	local_irq_save(flags);
+> +	input_arg = (void **)this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	pg = *input_arg;
+
+Pg is never used later on, why is it set?
 
