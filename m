@@ -2,24 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 232773DD50D
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 14:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073B33DD535
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Aug 2021 14:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233507AbhHBMB7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Aug 2021 08:01:59 -0400
-Received: from 8bytes.org ([81.169.241.247]:52728 "EHLO theia.8bytes.org"
+        id S233592AbhHBMIM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Aug 2021 08:08:12 -0400
+Received: from 8bytes.org ([81.169.241.247]:52786 "EHLO theia.8bytes.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233446AbhHBMB4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 2 Aug 2021 08:01:56 -0400
+        id S233516AbhHBMIM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 2 Aug 2021 08:08:12 -0400
 Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 2A79D379; Mon,  2 Aug 2021 14:01:45 +0200 (CEST)
-Date:   Mon, 2 Aug 2021 14:01:41 +0200
+        id BBD92379; Mon,  2 Aug 2021 14:08:00 +0200 (CEST)
+Date:   Mon, 2 Aug 2021 14:07:59 +0200
 From:   Joerg Roedel <joro@8bytes.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
         dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
         konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
         jgross@suse.com, sstabellini@kernel.org, will@kernel.org,
@@ -38,30 +37,27 @@ Cc:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
         linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         netdev@vger.kernel.org, vkuznets@redhat.com, anparri@microsoft.com
-Subject: Re: [PATCH 03/13] x86/HV: Add new hvcall guest address host
- visibility support
-Message-ID: <YQfepYTC4n6agq9z@8bytes.org>
+Subject: Re: [PATCH 04/13] HV: Mark vmbus ring buffer visible to host in
+ Isolation VM
+Message-ID: <YQfgH04t2SqacnHn@8bytes.org>
 References: <20210728145232.285861-1-ltykernel@gmail.com>
- <20210728145232.285861-4-ltykernel@gmail.com>
- <c00e269c-da4c-c703-0182-0221c73a76cc@intel.com>
+ <20210728145232.285861-5-ltykernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c00e269c-da4c-c703-0182-0221c73a76cc@intel.com>
+In-Reply-To: <20210728145232.285861-5-ltykernel@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 08:29:41AM -0700, Dave Hansen wrote:
-> __set_memory_enc_dec() is turning into a real mess.  SEV, TDX and now
-> Hyper-V are messing around in here.
+On Wed, Jul 28, 2021 at 10:52:19AM -0400, Tianyu Lan wrote:
+> +	if (type == HV_GPADL_BUFFER)
+> +		index = 0;
+> +	else
+> +		index = channel->gpadl_range[1].gpadlhandle ? 2 : 1;
 
-I was going to suggest a PV_OPS call where the fitting implementation
-for the guest environment can be plugged in at boot. There is TDX and an
-SEV(-SNP) case, a Hyper-V case, and likely more coming up from other
-cloud/hypervisor vendors. Hiding all these behind feature checks is not
-going to make things cleaner.
+Hmm... This doesn't look very robust. Can you set fixed indexes for
+different buffer types? HV_GPADL_BUFFER already has fixed index 0. But
+as it is implemented here you risk that index 2 gets overwritten by
+subsequent calls.
 
-Regards,
-
-	Joerg
