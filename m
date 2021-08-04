@@ -2,241 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAACD3E0827
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Aug 2021 20:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBB93E0885
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Aug 2021 21:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240576AbhHDSrd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Aug 2021 14:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240658AbhHDSqd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Aug 2021 14:46:33 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859FAC06179B;
-        Wed,  4 Aug 2021 11:45:58 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id u2so3981808plg.10;
-        Wed, 04 Aug 2021 11:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=29igml5xJQT7NZ/zHELD608zwBtMw+CBZNUu6aD3TXw=;
-        b=YYV/m/LMm9LueSaFvS1QqjEzusaN78zRUrtnhZOuMU1heWUA9GqVjn0EIfdioy78dO
-         pqyQr1mh3jD0fZRJ227Vtm1Yr/MBIZJfqPV9t2r5oVj/djtM4H34a0d2hv9nWJlmMMMc
-         C0ZzKol4Vgsz/Q9xqcn/U6GmtuToaeHJ1NsP9ZfEz7Fm5ahWkDMW7GGoANygL8DZ1y+9
-         uQ94GlUlEs4n5qTeavI4gSb/EIbS1zykqnrzZoZRj6oHARuYcWdHel7RiRpwWfqTur7t
-         +RFWBknyfar4zEtojp765cEWGfOex77YKgaagkx/IKKYP556Mlmva4L/VpYkV17KUMj1
-         QvGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=29igml5xJQT7NZ/zHELD608zwBtMw+CBZNUu6aD3TXw=;
-        b=RY72IIN/jNHVZqxyjSQE6SLq1g5uAJz5zxeiJGYSVk1YyMz63kveKErWjxGC1Ar8gd
-         5N6GORQE2v4k3vpgiKHEoeMJ3/KwnoIPElZgArFJWAt03ifQhRtXO1JaYDwQXp0dbfRf
-         iBAObfqWtby7pEz6AwksAie2ePQhukOOO8tWyOmWh83DB6r1vaCWPO2TJ/9bKvvuf4Al
-         IlW0vlM8RmHavs1mWfb87odvdAc9yoOcD+HfFN5SlQFsN842DYUf9rWfFryKV7vbH56f
-         pYTyFXbWyPjk5TnMfKqE2aCWimHOZenlTzSno+CzALn1YEzROkN391LV/zoW6dQFEfhn
-         LgzQ==
-X-Gm-Message-State: AOAM530Sid2JUNvCQ1PUtR2sFJ5EmeU7piJiqXwJYmxFNV+B42Kms5fc
-        J1hJ/LB8gVqovEaQctG6Ebg=
-X-Google-Smtp-Source: ABdhPJys+uUC+8R4d08qbIFnIv7LBHGpTM/c9FmBOlVHRSO99KZWQKeZJC0uWF82I4cQhSNYNbC05Q==
-X-Received: by 2002:a17:902:8b83:b029:12c:cbce:a52f with SMTP id ay3-20020a1709028b83b029012ccbcea52fmr546876plb.9.1628102758109;
-        Wed, 04 Aug 2021 11:45:58 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:f:1947:6842:b8a8:6f83])
-        by smtp.gmail.com with ESMTPSA id f5sm3325647pjo.23.2021.08.04.11.45.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 11:45:57 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
-        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
-        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
-        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        Tianyu.Lan@microsoft.com, rppt@kernel.org,
-        kirill.shutemov@linux.intel.com, akpm@linux-foundation.org,
-        brijesh.singh@amd.com, thomas.lendacky@amd.com, pgonda@google.com,
-        david@redhat.com, krish.sadhukhan@oracle.com, saravanand@fb.com,
-        aneesh.kumar@linux.ibm.com, xen-devel@lists.xenproject.org,
-        martin.b.radev@gmail.com, ardb@kernel.org, rientjes@google.com,
-        tj@kernel.org, keescook@chromium.org,
-        michael.h.kelley@microsoft.com
-Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, parri.andrea@gmail.com
-Subject: [PATCH V2 14/14] HV/Storvsc: Add Isolation VM support for storvsc driver
-Date:   Wed,  4 Aug 2021 14:45:10 -0400
-Message-Id: <20210804184513.512888-15-ltykernel@gmail.com>
+        id S239388AbhHDTQT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Aug 2021 15:16:19 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:40366 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239207AbhHDTQS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Aug 2021 15:16:18 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 57A89C0CD6;
+        Wed,  4 Aug 2021 19:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1628104565; bh=QNBcV08QVOLccNUG2RaWflwIhkYnYjRy+AJtEG7BCbM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j+zH2QZqMB8dlQi0ifUZfqfjzQb3+v7Ci6eYugBIrUptM30jGgkoH+f+5DWjc/XEw
+         IbU4qIzBI2fG0Pt265Ih/kmMylP7PXIN0N1zQyQi3lsTRQJpC2v4xEfI94DbGzrbCv
+         ZIRw28CDf8Rnlcx38GpDpJpTMXStH44CeQWqsAbgPzWrC1aEl4oN+OynLOUIMri5bI
+         5Ov3ztKGWJf2YgzqVbUp2ZJZhQe4MrgZJtJdugc2ndbAuWmSRFpOMH2vXX8OGnTPAx
+         J4683Ztg4lFNBUieT8tMLv3QyBs0ONSok5enMQyz/VKby7b6vRWmcvH09Nan7Nhruk
+         8rrLMs4iX2E8w==
+Received: from vineetg-Latitude-7400.internal.synopsys.com (snps-fugpbdpduq.internal.synopsys.com [10.202.17.37])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 112D3A0090;
+        Wed,  4 Aug 2021 19:16:02 +0000 (UTC)
+X-SNPS-Relay: synopsys.com
+From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
+To:     linux-snps-arc@lists.infradead.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Vladimir Isaev <Vladimir.Isaev@synopsys.com>,
+        Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Subject: [PATCH 00/11] ARC atomics update
+Date:   Wed,  4 Aug 2021 12:15:43 -0700
+Message-Id: <20210804191554.1252776-1-vgupta@synopsys.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210804184513.512888-1-ltykernel@gmail.com>
-References: <20210804184513.512888-1-ltykernel@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+Hi,
 
-In Isolation VM, all shared memory with host needs to mark visible
-to host via hvcall. vmbus_establish_gpadl() has already done it for
-storvsc rx/tx ring buffer. The page buffer used by vmbus_sendpacket_
-mpb_desc() still need to handle. Use DMA API to map/umap these
-memory during sending/receiving packet and Hyper-V DMA ops callback
-will use swiotlb function to allocate bounce buffer and copy data
-from/to bounce buffer.
+This series contains long due update to ARC atomics, discussed back
+in 2018 [1] and [2]. I had them for arc64 port and decided to post them
+here for some review and inclusion, after Mark's rework.
 
-Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
----
- drivers/scsi/storvsc_drv.c | 68 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 63 insertions(+), 5 deletions(-)
+The main changes are use of relaxed atomics and generic bitops. Latter
+does cause some cogen bloat on ARC due to signed args but that can be
+reviewd seperately consider cross-arch impact.
 
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index 328bb961c281..78320719bdd8 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -21,6 +21,8 @@
- #include <linux/device.h>
- #include <linux/hyperv.h>
- #include <linux/blkdev.h>
-+#include <linux/io.h>
-+#include <linux/dma-mapping.h>
- #include <scsi/scsi.h>
- #include <scsi/scsi_cmnd.h>
- #include <scsi/scsi_host.h>
-@@ -427,6 +429,8 @@ struct storvsc_cmd_request {
- 	u32 payload_sz;
- 
- 	struct vstor_packet vstor_packet;
-+	u32 hvpg_count;
-+	struct hv_dma_range *dma_range;
- };
- 
- 
-@@ -509,6 +513,14 @@ struct storvsc_scan_work {
- 	u8 tgt_id;
- };
- 
-+#define storvsc_dma_map(dev, page, offset, size, dir) \
-+	dma_map_page(dev, page, offset, size, dir)
-+
-+#define storvsc_dma_unmap(dev, dma_range, dir)		\
-+		dma_unmap_page(dev, dma_range.dma,	\
-+			       dma_range.mapping_size,	\
-+			       dir ? DMA_FROM_DEVICE : DMA_TO_DEVICE)
-+
- static void storvsc_device_scan(struct work_struct *work)
- {
- 	struct storvsc_scan_work *wrk;
-@@ -1260,6 +1272,7 @@ static void storvsc_on_channel_callback(void *context)
- 	struct hv_device *device;
- 	struct storvsc_device *stor_device;
- 	struct Scsi_Host *shost;
-+	int i;
- 
- 	if (channel->primary_channel != NULL)
- 		device = channel->primary_channel->device_obj;
-@@ -1314,6 +1327,15 @@ static void storvsc_on_channel_callback(void *context)
- 				request = (struct storvsc_cmd_request *)scsi_cmd_priv(scmnd);
- 			}
- 
-+			if (request->dma_range) {
-+				for (i = 0; i < request->hvpg_count; i++)
-+					storvsc_dma_unmap(&device->device,
-+						request->dma_range[i],
-+						request->vstor_packet.vm_srb.data_in == READ_TYPE);
-+
-+				kfree(request->dma_range);
-+			}
-+
- 			storvsc_on_receive(stor_device, packet, request);
- 			continue;
- 		}
-@@ -1810,7 +1832,9 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
- 		unsigned int hvpgoff, hvpfns_to_add;
- 		unsigned long offset_in_hvpg = offset_in_hvpage(sgl->offset);
- 		unsigned int hvpg_count = HVPFN_UP(offset_in_hvpg + length);
-+		dma_addr_t dma;
- 		u64 hvpfn;
-+		u32 size;
- 
- 		if (hvpg_count > MAX_PAGE_BUFFER_COUNT) {
- 
-@@ -1824,6 +1848,13 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
- 		payload->range.len = length;
- 		payload->range.offset = offset_in_hvpg;
- 
-+		cmd_request->dma_range = kcalloc(hvpg_count,
-+				 sizeof(*cmd_request->dma_range),
-+				 GFP_ATOMIC);
-+		if (!cmd_request->dma_range) {
-+			ret = -ENOMEM;
-+			goto free_payload;
-+		}
- 
- 		for (i = 0; sgl != NULL; sgl = sg_next(sgl)) {
- 			/*
-@@ -1847,9 +1878,29 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
- 			 * last sgl should be reached at the same time that
- 			 * the PFN array is filled.
- 			 */
--			while (hvpfns_to_add--)
--				payload->range.pfn_array[i++] =	hvpfn++;
-+			while (hvpfns_to_add--) {
-+				size = min(HV_HYP_PAGE_SIZE - offset_in_hvpg,
-+					   (unsigned long)length);
-+				dma = storvsc_dma_map(&dev->device, pfn_to_page(hvpfn++),
-+						      offset_in_hvpg, size,
-+						      scmnd->sc_data_direction);
-+				if (dma_mapping_error(&dev->device, dma)) {
-+					ret = -ENOMEM;
-+					goto free_dma_range;
-+				}
-+
-+				if (offset_in_hvpg) {
-+					payload->range.offset = dma & ~HV_HYP_PAGE_MASK;
-+					offset_in_hvpg = 0;
-+				}
-+
-+				cmd_request->dma_range[i].dma = dma;
-+				cmd_request->dma_range[i].mapping_size = size;
-+				payload->range.pfn_array[i++] = dma >> HV_HYP_PAGE_SHIFT;
-+				length -= size;
-+			}
- 		}
-+		cmd_request->hvpg_count = hvpg_count;
- 	}
- 
- 	cmd_request->payload = payload;
-@@ -1860,13 +1911,20 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
- 	put_cpu();
- 
- 	if (ret == -EAGAIN) {
--		if (payload_sz > sizeof(cmd_request->mpb))
--			kfree(payload);
- 		/* no more space */
--		return SCSI_MLQUEUE_DEVICE_BUSY;
-+		ret = SCSI_MLQUEUE_DEVICE_BUSY;
-+		goto free_dma_range;
- 	}
- 
- 	return 0;
-+
-+free_dma_range:
-+	kfree(cmd_request->dma_range);
-+
-+free_payload:
-+	if (payload_sz > sizeof(cmd_request->mpb))
-+		kfree(payload);
-+	return ret;
- }
- 
- static struct scsi_host_template scsi_driver = {
+The changes survive glibc testsuite with no regressions whatsoever.
+
+Please review and provide any feedback.
+
+Thx,
+-Vineet
+
+[1] https://lore.kernel.org/r/20180830144344.GW24142@hirez.programming.kicks-ass.net
+[2] https://lore.kernel.org/r/20180830135749.GA13005@arm.com
+
+
+Vineet Gupta (10):
+  ARC: atomics: disintegrate header
+  ARC: atomic: !LLSC: remove hack in atomic_set() for for UP
+  ARC: atomic: !LLSC: use int data type consistently
+  ARC: atomic64: LLSC: elide unused atomic_{and,or,xor,andnot}_return
+  ARC: atomics: implement relaxed variants
+  ARC: bitops: fls/ffs to take int (vs long) per asm-generic defines
+  ARC: xchg: !LLSC: remove UP micro-optimization/hack
+  ARC: cmpxchg/xchg: rewrite as macros to make type safe
+  ARC: cmpxchg/xchg: implement relaxed variants (LLSC config only)
+  ARC: atomic_cmpxchg/atomic_xchg: implement relaxed variants
+
+Will Deacon (1):
+  ARC: switch to generic bitops
+
+ arch/arc/include/asm/atomic-llsc.h     |  97 ++++++
+ arch/arc/include/asm/atomic-spinlock.h | 102 ++++++
+ arch/arc/include/asm/atomic.h          | 444 ++-----------------------
+ arch/arc/include/asm/atomic64-arcv2.h  | 250 ++++++++++++++
+ arch/arc/include/asm/bitops.h          | 188 +----------
+ arch/arc/include/asm/cmpxchg.h         | 233 ++++++-------
+ arch/arc/include/asm/smp.h             |  14 -
+ arch/arc/kernel/smp.c                  |   2 -
+ 8 files changed, 588 insertions(+), 742 deletions(-)
+ create mode 100644 arch/arc/include/asm/atomic-llsc.h
+ create mode 100644 arch/arc/include/asm/atomic-spinlock.h
+ create mode 100644 arch/arc/include/asm/atomic64-arcv2.h
+
 -- 
 2.25.1
 
