@@ -2,140 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB8D3E08C0
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Aug 2021 21:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E6D3E0929
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Aug 2021 22:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239108AbhHDT1h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Aug 2021 15:27:37 -0400
-Received: from mga01.intel.com ([192.55.52.88]:42490 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237768AbhHDT1g (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 4 Aug 2021 15:27:36 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="235953155"
-X-IronPort-AV: E=Sophos;i="5.84,295,1620716400"; 
-   d="scan'208";a="235953155"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 12:27:22 -0700
-X-IronPort-AV: E=Sophos;i="5.84,295,1620716400"; 
-   d="scan'208";a="671072064"
-Received: from cmalmber-mobl1.amr.corp.intel.com (HELO [10.212.219.120]) ([10.212.219.120])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 12:27:18 -0700
-Subject: Re: [PATCH V2 03/14] x86/set_memory: Add x86_set_memory_enc static
- call support
-To:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
-        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
-        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
-        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        Tianyu.Lan@microsoft.com, rppt@kernel.org,
-        kirill.shutemov@linux.intel.com, akpm@linux-foundation.org,
-        brijesh.singh@amd.com, thomas.lendacky@amd.com, pgonda@google.com,
-        david@redhat.com, krish.sadhukhan@oracle.com, saravanand@fb.com,
-        aneesh.kumar@linux.ibm.com, xen-devel@lists.xenproject.org,
-        martin.b.radev@gmail.com, ardb@kernel.org, rientjes@google.com,
-        tj@kernel.org, keescook@chromium.org,
-        michael.h.kelley@microsoft.com
-Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, parri.andrea@gmail.com
-References: <20210804184513.512888-1-ltykernel@gmail.com>
- <20210804184513.512888-4-ltykernel@gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <5823af8a-7dbb-dbb0-5ea2-d9846aa2a36a@intel.com>
-Date:   Wed, 4 Aug 2021 12:27:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S239688AbhHDUKE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Aug 2021 16:10:04 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:43349 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S239660AbhHDUKE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Aug 2021 16:10:04 -0400
+Received: (qmail 408211 invoked by uid 1000); 4 Aug 2021 16:09:50 -0400
+Date:   Wed, 4 Aug 2021 16:09:50 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Jade Alglave <j.alglave@ucl.ac.uk>, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+Message-ID: <20210804200950.GA406916@rowland.harvard.edu>
+References: <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210606012903.GA1723421@rowland.harvard.edu>
+ <20210606115336.GS18427@gate.crashing.org>
+ <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com>
+ <20210606182213.GA1741684@rowland.harvard.edu>
+ <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
+ <YL34NZ12mKoiSLvu@hirez.programming.kicks-ass.net>
+ <20210607115234.GA7205@willie-the-truck>
+ <20210730172020.GA32396@knuckles.cs.ucl.ac.uk>
+ <20210802233156.GM4397@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-In-Reply-To: <20210804184513.512888-4-ltykernel@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210802233156.GM4397@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/4/21 11:44 AM, Tianyu Lan wrote:
-> +static int default_set_memory_enc(unsigned long addr, int numpages, bool enc);
-> +DEFINE_STATIC_CALL(x86_set_memory_enc, default_set_memory_enc);
-> +
->  #define CPA_FLUSHTLB 1
->  #define CPA_ARRAY 2
->  #define CPA_PAGES_ARRAY 4
-> @@ -1981,6 +1985,11 @@ int set_memory_global(unsigned long addr, int numpages)
->  }
->  
->  static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
-> +{
-> +	return static_call(x86_set_memory_enc)(addr, numpages, enc);
-> +}
-> +
-> +static int default_set_memory_enc(unsigned long addr, int numpages, bool enc)
->  {
->  	struct cpa_data cpa;
->  	int ret;
+On Mon, Aug 02, 2021 at 04:31:56PM -0700, Paul E. McKenney wrote:
+> o	Section 2 I leave in Alan's capable hands.
 
-It doesn't make a lot of difference to add this infrastructure and then
-ignore it for the existing in-tree user:
+Here goes, although I'm not sure how important this is, given that 
+section 2 is presented as merely a "straw man" argument for something 
+that ARM decided to abandon.
 
-> static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
-> {
->         struct cpa_data cpa;
->         int ret;
-> 
->         /* Nothing to do if memory encryption is not active */
->         if (!mem_encrypt_active())
->                 return 0;
+While reading this section (and the paper in general), it was annoying 
+that the terms "down-one-leg" and "down-two-legs" are never explained or 
+motivated.  Even after reading section 2, I'm still not sure what they 
+are really intended to mean.  My impression is that "down-one-leg" is an 
+attempt to express the idea that control dependencies apply to accesses 
+occurring along one leg of a conditional but not to accesses occurring 
+after the two legs have rejoined.  Is that right?
 
-Shouldn't the default be to just "return 0"?  Then on
-mem_encrypt_active() systems, do the bulk of what is in
-__set_memory_enc_dec() today.
+P.17: "The drawback of this approach is that it would require order for 
+the “independent” case" -- this doesn't seem like a drawback to me.  
+Particularly since no existing architecture attempts to avoid ordering 
+the independent case.
 
+Def. of "points of divergence": This is not very precise.  What exactly 
+is a "branching decision"?  Do the two paths of a CAS or CSEL 
+instruction count?  What if the decision doesn't involve whether or not 
+to take the branch but rather where to branch to (as in a computed 
+branch or even just a call through a function pointer)?
+
+Def. of "address dependency": How could there be a Dependency through 
+registers from D4 to R2?  It's not at all easy to untangle the 
+definitions to see what this might mean.  What would be an example?  At 
+any rate, the case where RW2 is a Memory read doesn't seem right.  It 
+says that:
+
+	R0 = Load
+	R1 = Load([R0])
+
+is an address dependency but
+
+	R0 = Load
+	// Branching decision that depends on the value of R0 and
+	// carries a Dependency through registers to a new value for
+	// R0 (whatever that may mean) which is always equal to the
+	// existing value 
+	R1 = Load([R0])
+
+isn't.  Is this really what you mean?  If so, what is the motivation for 
+this definition?  How does it relate to the discussion earlier in this 
+section?
+
+Def. of antecedent: What is a Local read successor or an immediate Local 
+write successor?  These terms aren't defined, and without knowing what 
+they mean it is impossible to understand what an antecedent is.
+
+Def. of pre-equivalent effects and related terms: I don't understand how 
+you can have effects on different branches of a Point of divergence.  By 
+definition, only one of the branches is executed -- how can there be any 
+effects on the speculated branch?
+
+With all these concepts being so unclear, I was completely unable to 
+figure out what the definition of control dependency means.  The text 
+doesn't help at all, because it doesn't contain any examples or 
+explanations to make these things more comprehensible.
+
+The formalization in cat may have some historical interest, but it 
+conveys no information to a reader who isn't prepared to spend hours or 
+days trying to decipher it.  Honestly, do you know _anybody_ who could 
+tell what Figures 22 - 25 mean and what they do just from reading them?  
+You pretty much have to be an expert in cat just to tell what some of 
+the recursive functions in Figs. 23 and 24 do.
+
+(As just one very minor example, the "bisimulation" function in the 
+fourth-to-last line of Figure 25 isn't mentioned anywhere else.  How are 
+people supposed to understand it?)
+
+Alan
