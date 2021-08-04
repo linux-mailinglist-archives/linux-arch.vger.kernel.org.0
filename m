@@ -2,104 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 770793DFD4E
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Aug 2021 10:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE613E00B0
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Aug 2021 14:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbhHDIwn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Aug 2021 04:52:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43864 "EHLO mail.kernel.org"
+        id S237914AbhHDMAT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Aug 2021 08:00:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53552 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235216AbhHDIwm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 4 Aug 2021 04:52:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 194F160F6F;
-        Wed,  4 Aug 2021 08:52:30 +0000 (UTC)
+        id S235740AbhHDMAS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 4 Aug 2021 08:00:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 0FD9C61050;
+        Wed,  4 Aug 2021 12:00:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628067150;
-        bh=0iArU+ki2EYLRkNMmkYJbqoFHfcp+tUcOVzag8zIBck=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nobG9Gllv7N13jdGBP2jfG+ONsBdT6IEGWHjH/Oco3P/JFwCN0PDsDGkujbmZMAWe
-         BjdWUIvxBxnrqLftwh2D1cgQCKWkSUFW+wAM8uCwY04CZqKsKvZXc8GshDWm8MEyHO
-         aVcxw8Jd9apy8lEE+nRmqu0UieVsEssGfDd0ytPsynRejgJwh38QPDeGuT8XvI3VEX
-         dbH27biK1A5t4lHo3eKTfkopJBkymdBCTrrmItFkO0/OsoHYpCRVLJ/oSTmosIqe0M
-         knvdgIaQWoWde1rvTUFyE1H4qcwsPEQq4w4hxLwZ1Ozu4YIXbvRS+we8YRaSMCJfbC
-         9rSgjWs9x5jIA==
-Received: by mail-wm1-f42.google.com with SMTP id o7-20020a05600c5107b0290257f956e02dso3385465wms.1;
-        Wed, 04 Aug 2021 01:52:30 -0700 (PDT)
-X-Gm-Message-State: AOAM53316txzQsabJyuRzstgjNIjWx3j/mN2e5Pet6S6rU6yhrf7gNmp
-        q8aHFyJk9bzV7zWYqIh27p3NT+j5FX2aBfpYPLg=
-X-Google-Smtp-Source: ABdhPJwRBm+5B/otZTXkzrYbrncm3ie0XIHr+qNno/ecewugZENntEn3MDOC/UJz0gQwsZXJwdMVY0wo/wfqtPO74RM=
-X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr17262306wmq.43.1628067148644;
- Wed, 04 Aug 2021 01:52:28 -0700 (PDT)
+        s=k20201202; t=1628078406;
+        bh=oFnyZ1rfcnpRCFksBu/6lAvVX3yFRuCmRyDpl7GUDRc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=TjRnxdhvEU+nA6AXnEUBlriutWYpc+xWt9oZyKqYqw1PYKnPZsTNwiNkfRj3c4gge
+         5M85R3GNGsELKzcjYSk1cZSH69pcc9JT3t1kB9bfM34aNB/yJdhPXob1aj1Ln97xPy
+         I34RTEhgV1HsjKvLsVjvRWO4DOOqUcFak3RVKWPzJyv6S9Rw6ruft+Vx18m0wTesx8
+         XMAPUSD81sQJcFK9XJKMe/fYy4YLX0oXsaBEtDWhgk6dfhaaTiBRvRg+0RQOlWZ6X2
+         APGaL2l2iPJ3dOS9EYTkA2Q6lAZzqSCCk/Kri18AGhjUZMvph+qNjYJGTXQBhVggbH
+         317Kj8iKxssWA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0403E60A72;
+        Wed,  4 Aug 2021 12:00:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
- <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
- <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
- <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
- <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com> <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
- <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com> <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
- <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
-In-Reply-To: <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 4 Aug 2021 10:52:12 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
-Message-ID: <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
-Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
-To:     John Garry <john.garry@huawei.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] sock: allow reading and changing sk_userlocks with
+ setsockopt
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162807840601.323.12461942403559350811.git-patchwork-notify@kernel.org>
+Date:   Wed, 04 Aug 2021 12:00:06 +0000
+References: <20210804075556.2582-1-ptikhomirov@virtuozzo.com>
+In-Reply-To: <20210804075556.2582-1-ptikhomirov@virtuozzo.com>
+To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        arnd@arndb.de, edumazet@google.com, pabeni@redhat.com,
+        fw@strlen.de, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, avagin@gmail.com, kernel@openvz.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 4, 2021 at 9:55 AM John Garry <john.garry@huawei.com> wrote:
->
-> On 03/08/2021 13:15, Arnd Bergmann wrote:
-> >> That seems reasonable. And asm-generic io.h should be ifdef'ed by
-> >> HAS_IOPORT. In your patch you had it under CONFIG_IOPORT - was that
-> >> intentional?
-> > No, that was a typo. Thanks for pointing this out.
-> >
-> >> On another point, I noticed SCSI driver AHA152x depends on ISA, but is
-> >> not an isa driver - however it does use port IO. Would such dependencies
-> >> need to be changed to depend on HAS_IOPORT?
-> > I'm not sure what you mean here. As far as I can tell, AHA152x is an ISA
-> > driver in the sense that it is a driver for ISA add-on cards. However, it
-> > is not a 'struct isa_driver' in the sense that AHA1542 is, AHA152x  is even
-> > older and uses the linux-2.4 style initialization using a module_init()
-> > function that does the probing.
->
-> ok, fine. So I just wonder what the ISA kconfig dependency gets us for
-> aha152x. I experimented by removing the kconfig dependency and enabling
-> for the arm64 (which does not have CONFIG_ISA) std defconfig and it
-> built fine.
+Hello:
 
-The point of CONFIG_ISA is to only build drivers for ISA add-on cards
-on architectures that can have such slots. For ISA drivers in particular,
-we don't want them to be loaded on machines that don't have them
-because of the various ways this can cause trouble with hardwired
-port and irq numbers.
+This patch was applied to netdev/net-next.git (refs/heads/master):
 
-> >> Yeah, that sounds the same as what I was thinking. Maybe IOPORT_NATIVE
-> >> could work as a name. I would think that only x86/ia64 would define it.
-> >> A concern though is that someone could argue that is a functional
-> >> dependency, rather than just a build dependency.
-> > You can have those on a number of platforms, such as early
-> > PowerPC CHRP or pSeries systems, a number of MIPS workstations
-> > including recent Loongson machines, and many Alpha platforms.
-> >
->
-> hmmm... if some machines under an arch support "native" port IO and some
-> don't, then if we use a common multi-platform defconfig which defines
-> HARDCODED_IOPORT, then we still build for platforms without "native"
-> port IO, which is not ideal.
+On Wed,  4 Aug 2021 10:55:56 +0300 you wrote:
+> SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK flags disable automatic socket
+> buffers adjustment done by kernel (see tcp_fixup_rcvbuf() and
+> tcp_sndbuf_expand()). If we've just created a new socket this adjustment
+> is enabled on it, but if one changes the socket buffer size by
+> setsockopt(SO_{SND,RCV}BUF*) it becomes disabled.
+> 
+> CRIU needs to call setsockopt(SO_{SND,RCV}BUF*) on each socket on
+> restore as it first needs to increase buffer sizes for packet queues
+> restore and second it needs to restore back original buffer sizes. So
+> after CRIU restore all sockets become non-auto-adjustable, which can
+> decrease network performance of restored applications significantly.
+> 
+> [...]
 
-Correct, but that's not a problem I'm trying to solve at this point. The
-machines that have those are extremely rare, so almost all configurations
-that one would encounter in practice do not suffer from it, and solving it
-reliably would be really hard.
+Here is the summary with links:
+  - [v3] sock: allow reading and changing sk_userlocks with setsockopt
+    https://git.kernel.org/netdev/net-next/c/04190bf8944d
 
-       Arnd
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
