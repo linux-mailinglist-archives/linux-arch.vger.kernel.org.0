@@ -2,283 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF733DFCFD
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Aug 2021 10:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770793DFD4E
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Aug 2021 10:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236592AbhHDIey (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Aug 2021 04:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236354AbhHDIex (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Aug 2021 04:34:53 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86585C061799
-        for <linux-arch@vger.kernel.org>; Wed,  4 Aug 2021 01:34:40 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id a201so2816119ybg.12
-        for <linux-arch@vger.kernel.org>; Wed, 04 Aug 2021 01:34:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0CTfCNbfY1m9OBrWFZPhcEhGSy7DNXKX4GwNGkq+X1g=;
-        b=QmT3pbXMsz09tghu3H/sl/G9IDaUhFSWKS74ovRCAFzugw78Ehpt8Zv0Bhs3/XC0mJ
-         BgbGt3YjtGmG1cB8/xM8S8gj0VGKgyFq4CwCqPz9QG3hluAASdeghf0dYhTed90ywkp4
-         csPSMNGXzqJqF5gIZmUVrYGjkY4W9eAxqfIYsgmJsbTs6djsUrvNlyc4hEdxc0Ysa3Mj
-         MPb2pKrKk++1vNXbUtPt5yfykaoZiMTvieLMkO3/9no515vi4YIr5/5XvAyWJKgpBt+J
-         tbNdv0midy6C0QrSTrV76g1vQDFuSzcpjxGqbOm6pmH0Rmdi8BSTm4T4Yu0sUfBRsUUN
-         yKIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0CTfCNbfY1m9OBrWFZPhcEhGSy7DNXKX4GwNGkq+X1g=;
-        b=Dwa00RdIf8NsrMTpQzLmcVI8Sr90jVF2OPnC26kR8tvt8hUh3zA24U7M9DHNSn2qy9
-         FRfZC718Am0nYbhbfBUyMkl4DSS8qEepoMWGvoUmQHU6BsI4bUHktSyord7TOGhDb4Sn
-         AWdY59z0T/LosnSfGfeb/znjos4uIN1ikLHUnBZkp+TqIj//aEmDxJjhecA6iME7jj5B
-         3kr+24xZU2hpT+0rim7gLdAtYBMf3hYhdA6pKPXsq3IavdQlbUPfne/wfGfo/VJj0TzW
-         aKZMVTPPFCbTq5FIKatGkJOTKOM4GDGLEjXahj+8yY30JQcFr/MmUawW8R6sSEGrfT4j
-         16ZQ==
-X-Gm-Message-State: AOAM531Nx8xY1oT0YCnc8u3JPPxbSpPa3LUhmGYKVdpNfjR8RFKXLzZB
-        270zOdf9HMrLGd8j6XD+PvvwmVN45mHLkcGrWqVHFw==
-X-Google-Smtp-Source: ABdhPJzBEBMFio/4f/n7MXtT8b+2gqBl/NcHszvil/PLytVOHO6+5FiSb1mclZkBCsyKGgRpmhbupM/gkQFyJ4THnPg=
-X-Received: by 2002:a25:ad57:: with SMTP id l23mr34970381ybe.303.1628066079331;
- Wed, 04 Aug 2021 01:34:39 -0700 (PDT)
+        id S235277AbhHDIwn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Aug 2021 04:52:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43864 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235216AbhHDIwm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 4 Aug 2021 04:52:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 194F160F6F;
+        Wed,  4 Aug 2021 08:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628067150;
+        bh=0iArU+ki2EYLRkNMmkYJbqoFHfcp+tUcOVzag8zIBck=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nobG9Gllv7N13jdGBP2jfG+ONsBdT6IEGWHjH/Oco3P/JFwCN0PDsDGkujbmZMAWe
+         BjdWUIvxBxnrqLftwh2D1cgQCKWkSUFW+wAM8uCwY04CZqKsKvZXc8GshDWm8MEyHO
+         aVcxw8Jd9apy8lEE+nRmqu0UieVsEssGfDd0ytPsynRejgJwh38QPDeGuT8XvI3VEX
+         dbH27biK1A5t4lHo3eKTfkopJBkymdBCTrrmItFkO0/OsoHYpCRVLJ/oSTmosIqe0M
+         knvdgIaQWoWde1rvTUFyE1H4qcwsPEQq4w4hxLwZ1Ozu4YIXbvRS+we8YRaSMCJfbC
+         9rSgjWs9x5jIA==
+Received: by mail-wm1-f42.google.com with SMTP id o7-20020a05600c5107b0290257f956e02dso3385465wms.1;
+        Wed, 04 Aug 2021 01:52:30 -0700 (PDT)
+X-Gm-Message-State: AOAM53316txzQsabJyuRzstgjNIjWx3j/mN2e5Pet6S6rU6yhrf7gNmp
+        q8aHFyJk9bzV7zWYqIh27p3NT+j5FX2aBfpYPLg=
+X-Google-Smtp-Source: ABdhPJwRBm+5B/otZTXkzrYbrncm3ie0XIHr+qNno/ecewugZENntEn3MDOC/UJz0gQwsZXJwdMVY0wo/wfqtPO74RM=
+X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr17262306wmq.43.1628067148644;
+ Wed, 04 Aug 2021 01:52:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210804075556.2582-1-ptikhomirov@virtuozzo.com>
-In-Reply-To: <20210804075556.2582-1-ptikhomirov@virtuozzo.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 4 Aug 2021 10:34:28 +0200
-Message-ID: <CANn89i+Sz1xLmo1tFgbx0KH=RJks6Q=zw0O7NM962T-FG063aQ@mail.gmail.com>
-Subject: Re: [PATCH v3] sock: allow reading and changing sk_userlocks with setsockopt
-To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Paolo Abeni <pabeni@redhat.com>,
-        Florian Westphal <fw@strlen.de>,
-        LKML <linux-kernel@vger.kernel.org>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org,
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
+ <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
+ <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
+ <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com> <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
+ <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com> <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
+ <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
+In-Reply-To: <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 4 Aug 2021 10:52:12 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+Message-ID: <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     John Garry <john.garry@huawei.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Andrei Vagin <avagin@gmail.com>, kernel@openvz.org
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 4, 2021 at 9:56 AM Pavel Tikhomirov
-<ptikhomirov@virtuozzo.com> wrote:
+On Wed, Aug 4, 2021 at 9:55 AM John Garry <john.garry@huawei.com> wrote:
 >
-> SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK flags disable automatic socket
-> buffers adjustment done by kernel (see tcp_fixup_rcvbuf() and
-> tcp_sndbuf_expand()). If we've just created a new socket this adjustment
-> is enabled on it, but if one changes the socket buffer size by
-> setsockopt(SO_{SND,RCV}BUF*) it becomes disabled.
+> On 03/08/2021 13:15, Arnd Bergmann wrote:
+> >> That seems reasonable. And asm-generic io.h should be ifdef'ed by
+> >> HAS_IOPORT. In your patch you had it under CONFIG_IOPORT - was that
+> >> intentional?
+> > No, that was a typo. Thanks for pointing this out.
+> >
+> >> On another point, I noticed SCSI driver AHA152x depends on ISA, but is
+> >> not an isa driver - however it does use port IO. Would such dependencies
+> >> need to be changed to depend on HAS_IOPORT?
+> > I'm not sure what you mean here. As far as I can tell, AHA152x is an ISA
+> > driver in the sense that it is a driver for ISA add-on cards. However, it
+> > is not a 'struct isa_driver' in the sense that AHA1542 is, AHA152x  is even
+> > older and uses the linux-2.4 style initialization using a module_init()
+> > function that does the probing.
 >
-> CRIU needs to call setsockopt(SO_{SND,RCV}BUF*) on each socket on
-> restore as it first needs to increase buffer sizes for packet queues
-> restore and second it needs to restore back original buffer sizes.
+> ok, fine. So I just wonder what the ISA kconfig dependency gets us for
+> aha152x. I experimented by removing the kconfig dependency and enabling
+> for the arm64 (which does not have CONFIG_ISA) std defconfig and it
+> built fine.
 
-We could argue the bug is in TCP_REPAIR code, not allowing restoring
-queues unless
-those setsockopt() calls have been done.
+The point of CONFIG_ISA is to only build drivers for ISA add-on cards
+on architectures that can have such slots. For ISA drivers in particular,
+we don't want them to be loaded on machines that don't have them
+because of the various ways this can cause trouble with hardwired
+port and irq numbers.
 
-For instance SO_RCVLOWAT is able to automatically increase sk->sk_rcvbuf
+> >> Yeah, that sounds the same as what I was thinking. Maybe IOPORT_NATIVE
+> >> could work as a name. I would think that only x86/ia64 would define it.
+> >> A concern though is that someone could argue that is a functional
+> >> dependency, rather than just a build dependency.
+> > You can have those on a number of platforms, such as early
+> > PowerPC CHRP or pSeries systems, a number of MIPS workstations
+> > including recent Loongson machines, and many Alpha platforms.
+> >
+>
+> hmmm... if some machines under an arch support "native" port IO and some
+> don't, then if we use a common multi-platform defconfig which defines
+> HARDCODED_IOPORT, then we still build for platforms without "native"
+> port IO, which is not ideal.
 
-But I think this feature might be useful regardless of TCP_REPAIR needs.
+Correct, but that's not a problem I'm trying to solve at this point. The
+machines that have those are extremely rare, so almost all configurations
+that one would encounter in practice do not suffer from it, and solving it
+reliably would be really hard.
 
-(There is no way to 'undo' a prior SO_RCVBUF or SO_SNDBUF since they are setting
-the SOCK_[SND|RCV]BUF_LOCK bits permanently)
-
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-
-
-> So after CRIU restore all sockets become non-auto-adjustable, which can
-> decrease network performance of restored applications significantly.
->
-> CRIU need to be able to restore sockets with enabled/disabled adjustment
-> to the same state it was before dump, so let's add special setsockopt
-> for it.
->
-> Let's also export SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK flags to uAPI so
-> that using these interface one can reenable automatic socket buffer
-> adjustment on their sockets.
->
-> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> ---
-> Here is a corresponding CRIU commits using these new feature to fix slow
-> download speed problem after migration:
-> https://github.com/checkpoint-restore/criu/pull/1568
->
-> Origin of the problem:
->
-> We have a customer in Virtuozzo who mentioned that nginx server becomes
-> slower after container migration. Especially it is easy to mention when
-> you wget some big file via localhost from the same container which was
-> just migrated.
->
-> By strace-ing all nginx processes I see that nginx worker process before
-> c/r sends data to local wget with big chunks ~1.5Mb, but after c/r it
-> only succeeds to send by small chunks ~64Kb.
->
-> Before:
-> sendfile(12, 13, [7984974] => [9425600], 11479629) = 1440626 <0.000180>
->
-> After:
-> sendfile(8, 13, [1507275] => [1568768], 17957328) = 61493 <0.000675>
->
-> Smaller buffer can explain the decrease in download speed. So as a POC I
-> just commented out all buffer setting manipulations and that helped.
->
-> Note: I'm not sure about the way I export flags to uAPI, probably there
-> is some other better way without separating BUF and BIND lock flags to
-> different header files.
->
-> v2: define SOCK_BUF_LOCK_MASK mask
-> v3: reject other flags except SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK, use
-> mask in sock_getsockopt, export flags to uapi/linux/socket.h
-> ---
->  arch/alpha/include/uapi/asm/socket.h  |  2 ++
->  arch/mips/include/uapi/asm/socket.h   |  2 ++
->  arch/parisc/include/uapi/asm/socket.h |  2 ++
->  arch/sparc/include/uapi/asm/socket.h  |  2 ++
->  include/net/sock.h                    |  3 +--
->  include/uapi/asm-generic/socket.h     |  2 ++
->  include/uapi/linux/socket.h           |  5 +++++
->  net/core/sock.c                       | 13 +++++++++++++
->  8 files changed, 29 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-> index 6b3daba60987..1dd9baf4a6c2 100644
-> --- a/arch/alpha/include/uapi/asm/socket.h
-> +++ b/arch/alpha/include/uapi/asm/socket.h
-> @@ -129,6 +129,8 @@
->
->  #define SO_NETNS_COOKIE                71
->
-> +#define SO_BUF_LOCK            72
-> +
->  #if !defined(__KERNEL__)
->
->  #if __BITS_PER_LONG == 64
-> diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-> index cdf404a831b2..1eaf6a1ca561 100644
-> --- a/arch/mips/include/uapi/asm/socket.h
-> +++ b/arch/mips/include/uapi/asm/socket.h
-> @@ -140,6 +140,8 @@
->
->  #define SO_NETNS_COOKIE                71
->
-> +#define SO_BUF_LOCK            72
-> +
->  #if !defined(__KERNEL__)
->
->  #if __BITS_PER_LONG == 64
-> diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-> index 5b5351cdcb33..8baaad52d799 100644
-> --- a/arch/parisc/include/uapi/asm/socket.h
-> +++ b/arch/parisc/include/uapi/asm/socket.h
-> @@ -121,6 +121,8 @@
->
->  #define SO_NETNS_COOKIE                0x4045
->
-> +#define SO_BUF_LOCK            0x4046
-> +
->  #if !defined(__KERNEL__)
->
->  #if __BITS_PER_LONG == 64
-> diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-> index 92675dc380fa..e80ee8641ac3 100644
-> --- a/arch/sparc/include/uapi/asm/socket.h
-> +++ b/arch/sparc/include/uapi/asm/socket.h
-> @@ -122,6 +122,8 @@
->
->  #define SO_NETNS_COOKIE          0x0050
->
-> +#define SO_BUF_LOCK              0x0051
-> +
->  #if !defined(__KERNEL__)
->
->
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index ff1be7e7e90b..6e761451c927 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -68,6 +68,7 @@
->  #include <net/tcp_states.h>
->  #include <linux/net_tstamp.h>
->  #include <net/l3mdev.h>
-> +#include <uapi/linux/socket.h>
->
->  /*
->   * This structure really needs to be cleaned up.
-> @@ -1438,8 +1439,6 @@ static inline int __sk_prot_rehash(struct sock *sk)
->  #define RCV_SHUTDOWN   1
->  #define SEND_SHUTDOWN  2
->
-> -#define SOCK_SNDBUF_LOCK       1
-> -#define SOCK_RCVBUF_LOCK       2
->  #define SOCK_BINDADDR_LOCK     4
->  #define SOCK_BINDPORT_LOCK     8
->
-> diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-> index d588c244ec2f..1f0a2b4864e4 100644
-> --- a/include/uapi/asm-generic/socket.h
-> +++ b/include/uapi/asm-generic/socket.h
-> @@ -124,6 +124,8 @@
->
->  #define SO_NETNS_COOKIE                71
->
-> +#define SO_BUF_LOCK            72
-> +
->  #if !defined(__KERNEL__)
->
->  #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
-> diff --git a/include/uapi/linux/socket.h b/include/uapi/linux/socket.h
-> index c3409c8ec0dd..eb0a9a5b6e71 100644
-> --- a/include/uapi/linux/socket.h
-> +++ b/include/uapi/linux/socket.h
-> @@ -26,4 +26,9 @@ struct __kernel_sockaddr_storage {
->         };
->  };
->
-> +#define SOCK_SNDBUF_LOCK       1
-> +#define SOCK_RCVBUF_LOCK       2
-> +
-> +#define SOCK_BUF_LOCK_MASK (SOCK_SNDBUF_LOCK | SOCK_RCVBUF_LOCK)
-> +
->  #endif /* _UAPI_LINUX_SOCKET_H */
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 9671c32e6ef5..aada649e07e8 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -1358,6 +1358,15 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
->                 ret = sock_bindtoindex_locked(sk, val);
->                 break;
->
-> +       case SO_BUF_LOCK:
-> +               if (val & ~SOCK_BUF_LOCK_MASK) {
-> +                       ret = -EINVAL;
-> +                       break;
-> +               }
-> +               sk->sk_userlocks = val | (sk->sk_userlocks &
-> +                                         ~SOCK_BUF_LOCK_MASK);
-> +               break;
-> +
->         default:
->                 ret = -ENOPROTOOPT;
->                 break;
-> @@ -1720,6 +1729,10 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
->                 v.val64 = sock_net(sk)->net_cookie;
->                 break;
->
-> +       case SO_BUF_LOCK:
-> +               v.val = sk->sk_userlocks & SOCK_BUF_LOCK_MASK;
-> +               break;
-> +
->         default:
->                 /* We implement the SO_SNDLOWAT etc to not be settable
->                  * (1003.1g 7).
-> --
-> 2.31.1
->
+       Arnd
