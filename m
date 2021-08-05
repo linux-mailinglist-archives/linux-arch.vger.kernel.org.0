@@ -2,116 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A988D3E12AE
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 12:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7C03E158D
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 15:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240179AbhHEKbz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Aug 2021 06:31:55 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:47730 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239963AbhHEKbx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Aug 2021 06:31:53 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8FAB920B36ED;
-        Thu,  5 Aug 2021 03:31:39 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8FAB920B36ED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1628159499;
-        bh=ePlKPhwRIbIIFc+MuT827+okoKvGxizkUBUP/w4ErsE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pjAa4Q58vbxnUikwyYqOtoHBFxksV2ox51gdNK8v6ZdmyeLfBka8OCjfdWkiu/oQR
-         8Io+iu0nNtKxyKl2Jn9y+eBlz9MQWvgCaFoqtiQcluqUgeqL1GkwiDN+LfVHszd+np
-         EA0N1IBvlOvftaEGDTq/I2JWJJ+4umT2At7V+VHc=
-Received: by mail-pj1-f46.google.com with SMTP id l19so7669616pjz.0;
-        Thu, 05 Aug 2021 03:31:39 -0700 (PDT)
-X-Gm-Message-State: AOAM531YqyRCmOidWnKiMz3RXQMB2X9PlCofjzHNSLBQ7VcYRrPbtViB
-        ooyqRNyUMoxdffXmugKa2rTjm9F8qBllXgbVQZk=
-X-Google-Smtp-Source: ABdhPJxdohcSXq2Fna33fIGUiEu6kUIdxZ6/UhzFU8Koaz6JrTkw4lOh1yVNgX/OfIBQqhE040kGEhxRvLm7q8DNB0E=
-X-Received: by 2002:aa7:80d1:0:b029:399:ce3a:d617 with SMTP id
- a17-20020aa780d10000b0290399ce3ad617mr4286293pfn.16.1628159499106; Thu, 05
- Aug 2021 03:31:39 -0700 (PDT)
+        id S240231AbhHENU3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Aug 2021 09:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232724AbhHENU3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Aug 2021 09:20:29 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E6EC061765
+        for <linux-arch@vger.kernel.org>; Thu,  5 Aug 2021 06:20:15 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id f11so6645963ioj.3
+        for <linux-arch@vger.kernel.org>; Thu, 05 Aug 2021 06:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ffia4FtdtbAacefvHTQ97ZwKlVqk6Tb0pwbGsu/jgT0=;
+        b=Dk+HVP6iAtlBD6TYf+SGZdNdZLZtYM733nnGs/9Xhp/WXvTBEOrMDkBTQ37l4tFIU8
+         amDbhpQOWl7US1QM9JURszEj8jM/UpecnNHzG/kywV6yAawHnG+K6J7RpzKLw4nwxJXP
+         5aAjCwyL3GMX8LU6zhG5rByF7CzB1agYL51muy9/J9POKHaau7EQ/OdE1BlqX/oqU6mI
+         u9qI7GBx/iq7gKdFRjTo/8sinb5wVmod3gZAtMtB/luJOZiYoqTsKsq6ERQy9p4EyRWN
+         wdULCIoH87D0cgLLefAzyXRe8eMojJRvtGm5QghvKmoOCsJr0Dgqtgec5C4I5W1yNkXY
+         xpCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ffia4FtdtbAacefvHTQ97ZwKlVqk6Tb0pwbGsu/jgT0=;
+        b=bAimamEzC9ACIxLLmvys66ZIrCCZVhfFBFyV6cWkzc1SIbDv6Y9rAAgsphD3AwromI
+         oqG4alToLOP9zIgh8a16nuzZdrfD9lwbf2dnDA3gheoSRiQ7nXKq676asIqwZsSfvdkF
+         By+yoE5zhYM/wavoyDKvLjIuI7tV/FfsLRoihjrjVa0sEHM4C0i5+jHh/9S/mPXgBM7X
+         +ul7b5CZjusVjMkKGeIFSQr12HjJn9aZjiyC2cMcw23CZ53OtUwOl8BTmBqMrhEWqX3M
+         G3OYHCkhVZsWk0TRc0Djm03F0p5Qg2RRoIeM1bjjV9NHczF/tqY2OwTXlMsjlir74tup
+         5ZKg==
+X-Gm-Message-State: AOAM533Qfrox83hs0ofNOOetN0LYjHnhVOdkIxTxzrFdBbURFFzm/WUu
+        20+jXmI7/kgQUSdSv1f55WFjkYXfIlgYsv9pVmk=
+X-Google-Smtp-Source: ABdhPJzTuZ1SPSb+UGWPDpGriHN5vtUfocTHYaohDvmgBGBDnLtcp0xO0VAWu7H9GLc8ldmBkcQ/6tERtPphDqiDHWY=
+X-Received: by 2002:a02:6983:: with SMTP id e125mr4594712jac.112.1628169614801;
+ Thu, 05 Aug 2021 06:20:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAFnufp1QpMc87+-hwPa887iQQGCjjkGNanVSKOUsE-0ti82jrA@mail.gmail.com>
- <mhng-7b8d3a12-e223-4b69-a35a-617b0d7ac8f7@palmerdabbelt-glaptop>
-In-Reply-To: <mhng-7b8d3a12-e223-4b69-a35a-617b0d7ac8f7@palmerdabbelt-glaptop>
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-Date:   Thu, 5 Aug 2021 12:31:04 +0200
-X-Gmail-Original-Message-ID: <CAFnufp0eVejrDJoGE900D2U5-9qi-srVEmPOc9zHC5mSH4DgLg@mail.gmail.com>
-Message-ID: <CAFnufp0eVejrDJoGE900D2U5-9qi-srVEmPOc9zHC5mSH4DgLg@mail.gmail.com>
-Subject: Re: [PATCH] riscv: use the generic string routines
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+References: <20210728114822.1243-1-wangrui@loongson.cn> <20210729093923.GD21151@willie-the-truck>
+ <CAHirt9hNxsHPVWPa+RpUC6av0tcHPESb4Pr20ovAixwNEh4hrQ@mail.gmail.com> <7574da60-fb71-dad2-b099-a815a0a18c22@redhat.com>
+In-Reply-To: <7574da60-fb71-dad2-b099-a815a0a18c22@redhat.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 5 Aug 2021 21:20:00 +0800
+Message-ID: <CAAhV-H5no05HdLyzUr1Mhbem4_zcyRkx_4kTMpW_F5h5gfh=9A@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/5] locking/atomic: Implement atomic_fetch_and_or
+To:     Waiman Long <llong@redhat.com>
+Cc:     hev <r@hev.cc>, Will Deacon <will@kernel.org>,
+        Rui Wang <wangrui@loongson.cn>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <Atish.Patra@wdc.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Guo Ren <guoren@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 4, 2021 at 10:40 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+Hi, all,
+
+On Sat, Jul 31, 2021 at 2:40 AM Waiman Long <llong@redhat.com> wrote:
 >
-> On Tue, 03 Aug 2021 09:54:34 PDT (-0700), mcroce@linux.microsoft.com wrote:
-> > On Mon, Jul 19, 2021 at 1:44 PM Matteo Croce <mcroce@linux.microsoft.com> wrote:
-> >>
-> >> From: Matteo Croce <mcroce@microsoft.com>
-> >>
-> >> Use the generic routines which handle alignment properly.
-> >>
-> >> These are the performances measured on a BeagleV machine for a
-> >> 32 mbyte buffer:
-> >>
-> >> memcpy:
-> >> original aligned:        75 Mb/s
-> >> original unaligned:      75 Mb/s
-> >> new aligned:            114 Mb/s
-> >> new unaligned:          107 Mb/s
-> >>
-> >> memset:
-> >> original aligned:       140 Mb/s
-> >> original unaligned:     140 Mb/s
-> >> new aligned:            241 Mb/s
-> >> new unaligned:          241 Mb/s
-> >>
-> >> TCP throughput with iperf3 gives a similar improvement as well.
-> >>
-> >> This is the binary size increase according to bloat-o-meter:
-> >>
-> >> add/remove: 0/0 grow/shrink: 4/2 up/down: 432/-36 (396)
-> >> Function                                     old     new   delta
-> >> memcpy                                        36     324    +288
-> >> memset                                        32     148    +116
-> >> strlcpy                                      116     132     +16
-> >> strscpy_pad                                   84      96     +12
-> >> strlcat                                      176     164     -12
-> >> memmove                                       76      52     -24
-> >> Total: Before=1225371, After=1225767, chg +0.03%
-> >>
-> >> Signed-off-by: Matteo Croce <mcroce@microsoft.com>
-> >> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> >> ---
+> On 7/29/21 6:18 AM, hev wrote:
+> > Hi, Will,
 > >
-> > Hi,
+> > On Thu, Jul 29, 2021 at 5:39 PM Will Deacon <will@kernel.org> wrote:
+> >> On Wed, Jul 28, 2021 at 07:48:22PM +0800, Rui Wang wrote:
+> >>> From: wangrui <wangrui@loongson.cn>
+> >>>
+> >>> This patch introduce a new atomic primitive 'and_or', It may be have three
+> >>> types of implemeations:
+> >>>
+> >>>   * The generic implementation is based on arch_cmpxchg.
+> >>>   * The hardware supports atomic 'and_or' of single instruction.
+> >> Do any architectures actually support this instruction?
+> > No, I'm not sure now.
 > >
-> > can someone have a look at this change and share opinions?
+> >> On arm64, we can clear arbitrary bits and we can set arbitrary bits, but we
+> >> can't combine the two in a fashion which provides atomicity and
+> >> forward-progress guarantees.
+> >>
+> >> Please can you explain how this new primitive will be used, in case there's
+> >> an alternative way of doing it which maps better to what CPUs can actually
+> >> do?
+> > I think we can easily exchange arbitrary bits of a machine word with atomic
+> > andnot_or/and_or. Otherwise, we can only use xchg8/16 to do it. It depends on
+> > hardware support, and the key point is that the bits to be exchanged
+> > must be in the
+> > same sub-word. qspinlock adjusted memory layout for this reason, and waste some
+> > bits(_Q_PENDING_BITS == 8).
 >
-> This LGTM.  How are the generic string routines landing?  I'm happy to
-> take this into my for-next, but IIUC we need the optimized generic
-> versions first so we don't have a performance regression falling back to
-> the trivial ones for a bit.  Is there a shared tag I can pull in?
+> It is not actually a waste of bits. With _Q_PENDING_BITS==8, more
+> optimized code can be used for pending bit processing. It is only in the
+> rare case that NR_CPUS >= 16k - 1 that we have to fall back to
+> _Q_PENDING_BITS==1. In fact, that should be the only condition that will
+> make _Q_PENDING_BITS=1.
+Our original goal is to let LoongArch (and CSKY, RISC-V, etc) can use
+qspinlock, but these archs lack sub-word xchg/cmpxchg. Arnd suggests
+we not use qspinlock, but LoongArch has large SMP (and NUMA) so we
+need it. Peter suggests we implement atomic_fetch_and_or, but it seems
+not agreed by everyone. So, I think we can only fix the
+badly-implemented xchg_small() for MIPS and LoongArch.
 
-Hi,
-
-I see them only in linux-next by now.
-
--- 
-per aspera ad upstream
+Huacai
+>
+> Cheers,
+> Longman
+>
