@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5EF3E0B74
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 02:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C353E0B80
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 02:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235592AbhHEAxk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Aug 2021 20:53:40 -0400
-Received: from mga02.intel.com ([134.134.136.20]:12125 "EHLO mga02.intel.com"
+        id S236698AbhHEAxr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Aug 2021 20:53:47 -0400
+Received: from mga02.intel.com ([134.134.136.20]:12127 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234968AbhHEAxi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 4 Aug 2021 20:53:38 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="201215423"
+        id S235659AbhHEAxl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 4 Aug 2021 20:53:41 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="201215425"
 X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="201215423"
+   d="scan'208";a="201215425"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:25 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:27 -0700
 X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="437617186"
+   d="scan'208";a="437617195"
 Received: from mjkendri-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.254.17.117])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:22 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:24 -0700
 From:   Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -48,9 +48,9 @@ Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
         sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-doc@vger.kernel.org,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH v4 02/15] x86/tdx: Exclude Shared bit from physical_mask
-Date:   Wed,  4 Aug 2021 17:52:05 -0700
-Message-Id: <20210805005218.2912076-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v4 03/15] x86/tdx: Make pages shared in ioremap()
+Date:   Wed,  4 Aug 2021 17:52:06 -0700
+Message-Id: <20210805005218.2912076-4-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -62,25 +62,14 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 
-Just like MKTME, TDX reassigns bits of the physical address for
-metadata.  MKTME used several bits for an encryption KeyID. TDX
-uses a single bit in guests to communicate whether a physical page
-should be protected by TDX as private memory (bit set to 0) or
-unprotected and shared with the VMM (bit set to 1).
+All ioremap()ed pages that are not backed by normal memory (NONE or
+RESERVED) have to be mapped as shared.
 
-Add a helper, tdg_shared_mask() to generate the mask.  The processor
-enumerates its physical address width to include the shared bit, which
-means it gets included in __PHYSICAL_MASK by default.
+Reuse the infrastructure from AMD SEV code.
 
-Remove the shared mask from 'physical_mask' since any bits in
-tdg_shared_mask() are not used for physical addresses in page table
-entries.
-
-Also, note that shared mapping configuration cannot be clubbed between
-AMD SME and Intel TDX Guest platforms in common function. SME has
-to do it very early in __startup_64() as it sets the bit on all
-memory, except what is used for communication. TDX can postpone it,
-as it don't need any shared mapping in very early boot.
+Note that DMA code doesn't use ioremap() to convert memory to shared as
+DMA buffers backed by normal memory. DMA code make buffer shared with
+set_memory_decrypted().
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
@@ -89,77 +78,84 @@ Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.inte
 ---
 
 Changes since v3:
- * None
+ * Rebased on top of Tom Lendacky's protected guest
+   changes (https://lore.kernel.org/patchwork/cover/1468760/)
 
 Changes since v1:
  * Fixed format issues in commit log.
 
- arch/x86/Kconfig           | 1 +
- arch/x86/include/asm/tdx.h | 4 ++++
- arch/x86/kernel/tdx.c      | 9 +++++++++
- 3 files changed, 14 insertions(+)
+ arch/x86/include/asm/pgtable.h  | 4 ++++
+ arch/x86/mm/ioremap.c           | 8 ++++++--
+ include/linux/protected_guest.h | 1 +
+ 3 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index d66a8a2f3c97..8eada36694b6 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -872,6 +872,7 @@ config INTEL_TDX_GUEST
- 	select X86_X2APIC
- 	select SECURITY_LOCKDOWN_LSM
- 	select ARCH_HAS_PROTECTED_GUEST
-+	select X86_MEM_ENCRYPT_COMMON
- 	help
- 	  Provide support for running in a trusted domain on Intel processors
- 	  equipped with Trusted Domain eXtensions. TDX is a new Intel
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 72154d3f63c2..1e2a1c6a1898 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -77,6 +77,8 @@ int tdg_handle_virtualization_exception(struct pt_regs *regs,
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 448cd01eb3ec..2d4d518651d2 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -21,6 +21,10 @@
+ #define pgprot_encrypted(prot)	__pgprot(__sme_set(pgprot_val(prot)))
+ #define pgprot_decrypted(prot)	__pgprot(__sme_clr(pgprot_val(prot)))
  
- bool tdg_early_handle_ve(struct pt_regs *regs);
- 
-+extern phys_addr_t tdg_shared_mask(void);
++/* Make the page accesable by VMM for protected guests */
++#define pgprot_protected_guest(prot) __pgprot(pgprot_val(prot) |	\
++					      tdg_shared_mask())
 +
+ #ifndef __ASSEMBLY__
+ #include <asm/x86_init.h>
+ #include <asm/pkru.h>
+diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
+index 60ade7dd71bd..69a60f240124 100644
+--- a/arch/x86/mm/ioremap.c
++++ b/arch/x86/mm/ioremap.c
+@@ -17,6 +17,7 @@
+ #include <linux/mem_encrypt.h>
+ #include <linux/efi.h>
+ #include <linux/pgtable.h>
++#include <linux/protected_guest.h>
+ 
+ #include <asm/set_memory.h>
+ #include <asm/e820/api.h>
+@@ -26,6 +27,7 @@
+ #include <asm/pgalloc.h>
+ #include <asm/memtype.h>
+ #include <asm/setup.h>
++#include <asm/tdx.h>
+ 
+ #include "physaddr.h"
+ 
+@@ -87,8 +89,8 @@ static unsigned int __ioremap_check_ram(struct resource *res)
+ }
+ 
  /*
-  * To support I/O port access in decompressor or early kernel init
-  * code, since #VE exception handler cannot be used, use paravirt
-@@ -145,6 +147,8 @@ static inline bool tdx_prot_guest_has(unsigned long flag) { return false; }
- 
- static inline bool tdg_early_handle_ve(struct pt_regs *regs) { return false; }
- 
-+static inline phys_addr_t tdg_shared_mask(void) { return 0; }
-+
- #endif /* CONFIG_INTEL_TDX_GUEST */
- 
- #ifdef CONFIG_INTEL_TDX_GUEST_KVM
-diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
-index 0c24439774b4..d316fe33f52f 100644
---- a/arch/x86/kernel/tdx.c
-+++ b/arch/x86/kernel/tdx.c
-@@ -75,6 +75,12 @@ bool tdx_prot_guest_has(unsigned long flag)
- }
- EXPORT_SYMBOL_GPL(tdx_prot_guest_has);
- 
-+/* The highest bit of a guest physical address is the "sharing" bit */
-+phys_addr_t tdg_shared_mask(void)
-+{
-+	return 1ULL << (td_info.gpa_width - 1);
-+}
-+
- static void tdg_get_info(void)
+- * In a SEV guest, NONE and RESERVED should not be mapped encrypted because
+- * there the whole memory is already encrypted.
++ * In a SEV or TDX guest, NONE and RESERVED should not be mapped encrypted (or
++ * private in TDX case) because there the whole memory is already encrypted.
+  */
+ static unsigned int __ioremap_check_encrypted(struct resource *res)
  {
- 	u64 ret;
-@@ -86,6 +92,9 @@ static void tdg_get_info(void)
+@@ -246,6 +248,8 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
+ 	prot = PAGE_KERNEL_IO;
+ 	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
+ 		prot = pgprot_encrypted(prot);
++	else if (prot_guest_has(PATTR_GUEST_SHARED_MAPPING_INIT))
++		prot = pgprot_protected_guest(prot);
  
- 	td_info.gpa_width = out.rcx & GENMASK(5, 0);
- 	td_info.attributes = out.rdx;
-+
-+	/* Exclude Shared bit from the __PHYSICAL_MASK */
-+	physical_mask &= ~tdg_shared_mask();
- }
+ 	switch (pcm) {
+ 	case _PAGE_CACHE_MODE_UC:
+diff --git a/include/linux/protected_guest.h b/include/linux/protected_guest.h
+index 1a350c3fcfe2..14255f801100 100644
+--- a/include/linux/protected_guest.h
++++ b/include/linux/protected_guest.h
+@@ -17,6 +17,7 @@
+ #define PATTR_GUEST_MEM_ENCRYPT		2	/* Guest encrypted memory */
+ #define PATTR_GUEST_PROT_STATE		3	/* Guest encrypted state */
+ #define PATTR_GUEST_UNROLL_STRING_IO	4	/* Unrolled string IO */
++#define PATTR_GUEST_SHARED_MAPPING_INIT	5	/* Late shared mapping init*/
  
- static __cpuidle void tdg_halt(void)
+ /* 0x800 - 0x8ff reserved for AMD */
+ #define PATTR_SME			0x800
 -- 
 2.25.1
 
