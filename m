@@ -2,117 +2,383 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7C03E158D
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 15:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE533E1658
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 16:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240231AbhHENU3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Aug 2021 09:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S241851AbhHEOGF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Aug 2021 10:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbhHENU3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Aug 2021 09:20:29 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E6EC061765
-        for <linux-arch@vger.kernel.org>; Thu,  5 Aug 2021 06:20:15 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id f11so6645963ioj.3
-        for <linux-arch@vger.kernel.org>; Thu, 05 Aug 2021 06:20:15 -0700 (PDT)
+        with ESMTP id S241861AbhHEOGB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Aug 2021 10:06:01 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B96C061798;
+        Thu,  5 Aug 2021 07:05:33 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id j1so9037085pjv.3;
+        Thu, 05 Aug 2021 07:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ffia4FtdtbAacefvHTQ97ZwKlVqk6Tb0pwbGsu/jgT0=;
-        b=Dk+HVP6iAtlBD6TYf+SGZdNdZLZtYM733nnGs/9Xhp/WXvTBEOrMDkBTQ37l4tFIU8
-         amDbhpQOWl7US1QM9JURszEj8jM/UpecnNHzG/kywV6yAawHnG+K6J7RpzKLw4nwxJXP
-         5aAjCwyL3GMX8LU6zhG5rByF7CzB1agYL51muy9/J9POKHaau7EQ/OdE1BlqX/oqU6mI
-         u9qI7GBx/iq7gKdFRjTo/8sinb5wVmod3gZAtMtB/luJOZiYoqTsKsq6ERQy9p4EyRWN
-         wdULCIoH87D0cgLLefAzyXRe8eMojJRvtGm5QghvKmoOCsJr0Dgqtgec5C4I5W1yNkXY
-         xpCg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=F8VMrdCyOywJRypSYr/zNvHCgQ+meFAot/YAU98HWWE=;
+        b=ECF3X5iUC+sX/vDMJPtan9DyiKntE4JTT1Af+ZUPGy2bBqryLNVeJ3gR5+CS3fJHFH
+         +BGde9+tFxN33KSJ0vdmOJMD6p8xehdYyALwQFZ6G3NzehgjZywkm09J/HtwwfaTXzBP
+         S1WS2pWntdKte5+ILpRc2l734SfMuogBUrcU4GO/fIwTACeWEGst0D8KKq7Hp2ykipoA
+         QyhNf7ug3UEf8Ogx6Kd+jbFj4xFPVdasYhyQWntvhxI1wBJbaTa3jT5pkrkRsaek/UAd
+         NLLA6VCbXzd2NA0YhNwAwyGzJ7MPCd9oBnOdf+3gO1asduizzv+vye87H8v2E/Sqy61q
+         QusA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ffia4FtdtbAacefvHTQ97ZwKlVqk6Tb0pwbGsu/jgT0=;
-        b=bAimamEzC9ACIxLLmvys66ZIrCCZVhfFBFyV6cWkzc1SIbDv6Y9rAAgsphD3AwromI
-         oqG4alToLOP9zIgh8a16nuzZdrfD9lwbf2dnDA3gheoSRiQ7nXKq676asIqwZsSfvdkF
-         By+yoE5zhYM/wavoyDKvLjIuI7tV/FfsLRoihjrjVa0sEHM4C0i5+jHh/9S/mPXgBM7X
-         +ul7b5CZjusVjMkKGeIFSQr12HjJn9aZjiyC2cMcw23CZ53OtUwOl8BTmBqMrhEWqX3M
-         G3OYHCkhVZsWk0TRc0Djm03F0p5Qg2RRoIeM1bjjV9NHczF/tqY2OwTXlMsjlir74tup
-         5ZKg==
-X-Gm-Message-State: AOAM533Qfrox83hs0ofNOOetN0LYjHnhVOdkIxTxzrFdBbURFFzm/WUu
-        20+jXmI7/kgQUSdSv1f55WFjkYXfIlgYsv9pVmk=
-X-Google-Smtp-Source: ABdhPJzTuZ1SPSb+UGWPDpGriHN5vtUfocTHYaohDvmgBGBDnLtcp0xO0VAWu7H9GLc8ldmBkcQ/6tERtPphDqiDHWY=
-X-Received: by 2002:a02:6983:: with SMTP id e125mr4594712jac.112.1628169614801;
- Thu, 05 Aug 2021 06:20:14 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=F8VMrdCyOywJRypSYr/zNvHCgQ+meFAot/YAU98HWWE=;
+        b=RhR6DUfep5k0/wzg6iwW6yTbiO+B+HXXsnOumI3TofbZS9C9kUDVVtb/HivlCE7Cbg
+         yLc3qGIMjLLJLr+fTYAE31D6Y84YF/JTCOv5SgmlJcHxHTIyBijMMqkizIcLqbUjouVY
+         D6OgeRvsOGRTmQoVViKUx5e2F13Td+qFobP7CzKZ99TU/9PHhjuCwz/ZGfoMnHNEVvgs
+         dgO4ZV+ltwCh6g2xplvzcG679GsL+HBNZqBDaGKoCRYWed8X4TgV/WukidIqyN72FLjj
+         FzHVpfXRMnGoJ12k/7+A54kV+ibUrDBkZS0wPx5BJLyTYNhqCuqyCk+n7MtRrY5htII6
+         TBww==
+X-Gm-Message-State: AOAM530uf2lmogXbILTf+hdG1UT5iFkOCOYkFRx+aJZ/GVhEJCwVdRDZ
+        zAtfCBGE1csYDbq0STghdNg=
+X-Google-Smtp-Source: ABdhPJwBb/TGQHg7Q/TCL0bQgwmOAloOQN4ZDR0PVYFzozUh9xJAeBD4+y2vpy2azMRYRouhtcDM2Q==
+X-Received: by 2002:aa7:9719:0:b029:3b7:6965:c9b0 with SMTP id a25-20020aa797190000b02903b76965c9b0mr5413104pfg.50.1628172332669;
+        Thu, 05 Aug 2021 07:05:32 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
+        by smtp.gmail.com with ESMTPSA id w11sm8331978pgk.34.2021.08.05.07.05.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Aug 2021 07:05:31 -0700 (PDT)
+Subject: Re: [PATCH V2 03/14] x86/set_memory: Add x86_set_memory_enc static
+ call support
+To:     Dave Hansen <dave.hansen@intel.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        Tianyu.Lan@microsoft.com, rppt@kernel.org,
+        kirill.shutemov@linux.intel.com, akpm@linux-foundation.org,
+        brijesh.singh@amd.com, thomas.lendacky@amd.com, pgonda@google.com,
+        david@redhat.com, krish.sadhukhan@oracle.com, saravanand@fb.com,
+        aneesh.kumar@linux.ibm.com, xen-devel@lists.xenproject.org,
+        martin.b.radev@gmail.com, ardb@kernel.org, rientjes@google.com,
+        tj@kernel.org, keescook@chromium.org,
+        michael.h.kelley@microsoft.com, Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, parri.andrea@gmail.com
+References: <20210804184513.512888-1-ltykernel@gmail.com>
+ <20210804184513.512888-4-ltykernel@gmail.com>
+ <5823af8a-7dbb-dbb0-5ea2-d9846aa2a36a@intel.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <942e6fcb-3bdf-9294-d3db-ca311db440d3@gmail.com>
+Date:   Thu, 5 Aug 2021 22:05:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20210728114822.1243-1-wangrui@loongson.cn> <20210729093923.GD21151@willie-the-truck>
- <CAHirt9hNxsHPVWPa+RpUC6av0tcHPESb4Pr20ovAixwNEh4hrQ@mail.gmail.com> <7574da60-fb71-dad2-b099-a815a0a18c22@redhat.com>
-In-Reply-To: <7574da60-fb71-dad2-b099-a815a0a18c22@redhat.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Thu, 5 Aug 2021 21:20:00 +0800
-Message-ID: <CAAhV-H5no05HdLyzUr1Mhbem4_zcyRkx_4kTMpW_F5h5gfh=9A@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 1/5] locking/atomic: Implement atomic_fetch_and_or
-To:     Waiman Long <llong@redhat.com>
-Cc:     hev <r@hev.cc>, Will Deacon <will@kernel.org>,
-        Rui Wang <wangrui@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <5823af8a-7dbb-dbb0-5ea2-d9846aa2a36a@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, all,
+Hi Dave:
+	Thanks for review.
 
-On Sat, Jul 31, 2021 at 2:40 AM Waiman Long <llong@redhat.com> wrote:
->
-> On 7/29/21 6:18 AM, hev wrote:
-> > Hi, Will,
-> >
-> > On Thu, Jul 29, 2021 at 5:39 PM Will Deacon <will@kernel.org> wrote:
-> >> On Wed, Jul 28, 2021 at 07:48:22PM +0800, Rui Wang wrote:
-> >>> From: wangrui <wangrui@loongson.cn>
-> >>>
-> >>> This patch introduce a new atomic primitive 'and_or', It may be have three
-> >>> types of implemeations:
-> >>>
-> >>>   * The generic implementation is based on arch_cmpxchg.
-> >>>   * The hardware supports atomic 'and_or' of single instruction.
-> >> Do any architectures actually support this instruction?
-> > No, I'm not sure now.
-> >
-> >> On arm64, we can clear arbitrary bits and we can set arbitrary bits, but we
-> >> can't combine the two in a fashion which provides atomicity and
-> >> forward-progress guarantees.
-> >>
-> >> Please can you explain how this new primitive will be used, in case there's
-> >> an alternative way of doing it which maps better to what CPUs can actually
-> >> do?
-> > I think we can easily exchange arbitrary bits of a machine word with atomic
-> > andnot_or/and_or. Otherwise, we can only use xchg8/16 to do it. It depends on
-> > hardware support, and the key point is that the bits to be exchanged
-> > must be in the
-> > same sub-word. qspinlock adjusted memory layout for this reason, and waste some
-> > bits(_Q_PENDING_BITS == 8).
->
-> It is not actually a waste of bits. With _Q_PENDING_BITS==8, more
-> optimized code can be used for pending bit processing. It is only in the
-> rare case that NR_CPUS >= 16k - 1 that we have to fall back to
-> _Q_PENDING_BITS==1. In fact, that should be the only condition that will
-> make _Q_PENDING_BITS=1.
-Our original goal is to let LoongArch (and CSKY, RISC-V, etc) can use
-qspinlock, but these archs lack sub-word xchg/cmpxchg. Arnd suggests
-we not use qspinlock, but LoongArch has large SMP (and NUMA) so we
-need it. Peter suggests we implement atomic_fetch_and_or, but it seems
-not agreed by everyone. So, I think we can only fix the
-badly-implemented xchg_small() for MIPS and LoongArch.
+On 8/5/2021 3:27 AM, Dave Hansen wrote:
+> On 8/4/21 11:44 AM, Tianyu Lan wrote:
+>> +static int default_set_memory_enc(unsigned long addr, int numpages, bool enc);
+>> +DEFINE_STATIC_CALL(x86_set_memory_enc, default_set_memory_enc);
+>> +
+>>   #define CPA_FLUSHTLB 1
+>>   #define CPA_ARRAY 2
+>>   #define CPA_PAGES_ARRAY 4
+>> @@ -1981,6 +1985,11 @@ int set_memory_global(unsigned long addr, int numpages)
+>>   }
+>>   
+>>   static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
+>> +{
+>> +	return static_call(x86_set_memory_enc)(addr, numpages, enc);
+>> +}
+>> +
+>> +static int default_set_memory_enc(unsigned long addr, int numpages, bool enc)
+>>   {
+>>   	struct cpa_data cpa;
+>>   	int ret;
+> 
+> It doesn't make a lot of difference to add this infrastructure and then
+> ignore it for the existing in-tree user:
+> 
+>> static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
+>> {
+>>          struct cpa_data cpa;
+>>          int ret;
+>>
+>>          /* Nothing to do if memory encryption is not active */
+>>          if (!mem_encrypt_active())
+>>                  return 0;
+> 
+> Shouldn't the default be to just "return 0"?  Then on
+> mem_encrypt_active() systems, do the bulk of what is in
+> __set_memory_enc_dec() today.
+> 
 
-Huacai
->
-> Cheers,
-> Longman
->
+OK. I try moving code in __set_memory_enc_dec() to sev file 
+mem_encrypt.c and this requires to expose cpa functions and structure.
+Please have a look.
+
+Tom, Joerg and Brijesh, Could you review at sev code change?
+Thanks.
+
+
+
+diff --git a/arch/x86/include/asm/set_memory.h 
+b/arch/x86/include/asm/set_memory.h
+index 43fa081a1adb..991366612deb 100644
+--- a/arch/x86/include/asm/set_memory.h
++++ b/arch/x86/include/asm/set_memory.h
+@@ -4,6 +4,25 @@
+
+  #include <asm/page.h>
+  #include <asm-generic/set_memory.h>
++#include <linux/static_call.h>
++
++/*
++ * The current flushing context - we pass it instead of 5 arguments:
++ */
++struct cpa_data {
++	unsigned long	*vaddr;
++	pgd_t		*pgd;
++	pgprot_t	mask_set;
++	pgprot_t	mask_clr;
++	unsigned long	numpages;
++	unsigned long	curpage;
++	unsigned long	pfn;
++	unsigned int	flags;
++	unsigned int	force_split		: 1,
++			force_static_prot	: 1,
++			force_flush_all		: 1;
++	struct page	**pages;
++};
+
+  /*
+   * The set_memory_* API can be used to change various attributes of a 
+virtual
+@@ -83,6 +102,11 @@ int set_pages_rw(struct page *page, int numpages);
+  int set_direct_map_invalid_noflush(struct page *page);
+  int set_direct_map_default_noflush(struct page *page);
+  bool kernel_page_present(struct page *page);
++int __change_page_attr_set_clr(struct cpa_data *cpa, int checkalias);
++void cpa_flush(struct cpa_data *data, int cache);
++
++int dummy_set_memory_enc(unsigned long addr, int numpages, bool enc);
++DECLARE_STATIC_CALL(x86_set_memory_enc, dummy_set_memory_enc);
+
+  extern int kernel_set_to_readonly;
+
+diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
+index ff08dc463634..49e957c4191f 100644
+--- a/arch/x86/mm/mem_encrypt.c
++++ b/arch/x86/mm/mem_encrypt.c
+@@ -20,6 +20,8 @@
+  #include <linux/bitops.h>
+  #include <linux/dma-mapping.h>
+  #include <linux/virtio_config.h>
++#include <linux/highmem.h>
++#include <linux/static_call.h>
+
+  #include <asm/tlbflush.h>
+  #include <asm/fixmap.h>
+@@ -178,6 +180,45 @@ void __init sme_map_bootdata(char *real_mode_data)
+  	__sme_early_map_unmap_mem(__va(cmdline_paddr), COMMAND_LINE_SIZE, true);
+  }
+
++static int sev_set_memory_enc(unsigned long addr, int numpages, bool enc)
++{
++	struct cpa_data cpa;
++	int ret;
++
++	/* Should not be working on unaligned addresses */
++	if (WARN_ONCE(addr & ~PAGE_MASK, "misaligned address: %#lx\n", addr))
++		addr &= PAGE_MASK;
++
++	memset(&cpa, 0, sizeof(cpa));
++	cpa.vaddr = &addr;
++	cpa.numpages = numpages;
++	cpa.mask_set = enc ? __pgprot(_PAGE_ENC) : __pgprot(0);
++	cpa.mask_clr = enc ? __pgprot(0) : __pgprot(_PAGE_ENC);
++	cpa.pgd = init_mm.pgd;
++
++	/* Must avoid aliasing mappings in the highmem code */
++	kmap_flush_unused();
++	vm_unmap_aliases();
++
++	/*
++	 * Before changing the encryption attribute, we need to flush caches.
++	 */
++	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
++
++	ret = __change_page_attr_set_clr(&cpa, 1);
++
++	/*
++	 * After changing the encryption attribute, we need to flush TLBs again
++	 * in case any speculative TLB caching occurred (but no need to flush
++	 * caches again).  We could just use cpa_flush_all(), but in case TLB
++	 * flushing gets optimized in the cpa_flush() path use the same logic
++	 * as above.
++	 */
++	cpa_flush(&cpa, 0);
++
++	return ret;
++}
++
+  void __init sme_early_init(void)
+  {
+  	unsigned int i;
+@@ -185,6 +226,8 @@ void __init sme_early_init(void)
+  	if (!sme_me_mask)
+  		return;
+
++	static_call_update(x86_set_memory_enc, sev_set_memory_enc);
++
+  	early_pmd_flags = __sme_set(early_pmd_flags);
+
+  	__supported_pte_mask = __sme_set(__supported_pte_mask);
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index ad8a5c586a35..4f15f7c89dbc 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -18,6 +18,7 @@
+  #include <linux/libnvdimm.h>
+  #include <linux/vmstat.h>
+  #include <linux/kernel.h>
++#include <linux/static_call.h>
+
+  #include <asm/e820/api.h>
+  #include <asm/processor.h>
+@@ -32,24 +33,6 @@
+
+  #include "../mm_internal.h"
+
+-/*
+- * The current flushing context - we pass it instead of 5 arguments:
+- */
+-struct cpa_data {
+-	unsigned long	*vaddr;
+-	pgd_t		*pgd;
+-	pgprot_t	mask_set;
+-	pgprot_t	mask_clr;
+-	unsigned long	numpages;
+-	unsigned long	curpage;
+-	unsigned long	pfn;
+-	unsigned int	flags;
+-	unsigned int	force_split		: 1,
+-			force_static_prot	: 1,
+-			force_flush_all		: 1;
+-	struct page	**pages;
+-};
+-
+  enum cpa_warn {
+  	CPA_CONFLICT,
+  	CPA_PROTECT,
+@@ -66,6 +49,13 @@ static const int cpa_warn_level = CPA_PROTECT;
+   */
+  static DEFINE_SPINLOCK(cpa_lock);
+
++static int default_set_memory_enc(unsigned long addr, int numpages, 
+bool enc)
++{
++	return 0;
++}
++
++DEFINE_STATIC_CALL(x86_set_memory_enc, default_set_memory_enc);
++
+  #define CPA_FLUSHTLB 1
+  #define CPA_ARRAY 2
+  #define CPA_PAGES_ARRAY 4
+@@ -357,7 +347,7 @@ static void __cpa_flush_tlb(void *data)
+  		flush_tlb_one_kernel(fix_addr(__cpa_addr(cpa, i)));
+  }
+
+-static void cpa_flush(struct cpa_data *data, int cache)
++void cpa_flush(struct cpa_data *data, int cache)
+  {
+  	struct cpa_data *cpa = data;
+  	unsigned int i;
+@@ -1587,8 +1577,6 @@ static int __change_page_attr(struct cpa_data 
+*cpa, int primary)
+  	return err;
+  }
+
+-static int __change_page_attr_set_clr(struct cpa_data *cpa, int 
+checkalias);
+-
+  static int cpa_process_alias(struct cpa_data *cpa)
+  {
+  	struct cpa_data alias_cpa;
+@@ -1646,7 +1634,7 @@ static int cpa_process_alias(struct cpa_data *cpa)
+  	return 0;
+  }
+
+-static int __change_page_attr_set_clr(struct cpa_data *cpa, int checkalias)
++int __change_page_attr_set_clr(struct cpa_data *cpa, int checkalias)
+  {
+  	unsigned long numpages = cpa->numpages;
+  	unsigned long rempages = numpages;
+@@ -1982,45 +1970,7 @@ int set_memory_global(unsigned long addr, int 
+numpages)
+
+  static int __set_memory_enc_dec(unsigned long addr, int numpages, bool 
+enc)
+  {
+-	struct cpa_data cpa;
+-	int ret;
+-
+-	/* Nothing to do if memory encryption is not active */
+-	if (!mem_encrypt_active())
+-		return 0;
+-
+-	/* Should not be working on unaligned addresses */
+-	if (WARN_ONCE(addr & ~PAGE_MASK, "misaligned address: %#lx\n", addr))
+-		addr &= PAGE_MASK;
+-
+-	memset(&cpa, 0, sizeof(cpa));
+-	cpa.vaddr = &addr;
+-	cpa.numpages = numpages;
+-	cpa.mask_set = enc ? __pgprot(_PAGE_ENC) : __pgprot(0);
+-	cpa.mask_clr = enc ? __pgprot(0) : __pgprot(_PAGE_ENC);
+-	cpa.pgd = init_mm.pgd;
+-
+-	/* Must avoid aliasing mappings in the highmem code */
+-	kmap_flush_unused();
+-	vm_unmap_aliases();
+-
+-	/*
+-	 * Before changing the encryption attribute, we need to flush caches.
+-	 */
+-	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
+-
+-	ret = __change_page_attr_set_clr(&cpa, 1);
+-
+-	/*
+-	 * After changing the encryption attribute, we need to flush TLBs again
+-	 * in case any speculative TLB caching occurred (but no need to flush
+-	 * caches again).  We could just use cpa_flush_all(), but in case TLB
+-	 * flushing gets optimized in the cpa_flush() path use the same logic
+-	 * as above.
+-	 */
+-	cpa_flush(&cpa, 0);
+-
+-	return ret;
++	return static_call(x86_set_memory_enc)(addr, numpages, enc);
+  }
+
+  int set_memory_encrypted(unsigned long addr, int numpages)
