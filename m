@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C73993E0BA2
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 02:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC213E0BB0
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 02:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237051AbhHEAyA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Aug 2021 20:54:00 -0400
-Received: from mga02.intel.com ([134.134.136.20]:12131 "EHLO mga02.intel.com"
+        id S236816AbhHEAyS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Aug 2021 20:54:18 -0400
+Received: from mga09.intel.com ([134.134.136.24]:27469 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236865AbhHEAxw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 4 Aug 2021 20:53:52 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="201215445"
+        id S236608AbhHEAyF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 4 Aug 2021 20:54:05 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="214027473"
 X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="201215445"
+   d="scan'208";a="214027473"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:38 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:41 -0700
 X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="437617244"
+   d="scan'208";a="437617259"
 Received: from mjkendri-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.254.17.117])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:36 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:38 -0700
 From:   Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -48,9 +48,9 @@ Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
         sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-doc@vger.kernel.org,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH v4 08/15] x86/tdx: Enable shared memory protected guest flags for TDX guest
-Date:   Wed,  4 Aug 2021 17:52:11 -0700
-Message-Id: <20210805005218.2912076-9-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v4 09/15] pci: Consolidate pci_iomap* and pci_iomap*wc
+Date:   Wed,  4 Aug 2021 17:52:12 -0700
+Message-Id: <20210805005218.2912076-10-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -60,30 +60,128 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In TDX guest, since the memory is private to guest, it needs some
-extra configuration before sharing any data with VMM. AMD SEV also
-implements similar features and hence code can be shared. Currently
-memory sharing related code in the kernel is protected by
-PATTR_GUEST_MEM_ENCRYPT and PATTR_GUEST_SHARED_MAPPING_INIT flags.
-So enable them for TDX guest as well.
+From: Andi Kleen <ak@linux.intel.com>
 
+pci_iomap* and pci_iomap*wc are currently duplicated code, except
+that the _wc variant does not support IO ports. Replace them
+with a common helper and a callback for the mapping. I used
+wrappers for the maps because some architectures implement ioremap
+and friends with macros.
+
+This will allow to add more variants without excessive code
+duplications. This patch should have no behavior change.
+
+Signed-off-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- arch/x86/kernel/tdx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ lib/pci_iomap.c | 81 +++++++++++++++++++++++++++----------------------
+ 1 file changed, 44 insertions(+), 37 deletions(-)
 
-diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
-index 01b758496e84..1cf2443edb90 100644
---- a/arch/x86/kernel/tdx.c
-+++ b/arch/x86/kernel/tdx.c
-@@ -78,6 +78,8 @@ bool tdx_prot_guest_has(unsigned long flag)
- 	switch (flag) {
- 	case PATTR_GUEST_TDX:
- 	case PATTR_GUEST_UNROLL_STRING_IO:
-+	case PATTR_GUEST_MEM_ENCRYPT:
-+	case PATTR_GUEST_SHARED_MAPPING_INIT:
- 		return cpu_feature_enabled(X86_FEATURE_TDX_GUEST);
- 	}
+diff --git a/lib/pci_iomap.c b/lib/pci_iomap.c
+index 2d3eb1cb73b8..6251c3f651c6 100644
+--- a/lib/pci_iomap.c
++++ b/lib/pci_iomap.c
+@@ -10,6 +10,46 @@
+ #include <linux/export.h>
+ 
+ #ifdef CONFIG_PCI
++
++/*
++ * Callback wrappers because some architectures define ioremap et.al.
++ * as macros.
++ */
++static void __iomem *map_ioremap(phys_addr_t addr, size_t size)
++{
++	return ioremap(addr, size);
++}
++
++static void __iomem *map_ioremap_wc(phys_addr_t addr, size_t size)
++{
++	return ioremap_wc(addr, size);
++}
++
++static void __iomem *pci_iomap_range_map(struct pci_dev *dev,
++					 int bar,
++					 unsigned long offset,
++					 unsigned long maxlen,
++					 void __iomem *(*mapm)(phys_addr_t,
++							       size_t))
++{
++	resource_size_t start = pci_resource_start(dev, bar);
++	resource_size_t len = pci_resource_len(dev, bar);
++	unsigned long flags = pci_resource_flags(dev, bar);
++
++	if (len <= offset || !start)
++		return NULL;
++	len -= offset;
++	start += offset;
++	if (maxlen && len > maxlen)
++		len = maxlen;
++	if (flags & IORESOURCE_IO)
++		return __pci_ioport_map(dev, start, len);
++	if (flags & IORESOURCE_MEM)
++		return mapm(start, len);
++	/* What? */
++	return NULL;
++}
++
+ /**
+  * pci_iomap_range - create a virtual mapping cookie for a PCI BAR
+  * @dev: PCI device that owns the BAR
+@@ -30,22 +70,8 @@ void __iomem *pci_iomap_range(struct pci_dev *dev,
+ 			      unsigned long offset,
+ 			      unsigned long maxlen)
+ {
+-	resource_size_t start = pci_resource_start(dev, bar);
+-	resource_size_t len = pci_resource_len(dev, bar);
+-	unsigned long flags = pci_resource_flags(dev, bar);
+-
+-	if (len <= offset || !start)
+-		return NULL;
+-	len -= offset;
+-	start += offset;
+-	if (maxlen && len > maxlen)
+-		len = maxlen;
+-	if (flags & IORESOURCE_IO)
+-		return __pci_ioport_map(dev, start, len);
+-	if (flags & IORESOURCE_MEM)
+-		return ioremap(start, len);
+-	/* What? */
+-	return NULL;
++	return pci_iomap_range_map(dev, bar, offset, maxlen,
++				   map_ioremap);
+ }
+ EXPORT_SYMBOL(pci_iomap_range);
+ 
+@@ -70,27 +96,8 @@ void __iomem *pci_iomap_wc_range(struct pci_dev *dev,
+ 				 unsigned long offset,
+ 				 unsigned long maxlen)
+ {
+-	resource_size_t start = pci_resource_start(dev, bar);
+-	resource_size_t len = pci_resource_len(dev, bar);
+-	unsigned long flags = pci_resource_flags(dev, bar);
+-
+-
+-	if (flags & IORESOURCE_IO)
+-		return NULL;
+-
+-	if (len <= offset || !start)
+-		return NULL;
+-
+-	len -= offset;
+-	start += offset;
+-	if (maxlen && len > maxlen)
+-		len = maxlen;
+-
+-	if (flags & IORESOURCE_MEM)
+-		return ioremap_wc(start, len);
+-
+-	/* What? */
+-	return NULL;
++	return pci_iomap_range_map(dev, bar, offset, maxlen,
++				   map_ioremap_wc);
+ }
+ EXPORT_SYMBOL_GPL(pci_iomap_wc_range);
  
 -- 
 2.25.1
