@@ -2,179 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7073E0BE2
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 02:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826763E1014
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 10:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbhHEA4F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Aug 2021 20:56:05 -0400
-Received: from mga09.intel.com ([134.134.136.24]:27469 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237465AbhHEAy6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 4 Aug 2021 20:54:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="214027500"
-X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="214027500"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:53 -0700
-X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="437617307"
-Received: from mjkendri-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.254.17.117])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:51 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Michael S . Tsirkin" <mst@redhat.com>
-Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH v4 15/15] x86/tdx: Add cmdline option to force use of ioremap_shared
-Date:   Wed,  4 Aug 2021 17:52:18 -0700
-Message-Id: <20210805005218.2912076-16-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        id S232513AbhHEIUf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Aug 2021 04:20:35 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:29828 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230407AbhHEIUf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Aug 2021 04:20:35 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-222-ItXAGynfMm2D6VX6lXBPsw-1; Thu, 05 Aug 2021 09:20:16 +0100
+X-MC-Unique: ItXAGynfMm2D6VX6lXBPsw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.23; Thu, 5 Aug 2021 09:20:15 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.023; Thu, 5 Aug 2021 09:20:15 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Palmer Dabbelt' <palmer@dabbelt.com>,
+        "mcroce@linux.microsoft.com" <mcroce@linux.microsoft.com>,
+        "mcroce@linux.microsoft.com" <mcroce@linux.microsoft.com>
+CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        Atish Patra <Atish.Patra@wdc.com>,
+        "kernel@esmil.dk" <kernel@esmil.dk>,
+        "akira.tsukamoto@gmail.com" <akira.tsukamoto@gmail.com>,
+        "drew@beagleboard.org" <drew@beagleboard.org>,
+        "bmeng.cn@gmail.com" <bmeng.cn@gmail.com>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "Christoph Hellwig" <hch@infradead.org>
+Subject: RE: [PATCH] riscv: use the generic string routines
+Thread-Topic: [PATCH] riscv: use the generic string routines
+Thread-Index: AQHXiXDwMuHx//JaRE+MHXqCWo1pFatkkT8w
+Date:   Thu, 5 Aug 2021 08:20:15 +0000
+Message-ID: <b8d9437cae2248c7a2cb6244f5d760ec@AcuMS.aculab.com>
+References: <CAFnufp1QpMc87+-hwPa887iQQGCjjkGNanVSKOUsE-0ti82jrA@mail.gmail.com>
+ <mhng-7b8d3a12-e223-4b69-a35a-617b0d7ac8f7@palmerdabbelt-glaptop>
+In-Reply-To: <mhng-7b8d3a12-e223-4b69-a35a-617b0d7ac8f7@palmerdabbelt-glaptop>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add a command line option to force all the enabled drivers to use
-shared memory mappings. This will be useful when enabling new drivers
-in the protected guest without making all the required changes to use
-shared mappings in it.
-
-Note that this might also allow other non explicitly enabled drivers
-to interact with the host, which could cause other security risks.
-
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
- .../admin-guide/kernel-parameters.rst         |  1 +
- .../admin-guide/kernel-parameters.txt         | 12 ++++++++++++
- arch/x86/include/asm/io.h                     |  2 ++
- arch/x86/mm/ioremap.c                         | 19 ++++++++++++++++++-
- 4 files changed, 33 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.rst b/Documentation/admin-guide/kernel-parameters.rst
-index 01ba293a2d70..bdf3896a100c 100644
---- a/Documentation/admin-guide/kernel-parameters.rst
-+++ b/Documentation/admin-guide/kernel-parameters.rst
-@@ -147,6 +147,7 @@ parameter is applicable::
- 	PCI	PCI bus support is enabled.
- 	PCIE	PCI Express support is enabled.
- 	PCMCIA	The PCMCIA subsystem is enabled.
-+	PG	Protected guest is enabled.
- 	PNP	Plug & Play support is enabled.
- 	PPC	PowerPC architecture is enabled.
- 	PPT	Parallel port support is enabled.
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index bdb22006f713..ba390be62f89 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2062,6 +2062,18 @@
- 			1 - Bypass the IOMMU for DMA.
- 			unset - Use value of CONFIG_IOMMU_DEFAULT_PASSTHROUGH.
- 
-+	ioremap_force_shared= [X86_64, PG]
-+			Force the kernel to use shared memory mappings which do
-+			not use ioremap_shared/pcimap_shared to opt-in to shared
-+			mappings with the host. This feature is mainly used by
-+			a protected guest when enabling new drivers without
-+			proper shared memory related changes. Please note that
-+			this option might also allow other non explicitly enabled
-+			drivers to interact with the host in protected guest,
-+			which could cause other security risks. This option will
-+			also cause BIOS data structures to be shared with the host,
-+			which might open security holes.
-+
- 	io7=		[HW] IO7 for Marvel-based Alpha systems
- 			See comment before marvel_specify_io7 in
- 			arch/alpha/kernel/core_marvel.c.
-diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
-index 51c2c45456bf..744f72835a30 100644
---- a/arch/x86/include/asm/io.h
-+++ b/arch/x86/include/asm/io.h
-@@ -413,6 +413,8 @@ extern bool arch_memremap_can_ram_remap(resource_size_t offset,
- extern bool phys_mem_access_encrypted(unsigned long phys_addr,
- 				      unsigned long size);
- 
-+extern bool ioremap_force_shared;
-+
- /**
-  * iosubmit_cmds512 - copy data to single MMIO location, in 512-bit units
-  * @dst: destination, in MMIO space (must be 512-bit aligned)
-diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
-index 74260aaa494b..7576e886fad8 100644
---- a/arch/x86/mm/ioremap.c
-+++ b/arch/x86/mm/ioremap.c
-@@ -28,6 +28,7 @@
- #include <asm/memtype.h>
- #include <asm/setup.h>
- #include <asm/tdx.h>
-+#include <asm/cmdline.h>
- 
- #include "physaddr.h"
- 
-@@ -162,6 +163,17 @@ static void __ioremap_check_mem(resource_size_t addr, unsigned long size,
- 	__ioremap_check_other(addr, desc);
- }
- 
-+/*
-+ * Normally only drivers that are hardened for use in confidential guests
-+ * force shared mappings. But if device filtering is disabled other
-+ * devices can be loaded, and these need shared mappings too. This
-+ * variable is set to true if these filters are disabled.
-+ *
-+ * Note this has some side effects, e.g. various BIOS tables
-+ * get shared too which is risky.
-+ */
-+bool ioremap_force_shared;
-+
- /*
-  * Remap an arbitrary physical address space into the kernel virtual
-  * address space. It transparently creates kernel huge I/O mapping when
-@@ -249,7 +261,7 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
- 	prot = PAGE_KERNEL_IO;
- 	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
- 		prot = pgprot_encrypted(prot);
--	else if (shared)
-+	else if (shared || ioremap_force_shared)
- 		prot = pgprot_protected_guest(prot);
- 
- 	switch (pcm) {
-@@ -847,6 +859,11 @@ void __init early_ioremap_init(void)
- 	WARN_ON((fix_to_virt(0) + PAGE_SIZE) & ((1 << PMD_SHIFT) - 1));
- #endif
- 
-+	/* Parse cmdline params for ioremap_force_shared */
-+	if (cmdline_find_option_bool(boot_command_line,
-+				     "ioremap_force_shared"))
-+		ioremap_force_shared = 1;
-+
- 	early_ioremap_setup();
- 
- 	pmd = early_ioremap_pmd(fix_to_virt(FIX_BTMAP_BEGIN));
--- 
-2.25.1
+RnJvbTogUGFsbWVyIERhYmJlbHQNCj4gU2VudDogMDQgQXVndXN0IDIwMjEgMjE6NDANCj4gDQo+
+IE9uIFR1ZSwgMDMgQXVnIDIwMjEgMDk6NTQ6MzQgUERUICgtMDcwMCksIG1jcm9jZUBsaW51eC5t
+aWNyb3NvZnQuY29tIHdyb3RlOg0KPiA+IE9uIE1vbiwgSnVsIDE5LCAyMDIxIGF0IDE6NDQgUE0g
+TWF0dGVvIENyb2NlIDxtY3JvY2VAbGludXgubWljcm9zb2Z0LmNvbT4gd3JvdGU6DQo+ID4+DQo+
+ID4+IEZyb206IE1hdHRlbyBDcm9jZSA8bWNyb2NlQG1pY3Jvc29mdC5jb20+DQo+ID4+DQo+ID4+
+IFVzZSB0aGUgZ2VuZXJpYyByb3V0aW5lcyB3aGljaCBoYW5kbGUgYWxpZ25tZW50IHByb3Blcmx5
+Lg0KPiA+Pg0KPiA+PiBUaGVzZSBhcmUgdGhlIHBlcmZvcm1hbmNlcyBtZWFzdXJlZCBvbiBhIEJl
+YWdsZVYgbWFjaGluZSBmb3IgYQ0KPiA+PiAzMiBtYnl0ZSBidWZmZXI6DQo+ID4+DQo+ID4+IG1l
+bWNweToNCj4gPj4gb3JpZ2luYWwgYWxpZ25lZDogICAgICAgIDc1IE1iL3MNCj4gPj4gb3JpZ2lu
+YWwgdW5hbGlnbmVkOiAgICAgIDc1IE1iL3MNCj4gPj4gbmV3IGFsaWduZWQ6ICAgICAgICAgICAg
+MTE0IE1iL3MNCj4gPj4gbmV3IHVuYWxpZ25lZDogICAgICAgICAgMTA3IE1iL3MNCj4gPj4NCj4g
+Pj4gbWVtc2V0Og0KPiA+PiBvcmlnaW5hbCBhbGlnbmVkOiAgICAgICAxNDAgTWIvcw0KPiA+PiBv
+cmlnaW5hbCB1bmFsaWduZWQ6ICAgICAxNDAgTWIvcw0KPiA+PiBuZXcgYWxpZ25lZDogICAgICAg
+ICAgICAyNDEgTWIvcw0KPiA+PiBuZXcgdW5hbGlnbmVkOiAgICAgICAgICAyNDEgTWIvcw0KPiA+
+Pg0KPiA+PiBUQ1AgdGhyb3VnaHB1dCB3aXRoIGlwZXJmMyBnaXZlcyBhIHNpbWlsYXIgaW1wcm92
+ZW1lbnQgYXMgd2VsbC4NCj4gPj4NCj4gPj4gVGhpcyBpcyB0aGUgYmluYXJ5IHNpemUgaW5jcmVh
+c2UgYWNjb3JkaW5nIHRvIGJsb2F0LW8tbWV0ZXI6DQo+ID4+DQo+ID4+IGFkZC9yZW1vdmU6IDAv
+MCBncm93L3NocmluazogNC8yIHVwL2Rvd246IDQzMi8tMzYgKDM5NikNCj4gPj4gRnVuY3Rpb24g
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgb2xkICAgICBuZXcgICBkZWx0YQ0K
+PiA+PiBtZW1jcHkgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMzYgICAg
+IDMyNCAgICArMjg4DQo+ID4+IG1lbXNldCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAzMiAgICAgMTQ4ICAgICsxMTYNCj4gPj4gc3RybGNweSAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgMTE2ICAgICAxMzIgICAgICsxNg0KPiA+PiBzdHJzY3B5X3Bh
+ZCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgODQgICAgICA5NiAgICAgKzEyDQo+
+ID4+IHN0cmxjYXQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDE3NiAgICAg
+MTY0ICAgICAtMTINCj4gPj4gbWVtbW92ZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIDc2ICAgICAgNTIgICAgIC0yNA0KPiA+PiBUb3RhbDogQmVmb3JlPTEyMjUzNzEsIEFm
+dGVyPTEyMjU3NjcsIGNoZyArMC4wMyUNCj4gPj4NCj4gPj4gU2lnbmVkLW9mZi1ieTogTWF0dGVv
+IENyb2NlIDxtY3JvY2VAbWljcm9zb2Z0LmNvbT4NCj4gPj4gU2lnbmVkLW9mZi1ieTogRW1pbCBS
+ZW5uZXIgQmVydGhpbmcgPGtlcm5lbEBlc21pbC5kaz4NCj4gPj4gLS0tDQo+ID4NCj4gPiBIaSwN
+Cj4gPg0KPiA+IGNhbiBzb21lb25lIGhhdmUgYSBsb29rIGF0IHRoaXMgY2hhbmdlIGFuZCBzaGFy
+ZSBvcGluaW9ucz8NCj4gDQo+IFRoaXMgTEdUTS4gIEhvdyBhcmUgdGhlIGdlbmVyaWMgc3RyaW5n
+IHJvdXRpbmVzIGxhbmRpbmc/ICBJJ20gaGFwcHkgdG8NCj4gdGFrZSB0aGlzIGludG8gbXkgZm9y
+LW5leHQsIGJ1dCBJSVVDIHdlIG5lZWQgdGhlIG9wdGltaXplZCBnZW5lcmljDQo+IHZlcnNpb25z
+IGZpcnN0IHNvIHdlIGRvbid0IGhhdmUgYSBwZXJmb3JtYW5jZSByZWdyZXNzaW9uIGZhbGxpbmcg
+YmFjayB0bw0KPiB0aGUgdHJpdmlhbCBvbmVzIGZvciBhIGJpdC4gIElzIHRoZXJlIGEgc2hhcmVk
+IHRhZyBJIGNhbiBwdWxsIGluPw0KDQpJIHRob3VnaHQgdGhlIGFjdHVhbCBwcm9ibGVtIHdhcyB0
+aGF0IHRoZSBhc20gY29weSBmdW5jdGlvbnMgd2VyZQ0KZG9pbmcgbWlzYWxpZ25lZCB0cmFuc2Zl
+cnMgYW5kIGZhdWx0aW5nLg0KDQpUaGVyZSBpcyBubyB3YXkgdGhhdCB0aGUgc2ltcGxlIEMgbG9v
+cCBzaG91bGQgYmUgYXMgZmFzdCBhcw0KdGhlIGFzbSBmdW5jdGlvbiBnaXZlbiB0aGUgZGVsYXkg
+Y3ljbGVzIHJlYWRpbmcgZnJvbSBtZW1vcnkuDQoNCllvdSBkZWZpbml0ZWx5IG5lZWQgdG8gdGVz
+dCBtdWNoIHNtYWxsZXIgY29waWVzIHdoZXJlIHRoZQ0KYnVmZmVycyBhcmUgcmVzaWRlbnQgaW4g
+dGhlIEwxIGRhdGEgY2FjaGUuDQpBbnl0aGluZyBlbHNlIGlzIGNvbXBsZXRlbHkgZG9taW5hdGVk
+IGJ5IHRoZSBjYWNoZSBsaW5lIGZpbGxzL3NwaWxscy4NCg0KWW91IGFsc28gbmVlZCB0byB0ZXN0
+IG9uIHRoZSBtdWNoIGZhc3RlciByaXNjdiBpbXBsZW1lbnRhdGlvbnMNCm5vdCBqdXN0IG9uIHRo
+ZSBiZWFnbGV2IGJvYXJkLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2Vz
+aWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVL
+DQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
