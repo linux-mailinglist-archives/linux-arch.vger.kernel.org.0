@@ -2,46 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AF73E16E0
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 16:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6313E16F2
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 16:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241075AbhHEOYv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Aug 2021 10:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240989AbhHEOYv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Aug 2021 10:24:51 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED84C061765;
-        Thu,  5 Aug 2021 07:24:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zMcKhJ07Z0yEyEv/MZ8pR7li72ad4G0VC4wqCeDkbDY=; b=Q8Gt1gPN7F9SkQKtk66lR0Nvuh
-        J+bQdo/XSF0T67gISx6Vc66q4fTo+FTFXUMBRhgaIYcCdf4qsGlh0/mWJ+py9vssB/RciYSkt7LqL
-        D0cqTwAYfbBkgMf2ypNTXXW2W20qbJJiGowvi4sZXl3BoY2qT/+k7Nng8ZQfv0ypsUQI4WocLRzCG
-        u80NaVh0JtgNowR5InuyXmnurSDKaZAz/gxT14CsI+ZrymZR8Osz9v++VxUgQS1ig9yJ1gWeOnHdN
-        4FgEGzlqGLrJBOnGChRGgnAbrCvPvgpl8CZ89abXFTd7+wD4SGh2nZ+kuynsPyLw62j/Wl+j9erZJ
-        uCRxZNTA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mBeHe-0064f4-Gt; Thu, 05 Aug 2021 14:23:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3B62C30027B;
-        Thu,  5 Aug 2021 16:23:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1E329201DCD23; Thu,  5 Aug 2021 16:23:41 +0200 (CEST)
-Date:   Thu, 5 Aug 2021 16:23:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        id S239441AbhHEO3s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Aug 2021 10:29:48 -0400
+Received: from mga14.intel.com ([192.55.52.115]:28696 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233183AbhHEO3r (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 5 Aug 2021 10:29:47 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10067"; a="213893038"
+X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
+   d="scan'208";a="213893038"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 07:29:32 -0700
+X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
+   d="scan'208";a="442448718"
+Received: from apeddoll-mobl1.amr.corp.intel.com (HELO [10.209.20.48]) ([10.209.20.48])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 07:29:30 -0700
+Subject: Re: [PATCH V2 03/14] x86/set_memory: Add x86_set_memory_enc static
+ call support
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
         dave.hansen@linux.intel.com, luto@kernel.org,
         konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
         jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
@@ -59,44 +44,88 @@ Cc:     Dave Hansen <dave.hansen@intel.com>, kys@microsoft.com,
         linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         netdev@vger.kernel.org, vkuznets@redhat.com, parri.andrea@gmail.com
-Subject: Re: [PATCH V2 03/14] x86/set_memory: Add x86_set_memory_enc static
- call support
-Message-ID: <YQv0bRBUq1N5+jgG@hirez.programming.kicks-ass.net>
 References: <20210804184513.512888-1-ltykernel@gmail.com>
  <20210804184513.512888-4-ltykernel@gmail.com>
  <5823af8a-7dbb-dbb0-5ea2-d9846aa2a36a@intel.com>
  <942e6fcb-3bdf-9294-d3db-ca311db440d3@gmail.com>
+ <YQv0bRBUq1N5+jgG@hirez.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <fa63e6ad-9536-d5e9-d754-fa04fad69252@intel.com>
+Date:   Thu, 5 Aug 2021 07:29:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <942e6fcb-3bdf-9294-d3db-ca311db440d3@gmail.com>
+In-Reply-To: <YQv0bRBUq1N5+jgG@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 05, 2021 at 10:05:17PM +0800, Tianyu Lan wrote:
->  static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
->  {
-> +	return static_call(x86_set_memory_enc)(addr, numpages, enc);
->  }
+On 8/5/21 7:23 AM, Peter Zijlstra wrote:
+> This is assuming any of this is actually performance critical, based off
+> of this using static_call() to begin with.
 
-Hurpmh... So with a bit of 'luck' you get code-gen like:
+This code is not performance critical.
 
-__set_memory_enc_dec:
-	jmp __SCT_x86_set_memory_enc;
+I think I sent folks off on a wild goose chase when I asked that we make
+an effort to optimize code that does:
 
-set_memory_encrypted:
-	mov $1, %rdx
-	jmp __set_memory_enc_dec
+	if (some_hyperv_check())
+		foo();
 
-set_memory_decrypted:
-	mov $0, %rdx
-	jmp __set_memory_enc_dec
+	if (some_amd_feature_check())
+		bar();
 
+with checks that will actually compile away when Hyper-V or
+some_amd_feature() is disabled.  That's less about performance and just
+about good hygiene.  I *wanted* to see
+cpu_feature_enabled(X86_FEATURE...) checks.
 
-Which, to me, seems exceedingly daft. Best to make all 3 of those
-inlines and use EXPORT_STATIC_CALL_TRAMP_GPL(x86_set_memory_enc) or
-something.
+Someone suggested using static calls, and off we went...
 
-This is assuming any of this is actually performance critical, based off
-of this using static_call() to begin with.
+Could we please just use cpu_feature_enabled()?
