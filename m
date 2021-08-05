@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E0C3E0BCF
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 02:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7073E0BE2
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Aug 2021 02:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237493AbhHEAy7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Aug 2021 20:54:59 -0400
-Received: from mga09.intel.com ([134.134.136.24]:27477 "EHLO mga09.intel.com"
+        id S231373AbhHEA4F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Aug 2021 20:56:05 -0400
+Received: from mga09.intel.com ([134.134.136.24]:27469 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237201AbhHEAyT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 4 Aug 2021 20:54:19 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="214027497"
+        id S237465AbhHEAy6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 4 Aug 2021 20:54:58 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="214027500"
 X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="214027497"
+   d="scan'208";a="214027500"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:51 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:53 -0700
 X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="437617298"
+   d="scan'208";a="437617307"
 Received: from mjkendri-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.254.17.117])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:49 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:51 -0700
 From:   Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -48,9 +48,9 @@ Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
         sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-doc@vger.kernel.org,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH v4 14/15] x86/tdx: Implement ioremap_shared for x86
-Date:   Wed,  4 Aug 2021 17:52:17 -0700
-Message-Id: <20210805005218.2912076-15-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v4 15/15] x86/tdx: Add cmdline option to force use of ioremap_shared
+Date:   Wed,  4 Aug 2021 17:52:18 -0700
+Message-Id: <20210805005218.2912076-16-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -60,148 +60,121 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Andi Kleen <ak@linux.intel.com>
+Add a command line option to force all the enabled drivers to use
+shared memory mappings. This will be useful when enabling new drivers
+in the protected guest without making all the required changes to use
+shared mappings in it.
 
-Implement ioremap_shared for x86. In TDX most memory is encrypted,
-but some memory that is used to communicate with the host must
-be declared shared with special page table attributes and a
-special hypercall. Previously all ioremaped memory was declared
-shared, but this leads to various BIOS tables and other private
-state being shared, which is a security risk.
+Note that this might also allow other non explicitly enabled drivers
+to interact with the host, which could cause other security risks.
 
-This patch replaces the unconditional ioremap sharing with an explicit
-ioremap_shared that enables sharing.
-
-Signed-off-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- arch/x86/include/asm/io.h |  3 +++
- arch/x86/mm/ioremap.c     | 41 ++++++++++++++++++++++++++++++---------
- 2 files changed, 35 insertions(+), 9 deletions(-)
+ .../admin-guide/kernel-parameters.rst         |  1 +
+ .../admin-guide/kernel-parameters.txt         | 12 ++++++++++++
+ arch/x86/include/asm/io.h                     |  2 ++
+ arch/x86/mm/ioremap.c                         | 19 ++++++++++++++++++-
+ 4 files changed, 33 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/admin-guide/kernel-parameters.rst b/Documentation/admin-guide/kernel-parameters.rst
+index 01ba293a2d70..bdf3896a100c 100644
+--- a/Documentation/admin-guide/kernel-parameters.rst
++++ b/Documentation/admin-guide/kernel-parameters.rst
+@@ -147,6 +147,7 @@ parameter is applicable::
+ 	PCI	PCI bus support is enabled.
+ 	PCIE	PCI Express support is enabled.
+ 	PCMCIA	The PCMCIA subsystem is enabled.
++	PG	Protected guest is enabled.
+ 	PNP	Plug & Play support is enabled.
+ 	PPC	PowerPC architecture is enabled.
+ 	PPT	Parallel port support is enabled.
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index bdb22006f713..ba390be62f89 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -2062,6 +2062,18 @@
+ 			1 - Bypass the IOMMU for DMA.
+ 			unset - Use value of CONFIG_IOMMU_DEFAULT_PASSTHROUGH.
+ 
++	ioremap_force_shared= [X86_64, PG]
++			Force the kernel to use shared memory mappings which do
++			not use ioremap_shared/pcimap_shared to opt-in to shared
++			mappings with the host. This feature is mainly used by
++			a protected guest when enabling new drivers without
++			proper shared memory related changes. Please note that
++			this option might also allow other non explicitly enabled
++			drivers to interact with the host in protected guest,
++			which could cause other security risks. This option will
++			also cause BIOS data structures to be shared with the host,
++			which might open security holes.
++
+ 	io7=		[HW] IO7 for Marvel-based Alpha systems
+ 			See comment before marvel_specify_io7 in
+ 			arch/alpha/kernel/core_marvel.c.
 diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
-index 4c9e06a81ebe..51c2c45456bf 100644
+index 51c2c45456bf..744f72835a30 100644
 --- a/arch/x86/include/asm/io.h
 +++ b/arch/x86/include/asm/io.h
-@@ -379,6 +379,9 @@ extern void __iomem *ioremap_wc(resource_size_t offset, unsigned long size);
- extern void __iomem *ioremap_wt(resource_size_t offset, unsigned long size);
- #define ioremap_wt ioremap_wt
+@@ -413,6 +413,8 @@ extern bool arch_memremap_can_ram_remap(resource_size_t offset,
+ extern bool phys_mem_access_encrypted(unsigned long phys_addr,
+ 				      unsigned long size);
  
-+extern void __iomem *ioremap_shared(resource_size_t offset, unsigned long size);
-+#define ioremap_shared ioremap_shared
++extern bool ioremap_force_shared;
 +
- extern bool is_early_ioremap_ptep(pte_t *ptep);
- 
- #define IO_SPACE_LIMIT 0xffff
+ /**
+  * iosubmit_cmds512 - copy data to single MMIO location, in 512-bit units
+  * @dst: destination, in MMIO space (must be 512-bit aligned)
 diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
-index 69a60f240124..74260aaa494b 100644
+index 74260aaa494b..7576e886fad8 100644
 --- a/arch/x86/mm/ioremap.c
 +++ b/arch/x86/mm/ioremap.c
-@@ -178,7 +178,8 @@ static void __ioremap_check_mem(resource_size_t addr, unsigned long size,
-  */
- static void __iomem *
- __ioremap_caller(resource_size_t phys_addr, unsigned long size,
--		 enum page_cache_mode pcm, void *caller, bool encrypted)
-+		 enum page_cache_mode pcm, void *caller, bool encrypted,
-+		 bool shared)
- {
- 	unsigned long offset, vaddr;
- 	resource_size_t last_addr;
-@@ -248,7 +249,7 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
+@@ -28,6 +28,7 @@
+ #include <asm/memtype.h>
+ #include <asm/setup.h>
+ #include <asm/tdx.h>
++#include <asm/cmdline.h>
+ 
+ #include "physaddr.h"
+ 
+@@ -162,6 +163,17 @@ static void __ioremap_check_mem(resource_size_t addr, unsigned long size,
+ 	__ioremap_check_other(addr, desc);
+ }
+ 
++/*
++ * Normally only drivers that are hardened for use in confidential guests
++ * force shared mappings. But if device filtering is disabled other
++ * devices can be loaded, and these need shared mappings too. This
++ * variable is set to true if these filters are disabled.
++ *
++ * Note this has some side effects, e.g. various BIOS tables
++ * get shared too which is risky.
++ */
++bool ioremap_force_shared;
++
+ /*
+  * Remap an arbitrary physical address space into the kernel virtual
+  * address space. It transparently creates kernel huge I/O mapping when
+@@ -249,7 +261,7 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
  	prot = PAGE_KERNEL_IO;
  	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
  		prot = pgprot_encrypted(prot);
--	else if (prot_guest_has(PATTR_GUEST_SHARED_MAPPING_INIT))
-+	else if (shared)
+-	else if (shared)
++	else if (shared || ioremap_force_shared)
  		prot = pgprot_protected_guest(prot);
  
  	switch (pcm) {
-@@ -340,7 +341,8 @@ void __iomem *ioremap(resource_size_t phys_addr, unsigned long size)
- 	enum page_cache_mode pcm = _PAGE_CACHE_MODE_UC_MINUS;
+@@ -847,6 +859,11 @@ void __init early_ioremap_init(void)
+ 	WARN_ON((fix_to_virt(0) + PAGE_SIZE) & ((1 << PMD_SHIFT) - 1));
+ #endif
  
- 	return __ioremap_caller(phys_addr, size, pcm,
--				__builtin_return_address(0), false);
-+				__builtin_return_address(0), false,
-+				false);
- }
- EXPORT_SYMBOL(ioremap);
- 
-@@ -373,7 +375,8 @@ void __iomem *ioremap_uc(resource_size_t phys_addr, unsigned long size)
- 	enum page_cache_mode pcm = _PAGE_CACHE_MODE_UC;
- 
- 	return __ioremap_caller(phys_addr, size, pcm,
--				__builtin_return_address(0), false);
-+				__builtin_return_address(0), false,
-+				false);
- }
- EXPORT_SYMBOL_GPL(ioremap_uc);
- 
-@@ -390,10 +393,29 @@ EXPORT_SYMBOL_GPL(ioremap_uc);
- void __iomem *ioremap_wc(resource_size_t phys_addr, unsigned long size)
- {
- 	return __ioremap_caller(phys_addr, size, _PAGE_CACHE_MODE_WC,
--					__builtin_return_address(0), false);
-+					__builtin_return_address(0), false,
-+					false);
- }
- EXPORT_SYMBOL(ioremap_wc);
- 
-+/**
-+ * ioremap_shared - map memory into CPU space shared with host
-+ * @phys_addr:	bus address of the memory
-+ * @size:	size of the resource to map
-+ *
-+ * This version of ioremap ensures that the memory is marked shared
-+ * with the host. This is useful for confidential guests.
-+ *
-+ * Must be freed with iounmap.
-+ */
-+void __iomem *ioremap_shared(resource_size_t phys_addr, unsigned long size)
-+{
-+	return __ioremap_caller(phys_addr, size, _PAGE_CACHE_MODE_WC,
-+			__builtin_return_address(0), false,
-+			prot_guest_has(PATTR_GUEST_SHARED_MAPPING_INIT));
-+}
-+EXPORT_SYMBOL(ioremap_shared);
++	/* Parse cmdline params for ioremap_force_shared */
++	if (cmdline_find_option_bool(boot_command_line,
++				     "ioremap_force_shared"))
++		ioremap_force_shared = 1;
 +
- /**
-  * ioremap_wt	-	map memory into CPU space write through
-  * @phys_addr:	bus address of the memory
-@@ -407,21 +429,22 @@ EXPORT_SYMBOL(ioremap_wc);
- void __iomem *ioremap_wt(resource_size_t phys_addr, unsigned long size)
- {
- 	return __ioremap_caller(phys_addr, size, _PAGE_CACHE_MODE_WT,
--					__builtin_return_address(0), false);
-+					__builtin_return_address(0), false,
-+					false);
- }
- EXPORT_SYMBOL(ioremap_wt);
+ 	early_ioremap_setup();
  
- void __iomem *ioremap_encrypted(resource_size_t phys_addr, unsigned long size)
- {
- 	return __ioremap_caller(phys_addr, size, _PAGE_CACHE_MODE_WB,
--				__builtin_return_address(0), true);
-+				__builtin_return_address(0), true, false);
- }
- EXPORT_SYMBOL(ioremap_encrypted);
- 
- void __iomem *ioremap_cache(resource_size_t phys_addr, unsigned long size)
- {
- 	return __ioremap_caller(phys_addr, size, _PAGE_CACHE_MODE_WB,
--				__builtin_return_address(0), false);
-+				__builtin_return_address(0), false, false);
- }
- EXPORT_SYMBOL(ioremap_cache);
- 
-@@ -430,7 +453,7 @@ void __iomem *ioremap_prot(resource_size_t phys_addr, unsigned long size,
- {
- 	return __ioremap_caller(phys_addr, size,
- 				pgprot2cachemode(__pgprot(prot_val)),
--				__builtin_return_address(0), false);
-+				__builtin_return_address(0), false, false);
- }
- EXPORT_SYMBOL(ioremap_prot);
- 
+ 	pmd = early_ioremap_pmd(fix_to_virt(FIX_BTMAP_BEGIN));
 -- 
 2.25.1
 
