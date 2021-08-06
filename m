@@ -2,80 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D830F3E29C2
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Aug 2021 13:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B203E2A34
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Aug 2021 13:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242881AbhHFLeg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Aug 2021 07:34:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33052 "EHLO mail.kernel.org"
+        id S245671AbhHFL7s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Aug 2021 07:59:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34488 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232704AbhHFLef (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 6 Aug 2021 07:34:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 16D2E60FE7;
-        Fri,  6 Aug 2021 11:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628249660;
-        bh=1+KiZplv3MguZUZepGmue5Z/n03MIoOuRn2s0KMeuIo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eWHjhLQAAnrtFOQ2us3+TgZtQZtaAToDcCSN6k7dni+sBjzSJAmDcimFdlF2rGmcs
-         8lCvShrSLS1Xa/Y0k+hkekDfsKbYrwA7loz5OK5TnyPicR6Zfu7WdxsIZt6XvJ/ECc
-         Y9cewdnJdpyNNqvbgC84DMw4nkI4m8hSRPZtTpfasKx/sHG9b7Y1yrEIZYllVWz+Aq
-         M48x7rxWhWHtyAfcmgpI5pIFETl4PPVRkK7goaGtppvUEl4I23yIGFbl73WCM8G8QQ
-         nALdSk0XhrTHRL8oGQC3Pxn+h3D9G+TzmkaMI/eifnwtUiwktT8KK7rqc1mUb45/0B
-         IOmEtsiaD3z0Q==
-Date:   Fri, 6 Aug 2021 12:34:14 +0100
-From:   Will Deacon <will@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     kernel-team@android.com, Catalin Marinas <catalin.marinas@arm.com>,
+        id S230373AbhHFL7s (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 6 Aug 2021 07:59:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E754610FF;
+        Fri,  6 Aug 2021 11:59:30 +0000 (UTC)
+Date:   Fri, 6 Aug 2021 12:59:28 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kernel-team@android.com,
         Marc Zyngier <maz@kernel.org>,
         Jade Alglave <jade.alglave@arm.com>,
         Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
         kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org,
-        Claire Chang <tientzu@chromium.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] of: restricted dma: Don't fail device probe on rmem init
- failure
-Message-ID: <20210806113414.GA2531@willie-the-truck>
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] arm64: mm: Fix TLBI vs ASID rollover
+Message-ID: <20210806115927.GJ6719@arm.com>
 References: <20210806113109.2475-1-will@kernel.org>
- <20210806113109.2475-3-will@kernel.org>
+ <20210806113109.2475-2-will@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210806113109.2475-3-will@kernel.org>
+In-Reply-To: <20210806113109.2475-2-will@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 06, 2021 at 12:31:05PM +0100, Will Deacon wrote:
-> If CONFIG_DMA_RESTRICTED_POOL=n then probing a device with a reference
-> to a "restricted-dma-pool" will fail with a reasonably cryptic error:
-> 
->   | pci-host-generic: probe of 10000.pci failed with error -22
-> 
-> Print a more helpful message in this case and try to continue probing
-> the device as we do if the kernel doesn't have the restricted DMA patches
-> applied or either CONFIG_OF_ADDRESS or CONFIG_HAS_DMA =n.
-> 
-> Cc: Claire Chang <tientzu@chromium.org>
-> Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Will Deacon <will@kernel.org>
-> ---
->  drivers/of/address.c    | 8 ++++----
->  drivers/of/device.c     | 2 +-
->  drivers/of/of_private.h | 8 +++-----
->  3 files changed, 8 insertions(+), 10 deletions(-)
+On Fri, Aug 06, 2021 at 12:31:04PM +0100, Will Deacon wrote:
+> diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
+> index 75beffe2ee8a..e9c30859f80c 100644
+> --- a/arch/arm64/include/asm/mmu.h
+> +++ b/arch/arm64/include/asm/mmu.h
+> @@ -27,11 +27,32 @@ typedef struct {
+>  } mm_context_t;
+>  
+>  /*
+> - * This macro is only used by the TLBI and low-level switch_mm() code,
+> - * neither of which can race with an ASID change. We therefore don't
+> - * need to reload the counter using atomic64_read().
+> + * We use atomic64_read() here because the ASID for an 'mm_struct' can
+> + * be reallocated when scheduling one of its threads following a
+> + * rollover event (see new_context() and flush_context()). In this case,
+> + * a concurrent TLBI (e.g. via try_to_unmap_one() and ptep_clear_flush())
+> + * may use a stale ASID. This is fine in principle as the new ASID is
+> + * guaranteed to be clean in the TLB, but the TLBI routines have to take
+> + * care to handle the following race:
+> + *
+> + *    CPU 0                    CPU 1                          CPU 2
+> + *
+> + *    // ptep_clear_flush(mm)
+> + *    xchg_relaxed(pte, 0)
+> + *    DSB ISHST
+> + *    old = ASID(mm)
 
-Sorry, didn't mean to send this patch a second time, it was still kicking
-around in my tree from yesterday and I accidentally picked it up when
-sending my TLBI series.
+We'd need specs clarified (ARM ARM, cat model) that the DSB ISHST is
+sufficient to order the pte write with the subsequent ASID read.
+Otherwise the patch looks fine to me:
 
-Please ignore.
-
-Will
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
