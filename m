@@ -2,89 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A32943E2647
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Aug 2021 10:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E993E299A
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Aug 2021 13:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241278AbhHFIlZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Aug 2021 04:41:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40094 "EHLO mail.kernel.org"
+        id S241451AbhHFLbh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Aug 2021 07:31:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55566 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238955AbhHFIlY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 6 Aug 2021 04:41:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1889660EE8;
-        Fri,  6 Aug 2021 08:41:07 +0000 (UTC)
+        id S236130AbhHFLbg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 6 Aug 2021 07:31:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E1A860F38;
+        Fri,  6 Aug 2021 11:31:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628239269;
-        bh=2X17xjmGHGlgrytSaj7r9Rx++xVMsl8LbGTJrxDcYVY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=guSu2m5Q46GebwXsmOvz75ZiYpZHxyQflS5B1n4Hrnfz7jFFXeHmFtYg0ywOy1Us3
-         0i4y9Hzv6mT5wywO/LcsnpYtnmgVyL3uW9s+Z1wBY44GMJOOt4nD18wXPWit4o3e+X
-         07zKakiC/AzjL2P2+Ze49RVCaNgzA97L8PjNS0nyhFT9IerEFC7XldeUbvV2mfOM2d
-         HBOeYGQBL9FH6aoPZSrvs+/GMQlimZNcD5I6tSisskK1cEoSkvBFzOfiC9MT0XvqcH
-         Chbj9FtCClMEg/m24AI3QB10r0RcaAcV6OTFm/D+ccLXRaBtp4blSyrKOQg6VVJtgW
-         F3xj2zeaj9C4A==
-Date:   Fri, 6 Aug 2021 09:41:04 +0100
+        s=k20201202; t=1628249481;
+        bh=Wve2HPDAh8pk0/x/LBGSqB32H47g9ounsHsBh1cD85Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=itbTs6Chs219vUx56bnuoMQodGO4uXYcJwmWzsgssM61sEDB7ZFelV1dnBvkQFn7Y
+         IVX2ZYpMk8T2zdk2vGtcS/+/qSIaPoBJZhTyx5JeL8XSqdkj/ZxDYREl3nFmhwWsyC
+         ZvsU36kKfmQeMFEtMaMDT0Io54hinjIlXotpHos6Jz1jShYNEO+ev67DGDi1J6ZYX3
+         m8W8jzl/fuc67aVhVuIFmEPMswS5BKfGQ/tBQP4fPjSDVEdW5NZKucr23BtMR1tPiw
+         ALnTb5U4n7XatGDlV/aZPktQRKBKFUOib4ravqnOtRt+r7lmCIPTm8WbvCyANhzhgm
+         Hp9sZNXBJVBWA==
 From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Vladimir Isaev <Vladimir.Isaev@synopsys.com>
-Subject: Re: [PATCH 00/11] ARC atomics update
-Message-ID: <20210806084104.GA2015@willie-the-truck>
-References: <20210804191554.1252776-1-vgupta@synopsys.com>
- <20210805090209.GA22037@worktop.programming.kicks-ass.net>
- <2c2bed36-1bcf-ae34-0e94-9110c7e2b242@synopsys.com>
- <YQwaIIFvzdNcWnww@hirez.programming.kicks-ass.net>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Jade Alglave <jade.alglave@arm.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org
+Subject: [PATCH 0/4] Fix racing TLBI with ASID/VMID reallocation
+Date:   Fri,  6 Aug 2021 12:31:03 +0100
+Message-Id: <20210806113109.2475-1-will@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YQwaIIFvzdNcWnww@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 05, 2021 at 07:04:32PM +0200, Peter Zijlstra wrote:
-> On Thu, Aug 05, 2021 at 04:18:29PM +0000, Vineet Gupta wrote:
-> > On 8/5/21 2:02 AM, Peter Zijlstra wrote:
-> > > On Wed, Aug 04, 2021 at 12:15:43PM -0700, Vineet Gupta wrote:
-> > > 
-> > >> Vineet Gupta (10):
-> > >>    ARC: atomics: disintegrate header
-> > >>    ARC: atomic: !LLSC: remove hack in atomic_set() for for UP
-> > >>    ARC: atomic: !LLSC: use int data type consistently
-> > >>    ARC: atomic64: LLSC: elide unused atomic_{and,or,xor,andnot}_return
-> > >>    ARC: atomics: implement relaxed variants
-> > >>    ARC: bitops: fls/ffs to take int (vs long) per asm-generic defines
-> > >>    ARC: xchg: !LLSC: remove UP micro-optimization/hack
-> > >>    ARC: cmpxchg/xchg: rewrite as macros to make type safe
-> > >>    ARC: cmpxchg/xchg: implement relaxed variants (LLSC config only)
-> > >>    ARC: atomic_cmpxchg/atomic_xchg: implement relaxed variants
-> > >>
-> > >> Will Deacon (1):
-> > >>    ARC: switch to generic bitops
-> > > 
-> > > Didn't see any weird things:
-> > > 
-> > > Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > 
-> > Thx Peter. A lot of this is your code anyways ;-)
-> > 
-> > Any initial thoughts/comments on patch 06/11 - is there an obvious 
-> > reason that generic bitops take signed @nr or the hurdle is need to be 
-> > done consistently cross-arch.
-> 
-> That does indeed seem daft and ready for a cleanup. Will any
-> recollection from when you touched this?
+Hi all,
 
-I had a patch to fix this but it blew up in the robot and I didn't get round
-to reworking it:
+While reviewing Shameer's reworked VMID allocator [1] and discussing
+with Marc, we spotted a race between TLB invalidation (which typically
+takes an ASID or VMID argument) and reallocation of ASID/VMID for the
+context being targetted.
 
-https://lore.kernel.org/patchwork/patch/1245555/
+The first patch spells out an example with try_to_unmap_one() in a
+comment, which Catalin has kindly modelled in TLA+ at [2].
+
+Although I'm posting all this together for ease of review, the intention
+is that the first patch will go via arm64 with the latter going via kvm.
+
+Cheers,
 
 Will
+
+[1] https://lore.kernel.org/r/20210729104009.382-1-shameerali.kolothum.thodi@huawei.com
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/cmarinas/kernel-tla.git/commit/
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Jade Alglave <jade.alglave@arm.com>
+Cc: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+Cc: <kvmarm@lists.cs.columbia.edu>
+Cc: <linux-arch@vger.kernel.org>
+
+--->8
+
+Marc Zyngier (3):
+  KVM: arm64: Move kern_hyp_va() usage in __load_guest_stage2() into the
+    callers
+  KVM: arm64: Convert the host S2 over to __load_guest_stage2()
+  KVM: arm64: Upgrade VMID accesses to {READ,WRITE}_ONCE
+
+Will Deacon (1):
+  arm64: mm: Fix TLBI vs ASID rollover
+
+ arch/arm64/include/asm/kvm_mmu.h              | 17 ++++++-----
+ arch/arm64/include/asm/mmu.h                  | 29 ++++++++++++++++---
+ arch/arm64/include/asm/tlbflush.h             | 11 +++----
+ arch/arm64/kvm/arm.c                          |  2 +-
+ arch/arm64/kvm/hyp/include/nvhe/mem_protect.h |  2 +-
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c         |  6 ++--
+ arch/arm64/kvm/hyp/nvhe/switch.c              |  4 ++-
+ arch/arm64/kvm/hyp/nvhe/tlb.c                 |  2 +-
+ arch/arm64/kvm/hyp/vhe/switch.c               |  2 +-
+ arch/arm64/kvm/hyp/vhe/tlb.c                  |  2 +-
+ arch/arm64/kvm/mmu.c                          |  2 +-
+ 11 files changed, 52 insertions(+), 27 deletions(-)
+
+-- 
+2.32.0.605.g8dce9f2422-goog
+
