@@ -2,73 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F8C3E31A3
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Aug 2021 00:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7E23E326B
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Aug 2021 02:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241199AbhHFWUX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Fri, 6 Aug 2021 18:20:23 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:53843 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbhHFWUX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Aug 2021 18:20:23 -0400
-Received: by mail-io1-f71.google.com with SMTP id w3-20020a0566020343b02905393057ad92so6982689iou.20
-        for <linux-arch@vger.kernel.org>; Fri, 06 Aug 2021 15:20:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:content-transfer-encoding;
-        bh=TjZwUUDBCQTtiiphMf5lNNvkaUWGIfnKKUGZRCHod4s=;
-        b=R/RuUxIvEbSkQaTYKntIjgFTq07NcaVjZDn43jlKb/P1lWoM9+/thY+YyEDU0JvO/v
-         s9CxQzp153BhJx1BFxD3+YqD9I+xwJ5CYF9R+dZq55n5elnWkfUPBiDtuAgjPzOwInYV
-         6Tn0uZ6U39hvbGziV0EMz177ik9ZlFPDQ1fOf5iA1FOdShDtfoGKxALXkPbxA1JzVaCb
-         kKiae4DGjCshAkrVyLDJCPmWCr3kj8Kmtv+1xbjsQhrweSobqXo9yTIGYlZro8NO1E0F
-         TeedDioguGoe61l7jmWbLvsKqCCPvUyOFCT6rZAn2lND5rHf2POEzx3nz1J6xBIrvPil
-         J0nA==
-X-Gm-Message-State: AOAM5322WEJecgXUsIzO9tY7TSHazRiyMvXFXME4P0Ey0CSivr2kZ02h
-        VgU4tEzT+53tbrxxMfSw5RqeBfOimnQVuFavmyPPZaMB7Id5
-X-Google-Smtp-Source: ABdhPJzpIVDaCuynJVK3t71sYw7TX40yeX/4nyImc7KlRSQjfeTEFmrDpDfvonESvtNNCm06n335BFZZQFgOc40sQxqK3J4I4gE0
+        id S229708AbhHGAvs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Aug 2021 20:51:48 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:38047 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229707AbhHGAvs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Aug 2021 20:51:48 -0400
+Received: (qmail 476927 invoked by uid 1000); 6 Aug 2021 20:51:30 -0400
+Date:   Fri, 6 Aug 2021 20:51:30 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jade Alglave <j.alglave@ucl.ac.uk>
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC] LKMM: Add volatile_if()
+Message-ID: <20210807005130.GA476712@rowland.harvard.edu>
+References: <20210605145739.GB1712909@rowland.harvard.edu>
+ <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210606012903.GA1723421@rowland.harvard.edu>
+ <20210606115336.GS18427@gate.crashing.org>
+ <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com>
+ <20210606182213.GA1741684@rowland.harvard.edu>
+ <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
+ <YL34NZ12mKoiSLvu@hirez.programming.kicks-ass.net>
+ <20210607115234.GA7205@willie-the-truck>
+ <20210730172020.GA32396@knuckles.cs.ucl.ac.uk>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c266:: with SMTP id h6mr517881ild.273.1628288406528;
- Fri, 06 Aug 2021 15:20:06 -0700 (PDT)
-Date:   Fri, 06 Aug 2021 15:20:06 -0700
-In-Reply-To: <000000000000b8a3e905c69535e3@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000102b9305c8eb70da@google.com>
-Subject: Re: [syzbot] kernel BUG in __tlb_remove_page_size
-From:   syzbot <syzbot+2f816ba9b71ca9a8e6b0@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, andrii@kernel.org,
-        aneesh.kumar@linux.ibm.com, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, npiggin@gmail.com, peterz@infradead.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
-        toke@redhat.com, will@kernel.org, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210730172020.GA32396@knuckles.cs.ucl.ac.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Fri, Jul 30, 2021 at 06:20:22PM +0100, Jade Alglave wrote:
+> I hope this material can help inform this conversation and I would love
+> to hear your thoughts.
 
-commit af0efa050caa66e8f304c42c94c76cb6c480cb7e
-Author: Toke Høiland-Jørgensen <toke@redhat.com>
-Date:   Tue Jul 6 12:23:55 2021 +0000
+Thoughts on section 4...
 
-    libbpf: Restore errno return for functions that were already returning it
+The definition of Pick Basic dependency is phrased incorrectly.  The 
+"all of the following apply" in the first paragraph refers only to first 
+bullet point, which in turn refers to the following two bullet points.  
+The "all of the following apply" phrase should be removed and the first 
+bullet point should be merged into the main text.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13b872fa300000
-start commit:   3dbdb38e2869 Merge branch 'for-5.14' of git://git.kernel.o..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a1fcf15a09815757
-dashboard link: https://syzkaller.appspot.com/bug?extid=2f816ba9b71ca9a8e6b0
-userspace arch: i386
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=151ee572300000
+The definition of Pick dependency is redundant, because each Pick 
+Address and Pick Data dependency is itself already a Pick Basic 
+dependency.  The same is true of the cat formalization.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+In the cat code, the definition of Reg looks wrong.  It is:
 
-#syz fix: libbpf: Restore errno return for functions that were already returning it
+	let Reg=~M | ~BR
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Since (I presume) no event falls into both the M and BR classes, this 
+definition includes all events.  It probably should be:
+
+	let Reg=~(M | BR)
+
+or
+
+	let Reg=~M & ~BR
+
+It's now clear that my original understanding of the underlying basis of 
+Intrinsic control dependencies was wrong.  They aren't separated out 
+because CPUs can speculate through conditional branches; rather they are 
+separated out because they are the things which give rise to Pick 
+dependencies.  It would have been nice if the text had explained this at 
+the start instead of leaving it up to me to figure out for myself.
+
+Alan
