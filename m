@@ -2,88 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7E23E326B
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Aug 2021 02:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C556A3E3C8C
+	for <lists+linux-arch@lfdr.de>; Sun,  8 Aug 2021 21:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbhHGAvs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Aug 2021 20:51:48 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:38047 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229707AbhHGAvs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Aug 2021 20:51:48 -0400
-Received: (qmail 476927 invoked by uid 1000); 6 Aug 2021 20:51:30 -0400
-Date:   Fri, 6 Aug 2021 20:51:30 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jade Alglave <j.alglave@ucl.ac.uk>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC] LKMM: Add volatile_if()
-Message-ID: <20210807005130.GA476712@rowland.harvard.edu>
-References: <20210605145739.GB1712909@rowland.harvard.edu>
- <20210606001418.GH4397@paulmck-ThinkPad-P17-Gen-1>
- <20210606012903.GA1723421@rowland.harvard.edu>
- <20210606115336.GS18427@gate.crashing.org>
- <CAHk-=wjgzAn9DfR9DpU-yKdg74v=fvyzTJMD8jNjzoX4kaUBHQ@mail.gmail.com>
- <20210606182213.GA1741684@rowland.harvard.edu>
- <CAHk-=whDrTbYT6Y=9+XUuSd5EAHWtB9NBUvQLMFxooHjxtzEGA@mail.gmail.com>
- <YL34NZ12mKoiSLvu@hirez.programming.kicks-ass.net>
- <20210607115234.GA7205@willie-the-truck>
- <20210730172020.GA32396@knuckles.cs.ucl.ac.uk>
+        id S231967AbhHHTgX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 8 Aug 2021 15:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230201AbhHHTgW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 Aug 2021 15:36:22 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BBBC061760
+        for <linux-arch@vger.kernel.org>; Sun,  8 Aug 2021 12:36:02 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id e14so16079284qkg.3
+        for <linux-arch@vger.kernel.org>; Sun, 08 Aug 2021 12:36:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=uRuJYnQr4q07JLSEYwH/yTioHcPDdzH4IkkOfqRXwAk=;
+        b=PprLO2qCqdA65AYxRoDEn7T3E6UeCENAm0LHexZ5s8jUp+yPe7CDr5y/1mCzE9RmwR
+         ez+aUEsOIfnHVPJiTjMVF77w67mjEbapN/5QCgl7ByNptVhRb0GKv/SDElqCzQoRaP5A
+         ilmCChfzbxCE4B3flpAU7IiYHweJ+ScXuAiaZ8TMaxiT19/2QboGw7Wm5z6BAtZWXJ3+
+         ybkePmplZKIuQ/jU38N9mG4kYM+jgbgqIOALEeIQqBwfWrFZTfvJ5/PXoyBkXLqaorPS
+         TCNpeoQzQGD9crwTlAJl02lrhD50v9mw01qyyTuTez9N5/Uux3E1rA5UYIrJJRSjwa81
+         4cYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=uRuJYnQr4q07JLSEYwH/yTioHcPDdzH4IkkOfqRXwAk=;
+        b=kqPkkM7jecFWEuUg0eVcjHe3+XpkBrg3xHbn0npj5fJI7RLMOI4ZRuyZTe2ThgPG7P
+         VPLUdLkBBsZgObT+r4fgQ7683xNjzEkKNfmkL7OYUJ28O7dlV+cbNW4LJERUPy/aRL87
+         3937kI/Ygj6TO9o16Ok5AvmaSk1Ci1Bbq639lnKplhUaVtbwY5F/0vu3ZcBqfTHgIqjS
+         Yohmj1O4s0XvGTq0SCVuXfvagMKBCfCUGRw4Fg/NucPVd0paTWK6rMLK2Bi+vXiZqlUB
+         KLbNe8Zkp3p0ROZGJmdhZXJxuyF+c2O0SJmpJCbLplbEsynsSLA6aC/qMO2eNfzQXqWL
+         nwWQ==
+X-Gm-Message-State: AOAM530c5SNZLBMmkzSMIAOH3il3jaSqc6fFPT3ajGQkuXDSe8WPe/Kn
+        /sjsU6PGoy/SvKJIeFHy+Bm6kXQ8wOEz9UCcvhs=
+X-Google-Smtp-Source: ABdhPJwkKDwZ3l9GdEtYO7uWNlA1l2KPobvY+c89YkCbofyeTJPOelaXScJdBtCPuANV2mJYtmOVKaJbXUWUHHKp/qo=
+X-Received: by 2002:a05:620a:1581:: with SMTP id d1mr18887221qkk.327.1628451361654;
+ Sun, 08 Aug 2021 12:36:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210730172020.GA32396@knuckles.cs.ucl.ac.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:6214:529e:0:0:0:0 with HTTP; Sun, 8 Aug 2021 12:36:00
+ -0700 (PDT)
+Reply-To: mohamedkasim794@yahoo.com
+From:   Dr Kasim Mohamed <samiramohamed018@gmail.com>
+Date:   Sun, 8 Aug 2021 12:36:00 -0700
+Message-ID: <CAEqKzcMUz8cuU0jq+_WfLks4ZMtOoyrn-GkwjtBLfjwn2QGsbA@mail.gmail.com>
+Subject: THE AMOUNT IS 27.5 MILLIOMS USD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 06:20:22PM +0100, Jade Alglave wrote:
-> I hope this material can help inform this conversation and I would love
-> to hear your thoughts.
+I am Mr Kasim Mohamed
 
-Thoughts on section 4...
-
-The definition of Pick Basic dependency is phrased incorrectly.  The 
-"all of the following apply" in the first paragraph refers only to first 
-bullet point, which in turn refers to the following two bullet points.  
-The "all of the following apply" phrase should be removed and the first 
-bullet point should be merged into the main text.
-
-The definition of Pick dependency is redundant, because each Pick 
-Address and Pick Data dependency is itself already a Pick Basic 
-dependency.  The same is true of the cat formalization.
-
-In the cat code, the definition of Reg looks wrong.  It is:
-
-	let Reg=~M | ~BR
-
-Since (I presume) no event falls into both the M and BR classes, this 
-definition includes all events.  It probably should be:
-
-	let Reg=~(M | BR)
-
-or
-
-	let Reg=~M & ~BR
-
-It's now clear that my original understanding of the underlying basis of 
-Intrinsic control dependencies was wrong.  They aren't separated out 
-because CPUs can speculate through conditional branches; rather they are 
-separated out because they are the things which give rise to Pick 
-dependencies.  It would have been nice if the text had explained this at 
-the start instead of leaving it up to me to figure out for myself.
-
-Alan
+Hi Friend I am a bank director of the UBA Bank Plc bf .I want to
+transfer an abandoned sum of 27.5 millions USD  to you through ATM
+VISA CARD .50% will be for you. No risk involved. Contact me for more
+details. Kindly reply me back to my alternative email
+address(mohamedkasim794@yahoo.com) Mr kasim mohamed
