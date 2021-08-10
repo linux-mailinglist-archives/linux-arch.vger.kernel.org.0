@@ -2,179 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAE43E58CE
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Aug 2021 13:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39DF3E592B
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Aug 2021 13:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236351AbhHJLEZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Aug 2021 07:04:25 -0400
-Received: from mail-wm1-f49.google.com ([209.85.128.49]:37841 "EHLO
-        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbhHJLEY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Aug 2021 07:04:24 -0400
-Received: by mail-wm1-f49.google.com with SMTP id l34-20020a05600c1d22b02902573c214807so1653649wms.2;
-        Tue, 10 Aug 2021 04:04:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h9AyImD9UvKdyZgMt8rSQ3Uk0c9+Og7qG6N7oOE6PXA=;
-        b=kknAMMFV3iMz7H80toJ2ORuFVGtBvrkwJSfkuHhCKbXuVF4OQrz5PzJeOs0Xuz5j7p
-         xhL01MjmRsVdVz+M1yfRR6HD0JtOpP9lWpZ2u7MXBMiK1QDNFeMlAHjMMT4+7RL64lZ/
-         RpW/x+ew/PaPWvQIdT40J1Iowt1KgPE4VrCtwiCPn8thDNonKp409qm/GB1+UzcDGSjn
-         jhZmnZFZgbsxFJKCtuVxgZlNwskbq6ZXK3i/8jlp36f7Dulvq2C4aLQ6xJakO46mL0ha
-         LVO7IMmMrZ0bzcvNmLbMSR1bSK02iDDOlflDfU95laObwOK3RlOqUoWtNz6qIE8/bTXV
-         e7MQ==
-X-Gm-Message-State: AOAM530vZi9rm76tpq+UMpAaKrkGothBLTB+7QkuShDZb1+suRtR6Gms
-        ncPISjSddmFAV61dsjlXEHI=
-X-Google-Smtp-Source: ABdhPJyrk1wBfHB9MekkHvpHW9x6fYmFebxaC/tx0zZS+XISdOGMjx9hLm+CPvA9MFZ9+dQ3n/YQhA==
-X-Received: by 2002:a05:600c:3798:: with SMTP id o24mr4061437wmr.18.1628593441621;
-        Tue, 10 Aug 2021 04:04:01 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id q3sm3504575wmf.37.2021.08.10.04.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Aug 2021 04:04:01 -0700 (PDT)
-Date:   Tue, 10 Aug 2021 11:03:59 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
-        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
-        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
-        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
-        Tianyu.Lan@microsoft.com, pgonda@google.com,
-        martin.b.radev@gmail.com, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org,
-        sfr@canb.auug.org.au, saravanand@fb.com,
-        krish.sadhukhan@oracle.com, aneesh.kumar@linux.ibm.com,
-        xen-devel@lists.xenproject.org, rientjes@google.com,
-        hannes@cmpxchg.org, tj@kernel.org, michael.h.kelley@microsoft.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, parri.andrea@gmail.com, dave.hansen@intel.com
-Subject: Re: [PATCH V3 03/13] x86/HV: Add new hvcall guest address host
- visibility support
-Message-ID: <20210810110359.i4qodw7h36zrsicp@liuwe-devbox-debian-v2>
-References: <20210809175620.720923-1-ltykernel@gmail.com>
- <20210809175620.720923-4-ltykernel@gmail.com>
+        id S237951AbhHJLeb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Aug 2021 07:34:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49968 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229527AbhHJLeb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 10 Aug 2021 07:34:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 40E386101E;
+        Tue, 10 Aug 2021 11:34:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628595249;
+        bh=U4Zld7mAu6v7/9xMDyWvpT/NNYAWTiUJU4He5dD/eL4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lJZtsLaj7jaRkxeJSZpFbApjAOcERUr6k3R9FD36dUPQtws4z6KYPDzXzDfxVdwp+
+         I4Rx380OJYH4+KsXFBVtVm/uNG5+BdcR8Ahwh6jgjxh0K/tABjGp27T2Hg8JZBXE66
+         8vBTJdpdvoQehoE9FCEvW0W8q/WWprPCty3ERtdmGnbv+mapiDKrWvnX8QiMmTnYa2
+         eYoAva5zQNUQpGzDJ8+QTXuMJ98dyx8tkIJ3Dt2Fuj9PHNrLQFBRSE/kIXBj0GOi3Z
+         1go5tRWI2r6aELq/bjZcQ5B37g3vK98ee8qExwrQ3Eb4Nk0uOW3E9PugjHiPxx5cBQ
+         drvvS5gCGI1tg==
+Received: by mail-wr1-f54.google.com with SMTP id i4so8337645wru.0;
+        Tue, 10 Aug 2021 04:34:09 -0700 (PDT)
+X-Gm-Message-State: AOAM5305gi1q9rTqsanlIG5ZRWYeUAyZc58HNcj3DqN4dPj1uy6WfPms
+        1x7VI5hCJVipRmNQey0KM6Dgbqvl+ToDS2hZJIs=
+X-Google-Smtp-Source: ABdhPJyjNp84V0PWdniYskkVm3tgBt8qm+LU5nYRyMlh1QdiRB65+ZJ6dm/n9ev4DK0S0p/m2pg884gI41cWjwdHPfc=
+X-Received: by 2002:adf:a309:: with SMTP id c9mr12971585wrb.99.1628595247894;
+ Tue, 10 Aug 2021 04:34:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210809175620.720923-4-ltykernel@gmail.com>
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
+ <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
+ <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
+ <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com> <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
+ <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com> <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
+ <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com> <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+ <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
+In-Reply-To: <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 10 Aug 2021 13:33:52 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
+Message-ID: <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     John Garry <john.garry@huawei.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 09, 2021 at 01:56:07PM -0400, Tianyu Lan wrote:
-> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> 
-> Add new hvcall guest address host visibility support to mark
-> memory visible to host. Call it inside set_memory_decrypted
-> /encrypted(). Add HYPERVISOR feature check in the
-> hv_is_isolation_supported() to optimize in non-virtualization
-> environment.
-> 
-> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> ---
-> Change since v2:
->        * Rework __set_memory_enc_dec() and call Hyper-V and AMD function
->          according to platform check.
-> 
-> Change since v1:
->        * Use new staic call x86_set_memory_enc to avoid add Hyper-V
->          specific check in the set_memory code.
-> ---
->  arch/x86/hyperv/Makefile           |   2 +-
->  arch/x86/hyperv/hv_init.c          |   6 ++
->  arch/x86/hyperv/ivm.c              | 114 +++++++++++++++++++++++++++++
->  arch/x86/include/asm/hyperv-tlfs.h |  20 +++++
->  arch/x86/include/asm/mshyperv.h    |   4 +-
->  arch/x86/mm/pat/set_memory.c       |  19 +++--
->  include/asm-generic/hyperv-tlfs.h  |   1 +
->  include/asm-generic/mshyperv.h     |   1 +
->  8 files changed, 160 insertions(+), 7 deletions(-)
->  create mode 100644 arch/x86/hyperv/ivm.c
-> 
-> diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-> index 48e2c51464e8..5d2de10809ae 100644
-> --- a/arch/x86/hyperv/Makefile
-> +++ b/arch/x86/hyperv/Makefile
-> @@ -1,5 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> -obj-y			:= hv_init.o mmu.o nested.o irqdomain.o
-> +obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
->  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
->  
->  ifdef CONFIG_X86_64
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 0bb4d9ca7a55..b3683083208a 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -607,6 +607,12 @@ EXPORT_SYMBOL_GPL(hv_get_isolation_type);
->  
->  bool hv_is_isolation_supported(void)
->  {
-> +	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-> +		return 0;
+On Tue, Aug 10, 2021 at 11:19 AM John Garry <john.garry@huawei.com> wrote:
+> On 04/08/2021 09:52, Arnd Bergmann wrote:
+>
+> This seems a reasonable approach. Do you have a plan for this work? Or
+> still waiting for the green light?
 
-Nit: false instead of 0.
+I'm rather busy with other work at the moment, so no particular plans
+for any time soon.
 
-> +
-> +	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
-> +		return 0;
-> +
->  	return hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE;
->  }
->  
-[...]
-> +int hv_mark_gpa_visibility(u16 count, const u64 pfn[],
-> +			   enum hv_mem_host_visibility visibility)
-> +{
-> +	struct hv_gpa_range_for_visibility **input_pcpu, *input;
-> +	u16 pages_processed;
-> +	u64 hv_status;
-> +	unsigned long flags;
-> +
-> +	/* no-op if partition isolation is not enabled */
-> +	if (!hv_is_isolation_supported())
-> +		return 0;
-> +
-> +	if (count > HV_MAX_MODIFY_GPA_REP_COUNT) {
-> +		pr_err("Hyper-V: GPA count:%d exceeds supported:%lu\n", count,
-> +			HV_MAX_MODIFY_GPA_REP_COUNT);
-> +		return -EINVAL;
-> +	}
-> +
-> +	local_irq_save(flags);
-> +	input_pcpu = (struct hv_gpa_range_for_visibility **)
-> +			this_cpu_ptr(hyperv_pcpu_input_arg);
-> +	input = *input_pcpu;
-> +	if (unlikely(!input)) {
-> +		local_irq_restore(flags);
-> +		return -EINVAL;
-> +	}
-> +
-> +	input->partition_id = HV_PARTITION_ID_SELF;
-> +	input->host_visibility = visibility;
-> +	input->reserved0 = 0;
-> +	input->reserved1 = 0;
-> +	memcpy((void *)input->gpa_page_list, pfn, count * sizeof(*pfn));
-> +	hv_status = hv_do_rep_hypercall(
-> +			HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY, count,
-> +			0, input, &pages_processed);
-> +	local_irq_restore(flags);
-> +
-> +	if (!(hv_status & HV_HYPERCALL_RESULT_MASK))
-> +		return 0;
-> +
-> +	return hv_status & HV_HYPERCALL_RESULT_MASK;
+> I have noticed the kernel test robot reporting the following to me,
+> which seems to be the same issue which was addressed in this series
+> originally:
+>
+> config: s390-randconfig-r032-20210802 (attached as .config)
+> compiler: clang version 13.0.0 (https://github.com/llvm/llvm-project
+> 4f71f59bf3d9914188a11d0c41bedbb339d36ff5)
+> ...
+> All errors (new ones prefixed by >>):
+>
+>     In file included from drivers/block/null_blk/main.c:12:
+>     In file included from drivers/block/null_blk/null_blk.h:8:
+>     In file included from include/linux/blkdev.h:25:
+>     In file included from include/linux/scatterlist.h:9:
+>     In file included from arch/s390/include/asm/io.h:75:
+>     include/asm-generic/io.h:464:31: warning: performing pointer
+> arithmetic on a null pointer has undefined behavior
+> [-Wnull-pointer-arithmetic]
+>             val = __raw_readb(PCI_IOBASE + addr);
+>
+> So I imagine lots of people are seeing these.
 
-Joseph introduced a few helper functions in 753ed9c95c37d. They will
-make the code simpler.
+Right, this is the original problem that Niklas was trying to solve.
 
-Wei.
+If Niklas has time to get this fixed, I can probably find a way to work
+with him on finishing up my proposed patch with the changes you
+suggested.
+
+       Arnd
