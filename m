@@ -2,123 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D3A3E56A9
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Aug 2021 11:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240DE3E58AA
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Aug 2021 12:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238865AbhHJJUX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Aug 2021 05:20:23 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3620 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238880AbhHJJUO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Aug 2021 05:20:14 -0400
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GkS7l1GDLz6C9Kv;
-        Tue, 10 Aug 2021 17:19:15 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Tue, 10 Aug 2021 11:19:47 +0200
-Received: from [10.47.80.4] (10.47.80.4) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 10 Aug
- 2021 10:19:47 +0100
-Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
-To:     Arnd Bergmann <arnd@kernel.org>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
- <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
- <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
- <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
- <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com>
- <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
- <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com>
- <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
- <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
- <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
-Date:   Tue, 10 Aug 2021 10:19:12 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S238065AbhHJK4f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Aug 2021 06:56:35 -0400
+Received: from mail-wm1-f52.google.com ([209.85.128.52]:44796 "EHLO
+        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236095AbhHJK4e (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Aug 2021 06:56:34 -0400
+Received: by mail-wm1-f52.google.com with SMTP id d131-20020a1c1d890000b02902516717f562so2213359wmd.3;
+        Tue, 10 Aug 2021 03:56:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M8c678fNnsGLoOeW7UexhiEvWyA8c3/gcsG+wSE2ct8=;
+        b=YCI+qtGD/0L1xixPkuKTCC9Y8GQEW84XhzIUrfCXbiM5lACxef/iVs8OaZUE8vlfWz
+         wb9Q27CJyNtk7GkL9WoCerNfoPpW1jXOkHFFUwggNVxvFMs/0WbeccPAEZshTMpnsHK8
+         2XXUvydEAATjFYZtx4hXnUeKXMHyR7AMBnViRjwy5UVEJiVODi4evvd4u5W7c4ngbSNr
+         6SbbZobe51y/833k1QCUM8izOTg6PPK04cOTm5CwqkQ4Aa4CB3LIEGOLEJNTGGWiukx4
+         HJP+JSHQhsZUxxooZK5jUmoub4YR/rJz4jS5zC84guG0sxcTIqR7+ySXAzsDYBiEckYY
+         +KAA==
+X-Gm-Message-State: AOAM532uc1vxVQawPdccOCemU10J7dvdUsgvNr4g+KFPB+vUNigtNZ6k
+        Njjo1fGMRMwwzASB+USy4NA=
+X-Google-Smtp-Source: ABdhPJz2yF8WcgnnZUSV/YZcts24nqVnzunX66Xx60m+tHd6RHQnGzum63lk7AYwHZ32aACM7/ys3w==
+X-Received: by 2002:a1c:7dd0:: with SMTP id y199mr2862006wmc.23.1628592971259;
+        Tue, 10 Aug 2021 03:56:11 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id x18sm20028730wmc.17.2021.08.10.03.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 03:56:10 -0700 (PDT)
+Date:   Tue, 10 Aug 2021 10:56:09 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
+        Tianyu.Lan@microsoft.com, pgonda@google.com,
+        martin.b.radev@gmail.com, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, rppt@kernel.org,
+        sfr@canb.auug.org.au, saravanand@fb.com,
+        krish.sadhukhan@oracle.com, aneesh.kumar@linux.ibm.com,
+        xen-devel@lists.xenproject.org, rientjes@google.com,
+        hannes@cmpxchg.org, tj@kernel.org, michael.h.kelley@microsoft.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, parri.andrea@gmail.com, dave.hansen@intel.com
+Subject: Re: [PATCH V3 01/13] x86/HV: Initialize GHCB page in Isolation VM
+Message-ID: <20210810105609.soi67eg2us5w7yuq@liuwe-devbox-debian-v2>
+References: <20210809175620.720923-1-ltykernel@gmail.com>
+ <20210809175620.720923-2-ltykernel@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.80.4]
-X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210809175620.720923-2-ltykernel@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 04/08/2021 09:52, Arnd Bergmann wrote:
->>>> On another point, I noticed SCSI driver AHA152x depends on ISA, but is
->>>> not an isa driver - however it does use port IO. Would such dependencies
->>>> need to be changed to depend on HAS_IOPORT?
->>> I'm not sure what you mean here. As far as I can tell, AHA152x is an ISA
->>> driver in the sense that it is a driver for ISA add-on cards. However, it
->>> is not a 'struct isa_driver' in the sense that AHA1542 is, AHA152x  is even
->>> older and uses the linux-2.4 style initialization using a module_init()
->>> function that does the probing.
->> ok, fine. So I just wonder what the ISA kconfig dependency gets us for
->> aha152x. I experimented by removing the kconfig dependency and enabling
->> for the arm64 (which does not have CONFIG_ISA) std defconfig and it
->> built fine.
-> The point of CONFIG_ISA is to only build drivers for ISA add-on cards
-> on architectures that can have such slots. For ISA drivers in particular,
-> we don't want them to be loaded on machines that don't have them
-> because of the various ways this can cause trouble with hardwired
-> port and irq numbers.
-> 
->>>> Yeah, that sounds the same as what I was thinking. Maybe IOPORT_NATIVE
->>>> could work as a name. I would think that only x86/ia64 would define it.
->>>> A concern though is that someone could argue that is a functional
->>>> dependency, rather than just a build dependency.
->>> You can have those on a number of platforms, such as early
->>> PowerPC CHRP or pSeries systems, a number of MIPS workstations
->>> including recent Loongson machines, and many Alpha platforms.
->>>
->> hmmm... if some machines under an arch support "native" port IO and some
->> don't, then if we use a common multi-platform defconfig which defines
->> HARDCODED_IOPORT, then we still build for platforms without "native"
->> port IO, which is not ideal.
-> Correct, but that's not a problem I'm trying to solve at this point. The
-> machines that have those are extremely rare, so almost all configurations
-> that one would encounter in practice do not suffer from it, and solving it
-> reliably would be really hard.
+On Mon, Aug 09, 2021 at 01:56:05PM -0400, Tianyu Lan wrote:
+[...]
+>  static int hv_cpu_init(unsigned int cpu)
+>  {
+>  	union hv_vp_assist_msr_contents msr = { 0 };
+> @@ -85,6 +111,8 @@ static int hv_cpu_init(unsigned int cpu)
+>  		}
+>  	}
+>  
+> +	hyperv_init_ghcb();
+> +
 
-Hi Arnd,
+Why is the return value not checked here? If that's not required, can
+you leave a comment?
 
-This seems a reasonable approach. Do you have a plan for this work? Or 
-still waiting for the green light?
-
-I have noticed the kernel test robot reporting the following to me, 
-which seems to be the same issue which was addressed in this series 
-originally:
-
-config: s390-randconfig-r032-20210802 (attached as .config)
-compiler: clang version 13.0.0 (https://github.com/llvm/llvm-project 
-4f71f59bf3d9914188a11d0c41bedbb339d36ff5)
-...
-All errors (new ones prefixed by >>):
-
-    In file included from drivers/block/null_blk/main.c:12:
-    In file included from drivers/block/null_blk/null_blk.h:8:
-    In file included from include/linux/blkdev.h:25:
-    In file included from include/linux/scatterlist.h:9:
-    In file included from arch/s390/include/asm/io.h:75:
-    include/asm-generic/io.h:464:31: warning: performing pointer 
-arithmetic on a null pointer has undefined behavior 
-[-Wnull-pointer-arithmetic]
-            val = __raw_readb(PCI_IOBASE + addr);
-
-So I imagine lots of people are seeing these.
-
-Thanks,
-john
+Wei.
