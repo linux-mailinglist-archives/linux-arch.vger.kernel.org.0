@@ -2,53 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 494753E59C0
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Aug 2021 14:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5033E59E0
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Aug 2021 14:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237076AbhHJMSS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Aug 2021 08:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
+        id S240309AbhHJMZ7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Aug 2021 08:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbhHJMSR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Aug 2021 08:18:17 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B8FC0613D3;
-        Tue, 10 Aug 2021 05:17:56 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 28-20020a17090a031cb0290178dcd8a4d1so1813658pje.0;
-        Tue, 10 Aug 2021 05:17:56 -0700 (PDT)
+        with ESMTP id S240271AbhHJMZ6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Aug 2021 08:25:58 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA82C0613D3;
+        Tue, 10 Aug 2021 05:25:37 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id lw7-20020a17090b1807b029017881cc80b7so4045256pjb.3;
+        Tue, 10 Aug 2021 05:25:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nvD6+M9t7qTrvrmcvKckt/OKOvl8Bvz01WtaH3hiQrw=;
-        b=W8VJHgJYz2WQSwNj+l2V4hKZLutN1MT1dVCGeD6amKZrIf5ru9mj7Kr5RPC5btWdWX
-         RcBrITr2iOAHNEFyRwZNQK2DWBs/jeslabKlgJrh6HL+/vTklPVAPdNaLnbz89wRnuqp
-         vInDusDjinU1k1tXuSrvNl+arW4OUoLjK4+N1kssywggZW7Jvt3yFTBcvkkKO5md3u7e
-         bBYY198+1xHTBLt8BAqooipJ4q/UaotaCIigVxqnzz3L1RWNDBQzAY5XUbKRG2hYDfQr
-         DyJeQjfUNmnEVrq8buf0/t08+AhEw6uB7PdFS6dLDgmOJUh/gxis1n7pHXyKAOel03W2
-         Aoig==
+        bh=KL/EO4tx0TgX51zBlp9/CRNMvpFlpR97J3ss4EOthZ4=;
+        b=Ku17ZPCf0pl6UbjbC+OHRNn+ACNBAQsVDchdBbllR6na7JEZVKeCa/0V92DnHTF4iu
+         ltIgOtvQG3ChEWFKQGS+ZCmo2X5SwNpdvKDzPZ6w0gyO5dvGz4wCAvWk5byjwwrwUcRC
+         5GXqtBHSfAX3q8Kpy97hYWlFUn1WyjEzTjjzbz4eIMRpPJ/3pBUQT0IeP+6w+Os/n12x
+         G3057aJUPMJ9DEYkyOBYuaABfzqFcCP+cS+hRvjLg1IN1XmahkLLELPX+1i2xq4zJ7oh
+         O3GJi71MYUghn8gllMllI0c3neKMWm0JGzHgfC7goYCwLqZcdx+lapv2oLk7A8os2kge
+         ueiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=nvD6+M9t7qTrvrmcvKckt/OKOvl8Bvz01WtaH3hiQrw=;
-        b=KQHI85++P3+Hd88kMibAbhjpS1u2RRdz4qSSW37f3YsveDJX8wMjyJ+y6nnalLExUC
-         +C3TIZKwC4KA737inxc9TnLI5qm9XJjzrUel3oY4RKWgZcmMQEUJtslU4fnDaUxcs7cX
-         BHWlQKCct8lBzL/jZit9TwPIhYPfpgbRizh22kJtCQnLvGKxxNNXoR7hd1DhADs3eWBZ
-         ZuaRhgBOKqzCzr/dihLpdZ3JhhVIx1Rx14hevhdLk8nqVBAXgvJJfNY24Nka0VgYjjrP
-         4tstNjr8KlgfeQrhkH5upkXDnZk+6Kny2XLbBjfFSOU1UcJ3w0nibtfGgk3heRVzgalO
-         jZhg==
-X-Gm-Message-State: AOAM530J9Wij/AxcvY2OXwxdVZNaPu9GsyII1ziYBaYJ2PGFOxbNfKd6
-        6gARKUHrlzKfD80UksVfk1E=
-X-Google-Smtp-Source: ABdhPJzf0LwxUC1SEDmEJ4+woyBt3uEtabjBKjNM9eN5IQM2eh4nYHReWO5vIVqWyXP8Bs1frIDsoA==
-X-Received: by 2002:a63:131f:: with SMTP id i31mr348459pgl.207.1628597875367;
-        Tue, 10 Aug 2021 05:17:55 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:18:efec::4b1])
-        by smtp.gmail.com with ESMTPSA id ls16sm22103844pjb.49.2021.08.10.05.17.41
+        bh=KL/EO4tx0TgX51zBlp9/CRNMvpFlpR97J3ss4EOthZ4=;
+        b=E0JZUG4q36mSikq5Ex9Cbju8Wb0OSef/1tbuDcBfHD4016KgnE1Elpgbx2k2kuAJok
+         nZ45W5Dn4EfSwngwo/aEx8WXEgJ0LSvf1wYuoNlzlc2dCrSTJ5jx8vt02t6GWFfg6LyT
+         +T4ww2nSo23VXQ05QrG5F2P0+LQ3xF2jMh8sjpaEDixld5RKYfCI1Zn6/spMvSkDujsr
+         ysr8RkpZ3iXAD25zEXvXZgPNzEYHVa1EFpUWZhSomQcgURvnXteqs3nxFxqwWP/aIi+y
+         Da2dyHx76YGd0Z93SW1q9LXduuL9he6Hxs5q213ZCccrSNJblWbTl8eM0ozBTOFuRMpU
+         Ztww==
+X-Gm-Message-State: AOAM5317Ehxq4bjpl4shswiO7XMrA51+ebpja3YVwFQRd+26RO0aPYW/
+        pnW+2OQvrIPGNIpS2keZqxw=
+X-Google-Smtp-Source: ABdhPJxebFlgnG0NPPgyE6OjM0zu1XGnchtqFN1rLMZ/uNLQlKSp1bY7DCu3pvqaqyd/DJ1LphsUcQ==
+X-Received: by 2002:a63:e116:: with SMTP id z22mr254278pgh.361.1628598336671;
+        Tue, 10 Aug 2021 05:25:36 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
+        by smtp.gmail.com with ESMTPSA id c14sm27323452pgv.86.2021.08.10.05.25.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Aug 2021 05:17:54 -0700 (PDT)
-Subject: Re: [PATCH V3 01/13] x86/HV: Initialize GHCB page in Isolation VM
+        Tue, 10 Aug 2021 05:25:35 -0700 (PDT)
+Subject: Re: [PATCH V3 03/13] x86/HV: Add new hvcall guest address host
+ visibility support
 To:     Wei Liu <wei.liu@kernel.org>
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
@@ -72,15 +73,15 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
         vkuznets@redhat.com, parri.andrea@gmail.com, dave.hansen@intel.com
 References: <20210809175620.720923-1-ltykernel@gmail.com>
- <20210809175620.720923-2-ltykernel@gmail.com>
- <20210810105609.soi67eg2us5w7yuq@liuwe-devbox-debian-v2>
+ <20210809175620.720923-4-ltykernel@gmail.com>
+ <20210810110359.i4qodw7h36zrsicp@liuwe-devbox-debian-v2>
 From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <93f3b1c6-feec-9c3b-c2d0-6fceffd00ae9@gmail.com>
-Date:   Tue, 10 Aug 2021 20:17:41 +0800
+Message-ID: <3a888810-69cf-fa4d-b374-2053432e1e56@gmail.com>
+Date:   Tue, 10 Aug 2021 20:25:20 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <20210810105609.soi67eg2us5w7yuq@liuwe-devbox-debian-v2>
+In-Reply-To: <20210810110359.i4qodw7h36zrsicp@liuwe-devbox-debian-v2>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -88,26 +89,66 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Wei:
-       Thanks for review.
-
-On 8/10/2021 6:56 PM, Wei Liu wrote:
-> On Mon, Aug 09, 2021 at 01:56:05PM -0400, Tianyu Lan wrote:
-> [...]
->>   static int hv_cpu_init(unsigned int cpu)
->>   {
->>   	union hv_vp_assist_msr_contents msr = { 0 };
->> @@ -85,6 +111,8 @@ static int hv_cpu_init(unsigned int cpu)
->>   		}
->>   	}
+On 8/10/2021 7:03 PM, Wei Liu wrote:
+>> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+>> index 0bb4d9ca7a55..b3683083208a 100644
+>> --- a/arch/x86/hyperv/hv_init.c
+>> +++ b/arch/x86/hyperv/hv_init.c
+>> @@ -607,6 +607,12 @@ EXPORT_SYMBOL_GPL(hv_get_isolation_type);
 >>   
->> +	hyperv_init_ghcb();
->> +
-> 
-> Why is the return value not checked here? If that's not required, can
-> you leave a comment?
+>>   bool hv_is_isolation_supported(void)
+>>   {
+>> +	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+>> +		return 0;
+> Nit: false instead of 0.
 > 
 
-The check is necessary here. Will update in the next version.
+OK. Will fix in the next version.
+
+>> +int hv_mark_gpa_visibility(u16 count, const u64 pfn[],
+>> +			   enum hv_mem_host_visibility visibility)
+>> +{
+>> +	struct hv_gpa_range_for_visibility **input_pcpu, *input;
+>> +	u16 pages_processed;
+>> +	u64 hv_status;
+>> +	unsigned long flags;
+>> +
+>> +	/* no-op if partition isolation is not enabled */
+>> +	if (!hv_is_isolation_supported())
+>> +		return 0;
+>> +
+>> +	if (count > HV_MAX_MODIFY_GPA_REP_COUNT) {
+>> +		pr_err("Hyper-V: GPA count:%d exceeds supported:%lu\n", count,
+>> +			HV_MAX_MODIFY_GPA_REP_COUNT);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	local_irq_save(flags);
+>> +	input_pcpu = (struct hv_gpa_range_for_visibility **)
+>> +			this_cpu_ptr(hyperv_pcpu_input_arg);
+>> +	input = *input_pcpu;
+>> +	if (unlikely(!input)) {
+>> +		local_irq_restore(flags);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	input->partition_id = HV_PARTITION_ID_SELF;
+>> +	input->host_visibility = visibility;
+>> +	input->reserved0 = 0;
+>> +	input->reserved1 = 0;
+>> +	memcpy((void *)input->gpa_page_list, pfn, count * sizeof(*pfn));
+>> +	hv_status = hv_do_rep_hypercall(
+>> +			HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY, count,
+>> +			0, input, &pages_processed);
+>> +	local_irq_restore(flags);
+>> +
+>> +	if (!(hv_status & HV_HYPERCALL_RESULT_MASK))
+>> +		return 0;
+>> +
+>> +	return hv_status & HV_HYPERCALL_RESULT_MASK;
+> Joseph introduced a few helper functions in 753ed9c95c37d. They will
+> make the code simpler.
+
+OK. Will update in the next version.
 
 Thanks.
