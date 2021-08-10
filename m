@@ -2,95 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E39DF3E592B
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Aug 2021 13:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 494753E59C0
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Aug 2021 14:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237951AbhHJLeb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Aug 2021 07:34:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49968 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229527AbhHJLeb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 10 Aug 2021 07:34:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 40E386101E;
-        Tue, 10 Aug 2021 11:34:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628595249;
-        bh=U4Zld7mAu6v7/9xMDyWvpT/NNYAWTiUJU4He5dD/eL4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lJZtsLaj7jaRkxeJSZpFbApjAOcERUr6k3R9FD36dUPQtws4z6KYPDzXzDfxVdwp+
-         I4Rx380OJYH4+KsXFBVtVm/uNG5+BdcR8Ahwh6jgjxh0K/tABjGp27T2Hg8JZBXE66
-         8vBTJdpdvoQehoE9FCEvW0W8q/WWprPCty3ERtdmGnbv+mapiDKrWvnX8QiMmTnYa2
-         eYoAva5zQNUQpGzDJ8+QTXuMJ98dyx8tkIJ3Dt2Fuj9PHNrLQFBRSE/kIXBj0GOi3Z
-         1go5tRWI2r6aELq/bjZcQ5B37g3vK98ee8qExwrQ3Eb4Nk0uOW3E9PugjHiPxx5cBQ
-         drvvS5gCGI1tg==
-Received: by mail-wr1-f54.google.com with SMTP id i4so8337645wru.0;
-        Tue, 10 Aug 2021 04:34:09 -0700 (PDT)
-X-Gm-Message-State: AOAM5305gi1q9rTqsanlIG5ZRWYeUAyZc58HNcj3DqN4dPj1uy6WfPms
-        1x7VI5hCJVipRmNQey0KM6Dgbqvl+ToDS2hZJIs=
-X-Google-Smtp-Source: ABdhPJyjNp84V0PWdniYskkVm3tgBt8qm+LU5nYRyMlh1QdiRB65+ZJ6dm/n9ev4DK0S0p/m2pg884gI41cWjwdHPfc=
-X-Received: by 2002:adf:a309:: with SMTP id c9mr12971585wrb.99.1628595247894;
- Tue, 10 Aug 2021 04:34:07 -0700 (PDT)
+        id S237076AbhHJMSS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Aug 2021 08:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231678AbhHJMSR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Aug 2021 08:18:17 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B8FC0613D3;
+        Tue, 10 Aug 2021 05:17:56 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 28-20020a17090a031cb0290178dcd8a4d1so1813658pje.0;
+        Tue, 10 Aug 2021 05:17:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nvD6+M9t7qTrvrmcvKckt/OKOvl8Bvz01WtaH3hiQrw=;
+        b=W8VJHgJYz2WQSwNj+l2V4hKZLutN1MT1dVCGeD6amKZrIf5ru9mj7Kr5RPC5btWdWX
+         RcBrITr2iOAHNEFyRwZNQK2DWBs/jeslabKlgJrh6HL+/vTklPVAPdNaLnbz89wRnuqp
+         vInDusDjinU1k1tXuSrvNl+arW4OUoLjK4+N1kssywggZW7Jvt3yFTBcvkkKO5md3u7e
+         bBYY198+1xHTBLt8BAqooipJ4q/UaotaCIigVxqnzz3L1RWNDBQzAY5XUbKRG2hYDfQr
+         DyJeQjfUNmnEVrq8buf0/t08+AhEw6uB7PdFS6dLDgmOJUh/gxis1n7pHXyKAOel03W2
+         Aoig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nvD6+M9t7qTrvrmcvKckt/OKOvl8Bvz01WtaH3hiQrw=;
+        b=KQHI85++P3+Hd88kMibAbhjpS1u2RRdz4qSSW37f3YsveDJX8wMjyJ+y6nnalLExUC
+         +C3TIZKwC4KA737inxc9TnLI5qm9XJjzrUel3oY4RKWgZcmMQEUJtslU4fnDaUxcs7cX
+         BHWlQKCct8lBzL/jZit9TwPIhYPfpgbRizh22kJtCQnLvGKxxNNXoR7hd1DhADs3eWBZ
+         ZuaRhgBOKqzCzr/dihLpdZ3JhhVIx1Rx14hevhdLk8nqVBAXgvJJfNY24Nka0VgYjjrP
+         4tstNjr8KlgfeQrhkH5upkXDnZk+6Kny2XLbBjfFSOU1UcJ3w0nibtfGgk3heRVzgalO
+         jZhg==
+X-Gm-Message-State: AOAM530J9Wij/AxcvY2OXwxdVZNaPu9GsyII1ziYBaYJ2PGFOxbNfKd6
+        6gARKUHrlzKfD80UksVfk1E=
+X-Google-Smtp-Source: ABdhPJzf0LwxUC1SEDmEJ4+woyBt3uEtabjBKjNM9eN5IQM2eh4nYHReWO5vIVqWyXP8Bs1frIDsoA==
+X-Received: by 2002:a63:131f:: with SMTP id i31mr348459pgl.207.1628597875367;
+        Tue, 10 Aug 2021 05:17:55 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:18:efec::4b1])
+        by smtp.gmail.com with ESMTPSA id ls16sm22103844pjb.49.2021.08.10.05.17.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Aug 2021 05:17:54 -0700 (PDT)
+Subject: Re: [PATCH V3 01/13] x86/HV: Initialize GHCB page in Isolation VM
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
+        Tianyu.Lan@microsoft.com, pgonda@google.com,
+        martin.b.radev@gmail.com, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, rppt@kernel.org,
+        sfr@canb.auug.org.au, saravanand@fb.com,
+        krish.sadhukhan@oracle.com, aneesh.kumar@linux.ibm.com,
+        xen-devel@lists.xenproject.org, rientjes@google.com,
+        hannes@cmpxchg.org, tj@kernel.org, michael.h.kelley@microsoft.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, parri.andrea@gmail.com, dave.hansen@intel.com
+References: <20210809175620.720923-1-ltykernel@gmail.com>
+ <20210809175620.720923-2-ltykernel@gmail.com>
+ <20210810105609.soi67eg2us5w7yuq@liuwe-devbox-debian-v2>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <93f3b1c6-feec-9c3b-c2d0-6fceffd00ae9@gmail.com>
+Date:   Tue, 10 Aug 2021 20:17:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
- <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
- <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
- <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
- <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com> <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
- <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com> <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
- <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com> <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
- <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
-In-Reply-To: <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 10 Aug 2021 13:33:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
-Message-ID: <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
-Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
-To:     John Garry <john.garry@huawei.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210810105609.soi67eg2us5w7yuq@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 10, 2021 at 11:19 AM John Garry <john.garry@huawei.com> wrote:
-> On 04/08/2021 09:52, Arnd Bergmann wrote:
->
-> This seems a reasonable approach. Do you have a plan for this work? Or
-> still waiting for the green light?
+Hi Wei:
+       Thanks for review.
 
-I'm rather busy with other work at the moment, so no particular plans
-for any time soon.
+On 8/10/2021 6:56 PM, Wei Liu wrote:
+> On Mon, Aug 09, 2021 at 01:56:05PM -0400, Tianyu Lan wrote:
+> [...]
+>>   static int hv_cpu_init(unsigned int cpu)
+>>   {
+>>   	union hv_vp_assist_msr_contents msr = { 0 };
+>> @@ -85,6 +111,8 @@ static int hv_cpu_init(unsigned int cpu)
+>>   		}
+>>   	}
+>>   
+>> +	hyperv_init_ghcb();
+>> +
+> 
+> Why is the return value not checked here? If that's not required, can
+> you leave a comment?
+> 
 
-> I have noticed the kernel test robot reporting the following to me,
-> which seems to be the same issue which was addressed in this series
-> originally:
->
-> config: s390-randconfig-r032-20210802 (attached as .config)
-> compiler: clang version 13.0.0 (https://github.com/llvm/llvm-project
-> 4f71f59bf3d9914188a11d0c41bedbb339d36ff5)
-> ...
-> All errors (new ones prefixed by >>):
->
->     In file included from drivers/block/null_blk/main.c:12:
->     In file included from drivers/block/null_blk/null_blk.h:8:
->     In file included from include/linux/blkdev.h:25:
->     In file included from include/linux/scatterlist.h:9:
->     In file included from arch/s390/include/asm/io.h:75:
->     include/asm-generic/io.h:464:31: warning: performing pointer
-> arithmetic on a null pointer has undefined behavior
-> [-Wnull-pointer-arithmetic]
->             val = __raw_readb(PCI_IOBASE + addr);
->
-> So I imagine lots of people are seeing these.
+The check is necessary here. Will update in the next version.
 
-Right, this is the original problem that Niklas was trying to solve.
-
-If Niklas has time to get this fixed, I can probably find a way to work
-with him on finishing up my proposed patch with the changes you
-suggested.
-
-       Arnd
+Thanks.
