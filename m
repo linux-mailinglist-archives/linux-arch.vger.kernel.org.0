@@ -2,64 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE7B3E8BCA
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Aug 2021 10:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74B03E9171
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Aug 2021 14:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235935AbhHKI14 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Aug 2021 04:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        id S230176AbhHKMdC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Aug 2021 08:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbhHKI1z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Aug 2021 04:27:55 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C6FC061765
-        for <linux-arch@vger.kernel.org>; Wed, 11 Aug 2021 01:27:32 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id e186so2558599iof.12
-        for <linux-arch@vger.kernel.org>; Wed, 11 Aug 2021 01:27:32 -0700 (PDT)
+        with ESMTP id S230343AbhHKMc5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Aug 2021 08:32:57 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661BCC08EACC
+        for <linux-arch@vger.kernel.org>; Wed, 11 Aug 2021 05:31:07 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id w6so4247289oiv.11
+        for <linux-arch@vger.kernel.org>; Wed, 11 Aug 2021 05:31:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Suo1PJGKQxPGS27pW79MeFl2fTjVvoONrdUzPhZtiNg=;
-        b=Ktq45nQo4t9E1Hdjd/pWzSkmTuM5bF65184pVlONPqPr3Jm2NZHbAn1ThA//sXCTni
-         1jC2ZY8TjaqfiwgJNm1Y9zOrQiF4xLHD6TLfHKcafNvTigDoZWSuW/Wc+XYSGaYQJRe0
-         cCFmoUewsr75YOZHqQ/OEypEnXxfS+mqF3E5RHAqTWVzE/p/aMPpFOmzLttlwN735Z1W
-         d/ku77UBypIjrVrkEgyWyDx+CkwAiHVHQlAaSNRMsak+2sZitP3uvWaUlYckHH5pjHBx
-         6Sy2bkuAzx+GJtjnJvFzxjo0JOODI9EJ6lbrY1I0N/5WrU7EFy10oEgf/XkKOm6gA8Tn
-         rm1w==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=V2WNyYdLJoP6K8E9RJHda7LwABozwr3cIVvw6Vvde1lUvj7nEn1kwTUjYENmT632Mo
+         WIvrh1+vLbSYzoPuX6Jvs3ShmY85CXNRULiOryYERC5VxiduWi1eHXykl4rZM4plaPY9
+         v0bjHvKbPX4Dmx5VGMryZtevBJBtYqlBmyCVADyoJGpXTeFxDC0rBPdZ27wWjxlPHWYz
+         44e14rCDZLm5cj050Iix5aVHNgFsagqH3cnFq7JAXcrKgC2Fka4hZJKUHzp5yDGNsN2N
+         es2oehf9N517PT8Y97WToSGj6n+Bj5wnkCVHjnDVkM+in2erAaksScM3DAQFVo4RjSvJ
+         Sh7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Suo1PJGKQxPGS27pW79MeFl2fTjVvoONrdUzPhZtiNg=;
-        b=tgTbu5WBW7KqBY/lX3u3C3kWYxgm4e+FU7dQ/BXg7KQguuVGtlojMwBiahJxlxe+dQ
-         aINCBFHXlDeJKmW4sk4U7VFas87XMGxaAIEgdwntmxVmRCY6LWizfZ/JF0wp3c/tiUtM
-         /oTymAG7WEPrKYRoVyYNzO6yD3sf4NUWshlsifLvgopvvxWU01Vs8RVXCm83h+OMALoL
-         q4c/7Lh9TFFDlisb1gt0Rm+kBb/4R4X0TLqeYUAfXfAbFNwNv3ChVZzRaShnBBVlS2na
-         sDFoEfL5B28AkdsOWqGr2/qLWO1K5PJ5JRXmKtC3cTR2u41ylxhWlX919yOew/MAD3Eu
-         OIxw==
-X-Gm-Message-State: AOAM5334jDIjpxIHuYggTVg0sGHcskJ5CRxOtGaRzFCPrta/KLAOGfdv
-        pkIuwNo71OmR1dLY1aGsmsv1REXS/uvzYMp0Wcg=
-X-Google-Smtp-Source: ABdhPJxXUf6fCLSmN9gvLuUf7MU/yeLN0UbqP2gsxZUKKP4VIgJevcgxQMIvAde4j5Xw+jnRD4oAs2LeOARr2/F8j1U=
-X-Received: by 2002:a6b:670a:: with SMTP id b10mr16281ioc.137.1628670452174;
- Wed, 11 Aug 2021 01:27:32 -0700 (PDT)
+         :subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=ggZSZuIrNmhSQo3KvJ/Yf4eMej/IqiMB1hHHhrSWSkcRTJTNGWds4PzgcUdOcTpkRf
+         ry6X7Y/aGlFDqkH7LoKfghPzpt98Jfw4PWsJChF9X6+8bcKVQYmgiGl0sxF9WYivmKuj
+         gxoOXKIRFKvLLOxNemWjXGWFU9Jzti25g5A+SJwKFngttaRIU7x/GRoWuvpGSDiNfK1g
+         lcJz0VspKWgZnaY+agDheniQgsFRW1HVGSSCyjT7Wxi8W/UhJy6AdwrTjw1E8ctioskw
+         tONkp88aUvGeX+gnNyAJO1NAqbi/3wPOHrxCOjsugmDcr+Qxh2aR6uaLICk/7lPzGNPQ
+         UoTA==
+X-Gm-Message-State: AOAM533btcZa+WUp+/4UH87dDLLRr0jkU++MGOJLOlvBlzwikYh0s9rK
+        1qcZmaoTM8MS425Hr8XKakC40hHB7Y4/8AMTNvk=
+X-Google-Smtp-Source: ABdhPJzKX4bddhdfg8RiiyHYBr+yLXTM9M8N23Wzjnw2ULmtvMc+zP5mUiQ+LhDoka/W+ZMFsKP6zQ+h+O0KVwFq6y0=
+X-Received: by 2002:a05:6808:1924:: with SMTP id bf36mr24193426oib.106.1628685066760;
+ Wed, 11 Aug 2021 05:31:06 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a6b:d103:0:0:0:0:0 with HTTP; Wed, 11 Aug 2021 01:27:31
+Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:31:06
  -0700 (PDT)
-Reply-To: stefanerlingperson@outlook.com
-From:   Erling Persson Foundation <sheerobs9@gmail.com>
-Date:   Wed, 11 Aug 2021 09:27:31 +0100
-Message-ID: <CAHj-_5wSjvOnn+5NBxWsmNCS9+F+0cp3Ld_asnTu0YPj5ZJNnQ@mail.gmail.com>
-Subject: 
+Reply-To: rihabmanyang07@yahoo.com
+From:   Rihab Manyang <ndourandiogou1@gmail.com>
+Date:   Wed, 11 Aug 2021 13:31:06 +0100
+Message-ID: <CAP5_mB5hsG9XL1on3vsap=m7kWJuxk1JNYnqREpDhZc=rXpfpQ@mail.gmail.com>
+Subject: hi
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Nachricht von Stefan Erling Persson, Inhaber der philanthropischen
-Stiftung der Familie Erling Persson, und Sie wurden als Wohlt=C3=A4ter von
-3.5 Millionen Euro aus unserer pers=C3=B6nlichen Spende im Jahr 2021
-ausgew=C3=A4hlt. ANTWORT AUF ANSPR=C3=9CCHE.
+-- 
+How are you?I am miss.Rihab Manyang i will like to be your friend
+please write me back on my email for more details, Thanks.
