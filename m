@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F1F3EAAB1
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Aug 2021 21:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E6C3EAACA
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Aug 2021 21:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbhHLTP3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Aug 2021 15:15:29 -0400
-Received: from mail-dm6nam11on2090.outbound.protection.outlook.com ([40.107.223.90]:36627
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        id S234067AbhHLTTA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Aug 2021 15:19:00 -0400
+Received: from mail-mw2nam12on2094.outbound.protection.outlook.com ([40.107.244.94]:56429
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229607AbhHLTP2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 12 Aug 2021 15:15:28 -0400
+        id S233750AbhHLTS7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 12 Aug 2021 15:18:59 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XoNYOIx8mL8Q0zXc4H/tpK2UjuuQWJd/TLI8X5tXOVOzasgZYTv2cFOOejs7re+zxJ/B1+4okdzGzwGi9iyDz3uPwfMWMcugmgnAG7Hf1YCpPiY76UF61aJ0mkfEVFRUqrXGbipmw49si2hO5qpk3BshGQ/r9KTegZj70nQLNm9L7lf69YOzsIZXcHHlQpA9MEn1g5d6z0jYQ/auw0/CJMjgRTpty6HeC9FI8Tc7OC1YKQ50JVJZKybD+fn63ttyemj5w2edujf7EnlZkVrTH6odPUwdPAc64moVU1Vr+yIQA824GyoMgUNR+7Otr2bkDbvVdcssaQ2GPWAci2q3Og==
+ b=ftWryGqzH6vvqKzIYFd1fo9gg3tixhYCixF+Wr005TEepGPCCaqMX17CkaongcoLbZtmUtp3fnXqwJY+bYdNwoeja6RgxMyoSxBnT8ChOq4JDvojC0Q65bHSO6g+gQ8HatzxFkVN+W9eNhvRL7WMhQWhefavo6o56IAAo6942aPQ5NlZIa7n2Cs2S4HHdTyfJnYKS9+QgdAo9Gaqsw5UPOpguubmZHzAu2QE5XSdUnzgTS5ZcqVG+i6KmvojsfAXxLCktwroNYdYRDze8zYsK+MrYHtIoGsJDiCbkRi4Qi0NsqfOMlbqg6K6Cvw+iG1kMQoEpEWCGuM80XLAMByNqQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gpuys++vcODbpsGWQB3uRlx1IdhYOTtNFDrliIJ2G1M=;
- b=jpNpNIB50R7wxjmxlcO75VvEtK3X9yiHPsnEyIkgB+a9BXgcZvpfkNepO84mzCZKAoQv4b/IbVX2oPwPU9zUH6mO/lqR27fShUPsFcBACEklTh7pCc/KmExFd4RfyHNQKroW91ki2pqw8ihBdmUYNP14vXgkETCnhFnrPl+MzYgCTPGBJxfCnuchjWtMloeCW8pzudhu56sOKhfWN7oyHyEABysoM5fXziPuNpMCmdBH4sYD2t+FTrnABWpFCVSOA0pCXKMoX5kmy76mYpqvMyXDxVpai50d2jmnOwpAKx14YWEsaHSsz29IUXWZ/ulaLnu4r176nR21rTu5vQPtzg==
+ bh=7Ml/pDsLQ8y9j5HouSL5yGOSfNnF2kN6EzPfxU2Kbf0=;
+ b=fKE0T92NgibawBd7zdFhAmADACvbJp5B5f7RxbwKKZ5dVLNZkYGUfi/nMIFvcleBzc28Vy26U58SIja/RfW7XNnGTuCvf92+G5FZ3OfpZEXhigPB9z9XYrDFw8FYsJopkGVlSozWjogYBs34p/+Xv28XpX6Yc8ioditCNg9UYBdcoGm9dOlNcQ1w5M1g0TrfjltxLbhlkGGgHttPYCzYeMyIgRvIitgF8bj4AfsdWNZsbWiTnkMhsOcCROBd+siv9p1f88LALWKa5ARBENUGFwsHqw/HlX/88pt29d+u5DV8Aq2vAwz6U4tMgM3gz5Ahras6xy45le2WtfeEBSri7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gpuys++vcODbpsGWQB3uRlx1IdhYOTtNFDrliIJ2G1M=;
- b=abE98PLm6OZPm1OQ5pzOqnitEm2AusVKl7dyz4ig24zxA81NIASpgwR84oD6hvPpOKMohWx59HKw5+3KnBCU3FyMCAfjHM5qn9HnIMdQBm4qrHs0OqjCU6cM/3D6Vo8EwFe9uBihQWIFjEDimR9tuchm2yQjIKIVq9Z4RHYfAMw=
+ bh=7Ml/pDsLQ8y9j5HouSL5yGOSfNnF2kN6EzPfxU2Kbf0=;
+ b=GbsBnOZdqcWwEMUfr9qsB+qIyRFp+JDDqP/Q92Y/aHF0DtQsQdaVW2XBAr1lfUYwQc4V9eJfCod7Mikdkm378fnthKduGUNrNFQbPqKKKGWX+4fc9VRi2fScdfnzMnXj9PAt5uNagHFfs8j4r5m/Bo7SAzPTqPW3U+MDqyGb1vI=
 Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
- by CO1PR21MB1283.namprd21.prod.outlook.com (2603:10b6:303:162::15) with
+ by MWHPR21MB0861.namprd21.prod.outlook.com (2603:10b6:300:77::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.1; Thu, 12 Aug
- 2021 19:14:58 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.6; Thu, 12 Aug
+ 2021 19:18:30 +0000
 Received: from MWHPR21MB1593.namprd21.prod.outlook.com
  ([fe80::e8f7:b582:9e2d:ba55]) by MWHPR21MB1593.namprd21.prod.outlook.com
  ([fe80::e8f7:b582:9e2d:ba55%2]) with mapi id 15.20.4436.012; Thu, 12 Aug 2021
- 19:14:58 +0000
+ 19:18:30 +0000
 From:   Michael Kelley <mikelley@microsoft.com>
 To:     Tianyu Lan <ltykernel@gmail.com>,
         KY Srinivasan <kys@microsoft.com>,
@@ -89,289 +89,146 @@ CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
         vkuznets <vkuznets@redhat.com>,
         "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
         "dave.hansen@intel.com" <dave.hansen@intel.com>
-Subject: RE: [PATCH V3 01/13] x86/HV: Initialize GHCB page in Isolation VM
-Thread-Topic: [PATCH V3 01/13] x86/HV: Initialize GHCB page in Isolation VM
-Thread-Index: AQHXjUfh3L5oGAIB0EmHDBGVrpI9rKtwO+iQ
-Date:   Thu, 12 Aug 2021 19:14:58 +0000
-Message-ID: <MWHPR21MB1593BDFA4A71CE6882E25400D7F99@MWHPR21MB1593.namprd21.prod.outlook.com>
+Subject: RE: [PATCH V3 02/13] x86/HV: Initialize shared memory boundary in the
+ Isolation VM.
+Thread-Topic: [PATCH V3 02/13] x86/HV: Initialize shared memory boundary in
+ the Isolation VM.
+Thread-Index: AQHXjUfnHZ9QYgRpj0m0r+snbnmZg6twQiTQ
+Date:   Thu, 12 Aug 2021 19:18:30 +0000
+Message-ID: <MWHPR21MB159376E024639D8F0465BCA2D7F99@MWHPR21MB1593.namprd21.prod.outlook.com>
 References: <20210809175620.720923-1-ltykernel@gmail.com>
- <20210809175620.720923-2-ltykernel@gmail.com>
-In-Reply-To: <20210809175620.720923-2-ltykernel@gmail.com>
+ <20210809175620.720923-3-ltykernel@gmail.com>
+In-Reply-To: <20210809175620.720923-3-ltykernel@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=3bfdd0db-44ef-4cc1-aacb-5c4b1161b694;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-08-12T18:52:44Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=554cbf34-fbb7-44b9-8159-933acafadcb9;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-08-12T19:15:02Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ed154913-3150-4242-52eb-08d95dc579f5
-x-ms-traffictypediagnostic: CO1PR21MB1283:
+x-ms-office365-filtering-correlation-id: e0e43c59-6a82-4e84-1131-08d95dc5f87a
+x-ms-traffictypediagnostic: MWHPR21MB0861:
 x-ms-exchange-transport-forked: True
 x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <CO1PR21MB12831F14641653FFE1CF4DD0D7F99@CO1PR21MB1283.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-microsoft-antispam-prvs: <MWHPR21MB086139FC4B3AE2C13677FF8BD7F99@MWHPR21MB0861.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zAD0zptds3QUECqmDgLegJBW91ZPMlqGKdut1uA3XaBDTuKO0q/qQQ7g2mD1MHD3ZFTOeVKv1/DKxLqzfz7VokK1yy+5UN94nBv04f5p1mogCXwu+YSfxURVo0LD7lZmG6RFUwOjZVTNxwEJ3JbpmAwn3EpR2rvpMiOXbDMA6rrqaRdOehSBgGpW47NqaPZ6D5vp7zOUfhxDOHovn9OCSin+kAEXgJVAkwFKCeCjY3W4XX09Aa3hFIihwdJl26RiW27Evt4pL+mL4159hu81PhFj1TlAXYE2C0uRJWE2OC6+lzptfHflK00YA6sr6JW3SE4GBuD75abFn1r1pywwGij05foKb1l31IMoM+MsZB7TkDLi+41dOaMfdE9QvsZkAtsvIjVF2tTtcbPyXd47vU1qwwuY2ngsUcl/nowv74x8ROmoX7OR3qFZ4zTck0pwwodqAWOTz3IN+EYVjedb1CYxenFzbAJFdWejTWMfqBEPPNigeblgv7HdW932U6HWZpX3vsDPfAbdPFH8ntZNZGV7eKwSyC6AIjU3qkEm+DcinAzYpsgClpzPQDk7dlhwOvwHa22BFFXgyZ/8/zaaLEaliGortWoZa+MaMO/Lxxit55VCvtCRdy77zqkuUxk/aRenSvzCsw9f8ojjj6aBY1UWiwqdDqQmbBjGOwGijptlYXgX+BNdvy3JZ/O5zsBxyb2vrTLytVSkKjKx1sd+aR9x2H4rhHVH89Ig4mGMRSg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(53546011)(82950400001)(6506007)(82960400001)(71200400001)(2906002)(921005)(10290500003)(7696005)(508600001)(86362001)(26005)(186003)(4326008)(7416002)(122000001)(7406005)(54906003)(8676002)(8936002)(9686003)(110136005)(5660300002)(66446008)(64756008)(76116006)(66946007)(33656002)(83380400001)(55016002)(38070700005)(316002)(52536014)(8990500004)(38100700002)(66476007)(66556008);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: k4h0lSuYoZKNBm7yODlYkyykM+eKlWUfkryGyFa6mwk7nbyBl0dgw7qf7/wl2nAss91euPoXtlEGtdyXp0w1mZhv2j8fZ/0h+0OUUUf/iWkHAaj1jf7XS/B53LDfzM4M8Qbum20FqU9gZSlZiL+s/xyXz5L38QDKhyVbzFOJkG4J6g4IlkCSSIr0hWd6M4EL7jwtM/Hx1OocwXF7rwrjU90mlfsa8uGq+a72+1ItmexgO0mNiYtNROns5TV8dIXdPYa6J0KtuK1E/rvuRkuHrQyCPjt0EqZOjOBQnkK5YevNAEWuxn4jwA/tnG16/34kBR6wr9rJezvyTR5lyeqdlf3GctBNDJWWwXD37EDSxJVDGcz6zzRtWniskslldJ6Wm6ZzbJ9J7mBX9X4grnS0kXU0fNUi76FLYzfBQS9bqmJQ4PH+IaaebMLF1qlz2/xUU406fqEXQoJHFQ3/nBX4QttsdYwcMh8DihlFWoMlKoBfaZd7iTkZLwt42BeDZ++u+qCJuf7MoOYh+fbI0n41RUDvGEo92cGcm6885Tu3cTbZZDxkX0HNMMuHh5C2fK37DCdW7P3z3PcmbB0SwVSZ4LaJanPmoKO//wd05Gmvw0xItoh0oyosYHAIbsJGkxHZgpjyOBGkxJfW8NI49u9EQ2uEEcNnXf6OqyTxoBZ9eVIQwHgZWt0/h0zkT9AdKN6A61dtEsXEOUzKv4Jt94Ec+GotrUadBKZ3YSdyIw4Ydqg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(5660300002)(110136005)(66946007)(54906003)(66556008)(508600001)(71200400001)(122000001)(64756008)(8676002)(66446008)(76116006)(316002)(33656002)(26005)(7696005)(52536014)(10290500003)(2906002)(186003)(55016002)(7416002)(38070700005)(7406005)(921005)(8936002)(9686003)(83380400001)(6506007)(53546011)(82950400001)(4326008)(82960400001)(8990500004)(38100700002)(86362001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JJx9OHqprqGIl6IOQ06tKcKLUkeM5tuZVvsOA81J8By+5kpUL0nipy9GsNcN?=
- =?us-ascii?Q?5ruSTsR6FxEmDqS/fS3yDQc5pmqEfYJpvZSVJ3t1+MRTckQr/x2NN42qEN0L?=
- =?us-ascii?Q?CvluYUEBQuc+Y8Dl5Sc8drYd6tWKU2tT4sBt2oZn97e3olXJCBP8LP00nSzL?=
- =?us-ascii?Q?P3Xr1h9pz2LdsbEMsDkqe8KzLOgtSyRWL1u0flhe2vwGKaHOypt+jMZvFuKB?=
- =?us-ascii?Q?zmYoNJc5rcBF/PL8gmVMA6IwGLm0xvXSZoDks4LyHBnNrJvHjqmKKaXRYm84?=
- =?us-ascii?Q?augBx89owdqlUQMCQC9EKLRn468uWOtb9rQE6eWcvCl8ZqXnTZrwI9aOef0+?=
- =?us-ascii?Q?TMl1d66HAXSyS5iK1HLIVhCP8VoTezEwQjxChUplQyeFeO2bwJBjGmgZLQ2t?=
- =?us-ascii?Q?BAcOvICD9tmk+mz393k5Rgr0GQ0Ly4CPUx0xv8ubisbezSJutl93DNMdHN1p?=
- =?us-ascii?Q?SXy89DGHocXm9OgHjMgT0mTSrDNjnYnVMe0o5VsdMqzONiKa9ay9M2A7NhPu?=
- =?us-ascii?Q?SgsuvOicCFLQA+cdGuWW1skgu9g/wF8e8Yz8pnaFjz3mv0mepSv1fgohRw88?=
- =?us-ascii?Q?ja+XVY3mNhznPC2vmJvr5W/7M4Vp5Kt0wUFtNeYbPxVGIIjV8MWvjTRCiQSt?=
- =?us-ascii?Q?566SGD8uYnLq4o6MqAMnVhVelgE26P8GH/BgFvKq7kycD1wUIB13l35eXYso?=
- =?us-ascii?Q?DlTwqZUNJnexg9YqPY3HEx2eqmdbYSckkYRk5jlvbMtuXx5i37xROwl2G0QV?=
- =?us-ascii?Q?V9nCZCrXpILARBJui6q+bzi5dBD7VHwjCiDn4VxGNnmOQHcjcTKEnjl8dyrz?=
- =?us-ascii?Q?c7MqJPIfFMDkrtKORQRiYbaFPAteMDjwQGYFeOEedXg7Oqym8yHrD3/ufVLz?=
- =?us-ascii?Q?eBUfTCAuZGoOD7KwP+AsFaZZfEd3F0XnI0ecnVXjC2dGMOmoBEsvKZvwRCdU?=
- =?us-ascii?Q?KSgz+kPUez9irY8hbPcIT8rlTPzArb2b2qfJa7yh/nMlwQ6Yd3V93nGoSkL6?=
- =?us-ascii?Q?XnDbXhJ8kO//i9u5gD5INOGZHQqAEUUAGXxrAGSjbDf739/3b2nZ8UiUBiL7?=
- =?us-ascii?Q?P3jhMa8vYddnJvSIqxXeISLCpcnlLe+hT4YRil/i7mj4B5jAkaYT+Wytd5OR?=
- =?us-ascii?Q?crmKwkYg0oXxfa+K09H23q+V9DzkRUaeqpmvkAy/ngCMSK3njXATmDv48qNW?=
- =?us-ascii?Q?RpY2+hh6oeRm30nWS1APOtaaqFrhxsk8+AOSLqk5eZOv+cLFgw6YW7PWzJP9?=
- =?us-ascii?Q?Ubv9mCSuj3O3I7/I/9edQWRw+dj9lOkFjrdOBQ+sYovZJSbYCMZCUg9OL2aC?=
- =?us-ascii?Q?6fTVaFauNRWI+qF0gCQ993/h?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?CH5vmLBRd+jug8MHuck4kGKLBac5ncTT2zkTplxQ1SJTLnC0ycSP+bFSFW3R?=
+ =?us-ascii?Q?0HHt+kX+Vw1y44bkRGb80GZgX1LpNGajdP07FcMAEF6daimiXBDP69PMZqrY?=
+ =?us-ascii?Q?FOORhqWIsvNMrO+gfyOH6x3Ht0vU+R2aWZEV6U38gkXKYupI6rcfMiLwARN9?=
+ =?us-ascii?Q?M1asT87vQ6zzeobRahWhVoVmayaz0ON+47mfLUkEIJWeU3oZzBdBQAaQyqV2?=
+ =?us-ascii?Q?WTyGMHhiYUaP3wrxxn3mBEbwlr3gmNIq17rT/KVxkafXBmAVkcHvpOrz6nNu?=
+ =?us-ascii?Q?pvwmymyQEualti2M/4LoQzADPdWIxbbt4KF0eqeU34+2+bfVknDao5Z7srXH?=
+ =?us-ascii?Q?34RjVXQ03qvDWLH0TXGwVF+g/T8J5Qc8JAd7c3W6aRw+b54sAqy1JPmB8nX0?=
+ =?us-ascii?Q?5D9KkhCPw3cpFeqs1kRRTNCSLUF7ZwpExYg1llKLcyhCGWD0fYmwiU1z04EN?=
+ =?us-ascii?Q?qSgAPXuVMkwVSpDXY2bKxNU8PmTytSLFQxS0S64fDDicEJxAQdoi7xPOs0gy?=
+ =?us-ascii?Q?RdQYza7ilRMdSEZhsdzfIMkivo685k5PW30W6Uy8bXaztWduAfTEQek70eA2?=
+ =?us-ascii?Q?cgG9tRfx/afTg/pqoJETJkKko5D6TrcWQ+FbgQvj3O8LGfwRIsc6WMhZN8ne?=
+ =?us-ascii?Q?vx3knkXHnvbcLhYikECppUr4rjBEAuITRfZQl20OIupA/RblaSGQ5BZxpfcm?=
+ =?us-ascii?Q?VsblSNQQz9ardZ8U3Qgwtgd637q9zEuryXl5H/vw/kUWcpYMCr70NaNR6wrr?=
+ =?us-ascii?Q?wp5PEXWwadyWRL1Zm3v7VR3S7bJbcHPvLZsQL1/a24Hupd9C/yWqqnOY37R3?=
+ =?us-ascii?Q?JRemBqtLwXUkzFiIPYN3YSDmTF6nao8c4cJ2w8+7m68SPKZDfsAqyIoBBVRg?=
+ =?us-ascii?Q?A0j7bUolSUIN/Au4jI1s9GHpp6bG0s51aLnsOoHWvZjDfHQKXKxB7Fujomz0?=
+ =?us-ascii?Q?ePvRKGqTgh03cAmD0se1Y+Pn7zJOZPnmB4jzpS+P+o1yUVsClEW/HY3a95p7?=
+ =?us-ascii?Q?/WeoQMYLvaBOhsafO87P8NgV48f0y+xi3A3OhQ7gWQTh6NgCJQ5EDGDX65iY?=
+ =?us-ascii?Q?EEwWzT/kji5+vtVko4M5K4oJgMI8YSzj6CcUGNP+59Lb7O4QzivPXIyJNGVW?=
+ =?us-ascii?Q?U+1Hv3/qIXPlNm5JKGxEK+mrBPzXd1QnPqCB6cDkBJCkl7ljo6dZwoguql/f?=
+ =?us-ascii?Q?XsiD+/DHY4NU18xTerZivtL5aB0sIsM9CoV2Wn7K8QOA+AiM0Nod9XFqAfi6?=
+ =?us-ascii?Q?huzxLjrtsrUa1JKElngKuNT8E/fj1+DxNHhuYAEOi3F285VEMTquoZv+2R0b?=
+ =?us-ascii?Q?rN0JHZ5szfphmrlWLznCoy8k?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed154913-3150-4242-52eb-08d95dc579f5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2021 19:14:58.4607
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0e43c59-6a82-4e84-1131-08d95dc5f87a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2021 19:18:30.7416
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HdbeV510yJExLu5WL5x/AdyPokhvnPDxIsh21pCyfFEUrpXKjFBQDx+vb1GTCUcx2gk+5xk8zIUmI4i3mFL+7OqPgZbtGl5JsNZCtLQuibc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR21MB1283
+X-MS-Exchange-CrossTenant-userprincipalname: dTbwBIc20NOA+EWIaqRsudNGaQ8BeMq7shzU8tr3ThCtGGe5Wtx7pa7WF20ZojFJc78hP0wovlJniZwpiVCRmcNOePzSXW9w1mRs6NO3FOI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR21MB0861
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, August 9, 2021 10:56 A=
 M
-> Subject: [PATCH V3 01/13] x86/HV: Initialize GHCB page in Isolation VM
+> Subject: [PATCH V3 02/13] x86/HV: Initialize shared memory boundary in th=
+e Isolation VM.
 
-The subject line tag on patches under arch/x86/hyperv is generally "x86/hyp=
-erv:".
-There's some variation in the spelling of "hyperv", but let's go with the a=
-ll
-lowercase "hyperv".
+As with Patch 1, use the "x86/hyperv:" tag in the Subject line.
 
 >=20
-> Hyper-V exposes GHCB page via SEV ES GHCB MSR for SNP guest
-> to communicate with hypervisor. Map GHCB page for all
-> cpus to read/write MSR register and submit hvcall request
-> via GHCB.
+> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>=20
+> Hyper-V exposes shared memory boundary via cpuid
+> HYPERV_CPUID_ISOLATION_CONFIG and store it in the
+> shared_gpa_boundary of ms_hyperv struct. This prepares
+> to share memory with host for SNP guest.
 >=20
 > Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
 > ---
->  arch/x86/hyperv/hv_init.c       | 66 +++++++++++++++++++++++++++++++--
->  arch/x86/include/asm/mshyperv.h |  2 +
->  include/asm-generic/mshyperv.h  |  2 +
->  3 files changed, 66 insertions(+), 4 deletions(-)
+>  arch/x86/kernel/cpu/mshyperv.c |  2 ++
+>  include/asm-generic/mshyperv.h | 12 +++++++++++-
+>  2 files changed, 13 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 708a2712a516..0bb4d9ca7a55 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -20,6 +20,7 @@
->  #include <linux/kexec.h>
->  #include <linux/version.h>
->  #include <linux/vmalloc.h>
-> +#include <linux/io.h>
->  #include <linux/mm.h>
->  #include <linux/hyperv.h>
->  #include <linux/slab.h>
-> @@ -42,6 +43,31 @@ static void *hv_hypercall_pg_saved;
->  struct hv_vp_assist_page **hv_vp_assist_page;
->  EXPORT_SYMBOL_GPL(hv_vp_assist_page);
->=20
-> +static int hyperv_init_ghcb(void)
-> +{
-> +	u64 ghcb_gpa;
-> +	void *ghcb_va;
-> +	void **ghcb_base;
-> +
-> +	if (!ms_hyperv.ghcb_base)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * GHCB page is allocated by paravisor. The address
-> +	 * returned by MSR_AMD64_SEV_ES_GHCB is above shared
-> +	 * ghcb boundary and map it here.
-> +	 */
-> +	rdmsrl(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
-> +	ghcb_va =3D memremap(ghcb_gpa, HV_HYP_PAGE_SIZE, MEMREMAP_WB);
-> +	if (!ghcb_va)
-> +		return -ENOMEM;
-> +
-> +	ghcb_base =3D (void **)this_cpu_ptr(ms_hyperv.ghcb_base);
-> +	*ghcb_base =3D ghcb_va;
-> +
-> +	return 0;
-> +}
-> +
->  static int hv_cpu_init(unsigned int cpu)
->  {
->  	union hv_vp_assist_msr_contents msr =3D { 0 };
-> @@ -85,6 +111,8 @@ static int hv_cpu_init(unsigned int cpu)
->  		}
->  	}
->=20
-> +	hyperv_init_ghcb();
-> +
->  	return 0;
->  }
->=20
-> @@ -177,6 +205,14 @@ static int hv_cpu_die(unsigned int cpu)
->  {
->  	struct hv_reenlightenment_control re_ctrl;
->  	unsigned int new_cpu;
-> +	void **ghcb_va =3D NULL;
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
+v.c
+> index 6b5835a087a3..2b7f396ef1a5 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -313,6 +313,8 @@ static void __init ms_hyperv_init_platform(void)
+>  	if (ms_hyperv.priv_high & HV_ISOLATION) {
+>  		ms_hyperv.isolation_config_a =3D cpuid_eax(HYPERV_CPUID_ISOLATION_CONF=
+IG);
+>  		ms_hyperv.isolation_config_b =3D cpuid_ebx(HYPERV_CPUID_ISOLATION_CONF=
+IG);
+> +		ms_hyperv.shared_gpa_boundary =3D
+> +			(u64)1 << ms_hyperv.shared_gpa_boundary_bits;
 
-I'm not seeing any reason why this needs to be initialized.
+You could use BIT_ULL() here, but it's kind of a shrug.
 
-> +
-> +	if (ms_hyperv.ghcb_base) {
-> +		ghcb_va =3D (void **)this_cpu_ptr(ms_hyperv.ghcb_base);
-> +		if (*ghcb_va)
-> +			memunmap(*ghcb_va);
-> +		*ghcb_va =3D NULL;
-> +	}
 >=20
->  	hv_common_cpu_die(cpu);
->=20
-> @@ -383,9 +419,19 @@ void __init hyperv_init(void)
->  			VMALLOC_END, GFP_KERNEL, PAGE_KERNEL_ROX,
->  			VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
->  			__builtin_return_address(0));
-> -	if (hv_hypercall_pg =3D=3D NULL) {
-> -		wrmsrl(HV_X64_MSR_GUEST_OS_ID, 0);
-> -		goto remove_cpuhp_state;
-> +	if (hv_hypercall_pg =3D=3D NULL)
-> +		goto clean_guest_os_id;
-> +
-> +	if (hv_isolation_type_snp()) {
-> +		ms_hyperv.ghcb_base =3D alloc_percpu(void *);
-> +		if (!ms_hyperv.ghcb_base)
-> +			goto clean_guest_os_id;
-> +
-> +		if (hyperv_init_ghcb()) {
-> +			free_percpu(ms_hyperv.ghcb_base);
-> +			ms_hyperv.ghcb_base =3D NULL;
-> +			goto clean_guest_os_id;
-> +		}
-
-Having the GHCB setup code here splits the hypercall page setup into
-two parts, which is unexpected.  First the memory is allocated
-for the hypercall page, then the GHCB stuff is done, then the hypercall
-MSR is setup.  Is there a need to do this split?  Also, if the GHCB stuff
-fails and you goto clean_guest_os_id, the memory allocated for the
-hypercall page is never freed.
-
-It's also unexpected to have hyperv_init_ghcb() called here and called
-in hv_cpu_init().  Wouldn't it be possible to setup ghcb_base *before*
-cpu_setup_state() is called, so that hv_cpu_init() would take care of
-calling hyperv_init_ghcb() for the boot CPU?  That's the pattern used
-by the VP assist page, the percpu input page, etc.
-
->  	}
->=20
->  	rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> @@ -456,7 +502,8 @@ void __init hyperv_init(void)
->  	hv_query_ext_cap(0);
->  	return;
->=20
-> -remove_cpuhp_state:
-> +clean_guest_os_id:
-> +	wrmsrl(HV_X64_MSR_GUEST_OS_ID, 0);
->  	cpuhp_remove_state(cpuhp);
->  free_vp_assist_page:
->  	kfree(hv_vp_assist_page);
-> @@ -484,6 +531,9 @@ void hyperv_cleanup(void)
->  	 */
->  	hv_hypercall_pg =3D NULL;
->=20
-> +	if (ms_hyperv.ghcb_base)
-> +		free_percpu(ms_hyperv.ghcb_base);
-> +
-
-I don't think this cleanup is necessary.  The primary purpose of
-hyperv_cleanup() is to ensure that things like overlay pages are
-properly reset in Hyper-V before doing a kexec(), or before
-panic'ing and running the kdump kernel.  There's no need to do
-general memory free'ing in Linux.  Doing so just adds to the risk
-that the panic path could itself fail.
-
->  	/* Reset the hypercall page */
->  	hypercall_msr.as_uint64 =3D 0;
->  	wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> @@ -559,3 +609,11 @@ bool hv_is_isolation_supported(void)
->  {
->  	return hv_get_isolation_type() !=3D HV_ISOLATION_TYPE_NONE;
->  }
-> +
-> +DEFINE_STATIC_KEY_FALSE(isolation_type_snp);
-> +
-> +bool hv_isolation_type_snp(void)
-> +{
-> +	return static_branch_unlikely(&isolation_type_snp);
-> +}
-> +EXPORT_SYMBOL_GPL(hv_isolation_type_snp);
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
-erv.h
-> index adccbc209169..6627cfd2bfba 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -11,6 +11,8 @@
->  #include <asm/paravirt.h>
->  #include <asm/mshyperv.h>
->=20
-> +DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
-> +
->  typedef int (*hyperv_fill_flush_list_func)(
->  		struct hv_guest_mapping_flush_list *flush,
->  		void *data);
+>  		pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
+>  			ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
 > diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
 v.h
-> index c1ab6a6e72b5..4269f3174e58 100644
+> index 4269f3174e58..aa26d24a5ca9 100644
 > --- a/include/asm-generic/mshyperv.h
 > +++ b/include/asm-generic/mshyperv.h
-> @@ -36,6 +36,7 @@ struct ms_hyperv_info {
+> @@ -35,8 +35,18 @@ struct ms_hyperv_info {
+>  	u32 max_vp_index;
 >  	u32 max_lp_index;
 >  	u32 isolation_config_a;
->  	u32 isolation_config_b;
-> +	void  __percpu **ghcb_base;
+> -	u32 isolation_config_b;
+> +	union {
+> +		u32 isolation_config_b;
+> +		struct {
+> +			u32 cvm_type : 4;
+> +			u32 Reserved11 : 1;
+> +			u32 shared_gpa_boundary_active : 1;
+> +			u32 shared_gpa_boundary_bits : 6;
+> +			u32 Reserved12 : 20;
 
-This doesn't feel like the right place to put this pointer.  The other
-fields in the ms_hyperv_info structure are just fixed values obtained
-from the CPUID instruction.   The existing patterns similar to ghcb_base
-are the VP assist page and the percpu input and output args.  They are
-all based on standalone global variables.  It would be more consistent
-to do the same with the ghcb_base.
+Any reason to name the reserved fields as "11" and "12"?  It
+just looks a bit unusual.  And I'd suggest lowercase "r".
 
+> +		};
+> +	};
+>  	void  __percpu **ghcb_base;
+> +	u64 shared_gpa_boundary;
 >  };
 >  extern struct ms_hyperv_info ms_hyperv;
 >=20
-> @@ -237,6 +238,7 @@ bool hv_is_hyperv_initialized(void);
->  bool hv_is_hibernation_supported(void);
->  enum hv_isolation_type hv_get_isolation_type(void);
->  bool hv_is_isolation_supported(void);
-> +bool hv_isolation_type_snp(void);
->  void hyperv_cleanup(void);
->  bool hv_query_ext_cap(u64 cap_query);
->  #else /* CONFIG_HYPERV */
 > --
 > 2.25.1
 
