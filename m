@@ -2,60 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B74B03E9171
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Aug 2021 14:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699CB3E9B9E
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Aug 2021 02:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbhHKMdC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Aug 2021 08:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbhHKMc5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Aug 2021 08:32:57 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661BCC08EACC
-        for <linux-arch@vger.kernel.org>; Wed, 11 Aug 2021 05:31:07 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id w6so4247289oiv.11
-        for <linux-arch@vger.kernel.org>; Wed, 11 Aug 2021 05:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=V2WNyYdLJoP6K8E9RJHda7LwABozwr3cIVvw6Vvde1lUvj7nEn1kwTUjYENmT632Mo
-         WIvrh1+vLbSYzoPuX6Jvs3ShmY85CXNRULiOryYERC5VxiduWi1eHXykl4rZM4plaPY9
-         v0bjHvKbPX4Dmx5VGMryZtevBJBtYqlBmyCVADyoJGpXTeFxDC0rBPdZ27wWjxlPHWYz
-         44e14rCDZLm5cj050Iix5aVHNgFsagqH3cnFq7JAXcrKgC2Fka4hZJKUHzp5yDGNsN2N
-         es2oehf9N517PT8Y97WToSGj6n+Bj5wnkCVHjnDVkM+in2erAaksScM3DAQFVo4RjSvJ
-         Sh7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=ggZSZuIrNmhSQo3KvJ/Yf4eMej/IqiMB1hHHhrSWSkcRTJTNGWds4PzgcUdOcTpkRf
-         ry6X7Y/aGlFDqkH7LoKfghPzpt98Jfw4PWsJChF9X6+8bcKVQYmgiGl0sxF9WYivmKuj
-         gxoOXKIRFKvLLOxNemWjXGWFU9Jzti25g5A+SJwKFngttaRIU7x/GRoWuvpGSDiNfK1g
-         lcJz0VspKWgZnaY+agDheniQgsFRW1HVGSSCyjT7Wxi8W/UhJy6AdwrTjw1E8ctioskw
-         tONkp88aUvGeX+gnNyAJO1NAqbi/3wPOHrxCOjsugmDcr+Qxh2aR6uaLICk/7lPzGNPQ
-         UoTA==
-X-Gm-Message-State: AOAM533btcZa+WUp+/4UH87dDLLRr0jkU++MGOJLOlvBlzwikYh0s9rK
-        1qcZmaoTM8MS425Hr8XKakC40hHB7Y4/8AMTNvk=
-X-Google-Smtp-Source: ABdhPJzKX4bddhdfg8RiiyHYBr+yLXTM9M8N23Wzjnw2ULmtvMc+zP5mUiQ+LhDoka/W+ZMFsKP6zQ+h+O0KVwFq6y0=
-X-Received: by 2002:a05:6808:1924:: with SMTP id bf36mr24193426oib.106.1628685066760;
- Wed, 11 Aug 2021 05:31:06 -0700 (PDT)
+        id S233180AbhHLA0D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Aug 2021 20:26:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58696 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230072AbhHLA0A (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 11 Aug 2021 20:26:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 325886104F;
+        Thu, 12 Aug 2021 00:25:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628727936;
+        bh=nalF53ncdHbhwNRz2ufsd/JwJEBSeVGXufbQHvjVoOE=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=KS5TpNYDP+iA/LTGm+t8Wv35iUgSiurp+K92vjb99xKVsl5mqvpSzdQIvfGFRDHrq
+         xbDp3jLMOg6wOyu+kXZq1HJUrjH2ILIK2PY7VmXDQ08p0HFy0pE7PtErtApFPLh22i
+         bm+biFUfLkMPXJbL3CRmHBbPFaX6BL7qR3He+SyEQE1T6754Q7IVk+XbhPQaIIibNY
+         ZsUuE5DABfbmopLCLmH8Koa+2sxb9X/4oZiLTjoPYirT6teDBPSWbcvhA51RDG3uKy
+         xpEDlArMltW2XrRAIHW+gIFxaPFDCaK3/Dkh0QaRtBpMAMUNd/TiFsPcLntkC4LgaD
+         cKHnmn4d0Im3w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EC1A95C048D; Wed, 11 Aug 2021 17:25:35 -0700 (PDT)
+Date:   Wed, 11 Aug 2021 17:25:35 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     mingo@kernel.org
+Cc:     manfred@colorfullife.com, stern@rowland.harvard.edu,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com
+Subject: [GIT PULL lkmm] LKMM commits for v5.15
+Message-ID: <20210812002535.GA405507@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:31:06
- -0700 (PDT)
-Reply-To: rihabmanyang07@yahoo.com
-From:   Rihab Manyang <ndourandiogou1@gmail.com>
-Date:   Wed, 11 Aug 2021 13:31:06 +0100
-Message-ID: <CAP5_mB5hsG9XL1on3vsap=m7kWJuxk1JNYnqREpDhZc=rXpfpQ@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
--- 
-How are you?I am miss.Rihab Manyang i will like to be your friend
-please write me back on my email for more details, Thanks.
+Hello, Ingo!
+
+This pull request contains changes for the Linux-kernel memory model
+(LKMM).  These changes focus on documentation, providing additional
+examples and use cases.  These have been posted to LKML:
+
+https://lore.kernel.org/lkml/20210721211003.869892-1-paulmck@kernel.org/
+https://lore.kernel.org/lkml/20210721211003.869892-2-paulmck@kernel.org/
+https://lore.kernel.org/lkml/20210721211003.869892-3-paulmck@kernel.org/
+https://lore.kernel.org/lkml/20210721211003.869892-4-paulmck@kernel.org/
+
+They have been exposed to -next and the kernel test robot, not that these
+services do all that much for documentation changes.
+
+The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
+
+  Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git lkmm
+
+for you to fetch changes up to 87859a8e3f083bd57b34e6a962544d775a76b15f:
+
+  tools/memory-model: Document data_race(READ_ONCE()) (2021-07-27 11:48:55 -0700)
+
+----------------------------------------------------------------
+Manfred Spraul (1):
+      tools/memory-model: Heuristics using data_race() must handle all values
+
+Paul E. McKenney (3):
+      tools/memory-model: Make read_foo_diagnostic() more clearly diagnostic
+      tools/memory-model: Add example for heuristic lockless reads
+      tools/memory-model: Document data_race(READ_ONCE())
+
+ .../memory-model/Documentation/access-marking.txt  | 151 ++++++++++++++++++---
+ 1 file changed, 135 insertions(+), 16 deletions(-)
