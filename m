@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E46153EA3C4
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Aug 2021 13:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811D53EA3E2
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Aug 2021 13:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236720AbhHLLca (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Aug 2021 07:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S236700AbhHLLkC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Aug 2021 07:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233613AbhHLLc3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Aug 2021 07:32:29 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80963C061765
-        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 04:32:04 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id k3so6491451ilu.2
-        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 04:32:04 -0700 (PDT)
+        with ESMTP id S231467AbhHLLkB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Aug 2021 07:40:01 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE621C061765
+        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 04:39:36 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id i13so6481496ilm.11
+        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 04:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LLWbypFYtmmhpbofF5TQROLKFJee5lG0VaWrUd5101c=;
-        b=VI4VFK/PZglf40eNW4NpTC3MKUixGyPsgiiA0Bsg0N8uDU2dfXEDfw8sNiszR/rjdy
-         N/zyCfTJPd+POiUDhFeIXeZ1mALnrG7QAwmMw3XX69Kdqg5h6IK8xCY6xrtATp+xi5LR
-         QjqEDppdXq1OVFkp7WN674DmRO00/sGzBJXDPKWEU4vT1quVA3En5qsD5Jr82JQ/b+6w
-         nY/ivXCK39Mf4yHqbjWAIXWpNvXJ93SLuJgvCvXdjb+I3SqBqwRAliXcu0Auzjc2TRUD
-         9zOhmA+fAG/ejShY015c/i7sx012tj1ptUewJrabxIc8ILLUobd+Pw41PeX9sDw5sZ7U
-         oOmw==
+        bh=b0wWoSxZUHl9VAmkaix27x3+GGnF/qyM2ieQD9shx6A=;
+        b=cA2OjKSbMInt+NUGGQRLQFFs/6Fc1RQaWozcCvU9Kl4pMairN9tu0f9FYj3MzuKImD
+         +5LZ4L1LvkdpnRFHLfngHwEKPKUNwZW76+0Nm4dIgKCHi86wMm4y5qTn2RPpa6dGM4fd
+         9W4fe+BJ0HqhNPcu5cvgWlQpXfuxuNcywpbz5TuJK+Z9JS0/dRldRII6CcoJa+pmu1qN
+         8KSkSR5v5I7CqMBnF+i9Ij1iUx2CZrTGPSBCFrj2Y6h9dLFQF544lrzvVSWsnX8ErRG7
+         1du74OiFCgEt2FE5b7U9lk/7JGl09funrVIPCjoZQQ1yv6vPsZgixN2uYECtupvXC5l+
+         QLYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LLWbypFYtmmhpbofF5TQROLKFJee5lG0VaWrUd5101c=;
-        b=XRsjyjW3If4hA46oDFa8krg+YEwzCVY0eDsFplV/KIMnOn0P7QMSXaSJGDCqzSWzyi
-         XaO7aKFIj8qXfw5E7v32e7ARS5vcm+8d8Et4EqcPZXz+P7r6nnm4szdYAcvrtUAiBtaO
-         FHC/MtAH2rdLtU/qjBlRrH6sEFZqh7/FpyaLVWhQ6hn2s+VA/Xeg6z8nAwmj2lPTmOXj
-         HZ5kpRkhAUR44LFVPi/TeLn/o9DLMjc9ZYwMxVYfup4ljejl35GzyAhkL7K1k27Enp6g
-         qDcpVdY7FwAKozt+Q7oi+2v6/X66Ch1oDc4ug4lY7qB/tOMvXYT/XsC2ZZ5jpsppaKKh
-         ZjEA==
-X-Gm-Message-State: AOAM5306vF83iEnpfYmO33k5550Dph3lnW4PDW/zo0y3oouYRG1A4HIX
-        9PJy/6eyK+KtYnyIUyc/SHINu11JOyegaOfj9mk=
-X-Google-Smtp-Source: ABdhPJwHJwkQ8vvzaKoD2Kyf7FTuvuJH5jzz/AsZ2kzPIEtt1hzirEZD9p8hiX0IRX9as2RaGeURUnT5L+vgdGrdu7g=
-X-Received: by 2002:a05:6e02:2199:: with SMTP id j25mr2554884ila.97.1628767923937;
- Thu, 12 Aug 2021 04:32:03 -0700 (PDT)
+        bh=b0wWoSxZUHl9VAmkaix27x3+GGnF/qyM2ieQD9shx6A=;
+        b=VnwybQgXy6E5i7ilzo2L4sykAW92noU6foDWAbe2yOGVOgxR8CJeYVYME155Qd4JXS
+         013GZh7iJY/IhXbgpXytTQ8pGVbe81IXQ7LBn6zOkb1O0iQv4/kC5KCsxhEIOtMCP+/Q
+         Azxercz7VbPS3b1oBzAOxgbddc8Y54TXraauVs4hWimo9F4h04g0W+7ry+08D+OJAFVj
+         L1zCHEAknYZ6KceOzCbx85SBAO+VtmeCMaLRENghfR9Q915bkbtlj+QIyl9yMXhFWxEC
+         ns45jYZw5X99Bd9TDKooD+BXX3hOcClpB25OmSL7kuCu/YFrWvuqwW+cd4Mc/vtu+vOG
+         rngg==
+X-Gm-Message-State: AOAM531WUELL+pVwwvwzPYIaplyW/x1RYwK4vzA/BQpTDVzdMLg4f58j
+        5Wd8ZDWXwfAXCVsOePXV9Qk6+1bgrso7N/h+kkE=
+X-Google-Smtp-Source: ABdhPJz+K93enw2bys9Znj7L8SO936Zc8C5/3+B86eiMKcV0yU7+FbEXrz5Eh7l2aL+rkF0004GBwUS/KcER2wxyv38=
+X-Received: by 2002:a92:da0d:: with SMTP id z13mr2390206ilm.95.1628768376075;
+ Thu, 12 Aug 2021 04:39:36 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-17-chenhuacai@loongson.cn> <CAK8P3a10NN4mZYtzEEiYv8jqPZbMH-LH406cZV6M4HXhr-Z9yQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a10NN4mZYtzEEiYv8jqPZbMH-LH406cZV6M4HXhr-Z9yQ@mail.gmail.com>
+ <20210706041820.1536502-18-chenhuacai@loongson.cn> <YOQ/P/C7yfgCeKct@hirez.programming.kicks-ass.net>
+In-Reply-To: <YOQ/P/C7yfgCeKct@hirez.programming.kicks-ass.net>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Thu, 12 Aug 2021 19:31:52 +0800
-Message-ID: <CAAhV-H4CngxKBnZPyheMFgWcZvWVrinvBQ4UJhD=vGr+TBBk2g@mail.gmail.com>
-Subject: Re: [PATCH 16/19] LoongArch: Add VDSO and VSYSCALL support
-To:     Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 12 Aug 2021 19:39:23 +0800
+Message-ID: <CAAhV-H47zeE5mHD6Yv0oEWp_=JkHO_uyc6j+MRCovOtJeL-37Q@mail.gmail.com>
+Subject: Re: [PATCH 17/19] LoongArch: Add multi-processor (SMP) support
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
         Linus Torvalds <torvalds@linux-foundation.org>,
@@ -67,42 +67,126 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
+Hi, Peter,
 
-On Tue, Jul 6, 2021 at 6:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, Jul 6, 2021 at 7:32 PM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> On Tue, Jul 06, 2021 at 12:18:18PM +0800, Huacai Chen wrote:
+> > diff --git a/arch/loongarch/include/asm/barrier.h b/arch/loongarch/include/asm/barrier.h
+> > index 8ab8d8f15b88..ad09a3b31cba 100644
+> > --- a/arch/loongarch/include/asm/barrier.h
+> > +++ b/arch/loongarch/include/asm/barrier.h
+> > @@ -20,6 +20,19 @@
+> >  #define mb()         fast_mb()
+> >  #define iob()                fast_iob()
 > >
-> > This patch adds VDSO and VSYSCALL support (gettimeofday and its friends)
-> > for LoongArch.
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  arch/loongarch/include/asm/vdso.h             |  50 +++
-> >  arch/loongarch/include/asm/vdso/clocksource.h |   8 +
-> >  .../loongarch/include/asm/vdso/gettimeofday.h | 101 ++++++
-> >  arch/loongarch/include/asm/vdso/processor.h   |  14 +
-> >  arch/loongarch/include/asm/vdso/vdso.h        |  42 +++
-> >  arch/loongarch/include/asm/vdso/vsyscall.h    |  27 ++
-> >  arch/loongarch/kernel/vdso.c                  | 132 ++++++++
-> >  arch/loongarch/vdso/Makefile                  |  97 ++++++
-> >  arch/loongarch/vdso/elf.S                     |  15 +
-> >  arch/loongarch/vdso/genvdso.c                 | 311 ++++++++++++++++++
-> >  arch/loongarch/vdso/genvdso.h                 | 122 +++++++
-> >  arch/loongarch/vdso/sigreturn.S               |  24 ++
-> >  arch/loongarch/vdso/vdso.lds.S                |  65 ++++
-> >  arch/loongarch/vdso/vgettimeofday.c           |  26 ++
+> > +#define __smp_mb()   __asm__ __volatile__("dbar 0" : : : "memory")
+> > +#define __smp_rmb()  __asm__ __volatile__("dbar 0" : : : "memory")
+> > +#define __smp_wmb()  __asm__ __volatile__("dbar 0" : : : "memory")
 >
-> I fear you may have copied the wrong one here, the MIPS implementation seems
-> more complex than the rv64 or arm64 versions, and you should not need that
-> complexity.
+> :-(
 >
-> Can you try removing the genvdso.c  file completely? To be honest I don't
-> see why this is needed here, so I may be missing something, but the other
-> ones don't have it either.
-OK, VDSO needs to be refactored.
+> > +
+> > +#ifdef CONFIG_SMP
+> > +#define __WEAK_LLSC_MB               "       dbar 0  \n"
+> > +#else
+> > +#define __WEAK_LLSC_MB               "               \n"
+> > +#endif
+>
+> Isn't that spelled smp_mb() ?
+Yes, but __WEAK_LLSC_MB is used in inline asm.
+
+>
+> > +
+> > +#define __smp_mb__before_atomic()    barrier()
+> > +#define __smp_mb__after_atomic()     __smp_mb()
+>
+> Clarification please.
+>
+> Does this imply LL is sequentially consistent, while SC is not?
+I'm wrong here, no mb() is needed after atomic operations.
 
 Huacai
 >
+> > +
+> >  /**
+> >   * array_index_mask_nospec() - generate a ~0 mask when index < size, 0 otherwise
+> >   * @index: array element index
+> > @@ -48,6 +61,112 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
+> >       return mask;
+> >  }
+> >
+> > +#define __smp_load_acquire(p)                                                        \
+> > +({                                                                           \
+> > +     union { typeof(*p) __val; char __c[1]; } __u;                           \
+> > +     unsigned long __tmp = 0;                                                        \
+> > +     compiletime_assert_atomic_type(*p);                                     \
+> > +     switch (sizeof(*p)) {                                                   \
+> > +     case 1:                                                                 \
+> > +             *(__u8 *)__u.__c = *(volatile __u8 *)p;                         \
+> > +             __smp_mb();                                                     \
+> > +             break;                                                          \
+> > +     case 2:                                                                 \
+> > +             *(__u16 *)__u.__c = *(volatile __u16 *)p;                       \
+> > +             __smp_mb();                                                     \
+> > +             break;                                                          \
+> > +     case 4:                                                                 \
+> > +             __asm__ __volatile__(                                           \
+> > +             "amor.w %[val], %[tmp], %[mem]  \n"                             \
+> > +             : [val] "=&r" (*(__u32 *)__u.__c)                               \
+> > +             : [mem] "ZB" (*(u32 *) p), [tmp] "r" (__tmp)                    \
+> > +             : "memory");                                                    \
+> > +             break;                                                          \
+> > +     case 8:                                                                 \
+> > +             __asm__ __volatile__(                                           \
+> > +             "amor.d %[val], %[tmp], %[mem]  \n"                             \
+> > +             : [val] "=&r" (*(__u64 *)__u.__c)                               \
+> > +             : [mem] "ZB" (*(u64 *) p), [tmp] "r" (__tmp)                    \
+> > +             : "memory");                                                    \
+> > +             break;                                                          \
+> > +     default:                                                                \
+> > +             barrier();                                                      \
+> > +             __builtin_memcpy((void *)__u.__c, (const void *)p, sizeof(*p)); \
+> > +             __smp_mb();                                                     \
+> > +     }                                                                       \
+> > +     __u.__val;                                                              \
+> > +})
+> > +
+> > +#define __smp_store_release(p, v)                                            \
+> > +do {                                                                         \
+> > +     union { typeof(*p) __val; char __c[1]; } __u =                          \
+> > +             { .__val = (__force typeof(*p)) (v) };                          \
+> > +     unsigned long __tmp;                                                    \
+> > +     compiletime_assert_atomic_type(*p);                                     \
+> > +     switch (sizeof(*p)) {                                                   \
+> > +     case 1:                                                                 \
+> > +             __smp_mb();                                                     \
+> > +             *(volatile __u8 *)p = *(__u8 *)__u.__c;                         \
+> > +             break;                                                          \
+> > +     case 2:                                                                 \
+> > +             __smp_mb();                                                     \
+> > +             *(volatile __u16 *)p = *(__u16 *)__u.__c;                       \
+> > +             break;                                                          \
+> > +     case 4:                                                                 \
+> > +             __asm__ __volatile__(                                           \
+> > +             "amswap.w %[tmp], %[val], %[mem]        \n"                     \
+> > +             : [mem] "+ZB" (*(u32 *)p), [tmp] "=&r" (__tmp)                  \
+> > +             : [val] "r" (*(__u32 *)__u.__c)                                 \
+> > +             : );                                                            \
+> > +             break;                                                          \
+> > +     case 8:                                                                 \
+> > +             __asm__ __volatile__(                                           \
+> > +             "amswap.d %[tmp], %[val], %[mem]        \n"                     \
+> > +             : [mem] "+ZB" (*(u64 *)p), [tmp] "=&r" (__tmp)                  \
+> > +             : [val] "r" (*(__u64 *)__u.__c)                                 \
+> > +             : );                                                            \
+> > +             break;                                                          \
+> > +     default:                                                                \
+> > +             __smp_mb();                                                     \
+> > +             __builtin_memcpy((void *)p, (const void *)__u.__c, sizeof(*p)); \
+> > +             barrier();                                                      \
+> > +     }                                                                       \
+> > +} while (0)
 >
->        Arnd
+> What's the actual ordering of those AMO things?
+>
