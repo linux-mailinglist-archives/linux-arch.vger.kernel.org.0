@@ -2,112 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C28BA3EA4EB
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Aug 2021 14:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BE73EA7AA
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Aug 2021 17:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237205AbhHLMwi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Aug 2021 08:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S237877AbhHLPjJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Aug 2021 11:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235385AbhHLMwh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Aug 2021 08:52:37 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D3BC061765
-        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 05:52:12 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id q16so5847363ioj.0
-        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 05:52:12 -0700 (PDT)
+        with ESMTP id S234287AbhHLPjJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Aug 2021 11:39:09 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB17C061756;
+        Thu, 12 Aug 2021 08:38:43 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d1so7837491pll.1;
+        Thu, 12 Aug 2021 08:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5Zlt92MdplFzYzVCpLUOC1FV/hnjLdYhHb2ubOG+r2Q=;
-        b=Tkibcp3B8auckVHGyuXydSmyCVaUjzThulC3h7xIFZwu3NxD3biNZ2Vui8C7D+t+Q4
-         ABu1mtfOTQK7rqfNCz3eqoqb/PgnIEuUQPR2T6imuQRYRFULB507b1Gb0lq+r8uwu/yV
-         p5MvJJkGDp4T6TwDyLigxH/yBgrdgtGG67psKYi7KPmrlXoIIzmTCkuFsWOFe26y1a54
-         cPQvdwnrHMlc+zMdKu6JvsCxtAL0Tnp1Mr/C/BeziiMVz9qypEZtFBU973//kWK7vRd+
-         eCiONRnrj9xl0F+5y/8SmRDPaQGYtYDZADG0F4bEA8Tz//2YD+ihfVT0EhLxPaYwN7Ue
-         V4zw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JDlSeWOgXcTARSX0Sb/7iqT+nIM3mRl7e9seVpJTDsQ=;
+        b=eKwdoqgzbDwCSyrgnVW4fQAzUSWeoRx/kyQpFmKK+Fp7BDnr2/nHtS2A8lP7dy74pV
+         DhjbUbYBUBvR9ptLkWXPFGdb66asLd49SRfdmf9wxKJzWqlZ8T7NSu4mDDdOyr8QYGjC
+         0lNFiTw2Utqsdhq+i1tE7yKdLkrhwYJ4GcUjf5y7cP+4awTK44NJV01YV+BxlT3oQexu
+         0CRKAKLjxtq43dNgpQlyRzLdedFvCS41p+H+3bYjSaKBrgs7oVUsW9kyJWLlM734zPxy
+         UEVzFvb9jP9wMt2dE2D+cHyIUPC4b4v/Fn8lr0Ong2WornEq8pHks9kPtVFyDLYSburS
+         y7eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5Zlt92MdplFzYzVCpLUOC1FV/hnjLdYhHb2ubOG+r2Q=;
-        b=hbSYPAjMi+H8qcpXXjubyeEwRc4yb097m6Dt0Yj2/iBLgeJV83X8nTR+2BXpeRdxxG
-         VFy3F800upM0E9Q7KqHj/5Jx5pLHfa6/sdTCN9mYYZu4xzTxJ1dvBCftvHyI5JBTrKtb
-         Bjgew3wh7va8ESMLIdZaGJbpwdBTvdNE+WK6apYV+PloIJtqe9VJXVwjlJvFlPKfmhwC
-         xsv7B0GK52G7ONk1OGotTvFi8KR8pTF7qdkNamCUyIQnme8LTe9hkWITADLdS7b+8gUG
-         zmodRazM9+jjtxhNM8cKf3kL98BvybsWnGetJrlTMTZFHEss0Hfs3xYlaHRSXhXRa7cV
-         VVUw==
-X-Gm-Message-State: AOAM5323N0Qlj8B1M/8s+9HoeY1R9HZ77HCCJdcUP5WRn8op8fhRS3E1
-        iOGTsPWSJ0qBpQ55J+i21i7bav58u/KTcZs8U74=
-X-Google-Smtp-Source: ABdhPJyOrWE+BFg8wduShrgvPcporZZqxz8OVX4bfAnED2EbOC/4KFIPauEiz8vQkSOojKhc0C7mUPZPsEMqrJWlgsA=
-X-Received: by 2002:a05:6602:48c:: with SMTP id y12mr2965868iov.14.1628772732162;
- Thu, 12 Aug 2021 05:52:12 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JDlSeWOgXcTARSX0Sb/7iqT+nIM3mRl7e9seVpJTDsQ=;
+        b=hJM2eKZLuZWUGB1ZtYM8wIiGMxjrCxMiW8u7lE1hFTvrP8+0ra24mXUBHibngk+tEl
+         VQ5BjEmaA/xjwH1pnIA8isw4jKFnHG9NR1BnFQLkQvBmwb/oe45twLb22dqWGeuJtLF2
+         EzK7E5Yan3jWQkbmv5bPeK4HK9dHKtYKW3YjSdIeLwCvu3U7M4EM/QRmoIqxnMiI9Kob
+         /jyyw4/zqn0DkARto5BXYYHE6GJofaBpqbOmsJr/MuQ1loD9veIqsNgctoZ7Hbcin3Py
+         OSNla+20BPGXPB/3duAIOSw+aeRJMlj8hW5QZyTlexSg0GYhb+xYlafuGHhrm/ULzryv
+         whog==
+X-Gm-Message-State: AOAM531lCJB/VtPrvzReAuDOevNIq+02KskgqcOvIJR24csxf9ar/okT
+        pKeCX4OOPOMDqeI3EMSzdxI=
+X-Google-Smtp-Source: ABdhPJzM/sI+FsioyGJB+Q38ExsQyZIIBjJUHCnSB8L/yQaI33b3CkRfajWOppoDj5zZgXKq84mYaQ==
+X-Received: by 2002:a17:90a:648b:: with SMTP id h11mr5000375pjj.141.1628782723341;
+        Thu, 12 Aug 2021 08:38:43 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
+        by smtp.gmail.com with ESMTPSA id y7sm4139094pfp.102.2021.08.12.08.38.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Aug 2021 08:38:42 -0700 (PDT)
+Subject: Re: [PATCH V3 09/13] DMA: Add dma_map_decrypted/dma_unmap_encrypted()
+ function
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
+        Tianyu.Lan@microsoft.com, pgonda@google.com,
+        martin.b.radev@gmail.com, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, rppt@kernel.org,
+        sfr@canb.auug.org.au, saravanand@fb.com,
+        krish.sadhukhan@oracle.com, aneesh.kumar@linux.ibm.com,
+        xen-devel@lists.xenproject.org, rientjes@google.com,
+        hannes@cmpxchg.org, tj@kernel.org, michael.h.kelley@microsoft.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, parri.andrea@gmail.com, dave.hansen@intel.com
+References: <20210809175620.720923-1-ltykernel@gmail.com>
+ <20210809175620.720923-10-ltykernel@gmail.com>
+ <20210812122657.GB19050@lst.de>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <0598906d-9a47-34a9-16bf-4bacff7fa058@gmail.com>
+Date:   Thu, 12 Aug 2021 23:38:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-8-chenhuacai@loongson.cn> <CAK8P3a3FJSX6U9i0KYDKGVgPxi=OnrJJg73d74=KOkbEBoVa+g@mail.gmail.com>
- <YOQ50HDzj0+y00sR@hirez.programming.kicks-ass.net> <CAAhV-H767tTTCpR26x3hNN2BrWDyfe4z6p0gsgS4TSiXLu6=Hw@mail.gmail.com>
- <CAK8P3a0gDhL0SUo-RvR00GAi1cOTox_S759uEC7gr0yLkr=+JQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0gDhL0SUo-RvR00GAi1cOTox_S759uEC7gr0yLkr=+JQ@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Thu, 12 Aug 2021 20:51:59 +0800
-Message-ID: <CAAhV-H4vT_HC7mDJ0BaHhEujHGJ64OOecJ42NBEFSG6ztFFkzA@mail.gmail.com>
-Subject: Re: [PATCH 07/19] LoongArch: Add process management
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210812122657.GB19050@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
 
-On Thu, Aug 12, 2021 at 8:30 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Aug 12, 2021 at 1:17 PM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > On Tue, Jul 6, 2021 at 7:09 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Tue, Jul 06, 2021 at 12:16:37PM +0200, Arnd Bergmann wrote:
-> > > > On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > >
-> > > > > +void arch_cpu_idle(void)
-> > > > > +{
-> > > > > +       local_irq_enable();
-> > > > > +       __arch_cpu_idle();
-> > > > > +}
-> > > >
-> > > > This looks racy: What happens if an interrupt is pending and hits before
-> > > > entering __arch_cpu_idle()?
-> > >
-> > > They fix it up in their interrupt handler by moving the IP over the
-> > > actual IDLE instruction..
-> > >
-> > > Still the above is broken in that local_irq_enable() will have all sorts
-> > > of tracing, but RCU is disabled at this point, so it is still very much
-> > > broken.
-> > This is a sad story, the idle instruction cannot execute with irq
-> > disabled, we can only copy ugly code from MIPS.
->
-> Maybe you can avoid that tracing problem if you move the irq-enable
-> and subsequent need_resched() check into the assembler code.
->
-> Another option would be to have the actual idle logic implemented
-> in firmware that runs at a higher privilege level and provides a
-> hypercall interface to the kernel with the normal behavior (
-> enter with irq disabled, wait until irq).
-We have some problems with trace options enabled before, but it seems
-some problems disappear after we refactor the irq/syscall code by
-using generic entry code. :)
 
-Huacai.
->
->        Arnd
+On 8/12/2021 8:26 PM, Christoph Hellwig wrote:
+> On Mon, Aug 09, 2021 at 01:56:13PM -0400, Tianyu Lan wrote:
+>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>>
+>> In Hyper-V Isolation VM with AMD SEV, swiotlb boucne buffer
+>> needs to be mapped into address space above vTOM and so
+>> introduce dma_map_decrypted/dma_unmap_encrypted() to map/unmap
+>> bounce buffer memory. The platform can populate man/unmap callback
+>> in the dma memory decrypted ops.
+> 
+> Nothing here looks actually DMA related, and the names are horribly
+> confusing vs the actual dma_map_* calls.
+> 
+
+OK. So this still need to keep in the set_memory.c file.
