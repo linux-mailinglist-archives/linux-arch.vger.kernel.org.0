@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A103EA3F9
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Aug 2021 13:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F011B3EA431
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Aug 2021 13:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237010AbhHLLq7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Aug 2021 07:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39040 "EHLO
+        id S237140AbhHLL7U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Aug 2021 07:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236979AbhHLLqz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Aug 2021 07:46:55 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36555C061799
-        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 04:46:30 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id k3so6534251ilu.2
-        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 04:46:30 -0700 (PDT)
+        with ESMTP id S237053AbhHLL7T (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Aug 2021 07:59:19 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37CCC061765
+        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 04:58:54 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id r72so7995485iod.6
+        for <linux-arch@vger.kernel.org>; Thu, 12 Aug 2021 04:58:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=CvMOxgWqJ+R+5xprEOmRYm8KAY954TbkWQ7epYO/CZg=;
-        b=Ghc4s7YGi8CWB/c0/inqHNJFQURTRFjDlngKjNxUPsXGgd3sV5F9FRyZnOsFynEni8
-         B5iTllW1FY3zJVuRo/LU1IePHA5txadf9PJUwYLth8rvMqCfVOPEa81oFlTIuYwbHkeI
-         r2+j0AgjiCQMQpytY7/AzBcf2vjnwdYEB+ux5nS1/AMzYJbqDHTRSZyMxwAOnq0PuPjp
-         98G5nTS07FJokHj9lP+tHl/59tmTqWBQmzbzZxSdSAUu+7Fo74IqCbi7EQ3aLlGPQPZ5
-         hJi1ZwBBN/1HUjkhVdQhwTGDDq8uC1WNOVTLNtPKp7ji+iju0VYCbVSpFKKEdyj25POZ
-         RnlA==
+        bh=rd5PSxGyteQMZ/s4O9qcJO/Z8UKncgItM94FXPsqxLg=;
+        b=uaG4JewrgYzPUlZA5w/2FQLNkgg6QLuybkdIzt674SCECu/ZGCUpA+hYz3VedKDNBd
+         kCaCNft3/C98GvvqncHyrz976I9RTiLGfh49IUQoD7enSay5dqUYh2EEVbp1RswS1VP3
+         yJbuEXpd9I68iNvxBzDnzJDolKafUvU8lCw0VkrEiv6ejTG6xMY1E2/4TWnlvbzI1Ebu
+         6boJDtlZkp89NNpcB75rqImRWPq7pJtOQt1d4824Ue+jI/DGy3PxeLsmiEqsJgX/G9ue
+         PTTs3V88/2La0cA/4pLfxoVem50acf5/NTj5E3rPP2aWKI/nGJbhVp2VYMGeXWhCPFIW
+         hZww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CvMOxgWqJ+R+5xprEOmRYm8KAY954TbkWQ7epYO/CZg=;
-        b=mlvseOaCsTrLQgeD++NaopkEfnqOvmMa3y4UGN8c4hV42YgsHeL0slZWRUQL33X/DB
-         w/GDA7UrM3aYeUhwykGBDsAoYfb4h4Dfu3Fy0i/pdhdaQbDXP7K4ECl78nKFWne+r8jz
-         AUY7Tj+ZzX3E8npA/TK6B4l4Hy2HgFywnH2qpgsGFBcmmmJkthWVU7N5ayyLtT13Ii/v
-         7IdGJ48KHAcgcqyg14JRB8I/z76qqlnC2zchKFKIRmvTgMVybSKJK2d1qv+jakzUdQRu
-         05fYvlpBN0clNZTGEcthGD4c93OZi1tJzPP3Tf6xbGHhtNtAdfvMwT6aVyykSC3KUrdN
-         zPdg==
-X-Gm-Message-State: AOAM533mhchWk7uesyV38IGUeJam+vOXRyqG7QfjRecny/02LfVh1Yiv
-        4Xt7sCPuogSIVy+uF5g/7wUA2Nb0PefjIi0xJc0=
-X-Google-Smtp-Source: ABdhPJwtOVEByLhqH91YkCSdz/U9Ljx6Qly21LV28ZxIlDczIVIZlhsXyUaqm68znbgGnrMx3Da8xROS9nLxq1oP14Y=
-X-Received: by 2002:a92:ddcf:: with SMTP id d15mr2626804ilr.184.1628768789625;
- Thu, 12 Aug 2021 04:46:29 -0700 (PDT)
+        bh=rd5PSxGyteQMZ/s4O9qcJO/Z8UKncgItM94FXPsqxLg=;
+        b=cbY1CmqNbTNCdCjI9WFu12k7SaWUyztqBhfLJ5R8MEPRxK6QbaO0t0L96cmq5y36Lg
+         YgQXU5w+6Urq7zVZZQQBE0rD9vngavL/GBmtAdPwJr9J4NQFqXL8tmkL2fHCXX4/VABP
+         KFpjnYCDLNboxNiGq/z+fAmYrGEZ30w5EQpp9oiLG2L6FsmHBYAru62VhSKmTkhRlCB9
+         u+GLKogKLec2pPL82UzKgTQa9O1aXacn77P3CnvNSp6R+VSzEzH+At3cKRVptRWNEvcT
+         6zGddDH034x8sR00gB6MasqGKEW3vvMxNgvSUN3vc53Y2Oqd+HGqIxRYRKPPpUdZ7n3S
+         f9rw==
+X-Gm-Message-State: AOAM5311MovvNx6uZxndqzYpVDCOSy+LHJ5EVtot7BLTidqu8P8q2J/J
+        cqWuqo6VfXC3Y37AXIoXzQbP7wTi0CDfgtu/Qqo=
+X-Google-Smtp-Source: ABdhPJzVVs+kA22kt1/fuRSair836jsJVd+QxZoMtOMDiHqHabqt4UF25RARfgNV3wcvkypuUVMeSW2DEIEGHn76JXs=
+X-Received: by 2002:a05:6638:14d:: with SMTP id y13mr3535695jao.78.1628769534358;
+ Thu, 12 Aug 2021 04:58:54 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-19-chenhuacai@loongson.cn> <CAK8P3a2444qoaDJFvp-t2EzrZ2W6T-m_DPJbDAdJeSB-auV8gA@mail.gmail.com>
-In-Reply-To: <CAK8P3a2444qoaDJFvp-t2EzrZ2W6T-m_DPJbDAdJeSB-auV8gA@mail.gmail.com>
+ <20210706041820.1536502-20-chenhuacai@loongson.cn> <CAK8P3a2J+axpXoP_P+PApo90upUqn57=6_wY5RPZv6oNVV7oUA@mail.gmail.com>
+In-Reply-To: <CAK8P3a2J+axpXoP_P+PApo90upUqn57=6_wY5RPZv6oNVV7oUA@mail.gmail.com>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Thu, 12 Aug 2021 19:46:18 +0800
-Message-ID: <CAAhV-H7NeOfWmnfp79xE2e7g-LX2kkCrqOr9KVB7SE-JH6o-dw@mail.gmail.com>
-Subject: Re: [PATCH 18/19] LoongArch: Add Non-Uniform Memory Access (NUMA) support
+Date:   Thu, 12 Aug 2021 19:58:43 +0800
+Message-ID: <CAAhV-H7y7z6HsxMYbzAmtjfEOHLcP2+emm__9ZjNoy2Hk2xjkw@mail.gmail.com>
+Subject: Re: [PATCH 19/19] LoongArch: Add Loongson-3 default config file
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Andy Lutomirski <luto@kernel.org>,
@@ -73,38 +73,85 @@ On Tue, Jul 6, 2021 at 6:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
 > On Tue, Jul 6, 2021 at 6:18 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
 >
-> > +#ifdef CONFIG_SWIOTLB
-> > +/*
-> > + * Optional platform hook to call swiotlb_setup().
-> > + */
-> > +extern void plat_swiotlb_setup(void);
-> > +
-> > +#else
-> > +
-> > +static inline void plat_swiotlb_setup(void) {}
-> > +
-> > +#endif /* CONFIG_SWIOTLB */
+> > +CONFIG_EMBEDDED=y
 >
-> I guess this accidentally slipped into the wrong patch? It doesn't appear to be
-> NUMA related.
-This need to be improved.
-
+> You probably should not set this one.
 >
-> > diff --git a/arch/loongarch/loongson64/dma.c b/arch/loongarch/loongson64/dma.c
-> > new file mode 100644
-> > index 000000000000..f259f70c75fa
-> > --- /dev/null
-> > +++ b/arch/loongarch/loongson64/dma.c
-> > @@ -0,0 +1,59 @@
-> > +// SPDX-License-Identifier: GPL-2.0
+> > +CONFIG_CAIF=y
 >
-> Same for this file.
-We only need a custom dma.c in the NUMA case, because we need
-phys_to_dma()/dma_to_phys() to convert between 48bit physical address
-and 40bit DMA address. Without NUMA there is only one node, and its
-physical address will not exceed 40bit.
+> And almost certainly not this one.
+>
+> > +CONFIG_PCCARD=m
+> > +CONFIG_YENTA=m
+> > +CONFIG_RAPIDIO=y
+> > +CONFIG_RAPIDIO_TSI721=y
+>
+> These seem unlikely as well. Can you confirm that you have both old-style
+> PC-Card support and RAPIDIO support on your most common hardware?
+>
+> > +CONFIG_PARPORT=y
+> > +CONFIG_PARPORT_PC=y
+> > +CONFIG_PARPORT_SERIAL=y
+> > +CONFIG_PARPORT_PC_FIFO=y
+> > +CONFIG_PRINTER=m
+>
+> Is this an on-board PCI device you actually have?
+> What do you connect to the PC parport? Most printers
+> in the past 15 years only have USB or network connections.
+>
+> > +CONFIG_8139CP=m
+> > +CONFIG_8139TOO=m
+>
+> Do you actually support legacy PCI slots?
+>
+> > +CONFIG_SERIAL_8250=y
+> > +CONFIG_SERIAL_8250_CONSOLE=y
+> > +CONFIG_SERIAL_8250_NR_UARTS=16
+> > +CONFIG_SERIAL_8250_RUNTIME_UARTS=16
+> > +CONFIG_SERIAL_8250_EXTENDED=y
+> > +CONFIG_SERIAL_8250_MANY_PORTS=y
+> > +CONFIG_SERIAL_8250_SHARE_IRQ=y
+> > +CONFIG_SERIAL_8250_RSA=y
+> > +CONFIG_SERIAL_OF_PLATFORM=y
+>
+> I don't see any device tree support in your patches, so I think the
+> SERIAL_OF_PLATFORM is not needed.
+>
+> > +CONFIG_RAW_DRIVER=m
+>
+> This is gone now.
+>
+> > +CONFIG_INFINIBAND=m
+>
+> You don't seem to enable any infiniband host drivers, so the core
+> layer can probably remain turned off
+>
+> > +CONFIG_RTC_CLASS=y
+> > +CONFIG_RTC_DRV_EFI=y
+> > +CONFIG_UIO=m
+>
+> same for UIO.
+>
+> > +CONFIG_EXT2_FS=y
+> > +CONFIG_EXT2_FS_XATTR=y
+> > +CONFIG_EXT2_FS_POSIX_ACL=y
+> > +CONFIG_EXT2_FS_SECURITY=y
+> > +CONFIG_EXT3_FS=y
+> > +CONFIG_EXT3_FS_POSIX_ACL=y
+> > +CONFIG_EXT3_FS_SECURITY=y
+>
+> I would generally recommend using EXT4 over EXT2 or EXT3
+>
+> > +CONFIG_FRAME_WARN=1024
+>
+> On 64-bit platforms, you probably want to increase this a bit,
+> otherwise you get extra warnings about code that works as
+> intended. The default is 2048, but you should be able to get by
+> with 1280, if that lets you build a defconfig kernel without warnings.
+Most of your suggestions here will be accepted, but PARPORT and PCMCIA
+will be keeped, we use some legacy devices with superio.
 
 Huacai
 >
 >
->          Arnd
+>       Arnd
