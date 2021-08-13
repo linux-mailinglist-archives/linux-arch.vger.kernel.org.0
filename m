@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 358573EBD86
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Aug 2021 22:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920693EBDD5
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Aug 2021 23:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234528AbhHMUm6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Aug 2021 16:42:58 -0400
-Received: from mail-mw2nam10on2117.outbound.protection.outlook.com ([40.107.94.117]:35619
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        id S234853AbhHMV3O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Aug 2021 17:29:14 -0400
+Received: from mail-co1nam11on2111.outbound.protection.outlook.com ([40.107.220.111]:56769
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233915AbhHMUm5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 13 Aug 2021 16:42:57 -0400
+        id S234716AbhHMV3N (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 13 Aug 2021 17:29:13 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M/PmMgenu25aFfpENzd6BmNaINIatJBdK2kHTs0T2C3eLzR8bAMCN69/sCgY1lPaegteFUYw++/VftAaOKEJfCia0cbNX6Q5+VFEkzXeDpWOkt7pL5hSbB4xG1g87g8Mgxzz8ul3WGIo3oBk+VctzH9HIjuWwNtSiCoe9riZ15pNOYC/RaZjvX1PMh7HyWwPcqiO1nWzNSI53V0oGkcB0Oi417sk6bh9cRQeq1i50AIAbWVvboaKBv9RkldIo82yOusTxqsoEyecfVLLcIzvMiPYYVK11jHnofInj3ck6CGpaBsY7nAyxYPDeOKP2c248a/vy/y2gfLXEOYfXyYD1g==
+ b=lM9GMkQ0CZSF6GcW8MmJykNorU4W3vROSFp9OpMWUpORxqWGY2xKiKRyW/DYdbXHcp+hv75N6vxrYIwD0+BXgRasvE/lCKf8xBHZz0JGe48Pgv+uM2M7PWqgGDtwAJ4z68HVLgk2ltpRiSpTNxY94o/Oqir1sBCVHozLuB4chZMsbFvFpcMfqX82Z3pIrSTvXg9xG07vu4Supnd0kpTwivtQITp6oJRbgAUfJnmoI8P59Hncx8mbGRdWyO2ftnuKaT6ndR2PldfI0tzBOMdJS51Ed8D/VSuaBg5aM/gF13cdikt/R7SoT6Voc4kXudJZy7780fJS9DJUrFgk/QPytA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rypb+JEQTEQG5iMVSpatMOsXM7AJYRPM5NrU66ByIpU=;
- b=iMnW0KJKcevpVH2R6PmizDV+Un1DhRG6mjf7AxHpTNfdn4fK34/Vfg8QFdkt9qkl4LO9Rbb7NCmaho3AgHJ1og5XTlshxeveSS7+uuinLoc8MiT4/m7ZWEexlEucu4NwtnO7kgl3rUn+a0ImZW7B2J3pk0MUrVY1j67YargmRt9cGoD6utHnZqrX9nSGgjwbfLfsRNlfDuV5LA95yNrOaWgexwiiov+ZaZh7A0RZa7+FwaAMvTrZYT943JM8TukcIB3nxkPYzl4gU49QG+AwS+01gPGJS3CSdoFGNuMVKPmKcWRphtR2DEL+uE4YyaEsbdSzFPtqUREOjGVCwXJdpA==
+ bh=vFr/KaTPD182VDnGFw4G1DU5W3PZzQMKCsybADs7tdw=;
+ b=IGlght9cNCY9OCkHeWUQmBMXCJPDJsKmWdD14PA/LMEFBjfqLMK7AIARIjWcinqwpCEgfZLyRzHtqf7D24HJM14+tjDlh6SmBVsGaoCSO6cHxh6GXXQJN8djcGIk3OBHp8L3djn29E4+WSu8ct2TqPPEc96Axm9jqpPMrWEvbzPCgqJm5N0kb1Unf0YHdGXzSxV+SMnvxEZkzCKcAEp+fgcQvqrz/sOSWkZDpBSWU/GBUbmAuLxI5KbRnqRHn/o3Afd5Gsj0WQeZiDSEgAikLeq5/mtUzRxe0PD0d+GdvPNmNolKxg04W47U9sSfP8J6y5F4kmJqI9mu6Hj/qb8gVg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rypb+JEQTEQG5iMVSpatMOsXM7AJYRPM5NrU66ByIpU=;
- b=OrkvDOb9QchvZJTeA7Lm7wexaNiL6C/cxYw9/VfOynVZuDgbqbUJUh7Nnf5WilcHFrwbNbIF1usDaJnYY0DDiJoHntne9+qeK8io5D4Ii6FCK1R+FxkpToq2mMSarstHebLhNqSf11Ybp47M0+nOnMlqLVvXK//FRV5LeAKirGw=
+ bh=vFr/KaTPD182VDnGFw4G1DU5W3PZzQMKCsybADs7tdw=;
+ b=Ma8Sdr4yWNsaxQT5BfRvtkuXHY1ZDOPqnYs9FecMsAq5GAnUJPdmim7Inid47cWpOzoKKKFZTar/y+BhP4a14UReRxWJkfkgPzrBVyHAJobC79WQ6GP1mZ4hk2vWHs8C/q7w0eTeF1uO0sDKmf4jmXLs6rhirn/TbTq7jCoSzzk=
 Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
- by MW4PR21MB1986.namprd21.prod.outlook.com (2603:10b6:303:7d::13) with
+ by CO1PR21MB1297.namprd21.prod.outlook.com (2603:10b6:303:160::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.4; Fri, 13 Aug
- 2021 20:42:21 +0000
+ 2021 21:28:42 +0000
 Received: from MWHPR21MB1593.namprd21.prod.outlook.com
  ([fe80::e8f7:b582:9e2d:ba55]) by MWHPR21MB1593.namprd21.prod.outlook.com
  ([fe80::e8f7:b582:9e2d:ba55%2]) with mapi id 15.20.4436.012; Fri, 13 Aug 2021
- 20:42:21 +0000
+ 21:28:42 +0000
 From:   Michael Kelley <mikelley@microsoft.com>
 To:     Tianyu Lan <ltykernel@gmail.com>,
         KY Srinivasan <kys@microsoft.com>,
@@ -89,71 +89,73 @@ CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
         vkuznets <vkuznets@redhat.com>,
         "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
         "dave.hansen@intel.com" <dave.hansen@intel.com>
-Subject: RE: [PATCH V3 06/13] HV: Add ghcb hvcall support for SNP VM
-Thread-Topic: [PATCH V3 06/13] HV: Add ghcb hvcall support for SNP VM
-Thread-Index: AQHXjUfzslCDYD8zc0CR/lAuMVKshKtx61Hg
-Date:   Fri, 13 Aug 2021 20:42:20 +0000
-Message-ID: <MWHPR21MB159387555A5405E07A2935D7D7FA9@MWHPR21MB1593.namprd21.prod.outlook.com>
+Subject: RE: [PATCH V3 07/13] HV/Vmbus: Add SNP support for VMbus channel
+ initiate message
+Thread-Topic: [PATCH V3 07/13] HV/Vmbus: Add SNP support for VMbus channel
+ initiate message
+Thread-Index: AQHXjUfv24BSqXdZjUClmJbxPo3yw6tx7wUg
+Date:   Fri, 13 Aug 2021 21:28:42 +0000
+Message-ID: <MWHPR21MB15934F9D5617224608073CE7D7FA9@MWHPR21MB1593.namprd21.prod.outlook.com>
 References: <20210809175620.720923-1-ltykernel@gmail.com>
- <20210809175620.720923-7-ltykernel@gmail.com>
-In-Reply-To: <20210809175620.720923-7-ltykernel@gmail.com>
+ <20210809175620.720923-8-ltykernel@gmail.com>
+In-Reply-To: <20210809175620.720923-8-ltykernel@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=dd098ba2-7655-44ee-883c-b53605cbede8;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-08-13T20:36:48Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=4db12a68-da5e-4335-95dc-8738a43aac1e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-08-13T20:50:04Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d96ae8e2-a7fa-465d-b2bb-08d95e9ad92b
-x-ms-traffictypediagnostic: MW4PR21MB1986:
+x-ms-office365-filtering-correlation-id: 98b0b9a1-c51b-4bba-9ca6-08d95ea15337
+x-ms-traffictypediagnostic: CO1PR21MB1297:
 x-ms-exchange-transport-forked: True
 x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <MW4PR21MB1986E8A0FE134FF4F3050788D7FA9@MW4PR21MB1986.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-microsoft-antispam-prvs: <CO1PR21MB12972358D5949C41735B40B8D7FA9@CO1PR21MB1297.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uPUYC4yfmDYLNp847IY/NfmVOn708h40sC/iPq6OV4i8qhcDyxZE2oSiYBn2O/cMjy3sCzwdTVW9+9mqy4BhWQHBP3baaJPCn5lfhFGdwUKoi4nbD8EdTd1KeqjSkw4/5jc1acThW4oqR2sMkEc5SwKCCjT7Yfe5MmsDuqbaAoHf81C8PMz8WvnZJHDAd3cWFNiDiOmuknXi8Ies0xByPnQVKK0PA0REXd9W/RsYfOqWmHAC7EWMtOMicA3EDBL0rSln8wh448tW2DU4uYgQMecOvxGMuFgDqBl/u4jOICHXd3b++JjDgR4GejyiRqP6XPiAueGUtqQfsMC12MIeNLVjtdRMkzLHhODdcBYqkz2lYSZLNd/3UswFbbfJStFXAPPsatHh9D2jWHiCV6436MZ2Fo+TutO8R4BzIshfv5hZPQxubtIBwC3MGiPSdWtgfE4e/EfEUl63GY4cdx0k9cJQHj7wdo5Y0jcpVtSZ3GT74P5Xcb8ExvVXw+a3QzTRfhShVaoL6CQBu0oJTOeBDKb/cewOjEG451ZteZxoThy+rAfCrsCz0rZDdjVGNz6vpzjDaHyvS6DvLAXfNjUN0IR9jVWx2nPpdq7nWw3BGIXq9B8GJvpbOZyG8P79Cg7McD43KSJIjvFElMNvm9x8DSLaISQatZ3PVcV4kRgH8OvD6rjcvTfBIU61U/QxbBkmrfyE/ElgtuOIUFNWsVHkcdQ+J+/myBNKlLojSE3s5+4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(83380400001)(186003)(71200400001)(110136005)(66946007)(54906003)(9686003)(921005)(66556008)(64756008)(66446008)(66476007)(8676002)(86362001)(10290500003)(26005)(76116006)(52536014)(122000001)(38100700002)(2906002)(7696005)(316002)(7416002)(7406005)(4326008)(6506007)(38070700005)(82950400001)(33656002)(82960400001)(8990500004)(55016002)(8936002)(508600001);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: 3gdBQr+uaC/cH62f4x1FyA31Ggv7YkIy0azhogOJsnsNNDB0j3b+JRim3OKb74MQFbxb7RlIeQm5EhnB9Y1281XA0XpgSxvH3VYFNQgMqB92WaodbZ3GFqUZ53OLqJ0xz65i9EmvfRt3EKohriAnKNoPUn/MTKUjfylwHBI4oESuB41+4nU+Ebv/EP/R6XluxyOWw5zEqbbWD4h2b0s3cdtfVOC/38xJUUM9X0itbiC2i3mkmg+BDaAH9MYOMGZxYyIyz2cfaAYQYIZhSOs2qB6RPi8JFxFAJrrC8nG/zM6nTVhQgi4GLr933+wKrisfTfJrFG+a+3G0+J159C903tLRgQInrG3dgi3F6Ly12DvBbSukuA0fHL+ppjgU6QPEMRKAq9wlK5BB53/iJzlMLbEsg5WDyDkIpB3sdcOARlnnFHAyG41tGpkWvve7gzcTV4EAE2BAj740v1Sfbj1Aln9CYYQ34qEtJOp/KUzDxcEEV8NtLXp1FLWh/nU27fm7oakeF0Q4ZMgHZA1qxlU/MzYtMm42x45MRq5xM3ZEBI5TXxA4AW5SNfiMjqh7wrGpaFPc55H6aQsTxs7SPA6g7LRHt+SSaxUlz2m5MGGQMnNA7qvk4It/Jt+JxSECGZYk7ohCeeWIJ0JGFxSWFv1endAKgcvNdzfW2IZBzoOvsZiBtGMomHpdrDroGf2yxmzxsUu54WcqBpRyo5PL2UNsPJxz4KOJB1n97Tsr1roDYxI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(55016002)(6506007)(10290500003)(5660300002)(9686003)(76116006)(82950400001)(8936002)(122000001)(38100700002)(66556008)(8676002)(64756008)(66946007)(66446008)(110136005)(52536014)(71200400001)(33656002)(38070700005)(86362001)(316002)(15650500001)(66476007)(54906003)(82960400001)(7696005)(921005)(8990500004)(83380400001)(2906002)(7416002)(186003)(4326008)(26005)(7406005);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TtEpRuBy04VIdx/dcG9yXpycNPRk6aDHFV1oCjpVxCy/w6AkrSw9Xdc0lrwz?=
- =?us-ascii?Q?QUGdfD+vQ2TaAbYddX+T30dhYf8XScCmrF9gPMIBgVyYmYNxLnJ6YtPVwiVn?=
- =?us-ascii?Q?8CwoE7Y4XnAen+zkFixPe9TQGD3JFrniY/JWrK1wwJtyRVfUOBKNuD4sts4T?=
- =?us-ascii?Q?pP0jwcQEJ/0gysYpjMF8y6WkIRMaUPTJO8yhtCjCxLnZLatOR60KfruJK1Hn?=
- =?us-ascii?Q?l1FOdDFwMzfQ3NdHDfzJZorruJZCo4yG9mDDzOc9UwTvrS3XUlzbxQ4Z/ZRe?=
- =?us-ascii?Q?7EYj1gAx71DOckYKlIepQL22M+uS1CF2EBotHuC1OwyrLkczCgTW+wb2+2pf?=
- =?us-ascii?Q?LvBhFZ8mGVuvz/sYF3whCMJkxhCcnDPKCabzWw0E1ROS7yiFzOP16EYm3mR6?=
- =?us-ascii?Q?rH/H50uD32UsB3/nNkwFSuAmVZldpZ5ZJrDkpyKFKs2cTQ1JEXoHfbZVdO6p?=
- =?us-ascii?Q?n+bRbnszgjqeWxxvvTUnSYygYKJ74oGax6XldBKPYDxMIMpBELNqobt8+u8D?=
- =?us-ascii?Q?mHz43mSzOuMS0SFyyyBegxZZcJZRYsRtcjsF1Odfq7j6EqlVyHTeeZ0CengX?=
- =?us-ascii?Q?6RbnCDdc+uc3lMU29Tds3sDv5UdIixxGJ2N0p47JYRX5+vn2iubsRFalbFqw?=
- =?us-ascii?Q?1CdJocZZrQMk/cM5vbTSQiHdmEZw+CxnDrNbhJKzYsU9hW3P/O4Paw5S091Y?=
- =?us-ascii?Q?AzKG5sW96b2XTxaE6nhaoG0thV8N/Yd2LEGjoM9owNFDPLDkMxKpKgFUNG/6?=
- =?us-ascii?Q?yErCSmhMigFr6qDbA2GAFg8msdNMs6KV7esPyPVp30TQr2HT8VevqAntZhW1?=
- =?us-ascii?Q?f7KpNBbC4bXnHfHaT6Oqi/dRZDGgzhdAkFoZNhhGL6CB+3pSDnDrqoJpTzPM?=
- =?us-ascii?Q?Kc2E3ckopeXB2aNETvst/o1KqUB0pW62oEfVrFxcmG28jp4GAUWF+7mTPncZ?=
- =?us-ascii?Q?c1JGbZcg9/fOU4qq138NBN8oOmg7fiqZ8svCMQFJNYNz5AXVeirBlkdN9mId?=
- =?us-ascii?Q?DwdpDx+712M2QwS0nwncGLqEQUf1otmGgQGS4eEKCnSCoqVAy5jgfmo66/yC?=
- =?us-ascii?Q?w/wRzwtklnjkp31FyNbt0rQgf59glwT6uJ0mc/2AJ1HA58waeO1XqK9AIliQ?=
- =?us-ascii?Q?+xVrZ547stu/zk8sdCNS3UQKz11Sv8En/g6LwBChRWh5zp1XulvxBb5vg1Vj?=
- =?us-ascii?Q?uHOSWVnr2cpHHZ/KSqPNcAWjp8dgZGRicR9cfk86A3S24OwjAT1UT+5oshFt?=
- =?us-ascii?Q?D7AhQWqPC40tVdD81vcbv8TCC/XORXWohlc82dEfcNMvMjTNf95sPlD9coa9?=
- =?us-ascii?Q?XH1PZoTiLIhajHysssBnkqM9?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PI8niaD816S/UGWfeiG2CzBZYApmgTd1MXNm3ntN3Gu/tVDMXv9DoBc6+t1v?=
+ =?us-ascii?Q?R1kfPCnSRpSiG57uJJOrntPgM7HcfVpJ15sGD4RZP7Fl13UwITUC3LDcQeit?=
+ =?us-ascii?Q?97+PbvTZElm1FDv8E75dOPhheZYTiRuBLRv9JG2spF6cK5kTvSCIDtKB6Au2?=
+ =?us-ascii?Q?RRj6soRUmFkOEn9F2N9mEvtqkhwRBh3XvY+yx0SwL6dW1MjDkGUWtX45EmuD?=
+ =?us-ascii?Q?YEeHqwijiNdTjSVjMVwURfHFaudSSssyG5KJi/8fY0ydY+iRErRjyboWBHnN?=
+ =?us-ascii?Q?2DLoMWjTiUmGx/lxb9SY8OfMN+tDOjF+msaMXnlYdOsARNh69o4PKIz4QrIw?=
+ =?us-ascii?Q?itAAUiygWh6JD1TvLmoAF7F1DPmgNmao3GaGcBpATHo+EM1SrklyJvClAjKp?=
+ =?us-ascii?Q?ob3uM/+LqaQrfGWy//1SGK0lQ8dzrMcn6TxH7Ug4DqjF6Y06kF6uWDGoPk9f?=
+ =?us-ascii?Q?sUmQA0Q+vjGWTHiYgwl7aybYPwOGPYTbcocwhC5waln4I6D0ip0F5tX1qFpr?=
+ =?us-ascii?Q?uewC/TURDW3EZ/DdCuCTTzi4GzAOu4Xpvt0o9DSKh7/lUqTRFqLHGmAgoUPe?=
+ =?us-ascii?Q?7E3WYvb3NoWDlp8k8gcavnkouazT1YJat1RtRVY5jppHM1+Wc/kHoXjoyxTg?=
+ =?us-ascii?Q?ai7VTSFmbjH1sc64jwChCcQwFblmuo52S9XfHVzzpT9d1jL5kM5QV+afLoyA?=
+ =?us-ascii?Q?B4UeuadKypZ9ExzPw44217pZ33mCl145cfk+P02hWcp8p0GP2iJ9wpaGXz/w?=
+ =?us-ascii?Q?uZ8s68l+l8TKzUbq88JEmtJScpmu9izs3M5EUwxrM4PNp9ti9WGyg/WWkYW3?=
+ =?us-ascii?Q?7DKhptunUpT+JWb648aYcswGLLaQa8hLXe9+dBFx3ngkZU2miH46UlrPvrV6?=
+ =?us-ascii?Q?871GN4VB5cdv1R2owKu4y8l6MZIj/qtMOMulHLkaxbPYHCee5II++OUAyual?=
+ =?us-ascii?Q?Rvs4bCeQT8s6Ezm7dmkAz+DNit6XiMZncUU3W7JuR7JTNpflcZUXOn+sR+CX?=
+ =?us-ascii?Q?ax737yG6smY4+c9Aa1mOBdA2hX0t3Cbg4tiP2SOBzJyq3K57KDAamcXagxk/?=
+ =?us-ascii?Q?BKOmQzAtHPZZj6Bi73t8evdDVGfhp0ne5dfAQ0dtbUqSxjIZ9bsHuAzcV5tP?=
+ =?us-ascii?Q?njY1LDSOJEO1lm/z9DBQz4b+leOi7XznGhOMEU0wyYKoldN6MVe32msRcCFX?=
+ =?us-ascii?Q?BtM+vIoFISIURMxKFe7zoHXm7goQTXm0ozp96edgQ6R30AgPkpncsUNDYg5T?=
+ =?us-ascii?Q?8nWrRLZYOCEsTMWzJdBUywik7C3XWpNtXEdNgwRqLdSyEfQiEPuD3sGnMbQL?=
+ =?us-ascii?Q?97gmhx77iDT7wLoRxXQLJG7W?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d96ae8e2-a7fa-465d-b2bb-08d95e9ad92b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2021 20:42:20.9371
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98b0b9a1-c51b-4bba-9ca6-08d95ea15337
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2021 21:28:42.5526
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yK8TOzD/DV0Z6f+xokh0xsHxAdMIhcIgYHZI/BHSNO0OkTR6ZX03jxOHZ0JLmKPp1VGFFKNMdSMFFqTB1zxIy0PvXdK5+ihzztRvkbH/Q+Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB1986
+X-MS-Exchange-CrossTenant-userprincipalname: 2GlRry51dOGFLEy7qqNRQefh0YZsixtx9+RUI/RWWHP4M+m1dHGK/+j6WV1ge08uWzwqfz1rLzM7tiftV89eEyF/cN1aHAL+veCkNvjH/Wo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR21MB1297
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -161,175 +163,213 @@ X-Mailing-List: linux-arch@vger.kernel.org
 From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, August 9, 2021 10:56 A=
 M
 >=20
-> Hyper-V provides ghcb hvcall to handle VMBus
-> HVCALL_SIGNAL_EVENT and HVCALL_POST_MESSAGE
-> msg in SNP Isolation VM. Add such support.
+> The monitor pages in the CHANNELMSG_INITIATE_CONTACT msg are shared
+> with host in Isolation VM and so it's necessary to use hvcall to set
+> them visible to host. In Isolation VM with AMD SEV SNP, the access
+> address should be in the extra space which is above shared gpa
+> boundary. So remap these pages into the extra address(pa +
+> shared_gpa_boundary). Introduce monitor_pages_va to store
+> the remap address and unmap these va when disconnect vmbus.
 >=20
 > Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
 > ---
->  arch/x86/hyperv/ivm.c           | 43 +++++++++++++++++++++++++++++++++
->  arch/x86/include/asm/mshyperv.h |  1 +
->  drivers/hv/connection.c         |  6 ++++-
->  drivers/hv/hv.c                 |  8 +++++-
->  include/asm-generic/mshyperv.h  | 29 ++++++++++++++++++++++
->  5 files changed, 85 insertions(+), 2 deletions(-)
+> Change since v1:
+>         * Not remap monitor pages in the non-SNP isolation VM.
+> ---
+>  drivers/hv/connection.c   | 65 +++++++++++++++++++++++++++++++++++++++
+>  drivers/hv/hyperv_vmbus.h |  1 +
+>  2 files changed, 66 insertions(+)
 >=20
-> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-> index ec0e5c259740..c13ec5560d73 100644
-> --- a/arch/x86/hyperv/ivm.c
-> +++ b/arch/x86/hyperv/ivm.c
-> @@ -15,6 +15,49 @@
->  #include <asm/io.h>
->  #include <asm/mshyperv.h>
->=20
-> +#define GHCB_USAGE_HYPERV_CALL	1
-> +
-> +u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_=
-size)
-> +{
-> +	union hv_ghcb *hv_ghcb;
-> +	void **ghcb_base;
-> +	unsigned long flags;
-> +
-> +	if (!ms_hyperv.ghcb_base)
-> +		return -EFAULT;
-> +
-> +	WARN_ON(in_nmi());
-> +
-> +	local_irq_save(flags);
-> +	ghcb_base =3D (void **)this_cpu_ptr(ms_hyperv.ghcb_base);
-> +	hv_ghcb =3D (union hv_ghcb *)*ghcb_base;
-> +	if (!hv_ghcb) {
-> +		local_irq_restore(flags);
-> +		return -EFAULT;
-> +	}
-> +
-> +	hv_ghcb->ghcb.protocol_version =3D GHCB_PROTOCOL_MAX;
-> +	hv_ghcb->ghcb.ghcb_usage =3D GHCB_USAGE_HYPERV_CALL;
-> +
-> +	hv_ghcb->hypercall.outputgpa =3D (u64)output;
-> +	hv_ghcb->hypercall.hypercallinput.asuint64 =3D 0;
-> +	hv_ghcb->hypercall.hypercallinput.callcode =3D control;
-> +
-> +	if (input_size)
-> +		memcpy(hv_ghcb->hypercall.hypercalldata, input, input_size);
-> +
-> +	VMGEXIT();
-> +
-> +	hv_ghcb->ghcb.ghcb_usage =3D 0xffffffff;
-> +	memset(hv_ghcb->ghcb.save.valid_bitmap, 0,
-> +	       sizeof(hv_ghcb->ghcb.save.valid_bitmap));
-> +
-> +	local_irq_restore(flags);
-> +
-> +	return hv_ghcb->hypercall.hypercalloutput.callstatus;
-> +}
-> +EXPORT_SYMBOL_GPL(hv_ghcb_hypercall);
-
-This function is called from architecture independent code, so it needs a
-default no-op stub to enable the code to compile on ARM64.  The stub should
-always return failure.
-
-> +
->  void hv_ghcb_msr_write(u64 msr, u64 value)
->  {
->  	union hv_ghcb *hv_ghcb;
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
-erv.h
-> index 730985676ea3..a30c60f189a3 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -255,6 +255,7 @@ void hv_sint_rdmsrl_ghcb(u64 msr, u64 *value);
->  void hv_signal_eom_ghcb(void);
->  void hv_ghcb_msr_write(u64 msr, u64 value);
->  void hv_ghcb_msr_read(u64 msr, u64 *value);
-> +u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_=
-size);
->=20
->  #define hv_get_synint_state_ghcb(int_num, val)			\
->  	hv_sint_rdmsrl_ghcb(HV_X64_MSR_SINT0 + int_num, val)
 > diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-> index 5e479d54918c..6d315c1465e0 100644
+> index 6d315c1465e0..bf0ac3167bd2 100644
 > --- a/drivers/hv/connection.c
 > +++ b/drivers/hv/connection.c
-> @@ -447,6 +447,10 @@ void vmbus_set_event(struct vmbus_channel *channel)
+> @@ -19,6 +19,7 @@
+>  #include <linux/vmalloc.h>
+>  #include <linux/hyperv.h>
+>  #include <linux/export.h>
+> +#include <linux/io.h>
+>  #include <asm/mshyperv.h>
 >=20
->  	++channel->sig_events;
+>  #include "hyperv_vmbus.h"
+> @@ -104,6 +105,12 @@ int vmbus_negotiate_version(struct vmbus_channel_msg=
+info *msginfo, u32 version)
 >=20
-> -	hv_do_fast_hypercall8(HVCALL_SIGNAL_EVENT, channel->sig_event);
-> +	if (hv_isolation_type_snp())
-> +		hv_ghcb_hypercall(HVCALL_SIGNAL_EVENT, &channel->sig_event,
-> +				NULL, sizeof(u64));
-> +	else
-> +		hv_do_fast_hypercall8(HVCALL_SIGNAL_EVENT, channel->sig_event);
+>  	msg->monitor_page1 =3D virt_to_phys(vmbus_connection.monitor_pages[0]);
+>  	msg->monitor_page2 =3D virt_to_phys(vmbus_connection.monitor_pages[1]);
+> +
+> +	if (hv_isolation_type_snp()) {
+> +		msg->monitor_page1 +=3D ms_hyperv.shared_gpa_boundary;
+> +		msg->monitor_page2 +=3D ms_hyperv.shared_gpa_boundary;
+> +	}
+> +
+>  	msg->target_vcpu =3D hv_cpu_number_to_vp_number(VMBUS_CONNECT_CPU);
+>=20
+>  	/*
+> @@ -148,6 +155,31 @@ int vmbus_negotiate_version(struct vmbus_channel_msg=
+info *msginfo, u32 version)
+>  		return -ECONNREFUSED;
+>  	}
+>=20
+> +	if (hv_isolation_type_snp()) {
+> +		vmbus_connection.monitor_pages_va[0]
+> +			=3D vmbus_connection.monitor_pages[0];
+> +		vmbus_connection.monitor_pages[0]
+> +			=3D memremap(msg->monitor_page1, HV_HYP_PAGE_SIZE,
+> +				   MEMREMAP_WB);
+> +		if (!vmbus_connection.monitor_pages[0])
+> +			return -ENOMEM;
+
+This error case causes vmbus_negotiate_version() to return with
+vmbus_connection.con_state set to CONNECTED.  But the caller never checks t=
+he
+returned error code except for ETIMEDOUT.  So the caller will think that
+vmbus_negotiate_version() succeeded when it didn't.  There may be some
+existing bugs in that error handling code. :-(
+
+> +
+> +		vmbus_connection.monitor_pages_va[1]
+> +			=3D vmbus_connection.monitor_pages[1];
+> +		vmbus_connection.monitor_pages[1]
+> +			=3D memremap(msg->monitor_page2, HV_HYP_PAGE_SIZE,
+> +				   MEMREMAP_WB);
+> +		if (!vmbus_connection.monitor_pages[1]) {
+> +			memunmap(vmbus_connection.monitor_pages[0]);
+> +			return -ENOMEM;
+> +		}
+> +
+> +		memset(vmbus_connection.monitor_pages[0], 0x00,
+> +		       HV_HYP_PAGE_SIZE);
+> +		memset(vmbus_connection.monitor_pages[1], 0x00,
+> +		       HV_HYP_PAGE_SIZE);
+> +	}
+> +
+
+I don't think the memset() calls are needed.  The memory was originally
+allocated with hv_alloc_hyperv_zeroed_page(), so it should already be zeroe=
+d.
+
+>  	return ret;
 >  }
->  EXPORT_SYMBOL_GPL(vmbus_set_event);
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index 59f7173c4d9f..e5c9fc467893 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -98,7 +98,13 @@ int hv_post_message(union hv_connection_id connection_=
-id,
->  	aligned_msg->payload_size =3D payload_size;
->  	memcpy((void *)aligned_msg->payload, payload, payload_size);
 >=20
-> -	status =3D hv_do_hypercall(HVCALL_POST_MESSAGE, aligned_msg, NULL);
-> +	if (hv_isolation_type_snp())
-> +		status =3D hv_ghcb_hypercall(HVCALL_POST_MESSAGE,
-> +				(void *)aligned_msg, NULL,
-> +				sizeof(struct hv_input_post_message));
-> +	else
-> +		status =3D hv_do_hypercall(HVCALL_POST_MESSAGE,
-> +				aligned_msg, NULL);
+> @@ -159,6 +191,7 @@ int vmbus_connect(void)
+>  	struct vmbus_channel_msginfo *msginfo =3D NULL;
+>  	int i, ret =3D 0;
+>  	__u32 version;
+> +	u64 pfn[2];
 >=20
->  	/* Preemption must remain disabled until after the hypercall
->  	 * so some other thread can't get scheduled onto this cpu and
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index 90dac369a2dc..400181b855c1 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -31,6 +31,35 @@
+>  	/* Initialize the vmbus connection */
+>  	vmbus_connection.conn_state =3D CONNECTING;
+> @@ -216,6 +249,16 @@ int vmbus_connect(void)
+>  		goto cleanup;
+>  	}
 >=20
->  union hv_ghcb {
->  	struct ghcb ghcb;
-> +	struct {
-> +		u64 hypercalldata[509];
-> +		u64 outputgpa;
-> +		union {
-> +			union {
-> +				struct {
-> +					u32 callcode        : 16;
-> +					u32 isfast          : 1;
-> +					u32 reserved1       : 14;
-> +					u32 isnested        : 1;
-> +					u32 countofelements : 12;
-> +					u32 reserved2       : 4;
-> +					u32 repstartindex   : 12;
-> +					u32 reserved3       : 4;
-> +				};
-> +				u64 asuint64;
-> +			} hypercallinput;
-> +			union {
-> +				struct {
-> +					u16 callstatus;
-> +					u16 reserved1;
-> +					u32 elementsprocessed : 12;
-> +					u32 reserved2         : 20;
-> +				};
-> +				u64 asunit64;
-> +			} hypercalloutput;
-> +		};
-> +		u64 reserved2;
-> +	} hypercall;
->  } __packed __aligned(PAGE_SIZE);
+> +	if (hv_is_isolation_supported()) {
+> +		pfn[0] =3D virt_to_hvpfn(vmbus_connection.monitor_pages[0]);
+> +		pfn[1] =3D virt_to_hvpfn(vmbus_connection.monitor_pages[1]);
+> +		if (hv_mark_gpa_visibility(2, pfn,
+> +				VMBUS_PAGE_VISIBLE_READ_WRITE)) {
 
-Alignment should be to HV_HYP_PAGE_SIZE.  And it would be a good safety
-play to have a BUILD_BUG_ON() somewhere asserting that
-sizeof(union hv_ghcb) =3D=3D HV_HYP_PAGE_SIZE.
+Note that hv_mark_gpa_visibility() will need an appropriate no-op stub so
+that this architecture independent code will compile for ARM64.
 
+> +			ret =3D -EFAULT;
+> +			goto cleanup;
+> +		}
+> +	}
+> +
+>  	msginfo =3D kzalloc(sizeof(*msginfo) +
+>  			  sizeof(struct vmbus_channel_initiate_contact),
+>  			  GFP_KERNEL);
+> @@ -284,6 +327,8 @@ int vmbus_connect(void)
 >=20
->  struct ms_hyperv_info {
+>  void vmbus_disconnect(void)
+>  {
+> +	u64 pfn[2];
+> +
+>  	/*
+>  	 * First send the unload request to the host.
+>  	 */
+> @@ -303,6 +348,26 @@ void vmbus_disconnect(void)
+>  		vmbus_connection.int_page =3D NULL;
+>  	}
+>=20
+> +	if (hv_is_isolation_supported()) {
+> +		if (vmbus_connection.monitor_pages_va[0]) {
+> +			memunmap(vmbus_connection.monitor_pages[0]);
+> +			vmbus_connection.monitor_pages[0]
+> +				=3D vmbus_connection.monitor_pages_va[0];
+> +			vmbus_connection.monitor_pages_va[0] =3D NULL;
+> +		}
+> +
+> +		if (vmbus_connection.monitor_pages_va[1]) {
+> +			memunmap(vmbus_connection.monitor_pages[1]);
+> +			vmbus_connection.monitor_pages[1]
+> +				=3D vmbus_connection.monitor_pages_va[1];
+> +			vmbus_connection.monitor_pages_va[1] =3D NULL;
+> +		}
+> +
+> +		pfn[0] =3D virt_to_hvpfn(vmbus_connection.monitor_pages[0]);
+> +		pfn[1] =3D virt_to_hvpfn(vmbus_connection.monitor_pages[1]);
+> +		hv_mark_gpa_visibility(2, pfn, VMBUS_PAGE_NOT_VISIBLE);
+> +	}
+> +
+
+The code in this patch feels a bit more complicated than it needs to be.  A=
+ltogether,
+there are two different virtual addresses and one physical address for each=
+ monitor
+page.  The two virtual addresses are the one obtained from the original mem=
+ory
+allocation, and which will be used to free the memory.  The second virtual =
+address
+is the one used to actually access the data, which is the same as the first=
+ virtual
+address for a non-isolated VM.  The second VA is the result of memremap() c=
+all for an
+isolated VM.  The vmbus_connection data structure should save all three val=
+ues for
+each monitor page so they don't need to recomputed or moved around.  Then:
+
+1) For isolated and for non-isolated VMs, setup the virtual and physical ad=
+dresses
+of the monitor pages in vmbus_connect(), and store them in the vmbus_connec=
+tion
+data structure.  The physical address should include the shared_gpa_boundar=
+y offset
+in the case of an isolated VM.  At this point the two virtual addresses are=
+ the same.
+
+2) vmbus_negotiate_version() just grabs the physical address from the
+vmbus_connection data structure.  It doesn't make any changes to the virtua=
+l
+or physical addresses, which keeps it focused just on version negotiation.
+
+3) Once vmbus_negotiate_version() is done, vmbus_connect() can determine
+the remapped virtual address, and store that.  It can also change the visib=
+ility
+of the two pages using the previously stored physical address.
+
+4) vmbus_disconnect() can do the memunmaps() and change the visibility if n=
+eeded,
+and then free the memory using the address from the original allocation in =
+Step 1.
+
+>  	hv_free_hyperv_page((unsigned long)vmbus_connection.monitor_pages[0]);
+>  	hv_free_hyperv_page((unsigned long)vmbus_connection.monitor_pages[1]);
+>  	vmbus_connection.monitor_pages[0] =3D NULL;
+> diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
+> index 42f3d9d123a1..40bc0eff6665 100644
+> --- a/drivers/hv/hyperv_vmbus.h
+> +++ b/drivers/hv/hyperv_vmbus.h
+> @@ -240,6 +240,7 @@ struct vmbus_connection {
+>  	 * is child->parent notification
+>  	 */
+>  	struct hv_monitor_page *monitor_pages[2];
+> +	void *monitor_pages_va[2];
+>  	struct list_head chn_msg_list;
+>  	spinlock_t channelmsg_lock;
+>=20
 > --
 > 2.25.1
 
