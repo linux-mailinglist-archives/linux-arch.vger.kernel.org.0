@@ -2,195 +2,243 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2653EC2D9
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Aug 2021 15:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3273EC555
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Aug 2021 23:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbhHNNdo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 14 Aug 2021 09:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        id S232053AbhHNVRw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 14 Aug 2021 17:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbhHNNdo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 14 Aug 2021 09:33:44 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF92FC061764;
-        Sat, 14 Aug 2021 06:33:15 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id e19so15540331pla.10;
-        Sat, 14 Aug 2021 06:33:15 -0700 (PDT)
+        with ESMTP id S229564AbhHNVRv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 14 Aug 2021 17:17:51 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF3AC061764;
+        Sat, 14 Aug 2021 14:17:22 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 28-20020a17090a031cb0290178dcd8a4d1so14296970pje.0;
+        Sat, 14 Aug 2021 14:17:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=E3l49fTTRVE56Vn9goxprKRxj2T85G+ePpi3voIcgqM=;
-        b=UOFvhoKWqadKBxrSEwyDxHW1dWTJrafMlGKdpwz34n27UmdJ5/7Kx0SVLSJnJnFQc0
-         nBK93oRsNiOTXjOfX8P7bs71iCBHOyCMi130oWpbhdiSiTZv1X/wd8e1Dj3KcUJudx+R
-         IiqXfbcAXEMH0PHFY4CPHcc6MLxtKitkrnXiZwk/JUIU/s315UCEdfhd1VSWcmQTQ7bc
-         88Mt4SuCTPB8JkUJy7jP8ClgGplB8Sp8dTkRZqlPwgTonhZ6vEZD5ZWAEDT99qVSUv5r
-         jvnFloTwcCW37+swxtjfc/+FSQfYl++e87I3fcJuYu/lMrJjsO1ALvs02uq1jjhNUXax
-         DYCg==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eGEOABaW+Jyt8FMHeH6RyQFPROFOcMHr8N2XiGjbDrs=;
+        b=I3QzjE207ZflawaKKpji4QRm89bQ1A3Q0gksdRuOQxuvpaowiu8dTNx1fyzpGMInJP
+         ostZMyu6ka1isxCZ2YdgM7NeOhV8ovPJrdzCtGB607Qi0ajFAbyVqtOwuvYCvF3lNl5W
+         2gzsa842TdVlwdSe7T4KIqKD9LNPqlddUaVKx6tmwSfH05UlA02W4m7IIV1YRk95Vt7/
+         B+MguM2AJJo1lsqhfq3XeoNBVO5ZxmRgFPIz1A88s+cbIlw3KZBk3kBqQGFN45XUNpkv
+         cl4ltNivCmmDhh8lhk0f2qRHJ4CTsLmE9jDfvcKFo8yZXZnwPyeRjDP1uK4bgoKaEAsO
+         sSvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=E3l49fTTRVE56Vn9goxprKRxj2T85G+ePpi3voIcgqM=;
-        b=gevwnShCNIx6nwrjcetkWdRVNlkziKTD5/GKOsqJ9YrWgHKGrRVrmnbsFGBpfRKqa0
-         W8IzTptfO61zzzIpIp7YJKMGUiY0mymdqY+VS9HxNzb98CUdnVnHi+UU3hldUFo90phM
-         lmMD7NUrrOu9eB13EN0cf/eiB53mTmnTYvCEJbLRwnzWGF9tA+iegYh8GzorP054qkLx
-         beU6jHDyaBIbk8FTt2tZ6/R8mn/v+OwN/jf2nxapBQ5S8JL3fB7Kx6KQEElQ05OqdxZg
-         Gn9Pn6dHmqDZ6WygdQakb2Hd+Z/V7XG5H9UqvNTVtmami/cmfvEHYi0f5lLqwQfGy68f
-         VHOA==
-X-Gm-Message-State: AOAM532u/DVpiRxUtuvSuLRga04kk+NeNLpi52yPh88z7n0BTowMCcdh
-        2Oc9oH39twURJf9mpKvSoqY=
-X-Google-Smtp-Source: ABdhPJxx4GFAlWpOOAKq3xGwVTJFNnwgLV853vArASgiLYYXySIM5R+pCZYOCQaXwPK3prs4ee+uNQ==
-X-Received: by 2002:a17:90a:ad07:: with SMTP id r7mr7575975pjq.110.1628947995429;
-        Sat, 14 Aug 2021 06:33:15 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::50b? ([2404:f801:9000:1a:efea::50b])
-        by smtp.gmail.com with ESMTPSA id n31sm2319766pfv.22.2021.08.14.06.33.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Aug 2021 06:33:15 -0700 (PDT)
-Subject: Re: [PATCH V3 02/13] x86/HV: Initialize shared memory boundary in the
- Isolation VM.
-To:     Michael Kelley <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "martin.b.radev@gmail.com" <martin.b.radev@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "saravanand@fb.com" <saravanand@fb.com>,
-        "krish.sadhukhan@oracle.com" <krish.sadhukhan@oracle.com>,
-        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "tj@kernel.org" <tj@kernel.org>
-Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>
-References: <20210809175620.720923-1-ltykernel@gmail.com>
- <20210809175620.720923-3-ltykernel@gmail.com>
- <MWHPR21MB159376E024639D8F0465BCA2D7F99@MWHPR21MB1593.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <03fea66e-b2b4-af9c-5e06-2de63960a8b4@gmail.com>
-Date:   Sat, 14 Aug 2021 21:32:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        bh=eGEOABaW+Jyt8FMHeH6RyQFPROFOcMHr8N2XiGjbDrs=;
+        b=e4+mD+1qyvbcGlrLTeb0QJSl6OcAAVWZWykPtWJXVBHKe7YN+QDqI46H8jLNURJaTE
+         ZQcdNsd2CIBgntAhJGSD+qVpFW9+J/kUkkY0IGk8TP4PsI3lt0h9p13/52H1l+gJAGBs
+         GLQ1R7mrQCgx5j4qb2p1FRPkVRd/F39ZwTa3xu0ilW3pYLx2jjnvJ6R3b/XTEwDLRMJE
+         CSAbu0A0M86CvR3kJ2dOAAyJ/YMYlN9ZorHynfkUaxuUISywYDERwvQM2dlmBoZq2bRM
+         DaY5meN9FX57qwN0Yxlz/BxMUEWvELY0bmuONweN/nDpTrIAZN69ka5onvDqt51I7hwd
+         wAhA==
+X-Gm-Message-State: AOAM533Q7JaXsKyUj+yc59nP193IskvwV6y997BsGQzU0fN3d7jQloEr
+        Ydit5E6ED+cSYlrwtavLaao=
+X-Google-Smtp-Source: ABdhPJwmFsyM66ivdWGbPvVG1tm5rS7lVzakmgwAMXc7eBgk/qC2GYFSWSHTH5GxrhsrKGfjp/usTw==
+X-Received: by 2002:a63:cf0a:: with SMTP id j10mr8335224pgg.4.1628975841948;
+        Sat, 14 Aug 2021 14:17:21 -0700 (PDT)
+Received: from localhost ([12.28.44.171])
+        by smtp.gmail.com with ESMTPSA id x4sm6454780pff.126.2021.08.14.14.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Aug 2021 14:17:21 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrea Merello <andrea.merello@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Ben Gardon <bgardon@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Perches <joe@perches.com>, Jonas Bonn <jonas@southpole.se>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rich Felker <dalias@libc.org>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH RESEND 00/17] Resend bitmap patches
+Date:   Sat, 14 Aug 2021 14:16:56 -0700
+Message-Id: <20210814211713.180533-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <MWHPR21MB159376E024639D8F0465BCA2D7F99@MWHPR21MB1593.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+This is a resend of previously submitted series:
+https://lore.kernel.org/patchwork/cover/1462071/
+https://lore.kernel.org/patchwork/patch/1458703/
+https://lore.kernel.org/lkml/YPG8SdsbQ+sxjk0w@yury-ThinkPad/T/
+https://lore.kernel.org/lkml/YMVSHCY9yEocmfVD@yury-ThinkPad/T/
 
-On 8/13/2021 3:18 AM, Michael Kelley wrote:
-> From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, August 9, 2021 10:56 AM
->> Subject: [PATCH V3 02/13] x86/HV: Initialize shared memory boundary in the Isolation VM.
-> 
-> As with Patch 1, use the "x86/hyperv:" tag in the Subject line.
-> 
->>
->> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
->>
->> Hyper-V exposes shared memory boundary via cpuid
->> HYPERV_CPUID_ISOLATION_CONFIG and store it in the
->> shared_gpa_boundary of ms_hyperv struct. This prepares
->> to share memory with host for SNP guest.
->>
->> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
->> ---
->>   arch/x86/kernel/cpu/mshyperv.c |  2 ++
->>   include/asm-generic/mshyperv.h | 12 +++++++++++-
->>   2 files changed, 13 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
->> index 6b5835a087a3..2b7f396ef1a5 100644
->> --- a/arch/x86/kernel/cpu/mshyperv.c
->> +++ b/arch/x86/kernel/cpu/mshyperv.c
->> @@ -313,6 +313,8 @@ static void __init ms_hyperv_init_platform(void)
->>   	if (ms_hyperv.priv_high & HV_ISOLATION) {
->>   		ms_hyperv.isolation_config_a = cpuid_eax(HYPERV_CPUID_ISOLATION_CONFIG);
->>   		ms_hyperv.isolation_config_b = cpuid_ebx(HYPERV_CPUID_ISOLATION_CONFIG);
->> +		ms_hyperv.shared_gpa_boundary =
->> +			(u64)1 << ms_hyperv.shared_gpa_boundary_bits;
-> 
-> You could use BIT_ULL() here, but it's kind of a shrug.
+Most of the patches received testing and review. If I missed to
+add someone's review tag putting all together - my kind apologise.
+Please resend it here.
 
+I believe I addessed all comments except Joe's one. In comment to patch 3,
+Joe Perches suggested to rename include/linux/find.h, but didn't give a
+new name, so I leave it as is. Since this header is not for direct
+inclusion, I'm OK with any reasonable name, and we can change it later.
 
-Good suggestion. Thanks.
+Andrew, can you please take this series in linux-next?
 
-> 
->>
->>   		pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
->>   			ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
->> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
->> index 4269f3174e58..aa26d24a5ca9 100644
->> --- a/include/asm-generic/mshyperv.h
->> +++ b/include/asm-generic/mshyperv.h
->> @@ -35,8 +35,18 @@ struct ms_hyperv_info {
->>   	u32 max_vp_index;
->>   	u32 max_lp_index;
->>   	u32 isolation_config_a;
->> -	u32 isolation_config_b;
->> +	union {
->> +		u32 isolation_config_b;
->> +		struct {
->> +			u32 cvm_type : 4;
->> +			u32 Reserved11 : 1;
->> +			u32 shared_gpa_boundary_active : 1;
->> +			u32 shared_gpa_boundary_bits : 6;
->> +			u32 Reserved12 : 20;
-> 
-> Any reason to name the reserved fields as "11" and "12"?  It
-> just looks a bit unusual.  And I'd suggest lowercase "r".
-> 
+Andy Shevchenko (1):
+  tools: Rename bitmap_alloc() to bitmap_zalloc()
 
-Yes, will update in the next version.
+Yury Norov (16):
+  bitops: protect find_first_{,zero}_bit properly
+  bitops: move find_bit_*_le functions from le.h to find.h
+  include: move find.h from asm_generic to linux
+  arch: remove GENERIC_FIND_FIRST_BIT entirely
+  lib: add find_first_and_bit()
+  cpumask: use find_first_and_bit()
+  all: replace find_next{,_zero}_bit with find_first{,_zero}_bit where
+    appropriate
+  tools: sync tools/bitmap with mother linux
+  cpumask: replace cpumask_next_* with cpumask_first_* where appropriate
+  include/linux: move for_each_bit() macros from bitops.h to find.h
+  find: micro-optimize for_each_{set,clear}_bit()
+  Replace for_each_*_bit_from() with for_each_*_bit() where appropriate
+  mm/percpu: micro-optimize pcpu_is_populated()
+  bitmap: unify find_bit operations
+  lib: bitmap: add performance test for bitmap_print_to_pagebuf
+  vsprintf: rework bitmap_list_string
 
->> +		};
->> +	};
->>   	void  __percpu **ghcb_base;
->> +	u64 shared_gpa_boundary;
->>   };
->>   extern struct ms_hyperv_info ms_hyperv;
->>
->> --
->> 2.25.1
-> 
+ MAINTAINERS                                   |   4 +-
+ arch/alpha/include/asm/bitops.h               |   2 -
+ arch/arc/Kconfig                              |   1 -
+ arch/arc/include/asm/bitops.h                 |   1 -
+ arch/arm/include/asm/bitops.h                 |   1 -
+ arch/arm64/Kconfig                            |   1 -
+ arch/arm64/include/asm/bitops.h               |   1 -
+ arch/csky/include/asm/bitops.h                |   1 -
+ arch/h8300/include/asm/bitops.h               |   1 -
+ arch/hexagon/include/asm/bitops.h             |   1 -
+ arch/ia64/include/asm/bitops.h                |   2 -
+ arch/m68k/include/asm/bitops.h                |   2 -
+ arch/mips/Kconfig                             |   1 -
+ arch/mips/include/asm/bitops.h                |   1 -
+ arch/openrisc/include/asm/bitops.h            |   1 -
+ arch/parisc/include/asm/bitops.h              |   2 -
+ arch/powerpc/include/asm/bitops.h             |   2 -
+ arch/powerpc/include/asm/cputhreads.h         |   2 +-
+ arch/powerpc/platforms/pasemi/dma_lib.c       |   4 +-
+ arch/riscv/include/asm/bitops.h               |   1 -
+ arch/s390/Kconfig                             |   1 -
+ arch/s390/include/asm/bitops.h                |   1 -
+ arch/s390/kvm/kvm-s390.c                      |   2 +-
+ arch/sh/include/asm/bitops.h                  |   1 -
+ arch/sparc/include/asm/bitops_32.h            |   1 -
+ arch/sparc/include/asm/bitops_64.h            |   2 -
+ arch/x86/Kconfig                              |   1 -
+ arch/x86/include/asm/bitops.h                 |   2 -
+ arch/x86/kernel/apic/vector.c                 |   4 +-
+ arch/x86/um/Kconfig                           |   1 -
+ arch/xtensa/include/asm/bitops.h              |   1 -
+ block/blk-mq.c                                |   2 +-
+ drivers/block/rnbd/rnbd-clt.c                 |   2 +-
+ drivers/dma/ti/edma.c                         |   2 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c         |   4 +-
+ drivers/hwmon/ltc2992.c                       |   3 +-
+ drivers/iio/adc/ad7124.c                      |   2 +-
+ drivers/infiniband/hw/irdma/hw.c              |  16 +-
+ drivers/media/cec/core/cec-core.c             |   2 +-
+ drivers/media/mc/mc-devnode.c                 |   2 +-
+ drivers/mmc/host/renesas_sdhi_core.c          |   2 +-
+ drivers/net/virtio_net.c                      |   2 +-
+ drivers/pci/controller/dwc/pci-dra7xx.c       |   2 +-
+ drivers/scsi/lpfc/lpfc_sli.c                  |  10 +-
+ drivers/soc/fsl/qbman/bman_portal.c           |   2 +-
+ drivers/soc/fsl/qbman/qman_portal.c           |   2 +-
+ drivers/soc/ti/k3-ringacc.c                   |   4 +-
+ drivers/tty/n_tty.c                           |   2 +-
+ drivers/virt/acrn/ioreq.c                     |   3 +-
+ fs/f2fs/segment.c                             |   8 +-
+ fs/ocfs2/cluster/heartbeat.c                  |   2 +-
+ fs/ocfs2/dlm/dlmdomain.c                      |   4 +-
+ fs/ocfs2/dlm/dlmmaster.c                      |  18 +-
+ fs/ocfs2/dlm/dlmrecovery.c                    |   2 +-
+ fs/ocfs2/dlm/dlmthread.c                      |   2 +-
+ include/asm-generic/bitops.h                  |   1 -
+ include/asm-generic/bitops/le.h               |  64 ---
+ include/linux/bitmap.h                        |  34 +-
+ include/linux/bitops.h                        |  34 --
+ include/linux/cpumask.h                       |  46 ++-
+ include/linux/find.h                          | 372 ++++++++++++++++++
+ kernel/time/clocksource.c                     |   4 +-
+ lib/Kconfig                                   |   3 -
+ lib/find_bit.c                                |  21 +
+ lib/find_bit_benchmark.c                      |  21 +
+ lib/genalloc.c                                |   2 +-
+ lib/test_bitmap.c                             |  37 ++
+ lib/vsprintf.c                                |  24 +-
+ mm/percpu.c                                   |  35 +-
+ net/ncsi/ncsi-manage.c                        |   4 +-
+ tools/include/asm-generic/bitops.h            |   1 -
+ tools/include/asm-generic/bitops/find.h       | 145 -------
+ tools/include/linux/bitmap.h                  |  11 +-
+ .../bitops => tools/include/linux}/find.h     |  54 ++-
+ tools/lib/find_bit.c                          |  20 +
+ tools/perf/bench/find-bit-bench.c             |   2 +-
+ tools/perf/builtin-c2c.c                      |   6 +-
+ tools/perf/builtin-record.c                   |   2 +-
+ tools/perf/tests/bitmap.c                     |   2 +-
+ tools/perf/tests/mem2node.c                   |   2 +-
+ tools/perf/util/affinity.c                    |   4 +-
+ tools/perf/util/header.c                      |   4 +-
+ tools/perf/util/metricgroup.c                 |   2 +-
+ tools/perf/util/mmap.c                        |   4 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |   2 +-
+ tools/testing/selftests/kvm/dirty_log_test.c  |   4 +-
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c |   2 +-
+ 87 files changed, 657 insertions(+), 461 deletions(-)
+ create mode 100644 include/linux/find.h
+ delete mode 100644 tools/include/asm-generic/bitops/find.h
+ rename {include/asm-generic/bitops => tools/include/linux}/find.h (83%)
+
+-- 
+2.30.2
+
