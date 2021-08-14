@@ -2,174 +2,223 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCF53EC5AB
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Aug 2021 23:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147ED3EC5EC
+	for <lists+linux-arch@lfdr.de>; Sun, 15 Aug 2021 01:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234709AbhHNVVS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 14 Aug 2021 17:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236311AbhHNVUg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 14 Aug 2021 17:20:36 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E027C06122E;
-        Sat, 14 Aug 2021 14:19:28 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id a20so16360042plm.0;
-        Sat, 14 Aug 2021 14:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=OaNgCZRD4hHUI4tS8xBQiKuxtW8/RbylDXTBHUi27OQ=;
-        b=RV62ISfXUBoaKNadbCVlghPZyQ+LHJJZ8dSVyYLeF8iDAUYBt2Lo5nKaM+6NUAiUwV
-         ooXkm64XmYElbEd8415cR6Ztf/GlBTG8Pfw2lQY0HtaEY7iW4Ykt3l5aqTg+gPaLLCQj
-         pmfOHAXuIgULb6rKaCKDU1rXZKdTVPdHjvaKAMXFkKuxT6DffqYrdpT88lhGiRl87EUh
-         rK4y06ZEa6KsZjcv4gRLgXnwOefJ/BRdzS0RcvV9pNj5LWbVaCD36GeihYWz1xVh15rK
-         bjhS6zLbvJaM8cmFQBWMbGGzReJVplYiMazH69fPOUHslXGsC0jofgQF6IZCARL6evZn
-         g0og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OaNgCZRD4hHUI4tS8xBQiKuxtW8/RbylDXTBHUi27OQ=;
-        b=DTyjB/n/q9cm3kRuPssw1JS2Sw2a6kMDRbDJ7mZRIBhUXw7UmII5RM4yaXjRmUMOr4
-         t0oM9eU6yIy4QUJbDrlZmh6v7e/DnfAl8shQu0iyEmk+5TfFmEcABJE8A6UBdzy7OiMr
-         n55+nYB5LBqTyjQrFS+WU6aUDW9iFHXThHNckjdWyLQJljqYQQgd92oUWUTOQr7xhnTB
-         DD+/whBCCk5osv5iMZd8dogf5xCNieGZz8s9RJZM7NsiC38NB5xAVMx2QQrhkXSsZrXK
-         gxdSkdg4eeEcPWJyEABCJOTCzBX+8cQ9j22FRdSuNvE0/Rr7UJsuaDYDW8zMWa7ohvog
-         DAlg==
-X-Gm-Message-State: AOAM530p8kGHOtZRdMyqUdGFXgnOovKRjOsquckZJBGAw2w5g/9WXilB
-        tIwCrgRdGUkPICku/dEPCUI=
-X-Google-Smtp-Source: ABdhPJwWOGgPdsAP5xgLQmeuJG7wa9JnuUSFVObAMXt50U32Y2zsf4kDWiVRHM6r3Rl5iZJjQwDNVA==
-X-Received: by 2002:a65:6183:: with SMTP id c3mr8232385pgv.73.1628975967602;
-        Sat, 14 Aug 2021 14:19:27 -0700 (PDT)
-Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id y4sm5325910pjg.9.2021.08.14.14.19.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Aug 2021 14:19:27 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andrea Merello <andrea.merello@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Ben Gardon <bgardon@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Lameter <cl@linux.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
-        Joe Perches <joe@perches.com>, Jonas Bonn <jonas@southpole.se>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rich Felker <dalias@libc.org>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 17/17] vsprintf: rework bitmap_list_string
-Date:   Sat, 14 Aug 2021 14:17:13 -0700
-Message-Id: <20210814211713.180533-18-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210814211713.180533-1-yury.norov@gmail.com>
-References: <20210814211713.180533-1-yury.norov@gmail.com>
+        id S234019AbhHNXSy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 14 Aug 2021 19:18:54 -0400
+Received: from mga03.intel.com ([134.134.136.65]:64171 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233223AbhHNXSy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 14 Aug 2021 19:18:54 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10076"; a="215737009"
+X-IronPort-AV: E=Sophos;i="5.84,322,1620716400"; 
+   d="scan'208";a="215737009"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2021 16:18:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,322,1620716400"; 
+   d="scan'208";a="678361853"
+Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 14 Aug 2021 16:18:23 -0700
+Received: from kbuild by d053b881505b with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mF2v0-000PLF-Ve; Sat, 14 Aug 2021 23:18:22 +0000
+Date:   Sun, 15 Aug 2021 07:18:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [asm-generic:master] BUILD SUCCESS
+ 8f76f9c46952659dd925c21c3f62a0d05a3f3e71
+Message-ID: <61184f39.KlHxSTln/jd9KQxq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-bitmap_list_string() is very ineffective when printing bitmaps with long
-ranges of set bits because it calls find_next_bit for each bit in the
-bitmap.  We can do better by detecting ranges of set bits.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+branch HEAD: 8f76f9c46952659dd925c21c3f62a0d05a3f3e71  bitops/non-atomic: make @nr unsigned to avoid any DIV
 
-In my environment, before/after is 943008/31008 ns.
+elapsed time: 722m
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+configs tested: 165
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210814
+mips                            ar7_defconfig
+arm64                            alldefconfig
+arm                            pleb_defconfig
+powerpc                       ppc64_defconfig
+sh                   sh7770_generic_defconfig
+openrisc                  or1klitex_defconfig
+m68k                        m5407c3_defconfig
+powerpc                    klondike_defconfig
+mips                     loongson1c_defconfig
+arm                          ep93xx_defconfig
+arm                          iop32x_defconfig
+h8300                       h8s-sim_defconfig
+riscv                    nommu_k210_defconfig
+arm                        clps711x_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                 mpc834x_mds_defconfig
+powerpc                 mpc837x_rdb_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                         bigsur_defconfig
+powerpc64                           defconfig
+powerpc                        cell_defconfig
+m68k                          hp300_defconfig
+arm                         at91_dt_defconfig
+powerpc                      mgcoge_defconfig
+m68k                          sun3x_defconfig
+xtensa                          iss_defconfig
+arm                      jornada720_defconfig
+mips                     cu1830-neo_defconfig
+sparc                            alldefconfig
+arm                          lpd270_defconfig
+arm                          simpad_defconfig
+m68k                        stmark2_defconfig
+sh                          lboxre2_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                      walnut_defconfig
+mips                      bmips_stb_defconfig
+sh                           se7619_defconfig
+arm                         orion5x_defconfig
+sh                               alldefconfig
+arm                         s3c6400_defconfig
+arm                             mxs_defconfig
+sparc                       sparc32_defconfig
+arm                        multi_v5_defconfig
+powerpc                      makalu_defconfig
+powerpc                       maple_defconfig
+mips                           rs90_defconfig
+powerpc                         wii_defconfig
+powerpc                     ksi8560_defconfig
+h8300                            allyesconfig
+arm                     davinci_all_defconfig
+sh                           se7206_defconfig
+sh                                  defconfig
+arm                           corgi_defconfig
+xtensa                  audio_kc705_defconfig
+arm                       aspeed_g4_defconfig
+sh                  sh7785lcr_32bit_defconfig
+mips                       lemote2f_defconfig
+mips                         tb0287_defconfig
+powerpc                     sbc8548_defconfig
+arm                           viper_defconfig
+arm                          collie_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                   sh7724_generic_defconfig
+sh                          sdk7780_defconfig
+powerpc                        warp_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20210814
+x86_64               randconfig-a006-20210814
+x86_64               randconfig-a003-20210814
+x86_64               randconfig-a001-20210814
+x86_64               randconfig-a005-20210814
+x86_64               randconfig-a002-20210814
+i386                 randconfig-a004-20210814
+i386                 randconfig-a002-20210814
+i386                 randconfig-a001-20210814
+i386                 randconfig-a003-20210814
+i386                 randconfig-a006-20210814
+i386                 randconfig-a005-20210814
+i386                 randconfig-a004-20210815
+i386                 randconfig-a001-20210815
+i386                 randconfig-a002-20210815
+i386                 randconfig-a003-20210815
+i386                 randconfig-a006-20210815
+i386                 randconfig-a005-20210815
+x86_64               randconfig-a013-20210815
+x86_64               randconfig-a011-20210815
+x86_64               randconfig-a016-20210815
+x86_64               randconfig-a012-20210815
+x86_64               randconfig-a014-20210815
+x86_64               randconfig-a015-20210815
+i386                 randconfig-a011-20210814
+i386                 randconfig-a015-20210814
+i386                 randconfig-a013-20210814
+i386                 randconfig-a014-20210814
+i386                 randconfig-a016-20210814
+i386                 randconfig-a012-20210814
+i386                 randconfig-a011-20210815
+i386                 randconfig-a015-20210815
+i386                 randconfig-a014-20210815
+i386                 randconfig-a013-20210815
+i386                 randconfig-a016-20210815
+i386                 randconfig-a012-20210815
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-c001-20210814
+x86_64               randconfig-a004-20210815
+x86_64               randconfig-a006-20210815
+x86_64               randconfig-a003-20210815
+x86_64               randconfig-a001-20210815
+x86_64               randconfig-a002-20210815
+x86_64               randconfig-a005-20210815
+x86_64               randconfig-a013-20210814
+x86_64               randconfig-a011-20210814
+x86_64               randconfig-a016-20210814
+x86_64               randconfig-a012-20210814
+x86_64               randconfig-a014-20210814
+x86_64               randconfig-a015-20210814
+
 ---
- lib/vsprintf.c | 24 +++++++-----------------
- 1 file changed, 7 insertions(+), 17 deletions(-)
-
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index dd006adfe853..29a384eee286 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1241,20 +1241,13 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
- 			 struct printf_spec spec, const char *fmt)
- {
- 	int nr_bits = max_t(int, spec.field_width, 0);
--	/* current bit is 'cur', most recently seen range is [rbot, rtop] */
--	int cur, rbot, rtop;
- 	bool first = true;
-+	int rbot, rtop;
- 
- 	if (check_pointer(&buf, end, bitmap, spec))
- 		return buf;
- 
--	rbot = cur = find_first_bit(bitmap, nr_bits);
--	while (cur < nr_bits) {
--		rtop = cur;
--		cur = find_next_bit(bitmap, nr_bits, cur + 1);
--		if (cur < nr_bits && cur <= rtop + 1)
--			continue;
--
-+	for_each_set_bitrange(rbot, rtop, bitmap, nr_bits) {
- 		if (!first) {
- 			if (buf < end)
- 				*buf = ',';
-@@ -1263,15 +1256,12 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
- 		first = false;
- 
- 		buf = number(buf, end, rbot, default_dec_spec);
--		if (rbot < rtop) {
--			if (buf < end)
--				*buf = '-';
--			buf++;
--
--			buf = number(buf, end, rtop, default_dec_spec);
--		}
-+		if (rtop == rbot + 1)
-+			continue;
- 
--		rbot = cur;
-+		if (buf < end)
-+			*buf = '-';
-+		buf = number(++buf, end, rtop - 1, default_dec_spec);
- 	}
- 	return buf;
- }
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
