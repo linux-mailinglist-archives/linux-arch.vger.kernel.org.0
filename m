@@ -2,156 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5446C3EBF2E
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Aug 2021 03:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8253EBF99
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Aug 2021 04:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236038AbhHNBFA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Aug 2021 21:05:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58190 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235870AbhHNBFA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 13 Aug 2021 21:05:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6EEBF61042;
-        Sat, 14 Aug 2021 01:04:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628903072;
-        bh=DFe7UDoGnT6+u9OBWO0ZI9GbCic4YsZIgmx3Avqy5h0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=qdpJK4WjJaQf1C0jjNsURq189sWEPYwVEXf63nkPTHGo5GuEaWMbh4tazJvxpM4wr
-         N1LTQk4snhQeGf3Us8ww/eldAa7mGSGvez7Z7Tg0KsFaOCCz7SxepAocx0IAv5no1M
-         tf7jVd0ZbiKZDDAs64w9Vdwba09qv4K2uJ+sKt8o8hd+4bfY6MuZajZ/EyxwLsvhWt
-         NqbbGp6bCtWe5QEn9goO0GkyOHRGnkQX78kg0YcqGABXZlPsfOSSwkPPeUClNRRHgF
-         BZlIcwOJVRO3f6S/9B3mAt86poApD6jz/7qsP7DvFLSV6Y/VVl+/1KjCxWPpal1kAN
-         X2FPeoxyoIGyw==
-Subject: Re: [PATCH v3 0/6] asm-generic: strncpy_from_user/strnlen_user
- cleanup
-To:     Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Brian Cain <bcain@codeaurora.org>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>, Jeff Dike <jdike@addtoit.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Richard Weinberger <richard@nod.at>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.j>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20210722124814.778059-1-arnd@kernel.org>
-From:   Vineet Gupta <vgupta@kernel.org>
-Message-ID: <110b8a69-db5e-e5bc-4391-856a2ed45495@kernel.org>
-Date:   Fri, 13 Aug 2021 18:04:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S236519AbhHNCGp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Aug 2021 22:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236536AbhHNCGo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Aug 2021 22:06:44 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F4C061292
+        for <linux-arch@vger.kernel.org>; Fri, 13 Aug 2021 19:06:16 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id n6so18321588ljp.9
+        for <linux-arch@vger.kernel.org>; Fri, 13 Aug 2021 19:06:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
+        b=bMjFQnnAZpaPHPewg53a/655rlJcZF3F6tOCYZw1vRKDz/xIJdx97rNr27JLkW56nx
+         /iUhkVkrv2vt56YQtzEazhRgIPy/DINH4WyHeEexrKrG7liGbayL7Temc7NGvW0bB8Ad
+         jYLKY+nfNSoS1rYKoflW5LtIinkjSZBTTSJCtk74RyRz5/H1kPwLgMirqvm1jZ9Q2lvS
+         mysy6xLOxs0wYu9KWpVs3ZVzmyzuM6cY3iz+yVlGPkz3Lkb+v57sIQRRUb+ypy4gjifF
+         STYdF7upxk4m3MFQNQv0T7Zw+Yt5F/OYhuRsX60kpa6PLdNBh1LpNqMT51M2pasOSTPy
+         0wUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
+        b=FCc8Aq63rk7QpsCY+6ml43NtdtjvMN7M4tUnfFIfzeKOlkVw4hrjFsEFJ/z1B1oED1
+         QT1AlGbEIBNWdKdE8wP4dYdHxx0BtcFH7NdYHhPLguSduTF9c4Nd8IbUfMpZMLd2S4m4
+         6NSELjH4tY5JWEJRs3RuyuP9a4HAdmz3u2zmKT6VdC9JkLuCdKFPqxRRqN2z9hhnJXfJ
+         E4JwNUq7THC8OkAjsGyGJlGYaXIIgz0SRm+Wg3yMvIQUErQFXVa1CG6m86mIN3TUlSS9
+         9o07CTilVa6EO6IUcXtREqUnNBZxgI4JlYAaXZTS4FtCOqXmFHhSDv6gV+9IV6p+r2qb
+         n4pg==
+X-Gm-Message-State: AOAM531vFqk+hUMao34+NSidyaI6LuxFw6Pckvld5vm+29so06s0dvkn
+        w8COwmZa1Bs/AUwJbdgeEDWdmSH41sVVTnDHcMo=
+X-Google-Smtp-Source: ABdhPJynvegPmhEjUi/stm1v/NRwCcvEqe4+RCpcxOCwnF//w8aRyIcHmBxFidm29bl0vBPsC1zhmU0XtHDcktPhkc0=
+X-Received: by 2002:a2e:b1d3:: with SMTP id e19mr3920584lja.6.1628906774714;
+ Fri, 13 Aug 2021 19:06:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210722124814.778059-1-arnd@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6520:380d:b029:132:4f79:3ded with HTTP; Fri, 13 Aug 2021
+ 19:06:14 -0700 (PDT)
+Reply-To: deedeepaul@yandex.com
+From:   Deedee Paul <deedeepaul212@gmail.com>
+Date:   Sat, 14 Aug 2021 02:06:14 +0000
+Message-ID: <CADS-zP8AceijWYuKjjfFaC4WB2nM3FQqvpU1ob6Xb=P4w5FpkA@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd,
+Attention: Beneficiary,
 
-On 7/22/21 5:48 AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> I had run into some regressions for the previous version of this
-> series, the new version is based on v5.14-rc2 instead.
-> 
-> These two functions appear to be unnecessarily different between
-> architectures, and the asm-generic version is a bit questionable,
-> even for NOMMU architectures.
-> 
-> Clean this up to just use the generic library version for anything
-> that uses the generic version today. I've expanded on the patch
-> descriptions a little, as suggested by Christoph Hellwig, but I
-> suspect a more detailed review would uncover additional problems
-> with the custom versions that are getting removed.
-> 
-> I ended up adding patches for csky and microblaze as they had the
-> same implementation that I removed elsewhere, these are now gone
-> as well.
-> 
-> If I hear no objections from architecture maintainers or new
-> build regressions, I'll queue these up in the asm-generic tree
-> for 5.15.
-> 
->         Arnd
-> 
-> Link: https://lore.kernel.org/linux-arch/20210515101803.924427-1-arnd@kernel.org/
+This is to officially inform you that we have been having meetings for
+the past weeks now which ended Two days ago with Mr. John W. Ashe,
+President of the 68th session of the UN General Assembly, Mr. David
+R.Malpass. the World Bank President and Hon. Mrs. Christine Laggard
+(IMF) Director General, in the meeting we talked about how to
+compensate Scam victim's people and all the people that were affected
+the most by this Coronavirus pandemic.
 
-Are you planning to add this to asm-generic tree for 5.15 anytime soon.
-Also while there, any chance you could pick up [1] too which was Acked 
-by Will.
+Your email address was successfully selected for this donation with others.
 
-Thx,
--Vineet
+The United Nations have agreed to compensate you with the sum of
+($150,000.00) One hundred and fifty thousand United States Dollars. We
+have arranged your payment through WORLD ATM MASTERCARD which is the
+latest instruction from the World Bank Group.
 
-[1] 
-https://lore.kernel.org/linux-arch/20210805191408.2003237-1-vgupta@synopsys.com/
+For the collection of your WORLD ATM MASTERCARD contact our
+representative Rev. David Wood, send to him your contact address where
+you want your MASTERCARD to be sent to you, like
 
+1. Your Full Name: .........
+2. Your Country and Your Delivery Home Address: ........
+3. Your Telephone: ..............
 
-> 
-> Arnd Bergmann (9):
->    asm-generic/uaccess.h: remove __strncpy_from_user/__strnlen_user
->    h8300: remove stale strncpy_from_user
->    hexagon: use generic strncpy/strnlen from_user
->    arc: use generic strncpy/strnlen from_user
->    csky: use generic strncpy/strnlen from_user
->    microblaze: use generic strncpy/strnlen from_user
->    asm-generic: uaccess: remove inline strncpy_from_user/strnlen_user
->    asm-generic: remove extra strn{cpy_from,len}_user declarations
->    asm-generic: reverse GENERIC_{STRNCPY_FROM,STRNLEN}_USER symbols
-> 
->   arch/alpha/Kconfig                        |   2 -
->   arch/arc/include/asm/uaccess.h            |  72 -------------
->   arch/arc/mm/extable.c                     |  12 ---
->   arch/arm/Kconfig                          |   2 -
->   arch/arm64/Kconfig                        |   2 -
->   arch/csky/include/asm/uaccess.h           |   6 --
->   arch/csky/lib/usercopy.c                  | 102 ------------------
->   arch/h8300/kernel/h8300_ksyms.c           |   2 -
->   arch/h8300/lib/Makefile                   |   2 +-
->   arch/h8300/lib/strncpy.S                  |  35 ------
->   arch/hexagon/include/asm/uaccess.h        |  31 ------
->   arch/hexagon/kernel/hexagon_ksyms.c       |   1 -
->   arch/hexagon/mm/Makefile                  |   2 +-
->   arch/hexagon/mm/strnlen_user.S            | 126 ----------------------
->   arch/ia64/Kconfig                         |   2 +
->   arch/m68k/Kconfig                         |   2 -
->   arch/microblaze/include/asm/uaccess.h     |  19 +---
->   arch/microblaze/kernel/microblaze_ksyms.c |   3 -
->   arch/microblaze/lib/uaccess_old.S         |  90 ----------------
->   arch/mips/Kconfig                         |   2 +
->   arch/nds32/Kconfig                        |   2 -
->   arch/nios2/Kconfig                        |   2 -
->   arch/openrisc/Kconfig                     |   2 -
->   arch/parisc/Kconfig                       |   2 +-
->   arch/powerpc/Kconfig                      |   2 -
->   arch/riscv/Kconfig                        |   2 -
->   arch/s390/Kconfig                         |   2 +
->   arch/sh/Kconfig                           |   2 -
->   arch/sparc/Kconfig                        |   2 -
->   arch/um/Kconfig                           |   2 +
->   arch/um/include/asm/uaccess.h             |   5 +-
->   arch/um/kernel/skas/uaccess.c             |  14 ++-
->   arch/x86/Kconfig                          |   2 -
->   arch/xtensa/Kconfig                       |   3 +-
->   arch/xtensa/include/asm/uaccess.h         |   3 +-
->   include/asm-generic/uaccess.h             |  52 ++-------
->   lib/Kconfig                               |  10 +-
->   37 files changed, 43 insertions(+), 581 deletions(-)
->   delete mode 100644 arch/h8300/lib/strncpy.S
->   delete mode 100644 arch/hexagon/mm/strnlen_user.S
-> 
+His e-mail address: (ddavidwood1@yandex.com) He is a Canadian (UN)
+representative Agent.
 
+Thanks.
+Tel: 1 513 452 4352.
+Mr. Michael M=C3=B8ller Director-General of the United Nations Office
