@@ -2,223 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 147ED3EC5EC
-	for <lists+linux-arch@lfdr.de>; Sun, 15 Aug 2021 01:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F82F3EC834
+	for <lists+linux-arch@lfdr.de>; Sun, 15 Aug 2021 10:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbhHNXSy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 14 Aug 2021 19:18:54 -0400
-Received: from mga03.intel.com ([134.134.136.65]:64171 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233223AbhHNXSy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 14 Aug 2021 19:18:54 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10076"; a="215737009"
-X-IronPort-AV: E=Sophos;i="5.84,322,1620716400"; 
-   d="scan'208";a="215737009"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2021 16:18:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,322,1620716400"; 
-   d="scan'208";a="678361853"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Aug 2021 16:18:23 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mF2v0-000PLF-Ve; Sat, 14 Aug 2021 23:18:22 +0000
-Date:   Sun, 15 Aug 2021 07:18:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:master] BUILD SUCCESS
- 8f76f9c46952659dd925c21c3f62a0d05a3f3e71
-Message-ID: <61184f39.KlHxSTln/jd9KQxq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S236828AbhHOI46 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 15 Aug 2021 04:56:58 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:47537 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231274AbhHOI46 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 15 Aug 2021 04:56:58 -0400
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mkn8B-1mwoTt3Xsl-00mKv2 for <linux-arch@vger.kernel.org>; Sun, 15 Aug 2021
+ 10:56:26 +0200
+Received: by mail-wr1-f50.google.com with SMTP id k29so19226038wrd.7
+        for <linux-arch@vger.kernel.org>; Sun, 15 Aug 2021 01:56:26 -0700 (PDT)
+X-Gm-Message-State: AOAM531Tfrju2oJskTyoTARNwqMqOB1KNqXOMvJRwTOV/+3Bo2vNaFNu
+        42bys5rCzGD4JwvIdaHkZrJ1bwVXY7AE3DUlIWg=
+X-Google-Smtp-Source: ABdhPJxa92Ev1eM3KBFN/x6/DK+6q/cpuL7KxmsautXVb9NB2GYg+3CeMlkcx2uViVbP0TWhjTISi3DPIEeoetn4amg=
+X-Received: by 2002:a05:6000:46:: with SMTP id k6mr12764709wrx.105.1629017786497;
+ Sun, 15 Aug 2021 01:56:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-5-chenhuacai@loongson.cn> <CAK8P3a357Xgs7mdsP-NCmu5ukVqMHtV1Andte6vO1mEr2qoqbQ@mail.gmail.com>
+ <CAAhV-H5byhzBLbw3ASk=-8Xvkws8SS4eS_0Q5EyhXuzUdM1=sQ@mail.gmail.com>
+ <CAK8P3a2bq3p25dfhUEiTe57-i5SKwXJAEZ18=tpbXijqMrDpYQ@mail.gmail.com>
+ <CAAhV-H45GFoFz1csEJigCN_QiCvq68__0BXrmDcsQFK6Nr17Aw@mail.gmail.com>
+ <CAK8P3a15rj_vH2FN12+UVZ=YfPDTEJ_cN0PoNfyYFSz8KSOvzg@mail.gmail.com>
+ <CAAhV-H5r7HBhepc-N_Qmr=Vdy-5nHg-0ZvFK-nVY2eFzYqpR5A@mail.gmail.com>
+ <CAK8P3a1vMCHihjnu2wZsz0_JXhXr_pg0mN_x-b1X754BptReeA@mail.gmail.com> <CAAhV-H664mY-vQubEMX0yHdwHfH9kDrp6W=zHJvTE+yi31GpyQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H664mY-vQubEMX0yHdwHfH9kDrp6W=zHJvTE+yi31GpyQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sun, 15 Aug 2021 10:56:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0KLjGrfRnKQxCvULdL3PpMWCyjpx-tzcW1W5qqfiMbMw@mail.gmail.com>
+Message-ID: <CAK8P3a0KLjGrfRnKQxCvULdL3PpMWCyjpx-tzcW1W5qqfiMbMw@mail.gmail.com>
+Subject: Re: [PATCH 04/19] LoongArch: Add common headers
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:D0KFhKU5P32pIOXgsZXRuDUbFCWnxylonS8Czh2ZqkzIdcme7HM
+ A+B4zT02N872klwWGMOyGen/pKriIohWmdeyXkBpsOmLGvMD4OsyVH0MbO1HwqaeXTQCeUW
+ I1chBTARfX5td/1kH9aMgVABfBoDMFGzTMvkrinCVLq3OZCDoOhmS0L/lR6mKk5uE1yqWx7
+ 8XAGtzWYbEEAO5zbHJDSw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:T1UAIID5yLY=:gCz8BFg+3dQ5T2x/gMSr6c
+ RHGAWDtDyDLz+DwiEE5ZisUewlwpL57MgoRPlw9vW0mwQsVLbQWQs/5oJ1QlBDtfRu/8WVd1B
+ aVNADmr72Xc3frLjN2sGiKr2OeW6sSR0cB5k0+wIuTFgqTQe4ZT+zXZKrOMkbSObnRLaxr+LY
+ gL5ZX+cJkhdFqbAKdWgqI95rNIJ3TcMvsDUQTjuwlRzPPeUgTdYy0nW9Sj0NqlQrrdcrGqfud
+ 20GP5bGq7ub8qwcxemjmoC+TJolbKR/Ks3rQle+4EZRYpRMkk5kZRGehw+xxugNCnl3cyaPpD
+ HL2haPAoNQ1ELMDSxqF1gsAcOQ5jJpc3PgtA7xAChpG0JJ+wZYVG/UXKbUp9giv01iFi2c8Pl
+ 92y/r7bPp6nfdIc+hzOtZT8PK3Ux+ChO/2y3kTyabBY48Uma0qzHMiknCojlRDL6ulCFJyYyr
+ IIBL0uN+g8CnmuJtZ4cjmJQvdJ9lRw+P35TcycpQ8A77oIMTtg4m3d7El6nKEVLhoec9EGckR
+ k4Qvr/Ijh+Cjpe3dmMU/522uKfrP8Gk13icJNSQhKF8lAFaaZYNQUO3EVqn5DBiLzOtNcwoSk
+ SyPISIgD832RbJY/VEAc9kWlmr2Q9huY/ZaXIdMUCWazBVRY5x8B4ZDObgsgAVHVsL7JAkwFW
+ KM/MTdUyMj5QzNKdZBwR/i/wjDWpLaQQ2NPdb1WED20+pOUXfHUAl27VpyrDJhZx4I2rvPMCN
+ LHwTN5/A1HEron17/5WdctS0ihzRr7TLDCm3/bB+qhQTM0TSmrjPecT5OnxKBPpixdO8ivLd9
+ A31557VWJZA+xu7a7bzx3YSMeqd1v2AnBL1N2cuCPmzA20xVcZi1i64RxGnQ5rMsiWk96qh
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-branch HEAD: 8f76f9c46952659dd925c21c3f62a0d05a3f3e71  bitops/non-atomic: make @nr unsigned to avoid any DIV
+On Sat, Aug 14, 2021 at 4:50 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> On Fri, Aug 13, 2021 at 5:08 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> After some thinking, I found that ARM64 is "define kernel VABITS
+> depends on page table layout", and MIPS (also LoongArch) is "define
+> page table layout depends on kernel VABITS". So you can see:
+>
+> #ifdef CONFIG_VA_BITS_40
+> #ifdef CONFIG_PAGE_SIZE_4KB
+> #define PGD_ORDER               1
+> #define PUD_ORDER               aieeee_attempt_to_allocate_pud
+> #define PMD_ORDER               0
+> #define PTE_ORDER               0
+> #endif
 
-elapsed time: 722m
+I have no idea what aieeee_attempt_to_allocate_pud means, but
+this part seems fine.
 
-configs tested: 165
-configs skipped: 3
+> #ifdef CONFIG_PAGE_SIZE_16KB
+> #define PGD_ORDER               0
+> #define PUD_ORDER               aieeee_attempt_to_allocate_pud
+> #define PMD_ORDER               0
+> #define PTE_ORDER               0
+> #endif
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This doesn't seem to make sense at all however: it looks like you have
+three levels of 16KB page tables, so you get 47 bits, not 40. This
+means you waste 99% of the available address space when you
+run this kernel on a CPU that is able to access the entire space.
 
-gcc tested configs:
-arm64                               defconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210814
-mips                            ar7_defconfig
-arm64                            alldefconfig
-arm                            pleb_defconfig
-powerpc                       ppc64_defconfig
-sh                   sh7770_generic_defconfig
-openrisc                  or1klitex_defconfig
-m68k                        m5407c3_defconfig
-powerpc                    klondike_defconfig
-mips                     loongson1c_defconfig
-arm                          ep93xx_defconfig
-arm                          iop32x_defconfig
-h8300                       h8s-sim_defconfig
-riscv                    nommu_k210_defconfig
-arm                        clps711x_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                 mpc837x_rdb_defconfig
-mips                  maltasmvp_eva_defconfig
-mips                         bigsur_defconfig
-powerpc64                           defconfig
-powerpc                        cell_defconfig
-m68k                          hp300_defconfig
-arm                         at91_dt_defconfig
-powerpc                      mgcoge_defconfig
-m68k                          sun3x_defconfig
-xtensa                          iss_defconfig
-arm                      jornada720_defconfig
-mips                     cu1830-neo_defconfig
-sparc                            alldefconfig
-arm                          lpd270_defconfig
-arm                          simpad_defconfig
-m68k                        stmark2_defconfig
-sh                          lboxre2_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                      walnut_defconfig
-mips                      bmips_stb_defconfig
-sh                           se7619_defconfig
-arm                         orion5x_defconfig
-sh                               alldefconfig
-arm                         s3c6400_defconfig
-arm                             mxs_defconfig
-sparc                       sparc32_defconfig
-arm                        multi_v5_defconfig
-powerpc                      makalu_defconfig
-powerpc                       maple_defconfig
-mips                           rs90_defconfig
-powerpc                         wii_defconfig
-powerpc                     ksi8560_defconfig
-h8300                            allyesconfig
-arm                     davinci_all_defconfig
-sh                           se7206_defconfig
-sh                                  defconfig
-arm                           corgi_defconfig
-xtensa                  audio_kc705_defconfig
-arm                       aspeed_g4_defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                       lemote2f_defconfig
-mips                         tb0287_defconfig
-powerpc                     sbc8548_defconfig
-arm                           viper_defconfig
-arm                          collie_defconfig
-xtensa                  nommu_kc705_defconfig
-sh                   sh7724_generic_defconfig
-sh                          sdk7780_defconfig
-powerpc                        warp_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210814
-x86_64               randconfig-a006-20210814
-x86_64               randconfig-a003-20210814
-x86_64               randconfig-a001-20210814
-x86_64               randconfig-a005-20210814
-x86_64               randconfig-a002-20210814
-i386                 randconfig-a004-20210814
-i386                 randconfig-a002-20210814
-i386                 randconfig-a001-20210814
-i386                 randconfig-a003-20210814
-i386                 randconfig-a006-20210814
-i386                 randconfig-a005-20210814
-i386                 randconfig-a004-20210815
-i386                 randconfig-a001-20210815
-i386                 randconfig-a002-20210815
-i386                 randconfig-a003-20210815
-i386                 randconfig-a006-20210815
-i386                 randconfig-a005-20210815
-x86_64               randconfig-a013-20210815
-x86_64               randconfig-a011-20210815
-x86_64               randconfig-a016-20210815
-x86_64               randconfig-a012-20210815
-x86_64               randconfig-a014-20210815
-x86_64               randconfig-a015-20210815
-i386                 randconfig-a011-20210814
-i386                 randconfig-a015-20210814
-i386                 randconfig-a013-20210814
-i386                 randconfig-a014-20210814
-i386                 randconfig-a016-20210814
-i386                 randconfig-a012-20210814
-i386                 randconfig-a011-20210815
-i386                 randconfig-a015-20210815
-i386                 randconfig-a014-20210815
-i386                 randconfig-a013-20210815
-i386                 randconfig-a016-20210815
-i386                 randconfig-a012-20210815
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+> #ifdef CONFIG_PAGE_SIZE_64KB
+> #define PGD_ORDER               0
+> #define PUD_ORDER               aieeee_attempt_to_allocate_pud
+> #define PMD_ORDER               aieeee_attempt_to_allocate_pmd
+> #define PTE_ORDER               0
+> #endif
+> #endif
 
-clang tested configs:
-x86_64               randconfig-c001-20210814
-x86_64               randconfig-a004-20210815
-x86_64               randconfig-a006-20210815
-x86_64               randconfig-a003-20210815
-x86_64               randconfig-a001-20210815
-x86_64               randconfig-a002-20210815
-x86_64               randconfig-a005-20210815
-x86_64               randconfig-a013-20210814
-x86_64               randconfig-a011-20210814
-x86_64               randconfig-a016-20210814
-x86_64               randconfig-a012-20210814
-x86_64               randconfig-a014-20210814
-x86_64               randconfig-a015-20210814
+Similarly, here it seems you get 42 bits.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> #ifdef CONFIG_VA_BITS_48
+> #ifdef CONFIG_PAGE_SIZE_4KB
+> #define PGD_ORDER               0
+> #define PUD_ORDER               0
+> #define PMD_ORDER               0
+> #define PTE_ORDER               0
+> #endif
+> #ifdef CONFIG_PAGE_SIZE_16KB
+> #define PGD_ORDER               1
+> #define PUD_ORDER               aieeee_attempt_to_allocate_pud
+> #define PMD_ORDER               0
+> #define PTE_ORDER               0
+> #endif
+
+This again looks reasonable, though I don't see why you care about
+having the extra pgd_order here, instead of just going with
+47 bits.
+
+> #ifdef CONFIG_PAGE_SIZE_64KB
+> #define PGD_ORDER               0
+> #define PUD_ORDER               aieeee_attempt_to_allocate_pud
+> #define PMD_ORDER               0
+> #define PTE_ORDER               0
+> #endif
+> #endif
+
+I suppose you can't ever have more than 48 bits? Otherwise this option
+would give you 55 bits of address space.
+
+> Since 40 and 48 is the most popular VABITS of LoongArch hardware, and
+> LoongArch has a software-managed TLB, it seems "define page table
+> layout depends on kernel VABITS" is more natural for LoongArch.
+
+How common are Loongarch64 CPUs that limit the virtual address space
+to 40 bits instead of the full 48 bits? What is the purpose of limiting the
+CPU this way?
+
+       Arnd
