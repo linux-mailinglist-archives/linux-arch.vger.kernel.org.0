@@ -2,103 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7AA3ED22B
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Aug 2021 12:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC543ED931
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Aug 2021 16:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235719AbhHPKnh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Aug 2021 06:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
+        id S231952AbhHPOvP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 16 Aug 2021 10:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbhHPKng (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Aug 2021 06:43:36 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81757C061764;
-        Mon, 16 Aug 2021 03:43:05 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f08b5004455011f3e43b910.dip0.t-ipconnect.de [IPv6:2003:ec:2f08:b500:4455:11f:3e43:b910])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 050AD1EC04FB;
-        Mon, 16 Aug 2021 12:42:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1629110579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KJr3PLH9kdh7sq6ftHE42Mk4Hk9JcVNuZWU5FfzNhng=;
-        b=EdTJv86x/KgsZfUTho7nmU2tWDU7gWlJWwEPgv85zH6gBUrThHi9fC1iX5VEY4vmFQ3Wat
-        4L7CZpxMtqUnumgeTAAvIdt+GZJGAVni8JOdP7ssdtvST2BWMH3jSXeGJW+5iIwTMEZB+b
-        GdsXFMbpKbQbyECkWOQbzWkuxXgeI58=
-Date:   Mon, 16 Aug 2021 12:43:34 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v28 09/32] x86/mm: Introduce _PAGE_COW
-Message-ID: <YRpBVu7dCBjks71I@zn.tnic>
-References: <20210722205219.7934-1-yu-cheng.yu@intel.com>
- <20210722205219.7934-10-yu-cheng.yu@intel.com>
+        with ESMTP id S230078AbhHPOvO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Aug 2021 10:51:14 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BBDC061764;
+        Mon, 16 Aug 2021 07:50:42 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j1so26907625pjv.3;
+        Mon, 16 Aug 2021 07:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WJWFiW1tNTGnEXAY83sW/96pfLutJ+nc92p/dxWLkZg=;
+        b=NXbT1zLrDuMqskh2PkrXNK2vbCTKyrRJCbfTY5Bly9fYQ/XU0SfRcVq5Opg7hJuYPq
+         WAHFOfTPq1K1gGqDqCEl7LfXOVRnVK+Trx+MMYCG7OPlcmQ484293t+hm2eNoNgWwPWn
+         FMa4FwwJpv6nh2ij8bhxvHhBGoaIurIFplj7wnpKTSuRMnyldRdPcAWWcSmd+W7oZuoa
+         90O5BmPR7Iyg7k9vnQyRNKKQWgQWCvIDkqkqBKagNtE87pOxDe8b9ZAS8kRj2RhhMem8
+         RcODv8S8rQQKapLBdjj/yipP4YK2d1vrMKq6Wk4vAH1jeB7D9R7aSg32dzMV4dgTGHNn
+         cHbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WJWFiW1tNTGnEXAY83sW/96pfLutJ+nc92p/dxWLkZg=;
+        b=fbb1ZaF3MLVycQwQKjbG8tcuwm/EzfPl4vfOeAwIBBIpI5VAHOretXlKvGBNHOafKr
+         J4sliYDv9bM1NJ34ZtWlcNbRQfcnHzCgTsJSjZ0pAbO/Q+ZS9UwLI04fjxxT+t1ulgKB
+         IPPsyL1jDMfRU/xwfVCmRNPq+EgmJqGBCE7H4QBm+3v9G4+J54JJhbaFy3dCu8/Rl3w9
+         7K5pmWB18OdovI59y4YcwLnt6X5UmW2rVsI2M2xXxlqa6WyUhv9ggUES9Q5BEQBjEnks
+         KBjAZ2W/EG6tqNJmH9AiL3oJ2sNgDxByNrP7tGYlYLLOJL3RNWMiejrUZFaa654Spvws
+         dZjg==
+X-Gm-Message-State: AOAM533hjnoppG2uAotsGeSRSsDxViSB6cv8WbrCIyAqlQV10Y3I5ifs
+        bx41x1bQ5oFZapwtaIfmPcA=
+X-Google-Smtp-Source: ABdhPJwwGaWbF5lMH7zWG8CjOdMFhlJFveeUXJRyURV3wu36AAVQm0z4EMghAqWltWQj3nIzdJtriw==
+X-Received: by 2002:a17:90b:3014:: with SMTP id hg20mr17976900pjb.140.1629125442297;
+        Mon, 16 Aug 2021 07:50:42 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
+        by smtp.gmail.com with ESMTPSA id z2sm6264141pgb.33.2021.08.16.07.50.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Aug 2021 07:50:41 -0700 (PDT)
+Subject: Re: [PATCH V3 10/13] x86/Swiotlb: Add Swiotlb bounce buffer remap
+ function for HV IVM
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org, joro@8bytes.org,
+        will@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, ardb@kernel.org,
+        Tianyu.Lan@microsoft.com, pgonda@google.com,
+        martin.b.radev@gmail.com, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, rppt@kernel.org,
+        sfr@canb.auug.org.au, saravanand@fb.com,
+        krish.sadhukhan@oracle.com, aneesh.kumar@linux.ibm.com,
+        xen-devel@lists.xenproject.org, rientjes@google.com,
+        hannes@cmpxchg.org, tj@kernel.org, michael.h.kelley@microsoft.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, parri.andrea@gmail.com, dave.hansen@intel.com
+References: <20210809175620.720923-1-ltykernel@gmail.com>
+ <20210809175620.720923-11-ltykernel@gmail.com>
+ <20210812122741.GC19050@lst.de>
+ <d18ae061-6fc2-e69e-fc2c-2e1a1114c4b4@gmail.com>
+Message-ID: <890e5e21-714a-2db6-f68a-6211a69bebb9@gmail.com>
+Date:   Mon, 16 Aug 2021 22:50:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210722205219.7934-10-yu-cheng.yu@intel.com>
+In-Reply-To: <d18ae061-6fc2-e69e-fc2c-2e1a1114c4b4@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 22, 2021 at 01:51:56PM -0700, Yu-cheng Yu wrote:
-> @@ -153,13 +178,23 @@ static inline int pud_young(pud_t pud)
->  
->  static inline int pte_write(pte_t pte)
->  {
-> -	return pte_flags(pte) & _PAGE_RW;
-> +	/*
-> +	 * Shadow stack pages are always writable - but not by normal
-> +	 * instructions, and only by shadow stack operations.  Therefore,
-> +	 * the W=0,D=1 test with pte_shstk().
-> +	 */
-> +	return (pte_flags(pte) & _PAGE_RW) || pte_shstk(pte);
+On 8/14/2021 1:58 AM, Tianyu Lan wrote:
+> On 8/12/2021 8:27 PM, Christoph Hellwig wrote:
+>> This is still broken.  You need to make sure the actual DMA allocations
+>> do have struct page backing.
+>>
+> 
+> Hi Christoph:
+>       swiotlb_tbl_map_single() still returns PA below vTOM/share_gpa_ > boundary. These PAs has backing pages and belong to system memory.
+> In other word, all PAs passed to DMA API have backing pages and these is 
+> no difference between Isolation guest and traditional guest for DMA API.
+> The new mapped VA for PA above vTOM here is just to access the bounce 
+> buffer in the swiotlb code and isn't exposed to outside.
 
-Well, this is weird: if some kernel code queries a shstk page and this
-here function says it is writable but then goes and tries to write into
-it and that write fails, then it'll confuse the user.
+Hi Christoph:
+       Sorry to bother you.Please double check with these two patches
+" [PATCH V3 10/13] x86/Swiotlb: Add Swiotlb bounce buffer remap function 
+for HV IVM" and "[PATCH V3 09/13] DMA: Add dma_map_decrypted/dma_
+unmap_encrypted() function".
+       The swiotlb bounce buffer in the isolation VM are allocated in the
+low end memory and these memory has struct page backing. All dma address
+returned by swiotlb/DMA API are low end memory and this is as same as 
+what happen in the traditional VM.So this means all PAs passed to DMA 
+API have struct page backing. The difference in Isolation VM is to 
+access bounce buffer via address space above vTOM/shared_guest_memory
+_boundary. To access bounce buffer shared with host, the guest needs to
+mark the memory visible to host via hypercall and map bounce buffer in 
+the extra address space(PA + shared_guest_memory_boundary). The vstart
+introduced in this patch is to store va of extra address space and it's 
+only used to access bounce buffer in the swiotlb_bounce(). The PA in 
+extra space is only in the Hyper-V map function and won't be passed to 
+DMA API or other components.
+       The API dma_map_decrypted() introduced in the patch 9 is to map 
+the bounce buffer in the extra space and these memory in the low end 
+space are used as DMA memory in the driver. Do you prefer these APIs
+still in the set_memory.c? I move the API to dma/mapping.c due to the
+suggested name arch_dma_map_decrypted() in the previous mail
+(https://lore.kernel.org/netdev/20210720135437.GA13554@lst.de/).
+       If there are something unclear, please let me know. Hope this
+still can catch the merge window.
 
-IOW, from where I'm standing, that should be:
+Thanks.
 
-	return (pte_flags(pte) & _PAGE_RW) && !pte_shstk(pte);
 
-as in, a writable page is one which has _PAGE_RW and it is *not* a
-shadow stack page because latter is special and not really writable.
 
-Hmmm?
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
