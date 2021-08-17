@@ -2,84 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DA13EE362
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Aug 2021 03:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EB83EEEF6
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Aug 2021 17:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236507AbhHQBdR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Aug 2021 21:33:17 -0400
-Received: from conssluserg-04.nifty.com ([210.131.2.83]:55645 "EHLO
-        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238895AbhHQBch (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Aug 2021 21:32:37 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 17H1VaIY014246;
-        Tue, 17 Aug 2021 10:31:36 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 17H1VaIY014246
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1629163896;
-        bh=kY53EEVlSun2OrKhcICxxahQyp4LjpGB4vWVi50Hfv8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hEgIO1zWNUAm6z5VyOMrHJozJTbFvTC4GZGGT/xs0or8+aknjNi4Qg/k+PM9xRW8H
-         dhG4tEdo2VcWThFTG4dq6eAt3xiG8SjETLTVNgDb5wZypdfOciA9iXLFJ4NvZZHuEI
-         aV1GUUL0ftt1kkVpeUcnjS+2IO3Jxu0JMxEBbxAk0IORaWggnO4QI/ueMTXe7w0xYD
-         l7Lmu6RmCpPo5fvjzIiJC8WhBX72VUb6kZkEkps+VppZp+MzorFpzq91TeFdtGVj1B
-         Z04PwxgUfciFtWVdPwJygUUSlw659yMgtf6LGDWpmLOF3Y8yH4a/ZsbKPg9SxhG6Oy
-         jjz/K3fDcpqlQ==
-X-Nifty-SrcIP: [209.85.216.46]
-Received: by mail-pj1-f46.google.com with SMTP id gz13-20020a17090b0ecdb0290178c0e0ce8bso1483099pjb.1;
-        Mon, 16 Aug 2021 18:31:36 -0700 (PDT)
-X-Gm-Message-State: AOAM531Z2bX9S0TpZgOkhaDEHuWL5Nn02EE4ZDCtQ8zztisO2A6JPwP6
-        T3wgRjiaygQ4IRiYG966J6kkt30h/GGz3cmybuo=
-X-Google-Smtp-Source: ABdhPJzUC1mmq2wCI0eNYzNj3+5YcxsdYaAPsGrDHqhNpNjMg6v7t/v+55kBQh5YgHzqvhSB78bp5YUPd+OKtA1A/Jo=
-X-Received: by 2002:a65:6459:: with SMTP id s25mr950393pgv.7.1629163895760;
- Mon, 16 Aug 2021 18:31:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210801201336.2224111-1-adobriyan@gmail.com> <20210801201336.2224111-2-adobriyan@gmail.com>
- <CAMj1kXHA64+6j2HRwxmh0Q9L2X65bWrURBHSBEnGCgmoAemTSw@mail.gmail.com>
-In-Reply-To: <CAMj1kXHA64+6j2HRwxmh0Q9L2X65bWrURBHSBEnGCgmoAemTSw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 17 Aug 2021 10:30:58 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARJUTZ-VDP0bTQqjCQwznWB8d+OpYUQJGOOoaQx1X0FcQ@mail.gmail.com>
-Message-ID: <CAK7LNARJUTZ-VDP0bTQqjCQwznWB8d+OpYUQJGOOoaQx1X0FcQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] isystem: ship and use stdarg.h
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        id S237052AbhHQPLu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Aug 2021 11:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238258AbhHQPLr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Aug 2021 11:11:47 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF59C061764;
+        Tue, 17 Aug 2021 08:11:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EuJByfvQk0EBkTrYkEfND0mLwG08uWKKtyupgcpfEi8=; b=NVftCgQ+xjBGnrwNBx5ruvegqJ
+        FAVc3sV285AjsRH0KssPlRljyVsgHrS49ryXkCZfdr2OrWxuEXOVQ7eL00e+dHX/2qH91U01wLlyA
+        pnH1Nf0cLhUZxT/b4LoclXcLvQlyTJJTe/YQhn53JkCaw00IVv1UVwoGZ+Ts2e9o1gGyhYGh3y/Eq
+        cfHUYVRU06fBib/zrz7QgfqcJsvcRyeKVH74Km2N9LyD2uLj491uQfgaUR4mOCYoYM2DfoDHFRlvn
+        zQ4yEGGHd06hD13wDz0jQCtRPh3ug8n3kHhU2yMX40H6No2wzmRzBrnpTe6WJNZwv/GFjWHzaSKLC
+        9t53/qBA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mG0jv-00AUjl-Vy; Tue, 17 Aug 2021 15:10:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 006F530009A;
+        Tue, 17 Aug 2021 17:10:53 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ADFC42C8F5E0B; Tue, 17 Aug 2021 17:10:53 +0200 (CEST)
+Date:   Tue, 17 Aug 2021 17:10:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>, kernel-team@android.com
+Subject: Re: [PATCH v11 08/16] sched: Allow task CPU affinity to be
+ restricted on asymmetric systems
+Message-ID: <YRvRfZ/NnuNyIu3s@hirez.programming.kicks-ass.net>
+References: <20210730112443.23245-1-will@kernel.org>
+ <20210730112443.23245-9-will@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210730112443.23245-9-will@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 3, 2021 at 4:14 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Sun, 1 Aug 2021 at 22:13, Alexey Dobriyan <adobriyan@gmail.com> wrote:
-> >
-> > Ship minimal stdarg.h (1 type, 4 macros) as <linux/stdarg.h>.
-> > stdarg.h is the only userspace header commonly used in the kernel.
-> >
->
-> I /think/ I know why this is a good thing, but it is always better to
-> spell it out.
->
-> So with a better explanation in the commit log:
->
-> Acked-by: Ard Biesheuvel <ardb@kernel.org>
->
+On Fri, Jul 30, 2021 at 12:24:35PM +0100, Will Deacon wrote:
+> @@ -2783,20 +2778,173 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
+>  
+>  	__do_set_cpus_allowed(p, new_mask, flags);
+>  
+> -	return affine_move_task(rq, p, &rf, dest_cpu, flags);
+> +	if (flags & SCA_USER)
+> +		release_user_cpus_ptr(p);
+> +
+> +	return affine_move_task(rq, p, rf, dest_cpu, flags);
+>  
+>  out:
+> -	task_rq_unlock(rq, p, &rf);
+> +	task_rq_unlock(rq, p, rf);
+>  
+>  	return ret;
+>  }
 
+> +void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
+> +{
+> +	unsigned long flags;
+> +	struct cpumask *mask = p->user_cpus_ptr;
+> +
+> +	/*
+> +	 * Try to restore the old affinity mask. If this fails, then
+> +	 * we free the mask explicitly to avoid it being inherited across
+> +	 * a subsequent fork().
+> +	 */
+> +	if (!mask || !__sched_setaffinity(p, mask))
+> +		return;
+> +
+> +	raw_spin_lock_irqsave(&p->pi_lock, flags);
+> +	release_user_cpus_ptr(p);
+> +	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
+> +}
 
-I added your Ack because the benefit of this refactoring
-is described in this:
+Both these are a problem on RT.
 
-https://lore.kernel.org/lkml/YQhY40teUJcTc5H4@localhost.localdomain/
+The easiest recourse is simply never freeing the CPU mask (except on
+exit). The alternative is something like the below I suppose..
 
+I'm leaning towards the former option, wdyt?
 
-
--- 
-Best Regards
-Masahiro Yamada
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2733,6 +2733,7 @@ static int __set_cpus_allowed_ptr_locked
+ 	const struct cpumask *cpu_allowed_mask = task_cpu_possible_mask(p);
+ 	const struct cpumask *cpu_valid_mask = cpu_active_mask;
+ 	bool kthread = p->flags & PF_KTHREAD;
++	struct cpumask *user_mask = NULL;
+ 	unsigned int dest_cpu;
+ 	int ret = 0;
+ 
+@@ -2792,9 +2793,13 @@ static int __set_cpus_allowed_ptr_locked
+ 	__do_set_cpus_allowed(p, new_mask, flags);
+ 
+ 	if (flags & SCA_USER)
+-		release_user_cpus_ptr(p);
++		swap(user_mask, p->user_cpus_ptr);
++
++	ret = affine_move_task(rq, p, rf, dest_cpu, flags);
++
++	kfree(user_mask);
+ 
+-	return affine_move_task(rq, p, rf, dest_cpu, flags);
++	return ret;
+ 
+ out:
+ 	task_rq_unlock(rq, p, rf);
+@@ -2954,8 +2959,10 @@ void relax_compatible_cpus_allowed_ptr(s
+ 		return;
+ 
+ 	raw_spin_lock_irqsave(&p->pi_lock, flags);
+-	release_user_cpus_ptr(p);
++	p->user_cpus_ptr = NULL;
+ 	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
++
++	kfree(mask);
+ }
+ 
+ void set_task_cpu(struct task_struct *p, unsigned int new_cpu)
