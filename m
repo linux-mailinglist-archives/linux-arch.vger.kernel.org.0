@@ -2,151 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EB83EEEF6
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Aug 2021 17:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261093EEF37
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Aug 2021 17:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237052AbhHQPLu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Aug 2021 11:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
+        id S237427AbhHQPhM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Aug 2021 11:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238258AbhHQPLr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Aug 2021 11:11:47 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF59C061764;
-        Tue, 17 Aug 2021 08:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EuJByfvQk0EBkTrYkEfND0mLwG08uWKKtyupgcpfEi8=; b=NVftCgQ+xjBGnrwNBx5ruvegqJ
-        FAVc3sV285AjsRH0KssPlRljyVsgHrS49ryXkCZfdr2OrWxuEXOVQ7eL00e+dHX/2qH91U01wLlyA
-        pnH1Nf0cLhUZxT/b4LoclXcLvQlyTJJTe/YQhn53JkCaw00IVv1UVwoGZ+Ts2e9o1gGyhYGh3y/Eq
-        cfHUYVRU06fBib/zrz7QgfqcJsvcRyeKVH74Km2N9LyD2uLj491uQfgaUR4mOCYoYM2DfoDHFRlvn
-        zQ4yEGGHd06hD13wDz0jQCtRPh3ug8n3kHhU2yMX40H6No2wzmRzBrnpTe6WJNZwv/GFjWHzaSKLC
-        9t53/qBA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mG0jv-00AUjl-Vy; Tue, 17 Aug 2021 15:10:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 006F530009A;
-        Tue, 17 Aug 2021 17:10:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ADFC42C8F5E0B; Tue, 17 Aug 2021 17:10:53 +0200 (CEST)
-Date:   Tue, 17 Aug 2021 17:10:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, kernel-team@android.com
-Subject: Re: [PATCH v11 08/16] sched: Allow task CPU affinity to be
- restricted on asymmetric systems
-Message-ID: <YRvRfZ/NnuNyIu3s@hirez.programming.kicks-ass.net>
-References: <20210730112443.23245-1-will@kernel.org>
- <20210730112443.23245-9-will@kernel.org>
+        with ESMTP id S231893AbhHQPhL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Aug 2021 11:37:11 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0F4C061764;
+        Tue, 17 Aug 2021 08:36:38 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id oa17so32662515pjb.1;
+        Tue, 17 Aug 2021 08:36:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jBb72hVOoT632QaKCIWdx6/CC01Jwh36ZqbBo7qR29w=;
+        b=MZ87ScQaeTXUx2zc3QJX8paFfZdkSVdSMUYc0v0LY2+hc8AhlF3aqwldmB/BXXfh/z
+         xVUkX3EuT93f+Ekid/9wOV8vd4VGMuUzHWRKeiBzsSym+hW8V3hELzVo+u+KhQB9PaFI
+         yKaN6w7ws4iHi95okxDvcvyCJdiEqWiExOJPn7Rtxomj/p9ErurP79QsKnpF40UWedHY
+         wXhiv+BXDH0p6Ybpa+matnVITHtpuG4LstcJLEA+MFTvG9pqsO1LvATqA0RHijA20GDK
+         RCmlz/5mC+apSlI/jvD+4R9BoBCU6SvqrbqxGY696R6zje19Bg6nqx+tPpa86481eswl
+         CE+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jBb72hVOoT632QaKCIWdx6/CC01Jwh36ZqbBo7qR29w=;
+        b=DoKahIvjPv5ERb/sjGq5RyfrvGPaR61WnTwe+BKIzIP7CwBfpmkHKiYD2FyiqSjcHe
+         5LwVegZbsxOVUPKJ5PH/zF6ZH6HqwdkhApKAszY2nDrN7zebfhGfSrs3BJw95i45c3xp
+         6WTBv1jw7IbiGRWhuIbWxkJdBDrymO2fMyqlK1MFuBDLjxySPnqKBMUT5/dklKUtx9TZ
+         vbStajETAWrG0+9+7QXsNGlWuMIfNmPBTB5ZKqJsabJd7XpHMe985tp6NWBsnMh7NWmV
+         g5mPxWHm4aBoLIrADSzi2ifSmxmak32+7rdkCe2kx/JKPIMy7Y4AtZ1yWHnNsHdg9jTV
+         QrWw==
+X-Gm-Message-State: AOAM531g9bNl4Ihuzhsr5pklrb3WVQ+aL+enk7AF2qjRW6K5UOkj7q9W
+        36rehwhwJyPr0nOLCeKMboM=
+X-Google-Smtp-Source: ABdhPJyI43P3qYYJRg0q+cd32Cif7a9Xl5o4vVONB3bqiCMyd2bKoq7nZrIha1ZM+VxRpd1t2YLiqw==
+X-Received: by 2002:a17:903:31c3:b029:ed:6f74:49c7 with SMTP id v3-20020a17090331c3b02900ed6f7449c7mr3321877ple.12.1629214598127;
+        Tue, 17 Aug 2021 08:36:38 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
+        by smtp.gmail.com with ESMTPSA id q68sm3828407pgq.5.2021.08.17.08.36.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Aug 2021 08:36:37 -0700 (PDT)
+Subject: Re: [PATCH V3 08/13] HV/Vmbus: Initialize VMbus ring buffer for
+ Isolation VM
+To:     Michael Kelley <mikelley@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "martin.b.radev@gmail.com" <martin.b.radev@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "saravanand@fb.com" <saravanand@fb.com>,
+        "krish.sadhukhan@oracle.com" <krish.sadhukhan@oracle.com>,
+        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "tj@kernel.org" <tj@kernel.org>
+Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        vkuznets <vkuznets@redhat.com>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "dave.hansen@intel.com" <dave.hansen@intel.com>
+References: <20210809175620.720923-1-ltykernel@gmail.com>
+ <20210809175620.720923-9-ltykernel@gmail.com>
+ <MWHPR21MB1593FFD7F3402753751F433CD7FD9@MWHPR21MB1593.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <9de7c3ae-8f3f-3fc4-0491-b9df24f03cb6@gmail.com>
+Date:   Tue, 17 Aug 2021 23:36:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210730112443.23245-9-will@kernel.org>
+In-Reply-To: <MWHPR21MB1593FFD7F3402753751F433CD7FD9@MWHPR21MB1593.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 12:24:35PM +0100, Will Deacon wrote:
-> @@ -2783,20 +2778,173 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
->  
->  	__do_set_cpus_allowed(p, new_mask, flags);
->  
-> -	return affine_move_task(rq, p, &rf, dest_cpu, flags);
-> +	if (flags & SCA_USER)
-> +		release_user_cpus_ptr(p);
-> +
-> +	return affine_move_task(rq, p, rf, dest_cpu, flags);
->  
->  out:
-> -	task_rq_unlock(rq, p, &rf);
-> +	task_rq_unlock(rq, p, rf);
->  
->  	return ret;
->  }
 
-> +void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
-> +{
-> +	unsigned long flags;
-> +	struct cpumask *mask = p->user_cpus_ptr;
-> +
-> +	/*
-> +	 * Try to restore the old affinity mask. If this fails, then
-> +	 * we free the mask explicitly to avoid it being inherited across
-> +	 * a subsequent fork().
-> +	 */
-> +	if (!mask || !__sched_setaffinity(p, mask))
-> +		return;
-> +
-> +	raw_spin_lock_irqsave(&p->pi_lock, flags);
-> +	release_user_cpus_ptr(p);
-> +	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-> +}
 
-Both these are a problem on RT.
+On 8/17/2021 1:28 AM, Michael Kelley wrote:
+> This patch does the following:
+> 
+> 1) The existing ring buffer wrap-around mapping functionality is still
+> executed in hv_ringbuffer_init() when not doing SNP isolation.
+> This mapping is based on an array of struct page's that describe the
+> contiguous physical memory.
+> 
+> 2) New ring buffer wrap-around mapping functionality is added in
+> hv_ringbuffer_post_init() for the SNP isolation case.  The case is
+> handled in hv_ringbuffer_post_init() because it must be done after
+> the GPADL is established, since that's where the host visibility
+> is set.  What's interesting is that this case is exactly the same
+> as #1 above, except that the mapping is based on physical
+> memory addresses instead of struct page's.  We have to use physical
+> addresses because of applying the GPA boundary, and there are no
+> struct page's for those physical addresses.
+> 
+> Unfortunately, this duplicates a lot of logic in #1 and #2, except
+> for the struct page vs. physical address difference.
+> 
+> Proposal:  Couldn't we always do #2, even for the normal case
+> where SNP isolation is not being used?   The difference would
+> only be in whether the GPA boundary is added.  And it looks like
+> the normal case could be done after the GPADL is established,
+> as setting up the GPADL doesn't have any dependencies on
+> having the ring buffer mapped.  This approach would remove
+> a lot of duplication.  Just move the calls to hv_ringbuffer_init()
+> to after the GPADL is established, and do all the work there for
+> both cases.
+> 
 
-The easiest recourse is simply never freeing the CPU mask (except on
-exit). The alternative is something like the below I suppose..
+Hi Michael:
+     Thanks for suggestion. I just keep the original logic in current
+code. I will try combining these two functions and report back.
 
-I'm leaning towards the former option, wdyt?
-
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2733,6 +2733,7 @@ static int __set_cpus_allowed_ptr_locked
- 	const struct cpumask *cpu_allowed_mask = task_cpu_possible_mask(p);
- 	const struct cpumask *cpu_valid_mask = cpu_active_mask;
- 	bool kthread = p->flags & PF_KTHREAD;
-+	struct cpumask *user_mask = NULL;
- 	unsigned int dest_cpu;
- 	int ret = 0;
- 
-@@ -2792,9 +2793,13 @@ static int __set_cpus_allowed_ptr_locked
- 	__do_set_cpus_allowed(p, new_mask, flags);
- 
- 	if (flags & SCA_USER)
--		release_user_cpus_ptr(p);
-+		swap(user_mask, p->user_cpus_ptr);
-+
-+	ret = affine_move_task(rq, p, rf, dest_cpu, flags);
-+
-+	kfree(user_mask);
- 
--	return affine_move_task(rq, p, rf, dest_cpu, flags);
-+	return ret;
- 
- out:
- 	task_rq_unlock(rq, p, rf);
-@@ -2954,8 +2959,10 @@ void relax_compatible_cpus_allowed_ptr(s
- 		return;
- 
- 	raw_spin_lock_irqsave(&p->pi_lock, flags);
--	release_user_cpus_ptr(p);
-+	p->user_cpus_ptr = NULL;
- 	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-+
-+	kfree(mask);
- }
- 
- void set_task_cpu(struct task_struct *p, unsigned int new_cpu)
+Thanks.
