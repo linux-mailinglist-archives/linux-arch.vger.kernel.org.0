@@ -2,84 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D35923EEF50
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Aug 2021 17:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B3B3EF03E
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Aug 2021 18:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbhHQPnb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Aug 2021 11:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S229739AbhHQQgE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Aug 2021 12:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236613AbhHQPnb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Aug 2021 11:43:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDF0C061764;
-        Tue, 17 Aug 2021 08:42:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=u/XuR62QAH9RG+4+BVL2Z+k7nR2Ng6hmaSGa6V1RjgQ=; b=FLggYJ9XfdgVeZRfNay+7wu7ag
-        BRtXZCR7sLgTM5q7OulUwosh8qQa0myP1MVJyArfzuCG5I4F5yln8R4b4KHoGQCYF3DmZVW32CSJW
-        fP0wOFIcA7QvA6l0nCI0j5uCSP/qV9Sx1tVkFqZJo3sI2uNj0QQ26MRmuyFrfNiOCA1qSyQplYmnb
-        vpQ9bGiNE4gt6levSc7RMaHZafrnbkW6bclTG2WZipa7Oiq51T7i9PNjYJ07PsGW3E37+IDg/c35g
-        m49uzsili3Bw9q01gCB0AdOdoZhMIaD2WhjfMhF744iIvh9kp+7Gyw8NKUaGSQ5GoWBZZourIDynL
-        9ymSbjiA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mG1Dj-002fdj-4P; Tue, 17 Aug 2021 15:41:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 360E030009A;
-        Tue, 17 Aug 2021 17:41:42 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 286282C8F5E25; Tue, 17 Aug 2021 17:41:42 +0200 (CEST)
-Date:   Tue, 17 Aug 2021 17:41:42 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        with ESMTP id S229477AbhHQQgE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Aug 2021 12:36:04 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18002C061764;
+        Tue, 17 Aug 2021 09:35:31 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id 14so23742356qkc.4;
+        Tue, 17 Aug 2021 09:35:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=X66JXd8TkYUtNgpL3dedMaEApQt+UVVwJJYfA0n1YPg=;
+        b=g4zglayFs+OL2K1Tv5FWDo95NGXXY+tGDfEDov2cEemXLUcWHxppV7kaJhjKlxcOrQ
+         oHuvXm/1NLEueeijcc4k/pdxM6Mcwr6Rl3B3D7wFZy2ccLhUt4vZeoQJfZfhrPomyELx
+         GW+C0UiShHbqj3n/zGjS26Xwp4uQ61Z7LoZVhXIKdcRcj7Sdhe8A3DrLEAc6nInsJUvl
+         dp18hI9oI9+JlQYtUPxQqvz7toBSYsOVPi7y9JftNaV8NSLYZ/DiplGaFcbmP3J6IdzX
+         /fxmtbTG72QjQmjUz5DePLa7WUGZoqPqI4I9C2Rmp2XHKrgJhxvGhIuRvnmdts6lZMbP
+         wyDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X66JXd8TkYUtNgpL3dedMaEApQt+UVVwJJYfA0n1YPg=;
+        b=ORjTzeyqPQaBh0uyn/NC4C11EiCihBNYaSnvbWaI3sZQyf9ShRgJVwEjVds14wz3V6
+         bjLG59W9LjVl7sUP2IKiBvfWNyIHGm3/gpLjPOHLUc+qDCIFFxAnsWMJdB++PmU0biqd
+         LKP0CPophlzLhDJQr/NRlmbEkSjU3WqkBxvOD0KmLZy8DsB2edlqEKWIosv86ABN4oKI
+         /C7mH3XPmxATKG3TQFjs7uByl9RaZQMmUVaZHsCIUYspcYq3CN0kOCmxofE6mQKrLeZJ
+         0Cbeows5P4GXGtStvw1AiyaADxyLdDAErZcc1Tvd/f1c7iYpOJwVF+mu8Pvozh1vcw9E
+         jd/w==
+X-Gm-Message-State: AOAM531rb4r/Ekcks2FQRMUOyDUsxUn+jJ+bcvVZ6cFP3WszGxkusO2d
+        w371uGSeD4bH5SavYYwAsHY=
+X-Google-Smtp-Source: ABdhPJy2J9eIa9r5vu8RSDOAqKg1RDnXqD3PiG96WXh1xZ4GPhHRSNuK2PyNoYNfQalFqu4qZofQxQ==
+X-Received: by 2002:a37:d54:: with SMTP id 81mr4580109qkn.103.1629218130100;
+        Tue, 17 Aug 2021 09:35:30 -0700 (PDT)
+Received: from localhost ([12.28.44.171])
+        by smtp.gmail.com with ESMTPSA id k8sm1584346qkk.96.2021.08.17.09.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 09:35:29 -0700 (PDT)
+Date:   Tue, 17 Aug 2021 09:35:28 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        "open list:VFIO DRIVER" <kvm@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrea Merello <andrea.merello@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Ben Gardon <bgardon@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Cain <bcain@codeaurora.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Christoph Lameter <cl@linux.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, kernel-team@android.com
-Subject: Re: [PATCH v11 08/16] sched: Allow task CPU affinity to be
- restricted on asymmetric systems
-Message-ID: <YRvYtlyhuRpFi/Th@hirez.programming.kicks-ass.net>
-References: <20210730112443.23245-1-will@kernel.org>
- <20210730112443.23245-9-will@kernel.org>
+        David Hildenbrand <david@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Perches <joe@perches.com>, Jonas Bonn <jonas@southpole.se>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rich Felker <dalias@libc.org>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH 17/17] vsprintf: rework bitmap_list_string
+Message-ID: <YRvlUO87e7czAico@yury-ThinkPad>
+References: <20210814211713.180533-1-yury.norov@gmail.com>
+ <20210814211713.180533-18-yury.norov@gmail.com>
+ <CAHp75Vcjq-XmX-rikawj+wVwG+V+gXzZPishpanZ79-SGFb8rA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210730112443.23245-9-will@kernel.org>
+In-Reply-To: <CAHp75Vcjq-XmX-rikawj+wVwG+V+gXzZPishpanZ79-SGFb8rA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 12:24:35PM +0100, Will Deacon wrote:
-> +	struct rq_flags rf;
-> +	struct rq *rq;
-> +	int err;
-> +	struct cpumask *user_mask = NULL;
+On Sun, Aug 15, 2021 at 02:09:45PM +0300, Andy Shevchenko wrote:
+> On Sun, Aug 15, 2021 at 12:21 AM Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > bitmap_list_string() is very ineffective when printing bitmaps with long
+> > ranges of set bits because it calls find_next_bit for each bit in the
+> > bitmap.  We can do better by detecting ranges of set bits.
+> >
+> > In my environment, before/after is 943008/31008 ns.
+> 
+> I would add a couple of words, maybe in parentheses, to describe what
+> your environment is.
+> 
+> ...
+> 
+> > +               buf = number(++buf, end, rtop - 1, default_dec_spec);
+> 
+> ++buf is a bit confusing here. Since you will rewrite the buf value
+> anyway, I would write the parameter as buf + 1.
 
-> +	cpumask_var_t new_mask;
-> +	const struct cpumask *override_mask = task_cpu_possible_mask(p);
-
-> +	unsigned long flags;
-> +	struct cpumask *mask = p->user_cpus_ptr;
-
-I've fixed all that up to be proper reverse x-mas trees; similar for
-other patches.
+Agree, it's sloppy. I'll  send the patch by tomorrow.
