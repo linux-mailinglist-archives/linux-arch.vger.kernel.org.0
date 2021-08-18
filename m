@@ -2,107 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 636D13EF453
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Aug 2021 23:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FF63EFCFA
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Aug 2021 08:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234014AbhHQVBT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Aug 2021 17:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
+        id S238005AbhHRGmS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Aug 2021 02:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhHQVBT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Aug 2021 17:01:19 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F79C061764;
-        Tue, 17 Aug 2021 14:00:45 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f1175002d6ed1db7aad8219.dip0.t-ipconnect.de [IPv6:2003:ec:2f11:7500:2d6e:d1db:7aad:8219])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ECBC61EC054F;
-        Tue, 17 Aug 2021 23:00:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1629234040;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=mXsfggRjwQDlm0H7Ke4Yg4s+PjvD0gM8YpelP0TsXHU=;
-        b=h50TDWS4H9GdDodATzIk47AkyXvA4xxH+tNY8zodUJbiv66vz2uFecq8W13pkePmohzcG+
-        9bTxxFbcNJNR6KjEBv4mabKrZU3gRqlEIj14TxD1Hrp0arnMYTBjLNHIqwAoViz5K4MhkU
-        9jeBsoXMtMB5jcgWi4P1gXtqA77We3I=
-Date:   Tue, 17 Aug 2021 23:01:18 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     "luto@amacapital.net" <luto@amacapital.net>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v28 09/32] x86/mm: Introduce _PAGE_COW
-Message-ID: <YRwjnmT9O8jYmL/9@zn.tnic>
-References: <YRwT7XX36fQ2GWXn@zn.tnic>
- <1A27F5DF-477B-45B7-AD33-CC68D9B7CB89@amacapital.net>
- <YRwbD1hCYFXlYysI@zn.tnic>
- <490345b6-3e3d-4692-8162-85dcb71434c9@www.fastmail.com>
+        with ESMTP id S236730AbhHRGmS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Aug 2021 02:42:18 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4659FC061764;
+        Tue, 17 Aug 2021 23:41:44 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id h24-20020a1ccc180000b029022e0571d1a0so1057680wmb.5;
+        Tue, 17 Aug 2021 23:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AcoE87R52VyKOHG28xukneuIANPukP0XGTGJ2UbaRWQ=;
+        b=fSJEiK8mzY/9sHx+lIix/vXIsZux5UcOrmqHIKFFn6AFzXA16kA8wY8tXgEWjSJ8Lm
+         JVZbcK9v67RTRrO4H9ViCz8+tTJnDGbpPGwTjvmjYIYQ5oP6vkCOaXp73cPYglu5RFXi
+         cCJNXfPk/HN74TLzICueAgB/uVmNjv1ccTM1UHfd2bGqhWWiDT+HgJjCbB0Vj7d2m3zP
+         p3ruTGxFqReyEQi4dE9EH38Q46UbBJWyqhlkN2QcPB+EVpg0e8SpDfTYUgjzWizmNb+b
+         GuT8n3Cxl9k9vpcX3Z5HKgj5QmptwBrNPVvzbJJRDAMDWLtd4I6Xsh8f38O+QtMwYlbs
+         vuGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=AcoE87R52VyKOHG28xukneuIANPukP0XGTGJ2UbaRWQ=;
+        b=GmogE87SlYz/AmxtomQfD8v76fG/zu1ta7nC0GAEiyT8I+1VggmNM5Oz8AKWSP+bZk
+         ZNoa4E4mtSAyEG0+aejdWkubkDf7BfF0AxF+EojDirCXji9Z6bnCT+RG060Q8YNK/gAb
+         MaId6+GCrxPvjNhc4aYzzk9m2TCnYEmPw7PLofoVlJ6vV9r5NHR5K9vUVr/wKHxId7Eq
+         FMlOqKh/lrgp8R+1lVswMCntzbSX5jJzH3N8cjUS/Az8DP6Ac+VUzK8DEgPrjJoRDJfL
+         0mIjN257IBTEHrx5RQe0D4DYyrMnHIW+oRnTEmdaceYE8y/L9gDqNSSWAor3DQBvEZUg
+         D2Aw==
+X-Gm-Message-State: AOAM531XC2+zWNCewOGlJk2Ef/DzOxmESQlc1Utc9EMKOqFa5OCV6wp/
+        22GpM4auXGqHYmN7U01qEVvXTECOBLM=
+X-Google-Smtp-Source: ABdhPJwEOHOCBm92kSOopobU33IB1fbEqL6eDL2ttMM07p39cfeSqG8JM1ie1mhI+cnHppoMpGKV9w==
+X-Received: by 2002:a05:600c:2c4a:: with SMTP id r10mr6992863wmg.68.1629268902891;
+        Tue, 17 Aug 2021 23:41:42 -0700 (PDT)
+Received: from gmail.com (77-234-64-129.pool.digikabel.hu. [77.234.64.129])
+        by smtp.gmail.com with ESMTPSA id r8sm4927717wrj.11.2021.08.17.23.41.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 23:41:42 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 18 Aug 2021 08:41:40 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     manfred@colorfullife.com, stern@rowland.harvard.edu,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [GIT PULL lkmm] LKMM commits for v5.15
+Message-ID: <YRyrpPhEdRCnRmlq@gmail.com>
+References: <20210812002535.GA405507@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <490345b6-3e3d-4692-8162-85dcb71434c9@www.fastmail.com>
+In-Reply-To: <20210812002535.GA405507@paulmck-ThinkPad-P17-Gen-1>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 01:51:52PM -0700, Andy Lutomirski wrote:
-> WRSS can be used from user mode depending on the configuration.
 
-My point being, if you're going to do shadow stack management
-operations, you should check whether the target you're writing to is a
-shadow stack page. Clearly userspace can't do that but userspace will
-get notified of that pretty timely.
+* Paul E. McKenney <paulmck@kernel.org> wrote:
 
-> Double-you shmouble-you. You can't write it with MOV, but you can
-> write it from user code and from kernel code. As far as the mm is
-> concerned, I think it should be considered writable.
+> Hello, Ingo!
+> 
+> This pull request contains changes for the Linux-kernel memory model
+> (LKMM).  These changes focus on documentation, providing additional
+> examples and use cases.  These have been posted to LKML:
+> 
+> https://lore.kernel.org/lkml/20210721211003.869892-1-paulmck@kernel.org/
+> https://lore.kernel.org/lkml/20210721211003.869892-2-paulmck@kernel.org/
+> https://lore.kernel.org/lkml/20210721211003.869892-3-paulmck@kernel.org/
+> https://lore.kernel.org/lkml/20210721211003.869892-4-paulmck@kernel.org/
+> 
+> They have been exposed to -next and the kernel test robot, not that these
+> services do all that much for documentation changes.
+> 
+> The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
+> 
+>   Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git lkmm
+> 
+> for you to fetch changes up to 87859a8e3f083bd57b34e6a962544d775a76b15f:
+> 
+>   tools/memory-model: Document data_race(READ_ONCE()) (2021-07-27 11:48:55 -0700)
+> 
+> ----------------------------------------------------------------
+> Manfred Spraul (1):
+>       tools/memory-model: Heuristics using data_race() must handle all values
+> 
+> Paul E. McKenney (3):
+>       tools/memory-model: Make read_foo_diagnostic() more clearly diagnostic
+>       tools/memory-model: Add example for heuristic lockless reads
+>       tools/memory-model: Document data_race(READ_ONCE())
+> 
+>  .../memory-model/Documentation/access-marking.txt  | 151 ++++++++++++++++++---
+>  1 file changed, 135 insertions(+), 16 deletions(-)
 
-Because?
+Pulled into tip:locking/debug, thanks a lot Paul!
 
-> Although... anyone who tries to copy_to_user() it is going to be a bit
-> surprised. Hmm.
-
-Ok, so you see the confusion.
-
-In any case, I don't think you can simply look at a shadow stack page as
-simple writable page. There are cases where it is going to be fun.
-
-So why are we even saying that a shadow stack page is writable? Why
-can't we simply say that a shadow stack page is, well, something
-special?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+	Ingo
