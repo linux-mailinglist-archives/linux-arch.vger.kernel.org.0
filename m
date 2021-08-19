@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 738493F1FB2
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Aug 2021 20:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3F43F1FC0
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Aug 2021 20:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234225AbhHSSPk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Aug 2021 14:15:40 -0400
-Received: from mail-oln040093003006.outbound.protection.outlook.com ([40.93.3.6]:30971
+        id S233792AbhHSSSa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Aug 2021 14:18:30 -0400
+Received: from mail-oln040093003005.outbound.protection.outlook.com ([40.93.3.5]:21631
         "EHLO outbound.mail.eo.outlook.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234161AbhHSSPj (ORCPT
+        by vger.kernel.org with ESMTP id S229549AbhHSSS3 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 19 Aug 2021 14:15:39 -0400
+        Thu, 19 Aug 2021 14:18:29 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eSFxODerX4ZY5DtQyvl52o2xqc6E0O1er7f+HhXzGziX3zTDrOJiR418iX1Js8H224wjhyTYp0O4X322CUparF4SfnJQI/FhxzO/AMQlpai3UkYuRVA2Wz0qtENN426vTPT/H5zafnpgxug33lk0Ujajy0R2D3QH9wEHjr4KDhU9tWGKIl/mPgE2cBHyoTEmyWrRrcbwhORCNBdYdH7WCnaGKONMvuKDFXCtpuXdRJ/9vN94C/XtdpoHNAxWZyNl2PDDO27vJL67TGG9JypwR0gAQFdQDhQU0yRIiZj2NUZkH4NGntHWwWNDSSaOmYjFJBOubyRvOsFpS9bSrBHKew==
+ b=gwoZtuZ56poBUOAFZDpPHGy727LmeVpInTf9G53/pto5ISJpdkF8h4T0ttB83M10dk8c9mXechzbN4AwtCOWv8TQgN2/tafxbl0JFntG8SWGg33wQybtmc3AguccxS7pYiazTS48aJIpCAX+bCJ9tcdfjVMfshyG4zWtAYPThG85Q54NJZBBuyCBWoNSdOP+snI4mO1bg3BmLHMtpAB+ZEj8xJfhg1mdrw9okMrn+Nkp7c9BZKhxHL6f5OZ9Kx/+jXJgnhw7moiHVecjMSRxyBoQBNQT4+caQD/6LH3B8i2Ng7eN03v8ZNsi1vu56vX2OrDkypx3URU62sNFKwOHfg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DPje1EQkp0sgvXF7x/6+ErwISjkdzQKunUbLvGGhPpo=;
- b=B2QWlaPwC2gMmC9bPzLPqkKs56ogar/NgpDCHX92/tSDGLpDHj1/h7miVRnRgKKR0+txNC5JKWq0Dgp9IHVklU0BgfHhMARaj74eHuvUq/vyPlP5Db8RO8ivanPce3I+wELKnazgb3VHuTQyWCG32/on2wAjX8go5MwkM8e2nPCGTbUOWT5KTZhuctsAtpBlSuutl/fQPtM49oRYBiY6DaQ7yYZG1TJ20t38Vy22+/9siBykFrhxUL+f5W/ByJiU1CsAfMi04c7lHnv5JtHcpMnRw3kMzJw8Oayj6UN78Qj3huPJQsgE+V5rIS63nO4wrcfnt6Br7dPZ//e5d3Gvmw==
+ bh=iH7nccGMyVjmseQJK2PILp+62BP0KDo4OBuH+BbYWOU=;
+ b=RkgbBJWx4eObCYmg0M9uj9K5g3M1a4vzjE5DnEhCwfmxkeaa8bUl8jySyVqxgVp2HI7pgStXV1DqNo+VWuAAAxav0ADDiNlSUkrfLVPLVyewo7U2+QmsmIe+OpyYkCDcMSPUY4Yi+WLGBcGDwgsB1j6pC3YE+pExxCzRM0R+r/NHv+9beiBbzkD0xIV6L5LClJKwzgNUbY/dZHkaB0pJ8k+Lnbfru1jUrS7UTx1+DsXhJ4cP1+4vD6UsZ06NlmCIg8+nHoa/9r7x5fV6GzrdjWZdplaFxl7ynl/bKed5jG4QmNeZyjb5SP6Msq0dsatjkeOTzcp2eD52BT8R8uU5sQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DPje1EQkp0sgvXF7x/6+ErwISjkdzQKunUbLvGGhPpo=;
- b=O6EkUByemw/HGqjq/ETX0tmiNn4JWdwJjVc2AwkdkKXgWosigQK5rbH6fCasaCNSs7b1NMxaSSrTMCoBWAz5N2WTVltAuOKQLzgYOmeEsnLfFDw2CBMyP6dqYW6sEeXr0VKs+ZINs3T4cRPizDqSZCLKxqc3uk1GhjqVA4K4O5c=
+ bh=iH7nccGMyVjmseQJK2PILp+62BP0KDo4OBuH+BbYWOU=;
+ b=hEwmvbxWcOW3Ug7G1e6GHsLdGSvXjC7cquF8FEnH/WFmo9aVmASk3i007zdJwwj5ap551GdTJCXFfSoiGKXGmi2p9Yavm6fJFTy6VQfM+5d6iQauIOa35zoy1YNK7pNZEXkOrt+Lu3ejACktL3oUOgulADIFtKuvvQDk94jsH7A=
 Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
  by MWHPR21MB0157.namprd21.prod.outlook.com (2603:10b6:300:78::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.0; Thu, 19 Aug
- 2021 18:14:51 +0000
+ 2021 18:17:41 +0000
 Received: from MWHPR21MB1593.namprd21.prod.outlook.com
  ([fe80::e8f7:b582:9e2d:ba55]) by MWHPR21MB1593.namprd21.prod.outlook.com
  ([fe80::e8f7:b582:9e2d:ba55%2]) with mapi id 15.20.4436.012; Thu, 19 Aug 2021
- 18:14:51 +0000
+ 18:17:41 +0000
 From:   Michael Kelley <mikelley@microsoft.com>
 To:     Tianyu Lan <ltykernel@gmail.com>,
         KY Srinivasan <kys@microsoft.com>,
@@ -89,72 +89,72 @@ CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
         vkuznets <vkuznets@redhat.com>,
         "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
         "dave.hansen@intel.com" <dave.hansen@intel.com>
-Subject: RE: [PATCH V3 12/13] HV/Netvsc: Add Isolation VM support for netvsc
+Subject: RE: [PATCH V3 13/13] HV/Storvsc: Add Isolation VM support for storvsc
  driver
-Thread-Topic: [PATCH V3 12/13] HV/Netvsc: Add Isolation VM support for netvsc
- driver
-Thread-Index: AQHXjUf5b2VC7/Te4kWdqzzCQTFBL6t7Gw2w
-Date:   Thu, 19 Aug 2021 18:14:51 +0000
-Message-ID: <MWHPR21MB15936FE72E65A62FBA3EF4F2D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
+Thread-Topic: [PATCH V3 13/13] HV/Storvsc: Add Isolation VM support for
+ storvsc driver
+Thread-Index: AQHXjUf4MnryDC/QY0a+heAsfHsxAqt3v7Vg
+Date:   Thu, 19 Aug 2021 18:17:40 +0000
+Message-ID: <MWHPR21MB1593EEF30FFD5C60ED744985D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
 References: <20210809175620.720923-1-ltykernel@gmail.com>
- <20210809175620.720923-13-ltykernel@gmail.com>
-In-Reply-To: <20210809175620.720923-13-ltykernel@gmail.com>
+ <20210809175620.720923-14-ltykernel@gmail.com>
+In-Reply-To: <20210809175620.720923-14-ltykernel@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=98e42156-2e7e-486e-98a6-5afbdfc011ce;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-08-19T16:53:59Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=1ae64eaa-5064-47d6-83ad-1e0f1430f884;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-08-17T13:38:17Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a54f92a0-e9ee-4069-03e3-08d9633d3d06
+x-ms-office365-filtering-correlation-id: 3d025336-aab8-47e4-b431-08d9633da1f4
 x-ms-traffictypediagnostic: MWHPR21MB0157:
 x-ms-exchange-transport-forked: True
 x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <MWHPR21MB0157B1E7993A28DF222D0A43D7C09@MWHPR21MB0157.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-microsoft-antispam-prvs: <MWHPR21MB01577B563FAF54CAB3B8CA01D7C09@MWHPR21MB0157.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: C+2FpoeDESJgH3DxEIPmcxYCfzmxgugj2ivBBKHXhf3DNiQ7KWtXZY0ah24+/iTniM+Y8m6NyDh+if/Kzc7b8ZN9ZfFwPHVjMlbmDwmfW5NVlNmVKMVqAneHQwoI0GjuArs2Y534jFsqPyMXwfZt24KoLuI9dWoxExwg05yI3BtivGijCw+j/5jvcuspgVBZR/iSLfkVNAKBTcybFl8kbsVsTK+aTMhA459ux9AT2tfebZiMQ4XyLdozD1Pxioe+g32BCnhnNmIdA6EKcMTv7LcDJg+vZBDVr5NdjrnDt9p5W0yUTyGOzpn608+nT0Dsqwm2Cq5MmOHTxob4MKD+QB9mZmfuICLoEclbnMfyhLI5rvQr2G+peZrBs9W0wbuNlmhRGTPXaNBlOxsa6g4d+PGpBq/LGwjG2BBpFEzu7zyu/7YJbumPLqxcBAb29Qxy48TClX990JPfAYUnfAjj6gM2Ow5j0uZA//3X6sNuwMaa4Jsu2czLoBRIANX7Eg6xaa5qqDgDndHAQJVI1N7zfEVs1V1ckDoND3hk7dDcnPsPKXXaH5E1xdgi6B0MdibMfvTPYG+rf5mevlMZKudxA6DW61FSj2OTdBPrhzFm3dH0xLnUAVwzJllhHH4A2UrVgMrOU9HNwW+E0n5eFE2/ahP4kRrUzJ5oaOdsRH1fAYcBqSdPq58oqZzfLNKMQQbwS7PVtgfM2dMJNZIbEm74n3Vvf3l+un4mJ1JxhPHmeRY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(55016002)(86362001)(8990500004)(316002)(26005)(186003)(38100700002)(71200400001)(33656002)(83380400001)(7696005)(30864003)(8676002)(2906002)(122000001)(110136005)(4326008)(8936002)(921005)(54906003)(64756008)(6506007)(82960400001)(82950400001)(7416002)(7406005)(76116006)(9686003)(5660300002)(508600001)(38070700005)(66946007)(66446008)(66476007)(66556008)(10290500003)(52536014);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: ScXcwsXWhrmaFAN8/2i2kKNj108qUNyE2K166GSD9aPFvRa3jK0e69/YKrtsdCQjTN03Mjd7Ti0oK9rgH+yanH/ed6/9hxxkrGx+4b6eCazcp4wxO+H9mGMt+maLZ+5Y85nzjQ1IQFumdCEnr7hYQUYokAm/3Vl9h1X7CikshcCi4yov+WWEbegmUDaMzxwFK076WGlj+O3uW4zjguMOqNpFOY9e1N6kijFbQOuMGk58zdF2h04Yli2fliZ2c5HvW4CqIaE0BCSvBcie5xqsPM0zNG0O2w65oOEybWtQ5eoXvk3HD/V3wBKRzzxlhmPMPfODC6gZUCvhaitsjEd4m9JsX6rYUol54NiJdZFbBInIxfg9ALnmx2oiYSHYHEowHCpRnbc0UNLNUSricJFlMC2AJqxc9gTwFNx0j21dTV1eFsi7LkIUpV8ffpPU+yZF3BjKmc4yvOxbJ7mjaHYor5C6YrVfr5YGBK8GXxI5OPlnVbQcBlxSJYx8durwTVSBDEiGyf7fRTGTbqU8/bFu97GNNKcK2ieFBq4wlluZ6DVGjKT8wIiH9q1XY4ntgGQSWiGm0fCDoQcJNxFto+LZnT+XmRV9Bic2yibDWKLq7+gQ4nw1LC5v6Bo/QaRUA3WlEm6dtkhZQxqTOZSSUfxrCnl+9tW6q1fDmbCThGyy/+4IYxUmpD2vuxbggLx3a5be9ZD58RGaqoODWYN1sY5HYjf86l/0B6EvzUo/IzzGNA4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(7416002)(82960400001)(82950400001)(7406005)(4326008)(8936002)(921005)(64756008)(6506007)(54906003)(76116006)(52536014)(66476007)(66556008)(10290500003)(66446008)(5660300002)(9686003)(38070700005)(66946007)(508600001)(186003)(316002)(26005)(71200400001)(38100700002)(86362001)(8990500004)(55016002)(122000001)(110136005)(8676002)(2906002)(83380400001)(33656002)(7696005);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IVBG6WNbMPC+3oClPbsLzewhgBQ2hZC7sSa0aCm9VVvquSlR14k+wrTL1pJS?=
- =?us-ascii?Q?DI0WnBfMdc68Olqz/hyUhdg/XkLSOvBSokR6LwlM8kcVFpp3jndZrfKTY3uy?=
- =?us-ascii?Q?vnVD+BmYSvazRdJogH9OTH3etUt8nzL/FgC3LeP/tZ/dvxwZOW2HQUJYV3Fp?=
- =?us-ascii?Q?CEB40S1TNoY5WcQa1bVs7kM2HRPCgYlIpWF+U1RGdp55kKb2QmppENExfCeq?=
- =?us-ascii?Q?yD0W+FJFLiy9dJwlPdFI3uB3XB+PMUNVz+BplUPAyShPaUCGGpIWRVImhN1E?=
- =?us-ascii?Q?UW1mBV/dGREBbml3mkodaAchYUf8c2FyFx9rtzjaiqVWVJdJS5u4hcM3Wc6y?=
- =?us-ascii?Q?dBb2aiWcFjeMQG8DKuaJN3k46CLM9xPdScY8A6T+RPxOqKHCPKsQrhF1f+uo?=
- =?us-ascii?Q?DOSRL8QlkYEvz5N1Ytwb16OonXe5somKiMXKy8GJ/9FHv+yMO1rhg+QCE55/?=
- =?us-ascii?Q?tZV4caedS4PSzyhTcLA51HUKLRJZPMZcZZ8HidpVz6pmDsKotS/s8WIKR4hI?=
- =?us-ascii?Q?Ccx8TlezD7KgceLtlYdCHPHDAerVDLmJF9+g6WB9s+KSborLDfgZNdY9UaHs?=
- =?us-ascii?Q?Cs1w6tcu+6vBQUCP1agnBNQwyX3OItmFZDuj/WBCVp9gO0zcXPIazR3tcJMY?=
- =?us-ascii?Q?PizvkPPDlrA68hHl1c4MMyuT0pJvnChcelPBEKgduwRafNQqvqMnKQsBM0qr?=
- =?us-ascii?Q?kB66htuCWgBzRcb0TAQQA/PjZBaccXwr0WjK8Ab0MIK5krpT+YdGKBG5vICl?=
- =?us-ascii?Q?EWlxrhcL3c62Y+i0uxLmeBdtjAn6pZWLLfF/qhn40WdY8Kv1t6Lif5kEzQ00?=
- =?us-ascii?Q?hcY+O14dII5MePQr77DT4FHWY8zG9zkhf0PxIxtvhwQi/h3BqcD58JCl2wU7?=
- =?us-ascii?Q?2p+7b2eNq2PF0BNXQjfSUCK6YObe5GrhmJT+wLfDGTATolV4UuKDiMHm7XNw?=
- =?us-ascii?Q?dG65E5ZTX3qwPAoC7LGuG0fARY3mnledoeJgWHqyGg6VbKbTIQCMv7vOqpfL?=
- =?us-ascii?Q?969oC9cVz1USDeRSc7TWrd9vw50FW0wFIzrJGVqF0LSlmKRM4RBfa3X1iLmQ?=
- =?us-ascii?Q?oRezeJ9IqMBHsI3NS6vkrwA4fYP5XLA7xPikbO+PhbiHlfAcAtroiegRSDNl?=
- =?us-ascii?Q?IKWrYGmbOZfCP6i2QBFSxdR7oKPjIdbCMo0XMVmhTIup6TG4z72GKFRZrBNW?=
- =?us-ascii?Q?wHk2GL/O9ZXw4LzGfNMG2DBgW4Toza1K3LWa18tkO0D3XyE73dWIeKlgCYtd?=
- =?us-ascii?Q?7ESgGEMnHHOYyYXDDdi8O5Vtx5imiutvx4vUwxoQvOrwogC5MuprY8foV4Gf?=
- =?us-ascii?Q?CHagzHyJJ1ufC0WAikgc3QEI?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?aRG0iUVklSuAwUfBH5qJHOcPbkC2NrBtDsBCLSkID9XrcymfQwAnM0p1s4aH?=
+ =?us-ascii?Q?ayIs8eKXmVoREMXx0tJ5psyVGRZpaSjImNiC+ql3NL/sOhAOSQErqB+8huN7?=
+ =?us-ascii?Q?5AueEWK6SHl2tn65S4R5BFyYJEwPa0ShHubzZ94bON8dYhBKqg5nL/VyE5pZ?=
+ =?us-ascii?Q?nykGs6kivUHi1oV1E32a9+4KeiH1j0EirOtjuWONRrXuHEjba7wCRu3sclxk?=
+ =?us-ascii?Q?mXfXwHoOvNEG1fVL3lAiwazbd+QWe0wEkb5qYGqSlcc3SwrHkqkdNnc0GWVG?=
+ =?us-ascii?Q?MsniUo3pV/3jV8aHbqkVoCmBb/tuIL7k2uEzWak9i/6UwzeHXxPis6kRoYXj?=
+ =?us-ascii?Q?5hcfghMjyjmqsgAjBx3m932SrOfxk43abSQeYQjG+UqQPwMG8UNasuACU/39?=
+ =?us-ascii?Q?M0ryg1ouf6en+A0tmz023Q8G9/V3ZR+8k5AYpDHk+eRGCLM20Z7OjEPHPDSJ?=
+ =?us-ascii?Q?l27eVJbil/rkFzBJqbx9Q4p+/A01rpYWcg96y+v8WMOJD8QxBQyFgUXP32sp?=
+ =?us-ascii?Q?PlV/OOgllavbjk66lBUd/Ywknwux4sKWZHTOgL8vdlQVHYXXi8uXhpqe2a+P?=
+ =?us-ascii?Q?fE4VsT65V9rR7Ix4WTRG0j7aPOJpJA7BLmlQ/qpOX5Kh0LTlBOsB3HO+MrIh?=
+ =?us-ascii?Q?TJG2Pzz6i9q/0+CZC8TG27rbH7NIK8B8rHnBKcaGW/aQnis/1ZogZffdUjxp?=
+ =?us-ascii?Q?ezawhTI++zNbUDGIzpisi2Cz4fh3l5UlgKVMdFQGG790lfTQ1gxVUTYE2M52?=
+ =?us-ascii?Q?p/53KlgUc6peD/gYKXHXiHcl0dHJyCdkvlAQj8HEd1nmvIzopkprmprhkr4y?=
+ =?us-ascii?Q?ygpG9dXonzxJD+bb56GNug83x4U3UO1FvDZvdeHPaKjGyT10yu4naSRz86Mv?=
+ =?us-ascii?Q?1NXVgseQA/24gxFG81Fpi7ZYX2QzpoDQ5XuPcqpB0QgvQ5ZsvGNVH/Nz3J2E?=
+ =?us-ascii?Q?hHz6AYfPrPUvc4zgk1809DK3q2Y2KN99JCaL+1VCH9TbI4YZ5MpklVCm8lJJ?=
+ =?us-ascii?Q?R23piGdNkdsFs26/UJhj/btxx7Zno1Is5HQILxrtb6vIAMcu3uqtPKcw8IBp?=
+ =?us-ascii?Q?sGYW6vJTC4F2CfcuAo6j6ike2Xzay4ISRf8ApYMVQKzi2TT0/4ymi33KQF+h?=
+ =?us-ascii?Q?BmBug6I/zu5uLUE8qfyQQf3oaAErEF3xL+gnyW6fTEdmEMbOm+4IoPoOnGen?=
+ =?us-ascii?Q?ZsIrSMlm/FHaST+mKTLaWUR16a6iAdfSRSgj5Mx03d0CaMbhhye3e/GPk+uO?=
+ =?us-ascii?Q?cW+fgT/NRtDUJBvQJVreGSFoMD6L3B8AZekn29yRxzZHRhepId7fjmOeNeN/?=
+ =?us-ascii?Q?Wx/0SD7wgUW1SJ9OuDuFhv4J?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a54f92a0-e9ee-4069-03e3-08d9633d3d06
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2021 18:14:51.3167
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d025336-aab8-47e4-b431-08d9633da1f4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2021 18:17:40.7071
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GGzneGYRpxFMRaobKUAnYSapisXI7wJjBntGOsYDV8W94EdtN2ZBHsWPkz8B3jJ0FBK3g6ZSNbbJEVD8JpCZedfXeY1y2lOLKtKjvIYKMWY=
+X-MS-Exchange-CrossTenant-userprincipalname: TxCcduKUuq1yHcc8BsJo2y07vKDxnuPAOoqjd/EdOBhLTw4z1rxs+qoA6XlnF0e5Uwp/eRboma6yR4YImauNFpMjY24DH0n1n0/wzhvT2kA=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR21MB0157
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -164,353 +164,244 @@ From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, August 9, 2021 10:56 A=
 M
 >=20
 
-The Subject line tag should be "hv_netvsc:".
+Subject line tag should be "scsi: storvsc:"
 
 > In Isolation VM, all shared memory with host needs to mark visible
 > to host via hvcall. vmbus_establish_gpadl() has already done it for
-> netvsc rx/tx ring buffer. The page buffer used by vmbus_sendpacket_
-> pagebuffer() still need to handle. Use DMA API to map/umap these
+> storvsc rx/tx ring buffer. The page buffer used by vmbus_sendpacket_
+> mpb_desc() still need to handle. Use DMA API to map/umap these
+
+s/need to handle/needs to be handled/
+
 > memory during sending/receiving packet and Hyper-V DMA ops callback
 > will use swiotlb function to allocate bounce buffer and copy data
 > from/to bounce buffer.
 >=20
 > Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
 > ---
->  drivers/net/hyperv/hyperv_net.h   |   6 ++
->  drivers/net/hyperv/netvsc.c       | 144 +++++++++++++++++++++++++++++-
->  drivers/net/hyperv/rndis_filter.c |   2 +
->  include/linux/hyperv.h            |   5 ++
->  4 files changed, 154 insertions(+), 3 deletions(-)
+>  drivers/scsi/storvsc_drv.c | 68 +++++++++++++++++++++++++++++++++++---
+>  1 file changed, 63 insertions(+), 5 deletions(-)
 >=20
-> diff --git a/drivers/net/hyperv/hyperv_net.h b/drivers/net/hyperv/hyperv_=
-net.h
-> index bc48855dff10..862419912bfb 100644
-> --- a/drivers/net/hyperv/hyperv_net.h
-> +++ b/drivers/net/hyperv/hyperv_net.h
-> @@ -164,6 +164,7 @@ struct hv_netvsc_packet {
->  	u32 total_bytes;
->  	u32 send_buf_index;
->  	u32 total_data_buflen;
+> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> index 328bb961c281..78320719bdd8 100644
+> --- a/drivers/scsi/storvsc_drv.c
+> +++ b/drivers/scsi/storvsc_drv.c
+> @@ -21,6 +21,8 @@
+>  #include <linux/device.h>
+>  #include <linux/hyperv.h>
+>  #include <linux/blkdev.h>
+> +#include <linux/io.h>
+> +#include <linux/dma-mapping.h>
+>  #include <scsi/scsi.h>
+>  #include <scsi/scsi_cmnd.h>
+>  #include <scsi/scsi_host.h>
+> @@ -427,6 +429,8 @@ struct storvsc_cmd_request {
+>  	u32 payload_sz;
+>=20
+>  	struct vstor_packet vstor_packet;
+> +	u32 hvpg_count;
+
+This count is really the number of entries in the dma_range
+array, right?  If so, perhaps "dma_range_count" would be
+a better name so that it is more tightly associated.
+
 > +	struct hv_dma_range *dma_range;
 >  };
 >=20
->  #define NETVSC_HASH_KEYLEN 40
-> @@ -1074,6 +1075,7 @@ struct netvsc_device {
 >=20
->  	/* Receive buffer allocated by us but manages by NetVSP */
->  	void *recv_buf;
-> +	void *recv_original_buf;
->  	u32 recv_buf_size; /* allocated bytes */
->  	u32 recv_buf_gpadl_handle;
->  	u32 recv_section_cnt;
-> @@ -1082,6 +1084,8 @@ struct netvsc_device {
->=20
->  	/* Send buffer allocated by us */
->  	void *send_buf;
-> +	void *send_original_buf;
-> +	u32 send_buf_size;
->  	u32 send_buf_gpadl_handle;
->  	u32 send_section_cnt;
->  	u32 send_section_size;
-> @@ -1730,4 +1734,6 @@ struct rndis_message {
->  #define RETRY_US_HI	10000
->  #define RETRY_MAX	2000	/* >10 sec */
->=20
-> +void netvsc_dma_unmap(struct hv_device *hv_dev,
-> +		      struct hv_netvsc_packet *packet);
->  #endif /* _HYPERV_NET_H */
-> diff --git a/drivers/net/hyperv/netvsc.c b/drivers/net/hyperv/netvsc.c
-> index 7bd935412853..fc312e5db4d5 100644
-> --- a/drivers/net/hyperv/netvsc.c
-> +++ b/drivers/net/hyperv/netvsc.c
-> @@ -153,8 +153,21 @@ static void free_netvsc_device(struct rcu_head *head=
-)
->  	int i;
->=20
->  	kfree(nvdev->extension);
-> -	vfree(nvdev->recv_buf);
-> -	vfree(nvdev->send_buf);
-> +
-> +	if (nvdev->recv_original_buf) {
-> +		vunmap(nvdev->recv_buf);
-> +		vfree(nvdev->recv_original_buf);
-> +	} else {
-> +		vfree(nvdev->recv_buf);
-> +	}
-> +
-> +	if (nvdev->send_original_buf) {
-> +		vunmap(nvdev->send_buf);
-> +		vfree(nvdev->send_original_buf);
-> +	} else {
-> +		vfree(nvdev->send_buf);
-> +	}
-> +
->  	kfree(nvdev->send_section_map);
->=20
->  	for (i =3D 0; i < VRSS_CHANNEL_MAX; i++) {
-> @@ -330,6 +343,27 @@ int netvsc_alloc_recv_comp_ring(struct netvsc_device=
- *net_device, u32 q_idx)
->  	return nvchan->mrc.slots ? 0 : -ENOMEM;
->  }
->=20
-> +static void *netvsc_remap_buf(void *buf, unsigned long size)
-> +{
-> +	unsigned long *pfns;
-> +	void *vaddr;
-> +	int i;
-> +
-> +	pfns =3D kcalloc(size / HV_HYP_PAGE_SIZE, sizeof(unsigned long),
-> +		       GFP_KERNEL);
-
-This assumes that the "size" argument is a multiple of PAGE_SIZE.  I think
-that's true in all the use cases, but it would be safer to check.
-
-> +	if (!pfns)
-> +		return NULL;
-> +
-> +	for (i =3D 0; i < size / HV_HYP_PAGE_SIZE; i++)
-> +		pfns[i] =3D virt_to_hvpfn(buf + i * HV_HYP_PAGE_SIZE)
-> +			+ (ms_hyperv.shared_gpa_boundary >> HV_HYP_PAGE_SHIFT);
-> +
-> +	vaddr =3D vmap_pfn(pfns, size / HV_HYP_PAGE_SIZE, PAGE_KERNEL_IO);
-> +	kfree(pfns);
-> +
-> +	return vaddr;
-> +}
-
-This function appears to be a duplicate of hv_map_memory() in Patch 11 of t=
-his
-series.  Is it possible to structure things so there is only one implementa=
-tion?  In
-any case, see the comment in hv_map_memory() about PAGE_SIZE vs
-HV_HYP_PAGE_SIZE and similar.
-
-> +
->  static int netvsc_init_buf(struct hv_device *device,
->  			   struct netvsc_device *net_device,
->  			   const struct netvsc_device_info *device_info)
-> @@ -340,6 +374,7 @@ static int netvsc_init_buf(struct hv_device *device,
->  	unsigned int buf_size;
->  	size_t map_words;
->  	int i, ret =3D 0;
-> +	void *vaddr;
->=20
->  	/* Get receive buffer area. */
->  	buf_size =3D device_info->recv_sections * device_info->recv_section_siz=
-e;
-> @@ -375,6 +410,15 @@ static int netvsc_init_buf(struct hv_device *device,
->  		goto cleanup;
->  	}
->=20
-> +	if (hv_isolation_type_snp()) {
-> +		vaddr =3D netvsc_remap_buf(net_device->recv_buf, buf_size);
-> +		if (!vaddr)
-> +			goto cleanup;
-> +
-> +		net_device->recv_original_buf =3D net_device->recv_buf;
-> +		net_device->recv_buf =3D vaddr;
-> +	}
-> +
->  	/* Notify the NetVsp of the gpadl handle */
->  	init_packet =3D &net_device->channel_init_pkt;
->  	memset(init_packet, 0, sizeof(struct nvsp_message));
-> @@ -477,6 +521,15 @@ static int netvsc_init_buf(struct hv_device *device,
->  		goto cleanup;
->  	}
->=20
-> +	if (hv_isolation_type_snp()) {
-> +		vaddr =3D netvsc_remap_buf(net_device->send_buf, buf_size);
-> +		if (!vaddr)
-> +			goto cleanup;
-
-I don't think this error case is handled correctly.  Doesn't the remapping
-of the recv buf need to be undone?
-
-> +
-> +		net_device->send_original_buf =3D net_device->send_buf;
-> +		net_device->send_buf =3D vaddr;
-> +	}
-> +
->  	/* Notify the NetVsp of the gpadl handle */
->  	init_packet =3D &net_device->channel_init_pkt;
->  	memset(init_packet, 0, sizeof(struct nvsp_message));
-> @@ -767,7 +820,7 @@ static void netvsc_send_tx_complete(struct net_device=
- *ndev,
->=20
->  	/* Notify the layer above us */
->  	if (likely(skb)) {
-> -		const struct hv_netvsc_packet *packet
-> +		struct hv_netvsc_packet *packet
->  			=3D (struct hv_netvsc_packet *)skb->cb;
->  		u32 send_index =3D packet->send_buf_index;
->  		struct netvsc_stats *tx_stats;
-> @@ -783,6 +836,7 @@ static void netvsc_send_tx_complete(struct net_device=
- *ndev,
->  		tx_stats->bytes +=3D packet->total_bytes;
->  		u64_stats_update_end(&tx_stats->syncp);
->=20
-> +		netvsc_dma_unmap(ndev_ctx->device_ctx, packet);
->  		napi_consume_skb(skb, budget);
->  	}
->=20
-> @@ -947,6 +1001,82 @@ static void netvsc_copy_to_send_buf(struct netvsc_d=
-evice *net_device,
->  		memset(dest, 0, padding);
->  }
->=20
-> +void netvsc_dma_unmap(struct hv_device *hv_dev,
-> +		      struct hv_netvsc_packet *packet)
-> +{
-> +	u32 page_count =3D packet->cp_partial ?
-> +		packet->page_buf_cnt - packet->rmsg_pgcnt :
-> +		packet->page_buf_cnt;
-> +	int i;
-> +
-> +	if (!hv_is_isolation_supported())
-> +		return;
-> +
-> +	if (!packet->dma_range)
-> +		return;
-> +
-> +	for (i =3D 0; i < page_count; i++)
-> +		dma_unmap_single(&hv_dev->device, packet->dma_range[i].dma,
-> +				 packet->dma_range[i].mapping_size,
-> +				 DMA_TO_DEVICE);
-> +
-> +	kfree(packet->dma_range);
-> +}
-> +
-> +/* netvsc_dma_map - Map swiotlb bounce buffer with data page of
-> + * packet sent by vmbus_sendpacket_pagebuffer() in the Isolation
-> + * VM.
-> + *
-> + * In isolation VM, netvsc send buffer has been marked visible to
-> + * host and so the data copied to send buffer doesn't need to use
-> + * bounce buffer. The data pages handled by vmbus_sendpacket_pagebuffer(=
-)
-> + * may not be copied to send buffer and so these pages need to be
-> + * mapped with swiotlb bounce buffer. netvsc_dma_map() is to do
-> + * that. The pfns in the struct hv_page_buffer need to be converted
-> + * to bounce buffer's pfn. The loop here is necessary and so not
-> + * use dma_map_sg() here.
-
-I think I understand why the loop is necessary, but it would be
-nice to add a bit more comment text to explain.  The reason is
-that the entries in the page buffer array are not necessarily full
-pages of data.  Each entry in the array has a separate offset and
-len that may be non-zero, even for entries in the middle of the
-array.   And the entries are not physically contiguous.  So each
-entry must be individually mapped rather than as a contiguous unit.
-
-> + */
-> +int netvsc_dma_map(struct hv_device *hv_dev,
-> +		   struct hv_netvsc_packet *packet,
-> +		   struct hv_page_buffer *pb)
-> +{
-> +	u32 page_count =3D  packet->cp_partial ?
-> +		packet->page_buf_cnt - packet->rmsg_pgcnt :
-> +		packet->page_buf_cnt;
-> +	dma_addr_t dma;
-> +	int i;
-> +
-> +	if (!hv_is_isolation_supported())
-> +		return 0;
-> +
-> +	packet->dma_range =3D kcalloc(page_count,
-> +				    sizeof(*packet->dma_range),
-> +				    GFP_KERNEL);
-> +	if (!packet->dma_range)
-> +		return -ENOMEM;
-> +
-> +	for (i =3D 0; i < page_count; i++) {
-> +		char *src =3D phys_to_virt((pb[i].pfn << HV_HYP_PAGE_SHIFT)
-> +					 + pb[i].offset);
-> +		u32 len =3D pb[i].len;
-> +
-> +		dma =3D dma_map_single(&hv_dev->device, src, len,
-> +				     DMA_TO_DEVICE);
-> +		if (dma_mapping_error(&hv_dev->device, dma)) {
-> +			kfree(packet->dma_range);
-> +			return -ENOMEM;
-> +		}
-> +
-> +		packet->dma_range[i].dma =3D dma;
-> +		packet->dma_range[i].mapping_size =3D len;
-> +		pb[i].pfn =3D dma >> HV_HYP_PAGE_SHIFT;
-> +		pb[i].offset =3D offset_in_hvpage(dma);
-> +		pb[i].len =3D len;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static inline int netvsc_send_pkt(
->  	struct hv_device *device,
->  	struct hv_netvsc_packet *packet,
-> @@ -987,14 +1117,22 @@ static inline int netvsc_send_pkt(
->=20
->  	trace_nvsp_send_pkt(ndev, out_channel, rpkt);
->=20
-> +	packet->dma_range =3D NULL;
->  	if (packet->page_buf_cnt) {
->  		if (packet->cp_partial)
->  			pb +=3D packet->rmsg_pgcnt;
->=20
-> +		ret =3D netvsc_dma_map(ndev_ctx->device_ctx, packet, pb);
-> +		if (ret)
-> +			return ret;
-
-I think this error case needs to set things up so sending the packet
-can be retried at the higher levels.  The typical error is that
-swiotlb is out of bounce buffer memory.  That's a transient
-condition.  There's already code in this function to retry when
-the vmbus_sendpacket functions fails because the ring buffer
-is full, and running out of bounce buffer memory should probably
-take the same path.
-
-> +
->  		ret =3D vmbus_sendpacket_pagebuffer(out_channel,
->  						  pb, packet->page_buf_cnt,
->  						  &nvmsg, sizeof(nvmsg),
->  						  req_id);
-> +
-> +		if (ret)
-> +			netvsc_dma_unmap(ndev_ctx->device_ctx, packet);
->  	} else {
->  		ret =3D vmbus_sendpacket(out_channel,
->  				       &nvmsg, sizeof(nvmsg),
-> diff --git a/drivers/net/hyperv/rndis_filter.c b/drivers/net/hyperv/rndis=
-_filter.c
-> index f6c9c2a670f9..448fcc325ed7 100644
-> --- a/drivers/net/hyperv/rndis_filter.c
-> +++ b/drivers/net/hyperv/rndis_filter.c
-> @@ -361,6 +361,8 @@ static void rndis_filter_receive_response(struct net_=
-device *ndev,
->  			}
->  		}
->=20
-> +		netvsc_dma_unmap(((struct net_device_context *)
-> +			netdev_priv(ndev))->device_ctx, &request->pkt);
->  		complete(&request->wait_event);
->  	} else {
->  		netdev_err(ndev,
-> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-> index 83fa567ad594..2ea638101645 100644
-> --- a/include/linux/hyperv.h
-> +++ b/include/linux/hyperv.h
-> @@ -1601,6 +1601,11 @@ struct hyperv_service_callback {
->  	void (*callback)(void *context);
+> @@ -509,6 +513,14 @@ struct storvsc_scan_work {
+>  	u8 tgt_id;
 >  };
 >=20
-> +struct hv_dma_range {
-> +	dma_addr_t dma;
-> +	u32 mapping_size;
-> +};
+> +#define storvsc_dma_map(dev, page, offset, size, dir) \
+> +	dma_map_page(dev, page, offset, size, dir)
 > +
->  #define MAX_SRV_VER	0x7ffffff
->  extern bool vmbus_prep_negotiate_resp(struct icmsg_hdr *icmsghdrp, u8 *b=
-uf, u32 buflen,
->  				const int *fw_version, int fw_vercnt,
+> +#define storvsc_dma_unmap(dev, dma_range, dir)		\
+> +		dma_unmap_page(dev, dma_range.dma,	\
+> +			       dma_range.mapping_size,	\
+> +			       dir ? DMA_FROM_DEVICE : DMA_TO_DEVICE)
+> +
+
+Each of these macros is used only once.  IMHO, they don't
+add a lot of value.  Just coding dma_map/unmap_page()
+inline would be fine and eliminate these lines of code.
+
+>  static void storvsc_device_scan(struct work_struct *work)
+>  {
+>  	struct storvsc_scan_work *wrk;
+> @@ -1260,6 +1272,7 @@ static void storvsc_on_channel_callback(void *conte=
+xt)
+>  	struct hv_device *device;
+>  	struct storvsc_device *stor_device;
+>  	struct Scsi_Host *shost;
+> +	int i;
+>=20
+>  	if (channel->primary_channel !=3D NULL)
+>  		device =3D channel->primary_channel->device_obj;
+> @@ -1314,6 +1327,15 @@ static void storvsc_on_channel_callback(void *cont=
+ext)
+>  				request =3D (struct storvsc_cmd_request *)scsi_cmd_priv(scmnd);
+>  			}
+>=20
+> +			if (request->dma_range) {
+> +				for (i =3D 0; i < request->hvpg_count; i++)
+> +					storvsc_dma_unmap(&device->device,
+> +						request->dma_range[i],
+> +						request->vstor_packet.vm_srb.data_in =3D=3D READ_TYPE);
+
+I think you can directly get the DMA direction as request->cmd->sc_data_dir=
+ection.
+
+> +
+> +				kfree(request->dma_range);
+> +			}
+> +
+>  			storvsc_on_receive(stor_device, packet, request);
+>  			continue;
+>  		}
+> @@ -1810,7 +1832,9 @@ static int storvsc_queuecommand(struct Scsi_Host *h=
+ost, struct scsi_cmnd *scmnd)
+>  		unsigned int hvpgoff, hvpfns_to_add;
+>  		unsigned long offset_in_hvpg =3D offset_in_hvpage(sgl->offset);
+>  		unsigned int hvpg_count =3D HVPFN_UP(offset_in_hvpg + length);
+> +		dma_addr_t dma;
+>  		u64 hvpfn;
+> +		u32 size;
+>=20
+>  		if (hvpg_count > MAX_PAGE_BUFFER_COUNT) {
+>=20
+> @@ -1824,6 +1848,13 @@ static int storvsc_queuecommand(struct Scsi_Host *=
+host, struct scsi_cmnd *scmnd)
+>  		payload->range.len =3D length;
+>  		payload->range.offset =3D offset_in_hvpg;
+>=20
+> +		cmd_request->dma_range =3D kcalloc(hvpg_count,
+> +				 sizeof(*cmd_request->dma_range),
+> +				 GFP_ATOMIC);
+
+With this patch, it appears that storvsc_queuecommand() is always
+doing bounce buffering, even when running in a non-isolated VM.
+The dma_range is always allocated, and the inner loop below does
+the dma mapping for every I/O page.  The corresponding code in
+storvsc_on_channel_callback() that does the dma unmap allows for
+the dma_range to be NULL, but that never happens.
+
+> +		if (!cmd_request->dma_range) {
+> +			ret =3D -ENOMEM;
+
+The other memory allocation failure in this function returns
+SCSI_MLQUEUE_DEVICE_BUSY.   It may be debatable as to whether
+that's the best approach, but that's a topic for a different patch.  I
+would suggest being consistent and using the same return code
+here.
+
+> +			goto free_payload;
+> +		}
+>=20
+>  		for (i =3D 0; sgl !=3D NULL; sgl =3D sg_next(sgl)) {
+>  			/*
+> @@ -1847,9 +1878,29 @@ static int storvsc_queuecommand(struct Scsi_Host *=
+host, struct scsi_cmnd *scmnd)
+>  			 * last sgl should be reached at the same time that
+>  			 * the PFN array is filled.
+>  			 */
+> -			while (hvpfns_to_add--)
+> -				payload->range.pfn_array[i++] =3D	hvpfn++;
+> +			while (hvpfns_to_add--) {
+> +				size =3D min(HV_HYP_PAGE_SIZE - offset_in_hvpg,
+> +					   (unsigned long)length);
+> +				dma =3D storvsc_dma_map(&dev->device, pfn_to_page(hvpfn++),
+> +						      offset_in_hvpg, size,
+> +						      scmnd->sc_data_direction);
+> +				if (dma_mapping_error(&dev->device, dma)) {
+> +					ret =3D -ENOMEM;
+
+The typical error from dma_map_page() will be running out of
+bounce buffer memory.   This is a transient condition that should be
+retried at the higher levels.  So make sure to return an error code
+that indicates the I/O should be resubmitted.
+
+> +					goto free_dma_range;
+> +				}
+> +
+> +				if (offset_in_hvpg) {
+> +					payload->range.offset =3D dma & ~HV_HYP_PAGE_MASK;
+> +					offset_in_hvpg =3D 0;
+> +				}
+
+I'm not clear on why payload->range.offset needs to be set again.
+Even after the dma mapping is done, doesn't the offset in the first
+page have to be the same?  If it wasn't the same, Hyper-V wouldn't
+be able to process the PFN list correctly.  In fact, couldn't the above
+code just always set offset_in_hvpg =3D 0?
+
+> +
+> +				cmd_request->dma_range[i].dma =3D dma;
+> +				cmd_request->dma_range[i].mapping_size =3D size;
+> +				payload->range.pfn_array[i++] =3D dma >> HV_HYP_PAGE_SHIFT;
+> +				length -=3D size;
+> +			}
+>  		}
+> +		cmd_request->hvpg_count =3D hvpg_count;
+
+This line just saves the size of the dma_range array.  Could
+it be moved up with the code that allocates the dma_range
+array?  To me, it would make more sense to have all that
+code together in one place.
+
+>  	}
+
+The whole approach here is to do dma remapping on each individual page
+of the I/O buffer.  But wouldn't it be possible to use dma_map_sg() to map
+each scatterlist entry as a unit?  Each scatterlist entry describes a range=
+ of
+physically contiguous memory.  After dma_map_sg(), the resulting dma
+address must also refer to a physically contiguous range in the swiotlb
+bounce buffer memory.   So at the top of the "for" loop over the scatterlis=
+t
+entries, do dma_map_sg() if we're in an isolated VM.  Then compute the
+hvpfn value based on the dma address instead of sg_page().  But everything
+else is the same, and the inner loop for populating the pfn_arry is unmodif=
+ied.
+Furthermore, the dma_range array that you've added is not needed, since
+scatterlist entries already have a dma_address field for saving the mapped
+address, and dma_unmap_sg() uses that field.
+
+One thing:  There's a maximum swiotlb mapping size, which I think works
+out to be 256 Kbytes.  See swiotlb_max_mapping_size().  We need to make
+sure that we don't get a scatterlist entry bigger than this size.  But I th=
+ink
+this already happens because you set the device->dma_mask field in
+Patch 11 of this series.  __scsi_init_queue checks for this setting and
+sets max_sectors to limits transfers to the max mapping size.
+
+>=20
+>  	cmd_request->payload =3D payload;
+> @@ -1860,13 +1911,20 @@ static int storvsc_queuecommand(struct Scsi_Host =
+*host, struct scsi_cmnd *scmnd)
+>  	put_cpu();
+>=20
+>  	if (ret =3D=3D -EAGAIN) {
+> -		if (payload_sz > sizeof(cmd_request->mpb))
+> -			kfree(payload);
+>  		/* no more space */
+> -		return SCSI_MLQUEUE_DEVICE_BUSY;
+> +		ret =3D SCSI_MLQUEUE_DEVICE_BUSY;
+> +		goto free_dma_range;
+>  	}
+>=20
+>  	return 0;
+> +
+> +free_dma_range:
+> +	kfree(cmd_request->dma_range);
+> +
+> +free_payload:
+> +	if (payload_sz > sizeof(cmd_request->mpb))
+> +		kfree(payload);
+> +	return ret;
+>  }
+>=20
+>  static struct scsi_host_template scsi_driver =3D {
 > --
 > 2.25.1
 
