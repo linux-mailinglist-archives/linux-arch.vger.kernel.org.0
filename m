@@ -2,118 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E3B3F27FC
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 09:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF3A3F2811
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 10:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbhHTH40 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Aug 2021 03:56:26 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:52709 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbhHTH4Z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Aug 2021 03:56:25 -0400
-Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M89bP-1mBmiX3wPr-005Ji4 for <linux-arch@vger.kernel.org>; Fri, 20 Aug 2021
- 09:55:46 +0200
-Received: by mail-wm1-f49.google.com with SMTP id a201-20020a1c7fd2000000b002e6d33447f9so6651334wmd.0
-        for <linux-arch@vger.kernel.org>; Fri, 20 Aug 2021 00:55:46 -0700 (PDT)
-X-Gm-Message-State: AOAM530akxes7GoDXExzPTOumV9Ocl9sYNppbybRK5OEZ4kOrqPzU381
-        m+swkzpw9z2Kp20J86yFxD/EUt1PCjPAq6GpDTM=
-X-Google-Smtp-Source: ABdhPJwDP9Dzfkcnaexibgq//WhgoLjd+e+stMTdponb+VM8J/vewKheXfer3u7cfvZmm6ZT/OlE7mpe4RkGXD6vgqQ=
-X-Received: by 2002:a05:600c:510a:: with SMTP id o10mr2495130wms.84.1629446146649;
- Fri, 20 Aug 2021 00:55:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-5-chenhuacai@loongson.cn> <CAK8P3a357Xgs7mdsP-NCmu5ukVqMHtV1Andte6vO1mEr2qoqbQ@mail.gmail.com>
- <CAAhV-H5byhzBLbw3ASk=-8Xvkws8SS4eS_0Q5EyhXuzUdM1=sQ@mail.gmail.com>
- <CAK8P3a2bq3p25dfhUEiTe57-i5SKwXJAEZ18=tpbXijqMrDpYQ@mail.gmail.com>
- <CAAhV-H45GFoFz1csEJigCN_QiCvq68__0BXrmDcsQFK6Nr17Aw@mail.gmail.com>
- <CAK8P3a15rj_vH2FN12+UVZ=YfPDTEJ_cN0PoNfyYFSz8KSOvzg@mail.gmail.com>
- <CAAhV-H5r7HBhepc-N_Qmr=Vdy-5nHg-0ZvFK-nVY2eFzYqpR5A@mail.gmail.com>
- <CAK8P3a1vMCHihjnu2wZsz0_JXhXr_pg0mN_x-b1X754BptReeA@mail.gmail.com>
- <CAAhV-H664mY-vQubEMX0yHdwHfH9kDrp6W=zHJvTE+yi31GpyQ@mail.gmail.com>
- <CAK8P3a0KLjGrfRnKQxCvULdL3PpMWCyjpx-tzcW1W5qqfiMbMw@mail.gmail.com>
- <CAAhV-H6rPc1qyoE6FRpUQs1GS_K+xASHu_q5o-yT13eu7DKzVQ@mail.gmail.com>
- <CAK8P3a1LMY+KschuMfLoXB1qXMcTLVWeP+s41sCfQMFdRujQjQ@mail.gmail.com> <CAAhV-H64k25rVqGrYJ4wZxQEQ0jp=TRcUZA+Co8JoL1epBBwVg@mail.gmail.com>
-In-Reply-To: <CAAhV-H64k25rVqGrYJ4wZxQEQ0jp=TRcUZA+Co8JoL1epBBwVg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 20 Aug 2021 09:55:30 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0HZGv-uL=QOGkVxsRUEre49j+wZ1L4TtF0MJx-4qKBaQ@mail.gmail.com>
-Message-ID: <CAK8P3a0HZGv-uL=QOGkVxsRUEre49j+wZ1L4TtF0MJx-4qKBaQ@mail.gmail.com>
-Subject: Re: [PATCH 04/19] LoongArch: Add common headers
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:13rjwP85uu+RIZq5G2FszklT8HONc0ofB2mbw/Fic0Zu7pfo6lk
- JFMUT5lfdMiyThE6ES/7GAuxW5WVY4iSbxRHi9syMw/Xdx3AzrV4NYDH6bJeGUpgaI95mCC
- H6JAMt4nCFC1QTy0JyxA/r1KT5wnEnxAd1pjJZNFjVQlWrEO8aaw7GhjGvnXG+fgasBcfDh
- tRroMuitKY0+VGHUvAFKw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1B/zQJh5sDc=:H4psXdtk81P7Z0FJPznJTV
- J6bU7CB/OEHFH55XiqqJ/VXqS5voF5Uew3hOwfehoZ07DKwgsJtAHF4jMXVIr2Ga3PJC+oykU
- L/eyOXuygIrJAOCFwg60vd52JKF3+ct375Ed0ZK6oyJmseAmrH8SRH3JDHcT2nSSoGLhXhsTm
- LHlhCfISsifgsHT/P/S1tf8ZTuMBD+DnVNN16rBDMs2quxShVyLifNrBkg/14GdhH1URG6Qkh
- yljmxWCLCP14ZCnpuc5/1P6pg1y5jTq4ueGIbJtudj9mgOWCtqQu4MphMQROIPjxh8LTN884v
- BFU9HdkNVvto4pxBKdgSJOQbbT51VQPrY36urqsvnTTGJtWGOWWx4Le+aB2qFS/KT/FsB0Ahf
- FuTXlhr3Ugj9jA7GqojYzX+pC2ANNp17nXxyHFbpMkcCBtnmiAAJMXkDyFbtdjMjePOZDccMH
- 2RF9SU98HalXZhRv3XLmP/MWi5YeusRZEm6zaon6XgW35Bi+Eh4bgOuUj5rEhfdeN3/lFDugn
- j3OKPkUjl32KyQNQGt9U1y59/xkMHZG4UUUslpMpO89BzRbUXZzFwcfOcylHm9tPKUJu4r4mG
- Yk2OpOUUdnEDxxmMGU75uirhm458cqVxG5fM1wOxb6XrnhQjxu3FA5fQg/yzFIvfzAJrjusDn
- SyhSeJ9I0LIGn9rzJ6NIaO969drTg7GKm29oZPBKurKcCKm5c81sFZy4lkGVCPlmm4nGhiW9g
- eqhgRbUiHUB28aKdFg2TWFH02ty1C0aRVrAlG1Y3QUGSeA5y3j+K5coHPMVEB+OfKnZKizBPa
- 1hNqozzUJloPcXGABh3sCYh5270CJqkyAdOQO7PFMP0hQJtOWkCLrUas3VeXOvIeaYfxmp0
+        id S231142AbhHTIC7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Aug 2021 04:02:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50368 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229780AbhHTICV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 20 Aug 2021 04:02:21 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA5DA60FF2;
+        Fri, 20 Aug 2021 08:01:43 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mGzTB-0068mH-RR; Fri, 20 Aug 2021 09:01:41 +0100
+Date:   Fri, 20 Aug 2021 09:01:41 +0100
+Message-ID: <87tujkr1cq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kernel-team@android.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jade Alglave <jade.alglave@arm.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org
+Subject: Re: [PATCH 3/4] KVM: arm64: Convert the host S2 over to __load_guest_stage2()
+In-Reply-To: <YQ07sPoa4ACizYrp@google.com>
+References: <20210806113109.2475-1-will@kernel.org>
+        <20210806113109.2475-5-will@kernel.org>
+        <YQ07sPoa4ACizYrp@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: qperret@google.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kernel-team@android.com, catalin.marinas@arm.com, jade.alglave@arm.com, shameerali.kolothum.thodi@huawei.com, kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 20, 2021 at 6:00 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> On Wed, Aug 18, 2021 at 5:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > How common are Loongarch64 CPUs that limit the virtual address space
-> > > > to 40 bits instead of the full 48 bits? What is the purpose of limiting the
-> > > > CPU this way?
-> > > We have some low-end 64bits CPU whose VA is 40bits, this can reduce
-> > > the internal address bus width, so save some hardware cost and
-> > > complexity.
-> >
-> > Ok. So I could understand making CONFIG_VA_BITS_40 hardcode the
-> > VA size at compile time, but if you always support the fallback to any
-> > size at runtime, just allow using the high addresses.
-> Define a larger VA_BITS and fallback to a smaller one (TASKSIZE64) if
-> hardware doesn't support it? If so, there will be a problem: we should
-> define a 4-level page table, but the fallback only needs a 2-level or
-> 3-level page table.
+On Fri, 06 Aug 2021 14:40:00 +0100,
+Quentin Perret <qperret@google.com> wrote:
+> 
+> On Friday 06 Aug 2021 at 12:31:07 (+0100), Will Deacon wrote:
+> > From: Marc Zyngier <maz@kernel.org>
+> > 
+> > The protected mode relies on a separate helper to load the
+> > S2 context. Move over to the __load_guest_stage2() helper
+> > instead.
+> > 
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Jade Alglave <jade.alglave@arm.com>
+> > Cc: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > Signed-off-by: Will Deacon <will@kernel.org>
+> > ---
+> >  arch/arm64/include/asm/kvm_mmu.h              | 11 +++--------
+> >  arch/arm64/kvm/hyp/include/nvhe/mem_protect.h |  2 +-
+> >  arch/arm64/kvm/hyp/nvhe/mem_protect.c         |  2 +-
+> >  3 files changed, 5 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
+> > index 05e089653a1a..934ef0deff9f 100644
+> > --- a/arch/arm64/include/asm/kvm_mmu.h
+> > +++ b/arch/arm64/include/asm/kvm_mmu.h
+> > @@ -267,9 +267,10 @@ static __always_inline u64 kvm_get_vttbr(struct kvm_s2_mmu *mmu)
+> >   * Must be called from hyp code running at EL2 with an updated VTTBR
+> >   * and interrupts disabled.
+> >   */
+> > -static __always_inline void __load_stage2(struct kvm_s2_mmu *mmu, unsigned long vtcr)
+> > +static __always_inline void __load_guest_stage2(struct kvm_s2_mmu *mmu,
+> > +						struct kvm_arch *arch)
+> >  {
+> > -	write_sysreg(vtcr, vtcr_el2);
+> > +	write_sysreg(arch->vtcr, vtcr_el2);
+> >  	write_sysreg(kvm_get_vttbr(mmu), vttbr_el2);
+> >  
+> >  	/*
+> > @@ -280,12 +281,6 @@ static __always_inline void __load_stage2(struct kvm_s2_mmu *mmu, unsigned long
+> >  	asm(ALTERNATIVE("nop", "isb", ARM64_WORKAROUND_SPECULATIVE_AT));
+> >  }
+> >  
+> > -static __always_inline void __load_guest_stage2(struct kvm_s2_mmu *mmu,
+> > -						struct kvm_arch *arch)
+> > -{
+> > -	__load_stage2(mmu, arch->vtcr);
+> > -}
+> > -
+> >  static inline struct kvm *kvm_s2_mmu_to_kvm(struct kvm_s2_mmu *mmu)
+> >  {
+> >  	return container_of(mmu->arch, struct kvm, arch);
+> > diff --git a/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h b/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h
+> > index 9c227d87c36d..a910648bc71b 100644
+> > --- a/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h
+> > +++ b/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h
+> > @@ -29,7 +29,7 @@ void handle_host_mem_abort(struct kvm_cpu_context *host_ctxt);
+> >  static __always_inline void __load_host_stage2(void)
+> >  {
+> >  	if (static_branch_likely(&kvm_protected_mode_initialized))
+> > -		__load_stage2(&host_kvm.arch.mmu, host_kvm.arch.vtcr);
+> > +		__load_guest_stage2(&host_kvm.arch.mmu, &host_kvm.arch);
+> >  	else
+> >  		write_sysreg(0, vttbr_el2);
+> >  }
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/mem_protect.c b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+> > index d938ce95d3bd..d4e74ca7f876 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+> > +++ b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+> > @@ -126,7 +126,7 @@ int __pkvm_prot_finalize(void)
+> >  	kvm_flush_dcache_to_poc(params, sizeof(*params));
+> >  
+> >  	write_sysreg(params->hcr_el2, hcr_el2);
+> > -	__load_stage2(&host_kvm.arch.mmu, host_kvm.arch.vtcr);
+> > +	__load_guest_stage2(&host_kvm.arch.mmu, &host_kvm.arch);
+> 
+> Nit: clearly we're not loading a guest stage-2 here, so maybe the
+> function should take a more generic name?
 
-The number of levels is usually hardcoded based on the configuration,
-though I think at least x86 and s390 have code to do this dynamically,
-either depending on the CPU capability, or the largest address used
-in a task.
+How about we rename __load_guest_stage2() to __load_stage2() instead,
+with the same parameters?
 
-The easiest example to replicate would be arch/arm64, which lets you
-pick the page size first, and then offers different VA_BITS options that
-depend on this page size.
+Thanks,
 
-Another method is to have a single 'choice' statement in Kconfig that
-simply enumerates all the sensible options, such as
+	M.
 
-4K-3level (39 bits)
-4K-4level (48 bits)
-4K-5level (56 bits)
-16K-2level (36 bits)
-16K-3level (47 bits)
-64K-2level (42 bits)
-64K-3level (55 bits)
-
-You might prefer to offer the order-1 PGD versions of these to get
-to 40/48/56 bits instead of 39/47/55, or just offer both alternatives.
-
-       Arnd
+-- 
+Without deviation from the norm, progress is not possible.
