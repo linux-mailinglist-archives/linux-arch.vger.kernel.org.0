@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26153F2937
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 11:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B573F2CDD
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 15:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbhHTJdO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Aug 2021 05:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S240669AbhHTNMJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Aug 2021 09:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235321AbhHTJdM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Aug 2021 05:33:12 -0400
+        with ESMTP id S240444AbhHTNMJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Aug 2021 09:12:09 -0400
 Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E138C061575;
-        Fri, 20 Aug 2021 02:32:35 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id o2so8571522pgr.9;
-        Fri, 20 Aug 2021 02:32:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568A1C061575;
+        Fri, 20 Aug 2021 06:11:31 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id x4so9113269pgh.1;
+        Fri, 20 Aug 2021 06:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=F/INelQk2As+/GtcCaMtJ+YzY5fXWvqQ9IG9ehmEJG8=;
-        b=NOsRg08JE9vqoPHWkIYlLgvhL+MicNH2byE8RBT270hR7Y34lewYGmzCG7ZiSOPfst
-         hHwY77aZbHyaZy74ak1zDkDcJThEyYHT+phdATRZfrBFvdCFxZDPgNsT5HA2ACIGOssj
-         5flQeCaYSnsS7x235BGVvDlZVJfoVF2viLSRLpv9bgZw/C28yjBIhSKVFmgAWxO0RwLs
-         SqRSs/9c3L856W6LO84v1LhAxpS7IpBUWCu4vR1ZWSmuRYMsAqASRYQzmnl0WEeB+EGQ
-         v8cJErq4KMIgeGnBvkCcPfJfi85pvA0P+J4N0lc0Qhk1awxXio8YvgLwIqm9BpqqWqJj
-         KSgw==
+        bh=DumM/jSCQ5pQ9eZgFpU+0KewnSiWRI7kODNq3MVNO9E=;
+        b=Lxpe8djYypSrG+rDhdI8Zj8XoAi8qqQia8zhwT4UV3xhiowgSs10jy3AgDNzKEDEyF
+         2GuLbi9GVVFcjh9UlMDL9KUW8QrzZktPvIUcY7JQUGRvDt+fa7vHuxhyvZAdvey3t4ob
+         hD12I6HXHDrZkRjMhWqSXBvFA8t0l/nORUqxhobI5jL9kGkFeKuaLFh4hExMg94Nn/+Y
+         ZX0iJa6zVUQl4P3W+vN6fOmLG2tonMXiCheuMNI43YhxqI96dxD+FKqPHJQaTLtG54GP
+         oe6y5RcUvG1ZNewnn9OX4H8s3Nmh0Ni6Kg3bG+ljwBTTlaL4sNTRBPgI879siMp4TQte
+         F+eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=F/INelQk2As+/GtcCaMtJ+YzY5fXWvqQ9IG9ehmEJG8=;
-        b=rMtsF+QGUp5drnz5DEzx92ESwG2lVeehtmHgXgebbn9DWpKd10X1hVLAetRbdR831K
-         7F/8E6cLz88oDH+DjKGSyuhDc+9MppljHQQhMgASwRdtSjxdaYJ3EiKoKPyZDXs58lGg
-         rhhSZJE1+Ve8TDPp3xPAfwG4g+Ho7Hp0vK8LRtXnMGeFpxoC40wQwVIo8bP86x9zMAou
-         4X5TPFPrmuyVSJnMjD8dUjLQb3kuhdaNqlGzlRH3hE6pUOao5lOAQv4IYfyLzOkc8Gsh
-         IV0dNxG9Hyh5WmB2EI8C+GvcOgpMkEw0+yd0wh9y0bUuKnBGDGEKw95GJsehI84urXs7
-         mtOg==
-X-Gm-Message-State: AOAM532IL8cvcpm73pASbWfQURLATeNMESX/FjpoJml+CHBp1N5Khav4
-        wBWq2g5P7X5zoNgJhMN4lXY=
-X-Google-Smtp-Source: ABdhPJyMzC9zZ4t/lY/N9LWV+o+9MRA4tnKQgAYkkUeEh5Y8L6QkAwqXlqjG86qeQ0htTXLK/F9JXQ==
-X-Received: by 2002:a63:1a46:: with SMTP id a6mr17708253pgm.226.1629451955046;
-        Fri, 20 Aug 2021 02:32:35 -0700 (PDT)
+        bh=DumM/jSCQ5pQ9eZgFpU+0KewnSiWRI7kODNq3MVNO9E=;
+        b=llyNHPpVpo3iir1cPeIivDcuTL3CoBNVeJ1trZDaZrDqn5wYbXJyGqVxUwHwg9JpOY
+         5GrTRTcr1EeQTQujIPQXjip6HqrLCDYjCt+qYwUTSoU7K+85j2ji8gWfsbTxb4JBL5Qv
+         t9H3vtHyHg7JzjFM5tlyPFnuSuhyFZHjJZKKLOotbRP0qD3WUNAojwwJBupw8jZFfzro
+         +Wjl68Ompb4Dsb/i0/ju8ibMec6cAcWv0ESIjTJ00USAu2CyN2Mi4QqnwRUFnU/Mahxx
+         fiWRuhWneVc5cG7B14Hm/5icG1Ht/ASra39JMRsIBk3qyvb0nRHrVbiz7mGIqksI+EYH
+         rxsQ==
+X-Gm-Message-State: AOAM533vlTcDF7wjP9dD1SWcb8U3JZLWmWjhRQIez0IDt/cNGGWOL36+
+        FLJZ7+n6+zhJYwlJ8osFlGY=
+X-Google-Smtp-Source: ABdhPJxylFQdwesAZv+5jXWctSOyZLpktCQebAX+HYEeyV7Dv3stIO/u8x8uQwcYBOXvuYmq81vLhg==
+X-Received: by 2002:aa7:95a6:0:b0:3e0:efe2:83ee with SMTP id a6-20020aa795a6000000b003e0efe283eemr19334679pfk.36.1629465090875;
+        Fri, 20 Aug 2021 06:11:30 -0700 (PDT)
 Received: from ?IPv6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
-        by smtp.gmail.com with ESMTPSA id x42sm6108890pfh.205.2021.08.20.02.32.21
+        by smtp.gmail.com with ESMTPSA id z2sm8304603pgb.33.2021.08.20.06.11.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Aug 2021 02:32:34 -0700 (PDT)
-Subject: Re: [PATCH V3 11/13] HV/IOMMU: Enable swiotlb bounce buffer for
- Isolation VM
-To:     Michael Kelley <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
+        Fri, 20 Aug 2021 06:11:30 -0700 (PDT)
+Subject: Re: [PATCH V3 12/13] HV/Netvsc: Add Isolation VM support for netvsc
+ driver
+To:     "hch@lst.de" <hch@lst.de>, Michael Kelley <mikelley@microsoft.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
         "wei.liu@kernel.org" <wei.liu@kernel.org>,
@@ -73,7 +73,7 @@ To:     Michael Kelley <mikelley@microsoft.com>,
         "kuba@kernel.org" <kuba@kernel.org>,
         "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
         "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "arnd@arndb.de" <arnd@arndb.de>,
         "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
         "robin.murphy@arm.com" <robin.murphy@arm.com>,
         "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
@@ -92,8 +92,8 @@ To:     Michael Kelley <mikelley@microsoft.com>,
         "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
         "rientjes@google.com" <rientjes@google.com>,
         "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "tj@kernel.org" <tj@kernel.org>
-Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -103,15 +103,16 @@ Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
         "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
         "dave.hansen@intel.com" <dave.hansen@intel.com>
 References: <20210809175620.720923-1-ltykernel@gmail.com>
- <20210809175620.720923-12-ltykernel@gmail.com>
- <MWHPR21MB159315B335EB0B064B0B0F23D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
+ <20210809175620.720923-13-ltykernel@gmail.com>
+ <MWHPR21MB15936FE72E65A62FBA3EF4F2D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
+ <20210820042151.GB26450@lst.de>
 From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <e933f7e3-5573-bb8a-c313-75884d59235c@gmail.com>
-Date:   Fri, 20 Aug 2021 17:32:19 +0800
+Message-ID: <9e4d5de1-37b3-550d-9bca-4eb158e45b33@gmail.com>
+Date:   Fri, 20 Aug 2021 21:11:15 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <MWHPR21MB159315B335EB0B064B0B0F23D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
+In-Reply-To: <20210820042151.GB26450@lst.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -121,60 +122,57 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 
-On 8/20/2021 2:11 AM, Michael Kelley wrote:
->>   }
->> +
->> +/*
->> + * hv_map_memory - map memory to extra space in the AMD SEV-SNP Isolation VM.
->> + */
->> +void *hv_map_memory(void *addr, unsigned long size)
->> +{
->> +	unsigned long *pfns = kcalloc(size / HV_HYP_PAGE_SIZE,
->> +				      sizeof(unsigned long), GFP_KERNEL);
->> +	void *vaddr;
->> +	int i;
->> +
->> +	if (!pfns)
->> +		return NULL;
->> +
->> +	for (i = 0; i < size / HV_HYP_PAGE_SIZE; i++)
->> +		pfns[i] = virt_to_hvpfn(addr + i * HV_HYP_PAGE_SIZE) +
->> +			(ms_hyperv.shared_gpa_boundary >> HV_HYP_PAGE_SHIFT);
->> +
->> +	vaddr = vmap_pfn(pfns, size / HV_HYP_PAGE_SIZE,	PAGE_KERNEL_IO);
->> +	kfree(pfns);
->> +
->> +	return vaddr;
->> +}
-> This function is manipulating page tables in the guest VM.  It is not involved
-> in communicating with Hyper-V, or passing PFNs to Hyper-V.  The pfn array
-> contains guest PFNs, not Hyper-V PFNs.  So it should use PAGE_SIZE
-> instead of HV_HYP_PAGE_SIZE, and similarly PAGE_SHIFT and virt_to_pfn().
-> If this code were ever to run on ARM64 in the future with PAGE_SIZE other
-> than 4 Kbytes, the use of PAGE_SIZE is correct choice.
+On 8/20/2021 12:21 PM, hch@lst.de wrote:
+> On Thu, Aug 19, 2021 at 06:14:51PM +0000, Michael Kelley wrote:
+>>> +	if (!pfns)
+>>> +		return NULL;
+>>> +
+>>> +	for (i = 0; i < size / HV_HYP_PAGE_SIZE; i++)
+>>> +		pfns[i] = virt_to_hvpfn(buf + i * HV_HYP_PAGE_SIZE)
+>>> +			+ (ms_hyperv.shared_gpa_boundary >> HV_HYP_PAGE_SHIFT);
+>>> +
+>>> +	vaddr = vmap_pfn(pfns, size / HV_HYP_PAGE_SIZE, PAGE_KERNEL_IO);
+>>> +	kfree(pfns);
+>>> +
+>>> +	return vaddr;
+>>> +}
+>>
+>> This function appears to be a duplicate of hv_map_memory() in Patch 11 of this
+>> series.  Is it possible to structure things so there is only one implementation?  In
+> 
+> So right now it it identical, but there is an important difference:
+> the swiotlb memory is physically contiguous to start with, so we can
+> do the simple remap using vmap_range as suggested in the last mail.
+> The cases here are pretty weird in that netvsc_remap_buf is called right
+> after vzalloc.  That is we create _two_ mappings in vmalloc space right
+> after another, where the original one is just used for establishing the
+> "GPADL handle" and freeing the memory.  In other words, the obvious thing
+> to do here would be to use a vmalloc variant that allows to take the
+> shared_gpa_boundary into account when setting up the PTEs.
 
-OK. Will update with PAGE_SIZE.
-
+The buffer is allocated via vmalloc(). It needs to be marked as host
+visible via hyperv hvcall before being accessed via address space above
+shared_gpa_boundary. The hvcall is called in the vmbus_establish_gpadl().
 
 > 
->> +void __init hyperv_iommu_swiotlb_init(void)
->> +{
->> +	unsigned long bytes;
->> +
->> +	/*
->> +	 * Allocate Hyper-V swiotlb bounce buffer at early place
->> +	 * to reserve large contiguous memory.
->> +	 */
->> +	hyperv_io_tlb_size = 256 * 1024 * 1024;
-> A hard coded size here seems problematic.   The memory size of
-> Isolated VMs can vary by orders of magnitude.  I see that
-> xen_swiotlb_init() uses swiotlb_size_or_default(), which at least
-> pays attention to the value specified on the kernel boot line.
-> 
-> Another example is sev_setup_arch(), which in the native case sets
-> the size to 6% of main memory, with a max of 1 Gbyte.  This is
-> the case that's closer to Isolated VMs, so doing something
-> similar could be a good approach.
+> And here is somthing I need help from the x86 experts:  does the CPU
+> actually care about this shared_gpa_boundary?  Or does it just matter
+> for the generated DMA address?  Does somehow have a good pointer to
+> how this mechanism works?
 > 
 
-Yes, agree. It's better to keep bounce buffer size with AMD SEV.
+The shared_gpa_boundary is vTOM feature of AMD SEV-SNP. Tom Lendacky
+introduced the feature in previous mail. I copy it here and please have
+a look.
+
+ From Tom Lendacky:
+IIUC, this is using the vTOM feature of SEV-SNP. When this feature is
+enabled for a VMPL level, any physical memory addresses below vTOM are
+considered private/encrypted and any physical memory addresses above vTOM
+are considered shared/unencrypted. With this option, you don't need a
+fully enlightened guest that sets and clears page table encryption bits.
+You just need the DMA buffers to be allocated in the proper range above 
+vTOM.
+
+See the section on "Virtual Machine Privilege Levels" in
+https://www.amd.com/system/files/TechDocs/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more.pdf.
