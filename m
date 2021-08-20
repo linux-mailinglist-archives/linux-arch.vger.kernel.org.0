@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEA63F3339
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 20:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8E13F333C
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 20:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237184AbhHTSVa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Aug 2021 14:21:30 -0400
-Received: from mga05.intel.com ([192.55.52.43]:22433 "EHLO mga05.intel.com"
+        id S237523AbhHTSVb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Aug 2021 14:21:31 -0400
+Received: from mga05.intel.com ([192.55.52.43]:22429 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237362AbhHTSUk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 20 Aug 2021 14:20:40 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10082"; a="302407824"
+        id S237450AbhHTSUl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 20 Aug 2021 14:20:41 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10082"; a="302407829"
 X-IronPort-AV: E=Sophos;i="5.84,338,1620716400"; 
-   d="scan'208";a="302407824"
+   d="scan'208";a="302407829"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2021 11:18:49 -0700
 X-IronPort-AV: E=Sophos;i="5.84,338,1620716400"; 
-   d="scan'208";a="533074738"
+   d="scan'208";a="533074743"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2021 11:18:49 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -50,9 +50,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Rick P Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v29 18/32] mm: Add guard pages around a shadow stack.
-Date:   Fri, 20 Aug 2021 11:11:47 -0700
-Message-Id: <20210820181201.31490-19-yu-cheng.yu@intel.com>
+Subject: [PATCH v29 19/32] mm/mmap: Add shadow stack pages to memory accounting
+Date:   Fri, 20 Aug 2021 11:11:48 -0700
+Message-Id: <20210820181201.31490-20-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210820181201.31490-1-yu-cheng.yu@intel.com>
 References: <20210820181201.31490-1-yu-cheng.yu@intel.com>
@@ -62,132 +62,96 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-INCSSP(Q/D) increments shadow stack pointer and 'pops and discards' the
-first and the last elements in the range, effectively touches those memory
-areas.
-
-The maximum moving distance by INCSSPQ is 255 * 8 = 2040 bytes and
-255 * 4 = 1020 bytes by INCSSPD.  Both ranges are far from PAGE_SIZE.
-Thus, putting a gap page on both ends of a shadow stack prevents INCSSP,
-CALL, and RET from going beyond.
+Account shadow stack pages to stack memory.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Cc: Kees Cook <keescook@chromium.org>
 ---
+v26:
+- Remove redundant #ifdef CONFIG_MMU.
+
 v25:
-- Move SHADOW_STACK_GUARD_GAP to arch/x86/mm/mmap.c.
+- Remove #ifdef CONFIG_ARCH_HAS_SHADOW_STACK for is_shadow_stack_mapping().
 
 v24:
-- Instead changing vm_*_gap(), create x86-specific versions.
+- Change arch_shadow_stack_mapping() to is_shadow_stack_mapping().
+- Change VM_SHSTK to VM_SHADOW_STACK.
 ---
- arch/x86/include/asm/page_types.h |  7 +++++
- arch/x86/mm/mmap.c                | 46 +++++++++++++++++++++++++++++++
- include/linux/mm.h                |  4 +++
- 3 files changed, 57 insertions(+)
+ arch/x86/include/asm/pgtable.h | 3 +++
+ arch/x86/mm/pgtable.c          | 5 +++++
+ include/linux/pgtable.h        | 7 +++++++
+ mm/mmap.c                      | 5 +++++
+ 4 files changed, 20 insertions(+)
 
-diff --git a/arch/x86/include/asm/page_types.h b/arch/x86/include/asm/page_types.h
-index a506a411474d..e1533fdc08b4 100644
---- a/arch/x86/include/asm/page_types.h
-+++ b/arch/x86/include/asm/page_types.h
-@@ -73,6 +73,13 @@ bool pfn_range_is_mapped(unsigned long start_pfn, unsigned long end_pfn);
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index bfe4ea2b652d..0983a91b464c 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1638,6 +1638,9 @@ static inline bool arch_faults_on_old_pte(void)
+ #define maybe_mkwrite maybe_mkwrite
+ extern pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma);
  
- extern void initmem_init(void);
++#define is_shadow_stack_mapping is_shadow_stack_mapping
++extern bool is_shadow_stack_mapping(vm_flags_t vm_flags);
++
+ #endif	/* __ASSEMBLY__ */
  
-+#define vm_start_gap vm_start_gap
-+struct vm_area_struct;
-+extern unsigned long vm_start_gap(struct vm_area_struct *vma);
-+
-+#define vm_end_gap vm_end_gap
-+extern unsigned long vm_end_gap(struct vm_area_struct *vma);
-+
- #endif	/* !__ASSEMBLY__ */
+ #endif /* _ASM_X86_PGTABLE_H */
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index c22c8e9c37e8..61a364b9ae0a 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -884,3 +884,8 @@ int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
  
- #endif	/* _ASM_X86_PAGE_DEFS_H */
-diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
-index f3f52c5e2fd6..81f9325084d3 100644
---- a/arch/x86/mm/mmap.c
-+++ b/arch/x86/mm/mmap.c
-@@ -250,3 +250,49 @@ bool pfn_modify_allowed(unsigned long pfn, pgprot_t prot)
- 		return false;
- 	return true;
- }
+ #endif /* CONFIG_X86_64 */
+ #endif	/* CONFIG_HAVE_ARCH_HUGE_VMAP */
 +
-+/*
-+ * Shadow stack pointer is moved by CALL, RET, and INCSSP(Q/D).  INCSSPQ
-+ * moves shadow stack pointer up to 255 * 8 = ~2 KB (~1KB for INCSSPD) and
-+ * touches the first and the last element in the range, which triggers a
-+ * page fault if the range is not in a shadow stack.  Because of this,
-+ * creating 4-KB guard pages around a shadow stack prevents these
-+ * instructions from going beyond.
-+ */
-+#define SHADOW_STACK_GUARD_GAP PAGE_SIZE
-+
-+unsigned long vm_start_gap(struct vm_area_struct *vma)
++bool is_shadow_stack_mapping(vm_flags_t vm_flags)
 +{
-+	unsigned long vm_start = vma->vm_start;
-+	unsigned long gap = 0;
-+
-+	if (vma->vm_flags & VM_GROWSDOWN)
-+		gap = stack_guard_gap;
-+	else if (vma->vm_flags & VM_SHADOW_STACK)
-+		gap = SHADOW_STACK_GUARD_GAP;
-+
-+	if (gap != 0) {
-+		vm_start -= gap;
-+		if (vm_start > vma->vm_start)
-+			vm_start = 0;
-+	}
-+	return vm_start;
++	return vm_flags & VM_SHADOW_STACK;
 +}
-+
-+unsigned long vm_end_gap(struct vm_area_struct *vma)
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index e24d2c992b11..71aa63e2b014 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1484,6 +1484,13 @@ static inline bool arch_has_pfn_modify_check(void)
+ }
+ #endif /* !_HAVE_ARCH_PFN_MODIFY_ALLOWED */
+ 
++#ifndef is_shadow_stack_mapping
++static inline bool is_shadow_stack_mapping(vm_flags_t vm_flags)
 +{
-+	unsigned long vm_end = vma->vm_end;
-+	unsigned long gap = 0;
-+
-+	if (vma->vm_flags & VM_GROWSUP)
-+		gap = stack_guard_gap;
-+	else if (vma->vm_flags & VM_SHADOW_STACK)
-+		gap = SHADOW_STACK_GUARD_GAP;
-+
-+	if (gap != 0) {
-+		vm_end += gap;
-+		if (vm_end < vma->vm_end)
-+			vm_end = -PAGE_SIZE;
-+	}
-+	return vm_end;
++	return false;
 +}
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 4548f75cef14..354f38d21eed 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2729,6 +2729,7 @@ struct vm_area_struct *vma_lookup(struct mm_struct *mm, unsigned long addr)
- 	return vma;
- }
- 
-+#ifndef vm_start_gap
- static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
- {
- 	unsigned long vm_start = vma->vm_start;
-@@ -2740,7 +2741,9 @@ static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
- 	}
- 	return vm_start;
- }
 +#endif
++
+ /*
+  * Architecture PAGE_KERNEL_* fallbacks
+  *
+diff --git a/mm/mmap.c b/mm/mmap.c
+index ca54d36d203a..6be9ff4007ab 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1721,6 +1721,9 @@ static inline int accountable_mapping(struct file *file, vm_flags_t vm_flags)
+ 	if (file && is_file_hugepages(file))
+ 		return 0;
  
-+#ifndef vm_end_gap
- static inline unsigned long vm_end_gap(struct vm_area_struct *vma)
- {
- 	unsigned long vm_end = vma->vm_end;
-@@ -2752,6 +2755,7 @@ static inline unsigned long vm_end_gap(struct vm_area_struct *vma)
- 	}
- 	return vm_end;
++	if (is_shadow_stack_mapping(vm_flags))
++		return 1;
++
+ 	return (vm_flags & (VM_NORESERVE | VM_SHARED | VM_WRITE)) == VM_WRITE;
  }
-+#endif
  
- static inline unsigned long vma_pages(struct vm_area_struct *vma)
- {
+@@ -3370,6 +3373,8 @@ void vm_stat_account(struct mm_struct *mm, vm_flags_t flags, long npages)
+ 		mm->stack_vm += npages;
+ 	else if (is_data_mapping(flags))
+ 		mm->data_vm += npages;
++	else if (is_shadow_stack_mapping(flags))
++		mm->stack_vm += npages;
+ }
+ 
+ static vm_fault_t special_mapping_fault(struct vm_fault *vmf);
 -- 
 2.21.0
 
