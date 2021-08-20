@@ -2,45 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 695373F2D26
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 15:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01DA03F2EBC
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 17:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbhHTNbd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Aug 2021 09:31:33 -0400
-Received: from mail-co1nam11on2069.outbound.protection.outlook.com ([40.107.220.69]:11361
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229707AbhHTNbc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 20 Aug 2021 09:31:32 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RYbNohynw1dwZkENpWuS9EeVpZoOsCEeYwWfir8ADcGcV5qvruzikLkpnGYox0aflbY8M32/sgsF1ge170JhmsjQig1MRZBnwUeQtXhXiN/Ooj8ph06FQhj07dMMNbcPSRxoXhCc2vZam2T/m5ESVDWbciDCY7mQ+nMwlV62gYgG90HQHSwAZtZs39E7Fm27fM+oGXZE0ltbYz2jA2EFhqYR+cDxVT0i0uQQ87d7JYlfJX+ldZaDoUxBMZxqijkGbeW9xL/azb1/xk9CIqHc6nRtLvrOfoJoqPGmMhSfPtvsiELZrIDiBoCK2cgpQU2lZS8PLMUNOM9XnVPWlOP57Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M2xoiIec73wfWq4W/xdhp0kJ0euoZbXzd3Kj0SBhyoA=;
- b=FOt1ncds7gc5flmmxmouzNnWagRE4w7c/aA6XgymUjxYuNEyLv+TiT9ZsYrBZlm8IuLEs6dK3HfyhYsojNOYlRSbKTOmXlILn/BXe29thT9M6WgGbnIS4L7f7fHt02CvZdkWXEPe0j/gUVSMchOFXgrAWEM+yd9Zoo70GdNwusEhJxug9jn7OdardKCJPdtQaHBeHgm0N4L5cX652GG4SBLh5KuJsok9zBPI03p2WfjuB2+laYl5ahfeJUWIGnqHXvQrR0bgV3RWXW/TBha1lsMAdhNcyJvIsAblp/yb4pfVreYb766NUCqzB+AeKIS1pORyPheJiyoIo0hl5+1h6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M2xoiIec73wfWq4W/xdhp0kJ0euoZbXzd3Kj0SBhyoA=;
- b=OsJlYQd1i67xL9Vk4OXig18TWdkVh1rBAGSxxV8KMtvG2i8P3wHGYouyjv+0qsudX2GKN4++xoyqU7o8IHjom+bKZVHsQmGuoqNCGG3NJmk01kL5rPpwZONDWoVVODqwRwR5ASTIwieIl4Wx5UWb6ukXn7Bq6Pc23QXU4oDT4gY=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5221.namprd12.prod.outlook.com (2603:10b6:208:30b::9)
- by BL0PR12MB5505.namprd12.prod.outlook.com (2603:10b6:208:1ce::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.21; Fri, 20 Aug
- 2021 13:30:47 +0000
-Received: from BL1PR12MB5221.namprd12.prod.outlook.com
- ([fe80::8ce1:ecac:a5bd:e463]) by BL1PR12MB5221.namprd12.prod.outlook.com
- ([fe80::8ce1:ecac:a5bd:e463%6]) with mapi id 15.20.4436.021; Fri, 20 Aug 2021
- 13:30:46 +0000
-Subject: Re: [PATCH V3 12/13] HV/Netvsc: Add Isolation VM support for netvsc
+        id S240830AbhHTPVQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Aug 2021 11:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235928AbhHTPVP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Aug 2021 11:21:15 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC33C061575;
+        Fri, 20 Aug 2021 08:20:37 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id k24so9497974pgh.8;
+        Fri, 20 Aug 2021 08:20:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lOEOP553DOa54mvzQOTvxqghJgRlAqL/9egTYk51TpA=;
+        b=mNTS2gd5G3Ks7sZBiQSqKbxnuIVyWXDolh/tFasaTIp9Tx741ulpCEBBJUeNG6CWbn
+         bJhOlYcTmBgVknfCmejlU0pKjFYMNkb+mTQ+mEeg9ITv0adYOUR3hmKmVoC7BoPnsD0I
+         XWSBpp9HDsxPIU9RwnpnjWs+5qzfOYMAlk5vuGurnNnqnw7ijhJHg8X5IJWWxqYixCt3
+         +tg+SVuZQBaKBNS55ZDk0TnfxHeHQGNWLe/31oj8sgUHgNeRZB8TZc9b01CQkJiBbfS1
+         6m4md9Xn57tauA6eGKdWIXay7jb4zj040dBBFUXZl5hvlW19Wrja0c672M7277VVHF2w
+         s3ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lOEOP553DOa54mvzQOTvxqghJgRlAqL/9egTYk51TpA=;
+        b=c3LQHquSjGvnTqiS7vJc2Q/OJ81jX3xZvqbCgqpeVKn6XsY6jgCaZ15tkDDW28T+BC
+         N1MRazeusC/g1brIPi/YuqyscIrjuG8h6RTv284R2StK1B6lX0eQd/Cz5nj/F8hle+1H
+         jvg6onG4XS+aiW+L/9p2G9n2yq9Y21s7Y13zhIBl8zcLsgjRYoBOb2JCIWTaf9jTtjjL
+         a/1fT6em0BZuMXW2J3V7+I6xfK7P6L1pUo81MKsAJ4bVx42nyic/ZyTClfVOOz+A3qYC
+         jEMaBrFDtcnQXNiW6y90LWRMQEoX2IijqS3UbbpYlZRfgH/a7lTPT7xrxoGBZi2GcUKK
+         PzrA==
+X-Gm-Message-State: AOAM530nBcFAbCpzP2JyioetA+oRTt+eW0AAeH3s19JBalirVbKx43Q3
+        K7wnPvXKwwjkPGV2HZqS/Us=
+X-Google-Smtp-Source: ABdhPJzI2VZH5dwiRm0Ac/QtnJrMRH7ImkxlvumANqaLggfhogz2MaNnTDbHOsxuG4eIDNmSXl+big==
+X-Received: by 2002:aa7:9f12:0:b029:3e0:3224:6cd5 with SMTP id g18-20020aa79f120000b02903e032246cd5mr20286867pfr.43.1629472836712;
+        Fri, 20 Aug 2021 08:20:36 -0700 (PDT)
+Received: from ?IPv6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
+        by smtp.gmail.com with ESMTPSA id j5sm12049220pjv.56.2021.08.20.08.20.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Aug 2021 08:20:36 -0700 (PDT)
+Subject: Re: [PATCH V3 13/13] HV/Storvsc: Add Isolation VM support for storvsc
  driver
-To:     "hch@lst.de" <hch@lst.de>, Michael Kelley <mikelley@microsoft.com>
-Cc:     Tianyu Lan <ltykernel@gmail.com>,
+To:     Michael Kelley <mikelley@microsoft.com>,
         KY Srinivasan <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
@@ -63,9 +73,10 @@ Cc:     Tianyu Lan <ltykernel@gmail.com>,
         "kuba@kernel.org" <kuba@kernel.org>,
         "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
         "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
         "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
         "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
         "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
         "ardb@kernel.org" <ardb@kernel.org>,
         Tianyu Lan <Tianyu.Lan@microsoft.com>,
@@ -81,8 +92,8 @@ Cc:     Tianyu Lan <ltykernel@gmail.com>,
         "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
         "rientjes@google.com" <rientjes@google.com>,
         "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "tj@kernel.org" <tj@kernel.org>
+Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -92,123 +103,289 @@ Cc:     Tianyu Lan <ltykernel@gmail.com>,
         "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
         "dave.hansen@intel.com" <dave.hansen@intel.com>
 References: <20210809175620.720923-1-ltykernel@gmail.com>
- <20210809175620.720923-13-ltykernel@gmail.com>
- <MWHPR21MB15936FE72E65A62FBA3EF4F2D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
- <20210820042151.GB26450@lst.de>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-Message-ID: <276f30b6-d741-f88b-ae93-f3d6653498cb@amd.com>
-Date:   Fri, 20 Aug 2021 08:30:40 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-In-Reply-To: <20210820042151.GB26450@lst.de>
+ <20210809175620.720923-14-ltykernel@gmail.com>
+ <MWHPR21MB1593EEF30FFD5C60ED744985D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Message-ID: <a96626db-4ac9-3ce4-64e9-92568e4f827a@gmail.com>
+Date:   Fri, 20 Aug 2021 23:20:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <MWHPR21MB1593EEF30FFD5C60ED744985D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0076.namprd04.prod.outlook.com
- (2603:10b6:806:121::21) To BL1PR12MB5221.namprd12.prod.outlook.com
- (2603:10b6:208:30b::9)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from office-ryzen.texastahm.com (67.79.209.213) by SN7PR04CA0076.namprd04.prod.outlook.com (2603:10b6:806:121::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19 via Frontend Transport; Fri, 20 Aug 2021 13:30:42 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7f130b86-2f2b-4289-9e36-08d963deb7af
-X-MS-TrafficTypeDiagnostic: BL0PR12MB5505:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BL0PR12MB5505050EC4C321D2C86CD03AECC19@BL0PR12MB5505.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2gfyETn3qPjvqavDCPew+TbbzgP+8XxltXMx17ZYNVD/4NlalSsAa+KKIR5Urkr1sSmB3/cwDqgdMmq/6tIOrYHz3HUDWAJ1jRNk83r8L7ctDyM5orPKlCNMPJE0k2NYF57OQkPDPQX67Z2cWpCBiFGajyWwuk5ERFLtMHAR0frKoScRPP0Ib166timsFJDDm4TIfcApAH4jBVneW2eco07NnbT8RMMS0P5zH3T4YjMtY8afcND9BJkYrLRpbOIRfq3u6mHGT8MNI/7VCMsVlSS2PRY7MQrovF9YajDJuyULwIDlDB6sn7ypAEH8lRok36nSZ1YgRkJlJREdc+hqKaQgYgWIL69OOwyNSC9OE+KAXOc2uv5TFK2ofy7YP2H2ueuPDrYSH3lVXvYfF7hGCyQzIqcUvaICv1OeePXtWS6Ca9UZG5uIhmWA7AgMHZ8Y2jJFZ+HeJSNsm5QPQrwoDiwV2kK3CIpWu4wThn57uOulGOqMfWXVkX3Jt6bVadIyHnoj/6FYbTI74Dh8kr86w6JEnzwTX/Tc34GTPethoDCh9kuVYLTNKdmaddsQ/IbVgcRi5pbEb/V/+p3BFtlAdCQc7QKzjkKmnzMVoGce4+AruedyzRFY2qttWyH3AYFcci3qlakIY1mygl4fcfzNG6YjBTAOEe9B359sdcQlR9uxhErmU2HrYhY6c5JX2XdLDgdhRnPBva7vzYeIJ+lVWnAduHgWqkhLxtMGrPYVoi28hUqIBdlWm37bQ6+fm5KONCejKiNDWleqCg0FK6JHcOkeFHG9eym4dN6mMHmbF8HDC58Be8feZt+3ShZbk0w1GZ2SNV6ZC8d6fpMsCU6LhgB7ge0ZPvT1StHBWHpv3Ms=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5221.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(346002)(366004)(136003)(396003)(478600001)(6486002)(26005)(31696002)(6512007)(186003)(2906002)(38100700002)(5660300002)(53546011)(6506007)(36756003)(4326008)(66946007)(966005)(86362001)(66476007)(8676002)(2616005)(7416002)(956004)(54906003)(8936002)(316002)(110136005)(83380400001)(31686004)(66556008)(7366002)(7406005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QnJtTlQzdEo1eThEUWNGZ3VZaTBsbnRkRGorRHNWVHhvN2VKdnV4cWpyaDM4?=
- =?utf-8?B?MVBIL2VnR3lRVWJiZ2ZGc081dFkrZ29pdTlvOXZZY1JoN1dSU1dqbm5VNlpB?=
- =?utf-8?B?L3dmMzVDb2MzeWVNSU02bmRydlFNRkc5WGFMMjhGanh3TzhFVzNUWnAzWXpO?=
- =?utf-8?B?YVpuTkJFQTV0aG1wL2Nmek93TVdGWGZ6R1BOcjlSdGFWNzVpOGpKYXFjak5j?=
- =?utf-8?B?WjF2ZHVuUFUzcHNXYzJvRVVkci96MWxVWmFmVnFkN2FwTzNGbjZWNmh4emFF?=
- =?utf-8?B?V0Z5NUFxRWdYREk4WDdydjJ1dnJ1ZlloSXFPTmdmYXlBZyt2aXRyVGhaM01w?=
- =?utf-8?B?VDBRUmRMSi9XTU9kMS84MFNIdG44YWVIdGdmeUpERjVpRGV5MU1ETGRVZWQy?=
- =?utf-8?B?RWRBbER3bExYU0p2SzVTSEZWZ1N0MXE0MGMvZit3NUpWbk1GdlFLT1VCY3dQ?=
- =?utf-8?B?MjFhQjlQYmM3bCtmcUYzMkJkbm5RQlhvcys2UHlUSExvZUNtWXJpc1ZGK09w?=
- =?utf-8?B?cVFDbDlTcjFUWmF6RERGZk9qQzBMcllDaytaZWk2RXZoaDROTTJjNERCS2s5?=
- =?utf-8?B?SWVtMW1xRTV5QnNoTUxTOHY5b3hxTEZjVlBtT0dCRUZGM0NsQ0ZkaUx4N010?=
- =?utf-8?B?U3JwWG01Zmo4Z0RNei9Eb0ljSjJiU3doNWoyYUljcVBBZGZqZlJwZkY2bG5h?=
- =?utf-8?B?RDhkRSttWE1zZjFUQjRDWnpDVS8wd0ozaUZKMEh6SVF1N0FqaVc4TVA3TStF?=
- =?utf-8?B?VkhXN01MSHc2eHFrZUZJMU1LOE4rUmMwT05IZnFQTG5JVlM2Mzc0TWs0Ymd6?=
- =?utf-8?B?azZTNytNS08yNkszRU9mWUVnSERGVlI3Y0dQbUVITFJRRmVUREpmQUR2L1A0?=
- =?utf-8?B?c3lYaWRVV3F0d3FRSTJ6QmdGTTBHYWlrd0hLckpHUkxCZDA4VmlQTjFEUExI?=
- =?utf-8?B?SUFxQjdSQ3pmMldEdE1OTDFEK0UyWUxBQWVBMWxKVk8yRkJubzRRSDVmalNa?=
- =?utf-8?B?dmpmem1kaVhyejE1RGpWYkNJV0dYbXpuQ1RTWXFvaHFOcTlOZ2pmbFZDNnFO?=
- =?utf-8?B?b2toU1BXU2VSRURSOXVYdDJmOGdQQis5UG9CUDVXd3VEa1paRWdtbzV1QkFx?=
- =?utf-8?B?Mjl3QXBqZm9PeUp1aWtmcTRPcjFwdjFmdTFzK3lHRjFjbmV5UHRUZkt0OGRC?=
- =?utf-8?B?eUszOHdYdUI1WlVJaU84OGJoVmJ3bzZReHZZK3ZPbXJrakl3Z1hhUG9FYVQv?=
- =?utf-8?B?RjI2WjhqZlBsZEpkbEFHT245aS9sVE5ZWEVsVUFFYlNLcDdtMWc3YXdLeEE3?=
- =?utf-8?B?aHBGZ1QxVGkxRDlxd0JLYVlXSGRFVFFzUDNTNUhxRUxWbkR6LytjYUJzMms1?=
- =?utf-8?B?NE5TeC9YcVRZRng5dmUwdzdTNUdzRVo2TkZOT1F1cUdJbE9USFVTTDV6alpl?=
- =?utf-8?B?K2lKZlhxamRiUEpKMk14aXh1RmZyK3VPb09lalJaK1RTdlhjVXBuTW0wdmhy?=
- =?utf-8?B?Uy9pamFZTDlMMGlpSitMdUpiU0lSa1ZLOVREd2hwOGt0eWZ5Q3REZGVEbnFF?=
- =?utf-8?B?WlFWTzc1L0FBWTA0MDg2NnFoeXRtbFNKeDZ5b1lmN3orNk5nQkpTZ2EyOWVV?=
- =?utf-8?B?ckJLUTdlOExXeHpSamRqa0t4aHRnUTIwblRNTDdGTUgzNXJIZEQvZVkrTnlQ?=
- =?utf-8?B?cjFrMFNxWWJPNEZLMFZ4cmRzeC9YVXN6SXAvWFlSeHl4Q2Z6cnBXbWY3RXZU?=
- =?utf-8?Q?hfuG64VcprR6WNR3AoY7QKRoELfMUz5I9Lk+qaJ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f130b86-2f2b-4289-9e36-08d963deb7af
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5221.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2021 13:30:46.7933
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N8hF636Kko5E5awL4utZAAnAsHYUJ8Xk+OiOcjEEkkOPM6jQoYTv0V+JT3OSFZsDActObVEyU8+GN5p2WRrXMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5505
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/19/21 11:21 PM, hch@lst.de wrote:
-> On Thu, Aug 19, 2021 at 06:14:51PM +0000, Michael Kelley wrote:
->>> +	if (!pfns)
->>> +		return NULL;
->>> +
->>> +	for (i = 0; i < size / HV_HYP_PAGE_SIZE; i++)
->>> +		pfns[i] = virt_to_hvpfn(buf + i * HV_HYP_PAGE_SIZE)
->>> +			+ (ms_hyperv.shared_gpa_boundary >> HV_HYP_PAGE_SHIFT);
->>> +
->>> +	vaddr = vmap_pfn(pfns, size / HV_HYP_PAGE_SIZE, PAGE_KERNEL_IO);
->>> +	kfree(pfns);
->>> +
->>> +	return vaddr;
->>> +}
+
+
+On 8/20/2021 2:17 AM, Michael Kelley wrote:
+> From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, August 9, 2021 10:56 AM
 >>
->> This function appears to be a duplicate of hv_map_memory() in Patch 11 of this
->> series.  Is it possible to structure things so there is only one implementation?  In
 > 
-> So right now it it identical, but there is an important difference:
-> the swiotlb memory is physically contiguous to start with, so we can
-> do the simple remap using vmap_range as suggested in the last mail.
-> The cases here are pretty weird in that netvsc_remap_buf is called right
-> after vzalloc.  That is we create _two_ mappings in vmalloc space right
-> after another, where the original one is just used for establishing the
-> "GPADL handle" and freeing the memory.  In other words, the obvious thing
-> to do here would be to use a vmalloc variant that allows to take the
-> shared_gpa_boundary into account when setting up the PTEs.
+> Subject line tag should be "scsi: storvsc:"
 > 
-> And here is somthing I need help from the x86 experts:  does the CPU
-> actually care about this shared_gpa_boundary?  Or does it just matter
-> for the generated DMA address?  Does somehow have a good pointer to
-> how this mechanism works?
+>> In Isolation VM, all shared memory with host needs to mark visible
+>> to host via hvcall. vmbus_establish_gpadl() has already done it for
+>> storvsc rx/tx ring buffer. The page buffer used by vmbus_sendpacket_
+>> mpb_desc() still need to handle. Use DMA API to map/umap these
+> 
+> s/need to handle/needs to be handled/
+> 
+>> memory during sending/receiving packet and Hyper-V DMA ops callback
+>> will use swiotlb function to allocate bounce buffer and copy data
+>> from/to bounce buffer.
+>>
+>> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>> ---
+>>   drivers/scsi/storvsc_drv.c | 68 +++++++++++++++++++++++++++++++++++---
+>>   1 file changed, 63 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+>> index 328bb961c281..78320719bdd8 100644
+>> --- a/drivers/scsi/storvsc_drv.c
+>> +++ b/drivers/scsi/storvsc_drv.c
+>> @@ -21,6 +21,8 @@
+>>   #include <linux/device.h>
+>>   #include <linux/hyperv.h>
+>>   #include <linux/blkdev.h>
+>> +#include <linux/io.h>
+>> +#include <linux/dma-mapping.h>
+>>   #include <scsi/scsi.h>
+>>   #include <scsi/scsi_cmnd.h>
+>>   #include <scsi/scsi_host.h>
+>> @@ -427,6 +429,8 @@ struct storvsc_cmd_request {
+>>   	u32 payload_sz;
+>>
+>>   	struct vstor_packet vstor_packet;
+>> +	u32 hvpg_count;
+> 
+> This count is really the number of entries in the dma_range
+> array, right?  If so, perhaps "dma_range_count" would be
+> a better name so that it is more tightly associated.
 
-The CPU does care. Here's some info:
+Yes, will update.
 
-APM Volume 2, Section 15.36.8:
-https://www.amd.com/system/files/TechDocs/24593.pdf
+> 
+>> +	struct hv_dma_range *dma_range;
+>>   };
+>>
+>>
+>> @@ -509,6 +513,14 @@ struct storvsc_scan_work {
+>>   	u8 tgt_id;
+>>   };
+>>
+>> +#define storvsc_dma_map(dev, page, offset, size, dir) \
+>> +	dma_map_page(dev, page, offset, size, dir)
+>> +
+>> +#define storvsc_dma_unmap(dev, dma_range, dir)		\
+>> +		dma_unmap_page(dev, dma_range.dma,	\
+>> +			       dma_range.mapping_size,	\
+>> +			       dir ? DMA_FROM_DEVICE : DMA_TO_DEVICE)
+>> +
+> 
+> Each of these macros is used only once.  IMHO, they don't
+> add a lot of value.  Just coding dma_map/unmap_page()
+> inline would be fine and eliminate these lines of code.
 
-AMD SEV-SNP Whitepaper, Virtual Machine Privilege Levels (~page 14):
-https://www.amd.com/system/files/TechDocs/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more.pdf
+OK. Will update.
 
-Thanks,
-Tom
+> 
+>>   static void storvsc_device_scan(struct work_struct *work)
+>>   {
+>>   	struct storvsc_scan_work *wrk;
+>> @@ -1260,6 +1272,7 @@ static void storvsc_on_channel_callback(void *context)
+>>   	struct hv_device *device;
+>>   	struct storvsc_device *stor_device;
+>>   	struct Scsi_Host *shost;
+>> +	int i;
+>>
+>>   	if (channel->primary_channel != NULL)
+>>   		device = channel->primary_channel->device_obj;
+>> @@ -1314,6 +1327,15 @@ static void storvsc_on_channel_callback(void *context)
+>>   				request = (struct storvsc_cmd_request *)scsi_cmd_priv(scmnd);
+>>   			}
+>>
+>> +			if (request->dma_range) {
+>> +				for (i = 0; i < request->hvpg_count; i++)
+>> +					storvsc_dma_unmap(&device->device,
+>> +						request->dma_range[i],
+>> +						request->vstor_packet.vm_srb.data_in == READ_TYPE);
+> 
+> I think you can directly get the DMA direction as request->cmd->sc_data_direction.
+> 
+>> +
+>> +				kfree(request->dma_range);
+>> +			}
+>> +
+>>   			storvsc_on_receive(stor_device, packet, request);
+>>   			continue;
+>>   		}
+>> @@ -1810,7 +1832,9 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>>   		unsigned int hvpgoff, hvpfns_to_add;
+>>   		unsigned long offset_in_hvpg = offset_in_hvpage(sgl->offset);
+>>   		unsigned int hvpg_count = HVPFN_UP(offset_in_hvpg + length);
+>> +		dma_addr_t dma;
+>>   		u64 hvpfn;
+>> +		u32 size;
+>>
+>>   		if (hvpg_count > MAX_PAGE_BUFFER_COUNT) {
+>>
+>> @@ -1824,6 +1848,13 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>>   		payload->range.len = length;
+>>   		payload->range.offset = offset_in_hvpg;
+>>
+>> +		cmd_request->dma_range = kcalloc(hvpg_count,
+>> +				 sizeof(*cmd_request->dma_range),
+>> +				 GFP_ATOMIC);
+> 
+> With this patch, it appears that storvsc_queuecommand() is always
+> doing bounce buffering, even when running in a non-isolated VM.
 
+In the non-isolated VM, SWIOTLB_FORCE mode isn't enabled and so
+the swiotlb bounce buffer will not work.
+
+> The dma_range is always allocated, and the inner loop below does
+> the dma mapping for every I/O page.  The corresponding code in
+> storvsc_on_channel_callback() that does the dma unmap allows for
+> the dma_range to be NULL, but that never happens.
+
+Yes, dma mapping function will return PA directly in non-isolated VM.
+
+> 
+>> +		if (!cmd_request->dma_range) {
+>> +			ret = -ENOMEM;
+> 
+> The other memory allocation failure in this function returns
+> SCSI_MLQUEUE_DEVICE_BUSY.   It may be debatable as to whether
+> that's the best approach, but that's a topic for a different patch.  I
+> would suggest being consistent and using the same return code
+> here.
+
+OK. I will keep to return SCSI_MLQUEUE_DEVICE_BUSY here.
+
+> 
+>> +			goto free_payload;
+>> +		}
+>>
+>>   		for (i = 0; sgl != NULL; sgl = sg_next(sgl)) {
+>>   			/*
+>> @@ -1847,9 +1878,29 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>>   			 * last sgl should be reached at the same time that
+>>   			 * the PFN array is filled.
+>>   			 */
+>> -			while (hvpfns_to_add--)
+>> -				payload->range.pfn_array[i++] =	hvpfn++;
+>> +			while (hvpfns_to_add--) {
+>> +				size = min(HV_HYP_PAGE_SIZE - offset_in_hvpg,
+>> +					   (unsigned long)length);
+>> +				dma = storvsc_dma_map(&dev->device, pfn_to_page(hvpfn++),
+>> +						      offset_in_hvpg, size,
+>> +						      scmnd->sc_data_direction);
+>> +				if (dma_mapping_error(&dev->device, dma)) {
+>> +					ret = -ENOMEM;
+> 
+> The typical error from dma_map_page() will be running out of
+> bounce buffer memory.   This is a transient condition that should be
+> retried at the higher levels.  So make sure to return an error code
+> that indicates the I/O should be resubmitted.
+
+OK. It looks like error code should be SCSI_MLQUEUE_DEVICE_BUSY here.
+
+> 
+>> +					goto free_dma_range;
+>> +				}
+>> +
+>> +				if (offset_in_hvpg) {
+>> +					payload->range.offset = dma & ~HV_HYP_PAGE_MASK;
+>> +					offset_in_hvpg = 0;
+>> +				}
+> 
+> I'm not clear on why payload->range.offset needs to be set again.
+> Even after the dma mapping is done, doesn't the offset in the first
+> page have to be the same?  If it wasn't the same, Hyper-V wouldn't
+> be able to process the PFN list correctly.  In fact, couldn't the above
+> code just always set offset_in_hvpg = 0?
+
+The offset will be changed. The swiotlb bounce buffer is allocated with 
+IO_TLB_SIZE(2K) as unit. So the offset here may be changed.
+
+> 
+>> +
+>> +				cmd_request->dma_range[i].dma = dma;
+>> +				cmd_request->dma_range[i].mapping_size = size;
+>> +				payload->range.pfn_array[i++] = dma >> HV_HYP_PAGE_SHIFT;
+>> +				length -= size;
+>> +			}
+>>   		}
+>> +		cmd_request->hvpg_count = hvpg_count;
+> 
+> This line just saves the size of the dma_range array.  Could
+> it be moved up with the code that allocates the dma_range
+> array?  To me, it would make more sense to have all that
+> code together in one place.
+
+Sure. Will update.
+
+> 
+>>   	}
+> 
+> The whole approach here is to do dma remapping on each individual page
+> of the I/O buffer.  But wouldn't it be possible to use dma_map_sg() to map
+> each scatterlist entry as a unit?  Each scatterlist entry describes a range of
+> physically contiguous memory.  After dma_map_sg(), the resulting dma
+> address must also refer to a physically contiguous range in the swiotlb
+> bounce buffer memory.   So at the top of the "for" loop over the scatterlist
+> entries, do dma_map_sg() if we're in an isolated VM.  Then compute the
+> hvpfn value based on the dma address instead of sg_page().  But everything
+> else is the same, and the inner loop for populating the pfn_arry is unmodified.
+> Furthermore, the dma_range array that you've added is not needed, since
+> scatterlist entries already have a dma_address field for saving the mapped
+> address, and dma_unmap_sg() uses that field.
+
+I don't use dma_map_sg() here in order to avoid introducing one more 
+loop(e,g dma_map_sg()). We already have a loop to populate 
+cmd_request->dma_range[] and so do the dma map in the same loop.
+
+> 
+> One thing:  There's a maximum swiotlb mapping size, which I think works
+> out to be 256 Kbytes.  See swiotlb_max_mapping_size().  We need to make
+> sure that we don't get a scatterlist entry bigger than this size.  But I think
+> this already happens because you set the device->dma_mask field in
+> Patch 11 of this series.  __scsi_init_queue checks for this setting and
+> sets max_sectors to limits transfers to the max mapping size.
+
+I will double check.
+
+> 
+>>
+>>   	cmd_request->payload = payload;
+>> @@ -1860,13 +1911,20 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>>   	put_cpu();
+>>
+>>   	if (ret == -EAGAIN) {
+>> -		if (payload_sz > sizeof(cmd_request->mpb))
+>> -			kfree(payload);
+>>   		/* no more space */
+>> -		return SCSI_MLQUEUE_DEVICE_BUSY;
+>> +		ret = SCSI_MLQUEUE_DEVICE_BUSY;
+>> +		goto free_dma_range;
+>>   	}
+>>
+>>   	return 0;
+>> +
+>> +free_dma_range:
+>> +	kfree(cmd_request->dma_range);
+>> +
+>> +free_payload:
+>> +	if (payload_sz > sizeof(cmd_request->mpb))
+>> +		kfree(payload);
+>> +	return ret;
+>>   }
+>>
+>>   static struct scsi_host_template scsi_driver = {
+>> --
+>> 2.25.1
 > 
