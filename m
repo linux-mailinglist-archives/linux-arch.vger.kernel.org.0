@@ -2,189 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 208D23F25E5
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 06:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E3B3F27FC
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Aug 2021 09:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbhHTEdV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Aug 2021 00:33:21 -0400
-Received: from verein.lst.de ([213.95.11.211]:39666 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229457AbhHTEdU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 20 Aug 2021 00:33:20 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 0B8C66736F; Fri, 20 Aug 2021 06:32:38 +0200 (CEST)
-Date:   Fri, 20 Aug 2021 06:32:37 +0200
-From:   "hch@lst.de" <hch@lst.de>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     Tianyu Lan <ltykernel@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "martin.b.radev@gmail.com" <martin.b.radev@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "saravanand@fb.com" <saravanand@fb.com>,
-        "krish.sadhukhan@oracle.com" <krish.sadhukhan@oracle.com>,
-        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>
-Subject: Re: [PATCH V3 13/13] HV/Storvsc: Add Isolation VM support for
- storvsc driver
-Message-ID: <20210820043237.GC26450@lst.de>
-References: <20210809175620.720923-1-ltykernel@gmail.com> <20210809175620.720923-14-ltykernel@gmail.com> <MWHPR21MB1593EEF30FFD5C60ED744985D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
+        id S229847AbhHTH40 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Aug 2021 03:56:26 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:52709 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229780AbhHTH4Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Aug 2021 03:56:25 -0400
+Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M89bP-1mBmiX3wPr-005Ji4 for <linux-arch@vger.kernel.org>; Fri, 20 Aug 2021
+ 09:55:46 +0200
+Received: by mail-wm1-f49.google.com with SMTP id a201-20020a1c7fd2000000b002e6d33447f9so6651334wmd.0
+        for <linux-arch@vger.kernel.org>; Fri, 20 Aug 2021 00:55:46 -0700 (PDT)
+X-Gm-Message-State: AOAM530akxes7GoDXExzPTOumV9Ocl9sYNppbybRK5OEZ4kOrqPzU381
+        m+swkzpw9z2Kp20J86yFxD/EUt1PCjPAq6GpDTM=
+X-Google-Smtp-Source: ABdhPJwDP9Dzfkcnaexibgq//WhgoLjd+e+stMTdponb+VM8J/vewKheXfer3u7cfvZmm6ZT/OlE7mpe4RkGXD6vgqQ=
+X-Received: by 2002:a05:600c:510a:: with SMTP id o10mr2495130wms.84.1629446146649;
+ Fri, 20 Aug 2021 00:55:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR21MB1593EEF30FFD5C60ED744985D7C09@MWHPR21MB1593.namprd21.prod.outlook.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-5-chenhuacai@loongson.cn> <CAK8P3a357Xgs7mdsP-NCmu5ukVqMHtV1Andte6vO1mEr2qoqbQ@mail.gmail.com>
+ <CAAhV-H5byhzBLbw3ASk=-8Xvkws8SS4eS_0Q5EyhXuzUdM1=sQ@mail.gmail.com>
+ <CAK8P3a2bq3p25dfhUEiTe57-i5SKwXJAEZ18=tpbXijqMrDpYQ@mail.gmail.com>
+ <CAAhV-H45GFoFz1csEJigCN_QiCvq68__0BXrmDcsQFK6Nr17Aw@mail.gmail.com>
+ <CAK8P3a15rj_vH2FN12+UVZ=YfPDTEJ_cN0PoNfyYFSz8KSOvzg@mail.gmail.com>
+ <CAAhV-H5r7HBhepc-N_Qmr=Vdy-5nHg-0ZvFK-nVY2eFzYqpR5A@mail.gmail.com>
+ <CAK8P3a1vMCHihjnu2wZsz0_JXhXr_pg0mN_x-b1X754BptReeA@mail.gmail.com>
+ <CAAhV-H664mY-vQubEMX0yHdwHfH9kDrp6W=zHJvTE+yi31GpyQ@mail.gmail.com>
+ <CAK8P3a0KLjGrfRnKQxCvULdL3PpMWCyjpx-tzcW1W5qqfiMbMw@mail.gmail.com>
+ <CAAhV-H6rPc1qyoE6FRpUQs1GS_K+xASHu_q5o-yT13eu7DKzVQ@mail.gmail.com>
+ <CAK8P3a1LMY+KschuMfLoXB1qXMcTLVWeP+s41sCfQMFdRujQjQ@mail.gmail.com> <CAAhV-H64k25rVqGrYJ4wZxQEQ0jp=TRcUZA+Co8JoL1epBBwVg@mail.gmail.com>
+In-Reply-To: <CAAhV-H64k25rVqGrYJ4wZxQEQ0jp=TRcUZA+Co8JoL1epBBwVg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 20 Aug 2021 09:55:30 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0HZGv-uL=QOGkVxsRUEre49j+wZ1L4TtF0MJx-4qKBaQ@mail.gmail.com>
+Message-ID: <CAK8P3a0HZGv-uL=QOGkVxsRUEre49j+wZ1L4TtF0MJx-4qKBaQ@mail.gmail.com>
+Subject: Re: [PATCH 04/19] LoongArch: Add common headers
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:13rjwP85uu+RIZq5G2FszklT8HONc0ofB2mbw/Fic0Zu7pfo6lk
+ JFMUT5lfdMiyThE6ES/7GAuxW5WVY4iSbxRHi9syMw/Xdx3AzrV4NYDH6bJeGUpgaI95mCC
+ H6JAMt4nCFC1QTy0JyxA/r1KT5wnEnxAd1pjJZNFjVQlWrEO8aaw7GhjGvnXG+fgasBcfDh
+ tRroMuitKY0+VGHUvAFKw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1B/zQJh5sDc=:H4psXdtk81P7Z0FJPznJTV
+ J6bU7CB/OEHFH55XiqqJ/VXqS5voF5Uew3hOwfehoZ07DKwgsJtAHF4jMXVIr2Ga3PJC+oykU
+ L/eyOXuygIrJAOCFwg60vd52JKF3+ct375Ed0ZK6oyJmseAmrH8SRH3JDHcT2nSSoGLhXhsTm
+ LHlhCfISsifgsHT/P/S1tf8ZTuMBD+DnVNN16rBDMs2quxShVyLifNrBkg/14GdhH1URG6Qkh
+ yljmxWCLCP14ZCnpuc5/1P6pg1y5jTq4ueGIbJtudj9mgOWCtqQu4MphMQROIPjxh8LTN884v
+ BFU9HdkNVvto4pxBKdgSJOQbbT51VQPrY36urqsvnTTGJtWGOWWx4Le+aB2qFS/KT/FsB0Ahf
+ FuTXlhr3Ugj9jA7GqojYzX+pC2ANNp17nXxyHFbpMkcCBtnmiAAJMXkDyFbtdjMjePOZDccMH
+ 2RF9SU98HalXZhRv3XLmP/MWi5YeusRZEm6zaon6XgW35Bi+Eh4bgOuUj5rEhfdeN3/lFDugn
+ j3OKPkUjl32KyQNQGt9U1y59/xkMHZG4UUUslpMpO89BzRbUXZzFwcfOcylHm9tPKUJu4r4mG
+ Yk2OpOUUdnEDxxmMGU75uirhm458cqVxG5fM1wOxb6XrnhQjxu3FA5fQg/yzFIvfzAJrjusDn
+ SyhSeJ9I0LIGn9rzJ6NIaO969drTg7GKm29oZPBKurKcCKm5c81sFZy4lkGVCPlmm4nGhiW9g
+ eqhgRbUiHUB28aKdFg2TWFH02ty1C0aRVrAlG1Y3QUGSeA5y3j+K5coHPMVEB+OfKnZKizBPa
+ 1hNqozzUJloPcXGABh3sCYh5270CJqkyAdOQO7PFMP0hQJtOWkCLrUas3VeXOvIeaYfxmp0
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 19, 2021 at 06:17:40PM +0000, Michael Kelley wrote:
-> > +#define storvsc_dma_map(dev, page, offset, size, dir) \
-> > +	dma_map_page(dev, page, offset, size, dir)
-> > +
-> > +#define storvsc_dma_unmap(dev, dma_range, dir)		\
-> > +		dma_unmap_page(dev, dma_range.dma,	\
-> > +			       dma_range.mapping_size,	\
-> > +			       dir ? DMA_FROM_DEVICE : DMA_TO_DEVICE)
-> > +
-> 
-> Each of these macros is used only once.  IMHO, they don't
-> add a lot of value.  Just coding dma_map/unmap_page()
-> inline would be fine and eliminate these lines of code.
+On Fri, Aug 20, 2021 at 6:00 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> On Wed, Aug 18, 2021 at 5:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > How common are Loongarch64 CPUs that limit the virtual address space
+> > > > to 40 bits instead of the full 48 bits? What is the purpose of limiting the
+> > > > CPU this way?
+> > > We have some low-end 64bits CPU whose VA is 40bits, this can reduce
+> > > the internal address bus width, so save some hardware cost and
+> > > complexity.
+> >
+> > Ok. So I could understand making CONFIG_VA_BITS_40 hardcode the
+> > VA size at compile time, but if you always support the fallback to any
+> > size at runtime, just allow using the high addresses.
+> Define a larger VA_BITS and fallback to a smaller one (TASKSIZE64) if
+> hardware doesn't support it? If so, there will be a problem: we should
+> define a 4-level page table, but the fallback only needs a 2-level or
+> 3-level page table.
 
-Yes, I had the same thought when looking over the code.  Especially
-as macros tend to further obsfucate the code (compared to actual helper
-functions).
+The number of levels is usually hardcoded based on the configuration,
+though I think at least x86 and s390 have code to do this dynamically,
+either depending on the CPU capability, or the largest address used
+in a task.
 
-> > +				for (i = 0; i < request->hvpg_count; i++)
-> > +					storvsc_dma_unmap(&device->device,
-> > +						request->dma_range[i],
-> > +						request->vstor_packet.vm_srb.data_in == READ_TYPE);
-> 
-> I think you can directly get the DMA direction as request->cmd->sc_data_direction.
+The easiest example to replicate would be arch/arm64, which lets you
+pick the page size first, and then offers different VA_BITS options that
+depend on this page size.
 
-Yes.
+Another method is to have a single 'choice' statement in Kconfig that
+simply enumerates all the sensible options, such as
 
-> > 
-> > @@ -1824,6 +1848,13 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
-> >  		payload->range.len = length;
-> >  		payload->range.offset = offset_in_hvpg;
-> > 
-> > +		cmd_request->dma_range = kcalloc(hvpg_count,
-> > +				 sizeof(*cmd_request->dma_range),
-> > +				 GFP_ATOMIC);
-> 
-> With this patch, it appears that storvsc_queuecommand() is always
-> doing bounce buffering, even when running in a non-isolated VM.
-> The dma_range is always allocated, and the inner loop below does
-> the dma mapping for every I/O page.  The corresponding code in
-> storvsc_on_channel_callback() that does the dma unmap allows for
-> the dma_range to be NULL, but that never happens.
+4K-3level (39 bits)
+4K-4level (48 bits)
+4K-5level (56 bits)
+16K-2level (36 bits)
+16K-3level (47 bits)
+64K-2level (42 bits)
+64K-3level (55 bits)
 
-Maybe I'm missing something in the hyperv code, but I don't think
-dma_map_page would bounce buffer for the non-isolated case.  It
-will just return the physical address.
+You might prefer to offer the order-1 PGD versions of these to get
+to 40/48/56 bits instead of 39/47/55, or just offer both alternatives.
 
-> > +		if (!cmd_request->dma_range) {
-> > +			ret = -ENOMEM;
-> 
-> The other memory allocation failure in this function returns
-> SCSI_MLQUEUE_DEVICE_BUSY.   It may be debatable as to whether
-> that's the best approach, but that's a topic for a different patch.  I
-> would suggest being consistent and using the same return code
-> here.
-
-Independent of if SCSI_MLQUEUE_DEVICE_BUSY is good (it it a common
-pattern in SCSI drivers), ->queuecommand can't return normal
-negative errnos.  It must return the SCSI_MLQUEUE_* codes or 0.
-We should probably change the return type of the method definition
-to a suitable enum to make this more clear.
-
-> > +				if (offset_in_hvpg) {
-> > +					payload->range.offset = dma & ~HV_HYP_PAGE_MASK;
-> > +					offset_in_hvpg = 0;
-> > +				}
-> 
-> I'm not clear on why payload->range.offset needs to be set again.
-> Even after the dma mapping is done, doesn't the offset in the first
-> page have to be the same?  If it wasn't the same, Hyper-V wouldn't
-> be able to process the PFN list correctly.  In fact, couldn't the above
-> code just always set offset_in_hvpg = 0?
-
-Careful.  DMA mapping is supposed to keep the offset in the page, but
-for that the DMA mapping code needs to know what the device considers a
-"page".  For that the driver needs to set the min_align_mask field in
-struct device_dma_parameters.
-
-> 
-> The whole approach here is to do dma remapping on each individual page
-> of the I/O buffer.  But wouldn't it be possible to use dma_map_sg() to map
-> each scatterlist entry as a unit?  Each scatterlist entry describes a range of
-> physically contiguous memory.  After dma_map_sg(), the resulting dma
-> address must also refer to a physically contiguous range in the swiotlb
-> bounce buffer memory.   So at the top of the "for" loop over the scatterlist
-> entries, do dma_map_sg() if we're in an isolated VM.  Then compute the
-> hvpfn value based on the dma address instead of sg_page().  But everything
-> else is the same, and the inner loop for populating the pfn_arry is unmodified.
-> Furthermore, the dma_range array that you've added is not needed, since
-> scatterlist entries already have a dma_address field for saving the mapped
-> address, and dma_unmap_sg() uses that field.
-
-Yes, I think dma_map_sg is the right thing to use here, probably even
-for the non-isolated case so that we can get the hv drivers out of their
-little corner and into being more like a normal kernel driver.  That
-is, use the scsi_dma_map/scsi_dma_unmap helpers, and then iterate over
-the dma addresses one page at a time using for_each_sg_dma_page.
-
-> 
-> One thing:  There's a maximum swiotlb mapping size, which I think works
-> out to be 256 Kbytes.  See swiotlb_max_mapping_size().  We need to make
-> sure that we don't get a scatterlist entry bigger than this size.  But I think
-> this already happens because you set the device->dma_mask field in
-> Patch 11 of this series.  __scsi_init_queue checks for this setting and
-> sets max_sectors to limits transfers to the max mapping size.
-
-Indeed.
+       Arnd
