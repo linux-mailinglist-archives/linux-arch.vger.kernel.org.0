@@ -2,127 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8083F397D
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Aug 2021 10:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2BE3F3B6A
+	for <lists+linux-arch@lfdr.de>; Sat, 21 Aug 2021 18:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbhHUIRy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 Aug 2021 04:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbhHUIRs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Aug 2021 04:17:48 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C641C061575
-        for <linux-arch@vger.kernel.org>; Sat, 21 Aug 2021 01:17:09 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id i7so15295614iow.1
-        for <linux-arch@vger.kernel.org>; Sat, 21 Aug 2021 01:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7Cs7sjRSMZhIH3zoMGmleQcDUMRVb41/98HuNbOapDA=;
-        b=gXHdJwj/2CEW4yAdYMroDCsdSXlE/A0qgoBOB7UQgpXFBoIwr0VEfjLZQtXFJdlh1o
-         k1u9YeJugeKce3G485+mtom5IHUpWPqOFOBXXBr97EU7j73F7wNIekle3KHJQ5X+ze8E
-         S2xMaGvDtdEI5Z3Gy5dLBUchI71XAbYENjBj2zAZqFU7VnPeHpPAqcJWCCWPv1PjnnTj
-         llwZlSU033wvkd9Y/IKbLyu34fGoLj6oAELUIoR5bFJNSNUUtmVf6w4oQHzUwXUsUeSg
-         gw8cPzPzhQ0Nee1kWDO+c8cOMCVFa2sipk61mwr0+O0QXACzVHMz8axoEzms7M7X4mFq
-         wP9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7Cs7sjRSMZhIH3zoMGmleQcDUMRVb41/98HuNbOapDA=;
-        b=srfiH5bRCibh97phfKlJAhcb1LsIg+z6e7xaRkjO2Y7lmg+yFmPh8BNXQE//c4p1GW
-         Y2uLperpIZzE8xlPRThpr/XSi+Ajnv3CS3LNjQUCLX5Z+3aM4xM6LLTtdsgQk7j4GaWi
-         1gKwwmkYu2hSOkhojOLacXpXK4CKlLU+ETFh5pStrJj9usPthHHG8OqaxqU+LfOUlra3
-         Ktwkeu9hHATN6ldLYL3+Y6GZssySQRviDTPqHnMDPIku36Mpn40y8IsWTVikhbWB6yz+
-         lgtZx/Xg4LMNs6xSdIOTCtV+d/0JlUpUqbLz/20iKwSMpn0nyZNIDom6OwhbsPph/Tph
-         0LHg==
-X-Gm-Message-State: AOAM5300o4QRdrEZiDKzoZwosUGtijqnGo2VjwUcqZYJGyuGLdj8BVPo
-        3DRxJ6/2Q6S/zSKN1M5MxvsBNGVP9frrAD0t5TQ=
-X-Google-Smtp-Source: ABdhPJxXgnjCoIW95PhkxVQnAtbdbp7DZne7KQuXCEI9RC7iWhQnlH1SFW7NpKWnOlyszO1U5Lt6c9MaQFif460En6Y=
-X-Received: by 2002:a5d:97d0:: with SMTP id k16mr19504802ios.38.1629533828547;
- Sat, 21 Aug 2021 01:17:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
- <20210706041820.1536502-5-chenhuacai@loongson.cn> <CAK8P3a357Xgs7mdsP-NCmu5ukVqMHtV1Andte6vO1mEr2qoqbQ@mail.gmail.com>
- <CAAhV-H5byhzBLbw3ASk=-8Xvkws8SS4eS_0Q5EyhXuzUdM1=sQ@mail.gmail.com>
- <CAK8P3a2bq3p25dfhUEiTe57-i5SKwXJAEZ18=tpbXijqMrDpYQ@mail.gmail.com>
- <CAAhV-H45GFoFz1csEJigCN_QiCvq68__0BXrmDcsQFK6Nr17Aw@mail.gmail.com>
- <CAK8P3a15rj_vH2FN12+UVZ=YfPDTEJ_cN0PoNfyYFSz8KSOvzg@mail.gmail.com>
- <CAAhV-H5r7HBhepc-N_Qmr=Vdy-5nHg-0ZvFK-nVY2eFzYqpR5A@mail.gmail.com>
- <CAK8P3a1vMCHihjnu2wZsz0_JXhXr_pg0mN_x-b1X754BptReeA@mail.gmail.com>
- <CAAhV-H664mY-vQubEMX0yHdwHfH9kDrp6W=zHJvTE+yi31GpyQ@mail.gmail.com>
- <CAK8P3a0KLjGrfRnKQxCvULdL3PpMWCyjpx-tzcW1W5qqfiMbMw@mail.gmail.com>
- <CAAhV-H6rPc1qyoE6FRpUQs1GS_K+xASHu_q5o-yT13eu7DKzVQ@mail.gmail.com>
- <CAK8P3a1LMY+KschuMfLoXB1qXMcTLVWeP+s41sCfQMFdRujQjQ@mail.gmail.com>
- <CAAhV-H64k25rVqGrYJ4wZxQEQ0jp=TRcUZA+Co8JoL1epBBwVg@mail.gmail.com> <CAK8P3a0HZGv-uL=QOGkVxsRUEre49j+wZ1L4TtF0MJx-4qKBaQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0HZGv-uL=QOGkVxsRUEre49j+wZ1L4TtF0MJx-4qKBaQ@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sat, 21 Aug 2021 16:16:56 +0800
-Message-ID: <CAAhV-H5wS6TeioW3wKt0ndpxtfceZrkM_L7mH+3U4Uya8CGSxg@mail.gmail.com>
-Subject: Re: [PATCH 04/19] LoongArch: Add common headers
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
+        id S229669AbhHUQ1g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 21 Aug 2021 12:27:36 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:40166 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229571AbhHUQ1g (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 21 Aug 2021 12:27:36 -0400
+Received: from zn.tnic (p200300ec2f24ae00bda189edbc359330.dip0.t-ipconnect.de [IPv6:2003:ec:2f24:ae00:bda1:89ed:bc35:9330])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 34D691EC0236;
+        Sat, 21 Aug 2021 18:26:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1629563211;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=0X9mARlIoI2YRPMAIxP7vYnoH77rVjJv4iOG9yPzbYo=;
+        b=beFqjaCUR9g7x13v6kfDTVD7cJJ5lUQ02pYgQqgQQW+Dx4bC8R5jG/1T5ZRYq6EDDb5+xa
+        bw0pZXorCmCVKLFYYdtk53S2JVodDz0MBX3kC+g2G6IQ6GLmr+H4J/r4sw2B7gBfwwqSDs
+        rfWLAA2/wQdC4xwNfxLmtKRs7WN/+Sw=
+Date:   Sat, 21 Aug 2021 18:27:29 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Ingo Molnar <mingo@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v28 09/32] x86/mm: Introduce _PAGE_COW
+Message-ID: <YSEpcQG7WEa8hl9c@zn.tnic>
+References: <YRwT7XX36fQ2GWXn@zn.tnic>
+ <1A27F5DF-477B-45B7-AD33-CC68D9B7CB89@amacapital.net>
+ <YRwbD1hCYFXlYysI@zn.tnic>
+ <490345b6-3e3d-4692-8162-85dcb71434c9@www.fastmail.com>
+ <YRwjnmT9O8jYmL/9@zn.tnic>
+ <9a2b91ea-6a07-b7c8-24ac-3a15f62fbb7c@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9a2b91ea-6a07-b7c8-24ac-3a15f62fbb7c@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
+On Wed, Aug 18, 2021 at 09:38:30AM -0700, Yu, Yu-cheng wrote:
+> We can visualize the type of a mm area by looking at vma->vm_flags, e.g.
 
-On Fri, Aug 20, 2021 at 3:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Aug 20, 2021 at 6:00 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > On Wed, Aug 18, 2021 at 5:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > > How common are Loongarch64 CPUs that limit the virtual address space
-> > > > > to 40 bits instead of the full 48 bits? What is the purpose of limiting the
-> > > > > CPU this way?
-> > > > We have some low-end 64bits CPU whose VA is 40bits, this can reduce
-> > > > the internal address bus width, so save some hardware cost and
-> > > > complexity.
-> > >
-> > > Ok. So I could understand making CONFIG_VA_BITS_40 hardcode the
-> > > VA size at compile time, but if you always support the fallback to any
-> > > size at runtime, just allow using the high addresses.
-> > Define a larger VA_BITS and fallback to a smaller one (TASKSIZE64) if
-> > hardware doesn't support it? If so, there will be a problem: we should
-> > define a 4-level page table, but the fallback only needs a 2-level or
-> > 3-level page table.
->
-> The number of levels is usually hardcoded based on the configuration,
-> though I think at least x86 and s390 have code to do this dynamically,
-> either depending on the CPU capability, or the largest address used
-> in a task.
->
-> The easiest example to replicate would be arch/arm64, which lets you
-> pick the page size first, and then offers different VA_BITS options that
-> depend on this page size.
->
-> Another method is to have a single 'choice' statement in Kconfig that
-> simply enumerates all the sensible options, such as
->
-> 4K-3level (39 bits)
-> 4K-4level (48 bits)
-> 4K-5level (56 bits)
-> 16K-2level (36 bits)
-> 16K-3level (47 bits)
-> 64K-2level (42 bits)
-> 64K-3level (55 bits)
->
-> You might prefer to offer the order-1 PGD versions of these to get
-> to 40/48/56 bits instead of 39/47/55, or just offer both alternatives.
-Use combination option is a good idea, thanks.
+visualize?
 
-Huacai
->
->        Arnd
+> maybe_mkwrite(), and PTE macros as lower-level operatives.  These two have
+> some relations but not one-to-one.  Note that a PTE in a writable area is
+> not always pte_write().
+> 
+> I have considered and implemented a shadow stack PTE either pte_write() or
+> not.  Making shadow stack as pte_write() results in less arch_* macros and
+> less confusion in copy-on-write code.  That is one more thing to consider.
+
+Ok, even though I'm still not 100% convinced by both amluto's and your
+arguments. Let's try it and see what happens...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
