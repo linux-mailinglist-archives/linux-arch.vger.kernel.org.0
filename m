@@ -2,186 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E38A3F367F
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Aug 2021 00:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8083F397D
+	for <lists+linux-arch@lfdr.de>; Sat, 21 Aug 2021 10:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbhHTWiO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Aug 2021 18:38:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45182 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229451AbhHTWiO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 20 Aug 2021 18:38:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4337E6103D;
-        Fri, 20 Aug 2021 22:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629499055;
-        bh=C8jz8Bv63e052+kWi1tzbvXuwOtkfdMKISfabY64RtY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=b+V/huH+0jWmkArd1seL+iNhzD4ysWWQ9Wp/b/XT8hv9QdhQKCZ4bklEbuTsUFi6O
-         ks8z/ZU6B5ZbtwKg1Pk0SRK/snSRADjJtCUYz588rdL4wTl+tjugOyOP/WF8U9BpEi
-         Iag150ytRBI+hnBASCbQ9A05qAT/m1FRUuaT+ImfLuPbcCh29+KzAoVUHNo0IHJmmH
-         PTwq6dqIJ43jEshblvbRRHLWilgXizjdHRFe2Hz3zKj3EFuLKMvoEU0zTiWjPnuIyE
-         HIV72x5kKh8h5/2DnyC7Owuv67FvMArXkeqw9Z9CoZgCxmloyPrilEsyqZHWXvDh/x
-         Et+I9bFTtIohQ==
-Date:   Fri, 20 Aug 2021 17:37:34 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3] PCI: Move pci_dev_is/assign_added() to pci.h
-Message-ID: <20210820223734.GA3366782@bjorn-Precision-5520>
+        id S233037AbhHUIRy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 21 Aug 2021 04:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232077AbhHUIRs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Aug 2021 04:17:48 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C641C061575
+        for <linux-arch@vger.kernel.org>; Sat, 21 Aug 2021 01:17:09 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id i7so15295614iow.1
+        for <linux-arch@vger.kernel.org>; Sat, 21 Aug 2021 01:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Cs7sjRSMZhIH3zoMGmleQcDUMRVb41/98HuNbOapDA=;
+        b=gXHdJwj/2CEW4yAdYMroDCsdSXlE/A0qgoBOB7UQgpXFBoIwr0VEfjLZQtXFJdlh1o
+         k1u9YeJugeKce3G485+mtom5IHUpWPqOFOBXXBr97EU7j73F7wNIekle3KHJQ5X+ze8E
+         S2xMaGvDtdEI5Z3Gy5dLBUchI71XAbYENjBj2zAZqFU7VnPeHpPAqcJWCCWPv1PjnnTj
+         llwZlSU033wvkd9Y/IKbLyu34fGoLj6oAELUIoR5bFJNSNUUtmVf6w4oQHzUwXUsUeSg
+         gw8cPzPzhQ0Nee1kWDO+c8cOMCVFa2sipk61mwr0+O0QXACzVHMz8axoEzms7M7X4mFq
+         wP9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Cs7sjRSMZhIH3zoMGmleQcDUMRVb41/98HuNbOapDA=;
+        b=srfiH5bRCibh97phfKlJAhcb1LsIg+z6e7xaRkjO2Y7lmg+yFmPh8BNXQE//c4p1GW
+         Y2uLperpIZzE8xlPRThpr/XSi+Ajnv3CS3LNjQUCLX5Z+3aM4xM6LLTtdsgQk7j4GaWi
+         1gKwwmkYu2hSOkhojOLacXpXK4CKlLU+ETFh5pStrJj9usPthHHG8OqaxqU+LfOUlra3
+         Ktwkeu9hHATN6ldLYL3+Y6GZssySQRviDTPqHnMDPIku36Mpn40y8IsWTVikhbWB6yz+
+         lgtZx/Xg4LMNs6xSdIOTCtV+d/0JlUpUqbLz/20iKwSMpn0nyZNIDom6OwhbsPph/Tph
+         0LHg==
+X-Gm-Message-State: AOAM5300o4QRdrEZiDKzoZwosUGtijqnGo2VjwUcqZYJGyuGLdj8BVPo
+        3DRxJ6/2Q6S/zSKN1M5MxvsBNGVP9frrAD0t5TQ=
+X-Google-Smtp-Source: ABdhPJxXgnjCoIW95PhkxVQnAtbdbp7DZne7KQuXCEI9RC7iWhQnlH1SFW7NpKWnOlyszO1U5Lt6c9MaQFif460En6Y=
+X-Received: by 2002:a5d:97d0:: with SMTP id k16mr19504802ios.38.1629533828547;
+ Sat, 21 Aug 2021 01:17:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210720150145.640727-1-schnelle@linux.ibm.com>
+References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
+ <20210706041820.1536502-5-chenhuacai@loongson.cn> <CAK8P3a357Xgs7mdsP-NCmu5ukVqMHtV1Andte6vO1mEr2qoqbQ@mail.gmail.com>
+ <CAAhV-H5byhzBLbw3ASk=-8Xvkws8SS4eS_0Q5EyhXuzUdM1=sQ@mail.gmail.com>
+ <CAK8P3a2bq3p25dfhUEiTe57-i5SKwXJAEZ18=tpbXijqMrDpYQ@mail.gmail.com>
+ <CAAhV-H45GFoFz1csEJigCN_QiCvq68__0BXrmDcsQFK6Nr17Aw@mail.gmail.com>
+ <CAK8P3a15rj_vH2FN12+UVZ=YfPDTEJ_cN0PoNfyYFSz8KSOvzg@mail.gmail.com>
+ <CAAhV-H5r7HBhepc-N_Qmr=Vdy-5nHg-0ZvFK-nVY2eFzYqpR5A@mail.gmail.com>
+ <CAK8P3a1vMCHihjnu2wZsz0_JXhXr_pg0mN_x-b1X754BptReeA@mail.gmail.com>
+ <CAAhV-H664mY-vQubEMX0yHdwHfH9kDrp6W=zHJvTE+yi31GpyQ@mail.gmail.com>
+ <CAK8P3a0KLjGrfRnKQxCvULdL3PpMWCyjpx-tzcW1W5qqfiMbMw@mail.gmail.com>
+ <CAAhV-H6rPc1qyoE6FRpUQs1GS_K+xASHu_q5o-yT13eu7DKzVQ@mail.gmail.com>
+ <CAK8P3a1LMY+KschuMfLoXB1qXMcTLVWeP+s41sCfQMFdRujQjQ@mail.gmail.com>
+ <CAAhV-H64k25rVqGrYJ4wZxQEQ0jp=TRcUZA+Co8JoL1epBBwVg@mail.gmail.com> <CAK8P3a0HZGv-uL=QOGkVxsRUEre49j+wZ1L4TtF0MJx-4qKBaQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a0HZGv-uL=QOGkVxsRUEre49j+wZ1L4TtF0MJx-4qKBaQ@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Sat, 21 Aug 2021 16:16:56 +0800
+Message-ID: <CAAhV-H5wS6TeioW3wKt0ndpxtfceZrkM_L7mH+3U4Uya8CGSxg@mail.gmail.com>
+Subject: Re: [PATCH 04/19] LoongArch: Add common headers
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 20, 2021 at 05:01:45PM +0200, Niklas Schnelle wrote:
-> The helper function pci_dev_is_added() from drivers/pci/pci.h is used in
-> PCI arch code of both s390 and powerpc leading to awkward relative
-> includes. Move it to the global include/linux/pci.h and get rid of these
-> includes just for that one function.
+Hi, Arnd,
 
-I agree the includes are awkward.
+On Fri, Aug 20, 2021 at 3:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Aug 20, 2021 at 6:00 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > On Wed, Aug 18, 2021 at 5:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > > How common are Loongarch64 CPUs that limit the virtual address space
+> > > > > to 40 bits instead of the full 48 bits? What is the purpose of limiting the
+> > > > > CPU this way?
+> > > > We have some low-end 64bits CPU whose VA is 40bits, this can reduce
+> > > > the internal address bus width, so save some hardware cost and
+> > > > complexity.
+> > >
+> > > Ok. So I could understand making CONFIG_VA_BITS_40 hardcode the
+> > > VA size at compile time, but if you always support the fallback to any
+> > > size at runtime, just allow using the high addresses.
+> > Define a larger VA_BITS and fallback to a smaller one (TASKSIZE64) if
+> > hardware doesn't support it? If so, there will be a problem: we should
+> > define a 4-level page table, but the fallback only needs a 2-level or
+> > 3-level page table.
+>
+> The number of levels is usually hardcoded based on the configuration,
+> though I think at least x86 and s390 have code to do this dynamically,
+> either depending on the CPU capability, or the largest address used
+> in a task.
+>
+> The easiest example to replicate would be arch/arm64, which lets you
+> pick the page size first, and then offers different VA_BITS options that
+> depend on this page size.
+>
+> Another method is to have a single 'choice' statement in Kconfig that
+> simply enumerates all the sensible options, such as
+>
+> 4K-3level (39 bits)
+> 4K-4level (48 bits)
+> 4K-5level (56 bits)
+> 16K-2level (36 bits)
+> 16K-3level (47 bits)
+> 64K-2level (42 bits)
+> 64K-3level (55 bits)
+>
+> You might prefer to offer the order-1 PGD versions of these to get
+> to 40/48/56 bits instead of 39/47/55, or just offer both alternatives.
+Use combination option is a good idea, thanks.
 
-But the arch code *using* pci_dev_is_added() seems awkward, too.
-
-AFAICS, in powerpc, pci_dev_is_added() is only used by
-pnv_pci_ioda_fixup_iov() and pseries_pci_fixup_iov_resources().  Those
-are only called from pcibios_add_device(), which is only called from
-pci_device_add().
-
-Is it even possible for pci_dev_is_added() to be true in that path?
-
-s390 uses pci_dev_is_added() in recover_store(), but I don't know what
-that is (looks like a sysfs file, but it's not documented) or why s390
-is the only arch that does this.
-
-Maybe we should make powerpc and s390 less special?
-
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> Since v1 (and bad v2):
-> - Fixed accidental removal of PCI_DPC_RECOVERED, PCI_DPC_RECOVERING
->   defines and also move these to include/linux/pci.h
-> 
->  arch/powerpc/platforms/powernv/pci-sriov.c |  3 ---
->  arch/powerpc/platforms/pseries/setup.c     |  1 -
->  arch/s390/pci/pci_sysfs.c                  |  2 --
->  drivers/pci/hotplug/acpiphp_glue.c         |  1 -
->  drivers/pci/pci.h                          | 15 ---------------
->  include/linux/pci.h                        | 15 +++++++++++++++
->  6 files changed, 15 insertions(+), 22 deletions(-)
-> 
-> diff --git a/arch/powerpc/platforms/powernv/pci-sriov.c b/arch/powerpc/platforms/powernv/pci-sriov.c
-> index 28aac933a439..2e0ca5451e85 100644
-> --- a/arch/powerpc/platforms/powernv/pci-sriov.c
-> +++ b/arch/powerpc/platforms/powernv/pci-sriov.c
-> @@ -9,9 +9,6 @@
->  
->  #include "pci.h"
->  
-> -/* for pci_dev_is_added() */
-> -#include "../../../../drivers/pci/pci.h"
-> -
->  /*
->   * The majority of the complexity in supporting SR-IOV on PowerNV comes from
->   * the need to put the MMIO space for each VF into a separate PE. Internally
-> diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platforms/pseries/setup.c
-> index 631a0d57b6cd..17585ec9f955 100644
-> --- a/arch/powerpc/platforms/pseries/setup.c
-> +++ b/arch/powerpc/platforms/pseries/setup.c
-> @@ -74,7 +74,6 @@
->  #include <asm/hvconsole.h>
->  
->  #include "pseries.h"
-> -#include "../../../../drivers/pci/pci.h"
->  
->  DEFINE_STATIC_KEY_FALSE(shared_processor);
->  EXPORT_SYMBOL_GPL(shared_processor);
-> diff --git a/arch/s390/pci/pci_sysfs.c b/arch/s390/pci/pci_sysfs.c
-> index 6e2450c2b9c1..8dbe54ef8f8e 100644
-> --- a/arch/s390/pci/pci_sysfs.c
-> +++ b/arch/s390/pci/pci_sysfs.c
-> @@ -13,8 +13,6 @@
->  #include <linux/stat.h>
->  #include <linux/pci.h>
->  
-> -#include "../../../drivers/pci/pci.h"
-> -
->  #include <asm/sclp.h>
->  
->  #define zpci_attr(name, fmt, member)					\
-> diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
-> index f031302ad401..4cb963f88183 100644
-> --- a/drivers/pci/hotplug/acpiphp_glue.c
-> +++ b/drivers/pci/hotplug/acpiphp_glue.c
-> @@ -38,7 +38,6 @@
->  #include <linux/slab.h>
->  #include <linux/acpi.h>
->  
-> -#include "../pci.h"
->  #include "acpiphp.h"
->  
->  static LIST_HEAD(bridge_list);
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 93dcdd431072..a159cd0f6f05 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -383,21 +383,6 @@ static inline bool pci_dev_is_disconnected(const struct pci_dev *dev)
->  	return dev->error_state == pci_channel_io_perm_failure;
->  }
->  
-> -/* pci_dev priv_flags */
-> -#define PCI_DEV_ADDED 0
-> -#define PCI_DPC_RECOVERED 1
-> -#define PCI_DPC_RECOVERING 2
-> -
-> -static inline void pci_dev_assign_added(struct pci_dev *dev, bool added)
-> -{
-> -	assign_bit(PCI_DEV_ADDED, &dev->priv_flags, added);
-> -}
-> -
-> -static inline bool pci_dev_is_added(const struct pci_dev *dev)
-> -{
-> -	return test_bit(PCI_DEV_ADDED, &dev->priv_flags);
-> -}
-> -
->  #ifdef CONFIG_PCIEAER
->  #include <linux/aer.h>
->  
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 540b377ca8f6..ea0e23dbc8ec 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -507,6 +507,21 @@ struct pci_dev {
->  	unsigned long	priv_flags;	/* Private flags for the PCI driver */
->  };
->  
-> +/* pci_dev priv_flags */
-> +#define PCI_DEV_ADDED 0
-> +#define PCI_DPC_RECOVERED 1
-> +#define PCI_DPC_RECOVERING 2
-> +
-> +static inline void pci_dev_assign_added(struct pci_dev *dev, bool added)
-> +{
-> +	assign_bit(PCI_DEV_ADDED, &dev->priv_flags, added);
-> +}
-> +
-> +static inline bool pci_dev_is_added(const struct pci_dev *dev)
-> +{
-> +	return test_bit(PCI_DEV_ADDED, &dev->priv_flags);
-> +}
-> +
->  static inline struct pci_dev *pci_physfn(struct pci_dev *dev)
->  {
->  #ifdef CONFIG_PCI_IOV
-> -- 
-> 2.25.1
-> 
+Huacai
+>
+>        Arnd
