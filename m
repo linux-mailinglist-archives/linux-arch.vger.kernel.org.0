@@ -2,192 +2,202 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDCD3F3D32
-	for <lists+linux-arch@lfdr.de>; Sun, 22 Aug 2021 05:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961493F490A
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Aug 2021 12:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbhHVDAt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 Aug 2021 23:00:49 -0400
-Received: from mga11.intel.com ([192.55.52.93]:31102 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231336AbhHVDAs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 21 Aug 2021 23:00:48 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10083"; a="213813624"
-X-IronPort-AV: E=Sophos;i="5.84,341,1620716400"; 
-   d="scan'208";a="213813624"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2021 20:00:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,341,1620716400"; 
-   d="scan'208";a="424789844"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga006.jf.intel.com with ESMTP; 21 Aug 2021 20:00:06 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10; Sat, 21 Aug 2021 20:00:06 -0700
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10; Sat, 21 Aug 2021 20:00:05 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4
- via Frontend Transport; Sat, 21 Aug 2021 20:00:05 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.102)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.10; Sat, 21 Aug 2021 20:00:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=POkjPRld19EfAgxJWwnx/ihA2y4136O6L5BdE6nnqFSfTLoREEImQYYs0x5rO9vC7affYxXjMOAlD1ZvS3Vekric4Jzwx/DZ6I0Vtnxs6oKzpY9vyyEMlmQaTBnPXkNBRuCXEdUngV2w0qKQnJvWaWVqQIGZxyENwBCpjb4KQy8RI6eVLFRUDgUTdVerRsmLsnXIAiMgYX/R1XaBLjc8lTwdguO3p1VTSx+/ITHOoIP4xqbisdCiv8qyN+jzLClbQcQCekUNeadkMEa5yly5416+XrzwnAWwH7V5q1v7zU13PrX81EgQG+xS1lOiyb+KeGkBuqdwFttEtCW12C944Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FMQ4MAgMkYT+9Bq4QjZEUAYyR3x6wmgNe0dyRBtLSho=;
- b=ijHD0OEaUL9MKxiMHI3aN0QtsxwD4HDSpr2GTBmQXWDecV+HyFUbmy02IUM6bSXStSbzO24wtNakYzptqpI3R8ksvCoHv06l59Ys6G1dStEZSqARtblJoYSJCq+GRZX+dSUKBJNUG/UMOzOTJgRBwXthZD4xV2R9jhkzYm4XrD2l8lL3UY+S0dR1hywZKaKysLImzxrrUUcp9O9m4qjl8sssoZP2+gs2+pvt7PGD8u3gFE/FSp9cXyCldHI4Yuu9U7+gWPWhpfEJ4SEglieKbPKDAFMkneVUAygtzkFjWNbQAVG+RbENtDamyKvkcxtx6tfAT86/4GGLEuh5gRIBqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FMQ4MAgMkYT+9Bq4QjZEUAYyR3x6wmgNe0dyRBtLSho=;
- b=Yh/aJhWtIziKmEWlW1sPqp0Cidg/l2hfB6kW1ehc+kL4fhQZQyTGW0UF335uFpJdGH3HE53wIxI6G/7KA6mvML72tM8NlJOmUrmyortmk83sOnBguUrktfwX3lKxv6qXoPnMfBPU2qo6U9OrXADf3eojnZGw+YZIM+qkOPEaCh4=
-Received: from SN6PR11MB3184.namprd11.prod.outlook.com (2603:10b6:805:bd::17)
- by SN6PR11MB3184.namprd11.prod.outlook.com (2603:10b6:805:bd::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19; Sun, 22 Aug
- 2021 02:59:55 +0000
-Received: from SN6PR11MB3184.namprd11.prod.outlook.com
- ([fe80::892e:cae1:bef0:935e]) by SN6PR11MB3184.namprd11.prod.outlook.com
- ([fe80::892e:cae1:bef0:935e%6]) with mapi id 15.20.4436.019; Sun, 22 Aug 2021
- 02:59:55 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "esyr@redhat.com" <esyr@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-CC:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v29 09/32] x86/mm: Introduce _PAGE_COW
-Thread-Topic: [PATCH v29 09/32] x86/mm: Introduce _PAGE_COW
-Thread-Index: AQHXle/aMI4krKcn/kKrw6oEL7PJsat+V1eAgACAWQA=
-Date:   Sun, 22 Aug 2021 02:59:54 +0000
-Message-ID: <b545f4957412884d8e0fed88235a8d23fc6060c1.camel@intel.com>
-References: <20210820181201.31490-1-yu-cheng.yu@intel.com>
-         <20210820181201.31490-10-yu-cheng.yu@intel.com>
-         <152f757d37d3fd834a06fadad18165cbf44b1b48.camel@intel.com>
-In-Reply-To: <152f757d37d3fd834a06fadad18165cbf44b1b48.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a32bd834-2ac5-49c1-895c-08d96518eb74
-x-ms-traffictypediagnostic: SN6PR11MB3184:
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SN6PR11MB3184330B3CDD87F206943B9BC9C39@SN6PR11MB3184.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mzok3vok6p82t3ZIqKglgttRBs22yOo64wOx1O1X2uG/YxonmA0/TnqFkf/YlqDDrotKRL/anuaSmyegq4daDSVNUaeBZxXc1AZ+4ukdgtcpKnhwu7r4r2wQjZpAa8aHnbIs9VQc49gqVVQKl45RnGVGxAYKEUs/8fLNVi5TWpZ2U9CTiTjxGtmFA/UbUUhq2rZ+9RcrzAj1PEW/HvBnhkUxVwSyXApzH4iaQqbbWsTCFvym5agRj5vDI5lr1MMgqvaG+raqXom7UUc9YyZm0Vr0ZElxTweBMGn3RIfIuwYpmNy246KRH3XbNf1Sg0uqgKLWzxDJWSwZjeoO74UQjPuV7B/LznfM4Sm6QjBGY0TQKvQyFmKtomoKVXiL0kQS8zYkFDDsBQI/65LeMN/uFVl0LY3Hj4gSmY5/L1IH1Ua6ABnCTkg9CsIVnUXuiuezU8HE0oAuvvSh04YvKIALf2AvLGWVlcPlwvlYVysufEbhthW1Xo28w0H6A5jPk7iG81UoD4whSgWMwpUNE/h7x398HmnUTDfspz7kH8W2H9sblL9bc/ESDeJE12BKqXAbTOyJC1w3du5bJlzzElMSO5c266e2pExHHOydEzRDA9d6tSKsvS4xWtsNU1+DZztTwuayTJS5q4Es7c1/ChMZ+y89WVg+n2/4m8wcbA6W6BcKkasyrQ3JeIfkZTaUA9M0CXkVtDMj22bBuCPEqgYRzQkc1Y5qYBroQIajVJeekaIE4fpG8Wf6lanXJWm5Uzxg
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3184.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(66946007)(6506007)(5660300002)(76116006)(91956017)(122000001)(6486002)(36756003)(7406005)(921005)(7416002)(66446008)(2906002)(66556008)(316002)(26005)(2616005)(508600001)(64756008)(8936002)(4744005)(86362001)(8676002)(71200400001)(38070700005)(4326008)(38100700002)(6512007)(186003)(110136005)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cjlzTzlXczkvb28zTHFKS3crOWRnK3N0SzQxZFdrWkxFTWVtWlgvQzV5SHRN?=
- =?utf-8?B?YVpCaExHZi9SSGJNRXpLNFU1SlEySE11WVdpUFNRVjNKcHdyY2o5elpteEYw?=
- =?utf-8?B?cTFCdDRTbXVXMXFWWDBaL3NTRnN0cmMvai9LN0tTbjVrekROTWdwQnlIM3FF?=
- =?utf-8?B?a0FlSlpheVZxcmNtaTBRL09WbDZiaitYeW9VQkRtbGdEaGdqR2NRdHZYQmRI?=
- =?utf-8?B?Uk9MVU1BRWZzTEVDeGZKWU1BRkZWaEtiLzVXRG9BVUF3emFuSmlZUGFmd1d1?=
- =?utf-8?B?ZStCdDBXNlhHZ3Q5c21PSENHL1AwS3pUdms0YVZ5eXhWNmc1NC9vZUN6ZWVB?=
- =?utf-8?B?T09oQkQ2bE9SS3RtZUVWeHY2YnZmVlViakJwOG56bEZORXJzQWZPY05DTm9P?=
- =?utf-8?B?UndoaVFmSDlYZ1B5SEEwOGg0a0ZjZ1g1bzBneENQUTU0TGRtclpRd25EM1pZ?=
- =?utf-8?B?NlRncDIycGplcnJnZStTc3M4NUlGVnFNVDdWUVRNTUU2eFJpcHhCQk1yMk9v?=
- =?utf-8?B?eWIybDNTNmplUnJaNHZnbEdHS3h2WDN4VXF0YkRvelVrYlFYN2ljaC90RFZ5?=
- =?utf-8?B?MXVGY0QxUGJiOTNNVExDSUVicWlYd1h6YWVUa25NamIySFRoMFovV3JtVDc5?=
- =?utf-8?B?Nkpua1JZaFdSZldqVDNzeWJPbHVkVU0wdG0rQTNpUjV4L0pVcng3Mzh1WWZB?=
- =?utf-8?B?VXhZenVjLzFsQVpNNnZpK094K2lEeElYMGE5MVFUbDBDNk91Nkx1RmVvZFNq?=
- =?utf-8?B?ZDBFWHFTNUI0bjBvK2JXb1F0R3RFaGJOTjhZQkJvbnVEVm54ZzVYVzdFSkIv?=
- =?utf-8?B?T21SMmNxUlM3YWRvblRSek9ZbDIyZnJMOHllb2tZcVBFM2tpRlc0cktJUzI4?=
- =?utf-8?B?YWR1c2lOQ3BmZUVQUmdFeVlUK3Q2K1RlRzA5RnV1V09rT1ZFaVhBNzVEVndp?=
- =?utf-8?B?MkptRFR0WTRFeFU3UUlzcVBEVFRzVE4wRTBUQkdIUjVVRWo4L0V0WXpDU2JD?=
- =?utf-8?B?YnJnMXJQWW9SZ0l0SGxJeTE2dG1ud0M0bFc4ZTJnT1lkMEUyd2xpR3VycEZq?=
- =?utf-8?B?dFU2SkNWcU9id1JuSmxvcWQ4NDBTc01iQVZjNThzWGhNcTJtQkl2bkkraits?=
- =?utf-8?B?MHdjTE5RSld4NCsvdGlRUGNFZld4ZlFBZlM2QzZSc0NIUVF4WFFMbkNhK085?=
- =?utf-8?B?T01qbDdNVXZGK2F0OURQdXdwcnNmQnlIb1pzYjV1Y3QzRkk4alNvWEdMMXQv?=
- =?utf-8?B?WDFxZm04UVJlTW5UcWxNcHdWNTZNZjdMWGlZZ2lkSzRuc0hzTU1RdkNOSXps?=
- =?utf-8?B?aUc1MzlMZ085eTg2WE1iN0lCekVmYVhweGE2SHg5VUMxNXVoYVdTNGFFcmxL?=
- =?utf-8?B?cGNwME9tZGJtQnJ0OVJMOU1meUVzcXhhWk1KWTlBcU9XSGduRUN4b2dFb0Qz?=
- =?utf-8?B?akVrNkoyV1FPRHVHZC9IQWsrbmF4N3hhTm9kMTRWSVdySGtaYzVnSUtBUWRT?=
- =?utf-8?B?SUJ1ZTdsU2RTbVNMRk4rSXI2OFFPNzBLRUZ6ZFBXSGE2RU56c2JKamU1dEpa?=
- =?utf-8?B?RDBhbWIxUnUzYWJ3eGJNNVhMQjdjSUVCSlRYTHB6Y0MyVmVzbU9VYmZNeVU5?=
- =?utf-8?B?Y3BuTlNralhEN1FINjlxNitUbjdxNEhTZHhXTURHWXZhODhuRzJMak5zVjlI?=
- =?utf-8?B?bVV5VzhNNm9lajVJWnRDMm5FVVhqeXo3ZEk5UnpPREVkc1hWUjIwMGNsNy9B?=
- =?utf-8?B?R1d1dGtQRGNZUmF2U1JSbHkyU0dtODRPOTVub1ZjK3NScUYwUjhlVDZHYmx4?=
- =?utf-8?B?RmxuUXEzQzRMc1VsU2pOUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <46C0EAF0080602469A7CEB6EA7AFD640@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3184.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a32bd834-2ac5-49c1-895c-08d96518eb74
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2021 02:59:55.1040
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: p6RT59lXdurR7fnfEeMl+TkAGU00mI+tKZncpWaxwOsoZGkCekw+NTrxdPYX34Ymj7rkHKEDwYJR/fw7znfbgMoWsGNungFUU4S7b2Z9Nh0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3184
-X-OriginatorOrg: intel.com
+        id S234865AbhHWKy4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 23 Aug 2021 06:54:56 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21780 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234701AbhHWKy4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 23 Aug 2021 06:54:56 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17NAYN3b039643;
+        Mon, 23 Aug 2021 06:53:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=VK03W+30BqBYeXpGwPZrGnWV+vbZaZ/TMMug5lrNGn8=;
+ b=JgYC0gODFl8HmCalHaHw745zt3POR0EpG3aUrewK2WN3A769e5hI0hS3/2YOTQH06x3G
+ Q1pjiH/hapDcLXmUAwOk2qFU13UZnthyIjxBz/ne+KttOywWrOaYOGuVmVaAZfh/iYZQ
+ gbFFyn9vcCFfjAGpjpIC8iJG1tRTFgqolcqZAn2Tb4r8iFmYJNE6ZNbtS1xpNt7BJ9RA
+ LrzVk4WnbOsKIFz6Hf0gZDIcsybzmNJkh7JOXGvvCOa/NUCS1xxeVFurkJ/1j5hNTJzA
+ +PIdzBFyv8+hzUonJGSBTokfD8jrltSd2N1EpZiB44fbpfeBiTl6bt8dm1o0C8RqjFoG Gg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3am358artv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Aug 2021 06:53:46 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17NAYciQ040734;
+        Mon, 23 Aug 2021 06:53:46 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3am358artg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Aug 2021 06:53:46 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17NArNtJ006021;
+        Mon, 23 Aug 2021 10:53:44 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3ajs48jpv0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Aug 2021 10:53:44 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17NArets26280222
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Aug 2021 10:53:40 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B5E2A4096;
+        Mon, 23 Aug 2021 10:53:40 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC76FA4098;
+        Mon, 23 Aug 2021 10:53:39 +0000 (GMT)
+Received: from sig-9-145-159-82.de.ibm.com (unknown [9.145.159.82])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 23 Aug 2021 10:53:39 +0000 (GMT)
+Message-ID: <7595397d6c32ae8745201085956696866cc400b6.camel@linux.ibm.com>
+Subject: Re: [PATCH v3] PCI: Move pci_dev_is/assign_added() to pci.h
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Date:   Mon, 23 Aug 2021 12:53:39 +0200
+In-Reply-To: <20210820223734.GA3366782@bjorn-Precision-5520>
+References: <20210820223734.GA3366782@bjorn-Precision-5520>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: sPEaVfThlIByYT9mCQ6fz2K2kUsFA1OW
+X-Proofpoint-GUID: Srhjx2oMjFIXmjyTPWQ2Mu1yV3gTT4k-
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-23_02:2021-08-23,2021-08-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 impostorscore=0 lowpriorityscore=0
+ adultscore=0 bulkscore=0 phishscore=0 clxscore=1011 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108230070
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gU2F0LCAyMDIxLTA4LTIxIGF0IDE5OjIwICswMDAwLCBFZGdlY29tYmUsIFJpY2sgUCB3cm90
-ZToNCj4gK0tWTSBsaXN0Lg0KPiANCj4gT24gRnJpLCAyMDIxLTA4LTIwIGF0IDExOjExIC0wNzAw
-LCBZdS1jaGVuZyBZdSB3cm90ZToNCj4gPiAgDQo+ID4gIHN0YXRpYyBpbmxpbmUgaW50IHB0ZV93
-cml0ZShwdGVfdCBwdGUpDQo+ID4gIHsNCj4gPiAtICAgICAgIHJldHVybiBwdGVfZmxhZ3MocHRl
-KSAmIF9QQUdFX1JXOw0KPiA+ICsgICAgICAgLyoNCj4gPiArICAgICAgICAqIFNoYWRvdyBzdGFj
-ayBwYWdlcyBhcmUgYWx3YXlzIHdyaXRhYmxlIC0gYnV0IG5vdCBieQ0KPiA+IG5vcm1hbA0KPiA+
-ICsgICAgICAgICogaW5zdHJ1Y3Rpb25zLCBhbmQgb25seSBieSBzaGFkb3cgc3RhY2sgb3BlcmF0
-aW9ucy4gDQo+ID4gVGhlcmVmb3JlLA0KPiA+ICsgICAgICAgICogdGhlIFc9MCxEPTEgdGVzdCB3
-aXRoIHB0ZV9zaHN0aygpLg0KPiA+ICsgICAgICAgICovDQo+ID4gKyAgICAgICByZXR1cm4gKHB0
-ZV9mbGFncyhwdGUpICYgX1BBR0VfUlcpIHx8IHB0ZV9zaHN0ayhwdGUpOw0KPiA+ICB9DQo+ID4g
-IA0KPiANCj4gS1ZNIHVzZXMgdGhpcyBpbiBhIGNvdXBsZSBwbGFjZXMgd2hlbiBjaGVja2luZyBF
-UFQgcHRlcy4gQnV0IGJpdCA2DQo+IChkaXJ0eSkgaXMgYSB0b3RhbGx5IGRpZmZlcmVudCBtZWFu
-aW5nIGluIEVQVC4gSSB0aGluayBpdCdzIGp1c3QgdXNlZA0KPiB0byB0cmlnZ2VyIGFuIG9wdGlt
-aXphdGlvbiwgYnV0IHdvbmRlcmluZyBpZiBLVk0gc2hvdWxkIGhhdmUgaXRzIG93bg0KPiBURFAg
-c3BlY2lmaWMgZnVuY3Rpb24gaW5zdGVhZCBvZiB1c2luZyBwdGVfd3JpdGUoKS4NCj4gDQpBcmdo
-LCBuZXZlciBtaW5kLiBJIG1pc3JlYWQgdGhlIG5ldyBLVk0gbW11IG5vdGlmaWVyIHJlZmFjdG9y
-Lg0KDQo=
+On Fri, 2021-08-20 at 17:37 -0500, Bjorn Helgaas wrote:
+> On Tue, Jul 20, 2021 at 05:01:45PM +0200, Niklas Schnelle wrote:
+> > The helper function pci_dev_is_added() from drivers/pci/pci.h is used in
+> > PCI arch code of both s390 and powerpc leading to awkward relative
+> > includes. Move it to the global include/linux/pci.h and get rid of these
+> > includes just for that one function.
+> 
+> I agree the includes are awkward.
+> 
+> But the arch code *using* pci_dev_is_added() seems awkward, too.
+
+See below for my interpretation why s390 has some driver like
+functionality in its arch code which isn't necessarily awkward.
+
+Independent from that I have found pci_dev_is_added() as the only way
+deal with the case that one might be looking at a struct pci_dev
+reference that has been removed via pci_stop_and_remove_bus_device() or
+has never been fully scanned. This is quite useful when handling error
+events which on s390 are part of the adapter event mechanism shared
+with channel I/O devices.
+
+> 
+> AFAICS, in powerpc, pci_dev_is_added() is only used by
+> pnv_pci_ioda_fixup_iov() and pseries_pci_fixup_iov_resources().  Those
+> are only called from pcibios_add_device(), which is only called from
+> pci_device_add().
+> 
+> Is it even possible for pci_dev_is_added() to be true in that path?
+> 
+> s390 uses pci_dev_is_added() in recover_store()
+
+I'm actually looking into this as I'm working on an s390 implementation
+of the PCI recovery flow described in Documentation/PCI/pci-error-
+recovery.rst that would also call pci_dev_is_added() because when we
+get a platform notification of a PCI reset done by firmware it may be
+that the sturct pci_dev is going away i.e. we still have a ref count
+but it is not added to the PCI bus anymore. And pci_dev_is_added() is
+the only way I've found to check for this state.
+
+> , but I don't know what
+> that is (looks like a sysfs file, but it's not documented) or why s390
+> is the only arch that does this.
+
+Good point about this not being documented, I'll look into adding docs.
+
+This is a sysfs attribute that basically removes the pci_dev and re-
+adds it. This has the complication that since the attribute sits at
+/sys/bus/pci/devices/<dev>/recover it deletes its own parent directory
+which requires extra caution and means concurrent accesses block on
+pci_lock_rescan_remove() instead of a kernfs lock.
+Long story short when concurrently triggering the attribute one thread
+proceeds into the pci_lock_rescan_remove() section and does the
+removal, while others would block on pci_lock_rescan_remove(). Now when
+the threads unblock the removal is done. In this case there is a new
+struct pci_dev found in the rescan but the previously blocked threads
+still have references to the old struct pci_dev which was removed and
+as far as I could tell can only be distinguihsed by checking
+pci_dev_is_added().
+
+> 
+> Maybe we should make powerpc and s390 less special?
+
+On s390, as I see it, the reason for this is that all of the PCI
+functionality is directly defined in the Architecture as special CPU
+instructions which are kind of hypercalls but also an ISA extension.
+
+These instructions range from the basic PCI memory accesses (no real
+MMIO) to enumeration of the devices and on to reporting of hot-plug and
+and resets/recovery events. Importantly we do not have any kind of
+direct access to a real or virtual PCI controller and the architecture
+has no concept of a comparable entity.
+
+So in my opinion while there is some of the functionality of a PCI
+controller in arch/s390/pci the cut off between controller
+functionality and arch support isn't clear at all and exposing PCI
+support as CPU instructions doesn't map well to the controller concept.
+
+That said, in principle I'm open to moving some of that into
+drivers/pci/controller/ if you think that would improve things and we
+can find a good argument what should go where. One possible cut off
+would be to have arch/s390/pci/ provide wrappers to the PCI
+instructions but move all their uses to  e.g.
+drivers/pci/controller/s390/. This would of course be a major
+refactoring and none of that code would be useful on any other
+architecture but it would move a lot the accesses to PCI common code
+functionality out of the arch code.
+
+> 
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> > Since v1 (and bad v2):
+> > - Fixed accidental removal of PCI_DPC_RECOVERED, PCI_DPC_RECOVERING
+> >   defines and also move these to include/linux/pci.h
+> > 
+> >  arch/powerpc/platforms/powernv/pci-sriov.c |  3 ---
+> >  arch/powerpc/platforms/pseries/setup.c     |  1 -
+> >  arch/s390/pci/pci_sysfs.c                  |  2 --
+> >  drivers/pci/hotplug/acpiphp_glue.c         |  1 -
+> >  drivers/pci/pci.h                          | 15 ---------------
+> >  include/linux/pci.h                        | 15 +++++++++++++++
+> >  6 files changed, 15 insertions(+), 22 deletions(-)
+> > 
+> > diff --git a/arch/powerpc/platforms/powernv/pci-sriov.c b/arch/powerpc/platforms/powernv/pci-sriov.c
+> > index 28aac933a439..2e0ca5451e85 100644
+> > --- a/arch/powerpc/platforms/powernv/pci-sriov.c
+> > +++ b/arch/powerpc/platforms/powernv/pci-sriov.c
+> > @@ -9,9 +9,6 @@
+> >  
+> >  #include "pci.h"
+> >  
+> > -/* for pci_dev_is_added() */
+> > -#include "../../../../drivers/pci/pci.h"
+> > 
+.. snip ..
+
