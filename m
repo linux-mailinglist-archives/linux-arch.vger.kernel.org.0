@@ -2,153 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 083883F5B3B
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Aug 2021 11:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F043F617B
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Aug 2021 17:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235808AbhHXJsA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Aug 2021 05:48:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32029 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235703AbhHXJr7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 24 Aug 2021 05:47:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1629798435;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=byOliS/hAlH982j95uoj9FjiMsaJUQkzdYQOZKOZeFM=;
-        b=EpSjaKaORit2KBe35XMrcFltkhci8RVMV7pN97m/XqxyihAXn2G+tohwnWuAezzH4bp48M
-        efD8nrjBZJ6yjreif7/fjD3rTeTWH11Tav+ryGfZYH2nwH71eP7mowc9EipQYYwbSrgdrl
-        bEd+dJo0mtOfCZWeq1ubGE6hNpUgYI4=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-414-pmWWT99ANjGSinQeeOEdjw-1; Tue, 24 Aug 2021 05:47:14 -0400
-X-MC-Unique: pmWWT99ANjGSinQeeOEdjw-1
-Received: by mail-ej1-f70.google.com with SMTP id ke4-20020a17090798e4b02905b869727055so6845538ejc.11
-        for <linux-arch@vger.kernel.org>; Tue, 24 Aug 2021 02:47:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=byOliS/hAlH982j95uoj9FjiMsaJUQkzdYQOZKOZeFM=;
-        b=rymlglP7ouKampU72hsySqJ+WPVSuA2nFMvfEIC2aiAq16CQqCky8Y1dtDJRg9Vx2V
-         gGTD2ZWowJ17GaAkJZLupGhOUyaOOqx7aMT5XCHyMgVbmMTVfLoJxNvGb36lavvKquz9
-         NoIR9Ebc87jCw8Ufbo1nSp7xYM3oJWCUJjuKefjUQ1xrr/GrDImeNxTvxJl69XSlriwM
-         VPvA02gmhM91/8bEJb+X4N//qWNFwLadPumLc+7Z4A1Wnvl8beFQiVwUuCK/e5n3E7Bg
-         TUnbm/YFt+s+Rb2A0IOTetGObmxhu7Ga3vGbKmYxXaQJ6iRqsMoESBFxv7zrjwvvEFWp
-         CTgw==
-X-Gm-Message-State: AOAM532CsYlp5sWhIIgic2sgI+WzUm23K5O1GCl1CmeQLrGf6Pxk+zpk
-        j3UIB271bdFyKfyH0L04IP9juXraDhZLDu1WHmykgETJgIsIIoj7EZXaX79H9Rd4NJonzsFPpML
-        TQbVki+UgW0O7trnsfheguQ==
-X-Received: by 2002:a17:906:3542:: with SMTP id s2mr40413068eja.379.1629798433281;
-        Tue, 24 Aug 2021 02:47:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyUO88Sc9irEBtMZmBbVQ8WcILdFFNEosAjyt1865+nkRLAobkOu3Zuf3KEOK5TLE4bRYLW2A==
-X-Received: by 2002:a17:906:3542:: with SMTP id s2mr40413054eja.379.1629798433111;
-        Tue, 24 Aug 2021 02:47:13 -0700 (PDT)
-Received: from redhat.com ([2.55.137.225])
-        by smtp.gmail.com with ESMTPSA id b18sm2800522ejl.90.2021.08.24.02.47.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Aug 2021 02:47:12 -0700 (PDT)
-Date:   Tue, 24 Aug 2021 05:47:03 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-Message-ID: <20210824053830-mutt-send-email-mst@kernel.org>
-References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210805005218.2912076-12-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210823195409-mutt-send-email-mst@kernel.org>
- <26a3cce5-ddf7-cbe6-a41e-58a2aea48f78@linux.intel.com>
- <CAPcyv4iJVQKJ3bVwZhD08c8GNEP0jW2gx=H504NXcYK5o2t01A@mail.gmail.com>
- <d992b5af-8d57-6aa6-bd49-8e2b8d832b19@linux.intel.com>
+        id S238060AbhHXPYC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Aug 2021 11:24:02 -0400
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:23222 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238005AbhHXPYB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Aug 2021 11:24:01 -0400
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 17OFMfa6016562;
+        Wed, 25 Aug 2021 00:22:42 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 17OFMfa6016562
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1629818562;
+        bh=S+OncbYervpFyf36q1qMQ/cK2RuBY42Jax+g4KEinBk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZcH8Mol3zFOfA82L2ktXpSfndCTVIm8sSN5WhvCF0nkR7lfzciGFhUJXETjlXjtPX
+         zJh+MUJ/Ewjk16dZQ1gny5f5e7a9UEa8Y4ew4QsRa2f8+XDPL4zy7TRkyQPCCGuQBR
+         HtPcktDDii+gXrd9c6Y/+n2IDAqMdutuYAV8w4MCt5+cnVSpw8AKUX2Ib7Ibo6FD2q
+         Ohh6UGM+07Qonx5uLAq8xTeCFAPzEUUH7JfX0G/OTHgFnWD/VUkraTi5Z03rF1LVlI
+         S9HUYx9frUuL/nuZq9/KuCBWLzyvJI5ic9YGRufpg399QFVGzpWMzh0y6+RyOdbiCs
+         U/uVLdyiGdKjg==
+X-Nifty-SrcIP: [209.85.215.182]
+Received: by mail-pg1-f182.google.com with SMTP id e7so20084678pgk.2;
+        Tue, 24 Aug 2021 08:22:41 -0700 (PDT)
+X-Gm-Message-State: AOAM532kurLktu58pwqpHuXIw8lHovCfniN5blvX1moEtQVIcV7LHn01
+        PUcoRr6FGo3YJvxRRhzqkBZgYNDXJOe0Ioj8nm8=
+X-Google-Smtp-Source: ABdhPJxOp9dnA/3wndoHqVeBS+wD5iSN8I9DS95FoFt5pEdVV9c/uEMA3l6IFAOsje6soli60G91Ls2TkIcdXGUYgjE=
+X-Received: by 2002:aa7:8e56:0:b029:3cd:c2ec:6c1c with SMTP id
+ d22-20020aa78e560000b02903cdc2ec6c1cmr39028324pfr.80.1629818561184; Tue, 24
+ Aug 2021 08:22:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d992b5af-8d57-6aa6-bd49-8e2b8d832b19@linux.intel.com>
+References: <20210407053419.449796-1-gregkh@linuxfoundation.org> <20210407053419.449796-19-gregkh@linuxfoundation.org>
+In-Reply-To: <20210407053419.449796-19-gregkh@linuxfoundation.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 25 Aug 2021 00:22:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ07ycpjJQGwbtq1ii3k9rh2CZVN6MVxkfMb=+Vgs9zqw@mail.gmail.com>
+Message-ID: <CAK7LNAQ07ycpjJQGwbtq1ii3k9rh2CZVN6MVxkfMb=+Vgs9zqw@mail.gmail.com>
+Subject: Re: [PATCH 18/20] kbuild: sh: remove unused install script
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 23, 2021 at 07:14:18PM -0700, Andi Kleen wrote:
-> 
-> On 8/23/2021 6:04 PM, Dan Williams wrote:
-> > On Mon, Aug 23, 2021 at 5:31 PM Kuppuswamy, Sathyanarayanan
-> > <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
-> > > 
-> > > 
-> > > On 8/23/21 4:56 PM, Michael S. Tsirkin wrote:
-> > > > > Add a new variant of pci_iomap for mapping all PCI resources
-> > > > > of a devices as shared memory with a hypervisor in a confidential
-> > > > > guest.
-> > > > > 
-> > > > > Signed-off-by: Andi Kleen<ak@linux.intel.com>
-> > > > > Signed-off-by: Kuppuswamy Sathyanarayanan<sathyanarayanan.kuppuswamy@linux.intel.com>
-> > > > I'm a bit puzzled by this part. So why should the guest*not*  map
-> > > > pci memory as shared? And if the answer is never (as it seems to be)
-> > > > then why not just make regular pci_iomap DTRT?
-> > > It is in the context of confidential guest (where VMM is un-trusted). So
-> > > we don't want to make all PCI resource as shared. It should be allowed
-> > > only for hardened drivers/devices.
-> > That's confusing, isn't device authorization what keeps unaudited
-> > drivers from loading against untrusted devices? I'm feeling like
-> > Michael that this should be a detail that drivers need not care about
-> > explicitly, in which case it does not need to be exported because the
-> > detail can be buried in lower levels.
-> 
-> We originally made it default (similar to AMD), but it during code audit we
-> found a lot of drivers who do ioremap early outside the probe function.
-> Since it would be difficult to change them all we made it opt-in, which
-> ensures that only drivers that have been enabled can talk with the host at
-> all and can't be attacked. That made the problem of hardening all these
-> drivers a lot more practical.
-> 
-> Currently we only really need virtio and MSI-X shared, so for changing two
-> places in the tree you avoid a lot of headache elsewhere.
-> 
-> Note there is still a command line option to override if you want to allow
-> and load other drivers.
-> 
-> -Andi
+On Wed, Apr 7, 2021 at 2:35 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> The sh arch has a install.sh script, but no Makefile actually calls it.
+> Remove it to keep anyone from accidentally calling it in the future.
+>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: linux-sh@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  arch/sh/boot/compressed/install.sh | 56 ------------------------------
+>  1 file changed, 56 deletions(-)
+>  delete mode 100644 arch/sh/boot/compressed/install.sh
+>
+> diff --git a/arch/sh/boot/compressed/install.sh b/arch/sh/boot/compressed/install.sh
+> deleted file mode 100644
+> index f9f41818b17e..000000000000
+> --- a/arch/sh/boot/compressed/install.sh
+> +++ /dev/null
+> @@ -1,56 +0,0 @@
+> -#!/bin/sh
+> -#
+> -# arch/sh/boot/install.sh
+> -#
+> -# This file is subject to the terms and conditions of the GNU General Public
+> -# License.  See the file "COPYING" in the main directory of this archive
+> -# for more details.
+> -#
+> -# Copyright (C) 1995 by Linus Torvalds
+> -#
+> -# Adapted from code in arch/i386/boot/Makefile by H. Peter Anvin
+> -# Adapted from code in arch/i386/boot/install.sh by Russell King
+> -# Adapted from code in arch/arm/boot/install.sh by Stuart Menefy
+> -#
+> -# "make install" script for sh architecture
+> -#
+> -# Arguments:
+> -#   $1 - kernel version
+> -#   $2 - kernel image file
+> -#   $3 - kernel map file
+> -#   $4 - default install path (blank if root directory)
+> -#
+> -
+> -# User may have a custom install script
+> -
+> -if [ -x /sbin/${INSTALLKERNEL} ]; then
+> -  exec /sbin/${INSTALLKERNEL} "$@"
+> -fi
+> -
+> -if [ "$2" = "zImage" ]; then
+> -# Compressed install
+> -  echo "Installing compressed kernel"
+> -  if [ -f $4/vmlinuz-$1 ]; then
+> -    mv $4/vmlinuz-$1 $4/vmlinuz.old
+> -  fi
+> -
+> -  if [ -f $4/System.map-$1 ]; then
+> -    mv $4/System.map-$1 $4/System.old
+> -  fi
+> -
+> -  cat $2 > $4/vmlinuz-$1
+> -  cp $3 $4/System.map-$1
+> -else
+> -# Normal install
+> -  echo "Installing normal kernel"
+> -  if [ -f $4/vmlinux-$1 ]; then
+> -    mv $4/vmlinux-$1 $4/vmlinux.old
+> -  fi
+> -
+> -  if [ -f $4/System.map ]; then
+> -    mv $4/System.map $4/System.old
+> -  fi
+> -
+> -  cat $2 > $4/vmlinux-$1
+> -  cp $3 $4/System.map
+> -fi
+> --
+> 2.31.1
+>
 
-I see. Hmm. It's a bit of a random thing to do it at the map time
-though. E.g. DMA is all handled transparently behind the DMA API.
-Hardening is much more than just replacing map with map_shared
-and I suspect what you will end up with is basically
-vendors replacing map with map shared to make things work
-for their users and washing their hands.
 
-I would say an explicit flag in the driver that says "hardened"
-and refusing to init a non hardened one would be better.
+This one is applicable independently.
+
+Applied to linux-kbuild. Thanks.
+
+
 
 -- 
-MST
-
+Best Regards
+Masahiro Yamada
