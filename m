@@ -2,26 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AED43F6A40
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Aug 2021 22:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F188B3F6A6C
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Aug 2021 22:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234882AbhHXUOw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Aug 2021 16:14:52 -0400
-Received: from mga03.intel.com ([134.134.136.65]:27696 "EHLO mga03.intel.com"
+        id S235104AbhHXUcB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Aug 2021 16:32:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37406 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232099AbhHXUOv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 24 Aug 2021 16:14:51 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="217426630"
-X-IronPort-AV: E=Sophos;i="5.84,348,1620716400"; 
-   d="scan'208";a="217426630"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 13:14:05 -0700
-X-IronPort-AV: E=Sophos;i="5.84,348,1620716400"; 
-   d="scan'208";a="526813111"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.119.65]) ([10.209.119.65])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 13:14:03 -0700
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-To:     Bjorn Helgaas <helgaas@kernel.org>
+        id S234675AbhHXUcB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 24 Aug 2021 16:32:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3738C610F7;
+        Tue, 24 Aug 2021 20:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629837076;
+        bh=u89RhbA1T4/YcegxqumOKFDZveULzg7IH3BXxWstXGA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=E7gmG9cu+2X8EpSv9jHNw194dQ/bFH+W8S5CviPC+WEzgK9x1GqwxeKDnQA93Ubc6
+         pIROpW9mCbmFawlLNt183dkzLJG92jUie48vdct5nMY9KMIpav4jCN5vVtcBqt99IN
+         LlMRmUTD9hQbKroaOXlhVlrUixEOK798eHEQ6pmGyuqfJJo5J4wfidKynCvdtb3s37
+         PjcEO5DOcIPu3SLREF0Tt+IUZRL6NjCeGqQy3Vt+WmnxMDtnryxVfbjA5YVJAeYKm9
+         BpOJvSuNngQVXkAMINkK0ZwKmdIz+EDYyzVhKaDWPyJSTPhZYBRtaAf1VAW/wDK4NO
+         xT3mGvV5LJ4bA==
+Date:   Tue, 24 Aug 2021 15:31:15 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andi Kleen <ak@linux.intel.com>
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Dan Williams <dan.j.williams@intel.com>,
         "Kuppuswamy, Sathyanarayanan" 
@@ -53,35 +57,30 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         virtualization@lists.linux-foundation.org,
         Rajat Jain <rajatja@google.com>
-References: <20210824185541.GA3485816@bjorn-Precision-5520>
-From:   Andi Kleen <ak@linux.intel.com>
-Message-ID: <a80fc61a-bc55-b82c-354b-b57863ab03db@linux.intel.com>
-Date:   Tue, 24 Aug 2021 13:14:02 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
+Message-ID: <20210824203115.GA3492097@bjorn-Precision-5520>
 MIME-Version: 1.0
-In-Reply-To: <20210824185541.GA3485816@bjorn-Precision-5520>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a80fc61a-bc55-b82c-354b-b57863ab03db@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Aug 24, 2021 at 01:14:02PM -0700, Andi Kleen wrote:
+> 
+> On 8/24/2021 11:55 AM, Bjorn Helgaas wrote:
+> > [+cc Rajat; I still don't know what "shared memory with a hypervisor
+> > in a confidential guest" means,
+> 
+> A confidential guest is a guest which uses memory encryption to isolate
+> itself from the host. It doesn't trust the host. But it still needs to
+> communicate with the host for IO, so it has some special memory areas that
+> are explicitly marked shared. These are used to do IO with the host. All
+> their usage needs to be carefully hardened to avoid any security attacks on
+> the guest, that's why we want to limit this interaction only to a small set
+> of hardened drivers. For MMIO, the set is currently only virtio and MSI-X.
 
-On 8/24/2021 11:55 AM, Bjorn Helgaas wrote:
-> [+cc Rajat; I still don't know what "shared memory with a hypervisor
-> in a confidential guest" means,
+Good material for the commit log next time around.  Thanks!
 
-A confidential guest is a guest which uses memory encryption to isolate 
-itself from the host. It doesn't trust the host. But it still needs to 
-communicate with the host for IO, so it has some special memory areas 
-that are explicitly marked shared. These are used to do IO with the 
-host. All their usage needs to be carefully hardened to avoid any 
-security attacks on the guest, that's why we want to limit this 
-interaction only to a small set of hardened drivers. For MMIO, the set 
-is currently only virtio and MSI-X.
-
--Andi
-
-
+Bjorn
