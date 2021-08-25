@@ -2,96 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F018C3F77C6
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Aug 2021 16:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5136D3F78C5
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Aug 2021 17:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240493AbhHYOxX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Aug 2021 10:53:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54138 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240395AbhHYOxW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 25 Aug 2021 10:53:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36A4E610CD;
-        Wed, 25 Aug 2021 14:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629903156;
-        bh=JavDwpgii8kF2lXyvHOwR8IF/SUWfOr82rbSiTe1nco=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=etlal+X6PK/iyyE+nCKJqe8xvh6sOY35Jz8lqksr6gEQVCToh4OokpBhqzSLN+EQd
-         CbpLIssWEQtnZPMe70kfBxZJeme2Vw5EfXhChn/2RVE74/XOQ0ogJdDJbJSxQ6B6tW
-         NpWtwQV/bKLoQqX4+aw+rClsxeZQuTcMptgtwqLJE9cPhKmxBAMOvE9u1TAbpbyusm
-         2r/bieajK+y11XHoHy7rRrWGS+kpuVvgAm5FMOgzMz/YOJ/ryEgttZaNO+A2gFqSgV
-         gSDOXXqDHEGwZCzB6XgcGfNipfy8ECvl8ldyO/Fs4RX/PiHXnplmt9Ddb5SbfOzVkW
-         H7gyI/GMyzCTg==
-Date:   Wed, 25 Aug 2021 09:52:35 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Rajat Jain <rajatja@google.com>
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-Message-ID: <20210825145235.GA3565590@bjorn-Precision-5520>
+        id S235663AbhHYPfH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Aug 2021 11:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241835AbhHYPfH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Aug 2021 11:35:07 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E770C0613C1
+        for <linux-arch@vger.kernel.org>; Wed, 25 Aug 2021 08:34:21 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id b4so9729095lfo.13
+        for <linux-arch@vger.kernel.org>; Wed, 25 Aug 2021 08:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=M46nZc2nL9RSonYgcNxpcgN50d8y5o3zTcXKhUU97To=;
+        b=M/wKnoA+ejH3xirocr8jUfZJCEmJqPvsLGj16l+aGUQea3fiAq8DwOVoFJXPZDbb3Z
+         U5oeO7npUvgKUoKoAmOz3AsIsW9g+iyHUKH9M44lwVb48g3llgPgz7kAob3mWg8biSRY
+         6gpTNHWQf97mijdo7Sgl9+3yKY7VOXL/c+QP0EXhlzhMcyekWERqpgVb9mFOL63jVCJk
+         lNeNX6fFvo8jWuFrqdvelWS4deCLa/oOBVxhPIqSogtcCCvyTG2DNdfa0SaSOoyXO5t0
+         AAMqCzpfgJk3UO83PltOf8st5r91trelqawTmf3B7dOkd8L2La3DYVjclGvek+GiXxxT
+         csNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=M46nZc2nL9RSonYgcNxpcgN50d8y5o3zTcXKhUU97To=;
+        b=M34CHU25nqDIZtO7RCu3LaTQAhKf3JizxGny4syuBfWXS+wlobvySMIjS7F9QdWzKH
+         TGJlbA2u1EiYabHRIXKSWwNB6hX+7NEn6fvhDmVxhxDqItd1Nw+bGKFgIt9ZhrXfTRFJ
+         tTrpkNn+7OhZXuasdTfqfuZOfoBG/S7gvHtbFBMScVGq8B1Eqriv09HWotRHsP3OpjUI
+         8J1jhlzTsL0aI5kCRHnjbZ7MUhQ1xou0JCJd4O5mEB7p9KFojf2H+5Cs2Mh7D9K9/9xs
+         K2aY8PBTfv29n7FLk3TtZoXaK5oGdPVfBAs6nPRn7jSyseyoW9l6Ix1llESoanM6P3Ww
+         Jjzg==
+X-Gm-Message-State: AOAM531asmyqUICGIJw8oZiKt/qfb1GQ3mlzKZZoPoZSZ2uaG4cV0Jrh
+        Puj1GZS3zMatZZDim2ngwk7+Kg9XnTNqNQUrt7g=
+X-Google-Smtp-Source: ABdhPJx+H26pk04uzjrQ3Q3fjPYCLqEZIi/Y2ubu+CnNJKXmBTnqun5KZY+QlSLbzok513lZmxkhT1zA/6b2ZcJq1I0=
+X-Received: by 2002:ac2:5fe5:: with SMTP id s5mr35109890lfg.540.1629905659265;
+ Wed, 25 Aug 2021 08:34:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bb8c6f96-2597-bb80-bd08-7958405e1bf5@linux.intel.com>
+Received: by 2002:ab3:7413:0:0:0:0:0 with HTTP; Wed, 25 Aug 2021 08:34:18
+ -0700 (PDT)
+Reply-To: info.dynamicfinc@gmail.com
+From:   Dynamic Funds Inc <dynamicfunds6@gmail.com>
+Date:   Wed, 25 Aug 2021 16:34:18 +0100
+Message-ID: <CAC2kUiXg5sHenn0Kz+d08xmZxpDwJDoEt3dX5tHW7i_RJTcP7g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 24, 2021 at 01:50:00PM -0700, Andi Kleen wrote:
-> 
-> On 8/24/2021 1:31 PM, Bjorn Helgaas wrote:
-> > On Tue, Aug 24, 2021 at 01:14:02PM -0700, Andi Kleen wrote:
-> > > On 8/24/2021 11:55 AM, Bjorn Helgaas wrote:
-> > > > [+cc Rajat; I still don't know what "shared memory with a hypervisor
-> > > > in a confidential guest" means,
-> > > A confidential guest is a guest which uses memory encryption to isolate
-> > > itself from the host. It doesn't trust the host. But it still needs to
-> > > communicate with the host for IO, so it has some special memory areas that
-> > > are explicitly marked shared. These are used to do IO with the host. All
-> > > their usage needs to be carefully hardened to avoid any security attacks on
-> > > the guest, that's why we want to limit this interaction only to a small set
-> > > of hardened drivers. For MMIO, the set is currently only virtio and MSI-X.
-> > Good material for the commit log next time around.  Thanks!
-> 
-> This is all in the patch intro too, which should make it into the merge
-> commits.
+--=20
+Sch=C3=B6ne Gr=C3=BC=C3=9Fe.
 
-It's good if the cover letter makes into the merge commit log.
+Ich bin Noah Blackstein, Kreditvermittler bei Dynamic Funds Inc, einem
+eingetragenen Finanzunternehmen. Wir vergeben Kredite in H=C3=B6he von 3%
+im Bereich von 5.000 bis 15 Millionen Dollar, Pfund und Euro. (Keine
+Sozialversicherung und keine Bonit=C3=A4tspr=C3=BCfung, 100% garantiert!) I=
+ch
+freue mich darauf, mit Ihnen Gesch=C3=A4fte zu machen.
 
-It's probably just because my git foo is lacking, but merge commit
-logs don't seem as discoverable as the actual patch commit logs.  Five
-years from now, if I want to learn about pci_iomap_shared() history, I
-would "git log -p lib/pci_iomap.c" and search for it.  But I don't
-think I would see the merge commit then.
+Erbrachte Dienstleistungen umfassen; Pers=C3=B6nliche Darlehen,
+Refinanzierung, Heimwerker, Investitionsdarlehen, Autokredit,
+Studentendarlehen, Schuldenkonsolidierung, Kreditlinie, zweite
+Hypothek, Gesch=C3=A4ftsdarlehen. Bei Interesse kontaktieren Sie uns bitte
+mit den folgenden Informationen.
 
-Bjorn
+BORROWERS DATEN FORMULAR, F=C3=9CLLEN UND R=C3=9CCKGABE
+Vollst=C3=A4ndiger Name :.
+Kontakt Adresse:.
+Telefon :.
+Land :.
+Erforderlicher Betrag als Darlehen :.
+Leihdauer :.
+Zweck des Darlehens :.
+Geschlecht :.
+
+Gr=C3=BC=C3=9Fe,
+Dynamic Funds Inc.
+info.dynamicfinc@gmail.com
