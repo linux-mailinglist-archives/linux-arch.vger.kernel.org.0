@@ -2,153 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 088153F7989
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Aug 2021 17:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A482B3F7C87
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Aug 2021 21:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239399AbhHYP5V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Aug 2021 11:57:21 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:59200 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240495AbhHYP5V (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Aug 2021 11:57:21 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51]:34002)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mIvGU-00BJtr-36; Wed, 25 Aug 2021 09:56:34 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:55852 helo=email.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mIvGS-00DL13-SD; Wed, 25 Aug 2021 09:56:33 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Brad Boyer <flar@allandria.com>,
-        Andreas Schwab <schwab@linux-m68k.org>, geert@linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        torvalds@linux-foundation.org
-References: <e9009e13-cfec-c494-0b3b-f334f75cd1e4@gmail.com>
-        <af434994-5c61-0e3a-c7bc-3ed966ccb44f@gmail.com>
-        <87h7gopvz2.fsf@disp2133>
-        <328e59fb-3e8c-e4cd-06b4-1975ce98614a@gmail.com>
-        <877dhio13t.fsf@disp2133>
-        <12992a3c-0740-f90e-aa4e-1ec1d8ea38f6@gmail.com>
-        <87tukkk6h3.fsf@disp2133>
-        <df6618bf-d1bc-4759-2d14-934c22d54a83@gmail.com>
-        <87eebn7w7y.fsf@igel.home>
-        <db43bef1-7938-4fc1-853d-c20d66521329@gmail.com>
-        <20210725101253.GA6096@allandria.com>
-        <be3ddf9a-745e-4798-17a7-a9d0ddd7eef7@gmail.com>
-        <87a6m8kgtx.fsf_-_@disp2133>
-        <33327fd4-47fc-2eab-04e4-242697a23d5f@gmail.com>
-        <87tukghjfs.fsf_-_@disp2133>
-Date:   Wed, 25 Aug 2021 10:56:26 -0500
-In-Reply-To: <87tukghjfs.fsf_-_@disp2133> (Eric W. Biederman's message of
-        "Mon, 26 Jul 2021 16:08:39 -0500")
-Message-ID: <87v93tmsb9.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S237073AbhHYTFd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Aug 2021 15:05:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54970 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235172AbhHYTFc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 25 Aug 2021 15:05:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A0F0610A3;
+        Wed, 25 Aug 2021 19:04:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629918286;
+        bh=WE8rqI012Bzl/S5TbfbNOjLun8qlZXOdpo6l9ED62V4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=aFZjR+1honOKjKC+pRz6jj7Was9KpFFUMPJh/UkYpvNBL2xVPn87lwG5cA5CFX1Ob
+         4d5l/IrV8H+baIQvliFhmTXOTRgi8dfJxK/W0qgzFpt3XGIlPRifkxOuV1CZQA/JcY
+         NPNiDNbZCV41w9FxGUuENiifVKyythlsS+XYAh30GUvC2RXkn4ugxxAx0b8ImPsHNx
+         BcRYaLUiJv5rVJkjPymrj/3G8FzteXPNpSZIRpwMVKF96tN5/D4+woPrIBdUCTiM4e
+         JZTW4SJvS9/JzOU23fBU2hlAFlMWE7iUynCjK7I6g3wJA3jhw4zgjCkGqLde/haUzp
+         ydK1CXk21JDZQ==
+Date:   Wed, 25 Aug 2021 14:04:44 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v3] PCI: Move pci_dev_is/assign_added() to pci.h
+Message-ID: <20210825190444.GA3593752@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mIvGS-00DL13-SD;;;mid=<87v93tmsb9.fsf@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19jEnItnpOVDV2Rm9Ei+HQwl2CuUif63q4=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.4 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,FVGT_m_MULTI_ODD,TR_Symld_Words,
-        T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,
-        XMSubLong autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 XMSubLong Long Subject
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-        *  0.4 FVGT_m_MULTI_ODD Contains multiple odd letter combinations
-        *  0.0 T_TooManySym_03 6+ unique symbols in subject
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Michael Schmitz <schmitzmic@gmail.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 489 ms - load_scoreonly_sql: 0.40 (0.1%),
-        signal_user_changed: 13 (2.7%), b_tie_ro: 11 (2.2%), parse: 1.32
-        (0.3%), extract_message_metadata: 14 (2.9%), get_uri_detail_list: 2.1
-        (0.4%), tests_pri_-1000: 14 (2.9%), tests_pri_-950: 1.32 (0.3%),
-        tests_pri_-900: 1.08 (0.2%), tests_pri_-90: 71 (14.6%), check_bayes:
-        70 (14.2%), b_tokenize: 7 (1.5%), b_tok_get_all: 6 (1.3%),
-        b_comp_prob: 2.3 (0.5%), b_tok_touch_all: 50 (10.3%), b_finish: 0.88
-        (0.2%), tests_pri_0: 356 (72.7%), check_dkim_signature: 0.67 (0.1%),
-        check_dkim_adsp: 3.4 (0.7%), poll_dns_idle: 1.54 (0.3%), tests_pri_10:
-        2.2 (0.4%), tests_pri_500: 11 (2.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] signal/m68k: Use force_sigsegv(SIGSEGV) in fpsp040_die
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7595397d6c32ae8745201085956696866cc400b6.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ebiederm@xmission.com (Eric W. Biederman) writes:
+On Mon, Aug 23, 2021 at 12:53:39PM +0200, Niklas Schnelle wrote:
+> On Fri, 2021-08-20 at 17:37 -0500, Bjorn Helgaas wrote:
+> > On Tue, Jul 20, 2021 at 05:01:45PM +0200, Niklas Schnelle wrote:
+> > > The helper function pci_dev_is_added() from drivers/pci/pci.h is used in
+> > > PCI arch code of both s390 and powerpc leading to awkward relative
+> > > includes. Move it to the global include/linux/pci.h and get rid of these
+> > > includes just for that one function.
+> > 
+> > I agree the includes are awkward.
+> > 
+> > But the arch code *using* pci_dev_is_added() seems awkward, too.
+> 
+> See below for my interpretation why s390 has some driver like
+> functionality in its arch code which isn't necessarily awkward.
+> 
+> Independent from that I have found pci_dev_is_added() as the only way
+> deal with the case that one might be looking at a struct pci_dev
+> reference that has been removed via pci_stop_and_remove_bus_device() or
+> has never been fully scanned. This is quite useful when handling error
+> events which on s390 are part of the adapter event mechanism shared
+> with channel I/O devices.
+> 
+> > AFAICS, in powerpc, pci_dev_is_added() is only used by
+> > pnv_pci_ioda_fixup_iov() and pseries_pci_fixup_iov_resources().  Those
+> > are only called from pcibios_add_device(), which is only called from
+> > pci_device_add().
+> > 
+> > Is it even possible for pci_dev_is_added() to be true in that path?
 
-> In the fpsp040 code when copyin or copyout fails call
-> force_sigsegv(SIGSEGV) instead of do_exit(SIGSEGV).
->
-> This solves a couple of problems.  Because do_exit embeds the ptrace
-> stop PTRACE_EVENT_EXIT a complete stack frame needs to be present for
-> that to work correctly.  There is always the information needed for a
-> ptrace stop where get_signal is called.  So exiting with a signal
-> solves the ptrace issue.
->
-> Further exiting with a signal ensures that all of the threads in a
-> process are killed not just the thread that malfunctioned.  Which
-> avoids confusing userspace.
->
-> To make force_sigsegv(SIGSEGV) work in fpsp040_die modify the code to
-> save all of the registers and jump to ret_from_exception (which
-> ultimately calls get_signal) after fpsp040_die returns.
->
-> v2: Updated the branches to use gas's pseudo ops that automatically
->     calculate the best branch instruction to use for the purpose.
->
-> v1: Link: https://lkml.kernel.org/r/87a6m8kgtx.fsf_-_@disp2133
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+If the pci_dev_is_added() in powerpc is unreachable, we can remove it
+and at least reduce this to an s390-only problem.
 
-Any chance I can get an ack on this patch?
+> > s390 uses pci_dev_is_added() in recover_store()
+> 
+> I'm actually looking into this as I'm working on an s390 implementation
+> of the PCI recovery flow described in Documentation/PCI/pci-error-
+> recovery.rst that would also call pci_dev_is_added() because when we
+> get a platform notification of a PCI reset done by firmware it may be
+> that the struct pci_dev is going away i.e. we still have a ref count
+> but it is not added to the PCI bus anymore. And pci_dev_is_added() is
+> the only way I've found to check for this state.
+> 
+> > , but I don't know what
+> > that is (looks like a sysfs file, but it's not documented) or why s390
+> > is the only arch that does this.
+> 
+> Good point about this not being documented, I'll look into adding docs.
+> 
+> This is a sysfs attribute that basically removes the pci_dev and re-
+> adds it. This has the complication that since the attribute sits at
+> /sys/bus/pci/devices/<dev>/recover it deletes its own parent directory
+> which requires extra caution and means concurrent accesses block on
+> pci_lock_rescan_remove() instead of a kernfs lock.
+> Long story short when concurrently triggering the attribute one thread
+> proceeds into the pci_lock_rescan_remove() section and does the
+> removal, while others would block on pci_lock_rescan_remove(). Now when
+> the threads unblock the removal is done. In this case there is a new
+> struct pci_dev found in the rescan but the previously blocked threads
+> still have references to the old struct pci_dev which was removed and
+> as far as I could tell can only be distinguished by checking
+> pci_dev_is_added().
 
-Eric
+Is this locking issue different from concurrently writing to
+/sys/.../remove on other architectures?
 
-> ---
->  arch/m68k/fpsp040/skeleton.S | 3 ++-
->  arch/m68k/kernel/traps.c     | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
-> index a8f41615d94a..439395aa6fb4 100644
-> --- a/arch/m68k/fpsp040/skeleton.S
-> +++ b/arch/m68k/fpsp040/skeleton.S
-> @@ -502,7 +502,8 @@ in_ea:
->  	.section .fixup,#alloc,#execinstr
->  	.even
->  1:
-> -	jbra	fpsp040_die
-> +	jbsr	fpsp040_die
-> +	jbra	.Lnotkern
->  
->  	.section __ex_table,#alloc
->  	.align	4
-> diff --git a/arch/m68k/kernel/traps.c b/arch/m68k/kernel/traps.c
-> index 9e1261462bcc..5b19fcdcd69e 100644
-> --- a/arch/m68k/kernel/traps.c
-> +++ b/arch/m68k/kernel/traps.c
-> @@ -1150,7 +1150,7 @@ asmlinkage void set_esp0(unsigned long ssp)
->   */
->  asmlinkage void fpsp040_die(void)
->  {
-> -	do_exit(SIGSEGV);
-> +	force_sigsegv(SIGSEGV);
->  }
->  
->  #ifdef CONFIG_M68KFPU_EMU
+> > Maybe we should make powerpc and s390 less special?
+> 
+> On s390, as I see it, the reason for this is that all of the PCI
+> functionality is directly defined in the Architecture as special CPU
+> instructions which are kind of hypercalls but also an ISA extension.
+> 
+> These instructions range from the basic PCI memory accesses (no real
+> MMIO) to enumeration of the devices and on to reporting of hot-plug and
+> and resets/recovery events. Importantly we do not have any kind of
+> direct access to a real or virtual PCI controller and the architecture
+> has no concept of a comparable entity.
+> 
+> So in my opinion while there is some of the functionality of a PCI
+> controller in arch/s390/pci the cut off between controller
+> functionality and arch support isn't clear at all and exposing PCI
+> support as CPU instructions doesn't map well to the controller concept.
+> 
+> That said, in principle I'm open to moving some of that into
+> drivers/pci/controller/ if you think that would improve things and we
+> can find a good argument what should go where. One possible cut off
+> would be to have arch/s390/pci/ provide wrappers to the PCI
+> instructions but move all their uses to  e.g.
+> drivers/pci/controller/s390/. This would of course be a major
+> refactoring and none of that code would be useful on any other
+> architecture but it would move a lot the accesses to PCI common code
+> functionality out of the arch code.
+
+Looks like hotplug is already in drivers/pci/hotplug/s390_pci_hpc.c.
+
+Might be worth considering putting the other PCI core-ish code in
+drivers/pci as well, though it doesn't feel urgent to me.  Maybe a
+good internship or mentoring project.
+
+I'm not sure this juggling around is worth it basically to just clean
+up the include path.  The downside to me is exposing
+pci_dev_is_added() to outside the PCI core, because I don't want
+to encourage any other users.
+
+> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > ---
+> > > Since v1 (and bad v2):
+> > > - Fixed accidental removal of PCI_DPC_RECOVERED, PCI_DPC_RECOVERING
+> > >   defines and also move these to include/linux/pci.h
+> > > 
+> > >  arch/powerpc/platforms/powernv/pci-sriov.c |  3 ---
+> > >  arch/powerpc/platforms/pseries/setup.c     |  1 -
+> > >  arch/s390/pci/pci_sysfs.c                  |  2 --
+> > >  drivers/pci/hotplug/acpiphp_glue.c         |  1 -
+> > >  drivers/pci/pci.h                          | 15 ---------------
+> > >  include/linux/pci.h                        | 15 +++++++++++++++
+> > >  6 files changed, 15 insertions(+), 22 deletions(-)
+> > > 
+> > > diff --git a/arch/powerpc/platforms/powernv/pci-sriov.c b/arch/powerpc/platforms/powernv/pci-sriov.c
+> > > index 28aac933a439..2e0ca5451e85 100644
+> > > --- a/arch/powerpc/platforms/powernv/pci-sriov.c
+> > > +++ b/arch/powerpc/platforms/powernv/pci-sriov.c
+> > > @@ -9,9 +9,6 @@
+> > >  
+> > >  #include "pci.h"
+> > >  
+> > > -/* for pci_dev_is_added() */
+> > > -#include "../../../../drivers/pci/pci.h"
+> > > 
+> .. snip ..
+> 
