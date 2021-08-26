@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6163F897B
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Aug 2021 15:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A603F89E4
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Aug 2021 16:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242755AbhHZN6R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Aug 2021 09:58:17 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:38630 "EHLO
+        id S242773AbhHZOQA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Aug 2021 10:16:00 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:39980 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242768AbhHZN6K (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Aug 2021 09:58:10 -0400
+        with ESMTP id S229451AbhHZOQA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Aug 2021 10:16:00 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C66CF2230B;
-        Thu, 26 Aug 2021 13:57:17 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id C701B22311;
+        Thu, 26 Aug 2021 14:15:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1629986237; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1629987311; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=EnhMvs9n1nhsU1o7+xe9+Bo6hjRyCva0kdWrwKPRW08=;
-        b=GR//V0SiIEZKLC6w/96Ri/cMSee15eFRF7D1Vw13XhIHov2iDzsBhkCDnzKVLSJpFK3HsG
-        8kGlTGpPk7GQg4S3H0Q3HtwEcMPUwRcy6z3BgXTc4to++5I4qh2Z3tVt7aaH90iUtXrGB+
-        XxO2hZXNgRy0t1NpHNzYylTUjcl8whY=
+        bh=YK6hm9tLw/593E7arpJG5Cuje5/kJDaClSGQye4BMq0=;
+        b=axKtHoOTWlqihCIBRmbzGqm3o+VJALKGxrUEMLKbMEBSMTO55ouryeDauQanVIuJyJi7C1
+        w3ElGK9fmjmrGn4I842luAOMdD28IUDVgNal3rP2b9RVVRu09yDGoqw0QqwBexTPwbsliu
+        d7BtlagVchv8XGnwZ2Cwt8tgzMD3Gtg=
 Received: from suse.cz (unknown [10.100.224.162])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7E2C5A3B99;
-        Thu, 26 Aug 2021 13:57:14 +0000 (UTC)
-Date:   Thu, 26 Aug 2021 15:57:13 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id 2409BA3B8B;
+        Thu, 26 Aug 2021 14:15:11 +0000 (UTC)
+Date:   Thu, 26 Aug 2021 16:15:09 +0200
 From:   Petr Mladek <pmladek@suse.com>
 To:     Yury Norov <yury.norov@gmail.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -78,50 +78,32 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH 11/17] find: micro-optimize for_each_{set,clear}_bit()
-Message-ID: <YSeduU41Ef568xhS@alley>
+Subject: Re: [PATCH 17/17] vsprintf: rework bitmap_list_string
+Message-ID: <YSeh7SrwoMhWb8CO@alley>
 References: <20210814211713.180533-1-yury.norov@gmail.com>
- <20210814211713.180533-12-yury.norov@gmail.com>
+ <20210814211713.180533-18-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210814211713.180533-12-yury.norov@gmail.com>
+In-Reply-To: <20210814211713.180533-18-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat 2021-08-14 14:17:07, Yury Norov wrote:
-> The macros iterate thru all set/clear bits in a bitmap. They search a
-> first bit using find_first_bit(), and the rest bits using find_next_bit().
+On Sat 2021-08-14 14:17:13, Yury Norov wrote:
+> bitmap_list_string() is very ineffective when printing bitmaps with long
+> ranges of set bits because it calls find_next_bit for each bit in the
+> bitmap.  We can do better by detecting ranges of set bits.
 > 
-> Since find_next_bit() is called shortly after find_first_bit(), we can
-> save few lines of I-cache by not using find_first_bit().
+> In my environment, before/after is 943008/31008 ns.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Is this only a speculation or does it fix a real performance problem?
+I like the patch. The new code is much easier to follow.
+Feel free to use:
 
-The macro is used like:
-
-	for_each_set_bit(bit, addr, size) {
-		fn(bit);
-	}
-
-IMHO, the micro-opimization does not help when fn() is non-trivial.
-
-
-> --- a/include/linux/find.h
-> +++ b/include/linux/find.h
-> @@ -280,7 +280,7 @@ unsigned long find_next_bit_le(const void *addr, unsigned
->  #endif
->  
->  #define for_each_set_bit(bit, addr, size) \
-> -	for ((bit) = find_first_bit((addr), (size));		\
-> +	for ((bit) = find_next_bit((addr), (size), 0);		\
->  	     (bit) < (size);					\
->  	     (bit) = find_next_bit((addr), (size), (bit) + 1))
->  
-
-It is not a big deal. I just think that the original code is slightly
-more self-explaining.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
 Best Regards,
 Petr
