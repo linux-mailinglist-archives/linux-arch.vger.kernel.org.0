@@ -2,106 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1045C3F93B2
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Aug 2021 06:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1963F9A8F
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Aug 2021 16:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbhH0E16 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Aug 2021 00:27:58 -0400
-Received: from mengyan1223.wang ([89.208.246.23]:36706 "EHLO mengyan1223.wang"
+        id S245191AbhH0ODs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Aug 2021 10:03:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230070AbhH0E16 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 27 Aug 2021 00:27:58 -0400
-Received: from localhost.localdomain (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@mengyan1223.wang)
-        by mengyan1223.wang (Postfix) with ESMTPSA id 961636618C;
-        Fri, 27 Aug 2021 00:27:06 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
-        s=mail; t=1630038429;
-        bh=HQ5lvpjI4XUtZdLwCt9ajrrIpUohiLWau8D3VdTfHXY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=xXcXyQOTRAghOhepy4R+uAIDJLZl3lNGYwEykybT6y3d8N6tsTezDNCrDKjdyj5LT
-         ONTJ94Sj6tBfSTFW8F8rcUtvJ+lzICzuNnE9MFXB7yyIVcll8d+RDv8FBXxx8tGoKe
-         J0leJcEIdK6X7obt2VPk1caPuO0IVGujoPeTk68sMmPDZUIrtcGYJ/9/3cm+Dk2qTD
-         mUGRLaHDQTNwTi1zfQChAUWZsXPXecmolKz9y/M+I/9aYhhBXp4KM2XdeDVoBjicj5
-         aP+AIHGQxihoCN0ClXuF7tUo/xOBmcGWE+iw0uXEbvW6+Vv/B3ZJu5upk2iomzj9Fp
-         GeRU/r/CFLCfQ==
-Message-ID: <68d81c5ef4d877456aa44cac33fe6c87afc1ec45.camel@mengyan1223.wang>
-Subject: Re: [PATCH 10/19] LoongArch: Add signal handling support
-From:   Xi Ruoyao <xry111@mengyan1223.wang>
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S244821AbhH0ODp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 27 Aug 2021 10:03:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9A91060F25;
+        Fri, 27 Aug 2021 14:02:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1630072976;
+        bh=OyaTCDm5vZvhy4U/W+GLWVTstNRbyz9YgcJskrj8wkQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2TtPPCf+LNZnOsmLvAt9fUc5OzpV+f1ui/mrVuQC5Y7ImvGFnotOSUyq4gY/q8pre
+         GiBds2poXTHLvcaBEqnwYawae2sBQ7JnFOeI00lMERtULkhi7E5728cVkdRxH1yxEt
+         j2icDYo7tnhEa7qnCC+ZSLgzFmUwZdEFtT4D4JL8=
+Date:   Fri, 27 Aug 2021 16:02:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date:   Fri, 27 Aug 2021 12:27:05 +0800
-In-Reply-To: <CAAhV-H5UQQ81=P+i+5Xr3cRU_EqixO2EFHB1yjfi_ioV0cEfhA@mail.gmail.com>
-References: <20210706041820.1536502-1-chenhuacai@loongson.cn>
-         <20210706041820.1536502-11-chenhuacai@loongson.cn>
-         <df1260f044186d0bbb56b297c88ac3658a888f98.camel@mengyan1223.wang>
-         <CAAhV-H5UQQ81=P+i+5Xr3cRU_EqixO2EFHB1yjfi_ioV0cEfhA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Subject: Re: [PATCH 18/20] kbuild: sh: remove unused install script
+Message-ID: <YSjwiQu1kz7CJCrq@kroah.com>
+References: <20210407053419.449796-1-gregkh@linuxfoundation.org>
+ <20210407053419.449796-19-gregkh@linuxfoundation.org>
+ <CAK7LNAQ07ycpjJQGwbtq1ii3k9rh2CZVN6MVxkfMb=+Vgs9zqw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNAQ07ycpjJQGwbtq1ii3k9rh2CZVN6MVxkfMb=+Vgs9zqw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 2021-08-27 at 12:23 +0800, Huacai Chen wrote:
-> Hi, Ruoyao,
+On Wed, Aug 25, 2021 at 12:22:03AM +0900, Masahiro Yamada wrote:
+> On Wed, Apr 7, 2021 at 2:35 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > The sh arch has a install.sh script, but no Makefile actually calls it.
+> > Remove it to keep anyone from accidentally calling it in the future.
+> >
+> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > Cc: Rich Felker <dalias@libc.org>
+> > Cc: linux-sh@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  arch/sh/boot/compressed/install.sh | 56 ------------------------------
+> >  1 file changed, 56 deletions(-)
+> >  delete mode 100644 arch/sh/boot/compressed/install.sh
+> >
+> > diff --git a/arch/sh/boot/compressed/install.sh b/arch/sh/boot/compressed/install.sh
+> > deleted file mode 100644
+> > index f9f41818b17e..000000000000
+> > --- a/arch/sh/boot/compressed/install.sh
+> > +++ /dev/null
+> > @@ -1,56 +0,0 @@
+> > -#!/bin/sh
+> > -#
+> > -# arch/sh/boot/install.sh
+> > -#
+> > -# This file is subject to the terms and conditions of the GNU General Public
+> > -# License.  See the file "COPYING" in the main directory of this archive
+> > -# for more details.
+> > -#
+> > -# Copyright (C) 1995 by Linus Torvalds
+> > -#
+> > -# Adapted from code in arch/i386/boot/Makefile by H. Peter Anvin
+> > -# Adapted from code in arch/i386/boot/install.sh by Russell King
+> > -# Adapted from code in arch/arm/boot/install.sh by Stuart Menefy
+> > -#
+> > -# "make install" script for sh architecture
+> > -#
+> > -# Arguments:
+> > -#   $1 - kernel version
+> > -#   $2 - kernel image file
+> > -#   $3 - kernel map file
+> > -#   $4 - default install path (blank if root directory)
+> > -#
+> > -
+> > -# User may have a custom install script
+> > -
+> > -if [ -x /sbin/${INSTALLKERNEL} ]; then
+> > -  exec /sbin/${INSTALLKERNEL} "$@"
+> > -fi
+> > -
+> > -if [ "$2" = "zImage" ]; then
+> > -# Compressed install
+> > -  echo "Installing compressed kernel"
+> > -  if [ -f $4/vmlinuz-$1 ]; then
+> > -    mv $4/vmlinuz-$1 $4/vmlinuz.old
+> > -  fi
+> > -
+> > -  if [ -f $4/System.map-$1 ]; then
+> > -    mv $4/System.map-$1 $4/System.old
+> > -  fi
+> > -
+> > -  cat $2 > $4/vmlinuz-$1
+> > -  cp $3 $4/System.map-$1
+> > -else
+> > -# Normal install
+> > -  echo "Installing normal kernel"
+> > -  if [ -f $4/vmlinux-$1 ]; then
+> > -    mv $4/vmlinux-$1 $4/vmlinux.old
+> > -  fi
+> > -
+> > -  if [ -f $4/System.map ]; then
+> > -    mv $4/System.map $4/System.old
+> > -  fi
+> > -
+> > -  cat $2 > $4/vmlinux-$1
+> > -  cp $3 $4/System.map
+> > -fi
+> > --
+> > 2.31.1
+> >
 > 
-> On Fri, Aug 27, 2021 at 12:44 AM Xi Ruoyao <xry111@mengyan1223.wang>
-> wrote:
-> > 
-> > On Tue, 2021-07-06 at 12:18 +0800, Huacai Chen wrote:
-> > 
-> > > +/**
-> > > + * struct ucontext - user context structure
-> > > + * @uc_flags:
-> > > + * @uc_link:
-> > > + * @uc_stack:
-> > > + * @uc_mcontext:       holds basic processor state
-> > > + * @uc_sigmask:
-> > > + * @uc_extcontext:     holds extended processor state
-> > > + */
-> > > +struct ucontext {
-> > > +       /* Historic fields matching asm-generic */
-> > > +       unsigned long           uc_flags;
-> > > +       struct ucontext         *uc_link;
-> > > +       stack_t                 uc_stack;
-> > > +       struct sigcontext       uc_mcontext;
-> > > +       sigset_t                uc_sigmask;
-> > > +
-> > > +       /* Extended context structures may follow ucontext */
-> > > +       unsigned long long      uc_extcontext[0];
-> > > +};
-> > > +
-> > > +#endif /* __LOONGARCH_UAPI_ASM_UCONTEXT_H */
-> > 
-> > Hi Huacai,
-> > 
-> > Maybe this is off topic, but I just seen something damn particular
-> > in
-> > your workmates' glibc repo:
-> > 
-> > https://github.com/loongson/glibc/commit/86d7512949640642cdf767fb6beb077d446b2857
-> > "Modify struct mcontext_t and ucontext_t layout":
-> The V1 of kernel patchset "match" the old, un-pulblic toolchain, and
-> the new public toolchain (which you have seen) adjust ucontext, and
-> the V2 of kernel patchset will be also update ucontext. But anyway,
-> thank you very much!
-
-Thanks for the explaination! I'll try to incorporate the change into my
-next round of system build.
 > 
+> This one is applicable independently.
+> 
+> Applied to linux-kbuild. Thanks.
 
+Hey, nice, thanks!
+
+I'll work on the rest of the patches in this series after the next merge
+window is over...
+
+greg k-h
