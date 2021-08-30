@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEF93FBBE3
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Aug 2021 20:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054903FBC06
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Aug 2021 20:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238936AbhH3SSc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Aug 2021 14:18:32 -0400
-Received: from mga18.intel.com ([134.134.136.126]:43870 "EHLO mga18.intel.com"
+        id S238856AbhH3STj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Aug 2021 14:19:39 -0400
+Received: from mga18.intel.com ([134.134.136.126]:43858 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238752AbhH3SRn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 30 Aug 2021 14:17:43 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="205460120"
+        id S238900AbhH3SSH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 30 Aug 2021 14:18:07 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="205460123"
 X-IronPort-AV: E=Sophos;i="5.84,364,1620716400"; 
-   d="scan'208";a="205460120"
+   d="scan'208";a="205460123"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 11:16:22 -0700
 X-IronPort-AV: E=Sophos;i="5.84,364,1620716400"; 
-   d="scan'208";a="530533364"
+   d="scan'208";a="530533370"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 11:16:22 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -48,12 +48,10 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>,
         Rick P Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v30 28/32] ELF: Introduce arch_setup_elf_property()
-Date:   Mon, 30 Aug 2021 11:15:24 -0700
-Message-Id: <20210830181528.1569-29-yu-cheng.yu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v30 29/32] x86/cet/shstk: Add arch_prctl functions for shadow stack
+Date:   Mon, 30 Aug 2021 11:15:25 -0700
+Message-Id: <20210830181528.1569-30-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210830181528.1569-1-yu-cheng.yu@intel.com>
 References: <20210830181528.1569-1-yu-cheng.yu@intel.com>
@@ -63,188 +61,178 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-An ELF file's .note.gnu.property indicates arch features supported by the
-file.  These features are extracted by arch_parse_elf_property() and stored
-in 'arch_elf_state'.
+arch_prctl(ARCH_X86_CET_STATUS, u64 *args)
+    Get CET feature status.
 
-Introduce x86 feature definitions and arch_setup_elf_property(), which
-enables such features.  The first use-case of this function is Shadow
-Stack.
+    The parameter 'args' is a pointer to a user buffer.  The kernel returns
+    the following information:
 
-ARM64 is the other arch that has ARCH_USE_GNU_PROPERTY and arch_parse_elf_
-property().  Add arch_setup_elf_property() for it.
+    *args = shadow stack/IBT status
+    *(args + 1) = shadow stack base address
+    *(args + 2) = shadow stack size
+
+    32-bit binaries use the same interface, but only lower 32-bits of each
+    item.
+
+arch_prctl(ARCH_X86_CET_DISABLE, unsigned int features)
+    Disable CET features specified in 'features'.  Return -EPERM if CET is
+    locked.
+
+arch_prctl(ARCH_X86_CET_LOCK)
+    Lock in CET features.
+
+Also change do_arch_prctl_common()'s parameter 'cpuid_enabled' to
+'arg2', as it is now also passed to prctl_cet().
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Dave Martin <Dave.Martin@arm.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Mark Brown <broonie@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
-v27:
-- Make X86_64 select ARCH_USE_GNU_PROPERTY and ARCH_BINFMT_ELF_STATE and
-  remove #ifdef's.
-- Add link to x86-64-psABI document.
----
- arch/arm64/include/asm/elf.h |  5 +++++
- arch/x86/Kconfig             |  2 ++
- arch/x86/include/asm/elf.h   | 11 +++++++++++
- arch/x86/kernel/process_64.c | 27 +++++++++++++++++++++++++++
- fs/binfmt_elf.c              |  4 ++++
- include/linux/elf.h          |  6 ++++++
- include/uapi/linux/elf.h     | 14 ++++++++++++++
- 7 files changed, 69 insertions(+)
+ arch/x86/include/asm/cet.h        |  7 ++++
+ arch/x86/include/uapi/asm/prctl.h |  4 +++
+ arch/x86/kernel/Makefile          |  1 +
+ arch/x86/kernel/cet_prctl.c       | 60 +++++++++++++++++++++++++++++++
+ arch/x86/kernel/process.c         |  6 ++--
+ 5 files changed, 75 insertions(+), 3 deletions(-)
+ create mode 100644 arch/x86/kernel/cet_prctl.c
 
-diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-index 8d1c8dcb87fd..d37bc7915935 100644
---- a/arch/arm64/include/asm/elf.h
-+++ b/arch/arm64/include/asm/elf.h
-@@ -281,6 +281,11 @@ static inline int arch_parse_elf_property(u32 type, const void *data,
- 	return 0;
- }
+diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+index 90e84a45b80d..fb32cb093ebb 100644
+--- a/arch/x86/include/asm/cet.h
++++ b/arch/x86/include/asm/cet.h
+@@ -10,6 +10,7 @@ struct task_struct;
+ struct thread_shstk {
+ 	u64	base;
+ 	u64	size;
++	u64	locked:1;
+ };
  
-+static inline int arch_setup_elf_property(struct arch_elf_state *arch)
-+{
-+	return 0;
-+}
-+
- static inline int arch_elf_pt_proc(void *ehdr, void *phdr,
- 				   struct file *f, bool is_interp,
- 				   struct arch_elf_state *state)
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index cb0405ccf858..34692f02118c 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -29,6 +29,7 @@ config X86_64
- 	select ARCH_HAS_SHADOW_STACK
- 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
- 	select ARCH_USE_CMPXCHG_LOCKREF
-+	select ARCH_USE_GNU_PROPERTY
- 	select HAVE_ARCH_SOFT_DIRTY
- 	select MODULES_USE_ELF_RELA
- 	select NEED_DMA_MAP_STATE
-@@ -61,6 +62,7 @@ config X86
- 	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
- 	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
- 	select ARCH_32BIT_OFF_T			if X86_32
-+	select ARCH_BINFMT_ELF_STATE
- 	select ARCH_CLOCKSOURCE_INIT
- 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if X86_64 && HUGETLB_PAGE && MIGRATION
- 	select ARCH_ENABLE_MEMORY_HOTPLUG if X86_64 || (X86_32 && HIGHMEM)
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index 29fea180a665..3281a3d01bd2 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -394,6 +394,17 @@ extern int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
- 
- extern bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs);
- 
-+struct arch_elf_state {
-+	unsigned int gnu_property;
-+};
-+
-+#define INIT_ARCH_ELF_STATE {	\
-+	.gnu_property = 0,	\
-+}
-+
-+#define arch_elf_pt_proc(ehdr, phdr, elf, interp, state) (0)
-+#define arch_check_elf(ehdr, interp, interp_ehdr, state) (0)
-+
- /* Do not change the values. See get_align_mask() */
- enum align_flags {
- 	ALIGN_VA_32	= BIT(0),
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index ec0d836a13b1..4271963fdd8c 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -861,3 +861,30 @@ unsigned long KSTK_ESP(struct task_struct *task)
- {
- 	return task_pt_regs(task)->sp;
- }
-+
-+int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
-+			    bool compat, struct arch_elf_state *state)
-+{
-+	if (type != GNU_PROPERTY_X86_FEATURE_1_AND)
-+		return 0;
-+
-+	if (datasz != sizeof(unsigned int))
-+		return -ENOEXEC;
-+
-+	state->gnu_property = *(unsigned int *)data;
-+	return 0;
-+}
-+
-+int arch_setup_elf_property(struct arch_elf_state *state)
-+{
-+	int r = 0;
-+
-+#ifdef CONFIG_X86_SHADOW_STACK
-+	memset(&current->thread.shstk, 0, sizeof(struct thread_shstk));
-+
-+	if (state->gnu_property & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
-+		r = shstk_setup();
-+#endif
-+
-+	return r;
-+}
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 439ed81e755a..6a1936dab6b4 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1248,6 +1248,10 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 
- 	set_binfmt(&elf_format);
- 
-+	retval = arch_setup_elf_property(&arch_state);
-+	if (retval < 0)
-+		goto out;
-+
- #ifdef ARCH_HAS_SETUP_ADDITIONAL_PAGES
- 	retval = ARCH_SETUP_ADDITIONAL_PAGES(bprm, elf_ex, !!interpreter);
- 	if (retval < 0)
-diff --git a/include/linux/elf.h b/include/linux/elf.h
-index c9a46c4e183b..be04d15e937f 100644
---- a/include/linux/elf.h
-+++ b/include/linux/elf.h
-@@ -92,9 +92,15 @@ static inline int arch_parse_elf_property(u32 type, const void *data,
- {
- 	return 0;
- }
-+
-+static inline int arch_setup_elf_property(struct arch_elf_state *arch)
-+{
-+	return 0;
-+}
- #else
- extern int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
- 				   bool compat, struct arch_elf_state *arch);
-+extern int arch_setup_elf_property(struct arch_elf_state *arch);
+ #ifdef CONFIG_X86_SHADOW_STACK
+@@ -38,6 +39,12 @@ static inline int setup_signal_shadow_stack(int proc32, void __user *restorer) {
+ static inline int restore_signal_shadow_stack(void) { return 0; }
  #endif
  
- #ifdef CONFIG_ARCH_HAVE_ELF_PROT
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index 61bf4774b8f2..f50b3ce7bb75 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -456,4 +456,18 @@ typedef struct elf64_note {
- /* Bits for GNU_PROPERTY_AARCH64_FEATURE_1_BTI */
- #define GNU_PROPERTY_AARCH64_FEATURE_1_BTI	(1U << 0)
++#ifdef CONFIG_X86_SHADOW_STACK
++int prctl_cet(int option, u64 arg2);
++#else
++static inline int prctl_cet(int option, u64 arg2) { return -EINVAL; }
++#endif
++
+ #endif /* __ASSEMBLY__ */
  
-+/*
-+ * See the x86 64 psABI at:
-+ * https://gitlab.com/x86-psABIs/x86-64-ABI/-/wikis/x86-64-psABI
-+ * .note.gnu.property types for x86:
-+ */
-+/* 0xc0000000 and 0xc0000001 are reserved */
-+#define GNU_PROPERTY_X86_FEATURE_1_AND		0xc0000002
+ #endif /* _ASM_X86_CET_H */
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 5a6aac9fa41f..9245bf629120 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -14,4 +14,8 @@
+ #define ARCH_MAP_VDSO_32	0x2002
+ #define ARCH_MAP_VDSO_64	0x2003
+ 
++#define ARCH_X86_CET_STATUS		0x3001
++#define ARCH_X86_CET_DISABLE		0x3002
++#define ARCH_X86_CET_LOCK		0x3003
 +
-+/* Bits for GNU_PROPERTY_X86_FEATURE_1_AND */
-+#define GNU_PROPERTY_X86_FEATURE_1_IBT		0x00000001
-+#define GNU_PROPERTY_X86_FEATURE_1_SHSTK	0x00000002
-+#define GNU_PROPERTY_X86_FEATURE_1_VALID (GNU_PROPERTY_X86_FEATURE_1_IBT | \
-+					   GNU_PROPERTY_X86_FEATURE_1_SHSTK)
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 9e064845e497..39e826b5cabd 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -151,6 +151,7 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+ 
+ obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
+ obj-$(CONFIG_X86_SHADOW_STACK)		+= shstk.o
++obj-$(CONFIG_X86_SHADOW_STACK)		+= shstk.o cet_prctl.o
+ ###
+ # 64 bit specific files
+ ifeq ($(CONFIG_X86_64),y)
+diff --git a/arch/x86/kernel/cet_prctl.c b/arch/x86/kernel/cet_prctl.c
+new file mode 100644
+index 000000000000..b426d200e070
+--- /dev/null
++++ b/arch/x86/kernel/cet_prctl.c
+@@ -0,0 +1,60 @@
++// SPDX-License-Identifier: GPL-2.0
 +
- #endif /* _UAPI_LINUX_ELF_H */
++#include <linux/errno.h>
++#include <linux/uaccess.h>
++#include <linux/prctl.h>
++#include <linux/compat.h>
++#include <linux/mman.h>
++#include <linux/elfcore.h>
++#include <linux/processor.h>
++#include <asm/prctl.h>
++#include <asm/cet.h>
++
++/* See Documentation/x86/intel_cet.rst. */
++
++static int cet_copy_status_to_user(struct thread_shstk *shstk, u64 __user *ubuf)
++{
++	u64 buf[3] = {};
++
++	if (shstk->size) {
++		buf[0] |= GNU_PROPERTY_X86_FEATURE_1_SHSTK;
++		buf[1] = shstk->base;
++		buf[2] = shstk->size;
++	}
++
++	return copy_to_user(ubuf, buf, sizeof(buf));
++}
++
++int prctl_cet(int option, u64 arg2)
++{
++	struct thread_shstk *shstk;
++
++	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
++		return -ENOTSUPP;
++
++	shstk = &current->thread.shstk;
++
++	if (option == ARCH_X86_CET_STATUS)
++		return cet_copy_status_to_user(shstk, (u64 __user *)arg2);
++
++	switch (option) {
++	case ARCH_X86_CET_DISABLE:
++		if (shstk->locked)
++			return -EPERM;
++
++		if (arg2 & ~GNU_PROPERTY_X86_FEATURE_1_VALID)
++			return -EINVAL;
++		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
++			shstk_disable();
++		return 0;
++
++	case ARCH_X86_CET_LOCK:
++		if (arg2)
++			return -EINVAL;
++		shstk->locked = 1;
++		return 0;
++
++	default:
++		return -ENOSYS;
++	}
++}
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index bade6a594d63..7d8ccebdcab1 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -1006,14 +1006,14 @@ unsigned long get_wchan(struct task_struct *p)
+ }
+ 
+ long do_arch_prctl_common(struct task_struct *task, int option,
+-			  unsigned long cpuid_enabled)
++			  unsigned long arg2)
+ {
+ 	switch (option) {
+ 	case ARCH_GET_CPUID:
+ 		return get_cpuid_mode();
+ 	case ARCH_SET_CPUID:
+-		return set_cpuid_mode(task, cpuid_enabled);
++		return set_cpuid_mode(task, arg2);
+ 	}
+ 
+-	return -EINVAL;
++	return prctl_cet(option, arg2);
+ }
 -- 
 2.21.0
 
