@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 709F43FBBEF
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Aug 2021 20:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0DB3FBBEA
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Aug 2021 20:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238759AbhH3SSi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Aug 2021 14:18:38 -0400
-Received: from mga06.intel.com ([134.134.136.31]:23985 "EHLO mga06.intel.com"
+        id S238698AbhH3SSh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Aug 2021 14:18:37 -0400
+Received: from mga06.intel.com ([134.134.136.31]:23984 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238534AbhH3SRM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S238533AbhH3SRM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Mon, 30 Aug 2021 14:17:12 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="279339851"
+X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="279339852"
 X-IronPort-AV: E=Sophos;i="5.84,364,1620716400"; 
-   d="scan'208";a="279339851"
+   d="scan'208";a="279339852"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 11:16:17 -0700
 X-IronPort-AV: E=Sophos;i="5.84,364,1620716400"; 
-   d="scan'208";a="530533279"
+   d="scan'208";a="530533281"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 11:16:16 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 11:16:17 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -49,11 +49,10 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Haitao Huang <haitao.huang@intel.com>,
         Rick P Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v30 07/32] x86/mm: Remove _PAGE_DIRTY from kernel RO pages
-Date:   Mon, 30 Aug 2021 11:15:03 -0700
-Message-Id: <20210830181528.1569-8-yu-cheng.yu@intel.com>
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH v30 08/32] x86/mm: Move pmd_write(), pud_write() up in the file
+Date:   Mon, 30 Aug 2021 11:15:04 -0700
+Message-Id: <20210830181528.1569-9-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210830181528.1569-1-yu-cheng.yu@intel.com>
 References: <20210830181528.1569-1-yu-cheng.yu@intel.com>
@@ -63,62 +62,65 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The x86 family of processors do not directly create read-only and Dirty
-PTEs.  These PTEs are created by software.  One such case is that kernel
-read-only pages are historically setup as Dirty.
-
-New processors that support Shadow Stack regard read-only and Dirty PTEs as
-shadow stack pages.  This results in ambiguity between shadow stack and
-kernel read-only pages.  To resolve this, removed Dirty from kernel read-
-only pages.
+To prepare the introduction of _PAGE_COW, move pmd_write() and
+pud_write() up in the file, so that they can be used by other
+helpers below.  No functional changes.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- arch/x86/include/asm/pgtable_types.h | 6 +++---
- arch/x86/mm/pat/set_memory.c         | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/pgtable.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index 40497a9020c6..3781a79b6388 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -190,10 +190,10 @@ enum page_cache_mode {
- #define _KERNPG_TABLE		 (__PP|__RW|   0|___A|   0|___D|   0|   0| _ENC)
- #define _PAGE_TABLE_NOENC	 (__PP|__RW|_USR|___A|   0|___D|   0|   0)
- #define _PAGE_TABLE		 (__PP|__RW|_USR|___A|   0|___D|   0|   0| _ENC)
--#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|___D|   0|___G)
--#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|___D|   0|___G)
-+#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|   0|   0|___G)
-+#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|   0|   0|___G)
- #define __PAGE_KERNEL_NOCACHE	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __NC)
--#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|___D|   0|___G)
-+#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|   0|   0|___G)
- #define __PAGE_KERNEL_LARGE	 (__PP|__RW|   0|___A|__NX|___D|_PSE|___G)
- #define __PAGE_KERNEL_LARGE_EXEC (__PP|__RW|   0|___A|   0|___D|_PSE|___G)
- #define __PAGE_KERNEL_WP	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __WP)
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index ad8a5c586a35..a05e630cb531 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -1940,7 +1940,7 @@ int set_memory_nx(unsigned long addr, int numpages)
- 
- int set_memory_ro(unsigned long addr, int numpages)
- {
--	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW), 0);
-+	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW | _PAGE_DIRTY), 0);
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 448cd01eb3ec..0ddeda0bc0c0 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -156,6 +156,18 @@ static inline int pte_write(pte_t pte)
+ 	return pte_flags(pte) & _PAGE_RW;
  }
  
- int set_memory_rw(unsigned long addr, int numpages)
++#define pmd_write pmd_write
++static inline int pmd_write(pmd_t pmd)
++{
++	return pmd_flags(pmd) & _PAGE_RW;
++}
++
++#define pud_write pud_write
++static inline int pud_write(pud_t pud)
++{
++	return pud_flags(pud) & _PAGE_RW;
++}
++
+ static inline int pte_huge(pte_t pte)
+ {
+ 	return pte_flags(pte) & _PAGE_PSE;
+@@ -1099,12 +1111,6 @@ extern int pmdp_clear_flush_young(struct vm_area_struct *vma,
+ 				  unsigned long address, pmd_t *pmdp);
+ 
+ 
+-#define pmd_write pmd_write
+-static inline int pmd_write(pmd_t pmd)
+-{
+-	return pmd_flags(pmd) & _PAGE_RW;
+-}
+-
+ #define __HAVE_ARCH_PMDP_HUGE_GET_AND_CLEAR
+ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm, unsigned long addr,
+ 				       pmd_t *pmdp)
+@@ -1126,12 +1132,6 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
+ }
+ 
+-#define pud_write pud_write
+-static inline int pud_write(pud_t pud)
+-{
+-	return pud_flags(pud) & _PAGE_RW;
+-}
+-
+ #ifndef pmdp_establish
+ #define pmdp_establish pmdp_establish
+ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
 -- 
 2.21.0
 
