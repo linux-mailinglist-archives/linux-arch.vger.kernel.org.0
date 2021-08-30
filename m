@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09ECA3FBC31
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Aug 2021 20:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4243FBC35
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Aug 2021 20:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238591AbhH3SY0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Aug 2021 14:24:26 -0400
+        id S238645AbhH3SY1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Aug 2021 14:24:27 -0400
 Received: from mga06.intel.com ([134.134.136.31]:24492 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238538AbhH3SYF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 30 Aug 2021 14:24:05 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="279340865"
+        id S238583AbhH3SYH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 30 Aug 2021 14:24:07 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="279340866"
 X-IronPort-AV: E=Sophos;i="5.84,364,1620716400"; 
-   d="scan'208";a="279340865"
+   d="scan'208";a="279340866"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 11:23:10 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 11:23:11 -0700
 X-IronPort-AV: E=Sophos;i="5.84,364,1620716400"; 
-   d="scan'208";a="540650963"
+   d="scan'208";a="540650965"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 11:23:10 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -48,10 +48,11 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>,
         Rick P Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v30 07/10] x86/vdso: Insert endbr32/endbr64 to vDSO
-Date:   Mon, 30 Aug 2021 11:22:18 -0700
-Message-Id: <20210830182221.3535-8-yu-cheng.yu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH v30 08/10] x86/vdso: Introduce ENDBR macro
+Date:   Mon, 30 Aug 2021 11:22:19 -0700
+Message-Id: <20210830182221.3535-9-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210830182221.3535-1-yu-cheng.yu@intel.com>
 References: <20210830182221.3535-1-yu-cheng.yu@intel.com>
@@ -61,35 +62,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "H.J. Lu" <hjl.tools@gmail.com>
+ENDBR is a special new instruction for the Indirect Branch Tracking (IBT)
+component of CET.  IBT prevents attacks by ensuring that (most) indirect
+branches and function calls may only land at ENDBR instructions.  Branches
+that don't follow the rules will result in control flow (#CF) exceptions.
 
-When Indirect Branch Tracking (IBT) is enabled, vDSO entry points need
-ENDBR32/ENDBR64 as first instructions.  Kconfig X86_IBT verifies compiler's
--fcf-protection support.  Update vDso Makefile to enable it.
+ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
+instructions are inserted automatically by the compiler, but branch
+targets written in assembly must have ENDBR added manually.
 
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+Introduce ENDBR64/ENDBR32 macros.
+
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- arch/x86/entry/vdso/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/include/asm/vdso.h | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 05c4abc2fdfd..a773a5f03b63 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -93,6 +93,10 @@ endif
- 
- $(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- 
-+ifdef CONFIG_X86_IBT
-+$(vobjs) $(vobjs32): KBUILD_CFLAGS += -fcf-protection=branch
-+endif
+diff --git a/arch/x86/include/asm/vdso.h b/arch/x86/include/asm/vdso.h
+index 98aa103eb4ab..97358246e4c7 100644
+--- a/arch/x86/include/asm/vdso.h
++++ b/arch/x86/include/asm/vdso.h
+@@ -52,6 +52,24 @@ extern int map_vdso_once(const struct vdso_image *image, unsigned long addr);
+ extern bool fixup_vdso_exception(struct pt_regs *regs, int trapnr,
+ 				 unsigned long error_code,
+ 				 unsigned long fault_addr);
+-#endif /* __ASSEMBLER__ */
++#else /* __ASSEMBLER__ */
 +
- #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
- #
++/*
++ * ENDBR is an instruction for the Indirect Branch Tracking (IBT) component
++ * of CET.  IBT prevents attacks by ensuring that (most) indirect branches
++ * function calls may only land at ENDBR instructions.  Branches that don't
++ * follow the rules will result in control flow (#CF) exceptions.
++ * ENDBR is a noop when IBT is unsupported or disabled.  Most ENDBR
++ * instructions are inserted automatically by the compiler, but branch
++ * targets written in assembly must have ENDBR added manually.
++ */
++#ifdef CONFIG_X86_IBT
++#define ENDBR64 endbr64
++#define ENDBR32 endbr32
++#else
++#define ENDBR64
++#define ENDBR32
++#endif
+ 
++#endif /* __ASSEMBLER__ */
+ #endif /* _ASM_X86_VDSO_H */
 -- 
 2.21.0
 
