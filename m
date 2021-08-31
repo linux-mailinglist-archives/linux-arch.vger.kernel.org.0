@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D21573FCA14
-	for <lists+linux-arch@lfdr.de>; Tue, 31 Aug 2021 16:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02B23FCA18
+	for <lists+linux-arch@lfdr.de>; Tue, 31 Aug 2021 16:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238471AbhHaOnQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 31 Aug 2021 10:43:16 -0400
-Received: from mga07.intel.com ([134.134.136.100]:52071 "EHLO mga07.intel.com"
+        id S237512AbhHaOnS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 Aug 2021 10:43:18 -0400
+Received: from mga17.intel.com ([192.55.52.151]:12657 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238513AbhHaOnK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 31 Aug 2021 10:43:10 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10093"; a="282200856"
+        id S238550AbhHaOnL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 31 Aug 2021 10:43:11 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10093"; a="198723492"
 X-IronPort-AV: E=Sophos;i="5.84,366,1620716400"; 
-   d="scan'208";a="282200856"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 07:42:14 -0700
+   d="scan'208";a="198723492"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 07:42:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,366,1620716400"; 
-   d="scan'208";a="446126180"
+   d="scan'208";a="519710705"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 31 Aug 2021 07:42:08 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 31 Aug 2021 07:42:10 -0700
 Received: from alobakin-mobl.ger.corp.intel.com (psmrokox-mobl.ger.corp.intel.com [10.213.6.58])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 17VEfmfZ002209;
-        Tue, 31 Aug 2021 15:42:06 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 17VEfmfa002209;
+        Tue, 31 Aug 2021 15:42:08 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org
 Cc:     "Kristen C Accardi" <kristen.c.accardi@intel.com>,
@@ -45,9 +45,9 @@ Cc:     "Kristen C Accardi" <kristen.c.accardi@intel.com>,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH v6 kspp-next 09/22] x86/tools: Add relative relocs for randomized functions
-Date:   Tue, 31 Aug 2021 16:41:01 +0200
-Message-Id: <20210831144114.154-10-alexandr.lobakin@intel.com>
+Subject: [PATCH v6 kspp-next 10/22] x86/boot/compressed: Avoid duplicate malloc() implementations
+Date:   Tue, 31 Aug 2021 16:41:02 +0200
+Message-Id: <20210831144114.154-11-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210831144114.154-1-alexandr.lobakin@intel.com>
 References: <20210831144114.154-1-alexandr.lobakin@intel.com>
@@ -57,189 +57,142 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Kristen Carlson Accardi <kristen@linux.intel.com>
+From: Kees Cook <keescook@chromium.org>
 
-When reordering functions, the relative offsets for relocs that
-are either in the randomized sections, or refer to the randomized
-sections will need to be adjusted. Add code to detect whether a
-reloc satisfies these cases, and if so, add them to the appropriate
-reloc list.
+The preboot malloc() (and free()) implementation in
+include/linux/decompress/mm.h (which is also included by the
+static decompressors) is static. This is fine when the only thing
+interested in using malloc() is the decompression code, but the
+x86 preboot environment uses malloc() in a couple places, leading to a
+potential collision when the static copies of the available memory
+region ("malloc_ptr") gets reset to the global "free_mem_ptr" value.
+As it happens, the existing usage pattern happened to be safe because each
+user did 1 malloc() and 1 free() before returning and were not nested:
 
+extract_kernel() (misc.c)
+	choose_random_location() (kaslr.c)
+		mem_avoid_init()
+			handle_mem_options()
+				malloc()
+				...
+				free()
+	...
+	parse_elf() (misc.c)
+		malloc()
+		...
+		free()
+
+Adding FGKASLR, however, will insert additional malloc() calls local to
+fgkaslr.c in the middle of parse_elf()'s malloc()/free() pair:
+
+	parse_elf() (misc.c)
+		malloc()
+		if (...) {
+			layout_randomized_image(output, &ehdr, phdrs);
+				malloc() <- boom
+				...
+		else
+			layout_image(output, &ehdr, phdrs);
+		free()
+
+To avoid collisions, there must be a single implementation of malloc().
+Adjust include/linux/decompress/mm.h so that visibility can be
+controlled, provide prototypes in misc.h, and implement the functions in
+misc.c. This also results in a small size savings:
+
+$ size vmlinux.before vmlinux.after
+   text    data     bss     dec     hex filename
+8842314     468  178320 9021102  89a6ae vmlinux.before
+8842240     468  178320 9021028  89a664 vmlinux.after
+
+Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Tested-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- arch/x86/boot/compressed/Makefile |  7 ++++++-
- arch/x86/tools/relocs.c           | 32 +++++++++++++++++++++++++++----
- arch/x86/tools/relocs.h           |  4 ++--
- arch/x86/tools/relocs_common.c    | 15 ++++++++++-----
- 4 files changed, 46 insertions(+), 12 deletions(-)
+ arch/x86/boot/compressed/kaslr.c |  4 ----
+ arch/x86/boot/compressed/misc.c  |  3 +++
+ arch/x86/boot/compressed/misc.h  |  2 ++
+ include/linux/decompress/mm.h    | 12 ++++++++++--
+ 4 files changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 431bf7f846c3..c31a24161fbf 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -106,6 +106,11 @@ $(obj)/vmlinux: $(vmlinux-objs-y) $(efi-obj-y) FORCE
- 	$(call if_changed,ld)
+diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
+index e36690778497..7d94f95c84dd 100644
+--- a/arch/x86/boot/compressed/kaslr.c
++++ b/arch/x86/boot/compressed/kaslr.c
+@@ -32,10 +32,6 @@
+ #include <generated/utsrelease.h>
+ #include <asm/efi.h>
  
- OBJCOPYFLAGS_vmlinux.bin :=  -R .comment -S
-+
-+ifdef CONFIG_FG_KASLR
-+RELOCS_ARGS += --fg-kaslr
-+endif
-+
- $(obj)/vmlinux.bin: vmlinux FORCE
- 	$(call if_changed,objcopy)
+-/* Macros used by the included decompressor code below. */
+-#define STATIC
+-#include <linux/decompress/mm.h>
+-
+ #define _SETUP
+ #include <asm/setup.h>	/* For COMMAND_LINE_SIZE */
+ #undef _SETUP
+diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+index 743f13ea25c1..a4339cb2d247 100644
+--- a/arch/x86/boot/compressed/misc.c
++++ b/arch/x86/boot/compressed/misc.c
+@@ -28,6 +28,9 @@
  
-@@ -113,7 +118,7 @@ targets += $(patsubst $(obj)/%,%,$(vmlinux-objs-y)) vmlinux.bin.all vmlinux.relo
+ /* Macros used by the included decompressor code below. */
+ #define STATIC		static
++/* Define an externally visible malloc()/free(). */
++#define MALLOC_VISIBLE
++#include <linux/decompress/mm.h>
  
- CMD_RELOCS = arch/x86/tools/relocs
- quiet_cmd_relocs = RELOCS  $@
--      cmd_relocs = $(CMD_RELOCS) $< > $@;$(CMD_RELOCS) --abs-relocs $<
-+      cmd_relocs = $(CMD_RELOCS) $(RELOCS_ARGS) $< > $@;$(CMD_RELOCS) $(RELOCS_ARGS) --abs-relocs $<
- $(obj)/vmlinux.relocs: vmlinux FORCE
- 	$(call if_changed,relocs)
- 
-diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
-index ec50dfad407c..5ae6d1b8ea03 100644
---- a/arch/x86/tools/relocs.c
-+++ b/arch/x86/tools/relocs.c
-@@ -42,6 +42,8 @@ struct section {
- };
- static struct section *secs;
- 
-+static int fgkaslr_mode;
-+
- static const char * const sym_regex_kernel[S_NSYMTYPES] = {
  /*
-  * Following symbols have been audited. There values are constant and do
-@@ -818,6 +820,24 @@ static int is_percpu_sym(ElfW(Sym) *sym, const char *symname)
- 		strncmp(symname, "init_per_cpu_", 13);
+  * Provide definitions of memzero and memmove as some of the decompressors will
+diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+index 31139256859f..1a2e422dc357 100644
+--- a/arch/x86/boot/compressed/misc.h
++++ b/arch/x86/boot/compressed/misc.h
+@@ -44,6 +44,8 @@ extern char _head[], _end[];
+ /* misc.c */
+ extern memptr free_mem_ptr;
+ extern memptr free_mem_end_ptr;
++extern void *malloc(int size);
++extern void free(void *where);
+ extern struct boot_params *boot_params;
+ void __putstr(const char *s);
+ void __puthex(unsigned long value);
+diff --git a/include/linux/decompress/mm.h b/include/linux/decompress/mm.h
+index 868e9eacd69e..9192986b1a73 100644
+--- a/include/linux/decompress/mm.h
++++ b/include/linux/decompress/mm.h
+@@ -25,13 +25,21 @@
+ #define STATIC_RW_DATA static
+ #endif
+ 
++/*
++ * When an architecture needs to share the malloc()/free() implementation
++ * between compilation units, it needs to have non-local visibility.
++ */
++#ifndef MALLOC_VISIBLE
++#define MALLOC_VISIBLE static
++#endif
++
+ /* A trivial malloc implementation, adapted from
+  *  malloc by Hannu Savolainen 1993 and Matthias Urlichs 1994
+  */
+ STATIC_RW_DATA unsigned long malloc_ptr;
+ STATIC_RW_DATA int malloc_count;
+ 
+-static void *malloc(int size)
++MALLOC_VISIBLE void *malloc(int size)
+ {
+ 	void *p;
+ 
+@@ -52,7 +60,7 @@ static void *malloc(int size)
+ 	return p;
  }
  
-+static int is_function_section(struct section *sec)
-+{
-+	if (!fgkaslr_mode)
-+		return 0;
-+
-+	return !strncmp(sec_name(sec->shdr.sh_info), ".text.", 6);
-+}
-+
-+static int is_randomized_sym(ElfW(Sym) *sym)
-+{
-+	if (!fgkaslr_mode)
-+		return 0;
-+
-+	if (sym->st_shndx > shnum)
-+		return 0;
-+
-+	return !strncmp(sec_name(sym_index(sym)), ".text.", 6);
-+}
- 
- static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
- 		      const char *symname)
-@@ -843,12 +863,15 @@ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
- 	case R_X86_64_PC32:
- 	case R_X86_64_PLT32:
- 		/*
--		 * PC relative relocations don't need to be adjusted unless
--		 * referencing a percpu symbol.
-+		 * we need to keep pc relative relocations for sections which
-+		 * might be randomized, and for the percpu section.
-+		 * We also need to keep relocations for any offset which might
-+		 * reference an address in a section which has been randomized.
- 		 *
- 		 * NB: R_X86_64_PLT32 can be treated as R_X86_64_PC32.
- 		 */
--		if (is_percpu_sym(sym, symname))
-+		if (is_function_section(sec) || is_randomized_sym(sym) ||
-+		    is_percpu_sym(sym, symname))
- 			add_reloc(&relocs32neg, offset);
- 		break;
- 
-@@ -1163,8 +1186,9 @@ static void print_reloc_info(void)
- 
- void process(FILE *fp, int use_real_mode, int as_text,
- 	     int show_absolute_syms, int show_absolute_relocs,
--	     int show_reloc_info)
-+	     int show_reloc_info, int fgkaslr)
+-static void free(void *where)
++MALLOC_VISIBLE void free(void *where)
  {
-+	fgkaslr_mode = fgkaslr;
- 	regex_init(use_real_mode);
- 	read_ehdr(fp);
- 	read_shdrs(fp);
-diff --git a/arch/x86/tools/relocs.h b/arch/x86/tools/relocs.h
-index 43c83c0fd22c..f582895c04dd 100644
---- a/arch/x86/tools/relocs.h
-+++ b/arch/x86/tools/relocs.h
-@@ -31,8 +31,8 @@ enum symtype {
- 
- void process_32(FILE *fp, int use_real_mode, int as_text,
- 		int show_absolute_syms, int show_absolute_relocs,
--		int show_reloc_info);
-+		int show_reloc_info, int fgkaslr);
- void process_64(FILE *fp, int use_real_mode, int as_text,
- 		int show_absolute_syms, int show_absolute_relocs,
--		int show_reloc_info);
-+		int show_reloc_info, int fgkaslr);
- #endif /* RELOCS_H */
-diff --git a/arch/x86/tools/relocs_common.c b/arch/x86/tools/relocs_common.c
-index 6634352a20bc..b1072e63175f 100644
---- a/arch/x86/tools/relocs_common.c
-+++ b/arch/x86/tools/relocs_common.c
-@@ -12,14 +12,14 @@ void die(char *fmt, ...)
- 
- static void usage(void)
- {
--	die("relocs [--abs-syms|--abs-relocs|--reloc-info|--text|--realmode]" \
--	    " vmlinux\n");
-+	die("relocs [--abs-syms|--abs-relocs|--reloc-info|--text|--realmode|"
-+	    "--fg-kaslr] vmlinux\n");
- }
- 
- int main(int argc, char **argv)
- {
- 	int show_absolute_syms, show_absolute_relocs, show_reloc_info;
--	int as_text, use_real_mode;
-+	int as_text, use_real_mode, fgkaslr_opt;
- 	const char *fname;
- 	FILE *fp;
- 	int i;
-@@ -30,6 +30,7 @@ int main(int argc, char **argv)
- 	show_reloc_info = 0;
- 	as_text = 0;
- 	use_real_mode = 0;
-+	fgkaslr_opt = 0;
- 	fname = NULL;
- 	for (i = 1; i < argc; i++) {
- 		char *arg = argv[i];
-@@ -54,6 +55,10 @@ int main(int argc, char **argv)
- 				use_real_mode = 1;
- 				continue;
- 			}
-+			if (strcmp(arg, "--fg-kaslr") == 0) {
-+				fgkaslr_opt = 1;
-+				continue;
-+			}
- 		}
- 		else if (!fname) {
- 			fname = arg;
-@@ -75,11 +80,11 @@ int main(int argc, char **argv)
- 	if (e_ident[EI_CLASS] == ELFCLASS64)
- 		process_64(fp, use_real_mode, as_text,
- 			   show_absolute_syms, show_absolute_relocs,
--			   show_reloc_info);
-+			   show_reloc_info, fgkaslr_opt);
- 	else
- 		process_32(fp, use_real_mode, as_text,
- 			   show_absolute_syms, show_absolute_relocs,
--			   show_reloc_info);
-+			   show_reloc_info, fgkaslr_opt);
- 	fclose(fp);
- 	return 0;
- }
+ 	malloc_count--;
+ 	if (!malloc_count)
 -- 
 2.31.1
 
