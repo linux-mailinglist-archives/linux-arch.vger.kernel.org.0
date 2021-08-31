@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A78E3FC9FE
-	for <lists+linux-arch@lfdr.de>; Tue, 31 Aug 2021 16:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A44A3FCA02
+	for <lists+linux-arch@lfdr.de>; Tue, 31 Aug 2021 16:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238309AbhHaOnG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 31 Aug 2021 10:43:06 -0400
-Received: from mga09.intel.com ([134.134.136.24]:10930 "EHLO mga09.intel.com"
+        id S238479AbhHaOnI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 Aug 2021 10:43:08 -0400
+Received: from mga18.intel.com ([134.134.136.126]:36529 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238280AbhHaOmz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 31 Aug 2021 10:42:55 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10093"; a="218496782"
+        id S232016AbhHaOm5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 31 Aug 2021 10:42:57 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10093"; a="205616977"
 X-IronPort-AV: E=Sophos;i="5.84,366,1620716400"; 
-   d="scan'208";a="218496782"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 07:42:00 -0700
+   d="scan'208";a="205616977"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 07:42:02 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,366,1620716400"; 
-   d="scan'208";a="600974331"
+   d="scan'208";a="446126105"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga001.fm.intel.com with ESMTP; 31 Aug 2021 07:41:55 -0700
+  by orsmga002.jf.intel.com with ESMTP; 31 Aug 2021 07:41:57 -0700
 Received: from alobakin-mobl.ger.corp.intel.com (psmrokox-mobl.ger.corp.intel.com [10.213.6.58])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 17VEfmfS002209;
-        Tue, 31 Aug 2021 15:41:53 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 17VEfmfT002209;
+        Tue, 31 Aug 2021 15:41:54 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org
 Cc:     "Kristen C Accardi" <kristen.c.accardi@intel.com>,
@@ -45,9 +45,9 @@ Cc:     "Kristen C Accardi" <kristen.c.accardi@intel.com>,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH v6 kspp-next 02/22] kbuild: merge vmlinux_link() between the ordinary link and Clang LTO
-Date:   Tue, 31 Aug 2021 16:40:54 +0200
-Message-Id: <20210831144114.154-3-alexandr.lobakin@intel.com>
+Subject: [PATCH v6 kspp-next 03/22] kbuild: do not remove 'linux' link in scripts/link-vmlinux.sh
+Date:   Tue, 31 Aug 2021 16:40:55 +0200
+Message-Id: <20210831144114.154-4-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210831144114.154-1-alexandr.lobakin@intel.com>
 References: <20210831144114.154-1-alexandr.lobakin@intel.com>
@@ -59,71 +59,33 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Masahiro Yamada <masahiroy@kernel.org>
 
-When Clang LTO is enabled, vmlinux_link() reuses vmlinux.o instead of
-re-linking ${KBUILD_VMLINUX_OBJS} and ${KBUILD_VMLINUX_LIBS}.
+arch/um/Makefile passes the -f option to the ln command:
 
-That is the only difference here, so merge the similar code.
+  linux: vmlinux
+          @echo '  LINK $@'
+          $(Q)ln -f $< $@
+
+So, the hard link is always re-created, and the old one is removed
+anyway.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- scripts/link-vmlinux.sh | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+ scripts/link-vmlinux.sh | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 36ef7b37fc5d..a6c4d0bce3ba 100755
+index a6c4d0bce3ba..7b9c62e4d54a 100755
 --- a/scripts/link-vmlinux.sh
 +++ b/scripts/link-vmlinux.sh
-@@ -154,12 +154,23 @@ vmlinux_link()
- 	local objects
- 	local strip_debug
- 	local map_option
-+	local objs
-+	local libs
- 
- 	info LD ${output}
- 
- 	# skip output file argument
- 	shift
- 
-+	if [ -n "${CONFIG_LTO_CLANG}" ]; then
-+		# Use vmlinux.o instead of performing the slow LTO link again.
-+		objs=vmlinux.o
-+		libs=
-+	else
-+		objs="${KBUILD_VMLINUX_OBJS}"
-+		libs="${KBUILD_VMLINUX_LIBS}"
-+	fi
-+
- 	# The kallsyms linking does not need debug symbols included.
- 	if [ "$output" != "${output#.tmp_vmlinux.kallsyms}" ] ; then
- 		strip_debug=-Wl,--strip-debug
-@@ -170,22 +181,9 @@ vmlinux_link()
+@@ -206,7 +206,6 @@ vmlinux_link()
+ 			-Wl,-T,${lds}				\
+ 			${objects}				\
+ 			-lutil -lrt -lpthread
+-		rm -f linux
  	fi
+ }
  
- 	if [ "${SRCARCH}" != "um" ]; then
--		if [ -n "${CONFIG_LTO_CLANG}" ]; then
--			# Use vmlinux.o instead of performing the slow LTO
--			# link again.
--			objects="--whole-archive		\
--				vmlinux.o 			\
--				--no-whole-archive		\
--				${@}"
--		else
--			objects="--whole-archive		\
--				${KBUILD_VMLINUX_OBJS}		\
--				--no-whole-archive		\
--				--start-group			\
--				${KBUILD_VMLINUX_LIBS}		\
--				--end-group			\
--				${@}"
--		fi
-+		objects="--whole-archive ${objs} --no-whole-archive	\
-+			 --start-group ${libs} --end-group		\
-+			 $@"
- 
- 		${LD} ${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}	\
- 			${strip_debug#-Wl,}			\
 -- 
 2.31.1
 
