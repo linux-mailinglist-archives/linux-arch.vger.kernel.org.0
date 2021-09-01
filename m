@@ -2,110 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A812B3FD569
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Sep 2021 10:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A6F3FD762
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Sep 2021 12:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243243AbhIAIaw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Sep 2021 04:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243104AbhIAIav (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Sep 2021 04:30:51 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D69BC061575;
-        Wed,  1 Sep 2021 01:29:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id mw10-20020a17090b4d0a00b0017b59213831so4089706pjb.0;
-        Wed, 01 Sep 2021 01:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uEF7gvqwfbmwW2Wlh9BZzPOgxlqZXBD1tP6d5gmOMzA=;
-        b=sSDUcl7oLVlDkyo52pdEZM1V1Xl0bBb9tDAJ4/PMbqIS1gy5t9mc+pT3LQuiDrycda
-         60S67vEHa81Jq1BdakqxN8cxJgp5Xy8HjHz66se03Uj52cyu8DETsx9noSVwdgTm2iaY
-         ERzqhXKGtK+XVO5jjh6AudunXd87z/gA5d15bbIeClz0Ey8MyImTInsEvogqkC3nADkk
-         ZFzg8JMG8Sa60ydadlxjH0Gfpsq5wXtGAo8mWwj5C05ouUkQ+GHeKS1klvUYQYlH2Bji
-         npaS0ePftf8kMH7YjtNAcN4WMFOL8XEQ4SqHoDp1cWQCZA5zqJ4matQ92HBqmV04MWoR
-         hLfw==
+        id S232625AbhIAKMG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Sep 2021 06:12:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43883 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232258AbhIAKMG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Sep 2021 06:12:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630491069;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Qvu8f0am/SlQm3BBQ8kcFlHtYY52i34qaBeBiT+B1I=;
+        b=T8VIOQHUDwIg3VynN9vqrVNDYQqDsRwTTWjKkKZGdTkCusKOZAW+3vEp+EisKyNixhY7ac
+        Sh7a0Y9Vn2hBHwYRdguBga+0E/bsYhwUw1NqA8rI1cX1C3d1zMDqB5QFg/xIArENR5xm9k
+        uG3OQyaEo/zCiihAKzPMKyyzWWQNOOs=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-362-fx4rBQ2KM-my03n3IPPzxg-1; Wed, 01 Sep 2021 06:11:08 -0400
+X-MC-Unique: fx4rBQ2KM-my03n3IPPzxg-1
+Received: by mail-wm1-f70.google.com with SMTP id r125-20020a1c2b830000b0290197a4be97b7so827721wmr.9
+        for <linux-arch@vger.kernel.org>; Wed, 01 Sep 2021 03:11:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uEF7gvqwfbmwW2Wlh9BZzPOgxlqZXBD1tP6d5gmOMzA=;
-        b=nDI895MzFTCFgJqg9dURN4Jw3RxyDfPOfjbNUNzfvhGnyEqUgtI1K+1F8aSPAYycUI
-         c3Ur7dustcniQK8u2dNkUADlRKur1/Z1PKEWjZnXEB2Ip+euxpLXJgYJ7EFCAwiSLtA6
-         3f+xXK33h1Q1CvvNW3BP324I1EC3mU7xa/Qb3reqHFcnvAwnBK63jHU2dd+ETCCixjD6
-         BU6HFyx81IOeOPa0BWHfz9JbBzPItpOism6S3OpaTmLfqaSzDAlpymGjDjU7bFSsjgC4
-         SO4xbQI+2pBj3HmASb2dVVIjQ7YjmNjkc/uz/ebgPr1nJF5jJB1CUwgDQdBkt61J2vHu
-         CWKA==
-X-Gm-Message-State: AOAM531NTBDKk5oWJ0LXUCS8YUMoMTk8thGwn9lYX0OVgHiYXnXvImBx
-        dP4KmY8FnSJ2FQY/Y71S9LVDTcKZlCLWPHhmC8U=
-X-Google-Smtp-Source: ABdhPJx5if/okyK4OD2r1W9Kp91JPxGpTqwgPma1p/eDWUd9raCWGQpTPLtztEVZPRUznt5kWHNcoQ==
-X-Received: by 2002:a17:90a:6503:: with SMTP id i3mr10299929pjj.42.1630484994939;
-        Wed, 01 Sep 2021 01:29:54 -0700 (PDT)
-Received: from ownia.. ([173.248.225.217])
-        by smtp.gmail.com with ESMTPSA id d20sm19509159pfu.36.2021.09.01.01.29.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Sep 2021 01:29:54 -0700 (PDT)
-From:   Weizhao Ouyang <o451686892@gmail.com>
-To:     arnd@arndb.de, akpm@linux-foundation.org
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=5Qvu8f0am/SlQm3BBQ8kcFlHtYY52i34qaBeBiT+B1I=;
+        b=sBFBwOdWWT8zifpqnQAJGwB2/FnCTYfX7KPgami0HST5Cw5ELrRc3NDFD5cb7xVkaZ
+         9+jvJJXSqej93gcKGVa8cvukII71+6TgVlFnEVAnIYlsICLhRlWPDeVJ0jSmQFs9zYP0
+         LNAv5BWEe4Ya/5UG1ZlasGUXz/0murkoWqwMKHWhu37H9T1o7dbwTWy9zTHTE/J2gQHR
+         XYSqxWMs0+vLKpljU4o1NuMFg9N/lD2/FBrfWqnkoXTcG9n7pWg1snMcE6YmrzJnS+c5
+         QLZA0jL+8Fxj7PyYyMc9aTqbe9MpMJ4FIa72sgawOa9Avs8it3XLKx7EXMXBOrLjX4M0
+         AukQ==
+X-Gm-Message-State: AOAM530QRx+GzTeGcX0UY6akUFsMz+RjicZ9ywQjrODaGPCASLavdMLu
+        NJkOzUzj0UpZy+x19j8fqrRc0MkXZ6tCmDR+Hzghr7OHOjYg1Sr8fhKeRxCAIt7Glv+ZwKBDWzP
+        e9dNGxEj044FWrIGrg+BWgA==
+X-Received: by 2002:adf:dbd0:: with SMTP id e16mr36434446wrj.402.1630491066748;
+        Wed, 01 Sep 2021 03:11:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzoJvOC5ivwrzHTukER5oblEKCEnKLApZDh0Fa4VvnmniV9qnGBK5T9FaXi46sq4fgGHu226Q==
+X-Received: by 2002:adf:dbd0:: with SMTP id e16mr36434410wrj.402.1630491066497;
+        Wed, 01 Sep 2021 03:11:06 -0700 (PDT)
+Received: from [192.168.3.132] (p4ff23f71.dip0.t-ipconnect.de. [79.242.63.113])
+        by smtp.gmail.com with ESMTPSA id u26sm19587498wrd.32.2021.09.01.03.11.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Sep 2021 03:11:06 -0700 (PDT)
+Subject: Re: [PATCH 1/1] mm/early_ioremap.c: remove redundant
+ early_ioremap_shutdown()
+To:     Weizhao Ouyang <o451686892@gmail.com>, arnd@arndb.de,
+        akpm@linux-foundation.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Weizhao Ouyang <o451686892@gmail.com>
-Subject: [PATCH 1/1] mm/early_ioremap.c: remove redundant early_ioremap_shutdown()
-Date:   Wed,  1 Sep 2021 16:29:17 +0800
-Message-Id: <20210901082917.399953-1-o451686892@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        linux-mm@kvack.org
+References: <20210901082917.399953-1-o451686892@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Message-ID: <7ca43a9f-b62d-26df-0b9c-1cfa2f7dc611@redhat.com>
+Date:   Wed, 1 Sep 2021 12:11:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210901082917.399953-1-o451686892@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-early_ioremap_reset() reserved a weak function so that architectures can
-provide a specific cleanup. Now no architectures use it, remove this
-redundant function.
+On 01.09.21 10:29, Weizhao Ouyang wrote:
+> early_ioremap_reset() reserved a weak function so that architectures can
+> provide a specific cleanup. Now no architectures use it, remove this
+> redundant function.
+> 
+> Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
+> ---
+>   include/asm-generic/early_ioremap.h | 6 ------
+>   mm/early_ioremap.c                  | 5 -----
+>   2 files changed, 11 deletions(-)
+> 
+> diff --git a/include/asm-generic/early_ioremap.h b/include/asm-generic/early_ioremap.h
+> index 9def22e6e2b3..9d0479f50f97 100644
+> --- a/include/asm-generic/early_ioremap.h
+> +++ b/include/asm-generic/early_ioremap.h
+> @@ -19,12 +19,6 @@ extern void *early_memremap_prot(resource_size_t phys_addr,
+>   extern void early_iounmap(void __iomem *addr, unsigned long size);
+>   extern void early_memunmap(void *addr, unsigned long size);
+>   
+> -/*
+> - * Weak function called by early_ioremap_reset(). It does nothing, but
+> - * architectures may provide their own version to do any needed cleanups.
+> - */
+> -extern void early_ioremap_shutdown(void);
+> -
+>   #if defined(CONFIG_GENERIC_EARLY_IOREMAP) && defined(CONFIG_MMU)
+>   /* Arch-specific initialization */
+>   extern void early_ioremap_init(void);
+> diff --git a/mm/early_ioremap.c b/mm/early_ioremap.c
+> index 164607c7cdf1..74984c23a87e 100644
+> --- a/mm/early_ioremap.c
+> +++ b/mm/early_ioremap.c
+> @@ -38,13 +38,8 @@ pgprot_t __init __weak early_memremap_pgprot_adjust(resource_size_t phys_addr,
+>   	return prot;
+>   }
+>   
+> -void __init __weak early_ioremap_shutdown(void)
+> -{
+> -}
+> -
+>   void __init early_ioremap_reset(void)
+>   {
+> -	early_ioremap_shutdown();
+>   	after_paging_init = 1;
+>   }
+>   
+> 
 
-Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
----
- include/asm-generic/early_ioremap.h | 6 ------
- mm/early_ioremap.c                  | 5 -----
- 2 files changed, 11 deletions(-)
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-diff --git a/include/asm-generic/early_ioremap.h b/include/asm-generic/early_ioremap.h
-index 9def22e6e2b3..9d0479f50f97 100644
---- a/include/asm-generic/early_ioremap.h
-+++ b/include/asm-generic/early_ioremap.h
-@@ -19,12 +19,6 @@ extern void *early_memremap_prot(resource_size_t phys_addr,
- extern void early_iounmap(void __iomem *addr, unsigned long size);
- extern void early_memunmap(void *addr, unsigned long size);
- 
--/*
-- * Weak function called by early_ioremap_reset(). It does nothing, but
-- * architectures may provide their own version to do any needed cleanups.
-- */
--extern void early_ioremap_shutdown(void);
--
- #if defined(CONFIG_GENERIC_EARLY_IOREMAP) && defined(CONFIG_MMU)
- /* Arch-specific initialization */
- extern void early_ioremap_init(void);
-diff --git a/mm/early_ioremap.c b/mm/early_ioremap.c
-index 164607c7cdf1..74984c23a87e 100644
---- a/mm/early_ioremap.c
-+++ b/mm/early_ioremap.c
-@@ -38,13 +38,8 @@ pgprot_t __init __weak early_memremap_pgprot_adjust(resource_size_t phys_addr,
- 	return prot;
- }
- 
--void __init __weak early_ioremap_shutdown(void)
--{
--}
--
- void __init early_ioremap_reset(void)
- {
--	early_ioremap_shutdown();
- 	after_paging_init = 1;
- }
- 
 -- 
-2.30.2
+Thanks,
+
+David / dhildenb
 
