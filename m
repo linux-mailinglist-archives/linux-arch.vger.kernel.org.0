@@ -2,38 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 334A43FE6A5
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Sep 2021 02:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2AE3FE71D
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Sep 2021 03:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244044AbhIBAYK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Sep 2021 20:24:10 -0400
-Received: from mail-oln040093003009.outbound.protection.outlook.com ([40.93.3.9]:27579
+        id S232372AbhIBB23 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Sep 2021 21:28:29 -0400
+Received: from mail-oln040093008007.outbound.protection.outlook.com ([40.93.8.7]:60314
         "EHLO outbound.mail.eo.outlook.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239492AbhIBAYJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Sep 2021 20:24:09 -0400
+        by vger.kernel.org with ESMTP id S229606AbhIBB23 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Sep 2021 21:28:29 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S8hY9iJsRcCnx9oyRQ/hspUHIv5ff5374Rs6oJjEBnrTbvDk5OVpo0Dytg9YAtPPhZr2l5bsIK+3ilDvmgjxGyhDo5DazVJGf5g3p9s+a7ifYE/OqB+IVNp6W/b1GDIf14H4eQPlzE5fHzkG9QcOTAaGkRXI0CheiguOKNcKQBwnDgTmC20tuonkdBTxywuHT+oa3OFcYQE4s+NacqVM7320m1M2DWs3PTUtXvlQlWH4xqX/50jUCo0tmFahSIIj/Oq7ny4p7lSYujeyDChp/0Ze+ZUy5UBVLgnyj/inOOjQp+xFjvmb3XKi38+uCARx9Yx0y7ezjshT6Ergk0biRw==
+ b=PqH6zbdXDocj/kohzFNuFSZBk5b/2UyJU4cNNkSedGUI/Bt9AxktZr3L9inKZ89BLNZWRm8pjRFCVSdZmWh/D7zCDBnsK08tTqyTw8xnPM9T8qD795zce97qnANfvL4DnnQWxwCb2N4JEwDw0UEvFAm8otRci6Tysb/aS5cHwHhOfjMh3cXZAj1eIBlay6EwhFekB2EYr8FJCDpHO5MVGXV2/2iIorc6FfGOf9YZax4NWdmFeVRYUsLHy0SiExMp8GxVdCILOrEVCk4FOUhnoaVD2FX2c9FWXysJSUXRZcQi06bPgUZu/8NUdXzsATcF5LAx2D2WuDHfJe7lhyKDHA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=qzrjg2Ld5ycVv0rSLliu9cUFTVcVw5lvAUeicQF2lCU=;
- b=TD5YCrNUvn78vMeILZY/K1kN7MDYqpxRmyv1nyfnfetEvkiiGIWOviUgmGTxUOT3tTz8DT6AcojE/n4UXu+xZujVVXiORo734A80/XxTJrls2GzULEfoo5gU20wm6ZO9C8LxbRPQHJt8ZPIubtjEJdOnrWFCsmEcCuk5mEFvdbGkkO11QK7njiEmOONbnL2RYCgWzLX+yJL8B7gQlzVffowcYscJWFwefoK/8KWpqtwihCvDRisT3CBgLgf1QciWejLJmWELbTH+YzPtVfqhhRSuy3TmZh07wf6x+5vBZzen2El8KBTx5ivWGaJ8+JpsJhC0VRrSnVJ9Qsl5D8CYHA==
+ bh=BZ2kwHMnelplbCchdbwZ+ia6PwO7lsSSD7ssrmF5dHQ=;
+ b=dp8QKS4leVE/cV8OgvsZK9JLaqJ7eGztPQq3Qf2qrspWwGLK2Ys0PMv8qGHsPkGBKmaiFNJTmyJ27T6w1rxsJvMl9L83mH/xVWiVI8vUNkIC7JexfSgzx8/Vfl2ISUmJltmBEjp7JSzWVHyZxHuNBprA5P5NHl3VMYE1zmE6ACs3LpDfNWq1FUjoNp6/EIAsZsvm/505P1UXIw2TKXH/GyQnyK8OB/FF5og9GMqmW87u5UvwctGCN7/F/sadvMj454yKssyDGfjXlwLOtm3AX9vao2CUITlniy2ov2giGs+dfJfYtvU2SyznIOQjF1qqwxTb1HWM5AvGNsY4v6VoPA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qzrjg2Ld5ycVv0rSLliu9cUFTVcVw5lvAUeicQF2lCU=;
- b=U5bibdZiNOinwuDMK081bP3N0/p7F9BHnGIsAEpvJQuA6Ihj7otxojR0zUqUnUiD0Yh4MRNEIdDf402n6pckNC3TDDyvLAY8dufxHi/UK6uoVZLuRrk7ZJ6pH91S32HeTbmhMDfTzCVd+wpm6DZK8k33MsTtVd3/LunuK+n82Qk=
+ bh=BZ2kwHMnelplbCchdbwZ+ia6PwO7lsSSD7ssrmF5dHQ=;
+ b=YHOFezUF1yqpjllueuzWf+I0rHCtn83zrPTxn6ZddbZkFWosRcY7pGRkctpTaFd5I318INsrp+RQMmpsEpNjrO1bXE1mmqkIZDv0nFyFWs2LtR75VcpuZZTLMsJP0SuJTo3dkxZyNT5Z8InyQJ1QrId29JvNHTHxv7r7b4eyu1A=
 Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
- by MW2PR2101MB1019.namprd21.prod.outlook.com (2603:10b6:302:5::10) with
+ by MWHPR21MB0767.namprd21.prod.outlook.com (2603:10b6:300:76::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.6; Thu, 2 Sep
- 2021 00:23:08 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.0; Thu, 2 Sep
+ 2021 01:27:14 +0000
 Received: from MWHPR21MB1593.namprd21.prod.outlook.com
  ([fe80::3c8b:6387:cd5:7d86]) by MWHPR21MB1593.namprd21.prod.outlook.com
  ([fe80::3c8b:6387:cd5:7d86%8]) with mapi id 15.20.4478.014; Thu, 2 Sep 2021
- 00:23:08 +0000
+ 01:27:14 +0000
 From:   Michael Kelley <mikelley@microsoft.com>
 To:     Tianyu Lan <ltykernel@gmail.com>,
         KY Srinivasan <kys@microsoft.com>,
@@ -89,73 +89,73 @@ CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
         vkuznets <vkuznets@redhat.com>,
         "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
         "dave.hansen@intel.com" <dave.hansen@intel.com>
-Subject: RE: [PATCH V4 08/13] hyperv/vmbus: Initialize VMbus ring buffer for
+Subject: RE: [PATCH V4 11/13] hyperv/IOMMU: Enable swiotlb bounce buffer for
  Isolation VM
-Thread-Topic: [PATCH V4 08/13] hyperv/vmbus: Initialize VMbus ring buffer for
+Thread-Topic: [PATCH V4 11/13] hyperv/IOMMU: Enable swiotlb bounce buffer for
  Isolation VM
-Thread-Index: AQHXm2gFIWSYU02+UUyReBHQOl5/ZauK4YnA
-Date:   Thu, 2 Sep 2021 00:23:08 +0000
-Message-ID: <MWHPR21MB1593B416ED91CD454FC036E5D7CE9@MWHPR21MB1593.namprd21.prod.outlook.com>
+Thread-Index: AQHXm2gQQ4+yOBIZA0OE+jNjJUIyPauJR4sw
+Date:   Thu, 2 Sep 2021 01:27:14 +0000
+Message-ID: <MWHPR21MB159386DFD2EA14A585288C0FD7CE9@MWHPR21MB1593.namprd21.prod.outlook.com>
 References: <20210827172114.414281-1-ltykernel@gmail.com>
- <20210827172114.414281-9-ltykernel@gmail.com>
-In-Reply-To: <20210827172114.414281-9-ltykernel@gmail.com>
+ <20210827172114.414281-12-ltykernel@gmail.com>
+In-Reply-To: <20210827172114.414281-12-ltykernel@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=bc1bd6dd-73be-4423-bfec-d24cf5650634;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-08-29T19:29:24Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=38142b78-d6f5-49b9-b305-836e5d853fb5;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-08-28T19:01:59Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fdd00e19-74c7-465e-488a-08d96da7d743
-x-ms-traffictypediagnostic: MW2PR2101MB1019:
+x-ms-office365-filtering-correlation-id: 6b34df77-4512-4c58-304d-08d96db0cbb2
+x-ms-traffictypediagnostic: MWHPR21MB0767:
 x-ms-exchange-transport-forked: True
 x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <MW2PR2101MB10194E3D49874ACDD0F694DFD7CE9@MW2PR2101MB1019.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1360;
+x-microsoft-antispam-prvs: <MWHPR21MB0767F12FD371AC9DD10BFF9CD7CE9@MWHPR21MB0767.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:50;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: a/1uWWyCm6KRWpOZ3PLSe+hwH5KkYNdAfvjSkhJa6lFuCklklUG/XcyZBFKgN2AmmBkr2TBUHNINXZNh0dNw4ocmONb7WXoudBjauOPc3GnHW4Wg/qf5gmFold/8RyJO7lTfbQrenuk7lt8iraXKKwG1PTU24Fi5pm3jjxvzwoErjxm0Rk3pGEuIhCb2yt/jHdUohFwAJLrtIvyy/49dwrizA4T+wUah8Ydz/Zj4XnKnbNdJZSCobmq1u2VKgoxxZCODLTqyUjE3Mynw9xmlOYY8MMMaw1yZNSMDK45zhYSEjigcd6DBOcTRRVniT1qsRFMpwNpmtA+mIM+a0MUW86c0SFDSZoS+NbOp8J5RP9iFmaRdRmiMYYGYJ14vVmkrtqLCd0AD+jRbTPgTMWN2a3jem1lPpfnOSuZtLLjEI1s2CxJT2f+l3tIzzMp+U+vRsAwEYhRvlHT6+v47USlJufwuSsjmfG2BFgoRWAo8+LGnfd4cp/+f5KQDfPLigB7oTEGNKVc2sJR+T7Z5J1pQduSXsskar11wKYUD8XHYCaM2Qd4lsEPFR9Kmb92XK/YIsQrOiaGtJw21wMlwgUNUorsDwOXEkhWymepocLVf7Q94IDyyMEUBcLH/V5//3uUc2/Wdt0+z9PYdVcNrOKn9tLXZrqSsuMnIoDizHEX72nYhCg2KyUSvRmna68APZlkt4iw8SwP5mEH4CiXI407t1fR3sOBR6YA7uF5M0Xye0y0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4326008)(66556008)(66476007)(64756008)(921005)(66446008)(10290500003)(26005)(55016002)(66946007)(2906002)(7416002)(82950400001)(82960400001)(52536014)(7366002)(5660300002)(7406005)(76116006)(6506007)(316002)(508600001)(8676002)(8990500004)(71200400001)(122000001)(9686003)(86362001)(7696005)(38100700002)(83380400001)(38070700005)(33656002)(186003)(8936002)(110136005)(54906003);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: dNq0v0YJw7pRWijNhH6+mIFGGl3G+Qy79F9GPxBTEW6zvQTzNqClqowJIrhXZYp9GMtvZLsJp+tfuP2Tq9Qzulp93q84HKxOehoOdf6j5szdLfh8p6NKk4iBe0baCWKjhzr/XVFCpi2tzdKK7mhtiQXQdsKXcc+fAKRo/nIVdw1dBzrRoiMOsLwHrPNJl33LKNf/mTN2SCqHWsKWNnKgs70cJ27xsUSSU9jgWcxgraVidVFIrG+lJL0jVO7cL+tGq8qLvO0/E2f2dApLKfSVWxpmBzjXhM9KrqBRioxe2hXhZApwWIpsjYaGp37/uQZjdvb3HrwX4crtF5ITsReC2o5kK3wwjo37h/aJLeedmXT1rVes9TIc8Y6cUWGdejCHMoGfNYeisGNCby/L7jGOxFU4CXJgRRgKt+VRvayQwPh+fP+FsOEj9loTggZaNzdFNxYYj+QASN+y6ba9wth9UbMhI82frDFbwjruTQ1KnVrA7wIBMd4ZkpbfdkqkRbGIRGW11qQrY6a06A9mA4mnbSP/WIOH/9adlHFdVVA6F5WfiQWe7hUqMuqYC8DXeSz120oAzCMrDApGxQ5zZQ8MGTdwIfibzSrUc4ysz7CPc2G9TBXSbhSG+R2Aqxkuh7PuwyMx2hx3fuLZ2svCeqDC6n1ovPoJYs3UQU37UGg0XjVuR/ltirl+LZk8Sm+t5QRDajCrPxWnjESMJSZ46C9Cil2Ckv2R+mNO5DdNtc7RKUA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(7366002)(71200400001)(83380400001)(66476007)(66946007)(82950400001)(7416002)(316002)(38100700002)(7406005)(86362001)(9686003)(76116006)(921005)(66446008)(4326008)(64756008)(33656002)(10290500003)(2906002)(508600001)(186003)(7696005)(6506007)(55016002)(38070700005)(82960400001)(8676002)(122000001)(8936002)(52536014)(8990500004)(54906003)(26005)(5660300002)(110136005)(66556008);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6XoYftWOuBZ8DMMdcUow8qMAsztK90BM4zwgFHqXCTT0/q3RP3X2SwCIN0AN?=
- =?us-ascii?Q?1CO7TSM7aUgUQLy7/CS7apcmkWvaltP9dLrgtfUDUC21iu4mseZZaxiPcowW?=
- =?us-ascii?Q?FMzfYbCUD/MFcaRSpeOttttCfjw3BU+ayYxvspuBvq37pb7GREN1+j54ihRI?=
- =?us-ascii?Q?q+YKDNIRsQ8e5q9Mm49uRK3NMEPv1wDKWzDX4Dr9DfKAC3P/szxR4vsOu5ji?=
- =?us-ascii?Q?an3hnegJR3hQpW5lgodD7eGTGEl+yACooBujO62NgBtEvX2F3cKyTtYGg7Dv?=
- =?us-ascii?Q?qxlWTBCFJ372GbfMENy6ySZbmimtyzpCb9XIr2BsANfKh7KQSIyNryOjHC+S?=
- =?us-ascii?Q?lei2n1cWW4Zkbp59Uow5NopFsoKMwh8GpQmwLoXvfg6tex7uXWqDWO0q6/2/?=
- =?us-ascii?Q?d1DZ9BhOXns3eLlElLCP432cZOsypM9iC9J7ZqLpPF9U9wSJQpqcP9ssyrRW?=
- =?us-ascii?Q?zWbSM3DX8sO/rXmASE5w4QQVm007eC3GdWNg19sRSWdWAQe6TufvoVdHG97T?=
- =?us-ascii?Q?z6aUCZyPbPwv9Hmv3voLunZ5wMGOrsjrDqeeEEBu0ra3tb7zQ33xsJrELABw?=
- =?us-ascii?Q?stXUSAkVZg/1YtJbdRvCmIYsghJ7CdGKEo8LWxfaV+/pzXGuRrYLVEKyzccg?=
- =?us-ascii?Q?uHS0Ac94KveJFfPz8X9ggjJWrkzeNt9GJ+9PA8Q3nXrtYgyBL+vk27ZAsNvV?=
- =?us-ascii?Q?Xo+wRjsh7oIVMxQOAwDmROPephgD8IaokpRhpnr3JWa0077FA9EpgtSnqOSg?=
- =?us-ascii?Q?148fkt6WhUETRuE9dcbdbDda9c4b0hJ5F1dMTS1I2UPgSpUo9LXXUh0LIDt8?=
- =?us-ascii?Q?8/k2FJkot+Nc82CvZvBob6T4ntN9duPJtHpnV0fZAEc0KZ5eyohvIJNyZlU1?=
- =?us-ascii?Q?kWzW0qNRF7ofsWr1haiGZfqkplyq+PShvF/9C80NnqZSWC2vLfgqGTjxMgDj?=
- =?us-ascii?Q?NUhxmBOvxs+284vS99i5RTaL26s28x/V3OdB5u38+M6+sblMeeYIARkqWaS/?=
- =?us-ascii?Q?v2Bpm45vyAYk7NPFqOpiuxPLKsbyFqdZgNeQUDMLoKmf58EBDi9qdbV2QbSh?=
- =?us-ascii?Q?rq1BiCTg6y0U9W1rBsL3quQ1AJFe8yqXkuELcZObY+COu/BQlUVZys9+mJiy?=
- =?us-ascii?Q?MZ7HJL41DJJmC/9yrNJn8rCb5Y3K+DR8K+S1IsrUflLh3r+MeuVTXs28LwwO?=
- =?us-ascii?Q?JNztev9TSSmPYmRm9g2k3TTuad7FbXxy8kfAQaX3/pbrSkVqTy+wpJSgR8yL?=
- =?us-ascii?Q?xyPkiLcnYOOQjVYm8k/3s/ZYp5fjpLDafvtV9xpv25hsgcalc+ravYcCs5BA?=
- =?us-ascii?Q?8MmkSCuy0Xlhbl8Au+1+r8+q?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?49jzUXvgf7ZLIZvLg6Q1/1eUHzzwc3TfIDOhgzDpWNqfBbBgjatdlOGSnacX?=
+ =?us-ascii?Q?ENqJRp+Z0muZsNhTVYljQwAe/VGj2sStR4WnwzZc79blYZvjVMk+GG0MweJe?=
+ =?us-ascii?Q?2JqqGqlvmjOnf4EXWk+S1brb/7E1P9hA5Oiawk0Zfw+v4bTMJIi/V6FXez2D?=
+ =?us-ascii?Q?ci8LPNuzdPxLnUkIwX/5AfMsb+4g5Tm33b7LPpZMtiLGrhDTlCH9hRF6dz28?=
+ =?us-ascii?Q?XQ+9iLPB0lid5Rd+ouoAatq4QEGqryt/JqQrDB64Arr+YXHMpGTYN5K81L9Y?=
+ =?us-ascii?Q?wJF628NgGQSRV9cgx64AmqJ4pdV7onoO9aT3xMzSZ7uuxdkjtNm7cFyuKz7d?=
+ =?us-ascii?Q?JdP4kC1d33iP9/Fy/9xiKq9fxhkEgySgN2uEJcwA62mHZoShL5HfMPw17oL1?=
+ =?us-ascii?Q?2o5NLnScTG89+ja+xQQIH9+ZFXAmtNDxDLjQXexz4s3d7oZHGsRHDpkor/3z?=
+ =?us-ascii?Q?Xz7K1yGKF1+d3geiaFVInqOs1B1PRX/ISoy66V8EJG83zv/tng4lN62g0VU6?=
+ =?us-ascii?Q?EHFWVPQwulkliliYaj83EyaMBfE0tKy6lSA9i/e7aqiK/GVz+KdwRe/GM83C?=
+ =?us-ascii?Q?3IqSpRfKdZHHrQfXW0b9Tz9m5791BaKicfzQLqopfkn+Bm9fAzOyLsDYPId/?=
+ =?us-ascii?Q?rRPI/mORNTvsSZ43cQThwfR//IzO27dIfeRi4EqtEd4TmpkdxE6hNj7xIF2E?=
+ =?us-ascii?Q?DY0hfGunCRPEpkvCxRGUVvRHxkzQ7Xi7lCTVYFCNkZRLEyPnk2DfzTfphJ5v?=
+ =?us-ascii?Q?f1FhT8/5vTYzmdsBX7mDQuxMQb1pNuSND18uQ6wVzHML9exonLJWPKldospq?=
+ =?us-ascii?Q?PfKItemm+7ZwQVg+Dfn+jlBmMuB0uiaFKZXWzB3xyMvwvy2H0gE5wETBA7pM?=
+ =?us-ascii?Q?pYlH/htXd34h/GFdDYo8TqMI5lbfI1zQ7Xmpa01bOMRzT3yr7TvvLFx3ozXT?=
+ =?us-ascii?Q?59AoBSq0rNeJfOXXJmMBTJHZbtZVg2lw9u0S788POdPmqLonKm/LA64/QtiU?=
+ =?us-ascii?Q?nYnglQMC4AF/hH8P9+CyOOFokvkJeUrKsyyF7Hy9Wgy5QC1rSCS0xM7hOTLf?=
+ =?us-ascii?Q?EF+5WVbpx6UKzzsgThY0B/RSWIk5wXoSLEr/aDXhWAhyPVUznQqaLoI1o7tg?=
+ =?us-ascii?Q?DxYNRg48YTnP7nuF8p2UheDY/7jtOJGIz+cBnGn0brq9gya+pKXcNZU6fusb?=
+ =?us-ascii?Q?lQghAss56HBsmXFDmJQVOp/5XUoBjjMle/4yh6rwurNoEWHZOaAGPgx9l3UA?=
+ =?us-ascii?Q?ODSn8cZc52xyUtnnI4yHzECBTay9uqWw5IVAdqEZuTZHLr7+fX3XTOArA0q7?=
+ =?us-ascii?Q?YItS/HFI811TBI46JLo079y1?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdd00e19-74c7-465e-488a-08d96da7d743
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2021 00:23:08.5814
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b34df77-4512-4c58-304d-08d96db0cbb2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2021 01:27:14.5072
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bDiVg39aGq1FaXP2zo95/QN78I8IgtTSDrwy0TrxEwRiCpJ/PsqE6NddNnIMEFHdz5LmrkDwBlr26DPvAdo1fd6EHWSKXQK+l7enS4fOYHQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR2101MB1019
+X-MS-Exchange-CrossTenant-userprincipalname: 2KGO2qEIsLkOxALKzCEuY2PwU2DdLRgZF+IJZLEV/P7dB4OctEWxjII6iy63CCsAmyNnusPkM8cmgSdfqC69NrrNVbuVYcoMq/KOXZBRD5g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR21MB0767
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -163,190 +163,297 @@ X-Mailing-List: linux-arch@vger.kernel.org
 From: Tianyu Lan <ltykernel@gmail.com> Sent: Friday, August 27, 2021 10:21 =
 AM
 >=20
-
-Subject tag should be "Drivers: hv: vmbus: "
-
-> VMbus ring buffer are shared with host and it's need to
-> be accessed via extra address space of Isolation VM with
-> AMD SNP support. This patch is to map the ring buffer
-> address in extra address space via vmap_pfn(). Hyperv set
-> memory host visibility hvcall smears data in the ring buffer
-> and so reset the ring buffer memory to zero after mapping.
+> hyperv Isolation VM requires bounce buffer support to copy
+> data from/to encrypted memory and so enable swiotlb force
+> mode to use swiotlb bounce buffer for DMA transaction.
+>=20
+> In Isolation VM with AMD SEV, the bounce buffer needs to be
+> accessed via extra address space which is above shared_gpa_boundary
+> (E.G 39 bit address line) reported by Hyper-V CPUID ISOLATION_CONFIG.
+> The access physical address will be original physical address +
+> shared_gpa_boundary. The shared_gpa_boundary in the AMD SEV SNP
+> spec is called virtual top of memory(vTOM). Memory addresses below
+> vTOM are automatically treated as private while memory above
+> vTOM is treated as shared.
+>=20
+> Swiotlb bounce buffer code calls dma_map_decrypted()
+> to mark bounce buffer visible to host and map it in extra
+> address space. Populate dma memory decrypted ops with hv
+> map/unmap function.
+>=20
+> Hyper-V initalizes swiotlb bounce buffer and default swiotlb
+> needs to be disabled. pci_swiotlb_detect_override() and
+> pci_swiotlb_detect_4gb() enable the default one. To override
+> the setting, hyperv_swiotlb_detect() needs to run before
+> these detect functions which depends on the pci_xen_swiotlb_
+> init(). Make pci_xen_swiotlb_init() depends on the hyperv_swiotlb
+> _detect() to keep the order.
+>=20
+> The map function vmap_pfn() can't work in the early place
+> hyperv_iommu_swiotlb_init() and so initialize swiotlb bounce
+> buffer in the hyperv_iommu_swiotlb_later_init().
 >=20
 > Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
 > ---
 > Change since v3:
-> 	* Remove hv_ringbuffer_post_init(), merge map
-> 	operation for Isolation VM into hv_ringbuffer_init()
-> 	* Call hv_ringbuffer_init() after __vmbus_establish_gpadl().
+>        * Get hyperv bounce bufffer size via default swiotlb
+>        bounce buffer size function and keep default size as
+>        same as the one in the AMD SEV VM.
 > ---
->  drivers/hv/Kconfig       |  1 +
->  drivers/hv/channel.c     | 19 +++++++-------
->  drivers/hv/ring_buffer.c | 56 ++++++++++++++++++++++++++++++----------
->  3 files changed, 54 insertions(+), 22 deletions(-)
+>  arch/x86/hyperv/ivm.c           | 28 +++++++++++++++
+>  arch/x86/include/asm/mshyperv.h |  2 ++
+>  arch/x86/mm/mem_encrypt.c       |  3 +-
+>  arch/x86/xen/pci-swiotlb-xen.c  |  3 +-
+>  drivers/hv/vmbus_drv.c          |  3 ++
+>  drivers/iommu/hyperv-iommu.c    | 61 +++++++++++++++++++++++++++++++++
+>  include/linux/hyperv.h          |  1 +
+>  7 files changed, 99 insertions(+), 2 deletions(-)
 >=20
-> diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
-> index d1123ceb38f3..dd12af20e467 100644
-> --- a/drivers/hv/Kconfig
-> +++ b/drivers/hv/Kconfig
-> @@ -8,6 +8,7 @@ config HYPERV
->  		|| (ARM64 && !CPU_BIG_ENDIAN))
->  	select PARAVIRT
->  	select X86_HV_CALLBACK_VECTOR if X86
-> +	select VMAP_PFN
->  	help
->  	  Select this option to run Linux as a Hyper-V client operating
->  	  system.
-> diff --git a/drivers/hv/channel.c b/drivers/hv/channel.c
-> index 82650beb3af0..81f8629e4491 100644
-> --- a/drivers/hv/channel.c
-> +++ b/drivers/hv/channel.c
-> @@ -679,15 +679,6 @@ static int __vmbus_open(struct vmbus_channel *newcha=
-nnel,
->  	if (!newchannel->max_pkt_size)
->  		newchannel->max_pkt_size =3D VMBUS_DEFAULT_MAX_PKT_SIZE;
+> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
+> index e761c67e2218..84563b3c9f3a 100644
+> --- a/arch/x86/hyperv/ivm.c
+> +++ b/arch/x86/hyperv/ivm.c
+> @@ -294,3 +294,31 @@ int hv_set_mem_host_visibility(unsigned long addr, i=
+nt numpages, bool visible)
 >=20
-> -	err =3D hv_ringbuffer_init(&newchannel->outbound, page, send_pages, 0);
-> -	if (err)
-> -		goto error_clean_ring;
-> -
-> -	err =3D hv_ringbuffer_init(&newchannel->inbound, &page[send_pages],
-> -				 recv_pages, newchannel->max_pkt_size);
-> -	if (err)
-> -		goto error_clean_ring;
-> -
->  	/* Establish the gpadl for the ring buffer */
->  	newchannel->ringbuffer_gpadlhandle =3D 0;
->=20
-> @@ -699,6 +690,16 @@ static int __vmbus_open(struct vmbus_channel *newcha=
-nnel,
->  	if (err)
->  		goto error_clean_ring;
->=20
-> +	err =3D hv_ringbuffer_init(&newchannel->outbound,
-> +				 page, send_pages, 0);
-> +	if (err)
-> +		goto error_free_gpadl;
+>  	return __hv_set_mem_host_visibility((void *)addr, numpages, visibility)=
+;
+>  }
 > +
-> +	err =3D hv_ringbuffer_init(&newchannel->inbound, &page[send_pages],
-> +				 recv_pages, newchannel->max_pkt_size);
-> +	if (err)
-> +		goto error_free_gpadl;
+> +/*
+> + * hv_map_memory - map memory to extra space in the AMD SEV-SNP Isolatio=
+n VM.
+> + */
+> +void *hv_map_memory(void *addr, unsigned long size)
+> +{
+> +	unsigned long *pfns =3D kcalloc(size / HV_HYP_PAGE_SIZE,
+> +				      sizeof(unsigned long), GFP_KERNEL);
+
+Should be PAGE_SIZE, not HV_HYP_PAGE_SIZE, since this code
+only manipulates guest page tables.  There's no communication with
+Hyper-V that requires HV_HYP_PAGE_SIZE.
+
+> +	void *vaddr;
+> +	int i;
 > +
->  	/* Create and init the channel open message */
->  	open_info =3D kzalloc(sizeof(*open_info) +
->  			   sizeof(struct vmbus_channel_open_channel),
-> diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-> index 2aee356840a2..24d64d18eb65 100644
-> --- a/drivers/hv/ring_buffer.c
-> +++ b/drivers/hv/ring_buffer.c
-> @@ -17,6 +17,8 @@
->  #include <linux/vmalloc.h>
->  #include <linux/slab.h>
->  #include <linux/prefetch.h>
-> +#include <linux/io.h>
+> +	if (!pfns)
+> +		return NULL;
+> +
+> +	for (i =3D 0; i < size / PAGE_SIZE; i++)
+> +		pfns[i] =3D virt_to_hvpfn(addr + i * PAGE_SIZE) +
+
+Use virt_to_pfn(), not virt_to_hvpfn(), for the same reason.
+
+> +			(ms_hyperv.shared_gpa_boundary >> PAGE_SHIFT);
+> +
+> +	vaddr =3D vmap_pfn(pfns, size / PAGE_SIZE, PAGE_KERNEL_IO);
+> +	kfree(pfns);
+> +
+> +	return vaddr;
+> +}
+> +
+> +void hv_unmap_memory(void *addr)
+> +{
+> +	vunmap(addr);
+> +}
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
+erv.h
+> index b77f4caee3ee..627fcf8d443c 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -252,6 +252,8 @@ int hv_unmap_ioapic_interrupt(int ioapic_id, struct h=
+v_interrupt_entry *entry);
+>  int hv_mark_gpa_visibility(u16 count, const u64 pfn[],
+>  			   enum hv_mem_host_visibility visibility);
+>  int hv_set_mem_host_visibility(unsigned long addr, int numpages, bool vi=
+sible);
+> +void *hv_map_memory(void *addr, unsigned long size);
+> +void hv_unmap_memory(void *addr);
+>  void hv_sint_wrmsrl_ghcb(u64 msr, u64 value);
+>  void hv_sint_rdmsrl_ghcb(u64 msr, u64 *value);
+>  void hv_signal_eom_ghcb(void);
+> diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
+> index ff08dc463634..e2db0b8ed938 100644
+> --- a/arch/x86/mm/mem_encrypt.c
+> +++ b/arch/x86/mm/mem_encrypt.c
+> @@ -30,6 +30,7 @@
+>  #include <asm/processor-flags.h>
+>  #include <asm/msr.h>
+>  #include <asm/cmdline.h>
 > +#include <asm/mshyperv.h>
 >=20
->  #include "hyperv_vmbus.h"
+>  #include "mm_internal.h"
 >=20
-> @@ -183,8 +185,10 @@ void hv_ringbuffer_pre_init(struct vmbus_channel *ch=
-annel)
->  int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
->  		       struct page *pages, u32 page_cnt, u32 max_pkt_size)
+> @@ -202,7 +203,7 @@ void __init sev_setup_arch(void)
+>  	phys_addr_t total_mem =3D memblock_phys_mem_size();
+>  	unsigned long size;
+>=20
+> -	if (!sev_active())
+> +	if (!sev_active() && !hv_is_isolation_supported())
+>  		return;
+>=20
+>  	/*
+> diff --git a/arch/x86/xen/pci-swiotlb-xen.c b/arch/x86/xen/pci-swiotlb-xe=
+n.c
+> index 54f9aa7e8457..43bd031aa332 100644
+> --- a/arch/x86/xen/pci-swiotlb-xen.c
+> +++ b/arch/x86/xen/pci-swiotlb-xen.c
+> @@ -4,6 +4,7 @@
+>=20
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/pci.h>
+> +#include <linux/hyperv.h>
+>  #include <xen/swiotlb-xen.h>
+>=20
+>  #include <asm/xen/hypervisor.h>
+> @@ -91,6 +92,6 @@ int pci_xen_swiotlb_init_late(void)
+>  EXPORT_SYMBOL_GPL(pci_xen_swiotlb_init_late);
+>=20
+>  IOMMU_INIT_FINISH(pci_xen_swiotlb_detect,
+> -		  NULL,
+> +		  hyperv_swiotlb_detect,
+>  		  pci_xen_swiotlb_init,
+>  		  NULL);
+> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> index 57bbbaa4e8f7..f068e22a5636 100644
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/cpu.h>
+>  #include <linux/sched/task_stack.h>
+>=20
+> +#include <linux/dma-map-ops.h>
+>  #include <linux/delay.h>
+>  #include <linux/notifier.h>
+>  #include <linux/panic_notifier.h>
+> @@ -2081,6 +2082,7 @@ struct hv_device *vmbus_device_create(const guid_t =
+*type,
+>  	return child_device_obj;
+>  }
+>=20
+> +static u64 vmbus_dma_mask =3D DMA_BIT_MASK(64);
+>  /*
+>   * vmbus_device_register - Register the child device
+>   */
+> @@ -2121,6 +2123,7 @@ int vmbus_device_register(struct hv_device *child_d=
+evice_obj)
+>  	}
+>  	hv_debug_add_dev_dir(child_device_obj);
+>=20
+> +	child_device_obj->device.dma_mask =3D &vmbus_dma_mask;
+>  	return 0;
+>=20
+>  err_kset_unregister:
+> diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
+> index e285a220c913..899563551574 100644
+> --- a/drivers/iommu/hyperv-iommu.c
+> +++ b/drivers/iommu/hyperv-iommu.c
+> @@ -13,14 +13,22 @@
+>  #include <linux/irq.h>
+>  #include <linux/iommu.h>
+>  #include <linux/module.h>
+> +#include <linux/hyperv.h>
+> +#include <linux/io.h>
+>=20
+>  #include <asm/apic.h>
+>  #include <asm/cpu.h>
+>  #include <asm/hw_irq.h>
+>  #include <asm/io_apic.h>
+> +#include <asm/iommu.h>
+> +#include <asm/iommu_table.h>
+>  #include <asm/irq_remapping.h>
+>  #include <asm/hypervisor.h>
+>  #include <asm/mshyperv.h>
+> +#include <asm/swiotlb.h>
+> +#include <linux/dma-map-ops.h>
+> +#include <linux/dma-direct.h>
+> +#include <linux/set_memory.h>
+>=20
+>  #include "irq_remapping.h"
+>=20
+> @@ -36,6 +44,9 @@
+>  static cpumask_t ioapic_max_cpumask =3D { CPU_BITS_NONE };
+>  static struct irq_domain *ioapic_ir_domain;
+>=20
+> +static unsigned long hyperv_io_tlb_size;
+> +static void *hyperv_io_tlb_start;
+> +
+>  static int hyperv_ir_set_affinity(struct irq_data *data,
+>  		const struct cpumask *mask, bool force)
 >  {
-> -	int i;
->  	struct page **pages_wraparound;
-> +	unsigned long *pfns_wraparound;
-> +	u64 pfn;
-> +	int i;
+> @@ -337,4 +348,54 @@ static const struct irq_domain_ops hyperv_root_ir_do=
+main_ops =3D {
+>  	.free =3D hyperv_root_irq_remapping_free,
+>  };
 >=20
->  	BUILD_BUG_ON((sizeof(struct hv_ring_buffer) !=3D PAGE_SIZE));
->=20
-> @@ -192,23 +196,49 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info *=
-ring_info,
->  	 * First page holds struct hv_ring_buffer, do wraparound mapping for
->  	 * the rest.
->  	 */
-> -	pages_wraparound =3D kcalloc(page_cnt * 2 - 1, sizeof(struct page *),
-> -				   GFP_KERNEL);
-> -	if (!pages_wraparound)
-> -		return -ENOMEM;
-> +	if (hv_isolation_type_snp()) {
-> +		pfn =3D page_to_pfn(pages) +
-> +			HVPFN_DOWN(ms_hyperv.shared_gpa_boundary);
+> +void __init hyperv_iommu_swiotlb_init(void)
+> +{
+> +	/*
+> +	 * Allocate Hyper-V swiotlb bounce buffer at early place
+> +	 * to reserve large contiguous memory.
+> +	 */
+> +	hyperv_io_tlb_size =3D swiotlb_size_or_default();
+> +	hyperv_io_tlb_start =3D memblock_alloc(
+> +		hyperv_io_tlb_size, HV_HYP_PAGE_SIZE);
 
-Use PFN_DOWN, not HVPFN_DOWN.  This is all done in units of guest page
-size, not Hyper-V page size.
+Could the alignment be specified as just PAGE_SIZE?  I don't
+see any particular relationship here to the Hyper-V page size.
 
->=20
-> -	pages_wraparound[0] =3D pages;
-> -	for (i =3D 0; i < 2 * (page_cnt - 1); i++)
-> -		pages_wraparound[i + 1] =3D &pages[i % (page_cnt - 1) + 1];
-> +		pfns_wraparound =3D kcalloc(page_cnt * 2 - 1,
-> +			sizeof(unsigned long), GFP_KERNEL);
-> +		if (!pfns_wraparound)
-> +			return -ENOMEM;
->=20
-> -	ring_info->ring_buffer =3D (struct hv_ring_buffer *)
-> -		vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP, PAGE_KERNEL);
-> +		pfns_wraparound[0] =3D pfn;
-> +		for (i =3D 0; i < 2 * (page_cnt - 1); i++)
-> +			pfns_wraparound[i + 1] =3D pfn + i % (page_cnt - 1) + 1;
->=20
-> -	kfree(pages_wraparound);
-> +		ring_info->ring_buffer =3D (struct hv_ring_buffer *)
-> +			vmap_pfn(pfns_wraparound, page_cnt * 2 - 1,
-> +				 PAGE_KERNEL);
-> +		kfree(pfns_wraparound);
->=20
-> +		if (!ring_info->ring_buffer)
-> +			return -ENOMEM;
 > +
-> +		/* Zero ring buffer after setting memory host visibility. */
-> +		memset(ring_info->ring_buffer, 0x00,
-> +			HV_HYP_PAGE_SIZE * page_cnt);
-
-The page_cnt parameter is in units of the guest page size.  So this
-should use PAGE_SIZE, not HV_HYP_PAGE_SIZE.
-
-> +	} else {
-> +		pages_wraparound =3D kcalloc(page_cnt * 2 - 1,
-> +					   sizeof(struct page *),
-> +					   GFP_KERNEL);
-> +
-> +		pages_wraparound[0] =3D pages;
-> +		for (i =3D 0; i < 2 * (page_cnt - 1); i++)
-> +			pages_wraparound[i + 1] =3D
-> +				&pages[i % (page_cnt - 1) + 1];
-> +
-> +		ring_info->ring_buffer =3D (struct hv_ring_buffer *)
-> +			vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP,
-> +				PAGE_KERNEL);
-> +
-> +		kfree(pages_wraparound);
-> +		if (!ring_info->ring_buffer)
-> +			return -ENOMEM;
+> +	if (!hyperv_io_tlb_start) {
+> +		pr_warn("Fail to allocate Hyper-V swiotlb buffer.\n");
+> +		return;
 > +	}
-
-With this patch, the code is a big "if" statement with two halves -- one
-when SNP isolation is in effect, and the other when not.  The SNP isolation
-case does the work using PFNs with the shared_gpa_boundary added,
-while the other case does the same work but using struct page.  Perhaps
-I'm missing something, but can both halves be combined and always
-do the work using PFNs?  The only difference is whether to add the
-shared_gpa_boundary, and whether to zero the memory when done.
-So get the starting PFN, then have an "if" statement for whether to
-add the shared_gpa_boundary.  Then everything else is the same.
-At the end, use an "if" statement to decide whether to zero the
-memory.  It would really be better to have the logic in this algorithm
-coded only once.
-
+> +}
+> +
+> +int __init hyperv_swiotlb_detect(void)
+> +{
+> +	if (hypervisor_is_type(X86_HYPER_MS_HYPERV)
+> +	    && hv_is_isolation_supported()) {
+> +		/*
+> +		 * Enable swiotlb force mode in Isolation VM to
+> +		 * use swiotlb bounce buffer for dma transaction.
+> +		 */
+> +		swiotlb_force =3D SWIOTLB_FORCE;
+> +
+> +		dma_memory_generic_decrypted_ops.map =3D hv_map_memory;
+> +		dma_memory_generic_decrypted_ops.unmap =3D hv_unmap_memory;
+> +		return 1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +void __init hyperv_iommu_swiotlb_later_init(void)
+> +{
+> +	/*
+> +	 * Swiotlb bounce buffer needs to be mapped in extra address
+> +	 * space. Map function doesn't work in the early place and so
+> +	 * call swiotlb_late_init_with_tbl() here.
+> +	 */
+> +	if (swiotlb_late_init_with_tbl(hyperv_io_tlb_start,
+> +				       hyperv_io_tlb_size >> IO_TLB_SHIFT))
+> +		panic("Fail to initialize hyperv swiotlb.\n");
+> +}
+> +
+> +IOMMU_INIT_FINISH(hyperv_swiotlb_detect,
+> +		  NULL, hyperv_iommu_swiotlb_init,
+> +		  hyperv_iommu_swiotlb_later_init);
+> +
+>  #endif
+> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+> index 757e09606fd3..724a735d722a 100644
+> --- a/include/linux/hyperv.h
+> +++ b/include/linux/hyperv.h
+> @@ -1739,6 +1739,7 @@ int hyperv_write_cfg_blk(struct pci_dev *dev, void =
+*buf, unsigned int len,
+>  int hyperv_reg_block_invalidate(struct pci_dev *dev, void *context,
+>  				void (*block_invalidate)(void *context,
+>  							 u64 block_mask));
+> +int __init hyperv_swiotlb_detect(void);
 >=20
-> -	if (!ring_info->ring_buffer)
-> -		return -ENOMEM;
->=20
->  	ring_info->ring_buffer->read_index =3D
->  		ring_info->ring_buffer->write_index =3D 0;
+>  struct hyperv_pci_block_ops {
+>  	int (*read_block)(struct pci_dev *dev, void *buf, unsigned int buf_len,
 > --
 > 2.25.1
 
