@@ -2,59 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 437343FFA9F
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 08:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92683FFBBE
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 10:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347201AbhICGu5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Sep 2021 02:50:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57073 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346291AbhICGu4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Sep 2021 02:50:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630651796;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=paUDlp7iEJb3RmqcU7PhOx7PiOju1z7RQq4LXUKqpHE=;
-        b=Wl2F0BDdaQ12yfbz0HYMUiKNulF9ud2YK/62UZmNOQGwgeuxz+Y1S9mpCOQQrd8wDPN4rQ
-        WpE7BHn53la8r9wK68tr+GMvmA9Xi/vBsCE/PzFvGg537ibsQ/Wqu7uyvJgnI2ApryJEap
-        Vu0hBouYnb79qRgzUzB3sC3LQ9WK5pY=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-451-tdZVyQFfPyGwAdHI_L1VlA-1; Fri, 03 Sep 2021 02:49:55 -0400
-X-MC-Unique: tdZVyQFfPyGwAdHI_L1VlA-1
-Received: by mail-qk1-f200.google.com with SMTP id 23-20020a05620a071700b00426392c0e6eso5363499qkc.4
-        for <linux-arch@vger.kernel.org>; Thu, 02 Sep 2021 23:49:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=paUDlp7iEJb3RmqcU7PhOx7PiOju1z7RQq4LXUKqpHE=;
-        b=XTWjA+fGyHPi1sregRo/U3qYxstsxxxxGsTcDXqvzPMbWeYiyOv4W4Pu7Nj5FoT1DJ
-         IjUFqE/muuiLqnINEgpBsOi9a+8w/uGF3wJpk2TD+nw/8/bmCqFRJFgAqHVmfpl/c8dU
-         GpjCqNhblhDSBbnexpmRzvKq1kGW0DUFuKeUI0bILIlDlygJfe/IogZrct2g1bBhcffz
-         +xBuf9bVEcrPvrrZcjao6kmVWqABCziC0iShf4lLsTKDP+nzV1U6ej9IjwOSab3is0IL
-         USHdwi1acI7ryUAFuU/QzxlBqzIhtmtNthJv6VbU+kNcsAWdL3sYg/X7jm+OvrI19wlF
-         2Ezw==
-X-Gm-Message-State: AOAM5307f6dKoX1C26uyrbei9sosuSH/M9ZZnlB0q74nqOAI3ddEGZvY
-        pticYWxmGpiAZB6oK7c+5I5IoLXQyvEa9SEqgDQpi2l58+q9pev/CQniub2LS5BDYcYMOMomVWv
-        OcYcY8ePlObM3GDUsGgrH7A==
-X-Received: by 2002:a0c:ab4e:: with SMTP id i14mr2154150qvb.28.1630651795052;
-        Thu, 02 Sep 2021 23:49:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJykW/paz3da/9QXzOhKwMVDERXVXg3CeWKjwGEs1zXPNM88Zu07JB2eia/5zQd1pdOOdeRrmg==
-X-Received: by 2002:a0c:ab4e:: with SMTP id i14mr2154141qvb.28.1630651794814;
-        Thu, 02 Sep 2021 23:49:54 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::d])
-        by smtp.gmail.com with ESMTPSA id b1sm2565223qtj.76.2021.09.02.23.49.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Sep 2021 23:49:54 -0700 (PDT)
-Date:   Thu, 2 Sep 2021 23:49:51 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
+        id S1348243AbhICISy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Sep 2021 04:18:54 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4674 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348208AbhICISx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Sep 2021 04:18:53 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 18383Vjd100391;
+        Fri, 3 Sep 2021 04:17:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=EFVcpm4UQneIaCZwZnSBxOJ/+HzC3h8TKoJEJi3ETSI=;
+ b=MGSqvMgpFXEblg9c9CXPbECtXn/wV2ytKqQNTjkYQvHKb6pcVAwGZiMz4g9BbgrUYbgi
+ 46lmZ7x+llhy31bfPqWoTk8Kux+qgFfDzaPhqQ5Q4e1uqWbhV9nC5vuOEo2Phqcv0EwR
+ hcJgguCPrT55iqx8x899PV2fBn3zuzYbChqKtlo4XwyVqmi3fnhbQVQVGwf9ddEZERGZ
+ WjJLdYZtiP/a3h22AJuBgKRPNZ7rqVr9IY3zQ2BATW9bGT14XLBwMq2+kn0b+GE6LCzI
+ ksVovSxusoJAM3y94xehtTgqA4EJ0SQ/idoO0YZEAqKiIITokM/MubnlnapMMU65Ij9r Rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3audm3us44-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Sep 2021 04:17:29 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18383mw7101882;
+        Fri, 3 Sep 2021 04:17:28 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3audm3us3p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Sep 2021 04:17:28 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18388Crg010014;
+        Fri, 3 Sep 2021 08:17:27 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3au6q74vxc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Sep 2021 08:17:26 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1838HN0837093702
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Sep 2021 08:17:23 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2AC2652057;
+        Fri,  3 Sep 2021 08:17:23 +0000 (GMT)
+Received: from osiris (unknown [9.145.159.114])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 85EF952051;
+        Fri,  3 Sep 2021 08:17:22 +0000 (GMT)
+Date:   Fri, 3 Sep 2021 10:17:21 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
 To:     Kees Cook <keescook@chromium.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-arch@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        linux-arch@vger.kernel.org, Jessica Yu <jeyu@kernel.org>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Alexander Egorenkov <egorenar@linux.ibm.com>,
@@ -65,91 +67,43 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
         linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 3/4] module: Use a list of strings for ro_after_init
- sections
-Message-ID: <20210903064951.to4dhiu7zua7s6dn@treble>
+Subject: Re: [PATCH 1/4] vmlinux.lds.h: Use regular *RODATA and
+ *RO_AFTER_INIT_DATA suffixes
+Message-ID: <YTHaEYQz0O+MzpkE@osiris>
 References: <20210901233757.2571878-1-keescook@chromium.org>
- <20210901233757.2571878-4-keescook@chromium.org>
+ <20210901233757.2571878-2-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210901233757.2571878-4-keescook@chromium.org>
+In-Reply-To: <20210901233757.2571878-2-keescook@chromium.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: v1G7oJQepZwIeoo1eRVbS8zdzxgq0Ecm
+X-Proofpoint-GUID: EBwgNgUyLMucUzf3CMsYqy3jTnIpBptl
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-09-03_02:2021-09-03,2021-09-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
+ adultscore=0 impostorscore=0 mlxlogscore=815 bulkscore=0
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2108310000 definitions=main-2109030048
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 01, 2021 at 04:37:56PM -0700, Kees Cook wrote:
-> Instead of open-coding the section names, use a list for the sections that
-> need to be marked read-only after init. Unfortunately, it seems we can't
-> do normal section merging with scripts/module.lds.S as ld.bfd doesn't
-> correctly update symbol tables. For more details, see commit 6a3193cdd5e5
-> ("kbuild: lto: Merge module sections if and only if CONFIG_LTO_CLANG
-> is enabled").
+On Wed, Sep 01, 2021 at 04:37:54PM -0700, Kees Cook wrote:
+> Rename the various section macros that live in RODATA and
+> RO_AFTER_INIT_DATA. Just being called "DATA" implies they are expected
+> to be writable.
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: linux-arch@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/s390/kernel/vmlinux.lds.S    |  2 +-
+>  include/asm-generic/vmlinux.lds.h | 12 ++++++------
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
-I'm missing what this has to do with section merging.  Can you connect
-the dots here, i.e. what sections would we want to merge and how would
-that help here?
-
-Instead of hard-coding section names in module.c, I'm wondering if we
-can do something like the following to set SHF_RO_AFTER_INIT when first
-creating the sections.  Completely untested...
-
-
-diff --git a/arch/x86/include/asm/jump_label.h b/arch/x86/include/asm/jump_label.h
-index 0449b125d27f..d4ff34c6199c 100644
---- a/arch/x86/include/asm/jump_label.h
-+++ b/arch/x86/include/asm/jump_label.h
-@@ -13,7 +13,7 @@
- #include <linux/types.h>
- 
- #define JUMP_TABLE_ENTRY				\
--	".pushsection __jump_table,  \"aw\" \n\t"	\
-+	".pushsection __jump_table, \"0x00200003\" \n\t"\
- 	_ASM_ALIGN "\n\t"				\
- 	".long 1b - . \n\t"				\
- 	".long %l[l_yes] - . \n\t"			\
-diff --git a/kernel/module.c b/kernel/module.c
-index 40ec9a030eec..1dda33c9ae49 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3549,15 +3549,6 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
- 	 * Note: ro_after_init sections also have SHF_{WRITE,ALLOC} set.
- 	 */
- 	ndx = find_sec(info, ".data..ro_after_init");
--	if (ndx)
--		info->sechdrs[ndx].sh_flags |= SHF_RO_AFTER_INIT;
--	/*
--	 * Mark the __jump_table section as ro_after_init as well: these data
--	 * structures are never modified, with the exception of entries that
--	 * refer to code in the __init section, which are annotated as such
--	 * at module load time.
--	 */
--	ndx = find_sec(info, "__jump_table");
- 	if (ndx)
- 		info->sechdrs[ndx].sh_flags |= SHF_RO_AFTER_INIT;
- 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index e5947fbb9e7a..b25ca38179ea 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -20,6 +20,9 @@
- #include <linux/kernel.h>
- #include <linux/static_call_types.h>
- 
-+/* cribbed from include/uapi/linux/elf.h */
-+#define SHF_RO_AFTER_INIT	0x00200000
-+
- struct alternative {
- 	struct list_head list;
- 	struct instruction *insn;
-@@ -466,7 +469,8 @@ static int create_static_call_sections(struct objtool_file *file)
- 	list_for_each_entry(insn, &file->static_call_list, call_node)
- 		idx++;
- 
--	sec = elf_create_section(file->elf, ".static_call_sites", SHF_WRITE,
-+	sec = elf_create_section(file->elf, ".static_call_sites",
-+				 SHF_WRITE | SHF_RO_AFTER_INIT,
- 				 sizeof(struct static_call_site), idx);
- 	if (!sec)
- 		return -1;
-
+For the s390 bit:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
