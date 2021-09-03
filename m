@@ -2,17 +2,17 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E14BA3FFDC7
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 12:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97C73FFDC9
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 12:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349004AbhICKDw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Sep 2021 06:03:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50000 "EHLO mail.kernel.org"
+        id S234262AbhICKEX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Sep 2021 06:04:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50170 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348929AbhICKDu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 3 Sep 2021 06:03:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 34FE860FDA;
-        Fri,  3 Sep 2021 10:02:47 +0000 (UTC)
+        id S1349007AbhICKEX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Sep 2021 06:04:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CAB0F60FDA;
+        Fri,  3 Sep 2021 10:03:19 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -27,9 +27,9 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 17/22] LoongArch: Add some library functions
-Date:   Fri,  3 Sep 2021 17:52:08 +0800
-Message-Id: <20210903095213.797973-18-chenhuacai@loongson.cn>
+Subject: [PATCH V2 18/22] LoongArch: Add PCI controller support
+Date:   Fri,  3 Sep 2021 17:52:09 +0800
+Message-Id: <20210903095213.797973-19-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210903095213.797973-1-chenhuacai@loongson.cn>
 References: <20210903095213.797973-1-chenhuacai@loongson.cn>
@@ -39,590 +39,506 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds some library functions for LoongArch, including: delay,
-memset, memcpy, memmove, copy_user, strncpy_user, strnlen_user and tlb
-dump functions.
+Loongson64 based systems are PC-like systems which use PCI/PCIe as its
+I/O bus, This patch adds the PCI host controller support for LoongArch.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/delay.h  |  26 +++++++
- arch/loongarch/include/asm/string.h |  17 +++++
- arch/loongarch/lib/clear_user.S     |  43 +++++++++++
- arch/loongarch/lib/copy_user.S      |  47 ++++++++++++
- arch/loongarch/lib/delay.c          |  43 +++++++++++
- arch/loongarch/lib/dump_tlb.c       | 107 ++++++++++++++++++++++++++++
- arch/loongarch/lib/memcpy.S         |  32 +++++++++
- arch/loongarch/lib/memmove.S        |  45 ++++++++++++
- arch/loongarch/lib/memset.S         |  30 ++++++++
- arch/loongarch/lib/strncpy_user.S   |  51 +++++++++++++
- arch/loongarch/lib/strnlen_user.S   |  47 ++++++++++++
- 11 files changed, 488 insertions(+)
- create mode 100644 arch/loongarch/include/asm/delay.h
- create mode 100644 arch/loongarch/include/asm/string.h
- create mode 100644 arch/loongarch/lib/clear_user.S
- create mode 100644 arch/loongarch/lib/copy_user.S
- create mode 100644 arch/loongarch/lib/delay.c
- create mode 100644 arch/loongarch/lib/dump_tlb.c
- create mode 100644 arch/loongarch/lib/memcpy.S
- create mode 100644 arch/loongarch/lib/memmove.S
- create mode 100644 arch/loongarch/lib/memset.S
- create mode 100644 arch/loongarch/lib/strncpy_user.S
- create mode 100644 arch/loongarch/lib/strnlen_user.S
+ arch/loongarch/include/asm/device.h |  17 +++
+ arch/loongarch/include/asm/dma.h    |  13 +++
+ arch/loongarch/include/asm/pci.h    |  42 +++++++
+ arch/loongarch/pci/acpi.c           | 174 ++++++++++++++++++++++++++++
+ arch/loongarch/pci/msi.c            |  30 +++++
+ arch/loongarch/pci/pci.c            | 169 +++++++++++++++++++++++++++
+ 6 files changed, 445 insertions(+)
+ create mode 100644 arch/loongarch/include/asm/device.h
+ create mode 100644 arch/loongarch/include/asm/dma.h
+ create mode 100644 arch/loongarch/include/asm/pci.h
+ create mode 100644 arch/loongarch/pci/acpi.c
+ create mode 100644 arch/loongarch/pci/msi.c
+ create mode 100644 arch/loongarch/pci/pci.c
 
-diff --git a/arch/loongarch/include/asm/delay.h b/arch/loongarch/include/asm/delay.h
+diff --git a/arch/loongarch/include/asm/device.h b/arch/loongarch/include/asm/device.h
 new file mode 100644
-index 000000000000..717227c1c79d
+index 000000000000..75693eeba5c6
 --- /dev/null
-+++ b/arch/loongarch/include/asm/delay.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_DELAY_H
-+#define _ASM_DELAY_H
-+
-+#include <linux/param.h>
-+
-+extern void __delay(unsigned long loops);
-+extern void __ndelay(unsigned long ns);
-+extern void __udelay(unsigned long us);
-+
-+#define ndelay(ns) __ndelay(ns)
-+#define udelay(us) __udelay(us)
-+
-+/* make sure "usecs *= ..." in udelay do not overflow. */
-+#if HZ >= 1000
-+#define MAX_UDELAY_MS	1
-+#elif HZ <= 200
-+#define MAX_UDELAY_MS	5
-+#else
-+#define MAX_UDELAY_MS	(1000 / HZ)
-+#endif
-+
-+#endif /* _ASM_DELAY_H */
-diff --git a/arch/loongarch/include/asm/string.h b/arch/loongarch/include/asm/string.h
-new file mode 100644
-index 000000000000..21e9e0a58194
---- /dev/null
-+++ b/arch/loongarch/include/asm/string.h
++++ b/arch/loongarch/include/asm/device.h
 @@ -0,0 +1,17 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
++ * Arch specific extensions to struct device
++ *
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+#ifndef _ASM_STRING_H
-+#define _ASM_STRING_H
++#ifndef _ASM_LOONGARCH_DEVICE_H
++#define _ASM_LOONGARCH_DEVICE_H
 +
-+#define __HAVE_ARCH_MEMSET
-+extern void *memset(void *__s, int __c, size_t __count);
++struct dev_archdata {
++	unsigned long dma_attrs;
++};
 +
-+#define __HAVE_ARCH_MEMCPY
-+extern void *memcpy(void *__to, __const__ void *__from, size_t __n);
++struct pdev_archdata {
++};
 +
-+#define __HAVE_ARCH_MEMMOVE
-+extern void *memmove(void *__dest, __const__ void *__src, size_t __n);
-+
-+#endif /* _ASM_STRING_H */
-diff --git a/arch/loongarch/lib/clear_user.S b/arch/loongarch/lib/clear_user.S
++#endif /* _ASM_LOONGARCH_DEVICE_H*/
+diff --git a/arch/loongarch/include/asm/dma.h b/arch/loongarch/include/asm/dma.h
 new file mode 100644
-index 000000000000..97b9998360cc
+index 000000000000..a8a58dc93422
 --- /dev/null
-+++ b/arch/loongarch/lib/clear_user.S
-@@ -0,0 +1,43 @@
++++ b/arch/loongarch/include/asm/dma.h
+@@ -0,0 +1,13 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
++#ifndef __ASM_DMA_H
++#define __ASM_DMA_H
 +
-+#include <asm/asm.h>
-+#include <asm/asmmacro.h>
-+#include <asm/export.h>
-+#include <asm/regdef.h>
++#define MAX_DMA_ADDRESS	PAGE_OFFSET
++#define MAX_DMA32_PFN	(1UL << (32 - PAGE_SHIFT))
 +
-+.macro fixup_ex from, to, offset, fix
-+.if \fix
-+	.section .fixup, "ax"
-+\to:	addi.d	v0, a1, \offset
-+	jr	ra
-+	.previous
-+.endif
-+	.section __ex_table, "a"
-+	PTR	\from\()b, \to\()b
-+	.previous
-+.endm
++extern int isa_dma_bridge_buggy;
 +
-+/*
-+ * unsigned long __clear_user(void *addr, size_t size)
-+ *
-+ * a0: addr
-+ * a1: size
-+ */
-+SYM_FUNC_START(__clear_user)
-+	beqz	a1, 2f
-+
-+1:	st.b	zero, a0, 0
-+	addi.d	a0, a0, 1
-+	addi.d	a1, a1, -1
-+	bgt	a1, zero, 1b
-+
-+2:	move	v0, a1
-+	jr	ra
-+
-+	fixup_ex 1, 3, 0, 1
-+SYM_FUNC_END(__clear_user)
-+
-+EXPORT_SYMBOL(__clear_user)
-diff --git a/arch/loongarch/lib/copy_user.S b/arch/loongarch/lib/copy_user.S
++#endif
+diff --git a/arch/loongarch/include/asm/pci.h b/arch/loongarch/include/asm/pci.h
 new file mode 100644
-index 000000000000..b814efd9cbd2
+index 000000000000..e9f483396864
 --- /dev/null
-+++ b/arch/loongarch/lib/copy_user.S
-@@ -0,0 +1,47 @@
++++ b/arch/loongarch/include/asm/pci.h
+@@ -0,0 +1,42 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
++#ifndef _ASM_PCI_H
++#define _ASM_PCI_H
 +
-+#include <asm/asm.h>
-+#include <asm/asmmacro.h>
-+#include <asm/export.h>
-+#include <asm/regdef.h>
++#include <linux/ioport.h>
++#include <linux/list.h>
++#include <linux/mm.h>
++#include <linux/types.h>
++#include <asm/io.h>
 +
-+.macro fixup_ex from, to, offset, fix
-+.if \fix
-+	.section .fixup, "ax"
-+\to:	addi.d	v0, a2, \offset
-+	jr	ra
-+	.previous
-+.endif
-+	.section __ex_table, "a"
-+	PTR	\from\()b, \to\()b
-+	.previous
-+.endm
++#define PCIBIOS_MIN_IO		0x4000
++#define PCIBIOS_MIN_MEM		0x20000000
++#define PCIBIOS_MIN_CARDBUS_IO	0x4000
++
++#define HAVE_PCI_MMAP
++#define ARCH_GENERIC_PCI_MMAP_RESOURCE
++
++extern phys_addr_t mcfg_addr_init(int node);
++extern void pcibios_add_root_resources(struct list_head *resources);
++
++static inline int pci_proc_domain(struct pci_bus *bus)
++{
++	return pci_domain_nr(bus);
++}
 +
 +/*
-+ * unsigned long __copy_user(void *to, const void *from, size_t n)
-+ *
-+ * a0: to
-+ * a1: from
-+ * a2: n
++ * Can be used to override the logic in pci_scan_bus for skipping
++ * already-configured bus numbers - to be used for buggy BIOSes
++ * or architectures with incomplete PCI setup by the loader
 + */
-+SYM_FUNC_START(__copy_user)
-+	beqz	a2, 3f
++static inline unsigned int pcibios_assign_all_busses(void)
++{
++	return 0;
++}
 +
-+1:	ld.b	t0, a1, 0
-+2:	st.b	t0, a0, 0
-+	addi.d	a0, a0, 1
-+	addi.d	a1, a1, 1
-+	addi.d	a2, a2, -1
-+	bgt	a2, zero, 1b
++/* generic pci stuff */
++#include <asm-generic/pci.h>
 +
-+3:	move	v0, a2
-+	jr	ra
-+
-+	fixup_ex 1, 4, 0, 1
-+	fixup_ex 2, 4, 0, 0
-+SYM_FUNC_END(__copy_user)
-+
-+EXPORT_SYMBOL(__copy_user)
-diff --git a/arch/loongarch/lib/delay.c b/arch/loongarch/lib/delay.c
++#endif /* _ASM_PCI_H */
+diff --git a/arch/loongarch/pci/acpi.c b/arch/loongarch/pci/acpi.c
 new file mode 100644
-index 000000000000..cf22f0899a9a
+index 000000000000..d6e2f69b9503
 --- /dev/null
-+++ b/arch/loongarch/lib/delay.c
-@@ -0,0 +1,43 @@
++++ b/arch/loongarch/pci/acpi.c
+@@ -0,0 +1,174 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+#include <linux/delay.h>
-+#include <linux/export.h>
-+#include <linux/smp.h>
-+#include <linux/timex.h>
++#include <linux/pci.h>
++#include <linux/acpi.h>
++#include <linux/init.h>
++#include <linux/irq.h>
++#include <linux/dmi.h>
++#include <linux/slab.h>
++#include <linux/pci-acpi.h>
++#include <linux/pci-ecam.h>
 +
-+#include <asm/compiler.h>
-+#include <asm/processor.h>
++#include <asm/pci.h>
++#include <asm/loongson.h>
 +
-+void __delay(unsigned long cycles)
++struct pci_root_info {
++	struct acpi_pci_root_info common;
++	struct pci_config_window *cfg;
++};
++
++void pcibios_add_bus(struct pci_bus *bus)
 +{
-+	u64 t0 = get_cycles();
-+
-+	while ((unsigned long)(get_cycles() - t0) < cycles)
-+		cpu_relax();
++	acpi_pci_add_bus(bus);
 +}
-+EXPORT_SYMBOL(__delay);
++
++int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
++{
++	struct pci_config_window *cfg = bridge->bus->sysdata;
++	struct acpi_device *adev = to_acpi_device(cfg->parent);
++
++	ACPI_COMPANION_SET(&bridge->dev, adev);
++
++	return 0;
++}
++
++int acpi_pci_bus_find_domain_nr(struct pci_bus *bus)
++{
++	struct pci_config_window *cfg = bus->sysdata;
++	struct acpi_device *adev = to_acpi_device(cfg->parent);
++	struct acpi_pci_root *root = acpi_driver_data(adev);
++
++	return root->segment;
++}
++
++static void acpi_release_root_info(struct acpi_pci_root_info *ci)
++{
++	struct pci_root_info *info;
++
++	info = container_of(ci, struct pci_root_info, common);
++	pci_ecam_free(info->cfg);
++	kfree(ci->ops);
++	kfree(info);
++}
++
++static int acpi_prepare_root_resources(struct acpi_pci_root_info *ci)
++{
++	struct acpi_device *device = ci->bridge;
++	struct resource_entry *entry, *tmp;
++	int status;
++
++	status = acpi_pci_probe_root_resources(ci);
++	if (status > 0)
++		return status;
++
++	resource_list_for_each_entry_safe(entry, tmp, &ci->resources) {
++		dev_dbg(&device->dev,
++			   "host bridge window %pR (ignored)\n", entry->res);
++		resource_list_destroy_entry(entry);
++	}
++
++	pcibios_add_root_resources(&ci->resources);
++
++	return 0;
++}
 +
 +/*
-+ * Division by multiplication: you don't have to worry about
-+ * loss of precision.
-+ *
-+ * Use only for very small delays ( < 1 msec).	Should probably use a
-+ * lookup table, really, as the multiplications take much too long with
-+ * short delays.  This is a "reasonable" implementation, though (and the
-+ * first constant multiplications gets optimized away if the delay is
-+ * a constant)
++ * Lookup the bus range for the domain in MCFG, and set up config space
++ * mapping.
 + */
-+
-+void __udelay(unsigned long us)
++static struct pci_config_window *
++pci_acpi_setup_ecam_mapping(struct acpi_pci_root *root)
 +{
-+	__delay((us * 0x000010c7ull * HZ * lpj_fine) >> 32);
-+}
-+EXPORT_SYMBOL(__udelay);
++	int ret;
++	u16 seg = root->segment;
++	struct device *dev = &root->device->dev;
++	struct resource cfgres;
++	struct resource *bus_res = &root->secondary;
++	struct pci_config_window *cfg;
++	const struct pci_ecam_ops *ecam_ops;
 +
-+void __ndelay(unsigned long ns)
-+{
-+	__delay((ns * 0x00000005ull * HZ * lpj_fine) >> 32);
++	ret = pci_mcfg_lookup(root, &cfgres, &ecam_ops);
++	if (ret) {
++		dev_err(dev, "%04x:%pR ECAM region not found, use default value\n", seg, bus_res);
++		root->mcfg_addr = mcfg_addr_init(0);
++		ecam_ops = &loongson_pci_ecam_ops;
++	}
++
++	cfgres.start = root->mcfg_addr + (bus_res->start << ecam_ops->bus_shift);
++	cfgres.end = cfgres.start + (resource_size(bus_res) << ecam_ops->bus_shift) - 1;
++	cfgres.flags = IORESOURCE_MEM;
++
++	cfg = pci_ecam_create(dev, &cfgres, bus_res, ecam_ops);
++	if (IS_ERR(cfg)) {
++		dev_err(dev, "%04x:%pR error %ld mapping ECAM\n", seg, bus_res,
++			PTR_ERR(cfg));
++		return NULL;
++	}
++
++	return cfg;
 +}
-+EXPORT_SYMBOL(__ndelay);
-diff --git a/arch/loongarch/lib/dump_tlb.c b/arch/loongarch/lib/dump_tlb.c
++
++struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root)
++{
++	struct pci_bus *bus;
++	struct pci_root_info *info;
++	struct acpi_pci_root_ops *root_ops;
++	int domain = root->segment;
++	int busnum = root->secondary.start;
++
++	info = kzalloc(sizeof(*info), GFP_KERNEL);
++	if (!info) {
++		pr_warn("pci_bus %04x:%02x: ignored (out of memory)\n", domain, busnum);
++		return NULL;
++	}
++
++	root_ops = kzalloc(sizeof(*root_ops), GFP_KERNEL);
++	if (!root_ops) {
++		kfree(info);
++		return NULL;
++	}
++
++	info->cfg = pci_acpi_setup_ecam_mapping(root);
++	if (!info->cfg) {
++		kfree(info);
++		kfree(root_ops);
++		return NULL;
++	}
++
++	root_ops->release_info = acpi_release_root_info;
++	root_ops->prepare_resources = acpi_prepare_root_resources;
++	root_ops->pci_ops = (struct pci_ops *)&info->cfg->ops->pci_ops;
++
++	bus = pci_find_bus(domain, busnum);
++	if (bus) {
++		memcpy(bus->sysdata, info->cfg, sizeof(struct pci_config_window));
++		kfree(info);
++	} else {
++		bus = acpi_pci_root_create(root, root_ops,
++					   &info->common, info->cfg);
++		if (bus) {
++			/*
++			 * We insert PCI resources into the iomem_resource
++			 * and ioport_resource trees in either
++			 * pci_bus_claim_resources() or
++			 * pci_bus_assign_resources().
++			 */
++			if (pci_has_flag(PCI_PROBE_ONLY)) {
++				pci_bus_claim_resources(bus);
++			} else {
++				struct pci_bus *child;
++
++				pci_bus_size_bridges(bus);
++				pci_bus_assign_resources(bus);
++				list_for_each_entry(child, &bus->children, node)
++					pcie_bus_configure_settings(child);
++			}
++		} else {
++			kfree(info);
++		}
++	}
++
++	return bus;
++}
+diff --git a/arch/loongarch/pci/msi.c b/arch/loongarch/pci/msi.c
 new file mode 100644
-index 000000000000..df54db8ecaa6
+index 000000000000..2888c5e11539
 --- /dev/null
-+++ b/arch/loongarch/lib/dump_tlb.c
-@@ -0,0 +1,107 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/arch/loongarch/pci/msi.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/msi.h>
++#include <linux/pci.h>
++#include <linux/spinlock.h>
++
++static bool msix_enable = 1;
++core_param(msix, msix_enable, bool, 0664);
++
++int arch_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
++{
++	int id = pci_domain_nr(dev->bus);
++
++	if (!pci_msi_enabled())
++		return -ENOSPC;
++
++	if (type == PCI_CAP_ID_MSIX && !msix_enable)
++		return -ENOSPC;
++
++	return msi_domain_alloc_irqs(pch_msi_domain[id], &dev->dev, nvec);
++
++}
++
++void arch_teardown_msi_irq(unsigned int irq)
++{
++	irq_domain_free_irqs(irq, 1);
++}
+diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
+new file mode 100644
+index 000000000000..68f36368b0df
+--- /dev/null
++++ b/arch/loongarch/pci/pci.c
+@@ -0,0 +1,169 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
 +#include <linux/kernel.h>
 +#include <linux/mm.h>
++#include <linux/export.h>
++#include <linux/init.h>
++#include <linux/acpi.h>
++#include <linux/types.h>
++#include <linux/pci.h>
++#include <linux/of_address.h>
++#include <linux/vgaarb.h>
++#include <asm/loongson.h>
 +
-+#include <asm/loongarch.h>
-+#include <asm/page.h>
-+#include <asm/pgtable.h>
-+#include <asm/tlb.h>
++#define PCI_DEVICE_ID_LOONGSON_HOST     0x7a00
++#define PCI_DEVICE_ID_LOONGSON_DC       0x7a06
 +
-+void dump_tlb_regs(void)
++int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
++						int reg, int len, u32 *val)
 +{
-+	const int field = 2 * sizeof(unsigned long);
++	struct pci_bus *bus_tmp = pci_find_bus(domain, bus);
 +
-+	pr_info("Index    : %0x\n", read_csr_tlbidx());
-+	pr_info("PageSize : %0x\n", read_csr_pagesize());
-+	pr_info("EntryHi  : %0*lx\n", field, read_csr_entryhi());
-+	pr_info("EntryLo0 : %0*lx\n", field, read_csr_entrylo0());
-+	pr_info("EntryLo1 : %0*lx\n", field, read_csr_entrylo1());
++	if (bus_tmp)
++		return bus_tmp->ops->read(bus_tmp, devfn, reg, len, val);
++	return -EINVAL;
 +}
 +
-+static void dump_tlb(int first, int last)
++int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
++						int reg, int len, u32 val)
 +{
-+	unsigned long s_entryhi, entryhi, asid;
-+	unsigned long long entrylo0, entrylo1, pa;
-+	unsigned int index;
-+	unsigned int s_index, s_asid;
-+	unsigned int pagesize, c0, c1, i;
-+	unsigned long asidmask = cpu_asid_mask(&current_cpu_data);
-+	int pwidth = 11;
-+	int vwidth = 11;
-+	int asidwidth = DIV_ROUND_UP(ilog2(asidmask) + 1, 4);
++	struct pci_bus *bus_tmp = pci_find_bus(domain, bus);
 +
-+	s_entryhi = read_csr_entryhi();
-+	s_index = read_csr_tlbidx();
-+	s_asid = read_csr_asid();
++	if (bus_tmp)
++		return bus_tmp->ops->write(bus_tmp, devfn, reg, len, val);
++	return -EINVAL;
++}
 +
-+	for (i = first; i <= last; i++) {
-+		write_csr_index(i);
-+		tlb_read();
-+		pagesize = read_csr_pagesize();
-+		entryhi	 = read_csr_entryhi();
-+		entrylo0 = read_csr_entrylo0();
-+		entrylo1 = read_csr_entrylo1();
-+		index = read_csr_tlbidx();
-+		asid = read_csr_asid();
++/*
++ * We need to avoid collisions with `mirrored' VGA ports
++ * and other strange ISA hardware, so we always want the
++ * addresses to be allocated in the 0x000-0x0ff region
++ * modulo 0x400.
++ *
++ * Why? Because some silly external IO cards only decode
++ * the low 10 bits of the IO address. The 0x00-0xff region
++ * is reserved for motherboard devices that decode all 16
++ * bits, so it's ok to allocate at, say, 0x2800-0x28ff,
++ * but we want to try to avoid allocating at 0x2900-0x2bff
++ * which might have be mirrored at 0x0100-0x03ff..
++ */
++resource_size_t
++pcibios_align_resource(void *data, const struct resource *res,
++		       resource_size_t size, resource_size_t align)
++{
++	resource_size_t start = res->start;
 +
-+		/* EHINV bit marks entire entry as invalid */
-+		if (index & CSR_TLBIDX_EHINV)
-+			continue;
++	if (res->flags & IORESOURCE_IO) {
 +		/*
-+		 * ASID takes effect in absence of G (global) bit.
++		 * Put everything into 0x00-0xff region modulo 0x400
 +		 */
-+		if (!((entrylo0 | entrylo1) & ENTRYLO_G) &&
-+		    asid != s_asid)
-+			continue;
-+
-+		/*
-+		 * Only print entries in use
-+		 */
-+		pr_info("Index: %2d pgsize=%x ", i, (1 << pagesize));
-+
-+		c0 = (entrylo0 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
-+		c1 = (entrylo1 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
-+
-+		pr_cont("va=%0*lx asid=%0*lx",
-+			vwidth, (entryhi & ~0x1fffUL),
-+			asidwidth, entryhi & asidmask);
-+		/* RI/XI are in awkward places, so mask them off separately */
-+		pa = entrylo0 & ~(ENTRYLO_RI | ENTRYLO_XI);
-+		pa = (pa << 6) & PAGE_MASK;
-+		pr_cont("\n\t[");
-+		pr_cont("ri=%d xi=%d ",
-+			(entrylo0 & ENTRYLO_RI) ? 1 : 0,
-+			(entrylo0 & ENTRYLO_XI) ? 1 : 0);
-+		pr_cont("pa=%0*llx c=%d d=%d v=%d g=%d plv=%lld] [",
-+			pwidth, pa, c0,
-+			(entrylo0 & ENTRYLO_D) ? 1 : 0,
-+			(entrylo0 & ENTRYLO_V) ? 1 : 0,
-+			(entrylo0 & ENTRYLO_G) ? 1 : 0,
-+			(entrylo0 & ENTRYLO_PLV) >> ENTRYLO_PLV_SHIFT);
-+		/* RI/XI are in awkward places, so mask them off separately */
-+		pa = entrylo1 & ~(ENTRYLO_RI | ENTRYLO_XI);
-+		pa = (pa << 6) & PAGE_MASK;
-+		pr_cont("ri=%d xi=%d ",
-+			(entrylo1 & ENTRYLO_RI) ? 1 : 0,
-+			(entrylo1 & ENTRYLO_XI) ? 1 : 0);
-+		pr_cont("pa=%0*llx c=%d d=%d v=%d g=%d plv=%lld]\n",
-+			pwidth, pa, c1,
-+			(entrylo1 & ENTRYLO_D) ? 1 : 0,
-+			(entrylo1 & ENTRYLO_V) ? 1 : 0,
-+			(entrylo1 & ENTRYLO_G) ? 1 : 0,
-+			(entrylo1 & ENTRYLO_PLV) >> ENTRYLO_PLV_SHIFT);
++		if (start & 0x300)
++			start = (start + 0x3ff) & ~0x3ff;
++	} else if (res->flags & IORESOURCE_MEM) {
++		/* Make sure we start at our min on all hoses */
++		if (start < PCIBIOS_MIN_MEM)
++			start = PCIBIOS_MIN_MEM;
 +	}
-+	pr_info("\n");
 +
-+	write_csr_entryhi(s_entryhi);
-+	write_csr_tlbidx(s_index);
-+	write_csr_asid(s_asid);
++	return start;
 +}
 +
-+void dump_tlb_all(void)
++phys_addr_t mcfg_addr_init(int node)
 +{
-+	dump_tlb(0, current_cpu_data.tlbsize - 1);
++	return (((u64)node << 44) | MCFG_EXT_PCICFG_BASE);
 +}
-diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
-new file mode 100644
-index 000000000000..e94899d99624
---- /dev/null
-+++ b/arch/loongarch/lib/memcpy.S
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
 +
-+#include <asm/asmmacro.h>
-+#include <asm/export.h>
-+#include <asm/regdef.h>
++static struct resource pci_mem_resource = {
++	.name	= "pci memory space",
++	.flags	= IORESOURCE_MEM,
++};
 +
-+/*
-+ * void *memcpy(void *dst, const void *src, size_t n)
-+ *
-+ * a0: dst
-+ * a1: src
-+ * a2: n
-+ */
-+SYM_FUNC_START(memcpy)
-+	move	a3, a0
-+	beqz	a2, 2f
++static struct resource pci_io_resource = {
++	.name	= "pci io space",
++	.flags	= IORESOURCE_IO,
++};
 +
-+1:	ld.b	t0, a1, 0
-+	st.b	t0, a0, 0
-+	addi.d	a0, a0, 1
-+	addi.d	a1, a1, 1
-+	addi.d	a2, a2, -1
-+	bgt	a2, zero, 1b
++void pcibios_add_root_resources(struct list_head *resources)
++{
++	if (resources) {
++		pci_add_resource(resources, &pci_mem_resource);
++		pci_add_resource(resources, &pci_io_resource);
++	}
++}
 +
-+2:	move	v0, a3
-+	jr	ra
-+SYM_FUNC_END(memcpy)
-+
-+EXPORT_SYMBOL(memcpy)
-diff --git a/arch/loongarch/lib/memmove.S b/arch/loongarch/lib/memmove.S
-new file mode 100644
-index 000000000000..f55d8dcd09dd
---- /dev/null
-+++ b/arch/loongarch/lib/memmove.S
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+
-+#include <asm/asmmacro.h>
-+#include <asm/export.h>
-+#include <asm/regdef.h>
-+
-+/*
-+ * void *rmemcpy(void *dst, const void *src, size_t n)
-+ *
-+ * a0: dst
-+ * a1: src
-+ * a2: n
-+ */
-+SYM_FUNC_START(rmemcpy)
-+	move	a3, a0
-+	beqz	a2, 2f
-+
-+	add.d	a0, a0, a2
-+	add.d	a1, a1, a2
-+
-+1:	ld.b	t0, a1, -1
-+	st.b	t0, a0, -1
-+	addi.d	a0, a0, -1
-+	addi.d	a1, a1, -1
-+	addi.d	a2, a2, -1
-+	bgt	a2, zero, 1b
-+
-+2:	move	v0, a3
-+	jr	ra
-+SYM_FUNC_END(rmemcpy)
-+
-+SYM_FUNC_START(memmove)
-+	blt	a0, a1, 1f	/* dst < src, memcpy */
-+	blt	a1, a0, 2f	/* src < dst, rmemcpy */
-+	jr	ra		/* dst == src, return */
-+
-+1:	b	memcpy
-+
-+2:	b	rmemcpy
-+SYM_FUNC_END(memmove)
-+
-+EXPORT_SYMBOL(memmove)
-diff --git a/arch/loongarch/lib/memset.S b/arch/loongarch/lib/memset.S
-new file mode 100644
-index 000000000000..f599017e68fd
---- /dev/null
-+++ b/arch/loongarch/lib/memset.S
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+
-+#include <asm/asmmacro.h>
-+#include <asm/export.h>
-+#include <asm/regdef.h>
-+
-+/*
-+ * void *memset(void *s, int c, size_t n)
-+ *
-+ * a0: s
-+ * a1: c
-+ * a2: n
-+ */
-+SYM_FUNC_START(memset)
-+	move	a3, a0
-+	beqz	a2, 2f
-+
-+1:	st.b	a1, a0, 0
-+	addi.d	a0, a0, 1
-+	addi.d	a2, a2, -1
-+	bgt	a2, zero, 1b
-+
-+2:	move	v0, a3
-+	jr	ra
-+SYM_FUNC_END(memset)
-+
-+EXPORT_SYMBOL(memset)
-diff --git a/arch/loongarch/lib/strncpy_user.S b/arch/loongarch/lib/strncpy_user.S
-new file mode 100644
-index 000000000000..b42d81045929
---- /dev/null
-+++ b/arch/loongarch/lib/strncpy_user.S
-@@ -0,0 +1,51 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#include <linux/errno.h>
-+#include <asm/asm.h>
-+#include <asm/asmmacro.h>
-+#include <asm/export.h>
-+#include <asm/regdef.h>
-+
-+#define _ASM_EXTABLE(from, to)			\
-+	.section __ex_table, "a";		\
-+	PTR	from, to;			\
-+	.previous
-+
-+/*
-+ * long __strncpy_from_user(char *to, const char *from, long len)
-+ *
-+ * a0: to
-+ * a1: from
-+ * a2: len
-+ */
-+SYM_FUNC_START(__strncpy_from_user)
-+	move	a3, zero
-+
-+1:	ld.b	t0, a1, 0
-+	st.b	t0, a0, 0
-+	addi.d	a0, a0, 1
-+	addi.d	a1, a1, 1
-+	beqz	t0, 2f
-+
-+	addi.d	a3, a3, 1
-+	blt	a3, a2, 1b
++static int __init pcibios_set_cache_line_size(void)
++{
++	unsigned int lsize;
 +
 +	/*
-+	 * return len if the entire buffer filled,
-+	 * return strlen else
++	 * Set PCI cacheline size to that of the highest level in the
++	 * cache hierarchy.
 +	 */
-+2:	move	v0, a3
-+	jr	ra
++	lsize = cpu_dcache_line_size();
++	lsize = cpu_vcache_line_size() ? : lsize;
++	lsize = cpu_scache_line_size() ? : lsize;
 +
-+	.section .fixup, "ax"
-+	/* return -EFAULT if exception before terminator */
-+3:	li.w	a0, -EFAULT
-+	jr	ra
-+	.previous
++	BUG_ON(!lsize);
 +
-+	_ASM_EXTABLE(1b, 3b)
-+SYM_FUNC_END(__strncpy_from_user)
++	pci_dfl_cache_line_size = lsize >> 2;
 +
-+EXPORT_SYMBOL(__strncpy_from_user)
-diff --git a/arch/loongarch/lib/strnlen_user.S b/arch/loongarch/lib/strnlen_user.S
-new file mode 100644
-index 000000000000..9288a5ad294e
---- /dev/null
-+++ b/arch/loongarch/lib/strnlen_user.S
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#include <asm/asm.h>
-+#include <asm/asmmacro.h>
-+#include <asm/export.h>
-+#include <asm/regdef.h>
++	pr_debug("PCI: pci_cache_line_size set to %d bytes\n", lsize);
 +
-+#define _ASM_EXTABLE(from, to)			\
-+	.section __ex_table, "a";		\
-+	PTR	from, to;			\
-+	.previous
++	return 0;
++}
 +
-+/*
-+ * long __strnlen_user(const char *s, long n)
-+ *
-+ * a0: s
-+ * a1: n
-+ */
-+SYM_FUNC_START(__strnlen_user)
-+	move	a2, zero
++static int __init pcibios_init(void)
++{
++	return pcibios_set_cache_line_size();
++}
 +
-+1:	ld.b	t0, a0, 0
-+	addi.d	a0, a0, 1
-+	addi.d	a2, a2, 1
-+	beqz	t0, 2f
++subsys_initcall(pcibios_init);
 +
-+	bge	a1, a2, 1b
++int pcibios_dev_init(struct pci_dev *dev)
++{
++#ifdef CONFIG_ACPI
++	if (acpi_disabled)
++		return 0;
++	if (pci_dev_msi_enabled(dev))
++		return 0;
++	return acpi_pci_irq_enable(dev);
++#endif
++}
 +
-+	/*
-+	 * return the size of a string including the ending NUL character
-+	 * up to a maximum of n
-+	 */
-+2:	move	v0, a2
-+	jr	ra
++int pcibios_enable_device(struct pci_dev *dev, int mask)
++{
++	int err;
 +
-+	.section .fixup, "ax"
-+	/* return 0 in case of error */
-+3:	move	v0, zero
-+	jr	ra
-+	.previous
++	err = pci_enable_resources(dev, mask);
++	if (err < 0)
++		return err;
 +
-+	_ASM_EXTABLE(1b, 3b)
-+SYM_FUNC_END(__strnlen_user)
++	return pcibios_dev_init(dev);
++}
 +
-+EXPORT_SYMBOL(__strnlen_user)
++void pcibios_fixup_bus(struct pci_bus *bus)
++{
++	struct pci_dev *dev = bus->self;
++
++	if (pci_has_flag(PCI_PROBE_ONLY) && dev &&
++	    (dev->class >> 8) == PCI_CLASS_BRIDGE_PCI) {
++		pci_read_bridge_bases(bus);
++	}
++}
++
++static void pci_fixup_vgadev(struct pci_dev *pdev)
++{
++	struct pci_dev *devp = NULL;
++
++	while ((devp = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, devp))) {
++		if (devp->vendor != PCI_VENDOR_ID_LOONGSON) {
++			vga_set_default_device(devp);
++			dev_info(&pdev->dev,
++				"Overriding boot device as %X:%X\n",
++				devp->vendor, devp->device);
++		}
++	}
++}
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DC, pci_fixup_vgadev);
 -- 
 2.27.0
 
