@@ -2,140 +2,527 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A773FFC03
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 10:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0193FFD8B
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 11:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348219AbhICIcu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Sep 2021 04:32:50 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46638 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234831AbhICIct (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Sep 2021 04:32:49 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 18383uBv145986;
-        Fri, 3 Sep 2021 04:31:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Exm6y1FOu+ZBrK+yh3J6WZQaWOGuziL00C3jiRfFieI=;
- b=Zc5RAxNGHdVf02Wi1czvATyswyK3LyzNfG3uDLlFnSZ/GpBB3AXOIIeiUTuFUWPhx3qO
- UHd3vuSDI6AwH5VuTMk5PFhN8izJhiA1vfr0lO3aSgirFkwEwTuQAOBR7d1Lf/rReuN3
- ls02cdy0VRQ9LWJX3C69TX2cYZZhpUAyODoeqlO8hRACfrHlZMjQe3+yQ6iHTQ3QMJ28
- +lF9jYeYZfNoRGX+98YIur/RXBLCtCJ0DHoJh9sZnvj+uaRtZiSrjeEI8Erbd2h/9eYw
- J+F9cF8bE80J96R7LX6ZYwkfh1CMuVBxknleqYv7KIjG/2Q8vlbCy+geZzj+aIJ+qOBl Ag== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3aubde6mex-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Sep 2021 04:31:45 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1838SAYg031431;
-        Fri, 3 Sep 2021 08:31:43 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3au6q757ja-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Sep 2021 08:31:43 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1838Ve8d42991930
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Sep 2021 08:31:40 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3951BA4076;
-        Fri,  3 Sep 2021 08:31:40 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF647A404D;
-        Fri,  3 Sep 2021 08:31:39 +0000 (GMT)
-Received: from sig-9-145-171-221.de.ibm.com (unknown [9.145.171.221])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Sep 2021 08:31:39 +0000 (GMT)
-Message-ID: <dd9d9f056a8be2ea62e8497ca5f44707c5623600.camel@linux.ibm.com>
-Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>, John Garry <john.garry@huawei.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Fri, 03 Sep 2021 10:31:39 +0200
-In-Reply-To: <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
-References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
-         <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
-         <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
-         <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
-         <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com>
-         <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
-         <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com>
-         <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
-         <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
-         <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
-         <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
-         <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NvJMTKo50fBh6rkdhC0LTdUAKiWuDsEy
-X-Proofpoint-GUID: NvJMTKo50fBh6rkdhC0LTdUAKiWuDsEy
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S1348982AbhICJyJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Sep 2021 05:54:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45876 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348822AbhICJyI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Sep 2021 05:54:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DB9B960FC4;
+        Fri,  3 Sep 2021 09:53:04 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V2 00/22] arch: Add basic LoongArch support
+Date:   Fri,  3 Sep 2021 17:51:51 +0800
+Message-Id: <20210903095213.797973-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-09-03_02:2021-09-03,2021-09-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 bulkscore=0 clxscore=1011 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2108310000 definitions=main-2109030048
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2021-08-10 at 13:33 +0200, Arnd Bergmann wrote:
-> On Tue, Aug 10, 2021 at 11:19 AM John Garry <john.garry@huawei.com> wrote:
-> > On 04/08/2021 09:52, Arnd Bergmann wrote:
-> > 
-> > This seems a reasonable approach. Do you have a plan for this work? Or
-> > still waiting for the green light?
-> 
-> I'm rather busy with other work at the moment, so no particular plans
-> for any time soon.
-> 
-> > I have noticed the kernel test robot reporting the following to me,
-> > which seems to be the same issue which was addressed in this series
-> > originally:
-> > 
-> > config: s390-randconfig-r032-20210802 (attached as .config)
-> > compiler: clang version 13.0.0 (https://github.com/llvm/llvm-project
-> > 4f71f59bf3d9914188a11d0c41bedbb339d36ff5)
-> > ...
-> > All errors (new ones prefixed by >>):
-> > 
-> >     In file included from drivers/block/null_blk/main.c:12:
-> >     In file included from drivers/block/null_blk/null_blk.h:8:
-> >     In file included from include/linux/blkdev.h:25:
-> >     In file included from include/linux/scatterlist.h:9:
-> >     In file included from arch/s390/include/asm/io.h:75:
-> >     include/asm-generic/io.h:464:31: warning: performing pointer
-> > arithmetic on a null pointer has undefined behavior
-> > [-Wnull-pointer-arithmetic]
-> >             val = __raw_readb(PCI_IOBASE + addr);
-> > 
-> > So I imagine lots of people are seeing these.
-> 
-> Right, this is the original problem that Niklas was trying to solve.
-> 
-> If Niklas has time to get this fixed, I can probably find a way to work
-> with him on finishing up my proposed patch with the changes you
-> suggested.
-> 
->        Arnd
+LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+are already added in the next revision of ACPI Specification (current
+revision is 6.4).
 
-Sorry for the late reply, this got lost in my inbox. I could spare some
-cycles on this but I'm not sure how I can help.
+This patchset is adding basic LoongArch support in mainline kernel, we
+can see a complete snapshot here:
+https://github.com/loongson/linux/tree/loongarch-next
 
-The series you sent after Linus' nacked the previous approach looks
-quite broad touching lots of areas I have little experience with. I'd
-be willing to test things and look over patches the best I can of
-course.
+Cross-compile tool chain to build kernel:
+https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-20210812-cross-tools.tar.xz
 
-Thanks,
-Niklas
+A CLFS-based Linux distro:
+https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-system-2021-08-22.tar.bz2
+
+Open-source tool chain which is under review:
+https://github.com/loongson/binutils-gdb/tree/loongarch-2_37
+https://github.com/loongson/gcc/tree/loongarch-12
+https://github.com/loongson/glibc/tree/loongarch_2_34_dev
+
+Loongson and LoongArch documentations:
+https://github.com/loongson/LoongArch-Documentation
+
+LoongArch-specific interrupt controllers:
+https://mantis.uefi.org/mantis/view.php?id=2203
+
+V1 -> V2:
+1, Add documentation patches;
+2, Restore copyright statements;
+3, Split the big header patch;
+4, Cleanup signal-related headers;
+5, Cleanup incomplete 32-bit support;
+6, Move the major PCI work to drivers/pci;
+7, Rework Loongson64 platform support;
+8, Rework lpj and __udelay()/__ndelay();
+9, Rework page table layout config options;
+10, Rework syscall/exception/interrupt with generic entry framework;
+11, Simplify the VDSO/VSYSCALL implementation;
+12, Use generic I/O access macros and functions;
+13, Remove unaligned access emulation at present;
+14, Keep clocksource code in arch since it is the "native clocksource";
+15, Some other minor fixes and improvements.
+
+Huacai Chen(22):
+ Documentation: LoongArch: Add basic documentations.
+ Documentation/zh_CN: Add basic LoongArch documentations.
+ LoongArch: Add elf-related definitions.
+ LoongArch: Add writecombine support for drm.
+ LoongArch: Add build infrastructure.
+ LoongArch: Add CPU definition headers.
+ LoongArch: Add atomic/locking headers.
+ LoongArch: Add other common headers.
+ LoongArch: Add boot and setup routines.
+ LoongArch: Add exception/interrupt handling. 
+ LoongArch: Add process management.
+ LoongArch: Add memory management.
+ LoongArch: Add system call support.
+ LoongArch: Add signal handling support.
+ LoongArch: Add elf and module support.
+ LoongArch: Add misc common routines.
+ LoongArch: Add some library functions.
+ LoongArch: Add PCI controller support.
+ LoongArch: Add VDSO and VSYSCALL support.
+ LoongArch: Add multi-processor (SMP) support.
+ LoongArch: Add Non-Uniform Memory Access (NUMA) support.
+ LoongArch: Add Loongson-3 default config file.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ Documentation/arch.rst                             |    1 +
+ Documentation/loongarch/features.rst               |    3 +
+ Documentation/loongarch/index.rst                  |   21 +
+ Documentation/loongarch/introduction.rst           |  342 +++++
+ Documentation/loongarch/irq-chip-model.rst         |  158 ++
+ Documentation/translations/zh_CN/index.rst         |    1 +
+ .../translations/zh_CN/loongarch/features.rst      |    8 +
+ .../translations/zh_CN/loongarch/index.rst         |   26 +
+ .../translations/zh_CN/loongarch/introduction.rst  |  316 ++++
+ .../zh_CN/loongarch/irq-chip-model.rst             |  160 +++
+ arch/loongarch/.gitignore                          |    9 +
+ arch/loongarch/Kbuild                              |   10 +
+ arch/loongarch/Kconfig                             |  437 ++++++
+ arch/loongarch/Kconfig.debug                       |    0
+ arch/loongarch/Makefile                            |  124 ++
+ arch/loongarch/configs/loongson3_defconfig         |  722 ++++++++++
+ arch/loongarch/include/asm/Kbuild                  |   31 +
+ arch/loongarch/include/asm/abi.h                   |   27 +
+ arch/loongarch/include/asm/acenv.h                 |   17 +
+ arch/loongarch/include/asm/acpi.h                  |   39 +
+ arch/loongarch/include/asm/addrspace.h             |  110 ++
+ arch/loongarch/include/asm/asm-offsets.h           |    5 +
+ arch/loongarch/include/asm/asm-prototypes.h        |    7 +
+ arch/loongarch/include/asm/asm.h                   |  212 +++
+ arch/loongarch/include/asm/asmmacro.h              |  318 +++++
+ arch/loongarch/include/asm/atomic.h                |  302 ++++
+ arch/loongarch/include/asm/barrier.h               |  161 +++
+ arch/loongarch/include/asm/bitops.h                |  220 +++
+ arch/loongarch/include/asm/bitrev.h                |   34 +
+ arch/loongarch/include/asm/boot_param.h            |   91 ++
+ arch/loongarch/include/asm/bootinfo.h              |   34 +
+ arch/loongarch/include/asm/branch.h                |   21 +
+ arch/loongarch/include/asm/bug.h                   |   23 +
+ arch/loongarch/include/asm/cache.h                 |   13 +
+ arch/loongarch/include/asm/cacheflush.h            |   79 +
+ arch/loongarch/include/asm/cacheops.h              |   32 +
+ arch/loongarch/include/asm/clocksource.h           |   12 +
+ arch/loongarch/include/asm/cmpxchg.h               |  138 ++
+ arch/loongarch/include/asm/compiler.h              |   15 +
+ arch/loongarch/include/asm/cpu-features.h          |   67 +
+ arch/loongarch/include/asm/cpu-info.h              |  136 ++
+ arch/loongarch/include/asm/cpu.h                   |  123 ++
+ arch/loongarch/include/asm/cpufeature.h            |   24 +
+ arch/loongarch/include/asm/delay.h                 |   26 +
+ arch/loongarch/include/asm/device.h                |   17 +
+ arch/loongarch/include/asm/dma-direct.h            |   11 +
+ arch/loongarch/include/asm/dma.h                   |   13 +
+ arch/loongarch/include/asm/dmi.h                   |   24 +
+ arch/loongarch/include/asm/efi.h                   |   35 +
+ arch/loongarch/include/asm/elf.h                   |  308 ++++
+ arch/loongarch/include/asm/entry-common.h          |   13 +
+ arch/loongarch/include/asm/exec.h                  |   10 +
+ arch/loongarch/include/asm/fb.h                    |   23 +
+ arch/loongarch/include/asm/fixmap.h                |   15 +
+ arch/loongarch/include/asm/fpregdef.h              |   55 +
+ arch/loongarch/include/asm/fpu.h                   |  129 ++
+ arch/loongarch/include/asm/futex.h                 |  108 ++
+ arch/loongarch/include/asm/fw.h                    |   18 +
+ arch/loongarch/include/asm/hardirq.h               |   26 +
+ arch/loongarch/include/asm/hugetlb.h               |   79 +
+ arch/loongarch/include/asm/hw_irq.h                |   17 +
+ arch/loongarch/include/asm/idle.h                  |    9 +
+ arch/loongarch/include/asm/io.h                    |  126 ++
+ arch/loongarch/include/asm/irq.h                   |  102 ++
+ arch/loongarch/include/asm/irq_regs.h              |   27 +
+ arch/loongarch/include/asm/irqflags.h              |   52 +
+ arch/loongarch/include/asm/kdebug.h                |   23 +
+ arch/loongarch/include/asm/linkage.h               |   36 +
+ arch/loongarch/include/asm/local.h                 |  138 ++
+ arch/loongarch/include/asm/loongarch.h             | 1505 ++++++++++++++++++++
+ arch/loongarch/include/asm/loongson.h              |  159 +++
+ arch/loongarch/include/asm/mmu.h                   |   16 +
+ arch/loongarch/include/asm/mmu_context.h           |  151 ++
+ arch/loongarch/include/asm/mmzone.h                |   18 +
+ arch/loongarch/include/asm/module.h                |   15 +
+ arch/loongarch/include/asm/numa.h                  |   69 +
+ arch/loongarch/include/asm/page.h                  |  127 ++
+ arch/loongarch/include/asm/pci.h                   |   42 +
+ arch/loongarch/include/asm/percpu.h                |  222 +++
+ arch/loongarch/include/asm/perf_event.h            |   10 +
+ arch/loongarch/include/asm/pgalloc.h               |   97 ++
+ arch/loongarch/include/asm/pgtable-bits.h          |  139 ++
+ arch/loongarch/include/asm/pgtable.h               |  618 ++++++++
+ arch/loongarch/include/asm/prefetch.h              |   29 +
+ arch/loongarch/include/asm/processor.h             |  209 +++
+ arch/loongarch/include/asm/ptrace.h                |  140 ++
+ arch/loongarch/include/asm/reboot.h                |   10 +
+ arch/loongarch/include/asm/regdef.h                |   43 +
+ arch/loongarch/include/asm/serial.h                |   11 +
+ arch/loongarch/include/asm/setup.h                 |   25 +
+ arch/loongarch/include/asm/shmparam.h              |   12 +
+ arch/loongarch/include/asm/smp.h                   |  133 ++
+ arch/loongarch/include/asm/sparsemem.h             |   21 +
+ arch/loongarch/include/asm/spinlock.h              |   12 +
+ arch/loongarch/include/asm/spinlock_types.h        |   11 +
+ arch/loongarch/include/asm/stackframe.h            |  241 ++++
+ arch/loongarch/include/asm/string.h                |   17 +
+ arch/loongarch/include/asm/switch_to.h             |   37 +
+ arch/loongarch/include/asm/syscall.h               |   72 +
+ arch/loongarch/include/asm/thread_info.h           |  116 ++
+ arch/loongarch/include/asm/time.h                  |   50 +
+ arch/loongarch/include/asm/timex.h                 |   32 +
+ arch/loongarch/include/asm/tlb.h                   |  216 +++
+ arch/loongarch/include/asm/tlbflush.h              |   46 +
+ arch/loongarch/include/asm/topology.h              |   41 +
+ arch/loongarch/include/asm/types.h                 |   33 +
+ arch/loongarch/include/asm/uaccess.h               |  327 +++++
+ arch/loongarch/include/asm/unistd.h                |   11 +
+ arch/loongarch/include/asm/vdso.h                  |   38 +
+ arch/loongarch/include/asm/vdso/clocksource.h      |    8 +
+ arch/loongarch/include/asm/vdso/gettimeofday.h     |  100 ++
+ arch/loongarch/include/asm/vdso/processor.h        |   23 +
+ arch/loongarch/include/asm/vdso/vdso.h             |   31 +
+ arch/loongarch/include/asm/vdso/vsyscall.h         |   27 +
+ arch/loongarch/include/asm/vermagic.h              |   19 +
+ arch/loongarch/include/asm/vmalloc.h               |    4 +
+ arch/loongarch/include/uapi/asm/Kbuild             |    2 +
+ arch/loongarch/include/uapi/asm/abidefs.h          |   21 +
+ arch/loongarch/include/uapi/asm/auxvec.h           |   17 +
+ arch/loongarch/include/uapi/asm/bitfield.h         |   15 +
+ arch/loongarch/include/uapi/asm/bitsperlong.h      |    9 +
+ arch/loongarch/include/uapi/asm/break.h            |   23 +
+ arch/loongarch/include/uapi/asm/byteorder.h        |   13 +
+ arch/loongarch/include/uapi/asm/hwcap.h            |   20 +
+ arch/loongarch/include/uapi/asm/ptrace.h           |   50 +
+ arch/loongarch/include/uapi/asm/reg.h              |  103 ++
+ arch/loongarch/include/uapi/asm/sigcontext.h       |   40 +
+ arch/loongarch/include/uapi/asm/swab.h             |   52 +
+ arch/loongarch/include/uapi/asm/ucontext.h         |   46 +
+ arch/loongarch/include/uapi/asm/unistd.h           |    6 +
+ arch/loongarch/kernel/Makefile                     |   28 +
+ arch/loongarch/kernel/access-helper.h              |   13 +
+ arch/loongarch/kernel/acpi.c                       |  493 +++++++
+ arch/loongarch/kernel/asm-offsets.c                |  256 ++++
+ arch/loongarch/kernel/boardinfo.c                  |   36 +
+ arch/loongarch/kernel/cacheinfo.c                  |  126 ++
+ arch/loongarch/kernel/cmdline.c                    |   28 +
+ arch/loongarch/kernel/cmpxchg.c                    |  107 ++
+ arch/loongarch/kernel/cpu-probe.c                  |  301 ++++
+ arch/loongarch/kernel/dma.c                        |   58 +
+ arch/loongarch/kernel/efi.c                        |   68 +
+ arch/loongarch/kernel/elf.c                        |   41 +
+ arch/loongarch/kernel/entry.S                      |   86 ++
+ arch/loongarch/kernel/env.c                        |  170 +++
+ arch/loongarch/kernel/fpu.S                        |  296 ++++
+ arch/loongarch/kernel/genex.S                      |  160 +++
+ arch/loongarch/kernel/head.S                       |   91 ++
+ arch/loongarch/kernel/idle.c                       |   16 +
+ arch/loongarch/kernel/io.c                         |   94 ++
+ arch/loongarch/kernel/irq.c                        |  190 +++
+ arch/loongarch/kernel/mem.c                        |   85 ++
+ arch/loongarch/kernel/module.c                     |  653 +++++++++
+ arch/loongarch/kernel/msi.c                        |   38 +
+ arch/loongarch/kernel/numa.c                       |  483 +++++++
+ arch/loongarch/kernel/proc.c                       |  127 ++
+ arch/loongarch/kernel/process.c                    |  273 ++++
+ arch/loongarch/kernel/ptrace.c                     |  420 ++++++
+ arch/loongarch/kernel/reset.c                      |  102 ++
+ arch/loongarch/kernel/rtc.c                        |   36 +
+ arch/loongarch/kernel/setup.c                      |  501 +++++++
+ arch/loongarch/kernel/signal-common.h              |   38 +
+ arch/loongarch/kernel/signal.c                     |  572 ++++++++
+ arch/loongarch/kernel/smp.c                        |  900 ++++++++++++
+ arch/loongarch/kernel/switch.S                     |   47 +
+ arch/loongarch/kernel/syscall.c                    |   80 ++
+ arch/loongarch/kernel/time.c                       |  237 +++
+ arch/loongarch/kernel/topology.c                   |   57 +
+ arch/loongarch/kernel/traps.c                      |  745 ++++++++++
+ arch/loongarch/kernel/vdso.c                       |  139 ++
+ arch/loongarch/kernel/vmlinux.lds.S                |  115 ++
+ arch/loongarch/lib/Makefile                        |    7 +
+ arch/loongarch/lib/clear_user.S                    |   43 +
+ arch/loongarch/lib/copy_user.S                     |   47 +
+ arch/loongarch/lib/delay.c                         |   43 +
+ arch/loongarch/lib/dump_tlb.c                      |  107 ++
+ arch/loongarch/lib/memcpy.S                        |   32 +
+ arch/loongarch/lib/memmove.S                       |   45 +
+ arch/loongarch/lib/memset.S                        |   30 +
+ arch/loongarch/lib/strncpy_user.S                  |   51 +
+ arch/loongarch/lib/strnlen_user.S                  |   47 +
+ arch/loongarch/mm/Makefile                         |    9 +
+ arch/loongarch/mm/cache.c                          |  153 ++
+ arch/loongarch/mm/extable.c                        |   22 +
+ arch/loongarch/mm/fault.c                          |  248 ++++
+ arch/loongarch/mm/hugetlbpage.c                    |   87 ++
+ arch/loongarch/mm/init.c                           |  227 +++
+ arch/loongarch/mm/ioremap.c                        |   27 +
+ arch/loongarch/mm/maccess.c                        |   10 +
+ arch/loongarch/mm/mmap.c                           |  125 ++
+ arch/loongarch/mm/page.S                           |   84 ++
+ arch/loongarch/mm/pgtable.c                        |  132 ++
+ arch/loongarch/mm/tlb.c                            |  286 ++++
+ arch/loongarch/mm/tlbex.S                          |  537 +++++++
+ arch/loongarch/pci/Makefile                        |    7 +
+ arch/loongarch/pci/acpi.c                          |  176 +++
+ arch/loongarch/pci/pci.c                           |  195 +++
+ arch/loongarch/vdso/Makefile                       |   96 ++
+ arch/loongarch/vdso/elf.S                          |   15 +
+ arch/loongarch/vdso/gen_vdso_offsets.sh            |   14 +
+ arch/loongarch/vdso/sigreturn.S                    |   24 +
+ arch/loongarch/vdso/vdso.S                         |   22 +
+ arch/loongarch/vdso/vdso.lds.S                     |   72 +
+ arch/loongarch/vdso/vgettimeofday.c                |   26 +
+ drivers/gpu/drm/drm_vm.c                           |    2 +-
+ drivers/gpu/drm/ttm/ttm_module.c                   |    2 +-
+ include/drm/drm_cache.h                            |    8 +
+ include/linux/cpuhotplug.h                         |    1 +
+ include/uapi/linux/audit.h                         |    2 +
+ include/uapi/linux/elf-em.h                        |    1 +
+ include/uapi/linux/elf.h                           |    5 +
+ include/uapi/linux/kexec.h                         |    1 +
+ scripts/sorttable.c                                |    5 +
+ scripts/subarch.include                            |    2 +-
+ 213 files changed, 23197 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/loongarch/features.rst
+ create mode 100644 Documentation/loongarch/index.rst
+ create mode 100644 Documentation/loongarch/introduction.rst
+ create mode 100644 Documentation/loongarch/irq-chip-model.rst
+ create mode 100644 Documentation/translations/zh_CN/loongarch/features.rst
+ create mode 100644 Documentation/translations/zh_CN/loongarch/index.rst
+ create mode 100644 Documentation/translations/zh_CN/loongarch/introduction.rst
+ create mode 100644 Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
+ create mode 100644 arch/loongarch/.gitignore
+ create mode 100644 arch/loongarch/Kbuild
+ create mode 100644 arch/loongarch/Kconfig
+ create mode 100644 arch/loongarch/Kconfig.debug
+ create mode 100644 arch/loongarch/Makefile
+ create mode 100644 arch/loongarch/configs/loongson3_defconfig
+ create mode 100644 arch/loongarch/include/asm/Kbuild
+ create mode 100644 arch/loongarch/include/asm/abi.h
+ create mode 100644 arch/loongarch/include/asm/acenv.h
+ create mode 100644 arch/loongarch/include/asm/acpi.h
+ create mode 100644 arch/loongarch/include/asm/addrspace.h
+ create mode 100644 arch/loongarch/include/asm/asm-offsets.h
+ create mode 100644 arch/loongarch/include/asm/asm-prototypes.h
+ create mode 100644 arch/loongarch/include/asm/asm.h
+ create mode 100644 arch/loongarch/include/asm/asmmacro.h
+ create mode 100644 arch/loongarch/include/asm/atomic.h
+ create mode 100644 arch/loongarch/include/asm/barrier.h
+ create mode 100644 arch/loongarch/include/asm/bitops.h
+ create mode 100644 arch/loongarch/include/asm/bitrev.h
+ create mode 100644 arch/loongarch/include/asm/boot_param.h
+ create mode 100644 arch/loongarch/include/asm/bootinfo.h
+ create mode 100644 arch/loongarch/include/asm/branch.h
+ create mode 100644 arch/loongarch/include/asm/bug.h
+ create mode 100644 arch/loongarch/include/asm/cache.h
+ create mode 100644 arch/loongarch/include/asm/cacheflush.h
+ create mode 100644 arch/loongarch/include/asm/cacheops.h
+ create mode 100644 arch/loongarch/include/asm/clocksource.h
+ create mode 100644 arch/loongarch/include/asm/cmpxchg.h
+ create mode 100644 arch/loongarch/include/asm/compiler.h
+ create mode 100644 arch/loongarch/include/asm/cpu-features.h
+ create mode 100644 arch/loongarch/include/asm/cpu-info.h
+ create mode 100644 arch/loongarch/include/asm/cpu.h
+ create mode 100644 arch/loongarch/include/asm/cpufeature.h
+ create mode 100644 arch/loongarch/include/asm/delay.h
+ create mode 100644 arch/loongarch/include/asm/device.h
+ create mode 100644 arch/loongarch/include/asm/dma-direct.h
+ create mode 100644 arch/loongarch/include/asm/dma.h
+ create mode 100644 arch/loongarch/include/asm/dmi.h
+ create mode 100644 arch/loongarch/include/asm/efi.h
+ create mode 100644 arch/loongarch/include/asm/elf.h
+ create mode 100644 arch/loongarch/include/asm/entry-common.h
+ create mode 100644 arch/loongarch/include/asm/exec.h
+ create mode 100644 arch/loongarch/include/asm/fb.h
+ create mode 100644 arch/loongarch/include/asm/fixmap.h
+ create mode 100644 arch/loongarch/include/asm/fpregdef.h
+ create mode 100644 arch/loongarch/include/asm/fpu.h
+ create mode 100644 arch/loongarch/include/asm/futex.h
+ create mode 100644 arch/loongarch/include/asm/fw.h
+ create mode 100644 arch/loongarch/include/asm/hardirq.h
+ create mode 100644 arch/loongarch/include/asm/hugetlb.h
+ create mode 100644 arch/loongarch/include/asm/hw_irq.h
+ create mode 100644 arch/loongarch/include/asm/idle.h
+ create mode 100644 arch/loongarch/include/asm/io.h
+ create mode 100644 arch/loongarch/include/asm/irq.h
+ create mode 100644 arch/loongarch/include/asm/irq_regs.h
+ create mode 100644 arch/loongarch/include/asm/irqflags.h
+ create mode 100644 arch/loongarch/include/asm/kdebug.h
+ create mode 100644 arch/loongarch/include/asm/linkage.h
+ create mode 100644 arch/loongarch/include/asm/local.h
+ create mode 100644 arch/loongarch/include/asm/loongarch.h
+ create mode 100644 arch/loongarch/include/asm/loongson.h
+ create mode 100644 arch/loongarch/include/asm/mmu.h
+ create mode 100644 arch/loongarch/include/asm/mmu_context.h
+ create mode 100644 arch/loongarch/include/asm/mmzone.h
+ create mode 100644 arch/loongarch/include/asm/module.h
+ create mode 100644 arch/loongarch/include/asm/numa.h
+ create mode 100644 arch/loongarch/include/asm/page.h
+ create mode 100644 arch/loongarch/include/asm/pci.h
+ create mode 100644 arch/loongarch/include/asm/percpu.h
+ create mode 100644 arch/loongarch/include/asm/perf_event.h
+ create mode 100644 arch/loongarch/include/asm/pgalloc.h
+ create mode 100644 arch/loongarch/include/asm/pgtable-bits.h
+ create mode 100644 arch/loongarch/include/asm/pgtable.h
+ create mode 100644 arch/loongarch/include/asm/prefetch.h
+ create mode 100644 arch/loongarch/include/asm/processor.h
+ create mode 100644 arch/loongarch/include/asm/ptrace.h
+ create mode 100644 arch/loongarch/include/asm/reboot.h
+ create mode 100644 arch/loongarch/include/asm/regdef.h
+ create mode 100644 arch/loongarch/include/asm/serial.h
+ create mode 100644 arch/loongarch/include/asm/setup.h
+ create mode 100644 arch/loongarch/include/asm/shmparam.h
+ create mode 100644 arch/loongarch/include/asm/smp.h
+ create mode 100644 arch/loongarch/include/asm/sparsemem.h
+ create mode 100644 arch/loongarch/include/asm/spinlock.h
+ create mode 100644 arch/loongarch/include/asm/spinlock_types.h
+ create mode 100644 arch/loongarch/include/asm/stackframe.h
+ create mode 100644 arch/loongarch/include/asm/string.h
+ create mode 100644 arch/loongarch/include/asm/switch_to.h
+ create mode 100644 arch/loongarch/include/asm/syscall.h
+ create mode 100644 arch/loongarch/include/asm/thread_info.h
+ create mode 100644 arch/loongarch/include/asm/time.h
+ create mode 100644 arch/loongarch/include/asm/timex.h
+ create mode 100644 arch/loongarch/include/asm/tlb.h
+ create mode 100644 arch/loongarch/include/asm/tlbflush.h
+ create mode 100644 arch/loongarch/include/asm/topology.h
+ create mode 100644 arch/loongarch/include/asm/types.h
+ create mode 100644 arch/loongarch/include/asm/uaccess.h
+ create mode 100644 arch/loongarch/include/asm/unistd.h
+ create mode 100644 arch/loongarch/include/asm/vdso.h
+ create mode 100644 arch/loongarch/include/asm/vdso/clocksource.h
+ create mode 100644 arch/loongarch/include/asm/vdso/gettimeofday.h
+ create mode 100644 arch/loongarch/include/asm/vdso/processor.h
+ create mode 100644 arch/loongarch/include/asm/vdso/vdso.h
+ create mode 100644 arch/loongarch/include/asm/vdso/vsyscall.h
+ create mode 100644 arch/loongarch/include/asm/vermagic.h
+ create mode 100644 arch/loongarch/include/asm/vmalloc.h
+ create mode 100644 arch/loongarch/include/uapi/asm/Kbuild
+ create mode 100644 arch/loongarch/include/uapi/asm/abidefs.h
+ create mode 100644 arch/loongarch/include/uapi/asm/auxvec.h
+ create mode 100644 arch/loongarch/include/uapi/asm/bitfield.h
+ create mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
+ create mode 100644 arch/loongarch/include/uapi/asm/break.h
+ create mode 100644 arch/loongarch/include/uapi/asm/byteorder.h
+ create mode 100644 arch/loongarch/include/uapi/asm/hwcap.h
+ create mode 100644 arch/loongarch/include/uapi/asm/ptrace.h
+ create mode 100644 arch/loongarch/include/uapi/asm/reg.h
+ create mode 100644 arch/loongarch/include/uapi/asm/sigcontext.h
+ create mode 100644 arch/loongarch/include/uapi/asm/swab.h
+ create mode 100644 arch/loongarch/include/uapi/asm/ucontext.h
+ create mode 100644 arch/loongarch/include/uapi/asm/unistd.h
+ create mode 100644 arch/loongarch/kernel/Makefile
+ create mode 100644 arch/loongarch/kernel/access-helper.h
+ create mode 100644 arch/loongarch/kernel/acpi.c
+ create mode 100644 arch/loongarch/kernel/asm-offsets.c
+ create mode 100644 arch/loongarch/kernel/boardinfo.c
+ create mode 100644 arch/loongarch/kernel/cacheinfo.c
+ create mode 100644 arch/loongarch/kernel/cmdline.c
+ create mode 100644 arch/loongarch/kernel/cmpxchg.c
+ create mode 100644 arch/loongarch/kernel/cpu-probe.c
+ create mode 100644 arch/loongarch/kernel/dma.c
+ create mode 100644 arch/loongarch/kernel/efi.c
+ create mode 100644 arch/loongarch/kernel/elf.c
+ create mode 100644 arch/loongarch/kernel/entry.S
+ create mode 100644 arch/loongarch/kernel/env.c
+ create mode 100644 arch/loongarch/kernel/fpu.S
+ create mode 100644 arch/loongarch/kernel/genex.S
+ create mode 100644 arch/loongarch/kernel/head.S
+ create mode 100644 arch/loongarch/kernel/idle.c
+ create mode 100644 arch/loongarch/kernel/io.c
+ create mode 100644 arch/loongarch/kernel/irq.c
+ create mode 100644 arch/loongarch/kernel/mem.c
+ create mode 100644 arch/loongarch/kernel/module.c
+ create mode 100644 arch/loongarch/kernel/msi.c
+ create mode 100644 arch/loongarch/kernel/numa.c
+ create mode 100644 arch/loongarch/kernel/proc.c
+ create mode 100644 arch/loongarch/kernel/process.c
+ create mode 100644 arch/loongarch/kernel/ptrace.c
+ create mode 100644 arch/loongarch/kernel/reset.c
+ create mode 100644 arch/loongarch/kernel/rtc.c
+ create mode 100644 arch/loongarch/kernel/setup.c
+ create mode 100644 arch/loongarch/kernel/signal-common.h
+ create mode 100644 arch/loongarch/kernel/signal.c
+ create mode 100644 arch/loongarch/kernel/smp.c
+ create mode 100644 arch/loongarch/kernel/switch.S
+ create mode 100644 arch/loongarch/kernel/syscall.c
+ create mode 100644 arch/loongarch/kernel/time.c
+ create mode 100644 arch/loongarch/kernel/topology.c
+ create mode 100644 arch/loongarch/kernel/traps.c
+ create mode 100644 arch/loongarch/kernel/vdso.c
+ create mode 100644 arch/loongarch/kernel/vmlinux.lds.S
+ create mode 100644 arch/loongarch/lib/Makefile
+ create mode 100644 arch/loongarch/lib/clear_user.S
+ create mode 100644 arch/loongarch/lib/copy_user.S
+ create mode 100644 arch/loongarch/lib/delay.c
+ create mode 100644 arch/loongarch/lib/dump_tlb.c
+ create mode 100644 arch/loongarch/lib/memcpy.S
+ create mode 100644 arch/loongarch/lib/memmove.S
+ create mode 100644 arch/loongarch/lib/memset.S
+ create mode 100644 arch/loongarch/lib/strncpy_user.S
+ create mode 100644 arch/loongarch/lib/strnlen_user.S
+ create mode 100644 arch/loongarch/mm/Makefile
+ create mode 100644 arch/loongarch/mm/cache.c
+ create mode 100644 arch/loongarch/mm/extable.c
+ create mode 100644 arch/loongarch/mm/fault.c
+ create mode 100644 arch/loongarch/mm/hugetlbpage.c
+ create mode 100644 arch/loongarch/mm/init.c
+ create mode 100644 arch/loongarch/mm/ioremap.c
+ create mode 100644 arch/loongarch/mm/maccess.c
+ create mode 100644 arch/loongarch/mm/mmap.c
+ create mode 100644 arch/loongarch/mm/page.S
+ create mode 100644 arch/loongarch/mm/pgtable.c
+ create mode 100644 arch/loongarch/mm/tlb.c
+ create mode 100644 arch/loongarch/mm/tlbex.S
+ create mode 100644 arch/loongarch/pci/Makefile
+ create mode 100644 arch/loongarch/pci/acpi.c
+ create mode 100644 arch/loongarch/pci/pci.c
+ create mode 100644 arch/loongarch/vdso/Makefile
+ create mode 100644 arch/loongarch/vdso/elf.S
+ create mode 100755 arch/loongarch/vdso/gen_vdso_offsets.sh
+ create mode 100644 arch/loongarch/vdso/sigreturn.S
+ create mode 100644 arch/loongarch/vdso/vdso.S
+ create mode 100644 arch/loongarch/vdso/vdso.lds.S
+ create mode 100644 arch/loongarch/vdso/vgettimeofday.c
+--
+2.27.0
 
