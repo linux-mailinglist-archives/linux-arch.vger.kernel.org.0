@@ -2,17 +2,17 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBAC3FFDA9
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 11:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33993FFDAB
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 11:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbhICJ6m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Sep 2021 05:58:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47848 "EHLO mail.kernel.org"
+        id S234262AbhICJ7O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Sep 2021 05:59:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48006 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234974AbhICJ6m (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 3 Sep 2021 05:58:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C37B6056B;
-        Fri,  3 Sep 2021 09:57:38 +0000 (UTC)
+        id S1348990AbhICJ7M (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Sep 2021 05:59:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C2F6760FC4;
+        Fri,  3 Sep 2021 09:58:08 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -27,9 +27,9 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 09/22] LoongArch: Add boot and setup routines
-Date:   Fri,  3 Sep 2021 17:52:00 +0800
-Message-Id: <20210903095213.797973-10-chenhuacai@loongson.cn>
+Subject: [PATCH V2 10/22] LoongArch: Add exception/interrupt handling
+Date:   Fri,  3 Sep 2021 17:52:01 +0800
+Message-Id: <20210903095213.797973-11-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210903095213.797973-1-chenhuacai@loongson.cn>
 References: <20210903095213.797973-1-chenhuacai@loongson.cn>
@@ -39,2489 +39,1671 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds basic boot, setup and reset routines for LoongArch.
-LoongArch uses UEFI-based firmware and uses ACPI as the boot protocol.
-
-Now the boot information passed to kernel is like this:
-1, kernel get a0, a1 and a2 from bootloader.
-2, a0 is "argc", a1 is "argc", so "cmdline" comes from a0/a1.
-3, a2 is "envrion", which is a pointer to a "struct bootparamsinterface"
-4, "struct bootparamsinterface" include a "systemtable" pointer, whose
-   type is "efi_system_table_t". Most information, include ACPI tables,
-   come from here.
+This patch adds the exception and interrupt handling machanism for
+LoongArch.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/acenv.h      |  17 +
- arch/loongarch/include/asm/acpi.h       |  39 ++
- arch/loongarch/include/asm/boot_param.h |  91 +++++
- arch/loongarch/include/asm/bootinfo.h   |  33 ++
- arch/loongarch/include/asm/dmi.h        |  24 ++
- arch/loongarch/include/asm/efi.h        |  32 ++
- arch/loongarch/include/asm/fw.h         |  18 +
- arch/loongarch/include/asm/reboot.h     |  10 +
- arch/loongarch/include/asm/setup.h      |  21 ++
- arch/loongarch/kernel/acpi.c            | 329 +++++++++++++++++
- arch/loongarch/kernel/cacheinfo.c       | 126 +++++++
- arch/loongarch/kernel/cmdline.c         |  28 ++
- arch/loongarch/kernel/cpu-probe.c       | 301 +++++++++++++++
- arch/loongarch/kernel/efi.c             |  95 +++++
- arch/loongarch/kernel/env.c             | 170 +++++++++
- arch/loongarch/kernel/head.S            |  72 ++++
- arch/loongarch/kernel/mem.c             |  85 +++++
- arch/loongarch/kernel/reset.c           |  90 +++++
- arch/loongarch/kernel/setup.c           | 469 ++++++++++++++++++++++++
- arch/loongarch/kernel/time.c            | 237 ++++++++++++
- arch/loongarch/kernel/topology.c        |  13 +
- 21 files changed, 2300 insertions(+)
- create mode 100644 arch/loongarch/include/asm/acenv.h
- create mode 100644 arch/loongarch/include/asm/acpi.h
- create mode 100644 arch/loongarch/include/asm/boot_param.h
- create mode 100644 arch/loongarch/include/asm/bootinfo.h
- create mode 100644 arch/loongarch/include/asm/dmi.h
- create mode 100644 arch/loongarch/include/asm/efi.h
- create mode 100644 arch/loongarch/include/asm/fw.h
- create mode 100644 arch/loongarch/include/asm/reboot.h
- create mode 100644 arch/loongarch/include/asm/setup.h
- create mode 100644 arch/loongarch/kernel/acpi.c
- create mode 100644 arch/loongarch/kernel/cacheinfo.c
- create mode 100644 arch/loongarch/kernel/cmdline.c
- create mode 100644 arch/loongarch/kernel/cpu-probe.c
- create mode 100644 arch/loongarch/kernel/efi.c
- create mode 100644 arch/loongarch/kernel/env.c
- create mode 100644 arch/loongarch/kernel/head.S
- create mode 100644 arch/loongarch/kernel/mem.c
- create mode 100644 arch/loongarch/kernel/reset.c
- create mode 100644 arch/loongarch/kernel/setup.c
- create mode 100644 arch/loongarch/kernel/time.c
- create mode 100644 arch/loongarch/kernel/topology.c
+ arch/loongarch/include/asm/branch.h       |  21 +
+ arch/loongarch/include/asm/bug.h          |  23 +
+ arch/loongarch/include/asm/entry-common.h |  13 +
+ arch/loongarch/include/asm/hardirq.h      |  24 +
+ arch/loongarch/include/asm/hw_irq.h       |  17 +
+ arch/loongarch/include/asm/irq.h          | 103 +++
+ arch/loongarch/include/asm/irq_regs.h     |  27 +
+ arch/loongarch/include/asm/irqflags.h     |  52 ++
+ arch/loongarch/include/asm/kdebug.h       |  23 +
+ arch/loongarch/include/asm/stackframe.h   | 221 +++++++
+ arch/loongarch/include/uapi/asm/break.h   |  23 +
+ arch/loongarch/kernel/access-helper.h     |  13 +
+ arch/loongarch/kernel/genex.S             | 113 ++++
+ arch/loongarch/kernel/irq.c               | 119 ++++
+ arch/loongarch/kernel/traps.c             | 746 ++++++++++++++++++++++
+ 15 files changed, 1538 insertions(+)
+ create mode 100644 arch/loongarch/include/asm/branch.h
+ create mode 100644 arch/loongarch/include/asm/bug.h
+ create mode 100644 arch/loongarch/include/asm/entry-common.h
+ create mode 100644 arch/loongarch/include/asm/hardirq.h
+ create mode 100644 arch/loongarch/include/asm/hw_irq.h
+ create mode 100644 arch/loongarch/include/asm/irq.h
+ create mode 100644 arch/loongarch/include/asm/irq_regs.h
+ create mode 100644 arch/loongarch/include/asm/irqflags.h
+ create mode 100644 arch/loongarch/include/asm/kdebug.h
+ create mode 100644 arch/loongarch/include/asm/stackframe.h
+ create mode 100644 arch/loongarch/include/uapi/asm/break.h
+ create mode 100644 arch/loongarch/kernel/access-helper.h
+ create mode 100644 arch/loongarch/kernel/genex.S
+ create mode 100644 arch/loongarch/kernel/irq.c
+ create mode 100644 arch/loongarch/kernel/traps.c
 
-diff --git a/arch/loongarch/include/asm/acenv.h b/arch/loongarch/include/asm/acenv.h
+diff --git a/arch/loongarch/include/asm/branch.h b/arch/loongarch/include/asm/branch.h
 new file mode 100644
-index 000000000000..d1f41fbc9070
+index 000000000000..79121306625d
 --- /dev/null
-+++ b/arch/loongarch/include/asm/acenv.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * LoongArch specific ACPICA environments and implementation
-+ *
-+ * Author: Jianmin Lv <lvjianmin@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+
-+#ifndef _ASM_LOONGARCH_ACENV_H
-+#define _ASM_LOONGARCH_ACENV_H
-+
-+/* The head file is required by ACPI core, but we have nothing to fill
-+ * it now, update it later when needed.
-+ */
-+
-+#endif /* _ASM_LOONGARCH_ACENV_H */
-diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
-new file mode 100644
-index 000000000000..aab9223e1f4a
---- /dev/null
-+++ b/arch/loongarch/include/asm/acpi.h
-@@ -0,0 +1,39 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Author: Jianmin Lv <lvjianmin@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ */
-+
-+#ifndef _ASM_LOONGARCH_ACPI_H
-+#define _ASM_LOONGARCH_ACPI_H
-+
-+#ifdef CONFIG_ACPI
-+extern int acpi_strict;
-+extern int acpi_disabled;
-+extern int acpi_pci_disabled;
-+extern int acpi_noirq;
-+
-+static inline void disable_acpi(void)
-+{
-+	acpi_disabled = 1;
-+	acpi_pci_disabled = 1;
-+	acpi_noirq = 1;
-+}
-+
-+static inline bool acpi_has_cpu_in_madt(void)
-+{
-+	return true;
-+}
-+
-+extern struct list_head acpi_wakeup_device_list;
-+
-+#endif /* !CONFIG_ACPI */
-+
-+#define ACPI_TABLE_UPGRADE_MAX_PHYS (max_low_pfn << PAGE_SHIFT)
-+
-+#endif /* _ASM_LOONGARCH_ACPI_H */
-diff --git a/arch/loongarch/include/asm/boot_param.h b/arch/loongarch/include/asm/boot_param.h
-new file mode 100644
-index 000000000000..f515431d838b
---- /dev/null
-+++ b/arch/loongarch/include/asm/boot_param.h
-@@ -0,0 +1,91 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_BOOT_PARAM_H_
-+#define __ASM_BOOT_PARAM_H_
-+
-+#ifdef CONFIG_VT
-+#include <linux/screen_info.h>
-+#endif
-+
-+#define ADDRESS_TYPE_SYSRAM	1
-+#define ADDRESS_TYPE_RESERVED	2
-+#define ADDRESS_TYPE_ACPI	3
-+#define ADDRESS_TYPE_NVS	4
-+#define ADDRESS_TYPE_PMEM	5
-+
-+#define LOONGSON3_BOOT_MEM_MAP_MAX 128
-+
-+#define LOONGSON_EFIBOOT_SIGNATURE	"BPI"
-+#define LOONGSON_MEM_LINKLIST		"MEM"
-+#define LOONGSON_VBIOS_LINKLIST		"VBIOS"
-+#define LOONGSON_SCREENINFO_LINKLIST	"SINFO"
-+
-+/* Values for Version BPI */
-+enum bpi_version {
-+	BPI_VERSION_V1 = 1000, /* Signature="BPI01000" */
-+	BPI_VERSION_V2 = 1001, /* Signature="BPI01001" */
-+};
-+
-+/* Flags in bootparamsinterface */
-+#define BPI_FLAGS_UEFI_SUPPORTED BIT(0)
-+
-+struct _extention_list_hdr {
-+	u64	signature;
-+	u32	length;
-+	u8	revision;
-+	u8	checksum;
-+	struct	_extention_list_hdr *next;
-+} __packed;
-+
-+struct bootparamsinterface {
-+	u64	signature;	/* {"B", "P", "I", "0", "1", ... } */
-+	void	*systemtable;
-+	struct	_extention_list_hdr *extlist;
-+	u64	flags;
-+} __packed;
-+
-+struct loongsonlist_mem_map {
-+	struct	_extention_list_hdr header;	/* {"M", "E", "M"} */
-+	u8	map_count;
-+	struct	loongson_mem_map {
-+		u32 mem_type;
-+		u64 mem_start;
-+		u64 mem_size;
-+	} __packed map[LOONGSON3_BOOT_MEM_MAP_MAX];
-+} __packed;
-+
-+struct loongsonlist_vbios {
-+	struct	_extention_list_hdr header;	/* {"V", "B", "I", "O", "S"} */
-+	u64	vbios_addr;
-+} __packed;
-+
-+struct loongsonlist_screeninfo {
-+	struct	_extention_list_hdr header;	/* {"S", "I", "N", "F", "O"} */
-+	struct	screen_info si;
-+} __packed;
-+
-+struct loongson_board_info {
-+	int bios_size;
-+	char *bios_vendor;
-+	char *bios_version;
-+	char *bios_release_date;
-+	char *board_name;
-+	char *board_vendor;
-+};
-+
-+struct loongson_system_configuration {
-+	int bpi_ver;
-+	int nr_cpus;
-+	int nr_nodes;
-+	int nr_io_pics;
-+	int boot_cpu_id;
-+	int cores_per_node;
-+	int cores_per_package;
-+	char *cpuname;
-+	u64 vgabios_addr;
-+};
-+
-+extern struct loongson_board_info b_info;
-+extern struct bootparamsinterface *efi_bp;
-+extern struct loongsonlist_mem_map *loongson_mem_map;
-+extern struct loongson_system_configuration loongson_sysconf;
-+#endif
-diff --git a/arch/loongarch/include/asm/bootinfo.h b/arch/loongarch/include/asm/bootinfo.h
-new file mode 100644
-index 000000000000..41838633d1aa
---- /dev/null
-+++ b/arch/loongarch/include/asm/bootinfo.h
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_BOOTINFO_H
-+#define _ASM_BOOTINFO_H
-+
-+#include <linux/types.h>
-+#include <asm/setup.h>
-+
-+const char *get_system_type(void);
-+
-+extern void early_memblock_init(void);
-+extern void detect_memory_region(phys_addr_t start, phys_addr_t sz_min,  phys_addr_t sz_max);
-+
-+extern void early_init(void);
-+extern void platform_init(void);
-+
-+extern void free_init_pages(const char *what, unsigned long begin, unsigned long end);
-+
-+/*
-+ * Initial kernel command line, usually setup by fw_init_cmdline()
-+ */
-+extern char arcs_cmdline[COMMAND_LINE_SIZE];
-+
-+/*
-+ * Registers a0, a1, a3 and a4 as passed to the kernel entry by firmware
-+ */
-+extern unsigned long fw_arg0, fw_arg1, fw_arg2, fw_arg3;
-+
-+extern unsigned long initrd_start, initrd_end;
-+
-+#endif /* _ASM_BOOTINFO_H */
-diff --git a/arch/loongarch/include/asm/dmi.h b/arch/loongarch/include/asm/dmi.h
-new file mode 100644
-index 000000000000..fbe98f0e56e0
---- /dev/null
-+++ b/arch/loongarch/include/asm/dmi.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_DMI_H
-+#define _ASM_DMI_H
-+
-+#include <linux/io.h>
-+#include <linux/memblock.h>
-+
-+#define dmi_early_remap(x, l)	dmi_remap(x, l)
-+#define dmi_early_unmap(x, l)	dmi_unmap(x)
-+#define dmi_alloc(l)		memblock_alloc_low(l, PAGE_SIZE)
-+
-+static inline void *dmi_remap(u64 phys_addr, unsigned long size)
-+{
-+	return ((void *)TO_CAC(phys_addr));
-+}
-+
-+static inline void dmi_unmap(void *addr)
-+{
-+}
-+
-+#endif /* _ASM_DMI_H */
-diff --git a/arch/loongarch/include/asm/efi.h b/arch/loongarch/include/asm/efi.h
-new file mode 100644
-index 000000000000..90e8e35d7f4b
---- /dev/null
-+++ b/arch/loongarch/include/asm/efi.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_LOONGARCH_EFI_H
-+#define _ASM_LOONGARCH_EFI_H
-+
-+#include <linux/efi.h>
-+
-+extern void __init efi_init(void);
-+extern void __init efi_runtime_init(void);
-+extern void efifb_setup_from_dmi(struct screen_info *si, const char *opt);
-+
-+#define ARCH_EFI_IRQ_FLAGS_MASK  0x00000001  /*bit0: CP0 Status.IE*/
-+
-+#define arch_efi_call_virt_setup()               \
-+({                                               \
-+})
-+
-+#define arch_efi_call_virt(p, f, args...)        \
-+({                                               \
-+	efi_##f##_t * __f;                       \
-+	__f = p->f;                              \
-+	__f(args);                               \
-+})
-+
-+#define arch_efi_call_virt_teardown()            \
-+({                                               \
-+})
-+
-+
-+#endif /* _ASM_LOONGARCH_EFI_H */
-diff --git a/arch/loongarch/include/asm/fw.h b/arch/loongarch/include/asm/fw.h
-new file mode 100644
-index 000000000000..8a0e8e7c625f
---- /dev/null
-+++ b/arch/loongarch/include/asm/fw.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_FW_H_
-+#define __ASM_FW_H_
-+
-+#include <asm/bootinfo.h>
-+
-+extern int fw_argc;
-+extern long *_fw_argv, *_fw_envp;
-+
-+#define fw_argv(index)		((char *)(long)_fw_argv[(index)])
-+#define fw_envp(index)		((char *)(long)_fw_envp[(index)])
-+
-+extern void fw_init_cmdline(void);
-+
-+#endif /* __ASM_FW_H_ */
-diff --git a/arch/loongarch/include/asm/reboot.h b/arch/loongarch/include/asm/reboot.h
-new file mode 100644
-index 000000000000..0e96b0f42993
---- /dev/null
-+++ b/arch/loongarch/include/asm/reboot.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_REBOOT_H
-+#define _ASM_REBOOT_H
-+
-+extern void (*pm_restart)(void);
-+
-+#endif /* _ASM_REBOOT_H */
-diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
-new file mode 100644
-index 000000000000..fc1fb741b4da
---- /dev/null
-+++ b/arch/loongarch/include/asm/setup.h
++++ b/arch/loongarch/include/asm/branch.h
 @@ -0,0 +1,21 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
++#ifndef _ASM_BRANCH_H
++#define _ASM_BRANCH_H
 +
-+#ifndef _LOONGARCH_SETUP_H
-+#define _LOONGARCH_SETUP_H
++#include <asm/ptrace.h>
 +
-+#include <linux/types.h>
-+#include <uapi/asm/setup.h>
++static inline unsigned long exception_epc(struct pt_regs *regs)
++{
++	return regs->csr_epc;
++}
 +
-+#define VECSIZE 0x200
++static inline int compute_return_epc(struct pt_regs *regs)
++{
++	regs->csr_epc += 4;
++	return 0;
++}
 +
-+extern unsigned long eentry;
-+extern unsigned long tlbrentry;
-+extern void cpu_cache_init(void);
-+extern void per_cpu_trap_init(int cpu);
-+extern void set_handler(unsigned long offset, void *addr, unsigned long len);
-+extern void set_merr_handler(unsigned long offset, void *addr, unsigned long len);
-+
-+#endif /* __SETUP_H */
-diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
++#endif /* _ASM_BRANCH_H */
+diff --git a/arch/loongarch/include/asm/bug.h b/arch/loongarch/include/asm/bug.h
 new file mode 100644
-index 000000000000..dcd683352d61
+index 000000000000..bda49108a76d
 --- /dev/null
-+++ b/arch/loongarch/kernel/acpi.c
-@@ -0,0 +1,329 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * acpi.c - Architecture-Specific Low-Level ACPI Boot Support
-+ *
-+ * Author: Jianmin Lv <lvjianmin@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
++++ b/arch/loongarch/include/asm/bug.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_BUG_H
++#define __ASM_BUG_H
 +
-+#include <linux/init.h>
-+#include <linux/acpi.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/memblock.h>
-+#include <linux/serial_core.h>
-+#include <asm/io.h>
-+#include <asm/loongson.h>
++#include <linux/compiler.h>
 +
-+int acpi_disabled;
-+EXPORT_SYMBOL(acpi_disabled);
-+int acpi_noirq;
-+int acpi_pci_disabled;
-+EXPORT_SYMBOL(acpi_pci_disabled);
-+int acpi_strict = 1; /* We have no workarounds on LoongArch */
-+int num_processors;
-+int disabled_cpus;
-+enum acpi_irq_model_id acpi_irq_model = ACPI_IRQ_MODEL_PLATFORM;
++#ifdef CONFIG_BUG
 +
-+u64 acpi_saved_sp;
++#include <asm/break.h>
 +
-+#define MAX_CORE_PIC 256
-+
-+#define PREFIX			"ACPI: "
-+
-+/*
-+ * Following __acpi_xx functions should be implemented for sepecific cpu.
-+ */
-+int acpi_gsi_to_irq(u32 gsi, unsigned int *irqp)
++static inline void __noreturn BUG(void)
 +{
-+	if (irqp != NULL)
-+		*irqp = acpi_register_gsi(NULL, gsi, -1, -1);
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
-+
-+int acpi_isa_irq_to_gsi(unsigned int isa_irq, u32 *gsi)
-+{
-+	if (gsi)
-+		*gsi = isa_irq;
-+	return 0;
++	__asm__ __volatile__("break %0" : : "i" (BRK_BUG));
++	unreachable();
 +}
 +
-+/*
-+ * success: return IRQ number (>=0)
-+ * failure: return < 0
-+ */
-+int acpi_register_gsi(struct device *dev, u32 gsi, int trigger, int polarity)
-+{
-+	int id, hwirq;
-+	struct irq_domain *domain;
-+	struct irq_fwspec fwspec;
++#define HAVE_ARCH_BUG
 +
-+	switch (gsi) {
-+	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
-+		hwirq = gsi - GSI_MIN_CPU_IRQ;
-+		return irq_create_mapping(liointc_domain, hwirq);
-+
-+	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
-+		id = find_pch_pic(gsi);
-+		if (id < 0)
-+			return -1;
-+
-+		domain = pch_pic_domain[id];
-+		if (!domain)
-+			return gsi;
-+
-+		hwirq = gsi - acpi_pchpic[id]->gsi_base;
-+		fwspec.param_count = 2;
-+		fwspec.param[0] = hwirq;
-+		fwspec.param[1] = IRQ_TYPE_LEVEL_HIGH;
-+
-+		return irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, &fwspec);
-+	}
-+
-+	return -1;
-+}
-+EXPORT_SYMBOL_GPL(acpi_register_gsi);
-+
-+void acpi_unregister_gsi(u32 gsi)
-+{
-+
-+}
-+EXPORT_SYMBOL_GPL(acpi_unregister_gsi);
-+
-+void __iomem *__init __acpi_map_table(unsigned long phys, unsigned long size)
-+{
-+
-+	if (!phys || !size)
-+		return NULL;
-+
-+	return early_memremap(phys, size);
-+}
-+void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
-+{
-+	if (!map || !size)
-+		return;
-+
-+	early_memunmap(map, size);
-+}
-+
-+void __init acpi_boot_table_init(void)
-+{
-+	/*
-+	 * If acpi_disabled, bail out
-+	 */
-+	if (acpi_disabled)
-+		return;
-+
-+	/*
-+	 * Initialize the ACPI boot-time table parser.
-+	 */
-+	if (acpi_table_init()) {
-+		disable_acpi();
-+		return;
-+	}
-+}
-+
-+static int __init
-+acpi_parse_cpuintc(union acpi_subtable_headers *header, const unsigned long end)
-+{
-+	struct acpi_madt_core_pic *processor = NULL;
-+
-+	processor = (struct acpi_madt_core_pic *)header;
-+	if (BAD_MADT_ENTRY(processor, end))
-+		return -EINVAL;
-+
-+	acpi_table_print_madt_entry(&header->common);
-+
-+	return 0;
-+}
-+
-+static int __init
-+acpi_parse_liointc(union acpi_subtable_headers *header, const unsigned long end)
-+{
-+	struct acpi_madt_lio_pic *liointc = NULL;
-+
-+	liointc = (struct acpi_madt_lio_pic *)header;
-+
-+	if (BAD_MADT_ENTRY(liointc, end))
-+		return -EINVAL;
-+
-+	acpi_liointc = liointc;
-+
-+	return 0;
-+}
-+
-+static int __init
-+acpi_parse_eiointc(union acpi_subtable_headers *header, const unsigned long end)
-+{
-+	static int id = 0;
-+	struct acpi_madt_eio_pic *eiointc = NULL;
-+
-+	eiointc = (struct acpi_madt_eio_pic *)header;
-+
-+	if (BAD_MADT_ENTRY(eiointc, end))
-+		return -EINVAL;
-+
-+	acpi_eiointc[id++] = eiointc;
-+	loongson_sysconf.nr_io_pics = id;
-+
-+	return 0;
-+}
-+
-+static int __init
-+acpi_parse_htintc(union acpi_subtable_headers *header, const unsigned long end)
-+{
-+	struct acpi_madt_ht_pic *htintc = NULL;
-+
-+	htintc = (struct acpi_madt_ht_pic *)header;
-+
-+	if (BAD_MADT_ENTRY(htintc, end))
-+		return -EINVAL;
-+
-+	acpi_htintc = htintc;
-+	loongson_sysconf.nr_io_pics = 1;
-+
-+	return 0;
-+}
-+
-+static int __init
-+acpi_parse_pch_pic(union acpi_subtable_headers *header, const unsigned long end)
-+{
-+	static int id = 0;
-+	struct acpi_madt_bio_pic *pchpic = NULL;
-+
-+	pchpic = (struct acpi_madt_bio_pic *)header;
-+
-+	if (BAD_MADT_ENTRY(pchpic, end))
-+		return -EINVAL;
-+
-+	acpi_pchpic[id++] = pchpic;
-+
-+	return 0;
-+}
-+
-+static int __init
-+acpi_parse_pch_msi(union acpi_subtable_headers *header, const unsigned long end)
-+{
-+	static int id = 0;
-+	struct acpi_madt_msi_pic *pchmsi = NULL;
-+
-+	pchmsi = (struct acpi_madt_msi_pic *)header;
-+
-+	if (BAD_MADT_ENTRY(pchmsi, end))
-+		return -EINVAL;
-+
-+	acpi_pchmsi[id++] = pchmsi;
-+
-+	return 0;
-+}
-+
-+static int __init
-+acpi_parse_pch_lpc(union acpi_subtable_headers *header, const unsigned long end)
-+{
-+	struct acpi_madt_lpc_pic *pchlpc = NULL;
-+
-+	pchlpc = (struct acpi_madt_lpc_pic *)header;
-+
-+	if (BAD_MADT_ENTRY(pchlpc, end))
-+		return -EINVAL;
-+
-+	acpi_pchlpc = pchlpc;
-+
-+	return 0;
-+}
-+
-+static void __init acpi_process_madt(void)
-+{
-+	int error;
-+
-+	/* Parse MADT CPUINTC entries */
-+	error = acpi_table_parse_madt(ACPI_MADT_TYPE_CORE_PIC, acpi_parse_cpuintc, MAX_CORE_PIC);
-+	if (error < 0) {
-+		disable_acpi();
-+		pr_err(PREFIX "Invalid BIOS MADT (CPUINTC entries), ACPI disabled\n");
-+		return;
-+	}
-+
-+	loongson_sysconf.nr_cpus = num_processors;
-+
-+	/* Parse MADT LIOINTC entries */
-+	error = acpi_table_parse_madt(ACPI_MADT_TYPE_LIO_PIC, acpi_parse_liointc, 1);
-+	if (error < 0) {
-+		disable_acpi();
-+		pr_err(PREFIX "Invalid BIOS MADT (LIOINTC entries), ACPI disabled\n");
-+		return;
-+	}
-+
-+	/* Parse MADT EIOINTC entries */
-+	error = acpi_table_parse_madt(ACPI_MADT_TYPE_EIO_PIC, acpi_parse_eiointc, MAX_IO_PICS);
-+	if (error < 0) {
-+		disable_acpi();
-+		pr_err(PREFIX "Invalid BIOS MADT (EIOINTC entries), ACPI disabled\n");
-+		return;
-+	}
-+
-+	/* Parse MADT HTVEC entries */
-+	error = acpi_table_parse_madt(ACPI_MADT_TYPE_HT_PIC, acpi_parse_htintc, 1);
-+	if (error < 0) {
-+		disable_acpi();
-+		pr_err(PREFIX "Invalid BIOS MADT (HTVEC entries), ACPI disabled\n");
-+		return;
-+	}
-+
-+	/* Parse MADT PCHPIC entries */
-+	error = acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC, acpi_parse_pch_pic, MAX_IO_PICS);
-+	if (error < 0) {
-+		disable_acpi();
-+		pr_err(PREFIX "Invalid BIOS MADT (PCHPIC entries), ACPI disabled\n");
-+		return;
-+	}
-+
-+	/* Parse MADT PCHMSI entries */
-+	error = acpi_table_parse_madt(ACPI_MADT_TYPE_MSI_PIC, acpi_parse_pch_msi, MAX_IO_PICS);
-+	if (error < 0) {
-+		disable_acpi();
-+		pr_err(PREFIX "Invalid BIOS MADT (PCHMSI entries), ACPI disabled\n");
-+		return;
-+	}
-+
-+	/* Parse MADT PCHLPC entries */
-+	error = acpi_table_parse_madt(ACPI_MADT_TYPE_LPC_PIC, acpi_parse_pch_lpc, 1);
-+	if (error < 0) {
-+		disable_acpi();
-+		pr_err(PREFIX "Invalid BIOS MADT (PCHLPC entries), ACPI disabled\n");
-+		return;
-+	}
-+}
-+
-+int __init acpi_boot_init(void)
-+{
-+	/*
-+	 * If acpi_disabled, bail out
-+	 */
-+	if (acpi_disabled)
-+		return -1;
-+
-+	loongson_sysconf.boot_cpu_id = read_csr_cpuid();
-+
-+	/*
-+	 * Process the Multiple APIC Description Table (MADT), if present
-+	 */
-+	acpi_process_madt();
-+
-+	/* Do not enable ACPI SPCR console by default */
-+	acpi_parse_spcr(earlycon_acpi_spcr_enable, false);
-+
-+	return 0;
-+}
-+
-+void __init arch_reserve_mem_area(acpi_physical_address addr, size_t size)
-+{
-+	u8 map_count = loongson_mem_map->map_count;
-+
-+	loongson_mem_map->map[map_count].mem_start = addr;
-+	loongson_mem_map->map[map_count].mem_size = size;
-+	loongson_mem_map->map[map_count].mem_type = ADDRESS_TYPE_ACPI;
-+	loongson_mem_map->map_count++;
-+}
-diff --git a/arch/loongarch/kernel/cacheinfo.c b/arch/loongarch/kernel/cacheinfo.c
-new file mode 100644
-index 000000000000..399e2f5fa6fc
---- /dev/null
-+++ b/arch/loongarch/kernel/cacheinfo.c
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * LoongArch cacheinfo support
-+ *
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#include <linux/cacheinfo.h>
-+#include <linux/of.h>
-+
-+/* Populates leaf and increments to next leaf */
-+#define populate_cache(cache, leaf, c_level, c_type)		\
-+do {								\
-+	leaf->type = c_type;					\
-+	leaf->level = c_level;					\
-+	leaf->coherency_line_size = c->cache.linesz;		\
-+	leaf->number_of_sets = c->cache.sets;			\
-+	leaf->ways_of_associativity = c->cache.ways;		\
-+	leaf->size = c->cache.linesz * c->cache.sets *		\
-+		c->cache.ways;					\
-+	leaf++;							\
-+} while (0)
-+
-+static int __init_cache_level(unsigned int cpu)
-+{
-+	struct cpuinfo_loongarch *c = &current_cpu_data;
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
-+	int levels = 0, leaves = 0;
-+
-+	/*
-+	 * If Dcache is not set, we assume the cache structures
-+	 * are not properly initialized.
-+	 */
-+	if (c->dcache.waysize)
-+		levels += 1;
-+	else
-+		return -ENOENT;
-+
-+
-+	leaves += (c->icache.waysize) ? 2 : 1;
-+
-+	if (c->vcache.waysize) {
-+		levels++;
-+		leaves++;
-+	}
-+
-+	if (c->scache.waysize) {
-+		levels++;
-+		leaves++;
-+	}
-+
-+	if (c->tcache.waysize) {
-+		levels++;
-+		leaves++;
-+	}
-+
-+	this_cpu_ci->num_levels = levels;
-+	this_cpu_ci->num_leaves = leaves;
-+	return 0;
-+}
-+
-+static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
-+					   struct cacheinfo *sib_leaf)
-+{
-+	return !((this_leaf->level == 1) || (this_leaf->level == 2));
-+}
-+
-+static void __cache_cpumap_setup(unsigned int cpu)
-+{
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
-+	struct cacheinfo *this_leaf, *sib_leaf;
-+	unsigned int index;
-+
-+	for (index = 0; index < this_cpu_ci->num_leaves; index++) {
-+		unsigned int i;
-+
-+		this_leaf = this_cpu_ci->info_list + index;
-+		/* skip if shared_cpu_map is already populated */
-+		if (!cpumask_empty(&this_leaf->shared_cpu_map))
-+			continue;
-+
-+		cpumask_set_cpu(cpu, &this_leaf->shared_cpu_map);
-+		for_each_online_cpu(i) {
-+			struct cpu_cacheinfo *sib_cpu_ci = get_cpu_cacheinfo(i);
-+
-+			if (i == cpu || !sib_cpu_ci->info_list)
-+				continue;/* skip if itself or no cacheinfo */
-+			sib_leaf = sib_cpu_ci->info_list + index;
-+			if (cache_leaves_are_shared(this_leaf, sib_leaf)) {
-+				cpumask_set_cpu(cpu, &sib_leaf->shared_cpu_map);
-+				cpumask_set_cpu(i, &this_leaf->shared_cpu_map);
-+			}
-+		}
-+	}
-+}
-+
-+static int __populate_cache_leaves(unsigned int cpu)
-+{
-+	int level = 1;
-+	struct cpuinfo_loongarch *c = &current_cpu_data;
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
-+	struct cacheinfo *this_leaf = this_cpu_ci->info_list;
-+
-+	if (c->icache.waysize) {
-+		populate_cache(dcache, this_leaf, level, CACHE_TYPE_DATA);
-+		populate_cache(icache, this_leaf, level++, CACHE_TYPE_INST);
-+	} else {
-+		populate_cache(dcache, this_leaf, level++, CACHE_TYPE_UNIFIED);
-+	}
-+
-+	if (c->vcache.waysize)
-+		populate_cache(vcache, this_leaf, level++, CACHE_TYPE_UNIFIED);
-+
-+	if (c->scache.waysize)
-+		populate_cache(scache, this_leaf, level++, CACHE_TYPE_UNIFIED);
-+
-+	if (c->tcache.waysize)
-+		populate_cache(tcache, this_leaf, level++, CACHE_TYPE_UNIFIED);
-+
-+	__cache_cpumap_setup(cpu);
-+	this_cpu_ci->cpu_map_populated = true;
-+
-+	return 0;
-+}
-+
-+DEFINE_SMP_CALL_CACHE_FUNCTION(init_cache_level)
-+DEFINE_SMP_CALL_CACHE_FUNCTION(populate_cache_leaves)
-diff --git a/arch/loongarch/kernel/cmdline.c b/arch/loongarch/kernel/cmdline.c
-new file mode 100644
-index 000000000000..46bf4486b54c
---- /dev/null
-+++ b/arch/loongarch/kernel/cmdline.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/string.h>
-+
-+#include <asm/fw.h>
-+
-+int fw_argc;
-+long *_fw_argv, *_fw_envp;
-+
-+void __init fw_init_cmdline(void)
-+{
-+	int i;
-+
-+	fw_argc = fw_arg0;
-+	_fw_argv = (long *)fw_arg1;
-+	_fw_envp = (long *)fw_arg2;
-+
-+	arcs_cmdline[0] = '\0';
-+	for (i = 1; i < fw_argc; i++) {
-+		strlcat(arcs_cmdline, fw_argv(i), COMMAND_LINE_SIZE);
-+		if (i < (fw_argc - 1))
-+			strlcat(arcs_cmdline, " ", COMMAND_LINE_SIZE);
-+	}
-+}
-diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
-new file mode 100644
-index 000000000000..acf7eb19f75d
---- /dev/null
-+++ b/arch/loongarch/kernel/cpu-probe.c
-@@ -0,0 +1,301 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Processor capabilities determination functions.
-+ *
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/ptrace.h>
-+#include <linux/smp.h>
-+#include <linux/stddef.h>
-+#include <linux/export.h>
-+#include <linux/printk.h>
-+#include <linux/uaccess.h>
-+
-+#include <asm/cpu-features.h>
-+#include <asm/elf.h>
-+#include <asm/fpu.h>
-+#include <asm/loongarch.h>
-+#include <asm/pgtable-bits.h>
-+#include <asm/setup.h>
-+
-+/* Hardware capabilities */
-+unsigned int elf_hwcap __read_mostly;
-+EXPORT_SYMBOL_GPL(elf_hwcap);
-+
-+/*
-+ * Determine the FCSR mask for FPU hardware.
-+ */
-+static inline void cpu_set_fpu_fcsr_mask(struct cpuinfo_loongarch *c)
-+{
-+	unsigned long sr, mask, fcsr, fcsr0, fcsr1;
-+
-+	fcsr = c->fpu_csr0;
-+	mask = FPU_CSR_ALL_X | FPU_CSR_ALL_E | FPU_CSR_ALL_S | FPU_CSR_RM;
-+
-+	sr = read_csr_euen();
-+	enable_fpu();
-+
-+	fcsr0 = fcsr & mask;
-+	write_fcsr(LOONGARCH_FCSR0, fcsr0);
-+	fcsr0 = read_fcsr(LOONGARCH_FCSR0);
-+
-+	fcsr1 = fcsr | ~mask;
-+	write_fcsr(LOONGARCH_FCSR0, fcsr1);
-+	fcsr1 = read_fcsr(LOONGARCH_FCSR0);
-+
-+	write_fcsr(LOONGARCH_FCSR0, fcsr);
-+
-+	write_csr_euen(sr);
-+
-+	c->fpu_mask = ~(fcsr0 ^ fcsr1) & ~mask;
-+}
-+
-+static inline void set_elf_platform(int cpu, const char *plat)
-+{
-+	if (cpu == 0)
-+		__elf_platform = plat;
-+}
-+
-+/* MAP BASE */
-+unsigned long vm_map_base;
-+EXPORT_SYMBOL_GPL(vm_map_base);
-+
-+static void cpu_probe_addrbits(struct cpuinfo_loongarch *c)
-+{
-+#ifdef __NEED_ADDRBITS_PROBE
-+	c->pabits = (read_cpucfg(LOONGARCH_CPUCFG1) & CPUCFG1_PABITS) >> 4;
-+	c->vabits = (read_cpucfg(LOONGARCH_CPUCFG1) & CPUCFG1_VABITS) >> 12;
-+	vm_map_base = 0UL - (1UL << c->vabits);
-+#endif
-+}
-+
-+static void set_isa(struct cpuinfo_loongarch *c, unsigned int isa)
-+{
-+	switch (isa) {
-+	case LOONGARCH_CPU_ISA_LA64:
-+		c->isa_level |= LOONGARCH_CPU_ISA_LA64;
-+		fallthrough;
-+	case LOONGARCH_CPU_ISA_LA32S:
-+		c->isa_level |= LOONGARCH_CPU_ISA_LA32S;
-+		fallthrough;
-+	case LOONGARCH_CPU_ISA_LA32R:
-+		c->isa_level |= LOONGARCH_CPU_ISA_LA32R;
-+		break;
-+	}
-+}
-+
-+static void cpu_probe_common(struct cpuinfo_loongarch *c)
-+{
-+	unsigned int config;
-+	unsigned long asid_mask;
-+
-+	c->options = LOONGARCH_CPU_CPUCFG | LOONGARCH_CPU_CSR |
-+		     LOONGARCH_CPU_TLB | LOONGARCH_CPU_VINT | LOONGARCH_CPU_WATCH;
-+
-+	elf_hwcap |= HWCAP_LOONGARCH_CRC32;
-+
-+	config = read_cpucfg(LOONGARCH_CPUCFG1);
-+	if (config & CPUCFG1_UAL) {
-+		c->options |= LOONGARCH_CPU_UAL;
-+		elf_hwcap |= HWCAP_LOONGARCH_UAL;
-+	}
-+
-+	config = read_cpucfg(LOONGARCH_CPUCFG2);
-+	if (config & CPUCFG2_LAM) {
-+		c->options |= LOONGARCH_CPU_LAM;
-+		elf_hwcap |= HWCAP_LOONGARCH_LAM;
-+	}
-+	if (config & CPUCFG2_FP) {
-+		c->options |= LOONGARCH_CPU_FPU;
-+		elf_hwcap |= HWCAP_LOONGARCH_FPU;
-+	}
-+	if (config & CPUCFG2_COMPLEX) {
-+		c->options |= LOONGARCH_CPU_COMPLEX;
-+		elf_hwcap |= HWCAP_LOONGARCH_COMPLEX;
-+	}
-+	if (config & CPUCFG2_CRYPTO) {
-+		c->options |= LOONGARCH_CPU_CRYPTO;
-+		elf_hwcap |= HWCAP_LOONGARCH_CRYPTO;
-+	}
-+	if (config & CPUCFG2_LVZP) {
-+		c->options |= LOONGARCH_CPU_LVZ;
-+		elf_hwcap |= HWCAP_LOONGARCH_LVZ;
-+	}
-+
-+	config = read_cpucfg(LOONGARCH_CPUCFG6);
-+	if (config & CPUCFG6_PMP)
-+		c->options |= LOONGARCH_CPU_PMP;
-+
-+	config = iocsr_readl(LOONGARCH_IOCSR_FEATURES);
-+	if (config & IOCSRF_CSRIPI)
-+		c->options |= LOONGARCH_CPU_CSRIPI;
-+	if (config & IOCSRF_EXTIOI)
-+		c->options |= LOONGARCH_CPU_EXTIOI;
-+	if (config & IOCSRF_FREQSCALE)
-+		c->options |= LOONGARCH_CPU_SCALEFREQ;
-+	if (config & IOCSRF_VM)
-+		c->options |= LOONGARCH_CPU_HYPERVISOR;
-+
-+	config = csr_readl(LOONGARCH_CSR_ASID);
-+	config = (config & CSR_ASID_BIT) >> CSR_ASID_BIT_SHIFT;
-+	asid_mask = GENMASK(config - 1, 0);
-+	set_cpu_asid_mask(c, asid_mask);
-+
-+	config = read_csr_prcfg1();
-+	c->kscratch_mask = GENMASK((config & CSR_CONF1_KSNUM) - 1, 0);
-+	c->kscratch_mask &= ~(EXC_KSCRATCH_MASK | PERCPU_KSCRATCH_MASK | KVM_KSCRATCH_MASK);
-+
-+	config = read_csr_prcfg3();
-+	switch (config & CSR_CONF3_TLBTYPE) {
-+	case 0:
-+		c->tlbsizemtlb = 0;
-+		c->tlbsizestlbsets = 0;
-+		c->tlbsizestlbways = 0;
-+		c->tlbsize = 0;
-+		break;
-+	case 1:
-+		c->tlbsizemtlb = ((config & CSR_CONF3_MTLBSIZE) >> CSR_CONF3_MTLBSIZE_SHIFT) + 1;
-+		c->tlbsizestlbsets = 0;
-+		c->tlbsizestlbways = 0;
-+		c->tlbsize = c->tlbsizemtlb + c->tlbsizestlbsets * c->tlbsizestlbways;
-+		break;
-+	case 2:
-+		c->tlbsizemtlb = ((config & CSR_CONF3_MTLBSIZE) >> CSR_CONF3_MTLBSIZE_SHIFT) + 1;
-+		c->tlbsizestlbsets = 1 << ((config & CSR_CONF3_STLBIDX) >> CSR_CONF3_STLBIDX_SHIFT);
-+		c->tlbsizestlbways = ((config & CSR_CONF3_STLBWAYS) >> CSR_CONF3_STLBWAYS_SHIFT) + 1;
-+		c->tlbsize = c->tlbsizemtlb + c->tlbsizestlbsets * c->tlbsizestlbways;
-+		break;
-+	default:
-+		pr_warn("Warning: unimplemented tlb type\n");
-+	}
-+}
-+
-+#define MAX_NAME_LEN	32
-+#define VENDOR_OFFSET	0
-+#define CPUNAME_OFFSET	9
-+
-+static char cpu_full_name[MAX_NAME_LEN] = "        -        ";
-+
-+static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int cpu)
-+{
-+	uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
-+	uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
-+
-+	__cpu_full_name[cpu] = cpu_full_name;
-+	*vendor = iocsr_readq(LOONGARCH_IOCSR_VENDOR);
-+	*cpuname = iocsr_readq(LOONGARCH_IOCSR_CPUNAME);
-+
-+	switch (c->processor_id & PRID_IMP_MASK) {
-+	case PRID_IMP_LOONGSON_32:
-+		c->cputype = CPU_LOONGSON32;
-+		set_isa(c, LOONGARCH_CPU_ISA_LA32S);
-+		__cpu_family[cpu] = "Loongson-32bit";
-+		pr_info("Standard 32-bit Loongson Processor probed\n");
-+		break;
-+	case PRID_IMP_LOONGSON_64R:
-+		c->cputype = CPU_LOONGSON64;
-+		set_isa(c, LOONGARCH_CPU_ISA_LA64);
-+		__cpu_family[cpu] = "Loongson-64bit";
-+		pr_info("Reduced 64-bit Loongson Processor probed\n");
-+		break;
-+	case PRID_IMP_LOONGSON_64C:
-+		c->cputype = CPU_LOONGSON64;
-+		set_isa(c, LOONGARCH_CPU_ISA_LA64);
-+		__cpu_family[cpu] = "Loongson-64bit";
-+		pr_info("Classic 64-bit Loongson Processor probed\n");
-+		break;
-+	case PRID_IMP_LOONGSON_64G:
-+		c->cputype = CPU_LOONGSON64;
-+		set_isa(c, LOONGARCH_CPU_ISA_LA64);
-+		__cpu_family[cpu] = "Loongson-64bit";
-+		pr_info("Generic 64-bit Loongson Processor probed\n");
-+		break;
-+	default: /* Default to 64 bit */
-+		c->cputype = CPU_LOONGSON64;
-+		set_isa(c, LOONGARCH_CPU_ISA_LA64);
-+		__cpu_family[cpu] = "Loongson-64bit";
-+		pr_info("Unknown 64-bit Loongson Processor probed\n");
-+	}
-+}
-+
-+#ifdef CONFIG_64BIT
-+/* For use by uaccess.h */
-+u64 __ua_limit;
-+EXPORT_SYMBOL(__ua_limit);
 +#endif
 +
-+const char *__cpu_family[NR_CPUS];
-+const char *__cpu_full_name[NR_CPUS];
-+const char *__elf_platform;
++#include <asm-generic/bug.h>
 +
-+static void cpu_report(void)
++#endif /* __ASM_BUG_H */
+diff --git a/arch/loongarch/include/asm/entry-common.h b/arch/loongarch/include/asm/entry-common.h
+new file mode 100644
+index 000000000000..0fe2a098ded9
+--- /dev/null
++++ b/arch/loongarch/include/asm/entry-common.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef ARCH_LOONGARCH_ENTRY_COMMON_H
++#define ARCH_LOONGARCH_ENTRY_COMMON_H
++
++#include <linux/sched.h>
++#include <linux/processor.h>
++
++static inline bool on_thread_stack(void)
 +{
-+	struct cpuinfo_loongarch *c = &current_cpu_data;
-+
-+	pr_info("CPU%d revision is: %08x (%s)\n",
-+		smp_processor_id(), c->processor_id, cpu_family_string());
-+	if (c->options & LOONGARCH_CPU_FPU)
-+		pr_info("FPU%d revision is: %08x\n", smp_processor_id(), c->fpu_vers);
++	return !(((unsigned long)(current->stack) ^ current_stack_pointer) & ~(THREAD_SIZE - 1));
 +}
 +
-+void cpu_probe(void)
-+{
-+	unsigned int cpu = smp_processor_id();
-+	struct cpuinfo_loongarch *c = &current_cpu_data;
-+
-+	/*
-+	 * Set a default elf platform, cpu probe may later
-+	 * overwrite it with a more precise value
-+	 */
-+	set_elf_platform(cpu, "loongarch");
-+
-+	c->cputype	= CPU_UNKNOWN;
-+	c->processor_id = read_cpucfg(LOONGARCH_CPUCFG0);
-+	c->fpu_vers	= (read_cpucfg(LOONGARCH_CPUCFG2) >> 3) & 0x3;
-+
-+	c->fpu_csr0	= FPU_CSR_RN;
-+	c->fpu_mask	= FPU_CSR_RSVD;
-+
-+	cpu_probe_common(c);
-+
-+	per_cpu_trap_init(cpu);
-+
-+	switch (c->processor_id & PRID_COMP_MASK) {
-+	case PRID_COMP_LOONGSON:
-+		cpu_probe_loongson(c, cpu);
-+		break;
-+	}
-+
-+	BUG_ON(!__cpu_family[cpu]);
-+	BUG_ON(c->cputype == CPU_UNKNOWN);
-+
-+	cpu_probe_addrbits(c);
-+
-+#ifdef CONFIG_64BIT
-+	if (cpu == 0)
-+		__ua_limit = ~((1ull << cpu_vabits) - 1);
 +#endif
-+
-+	cpu_report();
-+}
-+
-+void cpu_set_cluster(struct cpuinfo_loongarch *cpuinfo, unsigned int cluster)
-+{
-+	/* Ensure the core number fits in the field */
-+	WARN_ON(cluster > (LOONGARCH_GLOBALNUMBER_CLUSTER >>
-+			   LOONGARCH_GLOBALNUMBER_CLUSTER_SHF));
-+
-+	cpuinfo->globalnumber &= ~LOONGARCH_GLOBALNUMBER_CLUSTER;
-+	cpuinfo->globalnumber |= cluster << LOONGARCH_GLOBALNUMBER_CLUSTER_SHF;
-+}
-+
-+void cpu_set_core(struct cpuinfo_loongarch *cpuinfo, unsigned int core)
-+{
-+	/* Ensure the core number fits in the field */
-+	WARN_ON(core > (LOONGARCH_GLOBALNUMBER_CORE >> LOONGARCH_GLOBALNUMBER_CORE_SHF));
-+
-+	cpuinfo->globalnumber &= ~LOONGARCH_GLOBALNUMBER_CORE;
-+	cpuinfo->globalnumber |= core << LOONGARCH_GLOBALNUMBER_CORE_SHF;
-+}
-diff --git a/arch/loongarch/kernel/efi.c b/arch/loongarch/kernel/efi.c
+diff --git a/arch/loongarch/include/asm/hardirq.h b/arch/loongarch/include/asm/hardirq.h
 new file mode 100644
-index 000000000000..c05abd143e44
+index 000000000000..ccde14a45f67
 --- /dev/null
-+++ b/arch/loongarch/kernel/efi.c
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * EFI initialization
-+ *
-+ * Author: Jianmin Lv <lvjianmin@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/efi.h>
-+#include <linux/efi-bgrt.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/export.h>
-+#include <linux/io.h>
-+#include <linux/kobject.h>
-+#include <linux/memblock.h>
-+#include <linux/reboot.h>
-+#include <linux/uaccess.h>
-+
-+#include <asm/efi.h>
-+#include <asm/boot_param.h>
-+
-+static efi_config_table_type_t arch_tables[] __initdata = {{},};
-+
-+void __init efi_runtime_init(void)
-+{
-+	if (!efi_enabled(EFI_BOOT))
-+		return;
-+
-+	if (!efi.runtime)
-+		return;
-+
-+	if (efi_runtime_disabled()) {
-+		pr_info("EFI runtime services will be disabled.\n");
-+		return;
-+	}
-+
-+	efi_native_runtime_setup();
-+	set_bit(EFI_RUNTIME_SERVICES, &efi.flags);
-+}
-+
-+void __init efi_init(void)
-+{
-+	unsigned long efi_config_table;
-+	efi_system_table_t *efi_systab;
-+
-+	if (!efi_bp)
-+		return;
-+
-+	efi_systab = (efi_system_table_t *)efi_bp->systemtable;
-+	if (!efi_systab) {
-+		pr_err("Can't find EFI system table.\n");
-+		return;
-+	}
-+
-+	set_bit(EFI_64BIT, &efi.flags);
-+	efi_config_table = (unsigned long)efi_systab->tables;
-+	efi.runtime	 = (efi_runtime_services_t *)efi_systab->runtime;
-+	efi.runtime_version = efi.runtime ? (unsigned int)efi.runtime->hdr.revision : 0;
-+
-+	efi_config_parse_tables((void *)efi_systab->tables, efi_systab->nr_tables, arch_tables);
-+}
-+
-+static ssize_t boardinfo_show(struct kobject *kobj,
-+			      struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf,
-+		"BIOS Information\n"
-+		"Vendor\t\t\t: %s\n"
-+		"Version\t\t\t: %s\n"
-+		"ROM Size\t\t: %d KB\n"
-+		"Release Date\t\t: %s\n\n"
-+		"Board Information\n"
-+		"Manufacturer\t\t: %s\n"
-+		"Board Name\t\t: %s\n"
-+		"Family\t\t\t: LOONGSON64\n\n",
-+		b_info.bios_vendor, b_info.bios_version,
-+		b_info.bios_size, b_info.bios_release_date,
-+		b_info.board_vendor, b_info.board_name);
-+}
-+
-+static struct kobj_attribute boardinfo_attr = __ATTR(boardinfo, 0444,
-+						     boardinfo_show, NULL);
-+
-+static int __init boardinfo_init(void)
-+{
-+	if (!efi_kobj)
-+		return -EINVAL;
-+
-+	return sysfs_create_file(efi_kobj, &boardinfo_attr.attr);
-+}
-+late_initcall(boardinfo_init);
-diff --git a/arch/loongarch/kernel/env.c b/arch/loongarch/kernel/env.c
-new file mode 100644
-index 000000000000..234fe282a98c
---- /dev/null
-+++ b/arch/loongarch/kernel/env.c
-@@ -0,0 +1,170 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#include <linux/export.h>
-+#include <linux/acpi.h>
-+#include <linux/efi.h>
-+#include <asm/fw.h>
-+#include <asm/time.h>
-+#include <asm/bootinfo.h>
-+#include <asm/loongson.h>
-+
-+struct bootparamsinterface *efi_bp;
-+struct loongsonlist_mem_map *loongson_mem_map;
-+struct loongsonlist_vbios *pvbios;
-+struct loongson_system_configuration loongson_sysconf;
-+EXPORT_SYMBOL(loongson_sysconf);
-+
-+u64 loongson_chipcfg[MAX_PACKAGES];
-+u64 loongson_chiptemp[MAX_PACKAGES];
-+u64 loongson_freqctrl[MAX_PACKAGES];
-+unsigned long long smp_group[MAX_PACKAGES];
-+
-+static void __init register_addrs_set(u64 *registers, const u64 addr, int num)
-+{
-+	u64 i;
-+
-+	for (i = 0; i < num; i++) {
-+		*registers = (i << 44) | addr;
-+		registers++;
-+	}
-+}
-+
-+static u8 ext_listhdr_checksum(u8 *buffer, u32 length)
-+{
-+	u8 sum = 0;
-+	u8 *end = buffer + length;
-+
-+	while (buffer < end) {
-+		sum = (u8)(sum + *(buffer++));
-+	}
-+
-+	return (sum);
-+}
-+
-+static int parse_mem(struct _extention_list_hdr *head)
-+{
-+	loongson_mem_map = (struct loongsonlist_mem_map *)head;
-+	if (ext_listhdr_checksum((u8 *)loongson_mem_map, head->length)) {
-+		pr_warn("mem checksum error\n");
-+		return -EPERM;
-+	}
-+
-+	return 0;
-+}
-+
-+static int parse_vbios(struct _extention_list_hdr *head)
-+{
-+	pvbios = (struct loongsonlist_vbios *)head;
-+
-+	if (ext_listhdr_checksum((u8 *)pvbios, head->length)) {
-+		pr_warn("vbios_addr checksum error\n");
-+		return -EPERM;
-+	}
-+
-+	loongson_sysconf.vgabios_addr = pvbios->vbios_addr;
-+
-+	return 0;
-+}
-+
-+static int parse_screeninfo(struct _extention_list_hdr *head)
-+{
-+	struct loongsonlist_screeninfo *pscreeninfo;
-+
-+	pscreeninfo = (struct loongsonlist_screeninfo *)head;
-+	if (ext_listhdr_checksum((u8 *)pscreeninfo, head->length)) {
-+		pr_warn("screeninfo_addr checksum error\n");
-+		return -EPERM;
-+	}
-+
-+	memcpy(&screen_info, &pscreeninfo->si, sizeof(screen_info));
-+
-+	return 0;
-+}
-+
-+static int list_find(struct _extention_list_hdr *head)
-+{
-+	struct _extention_list_hdr *fhead = head;
-+
-+	if (fhead == NULL) {
-+		pr_warn("the link is empty!\n");
-+		return -1;
-+	}
-+
-+	while (fhead != NULL) {
-+		if (memcmp(&(fhead->signature), LOONGSON_MEM_LINKLIST, 3) == 0) {
-+			if (parse_mem(fhead) != 0) {
-+				pr_warn("parse mem failed\n");
-+				return -EPERM;
-+			}
-+		} else if (memcmp(&(fhead->signature), LOONGSON_VBIOS_LINKLIST, 5) == 0) {
-+			if (parse_vbios(fhead) != 0) {
-+				pr_warn("parse vbios failed\n");
-+				return -EPERM;
-+			}
-+		} else if (memcmp(&(fhead->signature), LOONGSON_SCREENINFO_LINKLIST, 5) == 0) {
-+			if (parse_screeninfo(fhead) != 0) {
-+				pr_warn("parse screeninfo failed\n");
-+				return -EPERM;
-+			}
-+		}
-+		fhead = fhead->next;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __init parse_bpi_flags(void)
-+{
-+	if (efi_bp->flags & BPI_FLAGS_UEFI_SUPPORTED)
-+		set_bit(EFI_BOOT, &efi.flags);
-+	else
-+		clear_bit(EFI_BOOT, &efi.flags);
-+}
-+
-+static int get_bpi_version(void *signature)
-+{
-+	char data[8];
-+	int r, version = 0;
-+
-+	memset(data, 0, 8);
-+	memcpy(data, signature + 4, 4);
-+	r = kstrtoint(data, 10, &version);
-+
-+	if (r < 0 || version < BPI_VERSION_V1)
-+		panic("Fatal error, invalid BPI version: %d\n", version);
-+
-+	if (version >= BPI_VERSION_V2)
-+		parse_bpi_flags();
-+
-+	return version;
-+}
-+
-+void __init fw_init_environ(void)
-+{
-+	efi_bp = (struct bootparamsinterface *)_fw_envp;
-+	loongson_sysconf.bpi_ver = get_bpi_version(&efi_bp->signature);
-+
-+	register_addrs_set(smp_group, TO_UNCAC(0x1fe01000), 16);
-+	register_addrs_set(loongson_chipcfg, TO_UNCAC(0x1fe00180), 16);
-+	register_addrs_set(loongson_chiptemp, TO_UNCAC(0x1fe0019c), 16);
-+	register_addrs_set(loongson_freqctrl, TO_UNCAC(0x1fe001d0), 16);
-+
-+	if (list_find(efi_bp->extlist))
-+		pr_warn("Scan bootparam failed\n");
-+}
-+
-+static int __init init_cpu_fullname(void)
-+{
-+	int cpu;
-+
-+	if (loongson_sysconf.cpuname && !strncmp(loongson_sysconf.cpuname, "Loongson", 8)) {
-+		for (cpu = 0; cpu < NR_CPUS; cpu++)
-+			__cpu_full_name[cpu] = loongson_sysconf.cpuname;
-+	}
-+	return 0;
-+}
-+arch_initcall(init_cpu_fullname);
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-new file mode 100644
-index 000000000000..53e02fb0559d
---- /dev/null
-+++ b/arch/loongarch/kernel/head.S
-@@ -0,0 +1,72 @@
++++ b/arch/loongarch/include/asm/hardirq.h
+@@ -0,0 +1,24 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+#include <linux/init.h>
++#ifndef _ASM_HARDIRQ_H
++#define _ASM_HARDIRQ_H
++
++#include <linux/cache.h>
++#include <linux/threads.h>
++#include <linux/irq.h>
++
++extern void ack_bad_irq(unsigned int irq);
++#define ack_bad_irq ack_bad_irq
++
++#define NR_IPI	2
++
++typedef struct {
++	unsigned int ipi_irqs[NR_IPI];
++	unsigned int __softirq_pending;
++} ____cacheline_aligned irq_cpustat_t;
++
++DECLARE_PER_CPU_ALIGNED(irq_cpustat_t, irq_stat);
++
++#endif /* _ASM_HARDIRQ_H */
+diff --git a/arch/loongarch/include/asm/hw_irq.h b/arch/loongarch/include/asm/hw_irq.h
+new file mode 100644
+index 000000000000..53cccd8e02a0
+--- /dev/null
++++ b/arch/loongarch/include/asm/hw_irq.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#ifndef __ASM_HW_IRQ_H
++#define __ASM_HW_IRQ_H
++
++#include <linux/atomic.h>
++
++extern atomic_t irq_err_count;
++
++/*
++ * interrupt-retrigger: NOP for now. This may not be appropriate for all
++ * machines, we'll see ...
++ */
++
++#endif /* __ASM_HW_IRQ_H */
+diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
+new file mode 100644
+index 000000000000..5009ec6665a6
+--- /dev/null
++++ b/arch/loongarch/include/asm/irq.h
+@@ -0,0 +1,103 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_IRQ_H
++#define _ASM_IRQ_H
++
++#include <linux/irqdomain.h>
++#include <linux/irqreturn.h>
++
++struct irq_data;
++struct device_node;
++
++int get_ipi_irq(void);
++int get_pmc_irq(void);
++int get_timer_irq(void);
++void arch_init_irq(void);
++void spurious_interrupt(void);
++
++#define NR_IRQS_LEGACY 16
++
++void arch_trigger_cpumask_backtrace(const struct cpumask *mask,
++					bool exclude_self);
++#define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
++
++#define MAX_IO_PICS 2
++#define NR_IRQS	(64 + (256 * MAX_IO_PICS))
++
++#define LOONGSON_CPU_UART0_VEC		10 /* CPU UART0 */
++#define LOONGSON_CPU_THSENS_VEC		14 /* CPU Thsens */
++#define LOONGSON_CPU_HT0_VEC		16 /* CPU HT0 irq vector base number */
++#define LOONGSON_CPU_HT1_VEC		24 /* CPU HT1 irq vector base number */
++
++/* IRQ number definitions */
++#define LOONGSON_LPC_IRQ_BASE		0
++#define LOONGSON_LPC_LAST_IRQ		(LOONGSON_LPC_IRQ_BASE + 15)
++
++#define LOONGSON_CPU_IRQ_BASE		16
++#define LOONGSON_CPU_LAST_IRQ		(LOONGSON_CPU_IRQ_BASE + 14)
++
++#define LOONGSON_PCH_IRQ_BASE		64
++#define LOONGSON_PCH_ACPI_IRQ		(LOONGSON_PCH_IRQ_BASE + 47)
++#define LOONGSON_PCH_LAST_IRQ		(LOONGSON_PCH_IRQ_BASE + 64 - 1)
++
++#define LOONGSON_MSI_IRQ_BASE		(LOONGSON_PCH_IRQ_BASE + 64)
++#define LOONGSON_MSI_LAST_IRQ		(LOONGSON_PCH_IRQ_BASE + 256 - 1)
++
++#define GSI_MIN_CPU_IRQ		LOONGSON_CPU_IRQ_BASE
++#define GSI_MAX_CPU_IRQ		(LOONGSON_CPU_IRQ_BASE + 48 - 1)
++#define GSI_MIN_PCH_IRQ		LOONGSON_PCH_IRQ_BASE
++#define GSI_MAX_PCH_IRQ		(LOONGSON_PCH_IRQ_BASE + 256 - 1)
++
++extern int find_pch_pic(u32 gsi);
++extern int eiointc_get_node(int id);
++
++static inline void eiointc_enable(void)
++{
++	uint64_t misc;
++
++	misc = iocsr_readq(LOONGARCH_IOCSR_MISC_FUNC);
++	misc |= IOCSR_MISC_FUNC_EXT_IOI_EN;
++	iocsr_writeq(misc, LOONGARCH_IOCSR_MISC_FUNC);
++}
++
++struct acpi_madt_lio_pic;
++struct acpi_madt_eio_pic;
++struct acpi_madt_ht_pic;
++struct acpi_madt_bio_pic;
++struct acpi_madt_msi_pic;
++struct acpi_madt_lpc_pic;
++
++struct irq_domain *loongarch_cpu_irq_init(void);
++
++struct irq_domain *liointc_acpi_init(struct irq_domain *parent,
++					struct acpi_madt_lio_pic *acpi_liointc);
++struct irq_domain *eiointc_acpi_init(struct irq_domain *parent,
++					struct acpi_madt_eio_pic *acpi_eiointc);
++
++struct irq_domain *htvec_acpi_init(struct irq_domain *parent,
++					struct acpi_madt_ht_pic *acpi_htvec);
++struct irq_domain *pch_lpc_acpi_init(struct irq_domain *parent,
++					struct acpi_madt_lpc_pic *acpi_pchlpc);
++struct irq_domain *pch_msi_acpi_init(struct irq_domain *parent,
++					struct acpi_madt_msi_pic *acpi_pchmsi);
++struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
++					struct acpi_madt_bio_pic *acpi_pchpic);
++
++extern struct acpi_madt_lio_pic *acpi_liointc;
++extern struct acpi_madt_eio_pic *acpi_eiointc[MAX_IO_PICS];
++
++extern struct acpi_madt_ht_pic *acpi_htintc;
++extern struct acpi_madt_lpc_pic *acpi_pchlpc;
++extern struct acpi_madt_msi_pic *acpi_pchmsi[MAX_IO_PICS];
++extern struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
++
++extern struct irq_domain *cpu_domain;
++extern struct irq_domain *liointc_domain;
++extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
++extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
++
++#include <asm-generic/irq.h>
++
++#endif /* _ASM_IRQ_H */
+diff --git a/arch/loongarch/include/asm/irq_regs.h b/arch/loongarch/include/asm/irq_regs.h
+new file mode 100644
+index 000000000000..359a5bc4eb6b
+--- /dev/null
++++ b/arch/loongarch/include/asm/irq_regs.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#ifndef __ASM_IRQ_REGS_H
++#define __ASM_IRQ_REGS_H
++
++#define ARCH_HAS_OWN_IRQ_REGS
++
++#include <linux/thread_info.h>
++
++static inline struct pt_regs *get_irq_regs(void)
++{
++	return current_thread_info()->regs;
++}
++
++static inline struct pt_regs *set_irq_regs(struct pt_regs *new_regs)
++{
++	struct pt_regs *old_regs;
++
++	old_regs = get_irq_regs();
++	current_thread_info()->regs = new_regs;
++
++	return old_regs;
++}
++
++#endif /* __ASM_IRQ_REGS_H */
+diff --git a/arch/loongarch/include/asm/irqflags.h b/arch/loongarch/include/asm/irqflags.h
+new file mode 100644
+index 000000000000..25d4625ba8e6
+--- /dev/null
++++ b/arch/loongarch/include/asm/irqflags.h
+@@ -0,0 +1,52 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_IRQFLAGS_H
++#define _ASM_IRQFLAGS_H
++
++#ifndef __ASSEMBLY__
++
++#include <linux/compiler.h>
++#include <linux/stringify.h>
++#include <asm/compiler.h>
++#include <asm/loongarch.h>
++
++static inline void arch_local_irq_enable(void)
++{
++	csr_xchgl(CSR_CRMD_IE, CSR_CRMD_IE, LOONGARCH_CSR_CRMD);
++}
++
++static inline void arch_local_irq_disable(void)
++{
++	csr_xchgl(0, CSR_CRMD_IE, LOONGARCH_CSR_CRMD);
++}
++
++static inline unsigned long arch_local_irq_save(void)
++{
++	return csr_xchgl(0, CSR_CRMD_IE, LOONGARCH_CSR_CRMD);
++}
++
++static inline void arch_local_irq_restore(unsigned long flags)
++{
++	csr_xchgl(flags, CSR_CRMD_IE, LOONGARCH_CSR_CRMD);
++}
++
++static inline unsigned long arch_local_save_flags(void)
++{
++	return csr_readl(LOONGARCH_CSR_CRMD);
++}
++
++static inline int arch_irqs_disabled_flags(unsigned long flags)
++{
++	return !(flags & CSR_CRMD_IE);
++}
++
++static inline int arch_irqs_disabled(void)
++{
++	return arch_irqs_disabled_flags(arch_local_save_flags());
++}
++
++#endif /* #ifndef __ASSEMBLY__ */
++
++#endif /* _ASM_IRQFLAGS_H */
+diff --git a/arch/loongarch/include/asm/kdebug.h b/arch/loongarch/include/asm/kdebug.h
+new file mode 100644
+index 000000000000..beb1d9484e4e
+--- /dev/null
++++ b/arch/loongarch/include/asm/kdebug.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_LOONGARCH_KDEBUG_H
++#define _ASM_LOONGARCH_KDEBUG_H
++
++#include <linux/notifier.h>
++
++enum die_val {
++	DIE_OOPS = 1,
++	DIE_RI,
++	DIE_FP,
++	DIE_SIMD,
++	DIE_TRAP,
++	DIE_PAGE_FAULT,
++	DIE_BREAK,
++	DIE_SSTEPBP,
++	DIE_UPROBE,
++	DIE_UPROBE_XOL,
++};
++
++#endif /* _ASM_LOONGARCH_KDEBUG_H */
+diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
+new file mode 100644
+index 000000000000..28a7d646645d
+--- /dev/null
++++ b/arch/loongarch/include/asm/stackframe.h
+@@ -0,0 +1,221 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_STACKFRAME_H
++#define _ASM_STACKFRAME_H
++
 +#include <linux/threads.h>
 +
-+#include <asm/addrspace.h>
 +#include <asm/asm.h>
 +#include <asm/asmmacro.h>
-+#include <asm/regdef.h>
++#include <asm/asm-offsets.h>
 +#include <asm/loongarch.h>
-+#include <asm/stackframe.h>
++#include <asm/thread_info.h>
 +
-+SYM_ENTRY(_stext, SYM_L_GLOBAL, SYM_A_NONE)
++/* Make the addition of cfi info a little easier. */
++	.macro cfi_rel_offset reg offset=0 docfi=0
++	.if \docfi
++	.cfi_rel_offset \reg, \offset
++	.endif
++	.endm
 +
-+	__REF
++	.macro cfi_st reg offset=0 docfi=0
++	cfi_rel_offset \reg, \offset, \docfi
++	LONG_S	\reg, sp, \offset
++	.endm
 +
-+SYM_CODE_START(kernel_entry)			# kernel entry point
++	.macro cfi_restore reg offset=0 docfi=0
++	.if \docfi
++	.cfi_restore \reg
++	.endif
++	.endm
 +
-+	/* We might not get launched at the address the kernel is linked to,
-+	   so we jump there.  */
-+	la.abs		t0, 0f
-+	jirl		zero, t0, 0
-+0:
-+	la		t0, __bss_start		# clear .bss
-+	st.d		zero, t0, 0
-+	la		t1, __bss_stop - LONGSIZE
-+1:
-+	addi.d		t0, t0, LONGSIZE
-+	st.d		zero, t0, 0
-+	bne		t0, t1, 1b
++	.macro cfi_ld reg offset=0 docfi=0
++	LONG_L	\reg, sp, \offset
++	cfi_restore \reg \offset \docfi
++	.endm
 +
-+	la		t0, fw_arg0
-+	st.d		a0, t0, 0		# firmware arguments
-+	la		t0, fw_arg1
-+	st.d		a1, t0, 0
-+	la		t0, fw_arg2
-+	st.d		a2, t0, 0
-+	la		t0, fw_arg3
-+	st.d		a3, t0, 0
++	.macro BACKUP_T0T1
++	csrwr	t0, EXCEPTION_KS0
++	csrwr	t1, EXCEPTION_KS1
++	.endm
 +
-+	/* Config direct window and set PG */
-+	li.d		t0, CSR_DMW0_INIT	# UC, PLV0, 0x8000 xxxx xxxx xxxx
-+	csrwr		t0, LOONGARCH_CSR_DMWIN0
-+	li.d		t0, CSR_DMW1_INIT	# CA, PLV0, 0x9000 xxxx xxxx xxxx
-+	csrwr		t0, LOONGARCH_CSR_DMWIN1
-+	/* Enable PG */
-+	li.w		t0, 0xb0		# PLV=0, IE=0, PG=1
-+	csrwr		t0, LOONGARCH_CSR_CRMD
-+	li.w		t0, 0x04		# PLV=0, PIE=1, PWE=0
-+	csrwr		t0, LOONGARCH_CSR_PRMD
-+	li.w		t0, 0x00		# FPE=0, SXE=0, ASXE=0, BTE=0
-+	csrwr		t0, LOONGARCH_CSR_EUEN
++	.macro RELOAD_T0T1
++	csrrd   t0, EXCEPTION_KS0
++	csrrd   t1, EXCEPTION_KS1
++	.endm
 +
-+	/* KScratch3 used for percpu base, initialized as 0 */
-+	csrwr		zero, PERCPU_BASE_KS
-+	/* GPR21 used for percpu base (runtime), initialized as 0 */
-+	or		x0, zero, zero
++	.macro	SAVE_TEMP docfi=0 reload=1
++	.if \reload
++	RELOAD_T0T1
++	.endif
++	cfi_st	t0, PT_R12, \docfi
++	cfi_st	t1, PT_R13, \docfi
++	cfi_st	t2, PT_R14, \docfi
++	cfi_st	t3, PT_R15, \docfi
++	cfi_st	t4, PT_R16, \docfi
++	cfi_st	t5, PT_R17, \docfi
++	cfi_st	t6, PT_R18, \docfi
++	cfi_st	t7, PT_R19, \docfi
++	cfi_st	t8, PT_R20, \docfi
++	.endm
 +
-+	la		tp, init_thread_union
-+	/* Set the SP after an empty pt_regs.  */
-+	PTR_LI		sp, (_THREAD_SIZE - 32 - PT_SIZE)
-+	PTR_ADDU	sp, sp, tp
-+	set_saved_sp	sp, t0, t1
-+	PTR_ADDIU	sp, sp, -4 * SZREG	# init stack pointer
++	.macro	SAVE_STATIC docfi=0
++	cfi_st	s0, PT_R23, \docfi
++	cfi_st	s1, PT_R24, \docfi
++	cfi_st	s2, PT_R25, \docfi
++	cfi_st	s3, PT_R26, \docfi
++	cfi_st	s4, PT_R27, \docfi
++	cfi_st	s5, PT_R28, \docfi
++	cfi_st	s6, PT_R29, \docfi
++	cfi_st	s7, PT_R30, \docfi
++	cfi_st	s8, PT_R31, \docfi
++	.endm
 +
-+	bl		start_kernel
++/*
++ * get_saved_sp returns the SP for the current CPU by looking in the
++ * kernelsp array for it.  If tosp is set, it stores the current sp in
++ * t0 and loads the new value in sp.  If not, it clobbers t0 and
++ * stores the new value in t1, leaving sp unaffected.
++ */
++	.macro	get_saved_sp docfi=0 tosp=0
++	la.abs	t1, kernelsp
++	.if \tosp
++	move	t0, sp
++	.if \docfi
++	.cfi_register sp, t0
++	.endif
++	LONG_L	sp, t1, 0
++	.else
++	LONG_L	t1, t1, 0
++	.endif
++	.endm
 +
-+SYM_CODE_END(kernel_entry)
++	.macro	set_saved_sp stackp temp temp2
++	la.abs	\temp, kernelsp
++	LONG_S	\stackp, \temp, 0
++	.endm
 +
-+SYM_ENTRY(kernel_entry_end, SYM_L_GLOBAL, SYM_A_NONE)
-diff --git a/arch/loongarch/kernel/mem.c b/arch/loongarch/kernel/mem.c
++	.macro	SAVE_SOME docfi=0
++	csrrd	t1, LOONGARCH_CSR_PRMD
++	andi	t1, t1, 0x3	/* extract pplv bit */
++	move	t0, sp
++	beqz	t1, 8f
++	/* Called from user mode, new stack. */
++	get_saved_sp docfi=\docfi tosp=1
++8:
++	PTR_ADDIU sp, sp, -PT_SIZE
++	.if \docfi
++	.cfi_def_cfa sp, 0
++	.endif
++	cfi_st	t0, PT_R3, \docfi
++	cfi_rel_offset  sp, PT_R3, \docfi
++	LONG_S	zero, sp, PT_R0
++	csrrd	t0, LOONGARCH_CSR_PRMD
++	LONG_S	t0, sp, PT_PRMD
++	csrrd	t0, LOONGARCH_CSR_CRMD
++	LONG_S	t0, sp, PT_CRMD
++	csrrd	t0, LOONGARCH_CSR_ECFG
++	LONG_S	t0, sp, PT_ECFG
++	csrrd	t0, LOONGARCH_CSR_EUEN
++	LONG_S  t0, sp, PT_EUEN
++	cfi_st	ra, PT_R1, \docfi
++	cfi_st	a0, PT_R4, \docfi
++	cfi_st	a1, PT_R5, \docfi
++	cfi_st	a2, PT_R6, \docfi
++	cfi_st	a3, PT_R7, \docfi
++	cfi_st	a4, PT_R8, \docfi
++	cfi_st	a5, PT_R9, \docfi
++	cfi_st	a6, PT_R10, \docfi
++	cfi_st	a7, PT_R11, \docfi
++	csrrd	ra, LOONGARCH_CSR_EPC
++	LONG_S	ra, sp, PT_EPC
++	.if \docfi
++	.cfi_rel_offset ra, PT_EPC
++	.endif
++	cfi_st	tp, PT_R2, \docfi
++	cfi_st	fp, PT_R22, \docfi
++
++	/* Set thread_info if we're coming from user mode */
++	csrrd	t0, LOONGARCH_CSR_PRMD
++	andi	t0, t0, 0x3	/* extract pplv bit */
++	beqz	t0, 9f
++
++	li.d	tp, ~_THREAD_MASK
++	and	tp, tp, sp
++	cfi_st  x0, PT_R21, \docfi
++9:
++	.endm
++
++	.macro	SAVE_ALL docfi=0
++	SAVE_SOME \docfi
++	SAVE_TEMP \docfi
++	SAVE_STATIC \docfi
++	.endm
++
++	.macro	RESTORE_TEMP docfi=0
++	cfi_ld	t0, PT_R12, \docfi
++	cfi_ld	t1, PT_R13, \docfi
++	cfi_ld	t2, PT_R14, \docfi
++	cfi_ld	t3, PT_R15, \docfi
++	cfi_ld	t4, PT_R16, \docfi
++	cfi_ld	t5, PT_R17, \docfi
++	cfi_ld	t6, PT_R18, \docfi
++	cfi_ld	t7, PT_R19, \docfi
++	cfi_ld	t8, PT_R20, \docfi
++	.endm
++
++	.macro	RESTORE_STATIC docfi=0
++	cfi_ld	s0, PT_R23, \docfi
++	cfi_ld	s1, PT_R24, \docfi
++	cfi_ld	s2, PT_R25, \docfi
++	cfi_ld	s3, PT_R26, \docfi
++	cfi_ld	s4, PT_R27, \docfi
++	cfi_ld	s5, PT_R28, \docfi
++	cfi_ld	s6, PT_R29, \docfi
++	cfi_ld	s7, PT_R30, \docfi
++	cfi_ld	s8, PT_R31, \docfi
++	.endm
++
++	.macro	RESTORE_SOME docfi=0
++	/* LoongArch clear IE and PLV */
++	LONG_L	v0, sp, PT_PRMD
++	csrwr	v0, LOONGARCH_CSR_PRMD
++	LONG_L	v0, sp, PT_EPC
++	csrwr	v0, LOONGARCH_CSR_EPC
++	andi    v0, v0, 0x3	/* extract pplv bit */
++	beqz    v0, 8f
++	cfi_ld  x0, PT_R21, \docfi
++8:
++	cfi_ld	ra, PT_R1, \docfi
++	cfi_ld	a0, PT_R4, \docfi
++	cfi_ld	a1, PT_R5, \docfi
++	cfi_ld	a2, PT_R6, \docfi
++	cfi_ld	a3, PT_R7, \docfi
++	cfi_ld	a4, PT_R8, \docfi
++	cfi_ld	a5, PT_R9, \docfi
++	cfi_ld	a6, PT_R10, \docfi
++	cfi_ld	a7, PT_R11, \docfi
++	cfi_ld	tp, PT_R2, \docfi
++	cfi_ld	fp, PT_R22, \docfi
++	.endm
++
++	.macro	RESTORE_SP_AND_RET docfi=0
++	cfi_ld	sp, PT_R3, \docfi
++	ertn
++	.endm
++
++	.macro	RESTORE_ALL_AND_RET docfi=0
++	RESTORE_TEMP \docfi
++	RESTORE_STATIC \docfi
++	RESTORE_SOME \docfi
++	RESTORE_SP_AND_RET \docfi
++	.endm
++
++	/* Enter kernel mode */
++	.macro	KMODE
++	csrrd	x0, PERCPU_BASE_KS
++	.endm
++
++#endif /* _ASM_STACKFRAME_H */
+diff --git a/arch/loongarch/include/uapi/asm/break.h b/arch/loongarch/include/uapi/asm/break.h
 new file mode 100644
-index 000000000000..0e548b36af6a
+index 000000000000..96e8dba56cc3
 --- /dev/null
-+++ b/arch/loongarch/kernel/mem.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
++++ b/arch/loongarch/include/uapi/asm/break.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + */
-+#include <linux/fs.h>
-+#include <linux/mm.h>
-+#include <linux/memblock.h>
++#ifndef __UAPI_ASM_BREAK_H
++#define __UAPI_ASM_BREAK_H
 +
-+#include <asm/bootinfo.h>
-+#include <asm/loongson.h>
-+#include <asm/sections.h>
++#define BRK_DEFAULT		0	/* Used as default */
++#define BRK_BUG			1	/* Used by BUG() */
++#define BRK_KDB			2	/* Used in KDB_ENTER() */
++#define BRK_MATHEMU		3	/* Used by FPU emulator */
++#define BRK_USERBP		4	/* User bp (used by debuggers) */
++#define BRK_SSTEPBP		5	/* User bp (used by debuggers) */
++#define BRK_OVERFLOW		6	/* Overflow check */
++#define BRK_DIVZERO		7	/* Divide by zero check */
++#define BRK_RANGE		8	/* Range error check */
++#define BRK_MULOVFL		9	/* Multiply overflow */
++#define BRK_KPROBE_BP		10	/* Kprobe break */
++#define BRK_KPROBE_SSTEPBP	11	/* Kprobe single step break */
++#define BRK_UPROBE_BP		12	/* See <asm/uprobes.h> */
++#define BRK_UPROBE_XOLBP	13	/* See <asm/uprobes.h> */
 +
-+void __init early_memblock_init(void)
-+{
-+	int i;
-+	u32 mem_type;
-+	u64 mem_start, mem_end, mem_size;
-+
-+	/* parse memory information */
-+	for (i = 0; i < loongson_mem_map->map_count; i++) {
-+		mem_type = loongson_mem_map->map[i].mem_type;
-+		mem_start = loongson_mem_map->map[i].mem_start;
-+		mem_size = loongson_mem_map->map[i].mem_size;
-+		mem_end = mem_start + mem_size;
-+
-+		switch (mem_type) {
-+		case ADDRESS_TYPE_SYSRAM:
-+			memblock_add(mem_start, mem_size);
-+			if (max_low_pfn < (mem_end >> PAGE_SHIFT))
-+				max_low_pfn = mem_end >> PAGE_SHIFT;
-+			break;
-+		}
-+	}
-+	memblock_set_current_limit(PFN_PHYS(max_low_pfn));
-+}
-+
-+void __init fw_init_memory(void)
-+{
-+	int i;
-+	u32 mem_type;
-+	u64 mem_start, mem_end, mem_size;
-+	unsigned long start_pfn, end_pfn;
-+	static unsigned long num_physpages;
-+
-+	/* parse memory information */
-+	for (i = 0; i < loongson_mem_map->map_count; i++) {
-+		mem_type = loongson_mem_map->map[i].mem_type;
-+		mem_start = loongson_mem_map->map[i].mem_start;
-+		mem_size = loongson_mem_map->map[i].mem_size;
-+		mem_end = mem_start + mem_size;
-+
-+		switch (mem_type) {
-+		case ADDRESS_TYPE_SYSRAM:
-+			mem_start = PFN_ALIGN(mem_start);
-+			mem_end = PFN_ALIGN(mem_end - PAGE_SIZE + 1);
-+			num_physpages += (mem_size >> PAGE_SHIFT);
-+			memblock_add(loongson_mem_map->map[i].mem_start,
-+				     loongson_mem_map->map[i].mem_size);
-+			memblock_set_node(mem_start, mem_size, &memblock.memory, 0);
-+			break;
-+		case ADDRESS_TYPE_ACPI:
-+		case ADDRESS_TYPE_RESERVED:
-+			memblock_reserve(loongson_mem_map->map[i].mem_start,
-+					 loongson_mem_map->map[i].mem_size);
-+			break;
-+		}
-+	}
-+
-+	get_pfn_range_for_nid(0, &start_pfn, &end_pfn);
-+	pr_info("start_pfn=0x%lx, end_pfn=0x%lx, num_physpages:0x%lx\n",
-+				start_pfn, end_pfn, num_physpages);
-+
-+	NODE_DATA(0)->node_start_pfn = start_pfn;
-+	NODE_DATA(0)->node_spanned_pages = end_pfn - start_pfn;
-+
-+	/* used by finalize_initrd() */
-+	max_low_pfn = end_pfn;
-+
-+	/* Reserve the first 2MB */
-+	memblock_reserve(PHYS_OFFSET, 0x200000);
-+
-+	/* Reserve the kernel text/data/bss */
-+	memblock_reserve(__pa_symbol(&_text),
-+			 __pa_symbol(&_end) - __pa_symbol(&_text));
-+}
-diff --git a/arch/loongarch/kernel/reset.c b/arch/loongarch/kernel/reset.c
++#endif /* __UAPI_ASM_BREAK_H */
+diff --git a/arch/loongarch/kernel/access-helper.h b/arch/loongarch/kernel/access-helper.h
 new file mode 100644
-index 000000000000..b140c2aa2c5a
+index 000000000000..4a35ca81bd08
 --- /dev/null
-+++ b/arch/loongarch/kernel/reset.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#include <linux/kernel.h>
-+#include <linux/acpi.h>
-+#include <linux/efi.h>
-+#include <linux/export.h>
-+#include <linux/pm.h>
-+#include <linux/types.h>
-+#include <linux/reboot.h>
-+#include <linux/delay.h>
-+#include <linux/console.h>
++++ b/arch/loongarch/kernel/access-helper.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +
-+#include <acpi/reboot.h>
-+#include <asm/compiler.h>
-+#include <asm/idle.h>
-+#include <asm/loongarch.h>
-+#include <asm/reboot.h>
++#include <linux/uaccess.h>
 +
-+static void default_halt(void)
++static inline int __get_inst(u32 *i, u32 *p, bool user)
 +{
-+	local_irq_disable();
-+	clear_csr_ecfg(ECFG0_IM);
-+
-+	pr_notice("\n\n** You can safely turn off the power now **\n\n");
-+	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-+
-+	while (true) {
-+		__arch_cpu_idle();
-+	}
++	return user ? get_user(*i, (u32 __user *)p) : get_kernel_nofault(*i, p);
 +}
 +
-+static void default_poweroff(void)
++static inline int __get_addr(unsigned long *a, unsigned long *p, bool user)
 +{
-+#ifdef CONFIG_EFI
-+	efi.reset_system(EFI_RESET_SHUTDOWN, EFI_SUCCESS, 0, NULL);
-+#endif
-+	while (true) {
-+		__arch_cpu_idle();
-+	}
++	return user ? get_user(*a, (unsigned long __user *)p) : get_kernel_nofault(*a, p);
 +}
-+
-+static void default_restart(void)
-+{
-+#ifdef CONFIG_EFI
-+	if (efi_capsule_pending(NULL))
-+		efi_reboot(REBOOT_WARM, NULL);
-+	else
-+		efi_reboot(REBOOT_COLD, NULL);
-+#endif
-+	if (!acpi_disabled)
-+		acpi_reboot();
-+
-+	while (true) {
-+		__arch_cpu_idle();
-+	}
-+}
-+
-+void (*pm_restart)(void);
-+EXPORT_SYMBOL(pm_restart);
-+
-+void (*pm_power_off)(void);
-+EXPORT_SYMBOL(pm_power_off);
-+
-+void machine_halt(void)
-+{
-+	default_halt();
-+}
-+
-+void machine_power_off(void)
-+{
-+	pm_power_off();
-+}
-+
-+void machine_restart(char *command)
-+{
-+	do_kernel_restart(command);
-+	pm_restart();
-+}
-+
-+static int __init loongarch_reboot_setup(void)
-+{
-+	pm_restart = default_restart;
-+	pm_power_off = default_poweroff;
-+
-+	return 0;
-+}
-+
-+arch_initcall(loongarch_reboot_setup);
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
 new file mode 100644
-index 000000000000..7ec32959b36c
+index 000000000000..2d14057f7eab
 --- /dev/null
-+++ b/arch/loongarch/kernel/setup.c
-@@ -0,0 +1,469 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/arch/loongarch/kernel/genex.S
+@@ -0,0 +1,113 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
 + *
 + * Derived from MIPS:
-+ * Copyright (C) 1995 Linus Torvalds
-+ * Copyright (C) 1995 Waldorf Electronics
-+ * Copyright (C) 1994, 95, 96, 97, 98, 99, 2000, 01, 02, 03  Ralf Baechle
-+ * Copyright (C) 1996 Stoned Elipot
-+ * Copyright (C) 1999 Silicon Graphics, Inc.
-+ * Copyright (C) 2000, 2001, 2002, 2007	 Maciej W. Rozycki
++ * Copyright (C) 1994 - 2000, 2001, 2003 Ralf Baechle
++ * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
++ * Copyright (C) 2002, 2007  Maciej W. Rozycki
++ * Copyright (C) 2001, 2012 MIPS Technologies, Inc.  All rights reserved.
 + */
-+#include <linux/init.h>
++#include <asm/asm.h>
++#include <asm/asmmacro.h>
++#include <asm/loongarch.h>
++#include <asm/regdef.h>
++#include <asm/fpregdef.h>
++#include <asm/stackframe.h>
++#include <asm/thread_info.h>
++
++	.align	5
++SYM_FUNC_START(__arch_cpu_idle)
++	/* start of rollback region */
++	LONG_L	t0, tp, TI_FLAGS
++	nop
++	andi	t0, t0, _TIF_NEED_RESCHED
++	bnez	t0, 1f
++	nop
++	nop
++	nop
++	idle	0
++	/* end of rollback region */
++1:	jirl	zero, ra, 0
++SYM_FUNC_END(__arch_cpu_idle)
++
++SYM_FUNC_START(handle_vint)
++	BACKUP_T0T1
++	SAVE_ALL
++	la.abs	t1, __arch_cpu_idle
++	LONG_L  t0, sp, PT_EPC
++	/* 32 byte rollback region */
++	ori	t0, t0, 0x1f
++	xori	t0, t0, 0x1f
++	bne	t0, t1, 1f
++	LONG_S  t0, sp, PT_EPC
++1:
++	KMODE
++
++	move	a0, sp
++	la.abs	t0, do_vint
++	jirl    ra, t0, 0
++
++	RESTORE_ALL_AND_RET
++SYM_FUNC_END(handle_vint)
++
++SYM_FUNC_START(except_vec_cex)
++	b	cache_parity_error
++	nop
++SYM_FUNC_END(except_vec_cex)
++
++	.macro	__build_prep_badv
++	csrrd	t0, LOONGARCH_CSR_BADV
++	PTR_S	t0, sp, PT_BVADDR
++	KMODE
++	.endm
++
++	.macro	__build_prep_fcsr
++	movfcsr2gr	a1, fcsr0
++	KMODE
++	.endm
++
++	.macro	__build_prep_none
++	KMODE
++	.endm
++
++	.macro	__BUILD_silent exception
++	.endm
++
++	.macro	__BUILD_verbose nexception
++	LONG_L	a1, sp, PT_EPC
++	ASM_PRINT("Got \nexception at %016lx\012")
++	.endm
++
++	.macro	BUILD_HANDLER exception handler prep verbose
++	.align	5
++	SYM_FUNC_START(handle_\exception)
++	BACKUP_T0T1
++	SAVE_ALL
++
++	__build_prep_\prep
++	__BUILD_\verbose \exception
++	move	a0, sp
++	la.abs	t0, do_\handler
++	jirl    ra, t0, 0
++
++	RESTORE_ALL_AND_RET
++	SYM_FUNC_END(handle_\exception)
++	.endm
++
++	BUILD_HANDLER ade ade badv silent
++	BUILD_HANDLER ale ale badv silent
++	BUILD_HANDLER bp bp none silent
++	BUILD_HANDLER fpe fpe fcsr silent
++	BUILD_HANDLER fpu fpu none silent
++	BUILD_HANDLER lsx lsx none silent
++	BUILD_HANDLER lasx lasx none silent
++	BUILD_HANDLER lbt lbt none silent
++	BUILD_HANDLER ri ri none silent
++	BUILD_HANDLER watch watch none silent
++	BUILD_HANDLER reserved reserved none verbose	/* others */
++
++SYM_FUNC_START(handle_sys)
++	la.abs	t0, handle_syscall
++	jirl    zero, t0, 0
++SYM_FUNC_END(handle_sys)
+diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
+new file mode 100644
+index 000000000000..598818741615
+--- /dev/null
++++ b/arch/loongarch/kernel/irq.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#include <linux/kernel.h>
 +#include <linux/acpi.h>
-+#include <linux/dmi.h>
-+#include <linux/efi.h>
-+#include <linux/export.h>
-+#include <linux/screen_info.h>
++#include <linux/atomic.h>
++#include <linux/delay.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/kernel_stat.h>
++#include <linux/proc_fs.h>
++#include <linux/mm.h>
++#include <linux/random.h>
++#include <linux/sched.h>
++#include <linux/seq_file.h>
++#include <linux/kallsyms.h>
++#include <linux/uaccess.h>
++
++#include <asm/irq.h>
++#include <asm/loongson.h>
++#include <asm/setup.h>
++
++struct acpi_madt_lio_pic *acpi_liointc;
++struct acpi_madt_eio_pic *acpi_eiointc[MAX_IO_PICS];
++
++struct acpi_madt_ht_pic *acpi_htintc;
++struct acpi_madt_lpc_pic *acpi_pchlpc;
++struct acpi_madt_msi_pic *acpi_pchmsi[MAX_IO_PICS];
++struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
++
++struct irq_domain *cpu_domain;
++struct irq_domain *liointc_domain;
++struct irq_domain *pch_msi_domain[MAX_IO_PICS];
++struct irq_domain *pch_pic_domain[MAX_IO_PICS];
++
++int find_pch_pic(u32 gsi)
++{
++	int i, start, end;
++
++	/* Find the PCH_PIC that manages this GSI. */
++	for (i = 0; i < loongson_sysconf.nr_io_pics; i++) {
++		struct acpi_madt_bio_pic *irq_cfg = acpi_pchpic[i];
++
++		start = irq_cfg->gsi_base;
++		end   = irq_cfg->gsi_base + irq_cfg->size;
++		if (gsi >= start && gsi < end)
++			return i;
++	}
++
++	pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
++	return -1;
++}
++
++/*
++ * 'what should we do if we get a hw irq event on an illegal vector'.
++ * each architecture has to answer this themselves.
++ */
++void ack_bad_irq(unsigned int irq)
++{
++	pr_warn("Unexpected IRQ # %d\n", irq);
++}
++
++atomic_t irq_err_count;
++
++asmlinkage void spurious_interrupt(void)
++{
++	atomic_inc(&irq_err_count);
++}
++
++int arch_show_interrupts(struct seq_file *p, int prec)
++{
++	seq_printf(p, "%*s: %10u\n", prec, "ERR", atomic_read(&irq_err_count));
++	return 0;
++}
++
++void __init setup_IRQ(void)
++{
++	int i;
++	struct irq_domain *parent_domain;
++
++	if (!acpi_eiointc[0])
++		cpu_data[0].options &= ~LOONGARCH_CPU_EXTIOI;
++
++	cpu_domain = loongarch_cpu_irq_init();
++	liointc_domain = liointc_acpi_init(cpu_domain, acpi_liointc);
++
++	if (cpu_has_extioi) {
++		pr_info("Using EIOINTC interrupt mode\n");
++		for (i = 0; i < loongson_sysconf.nr_io_pics; i++) {
++			parent_domain = eiointc_acpi_init(cpu_domain, acpi_eiointc[i]);
++			pch_pic_domain[i] = pch_pic_acpi_init(parent_domain, acpi_pchpic[i]);
++			pch_msi_domain[i] = pch_msi_acpi_init(parent_domain, acpi_pchmsi[i]);
++		}
++	} else {
++		pr_info("Using HTVECINTC interrupt mode\n");
++		parent_domain = htvec_acpi_init(liointc_domain, acpi_htintc);
++		pch_pic_domain[0] = pch_pic_acpi_init(parent_domain, acpi_pchpic[0]);
++		pch_msi_domain[0] = pch_msi_acpi_init(parent_domain, acpi_pchmsi[0]);
++	}
++
++	irq_set_default_host(pch_pic_domain[0]);
++	pch_lpc_acpi_init(pch_pic_domain[0], acpi_pchlpc);
++}
++
++void __init init_IRQ(void)
++{
++	int i;
++
++	clear_csr_ecfg(ECFG0_IM);
++	clear_csr_estat(ESTATF_IP);
++
++	setup_IRQ();
++
++	for (i = 0; i < NR_IRQS; i++)
++		irq_set_noprobe(i);
++
++	set_csr_ecfg(ECFGF_IP0 | ECFGF_IP1 | ECFGF_IP2 | ECFGF_IPI | ECFGF_PMC);
++}
+diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+new file mode 100644
+index 000000000000..792afa11c532
+--- /dev/null
++++ b/arch/loongarch/kernel/traps.c
+@@ -0,0 +1,746 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Author: Huacai Chen <chenhuacai@loongson.cn>
++ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
++ */
++#include <linux/bitops.h>
++#include <linux/bug.h>
++#include <linux/compiler.h>
++#include <linux/context_tracking.h>
++#include <linux/entry-common.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/extable.h>
++#include <linux/mm.h>
++#include <linux/sched/mm.h>
++#include <linux/sched/debug.h>
++#include <linux/smp.h>
++#include <linux/spinlock.h>
++#include <linux/kallsyms.h>
 +#include <linux/memblock.h>
-+#include <linux/initrd.h>
-+#include <linux/ioport.h>
-+#include <linux/root_dev.h>
-+#include <linux/console.h>
-+#include <linux/pfn.h>
-+#include <linux/platform_device.h>
-+#include <linux/sizes.h>
-+#include <linux/device.h>
-+#include <linux/dma-map-ops.h>
-+#include <linux/swiotlb.h>
++#include <linux/interrupt.h>
++#include <linux/ptrace.h>
++#include <linux/kgdb.h>
++#include <linux/kdebug.h>
++#include <linux/kprobes.h>
++#include <linux/notifier.h>
++#include <linux/irq.h>
++#include <linux/perf_event.h>
 +
 +#include <asm/addrspace.h>
 +#include <asm/bootinfo.h>
-+#include <asm/cache.h>
++#include <asm/branch.h>
++#include <asm/break.h>
 +#include <asm/cpu.h>
-+#include <asm/dma.h>
-+#include <asm/efi.h>
-+#include <asm/fw.h>
-+#include <asm/loongson.h>
-+#include <asm/pgalloc.h>
-+#include <asm/sections.h>
-+#include <asm/setup.h>
-+#include <asm/time.h>
-+
-+#define SMBIOS_BIOSSIZE_OFFSET		0x09
-+#define SMBIOS_BIOSEXTERN_OFFSET	0x13
-+#define SMBIOS_FREQLOW_OFFSET		0x16
-+#define SMBIOS_FREQHIGH_OFFSET		0x17
-+#define SMBIOS_FREQLOW_MASK		0xFF
-+#define SMBIOS_CORE_PACKAGE_OFFSET	0x23
-+#define LOONGSON_EFI_ENABLE		(1 << 3)
-+
-+#ifdef CONFIG_VT
-+struct screen_info screen_info;
-+#endif
-+
-+DEFINE_PER_CPU(unsigned long, kernelsp);
-+unsigned long fw_arg0, fw_arg1, fw_arg2, fw_arg3;
-+struct cpuinfo_loongarch cpu_data[NR_CPUS] __read_mostly;
-+
-+EXPORT_SYMBOL(cpu_data);
-+
-+struct loongson_board_info b_info;
-+static const char dmi_empty_string[] = "        ";
-+
-+/*
-+ * Setup information
-+ *
-+ * These are initialized so they are in the .data section
-+ */
-+
-+char __initdata arcs_cmdline[COMMAND_LINE_SIZE];
-+static char __initdata command_line[COMMAND_LINE_SIZE];
-+
-+static struct resource code_resource = { .name = "Kernel code", };
-+static struct resource data_resource = { .name = "Kernel data", };
-+static struct resource bss_resource = { .name = "Kernel bss", };
-+
-+const char *get_system_type(void)
-+{
-+	return "generic-loongson-machine";
-+}
-+
-+static const char *dmi_string_parse(const struct dmi_header *dm, u8 s)
-+{
-+	const u8 *bp = ((u8 *) dm) + dm->length;
-+
-+	if (s) {
-+		s--;
-+		while (s > 0 && *bp) {
-+			bp += strlen(bp) + 1;
-+			s--;
-+		}
-+
-+		if (*bp != 0) {
-+			size_t len = strlen(bp)+1;
-+			size_t cmp_len = len > 8 ? 8 : len;
-+
-+			if (!memcmp(bp, dmi_empty_string, cmp_len))
-+				return dmi_empty_string;
-+
-+			return bp;
-+		}
-+	}
-+
-+	return "";
-+}
-+
-+static void __init parse_cpu_table(const struct dmi_header *dm)
-+{
-+	long freq_temp = 0;
-+	char *dmi_data = (char *)dm;
-+
-+	freq_temp = ((*(dmi_data + SMBIOS_FREQHIGH_OFFSET) << 8) +
-+			((*(dmi_data + SMBIOS_FREQLOW_OFFSET)) & SMBIOS_FREQLOW_MASK));
-+	cpu_clock_freq = freq_temp * 1000000;
-+
-+	loongson_sysconf.cpuname = (void *)dmi_string_parse(dm, dmi_data[16]);
-+	loongson_sysconf.cores_per_package = *(dmi_data + SMBIOS_CORE_PACKAGE_OFFSET);
-+
-+	pr_info("CpuClock = %llu\n", cpu_clock_freq);
-+}
-+
-+static void __init parse_bios_table(const struct dmi_header *dm)
-+{
-+	int bios_extern;
-+	char *dmi_data = (char *)dm;
-+
-+	bios_extern = *(dmi_data + SMBIOS_BIOSEXTERN_OFFSET);
-+	b_info.bios_size = *(dmi_data + SMBIOS_BIOSSIZE_OFFSET);
-+
-+	if (bios_extern & LOONGSON_EFI_ENABLE)
-+		set_bit(EFI_BOOT, &efi.flags);
-+	else
-+		clear_bit(EFI_BOOT, &efi.flags);
-+}
-+
-+static void __init find_tokens(const struct dmi_header *dm, void *dummy)
-+{
-+	switch (dm->type) {
-+	case 0x0: /* Extern BIOS */
-+		parse_bios_table(dm);
-+		break;
-+	case 0x4: /* Calling interface */
-+		parse_cpu_table(dm);
-+		break;
-+	}
-+}
-+static void __init smbios_parse(void)
-+{
-+	b_info.bios_vendor = (void *)dmi_get_system_info(DMI_BIOS_VENDOR);
-+	b_info.bios_version = (void *)dmi_get_system_info(DMI_BIOS_VERSION);
-+	b_info.bios_release_date = (void *)dmi_get_system_info(DMI_BIOS_DATE);
-+	b_info.board_vendor = (void *)dmi_get_system_info(DMI_BOARD_VENDOR);
-+	b_info.board_name = (void *)dmi_get_system_info(DMI_BOARD_NAME);
-+	dmi_walk(find_tokens, NULL);
-+}
-+
-+/*
-+ * Manage initrd
-+ */
-+#ifdef CONFIG_BLK_DEV_INITRD
-+
-+static unsigned long __init init_initrd(void)
-+{
-+	if (!phys_initrd_start || !phys_initrd_size)
-+		goto disable;
-+
-+	initrd_start = (unsigned long)phys_to_virt(phys_initrd_start);
-+	initrd_end   = (unsigned long)phys_to_virt(phys_initrd_start + phys_initrd_size);
-+
-+	if (!initrd_start || initrd_end <= initrd_start)
-+		goto disable;
-+
-+	if (initrd_start & ~PAGE_MASK) {
-+		pr_err("initrd start must be page aligned\n");
-+		goto disable;
-+	}
-+	if (initrd_start < PAGE_OFFSET) {
-+		pr_err("initrd start < PAGE_OFFSET\n");
-+		goto disable;
-+	}
-+
-+	ROOT_DEV = Root_RAM0;
-+
-+	return 0;
-+disable:
-+	initrd_start = 0;
-+	initrd_end = 0;
-+	return 0;
-+}
-+
-+static void __init finalize_initrd(void)
-+{
-+	unsigned long size = initrd_end - initrd_start;
-+
-+	if (size == 0) {
-+		pr_info("Initrd not found or empty");
-+		goto disable;
-+	}
-+	if (__pa(initrd_end) > PFN_PHYS(max_low_pfn)) {
-+		pr_err("Initrd extends beyond end of memory");
-+		goto disable;
-+	}
-+
-+
-+	memblock_reserve(__pa(initrd_start), size);
-+	initrd_below_start_ok = 1;
-+
-+	pr_info("Initial ramdisk at: 0x%lx (%lu bytes)\n",
-+		initrd_start, size);
-+	return;
-+disable:
-+	pr_cont(" - disabling initrd\n");
-+	initrd_start = 0;
-+	initrd_end = 0;
-+}
-+
-+#else  /* !CONFIG_BLK_DEV_INITRD */
-+
-+static unsigned long __init init_initrd(void)
-+{
-+	return 0;
-+}
-+
-+#define finalize_initrd()	do {} while (0)
-+
-+#endif
-+
-+static int usermem __initdata;
-+
-+static int __init early_parse_mem(char *p)
-+{
-+	phys_addr_t start, size;
-+
-+	/*
-+	 * If a user specifies memory size, we
-+	 * blow away any automatically generated
-+	 * size.
-+	 */
-+	if (usermem == 0) {
-+		usermem = 1;
-+		memblock_remove(memblock_start_of_DRAM(),
-+			memblock_end_of_DRAM() - memblock_start_of_DRAM());
-+	}
-+	start = 0;
-+	size = memparse(p, &p);
-+	if (*p == '@')
-+		start = memparse(p + 1, &p);
-+
-+	memblock_add(start, size);
-+
-+	return 0;
-+}
-+early_param("mem", early_parse_mem);
-+
-+static int __init early_parse_memmap(char *p)
-+{
-+	char *oldp;
-+	u64 start_at, mem_size;
-+
-+	if (!p)
-+		return -EINVAL;
-+
-+	if (!strncmp(p, "exactmap", 8)) {
-+		pr_err("\"memmap=exactmap\" invalid on LoongArch\n");
-+		return 0;
-+	}
-+
-+	oldp = p;
-+	mem_size = memparse(p, &p);
-+	if (p == oldp)
-+		return -EINVAL;
-+
-+	if (*p == '@') {
-+		start_at = memparse(p+1, &p);
-+		memblock_add(start_at, mem_size);
-+	} else if (*p == '#') {
-+		pr_err("\"memmap=nn#ss\" (force ACPI data) invalid on LoongArch\n");
-+		return -EINVAL;
-+	} else if (*p == '$') {
-+		start_at = memparse(p+1, &p);
-+		memblock_add(start_at, mem_size);
-+		memblock_reserve(start_at, mem_size);
-+	} else {
-+		pr_err("\"memmap\" invalid format!\n");
-+		return -EINVAL;
-+	}
-+
-+	if (*p == '\0') {
-+		usermem = 1;
-+		return 0;
-+	} else
-+		return -EINVAL;
-+}
-+early_param("memmap", early_parse_memmap);
-+
-+static void __init check_kernel_sections_mem(void)
-+{
-+	phys_addr_t start = __pa_symbol(&_text);
-+	phys_addr_t size = __pa_symbol(&_end) - start;
-+
-+	if (!memblock_is_region_memory(start, size)) {
-+		pr_info("Kernel sections are not in the memory maps\n");
-+		memblock_add(start, size);
-+	}
-+}
-+
-+static void __init bootcmdline_append(const char *s, size_t max)
-+{
-+	if (!s[0] || !max)
-+		return;
-+
-+	if (boot_command_line[0])
-+		strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
-+
-+	strlcat(boot_command_line, s, max);
-+}
-+
-+static void __init bootcmdline_init(char **cmdline_p)
-+{
-+	boot_command_line[0] = 0;
-+
-+	/*
-+	 * Take arguments from the bootloader at first. Early code should have
-+	 * filled arcs_cmdline with arguments from the bootloader.
-+	 */
-+	bootcmdline_append(arcs_cmdline, COMMAND_LINE_SIZE);
-+
-+	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
-+	*cmdline_p = command_line;
-+
-+	parse_early_param();
-+}
-+
-+/*
-+ * arch_mem_init - initialize memory management subsystem
-+ */
-+static void __init arch_mem_init(char **cmdline_p)
-+{
-+	if (usermem)
-+		pr_info("User-defined physical RAM map overwrite\n");
-+
-+	check_kernel_sections_mem();
-+
-+	memblock_set_node(0, PHYS_ADDR_MAX, &memblock.memory, 0);
-+	pagetable_init();
-+
-+	/*
-+	 * Prevent memblock from allocating high memory.
-+	 * This cannot be done before max_low_pfn is detected, so up
-+	 * to this point is possible to only reserve physical memory
-+	 * with memblock_reserve; memblock_alloc* can be used
-+	 * only after this point
-+	 */
-+	memblock_set_current_limit(PFN_PHYS(max_low_pfn));
-+
-+	/*
-+	 * In order to reduce the possibility of kernel panic when failed to
-+	 * get IO TLB memory under CONFIG_SWIOTLB, it is better to allocate
-+	 * low memory as small as possible before plat_swiotlb_setup(), so
-+	 * make sparse_init() using top-down allocation.
-+	 */
-+	memblock_set_bottom_up(false);
-+	sparse_init();
-+	memblock_set_bottom_up(true);
-+
-+	swiotlb_init(1);
-+
-+	dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
-+
-+	memblock_dump_all();
-+
-+	early_memtest(PFN_PHYS(ARCH_PFN_OFFSET), PFN_PHYS(max_low_pfn));
-+}
-+
-+static void __init resource_init(void)
-+{
-+	u64 i;
-+	phys_addr_t start, end;
-+
-+	code_resource.start = __pa_symbol(&_text);
-+	code_resource.end = __pa_symbol(&_etext) - 1;
-+	data_resource.start = __pa_symbol(&_etext);
-+	data_resource.end = __pa_symbol(&_edata) - 1;
-+	bss_resource.start = __pa_symbol(&__bss_start);
-+	bss_resource.end = __pa_symbol(&__bss_stop) - 1;
-+
-+	for_each_mem_range(i, &start, &end) {
-+		struct resource *res;
-+
-+		res = memblock_alloc(sizeof(struct resource), SMP_CACHE_BYTES);
-+		if (!res)
-+			panic("%s: Failed to allocate %zu bytes\n", __func__,
-+			      sizeof(struct resource));
-+
-+		res->start = start;
-+		/*
-+		 * In memblock, end points to the first byte after the
-+		 * range while in resourses, end points to the last byte in
-+		 * the range.
-+		 */
-+		res->end = end - 1;
-+		res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
-+		res->name = "System RAM";
-+
-+		request_resource(&iomem_resource, res);
-+
-+		/*
-+		 *  We don't know which RAM region contains kernel data,
-+		 *  so we try it repeatedly and let the resource manager
-+		 *  test it.
-+		 */
-+		request_resource(res, &code_resource);
-+		request_resource(res, &data_resource);
-+		request_resource(res, &bss_resource);
-+	}
-+}
-+
-+void __init platform_init(void)
-+{
-+	efi_init();
-+#ifdef CONFIG_ACPI_TABLE_UPGRADE
-+	acpi_table_upgrade();
-+#endif
-+#ifdef CONFIG_ACPI
-+	acpi_gbl_use_default_register_widths = false;
-+	acpi_boot_table_init();
-+	acpi_boot_init();
-+#endif
-+
-+	fw_init_memory();
-+	dmi_setup();
-+	smbios_parse();
-+	pr_info("The BIOS Version: %s\n", b_info.bios_version);
-+
-+	efi_runtime_init();
-+}
-+
-+void __init setup_arch(char **cmdline_p)
-+{
-+	cpu_probe();
-+
-+	fw_init_cmdline();
-+	fw_init_environ();
-+	early_memblock_init();
-+	bootcmdline_init(cmdline_p);
-+
-+	init_initrd();
-+	platform_init();
-+	finalize_initrd();
-+
-+	arch_mem_init(cmdline_p);
-+
-+	resource_init();
-+
-+	paging_init();
-+}
-+
-+static int __init register_gop_device(void)
-+{
-+	void *pd;
-+
-+	if (screen_info.orig_video_isVGA != VIDEO_TYPE_EFI)
-+		return 0;
-+	pd = platform_device_register_data(NULL, "efi-framebuffer", 0,
-+			&screen_info, sizeof(screen_info));
-+	return PTR_ERR_OR_ZERO(pd);
-+}
-+subsys_initcall(register_gop_device);
-diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
-new file mode 100644
-index 000000000000..2e00802a3742
---- /dev/null
-+++ b/arch/loongarch/kernel/time.c
-@@ -0,0 +1,237 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Common time service routines for LoongArch machines.
-+ *
-+ * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
-+ */
-+#include <linux/clockchips.h>
-+#include <linux/delay.h>
-+#include <linux/export.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/sched_clock.h>
-+#include <linux/spinlock.h>
-+
-+#include <asm/cpu-features.h>
++#include <asm/fpu.h>
 +#include <asm/loongarch.h>
-+#include <asm/time.h>
++#include <asm/mmu_context.h>
++#include <asm/pgtable.h>
++#include <asm/ptrace.h>
++#include <asm/sections.h>
++#include <asm/siginfo.h>
++#include <asm/tlb.h>
++#include <asm/types.h>
 +
-+u64 cpu_clock_freq;
-+EXPORT_SYMBOL(cpu_clock_freq);
-+u64 const_clock_freq;
-+EXPORT_SYMBOL(const_clock_freq);
++#include "access-helper.h"
 +
-+static DEFINE_RAW_SPINLOCK(state_lock);
-+static DEFINE_PER_CPU(struct clock_event_device, constant_clockevent_device);
++extern asmlinkage void handle_ade(void);
++extern asmlinkage void handle_ale(void);
++extern asmlinkage void handle_sys(void);
++extern asmlinkage void handle_bp(void);
++extern asmlinkage void handle_ri(void);
++extern asmlinkage void handle_fpu(void);
++extern asmlinkage void handle_fpe(void);
++extern asmlinkage void handle_lbt(void);
++extern asmlinkage void handle_lsx(void);
++extern asmlinkage void handle_lasx(void);
++extern asmlinkage void handle_reserved(void);
++extern asmlinkage void handle_watch(void);
++extern asmlinkage void handle_vint(void);
 +
-+static void constant_event_handler(struct clock_event_device *dev)
++static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
++			   const char *loglvl)
 +{
++	unsigned long addr;
++	unsigned long *sp = (unsigned long *)(regs->regs[3] & ~3);
++
++	printk("%sCall Trace:", loglvl);
++#ifdef CONFIG_KALLSYMS
++	printk("%s\n", loglvl);
++#endif
++	while (!kstack_end(sp)) {
++		unsigned long __user *p =
++			(unsigned long __user *)(unsigned long)sp++;
++		if (__get_user(addr, p)) {
++			printk("%s (Bad stack address)", loglvl);
++			break;
++		}
++		if (__kernel_text_address(addr))
++			print_ip_sym(loglvl, addr);
++	}
++	printk("%s\n", loglvl);
 +}
 +
-+irqreturn_t constant_timer_interrupt(int irq, void *data)
++static void show_stacktrace(struct task_struct *task,
++	const struct pt_regs *regs, const char *loglvl, bool user)
 +{
-+	int cpu = smp_processor_id();
-+	struct clock_event_device *cd;
++	int i;
++	const int field = 2 * sizeof(unsigned long);
++	unsigned long stackdata;
++	unsigned long *sp = (unsigned long *)regs->regs[3];
 +
-+	/* Clear Timer Interrupt */
-+	write_csr_tintclear(CSR_TINTCLR_TI);
-+	cd = &per_cpu(constant_clockevent_device, cpu);
-+	cd->event_handler(cd);
++	printk("%sStack :", loglvl);
++	i = 0;
++	while ((unsigned long) sp & (PAGE_SIZE - 1)) {
++		if (i && ((i % (64 / field)) == 0)) {
++			pr_cont("\n");
++			printk("%s       ", loglvl);
++		}
++		if (i > 39) {
++			pr_cont(" ...");
++			break;
++		}
 +
-+	return IRQ_HANDLED;
++		if (__get_addr(&stackdata, sp++, user)) {
++			pr_cont(" (Bad stack address)");
++			break;
++		}
++
++		pr_cont(" %0*lx", field, stackdata);
++		i++;
++	}
++	pr_cont("\n");
++	show_backtrace(task, regs, loglvl);
 +}
 +
-+static int constant_set_state_oneshot(struct clock_event_device *evt)
++void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
 +{
-+	unsigned long timer_config;
++	struct pt_regs regs;
 +
-+	raw_spin_lock(&state_lock);
++	regs.csr_crmd = 0;
++	if (sp) {
++		regs.regs[3] = (unsigned long)sp;
++		regs.regs[1] = 0;
++		regs.csr_epc = 0;
++	} else {
++		if (task && task != current) {
++			regs.regs[3] = task->thread.reg03;
++			regs.regs[1] = 0;
++			regs.csr_epc = task->thread.reg01;
++		} else {
++			memset(&regs, 0, sizeof(regs));
++		}
++	}
 +
-+	timer_config = csr_readq(LOONGARCH_CSR_TCFG);
-+	timer_config |= CSR_TCFG_EN;
-+	timer_config &= ~CSR_TCFG_PERIOD;
-+	csr_writeq(timer_config, LOONGARCH_CSR_TCFG);
-+
-+	raw_spin_unlock(&state_lock);
-+
-+	return 0;
++	show_stacktrace(task, &regs, loglvl, false);
 +}
 +
-+static int constant_set_state_oneshot_stopped(struct clock_event_device *evt)
++static void show_code(void *pc, bool user)
 +{
-+	unsigned long timer_config;
++	long i;
++	unsigned int insn;
 +
-+	raw_spin_lock(&state_lock);
++	printk("Code:");
 +
-+	timer_config = csr_readq(LOONGARCH_CSR_TCFG);
-+	timer_config &= ~CSR_TCFG_EN;
-+	csr_writeq(timer_config, LOONGARCH_CSR_TCFG);
-+
-+	raw_spin_unlock(&state_lock);
-+
-+	return 0;
++	for(i = -3 ; i < 6 ; i++) {
++		if (__get_inst(&insn, pc + i, user)) {
++			pr_cont(" (Bad address in epc)\n");
++			break;
++		}
++		pr_cont("%c%08x%c", (i?' ':'<'), insn, (i?' ':'>'));
++	}
++	pr_cont("\n");
 +}
 +
-+static int constant_set_state_periodic(struct clock_event_device *evt)
++static void __show_regs(const struct pt_regs *regs)
 +{
-+	unsigned long period;
-+	unsigned long timer_config;
++	const int field = 2 * sizeof(unsigned long);
++	unsigned int excsubcode;
++	unsigned int exccode;
++	int i;
 +
-+	raw_spin_lock(&state_lock);
++	show_regs_print_info(KERN_DEFAULT);
 +
-+	period = const_clock_freq / HZ;
-+	timer_config = period & CSR_TCFG_VAL;
-+	timer_config |= (CSR_TCFG_PERIOD | CSR_TCFG_EN);
-+	csr_writeq(timer_config, LOONGARCH_CSR_TCFG);
++	/*
++	 * Saved main processor registers
++	 */
++	for (i = 0; i < 32; ) {
++		if ((i % 4) == 0)
++			printk("$%2d   :", i);
++		pr_cont(" %0*lx", field, regs->regs[i]);
 +
-+	raw_spin_unlock(&state_lock);
++		i++;
++		if ((i % 4) == 0)
++			pr_cont("\n");
++	}
 +
-+	return 0;
++	/*
++	 * Saved csr registers
++	 */
++	printk("epc   : %0*lx %pS\n", field, regs->csr_epc,
++	       (void *) regs->csr_epc);
++	printk("ra    : %0*lx %pS\n", field, regs->regs[1],
++	       (void *) regs->regs[1]);
++
++	printk("CSR crmd: %08lx	", regs->csr_crmd);
++	printk("CSR prmd: %08lx	", regs->csr_prmd);
++	printk("CSR ecfg: %08lx	", regs->csr_ecfg);
++	printk("CSR estat: %08lx	", regs->csr_estat);
++	printk("CSR euen: %08lx	", regs->csr_euen);
++
++	pr_cont("\n");
++
++	exccode = ((regs->csr_estat) & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
++	excsubcode = ((regs->csr_estat) & CSR_ESTAT_ESUBCODE) >> CSR_ESTAT_ESUBCODE_SHIFT;
++	printk("ExcCode : %x (SubCode %x)\n", exccode, excsubcode);
++
++	if (exccode >= EXCCODE_TLBL && exccode <= EXCCODE_ALE)
++		printk("BadVA : %0*lx\n", field, regs->csr_badvaddr);
++
++	printk("PrId  : %08x (%s)\n", read_cpucfg(LOONGARCH_CPUCFG0),
++	       cpu_family_string());
 +}
 +
-+static int constant_set_state_shutdown(struct clock_event_device *evt)
++void show_regs(struct pt_regs *regs)
 +{
-+	return 0;
++	__show_regs((struct pt_regs *)regs);
++	dump_stack();
 +}
 +
-+static int constant_timer_next_event(unsigned long delta, struct clock_event_device *evt)
++void show_registers(struct pt_regs *regs)
 +{
-+	unsigned long timer_config;
++	__show_regs(regs);
++	print_modules();
++	printk("Process %s (pid: %d, threadinfo=%p, task=%p)\n",
++	       current->comm, current->pid, current_thread_info(), current);
 +
-+	delta &= CSR_TCFG_VAL;
-+	timer_config = delta | CSR_TCFG_EN;
-+	csr_writeq(timer_config, LOONGARCH_CSR_TCFG);
-+
-+	return 0;
++	show_stacktrace(current, regs, KERN_DEFAULT, user_mode(regs));
++	show_code((void *)regs->csr_epc, user_mode(regs));
++	printk("\n");
 +}
 +
-+static unsigned long __init get_loops_per_jiffy(void)
++static DEFINE_RAW_SPINLOCK(die_lock);
++
++void __noreturn die(const char *str, struct pt_regs *regs)
 +{
-+	unsigned long lpj = (unsigned long)const_clock_freq;
++	static int die_counter;
++	int sig = SIGSEGV;
 +
-+	do_div(lpj, HZ);
++	oops_enter();
 +
-+	return lpj;
++	if (notify_die(DIE_OOPS, str, regs, 0, current->thread.trap_nr,
++		       SIGSEGV) == NOTIFY_STOP)
++		sig = 0;
++
++	console_verbose();
++	raw_spin_lock_irq(&die_lock);
++	bust_spinlocks(1);
++
++	printk("%s[#%d]:\n", str, ++die_counter);
++	show_registers(regs);
++	add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
++	raw_spin_unlock_irq(&die_lock);
++
++	oops_exit();
++
++	if (in_interrupt())
++		panic("Fatal exception in interrupt");
++
++	if (panic_on_oops)
++		panic("Fatal exception");
++
++	do_exit(sig);
 +}
 +
-+static long init_timeval;
-+
-+void sync_counter(void)
++static inline void setup_vint_size(unsigned int size)
 +{
-+	/* Ensure counter begin at 0 */
-+	csr_writeq(-init_timeval, LOONGARCH_CSR_CNTC);
++	unsigned int vs;
++
++	vs = ilog2(size/4);
++
++	if (vs == 0 || vs > 7)
++		panic("vint_size %d Not support yet", vs);
++
++	csr_xchgl(vs<<CSR_ECFG_VS_SHIFT, CSR_ECFG_VS, LOONGARCH_CSR_ECFG);
 +}
 +
-+int constant_clockevent_init(void)
++/*
++ * Send SIGFPE according to FCSR Cause bits, which must have already
++ * been masked against Enable bits.  This is impotant as Inexact can
++ * happen together with Overflow or Underflow, and `ptrace' can set
++ * any bits.
++ */
++void force_fcsr_sig(unsigned long fcsr, void __user *fault_addr,
++		     struct task_struct *tsk)
 +{
-+	unsigned int irq;
-+	unsigned int cpu = smp_processor_id();
-+	unsigned long min_delta = 0x600;
-+	unsigned long max_delta = (1UL << 48) - 1;
-+	struct clock_event_device *cd;
-+	static int timer_irq_installed = 0;
++	int si_code = FPE_FLTUNK;
 +
-+	irq = get_timer_irq();
++	if (fcsr & FPU_CSR_INV_X)
++		si_code = FPE_FLTINV;
++	else if (fcsr & FPU_CSR_DIV_X)
++		si_code = FPE_FLTDIV;
++	else if (fcsr & FPU_CSR_OVF_X)
++		si_code = FPE_FLTOVF;
++	else if (fcsr & FPU_CSR_UDF_X)
++		si_code = FPE_FLTUND;
++	else if (fcsr & FPU_CSR_INE_X)
++		si_code = FPE_FLTRES;
 +
-+	cd = &per_cpu(constant_clockevent_device, cpu);
++	force_sig_fault(SIGFPE, si_code, fault_addr);
++}
 +
-+	cd->name = "Constant";
-+	cd->features = CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_PERCPU;
++int process_fpemu_return(int sig, void __user *fault_addr, unsigned long fcsr)
++{
++	int si_code;
++	struct vm_area_struct *vma;
 +
-+	cd->irq = irq;
-+	cd->rating = 320;
-+	cd->cpumask = cpumask_of(cpu);
-+	cd->set_state_oneshot = constant_set_state_oneshot;
-+	cd->set_state_oneshot_stopped = constant_set_state_oneshot_stopped;
-+	cd->set_state_periodic = constant_set_state_periodic;
-+	cd->set_state_shutdown = constant_set_state_shutdown;
-+	cd->set_next_event = constant_timer_next_event;
-+	cd->event_handler = constant_event_handler;
-+
-+	clockevents_config_and_register(cd, const_clock_freq, min_delta, max_delta);
-+
-+	if (timer_irq_installed)
++	switch (sig) {
++	case 0:
 +		return 0;
 +
-+	timer_irq_installed = 1;
++	case SIGFPE:
++		force_fcsr_sig(fcsr, fault_addr, current);
++		return 1;
 +
-+	sync_counter();
++	case SIGBUS:
++		force_sig_fault(SIGBUS, BUS_ADRERR, fault_addr);
++		return 1;
 +
-+	if (request_irq(irq, constant_timer_interrupt, IRQF_PERCPU | IRQF_TIMER, "timer", NULL))
-+		pr_err("Failed to request irq %d (timer)\n", irq);
++	case SIGSEGV:
++		mmap_read_lock(current->mm);
++		vma = find_vma(current->mm, (unsigned long)fault_addr);
++		if (vma && (vma->vm_start <= (unsigned long)fault_addr))
++			si_code = SEGV_ACCERR;
++		else
++			si_code = SEGV_MAPERR;
++		mmap_read_unlock(current->mm);
++		force_sig_fault(SIGSEGV, si_code, fault_addr);
++		return 1;
 +
-+	lpj_fine = get_loops_per_jiffy();
-+	pr_info("Constant clock event device register\n");
-+
-+	return 0;
++	default:
++		force_sig(sig);
++		return 1;
++	}
 +}
 +
-+static u64 read_const_counter(struct clocksource *clk)
++/*
++ * Delayed fp exceptions when doing a lazy ctx switch
++ */
++asmlinkage void noinstr do_fpe(struct pt_regs *regs, unsigned long fcsr)
 +{
-+	return drdtime();
++	int sig;
++	void __user *fault_addr;
++	irqentry_state_t state = irqentry_enter(regs);
++
++	if (notify_die(DIE_FP, "FP exception", regs, 0, current->thread.trap_nr,
++		       SIGFPE) == NOTIFY_STOP)
++		goto out;
++
++	/* Clear FCSR.Cause before enabling interrupts */
++	write_fcsr(LOONGARCH_FCSR0, fcsr & ~mask_fcsr_x(fcsr));
++	local_irq_enable();
++
++	die_if_kernel("FP exception in kernel code", regs);
++
++	sig = SIGFPE;
++	fault_addr = (void __user *) regs->csr_epc;
++
++	/* Send a signal if required.  */
++	process_fpemu_return(sig, fault_addr, fcsr);
++
++out:
++	local_irq_disable();
++	irqentry_exit(regs, state);
 +}
 +
-+static struct clocksource clocksource_const = {
-+	.name = "Constant",
-+	.rating = 400,
-+	.read = read_const_counter,
-+	.mask = CLOCKSOURCE_MASK(64),
-+	.flags = CLOCK_SOURCE_IS_CONTINUOUS,
-+	.mult = 0,
-+	.shift = 10,
-+};
-+
-+unsigned long long notrace sched_clock(void)
++asmlinkage void noinstr do_ade(struct pt_regs *regs)
 +{
-+	/* 64-bit arithmetic can overflow, so use 128-bit. */
-+	u64 t1, t2, t3;
-+	unsigned long long rv;
-+	u64 mult = clocksource_const.mult;
-+	u64 shift = clocksource_const.shift;
-+	u64 cnt = read_const_counter(NULL);
++	irqentry_state_t state = irqentry_enter(regs);
 +
-+	__asm__ (
-+		"nor		%[t1], $r0, %[shift]	\n\t"
-+		"mulh.du	%[t2], %[cnt], %[mult]	\n\t"
-+		"mul.d		%[t3], %[cnt], %[mult]	\n\t"
-+		"slli.d		%[t2], %[t2], 1		\n\t"
-+		"srl.d		%[rv], %[t3], %[shift]	\n\t"
-+		"sll.d		%[t1], %[t2], %[t1]	\n\t"
-+		"or		%[rv], %[t1], %[rv]	\n\t"
-+		: [rv] "=&r" (rv), [t1] "=&r" (t1), [t2] "=&r" (t2), [t3] "=&r" (t3)
-+		: [cnt] "r" (cnt), [mult] "r" (mult), [shift] "r" (shift)
-+		: );
++	die_if_kernel("Kernel ade access", regs);
++	force_sig(SIGBUS);
 +
-+	return rv;
++	irqentry_exit(regs, state);
 +}
 +
-+int __init constant_clocksource_init(void)
++asmlinkage void noinstr do_ale(struct pt_regs *regs)
 +{
-+	int res;
-+	unsigned long freq;
++	irqentry_state_t state = irqentry_enter(regs);
 +
-+	freq = const_clock_freq;
++	die_if_kernel("Kernel ale access", regs);
++	force_sig(SIGBUS);
 +
-+	clocksource_const.mult =
-+		clocksource_hz2mult(freq, clocksource_const.shift);
-+
-+	res = clocksource_register_hz(&clocksource_const, freq);
-+
-+	pr_info("Constant clock source device register\n");
-+
-+	return res;
++	irqentry_exit(regs, state);
 +}
 +
-+void __init time_init(void)
++asmlinkage void noinstr do_bp(struct pt_regs *regs)
 +{
-+	if (!cpu_has_cpucfg)
-+		const_clock_freq = cpu_clock_freq;
-+	else
-+		const_clock_freq = calc_const_freq();
++	bool user = user_mode(regs);
++	unsigned int opcode, bcode;
++	unsigned long epc = exception_epc(regs);
++	irqentry_state_t state = irqentry_enter(regs);
 +
-+	init_timeval = drdtime() - csr_readq(LOONGARCH_CSR_CNTC);
++	local_irq_enable();
++	current->thread.trap_nr = read_csr_excode();
++	if (__get_inst(&opcode, (u32 *)epc, user))
++		goto out_sigsegv;
 +
-+	constant_clockevent_init();
-+	constant_clocksource_init();
++	bcode = (opcode & 0x7fff);
++
++	/*
++	 * notify the kprobe handlers, if instruction is likely to
++	 * pertain to them.
++	 */
++	switch (bcode) {
++	case BRK_KPROBE_BP:
++		if (notify_die(DIE_BREAK, "Kprobe", regs, bcode,
++			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
++			goto out;
++		else
++			break;
++	case BRK_KPROBE_SSTEPBP:
++		if (notify_die(DIE_SSTEPBP, "Kprobe_SingleStep", regs, bcode,
++			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
++			goto out;
++		else
++			break;
++	case BRK_UPROBE_BP:
++		if (notify_die(DIE_UPROBE, "Uprobe", regs, bcode,
++			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
++			goto out;
++		else
++			break;
++	case BRK_UPROBE_XOLBP:
++		if (notify_die(DIE_UPROBE_XOL, "Uprobe_XOL", regs, bcode,
++			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
++			goto out;
++		else
++			break;
++	default:
++		if (notify_die(DIE_TRAP, "Break", regs, bcode,
++			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
++			goto out;
++		else
++			break;
++	}
++
++	switch (bcode) {
++	case BRK_BUG:
++		die_if_kernel("Kernel bug detected", regs);
++		force_sig(SIGTRAP);
++		break;
++	case BRK_DIVZERO:
++		die_if_kernel("Break instruction in kernel code", regs);
++		force_sig_fault(SIGFPE, FPE_INTDIV, (void __user *)regs->csr_epc);
++		break;
++	case BRK_OVERFLOW:
++		die_if_kernel("Break instruction in kernel code", regs);
++		force_sig_fault(SIGFPE, FPE_INTOVF, (void __user *)regs->csr_epc);
++		break;
++	default:
++		die_if_kernel("Break instruction in kernel code", regs);
++		force_sig_fault(SIGTRAP, TRAP_BRKPT, (void __user *)regs->csr_epc);
++		break;
++	}
++
++out:
++	local_irq_disable();
++	irqentry_exit(regs, state);
++	return;
++
++out_sigsegv:
++	force_sig(SIGSEGV);
++	goto out;
 +}
-diff --git a/arch/loongarch/kernel/topology.c b/arch/loongarch/kernel/topology.c
-new file mode 100644
-index 000000000000..3b2cbb95875b
---- /dev/null
-+++ b/arch/loongarch/kernel/topology.c
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/cpu.h>
-+#include <linux/init.h>
-+#include <linux/percpu.h>
 +
-+static struct cpu cpu_device;
-+
-+static int __init topology_init(void)
++asmlinkage void noinstr do_watch(struct pt_regs *regs)
 +{
-+	return register_cpu(&cpu_device, 0);
++	pr_warn("Hardware watch point handler not implemented!\n");
 +}
 +
-+subsys_initcall(topology_init);
++asmlinkage void noinstr do_ri(struct pt_regs *regs)
++{
++	int status = -1;
++	unsigned int opcode = 0;
++	unsigned int __user *epc = (unsigned int __user *)exception_epc(regs);
++	unsigned long old_epc = regs->csr_epc;
++	unsigned long old_ra = regs->regs[1];
++	irqentry_state_t state = irqentry_enter(regs);
++
++	local_irq_enable();
++	current->thread.trap_nr = read_csr_excode();
++
++	if (notify_die(DIE_RI, "RI Fault", regs, 0, current->thread.trap_nr,
++		       SIGILL) == NOTIFY_STOP)
++		goto out;
++
++	die_if_kernel("Reserved instruction in kernel code", regs);
++
++	if (unlikely(compute_return_epc(regs) < 0))
++		goto out;
++
++	if (unlikely(get_user(opcode, epc) < 0))
++		status = SIGSEGV;
++
++	if (status < 0)
++		status = SIGILL;
++
++	if (unlikely(status > 0)) {
++		regs->csr_epc = old_epc;		/* Undo skip-over.  */
++		regs->regs[1] = old_ra;
++		force_sig(status);
++	}
++
++out:
++	local_irq_disable();
++	irqentry_exit(regs, state);
++}
++
++static void init_restore_fp(void)
++{
++	if (!used_math()) {
++		/* First time FP context user. */
++		init_fpu();
++	} else {
++		/* This task has formerly used the FP context */
++		if (!is_fpu_owner())
++			own_fpu_inatomic(1);
++	}
++
++	BUG_ON(!is_fp_enabled());
++}
++
++asmlinkage void noinstr do_fpu(struct pt_regs *regs)
++{
++	irqentry_state_t state = irqentry_enter(regs);
++
++	local_irq_enable();
++	die_if_kernel("do_fpu invoked from kernel context!", regs);
++
++	preempt_disable();
++	init_restore_fp();
++	preempt_enable();
++
++	local_irq_disable();
++	irqentry_exit(regs, state);
++}
++
++asmlinkage void noinstr do_lsx(struct pt_regs *regs)
++{
++	irqentry_state_t state = irqentry_enter(regs);
++
++	local_irq_enable();
++	force_sig(SIGILL);
++	local_irq_disable();
++
++	irqentry_exit(regs, state);
++}
++
++asmlinkage void noinstr do_lasx(struct pt_regs *regs)
++{
++	irqentry_state_t state = irqentry_enter(regs);
++
++	local_irq_enable();
++	force_sig(SIGILL);
++	local_irq_disable();
++
++	irqentry_exit(regs, state);
++}
++
++asmlinkage void noinstr do_lbt(struct pt_regs *regs)
++{
++	irqentry_state_t state = irqentry_enter(regs);
++
++	local_irq_enable();
++	force_sig(SIGILL);
++	local_irq_disable();
++
++	irqentry_exit(regs, state);
++}
++
++asmlinkage void noinstr do_reserved(struct pt_regs *regs)
++{
++	irqentry_state_t state = irqentry_enter(regs);
++
++	/*
++	 * Game over - no way to handle this if it ever occurs.	 Most probably
++	 * caused by a new unknown cpu type or after another deadly
++	 * hard/software error.
++	 */
++	local_irq_enable();
++	show_regs(regs);
++	panic("Caught reserved exception %u - should not happen.", read_csr_excode());
++	local_irq_disable();
++
++	irqentry_exit(regs, state);
++}
++
++asmlinkage void cache_parity_error(void)
++{
++	const int field = 2 * sizeof(unsigned long);
++	unsigned int reg_val;
++
++	/* For the moment, report the problem and hang. */
++	pr_err("Cache error exception:\n");
++	pr_err("csr_merrepc == %0*llx\n", field, csr_readq(LOONGARCH_CSR_MERREPC));
++	reg_val = csr_readl(LOONGARCH_CSR_MERRCTL);
++	pr_err("csr_merrctl == %08x\n", reg_val);
++
++	pr_err("Decoded c0_cacheerr: %s cache fault in %s reference.\n",
++	       reg_val & (1<<30) ? "secondary" : "primary",
++	       reg_val & (1<<31) ? "data" : "insn");
++	if (((current_cpu_data.processor_id & 0xff0000) == PRID_COMP_LOONGSON)) {
++		pr_err("Error bits: %s%s%s%s%s%s%s%s\n",
++			reg_val & (1<<29) ? "ED " : "",
++			reg_val & (1<<28) ? "ET " : "",
++			reg_val & (1<<27) ? "ES " : "",
++			reg_val & (1<<26) ? "EE " : "",
++			reg_val & (1<<25) ? "EB " : "",
++			reg_val & (1<<24) ? "EI " : "",
++			reg_val & (1<<23) ? "E1 " : "",
++			reg_val & (1<<22) ? "E0 " : "");
++	} else {
++		pr_err("Error bits: %s%s%s%s%s%s%s\n",
++			reg_val & (1<<29) ? "ED " : "",
++			reg_val & (1<<28) ? "ET " : "",
++			reg_val & (1<<26) ? "EE " : "",
++			reg_val & (1<<25) ? "EB " : "",
++			reg_val & (1<<24) ? "EI " : "",
++			reg_val & (1<<23) ? "E1 " : "",
++			reg_val & (1<<22) ? "E0 " : "");
++	}
++	pr_err("IDX: 0x%08x\n", reg_val & ((1<<22)-1));
++
++	panic("Can't handle the cache error!");
++}
++
++#ifdef CONFIG_DEBUG_STACKOVERFLOW
++static inline void stack_overflow(void)
++{
++	unsigned long sp;
++
++	__asm__ __volatile__("move %0, $sp" : "=r" (sp));
++	sp &= THREAD_MASK;
++
++	/*
++	 * Check for stack overflow: is there less than STACK_WARN free?
++	 * STACK_WARN is defined as 1/8 of THREAD_SIZE by default.
++	 */
++	if (unlikely(sp < (sizeof(struct thread_info) + STACK_WARN))) {
++		pr_warn("do_arch_irq(): stack overflow: %ld\n",
++			sp - sizeof(struct thread_info));
++		dump_stack();
++	}
++}
++#else
++static inline void stack_overflow(void) {}
++#endif
++
++asmlinkage void noinstr do_vint(struct pt_regs *regs)
++{
++	irqentry_state_t state = irqentry_enter(regs);
++
++	stack_overflow();
++	handle_arch_irq(regs);
++
++	irqentry_exit(regs, state);
++}
++
++extern void tlb_init(void);
++extern void cache_error_setup(void);
++
++unsigned long eentry;
++EXPORT_SYMBOL_GPL(eentry);
++unsigned long tlbrentry;
++EXPORT_SYMBOL_GPL(tlbrentry);
++
++long exception_handlers[VECSIZE * 128 / sizeof(long)] __aligned(SZ_64K);
++
++static void configure_exception_vector(void)
++{
++	eentry    = (unsigned long)exception_handlers;
++	tlbrentry = (unsigned long)exception_handlers + 80*VECSIZE;
++
++	csr_writeq(eentry, LOONGARCH_CSR_EENTRY);
++	csr_writeq(eentry, LOONGARCH_CSR_MERRENTRY);
++	csr_writeq(tlbrentry, LOONGARCH_CSR_TLBRENTRY);
++}
++
++void per_cpu_trap_init(int cpu)
++{
++	unsigned int i;
++
++	setup_vint_size(VECSIZE);
++
++	configure_exception_vector();
++
++	if (!cpu_data[cpu].asid_cache)
++		cpu_data[cpu].asid_cache = asid_first_version(cpu);
++
++	mmgrab(&init_mm);
++	current->active_mm = &init_mm;
++	BUG_ON(current->mm);
++	enter_lazy_tlb(&init_mm, current);
++
++	/* Initialise exception handlers */
++	if (cpu == 0)
++		for (i = 0; i < 64; i++)
++			set_handler(i * VECSIZE, handle_reserved, VECSIZE);
++
++	tlb_init();
++	TLBMISS_HANDLER_SETUP();
++
++	cpu_cache_init();
++}
++
++/* Install CPU exception handler */
++void set_handler(unsigned long offset, void *addr, unsigned long size)
++{
++	memcpy((void *)(eentry + offset), addr, size);
++	local_flush_icache_range(eentry + offset, eentry + offset + size);
++}
++
++static const char panic_null_cerr[] =
++	"Trying to set NULL cache error exception handler\n";
++
++/*
++ * Install uncached CPU exception handler.
++ * This is suitable only for the cache error exception which is the only
++ * exception handler that is being run uncached.
++ */
++void set_merr_handler(unsigned long offset, void *addr, unsigned long size)
++{
++	unsigned long uncached_eentry = TO_UNCAC(__pa(eentry));
++
++	if (!addr)
++		panic(panic_null_cerr);
++
++	memcpy((void *)(uncached_eentry + offset), addr, size);
++}
++
++void __init trap_init(void)
++{
++	long i;
++
++	/* Set interrupt vector handler */
++	for (i = EXCCODE_INT_START; i < EXCCODE_INT_END; i++)
++		set_handler(i * VECSIZE, handle_vint, VECSIZE);
++
++	set_handler(EXCCODE_ADE * VECSIZE, handle_ade, VECSIZE);
++	set_handler(EXCCODE_ALE * VECSIZE, handle_ale, VECSIZE);
++	set_handler(EXCCODE_SYS * VECSIZE, handle_sys, VECSIZE);
++	set_handler(EXCCODE_BP * VECSIZE, handle_bp, VECSIZE);
++	set_handler(EXCCODE_INE * VECSIZE, handle_ri, VECSIZE);
++	set_handler(EXCCODE_IPE * VECSIZE, handle_ri, VECSIZE);
++	set_handler(EXCCODE_FPDIS * VECSIZE, handle_fpu, VECSIZE);
++	set_handler(EXCCODE_LSXDIS * VECSIZE, handle_lsx, VECSIZE);
++	set_handler(EXCCODE_LASXDIS * VECSIZE, handle_lasx, VECSIZE);
++	set_handler(EXCCODE_FPE * VECSIZE, handle_fpe, VECSIZE);
++	set_handler(EXCCODE_BTDIS * VECSIZE, handle_lbt, VECSIZE);
++	set_handler(EXCCODE_WATCH * VECSIZE, handle_watch, VECSIZE);
++
++	cache_error_setup();
++
++	local_flush_icache_range(eentry, eentry + 0x400);
++}
 -- 
 2.27.0
 
