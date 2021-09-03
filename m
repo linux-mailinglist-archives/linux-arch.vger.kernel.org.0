@@ -2,17 +2,17 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF00A3FFD8F
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 11:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFB63FFD93
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 11:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348965AbhICJz3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Sep 2021 05:55:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46488 "EHLO mail.kernel.org"
+        id S1348989AbhICJ4E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Sep 2021 05:56:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232273AbhICJz2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 3 Sep 2021 05:55:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 330AC60F9C;
-        Fri,  3 Sep 2021 09:54:24 +0000 (UTC)
+        id S1348984AbhICJ4C (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Sep 2021 05:56:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2896C60FC4;
+        Fri,  3 Sep 2021 09:54:58 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -27,583 +27,107 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 02/22] Documentation/zh_CN: Add basic LoongArch documentations
-Date:   Fri,  3 Sep 2021 17:51:53 +0800
-Message-Id: <20210903095213.797973-3-chenhuacai@loongson.cn>
+Subject: [PATCH V2 03/22] LoongArch: Add elf-related definitions
+Date:   Fri,  3 Sep 2021 17:51:54 +0800
+Message-Id: <20210903095213.797973-4-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210903095213.797973-1-chenhuacai@loongson.cn>
 References: <20210903095213.797973-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add some basic documentations (zh_CN version) for LoongArch. LoongArch
-is a new RISC ISA, which is a bit like MIPS or RISC-V. LoongArch
-includes a reduced 32-bit version (LA32R), a standard 32-bit version
-(LA32S) and a 64-bit version (LA64).
+Add elf-related definitions for LoongArch, including: EM_LOONGARCH,
+KEXEC_ARCH_LOONGARCH, AUDIT_ARCH_LOONGARCH32, AUDIT_ARCH_LOONGARCH64
+and NT_LOONGARCH_*.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- Documentation/translations/zh_CN/index.rst    |   1 +
- .../translations/zh_CN/loongarch/features.rst |   8 +
- .../translations/zh_CN/loongarch/index.rst    |  26 ++
- .../zh_CN/loongarch/introduction.rst          | 316 ++++++++++++++++++
- .../zh_CN/loongarch/irq-chip-model.rst        | 160 +++++++++
- 5 files changed, 511 insertions(+)
- create mode 100644 Documentation/translations/zh_CN/loongarch/features.rst
- create mode 100644 Documentation/translations/zh_CN/loongarch/index.rst
- create mode 100644 Documentation/translations/zh_CN/loongarch/introduction.rst
- create mode 100644 Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
+ include/uapi/linux/audit.h  | 2 ++
+ include/uapi/linux/elf-em.h | 1 +
+ include/uapi/linux/elf.h    | 5 +++++
+ include/uapi/linux/kexec.h  | 1 +
+ scripts/sorttable.c         | 5 +++++
+ 5 files changed, 14 insertions(+)
 
-diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
-index a34e58733ac8..88a3fd5d80a1 100644
---- a/Documentation/translations/zh_CN/index.rst
-+++ b/Documentation/translations/zh_CN/index.rst
-@@ -161,6 +161,7 @@ TODOList:
-    riscv/index
-    openrisc/index
-    parisc/index
-+   loongarch/index
+diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+index daa481729e9b..e6023f00eaf9 100644
+--- a/include/uapi/linux/audit.h
++++ b/include/uapi/linux/audit.h
+@@ -434,6 +434,8 @@ enum {
+ #define AUDIT_ARCH_UNICORE	(EM_UNICORE|__AUDIT_ARCH_LE)
+ #define AUDIT_ARCH_X86_64	(EM_X86_64|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
+ #define AUDIT_ARCH_XTENSA	(EM_XTENSA)
++#define AUDIT_ARCH_LOONGARCH32	(EM_LOONGARCH|__AUDIT_ARCH_LE)
++#define AUDIT_ARCH_LOONGARCH64	(EM_LOONGARCH|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
  
- TODOList:
+ #define AUDIT_PERM_EXEC		1
+ #define AUDIT_PERM_WRITE	2
+diff --git a/include/uapi/linux/elf-em.h b/include/uapi/linux/elf-em.h
+index f47e853546fa..ef38c2bc5ab7 100644
+--- a/include/uapi/linux/elf-em.h
++++ b/include/uapi/linux/elf-em.h
+@@ -51,6 +51,7 @@
+ #define EM_RISCV	243	/* RISC-V */
+ #define EM_BPF		247	/* Linux BPF - in-kernel virtual machine */
+ #define EM_CSKY		252	/* C-SKY */
++#define EM_LOONGARCH	258	/* LoongArch */
+ #define EM_FRV		0x5441	/* Fujitsu FR-V */
  
-diff --git a/Documentation/translations/zh_CN/loongarch/features.rst b/Documentation/translations/zh_CN/loongarch/features.rst
-new file mode 100644
-index 000000000000..3886e635ec06
---- /dev/null
-+++ b/Documentation/translations/zh_CN/loongarch/features.rst
-@@ -0,0 +1,8 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/loongarch/features.rst
-+:Translator: Huacai Chen <chenhuacai@loongson.cn>
-+
-+.. kernel-feat:: $srctree/Documentation/features loongarch
-diff --git a/Documentation/translations/zh_CN/loongarch/index.rst b/Documentation/translations/zh_CN/loongarch/index.rst
-new file mode 100644
-index 000000000000..367dead02e3a
---- /dev/null
-+++ b/Documentation/translations/zh_CN/loongarch/index.rst
-@@ -0,0 +1,26 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/loongarch/index.rst
-+:Translator: Huacai Chen <chenhuacai@loongson.cn>
-+
-+=================
-+LoongArch特性文档
-+=================
-+
-+.. toctree::
-+   :maxdepth: 2
-+   :numbered:
-+
-+   introduction
-+   irq-chip-model
-+
-+   features
-+
-+.. only::  subproject and html
-+
-+   Indices
-+   =======
-+
-+   * :ref:`genindex`
-diff --git a/Documentation/translations/zh_CN/loongarch/introduction.rst b/Documentation/translations/zh_CN/loongarch/introduction.rst
-new file mode 100644
-index 000000000000..c9461e46b8d6
---- /dev/null
-+++ b/Documentation/translations/zh_CN/loongarch/introduction.rst
-@@ -0,0 +1,316 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/loongarch/introduction.rst
-+:Translator: Huacai Chen <chenhuacai@loongson.cn>
-+
-+=============
-+LoongArch介绍
-+=============
-+
-+LoongArch是一种新的RISC ISA，在一定程度上类似于MIPS和RISC-V。LoongArch指令集
-+包括一个精简32位版（LA32R）、一个标准32位版（LA32S）、一个64位版（LA64）。
-+LoongArch有四个特权级（PLV0~PLV3），其中PLV0是最高特权级，用于内核；而PLV3是
-+最低特权级，用于应用程序。本文档介绍了LoongArch的寄存器、基础指令集、虚拟内
-+存以及其他一些主题。
-+
-+寄存器
-+======
-+
-+LoongArch的寄存器包括通用寄存器（GPRs）、浮点寄存器（FPRs）、向量寄存器（VRs）
-+和用于特权模式（PLV0）的控制状态寄存器（CSRs）。
-+
-+通用寄存器
-+----------
-+
-+LoongArch包括32个通用寄存器（$r0 - $r31），LA32中每个寄存器为32位宽，LA64中
-+每个寄存器为64位宽。$r0的内容总是0，而其他寄存器没有特殊功能。然而，我们有
-+如下所示的一套ABI寄存器使用约定。
-+
-+================= =============== =================== ==========
-+寄存器名          别名            用途                跨调用保持
-+================= =============== =================== ==========
-+``$r0``           ``$zero``       常量0               不使用
-+``$r1``           ``$ra``         返回地址            否
-+``$r2``           ``$tp``         TLS（线程局部存储） 不使用
-+``$r3``           ``$sp``         栈指针              是
-+``$r4``-``$r11``  ``$a0``-``$a7`` 参数寄存器          否
-+``$r4``-``$r5``   ``$v0``-``$v1`` 返回值              否
-+``$r12``-``$r20`` ``$t0``-``$t8`` 临时寄存器          否
-+``$r21``          ``$x``          保留                不使用
-+``$r22``          ``$fp``         帧指针              是
-+``$r23``-``$r31`` ``$s0``-``$s8`` 静态寄存器          是
-+================= =============== =================== ==========
-+
-+浮点寄存器
-+----------
-+
-+LoongArch有32个浮点寄存器（$f0 - $f31），每个寄存器均为64位宽。我们同样
-+有如下所示的一套ABI寄存器使用约定。
-+
-+================= ================== =================== ==========
-+寄存器名          别名               用途                跨调用保持
-+================= ================== =================== ==========
-+``$f0``-``$f7``   ``$fa0``-``$fa7``  参数寄存器          否
-+``$f0``-``$f1``   ``$fv0``-``$fv1``  返回值              否
-+``$f8``-``$f23``  ``$ft0``-``$ft15`` 临时寄存器          否
-+``$f24``-``$f31`` ``$fs0``-``$fs7``  静态寄存器          是
-+================= ================== =================== ==========
-+
-+向量寄存器
-+----------
-+
-+LoongArch拥有128位向量扩展（LSX，全称Loongson SIMD eXtention）和256位向量扩展
-+（LASX，全称Loongson Advanced SIMD eXtension）。共有32个向量寄存器，对于LSX是
-+$v0 - $v31，对于LASX是$x0 - $x31。浮点寄存器和向量寄存器是复用的，比如：$x0的
-+低128位是$v0，而$v0的低64位又是$f0，以此类推。
-+
-+控制状态寄存器
-+--------------
-+
-+控制状态寄存器只用于特权模式（PLV0）:
-+
-+================= ==================================== ==========
-+地址              全称描述                             简称
-+================= ==================================== ==========
-+0x0               当前模式信息                         CRMD
-+0x1               异常前模式信息                       PRMD
-+0x2               扩展部件使能                         EUEN
-+0x3               杂项控制                             MISC
-+0x4               异常配置                             ECFG
-+0x5               异常状态                             ESTAT
-+0x6               异常返回地址                         ERA
-+0x7               出错虚拟地址                         BADV
-+0x8               出错指令                             BADI
-+0xC               异常入口地址                         EENTRY
-+0x10              TLB索引                              TLBIDX
-+0x11              TLB表项高位                          TLBEHI
-+0x12              TLB表项低位0                         TLBELO0
-+0x13              TLB表项低位1                         TLBELO1
-+0x18              地址空间标识符                       ASID
-+0x19              低半地址空间页全局目录基址           PGDL
-+0x1A              高半地址空间页全局目录基址           PGDH
-+0x1B              页全局目录基址                       PGD
-+0x1C              页表遍历控制低半部分                 PWCL
-+0x1D              页表遍历控制高半部分                 PWCH
-+0x1E              STLB页大小                           STLBPS
-+0x1F              缩减虚地址配置                       RVACFG
-+0x20              CPU编号                              CPUID
-+0x21              特权资源配置信息1                    PRCFG1
-+0x22              特权资源配置信息2                    PRCFG2
-+0x23              特权资源配置信息3                    PRCFG3
-+0x30+n (0≤n≤15)   数据保存寄存器                       SAVEn
-+0x40              定时器编号                           TID
-+0x41              定时器配置                           TCFG
-+0x42              定时器值                             TVAL
-+0x43              计时器补偿                           CNTC
-+0x44              定时器中断清除                       TICLR
-+0x60              LLBit相关控制                        LLBCTL
-+0x80              实现相关控制1                        IMPCTL1
-+0x81              实现相关控制2                        IMPCTL2
-+0x88              TLB重填异常入口地址                  TLBRENTRY
-+0x89              TLB重填异常出错虚地址                TLBRBADV
-+0x8A              TLB重填异常返回地址                  TLBRERA
-+0x8B              TLB重填异常数据保存                  TLBRSAVE
-+0x8C              TLB重填异常表项低位0                 TLBRELO0
-+0x8D              TLB重填异常表项低位1                 TLBRELO1
-+0x8E              TLB重填异常表项高位                  TLBEHI
-+0x8F              TLB重填异常前模式信息                TLBRPRMD
-+0x90              机器错误控制                         MERRCTL
-+0x91              机器错误信息1                        MERRINFO1
-+0x92              机器错误信息2                        MERRINFO2
-+0x93              机器错误异常入口地址                 MERRENTRY
-+0x94              机器错误异常返回地址                 MERRERA
-+0x95              机器错误异常数据保存                 MERRSAVE
-+0x98              高速缓存标签                         CTAG
-+0x180+n (0≤n≤3)   直接映射配置窗口n                    DMWn
-+0x200+2n (0≤n≤31) 性能监测配置n                        PMCFGn
-+0x201+2n (0≤n≤31) 性能监测计数器n                      PMCNTn
-+0x300             内存读写监视点整体控制               MWPC
-+0x301             内存读写监视点整体状态               MWPS
-+0x310+8n (0≤n≤7)  内存读写监视点n配置1                 MWPnCFG1
-+0x311+8n (0≤n≤7)  内存读写监视点n配置2                 MWPnCFG2
-+0x312+8n (0≤n≤7)  内存读写监视点n配置3                 MWPnCFG3
-+0x313+8n (0≤n≤7)  内存读写监视点n配置4                 MWPnCFG4
-+0x380             取指监视点整体控制                   FWPC
-+0x381             取指监视点整体状态                   FWPS
-+0x390+8n (0≤n≤7)  取指监视点n配置1                     FWPnCFG1
-+0x391+8n (0≤n≤7)  取指监视点n配置2                     FWPnCFG2
-+0x392+8n (0≤n≤7)  取指监视点n配置3                     FWPnCFG3
-+0x393+8n (0≤n≤7)  取指监视点n配置4                     FWPnCFG4
-+0x500             调试寄存器                           DBG
-+0x501             调试异常返回地址                     DERA
-+0x502             调试数据保存                         DSAVE
-+================= ==================================== ==========
-+
-+基础指令集
-+==========
-+
-+指令格式
-+--------
-+
-+LoongArch的指令字长为32位，一共有9种指令格式::
-+
-+  2R-type:    Opcode + Rj + Rd
-+  3R-type:    Opcode + Rk + Rj + Rd
-+  4R-type:    Opcode + Ra + Rk + Rj + Rd
-+  2RI8-type:  Opcode + I8 + Rj + Rd
-+  2RI12-type: Opcode + I12 + Rj + Rd
-+  2RI14-type: Opcode + I14 + Rj + Rd
-+  2RI16-type: Opcode + I16 + Rj + Rd
-+  1RI21-type: Opcode + I21L + Rj + I21H
-+  I26-type:   Opcode + I26L + I26H
-+
-+Opcode是指令操作码，Rj和Rk是源操作数（寄存器），Rd是目标操作数（寄存器），Ra是
-+4R-type格式特有的附加操作数（寄存器）。I8/I12/I16/I21/I26分别是8位/12位/16位/
-+21位/26位的立即数。其中21位和26位立即数在指令字中被分割为高位部分与低位部分，
-+所以你们在这里的格式描述中能够看到I21L/I21H和I26L/I26H这样的表述。
-+
-+指令名称（助记符）
-+------------------
-+
-+我们在此只简单罗列一下指令名称，详细信息请阅读参考文献中的文档。
-+
-+算术运算指令::
-+
-+  ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
-+  SLT SLTU SLTI SLTUI
-+  AND OR NOR XOR ANDN ORN ANDI ORI XORI
-+  MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
-+  MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
-+  PCADDI PCADDU12I PCADDU18I
-+  LU12I.W LU32I.D LU52I.D ADDU16I.D
-+
-+移位运算指令::
-+
-+  SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
-+  SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
-+
-+位域操作指令::
-+
-+  EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
-+  BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
-+  REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
-+  MASKEQZ MASKNEZ
-+
-+分支转移指令::
-+
-+  BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
-+
-+访存读写指令::
-+
-+  LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
-+  LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
-+  LDPTR.W LDPTR.D STPTR.W STPTR.D
-+  PRELD PRELDX
-+
-+原子操作指令::
-+
-+  LL.W SC.W LL.D SC.D
-+  AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
-+  AMMAX.W AMMAX.D AMMIN.W AMMIN.D
-+
-+栅障指令::
-+
-+  IBAR DBAR
-+
-+特殊指令::
-+
-+  SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
-+
-+特权指令::
-+
-+  CSRRD CSRWR CSRXCHG
-+  IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
-+  CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
-+
-+虚拟内存
-+========
-+
-+LoongArch可以使用直接映射虚拟内存和分页映射虚拟内存。
-+
-+直接映射虚拟内存通过CSR.DMWn（n=0~3）来进行配置，虚拟地址（VA）和物理地址（PA）
-+之间有简单的映射关系::
-+
-+ VA = PA + 固定偏移
-+
-+分页映射的虚拟地址（VA）和物理地址（PA）有任意的映射关系，这种关系记录在TLB和页
-+表中。LoongArch的TLB包括一个全相联的MTLB（Multiple Page Size TLB，页大小可变）
-+和一个组相联的STLB（Single Page Size TLB，页大小固定）。
-+
-+缺省状态下，LA32的整个虚拟地址空间配置如下：
-+
-+============ =========================== ===========================
-+区段名       地址范围                    属性
-+============ =========================== ===========================
-+``UVRANGE``  ``0x00000000 - 0x7FFFFFFF`` 分页映射, 可缓存, PLV0~3
-+``KPRANGE0`` ``0x80000000 - 0x9FFFFFFF`` 直接映射, 非缓存, PLV0
-+``KPRANGE1`` ``0xA0000000 - 0xBFFFFFFF`` 直接映射, 可缓存, PLV0
-+``KVRANGE``  ``0xC0000000 - 0xFFFFFFFF`` 分页映射, 可缓存, PLV0
-+============ =========================== ===========================
-+
-+用户态（PLV3）只能访问UVRANGE，对于直接映射的KPRANGE0和KPRANGE1，将虚拟地址的第
-+30~31位清零就等于物理地址。例如：物理地址0x00001000对应的非缓存直接映射虚拟地址
-+是0x80001000，而其可缓存直接映射虚拟地址是0xA0001000。
-+
-+缺省状态下，LA64的整个虚拟地址空间配置如下：
-+
-+============ ====================== ==================================
-+区段名       地址范围               属性
-+============ ====================== ==================================
-+``XUVRANGE`` ``0x0000000000000000 - 分页映射, 可缓存, PLV0~3
-+             0x3FFFFFFFFFFFFFFF``
-+``XSPRANGE`` ``0x4000000000000000 - 直接映射, 可缓存 / 非缓存, PLV0
-+             0x7FFFFFFFFFFFFFFF``
-+``XKPRANGE`` ``0x8000000000000000 - 直接映射, 可缓存 / 非缓存, PLV0
-+             0xBFFFFFFFFFFFFFFF``
-+``XKVRANGE`` ``0xC000000000000000 - 分页映射, 可缓存, PLV0
-+             0xFFFFFFFFFFFFFFFF``
-+============ ====================== ==================================
-+
-+用户态（PLV3）只能访问XUVRANGE，对于直接映射的XSPRANGE和XKPRANGE，将虚拟地址的第
-+60~63位清零就等于物理地址，而其缓存属性是通过虚拟地址的第60~61位配置的（0表示强序
-+非缓存，1表示一致可缓存，2表示弱序非缓存）。目前，我们仅用XKPRANGE来进行直接映射，
-+XSPRANGE保留给以后用。此处给出一个直接映射的例子：物理地址0x00000000 00001000的强
-+序非缓存直接映射虚拟地址是0x80000000 00001000，其一致可缓存直接映射虚拟地址是
-+0x90000000 00001000，而其弱序非缓存直接映射虚拟地址是0xA0000000 00001000。
-+
-+Loongson与LoongArch的关系
-+=========================
-+
-+LoongArch是一种RISC指令集架构（ISA），不同于现存的任何一种ISA，而Loongson（即龙芯）
-+是一个处理器家族。龙芯包括三个系列：Loongson-1（龙芯1号）是32位处理器，Loongson-
-+2（龙芯2号）是低端64位处理器，而Loongson-3（龙芯3号）是高端64位处理器。旧的龙芯
-+处理器基于MIPS架构，而新的龙芯处理器基于LoongArch架构。以龙芯3号为例：龙芯3A1000
-+/3B1500/3A2000/3A3000/3A4000都是兼容MIPS的，而龙芯3A5000（以及将来的型号）都是
-+基于LoongArch的。
-+
-+参考文献
-+========
-+
-+Loongson与LoongArch的官方网站（龙芯中科技术股份有限公司）：
-+
-+  http://www.loongson.cn/index.html
-+
-+Loongson与LoongArch的开发者网站（软件与文档资源）：
-+
-+  http://www.loongnix.cn/index.php
-+
-+  https://github.com/loongson
-+
-+LoongArch指令集架构的文档：
-+
-+  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-Vol1-v1.00-CN.pdf （中文版）
-+
-+  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-Vol1-v1.00-EN.pdf （英文版）
-+
-+LoongArch的ABI文档：
-+
-+  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-ABI-v1.00-CN.pdf （中文版）
-+
-+  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-ABI-v1.00-EN.pdf （英文版）
-+
-+Loongson与LoongArch的Linux内核源码仓库：
-+
-+  https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git
-diff --git a/Documentation/translations/zh_CN/loongarch/irq-chip-model.rst b/Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
-new file mode 100644
-index 000000000000..b1ff1c4777df
---- /dev/null
-+++ b/Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
-@@ -0,0 +1,160 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/loongarch/irq-chip-model.rst
-+:Translator: Huacai Chen <chenhuacai@loongson.cn>
-+
-+==================================
-+LoongArch的IRQ芯片模型（层级关系）
-+==================================
-+
-+目前，基于LoongArch的处理器（如龙芯3A5000）只能与LS7A芯片组配合工作。LoongArch计算机
-+中的中断控制器（即IRQ芯片）包括CPUINTC（CPU Core Interrupt Controller）、LIOINTC（
-+Legacy I/O Interrupt Controller）、EIOINTC（Extended I/O Interrupt Controller）、
-+HTVECINTC（Hyper-Transport Vector Interrupt Controller）、PCH-PIC（LS7A芯片组的主中
-+断控制器）、PCH-LPC（LS7A芯片组的LPC中断控制器）和PCH-MSI（MSI中断控制器）。
-+
-+CPUINTC是一种CPU内部的每个核本地的中断控制器，LIOINTC/EIOINTC/HTVECINTC是CPU内部的
-+全局中断控制器（每个芯片一个，所有核共享），而PCH-PIC/PCH-LPC/PCH-MSI是CPU外部的中
-+断控制器（在配套芯片组里面）。这些中断控制器（或者说IRQ芯片）以一种层次树的组织形式
-+级联在一起，一共有两种层级关系模型（传统IRQ模型和扩展IRQ模型）。
-+
-+传统IRQ模型
-+===========
-+
-+在这种模型里面，IPI（Inter-Processor Interrupt）和CPU本地始终中断直接发送到CPUINTC，
-+CPU串口（UARTs）中断发送到LIOINTC，而其他所有设备的中断则分别发送到所连接的PCH-PIC/
-+PCH-LPC/PCH-MSI，然后被HTVECINTC统一收集，再发送到LIOINTC，最后到达CPUINTC。
-+
-+ +---------------------------------------------+
-+ |::                                           |
-+ |                                             |
-+ |    +-----+     +---------+     +-------+    |
-+ |    | IPI | --> | CPUINTC | <-- | Timer |    |
-+ |    +-----+     +---------+     +-------+    |
-+ |                     ^                       |
-+ |                     |                       |
-+ |                +---------+     +-------+    |
-+ |                | LIOINTC | <-- | UARTs |    |
-+ |                +---------+     +-------+    |
-+ |                     ^                       |
-+ |                     |                       |
-+ |               +-----------+                 |
-+ |               | HTVECINTC |                 |
-+ |               +-----------+                 |
-+ |                ^         ^                  |
-+ |                |         |                  |
-+ |          +---------+ +---------+            |
-+ |          | PCH-PIC | | PCH-MSI |            |
-+ |          +---------+ +---------+            |
-+ |            ^     ^           ^              |
-+ |            |     |           |              |
-+ |    +---------+ +---------+ +---------+      |
-+ |    | PCH-LPC | | Devices | | Devices |      |
-+ |    +---------+ +---------+ +---------+      |
-+ |         ^                                   |
-+ |         |                                   |
-+ |    +---------+                              |
-+ |    | Devices |                              |
-+ |    +---------+                              |
-+ |                                             |
-+ |                                             |
-+ +---------------------------------------------+
-+
-+扩展IRQ模型
-+===========
-+
-+在这种模型里面，IPI（Inter-Processor Interrupt）和CPU本地始终中断直接发送到CPUINTC，
-+CPU串口（UARTs）中断发送到LIOINTC，而其他所有设备的中断则分别发送到所连接的PCH-PIC/
-+PCH-LPC/PCH-MSI，然后被EIOINTC统一收集，再直接到达CPUINTC。
-+
-+ +--------------------------------------------------------+
-+ |::                                                      |
-+ |                                                        |
-+ |         +-----+     +---------+     +-------+          |
-+ |         | IPI | --> | CPUINTC | <-- | Timer |          |
-+ |         +-----+     +---------+     +-------+          |
-+ |                      ^       ^                         |
-+ |                      |       |                         |
-+ |               +---------+ +---------+     +-------+    |
-+ |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
-+ |               +---------+ +---------+     +-------+    |
-+ |                ^       ^                               |
-+ |                |       |                               |
-+ |         +---------+ +---------+                        |
-+ |         | PCH-PIC | | PCH-MSI |                        |
-+ |         +---------+ +---------+                        |
-+ |           ^     ^           ^                          |
-+ |           |     |           |                          |
-+ |   +---------+ +---------+ +---------+                  |
-+ |   | PCH-LPC | | Devices | | Devices |                  |
-+ |   +---------+ +---------+ +---------+                  |
-+ |        ^                                               |
-+ |        |                                               |
-+ |   +---------+                                          |
-+ |   | Devices |                                          |
-+ |   +---------+                                          |
-+ |                                                        |
-+ |                                                        |
-+ +--------------------------------------------------------+
-+
-+ACPI相关的定义
-+==============
-+
-+CPUINTC::
-+
-+  ACPI_MADT_TYPE_CORE_PIC;
-+  struct acpi_madt_core_pic;
-+  enum acpi_madt_core_pic_version;
-+
-+LIOINTC::
-+
-+  ACPI_MADT_TYPE_LIO_PIC;
-+  struct acpi_madt_lio_pic;
-+  enum acpi_madt_lio_pic_version;
-+
-+EIOINTC::
-+
-+  ACPI_MADT_TYPE_EIO_PIC;
-+  struct acpi_madt_eio_pic;
-+  enum acpi_madt_eio_pic_version;
-+
-+HTVECINTC::
-+
-+  ACPI_MADT_TYPE_HT_PIC;
-+  struct acpi_madt_ht_pic;
-+  enum acpi_madt_ht_pic_version;
-+
-+PCH-PIC::
-+
-+  ACPI_MADT_TYPE_BIO_PIC;
-+  struct acpi_madt_bio_pic;
-+  enum acpi_madt_bio_pic_version;
-+
-+PCH-MSI::
-+
-+  ACPI_MADT_TYPE_MSI_PIC;
-+  struct acpi_madt_msi_pic;
-+  enum acpi_madt_msi_pic_version;
-+
-+PCH-LPC::
-+
-+  ACPI_MADT_TYPE_LPC_PIC;
-+  struct acpi_madt_lpc_pic;
-+  enum acpi_madt_lpc_pic_version;
-+
-+参考文献
-+========
-+
-+龙芯3A5000的文档：
-+
-+  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-3A5000-usermanual-1.02-CN.pdf (中文版)
-+
-+  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-3A5000-usermanual-1.02-EN.pdf (英文版)
-+
-+龙芯LS7A芯片组的文档：
-+
-+  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-7A1000-usermanual-2.00-CN.pdf (中文版)
-+
-+  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-7A1000-usermanual-2.00-EN.pdf (英文版)
+ /*
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index 61bf4774b8f2..c788dd648226 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -432,6 +432,11 @@ typedef struct elf64_shdr {
+ #define NT_MIPS_DSP	0x800		/* MIPS DSP ASE registers */
+ #define NT_MIPS_FP_MODE	0x801		/* MIPS floating-point mode */
+ #define NT_MIPS_MSA	0x802		/* MIPS SIMD registers */
++#define NT_LOONGARCH_CPUCFG	0xa00	/* LoongArch CPU config registers */
++#define NT_LOONGARCH_CSR	0xa01	/* LoongArch control and status registers */
++#define NT_LOONGARCH_LSX	0xa02	/* LoongArch Loongson SIMD Extension registers */
++#define NT_LOONGARCH_LASX	0xa03	/* LoongArch Loongson Advanced SIMD Extension registers */
++#define NT_LOONGARCH_LBT	0xa04	/* LoongArch Loongson Binary Translation registers */
+ 
+ /* Note types with note name "GNU" */
+ #define NT_GNU_PROPERTY_TYPE_0	5
+diff --git a/include/uapi/linux/kexec.h b/include/uapi/linux/kexec.h
+index 778dc191c265..5ef2df004565 100644
+--- a/include/uapi/linux/kexec.h
++++ b/include/uapi/linux/kexec.h
+@@ -43,6 +43,7 @@
+ #define KEXEC_ARCH_MIPS    ( 8 << 16)
+ #define KEXEC_ARCH_AARCH64 (183 << 16)
+ #define KEXEC_ARCH_RISCV   (243 << 16)
++#define KEXEC_ARCH_LOONGARCH	(258 << 16)
+ 
+ /* The artificial cap on the number of segments passed to kexec_load. */
+ #define KEXEC_SEGMENT_MAX 16
+diff --git a/scripts/sorttable.c b/scripts/sorttable.c
+index 0ef3abfc4a51..3823079cf692 100644
+--- a/scripts/sorttable.c
++++ b/scripts/sorttable.c
+@@ -54,6 +54,10 @@
+ #define EM_ARCV2	195
+ #endif
+ 
++#ifndef EM_LOONGARCH
++#define EM_LOONGARCH	258
++#endif
++
+ static uint32_t (*r)(const uint32_t *);
+ static uint16_t (*r2)(const uint16_t *);
+ static uint64_t (*r8)(const uint64_t *);
+@@ -347,6 +351,7 @@ static int do_file(char const *const fname, void *addr)
+ 	case EM_ARCOMPACT:
+ 	case EM_ARCV2:
+ 	case EM_ARM:
++	case EM_LOONGARCH:
+ 	case EM_MICROBLAZE:
+ 	case EM_MIPS:
+ 	case EM_XTENSA:
 -- 
 2.27.0
 
