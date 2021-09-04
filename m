@@ -2,193 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 607BF400389
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Sep 2021 18:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394DC40095A
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Sep 2021 04:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350010AbhICQjp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Sep 2021 12:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S236175AbhIDCtc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Sep 2021 22:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235648AbhICQjo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Sep 2021 12:39:44 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C007DC061575
-        for <linux-arch@vger.kernel.org>; Fri,  3 Sep 2021 09:38:44 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id e7so3620408plh.8
-        for <linux-arch@vger.kernel.org>; Fri, 03 Sep 2021 09:38:44 -0700 (PDT)
+        with ESMTP id S234937AbhIDCtc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Sep 2021 22:49:32 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A11CC061757
+        for <linux-arch@vger.kernel.org>; Fri,  3 Sep 2021 19:48:31 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id a1so858187ilj.6
+        for <linux-arch@vger.kernel.org>; Fri, 03 Sep 2021 19:48:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FfOt3SEZ0/w/EILHgIhc/sI685lMnBLBscfmUVoWBxM=;
-        b=U3zD7zTVZnXyaVHVcepE2ZnBhIVi+C+briI5/GPmfUYXdkLyFmxljAvwjJ2Y/T6FN7
-         JEKgVwTx7TIQEk8iONrflQBgQEuu9wPi6w1QPNdCALwa6JGDNl9ILIHqvd26pArQ3XuF
-         FBhHN4XJSFB6INWrh3p2QndF/YNVVDAe55YSQ=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=QRVLfUMQ5fu6vtJy73BDfahhdXal2jJSb82M51StH1c=;
+        b=npMcxdIcFOzmLMmY7bmC+xc2TOI25Ys2UbC4KZLWV/qV8K3HXgbqzu/raHc90kaHJ4
+         f64bt4qTDBVwSmDZFsJvQj38URXOWMPW/OJhihfE2IQbZFN/KsbglSlgH8hMrttrj5qa
+         q0VdjH4pVUcfkYgklVl74xSMz0jsa8NPhBT8G4y/zHNujA7PCS+RkHIXmlt1juijtTGc
+         BfY0OpECYhGsVr5+yffThljBIHz1bQK9f6A8rv4iItSZReZUpB4/IJW2uTk/51xoLSck
+         XHSWfzK+Nit6sb7zqPgFhS438EaNWiVQOiGP35JTqciqC1cV8oMrZgBwDdo9w105NOqF
+         fHXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FfOt3SEZ0/w/EILHgIhc/sI685lMnBLBscfmUVoWBxM=;
-        b=kQrrQhb4dae/nemFQDEvTj4LpfClKrialhJjaUiLP2lYE/xifN5t1aXn8peQRkmB4F
-         KLdxRh1wz87SNB3WeMas9iE1J9QtiGs39/rBGZaJd9wG+9MpM51b50v0QqIarfhx9WzV
-         +0qL7RvQjUW6KTvnYZI4AZ2TrFismOdJ/YC77mKlMfDxMXAWwQkQ1B1+a0J44wLH7Yyv
-         uIYx3H+ufcINjAVwYC5nJgz4uy4xbat/IxnwsYyNbYPMwRJ5oK4eKAuAbqmbglCNU6E1
-         j40hDFmrqqhUJeI5ZkHvT09mAMt7w/F3PaSzY1Jb+JjH0FL3IgVII0FcDQQz6FwtIq2H
-         xBLQ==
-X-Gm-Message-State: AOAM5319fyFFGmCFnXdoTTMuycNmdwsMXpDnPGNTaYl11F6NuErwl9k2
-        ZZ76XayjGWKZJ4QUGRla43WLbA==
-X-Google-Smtp-Source: ABdhPJy/x5blIx3Lk+xBJRMgzA9HJvA8GilrLG2XXL2QHa1y/6WGYsNlTmOkpxYQfB+u+t83J6O6NQ==
-X-Received: by 2002:a17:90b:2212:: with SMTP id kw18mr1653921pjb.59.1630687124160;
-        Fri, 03 Sep 2021 09:38:44 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s31sm5894049pfw.23.2021.09.03.09.38.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Sep 2021 09:38:43 -0700 (PDT)
-Date:   Fri, 3 Sep 2021 09:38:42 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arch@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 3/4] module: Use a list of strings for ro_after_init
- sections
-Message-ID: <202109030932.1358C4093@keescook>
-References: <20210901233757.2571878-1-keescook@chromium.org>
- <20210901233757.2571878-4-keescook@chromium.org>
- <20210903064951.to4dhiu7zua7s6dn@treble>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=QRVLfUMQ5fu6vtJy73BDfahhdXal2jJSb82M51StH1c=;
+        b=M1Satv9vUtzPQO4SNjBj00fm+Pc6yp8ePIu1GFWYX9C/9+ZcEB1K0GXA2r54mwbGdR
+         GsLnRJOTab8e84HZXAZynmKZ7e7N72Xvs+K/YrxCYmPfu3wcDopsB4041ZNWcVY7l7Xw
+         qbtlNJRmraQ3RFfMYUAJHrmYJI7tz3mOtbvlde0QxYtHp8CLl9zUE8kJjFhytsLiQC31
+         xk+mpb0eE/yNyD1Rgkxb6PbKhrSIN+w2AxKrlsf5U25w3h009fcT47zZWpbd6Jcjk2uI
+         sSIU8sCrbmgeoaqh0vYCzFoKT0sGpbPy0cSYvM8AZ5u/fmyrZTJ5xMpjyDpCuZ/3iSw/
+         5M1Q==
+X-Gm-Message-State: AOAM532wx/4JtHQoEMT4bQLCgK65Cpde73+Wgrwudst7Fq74pzOY/gq4
+        XMnBb+23n9Dgj1xKe9tJgpGWBv1Ct++n97sS9Q==
+X-Google-Smtp-Source: ABdhPJzT2ommL+8lSFoYytoQNinM9mYLPYm2x8/pz5kvJdajok17IG03XuyYChCMfWsZwIA/NeK88MlDMdIcUpzm0oA=
+X-Received: by 2002:a92:611:: with SMTP id x17mr1338733ilg.41.1630723710413;
+ Fri, 03 Sep 2021 19:48:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210903064951.to4dhiu7zua7s6dn@treble>
+Received: by 2002:a4f:fadb:0:0:0:0:0 with HTTP; Fri, 3 Sep 2021 19:48:30 -0700 (PDT)
+Reply-To: deedeepaul@yandex.com
+From:   Deedee Paul <kwaanya1@gmail.com>
+Date:   Sat, 4 Sep 2021 02:48:30 +0000
+Message-ID: <CA+04VFSWA5CshVZhPi7+bYN-+rwWa15KMqbNsxFTuQciLhq1+g@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 02, 2021 at 11:49:51PM -0700, Josh Poimboeuf wrote:
-> On Wed, Sep 01, 2021 at 04:37:56PM -0700, Kees Cook wrote:
-> > Instead of open-coding the section names, use a list for the sections that
-> > need to be marked read-only after init. Unfortunately, it seems we can't
-> > do normal section merging with scripts/module.lds.S as ld.bfd doesn't
-> > correctly update symbol tables. For more details, see commit 6a3193cdd5e5
-> > ("kbuild: lto: Merge module sections if and only if CONFIG_LTO_CLANG
-> > is enabled").
-> 
-> I'm missing what this has to do with section merging.  Can you connect
-> the dots here, i.e. what sections would we want to merge and how would
-> that help here?
+Attention: Beneficiary,
 
-Right, sorry, if ld.bfd didn't have this issue, we could use section
-merging in the module.lds.S file the way we do in vmlinux.lds:
+This is to officially inform you that we have been having meetings for
+the past weeks now which ended Two days ago with Mr. John W. Ashe,
+President of the 68th session of the UN General Assembly, Mr. David
+R.Malpass. the World Bank President and Hon. Mrs. Christine Laggard
+(IMF) Director General, in the meeting we talked about how to
+compensate Scam victim's people and all the people that were affected
+the most by this Coronavirus pandemic.
 
-#ifndef RO_AFTER_INIT_DATA
-#define RO_AFTER_INIT_DATA                                              \
-        . = ALIGN(8);                                                   \
-        __start_ro_after_init = .;                                      \
-        *(.data..ro_after_init)                                         \
-        JUMP_TABLE_DATA                                                 \
-        STATIC_CALL_DATA                                                \
-        __end_ro_after_init = .;
-#endif
-...
-        . = ALIGN((align));                                             \
-        .rodata           : AT(ADDR(.rodata) - LOAD_OFFSET) {           \
-                __start_rodata = .;                                     \
-                *(.rodata) *(.rodata.*)                                 \
-                SCHED_DATA                                              \
-                RO_AFTER_INIT_DATA      /* Read only after init */      \
-                . = ALIGN(8);                                           \
-                __start___tracepoints_ptrs = .;                         \
-                KEEP(*(__tracepoints_ptrs)) /* Tracepoints: pointer array */ \
-                __stop___tracepoints_ptrs = .;                          \
-                *(__tracepoints_strings)/* Tracepoints: strings */      \
-        }                                                               \
+Your email address was successfully selected for this donation with others.
 
-Then jump_table and static_call sections could be collected into a
-new section, as the module loader would only need to look for that
-single name.
+The United Nations have agreed to compensate you with the sum of
+($150,000.00) One hundred and fifty thousand United States Dollars. We
+have arranged your payment through WORLD ATM MASTERCARD which is the
+latest instruction from the World Bank Group.
 
-> Instead of hard-coding section names in module.c, I'm wondering if we
-> can do something like the following to set SHF_RO_AFTER_INIT when first
-> creating the sections.  Completely untested...
-> 
-> 
-> diff --git a/arch/x86/include/asm/jump_label.h b/arch/x86/include/asm/jump_label.h
-> index 0449b125d27f..d4ff34c6199c 100644
-> --- a/arch/x86/include/asm/jump_label.h
-> +++ b/arch/x86/include/asm/jump_label.h
-> @@ -13,7 +13,7 @@
->  #include <linux/types.h>
->  
->  #define JUMP_TABLE_ENTRY				\
-> -	".pushsection __jump_table,  \"aw\" \n\t"	\
-> +	".pushsection __jump_table, \"0x00200003\" \n\t"\
->  	_ASM_ALIGN "\n\t"				\
->  	".long 1b - . \n\t"				\
->  	".long %l[l_yes] - . \n\t"			\
-> diff --git a/kernel/module.c b/kernel/module.c
-> index 40ec9a030eec..1dda33c9ae49 100644
-> --- a/kernel/module.c
-> +++ b/kernel/module.c
-> @@ -3549,15 +3549,6 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
->  	 * Note: ro_after_init sections also have SHF_{WRITE,ALLOC} set.
->  	 */
->  	ndx = find_sec(info, ".data..ro_after_init");
-> -	if (ndx)
-> -		info->sechdrs[ndx].sh_flags |= SHF_RO_AFTER_INIT;
-> -	/*
-> -	 * Mark the __jump_table section as ro_after_init as well: these data
-> -	 * structures are never modified, with the exception of entries that
-> -	 * refer to code in the __init section, which are annotated as such
-> -	 * at module load time.
-> -	 */
-> -	ndx = find_sec(info, "__jump_table");
->  	if (ndx)
->  		info->sechdrs[ndx].sh_flags |= SHF_RO_AFTER_INIT;
->  
-> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> index e5947fbb9e7a..b25ca38179ea 100644
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -20,6 +20,9 @@
->  #include <linux/kernel.h>
->  #include <linux/static_call_types.h>
->  
-> +/* cribbed from include/uapi/linux/elf.h */
-> +#define SHF_RO_AFTER_INIT	0x00200000
-> +
->  struct alternative {
->  	struct list_head list;
->  	struct instruction *insn;
-> @@ -466,7 +469,8 @@ static int create_static_call_sections(struct objtool_file *file)
->  	list_for_each_entry(insn, &file->static_call_list, call_node)
->  		idx++;
->  
-> -	sec = elf_create_section(file->elf, ".static_call_sites", SHF_WRITE,
-> +	sec = elf_create_section(file->elf, ".static_call_sites",
-> +				 SHF_WRITE | SHF_RO_AFTER_INIT,
->  				 sizeof(struct static_call_site), idx);
->  	if (!sec)
->  		return -1;
+For the collection of your WORLD ATM MASTERCARD contact our
+representative Rev. David Wood, forward to him this message and your
+contact address where you want your MASTERCARD to be sent to you, like
 
-Interesting! I got the impression from the module code that this wasn't
-possible since it'd be exposing an internal set of flags to the external
-linker, and would break the vmlinux section merging (since it _is_
-supposed to live in the .rodata section ultimately). The modules handle
-permissions slightly differently (i.e. more exact temporal), than the
-kernel though. (Most of the architecture's vmlinux logic starts with
-everything writable, and only does the read-only-ness after __init,
-though I think s390 does it "correctly" and as such has a separate area
-for the ro-after-init section.)
+1. Your Full Name: .........
+2. Your Country and Your Delivery Home Address: ........
+3. Your Telephone: ..............
 
--- 
-Kees Cook
+His e-mail address: (ddavidwood1@yandex.com) He is a Canadian (UN)
+representative Agent.
+
+Thanks.
+Tel: 1 513 452 4352.
+Mr. Michael M=C3=B8ller Director-General of the United Nations Office
