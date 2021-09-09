@@ -2,143 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F6D404C6D
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Sep 2021 13:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5523405397
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Sep 2021 14:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239602AbhIIL5D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Sep 2021 07:57:03 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:33810 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244846AbhIILyq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Sep 2021 07:54:46 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 98B442237B;
-        Thu,  9 Sep 2021 11:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1631188415; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eQS9ZQeFJQGmX5k5doxlCL9tdEWoOdO3DeKwN1zi5T0=;
-        b=00v59IeElg7EiE7DHb1zWtlUZ3YJjEriMz7GShwSI6HjWFzOHS2CdJ7M8fAz9nQNtDDcbs
-        J94bvmK7f4pGSSFGQotiPbZkObv+nYsyIAt733HOZLRCX7yJf4RBKu48LKihYPWrZIbBaf
-        eTzw669qmbL0RhD8IQ34BLGFO+BFHEE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1631188415;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eQS9ZQeFJQGmX5k5doxlCL9tdEWoOdO3DeKwN1zi5T0=;
-        b=p8MQdENfUnWaooQFXZj2H0QuLNNlmNpjSCkjq7a3nqRLLVr7DZorlFYl4fe7CAR7GhGKtc
-        Yfa5jdGKWMEhqCDg==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3BD0DA3CFC;
-        Thu,  9 Sep 2021 11:53:35 +0000 (UTC)
-Date:   Thu, 9 Sep 2021 13:53:35 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-cc:     linux-hardening@vger.kernel.org,
-        Kristen C Accardi <kristen.c.accardi@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Lukasz Czapnik <lukasz.czapnik@intel.com>,
-        Marta A Plantykow <marta.a.plantykow@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        live-patching@vger.kernel.org
-Subject: Re: [PATCH v6 kspp-next 16/22] livepatch: only match unique symbols
- when using fgkaslr
-In-Reply-To: <20210831144114.154-17-alexandr.lobakin@intel.com>
-Message-ID: <alpine.LSU.2.21.2109091347400.20761@pobox.suse.cz>
-References: <20210831144114.154-1-alexandr.lobakin@intel.com> <20210831144114.154-17-alexandr.lobakin@intel.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S1351240AbhIIMx2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Sep 2021 08:53:28 -0400
+Received: from out28-219.mail.aliyun.com ([115.124.28.219]:34042 "EHLO
+        out28-219.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236982AbhIIMqp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Sep 2021 08:46:45 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07591903|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.149272-0.00519396-0.845534;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.LHrbZjk_1631191525;
+Received: from 192.168.10.152(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.LHrbZjk_1631191525)
+          by smtp.aliyun-inc.com(10.147.40.233);
+          Thu, 09 Sep 2021 20:45:26 +0800
+Subject: Re: [PATCH 1/2] mips: convert syscall to generic entry
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        =?UTF-8?B?6ZmI6aOe5oms?= <chris.chenfeiyang@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        arnd@arndb.de, Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        chenhuacai@kernel.org, Yanteng Si <siyanteng@loongson.cn>
+References: <cover.1630929519.git.chenfeiyang@loongson.cn>
+ <ec14e242a73227bf5314bbc1b585919500e6fbc7.1630929519.git.chenfeiyang@loongson.cn>
+ <59feb382-a4ab-c94e-8f71-10ad0c0ceceb@flygoat.com>
+ <CACWXhKnA24KuJo33+OitPQVRRd3g_05DWRC2Dsnm7w8hVyKjNQ@mail.gmail.com>
+ <20210908085150.GA5622@alpha.franken.de>
+ <13d237ab-0ef3-772d-6f21-ff023781efcf@flygoat.com>
+From:   Zhou Yanjie <zhouyu@wanyeetech.com>
+Message-ID: <7e2c0db1-bf5a-8f16-bc43-81830a30045e@wanyeetech.com>
+Date:   Thu, 9 Sep 2021 20:45:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <13d237ab-0ef3-772d-6f21-ff023781efcf@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi,
 
-On Tue, 31 Aug 2021, Alexander Lobakin wrote:
+On 2021/9/8 下午8:41, Jiaxun Yang wrote:
+>
+> 在 2021/9/8 16:51, Thomas Bogendoerfer 写道:
+>> On Wed, Sep 08, 2021 at 10:08:47AM +0800, 陈飞扬 wrote:
+>>> On Tue, 7 Sept 2021 at 21:49, Jiaxun Yang <jiaxun.yang@flygoat.com> 
+>>> wrote:
+>>>>
+>>>> 在 2021/9/7 14:16, FreeFlyingSheep 写道:
+>>>>> From: Feiyang Chen <chenfeiyang@loongson.cn>
+>>>>>
+>>>>> Convert mips syscall to use the generic entry infrastructure from
+>>>>> kernel/entry/*.
+>>>>>
+>>>>> There are a few special things on mips:
+>>>>>
+>>>>> - There is one type of syscall on mips32 (scall32-o32) and three 
+>>>>> types
+>>>>> of syscalls on mips64 (scall64-o32, scall64-n32 and scall64-n64). Now
+>>>>> convert to C code to handle different types of syscalls.
+>>>>>
+>>>>> - For some special syscalls (e.g. fork, clone, clone3 and sysmips),
+>>>>> save_static_function() wrapper is used to save static registers. Now
+>>>>> SAVE_STATIC is used in handle_sys before calling do_syscall(), so the
+>>>>> save_static_function() wrapper can be removed.
+>>>>>
+>>>>> - For sigreturn/rt_sigreturn and sysmips, inline assembly is used to
+>>>>> jump to syscall_exit directly for skipping setting the error flag and
+>>>>> restoring all registers. Now use regs->regs[27] to mark whether to
+>>>>> handle the error flag and always restore all registers in handle_sys,
+>>>>> so these functions can return normally as other architecture.
+>>>> Hmm, that would give us overhead of register context on these 
+>>>> syscalls.
+>>>>
+>>>> I guess it's worthy?
+>>>>
+>>> Hi, Jiaxun,
+>>>
+>>> Saving and restoring registers against different system calls can be
+>>> difficult due to the use of generic entry.
+>>> To avoid a lot of duplicate code, I think the overhead is worth it.
+>> could you please provide numbers for that ? This code still runs
+>> on low end MIPS CPUs for which overhead might mean a different
+>> ballpark than some highend Loongson CPUs.
+>
+> It shows ~3% regression for UnixBench on MT7621A (1004Kec).
+>
+> + Yanjie could you help with a run on ingenic platform?
 
-> From: Kristen Carlson Accardi <kristen@linux.intel.com>
-> 
-> If any type of function granular randomization is enabled, the sympos
-> algorithm will fail, as it will be impossible to resolve symbols when
-> there are duplicates using the previous symbol position.
-> 
-> Override the value of sympos to always be zero if fgkaslr is enabled for
-> either the core kernel or modules, forcing the algorithm
-> to require that only unique symbols are allowed to be patched.
-> 
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
->  kernel/livepatch/core.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 335d988bd811..852bbfa9da7b 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -169,6 +169,17 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->  	else
->  		kallsyms_on_each_symbol(klp_find_callback, &args);
->  
-> +	/*
-> +	 * If any type of function granular randomization is enabled, it
-> +	 * will be impossible to resolve symbols when there are duplicates
-> +	 * using the previous symbol position (i.e. sympos != 0). Override
-> +	 * the value of sympos to always be zero in this case. This will
-> +	 * force the algorithm to require that only unique symbols are
-> +	 * allowed to be patched.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_FG_KASLR))
-> +		sympos = 0;
-> +
 
-I ran the live patching tests and no problem occurred, which is great. We 
-do not have a test for old_sympos, which makes the testing less telling, 
-but at least nothing blows up with the section randomization itself.
+Sure, I can help with JZ4775, JZ4780, X1000, X1830, X2000 from Ingenic, 
+and SF16A18, SF19A2890 from SiFlower.
 
-However, I want to reiterate what I wrote for the same patch in v5 
-series.
++ Paul could you help with a run on JZ4760 and JZ4770?
 
-The above hunk should work, but I wonder if we should make it more 
-explicit. With the change the user will get the error with "unresolvable 
-ambiguity for symbol..." if they specify sympos and the symbol is not 
-unique. It could confuse them.
++ Nikolaus could you help with a run on JZ4730?
 
-So, how about it making it something like
 
-if (IS_ENABLED(CONFIG_FG_KASLR) || IS_ENABLED(CONFIG_MODULE_FG_KASLR))
-        if (sympos) {
-                pr_err("fgkaslr is enabled, specifying sympos for symbol '%s' in object '%s' does not work.\n",
-                        name, objname);
-                *addr = 0;
-                return -EINVAL;
-        }
+Thanks and best regards!
 
-? (there could be goto to the error out at the end of the function to 
-save copy-pasting).
 
-In that case, if sympos is not specified, the user will get the message 
-which matches the reality. If the user specifies it, they will get the 
-error in case of fgkaslr (no matter if the symbol is found or not).
-
-What do you think?
-
-Miroslav
+>
+> Thanks.
+>
+> - Jiaxun
+>
+>>
+>> Thomas.
+>>
