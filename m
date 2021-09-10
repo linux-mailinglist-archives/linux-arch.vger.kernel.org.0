@@ -2,147 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A055D406D83
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Sep 2021 16:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03ED4406FB8
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Sep 2021 18:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234045AbhIJOVG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Sep 2021 10:21:06 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49182 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233837AbhIJOVG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 10 Sep 2021 10:21:06 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 18AE4dT0003764;
-        Fri, 10 Sep 2021 10:19:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=tRUcJmxZI06bgFTd2YoWwdkI1EIf07riiKhsAJZnDaQ=;
- b=ZrjhJ1IuAdWNBJqiskGsC8nlcEPv2s1p+8+Z2NVAeJzdMN7tF1ohextJz5ctdeZ1WNRX
- Mz/Gt2nmzq4JLvifwugJKJlHp9YhYxJPsA6iM9ww2a0YQ7Id3zypWL44V9zaex7rLrK1
- ZYLCP//kh+qz0aLcmSs982ehIrdsHC/St4FUg9MEv4CxnjKCE5XfudqJfS+WuxG1mbFN
- ZEi5dWH3+5JR2Sp7Wn1VwhU6qzmNYqEgH0w0ZA2Sieg23npxhE6n7WQVAqxWoX76ec70
- OXwOR+VNT4bIjt8uhJ/oOfJSy0NtC0wnKdgOzbS2Mzppoll1dNbFbg5TKCQzQqgNpzd8 wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ayu41hdew-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Sep 2021 10:19:47 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18AE53FG004823;
-        Fri, 10 Sep 2021 10:19:46 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ayu41hde0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Sep 2021 10:19:46 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18AEHawv025614;
-        Fri, 10 Sep 2021 14:19:44 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3axcnq23d2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Sep 2021 14:19:43 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18AEFIxU58655226
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Sep 2021 14:15:18 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3045C42041;
-        Fri, 10 Sep 2021 14:19:41 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BE31142042;
-        Fri, 10 Sep 2021 14:19:40 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Sep 2021 14:19:40 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Oliver O'Halloran" <oohall@gmail.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 1/1] powerpc: Drop superfluous pci_dev_is_added() calls
-Date:   Fri, 10 Sep 2021 16:19:40 +0200
-Message-Id: <20210910141940.2598035-2-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210910141940.2598035-1-schnelle@linux.ibm.com>
-References: <20210910141940.2598035-1-schnelle@linux.ibm.com>
+        id S229466AbhIJQf7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Sep 2021 12:35:59 -0400
+Received: from mga18.intel.com ([134.134.136.126]:41169 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229448AbhIJQf7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 Sep 2021 12:35:59 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10103"; a="208226577"
+X-IronPort-AV: E=Sophos;i="5.85,283,1624345200"; 
+   d="scan'208";a="208226577"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 09:34:47 -0700
+X-IronPort-AV: E=Sophos;i="5.85,283,1624345200"; 
+   d="scan'208";a="581420171"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.212.255.212]) ([10.212.255.212])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 09:34:46 -0700
+Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org
+References: <CAPcyv4iJVQKJ3bVwZhD08c8GNEP0jW2gx=H504NXcYK5o2t01A@mail.gmail.com>
+ <d992b5af-8d57-6aa6-bd49-8e2b8d832b19@linux.intel.com>
+ <20210824053830-mutt-send-email-mst@kernel.org>
+ <d21a2a2d-4670-ba85-ce9a-fc8ea80ef1be@linux.intel.com>
+ <20210829112105-mutt-send-email-mst@kernel.org>
+ <09b340dd-c8a8-689c-4dad-4fe0e36d39ae@linux.intel.com>
+ <20210829181635-mutt-send-email-mst@kernel.org>
+ <3a88a255-a528-b00a-912b-e71198d5f58f@linux.intel.com>
+ <20210830163723-mutt-send-email-mst@kernel.org>
+ <69fc30f4-e3e2-add7-ec13-4db3b9cc0cbd@linux.intel.com>
+ <20210910054044-mutt-send-email-mst@kernel.org>
+From:   Andi Kleen <ak@linux.intel.com>
+Message-ID: <f672dc1c-5280-7bbc-7a56-7c7aab31725c@linux.intel.com>
+Date:   Fri, 10 Sep 2021 09:34:45 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: za8VTNRr0shtqDgsPfee0Ni4ctKNrmje
-X-Proofpoint-ORIG-GUID: LucwXuB3CGUb9u06TqyoDzboh2KLAZa7
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-09-10_04:2021-09-09,2021-09-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
- suspectscore=0 clxscore=1015 impostorscore=0 malwarescore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2109030001
- definitions=main-2109100081
+In-Reply-To: <20210910054044-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On powerpc, pci_dev_is_added() is called as part of SR-IOV fixups
-that are done under pcibios_add_device() which in turn is only called in
-pci_device_add() whih is called when a PCI device is scanned.
 
-Now pci_dev_assign_added() is called in pci_bus_add_device() which is
-only called after scanning the device. Thus pci_dev_is_added() is always
-false and can be dropped.
+>>>> And we've been avoiding that drivers can self declare auditing, we've been
+>>>> trying to have a separate centralized list so that it's easier to enforce
+>>>> and avoids any cut'n'paste mistakes.
+>>>>
+>>>> -Andi
+>>> Now I'm confused. What is proposed here seems to be basically that,
+>>> drivers need to declare auditing by replacing ioremap with
+>>> ioremap_shared.
+>> Auditing is declared on the device model level using a central allow list.
+> Can we not have an init call allow list instead of, or in addition to, a
+> device allow list?
 
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- arch/powerpc/platforms/powernv/pci-sriov.c | 6 ------
- arch/powerpc/platforms/pseries/setup.c     | 3 +--
- 2 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/arch/powerpc/platforms/powernv/pci-sriov.c b/arch/powerpc/platforms/powernv/pci-sriov.c
-index 28aac933a439..deddbb233fde 100644
---- a/arch/powerpc/platforms/powernv/pci-sriov.c
-+++ b/arch/powerpc/platforms/powernv/pci-sriov.c
-@@ -9,9 +9,6 @@
- 
- #include "pci.h"
- 
--/* for pci_dev_is_added() */
--#include "../../../../drivers/pci/pci.h"
--
- /*
-  * The majority of the complexity in supporting SR-IOV on PowerNV comes from
-  * the need to put the MMIO space for each VF into a separate PE. Internally
-@@ -228,9 +225,6 @@ static void pnv_pci_ioda_fixup_iov_resources(struct pci_dev *pdev)
- 
- void pnv_pci_ioda_fixup_iov(struct pci_dev *pdev)
- {
--	if (WARN_ON(pci_dev_is_added(pdev)))
--		return;
--
- 	if (pdev->is_virtfn) {
- 		struct pnv_ioda_pe *pe = pnv_ioda_get_pe(pdev);
- 
-diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platforms/pseries/setup.c
-index f79126f16258..2188054470c1 100644
---- a/arch/powerpc/platforms/pseries/setup.c
-+++ b/arch/powerpc/platforms/pseries/setup.c
-@@ -74,7 +74,6 @@
- #include <asm/hvconsole.h>
- 
- #include "pseries.h"
--#include "../../../../drivers/pci/pci.h"
- 
- DEFINE_STATIC_KEY_FALSE(shared_processor);
- EXPORT_SYMBOL(shared_processor);
-@@ -750,7 +749,7 @@ static void pseries_pci_fixup_iov_resources(struct pci_dev *pdev)
- 	const int *indexes;
- 	struct device_node *dn = pci_device_to_OF_node(pdev);
- 
--	if (!pdev->is_physfn || pci_dev_is_added(pdev))
-+	if (!pdev->is_physfn)
- 		return;
- 	/*Firmware must support open sriov otherwise dont configure*/
- 	indexes = of_get_property(dn, "ibm,open-sriov-vf-bar-info", NULL);
--- 
-2.25.1
+That would be quite complicated and intrusive. In fact I'm not even sure 
+how to do maintain something like this. There are a lot of needed 
+initcalls, they would all need to be marked. How can we distinguish 
+them? It would be a giant auditing project. And of course how would you 
+prevent it from bitrotting?
 
+
+Basically it would be hundreds of changes all over the tree, just to 
+avoid two changes in virtio and MSI. Approach of just stopping the 
+initcalls from doing bad things is much less intrusive.
+
+>
+>> But this cannot do anything to initcalls that run before probe,
+> Can't we extend module_init so init calls are validated against the
+> allow list?
+
+See above.
+
+
+Also the problem isn't really with modules (we rely on udev not loading 
+them), but with builtin initcalls
+
+
+>
+>> that's why
+>> an extra level of defense of ioremap opt-in is useful.
+> OK even assuming this, why is pci_iomap opt-in useful?
+> That never happens before probe - there's simply no pci_device then.
+
+
+Hmm, yes that's true. I guess we can make it default to opt-in for 
+pci_iomap.
+
+It only really matters for device less ioremaps.
+
+>
+> It looks suspiciously like drivers self-declaring auditing to me which
+> we both seem to agree is undesirable. What exactly is the difference?
+
+
+Just allow listing the ioremaps is not self declaration because the 
+device will still not initialize due to the central device filter. If 
+you want to use it that has to be changed.
+
+It's just an additional safety net to contain code running before probe.
+
+
+>
+> Or are you just trying to disable anything that runs before probe?
+
+
+Well anything that could do dangerous host interactions (like processing 
+ioremap data) A lot of things are harmless and can be allowed, or 
+already blocked elsewhere (e.g. we have a IO port filter). This just 
+handles the ioremap/MMIO case.
+
+> In that case I don't see a reason to touch pci drivers though.
+> These should be fine with just the device model list.
+
+
+That won't stop initcalls.
+
+
+-Andi
+
+
+>
