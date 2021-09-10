@@ -2,121 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF00A407186
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Sep 2021 20:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D38407267
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Sep 2021 22:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbhIJS6c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Sep 2021 14:58:32 -0400
-Received: from mail-wm1-f42.google.com ([209.85.128.42]:41843 "EHLO
-        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbhIJS6a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Sep 2021 14:58:30 -0400
-Received: by mail-wm1-f42.google.com with SMTP id u15-20020a05600c19cf00b002f6445b8f55so2054518wmq.0;
-        Fri, 10 Sep 2021 11:57:18 -0700 (PDT)
+        id S233683AbhIJUWN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Sep 2021 16:22:13 -0400
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:40585 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230513AbhIJUWK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Sep 2021 16:22:10 -0400
+Received: by mail-oi1-f179.google.com with SMTP id h133so4602205oib.7;
+        Fri, 10 Sep 2021 13:20:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RmF22FF10VEqJ3XXc0rOTEglVQ69MnGfxCNpGugVz3s=;
-        b=VBiXpmS2PSdLU6yvYPVGgk3tgFjMBMYwlgT1IG/ogJymSwQUM/HVC9do7FwIIiBX/f
-         8PjW4kD09eAgaDbdIQ5yIbOTAVr9vemIHtKo26pHVBQRqp9B4jTjDXQMPMxgOqnYt/9+
-         MaSqW80ZHAlb6kSwhoNaRaRrgxewBp0+IysHMqIdhvlU06JcgSvxW7F1nF732y4sNO7g
-         Nc1VLyOXOlliarpwtb+3BB8pJwTO56xznBAtjGEEhkpZgAnX1E7wPxTRcyYfPRaLOWgk
-         3hAu0X64Z5OXy9+j52HiS8MlNUwJPbCfgulLeMTkLbKSCcUD03EXldCLjv4GNCPyOYWT
-         Trpw==
-X-Gm-Message-State: AOAM532TFbWa6HHvssJm8B6zq3NOwhRWKZx1O0Fsd9pSbxYWosT+iVWa
-        4OptTHw7PZoNBkC+wAlkogVXeJt7i+Y=
-X-Google-Smtp-Source: ABdhPJxMwIAPUIIgtWQ2PROYOhh89ZLAVG4KkM8B3daRv6H5KRh9ZkgUJfNiDVG5Hk+ZqqYT+7asfQ==
-X-Received: by 2002:a05:600c:22ca:: with SMTP id 10mr9753190wmg.170.1631300238170;
-        Fri, 10 Sep 2021 11:57:18 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2.j3c5onc20sse1dnehy4noqpfcg.zx.internal.cloudapp.net ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id y4sm5015351wmi.22.2021.09.10.11.57.17
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4IPxaQoHLBsI4TsWZBSz429Jh2IPs4Tsu9wpBitBgng=;
+        b=RHaoRE+qDgYZPicCywIjXi43sTcHVLztXKuRhBqTKG/BC3AcU3T1OrRbsbchDZDH42
+         qQDkjh6NdFxcOPdOkhKUyztQ7LAqL5c4wAeychuNyh7BIphBf6Uh7sdgOi6vp/32XXGb
+         7XiEUztdTPfVfdZxT6e+BGsuwZ4vLBRUsFXtzKfFjnj/xiJK2WdT3QIJq7NSo/Cfn08l
+         B6R0zrZCw+1G3nZRT9RcFkxXwuEsE2qI7pv8dasNw8D+q0EA+xN7BMiCZvTl+0MkdVF0
+         h63WP8ufp5jj/Vvpq5MhXPhWhx3Jqd598XNIr0ufIKJo6hzZugdYA8IS1BwiF2rrSuyx
+         EVDA==
+X-Gm-Message-State: AOAM530MuR9lBAdZ75GkAgdwnu8Cu+xtRwYXoMF3cJWo/boXmyAt4kel
+        nl+98UZs1SecqQhNZwgqsA==
+X-Google-Smtp-Source: ABdhPJz5SQZueBteIwX5jHufIZZ/JozLZUCT7O2iJGriI7vlauYxJk6NPj/twUv+QLH5Q4gVPTAZyQ==
+X-Received: by 2002:a05:6808:aa8:: with SMTP id r8mr5746125oij.171.1631305258063;
+        Fri, 10 Sep 2021 13:20:58 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id s24sm1483439otp.37.2021.09.10.13.20.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Sep 2021 11:57:17 -0700 (PDT)
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linux on Hyper-V List <linux-hyperv@vger.kernel.org>
-Cc:     Michael Kelley <mikelley@microsoft.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com,
-        sthemmin@microsoft.com, Wei Liu <wei.liu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 1/2] asm-generic/hyperv: provide cpumask_to_vpset_noself
-Date:   Fri, 10 Sep 2021 18:57:13 +0000
-Message-Id: <20210910185714.299411-2-wei.liu@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210910185714.299411-1-wei.liu@kernel.org>
-References: <20210910185714.299411-1-wei.liu@kernel.org>
+        Fri, 10 Sep 2021 13:20:57 -0700 (PDT)
+Received: (nullmailer pid 3226408 invoked by uid 1000);
+        Fri, 10 Sep 2021 20:20:55 -0000
+Date:   Fri, 10 Sep 2021 15:20:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Keith Packard <keithpac@amazon.com>
+Cc:     linux-kernel@vger.kernel.org, Abbott Liu <liuwenliang@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Ben Segall <bsegall@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        bpf@vger.kernel.org, Christoph Lameter <cl@linux.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>, devicetree@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joe Perches <joe@perches.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        KP Singh <kpsingh@kernel.org>, kvm@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org, Manivannan Sadhasivam <mani@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>, netdev@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nick Desaulniers <ndesaulniers@gooogle.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Song Liu <songliubraving@fb.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        virtualization@lists.linux-foundation.org,
+        "Wolfram Sang (Renesas)" <wsa+renesas@sang-engineering.com>,
+        YiFei Zhu <yifeifz2@illinois.edu>, Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH v4 4/7] Make sure task_struct is available for
+ raw_smp_processor_id
+Message-ID: <YTu+JyNyQH7v+1Yx@robh.at.kernel.org>
+References: <id:20210907220038.91021-1-keithpac@amazon.com>
+ <20210908190605.419064-1-keithpac@amazon.com>
+ <20210908190605.419064-5-keithpac@amazon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210908190605.419064-5-keithpac@amazon.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is a new variant which removes `self' cpu from the vpset. It will
-be used in Hyper-V enlightened IPI code.
+On Wed, Sep 08, 2021 at 12:06:02PM -0700, Keith Packard wrote:
+> To allow architectures to use the 'cpu' field in task_struct for cpu
+> identification, the task_struct must be visible whereever the
+> raw_smp_processor_id macro is used. It would be simplest to include
+> linux/sched.h from the relevant asm/smp.h file, but that file is
+> included from linux/sched.h, and the recursive include ends up with
+> several declarations in the wrong order.
+> 
+> To avoid this, the PowerPC architecture code has this ugly hack:
+> 
+> 	#define raw_smp_processor_id() \
+> 		(*(unsigned int *)((void *)current + _TASK_CPU))
+> 
+> As an alternative, placing includes of linux/sched.h in a few files
+> that are used along with asm/smp.h means we can use the task_struct
+> field directly.
+> 
+> Signed-off-by: Keith Packard <keithpac@amazon.com>
+> ---
+>  arch/arm/mm/proc-v7-bugs.c     | 1 +
+>  drivers/vhost/vhost.c          | 1 +
+>  drivers/vhost/vhost.h          | 1 +
+>  include/asm-generic/irq_regs.h | 1 +
+>  include/linux/of_address.h     | 1 +
 
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
----
-Provide a new variant instead of adding a new parameter because it makes
-it easier to backport -- we don't need to fix the users of
-cpumask_to_vpset.
+Where does the DT code use raw_smp_processor_id()? The header itself 
+certainly doesn't and the headers should only include what the headers 
+use directly.
 
-v2:
-1. Rename function
-2. Add preemptible check
----
- include/asm-generic/mshyperv.h | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+In general this seems pretty terrible pulling in all of sched.h (and 
+then everything else it includes) for just raw_smp_processor_id().
 
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 9a000ba2bb75..9a134806f1d5 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -184,10 +184,12 @@ static inline int hv_cpu_number_to_vp_number(int cpu_number)
- 	return hv_vp_index[cpu_number];
- }
- 
--static inline int cpumask_to_vpset(struct hv_vpset *vpset,
--				    const struct cpumask *cpus)
-+static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
-+				    const struct cpumask *cpus,
-+				    bool exclude_self)
- {
- 	int cpu, vcpu, vcpu_bank, vcpu_offset, nr_bank = 1;
-+	int this_cpu = smp_processor_id();
- 
- 	/* valid_bank_mask can represent up to 64 banks */
- 	if (hv_max_vp_index / 64 >= 64)
-@@ -205,6 +207,8 @@ static inline int cpumask_to_vpset(struct hv_vpset *vpset,
- 	 * Some banks may end up being empty but this is acceptable.
- 	 */
- 	for_each_cpu(cpu, cpus) {
-+		if (exclude_self && cpu == this_cpu)
-+			continue;
- 		vcpu = hv_cpu_number_to_vp_number(cpu);
- 		if (vcpu == VP_INVAL)
- 			return -1;
-@@ -219,6 +223,19 @@ static inline int cpumask_to_vpset(struct hv_vpset *vpset,
- 	return nr_bank;
- }
- 
-+static inline int cpumask_to_vpset(struct hv_vpset *vpset,
-+				    const struct cpumask *cpus)
-+{
-+	return __cpumask_to_vpset(vpset, cpus, false);
-+}
-+
-+static inline int cpumask_to_vpset_noself(struct hv_vpset *vpset,
-+				    const struct cpumask *cpus)
-+{
-+	WARN_ON_ONCE(preemptible());
-+	return __cpumask_to_vpset(vpset, cpus, true);
-+}
-+
- void hyperv_report_panic(struct pt_regs *regs, long err, bool in_die);
- bool hv_is_hyperv_initialized(void);
- bool hv_is_hibernation_supported(void);
--- 
-2.30.2
-
+>  include/linux/random.h         | 1 +
+>  include/linux/topology.h       | 1 +
+>  init/calibrate.c               | 1 +
+>  kernel/bpf/bpf_lru_list.h      | 1 +
+>  kernel/bpf/percpu_freelist.h   | 1 +
+>  kernel/sched/cpuacct.c         | 2 +-
+>  lib/irq_regs.c                 | 1 +
+>  12 files changed, 12 insertions(+), 1 deletion(-)
