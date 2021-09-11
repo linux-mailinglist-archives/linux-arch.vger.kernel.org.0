@@ -2,112 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BC24079D6
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Sep 2021 19:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF39407AF6
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Sep 2021 01:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbhIKR1d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Sep 2021 13:27:33 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:22068 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232615AbhIKR1c (ORCPT
+        id S234320AbhIKXz7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 Sep 2021 19:55:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45346 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234564AbhIKXz6 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 11 Sep 2021 13:27:32 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-87-4qc9EUa1M6qeRLmgOwokUA-1; Sat, 11 Sep 2021 18:26:13 +0100
-X-MC-Unique: 4qc9EUa1M6qeRLmgOwokUA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.23; Sat, 11 Sep 2021 18:26:12 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.023; Sat, 11 Sep 2021 18:26:12 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Palmer Dabbelt' <palmer@dabbelt.com>,
-        "mcroce@linux.microsoft.com" <mcroce@linux.microsoft.com>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        Atish Patra <Atish.Patra@wdc.com>,
-        "kernel@esmil.dk" <kernel@esmil.dk>,
-        "akira.tsukamoto@gmail.com" <akira.tsukamoto@gmail.com>,
-        "drew@beagleboard.org" <drew@beagleboard.org>,
-        "bmeng.cn@gmail.com" <bmeng.cn@gmail.com>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "Christoph Hellwig" <hch@infradead.org>
-Subject: RE: [PATCH] riscv: use the generic string routines
-Thread-Topic: [PATCH] riscv: use the generic string routines
-Thread-Index: AQHXpr/5qgNlr7pPJkaLpUnMWph5s6ufDaMA
-Date:   Sat, 11 Sep 2021 17:26:12 +0000
-Message-ID: <241c29b27c4c4acbbf893516bfa6f5aa@AcuMS.aculab.com>
-References: <CAFnufp0eVejrDJoGE900D2U5-9qi-srVEmPOc9zHC5mSH4DgLg@mail.gmail.com>
- <mhng-22e6331c-16e1-40cc-b431-4990fda46ecf@palmerdabbelt-glaptop>
-In-Reply-To: <mhng-22e6331c-16e1-40cc-b431-4990fda46ecf@palmerdabbelt-glaptop>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 11 Sep 2021 19:55:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1631404485;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XhzTiX0DZYV1X5ckSDoJZp4U7aZCZRTdTtc5atz14SI=;
+        b=HIYOtFgY4HxMNyU0nzLti5A8vG2pVu6p4v3N2hqr9VCqnSjvaEgH03c0xLylchB2XX6JhZ
+        MZja69E6+/mBnkFFoaH07qfH2BNOXewJXF/fF6FcQeepTpcoGIs0L1KGN//6havxYew7HX
+        7hUkBeY6or6zno1I58JXf2KSUB2lf60=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-339-OlotW8cuP9uV0QNfb_KVfQ-1; Sat, 11 Sep 2021 19:54:44 -0400
+X-MC-Unique: OlotW8cuP9uV0QNfb_KVfQ-1
+Received: by mail-ej1-f72.google.com with SMTP id ga42-20020a1709070c2a00b005dc8c1cc3a1so2256637ejc.17
+        for <linux-arch@vger.kernel.org>; Sat, 11 Sep 2021 16:54:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XhzTiX0DZYV1X5ckSDoJZp4U7aZCZRTdTtc5atz14SI=;
+        b=4iWi6MQm7yB275RvAR7JjMqpg4gtsRxqwZMIoK+eYr8VOTesf1q6u8IXITNcfKaSoN
+         i9wyZL/TP57OdnUlJQZLGJ7Q7wZG0PE1q6IAoqVUByxnYUSblQy7FGypO2ozZ3Laflol
+         uAbxADUmRiHkzOI6PYtlbUFuQxf6iLVzMfybW61jeaCU6Xg8yHhPKm3dIT/LetzXtPco
+         965LWPTWr+xljAQ3NuztHgEMGqsOAG5KlYXyGtljmnXdvkg/94HEAI3A9HwL/VqTl63R
+         xjLQhFfR1QvcG4u/+/ALGZjKm/pzXNpNYVhs7P5VSE++qDKkx8ZgIYCF83VOTL28s95j
+         Ylpw==
+X-Gm-Message-State: AOAM531KLDFZ53Q7pParN8wQL5qMec/cTmhqBMbjhIAozrrAUPydlmmA
+        Wzj6G26seDTooctWTHsz7YYZRJ9TEc7uXFBPTiTrCz5BYsvckFlxnS2ZAAu2gOVsNMR9WYmXPcN
+        dlgM8cM3rgcq73YO5Qm3yPg==
+X-Received: by 2002:a17:906:5855:: with SMTP id h21mr4944802ejs.230.1631404482985;
+        Sat, 11 Sep 2021 16:54:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzUJ/Dz7qpoDYQNg7a7mY8Cl7pe7fwOabdq++HQzqfzjVSc2KbxoH+7byBLBBXMvIdUmNqg2Q==
+X-Received: by 2002:a17:906:5855:: with SMTP id h21mr4944788ejs.230.1631404482774;
+        Sat, 11 Sep 2021 16:54:42 -0700 (PDT)
+Received: from redhat.com ([2.55.27.174])
+        by smtp.gmail.com with ESMTPSA id n13sm1309780ejk.97.2021.09.11.16.54.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Sep 2021 16:54:41 -0700 (PDT)
+Date:   Sat, 11 Sep 2021 19:54:36 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
+Message-ID: <20210911195006-mutt-send-email-mst@kernel.org>
+References: <20210824053830-mutt-send-email-mst@kernel.org>
+ <d21a2a2d-4670-ba85-ce9a-fc8ea80ef1be@linux.intel.com>
+ <20210829112105-mutt-send-email-mst@kernel.org>
+ <09b340dd-c8a8-689c-4dad-4fe0e36d39ae@linux.intel.com>
+ <20210829181635-mutt-send-email-mst@kernel.org>
+ <3a88a255-a528-b00a-912b-e71198d5f58f@linux.intel.com>
+ <20210830163723-mutt-send-email-mst@kernel.org>
+ <69fc30f4-e3e2-add7-ec13-4db3b9cc0cbd@linux.intel.com>
+ <20210910054044-mutt-send-email-mst@kernel.org>
+ <f672dc1c-5280-7bbc-7a56-7c7aab31725c@linux.intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f672dc1c-5280-7bbc-7a56-7c7aab31725c@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Li4NCj4gVGhlc2UgZW5kZWQgdXAgZ2V0dGluZyByZWplY3RlZCBieSBMaW51cywgc28gSSdtIGdv
-aW5nIHRvIGhvbGQgb2ZmIG9uDQo+IHRoaXMgZm9yIG5vdy4gIElmIHRoZXkncmUgcmVhbGx5IG91
-dCBvZiBsaWIvIHRoZW4gSSdsbCB0YWtlIHRoZSBDDQo+IHJvdXRpbmVzIGluIGFyY2gvcmlzY3Ys
-IGJ1dCBlaXRoZXIgd2F5IGl0J3MgYW4gaXNzdWUgZm9yIHRoZSBuZXh0DQo+IHJlbGVhc2UuDQoN
-CkkndmUgYmVlbiBoYWxmIGZvbGxvd2luZyB0aGlzLg0KSSd2ZSBub3Qgc2VlbiBhbnkgY29tcGFy
-aXNvbnMgYmV0d2VlbiB0aGUgQyBmdW5jdGlvbnMgcHJvcG9zZWQNCmhlcmUgYW5kIHRoZSByaXNj
-diBhc20gb25lcyB0aGF0IGhhZCB0aGUgZml4IGZvciBtaXNhbGlnbmVkDQp0cmFuc2ZlcnMgYXBw
-bGllZC4NCg0KSUlSQyB0aGVyZSBpcyBhIGNvbW1lbnQgaW4gdGhlIGFzbSBvbmVzIHRoYXQgdGhl
-IHVucm9sbGVkDQoncmVhZCBsb3RzJyAtICd3cml0ZSBsb3RzJyBsb29wIGlzIGZhc3RlciB0aGFu
-IHRoZSBvbGRlcg0KKGFzbSkgcmVhZC13cml0ZSBsb29wLg0KDQpCdXQgSSd2ZSBub3Qgc2VlbiBh
-bnkgYXJjaGljdHVyYWwgZGlzY3Vzc2lvbnMgYXQgYWxsLg0KDQpBIHNpbXBsZSBpbi1vcmRlciBz
-aW5nbGUtaXNzdWUgY3B1IHdpbGwgZXhlY3V0ZSB0aGUNCnVucm9sbGVkIGxvb3AgZmFzdGVyIGp1
-c3QgYmVjYXVzZSBpdCBoYXMgZmV3ZXIgaW5zdHJ1Y3Rpb25zLg0KVGhlIHJlYWQtbG90cyAtIHdy
-aXRlLWxvdHMgYWxtb3N0IGNlcnRhaW5seSBoZWxwcw0KYXZvaWQgcmVhZC1sYXRlbmN5IGRlbGF5
-aW5nIHRoaW5ncyBpZiBtdWx0aXBsZSByZWFkcw0KY2FuIGJlIHBpcGVsaW5lZC4NClRoZSB3cml0
-ZXMgYXJlIGFsbW9zdCBjZXJ0YWlubHkgJ3Bvc3RlZCcgYW5kIHBpcGVsaW5lZCwNCkJ1dCBhIHNp
-bXBsZSBjcHUgY291bGQgZWFzaWx5IHJlcXVpcmUgYWxsIHdyaXRlcyBmaW5pc2gNCmJlZm9yZSBk
-b2luZyBhIHJlYWQuDQoNCkEgc3VwZXItc2NhbGVyIChtdWx0aS1pc3N1ZSkgY3B1IGdpdmVzIHlv
-dSB0aGUgYWJpbGl0eQ0KdG8gZ2V0IHRoZSBsb29wIGNvbnRyb2wgaW5zdHJ1Y3Rpb25zICdmb3Ig
-ZnJlZScgd2l0aA0KY2FyZWZ1bGx5IHdyaXR0ZW4gYXNzZW1ibGVyLg0KQXQgd2hpY2ggcG9pbnQg
-YSBjb3B5IGZvciAnbGlmZSBjYWNoZScgZGF0YSBzaG91bGQgYmUNCmxpbWl0ZWQgb25seSBieSB0
-aGUgY3B1J3MgY2FjaGUgbWVtb3J5IGJhbmR3aWR0aC4NCg0KSWYgcmVhZHMgYW5kIHdyaXRlcyBj
-YW4gaW50ZXJsZWF2ZSB0aGVuIGEgbG9vcCB0aGF0DQphbHRlcm5hdGVzIHJlYWRzIGFuZCB3cml0
-ZXMgKHJlYWQgZWFjaCByZWdpc3Rlcg0KanVzdCBhZnRlciB3cml0aW5nIGl0KSBtYXkgbWVhbiB0
-aGF0IHlvdSBhbHdheXMNCmtlZXAgdGhlIGNwdS1jYWNoZSBpbnRlcmZhY2UgYnVzeS4NClRoaXMg
-d291bGQgYmUgZXNwZWNpYWxseSB0cnVlIGlmIHRoZSBjcHUgY2FuIGV4ZWN1dGUNCmJvdGggYSBj
-YWNoZSByZWFkIGFuZCB3cml0ZSBpbiB0aGUgc2FtZSBjeWNsZS4NCihXaGljaCBtYW55IG1vZGVy
-YXRlIHBlcmZvcm1hbmNlIGNwdSBjYW4uKQ0KDQpOb25lIG9mIHRoZSByZXF1aXJlcyBvdXQtb2Yt
-b3JkZXIgZXhlY3V0aW9uLCBqdXN0DQpleGVjdXRpb24gdG8gY29udGludWUgd2hpbGUgYSByZWFk
-IGlzIGluIHByb2dyZXNzLg0KDQpJJ20gYWxzbyBndWVzc2luZyB0aGF0IGFueSBwZXJmb3JtYW5j
-ZSB0ZXN0aW5nIGhhcyBiZWVuDQpkb25lIHdpdGggdGhlIChyZWxhdGl2ZWx5KSBjaGVhcCBib2Fy
-ZHMgdGhhdCBhcmUgcmVhZGlseQ0KYXZhaWxhYmxlLg0KDQpCdXQgSSd2ZSBhbHNvIHNlZW4gcmVm
-ZXJlbmNlcyBpbiB0aGUgcHJlc3MgdG8gbXVjaCBmYXN0ZXINCnJpc2N2IGNwdSB0aGF0IGFyZSBk
-ZWZpbml0ZWx5IG11bHRpLWlzc3VlIGFuZCBtYXkgaGF2ZQ0Kc29tZSBzaW1wbGUgb3V0LW9mLW9y
-ZGVyIGV4ZWN1dGlvbi4NCkFueSBjaGFuZ2VzIG91Z2h0IHRvIGJlIHRlc3RlZCBvbiB0aGVzZSBm
-YXN0ZXIgc3lzdGVtcy4NCg0KSSBhbHNvIHJlY2FsbCB0aGF0IHNvbWUgb2YgdGhlIHBlcmZvcm1h
-bmNlIG1lYXN1cmVtZW50cw0Kd2VyZSBtYWRlIHdpdGggbG9uZyBidWZmZXJzIC0gdGhleSB3aWxs
-IGJlIGRvbWluYXRlZCBieSB0aGUNCmNhY2hlIHRvIERSQU0gKGFuZCBtYXliZSBUTEIgbG9va3Vw
-KSB0aW1pbmdzLCBub3QgdGhlIGNvcHkNCmxvb3AuDQoNCkZvciBhIHNpbXBsZSBjcHUgeW91IG91
-Z2h0IHRvIGJlIGFibGUgdG8gbWVhc3VyZSB0aGUNCm51bWJlciBvZiBjcHUgY3ljbGVzIHVzZWQg
-Zm9yIGEgY29weSAtIGFuZCBhY2NvdW50IGZvcg0KYWxsIG9mIHRoZW0uDQpGb3Igc29tZXRoaW5n
-IGxpa2UgeDg2IHlvdSBjYW4gc2hvdyB0aGF0IHRoZSBjb3B5IGlzDQpiZWluZyBsaW1pdGVkIGJ5
-IHRoZSBjcHUtY2FjaGUgYmFuZHdpZHRoLg0KKEZXSVcgbWVhc3VyZW1lbnRzIG9mIHRoZSBpbmV0
-IGNoZWNrc3VtIGNvZGUgb24geDg2DQpzaG93IGl0IHJ1bnMgYXQgaGFsZiB0aGUgZXhwZWN0ZWQg
-c3BlZWQgb24gYSBsb3Qgb2YNCkludGVsIGNwdSAtIG5vIG9uZSBldmVyIG1lYXN1cmVkIGl0LikN
-Cg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2Fk
-LCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5v
-OiAxMzk3Mzg2IChXYWxlcykNCg==
+On Fri, Sep 10, 2021 at 09:34:45AM -0700, Andi Kleen wrote:
+> > > that's why
+> > > an extra level of defense of ioremap opt-in is useful.
+> > OK even assuming this, why is pci_iomap opt-in useful?
+> > That never happens before probe - there's simply no pci_device then.
+> 
+> 
+> Hmm, yes that's true. I guess we can make it default to opt-in for
+> pci_iomap.
+> 
+> It only really matters for device less ioremaps.
+
+OK. And same thing for other things with device, such as
+devm_platform_ioremap_resource.
+If we agree on all that, this will basically remove virtio
+changes from the picture ;)
+
+-- 
+MST
 
