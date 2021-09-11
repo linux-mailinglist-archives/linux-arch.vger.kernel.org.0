@@ -2,193 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF194078F9
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Sep 2021 17:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BC24079D6
+	for <lists+linux-arch@lfdr.de>; Sat, 11 Sep 2021 19:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbhIKPHg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Sep 2021 11:07:36 -0400
-Received: from mail-oln040093003015.outbound.protection.outlook.com ([40.93.3.15]:32879
-        "EHLO na01-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229633AbhIKPHg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 11 Sep 2021 11:07:36 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ghIXUsvliM2IxEvBOnxMKkQqUE1JJN2wDeSlchCr52VuCcyJLWcFvMnIKCKpQE36Xlf20Uuq4AXtfKe66yJTobvCZeDyn1Moqfamfz/eVBGBrRzrOYR/014ouXUjL+PbP5X618gS3AYtBugaL/m67IJhOMA9wAgZbvJhzB5q2LyZvLVn8fJwpH7Ay/oKGQXaY7OokbRIy8r3BspdVI7B1ILIWCTJAfyM439atf3q/xhJs391pA5WihQIBqeznhwgQzCTHVUdbF0y8yrAi4eL5kYAUkASx0smyfThbukJxXSLh7/0DLDcDBfIX23AH01UW5prId64UhHznQKu2vMi6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=9owJEdi83Ly1dtZEhG2ZNYq33dRTQJnWsD7sy+xEpMA=;
- b=kPxE7zRox34ovAu2Bm6ufmSoj/nMI/LChgo9JmMCcMi3XUzO33x96TfCiyuX9sGZmD/ksDtDvWq384XGjIQO1h2S6dujNCXmQ1vXsOenYIxW2+FwMyxrl2w+vBgcR3FWxxySh5yc7F/p/FXgf0O/ZlvR6UgLXu+NyNHu6Nm3Yd/JyCIVOHx6O8rHOLkH9mdjNtAIT7Lj/BmXrYveBHw9AfU6XblqkbW5L7jkmQZnjpMblxEUE7M/1TJx+nGIlC2zPtym2mGHzv8iv6Q1ruOTydnXiba9mt1fDyyJmHTT8shswJ5nps1A2DBuSa1m03gDrcvKh4VVx/BBgaRX9m38Dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9owJEdi83Ly1dtZEhG2ZNYq33dRTQJnWsD7sy+xEpMA=;
- b=adrVwvqV78p4sRM6plys+MKIqg/LLqcwImgRD9fLzQEH5lzrInMoxgcgoJ4+hxdrP8oI1CJLocnpJgWSg4H7IqCGH6VEuUzxofDLpIDxOsZjk3/GqbJJFOrc80qOUhCjj4DmEEEMufYrTheNIq15kpMODXfCEbOKKqnpu+JEaMc=
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
- by MW2PR2101MB1019.namprd21.prod.outlook.com (2603:10b6:302:5::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.7; Sat, 11 Sep
- 2021 15:06:19 +0000
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::45ad:3f2b:a0a5:4202]) by MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::45ad:3f2b:a0a5:4202%6]) with mapi id 15.20.4523.008; Sat, 11 Sep 2021
- 15:06:18 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>
-CC:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/2] asm-generic/hyperv: provide
- cpumask_to_vpset_noself
-Thread-Topic: [PATCH v2 1/2] asm-generic/hyperv: provide
- cpumask_to_vpset_noself
-Thread-Index: AQHXpnWvazf7s0/gcEySN+8356FaQque795Q
-Date:   Sat, 11 Sep 2021 15:06:18 +0000
-Message-ID: <MWHPR21MB15933CFA486898817B7E396AD7D79@MWHPR21MB1593.namprd21.prod.outlook.com>
-References: <20210910185714.299411-1-wei.liu@kernel.org>
- <20210910185714.299411-2-wei.liu@kernel.org>
-In-Reply-To: <20210910185714.299411-2-wei.liu@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
+        id S232797AbhIKR1d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 Sep 2021 13:27:33 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:22068 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232615AbhIKR1c (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 11 Sep 2021 13:27:32 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-87-4qc9EUa1M6qeRLmgOwokUA-1; Sat, 11 Sep 2021 18:26:13 +0100
+X-MC-Unique: 4qc9EUa1M6qeRLmgOwokUA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.23; Sat, 11 Sep 2021 18:26:12 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.023; Sat, 11 Sep 2021 18:26:12 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Palmer Dabbelt' <palmer@dabbelt.com>,
+        "mcroce@linux.microsoft.com" <mcroce@linux.microsoft.com>
+CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        Atish Patra <Atish.Patra@wdc.com>,
+        "kernel@esmil.dk" <kernel@esmil.dk>,
+        "akira.tsukamoto@gmail.com" <akira.tsukamoto@gmail.com>,
+        "drew@beagleboard.org" <drew@beagleboard.org>,
+        "bmeng.cn@gmail.com" <bmeng.cn@gmail.com>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "Christoph Hellwig" <hch@infradead.org>
+Subject: RE: [PATCH] riscv: use the generic string routines
+Thread-Topic: [PATCH] riscv: use the generic string routines
+Thread-Index: AQHXpr/5qgNlr7pPJkaLpUnMWph5s6ufDaMA
+Date:   Sat, 11 Sep 2021 17:26:12 +0000
+Message-ID: <241c29b27c4c4acbbf893516bfa6f5aa@AcuMS.aculab.com>
+References: <CAFnufp0eVejrDJoGE900D2U5-9qi-srVEmPOc9zHC5mSH4DgLg@mail.gmail.com>
+ <mhng-22e6331c-16e1-40cc-b431-4990fda46ecf@palmerdabbelt-glaptop>
+In-Reply-To: <mhng-22e6331c-16e1-40cc-b431-4990fda46ecf@palmerdabbelt-glaptop>
+Accept-Language: en-GB, en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8809fceb-4ef2-46fe-b619-2dc69115e71e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-09-11T15:05:01Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 215558f9-fcc5-463e-a7f3-08d97535b57a
-x-ms-traffictypediagnostic: MW2PR2101MB1019:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MW2PR2101MB10197B2DF2EE14209D251E44D7D79@MW2PR2101MB1019.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 348LrdknhDhERurbjnQ8qncn93iOoPupe+GJmCpJeug02igC0HbgbscdhSsxweNxdgM8+aAkhif6WLX9g8NrKQ+R7eJE5dVt7ZWbHAvXujhwKFwP3hw065CLEmUj5CCE/mSukp2ACNNG925nzBemFaZJpc5MtdQAObyXEEfMMhQBKgomlJqCCecVWAT8oeHucJ7yZ/lS9RA7RZIxXDyXksrBSZCUUvnYHmsEQ7we7IkgQYL/YAeneqKEfrur9Xkrjk0GLbxdgdgqx17/svJM0VTk+Irp/NpW01nS3/6nht/q5Kgc+W453q4e7faysr/XvNte8FsPNP2s3BZK/hleT811EiE+4wpjxi9EdqYV8lz+NZsHqDlRc0ZDFDLCY3VYRm4IOt8w3xB2HzU+krvjUEGSPtPm04Zb8HBj5La/3VHe3XeB8kDyrPoxh73kpDV87wjW+J6p8GumitUhRTZ2cwOGmx2JTwyy9OyJxmYmegda1LPsuh+kWbrnuvp1zU/P7/tGHbSI6bWLEDraflvfhwEXRz+10uNN+LrmBoh/0RVo3xX5Kk38vC0a07ovCyTYYKQ0fL2IqYL5Z21gtRQj2oIR07gaeexR3iBcEQ40H+Q=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(64756008)(66446008)(9686003)(7696005)(6506007)(66476007)(8676002)(54906003)(82950400001)(8936002)(38100700002)(4326008)(55016002)(71200400001)(26005)(10290500003)(186003)(110136005)(83380400001)(33656002)(82960400001)(122000001)(66946007)(508600001)(316002)(86362001)(38070700005)(66556008)(5660300002)(2906002)(8990500004)(52536014)(41533002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?UoNX3w51DT3ZBhl1wU3Bzk2DrebiLNQg8YcfrYqqNDMVTL7kmXZ5IIMM7h6x?=
- =?us-ascii?Q?dRkIshKtTJiHE4eXzDQoPOirQxFEb0ZIL7IiFSNML+VsOLMLa4SSn+JmZ6bU?=
- =?us-ascii?Q?L3pg8Ny5o/X44+xdydXBP7kwZRNyOqTxisXKDCpYGrBs6e9Se8dBeSyAPbDx?=
- =?us-ascii?Q?c9g8aiY2/bIXpxB6cQt4Jt8tvOpqcm6pKkvSspXCHCGsfiiJHY6vHBVPrmJz?=
- =?us-ascii?Q?gJeaG47lS70XpwoTaEgoCHtIGExj/4/+POwA5csogKd/1Re52nTXa+Fz5Ln0?=
- =?us-ascii?Q?Zlk85Hj/z/9v3pRobbV26UQEzJCj46Ej9vuSU8Aroex7E10HggZHdZO2h3Tx?=
- =?us-ascii?Q?ABScIXiblCPqJrSOpOv31NyFhHExdEN/6Nsf9qFpEJW6djwLp39DiyRWQT/d?=
- =?us-ascii?Q?hgIpxNrn0+awE2dnkUwDKt/6XlAxIKHhv5iKc8EaorkHasbqKnjb/80mUT4F?=
- =?us-ascii?Q?6AcQ+I4acKw0oyt2VMQzVx8wQLSHFpg0vb+qMZ8+yBAVHI+eaxqHNr1U9juP?=
- =?us-ascii?Q?x5Mzat/wNSuf5F0w1uAOJchAiNMRcTLDPoPAsYU3ZZ7cBHFx6sJu9PvZ6iW1?=
- =?us-ascii?Q?+Yfkk9N2EmHj0PpxRhOJVJ/zn+wAA2giWiotTumWdsJsFJ1h+Bkqb1qZVaWV?=
- =?us-ascii?Q?WMTMJVCRcWoRi5i2Fw0Kf92p7c0hHszXpASpZHjkFwkJNRGLIM4eP3BlPWeZ?=
- =?us-ascii?Q?DGpBggQU/fK4SeR39UQLIueB5ug/NBoac4Rh6dOTskdBthPa26IfYjq4u4ad?=
- =?us-ascii?Q?EHDx1127j0iwjGabe8Hg1KRErYN64i+sqcNo3k9f9yiatuxR+roLJl9RM7oJ?=
- =?us-ascii?Q?VMXILCW2Ek1paGwVuEJkkVwg8q1kjQ3jM5aorjU2WeI4sxNZrWBeLhovk5+A?=
- =?us-ascii?Q?Z+r0UWN7nq16/WTYJgfkhKpHG/C4UbPwvq2/x5UqOZo6j/xGVRXzSJa/ZGh/?=
- =?us-ascii?Q?aa/83JgTuDU6EjOl5+JT0uB134sZyN5NfDXTiravY/GxYjwxXA/b2rsoeVjX?=
- =?us-ascii?Q?2fApWbZlkS6oOI52dJNbNn/a3ic2wZ1tOemNFryUzApZ9siKkfUI2w13g3fR?=
- =?us-ascii?Q?3LVqw3nNndtRZKfvZnKvdpNG8YL1H4nENeGdFv+8v8CUcyuiWvYpRloiY4Qi?=
- =?us-ascii?Q?pzUqFIc2DKmp7jEHpBPvW5FlA4Hk8xGGcbpB8aQVG0UDryrCCczBGg+Kk/nM?=
- =?us-ascii?Q?7ueTWSEVrv0Q0WYKGpCiDbuxs9B2QDvmYZogzzkTIiQTooySp2vOJbYUr3JN?=
- =?us-ascii?Q?5CvApruRiHKuY/8w0mVqJep3kkxoSbd88YsbxvXEek2K+t0OL4QA1wUhBI6f?=
- =?us-ascii?Q?00/QLrk+RnDWXTKpHKzfALN+?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 215558f9-fcc5-463e-a7f3-08d97535b57a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2021 15:06:18.6387
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oLttx992YN1WiO6i5li4gufZIIuNG/zfIBp7V1xII3rn6Ct9fhZFtRZNZVxXM99e0GBd4J4wzN2rOZKXhQagKla3q9fQEyrn8a8w8PdlfgM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR2101MB1019
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Wei Liu <wei.liu@kernel.org> Sent: Friday, September 10, 2021 11:57 A=
-M
->=20
-> This is a new variant which removes `self' cpu from the vpset. It will
-> be used in Hyper-V enlightened IPI code.
->=20
-> Signed-off-by: Wei Liu <wei.liu@kernel.org>
-> ---
-> Provide a new variant instead of adding a new parameter because it makes
-> it easier to backport -- we don't need to fix the users of
-> cpumask_to_vpset.
->=20
-> v2:
-> 1. Rename function
-> 2. Add preemptible check
-> ---
->  include/asm-generic/mshyperv.h | 21 +++++++++++++++++++--
->  1 file changed, 19 insertions(+), 2 deletions(-)
->=20
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index 9a000ba2bb75..9a134806f1d5 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -184,10 +184,12 @@ static inline int hv_cpu_number_to_vp_number(int cp=
-u_number)
->  	return hv_vp_index[cpu_number];
->  }
->=20
-> -static inline int cpumask_to_vpset(struct hv_vpset *vpset,
-> -				    const struct cpumask *cpus)
-> +static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
-> +				    const struct cpumask *cpus,
-> +				    bool exclude_self)
->  {
->  	int cpu, vcpu, vcpu_bank, vcpu_offset, nr_bank =3D 1;
-> +	int this_cpu =3D smp_processor_id();
->=20
->  	/* valid_bank_mask can represent up to 64 banks */
->  	if (hv_max_vp_index / 64 >=3D 64)
-> @@ -205,6 +207,8 @@ static inline int cpumask_to_vpset(struct hv_vpset *v=
-pset,
->  	 * Some banks may end up being empty but this is acceptable.
->  	 */
->  	for_each_cpu(cpu, cpus) {
-> +		if (exclude_self && cpu =3D=3D this_cpu)
-> +			continue;
->  		vcpu =3D hv_cpu_number_to_vp_number(cpu);
->  		if (vcpu =3D=3D VP_INVAL)
->  			return -1;
-> @@ -219,6 +223,19 @@ static inline int cpumask_to_vpset(struct hv_vpset *=
-vpset,
->  	return nr_bank;
->  }
->=20
-> +static inline int cpumask_to_vpset(struct hv_vpset *vpset,
-> +				    const struct cpumask *cpus)
-> +{
-> +	return __cpumask_to_vpset(vpset, cpus, false);
-> +}
-> +
-> +static inline int cpumask_to_vpset_noself(struct hv_vpset *vpset,
-> +				    const struct cpumask *cpus)
-> +{
-> +	WARN_ON_ONCE(preemptible());
-> +	return __cpumask_to_vpset(vpset, cpus, true);
-> +}
-> +
->  void hyperv_report_panic(struct pt_regs *regs, long err, bool in_die);
->  bool hv_is_hyperv_initialized(void);
->  bool hv_is_hibernation_supported(void);
-> --
-> 2.30.2
-
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Li4NCj4gVGhlc2UgZW5kZWQgdXAgZ2V0dGluZyByZWplY3RlZCBieSBMaW51cywgc28gSSdtIGdv
+aW5nIHRvIGhvbGQgb2ZmIG9uDQo+IHRoaXMgZm9yIG5vdy4gIElmIHRoZXkncmUgcmVhbGx5IG91
+dCBvZiBsaWIvIHRoZW4gSSdsbCB0YWtlIHRoZSBDDQo+IHJvdXRpbmVzIGluIGFyY2gvcmlzY3Ys
+IGJ1dCBlaXRoZXIgd2F5IGl0J3MgYW4gaXNzdWUgZm9yIHRoZSBuZXh0DQo+IHJlbGVhc2UuDQoN
+CkkndmUgYmVlbiBoYWxmIGZvbGxvd2luZyB0aGlzLg0KSSd2ZSBub3Qgc2VlbiBhbnkgY29tcGFy
+aXNvbnMgYmV0d2VlbiB0aGUgQyBmdW5jdGlvbnMgcHJvcG9zZWQNCmhlcmUgYW5kIHRoZSByaXNj
+diBhc20gb25lcyB0aGF0IGhhZCB0aGUgZml4IGZvciBtaXNhbGlnbmVkDQp0cmFuc2ZlcnMgYXBw
+bGllZC4NCg0KSUlSQyB0aGVyZSBpcyBhIGNvbW1lbnQgaW4gdGhlIGFzbSBvbmVzIHRoYXQgdGhl
+IHVucm9sbGVkDQoncmVhZCBsb3RzJyAtICd3cml0ZSBsb3RzJyBsb29wIGlzIGZhc3RlciB0aGFu
+IHRoZSBvbGRlcg0KKGFzbSkgcmVhZC13cml0ZSBsb29wLg0KDQpCdXQgSSd2ZSBub3Qgc2VlbiBh
+bnkgYXJjaGljdHVyYWwgZGlzY3Vzc2lvbnMgYXQgYWxsLg0KDQpBIHNpbXBsZSBpbi1vcmRlciBz
+aW5nbGUtaXNzdWUgY3B1IHdpbGwgZXhlY3V0ZSB0aGUNCnVucm9sbGVkIGxvb3AgZmFzdGVyIGp1
+c3QgYmVjYXVzZSBpdCBoYXMgZmV3ZXIgaW5zdHJ1Y3Rpb25zLg0KVGhlIHJlYWQtbG90cyAtIHdy
+aXRlLWxvdHMgYWxtb3N0IGNlcnRhaW5seSBoZWxwcw0KYXZvaWQgcmVhZC1sYXRlbmN5IGRlbGF5
+aW5nIHRoaW5ncyBpZiBtdWx0aXBsZSByZWFkcw0KY2FuIGJlIHBpcGVsaW5lZC4NClRoZSB3cml0
+ZXMgYXJlIGFsbW9zdCBjZXJ0YWlubHkgJ3Bvc3RlZCcgYW5kIHBpcGVsaW5lZCwNCkJ1dCBhIHNp
+bXBsZSBjcHUgY291bGQgZWFzaWx5IHJlcXVpcmUgYWxsIHdyaXRlcyBmaW5pc2gNCmJlZm9yZSBk
+b2luZyBhIHJlYWQuDQoNCkEgc3VwZXItc2NhbGVyIChtdWx0aS1pc3N1ZSkgY3B1IGdpdmVzIHlv
+dSB0aGUgYWJpbGl0eQ0KdG8gZ2V0IHRoZSBsb29wIGNvbnRyb2wgaW5zdHJ1Y3Rpb25zICdmb3Ig
+ZnJlZScgd2l0aA0KY2FyZWZ1bGx5IHdyaXR0ZW4gYXNzZW1ibGVyLg0KQXQgd2hpY2ggcG9pbnQg
+YSBjb3B5IGZvciAnbGlmZSBjYWNoZScgZGF0YSBzaG91bGQgYmUNCmxpbWl0ZWQgb25seSBieSB0
+aGUgY3B1J3MgY2FjaGUgbWVtb3J5IGJhbmR3aWR0aC4NCg0KSWYgcmVhZHMgYW5kIHdyaXRlcyBj
+YW4gaW50ZXJsZWF2ZSB0aGVuIGEgbG9vcCB0aGF0DQphbHRlcm5hdGVzIHJlYWRzIGFuZCB3cml0
+ZXMgKHJlYWQgZWFjaCByZWdpc3Rlcg0KanVzdCBhZnRlciB3cml0aW5nIGl0KSBtYXkgbWVhbiB0
+aGF0IHlvdSBhbHdheXMNCmtlZXAgdGhlIGNwdS1jYWNoZSBpbnRlcmZhY2UgYnVzeS4NClRoaXMg
+d291bGQgYmUgZXNwZWNpYWxseSB0cnVlIGlmIHRoZSBjcHUgY2FuIGV4ZWN1dGUNCmJvdGggYSBj
+YWNoZSByZWFkIGFuZCB3cml0ZSBpbiB0aGUgc2FtZSBjeWNsZS4NCihXaGljaCBtYW55IG1vZGVy
+YXRlIHBlcmZvcm1hbmNlIGNwdSBjYW4uKQ0KDQpOb25lIG9mIHRoZSByZXF1aXJlcyBvdXQtb2Yt
+b3JkZXIgZXhlY3V0aW9uLCBqdXN0DQpleGVjdXRpb24gdG8gY29udGludWUgd2hpbGUgYSByZWFk
+IGlzIGluIHByb2dyZXNzLg0KDQpJJ20gYWxzbyBndWVzc2luZyB0aGF0IGFueSBwZXJmb3JtYW5j
+ZSB0ZXN0aW5nIGhhcyBiZWVuDQpkb25lIHdpdGggdGhlIChyZWxhdGl2ZWx5KSBjaGVhcCBib2Fy
+ZHMgdGhhdCBhcmUgcmVhZGlseQ0KYXZhaWxhYmxlLg0KDQpCdXQgSSd2ZSBhbHNvIHNlZW4gcmVm
+ZXJlbmNlcyBpbiB0aGUgcHJlc3MgdG8gbXVjaCBmYXN0ZXINCnJpc2N2IGNwdSB0aGF0IGFyZSBk
+ZWZpbml0ZWx5IG11bHRpLWlzc3VlIGFuZCBtYXkgaGF2ZQ0Kc29tZSBzaW1wbGUgb3V0LW9mLW9y
+ZGVyIGV4ZWN1dGlvbi4NCkFueSBjaGFuZ2VzIG91Z2h0IHRvIGJlIHRlc3RlZCBvbiB0aGVzZSBm
+YXN0ZXIgc3lzdGVtcy4NCg0KSSBhbHNvIHJlY2FsbCB0aGF0IHNvbWUgb2YgdGhlIHBlcmZvcm1h
+bmNlIG1lYXN1cmVtZW50cw0Kd2VyZSBtYWRlIHdpdGggbG9uZyBidWZmZXJzIC0gdGhleSB3aWxs
+IGJlIGRvbWluYXRlZCBieSB0aGUNCmNhY2hlIHRvIERSQU0gKGFuZCBtYXliZSBUTEIgbG9va3Vw
+KSB0aW1pbmdzLCBub3QgdGhlIGNvcHkNCmxvb3AuDQoNCkZvciBhIHNpbXBsZSBjcHUgeW91IG91
+Z2h0IHRvIGJlIGFibGUgdG8gbWVhc3VyZSB0aGUNCm51bWJlciBvZiBjcHUgY3ljbGVzIHVzZWQg
+Zm9yIGEgY29weSAtIGFuZCBhY2NvdW50IGZvcg0KYWxsIG9mIHRoZW0uDQpGb3Igc29tZXRoaW5n
+IGxpa2UgeDg2IHlvdSBjYW4gc2hvdyB0aGF0IHRoZSBjb3B5IGlzDQpiZWluZyBsaW1pdGVkIGJ5
+IHRoZSBjcHUtY2FjaGUgYmFuZHdpZHRoLg0KKEZXSVcgbWVhc3VyZW1lbnRzIG9mIHRoZSBpbmV0
+IGNoZWNrc3VtIGNvZGUgb24geDg2DQpzaG93IGl0IHJ1bnMgYXQgaGFsZiB0aGUgZXhwZWN0ZWQg
+c3BlZWQgb24gYSBsb3Qgb2YNCkludGVsIGNwdSAtIG5vIG9uZSBldmVyIG1lYXN1cmVkIGl0LikN
+Cg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2Fk
+LCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5v
+OiAxMzk3Mzg2IChXYWxlcykNCg==
 
