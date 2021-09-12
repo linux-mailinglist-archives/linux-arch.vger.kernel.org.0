@@ -2,123 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF39407AF6
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Sep 2021 01:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39375407B09
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Sep 2021 02:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbhIKXz7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Sep 2021 19:55:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45346 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234564AbhIKXz6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 11 Sep 2021 19:55:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631404485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XhzTiX0DZYV1X5ckSDoJZp4U7aZCZRTdTtc5atz14SI=;
-        b=HIYOtFgY4HxMNyU0nzLti5A8vG2pVu6p4v3N2hqr9VCqnSjvaEgH03c0xLylchB2XX6JhZ
-        MZja69E6+/mBnkFFoaH07qfH2BNOXewJXF/fF6FcQeepTpcoGIs0L1KGN//6havxYew7HX
-        7hUkBeY6or6zno1I58JXf2KSUB2lf60=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-339-OlotW8cuP9uV0QNfb_KVfQ-1; Sat, 11 Sep 2021 19:54:44 -0400
-X-MC-Unique: OlotW8cuP9uV0QNfb_KVfQ-1
-Received: by mail-ej1-f72.google.com with SMTP id ga42-20020a1709070c2a00b005dc8c1cc3a1so2256637ejc.17
-        for <linux-arch@vger.kernel.org>; Sat, 11 Sep 2021 16:54:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XhzTiX0DZYV1X5ckSDoJZp4U7aZCZRTdTtc5atz14SI=;
-        b=4iWi6MQm7yB275RvAR7JjMqpg4gtsRxqwZMIoK+eYr8VOTesf1q6u8IXITNcfKaSoN
-         i9wyZL/TP57OdnUlJQZLGJ7Q7wZG0PE1q6IAoqVUByxnYUSblQy7FGypO2ozZ3Laflol
-         uAbxADUmRiHkzOI6PYtlbUFuQxf6iLVzMfybW61jeaCU6Xg8yHhPKm3dIT/LetzXtPco
-         965LWPTWr+xljAQ3NuztHgEMGqsOAG5KlYXyGtljmnXdvkg/94HEAI3A9HwL/VqTl63R
-         xjLQhFfR1QvcG4u/+/ALGZjKm/pzXNpNYVhs7P5VSE++qDKkx8ZgIYCF83VOTL28s95j
-         Ylpw==
-X-Gm-Message-State: AOAM531KLDFZ53Q7pParN8wQL5qMec/cTmhqBMbjhIAozrrAUPydlmmA
-        Wzj6G26seDTooctWTHsz7YYZRJ9TEc7uXFBPTiTrCz5BYsvckFlxnS2ZAAu2gOVsNMR9WYmXPcN
-        dlgM8cM3rgcq73YO5Qm3yPg==
-X-Received: by 2002:a17:906:5855:: with SMTP id h21mr4944802ejs.230.1631404482985;
-        Sat, 11 Sep 2021 16:54:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzUJ/Dz7qpoDYQNg7a7mY8Cl7pe7fwOabdq++HQzqfzjVSc2KbxoH+7byBLBBXMvIdUmNqg2Q==
-X-Received: by 2002:a17:906:5855:: with SMTP id h21mr4944788ejs.230.1631404482774;
-        Sat, 11 Sep 2021 16:54:42 -0700 (PDT)
-Received: from redhat.com ([2.55.27.174])
-        by smtp.gmail.com with ESMTPSA id n13sm1309780ejk.97.2021.09.11.16.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Sep 2021 16:54:41 -0700 (PDT)
-Date:   Sat, 11 Sep 2021 19:54:36 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-Message-ID: <20210911195006-mutt-send-email-mst@kernel.org>
-References: <20210824053830-mutt-send-email-mst@kernel.org>
- <d21a2a2d-4670-ba85-ce9a-fc8ea80ef1be@linux.intel.com>
- <20210829112105-mutt-send-email-mst@kernel.org>
- <09b340dd-c8a8-689c-4dad-4fe0e36d39ae@linux.intel.com>
- <20210829181635-mutt-send-email-mst@kernel.org>
- <3a88a255-a528-b00a-912b-e71198d5f58f@linux.intel.com>
- <20210830163723-mutt-send-email-mst@kernel.org>
- <69fc30f4-e3e2-add7-ec13-4db3b9cc0cbd@linux.intel.com>
- <20210910054044-mutt-send-email-mst@kernel.org>
- <f672dc1c-5280-7bbc-7a56-7c7aab31725c@linux.intel.com>
+        id S231576AbhILALy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 Sep 2021 20:11:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52608 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230435AbhILALy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 11 Sep 2021 20:11:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D09CE61205;
+        Sun, 12 Sep 2021 00:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631405440;
+        bh=rjXQJPoGjJXG/Hc2aV6Aw8sNh7EVkz9yWcAzCNbbEjs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eXuEzLq6GWHkqS3CpXkj35rzzLmxtu2nj5NqNytbZT/1eFTIsvL4Y4RTc/JBBAv3q
+         rxBBSupQIwdCxZduZrnRITpU7VCaLA2MIi0fQOaTBaw4cnorgMbjtcqn8rXABv/LPA
+         a2XvU4N/hAd7xNdxkcmcDE/h/OP3R7/KZC7qWCLZhuGseNlzFvGfgrltPlHAndUddF
+         DkZ28vkxhg4a4AclC/WiGdgvGnuGGRlvN6/6GvyBno6TK8/StfVRE+hcC+28CYaTH4
+         UwznNCQh89sEPHMiHR4nzmK+9xQPcEGQ5DMvKuqDZGrHz6OsXPXWu9zwtPW+fJv4zO
+         69retl15t86nw==
+Received: by mail-lj1-f170.google.com with SMTP id l18so9903847lji.12;
+        Sat, 11 Sep 2021 17:10:40 -0700 (PDT)
+X-Gm-Message-State: AOAM530HuNSpE7/FRL8aDkPtSSS4BuVCpc/TRLLm0uvW8aC44e7CSVcO
+        IYP/Q/CBuuUGzBTqnOpQfwl7XMT1sAauexXlln0=
+X-Google-Smtp-Source: ABdhPJyiHODPdJ5L+2w4cbm1L9+Glebe7aq/6/Mw/j2r8k2lENKIx6D84Fb19m9zndoBsG51bmqUM7eRWPUwrBRFmpM=
+X-Received: by 2002:a2e:9ac7:: with SMTP id p7mr4002766ljj.72.1631405439084;
+ Sat, 11 Sep 2021 17:10:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f672dc1c-5280-7bbc-7a56-7c7aab31725c@linux.intel.com>
+References: <CAFnufp0eVejrDJoGE900D2U5-9qi-srVEmPOc9zHC5mSH4DgLg@mail.gmail.com>
+ <mhng-22e6331c-16e1-40cc-b431-4990fda46ecf@palmerdabbelt-glaptop>
+In-Reply-To: <mhng-22e6331c-16e1-40cc-b431-4990fda46ecf@palmerdabbelt-glaptop>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 12 Sep 2021 08:10:27 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTJ8M5FpL4=PDnPQgrrPaLxVhsZCTO2rXqaOm6MEn=gnA@mail.gmail.com>
+Message-ID: <CAJF2gTTJ8M5FpL4=PDnPQgrrPaLxVhsZCTO2rXqaOm6MEn=gnA@mail.gmail.com>
+Subject: Re: [PATCH] riscv: use the generic string routines
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Matteo Croce <mcroce@linux.microsoft.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <Atish.Patra@wdc.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Christoph Hellwig <hch@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 10, 2021 at 09:34:45AM -0700, Andi Kleen wrote:
-> > > that's why
-> > > an extra level of defense of ioremap opt-in is useful.
-> > OK even assuming this, why is pci_iomap opt-in useful?
-> > That never happens before probe - there's simply no pci_device then.
-> 
-> 
-> Hmm, yes that's true. I guess we can make it default to opt-in for
-> pci_iomap.
-> 
-> It only really matters for device less ioremaps.
-
-OK. And same thing for other things with device, such as
-devm_platform_ioremap_resource.
-If we agree on all that, this will basically remove virtio
-changes from the picture ;)
+On Sat, Sep 11, 2021 at 11:49 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Thu, 05 Aug 2021 03:31:04 PDT (-0700), mcroce@linux.microsoft.com wrote:
+> > On Wed, Aug 4, 2021 at 10:40 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> >>
+> >> On Tue, 03 Aug 2021 09:54:34 PDT (-0700), mcroce@linux.microsoft.com wrote:
+> >> > On Mon, Jul 19, 2021 at 1:44 PM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+> >> >>
+> >> >> From: Matteo Croce <mcroce@microsoft.com>
+> >> >>
+> >> >> Use the generic routines which handle alignment properly.
+> >> >>
+> >> >> These are the performances measured on a BeagleV machine for a
+> >> >> 32 mbyte buffer:
+> >> >>
+> >> >> memcpy:
+> >> >> original aligned:        75 Mb/s
+> >> >> original unaligned:      75 Mb/s
+> >> >> new aligned:            114 Mb/s
+> >> >> new unaligned:          107 Mb/s
+> >> >>
+> >> >> memset:
+> >> >> original aligned:       140 Mb/s
+> >> >> original unaligned:     140 Mb/s
+> >> >> new aligned:            241 Mb/s
+> >> >> new unaligned:          241 Mb/s
+> >> >>
+> >> >> TCP throughput with iperf3 gives a similar improvement as well.
+> >> >>
+> >> >> This is the binary size increase according to bloat-o-meter:
+> >> >>
+> >> >> add/remove: 0/0 grow/shrink: 4/2 up/down: 432/-36 (396)
+> >> >> Function                                     old     new   delta
+> >> >> memcpy                                        36     324    +288
+> >> >> memset                                        32     148    +116
+> >> >> strlcpy                                      116     132     +16
+> >> >> strscpy_pad                                   84      96     +12
+> >> >> strlcat                                      176     164     -12
+> >> >> memmove                                       76      52     -24
+> >> >> Total: Before=1225371, After=1225767, chg +0.03%
+> >> >>
+> >> >> Signed-off-by: Matteo Croce <mcroce@microsoft.com>
+> >> >> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> >> >> ---
+> >> >
+> >> > Hi,
+> >> >
+> >> > can someone have a look at this change and share opinions?
+> >>
+> >> This LGTM.  How are the generic string routines landing?  I'm happy to
+> >> take this into my for-next, but IIUC we need the optimized generic
+> >> versions first so we don't have a performance regression falling back to
+> >> the trivial ones for a bit.  Is there a shared tag I can pull in?
+> >
+> > Hi,
+> >
+> > I see them only in linux-next by now.
+>
+> These ended up getting rejected by Linus, so I'm going to hold off on
+> this for now.  If they're really out of lib/ then I'll take the C
+> routines in arch/riscv, but either way it's an issue for the next
+> release.
+Agree, we should take the C routine in arch/riscv for common
+implementation. If any vendor what custom implementation they could
+use the alternative framework in errata for string operations.
 
 -- 
-MST
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/
