@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4706409DB8
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 22:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9D4409DC5
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 22:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347913AbhIMUF5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Sep 2021 16:05:57 -0400
-Received: from mga05.intel.com ([192.55.52.43]:38697 "EHLO mga05.intel.com"
+        id S1347982AbhIMUGI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Sep 2021 16:06:08 -0400
+Received: from mga05.intel.com ([192.55.52.43]:38689 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347806AbhIMUFs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 13 Sep 2021 16:05:48 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="307336371"
+        id S1347850AbhIMUFw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Sep 2021 16:05:52 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="307336375"
 X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="307336371"
+   d="scan'208";a="307336375"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 13:04:31 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 13:04:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="469643918"
+   d="scan'208";a="469643922"
 Received: from sohilbuildbox.sc.intel.com (HELO localhost.localdomain) ([172.25.110.4])
   by fmsmga007.fm.intel.com with ESMTP; 13 Sep 2021 13:04:31 -0700
 From:   Sohil Mehta <sohil.mehta@intel.com>
@@ -45,9 +45,9 @@ Cc:     Sohil Mehta <sohil.mehta@intel.com>,
         Ramesh Thomas <ramesh.thomas@intel.com>,
         linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 06/13] x86/uintr: Introduce uintr receiver syscalls
-Date:   Mon, 13 Sep 2021 13:01:25 -0700
-Message-Id: <20210913200132.3396598-7-sohil.mehta@intel.com>
+Subject: [RFC PATCH 07/13] x86/process/64: Add uintr task context switch support
+Date:   Mon, 13 Sep 2021 13:01:26 -0700
+Message-Id: <20210913200132.3396598-8-sohil.mehta@intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210913200132.3396598-1-sohil.mehta@intel.com>
 References: <20210913200132.3396598-1-sohil.mehta@intel.com>
@@ -57,405 +57,200 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Any application that wants to receive a user interrupt needs to register
-an interrupt handler with the kernel. Add a registration syscall that
-sets up the interrupt handler and the related kernel structures for
-the task that makes this syscall.
+User interrupt state is saved and restored using xstate supervisor
+feature support. This includes the MSR state and the User Interrupt Flag
+(UIF) value.
 
-Only one interrupt handler per task can be registered with the
-kernel/hardware. Each task has its private interrupt vector space of 64
-vectors. The vector registration and the related FD management is
-covered later.
+During context switch update the UPID for a uintr task to reflect the
+current state of the task; namely whether the task should receive
+interrupt notifications and which cpu the task is currently running on.
 
-Also add an unregister syscall to let a task unregister the interrupt
-handler.
+XSAVES clears the notification vector (UINV) in the MISC MSR to prevent
+interrupts from being recognized in the UIRR MSR while the task is being
+context switched. The UINV is restored back when the kernel does an
+XRSTORS.
 
-The UPID for each receiver task needs to be updated whenever a task gets
-context switched or it moves from one cpu to another. This will also be
-covered later. The system calls haven't been wired up yet so no real
-harm is done if we don't update the UPID right now.
-
-<Code typically in the x86/kernel directory doesn't deal with file
-descriptor management. I have kept uintr_fd.c separate to make it easier
-to move it somewhere else if needed.>
+However, this conflicts with the kernel's lazy restore optimization
+which skips an XRSTORS if the kernel is scheduling the same user task
+back and the underlying MSR state hasn't been modified. Special handling
+is needed for a uintr task in the context switch path to keep using this
+optimization.
 
 Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 ---
- arch/x86/include/asm/processor.h |   6 +
- arch/x86/include/asm/uintr.h     |  13 ++
- arch/x86/kernel/Makefile         |   1 +
- arch/x86/kernel/uintr_core.c     | 240 +++++++++++++++++++++++++++++++
- arch/x86/kernel/uintr_fd.c       |  58 ++++++++
- 5 files changed, 318 insertions(+)
- create mode 100644 arch/x86/include/asm/uintr.h
- create mode 100644 arch/x86/kernel/uintr_core.c
- create mode 100644 arch/x86/kernel/uintr_fd.c
+ arch/x86/include/asm/entry-common.h |  4 ++
+ arch/x86/include/asm/uintr.h        |  9 ++++
+ arch/x86/kernel/fpu/core.c          |  8 +++
+ arch/x86/kernel/process_64.c        |  4 ++
+ arch/x86/kernel/uintr_core.c        | 75 +++++++++++++++++++++++++++++
+ 5 files changed, 100 insertions(+)
 
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 9ad2acaaae9b..d229bfac8b4f 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -9,6 +9,7 @@ struct task_struct;
- struct mm_struct;
- struct io_bitmap;
- struct vm86;
-+struct uintr_receiver;
- 
- #include <asm/math_emu.h>
- #include <asm/segment.h>
-@@ -529,6 +530,11 @@ struct thread_struct {
- 	 */
- 	u32			pkru;
- 
-+#ifdef CONFIG_X86_USER_INTERRUPTS
-+	/* User Interrupt state*/
-+	struct uintr_receiver	*ui_recv;
-+#endif
-+
- 	/* Floating point and extended processor state */
- 	struct fpu		fpu;
- 	/*
-diff --git a/arch/x86/include/asm/uintr.h b/arch/x86/include/asm/uintr.h
-new file mode 100644
-index 000000000000..4f35bd8bd4e0
---- /dev/null
-+++ b/arch/x86/include/asm/uintr.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_UINTR_H
-+#define _ASM_X86_UINTR_H
-+
-+#ifdef CONFIG_X86_USER_INTERRUPTS
-+
-+bool uintr_arch_enabled(void);
-+int do_uintr_register_handler(u64 handler);
-+int do_uintr_unregister_handler(void);
-+
-+#endif /* CONFIG_X86_USER_INTERRUPTS */
-+
-+#endif /* _ASM_X86_UINTR_H */
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 8f4e8fa6ed75..060ca9f23e23 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -140,6 +140,7 @@ obj-$(CONFIG_UPROBES)			+= uprobes.o
- obj-$(CONFIG_PERF_EVENTS)		+= perf_regs.o
- obj-$(CONFIG_TRACING)			+= tracepoint.o
- obj-$(CONFIG_SCHED_MC_PRIO)		+= itmt.o
-+obj-$(CONFIG_X86_USER_INTERRUPTS)	+= uintr_fd.o uintr_core.o
- obj-$(CONFIG_X86_UMIP)			+= umip.o
- 
- obj-$(CONFIG_UNWINDER_ORC)		+= unwind_orc.o
-diff --git a/arch/x86/kernel/uintr_core.c b/arch/x86/kernel/uintr_core.c
-new file mode 100644
-index 000000000000..2c6042a6840a
---- /dev/null
-+++ b/arch/x86/kernel/uintr_core.c
-@@ -0,0 +1,240 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021, Intel Corporation.
-+ *
-+ * Sohil Mehta <sohil.mehta@intel.com>
-+ * Jacob Pan <jacob.jun.pan@linux.intel.com>
-+ */
-+#define pr_fmt(fmt)    "uintr: " fmt
-+
-+#include <linux/refcount.h>
-+#include <linux/sched.h>
-+#include <linux/sched/task.h>
-+#include <linux/slab.h>
-+#include <linux/uaccess.h>
-+
-+#include <asm/apic.h>
-+#include <asm/fpu/internal.h>
-+#include <asm/irq_vectors.h>
-+#include <asm/msr.h>
-+#include <asm/msr-index.h>
+diff --git a/arch/x86/include/asm/entry-common.h b/arch/x86/include/asm/entry-common.h
+index 14ebd2196569..4e6c4d0912a5 100644
+--- a/arch/x86/include/asm/entry-common.h
++++ b/arch/x86/include/asm/entry-common.h
+@@ -8,6 +8,7 @@
+ #include <asm/nospec-branch.h>
+ #include <asm/io_bitmap.h>
+ #include <asm/fpu/api.h>
 +#include <asm/uintr.h>
+ 
+ /* Check that the stack and regs on entry from user mode are sane. */
+ static __always_inline void arch_check_user_regs(struct pt_regs *regs)
+@@ -57,6 +58,9 @@ static inline void arch_exit_to_user_mode_prepare(struct pt_regs *regs,
+ 	if (unlikely(ti_work & _TIF_NEED_FPU_LOAD))
+ 		switch_fpu_return();
+ 
++	if (static_cpu_has(X86_FEATURE_UINTR))
++		switch_uintr_return();
 +
-+/* User Posted Interrupt Descriptor (UPID) */
-+struct uintr_upid {
-+	struct {
-+		u8 status;	/* bit 0: ON, bit 1: SN, bit 2-7: reserved */
-+		u8 reserved1;	/* Reserved */
-+		u8 nv;		/* Notification vector */
-+		u8 reserved2;	/* Reserved */
-+		u32 ndst;	/* Notification destination */
-+	} nc __packed;		/* Notification control */
-+	u64 puir;		/* Posted user interrupt requests */
-+} __aligned(64);
+ #ifdef CONFIG_COMPAT
+ 	/*
+ 	 * Compat syscalls set TS_COMPAT.  Make sure we clear it before
+diff --git a/arch/x86/include/asm/uintr.h b/arch/x86/include/asm/uintr.h
+index 4f35bd8bd4e0..f7ccb67014b8 100644
+--- a/arch/x86/include/asm/uintr.h
++++ b/arch/x86/include/asm/uintr.h
+@@ -8,6 +8,15 @@ bool uintr_arch_enabled(void);
+ int do_uintr_register_handler(u64 handler);
+ int do_uintr_unregister_handler(void);
+ 
++/* TODO: Inline the context switch related functions */
++void switch_uintr_prepare(struct task_struct *prev);
++void switch_uintr_return(void);
 +
-+/* UPID Notification control status */
-+#define UPID_ON		0x0	/* Outstanding notification */
-+#define UPID_SN		0x1	/* Suppressed notification */
++#else /* !CONFIG_X86_USER_INTERRUPTS */
 +
-+struct uintr_upid_ctx {
++static inline void switch_uintr_prepare(struct task_struct *prev) {}
++static inline void switch_uintr_return(void) {}
++
+ #endif /* CONFIG_X86_USER_INTERRUPTS */
+ 
+ #endif /* _ASM_X86_UINTR_H */
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 7ada7bd03a32..e30588bf7ce9 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -95,6 +95,14 @@ EXPORT_SYMBOL(irq_fpu_usable);
+  * over the place.
+  *
+  * FXSAVE and all XSAVE variants preserve the FPU register state.
++ *
++ * When XSAVES is called with XFEATURE_UINTR enabled it
++ * saves the FPU state and clears the interrupt notification
++ * vector byte of the MISC_MSR [bits 39:32]. This is required
++ * to stop detecting additional User Interrupts after we
++ * have saved the FPU state. Before going back to userspace
++ * we would correct this and only program the byte that was
++ * cleared.
+  */
+ void save_fpregs_to_fpstate(struct fpu *fpu)
+ {
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index ec0d836a13b1..62b82137db9c 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -53,6 +53,7 @@
+ #include <asm/xen/hypervisor.h>
+ #include <asm/vdso.h>
+ #include <asm/resctrl.h>
++#include <asm/uintr.h>
+ #include <asm/unistd.h>
+ #include <asm/fsgsbase.h>
+ #ifdef CONFIG_IA32_EMULATION
+@@ -565,6 +566,9 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
+ 	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ENTRY) &&
+ 		     this_cpu_read(hardirq_stack_inuse));
+ 
++	if (static_cpu_has(X86_FEATURE_UINTR))
++		switch_uintr_prepare(prev_p);
++
+ 	if (!test_thread_flag(TIF_NEED_FPU_LOAD))
+ 		switch_fpu_prepare(prev_fpu, cpu);
+ 
+diff --git a/arch/x86/kernel/uintr_core.c b/arch/x86/kernel/uintr_core.c
+index 2c6042a6840a..7a29888050ad 100644
+--- a/arch/x86/kernel/uintr_core.c
++++ b/arch/x86/kernel/uintr_core.c
+@@ -238,3 +238,78 @@ int do_uintr_register_handler(u64 handler)
+ 
+ 	return 0;
+ }
++
++/* Suppress notifications since this task is being context switched out */
++void switch_uintr_prepare(struct task_struct *prev)
++{
 +	struct uintr_upid *upid;
-+	refcount_t refs;
-+};
 +
-+struct uintr_receiver {
-+	struct uintr_upid_ctx *upid_ctx;
-+};
-+
-+inline bool uintr_arch_enabled(void)
-+{
-+	return static_cpu_has(X86_FEATURE_UINTR);
-+}
-+
-+static inline bool is_uintr_receiver(struct task_struct *t)
-+{
-+	return !!t->thread.ui_recv;
-+}
-+
-+static inline u32 cpu_to_ndst(int cpu)
-+{
-+	u32 apicid = (u32)apic->cpu_present_to_apicid(cpu);
-+
-+	WARN_ON_ONCE(apicid == BAD_APICID);
-+
-+	if (!x2apic_enabled())
-+		return (apicid << 8) & 0xFF00;
-+
-+	return apicid;
-+}
-+
-+static void free_upid(struct uintr_upid_ctx *upid_ctx)
-+{
-+	kfree(upid_ctx->upid);
-+	upid_ctx->upid = NULL;
-+	kfree(upid_ctx);
-+}
-+
-+/* TODO: UPID needs to be allocated by a KPTI compatible allocator */
-+static struct uintr_upid_ctx *alloc_upid(void)
-+{
-+	struct uintr_upid_ctx *upid_ctx;
-+	struct uintr_upid *upid;
-+
-+	upid_ctx = kzalloc(sizeof(*upid_ctx), GFP_KERNEL);
-+	if (!upid_ctx)
-+		return NULL;
-+
-+	upid = kzalloc(sizeof(*upid), GFP_KERNEL);
-+
-+	if (!upid) {
-+		kfree(upid_ctx);
-+		return NULL;
++	if (is_uintr_receiver(prev)) {
++		upid = prev->thread.ui_recv->upid_ctx->upid;
++		set_bit(UPID_SN, (unsigned long *)&upid->nc.status);
 +	}
-+
-+	upid_ctx->upid = upid;
-+	refcount_set(&upid_ctx->refs, 1);
-+
-+	return upid_ctx;
 +}
 +
-+static void put_upid_ref(struct uintr_upid_ctx *upid_ctx)
++/*
++ * Do this right before we are going back to userspace after the FPU has been
++ * reloaded i.e. TIF_NEED_FPU_LOAD is clear.
++ * Called from arch_exit_to_user_mode_prepare() with interrupts disabled.
++ */
++void switch_uintr_return(void)
 +{
-+	if (refcount_dec_and_test(&upid_ctx->refs))
-+		free_upid(upid_ctx);
-+}
-+
-+int do_uintr_unregister_handler(void)
-+{
-+	struct task_struct *t = current;
-+	struct fpu *fpu = &t->thread.fpu;
-+	struct uintr_receiver *ui_recv;
-+	u64 msr64;
-+
-+	if (!is_uintr_receiver(t))
-+		return -EINVAL;
-+
-+	pr_debug("recv: Unregister handler and clear MSRs for task=%d\n",
-+		 t->pid);
-+
-+	/*
-+	 * TODO: Evaluate usage of fpregs_lock() and get_xsave_addr(). Bugs
-+	 * have been reported recently for PASID and WRPKRU.
-+	 *
-+	 * UPID and ui_recv will be referenced during context switch. Need to
-+	 * disable preemption while modifying the MSRs, UPID and ui_recv thread
-+	 * struct.
-+	 */
-+	fpregs_lock();
-+
-+	/* Clear only the receiver specific state. Sender related state is not modified */
-+	if (fpregs_state_valid(fpu, smp_processor_id())) {
-+		/* Modify only the relevant bits of the MISC MSR */
-+		rdmsrl(MSR_IA32_UINTR_MISC, msr64);
-+		msr64 &= ~GENMASK_ULL(39, 32);
-+		wrmsrl(MSR_IA32_UINTR_MISC, msr64);
-+		wrmsrl(MSR_IA32_UINTR_PD, 0ULL);
-+		wrmsrl(MSR_IA32_UINTR_RR, 0ULL);
-+		wrmsrl(MSR_IA32_UINTR_STACKADJUST, 0ULL);
-+		wrmsrl(MSR_IA32_UINTR_HANDLER, 0ULL);
-+	} else {
-+		struct uintr_state *p;
-+
-+		p = get_xsave_addr(&fpu->state.xsave, XFEATURE_UINTR);
-+		if (p) {
-+			p->handler = 0;
-+			p->stack_adjust = 0;
-+			p->upid_addr = 0;
-+			p->uinv = 0;
-+			p->uirr = 0;
-+		}
-+	}
-+
-+	ui_recv = t->thread.ui_recv;
-+	/*
-+	 * Suppress notifications so that no further interrupts are generated
-+	 * based on this UPID.
-+	 */
-+	set_bit(UPID_SN, (unsigned long *)&ui_recv->upid_ctx->upid->nc.status);
-+
-+	put_upid_ref(ui_recv->upid_ctx);
-+	kfree(ui_recv);
-+	t->thread.ui_recv = NULL;
-+
-+	fpregs_unlock();
-+
-+	return 0;
-+}
-+
-+int do_uintr_register_handler(u64 handler)
-+{
-+	struct uintr_receiver *ui_recv;
 +	struct uintr_upid *upid;
-+	struct task_struct *t = current;
-+	struct fpu *fpu = &t->thread.fpu;
 +	u64 misc_msr;
-+	int cpu;
 +
-+	if (is_uintr_receiver(t))
-+		return -EBUSY;
-+
-+	ui_recv = kzalloc(sizeof(*ui_recv), GFP_KERNEL);
-+	if (!ui_recv)
-+		return -ENOMEM;
-+
-+	ui_recv->upid_ctx = alloc_upid();
-+	if (!ui_recv->upid_ctx) {
-+		kfree(ui_recv);
-+		pr_debug("recv: alloc upid failed for task=%d\n", t->pid);
-+		return -ENOMEM;
-+	}
-+
-+	/*
-+	 * TODO: Evaluate usage of fpregs_lock() and get_xsave_addr(). Bugs
-+	 * have been reported recently for PASID and WRPKRU.
-+	 *
-+	 * UPID and ui_recv will be referenced during context switch. Need to
-+	 * disable preemption while modifying the MSRs, UPID and ui_recv thread
-+	 * struct.
-+	 */
-+	fpregs_lock();
-+
-+	cpu = smp_processor_id();
-+	upid = ui_recv->upid_ctx->upid;
-+	upid->nc.nv = UINTR_NOTIFICATION_VECTOR;
-+	upid->nc.ndst = cpu_to_ndst(cpu);
-+
-+	t->thread.ui_recv = ui_recv;
-+
-+	if (fpregs_state_valid(fpu, cpu)) {
-+		wrmsrl(MSR_IA32_UINTR_HANDLER, handler);
-+		wrmsrl(MSR_IA32_UINTR_PD, (u64)ui_recv->upid_ctx->upid);
-+
-+		/* Set value as size of ABI redzone */
-+		wrmsrl(MSR_IA32_UINTR_STACKADJUST, 128);
++	if (is_uintr_receiver(current)) {
++		/*
++		 * The XSAVES instruction clears the UINTR notification
++		 * vector(UINV) in the UINT_MISC MSR when user context gets
++		 * saved. Before going back to userspace we need to restore the
++		 * notification vector. XRSTORS would automatically restore the
++		 * notification but we can't be sure that XRSTORS will always
++		 * be called when going back to userspace. Also if XSAVES gets
++		 * called twice the UINV stored in the Xstate buffer will be
++		 * overwritten. Threfore, before going back to userspace we
++		 * always check if the UINV is set and reprogram if needed.
++		 *
++		 * Alternatively, we could combine this with
++		 * switch_fpu_return() and program the MSR whenever we are
++		 * skipping the XRSTORS. We need special precaution to make
++		 * sure the UINV value in the XSTATE buffer doesn't get
++		 * overwritten by calling XSAVES twice.
++		 */
++		WARN_ON_ONCE(test_thread_flag(TIF_NEED_FPU_LOAD));
 +
 +		/* Modify only the relevant bits of the MISC MSR */
 +		rdmsrl(MSR_IA32_UINTR_MISC, misc_msr);
-+		misc_msr |= (u64)UINTR_NOTIFICATION_VECTOR << 32;
-+		wrmsrl(MSR_IA32_UINTR_MISC, misc_msr);
-+	} else {
-+		struct xregs_state *xsave;
-+		struct uintr_state *p;
-+
-+		xsave = &fpu->state.xsave;
-+		xsave->header.xfeatures |= XFEATURE_MASK_UINTR;
-+		p = get_xsave_addr(&fpu->state.xsave, XFEATURE_UINTR);
-+		if (p) {
-+			p->handler = handler;
-+			p->upid_addr = (u64)ui_recv->upid_ctx->upid;
-+			p->stack_adjust = 128;
-+			p->uinv = UINTR_NOTIFICATION_VECTOR;
++		if (!(misc_msr & GENMASK_ULL(39, 32))) {
++			misc_msr |= (u64)UINTR_NOTIFICATION_VECTOR << 32;
++			wrmsrl(MSR_IA32_UINTR_MISC, misc_msr);
 +		}
++
++		/*
++		 * It is necessary to clear the SN bit after we set UINV and
++		 * NDST to avoid incorrect interrupt routing.
++		 */
++		upid = current->thread.ui_recv->upid_ctx->upid;
++		upid->nc.ndst = cpu_to_ndst(smp_processor_id());
++		clear_bit(UPID_SN, (unsigned long *)&upid->nc.status);
++
++		/*
++		 * Interrupts might have accumulated in the UPID while the
++		 * thread was preempted. In this case invoke the hardware
++		 * detection sequence manually by sending a self IPI with UINV.
++		 * Since UINV is set and SN is cleared, any new UINTR
++		 * notifications due to the self IPI or otherwise would result
++		 * in the hardware updating the UIRR directly.
++		 * No real interrupt would be generated as a result of this.
++		 *
++		 * The alternative is to atomically read and clear the UPID and
++		 * program the UIRR. In that case the kernel would need to
++		 * carefully manage the race with the hardware if the UPID gets
++		 * updated after the read.
++		 */
++		if (READ_ONCE(upid->puir))
++			apic->send_IPI_self(UINTR_NOTIFICATION_VECTOR);
 +	}
-+
-+	fpregs_unlock();
-+
-+	pr_debug("recv: task=%d register handler=%llx upid %px\n",
-+		 t->pid, handler, upid);
-+
-+	return 0;
-+}
-diff --git a/arch/x86/kernel/uintr_fd.c b/arch/x86/kernel/uintr_fd.c
-new file mode 100644
-index 000000000000..a1a9c105fdab
---- /dev/null
-+++ b/arch/x86/kernel/uintr_fd.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021, Intel Corporation.
-+ *
-+ * Sohil Mehta <sohil.mehta@intel.com>
-+ */
-+#define pr_fmt(fmt)	"uintr: " fmt
-+
-+#include <linux/sched.h>
-+#include <linux/syscalls.h>
-+
-+#include <asm/uintr.h>
-+
-+/*
-+ * sys_uintr_register_handler - setup user interrupt handler for receiver.
-+ */
-+SYSCALL_DEFINE2(uintr_register_handler, u64 __user *, handler, unsigned int, flags)
-+{
-+	int ret;
-+
-+	if (!uintr_arch_enabled())
-+		return -EOPNOTSUPP;
-+
-+	if (flags)
-+		return -EINVAL;
-+
-+	/* TODO: Validate the handler address */
-+	if (!handler)
-+		return -EFAULT;
-+
-+	ret = do_uintr_register_handler((u64)handler);
-+
-+	pr_debug("recv: register handler task=%d flags %d handler %lx ret %d\n",
-+		 current->pid, flags, (unsigned long)handler, ret);
-+
-+	return ret;
-+}
-+
-+/*
-+ * sys_uintr_unregister_handler - Teardown user interrupt handler for receiver.
-+ */
-+SYSCALL_DEFINE1(uintr_unregister_handler, unsigned int, flags)
-+{
-+	int ret;
-+
-+	if (!uintr_arch_enabled())
-+		return -EOPNOTSUPP;
-+
-+	if (flags)
-+		return -EINVAL;
-+
-+	ret = do_uintr_unregister_handler();
-+
-+	pr_debug("recv: unregister handler task=%d flags %d ret %d\n",
-+		 current->pid, flags, ret);
-+
-+	return ret;
 +}
 -- 
 2.33.0
