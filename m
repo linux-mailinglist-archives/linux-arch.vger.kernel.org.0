@@ -2,143 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E54DF4083C1
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 07:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3480A40841C
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 07:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbhIMFSC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Sep 2021 01:18:02 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:17194 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbhIMFSB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Sep 2021 01:18:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1631510195;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=tAfhz6QufKiLrm/ed7wZTVkjNN2LQnGrxYZQDIJXvMw=;
-    b=AwntNUwXfkOP31jyIciNWYM9hbXPiKePY2V4yEj/QzJlHqJzQr82cXpl0fv7MxqH+G
-    JQvM6yEZ4VCaTRvHDEmR24YVS7AZ9oZ1lST7Q+5LcgrsRZvjeiQRsTIw3o9d9nWW6RjA
-    VyJ0BrHROsMlvDoSYIcr1814OHic8Mmy+scIggwOCDp+rhZt+rpN8iD5CtQTMJOZE3dr
-    fXGcDfTy4BUSjC+UKbt78aZEV0uMOca58fngdizn92alPwL5r0BJUrrHcZcxv5ul/h51
-    3YqWtS7xMP+P2BI8SubXDP2fWCazJkB02rJErKOLa5VGj8DyaVD8JSNYVpsNrqYUkk3U
-    vfUg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43vUGE="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.33.3 SBL|AUTH)
-    with ESMTPSA id e07e13x8D5GYFQ6
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Mon, 13 Sep 2021 07:16:34 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 1/2] mips: convert syscall to generic entry
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <7e2c0db1-bf5a-8f16-bc43-81830a30045e@wanyeetech.com>
-Date:   Mon, 13 Sep 2021 07:16:32 +0200
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
-        luto@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-arch@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B2163252-3423-413C-8C35-B6E52C73E598@goldelico.com>
-References: <cover.1630929519.git.chenfeiyang@loongson.cn>
- <ec14e242a73227bf5314bbc1b585919500e6fbc7.1630929519.git.chenfeiyang@loongson.cn>
- <59feb382-a4ab-c94e-8f71-10ad0c0ceceb@flygoat.com>
- <CACWXhKnA24KuJo33+OitPQVRRd3g_05DWRC2Dsnm7w8hVyKjNQ@mail.gmail.com>
- <20210908085150.GA5622@alpha.franken.de>
- <13d237ab-0ef3-772d-6f21-ff023781efcf@flygoat.com>
- <7e2c0db1-bf5a-8f16-bc43-81830a30045e@wanyeetech.com>
-To:     Zhou Yanjie <zhouyu@wanyeetech.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
+        id S237033AbhIMFyx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Sep 2021 01:54:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55132 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237053AbhIMFyx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Sep 2021 01:54:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1631512417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lmIEdzAE8KtfMvdI7Vd3u1eV+5W/XqJ3cF9Jvl0CpQM=;
+        b=hba9LN/K8sGgLov/lZRQ6l3oSQ+7L+pv5G+v2J8/Z0HMbT3DYz02f4jX5DU7by81SqSv1U
+        eDyW2pgFe0A3K52vJB8EBdW5sR3IskS8SyW57BuFogt3KmtOeA9Tcb7AMcYJFmk9kG1yZF
+        Z7hLO+6Vc2vi5HLduNMSzDXAvW8+cpw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-408-YwERPJbqOLqSpSsdLIlkKw-1; Mon, 13 Sep 2021 01:53:36 -0400
+X-MC-Unique: YwERPJbqOLqSpSsdLIlkKw-1
+Received: by mail-wm1-f70.google.com with SMTP id v21-20020a05600c215500b002fa7eb53754so1418388wml.4
+        for <linux-arch@vger.kernel.org>; Sun, 12 Sep 2021 22:53:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lmIEdzAE8KtfMvdI7Vd3u1eV+5W/XqJ3cF9Jvl0CpQM=;
+        b=ChtHMn1cc+L7CJRteAUGdlzJ194RYFzQ9Mcp4S6p9MjOGWz24vG0mqZ4foBMfg9Q2x
+         nbrxLLP1HDdnf4NM6+iAL23/9TiDwQwo6yOkF87gf97iQuciqoR9HVu2xfMGH0MDapL5
+         pKGrA8tDLYkwTYP/pCCn1isCr18q2xz6guYOnoipfYF6zsvb3UQAUWlUT5QwBi/OEWF4
+         F7TTAjLqIc1m1EcGsQPZBzn9khG9jtOR9vyvmV1SwIiZIE5nmBpp12nTbFDTjMPSOcsq
+         PPTke71jS1STyOqMOhqdYEIS6uRDJfwLoap6OcWFimWDBvIYFzpx5k/sQ7vGlM2cukdm
+         QCVA==
+X-Gm-Message-State: AOAM531MgJ5gYhA1IE8ZJ4CPGtlNpVuW3hjPmEoAMOAhPZf0v36qaW/G
+        NRYLegwvD8lI1i7byoLvQICzj3ekZXWnFDfuqP8wM7fkMJsknxUtH4xw2MJ6fHfAHf8lFR/W33z
+        o+6BDUP/GEx4OsQ66C4WgRg==
+X-Received: by 2002:a7b:c4d2:: with SMTP id g18mr9470569wmk.135.1631512415168;
+        Sun, 12 Sep 2021 22:53:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxTQJ4DZD+V1695amUyGJ/+8H3ZLTdwwSERHH6LaZYj9FQdGTZerMCI+h0RgKu+afW5N87HtQ==
+X-Received: by 2002:a7b:c4d2:: with SMTP id g18mr9470536wmk.135.1631512414954;
+        Sun, 12 Sep 2021 22:53:34 -0700 (PDT)
+Received: from redhat.com ([2.55.27.174])
+        by smtp.gmail.com with ESMTPSA id k29sm5687574wms.24.2021.09.12.22.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Sep 2021 22:53:33 -0700 (PDT)
+Date:   Mon, 13 Sep 2021 01:53:27 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?utf-8?B?6ZmI6aOe5oms?= <chris.chenfeiyang@gmail.com>
-X-Mailer: Apple Mail (2.3445.104.21)
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
+Message-ID: <20210913013815-mutt-send-email-mst@kernel.org>
+References: <d21a2a2d-4670-ba85-ce9a-fc8ea80ef1be@linux.intel.com>
+ <20210829112105-mutt-send-email-mst@kernel.org>
+ <09b340dd-c8a8-689c-4dad-4fe0e36d39ae@linux.intel.com>
+ <20210829181635-mutt-send-email-mst@kernel.org>
+ <3a88a255-a528-b00a-912b-e71198d5f58f@linux.intel.com>
+ <20210830163723-mutt-send-email-mst@kernel.org>
+ <69fc30f4-e3e2-add7-ec13-4db3b9cc0cbd@linux.intel.com>
+ <20210910054044-mutt-send-email-mst@kernel.org>
+ <f672dc1c-5280-7bbc-7a56-7c7aab31725c@linux.intel.com>
+ <20210911195006-mutt-send-email-mst@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210911195006-mutt-send-email-mst@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+On Sat, Sep 11, 2021 at 07:54:43PM -0400, Michael S. Tsirkin wrote:
+> On Fri, Sep 10, 2021 at 09:34:45AM -0700, Andi Kleen wrote:
+> > > > that's why
+> > > > an extra level of defense of ioremap opt-in is useful.
+> > > OK even assuming this, why is pci_iomap opt-in useful?
+> > > That never happens before probe - there's simply no pci_device then.
+> > 
+> > 
+> > Hmm, yes that's true. I guess we can make it default to opt-in for
+> > pci_iomap.
+> > 
+> > It only really matters for device less ioremaps.
+> 
+> OK. And same thing for other things with device, such as
+> devm_platform_ioremap_resource.
+> If we agree on all that, this will basically remove virtio
+> changes from the picture ;)
 
 
-> Am 09.09.2021 um 14:45 schrieb Zhou Yanjie <zhouyu@wanyeetech.com>:
->=20
-> Hi,
->=20
-> On 2021/9/8 =E4=B8=8B=E5=8D=888:41, Jiaxun Yang wrote:
->>=20
->> =E5=9C=A8 2021/9/8 16:51, Thomas Bogendoerfer =E5=86=99=E9=81=93:
->>> On Wed, Sep 08, 2021 at 10:08:47AM +0800, =E9=99=88=E9=A3=9E=E6=89=AC =
-wrote:
->>>> On Tue, 7 Sept 2021 at 21:49, Jiaxun Yang <jiaxun.yang@flygoat.com> =
-wrote:
->>>>>=20
->>>>> =E5=9C=A8 2021/9/7 14:16, FreeFlyingSheep =E5=86=99=E9=81=93:
->>>>>> From: Feiyang Chen <chenfeiyang@loongson.cn>
->>>>>>=20
->>>>>> Convert mips syscall to use the generic entry infrastructure from
->>>>>> kernel/entry/*.
->>>>>>=20
->>>>>> There are a few special things on mips:
->>>>>>=20
->>>>>> - There is one type of syscall on mips32 (scall32-o32) and three =
-types
->>>>>> of syscalls on mips64 (scall64-o32, scall64-n32 and scall64-n64). =
-Now
->>>>>> convert to C code to handle different types of syscalls.
->>>>>>=20
->>>>>> - For some special syscalls (e.g. fork, clone, clone3 and =
-sysmips),
->>>>>> save_static_function() wrapper is used to save static registers. =
-Now
->>>>>> SAVE_STATIC is used in handle_sys before calling do_syscall(), so =
-the
->>>>>> save_static_function() wrapper can be removed.
->>>>>>=20
->>>>>> - For sigreturn/rt_sigreturn and sysmips, inline assembly is used =
-to
->>>>>> jump to syscall_exit directly for skipping setting the error flag =
-and
->>>>>> restoring all registers. Now use regs->regs[27] to mark whether =
-to
->>>>>> handle the error flag and always restore all registers in =
-handle_sys,
->>>>>> so these functions can return normally as other architecture.
->>>>> Hmm, that would give us overhead of register context on these =
-syscalls.
->>>>>=20
->>>>> I guess it's worthy?
->>>>>=20
->>>> Hi, Jiaxun,
->>>>=20
->>>> Saving and restoring registers against different system calls can =
-be
->>>> difficult due to the use of generic entry.
->>>> To avoid a lot of duplicate code, I think the overhead is worth it.
->>> could you please provide numbers for that ? This code still runs
->>> on low end MIPS CPUs for which overhead might mean a different
->>> ballpark than some highend Loongson CPUs.
->>=20
->> It shows ~3% regression for UnixBench on MT7621A (1004Kec).
->>=20
->> + Yanjie could you help with a run on ingenic platform?
->=20
->=20
-> Sure, I can help with JZ4775, JZ4780, X1000, X1830, X2000 from =
-Ingenic, and SF16A18, SF19A2890 from SiFlower.
->=20
-> + Paul could you help with a run on JZ4760 and JZ4770?
->=20
-> + Nikolaus could you help with a run on JZ4730?
+Something else that was pointed out to me:
 
-Have not observed a negative effect on jz4730. Same for jz4780.
-But I have not done performance tests.
+         fs->window_kaddr = devm_memremap_pages(&vdev->dev, pgmap);
+         if (IS_ERR(fs->window_kaddr))
+                 return PTR_ERR(fs->window_kaddr);
 
-BR,
-Nikolaus=
+
+looks like if we forget to set the shared flag then it will
+corrupt the DAX data?
+
+
+> -- 
+> MST
+> 
+
