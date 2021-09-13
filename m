@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 308F9409DB3
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 22:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E76D409DBF
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 22:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347860AbhIMUFx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Sep 2021 16:05:53 -0400
-Received: from mga05.intel.com ([192.55.52.43]:38689 "EHLO mga05.intel.com"
+        id S1347939AbhIMUGA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Sep 2021 16:06:00 -0400
+Received: from mga05.intel.com ([192.55.52.43]:38692 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347789AbhIMUFr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1347790AbhIMUFr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Mon, 13 Sep 2021 16:05:47 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="307336365"
+X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="307336367"
 X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="307336365"
+   d="scan'208";a="307336367"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 13:04:30 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 13:04:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="469643912"
+   d="scan'208";a="469643915"
 Received: from sohilbuildbox.sc.intel.com (HELO localhost.localdomain) ([172.25.110.4])
   by fmsmga007.fm.intel.com with ESMTP; 13 Sep 2021 13:04:30 -0700
 From:   Sohil Mehta <sohil.mehta@intel.com>
@@ -45,9 +45,9 @@ Cc:     Sohil Mehta <sohil.mehta@intel.com>,
         Ramesh Thomas <ramesh.thomas@intel.com>,
         linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 04/13] x86/fpu/xstate: Enumerate User Interrupts supervisor state
-Date:   Mon, 13 Sep 2021 13:01:23 -0700
-Message-Id: <20210913200132.3396598-5-sohil.mehta@intel.com>
+Subject: [RFC PATCH 05/13] x86/irq: Reserve a user IPI notification vector
+Date:   Mon, 13 Sep 2021 13:01:24 -0700
+Message-Id: <20210913200132.3396598-6-sohil.mehta@intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210913200132.3396598-1-sohil.mehta@intel.com>
 References: <20210913200132.3396598-1-sohil.mehta@intel.com>
@@ -57,167 +57,155 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Enable xstate supervisor support for User Interrupts by default.
+A user interrupt notification vector is used on the receiver's cpu to
+identify an interrupt as a user interrupt (and not a kernel interrupt).
+Hardware uses the same notification vector to generate an IPI from a
+sender's cpu core when the SENDUIPI instruction is executed.
 
-The user interrupt state for a task consists of the MSR state and the
-User Interrupt Flag (UIF) value. XSAVES and XRSTORS handle saving and
-restoring both of these states.
+Typically, the kernel shouldn't receive an interrupt with this vector.
+However, it is possible that the kernel might receive this vector.
 
-<The supervisor XSTATE code might be reworked based on issues reported
-in the past. The Uintr context switching code would also need rework and
-additional testing in that regard.>
+Scenario that can cause the spurious interrupt:
 
+Step	cpu 0 (receiver task)		cpu 1 (sender task)
+----	---------------------		-------------------
+1	task is running
+2					executes SENDUIPI
+3					IPI sent
+4	context switched out
+5	IPI delivered
+	(kernel interrupt detected)
+
+A kernel interrupt can be detected, if a receiver task gets scheduled
+out after the SENDUIPI-based IPI was sent but before the IPI was
+delivered.
+
+The kernel doesn't need to do anything in this case other than receiving
+the interrupt and clearing the local APIC. The user interrupt is always
+stored in the receiver's UPID before the IPI is generated. When the
+receiver gets scheduled back the interrupt would be delivered based on
+its UPID.
+
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 ---
- arch/x86/include/asm/fpu/types.h  | 20 +++++++++++++++++++-
- arch/x86/include/asm/fpu/xstate.h |  3 ++-
- arch/x86/kernel/cpu/common.c      |  6 ++++++
- arch/x86/kernel/fpu/xstate.c      | 20 +++++++++++++++++---
- 4 files changed, 44 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/hardirq.h     |  3 +++
+ arch/x86/include/asm/idtentry.h    |  4 ++++
+ arch/x86/include/asm/irq_vectors.h |  5 ++++-
+ arch/x86/kernel/idt.c              |  3 +++
+ arch/x86/kernel/irq.c              | 33 ++++++++++++++++++++++++++++++
+ 5 files changed, 47 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/fpu/types.h b/arch/x86/include/asm/fpu/types.h
-index f5a38a5f3ae1..b614f1416bea 100644
---- a/arch/x86/include/asm/fpu/types.h
-+++ b/arch/x86/include/asm/fpu/types.h
-@@ -118,7 +118,7 @@ enum xfeature {
- 	XFEATURE_RSRVD_COMP_11,
- 	XFEATURE_RSRVD_COMP_12,
- 	XFEATURE_RSRVD_COMP_13,
--	XFEATURE_RSRVD_COMP_14,
-+	XFEATURE_UINTR,
- 	XFEATURE_LBR,
+diff --git a/arch/x86/include/asm/hardirq.h b/arch/x86/include/asm/hardirq.h
+index 275e7fd20310..279afc01f1ac 100644
+--- a/arch/x86/include/asm/hardirq.h
++++ b/arch/x86/include/asm/hardirq.h
+@@ -19,6 +19,9 @@ typedef struct {
+ 	unsigned int kvm_posted_intr_ipis;
+ 	unsigned int kvm_posted_intr_wakeup_ipis;
+ 	unsigned int kvm_posted_intr_nested_ipis;
++#endif
++#ifdef CONFIG_X86_USER_INTERRUPTS
++	unsigned int uintr_spurious_count;
+ #endif
+ 	unsigned int x86_platform_ipis;	/* arch dependent */
+ 	unsigned int apic_perf_irqs;
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 1345088e9902..5929a6f9eeee 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -671,6 +671,10 @@ DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_WAKEUP_VECTOR,	sysvec_kvm_posted_intr_wakeup
+ DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_NESTED_VECTOR,	sysvec_kvm_posted_intr_nested_ipi);
+ #endif
  
- 	XFEATURE_MAX,
-@@ -135,6 +135,7 @@ enum xfeature {
- #define XFEATURE_MASK_PT		(1 << XFEATURE_PT_UNIMPLEMENTED_SO_FAR)
- #define XFEATURE_MASK_PKRU		(1 << XFEATURE_PKRU)
- #define XFEATURE_MASK_PASID		(1 << XFEATURE_PASID)
-+#define XFEATURE_MASK_UINTR		(1 << XFEATURE_UINTR)
- #define XFEATURE_MASK_LBR		(1 << XFEATURE_LBR)
- 
- #define XFEATURE_MASK_FPSSE		(XFEATURE_MASK_FP | XFEATURE_MASK_SSE)
-@@ -237,6 +238,23 @@ struct pkru_state {
- 	u32				pad;
- } __packed;
- 
-+/*
-+ * State component 14 is supervisor state used for User Interrupts state.
-+ * The size of this state is 48 bytes
-+ */
-+struct uintr_state {
-+	u64 handler;
-+	u64 stack_adjust;
-+	u32 uitt_size;
-+	u8  uinv;
-+	u8  pad1;
-+	u8  pad2;
-+	u8  uif_pad3;		/* bit 7 - UIF, bits 6:0 - reserved */
-+	u64 upid_addr;
-+	u64 uirr;
-+	u64 uitt_addr;
-+} __packed;
++#ifdef CONFIG_X86_USER_INTERRUPTS
++DECLARE_IDTENTRY_SYSVEC(UINTR_NOTIFICATION_VECTOR,	sysvec_uintr_spurious_interrupt);
++#endif
 +
- /*
-  * State component 15: Architectural LBR configuration state.
-  * The size of Arch LBR state depends on the number of LBRs (lbr_depth).
-diff --git a/arch/x86/include/asm/fpu/xstate.h b/arch/x86/include/asm/fpu/xstate.h
-index 109dfcc75299..4dd4e83c0c9d 100644
---- a/arch/x86/include/asm/fpu/xstate.h
-+++ b/arch/x86/include/asm/fpu/xstate.h
-@@ -44,7 +44,8 @@
- 	(XFEATURE_MASK_USER_SUPPORTED & ~XFEATURE_MASK_PKRU)
+ #if IS_ENABLED(CONFIG_HYPERV)
+ DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_hyperv_callback);
+ DECLARE_IDTENTRY_SYSVEC(HYPERV_REENLIGHTENMENT_VECTOR,	sysvec_hyperv_reenlightenment);
+diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
+index 43dcb9284208..d26faa504931 100644
+--- a/arch/x86/include/asm/irq_vectors.h
++++ b/arch/x86/include/asm/irq_vectors.h
+@@ -104,7 +104,10 @@
+ #define HYPERV_STIMER0_VECTOR		0xed
+ #endif
  
- /* All currently supported supervisor features */
--#define XFEATURE_MASK_SUPERVISOR_SUPPORTED (XFEATURE_MASK_PASID)
-+#define XFEATURE_MASK_SUPERVISOR_SUPPORTED (XFEATURE_MASK_PASID | \
-+					    XFEATURE_MASK_UINTR)
- 
- /*
-  * A supervisor state component may not always contain valuable information,
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 55fee930b6d1..3a0a3f5cfe0f 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -334,6 +334,12 @@ static __always_inline void setup_uintr(struct cpuinfo_x86 *c)
- 	if (!cpu_has(c, X86_FEATURE_UINTR))
- 		goto disable_uintr;
- 
-+	/* Confirm XSAVE support for UINTR is present. */
-+	if (!cpu_has_xfeatures(XFEATURE_MASK_UINTR, NULL)) {
-+		pr_info_once("x86: User Interrupts (UINTR) not enabled. XSAVE support for UINTR is missing.\n");
-+		goto clear_uintr_cap;
-+	}
+-#define LOCAL_TIMER_VECTOR		0xec
++/* Vector for User interrupt notifications */
++#define UINTR_NOTIFICATION_VECTOR       0xec
 +
- 	/*
- 	 * User Interrupts currently doesn't support PTI. For processors that
- 	 * support User interrupts PTI in auto mode will default to off.  Need
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index c8def1b7f8fb..ab19403effb0 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -38,6 +38,10 @@ static const char *xfeature_names[] =
- 	"Processor Trace (unused)"	,
- 	"Protection Keys User registers",
- 	"PASID state",
-+	"unknown xstate feature 11",
-+	"unknown xstate feature 12",
-+	"unknown xstate feature 13",
-+	"User Interrupts registers",
- 	"unknown xstate feature"	,
- };
++#define LOCAL_TIMER_VECTOR		0xeb
  
-@@ -53,6 +57,10 @@ static short xsave_cpuid_features[] __initdata = {
- 	X86_FEATURE_INTEL_PT,
- 	X86_FEATURE_PKU,
- 	X86_FEATURE_ENQCMD,
-+	-1,			/* Unknown 11 */
-+	-1,			/* Unknown 12 */
-+	-1,			/* Unknown 13 */
-+	X86_FEATURE_UINTR,
- };
+ #define NR_VECTORS			 256
  
- /*
-@@ -236,6 +244,7 @@ static void __init print_xstate_features(void)
- 	print_xstate_feature(XFEATURE_MASK_Hi16_ZMM);
- 	print_xstate_feature(XFEATURE_MASK_PKRU);
- 	print_xstate_feature(XFEATURE_MASK_PASID);
-+	print_xstate_feature(XFEATURE_MASK_UINTR);
+diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
+index df0fa695bb09..d8c45e0728f0 100644
+--- a/arch/x86/kernel/idt.c
++++ b/arch/x86/kernel/idt.c
+@@ -147,6 +147,9 @@ static const __initconst struct idt_data apic_idts[] = {
+ 	INTG(POSTED_INTR_WAKEUP_VECTOR,		asm_sysvec_kvm_posted_intr_wakeup_ipi),
+ 	INTG(POSTED_INTR_NESTED_VECTOR,		asm_sysvec_kvm_posted_intr_nested_ipi),
+ # endif
++#ifdef CONFIG_X86_USER_INTERRUPTS
++	INTG(UINTR_NOTIFICATION_VECTOR,		asm_sysvec_uintr_spurious_interrupt),
++#endif
+ # ifdef CONFIG_IRQ_WORK
+ 	INTG(IRQ_WORK_VECTOR,			asm_sysvec_irq_work),
+ # endif
+diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
+index e28f6a5d14f1..e3c35668c7c5 100644
+--- a/arch/x86/kernel/irq.c
++++ b/arch/x86/kernel/irq.c
+@@ -181,6 +181,12 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+ 		seq_printf(p, "%10u ",
+ 			   irq_stats(j)->kvm_posted_intr_wakeup_ipis);
+ 	seq_puts(p, "  Posted-interrupt wakeup event\n");
++#endif
++#ifdef CONFIG_X86_USER_INTERRUPTS
++	seq_printf(p, "%*s: ", prec, "UIS");
++	for_each_online_cpu(j)
++		seq_printf(p, "%10u ", irq_stats(j)->uintr_spurious_count);
++	seq_puts(p, "  User-interrupt spurious event\n");
+ #endif
+ 	return 0;
  }
+@@ -325,6 +331,33 @@ DEFINE_IDTENTRY_SYSVEC_SIMPLE(sysvec_kvm_posted_intr_nested_ipi)
+ }
+ #endif
  
- /*
-@@ -372,7 +381,8 @@ static void __init print_xstate_offset_size(void)
- 	 XFEATURE_MASK_PKRU |			\
- 	 XFEATURE_MASK_BNDREGS |		\
- 	 XFEATURE_MASK_BNDCSR |			\
--	 XFEATURE_MASK_PASID)
-+	 XFEATURE_MASK_PASID |			\
-+	 XFEATURE_MASK_UINTR)
++#ifdef CONFIG_X86_USER_INTERRUPTS
++/*
++ * Handler for UINTR_NOTIFICATION_VECTOR.
++ *
++ * The notification vector is used by the cpu to detect a User Interrupt. In
++ * the typical usage, the cpu would handle this interrupt and clear the local
++ * apic.
++ *
++ * However, it is possible that the kernel might receive this vector. This can
++ * happen if the receiver thread was running when the interrupt was sent but it
++ * got scheduled out before the interrupt was delivered. The kernel doesn't
++ * need to do anything other than clearing the local APIC. A pending user
++ * interrupt is always saved in the receiver's UPID which can be referenced
++ * when the receiver gets scheduled back.
++ *
++ * If the kernel receives a storm of these, it could mean an issue with the
++ * kernel's saving and restoring of the User Interrupt MSR state; Specifically,
++ * the notification vector bits in the IA32_UINTR_MISC_MSR.
++ */
++DEFINE_IDTENTRY_SYSVEC_SIMPLE(sysvec_uintr_spurious_interrupt)
++{
++	/* TODO: Add entry-exit tracepoints */
++	ack_APIC_irq();
++	inc_irq_stat(uintr_spurious_count);
++}
++#endif
++
  
- /*
-  * setup the xstate image representing the init state
-@@ -532,6 +542,7 @@ static void check_xstate_against_struct(int nr)
- 	XCHECK_SZ(sz, nr, XFEATURE_Hi16_ZMM,  struct avx_512_hi16_state);
- 	XCHECK_SZ(sz, nr, XFEATURE_PKRU,      struct pkru_state);
- 	XCHECK_SZ(sz, nr, XFEATURE_PASID,     struct ia32_pasid_state);
-+	XCHECK_SZ(sz, nr, XFEATURE_UINTR,     struct uintr_state);
- 
- 	/*
- 	 * Make *SURE* to add any feature numbers in below if
-@@ -539,9 +550,12 @@ static void check_xstate_against_struct(int nr)
- 	 * numbers.
- 	 */
- 	if ((nr < XFEATURE_YMM) ||
--	    (nr >= XFEATURE_MAX) ||
- 	    (nr == XFEATURE_PT_UNIMPLEMENTED_SO_FAR) ||
--	    ((nr >= XFEATURE_RSRVD_COMP_11) && (nr <= XFEATURE_LBR))) {
-+	    (nr == XFEATURE_RSRVD_COMP_11) ||
-+	    (nr == XFEATURE_RSRVD_COMP_12) ||
-+	    (nr == XFEATURE_RSRVD_COMP_13) ||
-+	    (nr == XFEATURE_LBR) ||
-+	    (nr >= XFEATURE_MAX)) {
- 		WARN_ONCE(1, "no structure for xstate: %d\n", nr);
- 		XSTATE_WARN_ON(1);
- 	}
+ #ifdef CONFIG_HOTPLUG_CPU
+ /* A cpu has been removed from cpu_online_mask.  Reset irq affinities. */
 -- 
 2.33.0
 
