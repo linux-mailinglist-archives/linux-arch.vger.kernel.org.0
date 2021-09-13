@@ -2,30 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B237409DCD
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 22:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E89C409E21
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 22:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348045AbhIMUGL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Sep 2021 16:06:11 -0400
-Received: from mga03.intel.com ([134.134.136.65]:19216 "EHLO mga03.intel.com"
+        id S243593AbhIMU26 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Sep 2021 16:28:58 -0400
+Received: from mga12.intel.com ([192.55.52.136]:23034 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347866AbhIMUFx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 13 Sep 2021 16:05:53 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="221830808"
+        id S230404AbhIMU25 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Sep 2021 16:28:57 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="201296841"
 X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="221830808"
+   d="scan'208";a="201296841"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 13:04:34 -0700
-X-ExtLoop1: 1
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 13:27:41 -0700
 X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="469643943"
-Received: from sohilbuildbox.sc.intel.com (HELO localhost.localdomain) ([172.25.110.4])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Sep 2021 13:04:33 -0700
-From:   Sohil Mehta <sohil.mehta@intel.com>
-To:     x86@kernel.org
-Cc:     Sohil Mehta <sohil.mehta@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
+   d="scan'208";a="469653660"
+Received: from srishtim-mobl1.amr.corp.intel.com (HELO [10.212.166.48]) ([10.212.166.48])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 13:27:40 -0700
+Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
+To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
+Cc:     Tony Luck <tony.luck@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         "H . Peter Anvin" <hpa@zytor.com>,
@@ -45,221 +42,77 @@ Cc:     Sohil Mehta <sohil.mehta@intel.com>,
         Ramesh Thomas <ramesh.thomas@intel.com>,
         linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 13/13] selftests/x86: Add basic tests for User IPI
-Date:   Mon, 13 Sep 2021 13:01:32 -0700
-Message-Id: <20210913200132.3396598-14-sohil.mehta@intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210913200132.3396598-1-sohil.mehta@intel.com>
 References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <c08f38db-77da-c50e-23f7-b3a76688deeb@intel.com>
+Date:   Mon, 13 Sep 2021 13:27:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20210913200132.3396598-1-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Include 2 basic tests for receiving a User IPI:
-1. Receiver is spinning in userspace.
-2. Receiver is blocked in the kernel.
+On 9/13/21 1:01 PM, Sohil Mehta wrote:
+> User Interrupts (Uintr) is a hardware technology that enables delivering
+> interrupts directly to user space.
 
-The selftests need gcc with 'muintr' support to compile.
+Your problem in all of this is going to be convincing folks that this is
+a problem worth solving.  I'd start this off with something
+attention-grabbing.
 
-GCC 11 (recently released) has support for this.
+Two things.  Good, snazzy writing doesn't repeat words.  You repeated
+"interrupt" twice in that first sentence.  It also doesn't get my
+attention.  Here's a more concise way of saying it, and also adding
+something to get the reader's attention:
 
-Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
----
- tools/testing/selftests/x86/Makefile |  10 ++
- tools/testing/selftests/x86/uintr.c  | 147 +++++++++++++++++++++++++++
- 2 files changed, 157 insertions(+)
- create mode 100644 tools/testing/selftests/x86/uintr.c
-
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index b4142cd1c5c2..38588221b09e 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -9,6 +9,7 @@ UNAME_M := $(shell uname -m)
- CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
- CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
- CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
-+CAN_BUILD_UINTR := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c -muintr)
- 
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
-@@ -19,6 +20,11 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			vdso_restorer
- TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
- 			corrupt_xstate_header
-+
-+ifeq ($(CAN_BUILD_UINTR),1)
-+TARGETS_C_64BIT_ONLY := $(TARGETS_C_64BIT_ONLY) uintr
-+endif
-+
- # Some selftests require 32bit support enabled also on 64bit systems
- TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
- 
-@@ -41,6 +47,10 @@ ifeq ($(CAN_BUILD_WITH_NOPIE),1)
- CFLAGS += -no-pie
- endif
- 
-+ifeq ($(CAN_BUILD_UINTR),1)
-+CFLAGS += -muintr
-+endif
-+
- define gen-target-rule-32
- $(1) $(1)_32: $(OUTPUT)/$(1)_32
- .PHONY: $(1) $(1)_32
-diff --git a/tools/testing/selftests/x86/uintr.c b/tools/testing/selftests/x86/uintr.c
-new file mode 100644
-index 000000000000..61a53526f2fa
---- /dev/null
-+++ b/tools/testing/selftests/x86/uintr.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2020, Intel Corporation.
-+ *
-+ * Sohil Mehta <sohil.mehta@intel.com>
-+ */
-+#define _GNU_SOURCE
-+#include <syscall.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <x86gprintrin.h>
-+#include <pthread.h>
-+#include <stdlib.h>
-+
-+#ifndef __x86_64__
-+# error This test is 64-bit only
-+#endif
-+
-+#ifndef __NR_uintr_register_handler
-+#define __NR_uintr_register_handler	449
-+#define __NR_uintr_unregister_handler	450
-+#define __NR_uintr_create_fd		451
-+#define __NR_uintr_register_sender	452
-+#define __NR_uintr_unregister_sender	453
-+#define __NR_uintr_wait			454
-+#endif
-+
-+#define uintr_register_handler(handler, flags)	syscall(__NR_uintr_register_handler, handler, flags)
-+#define uintr_unregister_handler(flags)		syscall(__NR_uintr_unregister_handler, flags)
-+#define uintr_create_fd(vector, flags)		syscall(__NR_uintr_create_fd, vector, flags)
-+#define uintr_register_sender(fd, flags)	syscall(__NR_uintr_register_sender, fd, flags)
-+#define uintr_unregister_sender(fd, flags)	syscall(__NR_uintr_unregister_sender, fd, flags)
-+#define uintr_wait(flags)			syscall(__NR_uintr_wait, flags)
-+
-+unsigned long uintr_received;
-+unsigned int uintr_fd;
-+
-+void __attribute__((interrupt))__attribute__((target("general-regs-only", "inline-all-stringops")))
-+uintr_handler(struct __uintr_frame *ui_frame,
-+	      unsigned long long vector)
-+{
-+	uintr_received = 1;
-+}
-+
-+void receiver_setup_interrupt(void)
-+{
-+	int vector = 0;
-+	int ret;
-+
-+	/* Register interrupt handler */
-+	if (uintr_register_handler(uintr_handler, 0)) {
-+		printf("[FAIL]\tInterrupt handler register error\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* Create uintr_fd */
-+	ret = uintr_create_fd(vector, 0);
-+	if (ret < 0) {
-+		printf("[FAIL]\tInterrupt vector registration error\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	uintr_fd = ret;
-+}
-+
-+void *sender_thread(void *arg)
-+{
-+	long sleep_usec = (long)arg;
-+	int uipi_index;
-+
-+	uipi_index = uintr_register_sender(uintr_fd, 0);
-+	if (uipi_index < 0) {
-+		printf("[FAIL]\tSender register error\n");
-+		return NULL;
-+	}
-+
-+	/* Sleep before sending IPI to allow the receiver to block in the kernel */
-+	if (sleep_usec)
-+		usleep(sleep_usec);
-+
-+	printf("\tother thread: sending IPI\n");
-+	_senduipi(uipi_index);
-+
-+	uintr_unregister_sender(uintr_fd, 0);
-+
-+	return NULL;
-+}
-+
-+static inline void cpu_relax(void)
-+{
-+	asm volatile("rep; nop" ::: "memory");
-+}
-+
-+void test_base_ipi(void)
-+{
-+	pthread_t pt;
-+
-+	uintr_received = 0;
-+	if (pthread_create(&pt, NULL, &sender_thread, NULL)) {
-+		printf("[FAIL]\tError creating sender thread\n");
-+		return;
-+	}
-+
-+	printf("[RUN]\tSpin in userspace (waiting for interrupts)\n");
-+	// Keep spinning until interrupt received
-+	while (!uintr_received)
-+		cpu_relax();
-+
-+	printf("[OK]\tUser interrupt received\n");
-+}
-+
-+void test_blocking_ipi(void)
-+{
-+	pthread_t pt;
-+	long sleep_usec;
-+
-+	uintr_received = 0;
-+	sleep_usec = 1000;
-+	if (pthread_create(&pt, NULL, &sender_thread, (void *)sleep_usec)) {
-+		printf("[FAIL]\tError creating sender thread\n");
-+		return;
-+	}
-+
-+	printf("[RUN]\tBlock in the kernel (waiting for interrupts)\n");
-+	uintr_wait(0);
-+	if (uintr_received)
-+		printf("[OK]\tUser interrupt received\n");
-+	else
-+		printf("[FAIL]\tUser interrupt not received\n");
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	receiver_setup_interrupt();
-+
-+	/* Enable interrupts */
-+	_stui();
-+
-+	test_base_ipi();
-+
-+	test_blocking_ipi();
-+
-+	close(uintr_fd);
-+	uintr_unregister_handler(0);
-+
-+	exit(EXIT_SUCCESS);
-+}
--- 
-2.33.0
+	User Interrupts directly deliver events to user space and are
+	10x faster than the closest alternative.
 
