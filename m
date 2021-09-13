@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2638409DBD
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 22:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B237409DCD
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Sep 2021 22:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347922AbhIMUF6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Sep 2021 16:05:58 -0400
+        id S1348045AbhIMUGL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Sep 2021 16:06:11 -0400
 Received: from mga03.intel.com ([134.134.136.65]:19216 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347824AbhIMUFv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 13 Sep 2021 16:05:51 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="221830804"
+        id S1347866AbhIMUFx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Sep 2021 16:05:53 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="221830808"
 X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="221830804"
+   d="scan'208";a="221830808"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 13:04:33 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 13:04:34 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="469643940"
+   d="scan'208";a="469643943"
 Received: from sohilbuildbox.sc.intel.com (HELO localhost.localdomain) ([172.25.110.4])
   by fmsmga007.fm.intel.com with ESMTP; 13 Sep 2021 13:04:33 -0700
 From:   Sohil Mehta <sohil.mehta@intel.com>
@@ -45,9 +45,9 @@ Cc:     Sohil Mehta <sohil.mehta@intel.com>,
         Ramesh Thomas <ramesh.thomas@intel.com>,
         linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 12/13] x86/uintr: Wire up the user interrupt syscalls
-Date:   Mon, 13 Sep 2021 13:01:31 -0700
-Message-Id: <20210913200132.3396598-13-sohil.mehta@intel.com>
+Subject: [RFC PATCH 13/13] selftests/x86: Add basic tests for User IPI
+Date:   Mon, 13 Sep 2021 13:01:32 -0700
+Message-Id: <20210913200132.3396598-14-sohil.mehta@intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210913200132.3396598-1-sohil.mehta@intel.com>
 References: <20210913200132.3396598-1-sohil.mehta@intel.com>
@@ -57,136 +57,209 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Wire up the user interrupt receiver and sender related syscalls for
-x86_64.
+Include 2 basic tests for receiving a User IPI:
+1. Receiver is spinning in userspace.
+2. Receiver is blocked in the kernel.
 
-For rest of the architectures the syscalls are not implemented.
+The selftests need gcc with 'muintr' support to compile.
 
-<TODO: Reserve the syscall numbers for other architectures>
+GCC 11 (recently released) has support for this.
 
 Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 ---
- arch/x86/entry/syscalls/syscall_32.tbl |  6 ++++++
- arch/x86/entry/syscalls/syscall_64.tbl |  6 ++++++
- include/linux/syscalls.h               |  8 ++++++++
- include/uapi/asm-generic/unistd.h      | 15 ++++++++++++++-
- kernel/sys_ni.c                        |  8 ++++++++
- scripts/checksyscalls.sh               |  6 ++++++
- 6 files changed, 48 insertions(+), 1 deletion(-)
+ tools/testing/selftests/x86/Makefile |  10 ++
+ tools/testing/selftests/x86/uintr.c  | 147 +++++++++++++++++++++++++++
+ 2 files changed, 157 insertions(+)
+ create mode 100644 tools/testing/selftests/x86/uintr.c
 
-diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index 960a021d543e..d0e97f1f1173 100644
---- a/arch/x86/entry/syscalls/syscall_32.tbl
-+++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -453,3 +453,9 @@
- 446	i386	landlock_restrict_self	sys_landlock_restrict_self
- 447	i386	memfd_secret		sys_memfd_secret
- 448	i386	process_mrelease	sys_process_mrelease
-+449	i386	uintr_register_handler	sys_uintr_register_handler
-+450	i386	uintr_unregister_handler sys_uintr_unregister_handler
-+451	i386	uintr_create_fd		sys_uintr_create_fd
-+452	i386	uintr_register_sender	sys_uintr_register_sender
-+453	i386	uintr_unregister_sender	sys_uintr_unregister_sender
-+454	i386	uintr_wait		sys_uintr_wait
-diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index 18b5500ea8bf..444af44e5947 100644
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -370,6 +370,12 @@
- 446	common	landlock_restrict_self	sys_landlock_restrict_self
- 447	common	memfd_secret		sys_memfd_secret
- 448	common	process_mrelease	sys_process_mrelease
-+449	common	uintr_register_handler	sys_uintr_register_handler
-+450	common	uintr_unregister_handler sys_uintr_unregister_handler
-+451	common	uintr_create_fd		sys_uintr_create_fd
-+452	common	uintr_register_sender	sys_uintr_register_sender
-+453	common	uintr_unregister_sender	sys_uintr_unregister_sender
-+454	common	uintr_wait		sys_uintr_wait
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index b4142cd1c5c2..38588221b09e 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -9,6 +9,7 @@ UNAME_M := $(shell uname -m)
+ CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+ CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
+ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
++CAN_BUILD_UINTR := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c -muintr)
  
- #
- # Due to a historical design error, certain syscalls are numbered differently
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 252243c7783d..f47f64c36d87 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1060,6 +1060,14 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
- /* arch/x86/kernel/ioport.c */
- asmlinkage long sys_ioperm(unsigned long from, unsigned long num, int on);
- 
-+/* arch/x86/kernel/uintr_fd.c */
-+asmlinkage long sys_uintr_register_handler(u64 __user *handler, unsigned int flags);
-+asmlinkage long sys_uintr_unregister_handler(unsigned int flags);
-+asmlinkage long sys_uintr_create_fd(u64 vector, unsigned int flags);
-+asmlinkage long sys_uintr_register_sender(int uintr_fd, unsigned int flags);
-+asmlinkage long sys_uintr_unregister_sender(int uintr_fd, unsigned int flags);
-+asmlinkage long sys_uintr_wait(unsigned int flags);
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+@@ -19,6 +20,11 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			vdso_restorer
+ TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
+ 			corrupt_xstate_header
 +
- /* pciconfig: alpha, arm, arm64, ia64, sparc */
- asmlinkage long sys_pciconfig_read(unsigned long bus, unsigned long dfn,
- 				unsigned long off, unsigned long len,
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index 1c5fb86d455a..b9a8b344270a 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -880,8 +880,21 @@ __SYSCALL(__NR_memfd_secret, sys_memfd_secret)
- #define __NR_process_mrelease 448
- __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
- 
-+#define __NR_uintr_register_handler 449
-+__SYSCALL(__NR_uintr_register_handler, sys_uintr_register_handler)
-+#define __NR_uintr_unregister_handler 450
-+__SYSCALL(__NR_uintr_unregister_handler, sys_uintr_unregister_handler)
-+#define __NR_uintr_create_fd 451
-+__SYSCALL(__NR_uintr_create_fd, sys_uintr_create_fd)
-+#define __NR_uintr_register_sender 452
-+__SYSCALL(__NR_uintr_register_sender, sys_uintr_register_sender)
-+#define __NR_uintr_unregister_sender 453
-+__SYSCALL(__NR_uintr_unregister_sender, sys_uintr_unregister_sender)
-+#define __NR_uintr_wait 454
-+__SYSCALL(__NR_uintr_wait, sys_uintr_wait)
++ifeq ($(CAN_BUILD_UINTR),1)
++TARGETS_C_64BIT_ONLY := $(TARGETS_C_64BIT_ONLY) uintr
++endif
 +
- #undef __NR_syscalls
--#define __NR_syscalls 449
-+#define __NR_syscalls 455
+ # Some selftests require 32bit support enabled also on 64bit systems
+ TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
  
- /*
-  * 32 bit systems traditionally used different
-diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-index f43d89d92860..5d8b92ac197b 100644
---- a/kernel/sys_ni.c
-+++ b/kernel/sys_ni.c
-@@ -357,6 +357,14 @@ COND_SYSCALL(pkey_free);
- /* memfd_secret */
- COND_SYSCALL(memfd_secret);
+@@ -41,6 +47,10 @@ ifeq ($(CAN_BUILD_WITH_NOPIE),1)
+ CFLAGS += -no-pie
+ endif
  
-+/* user interrupts */
-+COND_SYSCALL(uintr_register_handler);
-+COND_SYSCALL(uintr_unregister_handler);
-+COND_SYSCALL(uintr_create_fd);
-+COND_SYSCALL(uintr_register_sender);
-+COND_SYSCALL(uintr_unregister_sender);
-+COND_SYSCALL(uintr_wait);
++ifeq ($(CAN_BUILD_UINTR),1)
++CFLAGS += -muintr
++endif
 +
- /*
-  * Architecture specific weak syscall entries.
-  */
-diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
-index fd9777f63f14..0969580d829c 100755
---- a/scripts/checksyscalls.sh
-+++ b/scripts/checksyscalls.sh
-@@ -204,6 +204,12 @@ cat << EOF
- #define __IGNORE__sysctl
- #define __IGNORE_arch_prctl
- #define __IGNORE_nfsservctl
-+#define __IGNORE_uintr_register_handler
-+#define __IGNORE_uintr_unregister_handler
-+#define __IGNORE_uintr_create_fd
-+#define __IGNORE_uintr_register_sender
-+#define __IGNORE_uintr_unregister_sender
-+#define __IGNORE_uintr_wait
- 
- /* ... including the "new" 32-bit uid syscalls */
- #define __IGNORE_lchown32
+ define gen-target-rule-32
+ $(1) $(1)_32: $(OUTPUT)/$(1)_32
+ .PHONY: $(1) $(1)_32
+diff --git a/tools/testing/selftests/x86/uintr.c b/tools/testing/selftests/x86/uintr.c
+new file mode 100644
+index 000000000000..61a53526f2fa
+--- /dev/null
++++ b/tools/testing/selftests/x86/uintr.c
+@@ -0,0 +1,147 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2020, Intel Corporation.
++ *
++ * Sohil Mehta <sohil.mehta@intel.com>
++ */
++#define _GNU_SOURCE
++#include <syscall.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <x86gprintrin.h>
++#include <pthread.h>
++#include <stdlib.h>
++
++#ifndef __x86_64__
++# error This test is 64-bit only
++#endif
++
++#ifndef __NR_uintr_register_handler
++#define __NR_uintr_register_handler	449
++#define __NR_uintr_unregister_handler	450
++#define __NR_uintr_create_fd		451
++#define __NR_uintr_register_sender	452
++#define __NR_uintr_unregister_sender	453
++#define __NR_uintr_wait			454
++#endif
++
++#define uintr_register_handler(handler, flags)	syscall(__NR_uintr_register_handler, handler, flags)
++#define uintr_unregister_handler(flags)		syscall(__NR_uintr_unregister_handler, flags)
++#define uintr_create_fd(vector, flags)		syscall(__NR_uintr_create_fd, vector, flags)
++#define uintr_register_sender(fd, flags)	syscall(__NR_uintr_register_sender, fd, flags)
++#define uintr_unregister_sender(fd, flags)	syscall(__NR_uintr_unregister_sender, fd, flags)
++#define uintr_wait(flags)			syscall(__NR_uintr_wait, flags)
++
++unsigned long uintr_received;
++unsigned int uintr_fd;
++
++void __attribute__((interrupt))__attribute__((target("general-regs-only", "inline-all-stringops")))
++uintr_handler(struct __uintr_frame *ui_frame,
++	      unsigned long long vector)
++{
++	uintr_received = 1;
++}
++
++void receiver_setup_interrupt(void)
++{
++	int vector = 0;
++	int ret;
++
++	/* Register interrupt handler */
++	if (uintr_register_handler(uintr_handler, 0)) {
++		printf("[FAIL]\tInterrupt handler register error\n");
++		exit(EXIT_FAILURE);
++	}
++
++	/* Create uintr_fd */
++	ret = uintr_create_fd(vector, 0);
++	if (ret < 0) {
++		printf("[FAIL]\tInterrupt vector registration error\n");
++		exit(EXIT_FAILURE);
++	}
++
++	uintr_fd = ret;
++}
++
++void *sender_thread(void *arg)
++{
++	long sleep_usec = (long)arg;
++	int uipi_index;
++
++	uipi_index = uintr_register_sender(uintr_fd, 0);
++	if (uipi_index < 0) {
++		printf("[FAIL]\tSender register error\n");
++		return NULL;
++	}
++
++	/* Sleep before sending IPI to allow the receiver to block in the kernel */
++	if (sleep_usec)
++		usleep(sleep_usec);
++
++	printf("\tother thread: sending IPI\n");
++	_senduipi(uipi_index);
++
++	uintr_unregister_sender(uintr_fd, 0);
++
++	return NULL;
++}
++
++static inline void cpu_relax(void)
++{
++	asm volatile("rep; nop" ::: "memory");
++}
++
++void test_base_ipi(void)
++{
++	pthread_t pt;
++
++	uintr_received = 0;
++	if (pthread_create(&pt, NULL, &sender_thread, NULL)) {
++		printf("[FAIL]\tError creating sender thread\n");
++		return;
++	}
++
++	printf("[RUN]\tSpin in userspace (waiting for interrupts)\n");
++	// Keep spinning until interrupt received
++	while (!uintr_received)
++		cpu_relax();
++
++	printf("[OK]\tUser interrupt received\n");
++}
++
++void test_blocking_ipi(void)
++{
++	pthread_t pt;
++	long sleep_usec;
++
++	uintr_received = 0;
++	sleep_usec = 1000;
++	if (pthread_create(&pt, NULL, &sender_thread, (void *)sleep_usec)) {
++		printf("[FAIL]\tError creating sender thread\n");
++		return;
++	}
++
++	printf("[RUN]\tBlock in the kernel (waiting for interrupts)\n");
++	uintr_wait(0);
++	if (uintr_received)
++		printf("[OK]\tUser interrupt received\n");
++	else
++		printf("[FAIL]\tUser interrupt not received\n");
++}
++
++int main(int argc, char *argv[])
++{
++	receiver_setup_interrupt();
++
++	/* Enable interrupts */
++	_stui();
++
++	test_base_ipi();
++
++	test_blocking_ipi();
++
++	close(uintr_fd);
++	uintr_unregister_handler(0);
++
++	exit(EXIT_SUCCESS);
++}
 -- 
 2.33.0
 
