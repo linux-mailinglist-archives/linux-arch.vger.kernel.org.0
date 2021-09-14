@@ -2,89 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D63940A758
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Sep 2021 09:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2919740A9FB
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Sep 2021 10:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240218AbhINH2J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Sep 2021 03:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239257AbhINH2J (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Sep 2021 03:28:09 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83601C061574;
-        Tue, 14 Sep 2021 00:26:52 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id n13-20020a17090a4e0d00b0017946980d8dso1419681pjh.5;
-        Tue, 14 Sep 2021 00:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hp6GUAgrHFu7b5baJ2ikcAxV/WkbZIz5NLHRCJHH//0=;
-        b=ESZImyvw6EcVDRtmwwENKmlVK99GkWlIyipZteDq3OiKmImLMHq1fylxRO7GbaHkfs
-         NI0FfA8XxOv0MPSVT1XdLHhld1nDVyNkYM+G6RmOcOHu5LtiY/mmtQ8cxwGXC3lGhQSb
-         3A7+bDlLlwQB9bCMVKu2wQrpvRFzRwtgbwQ11pEyKUTmb1dcvcTTHuuJwHKslL7JZecK
-         +3dXIC03s1KaVJpI1gGdqfqLSutcRJbFxjt3Lf5bJSW5d0e0FsFXCZktCBcPkpNg/uHl
-         OTS8b4dd2nKuFN/QSPkdNBG5QZu4wLlAFAhAAYhri6n8PhrmfPKYpCIfVqUrdPsTFg1s
-         ytuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hp6GUAgrHFu7b5baJ2ikcAxV/WkbZIz5NLHRCJHH//0=;
-        b=WFRTQIbe7jIVEnQNusL0oRsjID2GZaZQa4S34g8fOiDt7TBXkgen00OBW8xf3VDAnH
-         PXH3UOEfLibbByFv+8CGPpNQd+t1HHRFlDGU6KrbS9WWNTi4kGihmSotJl3OEs+kDymo
-         9WFxotyZbh5USB3IyxNrA6uSY8fcUilR+tzeCSGuYuzspWWPdSbx+5qMJ59MoQvwfLfy
-         rg9u/0hsYW9BLGoDCMOXHzS2bUAyiFpZmdJPQdUtrwBHTk/Osj/HI7JmCWEQ93D3/m8X
-         gcZ7NogYT+cHTsKChSG2dyr8V/kkkRo6wZacVQOoz86ymxVGQIdbj5KI2TmFfjEljDdw
-         my7g==
-X-Gm-Message-State: AOAM533cdgmG3u+jbeT5qfmaEDzdlL4kaM7z1EhEnylsjkk5PWha0iMC
-        OIqxHo4q6gM+/rujItAJhasuextlBsu5t/CuTtE=
-X-Google-Smtp-Source: ABdhPJwDCIVl44gfdd1sKqX7nVUs+eR/MLALxF9c21ndqIA2Y/hvdtjZ2cgeOLIhKa6QUicMOSfpO29hrKScM4TqUD4=
-X-Received: by 2002:a17:90a:cc6:: with SMTP id 6mr494466pjt.233.1631604412035;
- Tue, 14 Sep 2021 00:26:52 -0700 (PDT)
+        id S231324AbhINIzp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Sep 2021 04:55:45 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:53581 "EHLO
+        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231503AbhINIze (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 Sep 2021 04:55:34 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id B29772B012A8;
+        Tue, 14 Sep 2021 04:54:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 14 Sep 2021 04:54:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=fm3; bh=s
+        T/bwjG5lVTLn0wUrVQ5PSObsjCHjK6vy4pIevgX+fM=; b=ltnTWW1eQSWazPmSM
+        utwvppK96dHVJD2nVmUKyUPHaXO/OLyZEazXy83rjOR3/GtgOlNy5ikQ1WUTbYq6
+        EjQsfFk2DvpmRzw5gjGlsUDdorlt3jsbX3wS+AGUA1Q6HKOee/jzTurv4h2bXqHa
+        ZeD0w74l4KniCuSypuWovraJyujfRDlGdhdDzvGkdxi9rJe646iwVxp7MtGOIYck
+        eD4ClXVI4M4DSJm4/2uDaUTgD+4OhC4npY8Iw+SQhOedGosDKPqQHjmm7a16O5Tk
+        miPRBZJw12ImiFgvf7QJ3C+4TDNgxP64sYBuEVNmy0ppt+qS/IO1oEJutcoreDPZ
+        RFW2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=sT/bwjG5lVTLn0wUrVQ5PSObsjCHjK6vy4pIevgX+
+        fM=; b=H4486TkxH62xP6MMVenFZbqxj0boInlsvbYSkWpxAnVYELa5DnS5jt83n
+        PjrGR7bcq5jdPKH+NKarhUuYA+yEi83MfVqqF0JdT8vlimnE1UhBVapF9mP/qwwN
+        rf5YiruolzAWqkZi0viorJswGxgjGMHzAy1F5EQNw6rQBXv0FKpVbPnjiVkAC+98
+        qD8kDJFOaz81lgkAvy8bRFYyJm+vByc0YE83QNwuM6JjxpjV8DUf6XMRlO1/7nnI
+        0UFXEkTBeZL2LUe7F3iEr1c1q8cAesExn1Oe0i4oJvxCIQ4FzM1Tvg5aDGzo4ZPF
+        X3sGqJE5S/A4yy+0Vjls5mzJEU25Q==
+X-ME-Sender: <xms:M2NAYVei-jZA0_gCW4L0QTe14uTJ0AAwqDFzfBp26EK9WQCi1F28ZQ>
+    <xme:M2NAYTNlu_j05q0S7GkEgsarQdddnItGWBcLpmTXXOHSpIyeAOzCpdWxWTSQs5aw8
+    ax8sunDHqK-KjXd07s>
+X-ME-Received: <xmr:M2NAYehAGsEBjUY9bHkuC_NFw6i7mgtDlQeLeBj2cYypE8bfMQ53B_iXKxduxMo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudegledgtdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
+    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:M2NAYe9-QRlhLNz3mpX-giOLuKFyZ3EZ1DdQeYRi1B6RLE9c1YLG5g>
+    <xmx:M2NAYRuKhRsh1h0m12DkcPyrKG5HvGZwG4532MtyGqcjQ507eStRgg>
+    <xmx:M2NAYdGruu1HK13C_-yw7_xJpdfEYnbkhIbm1I1jOnWOWpyc25IsMg>
+    <xmx:NmNAYSnZnkzucflI5UPw7Q1yGUVMrq6lrFvuIwMo10En9c_ILRZOstVLrKvXWd37>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 14 Sep 2021 04:54:10 -0400 (EDT)
+Message-ID: <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
+Date:   Tue, 14 Sep 2021 09:54:06 +0100
 MIME-Version: 1.0
-References: <20210903095213.797973-1-chenhuacai@loongson.cn> <20210903095213.797973-3-chenhuacai@loongson.cn>
-In-Reply-To: <20210903095213.797973-3-chenhuacai@loongson.cn>
-From:   teng sterling <sterlingteng@gmail.com>
-Date:   Tue, 14 Sep 2021 15:26:42 +0800
-Message-ID: <CAMU9jJqrBbD4RqL8EB=Wu0xsd69HzTcF=nfOzZQw8k0Cqy0xwQ@mail.gmail.com>
-Subject: Re: [PATCH V2 02/22] Documentation/zh_CN: Add basic LoongArch documentations
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
+To:     Feiyang Chen <chris.chenfeiyang@gmail.com>,
+        tsbogend@alpha.franken.de, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, arnd@arndb.de
+Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-arch@vger.kernel.org, chenhuacai@kernel.org,
+        zhouyu@wanyeetech.com, hns@goldelico.com
+References: <cover.1631583258.git.chenfeiyang@loongson.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <cover.1631583258.git.chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Huacai Chen <chenhuacai@loongson.cn> =E4=BA=8E2021=E5=B9=B49=E6=9C=883=E6=
-=97=A5=E5=91=A8=E4=BA=94 =E4=B8=8B=E5=8D=885:54=E5=86=99=E9=81=93=EF=BC=9A
+
+
+在 2021/9/14 2:50, Feiyang Chen 写道:
+> Convert MIPS to use the generic entry infrastructure from
+> kernel/entry/*.
 >
-> Add some basic documentations (zh_CN version) for LoongArch. LoongArch
-> is a new RISC ISA, which is a bit like MIPS or RISC-V. LoongArch
-> includes a reduced 32-bit version (LA32R), a standard 32-bit version
-> (LA32S) and a 64-bit version (LA64).
+> v2: Use regs->regs[27] to mark whether to restore all registers in
+> handle_sys and enable IRQ stack.
+Hi Feiyang,
+
+Thanks for your patch, could you please expand how could this improve 
+the performance?
+
+Thanks.
+- Jiaxun
 >
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
+> Feiyang Chen (2):
+>    MIPS: convert syscall to generic entry
+>    MIPS: convert irq to generic entry
+>
+>   arch/mips/Kconfig                         |   1 +
+>   arch/mips/include/asm/entry-common.h      |  13 ++
+>   arch/mips/include/asm/irqflags.h          |  42 ----
+>   arch/mips/include/asm/ptrace.h            |   8 +-
+>   arch/mips/include/asm/sim.h               |  70 -------
+>   arch/mips/include/asm/stackframe.h        |   8 +
+>   arch/mips/include/asm/syscall.h           |   5 +
+>   arch/mips/include/asm/thread_info.h       |  17 +-
+>   arch/mips/include/uapi/asm/ptrace.h       |   7 +-
+>   arch/mips/kernel/Makefile                 |  14 +-
+>   arch/mips/kernel/entry.S                  | 143 +-------------
+>   arch/mips/kernel/genex.S                  | 150 +++------------
+>   arch/mips/kernel/head.S                   |   1 -
+>   arch/mips/kernel/linux32.c                |   1 -
+>   arch/mips/kernel/ptrace.c                 |  78 --------
+>   arch/mips/kernel/r4k-bugs64.c             |  14 +-
+>   arch/mips/kernel/scall.S                  | 136 +++++++++++++
+>   arch/mips/kernel/scall32-o32.S            | 223 ---------------------
+>   arch/mips/kernel/scall64-n32.S            | 107 ----------
+>   arch/mips/kernel/scall64-n64.S            | 116 -----------
+>   arch/mips/kernel/scall64-o32.S            | 221 ---------------------
+>   arch/mips/kernel/signal.c                 |  59 +-----
+>   arch/mips/kernel/signal_n32.c             |  15 +-
+>   arch/mips/kernel/signal_o32.c             |  29 +--
+>   arch/mips/kernel/syscall.c                | 148 +++++++++++---
+>   arch/mips/kernel/syscalls/syscall_n32.tbl |   8 +-
+>   arch/mips/kernel/syscalls/syscall_n64.tbl |   8 +-
+>   arch/mips/kernel/syscalls/syscall_o32.tbl |   8 +-
+>   arch/mips/kernel/traps.c                  | 225 ++++++++++++++++------
+>   arch/mips/kernel/unaligned.c              |  19 +-
+>   arch/mips/mm/c-octeon.c                   |  15 ++
+>   arch/mips/mm/cex-oct.S                    |   8 +-
+>   arch/mips/mm/fault.c                      |  12 +-
+>   arch/mips/mm/tlbex-fault.S                |   7 +-
+>   34 files changed, 594 insertions(+), 1342 deletions(-)
+>   create mode 100644 arch/mips/include/asm/entry-common.h
+>   delete mode 100644 arch/mips/include/asm/sim.h
+>   create mode 100644 arch/mips/kernel/scall.S
+>   delete mode 100644 arch/mips/kernel/scall32-o32.S
+>   delete mode 100644 arch/mips/kernel/scall64-n32.S
+>   delete mode 100644 arch/mips/kernel/scall64-n64.S
+>   delete mode 100644 arch/mips/kernel/scall64-o32.S
+>
 
-BTW=EF=BC=9A
-Alex's Reviewed-by tag  is missing.  :)
-https://lore.kernel.org/linux-doc/31263309-cd53-6627-b647-4ffc86b4d405@gmai=
-l.com/
-
-Thanks,
-
-Yanteng
