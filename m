@@ -2,75 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 701F440A12C
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Sep 2021 01:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD0440A282
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Sep 2021 03:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350180AbhIMXCa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Sep 2021 19:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
+        id S229825AbhINBcF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Sep 2021 21:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349640AbhIMXCV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Sep 2021 19:02:21 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C64C061797
-        for <linux-arch@vger.kernel.org>; Mon, 13 Sep 2021 15:46:45 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id w1so11868137ilv.1
-        for <linux-arch@vger.kernel.org>; Mon, 13 Sep 2021 15:46:45 -0700 (PDT)
+        with ESMTP id S229542AbhINBcE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Sep 2021 21:32:04 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC9BC061574;
+        Mon, 13 Sep 2021 18:30:48 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id k24so11147425pgh.8;
+        Mon, 13 Sep 2021 18:30:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=UWVukDYpnouo2TmAsoiK3YFI/UCntBVDF8OdhEqH+sQ=;
-        b=HiInFQS0xNSg4zAtUBQLxG9MxGEXJyEeE+JV/5L3PPM35Jx9G1caztbXE+PFYoVypv
-         2VWa4rwNh4PRwpsu9IwWR420hvjt6NMEKoUD7TSepQSuccBS3B5xzK8tqWQzz2mpBeY4
-         Q4oBVPync6lhMOvAQ2rXgGbm2jvLMCbuN/QsrbQWClo/KKSxYzL6dyGnEwlqJPlpcYO7
-         VRomFoqG54/k842nMqPxIhQab85NPF3tzYStLWJ2SSokhNnExn6ctuSSsv8KZhY/T4Kx
-         1J3EPoQUvShNT9ctmMhR666BA6nehxp4hFQaGD62ejJtX0VmSkffbrKhvAaxVwdC0e7f
-         HZLQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Thaf/ImXtKQqzGermZZDUQcf5wJAJSh5177RgKZjfto=;
+        b=Jiii65vXTIz1M1sab0YUlB/1mLUAhA0lUt34zgaxrRPO8YpgRW341zmNub1oevjjv6
+         UydyC42tuELbseRzw2TabVuDYed+6lLx8bEj64hgldjuQCvURWq5mFfr0PCcZU1tSq+w
+         NIL6ECtu+nfK3gEKsqes5LpupJneRNL7XeObgqdaVCQX/oUc6ZzhNrvwClQwB6LuSAxE
+         fnAqzjWav67HM1KM/m1LPKHiOWuMEJYoccvV+kBHWg6fwjIvKOvwMristOWtC2TtwdoO
+         CoDfWwE0BB4MTDGIRPXMlDD5jpx3rhNhS7oFwMg/+Ck2XdZYmEWhrsewKrcz1t+cIdL2
+         rebQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=UWVukDYpnouo2TmAsoiK3YFI/UCntBVDF8OdhEqH+sQ=;
-        b=l3gt5/a0hJsvMdtNOeBuSo1b33Jfwljd7FVNTBnrhQW1iPxVRvfGp/SwHfTOGwgSi6
-         D7lXgBStKtsUfKJctiX4JUMZblH7xePKitbXdcO7CiJhsNFYwxU2+ol0fIFs2vdpM/4q
-         dP9zPBRYRaHKRL2MkDa2188veuT548D4zD3lWRdvcBdXn3yaw2tgVPLd/wg/dszZx3PX
-         eq917N3UgABBGrBypvQtt8PkCGDdfkVouRAC3K4UYAzRlGEG7AxBqxjn/UzH5vdgKICm
-         v8Wc2IpqmOCDdu+UF7HgBre+pq9WqP+c2CWj8G7K7ADRUeYxVdaumKRI6y1I0kBSwoGK
-         HY0g==
-X-Gm-Message-State: AOAM532TrzdE2gXyhoekZoJqTYpKzgusNyeQeqVo6U4mci0lzOxmA8k1
-        29w2/xT343IYSZ2MrAnT+ofX8tO3RQ7q6ILe26o=
-X-Google-Smtp-Source: ABdhPJwlGA2DWAuyIvbLXEadWQ0plML0YQVpBYTnLJvIER+zfvGK05nnpcey2YhljgaYKYvtTSQF0EeKigPdBbBa4S8=
-X-Received: by 2002:a92:6a06:: with SMTP id f6mr9905980ilc.16.1631573204484;
- Mon, 13 Sep 2021 15:46:44 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Thaf/ImXtKQqzGermZZDUQcf5wJAJSh5177RgKZjfto=;
+        b=q4dIW06DyCIKFc+s7X306PKLfdt3hD1f2aBp1iSMIR1HsGgLOyZ1u1bxJtQrCediOm
+         nlqj+CPgzuSe+DEhg71GU6tGb4kkFWUixK0HnDxvvXsDcpBMpFP6LS2kmzC5NfDFgxRq
+         pYdTBYBMrELO0kQVOVowsRYydGanYr/0SwWXaZTeWJ8vJS+i5YVsAyI+k+h/xv+Ly+R9
+         3V5HFEFWFSmmo6kSiQ7keikhz8lg2rF2O0jlXEDGGxsidcGcVQPj0uOeV9mOgcapZPFO
+         bVRd6jiXh/yi2d6C6DoxcRaL7ZMxywZ1Usj7KmOxAVRYi8HgmC7g6RqAE8aBOydnAzIi
+         G3/A==
+X-Gm-Message-State: AOAM532bjNhRxaKIxdl+/vVHQJExmK0Mz+ASHZbBrQ5EGn7pEFKQx5d4
+        rPhM1NA1Z2F+s3c4quUXz10X48Fc/LLHURZ6GZ8=
+X-Google-Smtp-Source: ABdhPJwxaC4dCRUvrRS/PfGULpz4gvff7nS4pMJDIuuSfO0YfM7zlHHiN8uLOadbwjWM2GXpf0iabb3nL4x6/E1R0Lg=
+X-Received: by 2002:a63:704f:: with SMTP id a15mr13599856pgn.120.1631583047659;
+ Mon, 13 Sep 2021 18:30:47 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: aliuhuadams@gmail.com
-Sender: drabidibellophdemail@gmail.com
-Received: by 2002:a05:6e02:1013:0:0:0:0 with HTTP; Mon, 13 Sep 2021 15:46:44
- -0700 (PDT)
-From:   Aliuhu Adams <aliuhuadamss@gmail.com>
-Date:   Mon, 13 Sep 2021 22:46:44 +0000
-X-Google-Sender-Auth: zMHf0abLi-Jk9FY3k-sotJ65xDU
-Message-ID: <CAAX4e0yjazP5nQ6SaGBGWbwHBeMQuG7AkGXxCdWDTFHgz2Zwxw@mail.gmail.com>
-Subject: From Aliuhu Adams
-To:     undisclosed-recipients:;
+References: <cover.1630929519.git.chenfeiyang@loongson.cn> <ec14e242a73227bf5314bbc1b585919500e6fbc7.1630929519.git.chenfeiyang@loongson.cn>
+ <59feb382-a4ab-c94e-8f71-10ad0c0ceceb@flygoat.com> <CACWXhKnA24KuJo33+OitPQVRRd3g_05DWRC2Dsnm7w8hVyKjNQ@mail.gmail.com>
+ <20210908085150.GA5622@alpha.franken.de>
+In-Reply-To: <20210908085150.GA5622@alpha.franken.de>
+From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
+Date:   Tue, 14 Sep 2021 09:30:53 +0800
+Message-ID: <CACWXhK=gud_vk5g7cLA_2P1=57mWfiJxTYpw2EPf=NNgbdR1Tw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mips: convert syscall to generic entry
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, arnd@arndb.de,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        chenhuacai@kernel.org, Yanteng Si <siyanteng@loongson.cn>,
+        Zhou Yanjie <zhouyu@wanyeetech.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
--- 
-From Aliuhu Adams,
+On Wed, 8 Sept 2021 at 17:28, Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Wed, Sep 08, 2021 at 10:08:47AM +0800, =E9=99=88=E9=A3=9E=E6=89=AC wro=
+te:
+> > On Tue, 7 Sept 2021 at 21:49, Jiaxun Yang <jiaxun.yang@flygoat.com> wro=
+te:
+> > >
+> > >
+> > > =E5=9C=A8 2021/9/7 14:16, FreeFlyingSheep =E5=86=99=E9=81=93:
+> > > > From: Feiyang Chen <chenfeiyang@loongson.cn>
+> > > >
+> > > > Convert mips syscall to use the generic entry infrastructure from
+> > > > kernel/entry/*.
+> > > >
+> > > > There are a few special things on mips:
+> > > >
+> > > > - There is one type of syscall on mips32 (scall32-o32) and three ty=
+pes
+> > > > of syscalls on mips64 (scall64-o32, scall64-n32 and scall64-n64). N=
+ow
+> > > > convert to C code to handle different types of syscalls.
+> > > >
+> > > > - For some special syscalls (e.g. fork, clone, clone3 and sysmips),
+> > > > save_static_function() wrapper is used to save static registers. No=
+w
+> > > > SAVE_STATIC is used in handle_sys before calling do_syscall(), so t=
+he
+> > > > save_static_function() wrapper can be removed.
+> > > >
+> > > > - For sigreturn/rt_sigreturn and sysmips, inline assembly is used t=
+o
+> > > > jump to syscall_exit directly for skipping setting the error flag a=
+nd
+> > > > restoring all registers. Now use regs->regs[27] to mark whether to
+> > > > handle the error flag and always restore all registers in handle_sy=
+s,
+> > > > so these functions can return normally as other architecture.
+> > >
+> > > Hmm, that would give us overhead of register context on these syscall=
+s.
+> > >
+> > > I guess it's worthy?
+> > >
+> >
+> > Hi, Jiaxun,
+> >
+> > Saving and restoring registers against different system calls can be
+> > difficult due to the use of generic entry.
+> > To avoid a lot of duplicate code, I think the overhead is worth it.
+>
+> could you please provide numbers for that ? This code still runs
+> on low end MIPS CPUs for which overhead might mean a different
+> ballpark than some highend Loongson CPUs.
 
-My name is Aliuhu Adams, from Burkina Faso
+Hi, Thomas, Jiaxun, Yanjie, Nikolaus,
 
-Please, I am contacting you for urgent assistance to help me move my
-inheritance to your country and help me to invest in your country.
+Thank you for your help. The impact on performance seems somewhat
+significant, I will make improvements in the v2 of the patchset.
 
-The amount is 14 million dollars and I want this money to be moved to your
-country urgently with me because of the fear of the killer of my parents.
+Thanks,
+Feiyang
 
-I shall give you more details when I hear from you.
-
-Thank you,
-
-Aliuhu Adams
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 =
+]
