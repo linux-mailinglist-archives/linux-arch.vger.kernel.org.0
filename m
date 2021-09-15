@@ -2,71 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E31B840BC90
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Sep 2021 02:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D960E40BF90
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Sep 2021 08:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbhIOAYq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Sep 2021 20:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
+        id S230478AbhIOGKY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Sep 2021 02:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbhIOAYp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Sep 2021 20:24:45 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5D6C061574;
-        Tue, 14 Sep 2021 17:23:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1631665405;
-        bh=Pliqrcvr6CmlpuzEgkusFjzlu2wuAo+oNPelgwZk/tI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TPy4x0c0qB00Uky/okfi0agfYTTirGCIOxGnyL3Z2WJjcy9Ij+y6eYt34V0foPR/O
-         o1okl98XSAlBWoLSjBK2ST30QS4MIAlF6Q5jA9WbJd+t/pYlgoXvxAw0bJWuqYJ3kd
-         7a7a6bYzwZZ6/qCNoSAmjasAfhIO+tm/yfC0Qr4vHTgZfWFSMgRJZ0XA3P/TYxv3W8
-         HAXDqW2k6pmwvEaigI491dok7/GBd2trlcrP8o0JI2Q9R8YjbcSTnLHIZiytZzNpto
-         aHqxor2QYwZ9tGiIR0+zkTxf7ARZwTpGwCyhJhFhBNQsj7LzgLsiKQ4LnRpQ+coT+7
-         P6bVDxR2ZyoQQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H8LXr70S6z9s5R;
-        Wed, 15 Sep 2021 10:23:24 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 1/1] powerpc: Drop superfluous pci_dev_is_added() calls
-In-Reply-To: <20210914193130.GA1447657@bjorn-Precision-5520>
-References: <20210914193130.GA1447657@bjorn-Precision-5520>
-Date:   Wed, 15 Sep 2021 10:23:22 +1000
-Message-ID: <87o88uk7ph.fsf@mpe.ellerman.id.au>
+        with ESMTP id S230395AbhIOGKY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Sep 2021 02:10:24 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8327C061574
+        for <linux-arch@vger.kernel.org>; Tue, 14 Sep 2021 23:09:05 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id u4so1256010qvb.6
+        for <linux-arch@vger.kernel.org>; Tue, 14 Sep 2021 23:09:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=Aauu7gYvMaBruI9Zt1CgTlkxSZ8evQwPBhKOMH6jf8s=;
+        b=HyK4r37LVW/cprqxCVL+yroTphte9yh1Jv5AtwZTblAJmCR90aYd4GneLNnp0s8PTF
+         NTAE30uGiQpCxSWmUeLuuejrIjwneSatT4BPUpbD6GIJPQNGnlBObzTlaeUH40pz4SyQ
+         IN8M6ub88VDaQN3sLDvdh2shP4FWdZURWQvTn7A3LFGnUy+7lFy7rkEonK0lzrZxaLJI
+         D8s3pc48vu8c/ez1ZxsGuQ9lZ8NXwgl+iAIHa4O+eigZJkwlM94t7rUJLh8ui/oSqFjk
+         KNdkC3A6KF+ZDWn50dgH6fA8lJjFusKk0BTFERCgrgxfcPAcIPKShjP/dxoW+2HmWCio
+         9qFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=Aauu7gYvMaBruI9Zt1CgTlkxSZ8evQwPBhKOMH6jf8s=;
+        b=cuCeStXSVXBAbEXOhR6CDK7KLy5izb60zXXyFQ6laRnNhJW+x1INT9aTDvnhYZFzLx
+         9T+PBAS1kTYG+GMUYoISTUHo6xhBCA6Yym4cEppd/mCIOz9HQK62DQbr5qJe6IDhVxxj
+         0ks8DBpupM+lAk/PFMGhS+AW3LuhfHos4Eh3ywHsqXb2FIyuKTl9wLqB98ytNMPxNkbm
+         86uEcWvtA2MHvAbcXtykQQ5RUod8KN93uQmjoVfZgZFZuZ8z5vI9DuqCp44aJN9vCfZc
+         CGJeqRV0iNUxIRwicUlKXdkRyDwCZtAwbB15PTjRmhRzEjNwIFSLyHXfqaHg5OFGVmWM
+         zQzw==
+X-Gm-Message-State: AOAM53082sHNXepc7eaoo0Sv4ygGGSVAsJqMG+hXL4DVOXcnICvc3sVe
+        QX8QjkdB8UBDnkt6TMIEmma+cL16L/YOVgXQbWE=
+X-Google-Smtp-Source: ABdhPJzplpKr6mhE3ylvTmqLQQM0HiII1TysIvhga2O0Qhq7G0lWQe06jKetiMxyu7jU9E0VESxZxOpaNpQ2cwGMWTg=
+X-Received: by 2002:ad4:456c:: with SMTP id o12mr9446007qvu.12.1631686144572;
+ Tue, 14 Sep 2021 23:09:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+Reply-To: godwinppter@gmail.com
+Sender: zedenail156@gmail.com
+Received: by 2002:ad4:58a8:0:0:0:0:0 with HTTP; Tue, 14 Sep 2021 23:09:03
+ -0700 (PDT)
+From:   Godwin Pete <godwinnpeter@gmail.com>
+Date:   Wed, 15 Sep 2021 08:09:03 +0200
+X-Google-Sender-Auth: FLi9MwMGFq3w9DLIEV-ISvpIlF8
+Message-ID: <CAONS4ed-H7U8LYSU3L7bTSRQ4xwMbjjHkGW22S-CTNvQWjP9_g@mail.gmail.com>
+Subject: Reply urgently
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Bjorn Helgaas <helgaas@kernel.org> writes:
-> On Fri, Sep 10, 2021 at 04:19:40PM +0200, Niklas Schnelle wrote:
->> On powerpc, pci_dev_is_added() is called as part of SR-IOV fixups
->> that are done under pcibios_add_device() which in turn is only called in
->> pci_device_add() whih is called when a PCI device is scanned.
->> 
->> Now pci_dev_assign_added() is called in pci_bus_add_device() which is
->> only called after scanning the device. Thus pci_dev_is_added() is always
->> false and can be dropped.
->> 
->> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
->
-> Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
->
-> This doesn't touch the PCI core, so maybe makes sense for you to take
-> it, Michael?  But let me know if you think otherwise.
+My good friend,
 
-Yeah I'm happy to take it, thanks.
+I just want to know if you, can help me to transfer the amount of
+($6Million). After the transfer we have to share it, 50% for me, and
+50% for you. Please let me know if you can help me for more
+information in regards with the transfer. I hope you can work with me
+honestly?
 
-cheers
+
+Thanks.
+
+Godwin Peter,
