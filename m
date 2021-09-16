@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D2540DDFD
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Sep 2021 17:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEBC40DDFE
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Sep 2021 17:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239165AbhIPPb5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Sep 2021 11:31:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46380 "EHLO mail.kernel.org"
+        id S238967AbhIPPcA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Sep 2021 11:32:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238967AbhIPPb5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 16 Sep 2021 11:31:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1A18960D07;
-        Thu, 16 Sep 2021 15:30:35 +0000 (UTC)
+        id S239052AbhIPPb7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 16 Sep 2021 11:31:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C04C16124B;
+        Thu, 16 Sep 2021 15:30:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631806236;
-        bh=e9yCCLO92N7HRfaC4YRIYtoCOTLa2gCo7SJPmKuBp6g=;
+        s=k20201202; t=1631806239;
+        bh=rTVazhUNkG5j722LE4noH1VWtBsKLbISqMxAF9fJEBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SqBC9CKd1VWl08UfL97gneXXSttlIOopwBxavHaosjwVrNcJTrtlPi1p7y/1zcAwq
-         rxFbkT6HRagZot/Qe5B2gKtCtqd4Gy866WoCFlvXQ707kmiM8ATwtvp0/C4u2tYM6x
-         2OZdwolrekMXWPP0yDaHJtJT9AlwL5I1CYLy1xeci6Y+27v7pz2FRGCTakUwdsXv2D
-         PPELV0AYS0zZjEeAAzQeH7UXgEy8hAsqStNI0MA/+9cw00hAMEY/lTWT3evKSe0Q8V
-         0jaoabLCGlWqqB1GphWejqWEdkkig7ar/AmXR4qbl6P/WvsD85f1l4q23eHm6o/AxC
-         /Osrj0w9+GgKw==
+        b=CRZYlC2rMxfqgJJRuaK+r1Gpd19aOfMiJpiAB7+R2JZQ8Ww1mzGvotehQUDZF9qra
+         E+bCll8xzJTTcORFtoBmprMuXCUzGFHQkS9nbdlaHuxXbS2Q4c+T0Isv65cK/I2gwZ
+         IY6YdabTueTP49jN6RnOQ9HqWZ3BxCDuWa9OZ52j3+IZu+ZK3KtPx9SgtsLJl/YBt8
+         yXLPoJhqYyKEqUGEtyDNB4HrWw/5byJc2Byr2G8Qj65iP7B5s7wpwyrqZLjNGvMFmS
+         vx8FBXdYt42A5gUqjPIMv9WOwEDxH5sPOPwwmWzDKzfGtlCi1D5MmaTw5I7TGH6p/Q
+         +qW1bWqjiV0UQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>
@@ -34,174 +34,109 @@ Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         libc-alpha@sourceware.org, Mark Brown <broonie@kernel.org>,
         Dave Martin <Dave.Martin@arm.com>
-Subject: [PATCH v6 1/4] elf: Allow architectures to parse properties on the main executable
-Date:   Thu, 16 Sep 2021 16:28:18 +0100
-Message-Id: <20210916152821.1153-2-broonie@kernel.org>
+Subject: [PATCH v6 2/4] arm64: Enable BTI for main executable as well as the interpreter
+Date:   Thu, 16 Sep 2021 16:28:19 +0100
+Message-Id: <20210916152821.1153-3-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210916152821.1153-1-broonie@kernel.org>
 References: <20210916152821.1153-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5824; h=from:subject; bh=e9yCCLO92N7HRfaC4YRIYtoCOTLa2gCo7SJPmKuBp6g=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhQ2KRd8LGZVDGxxxRRbghUIJa85La2sO6Z8zwZc85 5dnO+iqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYUNikQAKCRAk1otyXVSH0HDRB/ 0fGE94ShnNwWbZuP8+kXIrfzrFkmEVrLLVVd2/SnZtS1Ft0xrJ4QPyveG7eGr3lWJ/NwQFFrzdbuUw 21VjjUIH3ewa+8WqbJrj9Sl1AmCq/2ygiqxQ/OjXgeIaeosiOs0lBbPnCQIDaSGXGSnIAxiS6wZl9D TkOpKujnBasuiN3s3KERTAPFWLS/lX1ucBcQbdVl2Q4ox/FzircUE5vb02kefFogzU3TZKVSS4mC/P QU9P0z/uQFH7mbKE3myZEjZyyyuu71DQxy1eOj8f16k2vbVKBj0Bilt3JHOlu+5EKRGC4dVOjuyft8 NYI1ZHPBD4yZuuLECRDXMLl6+x8YWb
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3271; h=from:subject; bh=rTVazhUNkG5j722LE4noH1VWtBsKLbISqMxAF9fJEBA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhQ2KSBTRUxUybXN12U+BV+jLcUnzYrvdhcj8e2Js9 6J5JfWmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYUNikgAKCRAk1otyXVSH0D+cB/ 4i3WtYq4jhAqHpYm4V+ainvFPDPdmlQkW1GWtAM46gN4v+8aeDaM130ZQ9ZzaRzxJ6KOJeWixFAlqU spMMsO6/vvcrn9H7DPZClLqQ0ZCer87Duro9qcPI3n0n8UeRxNjefikub84hF1HfxEx86cOjH8K/km 24pPgcERPyB2xEnM1wBy/hFl+fGpX3hz1UTUD3u2/AyUKMaAV344+AlhnZqj8YHQGN068GM8hL8JFn jn3eqp7JZQP8MYysoucpOtxqCYWtTk8kFwI894EMeWVVmLeXe4l73NjFF39hxKndYK4ZLZiTIfHz49 QbLPgVcD1FAYHAvFVa/+0kmsH3u0B0
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Currently the ELF code only attempts to parse properties on the image
-that will start execution, either the interpreter or for statically linked
-executables the main executable. The expectation is that any property
-handling for the main executable will be done by the interpreter. This is
-a bit inconsistent since we do map the executable and is causing problems
-for the arm64 BTI support when used in conjunction with systemd's use of
-seccomp to implement MemoryDenyWriteExecute which stops the dynamic linker
-adjusting the permissions of executable segments.
+Currently for dynamically linked ELF executables we only enable BTI for
+the interpreter, expecting the interpreter to do this for the main
+executable. This is a bit inconsistent since we do map main executable and
+is causing issues with systemd's MemoryDenyWriteExecute feature which is
+implemented using a seccomp filter which prevents setting PROT_EXEC on
+already mapped memory and lacks the context to be able to detect that
+memory is already mapped with PROT_EXEC.
 
-Allow architectures to handle properties for both the dynamic linker and
-main executable, adjusting arch_parse_elf_properties() to have a new
-flag is_interp flag as with arch_elf_adjust_prot() and calling it for
-both the main executable and any intepreter.
-
-The user of this code, arm64, is adapted to ensure that there is no
-functional change.
+Resolve this by checking the BTI property for the main executable and
+enabling BTI if it is present when doing the initial mapping. This does
+mean that we may get more code with BTI enabled if running on a system
+without BTI support in the dynamic linker, this is expected to be a safe
+configuration and testing seems to confirm that. It also reduces the
+flexibility userspace has to disable BTI but it is expected that for cases
+where there are problems which require BTI to be disabled it is more likely
+that it will need to be disabled on a system level.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Tested-by: Jeremy Linton <jeremy.linton@arm.com>
 Reviewed-by: Dave Martin <Dave.Martin@arm.com>
+Tested-by: Jeremy Linton <jeremy.linton@arm.com>
 ---
- arch/arm64/include/asm/elf.h |  3 ++-
- fs/binfmt_elf.c              | 27 +++++++++++++++++++--------
- include/linux/elf.h          |  4 +++-
- 3 files changed, 24 insertions(+), 10 deletions(-)
+ arch/arm64/include/asm/elf.h | 15 ++++++++++++---
+ arch/arm64/kernel/process.c  | 14 ++------------
+ 2 files changed, 14 insertions(+), 15 deletions(-)
 
 diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-index 97932fbf973d..5cc002376abe 100644
+index 5cc002376abe..c4aa60db76a4 100644
 --- a/arch/arm64/include/asm/elf.h
 +++ b/arch/arm64/include/asm/elf.h
-@@ -259,6 +259,7 @@ struct arch_elf_state {
+@@ -251,12 +251,21 @@ struct arch_elf_state {
+ 	int flags;
+ };
  
+-#define ARM64_ELF_BTI		(1 << 0)
++#define ARM64_ELF_INTERP_BTI		(1 << 0)
++#define ARM64_ELF_EXEC_BTI		(1 << 1)
+ 
+ #define INIT_ARCH_ELF_STATE {			\
+ 	.flags = 0,				\
+ }
+ 
++static inline int arm64_elf_bti_flag(bool is_interp)
++{
++	if (is_interp)
++		return ARM64_ELF_INTERP_BTI;
++	else
++		return ARM64_ELF_EXEC_BTI;
++}
++
  static inline int arch_parse_elf_property(u32 type, const void *data,
  					  size_t datasz, bool compat,
-+					  bool has_interp, bool is_interp,
- 					  struct arch_elf_state *arch)
- {
- 	/* No known properties for AArch32 yet */
-@@ -271,7 +272,7 @@ static inline int arch_parse_elf_property(u32 type, const void *data,
+ 					  bool has_interp, bool is_interp,
+@@ -272,9 +281,9 @@ static inline int arch_parse_elf_property(u32 type, const void *data,
  		if (datasz != sizeof(*p))
  			return -ENOEXEC;
  
--		if (system_supports_bti() &&
-+		if (system_supports_bti() && has_interp == is_interp &&
+-		if (system_supports_bti() && has_interp == is_interp &&
++		if (system_supports_bti() &&
  		    (*p & GNU_PROPERTY_AARCH64_FEATURE_1_BTI))
- 			arch->flags |= ARM64_ELF_BTI;
- 	}
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 69d900a8473d..1b2d0fc87ad4 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -716,8 +716,9 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
-  */
- 
- static int parse_elf_property(const char *data, size_t *off, size_t datasz,
--			      struct arch_elf_state *arch,
--			      bool have_prev_type, u32 *prev_type)
-+			      struct arch_elf_state *arch, bool has_interp,
-+			      bool is_interp, bool have_prev_type,
-+			      u32 *prev_type)
- {
- 	size_t o, step;
- 	const struct gnu_property *pr;
-@@ -751,7 +752,8 @@ static int parse_elf_property(const char *data, size_t *off, size_t datasz,
- 	*prev_type = pr->pr_type;
- 
- 	ret = arch_parse_elf_property(pr->pr_type, data + o,
--				      pr->pr_datasz, ELF_COMPAT, arch);
-+				      pr->pr_datasz, ELF_COMPAT,
-+				      has_interp, is_interp, arch);
- 	if (ret)
- 		return ret;
- 
-@@ -764,6 +766,7 @@ static int parse_elf_property(const char *data, size_t *off, size_t datasz,
- #define NOTE_NAME_SZ (sizeof(GNU_PROPERTY_TYPE_0_NAME))
- 
- static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
-+				bool has_interp, bool is_interp,
- 				struct arch_elf_state *arch)
- {
- 	union {
-@@ -813,7 +816,8 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
- 	have_prev_type = false;
- 	do {
- 		ret = parse_elf_property(note.data, &off, datasz, arch,
--					 have_prev_type, &prev_type);
-+					 has_interp, is_interp, have_prev_type,
-+					 &prev_type);
- 		have_prev_type = true;
- 	} while (!ret);
- 
-@@ -828,6 +832,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 	unsigned long error;
- 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
- 	struct elf_phdr *elf_property_phdata = NULL;
-+	struct elf_phdr *interp_elf_property_phdata = NULL;
- 	unsigned long elf_bss, elf_brk;
- 	int bss_prot = 0;
- 	int retval, i;
-@@ -963,12 +968,11 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			goto out_free_dentry;
- 
- 		/* Pass PT_LOPROC..PT_HIPROC headers to arch code */
--		elf_property_phdata = NULL;
- 		elf_ppnt = interp_elf_phdata;
- 		for (i = 0; i < interp_elf_ex->e_phnum; i++, elf_ppnt++)
- 			switch (elf_ppnt->p_type) {
- 			case PT_GNU_PROPERTY:
--				elf_property_phdata = elf_ppnt;
-+				interp_elf_property_phdata = elf_ppnt;
- 				break;
- 
- 			case PT_LOPROC ... PT_HIPROC:
-@@ -979,10 +983,17 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 					goto out_free_dentry;
- 				break;
- 			}
-+
-+		retval = parse_elf_properties(interpreter,
-+					      interp_elf_property_phdata,
-+					      true, true, &arch_state);
-+		if (retval)
-+			goto out_free_dentry;
-+
+-			arch->flags |= ARM64_ELF_BTI;
++			arch->flags |= arm64_elf_bti_flag(is_interp);
  	}
  
--	retval = parse_elf_properties(interpreter ?: bprm->file,
--				      elf_property_phdata, &arch_state);
-+	retval = parse_elf_properties(bprm->file, elf_property_phdata,
-+				      interpreter, false, &arch_state);
- 	if (retval)
- 		goto out_free_dentry;
- 
-diff --git a/include/linux/elf.h b/include/linux/elf.h
-index c9a46c4e183b..1c45ecf29147 100644
---- a/include/linux/elf.h
-+++ b/include/linux/elf.h
-@@ -88,13 +88,15 @@ struct arch_elf_state;
- #ifndef CONFIG_ARCH_USE_GNU_PROPERTY
- static inline int arch_parse_elf_property(u32 type, const void *data,
- 					  size_t datasz, bool compat,
-+					  bool has_interp, bool is_interp,
- 					  struct arch_elf_state *arch)
- {
  	return 0;
- }
- #else
- extern int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
--				   bool compat, struct arch_elf_state *arch);
-+				   bool compat, bool has_interp, bool is_interp,
-+				   struct arch_elf_state *arch);
- #endif
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 19100fe8f7e4..1aecb20facd5 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -705,18 +705,8 @@ core_initcall(tagged_addr_init);
+ int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
+ 			 bool has_interp, bool is_interp)
+ {
+-	/*
+-	 * For dynamically linked executables the interpreter is
+-	 * responsible for setting PROT_BTI on everything except
+-	 * itself.
+-	 */
+-	if (is_interp != has_interp)
+-		return prot;
+-
+-	if (!(state->flags & ARM64_ELF_BTI))
+-		return prot;
+-
+-	if (prot & PROT_EXEC)
++	if ((prot & PROT_EXEC) &&
++	    (state->flags & arm64_elf_bti_flag(is_interp)))
+ 		prot |= PROT_BTI;
  
- #ifdef CONFIG_ARCH_HAVE_ELF_PROT
+ 	return prot;
 -- 
 2.20.1
 
