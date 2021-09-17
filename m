@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 207EA40F3D8
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Sep 2021 10:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D44E40F405
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Sep 2021 10:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233882AbhIQING (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Sep 2021 04:13:06 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:40981 "EHLO
+        id S238256AbhIQIZq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Sep 2021 04:25:46 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:46239 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233348AbhIQINE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Sep 2021 04:13:04 -0400
-Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MAtoX-1mcRUr2ycL-00BLqu; Fri, 17 Sep 2021 10:11:40 +0200
-Received: by mail-wm1-f46.google.com with SMTP id f62-20020a1c1f41000000b0030b42643f72so1282753wmf.3;
-        Fri, 17 Sep 2021 01:11:40 -0700 (PDT)
-X-Gm-Message-State: AOAM531drqy4BbYmcUK2E/pc2+hOJO9tQCwdg32h/aWDgC+Qojuh1RSU
-        UfC/Wm2K5+iwHVU5jBQ12a93HBlP49QMQ7ubulQ=
-X-Google-Smtp-Source: ABdhPJzdLqnRgI4cH6Nyy5LXIDujO3LJsA9YmMdPik3wbbxv6tFICqff3PNBsHdiQf1eaKsTtL5RdxVWXX/UgvbQIM8=
-X-Received: by 2002:a1c:23cb:: with SMTP id j194mr13725733wmj.1.1631866300248;
- Fri, 17 Sep 2021 01:11:40 -0700 (PDT)
+        with ESMTP id S233853AbhIQIZq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Sep 2021 04:25:46 -0400
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Md6V3-1n1JGW1SwF-00aI2c; Fri, 17 Sep 2021 10:24:23 +0200
+Received: by mail-wr1-f42.google.com with SMTP id t18so13863932wrb.0;
+        Fri, 17 Sep 2021 01:24:23 -0700 (PDT)
+X-Gm-Message-State: AOAM533PAzr8zQK7VjOS3rUWivgV4hBA1ekdwD9fmWHEzdc2SZqdHTUD
+        9RFsNGBGn3Ss9VAN+t9kJGMvGNArCXO4KKMGQQE=
+X-Google-Smtp-Source: ABdhPJyxKDbnAit0P8RlxwEKdj8mySHy/6gXPGZ8bIgKVMovkoL7/o6abv6tjsBL6nj2VlsV6u7V/UNuV8R2g2vUC1k=
+X-Received: by 2002:a05:6000:1561:: with SMTP id 1mr1229158wrz.369.1631867062981;
+ Fri, 17 Sep 2021 01:24:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210917035736.3934017-1-chenhuacai@loongson.cn> <20210917035736.3934017-10-chenhuacai@loongson.cn>
-In-Reply-To: <20210917035736.3934017-10-chenhuacai@loongson.cn>
+References: <20210917035736.3934017-1-chenhuacai@loongson.cn> <20210917035736.3934017-14-chenhuacai@loongson.cn>
+In-Reply-To: <20210917035736.3934017-14-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Sep 2021 10:11:24 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0BkYBoBh37YyZ1HU4f1thL6ckJR0MZhbkhpKanVK1WcQ@mail.gmail.com>
-Message-ID: <CAK8P3a0BkYBoBh37YyZ1HU4f1thL6ckJR0MZhbkhpKanVK1WcQ@mail.gmail.com>
-Subject: Re: [PATCH V3 09/22] LoongArch: Add boot and setup routines
+Date:   Fri, 17 Sep 2021 10:24:07 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3Ce0bsyrhEK1SZHtUPEnX-rvQcKLT-TPRGptNdmiJaqQ@mail.gmail.com>
+Message-ID: <CAK8P3a3Ce0bsyrhEK1SZHtUPEnX-rvQcKLT-TPRGptNdmiJaqQ@mail.gmail.com>
+Subject: Re: [PATCH V3 13/22] LoongArch: Add system call support
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -43,111 +43,84 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xX3+od/obibddeM4KisBEcIfw3ae01neA0i41oKlXY7PmDRQkbV
- gd7xnoQncgU5oZo1atrpKQOyYCS8qqp6pFdOmBVaY32r8RyizwNteLpzETqJFBM7+PhbJ8z
- +bJ81FyRd4cjY+DMiF/SmYD1lvNlKcQJ5YcIS559iQ8SE+VehBRYvNPcjudGHp01wcSJR1u
- ri5pDfW4OZHCcGCXkvGKA==
+X-Provags-ID: V03:K1:neJGTFHkscc1NAv6hwO1FuUBai5vvMKqfmhPIrXLcKuYH5LcNRn
+ zgfyX6Ed4AE7kT7+Gi0AseizMEv7Su0CnQDb9AKDdkJjn62qVynhQb3w12JTQAqOBec/ZMY
+ nBnSSL7C6cqy0cLnQxfTy2FSeKGdDvjYyJl011xUAGMqDe5Zbhg/rjko79sbzbMFB0dc8JY
+ fu5u7YgaU+fD5qoCdAeiw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Xjcg/tARvE4=:KCXqULx1p511re317mZ7tf
- mfRWXwKw3ufYl8Q+AnV5f8x47mRIxkbUVolojz+TVRvY8xsbrb3T75uoO5lIJyfKRjORBXEXS
- 9sjT4djIa9adZjCeDE6zGwfOKbASK74uaSGfBphqOF9SQwjQ2/JoeUYAWVG7a72oMGTnykIsd
- QxoPca5+LuX+fR241YLQmIjYtIp5MNauvE9Y/G7Kt5eWv+e0I25DmSKteod4wULy2YZeBMWz2
- NKd3vDFXtpyfh5fmxoWJ8oHNGUKsBymswi+5qfbVNremY5kQClIJQD1rizx4EU/Mf1Fg09pxc
- vFGG+VcagIyq1s6SxRcujVzwxEK6w7siFrRiLIiLxoiJwe04PUtE+YffLpwruzwJMilPJgW+2
- +q7L/dLqDF+dzZ1zDmnrvATCJTZrIwZiSKArubg+1l9jO52gaXNR8xaa9a/BUdWQxN1bdaAXP
- 3tV4F8zcoS3wGqF7oEdK/+5yeAXpGy9WeZ5CcRko5ReBVIqzlHTPq/eqbBlTQKVbEgechP2Yo
- d6LgrzaPoLhnrNVRQ6pr7W/99ViGq7WdipQTWbvdvz4GdAEaMdilrdMN8gOuYgGPWEaGZkxXo
- PZTUjh5/UOLjofNpKJXnW0sP+1uo0whlOfQxF/kCij1kYaeDLYZN3npTYb6V51Ul8DqnQ5HCy
- USujMVq/JyADIWmH5hePb9jxs07n8xHiauzL4eWAlQY9E9sS0UPBLoDZE1yI4Z1jRg5X1uRzP
- 3F7+oOv2Lp8STlt+d50spCdAhUdffET5vW8ZkLMzmqcwNW0S5tVsl96GH2/rspmZQaoIz2p03
- qCoGhVsmRuAGYmtk3iVsaTLjxgDFWkeEPKZr+NKEjgpKRZiYxJKjVXKGJFIcO1GRFImnmHzMF
- BdcEC22ZLyxVHGYNOrYQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:pzKiGr89jSo=:Kg/SDXl28Q9f0IxfdiBMQI
+ wyAU2NJbnHMcAgyplrdfMTbKGqMtYGLXung9GJOyEeshgfuGweIIYHNQI+8iEdVigudvNueN4
+ ZudexgROqDHMAkfCn46R/85nYQmwHXI1E3sBC8s+Nm92zguUdkRJp0A16ni2GinzJGRCnB2c8
+ bci56JQYrwcmHNXc1kPHwFnGdyQ9QhH0/3U/XHi3s0M8ydqOJfblzG31Pec4dIL/OuvvwhQIP
+ IFce7fAZdgwSFrHMvovyRkeZWWmRTBuhnnFKoWHjuOyH8Z+fuTG47vnz5ECcXaU8/Br6SONGa
+ UOgfIBHoFJOy4Bqq9NUos5GymBiLwF/4hAe5ex8slK6zjZvuOwW5ekThsdGUk5RkeuWjxtbTO
+ R6kw7/zXf+neKnMNkR6f9BZZDb3Jjdnfsl95qYWPAncjgDvI503jXa8pfFQkpsjoiFp8Bei2U
+ 2AR/8wbJEVEVKSXQsb6CEg3YiGE/xljJkk6M5wrmoylzeptKStDZ1AB2yykZowwX3OSfl54w2
+ DySMbhzpe24eQnADjQ6aFTozZDojZ0SePY9/e9/OvUO5kx8JGDEj0hHgtGfewbFEr0eN7p1cf
+ Ah61J4I+MLJUu5ofEs/SISu0AIAGnCStGDocAan6Y4zLTfnptm5/fT64MOEeXImNb+dUfCcT/
+ loBZf8MjVQu6OZkC/AGLneGJz8QMO0jXI10GPF1pHjcaYkqK6gnPhX+DKoQ+vIQn9COUO3xDL
+ vExphipCtrWHdOD8BTFVokpExUaIjOoXGemf0zZmTdtJta6/b/lGTHN8BhGlX+RSrmgZj533V
+ 5+s/hJ3IfI9WmpvYU1Awxac3yjwKPe2fVOpAzQ8PVXiy1R3REkiSo/JDMj8KlsIhXXW7a9Oox
+ fGxJW48iMYo4olfKd96g==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Fri, Sep 17, 2021 at 5:57 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> This patch adds basic boot, setup and reset routines for LoongArch.
-> LoongArch uses UEFI-based firmware and uses ACPI as the boot protocol.
+> +#define NR_syscalls (__NR_syscalls)
+> diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
+> new file mode 100644
+> index 000000000000..b344b1f91715
+> --- /dev/null
+> +++ b/arch/loongarch/include/uapi/asm/unistd.h
+> @@ -0,0 +1,6 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#define __ARCH_WANT_NEW_STAT
+> +#define __ARCH_WANT_SYS_CLONE
+> +#define __ARCH_WANT_SYS_CLONE3
 
-This needs to be reviewed by the maintainers for the EFI and ACPI subsystems,
-I added them to Cc here. If you add lines like
+I still think you need to remove __ARCH_WANT_NEW_STAT and
+__ARCH_WANT_SYS_CLONE here.
 
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-efi@vger.kernel.org
+I understand that those are needed for the transitional period when you
+still need to support your existing glibc library files, but you likely still
+have other kernel patches that are not part of this series, so I suggest
+you add those two lines as a custom patch there until you are ready to
+drop support for old libc.
 
-in the patch description before your Signed-off-by, then git-send-email will
-Cc them automatically without you having to spam them with the entire series.
-
-In particular, I know that Ard previously complained that you did not use the
-EFI boot protocol correctly, and I want to make sure that he's happy with the
-final version.
-
-> +static ssize_t boardinfo_show(struct kobject *kobj,
-> +                             struct kobj_attribute *attr, char *buf)
+> +
+> +SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+> +       unsigned long, prot, unsigned long, flags, unsigned long,
+> +       fd, off_t, offset)
 > +{
-> +       return sprintf(buf,
-> +               "BIOS Information\n"
-> +               "Vendor\t\t\t: %s\n"
-> +               "Version\t\t\t: %s\n"
-> +               "ROM Size\t\t: %d KB\n"
-> +               "Release Date\t\t: %s\n\n"
-> +               "Board Information\n"
-> +               "Manufacturer\t\t: %s\n"
-> +               "Board Name\t\t: %s\n"
-> +               "Family\t\t\t: LOONGSON64\n\n",
-> +               b_info.bios_vendor, b_info.bios_version,
-> +               b_info.bios_size, b_info.bios_release_date,
-> +               b_info.board_vendor, b_info.board_name);
+> +       if (offset & ~PAGE_MASK)
+> +               return -EINVAL;
+> +       return ksys_mmap_pgoff(addr, len, prot, flags, fd,
+> +                              offset >> PAGE_SHIFT);
 > +}
 > +
-> +static struct kobj_attribute boardinfo_attr = __ATTR(boardinfo, 0444,
-> +                                                    boardinfo_show, NULL);
-> +
-> +static int __init boardinfo_init(void)
+> +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
+> +       unsigned long, prot, unsigned long, flags, unsigned long, fd,
+> +       unsigned long, pgoff)
 > +{
-> +       if (!efi_kobj)
+> +       if (pgoff & (~PAGE_MASK >> 12))
 > +               return -EINVAL;
 > +
-> +       return sysfs_create_file(efi_kobj, &boardinfo_attr.attr);
+> +       return ksys_mmap_pgoff(addr, len, prot, flags, fd,
+> +                              pgoff >> (PAGE_SHIFT - 12));
 > +}
-> +late_initcall(boardinfo_init);
 
-I see you have documented this interface for your mips machines,
-but nothing else uses it.
+sys_mmap2() is only used on 32-bit architectures, you only need
+sys_mmap() here.
 
-I think some of this information should be part of the soc_device,
-either in addition to, or in place of this sysfs file.
+Ideally we'd just move those two definitions you have here into
+mm/mmap.c and remove all the duplicate definitions. Maybe
+you can come up with a patch to do this?
 
-Isn't there an existing method to do this on x86/arm/ia64 machines?
+Note that some architectures use either nonstandard names,
+or shift value other than 12, so those need to keep their own
+versions.
 
-> +static int constant_set_state_periodic(struct clock_event_device *evt)
-> +{
-> +       unsigned long period;
-> +       unsigned long timer_config;
-> +
-> +       raw_spin_lock(&state_lock);
-> +
-> +       period = const_clock_freq / HZ;
-> +       timer_config = period & CSR_TCFG_VAL;
-> +       timer_config |= (CSR_TCFG_PERIOD | CSR_TCFG_EN);
-> +       csr_writeq(timer_config, LOONGARCH_CSR_TCFG);
-> +
-> +       raw_spin_unlock(&state_lock);
-
-I see this pattern in a couple of places, using a spinlock or raw_spinlock
-to guard MMIO access, but on many architectures a register write is
-not serialized by the following spin_unlock, unless you insert another
-read from the same address in there. E.g. on PCIe, writes are always
-posted and it would not work.
-
-Can you confirm that it works correctly on CSR registers in loongarch?
-
-         Arnd
+      Arnd
