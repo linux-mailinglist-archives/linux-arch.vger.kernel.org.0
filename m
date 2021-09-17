@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C414A40F47C
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Sep 2021 11:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCD740F568
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Sep 2021 11:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbhIQJDm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Sep 2021 05:03:42 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:55873 "EHLO
+        id S241589AbhIQJ6o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Sep 2021 05:58:44 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:51943 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbhIQJDl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Sep 2021 05:03:41 -0400
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+        with ESMTP id S229842AbhIQJ6n (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Sep 2021 05:58:43 -0400
+Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
  mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N7iT4-1mwame1YQc-014lwc; Fri, 17 Sep 2021 11:02:18 +0200
-Received: by mail-wr1-f42.google.com with SMTP id i23so13992945wrb.2;
-        Fri, 17 Sep 2021 02:02:17 -0700 (PDT)
-X-Gm-Message-State: AOAM5306GrV7jZASVG5H+MQwNDDzY7hEGkrmz95rOTwGmaSRy148iRdL
-        oytmqDUKnsri7NvbO95wUSrNCbwgBXrIIy3f3bo=
-X-Google-Smtp-Source: ABdhPJw6r624crPzbfz4Nvr2pbJ9ZO+UiBgdv+k/OBM2TFktBVkhBtLpOU/mmzSq/jJnWFToRK6mw+fTR3mUw8aBqoc=
-X-Received: by 2002:adf:c10b:: with SMTP id r11mr10884040wre.336.1631869336873;
- Fri, 17 Sep 2021 02:02:16 -0700 (PDT)
+ 1Ml6Zo-1nANHI2Xsa-00lUCu; Fri, 17 Sep 2021 11:57:20 +0200
+Received: by mail-wm1-f46.google.com with SMTP id s24so6855946wmh.4;
+        Fri, 17 Sep 2021 02:57:20 -0700 (PDT)
+X-Gm-Message-State: AOAM5324p9PJ0BzLOY684l8kK2aHOlLNEQBN+T70dauRKTiZ+UYBUwk7
+        0fkFuY2PlgeoJkmPmuSr/JtaRfvrMz+uER4mDoY=
+X-Google-Smtp-Source: ABdhPJzyBSn5fd+1jNXROdABAdgBwflJnaUMN+smVMYhmymQpYzFP7i1jCUpju6EsMwBumKlxY5QJJaPaJvt4hjtt98=
+X-Received: by 2002:a05:600c:896:: with SMTP id l22mr14162849wmp.173.1631872640107;
+ Fri, 17 Sep 2021 02:57:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210917035736.3934017-1-chenhuacai@loongson.cn> <20210917035736.3934017-19-chenhuacai@loongson.cn>
-In-Reply-To: <20210917035736.3934017-19-chenhuacai@loongson.cn>
+References: <20210917035736.3934017-1-chenhuacai@loongson.cn> <20210917035736.3934017-21-chenhuacai@loongson.cn>
+In-Reply-To: <20210917035736.3934017-21-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Sep 2021 11:02:00 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a26CGyiZ9y7KxHGu6eHXZJ08X4mospr+3CL8g_qi=ACpg@mail.gmail.com>
-Message-ID: <CAK8P3a26CGyiZ9y7KxHGu6eHXZJ08X4mospr+3CL8g_qi=ACpg@mail.gmail.com>
-Subject: Re: [PATCH V3 18/22] LoongArch: Add PCI controller support
+Date:   Fri, 17 Sep 2021 11:57:04 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0N=SA-E7ChrMrA5Gv6TDMzJ4_QNUN5OzpJWgzyJwcboA@mail.gmail.com>
+Message-ID: <CAK8P3a0N=SA-E7ChrMrA5Gv6TDMzJ4_QNUN5OzpJWgzyJwcboA@mail.gmail.com>
+Subject: Re: [PATCH V3 20/22] LoongArch: Add multi-processor (SMP) support
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -43,68 +43,91 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ZPJ3unZ38iZq/NHPz6ZHLheWP8t8LYOCiD4YHHdb47yBqGycgoJ
- 7wtvDv4j1NCPuCR3WVqDY72Yi/kU77+z2h2XTngsC9WvTSxmIqWB29129+pgHBKZAc6kgk/
- mi0Nfm6H8KTWMB0n/5O1csvAnxb97ZymhX/fSMjh5zN00FqHxM9YaZndxqlI23qg9Qnx5Nb
- l2rrDs9GmaE957UCgQYJA==
+X-Provags-ID: V03:K1:kC1QUHCCsGGorUz97L4KK/8Lk7l9US/yxko6T91cxhmCcUhDdQb
+ GxvJ5YchEeqKmNqw5uQl2cpl0VSeiHAW7i+khcPA+z9XqBLN4XU2gWouuu2lGkG+lsHF6hb
+ 6GBY/MHhjKocEolyBgxoeppfaxazz3vUiKdcPhCgI3BFEmKGVO2BuJZhSFJhjgfTadhzngZ
+ GjhsemX4qPEu0G2UHxofg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:F8kJQlhz+VQ=:S4a9vWlo0mnu2sA42Kt7vI
- fbUWwXBkhzXYZiN4oVgYeSZ9L9m6qypr9Qd8PyTjhHHA5vrGBOlHdNY+L1+v2apPq1GOdd/N3
- AK6GdV/ydwq1R50APsARTmtDK7yxuAYg+qYWQWbTbVTagh7ZpAfN1zmaARR9EQT4XzN517gdp
- F+EbzgjT/oIHLTgcga8d2lELoMXeQlzVO6KPCoW4dRtKPkK1cB2Kx7orMO5F7WWdBAjTWA6Jx
- poifHkrK6pXY9kOQporWjq1vXBJ1/CVub+WwX+p+5lgEHPUtn+NueUaHsypq0pnjgHXCXm6r/
- ZLzNkEP33D5U+jw8fErUu18pkeFNCpy57K+ZlYLuF54L5xsDpUGDja4nc1NIFAGPl6jv1umoG
- yHBJyyH8ao1RFOxg0eDNOaXuMeV8zbO7+nM6IXE0/A9CyUM0RO7Z6y6cWhMjTuWE30LTEBCYG
- ZkuwCrebDIM7EGlNrj3EaWlxbfEbntyu0+TEVsbSepjLnG74yynpsYXTJWBr2oNdUSwPcA9r3
- q8aV/G6Q/ilJ5xd5NMbCd8w30wy4Tv8uf8n9tJ3+YocTIcPHZKpq1uG98ro7BeLxjZwRei324
- Jst6/L7XFe8c2BmBOM5IE9ddiYPV+yQ70bKvIoTP1/y6gQRfjDOEKp7XRgpmhK0P+YNTJeB8d
- j2dn9zmOC6HxoIbKGFcBZ/ZQQoBl/AGkEwg7QnL/W4g2KAb9whOrGkSVrnw0di/gwauMVdkLx
- bcOCteQsxFLQJiH012utf8oV2r8Q+Z3IC5vxpPIUw3622MqxRdnA2MHIc0MBPRWZ3dAVYH2J3
- oESZibmOwJml875FbEtFW05CDjatoy3U6RrfMJBsv2kmaOZLhmnyzUWonm1ls1Ghno7PmpHCx
- n9hlKkzAW8T8Do6WF8lg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NJtuMmF6raQ=:uAQd3w1+EClqPavyx4ZS3X
+ QE4AArTLVhJiLM95b66zKwhZWOAPnF711W96JJMmt2iHnTZcX1RNKQpJ9TtKNUAUcx0o8l4K6
+ 8Gu+1CCloKMv4voaNZxqTYIVyGqplAAd6HkpCxO81WacTf2hSWMSs4qBkRP7F/BO71+RZeXYZ
+ AWdMBVhxakDmnCikcZApKnsN9d/JRFBKmi66T/LtpQBHq4+hHB3e5m6BegoWpOlfLGiszZV0A
+ bt4/16el2NUwGwrQqgPd/2gXyEP7v2Y6mWqBxuyX2DSIMhPaYyWCAErQLhFTwPrPQ1rTMrBO8
+ paRwh3JE9h/dI0XkIOZ7wvVikvjmCaQuJ/A9sAKL/8dOZeZ2S1pEaxoPu9mptGTDWJ7OxztIr
+ FpcBDtoaDwhf0EIAFnJeAQFEmzf2K13BStb/2+a18t3y3YJqGr4ag3axbLsXo7HjnOkWq6Meg
+ DC6cmRWb7vpUaGMrEFzryJSnAVNd9LiRaOx1BA9oJ7A26eQPYoWFnr+JwSX8ssjk+rYT81HMp
+ d+66Vh4mkkf5xXrmX/10jMK0cJTYj75KUPzp4insEE6HDj0uwKxrxCG/sDqRqMXS3BBVXOWpA
+ oxbf1UE5fcfqLZFKQmj7Td4ztNbG7JmqFuzMkaQc2oFlryjhYxUDadv8wXsfRqaZjmkOtpwi2
+ RQ2T7123/0Rk5pyoe9Vxpg2gPhmhYlTlq0ZnA+ZH8Q60nGzCWM5n7DRl2EuKQyg/llviwrQsM
+ H46qKmUAF7PrP9J+wBwjNZZu3weExb/rILC3MGAqRrG026mQBmST2+ZF9msCLp64BSdzLVAXz
+ bb6snS5o4nyNX4kHkxoq2g0iB5jCBL8viyQcxyWqdmv+bpV+GY21gWBHWDa2lmd7bmBweu9xr
+ cXIkHvutMtbEc2n4vOrw==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Fri, Sep 17, 2021 at 5:57 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> Loongson64 based systems are PC-like systems which use PCI/PCIe as its
-> I/O bus, This patch adds the PCI host controller support for LoongArch.
->
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
-As discussed before, I think the PCI support should not be part of the
-architecture code or this patch series. The headers are ok, but the pci.c
-and acpi.c files have nothing loongarch specific in them, and you clearly
-just copied most of this from arm64 or x86.
+> +
+> +struct task_struct;
+> +
+> +struct plat_smp_ops {
+> +       void (*send_ipi_single)(int cpu, unsigned int action);
+> +       void (*send_ipi_mask)(const struct cpumask *mask, unsigned int action);
+> +       void (*smp_setup)(void);
+> +       void (*prepare_cpus)(unsigned int max_cpus);
+> +       int (*boot_secondary)(int cpu, struct task_struct *idle);
+> +       void (*init_secondary)(void);
+> +       void (*smp_finish)(void);
+> +#ifdef CONFIG_HOTPLUG_CPU
+> +       int (*cpu_disable)(void);
+> +       void (*cpu_die)(unsigned int cpu);
+> +#endif
+> +};
 
-What I would suggest you do instead is:
 
-- start a separate patch series, addressed to the ACPI, PCI host driver
-  and ARM64 maintainers.
+Do you foresee having more than one implementation of these in the
+near future? If not, I would suggest leaving out the extra indirection
+and just using direct function calls.
 
-- Move all the bits you need from arch/{arm64,ia64,x86} into
-  drivers/acpi/pci/pci_root.c, duplicating them with #if/#elif/#else
-  where they are too different, making the #else path the
-  default that can be shared with loongarch.
+> +#ifdef CONFIG_SMP
+> +
+> +static inline void plat_smp_setup(void)
+> +{
+> +       extern const struct plat_smp_ops *mp_ops;       /* private */
+> +
+> +       mp_ops->smp_setup();
+> +}
+> +
+> +#else /* !CONFIG_SMP */
+> +
+> +static inline void plat_smp_setup(void) { }
+> +
+> +#endif /* !CONFIG_SMP */
 
-- Move the bits from pci_root_info/acpi_pci_root_info that are
-  always needed into struct pci_host_bridge, with an
-  #ifdef CONFIG_ACPI where appropriate.
+You could even go further and do what arch/arm64 has, making
+SMP support unconditional. This obviously depends on hardware
+roadmaps, but if all harfdware you support has multiple cores,
+then non-SMP mode just adds complexity.
 
-- Simplify as much as you can easily do.
+> +
+> +#define MAX_CPUS 64
 
-        Arnd
+You CONFIG_NR_CPUS allows up to 256. I think you need to
+adjust one of the numbers to match the other, or remove this
+definition and just use CONFIG_NR_CPUS directly.
+
+> +
+> +static volatile void *ipi_set_regs[MAX_CPUS];
+> +static volatile void *ipi_clear_regs[MAX_CPUS];
+> +static volatile void *ipi_status_regs[MAX_CPUS];
+> +static volatile void *ipi_en_regs[MAX_CPUS];
+> +static volatile void *ipi_mailbox_buf[MAX_CPUS];
+
+Why are these 'volatile'? If they are MMIO registers, they
+should be __iomem, and accessed using readl()/writel()
+ etc
+
+       Arnd
