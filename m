@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCD740F568
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Sep 2021 11:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1323940F570
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Sep 2021 12:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241589AbhIQJ6o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Sep 2021 05:58:44 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:51943 "EHLO
+        id S241646AbhIQKB1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Sep 2021 06:01:27 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:42605 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbhIQJ6n (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Sep 2021 05:58:43 -0400
-Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
+        with ESMTP id S229842AbhIQKB0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Sep 2021 06:01:26 -0400
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
  mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Ml6Zo-1nANHI2Xsa-00lUCu; Fri, 17 Sep 2021 11:57:20 +0200
-Received: by mail-wm1-f46.google.com with SMTP id s24so6855946wmh.4;
-        Fri, 17 Sep 2021 02:57:20 -0700 (PDT)
-X-Gm-Message-State: AOAM5324p9PJ0BzLOY684l8kK2aHOlLNEQBN+T70dauRKTiZ+UYBUwk7
-        0fkFuY2PlgeoJkmPmuSr/JtaRfvrMz+uER4mDoY=
-X-Google-Smtp-Source: ABdhPJzyBSn5fd+1jNXROdABAdgBwflJnaUMN+smVMYhmymQpYzFP7i1jCUpju6EsMwBumKlxY5QJJaPaJvt4hjtt98=
-X-Received: by 2002:a05:600c:896:: with SMTP id l22mr14162849wmp.173.1631872640107;
- Fri, 17 Sep 2021 02:57:20 -0700 (PDT)
+ 1M9WiK-1mUU3L2KaS-005Yc6; Fri, 17 Sep 2021 12:00:03 +0200
+Received: by mail-wr1-f52.google.com with SMTP id i23so14260117wrb.2;
+        Fri, 17 Sep 2021 03:00:03 -0700 (PDT)
+X-Gm-Message-State: AOAM533ABkHQ9znRVJRWCpoMYS69xHnyGryVcPT3RofVAM/Imw4Gna4m
+        bp17krXeKV5pQ+wUXymYcTil3iC+SH92s1uO7Lk=
+X-Google-Smtp-Source: ABdhPJyvhDrqYzXphcVkK1FBrHhhk/pUL3mymqcJFEcLsVXHNrmMksOOvVhdhgKpF+HOpZzFT0cmgKV+rF7YHvlSJ+I=
+X-Received: by 2002:adf:c10b:: with SMTP id r11mr11167163wre.336.1631872803099;
+ Fri, 17 Sep 2021 03:00:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210917035736.3934017-1-chenhuacai@loongson.cn> <20210917035736.3934017-21-chenhuacai@loongson.cn>
-In-Reply-To: <20210917035736.3934017-21-chenhuacai@loongson.cn>
+References: <20210917035736.3934017-1-chenhuacai@loongson.cn>
+In-Reply-To: <20210917035736.3934017-1-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Sep 2021 11:57:04 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0N=SA-E7ChrMrA5Gv6TDMzJ4_QNUN5OzpJWgzyJwcboA@mail.gmail.com>
-Message-ID: <CAK8P3a0N=SA-E7ChrMrA5Gv6TDMzJ4_QNUN5OzpJWgzyJwcboA@mail.gmail.com>
-Subject: Re: [PATCH V3 20/22] LoongArch: Add multi-processor (SMP) support
+Date:   Fri, 17 Sep 2021 11:59:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0jdGhdoc4SHXDrtK2sOFkdWMX+6O2-WgcB1h=yNTqdgQ@mail.gmail.com>
+Message-ID: <CAK8P3a0jdGhdoc4SHXDrtK2sOFkdWMX+6O2-WgcB1h=yNTqdgQ@mail.gmail.com>
+Subject: Re: [PATCH V3 00/22] arch: Add basic LoongArch support
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -45,89 +45,92 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:kC1QUHCCsGGorUz97L4KK/8Lk7l9US/yxko6T91cxhmCcUhDdQb
- GxvJ5YchEeqKmNqw5uQl2cpl0VSeiHAW7i+khcPA+z9XqBLN4XU2gWouuu2lGkG+lsHF6hb
- 6GBY/MHhjKocEolyBgxoeppfaxazz3vUiKdcPhCgI3BFEmKGVO2BuJZhSFJhjgfTadhzngZ
- GjhsemX4qPEu0G2UHxofg==
+X-Provags-ID: V03:K1:qo30ntLUtt/uyLMOKOdSoOgpeBVG4SuyO6zNx0ur5ytVr+qF3N/
+ g+hbNYKbrj/sxa4R9xKAdRE6RspOsaXCY2tkFrQwq5MffNH6WzrWVxsnC8BsIBuiSMpLLAA
+ 0mWBSii/5ws3kld0J35VCQQXpvpuovB+eMzpAzccE1dzwwbgxWvMGIduhas1B1QWZ/Lc21h
+ xPnjee0l6aR8b9GgXoXDA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NJtuMmF6raQ=:uAQd3w1+EClqPavyx4ZS3X
- QE4AArTLVhJiLM95b66zKwhZWOAPnF711W96JJMmt2iHnTZcX1RNKQpJ9TtKNUAUcx0o8l4K6
- 8Gu+1CCloKMv4voaNZxqTYIVyGqplAAd6HkpCxO81WacTf2hSWMSs4qBkRP7F/BO71+RZeXYZ
- AWdMBVhxakDmnCikcZApKnsN9d/JRFBKmi66T/LtpQBHq4+hHB3e5m6BegoWpOlfLGiszZV0A
- bt4/16el2NUwGwrQqgPd/2gXyEP7v2Y6mWqBxuyX2DSIMhPaYyWCAErQLhFTwPrPQ1rTMrBO8
- paRwh3JE9h/dI0XkIOZ7wvVikvjmCaQuJ/A9sAKL/8dOZeZ2S1pEaxoPu9mptGTDWJ7OxztIr
- FpcBDtoaDwhf0EIAFnJeAQFEmzf2K13BStb/2+a18t3y3YJqGr4ag3axbLsXo7HjnOkWq6Meg
- DC6cmRWb7vpUaGMrEFzryJSnAVNd9LiRaOx1BA9oJ7A26eQPYoWFnr+JwSX8ssjk+rYT81HMp
- d+66Vh4mkkf5xXrmX/10jMK0cJTYj75KUPzp4insEE6HDj0uwKxrxCG/sDqRqMXS3BBVXOWpA
- oxbf1UE5fcfqLZFKQmj7Td4ztNbG7JmqFuzMkaQc2oFlryjhYxUDadv8wXsfRqaZjmkOtpwi2
- RQ2T7123/0Rk5pyoe9Vxpg2gPhmhYlTlq0ZnA+ZH8Q60nGzCWM5n7DRl2EuKQyg/llviwrQsM
- H46qKmUAF7PrP9J+wBwjNZZu3weExb/rILC3MGAqRrG026mQBmST2+ZF9msCLp64BSdzLVAXz
- bb6snS5o4nyNX4kHkxoq2g0iB5jCBL8viyQcxyWqdmv+bpV+GY21gWBHWDa2lmd7bmBweu9xr
- cXIkHvutMtbEc2n4vOrw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wzPYElE+Npg=:tRWDM98sSp0FvXG8LZqP+V
+ JplA+AjM1gkws6vAPpypGAA5WmIpJg8k3sUm+I5dlHq7F2Vm7c/1JoksAO8GXwcvmFUNIbg3W
+ GbLU1q1fSxMKvYltUUDJ2PN0YyGWFlt0ClXVW207vtIuS2fbZEq3paDZc4TxCzKNkdkp9DUVR
+ pdaG6zBZEU5wX2qMb76LzRdTzbTMFih8B2cxrZHRAQU0X41RUT0nnQ+M2xKjjyzoFlAyUDTip
+ B+L4eo7mLHFv4Cl0avREMqVo2aSWebJtHZJS5/Q+8R11beSSqSJtqliYis9ZwiCmuHUw7w4fZ
+ qmRNcjC4dNxFNrq7EbdkPkt2Vp4qZh8+3hnNHNmhktxtd2My5LxudgXEwpKdeSXHLY2yV4Iiq
+ xz7RZ+BNAVNlFRzSMu1O8jqmMouFYGB1fxX6TqjOzF9bgvVZFJZDcaS3M1i6dpDpfw/+cKcXi
+ 3HQYt/wfI8dz/hR7S7rLrQgrwLTTKm+uK0efzp/tG5DYkt7/WslzJM9BEFL29BlX2+vypAzL0
+ nlX8UzHXuOL+Gih5ZSpJGVOR4jeXOxEf1UjHvRn9d4oJo9bSb1Tmhet+nXygyWrE6CXZLTfdE
+ qfxANNXh4ZhLuHtr9wgwDN3yjedJYWTeHH1628cX9ltKhf9052R920Es+dScE4D2kANtZ3071
+ hwGBsje6xkLVDF9rd7nJhePenwPLO5LJtqMz6/wwDXlt4x1pw8qxJ4NeSUMsGA7Q4TH7zd1Ob
+ pIkUB/+Izp7YARrH8nfvUll1vYHRVyfmQAD1jhMhZo942d3w1UM2lCX1i9T0utnzuQkUP/dzp
+ sOxhsiO4s7cLrGZ+9os0MjVL8ss/tZK67J6IVP1G1tiR0Zk5danh46fO1hgY0z+1oTyboP7xi
+ 8obHruLvFqvKaAhyx0HQ==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Fri, Sep 17, 2021 at 5:57 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> are already added in the next revision of ACPI Specification (current
+> revision is 6.4).
+>
+> This patchset is adding basic LoongArch support in mainline kernel, we
+> can see a complete snapshot here:
+> https://github.com/loongson/linux/tree/loongarch-next
+>
+> Cross-compile tool chain to build kernel:
+> https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-20210812-cross-tools.tar.xz
+>
+> A CLFS-based Linux distro:
+> https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-system-2021-08-22.tar.bz2
+>
+> Open-source tool chain which is under review:
+> https://github.com/loongson/binutils-gdb/tree/loongarch-2_37
+> https://github.com/loongson/gcc/tree/loongarch-12
+> https://github.com/loongson/glibc/tree/loongarch_2_34_dev
+>
+> Loongson and LoongArch documentations:
+> https://github.com/loongson/LoongArch-Documentation
+>
+> LoongArch-specific interrupt controllers:
+> https://mantis.uefi.org/mantis/view.php?id=2203
+>
+> V1 -> V2:
+> 1, Add documentation patches;
+> 2, Restore copyright statements;
+> 3, Split the big header patch;
+> 4, Cleanup signal-related headers;
+> 5, Cleanup incomplete 32-bit support;
+> 6, Move the major PCI work to drivers/pci;
+> 7, Rework Loongson64 platform support;
+> 8, Rework lpj and __udelay()/__ndelay();
+> 9, Rework page table layout config options;
+> 10, Rework syscall/exception/interrupt with generic entry framework;
+> 11, Simplify the VDSO/VSYSCALL implementation;
+> 12, Use generic I/O access macros and functions;
+> 13, Remove unaligned access emulation at present;
+> 14, Keep clocksource code in arch since it is the "native clocksource";
+> 15, Some other minor fixes and improvements.
+>
+> V2 -> V3:
+> 1, Rebased on 5.15-rc1;
+> 2, Cleanup PCI code on V2;
+> 3, Support multiple msi domain;
+> 4, Support cacheable ioremap();
+> 5, Use irq stack for interrupt handling;
+> 6, Adjust struct ucontext and rt_sigframe;
+> 7, Some other minor fixes and improvements.
 
-> +
-> +struct task_struct;
-> +
-> +struct plat_smp_ops {
-> +       void (*send_ipi_single)(int cpu, unsigned int action);
-> +       void (*send_ipi_mask)(const struct cpumask *mask, unsigned int action);
-> +       void (*smp_setup)(void);
-> +       void (*prepare_cpus)(unsigned int max_cpus);
-> +       int (*boot_secondary)(int cpu, struct task_struct *idle);
-> +       void (*init_secondary)(void);
-> +       void (*smp_finish)(void);
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +       int (*cpu_disable)(void);
-> +       void (*cpu_die)(unsigned int cpu);
-> +#endif
-> +};
+I see you have made a lot of progress, that looks nice. I commented on the PCI
+stuff already, I think that needs more work and should be split out so it does
+not hold up the architecture merge. Also as I commented, the series needs more
+review from the EFI/ACPI, signal, and module maintainers among others.
 
+It would be good if you could add more information in the patch descriptions
+for each patch to summarize the discussions that have led to changes or
+whenever you got comments but argued that the current version is necessary.
 
-Do you foresee having more than one implementation of these in the
-near future? If not, I would suggest leaving out the extra indirection
-and just using direct function calls.
-
-> +#ifdef CONFIG_SMP
-> +
-> +static inline void plat_smp_setup(void)
-> +{
-> +       extern const struct plat_smp_ops *mp_ops;       /* private */
-> +
-> +       mp_ops->smp_setup();
-> +}
-> +
-> +#else /* !CONFIG_SMP */
-> +
-> +static inline void plat_smp_setup(void) { }
-> +
-> +#endif /* !CONFIG_SMP */
-
-You could even go further and do what arch/arm64 has, making
-SMP support unconditional. This obviously depends on hardware
-roadmaps, but if all harfdware you support has multiple cores,
-then non-SMP mode just adds complexity.
-
-> +
-> +#define MAX_CPUS 64
-
-You CONFIG_NR_CPUS allows up to 256. I think you need to
-adjust one of the numbers to match the other, or remove this
-definition and just use CONFIG_NR_CPUS directly.
-
-> +
-> +static volatile void *ipi_set_regs[MAX_CPUS];
-> +static volatile void *ipi_clear_regs[MAX_CPUS];
-> +static volatile void *ipi_status_regs[MAX_CPUS];
-> +static volatile void *ipi_en_regs[MAX_CPUS];
-> +static volatile void *ipi_mailbox_buf[MAX_CPUS];
-
-Why are these 'volatile'? If they are MMIO registers, they
-should be __iomem, and accessed using readl()/writel()
- etc
-
-       Arnd
+        Arnd
