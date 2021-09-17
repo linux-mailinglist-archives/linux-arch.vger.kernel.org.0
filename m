@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDED740F394
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Sep 2021 09:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207EA40F3D8
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Sep 2021 10:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240285AbhIQHy6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Sep 2021 03:54:58 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:41317 "EHLO
+        id S233882AbhIQING (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Sep 2021 04:13:06 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:40981 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbhIQHy5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Sep 2021 03:54:57 -0400
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MPosX-1mEiKr2zlD-00MrVl; Fri, 17 Sep 2021 09:53:34 +0200
-Received: by mail-wr1-f47.google.com with SMTP id q26so13649189wrc.7;
-        Fri, 17 Sep 2021 00:53:34 -0700 (PDT)
-X-Gm-Message-State: AOAM533EhJK3HuQUtYj48pB6j9+oAiQplLYHOzFmQxg3wLSIAHVTqFn1
-        hv+tXqBiCJE0tmtEkkFlLg8xTGhfEgzV9/5gyck=
-X-Google-Smtp-Source: ABdhPJyYWqWKnqFY/a4Kf/vPsS0c2qB8QMRqZuZJ195s1S/CG3F7FL+9spSmhLrD/p0ncHSxJEX5URv+rnTr+QzwxYo=
-X-Received: by 2002:a5d:4b50:: with SMTP id w16mr10388372wrs.71.1631865214272;
- Fri, 17 Sep 2021 00:53:34 -0700 (PDT)
+        with ESMTP id S233348AbhIQINE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Sep 2021 04:13:04 -0400
+Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MAtoX-1mcRUr2ycL-00BLqu; Fri, 17 Sep 2021 10:11:40 +0200
+Received: by mail-wm1-f46.google.com with SMTP id f62-20020a1c1f41000000b0030b42643f72so1282753wmf.3;
+        Fri, 17 Sep 2021 01:11:40 -0700 (PDT)
+X-Gm-Message-State: AOAM531drqy4BbYmcUK2E/pc2+hOJO9tQCwdg32h/aWDgC+Qojuh1RSU
+        UfC/Wm2K5+iwHVU5jBQ12a93HBlP49QMQ7ubulQ=
+X-Google-Smtp-Source: ABdhPJzdLqnRgI4cH6Nyy5LXIDujO3LJsA9YmMdPik3wbbxv6tFICqff3PNBsHdiQf1eaKsTtL5RdxVWXX/UgvbQIM8=
+X-Received: by 2002:a1c:23cb:: with SMTP id j194mr13725733wmj.1.1631866300248;
+ Fri, 17 Sep 2021 01:11:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210917035736.3934017-1-chenhuacai@loongson.cn> <20210917035736.3934017-6-chenhuacai@loongson.cn>
-In-Reply-To: <20210917035736.3934017-6-chenhuacai@loongson.cn>
+References: <20210917035736.3934017-1-chenhuacai@loongson.cn> <20210917035736.3934017-10-chenhuacai@loongson.cn>
+In-Reply-To: <20210917035736.3934017-10-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Sep 2021 09:53:18 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0E3fRJU9VCRp7MQz-jBC0nHi1DwjPGtymEg3vJJoDqrg@mail.gmail.com>
-Message-ID: <CAK8P3a0E3fRJU9VCRp7MQz-jBC0nHi1DwjPGtymEg3vJJoDqrg@mail.gmail.com>
-Subject: Re: [PATCH V3 05/22] LoongArch: Add build infrastructure
+Date:   Fri, 17 Sep 2021 10:11:24 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0BkYBoBh37YyZ1HU4f1thL6ckJR0MZhbkhpKanVK1WcQ@mail.gmail.com>
+Message-ID: <CAK8P3a0BkYBoBh37YyZ1HU4f1thL6ckJR0MZhbkhpKanVK1WcQ@mail.gmail.com>
+Subject: Re: [PATCH V3 09/22] LoongArch: Add boot and setup routines
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -43,124 +43,111 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:mBZTQjaYb8WtQneFumZYpiPFBqPGsxI08ewCpal0jnFkIIFYxo4
- diiQZjq429f8FuIIBDj65MWfDzFCjw/D/iuXcNarN5XIfSTmQ97Mt9aguKcm/al0NwlBsmh
- hfMAtcltz+Gd7mGXcaSREBdDn8FeDfWP9j/B2Z93Sp//az05nvvBGYxusyXBVKvJ5uB2G2Q
- eJJOcHHYEPjvsSJXhm4tQ==
+X-Provags-ID: V03:K1:xX3+od/obibddeM4KisBEcIfw3ae01neA0i41oKlXY7PmDRQkbV
+ gd7xnoQncgU5oZo1atrpKQOyYCS8qqp6pFdOmBVaY32r8RyizwNteLpzETqJFBM7+PhbJ8z
+ +bJ81FyRd4cjY+DMiF/SmYD1lvNlKcQJ5YcIS559iQ8SE+VehBRYvNPcjudGHp01wcSJR1u
+ ri5pDfW4OZHCcGCXkvGKA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:RO7CjDrpNx0=:WyNYbowOlsbISWCJb0bhlX
- KeZ8N3MfXgj5Df/k/yEFYbaqJlA7yI9BGTg8v0f7syrYEvyGE1W1jIuthb5s63SigUBJN1xee
- uPHN7Ni7F5RynqmgXahK/TDQuoj9WX7NTvjgquJqjAL7DVeoWTV+g0aMDbOh8su/z1KtopLXM
- OpVOfbhimz84hvHvDRD0gXci6EsdxoYem/njTdCwG0X4Q9KAjkJ8c0FWKHYRYwJq5ywtr3rqE
- GcImYrRKN9DIRrT+ThKXE+xVro1nB9uy+S68XLIaUC8I51fgFro3C20isUBGUDkVbN3xO3COg
- ZRhpjbIdV1wrZ0kLUNmMopTbyIgHM8OHUfj2ni8Q6U1lAwlBVaMymRpGsSJ7Y8fsyrK/A0TRD
- xAi43MjIV/BrWFGJ8MF4tkwBpAgBPkj/FMmaMbp/cnBTiunPSs3u+rrduS/t7J4vHJhYXgQDO
- l9N5noa25VPSaaDpicx5/DERnNKRqd47xYEtTYbaS7jJuP0HPWB+FH/Jkc9emc5QgdmdesolY
- ObQBh4a4cmaKrbwdKhAG3pbnIO5RbHgLbecOE5jmOF7C1pi4nyKgn4bV2crw6z9fSOriO5SH/
- ByMxoqgrEGB+NuINGuuX3vV2mswKr0OAT59xvSmiGRHSHY3agCVvj3HsydPZSn6cyVZIhhb8U
- u+RrSgHbeJ2KRNbrdWO7VTu8Q0MiQzdv5g0euCdY+JIF98rNQtP7CgZoFNEBvXNpgGcft0osJ
- /GN1DgGLc3zO1G/w0qVsyaBN0cJhLJRBuVIq4TjgCo0cj4Tv0rH67+8PfVtCw4o3HDsGvbOvg
- hqz5E4ETMHHGBV5Rvtu4aMrCF4bx4aZiOuPY2My1XiyGRAio+U/t+zfxYlsOeq9jMVy59zFuO
- KE0IZLhbDkO02qEBThAA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Xjcg/tARvE4=:KCXqULx1p511re317mZ7tf
+ mfRWXwKw3ufYl8Q+AnV5f8x47mRIxkbUVolojz+TVRvY8xsbrb3T75uoO5lIJyfKRjORBXEXS
+ 9sjT4djIa9adZjCeDE6zGwfOKbASK74uaSGfBphqOF9SQwjQ2/JoeUYAWVG7a72oMGTnykIsd
+ QxoPca5+LuX+fR241YLQmIjYtIp5MNauvE9Y/G7Kt5eWv+e0I25DmSKteod4wULy2YZeBMWz2
+ NKd3vDFXtpyfh5fmxoWJ8oHNGUKsBymswi+5qfbVNremY5kQClIJQD1rizx4EU/Mf1Fg09pxc
+ vFGG+VcagIyq1s6SxRcujVzwxEK6w7siFrRiLIiLxoiJwe04PUtE+YffLpwruzwJMilPJgW+2
+ +q7L/dLqDF+dzZ1zDmnrvATCJTZrIwZiSKArubg+1l9jO52gaXNR8xaa9a/BUdWQxN1bdaAXP
+ 3tV4F8zcoS3wGqF7oEdK/+5yeAXpGy9WeZ5CcRko5ReBVIqzlHTPq/eqbBlTQKVbEgechP2Yo
+ d6LgrzaPoLhnrNVRQ6pr7W/99ViGq7WdipQTWbvdvz4GdAEaMdilrdMN8gOuYgGPWEaGZkxXo
+ PZTUjh5/UOLjofNpKJXnW0sP+1uo0whlOfQxF/kCij1kYaeDLYZN3npTYb6V51Ul8DqnQ5HCy
+ USujMVq/JyADIWmH5hePb9jxs07n8xHiauzL4eWAlQY9E9sS0UPBLoDZE1yI4Z1jRg5X1uRzP
+ 3F7+oOv2Lp8STlt+d50spCdAhUdffET5vW8ZkLMzmqcwNW0S5tVsl96GH2/rspmZQaoIz2p03
+ qCoGhVsmRuAGYmtk3iVsaTLjxgDFWkeEPKZr+NKEjgpKRZiYxJKjVXKGJFIcO1GRFImnmHzMF
+ BdcEC22ZLyxVHGYNOrYQ==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 17, 2021 at 5:57 AM Huacai Chen <chenhuacai@loongson.cn>
-wrote:> --- /dev/null
-> +++ b/arch/loongarch/.gitignore
-> @@ -0,0 +1,9 @@
-> +*.lds
-> +*.raw
-> +calc_vmlinuz_load_addr
-> +elf-entry
-> +relocs
-> +vmlinux.*
-> +vmlinuz.*
+On Fri, Sep 17, 2021 at 5:57 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> This patch adds basic boot, setup and reset routines for LoongArch.
+> LoongArch uses UEFI-based firmware and uses ACPI as the boot protocol.
+
+This needs to be reviewed by the maintainers for the EFI and ACPI subsystems,
+I added them to Cc here. If you add lines like
+
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-efi@vger.kernel.org
+
+in the patch description before your Signed-off-by, then git-send-email will
+Cc them automatically without you having to spam them with the entire series.
+
+In particular, I know that Ard previously complained that you did not use the
+EFI boot protocol correctly, and I want to make sure that he's happy with the
+final version.
+
+> +static ssize_t boardinfo_show(struct kobject *kobj,
+> +                             struct kobj_attribute *attr, char *buf)
+> +{
+> +       return sprintf(buf,
+> +               "BIOS Information\n"
+> +               "Vendor\t\t\t: %s\n"
+> +               "Version\t\t\t: %s\n"
+> +               "ROM Size\t\t: %d KB\n"
+> +               "Release Date\t\t: %s\n\n"
+> +               "Board Information\n"
+> +               "Manufacturer\t\t: %s\n"
+> +               "Board Name\t\t: %s\n"
+> +               "Family\t\t\t: LOONGSON64\n\n",
+> +               b_info.bios_vendor, b_info.bios_version,
+> +               b_info.bios_size, b_info.bios_release_date,
+> +               b_info.board_vendor, b_info.board_name);
+> +}
 > +
-> +!kernel/vmlinux.lds.S
-
-Can you double-check that 'make clean' and/or 'make mrproper' remove all the
-generated files? This may already be the case, but I don't see how this is
-done in your Makefile
-
+> +static struct kobj_attribute boardinfo_attr = __ATTR(boardinfo, 0444,
+> +                                                    boardinfo_show, NULL);
 > +
-> +choice
-> +       prompt "Page Table Layout"
-> +       default 16KB_2LEVEL if 32BIT
-> +       default 16KB_3LEVEL if 64BIT
-> +       help
-> +         Allows choosing the page table layout, which is a combination
-> +         of page size and page table levels. The virtual memory address
-> +         space bits are determined by the page table layout.
+> +static int __init boardinfo_init(void)
+> +{
+> +       if (!efi_kobj)
+> +               return -EINVAL;
 > +
-> +config 4KB_3LEVEL
-> +       bool "4KB with 3 levels"
-> +       select PAGE_SIZE_4KB
-> +       select PGTABLE_3LEVEL
-> +       help
-> +         This option selects 4KB page size with 3 level page tables, which
-> +         support a maximum 39 bits of application virtual memory.
-> + ...
+> +       return sysfs_create_file(efi_kobj, &boardinfo_attr.attr);
+> +}
+> +late_initcall(boardinfo_init);
 
-Nice, this choice statement looks a lot better than the version you had before.
+I see you have documented this interface for your mips machines,
+but nothing else uses it.
 
+I think some of this information should be part of the soc_device,
+either in addition to, or in place of this sysfs file.
+
+Isn't there an existing method to do this on x86/arm/ia64 machines?
+
+> +static int constant_set_state_periodic(struct clock_event_device *evt)
+> +{
+> +       unsigned long period;
+> +       unsigned long timer_config;
 > +
-> +cflags-y += -ffreestanding
-
-I had not noticed this previously, but I think this should not be used here,
-as -ffreestanding disables a number of optimizations for compiler builtins.
-
-Did you just copy this from MIPS or do you have a particular reason this
-is used here?
-
-> +# Some distribution-specific toolchains might pass the -fstack-check
-> +# option during the build, which adds a simple stack-probe at the beginning
-> +# of every function.  This stack probe is to ensure that there is enough
-> +# stack space, else a SEGV is generated.  This is not desirable for LoongArch
-> +# as kernel stacks are small, placed in unmapped virtual memory, and do not
-> +# grow when overflowed.
-> +#
-> +cflags-y += -fno-stack-check
-
-This is already set in the global Makefile and can be removed as well
-
-> +cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
-> +cflags-y += -U_LOONGARCH_ISA -D_LOONGARCH_ISA=_LOONGARCH_ISA_LOONGARCH64
+> +       raw_spin_lock(&state_lock);
 > +
-> +load-y                         = 0x9000000000200000
+> +       period = const_clock_freq / HZ;
+> +       timer_config = period & CSR_TCFG_VAL;
+> +       timer_config |= (CSR_TCFG_PERIOD | CSR_TCFG_EN);
+> +       csr_writeq(timer_config, LOONGARCH_CSR_TCFG);
 > +
-> +drivers-$(CONFIG_PCI)          += arch/loongarch/pci/
-> +
-> +KBUILD_AFLAGS  += $(cflags-y)
-> +KBUILD_CFLAGS  += $(cflags-y)
-> +KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y)
-> +
-> +bootvars-y     = VMLINUX_LOAD_ADDRESS=$(load-y) PLATFORM="$(platform-y)"
+> +       raw_spin_unlock(&state_lock);
 
-I would argue that VMLINUX_LOAD_ADDRESS should not be configurable
-here, instead all kernels should use the same value.
+I see this pattern in a couple of places, using a spinlock or raw_spinlock
+to guard MMIO access, but on many architectures a register write is
+not serialized by the following spin_unlock, unless you insert another
+read from the same address in there. E.g. on PCIe, writes are always
+posted and it would not work.
 
-> diff --git a/arch/loongarch/include/asm/Kbuild b/arch/loongarch/include/asm/Kbuild
-> new file mode 100644
-> index 000000000000..41a76e675321
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/Kbuild
-> @@ -0,0 +1,31 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +generic-y += dma-contiguous.h
-> +generic-y += export.h
-> +generic-y += mcs_spinlock.h
-> +generic-y += parport.h
-> +generic-y += early_ioremap.h
-> +generic-y += qrwlock.h
-> +generic-y += qspinlock.h
+Can you confirm that it works correctly on CSR registers in loongarch?
 
-The list is apparently from an older kernel and no longer needed for
-files that are listed in include/asm-generic/Kbuild.
-
-Please only list the files that are not already there.
-
-        Arnd
+         Arnd
