@@ -2,112 +2,253 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA21340DE02
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Sep 2021 17:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6529740EECB
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Sep 2021 03:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239175AbhIPPcG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Sep 2021 11:32:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46542 "EHLO mail.kernel.org"
+        id S242340AbhIQBfc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Sep 2021 21:35:32 -0400
+Received: from mga01.intel.com ([192.55.52.88]:61401 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239172AbhIPPcF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 16 Sep 2021 11:32:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EE28661251;
-        Thu, 16 Sep 2021 15:30:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631806244;
-        bh=QN82akZbpMYFOZOMKttZiJvTLL0GDrhcaRfJwQFBvTA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SUtX56/9bvpBCQ+/geSv0+cf/xqfimCpy7nawedQJ2Oz5Q6uPPDrjn1Vr+7P2ZK7R
-         F1nAzlhDC9FcLmT3Ked6olWCHkD1+6jGPPH6xWoaDUXz04FCH31Vgpr3otP6HoOKSo
-         SbZAsiJZOP5LP4hFMMTmGAf9Ai6k6wFz0DNwRxowx/ZkNBAKRFVVW7VIPLXTPF3zjs
-         pIuQj2+Dbtkq4vZ/5TUAbPQ/oF8UHoOm9w0C+0bwZadBatly6sZX0AU1sJ+CEnn6al
-         FQzXU+X3dpXJ0j04EWJE+sVuU9P07EFO6XVv3Ze+HEwHy2VEv36lNkxDFfTjq+v0Ev
-         rJyh75aO4FhNQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Dave Martin <dave.martin@arm.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org, Mark Brown <broonie@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>
-Subject: [PATCH v6 4/4] elf: Remove has_interp property from arch_parse_elf_property()
-Date:   Thu, 16 Sep 2021 16:28:21 +0100
-Message-Id: <20210916152821.1153-5-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210916152821.1153-1-broonie@kernel.org>
-References: <20210916152821.1153-1-broonie@kernel.org>
+        id S242315AbhIQBf3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 16 Sep 2021 21:35:29 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10109"; a="245089367"
+X-IronPort-AV: E=Sophos;i="5.85,299,1624345200"; 
+   d="scan'208";a="245089367"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2021 18:34:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,299,1624345200"; 
+   d="scan'208";a="583855106"
+Received: from lkp-server01.sh.intel.com (HELO 285e7b116627) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 Sep 2021 18:34:05 -0700
+Received: from kbuild by 285e7b116627 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mR2lQ-0001cS-0X; Fri, 17 Sep 2021 01:34:04 +0000
+Date:   Fri, 17 Sep 2021 09:33:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:master] BUILD SUCCESS
+ 7962c2eddbfe7cce879acb06f9b4f205789e57b7
+Message-ID: <6143f05d.AUh9jnwR6km4jk+Q%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2173; h=from:subject; bh=QN82akZbpMYFOZOMKttZiJvTLL0GDrhcaRfJwQFBvTA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhQ2KUW/nPnyrDEhNX5FH04JxPL8ONZRrXb0eU1hpM 3s4tB9qJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYUNilAAKCRAk1otyXVSH0ApeB/ 9tg/tmtfoQLh0avnWOKSyisVmd1eMmYKwfBcrUR1FhHNlrLd7D9bccpOkUT7VckCTaIjMKXJIQ2GBp CrPUL1CefR1KspWgBeEbiq07NgiMHGBZmmCMO5E/j4R8GbYakWzfWd/e7dcac7VujX/c3OV7s/V7cO +SP/S2bVf+QPI+eys9fitIinml2oUWLiLveKsNGfyM/RChwwNsfQeJOGF15Ke2rry/4QcffHWhOM8C HCYBlNhyQMABDz/B8wKbsdhHOi+FdBBde7kAWZh5GApmj6GuSF8eFtifsUkpsaO1vI2NLvd53e4bNO FoS1VWVLDFCS7u4JFcvJKfy9ZhCAun
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since all current users of arch_parse_elf_property() are able to treat the
-interpreter and main executable orthogonaly the has_interp argument is now
-redundant so remove it.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+branch HEAD: 7962c2eddbfe7cce879acb06f9b4f205789e57b7  arch: remove unused function syscall_set_arguments()
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Tested-by: Jeremy Linton <jeremy.linton@arm.com>
-Reviewed-By: Dave Martin <Dave.Martin@arm.com>
+elapsed time: 1678m
+
+configs tested: 193
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210916
+arm                        clps711x_defconfig
+powerpc                 mpc8313_rdb_defconfig
+arc                 nsimosci_hs_smp_defconfig
+powerpc                      cm5200_defconfig
+sh                        edosk7705_defconfig
+x86_64                           allyesconfig
+powerpc                      chrp32_defconfig
+arm                         bcm2835_defconfig
+arm                         at91_dt_defconfig
+sh                           se7780_defconfig
+riscv                            alldefconfig
+mips                malta_qemu_32r6_defconfig
+arm                        mvebu_v5_defconfig
+arm                         vf610m4_defconfig
+powerpc                      ppc40x_defconfig
+sh                          rsk7201_defconfig
+sh                          polaris_defconfig
+powerpc                 mpc8560_ads_defconfig
+arm                         lubbock_defconfig
+arm                          ep93xx_defconfig
+arc                              alldefconfig
+powerpc                      ppc44x_defconfig
+sh                          landisk_defconfig
+um                           x86_64_defconfig
+powerpc                     ep8248e_defconfig
+arm                        mvebu_v7_defconfig
+arc                        nsimosci_defconfig
+arm                          moxart_defconfig
+powerpc                        fsp2_defconfig
+mips                  decstation_64_defconfig
+mips                          ath79_defconfig
+s390                          debug_defconfig
+powerpc                 mpc8272_ads_defconfig
+mips                         db1xxx_defconfig
+sh                           se7712_defconfig
+powerpc                     tqm8555_defconfig
+arm                          pxa910_defconfig
+powerpc                     tqm8541_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                     kmeter1_defconfig
+riscv                          rv32_defconfig
+s390                       zfcpdump_defconfig
+sh                           se7724_defconfig
+powerpc                     tqm5200_defconfig
+sh                   sh7770_generic_defconfig
+powerpc                      acadia_defconfig
+sh                          lboxre2_defconfig
+powerpc                   lite5200b_defconfig
+mips                        nlm_xlr_defconfig
+m68k                        stmark2_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                  mpc885_ads_defconfig
+arm                         cm_x300_defconfig
+sh                               alldefconfig
+m68k                         amcore_defconfig
+arm                        oxnas_v6_defconfig
+sh                           se7206_defconfig
+arm                         lpc18xx_defconfig
+powerpc                    socrates_defconfig
+arm                       netwinder_defconfig
+sparc                       sparc32_defconfig
+m68k                           sun3_defconfig
+ia64                      gensparse_defconfig
+mips                        workpad_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                    klondike_defconfig
+sh                           se7343_defconfig
+powerpc                 mpc837x_mds_defconfig
+arc                        vdk_hs38_defconfig
+nios2                         10m50_defconfig
+xtensa                    smp_lx200_defconfig
+powerpc                     ksi8560_defconfig
+powerpc                      tqm8xx_defconfig
+mips                      bmips_stb_defconfig
+arm                      pxa255-idp_defconfig
+sh                            hp6xx_defconfig
+mips                  cavium_octeon_defconfig
+nios2                         3c120_defconfig
+arm                             rpc_defconfig
+arm                        realview_defconfig
+arm                            hisi_defconfig
+sh                           se7722_defconfig
+arm                       versatile_defconfig
+sh                              ul2_defconfig
+sh                         ecovec24_defconfig
+sh                          sdk7780_defconfig
+arm                           u8500_defconfig
+powerpc                       holly_defconfig
+powerpc                   microwatt_defconfig
+h8300                               defconfig
+sh                          rsk7203_defconfig
+m68k                       m5249evb_defconfig
+powerpc                      bamboo_defconfig
+sparc64                          alldefconfig
+m68k                                defconfig
+openrisc                         alldefconfig
+m68k                       m5475evb_defconfig
+powerpc                     pseries_defconfig
+mips                           ip27_defconfig
+arm                       imx_v6_v7_defconfig
+arm                     am200epdkit_defconfig
+m68k                            mac_defconfig
+powerpc                    mvme5100_defconfig
+sh                        apsh4ad0a_defconfig
+arm                           tegra_defconfig
+powerpc                     kilauea_defconfig
+m68k                             alldefconfig
+sh                            shmin_defconfig
+sh                        dreamcast_defconfig
+x86_64               randconfig-c001-20210916
+arm                  randconfig-c002-20210916
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                                defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                             allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a016-20210916
+x86_64               randconfig-a013-20210916
+x86_64               randconfig-a012-20210916
+x86_64               randconfig-a011-20210916
+x86_64               randconfig-a014-20210916
+x86_64               randconfig-a015-20210916
+i386                 randconfig-a016-20210916
+i386                 randconfig-a015-20210916
+i386                 randconfig-a011-20210916
+i386                 randconfig-a012-20210916
+i386                 randconfig-a013-20210916
+i386                 randconfig-a014-20210916
+riscv                randconfig-r042-20210916
+s390                 randconfig-r044-20210916
+arc                  randconfig-r043-20210916
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+riscv                randconfig-c006-20210916
+x86_64               randconfig-c007-20210916
+mips                 randconfig-c004-20210916
+powerpc              randconfig-c003-20210916
+arm                  randconfig-c002-20210916
+i386                 randconfig-c001-20210916
+s390                 randconfig-c005-20210916
+x86_64               randconfig-a002-20210916
+x86_64               randconfig-a003-20210916
+x86_64               randconfig-a006-20210916
+x86_64               randconfig-a004-20210916
+x86_64               randconfig-a005-20210916
+x86_64               randconfig-a001-20210916
+i386                 randconfig-a004-20210916
+i386                 randconfig-a005-20210916
+i386                 randconfig-a006-20210916
+i386                 randconfig-a002-20210916
+i386                 randconfig-a003-20210916
+i386                 randconfig-a001-20210916
+hexagon              randconfig-r045-20210916
+hexagon              randconfig-r041-20210916
+
 ---
- arch/arm64/include/asm/elf.h | 2 +-
- fs/binfmt_elf.c              | 2 +-
- include/linux/elf.h          | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-index c4aa60db76a4..8009e8f07f1e 100644
---- a/arch/arm64/include/asm/elf.h
-+++ b/arch/arm64/include/asm/elf.h
-@@ -268,7 +268,7 @@ static inline int arm64_elf_bti_flag(bool is_interp)
- 
- static inline int arch_parse_elf_property(u32 type, const void *data,
- 					  size_t datasz, bool compat,
--					  bool has_interp, bool is_interp,
-+					  bool is_interp,
- 					  struct arch_elf_state *arch)
- {
- 	/* No known properties for AArch32 yet */
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 5d24aa203b61..495436fd4559 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -753,7 +753,7 @@ static int parse_elf_property(const char *data, size_t *off, size_t datasz,
- 
- 	ret = arch_parse_elf_property(pr->pr_type, data + o,
- 				      pr->pr_datasz, ELF_COMPAT,
--				      has_interp, is_interp, arch);
-+				      is_interp, arch);
- 	if (ret)
- 		return ret;
- 
-diff --git a/include/linux/elf.h b/include/linux/elf.h
-index d8392531899d..cdb080d4b34a 100644
---- a/include/linux/elf.h
-+++ b/include/linux/elf.h
-@@ -88,14 +88,14 @@ struct arch_elf_state;
- #ifndef CONFIG_ARCH_USE_GNU_PROPERTY
- static inline int arch_parse_elf_property(u32 type, const void *data,
- 					  size_t datasz, bool compat,
--					  bool has_interp, bool is_interp,
-+					  bool is_interp,
- 					  struct arch_elf_state *arch)
- {
- 	return 0;
- }
- #else
- extern int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
--				   bool compat, bool has_interp, bool is_interp,
-+				   bool compat, bool is_interp,
- 				   struct arch_elf_state *arch);
- #endif
- 
--- 
-2.20.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
