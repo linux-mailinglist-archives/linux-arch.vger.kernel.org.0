@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BD94103A3
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Sep 2021 06:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 118614103C2
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Sep 2021 06:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233232AbhIREhN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Sep 2021 00:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
+        id S231268AbhIRE43 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Sep 2021 00:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbhIREhM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Sep 2021 00:37:12 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEABC061574;
-        Fri, 17 Sep 2021 21:35:49 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id p24so11447266vsg.0;
-        Fri, 17 Sep 2021 21:35:49 -0700 (PDT)
+        with ESMTP id S230515AbhIRE43 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Sep 2021 00:56:29 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4E9C061574;
+        Fri, 17 Sep 2021 21:55:06 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id u8so11404488vsp.1;
+        Fri, 17 Sep 2021 21:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kmFmDpG2OT8NIyYat6UuNAoWRRZJuzBIzLpZ1l0xRDc=;
-        b=Vv6GvD5xs/0pWNwALj7JUXxMMQCj6I6NNpRGiWms3i7Lxg4gNUwuYf+9w+PJbYchLU
-         BgE5EAIWWrTmWtRoni4QaB2QAs93CX7qnyAZvPk6VR9TTYvnDSEie+qz6A5Fe1rsawzS
-         L5i+6mUR1Mn+0SHUBwRis5i7SLhoPgHVZQjqRvuK4ugeikbf/Ub+LTLydYnyZ9OJngoF
-         lG2id4WF+2FnWjNgfIbGlZY829wg3xfvx5LmWQq1aBOwjgnRoyAdUSA5g2f7NVNxW+NF
-         bcff80rQldc7UucNaP9ng0to6VWZyJLRPuUgkkz4Hah2DsTQehaUePjBbL7ahdmzDe7t
-         dPeA==
+        bh=FFq/Z2GV9Lte0l9PEYIOTE7ktsuCGI9xVGKYiyEv7l8=;
+        b=UC2B66ry2LUE00zPMcM3CXIEdwW/tHE1hVu8rJoRKlYTruoN83kYI63GI8AY9wczVF
+         kZu+ACY+nxBjHZWXVAJ85FWxfQoBdFX7pRdgXotnUbCyz9ddwyBsAFaHaRIQ8yEP0eGl
+         Iw3R1QY2bpA+rocRZm7DHKHXzfKCmWNOqjBtp8v+/n8MDipyt5Rns8JjBo0PH3GQm9Hn
+         aBvIz5Ik3aq1e5qEuSfPcjqXl2WF+hY7pb9djr/+wxPhBfkbBDQnHFVlOSlzgZbcFyNV
+         iJhr/BlxosQlkV2n037lOO2mzBing+p1CWWBZ3Mi1/13pJOYnUCYElj7NXb19FzyhzuF
+         YuMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kmFmDpG2OT8NIyYat6UuNAoWRRZJuzBIzLpZ1l0xRDc=;
-        b=Uj+wtIW/FfLcGcCmtLM1HsPNDLs3Qh0J+0PjbNgv69/hqxAoGUdz9Md/7UnCnEhhyl
-         BoOWfQ0vFW5JtyOvM/oQtQcC+6iuupL87lTCFpNWZA+zsxwpmux66UyiHh6YMbaKl0yR
-         QRnBdruON2sETo6bT0geU8SL0APglR4AH2dkeGqYLGKxynNnosCKO5En8OUpJYln/ymw
-         v5oDGYyihkw/t4Hp963MNNAxhwWwQ+Y3thd2tWAAefJ0pvFHk5XW0vZk23bxtsoQI3VV
-         Fax2dk/lL456PCHchBWEQeT9sAnB5ItK4CrnBBkoDIU64cOF0M2BiZ5SYJ/pnxSEScrq
-         zAwA==
-X-Gm-Message-State: AOAM53019gZP7DP6lyoiz2Nk3J/MckFURfrhSabITlz6o+gKfUhQsjfm
-        1lKsuZxA0PHvY262xLFs+o3GcCOXyabeBOjEcwA=
-X-Google-Smtp-Source: ABdhPJwV/re0vC2swikaJ0cZG1g3JXe4J21iHG1HhaSIOmr/RfbH1EynzSHUKOfd8ubiL9IILipvvJ3h8DzSTwZJC4c=
-X-Received: by 2002:a67:ee12:: with SMTP id f18mr11733970vsp.20.1631939748966;
- Fri, 17 Sep 2021 21:35:48 -0700 (PDT)
+        bh=FFq/Z2GV9Lte0l9PEYIOTE7ktsuCGI9xVGKYiyEv7l8=;
+        b=H6VXNndOXtUr0Gxpz+OEX4IqI2WtB6SFnCRgt1W7oiHT357qpobjhdBsZx3Upnycny
+         t24a6hIJ84g4GE9IJT+cuTdIez5Mu+FoicBmDxT56cUsKxOm7mHZeRPvnj1jXQ8IhoMI
+         yxCRWD3DUsgAtUyKj0iZPowGbOImo//j4m1IYiXTy/vZ5vNy5+4ft8tbDUw9HCqAZh8i
+         UF3L2XcHdn64W90PZ9b2JUlo2waM4RiQc8Tssmo0eiEQTRP9F+HpOfXzEc0FkHp9gf1X
+         8J79nuwHSJbyuuvkEgFMcicdbpFIhogfYgEx9vIoYRP7B7s2wuw1QZLJxyA/94+aD7Q1
+         XVTw==
+X-Gm-Message-State: AOAM530G/c1NqBCHjUsiCm3yolpZX6XbzhqvrQCHaUxbkfN3+EIHPFXw
+        KJEcGgLHT4FG+BMBc5awBvCb2W+GpULA1F6R0VM=
+X-Google-Smtp-Source: ABdhPJyjzk8nTR/0NNGwA+jemoYxppUNyNdjEAV59jalNmpZ2wJbdG2sqA4lE0rkjT6gL7f2q5ToMVu4g26p1B+9K20=
+X-Received: by 2002:a05:6102:e55:: with SMTP id p21mr135274vst.18.1631940904578;
+ Fri, 17 Sep 2021 21:55:04 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210917035736.3934017-1-chenhuacai@loongson.cn>
- <20210917035736.3934017-6-chenhuacai@loongson.cn> <CAK8P3a0E3fRJU9VCRp7MQz-jBC0nHi1DwjPGtymEg3vJJoDqrg@mail.gmail.com>
-In-Reply-To: <CAK8P3a0E3fRJU9VCRp7MQz-jBC0nHi1DwjPGtymEg3vJJoDqrg@mail.gmail.com>
+ <20210917035736.3934017-10-chenhuacai@loongson.cn> <CAK8P3a0BkYBoBh37YyZ1HU4f1thL6ckJR0MZhbkhpKanVK1WcQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a0BkYBoBh37YyZ1HU4f1thL6ckJR0MZhbkhpKanVK1WcQ@mail.gmail.com>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sat, 18 Sep 2021 12:35:37 +0800
-Message-ID: <CAAhV-H64VFFGARsrW+uZEwGHTJKoXG66E7-fCjN=0WVSZadwaw@mail.gmail.com>
-Subject: Re: [PATCH V3 05/22] LoongArch: Add build infrastructure
+Date:   Sat, 18 Sep 2021 12:54:52 +0800
+Message-ID: <CAAhV-H60MKs_gCf4ug3ACkXcDg4cGoYEQ=HchJz8+muFkrsJQA@mail.gmail.com>
+Subject: Re: [PATCH V3 09/22] LoongArch: Add boot and setup routines
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Andy Lutomirski <luto@kernel.org>,
@@ -65,7 +65,12 @@ Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -73,120 +78,96 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi, Arnd,
 
-On Fri, Sep 17, 2021 at 3:53 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Fri, Sep 17, 2021 at 4:11 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Fri, Sep 17, 2021 at 5:57 AM Huacai Chen <chenhuacai@loongson.cn>
-> wrote:> --- /dev/null
-> > +++ b/arch/loongarch/.gitignore
-> > @@ -0,0 +1,9 @@
-> > +*.lds
-> > +*.raw
-> > +calc_vmlinuz_load_addr
-> > +elf-entry
-> > +relocs
-> > +vmlinux.*
-> > +vmlinuz.*
-> > +
-> > +!kernel/vmlinux.lds.S
+> On Fri, Sep 17, 2021 at 5:57 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > This patch adds basic boot, setup and reset routines for LoongArch.
+> > LoongArch uses UEFI-based firmware and uses ACPI as the boot protocol.
 >
-> Can you double-check that 'make clean' and/or 'make mrproper' remove all the
-> generated files? This may already be the case, but I don't see how this is
-> done in your Makefile
-The files listed in .gitignore are not generated by the current series
-(except vmlinux, but it is cleaned, of course). Most of them are
-generated by the zboot patch (not in this series). So, should I keep
-the .gitignore file as is, or remove it at present?
+> This needs to be reviewed by the maintainers for the EFI and ACPI subsystems,
+> I added them to Cc here. If you add lines like
+>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: linux-efi@vger.kernel.org
+>
+> in the patch description before your Signed-off-by, then git-send-email will
+> Cc them automatically without you having to spam them with the entire series.
+OK, I will add them.
 
 >
-> > +
-> > +choice
-> > +       prompt "Page Table Layout"
-> > +       default 16KB_2LEVEL if 32BIT
-> > +       default 16KB_3LEVEL if 64BIT
-> > +       help
-> > +         Allows choosing the page table layout, which is a combination
-> > +         of page size and page table levels. The virtual memory address
-> > +         space bits are determined by the page table layout.
-> > +
-> > +config 4KB_3LEVEL
-> > +       bool "4KB with 3 levels"
-> > +       select PAGE_SIZE_4KB
-> > +       select PGTABLE_3LEVEL
-> > +       help
-> > +         This option selects 4KB page size with 3 level page tables, which
-> > +         support a maximum 39 bits of application virtual memory.
-> > + ...
->
-> Nice, this choice statement looks a lot better than the version you had before.
->
-> > +
-> > +cflags-y += -ffreestanding
->
-> I had not noticed this previously, but I think this should not be used here,
-> as -ffreestanding disables a number of optimizations for compiler builtins.
->
-> Did you just copy this from MIPS or do you have a particular reason this
-> is used here?
-If we use zboot (compressed kernel), there are some conflicting if
-without -ffrestanding. E.g., the built-in malloc() conflicts with the
-one defined in ./include/linux/decompress/mm.h.
+> In particular, I know that Ard previously complained that you did not use the
+> EFI boot protocol correctly, and I want to make sure that he's happy with the
+> final version.
+The Correct way means efistub?  We have investigated for some time and
+found that it is very difficult. E.g., our BIOS team said that they
+cannot get GOP drivers for graphics cards.
 
 >
-> > +# Some distribution-specific toolchains might pass the -fstack-check
-> > +# option during the build, which adds a simple stack-probe at the beginning
-> > +# of every function.  This stack probe is to ensure that there is enough
-> > +# stack space, else a SEGV is generated.  This is not desirable for LoongArch
-> > +# as kernel stacks are small, placed in unmapped virtual memory, and do not
-> > +# grow when overflowed.
-> > +#
-> > +cflags-y += -fno-stack-check
+> > +static ssize_t boardinfo_show(struct kobject *kobj,
+> > +                             struct kobj_attribute *attr, char *buf)
+> > +{
+> > +       return sprintf(buf,
+> > +               "BIOS Information\n"
+> > +               "Vendor\t\t\t: %s\n"
+> > +               "Version\t\t\t: %s\n"
+> > +               "ROM Size\t\t: %d KB\n"
+> > +               "Release Date\t\t: %s\n\n"
+> > +               "Board Information\n"
+> > +               "Manufacturer\t\t: %s\n"
+> > +               "Board Name\t\t: %s\n"
+> > +               "Family\t\t\t: LOONGSON64\n\n",
+> > +               b_info.bios_vendor, b_info.bios_version,
+> > +               b_info.bios_size, b_info.bios_release_date,
+> > +               b_info.board_vendor, b_info.board_name);
+> > +}
+> > +
+> > +static struct kobj_attribute boardinfo_attr = __ATTR(boardinfo, 0444,
+> > +                                                    boardinfo_show, NULL);
+> > +
+> > +static int __init boardinfo_init(void)
+> > +{
+> > +       if (!efi_kobj)
+> > +               return -EINVAL;
+> > +
+> > +       return sysfs_create_file(efi_kobj, &boardinfo_attr.attr);
+> > +}
+> > +late_initcall(boardinfo_init);
 >
-> This is already set in the global Makefile and can be removed as well
-OK, this will be removed.
+> I see you have documented this interface for your mips machines,
+> but nothing else uses it.
+>
+> I think some of this information should be part of the soc_device,
+> either in addition to, or in place of this sysfs file.
+This file list something describe the motherboard, which is different
+from SOC. These information are used by some user programs.
 
 >
-> > +cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
-> > +cflags-y += -U_LOONGARCH_ISA -D_LOONGARCH_ISA=_LOONGARCH_ISA_LOONGARCH64
-> > +
-> > +load-y                         = 0x9000000000200000
-> > +
-> > +drivers-$(CONFIG_PCI)          += arch/loongarch/pci/
-> > +
-> > +KBUILD_AFLAGS  += $(cflags-y)
-> > +KBUILD_CFLAGS  += $(cflags-y)
-> > +KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y)
-> > +
-> > +bootvars-y     = VMLINUX_LOAD_ADDRESS=$(load-y) PLATFORM="$(platform-y)"
+> Isn't there an existing method to do this on x86/arm/ia64 machines?
 >
-> I would argue that VMLINUX_LOAD_ADDRESS should not be configurable
-> here, instead all kernels should use the same value.
-VMLINUX_LOAD_ADDRESS is not configurable, it is also used by the later
-zboot patch (use VMLINUX_LOAD_ADDRESS to calculate the load address of
-vmlinuz).
-
+> > +static int constant_set_state_periodic(struct clock_event_device *evt)
+> > +{
+> > +       unsigned long period;
+> > +       unsigned long timer_config;
+> > +
+> > +       raw_spin_lock(&state_lock);
+> > +
+> > +       period = const_clock_freq / HZ;
+> > +       timer_config = period & CSR_TCFG_VAL;
+> > +       timer_config |= (CSR_TCFG_PERIOD | CSR_TCFG_EN);
+> > +       csr_writeq(timer_config, LOONGARCH_CSR_TCFG);
+> > +
+> > +       raw_spin_unlock(&state_lock);
 >
-> > diff --git a/arch/loongarch/include/asm/Kbuild b/arch/loongarch/include/asm/Kbuild
-> > new file mode 100644
-> > index 000000000000..41a76e675321
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/Kbuild
-> > @@ -0,0 +1,31 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +generic-y += dma-contiguous.h
-> > +generic-y += export.h
-> > +generic-y += mcs_spinlock.h
-> > +generic-y += parport.h
-> > +generic-y += early_ioremap.h
-> > +generic-y += qrwlock.h
-> > +generic-y += qspinlock.h
+> I see this pattern in a couple of places, using a spinlock or raw_spinlock
+> to guard MMIO access, but on many architectures a register write is
+> not serialized by the following spin_unlock, unless you insert another
+> read from the same address in there. E.g. on PCIe, writes are always
+> posted and it would not work.
 >
-> The list is apparently from an older kernel and no longer needed for
-> files that are listed in include/asm-generic/Kbuild.
->
-> Please only list the files that are not already there.
-Emmm, I have checked include/asm-generic/Kbuild and no duplication,
-but I've found a self duplication (rwsem.h), thanks.
+> Can you confirm that it works correctly on CSR registers in loongarch?
+CSR on LoongArch doesn't need any barrier or flush operations,
+spinlock here is used to protect the whole "read, modify and write".
 
 Huacai
 >
->         Arnd
+>          Arnd
