@@ -2,124 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C8B4104D2
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Sep 2021 09:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CA6410896
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Sep 2021 22:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238005AbhIRHia (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Sep 2021 03:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
+        id S239152AbhIRUk3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Sep 2021 16:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbhIRHi2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Sep 2021 03:38:28 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20894C061574;
-        Sat, 18 Sep 2021 00:37:05 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id v9so7572570uak.1;
-        Sat, 18 Sep 2021 00:37:05 -0700 (PDT)
+        with ESMTP id S229568AbhIRUk3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Sep 2021 16:40:29 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC9AC061574
+        for <linux-arch@vger.kernel.org>; Sat, 18 Sep 2021 13:39:05 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id g1so48886546lfj.12
+        for <linux-arch@vger.kernel.org>; Sat, 18 Sep 2021 13:39:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DzhfRJtsewrJy9gvg3PVALM7qiexBjbh/6ESbF9yAmQ=;
-        b=i1MTcAD9UnYWPlpu2z9dz7O9pjlQi/vuAb8G6J7B83k+RiE8sojZ6LvZ09CgoUK9n4
-         LczbRL08HgiCe6YvEYzMEkXDh1Q0J6Jk4GWLqVgxj1Zsl2mmDINOHcH8tljgjekYyuja
-         wbCP62A2N6pG33G7GTvW5WMKXBJcNSykuLc68szTgl3hBj0vHo3E9/Zrank8lIIdBfjG
-         oq7az9SaGonnHEdklABpvcpHh9cJebxCySh26hjrimvfq6LvmneliPGe0KzLyvCsp6eT
-         j/JPRVOpE7YO6zUAsiaElas3DlU350eVSGokG8rpu5d8vz5qH8YDH2eKKlIpOecW7U60
-         H3/A==
+        d=linux-foundation.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=IqNt5nWTQLqRGpQEMlOKbD7bENcF2xRoMQ119q1Za6w=;
+        b=R20A3mmR/f2eCdYwZ91MeBVlRK1Cl7GDpXP9jzgowmeAZhB0iUEbJSANmcPv2ho+Kz
+         n+Y8ej2Qaz/Ya3ljnRxCxZJK96mZnXYrPfIdIoaSHXYh+R3rSO+hWyDvWdZXcxYdC9/L
+         8Z+1W4I/1BjwF94FFzKcjogQyO8J0I+bnV8EA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DzhfRJtsewrJy9gvg3PVALM7qiexBjbh/6ESbF9yAmQ=;
-        b=UaFj+DX7cbkzfu3IVa6RUpB2tvWMzJTrkTAmI+nZ8Wg6zPISx/+jDXpZf6gHfEZhEy
-         +Fdl/TtptrfqdAHQ+q8dtog9n22yzOLutBpADpWwU1ZuaVmlAzRvUcjbrCwVl63892AX
-         B4VpZ6aBTVvkkpDDRy87U5zAIw3dn83A23PUvSCteT3Fvx/VvwPdjqkt008VD/XKJxsI
-         pEVXhqB02VmHC5eKcoVEmuVN1RrI2y+iemTWdFVGG/UT74ju36SRvzXVSs6mpsU+Un4U
-         IZxHHugNSK6xMlldo7xJS99Nn/nTHRNe5lQrokhyMz/4Pa2yPqTcRtyp+eDVeucmAIZl
-         s5Ew==
-X-Gm-Message-State: AOAM531zpCIcGDoGMcljRfa5sNikGEf2Ca3sOomKnEFz8v+evbEOn+41
-        ZaW3deQSf12M64HhZI1nk73pupKF715JcxQqHjs=
-X-Google-Smtp-Source: ABdhPJwi5zes5aLNI68EPqG8s32AnHOL7SpWjSiidkZRKZ44MpDEG9d4/Z3v+a0xOXreS8EF7zbs/z9Lh4RJ9M+id+w=
-X-Received: by 2002:ab0:31c1:: with SMTP id e1mr7426551uan.132.1631950623485;
- Sat, 18 Sep 2021 00:37:03 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=IqNt5nWTQLqRGpQEMlOKbD7bENcF2xRoMQ119q1Za6w=;
+        b=scH/2k5KZ6caTPQTyKyWOW79uJgGNR8lYB6NcCrVBfXDDtAFma3LCG2we9KJGjXQ89
+         FW/J0wkOl9NKWRHnAqvdsKaKYsHZCFJnkMnod19mvBRVkmY1uShTdZydcTl5Cditc/jc
+         L9FrKC/NxupxqSILRwAMjWe8sl462jbN6dJ7fkQ07N4uQ/rxNc6BVdaI9dQXyXnFFXjH
+         tpul12PbabXtowQ666pAQ4/Z1ZBrb/IFJliMnc+lF4HA9QfnkWolaMWr+kUbCbBHIp9h
+         6NtiSyWZ1agAIv2p+1C750SWY4fkcnR+MODeAZMum8mDtV93QLvyixrfqtRdjgKrLLKf
+         HgRQ==
+X-Gm-Message-State: AOAM533Uz82o5ekYQc6Bb8YydIGA2wEZm+1QjMx65V50n2d5pOfcYFa3
+        2/4ySlPvlvJNaFRAPCgHKV/bsme8gtIkNBpNUco=
+X-Google-Smtp-Source: ABdhPJzA9qttKmJ8lUqV2WXN8BPPWiXWh6o2emuTJGd7YQWvDkA/wCeZt5O6RcMNsN+gDREaQ+79mQ==
+X-Received: by 2002:a2e:990d:: with SMTP id v13mr15188248lji.127.1631997542865;
+        Sat, 18 Sep 2021 13:39:02 -0700 (PDT)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
+        by smtp.gmail.com with ESMTPSA id n4sm1098383lji.100.2021.09.18.13.39.01
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Sep 2021 13:39:02 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id i25so48852824lfg.6
+        for <linux-arch@vger.kernel.org>; Sat, 18 Sep 2021 13:39:01 -0700 (PDT)
+X-Received: by 2002:a05:6512:3d29:: with SMTP id d41mr2450196lfv.474.1631997541433;
+ Sat, 18 Sep 2021 13:39:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210917035736.3934017-1-chenhuacai@loongson.cn>
- <20210917035736.3934017-19-chenhuacai@loongson.cn> <CAK8P3a26CGyiZ9y7KxHGu6eHXZJ08X4mospr+3CL8g_qi=ACpg@mail.gmail.com>
-In-Reply-To: <CAK8P3a26CGyiZ9y7KxHGu6eHXZJ08X4mospr+3CL8g_qi=ACpg@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sat, 18 Sep 2021 15:36:52 +0800
-Message-ID: <CAAhV-H5=Ut+rymv1RH+1GVS2oVZogtuwY_Sk-dDosJh6=USr0Q@mail.gmail.com>
-Subject: Re: [PATCH V3 18/22] LoongArch: Add PCI controller support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 18 Sep 2021 13:38:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjRrh98pZoQ+AzfWmsTZacWxTJKXZ9eKU2X_0+jM=O8nw@mail.gmail.com>
+Message-ID: <CAHk-=wjRrh98pZoQ+AzfWmsTZacWxTJKXZ9eKU2X_0+jM=O8nw@mail.gmail.com>
+Subject: Odd pci_iounmap() declaration rules..
+To:     Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ulrich Teichert <krypton@ulrich-teichert.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
+So I was looking at a patch by Ulrich that reportedly got the alpha
+'Jensen' platform compile going again, and while it didn't work for
+me, a slightly modified one did get it mostly working. See commit
+cc9d3aaa5331 ("alpha: make 'Jensen' IO functions build again") for
+entirely irrelevant details.
 
-On Fri, Sep 17, 2021 at 5:02 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Sep 17, 2021 at 5:57 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > Loongson64 based systems are PC-like systems which use PCI/PCIe as its
-> > I/O bus, This patch adds the PCI host controller support for LoongArch.
-> >
-> > Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->
-> As discussed before, I think the PCI support should not be part of the
-> architecture code or this patch series. The headers are ok, but the pci.c
-> and acpi.c files have nothing loongarch specific in them, and you clearly
-> just copied most of this from arm64 or x86.
-In V2 part of the PCI code (pci-loongson.c) has moved to
-drivers/pci/controllers. For pci.c and acpi.c, I agree that "the thing
-should be like that", but have some different ideas about "the way to
-arrive at that". In my opinion, we can let this series be merged at
-first, and then do another series to "restructure the files and move
-common parts to the drivers directory". That way looks more natural to
-me (doing the other series at first may block the whole thing).
+Anyway, that particular case doesn't really matter, but the Jensen
+configuration is somewhat interesting in that it doesn't have
+CONFIG_PCI (and alpha doesn't do CONFIG_PM), and it turns out that
+breaks some other things.  Some of them are just random driver issues,
+not a big deal.
 
->
-> What I would suggest you do instead is:
->
-> - start a separate patch series, addressed to the ACPI, PCI host driver
->   and ARM64 maintainers.
->
-> - Move all the bits you need from arch/{arm64,ia64,x86} into
->   drivers/acpi/pci/pci_root.c, duplicating them with #if/#elif/#else
->   where they are too different, making the #else path the
->   default that can be shared with loongarch.
->
-> - Move the bits from pci_root_info/acpi_pci_root_info that are
->   always needed into struct pci_host_bridge, with an
->   #ifdef CONFIG_ACPI where appropriate.
->
-> - Simplify as much as you can easily do.
->
->         Arnd
+But one particular case is odd: "pci_iounmap()" behavior is all kinds of crazy.
+
+Now, to put that in perspective, look at pci_iomap(), and it's
+actually fairly normal, and handled in
+include/asm-generic/pci_iomap.h, with a fairly sane
+
+  #ifdef CONFIG_PCI
+  .. real declaration ..
+  #elif defined(CONFIG_GENERIC_PCI_IOMAP)
+  .. empty declaration ..
+  #endif
+
+although you can kind of see some oddity there if you look at the
+declaration of the __pci_ioport_map() thing for the special case of
+port remapping. Whatever. On the whole, you have that "declare for
+PCI, otherwise have empty declarations so that non-PCI systems can
+still build cleanly".
+
+Now, alpha makes the mistake of making that GENERIC_PCI_IOMAP thing
+conditional on having PCI at all:
+
+        select GENERIC_PCI_IOMAP if PCI
+
+which then means that the "non-PCI systems can still build cleanly"
+doesn't actually end up working, but whatever.  It does point out that
+maybe that
+
+  #elif defined(CONFIG_GENERIC_PCI_IOMAP)
+
+should perhaps just be a #else. Because it's kind of silly to only
+have those empty declarations if PCI is _not_ enabled, but
+GENERIC_PCI_IOMAP is enabled. Most architectures seem to just select
+GENERIC_PCI_IOMAP unconditionally, and it also gets selected magically
+for you if you pick GENERIC_IOMAP.
+
+So it's all a bit illogical, and slightyl complicated, but it doesn't
+seem to be a huge deal.
+
+What is *entirely* illogical is the state of "pci_iounmap()", though.
+
+You'd think that it would mirror pci_iomap(), wouldn't you? The two go
+literally hand-in-hand and pair up, after all.
+
+But no. Not at all.
+
+pci_iounmap() is decared not in include/asm-generic/pci_iomap.h
+together with pci_iomap(), but in include/asm-generic/iomap.h.
+
+And it has a different #ifdef too, doing
+
+  #ifdef CONFIG_PCI
+  .. delcaration..
+  #elif defined(CONFIG_GENERIC_IOMAP)
+  .. empty implementation ..
+  #endif
+
+which makes _no_ sense. Except it seems to be paired with this one in
+asm-generic/io.h (!!):
+
+  #ifndef CONFIG_GENERIC_IOMAP
+  .. declaration  for pci_iomap() ..
+
+  #ifndef pci_iounmap
+  #define pci_iounmap pci_iounmap
+  static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
+  {
+        __pci_ioport_unmap(p);
+  }
+  #endif
+  #endif /* CONFIG_GENERIC_IOMAP */
+
+which really makes no sense at all.
+
+So there's GENERIC_IOMAP, and there is GENERIC_PCI_IOMAP, and the
+_former_ modifies the behavior of "pci_iounmap()", but the _latter_
+(more logically) modifies the behavior of "pci_iomap()".
+
+I think this may at least partly just be a mistake. See commit
+97a29d59fc22 ("[PARISC] fix compile break caused by iomap: make
+IOPORT/PCI mapping functions conditional") which added those two
+different CONFIG_ tests. The different config option kind of makes
+sense in the context of which header file the declaration was in, but
+I think _that_ in turn was just an older confusing mistake.
+
+I'd like to fix some of the alpha issues by just making alpha do
+
+        select GENERIC_PCI_IOMAP
+
+unconditionally, so that if PCI isn't enabled, it gets the default
+empty implementation.
+
+But that doesn't work right now, because of the crazy situation with
+pci_iounmap().
+
+I think the right fix would be to(),
+
+ (a) move pci_iounmap() declaration to
+include/asm-generic/pci_iomap.h, and use the sane GENERIC_PCI_IOMAP
+config option for it (or even better, remove that #elif entirely and
+make it just #else
+
+ (b) if you want to make your own pci_iounmap(), you just implement
+your own one, and don't play games in the header file.
+
+Hmm? Comments? Added random people who have been involved in this
+(commit 97a29d59fc22 is from James, replaced him with Helge instead).
+
+                     Linus
