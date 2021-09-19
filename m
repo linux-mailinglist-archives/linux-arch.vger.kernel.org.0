@@ -2,110 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 481EF410D79
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Sep 2021 23:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75EA410D8A
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Sep 2021 00:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbhISVaM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 19 Sep 2021 17:30:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44126 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229790AbhISVaM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 19 Sep 2021 17:30:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 11CB06101C;
-        Sun, 19 Sep 2021 21:28:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632086926;
-        bh=gHRybIXxp07bcxXRiDOgWRi6Hl0pBM5+8SHJr3SOA/c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZsCH5R8A1aLBT5Sn4Yvqh7vQXI7Tl4vw/e0jR2aflSvE6R0l4BYvjM6gcgA9LLVkD
-         3Q0uiGCLKVnI51B5N6y0CY0wwvLImaPLDg5gr/wmXv9tiZ0io7E41qj5h9Mk6xDi0l
-         cFqFoK4vUQ4KI+H7CxDcoU26/kIy6Aa4ioynd2Y0RsJXDtYdNbDP/b01A/n6BYsL1/
-         g9CE2idqh39r8ryCbIZGpHB44F5EOBfyRHhq6EonyUJoNvMRXuuaZGBAXrEonzsUkq
-         ZKT/XpZzM+vj87Qv/DMx5zbLdbhCn4pcTcqzAZYfBZmGZ83gZaAid3XFvp+/uoCajU
-         /5brOeUdovKow==
-Date:   Sun, 19 Sep 2021 14:28:41 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ulrich Teichert <krypton@ulrich-teichert.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        llvm@lists.linux.dev
-Subject: Re: Odd pci_iounmap() declaration rules..
-Message-ID: <YUeriU9EIJ5hiFjL@archlinux-ax161>
-References: <CAHk-=wjRrh98pZoQ+AzfWmsTZacWxTJKXZ9eKU2X_0+jM=O8nw@mail.gmail.com>
- <YUdti08rLzfDZy8S@ls3530>
- <CAHk-=wgKc5TY-LiAjog5VKNUQ84CSZyPu+FQekMHDar=kdSW=Q@mail.gmail.com>
+        id S229790AbhISWCz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 19 Sep 2021 18:02:55 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:39550 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229689AbhISWCy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Sep 2021 18:02:54 -0400
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1A67B20B7179;
+        Sun, 19 Sep 2021 15:01:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1A67B20B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1632088889;
+        bh=xYWIsntM1FgbDegCQy3unFGC9gPydIe+qrJh0Z0Vtc4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TdAxIFP5QfRLlJBI4QFgRkgDe+6pmn4sD7ppVh2lsIAiDdZPpVel4ZDBcIH6ql6OB
+         xlkvtkDYOs0VnYCcs8aq0wtGUW5zpkl8Xu4KJPdkcDvauCt+0dQUQneKW3qmCUlvxa
+         UB/t4ASQqrwK/1h5/NdUPpMEQTDDiIMIjXquRWAA=
+Received: by mail-pj1-f45.google.com with SMTP id il14-20020a17090b164e00b0019c7a7c362dso6219315pjb.0;
+        Sun, 19 Sep 2021 15:01:29 -0700 (PDT)
+X-Gm-Message-State: AOAM530AA1+KCU3iEdOlxUQVlpx0JwgWuG16PHocQ9Vj48KDT00+gl2y
+        pATvxwdUhnGzwXOQMESIxsIWOCGhOBnESWGmpr4=
+X-Google-Smtp-Source: ABdhPJxAHHGLWy2uUvoOGz80IPccXw+Xczr2/1TCm0MbT3xDF9E6xQ7DemEpQaObkix7rBXkffoeXugGB0CHi3exzQo=
+X-Received: by 2002:a17:90b:254:: with SMTP id fz20mr34711278pjb.20.1632088888584;
+ Sun, 19 Sep 2021 15:01:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgKc5TY-LiAjog5VKNUQ84CSZyPu+FQekMHDar=kdSW=Q@mail.gmail.com>
+References: <20210919192104.98592-1-mcroce@linux.microsoft.com>
+In-Reply-To: <20210919192104.98592-1-mcroce@linux.microsoft.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Mon, 20 Sep 2021 00:00:52 +0200
+X-Gmail-Original-Message-ID: <CAFnufp2CvmwRMotzkoq-ZKCMCh6vCmRFR19aQ3JwHECZznVN6A@mail.gmail.com>
+Message-ID: <CAFnufp2CvmwRMotzkoq-ZKCMCh6vCmRFR19aQ3JwHECZznVN6A@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] riscv: optimized mem* functions
+To:     linux-riscv <linux-riscv@lists.infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Guo Ren <guoren@kernel.org>, Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 19, 2021 at 11:05:35AM -0700, Linus Torvalds wrote:
-> On Sun, Sep 19, 2021 at 10:04 AM Helge Deller <deller@gmx.de> wrote:
-> >
-> > Can you test if it fixes your alpha build (with GENERIC_PCI_IOMAP=y) as
-> > well?
-> 
-> Yup. With this I can do that "enable GENERIC_PCI_IOMAP
-> unconditionally" thing on alpha, and the one off EISA/PCI driver now
-> builds cleanly without PCI.
-> 
-> I applied it directly (along with the alpha patch to GENERIC_PCI_IOMAP).
-> 
-> I have now looked at a number of drivers and architectures that I had
-> happily forgotten _all_ about long long ago.
-> 
-> It's been kind of fun, but I sure can't claim it has been really _productive_.
+On Sun, Sep 19, 2021 at 9:21 PM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+>
+> From: Matteo Croce <mcroce@microsoft.com>
+>
+> Replace the assembly mem{cpy,move,set} with C equivalent.
+>
+> Try to access RAM with the largest bit width possible, but without
+> doing unaligned accesses.
+>
+> A further improvement could be to use multiple read and writes as the
+> assembly version was trying to do.
+>
+> Tested on a BeagleV Starlight with a SiFive U74 core, where the
+> improvement is noticeable.
+>
+> v3 -> v4:
+> - incorporate changes from proposed generic version:
+>   https://lore.kernel.org/lkml/20210617152754.17960-1-mcroce@linux.microsoft.com/
+>
 
-Commit 9caea0007601 ("parisc: Declare pci_iounmap() parisc version only
-when CONFIG_PCI enabled") causes the following build error on arm64 with
-Fedora's config, which CKI initially reported:
+Sorry, the correct link is:
 
-https://src.fedoraproject.org/rpms/kernel/raw/rawhide/f/kernel-aarch64-fedora.config
-https://lore.kernel.org/r/cki.E3FB2299E5.UQ0I0LMEXJ@redhat.com/
-https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/datawarehouse-public/2021/09/19/373372721/build_aarch64_redhat%3A1603258426/build.log
+https://lore.kernel.org/lkml/20210702123153.14093-1-mcroce@linux.microsoft.com/
 
-In file included from ./arch/arm64/include/asm/io.h:185,
-                 from ./include/linux/io.h:13,
-                 from ./include/acpi/acpi_io.h:5,
-                 from ./include/linux/acpi.h:35,
-                 from ./include/acpi/apei.h:9,
-                 from ./include/acpi/ghes.h:5,
-                 from ./include/linux/arm_sdei.h:8,
-                 from arch/arm64/kernel/asm-offsets.c:10:
-./include/asm-generic/io.h:1059:21: error: static declaration of 'pci_iounmap' follows non-static declaration
- 1059 | #define pci_iounmap pci_iounmap
-      |                     ^~~~~~~~~~~
-./include/asm-generic/io.h:1060:20: note: in expansion of macro 'pci_iounmap'
- 1060 | static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
-      |                    ^~~~~~~~~~~
-In file included from ./include/asm-generic/io.h:19,
-                 from ./arch/arm64/include/asm/io.h:185,
-                 from ./include/linux/io.h:13,
-                 from ./include/acpi/acpi_io.h:5,
-                 from ./include/linux/acpi.h:35,
-                 from ./include/acpi/apei.h:9,
-                 from ./include/acpi/ghes.h:5,
-                 from ./include/linux/arm_sdei.h:8,
-                 from arch/arm64/kernel/asm-offsets.c:10:
-./include/asm-generic/pci_iomap.h:21:13: note: previous declaration of 'pci_iounmap' with type 'void(struct pci_dev *, void *)'
-   21 | extern void pci_iounmap(struct pci_dev *dev, void __iomem *);
-      |             ^~~~~~~~~~~
-make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
-make[2]: Target '__build' not remade because of errors.
-make[1]: *** [Makefile:1219: prepare0] Error 2
-make[1]: Target 'all' not remade because of errors.
-make: *** [Makefile:350: __build_one_by_one] Error 2
-make: Target 'olddefconfig' not remade because of errors.
-make: Target 'all' not remade because of errors.
-
-Sorry, I do not have time at the moment to look at it (family Sunday and
-whatnot) but I wanted to be sure you were aware of it.
-
-Cheers,
-Nathan
+-- 
+per aspera ad upstream
