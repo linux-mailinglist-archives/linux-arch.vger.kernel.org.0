@@ -2,96 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C537F410E5E
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Sep 2021 04:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D9E411708
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Sep 2021 16:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbhITCiZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 19 Sep 2021 22:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbhITCiZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Sep 2021 22:38:25 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55166C061574;
-        Sun, 19 Sep 2021 19:36:59 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id u8so15156889vsp.1;
-        Sun, 19 Sep 2021 19:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KW0eAJoHEHsfgRpsIaeEBIptj7sPIMm58XFi25mu5Ww=;
-        b=NImqRjRNDePB0tFmRl7BwxTTNnsE5u7K0cfoAMu1FrPmn/G/eb8aOA5z+twRIfC5fH
-         3lZRWzf3zHTbP7AU5kZrQpGx3gy7bGCYHx513Y+qu3iUlG51WPb0iYiUMkodwwh7HcC1
-         nCyDHq8GfPhL8aQqHZMD8lesYK3ZJvOd24wpwLvqTI3ZXtoOluZb3Y9AHMJCCaQlwlRO
-         Bcrqn+Q/WhuCqBcvX0GJPITrR2xDFJmiGt7ILxafLH7yfImANuTmJAgIw8lNElijSJR/
-         dLmF28F/YX7+Tc19Vrq5al/3ZxewL8F9TiMrZwAMsWqKhZ9vSyo5RE2GrCXcF3OCg0Zc
-         6dnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KW0eAJoHEHsfgRpsIaeEBIptj7sPIMm58XFi25mu5Ww=;
-        b=kn+UDBEsWM3CVVx12L4+AFNvOqpZkvS7ULMSItrXNzruHSaEa6BSQ3FMuScGufMgG8
-         yCK2cJ8i5KDbIpQh/530GDoot/8LCCQQ7f0gyFpkpg3mqO/Dif9YsqqTl9Bf+tqe6b+Q
-         uF7gQsJ1EpKFFt2fqClgkM8YYhkI/vnx37YsKfkf7ITdu4bY/1y0GOFakA6bwpMT2SNB
-         Yf3A1EI9Sef6AKc6bMijOO9zRzxxse06CucVUYzJHbsRTFxxXPd6q0Wp9oTad+DzvoOu
-         O+CXWM3gKlRWX42VFJgypE4sJ5qGeVsd8kdcU6RSlgA5ALkIsGCHatEcwhG6dSspBCrU
-         7ZEQ==
-X-Gm-Message-State: AOAM532DljgGYyT0xiqrf+QSCA8yYnQowhGrzNZcdNYtm9g/EAXBAJCK
-        0FzlbE++uxI4TuiZrHa+XCcFmyGB88MX6Cp+38eH0MnI
-X-Google-Smtp-Source: ABdhPJwi/ObtWsm3iFluXwDHMGTKcvOZILhFCp0kPgBogbTHcslWK0e4+F/IjPuwahZtF3vW3XV7G1d/Pa7fHmfb2FM=
-X-Received: by 2002:a67:441:: with SMTP id 62mr14681934vse.54.1632105418321;
- Sun, 19 Sep 2021 19:36:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210917035736.3934017-1-chenhuacai@loongson.cn>
- <20210917035736.3934017-15-chenhuacai@loongson.cn> <87tuii52o2.fsf@disp2133>
- <CAAhV-H5MZ9uYyEnVoHXBXkrux1HdcPsKQ66zvB2oeMfq_AP7_A@mail.gmail.com> <CAK8P3a0xghZKNBWbZ-qUWQVKyus4xqJMhSV_baQO7zKDoTtGQg@mail.gmail.com>
-In-Reply-To: <CAK8P3a0xghZKNBWbZ-qUWQVKyus4xqJMhSV_baQO7zKDoTtGQg@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Mon, 20 Sep 2021 10:36:46 +0800
-Message-ID: <CAAhV-H7A=C3Tujt2YNv1np9pEP_Hxc-chGnOdmDCzx5tUt7F5g@mail.gmail.com>
-Subject: Re: [PATCH V3 14/22] LoongArch: Add signal handling support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S236735AbhITObr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Sep 2021 10:31:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56396 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232813AbhITObq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 20 Sep 2021 10:31:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E50960E76;
+        Mon, 20 Sep 2021 14:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632148219;
+        bh=Q9AttzYMMlrQ9pqRSwf8ZRicqkLjL7wPmPl+QB6Dqw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RDkwv2niPIMZc3hgsAxpdvEuyVP+F5N/JUNkW66BOpvgSf4CoVfmrciUp7kzVTtcd
+         vJpGZa1i3FV11K4wwUlsEBAWmgeTmL+9KbgS5EiBPJsmmMIjZke6jN6yqhoY5Rw+1v
+         NLyl5E+Ht2w3D5fP5Hrv0nCaxiFBHvCKNqWWHQDow+10eDHDaZcxEtZBWaPgxU6svG
+         zwKGHAH4xxP+WqgoIK34diFMkNXM3Kew3NGnArqQak2EbmjLpJYXg3yteJP6u3M52g
+         fO+W0vP20ycNgIC1V8/TCohayPJ7AnWswWi2EOdQnHSV31s6W+iEwRioS1Fpbs2UfP
+         E4HosL1jloyBA==
+Date:   Mon, 20 Sep 2021 07:30:15 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ulrich Teichert <krypton@ulrich-teichert.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        llvm@lists.linux.dev
+Subject: Re: Odd pci_iounmap() declaration rules..
+Message-ID: <YUia9zfbiertRRNR@archlinux-ax161>
+References: <CAHk-=wjRrh98pZoQ+AzfWmsTZacWxTJKXZ9eKU2X_0+jM=O8nw@mail.gmail.com>
+ <YUdti08rLzfDZy8S@ls3530>
+ <CAHk-=wgKc5TY-LiAjog5VKNUQ84CSZyPu+FQekMHDar=kdSW=Q@mail.gmail.com>
+ <YUeriU9EIJ5hiFjL@archlinux-ax161>
+ <CAHk-=wgNfaf03Dw78q1qLLZs6G=iJjfo5ZTcnyXgSk3w1tp0yg@mail.gmail.com>
+ <CAHk-=wirqeqb59bbFjCQ9L9BiVOQFqD=JbUEG+hU2bF4BDWqVg@mail.gmail.com>
+ <CAHk-=wgzc8EUcH=V7P0GoxVYw4bQ7URJvQVZ7_5pODQmrSkAnw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgzc8EUcH=V7P0GoxVYw4bQ7URJvQVZ7_5pODQmrSkAnw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
-
-On Sun, Sep 19, 2021 at 5:59 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sat, Sep 18, 2021 at 9:12 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > On Sat, Sep 18, 2021 at 5:10 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > For example does LoongArch have a version without built in floating
-> > > point support?
+On Sun, Sep 19, 2021 at 05:44:03PM -0700, Linus Torvalds wrote:
+> On Sun, Sep 19, 2021 at 3:44 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
-> > Some of these structures seems need rethinking, But we really have
-> > LoongArch-based MCUs now (no FP, no SMP, and even no MMU).
->
-> NOMMU Linux is kind-of on the way out as interest is fading, so I hope you
-> don't plan on supporting this in the future.
->
-> Do you expect to see future products with MMU but no FP or no SMP?
-OK, we will not care no-MMU hardware in Linux, but no-FP and no-SMP
-hardware will be supported.
+> > The fix seems to be to just move that odd code from the header file to
+> > lib/pci_iomap.c, and that should make it all JustWork(tm).
+> 
+> I'm not 100% happy about the end result, and in particular I think
+> that the new generic pci_iounmap() function for the
+> ARCH_WANTS_GENERIC_PCI_IOUNMAP case should do the "iounmap(p)" thing
+> even if ARCH_HAS_GENERIC_IOPORT_MAP wasn't true, but I tried to keep
+> the old rules, even if they seemed broken.
+> 
+> arm and arm64 build for me, as did sparc64 and alpha. At least in the
+> configs I tested.
+> 
+> And the code _does_ make a bit more sense than it used to. It still
+> has crazy corners, but moving the pci_iounmap() code out of the header
+> file should make it easier to fix up in the future.
 
-Huacai
->
->         Arnd
+Thanks, I can confirm that all of my build tests pass without any
+issues now.
+
+Cheers,
+Nathan
