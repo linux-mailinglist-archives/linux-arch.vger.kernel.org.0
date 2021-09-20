@@ -2,65 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C87412AF1
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Sep 2021 04:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587AE412D59
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Sep 2021 05:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235919AbhIUCEH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Sep 2021 22:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S229813AbhIUDVB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Sep 2021 23:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239960AbhIUB7r (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Sep 2021 21:59:47 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDBDC08EB1E
-        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 11:04:17 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id z24so45074882lfu.13
-        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 11:04:17 -0700 (PDT)
+        with ESMTP id S244157AbhIUCbN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Sep 2021 22:31:13 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBACC04A156
+        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 13:11:53 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id b15so54117404lfe.7
+        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 13:11:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=C96pDQyYyFg5qDGVLf3sLPlA5hQ7a8vVkj08bMsCj8M=;
-        b=EGycjJn+wnDLv4w5lW3U5Wn7gsAcaf6LTG1FqdE09AUzqmx2sOt3hXMLK/y4zNH99+
-         fl7CiEBkM9aBwsZrcqA4birLn9joAVXIKzRyWchC462H9YmTKBBw+fnnMc/T3VbhuGn3
-         Xr99GVBCb/6unRKmeB3xNNMDiBYkcm1rJQ8Fs=
+        bh=VJRE9kS/QPf/0tOqznxzvGRA8erQC6C/9CuG+/yz+9U=;
+        b=MjF/lwuc6mPv7nAhg2ZP9d30rlvilAFvjKmYIG8K/nAhbMgJRIcrN70sahLhELV4NY
+         uJMN/H9Eb+TGaf8vH+d6MIDjEqr8JeeHKbNJeW1urY2uxDdTgMkADNmigKMnbr6Ri8D8
+         J+BrPizNwPAYdm66/8hXK2c/1vjtRzwGGDMjU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=C96pDQyYyFg5qDGVLf3sLPlA5hQ7a8vVkj08bMsCj8M=;
-        b=ZJmFEwxzSjUwf3MdEGPk5hdPClMzF2Czx8bSiMs+HY2NsO0oDrlzHKSncJ/PVOxtEv
-         Qq4aN49dbB+z+7Vh7YLBsfjNpQ4i7TKPBtIb0yYJ5zAzDmDfFPFY89smDxEP8iKzaqN+
-         qtkk3W+gzUPBlg76PvWveXLrU6psFRWAPGM+2R8nVTptV/ZRqt5SG05VfVfvWEEpn4xL
-         ntr3SwJJyV8fZucFdDV9UEAfLe7zEvGNFx/LdPjCd9EXaS0HiJ84HPv/pe19FRZ4Yyxq
-         HOgpp+M/VaqRwXA/ARd38HmBOIjfM4bCarbyifUTebXOtqnDMJJSbwKSCx2fq7zfgohk
-         PBFA==
-X-Gm-Message-State: AOAM532yhIv3ouydSJoqlg4La4jJV4CPG7mre/QJ14DTE4cuN9ygt/Qm
-        isRELsumeZ5avbFdM0j6a12vlp9hbbqmXVVZ
-X-Google-Smtp-Source: ABdhPJzymeZxMiZ/iJ+U+bYWQG8h/BTp0+Ji8s41JLOJk/QX7NAtlOWmH6hB+0aJ727OEIF8Wo62Xw==
-X-Received: by 2002:a05:6512:13a5:: with SMTP id p37mr4782736lfa.403.1632161055361;
-        Mon, 20 Sep 2021 11:04:15 -0700 (PDT)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
-        by smtp.gmail.com with ESMTPSA id q7sm1853218ljg.137.2021.09.20.11.04.14
+        bh=VJRE9kS/QPf/0tOqznxzvGRA8erQC6C/9CuG+/yz+9U=;
+        b=oJU6lhiXcLBTvbUI04n021apH4LvKKZRbEK6FI6lCBsgg6WxBzDSPRdN4D2Zd+jnwY
+         aZwx5yJyy5lkTe4CKKA1OuDtUYmpaIRUf6pkXUe7ISpRUSliJzcMfUGVLXydjV2Pl34g
+         GE00oJavxpR7oDx2xpIuqx35F9K+Eet/OVARBQa/iLVS+NmJVgWO8/f6iHrrUMJjXSJG
+         XmMzq+FqIZYOL6oyc8XysKQpFR03Yrb6i/neUsYVBU5IRRYAYRVxkvrEVlmxLhl6Vguz
+         HfDK0LPsilxYMC4QjzzXbJXrpEPbeto75fsFwSJhKwJ2hHpbpZnd8R2lxC1OnaNAh+sX
+         u0XQ==
+X-Gm-Message-State: AOAM530/BV0AEmZIgEsTxnrhYiuDtncjOQIPWAQGWY6h9mBnuAZFHZmY
+        ViFn7ZCnmUBtP7saoF+8KYbYw7UztSKjLawIzk0=
+X-Google-Smtp-Source: ABdhPJyvdCfgvxEtnGNk94Yk1OZHP8e+ngH39R6jnAbZY/Bm/OqcQgbwVKKmVMg/Y4kgVbDk12Ul9g==
+X-Received: by 2002:a2e:9012:: with SMTP id h18mr1626234ljg.336.1632168711250;
+        Mon, 20 Sep 2021 13:11:51 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id j12sm1867090ljc.121.2021.09.20.13.11.49
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Sep 2021 11:04:14 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id u8so19749830lff.9
-        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 11:04:14 -0700 (PDT)
-X-Received: by 2002:a05:651c:1250:: with SMTP id h16mr4886099ljh.68.1632161051649;
- Mon, 20 Sep 2021 11:04:11 -0700 (PDT)
+        Mon, 20 Sep 2021 13:11:49 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id g41so39927778lfv.1
+        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 13:11:49 -0700 (PDT)
+X-Received: by 2002:a2e:3309:: with SMTP id d9mr12260277ljc.249.1632168709492;
+ Mon, 20 Sep 2021 13:11:49 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAHk-=wirexiZR+VO=H3xemGKOMkh8OasmXaKXTKUmAKYCzi8AQ@mail.gmail.com>
  <20210920134424.GA346531@roeck-us.net> <CAHk-=wgheheFx9myQyy5osh79BAazvmvYURAtub2gQtMvLrhqQ@mail.gmail.com>
- <CAHk-=wgnSFePkt9_TxgdgFvMz6ZyofLFQLuV_Tc7MQVXYdgSng@mail.gmail.com>
-In-Reply-To: <CAHk-=wgnSFePkt9_TxgdgFvMz6ZyofLFQLuV_Tc7MQVXYdgSng@mail.gmail.com>
+ <CAHk-=wgnSFePkt9_TxgdgFvMz6ZyofLFQLuV_Tc7MQVXYdgSng@mail.gmail.com> <715c52e6-9a71-6924-0643-407311ad56ba@physik.fu-berlin.de>
+In-Reply-To: <715c52e6-9a71-6924-0643-407311ad56ba@physik.fu-berlin.de>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 20 Sep 2021 11:03:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg9Th7A8eGiWK4gY8fGG41k6J3JQhip=4NCa9xUR7kMVQ@mail.gmail.com>
-Message-ID: <CAHk-=wg9Th7A8eGiWK4gY8fGG41k6J3JQhip=4NCa9xUR7kMVQ@mail.gmail.com>
+Date:   Mon, 20 Sep 2021 13:11:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjcCZW-Lu85djtfDSiQdOqH1hR=dDP5xHj6vhvMdBCMVA@mail.gmail.com>
+Message-ID: <CAHk-=wjcCZW-Lu85djtfDSiQdOqH1hR=dDP5xHj6vhvMdBCMVA@mail.gmail.com>
 Subject: Re: Linux 5.15-rc2
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-sparc <sparclinux@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         linux-arch <linux-arch@vger.kernel.org>
@@ -69,26 +70,43 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 10:04 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Mon, Sep 20, 2021 at 12:14 PM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
 >
-> But let me build a few more sparc configs (and this time do it
-> properly for both 32-bit and 64-bit) before I actually commit it and
-> push it out.
+> If you want to get feedback whether the kernel actually boots, let me know.
 
-Actually, I think I _had_ tested sparc64 properly before, it's just
-that I had only done the bigger configurations that had CONFIG_PCI
-enabled and that didn't show the failure due to that.
+So having looked around more sparc64 actually looks to be ok as-is,
+because it doesn't do any ioremap at all, and the PIO accesses are
+done at physical address zero.
 
-But I have now done the allnoconfig and tinyconfig builds that showed
-the problem, and verified that the trivial "depend on CONFIG_PCI"
-fixes things for me.
+Sparc uses a special IO memory address space and can basically map all
+of PCI that way, and it looks like the hardware does all the required
+special things for the PIO range at address 0-0xffff.
 
-Looks like the only remaining problem in your build configuration list
-that isn't queued up somewhere is that odd nouveau use of pwrsrc and
-the errno range thing. I'll apply it directly.
+So it turns out that the "missing iounmap()" is actually ok on sparc,
+because it's a no-op anyway - because the ioremap() was just a pointer
+cast with no actual remapping necessary.
 
-I'm sure that other configs will have a lot of other cases, but it is
-good to see at least your set shrinking.
+And the generic IOMAP thing does assume that PIO is special, in ways
+that sparc doesn't need. On x86, PIO is not remapped, but also uses
+different instructions, so it's not just pointer games that could be
+done at iomap/unmap case.
 
-            Linus
+(And on many other architectures you need to do different
+synchronization, even if you could perhaps otherwise make the
+PIO-vs-MMIO be only about the pointer mapping - so "writeb()" and
+"outb()" aren't just different in the addressing).
+
+End result: the only downside of sparc not using the generic iomap is
+likely that sparc will happily use a NULL __iomap pointer (error) and
+basically use it as a PIO access. But since other architectures like
+x86-64 would warn for that case (see 'bad_io_access()' in
+lib/iomap.c), even that isn't actually a big deal - any such bugs
+would have been found elsewhere.
+
+And having looked at this, I'm starting to suspect that sparc oddity
+is _why_ the fallback version in <asm-generic/io.h> was so broken. It
+did the right thing on sparc, but leaks iomap remappings almost
+anywhere else. But maybe sparc ended up being the only user of it?
+
+           Linus
