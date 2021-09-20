@@ -2,82 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD6B4126A4
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Sep 2021 21:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C87412AF1
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Sep 2021 04:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346630AbhITTRw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Sep 2021 15:17:52 -0400
-Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:46559 "EHLO
-        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230477AbhITTPv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 20 Sep 2021 15:15:51 -0400
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1mSOkA-001iDz-5u; Mon, 20 Sep 2021 21:14:22 +0200
-Received: from pd9f7417d.dip0.t-ipconnect.de ([217.247.65.125] helo=[192.168.178.35])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1mSOk9-002NNC-VD; Mon, 20 Sep 2021 21:14:22 +0200
-Message-ID: <715c52e6-9a71-6924-0643-407311ad56ba@physik.fu-berlin.de>
-Date:   Mon, 20 Sep 2021 21:14:21 +0200
+        id S235919AbhIUCEH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Sep 2021 22:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239960AbhIUB7r (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Sep 2021 21:59:47 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDBDC08EB1E
+        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 11:04:17 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z24so45074882lfu.13
+        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 11:04:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C96pDQyYyFg5qDGVLf3sLPlA5hQ7a8vVkj08bMsCj8M=;
+        b=EGycjJn+wnDLv4w5lW3U5Wn7gsAcaf6LTG1FqdE09AUzqmx2sOt3hXMLK/y4zNH99+
+         fl7CiEBkM9aBwsZrcqA4birLn9joAVXIKzRyWchC462H9YmTKBBw+fnnMc/T3VbhuGn3
+         Xr99GVBCb/6unRKmeB3xNNMDiBYkcm1rJQ8Fs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C96pDQyYyFg5qDGVLf3sLPlA5hQ7a8vVkj08bMsCj8M=;
+        b=ZJmFEwxzSjUwf3MdEGPk5hdPClMzF2Czx8bSiMs+HY2NsO0oDrlzHKSncJ/PVOxtEv
+         Qq4aN49dbB+z+7Vh7YLBsfjNpQ4i7TKPBtIb0yYJ5zAzDmDfFPFY89smDxEP8iKzaqN+
+         qtkk3W+gzUPBlg76PvWveXLrU6psFRWAPGM+2R8nVTptV/ZRqt5SG05VfVfvWEEpn4xL
+         ntr3SwJJyV8fZucFdDV9UEAfLe7zEvGNFx/LdPjCd9EXaS0HiJ84HPv/pe19FRZ4Yyxq
+         HOgpp+M/VaqRwXA/ARd38HmBOIjfM4bCarbyifUTebXOtqnDMJJSbwKSCx2fq7zfgohk
+         PBFA==
+X-Gm-Message-State: AOAM532yhIv3ouydSJoqlg4La4jJV4CPG7mre/QJ14DTE4cuN9ygt/Qm
+        isRELsumeZ5avbFdM0j6a12vlp9hbbqmXVVZ
+X-Google-Smtp-Source: ABdhPJzymeZxMiZ/iJ+U+bYWQG8h/BTp0+Ji8s41JLOJk/QX7NAtlOWmH6hB+0aJ727OEIF8Wo62Xw==
+X-Received: by 2002:a05:6512:13a5:: with SMTP id p37mr4782736lfa.403.1632161055361;
+        Mon, 20 Sep 2021 11:04:15 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id q7sm1853218ljg.137.2021.09.20.11.04.14
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Sep 2021 11:04:14 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id u8so19749830lff.9
+        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 11:04:14 -0700 (PDT)
+X-Received: by 2002:a05:651c:1250:: with SMTP id h16mr4886099ljh.68.1632161051649;
+ Mon, 20 Sep 2021 11:04:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
+References: <CAHk-=wirexiZR+VO=H3xemGKOMkh8OasmXaKXTKUmAKYCzi8AQ@mail.gmail.com>
+ <20210920134424.GA346531@roeck-us.net> <CAHk-=wgheheFx9myQyy5osh79BAazvmvYURAtub2gQtMvLrhqQ@mail.gmail.com>
+ <CAHk-=wgnSFePkt9_TxgdgFvMz6ZyofLFQLuV_Tc7MQVXYdgSng@mail.gmail.com>
+In-Reply-To: <CAHk-=wgnSFePkt9_TxgdgFvMz6ZyofLFQLuV_Tc7MQVXYdgSng@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 20 Sep 2021 11:03:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg9Th7A8eGiWK4gY8fGG41k6J3JQhip=4NCa9xUR7kMVQ@mail.gmail.com>
+Message-ID: <CAHk-=wg9Th7A8eGiWK4gY8fGG41k6J3JQhip=4NCa9xUR7kMVQ@mail.gmail.com>
 Subject: Re: Linux 5.15-rc2
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-sparc <sparclinux@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         linux-arch <linux-arch@vger.kernel.org>
-References: <CAHk-=wirexiZR+VO=H3xemGKOMkh8OasmXaKXTKUmAKYCzi8AQ@mail.gmail.com>
- <20210920134424.GA346531@roeck-us.net>
- <CAHk-=wgheheFx9myQyy5osh79BAazvmvYURAtub2gQtMvLrhqQ@mail.gmail.com>
- <CAHk-=wgnSFePkt9_TxgdgFvMz6ZyofLFQLuV_Tc7MQVXYdgSng@mail.gmail.com>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <CAHk-=wgnSFePkt9_TxgdgFvMz6ZyofLFQLuV_Tc7MQVXYdgSng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 217.247.65.125
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus!
-
-On 9/20/21 19:04, Linus Torvalds wrote:
-> On Mon, Sep 20, 2021 at 9:18 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> Anyway, this email ended up being a long explanation of what the code
->> _should_ do, in the hope that some enterprising kernel developer
->> decides "Oh, this sounds like an easy thing to fix". But you do need
->> to be able to test the end result at least a tiny bit.
-> 
-> In the meantime, the build fix is trivial: make that broken sparc
-> pci_iounmap() definition depend on CONFIG_PCI being set.
-> 
+On Mon, Sep 20, 2021 at 10:04 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
 > But let me build a few more sparc configs (and this time do it
 > properly for both 32-bit and 64-bit) before I actually commit it and
 > push it out.
 
-If you want to get feedback whether the kernel actually boots, let me know.
+Actually, I think I _had_ tested sparc64 properly before, it's just
+that I had only done the bigger configurations that had CONFIG_PCI
+enabled and that didn't show the failure due to that.
 
-I could test boot on a SPARC T5 LDOM (SPARC VM logical domain).
+But I have now done the allnoconfig and tinyconfig builds that showed
+the problem, and verified that the trivial "depend on CONFIG_PCI"
+fixes things for me.
 
-Adrian
+Looks like the only remaining problem in your build configuration list
+that isn't queued up somewhere is that odd nouveau use of pwrsrc and
+the errno range thing. I'll apply it directly.
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+I'm sure that other configs will have a lot of other cases, but it is
+good to see at least your set shrinking.
 
+            Linus
