@@ -2,111 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 587AE412D59
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Sep 2021 05:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCB3412AF0
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Sep 2021 04:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbhIUDVB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Sep 2021 23:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S229608AbhIUCD6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Sep 2021 22:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244157AbhIUCbN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Sep 2021 22:31:13 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBACC04A156
-        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 13:11:53 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id b15so54117404lfe.7
-        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 13:11:53 -0700 (PDT)
+        with ESMTP id S234662AbhIUBpM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Sep 2021 21:45:12 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21645C05937A;
+        Mon, 20 Sep 2021 14:14:14 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id m26so17470304pff.3;
+        Mon, 20 Sep 2021 14:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VJRE9kS/QPf/0tOqznxzvGRA8erQC6C/9CuG+/yz+9U=;
-        b=MjF/lwuc6mPv7nAhg2ZP9d30rlvilAFvjKmYIG8K/nAhbMgJRIcrN70sahLhELV4NY
-         uJMN/H9Eb+TGaf8vH+d6MIDjEqr8JeeHKbNJeW1urY2uxDdTgMkADNmigKMnbr6Ri8D8
-         J+BrPizNwPAYdm66/8hXK2c/1vjtRzwGGDMjU=
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wJbe26PbHhpGOrBm34WfP3EQpBDDdiCtuFeJHFErXao=;
+        b=XsOg/+RTS1dlQNb9LQapBJTEFbCTAMTz0fxmiMQT2IuwKXO/HGmAf4Tv+771pP9njY
+         nMxicCI6TJ7kfiCsL1P9Iq9ia/ZdNxasSfvohF+q+MAN/DS82gHpFxtGPjZ2VVFzOSMB
+         qFKTjVaN6yM9ZYqWlNSs8iqKIhrcc902zTIgS3z/24bT9yGe6DQpfxbfjfW/sH7chB8w
+         hwgxBaJWDPs//QlPZB/rbFStytxNc8xWs+xR8cuUN2HsumNl5VkD7mI713EsofTW81i7
+         q8WkCNTCpbd5NXvqfelOHpsKEV6NKhzoLcqcVsiXPz52vQCKD9vOQ3xesM06Sh4fahOQ
+         vN2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VJRE9kS/QPf/0tOqznxzvGRA8erQC6C/9CuG+/yz+9U=;
-        b=oJU6lhiXcLBTvbUI04n021apH4LvKKZRbEK6FI6lCBsgg6WxBzDSPRdN4D2Zd+jnwY
-         aZwx5yJyy5lkTe4CKKA1OuDtUYmpaIRUf6pkXUe7ISpRUSliJzcMfUGVLXydjV2Pl34g
-         GE00oJavxpR7oDx2xpIuqx35F9K+Eet/OVARBQa/iLVS+NmJVgWO8/f6iHrrUMJjXSJG
-         XmMzq+FqIZYOL6oyc8XysKQpFR03Yrb6i/neUsYVBU5IRRYAYRVxkvrEVlmxLhl6Vguz
-         HfDK0LPsilxYMC4QjzzXbJXrpEPbeto75fsFwSJhKwJ2hHpbpZnd8R2lxC1OnaNAh+sX
-         u0XQ==
-X-Gm-Message-State: AOAM530/BV0AEmZIgEsTxnrhYiuDtncjOQIPWAQGWY6h9mBnuAZFHZmY
-        ViFn7ZCnmUBtP7saoF+8KYbYw7UztSKjLawIzk0=
-X-Google-Smtp-Source: ABdhPJyvdCfgvxEtnGNk94Yk1OZHP8e+ngH39R6jnAbZY/Bm/OqcQgbwVKKmVMg/Y4kgVbDk12Ul9g==
-X-Received: by 2002:a2e:9012:: with SMTP id h18mr1626234ljg.336.1632168711250;
-        Mon, 20 Sep 2021 13:11:51 -0700 (PDT)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id j12sm1867090ljc.121.2021.09.20.13.11.49
-        for <linux-arch@vger.kernel.org>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wJbe26PbHhpGOrBm34WfP3EQpBDDdiCtuFeJHFErXao=;
+        b=pAB9PV995tNH42WiD5igGo40ltmnpk9Xv91Q3pAF63CML4jxpOugaNr5qWKywhGRvA
+         VDKu0I1V6LIKWqiT3kVJZv5YCtbJZ39nIQXIRD3NzhRIiUedu4KK4YpHZb3WnF+T+7xJ
+         by1KLMFNzRO8GcVO3/lmXK5UPhb7Giw416PwcLGYmk8y9r+VXjsUJBXMPJMwqSZiJGAl
+         6BcX0zoCA8G1ExPpySukgItKqMy+y7QwUORUyqMhywJJEAPsk0fN1UyO3yjzsgo9i54M
+         UNqvjgwRBEjOAxqQZVZ3pwy5aWruqgpkAzb8vSWNBeW0yNSdbBrcLZGtrc9N9bQliU45
+         wqIQ==
+X-Gm-Message-State: AOAM5301iSS+dii+GIlmAo3nNVUDSOEVboQCHrY3kfo3/aoRHLiV7as/
+        6rokvisuVeFjGwoMlqM82jU=
+X-Google-Smtp-Source: ABdhPJxT+Kq7mMohFE4vU+4/4A3kHTJgOAReFUeXiGCwjRSGFhNml42MoQBZbYpHGt5HUM9KI8UGng==
+X-Received: by 2002:a05:6a00:c3:b0:43d:e6be:b2a6 with SMTP id e3-20020a056a0000c300b0043de6beb2a6mr27203762pfj.34.1632172453197;
+        Mon, 20 Sep 2021 14:14:13 -0700 (PDT)
+Received: from [192.168.1.11] ([71.212.134.125])
+        by smtp.googlemail.com with ESMTPSA id p24sm14925238pfh.136.2021.09.20.14.14.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Sep 2021 13:11:49 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id g41so39927778lfv.1
-        for <linux-arch@vger.kernel.org>; Mon, 20 Sep 2021 13:11:49 -0700 (PDT)
-X-Received: by 2002:a2e:3309:: with SMTP id d9mr12260277ljc.249.1632168709492;
- Mon, 20 Sep 2021 13:11:49 -0700 (PDT)
+        Mon, 20 Sep 2021 14:14:12 -0700 (PDT)
+Sender: Richard Henderson <rth7680@gmail.com>
+Subject: Re: [PATCH V3 14/22] LoongArch: Add signal handling support
+To:     Huacai Chen <chenhuacai@gmail.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20210917035736.3934017-1-chenhuacai@loongson.cn>
+ <20210917035736.3934017-15-chenhuacai@loongson.cn> <87tuii52o2.fsf@disp2133>
+ <CAAhV-H5MZ9uYyEnVoHXBXkrux1HdcPsKQ66zvB2oeMfq_AP7_A@mail.gmail.com>
+ <CAK8P3a0xghZKNBWbZ-qUWQVKyus4xqJMhSV_baQO7zKDoTtGQg@mail.gmail.com>
+ <CAAhV-H7A=C3Tujt2YNv1np9pEP_Hxc-chGnOdmDCzx5tUt7F5g@mail.gmail.com>
+From:   Richard Henderson <rth@twiddle.net>
+Message-ID: <a0fb870d-3b79-ca77-305f-6178974729e4@twiddle.net>
+Date:   Mon, 20 Sep 2021 14:14:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <CAHk-=wirexiZR+VO=H3xemGKOMkh8OasmXaKXTKUmAKYCzi8AQ@mail.gmail.com>
- <20210920134424.GA346531@roeck-us.net> <CAHk-=wgheheFx9myQyy5osh79BAazvmvYURAtub2gQtMvLrhqQ@mail.gmail.com>
- <CAHk-=wgnSFePkt9_TxgdgFvMz6ZyofLFQLuV_Tc7MQVXYdgSng@mail.gmail.com> <715c52e6-9a71-6924-0643-407311ad56ba@physik.fu-berlin.de>
-In-Reply-To: <715c52e6-9a71-6924-0643-407311ad56ba@physik.fu-berlin.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 20 Sep 2021 13:11:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjcCZW-Lu85djtfDSiQdOqH1hR=dDP5xHj6vhvMdBCMVA@mail.gmail.com>
-Message-ID: <CAHk-=wjcCZW-Lu85djtfDSiQdOqH1hR=dDP5xHj6vhvMdBCMVA@mail.gmail.com>
-Subject: Re: Linux 5.15-rc2
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAAhV-H7A=C3Tujt2YNv1np9pEP_Hxc-chGnOdmDCzx5tUt7F5g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 12:14 PM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
->
-> If you want to get feedback whether the kernel actually boots, let me know.
+On 9/19/21 7:36 PM, Huacai Chen wrote:
+> Hi, Arnd,
+> 
+> On Sun, Sep 19, 2021 at 5:59 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> On Sat, Sep 18, 2021 at 9:12 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+>>> On Sat, Sep 18, 2021 at 5:10 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>>>> For example does LoongArch have a version without built in floating
+>>>> point support?
+>>>
+>>> Some of these structures seems need rethinking, But we really have
+>>> LoongArch-based MCUs now (no FP, no SMP, and even no MMU).
+>>
+>> NOMMU Linux is kind-of on the way out as interest is fading, so I hope you
+>> don't plan on supporting this in the future.
+>>
+>> Do you expect to see future products with MMU but no FP or no SMP?
+> OK, we will not care no-MMU hardware in Linux, but no-FP and no-SMP
+> hardware will be supported.
 
-So having looked around more sparc64 actually looks to be ok as-is,
-because it doesn't do any ioremap at all, and the PIO accesses are
-done at physical address zero.
+Please consider requiring the FP registers to be present even on no-FP hardware.
 
-Sparc uses a special IO memory address space and can basically map all
-of PCI that way, and it looks like the hardware does all the required
-special things for the PIO range at address 0-0xffff.
+With this plus the FP data movement instructions (FMOV, MOVGR2FR, MOVFR2GR, FLD, FST), it 
+is possible to implement soft-float without requiring a separate soft-float ABI.  This can 
+vastly simplify compatibility and deployment.
 
-So it turns out that the "missing iounmap()" is actually ok on sparc,
-because it's a no-op anyway - because the ioremap() was just a pointer
-cast with no actual remapping necessary.
 
-And the generic IOMAP thing does assume that PIO is special, in ways
-that sparc doesn't need. On x86, PIO is not remapped, but also uses
-different instructions, so it's not just pointer games that could be
-done at iomap/unmap case.
-
-(And on many other architectures you need to do different
-synchronization, even if you could perhaps otherwise make the
-PIO-vs-MMIO be only about the pointer mapping - so "writeb()" and
-"outb()" aren't just different in the addressing).
-
-End result: the only downside of sparc not using the generic iomap is
-likely that sparc will happily use a NULL __iomap pointer (error) and
-basically use it as a PIO access. But since other architectures like
-x86-64 would warn for that case (see 'bad_io_access()' in
-lib/iomap.c), even that isn't actually a big deal - any such bugs
-would have been found elsewhere.
-
-And having looked at this, I'm starting to suspect that sparc oddity
-is _why_ the fallback version in <asm-generic/io.h> was so broken. It
-did the right thing on sparc, but leaks iomap remappings almost
-anywhere else. But maybe sparc ended up being the only user of it?
-
-           Linus
+r~
