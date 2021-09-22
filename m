@@ -2,31 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C408F413DA3
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Sep 2021 00:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8585413FB9
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Sep 2021 04:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbhIUWhq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Sep 2021 18:37:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48912 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229775AbhIUWhq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 21 Sep 2021 18:37:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 054F06044F;
-        Tue, 21 Sep 2021 22:36:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632263777;
-        bh=th3qmPaUNQjiJHw2074qzi6M8+lsZxz3EyRRcE77AdI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=N3V50aLck3umR7T+IFg91Ni1G4xICympd/f/PRvUvUoF83JyMq/4G+7D0GMPML6JN
-         DoRL+w1+pA3sM38+COOT5MX5ugR8+G47LsMljgSS5eui3gBWevytzp/jybvykkizaQ
-         NGZXppqWkILz6E93KrUFYrIL0wVxfxIO2NCJGRQ27YDNp3SzWEHV8WEHsTu/txHRpo
-         g+i1+/YtUZQNQin3jZL61KKNA0lWR/dZBFpRfbCneKNbJ9bzEDOggrmptg5nv0932Z
-         aolA0H92iCs/oK3SVA21xsJ99K6CHmXsETUsH6KiJyHYzB6iWV0pqUr/D9LlohLxB0
-         YDE/kD/1nY3vg==
-Date:   Tue, 21 Sep 2021 17:36:15 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Huacai Chen <chenhuacai@gmail.com>, a@bhelgaas
+        id S229466AbhIVCov (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Sep 2021 22:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229537AbhIVCov (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Sep 2021 22:44:51 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A82EC061574;
+        Tue, 21 Sep 2021 19:43:22 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id b67so532395vkb.13;
+        Tue, 21 Sep 2021 19:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S7XWCRLPjasbFUjEZ4/PesuafkvYctGigM6PR8jA8qw=;
+        b=SIZByzy3HwkCFWjz3NnCVwALKWHqHfi1PqlMrTZ68Ui6xualqU982XbxRXxNuXntu7
+         CEToB9R4phsCVvTljaZGidDGqsDauncHnF1dXcy2ZZiFMWpRNFBUIrOpyhblP3qfF2Zr
+         1iiNn6bWCEXMgKNzrkr83D8A0oIZyiaMKS/+/E9GD9PFfbO0qXIiDw6HvqBqsYNVoR3t
+         vqqJAZ7b5KerV90DEzd4bZiJL6cEORMZYEzeTrN0mEuk0gOZnLtk1UUeRhBwc8c5yCOt
+         oUUSxLRyOdHbqPT55+kzMqgcejPpGXiYHGLMr7Z3/2afergR13IlqKerUzOpOFploYsw
+         Lz4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S7XWCRLPjasbFUjEZ4/PesuafkvYctGigM6PR8jA8qw=;
+        b=1Rcy/XjN4Q1//Bla752u5f5Z2t/znd2b2NLR6caSBSADHgWyLYwRCj856BY9uMBhMN
+         VevaCrydS3RB6eTaP9W/oBB67PRdlsHgjnOCxoS4TDMBgKy4/Yk4q0rb+gFAxRvZ2MYB
+         +pekUNkGeDXPpWKfBk3PID1gSNILvg/P+xEidX7MfNH1YhtiF1SyNeNNvV1aAXQzY9Yw
+         HnuGYCRyHglYGO/ISjjYgz8c5o2O56QwP5A6yUw1fA29pmdzzNYpGAb/q3ArnohK33aw
+         Bm1a1W3QtUewrQRzxG7D/hzCV1OyvSpaPu1xf+2ra2bWgvfbgdMvrKaT8pJmOY/IkCGZ
+         /M8Q==
+X-Gm-Message-State: AOAM532swPai85FkOQzasr6Bth5+dzgO6Ggkgofcp0bW2B7AqnQpvLhB
+        hYn4ub0Sj8PgYLCO/t6MxodDd6TlIGciXltLffQ=
+X-Google-Smtp-Source: ABdhPJycEuEnNxLN1CdvRqU7yLzngAuE06/owJhp1YjUIJp4yTSHs+a0gjkaVCBc9d7A/1OBAJtQEGM88S50GfDltKE=
+X-Received: by 2002:a1f:1283:: with SMTP id 125mr21948982vks.2.1632278601271;
+ Tue, 21 Sep 2021 19:43:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210917035736.3934017-1-chenhuacai@loongson.cn>
+ <20210917035736.3934017-15-chenhuacai@loongson.cn> <87tuii52o2.fsf@disp2133>
+ <CAAhV-H5MZ9uYyEnVoHXBXkrux1HdcPsKQ66zvB2oeMfq_AP7_A@mail.gmail.com>
+ <CAK8P3a0xghZKNBWbZ-qUWQVKyus4xqJMhSV_baQO7zKDoTtGQg@mail.gmail.com>
+ <CAAhV-H7A=C3Tujt2YNv1np9pEP_Hxc-chGnOdmDCzx5tUt7F5g@mail.gmail.com> <a0fb870d-3b79-ca77-305f-6178974729e4@twiddle.net>
+In-Reply-To: <a0fb870d-3b79-ca77-305f-6178974729e4@twiddle.net>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Wed, 22 Sep 2021 10:43:09 +0800
+Message-ID: <CAAhV-H5h9zNCmsOumR=_Bryj3-Qarbq7FH=uYbT_3++-8pwfPw@mail.gmail.com>
+Subject: Re: [PATCH V3 14/22] LoongArch: Add signal handling support
+To:     Richard Henderson <rth@twiddle.net>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
         Huacai Chen <chenhuacai@loongson.cn>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -37,74 +67,46 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH V3 18/22] LoongArch: Add PCI controller support
-Message-ID: <20210921223615.GA137894@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAhV-H5=Ut+rymv1RH+1GVS2oVZogtuwY_Sk-dDosJh6=USr0Q@mail.gmail.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 18, 2021 at 03:36:52PM +0800, Huacai Chen wrote:
-> On Fri, Sep 17, 2021 at 5:02 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Fri, Sep 17, 2021 at 5:57 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > >
-> > > Loongson64 based systems are PC-like systems which use PCI/PCIe as its
-> > > I/O bus, This patch adds the PCI host controller support for LoongArch.
-> > >
-> > > Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> >
-> > As discussed before, I think the PCI support should not be part of the
-> > architecture code or this patch series. The headers are ok, but the pci.c
-> > and acpi.c files have nothing loongarch specific in them, and you clearly
-> > just copied most of this from arm64 or x86.
+Hi, Richard,
+
+On Tue, Sep 21, 2021 at 5:14 AM Richard Henderson <rth@twiddle.net> wrote:
 >
-> In V2 part of the PCI code (pci-loongson.c) has moved to
-> drivers/pci/controllers. For pci.c and acpi.c, I agree that "the thing
-> should be like that", but have some different ideas about "the way to
-> arrive at that". In my opinion, we can let this series be merged at
-> first, and then do another series to "restructure the files and move
-> common parts to the drivers directory". That way looks more natural to
-> me (doing the other series at first may block the whole thing).
-> 
-> > What I would suggest you do instead is:
+> On 9/19/21 7:36 PM, Huacai Chen wrote:
+> > Hi, Arnd,
 > >
-> > - start a separate patch series, addressed to the ACPI, PCI host driver
-> >   and ARM64 maintainers.
-> >
-> > - Move all the bits you need from arch/{arm64,ia64,x86} into
-> >   drivers/acpi/pci/pci_root.c, duplicating them with #if/#elif/#else
-> >   where they are too different, making the #else path the
-> >   default that can be shared with loongarch.
-> >
-> > - Move the bits from pci_root_info/acpi_pci_root_info that are
-> >   always needed into struct pci_host_bridge, with an
-> >   #ifdef CONFIG_ACPI where appropriate.
-> >
-> > - Simplify as much as you can easily do.
+> > On Sun, Sep 19, 2021 at 5:59 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >>
+> >> On Sat, Sep 18, 2021 at 9:12 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> >>> On Sat, Sep 18, 2021 at 5:10 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >>>> For example does LoongArch have a version without built in floating
+> >>>> point support?
+> >>>
+> >>> Some of these structures seems need rethinking, But we really have
+> >>> LoongArch-based MCUs now (no FP, no SMP, and even no MMU).
+> >>
+> >> NOMMU Linux is kind-of on the way out as interest is fading, so I hope you
+> >> don't plan on supporting this in the future.
+> >>
+> >> Do you expect to see future products with MMU but no FP or no SMP?
+> > OK, we will not care no-MMU hardware in Linux, but no-FP and no-SMP
+> > hardware will be supported.
+>
+> Please consider requiring the FP registers to be present even on no-FP hardware.
+>
+> With this plus the FP data movement instructions (FMOV, MOVGR2FR, MOVFR2GR, FLD, FST), it
+> is possible to implement soft-float without requiring a separate soft-float ABI.  This can
+> vastly simplify compatibility and deployment.
+OK, I'll send an updated version.
 
-I would love to see this done.
-
-But we already have this kind of redundant code for arm64/ia64/x86.
-Arguably, we should have refactored it for ia64 or arm64.  It's
-unfortunate to add loongarch to that list, but why should we penalize
-loongarch more than arm64 and ia64?
-
-Bjorn
+>
+>
+> r~
