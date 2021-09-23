@@ -2,166 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF814150BD
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Sep 2021 21:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977F6415E2F
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Sep 2021 14:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237276AbhIVTx6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Sep 2021 15:53:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52729 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237263AbhIVTxx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 22 Sep 2021 15:53:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632340341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xKJgefLdWJy0dp9TYiGmtdcSy+WA2ewqvdcD0wX0UjM=;
-        b=GfCwVW7gBe6f2cLwBpZlazaSDDefEFmdU9kFIjM7dG0iZlLtFFFeDqfReWio1q1tG1kud5
-        F7vRt3S+vzf7Z9WdCYqNuemWu4b7uCP9PLmhShH/j2o+ijZkmOtkZwMbyUtR9ERImjsqOw
-        iXeJayXt6bpyZZyKoSVaBs/Sp8DBcIg=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-125-Plf6F6C2NZWrUYUhgsr10w-1; Wed, 22 Sep 2021 15:52:20 -0400
-X-MC-Unique: Plf6F6C2NZWrUYUhgsr10w-1
-Received: by mail-qk1-f197.google.com with SMTP id w2-20020a3794020000b02903b54f40b442so13444609qkd.0
-        for <linux-arch@vger.kernel.org>; Wed, 22 Sep 2021 12:52:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=xKJgefLdWJy0dp9TYiGmtdcSy+WA2ewqvdcD0wX0UjM=;
-        b=YbD/R9WyCNQnY7OqTWpidJrqHYOgPsCoF3OjzBzCB5vXgzDobNiz8UVVXnoBRaZSUV
-         Wp1Kw2osZ2vCvmtZoiyoJC/ZQLK2zRcOHDVkAiPWWeAy1uY90apxpJKhABqKawTwzP4s
-         bJrWEe5qyEvEXOQezHN7TK/Nju4yVCoM8K4aiK5AG0bkfYUfhkCsolpvI8u7kLw6isQY
-         O08t38z16qIJ/TOZS3wTzChZ/H+2QK/NFcvo5E8KgC4cTlB2+ChVNCYWnD02rMjhijMb
-         hbCF5FlxcxFb6fi2hxnHDtVQIhHnNGZ1TOHH4kPy/N1iPO5WxF2kNCtZLFkdbtyu/gV9
-         AXqQ==
-X-Gm-Message-State: AOAM533k4TVf9n33VxlbEiFRRGl0AmjeBSjJ+vEQrujQfqR1R6xx68jq
-        hDOmRIM7Nx+pIffAXsqCctuHAVYiFsLv+ZKBfidwVPEagZ4LUOLDNse5nG5e7tkuzFJLy6/Ih0j
-        Scuf4o0f2rOyscHkBIWOrig==
-X-Received: by 2002:a37:a8c1:: with SMTP id r184mr1063016qke.389.1632340340189;
-        Wed, 22 Sep 2021 12:52:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxvWXlOT4CAVdD5eoMa4qYxPLr98GVG+fY6djJAvqKhRJ80pZbxe74g2EjlcdKhL3xmrArIxw==
-X-Received: by 2002:a37:a8c1:: with SMTP id r184mr1062990qke.389.1632340339926;
-        Wed, 22 Sep 2021 12:52:19 -0700 (PDT)
-Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
-        by smtp.gmail.com with ESMTPSA id 188sm2533277qkm.21.2021.09.22.12.52.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Sep 2021 12:52:19 -0700 (PDT)
-From:   Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v15 3/6] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-To:     Davidlohr Bueso <dave@stgolabs.net>,
-        Alex Kogan <alex.kogan@oracle.com>
-Cc:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
-        will.deacon@arm.com, arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-References: <20210514200743.3026725-1-alex.kogan@oracle.com>
- <20210514200743.3026725-4-alex.kogan@oracle.com>
- <20210922192528.ob22pu54oeqsoeno@offworld>
-Message-ID: <8e743acb-ec75-ea03-493a-d57154ab8fed@redhat.com>
-Date:   Wed, 22 Sep 2021 15:52:18 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S240929AbhIWMUt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Sep 2021 08:20:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44976 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240987AbhIWMUj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 23 Sep 2021 08:20:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A753361214;
+        Thu, 23 Sep 2021 12:19:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1632399548;
+        bh=a5drWzuoeMZl8QP24M3+/zzD9bz02p+umQKMUtGw/us=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I/mTuHbo2gLcg9kkEvmFogd2VA8vMY06o9QjuRssvz5ca5X16E29nSfJHjVqYlvON
+         AAjPv2xjDCwOnqOjTatbJGebL91RmGSqgVKwn6ouKN9V1zudAfAOoY4XWPISHnNaeP
+         fx3vOX8EQqw7aGWb5n8vm1/D/l0XNWiftPVdmBmU=
+Date:   Thu, 23 Sep 2021 14:19:05 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Mehta, Sohil" <sohil.mehta@intel.com>
+Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Lutomirski, Andy" <luto@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "Kammela, Gayatri" <gayatri.kammela@intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Witt, Randy E" <randy.e.witt@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Thomas, Ramesh" <ramesh.thomas@intel.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
+Message-ID: <YUxwuR4V+kwk1L34@kroah.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <c08f38db-77da-c50e-23f7-b3a76688deeb@intel.com>
+ <BYAPR11MB33203044CD5D7413846655F9E5DA9@BYAPR11MB3320.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <20210922192528.ob22pu54oeqsoeno@offworld>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR11MB33203044CD5D7413846655F9E5DA9@BYAPR11MB3320.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/22/21 3:25 PM, Davidlohr Bueso wrote:
-> On Fri, 14 May 2021, Alex Kogan wrote:
->
->> diff --git a/Documentation/admin-guide/kernel-parameters.txt 
->> b/Documentation/admin-guide/kernel-parameters.txt
->> index a816935d23d4..94d35507560c 100644
->> --- a/Documentation/admin-guide/kernel-parameters.txt
->> +++ b/Documentation/admin-guide/kernel-parameters.txt
->> @@ -3515,6 +3515,16 @@
->>             NUMA balancing.
->>             Allowed values are enable and disable
->>
->> +    numa_spinlock=    [NUMA, PV_OPS] Select the NUMA-aware variant
->> +            of spinlock. The options are:
->> +            auto - Enable this variant if running on a multi-node
->> +            machine in native environment.
->> +            on  - Unconditionally enable this variant.
->
-> Is there any reason why the user would explicitly pass the on option
-> when the auto thing already does the multi-node check? Perhaps strange
-> numa topologies? Otherwise I would say it's not needed and the fewer
-> options we give the user for low level locking the better.
+On Tue, Sep 14, 2021 at 07:03:36PM +0000, Mehta, Sohil wrote:
+> Resending.. There were some email delivery issues.
+> 
+> On 9/13/2021 1:27 PM, Dave Hansen wrote:
+> >	User Interrupts directly deliver events to user space and are
+> >	10x faster than the closest alternative.
+> 
+> Thanks Dave. This is definitely more attention-grabbing than the
+> previous intro. I'll include this next time.
+> 
+> One thing to note, the 10x gain is only applicable for User IPIs.
+> For other source of User Interrupts (like kernel-to-user
+> notifications and other external sources), we don't have the data
+> yet.
+> 
+> I realized the User IPI data in the cover also needs some
+> clarification. The 10x gain is only seen when the receiver is
+> spinning in User space - waiting for interrupts.
+> 
+> If the receiver were to block (wait) in the kernel, the performance
+> would drop as expected. However, User IPI (blocked) would still be
+> 10% faster than Eventfd and 40% faster than signals.
+> 
+> Here is the updated table:
+> +---------------------+-------------------------+
+> | IPC type            |   Relative Latency      |
+> |                     |(normalized to User IPI) |
+> +---------------------+-------------------------+
+> | User IPI            |                     1.0 |
+> | User IPI (blocked)  |                     8.9 |
+> | Signal              |                    14.8 |
+> | Eventfd             |                     9.7 |
+> | Pipe                |                    16.3 |
+> | Domain              |                    17.3 |
+> +---------------------+-------------------------+
 
-I asked Alex to put in a command line option because we may want to 
-disable it on a multi-socket server if we want to.
+Relative is just that, "relative".  If the real values are extremely
+tiny, then relative is just "this goes a tiny tiny bit faster than what
+you have today in eventfd", right?
 
+So how about "absolute"?  What are we talking here?
 
->
->> +            off - Unconditionally disable this variant.
->> +
->> +            Not specifying this option is equivalent to
->> +            numa_spinlock=auto.
->> +
->>     numa_zonelist_order= [KNL, BOOT] Select zonelist order for NUMA.
->>             'node', 'default' can be specified
->>             This can be set from sysctl after boot.
->> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->> index 0045e1b44190..819c3dad8afc 100644
->> --- a/arch/x86/Kconfig
->> +++ b/arch/x86/Kconfig
->> @@ -1564,6 +1564,26 @@ config NUMA
->>
->>       Otherwise, you should say N.
->>
->> +config NUMA_AWARE_SPINLOCKS
->> +    bool "Numa-aware spinlocks"
->> +    depends on NUMA
->> +    depends on QUEUED_SPINLOCKS
->> +    depends on 64BIT
->> +    # For now, we depend on PARAVIRT_SPINLOCKS to make the patching 
->> work.
->> +    # This is awkward, but hopefully would be resolved once 
->> static_call()
->> +    # is available.
->> +    depends on PARAVIRT_SPINLOCKS
->
-> We now have static_call() - see 9183c3f9ed7.
-I agree that it is now time to look at using the static call for 
-slowpath switching.
->
->
->> +    default y
->> +    help
->> +      Introduce NUMA (Non Uniform Memory Access) awareness into
->> +      the slow path of spinlocks.
->> +
->> +      In this variant of qspinlock, the kernel will try to keep the 
->> lock
->> +      on the same node, thus reducing the number of remote cache 
->> misses,
->> +      while trading some of the short term fairness for better 
->> performance.
->> +
->> +      Say N if you want absolute first come first serve fairness.
->
-> This would also need a depends on !PREEMPT_RT, no? Raw spinlocks 
-> really want
-> the determinism. 
+And this is really only for the "one userspace task waking up another
+userspace task" policies.  What real workload can actually use this?
 
-Agreed
+thanks,
 
-Cheers,
-Longman
-
+greg k-h
