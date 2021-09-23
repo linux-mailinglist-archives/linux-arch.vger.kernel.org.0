@@ -2,78 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0677A416114
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Sep 2021 16:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D00A416133
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Sep 2021 16:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241405AbhIWOez (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Sep 2021 10:34:55 -0400
-Received: from out28-50.mail.aliyun.com ([115.124.28.50]:47058 "EHLO
-        out28-50.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240652AbhIWOez (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Sep 2021 10:34:55 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.109725|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.0194584-0.00528737-0.975254;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047209;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.LP.lKLZ_1632407598;
-Received: from 192.168.88.131(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.LP.lKLZ_1632407598)
-          by smtp.aliyun-inc.com(10.147.40.200);
-          Thu, 23 Sep 2021 22:33:19 +0800
-Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Feiyang Chen <chris.chenfeiyang@gmail.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, arnd@arndb.de,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        chenhuacai@kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>
-References: <cover.1631583258.git.chenfeiyang@loongson.cn>
- <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
- <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
- <20210921155708.GA12237@alpha.franken.de>
-From:   Zhou Yanjie <zhouyu@wanyeetech.com>
-Message-ID: <ef429f0f-7cc9-2625-3700-47dc459ee681@wanyeetech.com>
-Date:   Thu, 23 Sep 2021 22:33:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S241736AbhIWOlH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Sep 2021 10:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241740AbhIWOlG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Sep 2021 10:41:06 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C6CC061574
+        for <linux-arch@vger.kernel.org>; Thu, 23 Sep 2021 07:39:34 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id b6so6940295ilv.0
+        for <linux-arch@vger.kernel.org>; Thu, 23 Sep 2021 07:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ipddjsuaxiI/286Gm4qQfceIdGUHDBcUdts4yKeCSH4=;
+        b=uHYx8lMBcD3fdcBCoAhrmnl4hqnthU6myTzNsuLBS41zx+AqXblbex40h1gs0amATB
+         ytAxAfRYGJCxEEEZ8nUjC7HLIt/MSp6hWb7eL7ZvBSAsyS+8sdNsc/t/jmDtUM+vkNpF
+         a4s00ie4KO9obs+cSOMmuycxJsi5I9ukm4x0BeZ193Yj/u7k5bXAdaucOC49J6yXR9Vs
+         RV7BB+tM0IITyprJH1F0M4vIhD0CboqhgrfYGnaDMNemQ+tE30lmGrJ4LDyMUVqT69qT
+         M1fiLKBUAbt4LnV7UMFOn//p4SEft0ZcO5NINwbZfiHnCUulSxpPSZtpg/naRBkJL91T
+         kunQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ipddjsuaxiI/286Gm4qQfceIdGUHDBcUdts4yKeCSH4=;
+        b=s0sDJKS3U4za+c3cnHaE16tACD4cXfxDBQqAyU3/Hq1l39eCLEkvKPSdZlMTqNzlwY
+         zm78nrhn/A2Ct+PL86jdDZWncGS8W49lyf4IS9n9t5upXa5GWqjBF3CNleaNgZh+Kjx8
+         Wfso3KaC/spvT8j3EceYankPf6WQ2T05f0raPInY97LQhqkAK3PnxWr0O9ikfAeMuGGV
+         kL9z83tR/ifSvfIYzyBsA1G8HUHFdMvZfjU7FHChPIWVkytIH0KgoyH2RqBSDCs5fEly
+         LPaE66b7g7DOOdCcszQI2jO3KbDtIBWEFOlCNDuIoY85UsyhVqmB1bjP1KnI1q9o0x0C
+         Pkdw==
+X-Gm-Message-State: AOAM530cQJ3ctle8imPAoHNYqy+Ntm9+m1go89Yze0BD38rZGWLv+lRm
+        iT+vxFM+/EYiwp7vbF5me8tt7g==
+X-Google-Smtp-Source: ABdhPJzsOYhSeJ2qNXh716/hXIZ2FZll7ocgoOGbyeZS58c5agnlM8KEzaSe+yFSmFDdRInBy5omkQ==
+X-Received: by 2002:a05:6e02:20e7:: with SMTP id q7mr3930805ilv.309.1632407973711;
+        Thu, 23 Sep 2021 07:39:33 -0700 (PDT)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id d12sm2297274iow.16.2021.09.23.07.39.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Sep 2021 07:39:32 -0700 (PDT)
+Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
+To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
+Cc:     Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <ecf3cf2e-685d-afb9-1a5d-1382714cc60c@kernel.dk>
+Date:   Thu, 23 Sep 2021 08:39:30 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210921155708.GA12237@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210913200132.3396598-1-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Thomas,
+On 9/13/21 2:01 PM, Sohil Mehta wrote:
+> - Discuss potential use cases.
+> We are starting to look at actual usages and libraries (like libevent[2] and
+> liburing[3]) that can take advantage of this technology. Unfortunately, we
+> don't have much to share on this right now. We need some help from the
+> community to identify usages that can benefit from this. We would like to make
+> sure the proposed APIs work for the eventual consumers.
 
-On 2021/9/21 下午11:57, Thomas Bogendoerfer wrote:
-> On Tue, Sep 14, 2021 at 05:30:14PM +0800, Feiyang Chen wrote:
->> On Tue, 14 Sept 2021 at 16:54, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->>>
->>>
->>> 在 2021/9/14 2:50, Feiyang Chen 写道:
->>>> Convert MIPS to use the generic entry infrastructure from
->>>> kernel/entry/*.
->>>>
->>>> v2: Use regs->regs[27] to mark whether to restore all registers in
->>>> handle_sys and enable IRQ stack.
->>> Hi Feiyang,
->>>
->>> Thanks for your patch, could you please expand how could this improve
->>> the performance?
->>>
->> Hi, Jiaxun,
->>
->> We always restore all registers in handle_sys in the v1 of the
->> patchset. Since regs->regs[27] is marked where we need to restore all
->> registers, now we simply use it as the return value of do_syscall to
->> determine whether we can only restore partial registers in handle_sys.
-> can people, who provided performance numbers for v1 do the same for v2 ?
+One use case for liburing/io_uring would be to use it instead of eventfd
+for notifications. I know some folks do use eventfd right now, though
+it's not that common. But if we had support for something like this,
+then you could use it to know when to reap events rather than sleep in
+the kernel. Or at least to be notified when new events have been posted
+to the cq ring.
 
+-- 
+Jens Axboe
 
-Sure, I will test the v2 in the next few days.
-
-
-Thanks and best regards!
-
-
->
-> Thomas,
->
