@@ -2,110 +2,286 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1372641689D
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 01:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052444168A0
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 01:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243606AbhIWXxl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Sep 2021 19:53:41 -0400
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:45349 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240701AbhIWXxl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Sep 2021 19:53:41 -0400
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.west.internal (Postfix) with ESMTP id 2E9F72B012E2;
-        Thu, 23 Sep 2021 19:52:08 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute2.internal (MEProxy); Thu, 23 Sep 2021 19:52:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type:content-transfer-encoding; s=fm3; bh=v5nvr
-        /c1C/JJVmNNr0va2VihjkEqDsuPinNtEL20Fdc=; b=PN3PhQyrhimN59gLGDQV9
-        ANiT+SLLncPigslF+EAy2Zn/Tx42UkzGoiF69KBelRU4npjeszLYM00fa2WELfkL
-        SqojfcOMiP/MncB+gavSPOlVuWOBrsdYs1tfEBWDQRyptahAhxfiiBCfwiIJcxQU
-        ZJvY9/exfaEfInxUL0oRG4zKOKMXWljPVPa9TKwhw3z1tjxOLLdL9iFqCvi5B1oi
-        xfbbOTcNxDIQ0DzxTb1w3ZQnC9+O4hALTe99Utg7p4ucCqPQbcDW6WEO/3y3IMbb
-        eaJfn7Z+9zxFGB0cPzpCoEktCxM2TLrxHYkNsZi27j83u3MH22dM4lIAzQ5FIw+Z
-        Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=v5nvr/c1C/JJVmNNr0va2VihjkEqDsuPinNtEL20F
-        dc=; b=kqnF05pOr3bw7a5nr6W4nw7ziUQTbyaZdPED5SM/rUvrsiIPZnnMUsHwy
-        9QSiYS5dr0XwaLsGXbyQoXjWGp2Mg5OZLWP7umTr9o7C+ps0jZ/RCWlj/yse0diC
-        kVX9Ln03U6mJUlza/37k+nZx3Q3Xmh9VAWvMjo68Re2AdqZNGjoXVeT7FYXfSG5m
-        mOkqgSivjKU8XNTIPtQJBEd0vjU27jlga/+VCjvjWIr9jk9AkvqjbHYdnGdO67yM
-        0lN+B8IFJqVSmJVpEuyPtmg7N9FaKNpIWzzwcbqfj9im1L/GURGKLD97df8fq3HV
-        MQ1cGbAAx47KZX/r7aceGerJvMqdQ==
-X-ME-Sender: <xms:JRNNYQla6U3TgG6kPTxEZ5gMMR5R4jVth9b9kI39ypTWhO5-QmU8aw>
-    <xme:JRNNYf2HgekmJSsAzQtuysqxC40ljJKKKtQ3CjuduHcbkkXyf3iz6TXs8V1pP2gdo
-    pQ5K0YP3mjPZbePOJo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudejtddgvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
-    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-    eqnecuggftrfgrthhtvghrnhepfeetgeekveeftefhgfduheegvdeuuddvieefvddvlefh
-    feehkeetfeeukedtfeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:JRNNYeqM8IYHSAdhfq4eVoPxRSkYb9eYyOcMBUJEWnQvXUYQWsU6Vg>
-    <xmx:JRNNYcmnoas90TO5o7OvIp_CHG7109HlHZzkEM0wSVbeqa-9PWGvuw>
-    <xmx:JRNNYe3KIogSyRNp6MYQVd9YMJs6hEgtDA9_0Alad5VyJ74JUe6VWw>
-    <xmx:JxNNYcxMhFsWQDz8PXuGgkNW053t18SsCC4gBS0IxmgkY2tE-jvUls0KKBY>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8ECC5FA0AA5; Thu, 23 Sep 2021 19:52:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1303-gb2406efd75-fm-20210922.002-gb2406efd
-Mime-Version: 1.0
-Message-Id: <16d09c59-ba76-4dca-b9f2-bde502b96ecf@www.fastmail.com>
-In-Reply-To: <20210921155708.GA12237@alpha.franken.de>
-References: <cover.1631583258.git.chenfeiyang@loongson.cn>
- <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
- <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
- <20210921155708.GA12237@alpha.franken.de>
-Date:   Fri, 24 Sep 2021 00:51:35 +0100
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        FreeFlyingSheep <chris.chenfeiyang@gmail.com>
-Cc:     "Thomas Gleixner" <tglx@linutronix.de>, peterz@infradead.org,
-        luto@kernel.org, "Arnd Bergmann" <arnd@arndb.de>,
-        "Feiyang Chen" <chenfeiyang@loongson.cn>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-arch@vger.kernel.org, "Huacai Chen" <chenhuacai@kernel.org>,
-        "Zhou Yanjie" <zhouyu@wanyeetech.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S243610AbhIWXyT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Sep 2021 19:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240701AbhIWXyT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Sep 2021 19:54:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B96C061574;
+        Thu, 23 Sep 2021 16:52:47 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1632441164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8t9Mp0mSo0gdX5tqhZywcW0+ZyH+wD62qovNnFG0fek=;
+        b=Gfq5Y6o+jxu7HwFOFE571xUEos/tju+rt6TXz5RBhGT2qVKcOp/Dkxw/9IWTVvz01njN+V
+        GaDQpO5JF8YnurogoFD+WpAQ6QAZoV+05n2wvgQm9tD6CifE+QA1B3sTGD3+VFDrN3lInY
+        tMBHA4X29TGXQPq7zu+kY316Y2G+Hrts1T+eh6LFer239caINbAkKCiF3pb7eWMHijxied
+        x/nIXYTwWuOsOUHTAUdenqvk3em4LDxj3u0CQy8MTQscfjTiDOtbkATJyzAx1Baaj3X35d
+        l03MvQBBDkoABz3vezQT3gaAef9+YlF0ZI9ku3NlzrNoYhUbdrnBznsYLDraGA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1632441164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8t9Mp0mSo0gdX5tqhZywcW0+ZyH+wD62qovNnFG0fek=;
+        b=DKQ0n3ESTHzTib/idxiRZH2/ZqyuWEs1TOhVgHpFx3VgNTNjyPAnSu0DJc9X7P8jSMTD+V
+        B6U0xc6L5SwUplDg==
+To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
+Cc:     Sohil Mehta <sohil.mehta@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 06/13] x86/uintr: Introduce uintr receiver syscalls
+In-Reply-To: <20210913200132.3396598-7-sohil.mehta@intel.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-7-sohil.mehta@intel.com>
+Date:   Fri, 24 Sep 2021 01:52:43 +0200
+Message-ID: <87czoyg88k.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
+> +/* User Posted Interrupt Descriptor (UPID) */
+> +struct uintr_upid {
+> +	struct {
+> +		u8 status;	/* bit 0: ON, bit 1: SN, bit 2-7: reserved */
+> +		u8 reserved1;	/* Reserved */
+> +		u8 nv;		/* Notification vector */
+> +		u8 reserved2;	/* Reserved */
+> +		u32 ndst;	/* Notification destination */
+> +	} nc __packed;		/* Notification control */
+> +	u64 puir;		/* Posted user interrupt requests */
+> +} __aligned(64);
+> +
+> +/* UPID Notification control status */
+> +#define UPID_ON		0x0	/* Outstanding notification */
+> +#define UPID_SN		0x1	/* Suppressed notification */
 
+Come on. This are bits in upid.status, right? So why can't the comment
+above these defines says so and why can't the names not reflect that?
 
-=E5=9C=A82021=E5=B9=B49=E6=9C=8821=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8B=E5=
-=8D=884:57=EF=BC=8CThomas Bogendoerfer=E5=86=99=E9=81=93=EF=BC=9A
->
-> can people, who provided performance numbers for v1 do the same for v2=
- ?
+> +struct uintr_upid_ctx {
+> +	struct uintr_upid *upid;
+> +	refcount_t refs;
 
-Sorry I just move abroad (to UK) to seek higher education. Currently I d=
-on't have any MIPS device available so I won't be able to provide test r=
-esults as v1.
+Please use tabular format for struct members. 
 
-I'll try to get some MIPS devices soonish.
+> +};
+> +
+> +struct uintr_receiver {
+> +	struct uintr_upid_ctx *upid_ctx;
+> +};
 
-Thanks.
+So we need a struct to wrap a pointer to another struct. Why?
 
->
-> Thomas,
->
-> --=20
-> Crap can work. Given enough thrust pigs will fly, but it's not necessa=
-rily a
-> good idea.                                                [ RFC1925, 2=
-.3 ]
+> +inline bool uintr_arch_enabled(void)
 
---=20
-- Jiaxun
+What's this arch_enabled indirection for? Is this used anywhere in
+non-architecture code?
+
+> +{
+> +	return static_cpu_has(X86_FEATURE_UINTR);
+> +}
+> +
+> +static inline bool is_uintr_receiver(struct task_struct *t)
+> +{
+> +	return !!t->thread.ui_recv;
+> +}
+> +
+> +static inline u32 cpu_to_ndst(int cpu)
+> +{
+> +	u32 apicid = (u32)apic->cpu_present_to_apicid(cpu);
+> +
+> +	WARN_ON_ONCE(apicid == BAD_APICID);
+
+Brilliant. If x2apic is not enabled then this case returns
+
+> +	if (!x2apic_enabled())
+> +		return (apicid << 8) & 0xFF00;
+
+  (BAD_APICID << 8) & 0xFF00 == 0xFF ....
+
+> +int do_uintr_unregister_handler(void)
+> +{
+> +	struct task_struct *t = current;
+> +	struct fpu *fpu = &t->thread.fpu;
+> +	struct uintr_receiver *ui_recv;
+> +	u64 msr64;
+> +
+> +	if (!is_uintr_receiver(t))
+> +		return -EINVAL;
+> +
+> +	pr_debug("recv: Unregister handler and clear MSRs for task=%d\n",
+> +		 t->pid);
+> +
+> +	/*
+> +	 * TODO: Evaluate usage of fpregs_lock() and get_xsave_addr(). Bugs
+> +	 * have been reported recently for PASID and WRPKRU.
+
+Again. Which bugs and why haven't they been evaluated before posting?
+
+> +	 * UPID and ui_recv will be referenced during context switch. Need to
+> +	 * disable preemption while modifying the MSRs, UPID and ui_recv thread
+> +	 * struct.
+> +	 */
+> +	fpregs_lock();
+
+And because you need to disable preemption you need to use
+fpregs_lock(), right? That's not what fpregs_lock() is about.
+
+> +	/* Clear only the receiver specific state. Sender related state is not modified */
+> +	if (fpregs_state_valid(fpu, smp_processor_id())) {
+> +		/* Modify only the relevant bits of the MISC MSR */
+> +		rdmsrl(MSR_IA32_UINTR_MISC, msr64);
+> +		msr64 &= ~GENMASK_ULL(39, 32);
+
+This is exactly the crap which results from not defining stuff
+properly. Random numbers in code which nobody can understand.
+
+> +		wrmsrl(MSR_IA32_UINTR_MISC, msr64);
+> +		wrmsrl(MSR_IA32_UINTR_PD, 0ULL);
+> +		wrmsrl(MSR_IA32_UINTR_RR, 0ULL);
+> +		wrmsrl(MSR_IA32_UINTR_STACKADJUST, 0ULL);
+> +		wrmsrl(MSR_IA32_UINTR_HANDLER, 0ULL);
+> +	} else {
+> +		struct uintr_state *p;
+> +
+> +		p = get_xsave_addr(&fpu->state.xsave, XFEATURE_UINTR);
+> +		if (p) {
+> +			p->handler = 0;
+> +			p->stack_adjust = 0;
+> +			p->upid_addr = 0;
+> +			p->uinv = 0;
+> +			p->uirr = 0;
+> +		}
+
+So p == NULL is expected here?
+
+> +	}
+> +
+> +	ui_recv = t->thread.ui_recv;
+> +	/*
+> +	 * Suppress notifications so that no further interrupts are generated
+> +	 * based on this UPID.
+> +	 */
+> +	set_bit(UPID_SN, (unsigned long *)&ui_recv->upid_ctx->upid->nc.status);
+> +
+> +	put_upid_ref(ui_recv->upid_ctx);
+> +	kfree(ui_recv);
+> +	t->thread.ui_recv = NULL;
+
+Why has this put/kfree stuff to be in the fpregs locked section?
+
+> +	fpregs_unlock();
+> +
+> +	return 0;
+> +}
+> +
+> +int do_uintr_register_handler(u64 handler)
+> +{
+> +	struct uintr_receiver *ui_recv;
+> +	struct uintr_upid *upid;
+> +	struct task_struct *t = current;
+> +	struct fpu *fpu = &t->thread.fpu;
+> +	u64 misc_msr;
+> +	int cpu;
+> +
+> +	if (is_uintr_receiver(t))
+> +		return -EBUSY;
+> +
+> +	ui_recv = kzalloc(sizeof(*ui_recv), GFP_KERNEL);
+> +	if (!ui_recv)
+> +		return -ENOMEM;
+> +
+> +	ui_recv->upid_ctx = alloc_upid();
+> +	if (!ui_recv->upid_ctx) {
+> +		kfree(ui_recv);
+> +		pr_debug("recv: alloc upid failed for task=%d\n", t->pid);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	/*
+> +	 * TODO: Evaluate usage of fpregs_lock() and get_xsave_addr(). Bugs
+> +	 * have been reported recently for PASID and WRPKRU.
+
+Oh well.
+
+> +	 * UPID and ui_recv will be referenced during context switch. Need to
+> +	 * disable preemption while modifying the MSRs, UPID and ui_recv thread
+> +	 * struct.
+
+See above.
+
+> +	 */
+> +	fpregs_lock();
+> +
+> +	cpu = smp_processor_id();
+> +	upid = ui_recv->upid_ctx->upid;
+> +	upid->nc.nv = UINTR_NOTIFICATION_VECTOR;
+> +	upid->nc.ndst = cpu_to_ndst(cpu);
+> +
+> +	t->thread.ui_recv = ui_recv;
+> +
+> +	if (fpregs_state_valid(fpu, cpu)) {
+> +		wrmsrl(MSR_IA32_UINTR_HANDLER, handler);
+> +		wrmsrl(MSR_IA32_UINTR_PD, (u64)ui_recv->upid_ctx->upid);
+> +
+> +		/* Set value as size of ABI redzone */
+> +		wrmsrl(MSR_IA32_UINTR_STACKADJUST, 128);
+> +
+> +		/* Modify only the relevant bits of the MISC MSR */
+> +		rdmsrl(MSR_IA32_UINTR_MISC, misc_msr);
+> +		misc_msr |= (u64)UINTR_NOTIFICATION_VECTOR << 32;
+> +		wrmsrl(MSR_IA32_UINTR_MISC, misc_msr);
+> +	} else {
+> +		struct xregs_state *xsave;
+> +		struct uintr_state *p;
+> +
+> +		xsave = &fpu->state.xsave;
+> +		xsave->header.xfeatures |= XFEATURE_MASK_UINTR;
+> +		p = get_xsave_addr(&fpu->state.xsave, XFEATURE_UINTR);
+> +		if (p) {
+> +			p->handler = handler;
+> +			p->upid_addr = (u64)ui_recv->upid_ctx->upid;
+> +			p->stack_adjust = 128;
+> +			p->uinv = UINTR_NOTIFICATION_VECTOR;
+> +		}
+
+Again. How is p supposed to be NULL and if so, why is this silently
+treating this as success?
+
+> +	}
+> +
+> +	fpregs_unlock();
+
+Thanks,
+
+        tglx
