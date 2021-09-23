@@ -2,101 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B010A416705
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Sep 2021 22:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57824167F0
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 00:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235917AbhIWVBD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Sep 2021 17:01:03 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:34040 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbhIWVBD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Sep 2021 17:01:03 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id CD9BC1C0BA5; Thu, 23 Sep 2021 22:59:29 +0200 (CEST)
-Date:   Thu, 23 Sep 2021 22:59:29 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        id S243465AbhIWWZn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Sep 2021 18:25:43 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:37578 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243436AbhIWWZf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Sep 2021 18:25:35 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1632435841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Matoo2OIfdawfGuu3j6hbf2m+pvAyOqko4uRRDDqJ0=;
+        b=N9ssRTZGMxorWOBqZEIQ9Tt2vNTC5I8aj19BMSE9Xssk0QWWtT/+0NICD6ssXGkA5FR8ds
+        7HwcthwHMm5PC2Ku+n2v00I8mpZkiSVyBlEP9litACd8ROqGfpHbiBNt7rpSxNEqPlEYoy
+        0WAbbsoSaHa38BXkXdMOEyhZcgpZeu/OVVG86ipRvJudoV8qZrOLuOHhnH4J38TdHWYzTm
+        k2wC7mCPI2oPu5BiSuRDTc1c4YPpiojnhbSVvtiUjxhC8qtgZkHBzuLSFi9C4zMHQXQui+
+        44GBHIIVFKD1k02kDBFfUkrxVzbrvQND6Rs33SPZqSweYAPfS01ntNPARWGLOg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1632435841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Matoo2OIfdawfGuu3j6hbf2m+pvAyOqko4uRRDDqJ0=;
+        b=/7ConpvTXAvFWy6BmvzoZaT07ZxWDyhnP2mIpX3mCcpKyA1zbHQBf+ebCtIwiiVEMqZdvP
+        uR9Iu/xxODMvHjBw==
+To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
+Cc:     Sohil Mehta <sohil.mehta@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH V3 01/22] Documentation: LoongArch: Add basic
- documentations
-Message-ID: <20210923205929.GA23210@duo.ucw.cz>
-References: <20210917035736.3934017-1-chenhuacai@loongson.cn>
- <20210917035736.3934017-2-chenhuacai@loongson.cn>
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 03/13] x86/cpu: Enumerate User Interrupts support
+In-Reply-To: <20210913200132.3396598-4-sohil.mehta@intel.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-4-sohil.mehta@intel.com>
+Date:   Fri, 24 Sep 2021 00:24:00 +0200
+Message-ID: <87lf3nexrz.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
-Content-Disposition: inline
-In-Reply-To: <20210917035736.3934017-2-chenhuacai@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
+> SENDUIPI is a special ring-3 instruction that makes a supervisor mode
+> memory access to the UPID and UITT memory. Currently, KPTI needs to be
+> off for User IPIs to work.  Processors that support user interrupts are
+> not affected by Meltdown so the auto mode of KPTI will default to off.
+>
+> Users who want to force enable KPTI will need to wait for a later
+> version of this patch series that is compatible with KPTI. We need to
+> allocate the UPID and UITT structures from a special memory region that
+> has supervisor access but it is mapped into userspace. The plan is to
+> implement a mechanism similar to LDT.
 
---5vNYLRcllDrimb99
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Seriously?
 
-Hi!
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
-> Add some basic documentations for LoongArch. LoongArch is a new RISC
-> ISA, which is a bit like MIPS or RISC-V. LoongArch includes a reduced
-> 32-bit version (LA32R), a standard 32-bit version (LA32S) and a 64-bit
-> version (LA64).
->=20
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+This SOB chain is invalid. Ditto in several other patches.
 
-> +Relationship of Loongson and LoongArch
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>  
+> +config X86_USER_INTERRUPTS
+> +	bool "User Interrupts (UINTR)"
+> +	depends on X86_LOCAL_APIC && X86_64
+
+X86_64 does not work w/o LOCAL_APIC so this dependency is pointless.
+
+> +	depends on CPU_SUP_INTEL
+> +	help
+> +	  User Interrupts are events that can be delivered directly to
+> +	  userspace without a transition through the kernel. The interrupts
+> +	  could be generated by another userspace application, kernel or a
+> +	  device.
 > +
-> +LoongArch is a RISC ISA which is different from any other existing ones,=
- while
-> +Loongson is a family of processors. Loongson includes 3 series: Loongson=
--1 is
-> +32-bit processors, Loongson-2 is low-end 64-bit processors, and Loongson=
--3 is
-> +high-end 64-bit processors. Old Loongson is based on MIPS, and New
-> Loongson is
+> +	  Refer, Documentation/x86/user-interrupts.rst for details.
 
-s/processors/processor/ , I guess.
+"Refer, Documentation..." is not a sentence.
 
-> +Official web site of Loongson and LoongArch (Loongson Technology Corp. L=
-td.):
+>  
+> +/* User Interrupt interface */
+> +#define MSR_IA32_UINTR_RR		0x985
+> +#define MSR_IA32_UINTR_HANDLER		0x986
+> +#define MSR_IA32_UINTR_STACKADJUST	0x987
+> +#define MSR_IA32_UINTR_MISC		0x988	/* 39:32-UINV, 31:0-UITTSZ */
+
+Bah, these tail comments are crap. Please define proper masks/shift
+constants for this instead of using magic numbers in the code.
+
+> +static __always_inline void setup_uintr(struct cpuinfo_x86 *c)
+
+This has to be always inline because it's performance critical or what?
+
+> +{
+> +	/* check the boot processor, plus compile options for UINTR. */
+
+Sentences start with uppercase letters.
+
+> +	if (!cpu_feature_enabled(X86_FEATURE_UINTR))
+> +		goto disable_uintr;
 > +
-> +  http://www.loongson.cn/index.html
+> +	/* checks the current processor's cpuid bits: */
+> +	if (!cpu_has(c, X86_FEATURE_UINTR))
+> +		goto disable_uintr;
+> +
+> +	/*
+> +	 * User Interrupts currently doesn't support PTI. For processors that
+> +	 * support User interrupts PTI in auto mode will default to off.  Need
+> +	 * this check only for users who have force enabled PTI.
+> +	 */
+> +	if (boot_cpu_has(X86_FEATURE_PTI)) {
+> +		pr_info_once("x86: User Interrupts (UINTR) not enabled. Please disable PTI using 'nopti' kernel parameter\n");
 
-It would be better to point to english version of page.
+That message does not make sense. The admin has explicitly added 'pti'
+to the kernel command line on a CPU which is not affected. So why would
+he now have to add 'nopti' ?
 
-> +Developer web site of Loongson and LoongArch (Software and Documentation=
-s):
+Thanks,
 
-Documentation.
-
-BR,								Pavel
---=20
-http://www.livejournal.com/~pavelmachek
-
---5vNYLRcllDrimb99
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYUzqsQAKCRAw5/Bqldv6
-8vGmAJ9JXgVOqzCePPliXgVLLk/zRabUfQCeKP9TE9OX76UJSpSYHk3YkyKt/tc=
-=vT6P
------END PGP SIGNATURE-----
-
---5vNYLRcllDrimb99--
+        tglx
