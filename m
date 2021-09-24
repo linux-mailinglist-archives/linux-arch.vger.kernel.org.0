@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE97416AAF
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 06:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E53416AB2
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 06:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbhIXEJm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Sep 2021 00:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S229678AbhIXEMU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Sep 2021 00:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbhIXEJl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Sep 2021 00:09:41 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724B1C061574;
-        Thu, 23 Sep 2021 21:08:09 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id az15so8699228vsb.8;
-        Thu, 23 Sep 2021 21:08:09 -0700 (PDT)
+        with ESMTP id S229454AbhIXEMU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Sep 2021 00:12:20 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAE6C061574;
+        Thu, 23 Sep 2021 21:10:48 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id k10so8648934vsp.12;
+        Thu, 23 Sep 2021 21:10:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OrfZTnPPcM70O+mM7svGzbSZyFLavyq7xdJVv7AuMNA=;
-        b=AArxpfs5t7Tz2blzs1aSH0nNCrhMd8+cwSBQ19o4cZa1TsGYBouqIdFikADBbqpdbH
-         //kH56sx3wfBf3MpEP4zIyjrpGtN87iLmdvjRz9DK1j/ho8vLQ8KJ6Ffc2CrxslmlYmh
-         TewPJMNgYPbYaDcmRGDJHtCPKzIYwrhsXcFlO6SlEWY+WZBu9aHeg3xIPgoMBBHk/x9A
-         5rZLietz9KoYY9tsOgbYAjOp6HpGB7wdU5ue6AhHB48btdeupZlALSeJvWr+NWBqxtzt
-         1O+kjP3vi2La3Bq6Jd9/2fNy8EBqTDBn65OLwplhZ+ybVX87UsrvAgidu/IjtoCuWvhs
-         Vb9Q==
+        bh=Bk15Hm2M8idBVgL17RzOk2yetGgHrtwFP6x5McjK4DA=;
+        b=lj+ehfoLt8PH752kmrSF3EVTC8nlA/Ayv88DSqabOxmVGnNIaV0nZVxy/OcKPrkE+G
+         GqiH3zCzvzggADBo+GtsyLhASlr5MnXZiPAjgxg4UScuDnontFjuIBF24c7lMR1bFECi
+         9mwtPlJOJqx5QlgXsV3oJQD7fiyNi60HL7mliU82r5Hr4+qoZXouquejDPJlm5+V8uGr
+         wDrvRgGcYA+ksiMKfsi8Q8MXfCwshPppdH4c4zo03DaPMB6GtTLWHPQcJqeRBKhBQCln
+         Q1D4L7dMtzAVDY1/hb9dsF1oeIeTGdd7BbGZR4haVYCJCFYjdfdPeT/ipmyVN135lrsU
+         hEkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OrfZTnPPcM70O+mM7svGzbSZyFLavyq7xdJVv7AuMNA=;
-        b=vZyrL10d+QBNnVYtQYTRYvW4V41EQuU1XYMsyYorkX2dW9wSowSyWOvuGgwvvTW/mS
-         Qzrwxit+MJ2yL5XGsM3bgPsdr/aBUgqaZDcsuLFjKhNi4DHUkiZQ61K6+v2S7M91nkJ+
-         yZlFpYI2zRKGZodPfssguNsleIWsHUZgeq0Zg4XI/tWHd0r4AMi8W7oVqftQnEP8yA4i
-         eqpIXw2nUsSt5n6D6ECjqiHrei9n4qnM7v2txI/An/L6Q5akJJlyfvps5Rgdam0lYD6f
-         H3iiufARLyIV50pzEq0nidaIz/jfmhbywph6lX8HzjPiANfPwTFwQ1npwjTYTztLJRFX
-         FMIQ==
-X-Gm-Message-State: AOAM532yTYKPc1JP577/yZwF8JVZv+zkeCvos7Z0CiWHq/dV5XZhsIaT
-        wnfvFdaGP76kSt9CngfCZxMnslpAlEi/rVDlGUU=
-X-Google-Smtp-Source: ABdhPJzBYtMAeuTPKkvolL/ISASIbDnfE9Ljusmo03aOxkckysqJQg0jrvbRLz3JEOjHsN+a0k6NC4qjSg1U/flIT5c=
-X-Received: by 2002:a05:6102:e55:: with SMTP id p21mr7453555vst.18.1632456488526;
- Thu, 23 Sep 2021 21:08:08 -0700 (PDT)
+        bh=Bk15Hm2M8idBVgL17RzOk2yetGgHrtwFP6x5McjK4DA=;
+        b=YB5d+OLphiDDWHzppMBcTOZxIKNbSKhZRyjORjV4Tq5C3tC11NjsaAJU7wTtu8nQfd
+         RSLgED5K3XRoLyVFsdrirww0cDOatCW+MucpW8D5MdK5ASyvBHXynqt96SM1gvy7pC/e
+         O9xdlrS4aZw+iXST2mBeVtmDc9z+RDhT2KWzyO/mt6/SEPfnzCMk1G0hP+FbFl7InE/f
+         hutMXspZnJpmw5T21PWr9JGaOTF6zEAwKrXZqtIR6iIdoJroMucLWX8IU4j1UKqweNRq
+         pyeDcnfqnjdMjXQ0Jc8/Xnev8YJnf1zewKps4H4q+H9tBdFtPobNgwAX43gsHHJySStc
+         nryQ==
+X-Gm-Message-State: AOAM53353eGNvp3BgiP/3cJDlouIN55el+hSPDSCOmSB9fz3EKabX/zE
+        AX/ViY8SDL+1kjvEI8UlsqeSYFkkgJPbBu+2nKw=
+X-Google-Smtp-Source: ABdhPJzLUfouWkKEbNgnmt6Uyf7gpyFM0hgGqGEzrmvrnmP8/pa2XDxulvhZtbJi5dwvUBMg9NmX2k9F0edVcx2hX5g=
+X-Received: by 2002:a67:ee12:: with SMTP id f18mr7989448vsp.20.1632456646925;
+ Thu, 23 Sep 2021 21:10:46 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210917035736.3934017-1-chenhuacai@loongson.cn>
- <20210917035736.3934017-2-chenhuacai@loongson.cn> <20210923203705.GA1936@bug>
-In-Reply-To: <20210923203705.GA1936@bug>
+ <20210917035736.3934017-2-chenhuacai@loongson.cn> <20210923205929.GA23210@duo.ucw.cz>
+In-Reply-To: <20210923205929.GA23210@duo.ucw.cz>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 24 Sep 2021 12:07:56 +0800
-Message-ID: <CAAhV-H4=Fdsut8c+Zs3RmR9p=_4pNeYb7Bw-JA51UwV7SF9GgA@mail.gmail.com>
+Date:   Fri, 24 Sep 2021 12:10:35 +0800
+Message-ID: <CAAhV-H5MPtfsBDH9Vo1e1n0oES_jHUrKJqk6Jgu=KD+WFFrKxA@mail.gmail.com>
 Subject: Re: [PATCH V3 01/22] Documentation: LoongArch: Add basic documentations
 To:     Pavel Machek <pavel@ucw.cz>
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
@@ -74,37 +74,45 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi, Pavel,
 
-On Fri, Sep 24, 2021 at 4:37 AM Pavel Machek <pavel@ucw.cz> wrote:
+On Fri, Sep 24, 2021 at 4:59 AM Pavel Machek <pavel@ucw.cz> wrote:
 >
 > Hi!
 >
 > > Add some basic documentations for LoongArch. LoongArch is a new RISC
+> > ISA, which is a bit like MIPS or RISC-V. LoongArch includes a reduced
+> > 32-bit version (LA32R), a standard 32-bit version (LA32S) and a 64-bit
+> > version (LA64).
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 >
-> ... documentation ...
+> > +Relationship of Loongson and LoongArch
+> > +======================================
+> > +
+> > +LoongArch is a RISC ISA which is different from any other existing ones, while
+> > +Loongson is a family of processors. Loongson includes 3 series: Loongson-1 is
+> > +32-bit processors, Loongson-2 is low-end 64-bit processors, and Loongson-3 is
+> > +high-end 64-bit processors. Old Loongson is based on MIPS, and New
+> > Loongson is
+>
+> s/processors/processor/ , I guess.
+Should be processor series here, thanks.
+
+>
+> > +Official web site of Loongson and LoongArch (Loongson Technology Corp. Ltd.):
+> > +
+> > +  http://www.loongson.cn/index.html
+>
+> It would be better to point to english version of page.
+The English version doesn't exist at present.
+
+>
+> > +Developer web site of Loongson and LoongArch (Software and Documentations):
+>
+> Documentation.
 OK, thanks.
-
->
-> > +wide in LA64. $r0 is always zero, and other registers has no special feature,
->
-> ...have no special features...
-OK, thanks.
-
->
-> > +but we actually have an ABI register conversion as below.
->
-> convention?
-Yes, should be convention here.
-
->
-> > +``$r21``          ``$x``          Reserved            Unused
-> > +``$r22``          ``$fp``         Frame pointer       Yes
-> > +``$r23``-``$r31`` ``$s0``-``$s8`` Static registers    Yes
-> > +================= =============== =================== ============
->
-> Not sure I know the term 'static registers' before.
-"Static register" comes from the MIPS code "SAVE_STATIC", maybe it is
-called "Saved register" in other places, but I think "static register"
-is also OK.
 
 Huacai
->                                                                 Pavel
+>
+> BR,                                                             Pavel
+> --
+> http://www.livejournal.com/~pavelmachek
