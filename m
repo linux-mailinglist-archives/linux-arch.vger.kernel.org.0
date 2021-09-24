@@ -2,33 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D642241705C
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 12:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F0541707D
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 12:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbhIXKfX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Sep 2021 06:35:23 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:41134 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbhIXKfX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Sep 2021 06:35:23 -0400
+        id S245660AbhIXK4J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Sep 2021 06:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245662AbhIXKzs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Sep 2021 06:55:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8023C061756;
+        Fri, 24 Sep 2021 03:54:15 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1632479629;
+        s=2020; t=1632480853;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=3qlwpik2ZScVioRdtjZP8dq5+cHoEHM42Y3IpVn8O9Q=;
-        b=AvrQWPehTUVeCLggZJeZ3UYEa+fnpn39vXJdpbQqIG/r6Rui1EN4hlJBV8UQ3zBeDSB3BQ
-        BKkOHaQ+yVzL/HOgB+9iWi5Lz8GXpxPAUhdUHWPcTQSpFVcCqywiA78Ymd32UcKZNbt9fx
-        +LRZJgrq/4BtoDPDFofUuyLpwpSG2ggTdIRBAQ5joeXEfvlBBs/38u7pJvrCmbtzys8/Nl
-        9ZRYAuD2f7OWTC2rwXKqv47ryeVecQ/PxQqhrpNbghize7ara9fFRGmibIfxomh1lqQUxy
-        Q/Wqpk+OIJuQGgSPMcaw7+fnBIA+HNrXLpVtvtGVAeq9qpFI2qFZNrxGZ2IB4w==
+         in-reply-to:in-reply-to:references:references;
+        bh=/7ACTzCKCJ8fwwf3NKIamkJEmGqQfZ3neuf/bUWLhh4=;
+        b=WxF8rGiwvf1wvxuvzyKyMSchqrD0yZKbzEfkzG0wI6AOaPBxJ/jeiXwxvJ94Eg/E9cYxmf
+        3FgatXPU71L+df75qc2V1eebCNqphQZjW+VTS855o3tzG/ah0wQWrwYxpQ1/ldSqvvcIwm
+        YoN5DPycOsKS/UZ5LtkI4FXY3DhVDUrQSn+uUfEMF2LpfBVeJPgsyw53T9qMi9vUn51Dz4
+        9eOBavCSJ5NDNpLsgy2O2/1kT+oewcOf0EXmCJlb9hOuchF7+BwfM314xtIawEv7XOR/Aj
+        +f4DgFZTTVrf2LrcEEpgykcudT1UhjmHVgzkjW6VL/lbZxJ9wYf8yH2nVFYjFg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1632479629;
+        s=2020e; t=1632480853;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=3qlwpik2ZScVioRdtjZP8dq5+cHoEHM42Y3IpVn8O9Q=;
-        b=ne6ljzK1+lXK4uvd1YB/lXPIykpTmY7pn0htgpsCu3j7Zq1g8CpGd2UYATKTaqbfUhth9B
-        EEY3Lsa/5HpuihBQ==
+         in-reply-to:in-reply-to:references:references;
+        bh=/7ACTzCKCJ8fwwf3NKIamkJEmGqQfZ3neuf/bUWLhh4=;
+        b=F3HUGypPhoXARUuEk506nAxHNIZzPBZIIK5AavJ/nhx9YV+Pe2P8r2P1/l/9fazJhebx0u
+        l4ESm1OK9zEbocDQ==
 To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
 Cc:     Sohil Mehta <sohil.mehta@intel.com>,
         Tony Luck <tony.luck@intel.com>,
@@ -51,11 +56,12 @@ Cc:     Sohil Mehta <sohil.mehta@intel.com>,
         Ramesh Thomas <ramesh.thomas@intel.com>,
         linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 09/13] x86/uintr: Introduce vector registration and
- uintr_fd syscall
-In-Reply-To: <20210913200132.3396598-10-sohil.mehta@intel.com>
-Date:   Fri, 24 Sep 2021 12:33:48 +0200
-Message-ID: <87wnn6dzzn.ffs@tglx>
+Subject: Re: [RFC PATCH 10/13] x86/uintr: Introduce user IPI sender syscalls
+In-Reply-To: <20210913200132.3396598-11-sohil.mehta@intel.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-11-sohil.mehta@intel.com>
+Date:   Fri, 24 Sep 2021 12:54:12 +0200
+Message-ID: <87tuiadz1n.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -63,155 +69,174 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
->  static void free_upid(struct uintr_upid_ctx *upid_ctx)
+> +/*
+> + * No lock is needed to read the active flag. Writes only happen from
+> + * r_info->task that owns the UPID. Everyone else would just read this flag.
+> + *
+> + * This only provides a static check. The receiver may become inactive right
+> + * after this check. The primary reason to have this check is to prevent future
+> + * senders from connecting with this UPID, since the receiver task has already
+> + * made this UPID inactive.
+
+How is that not racy?
+
+> +static void free_uitt(struct uintr_uitt_ctx *uitt_ctx)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&uitt_ctx->uitt_lock, flags);
+> +	kfree(uitt_ctx->uitt);
+
+Again. Please move kfree() outside of the lock held region. But aside of
+that what is this lock protecting here?
+
+> +	uitt_ctx->uitt = NULL;
+> +	spin_unlock_irqrestore(&uitt_ctx->uitt_lock, flags);
+
+If there is concurrency then the other task which is blocked on
+uitt_lock will operate on uitt_ctx while the same is freed.
+
+Again, this lacks any life time and serialization rules. Just sprinkling
+locks all over the place does not make it magically correct.
+
+> +	kfree(uitt_ctx);
+> +}
+
+> +static void put_uitt_ref(struct uintr_uitt_ctx *uitt_ctx)
+> +{
+> +	if (refcount_dec_and_test(&uitt_ctx->refs))
+> +		free_uitt(uitt_ctx);
+> +}
+
+
+> +static struct uintr_uitt_ctx *get_uitt_ref(struct uintr_uitt_ctx *uitt_ctx)
+> +{
+> +	refcount_inc(&uitt_ctx->refs);
+> +	return uitt_ctx;
+> +}
+> +
+> +static inline void mark_uitte_invalid(struct uintr_sender_info *s_info)
+> +{
+> +	struct uintr_uitt_entry *uitte;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&s_info->uitt_ctx->uitt_lock, flags);
+> +	uitte = &s_info->uitt_ctx->uitt[s_info->uitt_index];
+> +	uitte->valid = 0;
+> +	spin_unlock_irqrestore(&s_info->uitt_ctx->uitt_lock, flags);
+> +}
+> +
+>  static void __clear_vector_from_upid(u64 uvec, struct uintr_upid *upid)
 >  {
-> +	put_task_struct(upid_ctx->task);
-
-That's current, right?
-
->  	kfree(upid_ctx->upid);
->  	upid_ctx->upid = NULL;
->  	kfree(upid_ctx);
-> @@ -93,6 +93,7 @@ static struct uintr_upid_ctx *alloc_upid(void)
->  
->  	upid_ctx->upid = upid;
->  	refcount_set(&upid_ctx->refs, 1);
-> +	upid_ctx->task = get_task_struct(current);
-
-Current takes a refcount on it's own task struct when allocating upid,
-and releases it at some point when freeing upid, right?
-
-What for? Comments are overrated, except for comments describing
-the obvious in the wrong way.
-
-If this ever comes back in some form, then I pretty please want the life
-time rules of this documented properly. The current state is
-unreviewable.
-
->  	return upid_ctx;
->  }
-> @@ -103,6 +104,77 @@ static void put_upid_ref(struct uintr_upid_ctx *upid_ctx)
->  		free_upid(upid_ctx);
+>  	clear_bit(uvec, (unsigned long *)&upid->puir);
+> @@ -175,6 +290,210 @@ static void receiver_clear_uvec(struct callback_head *head)
+>  	kfree(r_info);
 >  }
 >  
-> +static struct uintr_upid_ctx *get_upid_ref(struct uintr_upid_ctx *upid_ctx)
-> +{
-> +	refcount_inc(&upid_ctx->refs);
-> +	return upid_ctx;
-> +}
-> +
-> +static void __clear_vector_from_upid(u64 uvec, struct uintr_upid *upid)
-> +{
-> +	clear_bit(uvec, (unsigned long *)&upid->puir);
-> +}
-> +
-> +static void __clear_vector_from_task(u64 uvec)
+> +static void teardown_uitt(void)
 > +{
 > +	struct task_struct *t = current;
+> +	struct fpu *fpu = &t->thread.fpu;
+> +	u64 msr64;
 > +
-> +	pr_debug("recv: task=%d free vector %llu\n", t->pid, uvec);
+> +	put_uitt_ref(t->thread.ui_send->uitt_ctx);
+> +	kfree(t->thread.ui_send);
+> +	t->thread.ui_send = NULL;
 > +
-> +	if (!(BIT_ULL(uvec) & t->thread.ui_recv->uvec_mask))
+> +	fpregs_lock();
+> +
+> +	if (fpregs_state_valid(fpu, smp_processor_id())) {
+> +		/* Modify only the relevant bits of the MISC MSR */
+> +		rdmsrl(MSR_IA32_UINTR_MISC, msr64);
+> +		msr64 &= GENMASK_ULL(63, 32);
+
+More magic numbers.
+
+> +		wrmsrl(MSR_IA32_UINTR_MISC, msr64);
+> +		wrmsrl(MSR_IA32_UINTR_TT, 0ULL);
+
+> +static void __free_uitt_entry(unsigned int entry)
+> +{
+> +	struct task_struct *t = current;
+> +	unsigned long flags;
+> +
+> +	if (entry >= UINTR_MAX_UITT_NR)
 > +		return;
 > +
-> +	clear_bit(uvec, (unsigned long *)&t->thread.ui_recv->uvec_mask);
+> +	if (!is_uintr_sender(t))
+> +		return;
 > +
-> +	if (!t->thread.ui_recv->uvec_mask)
-> +		pr_debug("recv: task=%d unregistered all user vectors\n", t->pid);
-
-Once you are done debugging this complex function can you please turn it
-into an unconditional clear_bit(...) at the call site?
-
-> +/* Callback to clear the vector structures when a vector is unregistered. */
-> +static void receiver_clear_uvec(struct callback_head *head)
-> +{
-> +	struct uintr_receiver_info *r_info;
-> +	struct uintr_upid_ctx *upid_ctx;
-> +	struct task_struct *t = current;
-> +	u64 uvec;
+> +	pr_debug("send: Freeing UITTE entry %d for task=%d\n", entry, t->pid);
 > +
-> +	r_info = container_of(head, struct uintr_receiver_info, twork);
-> +	uvec = r_info->uvec;
-> +	upid_ctx = r_info->upid_ctx;
+> +	spin_lock_irqsave(&t->thread.ui_send->uitt_ctx->uitt_lock, flags);
+> +	memset(&t->thread.ui_send->uitt_ctx->uitt[entry], 0,
+> +	       sizeof(struct uintr_uitt_entry));
+> +	spin_unlock_irqrestore(&t->thread.ui_send->uitt_ctx->uitt_lock,
+> flags);
+
+What's the spinlock protecting here?
+
+> +	clear_bit(entry, (unsigned long *)t->thread.ui_send->uitt_mask);
 > +
-> +	/*
-> +	 * If a task has unregistered the interrupt handler the vector
-> +	 * structures would have already been cleared.
-
-would ? No. They must have been cleared already, anything else is a bug.
-
-> +	 */
-> +	if (is_uintr_receiver(t)) {
-> +		/*
-> +		 * The UPID context in the callback might differ from the one
-> +		 * on the task if the task unregistered its interrupt handler
-> +		 * and then registered itself again. The vector structures
-> +		 * related to the previous UPID would have already been cleared
-> +		 * in that case.
-> +		 */
-> +		if (t->thread.ui_recv->upid_ctx != upid_ctx) {
-> +			pr_debug("recv: task %d is now using a different UPID\n",
-> +				 t->pid);
-> +			goto out_free;
-> +		}
-> +
-> +		/*
-> +		 * If the vector has been recognized in the UIRR don't modify
-> +		 * it. We need to disable User Interrupts before modifying the
-> +		 * UIRR. It might be better to just let that interrupt get
-> +		 * delivered.
-
-Might be better? Please provide coherent explanations why this is correct.
-
-> +		 */
-> +		__clear_vector_from_upid(uvec, upid_ctx->upid);
-> +		__clear_vector_from_task(uvec);
+> +	if (is_uitt_empty(t)) {
+> +		pr_debug("send: UITT mask is empty. Dereference and teardown UITT\n");
+> +		teardown_uitt();
 > +	}
-> +
-> +out_free:
-> +	put_upid_ref(upid_ctx);
-> +	kfree(r_info);
 > +}
-> +
->  int do_uintr_unregister_handler(void)
->  {
->  	struct task_struct *t = current;
-> @@ -239,6 +311,53 @@ int do_uintr_register_handler(u64 handler)
->  	return 0;
->  }
->  
-> +void do_uintr_unregister_vector(struct uintr_receiver_info *r_info)
+
+> +void do_uintr_unregister_sender(struct uintr_receiver_info *r_info,
+> +				struct uintr_sender_info *s_info)
 > +{
 > +	int ret;
 > +
-> +	pr_debug("recv: Adding task work to clear vector %llu added for task=%d\n",
-> +		 r_info->uvec, r_info->upid_ctx->task->pid);
+> +	/*
+> +	 * To make sure any new senduipi result in a #GP fault.
+> +	 * The task work might take non-zero time to kick the process out.
+
+-ENOPARSE
+
+> +	 */
+> +	mark_uitte_invalid(s_info);
 > +
-> +	init_task_work(&r_info->twork, receiver_clear_uvec);
-
-How is this safe? Reinitialization has to be serialized against other
-usage. Again: Document the life time and serialization rules. Your
-pr_debugs sprinkled all over the place are not a replacement for that.
-
-> +	ret = task_work_add(r_info->upid_ctx->task, &r_info->twork, true);
-
-Care to look at the type of the third argument of task_work_add()?
-
-> +struct uintrfd_ctx {
-> +	struct uintr_receiver_info *r_info;
-
-Yet another wrapper struct? What for?
-
-> +/*
-> + * sys_uintr_create_fd - Create a uintr_fd for the registered interrupt vector.
-
-So this creates a file descriptor for a vector which is already
-allocated and then it calls do_uintr_register_vector() which allocates
-the vector?
-
-> + */
-> +SYSCALL_DEFINE2(uintr_create_fd, u64, vector, unsigned int, flags)
+> +	pr_debug("send: Adding Free UITTE %d task work for task=%d\n",
+> +		 s_info->uitt_index, s_info->task->pid);
+> +
+> +	init_task_work(&s_info->twork, sender_free_uitte);
+> +	ret = task_work_add(s_info->task, &s_info->twork, true);
+> +	if (ret) {
+> +		/*
+> +		 * Dereferencing the UITT and UPID here since the task has
+> +		 * exited.
+> +		 */
+> +		pr_debug("send: Free UITTE %d task=%d has already exited\n",
+> +			 s_info->uitt_index, s_info->task->pid);
+> +		put_upid_ref(s_info->r_upid_ctx);
+> +		put_uitt_ref(s_info->uitt_ctx);
+> +		put_task_struct(s_info->task);
+> +		kfree(s_info);
+> +		return;
+> +	}
+> +}
+> +
+> +int do_uintr_register_sender(struct uintr_receiver_info *r_info,
+> +			     struct uintr_sender_info *s_info)
 > +{
+> +	struct uintr_uitt_entry *uitte = NULL;
+> +	struct uintr_sender *ui_send;
+> +	struct task_struct *t = current;
+> +	unsigned long flags;
+> +	int entry;
+> +	int ret;
+> +
+> +	/*
+> +	 * Only a static check. Receiver could exit anytime after this check.
+> +	 * This check only prevents connections using uintr_fd after the
+> +	 * receiver has already exited/unregistered.
+> +	 */
+> +	if (!uintr_is_receiver_active(r_info))
+> +		return -ESHUTDOWN;
+
+How is this safe against a concurrent unregister/exit operation?
 
 Thanks,
 
