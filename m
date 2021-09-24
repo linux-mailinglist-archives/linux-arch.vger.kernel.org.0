@@ -2,193 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD68416934
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 03:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE97416AAF
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 06:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240863AbhIXBDz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Sep 2021 21:03:55 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:38524 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243676AbhIXBDz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Sep 2021 21:03:55 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1632445341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kQk2GihfSjtSeZUWZy1F+u7jfH25EFIJlwAQfvaVLi0=;
-        b=1LVRE8MVY421IfWRt9am8QgddckQOV4Jq+7iSes11mrYMdt7vzrInJeEr6W26CgBOyBS4H
-        /RNeRYnri1xJRRPY6UNmkCEvfjCzg+7BhrQBPKRKHnzZ/kCxnP0r0c3mIC4NxKLvlkXHTO
-        KfxwvHyJ1p//1O8yyGqtqmfEwXE3d/k6az+MZpjj0UJ30/0Y8cyjaIHl65G2W7j90AGvGy
-        Rqf7VO1KMMTxOReGXUy63pSN/JYBmV24Grclj6m44UfAlGsmDP72hORGFXPt2NDBpQxqhP
-        AkKRshaPbCTMuhFlT1gSLa6k70JxRKI53wf3I2tbuxYy04xqm9IOTacD2qBnvw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1632445341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kQk2GihfSjtSeZUWZy1F+u7jfH25EFIJlwAQfvaVLi0=;
-        b=3aPjjZKeE1+jA9HmIhDpgs4l8/mPEyArvUVFnsXiH/YzTv7WWpGSUEXQQP5L73JRWfFD2F
-        fgGmIXzaeL/EpKBg==
-To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
-Cc:     Sohil Mehta <sohil.mehta@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 08/13] x86/process/64: Clean up uintr task fork and
- exit paths
-In-Reply-To: <20210913200132.3396598-9-sohil.mehta@intel.com>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-9-sohil.mehta@intel.com>
-Date:   Fri, 24 Sep 2021 03:02:21 +0200
-Message-ID: <8735pug50i.ffs@tglx>
+        id S229678AbhIXEJm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Sep 2021 00:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229454AbhIXEJl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Sep 2021 00:09:41 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724B1C061574;
+        Thu, 23 Sep 2021 21:08:09 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id az15so8699228vsb.8;
+        Thu, 23 Sep 2021 21:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OrfZTnPPcM70O+mM7svGzbSZyFLavyq7xdJVv7AuMNA=;
+        b=AArxpfs5t7Tz2blzs1aSH0nNCrhMd8+cwSBQ19o4cZa1TsGYBouqIdFikADBbqpdbH
+         //kH56sx3wfBf3MpEP4zIyjrpGtN87iLmdvjRz9DK1j/ho8vLQ8KJ6Ffc2CrxslmlYmh
+         TewPJMNgYPbYaDcmRGDJHtCPKzIYwrhsXcFlO6SlEWY+WZBu9aHeg3xIPgoMBBHk/x9A
+         5rZLietz9KoYY9tsOgbYAjOp6HpGB7wdU5ue6AhHB48btdeupZlALSeJvWr+NWBqxtzt
+         1O+kjP3vi2La3Bq6Jd9/2fNy8EBqTDBn65OLwplhZ+ybVX87UsrvAgidu/IjtoCuWvhs
+         Vb9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OrfZTnPPcM70O+mM7svGzbSZyFLavyq7xdJVv7AuMNA=;
+        b=vZyrL10d+QBNnVYtQYTRYvW4V41EQuU1XYMsyYorkX2dW9wSowSyWOvuGgwvvTW/mS
+         Qzrwxit+MJ2yL5XGsM3bgPsdr/aBUgqaZDcsuLFjKhNi4DHUkiZQ61K6+v2S7M91nkJ+
+         yZlFpYI2zRKGZodPfssguNsleIWsHUZgeq0Zg4XI/tWHd0r4AMi8W7oVqftQnEP8yA4i
+         eqpIXw2nUsSt5n6D6ECjqiHrei9n4qnM7v2txI/An/L6Q5akJJlyfvps5Rgdam0lYD6f
+         H3iiufARLyIV50pzEq0nidaIz/jfmhbywph6lX8HzjPiANfPwTFwQ1npwjTYTztLJRFX
+         FMIQ==
+X-Gm-Message-State: AOAM532yTYKPc1JP577/yZwF8JVZv+zkeCvos7Z0CiWHq/dV5XZhsIaT
+        wnfvFdaGP76kSt9CngfCZxMnslpAlEi/rVDlGUU=
+X-Google-Smtp-Source: ABdhPJzBYtMAeuTPKkvolL/ISASIbDnfE9Ljusmo03aOxkckysqJQg0jrvbRLz3JEOjHsN+a0k6NC4qjSg1U/flIT5c=
+X-Received: by 2002:a05:6102:e55:: with SMTP id p21mr7453555vst.18.1632456488526;
+ Thu, 23 Sep 2021 21:08:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20210917035736.3934017-1-chenhuacai@loongson.cn>
+ <20210917035736.3934017-2-chenhuacai@loongson.cn> <20210923203705.GA1936@bug>
+In-Reply-To: <20210923203705.GA1936@bug>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Fri, 24 Sep 2021 12:07:56 +0800
+Message-ID: <CAAhV-H4=Fdsut8c+Zs3RmR9p=_4pNeYb7Bw-JA51UwV7SF9GgA@mail.gmail.com>
+Subject: Re: [PATCH V3 01/22] Documentation: LoongArch: Add basic documentations
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
+Hi, Pavel,
 
-> The user interrupt MSRs and the user interrupt state is task specific.
-> During task fork and exit clear the task state, clear the MSRs and
-> dereference the shared resources.
+On Fri, Sep 24, 2021 at 4:37 AM Pavel Machek <pavel@ucw.cz> wrote:
 >
-> Some of the memory resources like the UPID are referenced in the file
-> descriptor and could be in use while the uintr_fd is still valid.
-> Instead of freeing up  the UPID just dereference it.
+> Hi!
+>
+> > Add some basic documentations for LoongArch. LoongArch is a new RISC
+>
+> ... documentation ...
+OK, thanks.
 
-Derefencing the UPID, i.e. accessing task->upid->foo helps in which way?
+>
+> > +wide in LA64. $r0 is always zero, and other registers has no special feature,
+>
+> ...have no special features...
+OK, thanks.
 
-You want to drop the reference count I assume. Then please write that
-so. 
+>
+> > +but we actually have an ABI register conversion as below.
+>
+> convention?
+Yes, should be convention here.
 
-> Eventually when every user releases the reference the memory resource
-> will be freed up.
+>
+> > +``$r21``          ``$x``          Reserved            Unused
+> > +``$r22``          ``$fp``         Frame pointer       Yes
+> > +``$r23``-``$r31`` ``$s0``-``$s8`` Static registers    Yes
+> > +================= =============== =================== ============
+>
+> Not sure I know the term 'static registers' before.
+"Static register" comes from the MIPS code "SAVE_STATIC", maybe it is
+called "Saved register" in other places, but I think "static register"
+is also OK.
 
-Yeah, eventually or not...
-
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-
-> @@ -260,6 +260,7 @@ int fpu_clone(struct task_struct *dst)
->  {
->  	struct fpu *src_fpu = &current->thread.fpu;
->  	struct fpu *dst_fpu = &dst->thread.fpu;
-> +	struct uintr_state *uintr_state;
->  
->  	/* The new task's FPU state cannot be valid in the hardware. */
->  	dst_fpu->last_cpu = -1;
-> @@ -284,6 +285,14 @@ int fpu_clone(struct task_struct *dst)
->  
->  	else
->  		save_fpregs_to_fpstate(dst_fpu);
-> +
-> +	/* UINTR state is not expected to be inherited (in the current design). */
-> +	if (static_cpu_has(X86_FEATURE_UINTR)) {
-> +		uintr_state = get_xsave_addr(&dst_fpu->state.xsave, XFEATURE_UINTR);
-> +		if (uintr_state)
-> +			memset(uintr_state, 0, sizeof(*uintr_state));
-> +	}
-
-1) If the FPU registers are up to date then this can be completely
-   avoided by excluding the UINTR component from XSAVES
-
-2) If the task never used that muck then UINTR is in init state and
-   clearing that memory is a redunant exercise because it has been
-   cleared already
-
-So yes, this clearly is evidence how this is enhancing performance.
-
-> +/*
-> + * This should only be called from exit_thread().
-
-Should? Would? Maybe or what?
-
-> + * exit_thread() can happen in current context when the current thread is
-> + * exiting or it can happen for a new thread that is being created.
-
-A right that makes sense. If a new thread is created then it can call
-exit_thread(), right?
-
-> + * For new threads is_uintr_receiver() should fail.
-
-Should fail?
-
-> + */
-> +void uintr_free(struct task_struct *t)
-> +{
-> +	struct uintr_receiver *ui_recv;
-> +	struct fpu *fpu;
-> +
-> +	if (!static_cpu_has(X86_FEATURE_UINTR) || !is_uintr_receiver(t))
-> +		return;
-> +
-> +	if (WARN_ON_ONCE(t != current))
-> +		return;
-> +
-> +	fpu = &t->thread.fpu;
-> +
-> +	fpregs_lock();
-> +
-> +	if (fpregs_state_valid(fpu, smp_processor_id())) {
-> +		wrmsrl(MSR_IA32_UINTR_MISC, 0ULL);
-> +		wrmsrl(MSR_IA32_UINTR_PD, 0ULL);
-> +		wrmsrl(MSR_IA32_UINTR_RR, 0ULL);
-> +		wrmsrl(MSR_IA32_UINTR_STACKADJUST, 0ULL);
-> +		wrmsrl(MSR_IA32_UINTR_HANDLER, 0ULL);
-> +	} else {
-> +		struct uintr_state *p;
-> +
-> +		p = get_xsave_addr(&fpu->state.xsave, XFEATURE_UINTR);
-> +		if (p) {
-> +			p->handler = 0;
-> +			p->uirr = 0;
-> +			p->upid_addr = 0;
-> +			p->stack_adjust = 0;
-> +			p->uinv = 0;
-> +		}
-> +	}
-> +
-> +	/* Check: Can a thread be context switched while it is exiting? */
-
-This looks like a question which should be answered _before_ writing
-such code.
-
-> +	ui_recv = t->thread.ui_recv;
-> +
-> +	/*
-> +	 * Suppress notifications so that no further interrupts are
-> +	 * generated based on this UPID.
-> +	 */
-> +	set_bit(UPID_SN, (unsigned long *)&ui_recv->upid_ctx->upid->nc.status);
-> +	put_upid_ref(ui_recv->upid_ctx);
-> +	kfree(ui_recv);
-> +	t->thread.ui_recv = NULL;
-
-Again, why needs all this put/kfree muck be within the fpregs locked section?
-
-> +	fpregs_unlock();
-> +}
-
-Thanks,
-
-        tglx
+Huacai
+>                                                                 Pavel
