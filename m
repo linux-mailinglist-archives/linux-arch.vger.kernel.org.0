@@ -2,179 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16900417092
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 13:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03DF417631
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Sep 2021 15:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244606AbhIXLGB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Sep 2021 07:06:01 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:41368 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244510AbhIXLGA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Sep 2021 07:06:00 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1632481466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R0xmbt7Av+GwVclLZhRHdpujH9c0cVpxkWZDFBaxUtM=;
-        b=OsU5VzNgLGtvscowoSnpo57k/J92eaphSGiTNWv8fOkgM9kvbwSbg3BzhDg5z2shi90pF7
-        sx8bFGSIY/PLP/Pm4QOwON/6l9t8NQwzid0k8fbAs4/ZsaOz4MsvpjKkt1u98P7za/S7Dd
-        cVEJbdAtNnSrfv3qVySmTASvY4yKUiqn8Zs49FxlYx/DIc+5tO6tna0q9GqRZ+a5iweaEt
-        ufZHJxBR1M1K3Os9x8r5wSL8xobVsMh8hcUrXwuMoSihqtLPAZie0AXMbe7NgjytJO7ie3
-        MkIbp0v63kSbVe/jxLfqRmDcHh8/2fCDIoMmf2Dy+hbXYVT0fFISwAupCo88RQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1632481466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R0xmbt7Av+GwVclLZhRHdpujH9c0cVpxkWZDFBaxUtM=;
-        b=ADW+qoGHk4FKZa85mQXSXh5rJDACF1IJmkDonEbagVzDoaNlHD9Bf0S5UTGdfeByEe4oy1
-        H4oboX/eR8q281Ag==
-To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
-Cc:     Sohil Mehta <sohil.mehta@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
-In-Reply-To: <20210913200132.3396598-12-sohil.mehta@intel.com>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-12-sohil.mehta@intel.com>
-Date:   Fri, 24 Sep 2021 13:04:25 +0200
-Message-ID: <87r1dedykm.ffs@tglx>
+        id S1346324AbhIXNu4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Sep 2021 09:50:56 -0400
+Received: from pegase2.c-s.fr ([93.17.235.10]:48661 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346246AbhIXNu4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 24 Sep 2021 09:50:56 -0400
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4HGD0Z2Ghmz9sVr;
+        Fri, 24 Sep 2021 15:49:18 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Sr-aHIJnT2hD; Fri, 24 Sep 2021 15:49:18 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4HGD0X5JDkz9sVs;
+        Fri, 24 Sep 2021 15:49:16 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9AEDD8B77E;
+        Fri, 24 Sep 2021 15:49:16 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id uoZyYyvOfIn5; Fri, 24 Sep 2021 15:49:16 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.215])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5359E8B780;
+        Fri, 24 Sep 2021 15:49:16 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1) with ESMTPS id 18ODn5pO1293056
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 24 Sep 2021 15:49:05 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1/Submit) id 18ODn4Zl1293054;
+        Fri, 24 Sep 2021 15:49:04 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrew Morton <akpm@linux-foundation.org>, arnd@arndb.de
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arch@vger.kernel.org,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Subject: [PATCH 1/3] mm: Make generic arch_is_kernel_initmem_freed() do what it says
+Date:   Fri, 24 Sep 2021 15:48:45 +0200
+Message-Id: <0b55650058a5bf64f7d74781871a1ada2298c8b4.1632491308.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
-> Add a new system call to allow applications to block in the kernel and
-> wait for user interrupts.
->
-> <The current implementation doesn't support waking up from other
-> blocking system calls like sleep(), read(), epoll(), etc.
->
-> uintr_wait() is a placeholder syscall while we decide on that
-> behaviour.>
->
-> When the application makes this syscall the notification vector is
-> switched to a new kernel vector. Any new SENDUIPI will invoke the kernel
-> interrupt which is then used to wake up the process.
->
-> Currently, the task wait list is global one. To make the implementation
-> scalable there is a need to move to a distributed per-cpu wait list.
+Commit 7a5da02de8d6 ("locking/lockdep: check for freed initmem in
+static_obj()") added arch_is_kernel_initmem_freed() which is supposed
+to report whether an object is part of already freed init memory.
 
-How are per cpu wait lists going to solve the problem?
+For the time being, the generic version of arch_is_kernel_initmem_freed()
+always reports 'false', allthough free_initmem() is generically called
+on all architectures.
 
-> +
-> +/*
-> + * Handler for UINTR_KERNEL_VECTOR.
-> + */
-> +DEFINE_IDTENTRY_SYSVEC(sysvec_uintr_kernel_notification)
-> +{
-> +	/* TODO: Add entry-exit tracepoints */
-> +	ack_APIC_irq();
-> +	inc_irq_stat(uintr_kernel_notifications);
-> +
-> +	uintr_wake_up_process();
+Therefore, change the generic version of arch_is_kernel_initmem_freed()
+to check whether free_initmem() has been called. If so, then check
+if a given address falls into init memory.
 
-So this interrupt happens for any of those notifications. How are they
-differentiated? 
->  
-> +int uintr_receiver_wait(void)
-> +{
-> +	struct uintr_upid_ctx *upid_ctx;
-> +	unsigned long flags;
-> +
-> +	if (!is_uintr_receiver(current))
-> +		return -EOPNOTSUPP;
-> +
-> +	upid_ctx = current->thread.ui_recv->upid_ctx;
-> +	upid_ctx->upid->nc.nv = UINTR_KERNEL_VECTOR;
-> +	upid_ctx->waiting = true;
-> +	spin_lock_irqsave(&uintr_wait_lock, flags);
-> +	list_add(&upid_ctx->node, &uintr_wait_list);
-> +	spin_unlock_irqrestore(&uintr_wait_lock, flags);
-> +
-> +	set_current_state(TASK_INTERRUPTIBLE);
+In order to use function init_section_contains(), the fonction is
+moved at the end of asm-generic/section.h
 
-Because we have not enough properly implemented wait primitives you need
-to open code one which is blantantly wrong vs. a concurrent wake up?
+Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ include/asm-generic/sections.h | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
-> +	schedule();
-
-How is that correct vs. a spurious wakeup? What takes care that the
-entry is removed from the list?
-
-Again. We have proper wait primitives.
-
-> +	return -EINTR;
-> +}
-> +
-> +/*
-> + * Runs in interrupt context.
-> + * Scan through all UPIDs to check if any interrupt is on going.
-> + */
-> +void uintr_wake_up_process(void)
-> +{
-> +	struct uintr_upid_ctx *upid_ctx, *tmp;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&uintr_wait_lock, flags);
-> +	list_for_each_entry_safe(upid_ctx, tmp, &uintr_wait_list, node) {
-> +		if (test_bit(UPID_ON, (unsigned long*)&upid_ctx->upid->nc.status)) {
-> +			set_bit(UPID_SN, (unsigned long *)&upid_ctx->upid->nc.status);
-> +			upid_ctx->upid->nc.nv = UINTR_NOTIFICATION_VECTOR;
-> +			upid_ctx->waiting = false;
-> +			wake_up_process(upid_ctx->task);
-> +			list_del(&upid_ctx->node);
-
-So any of these notification interrupts does a global mass wake up? How
-does that make sense?
-
-> +		}
-> +	}
-> +	spin_unlock_irqrestore(&uintr_wait_lock, flags);
-> +}
-> +
-> +/* Called when task is unregistering/exiting */
-> +static void uintr_remove_task_wait(struct task_struct *task)
-> +{
-> +	struct uintr_upid_ctx *upid_ctx, *tmp;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&uintr_wait_lock, flags);
-> +	list_for_each_entry_safe(upid_ctx, tmp, &uintr_wait_list, node) {
-> +		if (upid_ctx->task == task) {
-> +			pr_debug("wait: Removing task %d from wait\n",
-> +				 upid_ctx->task->pid);
-> +			upid_ctx->upid->nc.nv = UINTR_NOTIFICATION_VECTOR;
-> +			upid_ctx->waiting = false;
-> +			list_del(&upid_ctx->node);
-> +		}
-
-What? You have to do a global list walk to find the entry which you
-added yourself?
-
-Thanks,
-
-        tglx
+diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
+index d16302d3eb59..d1e5bb2c6b72 100644
+--- a/include/asm-generic/sections.h
++++ b/include/asm-generic/sections.h
+@@ -80,20 +80,6 @@ static inline int arch_is_kernel_data(unsigned long addr)
+ }
+ #endif
  
+-/*
+- * Check if an address is part of freed initmem. This is needed on architectures
+- * with virt == phys kernel mapping, for code that wants to check if an address
+- * is part of a static object within [_stext, _end]. After initmem is freed,
+- * memory can be allocated from it, and such allocations would then have
+- * addresses within the range [_stext, _end].
+- */
+-#ifndef arch_is_kernel_initmem_freed
+-static inline int arch_is_kernel_initmem_freed(unsigned long addr)
+-{
+-	return 0;
+-}
+-#endif
+-
+ /**
+  * memory_contains - checks if an object is contained within a memory region
+  * @begin: virtual address of the beginning of the memory region
+@@ -172,4 +158,21 @@ static inline bool is_kernel_rodata(unsigned long addr)
+ 	       addr < (unsigned long)__end_rodata;
+ }
+ 
++/*
++ * Check if an address is part of freed initmem. This is needed on architectures
++ * with virt == phys kernel mapping, for code that wants to check if an address
++ * is part of a static object within [_stext, _end]. After initmem is freed,
++ * memory can be allocated from it, and such allocations would then have
++ * addresses within the range [_stext, _end].
++ */
++#ifndef arch_is_kernel_initmem_freed
++static inline int arch_is_kernel_initmem_freed(unsigned long addr)
++{
++	if (system_state < SYSTEM_RUNNING)
++		return 0;
++
++	return init_section_contains((void *)addr, 1);
++}
++#endif
++
+ #endif /* _ASM_GENERIC_SECTIONS_H_ */
+-- 
+2.31.1
+
