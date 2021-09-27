@@ -2,142 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6732741914B
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Sep 2021 11:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9AB419283
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Sep 2021 12:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbhI0JJe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Sep 2021 05:09:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47333 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233602AbhI0JJb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Sep 2021 05:09:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632733673;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KVP7Xe4ufaNCXcd20wpSSrMBsG9usYiBh4tpjUVxTUI=;
-        b=A87jVk+oepUAxtpitt31u+xGVoIIAZhHvRG1ytMIxJ+Evgb5oKfi/FAAY/t0EhtGY2B8lu
-        GsmusM22kaoZRJikJg9TYi0PoN98zEYTRM/R/2H1BcIJJCkx8JRF3r39x/pYwXMPCOrKZ5
-        1Co2wrNmMfgPWkUPO8PgrqhlcK68OmY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-509-SFGbf0kgOXeJKXBgJXYCpQ-1; Mon, 27 Sep 2021 05:07:51 -0400
-X-MC-Unique: SFGbf0kgOXeJKXBgJXYCpQ-1
-Received: by mail-wr1-f72.google.com with SMTP id x7-20020a5d6507000000b0015dada209b1so13701684wru.15
-        for <linux-arch@vger.kernel.org>; Mon, 27 Sep 2021 02:07:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KVP7Xe4ufaNCXcd20wpSSrMBsG9usYiBh4tpjUVxTUI=;
-        b=pfzETxjRSCCy2R+CFN3Ueh3HsOF5N8d0fp6Qo7btJg8vU5M1KPW/BDqrAIHIGM6f7B
-         bJBShkX9xRC2N3fadXlwd+hpGbFJkeg20BGEl80Yy6IFNG/Yvnt4PsJnCoQf+QC0qI++
-         rv99mnxcXvrlzHfd+trICiIJOgCSdfn/kXnmPt2VJpLl+WsgTgx2s+lY8jDDc+byS1pG
-         k2KsMRs4FgD2wnBibZKw7POGooy2djMdO4JQNL9fQyfCEjewaPyKLtD/IAWCXPeP2HAS
-         6plZTjElolUFHQNCsTCuCB2gHriysy0SDqKwigBM4ZIjRnLAk0rTMC+8wFDDt7N84Mcw
-         LZjQ==
-X-Gm-Message-State: AOAM532+YzbGJ6QtomShn7CVfTDtaZc3MZwqbq6GYu73Qsx444ry5ECo
-        gDOIvVURlNVxPuFOq5Endp4KnURT8y7dB1idoyHaltnsS/UBGM4Bx7Gi+8a1i4Dlj/TOluHDzzI
-        IZL1fnJqNHoDl+EiIXGHdkw==
-X-Received: by 2002:a5d:608e:: with SMTP id w14mr26547276wrt.18.1632733670882;
-        Mon, 27 Sep 2021 02:07:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwC5dYp72FkeZBf/nNTyOGuT0oOk/w7Q1ed5WCCglQAPy4Z5zq+YWXxX5Bel6h9RljJshmxpg==
-X-Received: by 2002:a5d:608e:: with SMTP id w14mr26547249wrt.18.1632733670649;
-        Mon, 27 Sep 2021 02:07:50 -0700 (PDT)
-Received: from redhat.com ([2.55.16.138])
-        by smtp.gmail.com with ESMTPSA id i203sm20492120wma.7.2021.09.27.02.07.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Sep 2021 02:07:49 -0700 (PDT)
-Date:   Mon, 27 Sep 2021 05:07:42 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-Message-ID: <20210927044738-mutt-send-email-mst@kernel.org>
-References: <20210829112105-mutt-send-email-mst@kernel.org>
- <09b340dd-c8a8-689c-4dad-4fe0e36d39ae@linux.intel.com>
- <20210829181635-mutt-send-email-mst@kernel.org>
- <3a88a255-a528-b00a-912b-e71198d5f58f@linux.intel.com>
- <20210830163723-mutt-send-email-mst@kernel.org>
- <69fc30f4-e3e2-add7-ec13-4db3b9cc0cbd@linux.intel.com>
- <20210910054044-mutt-send-email-mst@kernel.org>
- <f672dc1c-5280-7bbc-7a56-7c7aab31725c@linux.intel.com>
- <20210911195006-mutt-send-email-mst@kernel.org>
- <ad1e41d1-3f4e-8982-16ea-18a3b2c04019@linux.intel.com>
+        id S233907AbhI0KvQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Sep 2021 06:51:16 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:40456 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233917AbhI0KvO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Sep 2021 06:51:14 -0400
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C91B920B4846;
+        Mon, 27 Sep 2021 03:49:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C91B920B4846
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1632739772;
+        bh=VZvw/wIlq/UcIn6rQL0WGXaz3mDbsqOb4IhjmRl4FHY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Pw7JHDXW5hAtNU1o+qCli2Bl5b7+zDkuD+JHUDwagxb7XcKsBrCOm4nWD7s3RqNNx
+         T5R3SD7qZVctJCrTpSZ9BBTH0fIRnR1iZdfUEmgC6yDdg6NqqhIHApsgcHo9kTS4Ns
+         BJ0NKbmav13sVT5kQEe5hvU0jwYc7kJXpxCT1wjk=
+Received: by mail-pj1-f47.google.com with SMTP id h12so1799595pjj.1;
+        Mon, 27 Sep 2021 03:49:32 -0700 (PDT)
+X-Gm-Message-State: AOAM533x5OWQGq63CW5Ay3yS8HXhRe79lJcWSPisZMXOBwIqr2bfO/nU
+        9H6FNB3RiOZopd6b6RvZ9zHIC0eJD0NcB5/jhuA=
+X-Google-Smtp-Source: ABdhPJwWrdUZbG6u6ik5z6zlzTdgcwT/NZeHyQQPSrmqvewNPKVfDBt9KV1cs+l0aSm29Sx+YJjL60kJr8YCPUPBr04=
+X-Received: by 2002:a17:902:7e8a:b0:13d:95e2:d9c2 with SMTP id
+ z10-20020a1709027e8a00b0013d95e2d9c2mr21933306pla.8.1632739772259; Mon, 27
+ Sep 2021 03:49:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad1e41d1-3f4e-8982-16ea-18a3b2c04019@linux.intel.com>
+References: <20210919192104.98592-3-mcroce@linux.microsoft.com> <202109200526.YYwdkOeI-lkp@intel.com>
+In-Reply-To: <202109200526.YYwdkOeI-lkp@intel.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Mon, 27 Sep 2021 12:48:56 +0200
+X-Gmail-Original-Message-ID: <CAFnufp2bhWVd-SdSaK3ppFNkoBpJa+-0+kSrWzdxrmYNjyM+Zg@mail.gmail.com>
+Message-ID: <CAFnufp2bhWVd-SdSaK3ppFNkoBpJa+-0+kSrWzdxrmYNjyM+Zg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] riscv: optimized memmove
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 03:43:40PM -0700, Andi Kleen wrote:
-> 
-> > > Hmm, yes that's true. I guess we can make it default to opt-in for
-> > > pci_iomap.
-> > > 
-> > > It only really matters for device less ioremaps.
-> > OK. And same thing for other things with device, such as
-> > devm_platform_ioremap_resource.
-> > If we agree on all that, this will basically remove virtio
-> > changes from the picture ;)
-> 
-> Hi we revisited this now. One problem with removing the ioremap opt-in is
-> that it's still possible for drivers to get at devices without going through
-> probe. For example they can walk the PCI device list. Some drivers do that
-> for various reasons. So if we remove the opt-in we would need to audit and
-> possibly fix all that, which would be potentially a lot of churn. That's why
-> I think it's better to keep the opt-in.
-> 
-> 
-> -Andi
-> 
+On Mon, Sep 20, 2021 at 12:06 AM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Matteo,
+>
+> Thank you for the patch! Yet something to improve:
+>
+> [auto build test ERROR on linux/master]
+> [also build test ERROR on linus/master v5.15-rc1 next-20210917]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/0day-ci/linux/commits/Matteo-Croce/riscv-optimized-mem-functions/20210920-032303
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git bdb575f872175ed0ecf2638369da1cb7a6e86a14
+> config: riscv-randconfig-r004-20210919 (attached as .config)
+> compiler: riscv64-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/9a948fd7d78a58890608e9dd0f77e5ff84f36e3e
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Matteo-Croce/riscv-optimized-mem-functions/20210920-032303
+>         git checkout 9a948fd7d78a58890608e9dd0f77e5ff84f36e3e
+>         # save the attached .config to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    arch/riscv/lib/string.c: In function '__memmove':
+> >> arch/riscv/lib/string.c:89:7: error: inlining failed in call to 'always_inline' 'memcpy': function body can be overwritten at link time
+>       89 | void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+>          |       ^~~~~~
+>    arch/riscv/lib/string.c:99:24: note: called from here
+>       99 |                 return memcpy(dest, src, count);
+>          |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+>
+>
+> vim +89 arch/riscv/lib/string.c
+>
+> 86c5866e9b7fdd Matteo Croce 2021-09-19  88
+> 86c5866e9b7fdd Matteo Croce 2021-09-19 @89  void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+> 86c5866e9b7fdd Matteo Croce 2021-09-19  90  EXPORT_SYMBOL(memcpy);
+> 9a948fd7d78a58 Matteo Croce 2021-09-19  91
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
-I've been thinking about why this still feels wrong to me.
-
-Here's what I came up with: at some point someone will want one of these
-modules (poking at devices in the initcall) in the encrypted
-environment, and will change ioremap to ioremap_shared.
-At that point the allowlist will be broken again, and
-by that time it will be set in stone and too late to fix.
-
-Isn't the problem that what is actually audited is modules,
-but you are trying to add devices to allow list?
-So why not have modules/initcalls in the allowlist then?
-For built-in modules, we already have initcall_blacklisted, right?
-This could be an extension ... no?
+How can we fix this? Maybe calling __memcpy() instead?
 
 -- 
-MST
-
+per aspera ad upstream
