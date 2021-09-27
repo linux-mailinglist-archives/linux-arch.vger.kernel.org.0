@@ -2,67 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29512419F1B
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Sep 2021 21:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C247841A053
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Sep 2021 22:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236460AbhI0T2f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Sep 2021 15:28:35 -0400
-Received: from mga02.intel.com ([134.134.136.20]:51388 "EHLO mga02.intel.com"
+        id S236776AbhI0Uou (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Sep 2021 16:44:50 -0400
+Received: from mga02.intel.com ([134.134.136.20]:56885 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236447AbhI0T2f (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Sep 2021 15:28:35 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10120"; a="211797484"
+        id S236470AbhI0Uot (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Sep 2021 16:44:49 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10120"; a="211809917"
 X-IronPort-AV: E=Sophos;i="5.85,327,1624345200"; 
-   d="scan'208";a="211797484"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2021 12:26:53 -0700
+   d="scan'208";a="211809917"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2021 13:43:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,327,1624345200"; 
-   d="scan'208";a="615977548"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Sep 2021 12:26:53 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+   d="scan'208";a="553470858"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Sep 2021 13:43:10 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Mon, 27 Sep 2021 12:26:50 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ 15.1.2242.12; Mon, 27 Sep 2021 13:43:09 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Mon, 27 Sep 2021 12:26:50 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.40) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2242.12; Mon, 27 Sep 2021 13:43:09 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12 via Frontend Transport; Mon, 27 Sep 2021 13:43:09 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Mon, 27 Sep 2021 12:26:49 -0700
+ 15.1.2242.12; Mon, 27 Sep 2021 13:43:08 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NGkxZRkN03Fm5T+e3Vk6YzOFHUL7N+mqanJYycUsocm97dpo9ulopY/NMgHEw75lpqLN/mxdkhBurJlPlUuoAuh78oyyyuthpQZHgJuy2nLq/Bn3t6SAS0ftmJglPmGiqCjxU4k3H9RsmZQIZnAwn0ZA7OuC+cY+svGP2vDc/TWF6tJurRj1cHh3aold3sES0ZX8bCZf/oyQJSK4w+5x+GRvShTrHBDuZac524YeLrPeAGqOG5wUO8uVRbMPdy74FliSzOKmFAdaXK5kL1xV9FGUCJtROOqZVmhay21Par22d/L1rlMYZWuZzJFWhCh4X09V+DExVR25teyvmSXXoA==
+ b=JclATX2Jv0yeSalMai/wR/mnRKNQ08xX07B9AbcQn6Z9BGI4UvVtPEKLCCsVI7w4JiToGLSma4DM7Ka5WIT5QRTrXGEhxWa3j17+OB9Y8PTOwZvRAax6fkp/MJvqBKeq2mkQRr9IA/u9NheGT27O98ByyzaVq8xLfWgRrtXoUf3JVK2npZiwkOgvO73bQAac5X7aKoUlyNXn84hLSbPWZ+0atMQ5Xb29xZv1E8q/qz/83wsr6sjKYDReshRN6FtQRK8p+EJEiLcMBYSqpN6KFZjK1QXZBgaB6/yUnFlDrBkBsIN1C8qz4YlULoTpsaTej0O+n9XeopMvM6ejwSJRSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=r10G1+NTA/T43K6hiiNO5wD0MoSNUdRvft0CPmC22N8=;
- b=dxsaK8iE+5jN4L6CS2JQTNYa5mXkbdWE2co0PmrgaG6H1v86gB1AhefrLJQUlxkiK5OgFGQUED7IgHX3XOoTE+cpm8lSEm1FSTblIsbgyP/onCOS8cP/nym6Ce4APtevNgfh3xcH+gT9u4C7zYSWQjPNzJ4Hl9ZImfedwoMaELbH8c9Vw5q2z8OCS2kjYomkD3YK7QPc1VVNWlaEXCvpSOuNiGvxzD9COUs9rifiAReCV276bHjIUAjjW/uWxS42ZYqkRDbVFYcq/0xax/3vfSjhajjZ4IjA3Hv2tKU3DNseMHLQT0LJt2T4wRrNK8+nfCh5M9s+sGaREyp2aACILg==
+ bh=VB+YX0KchxRbsVVY2oIFJzRfo71ArlTSZ5lWZ2LGp/E=;
+ b=i+g0aXLZye2uaIc6oeHK0PqfsqXV6jxnoXjVIkLcOZGuvd0OwY1hI/per5WitBe0rb0ezAt/7WNrFc0sXBfQbvfzW2CEN2fahnU5Dpa9O9aXRfDrmoPF6zz0asU7//brmpTUcfu29qrhRwiIBddK5VZ77Xfp1GHbJ9oKkj4a3AGAyCmHKY3ZJ0QLjAjveL7URPQLF1BoSrzSivS+VGBg28/xi5feNiSQHx6taLumsWXdcArH7NZFWujprJMA+9v6pqmDII23/KBoUVnwBOhIW9z8/skPk24qjmDEAA7Q2KZrYNlsezwKnsJFhdpkli455xKa2458R3fELEpfSewe+Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
  s=selector2-intel-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r10G1+NTA/T43K6hiiNO5wD0MoSNUdRvft0CPmC22N8=;
- b=DMYUllc/SADiNsizkFNO2+pMBmWzdlNBvvzAOsWXRhq+bce0bT/y5bBRK8LCRvQjs/yphS/wmiD6Ylkiw0hjJ2jusizvFJaKettymS76hI2R4PNJLuRCYVw//hkvpqTjq0SAWkkZotu6o8TB1G9tEl5jgbLzb5e1RruYW1J8FHw=
+ bh=VB+YX0KchxRbsVVY2oIFJzRfo71ArlTSZ5lWZ2LGp/E=;
+ b=TChKLO7MMmH2i3nJ7Xc/JU+/Pgwj1DKtUN/7QTdL1YNW+T6V26QFP0iGDOmryOAGlx/1X/nqEblV7A+swCgMbSLtRsh32oSzavUQkDCLKsVlegYZqGq0FzgGDc6N4+FM/6maFz+Pd4wa5daGKrWHKrTZTrpuUdQYNAVww4BKhjg=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=intel.com;
 Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by BYAPR11MB3127.namprd11.prod.outlook.com (2603:10b6:a03:91::32) with
+ by BY5PR11MB3927.namprd11.prod.outlook.com (2603:10b6:a03:186::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15; Mon, 27 Sep
- 2021 19:26:46 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13; Mon, 27 Sep
+ 2021 20:42:36 +0000
 Received: from BYAPR11MB3320.namprd11.prod.outlook.com
  ([fe80::4167:f9ef:19b2:eaff]) by BYAPR11MB3320.namprd11.prod.outlook.com
  ([fe80::4167:f9ef:19b2:eaff%3]) with mapi id 15.20.4544.021; Mon, 27 Sep 2021
- 19:26:46 +0000
-Subject: Re: [RFC PATCH 05/13] x86/irq: Reserve a user IPI notification vector
+ 20:42:36 +0000
+Subject: Re: [RFC PATCH 03/13] x86/cpu: Enumerate User Interrupts support
 To:     Thomas Gleixner <tglx@linutronix.de>, <x86@kernel.org>
 CC:     Tony Luck <tony.luck@intel.com>,
         Dave Hansen <dave.hansen@intel.com>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Andy Lutomirski <luto@kernel.org>,
         Jens Axboe <axboe@kernel.dk>,
@@ -81,140 +85,131 @@ CC:     Tony Luck <tony.luck@intel.com>,
         <linux-api@vger.kernel.org>, <linux-arch@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-6-sohil.mehta@intel.com> <87fstugabg.ffs@tglx>
+ <20210913200132.3396598-4-sohil.mehta@intel.com> <87lf3nexrz.ffs@tglx>
 From:   Sohil Mehta <sohil.mehta@intel.com>
-Message-ID: <7b0f2e77-51c5-f9e9-de5b-8fe59b1df8fa@intel.com>
-Date:   Mon, 27 Sep 2021 12:26:44 -0700
+Message-ID: <42a14757-5b38-19cf-d830-1641b07f89ba@intel.com>
+Date:   Mon, 27 Sep 2021 13:42:33 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.14.0
-In-Reply-To: <87fstugabg.ffs@tglx>
+In-Reply-To: <87lf3nexrz.ffs@tglx>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-ClientProxiedBy: SJ0PR13CA0078.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::23) To BYAPR11MB3320.namprd11.prod.outlook.com
+X-ClientProxiedBy: BY3PR03CA0020.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a::25) To BYAPR11MB3320.namprd11.prod.outlook.com
  (2603:10b6:a03:18::25)
 MIME-Version: 1.0
-Received: from [192.168.86.37] (73.222.31.188) by SJ0PR13CA0078.namprd13.prod.outlook.com (2603:10b6:a03:2c4::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.9 via Frontend Transport; Mon, 27 Sep 2021 19:26:45 +0000
+Received: from [192.168.86.37] (73.222.31.188) by BY3PR03CA0020.namprd03.prod.outlook.com (2603:10b6:a03:39a::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13 via Frontend Transport; Mon, 27 Sep 2021 20:42:35 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 85652cd9-3578-42d0-fe88-08d981ecbedf
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3127:
+X-MS-Office365-Filtering-Correlation-Id: 2b7c9686-96b1-43e5-8da2-08d981f75655
+X-MS-TrafficTypeDiagnostic: BY5PR11MB3927:
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR11MB3127E96D969595CFEC12B76BE5A79@BYAPR11MB3127.namprd11.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BY5PR11MB39276310040765B576719F87E5A79@BY5PR11MB3927.namprd11.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mEZLFRfabn/bJ5kcDHruDV1j5xnLZNkt4CHgRASyUwXZPbFb/gppq/MUPwBZTKr1h+ShQtF3AnQE7E4MtGcuRufod8svlZBzUOZUCKTFa0xbew7nNMp0xJoBxkvwKKX50WIq43veq15MLSuMPMXvQSA2WvdWL6W423WjkQBljfPVrHbp4m+qqLemsR8T1j3VzKffo23Qlwi272+J9OFVX8Ha5OJ/8DHR57ElWWPcZJWzw8GEFXcI+vgtV9xKad8WqF4RCP00/9NvR7SySQnonP1uaZph8xiUYS7OBaNI1UExuX+7GBypLZXF7JgI738uP2MTWhJ9XHoMPh4viRhqvM2oZ2N3Wn5BYf3Hu7LRwQvGmuRHC6F0BCxRFozRXco/ZwdytpSKrWnC9We3FTgOqwugOtgeVF4t7VhPLEBWeljjw7mh4AHiv9Llq2HYjy8zQJHmBIQNfArtRGvig+u6uUmlJcWE8xLQFKD3PsQrseJoIdZGspBcwbiQ6tECMqvPS5R/O7w6+8HR2jlEMSLoGypgK0EvY/oCO3rpMSZ3tO/p8htPi5cts8GE5CZ9CkSKuJhOzA0EWzy9vtq7C103VCOoLisz5TGPcveKI023ZPwsH+E4VizSSWGi2fGaL9JgOo81s2DdvMRLvXC40w+w2EFJTr2dPNk8pO4jLRiRL/p7l9APLgSkl2Y4oeUOodSCNta6oC5qE0B5Z+cFhMgRAr1BZrxEIcN3JOJGa/UJa6Y9gIZPe45DD78HcqP1uvCW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(508600001)(66556008)(66476007)(4326008)(36756003)(316002)(31686004)(16576012)(54906003)(26005)(44832011)(31696002)(53546011)(86362001)(8936002)(6486002)(83380400001)(2616005)(5660300002)(8676002)(15650500001)(38100700002)(2906002)(186003)(956004)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: dysgKdKMVbsOBueh/hjVEpqbmcbiCgTLGpsRa+MTNfwi/g+jL8Can4x4zBmwstQgd2/x00JVTBqzjKIitTejLh4BHizyHAeEpKqS6YNIGe6m9Ho24IZprRQiWFXKnK2Ot9FyP3RejyKdVyUJaSVVXqfRsq7gnJWLP+S+hpLPlvjKhXKvfhAMDdak9getgjkxlqBAxdIkdyvACPtaPQdn5z65RZAs6bJ2o48zXMgyHeX9itg24RT6MUmiCdztHfb+L16pzm3DfE1X39u+HFgGJqsHtJ2jgyz6i0QbEhlbRbA6xALHUFo4Py/b2pvmvj6AyxQaAJD4nojPnUoKIg8e2wM/jbxgsBFouunt6F6TUj/a6zpVnpc40EbeWU73X4vyzknTv/XV5HniyMHnloUPtFBarzWVo2chSLRqXLeQ/hO3V8K1MlNFBUdZVFiUHSx+gGs86gUH+Wa3xdMFl4clEtMxTcE0Al68X0sOOfZMIv/8YONTkbeq4jbp54Hu9YOGMohZWGdTgQ8Tjv6mkOkCGSCm/kNY0DVmqxENVMasAswK/XHiCyP2m1xcJ6lQGT5nO36BNLD9BBEUMkx46g9GcSSIumQ9Ys1E/qhLf2+tdrkuvOBOSA4z4dPtbHf5grbeoPDJS7JfibqE8pmS0wS9v1MozO7hpNUICrm/QEAHhj7ERVZz9fUagHnFBKIuAftJO1JYc/0M6ymSdbqOl1NSViE/STBIM1j81I3OFsXJdIBlW5sjuQF4AGJUVZBrWo8s
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(66946007)(36756003)(31686004)(508600001)(5660300002)(8936002)(26005)(186003)(316002)(16576012)(44832011)(4326008)(54906003)(7416002)(83380400001)(2616005)(6486002)(38100700002)(53546011)(31696002)(956004)(86362001)(2906002)(66476007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c0MzTUYyZlkrQ1BRWUpuWWdGd2xkaXpVYXVGbHYxRmRrSW5rR0JpNUc0RjZ1?=
- =?utf-8?B?TzEwS1VhTU4vcVdJM1RlTXhlbTY1bHRGYlRSUVEyL255STFORkdVSjI3MUdZ?=
- =?utf-8?B?UjdKcGd6eXA3TWdZRStydWNmM2IyelZSeXZOS3dHRlhxSEl5SURzeUQ5bnQ5?=
- =?utf-8?B?OGhyYXJYbVdxZytzY0tCUDNBTlhCUitEWEV6SFZRcE1zSVVJZkVLUm5ZYkQw?=
- =?utf-8?B?VXlTdVZNZHJ4aXFCZ1J4QzlUdTdZSVBJODhzMGlWSkpDNzlKT2p4OGlYY2tx?=
- =?utf-8?B?ZlpqVnR6MXduOEtNR0lZNXBhR0l3TzF2d3FSSGNZaEZxSEU1ZFBOL2RkOFhu?=
- =?utf-8?B?ajRnbkhhdjZFR2tGcmpISElaT1o3MUc3OXZWOVg5bHlZN2l5MHRiWEdhRGhE?=
- =?utf-8?B?RWNXT2FERythSXB0RG9HRW9XMGxON3FaWjBhM0RKUkN1KzRVODVJTUd5MnFi?=
- =?utf-8?B?REtrWHROSTJScUZSbnA5bDA4d3UwQmZnK2FiNEpYNjFrZ0oycmVKQ003WTNL?=
- =?utf-8?B?NnY5S1ZTTnpnRmZkOUpGTGNMRlJVLzU4Z3BTWmVJNnZpZVBlNnQ4ZW5wOWdM?=
- =?utf-8?B?RmJ2WjZ4OHlnem5RSGhTV0JVUFhCOTgwM2tna1laUVZ1SkhyTTFuNkhJMksr?=
- =?utf-8?B?b1AyK21pQlpxbzlMTkNYTUFSazRrY0hPak9qcXd2SHBhcVEvdnpVVGtnWFIv?=
- =?utf-8?B?MlFUT1dKRWMzMUdCWnNoSnlPUVJHNXp4LzR5K1oxS2ovYUg4Q3hPaVVRRXhO?=
- =?utf-8?B?MU1BdzlIL1hmeVdoWEFxTjFXanZIQklyTnZWUnFYVmg5enlRR25qNHNMZU9R?=
- =?utf-8?B?emtJQVFkSjVSUFlDc0hVWmExWGpWQm5mcytKQ0hQQ0szMjlxTGMzb1NTL0s0?=
- =?utf-8?B?L2hZWSsydnJFRXRBOEtxVEVjWml2UTJJMmUwSXFpWWxWOERVYmlVaGhNVVZ4?=
- =?utf-8?B?T09ZQmp6cVBLanNLSTZmckxyQ0NhMGlqbE1WcWh3TnFIc0lRZWhWQXhYZ0ds?=
- =?utf-8?B?Mldpcjg3bTZGWkpVYW9HVUhBaFdQWGlnRm52THh3czVSVnJnTGQwRlRqQ0l6?=
- =?utf-8?B?VkJpNFBkYTJLN1BPLzZSdTd3akZyVUxhVElPOThKdHN2RTRyQ1YrTFpJQi9j?=
- =?utf-8?B?NklBWHUzNzBTMFQ0SFZEYWtBVFhJV3JQSVljRHY1OERFRmxHSXdWUm1ZOFAv?=
- =?utf-8?B?QjUvV0JkS2NXZTkvTUYwbjIvdWxOZ1dRM1pLRUtqYllNMGtPbE0rU1ZUbVZT?=
- =?utf-8?B?UHdhemYyRk1wSjRuTE8xQ0pzazVmTS81SjMzM1lLU3JwOVR0Q3E0ZmNIb2M2?=
- =?utf-8?B?RUtVOVExcDUxY0dTTUx0VUthRGo4bk9Uc0UzVkgrMi95WjBSengwdTdEam9l?=
- =?utf-8?B?MWZyTTZ3cjJUeFVvYWUwakhZK0JuQkxhZ1A4c3FPUHpCeERJSFBTZURKb2E3?=
- =?utf-8?B?dFRLVmFVR0lBRWg2UEVOOE4xSUJnM3BKQ3l4TnRscnl6TGg4MFpyQzY0M2Jk?=
- =?utf-8?B?NmhKQTByb2tGQkhUb013TkZpa2hyWnRPYXdoKzl5bmZHYm1NZ2JRQjRtMDVR?=
- =?utf-8?B?WGtGUkdtK29NN3cxcXg5aEtPL3dxSVh2VXg2d3EvbEFWbDQwZGZFMUR2RjdM?=
- =?utf-8?B?NVcwN3EvRVBRS25lTXY4a2o4M0luYkFXdlFXYldVeEplUWZucVVpNU9TdGJv?=
- =?utf-8?B?VnFkemRZbVVYYXlLSkJXSkRGNzZCQW1NSC9wOXVkM256Z25QV0RmM1FXODNK?=
- =?utf-8?Q?OIb6Lz5UO8jfd0Hj2JlxnvJyODPWBbLu18gg1lM?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85652cd9-3578-42d0-fe88-08d981ecbedf
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UUVidS9nRTdyVFpmc3hqWHdKMXpZeXN2aEJjdXlCWmRGVFB4bTh2ZlozUTF4?=
+ =?utf-8?B?cXZKNjg1TnBCSHRFYkxIVVJyZXVpMXpaZmI3WjhhTXdLekkwODJ2OHUrRDBX?=
+ =?utf-8?B?SjNMallleHdLQTZENEoyYTZQYnRKbDdZWG43cUMraXlJdk1Vc3ZYb0hDMVFX?=
+ =?utf-8?B?Ky9FSDB0NCtZaU9YZ2dmbWwxUWtMcHFvdFVPQWhJbWxsRkxsS0VKT2Q1S3pq?=
+ =?utf-8?B?YVpVZUo0YVhwcmRkZGNVUU5TTGFSY1k5djlVNkFCV2ZnQjlCQUZMWlRyQ2U0?=
+ =?utf-8?B?bnlCbDBKT1lFVGp5ZzM3Rk1KMjdSV1g5Nms0TVd3Ym9ZRUZlOFN4NEhDMmhS?=
+ =?utf-8?B?MzYyOGJiUEJrczFZSHFXa0IwbklsWEc1RmQ0dXhGMlJvRXZ3UHdLZ1crZ0pj?=
+ =?utf-8?B?dGF3Vi9XZU1iVUVRdzhyeHZHMVNjVTVpcWZtazNoT1FkelFyaXoxZmFadlNv?=
+ =?utf-8?B?dWRzUU9sN0ZXWVVHaWJzSzNPdWkwUGcvOVhUdW9VUUJuUE5Ha2l3aEtsN2F3?=
+ =?utf-8?B?MlVzSERRdldYWEFYZzZBWVFwc2ErQThFLzVWNDNmbWZvZHlMTGpFb2p3Q044?=
+ =?utf-8?B?SEcwaEpSaXZnRFlKNHdoWGxFaUVvbXhEcmcvdXRoZy9tMzhJVWxOZFllY0JW?=
+ =?utf-8?B?cEpjcWIvS0NhOE5zdnd2bE5xY01EcWhOalFmUEtGKzhQYldvUW1WS0psSXd4?=
+ =?utf-8?B?d3c4MHFKQWhKOW1LcFJJdmhLZk0vSXRoc01adHlUZm53U0dTNk9FZWVzTC85?=
+ =?utf-8?B?ZEJobXBBVU9RaVJQbWFHeksrb3ZOS2Z5WXJaVm52UGV6d09SN053U3RvK25J?=
+ =?utf-8?B?YVRLVWRsYXJZb1pqazdyS0ZURzdDNlB4UjliViszLzlQYVNiakgyM3o4S0hu?=
+ =?utf-8?B?aGZFcWViV3FtN1h1aDUrQVNZUFY1WTl4cU5qUHI3dUZLNU1EZUFwcVMzeHM3?=
+ =?utf-8?B?WVpPaU9yUHJDUHd2OVJFYkY0dE5vcG01M3JBdXdHcUZYNmt0cEVMeDg0by92?=
+ =?utf-8?B?OEFubnRDSllqT3JIYXllTFlmdmxFY1ZXemE4RVh1cUR4OVJCKzIyMDJ5eHRU?=
+ =?utf-8?B?Qkl0dG1ucjFnNnFhRGhFMTBRczRTMjRvRFhWUG5tcldVc0dzc0RIYWxWZzdv?=
+ =?utf-8?B?TGg5TWZ4OUx0WGlxYkgwVWxsMUtYSS82OFBYdFZOY2psYXdjUVFheTVySXhM?=
+ =?utf-8?B?TG83MjVOQzFPRnk2U2dML05zUmVEMHRVcURmaGt0dlRVTmszR2libUtwT21R?=
+ =?utf-8?B?L2ppOVN6SFlTMmFremxvRTJ5OEdMSms2TXBkNVBnKzJ3ejVVYkZPT1dtcWxm?=
+ =?utf-8?B?bklhdnBua1h2NVBxdlhncGVaN2FlS3JuUEkwUE9zOEpSM1RVWVlXU1hxTXJr?=
+ =?utf-8?B?dWhCTnNzQ0JZSm1DSWlqMnVSZmpPaTNOTlNRVTFudDVLejJTUjZaejRWZm4r?=
+ =?utf-8?B?M042RzhFUCtKVzdpYWhDcS9ZbUt1K1N2WEFQaWI2QUlQbWsxa0hEMmZ5WEla?=
+ =?utf-8?B?Skx4NFpVaHpZeXpzRkQzK1paVUxhZVJCOE1kVmMrVittZUd0bEd2S3MraGJT?=
+ =?utf-8?B?eUEyd2VzNzZjZG1GVUt2d21FSVM2VHNCRlRodG94Q25ScXF3am9ldTIzWm9S?=
+ =?utf-8?B?aVpLSFROQjZ1VElabmhzTmVPNlRCR01PSFhVVEJiYk1CU1lXTEpwUDFoWW5o?=
+ =?utf-8?B?UGo2SWZaWEFwT1pYRFRrRWxjRFBHaEdIcUZOQUt6aHZ0bjduSkVrWGZQeFBQ?=
+ =?utf-8?Q?oeIGKz/YLXbIuKHMGQv1GV0PxLl6hvvXOuwpt8x?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b7c9686-96b1-43e5-8da2-08d981f75655
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2021 19:26:46.6999
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2021 20:42:35.8166
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6H7LD89A/vOXKD6U9PgMTS0drkcAtaUguuiyKg2slDt79LKyx6USTRp1k3mpSqsCRYcym5n1MlyEaqCW3k6eRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3127
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6oaVzGaLncIi1udGLYff3TcM6LhFjeZGLoT0YfA0XRwyjXew1OhRgR07BtLJyl+GL9Bdgq4m4BIm2WbB93lnWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB3927
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/23/2021 4:07 PM, Thomas Gleixner wrote:
+On 9/23/2021 3:24 PM, Thomas Gleixner wrote:
 > On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
->> A user interrupt notification vector is used on the receiver's cpu to
->> identify an interrupt as a user interrupt (and not a kernel interrupt).
->> Hardware uses the same notification vector to generate an IPI from a
->> sender's cpu core when the SENDUIPI instruction is executed.
+>> SENDUIPI is a special ring-3 instruction that makes a supervisor mode
+>> memory access to the UPID and UITT memory. Currently, KPTI needs to be
+>> off for User IPIs to work.  Processors that support user interrupts are
+>> not affected by Meltdown so the auto mode of KPTI will default to off.
 >>
->> Typically, the kernel shouldn't receive an interrupt with this vector.
->> However, it is possible that the kernel might receive this vector.
->>
->> Scenario that can cause the spurious interrupt:
->>
->> Step	cpu 0 (receiver task)		cpu 1 (sender task)
->> ----	---------------------		-------------------
->> 1	task is running
->> 2					executes SENDUIPI
->> 3					IPI sent
->> 4	context switched out
->> 5	IPI delivered
->> 	(kernel interrupt detected)
->>
->> A kernel interrupt can be detected, if a receiver task gets scheduled
->> out after the SENDUIPI-based IPI was sent but before the IPI was
->> delivered.
-> What happens if the SENDUIPI is issued when the target task is not on
-> the CPU? How is that any different from the above?
+>> Users who want to force enable KPTI will need to wait for a later
+>> version of this patch series that is compatible with KPTI. We need to
+>> allocate the UPID and UITT structures from a special memory region that
+>> has supervisor access but it is mapped into userspace. The plan is to
+>> implement a mechanism similar to LDT.
+> Seriously?
 
+Are questioning why we should add KPTI support if the hardware is not 
+affected by Meltdown?
 
-This didn't get covered in the other thread. Thought, I would clarify 
-this a bit more.
+or
 
-A notification IPI is sent from the CPU that executes SENDUIPI if the 
-target task is running (SN is 0).
+Why use an LDT like mechanism to do this?
 
-If the target task is not running SN bit in the UPID is set, which 
-prevents any notification interrupts from being generated.
+I have listed this as one of the opens in the cover letter as well. I am 
+not sure if users who force enable PTI would really care about User 
+Interrupts.
 
-However, it is possible that SN is 0 when SENDUIPI was executed which 
-generates the notification IPI. But when the IPI arrives on receiver 
-CPU, SN has been set, the task state has been saved and UINV has been 
-cleared.
+Any input here would be helpful.
 
-A kernel interrupt is detected in this case. I have a sample that demos 
-this. I'll fix the current code and then send out the results.
-
-
->> The kernel doesn't need to do anything in this case other than receiving
->> the interrupt and clearing the local APIC. The user interrupt is always
->> stored in the receiver's UPID before the IPI is generated. When the
->> receiver gets scheduled back the interrupt would be delivered based on
->> its UPID.
-> So why on earth is that vector reaching the CPU at all?
-
-You covered this in the other thread.
-
->> +#ifdef CONFIG_X86_USER_INTERRUPTS
->> +	seq_printf(p, "%*s: ", prec, "UIS");
-> No point in printing that when user interrupts are not available/enabled
-> on the system.
 >
-Will fix this.
+>> +	if (!cpu_feature_enabled(X86_FEATURE_UINTR))
+>> +		goto disable_uintr;
+>> +
+>> +	/* checks the current processor's cpuid bits: */
+>> +	if (!cpu_has(c, X86_FEATURE_UINTR))
+>> +		goto disable_uintr;
+>> +
+>> +	/*
+>> +	 * User Interrupts currently doesn't support PTI. For processors that
+>> +	 * support User interrupts PTI in auto mode will default to off.  Need
+>> +	 * this check only for users who have force enabled PTI.
+>> +	 */
+>> +	if (boot_cpu_has(X86_FEATURE_PTI)) {
+>> +		pr_info_once("x86: User Interrupts (UINTR) not enabled. Please disable PTI using 'nopti' kernel parameter\n");
+> That message does not make sense. The admin has explicitly added 'pti'
+> to the kernel command line on a CPU which is not affected. So why would
+> he now have to add 'nopti' ?
+
+Yup. I'll fix this and other issues in this patch.
+
+I thought the user should know why UINTR has been disabled. In 
+hindsight, this would have been better covered in the sample Readme or 
+something similar.
+
 
 Thanks,
 
