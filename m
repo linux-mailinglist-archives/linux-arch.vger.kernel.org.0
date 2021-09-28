@@ -2,102 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C36641A72C
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Sep 2021 07:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBD841A97B
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Sep 2021 09:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234919AbhI1Fk6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Sep 2021 01:40:58 -0400
-Received: from verein.lst.de ([213.95.11.211]:50132 "EHLO verein.lst.de"
+        id S239234AbhI1HRp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Sep 2021 03:17:45 -0400
+Received: from pegase2.c-s.fr ([93.17.235.10]:57751 "EHLO pegase2.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234243AbhI1Fk5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Sep 2021 01:40:57 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id ED5FC67373; Tue, 28 Sep 2021 07:39:11 +0200 (CEST)
-Date:   Tue, 28 Sep 2021 07:39:11 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
-        "saravanand@fb.com" <saravanand@fb.com>,
-        "krish.sadhukhan@oracle.com" <krish.sadhukhan@oracle.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "rientjes@google.com" <rientjes@google.com>
-Subject: Re: [PATCH V5 12/12] net: netvsc: Add Isolation VM support for
- netvsc driver
-Message-ID: <20210928053911.GA29208@lst.de>
-References: <20210914133916.1440931-1-ltykernel@gmail.com> <20210914133916.1440931-13-ltykernel@gmail.com> <MWHPR21MB15939A5D74CA1DF25EE816ADD7DB9@MWHPR21MB1593.namprd21.prod.outlook.com> <43e22b84-7273-4099-42ea-54b06f398650@gmail.com> <e379a60b-4d74-9167-983f-f70c96bb279e@gmail.com>
+        id S239215AbhI1HRo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 28 Sep 2021 03:17:44 -0400
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4HJW4y1Ht5z9sY0;
+        Tue, 28 Sep 2021 09:16:02 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bgW3wrAQAMpV; Tue, 28 Sep 2021 09:16:02 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4HJW4w14WJz9sY3;
+        Tue, 28 Sep 2021 09:16:00 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0B5628B763;
+        Tue, 28 Sep 2021 09:16:00 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 2Lab4gKZMbDz; Tue, 28 Sep 2021 09:15:59 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.48])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A8CC18B773;
+        Tue, 28 Sep 2021 09:15:59 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1) with ESMTPS id 18S7FnaP1452309
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 28 Sep 2021 09:15:49 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1/Submit) id 18S7FmAX1452307;
+        Tue, 28 Sep 2021 09:15:48 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrew Morton <akpm@linux-foundation.org>, arnd@arndb.de
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arch@vger.kernel.org,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Subject: [PATCH v2 1/4] mm: Create a new system state and fix core_kernel_text()
+Date:   Tue, 28 Sep 2021 09:15:34 +0200
+Message-Id: <ffa99e8e91e756b081427b27e408f275b7d43df7.1632813331.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e379a60b-4d74-9167-983f-f70c96bb279e@gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 10:26:43PM +0800, Tianyu Lan wrote:
-> Hi Christoph:
->     Gentile ping. The swiotlb and shared memory mapping changes in this
-> patchset needs your reivew. Could you have a look?
+core_kernel_text() considers that until system_state in at least
+SYSTEM_RUNNING, init memory is valid.
 
-I'm a little too busy for a review of such a huge patchset right now.
-That being said here are my comments from a very quick review:
+But init memory is freed a few lines before setting SYSTEM_RUNNING,
+so we have a small period of time when core_kernel_text() is wrong.
 
- - the bare memremap usage in swiotlb looks strange and I'd
-   definitively expect a well documented wrapper.
- - given that we can now hand out swiotlb memory for coherent mappings
-   we need to carefully audit what happens when this memremaped
-   memory gets mmaped or used through dma_get_sgtable
- - the netscv changes I'm not happy with at all.  A large part of it
-   is that the driver already has a bad structure, but this series
-   is making it significantly worse.  We'll need to find a way
-   to use the proper dma mapping abstractions here.  One option
-   if you want to stick to the double vmapped buffer would be something
-   like using dma_alloc_noncontigous plus a variant of
-   dma_vmap_noncontiguous that takes the shared_gpa_boundary into
-   account.
+Create an intermediate system state called SYSTEM_FREEING_INIT that
+is set before starting freeing init memory, and use it in
+core_kernel_text() to report init memory invalid earlier.
+
+Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+v2: New
+---
+ include/linux/kernel.h | 1 +
+ init/main.c            | 2 ++
+ kernel/extable.c       | 2 +-
+ 3 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index 2776423a587e..471bc0593679 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -248,6 +248,7 @@ extern bool early_boot_irqs_disabled;
+ extern enum system_states {
+ 	SYSTEM_BOOTING,
+ 	SYSTEM_SCHEDULING,
++	SYSTEM_FREEING_INITMEM,
+ 	SYSTEM_RUNNING,
+ 	SYSTEM_HALT,
+ 	SYSTEM_POWER_OFF,
+diff --git a/init/main.c b/init/main.c
+index 3f7216934441..c457d393fdd4 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -1505,6 +1505,8 @@ static int __ref kernel_init(void *unused)
+ 	kernel_init_freeable();
+ 	/* need to finish all async __init code before freeing the memory */
+ 	async_synchronize_full();
++
++	system_state = SYSTEM_FREEING_INITMEM;
+ 	kprobe_free_init_mem();
+ 	ftrace_free_init_mem();
+ 	kgdb_free_init_mem();
+diff --git a/kernel/extable.c b/kernel/extable.c
+index b0ea5eb0c3b4..290661f68e6b 100644
+--- a/kernel/extable.c
++++ b/kernel/extable.c
+@@ -76,7 +76,7 @@ int notrace core_kernel_text(unsigned long addr)
+ 	    addr < (unsigned long)_etext)
+ 		return 1;
+ 
+-	if (system_state < SYSTEM_RUNNING &&
++	if (system_state < SYSTEM_FREEING_INITMEM &&
+ 	    init_kernel_text(addr))
+ 		return 1;
+ 	return 0;
+-- 
+2.31.1
+
