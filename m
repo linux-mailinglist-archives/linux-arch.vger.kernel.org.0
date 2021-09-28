@@ -2,122 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4E041A975
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Sep 2021 09:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B72C341AA77
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Sep 2021 10:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239174AbhI1HRl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Sep 2021 03:17:41 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:44487 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239142AbhI1HRk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Sep 2021 03:17:40 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4HJW4w1csMz9sY4;
-        Tue, 28 Sep 2021 09:16:00 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dsEG85IsB9d9; Tue, 28 Sep 2021 09:16:00 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4HJW4w0hDKz9sXy;
-        Tue, 28 Sep 2021 09:16:00 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 01A628B775;
-        Tue, 28 Sep 2021 09:16:00 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id YYYmKCpsbY4J; Tue, 28 Sep 2021 09:15:59 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.48])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A26C08B763;
-        Tue, 28 Sep 2021 09:15:59 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1) with ESMTPS id 18S7FnZ51452321
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 28 Sep 2021 09:15:49 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1/Submit) id 18S7Fnpb1452320;
-        Tue, 28 Sep 2021 09:15:49 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Andrew Morton <akpm@linux-foundation.org>, arnd@arndb.de
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arch@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Subject: [PATCH v2 4/4] s390: Use generic version of arch_is_kernel_initmem_freed()
-Date:   Tue, 28 Sep 2021 09:15:37 +0200
-Message-Id: <d4a15dc0e699e6a60858bff4d183a9b1aea90433.1632813331.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <ffa99e8e91e756b081427b27e408f275b7d43df7.1632813331.git.christophe.leroy@csgroup.eu>
-References: <ffa99e8e91e756b081427b27e408f275b7d43df7.1632813331.git.christophe.leroy@csgroup.eu>
+        id S239463AbhI1IN1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Sep 2021 04:13:27 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:33958 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239043AbhI1IN0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Sep 2021 04:13:26 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1632816706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MuA+W1hIA1rAMXQIqohvtqkn6nT1tdEByWW7so2/mJE=;
+        b=o4AnzY92TDieIgsy0BxYM5ZrB7EKL02pFUFM6LcB4FFSjyx/IoknxzoYCwx61/g49g1LW9
+        K6ODGpL2PzQRXYgEhGdPzWWs/0oZKiBxLNrfe7Vf75kdG+hFBCC9oIUPDD4Z3KmMuxxn2z
+        Eg4wnTUmdqDlGRQ9761Xg/RubHl4bDgobqZFuEimIakTgiYXKDfnsZ7HDISSL4gSa4q4ni
+        WhxbEGAaexob8STeYYdPQ1VURR2ErZWrmiBRLAY6VVshAZAENbVuJrWbK11ilMwSQ2Y/uF
+        5qZWAPY1vXTkeOvt8isNigKPsNXfir2Zi9EpdZDuxDjOHZAqQht0UjX0xxs+bA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1632816706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MuA+W1hIA1rAMXQIqohvtqkn6nT1tdEByWW7so2/mJE=;
+        b=l8vTUOns3NZZW+RgVuFEifsZxru0n8deKjPocVe7Z5Jbqqa5HK5OCRpnvmZ2yuboQGYauN
+        090YSxHuWDSQ8PAw==
+To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
+Cc:     Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 05/13] x86/irq: Reserve a user IPI notification vector
+In-Reply-To: <447377f0-21e5-067d-55ac-cb2eeca7ceae@intel.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-6-sohil.mehta@intel.com> <87fstugabg.ffs@tglx>
+ <878rzkeq9f.ffs@tglx> <87bl4fcxz8.ffs@tglx>
+ <447377f0-21e5-067d-55ac-cb2eeca7ceae@intel.com>
+Date:   Tue, 28 Sep 2021 10:11:45 +0200
+Message-ID: <878rzhazlq.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Generic version of arch_is_kernel_initmem_freed() now does the same
-as s390 version.
+Sohil,
 
-Remove the s390 version.
+On Mon, Sep 27 2021 at 12:07, Sohil Mehta wrote:
+> On 9/26/2021 5:39 AM, Thomas Gleixner wrote:
+>
+> The User-interrupt notification processing moves all the pending 
+> interrupts from UPID.PIR to the UIRR.
 
-Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v2: No change
----
- arch/s390/include/asm/sections.h | 12 ------------
- arch/s390/mm/init.c              |  3 ---
- 2 files changed, 15 deletions(-)
+Indeed that makes sense. Should have thought about that myself.
 
-diff --git a/arch/s390/include/asm/sections.h b/arch/s390/include/asm/sections.h
-index 85881dd48022..3fecaa4e8b74 100644
---- a/arch/s390/include/asm/sections.h
-+++ b/arch/s390/include/asm/sections.h
-@@ -2,20 +2,8 @@
- #ifndef _S390_SECTIONS_H
- #define _S390_SECTIONS_H
- 
--#define arch_is_kernel_initmem_freed arch_is_kernel_initmem_freed
--
- #include <asm-generic/sections.h>
- 
--extern bool initmem_freed;
--
--static inline int arch_is_kernel_initmem_freed(unsigned long addr)
--{
--	if (!initmem_freed)
--		return 0;
--	return addr >= (unsigned long)__init_begin &&
--	       addr < (unsigned long)__init_end;
--}
--
- /*
-  * .boot.data section contains variables "shared" between the decompressor and
-  * the decompressed kernel. The decompressor will store values in them, and
-diff --git a/arch/s390/mm/init.c b/arch/s390/mm/init.c
-index a04faf49001a..8c6f258a6183 100644
---- a/arch/s390/mm/init.c
-+++ b/arch/s390/mm/init.c
-@@ -58,8 +58,6 @@ unsigned long empty_zero_page, zero_page_mask;
- EXPORT_SYMBOL(empty_zero_page);
- EXPORT_SYMBOL(zero_page_mask);
- 
--bool initmem_freed;
--
- static void __init setup_zero_pages(void)
- {
- 	unsigned int order;
-@@ -214,7 +212,6 @@ void __init mem_init(void)
- 
- void free_initmem(void)
- {
--	initmem_freed = true;
- 	__set_memory((unsigned long)_sinittext,
- 		     (unsigned long)(_einittext - _sinittext) >> PAGE_SHIFT,
- 		     SET_MEMORY_RW | SET_MEMORY_NX);
--- 
-2.31.1
+>> Also the restore portion on the way back to user space has to be coupled
+>> more tightly:
+>>
+>> arch_exit_to_user_mode_prepare()
+>> {
+>>          ...
+>>          if (unlikely(ti_work & _TIF_UPID))
+>>          	uintr_restore_upid(ti_work & _TIF_NEED_FPU_LOAD);
+>>          if (unlikely(ti_work & _TIF_NEED_FPU_LOAD))
+>>          	switch_fpu_return();
+>> }
+>
+> I am assuming _TIF_UPID would be set everytime SN is set and XSTATE is 
+> saved.
 
+Yes.
+
+>> upid_set_ndst(upid)
+>> {
+>> 	apicid = __this_cpu_read(x86_cpu_to_apicid);
+>>
+>>          if (x2apic_enabled())
+>>              upid->ndst.x2apic = apicid;
+>>          else
+>>              upid->ndst.apic = apicid;
+>> }
+>>
+>> uintr_restore_upid(bool xrstors_pending)
+>> {
+>>          clear_thread_flag(TIF_UPID);
+>>          
+>> 	// Update destination
+>>          upid_set_ndst(upid);
+>>
+>>          // Do we need something stronger here?
+>>          barrier();
+>>
+>>          clear_bit(SN, upid->status);
+>>
+>>          // Any SENDUIPI after this point sends to this CPU
+>>             
+>>          // Any bit which was set in upid->pir after SN was set
+>>          // and/or UINV was cleared by XSAVES up to the point
+>>          // where SN was cleared above is not reflected in UIRR.
+>>
+>> 	// As this runs with interrupts disabled the current state
+>>          // of upid->pir can be read and used for restore. A SENDUIPI
+>>          // which sets a bit in upid->pir after that read will send
+>>          // the notification vector which is going to be handled once
+>>          // the task reenables interrupts on return to user space.
+>>          // If the SENDUIPI set the bit before the read then the
+>>          // notification vector handling will just observe the same
+>>          // PIR state.
+>>
+>>          // Needs to be a locked access as there might be a
+>>          // concurrent SENDUIPI modiying it.
+>>          pir = read_locked(upid->pir);
+>>
+>>          if (xrstors_pending)) {
+>>          	// Update the saved xstate for xrstors
+>>             	current->xstate.uintr.uinv = UINTR_NOTIFICATION_VECTOR;
+>
+> XSAVES saves the UINV value into the XSTATE buffer. I am not sure if we 
+> need this again. Is it because it could have been overwritten by calling 
+> XSAVES twice?
+
+Yes that can happen AFAICT. I haven't done a deep analysis, but this
+needs to looked at.
+
+>>                  current->xstate.uintr.uirr = pir;
+>
+> I believe PIR should be ORed. There could be some bits already set in 
+> the UIRR.
+>
+> Also, shouldn't UPID->PIR be cleared? If not, we would detect these 
+> interrupts all over again during the next ring transition.
+
+Right. So that PIR read above needs to be a locked cmpxchg().
+
+>>          } else {
+>>                  // Manually restore UIRR and UINV
+>>                  wrmsrl(IA32_UINTR_RR, pir);
+> I believe read-modify-write here as well.
+
+Sigh, yes.
+
+Thanks,
+
+        tglx
