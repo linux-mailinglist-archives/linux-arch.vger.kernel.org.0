@@ -2,95 +2,181 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2845741BF89
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 09:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D173241C445
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 14:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244497AbhI2HGi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Sep 2021 03:06:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54844 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244488AbhI2HGh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 Sep 2021 03:06:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E66F60F6E;
-        Wed, 29 Sep 2021 07:04:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1632899097;
-        bh=g6BUe7enuFI4kxDLyFSJFYsLRLSx3gM/vt9+PUIBkDo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FL95RGHa44BF5B5Lw0VjAdsdqvfpo2q0UvdkB+Vinf8wyAX9PChuuIEVvwkwDn+jv
-         cHAPhXvSG3PCDo3LllmIRJ4uDW//iCy0QwgbT2R8ZoD95K893CqSr/m+h03pGjNlCX
-         whBEcMccL8T1rkHyyqSkCJuZ2+CP5GrdBQhuRgls=
-Date:   Wed, 29 Sep 2021 09:04:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sohil Mehta <sohil.mehta@intel.com>
-Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
+        id S245149AbhI2MIZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Sep 2021 08:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244943AbhI2MIZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Sep 2021 08:08:25 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAC7C061755
+        for <linux-arch@vger.kernel.org>; Wed, 29 Sep 2021 05:06:42 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id q127-20020a1ca785000000b0030cb71ea4d1so1583947wme.1
+        for <linux-arch@vger.kernel.org>; Wed, 29 Sep 2021 05:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZUrTE1lS5oIQTax5a5GDZNIHxuc33ruzP5rR4Lxz3a4=;
+        b=L9L8l3oRRCUvc5C06ylk3QB5ulMPbJNFwY0fYsVM90Vgcer/pyRPhVMfJGhSnAFat+
+         60xoKm60FPIUdbXcRxL35Ku7ILoMum7BJOQARbKZJ3gkIPW7TAUN5MR70IvhQHBf8glw
+         Bc7NaJeOGqTHuveTKQCTz1s0SIk1nFAIBd7gc0deghB+XhA4s6P3pHP5sAJnXqfeYuB4
+         Hm/ykR70aMyFN+t5KNGJ1XceRvh6/Fqeti+qIeG387oMOUp4O1zj27whEbO/H1nqpraL
+         KVxqTfMIlvk+ZTkzfB+l+EyI+JO78WloJ5mS/eXpuhePh21OCZgrStV1BGdNemHWtW3i
+         f/2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZUrTE1lS5oIQTax5a5GDZNIHxuc33ruzP5rR4Lxz3a4=;
+        b=vs/Ogkd7j+Brs5Q3yTWTRJHRJ0K4OoMF8ZweGF5/orZZuvxEPSg1usZgMJxoB/7TCI
+         hQHM+xuWxrxTGgZd+pXNX2SmprNr/Q0yOf2e2zu6sLlypaKa9SEVyoGuRQTAMKZIo9fg
+         qj/ZJfnFNQGsk1D1AO9HzmERZXh4ruP4+4Eaz3rI8ARi7Qnnv5RwbHL8fvpuRbzTv5Z7
+         5a2zXaDIuhtzrhfAKGnhOom7s931XPu0EtjhPilz8+K91PW1ThjQ4YE62YGrjf+qfk9J
+         5aILQwqlCy6KtXRlcEVYnKxltt+2epDiflO8gDQ01Erqlqj2MVQGW14MGpSmcGkZV+5U
+         CjEQ==
+X-Gm-Message-State: AOAM5307XUMCE5tHe56liyQp4GDAvxVLbpqA0lfFTYuQ1Qc0/WXTNx2z
+        Ia29ycfHK/B4QSs7eoenuKbvjw==
+X-Google-Smtp-Source: ABdhPJyKpv3fF+OhFeUpeh+ujdRxW+mTeSxbgwm1QX7Dkuh0JV9ldlAvn1O8sVNnBBDCiszeUzyf0A==
+X-Received: by 2002:a1c:1b17:: with SMTP id b23mr9981711wmb.139.1632917201096;
+        Wed, 29 Sep 2021 05:06:41 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:c9be:b970:304:6a4d])
+        by smtp.gmail.com with ESMTPSA id b15sm2601582wru.9.2021.09.29.05.06.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Sep 2021 05:06:40 -0700 (PDT)
+Date:   Wed, 29 Sep 2021 14:06:34 +0200
+From:   Marco Elver <elver@google.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     will@kernel.org, paulmck@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 10/13] x86/uintr: Introduce user IPI sender syscalls
-Message-ID: <YVQQFs4HC3tn2GiG@kroah.com>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-11-sohil.mehta@intel.com>
- <YUxy6XqMB1+DYJtP@kroah.com>
- <4704e81d-a3d2-aedf-1c79-e45cc86826a5@intel.com>
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        stern@rowland.harvard.edu, parri.andrea@gmail.com,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        linux-toolchains@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
+Message-ID: <YVRWyq+rDeAFLx+X@elver.google.com>
+References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4704e81d-a3d2-aedf-1c79-e45cc86826a5@intel.com>
+In-Reply-To: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 11:01:54AM -0700, Sohil Mehta wrote:
-> On 9/23/2021 5:28 AM, Greg KH wrote:
-> > On Mon, Sep 13, 2021 at 01:01:29PM -0700, Sohil Mehta wrote:
-> > > +/* User Interrupt Target Table Entry (UITTE) */
-> > > +struct uintr_uitt_entry {
-> > > +	u8	valid;			/* bit 0: valid, bit 1-7: reserved */
-> > Do you check that the other bits are set to 0?
+On Tue, Sep 28, 2021 at 05:15PM -0400, Mathieu Desnoyers wrote:
+> The control dependency ordering currently documented in
+> Documentation/memory-barriers.txt is fragile and can be broken by
+> various compiler optimizations.
 > 
-> I don't have a check but kzalloc() in alloc_uitt() should set it to 0.
+> The goal here is to prevent the compiler from being able to optimize a
+> conditional branch into something which lacks the control dependency,
+> while letting the compiler choose the best conditional branch in each
+> case.
 > 
-> > > +	u8	user_vec;
-> > > +	u8	reserved[6];
-> > What is this reserved for?
+> Prevent the compiler from considering the two legs of a conditional
+> branch as identical by adding a distinct volatile asm in each leg of the
+> branch. Those asm do not emit any instruction nor data into the
+> resulting executable, and do not have any clobbers.
 > 
-> This is hardware defined structure as well. I should probably mention this
-> it in the comment above.
+> GNU describes asm volatile statements as having side-effects. [1]
 > 
-> > > +	u64	target_upid_addr;
-> > If this is a pointer, why not say it is a pointer?
+> C99 describes that accessing volatile objects are side-effects, and that
+> "at certain specified points in the execution sequence called sequence
+> points, all side effects of previous evaluations shall be complete
+> and no side effects of subsequent evaluations shall have taken
+> place". [2]
 > 
-> I used a u64 to get the size and alignment of this structure as required by
-> the hardware. I wasn't sure if using a struct upid * would complicate that.
+> This ensures that the program order of READ_ONCE(), asm volatile in both
+> legs of the branch, and following WRITE_ONCE() and after_ctrl_dep()
+> barriers are preserved.
 > 
-> Also this field is never used as a pointer by the kernel. It is only used to
-> program an entry that is read by the hardware.
+> With this approach, the following code now keeps the control dependency:
 > 
-> Is this reasonable or would you still prefer a pointer?
+>         z = READ_ONCE(var1);
+>         if (ctrl_dep(z))
+>                 WRITE_ONCE(var2, 5);
+>         else
+>                 WRITE_ONCE(var2, 5);
+> 
+> And the ctrl_dep_eval() checking the constant triggers a build error
+> for:
+> 
+>         y = READ_ONCE(var1);
+>         if (ctrl_dep(y % 1))
+>                 WRITE_ONCE(var2, 5);
+>         else
+>                 WRITE_ONCE(var2, 6);
+> 
+> Which is good to have to ensure the compiler don't end up removing the
+> conditional branch because the it evaluates a constant.
+> 
+> Introduce the ctrl_dep macro in the generic headers, and use it
+> everywhere it appears relevant.  The approach taken is simply to
+> look for smp_acquire__after_ctrl_dep and "control dependency" across the
+> kernel sources, so a few other uses may have been missed.
 
-Ok, just document it really well that this is NOT a real address used by
-the kernel.  As it is, that's not obvious at all.
+It would be nice to know where and on which arch things are currently
+broken of course, which might then also help raise confidence that this
+implementation of ctrl_dep() works.
 
-And if this crosses the user/kernel boundry, it needs to be __u64 right?
+Because it's still hard to prove that the compiler will always do the
+right thing with that implementation. The only concrete option I see
+here is creating tests with known or potential breakage.
 
-thanks,
+In an ideal world we could add such tests to the compiler's test-suites
+themselves, assuming the behaviour your ctrl_dep() implementation relies
+on is supposed to be guaranteed (and the compiler folks agree..).
 
-greg k-h
+Beyond the above trivial test case with 2 identical branches, here's
+another one that breaks on arm64 with clang 12 (taken from
+https://reviews.llvm.org/D103958):
+
+ | int x, y;
+ | void noinline test_ctrl_dep_broken1(void)
+ | {
+ | 	/* ARM: do NOT expect: cinc | expect: cbz */
+ | 	if (ctrl_dep(READ_ONCE(x))) {
+ | 		y = 1;
+ | 	} else {
+ | 		y = 2;
+ | 	}
+ | }
+
+Without ctrl_dep():
+
+ | <test_ctrl_dep_broken1>:
+ |        d00042a8        adrp    x8, ffffffc010868000 <initcall_debug>
+ |        b9400508        ldr     w8, [x8, #4]
+ |        52800029        mov     w9, #0x1                        // #1
+ |        7100011f        cmp     w8, #0x0
+ |        1a891528        cinc    w8, w9, eq  // eq = none
+ |        d00042a9        adrp    x9, ffffffc010868000 <initcall_debug>
+ |        b9000928        str     w8, [x9, #8]
+ |        d65f03c0        ret
+
+			^^ no branch, compiler replaced branch with cinc!
+
+with ctrl_dep():
+
+ | <test_ctrl_dep_broken1>:
+ |        d00042a8        adrp    x8, ffffffc010868000 <initcall_debug>
+ |        b9400508        ldr     w8, [x8, #4]
+ |        34000068        cbz     w8, ffffffc0100124b4 <test_ctrl_dep_broken1+0x14>
+ |        52800028        mov     w8, #0x1                        // #1
+ |        14000002        b       ffffffc0100124b8 <test_ctrl_dep_broken1+0x18>
+ |        52800048        mov     w8, #0x2                        // #2
+ |        d00042a9        adrp    x9, ffffffc010868000 <initcall_debug>
+ |        b9000928        str     w8, [x9, #8]
+ |        d65f03c0        ret
+
+			^^ has cbz (and no cinc)
+
+Which is good -- empirically, this seems to work for this case at least.
