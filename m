@@ -2,171 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5817641CBAB
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 20:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1499341CC98
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 21:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344651AbhI2SUD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Sep 2021 14:20:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:51894 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343639AbhI2SUC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 Sep 2021 14:20:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632939500;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nnJZ7DpiogLpstvFiZH+ZlbBG07Zi0HLaCj48WwsBY8=;
-        b=VoeqJSbg2PQ9UDy5sx45KMOyAJCoo6so3Q1EMvopmsviFHsTRIujC1Canf2dZdMn6904XW
-        iGAyDpNCjyfKhhtrx1UluRFogjG443ERuNZlHKBD+wlbIeH0fuyT40FhfwpQD9KYP53ZMJ
-        gau2cJye3JkRFO2dt7Uy12kUEH/SvyQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-311-wd7hD-DWPf2CUXLQtgs_rA-1; Wed, 29 Sep 2021 14:18:18 -0400
-X-MC-Unique: wd7hD-DWPf2CUXLQtgs_rA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 23556189CD1F;
-        Wed, 29 Sep 2021 18:18:17 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2115819C59;
-        Wed, 29 Sep 2021 18:18:16 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     Ramji Jiyani <ramjiyani@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        Arnd Bergmann <arnd@arndb.de>, kernel-team@android.com,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        oleg@redhat.com, hch@lst.de
-Subject: Re: [PATCH] aio: Add support for the POLLFREE
-References: <20210913183753.563103-1-ramjiyani@google.com>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Wed, 29 Sep 2021 14:20:08 -0400
-In-Reply-To: <20210913183753.563103-1-ramjiyani@google.com> (Ramji Jiyani's
-        message of "Mon, 13 Sep 2021 18:37:52 +0000")
-Message-ID: <x494ka39rc7.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1346620AbhI2T2w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Sep 2021 15:28:52 -0400
+Received: from mail.efficios.com ([167.114.26.124]:56926 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346609AbhI2T2v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Sep 2021 15:28:51 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 2AB6036C376;
+        Wed, 29 Sep 2021 15:27:09 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id raTpiO30fpZA; Wed, 29 Sep 2021 15:27:07 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 19F8C36C7B1;
+        Wed, 29 Sep 2021 15:27:07 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 19F8C36C7B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1632943627;
+        bh=CkOi3VPTp6ogoTAZn5G8/aQOQFuimMm2R8UBTyDNfdk=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=kCiFD6Uo8W8p7WoUCjCQ9v8w2TFEsn/RdM13pO8Lze4zMc5Fe/d6nbdqY6uwIT2fs
+         oD1A2Ow7nspUQUAcycyUkPERyFbSwnL9J6FM5QfiSEfM7PusvBqAxUB+EUsmqr2cre
+         qmrmFSdGOHIGmxcX8w+bupiKLWSFu4jFpVCJzog/ZZH/1ftlzSwCreQRqrG7m+kw6c
+         PUCVWPmZ1M3b9/VILoJSeROGkA0AMHVUg+wqNra2zH7NyiRBkB9a2H7bb1EVBLAugI
+         zAE9oYrGwM8mvBI3waIjOP40eix30iXIp8+e6+UFryJtdllGJdeicVbuyzg0d4kdOU
+         KPjG8P47mJcXw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id EraXV3JHf38h; Wed, 29 Sep 2021 15:27:07 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 06CAC36C2E3;
+        Wed, 29 Sep 2021 15:27:07 -0400 (EDT)
+Date:   Wed, 29 Sep 2021 15:27:06 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, paulmck <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        j alglave <j.alglave@ucl.ac.uk>,
+        luc maranget <luc.maranget@inria.fr>,
+        akiyks <akiyks@gmail.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Message-ID: <1882826966.44389.1632943626923.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CAHk-=wg23CqjGWjjxDQ7yxrb+eF5at2KFU03GZa18Znx=+Xvow@mail.gmail.com>
+References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com> <CAHk-=wg23CqjGWjjxDQ7yxrb+eF5at2KFU03GZa18Znx=+Xvow@mail.gmail.com>
+Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4125 (ZimbraWebClient - FF92 (Linux)/8.8.15_GA_4059)
+Thread-Topic: LKMM: Add ctrl_dep() macro for control dependency
+Thread-Index: scHG8V709IkY+wJtrVUo+d3Zn/2umg==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Adding Oleg and Christoph.
+----- On Sep 29, 2021, at 10:47 AM, Linus Torvalds torvalds@linux-foundation.org wrote:
 
-Ramji Jiyani <ramjiyani@google.com> writes:
+> On Tue, Sep 28, 2021 at 2:15 PM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> Introduce the ctrl_dep macro in the generic headers, and use it
+>> everywhere it appears relevant.
+> 
+> The control dependency is so subtle - just see our discussions - that
+> I really think every single use of it needs to have a comment about
+> why it's needed.
 
-> Commit f5cb779ba163 ("ANDROID: binder: remove waitqueue when thread
-> exits.") fixed the use-after-free in eventpoll but aio still has the
-> same issue because it doesn't honor the POLLFREE flag.
->
-> Add support for the POLLFREE flag to force complete iocb inline in
-> aio_poll_wake(). A thread may use it to signal it's exit and/or request
-> to cleanup while pending poll request. In this case, aio_poll_wake()
-> needs to make sure it doesn't keep any reference to the queue entry
-> before returning from wake to avoid possible use after free via
-> poll_cancel() path.
+I agree with you on thorough documentation of each control dependency,
+perhaps just not about documentation of all compiler optimizations
+affecting each of them.
 
-Is this an in-kernel user?  Can you explain more about how or when this
-happens?  Do you have a stack trace that shows the problem?  I'm not
-sure this use of POLLFREE exactly follows with the initial intention of
-the flag, but hopefully Oleg can comment on that.
+> 
+> Right now, that patch seems to just sprinkle them more or less
+> randomly. That's absolutely not what I want. It will just mean that
+> other people start sprinkling them randomly even more, and nobody will
+> dare remove them.
+
+Note that I have not found that many uses of control dependencies in the
+kernel tree. When they are used, this happens to be code where speed
+really matters though.
+
+> So I'd literally want a comment about "this needs a control
+> dependency, because otherwise the compiler could merge the two
+> identical stores X and Y".
+
+My hope with this ctrl_dep() macro is to remove at least some of
+the caveats to keep in mind when using control dependency ordering.
+Requiring to keep track of all relevant compiler optimizations on all
+architectures while reasoning about memory barriers is error-prone.
+
+> When you have a READ_ONCE() in the conditional, and a WRITE_ONCE() in
+> the statement protected by the conditional, there is *no* need to
+> randomly sprinkle noise that doesn't matter.
+
+The main advantage in doing so would be documentation, both in terms of
+letting the compiler know that this control dependency matters for
+ordering, and in terms of simplifying the set of caveats to document
+in Documentation/memory-barriers.txt.
+
+> And if there *is* need ("look, we have that same store in both the if-
+> and the else-statement" or whatever), then say so, and state that
+> thing.
+
+If we go for only using ctrl_dep() for scenarios which require it for
+documented reasons, then we would need to leave in place all the
+caveats details in Documentation/memory-barriers.txt, and document
+that in those scenarios ctrl_dep() should be used. This would be a
+starting point I guess.
 
 Thanks,
-Jeff
 
-> The POLLFREE flag is no more exclusive to the epoll and is being
-> shared with the aio. Remove comment from poll.h to avoid confusion.
-> Also enclosed the POLLFREE macro definition in parentheses to fix
-> checkpatch error.
->
-> Signed-off-by: Ramji Jiyani <ramjiyani@google.com>
-> ---
->  fs/aio.c                        | 45 ++++++++++++++++++---------------
->  include/uapi/asm-generic/poll.h |  2 +-
->  2 files changed, 26 insertions(+), 21 deletions(-)
->
-> diff --git a/fs/aio.c b/fs/aio.c
-> index 51b08ab01dff..5d539c05df42 100644
-> --- a/fs/aio.c
-> +++ b/fs/aio.c
-> @@ -1674,6 +1674,7 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
->  {
->  	struct poll_iocb *req = container_of(wait, struct poll_iocb, wait);
->  	struct aio_kiocb *iocb = container_of(req, struct aio_kiocb, poll);
-> +	struct kioctx *ctx = iocb->ki_ctx;
->  	__poll_t mask = key_to_poll(key);
->  	unsigned long flags;
->  
-> @@ -1683,29 +1684,33 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
->  
->  	list_del_init(&req->wait.entry);
->  
-> -	if (mask && spin_trylock_irqsave(&iocb->ki_ctx->ctx_lock, flags)) {
-> -		struct kioctx *ctx = iocb->ki_ctx;
-> +	/*
-> +	 * Use irqsave/irqrestore because not all filesystems (e.g. fuse)
-> +	 * call this function with IRQs disabled and because IRQs have to
-> +	 * be disabled before ctx_lock is obtained.
-> +	 */
-> +	if (mask & POLLFREE) {
-> +		/* Force complete iocb inline to remove refs to deleted entry */
-> +		spin_lock_irqsave(&ctx->ctx_lock, flags);
-> +	} else if (!(mask && spin_trylock_irqsave(&ctx->ctx_lock, flags))) {
-> +		/* Can't complete iocb inline; schedule for later */
-> +		schedule_work(&req->work);
-> +		return 1;
-> +	}
->  
-> -		/*
-> -		 * Try to complete the iocb inline if we can. Use
-> -		 * irqsave/irqrestore because not all filesystems (e.g. fuse)
-> -		 * call this function with IRQs disabled and because IRQs
-> -		 * have to be disabled before ctx_lock is obtained.
-> -		 */
-> -		list_del(&iocb->ki_list);
-> -		iocb->ki_res.res = mangle_poll(mask);
-> -		req->done = true;
-> -		if (iocb->ki_eventfd && eventfd_signal_allowed()) {
-> -			iocb = NULL;
-> -			INIT_WORK(&req->work, aio_poll_put_work);
-> -			schedule_work(&req->work);
-> -		}
-> -		spin_unlock_irqrestore(&ctx->ctx_lock, flags);
-> -		if (iocb)
-> -			iocb_put(iocb);
-> -	} else {
-> +	/* complete iocb inline */
-> +	list_del(&iocb->ki_list);
-> +	iocb->ki_res.res = mangle_poll(mask);
-> +	req->done = true;
-> +	if (iocb->ki_eventfd && eventfd_signal_allowed()) {
-> +		iocb = NULL;
-> +		INIT_WORK(&req->work, aio_poll_put_work);
->  		schedule_work(&req->work);
->  	}
-> +	spin_unlock_irqrestore(&ctx->ctx_lock, flags);
-> +	if (iocb)
-> +		iocb_put(iocb);
-> +
->  	return 1;
->  }
->  
-> diff --git a/include/uapi/asm-generic/poll.h b/include/uapi/asm-generic/poll.h
-> index 41b509f410bf..35b1b69af729 100644
-> --- a/include/uapi/asm-generic/poll.h
-> +++ b/include/uapi/asm-generic/poll.h
-> @@ -29,7 +29,7 @@
->  #define POLLRDHUP       0x2000
->  #endif
->  
-> -#define POLLFREE	(__force __poll_t)0x4000	/* currently only for epoll */
-> +#define POLLFREE	((__force __poll_t)0x4000)
->  
->  #define POLL_BUSY_LOOP	(__force __poll_t)0x8000
+Mathieu
 
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
