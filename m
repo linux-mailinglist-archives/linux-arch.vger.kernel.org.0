@@ -2,133 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1499341CC98
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 21:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33C341CCD3
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 21:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346620AbhI2T2w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Sep 2021 15:28:52 -0400
-Received: from mail.efficios.com ([167.114.26.124]:56926 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346609AbhI2T2v (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Sep 2021 15:28:51 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 2AB6036C376;
-        Wed, 29 Sep 2021 15:27:09 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id raTpiO30fpZA; Wed, 29 Sep 2021 15:27:07 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 19F8C36C7B1;
-        Wed, 29 Sep 2021 15:27:07 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 19F8C36C7B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1632943627;
-        bh=CkOi3VPTp6ogoTAZn5G8/aQOQFuimMm2R8UBTyDNfdk=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=kCiFD6Uo8W8p7WoUCjCQ9v8w2TFEsn/RdM13pO8Lze4zMc5Fe/d6nbdqY6uwIT2fs
-         oD1A2Ow7nspUQUAcycyUkPERyFbSwnL9J6FM5QfiSEfM7PusvBqAxUB+EUsmqr2cre
-         qmrmFSdGOHIGmxcX8w+bupiKLWSFu4jFpVCJzog/ZZH/1ftlzSwCreQRqrG7m+kw6c
-         PUCVWPmZ1M3b9/VILoJSeROGkA0AMHVUg+wqNra2zH7NyiRBkB9a2H7bb1EVBLAugI
-         zAE9oYrGwM8mvBI3waIjOP40eix30iXIp8+e6+UFryJtdllGJdeicVbuyzg0d4kdOU
-         KPjG8P47mJcXw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id EraXV3JHf38h; Wed, 29 Sep 2021 15:27:07 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 06CAC36C2E3;
-        Wed, 29 Sep 2021 15:27:07 -0400 (EDT)
-Date:   Wed, 29 Sep 2021 15:27:06 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, paulmck <paulmck@kernel.org>,
+        id S244887AbhI2Tsj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Sep 2021 15:48:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52860 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344818AbhI2Tsi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 29 Sep 2021 15:48:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632944816;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OphKSRDSZgdX5nhZl6LEkHup1MlwE4E4ChnXI2KmIUo=;
+        b=hI0eJoZTAjXAZfXz/lmouxtVuU1+kXFvbA1Cx/15uvJkf/CnrGB296rEhB4agx2WeHnNdb
+        5SDeUKCRTF5MohQc0+an5Vh61EjYwmp9974d0jgYGMyYHbpaJwLMbybHfyPB/E2TmMgxXQ
+        6PXR/SbnPkF/Hq5En9iMS+gCxRUxWEQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-236-HILN_C1ROwGuqXDAIOZcMQ-1; Wed, 29 Sep 2021 15:46:55 -0400
+X-MC-Unique: HILN_C1ROwGuqXDAIOZcMQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D3E09801E72;
+        Wed, 29 Sep 2021 19:46:52 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.176])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D24D45C1C5;
+        Wed, 29 Sep 2021 19:46:48 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        will@kernel.org, paulmck@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        j alglave <j.alglave@ucl.ac.uk>,
-        luc maranget <luc.maranget@inria.fr>,
-        akiyks <akiyks@gmail.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Message-ID: <1882826966.44389.1632943626923.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CAHk-=wg23CqjGWjjxDQ7yxrb+eF5at2KFU03GZa18Znx=+Xvow@mail.gmail.com>
-References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com> <CAHk-=wg23CqjGWjjxDQ7yxrb+eF5at2KFU03GZa18Znx=+Xvow@mail.gmail.com>
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        stern@rowland.harvard.edu, parri.andrea@gmail.com,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        linux-toolchains@vger.kernel.org, linux-arch@vger.kernel.org
 Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
+References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
+        <87lf3f7eh6.fsf@oldenburg.str.redhat.com>
+        <20210929174146.GF22689@gate.crashing.org>
+Date:   Wed, 29 Sep 2021 21:46:47 +0200
+In-Reply-To: <20210929174146.GF22689@gate.crashing.org> (Segher Boessenkool's
+        message of "Wed, 29 Sep 2021 12:41:46 -0500")
+Message-ID: <877dez5fmg.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4125 (ZimbraWebClient - FF92 (Linux)/8.8.15_GA_4059)
-Thread-Topic: LKMM: Add ctrl_dep() macro for control dependency
-Thread-Index: scHG8V709IkY+wJtrVUo+d3Zn/2umg==
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
------ On Sep 29, 2021, at 10:47 AM, Linus Torvalds torvalds@linux-foundation.org wrote:
+* Segher Boessenkool:
 
-> On Tue, Sep 28, 2021 at 2:15 PM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
->>
->> Introduce the ctrl_dep macro in the generic headers, and use it
->> everywhere it appears relevant.
-> 
-> The control dependency is so subtle - just see our discussions - that
-> I really think every single use of it needs to have a comment about
-> why it's needed.
+> Hi!
+>
+> On Wed, Sep 29, 2021 at 02:28:37PM +0200, Florian Weimer wrote:
+>> If you need a specific instruction emitted, you need a compiler
+>> intrinsic or inline assembly.
+>
+> Not an intrinsic.  Builtins (like almost all other code) do not say
+> "generate this particular machine code", they say "generate code that
+> does <this>".  That is one reason why builtins are more powerful than
+> inline assembler (another related reason is that they tell the compiler
+> exactly what behaviour is expected).
 
-I agree with you on thorough documentation of each control dependency,
-perhaps just not about documentation of all compiler optimizations
-affecting each of them.
+I meant that if the object code has to contain a specific instruction
+sequence involving a conditional, it needs some form of compiler
+support.  Adding some volatile here and some form of a compiler barrier
+there is very brittle.
 
-> 
-> Right now, that patch seems to just sprinkle them more or less
-> randomly. That's absolutely not what I want. It will just mean that
-> other people start sprinkling them randomly even more, and nobody will
-> dare remove them.
+>> I don't think it's possible to piggy-back this on something else.
+>
+> Unless we get a description of what this does in term of language
+> semantics (instead of generated machine code), there is no hope, even.
 
-Note that I have not found that many uses of control dependencies in the
-kernel tree. When they are used, this happens to be code where speed
-really matters though.
-
-> So I'd literally want a comment about "this needs a control
-> dependency, because otherwise the compiler could merge the two
-> identical stores X and Y".
-
-My hope with this ctrl_dep() macro is to remove at least some of
-the caveats to keep in mind when using control dependency ordering.
-Requiring to keep track of all relevant compiler optimizations on all
-architectures while reasoning about memory barriers is error-prone.
-
-> When you have a READ_ONCE() in the conditional, and a WRITE_ONCE() in
-> the statement protected by the conditional, there is *no* need to
-> randomly sprinkle noise that doesn't matter.
-
-The main advantage in doing so would be documentation, both in terms of
-letting the compiler know that this control dependency matters for
-ordering, and in terms of simplifying the set of caveats to document
-in Documentation/memory-barriers.txt.
-
-> And if there *is* need ("look, we have that same store in both the if-
-> and the else-statement" or whatever), then say so, and state that
-> thing.
-
-If we go for only using ctrl_dep() for scenarios which require it for
-documented reasons, then we would need to leave in place all the
-caveats details in Documentation/memory-barriers.txt, and document
-that in those scenarios ctrl_dep() should be used. This would be a
-starting point I guess.
+True.  For example, if the argument contains a sequence point, what does
+that even mean?
 
 Thanks,
+Florian
 
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
