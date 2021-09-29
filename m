@@ -2,260 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFB041CCE4
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 21:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FB841CCE7
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 21:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345554AbhI2Tv4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Sep 2021 15:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345549AbhI2Tvz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Sep 2021 15:51:55 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139E1C061765
-        for <linux-arch@vger.kernel.org>; Wed, 29 Sep 2021 12:50:14 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id u11so2435745uaw.3
-        for <linux-arch@vger.kernel.org>; Wed, 29 Sep 2021 12:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YBnrGvzpOalQc1rPribEAYXuOJwtyiiHK62RY8KenlQ=;
-        b=FPpe9Q2b5DHrn+WU3m/hxinNK1e2liJ1oeJrapwYERV0E/AYiaPqvZbfZ6cCY9iyVJ
-         pSBU1F5N4Sk12cZGG1pVPmwTcujDy2cdrRKvtB96L57xvYeDqkBaBbXjlnGKdW7L/oPb
-         ZacTI5cC1E9LHyQC5hE6MAi4ciTqztlBodzgRmmYG2npIlCV7gEVJdxyqPyEqFe537zs
-         KV7Kr14rOvqwaB44iBwRD4IlLKofhntmC8zmidYWlF6FOv3jnpro2aLENCkfyKlVDlzQ
-         R1t+zWQKQMupARPaCow97jyA8pg/1azfyGCCQyBeCvMqRKbV6jj0efl79zwCL82ncNqH
-         YOdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YBnrGvzpOalQc1rPribEAYXuOJwtyiiHK62RY8KenlQ=;
-        b=WrI+2a7BrxUeTFdVcTD4grJIgPqT2rs5SDeA/sEDMS4PYQm41elpQXlFLcmgJZPa0F
-         Lmugw94eGf9oxpBfWj8jsUJLp346Hyc+oiHO4Jb3DYzupvQtXywdUuZCVkQzfAhq3A/l
-         5KZFDlUfktZQQMzd4xChlTADDBERFi9VGrWoM3unpx51mMA6DAGxamvON8QkkE4ve5vX
-         cDSZeSAlTvJH3WkvExQWkIBRslBuewOSiQqhZQE7nVzNe6cyyZkju30okN+PMxtSLI3Q
-         NcMihci1KM7h+Bvy+mQ8zkzwV1sq/Dy9kViSbCu7ZxcDzWNydAwvJiAqd5U1VliiWl0a
-         dA6g==
-X-Gm-Message-State: AOAM532IWHtoSkeyl8M+ZckKxLqSIg8rJv3BrXfBKc56YxWoZzwSaq59
-        RCQ6X7gWws5Wl0kDFMWhuDYlOcR0kjxts5stVZ9Ixg==
-X-Google-Smtp-Source: ABdhPJxvKbLjTzwtXdtwANfFqJi0bFsVEXnzUaJ+/sJGfQYpol+wq4iDhalq4ZNwFCygTZNPtiS6r0YiyiUBwNVGYQA=
-X-Received: by 2002:a9f:301c:: with SMTP id h28mr2249241uab.58.1632945012871;
- Wed, 29 Sep 2021 12:50:12 -0700 (PDT)
+        id S1345655AbhI2Twi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Sep 2021 15:52:38 -0400
+Received: from mail.efficios.com ([167.114.26.124]:37850 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345636AbhI2Twf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Sep 2021 15:52:35 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 5653536CAAF;
+        Wed, 29 Sep 2021 15:50:53 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id J39vdJ66HPaU; Wed, 29 Sep 2021 15:50:52 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 85EC236CB58;
+        Wed, 29 Sep 2021 15:50:52 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 85EC236CB58
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1632945052;
+        bh=WiwY1kiDvwRVHtpENMrogCkLtrldkOHJEToBV94K9Kc=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=IvbrHeK2un8t2ZPuiWyezyjxsxp+PNxfRMHi5sf0Ie3WqcOmlfSAGyYqisE9euvMU
+         ALVt/KFLRLDJVMCvvMfRbykAv6c1iNlgDQK85w6cV2e39PWEt1PleFDXoPmOEktO0f
+         9/P4omnGqYzW9fyFjq3aPYp4fcnhglQQQkDSg/C/aNqorfsjBqobE1ghHf5sUuzhvY
+         D3kH2es3cmcJginAS2ND4xeh5w7zIx9pfjEJxSWSb8YrL9NdAkWyFYIpJ4VKAh5ny0
+         Ly8MvK/7sLv6rqTwxErnyoUGHsVJWcXoglp8PW8b1MOOt6BTSAISipdgn3dmOb3uDI
+         C3Dfn/fp2fVNA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id WniF562roqeL; Wed, 29 Sep 2021 15:50:52 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 6EB0736C55F;
+        Wed, 29 Sep 2021 15:50:52 -0400 (EDT)
+Date:   Wed, 29 Sep 2021 15:50:52 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, paulmck <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        j alglave <j.alglave@ucl.ac.uk>,
+        luc maranget <luc.maranget@inria.fr>,
+        akiyks <akiyks@gmail.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Message-ID: <457755093.44604.1632945052335.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CAHk-=wjd_BJiJYZ99PAoc4mQ3QTiZrt-tRdznj3g9kU8-gYsAA@mail.gmail.com>
+References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com> <CAHk-=wg23CqjGWjjxDQ7yxrb+eF5at2KFU03GZa18Znx=+Xvow@mail.gmail.com> <CAHk-=wjd_BJiJYZ99PAoc4mQ3QTiZrt-tRdznj3g9kU8-gYsAA@mail.gmail.com>
+Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
 MIME-Version: 1.0
-References: <20210913183753.563103-1-ramjiyani@google.com> <x494ka39rc7.fsf@segfault.boston.devel.redhat.com>
-In-Reply-To: <x494ka39rc7.fsf@segfault.boston.devel.redhat.com>
-From:   Ramji Jiyani <ramjiyani@google.com>
-Date:   Wed, 29 Sep 2021 12:50:01 -0700
-Message-ID: <CAKUd0B_TCXRY4h1hTztfwWbNSFQqsudDLn2S_28csgWZmZAG3Q@mail.gmail.com>
-Subject: Re: [PATCH] aio: Add support for the POLLFREE
-To:     Jeff Moyer <jmoyer@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        Arnd Bergmann <arnd@arndb.de>, kernel-team@android.com,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        oleg@redhat.com, hch@lst.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4125 (ZimbraWebClient - FF92 (Linux)/8.8.15_GA_4059)
+Thread-Topic: LKMM: Add ctrl_dep() macro for control dependency
+Thread-Index: cL23+1Kw3cVad0ytZvNC6SLA16g8Tw==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Jeff:
+----- On Sep 29, 2021, at 10:54 AM, Linus Torvalds torvalds@linux-foundation.org wrote:
 
-Thanks for the response.
+> On Wed, Sep 29, 2021 at 7:47 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>>
+>> And if there *is* need ("look, we have that same store in both the if-
+>> and the else-statement" or whatever), then say so, and state that
+>> thing.
+> 
+> Side note: I'd also like the commit that introduces this to talk very
+> explicitly about the particular case that it is used doe and that it
+> fixes. No "this can happen". A "this happened, here's the _actual_
+> wrong code generation, and look how this new ctrl_dep() macro fixes
+> it".
+> 
+> When it's this subtle, I don't want theoretical arguments. I want
+> actual outstanding and real bugs.
+> 
+> Because I get the feeling that there were very few actual realistic
+> examples of this, only made-up theoretical cases that wouldn't ever
+> really be found in real code.
 
-On Wed, Sep 29, 2021 at 11:18 AM Jeff Moyer <jmoyer@redhat.com> wrote:
->
-> Adding Oleg and Christoph.
->
-> Ramji Jiyani <ramjiyani@google.com> writes:
->
-> > Commit f5cb779ba163 ("ANDROID: binder: remove waitqueue when thread
-> > exits.") fixed the use-after-free in eventpoll but aio still has the
-> > same issue because it doesn't honor the POLLFREE flag.
-> >
-> > Add support for the POLLFREE flag to force complete iocb inline in
-> > aio_poll_wake(). A thread may use it to signal it's exit and/or request
-> > to cleanup while pending poll request. In this case, aio_poll_wake()
-> > needs to make sure it doesn't keep any reference to the queue entry
-> > before returning from wake to avoid possible use after free via
-> > poll_cancel() path.
->
-> Is this an in-kernel user?
+There is one particular scenario which concerns me in refcount_dec_and_test().
+It relies on smp_acquire__after_ctrl_dep() to promote the control
+dependency to an acquire barrier on success. Because it is exposed
+within a static inline function, it hides the fact that control dependencies
+are being used under the hood.
 
-Yes, an in-kernel user here is android binder.
+I have not identified a specific instance of oddly generated code, but this is
+an accident waiting to happen. If we take this simplified refcount code
+into godbolt.org and compile it for RISC-V rv64gc clang 12.0.1:
 
-> Can you explain more about how or when this
-> happens?  Do you have a stack trace that shows the problem?
+#define RISCV_FENCE(p, s) \
+        __asm__ __volatile__ ("fence " #p "," #s : : : "memory")
+#define __smp_rmb()     RISCV_FENCE(r,r)
 
-This is to fix a use after free issue between binder thread and aio
-interactions.
+volatile int var1;
+volatile int refcount;
 
-Suppose we poll a binder file through aio. The poll inserts a wait_queue_entry
-into the wait_queue_head list associated with the file. And it takes a
-reference on the binder file, so it can't go away. The poll then returns to
-userspace while poll operation remains pending (async io).
-
-So after starting the poll, we can run BINDER_THREAD_EXIT to free the wait
-queue head.The aio poll is still queued though, so aio will UAF the queue head.
-
-Here are the simplified codes to sequence of events in which case UAF occurs.
-
-static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
-                void *key)
+static inline bool refcount_dec_and_test(void)
 {
-         if (mask && !(mask & req->events))    // (1)
-                return 0;
-
-        list_del_init(&req->wait.entry);      // (2)
-
-        if (mask && spin_trylock_irqsave(&iocb->ki_ctx->ctx_lock, flags)) {
-                // complete request now
-                list_del(&iocb->ki_list);     // (3)
-                ...
-        } else {
-                // complete later
-                schedule_work(&req->work);    // (4)
-        }
-        return 1;
+    refcount--;
+    if (refcount == 0) {
+        __smp_rmb();    /* acquire after ctrl_dep */
+        return true;
+    }
+    return false;
 }
 
-In check (1), mask has EPOLLHUP from binder and actually req->events will
-always have EPOLLHUP as well (this is set unconditionally in aio_poll()).
-So we proceed to (2), which unlinks the wait queue entry. Next, we complete
-the request either right now (3) or later with scheduled work (4), depending
-on whether the trylock of ctx_lock succeeds.
-
-It turns out that UAF is possible in case (4), where the request remains linked
-through ki_list. This allows io_cancel() to find and cancel the request:
-
-static int aio_poll_cancel(struct kiocb *iocb)
+void fct(void)
 {
-        ...
+    int x;
 
-        spin_lock(&req->head->lock);                // (5)
-        WRITE_ONCE(req->cancelled, true);
-        if (!list_empty(&req->wait.entry)) {
-                list_del_init(&req->wait.entry);    // (6)
-                schedule_work(&aiocb->poll.work);
-        }
-        spin_unlock(&req->head->lock);
-
-        return 0;
+    if (refcount_dec_and_test()) {
+        var1 = 0;
+        return;
+    }
+    __smp_rmb();
+    var1 = 1;
 }
 
-The list_del_init() at (6) would UAF, but the wait queue entry was already
-unlinked, so this is unreachable. But req->head in (5) also points to the
-freed queue head, so spin_lock() will still UAF.
+We end up with:
 
-There was a similar issue with eventpoll. Unlike aio's aio_poll_wake()
-eventpoll's
-ep_poll_callback() honors the POLLFREE flag. It makes sure that both the queue
-entry is unlinked and the queue head pointer is cleared in case of POLLFREE.
+fct():                               # @fct()
+        lui     a0, %hi(refcount)
+        lw      a1, %lo(refcount)(a0)
+        addiw   a1, a1, -1
+        sw      a1, %lo(refcount)(a0)
+        lw      a0, %lo(refcount)(a0)
+        fence   r, r
+        snez    a0, a0
+        lui     a1, %hi(var1)
+        sw      a0, %lo(var1)(a1)
+        ret
 
-The patch is introducing the POLLFREE in which case the request needs to be
-honored inline as the reference may not be valid in future time when the worker
-thread gets to it.
+Which lacks the conditional branch, and where the "fence r,r" instruction
+does not properly order following stores after the refcount load.
 
-> I'm not sure this use of POLLFREE exactly follows with the initial intention of
-> the flag, but hopefully Oleg can comment on that.
->
-> Thanks,
-> Jeff
+Adding ctrl_dep() around the refcount == 0 check fixes this:
+
+fct():                                # @fct()
+        lui     a0, %hi(refcount)
+        lw      a1, %lo(refcount)(a0)
+        addiw   a1, a1, -1
+        sw      a1, %lo(refcount)(a0)
+        lw      a0, %lo(refcount)(a0)
+        beqz    a0, .LBB0_2
+
+        fence   r, r
+        addi    a0, zero, 1
+        j       .LBB0_3
+.LBB0_2:
+
+        fence   r, r
+        mv      a0, zero
+.LBB0_3:
+        lui     a1, %hi(var1)
+        sw      a0, %lo(var1)(a1)
+        ret
+
+I admit that this is still a "made up" example, although it is similar to the actual
+implementation of refcount_dec_and_check(). But if we need to audit every user of this
+API for wrongly generated code, we may be looking for a needle in a haystack.
 
 Thanks,
-Ram
 
->
-> > The POLLFREE flag is no more exclusive to the epoll and is being
-> > shared with the aio. Remove comment from poll.h to avoid confusion.
-> > Also enclosed the POLLFREE macro definition in parentheses to fix
-> > checkpatch error.
-> >
-> > Signed-off-by: Ramji Jiyani <ramjiyani@google.com>
-> > ---
-> >  fs/aio.c                        | 45 ++++++++++++++++++---------------
-> >  include/uapi/asm-generic/poll.h |  2 +-
-> >  2 files changed, 26 insertions(+), 21 deletions(-)
-> >
-> > diff --git a/fs/aio.c b/fs/aio.c
-> > index 51b08ab01dff..5d539c05df42 100644
-> > --- a/fs/aio.c
-> > +++ b/fs/aio.c
-> > @@ -1674,6 +1674,7 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
-> >  {
-> >       struct poll_iocb *req = container_of(wait, struct poll_iocb, wait);
-> >       struct aio_kiocb *iocb = container_of(req, struct aio_kiocb, poll);
-> > +     struct kioctx *ctx = iocb->ki_ctx;
-> >       __poll_t mask = key_to_poll(key);
-> >       unsigned long flags;
-> >
-> > @@ -1683,29 +1684,33 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
-> >
-> >       list_del_init(&req->wait.entry);
-> >
-> > -     if (mask && spin_trylock_irqsave(&iocb->ki_ctx->ctx_lock, flags)) {
-> > -             struct kioctx *ctx = iocb->ki_ctx;
-> > +     /*
-> > +      * Use irqsave/irqrestore because not all filesystems (e.g. fuse)
-> > +      * call this function with IRQs disabled and because IRQs have to
-> > +      * be disabled before ctx_lock is obtained.
-> > +      */
-> > +     if (mask & POLLFREE) {
-> > +             /* Force complete iocb inline to remove refs to deleted entry */
-> > +             spin_lock_irqsave(&ctx->ctx_lock, flags);
-> > +     } else if (!(mask && spin_trylock_irqsave(&ctx->ctx_lock, flags))) {
-> > +             /* Can't complete iocb inline; schedule for later */
-> > +             schedule_work(&req->work);
-> > +             return 1;
-> > +     }
-> >
-> > -             /*
-> > -              * Try to complete the iocb inline if we can. Use
-> > -              * irqsave/irqrestore because not all filesystems (e.g. fuse)
-> > -              * call this function with IRQs disabled and because IRQs
-> > -              * have to be disabled before ctx_lock is obtained.
-> > -              */
-> > -             list_del(&iocb->ki_list);
-> > -             iocb->ki_res.res = mangle_poll(mask);
-> > -             req->done = true;
-> > -             if (iocb->ki_eventfd && eventfd_signal_allowed()) {
-> > -                     iocb = NULL;
-> > -                     INIT_WORK(&req->work, aio_poll_put_work);
-> > -                     schedule_work(&req->work);
-> > -             }
-> > -             spin_unlock_irqrestore(&ctx->ctx_lock, flags);
-> > -             if (iocb)
-> > -                     iocb_put(iocb);
-> > -     } else {
-> > +     /* complete iocb inline */
-> > +     list_del(&iocb->ki_list);
-> > +     iocb->ki_res.res = mangle_poll(mask);
-> > +     req->done = true;
-> > +     if (iocb->ki_eventfd && eventfd_signal_allowed()) {
-> > +             iocb = NULL;
-> > +             INIT_WORK(&req->work, aio_poll_put_work);
-> >               schedule_work(&req->work);
-> >       }
-> > +     spin_unlock_irqrestore(&ctx->ctx_lock, flags);
-> > +     if (iocb)
-> > +             iocb_put(iocb);
-> > +
-> >       return 1;
-> >  }
-> >
-> > diff --git a/include/uapi/asm-generic/poll.h b/include/uapi/asm-generic/poll.h
-> > index 41b509f410bf..35b1b69af729 100644
-> > --- a/include/uapi/asm-generic/poll.h
-> > +++ b/include/uapi/asm-generic/poll.h
-> > @@ -29,7 +29,7 @@
-> >  #define POLLRDHUP       0x2000
-> >  #endif
-> >
-> > -#define POLLFREE     (__force __poll_t)0x4000        /* currently only for epoll */
-> > +#define POLLFREE     ((__force __poll_t)0x4000)
-> >
-> >  #define POLL_BUSY_LOOP       (__force __poll_t)0x8000
->
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
