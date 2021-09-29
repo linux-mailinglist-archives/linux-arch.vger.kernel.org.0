@@ -2,315 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F073641CB04
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 19:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C0341CB37
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Sep 2021 19:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345671AbhI2RYa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Sep 2021 13:24:30 -0400
-Received: from mail-wm1-f51.google.com ([209.85.128.51]:53861 "EHLO
-        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345497AbhI2RY1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Sep 2021 13:24:27 -0400
-Received: by mail-wm1-f51.google.com with SMTP id z2so2422233wmc.3;
-        Wed, 29 Sep 2021 10:22:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2UDPh4La5iwY4VW8a0ZpuzCkHbdxXf3VO7p8sK54Uxs=;
-        b=C+r4Mmh8r/X9VlgjgxRrk8Y1bo9CRKwB5BR3CyGAMLc6YHJQwEjinsqp0NBmhQ7Ai9
-         56LFjxpwz4g3XdJYrJ+OTb5TJcvsgUOWioRrQDEGfon26dzuv+Y8nYG1ctpwsrzNL+fv
-         Wj4DkfjPJFXmvfL6rqCkhJZAFxoWk4w9qPM+aAFlsHCkolDTDEfj+0JUHAPUC8tkVeKk
-         FpyDG/aw4GJZ6hkaOchRd8/ir0GmeUzGXnchEE1q8GSL3frMw9OFZU4i/SxYlBzBBL1o
-         Fxn4/XKqG6mC2+RTfmPe8nwEIsRARqs8iVnXnR/oxNFHpJMMrvrkH23jf1x6Teu5pGQ8
-         Eq6g==
-X-Gm-Message-State: AOAM530p1ztWp3lxSQYbqKCimoeie5cAtmxDby+mfUmIy5+Khhi3iJCW
-        fSTT4Lkz8JpXuyOBcryrnVM=
-X-Google-Smtp-Source: ABdhPJzOJRD8kTgcIoOlSJO+c6h1SdfYm2RATbr4K5FHw81r5UiWIq687hZBst/OMLPVeCTHb7N7TQ==
-X-Received: by 2002:a7b:c948:: with SMTP id i8mr11448019wml.193.1632936164903;
-        Wed, 29 Sep 2021 10:22:44 -0700 (PDT)
-Received: from msft-t490s.. (mob-31-159-120-132.net.vodafone.it. [31.159.120.132])
-        by smtp.gmail.com with ESMTPSA id n26sm2267502wmi.43.2021.09.29.10.22.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 10:22:44 -0700 (PDT)
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-To:     linux-riscv@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Guo Ren <guoren@kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v5 3/3] riscv: optimized memset
-Date:   Wed, 29 Sep 2021 19:22:34 +0200
-Message-Id: <20210929172234.31620-4-mcroce@linux.microsoft.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210929172234.31620-1-mcroce@linux.microsoft.com>
-References: <20210929172234.31620-1-mcroce@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S245180AbhI2RtX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Sep 2021 13:49:23 -0400
+Received: from gate.crashing.org ([63.228.1.57]:47517 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245131AbhI2RtX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 29 Sep 2021 13:49:23 -0400
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 18THfmdA001474;
+        Wed, 29 Sep 2021 12:41:48 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 18THfk9G001468;
+        Wed, 29 Sep 2021 12:41:46 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Wed, 29 Sep 2021 12:41:46 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        will@kernel.org, paulmck@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        stern@rowland.harvard.edu, parri.andrea@gmail.com,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        linux-toolchains@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
+Message-ID: <20210929174146.GF22689@gate.crashing.org>
+References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com> <87lf3f7eh6.fsf@oldenburg.str.redhat.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87lf3f7eh6.fsf@oldenburg.str.redhat.com>
+User-Agent: Mutt/1.4.2.3i
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Matteo Croce <mcroce@microsoft.com>
+Hi!
 
-The generic memset is defined as a byte at time write. This is always
-safe, but it's slower than a 4 byte or even 8 byte write.
+On Wed, Sep 29, 2021 at 02:28:37PM +0200, Florian Weimer wrote:
+> If you need a specific instruction emitted, you need a compiler
+> intrinsic or inline assembly.
 
-Write a generic memset which fills the data one byte at time until the
-destination is aligned, then fills using the largest size allowed,
-and finally fills the remaining data one byte at time.
+Not an intrinsic.  Builtins (like almost all other code) do not say
+"generate this particular machine code", they say "generate code that
+does <this>".  That is one reason why builtins are more powerful than
+inline assembler (another related reason is that they tell the compiler
+exactly what behaviour is expected).
 
-Signed-off-by: Matteo Croce <mcroce@microsoft.com>
----
- arch/riscv/include/asm/string.h |  10 +--
- arch/riscv/kernel/Makefile      |   1 -
- arch/riscv/kernel/riscv_ksyms.c |  13 ----
- arch/riscv/lib/Makefile         |   1 -
- arch/riscv/lib/memset.S         | 113 --------------------------------
- arch/riscv/lib/string.c         |  41 ++++++++++++
- 6 files changed, 44 insertions(+), 135 deletions(-)
- delete mode 100644 arch/riscv/kernel/riscv_ksyms.c
- delete mode 100644 arch/riscv/lib/memset.S
+> I don't think it's possible to piggy-back this on something else.
 
-diff --git a/arch/riscv/include/asm/string.h b/arch/riscv/include/asm/string.h
-index 25d9b9078569..90500635035a 100644
---- a/arch/riscv/include/asm/string.h
-+++ b/arch/riscv/include/asm/string.h
-@@ -6,14 +6,10 @@
- #ifndef _ASM_RISCV_STRING_H
- #define _ASM_RISCV_STRING_H
- 
--#include <linux/types.h>
--#include <linux/linkage.h>
--
--#define __HAVE_ARCH_MEMSET
--extern asmlinkage void *memset(void *, int, size_t);
--extern asmlinkage void *__memset(void *, int, size_t);
--
- #ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
-+#define __HAVE_ARCH_MEMSET
-+extern void *memset(void *s, int c, size_t count);
-+extern void *__memset(void *s, int c, size_t count);
- #define __HAVE_ARCH_MEMCPY
- extern void *memcpy(void *dest, const void *src, size_t count);
- extern void *__memcpy(void *dest, const void *src, size_t count);
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 3397ddac1a30..fecf03822435 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -31,7 +31,6 @@ obj-y	+= syscall_table.o
- obj-y	+= sys_riscv.o
- obj-y	+= time.o
- obj-y	+= traps.o
--obj-y	+= riscv_ksyms.o
- obj-y	+= stacktrace.o
- obj-y	+= cacheinfo.o
- obj-y	+= patch.o
-diff --git a/arch/riscv/kernel/riscv_ksyms.c b/arch/riscv/kernel/riscv_ksyms.c
-deleted file mode 100644
-index 361565c4db7e..000000000000
---- a/arch/riscv/kernel/riscv_ksyms.c
-+++ /dev/null
-@@ -1,13 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (C) 2017 Zihao Yu
-- */
--
--#include <linux/export.h>
--#include <linux/uaccess.h>
--
--/*
-- * Assembly functions that may be used (directly or indirectly) by modules
-- */
--EXPORT_SYMBOL(memset);
--EXPORT_SYMBOL(__memset);
-diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
-index 484f5ff7b508..e33263cc622a 100644
---- a/arch/riscv/lib/Makefile
-+++ b/arch/riscv/lib/Makefile
-@@ -1,6 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- lib-y			+= delay.o
--lib-y			+= memset.o
- lib-$(CONFIG_MMU)	+= uaccess.o
- lib-$(CONFIG_64BIT)	+= tishift.o
- lib-$(CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE) += string.o
-diff --git a/arch/riscv/lib/memset.S b/arch/riscv/lib/memset.S
-deleted file mode 100644
-index 34c5360c6705..000000000000
---- a/arch/riscv/lib/memset.S
-+++ /dev/null
-@@ -1,113 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2013 Regents of the University of California
-- */
--
--
--#include <linux/linkage.h>
--#include <asm/asm.h>
--
--/* void *memset(void *, int, size_t) */
--ENTRY(__memset)
--WEAK(memset)
--	move t0, a0  /* Preserve return value */
--
--	/* Defer to byte-oriented fill for small sizes */
--	sltiu a3, a2, 16
--	bnez a3, 4f
--
--	/*
--	 * Round to nearest XLEN-aligned address
--	 * greater than or equal to start address
--	 */
--	addi a3, t0, SZREG-1
--	andi a3, a3, ~(SZREG-1)
--	beq a3, t0, 2f  /* Skip if already aligned */
--	/* Handle initial misalignment */
--	sub a4, a3, t0
--1:
--	sb a1, 0(t0)
--	addi t0, t0, 1
--	bltu t0, a3, 1b
--	sub a2, a2, a4  /* Update count */
--
--2: /* Duff's device with 32 XLEN stores per iteration */
--	/* Broadcast value into all bytes */
--	andi a1, a1, 0xff
--	slli a3, a1, 8
--	or a1, a3, a1
--	slli a3, a1, 16
--	or a1, a3, a1
--#ifdef CONFIG_64BIT
--	slli a3, a1, 32
--	or a1, a3, a1
--#endif
--
--	/* Calculate end address */
--	andi a4, a2, ~(SZREG-1)
--	add a3, t0, a4
--
--	andi a4, a4, 31*SZREG  /* Calculate remainder */
--	beqz a4, 3f            /* Shortcut if no remainder */
--	neg a4, a4
--	addi a4, a4, 32*SZREG  /* Calculate initial offset */
--
--	/* Adjust start address with offset */
--	sub t0, t0, a4
--
--	/* Jump into loop body */
--	/* Assumes 32-bit instruction lengths */
--	la a5, 3f
--#ifdef CONFIG_64BIT
--	srli a4, a4, 1
--#endif
--	add a5, a5, a4
--	jr a5
--3:
--	REG_S a1,        0(t0)
--	REG_S a1,    SZREG(t0)
--	REG_S a1,  2*SZREG(t0)
--	REG_S a1,  3*SZREG(t0)
--	REG_S a1,  4*SZREG(t0)
--	REG_S a1,  5*SZREG(t0)
--	REG_S a1,  6*SZREG(t0)
--	REG_S a1,  7*SZREG(t0)
--	REG_S a1,  8*SZREG(t0)
--	REG_S a1,  9*SZREG(t0)
--	REG_S a1, 10*SZREG(t0)
--	REG_S a1, 11*SZREG(t0)
--	REG_S a1, 12*SZREG(t0)
--	REG_S a1, 13*SZREG(t0)
--	REG_S a1, 14*SZREG(t0)
--	REG_S a1, 15*SZREG(t0)
--	REG_S a1, 16*SZREG(t0)
--	REG_S a1, 17*SZREG(t0)
--	REG_S a1, 18*SZREG(t0)
--	REG_S a1, 19*SZREG(t0)
--	REG_S a1, 20*SZREG(t0)
--	REG_S a1, 21*SZREG(t0)
--	REG_S a1, 22*SZREG(t0)
--	REG_S a1, 23*SZREG(t0)
--	REG_S a1, 24*SZREG(t0)
--	REG_S a1, 25*SZREG(t0)
--	REG_S a1, 26*SZREG(t0)
--	REG_S a1, 27*SZREG(t0)
--	REG_S a1, 28*SZREG(t0)
--	REG_S a1, 29*SZREG(t0)
--	REG_S a1, 30*SZREG(t0)
--	REG_S a1, 31*SZREG(t0)
--	addi t0, t0, 32*SZREG
--	bltu t0, a3, 3b
--	andi a2, a2, SZREG-1  /* Update count */
--
--4:
--	/* Handle trailing misalignment */
--	beqz a2, 6f
--	add a3, t0, a2
--5:
--	sb a1, 0(t0)
--	addi t0, t0, 1
--	bltu t0, a3, 5b
--6:
--	ret
--END(__memset)
-diff --git a/arch/riscv/lib/string.c b/arch/riscv/lib/string.c
-index 4442ca5ef13c..871ffbfac0ab 100644
---- a/arch/riscv/lib/string.c
-+++ b/arch/riscv/lib/string.c
-@@ -111,3 +111,44 @@ EXPORT_SYMBOL(__memmove);
- 
- void *memmove(void *dest, const void *src, size_t count) __weak __alias(__memmove);
- EXPORT_SYMBOL(memmove);
-+
-+void *__memset(void *s, int c, size_t count)
-+{
-+	union types dest = { .as_u8 = s };
-+
-+	if (count >= MIN_THRESHOLD) {
-+		unsigned long cu = (unsigned long)c;
-+
-+		/* Compose an ulong with 'c' repeated 4/8 times */
-+#ifdef CONFIG_ARCH_HAS_FAST_MULTIPLIER
-+		cu *= 0x0101010101010101UL;
-+#else
-+		cu |= cu << 8;
-+		cu |= cu << 16;
-+		/* Suppress warning on 32 bit machines */
-+		cu |= (cu << 16) << 16;
-+#endif
-+		if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
-+			/*
-+			 * Fill the buffer one byte at time until
-+			 * the destination is word aligned.
-+			 */
-+			for (; count && dest.as_uptr & WORD_MASK; count--)
-+				*dest.as_u8++ = c;
-+		}
-+
-+		/* Copy using the largest size allowed */
-+		for (; count >= BYTES_LONG; count -= BYTES_LONG)
-+			*dest.as_ulong++ = cu;
-+	}
-+
-+	/* copy the remainder */
-+	while (count--)
-+		*dest.as_u8++ = c;
-+
-+	return s;
-+}
-+EXPORT_SYMBOL(__memset);
-+
-+void *memset(void *s, int c, size_t count) __weak __alias(__memset);
-+EXPORT_SYMBOL(memset);
--- 
-2.31.1
+Unless we get a description of what this does in term of language
+semantics (instead of generated machine code), there is no hope, even.
 
+
+Segher
