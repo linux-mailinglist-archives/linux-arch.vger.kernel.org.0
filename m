@@ -2,138 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B04541DF0F
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 18:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31AE41DF75
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 18:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350390AbhI3QcO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Sep 2021 12:32:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26966 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351270AbhI3QcH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 Sep 2021 12:32:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1633019424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u7/zMdrPeVyZNLTntHruwDpYub+H9qwtzzzSUntktcA=;
-        b=KtA1vjLn+sdHoDiIp9U80N+wzWoU16UzI9ctPdYu1NI7JyATuhgYtjUVHt83ENNgKPDPN8
-        8KV7+pvJgacC5DYhXHCadsS8lsfBNvim4lVPj5xRaG3qLw59KAsqGS5R7/vt9DosZQKLfh
-        xw3VplwDXdw7nRGGt04wxPB7kzwep+0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-505-z2r_DDwdMRWSxVzVoPhJUw-1; Thu, 30 Sep 2021 12:30:22 -0400
-X-MC-Unique: z2r_DDwdMRWSxVzVoPhJUw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3FA3A18125C0;
-        Thu, 30 Sep 2021 16:30:19 +0000 (UTC)
-Received: from localhost (unknown [10.39.195.132])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A3A2B1017E3E;
-        Thu, 30 Sep 2021 16:30:18 +0000 (UTC)
-Date:   Thu, 30 Sep 2021 17:30:17 +0100
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Sohil Mehta <sohil.mehta@intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
-Message-ID: <YVXmGTo5Uzp44QQq@stefanha-x1.localdomain>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <456bf9cf-87b8-4c3d-ac0c-7e392bcf26de@www.fastmail.com>
+        id S1352272AbhI3Qpf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Sep 2021 12:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352270AbhI3Qpf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Sep 2021 12:45:35 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD4BC06176E
+        for <linux-arch@vger.kernel.org>; Thu, 30 Sep 2021 09:43:52 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id i30so8053346vsj.13
+        for <linux-arch@vger.kernel.org>; Thu, 30 Sep 2021 09:43:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=n2bSpMqxJ0dY9BSo/Xu7zMUz7wPIVm52WMZusT6XPY8SfCnyRX2+Cx4J/Gnzj+o3xo
+         odxUeTqqtxcHRl5brxDk+RnyURke97bQbt/skWyI6k2fcwUxpXmD+NP8C5YcFztoRgC9
+         N+3WGjf71UhrCRFDTZJ0yEwkrbyKHfy/u44uq2ejKTV8WbPkXe9zw8Cu7eloAMEcrbIi
+         AlNM1PEjYzyusQS6Mor6mtV7gJObwWxYE6mZHRVS5RLuMv2L7tCTAeWjzK65542CCdju
+         XJowJ3Z6NQ/JfcybJW4WZPLrXC5doYay0QNXcTLRWZZbG/oNJNzAtZgMyxtSp+xXgnLC
+         MHrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=nFsk9YKgcD4fEJyoz7PQeE88SPNNQZ5T1BYIbJMUBQyMPRSaHpAhZwN8Lw3QTMe06H
+         3jCHNl18WtE1X+iKmCziCNo+4Odt3bCrpjrXKI7DcQPHc8AVLancKDo0glJ2KjqBp/yt
+         pWpGz/m7keW4Ops2z33KMZfFj9b6TngxlO5mpoDe0Xu9UAi5SHUSBMyk8mnrY/bbuL7j
+         slb/rL6A+HqWKRCNqyoO4c/btm+WoeJ3n8V6APqR9F7uR04ZfC8ilOEhPv9DXc9Xdf0x
+         72y45kyulcCOZy9gxl3kYuIcypFDvO1NbqcCGuhleYbW89vqv232T9YDBqGS2aKFd4Xz
+         Mixw==
+X-Gm-Message-State: AOAM531y5NPVo1v2WI9RMc7XZbULFWJbyWI12bvCuEkH6HnxiUR8X7y8
+        qSwZUJJWjMJxVb2wemeiEHOI1u0AG94qOEFwsFk=
+X-Google-Smtp-Source: ABdhPJx815blzYEOowfpzprP3ANfd6R7hC3svBhpigH+laurUCXOrgW5tXH5vIlzMyaGxjoEUfK5OLCNxPgfa2yb4yk=
+X-Received: by 2002:a67:d589:: with SMTP id m9mr281002vsj.30.1633020231510;
+ Thu, 30 Sep 2021 09:43:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IzEoHzzIxT1o87/+"
-Content-Disposition: inline
-In-Reply-To: <456bf9cf-87b8-4c3d-ac0c-7e392bcf26de@www.fastmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Received: by 2002:a59:ab2e:0:b0:22d:7f44:603a with HTTP; Thu, 30 Sep 2021
+ 09:43:51 -0700 (PDT)
+Reply-To: irenezakari24@gmail.com
+From:   Irene zakari <irenezakari88@gmail.com>
+Date:   Thu, 30 Sep 2021 09:43:51 -0700
+Message-ID: <CAFT8PFHwc-Qm9DFiyiey8SBp0_jFZ6Y6WQofETaQ9eukm+AnTA@mail.gmail.com>
+Subject: PLEASE I NEED YOUR HELP
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hello   ..
 
---IzEoHzzIxT1o87/+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+How do you do over there? I hope you are doing well?
 
-On Tue, Sep 28, 2021 at 09:31:34PM -0700, Andy Lutomirski wrote:
-> On Mon, Sep 13, 2021, at 1:01 PM, Sohil Mehta wrote:
-> > User Interrupts Introduction
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> >
-> > User Interrupts (Uintr) is a hardware technology that enables delivering
-> > interrupts directly to user space.
-> >
-> > Today, virtually all communication across privilege boundaries happens =
-by going
-> > through the kernel. These include signals, pipes, remote procedure call=
-s and
-> > hardware interrupt based notifications. User interrupts provide the fou=
-ndation
-> > for more efficient (low latency and low CPU utilization) versions of th=
-ese
-> > common operations by avoiding transitions through the kernel.
-> >
->=20
-> ...
->=20
-> I spent some time reviewing the docs (ISE) and contemplating how this all=
- fits together, and I have a high level question:
->=20
-> Can someone give an example of a realistic workload that would benefit fr=
-om SENDUIPI and precisely how it would use SENDUIPI?  Or an example of a re=
-alistic workload that would benefit from hypothetical device-initiated user=
- interrupts and how it would use them?  I'm having trouble imagining someth=
-ing that wouldn't work as well or better by simply polling, at least on DMA=
--coherent architectures like x86.
+My name is Irene. (24 years), i am single, from Gambia, the only child
+of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
+(Building Construction Company in The Gambia) also the CEO of Bernard
+Import and Export (GAMBIA).
 
-I was wondering the same thing. One thing came to mind:
+As a matter of fact my mother died when i was barely 4 years old
+according to my late father and because of the type of love he had for
+my mother made him to remain UN-married till he left the ghost..
 
-An application that wants to be *interrupted* from what it's doing
-rather than waiting until the next polling point. For example,
-applications that are CPU-intensive and have green threads. I can't name
-a real application like this though :P.
+So after the death of my father as a result of assassinate, his brother (My
+Uncle) who is the purchasing and marketing sale manager of my late
+fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
+convert all the properties and resources of my late father into his
+which i quarreled with him and it made him to lay his anger on me to
+the extent of hiring an assassins to kill me but to God be the glory i
+succeeded by making a way to Burkina faso for my dear life.
+Honestly i do live a fearful life even here in Burkina faso because of
+those Assassins coming after me .
 
-Stefan
+I would want to live and study in your country for my better future.
+because my father same blood brother wanted to force me into undecided
+marriage, just for me to leave my father home and went and live with
+another man I never know as he want to occupied all my father home
+and maybe to sold it as my father no longer alive, I'm the only child
+daughter my father born, '' but he don't know that i am not
+interesting in any of my father properties or early marriage for now,
+because i still have future to think about and to focus on my studies
+first as i was doing my first year in the University before the death
+of my father.
 
---IzEoHzzIxT1o87/+
-Content-Type: application/pgp-signature; name="signature.asc"
+Actually what I want to discuss with you is about my personal issue
+concern funds my late father deposited in a bank outside my country,
+worth $4.5 million united state dollars. i need your assistance to
+receive and invest this funds in your country.
 
------BEGIN PGP SIGNATURE-----
+Please help me, I am sincere to you and I want to be member of your
+family as well if you wouldn't mind to accept me and lead me to better
+future in your country.
 
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmFV5hkACgkQnKSrs4Gr
-c8gkYAf8DF5mZAyvdq7MYNw7V3LLjLXQA/PJX65e9s/VzX1DOImgxepjEQfAkQUT
-/IncDgMu0mkE0+jU/ZwEngFzI77d5uDzt/xV8cVHjqfE7vCy8SASNg4HFijkl7aF
-aS+vZ2XK89S28S8ocQ/d7GPE80E+IEuxjInzASwimHFCmFtW8U+ka4CmIxbsw6e1
-1ahYfTSnKrwSR2qSzW7cwU4WZFibG0TR0Lgz/oBm9dQuqu7IArWmSTNRKAQPJtqU
-Q+TtjQh/s1Gvvzq8gvdBB6/2mWVE4fUfwatayUBb3HdcUt+5/J32kT/vjeY9HSZL
-PkwYaTLC72ly4H9nhy2lYDD7XbfgFQ==
-=O0C0
------END PGP SIGNATURE-----
+All the documents the bank issue to my father during time of deposit
+is with me now.
+I already notify the bank on phone about the death of my father and
+they are surprise for the news and accept that my father is their good
+customer.
+I will be happy if this money can be invested in any business of your
+choice and it will be under your control till i finished my education,
+also I'm assuring you good relationship and I am ready to discuss the
+amount of money to give you from this money for your help.
 
---IzEoHzzIxT1o87/+--
+Therefore, I shall give you the bank contact and other necessary
+information in my next email if you will only promise me that you will
+not/never betray and disclosed this matter to anybody, because, this
+money is the only hope i have for survival on earth since I have lost
+my parents.
 
+Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
+CERTIFICATE here with me, but before I give you further information, i
+will like to know your full data
+
+1. Full Name: ........................
+2. Address: ..................
+3. Nationality: ........... Sex................
+4. Age:........... Date of Birth:................
+5. Occupation:...................
+.....
+6. Phone: ........... Fax:.........................
+7. State of Origin: .......Country:..............
+8. Occupation:...................
+................
+9. Marital status........... E-mail address's: ............
+10. Scan copy of your ID card or Driving License/Photo:............
+DECLARATION:
+
+so that i will be fully sure that i am not trusting the wrong person.
+and it will also give me the mind to send you the bank contact for you
+to communicate with them for more verification about this money. and
+to know you more better.
+
+Meanwhile, you can reach me through my pastor,his name is Pastor Paul
+any time you call, tell him that you want to speak with me because
+right now i am living in the church here in Burkina faso and i don't
+want to stay here any longer,
+send for me to speak with you his phone number is this(+226 75213646)
+
+I will stop here and i will be waiting for your reply and feel free
+ask any thing you want to know about me.
+Please help me, I would be highly appreciated
+Have nice day.
+From Irene
