@@ -2,87 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 612AE41DDDD
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 17:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD75641DDE6
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 17:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345874AbhI3Ppa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Sep 2021 11:45:30 -0400
-Received: from mengyan1223.wang ([89.208.246.23]:37122 "EHLO mengyan1223.wang"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344638AbhI3Pp3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 Sep 2021 11:45:29 -0400
-Received: from localhost.localdomain (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@mengyan1223.wang)
-        by mengyan1223.wang (Postfix) with ESMTPSA id 17F2F659C3;
-        Thu, 30 Sep 2021 11:43:42 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
-        s=mail; t=1633016626;
-        bh=FMs1Fhsw2K98QlB0rPqFFGEgdRlNdvHCn8NhtpKTEws=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=yravmq85GEczVyiyS3kw3UN/+Os3oI44etkXNZCUyWBj1JxkGv8jPUO1MWKB6VW/e
-         ba6Ld7lEMYQgXkoI63CEYMwmU06pRyRo+O32o3MrnBska6Dk71DgncIDjgtimFlUiG
-         5ybkPVFjcJbvUi4LK3RuW9ykdPQLWmCeiFC2KlO5plwKpAZK0XpCUPHmXD5ke9XMFz
-         EShRwWetuxhyWCyuGaoBtpUFoz+QrLAkp9WxhiU9LBm1Q3E4Upx75r2kIl8ojMQ3Vy
-         CgZhLCA5S/iN5hi9r7x2L2qpozMnViR+tqMmheuWgdw8uQw0SlXNU9MtkEatYWUAB0
-         B9rBoeWMRiZ2Q==
-Message-ID: <f6fc1fa8bf4decf97d76900a64fe0bc2bf25576d.camel@mengyan1223.wang>
-Subject: Re: [PATCH V4 19/22] LoongArch: Add VDSO and VSYSCALL support
-From:   Xi Ruoyao <xry111@mengyan1223.wang>
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date:   Thu, 30 Sep 2021 23:43:41 +0800
-In-Reply-To: <20210927064300.624279-20-chenhuacai@loongson.cn>
-References: <20210927064300.624279-1-chenhuacai@loongson.cn>
-         <20210927064300.624279-20-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.0 
+        id S1345907AbhI3Prz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Sep 2021 11:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345751AbhI3Prz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Sep 2021 11:47:55 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F56DC06176C
+        for <linux-arch@vger.kernel.org>; Thu, 30 Sep 2021 08:46:12 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id e16so6052001qte.13
+        for <linux-arch@vger.kernel.org>; Thu, 30 Sep 2021 08:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8d6xo5L9QevHc/0Sduv9NQkae1fLgboqRLN/cOlHL94=;
+        b=iR/rfVgiWHq5rw4NLK5OT9v5lYhcLGBGwNqvqBTHa8uM0K3LSI6Qds40sZdhqy343D
+         nKF1AalapkTkhy/ypRBVypdug7o8/xaqtmHaWv9UPFEGjb1UhHpm/4rTjAiBbtASwfKx
+         3JH/kVbQPqPEjk5/0bNv7k1/Y2BIonRHJ0vWOSQM3zvPY70Uxrv2rSgTrqGgUv6GDu7E
+         chrKKhinXiSRYk/xsds2GtV3wz6HxpGI4jq2FDoKpBIlG6t+6bi34LoQK0m5uh10NjJQ
+         5mDPrpUbvxQNLMegc4nJJFYKUu1kf5g3ZYgnxHtFO6ahoMuizo6fqj2+osS40oUSZmZK
+         mhMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8d6xo5L9QevHc/0Sduv9NQkae1fLgboqRLN/cOlHL94=;
+        b=N1YTXlAVkNfuHe7Gpc+k5v8ff/WCJr0RPfLuIgYysG+iAtkYLPhkboT4DDBf3vbns5
+         /sD1lIPK+8hZIefbjcLL0IP31rjDjWIEDRSRQY+4OQoyr6ZJiYknCcxtJ84ueNrdyaXf
+         8hyIjTg9UQmXvgajH6am2U71vB69HWPhOmdSfSWWlD86nTE6TTV3StPJ7wE2WgZ9bQZK
+         rucNpnX5HeYPrsgbaIo/IYjxL7q+5GWkpwRY76EQc1GM32y9rNvtn12SbLqXXGrOqwO8
+         tlqoeCq+oHlNRbZ9lTLIthyv/zhu2A0KCbOY2oQvtW92aXznkAniOi5b3d08tow3uihH
+         8lfg==
+X-Gm-Message-State: AOAM530nv+YnGWi6dAHU/ZumkIRmjrXFvrlCBUf4N0OA3wwGiQsYeVTU
+        vasoidMQ+WQZWFGpIIaIrtJU+kbXXmhjuCSluezN/g==
+X-Google-Smtp-Source: ABdhPJwZ3uxL8AigS1SCTssbBbBxtSyTYvRLlSFXF7X1iRF0BIcI7ZsH6TQi0ZjmX4wm1iehH5EIvAVb3aaD1X5z2aM=
+X-Received: by 2002:ac8:5ed1:: with SMTP id s17mr7389237qtx.196.1633016771378;
+ Thu, 30 Sep 2021 08:46:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20210930071143.63410-1-wangkefeng.wang@huawei.com> <20210930071143.63410-8-wangkefeng.wang@huawei.com>
+In-Reply-To: <20210930071143.63410-8-wangkefeng.wang@huawei.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 30 Sep 2021 17:45:35 +0200
+Message-ID: <CAG_fn=XD+nVgVRgj7KFsPWSuia+gZzpA3KAdqucjKodOvxSF6w@mail.gmail.com>
+Subject: Re: [PATCH v4 07/11] mm: kasan: Use is_kernel() helper
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, bpf@vger.kernel.org,
+        linux-alpha@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 2021-09-27 at 14:42 +0800, Huacai Chen wrote:
-> diff --git a/arch/loongarch/vdso/gen_vdso_offsets.sh
-> b/arch/loongarch/vdso/gen_vdso_offsets.sh
-> new file mode 100755
-> index 000000000000..7da255fea213
-> --- /dev/null
-> +++ b/arch/loongarch/vdso/gen_vdso_offsets.sh
-> @@ -0,0 +1,14 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +#
-> +# Derived from RISC-V and ARM64:
-> +# Author: Will Deacon <will.deacon@arm.com>
-> +#
-> +# Match symbols in the DSO that look like VDSO_*; produce a header
-> file
-> +# of constant offsets into the shared object.
-> +#
-> +
-> +LC_ALL=C
+On Thu, Sep 30, 2021 at 9:09 AM Kefeng Wang <wangkefeng.wang@huawei.com> wr=
+ote:
+>
+> Directly use is_kernel() helper in kernel_or_module_addr().
+>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Alexander Potapenko <glider@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 
-I'm wondering whether this line is really useful... There is no "export"
-here so the variable won't be passed to the environment of the sed
-command below.
+> ---
+>  mm/kasan/report.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index 3239fd8f8747..1c955e1c98d5 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -226,7 +226,7 @@ static void describe_object(struct kmem_cache *cache,=
+ void *object,
+>
+>  static inline bool kernel_or_module_addr(const void *addr)
+>  {
+> -       if (addr >=3D (void *)_stext && addr < (void *)_end)
+> +       if (is_kernel((unsigned long)addr))
+>                 return true;
+>         if (is_module_address((unsigned long)addr))
+>                 return true;
+> --
+> 2.26.2
+>
 
-> +sed -n -e 's/^00*/0/' -e \
-> +'s/^\([0-9a-fA-F]*\) . VDSO_\([a-zA-Z0-9_]*\)$/\#define
-> vdso_offset_\2\t0x\1/p'
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
