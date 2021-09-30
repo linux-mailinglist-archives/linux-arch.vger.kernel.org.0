@@ -2,173 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA4241E0AD
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 20:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC87B41E103
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 20:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353143AbhI3SKo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Sep 2021 14:10:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54640 "EHLO mail.kernel.org"
+        id S1349792AbhI3SWd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Sep 2021 14:22:33 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:43480 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353049AbhI3SKn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 Sep 2021 14:10:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 07DE461164;
-        Thu, 30 Sep 2021 18:08:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633025340;
-        bh=UPHwmzSJnwSsQoJLImFPmf4NodVlf1O6Qw5Hs01UYqQ=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=hC8Ng3dlwvmrP31QVc+9GLMXg7wS1lgS0k+KPnsGJPlEy+F0NYiocgYWcKJBA4ZkY
-         eF3jc5FwTNBegmccHIcdJj3ENLMr4bMFvrbkQgAhdIZEwhJnGedkOOlvCOCX111lnD
-         8OV/MfIKFNfzSEz8VzMv8VcdI4GZyX7RcPz5LUCvK7CpQrRfOfkHEy7GFFjPelIKdk
-         Zaeo1zwltgL4+Ajcv2m7Bg0m7BpblzJwBPB662ViK2whPCkEbfL2+da5T/liGAcfh6
-         XxCCgd56QqAjORyDFa4gNeiTnztdZXxnjnund73gwlfS/6O11Jjsafqhd80lrol2CB
-         Ld2WqWgPh1TrQ==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 20DA227C0069;
-        Thu, 30 Sep 2021 14:08:58 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute6.internal (MEProxy); Thu, 30 Sep 2021 14:08:58 -0400
-X-ME-Sender: <xms:OP1VYZuyzp6dXkXnWR2Z2UXrOqrsB6s6wIiH8mjCxabMFbjlFTqACw>
-    <xme:OP1VYSdqU6u1Kr4MEIUjgc5ejIx4YKEqqrLdtZeIydp1jG8EeCJ3hnndqC5KXmqAA
-    pBj7e5bn9l3MTzpcl8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekgedguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedvleehjeejvefhuddtgeegffdtjedtffegveethedvgfejieev
-    ieeufeevuedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:OP1VYcyUN4l72fLEcAgjsVuN3ALE1Ra987UgARcTwQb4JPOYERUnZA>
-    <xmx:OP1VYQMPTbWWilBqfNdZkecL2Z5y9dDp9LeoPfDV_PVlfDWc5j4-Yw>
-    <xmx:OP1VYZ_aUxo2qNadv6a_JbcvclctcFCWXU8RfL8BCwtqJw6SFJACIg>
-    <xmx:Ov1VYZ95M-qUafSQ-D-N7VbNN_YvGYuZoJhQo2ynqBXpqK-ckdbGzW2n7-g>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BA6F621E0063; Thu, 30 Sep 2021 14:08:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1322-g921842b88a-fm-20210929.001-g921842b8
-Mime-Version: 1.0
-Message-Id: <fd54f257-fa02-4ec3-a81b-b5e60f24bf94@www.fastmail.com>
-In-Reply-To: <c6e83d0e-6551-4e16-0822-0abbc4d656c4@intel.com>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-12-sohil.mehta@intel.com>
- <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
- <c6e83d0e-6551-4e16-0822-0abbc4d656c4@intel.com>
-Date:   Thu, 30 Sep 2021 11:08:35 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Sohil Mehta" <sohil.mehta@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Cc:     "Tony Luck" <tony.luck@intel.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, "Jens Axboe" <axboe@kernel.dk>,
-        "Christian Brauner" <christian@brauner.io>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Shuah Khan" <shuah@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Raj Ashok" <ashok.raj@intel.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        "Gayatri Kammela" <gayatri.kammela@intel.com>,
-        "Zeng Guang" <guang.zeng@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Randy E Witt" <randy.e.witt@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Ramesh Thomas" <ramesh.thomas@intel.com>,
-        "Linux API" <linux-api@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S1351282AbhI3SW0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 30 Sep 2021 14:22:26 -0400
+Received: from zn.tnic (p200300ec2f0e160042ff9e72dd33ffc9.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:1600:42ff:9e72:dd33:ffc9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BDC561EC052C;
+        Thu, 30 Sep 2021 20:20:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1633026040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=FXyOq/QMBX4m5TO7R9gCBXGs2SQRIs7nKHlxFhhRzA8=;
+        b=eT+8YEfPrmSWLKeBe4sPaMbSsDltmaGjWcspmyrqCwnOuzTm4K1dChyrOJCGMyrAYnVUfh
+        r6u0gvWL7KLGCNsLaxM78DtrUnzdqnkLk+spjkiE7y2TQKD5JVcs/lmlsUbl7vAWpMXOUa
+        YtkoYm471zCc5pj5k+hmgCwx0wd5OYs=
+Date:   Thu, 30 Sep 2021 20:20:37 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        davem@davemloft.net, kuba@kernel.org, gregkh@linuxfoundation.org,
+        arnd@arndb.de, brijesh.singh@amd.com, jroedel@suse.de,
+        Tianyu.Lan@microsoft.com, thomas.lendacky@amd.com,
+        pgonda@google.com, akpm@linux-foundation.org, rppt@kernel.org,
+        kirill.shutemov@linux.intel.com, saravanand@fb.com,
+        aneesh.kumar@linux.ibm.com, rientjes@google.com, tj@kernel.org,
+        michael.h.kelley@microsoft.com, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com,
+        konrad.wilk@oracle.com, hch@lst.de, robin.murphy@arm.com,
+        joro@8bytes.org, parri.andrea@gmail.com, dave.hansen@intel.com
+Subject: Re: [PATCH V6 5/8] x86/hyperv: Add Write/Read MSR registers via ghcb
+ page
+Message-ID: <YVX/9Xxxgy5D/Cvo@zn.tnic>
+References: <20210930130545.1210298-1-ltykernel@gmail.com>
+ <20210930130545.1210298-6-ltykernel@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210930130545.1210298-6-ltykernel@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 28, 2021, at 9:56 PM, Sohil Mehta wrote:
-> On 9/28/2021 8:30 PM, Andy Lutomirski wrote:
->> On Mon, Sep 13, 2021, at 1:01 PM, Sohil Mehta wrote:
->>> Add a new system call to allow applications to block in the kernel a=
-nd
->>> wait for user interrupts.
->>>
->> ...
->>
->>> When the application makes this syscall the notification vector is
->>> switched to a new kernel vector. Any new SENDUIPI will invoke the ke=
-rnel
->>> interrupt which is then used to wake up the process.
->> Any new SENDUIPI that happens to hit the target CPU's ucode at a time=
- when the kernel vector is enabled will deliver the interrupt.  Any new =
-SENDUIPI that happens to hit the target CPU's ucode at a time when a dif=
-ferent UIPI-using task is running will *not* deliver the interrupt, unle=
-ss I'm missing some magic.  Which means that wakeups will be missed, whi=
-ch I think makes this whole idea a nonstarter.
->>
->> Am I missing something?
->
->
-> The current kernel implementation reserves 2 notification vectors (NV)=20
-> for the 2 states of a thread (running vs blocked).
->
-> NV-1 =E2=80=93 used only for tasks that are running. (results in a use=
-r=20
-> interrupt or a spurious kernel interrupt)
->
-> NV-2 =E2=80=93 used only for a tasks that are blocked in the kernel. (=
-always=20
-> results in a kernel interrupt)
->
-> The UPID.UINV bits are switched between NV-1 and NV-2 based on the sta=
-te=20
-> of the task.
+On Thu, Sep 30, 2021 at 09:05:41AM -0400, Tianyu Lan wrote:
+> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+> index 9f90f460a28c..dd7f37de640b 100644
+> --- a/arch/x86/kernel/sev-shared.c
+> +++ b/arch/x86/kernel/sev-shared.c
+> @@ -94,10 +94,9 @@ static void vc_finish_insn(struct es_em_ctxt *ctxt)
+>  	ctxt->regs->ip += ctxt->insn.length;
+>  }
+>  
+> -static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+> -					  struct es_em_ctxt *ctxt,
+> -					  u64 exit_code, u64 exit_info_1,
+> -					  u64 exit_info_2)
+> +enum es_result sev_es_ghcb_hv_call_simple(struct ghcb *ghcb,
+> +				   u64 exit_code, u64 exit_info_1,
+> +				   u64 exit_info_2)
 
-Aha, cute.  So NV-1 is only sent if the target is directly paying attent=
-ion and, assuming all the atomics are done right, NV-2 will be sent for =
-tasks that are asleep.
+Align arguments on the opening brace.
 
-Logically, I think these are the possible states for a receiving task:
+Also, there's nothing "simple" about it - what you've carved out does
+the actual HV call and the trailing part is verifying the HV info. So
+that function should be called
 
-1. Running.  SENDUIPI will actually deliver the event directly (or not i=
-f uintr is masked).  If the task just stopped running and the atomics ar=
-e right, then the schedule-out code can, I think, notice.
+__sev_es_ghcb_hv_call()
 
-2. Not running, but either runnable or not currently waiting for uintr (=
-e.g. blocked in an unrelated syscall).  This is straightforward -- no IP=
-I or other action is needed other than setting the uintr-pending bit.
+and the outer one without the "__".
 
-3. Blocked and waiting for uintr.  For this to work right, anyone trying=
- to send with SENDUIPI (or maybe a vdso or similar clever wrapper around=
- it) needs to result in either a fault or an IPI so the kernel can proce=
-ss the wakeup.
+>  {
+>  	enum es_result ret;
+>  
+> @@ -109,29 +108,45 @@ static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+>  	ghcb_set_sw_exit_info_1(ghcb, exit_info_1);
+>  	ghcb_set_sw_exit_info_2(ghcb, exit_info_2);
+>  
+> -	sev_es_wr_ghcb_msr(__pa(ghcb));
+>  	VMGEXIT();
+>  
+> -	if ((ghcb->save.sw_exit_info_1 & 0xffffffff) == 1) {
+> -		u64 info = ghcb->save.sw_exit_info_2;
+> -		unsigned long v;
+> -
+> -		info = ghcb->save.sw_exit_info_2;
+> -		v = info & SVM_EVTINJ_VEC_MASK;
+> -
+> -		/* Check if exception information from hypervisor is sane. */
+> -		if ((info & SVM_EVTINJ_VALID) &&
+> -		    ((v == X86_TRAP_GP) || (v == X86_TRAP_UD)) &&
+> -		    ((info & SVM_EVTINJ_TYPE_MASK) == SVM_EVTINJ_TYPE_EXEPT)) {
+> -			ctxt->fi.vector = v;
+> -			if (info & SVM_EVTINJ_VALID_ERR)
+> -				ctxt->fi.error_code = info >> 32;
+> -			ret = ES_EXCEPTION;
+> -		} else {
+> -			ret = ES_VMM_ERROR;
+> -		}
+> -	} else {
+> +	if ((ghcb->save.sw_exit_info_1 & 0xffffffff) == 1)
+> +		ret = ES_VMM_ERROR;
+> +	else
+>  		ret = ES_OK;
+> +
+> +	return ret;
+> +}
+> +
+> +static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+> +				   struct es_em_ctxt *ctxt,
+> +				   u64 exit_code, u64 exit_info_1,
+> +				   u64 exit_info_2)
 
-(Note that, depending on how fancy we get with file descriptors and poll=
-ing, we need to watch out for the running-and-also-waiting-for-kernel-no=
-tification state.  That one will never work right.)
 
-3 is the nasty case, and your patch makes it work with this NV-2 trick. =
- The trick is a bit gross for a couple reasons.  First, it conveys no us=
-eful information to the kernel except that an unknown task did SENDUIPI =
-and maybe that the target was most recently on a given CPU.  So a big li=
-st search is needed.  Also, it hits an essentially arbitrary and possibl=
-y completely innocent victim CPU and task, and people doing any sort of =
-task isolation workload will strongly dislike this.  For some of those u=
-sers, "strongly" may mean "treat system as completely failed, fail over =
-to something else and call expensive tech support."  So we can't do that.
+Align arguments on the opening brace.
 
-I think we have three choices:
+> +{
+> +	unsigned long v;
+> +	enum es_result ret;
+> +	u64 info;
+> +
+> +	sev_es_wr_ghcb_msr(__pa(ghcb));
+> +
+> +	ret = sev_es_ghcb_hv_call_simple(ghcb, exit_code, exit_info_1,
+> +					 exit_info_2);
+> +	if (ret == ES_OK)
+> +		return ret;
+> +
+> +	info = ghcb->save.sw_exit_info_2;
+> +	v = info & SVM_EVTINJ_VEC_MASK;
+> +
+> +	/* Check if exception information from hypervisor is sane. */
+> +	if ((info & SVM_EVTINJ_VALID) &&
+> +	    ((v == X86_TRAP_GP) || (v == X86_TRAP_UD)) &&
+> +	    ((info & SVM_EVTINJ_TYPE_MASK) == SVM_EVTINJ_TYPE_EXEPT)) {
+> +		ctxt->fi.vector = v;
+> +		if (info & SVM_EVTINJ_VALID_ERR)
+> +			ctxt->fi.error_code = info >> 32;
+> +		ret = ES_EXCEPTION;
+> +	} else {
+> +		ret = ES_VMM_ERROR;
 
-Use a fancy wrapper around SENDUIPI.  This is probably a bad idea.
+Why do you need to assign ES_VMM_ERROR here again when you return it
+above?
 
-Treat the NV-2 as a real interrupt and honor affinity settings.  This wi=
-ll be annoying and slow, I think, if it's even workable at all.
+IOW, that else branch is not really needed.
 
-Handle this case with faults instead of interrupts.  We could set a rese=
-rved bit in UPID so that SENDUIPI results in #GP, decode it, and process=
- it.  This puts the onus on the actual task causing trouble, which is ni=
-ce, and it lets us find the UPID and target directly instead of walking =
-all of them.  I don't know how well it would play with hypothetical futu=
-re hardware-initiated uintrs, though.
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
