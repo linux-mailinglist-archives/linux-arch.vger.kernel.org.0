@@ -2,121 +2,212 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD75641DDE6
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 17:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D689941DEFC
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 18:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345907AbhI3Prz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Sep 2021 11:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345751AbhI3Prz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Sep 2021 11:47:55 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F56DC06176C
-        for <linux-arch@vger.kernel.org>; Thu, 30 Sep 2021 08:46:12 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id e16so6052001qte.13
-        for <linux-arch@vger.kernel.org>; Thu, 30 Sep 2021 08:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8d6xo5L9QevHc/0Sduv9NQkae1fLgboqRLN/cOlHL94=;
-        b=iR/rfVgiWHq5rw4NLK5OT9v5lYhcLGBGwNqvqBTHa8uM0K3LSI6Qds40sZdhqy343D
-         nKF1AalapkTkhy/ypRBVypdug7o8/xaqtmHaWv9UPFEGjb1UhHpm/4rTjAiBbtASwfKx
-         3JH/kVbQPqPEjk5/0bNv7k1/Y2BIonRHJ0vWOSQM3zvPY70Uxrv2rSgTrqGgUv6GDu7E
-         chrKKhinXiSRYk/xsds2GtV3wz6HxpGI4jq2FDoKpBIlG6t+6bi34LoQK0m5uh10NjJQ
-         5mDPrpUbvxQNLMegc4nJJFYKUu1kf5g3ZYgnxHtFO6ahoMuizo6fqj2+osS40oUSZmZK
-         mhMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8d6xo5L9QevHc/0Sduv9NQkae1fLgboqRLN/cOlHL94=;
-        b=N1YTXlAVkNfuHe7Gpc+k5v8ff/WCJr0RPfLuIgYysG+iAtkYLPhkboT4DDBf3vbns5
-         /sD1lIPK+8hZIefbjcLL0IP31rjDjWIEDRSRQY+4OQoyr6ZJiYknCcxtJ84ueNrdyaXf
-         8hyIjTg9UQmXvgajH6am2U71vB69HWPhOmdSfSWWlD86nTE6TTV3StPJ7wE2WgZ9bQZK
-         rucNpnX5HeYPrsgbaIo/IYjxL7q+5GWkpwRY76EQc1GM32y9rNvtn12SbLqXXGrOqwO8
-         tlqoeCq+oHlNRbZ9lTLIthyv/zhu2A0KCbOY2oQvtW92aXznkAniOi5b3d08tow3uihH
-         8lfg==
-X-Gm-Message-State: AOAM530nv+YnGWi6dAHU/ZumkIRmjrXFvrlCBUf4N0OA3wwGiQsYeVTU
-        vasoidMQ+WQZWFGpIIaIrtJU+kbXXmhjuCSluezN/g==
-X-Google-Smtp-Source: ABdhPJwZ3uxL8AigS1SCTssbBbBxtSyTYvRLlSFXF7X1iRF0BIcI7ZsH6TQi0ZjmX4wm1iehH5EIvAVb3aaD1X5z2aM=
-X-Received: by 2002:ac8:5ed1:: with SMTP id s17mr7389237qtx.196.1633016771378;
- Thu, 30 Sep 2021 08:46:11 -0700 (PDT)
+        id S1350828AbhI3Q2b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Sep 2021 12:28:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52335 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350903AbhI3Q2b (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 30 Sep 2021 12:28:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633019208;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8PISp8iVa05eQ0nPoH/bRhmYC2DUIpy9ROZ0Fj+fBBY=;
+        b=Ncl7FmhqvoZGFcNlxr3r6omEUv9/KcNCiaygtQ3oaeUtmMQI7+WCzb5vYm0FDpa8sNwzfm
+        OUf4ueP6ihsq8CpUUyqPwHmfcQcy+HKWmKfhAfhBcZlOg5CvCSxgiBvUMp7SgM9gZm3EWd
+        1xLDmBPHYQrOlasLAL/Zfz9EFo81dbY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-308-g76yGbzRPzCK8PZNQzH-fA-1; Thu, 30 Sep 2021 12:26:46 -0400
+X-MC-Unique: g76yGbzRPzCK8PZNQzH-fA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D68F835DEE;
+        Thu, 30 Sep 2021 16:26:43 +0000 (UTC)
+Received: from localhost (unknown [10.39.195.132])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 57C985F4E2;
+        Thu, 30 Sep 2021 16:26:41 +0000 (UTC)
+Date:   Thu, 30 Sep 2021 17:26:40 +0100
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Sohil Mehta <sohil.mehta@intel.com>
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
+Message-ID: <YVXlQIt/oWQlIupu@stefanha-x1.localdomain>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
 MIME-Version: 1.0
-References: <20210930071143.63410-1-wangkefeng.wang@huawei.com> <20210930071143.63410-8-wangkefeng.wang@huawei.com>
-In-Reply-To: <20210930071143.63410-8-wangkefeng.wang@huawei.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 30 Sep 2021 17:45:35 +0200
-Message-ID: <CAG_fn=XD+nVgVRgj7KFsPWSuia+gZzpA3KAdqucjKodOvxSF6w@mail.gmail.com>
-Subject: Re: [PATCH v4 07/11] mm: kasan: Use is_kernel() helper
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, bpf@vger.kernel.org,
-        linux-alpha@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="i9X2Z49tWwf/3JF/"
+Content-Disposition: inline
+In-Reply-To: <20210913200132.3396598-1-sohil.mehta@intel.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 9:09 AM Kefeng Wang <wangkefeng.wang@huawei.com> wr=
-ote:
->
-> Directly use is_kernel() helper in kernel_or_module_addr().
->
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
 
-> ---
->  mm/kasan/report.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> index 3239fd8f8747..1c955e1c98d5 100644
-> --- a/mm/kasan/report.c
-> +++ b/mm/kasan/report.c
-> @@ -226,7 +226,7 @@ static void describe_object(struct kmem_cache *cache,=
- void *object,
->
->  static inline bool kernel_or_module_addr(const void *addr)
->  {
-> -       if (addr >=3D (void *)_stext && addr < (void *)_end)
-> +       if (is_kernel((unsigned long)addr))
->                 return true;
->         if (is_module_address((unsigned long)addr))
->                 return true;
-> --
-> 2.26.2
->
+--i9X2Z49tWwf/3JF/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Sep 13, 2021 at 01:01:19PM -0700, Sohil Mehta wrote:
+> User Interrupts Introduction
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+>=20
+> User Interrupts (Uintr) is a hardware technology that enables delivering
+> interrupts directly to user space.
+>=20
+> Today, virtually all communication across privilege boundaries happens by=
+ going
+> through the kernel. These include signals, pipes, remote procedure calls =
+and
+> hardware interrupt based notifications. User interrupts provide the found=
+ation
+> for more efficient (low latency and low CPU utilization) versions of these
+> common operations by avoiding transitions through the kernel.
+>=20
+> In the User Interrupts hardware architecture, a receiver is always expect=
+ed to
+> be a user space task. However, a user interrupt can be sent by another us=
+er
+> space task, kernel or an external source (like a device).
+>=20
+> In addition to the general infrastructure to receive user interrupts, this
+> series introduces a single source: interrupts from another user task.  Th=
+ese
+> are referred to as User IPIs.
+>=20
+> The first implementation of User IPIs will be in the Intel processor code=
+-named
+> Sapphire Rapids. Refer Chapter 11 of the Intel Architecture instruction s=
+et
+> extensions for details of the hardware architecture [1].
+>=20
+> Series-reviewed-by: Tony Luck <tony.luck@intel.com>
+>=20
+> Main goals of this RFC
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> - Introduce this upcoming technology to the community.
+> This cover letter includes a hardware architecture summary along with the
+> software architecture and kernel design choices. This post is a bit long =
+as a
+> result. Hopefully, it helps answer more questions than it creates :) I am=
+ also
+> planning to talk about User Interrupts next week at the LPC Kernel summit.
+>=20
+> - Discuss potential use cases.
+> We are starting to look at actual usages and libraries (like libevent[2] =
+and
+> liburing[3]) that can take advantage of this technology. Unfortunately, we
+> don't have much to share on this right now. We need some help from the
+> community to identify usages that can benefit from this. We would like to=
+ make
+> sure the proposed APIs work for the eventual consumers.
+>=20
+> - Get early feedback on the software architecture.
+> We are hoping to get some feedback on the direction of overall software
+> architecture - starting with User IPI, extending it for kernel-to-user
+> interrupt notifications and external interrupts in the future.=20
+>=20
+> - Discuss some of the main architecture opens.
+> There is lot of work that still needs to happen to enable this technology=
+=2E We
+> are looking for some input on future patches that would be of interest. H=
+ere
+> are some of the big opens that we are looking to resolve.
+> * Should Uintr interrupt all blocking system calls like sleep(), read(),
+>   poll(), etc? If so, should we implement an SA_RESTART type of mechanism
+>   similar to signals? - Refer Blocking for interrupts section below.
+>=20
+> * Should the User Interrupt Target table (UITT) be shared between threads=
+ of a
+>   multi-threaded application or maybe even across processes? - Refer Shar=
+ing
+>   the UITT section below.
+>=20
+> Why care about this? - Micro benchmark performance
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> There is a ~9x or higher performance improvement using User IPI over othe=
+r IPC
+> mechanisms for event signaling.
+>=20
+> Below is the average normalized latency for a 1M ping-pong IPC notificati=
+ons
+> with message size=3D1.
+>=20
+> +------------+-------------------------+
+> | IPC type   |   Relative Latency      |
+> |            |(normalized to User IPI) |
+> +------------+-------------------------+
+> | User IPI   |                     1.0 |
+> | Signal     |                    14.8 |
+> | Eventfd    |                     9.7 |
 
---=20
-Alexander Potapenko
-Software Engineer
+Is this the bi-directional eventfd benchmark?
+https://github.com/intel/uintr-ipc-bench/blob/linux-rfc-v1/source/eventfd/e=
+ventfd-bi.c
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+Two things stand out:
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+1. The server and client threads are racing on the same eventfd.
+   Eventfds aren't bi-directional! The eventfd_wait() function has code
+   to write the value back, which is a waste of CPU cycles and hinders
+   progress. I've never seen eventfd used this way in real applications.
+   Can you use two separate eventfds?
+
+2. The fd is in blocking mode and the task may be descheduled, so we're
+   measuring eventfd read/write latency plus scheduler/context-switch
+   latency. A fairer comparison against user interrupts would be to busy
+   wait on a non-blocking fd so the scheduler/context-switch latency is
+   mostly avoided. After all, the uintrfd-bi.c benchmark does this in
+   uintrfd_wait():
+
+     // Keep spinning until the interrupt is received
+     while (!uintr_received[token]);
+
+--i9X2Z49tWwf/3JF/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmFV5UAACgkQnKSrs4Gr
+c8hf0wgAm6bnfUmQ8qskTYEGJX82TAe5nbxR5p9nO/xZtesrjT3IUeVFHKuylsNr
+eItzDKlRBJlncB1z4cLXkKhT2+ARj4zN88mJ0qXZKIZpravgmW7A9E8EgOeFOixA
+Vkxo6220auDhTeLLCyfg76/5mtW/Kb6Taj1wfc3WZQxZeb9exv9R1LGRV8NzsipE
+FCuKTyzjhdVtkFfS9w24/SK6z3b9rTyDHcVENET/LFHRfax7Tona3+bsWGrhH/cB
+ArwCJ4ziT8ZAgoK0rbuxCj0+PT2ZM2uXF3ctsjk+ljZC6yUAIxZJGS7siboRUIjH
+icdl/RoAJ4wqNTJRBciAqv2rRRkpxg==
+=M4lD
+-----END PGP SIGNATURE-----
+
+--i9X2Z49tWwf/3JF/--
+
