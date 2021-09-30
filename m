@@ -2,449 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 626F141E25A
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 21:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7775F41E399
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 00:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343520AbhI3Tpj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Sep 2021 15:45:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58206 "EHLO mail.kernel.org"
+        id S245636AbhI3WDv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Sep 2021 18:03:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55350 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231637AbhI3Tpe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 Sep 2021 15:45:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E416F619E0;
-        Thu, 30 Sep 2021 19:43:50 +0000 (UTC)
+        id S229644AbhI3WDv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 30 Sep 2021 18:03:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E349619F5;
+        Thu, 30 Sep 2021 22:02:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633031031;
-        bh=KOFRWme1rbqxtm5iJvA82taQU76or3dW9FLoHN55pdY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Ol+A9pUz3l5AU1GQ3PyMi2U313MoAs3zWBiLq+zqXGVl+iAUIv/DPWrq0CyVySjlr
-         AdDYHHN5B0GzhDvq2AO2lY7uDeqEVxx29uYBY/iwF6HOj17exGcOgdQctFC2Tr+RAw
-         YubogjCJPF0hNH23DUdIWNoaHGmWaWjA3wc0V6Ig8I1IjA4x3GH1JLmqJwRFgiLlvw
-         Fm4euTVrG1Xr7HJdvpDx5PQSrVwmpnEZ/65eIJETbWtuzidqFKjdXhMMIXTh5Wu1V0
-         Doy3lwv0r8sOqzTR9qg3ivAXedX8qzkee/mnrqg+h7CkAMWpMvRz/92skytL88HPPO
-         JSotGWISDG9xw==
-Subject: Re: [PATCH v5 1/3] riscv: optimized memcpy
-To:     Matteo Croce <mcroce@linux.microsoft.com>,
-        Guo Ren <guoren@kernel.org>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>
-References: <20210929172234.31620-1-mcroce@linux.microsoft.com>
- <20210929172234.31620-2-mcroce@linux.microsoft.com>
- <CAJF2gTRSVeUOwmaUcpMJL+jOofvX5iWLRLCfMajQcut_T409qA@mail.gmail.com>
- <CAFnufp1wHVY-yoUUDxT1mhv8HV=cmHZSwMP+8r-2CzNAYEn4DQ@mail.gmail.com>
-From:   Vineet Gupta <vgupta@kernel.org>
-Message-ID: <a9ce9ea2-9e5d-0e56-d980-5dedd087f62d@kernel.org>
-Date:   Thu, 30 Sep 2021 12:43:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <CAFnufp1wHVY-yoUUDxT1mhv8HV=cmHZSwMP+8r-2CzNAYEn4DQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        s=k20201202; t=1633039328;
+        bh=2lX2HS9p7h6jVhzTp+A/c8lOWnTkxK3BWpjUhjVAspk=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=DoX0OvxqWP+fcmhRSZwVxN4k+1r5YBC1wRi8pniTKlxH3tACBGX4+E1i+yVjntK4b
+         0iWtOlCOdWHpEAn3J3bL3IlchzExStZ5E2auAtQpd7bF8WyG8bw7F2s0CP5APPTDTo
+         0m3wwZ4U+BrL5+4//yR5l1VxJDd8Ti3ELWDMrfuGilQP4e0dGIJnOGwzhlTY69oB13
+         GKVmw4+PEamDDsv1AIqh0mnH4w1g+7W4XlKyD2Nhyfyj0WgzXCXQ4sPK5MOl1pEJmZ
+         18m+YIc09tm+G4oVB3Sbgh3Q3juJMrICckMfzuRVUFhaCWVruZDmxzvFPgnCsmIQnl
+         GvnUP3JDGUo6A==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 7EFF227C0054;
+        Thu, 30 Sep 2021 18:02:05 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute6.internal (MEProxy); Thu, 30 Sep 2021 18:02:05 -0400
+X-ME-Sender: <xms:3DNWYaN6K1HaFgb_J05zGYyqVXqKvabwgebyr9hUC3zkxxmR5abd0A>
+    <xme:3DNWYY_F60-VbYshuls7MAekehK87YHGHNlkmGeWnPnYRdEN-weebXQPy2fnBJ6Jy
+    6vsNvRtJcudxCxPADI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekhedgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdelheejjeevhfdutdeggefftdejtdffgeevteehvdfgjeeiveei
+    ueefveeuvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:3DNWYRTwFfTAJpG4EY22PYhz4Ert7EDfbqqBHhP062OWBRy-DPhS7A>
+    <xmx:3DNWYaucXJL1-5aX6DTXwUEX22GUFqM4kXWPATyv0eLqtlXK-NbrDA>
+    <xmx:3DNWYScbGHpLO9rw9OLb4tG1UdbOtsxmmxfSlE4BVR-pq3EMMKSTCQ>
+    <xmx:3TNWYQepZXGaGAmyFThUoEUwUCXJSZAnoNPDtfxLIvGgtvb2FSw7GHDGSlc>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 689F621E0062; Thu, 30 Sep 2021 18:02:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1322-g921842b88a-fm-20210929.001-g921842b8
+Mime-Version: 1.0
+Message-Id: <b537a890-4b9f-462e-8c17-5c7aa9b60138@www.fastmail.com>
+In-Reply-To: <877dex7tgj.ffs@tglx>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-12-sohil.mehta@intel.com>
+ <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
+ <c6e83d0e-6551-4e16-0822-0abbc4d656c4@intel.com>
+ <fd54f257-fa02-4ec3-a81b-b5e60f24bf94@www.fastmail.com> <877dex7tgj.ffs@tglx>
+Date:   Thu, 30 Sep 2021 15:01:44 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Sohil Mehta" <sohil.mehta@intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Cc:     "Tony Luck" <tony.luck@intel.com>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, "Jens Axboe" <axboe@kernel.dk>,
+        "Christian Brauner" <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Shuah Khan" <shuah@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Raj Ashok" <ashok.raj@intel.com>,
+        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
+        "Gayatri Kammela" <gayatri.kammela@intel.com>,
+        "Zeng Guang" <guang.zeng@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Randy E Witt" <randy.e.witt@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Ramesh Thomas" <ramesh.thomas@intel.com>,
+        "Linux API" <linux-api@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/29/21 6:36 PM, Matteo Croce wrote:
-> On Thu, Sep 30, 2021 at 3:25 AM Guo Ren <guoren@kernel.org> wrote:
->>
->> On Thu, Sep 30, 2021 at 1:22 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
->>>
->>> From: Matteo Croce <mcroce@microsoft.com>
->>>
->>> Write a C version of memcpy() which uses the biggest data size allowed,
->>> without generating unaligned accesses.
->>>
->>> The procedure is made of three steps:
->>> First copy data one byte at time until the destination buffer is aligned
->>> to a long boundary.
->>> Then copy the data one long at time shifting the current and the next u8
->>> to compose a long at every cycle.
->>> Finally, copy the remainder one byte at time.
->>>
->>> On a BeagleV, the TCP RX throughput increased by 45%:
->>>
->>> before:
->>>
->>> $ iperf3 -c beaglev
->>> Connecting to host beaglev, port 5201
->>> [  5] local 192.168.85.6 port 44840 connected to 192.168.85.48 port 5201
->>> [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
->>> [  5]   0.00-1.00   sec  76.4 MBytes   641 Mbits/sec   27    624 KBytes
->>> [  5]   1.00-2.00   sec  72.5 MBytes   608 Mbits/sec    0    708 KBytes
->>> [  5]   2.00-3.00   sec  73.8 MBytes   619 Mbits/sec   10    451 KBytes
->>> [  5]   3.00-4.00   sec  72.5 MBytes   608 Mbits/sec    0    564 KBytes
->>> [  5]   4.00-5.00   sec  73.8 MBytes   619 Mbits/sec    0    658 KBytes
->>> [  5]   5.00-6.00   sec  73.8 MBytes   619 Mbits/sec   14    522 KBytes
->>> [  5]   6.00-7.00   sec  73.8 MBytes   619 Mbits/sec    0    621 KBytes
->>> [  5]   7.00-8.00   sec  72.5 MBytes   608 Mbits/sec    0    706 KBytes
->>> [  5]   8.00-9.00   sec  73.8 MBytes   619 Mbits/sec   20    580 KBytes
->>> [  5]   9.00-10.00  sec  73.8 MBytes   619 Mbits/sec    0    672 KBytes
->>> - - - - - - - - - - - - - - - - - - - - - - - - -
->>> [ ID] Interval           Transfer     Bitrate         Retr
->>> [  5]   0.00-10.00  sec   736 MBytes   618 Mbits/sec   71             sender
->>> [  5]   0.00-10.01  sec   733 MBytes   615 Mbits/sec                  receiver
->>>
->>> after:
->>>
->>> $ iperf3 -c beaglev
->>> Connecting to host beaglev, port 5201
->>> [  5] local 192.168.85.6 port 44864 connected to 192.168.85.48 port 5201
->>> [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
->>> [  5]   0.00-1.00   sec   109 MBytes   912 Mbits/sec   48    559 KBytes
->>> [  5]   1.00-2.00   sec   108 MBytes   902 Mbits/sec    0    690 KBytes
->>> [  5]   2.00-3.00   sec   106 MBytes   891 Mbits/sec   36    396 KBytes
->>> [  5]   3.00-4.00   sec   108 MBytes   902 Mbits/sec    0    567 KBytes
->>> [  5]   4.00-5.00   sec   106 MBytes   891 Mbits/sec    0    699 KBytes
->>> [  5]   5.00-6.00   sec   106 MBytes   891 Mbits/sec   32    414 KBytes
->>> [  5]   6.00-7.00   sec   106 MBytes   891 Mbits/sec    0    583 KBytes
->>> [  5]   7.00-8.00   sec   106 MBytes   891 Mbits/sec    0    708 KBytes
->>> [  5]   8.00-9.00   sec   106 MBytes   891 Mbits/sec   28    433 KBytes
->>> [  5]   9.00-10.00  sec   108 MBytes   902 Mbits/sec    0    591 KBytes
->>> - - - - - - - - - - - - - - - - - - - - - - - - -
->>> [ ID] Interval           Transfer     Bitrate         Retr
->>> [  5]   0.00-10.00  sec  1.04 GBytes   897 Mbits/sec  144             sender
->>> [  5]   0.00-10.01  sec  1.04 GBytes   894 Mbits/sec                  receiver
->>>
->>> And the decreased CPU time of the memcpy() is observable with perf top.
->>> This is the `perf top -Ue task-clock` output when doing the test:
->>>
->>> before:
->>>
->>> Overhead  Shared O  Symbol
->>>    42.22%  [kernel]  [k] memcpy
->>>    35.00%  [kernel]  [k] __asm_copy_to_user
->>>     3.50%  [kernel]  [k] sifive_l2_flush64_range
->>>     2.30%  [kernel]  [k] stmmac_napi_poll_rx
->>>     1.11%  [kernel]  [k] memset
->>>
->>> after:
->>>
->>> Overhead  Shared O  Symbol
->>>    45.69%  [kernel]  [k] __asm_copy_to_user
->>>    29.06%  [kernel]  [k] memcpy
->>>     4.09%  [kernel]  [k] sifive_l2_flush64_range
->>>     2.77%  [kernel]  [k] stmmac_napi_poll_rx
->>>     1.24%  [kernel]  [k] memset
->>>
->>> Signed-off-by: Matteo Croce <mcroce@microsoft.com>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> ---
->>>   arch/riscv/include/asm/string.h |   8 ++-
->>>   arch/riscv/kernel/riscv_ksyms.c |   2 -
->>>   arch/riscv/lib/Makefile         |   2 +-
->>>   arch/riscv/lib/memcpy.S         | 108 --------------------------------
->>>   arch/riscv/lib/string.c         |  90 ++++++++++++++++++++++++++
->>>   5 files changed, 97 insertions(+), 113 deletions(-)
->>>   delete mode 100644 arch/riscv/lib/memcpy.S
->>>   create mode 100644 arch/riscv/lib/string.c
->>>
->>> diff --git a/arch/riscv/include/asm/string.h b/arch/riscv/include/asm/string.h
->>> index 909049366555..6b5d6fc3eab4 100644
->>> --- a/arch/riscv/include/asm/string.h
->>> +++ b/arch/riscv/include/asm/string.h
->>> @@ -12,9 +12,13 @@
->>>   #define __HAVE_ARCH_MEMSET
->>>   extern asmlinkage void *memset(void *, int, size_t);
->>>   extern asmlinkage void *__memset(void *, int, size_t);
->>> +
->>> +#ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
->> What's the problem with the -O3 & -Os? If the user uses
->> CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3 that will cause bad performance
->> for memcpy?
->> Seems asm version is more compatible?
->>
->>>   #define __HAVE_ARCH_MEMCPY
->>> -extern asmlinkage void *memcpy(void *, const void *, size_t);
->>> -extern asmlinkage void *__memcpy(void *, const void *, size_t);
->>> +extern void *memcpy(void *dest, const void *src, size_t count);
->>> +extern void *__memcpy(void *dest, const void *src, size_t count);
->>> +#endif
->>> +
->>>   #define __HAVE_ARCH_MEMMOVE
->>>   extern asmlinkage void *memmove(void *, const void *, size_t);
->>>   extern asmlinkage void *__memmove(void *, const void *, size_t);
->>> diff --git a/arch/riscv/kernel/riscv_ksyms.c b/arch/riscv/kernel/riscv_ksyms.c
->>> index 5ab1c7e1a6ed..3f6d512a5b97 100644
->>> --- a/arch/riscv/kernel/riscv_ksyms.c
->>> +++ b/arch/riscv/kernel/riscv_ksyms.c
->>> @@ -10,8 +10,6 @@
->>>    * Assembly functions that may be used (directly or indirectly) by modules
->>>    */
->>>   EXPORT_SYMBOL(memset);
->>> -EXPORT_SYMBOL(memcpy);
->>>   EXPORT_SYMBOL(memmove);
->>>   EXPORT_SYMBOL(__memset);
->>> -EXPORT_SYMBOL(__memcpy);
->>>   EXPORT_SYMBOL(__memmove);
->>> diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
->>> index 25d5c9664e57..2ffe85d4baee 100644
->>> --- a/arch/riscv/lib/Makefile
->>> +++ b/arch/riscv/lib/Makefile
->>> @@ -1,9 +1,9 @@
->>>   # SPDX-License-Identifier: GPL-2.0-only
->>>   lib-y                  += delay.o
->>> -lib-y                  += memcpy.o
->>>   lib-y                  += memset.o
->>>   lib-y                  += memmove.o
->>>   lib-$(CONFIG_MMU)      += uaccess.o
->>>   lib-$(CONFIG_64BIT)    += tishift.o
->>> +lib-$(CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE) += string.o
->>>
->>>   obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
->>> diff --git a/arch/riscv/lib/memcpy.S b/arch/riscv/lib/memcpy.S
->>> deleted file mode 100644
->>> index 51ab716253fa..000000000000
->>> --- a/arch/riscv/lib/memcpy.S
->>> +++ /dev/null
->>> @@ -1,108 +0,0 @@
->>> -/* SPDX-License-Identifier: GPL-2.0-only */
->>> -/*
->>> - * Copyright (C) 2013 Regents of the University of California
->>> - */
->>> -
->>> -#include <linux/linkage.h>
->>> -#include <asm/asm.h>
->>> -
->>> -/* void *memcpy(void *, const void *, size_t) */
->>> -ENTRY(__memcpy)
->>> -WEAK(memcpy)
->>> -       move t6, a0  /* Preserve return value */
->>> -
->>> -       /* Defer to byte-oriented copy for small sizes */
->>> -       sltiu a3, a2, 128
->>> -       bnez a3, 4f
->>> -       /* Use word-oriented copy only if low-order bits match */
->>> -       andi a3, t6, SZREG-1
->>> -       andi a4, a1, SZREG-1
->>> -       bne a3, a4, 4f
->>> -
->>> -       beqz a3, 2f  /* Skip if already aligned */
->>> -       /*
->>> -        * Round to nearest double word-aligned address
->>> -        * greater than or equal to start address
->>> -        */
->>> -       andi a3, a1, ~(SZREG-1)
->>> -       addi a3, a3, SZREG
->>> -       /* Handle initial misalignment */
->>> -       sub a4, a3, a1
->>> -1:
->>> -       lb a5, 0(a1)
->>> -       addi a1, a1, 1
->>> -       sb a5, 0(t6)
->>> -       addi t6, t6, 1
->>> -       bltu a1, a3, 1b
->>> -       sub a2, a2, a4  /* Update count */
->>> -
->>> -2:
->>> -       andi a4, a2, ~((16*SZREG)-1)
->>> -       beqz a4, 4f
->>> -       add a3, a1, a4
->>> -3:
->>> -       REG_L a4,       0(a1)
->>> -       REG_L a5,   SZREG(a1)
->>> -       REG_L a6, 2*SZREG(a1)
->>> -       REG_L a7, 3*SZREG(a1)
->>> -       REG_L t0, 4*SZREG(a1)
->>> -       REG_L t1, 5*SZREG(a1)
->>> -       REG_L t2, 6*SZREG(a1)
->>> -       REG_L t3, 7*SZREG(a1)
->>> -       REG_L t4, 8*SZREG(a1)
->>> -       REG_L t5, 9*SZREG(a1)
->>> -       REG_S a4,       0(t6)
->>> -       REG_S a5,   SZREG(t6)
->>> -       REG_S a6, 2*SZREG(t6)
->>> -       REG_S a7, 3*SZREG(t6)
->>> -       REG_S t0, 4*SZREG(t6)
->>> -       REG_S t1, 5*SZREG(t6)
->>> -       REG_S t2, 6*SZREG(t6)
->>> -       REG_S t3, 7*SZREG(t6)
->>> -       REG_S t4, 8*SZREG(t6)
->>> -       REG_S t5, 9*SZREG(t6)
->>> -       REG_L a4, 10*SZREG(a1)
->>> -       REG_L a5, 11*SZREG(a1)
->>> -       REG_L a6, 12*SZREG(a1)
->>> -       REG_L a7, 13*SZREG(a1)
->>> -       REG_L t0, 14*SZREG(a1)
->>> -       REG_L t1, 15*SZREG(a1)
->>> -       addi a1, a1, 16*SZREG
->>> -       REG_S a4, 10*SZREG(t6)
->>> -       REG_S a5, 11*SZREG(t6)
->>> -       REG_S a6, 12*SZREG(t6)
->>> -       REG_S a7, 13*SZREG(t6)
->>> -       REG_S t0, 14*SZREG(t6)
->>> -       REG_S t1, 15*SZREG(t6)
->>> -       addi t6, t6, 16*SZREG
->>> -       bltu a1, a3, 3b
->>> -       andi a2, a2, (16*SZREG)-1  /* Update count */
->>> -
->>> -4:
->>> -       /* Handle trailing misalignment */
->>> -       beqz a2, 6f
->>> -       add a3, a1, a2
->>> -
->>> -       /* Use word-oriented copy if co-aligned to word boundary */
->>> -       or a5, a1, t6
->>> -       or a5, a5, a3
->>> -       andi a5, a5, 3
->>> -       bnez a5, 5f
->>> -7:
->>> -       lw a4, 0(a1)
->>> -       addi a1, a1, 4
->>> -       sw a4, 0(t6)
->>> -       addi t6, t6, 4
->>> -       bltu a1, a3, 7b
->>> -
->>> -       ret
->>> -
->>> -5:
->>> -       lb a4, 0(a1)
->>> -       addi a1, a1, 1
->>> -       sb a4, 0(t6)
->>> -       addi t6, t6, 1
->>> -       bltu a1, a3, 5b
->>> -6:
->>> -       ret
->>> -END(__memcpy)
->>> diff --git a/arch/riscv/lib/string.c b/arch/riscv/lib/string.c
->>> new file mode 100644
->>> index 000000000000..bfc912ee23f8
->>> --- /dev/null
->>> +++ b/arch/riscv/lib/string.c
->>> @@ -0,0 +1,90 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * String functions optimized for hardware which doesn't
->>> + * handle unaligned memory accesses efficiently.
->>> + *
->>> + * Copyright (C) 2021 Matteo Croce
->>> + */
->>> +
->>> +#include <linux/types.h>
->>> +#include <linux/module.h>
->>> +
->>> +/* Minimum size for a word copy to be convenient */
->>> +#define BYTES_LONG     sizeof(long)
->>> +#define WORD_MASK      (BYTES_LONG - 1)
->>> +#define MIN_THRESHOLD  (BYTES_LONG * 2)
->>> +
->>> +/* convenience union to avoid cast between different pointer types */
->>> +union types {
->>> +       u8 *as_u8;
->>> +       unsigned long *as_ulong;
->>> +       uintptr_t as_uptr;
->>> +};
->>> +
->>> +union const_types {
->>> +       const u8 *as_u8;
->>> +       unsigned long *as_ulong;
->>> +       uintptr_t as_uptr;
->>> +};
->>> +
->>> +void *__memcpy(void *dest, const void *src, size_t count)
->> How about using __attribute__((optimize("-O2"))) here to replace your
->> previous "#ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE"?
->>
->>> +{
->>> +       union const_types s = { .as_u8 = src };
->>> +       union types d = { .as_u8 = dest };
->>> +       int distance = 0;
->>> +
->>> +       if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
->>> +               if (count < MIN_THRESHOLD)
->>> +                       goto copy_remainder;
->>> +
->>> +               /* Copy a byte at time until destination is aligned. */
->>> +               for (; d.as_uptr & WORD_MASK; count--)
->>> +                       *d.as_u8++ = *s.as_u8++;
->>> +
->>> +               distance = s.as_uptr & WORD_MASK;
->>> +       }
->>> +
->>> +       if (distance) {
->>> +               unsigned long last, next;
->>> +
->>> +               /*
->>> +                * s is distance bytes ahead of d, and d just reached
->>> +                * the alignment boundary. Move s backward to word align it
->>> +                * and shift data to compensate for distance, in order to do
->>> +                * word-by-word copy.
->>> +                */
->>> +               s.as_u8 -= distance;
->>> +
->>> +               next = s.as_ulong[0];
->>> +               for (; count >= BYTES_LONG; count -= BYTES_LONG) {
->>> +                       last = next;
->>> +                       next = s.as_ulong[1];
->>> +
->>> +                       d.as_ulong[0] = last >> (distance * 8) |
->>> +                                       next << ((BYTES_LONG - distance) * 8);
->>> +
->>> +                       d.as_ulong++;
->>> +                       s.as_ulong++;
->>> +               }
->>> +
->>> +               /* Restore s with the original offset. */
->>> +               s.as_u8 += distance;
->>> +       } else {
->>> +               /*
->>> +                * If the source and dest lower bits are the same, do a simple
->>> +                * 32/64 bit wide copy.
->>> +                */
->>> +               for (; count >= BYTES_LONG; count -= BYTES_LONG)
->>> +                       *d.as_ulong++ = *s.as_ulong++;
->>> +       }
->>> +
->>> +copy_remainder:
->>> +       while (count--)
->>> +               *d.as_u8++ = *s.as_u8++;
->>> +
->>> +       return dest;
->>> +}
->>> +EXPORT_SYMBOL(__memcpy);
->>> +
->>> +void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
->>> +EXPORT_SYMBOL(memcpy);
->>> --
->>> 2.31.1
->>>
->>
->>
->> --
->> Best Regards
->>   Guo Ren
->>
->> ML: https://lore.kernel.org/linux-csky/
-> 
-> If CONFIG_CC_OPTIMIZE_FOR_SIZE I fallback to the generic
-> implementations, which are very small.
-> It's just an optimization to save more space when -Os is used.
-> 
-> CC_OPTIMIZE_FOR_PERFORMANCE_O3 is ARC specific.
 
-It is not. Its just that for ARC I've used -O3 as default. Historically 
-for compilers at the time some architecture had issues with -O3 builds 
-and/or compiler would inline more. But nothing in -O3 is specific to ARC.
 
-BTW off topic (but relevant to this patchset), I strongly feel that 
-routines like memset/memcpy are better coded in assembly for really 
-water tight instruction scheduling and ease of further optimizing (e.g. 
-use of CMO.zero etc as experimented by Philipp). What is blocking you 
-from optimizing the asm version ? You are leaving the fate of these 
-critical routines in the hand of compiler - this can lead to performance 
-shenanigans on a big gcc upgrade.
+On Thu, Sep 30, 2021, at 12:29 PM, Thomas Gleixner wrote:
+> On Thu, Sep 30 2021 at 11:08, Andy Lutomirski wrote:
+>> On Tue, Sep 28, 2021, at 9:56 PM, Sohil Mehta wrote:
+>> I think we have three choices:
+>>
+>> Use a fancy wrapper around SENDUIPI.  This is probably a bad idea.
+>>
+>> Treat the NV-2 as a real interrupt and honor affinity settings.  This
+>> will be annoying and slow, I think, if it's even workable at all.
+>
+> We can make it a real interrupt in form of a per CPU interrupt, but
+> affinity settings are not really feasible because the affinity is in t=
+he
+> UPID.ndst field. So, yes we can target it to some CPU, but that's racy.
+>
+>> Handle this case with faults instead of interrupts.  We could set a
+>> reserved bit in UPID so that SENDUIPI results in #GP, decode it, and
+>> process it.  This puts the onus on the actual task causing trouble,
+>> which is nice, and it lets us find the UPID and target directly
+>> instead of walking all of them.  I don't know how well it would play
+>> with hypothetical future hardware-initiated uintrs, though.
+>
+> I thought about that as well and dismissed it due to the hardware
+> initiated ones but thinking more about it, those need some translation
+> unit (e.g. irq remapping) anyway, so it might be doable to catch those
+> as well. So we could just ignore them for now and go for the #GP trick
+> and deal with the device initiated ones later when they come around :)
 
--Vineet
+Sounds good to me. In the long run, if Intel wants device initiated fanc=
+y interrupts to work well, they need a new design.
+
+>
+> But even with that we still need to keep track of the armed ones per C=
+PU
+> so we can handle CPU hotunplug correctly. Sigh...
+
+I don=E2=80=99t think any real work is needed. We will only ever have ar=
+med UPIDs (with notification interrupts enabled) for running tasks, and =
+hot-unplugged CPUs don=E2=80=99t have running tasks.  We do need a way t=
+o drain pending IPIs before we offline a CPU, but that=E2=80=99s a separ=
+ate problem and may be unsolvable for all I know. Is there a magic APIC =
+operation to wait until all initiated IPIs targeting the local CPU arriv=
+e?  I guess we can also just mask the notification vector so that it won=
+=E2=80=99t crash us if we get a stale IPI after going offline.
+
+>
+> Thanks,
+>
+>         tglx
