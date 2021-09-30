@@ -2,406 +2,425 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8A341D038
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 01:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E0141D0EE
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 03:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347184AbhI2X6m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Sep 2021 19:58:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60216 "EHLO mail.kernel.org"
+        id S1343712AbhI3B0l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Sep 2021 21:26:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54858 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347021AbhI2X6m (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 Sep 2021 19:58:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BC8760EE4;
-        Wed, 29 Sep 2021 23:57:00 +0000 (UTC)
+        id S229477AbhI3B0l (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 29 Sep 2021 21:26:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A745615E6;
+        Thu, 30 Sep 2021 01:24:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632959820;
-        bh=u/f62+IedkJJ1rM8oM6PYSLQeoq90oK5VgySaRMYS04=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=CtIxkqWtBHqoEQL1QTZ5Mt4pYlJmxf4pB1viCOsHQDqUlD1dYNoYFXBogNo/XNIbP
-         HlYhq1CzBbba3d3wF/hD/wlYAJv3FXYft5+sYcL+3+2IMNFQToUfY1lsggZpMgwEAW
-         RNN/OTBfR47Y0IvNjF6GCI2XCCW6N5YjRzkPfg8+CKefpbtEN2Il+9BWWt4hbdcJCB
-         vVK1fJUIG3LTzw2MGc0ZEI99q+XvfMbH0C6v6ru9/xjUL7r4W3GCTLtsxtJHzHZlOf
-         FYr2SRyKpweTf2w/eXYEKV9rY0rw3tFoVrpRPozDJz249TvTsDzf0mFxAF2lvIvRxv
-         Y/165HehXOJZA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3037D5C1308; Wed, 29 Sep 2021 16:57:00 -0700 (PDT)
-Date:   Wed, 29 Sep 2021 16:57:00 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        will@kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        stern@rowland.harvard.edu, parri.andrea@gmail.com,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        linux-toolchains@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
-Message-ID: <20210929235700.GF880162@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
- <20210929214703.GG22689@gate.crashing.org>
+        s=k20201202; t=1632965099;
+        bh=9UwRNhH+QUgXvsQcSHsRIJoQjd68Bzhy/GzdrwVADlc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kxaMWiBvWWzwdWP6y5ScKiNQ+rgkQosRAEYFE+4JQyW2MeFx1CVAy6mH302q+A4WC
+         0ABkq5tC0detJXp1DDwitkPCf5eWjZ2r77QtMR9PtIlpD1QXALOHUAWmZZnYoAUq2J
+         WDnr0zk4gTKtYAnucun3KXWYnuW2u7gR+EhmRfNyb/O6MK7/zd+gZusfuv4VgrfAxA
+         05QF8cqS4xYWJAWk+kbCUcBlHwGhSIs2FjZRv6PPzWmAObu6rqCvT7u0GUOn8yIEnF
+         AwCIUhkdLGwaL2xWbeF+ltmDApMUGxvvb5WbeuKCYdLjeLsxMhu0aXHdGfMlyl6Wla
+         PKssoHytbSqtg==
+Received: by mail-ua1-f44.google.com with SMTP id c33so2969780uae.9;
+        Wed, 29 Sep 2021 18:24:59 -0700 (PDT)
+X-Gm-Message-State: AOAM532kPQq1tlZjn+FmXOJMP/2y3Qx5X2z6f/mrmPBJAlaayqzqanPR
+        heoVCUM39TkH01ZTN4CI7AZgluFX/245kAahGPg=
+X-Google-Smtp-Source: ABdhPJxr4nyuS3T6e/1IiTSYUMT71ALIxV3VM+0ngW+OYcCbfpfRLq7KAUbH04GJbR74OsIrmP3zaH8LcVoJbV1j7Rs=
+X-Received: by 2002:ab0:6ec6:: with SMTP id c6mr3629624uav.97.1632965098324;
+ Wed, 29 Sep 2021 18:24:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210929214703.GG22689@gate.crashing.org>
+References: <20210929172234.31620-1-mcroce@linux.microsoft.com> <20210929172234.31620-2-mcroce@linux.microsoft.com>
+In-Reply-To: <20210929172234.31620-2-mcroce@linux.microsoft.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 30 Sep 2021 09:24:47 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRSVeUOwmaUcpMJL+jOofvX5iWLRLCfMajQcut_T409qA@mail.gmail.com>
+Message-ID: <CAJF2gTRSVeUOwmaUcpMJL+jOofvX5iWLRLCfMajQcut_T409qA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] riscv: optimized memcpy
+To:     Matteo Croce <mcroce@linux.microsoft.com>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 29, 2021 at 04:47:03PM -0500, Segher Boessenkool wrote:
-> Hi!
-> 
-> On Tue, Sep 28, 2021 at 05:15:07PM -0400, Mathieu Desnoyers wrote:
-> > C99 describes that accessing volatile objects are side-effects, and that
-> > "at certain specified points in the execution sequence called sequence
-> > points, all side effects of previous evaluations shall be complete
-> > and no side effects of subsequent evaluations shall have taken
-> > place". [2]
-> 
-> But note that the kernel explicitly uses C89 (with GNU extensions).
-> Side effects are largely equal there though.
-> 
-> Also note that there may no place in the generated machine code that
-> corresponds exactly to some sequence point.  Sequence points are a
-> concept that applies to the source program and how that executes on the
-> abstract machine.
-
-Plus the "as if" rule rears its ugly head in many of these situations.
-
-> > +Because ctrl_dep emits distinct asm volatile within each leg of the if
-> > +statement, the compiler cannot transform the two writes to 'b' into a
-> > +conditional-move (cmov) instruction, thus ensuring the presence of a
-> > +conditional branch.  Also because the ctrl_dep emits asm volatile within
-> > +each leg of the if statement, the compiler cannot move the write to 'c'
-> > +before the conditional branch.
-> 
-> I think your reasoning here misses some things.  So many that I don't
-> know where to start to list them, every "because" and "thus" here does
-> not follow, and even the statements of fact are not a given.
-> 
-> Why do you want a conditional branch insn at all, anyway?  You really
-> want something else as far as I can see.
-
-Because at the assembly language level on some architectures, a
-conditional branch instruction provides weak but very real and very
-useful memory-ordering properties.  Such a branch orders all loads
-whose return values feed into the branch condition before any stores
-that execute after the branch does (regardless of whether or not the
-branch was taken).  And this is all the ordering that is required for
-the use cases that Mathieu is worried about.
-
-Yes, you can use explicit memory-barrier or acquire-load instructions,
-but those incur more overhead on some types of hardware.  The code in
-question is on a hotpath and is thus performance-critical.
-
-It would be nice to be able to somehow tell the compiler exactly
-what the ordering constraints are ("this particular load must be
-ordered before these particular stores") and then let it (1) figure
-out that a conditional branch will do the trick and (2) generate the
-code accordingly.  But last I checked, this was not going to happen any
-time soon.  So for the time being, we have to live within the current
-capability of the tools that are available to us.
-
-Linus points out that in all the actual control-dependent code in
-the Linux kernel, the compiler is going to be hard-pressed to fail
-to emit the required branch.  (Or in the case of ARMv8, the required
-conditional-move instruction.)
-
-Mathieu, for his part, recently read the relevant portions of
-memory-barriers.txt (reproduced below) and would like to simplify these
-coding guidlines, which, speaking as the author of those guidelines,
-would be an extremely good thing.  His patches are attempting to move
-us in that direction.
-
-Alternatives include: (1) Using acquire loads or memory barriers
-and accepting the loss in performance, but giving the compiler much
-less leeway, (2) Ripping all of the two-legged "if" examples from
-memory-barriers.txt and restricting control dependencies to else-less
-"if" statements, again giving the compiler less leeway, and (3) Your
-ideas here.
-
-Does that help, or am I missing your point?
-
-> It is essential here that there is a READ_ONCE and the WRITE_ONCE.
-> Those things might make it work the way you want, but as Linus says this
-> is all way too subtle.  Can you include the *_ONCE into the primitive
-> itself somehow?
-
-Actually, if the store is not involved in a data race, the WRITE_ONCE()
-is not needed.  And in that case, the compiler is much less able to
-fail to provide the needed ordering.  (No, the current documentation
-does not reflect this.)  But if there is a data race, then your point
-is right on the mark -- that WRITE_ONCE() cannot be safely omitted.
-
-But you are absolutely right that the READ_ONCE() or equivalent is not
-at all optional.  An example of an acceptable equivalent is an atomic
-read-modify-write operation such as atomic_xchg_relaxed().
-
-The question about whether the READ_ONCE() and WRITE_ONCE() can be
-incorporated into the macro I leave to Mathieu.  I can certainly see
-serious benefits from this approach, at least from a compiler viewpoint.
-I must reserve judgment on usability until I see a proposal.
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-Relevant excerpt from memory-barriers.txt
-------------------------------------------------------------------------
-
-CONTROL DEPENDENCIES
---------------------
-
-Control dependencies can be a bit tricky because current compilers do
-not understand them.  The purpose of this section is to help you prevent
-the compiler's ignorance from breaking your code.
-
-A load-load control dependency requires a full read memory barrier, not
-simply a data dependency barrier to make it work correctly.  Consider the
-following bit of code:
-
-	q = READ_ONCE(a);
-	if (q) {
-		<data dependency barrier>  /* BUG: No data dependency!!! */
-		p = READ_ONCE(b);
-	}
-
-This will not have the desired effect because there is no actual data
-dependency, but rather a control dependency that the CPU may short-circuit
-by attempting to predict the outcome in advance, so that other CPUs see
-the load from b as having happened before the load from a.  In such a
-case what's actually required is:
-
-	q = READ_ONCE(a);
-	if (q) {
-		<read barrier>
-		p = READ_ONCE(b);
-	}
-
-However, stores are not speculated.  This means that ordering -is- provided
-for load-store control dependencies, as in the following example:
-
-	q = READ_ONCE(a);
-	if (q) {
-		WRITE_ONCE(b, 1);
-	}
-
-Control dependencies pair normally with other types of barriers.
-That said, please note that neither READ_ONCE() nor WRITE_ONCE()
-are optional! Without the READ_ONCE(), the compiler might combine the
-load from 'a' with other loads from 'a'.  Without the WRITE_ONCE(),
-the compiler might combine the store to 'b' with other stores to 'b'.
-Either can result in highly counterintuitive effects on ordering.
-
-Worse yet, if the compiler is able to prove (say) that the value of
-variable 'a' is always non-zero, it would be well within its rights
-to optimize the original example by eliminating the "if" statement
-as follows:
-
-	q = a;
-	b = 1;  /* BUG: Compiler and CPU can both reorder!!! */
-
-So don't leave out the READ_ONCE().
-
-It is tempting to try to enforce ordering on identical stores on both
-branches of the "if" statement as follows:
-
-	q = READ_ONCE(a);
-	if (q) {
-		barrier();
-		WRITE_ONCE(b, 1);
-		do_something();
-	} else {
-		barrier();
-		WRITE_ONCE(b, 1);
-		do_something_else();
-	}
-
-Unfortunately, current compilers will transform this as follows at high
-optimization levels:
-
-	q = READ_ONCE(a);
-	barrier();
-	WRITE_ONCE(b, 1);  /* BUG: No ordering vs. load from a!!! */
-	if (q) {
-		/* WRITE_ONCE(b, 1); -- moved up, BUG!!! */
-		do_something();
-	} else {
-		/* WRITE_ONCE(b, 1); -- moved up, BUG!!! */
-		do_something_else();
-	}
-
-Now there is no conditional between the load from 'a' and the store to
-'b', which means that the CPU is within its rights to reorder them:
-The conditional is absolutely required, and must be present in the
-assembly code even after all compiler optimizations have been applied.
-Therefore, if you need ordering in this example, you need explicit
-memory barriers, for example, smp_store_release():
-
-	q = READ_ONCE(a);
-	if (q) {
-		smp_store_release(&b, 1);
-		do_something();
-	} else {
-		smp_store_release(&b, 1);
-		do_something_else();
-	}
-
-In contrast, without explicit memory barriers, two-legged-if control
-ordering is guaranteed only when the stores differ, for example:
-
-	q = READ_ONCE(a);
-	if (q) {
-		WRITE_ONCE(b, 1);
-		do_something();
-	} else {
-		WRITE_ONCE(b, 2);
-		do_something_else();
-	}
-
-The initial READ_ONCE() is still required to prevent the compiler from
-proving the value of 'a'.
-
-In addition, you need to be careful what you do with the local variable 'q',
-otherwise the compiler might be able to guess the value and again remove
-the needed conditional.  For example:
-
-	q = READ_ONCE(a);
-	if (q % MAX) {
-		WRITE_ONCE(b, 1);
-		do_something();
-	} else {
-		WRITE_ONCE(b, 2);
-		do_something_else();
-	}
-
-If MAX is defined to be 1, then the compiler knows that (q % MAX) is
-equal to zero, in which case the compiler is within its rights to
-transform the above code into the following:
-
-	q = READ_ONCE(a);
-	WRITE_ONCE(b, 2);
-	do_something_else();
-
-Given this transformation, the CPU is not required to respect the ordering
-between the load from variable 'a' and the store to variable 'b'.  It is
-tempting to add a barrier(), but this does not help.  The conditional
-is gone, and the barrier won't bring it back.  Therefore, if you are
-relying on this ordering, you should make sure that MAX is greater than
-one, perhaps as follows:
-
-	q = READ_ONCE(a);
-	BUILD_BUG_ON(MAX <= 1); /* Order load from a with store to b. */
-	if (q % MAX) {
-		WRITE_ONCE(b, 1);
-		do_something();
-	} else {
-		WRITE_ONCE(b, 2);
-		do_something_else();
-	}
-
-Please note once again that the stores to 'b' differ.  If they were
-identical, as noted earlier, the compiler could pull this store outside
-of the 'if' statement.
-
-You must also be careful not to rely too much on boolean short-circuit
-evaluation.  Consider this example:
-
-	q = READ_ONCE(a);
-	if (q || 1 > 0)
-		WRITE_ONCE(b, 1);
-
-Because the first condition cannot fault and the second condition is
-always true, the compiler can transform this example as following,
-defeating control dependency:
-
-	q = READ_ONCE(a);
-	WRITE_ONCE(b, 1);
-
-This example underscores the need to ensure that the compiler cannot
-out-guess your code.  More generally, although READ_ONCE() does force
-the compiler to actually emit code for a given load, it does not force
-the compiler to use the results.
-
-In addition, control dependencies apply only to the then-clause and
-else-clause of the if-statement in question.  In particular, it does
-not necessarily apply to code following the if-statement:
-
-	q = READ_ONCE(a);
-	if (q) {
-		WRITE_ONCE(b, 1);
-	} else {
-		WRITE_ONCE(b, 2);
-	}
-	WRITE_ONCE(c, 1);  /* BUG: No ordering against the read from 'a'. */
-
-It is tempting to argue that there in fact is ordering because the
-compiler cannot reorder volatile accesses and also cannot reorder
-the writes to 'b' with the condition.  Unfortunately for this line
-of reasoning, the compiler might compile the two writes to 'b' as
-conditional-move instructions, as in this fanciful pseudo-assembly
-language:
-
-	ld r1,a
-	cmp r1,$0
-	cmov,ne r4,$1
-	cmov,eq r4,$2
-	st r4,b
-	st $1,c
-
-A weakly ordered CPU would have no dependency of any sort between the load
-from 'a' and the store to 'c'.  The control dependencies would extend
-only to the pair of cmov instructions and the store depending on them.
-In short, control dependencies apply only to the stores in the then-clause
-and else-clause of the if-statement in question (including functions
-invoked by those two clauses), not to code following that if-statement.
-
-
-Note well that the ordering provided by a control dependency is local
-to the CPU containing it.  See the section on "Multicopy atomicity"
-for more information.
-
-
-In summary:
-
-  (*) Control dependencies can order prior loads against later stores.
-      However, they do -not- guarantee any other sort of ordering:
-      Not prior loads against later loads, nor prior stores against
-      later anything.  If you need these other forms of ordering,
-      use smp_rmb(), smp_wmb(), or, in the case of prior stores and
-      later loads, smp_mb().
-
-  (*) If both legs of the "if" statement begin with identical stores to
-      the same variable, then those stores must be ordered, either by
-      preceding both of them with smp_mb() or by using smp_store_release()
-      to carry out the stores.  Please note that it is -not- sufficient
-      to use barrier() at beginning of each leg of the "if" statement
-      because, as shown by the example above, optimizing compilers can
-      destroy the control dependency while respecting the letter of the
-      barrier() law.
-
-  (*) Control dependencies require at least one run-time conditional
-      between the prior load and the subsequent store, and this
-      conditional must involve the prior load.  If the compiler is able
-      to optimize the conditional away, it will have also optimized
-      away the ordering.  Careful use of READ_ONCE() and WRITE_ONCE()
-      can help to preserve the needed conditional.
-
-  (*) Control dependencies require that the compiler avoid reordering the
-      dependency into nonexistence.  Careful use of READ_ONCE() or
-      atomic{,64}_read() can help to preserve your control dependency.
-      Please see the COMPILER BARRIER section for more information.
-
-  (*) Control dependencies apply only to the then-clause and else-clause
-      of the if-statement containing the control dependency, including
-      any functions that these two clauses call.  Control dependencies
-      do -not- apply to code following the if-statement containing the
-      control dependency.
-
-  (*) Control dependencies pair normally with other types of barriers.
-
-  (*) Control dependencies do -not- provide multicopy atomicity.  If you
-      need all the CPUs to see a given store at the same time, use smp_mb().
-
-  (*) Compilers do not understand control dependencies.  It is therefore
-      your job to ensure that they do not break your code.
+On Thu, Sep 30, 2021 at 1:22 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+>
+> From: Matteo Croce <mcroce@microsoft.com>
+>
+> Write a C version of memcpy() which uses the biggest data size allowed,
+> without generating unaligned accesses.
+>
+> The procedure is made of three steps:
+> First copy data one byte at time until the destination buffer is aligned
+> to a long boundary.
+> Then copy the data one long at time shifting the current and the next u8
+> to compose a long at every cycle.
+> Finally, copy the remainder one byte at time.
+>
+> On a BeagleV, the TCP RX throughput increased by 45%:
+>
+> before:
+>
+> $ iperf3 -c beaglev
+> Connecting to host beaglev, port 5201
+> [  5] local 192.168.85.6 port 44840 connected to 192.168.85.48 port 5201
+> [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+> [  5]   0.00-1.00   sec  76.4 MBytes   641 Mbits/sec   27    624 KBytes
+> [  5]   1.00-2.00   sec  72.5 MBytes   608 Mbits/sec    0    708 KBytes
+> [  5]   2.00-3.00   sec  73.8 MBytes   619 Mbits/sec   10    451 KBytes
+> [  5]   3.00-4.00   sec  72.5 MBytes   608 Mbits/sec    0    564 KBytes
+> [  5]   4.00-5.00   sec  73.8 MBytes   619 Mbits/sec    0    658 KBytes
+> [  5]   5.00-6.00   sec  73.8 MBytes   619 Mbits/sec   14    522 KBytes
+> [  5]   6.00-7.00   sec  73.8 MBytes   619 Mbits/sec    0    621 KBytes
+> [  5]   7.00-8.00   sec  72.5 MBytes   608 Mbits/sec    0    706 KBytes
+> [  5]   8.00-9.00   sec  73.8 MBytes   619 Mbits/sec   20    580 KBytes
+> [  5]   9.00-10.00  sec  73.8 MBytes   619 Mbits/sec    0    672 KBytes
+> - - - - - - - - - - - - - - - - - - - - - - - - -
+> [ ID] Interval           Transfer     Bitrate         Retr
+> [  5]   0.00-10.00  sec   736 MBytes   618 Mbits/sec   71             sender
+> [  5]   0.00-10.01  sec   733 MBytes   615 Mbits/sec                  receiver
+>
+> after:
+>
+> $ iperf3 -c beaglev
+> Connecting to host beaglev, port 5201
+> [  5] local 192.168.85.6 port 44864 connected to 192.168.85.48 port 5201
+> [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+> [  5]   0.00-1.00   sec   109 MBytes   912 Mbits/sec   48    559 KBytes
+> [  5]   1.00-2.00   sec   108 MBytes   902 Mbits/sec    0    690 KBytes
+> [  5]   2.00-3.00   sec   106 MBytes   891 Mbits/sec   36    396 KBytes
+> [  5]   3.00-4.00   sec   108 MBytes   902 Mbits/sec    0    567 KBytes
+> [  5]   4.00-5.00   sec   106 MBytes   891 Mbits/sec    0    699 KBytes
+> [  5]   5.00-6.00   sec   106 MBytes   891 Mbits/sec   32    414 KBytes
+> [  5]   6.00-7.00   sec   106 MBytes   891 Mbits/sec    0    583 KBytes
+> [  5]   7.00-8.00   sec   106 MBytes   891 Mbits/sec    0    708 KBytes
+> [  5]   8.00-9.00   sec   106 MBytes   891 Mbits/sec   28    433 KBytes
+> [  5]   9.00-10.00  sec   108 MBytes   902 Mbits/sec    0    591 KBytes
+> - - - - - - - - - - - - - - - - - - - - - - - - -
+> [ ID] Interval           Transfer     Bitrate         Retr
+> [  5]   0.00-10.00  sec  1.04 GBytes   897 Mbits/sec  144             sender
+> [  5]   0.00-10.01  sec  1.04 GBytes   894 Mbits/sec                  receiver
+>
+> And the decreased CPU time of the memcpy() is observable with perf top.
+> This is the `perf top -Ue task-clock` output when doing the test:
+>
+> before:
+>
+> Overhead  Shared O  Symbol
+>   42.22%  [kernel]  [k] memcpy
+>   35.00%  [kernel]  [k] __asm_copy_to_user
+>    3.50%  [kernel]  [k] sifive_l2_flush64_range
+>    2.30%  [kernel]  [k] stmmac_napi_poll_rx
+>    1.11%  [kernel]  [k] memset
+>
+> after:
+>
+> Overhead  Shared O  Symbol
+>   45.69%  [kernel]  [k] __asm_copy_to_user
+>   29.06%  [kernel]  [k] memcpy
+>    4.09%  [kernel]  [k] sifive_l2_flush64_range
+>    2.77%  [kernel]  [k] stmmac_napi_poll_rx
+>    1.24%  [kernel]  [k] memset
+>
+> Signed-off-by: Matteo Croce <mcroce@microsoft.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  arch/riscv/include/asm/string.h |   8 ++-
+>  arch/riscv/kernel/riscv_ksyms.c |   2 -
+>  arch/riscv/lib/Makefile         |   2 +-
+>  arch/riscv/lib/memcpy.S         | 108 --------------------------------
+>  arch/riscv/lib/string.c         |  90 ++++++++++++++++++++++++++
+>  5 files changed, 97 insertions(+), 113 deletions(-)
+>  delete mode 100644 arch/riscv/lib/memcpy.S
+>  create mode 100644 arch/riscv/lib/string.c
+>
+> diff --git a/arch/riscv/include/asm/string.h b/arch/riscv/include/asm/string.h
+> index 909049366555..6b5d6fc3eab4 100644
+> --- a/arch/riscv/include/asm/string.h
+> +++ b/arch/riscv/include/asm/string.h
+> @@ -12,9 +12,13 @@
+>  #define __HAVE_ARCH_MEMSET
+>  extern asmlinkage void *memset(void *, int, size_t);
+>  extern asmlinkage void *__memset(void *, int, size_t);
+> +
+> +#ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+What's the problem with the -O3 & -Os? If the user uses
+CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3 that will cause bad performance
+for memcpy?
+Seems asm version is more compatible?
+
+>  #define __HAVE_ARCH_MEMCPY
+> -extern asmlinkage void *memcpy(void *, const void *, size_t);
+> -extern asmlinkage void *__memcpy(void *, const void *, size_t);
+> +extern void *memcpy(void *dest, const void *src, size_t count);
+> +extern void *__memcpy(void *dest, const void *src, size_t count);
+> +#endif
+> +
+>  #define __HAVE_ARCH_MEMMOVE
+>  extern asmlinkage void *memmove(void *, const void *, size_t);
+>  extern asmlinkage void *__memmove(void *, const void *, size_t);
+> diff --git a/arch/riscv/kernel/riscv_ksyms.c b/arch/riscv/kernel/riscv_ksyms.c
+> index 5ab1c7e1a6ed..3f6d512a5b97 100644
+> --- a/arch/riscv/kernel/riscv_ksyms.c
+> +++ b/arch/riscv/kernel/riscv_ksyms.c
+> @@ -10,8 +10,6 @@
+>   * Assembly functions that may be used (directly or indirectly) by modules
+>   */
+>  EXPORT_SYMBOL(memset);
+> -EXPORT_SYMBOL(memcpy);
+>  EXPORT_SYMBOL(memmove);
+>  EXPORT_SYMBOL(__memset);
+> -EXPORT_SYMBOL(__memcpy);
+>  EXPORT_SYMBOL(__memmove);
+> diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
+> index 25d5c9664e57..2ffe85d4baee 100644
+> --- a/arch/riscv/lib/Makefile
+> +++ b/arch/riscv/lib/Makefile
+> @@ -1,9 +1,9 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  lib-y                  += delay.o
+> -lib-y                  += memcpy.o
+>  lib-y                  += memset.o
+>  lib-y                  += memmove.o
+>  lib-$(CONFIG_MMU)      += uaccess.o
+>  lib-$(CONFIG_64BIT)    += tishift.o
+> +lib-$(CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE) += string.o
+>
+>  obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
+> diff --git a/arch/riscv/lib/memcpy.S b/arch/riscv/lib/memcpy.S
+> deleted file mode 100644
+> index 51ab716253fa..000000000000
+> --- a/arch/riscv/lib/memcpy.S
+> +++ /dev/null
+> @@ -1,108 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-only */
+> -/*
+> - * Copyright (C) 2013 Regents of the University of California
+> - */
+> -
+> -#include <linux/linkage.h>
+> -#include <asm/asm.h>
+> -
+> -/* void *memcpy(void *, const void *, size_t) */
+> -ENTRY(__memcpy)
+> -WEAK(memcpy)
+> -       move t6, a0  /* Preserve return value */
+> -
+> -       /* Defer to byte-oriented copy for small sizes */
+> -       sltiu a3, a2, 128
+> -       bnez a3, 4f
+> -       /* Use word-oriented copy only if low-order bits match */
+> -       andi a3, t6, SZREG-1
+> -       andi a4, a1, SZREG-1
+> -       bne a3, a4, 4f
+> -
+> -       beqz a3, 2f  /* Skip if already aligned */
+> -       /*
+> -        * Round to nearest double word-aligned address
+> -        * greater than or equal to start address
+> -        */
+> -       andi a3, a1, ~(SZREG-1)
+> -       addi a3, a3, SZREG
+> -       /* Handle initial misalignment */
+> -       sub a4, a3, a1
+> -1:
+> -       lb a5, 0(a1)
+> -       addi a1, a1, 1
+> -       sb a5, 0(t6)
+> -       addi t6, t6, 1
+> -       bltu a1, a3, 1b
+> -       sub a2, a2, a4  /* Update count */
+> -
+> -2:
+> -       andi a4, a2, ~((16*SZREG)-1)
+> -       beqz a4, 4f
+> -       add a3, a1, a4
+> -3:
+> -       REG_L a4,       0(a1)
+> -       REG_L a5,   SZREG(a1)
+> -       REG_L a6, 2*SZREG(a1)
+> -       REG_L a7, 3*SZREG(a1)
+> -       REG_L t0, 4*SZREG(a1)
+> -       REG_L t1, 5*SZREG(a1)
+> -       REG_L t2, 6*SZREG(a1)
+> -       REG_L t3, 7*SZREG(a1)
+> -       REG_L t4, 8*SZREG(a1)
+> -       REG_L t5, 9*SZREG(a1)
+> -       REG_S a4,       0(t6)
+> -       REG_S a5,   SZREG(t6)
+> -       REG_S a6, 2*SZREG(t6)
+> -       REG_S a7, 3*SZREG(t6)
+> -       REG_S t0, 4*SZREG(t6)
+> -       REG_S t1, 5*SZREG(t6)
+> -       REG_S t2, 6*SZREG(t6)
+> -       REG_S t3, 7*SZREG(t6)
+> -       REG_S t4, 8*SZREG(t6)
+> -       REG_S t5, 9*SZREG(t6)
+> -       REG_L a4, 10*SZREG(a1)
+> -       REG_L a5, 11*SZREG(a1)
+> -       REG_L a6, 12*SZREG(a1)
+> -       REG_L a7, 13*SZREG(a1)
+> -       REG_L t0, 14*SZREG(a1)
+> -       REG_L t1, 15*SZREG(a1)
+> -       addi a1, a1, 16*SZREG
+> -       REG_S a4, 10*SZREG(t6)
+> -       REG_S a5, 11*SZREG(t6)
+> -       REG_S a6, 12*SZREG(t6)
+> -       REG_S a7, 13*SZREG(t6)
+> -       REG_S t0, 14*SZREG(t6)
+> -       REG_S t1, 15*SZREG(t6)
+> -       addi t6, t6, 16*SZREG
+> -       bltu a1, a3, 3b
+> -       andi a2, a2, (16*SZREG)-1  /* Update count */
+> -
+> -4:
+> -       /* Handle trailing misalignment */
+> -       beqz a2, 6f
+> -       add a3, a1, a2
+> -
+> -       /* Use word-oriented copy if co-aligned to word boundary */
+> -       or a5, a1, t6
+> -       or a5, a5, a3
+> -       andi a5, a5, 3
+> -       bnez a5, 5f
+> -7:
+> -       lw a4, 0(a1)
+> -       addi a1, a1, 4
+> -       sw a4, 0(t6)
+> -       addi t6, t6, 4
+> -       bltu a1, a3, 7b
+> -
+> -       ret
+> -
+> -5:
+> -       lb a4, 0(a1)
+> -       addi a1, a1, 1
+> -       sb a4, 0(t6)
+> -       addi t6, t6, 1
+> -       bltu a1, a3, 5b
+> -6:
+> -       ret
+> -END(__memcpy)
+> diff --git a/arch/riscv/lib/string.c b/arch/riscv/lib/string.c
+> new file mode 100644
+> index 000000000000..bfc912ee23f8
+> --- /dev/null
+> +++ b/arch/riscv/lib/string.c
+> @@ -0,0 +1,90 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * String functions optimized for hardware which doesn't
+> + * handle unaligned memory accesses efficiently.
+> + *
+> + * Copyright (C) 2021 Matteo Croce
+> + */
+> +
+> +#include <linux/types.h>
+> +#include <linux/module.h>
+> +
+> +/* Minimum size for a word copy to be convenient */
+> +#define BYTES_LONG     sizeof(long)
+> +#define WORD_MASK      (BYTES_LONG - 1)
+> +#define MIN_THRESHOLD  (BYTES_LONG * 2)
+> +
+> +/* convenience union to avoid cast between different pointer types */
+> +union types {
+> +       u8 *as_u8;
+> +       unsigned long *as_ulong;
+> +       uintptr_t as_uptr;
+> +};
+> +
+> +union const_types {
+> +       const u8 *as_u8;
+> +       unsigned long *as_ulong;
+> +       uintptr_t as_uptr;
+> +};
+> +
+> +void *__memcpy(void *dest, const void *src, size_t count)
+How about using __attribute__((optimize("-O2"))) here to replace your
+previous "#ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE"?
+
+> +{
+> +       union const_types s = { .as_u8 = src };
+> +       union types d = { .as_u8 = dest };
+> +       int distance = 0;
+> +
+> +       if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
+> +               if (count < MIN_THRESHOLD)
+> +                       goto copy_remainder;
+> +
+> +               /* Copy a byte at time until destination is aligned. */
+> +               for (; d.as_uptr & WORD_MASK; count--)
+> +                       *d.as_u8++ = *s.as_u8++;
+> +
+> +               distance = s.as_uptr & WORD_MASK;
+> +       }
+> +
+> +       if (distance) {
+> +               unsigned long last, next;
+> +
+> +               /*
+> +                * s is distance bytes ahead of d, and d just reached
+> +                * the alignment boundary. Move s backward to word align it
+> +                * and shift data to compensate for distance, in order to do
+> +                * word-by-word copy.
+> +                */
+> +               s.as_u8 -= distance;
+> +
+> +               next = s.as_ulong[0];
+> +               for (; count >= BYTES_LONG; count -= BYTES_LONG) {
+> +                       last = next;
+> +                       next = s.as_ulong[1];
+> +
+> +                       d.as_ulong[0] = last >> (distance * 8) |
+> +                                       next << ((BYTES_LONG - distance) * 8);
+> +
+> +                       d.as_ulong++;
+> +                       s.as_ulong++;
+> +               }
+> +
+> +               /* Restore s with the original offset. */
+> +               s.as_u8 += distance;
+> +       } else {
+> +               /*
+> +                * If the source and dest lower bits are the same, do a simple
+> +                * 32/64 bit wide copy.
+> +                */
+> +               for (; count >= BYTES_LONG; count -= BYTES_LONG)
+> +                       *d.as_ulong++ = *s.as_ulong++;
+> +       }
+> +
+> +copy_remainder:
+> +       while (count--)
+> +               *d.as_u8++ = *s.as_u8++;
+> +
+> +       return dest;
+> +}
+> +EXPORT_SYMBOL(__memcpy);
+> +
+> +void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+> +EXPORT_SYMBOL(memcpy);
+> --
+> 2.31.1
+>
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
