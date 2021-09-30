@@ -2,100 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EE241D72C
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 12:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8CC41D765
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Sep 2021 12:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349754AbhI3KHS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Sep 2021 06:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        id S1349835AbhI3KOz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Sep 2021 06:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349744AbhI3KHQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Sep 2021 06:07:16 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BBAC06176C;
-        Thu, 30 Sep 2021 03:05:34 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 75so5693051pga.3;
-        Thu, 30 Sep 2021 03:05:34 -0700 (PDT)
+        with ESMTP id S1349804AbhI3KOy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Sep 2021 06:14:54 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541D4C06176C
+        for <linux-arch@vger.kernel.org>; Thu, 30 Sep 2021 03:13:11 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id s17so19809071edd.8
+        for <linux-arch@vger.kernel.org>; Thu, 30 Sep 2021 03:13:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tUCu93B1vpXOt7rVT/VHSEoF5/1bf9+fBEaKI0gkxts=;
-        b=frK6mzU85ZlJgrbQyDP5MR6HkaDdlSc5oWEvc1hMs4/CwyQEqeJoalPGX+A6+szh3I
-         eL5LwgF0yD4HTYn32Zzh9cb64UOH1QwYoPshrX7CRRiAxeSZ6ItMAEIj5DHUEfNfY2Sq
-         IgWrBo0vtDPK2TorEPYquYMigT+ujOgNjtciA+Pzut1J2qWdPmMBvfVOvwOPBtQ9BQ72
-         dmTe7B97D5nNx0rhPVL98ojMyUuDifYRXuU/RmQoT9+wanpvZRX8ElWvD/Mc9rsABjCs
-         gJQJPOqleg8+/pi/Trh31rQUg4KjOHTenOTIgooDowza8Kxds2Yj2dxMMnuuvxp/ZxyX
-         EwWA==
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=di22f+1qtT1rJlDsDU5gv52bfkIzi99/0/f5YELZTOw=;
+        b=ppyHc1xu2ZjQ/kTBT2c/n07AkMuYUtXvdy0s7QXVTxECAFMjweuXUCK7xVE+xwaX0C
+         6o8ZrsH3/9Aynnbf9fMbiY9C8vrkZKxMS2dYyF99LaMNbMDmo+1MshkoCVBu64oPE6ga
+         zFJAQfJwiWTcCZsmLrqej5kKbY2vHfu7puIu4/K01CNJFBuzzGgBrIqsTKFJtWl1D8WY
+         Zs33o3bUzbg+B6tae1aWxdGoSxVf8Jp54BcOj5rIAhOIm93rKhQ0OmZemre71DGprt/y
+         YIumJdsINVkRuayzKbrt7Bx5i0AKwik6J4Ki1n3eaMHv8bBS9zWjaa6znfhzuZJX3poI
+         GbLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tUCu93B1vpXOt7rVT/VHSEoF5/1bf9+fBEaKI0gkxts=;
-        b=oa/plI1RUWXOJ8Vzd5v1WS+PzMJz3ssl1GoEzV3Efdd/ChvE+7Vk6h34Qm6J/BO6C1
-         txaR+QWW4f7RR2Zg6qJwx8KETCGkGNldsnoW6HOT4lbgsTit+co15NJ6DHIycP+72DOL
-         f6RluFLeTzztVqZaqgSyf5zJ808Ba6qOTLB1mCAMqU4mT0vrzG7SQPiDBFwPrW7x+vTb
-         A3G8mtforzzEBZTFejQXVeaMe6EyWsHXGp/H8IzcX/fLAexZojtO3okNbW2niEl2ddIa
-         RSo22oFoYWxTfFR5PpeGha084uXeGAUhlpdeV2kgBI7nSk3lRFtnUOSCykHtkewRgSs0
-         Ah2Q==
-X-Gm-Message-State: AOAM531eAQnxUTMXTshlaETv+i59ptg1pGkYTyLhN7zQHcK2IH/u9yP3
-        r8iiF2UFX6V2gBWP7AIDPoQ=
-X-Google-Smtp-Source: ABdhPJxLpBoDLentgowSq7BYVkZbWr8XcA59pOS1I/wl7T+PKz6q2YUwlz95jj+3g9bSzgrzAod7ww==
-X-Received: by 2002:a63:131f:: with SMTP id i31mr4178307pgl.207.1632996333691;
-        Thu, 30 Sep 2021 03:05:33 -0700 (PDT)
-Received: from baohua-VirtualBox.localdomain (203-173-222-16.dialup.ihug.co.nz. [203.173.222.16])
-        by smtp.gmail.com with ESMTPSA id 130sm2568262pfz.77.2021.09.30.03.05.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Sep 2021 03:05:32 -0700 (PDT)
-From:   Barry Song <21cnbao@gmail.com>
-To:     alex.kogan@oracle.com
-Cc:     arnd@arndb.de, bp@alien8.de, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com, guohanjun@huawei.com, hpa@zytor.com,
-        jglauber@marvell.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, longman@redhat.com, mingo@redhat.com,
-        peterz@infradead.org, steven.sistare@oracle.com,
-        tglx@linutronix.de, will.deacon@arm.com, x86@kernel.org
-Subject: Re: [PATCH v15 3/6] locking/qspinlock: Introduce CNA into the slow path of qspinlock
-Date:   Thu, 30 Sep 2021 18:05:14 +0800
-Message-Id: <20210930100514.10121-1-21cnbao@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210514200743.3026725-4-alex.kogan@oracle.com>
-References: <20210514200743.3026725-4-alex.kogan@oracle.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=di22f+1qtT1rJlDsDU5gv52bfkIzi99/0/f5YELZTOw=;
+        b=un4ubl3Rqkqp2R0rp79T1xKP3BvMqJ9eRc71oUXniRdOVsuA/XMEDwnbOion+wfUfY
+         CfsSIgpOxs2MM597xpPDOCuvRztMGekBEMC5Z3DJxss5b6BROPePw+Q7HJhTjFvDcYKb
+         AhfpjQnrOm7svfDTtb5dsmYUbfDevLD5hlJno4pdf+c9Zw8ZRANf2gUrEQz55+Bqda47
+         Yvbh6ZsYOMCSRZ1YkSIWGRTR5wlmsBtl71Qgz6wtJ7JsTAsUabFb8HUA8f9Exdhv4ZlJ
+         53qrWdVHFEcBKezjWy3woO7POyQrQF1sybLxCXcBptOlrvXlHeU/UexjEvK/Z/L9g2WN
+         TtCA==
+X-Gm-Message-State: AOAM5317Ynge+SYWqk09ez5q7ZZCUPUvIw81bGDLay//ZdZzIyBDnujy
+        LkjKFQqZcKaki/jl51QQMlrkCQ==
+X-Google-Smtp-Source: ABdhPJzUmXdUqIGI8syP1K7qbkNoLgpokgx7oGftLZ5Q5kO7Xtw6c5x1cXA4qfoDB4xaMGW2mjnWyg==
+X-Received: by 2002:a17:906:4d99:: with SMTP id s25mr5632392eju.175.1632996789937;
+        Thu, 30 Sep 2021 03:13:09 -0700 (PDT)
+Received: from ?IPv6:2a02:768:2307:40d6::45a? ([2a02:768:2307:40d6::45a])
+        by smtp.gmail.com with ESMTPSA id j14sm1265961edl.21.2021.09.30.03.13.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Sep 2021 03:13:09 -0700 (PDT)
+Subject: Re: [PATCH v4 10/11] microblaze: Use is_kernel_text() helper
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, rostedt@goodmis.org,
+        mingo@redhat.com, davem@davemloft.net, ast@kernel.org,
+        ryabinin.a.a@gmail.com, akpm@linux-foundation.org
+Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+References: <20210930071143.63410-1-wangkefeng.wang@huawei.com>
+ <20210930071143.63410-11-wangkefeng.wang@huawei.com>
+From:   Michal Simek <monstr@monstr.eu>
+Message-ID: <2a23c06c-62e5-d4f8-4c7c-4e5c055a9e69@monstr.eu>
+Date:   Thu, 30 Sep 2021 12:13:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210930071143.63410-11-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> +/*
-> + * Implement a NUMA-aware version of MCS (aka CNA, or compact NUMA-aware lock).
-> + *
-> + * In CNA, spinning threads are organized in two queues, a primary queue for
-> + * threads running on the same NUMA node as the current lock holder, and a
-> + * secondary queue for threads running on other nodes. Schematically, it
-> + * looks like this:
-> + *
-> + *    cna_node
-> + *   +----------+     +--------+         +--------+
-> + *   |mcs:next  | --> |mcs:next| --> ... |mcs:next| --> NULL  [Primary queue]
-> + *   |mcs:locked| -.  +--------+         +--------+
-> + *   +----------+  |
-> + *                 `----------------------.
-> + *                                        v
-> + *                 +--------+         +--------+
-> + *                 |mcs:next| --> ... |mcs:next|            [Secondary queue]
-> + *                 +--------+         +--------+
-> + *                     ^                    |
-> + *                     `--------------------'
-> + *
 
-probably not only related with NUMA, it might be also related with cache topology.
-For example, one NUMA might has a couple of sub domains, each domain shares some
-last level cache. ZEN, Power and some ARM servers all have this kind of topology.
 
-lock synchronization within this smaller range should be much faster. anyway, it
-looks like a good start to be aware of numa only for this moment.
+On 9/30/21 9:11 AM, Kefeng Wang wrote:
+> Use is_kernel_text() helper to simplify code.
+> 
+> Cc: Michal Simek <monstr@monstr.eu>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  arch/microblaze/mm/pgtable.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/microblaze/mm/pgtable.c b/arch/microblaze/mm/pgtable.c
+> index c1833b159d3b..9f73265aad4e 100644
+> --- a/arch/microblaze/mm/pgtable.c
+> +++ b/arch/microblaze/mm/pgtable.c
+> @@ -34,6 +34,7 @@
+>  #include <linux/mm_types.h>
+>  #include <linux/pgtable.h>
+>  #include <linux/memblock.h>
+> +#include <linux/kallsyms.h>
+>  
+>  #include <asm/pgalloc.h>
+>  #include <linux/io.h>
+> @@ -171,7 +172,7 @@ void __init mapin_ram(void)
+>  	for (s = 0; s < lowmem_size; s += PAGE_SIZE) {
+>  		f = _PAGE_PRESENT | _PAGE_ACCESSED |
+>  				_PAGE_SHARED | _PAGE_HWEXEC;
+> -		if ((char *) v < _stext || (char *) v >= _etext)
+> +		if (!is_kernel_text(v))
+>  			f |= _PAGE_WRENABLE;
+>  		else
+>  			/* On the MicroBlaze, no user access
+> 
 
-Thanks
-barry
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+
+Thanks,
+Michal
+
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+
