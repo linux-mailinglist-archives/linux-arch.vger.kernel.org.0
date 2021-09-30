@@ -2,141 +2,204 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7775F41E399
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 00:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D4741E450
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 00:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245636AbhI3WDv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Sep 2021 18:03:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55350 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229644AbhI3WDv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 Sep 2021 18:03:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E349619F5;
-        Thu, 30 Sep 2021 22:02:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633039328;
-        bh=2lX2HS9p7h6jVhzTp+A/c8lOWnTkxK3BWpjUhjVAspk=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=DoX0OvxqWP+fcmhRSZwVxN4k+1r5YBC1wRi8pniTKlxH3tACBGX4+E1i+yVjntK4b
-         0iWtOlCOdWHpEAn3J3bL3IlchzExStZ5E2auAtQpd7bF8WyG8bw7F2s0CP5APPTDTo
-         0m3wwZ4U+BrL5+4//yR5l1VxJDd8Ti3ELWDMrfuGilQP4e0dGIJnOGwzhlTY69oB13
-         GKVmw4+PEamDDsv1AIqh0mnH4w1g+7W4XlKyD2Nhyfyj0WgzXCXQ4sPK5MOl1pEJmZ
-         18m+YIc09tm+G4oVB3Sbgh3Q3juJMrICckMfzuRVUFhaCWVruZDmxzvFPgnCsmIQnl
-         GvnUP3JDGUo6A==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 7EFF227C0054;
-        Thu, 30 Sep 2021 18:02:05 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute6.internal (MEProxy); Thu, 30 Sep 2021 18:02:05 -0400
-X-ME-Sender: <xms:3DNWYaN6K1HaFgb_J05zGYyqVXqKvabwgebyr9hUC3zkxxmR5abd0A>
-    <xme:3DNWYY_F60-VbYshuls7MAekehK87YHGHNlkmGeWnPnYRdEN-weebXQPy2fnBJ6Jy
-    6vsNvRtJcudxCxPADI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekhedgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdelheejjeevhfdutdeggefftdejtdffgeevteehvdfgjeeiveei
-    ueefveeuvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:3DNWYRTwFfTAJpG4EY22PYhz4Ert7EDfbqqBHhP062OWBRy-DPhS7A>
-    <xmx:3DNWYaucXJL1-5aX6DTXwUEX22GUFqM4kXWPATyv0eLqtlXK-NbrDA>
-    <xmx:3DNWYScbGHpLO9rw9OLb4tG1UdbOtsxmmxfSlE4BVR-pq3EMMKSTCQ>
-    <xmx:3TNWYQepZXGaGAmyFThUoEUwUCXJSZAnoNPDtfxLIvGgtvb2FSw7GHDGSlc>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 689F621E0062; Thu, 30 Sep 2021 18:02:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1322-g921842b88a-fm-20210929.001-g921842b8
-Mime-Version: 1.0
-Message-Id: <b537a890-4b9f-462e-8c17-5c7aa9b60138@www.fastmail.com>
-In-Reply-To: <877dex7tgj.ffs@tglx>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20210913200132.3396598-12-sohil.mehta@intel.com>
- <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
- <c6e83d0e-6551-4e16-0822-0abbc4d656c4@intel.com>
- <fd54f257-fa02-4ec3-a81b-b5e60f24bf94@www.fastmail.com> <877dex7tgj.ffs@tglx>
-Date:   Thu, 30 Sep 2021 15:01:44 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Sohil Mehta" <sohil.mehta@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Cc:     "Tony Luck" <tony.luck@intel.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, "Jens Axboe" <axboe@kernel.dk>,
-        "Christian Brauner" <christian@brauner.io>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Shuah Khan" <shuah@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Raj Ashok" <ashok.raj@intel.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        "Gayatri Kammela" <gayatri.kammela@intel.com>,
-        "Zeng Guang" <guang.zeng@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Randy E Witt" <randy.e.witt@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Ramesh Thomas" <ramesh.thomas@intel.com>,
-        "Linux API" <linux-api@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
-Content-Type: text/plain;charset=utf-8
+        id S1349248AbhI3W7r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Sep 2021 18:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230108AbhI3W7q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Sep 2021 18:59:46 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F4AC061771;
+        Thu, 30 Sep 2021 15:58:02 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id dn26so27767700edb.13;
+        Thu, 30 Sep 2021 15:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XWANcquiC3OT/k9PEu3qx71OxUdcpZJWv4aU3uSky5s=;
+        b=SDE9WHQtL/a9M0clbm0TCl7lNza8vukyFjIcehlRUTJ2tYNz2gpfdRWku/XgIJY78e
+         T6WddEkciw7Eze35I1x2HEr/LjeUPp1Ju0aWb2eOiJ5SK4WvvpkJUKrlpAA+tofpOebP
+         TBhAGkjFZak2w3Ih50qnbrxY34I/g8mUCU8Ogwpar26o0K/svWEvI8DDIpJwhC8Wjnsw
+         kXWgO/fUJDuh2t7UFcrTfqyJZSU80xvbX7EU1d2fPvIwHRHgRIvUJca3NakZCoRpjeuf
+         zYE8fR8mlqVWHwNBwEMZ4ATkh3/XCIpPGy6Oj1PuMr7UDZz6OHDa1QwyfbPyFja9GLlI
+         DZ2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XWANcquiC3OT/k9PEu3qx71OxUdcpZJWv4aU3uSky5s=;
+        b=xvrM/x/aDAQBGtgjEvsRoJLJbjEyPsRPvhmKSkfKvafRr/EguHM/y8uxg+E9ncKlv4
+         j1TAWtVbxijCOb/JTv7DH3ne1CJ9kQY+KtAPlTeRPYIIc/Blm0vG+2KTlP7Sqqljj6G/
+         d152qosBFBQbyB4MJelRo9frwD4OaYAlWcXKOLCBf/0Tgj+kuVoOiPenBjXNFX420hpC
+         +9Icx7+xC+4diF+ZkTnHDwDJ3m0BLog/RiBjPTfLrrdUBJwBjpE2k6OiJvwg9aMXSlie
+         4N1gexc7OZ1vw2bUsjnDaA+/+SX1wdHtWFAg3SBwjN1hqUxgJcXuYBWcbPeP+YH2B93K
+         fr1w==
+X-Gm-Message-State: AOAM530j6cGQ1bicg5JXs8Dwn5CCxlFlqKfqHK/bSXdNUozgBfdRbVPs
+        mp2hbUulZfmBphDPBRBsSaVDcRJ8HXaitdJMn78=
+X-Google-Smtp-Source: ABdhPJz/YMmmeE5YFvsQBtzY8jRRBhr1m6d+5MtRxBBdFR8Khw3S3Y5hJKORenGCFsIVpvNAsPOKrDagnO48N5mKHTA=
+X-Received: by 2002:aa7:d7d5:: with SMTP id e21mr10586747eds.27.1633042681168;
+ Thu, 30 Sep 2021 15:58:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210514200743.3026725-1-alex.kogan@oracle.com>
+ <20210930094447.9719-1-21cnbao@gmail.com> <a6340beb-3b4a-2518-9340-ea0fc7583dbe@redhat.com>
+In-Reply-To: <a6340beb-3b4a-2518-9340-ea0fc7583dbe@redhat.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Fri, 1 Oct 2021 11:57:49 +1300
+Message-ID: <CAGsJ_4wtyLOSwYH0n5vbJ3YFyXcxyVstXxn7q=nr=bPuX5oNaQ@mail.gmail.com>
+Subject: Re: [PATCH v15 0/6] Add NUMA-awareness to qspinlock
+To:     Waiman Long <llong@redhat.com>
+Cc:     alex.kogan@oracle.com, Arnd Bergmann <arnd@arndb.de>,
+        Borislav Petkov <bp@alien8.de>, daniel.m.jordan@oracle.com,
+        dave.dice@oracle.com, guohanjun@huawei.com,
+        "H. Peter Anvin" <hpa@zytor.com>, jglauber@marvell.com,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>, linux@armlinux.org.uk,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        steven.sistare@oracle.com, Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will.deacon@arm.com>, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On Thu, Sep 30, 2021, at 12:29 PM, Thomas Gleixner wrote:
-> On Thu, Sep 30 2021 at 11:08, Andy Lutomirski wrote:
->> On Tue, Sep 28, 2021, at 9:56 PM, Sohil Mehta wrote:
->> I think we have three choices:
->>
->> Use a fancy wrapper around SENDUIPI.  This is probably a bad idea.
->>
->> Treat the NV-2 as a real interrupt and honor affinity settings.  This
->> will be annoying and slow, I think, if it's even workable at all.
+On Fri, Oct 1, 2021 at 5:58 AM Waiman Long <llong@redhat.com> wrote:
 >
-> We can make it a real interrupt in form of a per CPU interrupt, but
-> affinity settings are not really feasible because the affinity is in t=
-he
-> UPID.ndst field. So, yes we can target it to some CPU, but that's racy.
+> On 9/30/21 5:44 AM, Barry Song wrote:
+> >> We have done some performance evaluation with the locktorture module
+> >> as well as with several benchmarks from the will-it-scale repo.
+> >> The following locktorture results are from an Oracle X5-4 server
+> >> (four Intel Xeon E7-8895 v3 @ 2.60GHz sockets with 18 hyperthreaded
+> >> cores each). Each number represents an average (over 25 runs) of the
+> >> total number of ops (x10^7) reported at the end of each run. The
+> >> standard deviation is also reported in (), and in general is about 3%
+> >> from the average. The 'stock' kernel is v5.12.0,
+> > I assume x5-4 server has the crossbar topology and its numa diameter is
+> > 1hop, and all tests were done on this kind of symmetrical topology. Am
+> > I right?
+> >
+> >      =E2=94=8C=E2=94=80=E2=94=90                 =E2=94=8C=E2=94=80=E2=
+=94=90
+> >      =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4 =E2=94=82
+> >      =E2=94=94=E2=94=80=E2=94=A41               1=E2=94=94=E2=94=AC=E2=
+=94=98
+> >        =E2=94=82  1           1   =E2=94=82
+> >        =E2=94=82    1       1     =E2=94=82
+> >        =E2=94=82      1   1       =E2=94=82
+> >        =E2=94=82        1         =E2=94=82
+> >        =E2=94=82      1   1       =E2=94=82
+> >        =E2=94=82     1      1     =E2=94=82
+> >        =E2=94=82   1         1    =E2=94=82
+> >       =E2=94=8C=E2=94=BC=E2=94=901             1  =E2=94=9C=E2=94=80=E2=
+=94=90
+> >       =E2=94=82=E2=94=BC=E2=94=BC=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4 =E2=94=82
+> >       =E2=94=94=E2=94=80=E2=94=98                 =E2=94=94=E2=94=80=E2=
+=94=98
+> >
+> >
+> > what if the hardware is using the ring topology and other topologies wi=
+th
+> > 2-hops or even 3-hops such as:
+> >
+> >       =E2=94=8C=E2=94=80=E2=94=90                 =E2=94=8C=E2=94=80=E2=
+=94=90
+> >       =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4 =E2=94=82
+> >       =E2=94=94=E2=94=80=E2=94=A4                 =E2=94=94=E2=94=AC=E2=
+=94=98
+> >         =E2=94=82                  =E2=94=82
+> >         =E2=94=82                  =E2=94=82
+> >         =E2=94=82                  =E2=94=82
+> >         =E2=94=82                  =E2=94=82
+> >         =E2=94=82                  =E2=94=82
+> >         =E2=94=82                  =E2=94=82
+> >         =E2=94=82                  =E2=94=82
+> >        =E2=94=8C=E2=94=A4                  =E2=94=9C=E2=94=80=E2=94=90
+> >        =E2=94=82=E2=94=BC=E2=94=AC=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4 =E2=94=82
+> >        =E2=94=94=E2=94=80=E2=94=98                 =E2=94=94=E2=94=80=
+=E2=94=98
+> >
+> >
+> > or:
+> >
+> >
+> >      =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=90       =E2=94=8C=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=90      =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=90      =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=90
+> >      =E2=94=82   =E2=94=82       =E2=94=82   =E2=94=82      =E2=94=82  =
+  =E2=94=82      =E2=94=82     =E2=94=82
+> >      =E2=94=82   =E2=94=82       =E2=94=82   =E2=94=82      =E2=94=82  =
+  =E2=94=82      =E2=94=82     =E2=94=82
+> >      =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=BC=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=A4
+> >      =E2=94=82   =E2=94=82       =E2=94=82   =E2=94=82      =E2=94=82  =
+  =E2=94=82      =E2=94=82     =E2=94=82
+> >      =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=98       =E2=94=94=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=98      =E2=94=94=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=98      =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=98
+> >
+> > do we need to consider the distances of numa nodes in the secondary
+> > queue? does it still make sense to treat everyone else equal in
+> > secondary queue?
 >
->> Handle this case with faults instead of interrupts.  We could set a
->> reserved bit in UPID so that SENDUIPI results in #GP, decode it, and
->> process it.  This puts the onus on the actual task causing trouble,
->> which is nice, and it lets us find the UPID and target directly
->> instead of walking all of them.  I don't know how well it would play
->> with hypothetical future hardware-initiated uintrs, though.
->
-> I thought about that as well and dismissed it due to the hardware
-> initiated ones but thinking more about it, those need some translation
-> unit (e.g. irq remapping) anyway, so it might be doable to catch those
-> as well. So we could just ignore them for now and go for the #GP trick
-> and deal with the device initiated ones later when they come around :)
+> The purpose of this patch series is to minimize cacheline transfer from
+> one numa node to another. Taking the fine grained detail of the numa
+> topology into account will complicate the code without much performance
+> benefit from my point of view. Let's keep it simple first. We can always
+> improve it later on if one can show real benefit of doing so.
 
-Sounds good to me. In the long run, if Intel wants device initiated fanc=
-y interrupts to work well, they need a new design.
+for sure i am not expecting the complex  NUMA topology taken into account f=
+or
+this moment. I am just curious how things will be different if topology isn=
+'t a
+crossbar with 1-hop only.
+
+when the master queue is empty, the distance of the numa node spinlock will
+jump to will affect the performance. but I am not quite sure how much it wi=
+ll
+be. just like a disk, bumping back and forth between far cylinders and sect=
+ors
+might waste a lot of time.
+
+On the other hand, some numa nodes might be very close while some others
+might be very far. for example, if one socket has several DIEs, and the mac=
+hine
+has several sockets, cacheline coherence overhead for NUMA nodes of DIEs wi=
+thin
+one socket might be much less than that of NUMA nodes which are in differen=
+t
+sockets. I assume maintaining the master/secondary queues need some
+overhead especially while the system has many cores and multiple NUMA nodes=
+,
+in this case, making neighbor NUMA nodes share one master queue might win.
+
+Anyway, we need a lot of benchmarking on this before we can really do anyth=
+ing
+on it.  For this moment, ignoring the complicated topology should be a
+better way
+to start.
 
 >
-> But even with that we still need to keep track of the armed ones per C=
-PU
-> so we can handle CPU hotunplug correctly. Sigh...
+> Cheers,
+> Longman
 
-I don=E2=80=99t think any real work is needed. We will only ever have ar=
-med UPIDs (with notification interrupts enabled) for running tasks, and =
-hot-unplugged CPUs don=E2=80=99t have running tasks.  We do need a way t=
-o drain pending IPIs before we offline a CPU, but that=E2=80=99s a separ=
-ate problem and may be unsolvable for all I know. Is there a magic APIC =
-operation to wait until all initiated IPIs targeting the local CPU arriv=
-e?  I guess we can also just mask the notification vector so that it won=
-=E2=80=99t crash us if we get a stale IPI after going offline.
-
->
-> Thanks,
->
->         tglx
+Thanks
+barry
