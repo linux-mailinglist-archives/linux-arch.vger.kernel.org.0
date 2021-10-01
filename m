@@ -2,175 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C455A41F4CA
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 20:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA50F41F4E3
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 20:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355850AbhJASQt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Oct 2021 14:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S1355705AbhJASUp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Oct 2021 14:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355897AbhJASQ1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 14:16:27 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D09C0613AA;
-        Fri,  1 Oct 2021 11:13:37 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id oj15-20020a17090b4d8f00b0019f8860d6e2so824269pjb.5;
-        Fri, 01 Oct 2021 11:13:37 -0700 (PDT)
+        with ESMTP id S1355744AbhJASUo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 14:20:44 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1756C0613E2
+        for <linux-arch@vger.kernel.org>; Fri,  1 Oct 2021 11:18:58 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id z24so42099742lfu.13
+        for <linux-arch@vger.kernel.org>; Fri, 01 Oct 2021 11:18:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FlSQA/x8Q659lExbJ8x+3pbQGN8nCVePZlCG2RLxniQ=;
-        b=dNr9oSu6Qtp0DeQk6DSDUbA9YikKVIz9z6eDiaeb6OMzoEdg9gAFlLLwsOWXLrGG8M
-         Tf6ft5iMykzEGrZMsfgyC9QLYxeJZzr9iokrdPNjaxqOaAq2tRkql/LvBg7Oo5bXXM7K
-         6j6QD6fvxGLhYzQVks5mwK0mKYnxwzsRZyJ8VPG4lYVlogXWb2FMSaNXHbJRufBdnKqU
-         mFgBekVMogPp8ABPAVRABc0Fq2iUE0SzqOLA3wJsXjpr6o45seO512t+JfJ6HU5UQeV0
-         qQSgp9y9Gl4LBdLJ7YMJ84T/d4ko6eiEc+Ih+Sz3NT81xaniChwYG66PpEO7KGxtm3kA
-         Ozuw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UuvJOD3DzRGmVW6xcad8F/v9YB5VsSRjw/nzs5q47b4=;
+        b=MgDHcdJSmX13uyCrfEHU0FYoJQ1hXzA5UW2GY94/ufFm/9Qq3zH15vPjnENcyoArkK
+         FU67Ww/nLrIPvwuOcYozEGxrgnmYrE/xtwICCE/8r8Fq7gG7HGJlLyPDKnPGIQOpwv4h
+         TG9h2lpDce0CjWYasQzV5YqhInUJMedEFM9PM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FlSQA/x8Q659lExbJ8x+3pbQGN8nCVePZlCG2RLxniQ=;
-        b=RAGdtbKX8YkTZTyHJpSnqKKpD5s2fXQqsAvEHGJ+T+WxfcZJ5Zps2ZYGg0LgV/NjZo
-         goWoeWmPHSrTo3uh7eKPzXegStQ656h4qzzxvo4vO1n3Z3q2twolLf0Y/FjewZWZbW2F
-         3iOR/r25853OqFF8zn/dCW3w1IzYHzEFtN/zPqpIaMxBitpdZm/Gw7W34peVSKv0OV8R
-         NzWVIWMNPLf+eJeLNUinf4JJWGLYqYU3x1znZZ/Te1jC0B3XiytCamttx3dp3d6flIeX
-         uLwJ7BREjFIa33p5SgEoMg+7QGfN5dsALuPk2wTKv6xcN4KR1+EOwyT4MbkMUh4hjnvf
-         3XXw==
-X-Gm-Message-State: AOAM530tnZYscEsy/BAvm+BSDfGzGXnkqHDHmiNuInVY1qQSUMsNQOhv
-        23RBH0KvYla25iDhn276ojc=
-X-Google-Smtp-Source: ABdhPJwYukMmWxTyp0ryKmZnt4pz+cTynvNrINevzce5Gbx7dcqhhXEHbxJDQcDzmMx/MR36JOPG5g==
-X-Received: by 2002:a17:90a:4815:: with SMTP id a21mr14770802pjh.108.1633112017021;
-        Fri, 01 Oct 2021 11:13:37 -0700 (PDT)
-Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id p4sm5778054pjo.0.2021.10.01.11.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 11:13:36 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andrea Merello <andrea.merello@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Ben Gardon <bgardon@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Lameter <cl@linux.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
-        Joe Perches <joe@perches.com>, Jonas Bonn <jonas@southpole.se>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rich Felker <dalias@libc.org>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 16/16] vsprintf: rework bitmap_list_string
-Date:   Fri,  1 Oct 2021 11:12:45 -0700
-Message-Id: <20211001181245.228419-17-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211001181245.228419-1-yury.norov@gmail.com>
-References: <20211001181245.228419-1-yury.norov@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UuvJOD3DzRGmVW6xcad8F/v9YB5VsSRjw/nzs5q47b4=;
+        b=SGcyIgQB+hoUsB2n4h8GccVHIywHH41CNGUZHiWJQwO6xKCLF4e5XygH9n1RnBSl2z
+         aCZ6ppvCL4gJh4a+aXGbxTWCSYbrlXyb4OWfvLn4KWht4ePCtT2obCD+l7s1pF+5RBCl
+         C+VYEyWAtNgDesFNVcrbDRSC2aEJsjNtcHWNDw3AoeyJ8ngkt3n+B/4YC5iJMkXP6SUN
+         1XNjsu2bP0AHECDoZ3Ipm8xW97q6RAaAAexuUSV6E9hIBjl8d2+I8RYWnk8CPc33pGVb
+         4TrH1g6T/RnOl5AChmbiza/pt/DtxnLHqqbrgdNCKzmhMy2tZNpQqhmNC8gdO9e4KYfu
+         1D0w==
+X-Gm-Message-State: AOAM531EVmqjG2hH1OstgkuQYoN50dnc+tPlwb/F0MZQvmQZ8G8y5Ou5
+        x2FiliF5QxtUHFo0FyALUXVgng67dAwZwA6HWUU=
+X-Google-Smtp-Source: ABdhPJxkTCRtvBU3XPolpgaR7qGIrOaSWVVCh84HvAplAbQLpMM2h7dRJFT4bj4VkukCWJKlb+XTzA==
+X-Received: by 2002:a2e:611a:: with SMTP id v26mr13534069ljb.122.1633112336774;
+        Fri, 01 Oct 2021 11:18:56 -0700 (PDT)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id a7sm731774ljd.85.2021.10.01.11.18.53
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Oct 2021 11:18:54 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id x27so42096128lfu.5
+        for <linux-arch@vger.kernel.org>; Fri, 01 Oct 2021 11:18:53 -0700 (PDT)
+X-Received: by 2002:ac2:51a6:: with SMTP id f6mr147804lfk.150.1633112333146;
+ Fri, 01 Oct 2021 11:18:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
+ <YVRWyq+rDeAFLx+X@elver.google.com> <1340204910.47919.1633103136293.JavaMail.zimbra@efficios.com>
+ <CAHk-=whcN4ACLFvst0THwwpUFK4DDSM4O_frSoUQJ1m+0ENWjw@mail.gmail.com> <1097444747.48074.1633109281556.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1097444747.48074.1633109281556.JavaMail.zimbra@efficios.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 1 Oct 2021 11:18:37 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whi_B36yw9Haw3sfSQhF7+Y1=bn_y2S=DwZ533yuF=izw@mail.gmail.com>
+Message-ID: <CAHk-=whi_B36yw9Haw3sfSQhF7+Y1=bn_y2S=DwZ533yuF=izw@mail.gmail.com>
+Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Marco Elver <elver@google.com>, Will Deacon <will@kernel.org>,
+        paulmck <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        j alglave <j.alglave@ucl.ac.uk>,
+        luc maranget <luc.maranget@inria.fr>,
+        akiyks <akiyks@gmail.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-bitmap_list_string() is very ineffective when printing bitmaps with long
-ranges of set bits because it calls find_next_bit for each bit in the
-bitmap.  We can do better by detecting ranges of set bits.
+On Fri, Oct 1, 2021 at 10:28 AM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> I've spent some quality time staring at generated assembler diff in the past
+> days, and looking for code patterns of refcount_dec_and_test users, without
+> much success. There are some cases which end up working by chance, e.g. in
+> cases where the if leg has a smp_acquire__after_ctrl_dep and the else leg has
+> code that emits a barrier(), but I did not find any buggy generated
+> code per se. In order to observe those issues in real life, we would
+> really need to have identical then/else legs to the branch.
 
-In my environment, before/after is 943008/31008 ns.
+Yeah, that's been very much my feeling too during this whole
+discussion (including, very much, earlier threads).
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- lib/vsprintf.c | 24 +++++++-----------------
- 1 file changed, 7 insertions(+), 17 deletions(-)
+All the examples about this being a problem are those kinds of
+"identical or near-identical if/else statements" and they just don't
+seem to be all that realistic.
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 67a96165e587..d1bbf1d78df3 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1241,20 +1241,13 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
- 			 struct printf_spec spec, const char *fmt)
- {
- 	int nr_bits = max_t(int, spec.field_width, 0);
--	/* current bit is 'cur', most recently seen range is [rbot, rtop] */
--	int cur, rbot, rtop;
- 	bool first = true;
-+	int rbot, rtop;
- 
- 	if (check_pointer(&buf, end, bitmap, spec))
- 		return buf;
- 
--	rbot = cur = find_first_bit(bitmap, nr_bits);
--	while (cur < nr_bits) {
--		rtop = cur;
--		cur = find_next_bit(bitmap, nr_bits, cur + 1);
--		if (cur < nr_bits && cur <= rtop + 1)
--			continue;
--
-+	for_each_set_bitrange(rbot, rtop, bitmap, nr_bits) {
- 		if (!first) {
- 			if (buf < end)
- 				*buf = ',';
-@@ -1263,15 +1256,12 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
- 		first = false;
- 
- 		buf = number(buf, end, rbot, default_dec_spec);
--		if (rbot < rtop) {
--			if (buf < end)
--				*buf = '-';
--			buf++;
--
--			buf = number(buf, end, rtop, default_dec_spec);
--		}
-+		if (rtop == rbot + 1)
-+			continue;
- 
--		rbot = cur;
-+		if (buf < end)
-+			*buf = '-';
-+		buf = number(++buf, end, rtop - 1, default_dec_spec);
- 	}
- 	return buf;
- }
--- 
-2.30.2
+Because immediately when the if-statement actually does something
+_meaningful_, it just turns into a branch. And when people use atomics
+- even the weak READ/WRITE_ONCE() kinds of things, never mind anything
+stronger - it really doesn't give the compiler the option to move
+things around all that much.
 
+There's a reason the source code uses an if-statement, after all: that
+is literally the logical code flow, and people write a very particular
+dependency chain that is just very fundamental.
+
+Having essentially the same thing on both sides just isn't a realistic
+thing to do, and if it were - and you cared about performance in that
+case, which is what this is all about, after all - you'd write it very
+differently.
+
+                Linus
