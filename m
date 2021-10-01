@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 240E041EE63
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 15:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA8041EE9F
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 15:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354011AbhJANUD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Oct 2021 09:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37286 "EHLO
+        id S231708AbhJANdv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Oct 2021 09:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352696AbhJANTt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 09:19:49 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE87C0613EB;
-        Fri,  1 Oct 2021 06:17:45 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id w11so6262277plz.13;
-        Fri, 01 Oct 2021 06:17:45 -0700 (PDT)
+        with ESMTP id S231416AbhJANdv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 09:33:51 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47819C061775;
+        Fri,  1 Oct 2021 06:32:07 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id q23so7928045pfs.9;
+        Fri, 01 Oct 2021 06:32:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ylpl7fwcJ6dmn8OOkjpCoC6BQ0dUN3SoIftGjd4jR9U=;
-        b=jXNrEhRQ+XqK/MsLCBs+KJXQnxuYQ2yX2fUjSWwoGUrREJtyMpH0hGhkVJMSW1wLd1
-         QG/YWwpP9/HYnq/HsGiy0rsQXdViF2LhyHl20KL67shjcwzQb+r6Spe6JdGO57xbxAIb
-         gOKluJnZ+JrnIhxbd1z7MVSLZINqTYaToYH7z9tQnKhI3GUggfMdP3C+l3uhn5niPwD/
-         KNdDhOLicZnNfLsyH2DOOiMn5FXB5uSpqeEDAki+hKUEjLkS6p16gb9tUjokkdO1eYPS
-         xzxm4SVx+EUgVWK2LFtWAAWE4j3yrI9HDIes+q6qDkvmzz1/HvAx024kqsTy+GXRRnHC
-         QMiw==
+        bh=EkX8N/foQh79zdmHXhT/3vt7GknIsH61jaJs2i8JOH0=;
+        b=JVi2qlLW64stMaJ6M+MDj9e59Y++JoKgQwTX3P1JN5gtKv9XQurQTcovFy2QkDLLUj
+         iKp7AScsFt/meALx0S0cg8Hs4HL+bp0zcDg0STWnr6DEV/YOsEXUWnsiFtgzOMef9C1C
+         mCd0VujVTSqQWv/h92xBrUUfUO07IjJwugPluKEZrX0sIIpQfslEoXNWjbh88IrR57oN
+         ieIIKYbuXF52iwtovIK2HHl9wiE1wNt5phaxiBpj6wOktz9WpGit6gzslRea4GW6ab+U
+         J03nuCjmPBoyc4nslGg+y9cldUV8KS3Qr32LRxruHRAczF43xf5BbiyYyvlGnM9VzaGx
+         oJlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Ylpl7fwcJ6dmn8OOkjpCoC6BQ0dUN3SoIftGjd4jR9U=;
-        b=heNPYB15lSVZPM+CoPjpGIX6ZrM/QzCbSLoQpmH39OVTmCRTIksf1FFwfUUTp6snHV
-         6tqWm9wLuNbm8yOjqaHBviF1OHHheBtd7GmfKDOUA7nW/tzrzn7HZuEkVeZk72aWwKAy
-         r8OLtubQ2msIWFBToasjeZRv4hnaB/MhEbd5eYCdBOsto49bGIqJci2kOg7lqPeYvKhc
-         AqHmqd1+n3kMcxcGD8uYcaBE/x/4DEPWX8qBbfAmANp5/FdP9sXxHZMyctnfvPAwccUn
-         NG0LqPR5IRuUuXOhBeP4o1w5SHvIjtENq+m8wPKem/zkbm2zEO7q8tiASbbefbvw0lkc
-         CKrg==
-X-Gm-Message-State: AOAM530FB8V6+76MeeESUb0S3Ifzk+rQ/RieIe8BOsnE9D8W005K3kMR
-        06L460lHRdW1bm5oDbQniBA=
-X-Google-Smtp-Source: ABdhPJzVVuw8Y9jVkevWrUuql70mrqqyUm154zOarGgS2WsExr7akQAa/DG3ZUsriL6WynJLxWvg/w==
-X-Received: by 2002:a17:902:c612:b0:13c:9801:a336 with SMTP id r18-20020a170902c61200b0013c9801a336mr9397654plr.27.1633094265436;
-        Fri, 01 Oct 2021 06:17:45 -0700 (PDT)
+        bh=EkX8N/foQh79zdmHXhT/3vt7GknIsH61jaJs2i8JOH0=;
+        b=cf/8M9JOe/MGhuRyJPCAwoSkD8o7taNloh0EgvsPzchcdhmJYiLYqWRuKNt4kX08Dr
+         YQFEfv0UPM/lqR85Ujqir1od0+OZBcetBAdERfnXr7RWSIFf4RVoKVAUAzo1s60LZ49k
+         rseJIvLP2JMB1QejTHhuAlXNbd/+B7p4Z5bk7fwZpT+qZo9VIOIBmcHJ2hGE2jKQHg2H
+         nb40T/RVa9gSHlJw/cNolvEycPVSMa789DIcGtKMVbc6O0wm8+qR0MCNFnH0CJeh/hkm
+         tiumMLKL9LwDnEkjF+0aO10eaRuRmrTscJ6WCLWRfl8pG8jC7DlERZnw7e8DctuWLD/E
+         kOWg==
+X-Gm-Message-State: AOAM533+qbr3hazg85bnS6SRSsIDLiltxJzjMZ172obDGDMvhi1NNtH/
+        qCpV0/twE9yDlLHfB0hques=
+X-Google-Smtp-Source: ABdhPJzQwMRguOEcxGL4zKu5NEXMHgfCmxG0ebgGYybD2K/CLVKC8fY2G/X91ZQ/EIJIkmT9jSkW4g==
+X-Received: by 2002:a05:6a00:1891:b0:446:c141:7d2a with SMTP id x17-20020a056a00189100b00446c1417d2amr11540913pfh.36.1633095126764;
+        Fri, 01 Oct 2021 06:32:06 -0700 (PDT)
 Received: from ?IPv6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
-        by smtp.gmail.com with ESMTPSA id e11sm6404924pfm.28.2021.10.01.06.17.34
+        by smtp.gmail.com with ESMTPSA id i5sm7687684pjk.47.2021.10.01.06.31.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Oct 2021 06:17:45 -0700 (PDT)
-Subject: Re: [PATCH V6 3/8] x86/hyperv: Add new hvcall guest address host
- visibility support
+        Fri, 01 Oct 2021 06:32:06 -0700 (PDT)
+Subject: Re: [PATCH V6 5/8] x86/hyperv: Add Write/Read MSR registers via ghcb
+ page
 To:     Borislav Petkov <bp@alien8.de>
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
@@ -67,84 +67,51 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         konrad.wilk@oracle.com, hch@lst.de, robin.murphy@arm.com,
         joro@8bytes.org, parri.andrea@gmail.com, dave.hansen@intel.com
 References: <20210930130545.1210298-1-ltykernel@gmail.com>
- <20210930130545.1210298-4-ltykernel@gmail.com> <YVX7n4YM8ZirwTQu@zn.tnic>
+ <20210930130545.1210298-6-ltykernel@gmail.com> <YVX/9Xxxgy5D/Cvo@zn.tnic>
 From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <8a9a6753-d0b5-3c12-5a5c-17decae3548b@gmail.com>
-Date:   Fri, 1 Oct 2021 21:17:33 +0800
+Message-ID: <6525a915-fd4f-5875-cddd-06aeac5df896@gmail.com>
+Date:   Fri, 1 Oct 2021 21:31:55 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <YVX7n4YM8ZirwTQu@zn.tnic>
+In-Reply-To: <YVX/9Xxxgy5D/Cvo@zn.tnic>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Boris:
-	Thanks for your review.
 
-On 10/1/2021 2:02 AM, Borislav Petkov wrote:
-> On Thu, Sep 30, 2021 at 09:05:39AM -0400, Tianyu Lan wrote:
->> @@ -1980,15 +1982,11 @@ int set_memory_global(unsigned long addr, int numpages)
->>   				    __pgprot(_PAGE_GLOBAL), 0);
+
+On 10/1/2021 2:20 AM, Borislav Petkov wrote:
+> On Thu, Sep 30, 2021 at 09:05:41AM -0400, Tianyu Lan wrote:
+>> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+>> index 9f90f460a28c..dd7f37de640b 100644
+>> --- a/arch/x86/kernel/sev-shared.c
+>> +++ b/arch/x86/kernel/sev-shared.c
+>> @@ -94,10 +94,9 @@ static void vc_finish_insn(struct es_em_ctxt *ctxt)
+>>   	ctxt->regs->ip += ctxt->insn.length;
 >>   }
 >>   
->> -static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
->> +static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+>> -static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+>> -					  struct es_em_ctxt *ctxt,
+>> -					  u64 exit_code, u64 exit_info_1,
+>> -					  u64 exit_info_2)
+>> +enum es_result sev_es_ghcb_hv_call_simple(struct ghcb *ghcb,
+>> +				   u64 exit_code, u64 exit_info_1,
+>> +				   u64 exit_info_2)
+> Align arguments on the opening brace.
 > 
-> What exactly is that "pgtable" at the end of the name supposed to mean?
+> Also, there's nothing "simple" about it - what you've carved out does
+> the actual HV call and the trailing part is verifying the HV info. So
+> that function should be called
+> 
+> __sev_es_ghcb_hv_call()
+> 
+> and the outer one without the "__".
 > 
 
-This was suggested by Dave Hansen. It gets used for the hypervisors
-that get informed about "encryption" status via page tables: SEV and TDX.
+Good suggestion. Will fix it in the next version.
 
-https://lore.kernel.org/linux-iommu/c00e269c-da4c-c703-0182-0221c73a76cc@intel.com/
-
-> So if you want to have different indirections here, I'd suggest you do
-> this:
-> 
-> set_memory_encrypted/decrypted() is the external API. It calls
-> 
-> _set_memory_enc_dec() which does your hv_* checks. Note the single
-> underscore "_" prefix.
-> 
-> Then, the workhorse remains __set_memory_enc_dec().
-> 
-> Ok?
-> 
-> Also, we're reworking the mem_encrypt_active() accessors:
-> 
-> https://lkml.kernel.org/r/20210928191009.32551-1-bp@alien8.de
-> 
-> so some synchronization when juggling patchsets will be needed. JFYI
-> anyway.
-
-Thanks for reminder. I know that patchset and suggested to decouple 
-dependency among SEV, TDX and Hyper=v patchset.
-
-> 
-> Also 2, building your set triggers this, dunno if I'm missing some
-> patches on my local branch for that.
-
-Thanks for your test. Missing hv_set_register() when CONFIG_HYPERV is 
-not selected. I will fix it in the next version.
-
-> 
-> In file included from ./arch/x86/include/asm/mshyperv.h:240,
->                   from ./include/clocksource/hyperv_timer.h:18,
->                   from ./arch/x86/include/asm/vdso/gettimeofday.h:21,
->                   from ./include/vdso/datapage.h:137,
->                   from ./arch/x86/include/asm/vgtod.h:12,
->                   from arch/x86/entry/vdso/vma.c:20:
-> ./include/asm-generic/mshyperv.h: In function ‘vmbus_signal_eom’:
-> ./include/asm-generic/mshyperv.h:153:3: error: implicit declaration of function ‘hv_set_register’; did you mean ‘kset_register’? [-Werror=implicit-function-declaration]
->    153 |   hv_set_register(HV_REGISTER_EOM, 0);
->        |   ^~~~~~~~~~~~~~~
->        |   kset_register
-> In file included from ./arch/x86/include/asm/mshyperv.h:240,
->                   from arch/x86/mm/pat/set_memory.c:34:
-> ./include/asm-generic/mshyperv.h: In function ‘vmbus_signal_eom’:
-> ...
-> 
+Thanks.
