@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B375741F497
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 20:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF4641F48B
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 20:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355892AbhJASPL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Oct 2021 14:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S1355726AbhJASPD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Oct 2021 14:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbhJASOm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 14:14:42 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F231AC061775;
-        Fri,  1 Oct 2021 11:12:57 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id s16so8696457pfk.0;
-        Fri, 01 Oct 2021 11:12:57 -0700 (PDT)
+        with ESMTP id S1355750AbhJASOp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 14:14:45 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9F8C0613EB;
+        Fri,  1 Oct 2021 11:13:01 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id pg10so6655222pjb.5;
+        Fri, 01 Oct 2021 11:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hccErX5nsuBThpX1Qxtkn5mCN3OYZEDoRlFj/Ybj3XY=;
-        b=eNQv0zT9wFIYG2d9RSYmrbYF/9+gDMlyHEk2kCxhtt/BPba5Sa6Y5/Pfc21A6ZledH
-         NtFvLtg8HbOvKS5ifSxU+3KRYS2usXEgtKbtZd+DX/QpMMZOK5UirtRqnYm5xg/23p+z
-         6ogkTOE851LeQHkNWZYEVhX+qowpLguCDYor/H12IXwTFQhzwNx8YTvlRiEviEjX/eTm
-         GyXPq3XvfYFNmGE6A2tVZkIAS67uVgKz5PysH0Fg53Obl0r1jf55RJNPaCmBjS/JUAu8
-         b5HPVmRoG8a2lz+ORSVwDYeF11ChkSF2ZzOQmND+LCuidg42UMyCnQcOBSSviGD9wdBR
-         G/KA==
+        bh=FIPuS4OLzQCF5AgK/VmYDt3q+TnxbO8XesSIDRxgCzY=;
+        b=OUPs20Lz/NmbRxei/rcKEENCor4GrIksTbNzrra8o8sGuoimx71sXhzX9Of43nAnI/
+         mtkXVzPKdKv18s+rx/EDmdNghESXRYhcZubBhhiltyvNDVGcAN1wfPJp6chufp3k5zKa
+         DtCX0vJNCzUwHi0xdLwtTK985EUilWbQIKMWGdgIrEELDhcRcMJg8N8NFHuDF12RNQPz
+         6rHWpH1T21yydWaNUcBB8SvN/n4NeggmGa7dghzyUMTL4jIlroY40idxGtFCOXovvnZG
+         i7cdjmKJSVuY+GoLvZAtZC6hQy7WfscaNhF9R3CmeyVmTkey4TfMvi/1IP07zzSCFrow
+         reag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hccErX5nsuBThpX1Qxtkn5mCN3OYZEDoRlFj/Ybj3XY=;
-        b=Sb7WoC1aKgPsxvcEC/Y9ZUxVTJmIxgYXZuoRSkyfIzDN12oJRe7HMCPPpPGB0Vtu+W
-         vWWiFZ0bzJG69oUS4VxuooDLFzVmExBQbBVPBFXAfOpSxGdCm/pjG8ZtWOEfRH/3ZELs
-         DPTZ0ppWSR1lKFVLj9KN0oPHe3pWw6VI+Qw4cWW2Xg3Qq4HOgih6WeczqBRIUMx5nKv4
-         3AYZyq3CFsyJ05bJdAHngU+MchyY62hxkypPUVBGimheSa16/rCZokxXkQcZcjg9Eqeh
-         cjVEphe36b7aFUgY3t+UxWFABXzYkkYPp9QViSwC9715trp6ipsJ/Ui2cNaWmMEEu3t3
-         kpTw==
-X-Gm-Message-State: AOAM531+VrlzzecfFzfMImSoFekv6jjj/XLEPaXqj6TbsnooPdgXqfOp
-        D3cbzTxChE1IJarUEFE9n7w=
-X-Google-Smtp-Source: ABdhPJxA5wXF+p/tCZI++lmXi6PcZUYKkyd8walyCE+sWHF8FNAQnVzD2aq4sck7AdI91wJlTtLa3A==
-X-Received: by 2002:a62:1786:0:b0:445:1a9c:952a with SMTP id 128-20020a621786000000b004451a9c952amr11526450pfx.39.1633111977451;
-        Fri, 01 Oct 2021 11:12:57 -0700 (PDT)
+        bh=FIPuS4OLzQCF5AgK/VmYDt3q+TnxbO8XesSIDRxgCzY=;
+        b=YOz9fgTCgGAUGnenRa0NEggV+tC7lvbszQQ/a6VyNXtt7IHYO6Ny+k6kMOJLdCyrQy
+         GCgu7kpZ+9vZCK2lh4kQ3+Tqze60VPQygDhMZNLWyWB3Si5lnU0XgzDidAoulKips1/u
+         kVuKzQUFnp8e8mJ1958EvdDutNmWLHCyE+MmVJ05WkQxZeUizIES1ENIIrgAeMIfRG2A
+         MOKQsAUNfknIwnUKhZlH5wK/YWzJzRFTfdlXWgHfLBimXG784R98BaO9GAnp5nlY4M2H
+         Lc5eb0GNZvZVxX9nPAFSfKq8d4ZvxJtxHAVfwjxqP83K+8RQlVxWYtmjPNaht8VCn94D
+         WeoA==
+X-Gm-Message-State: AOAM53110TMZQD0kavlQce35X71IodAVfWU3fAkBujBmM88IPlB3X7aU
+        /hcuV/gr2TLo0WsFrExRqwFyxbNHwEo=
+X-Google-Smtp-Source: ABdhPJwYsv/lJiq2bBbSjjU3f4DxXazbTsA4OLPiXahnaImXyC6vCzP9cY+tmf9cr+7T5Q6pwdEmdw==
+X-Received: by 2002:a17:90a:da06:: with SMTP id e6mr14937823pjv.63.1633111980523;
+        Fri, 01 Oct 2021 11:13:00 -0700 (PDT)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id q21sm6463234pgk.71.2021.10.01.11.12.56
+        by smtp.gmail.com with ESMTPSA id 186sm5925966pfg.20.2021.10.01.11.12.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 11:12:57 -0700 (PDT)
+        Fri, 01 Oct 2021 11:13:00 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Yury Norov <yury.norov@gmail.com>,
@@ -99,9 +99,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 04/16] arch: remove GENERIC_FIND_FIRST_BIT entirely
-Date:   Fri,  1 Oct 2021 11:12:33 -0700
-Message-Id: <20211001181245.228419-5-yury.norov@gmail.com>
+Subject: [PATCH 05/16] lib: add find_first_and_bit()
+Date:   Fri,  1 Oct 2021 11:12:34 -0700
+Message-Id: <20211001181245.228419-6-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211001181245.228419-1-yury.norov@gmail.com>
 References: <20211001181245.228419-1-yury.norov@gmail.com>
@@ -111,154 +111,158 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In 5.12 cycle we enabled GENERIC_FIND_FIRST_BIT config option for ARM64
-and MIPS. It increased performance and shrunk .text size; and so far
-I didn't receive any negative feedback on the change.
+Currently find_first_and_bit() is an alias to find_next_and_bit(). However,
+it is widely used in cpumask, so it worth to optimize it. This patch adds
+its own implementation for find_first_and_bit().
 
-https://lore.kernel.org/linux-arch/20210225135700.1381396-1-yury.norov@gmail.com/
+On x86_64 find_bit_benchmark says:
 
-Now I think it's a good time to switch all architectures to use
-find_{first,last}_bit() unconditionally, and so remove corresponding
-config option.
+Before (#define find_first_and_bit(...) find_next_and_bit(..., 0):
+Start testing find_bit() with random-filled bitmap
+[  140.291468] find_first_and_bit:           46890919 ns,  32671 iterations
+Start testing find_bit() with sparse bitmap
+[  140.295028] find_first_and_bit:               7103 ns,      1 iterations
 
-The patch does't introduce functioal changes for arc, arm, arm64, mips,
-m68k, s390 and x86, for other architectures I expect improvement both in
-performance and .text size.
+After:
+Start testing find_bit() with random-filled bitmap
+[  162.574907] find_first_and_bit:           25045813 ns,  32846 iterations
+Start testing find_bit() with sparse bitmap
+[  162.578458] find_first_and_bit:               4900 ns,      1 iterations
+
+(Thanks to Alexey Klimov for thorough testing.)
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Tested-by: Alexander Lobakin <alobakin@pm.me> (mips)
-Reviewed-by: Alexander Lobakin <alobakin@pm.me> (mips)
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Will Deacon <will@kernel.org>
 Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Tested-by: Alexey Klimov <aklimov@redhat.com>
 ---
- arch/arc/Kconfig     |  1 -
- arch/arm64/Kconfig   |  1 -
- arch/mips/Kconfig    |  1 -
- arch/s390/Kconfig    |  1 -
- arch/x86/Kconfig     |  1 -
- arch/x86/um/Kconfig  |  1 -
- include/linux/find.h | 13 -------------
- lib/Kconfig          |  3 ---
- 8 files changed, 22 deletions(-)
+ include/linux/find.h     | 27 +++++++++++++++++++++++++++
+ lib/find_bit.c           | 21 +++++++++++++++++++++
+ lib/find_bit_benchmark.c | 21 +++++++++++++++++++++
+ 3 files changed, 69 insertions(+)
 
-diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
-index 3a5a80f302e1..248389278e8f 100644
---- a/arch/arc/Kconfig
-+++ b/arch/arc/Kconfig
-@@ -20,7 +20,6 @@ config ARC
- 	select COMMON_CLK
- 	select DMA_DIRECT_REMAP
- 	select GENERIC_ATOMIC64 if !ISA_ARCV2 || !(ARC_HAS_LL64 && ARC_HAS_LLSC)
--	select GENERIC_FIND_FIRST_BIT
- 	# for now, we don't need GENERIC_IRQ_PROBE, CONFIG_GENERIC_IRQ_CHIP
- 	select GENERIC_IRQ_SHOW
- 	select GENERIC_PCI_IOMAP
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 5c7ae4c3954b..abbd7b1e549f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -119,7 +119,6 @@ config ARM64
- 	select GENERIC_CPU_AUTOPROBE
- 	select GENERIC_CPU_VULNERABILITIES
- 	select GENERIC_EARLY_IOREMAP
--	select GENERIC_FIND_FIRST_BIT
- 	select GENERIC_IDLE_POLL_SETUP
- 	select GENERIC_IRQ_IPI
- 	select GENERIC_IRQ_PROBE
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 771ca53af06d..0cf31a6cbee1 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -32,7 +32,6 @@ config MIPS
- 	select GENERIC_ATOMIC64 if !64BIT
- 	select GENERIC_CMOS_UPDATE
- 	select GENERIC_CPU_AUTOPROBE
--	select GENERIC_FIND_FIRST_BIT
- 	select GENERIC_GETTIMEOFDAY
- 	select GENERIC_IOMAP
- 	select GENERIC_IRQ_PROBE
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index b86de61b8caa..b0bb3aaec5f2 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -127,7 +127,6 @@ config S390
- 	select GENERIC_CPU_AUTOPROBE
- 	select GENERIC_CPU_VULNERABILITIES
- 	select GENERIC_ENTRY
--	select GENERIC_FIND_FIRST_BIT
- 	select GENERIC_GETTIMEOFDAY
- 	select GENERIC_PTDUMP
- 	select GENERIC_SMP_IDLE_THREAD
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 16e216b57863..8889bfa5597e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -134,7 +134,6 @@ config X86
- 	select GENERIC_CPU_VULNERABILITIES
- 	select GENERIC_EARLY_IOREMAP
- 	select GENERIC_ENTRY
--	select GENERIC_FIND_FIRST_BIT
- 	select GENERIC_IOMAP
- 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK	if SMP
- 	select GENERIC_IRQ_MATRIX_ALLOCATOR	if X86_LOCAL_APIC
-diff --git a/arch/x86/um/Kconfig b/arch/x86/um/Kconfig
-index 95d26a69088b..40d6a06e41c8 100644
---- a/arch/x86/um/Kconfig
-+++ b/arch/x86/um/Kconfig
-@@ -8,7 +8,6 @@ endmenu
- 
- config UML_X86
- 	def_bool y
--	select GENERIC_FIND_FIRST_BIT
- 
- config 64BIT
- 	bool "64-bit kernel" if "$(SUBARCH)" = "x86"
 diff --git a/include/linux/find.h b/include/linux/find.h
-index c5410c243e04..ea57f7f38c49 100644
+index ea57f7f38c49..6048f8c97418 100644
 --- a/include/linux/find.h
 +++ b/include/linux/find.h
-@@ -101,8 +101,6 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+@@ -12,6 +12,8 @@ extern unsigned long _find_next_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long nbits,
+ 		unsigned long start, unsigned long invert, unsigned long le);
+ extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
++extern unsigned long _find_first_and_bit(const unsigned long *addr1,
++					 const unsigned long *addr2, unsigned long size);
+ extern unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size);
+ extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long size);
+ 
+@@ -123,6 +125,31 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
  }
  #endif
  
--#ifdef CONFIG_GENERIC_FIND_FIRST_BIT
--
- #ifndef find_first_bit
++#ifndef find_first_and_bit
++/**
++ * find_first_and_bit - find the first set bit in both memory regions
++ * @addr1: The first address to base the search on
++ * @addr2: The second address to base the search on
++ * @size: The bitmap size in bits
++ *
++ * Returns the bit number for the next set bit
++ * If no bits are set, returns @size.
++ */
++static inline
++unsigned long find_first_and_bit(const unsigned long *addr1,
++				 const unsigned long *addr2,
++				 unsigned long size)
++{
++	if (small_const_nbits(size)) {
++		unsigned long val = *addr1 & *addr2 & GENMASK(size - 1, 0);
++
++		return val ? __ffs(val) : size;
++	}
++
++	return _find_first_and_bit(addr1, addr2, size);
++}
++#endif
++
+ #ifndef find_first_zero_bit
  /**
-  * find_first_bit - find the first set bit in a memory region
-@@ -147,17 +145,6 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
- }
+  * find_first_zero_bit - find the first cleared bit in a memory region
+diff --git a/lib/find_bit.c b/lib/find_bit.c
+index 0f8e2e369b1d..1b8e4b2a9cba 100644
+--- a/lib/find_bit.c
++++ b/lib/find_bit.c
+@@ -89,6 +89,27 @@ unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
+ EXPORT_SYMBOL(_find_first_bit);
  #endif
  
--#else /* CONFIG_GENERIC_FIND_FIRST_BIT */
--
--#ifndef find_first_bit
--#define find_first_bit(addr, size) find_next_bit((addr), (size), 0)
--#endif
--#ifndef find_first_zero_bit
--#define find_first_zero_bit(addr, size) find_next_zero_bit((addr), (size), 0)
--#endif
--
--#endif /* CONFIG_GENERIC_FIND_FIRST_BIT */
--
- #ifndef find_last_bit
- /**
-  * find_last_bit - find the last set bit in a memory region
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 5e7165e6a346..6a6ae5312fa0 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -65,9 +65,6 @@ config GENERIC_STRNLEN_USER
- config GENERIC_NET_UTILS
- 	bool
++#ifndef find_first_and_bit
++/*
++ * Find the first set bit in two memory regions.
++ */
++unsigned long _find_first_and_bit(const unsigned long *addr1,
++				  const unsigned long *addr2,
++				  unsigned long size)
++{
++	unsigned long idx, val;
++
++	for (idx = 0; idx * BITS_PER_LONG < size; idx++) {
++		val = addr1[idx] & addr2[idx];
++		if (val)
++			return min(idx * BITS_PER_LONG + __ffs(val), size);
++	}
++
++	return size;
++}
++EXPORT_SYMBOL(_find_first_and_bit);
++#endif
++
+ #ifndef find_first_zero_bit
+ /*
+  * Find the first cleared bit in a memory region.
+diff --git a/lib/find_bit_benchmark.c b/lib/find_bit_benchmark.c
+index 5637c5711db9..db904b57d4b8 100644
+--- a/lib/find_bit_benchmark.c
++++ b/lib/find_bit_benchmark.c
+@@ -49,6 +49,25 @@ static int __init test_find_first_bit(void *bitmap, unsigned long len)
+ 	return 0;
+ }
  
--config GENERIC_FIND_FIRST_BIT
--	bool
--
- source "lib/math/Kconfig"
++static int __init test_find_first_and_bit(void *bitmap, const void *bitmap2, unsigned long len)
++{
++	static DECLARE_BITMAP(cp, BITMAP_LEN) __initdata;
++	unsigned long i, cnt;
++	ktime_t time;
++
++	bitmap_copy(cp, bitmap, BITMAP_LEN);
++
++	time = ktime_get();
++	for (cnt = i = 0; i < len; cnt++) {
++		i = find_first_and_bit(cp, bitmap2, len);
++		__clear_bit(i, cp);
++	}
++	time = ktime_get() - time;
++	pr_err("find_first_and_bit: %18llu ns, %6ld iterations\n", time, cnt);
++
++	return 0;
++}
++
+ static int __init test_find_next_bit(const void *bitmap, unsigned long len)
+ {
+ 	unsigned long i, cnt;
+@@ -129,6 +148,7 @@ static int __init find_bit_test(void)
+ 	 * traverse only part of bitmap to avoid soft lockup.
+ 	 */
+ 	test_find_first_bit(bitmap, BITMAP_LEN / 10);
++	test_find_first_and_bit(bitmap, bitmap2, BITMAP_LEN / 2);
+ 	test_find_next_and_bit(bitmap, bitmap2, BITMAP_LEN);
  
- config NO_GENERIC_PCI_IOPORT_MAP
+ 	pr_err("\nStart testing find_bit() with sparse bitmap\n");
+@@ -145,6 +165,7 @@ static int __init find_bit_test(void)
+ 	test_find_next_zero_bit(bitmap, BITMAP_LEN);
+ 	test_find_last_bit(bitmap, BITMAP_LEN);
+ 	test_find_first_bit(bitmap, BITMAP_LEN);
++	test_find_first_and_bit(bitmap, bitmap2, BITMAP_LEN);
+ 	test_find_next_and_bit(bitmap, bitmap2, BITMAP_LEN);
+ 
+ 	/*
 -- 
 2.30.2
 
