@@ -2,93 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF73341F238
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 18:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDED41F236
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 18:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355046AbhJAQhy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Oct 2021 12:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355081AbhJAQhx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 12:37:53 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E3AC061775
-        for <linux-arch@vger.kernel.org>; Fri,  1 Oct 2021 09:36:08 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id u18so41240956lfd.12
-        for <linux-arch@vger.kernel.org>; Fri, 01 Oct 2021 09:36:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jD7nwgHxMSeInUUrs6FJvRIyAdhMaTevfxCsu5BdLTM=;
-        b=PpsqrsGdIFtn0KUPuJCzf5kI4Ojb7JegjF0BMY8LGcnxojJcyAKH5k+wMEqCTVCgzl
-         1JQOIKyWlYlFXvLkV+P4j2KXRW+vn73pOipkMa/rdLBsfXs2C5ON06epk0gG2f0lb3JE
-         TuSCdW5hFzBNhpbQQUh5N3vycq4ZQXUL7ShOc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jD7nwgHxMSeInUUrs6FJvRIyAdhMaTevfxCsu5BdLTM=;
-        b=Jj4pjimEKAmoIEycmBZAiz2DLs7oiG5+GhGVV6Uvm8UOQg7KUKPySFZrNo1royZ5SW
-         MoYZuBWyZQalQIMDAd9AbISq5BJuUwUUQu0oSCgvIx6L+iOYmS6qL+lhEqjMNFtIxFmR
-         D+jhC4YU3m+Gy3ghylsvk+elcXTljOgjYnIa+lA2mFaItZa2OYYZq4aB3HdvTvYbG+OO
-         U1pFarskGtnTKj+jwRswQJgV9bAhNV6Qdmq5QJO35ZuN0KoSf3npWODs83p+fqGKG2hX
-         XgOFnU8mIWq0FLeP2rtLPVxUUz4HWRBaXATnUMXDRO48STCGJMHv7neQfLzSvQfYRMqr
-         k1dA==
-X-Gm-Message-State: AOAM531KjEL0SRarQYQQntrzBkRSn4XF5XMPtaFThL0WYeOOxqPhr9vy
-        r6/crJEtvADvbv0mRL17vTAsI2BpbblitVGaeKo=
-X-Google-Smtp-Source: ABdhPJyQ7GyTFWC6cEHxIRueFndoG1fdQwi3bv3+XTF+CJWCKj6B0fG6cjlcmx+zo7cpK6M4MW5mVA==
-X-Received: by 2002:ac2:5451:: with SMTP id d17mr6264226lfn.367.1633106166352;
-        Fri, 01 Oct 2021 09:36:06 -0700 (PDT)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id m25sm708283lji.52.2021.10.01.09.36.04
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Oct 2021 09:36:04 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id e15so41004061lfr.10
-        for <linux-arch@vger.kernel.org>; Fri, 01 Oct 2021 09:36:04 -0700 (PDT)
-X-Received: by 2002:a19:ef01:: with SMTP id n1mr6592631lfh.150.1633106163819;
- Fri, 01 Oct 2021 09:36:03 -0700 (PDT)
+        id S1355052AbhJAQhw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Oct 2021 12:37:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24384 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232117AbhJAQhw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 12:37:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633106167;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pu/Lo/8PIcVP2w18pMUuKpKdni82TYWbWCVM3bXJdyE=;
+        b=E50guQegsNAcTypCsesfZ4T8nHgAKg6ZFE6OvmmsdD9OpFCmWCGt5Pr4pF5JggfesTx1Ow
+        JHFp2O6I7cJdgBbTpHotbcajt04dH5Ch/4fGEQVnmnU4x+1pkS8E/+bOIcqfcUi2MYJ/0H
+        T2cip+u+dyu9NfX9daiVrYM2eHmy0jo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-382-Gq9idoBgPeePeb96LPjoWQ-1; Fri, 01 Oct 2021 12:36:05 -0400
+X-MC-Unique: Gq9idoBgPeePeb96LPjoWQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 639F119200D3;
+        Fri,  1 Oct 2021 16:36:01 +0000 (UTC)
+Received: from localhost (unknown [10.39.192.187])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B5B51608BA;
+        Fri,  1 Oct 2021 16:36:00 +0000 (UTC)
+Date:   Fri, 1 Oct 2021 17:35:58 +0100
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Sohil Mehta <sohil.mehta@intel.com>,
+        Peter Maydell <peter.maydell@linaro.org>,
+        Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+        Richard Henderson <richard.henderson@linaro.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, qemu-devel@nongnu.org
+Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
+Message-ID: <YVc47ohb4nxrBO5h@stefanha-x1.localdomain>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <456bf9cf-87b8-4c3d-ac0c-7e392bcf26de@www.fastmail.com>
+ <YVXmGTo5Uzp44QQq@stefanha-x1.localdomain>
+ <778d40fe-ad8e-fd7c-4caa-499910bb0925@intel.com>
 MIME-Version: 1.0
-References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
- <87lf3f7eh6.fsf@oldenburg.str.redhat.com> <20210929174146.GF22689@gate.crashing.org>
- <2088260319.47978.1633104808220.JavaMail.zimbra@efficios.com> <871r54ww2k.fsf@oldenburg.str.redhat.com>
-In-Reply-To: <871r54ww2k.fsf@oldenburg.str.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 1 Oct 2021 09:35:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgexLqNnngLPts=wXrRcoP_XHO03iPJbsAg8HYuJbbAvw@mail.gmail.com>
-Message-ID: <CAHk-=wgexLqNnngLPts=wXrRcoP_XHO03iPJbsAg8HYuJbbAvw@mail.gmail.com>
-Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Will Deacon <will@kernel.org>, paulmck <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        j alglave <j.alglave@ucl.ac.uk>,
-        luc maranget <luc.maranget@inria.fr>,
-        akiyks <akiyks@gmail.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9EVyQ6g1a8JZP43O"
+Content-Disposition: inline
+In-Reply-To: <778d40fe-ad8e-fd7c-4caa-499910bb0925@intel.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 1, 2021 at 9:26 AM Florian Weimer <fweimer@redhat.com> wrote:
->
-> Will any conditional branch do, or is it necessary that it depends in
-> some way on the data read?
 
-The condition needs to be dependent on the read.
+--9EVyQ6g1a8JZP43O
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-(Easy way to see it: if the read isn't related to the conditional or
-write data/address, the read could just be delayed to after the
-condition and the store had been done).
+On Thu, Sep 30, 2021 at 10:24:24AM -0700, Sohil Mehta wrote:
+>=20
+> On 9/30/2021 9:30 AM, Stefan Hajnoczi wrote:
+> > On Tue, Sep 28, 2021 at 09:31:34PM -0700, Andy Lutomirski wrote:
+> > >=20
+> > > I spent some time reviewing the docs (ISE) and contemplating how this=
+ all fits together, and I have a high level question:
+> > >=20
+> > > Can someone give an example of a realistic workload that would benefi=
+t from SENDUIPI and precisely how it would use SENDUIPI?  Or an example of =
+a realistic workload that would benefit from hypothetical device-initiated =
+user interrupts and how it would use them?  I'm having trouble imagining so=
+mething that wouldn't work as well or better by simply polling, at least on=
+ DMA-coherent architectures like x86.
+> > I was wondering the same thing. One thing came to mind:
+> >=20
+> > An application that wants to be *interrupted* from what it's doing
+> > rather than waiting until the next polling point. For example,
+> > applications that are CPU-intensive and have green threads. I can't name
+> > a real application like this though :P.
+>=20
+> Thank you Stefan and Andy for giving this some thought.
+>=20
+> We are consolidating the information internally on where and how exactly =
+we
+> expect to see benefits with real workloads for the various sources of User
+> Interrupts. It will take a few days to get back on this one.
 
-               Linus
+One possible use case came to mind in QEMU's TCG just-in-time compiler:
+
+QEMU's TCG threads execute translated code. There are events that
+require interrupting these threads. Today a check is performed at the
+start of every translated block. Most of the time the check is false and
+it's a waste of CPU.
+
+User interrupts can eliminate the need for checks by interrupting TCG
+threads when events occur.
+
+I don't know whether this will improve performance or how feasible it is
+to implement, but I've added people who might have ideas. (For a summary
+of user interrupts, see
+https://lwn.net/SubscriberLink/871113/60652640e11fc5df/.)
+
+Stefan
+
+--9EVyQ6g1a8JZP43O
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmFXOO4ACgkQnKSrs4Gr
+c8j1LQf/SZwCRlCZlWue5FvVhDmWF//uX4PGQQMaisI7h989XbCnOAuKgojBX/CZ
+juXKMDJAuLrBR85BOl/7mEz/bM4m1b7pkMq4GR73ER/5/aupQv/yldA+MPklTyzQ
+8DXcmTsApJk7CQvCOheb6CWKwtCZ0pkZu12vnk8w+IiL601ZYzyWr/wPUFCjxWXa
+GjqeLxGzpHjczrw4f9zjTsheGhZaX7TVLh6ULQ2dsLxIRXw+23tQPmCd19mAh0Oc
+Zgg/Mk4la+cNm5RXfdSTbunqafjGQLeNYBRLMA4DzigKxeU2wCULezW9ZLN8LJ6u
+MNGacFSLGXxsd2Waa5fBTjGyji5qwg==
+=GlvG
+-----END PGP SIGNATURE-----
+
+--9EVyQ6g1a8JZP43O--
+
