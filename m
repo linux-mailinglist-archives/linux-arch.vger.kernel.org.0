@@ -2,189 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6BF41EED4
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 15:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A48B41F0F5
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 17:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbhJANqr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Oct 2021 09:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbhJANqq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 09:46:46 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71853C061775;
-        Fri,  1 Oct 2021 06:45:02 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id h3so9456941pgb.7;
-        Fri, 01 Oct 2021 06:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+W0613/U97/IRk/cKafjuDgCo1b1iuYjGfZXYXnQ6Ks=;
-        b=fI+a+LG8ArsPWPNVrcDlN1Y+DGYbEAMiOyVtFcrgIanlWJoHfu3nErCi7z9B7TRc0s
-         XwkLDSu1HSUCVcuUGAf2UAfkIZbdq0kYiq1hwcM4Chs9DtwIyx5IcQcjIfHB/Pf2yXEo
-         H7qFms2XI1NTfN593xVR9xVLDqYLgx0y3Nnz8+9Bq6V7W7c3d+wtp69kwgzNG+8b8JdR
-         Y4gZtH/zc4nw9Vv9uUKElYpBKRywUCzcJ5JZ8FBtYTOLAbe6Ey+vzJmV1uMjblwCdps+
-         8o6+40wggv41yfCOBYJzPR9nB5IkaksFvEMkrAHI/sEx/M2LIzl4SavufDg1IOWqSdK8
-         IFTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+W0613/U97/IRk/cKafjuDgCo1b1iuYjGfZXYXnQ6Ks=;
-        b=2P8gyvR5aTMwtqGFCEU0p9GeLXeG/0WlyjEYxQtHBkLSzcLZP/HwZeSzKzWeNoMh4i
-         4mddxL9ue+35/udtmJDURr6VS99UVPBxi7ija1KrQvGrh2fxyX9ahzfiuV22M/sZuTa8
-         mhtbVJSs8QFMGOtdP4Ec4IQ6OVRd9Wlp4GS77VBQJs1dDD50bGjvWZQfVfWzM+UZlq30
-         pOLuSRGPd/b37SqysX/9Dfu6fzLfiTTq27HgT36WddgvdaX6d6hcCZ02lFxDuG4hMgFy
-         dWoPY7hw2+YWzBoxA8TZOWGW++euD9kdVbbKeUW4NqHyLzvRyMqG6y57HYVU0fQ8btqR
-         iQHA==
-X-Gm-Message-State: AOAM532zhdETqLxy0xm3RsFG72qpt4qOGOdutUcaMYJW4A/fy9H+Jtme
-        i3d0j9llvtIqDKY26Wg6uU4=
-X-Google-Smtp-Source: ABdhPJxUpFMG0u9Y0nQi7Ij3rISBGTDlzrBFeaSwsW5M8Ta7kbtdYw1JRUOoqo+ermBwMkbpwM/6YQ==
-X-Received: by 2002:a63:f050:: with SMTP id s16mr9765518pgj.258.1633095901913;
-        Fri, 01 Oct 2021 06:45:01 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
-        by smtp.gmail.com with ESMTPSA id p27sm6480554pfq.164.2021.10.01.06.44.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Oct 2021 06:45:01 -0700 (PDT)
-Subject: Re: [PATCH V6 5/8] x86/hyperv: Add Write/Read MSR registers via ghcb
- page
-To:     Tom Lendacky <thomas.lendacky@amd.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        davem@davemloft.net, kuba@kernel.org, gregkh@linuxfoundation.org,
-        arnd@arndb.de, brijesh.singh@amd.com, jroedel@suse.de,
-        Tianyu.Lan@microsoft.com, pgonda@google.com,
-        akpm@linux-foundation.org, rppt@kernel.org,
-        kirill.shutemov@linux.intel.com, saravanand@fb.com,
-        aneesh.kumar@linux.ibm.com, rientjes@google.com, tj@kernel.org,
-        michael.h.kelley@microsoft.com
-Cc:     linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, konrad.wilk@oracle.com, hch@lst.de,
-        robin.murphy@arm.com, joro@8bytes.org, parri.andrea@gmail.com,
-        dave.hansen@intel.com
-References: <20210930130545.1210298-1-ltykernel@gmail.com>
- <20210930130545.1210298-6-ltykernel@gmail.com>
- <0f33ca85-f1c6-bab3-5bdb-233c09f86621@amd.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <5d13faf8-0733-10cc-6e2e-c43b400f7d69@gmail.com>
-Date:   Fri, 1 Oct 2021 21:44:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <0f33ca85-f1c6-bab3-5bdb-233c09f86621@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1354954AbhJAPPh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Oct 2021 11:15:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51204 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354868AbhJAPPh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 1 Oct 2021 11:15:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 50D2C61A03;
+        Fri,  1 Oct 2021 15:13:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633101233;
+        bh=AN2KczzHH12GPIyjRmOqJEClIqeRchZXDMq1q/SMB9A=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=CwFRT8SokK/HWVzf7McAlR8ZCAMlc6y9V2UiDE5RwrmJp2ca4OU1YwRL8mP6GM39s
+         pO4lkDw6HS2R3VlMw79ZT93TUlzVyqOk7fZo/HYTWy4h3VaHw3W5nMN90U4CYpCcEI
+         L1vtNUyAy4Bi3JcLrLy2rHynpO/wSTqx6EvlVZeZOS0QK4Yx2EP3asWUdP9gR0rW+6
+         5vw+QuBIxIDu91iWzrGTgLyWUq2uHan5ht4roXamlYb+/mcle94HpjJIdUr2rPZAeX
+         Ok00D40w40K3DtAbOjHLRRJxtnlcKRHQCD1HSmzfc0jMUIF9kfqdBS5WorJaCJrPSC
+         pXsRd3K0SIMLA==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 41DE927C005A;
+        Fri,  1 Oct 2021 11:13:50 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute6.internal (MEProxy); Fri, 01 Oct 2021 11:13:50 -0400
+X-ME-Sender: <xms:rCVXYQyKU-wP9158rpGYIA6Wna6y97sWd-dkZ5a1wYc3MiRKBl8NHA>
+    <xme:rCVXYUSrnqAgb0RPhyj-O3Lb3g039kEcNiTqZt6IjKraJjEXLSqV55s04MD8Vfx_V
+    5P6_aDqsDllclBaNU4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekiedgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpedthfehtedtvdetvdetudfgueeuhfdtudegvdelveelfedvteelfffg
+    fedvkeegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
+    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
+    drlhhuthhordhush
+X-ME-Proxy: <xmx:rCVXYSVcfsOzYKsBRlwwwDNJOKwa7T58ktBwU56C2cxE917vh5G7yA>
+    <xmx:rCVXYejllRAV3DUoYO_jmBahwxnXlS0ZmZuM_2tQZBHhpbxZ9AZ2Xw>
+    <xmx:rCVXYSAYhRpOhQDWXRMj7ms6goy05oVqERViiWI0rtF8DmQQ3CS2Yg>
+    <xmx:riVXYTyNDpBk5sDQXLXQAeEZPZOXzo0hZOdrowsBezGDn7FJLO6sxkiA1l8>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4010121E0066; Fri,  1 Oct 2021 11:13:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1322-g921842b88a-fm-20210929.001-g921842b8
+Mime-Version: 1.0
+Message-Id: <0364c572-4bc2-4538-8d65-485dbfa81f0d@www.fastmail.com>
+In-Reply-To: <87pmsp5aqx.ffs@tglx>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-12-sohil.mehta@intel.com>
+ <f5a971e4-6b0d-477f-992c-89110a2ceb03@www.fastmail.com>
+ <c6e83d0e-6551-4e16-0822-0abbc4d656c4@intel.com>
+ <fd54f257-fa02-4ec3-a81b-b5e60f24bf94@www.fastmail.com> <877dex7tgj.ffs@tglx>
+ <b537a890-4b9f-462e-8c17-5c7aa9b60138@www.fastmail.com> <87tui162am.ffs@tglx>
+ <25ba1e1f-c05b-4b67-b547-6b5dbc958a2f@www.fastmail.com> <87pmsp5aqx.ffs@tglx>
+Date:   Fri, 01 Oct 2021 08:13:26 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Sohil Mehta" <sohil.mehta@intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Cc:     "Tony Luck" <tony.luck@intel.com>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, "Jens Axboe" <axboe@kernel.dk>,
+        "Christian Brauner" <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Shuah Khan" <shuah@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Raj Ashok" <ashok.raj@intel.com>,
+        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
+        "Gayatri Kammela" <gayatri.kammela@intel.com>,
+        "Zeng Guang" <guang.zeng@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Randy E Witt" <randy.e.witt@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Ramesh Thomas" <ramesh.thomas@intel.com>,
+        "Linux API" <linux-api@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 11/13] x86/uintr: Introduce uintr_wait() syscall
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Tom:
-      Thanks for your review.
+On Fri, Oct 1, 2021, at 2:56 AM, Thomas Gleixner wrote:
+> On Thu, Sep 30 2021 at 21:41, Andy Lutomirski wrote:
+>> On Thu, Sep 30, 2021, at 5:01 PM, Thomas Gleixner wrote:
+>
+>> Now that I read the docs some more, I'm seriously concerned about this
+>> XSAVE design.  XSAVES with UINTR is destructive -- it clears UINV.  If
+>> we actually use this, then the whole last_cpu "preserve the state in
+>> registers" optimization goes out the window.  So does anything that
+>> happens to assume that merely saving the state doesn't destroy it on
+>> respectable modern CPUs XRSTORS will #GP if you XRSTORS twice, which
+>> makes me nervous and would need a serious audit of our XRSTORS paths.
+>
+> I have no idea what you are fantasizing about. You can XRSTORS five
+> times in a row as long as your XSTATE memory image is correct.
 
-On 10/1/2021 2:27 AM, Tom Lendacky wrote:
-> On 9/30/21 8:05 AM, Tianyu Lan wrote:
->> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
->>
-> 
-> ...
-> 
->> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
->> index 9f90f460a28c..dd7f37de640b 100644
->> --- a/arch/x86/kernel/sev-shared.c
->> +++ b/arch/x86/kernel/sev-shared.c
->> @@ -94,10 +94,9 @@ static void vc_finish_insn(struct es_em_ctxt *ctxt)
->>       ctxt->regs->ip += ctxt->insn.length;
->>   }
->> -static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
->> -                      struct es_em_ctxt *ctxt,
->> -                      u64 exit_code, u64 exit_info_1,
->> -                      u64 exit_info_2)
->> +enum es_result sev_es_ghcb_hv_call_simple(struct ghcb *ghcb,
->> +                   u64 exit_code, u64 exit_info_1,
->> +                   u64 exit_info_2)
->>   {
->>       enum es_result ret;
->> @@ -109,29 +108,45 @@ static enum es_result sev_es_ghcb_hv_call(struct 
->> ghcb *ghcb,
->>       ghcb_set_sw_exit_info_1(ghcb, exit_info_1);
->>       ghcb_set_sw_exit_info_2(ghcb, exit_info_2);
->> -    sev_es_wr_ghcb_msr(__pa(ghcb));
->>       VMGEXIT();
->> -    if ((ghcb->save.sw_exit_info_1 & 0xffffffff) == 1) {
->> -        u64 info = ghcb->save.sw_exit_info_2;
->> -        unsigned long v;
->> -
->> -        info = ghcb->save.sw_exit_info_2;
->> -        v = info & SVM_EVTINJ_VEC_MASK;
->> -
->> -        /* Check if exception information from hypervisor is sane. */
->> -        if ((info & SVM_EVTINJ_VALID) &&
->> -            ((v == X86_TRAP_GP) || (v == X86_TRAP_UD)) &&
->> -            ((info & SVM_EVTINJ_TYPE_MASK) == SVM_EVTINJ_TYPE_EXEPT)) {
->> -            ctxt->fi.vector = v;
->> -            if (info & SVM_EVTINJ_VALID_ERR)
->> -                ctxt->fi.error_code = info >> 32;
->> -            ret = ES_EXCEPTION;
->> -        } else {
->> -            ret = ES_VMM_ERROR;
->> -        }
->> -    } else {
->> +    if ((ghcb->save.sw_exit_info_1 & 0xffffffff) == 1)
-> 
-> Really, any non-zero value indicates an error, so this should be:
-> 
->      if (ghcb->save.sw_exit_info_1 & 0xffffffff) >
->> +        ret = ES_VMM_ERROR;
->> +    else
->>           ret = ES_OK;
->> +
->> +    return ret;
->> +}
->> +
->> +static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
->> +                   struct es_em_ctxt *ctxt,
->> +                   u64 exit_code, u64 exit_info_1,
->> +                   u64 exit_info_2)
->> +{
->> +    unsigned long v;
->> +    enum es_result ret;
->> +    u64 info;
->> +
->> +    sev_es_wr_ghcb_msr(__pa(ghcb));
->> +
->> +    ret = sev_es_ghcb_hv_call_simple(ghcb, exit_code, exit_info_1,
->> +                     exit_info_2);
->> +    if (ret == ES_OK)
->> +        return ret;
->> +
-> 
-> And then here, the explicit check for 1 should be performed and if not 
-> 1, then return ES_VMM_ERROR. If it is 1, then check the event injection 
-> values. >
-> Thanks,
-> Tom
+I'm just reading TFM, which is some kind of dystopian fantasy.
 
-Good suggestion. Will update.
+11.8.2.4 XRSTORS
 
-> 
->> +    info = ghcb->save.sw_exit_info_2;
->> +    v = info & SVM_EVTINJ_VEC_MASK;
->> +
->> +    /* Check if exception information from hypervisor is sane. */
->> +    if ((info & SVM_EVTINJ_VALID) &&
->> +        ((v == X86_TRAP_GP) || (v == X86_TRAP_UD)) &&
->> +        ((info & SVM_EVTINJ_TYPE_MASK) == SVM_EVTINJ_TYPE_EXEPT)) {
->> +        ctxt->fi.vector = v;
->> +        if (info & SVM_EVTINJ_VALID_ERR)
->> +            ctxt->fi.error_code = info >> 32;
->> +        ret = ES_EXCEPTION;
->> +    } else {
->> +        ret = ES_VMM_ERROR;
->>       }
->>       return ret;
+Before restoring the user-interrupt state component, XRSTORS verifies that UINV is 0. If it is not, XRSTORS
+causes a general-protection fault (#GP) before loading any part of the user-interrupt state component. (UINV
+is IA32_UINTR_MISC[39:32]; XRSTORS does not check the contents of the remainder of that MSR.)
+
+So if UINV is set in the memory image and you XRSTORS five times in a row, the first one will work assuming UINV was zero.  The second one will #GP.  And:
+
+11.8.2.3 XSAVES
+After saving the user-interrupt state component, XSAVES clears UINV. (UINV is IA32_UINTR_MISC[39:32];
+XSAVES does not modify the remainder of that MSR.)
+
+So if we're running a UPID-enabled user task and we switch to a kernel thread, we do XSAVES and UINV is cleared.  Then we switch back to the same task and don't do XRSTORS (or otherwise write IA32_UINTR_MISC) and UINV is still clear.
+
+And we had better clear UINV when running a kernel thread because the UPID might get freed or the kernel thread might do some CPL3 shenanigans (via EFI, perhaps? I don't know if any firmwares actually do this).
+
+So all this seems to put UINV into the "independent" category of feature along with LBR.  And the 512-byte wastes from extra copies of the legacy area and the loss of the XMODIFIED optimization will just be collateral damage.
