@@ -2,100 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 773F841E81A
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 09:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B56941E8AD
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 10:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351989AbhJAHQ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Oct 2021 03:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbhJAHQ2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 03:16:28 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A331C061778
-        for <linux-arch@vger.kernel.org>; Fri,  1 Oct 2021 00:14:45 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id k24so8613443pgh.8
-        for <linux-arch@vger.kernel.org>; Fri, 01 Oct 2021 00:14:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=axtens.net; s=google;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=hQ5Dp9x0o7vj9OmS5x46emFCr7Zl/nJolk9+Z2BpJ/M=;
-        b=fe9H/w2X2vuAp8bhFAjKcirq956EvG0Xsc4F/qPYLCr7shEcx/7zVRCvPxYTKIseYq
-         cM0bGEaE6AOBmeVWMByscucDo3qj28Mo1bYpVvfDkpGyt16RzahFoQ3vLK88+7PljDI8
-         g4xwbvUg0m6Q0tlQhV1A905dnxfllF0FbKG5g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=hQ5Dp9x0o7vj9OmS5x46emFCr7Zl/nJolk9+Z2BpJ/M=;
-        b=vjuRgcwOikxoykr67JMzEuuweBrx96jz8bc4oAEdCFf+Yvj4ytsyTK1lpiGwtpOnC8
-         SmqPcBozd4afcXqosbAHHGP5QcipWExATsknK4cwlK+MRI6e+0Tv9U4bs2wcwmARclHW
-         pn5eA2/bg7TClAGWA4OBg/frIGWkrAmNsbT9QhZcrFMD1MJRBuxQWwzTUx4Q4rabdy7C
-         vTKu9NNsyxGB6BznyFsFDOrt8eO3HrOjDWFfvHebxxXRrMUjWv2RVfy5GFFDLkeYtt26
-         ujmix18dT4vjyT1xwCCPBLtQUv2SRH+wNEu4f43PTcmkZQzDhEOtCBHR4h3sGatN1Xmp
-         TUWg==
-X-Gm-Message-State: AOAM533T6Et8zsgDfMvdmnkeOXH1a8okdhmmFQMAbHzZHUSDTn4zYsbt
-        N9mrLZNecGYqePHLsmChCHnGbw==
-X-Google-Smtp-Source: ABdhPJybs5wSHjwxNYuL3Oj52Xlb/bebURrnTQ6GT1WSxewTOdLpU3woiWbsUUuDzK3q3lC/kp1vUA==
-X-Received: by 2002:aa7:9a0e:0:b0:44a:3ae2:825c with SMTP id w14-20020aa79a0e000000b0044a3ae2825cmr8564635pfj.28.1633072484450;
-        Fri, 01 Oct 2021 00:14:44 -0700 (PDT)
-Received: from localhost ([2001:4479:e200:df00:c98c:9868:6328:c144])
-        by smtp.gmail.com with ESMTPSA id k12sm1219967pjf.32.2021.10.01.00.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 00:14:43 -0700 (PDT)
-From:   Daniel Axtens <dja@axtens.net>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>, arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 2/4] mm: Make generic arch_is_kernel_initmem_freed() do what it says
-In-Reply-To: <1d40783e676e07858be97d881f449ee7ea8adfb1.1633001016.git.christophe.leroy@csgroup.eu>
-References: <9ecfdee7dd4d741d172cb93ff1d87f1c58127c9a.1633001016.git.christophe.leroy@csgroup.eu> <1d40783e676e07858be97d881f449ee7ea8adfb1.1633001016.git.christophe.leroy@csgroup.eu>
-Date:   Fri, 01 Oct 2021 17:14:41 +1000
-Message-ID: <87ilyhmd26.fsf@linkitivity.dja.id.au>
+        id S1352669AbhJAIID (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Oct 2021 04:08:03 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:26261 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352618AbhJAIIC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 04:08:02 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-34-W05ZMRukNYqLxn2NGHWQgw-1; Fri, 01 Oct 2021 09:06:14 +0100
+X-MC-Unique: W05ZMRukNYqLxn2NGHWQgw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.23; Fri, 1 Oct 2021 09:06:13 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.023; Fri, 1 Oct 2021 09:06:13 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Vineet Gupta' <vgupta@kernel.org>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        Guo Ren <guoren@kernel.org>
+CC:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atish.patra@wdc.com>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>, Christoph Hellwig <hch@lst.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>
+Subject: RE: [PATCH v5 1/3] riscv: optimized memcpy
+Thread-Topic: [PATCH v5 1/3] riscv: optimized memcpy
+Thread-Index: AQHXtjOD+7ayCntxxUO0SHdTnQy2G6u9yEmA
+Date:   Fri, 1 Oct 2021 08:06:13 +0000
+Message-ID: <63ab9e73cb58404c99e271b11b2b5bf5@AcuMS.aculab.com>
+References: <20210929172234.31620-1-mcroce@linux.microsoft.com>
+ <20210929172234.31620-2-mcroce@linux.microsoft.com>
+ <CAJF2gTRSVeUOwmaUcpMJL+jOofvX5iWLRLCfMajQcut_T409qA@mail.gmail.com>
+ <CAFnufp1wHVY-yoUUDxT1mhv8HV=cmHZSwMP+8r-2CzNAYEn4DQ@mail.gmail.com>
+ <a9ce9ea2-9e5d-0e56-d980-5dedd087f62d@kernel.org>
+In-Reply-To: <a9ce9ea2-9e5d-0e56-d980-5dedd087f62d@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
->  #ifdef __KERNEL__
-> +/*
-> + * Check if an address is part of freed initmem. After initmem is freed,
-> + * memory can be allocated from it, and such allocations would then have
-> + * addresses within the range [_stext, _end].
-> + */
-> +#ifndef arch_is_kernel_initmem_freed
-> +static int arch_is_kernel_initmem_freed(unsigned long addr)
-> +{
-> +	if (system_state < SYSTEM_FREEING_INITMEM)
-> +		return 0;
-> +
-> +	return init_section_contains((void *)addr, 1);
+Li4uDQo+IEJUVyBvZmYgdG9waWMgKGJ1dCByZWxldmFudCB0byB0aGlzIHBhdGNoc2V0KSwgSSBz
+dHJvbmdseSBmZWVsIHRoYXQNCj4gcm91dGluZXMgbGlrZSBtZW1zZXQvbWVtY3B5IGFyZSBiZXR0
+ZXIgY29kZWQgaW4gYXNzZW1ibHkgZm9yIHJlYWxseQ0KPiB3YXRlciB0aWdodCBpbnN0cnVjdGlv
+biBzY2hlZHVsaW5nIGFuZCBlYXNlIG9mIGZ1cnRoZXIgb3B0aW1pemluZyAoZS5nLg0KPiB1c2Ug
+b2YgQ01PLnplcm8gZXRjIGFzIGV4cGVyaW1lbnRlZCBieSBQaGlsaXBwKS4gV2hhdCBpcyBibG9j
+a2luZyB5b3UNCj4gZnJvbSBvcHRpbWl6aW5nIHRoZSBhc20gdmVyc2lvbiA/IFlvdSBhcmUgbGVh
+dmluZyB0aGUgZmF0ZSBvZiB0aGVzZQ0KPiBjcml0aWNhbCByb3V0aW5lcyBpbiB0aGUgaGFuZCBv
+ZiBjb21waWxlciAtIHRoaXMgY2FuIGxlYWQgdG8gcGVyZm9ybWFuY2UNCj4gc2hlbmFuaWdhbnMg
+b24gYSBiaWcgZ2NjIHVwZ3JhZGUuDQoNCllvdSBhbHNvIG5lZWQgdG8gd29ycnkgYWJvdXQgdGhl
+IGNvc3Qgb2Ygc2hvcnQgdHJhbnNmZXJzLg0KQSBmZXcgY3ljbGVzIHRoZXJlIGNvdWxkIGhhdmUg
+YSBtdWNoIGJpZ2dlciBkaWZmZXJlbmNlDQp0aGF0IHNvbWV0aGluZyB0aGF0IHNwZWVkcyB1cCBs
+b25nIHRyYW5zZmVycy4NClNob3J0IG9uZXMgYXJlIGxpa2VseSB0byBiZSBmYWlybHkgY29tbW9u
+Lg0KSSBkb3VidCB0aGUgbG9vcCB1bnJvbGxpbmcgb3B0aW1pc2F0aW9uIGluIGdjYyBpcyBhY3R1
+YWxseQ0KYW55IGdvb2QgZm9yIGxvb3BzIHRoYXQgbWlnaHQgYmUgZG9uZSBhIGZldyB0aW1lcy4N
+Cg0KRm9ydHVuYXRlbHkgdGhlIGtlcm5lbCBkb2Vzbid0IGdldCAnaGl0IGJ5JyBnY2MgdW5yb2xs
+aW5nDQpsb29wcyBpbnRvIHRoZSBBVlggaW5zdHJ1Y3Rpb25zLg0KVGhlIHNldHVwIGNvc3RzIGZv
+ciB0aGF0IChhbmQgSS1jYWNoZSBmb290cHJpbnQpIGFyZSBob3JyaWQuDQpBbHRob3VnaCBJIHN1
+c3BlY3QgaXQgaXMgdGhhdCBvcHRpbWlzYXRpb24gdGhhdCAnYnJva2UnDQpjb2RlIHRoYXQgdXNl
+ZCBtaXNhbGlnbmVkIHBvaW50ZXJzIG9uIG92ZXJsYXBwaW5nIGRhdGEuDQoNCkl0IGlzIGEgZ2Vu
+ZXJhbCBwcm9ibGVtIHdpdGggdGhlICdvbmUgc2l6ZSBmaXRzIGFsbCcgbWVtY3B5KCkuDQoNCglE
+YXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91
+bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5
+NzM4NiAoV2FsZXMpDQo=
 
-Is init_section_contains sufficient here?
-
-include/asm-generic/sections.h says:
- * [__init_begin, __init_end]: contains .init.* sections, but .init.text.*
- *                   may be out of this range on some architectures.
- * [_sinittext, _einittext]: contains .init.text.* sections
-
-init_section_contains only checks __init_*:
-static inline bool init_section_contains(void *virt, size_t size)
-{
-	return memory_contains(__init_begin, __init_end, virt, size);
-}
-
-Do we need to check against _sinittext and _einittext?
-
-Your proposed generic code will work for powerpc and s390 because those
-archs only test against __init_* anyway. I don't know if any platform
-actually does place .init.text outside of __init_begin=>__init_end, but
-the comment seems to suggest that they could.
-
-Kind regards,
-Daniel
