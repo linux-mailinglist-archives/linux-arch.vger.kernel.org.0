@@ -2,196 +2,372 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AA941E598
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 02:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA00841E5B2
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 03:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350104AbhJAAmf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Sep 2021 20:42:35 -0400
-Received: from mga06.intel.com ([134.134.136.31]:54352 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349760AbhJAAme (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 Sep 2021 20:42:34 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="286343931"
-X-IronPort-AV: E=Sophos;i="5.85,336,1624345200"; 
-   d="scan'208";a="286343931"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2021 17:40:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,336,1624345200"; 
-   d="scan'208";a="564552041"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Sep 2021 17:40:30 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 30 Sep 2021 17:40:30 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 30 Sep 2021 17:40:30 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Thu, 30 Sep 2021 17:40:30 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Thu, 30 Sep 2021 17:40:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SV5jmUKZuHnSNzeYeIQTf1h7oNTdBhgYOzz0YcF3Ns77FcZhRNr2130vFvLDvZJsSeSt2yRpxavvlncAmmT7t4ZluaKHzEK/dtDsaANlkDrb+AGXHcoqbVk39Tz89JA4qWzb+jdsYKS/LKBuIfkKNnkoLNRvPDo7CsXs27//vVBRW2i2mMeDU0/ZBXJRy6mX7XKUyuFL4pWzy6f99qUQkY82fGhkHk3iSUB1JFzsNhkX3tdERq6uyTsEpq1MT7m+UlfOSiIsZ97dOLGPSdfUaHwr4acTh1ANqqbb7KIutBaPtl/Cm5tdRNsRKGQfIr/xdy9BpxyFjFcXPbcD1Ji/Gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aqMOt9UR4Nu+hD7zvVuQmRP9Z4ORnMa3A5tWNXxUUmk=;
- b=OiJc+4O2M5q0jIP7DbOjpidlhlK3kxeXr5/TCcSHreGC6I0f8pnIFZZPivj991ocI+IFRdXbWwkCH/slC8BrgUsRMauzigPz9lzY2wyI9ypmJixLWtTqKcewhFK5gG5rGAqNcjJRR37SilAq8U6vSpUndBaZq4g1FbD+BQjZmxOQU4CAYkuOv3lTGTpETs2FjbV9OWcIIR5u+z/Pz8nmGXHwXOeEjANa/uDH1IQAXZQbYGs6zfiE1ftqnHdtmMh2f6UtQVEsXS51mcCr6ETCJa4clwydeNwUY3FxrIzKZe1ojSaj8Ya3jECjbX+TeIy2Dkb0ABp6ptWUe/r3Zt8Fxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aqMOt9UR4Nu+hD7zvVuQmRP9Z4ORnMa3A5tWNXxUUmk=;
- b=Fz2jwYGs+f63X6bA6pC4z13RL4yWn25ZZ1zhHpG+SRM/eyX1Ql6E0vklcZEJdo/tg0/4Fx52+XI0BiphnO5Ev5yrQdkFSL/jE/iCiAd6wKi4ubgJ+gfgERDUp8IycnrrzZ0feVEVdFPW2Lhq2g5Xgh+y2AlxMh508WGFLIUWkcI=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by BYAPR11MB2760.namprd11.prod.outlook.com (2603:10b6:a02:c0::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15; Fri, 1 Oct
- 2021 00:40:26 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::4167:f9ef:19b2:eaff]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::4167:f9ef:19b2:eaff%3]) with mapi id 15.20.4566.016; Fri, 1 Oct 2021
- 00:40:26 +0000
-Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
-To:     Stefan Hajnoczi <stefanha@redhat.com>
-CC:     <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
+        id S1351119AbhJABV6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Sep 2021 21:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351058AbhJABV6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Sep 2021 21:21:58 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BACC06176A;
+        Thu, 30 Sep 2021 18:20:14 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id e144so9855750iof.3;
+        Thu, 30 Sep 2021 18:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hVWDhmIP1pz2733bKRI2khM7ndzrEGs5aTcw9T8Uk1Q=;
+        b=V/DlQbkf91y3opUGrM9Xm6VB2hWr3LFx8m8GZx6gK8llt1yBFYX7+rm58xHeIvZIuF
+         0PWi54IobRm1RuyLbKWPtYfMXEduh3rwbOevMH9o6jmlwp//zVKdodKYZGM2bsLQjfyS
+         ZhmIDK2qb3s6J0CJN7e2Lih+1drl6ZKECNHUilEzXcYJmfv8pM65GikpDm6Dj2ujY2jV
+         /HHReHs2sLlnfp5cMP1tBSGaVkKp3rxUZsbK3GC0iZ2WspXCAfHN2VeNRsMt0UkVZANy
+         dexJKMxIFd+iE6fYxHBhljeWPpuW1WxxBvE2aCQq7J4CiWil1c9M1ypWwhgooc/Sl6eq
+         0mLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hVWDhmIP1pz2733bKRI2khM7ndzrEGs5aTcw9T8Uk1Q=;
+        b=Y1Un4vRruUEGg2EivwSi7ktkx2wPaIcpgI/j1NtnSCPbJojSuuehl/RQs5NzlsaKq8
+         fUsaNM/0dyL4U1p89Rdh93M8KvAdLr1Xfl+KZ4KiaCY3e3cSMBK38h/Rm/O4MYjGZFe7
+         OHx7s2tyQPgmCXc+MP99TXBpvDNIG62xCXydlvxfuTku6JX1zeAw/o4i9u2LMJ8+dylt
+         XY73atrm0PJGusbCN6gyDNY+gl69PukCO1O0DY1myPP+U6vR/pD473Js5TGcPbDGgU/d
+         aiw1X5DnJAqrbEHtMYEmASTvYSBST7SeFrMVyDFj2L9r/4FGYSPF3AA7Etb2/vBW6bt6
+         21XQ==
+X-Gm-Message-State: AOAM533U2Frt5VpfhGCUFZLWiME9iTAnLhzrQRjS5dUJfDRKMNUi/dkZ
+        uvQLr16+oO9ANG0QAhtf9t8=
+X-Google-Smtp-Source: ABdhPJyLQ+VRCeUb0kynXfokUHp9f1gPKBQnpNOqhkGb35f57yu5hVB89Dmb2+kcWIFkxqVaJTH5yA==
+X-Received: by 2002:a05:6602:55:: with SMTP id z21mr6078608ioz.205.1633051214097;
+        Thu, 30 Sep 2021 18:20:14 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id a4sm693574ild.52.2021.09.30.18.20.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Sep 2021 18:20:13 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 5026727C005B;
+        Thu, 30 Sep 2021 21:20:11 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 30 Sep 2021 21:20:11 -0400
+X-ME-Sender: <xms:SWJWYQcsfxS0hTpq-2woDN3tWVabrHeP5wnzpHF8joOsQ3MdGMC9Pw>
+    <xme:SWJWYSMlHuyuv19sCbW7o2o6j-gVqpq4mfH2c4Z1gAEEodpOUGJmuDX50tCj99x68
+    jNHG42ZSuejWY-KPg>
+X-ME-Received: <xmr:SWJWYRia1yuf_HpLoXJgn_xyrOKnTxUCxdXcuBoxFD3km6jYNcFi2ROBwtRCzw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekhedggeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhepveeijedthfeijeefudehhedvveegudegteehgffgtddvuedtveegtedvvdef
+    gedtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhp
+    vghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrd
+    hfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:SWJWYV-YQYLpSjeNcXb5IfCjCCLtLcDL1OX0mJao0FjlmgtA6Py2Ww>
+    <xmx:SWJWYcv-qnp34kxwZEYj9qMdx9hZDXFkLwNBDpMFawEZ_ycgMmrO8w>
+    <xmx:SWJWYcF6w0lX8xMAVOxI-h5lVxkqssXNrLRSw1zqq8bI_EsZbIprdw>
+    <xmx:S2JWYURoMI_DqeMuxW1kUM1qCc9gyrKE8OalC48I9xf7NsgGSi4DXk5ZJj8>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Sep 2021 21:20:08 -0400 (EDT)
+Date:   Fri, 1 Oct 2021 09:19:21 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     "Paul E . McKenney " <paulmck@kernel.org>,
+        Dan Lustig <dlustig@nvidia.com>, Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "Gayatri Kammela" <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        "Dan Williams" <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        <linux-api@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <YVXlQIt/oWQlIupu@stefanha-x1.localdomain>
-From:   Sohil Mehta <sohil.mehta@intel.com>
-Message-ID: <d0e9d6cd-16ea-173d-36ba-24ab814553b1@intel.com>
-Date:   Thu, 30 Sep 2021 17:40:24 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
-In-Reply-To: <YVXlQIt/oWQlIupu@stefanha-x1.localdomain>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: SJ0PR03CA0272.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::7) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Peter Anvin <hpa@zytor.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vince Weaver <vincent.weaver@maine.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Stephane Eranian <eranian@google.com>, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mpe@ellerman.id.au,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH] tools/memory-model: Provide extra ordering for
+ unlock+lock pair on the same CPU
+Message-ID: <YVZiGdWXfbsHs2xa@boqun-archlinux>
+References: <20210930130823.2103688-1-boqun.feng@gmail.com>
 MIME-Version: 1.0
-Received: from [192.168.86.37] (73.222.31.188) by SJ0PR03CA0272.namprd03.prod.outlook.com (2603:10b6:a03:39e::7) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.13 via Frontend Transport; Fri, 1 Oct 2021 00:40:25 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5011ac40-95c7-48d9-d06b-08d984740f93
-X-MS-TrafficTypeDiagnostic: BYAPR11MB2760:
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR11MB27602F56DD92054D634D0096E5AB9@BYAPR11MB2760.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zazQW2HYzw9/ERTAOc8Gr4pxyTTRnA93WCMNgSSuGA3gialiXsAy6by0BFTI+03Wxt0K8nu7Bq1j8S5oXSPvmQiDYnMiCmHkY5zK3VZnxqita5WzXB84lV9Eu8nND74x29LbqRR4fPrebXZqfGFkQ7rXBQ4CrNW+afIYne7YEkne//K0vvM3WNYLp6ni8h6TgUD7u8DE/ORaaTasqGyA5ZJbk9C0uzVPcBqrLNOy4/dh8K7+FXrsIMKExAeqcHN1wmOcofH87J4FW7uvoiEUYlmYTJ2Ue86i2cG/xyMwOUSiwqE4GdvRqyC2xxfATZueqjchld5CBnahcTG0T+tx9DK0/oZ4T+MGTbJ2Q8cI7z0+ZKpiL1wo32S6FzH5zS9t9mhMHGm164NV0/anpAvKKoxSVAUFtBgekTWGeMB1nZwXsxoaxpN95u070M4WRcbqkd8JaGtlWcNhfN7Ie3hE5mVgtV+MWarr0ou8Ru/3Lee54LRbpCOilaXRBa5ZzPWmBLzhhi4h69MISA3mjDkr5plwKV8zk11FYgGxTT5ZY9FNUR4Rju+LVZtOrusKboZ65Aj6fqA7W7Qo6OogxtB1xtin22AzO+K2194p7+KgDXUvqCgUN8V9Xdyl3xh21wXRl482XW1o/F51HiV9T1uIHHejGrUOGBmogotz5fzXSpZovbX65fJZPRqH2j+y+dHvTGed55MhniID/T4/gsKJUVehEL//E0HE7zDSkN+PTHDdVUMZJWIrsutZutgLPgwMgIhY5kCuUvoVRfl8BtapmiElTDMJhaI8RJ010fOnS+tjrc3T/iIg3LR+P1pASUBt
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(7416002)(316002)(16576012)(36756003)(54906003)(86362001)(8676002)(508600001)(83380400001)(8936002)(31686004)(5660300002)(956004)(31696002)(186003)(2616005)(6486002)(966005)(26005)(38100700002)(2906002)(4326008)(6916009)(53546011)(66946007)(66476007)(66556008)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?Windows-1252?Q?HI0rd6/EGpvb7asDPWAPwYaFkxRXRlpvMaRo1gSxY9RBDFXw5EmN7Uzs?=
- =?Windows-1252?Q?uP617BRfSCCaktcb0YA6x4OSHDARWOTX20hambzcfA95+h8zDXIzsF0v?=
- =?Windows-1252?Q?Zi3yteKDICcmvEb04hz1uVxtERcNVEn5IKbeyx1NmPb8PHa6FUEF3/C1?=
- =?Windows-1252?Q?yQaeUngIQ12krMcZh35p9L5A6wLvEDnDHVrqpWI5yWzZGziCPsNrvj2G?=
- =?Windows-1252?Q?oxo68cePPbSDReYNk3mEzkpfhLNOfzw2V2cnKgPNmDue6vNpTsTSOYBT?=
- =?Windows-1252?Q?JWG/uEnamjgLU6F9o2MpsLmQdz1Ou6UR96JniJlT8YKJAS16QKHGUkXd?=
- =?Windows-1252?Q?Tjf8s8X/vWvEJEj9vbMpHf/I52KDhlJoZr0rz2lIX2XBwVFDx1h2zKq0?=
- =?Windows-1252?Q?XCIMPPvnLfp5atj6igFg1oIkRQ3stjEJ666PUk4uDzb/EQSyqBxl6SzN?=
- =?Windows-1252?Q?BhCw8iqOU9qVOWia6+ZvPQ8tzYw/oG/XdR8UZnwH6HzZfrDgYH7r30iV?=
- =?Windows-1252?Q?QfjMKsy0GdJb2NkbrRe74zUNTO/JrCKHvIKRSery8Sge+ecxpihz4ubT?=
- =?Windows-1252?Q?Td5pieh0T2YabUEIyyuz0/fiSjBhb00Lok76dDculQCrVp+xSy8rj+R2?=
- =?Windows-1252?Q?2nuHLnGD0AJyAPzWv7PrQCLAhElzIrHCGojRGWMZl+A7zIu1YBPONvOF?=
- =?Windows-1252?Q?tmmoyU+D3tLk4pfjL77GMqofl/xtrNd9yhMZQRS9K996KYjyifZwp7I9?=
- =?Windows-1252?Q?RK+IWL1ftBABeQNJ/EZVy+AW3pbLg+Iye461iJNDOnXz7bupwRLJxxVU?=
- =?Windows-1252?Q?+yI3bS6xUpWRbuBTs9sIXMpJaSr6JUGWevPbSroOnNkIJsoWzt17EB2Q?=
- =?Windows-1252?Q?TMWyEiGaUe5iMswnxniqaSMBQZe9VOs+11DWeTcUQ59BUo0aSIzBPVmT?=
- =?Windows-1252?Q?TgWrzXncLFSdaJSwAlkUVFqC7R9M2pbkQGOvnZ+/SGZxwjLtF7GF8rIK?=
- =?Windows-1252?Q?u/xqdeQFcllyNYQScgTlhDhdE6jyVqHN8xlRDn0TZgK3zpNUro59VV05?=
- =?Windows-1252?Q?QiW4Cj5EntatLPIArk8ntk9gio97DqseeLU2BsMsJfpYr38I0HpWBuc0?=
- =?Windows-1252?Q?Jy3WeacPo7AwybHb3hdduqzBjc6YFUy6hlGTgjQkEGU4C/qJyyeZaQPq?=
- =?Windows-1252?Q?yeDsggapk21abCS5I7/24/X7VIrtm8b56zRveJOX2fphAZsu572ia9xF?=
- =?Windows-1252?Q?v5tGnYZVx2mY3GSEbsWRdN6mwCG/M5u+wyOhaN6wxj6ExM4M6tWCC1nf?=
- =?Windows-1252?Q?YykAzlFcuqUR941+w1L2jEzDTprfHPHaETz6xzh56A/QrqdrJ/XyQ3/2?=
- =?Windows-1252?Q?ghC8Qvis9orWMlAytxjH2Z7bDwkfQZ7OHYfQ0HXdUZY8BD+BAduJas5b?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5011ac40-95c7-48d9-d06b-08d984740f93
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Oct 2021 00:40:26.4902
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OnjXpLwYwp0fmiglsSVEgESwZkoQjQW6x7UTLHL+GljOw5+SaOkzzNycqImj9UxXpbyYpKiBGf5C6RZJxa7bAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2760
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210930130823.2103688-1-boqun.feng@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/30/2021 9:26 AM, Stefan Hajnoczi wrote:
-> On Mon, Sep 13, 2021 at 01:01:19PM -0700, Sohil Mehta wrote:
->> +------------+-------------------------+
->> | IPC type   |   Relative Latency      |
->> |            |(normalized to User IPI) |
->> +------------+-------------------------+
->> | User IPI   |                     1.0 |
->> | Signal     |                    14.8 |
->> | Eventfd    |                     9.7 |
-> Is this the bi-directional eventfd benchmark?
-> https://github.com/intel/uintr-ipc-bench/blob/linux-rfc-v1/source/eventfd/eventfd-bi.c
+(Add linux-arch in Cc list)
 
-Yes. I have left it unmodified from the original source. But, I should 
-have looked at it more closely.
+Architecture maintainers, this patch is about strengthening our memory
+model a little bit, your inputs (confirmation, ack/nack, etc.) are
+appreciated.
 
-> Two things stand out:
->
-> 1. The server and client threads are racing on the same eventfd.
->     Eventfds aren't bi-directional! The eventfd_wait() function has code
->     to write the value back, which is a waste of CPU cycles and hinders
->     progress. I've never seen eventfd used this way in real applications.
->     Can you use two separate eventfds?
+Regards,
+Boqun
 
-Sure. I can do that.
-
-
-> 2. The fd is in blocking mode and the task may be descheduled, so we're
->     measuring eventfd read/write latency plus scheduler/context-switch
->     latency. A fairer comparison against user interrupts would be to busy
->     wait on a non-blocking fd so the scheduler/context-switch latency is
->     mostly avoided. After all, the uintrfd-bi.c benchmark does this in
->     uintrfd_wait():
->
->       // Keep spinning until the interrupt is received
->       while (!uintr_received[token]);
-
-That makes sense. I'll give this a try and send out the updated results.
-
-Thanks,
-Sohil
-
+On Thu, Sep 30, 2021 at 09:08:23PM +0800, Boqun Feng wrote:
+> A recent discussion[1] shows that we are in favor of strengthening the
+> ordering of unlock + lock on the same CPU: a unlock and a po-after lock
+> should provide the so-called RCtso ordering, that is a memory access S
+> po-before the unlock should be ordered against a memory access R
+> po-after the lock, unless S is a store and R is a load.
+> 
+> The strengthening meets programmers' expection that "sequence of two
+> locked regions to be ordered wrt each other" (from Linus), and can
+> reduce the mental burden when using locks. Therefore add it in LKMM.
+> 
+> [1]: https://lore.kernel.org/lkml/20210909185937.GA12379@rowland.harvard.edu/
+> 
+> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+> Alan,
+> 
+> I added the "Co-developed-by" and "Signed-off-by" tags since most of the
+> work is done by you. Feel free to let me know if you want to change
+> anything.
+> 
+> Regards,
+> Boqun
+> 
+> 
+>  .../Documentation/explanation.txt             | 44 +++++++++++--------
+>  tools/memory-model/linux-kernel.cat           |  6 +--
+>  ...LB+unlocklockonceonce+poacquireonce.litmus | 33 ++++++++++++++
+>  ...unlocklockonceonce+fencermbonceonce.litmus | 33 ++++++++++++++
+>  tools/memory-model/litmus-tests/README        |  8 ++++
+>  5 files changed, 102 insertions(+), 22 deletions(-)
+>  create mode 100644 tools/memory-model/litmus-tests/LB+unlocklockonceonce+poacquireonce.litmus
+>  create mode 100644 tools/memory-model/litmus-tests/MP+unlocklockonceonce+fencermbonceonce.litmus
+> 
+> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> index 5d72f3112e56..394ee57d58f2 100644
+> --- a/tools/memory-model/Documentation/explanation.txt
+> +++ b/tools/memory-model/Documentation/explanation.txt
+> @@ -1813,15 +1813,16 @@ spin_trylock() -- we can call these things lock-releases and
+>  lock-acquires -- have two properties beyond those of ordinary releases
+>  and acquires.
+>  
+> -First, when a lock-acquire reads from a lock-release, the LKMM
+> -requires that every instruction po-before the lock-release must
+> -execute before any instruction po-after the lock-acquire.  This would
+> -naturally hold if the release and acquire operations were on different
+> -CPUs, but the LKMM says it holds even when they are on the same CPU.
+> -For example:
+> +First, when a lock-acquire reads from or is po-after a lock-release,
+> +the LKMM requires that every instruction po-before the lock-release
+> +must execute before any instruction po-after the lock-acquire.  This
+> +would naturally hold if the release and acquire operations were on
+> +different CPUs and accessed the same lock variable, but the LKMM says
+> +it also holds when they are on the same CPU, even if they access
+> +different lock variables.  For example:
+>  
+>  	int x, y;
+> -	spinlock_t s;
+> +	spinlock_t s, t;
+>  
+>  	P0()
+>  	{
+> @@ -1830,9 +1831,9 @@ For example:
+>  		spin_lock(&s);
+>  		r1 = READ_ONCE(x);
+>  		spin_unlock(&s);
+> -		spin_lock(&s);
+> +		spin_lock(&t);
+>  		r2 = READ_ONCE(y);
+> -		spin_unlock(&s);
+> +		spin_unlock(&t);
+>  	}
+>  
+>  	P1()
+> @@ -1842,10 +1843,10 @@ For example:
+>  		WRITE_ONCE(x, 1);
+>  	}
+>  
+> -Here the second spin_lock() reads from the first spin_unlock(), and
+> -therefore the load of x must execute before the load of y.  Thus we
+> -cannot have r1 = 1 and r2 = 0 at the end (this is an instance of the
+> -MP pattern).
+> +Here the second spin_lock() is po-after the first spin_unlock(), and
+> +therefore the load of x must execute before the load of y, even though
+> +the two locking operations use different locks.  Thus we cannot have
+> +r1 = 1 and r2 = 0 at the end (this is an instance of the MP pattern).
+>  
+>  This requirement does not apply to ordinary release and acquire
+>  fences, only to lock-related operations.  For instance, suppose P0()
+> @@ -1872,13 +1873,13 @@ instructions in the following order:
+>  
+>  and thus it could load y before x, obtaining r2 = 0 and r1 = 1.
+>  
+> -Second, when a lock-acquire reads from a lock-release, and some other
+> -stores W and W' occur po-before the lock-release and po-after the
+> -lock-acquire respectively, the LKMM requires that W must propagate to
+> -each CPU before W' does.  For example, consider:
+> +Second, when a lock-acquire reads from or is po-after a lock-release,
+> +and some other stores W and W' occur po-before the lock-release and
+> +po-after the lock-acquire respectively, the LKMM requires that W must
+> +propagate to each CPU before W' does.  For example, consider:
+>  
+>  	int x, y;
+> -	spinlock_t x;
+> +	spinlock_t s;
+>  
+>  	P0()
+>  	{
+> @@ -1908,7 +1909,12 @@ each CPU before W' does.  For example, consider:
+>  
+>  If r1 = 1 at the end then the spin_lock() in P1 must have read from
+>  the spin_unlock() in P0.  Hence the store to x must propagate to P2
+> -before the store to y does, so we cannot have r2 = 1 and r3 = 0.
+> +before the store to y does, so we cannot have r2 = 1 and r3 = 0.  But
+> +if P1 had used a lock variable different from s, the writes could have
+> +propagated in either order.  (On the other hand, if the code in P0 and
+> +P1 had all executed on a single CPU, as in the example before this
+> +one, then the writes would have propagated in order even if the two
+> +critical sections used different lock variables.)
+>  
+>  These two special requirements for lock-release and lock-acquire do
+>  not arise from the operational model.  Nevertheless, kernel developers
+> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+> index 2a9b4fe4a84e..d70315fddef6 100644
+> --- a/tools/memory-model/linux-kernel.cat
+> +++ b/tools/memory-model/linux-kernel.cat
+> @@ -27,7 +27,7 @@ include "lock.cat"
+>  (* Release Acquire *)
+>  let acq-po = [Acquire] ; po ; [M]
+>  let po-rel = [M] ; po ; [Release]
+> -let po-unlock-rf-lock-po = po ; [UL] ; rf ; [LKR] ; po
+> +let po-unlock-lock-po = po ; [UL] ; (po|rf) ; [LKR] ; po
+>  
+>  (* Fences *)
+>  let R4rmb = R \ Noreturn	(* Reads for which rmb works *)
+> @@ -70,12 +70,12 @@ let rwdep = (dep | ctrl) ; [W]
+>  let overwrite = co | fr
+>  let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+>  let to-r = addr | (dep ; [Marked] ; rfi)
+> -let ppo = to-r | to-w | fence | (po-unlock-rf-lock-po & int)
+> +let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
+>  
+>  (* Propagation: Ordering from release operations and strong fences. *)
+>  let A-cumul(r) = (rfe ; [Marked])? ; r
+>  let cumul-fence = [Marked] ; (A-cumul(strong-fence | po-rel) | wmb |
+> -	po-unlock-rf-lock-po) ; [Marked]
+> +	po-unlock-lock-po) ; [Marked]
+>  let prop = [Marked] ; (overwrite & ext)? ; cumul-fence* ;
+>  	[Marked] ; rfe? ; [Marked]
+>  
+> diff --git a/tools/memory-model/litmus-tests/LB+unlocklockonceonce+poacquireonce.litmus b/tools/memory-model/litmus-tests/LB+unlocklockonceonce+poacquireonce.litmus
+> new file mode 100644
+> index 000000000000..955b9c7cdc7f
+> --- /dev/null
+> +++ b/tools/memory-model/litmus-tests/LB+unlocklockonceonce+poacquireonce.litmus
+> @@ -0,0 +1,33 @@
+> +C LB+unlocklockonceonce+poacquireonce
+> +
+> +(*
+> + * Result: Never
+> + *
+> + * If two locked critical sections execute on the same CPU, all accesses
+> + * in the first must execute before any accesses in the second, even if
+> + * the critical sections are protected by different locks.
+> + *)
+> +
+> +{}
+> +
+> +P0(spinlock_t *s, spinlock_t *t, int *x, int *y)
+> +{
+> +	int r1;
+> +
+> +	spin_lock(s);
+> +	r1 = READ_ONCE(*x);
+> +	spin_unlock(s);
+> +	spin_lock(t);
+> +	WRITE_ONCE(*y, 1);
+> +	spin_unlock(t);
+> +}
+> +
+> +P1(int *x, int *y)
+> +{
+> +	int r2;
+> +
+> +	r2 = smp_load_acquire(y);
+> +	WRITE_ONCE(*x, 1);
+> +}
+> +
+> +exists (0:r1=1 /\ 1:r2=1)
+> diff --git a/tools/memory-model/litmus-tests/MP+unlocklockonceonce+fencermbonceonce.litmus b/tools/memory-model/litmus-tests/MP+unlocklockonceonce+fencermbonceonce.litmus
+> new file mode 100644
+> index 000000000000..2feb1398be71
+> --- /dev/null
+> +++ b/tools/memory-model/litmus-tests/MP+unlocklockonceonce+fencermbonceonce.litmus
+> @@ -0,0 +1,33 @@
+> +C MP+unlocklockonceonce+fencermbonceonce
+> +
+> +(*
+> + * Result: Never
+> + *
+> + * If two locked critical sections execute on the same CPU, stores in the
+> + * first must propagate to each CPU before stores in the second do, even if
+> + * the critical sections are protected by different locks.
+> + *)
+> +
+> +{}
+> +
+> +P0(spinlock_t *s, spinlock_t *t, int *x, int *y)
+> +{
+> +	spin_lock(s);
+> +	WRITE_ONCE(*x, 1);
+> +	spin_unlock(s);
+> +	spin_lock(t);
+> +	WRITE_ONCE(*y, 1);
+> +	spin_unlock(t);
+> +}
+> +
+> +P1(int *x, int *y)
+> +{
+> +	int r1;
+> +	int r2;
+> +
+> +	r1 = READ_ONCE(*y);
+> +	smp_rmb();
+> +	r2 = READ_ONCE(*x);
+> +}
+> +
+> +exists (1:r1=1 /\ 1:r2=0)
+> diff --git a/tools/memory-model/litmus-tests/README b/tools/memory-model/litmus-tests/README
+> index 681f9067fa9e..d311a0ff1ae6 100644
+> --- a/tools/memory-model/litmus-tests/README
+> +++ b/tools/memory-model/litmus-tests/README
+> @@ -63,6 +63,10 @@ LB+poonceonces.litmus
+>  	As above, but with store-release replaced with WRITE_ONCE()
+>  	and load-acquire replaced with READ_ONCE().
+>  
+> +LB+unlocklockonceonce+poacquireonce.litmus
+> +	Does a unlock+lock pair provides ordering guarantee between a
+> +	load and a store?
+> +
+>  MP+onceassign+derefonce.litmus
+>  	As below, but with rcu_assign_pointer() and an rcu_dereference().
+>  
+> @@ -90,6 +94,10 @@ MP+porevlocks.litmus
+>  	As below, but with the first access of the writer process
+>  	and the second access of reader process protected by a lock.
+>  
+> +MP+unlocklockonceonce+fencermbonceonce.litmus
+> +	Does a unlock+lock pair provides ordering guarantee between a
+> +	store and another store?
+> +
+>  MP+fencewmbonceonce+fencermbonceonce.litmus
+>  	Does a smp_wmb() (between the stores) and an smp_rmb() (between
+>  	the loads) suffice for the message-passing litmus test, where one
+> -- 
+> 2.32.0
+> 
