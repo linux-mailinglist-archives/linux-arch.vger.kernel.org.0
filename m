@@ -2,31 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A57C441F4F2
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 20:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6812641F50F
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 20:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355650AbhJASZr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Oct 2021 14:25:47 -0400
-Received: from mga17.intel.com ([192.55.52.151]:10291 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229549AbhJASZq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 1 Oct 2021 14:25:46 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10124"; a="205682775"
-X-IronPort-AV: E=Sophos;i="5.85,339,1624345200"; 
-   d="scan'208";a="205682775"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 11:23:58 -0700
-X-IronPort-AV: E=Sophos;i="5.85,339,1624345200"; 
-   d="scan'208";a="619318720"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 11:23:46 -0700
-Received: from andy by smile with local (Exim 4.95-RC2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mWNC7-007Vql-Ly;
-        Fri, 01 Oct 2021 21:23:39 +0300
-Date:   Fri, 1 Oct 2021 21:23:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
+        id S231822AbhJASin (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Oct 2021 14:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355969AbhJASig (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 14:38:36 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C9C061775;
+        Fri,  1 Oct 2021 11:36:44 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p1so2647059pfh.8;
+        Fri, 01 Oct 2021 11:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U/jeo0cc4IS12fXu/3bym/iiyWz3QTfkGKyYijbo8pY=;
+        b=cPfJPl85flsr5d4GoEpVUbaPdgMoIQXFsKWqOJIawh2OktBJif4WDJTgJfCp+DZVLE
+         xWjav8cTfeSzwz6vvFgspe8IuaOqaPNp1QmAXMnLOJhWBr+i9jTOc6g0I++ZmPq70S2u
+         wz+gnit0JRnRxpEKSiaFE/4qg58Qj5poqu6BZscEk7exNp72iz2SVBawCsfF7bRb9kd4
+         WQHbaZ7lwO2hmVGRat0sOY4CbIqesw4bhvmbdOsncWv6mImb8vtBs90Az8MFfTQzaGqX
+         NLKwh1XOC6ZlMYoPzZDX2cqXJ7bDqFJFTjyJjRGAPHJ1urMr9+ZmccUHI/ZdKgggTBpL
+         HMCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U/jeo0cc4IS12fXu/3bym/iiyWz3QTfkGKyYijbo8pY=;
+        b=p3PHMLbvL10ZT7WKQ3MUmMalH4Xgz4SBRI5LFbymV3M7k00S65G7KB4Cc5qX7eQk8Q
+         JsUYMVfDDmHcqSb3EsnzmcyEh0nOBVqDgC0nbBHXyHERFZeOsZ6rP3iRaYFgPXlee0wf
+         vmJ3h5k7Bln7j3ZEk10xfxZPIvlEStDjdfvkoZeMaUIAapj73mdUpF2tYauS3DxeinCi
+         U8b443AhUC9FnkJcYJGkJSoWjcC7/TUC5ROE9NdPi7qUr4OfIB7kFzsBaR4M6wxDIV8H
+         A+fhxsqMoarDLgyMSd3iBXNV04Vhijq9/DWM0dAht5tMNf5q8cMAZkyHd2UGXD7RZTgB
+         rCiQ==
+X-Gm-Message-State: AOAM532SN6xnR6UcfWMoch6otfb7/kqlT7QRc6pY9CF0AXvCTys+t+ip
+        EgB4Oui4+Jl6jxpWlYnRVBs=
+X-Google-Smtp-Source: ABdhPJxpcN7h+xroaO4ziJJc8u4TcIRQF/ZupaBuavc2M/JBoGPwQoLCynTihJtuxc2oGWN1VfWgvw==
+X-Received: by 2002:a62:e210:0:b0:44b:ae4c:8c01 with SMTP id a16-20020a62e210000000b0044bae4c8c01mr11498160pfi.45.1633113403479;
+        Fri, 01 Oct 2021 11:36:43 -0700 (PDT)
+Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id t23sm2310819pgn.25.2021.10.01.11.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Oct 2021 11:36:43 -0700 (PDT)
+Date:   Fri, 1 Oct 2021 11:36:44 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -77,37 +100,37 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
 Subject: Re: [PATCH RESEND 2 00/16] Resend bitmap patches
-Message-ID: <YVdSK4rFmLVFrKrD@smile.fi.intel.com>
+Message-ID: <YVdVPGaF2Gq1PGpG@yury-ThinkPad>
 References: <20211001181226.228340-1-yury.norov@gmail.com>
+ <YVdSK4rFmLVFrKrD@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211001181226.228340-1-yury.norov@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <YVdSK4rFmLVFrKrD@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 01, 2021 at 11:12:10AM -0700, Yury Norov wrote:
-> Hi Stephen,
+On Fri, Oct 01, 2021 at 09:23:39PM +0300, Andy Shevchenko wrote:
+> On Fri, Oct 01, 2021 at 11:12:10AM -0700, Yury Norov wrote:
+> > Hi Stephen,
+> > 
+> > Can you please take this series into the next tree? It has been already
+> > in next-tree for 5.14:
+> > 
+> > https://lore.kernel.org/linux-mmc/YSeduU41Ef568xhS@alley/T/
+> > 
+> > But it was damaged and we decided to merge it in 5.15 cycle. No changes
+> > comparing to 5.14, except for Andy's patch that was already upstreamed
+> > and therefore removed from here.
+> > 
+> > The git tree is here:
+> > 	https://github.com/norov/linux/tree/bitmap-20210929
 > 
-> Can you please take this series into the next tree? It has been already
-> in next-tree for 5.14:
 > 
-> https://lore.kernel.org/linux-mmc/YSeduU41Ef568xhS@alley/T/
-> 
-> But it was damaged and we decided to merge it in 5.15 cycle. No changes
-> comparing to 5.14, except for Andy's patch that was already upstreamed
-> and therefore removed from here.
-> 
-> The git tree is here:
-> 	https://github.com/norov/linux/tree/bitmap-20210929
+> This is a dup with the same subject. Which one should we look into?
 
+Please ignore this (short) series. It's a duplication, my connection
+was broken and I had to restart submitting.
 
-This is a dup with the same subject. Which one should we look into?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Sorry for noise.
