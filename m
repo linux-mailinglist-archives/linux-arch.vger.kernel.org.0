@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D0C41F171
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 17:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB7241F1EA
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Oct 2021 18:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbhJAPrX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Oct 2021 11:47:23 -0400
-Received: from mail.efficios.com ([167.114.26.124]:58602 "EHLO
+        id S232202AbhJAQPP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Oct 2021 12:15:15 -0400
+Received: from mail.efficios.com ([167.114.26.124]:39316 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbhJAPrW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 11:47:22 -0400
+        with ESMTP id S1354559AbhJAQPO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Oct 2021 12:15:14 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id CA63638645D;
-        Fri,  1 Oct 2021 11:45:37 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 8A84638632E;
+        Fri,  1 Oct 2021 12:13:29 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id jvV3ZJgPqAFG; Fri,  1 Oct 2021 11:45:36 -0400 (EDT)
+        with ESMTP id ZM3AFaLuOgDH; Fri,  1 Oct 2021 12:13:28 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 7D33F386141;
-        Fri,  1 Oct 2021 11:45:36 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 7D33F386141
+        by mail.efficios.com (Postfix) with ESMTP id 6AE5338632D;
+        Fri,  1 Oct 2021 12:13:28 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6AE5338632D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1633103136;
-        bh=tdZFM0RCTMf5TWq/BEKiN7Jxsreq5aQVUeqqY1I6YQo=;
+        s=default; t=1633104808;
+        bh=7eKt/v8SRlysskI2agkVhAwiyRJ/IGvqsXIGEt7mukY=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=ffqVjaaZKkIHZVGNuahc4oYB3qHluEniIDzhUBpLAnUvwjq5gnoHJ9VpHc2hg88w8
-         e4PidJrCjBCDUr5+fLz+nqIOJgIgWyVkCveIGfE5PAImJNK5ZiGIek/8rcHOHAPNN9
-         oy3g8azJ21LeGNiTglAcKDpMCzZKPBbB95wFf7+bwtqwDhih77UfGXAlS10cp5YGxJ
-         +hQD/QQVtlol0uPdL/5G6rGv8i/Iqk044sDSQwWSyCUbefhC/FbIZfQ75JJg2NE01y
-         RmXGe+h9woVhI372kS37ys72b5AcloBVn7Ro8fvYtzInNMidkmjTWrvDt2aMDar9Ab
-         SApdXhUqsTgQA==
+        b=HRsS/V+HG6HeqpGV/J40K3XHvj85ZIHCsQDyPMZt0iKMe8LYstlk/ZCVe27ET19dw
+         4W8Rmdmd/6roX9HfjStkwHdNdQOKpTgyL4ttT7pPX4MlzlkdU4Dco26etLSm9GUiA3
+         FYFa0oANbcYESYQgFS4wEaRCNtBQTiryMomellBouzWPvlySk6qYa0jfocImP2Q2qr
+         4/mPLb+ejUagbbihCOrntfFhOy3yZhey1dZcduBZLWa9OkEC9Y3sC84TVz6kYN914F
+         R5++N0SKQuOfkf3RPbQfZG3Mg2Ji3zY0Zy0b9PxCPqKCrP0tuyC9qANqhTOgMyZKyG
+         MzZC+utydT4XQ==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Xosu6iaAPBNq; Fri,  1 Oct 2021 11:45:36 -0400 (EDT)
+        with ESMTP id 4hr9GWQ1uzEd; Fri,  1 Oct 2021 12:13:28 -0400 (EDT)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 65FE13861E0;
-        Fri,  1 Oct 2021 11:45:36 -0400 (EDT)
-Date:   Fri, 1 Oct 2021 11:45:36 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 52B303867A0;
+        Fri,  1 Oct 2021 12:13:28 -0400 (EDT)
+Date:   Fri, 1 Oct 2021 12:13:28 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Will Deacon <will@kernel.org>, paulmck <paulmck@kernel.org>,
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Florian Weimer <fweimer@redhat.com>, Will Deacon <will@kernel.org>,
+        paulmck <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -56,9 +56,9 @@ Cc:     Will Deacon <will@kernel.org>, paulmck <paulmck@kernel.org>,
         akiyks <akiyks@gmail.com>,
         linux-toolchains <linux-toolchains@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
-Message-ID: <1340204910.47919.1633103136293.JavaMail.zimbra@efficios.com>
-In-Reply-To: <YVRWyq+rDeAFLx+X@elver.google.com>
-References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com> <YVRWyq+rDeAFLx+X@elver.google.com>
+Message-ID: <2088260319.47978.1633104808220.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20210929174146.GF22689@gate.crashing.org>
+References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com> <87lf3f7eh6.fsf@oldenburg.str.redhat.com> <20210929174146.GF22689@gate.crashing.org>
 Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -66,169 +66,63 @@ Content-Transfer-Encoding: 7bit
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4125 (ZimbraWebClient - FF92 (Linux)/8.8.15_GA_4059)
 Thread-Topic: LKMM: Add ctrl_dep() macro for control dependency
-Thread-Index: d9agcrBI/g+vSBSUYnraVzg7PQhubQ==
+Thread-Index: vReMbXYKiUNSWYkS0HYbTozqU0HTpw==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
------ On Sep 29, 2021, at 8:06 AM, Marco Elver elver@google.com wrote:
+----- On Sep 29, 2021, at 1:41 PM, Segher Boessenkool segher@kernel.crashing.org wrote:
 
-> On Tue, Sep 28, 2021 at 05:15PM -0400, Mathieu Desnoyers wrote:
->> The control dependency ordering currently documented in
->> Documentation/memory-barriers.txt is fragile and can be broken by
->> various compiler optimizations.
->> 
->> The goal here is to prevent the compiler from being able to optimize a
->> conditional branch into something which lacks the control dependency,
->> while letting the compiler choose the best conditional branch in each
->> case.
->> 
->> Prevent the compiler from considering the two legs of a conditional
->> branch as identical by adding a distinct volatile asm in each leg of the
->> branch. Those asm do not emit any instruction nor data into the
->> resulting executable, and do not have any clobbers.
->> 
->> GNU describes asm volatile statements as having side-effects. [1]
->> 
->> C99 describes that accessing volatile objects are side-effects, and that
->> "at certain specified points in the execution sequence called sequence
->> points, all side effects of previous evaluations shall be complete
->> and no side effects of subsequent evaluations shall have taken
->> place". [2]
->> 
->> This ensures that the program order of READ_ONCE(), asm volatile in both
->> legs of the branch, and following WRITE_ONCE() and after_ctrl_dep()
->> barriers are preserved.
->> 
->> With this approach, the following code now keeps the control dependency:
->> 
->>         z = READ_ONCE(var1);
->>         if (ctrl_dep(z))
->>                 WRITE_ONCE(var2, 5);
->>         else
->>                 WRITE_ONCE(var2, 5);
->> 
->> And the ctrl_dep_eval() checking the constant triggers a build error
->> for:
->> 
->>         y = READ_ONCE(var1);
->>         if (ctrl_dep(y % 1))
->>                 WRITE_ONCE(var2, 5);
->>         else
->>                 WRITE_ONCE(var2, 6);
->> 
->> Which is good to have to ensure the compiler don't end up removing the
->> conditional branch because the it evaluates a constant.
->> 
->> Introduce the ctrl_dep macro in the generic headers, and use it
->> everywhere it appears relevant.  The approach taken is simply to
->> look for smp_acquire__after_ctrl_dep and "control dependency" across the
->> kernel sources, so a few other uses may have been missed.
+> Hi!
 > 
-> It would be nice to know where and on which arch things are currently
-> broken of course, which might then also help raise confidence that this
-> implementation of ctrl_dep() works.
+> On Wed, Sep 29, 2021 at 02:28:37PM +0200, Florian Weimer wrote:
+>> If you need a specific instruction emitted, you need a compiler
+>> intrinsic or inline assembly.
 > 
-> Because it's still hard to prove that the compiler will always do the
-> right thing with that implementation. The only concrete option I see
-> here is creating tests with known or potential breakage.
+> Not an intrinsic.  Builtins (like almost all other code) do not say
+> "generate this particular machine code", they say "generate code that
+> does <this>".  That is one reason why builtins are more powerful than
+> inline assembler (another related reason is that they tell the compiler
+> exactly what behaviour is expected).
 > 
-> In an ideal world we could add such tests to the compiler's test-suites
-> themselves, assuming the behaviour your ctrl_dep() implementation relies
-> on is supposed to be guaranteed (and the compiler folks agree..).
+>> I don't think it's possible to piggy-back this on something else.
+> 
+> Unless we get a description of what this does in term of language
+> semantics (instead of generated machine code), there is no hope, even.
 
-Indeed, if we end up agreeing on the need for a compiler builtin, it should
-be added to the compiler test-suites with the known problematic scenarios
-for each architecture.
+Hi Segher,
 
-> 
-> Beyond the above trivial test case with 2 identical branches, here's
-> another one that breaks on arm64 with clang 12 (taken from
-> https://reviews.llvm.org/D103958):
-> 
-> | int x, y;
-> | void noinline test_ctrl_dep_broken1(void)
-> | {
-> | 	/* ARM: do NOT expect: cinc | expect: cbz */
-> | 	if (ctrl_dep(READ_ONCE(x))) {
-> | 		y = 1;
-> | 	} else {
-> | 		y = 2;
-> | 	}
-> | }
-> 
-> Without ctrl_dep():
-> 
-> | <test_ctrl_dep_broken1>:
-> |        d00042a8        adrp    x8, ffffffc010868000 <initcall_debug>
-> |        b9400508        ldr     w8, [x8, #4]
-> |        52800029        mov     w9, #0x1                        // #1
-> |        7100011f        cmp     w8, #0x0
-> |        1a891528        cinc    w8, w9, eq  // eq = none
-> |        d00042a9        adrp    x9, ffffffc010868000 <initcall_debug>
-> |        b9000928        str     w8, [x9, #8]
-> |        d65f03c0        ret
-> 
->			^^ no branch, compiler replaced branch with cinc!
-> 
-> with ctrl_dep():
-> 
-> | <test_ctrl_dep_broken1>:
-> |        d00042a8        adrp    x8, ffffffc010868000 <initcall_debug>
-> |        b9400508        ldr     w8, [x8, #4]
-> |        34000068        cbz     w8, ffffffc0100124b4 <test_ctrl_dep_broken1+0x14>
-> |        52800028        mov     w8, #0x1                        // #1
-> |        14000002        b       ffffffc0100124b8 <test_ctrl_dep_broken1+0x18>
-> |        52800048        mov     w8, #0x2                        // #2
-> |        d00042a9        adrp    x9, ffffffc010868000 <initcall_debug>
-> |        b9000928        str     w8, [x9, #8]
-> |        d65f03c0        ret
-> 
->			^^ has cbz (and no cinc)
-> 
-> Which is good -- empirically, this seems to work for this case at least.
+Let me try a slightly improved attempt at describing what I am looking
+for in terms of language semantics.
 
-Well AFAIU, this example with cinc does guarantee the control dependency for the store
-to "y". The issue arises if we have additional stores which are also expected to be
-ordered by the control dependency, e.g.:
+First, let's suppose we define two new compiler builtins, e.g.
+__sync_ctrl_dep_rw() and __sync_ctrl_dep_acquire().
 
- 	if (READ_ONCE(x)) {
- 		WRITE_ONCE(y, 1);
- 	} else {
- 		WRITE_ONCE(y, 2);
- 	}
-        WRITE_ONCE(z, 3);
+Their task would be to ensure that a R->W or R->RW (acquire) dependency between the
+volatile loads used as input of the evaluated expression and following volatile
+stores, volatile loads for R->RW, volatile asm, memory clobbers, is present in the
+following situations:
 
-Here the store to "z" would not necessarily be ordered by the control dependency.
+When the builtin is used around evaluation of the left operand of the && (logical
+AND) and || (logical OR) expression, the R->W or R->RW dependency should be
+present before evaluating the right operand.
 
-Likewise with clang if we store the same value to different memory locations, e.g.:
+When the builtin is used around evaluation of the first operand of the ternary
+"question-mark" operator, the R->W or R->RW dependency should be present before
+evaluating the second or third operands.
 
- 	if (READ_ONCE(x)) {
- 		WRITE_ONCE(a, 0);
- 	} else {
- 		WRITE_ONCE(b, 0);
- 	}
-        WRITE_ONCE(z, 3);
+When the builtin is used around evaluation of the controlling expressions of
+if, switch, while, and do-while statements, as well as of the second operand of
+the for statement, the R->W or R->RW dependency should be present before the
+next sequence point is evaluated.
 
-With armv8, the csel instruction is done on the address being written to, which also
-removes the conditional branch. I think this last example is missing from the kernel
-documentation.
+One cheap way to achieve said R->W dependency (as well as R->RW on architectures which
+to not reorder R->R) is to ensure that the generated assembly contains a conditional
+branch. Other ways to ensure this include more heavy-weight approaches such as explicit
+barriers.
 
-Another case which should perhaps be documented is the ability of the compiler to
-match assembler, e.g.:
-
-if (READ_ONCE(x)) {
-   smp_acquire__after_ctrl_dep();
-   WRITE_ONCE(a, 0);
-} else {
-   smp_rmb();
-   WRITE_ONCE(b, 0);
-}
-WRITE_ONCE(z, 3);
-
-In the example above, the compiler can match and lift the inline asm, and use
-csel to select the address to write to, thus causing the store to z to lack
-the control dependency with load x.
+Hopefully my description above is slightly closer to the expected language
+semantics.
 
 Thanks,
 
