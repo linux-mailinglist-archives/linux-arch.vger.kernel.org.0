@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B0E41FAF0
-	for <lists+linux-arch@lfdr.de>; Sat,  2 Oct 2021 12:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C5841FAF5
+	for <lists+linux-arch@lfdr.de>; Sat,  2 Oct 2021 12:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbhJBKv6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 2 Oct 2021 06:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S232778AbhJBKzg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 2 Oct 2021 06:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbhJBKv5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 2 Oct 2021 06:51:57 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F314EC061570;
-        Sat,  2 Oct 2021 03:50:11 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id c33so8542960uae.9;
-        Sat, 02 Oct 2021 03:50:11 -0700 (PDT)
+        with ESMTP id S232754AbhJBKzf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 2 Oct 2021 06:55:35 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00117C061570;
+        Sat,  2 Oct 2021 03:53:49 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id x1so14200282vsp.12;
+        Sat, 02 Oct 2021 03:53:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hApVBQxpxEC5vFy5Vo/ksJtoWpp3dT/2xS6YTcdOE2Y=;
-        b=P4RPrTAKw+Xf8YTtm1ijdqPK6rNH7thWGY11M24OTN89QTWl5phavzvMYOnB841xaO
-         r5MWL3qF0YjZMBCfKSLHQRRNKkUn7oUB7u1AB8WQ9VMVs/Z5Dcs9/3GSbjZyaPLZH8A2
-         evdyYUhjPjgJHbpf+zYErf0n6OmVD5++ogTQblzFSFWscBYnRRW0PDibXMndfme0RWwB
-         2fM6DeJixjQERPJAd0Hg7Or7bcDhf0AUJMEJb8JqRHpYpL/T6t+jwTcewby+QDbvSdQx
-         9554NPbY9bEAtg7YGN95WBS5y3gWzoGLGS2MlqX7jJfRGQad1anu9rrz0/tbtbEQiY+u
-         cOqw==
+        bh=S8AMvlzdTkejVxsXWrKsf8n98oO9XTyRrRx8u9e01JA=;
+        b=mAzt/HA+CIYNMZlJW6XxNwlMC5YmuF+mVinP76jsN76NU5hM+CHrpKGFycQVbM2Fbh
+         W6SoyHlLzjSVwJfIRAa+j2bA23Aagt4hNflg+v948dOCE8EL9f7RZNEwMECl/UZPFFmf
+         k7/dvLKQ4JbjkZCVwDL7V4PEFRj7nUJ5V/Q9I0Xw6FjjcB40bADihBgPWO9MCfFZ1OoZ
+         GEfsqBEOgS3fkBHCfVnGFwbx5Hdsyu1IpGboSp8u+EVG+UGwR/Cv/7jF02DhAjuf4SFv
+         GzUvHbqi6Dze0GDc6rJB8Qrb9KOUL0TIAUjVqDgzedQgpHeNnaSa9dbjhAmmYUg9j0gE
+         wmjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hApVBQxpxEC5vFy5Vo/ksJtoWpp3dT/2xS6YTcdOE2Y=;
-        b=uymqnCFHD+6bYu7Vhsud5hvIA18SypWr3nmXHyJqwpDQ8xabJ4YjgLjlX539ekf1J8
-         +4GvPvwB0I9PvAKFB+hdgpHyuENxRY1B5ZZkAJihjvs4OILgzwNttcnBp2PSq41wjjWW
-         Fw18nW4hWzDmVkU78AV0fhqmDeU3Czsy3jT5fqNxODHsbQDaDZj/K+5FBPwLbJUn7IwU
-         6cVRjePHuR5DnedLJzTIEJky+Ez2L4U8xhjVL5FrEu2GktFcZ7m32R/VJBlHqpawf6hI
-         G9bcvVK41FnieFnCdsLYUTgA2q1K0UtcZeMmsFsebwTcUBzOsoTO/APfQy84nGgutdKT
-         es5w==
-X-Gm-Message-State: AOAM532cCgyMtKRvWRx4K9f0s2mGfFpQvHho5J7nC5fvux3n+z6oKe8Q
-        FziTmOraHPCgY8RDVRU35UnIGAYQwbOjKfO0Bzc=
-X-Google-Smtp-Source: ABdhPJxrt0PHaUYomQoyBR7LSumjrjkCTVkFlD8OoKphsiOwEiX4pq6aBotbO+VWDsjqM++E1d15YgXCMvWwLVyq5kc=
-X-Received: by 2002:ab0:550f:: with SMTP id t15mr1343048uaa.22.1633171810757;
- Sat, 02 Oct 2021 03:50:10 -0700 (PDT)
+        bh=S8AMvlzdTkejVxsXWrKsf8n98oO9XTyRrRx8u9e01JA=;
+        b=5Jo9TLYo63MT1LGG2xYzd2zzCkVlUSxondW24XMwVe+mtu96KIyKFebaB/pSSg+QOD
+         n443Kf1ENSrYVxhTOoffjn0WKApqStudGH2PhsfQwCviCO3BESyB76mzdnhAQ8X4/2Kk
+         b3l2NzH1bnuCxioEQVNjNG0h1lsCpwQV5hf7avjM+6PhXsFiZ+kk3lj+Cs31PEd3fTF4
+         op5E0ij+YGp1U6tvAIuy1UuD1oqMM3bKlcPNH/uEbNenE+FVupTtAi/RTrwk6NL2bmp7
+         G58H/SYUSL4QMWwhT559Ptol+IOTWsyc6wTg5+hLbdHg5Wuify12sLXRVb2mFvgj4u9U
+         L9Jg==
+X-Gm-Message-State: AOAM532cKRSvikO7thUBQlfKGpuHxm8OzvBPOrvSdzXzteg7Z6K9Ddk/
+        +VfLUOMvS0mw6vlPwJQh4Zj8bjovkzM7Ps+vAAc=
+X-Google-Smtp-Source: ABdhPJycNzslYkqewwAUOxVjedhgvWNh8sdMsYSbO8n4dKO778ubzmg+9g0x9Co6fgBsYA549fG22gUQCoBIxy0C+hM=
+X-Received: by 2002:a05:6102:2757:: with SMTP id p23mr8117038vsu.61.1633172029191;
+ Sat, 02 Oct 2021 03:53:49 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210927064300.624279-1-chenhuacai@loongson.cn>
- <20210927064300.624279-7-chenhuacai@loongson.cn> <91d12c483421cc7bd69d8ee7f28243d65877a7af.camel@mengyan1223.wang>
-In-Reply-To: <91d12c483421cc7bd69d8ee7f28243d65877a7af.camel@mengyan1223.wang>
+ <20210927064300.624279-20-chenhuacai@loongson.cn> <f6fc1fa8bf4decf97d76900a64fe0bc2bf25576d.camel@mengyan1223.wang>
+In-Reply-To: <f6fc1fa8bf4decf97d76900a64fe0bc2bf25576d.camel@mengyan1223.wang>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sat, 2 Oct 2021 18:49:59 +0800
-Message-ID: <CAAhV-H6Pt5=DCC39PhJg6jHgpo+GyTGH=KonpncOVFMpD=__Ow@mail.gmail.com>
-Subject: Re: [PATCH V4 06/22] LoongArch: Add CPU definition headers
+Date:   Sat, 2 Oct 2021 18:53:37 +0800
+Message-ID: <CAAhV-H6WWPeYfYsAM2UfKH1GYVA=Ww2k1akAy-ve28u3kJL4pA@mail.gmail.com>
+Subject: Re: [PATCH V4 19/22] LoongArch: Add VDSO and VSYSCALL support
 To:     Xi Ruoyao <xry111@mengyan1223.wang>
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -74,24 +74,38 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi, Ruoyao,
 
-On Thu, Sep 30, 2021 at 11:30 PM Xi Ruoyao <xry111@mengyan1223.wang> wrote:
+On Thu, Sep 30, 2021 at 11:43 PM Xi Ruoyao <xry111@mengyan1223.wang> wrote:
 >
 > On Mon, 2021-09-27 at 14:42 +0800, Huacai Chen wrote:
+> > diff --git a/arch/loongarch/vdso/gen_vdso_offsets.sh
+> > b/arch/loongarch/vdso/gen_vdso_offsets.sh
+> > new file mode 100755
+> > index 000000000000..7da255fea213
+> > --- /dev/null
+> > +++ b/arch/loongarch/vdso/gen_vdso_offsets.sh
+> > @@ -0,0 +1,14 @@
+> > +#!/bin/sh
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +
+> > +#
+> > +# Derived from RISC-V and ARM64:
+> > +# Author: Will Deacon <will.deacon@arm.com>
+> > +#
+> > +# Match symbols in the DSO that look like VDSO_*; produce a header
+> > file
+> > +# of constant offsets into the shared object.
+> > +#
+> > +
+> > +LC_ALL=C
 >
-> > +#define t0     $r12    /* caller saved */
-> > +#define t1     $r13
-> > +#define t2     $r14
-> > +#define t3     $r15
-> > +#define t4     $r16
-> > +#define t5     $r17
-> > +#define t6     $r18
-> > +#define t7     $r19
-> > +#define t8     $r20
-> > +#define x0     $r21
->
-> In the doc it's said x0 will be used to name a 256-bit vector register.
-> Maybe it's better to rename this one?
-OK, I want to rename it to u0 (U means Unused in userspace).
+> I'm wondering whether this line is really useful... There is no "export"
+> here so the variable won't be passed to the environment of the sed
+> command below.
+Have you encountered some problems with this? It just works for me,
+and both ARM64 and RISCV are the same.
 
 Huacai
 >
+> > +sed -n -e 's/^00*/0/' -e \
+> > +'s/^\([0-9a-fA-F]*\) . VDSO_\([a-zA-Z0-9_]*\)$/\#define
+> > vdso_offset_\2\t0x\1/p'
