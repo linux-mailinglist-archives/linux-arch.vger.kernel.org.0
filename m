@@ -2,54 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 608D741FE97
-	for <lists+linux-arch@lfdr.de>; Sun,  3 Oct 2021 01:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F034A41FEBF
+	for <lists+linux-arch@lfdr.de>; Sun,  3 Oct 2021 01:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbhJBXMG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 2 Oct 2021 19:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbhJBXMF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 2 Oct 2021 19:12:05 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607EFC061714;
-        Sat,  2 Oct 2021 16:10:19 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id p1so5148507pfh.8;
-        Sat, 02 Oct 2021 16:10:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uWsmnTdLYgGTIESxzt0fKdeqEQq87Inaf5bYUeItpZw=;
-        b=VFvP6LrVFrumdKonxWiPTWqt1wzR+4nfggmOkAXBi0frjODwU7AKHK6odrkaYnuJH6
-         hvx/WNaTEmlAFhuFCDSkfmWjHZ2mopR9wqO4r2yWBX9G81P3VIsitAMlmlR+lc/KsA4K
-         8BKBYUE4G1ZJqIJd4czLQd7wc0tVfxedzujFAQz7pbJJ/THHc8GB8xlA+gYw6x39yVG7
-         siZFQmTZ4QJqtYPRsAhWeIRD/o1/mU3c6F8DH8ykZHWu/C9uDSWRDdKaEwZk7HWEMJAF
-         mR35EDQs2T3U+0p16dx/HxGPQTWQT8bX8JPYhYHp8129LxLdQY+wJBTAUU9DbLn3WxKs
-         WTgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uWsmnTdLYgGTIESxzt0fKdeqEQq87Inaf5bYUeItpZw=;
-        b=IE1av44gleedUCOqhEMyL/BpkWObpfMB8E80p+txqnA0mBWG0inUxKjqrWGArs2RmO
-         H6g+UTwX2H3f9+kDQ7HjjA4glPEjqMB0Eq6LRGbsjQawTC4L41pgQ7K9qRLXuIHogkyW
-         NyMk5fU3ikh28Kl9KI64/uha8gkvi8OYk9Tsfo2v/aLVZLuyY5qg9SzG7LT+beOMHpyh
-         Km6pBLPjtBRCabnW3YYcsQVPEIe22lSlodX+wzq0io8jPRKizIb/YRLXUbMTnkDVdkeA
-         EIgml6woBGWC2oP8ZxtUJZyIjg2xFuyy0aKzrw0bLRQViCif/KWRz0k/VDxlFoi2M1hl
-         +3rQ==
-X-Gm-Message-State: AOAM533P+9WBOmClEGKschl3HUlGiF2+yA29lkY2k+UHZmkYEicrzxRd
-        VRw4pc0d4PZPxs0RweG5HX8=
-X-Google-Smtp-Source: ABdhPJxBPfASvqvpKaozrHZlhb76h0W/4pnVSDT2NKcdRSrRFmnKkE73nJpee/T1k5kzMl0+1fkGqA==
-X-Received: by 2002:a63:cc49:: with SMTP id q9mr4712022pgi.463.1633216218668;
-        Sat, 02 Oct 2021 16:10:18 -0700 (PDT)
-Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id b142sm10096505pfb.17.2021.10.02.16.10.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Oct 2021 16:10:18 -0700 (PDT)
-Date:   Sat, 2 Oct 2021 16:10:20 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S234202AbhJBXnC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 2 Oct 2021 19:43:02 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:55511 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234050AbhJBXnB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 2 Oct 2021 19:43:01 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HMNll5JY5z4xLs;
+        Sun,  3 Oct 2021 10:41:07 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1633218073;
+        bh=h5rCfWVd2KAS1r0rx/4MyeNOm0KXGCv7ei1Oa3wfVw8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LR9XvwNWo52I8k8xV1ARFIY3gZCD6/3fjo9CQhO0P6jaKRMszMFIL9bWLhh5iHw0q
+         UHI2kDxGx1bMKWBNHrBp7vyYxW4DB20WArsVI1kDqdO7+0ghnrMEG4K/yb7+LvTwBn
+         toMSTxPFapsEexWZp/qdWSTAlR/D4/Okbw7UJ9E7Wa23OVSX84UUlHu82Aj8bm8gOQ
+         ThsZMc01DLr77Asp89OT4VFUxxBLN+Y+e6SBiCL90Jtjex4R5Tmr24TCfkIDfGv451
+         a9P2jZ3BOQozarZeeuXvTI2lmn7rO4tPUj5/hnApbqIEbaANHaSK8XxZoti6ar9Lpw
+         dnZNNNZseg4Aw==
+Date:   Sun, 3 Oct 2021 10:41:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -100,41 +80,66 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
 Subject: Re: [PATCH RESEND 2 00/16] Resend bitmap patches
-Message-ID: <YVjm3NXEhoBQtUSI@yury-ThinkPad>
+Message-ID: <20211003104106.1526fa31@canb.auug.org.au>
+In-Reply-To: <YVjm3NXEhoBQtUSI@yury-ThinkPad>
 References: <20211001181245.228419-1-yury.norov@gmail.com>
- <20211003094722.434c030d@canb.auug.org.au>
+        <20211003094722.434c030d@canb.auug.org.au>
+        <YVjm3NXEhoBQtUSI@yury-ThinkPad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211003094722.434c030d@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/kAlpOp8EAy3Kn/awCgiF/9z";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Oct 03, 2021 at 09:47:22AM +1100, Stephen Rothwell wrote:
-> Hi Yury,
-> 
-> On Fri,  1 Oct 2021 11:12:29 -0700 Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > Can you please take this series into the next tree? It has been already
-> > in next-tree for 5.14:
-> > 
-> > https://lore.kernel.org/linux-mmc/YSeduU41Ef568xhS@alley/T/
-> > 
-> > But it was damaged and we decided to merge it in 5.15 cycle. No changes
-> > comparing to 5.14, except for Andy's patch that was already upstreamed
-> > and therefore removed from here.
-> > 
-> > The git tree is here:
-> > 	https://github.com/norov/linux/tree/bitmap-20210929
-> 
-> Sorry, I cannot include that in linux-next since it it based on (an old
-> version of) linux-next itself.  If it needs to be based on other trees in
-> linux-next, then it has to be added to Andrew Morton's patch series (in
-> the post linux-next section.  Otherwise, if it can be based on Linus
-> Torvald's tree (even with a few conflicts), then that is better.
+--Sig_/kAlpOp8EAy3Kn/awCgiF/9z
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ok, I'll resend it based on Linus tree shortly
+Hi Yury,
 
-Thanks,
-Yury
+On Sat, 2 Oct 2021 16:10:20 -0700 Yury Norov <yury.norov@gmail.com> wrote:
+>
+> Ok, I'll resend it based on Linus tree shortly
+
+Thanks.
+
+I also need a branch name that will stay the same.  I will fetch that
+branch every day and use whatever you have set that branch to.
+
+Here are the rules for inclusion in linux-next:
+
+You will need to ensure that the commits in your tree/branch have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--Sig_/kAlpOp8EAy3Kn/awCgiF/9z
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFY7hMACgkQAVBC80lX
+0Gyudgf/duBmonArREDWPtOW4lp51VabyQLx+hZYJ+Q1auyILQqUEA2zzIxjOlcr
+Q9PeQKO7pqN8v6Cy8BW1ObVXhQDCrgfWgAXxv+E3r3DuiybqvfhXGh+33dcs339/
+ASl5rj/Wg3L3deEtupNsN2kvN0bjnrBP2b/1FeTPWCrhq/JCHiH2hM1NDJ9BzXzM
+jBDYxqlAwxPxWq4IcOFu/rq9Sykml+ROpOnKcKf72d60WcJUsG9HtWZZjy/FbKym
+2R+EwahIb8SXCFmsAPmWuCwcQMAz/m/OH91/VZ9Es8X9ef+MlWMQpg94hw3JlMrP
+e33F7MaTTKnxgbRK/TW8ReYml2wriA==
+=NPVY
+-----END PGP SIGNATURE-----
+
+--Sig_/kAlpOp8EAy3Kn/awCgiF/9z--
