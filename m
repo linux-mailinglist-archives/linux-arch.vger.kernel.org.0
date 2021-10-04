@@ -2,101 +2,191 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6AF420316
-	for <lists+linux-arch@lfdr.de>; Sun,  3 Oct 2021 19:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD324204C0
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Oct 2021 03:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbhJCRVM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 3 Oct 2021 13:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbhJCRVL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 3 Oct 2021 13:21:11 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AECC0613EC;
-        Sun,  3 Oct 2021 10:19:23 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id p80so17603158iod.10;
-        Sun, 03 Oct 2021 10:19:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LtNAm7zzl2qrgZZh/QTIxNxuRAfc7I+2wFFQB9vnTF0=;
-        b=HPajL2gRll5UGOWQudiLfEhv04bZJLEY04ZU7ZSRAIC019LPw99IB3jcVbN4EN+uaa
-         xyKMFFwUWxMYSoP4ZBJywqtND/RYthdauADK8DHtR06cFEMk7vPzapNi8yp+/BQqu9DS
-         XOr3DnKVtkoe0wPl/79bKfHiDibk91+zdv0sLCel9UFYLCb9bmD47OsCKSwE0mGDtw8/
-         6gdgpENhRKndxirmzsgGPXX1upChcdibaOTNC3bq+DmwPpNVd9cFYYXmPAmiOvESIXbo
-         CSbSXebOc4mMaPqb0Px805lEkzhdOgcnojNc1+KreKV66iyssiTwe6WqQz88OHS1mJw/
-         GXiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LtNAm7zzl2qrgZZh/QTIxNxuRAfc7I+2wFFQB9vnTF0=;
-        b=OlJvNQS4Y84OZTjs29lxUhu7NVJXGBUBlDEKWR77L5beT9+YJbW6ZE6vsZhKSORaNu
-         Zjk7+snQ7f8+yIOuq594x7JkqAbRLCLUvMSZoxYfjtT6Fy3mM7PRGEZXBLn9E31o5Ii4
-         pZJU3bUZ1KkQ1xCg9PnW0Yz0Mt8k9mPFRKQlMGiZw9Z8KxNum2RFQAJzx8kvd6+MITby
-         +LUKlCmGPfmvWe6fp6px09cLOLoT9HjL8jLm6H/nYmOROprlbIWMhuskijP2ZHQTpipr
-         8uIRvN1pmjqdFjwYVwVnFYR4R36YDceS+dptD32PcjJnyG1dhEK5kvB4nNLLvqOvUSni
-         IGrA==
-X-Gm-Message-State: AOAM530kCN3EUHHI7U5xQ2AzGAH6ur52saDb7ZLGzN6gc14eVZaeiig/
-        E97KBM4k6Ot70DKFQGYBmN4GxfWf4Cov0KNNNBM=
-X-Google-Smtp-Source: ABdhPJzE8E4NG+zryoNkkGJT+VnCZOOENDmogYIeJjU1ZUgffAvfm3SvEG54YtnyET4C9tYQXAL12Yepc0ZqQhXt644=
-X-Received: by 2002:a05:6602:214f:: with SMTP id y15mr6480548ioy.127.1633281563293;
- Sun, 03 Oct 2021 10:19:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210930071143.63410-1-wangkefeng.wang@huawei.com> <20210930071143.63410-8-wangkefeng.wang@huawei.com>
-In-Reply-To: <20210930071143.63410-8-wangkefeng.wang@huawei.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Sun, 3 Oct 2021 19:19:12 +0200
-Message-ID: <CA+fCnZd6=sXgb-782KkijqJ7zgBj38oXLeLbi4HoUhm3MY4J8g@mail.gmail.com>
-Subject: Re: [PATCH v4 07/11] mm: kasan: Use is_kernel() helper
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        David Miller <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S232038AbhJDBgD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 3 Oct 2021 21:36:03 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:40541 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229597AbhJDBgD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 3 Oct 2021 21:36:03 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 2F73A2B012EA;
+        Sun,  3 Oct 2021 21:34:13 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sun, 03 Oct 2021 21:34:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        subject:to:references:cc:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm3; bh=j
+        08sh6m6YgSaQWXZPVhA3JZmyLlucPN/yEkWrIr4Uc0=; b=EjcmciBXjpLqcxflb
+        q67yJ8hPxQ7VhDsjMltDPGQ6TKPw3oXAka4cymfenw2sFcV9+2PTBeher17PCAD2
+        M6kswA7faR1slq6kLy2stdcmNk43Ug5Y/blYZYKVehffZqdi97PQLbDn+i08lhu0
+        R1Nw3jJV+fHekXVYRNjfLsXHARse30X4sfAhXuboH83q7h8DENnKPSyQ3ZquWrGF
+        5DC67sDh2lR1epjdB+SZQdnwQZeNv6yuUKyisZqodz2BaCLXbYXJmLYm5onSbfhx
+        9lJe4gEJ81Ss/4NKGdLUt/Ac87r9I7vEUA4I7zUodSoSLIIyTskdzmCpsycMsdA1
+        WnqcA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=j08sh6m6YgSaQWXZPVhA3JZmyLlucPN/yEkWrIr4U
+        c0=; b=YC6izWu0Kjo1Qb7rA1jiEuQZsbWP7DEtCGykjlcvbxyEmTy4uAgmF5TLz
+        B89QY7KF5+IKB9q/Zbca/ipkMjn0sRE5vXT3outSaz83cwUcq0HR3iERRstMCD3w
+        agf+naermuxGMRvEqS2+2REWjPbdOSUqAg6UtQ+cSYAznbVZtMbmltU+dRM8bBvx
+        FwbZjY0dWnFzr+vjBUuLWvqzCH6mcMG1nO5mNCGT+OZpTdOMn39MhLdSQX9vW7rC
+        HE7ul4pQxxnzjZK5RYwgGepJBZkmWB0H6kk4DdMKC1vTY+eIWAw6UQHF0Se4T7jh
+        dpNa63nAbcPFEZdPaNrjsxgDOPZqg==
+X-ME-Sender: <xms:E1paYc1__yfUYN85tBFlf72T7I1jqtG8d0yBiLWQrQMdN5ebn0lL3w>
+    <xme:E1paYXG0jXORCRdVxXIEoUldnVdUZ9-NV51DGwmp2RrYQVPV-S9EsUpoF9cL3SLMn
+    gt6mI6pVunQPNUD8A>
+X-ME-Received: <xmr:E1paYU6y_9AKaPRO0DydJIqpi-eNzSWzNyW2C_hfAiQvd2upjRqNZFzsJVVOgS314Xr9ZcJDQ7PIZSb0EGAsL0X8wTYe6yY_Kx6a2kunrTpjL-l3aqWRS2V8MA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeluddggeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgfevffetleehffejueekvdekvdeitdehveegfeekheeuieeiueet
+    uefgtedtgeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:E1paYV1r3P_dvbSWePjc29cvvEWXFXN_ST5zIbpEPxJBZKODWiJg5g>
+    <xmx:E1paYfEIT9WVE1jLcCr3siueJ7uhD9Jjw7DJRQzmJNQs8z1hFiummw>
+    <xmx:E1paYe_wwZGRhioAsm199qxDzvYAafosWWiaQjXxjiQ7BlJUzHNBfQ>
+    <xmx:FFpaYemw4ofYc9WS4pEaHrrRkD84RolIzYf9F3aJI6S2r_8jmQPaT8zgwwo>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 3 Oct 2021 21:34:10 -0400 (EDT)
+Subject: Re: [PATCH v2 04/10] riscv: Implement sv48 support
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+References: <20210929145113.1935778-1-alexandre.ghiti@canonical.com>
+ <20210929145113.1935778-5-alexandre.ghiti@canonical.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <Atish.Patra@wdc.com>,
+        Christoph Hellwig <hch@lst.de>,
         Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org,
-        bpf <bpf@vger.kernel.org>, linux-alpha@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
         Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-efi@vger.kernel.org, linux-arch@vger.kernel.org
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <748a2c58-4d69-6457-0aa5-89797cb45a5c@sholland.org>
+Date:   Sun, 3 Oct 2021 20:34:10 -0500
+User-Agent: Mozilla/5.0 (X11; Linux ppc64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
+MIME-Version: 1.0
+In-Reply-To: <20210929145113.1935778-5-alexandre.ghiti@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 9:09 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->
-> Directly use is_kernel() helper in kernel_or_module_addr().
->
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+On 9/29/21 9:51 AM, Alexandre Ghiti wrote:
+> By adding a new 4th level of page table, give the possibility to 64bit
+> kernel to address 2^48 bytes of virtual address: in practice, that offers
+> 128TB of virtual address space to userspace and allows up to 64TB of
+> physical memory.
+> 
+> If the underlying hardware does not support sv48, we will automatically
+> fallback to a standard 3-level page table by folding the new PUD level into
+> PGDIR level. In order to detect HW capabilities at runtime, we
+> use SATP feature that ignores writes with an unsupported mode.
+> 
+> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 > ---
->  mm/kasan/report.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> index 3239fd8f8747..1c955e1c98d5 100644
-> --- a/mm/kasan/report.c
-> +++ b/mm/kasan/report.c
-> @@ -226,7 +226,7 @@ static void describe_object(struct kmem_cache *cache, void *object,
->
->  static inline bool kernel_or_module_addr(const void *addr)
->  {
-> -       if (addr >= (void *)_stext && addr < (void *)_end)
-> +       if (is_kernel((unsigned long)addr))
->                 return true;
->         if (is_module_address((unsigned long)addr))
->                 return true;
-> --
-> 2.26.2
->
+>  arch/riscv/Kconfig                      |   4 +-
+>  arch/riscv/include/asm/csr.h            |   3 +-
+>  arch/riscv/include/asm/fixmap.h         |   1 +
+>  arch/riscv/include/asm/kasan.h          |   2 +-
+>  arch/riscv/include/asm/page.h           |  10 +
+>  arch/riscv/include/asm/pgalloc.h        |  40 ++++
+>  arch/riscv/include/asm/pgtable-64.h     | 108 ++++++++++-
+>  arch/riscv/include/asm/pgtable.h        |  13 +-
+>  arch/riscv/kernel/head.S                |   3 +-
+>  arch/riscv/mm/context.c                 |   4 +-
+>  arch/riscv/mm/init.c                    | 237 ++++++++++++++++++++----
+>  arch/riscv/mm/kasan_init.c              |  91 +++++++--
+>  drivers/firmware/efi/libstub/efi-stub.c |   2 +
+>  13 files changed, 453 insertions(+), 65 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 13e9c4298fbc..69c5533955ed 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -149,7 +149,7 @@ config PAGE_OFFSET
+>  	hex
+>  	default 0xC0000000 if 32BIT
+>  	default 0x80000000 if 64BIT && !MMU
+> -	default 0xffffffe000000000 if 64BIT
+> +	default 0xffffc00000000000 if 64BIT
+>  
+>  config ARCH_FLATMEM_ENABLE
+>  	def_bool !NUMA
+> @@ -197,7 +197,7 @@ config FIX_EARLYCON_MEM
+>  
+>  config PGTABLE_LEVELS
+>  	int
+> -	default 3 if 64BIT
+> +	default 4 if 64BIT
+>  	default 2
+>  
+>  config LOCKDEP_SUPPORT
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 87ac65696871..3fdb971c7896 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -40,14 +40,13 @@
+>  #ifndef CONFIG_64BIT
+>  #define SATP_PPN	_AC(0x003FFFFF, UL)
+>  #define SATP_MODE_32	_AC(0x80000000, UL)
+> -#define SATP_MODE	SATP_MODE_32
+>  #define SATP_ASID_BITS	9
+>  #define SATP_ASID_SHIFT	22
+>  #define SATP_ASID_MASK	_AC(0x1FF, UL)
+>  #else
+>  #define SATP_PPN	_AC(0x00000FFFFFFFFFFF, UL)
+>  #define SATP_MODE_39	_AC(0x8000000000000000, UL)
+> -#define SATP_MODE	SATP_MODE_39
+> +#define SATP_MODE_48	_AC(0x9000000000000000, UL)
+>  #define SATP_ASID_BITS	16
+>  #define SATP_ASID_SHIFT	44
+>  #define SATP_ASID_MASK	_AC(0xFFFF, UL)
+> diff --git a/arch/riscv/include/asm/fixmap.h b/arch/riscv/include/asm/fixmap.h
+> index 54cbf07fb4e9..58a718573ad6 100644
+> --- a/arch/riscv/include/asm/fixmap.h
+> +++ b/arch/riscv/include/asm/fixmap.h
+> @@ -24,6 +24,7 @@ enum fixed_addresses {
+>  	FIX_HOLE,
+>  	FIX_PTE,
+>  	FIX_PMD,
+> +	FIX_PUD,
+>  	FIX_TEXT_POKE1,
+>  	FIX_TEXT_POKE0,
+>  	FIX_EARLYCON_MEM_BASE,
+> diff --git a/arch/riscv/include/asm/kasan.h b/arch/riscv/include/asm/kasan.h
+> index a2b3d9cdbc86..1dcf5fa93aa0 100644
+> --- a/arch/riscv/include/asm/kasan.h
+> +++ b/arch/riscv/include/asm/kasan.h
+> @@ -27,7 +27,7 @@
+>   */
+>  #define KASAN_SHADOW_SCALE_SHIFT	3
+>  
+> -#define KASAN_SHADOW_SIZE	(UL(1) << ((CONFIG_VA_BITS - 1) - KASAN_SHADOW_SCALE_SHIFT))
+> +#define KASAN_SHADOW_SIZE	(UL(1) << ((VA_BITS - 1) - KASAN_SHADOW_SCALE_SHIFT))
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Does this change belong in patch 1, where you remove CONFIG_VA_BITS?
+
+Regards,
+Samuel
