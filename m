@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD0F421E57
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092C0421E5D
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbhJEFos (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 01:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
+        id S233326AbhJEFov (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 01:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbhJEFoM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:44:12 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6B0C0617BA;
-        Mon,  4 Oct 2021 22:41:44 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id oa6-20020a17090b1bc600b0019ffc4b9c51so1053210pjb.2;
-        Mon, 04 Oct 2021 22:41:44 -0700 (PDT)
+        with ESMTP id S232492AbhJEFoN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:44:13 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D14C0617BE;
+        Mon,  4 Oct 2021 22:41:47 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id m5so3691446pfk.7;
+        Mon, 04 Oct 2021 22:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=nVIr7fAkmnLGTRIKArO4HwVYW8hhJ6BbGtxi7VDtm5A=;
-        b=hOVRsOlT8XPHEFn7u90zG8kykUcqD1ypQHJ/k9TmiKzTRKuEbC/SAMidDKAKRuWDyf
-         ONXZiigSr00bSFhT96Jcn0Zlj9HZB/o5fFhESjadfXMDEU5C5pZwwGMvrRD5rnhy1fuy
-         9UKf1jM/PPWmBFKY1hJx9mC5gO1MTACgmo6W1ZcR6J0IIClqU3RsXMXNgZJcBTFrHIBT
-         eNMhetVQBRFqh0ZeNqX4I+PgrAIYpp+pfi5pXDjCnFLWOLr836YhHNSepcvhUK3aN9Ln
-         l5nIWn+NZBNc6ZeMAF3gQGdkctCVYwr2nZPG9Wg9rnt5Zvp3zKpEWjGsgaIcY4c8SPOS
-         WnBw==
+        bh=+ZNFqZL6Mgo5rwsf7yN4tz0gd8I7XPFY6Ga4YBxagho=;
+        b=kU5Y7HnPbgF+Rq+MtA/+UamygPQuNDHOtRvNjoP5AwB4aNWInI+I9OI3kWMvB9OG00
+         w/nOUbCy/H/lq2Bs9UsDu6ZVYXMII3SFKrk8sAPK4jF9AVUKTCt/9kazO/wvjbq5kJCx
+         75+NTA/EHHqNtci9D5KdfHHX3CNsg5bcz8rKKPiMNn8PiwQPVBDqeb7PzbTJm9VA/h8T
+         f6xuMp9rgyeko2lCqmohheESfCVP+XBsReLy+67Xbzf27iDLWfxqqf4qxGxID2zUEges
+         qoYCsIpZkF1UPft6kwjC/4fqzTm5buicksIiqtWMYlOVYBHvDSIiabJzt789r3Nsou0b
+         sw6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nVIr7fAkmnLGTRIKArO4HwVYW8hhJ6BbGtxi7VDtm5A=;
-        b=TCwLs3j0xaiO+AesVos7Idk19vO/ZZmIfx/ccrP/A2DFLsv0ILyKc/jj3m4GnAPVT1
-         79gvhCmdjcE0U8TGaCUH6iN2lYnRVCPk7ZWFOaoBKj4zxGaWTbhOZJobgVAlALcNp43e
-         qhlft8HXkOdFLywlW37Qd8XmnF2EoR9p2z5M4u1s9aU5TdtbYGhTzSOwrSC2KyepiFNH
-         u7T7G3DjonvqtcmHpA5F+j+Qhvjnvi17mlkwjkiYZtdGKaUJBPm0tgn70+hTFFEqsR/c
-         VneHkD4V5rapeUxFOw7a570w1DPxMLQMiX+tRnW/qyJlU/tqvPIbAKZ3SVrrKmIwXOz2
-         rM9g==
-X-Gm-Message-State: AOAM533Ij8HNWxxe6IM45/tVBqjLBxsodv5CyMeal4qBzdZ41zt5jdsK
-        8CpLu+xyicAIEl5Bjj/Pbi0=
-X-Google-Smtp-Source: ABdhPJwduIIdB4dTL8t+flaozTGh6Eae8ekpp/242AL8xC7zBroB9475SOuRVteNcwlN153uZIeuIg==
-X-Received: by 2002:a17:90b:4c86:: with SMTP id my6mr1521844pjb.77.1633412504391;
-        Mon, 04 Oct 2021 22:41:44 -0700 (PDT)
+        bh=+ZNFqZL6Mgo5rwsf7yN4tz0gd8I7XPFY6Ga4YBxagho=;
+        b=BBXrm9qC8qqQsxdcFCJcfYmkT9RCHIfAVSNQ+SC80upD/GGDfdgkxCQ1IEVr1Zh2hh
+         998s7P7DZofTRa/InBM7EKio8S0HwFVPffGLBsXAmF699DHDG/RYTi/DZjNSiI82gm/H
+         tRjmopaXxwNHqTW8F5ZbBzFl8o1vllH7XbpKEL1qCMRf4BXKEPvT/4aFstLJvgF7xusL
+         Rxm2qZxN/nh12RQEbVwyRSrNol6DhtTW7Kc8unyw8OKX54tO1+2e+JMBz7ooeuqy4v/a
+         bDXl9VL+ZxE+9geXEq9/31bndIf9+XBUBQ1qyPm/dJOEzMkqOscmPr+B97QuyuBaGnYQ
+         nHRQ==
+X-Gm-Message-State: AOAM531qWrFhU7ryo4jTnPv49mBlowiL2PiANDUubJ/ZS6Uyd3PdgG2Y
+        QTyzj1rKbp8BxVqX1oMP+wI=
+X-Google-Smtp-Source: ABdhPJyceY+Tjx2E1vLJ8VOw77txS+bxzlDVR3Dhcj/EVOQXuYONaKvyFMjEqfjvCyKzvGpZH3bvSA==
+X-Received: by 2002:a65:400c:: with SMTP id f12mr14150413pgp.296.1633412507236;
+        Mon, 04 Oct 2021 22:41:47 -0700 (PDT)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id 65sm16122052pfu.187.2021.10.04.22.41.43
+        by smtp.gmail.com with ESMTPSA id q27sm9268916pfg.125.2021.10.04.22.41.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 22:41:44 -0700 (PDT)
+        Mon, 04 Oct 2021 22:41:46 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Yury Norov <yury.norov@gmail.com>,
@@ -99,9 +99,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 15/16] lib: bitmap: add performance test for bitmap_print_to_pagebuf
-Date:   Mon,  4 Oct 2021 22:40:58 -0700
-Message-Id: <20211005054059.475634-16-yury.norov@gmail.com>
+Subject: [PATCH 16/16] vsprintf: rework bitmap_list_string
+Date:   Mon,  4 Oct 2021 22:40:59 -0700
+Message-Id: <20211005054059.475634-17-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211005054059.475634-1-yury.norov@gmail.com>
 References: <20211005054059.475634-1-yury.norov@gmail.com>
@@ -111,71 +111,66 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Functional tests for bitmap_print_to_pagebuf() are provided
-in lib/test_printf.c. This patch adds performance test for
-a case of fully set bitmap.
+bitmap_list_string() is very ineffective when printing bitmaps with long
+ranges of set bits because it calls find_next_bit for each bit in the
+bitmap.  We can do better by detecting ranges of set bits.
+
+In my environment, before/after is 943008/31008 ns.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- lib/test_bitmap.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ lib/vsprintf.c | 24 +++++++-----------------
+ 1 file changed, 7 insertions(+), 17 deletions(-)
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index d33fa5a61b95..0c82f07f74fc 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -446,6 +446,42 @@ static void __init test_bitmap_parselist(void)
- 	}
- }
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index d7ad44f2c8f5..4415bea601fd 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -1241,20 +1241,13 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
+ 			 struct printf_spec spec, const char *fmt)
+ {
+ 	int nr_bits = max_t(int, spec.field_width, 0);
+-	/* current bit is 'cur', most recently seen range is [rbot, rtop] */
+-	int cur, rbot, rtop;
+ 	bool first = true;
++	int rbot, rtop;
  
-+static void __init test_bitmap_printlist(void)
-+{
-+	unsigned long *bmap = kmalloc(PAGE_SIZE, GFP_KERNEL);
-+	char *buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
-+	char expected[256];
-+	int ret, slen;
-+	ktime_t time;
-+
-+	if (!buf || !bmap)
-+		goto out;
-+
-+	memset(bmap, -1, PAGE_SIZE);
-+	slen = snprintf(expected, 256, "0-%ld", PAGE_SIZE * 8 - 1);
-+	if (slen < 0)
-+		goto out;
-+
-+	time = ktime_get();
-+	ret = bitmap_print_to_pagebuf(true, buf, bmap, PAGE_SIZE * 8);
-+	time = ktime_get() - time;
-+
-+	if (ret != slen + 1) {
-+		pr_err("bitmap_print_to_pagebuf: result is %d, expected %d\n", ret, slen);
-+		goto out;
-+	}
-+
-+	if (strncmp(buf, expected, slen)) {
-+		pr_err("bitmap_print_to_pagebuf: result is %s, expected %s\n", buf, expected);
-+		goto out;
-+	}
-+
-+	pr_err("bitmap_print_to_pagebuf: input is '%s', Time: %llu\n", buf, time);
-+out:
-+	kfree(buf);
-+	kfree(bmap);
-+}
-+
- static const unsigned long parse_test[] __initconst = {
- 	BITMAP_FROM_U64(0),
- 	BITMAP_FROM_U64(1),
-@@ -818,6 +854,7 @@ static void __init selftest(void)
- 	test_bitmap_arr32();
- 	test_bitmap_parse();
- 	test_bitmap_parselist();
-+	test_bitmap_printlist();
- 	test_mem_optimisations();
- 	test_for_each_set_clump8();
- 	test_bitmap_cut();
+ 	if (check_pointer(&buf, end, bitmap, spec))
+ 		return buf;
+ 
+-	rbot = cur = find_first_bit(bitmap, nr_bits);
+-	while (cur < nr_bits) {
+-		rtop = cur;
+-		cur = find_next_bit(bitmap, nr_bits, cur + 1);
+-		if (cur < nr_bits && cur <= rtop + 1)
+-			continue;
+-
++	for_each_set_bitrange(rbot, rtop, bitmap, nr_bits) {
+ 		if (!first) {
+ 			if (buf < end)
+ 				*buf = ',';
+@@ -1263,15 +1256,12 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
+ 		first = false;
+ 
+ 		buf = number(buf, end, rbot, default_dec_spec);
+-		if (rbot < rtop) {
+-			if (buf < end)
+-				*buf = '-';
+-			buf++;
+-
+-			buf = number(buf, end, rtop, default_dec_spec);
+-		}
++		if (rtop == rbot + 1)
++			continue;
+ 
+-		rbot = cur;
++		if (buf < end)
++			*buf = '-';
++		buf = number(++buf, end, rtop - 1, default_dec_spec);
+ 	}
+ 	return buf;
+ }
 -- 
 2.30.2
 
