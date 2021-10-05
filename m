@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41D6422437
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 13:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA496422442
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 13:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234412AbhJELCS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 07:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S234567AbhJELC3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 07:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbhJELBx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 07:01:53 -0400
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A93C061745
-        for <linux-arch@vger.kernel.org>; Tue,  5 Oct 2021 04:00:03 -0700 (PDT)
-Received: by mail-wr1-x44a.google.com with SMTP id c2-20020adfa302000000b0015e4260febdso5566217wrb.20
-        for <linux-arch@vger.kernel.org>; Tue, 05 Oct 2021 04:00:03 -0700 (PDT)
+        with ESMTP id S234476AbhJELCA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 07:02:00 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0940DC061793
+        for <linux-arch@vger.kernel.org>; Tue,  5 Oct 2021 04:00:05 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id w2-20020a3794020000b02903b54f40b442so26708316qkd.0
+        for <linux-arch@vger.kernel.org>; Tue, 05 Oct 2021 04:00:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=xsbn5DHOInVTvHdCjIbH8F7lYj2M2KByY98qL4y3tHQ=;
-        b=GzYNn8BbV6HkxgVdAh/WhkAVRVFifsX3fAkp8fuVoAbra5X82gtJ5hOoDMKsnHhLwC
-         mnx7wKKhxnC9J06fLnhTs/xSclQNx4hwLNnYCZymjlGPonilYIh7ZmRmdGaX29tLzIRe
-         M/j6QrWCMbfWV4Uu86XFyHKI9s9H6sXo+yJKUz1mUCWwgwYOJGiFIolnc4BC6eKk7wcc
-         6o3T4EGFdqZ5IxBb7RCK1gZZcmJPDF/AUCprOJ4NoNdyrcmFb3fuHUWzHWh165fY7Y+9
-         yWwiA81IolLhAEqe9OyucVzO5vf2e4p0TazEtV3o/92kFxe0WM8a08FV6GXuJapgpPZu
-         qmdA==
+        bh=VR1v+uOEj5JHWgZG/AjKjsmQRdRMH76n4CGK16N25tc=;
+        b=OOmVz5m9sgHxZ5tpr/f91NKUEC1uc9rMyBTH60E4A2rtnobKjQUKS5BS5vP0IphX4h
+         wZwGLnUaMH/gItLkkn3k+udKE5o/pECwpdVoaNBrXEfthT0ThUaifj4RWj+cabsTGBGf
+         l1ZHm1JhkDyaGdhfJDbvEYYUbwneLAxtPO0KzSK63NWqe69yIu5BETJMFPUjGr/reJ5p
+         8C70N/BQQzpJJdfVViy3y/O1XL0IgkIsY0a+Rycv8smMQBb9va/r8WGrDJttmTTfKgVt
+         P/LE7k6AHKligqpuKS3WqrmkDoaFPkHsV8/Gm5n/MWjw9huBNrITLIWi2bSp/lTViEvC
+         YuYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=xsbn5DHOInVTvHdCjIbH8F7lYj2M2KByY98qL4y3tHQ=;
-        b=kXFq51TEo/EC039KXiTzE5nAm7G+p+zvdhpoHw6MlvmtSmRcie23oNScV+b6f9Xbn0
-         McITwzUtuo7NGxNcARRqCFt8KyGFTIlRDqAnUlynkjdjHZ/l5L7X1L6RN1Auh4wzskuf
-         TMrfk3OMQNOgSclFcBxMOdmgkAWASh4tzuY1u4i6rdreKsUMuVNo3z6M0+n3nQzZHbpL
-         FGVgnRQx8EHipH0Ip4oOI5m0truxWBVq+jBgmjxp2kUF+/xMI3QbsT6Za1Jpk6PwiMuR
-         LvmPjMq2GkXl94aJSBCp6ojXNWtqm84LQ3ddjVrP1xz3X1ixls+gGR5IgfT73j3LBMCz
-         BdGg==
-X-Gm-Message-State: AOAM531nOcqufE9ommENYOXKdNNMYZt3o+CWtFo2pD1Wel8Q6Vn8rPKX
-        ODm25NEdBnIb5RRFpR6DGXc6HJAatA==
-X-Google-Smtp-Source: ABdhPJyQ9+XR3YU56FBJU8DeE3vu/iZuM2wNV7QdNqbMLHMu3vYpUyN6kv4zopypBzI8an4m0Im5e2ujqw==
+        bh=VR1v+uOEj5JHWgZG/AjKjsmQRdRMH76n4CGK16N25tc=;
+        b=aZwAoRnsLGQ3gKiUB/G4pCMIVkilIYxJGcqrW/blSkjx+2wtTmkSSlAjqy5HgLyiPh
+         khtIuY+GPiM8Tcs0wJKZw3oktHQN5ZGtESItr4hRCyL9mu98TZYqpnBRD+yidowxWB37
+         xGbwhaDKRUuMwYUdVIL0ICrqIF1fEv5fagx/2ukoopzn3JyK8rtkG9dsUcTnQl2yZv1P
+         njRDSD1jpcEbJwaDs8dUhKtMinWlgSZsqxEs8oDuzEAUq6JKBADOLQyG3XvKY9AWpImg
+         OTcOvHtAcafV2mDGxpTN24zubPPG49cTE7m1Hle3MfnO2prQVMG56cEo7WDBmASxtKh+
+         QSgw==
+X-Gm-Message-State: AOAM530VMUusKnosNUxIBkANRMNhgbu9r+o+qj89Q2K+7Xkwo1QoqVHG
+        DWm3j52QVAEwuVQynqXNAnJek7VsMQ==
+X-Google-Smtp-Source: ABdhPJzKD6+pLzVxtocJ8QXUwjt+bDfPEzIrOBgSPHmtyTm0gDoWxM9bjjQ9uNCP0wR03odJaPoCD9G9MA==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:e44f:5054:55f8:fcb8])
- (user=elver job=sendgmr) by 2002:adf:a35d:: with SMTP id d29mr20140800wrb.318.1633431601839;
- Tue, 05 Oct 2021 04:00:01 -0700 (PDT)
-Date:   Tue,  5 Oct 2021 12:58:50 +0200
+ (user=elver job=sendgmr) by 2002:a05:6214:1022:: with SMTP id
+ k2mr27293030qvr.53.1633431604158; Tue, 05 Oct 2021 04:00:04 -0700 (PDT)
+Date:   Tue,  5 Oct 2021 12:58:51 +0200
 In-Reply-To: <20211005105905.1994700-1-elver@google.com>
-Message-Id: <20211005105905.1994700-9-elver@google.com>
+Message-Id: <20211005105905.1994700-10-elver@google.com>
 Mime-Version: 1.0
 References: <20211005105905.1994700-1-elver@google.com>
 X-Mailer: git-send-email 2.33.0.800.g4c38ced690-goog
-Subject: [PATCH -rcu/kcsan 08/23] kcsan: Show location access was reordered to
+Subject: [PATCH -rcu/kcsan 09/23] kcsan: Document modeling of weak memory
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Alexander Potapenko <glider@google.com>,
@@ -72,137 +72,111 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Also show the location the access was reordered to. An example report:
-
-| ==================================================================
-| BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
-|
-| read-write to 0xffffffffc01e61a8 of 8 bytes by task 2311 on cpu 5:
-|  test_kernel_wrong_memorder+0x57/0x90
-|  access_thread+0x99/0xe0
-|  kthread+0x2ba/0x2f0
-|  ret_from_fork+0x22/0x30
-|
-| read-write (reordered) to 0xffffffffc01e61a8 of 8 bytes by task 2310 on cpu 7:
-|  test_kernel_wrong_memorder+0x57/0x90
-|  access_thread+0x99/0xe0
-|  kthread+0x2ba/0x2f0
-|  ret_from_fork+0x22/0x30
-|   |
-|   +-> reordered to: test_kernel_wrong_memorder+0x80/0x90
-|
-| Reported by Kernel Concurrency Sanitizer on:
-| CPU: 7 PID: 2310 Comm: access_thread Not tainted 5.14.0-rc1+ #18
-| Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-| ==================================================================
+Document how KCSAN models a subset of weak memory and the subset of
+missing memory barriers it can detect as a result.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- kernel/kcsan/report.c | 35 +++++++++++++++++++++++------------
- 1 file changed, 23 insertions(+), 12 deletions(-)
+ Documentation/dev-tools/kcsan.rst | 72 +++++++++++++++++++++++++------
+ 1 file changed, 59 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
-index 1b0e050bdf6a..67794404042a 100644
---- a/kernel/kcsan/report.c
-+++ b/kernel/kcsan/report.c
-@@ -308,10 +308,12 @@ static int get_stack_skipnr(const unsigned long stack_entries[], int num_entries
+diff --git a/Documentation/dev-tools/kcsan.rst b/Documentation/dev-tools/kcsan.rst
+index 7db43c7c09b8..4fc3773fead9 100644
+--- a/Documentation/dev-tools/kcsan.rst
++++ b/Documentation/dev-tools/kcsan.rst
+@@ -204,17 +204,17 @@ Ultimately this allows to determine the possible executions of concurrent code,
+ and if that code is free from data races.
  
- /*
-  * Skips to the first entry that matches the function of @ip, and then replaces
-- * that entry with @ip, returning the entries to skip.
-+ * that entry with @ip, returning the entries to skip with @replaced containing
-+ * the replaced entry.
-  */
- static int
--replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned long ip)
-+replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned long ip,
-+		    unsigned long *replaced)
- {
- 	unsigned long symbolsize, offset;
- 	unsigned long target_func;
-@@ -330,6 +332,7 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
- 		func -= offset;
- 
- 		if (func == target_func) {
-+			*replaced = stack_entries[skip];
- 			stack_entries[skip] = ip;
- 			return skip;
- 		}
-@@ -342,9 +345,10 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
- }
- 
- static int
--sanitize_stack_entries(unsigned long stack_entries[], int num_entries, unsigned long ip)
-+sanitize_stack_entries(unsigned long stack_entries[], int num_entries, unsigned long ip,
-+		       unsigned long *replaced)
- {
--	return ip ? replace_stack_entry(stack_entries, num_entries, ip) :
-+	return ip ? replace_stack_entry(stack_entries, num_entries, ip, replaced) :
- 			  get_stack_skipnr(stack_entries, num_entries);
- }
- 
-@@ -360,6 +364,14 @@ static int sym_strcmp(void *addr1, void *addr2)
- 	return strncmp(buf1, buf2, sizeof(buf1));
- }
- 
-+static void
-+print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long reordered_to)
-+{
-+	stack_trace_print(stack_entries, num_entries, 0);
-+	if (reordered_to)
-+		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to);
-+}
+ KCSAN is aware of *marked atomic operations* (``READ_ONCE``, ``WRITE_ONCE``,
+-``atomic_*``, etc.), but is oblivious of any ordering guarantees and simply
+-assumes that memory barriers are placed correctly. In other words, KCSAN
+-assumes that as long as a plain access is not observed to race with another
+-conflicting access, memory operations are correctly ordered.
+-
+-This means that KCSAN will not report *potential* data races due to missing
+-memory ordering. Developers should therefore carefully consider the required
+-memory ordering requirements that remain unchecked. If, however, missing
+-memory ordering (that is observable with a particular compiler and
+-architecture) leads to an observable data race (e.g. entering a critical
+-section erroneously), KCSAN would report the resulting data race.
++``atomic_*``, etc.), and a subset of ordering guarantees implied by memory
++barriers. With ``CONFIG_KCSAN_WEAK_MEMORY=y``, KCSAN models load or store
++buffering, and can detect missing ``smp_mb()``, ``smp_wmb()``, ``smp_rmb()``,
++``smp_store_release()``, and all ``atomic_*`` operations with equivalent
++implied barriers.
 +
- static void print_verbose_info(struct task_struct *task)
- {
- 	if (!task)
-@@ -378,10 +390,12 @@ static void print_report(enum kcsan_value_change value_change,
- 			 struct other_info *other_info,
- 			 u64 old, u64 new, u64 mask)
- {
-+	unsigned long reordered_to = 0;
- 	unsigned long stack_entries[NUM_STACK_ENTRIES] = { 0 };
- 	int num_stack_entries = stack_trace_save(stack_entries, NUM_STACK_ENTRIES, 1);
--	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip);
-+	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, &reordered_to);
- 	unsigned long this_frame = stack_entries[skipnr];
-+	unsigned long other_reordered_to = 0;
- 	unsigned long other_frame = 0;
- 	int other_skipnr = 0; /* silence uninit warnings */
++Note, KCSAN will not report all data races due to missing memory ordering,
++specifically where a memory barrier would be required to prohibit subsequent
++memory operation from reordering before the barrier. Developers should
++therefore carefully consider the required memory ordering requirements that
++remain unchecked.
  
-@@ -394,7 +408,7 @@ static void print_report(enum kcsan_value_change value_change,
- 	if (other_info) {
- 		other_skipnr = sanitize_stack_entries(other_info->stack_entries,
- 						      other_info->num_stack_entries,
--						      other_info->ai.ip);
-+						      other_info->ai.ip, &other_reordered_to);
- 		other_frame = other_info->stack_entries[other_skipnr];
+ Race Detection Beyond Data Races
+ --------------------------------
+@@ -268,6 +268,52 @@ marked operations, if all accesses to a variable that is accessed concurrently
+ are properly marked, KCSAN will never trigger a watchpoint and therefore never
+ report the accesses.
  
- 		/* @value_change is only known for the other thread */
-@@ -434,10 +448,9 @@ static void print_report(enum kcsan_value_change value_change,
- 		       other_info->ai.cpu_id);
++Modeling Weak Memory
++~~~~~~~~~~~~~~~~~~~~
++
++KCSAN's approach to detecting data races due to missing memory barriers is
++based on modeling access reordering (with ``CONFIG_KCSAN_WEAK_MEMORY=y``).
++Each plain memory access for which a watchpoint is set up, is also selected for
++simulated reordering within the scope of its function (at most 1 in-flight
++access).
++
++Once an access has been selected for reordering, it is checked along every
++other access until the end of the function scope. If an appropriate memory
++barrier is encountered, the access will no longer be considered for simulated
++reordering.
++
++When the result of a memory operation should be ordered by a barrier, KCSAN can
++then detect data races where the conflict only occurs as a result of a missing
++barrier. Consider the example::
++
++    int x, flag;
++    void T1(void)
++    {
++        x = 1;                  // data race!
++        WRITE_ONCE(flag, 1);    // correct: smp_store_release(&flag, 1)
++    }
++    void T2(void)
++    {
++        while (!READ_ONCE(flag));   // correct: smp_load_acquire(&flag)
++        ... = x;                    // data race!
++    }
++
++When weak memory modeling is enabled, KCSAN can consider ``x`` in ``T1`` for
++simulated reordering. After the write of ``flag``, ``x`` is again checked for
++concurrent accesses: because ``T2`` is able to proceed after the write of
++``flag``, a data race is detected. With the correct barriers in place, ``x``
++would not be considered for reordering after the proper release of ``flag``,
++and no data race would be detected.
++
++Deliberate trade-offs in complexity but also practical limitations mean only a
++subset of data races due to missing memory barriers can be detected. Recall
++that watchpoints are only set up for plain accesses, and the only access type
++for which KCSAN simulates reordering. This means reordering of marked accesses
++is not modeled. Furthermore, with the currently available compiler support, the
++implementation is limited to modeling the effects of "buffering" (delaying
++accesses), since the runtime cannot "prefetch" accesses. One implication of
++this is that acquire operations do not require barrier instrumentation.
++
+ Key Properties
+ ~~~~~~~~~~~~~~
  
- 		/* Print the other thread's stack trace. */
--		stack_trace_print(other_info->stack_entries + other_skipnr,
-+		print_stack_trace(other_info->stack_entries + other_skipnr,
- 				  other_info->num_stack_entries - other_skipnr,
--				  0);
--
-+				  other_reordered_to);
- 		if (IS_ENABLED(CONFIG_KCSAN_VERBOSE))
- 			print_verbose_info(other_info->task);
+@@ -290,8 +336,8 @@ Key Properties
+ 4. **Detects Racy Writes from Devices:** Due to checking data values upon
+    setting up watchpoints, racy writes from devices can also be detected.
  
-@@ -451,9 +464,7 @@ static void print_report(enum kcsan_value_change value_change,
- 		       get_thread_desc(ai->task_pid), ai->cpu_id);
- 	}
- 	/* Print stack trace of this thread. */
--	stack_trace_print(stack_entries + skipnr, num_stack_entries - skipnr,
--			  0);
--
-+	print_stack_trace(stack_entries + skipnr, num_stack_entries - skipnr, reordered_to);
- 	if (IS_ENABLED(CONFIG_KCSAN_VERBOSE))
- 		print_verbose_info(current);
+-5. **Memory Ordering:** KCSAN is *not* explicitly aware of the LKMM's ordering
+-   rules; this may result in missed data races (false negatives).
++5. **Memory Ordering:** KCSAN is aware of only a subset of LKMM ordering rules;
++   this may result in missed data races (false negatives).
  
+ 6. **Analysis Accuracy:** For observed executions, due to using a sampling
+    strategy, the analysis is *unsound* (false negatives possible), but aims to
 -- 
 2.33.0.800.g4c38ced690-goog
 
