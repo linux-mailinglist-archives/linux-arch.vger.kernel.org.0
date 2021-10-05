@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA026421E51
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD0F421E57
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbhJEFof (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 01:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S233132AbhJEFos (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 01:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbhJEFnr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:43:47 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30239C0617AF;
-        Mon,  4 Oct 2021 22:41:42 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id e7so18763326pgk.2;
-        Mon, 04 Oct 2021 22:41:42 -0700 (PDT)
+        with ESMTP id S232261AbhJEFoM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:44:12 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6B0C0617BA;
+        Mon,  4 Oct 2021 22:41:44 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id oa6-20020a17090b1bc600b0019ffc4b9c51so1053210pjb.2;
+        Mon, 04 Oct 2021 22:41:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mIoEZvUunyoBxXbbv99PoMzXoVzxmlZkq0hicXdZBHM=;
-        b=H7MuVgk8rwoCPuSVs67duOR8ofBrB0Cd3fq7R6N+e2r7KhWAau2+Ig2aGOBiUORiK9
-         s3I+ntszDfJd9GwXR0+AVeQP6o7tJfDWDDXbCk7bZ50nGgBO4/OW9txjHsVfwaMROOdn
-         dOtmb36Nn7j4zVWnKRr4TeHTUdoLIi3lpfehF/n+r99U6VDEfCbVXafXYlgEzFsA6nlU
-         4HOS95sZ6/hdGmsgX+s8RTGwSKgg4FXPQra9G4AgggY/77BIlMJugYFbk0BDIufoeowA
-         otNn1PtOJR5rP2II9HVwh6Wn2DrcVQz2MYoJgJh30fRodClTprFYWTML7LCEEJVDk55w
-         K7Ww==
+        bh=nVIr7fAkmnLGTRIKArO4HwVYW8hhJ6BbGtxi7VDtm5A=;
+        b=hOVRsOlT8XPHEFn7u90zG8kykUcqD1ypQHJ/k9TmiKzTRKuEbC/SAMidDKAKRuWDyf
+         ONXZiigSr00bSFhT96Jcn0Zlj9HZB/o5fFhESjadfXMDEU5C5pZwwGMvrRD5rnhy1fuy
+         9UKf1jM/PPWmBFKY1hJx9mC5gO1MTACgmo6W1ZcR6J0IIClqU3RsXMXNgZJcBTFrHIBT
+         eNMhetVQBRFqh0ZeNqX4I+PgrAIYpp+pfi5pXDjCnFLWOLr836YhHNSepcvhUK3aN9Ln
+         l5nIWn+NZBNc6ZeMAF3gQGdkctCVYwr2nZPG9Wg9rnt5Zvp3zKpEWjGsgaIcY4c8SPOS
+         WnBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mIoEZvUunyoBxXbbv99PoMzXoVzxmlZkq0hicXdZBHM=;
-        b=Si9x6dbvlQw6sWVnQkvUZvdgbfnx+/kzBgl22ZaCQ73g6/pRH34K2S7y6d2XiPaP7U
-         l2i/c5S66Z3ZIAwQH0ybt/9JpDqz8tBabp1iyR/zYMN0FY8tL3c0sb4wGhAF/dsyqfFe
-         jL2KNcrVgXkwMkZHvjt74UHPF/75JU+iB9gYt7kePUhP53sKGYUgFvPc0aLrc+xcz3+3
-         5xamnDg6dPHe2IdPrVtY/LnOicT365/oyF++op3pEURZswJA+HpYMYVRPBy4X5Q0YK8Z
-         0WpZaGWWm7KRlLjbqREbARIXNIYktHAnqdQoNhAgLBkvLBnh2EEE2X96UUkJwowEVoH4
-         bxyQ==
-X-Gm-Message-State: AOAM530qGyeQpk5N4xd1c2ORqwFtVY0QCLr7ltGmf3Bt7q2AGZAX3rff
-        BjRVMlQa07NELTL9AW/Jts8=
-X-Google-Smtp-Source: ABdhPJz4xb91hITMRHuZKCbv+Xs/qD8OtY1aPP1x4hzEQBnTzH7yv2IkQITt4SMIFDV/bwD4ZEdEfA==
-X-Received: by 2002:a62:3606:0:b0:445:38d5:98bf with SMTP id d6-20020a623606000000b0044538d598bfmr29550548pfa.4.1633412501560;
-        Mon, 04 Oct 2021 22:41:41 -0700 (PDT)
+        bh=nVIr7fAkmnLGTRIKArO4HwVYW8hhJ6BbGtxi7VDtm5A=;
+        b=TCwLs3j0xaiO+AesVos7Idk19vO/ZZmIfx/ccrP/A2DFLsv0ILyKc/jj3m4GnAPVT1
+         79gvhCmdjcE0U8TGaCUH6iN2lYnRVCPk7ZWFOaoBKj4zxGaWTbhOZJobgVAlALcNp43e
+         qhlft8HXkOdFLywlW37Qd8XmnF2EoR9p2z5M4u1s9aU5TdtbYGhTzSOwrSC2KyepiFNH
+         u7T7G3DjonvqtcmHpA5F+j+Qhvjnvi17mlkwjkiYZtdGKaUJBPm0tgn70+hTFFEqsR/c
+         VneHkD4V5rapeUxFOw7a570w1DPxMLQMiX+tRnW/qyJlU/tqvPIbAKZ3SVrrKmIwXOz2
+         rM9g==
+X-Gm-Message-State: AOAM533Ij8HNWxxe6IM45/tVBqjLBxsodv5CyMeal4qBzdZ41zt5jdsK
+        8CpLu+xyicAIEl5Bjj/Pbi0=
+X-Google-Smtp-Source: ABdhPJwduIIdB4dTL8t+flaozTGh6Eae8ekpp/242AL8xC7zBroB9475SOuRVteNcwlN153uZIeuIg==
+X-Received: by 2002:a17:90b:4c86:: with SMTP id my6mr1521844pjb.77.1633412504391;
+        Mon, 04 Oct 2021 22:41:44 -0700 (PDT)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id g22sm19264702pfj.15.2021.10.04.22.41.40
+        by smtp.gmail.com with ESMTPSA id 65sm16122052pfu.187.2021.10.04.22.41.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 22:41:41 -0700 (PDT)
+        Mon, 04 Oct 2021 22:41:44 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Yury Norov <yury.norov@gmail.com>,
@@ -99,9 +99,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 14/16] bitmap: unify find_bit operations
-Date:   Mon,  4 Oct 2021 22:40:57 -0700
-Message-Id: <20211005054059.475634-15-yury.norov@gmail.com>
+Subject: [PATCH 15/16] lib: bitmap: add performance test for bitmap_print_to_pagebuf
+Date:   Mon,  4 Oct 2021 22:40:58 -0700
+Message-Id: <20211005054059.475634-16-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211005054059.475634-1-yury.norov@gmail.com>
 References: <20211005054059.475634-1-yury.norov@gmail.com>
@@ -111,224 +111,71 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-bitmap_for_each_{set,clear}_region() are similar to for_each_bit()
-macros in include/linux/find.h, but interface and implementation
-of them are different.
-
-This patch adds for_each_bitrange() macros and drops unused
-bitmap_*_region() API in sake of unification.
+Functional tests for bitmap_print_to_pagebuf() are provided
+in lib/test_printf.c. This patch adds performance test for
+a case of fully set bitmap.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Acked-by: Dennis Zhou <dennis@kernel.org>
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
 ---
- drivers/mmc/host/renesas_sdhi_core.c |  2 +-
- include/linux/bitmap.h               | 33 ----------------
- include/linux/find.h                 | 56 ++++++++++++++++++++++++++++
- mm/percpu.c                          | 20 ++++------
- 4 files changed, 65 insertions(+), 46 deletions(-)
+ lib/test_bitmap.c | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/drivers/mmc/host/renesas_sdhi_core.c b/drivers/mmc/host/renesas_sdhi_core.c
-index a4407f391f66..9c99fb576911 100644
---- a/drivers/mmc/host/renesas_sdhi_core.c
-+++ b/drivers/mmc/host/renesas_sdhi_core.c
-@@ -628,7 +628,7 @@ static int renesas_sdhi_select_tuning(struct tmio_mmc_host *host)
- 	 * is at least SH_MOBILE_SDHI_MIN_TAP_ROW probes long then use the
- 	 * center index as the tap, otherwise bail out.
- 	 */
--	bitmap_for_each_set_region(bitmap, rs, re, 0, taps_size) {
-+	for_each_set_bitrange(rs, re, bitmap, taps_size) {
- 		if (re - rs > tap_cnt) {
- 			tap_end = re;
- 			tap_start = rs;
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index c88b2321ba14..e57dca065343 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -55,12 +55,6 @@ struct device;
-  *  bitmap_clear(dst, pos, nbits)               Clear specified bit area
-  *  bitmap_find_next_zero_area(buf, len, pos, n, mask)  Find bit free area
-  *  bitmap_find_next_zero_area_off(buf, len, pos, n, mask, mask_off)  as above
-- *  bitmap_next_clear_region(map, &start, &end, nbits)  Find next clear region
-- *  bitmap_next_set_region(map, &start, &end, nbits)  Find next set region
-- *  bitmap_for_each_clear_region(map, rs, re, start, end)
-- *  						Iterate over all clear regions
-- *  bitmap_for_each_set_region(map, rs, re, start, end)
-- *  						Iterate over all set regions
-  *  bitmap_shift_right(dst, src, n, nbits)      *dst = *src >> n
-  *  bitmap_shift_left(dst, src, n, nbits)       *dst = *src << n
-  *  bitmap_cut(dst, src, first, n, nbits)       Cut n bits from first, copy rest
-@@ -465,14 +459,6 @@ static inline void bitmap_replace(unsigned long *dst,
- 		__bitmap_replace(dst, old, new, mask, nbits);
+diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+index d33fa5a61b95..0c82f07f74fc 100644
+--- a/lib/test_bitmap.c
++++ b/lib/test_bitmap.c
+@@ -446,6 +446,42 @@ static void __init test_bitmap_parselist(void)
+ 	}
  }
  
--static inline void bitmap_next_clear_region(unsigned long *bitmap,
--					    unsigned int *rs, unsigned int *re,
--					    unsigned int end)
--{
--	*rs = find_next_zero_bit(bitmap, end, *rs);
--	*re = find_next_bit(bitmap, end, *rs + 1);
--}
--
- static inline void bitmap_next_set_region(unsigned long *bitmap,
- 					  unsigned int *rs, unsigned int *re,
- 					  unsigned int end)
-@@ -481,25 +467,6 @@ static inline void bitmap_next_set_region(unsigned long *bitmap,
- 	*re = find_next_zero_bit(bitmap, end, *rs + 1);
- }
- 
--/*
-- * Bitmap region iterators.  Iterates over the bitmap between [@start, @end).
-- * @rs and @re should be integer variables and will be set to start and end
-- * index of the current clear or set region.
-- */
--#define bitmap_for_each_clear_region(bitmap, rs, re, start, end)	     \
--	for ((rs) = (start),						     \
--	     bitmap_next_clear_region((bitmap), &(rs), &(re), (end));	     \
--	     (rs) < (re);						     \
--	     (rs) = (re) + 1,						     \
--	     bitmap_next_clear_region((bitmap), &(rs), &(re), (end)))
--
--#define bitmap_for_each_set_region(bitmap, rs, re, start, end)		     \
--	for ((rs) = (start),						     \
--	     bitmap_next_set_region((bitmap), &(rs), &(re), (end));	     \
--	     (rs) < (re);						     \
--	     (rs) = (re) + 1,						     \
--	     bitmap_next_set_region((bitmap), &(rs), &(re), (end)))
--
- /**
-  * BITMAP_FROM_U64() - Represent u64 value in the format suitable for bitmap.
-  * @n: u64 value
-diff --git a/include/linux/find.h b/include/linux/find.h
-index ae9ed52b52b8..5bb6db213bcb 100644
---- a/include/linux/find.h
-+++ b/include/linux/find.h
-@@ -301,6 +301,62 @@ unsigned long find_next_bit_le(const void *addr, unsigned
- 	     (bit) < (size);					\
- 	     (bit) = find_next_zero_bit((addr), (size), (bit) + 1))
- 
-+/**
-+ * for_each_set_bitrange - iterate over all set bit ranges [b; e)
-+ * @b: bit offset of start of current bitrange (first set bit)
-+ * @e: bit offset of end of current bitrange (first unset bit)
-+ * @addr: bitmap address to base the search on
-+ * @size: bitmap size in number of bits
-+ */
-+#define for_each_set_bitrange(b, e, addr, size)			\
-+	for ((b) = find_next_bit((addr), (size), 0),		\
-+	     (e) = find_next_zero_bit((addr), (size), (b) + 1);	\
-+	     (b) < (size);					\
-+	     (b) = find_next_bit((addr), (size), (e) + 1),	\
-+	     (e) = find_next_zero_bit((addr), (size), (b) + 1))
++static void __init test_bitmap_printlist(void)
++{
++	unsigned long *bmap = kmalloc(PAGE_SIZE, GFP_KERNEL);
++	char *buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
++	char expected[256];
++	int ret, slen;
++	ktime_t time;
 +
-+/**
-+ * for_each_set_bitrange_from - iterate over all set bit ranges [b; e)
-+ * @b: bit offset of start of current bitrange (first set bit); must be initialized
-+ * @e: bit offset of end of current bitrange (first unset bit)
-+ * @addr: bitmap address to base the search on
-+ * @size: bitmap size in number of bits
-+ */
-+#define for_each_set_bitrange_from(b, e, addr, size)		\
-+	for ((b) = find_next_bit((addr), (size), (b)),		\
-+	     (e) = find_next_zero_bit((addr), (size), (b) + 1);	\
-+	     (b) < (size);					\
-+	     (b) = find_next_bit((addr), (size), (e) + 1),	\
-+	     (e) = find_next_zero_bit((addr), (size), (b) + 1))
++	if (!buf || !bmap)
++		goto out;
 +
-+/**
-+ * for_each_clear_bitrange - iterate over all unset bit ranges [b; e)
-+ * @b: bit offset of start of current bitrange (first unset bit)
-+ * @e: bit offset of end of current bitrange (first set bit)
-+ * @addr: bitmap address to base the search on
-+ * @size: bitmap size in number of bits
-+ */
-+#define for_each_clear_bitrange(b, e, addr, size)		\
-+	for ((b) = find_next_zero_bit((addr), (size), 0),	\
-+	     (e) = find_next_bit((addr), (size), (b) + 1);	\
-+	     (b) < (size);					\
-+	     (b) = find_next_zero_bit((addr), (size), (e) + 1),	\
-+	     (e) = find_next_bit((addr), (size), (b) + 1))
++	memset(bmap, -1, PAGE_SIZE);
++	slen = snprintf(expected, 256, "0-%ld", PAGE_SIZE * 8 - 1);
++	if (slen < 0)
++		goto out;
 +
-+/**
-+ * for_each_clear_bitrange_from - iterate over all unset bit ranges [b; e)
-+ * @b: bit offset of start of current bitrange (first set bit); must be initialized
-+ * @e: bit offset of end of current bitrange (first unset bit)
-+ * @addr: bitmap address to base the search on
-+ * @size: bitmap size in number of bits
-+ */
-+#define for_each_clear_bitrange_from(b, e, addr, size)		\
-+	for ((b) = find_next_zero_bit((addr), (size), (b)),	\
-+	     (e) = find_next_bit((addr), (size), (b) + 1);	\
-+	     (b) < (size);					\
-+	     (b) = find_next_zero_bit((addr), (size), (e) + 1),	\
-+	     (e) = find_next_bit((addr), (size), (b) + 1))
++	time = ktime_get();
++	ret = bitmap_print_to_pagebuf(true, buf, bmap, PAGE_SIZE * 8);
++	time = ktime_get() - time;
 +
- /**
-  * for_each_set_clump8 - iterate over bitmap for each 8-bit clump with set bits
-  * @start: bit offset to start search and to store the current iteration offset
-diff --git a/mm/percpu.c b/mm/percpu.c
-index 1cf0bb904b1d..ff4e7a89eb61 100644
---- a/mm/percpu.c
-+++ b/mm/percpu.c
-@@ -779,7 +779,7 @@ static void pcpu_block_refresh_hint(struct pcpu_chunk *chunk, int index)
- {
- 	struct pcpu_block_md *block = chunk->md_blocks + index;
- 	unsigned long *alloc_map = pcpu_index_alloc_map(chunk, index);
--	unsigned int rs, re, start;	/* region start, region end */
-+	unsigned int start, end;	/* region start, region end */
- 
- 	/* promote scan_hint to contig_hint */
- 	if (block->scan_hint) {
-@@ -795,9 +795,8 @@ static void pcpu_block_refresh_hint(struct pcpu_chunk *chunk, int index)
- 	block->right_free = 0;
- 
- 	/* iterate over free areas and update the contig hints */
--	bitmap_for_each_clear_region(alloc_map, rs, re, start,
--				     PCPU_BITMAP_BLOCK_BITS)
--		pcpu_block_update(block, rs, re);
-+	for_each_clear_bitrange_from(start, end, alloc_map, PCPU_BITMAP_BLOCK_BITS)
-+		pcpu_block_update(block, start, end);
- }
- 
- /**
-@@ -1852,13 +1851,12 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
- 
- 	/* populate if not all pages are already there */
- 	if (!is_atomic) {
--		unsigned int page_start, page_end, rs, re;
-+		unsigned int page_end, rs, re;
- 
--		page_start = PFN_DOWN(off);
-+		rs = PFN_DOWN(off);
- 		page_end = PFN_UP(off + size);
- 
--		bitmap_for_each_clear_region(chunk->populated, rs, re,
--					     page_start, page_end) {
-+		for_each_clear_bitrange_from(rs, re, chunk->populated, page_end) {
- 			WARN_ON(chunk->immutable);
- 
- 			ret = pcpu_populate_chunk(chunk, rs, re, pcpu_gfp);
-@@ -2014,8 +2012,7 @@ static void pcpu_balance_free(bool empty_only)
- 	list_for_each_entry_safe(chunk, next, &to_free, list) {
- 		unsigned int rs, re;
- 
--		bitmap_for_each_set_region(chunk->populated, rs, re, 0,
--					   chunk->nr_pages) {
-+		for_each_set_bitrange(rs, re, chunk->populated, chunk->nr_pages) {
- 			pcpu_depopulate_chunk(chunk, rs, re);
- 			spin_lock_irq(&pcpu_lock);
- 			pcpu_chunk_depopulated(chunk, rs, re);
-@@ -2085,8 +2082,7 @@ static void pcpu_balance_populated(void)
- 			continue;
- 
- 		/* @chunk can't go away while pcpu_alloc_mutex is held */
--		bitmap_for_each_clear_region(chunk->populated, rs, re, 0,
--					     chunk->nr_pages) {
-+		for_each_clear_bitrange(rs, re, chunk->populated, chunk->nr_pages) {
- 			int nr = min_t(int, re - rs, nr_to_pop);
- 
- 			spin_unlock_irq(&pcpu_lock);
++	if (ret != slen + 1) {
++		pr_err("bitmap_print_to_pagebuf: result is %d, expected %d\n", ret, slen);
++		goto out;
++	}
++
++	if (strncmp(buf, expected, slen)) {
++		pr_err("bitmap_print_to_pagebuf: result is %s, expected %s\n", buf, expected);
++		goto out;
++	}
++
++	pr_err("bitmap_print_to_pagebuf: input is '%s', Time: %llu\n", buf, time);
++out:
++	kfree(buf);
++	kfree(bmap);
++}
++
+ static const unsigned long parse_test[] __initconst = {
+ 	BITMAP_FROM_U64(0),
+ 	BITMAP_FROM_U64(1),
+@@ -818,6 +854,7 @@ static void __init selftest(void)
+ 	test_bitmap_arr32();
+ 	test_bitmap_parse();
+ 	test_bitmap_parselist();
++	test_bitmap_printlist();
+ 	test_mem_optimisations();
+ 	test_for_each_set_clump8();
+ 	test_bitmap_cut();
 -- 
 2.30.2
 
