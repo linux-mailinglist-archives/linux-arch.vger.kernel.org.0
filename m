@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7036421E4C
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B33421E4F
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbhJEFoV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 01:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S232717AbhJEFoW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 01:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbhJEFnp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:43:45 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F8BC0617A8;
-        Mon,  4 Oct 2021 22:41:36 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id m21so18690266pgu.13;
-        Mon, 04 Oct 2021 22:41:36 -0700 (PDT)
+        with ESMTP id S232941AbhJEFnq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:43:46 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5D9C0617AA;
+        Mon,  4 Oct 2021 22:41:39 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id k26so16431890pfi.5;
+        Mon, 04 Oct 2021 22:41:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wFgxHPU246K2Qd2iZ9FPnjvlT4kP2xuwZmDeybJhhzg=;
-        b=NSZ5I8A0BDdzAzDpUX1aU3QZzQzhYEhxfjF69z01CLcPbGIlV6w47158NvBMzslF86
-         E2e/cyfq243sMaVeUP5P/ZCxh92gmf7lavftuqzBwHTOJbKi1DMx0bTDQu/knznTEBEk
-         IjMoK4bpse7Gq6KZmmeO6wpq7qI44cplNXbF7pvxr5nor4ARArgKLyeTJ3cRYapnjmFb
-         VZBQBI5DxftwDedXJZ5K5kHTTVHIuOLyXU5E5xR3nBVVPDKNsVSqV+7aXb67FtKOOe77
-         QcICA4lKw0iNRL9ofzv/RFd+6nOJOlRr8VLdoxArIrSq2hsiMPxB4wCKrTPkCkve80rL
-         Jhow==
+        bh=nf81eMg0W7fVWw+dS1fRTqTJZj1jgno6nh0Ggg55AFs=;
+        b=ItK3sXhsAM1f1ASq5u4DaKGjX0YlsAxopFtfKS5hkUGd2sSnkTU+qaKgXZTN57kjrH
+         YyTiguK30n8ixSoHgKeQTHnWXideSR4lXu6Y5AQ1qutTOlTpCfF4vK091PRnFnIemVFq
+         IdLl4+cpPVnnyEkM35F/tFy+WN6FWqNQHEoCuIJJdJ07OO/Q8/wG/CUh7W07ELnQf6LA
+         Vr259OX/kYoyfHAjZHTpVnA1b0afzM45P5r63b+WD8ltL0vaY5hYThrMKobSsbekeQoA
+         FkrL760sIbMTlMuhmcDJ60JMRRgj+4U7jqSsffEqH3hUo3OB+xMEQxsIgIFbn37xPzfn
+         +Aiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wFgxHPU246K2Qd2iZ9FPnjvlT4kP2xuwZmDeybJhhzg=;
-        b=EAqPe+YiPi+S4WmaQFLfI1/MUU6jxudycq3G4p6/vZjLm03n6Rml8KbjrB3MAUZRMJ
-         LhV+Q45o8Ol+U8GMPcC0Yo/MaWkFrUqoMXMutsONOJdtZtFkSJPyW58JVGky6IKg9BhR
-         xyRmtLUhyHU6YwNBzt5kIOKznA/C5GZxt+yxkvT+x1Rk7jjCjqfwQ0IjGpftn1HWa2St
-         93d7cJKDnDs5Dbl3gt8RRY+CMB40AFW6BUZnrl11XcInJQRfGSX47zzZkAEWVuPtC8Yx
-         +3WRlnKW5YVwUA8ODQiCCTOv+Tbh5OGTtYlm+4smcuuX182f3xT3QjbXmOK63HIVh7Ox
-         tEzg==
-X-Gm-Message-State: AOAM5303bj1V+vnAXiX3EIvKx+kcrFNsw3WbAIsMunga66imzlQNtCkc
-        P6CG2QlpO0k8Di4qY3Ogiu4=
-X-Google-Smtp-Source: ABdhPJzOXY7wXA2VdIxEH+H9d7itHg+DPcAhV7CDvqyaZET+/ibIF+kthkZUCuvQwuMy0FOHK1ylAQ==
-X-Received: by 2002:aa7:96e3:0:b0:44b:e158:584c with SMTP id i3-20020aa796e3000000b0044be158584cmr28524285pfq.43.1633412495674;
-        Mon, 04 Oct 2021 22:41:35 -0700 (PDT)
+        bh=nf81eMg0W7fVWw+dS1fRTqTJZj1jgno6nh0Ggg55AFs=;
+        b=DNvrV5Uek0CPr+ZZiOcz9k8+rxdaZj6XJBT+M3kSqRFeaEqoZOyMIN1fVu+3zlP3Ad
+         iZevV1AFrdUKa3cUQFMPetHKPUra3qbEZVpPRo4rOQJLmX2gu3dFge4vrEsVs0hxvr+f
+         j79M1hctL/6ALhuNgmbvAnuNdUYlVQ/o3+HecmgcYuzPHcBrPgGR1+IS+PxXyupATJrj
+         FGFKkC8UrNQX4iM/XSiAD1uUPLRmyZuubUoNWewcs3+b3ZAjdxdrCgp+9J+seCj9AeJi
+         X0j73XcEi632p7+DE19jt1OWZ92DEa35/hSe9kcI8iyX667DNRvIb+GjbSMBtYjuFhp4
+         cqSw==
+X-Gm-Message-State: AOAM530+8Ce72thtaIB0v2F4GQSK6Xb6Zkva9H12ZAJazdO4rxxm9D0q
+        6sgXM4BXjKm5TX2fvC4nBgg=
+X-Google-Smtp-Source: ABdhPJwkGoS5lx+2DFRKSI4puA9sR0Q04TQBSdoQwr4TaY60RgunHwEUf0OU253yIkwHPeX5ysEAEg==
+X-Received: by 2002:a63:1a65:: with SMTP id a37mr14296966pgm.338.1633412498651;
+        Mon, 04 Oct 2021 22:41:38 -0700 (PDT)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id r8sm16019866pgp.30.2021.10.04.22.41.34
+        by smtp.gmail.com with ESMTPSA id u19sm10821033pfg.18.2021.10.04.22.41.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 22:41:35 -0700 (PDT)
+        Mon, 04 Oct 2021 22:41:38 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Yury Norov <yury.norov@gmail.com>,
@@ -99,9 +99,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 12/16] Replace for_each_*_bit_from() with for_each_*_bit() where appropriate
-Date:   Mon,  4 Oct 2021 22:40:55 -0700
-Message-Id: <20211005054059.475634-13-yury.norov@gmail.com>
+Subject: [PATCH 13/16] mm/percpu: micro-optimize pcpu_is_populated()
+Date:   Mon,  4 Oct 2021 22:40:56 -0700
+Message-Id: <20211005054059.475634-14-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211005054059.475634-1-yury.norov@gmail.com>
 References: <20211005054059.475634-1-yury.norov@gmail.com>
@@ -111,71 +111,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-A couple of kernel functions call for_each_*_bit_from() with start
-bit equal to 0. Replace them with for_each_*_bit().
-
-No functional changes, but might improve on readability.
+bitmap_next_clear_region() calls find_next_zero_bit() and find_next_bit()
+sequentially to find a range of clear bits. In case of pcpu_is_populated()
+there's a chance to return earlier if bitmap has all bits set.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Acked-by: Dennis Zhou <dennis@kernel.org>
 ---
- arch/x86/kernel/apic/vector.c         | 4 ++--
- drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 4 ++--
- drivers/hwmon/ltc2992.c               | 3 +--
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ mm/percpu.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/kernel/apic/vector.c b/arch/x86/kernel/apic/vector.c
-index c132daabe615..3e6f6b448f6a 100644
---- a/arch/x86/kernel/apic/vector.c
-+++ b/arch/x86/kernel/apic/vector.c
-@@ -760,9 +760,9 @@ void __init lapic_update_legacy_vectors(void)
- 
- void __init lapic_assign_system_vectors(void)
+diff --git a/mm/percpu.c b/mm/percpu.c
+index e0a986818903..1cf0bb904b1d 100644
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -1070,17 +1070,18 @@ static void pcpu_block_update_hint_free(struct pcpu_chunk *chunk, int bit_off,
+ static bool pcpu_is_populated(struct pcpu_chunk *chunk, int bit_off, int bits,
+ 			      int *next_off)
  {
--	unsigned int i, vector = 0;
-+	unsigned int i, vector;
+-	unsigned int page_start, page_end, rs, re;
++	unsigned int start, end;
  
--	for_each_set_bit_from(vector, system_vectors, NR_VECTORS)
-+	for_each_set_bit(vector, system_vectors, NR_VECTORS)
- 		irq_matrix_assign_system(vector_matrix, vector, false);
+-	page_start = PFN_DOWN(bit_off * PCPU_MIN_ALLOC_SIZE);
+-	page_end = PFN_UP((bit_off + bits) * PCPU_MIN_ALLOC_SIZE);
++	start = PFN_DOWN(bit_off * PCPU_MIN_ALLOC_SIZE);
++	end = PFN_UP((bit_off + bits) * PCPU_MIN_ALLOC_SIZE);
  
- 	if (nr_legacy_irqs() > 1)
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-index cc5b07f86346..789acae37f55 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-@@ -1047,7 +1047,7 @@ int etnaviv_gpu_debugfs(struct etnaviv_gpu *gpu, struct seq_file *m)
+-	rs = page_start;
+-	bitmap_next_clear_region(chunk->populated, &rs, &re, page_end);
+-	if (rs >= page_end)
++	start = find_next_zero_bit(chunk->populated, end, start);
++	if (start >= end)
+ 		return true;
  
- void etnaviv_gpu_recover_hang(struct etnaviv_gpu *gpu)
- {
--	unsigned int i = 0;
-+	unsigned int i;
+-	*next_off = re * PAGE_SIZE / PCPU_MIN_ALLOC_SIZE;
++	end = find_next_bit(chunk->populated, end, start + 1);
++
++	*next_off = end * PAGE_SIZE / PCPU_MIN_ALLOC_SIZE;
+ 	return false;
+ }
  
- 	dev_err(gpu->dev, "recover hung GPU!\n");
- 
-@@ -1060,7 +1060,7 @@ void etnaviv_gpu_recover_hang(struct etnaviv_gpu *gpu)
- 
- 	/* complete all events, the GPU won't do it after the reset */
- 	spin_lock(&gpu->event_spinlock);
--	for_each_set_bit_from(i, gpu->event_bitmap, ETNA_NR_EVENTS)
-+	for_each_set_bit(i, gpu->event_bitmap, ETNA_NR_EVENTS)
- 		complete(&gpu->event_free);
- 	bitmap_zero(gpu->event_bitmap, ETNA_NR_EVENTS);
- 	spin_unlock(&gpu->event_spinlock);
-diff --git a/drivers/hwmon/ltc2992.c b/drivers/hwmon/ltc2992.c
-index 2a4bed0ab226..7352d2b3c756 100644
---- a/drivers/hwmon/ltc2992.c
-+++ b/drivers/hwmon/ltc2992.c
-@@ -248,8 +248,7 @@ static int ltc2992_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask
- 
- 	gpio_status = reg;
- 
--	gpio_nr = 0;
--	for_each_set_bit_from(gpio_nr, mask, LTC2992_GPIO_NR) {
-+	for_each_set_bit(gpio_nr, mask, LTC2992_GPIO_NR) {
- 		if (test_bit(LTC2992_GPIO_BIT(gpio_nr), &gpio_status))
- 			set_bit(gpio_nr, bits);
- 	}
 -- 
 2.30.2
 
