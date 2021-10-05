@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C53CE421E27
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67CE421E29
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232304AbhJEFnY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 01:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
+        id S232521AbhJEFn0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 01:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbhJEFnI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:43:08 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435C4C061783;
-        Mon,  4 Oct 2021 22:41:13 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id w14so1528934pll.2;
-        Mon, 04 Oct 2021 22:41:13 -0700 (PDT)
+        with ESMTP id S232307AbhJEFnK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:43:10 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C3BC061745;
+        Mon,  4 Oct 2021 22:41:16 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id a11so492239plm.0;
+        Mon, 04 Oct 2021 22:41:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FIPuS4OLzQCF5AgK/VmYDt3q+TnxbO8XesSIDRxgCzY=;
-        b=IB/e9E/C1kr8o0K5p8DzE62VkGgywadLxe9xGEIVZ9iGC/sIxNgo2/87mURnDogKP7
-         m8HBiNbsUvDrIoE43mIFRcXZSGZ9tctHdgAwm3etPMRH6gJs8iyQcs6qegXbIu+l44O9
-         7HoVSFbODN5nUtrtzlzDy3nKiDJDLm6qbTXFZR5BCvQCuG4DCx7b/G23X5rN+kYfgp1u
-         s1xj1BKNkrR5a9CcA+ETt9hwhj1A2+wJaxnJ70fiYtihkSPJbEZTFOkXgw5FF7UpTfjo
-         tfncNoW/B7FETJce8ZEtvy7GWga+cqQ76Og9QapjpdZBbFOdSIGTs7khxf/6tSqZAV3n
-         oU5A==
+        bh=pDr/2wmKOhtISD4bTLAYys4abxrcPBrhwIDJ4wnRZw0=;
+        b=WITMNTfkqR7TVUYnguYCLl7md8pYe01Wx+ljByw14DxDIsV9LRFj6o44yqqDfsHFoH
+         M5nTtm7+OJPsrfx/6Pmf83O/AbLBLQ9XdoqYvBJpjBrN26NKKBgJitJGqfe81CJsW5JS
+         voOL+Q4Sr3cIdzvwSmwUDpShwpll4642aC+Wkx3hPlGk5wFqpsfw76JUdazqwo/wExn9
+         ex+6AIVSVksgqRSjnpBOvZ8fCzRt580yJ0fs+cFnIrq3eAbKJnBpCF3rfq+hI287+FlO
+         KPpQeyey4ivPfe3sCnWEOJRlQPSZXcC/nfZ+F//UwA7ReYxAfn+3D3QTkx03Tgyw8Vyh
+         2dAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FIPuS4OLzQCF5AgK/VmYDt3q+TnxbO8XesSIDRxgCzY=;
-        b=gUB4fGcRXoQSoqj8CwTBj5kjOzUVcQYi4J5DbhgPZ6/lWoWXrocr3X4q9lpG7LJsZ3
-         4a3jeDgi76wnAniuzaIIt+S5wV1nSJli1jPYp5W4v7BH0WHw9iqwWk4vFGqTiwuivxgC
-         nCc88ZItJ1AEKoZTL7v7nJDSy56rYTUzQQ/h5p0qtcPjpujOx5/kf+k2jI58oXRMe9Oq
-         NJLGZPbnoGzbOMfIOeCQVRJCCGh0qsHO8XONUyrVzT51qfWaSOa6402HvnHXSaep6Ock
-         JD+hxGnnUIpA2RAY4HcIkdXzrWoYNJkOpixeRwd13h/qhuqGKbY5IeMELuYl6JOCQRzS
-         OcZQ==
-X-Gm-Message-State: AOAM530jszMsmJEqFmaKXx/Kubiy1DQWFG9qtSuc1ECxHGnKmO3aJvEA
-        KOFPcSjJaQe5FGI0xApHLz0=
-X-Google-Smtp-Source: ABdhPJz8WyWYoFwsoQMeCU3ssjLVOLt9VS4oUnytD2/OaWtFurLWyTtrhH5Pr8dODfpZCySuXm3Ejw==
-X-Received: by 2002:a17:902:c78a:b0:13e:cac2:4b41 with SMTP id w10-20020a170902c78a00b0013ecac24b41mr3494570pla.17.1633412472703;
-        Mon, 04 Oct 2021 22:41:12 -0700 (PDT)
+        bh=pDr/2wmKOhtISD4bTLAYys4abxrcPBrhwIDJ4wnRZw0=;
+        b=qhzXEHxXloNhFSfj0Ig0XZPYOmrVzYeYSt5j5OU/g6C9QAheLLPm/sFXmuKu1fC+mL
+         vX4Wy7DRtT3PttLLegcOpTu0kH1fOLUZV0105cuHKEJ4mQtryKpHH6hrP8wEAYBFuymO
+         x6Q9i5sFDULMAC5Gav54L2gY6C2uVlbCmXdj0Jl6Si1WQ58HEh73ZWVCWVrLm7K/jqFX
+         lFRTcdCQVR2FF57KCbFsNHaR1TYgEzhfsfcnm16ql45GHQFwK0a8koyGwTg/o0VBwyHf
+         xld0LmUmbSScRT3wRUoSE2G7LbA7RfE2C2pTsvEOuyyqfEj57q8buKD+aEtKugdTGC0N
+         7bkg==
+X-Gm-Message-State: AOAM533ZnzotyJGcSEP6sT9gu7b9ReZSUwQSIhSKN6aH92zqPM2mv7CB
+        VtDxWvmkZppsxIt2TstC3VQ=
+X-Google-Smtp-Source: ABdhPJwpfQTh6J6dcL0YXRPohLHBsZRGMm3qVmnYH5MGjeG+Mt0DfSSRl/M24lky7ufNhUNuHQ79Mw==
+X-Received: by 2002:a17:902:db05:b0:13e:7b36:5e11 with SMTP id m5-20020a170902db0500b0013e7b365e11mr3507916plx.43.1633412475755;
+        Mon, 04 Oct 2021 22:41:15 -0700 (PDT)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id j12sm16719053pfj.206.2021.10.04.22.41.11
+        by smtp.gmail.com with ESMTPSA id o15sm16762764pfg.14.2021.10.04.22.41.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 22:41:12 -0700 (PDT)
+        Mon, 04 Oct 2021 22:41:15 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Yury Norov <yury.norov@gmail.com>,
@@ -99,9 +99,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 05/16] lib: add find_first_and_bit()
-Date:   Mon,  4 Oct 2021 22:40:48 -0700
-Message-Id: <20211005054059.475634-6-yury.norov@gmail.com>
+Subject: [PATCH 06/16] cpumask: use find_first_and_bit()
+Date:   Mon,  4 Oct 2021 22:40:49 -0700
+Message-Id: <20211005054059.475634-7-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211005054059.475634-1-yury.norov@gmail.com>
 References: <20211005054059.475634-1-yury.norov@gmail.com>
@@ -111,158 +111,77 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Currently find_first_and_bit() is an alias to find_next_and_bit(). However,
-it is widely used in cpumask, so it worth to optimize it. This patch adds
-its own implementation for find_first_and_bit().
-
-On x86_64 find_bit_benchmark says:
-
-Before (#define find_first_and_bit(...) find_next_and_bit(..., 0):
-Start testing find_bit() with random-filled bitmap
-[  140.291468] find_first_and_bit:           46890919 ns,  32671 iterations
-Start testing find_bit() with sparse bitmap
-[  140.295028] find_first_and_bit:               7103 ns,      1 iterations
-
-After:
-Start testing find_bit() with random-filled bitmap
-[  162.574907] find_first_and_bit:           25045813 ns,  32846 iterations
-Start testing find_bit() with sparse bitmap
-[  162.578458] find_first_and_bit:               4900 ns,      1 iterations
-
-(Thanks to Alexey Klimov for thorough testing.)
+Now we have an efficient implementation for find_first_and_bit(),
+so switch cpumask to use it where appropriate.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Tested-by: Alexey Klimov <aklimov@redhat.com>
 ---
- include/linux/find.h     | 27 +++++++++++++++++++++++++++
- lib/find_bit.c           | 21 +++++++++++++++++++++
- lib/find_bit_benchmark.c | 21 +++++++++++++++++++++
- 3 files changed, 69 insertions(+)
+ include/linux/cpumask.h | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/find.h b/include/linux/find.h
-index ea57f7f38c49..6048f8c97418 100644
---- a/include/linux/find.h
-+++ b/include/linux/find.h
-@@ -12,6 +12,8 @@ extern unsigned long _find_next_bit(const unsigned long *addr1,
- 		const unsigned long *addr2, unsigned long nbits,
- 		unsigned long start, unsigned long invert, unsigned long le);
- extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
-+extern unsigned long _find_first_and_bit(const unsigned long *addr1,
-+					 const unsigned long *addr2, unsigned long size);
- extern unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size);
- extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long size);
- 
-@@ -123,6 +125,31 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
- }
- #endif
- 
-+#ifndef find_first_and_bit
-+/**
-+ * find_first_and_bit - find the first set bit in both memory regions
-+ * @addr1: The first address to base the search on
-+ * @addr2: The second address to base the search on
-+ * @size: The bitmap size in bits
-+ *
-+ * Returns the bit number for the next set bit
-+ * If no bits are set, returns @size.
-+ */
-+static inline
-+unsigned long find_first_and_bit(const unsigned long *addr1,
-+				 const unsigned long *addr2,
-+				 unsigned long size)
-+{
-+	if (small_const_nbits(size)) {
-+		unsigned long val = *addr1 & *addr2 & GENMASK(size - 1, 0);
-+
-+		return val ? __ffs(val) : size;
-+	}
-+
-+	return _find_first_and_bit(addr1, addr2, size);
-+}
-+#endif
-+
- #ifndef find_first_zero_bit
- /**
-  * find_first_zero_bit - find the first cleared bit in a memory region
-diff --git a/lib/find_bit.c b/lib/find_bit.c
-index 0f8e2e369b1d..1b8e4b2a9cba 100644
---- a/lib/find_bit.c
-+++ b/lib/find_bit.c
-@@ -89,6 +89,27 @@ unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
- EXPORT_SYMBOL(_find_first_bit);
- #endif
- 
-+#ifndef find_first_and_bit
-+/*
-+ * Find the first set bit in two memory regions.
-+ */
-+unsigned long _find_first_and_bit(const unsigned long *addr1,
-+				  const unsigned long *addr2,
-+				  unsigned long size)
-+{
-+	unsigned long idx, val;
-+
-+	for (idx = 0; idx * BITS_PER_LONG < size; idx++) {
-+		val = addr1[idx] & addr2[idx];
-+		if (val)
-+			return min(idx * BITS_PER_LONG + __ffs(val), size);
-+	}
-+
-+	return size;
-+}
-+EXPORT_SYMBOL(_find_first_and_bit);
-+#endif
-+
- #ifndef find_first_zero_bit
- /*
-  * Find the first cleared bit in a memory region.
-diff --git a/lib/find_bit_benchmark.c b/lib/find_bit_benchmark.c
-index 5637c5711db9..db904b57d4b8 100644
---- a/lib/find_bit_benchmark.c
-+++ b/lib/find_bit_benchmark.c
-@@ -49,6 +49,25 @@ static int __init test_find_first_bit(void *bitmap, unsigned long len)
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index 5d4d07a9e1ed..c7be6c5b7523 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -123,6 +123,12 @@ static inline unsigned int cpumask_first(const struct cpumask *srcp)
  	return 0;
  }
  
-+static int __init test_find_first_and_bit(void *bitmap, const void *bitmap2, unsigned long len)
++static inline unsigned int cpumask_first_and(const struct cpumask *srcp1,
++					     const struct cpumask *srcp2)
 +{
-+	static DECLARE_BITMAP(cp, BITMAP_LEN) __initdata;
-+	unsigned long i, cnt;
-+	ktime_t time;
-+
-+	bitmap_copy(cp, bitmap, BITMAP_LEN);
-+
-+	time = ktime_get();
-+	for (cnt = i = 0; i < len; cnt++) {
-+		i = find_first_and_bit(cp, bitmap2, len);
-+		__clear_bit(i, cp);
-+	}
-+	time = ktime_get() - time;
-+	pr_err("find_first_and_bit: %18llu ns, %6ld iterations\n", time, cnt);
-+
 +	return 0;
 +}
 +
- static int __init test_find_next_bit(const void *bitmap, unsigned long len)
+ static inline unsigned int cpumask_last(const struct cpumask *srcp)
  {
- 	unsigned long i, cnt;
-@@ -129,6 +148,7 @@ static int __init find_bit_test(void)
- 	 * traverse only part of bitmap to avoid soft lockup.
- 	 */
- 	test_find_first_bit(bitmap, BITMAP_LEN / 10);
-+	test_find_first_and_bit(bitmap, bitmap2, BITMAP_LEN / 2);
- 	test_find_next_and_bit(bitmap, bitmap2, BITMAP_LEN);
+ 	return 0;
+@@ -167,7 +173,7 @@ static inline unsigned int cpumask_local_spread(unsigned int i, int node)
  
- 	pr_err("\nStart testing find_bit() with sparse bitmap\n");
-@@ -145,6 +165,7 @@ static int __init find_bit_test(void)
- 	test_find_next_zero_bit(bitmap, BITMAP_LEN);
- 	test_find_last_bit(bitmap, BITMAP_LEN);
- 	test_find_first_bit(bitmap, BITMAP_LEN);
-+	test_find_first_and_bit(bitmap, bitmap2, BITMAP_LEN);
- 	test_find_next_and_bit(bitmap, bitmap2, BITMAP_LEN);
+ static inline int cpumask_any_and_distribute(const struct cpumask *src1p,
+ 					     const struct cpumask *src2p) {
+-	return cpumask_next_and(-1, src1p, src2p);
++	return cpumask_first_and(src1p, src2p);
+ }
  
- 	/*
+ static inline int cpumask_any_distribute(const struct cpumask *srcp)
+@@ -195,6 +201,19 @@ static inline unsigned int cpumask_first(const struct cpumask *srcp)
+ 	return find_first_bit(cpumask_bits(srcp), nr_cpumask_bits);
+ }
+ 
++/**
++ * cpumask_first_and - return the first cpu from *srcp1 & *srcp2
++ * @src1p: the first input
++ * @src2p: the second input
++ *
++ * Returns >= nr_cpu_ids if no cpus set in both.  See also cpumask_next_and().
++ */
++static inline
++unsigned int cpumask_first_and(const struct cpumask *srcp1, const struct cpumask *srcp2)
++{
++	return find_first_and_bit(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_cpumask_bits);
++}
++
+ /**
+  * cpumask_last - get the last CPU in a cpumask
+  * @srcp:	- the cpumask pointer
+@@ -585,15 +604,6 @@ static inline void cpumask_copy(struct cpumask *dstp,
+  */
+ #define cpumask_any(srcp) cpumask_first(srcp)
+ 
+-/**
+- * cpumask_first_and - return the first cpu from *srcp1 & *srcp2
+- * @src1p: the first input
+- * @src2p: the second input
+- *
+- * Returns >= nr_cpu_ids if no cpus set in both.  See also cpumask_next_and().
+- */
+-#define cpumask_first_and(src1p, src2p) cpumask_next_and(-1, (src1p), (src2p))
+-
+ /**
+  * cpumask_any_and - pick a "random" cpu from *mask1 & *mask2
+  * @mask1: the first input cpumask
 -- 
 2.30.2
 
