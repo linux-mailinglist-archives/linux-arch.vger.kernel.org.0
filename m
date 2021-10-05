@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF0C421E0A
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107F0421E0F
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbhJEFmr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 01:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        id S232003AbhJEFmx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 01:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbhJEFmr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:42:47 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EA5C061745;
-        Mon,  4 Oct 2021 22:40:57 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id b22so1532583pls.1;
-        Mon, 04 Oct 2021 22:40:57 -0700 (PDT)
+        with ESMTP id S230403AbhJEFmu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:42:50 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556F7C061745;
+        Mon,  4 Oct 2021 22:41:00 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id k26so16430687pfi.5;
+        Mon, 04 Oct 2021 22:41:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=av2xBHrLGpKKZFp0hKB8ZbiiBN2E9k8Q3N8s6NRbFdw=;
-        b=PKuJVAQDnM7o1A1xpeF9VLcI17Tqus9XxFzhAFuALd4R+DXgKacNKpcN4FRR5jgShX
-         0UBK5eiN6fVVUtxRfpi88bjCdDPrJuc5Dn1Af826bcu4uksV/iFiCPl2pWonOLzVlBR/
-         0KCtgKab/npd30UZLa5Aoka8viu0QbsVH2Ngcxp9cExcUTfUPsA20If8PgSMlp0y3ErD
-         z7rQDCQkAAczGP5c9hqIIwOORhPeEF6XVN9fMG+XWt7PjZA/pdSBQFZMmiqNX2HefQV4
-         YAPjieQrGgSghN3pjiWlHzLfAYELhqIizkpXRwvoBwysp++4UikVvpezIYL/senmkl2I
-         hJpQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sW0jJ5BzCWKEZDvFC9cMEYLIv2cIm64unRMGWihrNWQ=;
+        b=WOXswavyJMWF/0Lt4Wn5Zd9XNa+PO32+1yDRh6F1FfPSNi9pdMeOkEIZfaKf+IuvZf
+         vObi+qExEYPtOu22bBx/YhHhkY5vhMQdnRI3kX43P+17BNzwmRpKDXQS6u6RrsRl9QBt
+         n50kGkLgBKMCb/LQoRYmfQ0VJbmdBQcxiocYN9/yiaHvOXejw9e/GxVLLEVqlcuj+c1J
+         V5Ef8Ha5eTh9EalE3TTqAgLW8weAuxSwc6pRi6vTMjg8K04oHYdwuKt2arpHi6nWgE6b
+         Btpgx3yBMYmSGtH6ESnXAbavbBxPYQjyWN+ykhZvV5MsqN2faV+1jMR+5W/O08yRYDnS
+         fOFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=av2xBHrLGpKKZFp0hKB8ZbiiBN2E9k8Q3N8s6NRbFdw=;
-        b=JdPvgt1V5qrXvy0IDTwmtRQbt/z+uN84FbZa+3peb//X3fZHTUND1oPXM2Nfn+YYn8
-         +pE+IPnSy7pHs5nUDKO1IegIQ6qyZV/EQOOnntujSt05bjra79rh/fE201X5b4raAlDi
-         TQ3GfuNmCcr7uB90cmeuRBnbxVaWg/Lf3C86JL6lgZhy7OkfEUI6EvnGlzY7tK3dQLPc
-         n7M+0ML2w19owsPxfVaDgQLgUSHj/mxpkbSW2Nv42WumaYEzNQbTcERwoipRsyIqeFgV
-         3zqvmDyv+IMH2H0ejkuAGxeawiJABAwTB95yDB3XLsGMhnEmO7Qa8MzpAIKHQSD2Mf+E
-         3Rqw==
-X-Gm-Message-State: AOAM531TphuW2GP4ASeJiOFXT1+Pa/YcwkYpO5JYMkJPujLPpDTAOrqr
-        Svy1ds6KZqXkX+VaITGtyHg=
-X-Google-Smtp-Source: ABdhPJwO5flC4hUMWWj7yG3YyGmvMkMYfWlRb1NWlMcNKI//7aKBUf5dAIWmvjHk9EHwFLu2wf1g3Q==
-X-Received: by 2002:a17:90a:4b4d:: with SMTP id o13mr1510046pjl.236.1633412456736;
-        Mon, 04 Oct 2021 22:40:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sW0jJ5BzCWKEZDvFC9cMEYLIv2cIm64unRMGWihrNWQ=;
+        b=O2tUQNA0ENZ0vNZ+bTfdXGeLmqSCm6hnbD0UB1kxAXmkaprL3wGD52raJfXnkK70hh
+         /Zn2qqO341nJiIhUsrew5BODcyzj+20Dl4760fGzfKTeXzTEVxkTmW0ef9hqIZC+Sd8u
+         txoMNpEzll/ywFdUojZtI3SgFs5Y0hl0VFN+mIxGJ9h0R+FLUVCfIQMTrmztoHv+UW2B
+         BO8DZGTR95Q3anAt8x4m6R6RpqypP5v9pmJHRUI/34btJIWma6ZtMh+Y+2no0L8oN6bA
+         60mbsDK8EVn4E4Y4PEJXPUneaaM6/Tt79g1CjfdNfxuX3OHWnKJXCzgPKR9M7YVulfEW
+         4Rcg==
+X-Gm-Message-State: AOAM530jKZy5N6weqNODg3otd/EZt1aDkHtDfTyJT6u13MjTXk3ygAPk
+        0gUxrnMNU1cKy40ZTuXRQz8=
+X-Google-Smtp-Source: ABdhPJxojNM5f46KxY2QTVGFBd3LT+L/Ruhn4FYG3sxC1D9oFomJBdBrVF6aAr0Lyq/9vAihEusPpw==
+X-Received: by 2002:a63:d806:: with SMTP id b6mr14155714pgh.395.1633412459843;
+        Mon, 04 Oct 2021 22:40:59 -0700 (PDT)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id x21sm16155237pfa.186.2021.10.04.22.40.55
+        by smtp.gmail.com with ESMTPSA id a5sm5897048pff.219.2021.10.04.22.40.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 22:40:56 -0700 (PDT)
+        Mon, 04 Oct 2021 22:40:59 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Yury Norov <yury.norov@gmail.com>,
@@ -98,124 +98,63 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH RESEND 3 00/16] Bitmap patches for 5.15
-Date:   Mon,  4 Oct 2021 22:40:43 -0700
-Message-Id: <20211005054059.475634-1-yury.norov@gmail.com>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH 01/16] bitops: protect find_first_{,zero}_bit properly
+Date:   Mon,  4 Oct 2021 22:40:44 -0700
+Message-Id: <20211005054059.475634-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211005054059.475634-1-yury.norov@gmail.com>
+References: <20211005054059.475634-1-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Stephen,
+find_first_bit() and find_first_zero_bit() are not protected with
+ifdefs as other functions in find.h. It causes build errors on some
+platforms if CONFIG_GENERIC_FIND_FIRST_BIT is enabled.
 
-Please pull this bitmap series. The git tree is here:
-        https://github.com/norov/linux/tree/bitmap-master-5.15
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Fixes: 2cc7b6a44ac2 ("lib: add fast path for find_first_*_bit() and find_last_bit()")
+Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ include/asm-generic/bitops/find.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks,
-Yury
-
-Yury Norov (16):
-  bitops: protect find_first_{,zero}_bit properly
-  bitops: move find_bit_*_le functions from le.h to find.h
-  include: move find.h from asm_generic to linux
-  arch: remove GENERIC_FIND_FIRST_BIT entirely
-  lib: add find_first_and_bit()
-  cpumask: use find_first_and_bit()
-  all: replace find_next{,_zero}_bit with find_first{,_zero}_bit where
-    appropriate
-  tools: sync tools/bitmap with mother linux
-  cpumask: replace cpumask_next_* with cpumask_first_* where appropriate
-  include/linux: move for_each_bit() macros from bitops.h to find.h
-  find: micro-optimize for_each_{set,clear}_bit()
-  Replace for_each_*_bit_from() with for_each_*_bit() where appropriate
-  mm/percpu: micro-optimize pcpu_is_populated()
-  bitmap: unify find_bit operations
-  lib: bitmap: add performance test for bitmap_print_to_pagebuf
-  vsprintf: rework bitmap_list_string
-
- MAINTAINERS                                   |   4 +-
- arch/alpha/include/asm/bitops.h               |   2 -
- arch/arc/Kconfig                              |   1 -
- arch/arc/include/asm/bitops.h                 |   1 -
- arch/arm/include/asm/bitops.h                 |   1 -
- arch/arm64/Kconfig                            |   1 -
- arch/arm64/include/asm/bitops.h               |   1 -
- arch/csky/include/asm/bitops.h                |   1 -
- arch/h8300/include/asm/bitops.h               |   1 -
- arch/hexagon/include/asm/bitops.h             |   1 -
- arch/ia64/include/asm/bitops.h                |   2 -
- arch/m68k/include/asm/bitops.h                |   2 -
- arch/mips/Kconfig                             |   1 -
- arch/mips/include/asm/bitops.h                |   1 -
- arch/openrisc/include/asm/bitops.h            |   1 -
- arch/parisc/include/asm/bitops.h              |   2 -
- arch/powerpc/include/asm/bitops.h             |   2 -
- arch/powerpc/include/asm/cputhreads.h         |   2 +-
- arch/powerpc/platforms/pasemi/dma_lib.c       |   4 +-
- arch/riscv/include/asm/bitops.h               |   1 -
- arch/s390/Kconfig                             |   1 -
- arch/s390/include/asm/bitops.h                |   1 -
- arch/s390/kvm/kvm-s390.c                      |   2 +-
- arch/sh/include/asm/bitops.h                  |   1 -
- arch/sparc/include/asm/bitops_32.h            |   1 -
- arch/sparc/include/asm/bitops_64.h            |   2 -
- arch/x86/Kconfig                              |   1 -
- arch/x86/include/asm/bitops.h                 |   2 -
- arch/x86/kernel/apic/vector.c                 |   4 +-
- arch/x86/um/Kconfig                           |   1 -
- arch/xtensa/include/asm/bitops.h              |   1 -
- block/blk-mq.c                                |   2 +-
- drivers/block/rnbd/rnbd-clt.c                 |   2 +-
- drivers/dma/ti/edma.c                         |   2 +-
- drivers/gpu/drm/etnaviv/etnaviv_gpu.c         |   4 +-
- drivers/hwmon/ltc2992.c                       |   3 +-
- drivers/iio/adc/ad7124.c                      |   2 +-
- drivers/infiniband/hw/irdma/hw.c              |  16 +-
- drivers/media/cec/core/cec-core.c             |   2 +-
- drivers/media/mc/mc-devnode.c                 |   2 +-
- drivers/mmc/host/renesas_sdhi_core.c          |   2 +-
- drivers/net/virtio_net.c                      |   2 +-
- drivers/pci/controller/dwc/pci-dra7xx.c       |   2 +-
- drivers/scsi/lpfc/lpfc_sli.c                  |  10 +-
- drivers/soc/fsl/qbman/bman_portal.c           |   2 +-
- drivers/soc/fsl/qbman/qman_portal.c           |   2 +-
- drivers/soc/ti/k3-ringacc.c                   |   4 +-
- drivers/tty/n_tty.c                           |   2 +-
- drivers/virt/acrn/ioreq.c                     |   3 +-
- fs/f2fs/segment.c                             |   8 +-
- fs/ocfs2/cluster/heartbeat.c                  |   2 +-
- fs/ocfs2/dlm/dlmdomain.c                      |   4 +-
- fs/ocfs2/dlm/dlmmaster.c                      |  18 +-
- fs/ocfs2/dlm/dlmrecovery.c                    |   2 +-
- fs/ocfs2/dlm/dlmthread.c                      |   2 +-
- include/asm-generic/bitops.h                  |   1 -
- include/asm-generic/bitops/le.h               |  64 ---
- include/linux/bitmap.h                        |  34 +-
- include/linux/bitops.h                        |  34 --
- include/linux/cpumask.h                       |  46 ++-
- include/linux/find.h                          | 372 ++++++++++++++++++
- kernel/time/clocksource.c                     |   4 +-
- lib/Kconfig                                   |   3 -
- lib/find_bit.c                                |  21 +
- lib/find_bit_benchmark.c                      |  21 +
- lib/genalloc.c                                |   2 +-
- lib/test_bitmap.c                             |  37 ++
- lib/vsprintf.c                                |  24 +-
- mm/percpu.c                                   |  35 +-
- net/ncsi/ncsi-manage.c                        |   4 +-
- tools/include/asm-generic/bitops.h            |   1 -
- tools/include/asm-generic/bitops/find.h       | 145 -------
- tools/include/linux/bitmap.h                  |   7 +-
- .../bitops => tools/include/linux}/find.h     |  54 ++-
- tools/lib/find_bit.c                          |  20 +
- 75 files changed, 637 insertions(+), 441 deletions(-)
- create mode 100644 include/linux/find.h
- delete mode 100644 tools/include/asm-generic/bitops/find.h
- rename {include/asm-generic/bitops => tools/include/linux}/find.h (83%)
-
+diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
+index 0d132ee2a291..835f959a25f2 100644
+--- a/include/asm-generic/bitops/find.h
++++ b/include/asm-generic/bitops/find.h
+@@ -97,6 +97,7 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+ 
+ #ifdef CONFIG_GENERIC_FIND_FIRST_BIT
+ 
++#ifndef find_first_bit
+ /**
+  * find_first_bit - find the first set bit in a memory region
+  * @addr: The address to start the search at
+@@ -116,7 +117,9 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+ 
+ 	return _find_first_bit(addr, size);
+ }
++#endif
+ 
++#ifndef find_first_zero_bit
+ /**
+  * find_first_zero_bit - find the first cleared bit in a memory region
+  * @addr: The address to start the search at
+@@ -136,6 +139,8 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+ 
+ 	return _find_first_zero_bit(addr, size);
+ }
++#endif
++
+ #else /* CONFIG_GENERIC_FIND_FIRST_BIT */
+ 
+ #ifndef find_first_bit
 -- 
 2.30.2
 
