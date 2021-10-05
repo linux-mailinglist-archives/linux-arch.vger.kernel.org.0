@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE0D421E42
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7036421E4C
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbhJEFoO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 01:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S233434AbhJEFoV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 01:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232538AbhJEFno (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:43:44 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C121DC0617A7;
-        Mon,  4 Oct 2021 22:41:32 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id u7so16389605pfg.13;
-        Mon, 04 Oct 2021 22:41:32 -0700 (PDT)
+        with ESMTP id S232923AbhJEFnp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:43:45 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F8BC0617A8;
+        Mon,  4 Oct 2021 22:41:36 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id m21so18690266pgu.13;
+        Mon, 04 Oct 2021 22:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KItrf/8CC1jUWlWikMSRYATLzZeQvXDG/CTBGZDdNyk=;
-        b=Bpmn/v6e92t53IrffCbZ0P2wjj7VbUr7WQlZi8GiUWBePeBjmPafz+EEToTVj1KBvg
-         g+1rFedFvnacJh4mrh9hXcUEzyebafq+C75uhOg4fQaKYT1tmDSg/iEYFLti0JaW4/4O
-         jrwPd5BUXwnbYs9GvRIsLiGET6Z1o+Ihg0omODBRvNGxe8AXKHX29Qvi6IYZIenmeyXF
-         ezs8z+AwZcwxvdzzpq33egaQPo2paUoUMU1QbQMa4BCZaNIS5hDjTbozkrPc+Mmpl9Qt
-         oIE42KQJCmHBlsQyYmCOdji02opROQBhrkZlFneDM6wltr5rH+l9mYf7Tj/hULJFILE1
-         EbVg==
+        bh=wFgxHPU246K2Qd2iZ9FPnjvlT4kP2xuwZmDeybJhhzg=;
+        b=NSZ5I8A0BDdzAzDpUX1aU3QZzQzhYEhxfjF69z01CLcPbGIlV6w47158NvBMzslF86
+         E2e/cyfq243sMaVeUP5P/ZCxh92gmf7lavftuqzBwHTOJbKi1DMx0bTDQu/knznTEBEk
+         IjMoK4bpse7Gq6KZmmeO6wpq7qI44cplNXbF7pvxr5nor4ARArgKLyeTJ3cRYapnjmFb
+         VZBQBI5DxftwDedXJZ5K5kHTTVHIuOLyXU5E5xR3nBVVPDKNsVSqV+7aXb67FtKOOe77
+         QcICA4lKw0iNRL9ofzv/RFd+6nOJOlRr8VLdoxArIrSq2hsiMPxB4wCKrTPkCkve80rL
+         Jhow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KItrf/8CC1jUWlWikMSRYATLzZeQvXDG/CTBGZDdNyk=;
-        b=j4eI5cuNluoFKWMYR2xzQbhpOep/eXIXk7K5+pW8On30rCiEQqLcK6djsQOoHLeSCC
-         aPMYnehVLprCvovQoZrKULf/aEASlm6/WkYHrIAqYuG2BPefuaaPOBUw9L1mub00jSgy
-         sI0mYt1VdRwmAppzekryfbtJjgx/lOWsxMtlppuLWueT/4otcRSlNz+CnYjpYNW9VM46
-         pM78xsjDoulZKcz+iHZXwxbL0UwV8bnmmDom1CJKAJ+Z49VXCeYbeyu7+N32T80ijhSr
-         n15/KHRfznMQdVnIw371tR7kOlSJTEqDeVDTWZClOfq7SmRuGNYmXw3P2p3N5XyeHOpF
-         /rlQ==
-X-Gm-Message-State: AOAM531Ug7mECwgGBet6QNSTmUBFShodZ+vuo9fVyUmQSGSBKo636vP9
-        /LokuA9upFR9/Zbb/UKAeHI=
-X-Google-Smtp-Source: ABdhPJwIrub99GY0Rct4v0vxz6U9hkhP3mRxBIeZ3EN/OJJZr8q04GkioxJFL7nH8BbuY28FOs/Z9w==
-X-Received: by 2002:a62:8f53:0:b0:44c:5d10:9378 with SMTP id n80-20020a628f53000000b0044c5d109378mr10034105pfd.19.1633412492209;
-        Mon, 04 Oct 2021 22:41:32 -0700 (PDT)
+        bh=wFgxHPU246K2Qd2iZ9FPnjvlT4kP2xuwZmDeybJhhzg=;
+        b=EAqPe+YiPi+S4WmaQFLfI1/MUU6jxudycq3G4p6/vZjLm03n6Rml8KbjrB3MAUZRMJ
+         LhV+Q45o8Ol+U8GMPcC0Yo/MaWkFrUqoMXMutsONOJdtZtFkSJPyW58JVGky6IKg9BhR
+         xyRmtLUhyHU6YwNBzt5kIOKznA/C5GZxt+yxkvT+x1Rk7jjCjqfwQ0IjGpftn1HWa2St
+         93d7cJKDnDs5Dbl3gt8RRY+CMB40AFW6BUZnrl11XcInJQRfGSX47zzZkAEWVuPtC8Yx
+         +3WRlnKW5YVwUA8ODQiCCTOv+Tbh5OGTtYlm+4smcuuX182f3xT3QjbXmOK63HIVh7Ox
+         tEzg==
+X-Gm-Message-State: AOAM5303bj1V+vnAXiX3EIvKx+kcrFNsw3WbAIsMunga66imzlQNtCkc
+        P6CG2QlpO0k8Di4qY3Ogiu4=
+X-Google-Smtp-Source: ABdhPJzOXY7wXA2VdIxEH+H9d7itHg+DPcAhV7CDvqyaZET+/ibIF+kthkZUCuvQwuMy0FOHK1ylAQ==
+X-Received: by 2002:aa7:96e3:0:b0:44b:e158:584c with SMTP id i3-20020aa796e3000000b0044be158584cmr28524285pfq.43.1633412495674;
+        Mon, 04 Oct 2021 22:41:35 -0700 (PDT)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id e10sm6312603pfd.174.2021.10.04.22.41.31
+        by smtp.gmail.com with ESMTPSA id r8sm16019866pgp.30.2021.10.04.22.41.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 22:41:31 -0700 (PDT)
+        Mon, 04 Oct 2021 22:41:35 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Yury Norov <yury.norov@gmail.com>,
@@ -99,9 +99,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 11/16] find: micro-optimize for_each_{set,clear}_bit()
-Date:   Mon,  4 Oct 2021 22:40:54 -0700
-Message-Id: <20211005054059.475634-12-yury.norov@gmail.com>
+Subject: [PATCH 12/16] Replace for_each_*_bit_from() with for_each_*_bit() where appropriate
+Date:   Mon,  4 Oct 2021 22:40:55 -0700
+Message-Id: <20211005054059.475634-13-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211005054059.475634-1-yury.norov@gmail.com>
 References: <20211005054059.475634-1-yury.norov@gmail.com>
@@ -111,40 +111,71 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The macros iterate thru all set/clear bits in a bitmap. They search a
-first bit using find_first_bit(), and the rest bits using find_next_bit().
+A couple of kernel functions call for_each_*_bit_from() with start
+bit equal to 0. Replace them with for_each_*_bit().
 
-Since find_next_bit() is called shortly after find_first_bit(), we can
-save few lines of I-cache by not using find_first_bit().
+No functional changes, but might improve on readability.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- include/linux/find.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/apic/vector.c         | 4 ++--
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 4 ++--
+ drivers/hwmon/ltc2992.c               | 3 +--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/find.h b/include/linux/find.h
-index 4500e8ab93e2..ae9ed52b52b8 100644
---- a/include/linux/find.h
-+++ b/include/linux/find.h
-@@ -280,7 +280,7 @@ unsigned long find_next_bit_le(const void *addr, unsigned
- #endif
+diff --git a/arch/x86/kernel/apic/vector.c b/arch/x86/kernel/apic/vector.c
+index c132daabe615..3e6f6b448f6a 100644
+--- a/arch/x86/kernel/apic/vector.c
++++ b/arch/x86/kernel/apic/vector.c
+@@ -760,9 +760,9 @@ void __init lapic_update_legacy_vectors(void)
  
- #define for_each_set_bit(bit, addr, size) \
--	for ((bit) = find_first_bit((addr), (size));		\
-+	for ((bit) = find_next_bit((addr), (size), 0);		\
- 	     (bit) < (size);					\
- 	     (bit) = find_next_bit((addr), (size), (bit) + 1))
+ void __init lapic_assign_system_vectors(void)
+ {
+-	unsigned int i, vector = 0;
++	unsigned int i, vector;
  
-@@ -291,7 +291,7 @@ unsigned long find_next_bit_le(const void *addr, unsigned
- 	     (bit) = find_next_bit((addr), (size), (bit) + 1))
+-	for_each_set_bit_from(vector, system_vectors, NR_VECTORS)
++	for_each_set_bit(vector, system_vectors, NR_VECTORS)
+ 		irq_matrix_assign_system(vector_matrix, vector, false);
  
- #define for_each_clear_bit(bit, addr, size) \
--	for ((bit) = find_first_zero_bit((addr), (size));	\
-+	for ((bit) = find_next_zero_bit((addr), (size), 0);	\
- 	     (bit) < (size);					\
- 	     (bit) = find_next_zero_bit((addr), (size), (bit) + 1))
+ 	if (nr_legacy_irqs() > 1)
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+index cc5b07f86346..789acae37f55 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+@@ -1047,7 +1047,7 @@ int etnaviv_gpu_debugfs(struct etnaviv_gpu *gpu, struct seq_file *m)
  
+ void etnaviv_gpu_recover_hang(struct etnaviv_gpu *gpu)
+ {
+-	unsigned int i = 0;
++	unsigned int i;
+ 
+ 	dev_err(gpu->dev, "recover hung GPU!\n");
+ 
+@@ -1060,7 +1060,7 @@ void etnaviv_gpu_recover_hang(struct etnaviv_gpu *gpu)
+ 
+ 	/* complete all events, the GPU won't do it after the reset */
+ 	spin_lock(&gpu->event_spinlock);
+-	for_each_set_bit_from(i, gpu->event_bitmap, ETNA_NR_EVENTS)
++	for_each_set_bit(i, gpu->event_bitmap, ETNA_NR_EVENTS)
+ 		complete(&gpu->event_free);
+ 	bitmap_zero(gpu->event_bitmap, ETNA_NR_EVENTS);
+ 	spin_unlock(&gpu->event_spinlock);
+diff --git a/drivers/hwmon/ltc2992.c b/drivers/hwmon/ltc2992.c
+index 2a4bed0ab226..7352d2b3c756 100644
+--- a/drivers/hwmon/ltc2992.c
++++ b/drivers/hwmon/ltc2992.c
+@@ -248,8 +248,7 @@ static int ltc2992_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask
+ 
+ 	gpio_status = reg;
+ 
+-	gpio_nr = 0;
+-	for_each_set_bit_from(gpio_nr, mask, LTC2992_GPIO_NR) {
++	for_each_set_bit(gpio_nr, mask, LTC2992_GPIO_NR) {
+ 		if (test_bit(LTC2992_GPIO_BIT(gpio_nr), &gpio_status))
+ 			set_bit(gpio_nr, bits);
+ 	}
 -- 
 2.30.2
 
