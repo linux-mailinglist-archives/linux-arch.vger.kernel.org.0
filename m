@@ -2,151 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD7A421E96
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 08:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2109421ED6
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 08:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbhJEGEW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 02:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
+        id S232346AbhJEG1H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 02:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbhJEGET (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 02:04:19 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3838C061745;
-        Mon,  4 Oct 2021 23:02:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HNn6Z0Lw4z4xbT;
-        Tue,  5 Oct 2021 17:02:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633413746;
-        bh=NxMykwAtSBGQYw1NN1b8tuLk3z/eu8KgxmvlevpwR08=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AuN21dHC9+MvuIwLhRD96bDPhCznYUF4mW6sVZScbRUzl9khYXUvaDeVKY7j3EpSi
-         SxLzKS1Bs4wrte7aWbXpZFWoemH0PNGO4D37mni3TZjB1HF9v41Jp65nKUZ8k7EWb7
-         1WS06ttvm7jDrexi/wdAcBbdmsaNmdqfqkCfLltRleNNHw6/4tsoys9pHDR4kMpQ3X
-         hiZ975kZUM946XlJkVfu3fcj8ixvWtI9+4vCQ14o+3BoPZXOQo2KwupnUaz3BSOQLv
-         PP+voIhGccH2rnqTb4t4QCc3N3EFgiuOYx9ydItftfDiXwetSYPCE98mkJ03f/99MZ
-         0OvLwF5mq8Z4Q==
-Date:   Tue, 5 Oct 2021 17:02:13 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andrea Merello <andrea.merello@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Ben Gardon <bgardon@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Lameter <cl@linux.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
-        Joe Perches <joe@perches.com>, Jonas Bonn <jonas@southpole.se>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rich Felker <dalias@libc.org>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH RESEND 3 00/16] Bitmap patches for 5.15
-Message-ID: <20211005170213.6e4ca629@canb.auug.org.au>
-In-Reply-To: <20211005054059.475634-1-yury.norov@gmail.com>
-References: <20211005054059.475634-1-yury.norov@gmail.com>
+        with ESMTP id S231597AbhJEG1H (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 02:27:07 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21753C061745
+        for <linux-arch@vger.kernel.org>; Mon,  4 Oct 2021 23:25:17 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id j27so15449669wms.0
+        for <linux-arch@vger.kernel.org>; Mon, 04 Oct 2021 23:25:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=3M5LE1HnKvxOZ4MlSbNjhvRtrYcc0TJpKDXnxW0WKY4=;
+        b=a2g/TxXirq+a+CuMoLm5zrODdt8LjSrDBouHEH7zp0z0cysMxokeULIoAWgWiRzGF0
+         nM1lPirbytae1VSkpCyvU8gcWRxVpvR0A4/nxTkOdif4VyX50h+Ll2jjU5TTmny2yvM9
+         mz61AaNvVsIFNlPNCVJAQNYUYR0gqVJcNM/uePSI+dxOBETtYx70wpyCA5Y4evIBFWJ9
+         bFMXnp44oBM3ZCXl8YFA+Ufn9iCthQgUfKnBYpbeIMOXLMoaHuQmueqOAYABKKvkUnF3
+         6ZzGhNq/RxpgLAoVxY6yl0eU9IOf7aLdWQyeMcvCAzHpPbLdNG+FI1kLjRLVPZ2Bdjw4
+         ttJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=3M5LE1HnKvxOZ4MlSbNjhvRtrYcc0TJpKDXnxW0WKY4=;
+        b=SijILIkO81MlHKMoNFAyLJu1UDTD6GcQrSey0oBnMwpojwZkzybKyUDJxlD3VycbhS
+         mCdNqwpG2zbdx1TtLhAanYr8Xp78IJTWAkKZzAPafwZhCecEWuqtT/1VBktqaoTyMNvg
+         zojlcRM31Ofm/A6heQd7XmUJBYBs/HjVEuQFKVvJI+EnobTI93axAgARlIvqmCfUSygp
+         o8f+aAOzxo1mtjGoywlN0oVsXnwzhq7zFl8Po8Mrwd2fQTDyN9gwPAgI9/3A8La5nXES
+         ZhJuFplaXr1WTs0wvgPBAlz/RAhkyn7MFmXySk1qFEW7JCgzzHpYeUi6u0sQuwuIUeRi
+         l1kg==
+X-Gm-Message-State: AOAM5311gZhjhuZ2hISWyi1HyLSRe3NOga991O7xARH26qUEkXqVzPXe
+        eOoRCyLgayMKRSIKDlDHgyh421afgDVkSgJDsDA=
+X-Google-Smtp-Source: ABdhPJxaZ0d6lVzMbVYTvPiV/sOywiRLAE1RRmHn3Mfx9CQURaTu2iebJptJgLH1POST0imdy9lv1AzkM1K2fQWSLVA=
+X-Received: by 2002:a1c:7515:: with SMTP id o21mr1504346wmc.76.1633415115368;
+ Mon, 04 Oct 2021 23:25:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UQDD3e=d/fr65N4eQ6HWDaN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Received: by 2002:a5d:52c2:0:0:0:0:0 with HTTP; Mon, 4 Oct 2021 23:25:14 -0700 (PDT)
+Reply-To: justinseydou@gmail.com
+From:   Justin Seydou <cathydampry@gmail.com>
+Date:   Tue, 5 Oct 2021 07:25:14 +0100
+Message-ID: <CAJt1DuJCbB8bM8dpUubpU4Yt3SS=bH6HG6_FaEkvQe00NFyhPQ@mail.gmail.com>
+Subject: Proposal
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---Sig_/UQDD3e=d/fr65N4eQ6HWDaN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Dear friend,
 
-Hi Yury,
+I write to inform you about a business proposal I have which I would
+like to handle with you.
+Fifty million dollars is involved. Be rest assured that everything is
+legal and risk free.
+Kindly indicate your interest.
 
-On Mon,  4 Oct 2021 22:40:43 -0700 Yury Norov <yury.norov@gmail.com> wrote:
->
-> Please pull this bitmap series. The git tree is here:
->         https://github.com/norov/linux/tree/bitmap-master-5.15
-
-Actually branch bitmap-master-5.15 of https://github.com/norov/linux.git
-
-I would prefer a more generic branch name (unless this is a short term
-tree - since I will fetch it every day until you tell me to stop)
-
-Added to linux-next from today.
-
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
-
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
-
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
-
---=20
-Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
-
---Sig_/UQDD3e=d/fr65N4eQ6HWDaN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFb6mUACgkQAVBC80lX
-0Gxbewf/Ww/E+XPHdQ1mp59XC0GkoUKOxCBfGR1vs7uFtk/jjJjQgZczaO5K0V8B
-5AV4HEuVQrACgBuuHnKuciVhbzgu5zwK6AitIcZTU904LwEr+mUZuhKteKdGMzlp
-fIWXLaQEDg3eHhTk3IYFiCJK/xQqU4TxVD4vCCGveKRh2C603nww/En/sYfFrmOk
-1ofCL8wN1uxqI+rsm21e2cXvb4IlMto5uimejQmP55fyX9zsdZ95ZUHg3jLb4sy3
-JAP298Vgeqhv3ynmkjYzYilP4TC0psiyQMGvwuzlFMN/qaywyQ1OeKYCm0ymgAXr
-lnHzfD2RdD0mlcaxkqWAWThdw6GFag==
-=qIlm
------END PGP SIGNATURE-----
-
---Sig_/UQDD3e=d/fr65N4eQ6HWDaN--
+Justin Seydou.
