@@ -2,141 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9303F42247F
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 13:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2724B422593
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 13:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234220AbhJELEK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 07:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S234378AbhJELr0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 07:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234700AbhJELDm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 07:03:42 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9FEC061369
-        for <linux-arch@vger.kernel.org>; Tue,  5 Oct 2021 04:00:37 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id c19-20020ac81e93000000b002a71180fd3dso18105636qtm.1
-        for <linux-arch@vger.kernel.org>; Tue, 05 Oct 2021 04:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=GVi87uCC9iTMZ0tahcA01mPlZX23fhUUuaenbQ1/OXU=;
-        b=eBKhKFS4x1q99vUTWlhpytTALPtvi3mgku2eaV9j+J7rB3DErHSPoLRonHHdXa8PGK
-         6HibdPdPZNy+o32rjdkB5tY0E11xrK9Ac3m5LDrgA2eA7J4HLKzrEbZQKgIw1AY8VNHy
-         cAXItLXIxr8LebyG5GXhJ5+H92uEdXLdYsxLq82kMDMHBfWpeoLyU9FKZpfWRWKR30/e
-         40g9aYJKuuWKDqCwSD6vrOeXjAUAmFMMNRQ8Wu7WwLiT+hOd27rLzpsYzEuWPDXPx3F4
-         L1BPhdtoHS1Yj0ZHU4Y3K79zG6ebY4E4kLEZBtO7noFlNeKlrDewmFrRbhHEejhMl+79
-         /MaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=GVi87uCC9iTMZ0tahcA01mPlZX23fhUUuaenbQ1/OXU=;
-        b=AVbZD+gWwEfujY5bXxNUBPb0bMXthU4h/r6T7aliJbMX7xIWJKrk6HD3dukUeNetqJ
-         KAWPsLQIJV+fE72s4sZk3KCT4brraLtgEa3hMevJLzs1HRGz8OE9Gn73qwWcNq7HpsT5
-         C7mklfexsXKxvigjwgVC7smDJUjf4xditTmp6goHKo4rXhmJnkvPHYrl+ngcC4MPk2ha
-         AIXZhaAVgQ7jJYtJ/SwUAL6l16ZHdH34OMy1+KKrQjsjiBr4/1nBvmBnuQDdU6Oz8AaT
-         2ebe2nK+A3Z2AKs0kAM4JP69ekSpSI31GxI4w+yqykqxqM7c4KLH8bVN8edpGUi3XAT2
-         8XfQ==
-X-Gm-Message-State: AOAM531yHCc8gPmcUno46l+I6BZyKLMn8ApUIYK1pITB8S0W+ozzCYFR
-        VOYbm36YBDhJprAXCf711hW7kkSVEw==
-X-Google-Smtp-Source: ABdhPJyqnmEQmSHt6KCacfuyURYDmMa093deSnQHXsO3BMcqzTTUKZjrrxibP+T5sEG2RF9gpTkjLb8Zvw==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:e44f:5054:55f8:fcb8])
- (user=elver job=sendgmr) by 2002:a05:6214:1305:: with SMTP id
- a5mr21006975qvv.64.1633431636934; Tue, 05 Oct 2021 04:00:36 -0700 (PDT)
-Date:   Tue,  5 Oct 2021 12:59:05 +0200
-In-Reply-To: <20211005105905.1994700-1-elver@google.com>
-Message-Id: <20211005105905.1994700-24-elver@google.com>
-Mime-Version: 1.0
-References: <20211005105905.1994700-1-elver@google.com>
-X-Mailer: git-send-email 2.33.0.800.g4c38ced690-goog
-Subject: [PATCH -rcu/kcsan 23/23] objtool, kcsan: Remove memory barrier
- instrumentation from noinstr
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     Alexander Potapenko <glider@google.com>,
+        with ESMTP id S233672AbhJELrZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 07:47:25 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F544C061749;
+        Tue,  5 Oct 2021 04:45:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ffKpkAKU6pM8rv8h0B9+33I0DIIEdsYkyFi/KKBw/n4=; b=QwhZudjTLBG5nEAkb328sCh1aC
+        62/JNAedSpu4Qut6TyMZcJ898Y3DXPP4LNIj+gM7jtgaMVxBfjPGp86OmO1tc8WGBv1j9J5PlL2uX
+        WojOanTqeqJreTOaVIi2Dhhb8IqdFsnG4/cWBZounxROwWtOj1PEOrpNGjDDI5XfjWjtRQhXban1z
+        csGWJ7AT6EhvkR1xcCqQKhtMewKVKy4ReI6O8HC8MEkuCCdPlA7y6QN/jwBwfhh7UGtHbQXTIov1t
+        xCopFaLHP5Qwm+AJh9vLQ+rSVoVqKTwFM177Yc4pe97YTC0SBJObSJm8glMXLT4ZYcm5+HjDCiD4Q
+        iwQEbJ2Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mXiox-000MNr-Vi; Tue, 05 Oct 2021 11:41:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 622C630026F;
+        Tue,  5 Oct 2021 13:41:18 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 452272038E207; Tue,  5 Oct 2021 13:41:18 +0200 (CEST)
+Date:   Tue, 5 Oct 2021 13:41:18 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Borislav Petkov <bp@alien8.de>,
         Dmitry Vyukov <dvyukov@google.com>,
         Ingo Molnar <mingo@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Waiman Long <longman@redhat.com>,
         Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH -rcu/kcsan 05/23] kcsan: Add core memory barrier
+ instrumentation functions
+Message-ID: <YVw53mP3VkWyCzxn@hirez.programming.kicks-ass.net>
+References: <20211005105905.1994700-1-elver@google.com>
+ <20211005105905.1994700-6-elver@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211005105905.1994700-6-elver@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Teach objtool to turn instrumentation required for memory barrier
-modeling into nops in noinstr text.
+On Tue, Oct 05, 2021 at 12:58:47PM +0200, Marco Elver wrote:
+> +static __always_inline void kcsan_atomic_release(int memorder)
+> +{
+> +	if (memorder == __ATOMIC_RELEASE ||
+> +	    memorder == __ATOMIC_SEQ_CST ||
+> +	    memorder == __ATOMIC_ACQ_REL)
+> +		__kcsan_release();
+> +}
+> +
+>  #define DEFINE_TSAN_ATOMIC_LOAD_STORE(bits)                                                        \
+>  	u##bits __tsan_atomic##bits##_load(const u##bits *ptr, int memorder);                      \
+>  	u##bits __tsan_atomic##bits##_load(const u##bits *ptr, int memorder)                       \
+>  	{                                                                                          \
+> +		kcsan_atomic_release(memorder);                                                    \
+>  		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
+>  			check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_ATOMIC, _RET_IP_);    \
+>  		}                                                                                  \
+> @@ -1156,6 +1187,7 @@ EXPORT_SYMBOL(__tsan_init);
+>  	void __tsan_atomic##bits##_store(u##bits *ptr, u##bits v, int memorder);                   \
+>  	void __tsan_atomic##bits##_store(u##bits *ptr, u##bits v, int memorder)                    \
+>  	{                                                                                          \
+> +		kcsan_atomic_release(memorder);                                                    \
+>  		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
+>  			check_access(ptr, bits / BITS_PER_BYTE,                                    \
+>  				     KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC, _RET_IP_);          \
+> @@ -1168,6 +1200,7 @@ EXPORT_SYMBOL(__tsan_init);
+>  	u##bits __tsan_atomic##bits##_##op(u##bits *ptr, u##bits v, int memorder);                 \
+>  	u##bits __tsan_atomic##bits##_##op(u##bits *ptr, u##bits v, int memorder)                  \
+>  	{                                                                                          \
+> +		kcsan_atomic_release(memorder);                                                    \
+>  		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
+>  			check_access(ptr, bits / BITS_PER_BYTE,                                    \
+>  				     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
+> @@ -1200,6 +1233,7 @@ EXPORT_SYMBOL(__tsan_init);
+>  	int __tsan_atomic##bits##_compare_exchange_##strength(u##bits *ptr, u##bits *exp,          \
+>  							      u##bits val, int mo, int fail_mo)    \
+>  	{                                                                                          \
+> +		kcsan_atomic_release(mo);                                                          \
+>  		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
+>  			check_access(ptr, bits / BITS_PER_BYTE,                                    \
+>  				     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
+> @@ -1215,6 +1249,7 @@ EXPORT_SYMBOL(__tsan_init);
+>  	u##bits __tsan_atomic##bits##_compare_exchange_val(u##bits *ptr, u##bits exp, u##bits val, \
+>  							   int mo, int fail_mo)                    \
+>  	{                                                                                          \
+> +		kcsan_atomic_release(mo);                                                          \
+>  		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
+>  			check_access(ptr, bits / BITS_PER_BYTE,                                    \
+>  				     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
+> @@ -1246,6 +1281,7 @@ DEFINE_TSAN_ATOMIC_OPS(64);
+>  void __tsan_atomic_thread_fence(int memorder);
+>  void __tsan_atomic_thread_fence(int memorder)
+>  {
+> +	kcsan_atomic_release(memorder);
+>  	__atomic_thread_fence(memorder);
+>  }
+>  EXPORT_SYMBOL(__tsan_atomic_thread_fence);
 
-The __tsan_func_entry/exit calls are still emitted by compilers even
-with the __no_sanitize_thread attribute. The memory barrier
-instrumentation will be inserted explicitly (without compiler help), and
-thus needs to also explicitly be removed.
-
-Signed-off-by: Marco Elver <elver@google.com>
----
- tools/objtool/check.c | 32 ++++++++++++++++++++++++++------
- 1 file changed, 26 insertions(+), 6 deletions(-)
-
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 7e8cd3ba5482..7b694e639164 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -965,6 +965,31 @@ static struct symbol *find_call_destination(struct section *sec, unsigned long o
- 	return call_dest;
- }
- 
-+static bool should_remove_if_noinstr(const char *name)
-+{
-+	/*
-+	 * Many compilers cannot disable KCOV with a function attribute so they
-+	 * need a little help, NOP out any KCOV calls from noinstr text.
-+	 */
-+	if (!strncmp(name, "__sanitizer_cov_", 16))
-+		return true;
-+
-+	/*
-+	 * Compilers currently do not remove __tsan_func_entry/exit with the
-+	 * __no_sanitize_thread attribute, remove them. Memory barrier
-+	 * instrumentation is not emitted by the compiler, but inserted
-+	 * explicitly, so we need to also remove them.
-+	 */
-+	if (!strncmp(name, "__tsan_func_", 12) ||
-+	    !strcmp(name, "__kcsan_mb") ||
-+	    !strcmp(name, "__kcsan_wmb") ||
-+	    !strcmp(name, "__kcsan_rmb") ||
-+	    !strcmp(name, "__kcsan_release"))
-+		return true;
-+
-+	return false;
-+}
-+
- /*
-  * Find the destination instructions for all calls.
-  */
-@@ -1031,13 +1056,8 @@ static int add_call_destinations(struct objtool_file *file)
- 				      &file->static_call_list);
- 		}
- 
--		/*
--		 * Many compilers cannot disable KCOV with a function attribute
--		 * so they need a little help, NOP out any KCOV calls from noinstr
--		 * text.
--		 */
- 		if (insn->sec->noinstr &&
--		    !strncmp(insn->call_dest->name, "__sanitizer_cov_", 16)) {
-+		    should_remove_if_noinstr(insn->call_dest->name)) {
- 			if (reloc) {
- 				reloc->type = R_NONE;
- 				elf_write_reloc(file->elf, reloc);
--- 
-2.33.0.800.g4c38ced690-goog
-
+I find that very hard to read.. kcsan_atomic_release() it not in fact a
+release. It might be a release if @memorder implies one.
