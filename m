@@ -2,55 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 092C0421E5D
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD7A421E96
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 08:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233326AbhJEFov (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 01:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
+        id S231752AbhJEGEW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 02:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232492AbhJEFoN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:44:13 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D14C0617BE;
-        Mon,  4 Oct 2021 22:41:47 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id m5so3691446pfk.7;
-        Mon, 04 Oct 2021 22:41:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+ZNFqZL6Mgo5rwsf7yN4tz0gd8I7XPFY6Ga4YBxagho=;
-        b=kU5Y7HnPbgF+Rq+MtA/+UamygPQuNDHOtRvNjoP5AwB4aNWInI+I9OI3kWMvB9OG00
-         w/nOUbCy/H/lq2Bs9UsDu6ZVYXMII3SFKrk8sAPK4jF9AVUKTCt/9kazO/wvjbq5kJCx
-         75+NTA/EHHqNtci9D5KdfHHX3CNsg5bcz8rKKPiMNn8PiwQPVBDqeb7PzbTJm9VA/h8T
-         f6xuMp9rgyeko2lCqmohheESfCVP+XBsReLy+67Xbzf27iDLWfxqqf4qxGxID2zUEges
-         qoYCsIpZkF1UPft6kwjC/4fqzTm5buicksIiqtWMYlOVYBHvDSIiabJzt789r3Nsou0b
-         sw6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+ZNFqZL6Mgo5rwsf7yN4tz0gd8I7XPFY6Ga4YBxagho=;
-        b=BBXrm9qC8qqQsxdcFCJcfYmkT9RCHIfAVSNQ+SC80upD/GGDfdgkxCQ1IEVr1Zh2hh
-         998s7P7DZofTRa/InBM7EKio8S0HwFVPffGLBsXAmF699DHDG/RYTi/DZjNSiI82gm/H
-         tRjmopaXxwNHqTW8F5ZbBzFl8o1vllH7XbpKEL1qCMRf4BXKEPvT/4aFstLJvgF7xusL
-         Rxm2qZxN/nh12RQEbVwyRSrNol6DhtTW7Kc8unyw8OKX54tO1+2e+JMBz7ooeuqy4v/a
-         bDXl9VL+ZxE+9geXEq9/31bndIf9+XBUBQ1qyPm/dJOEzMkqOscmPr+B97QuyuBaGnYQ
-         nHRQ==
-X-Gm-Message-State: AOAM531qWrFhU7ryo4jTnPv49mBlowiL2PiANDUubJ/ZS6Uyd3PdgG2Y
-        QTyzj1rKbp8BxVqX1oMP+wI=
-X-Google-Smtp-Source: ABdhPJyceY+Tjx2E1vLJ8VOw77txS+bxzlDVR3Dhcj/EVOQXuYONaKvyFMjEqfjvCyKzvGpZH3bvSA==
-X-Received: by 2002:a65:400c:: with SMTP id f12mr14150413pgp.296.1633412507236;
-        Mon, 04 Oct 2021 22:41:47 -0700 (PDT)
-Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id q27sm9268916pfg.125.2021.10.04.22.41.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 22:41:46 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        with ESMTP id S231597AbhJEGET (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 02:04:19 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3838C061745;
+        Mon,  4 Oct 2021 23:02:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HNn6Z0Lw4z4xbT;
+        Tue,  5 Oct 2021 17:02:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1633413746;
+        bh=NxMykwAtSBGQYw1NN1b8tuLk3z/eu8KgxmvlevpwR08=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AuN21dHC9+MvuIwLhRD96bDPhCznYUF4mW6sVZScbRUzl9khYXUvaDeVKY7j3EpSi
+         SxLzKS1Bs4wrte7aWbXpZFWoemH0PNGO4D37mni3TZjB1HF9v41Jp65nKUZ8k7EWb7
+         1WS06ttvm7jDrexi/wdAcBbdmsaNmdqfqkCfLltRleNNHw6/4tsoys9pHDR4kMpQ3X
+         hiZ975kZUM946XlJkVfu3fcj8ixvWtI9+4vCQ14o+3BoPZXOQo2KwupnUaz3BSOQLv
+         PP+voIhGccH2rnqTb4t4QCc3N3EFgiuOYx9ydItftfDiXwetSYPCE98mkJ03f/99MZ
+         0OvLwF5mq8Z4Q==
+Date:   Tue, 5 Oct 2021 17:02:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-mmc@vger.kernel.org, linux-perf-users@vger.kernel.org,
@@ -99,78 +82,71 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 16/16] vsprintf: rework bitmap_list_string
-Date:   Mon,  4 Oct 2021 22:40:59 -0700
-Message-Id: <20211005054059.475634-17-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: [PATCH RESEND 3 00/16] Bitmap patches for 5.15
+Message-ID: <20211005170213.6e4ca629@canb.auug.org.au>
 In-Reply-To: <20211005054059.475634-1-yury.norov@gmail.com>
 References: <20211005054059.475634-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/UQDD3e=d/fr65N4eQ6HWDaN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-bitmap_list_string() is very ineffective when printing bitmaps with long
-ranges of set bits because it calls find_next_bit for each bit in the
-bitmap.  We can do better by detecting ranges of set bits.
+--Sig_/UQDD3e=d/fr65N4eQ6HWDaN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-In my environment, before/after is 943008/31008 ns.
+Hi Yury,
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- lib/vsprintf.c | 24 +++++++-----------------
- 1 file changed, 7 insertions(+), 17 deletions(-)
+On Mon,  4 Oct 2021 22:40:43 -0700 Yury Norov <yury.norov@gmail.com> wrote:
+>
+> Please pull this bitmap series. The git tree is here:
+>         https://github.com/norov/linux/tree/bitmap-master-5.15
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index d7ad44f2c8f5..4415bea601fd 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1241,20 +1241,13 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
- 			 struct printf_spec spec, const char *fmt)
- {
- 	int nr_bits = max_t(int, spec.field_width, 0);
--	/* current bit is 'cur', most recently seen range is [rbot, rtop] */
--	int cur, rbot, rtop;
- 	bool first = true;
-+	int rbot, rtop;
- 
- 	if (check_pointer(&buf, end, bitmap, spec))
- 		return buf;
- 
--	rbot = cur = find_first_bit(bitmap, nr_bits);
--	while (cur < nr_bits) {
--		rtop = cur;
--		cur = find_next_bit(bitmap, nr_bits, cur + 1);
--		if (cur < nr_bits && cur <= rtop + 1)
--			continue;
--
-+	for_each_set_bitrange(rbot, rtop, bitmap, nr_bits) {
- 		if (!first) {
- 			if (buf < end)
- 				*buf = ',';
-@@ -1263,15 +1256,12 @@ char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
- 		first = false;
- 
- 		buf = number(buf, end, rbot, default_dec_spec);
--		if (rbot < rtop) {
--			if (buf < end)
--				*buf = '-';
--			buf++;
--
--			buf = number(buf, end, rtop, default_dec_spec);
--		}
-+		if (rtop == rbot + 1)
-+			continue;
- 
--		rbot = cur;
-+		if (buf < end)
-+			*buf = '-';
-+		buf = number(++buf, end, rtop - 1, default_dec_spec);
- 	}
- 	return buf;
- }
--- 
-2.30.2
+Actually branch bitmap-master-5.15 of https://github.com/norov/linux.git
 
+I would prefer a more generic branch name (unless this is a short term
+tree - since I will fetch it every day until you tell me to stop)
+
+Added to linux-next from today.
+
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--Sig_/UQDD3e=d/fr65N4eQ6HWDaN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFb6mUACgkQAVBC80lX
+0Gxbewf/Ww/E+XPHdQ1mp59XC0GkoUKOxCBfGR1vs7uFtk/jjJjQgZczaO5K0V8B
+5AV4HEuVQrACgBuuHnKuciVhbzgu5zwK6AitIcZTU904LwEr+mUZuhKteKdGMzlp
+fIWXLaQEDg3eHhTk3IYFiCJK/xQqU4TxVD4vCCGveKRh2C603nww/En/sYfFrmOk
+1ofCL8wN1uxqI+rsm21e2cXvb4IlMto5uimejQmP55fyX9zsdZ95ZUHg3jLb4sy3
+JAP298Vgeqhv3ynmkjYzYilP4TC0psiyQMGvwuzlFMN/qaywyQ1OeKYCm0ymgAXr
+lnHzfD2RdD0mlcaxkqWAWThdw6GFag==
+=qIlm
+-----END PGP SIGNATURE-----
+
+--Sig_/UQDD3e=d/fr65N4eQ6HWDaN--
