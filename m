@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED6F421E39
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3A3421E3E
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Oct 2021 07:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbhJEFnz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Oct 2021 01:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S231594AbhJEFoD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Oct 2021 01:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbhJEFnP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:43:15 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D03EC061767;
-        Mon,  4 Oct 2021 22:41:26 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id v11so6148979pgb.8;
-        Mon, 04 Oct 2021 22:41:26 -0700 (PDT)
+        with ESMTP id S232460AbhJEFnY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Oct 2021 01:43:24 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BE5C061786;
+        Mon,  4 Oct 2021 22:41:29 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id u7so16389495pfg.13;
+        Mon, 04 Oct 2021 22:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PN1SnsAr5qtcccHhg1TXrsqv+SN4IjsrbS3fnYHlx48=;
-        b=nTEY1+qTJaEFsV4dMUSRInRVjU5PmvSR+bq2viqVuFW4zLuYhON05f27dmvEp+Of/v
-         PjM0BenijyhPSLUGByu3U14Z323wLir16Z5TPlIvMgTvvs/tKr6FRK4WxBsy6e1A1gE7
-         1Nn4aK5V3lHKyMqzdOq5AqRF8rLLQyYb/Sz374i0x6RCqo9avGOlQCNuoR84x9mpifu0
-         HDJFQ0xQCETwZ3QeE78H4Q5s0a6tPCB8InTjdgwTnUMy57xuX4k8vucrfDP2LielaV7/
-         W5NXQh6iuY/FR0b74ckdzOPXRQ7koZFuijHvtc+OCHwPj22Oe550c26EkXgRpjCHjC/3
-         o4+w==
+        bh=l9nPluaIygVrxAM46QxhfMM0ANd4//99PAUXWZ29x3A=;
+        b=ZnfcQu7W0sA+iHxVOf++U/MTFN8VM5oN0Hez5QOh7+ny6emw+OAhT8tQVhR/C3P+4+
+         TVhcgRJDLmUpnn9MXFal//LhQaYmO4PIgNdGrpYssl/iOFt9AiF+7g/79sTxOQUJug1D
+         0zb1WDbT2z4J1BDi4GMVZ91KNMm1kXNwWnGIEGTPApYn/68dKPAHDvLJeFg2j/vJMckk
+         b+Lnu+MVpcO0+/SwbfbmANbNWZzYLjBAzetfHyx795JjyJ2b0AC/1oVd6iBzXQfMQJye
+         ztpMc9Boio0Ks9oqnqlSOLh4F4xGhpRAt/7nKHVoMCipJ/zmQ/d2IS+BolLHUr0PvPZe
+         0zuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PN1SnsAr5qtcccHhg1TXrsqv+SN4IjsrbS3fnYHlx48=;
-        b=lpyjHdEpxTq8lN2MNCIMoG0srDwyndiQnr83G01eh1Um92Vv8Rl15qO28E3tuyefkG
-         +nXYwyHvI6UDMSvTOSmIShZORFLpxWJtm/HAZmXY+aXGUMtNYZN1KPakjJA7FDpbMRPg
-         srhusnxSI4X6jVGAmVIptmbl9V4aCc1vYKOvJgx6PJipKJ6APAgV95Ox1ABkCLCuC/or
-         Wzww+tX2Hz4HrUBz7CElZjTWN6WWekKZoSrMAUYHL1nMbkR6VSskEZH5VKJZa2VEH+2H
-         kIKBsiSU0wS00Wsg6tV+6bIRrSOpH6EkjRhLrZuYjtyIgeF7e7/hoXfD5uWluPEfVLmG
-         nkGw==
-X-Gm-Message-State: AOAM532SePtSwBlcX9HbsP4mgFflq6pNLSsGODH6re0SjiQm4cp6pVSr
-        r1Yyq2lqCLTa9xy8StVGee4=
-X-Google-Smtp-Source: ABdhPJy4xT5z1reZAEMRl4Zo/gyKf7y4Xhui/F+FUAn6N2CEUOisZ8Bwxqia7dhoUC4OzTnFiC7HCQ==
-X-Received: by 2002:aa7:97bc:0:b0:44c:53f:fbd with SMTP id d28-20020aa797bc000000b0044c053f0fbdmr25161717pfq.19.1633412485481;
-        Mon, 04 Oct 2021 22:41:25 -0700 (PDT)
+        bh=l9nPluaIygVrxAM46QxhfMM0ANd4//99PAUXWZ29x3A=;
+        b=xmsuzmnw2jscDeb4hJN013mqGRV99beiPdbzK2S4gU0xz/DAkClq8lucwQi4f7tiFe
+         Ul2EDm47BUG53wrjwDo5drvRY5NDXLFmllxZCRJ541G/DdDHeAWkxE5InsaNrP/vdAdP
+         6AbrcwnNr5SpsEH2Q34Tyau1XW34y+OVWSWxWPBEgi34bsb2uRvfktzNm7CGvr4gxJFK
+         vjX6BuopXxbl4TwE/IpoISXzMJkogGp3dhXCfy+RwEWt/onXn/Mj2baUTbNoalhIyfsv
+         XPU4qnUa8AIQygmGhA9JDRCuWPDomHTJpbsxiXiB7Sb0wtJKk0TQTk2tliLIpxnyfjc7
+         rb2A==
+X-Gm-Message-State: AOAM531GVXKkfkdlrE/X2xJKaQl3jQLQeIjp5CQ7iabaGz5808a9uQMI
+        PB1t36KFxtkJ122e2aukXbY=
+X-Google-Smtp-Source: ABdhPJz9Y/BWEVUgHcP1FR/crduh996vCoQAuFnQD5sdS7/wiP35B9flW1N+clMqcvTh7OS8VyhIxg==
+X-Received: by 2002:a63:da49:: with SMTP id l9mr13958792pgj.277.1633412488925;
+        Mon, 04 Oct 2021 22:41:28 -0700 (PDT)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id g3sm15719059pgj.66.2021.10.04.22.41.24
+        by smtp.gmail.com with ESMTPSA id z4sm16714009pfz.99.2021.10.04.22.41.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 22:41:25 -0700 (PDT)
+        Mon, 04 Oct 2021 22:41:28 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Yury Norov <yury.norov@gmail.com>,
@@ -99,9 +99,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Will Deacon <will@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 09/16] cpumask: replace cpumask_next_* with cpumask_first_* where appropriate
-Date:   Mon,  4 Oct 2021 22:40:52 -0700
-Message-Id: <20211005054059.475634-10-yury.norov@gmail.com>
+Subject: [PATCH 10/16] include/linux: move for_each_bit() macros from bitops.h to find.h
+Date:   Mon,  4 Oct 2021 22:40:53 -0700
+Message-Id: <20211005054059.475634-11-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211005054059.475634-1-yury.norov@gmail.com>
 References: <20211005054059.475634-1-yury.norov@gmail.com>
@@ -111,145 +111,104 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-cpumask_first() is a more effective analogue of 'next' version if n == -1
-(which means start == 0). This patch replaces 'next' with 'first' where
-things look trivial.
-
-There's no cpumask_first_zero() function, so create it.
+for_each_bit() macros depend on find_bit() machinery, and so the
+proper place for them is the find.h header.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- arch/powerpc/include/asm/cputhreads.h |  2 +-
- block/blk-mq.c                        |  2 +-
- drivers/net/virtio_net.c              |  2 +-
- drivers/soc/fsl/qbman/bman_portal.c   |  2 +-
- drivers/soc/fsl/qbman/qman_portal.c   |  2 +-
- include/linux/cpumask.h               | 16 ++++++++++++++++
- kernel/time/clocksource.c             |  4 ++--
- 7 files changed, 23 insertions(+), 7 deletions(-)
+ include/linux/bitops.h | 34 ----------------------------------
+ include/linux/find.h   | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 34 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/cputhreads.h b/arch/powerpc/include/asm/cputhreads.h
-index b167186aaee4..44286df21d2a 100644
---- a/arch/powerpc/include/asm/cputhreads.h
-+++ b/arch/powerpc/include/asm/cputhreads.h
-@@ -52,7 +52,7 @@ static inline cpumask_t cpu_thread_mask_to_cores(const struct cpumask *threads)
- 	for (i = 0; i < NR_CPUS; i += threads_per_core) {
- 		cpumask_shift_left(&tmp, &threads_core_mask, i);
- 		if (cpumask_intersects(threads, &tmp)) {
--			cpu = cpumask_next_and(-1, &tmp, cpu_online_mask);
-+			cpu = cpumask_first_and(&tmp, cpu_online_mask);
- 			if (cpu < nr_cpu_ids)
- 				cpumask_set_cpu(cpu, &res);
- 		}
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 108a352051be..d4f5a05f4470 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2536,7 +2536,7 @@ static bool blk_mq_hctx_has_requests(struct blk_mq_hw_ctx *hctx)
- static inline bool blk_mq_last_cpu_in_hctx(unsigned int cpu,
- 		struct blk_mq_hw_ctx *hctx)
+diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+index 5e62e2383b7f..7aaed501f768 100644
+--- a/include/linux/bitops.h
++++ b/include/linux/bitops.h
+@@ -32,40 +32,6 @@ extern unsigned long __sw_hweight64(__u64 w);
+  */
+ #include <asm/bitops.h>
+ 
+-#define for_each_set_bit(bit, addr, size) \
+-	for ((bit) = find_first_bit((addr), (size));		\
+-	     (bit) < (size);					\
+-	     (bit) = find_next_bit((addr), (size), (bit) + 1))
+-
+-/* same as for_each_set_bit() but use bit as value to start with */
+-#define for_each_set_bit_from(bit, addr, size) \
+-	for ((bit) = find_next_bit((addr), (size), (bit));	\
+-	     (bit) < (size);					\
+-	     (bit) = find_next_bit((addr), (size), (bit) + 1))
+-
+-#define for_each_clear_bit(bit, addr, size) \
+-	for ((bit) = find_first_zero_bit((addr), (size));	\
+-	     (bit) < (size);					\
+-	     (bit) = find_next_zero_bit((addr), (size), (bit) + 1))
+-
+-/* same as for_each_clear_bit() but use bit as value to start with */
+-#define for_each_clear_bit_from(bit, addr, size) \
+-	for ((bit) = find_next_zero_bit((addr), (size), (bit));	\
+-	     (bit) < (size);					\
+-	     (bit) = find_next_zero_bit((addr), (size), (bit) + 1))
+-
+-/**
+- * for_each_set_clump8 - iterate over bitmap for each 8-bit clump with set bits
+- * @start: bit offset to start search and to store the current iteration offset
+- * @clump: location to store copy of current 8-bit clump
+- * @bits: bitmap address to base the search on
+- * @size: bitmap size in number of bits
+- */
+-#define for_each_set_clump8(start, clump, bits, size) \
+-	for ((start) = find_first_clump8(&(clump), (bits), (size)); \
+-	     (start) < (size); \
+-	     (start) = find_next_clump8(&(clump), (bits), (size), (start) + 8))
+-
+ static inline int get_bitmask_order(unsigned int count)
  {
--	if (cpumask_next_and(-1, hctx->cpumask, cpu_online_mask) != cpu)
-+	if (cpumask_first_and(hctx->cpumask, cpu_online_mask) != cpu)
- 		return false;
- 	if (cpumask_next_and(cpu, hctx->cpumask, cpu_online_mask) < nr_cpu_ids)
- 		return false;
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 79bd2585ec6b..a3b16790846c 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2085,7 +2085,7 @@ static void virtnet_set_affinity(struct virtnet_info *vi)
- 	stragglers = num_cpu >= vi->curr_queue_pairs ?
- 			num_cpu % vi->curr_queue_pairs :
- 			0;
--	cpu = cpumask_next(-1, cpu_online_mask);
-+	cpu = cpumask_first(cpu_online_mask);
+ 	int order;
+diff --git a/include/linux/find.h b/include/linux/find.h
+index 6048f8c97418..4500e8ab93e2 100644
+--- a/include/linux/find.h
++++ b/include/linux/find.h
+@@ -279,4 +279,38 @@ unsigned long find_next_bit_le(const void *addr, unsigned
+ #error "Please fix <asm/byteorder.h>"
+ #endif
  
- 	for (i = 0; i < vi->curr_queue_pairs; i++) {
- 		group_size = stride + (i < stragglers ? 1 : 0);
-diff --git a/drivers/soc/fsl/qbman/bman_portal.c b/drivers/soc/fsl/qbman/bman_portal.c
-index acda8a5637c5..4d7b9caee1c4 100644
---- a/drivers/soc/fsl/qbman/bman_portal.c
-+++ b/drivers/soc/fsl/qbman/bman_portal.c
-@@ -155,7 +155,7 @@ static int bman_portal_probe(struct platform_device *pdev)
- 	}
- 
- 	spin_lock(&bman_lock);
--	cpu = cpumask_next_zero(-1, &portal_cpus);
-+	cpu = cpumask_first_zero(&portal_cpus);
- 	if (cpu >= nr_cpu_ids) {
- 		__bman_portals_probed = 1;
- 		/* unassigned portal, skip init */
-diff --git a/drivers/soc/fsl/qbman/qman_portal.c b/drivers/soc/fsl/qbman/qman_portal.c
-index 96f74a1dc603..e23b60618c1a 100644
---- a/drivers/soc/fsl/qbman/qman_portal.c
-+++ b/drivers/soc/fsl/qbman/qman_portal.c
-@@ -248,7 +248,7 @@ static int qman_portal_probe(struct platform_device *pdev)
- 	pcfg->pools = qm_get_pools_sdqcr();
- 
- 	spin_lock(&qman_lock);
--	cpu = cpumask_next_zero(-1, &portal_cpus);
-+	cpu = cpumask_first_zero(&portal_cpus);
- 	if (cpu >= nr_cpu_ids) {
- 		__qman_portals_probed = 1;
- 		/* unassigned portal, skip init */
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index c7be6c5b7523..862856fe0056 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -123,6 +123,11 @@ static inline unsigned int cpumask_first(const struct cpumask *srcp)
- 	return 0;
- }
- 
-+static inline unsigned int cpumask_first_zero(const struct cpumask *srcp)
-+{
-+	return 0;
-+}
++#define for_each_set_bit(bit, addr, size) \
++	for ((bit) = find_first_bit((addr), (size));		\
++	     (bit) < (size);					\
++	     (bit) = find_next_bit((addr), (size), (bit) + 1))
 +
- static inline unsigned int cpumask_first_and(const struct cpumask *srcp1,
- 					     const struct cpumask *srcp2)
- {
-@@ -201,6 +206,17 @@ static inline unsigned int cpumask_first(const struct cpumask *srcp)
- 	return find_first_bit(cpumask_bits(srcp), nr_cpumask_bits);
- }
- 
++/* same as for_each_set_bit() but use bit as value to start with */
++#define for_each_set_bit_from(bit, addr, size) \
++	for ((bit) = find_next_bit((addr), (size), (bit));	\
++	     (bit) < (size);					\
++	     (bit) = find_next_bit((addr), (size), (bit) + 1))
++
++#define for_each_clear_bit(bit, addr, size) \
++	for ((bit) = find_first_zero_bit((addr), (size));	\
++	     (bit) < (size);					\
++	     (bit) = find_next_zero_bit((addr), (size), (bit) + 1))
++
++/* same as for_each_clear_bit() but use bit as value to start with */
++#define for_each_clear_bit_from(bit, addr, size) \
++	for ((bit) = find_next_zero_bit((addr), (size), (bit));	\
++	     (bit) < (size);					\
++	     (bit) = find_next_zero_bit((addr), (size), (bit) + 1))
++
 +/**
-+ * cpumask_first_zero - get the first unset cpu in a cpumask
-+ * @srcp: the cpumask pointer
-+ *
-+ * Returns >= nr_cpu_ids if all cpus are set.
++ * for_each_set_clump8 - iterate over bitmap for each 8-bit clump with set bits
++ * @start: bit offset to start search and to store the current iteration offset
++ * @clump: location to store copy of current 8-bit clump
++ * @bits: bitmap address to base the search on
++ * @size: bitmap size in number of bits
 + */
-+static inline unsigned int cpumask_first_zero(const struct cpumask *srcp)
-+{
-+	return find_first_zero_bit(cpumask_bits(srcp), nr_cpumask_bits);
-+}
++#define for_each_set_clump8(start, clump, bits, size) \
++	for ((start) = find_first_clump8(&(clump), (bits), (size)); \
++	     (start) < (size); \
++	     (start) = find_next_clump8(&(clump), (bits), (size), (start) + 8))
 +
- /**
-  * cpumask_first_and - return the first cpu from *srcp1 & *srcp2
-  * @src1p: the first input
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index b8a14d2fb5ba..f29d1a524fa5 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -257,7 +257,7 @@ static void clocksource_verify_choose_cpus(void)
- 		return;
- 
- 	/* Make sure to select at least one CPU other than the current CPU. */
--	cpu = cpumask_next(-1, cpu_online_mask);
-+	cpu = cpumask_first(cpu_online_mask);
- 	if (cpu == smp_processor_id())
- 		cpu = cpumask_next(cpu, cpu_online_mask);
- 	if (WARN_ON_ONCE(cpu >= nr_cpu_ids))
-@@ -279,7 +279,7 @@ static void clocksource_verify_choose_cpus(void)
- 		cpu = prandom_u32() % nr_cpu_ids;
- 		cpu = cpumask_next(cpu - 1, cpu_online_mask);
- 		if (cpu >= nr_cpu_ids)
--			cpu = cpumask_next(-1, cpu_online_mask);
-+			cpu = cpumask_first(cpu_online_mask);
- 		if (!WARN_ON_ONCE(cpu >= nr_cpu_ids))
- 			cpumask_set_cpu(cpu, &cpus_chosen);
- 	}
+ #endif /*__LINUX_FIND_H_ */
 -- 
 2.30.2
 
