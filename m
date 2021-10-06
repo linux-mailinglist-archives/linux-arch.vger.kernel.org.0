@@ -2,77 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CA242411B
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Oct 2021 17:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5E4424363
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Oct 2021 18:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238124AbhJFPTt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Oct 2021 11:19:49 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:50943 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbhJFPTs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Oct 2021 11:19:48 -0400
-Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MNKuI-1mAX1c2hNi-00OrM3; Wed, 06 Oct 2021 17:17:54 +0200
-Received: by mail-wr1-f41.google.com with SMTP id j8so9901411wro.7;
-        Wed, 06 Oct 2021 08:17:54 -0700 (PDT)
-X-Gm-Message-State: AOAM532Q43ElqS2UQ23hjzSfwnj9OHkRE/+A3QS9kCMKb5NMJhd1yV6h
-        3dpik9wlo4MbVO/nfyJlfMAb7zKPlzSZnBPfB6I=
-X-Google-Smtp-Source: ABdhPJzzqvoHYlQk2fQWJUzRcXdqZhuq+vNm94ftkYZ7RMylClUbZjxaLkQtrEJaWxkhu1k6wukF1ikvRUsQcoSXV/M=
-X-Received: by 2002:adf:b1c4:: with SMTP id r4mr28248153wra.428.1633533474265;
- Wed, 06 Oct 2021 08:17:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211006145859.9564-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20211006145859.9564-1-lukas.bulwahn@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 6 Oct 2021 17:17:38 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a12-atmqjtjqi-RhFXH2Kwa-hxYcxy3Ftz2YjY5yyPHqg@mail.gmail.com>
-Message-ID: <CAK8P3a12-atmqjtjqi-RhFXH2Kwa-hxYcxy3Ftz2YjY5yyPHqg@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:nIl25lFbfNeOMxdEthhqs0MK70ahLfP3x9ECRWZNMgCj2qfywzL
- WDhlPDN210R8SBPhm7di6dzIa+rskaw3oXzZ7uNjuJ8YD8abpemXGWJIFAyS3BZs+jnDQKH
- xhjNq3EOkJa44N/03wjzYl6dSSjr63UehjLs8n5wQDvPgsJ7iyh8oInYrwz6EQmIunsxFwA
- SYd2tb46E0WRa9EK9XZtw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Mtxe3FpY1yw=:JhWVhEk8cwwRWfgc4FGWD2
- JkxnfiPYNYdaLjquCNPhuYbjynIBCtWx3fdXnPslZ84EVOpa+r9zLI0xlP45HVXmfUO8uyKe7
- zvQaE9XPmnitnKg2tMkcEs/w9fzNgvPWVsnllAHr48bya5GzUG8UUtvTjastYS7KDT8/JUfWR
- YE2tCSiCbWGZMUoY7nqjiWe3kYvCncPyoZqyOj5se6jTxS8h81/xaV/E5NHxVODeY0LuhhzsR
- 5UG04wZNC+P7JqKHWJDHg0shZt1hvFFeTpvFq6p3HdrdU2mDJALMkEWeuU3Tj1OiM1JdEt+A2
- SutSVenVH9lHg+r6xnAiuSp99U87tBBUDDZN+7YRnllasZAhSTBnuxxrv3EupMTHOkwd2ciN5
- NWUsEpyfbtq1tw3TZR7xtRR+FG5TQLl2vfqAyOjfZiEb6zYywelkoHL9U9vqo3Ty2wVLXeyFC
- tGRuqWK39ZRmXC6XDlYvNmU7G1dRC91NAJa+ieW2mtvcQncuSXTiAn3zmA71iBMnpnCR8RoWL
- zZEpWIc2DZZ1PvyA4uGBEc3EQ2Ooa/fhw+94i1LdVOcKSdXztsbm+YHCCKrrxvhlf/fH6G4QU
- Wzs4MceK4dJWU/VfCBMf5KXm7eKQJlNWQF6uaRkzgm9gtn3k5H5dDDX9pNnJAeBxQjffuNC27
- TRrteIsMWyDmsYV4CuTyhgrCJpuh1vgXHcV5m3roGlBROWdUEFM6qEJTzxsfhCawqPmjphsRH
- Xn68GFVhPk00Ay7KjKQf3Dz8yaCtVDRKvHEeSA==
+        id S230077AbhJFQyo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Oct 2021 12:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229548AbhJFQyn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Oct 2021 12:54:43 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D97C061746
+        for <linux-arch@vger.kernel.org>; Wed,  6 Oct 2021 09:52:51 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id w11so2020394plz.13
+        for <linux-arch@vger.kernel.org>; Wed, 06 Oct 2021 09:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tE2mxdh37dnyxx/6GEpmhKLL+VCgiyppriZBIEN9Yek=;
+        b=ZgSYszkACVNYbPHRv6dT0Y71PsmUfzugPsUa5R+6KzBhBz4OXDPWevSFbzHG7TTBrx
+         O8hidqI1gV5G8yuWIAwdZe1qu2PgHRfI/GiPxgzXg6Z4gfjM/WGjc3jAwGCC6kA44aQK
+         dkLxOk42bZuJmnjwg84M/m6XZb+JBjBg/27Yd9aN8+PRmGfu0Fh+ahVMfZ4kEefzNU6J
+         d/1PWGJRMFij2Mj/Rrz1oOf85Ryu0YoxOtWsbCpCDjOAjre797K799fPHa0WKplUU4VQ
+         /r0VoP+HkKKJ705siLyeDGON4T9AB90BkuvBG/A6zp/SyPab3luVPsTV1kIEfQh7ptsm
+         WY9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=tE2mxdh37dnyxx/6GEpmhKLL+VCgiyppriZBIEN9Yek=;
+        b=Cns/ctimgZZVk43tjmvVrPg0Gvluj2s29op/FiEKyFLzMVXNMNCyXCMf/UITsaHbPU
+         iXCN9+85jbrH7BxJBc/1fCYAu5SZIS8wf4Zse61mXZCJBhkh7lYMUIpfOp39W9gPsigr
+         5sTzQAn+7ye5m9VAHs82Ee8HDwq84bjmYH4Oq81QfLSUa3YYgX4OOobFmvGRCHpMBtBT
+         qY3xHwth65Tu9994JNw3j5cpMHqjM99tCNbf9z9WlcHuSq7QvQG87W8Jhksig7ttfW+j
+         TsvVw2pK+M1JfE2KdIUgnlWqmjRUlmYTRtl/BCUurmGFNvNQASUr5JvfQeohBqRT/DVZ
+         LtsQ==
+X-Gm-Message-State: AOAM5329YKmmMeXmtmus9wwlVj6NFhy+HW228URfpfhzsmtRlmv3aHmA
+        C76g/aDrf3eeMtQ+HHLI9XKS0Q==
+X-Google-Smtp-Source: ABdhPJwTBcQVmbKGkS9vwq4EiC9JTSG8DwDNpJPlsNCPI/DX2wwEwAFi6KDnd7CVB87LQIBKqStMNw==
+X-Received: by 2002:a17:902:ea93:b0:13e:c727:3026 with SMTP id x19-20020a170902ea9300b0013ec7273026mr12001089plb.53.1633539170709;
+        Wed, 06 Oct 2021 09:52:50 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id r130sm14086047pfc.89.2021.10.06.09.52.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Oct 2021 09:52:50 -0700 (PDT)
+Date:   Wed, 06 Oct 2021 09:52:50 -0700 (PDT)
+X-Google-Original-Date: Wed, 06 Oct 2021 09:52:48 PDT (-0700)
+Subject:     Re: [PATCH] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
+In-Reply-To: <CAK8P3a12-atmqjtjqi-RhFXH2Kwa-hxYcxy3Ftz2YjY5yyPHqg@mail.gmail.com>
+CC:     lukas.bulwahn@gmail.com, Arnd Bergmann <arnd@arndb.de>,
+        mcgrof@kernel.org, linux-arch@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-f5938c9b-7fc1-4b0c-9449-7dd1431f5446@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 6, 2021 at 5:00 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+On Wed, 06 Oct 2021 08:17:38 PDT (-0700), Arnd Bergmann wrote:
+> On Wed, Oct 6, 2021 at 5:00 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+>>
+>> Commit 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+>> introduces the config symbol GENERIC_LIB_DEVMEM_IS_ALLOWED, but then
+>> falsely refers to CONFIG_GENERIC_DEVMEM_IS_ALLOWED (note the missing LIB
+>> in the reference) in ./include/asm-generic/io.h.
+>>
+>> Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
+>>
+>> GENERIC_DEVMEM_IS_ALLOWED
+>> Referencing files: include/asm-generic/io.h
+>>
+>> Correct the name of the config to the intended one.
+>>
+>> Fixes: 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+>> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 >
-> Commit 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
-> introduces the config symbol GENERIC_LIB_DEVMEM_IS_ALLOWED, but then
-> falsely refers to CONFIG_GENERIC_DEVMEM_IS_ALLOWED (note the missing LIB
-> in the reference) in ./include/asm-generic/io.h.
->
-> Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
->
-> GENERIC_DEVMEM_IS_ALLOWED
-> Referencing files: include/asm-generic/io.h
->
-> Correct the name of the config to the intended one.
->
-> Fixes: 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+
+Thanks.  I'm going to assume this is going in through some other tree, 
+but IIUC I sent the buggy patch up so LMK if you're expecting it to go 
+through mine.
