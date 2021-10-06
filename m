@@ -2,239 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F09242383E
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Oct 2021 08:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE6C42409A
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Oct 2021 16:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237740AbhJFGjp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Oct 2021 02:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
+        id S239137AbhJFPBB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Oct 2021 11:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237443AbhJFGjP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Oct 2021 02:39:15 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF081C06178C;
-        Tue,  5 Oct 2021 23:37:08 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id y5so1041612pll.3;
-        Tue, 05 Oct 2021 23:37:08 -0700 (PDT)
+        with ESMTP id S238226AbhJFPBB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Oct 2021 11:01:01 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F938C061746;
+        Wed,  6 Oct 2021 07:59:09 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id u18so9761172wrg.5;
+        Wed, 06 Oct 2021 07:59:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cUs+nJBemKyqHW1/+tBNnIBzfXId6r+3EciJyXUHzJs=;
-        b=deTC7Rn0DcsjYYoiRTspqzgwi6qRvMUyQ7vSXGCFfsa5xOad3Gdn8ljNTkYggYUB9M
-         Wh54qfIM5W1Y8TsctnlhmnbtFhrNYJ2+ZTro+t6KMkIvD8O85+Rdwpnvlo5kwHeXVcu5
-         NizfNtc56ygl73gOCxTLx9/P+KRIjVluMvecfcdL/zXZsCORSKluiRe8eSvs8tVVfdeW
-         g2T1xPemJDMJ3eUNAjHKR7YTRbm7UjH1UISQ5DcUn449tkIhamOtMwdvtYgyAxCVen12
-         VCt1M1thqP1DgyxyVwTvGfYaadDjgRppBbD2GrkbPMC6YYTAtAJhM10QLs2lO8ZY+/ap
-         7aGA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YV9ztV9xa2SuX3HIxstgvWzEEnBcrdgp13MusSmPbpA=;
+        b=ikzrDcGLA8Kd+BQ/z42ALgP7DgM7QpBp2X33jKpROLka6mn0oXSHZtKDBInUvuhYth
+         vIvddKlCD+9WhI0/9Hs/Bb//zPomw2hHTHjYWkYhnSdAQLF0r7NdRUnI6xzXliYvmKrx
+         eZORcANpDNELyeEYgEOPatkfCVtyp15mPfx+et20USafzaNrP0xTKJ9wl6q0JAAuS4NK
+         q/3NefaWmm8NlFEVkpC7RwzyZIUQYVclm1OrhFmDLVwc+JGGQJHxsNPQgklVuSpY6hIe
+         ToYlkiHvnJGnwfIGrUrF5N9wfONznGZfvQItOfc1ERdqnWH+KfWNGalolXQS/y5ZHJEq
+         XmvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cUs+nJBemKyqHW1/+tBNnIBzfXId6r+3EciJyXUHzJs=;
-        b=3XBszEZpxjFKPcVQqISU+5BnvtNSYVCFZuL0SmzwazC2PMqdv1TXhXz1u3TZRY559p
-         O9KWg9of7M9MLKaG/NfXxt1edF8YZBov4E5oH6tNFiP8HraEjYpQzto31ftJR3YdXZZ9
-         2JyMagpSVhgNpeKiKfnp09R3ZM6eRwgD272p1kT5SAuG6p8c073SPE2g8OLYJ24rlrdS
-         dXIhilLFuOsmCxrY2K5FamWTLmoHvIAy9sn1XR5UTSlAqpzRNYkcu5AoPM9s1u0YOyra
-         zOdSbfPBCM/NjRjLzUwprdBDY4DN6WHbzJW1ew7FiEUcUj0ZscR16a2FS910n6sMKWls
-         lKEg==
-X-Gm-Message-State: AOAM531p8mKZU+h94gvlAtVOIojJFDWmnfB0QA/b125MwBCEnWZ70jRz
-        RI9NhHPM26f3mIRbVYbFSAE=
-X-Google-Smtp-Source: ABdhPJzeVApnzhQbAoaxrNRKX1UnEUGI+xcGgAtFDKobBiFveN6zuJKOkPB2FG743LxWJ1lp7WtAhQ==
-X-Received: by 2002:a17:902:6b01:b0:13e:50bb:790f with SMTP id o1-20020a1709026b0100b0013e50bb790fmr9298533plk.42.1633502228179;
-        Tue, 05 Oct 2021 23:37:08 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:37:357b:c418:cfef:30b1])
-        by smtp.gmail.com with ESMTPSA id l185sm19886413pfd.29.2021.10.05.23.37.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YV9ztV9xa2SuX3HIxstgvWzEEnBcrdgp13MusSmPbpA=;
+        b=65ul6DuZuYWK9RHBjjKyYc+KsY15YwJL14MDFOTlObpMqSv9D0uBaV8mBlzUUkqwEd
+         eFP7IReGrgaH5GEwrNYAfo+QJGtJlWmZub+BTwHOfD1amG803uttotsZInCIGW5uH0nb
+         HHge+nJFMWt6OxF7TFbePO6yARWtyfG4nFUna0PFHLF+dBJWknqOTadBUu3r+l+xKLg3
+         ojjjFcrADh7Gg0J2+JGU1o8X67j91Mmf5dWxLrFAuz3Ioexv5kfAMoPRkXieJ5QZilGG
+         5Ulelx64nLCR+47OprCmrciSfypQ7pvwGm3Da/a5ziteOuGqDR1ri0am0FmM1yDyh182
+         WMPQ==
+X-Gm-Message-State: AOAM532E7E1ywjUaOwAnxB5uGfo4+thmiImYgHeJJxovJt7MWqA5TbN3
+        pK2gGfYuGOM08amRCYC2Hc8=
+X-Google-Smtp-Source: ABdhPJzc7PF/Xen3kx4m+BH/K9IyR+PBDPrqUaxyO6vs8Z0w/F26OAw9+rYSrQIfTWym05fECsXIew==
+X-Received: by 2002:a7b:c441:: with SMTP id l1mr10172275wmi.69.1633532347600;
+        Wed, 06 Oct 2021 07:59:07 -0700 (PDT)
+Received: from DEL01237W.ebgroup.elektrobit.com (eth1-fw1-nbg6.eb.noris.de. [213.95.148.172])
+        by smtp.gmail.com with ESMTPSA id r205sm1886848wma.3.2021.10.06.07.59.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 23:37:07 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        davem@davemloft.net, kuba@kernel.org, gregkh@linuxfoundation.org,
-        arnd@arndb.de, jroedel@suse.de, brijesh.singh@amd.com,
-        Tianyu.Lan@microsoft.com, thomas.lendacky@amd.com,
-        pgonda@google.com, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org, tj@kernel.org,
-        aneesh.kumar@linux.ibm.com, saravanand@fb.com, hannes@cmpxchg.org,
-        rientjes@google.com, michael.h.kelley@microsoft.com
-Cc:     linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, konrad.wilk@oracle.com, hch@lst.de,
-        robin.murphy@arm.com, joro@8bytes.org, parri.andrea@gmail.com,
-        dave.hansen@intel.com
-Subject: [PATCH V7 9/9] Drivers: hv : vmbus: Initialize VMbus ring buffer for Isolation VM
-Date:   Wed,  6 Oct 2021 02:36:49 -0400
-Message-Id: <20211006063651.1124737-10-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211006063651.1124737-1-ltykernel@gmail.com>
-References: <20211006063651.1124737-1-ltykernel@gmail.com>
+        Wed, 06 Oct 2021 07:59:07 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        linux-arch@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
+Date:   Wed,  6 Oct 2021 16:58:59 +0200
+Message-Id: <20211006145859.9564-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+Commit 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+introduces the config symbol GENERIC_LIB_DEVMEM_IS_ALLOWED, but then
+falsely refers to CONFIG_GENERIC_DEVMEM_IS_ALLOWED (note the missing LIB
+in the reference) in ./include/asm-generic/io.h.
 
-VMbus ring buffer are shared with host and it's need to
-be accessed via extra address space of Isolation VM with
-AMD SNP support. This patch is to map the ring buffer
-address in extra address space via vmap_pfn(). Hyperv set
-memory host visibility hvcall smears data in the ring buffer
-and so reset the ring buffer memory to zero after mapping.
+Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
 
-Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+GENERIC_DEVMEM_IS_ALLOWED
+Referencing files: include/asm-generic/io.h
+
+Correct the name of the config to the intended one.
+
+Fixes: 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
-Change since v4:
-	* Use PFN_DOWN instead of HVPFN_DOWN in the hv_ringbuffer_init()
+ include/asm-generic/io.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Change since v3:
-	* Remove hv_ringbuffer_post_init(), merge map
-	operation for Isolation VM into hv_ringbuffer_init()
-	* Call hv_ringbuffer_init() after __vmbus_establish_gpadl().
----
- drivers/hv/Kconfig       |  1 +
- drivers/hv/channel.c     | 19 +++++++-------
- drivers/hv/ring_buffer.c | 55 ++++++++++++++++++++++++++++++----------
- 3 files changed, 53 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
-index d1123ceb38f3..dd12af20e467 100644
---- a/drivers/hv/Kconfig
-+++ b/drivers/hv/Kconfig
-@@ -8,6 +8,7 @@ config HYPERV
- 		|| (ARM64 && !CPU_BIG_ENDIAN))
- 	select PARAVIRT
- 	select X86_HV_CALLBACK_VECTOR if X86
-+	select VMAP_PFN
- 	help
- 	  Select this option to run Linux as a Hyper-V client operating
- 	  system.
-diff --git a/drivers/hv/channel.c b/drivers/hv/channel.c
-index b37ff4a39224..dc5c35210c16 100644
---- a/drivers/hv/channel.c
-+++ b/drivers/hv/channel.c
-@@ -683,15 +683,6 @@ static int __vmbus_open(struct vmbus_channel *newchannel,
- 	if (!newchannel->max_pkt_size)
- 		newchannel->max_pkt_size = VMBUS_DEFAULT_MAX_PKT_SIZE;
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index cc7338f9e0d1..6364174504d7 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -1125,7 +1125,7 @@ static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
+ }
+ #endif
  
--	err = hv_ringbuffer_init(&newchannel->outbound, page, send_pages, 0);
--	if (err)
--		goto error_clean_ring;
--
--	err = hv_ringbuffer_init(&newchannel->inbound, &page[send_pages],
--				 recv_pages, newchannel->max_pkt_size);
--	if (err)
--		goto error_clean_ring;
--
- 	/* Establish the gpadl for the ring buffer */
- 	newchannel->ringbuffer_gpadlhandle.gpadl_handle = 0;
+-#ifndef CONFIG_GENERIC_DEVMEM_IS_ALLOWED
++#ifndef CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED
+ extern int devmem_is_allowed(unsigned long pfn);
+ #endif
  
-@@ -703,6 +694,16 @@ static int __vmbus_open(struct vmbus_channel *newchannel,
- 	if (err)
- 		goto error_clean_ring;
- 
-+	err = hv_ringbuffer_init(&newchannel->outbound,
-+				 page, send_pages, 0);
-+	if (err)
-+		goto error_free_gpadl;
-+
-+	err = hv_ringbuffer_init(&newchannel->inbound, &page[send_pages],
-+				 recv_pages, newchannel->max_pkt_size);
-+	if (err)
-+		goto error_free_gpadl;
-+
- 	/* Create and init the channel open message */
- 	open_info = kzalloc(sizeof(*open_info) +
- 			   sizeof(struct vmbus_channel_open_channel),
-diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-index 314015d9e912..931802ae985c 100644
---- a/drivers/hv/ring_buffer.c
-+++ b/drivers/hv/ring_buffer.c
-@@ -17,6 +17,8 @@
- #include <linux/vmalloc.h>
- #include <linux/slab.h>
- #include <linux/prefetch.h>
-+#include <linux/io.h>
-+#include <asm/mshyperv.h>
- 
- #include "hyperv_vmbus.h"
- 
-@@ -183,8 +185,10 @@ void hv_ringbuffer_pre_init(struct vmbus_channel *channel)
- int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
- 		       struct page *pages, u32 page_cnt, u32 max_pkt_size)
- {
--	int i;
- 	struct page **pages_wraparound;
-+	unsigned long *pfns_wraparound;
-+	u64 pfn;
-+	int i;
- 
- 	BUILD_BUG_ON((sizeof(struct hv_ring_buffer) != PAGE_SIZE));
- 
-@@ -192,23 +196,48 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
- 	 * First page holds struct hv_ring_buffer, do wraparound mapping for
- 	 * the rest.
- 	 */
--	pages_wraparound = kcalloc(page_cnt * 2 - 1, sizeof(struct page *),
--				   GFP_KERNEL);
--	if (!pages_wraparound)
--		return -ENOMEM;
-+	if (hv_isolation_type_snp()) {
-+		pfn = page_to_pfn(pages) +
-+			PFN_DOWN(ms_hyperv.shared_gpa_boundary);
-+
-+		pfns_wraparound = kcalloc(page_cnt * 2 - 1,
-+			sizeof(unsigned long), GFP_KERNEL);
-+		if (!pfns_wraparound)
-+			return -ENOMEM;
-+
-+		pfns_wraparound[0] = pfn;
-+		for (i = 0; i < 2 * (page_cnt - 1); i++)
-+			pfns_wraparound[i + 1] = pfn + i % (page_cnt - 1) + 1;
- 
--	pages_wraparound[0] = pages;
--	for (i = 0; i < 2 * (page_cnt - 1); i++)
--		pages_wraparound[i + 1] = &pages[i % (page_cnt - 1) + 1];
-+		ring_info->ring_buffer = (struct hv_ring_buffer *)
-+			vmap_pfn(pfns_wraparound, page_cnt * 2 - 1,
-+				 PAGE_KERNEL);
-+		kfree(pfns_wraparound);
- 
--	ring_info->ring_buffer = (struct hv_ring_buffer *)
--		vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP, PAGE_KERNEL);
-+		if (!ring_info->ring_buffer)
-+			return -ENOMEM;
-+
-+		/* Zero ring buffer after setting memory host visibility. */
-+		memset(ring_info->ring_buffer, 0x00, PAGE_SIZE * page_cnt);
-+	} else {
-+		pages_wraparound = kcalloc(page_cnt * 2 - 1,
-+					   sizeof(struct page *),
-+					   GFP_KERNEL);
-+
-+		pages_wraparound[0] = pages;
-+		for (i = 0; i < 2 * (page_cnt - 1); i++)
-+			pages_wraparound[i + 1] =
-+				&pages[i % (page_cnt - 1) + 1];
- 
--	kfree(pages_wraparound);
-+		ring_info->ring_buffer = (struct hv_ring_buffer *)
-+			vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP,
-+				PAGE_KERNEL);
- 
-+		kfree(pages_wraparound);
-+		if (!ring_info->ring_buffer)
-+			return -ENOMEM;
-+	}
- 
--	if (!ring_info->ring_buffer)
--		return -ENOMEM;
- 
- 	ring_info->ring_buffer->read_index =
- 		ring_info->ring_buffer->write_index = 0;
 -- 
-2.25.1
+2.26.2
 
