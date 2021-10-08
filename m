@@ -2,126 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D58EB426CD2
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Oct 2021 16:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39FE426E82
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Oct 2021 18:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbhJHOis (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Oct 2021 10:38:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46212 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229756AbhJHOir (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 8 Oct 2021 10:38:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 95F0260F5C;
-        Fri,  8 Oct 2021 14:36:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633703812;
-        bh=t+hlBOA9013wCFF+qw9fA68XVfWsxLdC41rXTznDq+c=;
-        h=From:Date:Subject:To:Cc:From;
-        b=fG4ogRK3ZZNFAQ00Si3IYqNyGXsJ1xilUV4wmIP1aRxeQcnaZYnwXSGMhDTSIO/uL
-         GsOC1oiCKNMekPlx+04AiIYTUFepKQS0sorYAGxnTRtoPjVfzpX3Auc3fBNN9xNvd7
-         2lB6wAmehOQz89Jm3T86aTTTZktyx+7lWTknVOWthmcfU1v8vETapIXdF6XQQIsMtk
-         DIpeRQoFiM7CHkbqAXC7APbYJeJFWO5JEioM41GtEDAwkElBfwqizUR9RzLF3wOMah
-         CZqg45SIueuLqn/izsRbWikGRYqWZulZ9dTlCxZ3+3gMmSjAGREQpfnMEkN/KgEEtN
-         GYSFH/9auAYlg==
-Received: by mail-wr1-f43.google.com with SMTP id e12so30518500wra.4;
-        Fri, 08 Oct 2021 07:36:52 -0700 (PDT)
-X-Gm-Message-State: AOAM530sxmLAZbnDKb4LJA9Gxj+dAnTNOcmQmL2K1shsNCTh69cKFltY
-        oEEaIh03FguLQ9vDZpz0EdcQuvRldRjuhp2bRd4=
-X-Google-Smtp-Source: ABdhPJz7rvULoEBwZGj3NKEJYoTa6eWldb9JNPxhe0dUKjgtZhb+oFcS2iARUryNLXjWtpdUumTdWOhep47L+av9IaA=
-X-Received: by 2002:adf:b1c4:: with SMTP id r4mr4627783wra.428.1633703811146;
- Fri, 08 Oct 2021 07:36:51 -0700 (PDT)
+        id S230246AbhJHQTV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Oct 2021 12:19:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57735 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229559AbhJHQTV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Oct 2021 12:19:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633709845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F8CaDxS3ZxSSQU+iGhFbf89kwNPmHoSD1YG/GilwFS8=;
+        b=MPJCIuBfRJFxdEeSKix14lm8blSJ1fkUKXjPbImU3zJQ/LOSzh4PkcXMmTrbEfLdvKMPm5
+        ZeCZQV4k76CBZG6vXAZmw+JrDj039m9TDvAlKJ9rau0rqWSeUxTlgfX933R+Qyn4wi2bsg
+        c1dTUUX789bt86HuspIGIpYD5a3Ln3c=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-533-3KG9-ht8ODSQK6Yz4In8Cw-1; Fri, 08 Oct 2021 12:17:14 -0400
+X-MC-Unique: 3KG9-ht8ODSQK6Yz4In8Cw-1
+Received: by mail-qk1-f198.google.com with SMTP id l3-20020a05620a28c300b0045db8137fa9so8685037qkp.5
+        for <linux-arch@vger.kernel.org>; Fri, 08 Oct 2021 09:17:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F8CaDxS3ZxSSQU+iGhFbf89kwNPmHoSD1YG/GilwFS8=;
+        b=LvZYU0jXuayqzqBk9LedhICAs21ZODFDRabf76UBf+ka4hOAp3Y2dzXMAp7QaB1RFi
+         56NWkYScneDIbsf1OY5TopTcz4o04QFA6Y7a38ZrlYtZyOolISF3Cp/NPfgFSwHBAWnB
+         33CMYkE6ySZ04i7Mj3ixK/EanPVuw5zNctLT7j6twUKBCXbT3HZOhQlThNUWX70PX6SQ
+         zGAQhOEwY6tlUC1Ts0sEXy5uxj7y90JQ95M/pepUT3DsWcsdEOPm5akJlLX8ytq4fsy7
+         M1X8jJGzIq0G7aFkTq4xeINWbIUcz1Zqu8sZRPLFZyLznjUHyCtToVvTaCv9M0FxbMqb
+         V2ig==
+X-Gm-Message-State: AOAM530Ci+Y6UbdoXtpnXX6BOIavXMervyp56dbLnsMfVdHvyvaZfYUt
+        P0mOtFk/AmUq2PBpOQHf6VhQfO3dKI306xRfBcCE2a2mc/aN1SyBmqW5VbO7D+RpKWxnKIINjFg
+        1icf/FAVlR532zjICV8SU/w==
+X-Received: by 2002:a05:6214:294:: with SMTP id l20mr9523268qvv.30.1633709834200;
+        Fri, 08 Oct 2021 09:17:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw6ExCuEMbasm/gLwW//wQY0/4UCLYUOl4ssvLqUvFOcMjFiAJy1vmJaiafPCJcjnPk3KtghQ==
+X-Received: by 2002:a05:6214:294:: with SMTP id l20mr9523255qvv.30.1633709834017;
+        Fri, 08 Oct 2021 09:17:14 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::48])
+        by smtp.gmail.com with ESMTPSA id p19sm2730266qtk.20.2021.10.08.09.17.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Oct 2021 09:17:13 -0700 (PDT)
+Date:   Fri, 8 Oct 2021 09:17:07 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, keescook@chromium.org,
+        jannh@google.com, linux-kernel@vger.kernel.org,
+        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, akpm@linux-foundation.org,
+        christian.brauner@ubuntu.com, amistry@google.com,
+        Kenta.Tada@sony.com, legion@kernel.org,
+        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
+        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
+        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, ebiederm@xmission.com,
+        ohoono.kwon@samsung.com, kaleshsingh@google.com,
+        yifeifz2@illinois.edu, linux-hardening@vger.kernel.org,
+        linux-arch@vger.kernel.org, vgupta@kernel.org,
+        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        nickhu@andestech.com, jonas@southpole.se, mpe@ellerman.id.au,
+        paul.walmsley@sifive.com, hca@linux.ibm.com,
+        ysato@users.sourceforge.jp, davem@davemloft.net, chris@zankel.net
+Subject: Re: [PATCH 6/7] arch: __get_wchan || STACKTRACE_SUPPORT
+Message-ID: <20211008161707.i3cwz6qukgcf4frj@treble>
+References: <20211008111527.438276127@infradead.org>
+ <20211008111626.392918519@infradead.org>
+ <20211008124052.GA976@C02TD0UTHF1T.local>
+ <YWBLl0mMTGPE/7hM@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 8 Oct 2021 16:36:35 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0WCfiZ=WeezCCATSoxGmaDtL=pAWKzRu3wuLaT9qs6gA@mail.gmail.com>
-Message-ID: <CAK8P3a0WCfiZ=WeezCCATSoxGmaDtL=pAWKzRu3wuLaT9qs6gA@mail.gmail.com>
-Subject: [GIT PULL] asm-generic: build fixes for v5.15
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Adam Borowski <kilobyte@angband.pl>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YWBLl0mMTGPE/7hM@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+On Fri, Oct 08, 2021 at 03:45:59PM +0200, Peter Zijlstra wrote:
+> > stack_trace_save_tsk() *shouldn't* skip anything unless we've explicitly
+> > told it to via skipnr, because I'd expect that
+> 
+> It's what most archs happen to do today and is what
+> stack_trace_save_tsk() as implemented using arch_stack_walk() does.
+> Which is I think the closest to canonical we have.
 
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+It *is* confusing though.  Even if 'nosched' may be the normally
+desired behavior, stack_trace_save_tsk() should probably be named
+stack_trace_save_tsk_nosched().
 
-are available in the Git repository at:
+-- 
+Josh
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-tags/asm-generic-fixes-5.15
-
-for you to fetch changes up to 2fbc349911e45d4ea5187b608c8d58db66496260:
-
-  asm-generic/io.h: give stub iounmap() on !MMU same prototype as
-elsewhere (2021-10-08 15:39:33 +0200)
-
-----------------------------------------------------------------
-asm-generic: build fixes for v5.15
-
-There is one build fix for Arm platforms that ended up impacting most
-architectures because of the way the drivers/firmware Kconfig file is
-wired up:
-
-The CONFIG_QCOM_SCM dependency have caused a number of randconfig
-regressions over time, and some still remain in v5.15-rc4. The
-fix we agreed on in the end is to make this symbol selected by any
-driver using it, and then building it even for non-Arm platforms with
-CONFIG_COMPILE_TEST.
-
-To make this work on all architectures, the drivers/firmware/Kconfig
-file needs to be included for all architectures to make the symbol
-itself visible.
-
-In a separate discussion, we found that a sound driver patch that is
-pending for v5.16 needs the same change to include this Kconfig file,
-so the easiest solution seems to have my Kconfig rework included in v5.15.
-
-There is a small merge conflict against an earlier partial fix for the
-QCOM_SCM dependency problems.
-
-Finally, the branch also includes a small unrelated build fix for NOMMU
-architectures.
-
-Link: https://lore.kernel.org/all/20210928153508.101208f8@canb.auug.org.au/
-Link: https://lore.kernel.org/all/20210928075216.4193128-1-arnd@kernel.org/
-Link: https://lore.kernel.org/all/20211007151010.333516-1-arnd@kernel.org/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-----------------------------------------------------------------
-Adam Borowski (1):
-      asm-generic/io.h: give stub iounmap() on !MMU same prototype as elsewhere
-
-Arnd Bergmann (2):
-      firmware: include drivers/firmware/Kconfig unconditionally
-      qcom_scm: hide Kconfig symbol
-
- arch/arm/Kconfig                           |  2 -
- arch/arm64/Kconfig                         |  2 -
- arch/ia64/Kconfig                          |  2 -
- arch/mips/Kconfig                          |  2 -
- arch/parisc/Kconfig                        |  2 -
- arch/riscv/Kconfig                         |  2 -
- arch/x86/Kconfig                           |  2 -
- drivers/Kconfig                            |  2 +
- drivers/firmware/Kconfig                   |  5 +--
- drivers/gpu/drm/msm/Kconfig                |  4 +-
- drivers/iommu/Kconfig                      |  3 +-
- drivers/iommu/arm/arm-smmu/Makefile        |  3 +-
- drivers/iommu/arm/arm-smmu/arm-smmu-impl.c |  3 +-
- drivers/media/platform/Kconfig             |  2 +-
- drivers/mmc/host/Kconfig                   |  2 +-
- drivers/net/ipa/Kconfig                    |  1 +
- drivers/net/wireless/ath/ath10k/Kconfig    |  2 +-
- drivers/pinctrl/qcom/Kconfig               |  3 +-
- include/asm-generic/io.h                   |  2 +-
- include/linux/arm-smccc.h                  | 10 +++++
- include/linux/qcom_scm.h                   | 71 ------------------------------
- 21 files changed, 27 insertions(+), 100 deletions(-)
