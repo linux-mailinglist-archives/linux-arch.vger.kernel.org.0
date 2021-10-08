@@ -2,66 +2,203 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F41B42737E
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 00:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9204442746E
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 01:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243555AbhJHWPG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Oct 2021 18:15:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57758 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243539AbhJHWPF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 8 Oct 2021 18:15:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8320760FC1;
-        Fri,  8 Oct 2021 22:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633731189;
-        bh=wNgDKDIIK358RGjNmCHeTM6eGu9i1NUq2a4Cx1Zn5ec=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=NfOQ1BydTGGErjNKi2rvvo23VwEfRECB5hinU3fTD/YWGT9/wIoxtnDy0UMOb9F4Z
-         Tzo85ZiIClqd9Br3sFdFgZc04avS7YFvKqBTXL1DiIl4OuLjBm9qY2WvQp8l+8T0B5
-         AthcCY3b9E2A3C/eMVa0xojj/6onvABaY40UGivKWe/p1obD6p8Y4Bun00Fgp1s8zp
-         RGlUjv6rmc5Hni8/2Ju6cxQJcUjT0b7O9dwy0Z94iGg1CuBBYqPTMaPsBt0GNoUzlI
-         HXbK/hR3Bd6/t9zuyP1NSYD6n8jVOsNG5w7uN4sQ0R/gVLZtxJfARJL0iO21pHUVd9
-         vv+eJeOuhHiyg==
-Date:   Fri, 8 Oct 2021 17:13:08 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3] PCI: Move pci_dev_is/assign_added() to pci.h
-Message-ID: <20211008221308.GA1383868@bhelgaas>
+        id S243933AbhJHX5F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Oct 2021 19:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243934AbhJHX5F (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Oct 2021 19:57:05 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444C2C061764
+        for <linux-arch@vger.kernel.org>; Fri,  8 Oct 2021 16:55:09 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id ls14-20020a17090b350e00b001a00e2251c8so8922250pjb.4
+        for <linux-arch@vger.kernel.org>; Fri, 08 Oct 2021 16:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NTgT6QanWfRduDXfALgprcIXPoYmwJMRISipF8hOgn0=;
+        b=UvrNsbuHOolQTlQBXEtvY7PhQ4e4HGX7cruVovKzRM26iiB57Q92NDOkOvdFsX9KBd
+         9WQXT1UMFWJsbCYpXTLLlQQyIlz2otEFClCRNRWAE1mWhdllnhjYqjC+fcpXest6HeZ2
+         wypm984zf7l3YgA/7h3zdE6+DYAIADuYfU6fU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NTgT6QanWfRduDXfALgprcIXPoYmwJMRISipF8hOgn0=;
+        b=EZk9qLDFPkpz1qpRhbBcIM2ZQd3GuIgIzDq4C7LzmOmUNFQZlU7LftDxt1nWFXwwdm
+         t8o5dbWb2y/eb1cbmzYRH3cm8yGTHeVrmKUs3BTA9K8ucMK7akoxWSqMCVlZrTBUjdQu
+         x19LLE46em/pcAVL4sjFw1PDgTNqbicVOmulMKOaMC9dcJxwKfcQJ68DfcNlCiYePBog
+         egCKRupbBJaUqZ37vqo6FWJ0WrECzUriAh/STg+uplctOiOJCTkwmefITyfHa3k/fOaB
+         VZTgJqp8JdnldxEPd7Yj1NUx6yO+lhvQ5JctSM9ns40EN37sjNIYTFhDeO7k6LhgN3+K
+         OVBw==
+X-Gm-Message-State: AOAM533x1oIEJP+CUAwthlh/bck9qcP7oZhEdwqvp5L14sBWJxWWwY97
+        qFEhdy+jNPIAXFQY51Ki0g1wrg==
+X-Google-Smtp-Source: ABdhPJxVP3N4yhiAQdhQSX2YP8sb7Lm448c8O2UVd19pFUeo4nh/fLA29BP3BsuiH+I1rOT0b4n0kQ==
+X-Received: by 2002:a17:90b:224e:: with SMTP id hk14mr14867208pjb.224.1633737308774;
+        Fri, 08 Oct 2021 16:55:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b13sm13196981pjl.15.2021.10.08.16.55.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Oct 2021 16:55:08 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Gladkov <gladkov.alexey@gmail.com>, jannh@google.com,
+        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, christian.brauner@ubuntu.com,
+        amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
+        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
+        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
+        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, ebiederm@xmission.com,
+        ohoono.kwon@samsung.com, kaleshsingh@google.com,
+        yifeifz2@illinois.edu, linux-arch@vger.kernel.org,
+        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
+        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
+        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
+        chris@zankel.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] selftests: proc: Make sure wchan works when it exists
+Date:   Fri,  8 Oct 2021 16:55:04 -0700
+Message-Id: <20211008235504.2957528-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210720150145.640727-1-schnelle@linux.ibm.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3546; h=from:subject; bh=rB8jOOGIdiP/iyWBGWq3AhwcsSSZTX18wRYEg/FXYmE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhYNpXPkUEdGrIu4y1HLLDxNMb+n9ox77AOSdFvFSD bfhAXb+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYWDaVwAKCRCJcvTf3G3AJn0CD/ 4qW+e9mYMV4ZcwM0iBRmJhmZQxAWr33QtMkLwAO/EaIltsDgim6Ni+pKchA7nIQjf3oFoqZjbhP1Cp C5Y7Qq4W1DR1cD046gu5TzATKoxsbcwcSzBS5mrAPaUKY+vIyciYsqgw2myydRz4vBdNOKy9UcpVLm paa85vPMPsppqd8cQv/Wf1V6J7sjIXORRYYMokEGmQO/aXSShOol1KMtbgLiVh5ws4/KbOjtT0Z3XU R/kBl05TmhX1U0qXJiDMTeHa3PfSHFgxLTbqNUQQzsosY7JSG4IWl4KLpVpC6WRSvnSlYdf1tw65M0 FnCVLSWYGZ1wLsSMcsPhhU+5Vviwlrr4QUtFNXsFxLXOXn/JrgN3XtJWWlfuepZyKeGWOqNX3DzKNw 1BepILhh0xVogfv0fIoee3O/i1+8FjgQUZSO2cCC1fjVW+P5CMAKJwOqhJzlJ3aphOFwcJYTs4SJ5v SRBo1aFbAxpB5Z8dkUeM2EtS5bbjiIj2oau4wVSmQ4wkLIhXT14qIEA70r6JONKZtfnIBmBLESvybZ /eMvMPyvwOaV6N3NiZ1pNMmC8mOJXV4CjQ70UB44ZvfWOg+aMru+++l1uCPrJumAAPedlRsnt08d1J w8+mDwVkblkD5MbHnVgz3Odw5e5YJoCoKR7LNNX10D3EKvOIl/PDTirCZQ0w==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 20, 2021 at 05:01:45PM +0200, Niklas Schnelle wrote:
-> The helper function pci_dev_is_added() from drivers/pci/pci.h is used in
-> PCI arch code of both s390 and powerpc leading to awkward relative
-> includes. Move it to the global include/linux/pci.h and get rid of these
-> includes just for that one function.
-> 
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> Since v1 (and bad v2):
-> - Fixed accidental removal of PCI_DPC_RECOVERED, PCI_DPC_RECOVERING
->   defines and also move these to include/linux/pci.h
-> 
->  arch/powerpc/platforms/powernv/pci-sriov.c |  3 ---
->  arch/powerpc/platforms/pseries/setup.c     |  1 -
->  arch/s390/pci/pci_sysfs.c                  |  2 --
->  drivers/pci/hotplug/acpiphp_glue.c         |  1 -
->  drivers/pci/pci.h                          | 15 ---------------
->  include/linux/pci.h                        | 15 +++++++++++++++
->  6 files changed, 15 insertions(+), 22 deletions(-)
+This makes sure that wchan contains a sensible symbol when a process is
+blocked. Specifically this calls the sleep() syscall, and expects the
+architecture to have called schedule() from a function that has "sleep"
+somewhere in its name. For example, on the architectures I tested
+(x86_64, arm64, arm, mips, and powerpc) this is "hrtimer_nanosleep":
 
-I dropped this one because I think a subsequent patch removed the use
-in arch/powerpc, so if you still need this, it probably needs to be
-updated to at least drop those hunks.
+$ tools/testing/selftests/proc/proc-pid-wchan
+ok: found 'sleep' in wchan 'hrtimer_nanosleep'
+
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Hi Peter,
+
+Can you add this to the wchan series, please? This should help wchan from
+regressing in the future, and allow us to notice if the depth accidentally
+changes, like Mark saw.
+---
+ tools/testing/selftests/proc/Makefile         |  1 +
+ tools/testing/selftests/proc/proc-pid-wchan.c | 69 +++++++++++++++++++
+ 2 files changed, 70 insertions(+)
+ create mode 100644 tools/testing/selftests/proc/proc-pid-wchan.c
+
+diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
+index 1054e40a499a..45cf35703ece 100644
+--- a/tools/testing/selftests/proc/Makefile
++++ b/tools/testing/selftests/proc/Makefile
+@@ -8,6 +8,7 @@ TEST_GEN_PROGS += fd-002-posix-eq
+ TEST_GEN_PROGS += fd-003-kthread
+ TEST_GEN_PROGS += proc-loadavg-001
+ TEST_GEN_PROGS += proc-pid-vm
++TEST_GEN_PROGS += proc-pid-wchan
+ TEST_GEN_PROGS += proc-self-map-files-001
+ TEST_GEN_PROGS += proc-self-map-files-002
+ TEST_GEN_PROGS += proc-self-syscall
+diff --git a/tools/testing/selftests/proc/proc-pid-wchan.c b/tools/testing/selftests/proc/proc-pid-wchan.c
+new file mode 100644
+index 000000000000..7d7870c31cef
+--- /dev/null
++++ b/tools/testing/selftests/proc/proc-pid-wchan.c
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Make sure that wchan returns a reasonable symbol when blocked.
++ */
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <signal.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/wait.h>
++
++#define perror_exit(str) do { perror(str); _exit(1); } while (0)
++
++int main(void)
++{
++	char buf[64];
++	pid_t child;
++	int sync[2], fd;
++
++	if (pipe(sync) < 0)
++		perror_exit("pipe");
++
++	child = fork();
++	if (child < 0)
++		perror_exit("fork");
++	if (child == 0) {
++		/* Child */
++		if (close(sync[0]) < 0)
++			perror_exit("child close sync[0]");
++		if (close(sync[1]) < 0)
++			perror_exit("child close sync[1]");
++		sleep(10);
++		_exit(0);
++	}
++	/* Parent */
++	if (close(sync[1]) < 0)
++		perror_exit("parent close sync[1]");
++	if (read(sync[0], buf, 1) != 0)
++		perror_exit("parent read sync[0]");
++
++	snprintf(buf, sizeof(buf), "/proc/%d/wchan", child);
++	fd = open(buf, O_RDONLY);
++	if (fd < 0) {
++		if (errno == ENOENT)
++			return 4;
++		perror_exit(buf);
++	}
++
++	memset(buf, 0, sizeof(buf));
++	if (read(fd, buf, sizeof(buf) - 1) < 1)
++		perror_exit(buf);
++	if (strstr(buf, "sleep") == NULL) {
++		fprintf(stderr, "FAIL: did not find 'sleep' in wchan '%s'\n", buf);
++		return 1;
++	}
++	printf("ok: found 'sleep' in wchan '%s'\n", buf);
++
++	if (kill(child, SIGKILL) < 0)
++		perror_exit("kill");
++	if (waitpid(child, NULL, 0) != child) {
++		fprintf(stderr, "waitpid: got the wrong child!?\n");
++		return 1;
++	}
++
++	return 0;
++}
+-- 
+2.30.2
+
