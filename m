@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 480394268A6
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Oct 2021 13:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2C64268A3
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Oct 2021 13:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240199AbhJHLY2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Oct 2021 07:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S240222AbhJHLYQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Oct 2021 07:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240126AbhJHLY1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Oct 2021 07:24:27 -0400
+        with ESMTP id S240126AbhJHLYP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Oct 2021 07:24:15 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A130AC061755
-        for <linux-arch@vger.kernel.org>; Fri,  8 Oct 2021 04:22:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61ACC061570
+        for <linux-arch@vger.kernel.org>; Fri,  8 Oct 2021 04:22:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=ofWCfTSs0oD5Q4xT4z6AUkUwqGJfd9mpsDBxKE6bY48=; b=I0Pi/oMXn1aRSqHdaR9Rp2iNH4
-        yeyvzwNt+bFzYoBXFZQGhz/7jn9PNzq3N6UyYATbLJk4NrJufr8TfsqoZGQ4u0UbXse60aFDlqjrh
-        uNVn3uff5i1VN9OSN516hrjUUzU4o2cqwNQP5specOeufIwFxPeHiWTjNH5onaZ6+icnXKHA7W1zC
-        FbVF/Ua65tR6ykevcy5Cdd+n3efxlHpASVMy2Hp6y4rgcszNTr8/cP89yyo96wqMZdy2EGbX8n6wz
-        lLWdRUbDSDMmkUANBifxTUKCqTnTBwsTBztHXm3Tn0gctsMHR10Mji0ueuZl3q1BQlviODozeUj5O
-        IWTd+aAg==;
+        bh=p3MnJb0p9zTh2pF0k74z5BzLOqVP4rkZtcQsJlUtZOQ=; b=EnPA9VBnM3lkvloqgPA+1PWc7C
+        dmVWHpR6AVmTcBnUH0v7L0ujtOlrx+UVObLkZh1bHoF4+emArAIpiPv7VL+L/HljGE71rZkjv2hCG
+        bGflkUO+tjjc7RmSQceM56wVMsp6KgA4fbc44APtXcuC4Jj2uMbbJT+XIYLITMFbGJZ/v+vq83/Od
+        qduy950KdUIMw/4h+oKGciL5OLOsh2zoOAXI/7cDAuaYVJKCJiSk5KKT+dFn7qDKwX1lgOAA0ofb7
+        TyqLC15mrihVL/6/P1xukDeSc2Q8lyMKwE2geWKXLPTJ1c2o4XQIYsppVfOQzIyHLiRCOfyODEesC
+        CH7L05Eg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mYnsH-0032fu-Kd; Fri, 08 Oct 2021 11:17:21 +0000
+        id 1mYnsH-0032fs-Jm; Fri, 08 Oct 2021 11:17:21 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA520302D3B;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B343B302D3E;
         Fri,  8 Oct 2021 13:17:08 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id E7B632DB84A6A; Fri,  8 Oct 2021 13:17:07 +0200 (CEST)
-Message-ID: <20211008111626.332092234@infradead.org>
+        id EC8112DB84A6B; Fri,  8 Oct 2021 13:17:07 +0200 (CEST)
+Message-ID: <20211008111626.392918519@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 08 Oct 2021 13:15:32 +0200
+Date:   Fri, 08 Oct 2021 13:15:33 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     keescook@chromium.org, jannh@google.com
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -62,7 +62,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
         hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
         chris@zankel.net
-Subject: [PATCH 5/7] sched: Add wrapper for get_wchan() to keep task blocked
+Subject: [PATCH 6/7] arch: __get_wchan || STACKTRACE_SUPPORT
 References: <20211008111527.438276127@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -70,833 +70,895 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+It's trivial to implement __get_wchan() with CONFIG_STACKTRACE
 
-Having a stable wchan means the process must be blocked and for it to
-stay that way while performing stack unwinding.
-
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/alpha/include/asm/processor.h      |    2 +-
- arch/alpha/kernel/process.c             |    5 ++---
- arch/arc/include/asm/processor.h        |    2 +-
- arch/arc/kernel/stacktrace.c            |    4 ++--
- arch/arm/include/asm/processor.h        |    2 +-
- arch/arm/kernel/process.c               |    4 +---
- arch/arm64/include/asm/processor.h      |    2 +-
- arch/arm64/kernel/process.c             |    4 +---
- arch/csky/include/asm/processor.h       |    2 +-
- arch/csky/kernel/stacktrace.c           |    5 ++---
- arch/h8300/include/asm/processor.h      |    2 +-
- arch/h8300/kernel/process.c             |    5 +----
- arch/hexagon/include/asm/processor.h    |    2 +-
- arch/hexagon/kernel/process.c           |    4 +---
- arch/ia64/include/asm/processor.h       |    2 +-
- arch/ia64/kernel/process.c              |    5 +----
- arch/m68k/include/asm/processor.h       |    2 +-
- arch/m68k/kernel/process.c              |    4 +---
- arch/microblaze/include/asm/processor.h |    2 +-
- arch/microblaze/kernel/process.c        |    2 +-
- arch/mips/include/asm/processor.h       |    2 +-
- arch/mips/kernel/process.c              |    8 +++-----
- arch/nds32/include/asm/processor.h      |    2 +-
- arch/nds32/kernel/process.c             |    7 +------
- arch/nios2/include/asm/processor.h      |    2 +-
- arch/nios2/kernel/process.c             |    5 +----
- arch/openrisc/include/asm/processor.h   |    2 +-
- arch/openrisc/kernel/process.c          |    2 +-
- arch/parisc/include/asm/processor.h     |    2 +-
- arch/parisc/kernel/process.c            |    5 +----
- arch/powerpc/include/asm/processor.h    |    2 +-
- arch/powerpc/kernel/process.c           |    9 +++------
- arch/riscv/include/asm/processor.h      |    2 +-
- arch/riscv/kernel/stacktrace.c          |   12 +++++-------
- arch/s390/include/asm/processor.h       |    2 +-
- arch/s390/kernel/process.c              |    4 ++--
- arch/sh/include/asm/processor_32.h      |    2 +-
- arch/sh/kernel/process_32.c             |    5 +----
- arch/sparc/include/asm/processor_32.h   |    2 +-
- arch/sparc/include/asm/processor_64.h   |    2 +-
- arch/sparc/kernel/process_32.c          |    5 +----
- arch/sparc/kernel/process_64.c          |    5 +----
- arch/um/include/asm/processor-generic.h |    2 +-
- arch/um/kernel/process.c                |    5 +----
- arch/x86/include/asm/processor.h        |    2 +-
- arch/x86/kernel/process.c               |    5 +----
- arch/xtensa/include/asm/processor.h     |    2 +-
- arch/xtensa/kernel/process.c            |    5 +----
- include/linux/sched.h                   |    1 +
- kernel/sched/core.c                     |   19 +++++++++++++++++++
- 50 files changed, 80 insertions(+), 112 deletions(-)
+ arch/arc/include/asm/processor.h        |    2 -
+ arch/arc/kernel/stacktrace.c            |   17 --------------
+ arch/arm/include/asm/processor.h        |    2 -
+ arch/arm/kernel/process.c               |   22 -------------------
+ arch/arm64/include/asm/processor.h      |    2 -
+ arch/arm64/kernel/process.c             |   26 ----------------------
+ arch/csky/include/asm/processor.h       |    2 -
+ arch/csky/kernel/stacktrace.c           |   18 ---------------
+ arch/hexagon/include/asm/processor.h    |    3 --
+ arch/hexagon/kernel/process.c           |   26 ----------------------
+ arch/ia64/include/asm/processor.h       |    3 --
+ arch/ia64/kernel/process.c              |   28 ------------------------
+ arch/microblaze/include/asm/processor.h |    2 -
+ arch/microblaze/kernel/process.c        |    6 -----
+ arch/mips/include/asm/processor.h       |    2 -
+ arch/mips/kernel/process.c              |   27 -----------------------
+ arch/nds32/include/asm/processor.h      |    2 -
+ arch/nds32/kernel/process.c             |   23 -------------------
+ arch/openrisc/include/asm/processor.h   |    1 
+ arch/openrisc/kernel/process.c          |    6 -----
+ arch/parisc/include/asm/processor.h     |    2 -
+ arch/parisc/kernel/process.c            |   24 --------------------
+ arch/powerpc/include/asm/processor.h    |    2 -
+ arch/powerpc/kernel/process.c           |   37 --------------------------------
+ arch/riscv/include/asm/processor.h      |    3 --
+ arch/riscv/kernel/stacktrace.c          |   21 ------------------
+ arch/s390/include/asm/processor.h       |    1 
+ arch/s390/kernel/process.c              |   29 -------------------------
+ arch/sh/include/asm/processor_32.h      |    2 -
+ arch/sh/kernel/process_32.c             |   19 ----------------
+ arch/sparc/include/asm/processor_64.h   |    2 -
+ arch/sparc/kernel/process_64.c          |   28 ------------------------
+ arch/um/include/asm/processor-generic.h |    1 
+ arch/um/kernel/process.c                |   32 ---------------------------
+ arch/x86/include/asm/processor.h        |    2 -
+ arch/x86/kernel/process.c               |   14 ------------
+ arch/xtensa/include/asm/processor.h     |    2 -
+ arch/xtensa/kernel/process.c            |   29 -------------------------
+ kernel/sched/core.c                     |   15 ++++++++++++
+ lib/Kconfig.debug                       |    7 ------
+ 40 files changed, 16 insertions(+), 476 deletions(-)
 
---- a/arch/alpha/include/asm/processor.h
-+++ b/arch/alpha/include/asm/processor.h
-@@ -42,7 +42,7 @@ extern void start_thread(struct pt_regs
- struct task_struct;
- extern void release_thread(struct task_struct *);
- 
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
- #define KSTK_EIP(tsk) (task_pt_regs(tsk)->pc)
- 
---- a/arch/alpha/kernel/process.c
-+++ b/arch/alpha/kernel/process.c
-@@ -376,12 +376,11 @@ thread_saved_pc(struct task_struct *t)
- }
- 
- unsigned long
--get_wchan(struct task_struct *p)
-+__get_wchan(struct task_struct *p)
- {
- 	unsigned long schedule_frame;
- 	unsigned long pc;
--	if (!p || p == current || task_is_running(p))
--		return 0;
-+
- 	/*
- 	 * This one depends on the frame size of schedule().  Do a
- 	 * "disass schedule" in gdb to find the frame size.  Also, the
 --- a/arch/arc/include/asm/processor.h
 +++ b/arch/arc/include/asm/processor.h
-@@ -70,7 +70,7 @@ struct task_struct;
+@@ -70,8 +70,6 @@ struct task_struct;
  extern void start_thread(struct pt_regs * regs, unsigned long pc,
  			 unsigned long usp);
  
--extern unsigned int get_wchan(struct task_struct *p);
-+extern unsigned int __get_wchan(struct task_struct *p);
- 
+-extern unsigned int __get_wchan(struct task_struct *p);
+-
  #endif /* !__ASSEMBLY__ */
  
+ /*
 --- a/arch/arc/kernel/stacktrace.c
 +++ b/arch/arc/kernel/stacktrace.c
-@@ -15,7 +15,7 @@
-  *      = specifics of data structs where trace is saved(CONFIG_STACKTRACE etc)
-  *
-  *  vineetg: March 2009
-- *  -Implemented correct versions of thread_saved_pc() and get_wchan()
-+ *  -Implemented correct versions of thread_saved_pc() and __get_wchan()
-  *
-  *  rajeshwarr: 2008
-  *  -Initial implementation
-@@ -248,7 +248,7 @@ void show_stack(struct task_struct *tsk,
-  * Of course just returning schedule( ) would be pointless so unwind until
-  * the function is not in schedular code
-  */
--unsigned int get_wchan(struct task_struct *tsk)
-+unsigned int __get_wchan(struct task_struct *tsk)
- {
- 	return arc_unwind_core(tsk, NULL, __get_first_nonsched, NULL);
+@@ -217,14 +217,6 @@ static int __collect_all_but_sched(unsig
+ 
+ #endif
+ 
+-static int __get_first_nonsched(unsigned int address, void *unused)
+-{
+-	if (in_sched_functions(address))
+-		return 0;
+-
+-	return -1;
+-}
+-
+ /*-------------------------------------------------------------------------
+  *              APIs expected by various kernel sub-systems
+  *-------------------------------------------------------------------------
+@@ -244,15 +236,6 @@ void show_stack(struct task_struct *tsk,
+ 	show_stacktrace(tsk, NULL, loglvl);
  }
+ 
+-/* Another API expected by schedular, shows up in "ps" as Wait Channel
+- * Of course just returning schedule( ) would be pointless so unwind until
+- * the function is not in schedular code
+- */
+-unsigned int __get_wchan(struct task_struct *tsk)
+-{
+-	return arc_unwind_core(tsk, NULL, __get_first_nonsched, NULL);
+-}
+-
+ #ifdef CONFIG_STACKTRACE
+ 
+ /*
 --- a/arch/arm/include/asm/processor.h
 +++ b/arch/arm/include/asm/processor.h
-@@ -84,7 +84,7 @@ struct task_struct;
+@@ -84,8 +84,6 @@ struct task_struct;
  /* Free all resources held by a thread. */
  extern void release_thread(struct task_struct *);
  
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
+-unsigned long __get_wchan(struct task_struct *p);
+-
  #define task_pt_regs(p) \
  	((struct pt_regs *)(THREAD_START_SP + task_stack_page(p)) - 1)
+ 
 --- a/arch/arm/kernel/process.c
 +++ b/arch/arm/kernel/process.c
-@@ -276,13 +276,11 @@ int copy_thread(unsigned long clone_flag
+@@ -276,28 +276,6 @@ int copy_thread(unsigned long clone_flag
  	return 0;
  }
  
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	struct stackframe frame;
- 	unsigned long stack_page;
- 	int count = 0;
--	if (!p || p == current || task_is_running(p))
--		return 0;
- 
- 	frame.fp = thread_saved_fp(p);
- 	frame.sp = thread_saved_sp(p);
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	struct stackframe frame;
+-	unsigned long stack_page;
+-	int count = 0;
+-
+-	frame.fp = thread_saved_fp(p);
+-	frame.sp = thread_saved_sp(p);
+-	frame.lr = 0;			/* recovered from the stack */
+-	frame.pc = thread_saved_pc(p);
+-	stack_page = (unsigned long)task_stack_page(p);
+-	do {
+-		if (frame.sp < stack_page ||
+-		    frame.sp >= stack_page + THREAD_SIZE ||
+-		    unwind_frame(&frame) < 0)
+-			return 0;
+-		if (!in_sched_functions(frame.pc))
+-			return frame.pc;
+-	} while (count ++ < 16);
+-	return 0;
+-}
+-
+ #ifdef CONFIG_MMU
+ #ifdef CONFIG_KUSER_HELPERS
+ /*
 --- a/arch/arm64/include/asm/processor.h
 +++ b/arch/arm64/include/asm/processor.h
-@@ -257,7 +257,7 @@ struct task_struct;
+@@ -257,8 +257,6 @@ struct task_struct;
  /* Free all resources held by a thread. */
  extern void release_thread(struct task_struct *);
  
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
+-unsigned long __get_wchan(struct task_struct *p);
+-
  void update_sctlr_el1(u64 sctlr);
  
+ /* Thread switching */
 --- a/arch/arm64/kernel/process.c
 +++ b/arch/arm64/kernel/process.c
-@@ -528,13 +528,11 @@ __notrace_funcgraph struct task_struct *
+@@ -528,32 +528,6 @@ __notrace_funcgraph struct task_struct *
  	return last;
  }
  
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	struct stackframe frame;
- 	unsigned long stack_page, ret = 0;
- 	int count = 0;
--	if (!p || p == current || task_is_running(p))
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	struct stackframe frame;
+-	unsigned long stack_page, ret = 0;
+-	int count = 0;
+-
+-	stack_page = (unsigned long)try_get_task_stack(p);
+-	if (!stack_page)
 -		return 0;
- 
- 	stack_page = (unsigned long)try_get_task_stack(p);
- 	if (!stack_page)
+-
+-	start_backtrace(&frame, thread_saved_fp(p), thread_saved_pc(p));
+-
+-	do {
+-		if (unwind_frame(p, &frame))
+-			goto out;
+-		if (!in_sched_functions(frame.pc)) {
+-			ret = frame.pc;
+-			goto out;
+-		}
+-	} while (count++ < 16);
+-
+-out:
+-	put_task_stack(p);
+-	return ret;
+-}
+-
+ unsigned long arch_align_stack(unsigned long sp)
+ {
+ 	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
 --- a/arch/csky/include/asm/processor.h
 +++ b/arch/csky/include/asm/processor.h
-@@ -81,7 +81,7 @@ static inline void release_thread(struct
+@@ -81,8 +81,6 @@ static inline void release_thread(struct
  
  extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
  
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
+-unsigned long __get_wchan(struct task_struct *p);
+-
  #define KSTK_EIP(tsk)		(task_pt_regs(tsk)->pc)
  #define KSTK_ESP(tsk)		(task_pt_regs(tsk)->usp)
+ 
 --- a/arch/csky/kernel/stacktrace.c
 +++ b/arch/csky/kernel/stacktrace.c
-@@ -111,12 +111,11 @@ static bool save_wchan(unsigned long pc,
- 	return false;
+@@ -101,24 +101,6 @@ void show_stack(struct task_struct *task
+ 	walk_stackframe(task, NULL, print_trace_address, (void *)loglvl);
  }
  
--unsigned long get_wchan(struct task_struct *task)
-+unsigned long __get_wchan(struct task_struct *task)
- {
- 	unsigned long pc = 0;
- 
--	if (likely(task && task != current && !task_is_running(task)))
--		walk_stackframe(task, NULL, save_wchan, &pc);
-+	walk_stackframe(task, NULL, save_wchan, &pc);
- 	return pc;
- }
- 
---- a/arch/h8300/include/asm/processor.h
-+++ b/arch/h8300/include/asm/processor.h
-@@ -105,7 +105,7 @@ static inline void release_thread(struct
- {
- }
- 
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
- #define	KSTK_EIP(tsk)	\
- 	({			 \
---- a/arch/h8300/kernel/process.c
-+++ b/arch/h8300/kernel/process.c
-@@ -128,15 +128,12 @@ int copy_thread(unsigned long clone_flag
- 	return 0;
- }
- 
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	unsigned long fp, pc;
- 	unsigned long stack_page;
- 	int count = 0;
- 
--	if (!p || p == current || task_is_running(p))
--		return 0;
+-static bool save_wchan(unsigned long pc, void *arg)
+-{
+-	if (!in_sched_functions(pc)) {
+-		unsigned long *p = arg;
+-		*p = pc;
+-		return true;
+-	}
+-	return false;
+-}
 -
- 	stack_page = (unsigned long)p;
- 	fp = ((struct pt_regs *)p->thread.ksp)->er6;
- 	do {
+-unsigned long __get_wchan(struct task_struct *task)
+-{
+-	unsigned long pc = 0;
+-
+-	walk_stackframe(task, NULL, save_wchan, &pc);
+-	return pc;
+-}
+-
+ #ifdef CONFIG_STACKTRACE
+ static bool __save_trace(unsigned long pc, void *arg, bool nosched)
+ {
 --- a/arch/hexagon/include/asm/processor.h
 +++ b/arch/hexagon/include/asm/processor.h
-@@ -64,7 +64,7 @@ struct thread_struct {
+@@ -63,9 +63,6 @@ struct thread_struct {
+ /*  Free all resources held by a thread; defined in process.c  */
  extern void release_thread(struct task_struct *dead_task);
  
- /* Get wait channel for task P.  */
--extern unsigned long get_wchan(struct task_struct *p);
-+extern unsigned long __get_wchan(struct task_struct *p);
- 
+-/* Get wait channel for task P.  */
+-extern unsigned long __get_wchan(struct task_struct *p);
+-
  /*  The following stuff is pretty HEXAGON specific.  */
  
+ /*  This is really just here for __switch_to.
 --- a/arch/hexagon/kernel/process.c
 +++ b/arch/hexagon/kernel/process.c
-@@ -130,13 +130,11 @@ void flush_thread(void)
-  * is an identification of the point at which the scheduler
-  * was invoked by a blocked thread.
-  */
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	unsigned long fp, pc;
- 	unsigned long stack_page;
- 	int count = 0;
--	if (!p || p == current || task_is_running(p))
--		return 0;
- 
- 	stack_page = (unsigned long)task_stack_page(p);
- 	fp = ((struct hexagon_switch_stack *)p->thread.switch_sp)->fp;
---- a/arch/ia64/include/asm/processor.h
-+++ b/arch/ia64/include/asm/processor.h
-@@ -330,7 +330,7 @@ struct task_struct;
- #define release_thread(dead_task)
- 
- /* Get wait channel for task P.  */
--extern unsigned long get_wchan (struct task_struct *p);
-+extern unsigned long __get_wchan (struct task_struct *p);
- 
- /* Return instruction pointer of blocked task TSK.  */
- #define KSTK_EIP(tsk)					\
---- a/arch/ia64/kernel/process.c
-+++ b/arch/ia64/kernel/process.c
-@@ -523,15 +523,12 @@ exit_thread (struct task_struct *tsk)
+@@ -126,32 +126,6 @@ void flush_thread(void)
  }
- 
- unsigned long
--get_wchan (struct task_struct *p)
-+__get_wchan (struct task_struct *p)
- {
- 	struct unw_frame_info info;
- 	unsigned long ip;
- 	int count = 0;
- 
--	if (!p || p == current || task_is_running(p))
--		return 0;
--
- 	/*
- 	 * Note: p may not be a blocked task (it could be current or
- 	 * another process running on some other CPU.  Rather than
---- a/arch/m68k/include/asm/processor.h
-+++ b/arch/m68k/include/asm/processor.h
-@@ -125,7 +125,7 @@ static inline void release_thread(struct
- {
- }
- 
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
- #define	KSTK_EIP(tsk)	\
-     ({			\
---- a/arch/m68k/kernel/process.c
-+++ b/arch/m68k/kernel/process.c
-@@ -263,13 +263,11 @@ int dump_fpu (struct pt_regs *regs, stru
- }
- EXPORT_SYMBOL(dump_fpu);
- 
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	unsigned long fp, pc;
- 	unsigned long stack_page;
- 	int count = 0;
--	if (!p || p == current || task_is_running(p))
--		return 0;
- 
- 	stack_page = (unsigned long)task_stack_page(p);
- 	fp = ((struct switch_stack *)p->thread.ksp)->a6;
---- a/arch/microblaze/include/asm/processor.h
-+++ b/arch/microblaze/include/asm/processor.h
-@@ -68,7 +68,7 @@ static inline void release_thread(struct
- {
- }
- 
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
- /* The size allocated for kernel stacks. This _must_ be a power of two! */
- # define KERNEL_STACK_SIZE	0x2000
---- a/arch/microblaze/kernel/process.c
-+++ b/arch/microblaze/kernel/process.c
-@@ -112,7 +112,7 @@ int copy_thread(unsigned long clone_flag
- 	return 0;
- }
- 
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- /* TBD (used by procfs) */
- 	return 0;
---- a/arch/mips/include/asm/processor.h
-+++ b/arch/mips/include/asm/processor.h
-@@ -369,7 +369,7 @@ static inline void flush_thread(void)
- {
- }
- 
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
- #define __KSTK_TOS(tsk) ((unsigned long)task_stack_page(tsk) + \
- 			 THREAD_SIZE - 32 - sizeof(struct pt_regs))
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -511,7 +511,7 @@ static int __init frame_info_init(void)
- 
- 	/*
- 	 * Without schedule() frame info, result given by
--	 * thread_saved_pc() and get_wchan() are not reliable.
-+	 * thread_saved_pc() and __get_wchan() are not reliable.
- 	 */
- 	if (schedule_mfi.pc_offset < 0)
- 		printk("Can't analyze schedule() prologue at %p\n", schedule);
-@@ -652,9 +652,9 @@ unsigned long unwind_stack(struct task_s
- #endif
  
  /*
-- * get_wchan - a maintenance nightmare^W^Wpain in the ass ...
-+ * __get_wchan - a maintenance nightmare^W^Wpain in the ass ...
+- * The "wait channel" terminology is archaic, but what we want
+- * is an identification of the point at which the scheduler
+- * was invoked by a blocked thread.
+- */
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	unsigned long fp, pc;
+-	unsigned long stack_page;
+-	int count = 0;
+-
+-	stack_page = (unsigned long)task_stack_page(p);
+-	fp = ((struct hexagon_switch_stack *)p->thread.switch_sp)->fp;
+-	do {
+-		if (fp < (stack_page + sizeof(struct thread_info)) ||
+-			fp >= (THREAD_SIZE - 8 + stack_page))
+-			return 0;
+-		pc = ((unsigned long *)fp)[1];
+-		if (!in_sched_functions(pc))
+-			return pc;
+-		fp = *(unsigned long *) fp;
+-	} while (count++ < 16);
+-
+-	return 0;
+-}
+-
+-/*
+  * Called on the exit path of event entry; see vm_entry.S
+  *
+  * Interrupts will already be disabled.
+--- a/arch/ia64/include/asm/processor.h
++++ b/arch/ia64/include/asm/processor.h
+@@ -329,9 +329,6 @@ struct task_struct;
   */
--unsigned long get_wchan(struct task_struct *task)
-+unsigned long __get_wchan(struct task_struct *task)
+ #define release_thread(dead_task)
+ 
+-/* Get wait channel for task P.  */
+-extern unsigned long __get_wchan (struct task_struct *p);
+-
+ /* Return instruction pointer of blocked task TSK.  */
+ #define KSTK_EIP(tsk)					\
+   ({							\
+--- a/arch/ia64/kernel/process.c
++++ b/arch/ia64/kernel/process.c
+@@ -522,34 +522,6 @@ exit_thread (struct task_struct *tsk)
+ 	ia64_drop_fpu(tsk);
+ }
+ 
+-unsigned long
+-__get_wchan (struct task_struct *p)
+-{
+-	struct unw_frame_info info;
+-	unsigned long ip;
+-	int count = 0;
+-
+-	/*
+-	 * Note: p may not be a blocked task (it could be current or
+-	 * another process running on some other CPU.  Rather than
+-	 * trying to determine if p is really blocked, we just assume
+-	 * it's blocked and rely on the unwind routines to fail
+-	 * gracefully if the process wasn't really blocked after all.
+-	 * --davidm 99/12/15
+-	 */
+-	unw_init_from_blocked_task(&info, p);
+-	do {
+-		if (task_is_running(p))
+-			return 0;
+-		if (unw_unwind(&info) < 0)
+-			return 0;
+-		unw_get_ip(&info, &ip);
+-		if (!in_sched_functions(ip))
+-			return ip;
+-	} while (count++ < 16);
+-	return 0;
+-}
+-
+ void
+ cpu_halt (void)
  {
- 	unsigned long pc = 0;
- #ifdef CONFIG_KALLSYMS
-@@ -662,8 +662,6 @@ unsigned long get_wchan(struct task_stru
- 	unsigned long ra = 0;
+--- a/arch/microblaze/include/asm/processor.h
++++ b/arch/microblaze/include/asm/processor.h
+@@ -68,8 +68,6 @@ static inline void release_thread(struct
+ {
+ }
+ 
+-unsigned long __get_wchan(struct task_struct *p);
+-
+ /* The size allocated for kernel stacks. This _must_ be a power of two! */
+ # define KERNEL_STACK_SIZE	0x2000
+ 
+--- a/arch/microblaze/kernel/process.c
++++ b/arch/microblaze/kernel/process.c
+@@ -112,12 +112,6 @@ int copy_thread(unsigned long clone_flag
+ 	return 0;
+ }
+ 
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-/* TBD (used by procfs) */
+-	return 0;
+-}
+-
+ /* Set up a thread for executing a new program */
+ void start_thread(struct pt_regs *regs, unsigned long pc, unsigned long usp)
+ {
+--- a/arch/mips/include/asm/processor.h
++++ b/arch/mips/include/asm/processor.h
+@@ -369,8 +369,6 @@ static inline void flush_thread(void)
+ {
+ }
+ 
+-unsigned long __get_wchan(struct task_struct *p);
+-
+ #define __KSTK_TOS(tsk) ((unsigned long)task_stack_page(tsk) + \
+ 			 THREAD_SIZE - 32 - sizeof(struct pt_regs))
+ #define task_pt_regs(tsk) ((struct pt_regs *)__KSTK_TOS(tsk))
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -651,33 +651,6 @@ unsigned long unwind_stack(struct task_s
+ }
  #endif
  
--	if (!task || task == current || task_is_running(task))
+-/*
+- * __get_wchan - a maintenance nightmare^W^Wpain in the ass ...
+- */
+-unsigned long __get_wchan(struct task_struct *task)
+-{
+-	unsigned long pc = 0;
+-#ifdef CONFIG_KALLSYMS
+-	unsigned long sp;
+-	unsigned long ra = 0;
+-#endif
+-
+-	if (!task_stack_page(task))
 -		goto out;
- 	if (!task_stack_page(task))
- 		goto out;
- 
+-
+-	pc = thread_saved_pc(task);
+-
+-#ifdef CONFIG_KALLSYMS
+-	sp = task->thread.reg29 + schedule_mfi.frame_size;
+-
+-	while (in_sched_functions(pc))
+-		pc = unwind_stack(task, &sp, pc, &ra);
+-#endif
+-
+-out:
+-	return pc;
+-}
+-
+ unsigned long mips_stack_top(void)
+ {
+ 	unsigned long top = TASK_SIZE & PAGE_MASK;
 --- a/arch/nds32/include/asm/processor.h
 +++ b/arch/nds32/include/asm/processor.h
-@@ -83,7 +83,7 @@ extern struct task_struct *last_task_use
+@@ -83,8 +83,6 @@ extern struct task_struct *last_task_use
  /* Prepare to copy thread state - unlazy all lazy status */
  #define prepare_to_copy(tsk)	do { } while (0)
  
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
+-unsigned long __get_wchan(struct task_struct *p);
+-
  #define cpu_relax()			barrier()
  
+ #define task_pt_regs(task) \
 --- a/arch/nds32/kernel/process.c
 +++ b/arch/nds32/kernel/process.c
-@@ -233,15 +233,12 @@ int dump_fpu(struct pt_regs *regs, elf_f
+@@ -232,26 +232,3 @@ int dump_fpu(struct pt_regs *regs, elf_f
+ }
  
  EXPORT_SYMBOL(dump_fpu);
- 
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	unsigned long fp, lr;
- 	unsigned long stack_start, stack_end;
- 	int count = 0;
- 
--	if (!p || p == current || task_is_running(p))
--		return 0;
 -
- 	if (IS_ENABLED(CONFIG_FRAME_POINTER)) {
- 		stack_start = (unsigned long)end_of_stack(p);
- 		stack_end = (unsigned long)task_stack_page(p) + THREAD_SIZE;
-@@ -258,5 +255,3 @@ unsigned long get_wchan(struct task_stru
- 	}
- 	return 0;
- }
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	unsigned long fp, lr;
+-	unsigned long stack_start, stack_end;
+-	int count = 0;
 -
--EXPORT_SYMBOL(get_wchan);
---- a/arch/nios2/include/asm/processor.h
-+++ b/arch/nios2/include/asm/processor.h
-@@ -69,7 +69,7 @@ static inline void release_thread(struct
- {
- }
- 
--extern unsigned long get_wchan(struct task_struct *p);
-+extern unsigned long __get_wchan(struct task_struct *p);
- 
- #define task_pt_regs(p) \
- 	((struct pt_regs *)(THREAD_SIZE + task_stack_page(p)) - 1)
---- a/arch/nios2/kernel/process.c
-+++ b/arch/nios2/kernel/process.c
-@@ -217,15 +217,12 @@ void dump(struct pt_regs *fp)
- 	pr_emerg("\n\n");
- }
- 
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	unsigned long fp, pc;
- 	unsigned long stack_page;
- 	int count = 0;
- 
--	if (!p || p == current || task_is_running(p))
--		return 0;
+-	if (IS_ENABLED(CONFIG_FRAME_POINTER)) {
+-		stack_start = (unsigned long)end_of_stack(p);
+-		stack_end = (unsigned long)task_stack_page(p) + THREAD_SIZE;
 -
- 	stack_page = (unsigned long)p;
- 	fp = ((struct switch_stack *)p->thread.ksp)->fp;	/* ;dgt2 */
- 	do {
+-		fp = thread_saved_fp(p);
+-		do {
+-			if (fp < stack_start || fp > stack_end)
+-				return 0;
+-			lr = ((unsigned long *)fp)[0];
+-			if (!in_sched_functions(lr))
+-				return lr;
+-			fp = *(unsigned long *)(fp + 4);
+-		} while (count++ < 16);
+-	}
+-	return 0;
+-}
 --- a/arch/openrisc/include/asm/processor.h
 +++ b/arch/openrisc/include/asm/processor.h
-@@ -73,7 +73,7 @@ struct thread_struct {
+@@ -73,7 +73,6 @@ struct thread_struct {
  
  void start_thread(struct pt_regs *regs, unsigned long nip, unsigned long sp);
  void release_thread(struct task_struct *);
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
+-unsigned long __get_wchan(struct task_struct *p);
  
  #define cpu_relax()     barrier()
  
 --- a/arch/openrisc/kernel/process.c
 +++ b/arch/openrisc/kernel/process.c
-@@ -263,7 +263,7 @@ void dump_elf_thread(elf_greg_t *dest, s
+@@ -263,9 +263,3 @@ void dump_elf_thread(elf_greg_t *dest, s
  	dest[35] = 0;
  }
  
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	/* TODO */
- 
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	/* TODO */
+-
+-	return 0;
+-}
 --- a/arch/parisc/include/asm/processor.h
 +++ b/arch/parisc/include/asm/processor.h
-@@ -273,7 +273,7 @@ struct mm_struct;
+@@ -273,8 +273,6 @@ struct mm_struct;
  /* Free all resources held by a thread. */
  extern void release_thread(struct task_struct *);
  
--extern unsigned long get_wchan(struct task_struct *p);
-+extern unsigned long __get_wchan(struct task_struct *p);
- 
+-extern unsigned long __get_wchan(struct task_struct *p);
+-
  #define KSTK_EIP(tsk)	((tsk)->thread.regs.iaoq[0])
  #define KSTK_ESP(tsk)	((tsk)->thread.regs.gr[30])
+ 
 --- a/arch/parisc/kernel/process.c
 +++ b/arch/parisc/kernel/process.c
-@@ -240,15 +240,12 @@ copy_thread(unsigned long clone_flags, u
- }
- 
- unsigned long
--get_wchan(struct task_struct *p)
-+__get_wchan(struct task_struct *p)
- {
- 	struct unwind_frame_info info;
- 	unsigned long ip;
- 	int count = 0;
- 
--	if (!p || p == current || task_is_running(p))
--		return 0;
--
- 	/*
- 	 * These bracket the sleeping functions..
- 	 */
---- a/arch/powerpc/include/asm/processor.h
-+++ b/arch/powerpc/include/asm/processor.h
-@@ -300,7 +300,7 @@ struct thread_struct {
- 
- #define task_pt_regs(tsk)	((tsk)->thread.regs)
- 
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
- #define KSTK_EIP(tsk)  ((tsk)->thread.regs? (tsk)->thread.regs->nip: 0)
- #define KSTK_ESP(tsk)  ((tsk)->thread.regs? (tsk)->thread.regs->gpr[1]: 0)
---- a/arch/powerpc/kernel/process.c
-+++ b/arch/powerpc/kernel/process.c
-@@ -2111,14 +2111,11 @@ int validate_sp(unsigned long sp, struct
- 
- EXPORT_SYMBOL(validate_sp);
- 
--static unsigned long __get_wchan(struct task_struct *p)
-+static unsigned long ___get_wchan(struct task_struct *p)
- {
- 	unsigned long ip, sp;
- 	int count = 0;
- 
--	if (!p || p == current || task_is_running(p))
--		return 0;
--
- 	sp = p->thread.ksp;
- 	if (!validate_sp(sp, p, STACK_FRAME_OVERHEAD))
- 		return 0;
-@@ -2137,14 +2134,14 @@ static unsigned long __get_wchan(struct
+@@ -239,30 +239,6 @@ copy_thread(unsigned long clone_flags, u
  	return 0;
  }
  
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
+-unsigned long
+-__get_wchan(struct task_struct *p)
+-{
+-	struct unwind_frame_info info;
+-	unsigned long ip;
+-	int count = 0;
+-
+-	/*
+-	 * These bracket the sleeping functions..
+-	 */
+-
+-	unwind_frame_init_from_blocked_task(&info, p);
+-	do {
+-		if (unwind_once(&info) < 0)
+-			return 0;
+-		if (task_is_running(p))
+-                        return 0;
+-		ip = info.ip;
+-		if (!in_sched_functions(ip))
+-			return ip;
+-	} while (count++ < MAX_UNWIND_ENTRIES);
+-	return 0;
+-}
+-
+ #ifdef CONFIG_64BIT
+ void *dereference_function_descriptor(void *ptr)
  {
- 	unsigned long ret;
+--- a/arch/powerpc/include/asm/processor.h
++++ b/arch/powerpc/include/asm/processor.h
+@@ -300,8 +300,6 @@ struct thread_struct {
  
- 	if (!try_get_task_stack(p))
- 		return 0;
+ #define task_pt_regs(tsk)	((tsk)->thread.regs)
  
--	ret = __get_wchan(p);
-+	ret = ___get_wchan(p);
+-unsigned long __get_wchan(struct task_struct *p);
+-
+ #define KSTK_EIP(tsk)  ((tsk)->thread.regs? (tsk)->thread.regs->nip: 0)
+ #define KSTK_ESP(tsk)  ((tsk)->thread.regs? (tsk)->thread.regs->gpr[1]: 0)
  
- 	put_task_stack(p);
+--- a/arch/powerpc/kernel/process.c
++++ b/arch/powerpc/kernel/process.c
+@@ -2111,43 +2111,6 @@ int validate_sp(unsigned long sp, struct
  
+ EXPORT_SYMBOL(validate_sp);
+ 
+-static unsigned long ___get_wchan(struct task_struct *p)
+-{
+-	unsigned long ip, sp;
+-	int count = 0;
+-
+-	sp = p->thread.ksp;
+-	if (!validate_sp(sp, p, STACK_FRAME_OVERHEAD))
+-		return 0;
+-
+-	do {
+-		sp = *(unsigned long *)sp;
+-		if (!validate_sp(sp, p, STACK_FRAME_OVERHEAD) ||
+-		    task_is_running(p))
+-			return 0;
+-		if (count > 0) {
+-			ip = ((unsigned long *)sp)[STACK_FRAME_LR_SAVE];
+-			if (!in_sched_functions(ip))
+-				return ip;
+-		}
+-	} while (count++ < 16);
+-	return 0;
+-}
+-
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	unsigned long ret;
+-
+-	if (!try_get_task_stack(p))
+-		return 0;
+-
+-	ret = ___get_wchan(p);
+-
+-	put_task_stack(p);
+-
+-	return ret;
+-}
+-
+ static int kstack_depth_to_print = CONFIG_PRINT_STACK_DEPTH;
+ 
+ void __no_sanitize_address show_stack(struct task_struct *tsk,
 --- a/arch/riscv/include/asm/processor.h
 +++ b/arch/riscv/include/asm/processor.h
-@@ -66,7 +66,7 @@ static inline void release_thread(struct
+@@ -66,9 +66,6 @@ static inline void release_thread(struct
  {
  }
  
--extern unsigned long get_wchan(struct task_struct *p);
-+extern unsigned long __get_wchan(struct task_struct *p);
- 
- 
+-extern unsigned long __get_wchan(struct task_struct *p);
+-
+-
  static inline void wait_for_interrupt(void)
+ {
+ 	__asm__ __volatile__ ("wfi");
 --- a/arch/riscv/kernel/stacktrace.c
 +++ b/arch/riscv/kernel/stacktrace.c
-@@ -128,16 +128,14 @@ static bool save_wchan(void *arg, unsign
- 	return true;
+@@ -118,27 +118,6 @@ void show_stack(struct task_struct *task
+ 	dump_backtrace(NULL, task, loglvl);
  }
  
--unsigned long get_wchan(struct task_struct *task)
-+unsigned long __get_wchan(struct task_struct *task)
- {
- 	unsigned long pc = 0;
- 
--	if (likely(task && task != current && !task_is_running(task))) {
--		if (!try_get_task_stack(task))
--			return 0;
--		walk_stackframe(task, NULL, save_wchan, &pc);
--		put_task_stack(task);
+-static bool save_wchan(void *arg, unsigned long pc)
+-{
+-	if (!in_sched_functions(pc)) {
+-		unsigned long *p = arg;
+-		*p = pc;
+-		return false;
 -	}
-+	if (!try_get_task_stack(task))
-+		return 0;
-+	walk_stackframe(task, NULL, save_wchan, &pc);
-+	put_task_stack(task);
- 	return pc;
- }
+-	return true;
+-}
+-
+-unsigned long __get_wchan(struct task_struct *task)
+-{
+-	unsigned long pc = 0;
+-
+-	if (!try_get_task_stack(task))
+-		return 0;
+-	walk_stackframe(task, NULL, save_wchan, &pc);
+-	put_task_stack(task);
+-	return pc;
+-}
+-
+ #ifdef CONFIG_STACKTRACE
  
+ noinline void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
 --- a/arch/s390/include/asm/processor.h
 +++ b/arch/s390/include/asm/processor.h
-@@ -192,7 +192,7 @@ static inline void release_thread(struct
+@@ -192,7 +192,6 @@ static inline void release_thread(struct
  void guarded_storage_release(struct task_struct *tsk);
  void gs_load_bc_cb(struct pt_regs *regs);
  
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
+-unsigned long __get_wchan(struct task_struct *p);
  #define task_pt_regs(tsk) ((struct pt_regs *) \
          (task_stack_page(tsk) + THREAD_SIZE) - 1)
  #define KSTK_EIP(tsk)	(task_pt_regs(tsk)->psw.addr)
 --- a/arch/s390/kernel/process.c
 +++ b/arch/s390/kernel/process.c
-@@ -181,12 +181,12 @@ void execve_tail(void)
+@@ -181,35 +181,6 @@ void execve_tail(void)
  	asm volatile("sfpc %0" : : "d" (0));
  }
  
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	struct unwind_state state;
+-	unsigned long ip = 0;
+-
+-	if (!task_stack_page(p))
+-		return 0;
+-
+-	if (!try_get_task_stack(p))
+-		return 0;
+-
+-	unwind_for_each_frame(&state, p, NULL, 0) {
+-		if (state.stack_info.type != STACK_TYPE_TASK) {
+-			ip = 0;
+-			break;
+-		}
+-
+-		ip = unwind_get_return_address(&state);
+-		if (!ip)
+-			break;
+-
+-		if (!in_sched_functions(ip))
+-			break;
+-	}
+-
+-	put_task_stack(p);
+-	return ip;
+-}
+-
+ unsigned long arch_align_stack(unsigned long sp)
  {
- 	struct unwind_state state;
- 	unsigned long ip = 0;
- 
--	if (!p || p == current || task_is_running(p) || !task_stack_page(p))
-+	if (!task_stack_page(p))
- 		return 0;
- 
- 	if (!try_get_task_stack(p))
+ 	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
 --- a/arch/sh/include/asm/processor_32.h
 +++ b/arch/sh/include/asm/processor_32.h
-@@ -180,7 +180,7 @@ static inline void show_code(struct pt_r
+@@ -180,8 +180,6 @@ static inline void show_code(struct pt_r
  }
  #endif
  
--extern unsigned long get_wchan(struct task_struct *p);
-+extern unsigned long __get_wchan(struct task_struct *p);
- 
+-extern unsigned long __get_wchan(struct task_struct *p);
+-
  #define KSTK_EIP(tsk)  (task_pt_regs(tsk)->pc)
  #define KSTK_ESP(tsk)  (task_pt_regs(tsk)->regs[15])
+ 
 --- a/arch/sh/kernel/process_32.c
 +++ b/arch/sh/kernel/process_32.c
-@@ -182,13 +182,10 @@ __switch_to(struct task_struct *prev, st
+@@ -181,22 +181,3 @@ __switch_to(struct task_struct *prev, st
+ 
  	return prev;
  }
- 
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	unsigned long pc;
- 
--	if (!p || p == current || task_is_running(p))
--		return 0;
 -
- 	/*
- 	 * The same comment as on the Alpha applies here, too ...
- 	 */
---- a/arch/sparc/include/asm/processor_32.h
-+++ b/arch/sparc/include/asm/processor_32.h
-@@ -89,7 +89,7 @@ static inline void start_thread(struct p
- /* Free all resources held by a thread. */
- #define release_thread(tsk)		do { } while(0)
- 
--unsigned long get_wchan(struct task_struct *);
-+unsigned long __get_wchan(struct task_struct *);
- 
- #define task_pt_regs(tsk) ((tsk)->thread.kregs)
- #define KSTK_EIP(tsk)  ((tsk)->thread.kregs->pc)
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	unsigned long pc;
+-
+-	/*
+-	 * The same comment as on the Alpha applies here, too ...
+-	 */
+-	pc = thread_saved_pc(p);
+-
+-#ifdef CONFIG_FRAME_POINTER
+-	if (in_sched_functions(pc)) {
+-		unsigned long schedule_frame = (unsigned long)p->thread.sp;
+-		return ((unsigned long *)schedule_frame)[21];
+-	}
+-#endif
+-
+-	return pc;
+-}
 --- a/arch/sparc/include/asm/processor_64.h
 +++ b/arch/sparc/include/asm/processor_64.h
-@@ -183,7 +183,7 @@ do { \
+@@ -183,8 +183,6 @@ do { \
  /* Free all resources held by a thread. */
  #define release_thread(tsk)		do { } while (0)
  
--unsigned long get_wchan(struct task_struct *task);
-+unsigned long __get_wchan(struct task_struct *task);
- 
+-unsigned long __get_wchan(struct task_struct *task);
+-
  #define task_pt_regs(tsk) (task_thread_info(tsk)->kregs)
  #define KSTK_EIP(tsk)  (task_pt_regs(tsk)->tpc)
---- a/arch/sparc/kernel/process_32.c
-+++ b/arch/sparc/kernel/process_32.c
-@@ -365,7 +365,7 @@ int copy_thread(unsigned long clone_flag
- 	return 0;
- }
- 
--unsigned long get_wchan(struct task_struct *task)
-+unsigned long __get_wchan(struct task_struct *task)
- {
- 	unsigned long pc, fp, bias = 0;
- 	unsigned long task_base = (unsigned long) task;
-@@ -373,9 +373,6 @@ unsigned long get_wchan(struct task_stru
- 	struct reg_window32 *rw;
- 	int count = 0;
- 
--	if (!task || task == current || task_is_running(task))
--		goto out;
--
- 	fp = task_thread_info(task)->ksp + bias;
- 	do {
- 		/* Bogus frame pointer? */
+ #define KSTK_ESP(tsk)  (task_pt_regs(tsk)->u_regs[UREG_FP])
 --- a/arch/sparc/kernel/process_64.c
 +++ b/arch/sparc/kernel/process_64.c
-@@ -663,7 +663,7 @@ int arch_dup_task_struct(struct task_str
+@@ -662,31 +662,3 @@ int arch_dup_task_struct(struct task_str
+ 	*dst = *src;
  	return 0;
  }
- 
--unsigned long get_wchan(struct task_struct *task)
-+unsigned long __get_wchan(struct task_struct *task)
- {
- 	unsigned long pc, fp, bias = 0;
- 	struct thread_info *tp;
-@@ -671,9 +671,6 @@ unsigned long get_wchan(struct task_stru
-         unsigned long ret = 0;
- 	int count = 0; 
- 
--	if (!task || task == current || task_is_running(task))
--		goto out;
 -
- 	tp = task_thread_info(task);
- 	bias = STACK_BIAS;
- 	fp = task_thread_info(task)->ksp + bias;
+-unsigned long __get_wchan(struct task_struct *task)
+-{
+-	unsigned long pc, fp, bias = 0;
+-	struct thread_info *tp;
+-	struct reg_window *rw;
+-        unsigned long ret = 0;
+-	int count = 0; 
+-
+-	tp = task_thread_info(task);
+-	bias = STACK_BIAS;
+-	fp = task_thread_info(task)->ksp + bias;
+-
+-	do {
+-		if (!kstack_valid(tp, fp))
+-			break;
+-		rw = (struct reg_window *) fp;
+-		pc = rw->ins[7];
+-		if (!in_sched_functions(pc)) {
+-			ret = pc;
+-			goto out;
+-		}
+-		fp = rw->ins[6] + bias;
+-	} while (++count < 16);
+-
+-out:
+-	return ret;
+-}
 --- a/arch/um/include/asm/processor-generic.h
 +++ b/arch/um/include/asm/processor-generic.h
-@@ -106,6 +106,6 @@ extern struct cpuinfo_um boot_cpu_data;
+@@ -106,6 +106,5 @@ extern struct cpuinfo_um boot_cpu_data;
  #define cache_line_size()	(boot_cpu_data.cache_alignment)
  
  #define KSTK_REG(tsk, reg) get_thread_reg(reg, &tsk->thread.switch_buf)
--extern unsigned long get_wchan(struct task_struct *p);
-+extern unsigned long __get_wchan(struct task_struct *p);
+-extern unsigned long __get_wchan(struct task_struct *p);
  
  #endif
 --- a/arch/um/kernel/process.c
 +++ b/arch/um/kernel/process.c
-@@ -364,14 +364,11 @@ unsigned long arch_align_stack(unsigned
+@@ -364,38 +364,6 @@ unsigned long arch_align_stack(unsigned
  }
  #endif
  
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	unsigned long stack_page, sp, ip;
- 	bool seen_sched = 0;
- 
--	if ((p == NULL) || (p == current) || task_is_running(p))
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	unsigned long stack_page, sp, ip;
+-	bool seen_sched = 0;
+-
+-	stack_page = (unsigned long) task_stack_page(p);
+-	/* Bail if the process has no kernel stack for some reason */
+-	if (stack_page == 0)
 -		return 0;
 -
- 	stack_page = (unsigned long) task_stack_page(p);
- 	/* Bail if the process has no kernel stack for some reason */
- 	if (stack_page == 0)
+-	sp = p->thread.switch_buf->JB_SP;
+-	/*
+-	 * Bail if the stack pointer is below the bottom of the kernel
+-	 * stack for some reason
+-	 */
+-	if (sp < stack_page)
+-		return 0;
+-
+-	while (sp < stack_page + THREAD_SIZE) {
+-		ip = *((unsigned long *) sp);
+-		if (in_sched_functions(ip))
+-			/* Ignore everything until we're above the scheduler */
+-			seen_sched = 1;
+-		else if (kernel_text_address(ip) && seen_sched)
+-			return ip;
+-
+-		sp += sizeof(unsigned long);
+-	}
+-
+-	return 0;
+-}
+-
+ int elf_core_copy_fpregs(struct task_struct *t, elf_fpregset_t *fpu)
+ {
+ 	int cpu = current_thread_info()->cpu;
 --- a/arch/x86/include/asm/processor.h
 +++ b/arch/x86/include/asm/processor.h
-@@ -590,7 +590,7 @@ static inline void load_sp0(unsigned lon
+@@ -590,8 +590,6 @@ static inline void load_sp0(unsigned lon
  /* Free all resources held by a thread. */
  extern void release_thread(struct task_struct *);
  
--unsigned long get_wchan(struct task_struct *p);
-+unsigned long __get_wchan(struct task_struct *p);
- 
+-unsigned long __get_wchan(struct task_struct *p);
+-
  /*
   * Generic CPUID function
+  * clear %ecx since some cpus (Cyrix MII) do not set or clear %ecx
 --- a/arch/x86/kernel/process.c
 +++ b/arch/x86/kernel/process.c
-@@ -943,13 +943,10 @@ unsigned long arch_randomize_brk(struct
-  * because the task might wake up and we might look at a stack
-  * changing under us.
-  */
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	unsigned long entry = 0;
- 
--	if (p == current || task_is_running(p))
--		return 0;
--
- 	stack_trace_save_tsk(p, &entry, 1, 0);
- 	return entry;
+@@ -937,20 +937,6 @@ unsigned long arch_randomize_brk(struct
+ 	return randomize_page(mm->brk, 0x02000000);
  }
+ 
+-/*
+- * Called from fs/proc with a reference on @p to find the function
+- * which called into schedule(). This needs to be done carefully
+- * because the task might wake up and we might look at a stack
+- * changing under us.
+- */
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	unsigned long entry = 0;
+-
+-	stack_trace_save_tsk(p, &entry, 1, 0);
+-	return entry;
+-}
+-
+ long do_arch_prctl_common(struct task_struct *task, int option,
+ 			  unsigned long cpuid_enabled)
+ {
 --- a/arch/xtensa/include/asm/processor.h
 +++ b/arch/xtensa/include/asm/processor.h
-@@ -215,7 +215,7 @@ struct mm_struct;
+@@ -215,8 +215,6 @@ struct mm_struct;
  /* Free all resources held by a thread. */
  #define release_thread(thread) do { } while(0)
  
--extern unsigned long get_wchan(struct task_struct *p);
-+extern unsigned long __get_wchan(struct task_struct *p);
- 
+-extern unsigned long __get_wchan(struct task_struct *p);
+-
  #define KSTK_EIP(tsk)		(task_pt_regs(tsk)->pc)
  #define KSTK_ESP(tsk)		(task_pt_regs(tsk)->areg[1])
+ 
 --- a/arch/xtensa/kernel/process.c
 +++ b/arch/xtensa/kernel/process.c
-@@ -298,15 +298,12 @@ int copy_thread(unsigned long clone_flag
-  * These bracket the sleeping functions..
-  */
+@@ -293,32 +293,3 @@ int copy_thread(unsigned long clone_flag
+ 	return 0;
+ }
  
--unsigned long get_wchan(struct task_struct *p)
-+unsigned long __get_wchan(struct task_struct *p)
- {
- 	unsigned long sp, pc;
- 	unsigned long stack_page = (unsigned long) task_stack_page(p);
- 	int count = 0;
- 
--	if (!p || p == current || task_is_running(p))
--		return 0;
 -
- 	sp = p->thread.sp;
- 	pc = MAKE_PC_FROM_RA(p->thread.ra, p->thread.sp);
- 
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2139,6 +2139,7 @@ static inline void set_task_cpu(struct t
- #endif /* CONFIG_SMP */
- 
- extern bool sched_task_on_rq(struct task_struct *p);
-+extern unsigned long get_wchan(struct task_struct *p);
- 
- /*
-  * In order to reduce various lock holder preemption latencies provide an
+-/*
+- * These bracket the sleeping functions..
+- */
+-
+-unsigned long __get_wchan(struct task_struct *p)
+-{
+-	unsigned long sp, pc;
+-	unsigned long stack_page = (unsigned long) task_stack_page(p);
+-	int count = 0;
+-
+-	sp = p->thread.sp;
+-	pc = MAKE_PC_FROM_RA(p->thread.ra, p->thread.sp);
+-
+-	do {
+-		if (sp < stack_page + sizeof(struct task_struct) ||
+-		    sp >= (stack_page + THREAD_SIZE) ||
+-		    pc == 0)
+-			return 0;
+-		if (!in_sched_functions(pc))
+-			return pc;
+-
+-		/* Stack layout: sp-4: ra, sp-3: sp' */
+-
+-		pc = MAKE_PC_FROM_RA(SPILL_SLOT(sp, 0), sp);
+-		sp = SPILL_SLOT(sp, 1);
+-	} while (count++ < 16);
+-	return 0;
+-}
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -1962,6 +1962,25 @@ bool sched_task_on_rq(struct task_struct
+@@ -1966,6 +1966,21 @@ bool sched_task_on_rq(struct task_struct
  	return task_on_rq_queued(p);
  }
  
-+unsigned long get_wchan(struct task_struct *p)
++#ifdef CONFIG_STACKTRACE
++static unsigned long __get_wchan(struct task_struct *p)
 +{
-+	unsigned long ip = 0;
-+	unsigned int state;
++	unsigned long entry = 0;
 +
-+	if (!p || p == current)
-+		return 0;
++	stack_trace_save_tsk(p, &entry, 1, 0);
 +
-+	/* Only get wchan if task is blocked and we can keep it that way. */
-+	raw_spin_lock_irq(&p->pi_lock);
-+	state = READ_ONCE(p->__state);
-+	smp_rmb(); /* see try_to_wake_up() */
-+	if (state != TASK_RUNNING && state != TASK_WAKING && !p->on_rq)
-+		ip = __get_wchan(p);
-+	raw_spin_unlock_irq(&p->pi_lock);
-+
-+	return ip;
++	return entry;
 +}
++#endif
 +
- static inline void enqueue_task(struct rq *rq, struct task_struct *p, int flags)
++/*
++ * Called from fs/proc with a reference on @p to find the function
++ * which called into schedule().
++ */
+ unsigned long get_wchan(struct task_struct *p)
  {
- 	if (!(flags & ENQUEUE_NOCLOCK))
+ 	unsigned long ip = 0;
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1531,13 +1531,8 @@ config DEBUG_IRQFLAGS
+ 	  are enabled.
+ 
+ config STACKTRACE
+-	bool "Stack backtrace support"
++	def_bool y
+ 	depends on STACKTRACE_SUPPORT
+-	help
+-	  This option causes the kernel to create a /proc/pid/stack for
+-	  every process, showing its current stack trace.
+-	  It is also used by various kernel debugging features that require
+-	  stack trace generation.
+ 
+ config WARN_ALL_UNSEEDED_RANDOM
+ 	bool "Warn for all uses of unseeded randomness"
 
 
