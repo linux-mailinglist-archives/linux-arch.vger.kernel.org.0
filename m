@@ -2,189 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 012A742688F
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Oct 2021 13:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E464268AB
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Oct 2021 13:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240117AbhJHLUz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Oct 2021 07:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240367AbhJHLUs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Oct 2021 07:20:48 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FA7C061762
-        for <linux-arch@vger.kernel.org>; Fri,  8 Oct 2021 04:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=umSfuLmNyx4dR8mDkBis1oRVsQNuMXaIh5WYIShus0o=; b=kyV7a5VCRDjg0lCxTwlu9BoLfA
-        j0FlmMCPFG1UizZ0ewTSHVjKcuv2XpbfoGf4ChD2nr0alhYJWtbCl/hhaL2E5HEECcqf+i3fLo8KY
-        hR69k8ZNf/NrwVCnlgLrNA3p4REQnE7mvSfJNf/Ntui5NkxQlJB5VpsQ8QD6SupueH5NJFlZUEwjI
-        f8r4AVLvc0NoPelOJaxHuIntff438VPrTbdXZWTCcZnTNxlKTyUU9kvXfcUtCvzWi+GpezSVoOIaO
-        Q7bNrKBgZuXqq6InRVW81DbNKdFDhFtDGFLEHc6BwfSVc8DZ4P/t8f5aR8ebv1QHpp9mZkUmut+4d
-        EagtDrSg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mYnsI-008eLg-6Z; Fri, 08 Oct 2021 11:17:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C0074302D44;
-        Fri,  8 Oct 2021 13:17:08 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id F0ABC2DB84A6C; Fri,  8 Oct 2021 13:17:07 +0200 (CEST)
-Message-ID: <20211008111626.455137084@infradead.org>
-User-Agent: quilt/0.66
-Date:   Fri, 08 Oct 2021 13:15:34 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     keescook@chromium.org, jannh@google.com
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, akpm@linux-foundation.org,
-        christian.brauner@ubuntu.com, amistry@google.com,
-        Kenta.Tada@sony.com, legion@kernel.org,
-        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
-        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com,
-        mark.rutland@arm.com, axboe@kernel.dk, metze@samba.org,
-        laijs@linux.alibaba.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, ebiederm@xmission.com,
-        ohoono.kwon@samsung.com, kaleshsingh@google.com,
-        yifeifz2@illinois.edu, jpoimboe@redhat.com,
-        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
-        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
-        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
-        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
-        chris@zankel.net
-Subject: [PATCH 7/7] arch: Fix STACKTRACE_SUPPORT
-References: <20211008111527.438276127@infradead.org>
+        id S240084AbhJHL2d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Oct 2021 07:28:33 -0400
+Received: from mail-ua1-f50.google.com ([209.85.222.50]:42557 "EHLO
+        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230118AbhJHL2b (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Oct 2021 07:28:31 -0400
+Received: by mail-ua1-f50.google.com with SMTP id c33so6483503uae.9;
+        Fri, 08 Oct 2021 04:26:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0PjIYnfhy9JPfwuH1borR6uzGu121ZxVTnsPHIR1D60=;
+        b=0VCoAG3iBRkON5TbAPG2geJUxQ6xJsJ+mT64KWyBxV9Y+k71/hYDE+cy6JqK/UmL90
+         Hi2n+iI3pqaTPx0kP5Jxyg5mNdyBSO69c4qYD1wDrX38RKcrMtH8LI8oGUtQyw+YPsFN
+         ZGIgGMujFmlyQDvneRs4Is0GABZUfPtfFiXkOPsh/fE27u3OWRCF3OJHXWjpCJ6ItCIE
+         zxMHrvXzuJDZMeR26UAvbGjVAJ5GJuYK0DEm6tqb5HPywApXSo3zzuMoT/DaBZGbqfF0
+         c2r8C335h2TH1I9QN9fK9ob5mYJr+n3SKWi1L9NWYIwaIJodB1SB2wmjiLMVX30ZxcNx
+         EGig==
+X-Gm-Message-State: AOAM530EhvxMg1UpOGmZiEPCI0/Et1Y+tj27dPDyCqkYke+qilwtcJM3
+        5/C3GGYOLP/x73n24JnxoCV6cf6Vmd68xaPzK5k=
+X-Google-Smtp-Source: ABdhPJyteRFr5h/MW+daRXU5YNDBMWkgDET9u4GPaMKgL5YkWc1aPkv1aZJdPd3DoNASP2tz/NiY7+7luWZgA8L+pQk=
+X-Received: by 2002:ab0:58c1:: with SMTP id r1mr1876640uac.89.1633692395608;
+ Fri, 08 Oct 2021 04:26:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20211008111527.438276127@infradead.org> <20211008111626.332092234@infradead.org>
+In-Reply-To: <20211008111626.332092234@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 8 Oct 2021 13:26:24 +0200
+Message-ID: <CAMuHMdUzQXPtfYDzytFeXNig7dQo+16+wRqud1AeF8GoLJMgNA@mail.gmail.com>
+Subject: Re: [PATCH 5/7] sched: Add wrapper for get_wchan() to keep task blocked
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        vcaputo@pengaru.com, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
+        michael.weiss@aisec.fraunhofer.de, Michal Hocko <mhocko@suse.com>,
+        Helge Deller <deller@gmx.de>, zhengqi.arch@bytedance.com,
+        "Tobin C. Harding" <me@tobin.cc>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jens Axboe <axboe@kernel.dk>, metze@samba.org,
+        laijs@linux.alibaba.com, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        ohoono.kwon@samsung.com, kaleshsingh@google.com,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-hardening@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-A few archs got save_stack_trace_tsk() vs in_sched_functions() wrong.
+On Fri, Oct 8, 2021 at 1:20 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> From: Kees Cook <keescook@chromium.org>
+>
+> Having a stable wchan means the process must be blocked and for it to
+> stay that way while performing stack unwinding.
+>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/csky/kernel/stacktrace.c  |    7 ++++++-
- arch/mips/kernel/stacktrace.c  |   27 ++++++++++++++++-----------
- arch/nds32/kernel/stacktrace.c |   21 +++++++++++----------
- 3 files changed, 33 insertions(+), 22 deletions(-)
+>  arch/m68k/include/asm/processor.h       |    2 +-
+>  arch/m68k/kernel/process.c              |    4 +---
 
---- a/arch/csky/kernel/stacktrace.c
-+++ b/arch/csky/kernel/stacktrace.c
-@@ -122,12 +122,17 @@ static bool save_trace(unsigned long pc,
- 	return __save_trace(pc, arg, false);
- }
- 
-+static bool save_trace_nosched(unsigned long pc, void *arg)
-+{
-+	return __save_trace(pc, arg, true);
-+}
-+
- /*
-  * Save stack-backtrace addresses into a stack_trace buffer.
-  */
- void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
- {
--	walk_stackframe(tsk, NULL, save_trace, trace);
-+	walk_stackframe(tsk, NULL, save_trace_nosched, trace);
- }
- EXPORT_SYMBOL_GPL(save_stack_trace_tsk);
- 
---- a/arch/mips/kernel/stacktrace.c
-+++ b/arch/mips/kernel/stacktrace.c
-@@ -66,16 +66,7 @@ static void save_context_stack(struct st
- #endif
- }
- 
--/*
-- * Save stack-backtrace addresses into a stack_trace buffer.
-- */
--void save_stack_trace(struct stack_trace *trace)
--{
--	save_stack_trace_tsk(current, trace);
--}
--EXPORT_SYMBOL_GPL(save_stack_trace);
--
--void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
-+static void __save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace, bool savesched)
- {
- 	struct pt_regs dummyregs;
- 	struct pt_regs *regs = &dummyregs;
-@@ -88,6 +79,20 @@ void save_stack_trace_tsk(struct task_st
- 		regs->cp0_epc = tsk->thread.reg31;
- 	} else
- 		prepare_frametrace(regs);
--	save_context_stack(trace, tsk, regs, tsk == current);
-+	save_context_stack(trace, tsk, regs, savesched);
-+}
-+
-+/*
-+ * Save stack-backtrace addresses into a stack_trace buffer.
-+ */
-+void save_stack_trace(struct stack_trace *trace)
-+{
-+	__save_stack_trace_tsk(current, trace, true);
-+}
-+EXPORT_SYMBOL_GPL(save_stack_trace);
-+
-+void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
-+{
-+	__save_stack_trace_tsk(tsk, trace, false);
- }
- EXPORT_SYMBOL_GPL(save_stack_trace_tsk);
---- a/arch/nds32/kernel/stacktrace.c
-+++ b/arch/nds32/kernel/stacktrace.c
-@@ -6,25 +6,16 @@
- #include <linux/stacktrace.h>
- #include <linux/ftrace.h>
- 
--void save_stack_trace(struct stack_trace *trace)
--{
--	save_stack_trace_tsk(current, trace);
--}
--EXPORT_SYMBOL_GPL(save_stack_trace);
--
--void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
-+static void __save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace, bool savesched)
- {
- 	unsigned long *fpn;
- 	int skip = trace->skip;
--	int savesched;
- 	int graph_idx = 0;
- 
- 	if (tsk == current) {
- 		__asm__ __volatile__("\tori\t%0, $fp, #0\n":"=r"(fpn));
--		savesched = 1;
- 	} else {
- 		fpn = (unsigned long *)thread_saved_fp(tsk);
--		savesched = 0;
- 	}
- 
- 	while (!kstack_end(fpn) && !((unsigned long)fpn & 0x3)
-@@ -50,4 +41,14 @@ void save_stack_trace_tsk(struct task_st
- 		fpn = (unsigned long *)fpp;
- 	}
- }
-+void save_stack_trace(struct stack_trace *trace)
-+{
-+	__save_stack_trace_tsk(current, trace, true);
-+}
-+EXPORT_SYMBOL_GPL(save_stack_trace);
-+
-+void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
-+{
-+	__save_stack_trace_tsk(tsk, trace, false);
-+}
- EXPORT_SYMBOL_GPL(save_stack_trace_tsk);
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
