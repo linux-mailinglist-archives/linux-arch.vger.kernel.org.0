@@ -2,123 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46560426BEE
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Oct 2021 15:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58EB426CD2
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Oct 2021 16:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233472AbhJHNuG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Oct 2021 09:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbhJHNuF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Oct 2021 09:50:05 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A315C061570;
-        Fri,  8 Oct 2021 06:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AeZfY9f2iurPW1q+xtFtNI1W2I5709CG4W+EJzRCAMU=; b=DqeWXbPQlW8+2aIXHL4un8c8+C
-        ruiELp8b0b13YYNPX7L4rPcFlICkbKbxDmpxW0wfhQri+vCj4+Un16Vk2xSx5dnHKB6XjF/nCD4Kc
-        nlnyFWrwNg5WN4WEfLzCSesqGpp15v6P6xIml5ZTruuTBuiM9FYSXvBMo18CxswkMsRBySXd9+BjP
-        UIzM212gfP/XKVRlc+i9DzGCdyo6ulxCGiaIh7lO+UySloIQPd2SGi0v5Xr81ivHfLGBEpUiHJRBR
-        NSJhA9/LEcIXsBIVuCAiF2O2TNE5GY68jb8IP3tr8i6lQN6u1mH0yrsXX5Ji+Xu+tNprYsQ4lhIl4
-        GOQBFtJA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mYqCJ-008fZ5-Li; Fri, 08 Oct 2021 13:46:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A494E300ECB;
-        Fri,  8 Oct 2021 15:45:59 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 64C3A2007A037; Fri,  8 Oct 2021 15:45:59 +0200 (CEST)
-Date:   Fri, 8 Oct 2021 15:45:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     keescook@chromium.org, jannh@google.com,
-        linux-kernel@vger.kernel.org, vcaputo@pengaru.com,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, akpm@linux-foundation.org,
-        christian.brauner@ubuntu.com, amistry@google.com,
-        Kenta.Tada@sony.com, legion@kernel.org,
-        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
-        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
-        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, ebiederm@xmission.com,
-        ohoono.kwon@samsung.com, kaleshsingh@google.com,
-        yifeifz2@illinois.edu, jpoimboe@redhat.com,
-        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
-        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
-        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
-        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
-        chris@zankel.net
-Subject: Re: [PATCH 6/7] arch: __get_wchan || STACKTRACE_SUPPORT
-Message-ID: <YWBLl0mMTGPE/7hM@hirez.programming.kicks-ass.net>
-References: <20211008111527.438276127@infradead.org>
- <20211008111626.392918519@infradead.org>
- <20211008124052.GA976@C02TD0UTHF1T.local>
+        id S230511AbhJHOis (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Oct 2021 10:38:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46212 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229756AbhJHOir (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 8 Oct 2021 10:38:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 95F0260F5C;
+        Fri,  8 Oct 2021 14:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633703812;
+        bh=t+hlBOA9013wCFF+qw9fA68XVfWsxLdC41rXTznDq+c=;
+        h=From:Date:Subject:To:Cc:From;
+        b=fG4ogRK3ZZNFAQ00Si3IYqNyGXsJ1xilUV4wmIP1aRxeQcnaZYnwXSGMhDTSIO/uL
+         GsOC1oiCKNMekPlx+04AiIYTUFepKQS0sorYAGxnTRtoPjVfzpX3Auc3fBNN9xNvd7
+         2lB6wAmehOQz89Jm3T86aTTTZktyx+7lWTknVOWthmcfU1v8vETapIXdF6XQQIsMtk
+         DIpeRQoFiM7CHkbqAXC7APbYJeJFWO5JEioM41GtEDAwkElBfwqizUR9RzLF3wOMah
+         CZqg45SIueuLqn/izsRbWikGRYqWZulZ9dTlCxZ3+3gMmSjAGREQpfnMEkN/KgEEtN
+         GYSFH/9auAYlg==
+Received: by mail-wr1-f43.google.com with SMTP id e12so30518500wra.4;
+        Fri, 08 Oct 2021 07:36:52 -0700 (PDT)
+X-Gm-Message-State: AOAM530sxmLAZbnDKb4LJA9Gxj+dAnTNOcmQmL2K1shsNCTh69cKFltY
+        oEEaIh03FguLQ9vDZpz0EdcQuvRldRjuhp2bRd4=
+X-Google-Smtp-Source: ABdhPJz7rvULoEBwZGj3NKEJYoTa6eWldb9JNPxhe0dUKjgtZhb+oFcS2iARUryNLXjWtpdUumTdWOhep47L+av9IaA=
+X-Received: by 2002:adf:b1c4:: with SMTP id r4mr4627783wra.428.1633703811146;
+ Fri, 08 Oct 2021 07:36:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211008124052.GA976@C02TD0UTHF1T.local>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 8 Oct 2021 16:36:35 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0WCfiZ=WeezCCATSoxGmaDtL=pAWKzRu3wuLaT9qs6gA@mail.gmail.com>
+Message-ID: <CAK8P3a0WCfiZ=WeezCCATSoxGmaDtL=pAWKzRu3wuLaT9qs6gA@mail.gmail.com>
+Subject: [GIT PULL] asm-generic: build fixes for v5.15
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 08, 2021 at 01:40:52PM +0100, Mark Rutland wrote:
-> [Adding Josh, since there might be a concern here from a livepatch pov]
-> 
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
-> > +static unsigned long __get_wchan(struct task_struct *p)
-> > +{
-> > +	unsigned long entry = 0;
-> > +
-> > +	stack_trace_save_tsk(p, &entry, 1, 0);
-> 
-> This assumes stack_trace_save_tsk() will skip sched functions, but I
-> don't think that's ever been a requirement? It's certinaly not
-> documented anywhere that I could find, and arm64 doesn't do so today,
-> and this patch causes wchan to just log `__switch_to` for everything.
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 
-Confused, arm64 has arch_stack_walk() and should thus use
-kernel/stacktrace.c's stack_trace_consume_entry_nosched.
+are available in the Git repository at:
 
-> I realise you "fix" that for some arches in the next patch, but it's not
-> clear to me that's the right thing to do -- I would expect that
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+tags/asm-generic-fixes-5.15
 
-I only actually change the behaviour on csky, both mips and nds32 have
-this 'savesched = (task == current)' logic which ends up being a very
-confusing way to write things, but for wchan we never call on current,
-and hence don't save the __sched functions.
+for you to fetch changes up to 2fbc349911e45d4ea5187b608c8d58db66496260:
 
-> stack_trace_save_tsk() *shouldn't* skip anything unless we've explicitly
-> told it to via skipnr, because I'd expect that
+  asm-generic/io.h: give stub iounmap() on !MMU same prototype as
+elsewhere (2021-10-08 15:39:33 +0200)
 
-It's what most archs happen to do today and is what
-stack_trace_save_tsk() as implemented using arch_stack_walk() does.
-Which is I think the closest to canonical we have.
+----------------------------------------------------------------
+asm-generic: build fixes for v5.15
 
-> stack_trace_save_tsk_reliable() mustn't, in case we ever need to patch
-> anything in the scheduler (or arch ctxsw code) with a livepatch, or if
-> you ever *want* to have the sched functions in a trace.
-> 
-> So I have two big questions:
-> 
-> 1) Where precisely should stack_trace_save_tsk() and
->    stack_trace_save_tsk_reliable() start from?
-> 
-> 1) What should you do when you *do* want sched functions in a trace?
-> 
-> We could side-step the issue here by using arch_stack_walk(), which'd
-> make it easy to skip sched functions in the core code.
+There is one build fix for Arm platforms that ended up impacting most
+architectures because of the way the drivers/firmware Kconfig file is
+wired up:
 
-arch_stack_walk() is the modern API and should be used going forward,
-and I've gone with the stack_trace_save*() implementation as per that.
+The CONFIG_QCOM_SCM dependency have caused a number of randconfig
+regressions over time, and some still remain in v5.15-rc4. The
+fix we agreed on in the end is to make this symbol selected by any
+driver using it, and then building it even for non-Arm platforms with
+CONFIG_COMPILE_TEST.
+
+To make this work on all architectures, the drivers/firmware/Kconfig
+file needs to be included for all architectures to make the symbol
+itself visible.
+
+In a separate discussion, we found that a sound driver patch that is
+pending for v5.16 needs the same change to include this Kconfig file,
+so the easiest solution seems to have my Kconfig rework included in v5.15.
+
+There is a small merge conflict against an earlier partial fix for the
+QCOM_SCM dependency problems.
+
+Finally, the branch also includes a small unrelated build fix for NOMMU
+architectures.
+
+Link: https://lore.kernel.org/all/20210928153508.101208f8@canb.auug.org.au/
+Link: https://lore.kernel.org/all/20210928075216.4193128-1-arnd@kernel.org/
+Link: https://lore.kernel.org/all/20211007151010.333516-1-arnd@kernel.org/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Adam Borowski (1):
+      asm-generic/io.h: give stub iounmap() on !MMU same prototype as elsewhere
+
+Arnd Bergmann (2):
+      firmware: include drivers/firmware/Kconfig unconditionally
+      qcom_scm: hide Kconfig symbol
+
+ arch/arm/Kconfig                           |  2 -
+ arch/arm64/Kconfig                         |  2 -
+ arch/ia64/Kconfig                          |  2 -
+ arch/mips/Kconfig                          |  2 -
+ arch/parisc/Kconfig                        |  2 -
+ arch/riscv/Kconfig                         |  2 -
+ arch/x86/Kconfig                           |  2 -
+ drivers/Kconfig                            |  2 +
+ drivers/firmware/Kconfig                   |  5 +--
+ drivers/gpu/drm/msm/Kconfig                |  4 +-
+ drivers/iommu/Kconfig                      |  3 +-
+ drivers/iommu/arm/arm-smmu/Makefile        |  3 +-
+ drivers/iommu/arm/arm-smmu/arm-smmu-impl.c |  3 +-
+ drivers/media/platform/Kconfig             |  2 +-
+ drivers/mmc/host/Kconfig                   |  2 +-
+ drivers/net/ipa/Kconfig                    |  1 +
+ drivers/net/wireless/ath/ath10k/Kconfig    |  2 +-
+ drivers/pinctrl/qcom/Kconfig               |  3 +-
+ include/asm-generic/io.h                   |  2 +-
+ include/linux/arm-smccc.h                  | 10 +++++
+ include/linux/qcom_scm.h                   | 71 ------------------------------
+ 21 files changed, 27 insertions(+), 100 deletions(-)
