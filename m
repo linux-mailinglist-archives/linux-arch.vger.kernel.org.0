@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F5B427511
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 02:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F01D427516
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 02:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244218AbhJIAk2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Oct 2021 20:40:28 -0400
-Received: from mga02.intel.com ([134.134.136.20]:5260 "EHLO mga02.intel.com"
+        id S244277AbhJIAkc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Oct 2021 20:40:32 -0400
+Received: from mga02.intel.com ([134.134.136.20]:5261 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244224AbhJIAkB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 8 Oct 2021 20:40:01 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10131"; a="213756532"
+        id S244132AbhJIAkF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 8 Oct 2021 20:40:05 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10131"; a="213756539"
 X-IronPort-AV: E=Sophos;i="5.85,358,1624345200"; 
-   d="scan'208";a="213756532"
+   d="scan'208";a="213756539"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 17:37:47 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 17:37:48 -0700
 X-IronPort-AV: E=Sophos;i="5.85,358,1624345200"; 
-   d="scan'208";a="624905390"
+   d="scan'208";a="624905394"
 Received: from dmsojoza-mobl3.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.251.135.62])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 17:37:45 -0700
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 17:37:47 -0700
 From:   Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -53,9 +53,9 @@ Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
         linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH v5 10/16] PCI: Consolidate pci_iomap_range(), pci_iomap_wc_range()
-Date:   Fri,  8 Oct 2021 17:37:05 -0700
-Message-Id: <20211009003711.1390019-11-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v5 11/16] asm/io.h: Add ioremap_host_shared fallback
+Date:   Fri,  8 Oct 2021 17:37:06 -0700
+Message-Id: <20211009003711.1390019-12-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -67,140 +67,112 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Andi Kleen <ak@linux.intel.com>
 
-pci_iomap_range() and pci_iomap_wc_range() are currently duplicated
-code, except that the _wc variant does not support IO ports. So,
-implement them using a common helper, pci_iomap_range_map().
-
-Also add wrappers for the maps because some architectures implement
-ioremap and friends with macros.
-
-This will allow to add more variants without excessive code
-duplication. This patch has no functional changes.
+This function is for declaring memory that should be shared with
+a hypervisor in a confidential guest. If the architecture doesn't
+implement it it's just ioremap.
 
 Signed-off-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
+
 Changes since v4:
- * Rebased on top of Tom Lendacky's CC guest
-   changes (https://www.spinics.net/lists/linux-tip-commits/msg58716.html)
- * Fixed commit log as per Bjorns comments.
- * Added "support_io" argument to pci_iomap_range_map() to support
-    __pci_ioport_map() only in pci_iomap_range().
+ * Renamed ioremap_shared to ioremap_host_shared
+ * Added documentation for ioremap_host_shared().
 
- lib/pci_iomap.c | 86 ++++++++++++++++++++++++++++---------------------
- 1 file changed, 49 insertions(+), 37 deletions(-)
+ Documentation/driver-api/device-io.rst | 7 +++++++
+ arch/alpha/include/asm/io.h            | 2 ++
+ arch/mips/include/asm/io.h             | 2 ++
+ arch/parisc/include/asm/io.h           | 2 ++
+ arch/sparc/include/asm/io_64.h         | 2 ++
+ include/asm-generic/io.h               | 5 +++++
+ 6 files changed, 20 insertions(+)
 
-diff --git a/lib/pci_iomap.c b/lib/pci_iomap.c
-index 2d3eb1cb73b8..57bd92f599ee 100644
---- a/lib/pci_iomap.c
-+++ b/lib/pci_iomap.c
-@@ -10,6 +10,51 @@
- #include <linux/export.h>
+diff --git a/Documentation/driver-api/device-io.rst b/Documentation/driver-api/device-io.rst
+index e9f04b1815d1..9f77a036fc2f 100644
+--- a/Documentation/driver-api/device-io.rst
++++ b/Documentation/driver-api/device-io.rst
+@@ -429,6 +429,13 @@ of the linear kernel memory area to a regular pointer.
  
- #ifdef CONFIG_PCI
+ Portable drivers should avoid the use of ioremap_cache().
+ 
++ioremap_host_shared()
++---------------------
 +
-+/*
-+ * Callback wrappers because some architectures define ioremap et.al.
-+ * as macros.
-+ */
-+static void __iomem *map_ioremap(phys_addr_t addr, size_t size)
-+{
-+	return ioremap(addr, size);
-+}
++ioremap_host_shared() maps I/O memory so that it can be shared with the host
++in a confidential guest platform. It is mainly used in platforms like
++Trusted Domain Extensions (TDX).
 +
-+static void __iomem *map_ioremap_wc(phys_addr_t addr, size_t size)
-+{
-+	return ioremap_wc(addr, size);
-+}
-+
-+static void __iomem *pci_iomap_range_map(struct pci_dev *dev,
-+					 int bar,
-+					 unsigned long offset,
-+					 unsigned long maxlen,
-+					 void __iomem *(*mapm)(phys_addr_t,
-+							       size_t),
-+					 bool support_io)
-+{
-+	resource_size_t start = pci_resource_start(dev, bar);
-+	resource_size_t len = pci_resource_len(dev, bar);
-+	unsigned long flags = pci_resource_flags(dev, bar);
-+
-+	if (len <= offset || !start)
-+		return NULL;
-+	len -= offset;
-+	start += offset;
-+	if (maxlen && len > maxlen)
-+		len = maxlen;
-+	if (flags & IORESOURCE_IO) {
-+		if (support_io)
-+			return __pci_ioport_map(dev, start, len);
-+
-+		return NULL;
-+	}
-+	if (flags & IORESOURCE_MEM)
-+		return mapm(start, len);
-+	/* What? */
-+	return NULL;
-+}
-+
- /**
-  * pci_iomap_range - create a virtual mapping cookie for a PCI BAR
-  * @dev: PCI device that owns the BAR
-@@ -30,22 +75,8 @@ void __iomem *pci_iomap_range(struct pci_dev *dev,
- 			      unsigned long offset,
- 			      unsigned long maxlen)
- {
--	resource_size_t start = pci_resource_start(dev, bar);
--	resource_size_t len = pci_resource_len(dev, bar);
--	unsigned long flags = pci_resource_flags(dev, bar);
--
--	if (len <= offset || !start)
--		return NULL;
--	len -= offset;
--	start += offset;
--	if (maxlen && len > maxlen)
--		len = maxlen;
--	if (flags & IORESOURCE_IO)
--		return __pci_ioport_map(dev, start, len);
--	if (flags & IORESOURCE_MEM)
--		return ioremap(start, len);
--	/* What? */
--	return NULL;
-+	return pci_iomap_range_map(dev, bar, offset, maxlen,
-+				   map_ioremap, true);
+ Architecture example
+ --------------------
+ 
+diff --git a/arch/alpha/include/asm/io.h b/arch/alpha/include/asm/io.h
+index 0fab5ac90775..81952ef50667 100644
+--- a/arch/alpha/include/asm/io.h
++++ b/arch/alpha/include/asm/io.h
+@@ -283,6 +283,8 @@ static inline void __iomem *ioremap(unsigned long port, unsigned long size)
  }
- EXPORT_SYMBOL(pci_iomap_range);
  
-@@ -70,27 +101,8 @@ void __iomem *pci_iomap_wc_range(struct pci_dev *dev,
- 				 unsigned long offset,
- 				 unsigned long maxlen)
+ #define ioremap_wc ioremap
++/* Share memory with host in confidential guest platforms */
++#define ioremap_host_shared ioremap
+ #define ioremap_uc ioremap
+ 
+ static inline void iounmap(volatile void __iomem *addr)
+diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+index 6f5c86d2bab4..83f638fb48c5 100644
+--- a/arch/mips/include/asm/io.h
++++ b/arch/mips/include/asm/io.h
+@@ -179,6 +179,8 @@ void iounmap(const volatile void __iomem *addr);
+ #define ioremap(offset, size)						\
+ 	ioremap_prot((offset), (size), _CACHE_UNCACHED)
+ #define ioremap_uc		ioremap
++/* Share memory with host in confidential guest platforms */
++#define ioremap_host_shared	ioremap
+ 
+ /*
+  * ioremap_cache -	map bus memory into CPU space
+diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
+index 0b5259102319..ef516ee06238 100644
+--- a/arch/parisc/include/asm/io.h
++++ b/arch/parisc/include/asm/io.h
+@@ -129,6 +129,8 @@ static inline void gsc_writeq(unsigned long long val, unsigned long addr)
+  */
+ void __iomem *ioremap(unsigned long offset, unsigned long size);
+ #define ioremap_wc			ioremap
++/* Share memory with host in confidential guest platforms */
++#define ioremap_host_shared		ioremap
+ #define ioremap_uc			ioremap
+ 
+ extern void iounmap(const volatile void __iomem *addr);
+diff --git a/arch/sparc/include/asm/io_64.h b/arch/sparc/include/asm/io_64.h
+index 5ffa820dcd4d..5b73b877f832 100644
+--- a/arch/sparc/include/asm/io_64.h
++++ b/arch/sparc/include/asm/io_64.h
+@@ -409,6 +409,8 @@ static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
+ #define ioremap_uc(X,Y)			ioremap((X),(Y))
+ #define ioremap_wc(X,Y)			ioremap((X),(Y))
+ #define ioremap_wt(X,Y)			ioremap((X),(Y))
++/* Share memory with host in confidential guest platforms */
++#define ioremap_host_shared(X, Y)	ioremap((X), (Y))
+ static inline void __iomem *ioremap_np(unsigned long offset, unsigned long size)
  {
--	resource_size_t start = pci_resource_start(dev, bar);
--	resource_size_t len = pci_resource_len(dev, bar);
--	unsigned long flags = pci_resource_flags(dev, bar);
--
--
--	if (flags & IORESOURCE_IO)
--		return NULL;
--
--	if (len <= offset || !start)
--		return NULL;
--
--	len -= offset;
--	start += offset;
--	if (maxlen && len > maxlen)
--		len = maxlen;
--
--	if (flags & IORESOURCE_MEM)
--		return ioremap_wc(start, len);
--
--	/* What? */
--	return NULL;
-+	return pci_iomap_range_map(dev, bar, offset, maxlen,
-+				   map_ioremap_wc, false);
- }
- EXPORT_SYMBOL_GPL(pci_iomap_wc_range);
+ 	return NULL;
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index e93375c710b9..26b48fe23769 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -982,6 +982,11 @@ static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
+ #define ioremap_wt ioremap
+ #endif
  
++/* Share memory with host in confidential guest platforms */
++#ifndef ioremap_host_shared
++#define ioremap_host_shared ioremap
++#endif
++
+ /*
+  * ioremap_uc is special in that we do require an explicit architecture
+  * implementation.  In general you do not want to use this function in a
 -- 
 2.25.1
 
