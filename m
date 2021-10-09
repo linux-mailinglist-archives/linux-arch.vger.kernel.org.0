@@ -2,27 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA2642753F
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 02:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D19E427574
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 03:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244213AbhJIAlN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Oct 2021 20:41:13 -0400
-Received: from mga02.intel.com ([134.134.136.20]:5260 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244107AbhJIAkv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 8 Oct 2021 20:40:51 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10131"; a="213756576"
-X-IronPort-AV: E=Sophos;i="5.85,358,1624345200"; 
-   d="scan'208";a="213756576"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 17:37:56 -0700
-X-IronPort-AV: E=Sophos;i="5.85,358,1624345200"; 
-   d="scan'208";a="624905446"
-Received: from dmsojoza-mobl3.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.251.135.62])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 17:37:55 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+        id S244041AbhJIBra (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Oct 2021 21:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232063AbhJIBra (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Oct 2021 21:47:30 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A1BC061570;
+        Fri,  8 Oct 2021 18:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=8Yhlfpn88xGUZ0D2UsU9ZR1KIwe5CGURq7DLgR1hrBY=; b=1Z6zSdy4U1cnEgkDHFifc+XY8Y
+        GlewY7KjyFBbKH64naXeI41ZeCK2wzbxmLYn8tQReOLUCKAfWokngJdgXzG2kZqfZuukHe0LzGSem
+        /fWn4TtGInc4xujKU9lhTWQmbcOyZPdRobBXzgyYqQiz2V+LCqXMtthT6T+ZQAyQo3oPf9aPdoOkJ
+        XKCfcDJy3GwQcs5wemBALdUGapmhhOQ0Ws+MHquNKSKXMDSnM/RxQhR8WlIXhEXmTBWm/wLd+hHF0
+        AGJlpBT1b3CurBjVkXBwVF3uizzCjn8R7aZLHlbBj649FMdFXEGzDXcQrpB78Kj/tCgGw8zSXNsVA
+        Vnnceg4Q==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mZ1QW-004Rhr-Nh; Sat, 09 Oct 2021 01:45:28 +0000
+Subject: Re: [PATCH v5 16/16] x86/tdx: Add cmdline option to force use of
+ ioremap_host_shared
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
@@ -46,140 +55,61 @@ Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
         Kirill Shutemov <kirill.shutemov@linux.intel.com>,
         Sean Christopherson <seanjc@google.com>,
         Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH v5 16/16] x86/tdx: Add cmdline option to force use of ioremap_host_shared
-Date:   Fri,  8 Oct 2021 17:37:11 -0700
-Message-Id: <20211009003711.1390019-17-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009003711.1390019-17-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <7b4c3e3e-09e4-3bf8-6e23-77892fb6df02@infradead.org>
+Date:   Fri, 8 Oct 2021 18:45:26 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211009003711.1390019-17-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add a command line option to force all the enabled drivers to use
-shared memory mappings. This will be useful when enabling new drivers
-in the confidential guest without making all the required changes to
-use shared mappings in it.
+On 10/8/21 5:37 PM, Kuppuswamy Sathyanarayanan wrote:
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 91ba391f9b32..0af19cb1a28c 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -2076,6 +2076,18 @@
+>   			1 - Bypass the IOMMU for DMA.
+>   			unset - Use value of CONFIG_IOMMU_DEFAULT_PASSTHROUGH.
+>   
+> +	ioremap_force_shared= [X86_64, CCG]
+> +			Force the kernel to use shared memory mappings which do
+> +			not use ioremap_host_shared/pcimap_host_shared to opt-in
+> +			to shared mappings with the host. This feature is mainly
+> +			used by a confidential guest when enabling new drivers
+> +			without proper shared memory related changes. Please note
+> +			that this option might also allow other non explicitly
+> +			enabled drivers to interact with the host in confidential
+> +			guest, which could cause other security risks. This option
+> +			will also cause BIOS data structures to be shared with the
+> +			host, which might open security holes.
 
-Note that this might also allow other non explicitly enabled drivers
-to interact with the host, which could cause other security risks.
+Hi,
+This cmdline option text should have a little bit more info. Just as an
+example/template:
 
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
- .../admin-guide/kernel-parameters.rst         |  1 +
- .../admin-guide/kernel-parameters.txt         | 12 ++++++++++++
- arch/x86/include/asm/io.h                     |  2 ++
- arch/x86/mm/ioremap.c                         | 19 ++++++++++++++++++-
- 4 files changed, 33 insertions(+), 1 deletion(-)
+	acpi_apic_instance=	[ACPI, IOAPIC]
+			Format: <int>
+			2: use 2nd APIC table, if available
+			1,0: use 1st APIC table
+			default: 0
 
-diff --git a/Documentation/admin-guide/kernel-parameters.rst b/Documentation/admin-guide/kernel-parameters.rst
-index 01ba293a2d70..02e6aae1ad68 100644
---- a/Documentation/admin-guide/kernel-parameters.rst
-+++ b/Documentation/admin-guide/kernel-parameters.rst
-@@ -102,6 +102,7 @@ parameter is applicable::
- 	ARM	ARM architecture is enabled.
- 	ARM64	ARM64 architecture is enabled.
- 	AX25	Appropriate AX.25 support is enabled.
-+	CCG	Confidential Computing guest is enabled.
- 	CLK	Common clock infrastructure is enabled.
- 	CMA	Contiguous Memory Area support is enabled.
- 	DRM	Direct Rendering Management support is enabled.
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 91ba391f9b32..0af19cb1a28c 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2076,6 +2076,18 @@
- 			1 - Bypass the IOMMU for DMA.
- 			unset - Use value of CONFIG_IOMMU_DEFAULT_PASSTHROUGH.
- 
-+	ioremap_force_shared= [X86_64, CCG]
-+			Force the kernel to use shared memory mappings which do
-+			not use ioremap_host_shared/pcimap_host_shared to opt-in
-+			to shared mappings with the host. This feature is mainly
-+			used by a confidential guest when enabling new drivers
-+			without proper shared memory related changes. Please note
-+			that this option might also allow other non explicitly
-+			enabled drivers to interact with the host in confidential
-+			guest, which could cause other security risks. This option
-+			will also cause BIOS data structures to be shared with the
-+			host, which might open security holes.
-+
- 	io7=		[HW] IO7 for Marvel-based Alpha systems
- 			See comment before marvel_specify_io7 in
- 			arch/alpha/kernel/core_marvel.c.
-diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
-index 521b239c013f..98836c2833e4 100644
---- a/arch/x86/include/asm/io.h
-+++ b/arch/x86/include/asm/io.h
-@@ -423,6 +423,8 @@ static inline bool phys_mem_access_encrypted(unsigned long phys_addr,
- }
- #endif
- 
-+extern bool ioremap_force_shared;
-+
- /**
-  * iosubmit_cmds512 - copy data to single MMIO location, in 512-bit units
-  * @dst: destination, in MMIO space (must be 512-bit aligned)
-diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
-index a83a69045f61..d0d2bf5116bc 100644
---- a/arch/x86/mm/ioremap.c
-+++ b/arch/x86/mm/ioremap.c
-@@ -28,6 +28,7 @@
- #include <asm/memtype.h>
- #include <asm/setup.h>
- #include <asm/tdx.h>
-+#include <asm/cmdline.h>
- 
- #include "physaddr.h"
- 
-@@ -162,6 +163,17 @@ static void __ioremap_check_mem(resource_size_t addr, unsigned long size,
- 	__ioremap_check_other(addr, desc);
- }
- 
-+/*
-+ * Normally only drivers that are hardened for use in confidential guests
-+ * force shared mappings. But if device filtering is disabled other
-+ * devices can be loaded, and these need shared mappings too. This
-+ * variable is set to true if these filters are disabled.
-+ *
-+ * Note this has some side effects, e.g. various BIOS tables
-+ * get shared too which is risky.
-+ */
-+bool ioremap_force_shared;
-+
- /*
-  * Remap an arbitrary physical address space into the kernel virtual
-  * address space. It transparently creates kernel huge I/O mapping when
-@@ -249,7 +261,7 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
- 	prot = PAGE_KERNEL_IO;
- 	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
- 		prot = pgprot_encrypted(prot);
--	else if (shared)
-+	else if (shared || ioremap_force_shared)
- 		prot = pgprot_cc_guest(prot);
- 
- 	switch (pcm) {
-@@ -847,6 +859,11 @@ void __init early_ioremap_init(void)
- 	WARN_ON((fix_to_virt(0) + PAGE_SIZE) & ((1 << PMD_SHIFT) - 1));
- #endif
- 
-+	/* Parse cmdline params for ioremap_force_shared */
-+	if (cmdline_find_option_bool(boot_command_line,
-+				     "ioremap_force_shared"))
-+		ioremap_force_shared = 1;
-+
- 	early_ioremap_setup();
- 
- 	pmd = early_ioremap_pmd(fix_to_virt(FIX_BTMAP_BEGIN));
+So what is expected after the "=" sign?...
+
+thanks.
 -- 
-2.25.1
-
+~Randy
