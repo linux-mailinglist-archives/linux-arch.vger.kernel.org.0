@@ -2,230 +2,238 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02575427877
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 11:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7601427893
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 11:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbhJIJi2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 9 Oct 2021 05:38:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51606 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230022AbhJIJi2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 9 Oct 2021 05:38:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C30956103B;
-        Sat,  9 Oct 2021 09:36:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633772191;
-        bh=SjT8GXjp2vALqAboJSsc+ya7I8HSo3JkjeRK9RdsfOs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RPa5mVuZmKfBqcwzAKdwFLiOTh4k96G1uawf5srCOZkavlEliMGmiGYkMd7zaYuur
-         9D/ZlUyYDul7Iscb2Mj4kG9D1oktsPMIHdKq28uLstTO+wi+4Wyqg6G/dZfjqibPlX
-         BWvz/ey57e+lL7xBmVtUf/NMqHIu87QifvYy8QuWHYaUFj9311A2jnF3aSvVPWq44V
-         KVZ87zyADOVHAVnZ1Ian7zheZDXzmotL+Yhr3k8r+3DZ0DNfQ8KbYtVUYfCDsrLy09
-         320QguKRYhBKQczyXoi0ZYQCk6nuZOTUhkRXtLwm+lAYi62nqVX8UY3xT8x7Mc78Nv
-         IW/MbN0QRJCKw==
-Received: by mail-ua1-f51.google.com with SMTP id r17so189394uaf.8;
-        Sat, 09 Oct 2021 02:36:31 -0700 (PDT)
-X-Gm-Message-State: AOAM532YhZTiXp89NiMmfRD1AumqnX8VDxiLTqOo7S80vJ2uEkcuT+Po
-        tVIxJrzhhWt214xwdiHlh4IoBbBWsCFuRZkFn9M=
-X-Google-Smtp-Source: ABdhPJw4K9Vh0ayL3YzQdV/mPKwTuZ6tYl/k8iHoEU5LBj948W/50Y3El7sw3j56qe2h+lEng8MYJoY+5CCl0TmO9lE=
-X-Received: by 2002:a05:6130:426:: with SMTP id ba38mr7997026uab.108.1633772190841;
- Sat, 09 Oct 2021 02:36:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211008111527.438276127@infradead.org> <20211008111626.455137084@infradead.org>
-In-Reply-To: <20211008111626.455137084@infradead.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 9 Oct 2021 17:36:19 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRTbOjqfNcm16E_XCtBSxTiUyczsWYR9uy6ZYqSuR41Pg@mail.gmail.com>
-Message-ID: <CAJF2gTRTbOjqfNcm16E_XCtBSxTiUyczsWYR9uy6ZYqSuR41Pg@mail.gmail.com>
-Subject: Re: [PATCH 7/7] arch: Fix STACKTRACE_SUPPORT
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        vcaputo@pengaru.com, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        christian.brauner@ubuntu.com, amistry@google.com,
-        Kenta.Tada@sony.com, legion@kernel.org,
-        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com,
-        Helge Deller <deller@gmx.de>, zhengqi.arch@bytedance.com,
-        me@tobin.cc, tycho@tycho.pizza,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jens Axboe <axboe@kernel.dk>, metze@samba.org,
-        laijs@linux.alibaba.com, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        ohoono.kwon@samsung.com, kaleshsingh@google.com,
-        yifeifz2@illinois.edu, jpoimboe@redhat.com,
-        linux-hardening@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>, vgupta@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Michal Simek <monstr@monstr.eu>,
+        id S232422AbhJIJzk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 9 Oct 2021 05:55:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20749 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232146AbhJIJzk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Oct 2021 05:55:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633773222;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TC+ficJjTyhwmBtLURsKztDpUSSEvDlSazI7HDdGRfI=;
+        b=cjSZUc86dmHceTLNpmvWsXr7bi1yVx+B2v6mVpNBZBSOp8aZtcH0vKkm+QKsqTqgoLtVVF
+        XE5mynOhK2BzgvVtUXVkCWnt2MS6Ma/0AqIkeEZiyMIGHjDe93IRujeBW7TiGQY4RET7+D
+        VzorxDcDG5x1F5jGkUXz/uWp3dT4ktI=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-20-bz9TjC7FOmq-Np8RzQyEqA-1; Sat, 09 Oct 2021 05:53:42 -0400
+X-MC-Unique: bz9TjC7FOmq-Np8RzQyEqA-1
+Received: by mail-ed1-f69.google.com with SMTP id i7-20020a50d747000000b003db0225d219so11479542edj.0
+        for <linux-arch@vger.kernel.org>; Sat, 09 Oct 2021 02:53:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TC+ficJjTyhwmBtLURsKztDpUSSEvDlSazI7HDdGRfI=;
+        b=VMqQRgem5UMLb0fR2pAYizCIHNZwGpAb5XAqbRZDVO9EYrxWCN7ElvWetm3SDSRXKY
+         yldnPF2OiXZFGdlFb0FlV1V9EDhW2IwsuegvSrk+X3GJ8RD9JQHFYlNtEI8UmEUJHrY5
+         Ex/tZlYtvNseV1+B56TQQELoV+T3Ukr1P/M/fWQvGeVbZqat2QGrV2jwcW9MMD6VpUIU
+         hvTa7zN9T/JscBDULgbKsbFoqptJGgVNr8dgEdTpGS2fQeUL/lwpzft6k08I2102vsQe
+         bcWmvdbzNAKu3AMjr1/Bof/k/uWTv8QU7O5ak5qRDKsnq76rgQCAq3uJuuU7dG/PqPht
+         GKrw==
+X-Gm-Message-State: AOAM530w7bybpvv8U9gaukv/glAoOmgmMhM2xIbuGJya9tCD28svAaL0
+        f9BuQHBL6cUz+u14Px4OOPaMytcjGv++X/lfZejVV3OAoXb9I0xlAXoPQL9RDbKLZUSDsjZMfro
+        CYG5Ud2ZFOCc7ltcl12wwPA==
+X-Received: by 2002:a17:906:2bc7:: with SMTP id n7mr10404160ejg.238.1633773220396;
+        Sat, 09 Oct 2021 02:53:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxePZTE9MitFRdc70X+sthkRGYJjDyzEeDJjYhWOTmTvwwLiK4AL4UvsV8FtvbX7jf0fHnSpA==
+X-Received: by 2002:a17:906:2bc7:: with SMTP id n7mr10404118ejg.238.1633773220163;
+        Sat, 09 Oct 2021 02:53:40 -0700 (PDT)
+Received: from redhat.com ([2.55.132.170])
+        by smtp.gmail.com with ESMTPSA id rv25sm776493ejb.21.2021.10.09.02.53.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Oct 2021 02:53:39 -0700 (PDT)
+Date:   Sat, 9 Oct 2021 05:53:32 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        David Miller <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>
-Content-Type: text/plain; charset="UTF-8"
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v5 12/16] PCI: Add pci_iomap_host_shared(),
+ pci_iomap_host_shared_range()
+Message-ID: <20211009053103-mutt-send-email-mst@kernel.org>
+References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Thx Peter,
+On Fri, Oct 08, 2021 at 05:37:07PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> From: Andi Kleen <ak@linux.intel.com>
+> 
+> For Confidential VM guests like TDX, the host is untrusted and hence
+> the devices emulated by the host or any data coming from the host
+> cannot be trusted. So the drivers that interact with the outside world
+> have to be hardened by sharing memory with host on need basis
+> with proper hardening fixes.
+> 
+> For the PCI driver case, to share the memory with the host add
+> pci_iomap_host_shared() and pci_iomap_host_shared_range() APIs.
+> 
+> Signed-off-by: Andi Kleen <ak@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-On Fri, Oct 8, 2021 at 7:18 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> A few archs got save_stack_trace_tsk() vs in_sched_functions() wrong.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+So I proposed to make all pci mappings shared, eliminating the need
+to patch drivers.
+
+To which Andi replied
+	One problem with removing the ioremap opt-in is that
+	it's still possible for drivers to get at devices without going through probe.
+
+To which Greg replied:
+https://lore.kernel.org/all/YVXBNJ431YIWwZdQ@kroah.com/
+	If there are in-kernel PCI drivers that do not do this, they need to be
+	fixed today.
+
+Can you guys resolve the differences here?
+
+And once they are resolved, mention this in the commit log so
+I don't get to re-read the series just to find out nothing
+changed in this respect?
+
+I frankly do not believe we are anywhere near being able to harden
+an arbitrary kernel config against attack.
+How about creating a defconfig that makes sense for TDX then?
+Anyone deviating from that better know what they are doing,
+this API tweaking is just putting policy into the kernel  ...
+
 > ---
->  arch/csky/kernel/stacktrace.c  |    7 ++++++-
->  arch/mips/kernel/stacktrace.c  |   27 ++++++++++++++++-----------
->  arch/nds32/kernel/stacktrace.c |   21 +++++++++++----------
->  3 files changed, 33 insertions(+), 22 deletions(-)
->
-> --- a/arch/csky/kernel/stacktrace.c
-> +++ b/arch/csky/kernel/stacktrace.c
-> @@ -122,12 +122,17 @@ static bool save_trace(unsigned long pc,
->         return __save_trace(pc, arg, false);
+>  Changes since v4:
+>  * Replaced "_shared" with "_host_shared" in pci_iomap* APIs
+>  * Fixed commit log as per review comments.
+> 
+>  include/asm-generic/pci_iomap.h |  6 +++++
+>  lib/pci_iomap.c                 | 47 +++++++++++++++++++++++++++++++++
+>  2 files changed, 53 insertions(+)
+> 
+> diff --git a/include/asm-generic/pci_iomap.h b/include/asm-generic/pci_iomap.h
+> index df636c6d8e6c..a4a83c8ab3cf 100644
+> --- a/include/asm-generic/pci_iomap.h
+> +++ b/include/asm-generic/pci_iomap.h
+> @@ -18,6 +18,12 @@ extern void __iomem *pci_iomap_range(struct pci_dev *dev, int bar,
+>  extern void __iomem *pci_iomap_wc_range(struct pci_dev *dev, int bar,
+>  					unsigned long offset,
+>  					unsigned long maxlen);
+> +extern void __iomem *pci_iomap_host_shared(struct pci_dev *dev, int bar,
+> +					   unsigned long max);
+> +extern void __iomem *pci_iomap_host_shared_range(struct pci_dev *dev, int bar,
+> +						 unsigned long offset,
+> +						 unsigned long maxlen);
+> +
+>  /* Create a virtual mapping cookie for a port on a given PCI device.
+>   * Do not call this directly, it exists to make it easier for architectures
+>   * to override */
+> diff --git a/lib/pci_iomap.c b/lib/pci_iomap.c
+> index 57bd92f599ee..2816dc8715da 100644
+> --- a/lib/pci_iomap.c
+> +++ b/lib/pci_iomap.c
+> @@ -25,6 +25,11 @@ static void __iomem *map_ioremap_wc(phys_addr_t addr, size_t size)
+>  	return ioremap_wc(addr, size);
 >  }
->
-> +static bool save_trace_nosched(unsigned long pc, void *arg)
+>  
+> +static void __iomem *map_ioremap_host_shared(phys_addr_t addr, size_t size)
 > +{
-> +       return __save_trace(pc, arg, true);
+> +	return ioremap_host_shared(addr, size);
 > +}
 > +
->  /*
->   * Save stack-backtrace addresses into a stack_trace buffer.
->   */
->  void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
->  {
-> -       walk_stackframe(tsk, NULL, save_trace, trace);
-> +       walk_stackframe(tsk, NULL, save_trace_nosched, trace);
+>  static void __iomem *pci_iomap_range_map(struct pci_dev *dev,
+>  					 int bar,
+>  					 unsigned long offset,
+> @@ -106,6 +111,48 @@ void __iomem *pci_iomap_wc_range(struct pci_dev *dev,
 >  }
->  EXPORT_SYMBOL_GPL(save_stack_trace_tsk);
-I think the patch should be:
-@@ -138,7 +138,7 @@ static bool __save_trace(unsigned long pc, void
-*arg, bool nosched)
+>  EXPORT_SYMBOL_GPL(pci_iomap_wc_range);
+>  
+> +/**
+> + * pci_iomap_host_shared_range - create a virtual shared mapping cookie
+> + *				 for a PCI BAR
+> + * @dev: PCI device that owns the BAR
+> + * @bar: BAR number
+> + * @offset: map memory at the given offset in BAR
+> + * @maxlen: max length of the memory to map
+> + *
+> + * Remap a pci device's resources shared in a confidential guest.
+> + * For more details see pci_iomap_range's documentation.
 
- static bool save_trace(unsigned long pc, void *arg)
- {
--       return __save_trace(pc, arg, false);
-+       return __save_trace(pc, arg, true);
- }
+So how does a driver author know when to use this function, and when to
+use the regular pci_iomap_range?  Drivers have no idea whether they are
+used in a confidential guest, and which ranges are shared, it's a TDX
+thing ...
 
-Another question:
-If we put sched_text in the backtrace buffer, just cause put no useful
-information in wchan, right?
-(I think it wouldn't cause a worse problem than debugging.)
+This documentation should really address it.
 
-
->
-> --- a/arch/mips/kernel/stacktrace.c
-> +++ b/arch/mips/kernel/stacktrace.c
-> @@ -66,16 +66,7 @@ static void save_context_stack(struct st
->  #endif
->  }
->
-> -/*
-> - * Save stack-backtrace addresses into a stack_trace buffer.
-> - */
-> -void save_stack_trace(struct stack_trace *trace)
-> -{
-> -       save_stack_trace_tsk(current, trace);
-> -}
-> -EXPORT_SYMBOL_GPL(save_stack_trace);
-> -
-> -void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
-> +static void __save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace, bool savesched)
->  {
->         struct pt_regs dummyregs;
->         struct pt_regs *regs = &dummyregs;
-> @@ -88,6 +79,20 @@ void save_stack_trace_tsk(struct task_st
->                 regs->cp0_epc = tsk->thread.reg31;
->         } else
->                 prepare_frametrace(regs);
-> -       save_context_stack(trace, tsk, regs, tsk == current);
-> +       save_context_stack(trace, tsk, regs, savesched);
-> +}
-> +
-> +/*
-> + * Save stack-backtrace addresses into a stack_trace buffer.
+> + *
+> + * @maxlen specifies the maximum length to map. To get access to
+> + * the complete BAR from offset to the end, pass %0 here.
 > + */
-> +void save_stack_trace(struct stack_trace *trace)
+> +void __iomem *pci_iomap_host_shared_range(struct pci_dev *dev, int bar,
+> +					  unsigned long offset,
+> +					  unsigned long maxlen)
 > +{
-> +       __save_stack_trace_tsk(current, trace, true);
+> +	return pci_iomap_range_map(dev, bar, offset, maxlen,
+> +				   map_ioremap_host_shared, true);
 > +}
-> +EXPORT_SYMBOL_GPL(save_stack_trace);
+> +EXPORT_SYMBOL_GPL(pci_iomap_host_shared_range);
 > +
-> +void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
+> +/**
+> + * pci_iomap_host_shared - create a virtual shared mapping cookie for a PCI BAR
+> + * @dev: PCI device that owns the BAR
+> + * @bar: BAR number
+> + * @maxlen: length of the memory to map
+> + *
+> + * See pci_iomap for details. This function creates a shared mapping
+> + * with the host for confidential hosts.
+> + *
+> + * @maxlen specifies the maximum length to map. To get access to the
+> + * complete BAR without checking for its length first, pass %0 here.
+> + */
+> +void __iomem *pci_iomap_host_shared(struct pci_dev *dev, int bar,
+> +			       unsigned long maxlen)
 > +{
-> +       __save_stack_trace_tsk(tsk, trace, false);
->  }
->  EXPORT_SYMBOL_GPL(save_stack_trace_tsk);
-> --- a/arch/nds32/kernel/stacktrace.c
-> +++ b/arch/nds32/kernel/stacktrace.c
-> @@ -6,25 +6,16 @@
->  #include <linux/stacktrace.h>
->  #include <linux/ftrace.h>
->
-> -void save_stack_trace(struct stack_trace *trace)
-> -{
-> -       save_stack_trace_tsk(current, trace);
-> -}
-> -EXPORT_SYMBOL_GPL(save_stack_trace);
-> -
-> -void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
-> +static void __save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace, bool savesched)
->  {
->         unsigned long *fpn;
->         int skip = trace->skip;
-> -       int savesched;
->         int graph_idx = 0;
->
->         if (tsk == current) {
->                 __asm__ __volatile__("\tori\t%0, $fp, #0\n":"=r"(fpn));
-> -               savesched = 1;
->         } else {
->                 fpn = (unsigned long *)thread_saved_fp(tsk);
-> -               savesched = 0;
->         }
->
->         while (!kstack_end(fpn) && !((unsigned long)fpn & 0x3)
-> @@ -50,4 +41,14 @@ void save_stack_trace_tsk(struct task_st
->                 fpn = (unsigned long *)fpp;
->         }
->  }
-> +void save_stack_trace(struct stack_trace *trace)
-> +{
-> +       __save_stack_trace_tsk(current, trace, true);
+> +	return pci_iomap_host_shared_range(dev, bar, 0, maxlen);
 > +}
-> +EXPORT_SYMBOL_GPL(save_stack_trace);
+> +EXPORT_SYMBOL_GPL(pci_iomap_host_shared);
 > +
-> +void save_stack_trace_tsk(struct task_struct *tsk, struct stack_trace *trace)
-> +{
-> +       __save_stack_trace_tsk(tsk, trace, false);
-> +}
->  EXPORT_SYMBOL_GPL(save_stack_trace_tsk);
->
->
+>  /**
+>   * pci_iomap - create a virtual mapping cookie for a PCI BAR
+>   * @dev: PCI device that owns the BAR
+> -- 
+> 2.25.1
 
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
