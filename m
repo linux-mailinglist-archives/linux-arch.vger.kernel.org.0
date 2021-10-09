@@ -2,203 +2,201 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9204442746E
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 01:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB51A4274C0
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Oct 2021 02:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243933AbhJHX5F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Oct 2021 19:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243934AbhJHX5F (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Oct 2021 19:57:05 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444C2C061764
-        for <linux-arch@vger.kernel.org>; Fri,  8 Oct 2021 16:55:09 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id ls14-20020a17090b350e00b001a00e2251c8so8922250pjb.4
-        for <linux-arch@vger.kernel.org>; Fri, 08 Oct 2021 16:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NTgT6QanWfRduDXfALgprcIXPoYmwJMRISipF8hOgn0=;
-        b=UvrNsbuHOolQTlQBXEtvY7PhQ4e4HGX7cruVovKzRM26iiB57Q92NDOkOvdFsX9KBd
-         9WQXT1UMFWJsbCYpXTLLlQQyIlz2otEFClCRNRWAE1mWhdllnhjYqjC+fcpXest6HeZ2
-         wypm984zf7l3YgA/7h3zdE6+DYAIADuYfU6fU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NTgT6QanWfRduDXfALgprcIXPoYmwJMRISipF8hOgn0=;
-        b=EZk9qLDFPkpz1qpRhbBcIM2ZQd3GuIgIzDq4C7LzmOmUNFQZlU7LftDxt1nWFXwwdm
-         t8o5dbWb2y/eb1cbmzYRH3cm8yGTHeVrmKUs3BTA9K8ucMK7akoxWSqMCVlZrTBUjdQu
-         x19LLE46em/pcAVL4sjFw1PDgTNqbicVOmulMKOaMC9dcJxwKfcQJ68DfcNlCiYePBog
-         egCKRupbBJaUqZ37vqo6FWJ0WrECzUriAh/STg+uplctOiOJCTkwmefITyfHa3k/fOaB
-         VZTgJqp8JdnldxEPd7Yj1NUx6yO+lhvQ5JctSM9ns40EN37sjNIYTFhDeO7k6LhgN3+K
-         OVBw==
-X-Gm-Message-State: AOAM533x1oIEJP+CUAwthlh/bck9qcP7oZhEdwqvp5L14sBWJxWWwY97
-        qFEhdy+jNPIAXFQY51Ki0g1wrg==
-X-Google-Smtp-Source: ABdhPJxVP3N4yhiAQdhQSX2YP8sb7Lm448c8O2UVd19pFUeo4nh/fLA29BP3BsuiH+I1rOT0b4n0kQ==
-X-Received: by 2002:a17:90b:224e:: with SMTP id hk14mr14867208pjb.224.1633737308774;
-        Fri, 08 Oct 2021 16:55:08 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b13sm13196981pjl.15.2021.10.08.16.55.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 16:55:08 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        linux-kselftest@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>, jannh@google.com,
-        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, christian.brauner@ubuntu.com,
-        amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
-        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
-        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
-        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, ebiederm@xmission.com,
-        ohoono.kwon@samsung.com, kaleshsingh@google.com,
-        yifeifz2@illinois.edu, linux-arch@vger.kernel.org,
-        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
-        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
-        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
-        chris@zankel.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] selftests: proc: Make sure wchan works when it exists
-Date:   Fri,  8 Oct 2021 16:55:04 -0700
-Message-Id: <20211008235504.2957528-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        id S244003AbhJIAj2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Oct 2021 20:39:28 -0400
+Received: from mga02.intel.com ([134.134.136.20]:5242 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231963AbhJIAj1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 8 Oct 2021 20:39:27 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10131"; a="213756480"
+X-IronPort-AV: E=Sophos;i="5.85,358,1624345200"; 
+   d="scan'208";a="213756480"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 17:37:31 -0700
+X-IronPort-AV: E=Sophos;i="5.85,358,1624345200"; 
+   d="scan'208";a="624905334"
+Received: from dmsojoza-mobl3.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.251.135.62])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 17:37:29 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH v5 00/16] Add TDX Guest Support (shared-mm support)
+Date:   Fri,  8 Oct 2021 17:36:55 -0700
+Message-Id: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3546; h=from:subject; bh=rB8jOOGIdiP/iyWBGWq3AhwcsSSZTX18wRYEg/FXYmE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhYNpXPkUEdGrIu4y1HLLDxNMb+n9ox77AOSdFvFSD bfhAXb+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYWDaVwAKCRCJcvTf3G3AJn0CD/ 4qW+e9mYMV4ZcwM0iBRmJhmZQxAWr33QtMkLwAO/EaIltsDgim6Ni+pKchA7nIQjf3oFoqZjbhP1Cp C5Y7Qq4W1DR1cD046gu5TzATKoxsbcwcSzBS5mrAPaUKY+vIyciYsqgw2myydRz4vBdNOKy9UcpVLm paa85vPMPsppqd8cQv/Wf1V6J7sjIXORRYYMokEGmQO/aXSShOol1KMtbgLiVh5ws4/KbOjtT0Z3XU R/kBl05TmhX1U0qXJiDMTeHa3PfSHFgxLTbqNUQQzsosY7JSG4IWl4KLpVpC6WRSvnSlYdf1tw65M0 FnCVLSWYGZ1wLsSMcsPhhU+5Vviwlrr4QUtFNXsFxLXOXn/JrgN3XtJWWlfuepZyKeGWOqNX3DzKNw 1BepILhh0xVogfv0fIoee3O/i1+8FjgQUZSO2cCC1fjVW+P5CMAKJwOqhJzlJ3aphOFwcJYTs4SJ5v SRBo1aFbAxpB5Z8dkUeM2EtS5bbjiIj2oau4wVSmQ4wkLIhXT14qIEA70r6JONKZtfnIBmBLESvybZ /eMvMPyvwOaV6N3NiZ1pNMmC8mOJXV4CjQ70UB44ZvfWOg+aMru+++l1uCPrJumAAPedlRsnt08d1J w8+mDwVkblkD5MbHnVgz3Odw5e5YJoCoKR7LNNX10D3EKvOIl/PDTirCZQ0w==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This makes sure that wchan contains a sensible symbol when a process is
-blocked. Specifically this calls the sleep() syscall, and expects the
-architecture to have called schedule() from a function that has "sleep"
-somewhere in its name. For example, on the architectures I tested
-(x86_64, arm64, arm, mips, and powerpc) this is "hrtimer_nanosleep":
+Hi All,
 
-$ tools/testing/selftests/proc/proc-pid-wchan
-ok: found 'sleep' in wchan 'hrtimer_nanosleep'
+Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
+hosts and some physical attacks. Since VMM is untrusted entity, it does
+not allow VMM to access guest private memory. Any memory that is required
+for communication with VMM must be shared explicitly. This series adds
+support to securely share guest memory with VMM when it is required by
+guest.
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-Hi Peter,
+Originally TDX did automatic sharing of every ioremap. But it was found that
+this ends up with a lot of memory shared that is supposed to be private, for
+example ACPI tables. Also in general since only a few drivers are expected
+to be used it's safer to mark them explicitly (for virtio it actually only
+needs two places). This gives the advantage of automatically preventing
+other drivers from doing MMIO, which can happen in some cases even with
+the device filter. There is still a command line option to override this option,
+which allows to use all drivers.
 
-Can you add this to the wchan series, please? This should help wchan from
-regressing in the future, and allow us to notice if the depth accidentally
-changes, like Mark saw.
----
- tools/testing/selftests/proc/Makefile         |  1 +
- tools/testing/selftests/proc/proc-pid-wchan.c | 69 +++++++++++++++++++
- 2 files changed, 70 insertions(+)
- create mode 100644 tools/testing/selftests/proc/proc-pid-wchan.c
+This series is the continuation of the patch series titled "Add TDX Guest
+Support (Initial support)", "Add TDX Guest Support (#VE handler support)"
+and "Add TDX Guest Support (boot support)" which added initial support,
+ #VE handler support and boot fixes for TDX guests. You  can find the
+related patchsets in the following links.
 
-diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
-index 1054e40a499a..45cf35703ece 100644
---- a/tools/testing/selftests/proc/Makefile
-+++ b/tools/testing/selftests/proc/Makefile
-@@ -8,6 +8,7 @@ TEST_GEN_PROGS += fd-002-posix-eq
- TEST_GEN_PROGS += fd-003-kthread
- TEST_GEN_PROGS += proc-loadavg-001
- TEST_GEN_PROGS += proc-pid-vm
-+TEST_GEN_PROGS += proc-pid-wchan
- TEST_GEN_PROGS += proc-self-map-files-001
- TEST_GEN_PROGS += proc-self-map-files-002
- TEST_GEN_PROGS += proc-self-syscall
-diff --git a/tools/testing/selftests/proc/proc-pid-wchan.c b/tools/testing/selftests/proc/proc-pid-wchan.c
-new file mode 100644
-index 000000000000..7d7870c31cef
---- /dev/null
-+++ b/tools/testing/selftests/proc/proc-pid-wchan.c
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Make sure that wchan returns a reasonable symbol when blocked.
-+ */
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/wait.h>
-+
-+#define perror_exit(str) do { perror(str); _exit(1); } while (0)
-+
-+int main(void)
-+{
-+	char buf[64];
-+	pid_t child;
-+	int sync[2], fd;
-+
-+	if (pipe(sync) < 0)
-+		perror_exit("pipe");
-+
-+	child = fork();
-+	if (child < 0)
-+		perror_exit("fork");
-+	if (child == 0) {
-+		/* Child */
-+		if (close(sync[0]) < 0)
-+			perror_exit("child close sync[0]");
-+		if (close(sync[1]) < 0)
-+			perror_exit("child close sync[1]");
-+		sleep(10);
-+		_exit(0);
-+	}
-+	/* Parent */
-+	if (close(sync[1]) < 0)
-+		perror_exit("parent close sync[1]");
-+	if (read(sync[0], buf, 1) != 0)
-+		perror_exit("parent read sync[0]");
-+
-+	snprintf(buf, sizeof(buf), "/proc/%d/wchan", child);
-+	fd = open(buf, O_RDONLY);
-+	if (fd < 0) {
-+		if (errno == ENOENT)
-+			return 4;
-+		perror_exit(buf);
-+	}
-+
-+	memset(buf, 0, sizeof(buf));
-+	if (read(fd, buf, sizeof(buf) - 1) < 1)
-+		perror_exit(buf);
-+	if (strstr(buf, "sleep") == NULL) {
-+		fprintf(stderr, "FAIL: did not find 'sleep' in wchan '%s'\n", buf);
-+		return 1;
-+	}
-+	printf("ok: found 'sleep' in wchan '%s'\n", buf);
-+
-+	if (kill(child, SIGKILL) < 0)
-+		perror_exit("kill");
-+	if (waitpid(child, NULL, 0) != child) {
-+		fprintf(stderr, "waitpid: got the wrong child!?\n");
-+		return 1;
-+	}
-+
-+	return 0;
-+}
+[set 1, v9] - https://lore.kernel.org/lkml/20211008234009.1211215-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+[set 2, v7] - https://lore.kernel.org/lkml/20211005204136.1812078-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+[set 3, v7] - https://lore.kernel.org/lkml/20211005230550.1819406-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+
+Also please note that this series alone is not necessarily fully
+functional. You need to apply all the above 3 patch series to get
+a fully functional TDX guest.
+
+You can find TDX related documents in the following link.
+
+https://software.intel.com/content/www/br/pt/develop/articles/intel-trust-domain-extensions.html
+
+Also, ioremap related changes in mips, parisc, alpha, sparch archs' are
+only compile tested, and hence need help from the community users of these
+archs' to make sure that it does not break any functionality.
+
+In this patch series, following patches are in PCI domain and are
+meant for the PCI domain reviewers.
+
+  pci: Consolidate pci_iomap* and pci_iomap*wc
+  pci: Add pci_iomap_shared{,_range}
+  pci: Mark MSI data shared
+
+Patch titled "asm/io.h: Add ioremap_host_shared fallback" adds
+generic and arch specific ioremap_host_shared headers and are
+meant to be reviewed by linux-arch@vger.kernel.org,
+linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org.
+
+Similarly patch titled "virtio: Use shared mappings for virtio
+PCI devices" adds ioremap_host_shared() support for virtio drivers
+and are meant to be reviewed by virtio driver maintainers.
+
+I have CCed this patch series to all the related domain maintainers
+and open lists. If you prefer to get only patches specific to your
+domain, please let me know. I will fix this in next submission.
+
+Changes since v4:
+ * Since patch titled "x86/tdx: Get TD execution environment
+   information via TDINFO" is required only by this patch set,
+   moved it here.
+ * Rest of the change log is included per patch.
+
+Changes since v3:
+ * Rebased on top of Tom Lendacky's protected guest
+   changes (https://lore.kernel.org/patchwork/cover/1468760/)
+ * Added new API to share io-reamapped memory selectively
+   (using ioremap_shared())
+ * Added new wrapper (pci_iomap_shared_range()) for PCI IO
+   remap shared mappings use case.
+
+Changes since v2:
+ * Rebased on top of v5.14-rc1.
+ * No functional changes.
+
+Andi Kleen (6):
+  PCI: Consolidate pci_iomap_range(), pci_iomap_wc_range()
+  asm/io.h: Add ioremap_host_shared fallback
+  PCI: Add pci_iomap_host_shared(), pci_iomap_host_shared_range()
+  PCI: Mark MSI data shared
+  virtio: Use shared mappings for virtio PCI devices
+  x86/tdx: Implement ioremap_host_shared for x86
+
+Isaku Yamahata (1):
+  x86/tdx: ioapic: Add shared bit for IOAPIC base address
+
+Kirill A. Shutemov (7):
+  x86/mm: Move force_dma_unencrypted() to common code
+  x86/tdx: Get TD execution environment information via TDINFO
+  x86/tdx: Exclude Shared bit from physical_mask
+  x86/tdx: Make pages shared in ioremap()
+  x86/tdx: Add helper to do MapGPA hypercall
+  x86/tdx: Make DMA pages shared
+  x86/kvm: Use bounce buffers for TD guest
+
+Kuppuswamy Sathyanarayanan (2):
+  x86/tdx: Enable shared memory confidential guest flags for TDX guest
+  x86/tdx: Add cmdline option to force use of ioremap_host_shared
+
+ .../admin-guide/kernel-parameters.rst         |   1 +
+ .../admin-guide/kernel-parameters.txt         |  12 ++
+ Documentation/driver-api/device-io.rst        |   7 +
+ arch/alpha/include/asm/io.h                   |   2 +
+ arch/mips/include/asm/io.h                    |   2 +
+ arch/parisc/include/asm/io.h                  |   2 +
+ arch/sparc/include/asm/io_64.h                |   2 +
+ arch/x86/Kconfig                              |   9 +-
+ arch/x86/include/asm/io.h                     |   6 +
+ arch/x86/include/asm/mem_encrypt_common.h     |  21 +++
+ arch/x86/include/asm/pgtable.h                |   5 +
+ arch/x86/include/asm/tdx.h                    |  22 +++
+ arch/x86/kernel/apic/io_apic.c                |  18 ++-
+ arch/x86/kernel/cc_platform.c                 |   3 +
+ arch/x86/kernel/tdx.c                         | 109 +++++++++++++++
+ arch/x86/mm/Makefile                          |   2 +
+ arch/x86/mm/ioremap.c                         |  64 +++++++--
+ arch/x86/mm/mem_encrypt.c                     |   8 +-
+ arch/x86/mm/mem_encrypt_common.c              |  40 ++++++
+ arch/x86/mm/pat/set_memory.c                  |  45 +++++-
+ drivers/pci/msi.c                             |   2 +-
+ drivers/virtio/virtio_pci_modern_dev.c        |   2 +-
+ include/asm-generic/io.h                      |   5 +
+ include/asm-generic/pci_iomap.h               |   6 +
+ include/linux/cc_platform.h                   |  13 ++
+ lib/pci_iomap.c                               | 131 +++++++++++++-----
+ 26 files changed, 475 insertions(+), 64 deletions(-)
+ create mode 100644 arch/x86/include/asm/mem_encrypt_common.h
+ create mode 100644 arch/x86/mm/mem_encrypt_common.c
+
 -- 
-2.30.2
+2.25.1
 
