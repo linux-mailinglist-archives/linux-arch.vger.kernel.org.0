@@ -2,150 +2,187 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDEC4281F2
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Oct 2021 16:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D678F428403
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Oct 2021 00:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbhJJOgZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 10 Oct 2021 10:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbhJJOgY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 10 Oct 2021 10:36:24 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E90CC061570;
-        Sun, 10 Oct 2021 07:34:26 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id b10so1783049iof.12;
-        Sun, 10 Oct 2021 07:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YzsW4oaRYWh/PSqb1gGOzEnZWrkrc4WMPo9eaQRhBrU=;
-        b=fZWwjrQSPxBuf44Hgb6oDHvJ2UoqWrh7YB45ip6bKVAt2EixdLHmkFbDhKOZXHfbNk
-         ZEdI1vTmSJAnPuBdtEnzWZ0B9je99aSjVm2DHFzcG2oTcOMIDqbBhtA0LKRjJxIwb87N
-         nCceE/g7tXdbiIcMup1wk8EfteveV9TgANYzBncmOPqh6RBZY+dmVH4206x4Yru68T5j
-         UwmrrMkioeeqDLPgsPY9SrQknlIwA5E1o4fo9k8AoNrCjDNVUqm4w/5MU7CPQ0t89YNJ
-         l9iEisMhKtR3m9mgmkSE88R+LFoFd975xqcjCffEaE6FlY5d8Jj6r513B7zJ0QHwBgPo
-         Xlfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YzsW4oaRYWh/PSqb1gGOzEnZWrkrc4WMPo9eaQRhBrU=;
-        b=J2e1BZNP7s6D5940JnpRH3tHD/0w4gu7gPxV/oyH/Bi+yaB95hl1lHMSIXPIVeavvX
-         OmsaY1osMWGA2KUv2lpx6NEQzPDrWDpYBWQ+QMsB187PUr6VPMlCXaSlE2idleDP5bw5
-         d/DfSfs48118aIkDStJbom5mK81xJPSNSP1DlLnWHDHuBUMW05IaFRmKVv5NV+Gg04mY
-         ufLxcvDfuOJUzM8XiyjwEEZjHCrNN5O8OC7S+qwujeaeUE6TU1Z+cSEIvSl9ErPkuxqV
-         DYlE+GY9e+uQ79yVuG6MxdLCYz4X3VPaTZy+wCgKA/tmZuHDKmjzV1R+nY4+PQT2TvZv
-         u4ZQ==
-X-Gm-Message-State: AOAM5314jnAuqS72mjHOmsrkeW9tMdE5z2zvukA3yRFTUjvVY0wYz4gc
-        FVTQOt7BRlvWd1lh7QpLfCw=
-X-Google-Smtp-Source: ABdhPJyoLtFMZVKhdUvNCepzUYUZ8SqVlA4lvw+MI+kIReJzAzSq9HUedKaX9U1fa4DNaC8mgeFNFg==
-X-Received: by 2002:a02:cb1e:: with SMTP id j30mr15179400jap.143.1633876465976;
-        Sun, 10 Oct 2021 07:34:25 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id q17sm2704829iot.16.2021.10.10.07.34.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Oct 2021 07:34:24 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailauth.nyi.internal (Postfix) with ESMTP id F413B27C0054;
-        Sun, 10 Oct 2021 10:34:22 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sun, 10 Oct 2021 10:34:23 -0400
-X-ME-Sender: <xms:7PliYT2doylFjvF9hEnyzLigkkpyfGeVhvTOcGEuoxYKzHBIbjlN8g>
-    <xme:7PliYSHdINz_oZ35XC7uzVOJHVfPHJj4l0xN_BUwLmOInXVrrQsJigOOUru-A9Bmg
-    PGEUWqwGYGvxGQTyA>
-X-ME-Received: <xmr:7PliYT4ldrAcafRkJkTNR_nt4YgMHoT491kcp9DKosq1WcHLIIhLbWf61AZMpQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtgedgjeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhepveeijedthfeijeefudehhedvveegudegteehgffgtddvuedtveegtedvvdef
-    gedtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhp
-    vghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrd
-    hfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:7PliYY37zqVWGBVl7FbrMnF7zHHH4gZtK3k2LYjw9Flzqc_JIynk3Q>
-    <xmx:7PliYWGNYff1CwHCujNj3ACaXLCHn8WKlAhrwq_WhTDJZDbpz5tUEw>
-    <xmx:7PliYZ_04O0L-uCmXkSHcM8CiaxRMSbMlDLSGNO6gr4QePFtZX3QPA>
-    <xmx:7vliYWIjcQRkKKISz2Tnpuy-TQopFsxr6WQwEapabV9bq7_poSyU8GUCjB0>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 10 Oct 2021 10:34:19 -0400 (EDT)
-Date:   Sun, 10 Oct 2021 22:33:05 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     mpe@ellerman.id.au, linux-kernel@vger.kernel.org,
-        paulmck@kernel.org, Daniel Lustig <dlustig@nvidia.com>,
-        will@kernel.org, peterz@infradead.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        alexander.shishkin@linux.intel.com, hpa@zytor.com,
-        parri.andrea@gmail.com, mingo@kernel.org, vincent.weaver@maine.edu,
-        tglx@linutronix.de, jolsa@redhat.com, acme@redhat.com,
-        eranian@google.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        stern@rowland.harvard.edu, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] tools/memory-model: Provide extra ordering for
- unlock+lock pair on the same CPU
-Message-ID: <YWL5ofEuAH2NUGjj@boqun-archlinux>
-References: <YV/rH0TeokccdbMD@boqun-archlinux>
- <mhng-9504267b-2dee-4c16-b7a5-4c4360066b5e@palmerdabbelt-glaptop>
+        id S232985AbhJJWNY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 10 Oct 2021 18:13:24 -0400
+Received: from mga11.intel.com ([192.55.52.93]:49214 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231343AbhJJWNY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 10 Oct 2021 18:13:24 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10133"; a="224178252"
+X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
+   d="scan'208";a="224178252"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 15:11:25 -0700
+X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
+   d="scan'208";a="459743239"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.83.75]) ([10.209.83.75])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 15:11:24 -0700
+Message-ID: <0e6664ac-cbb2-96ff-0106-9301735c0836@linux.intel.com>
+Date:   Sun, 10 Oct 2021 15:11:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-9504267b-2dee-4c16-b7a5-4c4360066b5e@palmerdabbelt-glaptop>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v5 12/16] PCI: Add pci_iomap_host_shared(),
+ pci_iomap_host_shared_range()
+Content-Language: en-US
+To:     Dan Williams <dan.j.williams@intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        "Reshetova, Elena" <elena.reshetova@intel.com>
+References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009053103-mutt-send-email-mst@kernel.org>
+ <CAPcyv4hDhjRXYCX_aiOboLF0eaTo6VySbZDa5NQu2ed9Ty2Ekw@mail.gmail.com>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <CAPcyv4hDhjRXYCX_aiOboLF0eaTo6VySbZDa5NQu2ed9Ty2Ekw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 08, 2021 at 09:32:58AM -0700, Palmer Dabbelt wrote:
-> On Thu, 07 Oct 2021 23:54:23 PDT (-0700), boqun.feng@gmail.com wrote:
-> > On Fri, Oct 08, 2021 at 04:30:37PM +1100, Michael Ellerman wrote:
-> > > Boqun Feng <boqun.feng@gmail.com> writes:
-> > > > (Add linux-arch in Cc list)
-> > > >
-> > > > Architecture maintainers, this patch is about strengthening our memory
-> > > > model a little bit, your inputs (confirmation, ack/nack, etc.) are
-> > > > appreciated.
-> > > 
-> > > Hi Boqun,
-> > > 
-> > > I don't feel like I'm really qualified to give an ack here, you and the
-> > > other memory model folk know this stuff much better than me.
-> > > 
-> > > But I have reviewed it and it matches my understanding of how our
-> > > barriers work, so it looks OK to me.
-> > > 
-> > > Reviewed-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-> 
-> I'm basically in the same spot.  I think I said something to that effect
-> somewhere in the thread, but I'm not sure if it got picked up so
-> 
-> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com> (RISC-V)
-> 
 
-Thanks!
+On 10/9/2021 1:39 PM, Dan Williams wrote:
+> On Sat, Oct 9, 2021 at 2:53 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>> On Fri, Oct 08, 2021 at 05:37:07PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>>> From: Andi Kleen <ak@linux.intel.com>
+>>>
+>>> For Confidential VM guests like TDX, the host is untrusted and hence
+>>> the devices emulated by the host or any data coming from the host
+>>> cannot be trusted. So the drivers that interact with the outside world
+>>> have to be hardened by sharing memory with host on need basis
+>>> with proper hardening fixes.
+>>>
+>>> For the PCI driver case, to share the memory with the host add
+>>> pci_iomap_host_shared() and pci_iomap_host_shared_range() APIs.
+>>>
+>>> Signed-off-by: Andi Kleen <ak@linux.intel.com>
+>>> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+>> So I proposed to make all pci mappings shared, eliminating the need
+>> to patch drivers.
+>>
+>> To which Andi replied
+>>          One problem with removing the ioremap opt-in is that
+>>          it's still possible for drivers to get at devices without going through probe.
+>>
+>> To which Greg replied:
+>> https://lore.kernel.org/all/YVXBNJ431YIWwZdQ@kroah.com/
+>>          If there are in-kernel PCI drivers that do not do this, they need to be
+>>          fixed today.
+>>
+>> Can you guys resolve the differences here?
+> I agree with you and Greg here. If a driver is accessing hardware
+> resources outside of the bind lifetime of one of the devices it
+> supports, and in a way that neither modrobe-policy nor
+> device-authorization -policy infrastructure can block, that sounds
+> like a bug report.
 
-> (I don't feel comfortable reviewing it so I'm acking it, not sure if I'm
-> just backwards about what all this means though ;)).
-> 
-> IIUC this change will mean the RISC-V port is broken, but I'm happy to fix
+The 5.15 tree has something like ~2.4k IO accesses (including MMIO and 
+others) in init functions that also register drivers (thanks Elena for 
+the number)
 
-No, the RISC-V port is not broken, this patch only strengthen the
-unlock(A)+lock(B) to TSO ordering, as per the previous discussion:
+Some are probably old drivers that could be fixed, but it's quite a few 
+legitimate cases. For example for platform or ISA drivers that's the 
+only way they can be implemented because they often have no other 
+enumeration mechanism. For PCI drivers it's rarer, but also still can 
+happen. One example that comes to mind here is the x86 Intel uncore 
+drivers, which support a mix of MSR, ioremap and PCI config space 
+accesses all from the same driver. This particular example can (and 
+should be) fixed in other ways, but similar things also happen in other 
+drivers, and they're not all broken. Even for the broken ones they're 
+usually for some crufty old devices that has very few users, so it's 
+likely untestable in practice.
 
-	https://lore.kernel.org/lkml/5412ab37-2979-5717-4951-6a61366df0f2@nvidia.com/
+My point is just that the ecosystem of devices that Linux supports is 
+messy enough that there are legitimate exceptions from the "First IO 
+only in probe call only" rule.
 
-RISC-V's current lock implementation is fine, and it's still OK if
-RISC-V still to queued spinlock, since as Dan said in that email thread,
-the following code still provides TSO ordering:
+And we can't just fix them all. Even if we could it would be hard to 
+maintain.
 
-	FENCE RW, W
-	store A
-	ll/sc B
-	FENCE R, RW
+Using a "firewall model" hooking into a few strategic points like we're 
+proposing here is much saner for everyone.
 
-Regards,
-Boqun
+Now we can argue about the details. Right now what we're proposing has 
+some redundancies: it has both a device model filter and low level 
+filter for ioremap (this patch and some others). The low level filter is 
+for catching issues that don't clearly fit into the 
+"enumeration<->probe" model. You could call that redundant, but I would 
+call it defense in depth or better safe than sorry. In theory it would 
+be enough to have the low level opt-in only, but that would have the 
+drawback that is something gets enumerated after all you would have all 
+kind of weird device driver failures and in some cases even killed 
+guests. So I think it makes sense to have
 
-> it.  Were you guys trying to target this for 5.16?
 
+> Fix those drivers instead of sprinkling
+> ioremap_shared in select places and with unclear rules about when a
+> driver is allowed to do "shared" mappings.
+
+Only add it when the driver has been audited and hardened.
+
+But I agree we need on a documented process for this. I will work on 
+some documentation for a proposal. But essentially I think it should be 
+some variant of what Elena has outlined in her talk at Security Summit.
+
+https://static.sched.com/hosted_files/lssna2021/b6/LSS-HardeningLinuxGuestForCCC.pdf
+
+That is using extra auditing/scrutiny at review time, supported with 
+some static code analysis that points to the interaction points, and 
+code needs to be fuzzed explicitly.
+
+However short term it's only three virtio drivers, so this is not a 
+urgent problem.
+
+> Let the new
+> device-authorization mechanism (with policy in userspace)
+
+
+Default policy in user space just seems to be a bad idea here. Who 
+should know if a driver is hardened other than the kernel? Maintaining 
+the list somewhere else just doesn't make sense to me.
+
+Also there is the more practical problem that some devices are needed 
+for booting. For example in TDX we can't print something to the console 
+with this mechanism, so you would never get any output before the 
+initrd. Just seems like a nightmare for debugging anything. There really 
+needs to be an authorization mechanism that works reasonably early.
+
+I can see a point of having user space overrides though, but we need to 
+have a sane kernel default that works early.
+
+-Andi
