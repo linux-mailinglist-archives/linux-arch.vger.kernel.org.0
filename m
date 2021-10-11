@@ -2,34 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1559D428530
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Oct 2021 04:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39A2428850
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Oct 2021 10:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbhJKCl5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 10 Oct 2021 22:41:57 -0400
-Received: from mga17.intel.com ([192.55.52.151]:13178 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231578AbhJKCl4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 10 Oct 2021 22:41:56 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10133"; a="207592594"
-X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
-   d="scan'208";a="207592594"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 19:39:57 -0700
-X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
-   d="scan'208";a="459805979"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.83.75]) ([10.209.83.75])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 19:39:56 -0700
-Message-ID: <8c906de6-5efa-b87a-c800-6f07b98339d0@linux.intel.com>
-Date:   Sun, 10 Oct 2021 19:39:55 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5 16/16] x86/tdx: Add cmdline option to force use of
- ioremap_host_shared
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Kuppuswamy Sathyanarayanan 
+        id S234685AbhJKIIG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Oct 2021 04:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231300AbhJKIIF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Oct 2021 04:08:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353D0C061570;
+        Mon, 11 Oct 2021 01:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NePUhq2kCKuKoLuyepvAsQyQ3u7DiGVbX0RKJvjUUBc=; b=t0XKqM9eXqx+4HnaXU3qjxrcgE
+        DAIGSaUWiyGD5X9tASynPdwMwQ7CObj9K4vyt5PIYZSZg5eXPXdqeh0+p8khIYRRb5l69wjtSlm7L
+        AXnpOtT2ilZaZDuEND8sp4gdlWcqHlfUvytMstqVyJsG1aeJQiTFtimDrwWIeZuDcvOqrxBI1EIAy
+        h97La2yXt8YhzNa9oJM8fvdRdKQak3maZ5PSU6QaoJMK5DXPqXxNsx1XPFs3SDDQMjhVDvQLbxr9U
+        ViQfg0AAx2g5lHzJloJzLPfjivGpqAe0f3NFxAQSOvhVdAkhQUc6pTexSik4p+FFZjfrs8Lx1PE0Q
+        69kuX6dg==;
+Received: from hch by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mZqCT-005LX8-JJ; Mon, 11 Oct 2021 07:58:45 +0000
+Date:   Mon, 11 Oct 2021 08:58:21 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -43,6 +42,7 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "David S . Miller" <davem@davemloft.net>,
         Arnd Bergmann <arnd@arndb.de>,
         Jonathan Corbet <corbet@lwn.net>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         David Hildenbrand <david@redhat.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
@@ -51,6 +51,7 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Dave Hansen <dave.hansen@intel.com>,
         Tony Luck <tony.luck@intel.com>,
         Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
         Kirill Shutemov <kirill.shutemov@linux.intel.com>,
         Sean Christopherson <seanjc@google.com>,
         Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
@@ -60,26 +61,20 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-doc@vger.kernel.org,
         virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v5 12/16] PCI: Add pci_iomap_host_shared(),
+ pci_iomap_host_shared_range()
+Message-ID: <YWPunfa+WK86Cgnv@infradead.org>
 References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009003711.1390019-17-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009070132-mutt-send-email-mst@kernel.org>
-From:   Andi Kleen <ak@linux.intel.com>
-In-Reply-To: <20211009070132-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-> The connection is quite unfortunate IMHO.
-> Can't there be an option
-> that unbreaks drivers *without* opening up security holes by
-> making BIOS shared?
-
-That would require new low level APIs that distinguish both cases, and a 
-tree sweep.
-
-
--Andi
+Just as last time:  This does not make any sense.  ioremap is shared
+by definition.
 
