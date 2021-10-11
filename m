@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D30CD42840C
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Oct 2021 00:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1559D428530
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Oct 2021 04:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbhJJWYl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 10 Oct 2021 18:24:41 -0400
-Received: from mga03.intel.com ([134.134.136.65]:64334 "EHLO mga03.intel.com"
+        id S231872AbhJKCl5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 10 Oct 2021 22:41:57 -0400
+Received: from mga17.intel.com ([192.55.52.151]:13178 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231136AbhJJWYk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 10 Oct 2021 18:24:40 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10133"; a="226725291"
+        id S231578AbhJKCl4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 10 Oct 2021 22:41:56 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10133"; a="207592594"
 X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
-   d="scan'208";a="226725291"
+   d="scan'208";a="207592594"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 15:22:41 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 19:39:57 -0700
 X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
-   d="scan'208";a="459751289"
+   d="scan'208";a="459805979"
 Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.83.75]) ([10.209.83.75])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 15:22:40 -0700
-Message-ID: <cec62ebb-87d7-d725-1096-2c97c5eedbc3@linux.intel.com>
-Date:   Sun, 10 Oct 2021 15:22:39 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 19:39:56 -0700
+Message-ID: <8c906de6-5efa-b87a-c800-6f07b98339d0@linux.intel.com>
+Date:   Sun, 10 Oct 2021 19:39:55 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH v5 12/16] PCI: Add pci_iomap_host_shared(),
- pci_iomap_host_shared_range()
+Subject: Re: [PATCH v5 16/16] x86/tdx: Add cmdline option to force use of
+ ioremap_host_shared
 Content-Language: en-US
 To:     "Michael S. Tsirkin" <mst@redhat.com>,
         Kuppuswamy Sathyanarayanan 
@@ -61,10 +61,10 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-doc@vger.kernel.org,
         virtualization@lists.linux-foundation.org
 References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009053103-mutt-send-email-mst@kernel.org>
+ <20211009003711.1390019-17-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009070132-mutt-send-email-mst@kernel.org>
 From:   Andi Kleen <ak@linux.intel.com>
-In-Reply-To: <20211009053103-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20211009070132-mutt-send-email-mst@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -72,56 +72,14 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-> To which Andi replied
-> 	One problem with removing the ioremap opt-in is that
-> 	it's still possible for drivers to get at devices without going through probe.
->
-> To which Greg replied:
-> https://lore.kernel.org/all/YVXBNJ431YIWwZdQ@kroah.com/
-> 	If there are in-kernel PCI drivers that do not do this, they need to be
-> 	fixed today.
->
-> Can you guys resolve the differences here?
+> The connection is quite unfortunate IMHO.
+> Can't there be an option
+> that unbreaks drivers *without* opening up security holes by
+> making BIOS shared?
 
-
-I addressed this in my other mail, but we may need more discussion.
-
-
->
-> And once they are resolved, mention this in the commit log so
-> I don't get to re-read the series just to find out nothing
-> changed in this respect?
->
-> I frankly do not believe we are anywhere near being able to harden
-> an arbitrary kernel config against attack.
-
-Why not? Device filter and the opt-ins together are a fairly strong 
-mechanism.
-
-And it's not that they're a lot of code or super complicated either.
-
-You're essentially objecting to a single line change in your subsystem here.
-
-
-> How about creating a defconfig that makes sense for TDX then?
-
-TDX can be used in many different ways, I don't think a defconfig is 
-practical.
-
-In theory you could do some Kconfig dependency (at the pain point of 
-having separate kernel binariees), but why not just do it at run time 
-then if you maintain the list anyways. That's much easier and saner for 
-everyone. In the past we usually always ended up with runtime mechanism 
-for similar things anyways.
-
-Also it turns out that the filter mechanisms are needed for some arch 
-drivers which are not even configurable, so alone it's probably not enough,
-
-
-> Anyone deviating from that better know what they are doing,
-> this API tweaking is just putting policy into the kernel  ...
-
-Hardening drivers is kernel policy. It cannot be done anywhere else.
+That would require new low level APIs that distinguish both cases, and a 
+tree sweep.
 
 
 -Andi
+
