@@ -2,214 +2,200 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A004295F4
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Oct 2021 19:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100F34296C6
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Oct 2021 20:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbhJKRo1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Oct 2021 13:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbhJKRo0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Oct 2021 13:44:26 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A494C06161C
-        for <linux-arch@vger.kernel.org>; Mon, 11 Oct 2021 10:42:26 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id kk10so13812885pjb.1
-        for <linux-arch@vger.kernel.org>; Mon, 11 Oct 2021 10:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fIgVsm94kxYUZNiL4Bxn3wPBnd3IejzU3gHnaJvMuG4=;
-        b=NDDjxJTvpXyqQZqINNCpwq5QuvZPHy3ezHcVfOu79DTvi2kj8uT8BS7XQM8rbR+Gse
-         abrAepFyJpMx1OnUkC119hHQ/wfKy+HbF3egevze0eKjs0CjaKmO4D3JpHdvnYHrpGpz
-         DMiJSWLleg8CkwUxu015qDgfkK26DS6o6pfv4=
+        id S234380AbhJKSYq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Oct 2021 14:24:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29076 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234399AbhJKSYo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 11 Oct 2021 14:24:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633976563;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dMNh2Z50mjXzYsw8NI8wyY+ikUuFKE6oW0fJI23ISWw=;
+        b=fISYrrSJNh9ZzUprXO1YpfKegc7B9Qj+81C1tBjNjqnDq7uIFV0QC5vTNWL6fmuDzC/oUL
+        GzepTAj17G/Br0CpfRQzdBSPZ+jrgivJkXcBIQAEvHM3hWf0UlcWAdN4JeJFv0fPeVhfDz
+        apBKm7KWzqve5OWKqVG8qMp5lseaa/o=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-176-wvvTBE0pO9GG0FbFkmFaKA-1; Mon, 11 Oct 2021 14:22:42 -0400
+X-MC-Unique: wvvTBE0pO9GG0FbFkmFaKA-1
+Received: by mail-ed1-f70.google.com with SMTP id c8-20020a50d648000000b003daa53c7518so16571172edj.21
+        for <linux-arch@vger.kernel.org>; Mon, 11 Oct 2021 11:22:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fIgVsm94kxYUZNiL4Bxn3wPBnd3IejzU3gHnaJvMuG4=;
-        b=atEjfp9Pe7VtyhSHFqabJ/mYL9NfGx2qCpn/ovQD4pIAJeqWZHgEXVe7QG7JjXNTOz
-         1LY5vovR+b9K9J/pRGBcUC8gvB8KP/P9I957qhY8dNiqHHrXsDujOcmnvEYfV14d2NI4
-         0pT/FkqMxQ+9f6uh/212E/MXZC3OVyUbttLYnG3ExyNnRyYRdAQ6xOzKX0d8N7Int2rl
-         QOcXHxj8+vpy39NsvCiYacVtnXeAOh5miUD7iymSJ0v2mISLeDMQdAg612FmK2HWOrgf
-         hmg0gmc5g+ZcEnnEC6tWJAKIW5Ga7E3+sB4rvbFtt6CAmG9GuRzveSv64K/1xoNBAL95
-         qJfw==
-X-Gm-Message-State: AOAM532a5VH8u49wTBW8O0k0LVZYh6MXzhaD6qbuvVUsw5TFfWHKXVIp
-        FoONCSr4gPutPjHbS6h7BBbZJw==
-X-Google-Smtp-Source: ABdhPJxRFGXIkK5xAjJsnJbx4wTgEPcUz4yu5js7dOpHpJw7GqQdiivS87ywjxfQRe0afyXSmRxh2w==
-X-Received: by 2002:a17:902:f551:b0:13e:fb56:f519 with SMTP id h17-20020a170902f55100b0013efb56f519mr25796087plf.0.1633974145574;
-        Mon, 11 Oct 2021 10:42:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j4sm9091145pfu.94.2021.10.11.10.42.24
+        bh=dMNh2Z50mjXzYsw8NI8wyY+ikUuFKE6oW0fJI23ISWw=;
+        b=nR0r7matC8sFXzX5JautRccZ9SatZ5o8W9+K8bBgIjpy2iZlJz8c3s59y7bADlwGje
+         CXLgQ2LfmSo0a1yUmGvG0qUheNFAa/tmFFloR5Na8qnru5XfC6E2LexXD98pEDiISfTB
+         b6eXAVgvNp5YR9t+gcNgn46RdRBNiGtmpNSNLP8evxEmKUSvzOrT5nvMfkJH4qlmFvwG
+         AdqUVyq3JpITEc7fZ+rGUbyPMRX/wyUZXY82/IZOMPg4Q/VBgdYFS49xuKOdKTR45riE
+         9amzOlR4js/NdpZQv2Fa1dtcM3tOs2hy4i95gaeIT9lTBA11vtLMPAw+J8x4OBrPouIh
+         zaUw==
+X-Gm-Message-State: AOAM5301DkDHSsEpYI+3G8ACMzoNM+CJ0LGSJasBRtfuPHkmU2zeDzeu
+        y0Vzd+2bL49ENiS0UH7hOevlMCQMjxS3WZ/ho1KCS7eUMskv43ZJBbb0itUi32r0D1trmOjoxd8
+        7eU0q3oqeS4uj2k+zxE5cgg==
+X-Received: by 2002:aa7:c941:: with SMTP id h1mr44235666edt.128.1633976560834;
+        Mon, 11 Oct 2021 11:22:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyN/U+BRUzodKL6gvFVqtuU/Q67n/I/WAJHIiErFZ+rnv84Ucv2oE2o+msvXuPI2MK8YmvNow==
+X-Received: by 2002:aa7:c941:: with SMTP id h1mr44235616edt.128.1633976560614;
+        Mon, 11 Oct 2021 11:22:40 -0700 (PDT)
+Received: from redhat.com ([2.55.159.57])
+        by smtp.gmail.com with ESMTPSA id u2sm4623544eda.32.2021.10.11.11.22.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Oct 2021 10:42:25 -0700 (PDT)
-Date:   Mon, 11 Oct 2021 10:42:24 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Mon, 11 Oct 2021 11:22:39 -0700 (PDT)
+Date:   Mon, 11 Oct 2021 14:22:33 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>, jannh@google.com,
-        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, christian.brauner@ubuntu.com,
-        amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
-        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
-        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
-        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, ebiederm@xmission.com,
-        ohoono.kwon@samsung.com, kaleshsingh@google.com,
-        yifeifz2@illinois.edu, linux-arch@vger.kernel.org,
-        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
-        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
-        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
-        chris@zankel.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] selftests: proc: Make sure wchan works when it exists
-Message-ID: <202110111022.21B600CC2@keescook>
-References: <20211008235504.2957528-1-keescook@chromium.org>
- <YWGQckkJuKB4yAfg@localhost.localdomain>
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v5 12/16] PCI: Add pci_iomap_host_shared(),
+ pci_iomap_host_shared_range()
+Message-ID: <20211011141248-mutt-send-email-mst@kernel.org>
+References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009053103-mutt-send-email-mst@kernel.org>
+ <cec62ebb-87d7-d725-1096-2c97c5eedbc3@linux.intel.com>
+ <20211011073614-mutt-send-email-mst@kernel.org>
+ <78766e28-8353-acc8-19e2-033d4bbf3472@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YWGQckkJuKB4yAfg@localhost.localdomain>
+In-Reply-To: <78766e28-8353-acc8-19e2-033d4bbf3472@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Oct 09, 2021 at 03:52:02PM +0300, Alexey Dobriyan wrote:
-> On Fri, Oct 08, 2021 at 04:55:04PM -0700, Kees Cook wrote:
-> > This makes sure that wchan contains a sensible symbol when a process is
-> > blocked.
+On Mon, Oct 11, 2021 at 10:32:23AM -0700, Andi Kleen wrote:
 > 
-> > Specifically this calls the sleep() syscall, and expects the
-> > architecture to have called schedule() from a function that has "sleep"
-> > somewhere in its name.
+> > Because it does not end with I/O operations, that's a trivial example.
+> > module unloading is famous for being racy: I just re-read that part of
+> > virtio drivers and sure enough we have bugs there, this is after
+> > they have presumably been audited, so a TDX guest is better off
+> > just disabling hot-unplug completely, and hotplug isn't far behind.
 > 
-> This exposes internal kernel symbol to userspace.
-
-Correct; we're verifying the results of the wchan output, which produces
-a kernel symbol for blocked processes.
-
-> Why would want to test that?
-
-This is part of a larger series refactoring/fixing wchan[1], and we've
-now tripped over several different failure conditions, so I want to make
-sure this doesn't regress in the future.
-
-> Doing s/sleep/SLEEP/g doesn't change kernel but now the test is broken.
-
-Yes; the test would be doing it's job, as that would mean there was a
-userspace visible change to wchan, so we'd want to catch it and either
-fix the kernel or update the test to reflect the new reality.
-
+> These all shouldn't matter for a confidential guest. The only way it can be
+> attacked is through IO, everything else is protected by hardware.
 > 
-> > For example, on the architectures I tested
-> > (x86_64, arm64, arm, mips, and powerpc) this is "hrtimer_nanosleep":
 > 
-> > +/*
-> > + * Make sure that wchan returns a reasonable symbol when blocked.
-> > + */
+> Also it would all require doing something at the guest level, which we
+> assume is not malicious.
 > 
-> Test should be "contains C identifier" then?
+> 
+> > Malicious filesystems can exploit many linux systems unless
+> > you take pains to limit what is mounted and how.
+> 
+> That's expected to be handled by authenticated dmcrypt and similar.
+> Hardening at this level has been done for many years.
 
-Nope, this was intentional. Expanding to a C identifier won't catch the
-"we unwound the stack to the wrong depth and now all wchan shows is
-'__switch_to'" bug[2]. We're specifically checking that wchan is doing
-at least the right thing for the most common blocking state.
+It's possible to do it like this, sure. But that's not the
+only configuration, userspace needs to be smart about setting things up.
+Which is my point really.
 
 > 
-> > +int main(void)
-> > +{
-> > +	char buf[64];
-> > +	pid_t child;
-> > +	int sync[2], fd;
-> > +
-> > +	if (pipe(sync) < 0)
-> > +		perror_exit("pipe");
-> > +
-> > +	child = fork();
-> > +	if (child < 0)
-> > +		perror_exit("fork");
-> > +	if (child == 0) {
-> > +		/* Child */
-> > +		if (close(sync[0]) < 0)
-> > +			perror_exit("child close sync[0]");
-> > +		if (close(sync[1]) < 0)
-> > +			perror_exit("child close sync[1]");
+> > Networking devices tend to get into the default namespaces and can
+> > do more or less whatever CAP_NET_ADMIN can.
+> > Etc.
 > 
-> Redundant close().
+> 
+> Networking should be already hardened, otherwise you would have much worse
+> problems today.
 
-Hmm, did you maybe miss the differing array indexes? This closes the
-reading end followed by the writing end of the child's pipe.
+Same thing. NFS is pretty common, you are saying don't do it then. Fair
+enough but again, arbitrary configs just aren't going to be secure.
 
 > 
-> > +		sleep(10);
-> > +		_exit(0);
-> > +	}
-> > +	/* Parent */
-> > +	if (close(sync[1]) < 0)
-> > +		perror_exit("parent close sync[1]");
 > 
-> Redundant close().
-
-It's not, though. This closes the write side of the parent's pipe.
-
+> > hange in your subsystem here.
+> > Well I commented on the API patch, not the virtio patch.
+> > If it's a way for a driver to say "I am hardened
+> > and audited" then I guess it should at least say so.
 > 
-> > +	if (read(sync[0], buf, 1) != 0)
-> > +		perror_exit("parent read sync[0]");
 > 
-> Racy if child is scheduled out after first close in the child.
+> This is handled by the central allow list. We intentionally didn't want each
+> driver to declare itself, but have a central list where changes will get
+> more scrutiny than random driver code.
 
-No, the first close will close the child's read-side of the pipe, which
-isn't being used. For example, see[3].
+Makes sense. Additionally, distros can tweak that to their heart's
+content, selecting the functionality/security balance that makes sense
+for them.
 
-The parent's read of /proc/$child/wchan could technically race if the
-child is scheduled out after the second close() and before the sleep(),
-but the parent is doing at least 2 syscalls before then. I'm open to
-a more exact synchronization method, but this should be sufficient.
-(e.g. Using ptrace to catch sleep syscall entry seemed like overkill.)
+> But then there are the additional opt-ins for the low level firewall. These
+> are in the API. I don't see how it could be done at the driver level, unless
+> you want to pass in a struct device everywhere?
 
--Kees
+I am just saying don't do it then. Don't build drivers that distro does
+not want to support into kernel. And don't load them when they are
+modules.
 
-[1] https://lore.kernel.org/lkml/20211008111527.438276127@infradead.org/
-[2] https://lore.kernel.org/lkml/20211008124052.GA976@C02TD0UTHF1T.local/
-[3] https://man7.org/tlpi/code/online/diff/pipes/pipe_sync.c.html
-
+> > > > How about creating a defconfig that makes sense for TDX then?
+> > > TDX can be used in many different ways, I don't think a defconfig is
+> > > practical.
+> > > 
+> > > In theory you could do some Kconfig dependency (at the pain point of having
+> > > separate kernel binariees), but why not just do it at run time then if you
+> > > maintain the list anyways. That's much easier and saner for everyone. In the
+> > > past we usually always ended up with runtime mechanism for similar things
+> > > anyways.
+> > > 
+> > > Also it turns out that the filter mechanisms are needed for some arch
+> > > drivers which are not even configurable, so alone it's probably not enough,
+> > 
+> > I guess they aren't really needed though right, or you won't try to
+> > filter them?
 > 
-> > +	snprintf(buf, sizeof(buf), "/proc/%d/wchan", child);
-> > +	fd = open(buf, O_RDONLY);
-> > +	if (fd < 0) {
-> > +		if (errno == ENOENT)
-> > +			return 4;
-> > +		perror_exit(buf);
-> > +	}
-> > +
-> > +	memset(buf, 0, sizeof(buf));
-> > +	if (read(fd, buf, sizeof(buf) - 1) < 1)
-> > +		perror_exit(buf);
-> > +	if (strstr(buf, "sleep") == NULL) {
-> > +		fprintf(stderr, "FAIL: did not find 'sleep' in wchan '%s'\n", buf);
-> > +		return 1;
-> > +	}
-> > +	printf("ok: found 'sleep' in wchan '%s'\n", buf);
-> > +
-> > +	if (kill(child, SIGKILL) < 0)
-> > +		perror_exit("kill");
-> > +	if (waitpid(child, NULL, 0) != child) {
-> > +		fprintf(stderr, "waitpid: got the wrong child!?\n");
-> > +		return 1;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
+> We're addressing most of them with the device filter for platform drivers.
+> But since we cannot stop them doing ioremap IO in their init code they also
+> need the low level firewall.
+> 
+> Some others that cannot be addressed have explicit disables.
+> 
+> 
+> > So make them configurable?
+> 
+> Why not just fix the runtime? It's much saner for everyone. Proposing to do
+> things at build time sounds like we're in Linux 0.99 days.
+> 
+> -Andi
+
+Um. Tweaking driver code is not just build time, it's development time.
+At least with kconfig you don't need to patch your kernel.
 
 -- 
-Kees Cook
+MST
+
