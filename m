@@ -2,105 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 139C242C450
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Oct 2021 17:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E924442C82B
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Oct 2021 19:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236541AbhJMPCw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Oct 2021 11:02:52 -0400
-Received: from out28-49.mail.aliyun.com ([115.124.28.49]:45578 "EHLO
-        out28-49.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236683AbhJMPCv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Oct 2021 11:02:51 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0749723|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.0375353-0.0121272-0.950337;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.LYdQ.qb_1634137244;
-Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.LYdQ.qb_1634137244)
-          by smtp.aliyun-inc.com(10.147.41.143);
-          Wed, 13 Oct 2021 23:00:44 +0800
-Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Feiyang Chen <chris.chenfeiyang@gmail.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, arnd@arndb.de,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        chenhuacai@kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>
-References: <cover.1631583258.git.chenfeiyang@loongson.cn>
- <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
- <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
- <20210921155708.GA12237@alpha.franken.de>
- <ef429f0f-7cc9-2625-3700-47dc459ee681@wanyeetech.com>
-Message-ID: <8a6f5c78-62c0-5d58-1386-dabfcacc112a@wanyeetech.com>
-Date:   Wed, 13 Oct 2021 23:00:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S238343AbhJMR75 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Oct 2021 13:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238258AbhJMR74 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Oct 2021 13:59:56 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A87CC061753
+        for <linux-arch@vger.kernel.org>; Wed, 13 Oct 2021 10:57:53 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id r201so3088267pgr.4
+        for <linux-arch@vger.kernel.org>; Wed, 13 Oct 2021 10:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tovZs/fMamUNhc9V1ZyRuitMxRBIyX1nI5NaXzCb1hY=;
+        b=G2qErgjv5HIfhOUry8jDhzJppHdZE25hAmIYtv/loO+niQCfapFhBGvRWsOBJLizPg
+         AWT7H19YivWexKf2RxMOYI7qy7LBwic4NCRwwvkEPxTK85KAECjiBduVd79ggD6MNlQ3
+         PwMusKJy8PAMRDONeipR+AKRPwnMTeTPncnCA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tovZs/fMamUNhc9V1ZyRuitMxRBIyX1nI5NaXzCb1hY=;
+        b=GF7jwSHWYdTB6ickcyiNQi/kOIOQ5H1dSOckpMWezjUPkV4Kfv9B0Avz1W0L50RclC
+         GAp+jQ69xshBMkI+UeCPynIFDlsXub6DebcdaSqwL/8lC0xy7wQZCbNxM5y7S7Z2UFgh
+         0d3WVNwaIvGhs0mYjj0FgX6s966LH/dClncRLH7qvl8IeEmCqp2w8zjMHAOjmlSJkAId
+         +7Phw7RWTcHdYXRwe70+iElEwk+n+pjeF/+Y9jb1Rb1G7EuD9rFvlEn8C2xPYVEniolR
+         k5LrHFab8sAn2+98tndu8UlsVs2QZmG5ILhkqNQsRMGY6gCMySmvZTJcyy9Mg0XTbAVj
+         LqRw==
+X-Gm-Message-State: AOAM530SMAEpIOOLOev+4cm8kEVooCuWyPVFD/p1oKKc70Ma1JIifSln
+        tk8EEZc/hjUsu9W6g76/ltK9IA==
+X-Google-Smtp-Source: ABdhPJzCKTW81GqeouHKZKjp+D5/8WyFEtj3voLvuSJY69lPRmI2Nh2pCbNkaKmEWld21LKZUBGxgQ==
+X-Received: by 2002:a05:6a00:8c7:b0:44c:a7f9:d8d1 with SMTP id s7-20020a056a0008c700b0044ca7f9d8d1mr756635pfu.49.1634147872423;
+        Wed, 13 Oct 2021 10:57:52 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d67sm155299pfd.151.2021.10.13.10.57.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Oct 2021 10:57:52 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>, Joerg Roedel <jroedel@suse.de>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Jing Yangyang <jing.yangyang@zte.com.cn>,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Fangrui Song <maskray@google.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH 0/4] x86: Various clean-ups in support of FGKASLR
+Date:   Wed, 13 Oct 2021 10:57:38 -0700
+Message-Id: <20211013175742.1197608-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <ef429f0f-7cc9-2625-3700-47dc459ee681@wanyeetech.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1156; h=from:subject; bh=PRf65j0JLkeyuy0M8f8WYpGBuH2Z9LGCXYFpyuGxQQ4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhZx4UR5tiE4MGhsX6k9YeysDLLv8D+UhwbD5cdGmc M3oPcB6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYWceFAAKCRCJcvTf3G3AJsetD/ 9jqt/mMainURcBkfvabgTOLY7SRxtWhpfdp++dz9638RboQjKK/pgK1aMBtMqEAT0nvJtZGoM2JGjl V+W0N3WaIATR8h73k+fgtgD2zIagC7IibIhV06Tj3tSztXwCvEe+tMaQEfpYFaaNc/Tw5lFpcx4AKx eOphkWsQSvzyQIq1F6dX7QXLn5HZjCQB5QAOo21siALDbAAExXUqGoc1W96ILJuAVCg3nJCP92pADz gOfRDCvPwI+1/WEdpe8qgDpI+EhrRs+3z+D1sBi3S+WsQthGxnoj+Cr8yYyeOih10wCOnixEutJAo6 0jhz01Bn5Wv78B0vwxSp2uPs1Qw2mf5zsDwbQdCaqj+cQbqEcyTNRlxcwsAkgU1V5oSYh5XyNbORRM pxZxmtir61MsEkHgx8juWagLoab5D7Tszt5m6y0a+y0CpqFjR98b+P2jLHtN9j83QEnE+lYx8pXH9k VER+Yrzu6DTNobQcAwJiObxxWzRnvrmHqfU49BF92SBkov6axqsXziXbS5fjRJmN6ZceJpeCW7SvIA XRdw/QgHEV2Wf/dyRZAPBySso5Dra6Ry1KaDBHtULwsy7NCjSLZQupWLz/v/Q9/yDafPmMJmkMN6GK 6vru6cw6mIsWUB6Fwck+eMzTdtk1gEuxfrDG3sD2Q+pNjVW9752yKR7iCnXA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Thomas,
+Hi,
 
-On 2021/9/23 下午10:33, Zhou Yanjie wrote:
-> Hi Thomas,
->
-> On 2021/9/21 下午11:57, Thomas Bogendoerfer wrote:
->> On Tue, Sep 14, 2021 at 05:30:14PM +0800, Feiyang Chen wrote:
->>> On Tue, 14 Sept 2021 at 16:54, Jiaxun Yang <jiaxun.yang@flygoat.com> 
->>> wrote:
->>>>
->>>>
->>>> 在 2021/9/14 2:50, Feiyang Chen 写道:
->>>>> Convert MIPS to use the generic entry infrastructure from
->>>>> kernel/entry/*.
->>>>>
->>>>> v2: Use regs->regs[27] to mark whether to restore all registers in
->>>>> handle_sys and enable IRQ stack.
->>>> Hi Feiyang,
->>>>
->>>> Thanks for your patch, could you please expand how could this improve
->>>> the performance?
->>>>
->>> Hi, Jiaxun,
->>>
->>> We always restore all registers in handle_sys in the v1 of the
->>> patchset. Since regs->regs[27] is marked where we need to restore all
->>> registers, now we simply use it as the return value of do_syscall to
->>> determine whether we can only restore partial registers in handle_sys.
->> can people, who provided performance numbers for v1 do the same for v2 ?
->
->
-> Sure, I will test the v2 in the next few days.
+These are a small set of patches that clean up various things that are
+each stand-alone improvements, but they're also needed for the coming
+FGKASLR series[1]. I thought it best to just get these landed instead
+of having them continue to tag along with FGKASLR, especially the
+early malloc() fix, which is a foot-gun waiting to happen. :)
 
+Thanks!
 
-Sorry for the delay, It took a lot of time to migrate the environment to 
-my new computer, here is the results:
+-Kees
 
+[1] https://lore.kernel.org/lkml/20210831144114.154-1-alexandr.lobakin@intel.com/
 
-Score Without Patches  Score With Patches  Performance Change SoC Model
-        105.9                102.1              -3.6%  JZ4775
-        132.4                124.1              -6.3%  JZ4780(SMP off)
-        170.2                155.7             -8.5%  JZ4780(SMP on)
-        101.3                 91.5              -9.7%  X1000E
-        187.1                179.4              -4.1%  X1830
-        324.9                314.3              -3.3%  X2000(SMT off)
-        394.6                373.9              -5.2%  X2000(SMT off)
+Kees Cook (2):
+  x86/boot: Allow a "silent" kaslr random byte fetch
+  x86/boot/compressed: Avoid duplicate malloc() implementations
 
+Kristen Carlson Accardi (2):
+  x86/tools/relocs: Support >64K section headers
+  vmlinux.lds.h: Have ORC lookup cover entire _etext - _stext
 
-Compared with the V1 version, there are some improvements, but the 
-performance loss is still a bit obvious
+ arch/x86/boot/compressed/kaslr.c  |   4 --
+ arch/x86/boot/compressed/misc.c   |   3 +
+ arch/x86/boot/compressed/misc.h   |   2 +
+ arch/x86/lib/kaslr.c              |  18 ++++--
+ arch/x86/tools/relocs.c           | 103 ++++++++++++++++++++++--------
+ include/asm-generic/vmlinux.lds.h |   3 +-
+ include/linux/decompress/mm.h     |  12 +++-
+ 7 files changed, 107 insertions(+), 38 deletions(-)
 
-Thanks and best regards!
+-- 
+2.30.2
 
-
->
->
-> Thanks and best regards!
->
->
->>
->> Thomas,
->>
