@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B7542D25A
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 08:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D494F42D255
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 08:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbhJNG0M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Oct 2021 02:26:12 -0400
+        id S229713AbhJNG0I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Oct 2021 02:26:08 -0400
 Received: from pegase2.c-s.fr ([93.17.235.10]:45337 "EHLO pegase2.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229883AbhJNG0J (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 14 Oct 2021 02:26:09 -0400
+        id S229746AbhJNG0G (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 14 Oct 2021 02:26:06 -0400
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4HVK9W17yZz9sSZ;
-        Thu, 14 Oct 2021 08:23:59 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4HVK9V2XGPz9sST;
+        Thu, 14 Oct 2021 08:23:58 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id b0yiiAEuME1g; Thu, 14 Oct 2021 08:23:59 +0200 (CEST)
+        with ESMTP id ywvM8ua99sUG; Thu, 14 Oct 2021 08:23:58 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4HVK9V5Kd0z9sSK;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4HVK9V1df3z9sSK;
         Thu, 14 Oct 2021 08:23:58 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A0AB98B788;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2155E8B788;
         Thu, 14 Oct 2021 08:23:58 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id gzQ4S7fKJNqd; Thu, 14 Oct 2021 08:23:58 +0200 (CEST)
+        with ESMTP id LEgVpphJSeUz; Thu, 14 Oct 2021 08:23:58 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.231])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 402468B763;
-        Thu, 14 Oct 2021 08:23:58 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D44DA8B763;
+        Thu, 14 Oct 2021 08:23:57 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1) with ESMTPS id 19E5oQAt2266034
+        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1) with ESMTPS id 19E5oQBY2266038
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Thu, 14 Oct 2021 07:50:26 +0200
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1/Submit) id 19E5oQZE2266033;
+        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1/Submit) id 19E5oQ4u2266037;
         Thu, 14 Oct 2021 07:50:26 +0200
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
@@ -52,71 +52,57 @@ Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 10/13] lkdtm: Really write into kernel text in WRITE_KERN
-Date:   Thu, 14 Oct 2021 07:49:59 +0200
-Message-Id: <da2ee09d23d7406475578d2b72d0c27160acd856.1634190022.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v2 11/13] lkdtm: Fix lkdtm_EXEC_RODATA()
+Date:   Thu, 14 Oct 2021 07:50:00 +0200
+Message-Id: <44946ed0340013a52f8acdee7d6d0781f145cd6b.1634190022.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1634190022.git.christophe.leroy@csgroup.eu>
 References: <cover.1634190022.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1634190596; l=1853; s=20211009; h=from:subject:message-id; bh=z/aB80p6e37+wi5UDvnOtBLSSHNpIOGfxrnndLg8VIY=; b=GzlSY84BycesIyXqAb04qiQPImy6tCuMMcp0B+fXkd/gAdogGCmqQ6ckrRhiRM1oHHrRbc5xqrwJ XthU1P3yCgyO/6hVvrBos8Ex6ZO+uKbuqQWMpiahdoI2ATxn/Ysb
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1634190596; l=1315; s=20211009; h=from:subject:message-id; bh=rb6s8T8RzgppuRF6clvJIPiZDvSiUgRo2Ftj9cKfCbI=; b=IomnMzuLREpm22pqHiUGM7GaxjWQw6U4JqCv8E/AD7rCX5OHbqBvUX0igIGbFZcJnsdwgmpcgCOZ V9VbVBWuCT2ksy6IfSzsaHiA2GEOl5ZkQT1MMB8AK72+hu6d6ibU
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-WRITE_KERN is supposed to overwrite some kernel text, namely
-do_overwritten() function.
+Behind its location, lkdtm_EXEC_RODATA() executes
+lkdtm_rodata_do_nothing() which is a real function,
+not a copy of do_nothing().
 
-But at the time being it overwrites do_overwritten() function
-descriptor, not function text.
+So executes it directly instead of using execute_location().
 
-Fix it by dereferencing the function descriptor to obtain
-function text pointer.
+This is necessary because following patch will fix execute_location()
+to use a copy of the function descriptor of do_nothing() and
+function descriptor of lkdtm_rodata_do_nothing() might be different.
 
-And make do_overwritten() noinline so that it is really
-do_overwritten() which is called by lkdtm_WRITE_KERN().
+And fix displayed addresses by dereferencing the function descriptors.
 
-Acked-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/misc/lkdtm/perms.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/misc/lkdtm/perms.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
-index 60b3b2fe929d..035fcca441f0 100644
+index 035fcca441f0..5266dc28df6e 100644
 --- a/drivers/misc/lkdtm/perms.c
 +++ b/drivers/misc/lkdtm/perms.c
-@@ -10,6 +10,7 @@
- #include <linux/mman.h>
- #include <linux/uaccess.h>
- #include <asm/cacheflush.h>
-+#include <asm/sections.h>
+@@ -153,7 +153,14 @@ void lkdtm_EXEC_VMALLOC(void)
  
- /* Whether or not to fill the target memory area with do_nothing(). */
- #define CODE_WRITE	true
-@@ -37,7 +38,7 @@ static noinline void do_nothing(void)
+ void lkdtm_EXEC_RODATA(void)
+ {
+-	execute_location(lkdtm_rodata_do_nothing, CODE_AS_IS);
++	pr_info("attempting ok execution at %px\n",
++		dereference_function_descriptor(do_nothing));
++	do_nothing();
++
++	pr_info("attempting bad execution at %px\n",
++		dereference_function_descriptor(lkdtm_rodata_do_nothing));
++	lkdtm_rodata_do_nothing();
++	pr_err("FAIL: func returned\n");
  }
  
- /* Must immediately follow do_nothing for size calculuations to work out. */
--static void do_overwritten(void)
-+static noinline void do_overwritten(void)
- {
- 	pr_info("do_overwritten wasn't overwritten!\n");
- 	return;
-@@ -113,8 +114,9 @@ void lkdtm_WRITE_KERN(void)
- 	size_t size;
- 	volatile unsigned char *ptr;
- 
--	size = (unsigned long)do_overwritten - (unsigned long)do_nothing;
--	ptr = (unsigned char *)do_overwritten;
-+	size = (unsigned long)dereference_function_descriptor(do_overwritten) -
-+	       (unsigned long)dereference_function_descriptor(do_nothing);
-+	ptr = dereference_function_descriptor(do_overwritten);
- 
- 	pr_info("attempting bad %zu byte write at %px\n", size, ptr);
- 	memcpy((void *)ptr, (unsigned char *)do_nothing, size);
+ void lkdtm_EXEC_USERSPACE(void)
 -- 
 2.31.1
 
