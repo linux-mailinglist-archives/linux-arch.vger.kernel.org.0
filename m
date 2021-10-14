@@ -2,170 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD0042E40F
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Oct 2021 00:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB9F42E444
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Oct 2021 00:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbhJNWTn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Oct 2021 18:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S230030AbhJNWi6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Oct 2021 18:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbhJNWTm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Oct 2021 18:19:42 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C91EC061570
-        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 15:17:37 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id g13-20020a17090a3c8d00b00196286963b9so7956388pjc.3
-        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 15:17:37 -0700 (PDT)
+        with ESMTP id S230330AbhJNWi5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Oct 2021 18:38:57 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22593C061570
+        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 15:36:52 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id n8so33132622lfk.6
+        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 15:36:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=axtens.net; s=google;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=/gn1naYin2rxewmNR+UQ+4Ua2Az6pxvVd0XA2L6nJ+U=;
-        b=ONfSismG4d04naWppWaw5fFBIKSKKMAy0gVJiXZrFConvnU5E8d2Ayd3VDh0kKxPlM
-         KfYheVy3VZqFxW7C3SyDj3kHRI0/KpnkFFKB2eHymwNvTlk77B8NEvbREKsCxf/hUfZR
-         66TL6htytJE5V6/HVu+C2OZbv0Cu9cqLYCK78=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oPuxOfPoEn2w+Vy6YtWqvZyYsB0r4ReZCNxVMrkb8QI=;
+        b=TU2N5ITK3xVvoWLOxg0QxSdXuTND/1UVb8D9kq7fbac/6VC+lbImYzJlzwGBaDf5Pi
+         1jEErQguvYRKtAArQG03jv4A/g1xPWpJLfs42JrKGBOTus1dB6eJozNJOOcZh974rGLb
+         bnRyUJRcXby9bIILD4PGb6QWwfZdO2Q7jF3rY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=/gn1naYin2rxewmNR+UQ+4Ua2Az6pxvVd0XA2L6nJ+U=;
-        b=SIfsiGQBtmJwdoj1xlza4i4leblVYryJXGOMDfuRPgQypP/ES8lLbybiiWcOn+46lx
-         rojJOBhREwhsCTnRTKnr51ZxCOq0rRBuG7QlN0e4Zegr+vY8bPa5hBRPA87k0Ve0BWnP
-         T9soaEXipnE8gFXLYMCp9SR7Y/j3dh548NZfrUKmLMF9C/Ss2sVk4N84INrNA6y7G+9d
-         nVRTShHM9oIh48BY1hpmOTFvsmQau5fYw013fErRE9BoVyRXA27lFOG7mvtw92DFA1Xu
-         DZ27hrwTpZxmQ4tnNKy+V1yjSanir37DqEJZrvBxE7aufIejpTsA2NvWkvz9WIRJjdIH
-         gSNg==
-X-Gm-Message-State: AOAM531wAQ5J0ACw7oWT3fvueu0CMT/1pRE5BYN3sod/0T7KDFPm6dNh
-        Zd033s3M5E3ZGp7LIF0O1mRrZ/PncRCUqw==
-X-Google-Smtp-Source: ABdhPJzab2EpHK7Q/T8QXwpqraVUPmAWt0eL0woPg5T6pMmI9UAwBAQkaSq8CsyFo20UObxGkQ6Z9w==
-X-Received: by 2002:a17:90b:224e:: with SMTP id hk14mr9005831pjb.224.1634249856727;
-        Thu, 14 Oct 2021 15:17:36 -0700 (PDT)
-Received: from localhost ([2001:4479:e300:600:4901:2fb9:ed97:3a3e])
-        by smtp.gmail.com with ESMTPSA id x27sm3586622pfo.90.2021.10.14.15.17.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Oct 2021 15:17:36 -0700 (PDT)
-From:   Daniel Axtens <dja@axtens.net>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 03/13] powerpc: Remove func_descr_t
-In-Reply-To: <16eef6afbf7322d0c07760ebf827b8f9f50f7c6e.1634190022.git.christophe.leroy@csgroup.eu>
-References: <cover.1634190022.git.christophe.leroy@csgroup.eu>
- <16eef6afbf7322d0c07760ebf827b8f9f50f7c6e.1634190022.git.christophe.leroy@csgroup.eu>
-Date:   Fri, 15 Oct 2021 09:17:33 +1100
-Message-ID: <874k9j45fm.fsf@dja-thinkpad.axtens.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oPuxOfPoEn2w+Vy6YtWqvZyYsB0r4ReZCNxVMrkb8QI=;
+        b=QzF2YayXBNJSPLjbA4NgilKwpSwvpTdjaLKaxFEL6a0VCbNK4GUtSKF+IaamydvPw9
+         0WxCLmsQbOmgHY/WxaGYXgoHLfwHqPUkWFhFqmqOxReW0si3687jIOlk7OTFQgsdtr+J
+         prinqCJDPyKace3RVE2NM0P5dcQphSJy8VAF3kK+VBbZrx7okW4egKA6ydOluuwT3TtP
+         7U1ID5zSqneyu+uK5vPwsDySNjvijSra8Q3naJC3GiuHkGxq3onxZGg7XdbPjTdizQZR
+         FUBhRHlejUfYp9WptixddZ7xNTLMuFr1mUDzWAiIBOWZE1yjIEIm2VCypgwI34N6CKFJ
+         KkOA==
+X-Gm-Message-State: AOAM533XE4BoIeAceBc/x46yl0wQE/jwiMbv33Gi+ZrcRpS63474Ny2P
+        nPHK5GTlxvSpFm3I2NgLdsEIcxg0v+gCUgOL
+X-Google-Smtp-Source: ABdhPJycyxcG/FpWVBE+B73L/Ex4NFWsXS1BXpgkWd84rpZm0yzqhEg7Af4mz+PZuSDhq4zeMt1nTg==
+X-Received: by 2002:a2e:b0c6:: with SMTP id g6mr8926159ljl.496.1634251010183;
+        Thu, 14 Oct 2021 15:36:50 -0700 (PDT)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
+        by smtp.gmail.com with ESMTPSA id p6sm335738lfs.109.2021.10.14.15.36.45
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Oct 2021 15:36:49 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id r19so32228560lfe.10
+        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 15:36:45 -0700 (PDT)
+X-Received: by 2002:a05:6512:398a:: with SMTP id j10mr7595767lfu.402.1634251004791;
+ Thu, 14 Oct 2021 15:36:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <87lf3f7eh6.fsf@oldenburg.str.redhat.com> <20210929174146.GF22689@gate.crashing.org>
+ <2088260319.47978.1633104808220.JavaMail.zimbra@efficios.com>
+ <871r54ww2k.fsf@oldenburg.str.redhat.com> <CAHk-=wgexLqNnngLPts=wXrRcoP_XHO03iPJbsAg8HYuJbbAvw@mail.gmail.com>
+ <87y271yo4l.fsf@mid.deneb.enyo.de> <20211014000104.GX880162@paulmck-ThinkPad-P17-Gen-1>
+ <87lf2v61k7.fsf@mid.deneb.enyo.de> <20211014162311.GD880162@paulmck-ThinkPad-P17-Gen-1>
+ <87o87r4gfp.fsf@mid.deneb.enyo.de> <20211014210959.GJ880162@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20211014210959.GJ880162@paulmck-ThinkPad-P17-Gen-1>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 14 Oct 2021 18:36:28 -0400
+X-Gmail-Original-Message-ID: <CAHk-=whrmpKUbJp1gmY3tyNCw6YebEZO1Cd8GzsL_4WFf-obDQ@mail.gmail.com>
+Message-ID: <CAHk-=whrmpKUbJp1gmY3tyNCw6YebEZO1Cd8GzsL_4WFf-obDQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Florian Weimer <fw@deneb.enyo.de>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        j alglave <j.alglave@ucl.ac.uk>,
+        luc maranget <luc.maranget@inria.fr>,
+        akiyks <akiyks@gmail.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-
-> 'func_descr_t' is redundant with 'struct ppc64_opd_entry'
-
-So, if I understand the overall direction of the series, you're
-consolidating powerpc around one single type for function descriptors,
-and then you're creating a generic typedef so that generic code can
-always do ((func_desc_t)x)->addr to get the address of a function out of
-a function descriptor regardless of arch. (And regardless of whether the
-arch uses function descriptors or not.)
-
-So:
-
- - why pick ppc64_opd_entry over func_descr_t?
-
- - Why not make our struct just called func_desc_t - why have a
-   ppc64_opd_entry type or a func_descr_t typedef?
-
- - Should this patch wait until after you've made the generic
-   func_desc_t change and move directly to that new interface? (rather
-   than move from func_descr_t -> ppc64_opd_entry -> ...) Or is there a
-   particular reason arch specific code should use an arch-specific
-   struct or named type?
-
-> Remove it.
+On Thu, Oct 14, 2021 at 5:10 PM Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/include/asm/code-patching.h | 2 +-
->  arch/powerpc/include/asm/types.h         | 6 ------
->  arch/powerpc/kernel/signal_64.c          | 8 ++++----
->  3 files changed, 5 insertions(+), 11 deletions(-)
->
-> diff --git a/arch/powerpc/include/asm/code-patching.h b/arch/powerpc/include/asm/code-patching.h
-> index 4ba834599c4d..f3445188d319 100644
-> --- a/arch/powerpc/include/asm/code-patching.h
-> +++ b/arch/powerpc/include/asm/code-patching.h
-> @@ -110,7 +110,7 @@ static inline unsigned long ppc_function_entry(void *func)
->  	 * function's descriptor. The first entry in the descriptor is the
->  	 * address of the function text.
->  	 */
-> -	return ((func_descr_t *)func)->entry;
-> +	return ((struct ppc64_opd_entry *)func)->addr;
->  #else
->  	return (unsigned long)func;
->  #endif
-> diff --git a/arch/powerpc/include/asm/types.h b/arch/powerpc/include/asm/types.h
-> index f1630c553efe..97da77bc48c9 100644
-> --- a/arch/powerpc/include/asm/types.h
-> +++ b/arch/powerpc/include/asm/types.h
-> @@ -23,12 +23,6 @@
->  
->  typedef __vector128 vector128;
->  
-> -typedef struct {
-> -	unsigned long entry;
-> -	unsigned long toc;
-> -	unsigned long env;
-> -} func_descr_t;
+> In all the weakly ordered architectures I am aware of, spilling to
+> the stack and reloading preserves the ordering.  The ordering from
+> the initial load to the spill is an assembly-language data dependency,
+> the ordering from the spill to the reload is single-variable SC, and
+> the ordering beyond that is the original control dependency.
 
-I was a little concerned about going from a 3-element struct to a
-2-element struct (as ppc64_opd_entry doesn't have an element for env) -
-but we don't seem to take the sizeof this anywhere, nor do we use env
-anywhere, nor do we do funky macro stuff with it in the signal handling
-code that might implictly use the 3rd element, so I guess this will
-work. Still, func_descr_t seems to describe the underlying ABI better
-than ppc64_opd_entry...
+I think the thing about a control dependency is that any way to
+optimize it differently only strengthens it.
 
->  #endif /* __ASSEMBLY__ */
->  
->  #endif /* _ASM_POWERPC_TYPES_H */
-> diff --git a/arch/powerpc/kernel/signal_64.c b/arch/powerpc/kernel/signal_64.c
-> index 1831bba0582e..63ddbe7b108c 100644
-> --- a/arch/powerpc/kernel/signal_64.c
-> +++ b/arch/powerpc/kernel/signal_64.c
-> @@ -933,11 +933,11 @@ int handle_rt_signal64(struct ksignal *ksig, sigset_t *set,
->  		 * descriptor is the entry address of signal and the second
->  		 * entry is the TOC value we need to use.
->  		 */
-> -		func_descr_t __user *funct_desc_ptr =
-> -			(func_descr_t __user *) ksig->ka.sa.sa_handler;
-> +		struct ppc64_opd_entry __user *funct_desc_ptr =
-> +			(struct ppc64_opd_entry __user *)ksig->ka.sa.sa_handler;
->  
-> -		err |= get_user(regs->ctr, &funct_desc_ptr->entry);
-> -		err |= get_user(regs->gpr[2], &funct_desc_ptr->toc);
-> +		err |= get_user(regs->ctr, &funct_desc_ptr->addr);
-> +		err |= get_user(regs->gpr[2], &funct_desc_ptr->r2);
+That was very different from the problems we had with describing the
+RCU dependencies - they were data dependencies, and if they could ever
+be turned into control dependencies, they would have been weakened.
 
-Likewise, r2 seems like a worse name than toc. I guess we could clean
-that up another time though.
+But the only way to really weaken a control dependency and the write
+behind it is to get rid of it entirely.
 
-Kind regards,
-Daniel
+So turning it into a data dependency (by turning the conditional into
+a 'select' instruction, for example) only makes it stronger. And no
+amount of register spilling or data movement any other way makes any
+difference.
 
->  	}
->  
->  	/* enter the signal handler in native-endian mode */
-> -- 
-> 2.31.1
+That's why all the examples of what could go wrong were about same
+code on both sides of the conditional, which allowed removing the
+conditional entirely (or at least moving parts of the "protected" code
+to before it.
+
+(The other way to remove the conditional is to just optimize away the
+conditional itself, but that's defeated by "READ_ONCE()" being part of
+the source of the conditional, and any data or control dependency from
+that fundamental "the compiler cannot remove this logic" is always
+sufficient).
+
+So I really don't think this is even about "any weakly ordered
+architecture". I think this is fundamentally about causality. You
+simply cannot make a conditional write visible before the condition
+has been resolved, and resolving the condition requires the read to
+have happened.
+
+This is not open to "speculation". Not by hardware, not by compilers.
+
+There are only two ways you can break this fundamental construct:
+
+ - outright bugs
+
+ - a perfect oracle
+
+And honestly, if you have a perfect oracle, you're better off making
+money playing the lotto than you would ever be doing hardware or
+software development, so that second option isn't really even
+interesting.
+
+                 Linus
