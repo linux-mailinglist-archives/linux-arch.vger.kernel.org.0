@@ -2,169 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E4442D891
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 13:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF22542D8B9
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 14:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbhJNLwM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Oct 2021 07:52:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27479 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231295AbhJNLwK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 14 Oct 2021 07:52:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634212205;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BjIpv+udz4Ba/qOEMRyyxOUnaMX1at+9okP/sD2YABQ=;
-        b=RJbGGIXmx737jWGuoaQ8BkDITholNunoKfz2idBH8Ex9dwETzD6evS4D1CIE7V9DHUciz4
-        tIIp3EVImjL3SuQUCsQxqGKnmw7Bo0J8UBrdr5DKdcGaLtonDs3pki71SV7Dk0V/XrKKVS
-        hRNVJHH+BKAKBG8xync17sEcCJQHEn8=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-111-oKHh3KEvPvOosAleFzifsQ-1; Thu, 14 Oct 2021 07:50:04 -0400
-X-MC-Unique: oKHh3KEvPvOosAleFzifsQ-1
-Received: by mail-wr1-f70.google.com with SMTP id r21-20020adfa155000000b001608162e16dso4317127wrr.15
-        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 04:50:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BjIpv+udz4Ba/qOEMRyyxOUnaMX1at+9okP/sD2YABQ=;
-        b=YO1N1SmB9xVwmPwfro/OEPQ9EQo7PQMaftAkHEW6MM4IqJvB52BY6yznT449C8Ye7a
-         EzHd1fL7oLwSNvYGI0/UqkSAXz8G/bRYHZfuu12UEl1Kq6oy4zlLUYrELZl6FFcosY/P
-         emhZ27gbtcRLPZGUX8q55TjUuN5ruxIerKcNZUpCHYUxCTQZWrzriSFGa+UwfSH3XOuc
-         86mfp8zVn1JIdKSzQ1Ji9J+gxn54/FYwKssfRruRoxODpne3WxY1yMTqGO5eD166SR2g
-         hpKoQ79Y4S2OaQuRWaf9lFp1/xdEFpDAs+87toFRxopEMAW/qrzsFneOAEzUz77C0BY8
-         Y/ZQ==
-X-Gm-Message-State: AOAM530yYPSDzQ/QCxIdx3S7QKcqyIw+9mMOjO8RJndA0IFHjXTwIhGu
-        VNlSHFjXv+EOSiPHNqjtNWMplXgelFhf/0dP000H2guIcRU4WV32mPe3Wlz3NPe7t9t8WHFiNOk
-        AGKGFGO+63hYL0xOp2Uq3GA==
-X-Received: by 2002:adf:959a:: with SMTP id p26mr5903564wrp.342.1634212203027;
-        Thu, 14 Oct 2021 04:50:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz9qOw3WbNBTRd79UJzGLK0rcHBsHFX2nKa+bjejslC1TbPETWCFjebXvTyHUX4CLIfPAkTIA==
-X-Received: by 2002:adf:959a:: with SMTP id p26mr5903550wrp.342.1634212202845;
-        Thu, 14 Oct 2021 04:50:02 -0700 (PDT)
-Received: from redhat.com ([2.55.16.227])
-        by smtp.gmail.com with ESMTPSA id o1sm2171853wru.91.2021.10.14.04.49.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Oct 2021 04:50:02 -0700 (PDT)
-Date:   Thu, 14 Oct 2021 07:49:55 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Reshetova, Elena" <elena.reshetova@intel.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter H Anvin <hpa@zytor.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH v5 12/16] PCI: Add pci_iomap_host_shared(),
- pci_iomap_host_shared_range()
-Message-ID: <20211014065626-mutt-send-email-mst@kernel.org>
-References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009053103-mutt-send-email-mst@kernel.org>
- <CAPcyv4hDhjRXYCX_aiOboLF0eaTo6VySbZDa5NQu2ed9Ty2Ekw@mail.gmail.com>
- <0e6664ac-cbb2-96ff-0106-9301735c0836@linux.intel.com>
- <DM8PR11MB57501C8F8F5C8B315726882EE7B69@DM8PR11MB5750.namprd11.prod.outlook.com>
- <20211012171016-mutt-send-email-mst@kernel.org>
- <DM8PR11MB5750A40FAA6AFF6A29CF70DAE7B89@DM8PR11MB5750.namprd11.prod.outlook.com>
- <20211014025514-mutt-send-email-mst@kernel.org>
- <DM8PR11MB57500B2D821E8AAF93EB66CEE7B89@DM8PR11MB5750.namprd11.prod.outlook.com>
+        id S230198AbhJNMFI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Oct 2021 08:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230172AbhJNMFH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Oct 2021 08:05:07 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FD4C061570;
+        Thu, 14 Oct 2021 05:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LQbu81zuvorNbNl7md+JgKHR7v/3E2/nFaDHpBUMKHE=; b=K+VqEeAQrYdM6TmqnvgqR8nQZ2
+        NUVGVVdJOKwbDDGJLr2XaNah8D3QzuwIEiRxNHZTCkRVBNPcsYGoyUwvsSFUkI26FQ57xybfxRkBr
+        xIKCPhafKP5jWU8T3MrrEwNDfJlZ9qcmPxjI6L5P1Fyyd6l7J+c0+vDz8E4JQB8gBWwekKorq1TPB
+        mTkG7hJstKx4fg034oRxe7rWHPayvwIpCm8kaC3EoNrDKi410bqJjM+2qNJuGSsLX8FJgTReiQ0Ke
+        nvz5uY+7YlYlxuOcmgx+88lfZbqgtns6SWmoBoNUKgfH5gijloXLdNXfI3Cl4FyDKOoCE2NzAHUpf
+        +RdYfERQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55094)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mazRg-0001Ib-Rt; Thu, 14 Oct 2021 13:02:48 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mazRS-00028C-K9; Thu, 14 Oct 2021 13:02:34 +0100
+Date:   Thu, 14 Oct 2021 13:02:34 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     keescook@chromium.org, jannh@google.com,
+        linux-kernel@vger.kernel.org, vcaputo@pengaru.com,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, akpm@linux-foundation.org,
+        christian.brauner@ubuntu.com, amistry@google.com,
+        Kenta.Tada@sony.com, legion@kernel.org,
+        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
+        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com,
+        mark.rutland@arm.com, axboe@kernel.dk, metze@samba.org,
+        laijs@linux.alibaba.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, ebiederm@xmission.com,
+        ohoono.kwon@samsung.com, kaleshsingh@google.com,
+        yifeifz2@illinois.edu, jpoimboe@redhat.com,
+        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
+        vgupta@kernel.org, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        nickhu@andestech.com, jonas@southpole.se, mpe@ellerman.id.au,
+        paul.walmsley@sifive.com, hca@linux.ibm.com,
+        ysato@users.sourceforge.jp, davem@davemloft.net, chris@zankel.net
+Subject: Re: [PATCH 0/7] wchan: Fix wchan support
+Message-ID: <YWgcWnbsvI1rbvEj@shell.armlinux.org.uk>
+References: <20211008111527.438276127@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM8PR11MB57500B2D821E8AAF93EB66CEE7B89@DM8PR11MB5750.namprd11.prod.outlook.com>
+In-Reply-To: <20211008111527.438276127@infradead.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 14, 2021 at 07:27:42AM +0000, Reshetova, Elena wrote:
-> > On Thu, Oct 14, 2021 at 06:32:32AM +0000, Reshetova, Elena wrote:
-> > > > On Tue, Oct 12, 2021 at 06:36:16PM +0000, Reshetova, Elena wrote:
-> > > > > > The 5.15 tree has something like ~2.4k IO accesses (including MMIO and
-> > > > > > others) in init functions that also register drivers (thanks Elena for
-> > > > > > the number)
-> > > > >
-> > > > > To provide more numbers on this. What I can see so far from a smatch-based
-> > > > > analysis, we have 409 __init style functions (.probe & builtin/module_
-> > > > > _platform_driver_probe excluded) for 5.15 with allyesconfig.
-> > > >
-> > > > I don't think we care about allyesconfig at all though.
-> > > > Just don't do that.
-> > > > How about allmodconfig? This is closer to what distros actually do.
-> > >
-> > > It does not make any difference really for the content of the /drivers/*:
-> > > gives 408 __init style functions doing IO (.probe & builtin/module_
-> > > > > _platform_driver_probe excluded) for 5.15 with allmodconfig:
-> > >
-> > > ['doc200x_ident_chip',
-> > > 'doc_probe', 'doc2001_init', 'mtd_speedtest_init',
-> > > 'mtd_nandbiterrs_init', 'mtd_oobtest_init', 'mtd_pagetest_init',
-> > > 'tort_init', 'mtd_subpagetest_init', 'fixup_pmc551',
-> > > 'doc_set_driver_info', 'init_amd76xrom', 'init_l440gx',
-> > > 'init_sc520cdp', 'init_ichxrom', 'init_ck804xrom', 'init_esb2rom',
-> > > 'probe_acpi_namespace_devices', 'amd_iommu_init_pci', 'state_next',
-> > > 'arm_v7s_do_selftests', 'arm_lpae_run_tests', 'init_iommu_one',
-> > 
-> > Um. ARM? Which architecture is this build for?
+On Fri, Oct 08, 2021 at 01:15:27PM +0200, Peter Zijlstra wrote:
+> Hi,
 > 
-> The list of smatch IO findings is built for x86, but the smatch cross function
-> database covers all archs, so when queried for all potential function callers,
-> it would show non x86 arch call chains also. 
+> This fixes up wchan which is various degrees of broken across the
+> architectures.
 > 
-> Here is the original x86 finding and call chain for the 'arm_v7s_do_selftests':
+> Patch 4 fixes wchan for x86, which has been returning 0 for the past many
+> releases.
 > 
->   Detected low-level IO from arm_v7s_do_selftests in fun
-> __iommu_queue_command_sync
+> Patch 5 fixes the fundamental race against scheduling.
 > 
-> drivers/iommu/amd/iommu.c:1025 __iommu_queue_command_sync() error:
-> {15002074744551330002}
->     'check_host_input' read from the host using function 'readl' to a
-> member of the structure 'iommu->cmd_buf_head';
+> Patch 6 deletes a lot and makes STACKTRACE unconditional
 > 
-> __iommu_queue_command_sync()
->   iommu_completion_wait()
->     amd_iommu_domain_flush_complete()
->       iommu_v1_map_page()
->         arm_v7s_do_selftests()
+> patch 7 fixes up a few STACKTRACE arch oddities
 > 
-> So, the results can be further filtered if you want a specified arch. 
+> 0day says all builds are good, so it must be perfect :-) I'm planning on
+> queueing up at least the first 5 patches, but I'm hoping the last two patches
+> can be too.
+> 
+> Also available here:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/wchan
 
-Even better would be a typical distro build.
+These patches introduce a regression on ARM. Whereas before, I have
+/proc/*/wchan populated with non-zero values, with these patches they
+_all_ contain "0":
+
+root@clearfog21:~# cat /proc/*/wchan
+0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000root@clearfog21:~#
+
+I'll try to investigate what is going on later today.
 
 -- 
-MST
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
