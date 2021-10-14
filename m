@@ -2,71 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 103C842CB29
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Oct 2021 22:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B134242CF5D
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 02:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbhJMUiX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Oct 2021 16:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbhJMUiW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Oct 2021 16:38:22 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC5CC061570
-        for <linux-arch@vger.kernel.org>; Wed, 13 Oct 2021 13:36:19 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id h4so7183056uaw.1
-        for <linux-arch@vger.kernel.org>; Wed, 13 Oct 2021 13:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oxmlE0jWTvIABAOfcWenbXPbvIcFQQi9okWp6MfW2Rk=;
-        b=dSwYr10Czbxlxm7F67KMPvvJG9P3phmX0JBl9Ty+/TuGFPA0rsFQPLdAUoKK7dCh41
-         9uMqVVhVMu8cioCd5Y2rVX+7tzSExeucmzg+GfpGSWafRxGh8Gyy8x1nICbhYFOuPD6D
-         3227y+5cZC8ZqIXulPV6s4wxTMnUNoNxZWlJCUJPUHt7ok0hfsJ1g5kTSrZHeY83Opte
-         PjM3CPJpRBV6Ne9KK7m1wElFoUStioYCCRwZGX4K9me+zIOdMy8qMo85c+Anyhox/lm6
-         iXOplN3FBIrzrEB21N8FpE/yOlyfK5kcbAcrdtkcX8rZY5rZcInFj05k5egv2a7iGkLD
-         SojQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oxmlE0jWTvIABAOfcWenbXPbvIcFQQi9okWp6MfW2Rk=;
-        b=ijHys0X6cp3UGeOWdBwKLsuLzOtvipkz5/SihBThWdHu/gCzbK/Teys/GIdgPRU6MA
-         DONfo1qq3NVILqa6dIoIHWeCqHd0f5YkuHy5n6WDWCLfwGLNHx5jdPnOOfvGC9WePmoM
-         g2FELHn6AnSO0DFknK0MqRfrwk7g4P3zVlx7KwXTX4Wld9qicX9cQAQzU6CWg7DHeSNs
-         Xwfdyk+dUtv10um6LKED5+p2nyN9q238k+ndt27/2E+Zft44orjZG0zWj1IQYqQL0MhA
-         3FOL9Xm2ffGBOgsBCuL1qiaWgusfw3LFRRlxNRAJEbZ23D8+BWnMAbDvk0OeovARF/Uw
-         8g6g==
-X-Gm-Message-State: AOAM532Fe61zaDEOYJIOlahao8YNAbOVA+8vbwaVEk7QWWb0S2gMPNav
-        3y2NSPP1jCE6TI0BocgZ16sxTMGkpqczwkuuZE4pyA==
-X-Google-Smtp-Source: ABdhPJxCWJwH8wsDAPq7q8Ma8DI8v/ghsdOiUWd7ssye0vrKNbb4cbAPYMkSxDl5594oZyze0+c7hz4obonnasO/r/c=
-X-Received: by 2002:ab0:540e:: with SMTP id n14mr1776903uaa.73.1634157378226;
- Wed, 13 Oct 2021 13:36:18 -0700 (PDT)
+        id S229698AbhJNADJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Oct 2021 20:03:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34200 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229677AbhJNADI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 13 Oct 2021 20:03:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 102CF61130;
+        Thu, 14 Oct 2021 00:01:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634169665;
+        bh=xQ9stP59+c3RrHPEyY/yaAiPg7w9ZkGXGwxSUoF2MVw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=O/DF7k+1QM3CpeeavAORpDv+Hqz1sK1IiUF++fkBYOevSWBTLRxeKpTNlSSbOnFqJ
+         v9SxsTLSfRqZqH+UfaZWpupsXZuZozXZwDIu20OOuFy8QG9nTPGNi7aZ2Wb8XNTmPI
+         ImiIXG8CajWHoF0hTIsbxa+A2ev1O0b3XvtKatBNQQHgphF7Dkl/dcspIf6apn1s02
+         0mjD43ySwEW2SysU+w3U+X602Oj2dCe+nuGJcPI6rTtiHzKaZp83oobOwJIH+Z9eIo
+         GujymaYUU3N4qyUXk0hww+iVJZ8tZ5Ah07z5PFCtLRmsC9/7UYsXK76gwG4h8fT6Wo
+         W+0mGANd7TRCw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id CAC0C5C14F7; Wed, 13 Oct 2021 17:01:04 -0700 (PDT)
+Date:   Wed, 13 Oct 2021 17:01:04 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Florian Weimer <fw@deneb.enyo.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        j alglave <j.alglave@ucl.ac.uk>,
+        luc maranget <luc.maranget@inria.fr>,
+        akiyks <akiyks@gmail.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
+Message-ID: <20211014000104.GX880162@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
+ <87lf3f7eh6.fsf@oldenburg.str.redhat.com>
+ <20210929174146.GF22689@gate.crashing.org>
+ <2088260319.47978.1633104808220.JavaMail.zimbra@efficios.com>
+ <871r54ww2k.fsf@oldenburg.str.redhat.com>
+ <CAHk-=wgexLqNnngLPts=wXrRcoP_XHO03iPJbsAg8HYuJbbAvw@mail.gmail.com>
+ <87y271yo4l.fsf@mid.deneb.enyo.de>
 MIME-Version: 1.0
-References: <20211007002507.42501-1-ramjiyani@google.com> <20211012085915.GA25069@lst.de>
-In-Reply-To: <20211012085915.GA25069@lst.de>
-From:   Ramji Jiyani <ramjiyani@google.com>
-Date:   Wed, 13 Oct 2021 13:36:06 -0700
-Message-ID: <CAKUd0B8UUFKif0OOQG_4gUcyoWPgsau+KWtWt__Vjuxfw13kmg@mail.gmail.com>
-Subject: Re: [PATCH v4] aio: Add support for the POLLFREE
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     arnd@arndb.de, viro@zeniv.linux.org.uk, bcrl@kvack.org,
-        kernel-team@android.com, linux-aio@kvack.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oleg@redhat.com, ebiggers@kernel.org,
-        Jeff Moyer <jmoyer@redhat.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y271yo4l.fsf@mid.deneb.enyo.de>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 1:59 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> Looks good,
->
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+On Sun, Oct 10, 2021 at 04:02:02PM +0200, Florian Weimer wrote:
+> * Linus Torvalds:
+> 
+> > On Fri, Oct 1, 2021 at 9:26 AM Florian Weimer <fweimer@redhat.com> wrote:
+> >>
+> >> Will any conditional branch do, or is it necessary that it depends in
+> >> some way on the data read?
+> >
+> > The condition needs to be dependent on the read.
+> >
+> > (Easy way to see it: if the read isn't related to the conditional or
+> > write data/address, the read could just be delayed to after the
+> > condition and the store had been done).
+> 
+> That entirely depends on how the hardware is specified to work.  And
+> the hardware could recognize certain patterns as always producing the
+> same condition codes, e.g., AND with zero.  Do such tests still count?
+> It depends on what the specification says.
+> 
+> What I really dislike about this: Operators like & and < now have side
+> effects, and is no longer possible to reason about arithmetic
+> expressions in isolation.
 
-Thanks, Christoph.
+Is there a reasonable syntax that might help with these issues?
 
-~ Ramji
+Yes, I know, we for sure have conflicting constraints on "reasonable"
+on copy on this email.  What else is new?  ;-)
+
+I could imagine a tag of some sort on the load and store, linking the
+operations that needed to be ordered.  You would also want that same
+tag on any conditional operators along the way?  Or would the presence
+of the tags on the load and store suffice?
+
+							Thanx, Paul
