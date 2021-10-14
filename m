@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9781D42E3C5
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 23:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD0042E40F
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Oct 2021 00:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbhJNVre (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Oct 2021 17:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S233908AbhJNWTn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Oct 2021 18:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234128AbhJNVra (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Oct 2021 17:47:30 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80F9C061570
-        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 14:45:24 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id a73so6776886pge.0
-        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 14:45:24 -0700 (PDT)
+        with ESMTP id S229829AbhJNWTm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Oct 2021 18:19:42 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C91EC061570
+        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 15:17:37 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id g13-20020a17090a3c8d00b00196286963b9so7956388pjc.3
+        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 15:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=axtens.net; s=google;
         h=from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=4GrPc7FGyCnCD/UjuDxp/izjM7wkRrx7pBgnvNh8AfA=;
-        b=XqUQLpCs2S/h/ceVWU2JHhlb+0n6xx80AR84zM1fbTXyJpTTdz7naNXuSISe0OmVPh
-         NjZ/D/TD0ZH2RQIVG7s4CPqlOO1tq69oTkrFSh1I9LXUEVLqPBgSqyhAGps/jJj4ZA4P
-         vglf7c8/7+vfhlwsZ4SeyOpGpkDyS0m7q2pnE=
+        bh=/gn1naYin2rxewmNR+UQ+4Ua2Az6pxvVd0XA2L6nJ+U=;
+        b=ONfSismG4d04naWppWaw5fFBIKSKKMAy0gVJiXZrFConvnU5E8d2Ayd3VDh0kKxPlM
+         KfYheVy3VZqFxW7C3SyDj3kHRI0/KpnkFFKB2eHymwNvTlk77B8NEvbREKsCxf/hUfZR
+         66TL6htytJE5V6/HVu+C2OZbv0Cu9cqLYCK78=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=4GrPc7FGyCnCD/UjuDxp/izjM7wkRrx7pBgnvNh8AfA=;
-        b=UbzISmuG2lVobtrD5c6YLaA6DJCSlBh1QQznMrZOWbAm1t7SIfMsMcNpEJNJEbrbk3
-         TbAufNqMRnaRpbD+lmoO7K0XHQxTUyhE2HA2eJyN5QJ4C3hqmu9WluxNGc5xpRAs0GXM
-         Y02FF/g5/NrA3+mmP8wfz6w0Cl/PadqomBfJzm33VpYJ2onPLSpL5l+QmyJ+lz3yA8nY
-         Dc4nGOq0PThBj0X4oJo7rDyl0W6sfQkkoYaDLZvQaCl0+T5sYyhHU1SlTLKnatOR+hsY
-         ggJQNpktkCMpK/fwZhFVg9KdfTtJvEH7mGbMzZAdR/OLfWs2ltqYo4KDzkGXNX1KWRqk
-         WZ0w==
-X-Gm-Message-State: AOAM5327LV5Fejt8vGT/8SNDH4R9dLvoARm5wFCfFkgD7dfGg28TQZSZ
-        wZWdzn3/8/uFLf36OymBm2L33g==
-X-Google-Smtp-Source: ABdhPJxS8/zOn3bSDjYQg+GZqWOsdaDA+H+My597hv01n1JtKvTgaMjIuZ//mrufBDPiNL/OIH5zxA==
-X-Received: by 2002:a63:dc42:: with SMTP id f2mr6272407pgj.152.1634247922841;
-        Thu, 14 Oct 2021 14:45:22 -0700 (PDT)
+        bh=/gn1naYin2rxewmNR+UQ+4Ua2Az6pxvVd0XA2L6nJ+U=;
+        b=SIfsiGQBtmJwdoj1xlza4i4leblVYryJXGOMDfuRPgQypP/ES8lLbybiiWcOn+46lx
+         rojJOBhREwhsCTnRTKnr51ZxCOq0rRBuG7QlN0e4Zegr+vY8bPa5hBRPA87k0Ve0BWnP
+         T9soaEXipnE8gFXLYMCp9SR7Y/j3dh548NZfrUKmLMF9C/Ss2sVk4N84INrNA6y7G+9d
+         nVRTShHM9oIh48BY1hpmOTFvsmQau5fYw013fErRE9BoVyRXA27lFOG7mvtw92DFA1Xu
+         DZ27hrwTpZxmQ4tnNKy+V1yjSanir37DqEJZrvBxE7aufIejpTsA2NvWkvz9WIRJjdIH
+         gSNg==
+X-Gm-Message-State: AOAM531wAQ5J0ACw7oWT3fvueu0CMT/1pRE5BYN3sod/0T7KDFPm6dNh
+        Zd033s3M5E3ZGp7LIF0O1mRrZ/PncRCUqw==
+X-Google-Smtp-Source: ABdhPJzab2EpHK7Q/T8QXwpqraVUPmAWt0eL0woPg5T6pMmI9UAwBAQkaSq8CsyFo20UObxGkQ6Z9w==
+X-Received: by 2002:a17:90b:224e:: with SMTP id hk14mr9005831pjb.224.1634249856727;
+        Thu, 14 Oct 2021 15:17:36 -0700 (PDT)
 Received: from localhost ([2001:4479:e300:600:4901:2fb9:ed97:3a3e])
-        by smtp.gmail.com with ESMTPSA id s62sm3366448pgc.5.2021.10.14.14.45.21
+        by smtp.gmail.com with ESMTPSA id x27sm3586622pfo.90.2021.10.14.15.17.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Oct 2021 14:45:22 -0700 (PDT)
+        Thu, 14 Oct 2021 15:17:36 -0700 (PDT)
 From:   Daniel Axtens <dja@axtens.net>
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -57,13 +57,12 @@ To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
 Cc:     linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
         linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 02/13] powerpc: Rename 'funcaddr' to 'addr' in
- 'struct ppc64_opd_entry'
-In-Reply-To: <49f59a8bf2c4d95cfaa03bd3dd3c1569822ad6ba.1634190022.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v2 03/13] powerpc: Remove func_descr_t
+In-Reply-To: <16eef6afbf7322d0c07760ebf827b8f9f50f7c6e.1634190022.git.christophe.leroy@csgroup.eu>
 References: <cover.1634190022.git.christophe.leroy@csgroup.eu>
- <49f59a8bf2c4d95cfaa03bd3dd3c1569822ad6ba.1634190022.git.christophe.leroy@csgroup.eu>
-Date:   Fri, 15 Oct 2021 08:45:19 +1100
-Message-ID: <877def46xc.fsf@dja-thinkpad.axtens.net>
+ <16eef6afbf7322d0c07760ebf827b8f9f50f7c6e.1634190022.git.christophe.leroy@csgroup.eu>
+Date:   Fri, 15 Oct 2021 09:17:33 +1100
+Message-ID: <874k9j45fm.fsf@dja-thinkpad.axtens.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -72,91 +71,101 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Christophe Leroy <christophe.leroy@csgroup.eu> writes:
 
-> There are three architectures with function descriptors, try to
-> have common names for the address they contain in order to
-> refactor some functions into generic functions later.
+> 'func_descr_t' is redundant with 'struct ppc64_opd_entry'
+
+So, if I understand the overall direction of the series, you're
+consolidating powerpc around one single type for function descriptors,
+and then you're creating a generic typedef so that generic code can
+always do ((func_desc_t)x)->addr to get the address of a function out of
+a function descriptor regardless of arch. (And regardless of whether the
+arch uses function descriptors or not.)
+
+So:
+
+ - why pick ppc64_opd_entry over func_descr_t?
+
+ - Why not make our struct just called func_desc_t - why have a
+   ppc64_opd_entry type or a func_descr_t typedef?
+
+ - Should this patch wait until after you've made the generic
+   func_desc_t change and move directly to that new interface? (rather
+   than move from func_descr_t -> ppc64_opd_entry -> ...) Or is there a
+   particular reason arch specific code should use an arch-specific
+   struct or named type?
+
+> Remove it.
 >
-> powerpc has 'funcaddr'
-> ia64 has 'ip'
-> parisc has 'addr'
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/include/asm/code-patching.h | 2 +-
+>  arch/powerpc/include/asm/types.h         | 6 ------
+>  arch/powerpc/kernel/signal_64.c          | 8 ++++----
+>  3 files changed, 5 insertions(+), 11 deletions(-)
 >
-> Vote for 'addr' and update 'struct ppc64_opd_entry' accordingly.
+> diff --git a/arch/powerpc/include/asm/code-patching.h b/arch/powerpc/include/asm/code-patching.h
+> index 4ba834599c4d..f3445188d319 100644
+> --- a/arch/powerpc/include/asm/code-patching.h
+> +++ b/arch/powerpc/include/asm/code-patching.h
+> @@ -110,7 +110,7 @@ static inline unsigned long ppc_function_entry(void *func)
+>  	 * function's descriptor. The first entry in the descriptor is the
+>  	 * address of the function text.
+>  	 */
+> -	return ((func_descr_t *)func)->entry;
+> +	return ((struct ppc64_opd_entry *)func)->addr;
+>  #else
+>  	return (unsigned long)func;
+>  #endif
+> diff --git a/arch/powerpc/include/asm/types.h b/arch/powerpc/include/asm/types.h
+> index f1630c553efe..97da77bc48c9 100644
+> --- a/arch/powerpc/include/asm/types.h
+> +++ b/arch/powerpc/include/asm/types.h
+> @@ -23,12 +23,6 @@
+>  
+>  typedef __vector128 vector128;
+>  
+> -typedef struct {
+> -	unsigned long entry;
+> -	unsigned long toc;
+> -	unsigned long env;
+> -} func_descr_t;
 
-I would have picked 'funcaddr', but at least 'addr' is better than 'ip'!
-And I agree that consistency, and then making things generic is worthwhile.
+I was a little concerned about going from a 3-element struct to a
+2-element struct (as ppc64_opd_entry doesn't have an element for env) -
+but we don't seem to take the sizeof this anywhere, nor do we use env
+anywhere, nor do we do funky macro stuff with it in the signal handling
+code that might implictly use the 3rd element, so I guess this will
+work. Still, func_descr_t seems to describe the underlying ABI better
+than ppc64_opd_entry...
 
-I grepped the latest powerpc/next for uses of 'funcaddr'. There were 5,
-your patch changes all 5.
+>  #endif /* __ASSEMBLY__ */
+>  
+>  #endif /* _ASM_POWERPC_TYPES_H */
+> diff --git a/arch/powerpc/kernel/signal_64.c b/arch/powerpc/kernel/signal_64.c
+> index 1831bba0582e..63ddbe7b108c 100644
+> --- a/arch/powerpc/kernel/signal_64.c
+> +++ b/arch/powerpc/kernel/signal_64.c
+> @@ -933,11 +933,11 @@ int handle_rt_signal64(struct ksignal *ksig, sigset_t *set,
+>  		 * descriptor is the entry address of signal and the second
+>  		 * entry is the TOC value we need to use.
+>  		 */
+> -		func_descr_t __user *funct_desc_ptr =
+> -			(func_descr_t __user *) ksig->ka.sa.sa_handler;
+> +		struct ppc64_opd_entry __user *funct_desc_ptr =
+> +			(struct ppc64_opd_entry __user *)ksig->ka.sa.sa_handler;
+>  
+> -		err |= get_user(regs->ctr, &funct_desc_ptr->entry);
+> -		err |= get_user(regs->gpr[2], &funct_desc_ptr->toc);
+> +		err |= get_user(regs->ctr, &funct_desc_ptr->addr);
+> +		err |= get_user(regs->gpr[2], &funct_desc_ptr->r2);
 
-The series passes build tests and this patch has no checkpatch or other
-style concerns.
-
-On that basis:
-Reviewed-by: Daniel Axtens <dja@axtens.net>
+Likewise, r2 seems like a worse name than toc. I guess we could clean
+that up another time though.
 
 Kind regards,
 Daniel
 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/include/asm/elf.h      | 2 +-
->  arch/powerpc/include/asm/sections.h | 2 +-
->  arch/powerpc/kernel/module_64.c     | 6 +++---
->  3 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/powerpc/include/asm/elf.h b/arch/powerpc/include/asm/elf.h
-> index a4406714c060..bb0f278f9ed4 100644
-> --- a/arch/powerpc/include/asm/elf.h
-> +++ b/arch/powerpc/include/asm/elf.h
-> @@ -178,7 +178,7 @@ void relocate(unsigned long final_address);
+>  	}
 >  
->  /* There's actually a third entry here, but it's unused */
->  struct ppc64_opd_entry {
-> -	unsigned long funcaddr;
-> +	unsigned long addr;
->  	unsigned long r2;
->  };
->  
-> diff --git a/arch/powerpc/include/asm/sections.h b/arch/powerpc/include/asm/sections.h
-> index 6e4af4492a14..32e7035863ac 100644
-> --- a/arch/powerpc/include/asm/sections.h
-> +++ b/arch/powerpc/include/asm/sections.h
-> @@ -77,7 +77,7 @@ static inline void *dereference_function_descriptor(void *ptr)
->  	struct ppc64_opd_entry *desc = ptr;
->  	void *p;
->  
-> -	if (!get_kernel_nofault(p, (void *)&desc->funcaddr))
-> +	if (!get_kernel_nofault(p, (void *)&desc->addr))
->  		ptr = p;
->  	return ptr;
->  }
-> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-> index 6baa676e7cb6..82908c9be627 100644
-> --- a/arch/powerpc/kernel/module_64.c
-> +++ b/arch/powerpc/kernel/module_64.c
-> @@ -72,11 +72,11 @@ static func_desc_t func_desc(unsigned long addr)
->  }
->  static unsigned long func_addr(unsigned long addr)
->  {
-> -	return func_desc(addr).funcaddr;
-> +	return func_desc(addr).addr;
->  }
->  static unsigned long stub_func_addr(func_desc_t func)
->  {
-> -	return func.funcaddr;
-> +	return func.addr;
->  }
->  static unsigned int local_entry_offset(const Elf64_Sym *sym)
->  {
-> @@ -187,7 +187,7 @@ static int relacmp(const void *_x, const void *_y)
->  static unsigned long get_stubs_size(const Elf64_Ehdr *hdr,
->  				    const Elf64_Shdr *sechdrs)
->  {
-> -	/* One extra reloc so it's always 0-funcaddr terminated */
-> +	/* One extra reloc so it's always 0-addr terminated */
->  	unsigned long relocs = 1;
->  	unsigned i;
->  
+>  	/* enter the signal handler in native-endian mode */
 > -- 
 > 2.31.1
