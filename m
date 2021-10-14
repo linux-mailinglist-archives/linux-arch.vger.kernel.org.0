@@ -2,134 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0099142DF10
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 18:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2BB42E0B8
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 20:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbhJNQZV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Oct 2021 12:25:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54750 "EHLO mail.kernel.org"
+        id S229983AbhJNSFX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Oct 2021 14:05:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:58522 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229589AbhJNQZV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 14 Oct 2021 12:25:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D9F8610F9;
-        Thu, 14 Oct 2021 16:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634228591;
-        bh=fCvytSPcAeWo2Vds96eNy2fT0BcSOAO7bX73OXJ3ZDw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IFU1s5a3z5Ekj2w0Y2WYmd0mqAHup0noJpoI07M4xq3w2OeC34TFrWMNrY47A0opP
-         u5kjSp64z8dUyFT/erKNcZcvGkCGzbQ818e9jW44tzbGv+ZNAHdccv8GTw50ODk6yG
-         uwElhmZHFVGJ1jt/ormdO88HltmoRpcv/RDha4gJxN69udTCLmYr7HK5Xsq8mKNKLy
-         IMLhgAUql24WpHJxB9S9IbuyyIGFLEIjvjJNM7E7TlcsaxjDwlvmy/vr42ZeolpOK0
-         6XuKeF5N32eBlGLDS4fWsuvdhxEqqqth7FACn71BL2PelgoZluE+Vdydxi0VKlNyIa
-         pK2QToiAjSoxA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 38B635C0AE9; Thu, 14 Oct 2021 09:23:11 -0700 (PDT)
-Date:   Thu, 14 Oct 2021 09:23:11 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Florian Weimer <fw@deneb.enyo.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        j alglave <j.alglave@ucl.ac.uk>,
-        luc maranget <luc.maranget@inria.fr>,
-        akiyks <akiyks@gmail.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
-Message-ID: <20211014162311.GD880162@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
- <87lf3f7eh6.fsf@oldenburg.str.redhat.com>
- <20210929174146.GF22689@gate.crashing.org>
- <2088260319.47978.1633104808220.JavaMail.zimbra@efficios.com>
- <871r54ww2k.fsf@oldenburg.str.redhat.com>
- <CAHk-=wgexLqNnngLPts=wXrRcoP_XHO03iPJbsAg8HYuJbbAvw@mail.gmail.com>
- <87y271yo4l.fsf@mid.deneb.enyo.de>
- <20211014000104.GX880162@paulmck-ThinkPad-P17-Gen-1>
- <87lf2v61k7.fsf@mid.deneb.enyo.de>
+        id S233806AbhJNSFW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 14 Oct 2021 14:05:22 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD85611D4;
+        Thu, 14 Oct 2021 11:03:15 -0700 (PDT)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9CFD13F66F;
+        Thu, 14 Oct 2021 11:03:09 -0700 (PDT)
+Date:   Thu, 14 Oct 2021 19:03:07 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     keescook@chromium.org, jannh@google.com,
+        linux-kernel@vger.kernel.org, vcaputo@pengaru.com,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, akpm@linux-foundation.org,
+        christian.brauner@ubuntu.com, amistry@google.com,
+        Kenta.Tada@sony.com, legion@kernel.org,
+        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
+        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
+        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, ebiederm@xmission.com,
+        ohoono.kwon@samsung.com, kaleshsingh@google.com,
+        yifeifz2@illinois.edu, jpoimboe@redhat.com,
+        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
+        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
+        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
+        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
+        chris@zankel.net
+Subject: Re: [PATCH 6/7] arch: __get_wchan || STACKTRACE_SUPPORT
+Message-ID: <20211014180307.GB39276@lakrids.cambridge.arm.com>
+References: <20211008111527.438276127@infradead.org>
+ <20211008111626.392918519@infradead.org>
+ <20211008124052.GA976@C02TD0UTHF1T.local>
+ <YWBLl0mMTGPE/7hM@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87lf2v61k7.fsf@mid.deneb.enyo.de>
+In-Reply-To: <YWBLl0mMTGPE/7hM@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 14, 2021 at 05:58:16PM +0200, Florian Weimer wrote:
-> * Paul E. McKenney:
+On Fri, Oct 08, 2021 at 03:45:59PM +0200, Peter Zijlstra wrote:
+> On Fri, Oct 08, 2021 at 01:40:52PM +0100, Mark Rutland wrote:
+> > [Adding Josh, since there might be a concern here from a livepatch pov]
+> > 
 > 
-> > On Sun, Oct 10, 2021 at 04:02:02PM +0200, Florian Weimer wrote:
-> >> * Linus Torvalds:
-> >> 
-> >> > On Fri, Oct 1, 2021 at 9:26 AM Florian Weimer <fweimer@redhat.com> wrote:
-> >> >>
-> >> >> Will any conditional branch do, or is it necessary that it depends in
-> >> >> some way on the data read?
-> >> >
-> >> > The condition needs to be dependent on the read.
-> >> >
-> >> > (Easy way to see it: if the read isn't related to the conditional or
-> >> > write data/address, the read could just be delayed to after the
-> >> > condition and the store had been done).
-> >> 
-> >> That entirely depends on how the hardware is specified to work.  And
-> >> the hardware could recognize certain patterns as always producing the
-> >> same condition codes, e.g., AND with zero.  Do such tests still count?
-> >> It depends on what the specification says.
-> >> 
-> >> What I really dislike about this: Operators like & and < now have side
-> >> effects, and is no longer possible to reason about arithmetic
-> >> expressions in isolation.
-> >
-> > Is there a reasonable syntax that might help with these issues?
+> > > +static unsigned long __get_wchan(struct task_struct *p)
+> > > +{
+> > > +	unsigned long entry = 0;
+> > > +
+> > > +	stack_trace_save_tsk(p, &entry, 1, 0);
+> > 
+> > This assumes stack_trace_save_tsk() will skip sched functions, but I
+> > don't think that's ever been a requirement? It's certinaly not
+> > documented anywhere that I could find, and arm64 doesn't do so today,
+> > and this patch causes wchan to just log `__switch_to` for everything.
 > 
-> Is this really a problem of syntax?
+> Confused, arm64 has arch_stack_walk() and should thus use
+> kernel/stacktrace.c's stack_trace_consume_entry_nosched.
 
-No, but we seem to need some way to communicate the control-dependency's
-ordering intent to the compiler.  ;-)
+Looking at this arm64's *current* get_wchan() unwinds once before
+checking in_sched_functions(), so it skips __switch_to(). As of this
+patch, we check in_sched_functions() first, which stops the unwind
+immediately as __switch_to() isn't marked as __sched.
 
-> > Yes, I know, we for sure have conflicting constraints on "reasonable"
-> > on copy on this email.  What else is new?  ;-)
-> >
-> > I could imagine a tag of some sort on the load and store, linking the
-> > operations that needed to be ordered.  You would also want that same
-> > tag on any conditional operators along the way?  Or would the presence
-> > of the tags on the load and store suffice?
-> 
-> If the load is assigned to a local variable whose address is not taken
-> and which is only assigned this once, it could be used to label the
-> store.  Then the compiler checks if all paths from the load to the
-> store feature a condition that depends on the local variable (where
-> qualifying conditions probably depend on the architecture).  If it
-> can't prove that is the case, it emits a fake no-op condition that
-> triggers the hardware barrier.  This formulation has the advantage
-> that it does not add side effects to operators like <.  It even
-> generalizes to different barrier-implying instructions besides
-> conditional branches.
+I think x86 gets away with this because switch_to() is asm, and that
+tail-calls __switch_to() when returning.
 
-So something like this?
+Does switch_to() and below need to be marked __sched?
 
-	tagvar = READ_ONCE(a);
-	if (tagvar)
-		WRITE_ONCE_COND(b, 1, tagvar);
-
-(This seems to me to be an eminently reasonable syntax.)
-
-Or did I miss a turn in there somewhere?
-
-> But I'm not sure if all this complexity will be a tangible improvement
-> over just using that no-op condition all the time (whether implied by
-> READ_ONCE, or in a separate ctrl_dep macro).
-
-That is an excellent question.  I have no idea what the answer is.  ;-)
-
-						Thanx, Paul
+Thanks,
+Mark.
