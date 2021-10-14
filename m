@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2BB42E0B8
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 20:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA8742E0D2
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 20:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbhJNSFX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Oct 2021 14:05:23 -0400
-Received: from foss.arm.com ([217.140.110.172]:58522 "EHLO foss.arm.com"
+        id S233790AbhJNSJw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Oct 2021 14:09:52 -0400
+Received: from foss.arm.com ([217.140.110.172]:58672 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233806AbhJNSFW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 14 Oct 2021 14:05:22 -0400
+        id S233643AbhJNSJv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 14 Oct 2021 14:09:51 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD85611D4;
-        Thu, 14 Oct 2021 11:03:15 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 735721480;
+        Thu, 14 Oct 2021 11:07:46 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9CFD13F66F;
-        Thu, 14 Oct 2021 11:03:09 -0700 (PDT)
-Date:   Thu, 14 Oct 2021 19:03:07 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51FE13F66F;
+        Thu, 14 Oct 2021 11:07:40 -0700 (PDT)
+Date:   Thu, 14 Oct 2021 19:07:38 +0100
 From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     keescook@chromium.org, jannh@google.com,
-        linux-kernel@vger.kernel.org, vcaputo@pengaru.com,
-        mingo@redhat.com, juri.lelli@redhat.com,
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, keescook@chromium.org,
+        jannh@google.com, linux-kernel@vger.kernel.org,
+        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
         bristot@redhat.com, akpm@linux-foundation.org,
@@ -34,57 +34,50 @@ Cc:     keescook@chromium.org, jannh@google.com,
         metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
         dave.hansen@linux.intel.com, ebiederm@xmission.com,
         ohoono.kwon@samsung.com, kaleshsingh@google.com,
-        yifeifz2@illinois.edu, jpoimboe@redhat.com,
-        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
-        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
-        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
-        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
-        chris@zankel.net
+        yifeifz2@illinois.edu, linux-hardening@vger.kernel.org,
+        linux-arch@vger.kernel.org, vgupta@kernel.org,
+        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        nickhu@andestech.com, jonas@southpole.se, mpe@ellerman.id.au,
+        paul.walmsley@sifive.com, hca@linux.ibm.com,
+        ysato@users.sourceforge.jp, davem@davemloft.net, chris@zankel.net
 Subject: Re: [PATCH 6/7] arch: __get_wchan || STACKTRACE_SUPPORT
-Message-ID: <20211014180307.GB39276@lakrids.cambridge.arm.com>
+Message-ID: <20211014180738.GC39276@lakrids.cambridge.arm.com>
 References: <20211008111527.438276127@infradead.org>
  <20211008111626.392918519@infradead.org>
  <20211008124052.GA976@C02TD0UTHF1T.local>
  <YWBLl0mMTGPE/7hM@hirez.programming.kicks-ass.net>
+ <20211008161707.i3cwz6qukgcf4frj@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YWBLl0mMTGPE/7hM@hirez.programming.kicks-ass.net>
+In-Reply-To: <20211008161707.i3cwz6qukgcf4frj@treble>
 User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 08, 2021 at 03:45:59PM +0200, Peter Zijlstra wrote:
-> On Fri, Oct 08, 2021 at 01:40:52PM +0100, Mark Rutland wrote:
-> > [Adding Josh, since there might be a concern here from a livepatch pov]
+On Fri, Oct 08, 2021 at 09:17:07AM -0700, Josh Poimboeuf wrote:
+> On Fri, Oct 08, 2021 at 03:45:59PM +0200, Peter Zijlstra wrote:
+> > > stack_trace_save_tsk() *shouldn't* skip anything unless we've explicitly
+> > > told it to via skipnr, because I'd expect that
 > > 
-> 
-> > > +static unsigned long __get_wchan(struct task_struct *p)
-> > > +{
-> > > +	unsigned long entry = 0;
-> > > +
-> > > +	stack_trace_save_tsk(p, &entry, 1, 0);
-> > 
-> > This assumes stack_trace_save_tsk() will skip sched functions, but I
-> > don't think that's ever been a requirement? It's certinaly not
-> > documented anywhere that I could find, and arm64 doesn't do so today,
-> > and this patch causes wchan to just log `__switch_to` for everything.
-> 
-> Confused, arm64 has arch_stack_walk() and should thus use
-> kernel/stacktrace.c's stack_trace_consume_entry_nosched.
+> > It's what most archs happen to do today and is what
+> > stack_trace_save_tsk() as implemented using arch_stack_walk() does.
+> > Which is I think the closest to canonical we have.
 
-Looking at this arm64's *current* get_wchan() unwinds once before
-checking in_sched_functions(), so it skips __switch_to(). As of this
-patch, we check in_sched_functions() first, which stops the unwind
-immediately as __switch_to() isn't marked as __sched.
+Ah; and arch_stack_walk() itself shouldn't skip anything, which gives
+the consistent low-level semantic I wanted.
 
-I think x86 gets away with this because switch_to() is asm, and that
-tail-calls __switch_to() when returning.
+> It *is* confusing though.  Even if 'nosched' may be the normally
+> desired behavior, stack_trace_save_tsk() should probably be named
+> stack_trace_save_tsk_nosched().
 
-Does switch_to() and below need to be marked __sched?
+I agree that'd be less confusing!
+
+Josh, am I right in my understanding that the reliable stacktrace
+functions *shouldn't* skip sched functions, or should those similarly
+gain a _nosched suffix?
 
 Thanks,
 Mark.
