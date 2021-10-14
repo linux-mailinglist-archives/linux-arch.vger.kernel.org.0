@@ -2,168 +2,169 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0902242D57E
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 10:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A59E142D5FC
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 11:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbhJNI6D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Oct 2021 04:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbhJNI6C (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Oct 2021 04:58:02 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEA7C061570;
-        Thu, 14 Oct 2021 01:55:58 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id om14so4211199pjb.5;
-        Thu, 14 Oct 2021 01:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=THRnlUFtRl5vYcnMFF9o7XezZbEmtWWNz/WTffJCZww=;
-        b=EShx8j66Mb1MfbirC3yEc5pAn7vD/rRMBp4DOxWAcBacIKTl4MllYVMuCGvthm6Dbn
-         MvxJrjStlAjWsDqjUrTr5wQJR/IuzCP2tWBVSe9eCm939zm1Q70/A3adrzlthJD2IhIr
-         WukORLaQO5xNiu0i4Rbov6QKp/zs8GEIhdgzJQKsjEMS5mKxrl38dYpQAnWiszvrdStK
-         0GkHBgOmetLNCq0EjuzDsNBAxLOlfdPjs3UVo/+x5ZMWP2KpfVjDsgNsBt63SwXPIvlJ
-         bloouReGDIQ/ZknAr2MjK2X+AWlIyE9VbV8ufHExJ2Xv2LkEbR3EROX+46mJepSXfV4D
-         vaNg==
+        id S229513AbhJNJ2g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Oct 2021 05:28:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27748 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229551AbhJNJ2f (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 14 Oct 2021 05:28:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634203590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MFy26Kc6cpLu18LAs5Mx0Nrg8iL3DuTgZC2Ev14vjlo=;
+        b=X2mCdv8b1K88eBKlnWLq69ctpJUgvxcadvamxM/mn99+T+jMO3aioYuoqC+npqMg6NSXb9
+        DjbnOYauRoO0F+uJ1Fd4TTsFKj80Qh9YoDcsBGmIU0Z53054RrYn3NRQVR6ZKRRpPpdlZw
+        t/YBQ7/WS+kpUFDtv2YGdeKj9M2YW4E=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-315-Q_HrYpGUNxav7HnAthkzlw-1; Thu, 14 Oct 2021 05:26:29 -0400
+X-MC-Unique: Q_HrYpGUNxav7HnAthkzlw-1
+Received: by mail-ed1-f69.google.com with SMTP id e14-20020a056402088e00b003db6ebb9526so4595956edy.22
+        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 02:26:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=THRnlUFtRl5vYcnMFF9o7XezZbEmtWWNz/WTffJCZww=;
-        b=o8JrkZfyTnXIwLnrs45zFn57LY9Z5lD1XMLTwnyUjYOe//oWeNyCU43k3S5iJ0ElQ5
-         qU1yzspm0OBUmR+cjtaqoQ15ORvV3tYpmCWx+KWhKxPe/hka4iY52GWQ6mvye7UKr/Ko
-         rTF9Mnf8JrlTd3TF8XeXY7WjzzYn3mIWyeXQQwtnyxPzPo/ISHihgT4kB9/ZxmJW+PjW
-         wI+NBrPj8+b2MVNws7/m+9EurHAhCh15lD6rBPgbhxLAye36CW45cIzCJUNVTQ24AVxI
-         XkJ/rQ59W2ciJCLd3TSfhFgqb/dN3n/5vYvXDxi2j1Yh9YcVgr7S9z2uNAGn9Wv/9kLl
-         knRQ==
-X-Gm-Message-State: AOAM533AMuvIZmGPWaDXL1ADsfWi93Z+eTgTrIF7C+24Urlf1VieLTrt
-        nDnBaKwOiwIevsuqdIfwCoJCmwYMb35bOLd6FXY=
-X-Google-Smtp-Source: ABdhPJz+aL7WEeb9t/f+LAQZXCCS3MZ68QTEzm0tH2Pk2S9by/5WdIUOKmnKd16e+Bfxz3l4lERkjmZ8J5WcSYD5u1I=
-X-Received: by 2002:a17:90a:a41:: with SMTP id o59mr19323943pjo.243.1634201757853;
- Thu, 14 Oct 2021 01:55:57 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MFy26Kc6cpLu18LAs5Mx0Nrg8iL3DuTgZC2Ev14vjlo=;
+        b=ggfHs9t1Z4tZfNd0Y8J12L7mCzJjrNalsGTYa1Qq+lQ6IAvpRId/2jfu/BA7Jly5uD
+         SHy8N1lyK5X4jdE6/jj1nPcZ6g8KqOIfo8H5q6EpqfxSsMvmq/PqjHTD1VaMJPx9H3Ui
+         qT6h3gJhjGoMferoe80HXdM6XmNLtGSvAEyg/e6KXXZrlFqSZGPa8fupxaWQSfp19jRg
+         sWtkxyjP6x9cB1WqdUBH7DzZDVbOT95mRQGkvwo52a/7hAJSxdWTHDvJ605T1d1x7R6d
+         HlmpcvGbsrYuo/SbsnNE0qK9qFJdzaDdCcWv8SX1DGMo2qvnosaCVcEPQfnv+6iydt2L
+         43JQ==
+X-Gm-Message-State: AOAM532Obu6M6KCpEdQdXOr13mddVzmt2+Bv/F0tghUf6OdJHtORqgED
+        iXTmr17SmX4bk1caJvSNcFfIeqoSfp+NUYkTxauJzZFVAW4x/APZssrx+ITqt2vR9lyzz9crwFG
+        G8RHW0GcW1zKzLKDjgqTlQg==
+X-Received: by 2002:a05:6402:3488:: with SMTP id v8mr6898745edc.106.1634203588057;
+        Thu, 14 Oct 2021 02:26:28 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwzUMhY55dY1Ed2tUolHVxn0GGtah89ijl+mJABjkbp/N7HKf5Fl2EAkvFydJiTJ/Wm+2qndQ==
+X-Received: by 2002:a05:6402:3488:: with SMTP id v8mr6898699edc.106.1634203587836;
+        Thu, 14 Oct 2021 02:26:27 -0700 (PDT)
+Received: from redhat.com ([2.55.16.227])
+        by smtp.gmail.com with ESMTPSA id f19sm1749252edj.77.2021.10.14.02.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Oct 2021 02:26:27 -0700 (PDT)
+Date:   Thu, 14 Oct 2021 05:26:20 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter H Anvin <hpa@zytor.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+Subject: Re: [PATCH v5 12/16] PCI: Add pci_iomap_host_shared(),
+ pci_iomap_host_shared_range()
+Message-ID: <20211014052605-mutt-send-email-mst@kernel.org>
+References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009053103-mutt-send-email-mst@kernel.org>
+ <CAPcyv4hDhjRXYCX_aiOboLF0eaTo6VySbZDa5NQu2ed9Ty2Ekw@mail.gmail.com>
+ <0e6664ac-cbb2-96ff-0106-9301735c0836@linux.intel.com>
+ <DM8PR11MB57501C8F8F5C8B315726882EE7B69@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <20211012171016-mutt-send-email-mst@kernel.org>
+ <DM8PR11MB5750A40FAA6AFF6A29CF70DAE7B89@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <20211014025514-mutt-send-email-mst@kernel.org>
+ <DM8PR11MB57500B2D821E8AAF93EB66CEE7B89@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <cover.1634177547.git.chenfeiyang@loongson.cn> <31a97087b56c703606b8d871ac35d2192928fe6b.1634177547.git.chenfeiyang@loongson.cn>
- <ddfbb616-9df1-9a92-3171-d534bddbd3d1@xen0n.name>
-In-Reply-To: <ddfbb616-9df1-9a92-3171-d534bddbd3d1@xen0n.name>
-From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
-Date:   Thu, 14 Oct 2021 16:56:14 +0800
-Message-ID: <CACWXhKmFdFgJHsc+5Cu6wcHaTHJiqTfgd=P0ehkiy4Xpqp1Q3g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] MIPS: convert syscall to generic entry
-To:     WANG Xuerui <i.kernel@xen0n.name>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        arnd@arndb.de, Feiyang Chen <chenfeiyang@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        chenhuacai@kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Zhou Yanjie <zhouyu@wanyeetech.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        YunQiang Su <wzssyqa@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR11MB57500B2D821E8AAF93EB66CEE7B89@DM8PR11MB5750.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 14 Oct 2021 at 16:37, WANG Xuerui <i.kernel@xen0n.name> wrote:
->
-> Hi Feiyang,
->
-> On 2021/10/14 16:32, Feiyang Chen wrote:
-> > Convert MIPS syscall to use the generic entry infrastructure from
-> > kernel/entry/*.
-> >
-> > There are a few special things on MIPS:
-> >
-> > - There is one type of syscall on MIPS32 (scall32-o32) and three types
-> > of syscalls on MIPS64 (scall64-o32, scall64-n32 and scall64-n64). Now
-> > convert to C code to handle different types of syscalls.
-> >
-> > - For some special syscalls (e.g. fork, clone, clone3 and sysmips),
-> > save_static_function() wrapper is used to save static registers. Now
-> > SAVE_STATIC is used in handle_sys before calling do_syscall(), so the
-> > save_static_function() wrapper can be removed.
-> >
-> > - For sigreturn/rt_sigreturn and sysmips, inline assembly is used to
-> > jump to syscall_exit directly for skipping setting the error flag and
-> > restoring all registers. Now use regs->regs[27] to mark whether to
-> > handle the error flag and restore all registers in handle_sys, so these
-> > functions can return normally as other architecture.
-> >
-> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> > Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
-> > ---
-> >  arch/mips/Kconfig                         |   1 +
-> >  arch/mips/include/asm/entry-common.h      |  13 ++
-> >  arch/mips/include/asm/ptrace.h            |   8 +-
-> >  arch/mips/include/asm/sim.h               |  70 -------
-> >  arch/mips/include/asm/syscall.h           |   5 +
-> >  arch/mips/include/asm/thread_info.h       |  17 +-
-> >  arch/mips/include/uapi/asm/ptrace.h       |   7 +-
-> >  arch/mips/kernel/Makefile                 |  14 +-
-> >  arch/mips/kernel/entry.S                  |  75 ++------
-> >  arch/mips/kernel/linux32.c                |   1 -
-> >  arch/mips/kernel/ptrace.c                 |  78 --------
-> >  arch/mips/kernel/scall.S                  | 137 +++++++++++++
-> >  arch/mips/kernel/scall32-o32.S            | 223 ----------------------
-> >  arch/mips/kernel/scall64-n32.S            | 107 -----------
-> >  arch/mips/kernel/scall64-n64.S            | 116 -----------
-> >  arch/mips/kernel/scall64-o32.S            | 221 ---------------------
-> >  arch/mips/kernel/signal.c                 |  37 ++--
-> >  arch/mips/kernel/signal_n32.c             |  16 +-
-> >  arch/mips/kernel/signal_o32.c             |  31 +--
-> >  arch/mips/kernel/syscall.c                | 148 +++++++++++---
-> >  arch/mips/kernel/syscalls/syscall_n32.tbl |   8 +-
-> >  arch/mips/kernel/syscalls/syscall_n64.tbl |   8 +-
-> >  arch/mips/kernel/syscalls/syscall_o32.tbl |   8 +-
-> >  23 files changed, 354 insertions(+), 995 deletions(-)
-> >  create mode 100644 arch/mips/include/asm/entry-common.h
-> >  delete mode 100644 arch/mips/include/asm/sim.h
-> >  create mode 100644 arch/mips/kernel/scall.S
-> >  delete mode 100644 arch/mips/kernel/scall32-o32.S
-> >  delete mode 100644 arch/mips/kernel/scall64-n32.S
-> >  delete mode 100644 arch/mips/kernel/scall64-n64.S
-> >  delete mode 100644 arch/mips/kernel/scall64-o32.S
-> >
-> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> > index 1291774a2fa5..debd125100ad 100644
-> > --- a/arch/mips/Kconfig
-> > +++ b/arch/mips/Kconfig
-> > @@ -32,6 +32,7 @@ config MIPS
-> >       select GENERIC_ATOMIC64 if !64BIT
-> >       select GENERIC_CMOS_UPDATE
-> >       select GENERIC_CPU_AUTOPROBE
-> > +     select GENERIC_ENTRY
-> >       select GENERIC_GETTIMEOFDAY
-> >       select GENERIC_IOMAP
-> >       select GENERIC_IRQ_PROBE
-> > diff --git a/arch/mips/include/asm/entry-common.h b/arch/mips/include/asm/entry-common.h
-> > new file mode 100644
-> > index 000000000000..0fe2a098ded9
-> > --- /dev/null
-> > +++ b/arch/mips/include/asm/entry-common.h
-> > @@ -0,0 +1,13 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef ARCH_LOONGARCH_ENTRY_COMMON_H
-> > +#define ARCH_LOONGARCH_ENTRY_COMMON_H
-> Do you intend to say "MIPS"? ;-)
+On Thu, Oct 14, 2021 at 07:27:42AM +0000, Reshetova, Elena wrote:
+> > On Thu, Oct 14, 2021 at 06:32:32AM +0000, Reshetova, Elena wrote:
+> > > > On Tue, Oct 12, 2021 at 06:36:16PM +0000, Reshetova, Elena wrote:
+> > > > > > The 5.15 tree has something like ~2.4k IO accesses (including MMIO and
+> > > > > > others) in init functions that also register drivers (thanks Elena for
+> > > > > > the number)
+> > > > >
+> > > > > To provide more numbers on this. What I can see so far from a smatch-based
+> > > > > analysis, we have 409 __init style functions (.probe & builtin/module_
+> > > > > _platform_driver_probe excluded) for 5.15 with allyesconfig.
+> > > >
+> > > > I don't think we care about allyesconfig at all though.
+> > > > Just don't do that.
+> > > > How about allmodconfig? This is closer to what distros actually do.
+> > >
+> > > It does not make any difference really for the content of the /drivers/*:
+> > > gives 408 __init style functions doing IO (.probe & builtin/module_
+> > > > > _platform_driver_probe excluded) for 5.15 with allmodconfig:
+> > >
+> > > ['doc200x_ident_chip',
+> > > 'doc_probe', 'doc2001_init', 'mtd_speedtest_init',
+> > > 'mtd_nandbiterrs_init', 'mtd_oobtest_init', 'mtd_pagetest_init',
+> > > 'tort_init', 'mtd_subpagetest_init', 'fixup_pmc551',
+> > > 'doc_set_driver_info', 'init_amd76xrom', 'init_l440gx',
+> > > 'init_sc520cdp', 'init_ichxrom', 'init_ck804xrom', 'init_esb2rom',
+> > > 'probe_acpi_namespace_devices', 'amd_iommu_init_pci', 'state_next',
+> > > 'arm_v7s_do_selftests', 'arm_lpae_run_tests', 'init_iommu_one',
+> > 
+> > Um. ARM? Which architecture is this build for?
+> 
+> The list of smatch IO findings is built for x86, but the smatch cross function
+> database covers all archs, so when queried for all potential function callers,
+> it would show non x86 arch call chains also. 
+> 
+> Here is the original x86 finding and call chain for the 'arm_v7s_do_selftests':
+> 
+>   Detected low-level IO from arm_v7s_do_selftests in fun
+> __iommu_queue_command_sync
+> 
+> drivers/iommu/amd/iommu.c:1025 __iommu_queue_command_sync() error:
+> {15002074744551330002}
+>     'check_host_input' read from the host using function 'readl' to a
+> member of the structure 'iommu->cmd_buf_head';
+> 
+> __iommu_queue_command_sync()
+>   iommu_completion_wait()
+>     amd_iommu_domain_flush_complete()
+>       iommu_v1_map_page()
+>         arm_v7s_do_selftests()
+> 
+> So, the results can be further filtered if you want a specified arch. 
 
-Hi, YunQiang, Xuerui,
+So what is it just for x86? Could you tell?
 
-Yes, I will fix it in the next version.
+-- 
+MST
 
-Thanks,
-Feiyang
-
-> > +
-> > +#include <linux/sched.h>
-> > +#include <linux/processor.h>
-> > +
-> > +static inline bool on_thread_stack(void)
-> > +{
-> > +     return !(((unsigned long)(current->stack) ^ current_stack_pointer) & ~(THREAD_SIZE - 1));
-> > +}
-> > +
-> > +#endif
