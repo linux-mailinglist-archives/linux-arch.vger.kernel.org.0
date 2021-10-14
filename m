@@ -2,104 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEA042D035
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 04:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F3942D0BF
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 05:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbhJNCQh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Oct 2021 22:16:37 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36745 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229798AbhJNCQh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Oct 2021 22:16:37 -0400
-Received: (qmail 910485 invoked by uid 1000); 13 Oct 2021 22:14:31 -0400
-Date:   Wed, 13 Oct 2021 22:14:31 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Florian Weimer <fw@deneb.enyo.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        j alglave <j.alglave@ucl.ac.uk>,
-        luc maranget <luc.maranget@inria.fr>,
-        akiyks <akiyks@gmail.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
-Message-ID: <20211014021431.GA910341@rowland.harvard.edu>
-References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
- <87lf3f7eh6.fsf@oldenburg.str.redhat.com>
- <20210929174146.GF22689@gate.crashing.org>
- <2088260319.47978.1633104808220.JavaMail.zimbra@efficios.com>
- <871r54ww2k.fsf@oldenburg.str.redhat.com>
- <CAHk-=wgexLqNnngLPts=wXrRcoP_XHO03iPJbsAg8HYuJbbAvw@mail.gmail.com>
- <87y271yo4l.fsf@mid.deneb.enyo.de>
- <20211014000104.GX880162@paulmck-ThinkPad-P17-Gen-1>
+        id S229846AbhJNDDZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Oct 2021 23:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229838AbhJNDDY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Oct 2021 23:03:24 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8FFC061570;
+        Wed, 13 Oct 2021 20:01:20 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id e2so8571960uax.7;
+        Wed, 13 Oct 2021 20:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f/CZ3h41DYsFMAqGi5C28jlvcQjjjxXwdgVx1UeMUqU=;
+        b=dOC+24nlC1p6+PhEkce9QFi/JokIB7H4RtKCST+pjZJ155B3+Nbupy+nGfA4Z2Z8b+
+         35NsrVFLusp8hep969Gol4XDCuRjKxiaH+//CfVeTlENH+JOFdEpBb8afIaEOScwKmo2
+         yjuk3kQKmmyYJsk5dljIDsrJrUr3EHKOdHODAgGv3Qdaembzc/qqjvBsR3XjGtk26zU+
+         piuPEt2Gy0A+/WBvEj2vs2142LkPPrbeSK9pcfmKxOnH0/l9A0tmmelBrGbRrjDuoSJm
+         xcdFAK2vFPJjtx9fXRWTn+Liyq0mlsQEseIYMqhpMZH4/L09vGcLvyKU95j5vvSF4IyU
+         4/8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f/CZ3h41DYsFMAqGi5C28jlvcQjjjxXwdgVx1UeMUqU=;
+        b=1jvdyNLbNfacAV2I0ztmL8NeDvOtRsSqUckZbh9p/W/smeGFsHBRJj/aVrAtkglqLn
+         G5MSWMomYg4ZgwDxf6A+7pSLDFgmsAH6J+tEPRby6KP0hAyK+zTCzoINdyVJ02t/RR7P
+         8D10WEW+ItDB2M3Ka4rFRZroczkgHAuYVB+ps2IUKKRR6KnBwU6ZyjaN6MDoa9Nje2n8
+         jmNgx6RRbH5fSwOSREb8SufN7lcsITG5jhSUTDcGez/gx2usSetbqd0eij7ApllKrP78
+         tfxJ/rVBiLNPVnlwt2M+gYRYh2wWLu0mvhCR2b+V58BD7DPPptmkz/d91QMumMkiiaEt
+         s8zg==
+X-Gm-Message-State: AOAM531NQVfGfmVd7jTCzh8QyK9GNpf/nKxjTDsI9CEXnpAx0/Gz+jIX
+        Ptt9+GkfFxa6L9/I4K0zQ6rVeagYdTX3Z1C/TWY=
+X-Google-Smtp-Source: ABdhPJxYY6ovGCJYATjdLZaiIF1rw1Hx7UZB4cKPjBLokqyTS0rHd8ySPxin0PpRI3ThKuqePR3LSJeXRYzjkCYi4So=
+X-Received: by 2002:a67:c19d:: with SMTP id h29mr3419511vsj.18.1634180479914;
+ Wed, 13 Oct 2021 20:01:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211014000104.GX880162@paulmck-ThinkPad-P17-Gen-1>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211013063656.3084555-1-chenhuacai@loongson.cn>
+ <20211013071117.3097969-1-chenhuacai@loongson.cn> <20211013071117.3097969-2-chenhuacai@loongson.cn>
+ <YWbXdEyonDpXJFK2@bombadil.infradead.org>
+In-Reply-To: <YWbXdEyonDpXJFK2@bombadil.infradead.org>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 14 Oct 2021 11:01:08 +0800
+Message-ID: <CAAhV-H5-8yPjZhOkV2+v+XB85+2qs5342hDdTYAV1ctPAdb7+A@mail.gmail.com>
+Subject: Re: [PATCH V5 15/22] LoongArch: Add elf and module support
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jessica Yu <jeyu@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 05:01:04PM -0700, Paul E. McKenney wrote:
-> On Sun, Oct 10, 2021 at 04:02:02PM +0200, Florian Weimer wrote:
-> > * Linus Torvalds:
-> > 
-> > > On Fri, Oct 1, 2021 at 9:26 AM Florian Weimer <fweimer@redhat.com> wrote:
-> > >>
-> > >> Will any conditional branch do, or is it necessary that it depends in
-> > >> some way on the data read?
-> > >
-> > > The condition needs to be dependent on the read.
-> > >
-> > > (Easy way to see it: if the read isn't related to the conditional or
-> > > write data/address, the read could just be delayed to after the
-> > > condition and the store had been done).
-> > 
-> > That entirely depends on how the hardware is specified to work.  And
-> > the hardware could recognize certain patterns as always producing the
-> > same condition codes, e.g., AND with zero.  Do such tests still count?
-> > It depends on what the specification says.
-> > 
-> > What I really dislike about this: Operators like & and < now have side
-> > effects, and is no longer possible to reason about arithmetic
-> > expressions in isolation.
-> 
-> Is there a reasonable syntax that might help with these issues?
-> 
-> Yes, I know, we for sure have conflicting constraints on "reasonable"
-> on copy on this email.  What else is new?  ;-)
-> 
-> I could imagine a tag of some sort on the load and store, linking the
-> operations that needed to be ordered.  You would also want that same
-> tag on any conditional operators along the way?  Or would the presence
-> of the tags on the load and store suffice?
+Hi, Luis,
 
-Here's a easy cop-out.  Imagine a version of READ_ONCE that is 
-equivalent to:
+On Wed, Oct 13, 2021 at 8:56 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Wed, Oct 13, 2021 at 03:11:10PM +0800, Huacai Chen wrote:
+> > diff --git a/arch/loongarch/include/asm/vermagic.h b/arch/loongarch/include/asm/vermagic.h
+> > new file mode 100644
+> > index 000000000000..9882dfd4702a
+> > --- /dev/null
+> > +++ b/arch/loongarch/include/asm/vermagic.h
+> > @@ -0,0 +1,19 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
+> > + */
+> > +#ifndef _ASM_VERMAGIC_H
+> > +#define _ASM_VERMAGIC_H
+> > +
+> > +#define MODULE_PROC_FAMILY "LOONGARCH "
+>
+> I take it this not a mips arch? There are other longarchs under
+> arch/mips/include/asm/vermagic.h which is why I ask.
+Yes, LoongArch is not compatible with MIPS, old Loongson is MIPS and
+new Loongson isn't.
 
-	a normal READ_ONCE on TSO architectures,
+>
+> > diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+> > new file mode 100644
+> > index 000000000000..af7c403b032b
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/module.c
+> > @@ -0,0 +1,652 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Author: Hanlu Li <lihanlu@loongson.cn>
+> > + *         Huacai Chen <chenhuacai@loongson.cn>
+> > + *
+> > + * Copyright (C) 2020-2021 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +#undef DEBUG
+>
+> Please remove this undef DEBUG line.
+OK, thanks.
 
-	a load-acquire on more weakly ordered architectures.
+>
+> > +
+> > +#include <linux/moduleloader.h>
+> > +#include <linux/elf.h>
+> > +#include <linux/mm.h>
+> > +#include <linux/vmalloc.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/fs.h>
+> > +#include <linux/string.h>
+> > +#include <linux/kernel.h>
+> > +
+> > +static int rela_stack_push(s64 stack_value, s64 *rela_stack, size_t *rela_stack_top)
+> > +{
+> > +     if (*rela_stack_top >= RELA_STACK_DEPTH)
+> > +             return -ENOEXEC;
+> > +
+> > +     rela_stack[(*rela_stack_top)++] = stack_value;
+> > +     pr_debug("%s stack_value = 0x%llx\n", __func__, stack_value);
+>
+> If you are going to use pr_debug() so much you may want to add
+> a define for #define pr_fmt(fmt) at the very top.
+OK, thanks.
 
-Call it READ_ONCE_FOR_COND, for the sake of argument.  Then as long as 
-people are careful to use READ_ONCE_FOR_COND when loading the values 
-that a conditional expression depends on, and WRITE_ONCE for the 
-important stores in the branches of the "if" statement, all 
-architectures will have the desired ordering.  (In fact, if there are 
-multiple loads involved in the condition then only the last one has to 
-be READ_ONCE_FOR_COND; the others can just be READ_ONCE.)
+>
+> > +int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+> > +                    unsigned int symindex, unsigned int relsec,
+> > +                    struct module *me)
+> > +{
+>
+> Nit: Please use struct module *mod, it is much more common in other places.
+>
+OK, thanks.
 
-Of course, this is not optimal on non-TSO archictecture.  That's why I 
-called it a cop-out.  But at least it is simple and easy.
-
-Alan Stern
+> Other than that, this looks fine to me.
+>
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+>
+>   Luis
