@@ -2,111 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF7042CF8C
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 02:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEA042D035
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Oct 2021 04:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbhJNAbw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Oct 2021 20:31:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34465 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229663AbhJNAbw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 13 Oct 2021 20:31:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634171387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5NbKviyVjAGHpJsTY9YMRcseM4r7JqRNYBE2w/RGvYI=;
-        b=bnIgPwr+EfQzmKZaxZ1DKo86Cnt5OSaDnXKFhCcm2xoXbHFIg2BFDpVJheu0RLzK4M812A
-        fiRWNqs71L4k/uAkgeZz8umWPoTSHujCi1EtRMaEhHnA6iMzwU+3sN8i3wj87uXb7/2fLK
-        ACTOKgNY3BZ1GEv/TyeobUlRvrJMTew=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-162-Kk18oF1pOeu6mNLYDzzrFA-1; Wed, 13 Oct 2021 20:29:46 -0400
-X-MC-Unique: Kk18oF1pOeu6mNLYDzzrFA-1
-Received: by mail-qt1-f199.google.com with SMTP id c19-20020ac81e93000000b002a71180fd3dso3398509qtm.1
-        for <linux-arch@vger.kernel.org>; Wed, 13 Oct 2021 17:29:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5NbKviyVjAGHpJsTY9YMRcseM4r7JqRNYBE2w/RGvYI=;
-        b=xtj2MAI3Pu75DH1xsl9W9R8UBqTq6nHn9asPgJUTZ7JXt3R+fLGqMwdh8oXH1y/wYU
-         ARr/h9J32nZ2DsiKIxqaIAH90xztsvkF8Rgxpa3ONRYsKOjKIA9lhAUBXBw/7jgh/ry6
-         kCCbTsRsMcMo02RMFERGuy2p8zxAVc4lJ3MOE+gnk1tVpwm6rnyKV2D//hSHi/NRTJTy
-         xs+eZ9CIhqGt2fDvRM4lzlFCUnuIxVSiswceS3YeCtO8MjXigJqjnrD3AIwstSJdxGbV
-         1wCHJ16Nl1eUW59nS38sdyONlIpOzIIZAx/6NOfXHzCCE9Yd1E2iXoBtpG1qW7I1a9mW
-         EH8Q==
-X-Gm-Message-State: AOAM530bFISpjo9tmnM7rGYTtRhH7aTBTuAtc5rx9mslCUgwnFG6j6sg
-        E0Sx/ZnHXshCzpRCX7Tm4LCTNbj2AQ0fyxH0mbxynbZ/eEBYGbeAtZ4CyVftpCKA61NjzGzPB0P
-        Yxd2a1DTH7WtIvziOXQrp5Q==
-X-Received: by 2002:a05:622a:4d2:: with SMTP id q18mr3028931qtx.84.1634171386061;
-        Wed, 13 Oct 2021 17:29:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxVACw6Q+Bf+KRmLJVeXEJvTVKunw0eo0+N1Y08lNYbQoCAUE2k8n1Z/txG89ZKqIF/2iP2xg==
-X-Received: by 2002:a05:622a:4d2:: with SMTP id q18mr3028899qtx.84.1634171385863;
-        Wed, 13 Oct 2021 17:29:45 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id w17sm720171qts.53.2021.10.13.17.29.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Oct 2021 17:29:45 -0700 (PDT)
-Date:   Wed, 13 Oct 2021 17:29:41 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>, Joerg Roedel <jroedel@suse.de>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Jing Yangyang <jing.yangyang@zte.com.cn>,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 4/4] vmlinux.lds.h: Have ORC lookup cover entire _etext -
- _stext
-Message-ID: <20211014002941.3ywwcfhf53bpw5xp@treble>
-References: <20211013175742.1197608-1-keescook@chromium.org>
- <20211013175742.1197608-5-keescook@chromium.org>
+        id S229834AbhJNCQh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Oct 2021 22:16:37 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:36745 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229798AbhJNCQh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Oct 2021 22:16:37 -0400
+Received: (qmail 910485 invoked by uid 1000); 13 Oct 2021 22:14:31 -0400
+Date:   Wed, 13 Oct 2021 22:14:31 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Florian Weimer <fw@deneb.enyo.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        j alglave <j.alglave@ucl.ac.uk>,
+        luc maranget <luc.maranget@inria.fr>,
+        akiyks <akiyks@gmail.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC PATCH] LKMM: Add ctrl_dep() macro for control dependency
+Message-ID: <20211014021431.GA910341@rowland.harvard.edu>
+References: <20210928211507.20335-1-mathieu.desnoyers@efficios.com>
+ <87lf3f7eh6.fsf@oldenburg.str.redhat.com>
+ <20210929174146.GF22689@gate.crashing.org>
+ <2088260319.47978.1633104808220.JavaMail.zimbra@efficios.com>
+ <871r54ww2k.fsf@oldenburg.str.redhat.com>
+ <CAHk-=wgexLqNnngLPts=wXrRcoP_XHO03iPJbsAg8HYuJbbAvw@mail.gmail.com>
+ <87y271yo4l.fsf@mid.deneb.enyo.de>
+ <20211014000104.GX880162@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211013175742.1197608-5-keescook@chromium.org>
+In-Reply-To: <20211014000104.GX880162@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 10:57:42AM -0700, Kees Cook wrote:
-> From: Kristen Carlson Accardi <kristen@linux.intel.com>
+On Wed, Oct 13, 2021 at 05:01:04PM -0700, Paul E. McKenney wrote:
+> On Sun, Oct 10, 2021 at 04:02:02PM +0200, Florian Weimer wrote:
+> > * Linus Torvalds:
+> > 
+> > > On Fri, Oct 1, 2021 at 9:26 AM Florian Weimer <fweimer@redhat.com> wrote:
+> > >>
+> > >> Will any conditional branch do, or is it necessary that it depends in
+> > >> some way on the data read?
+> > >
+> > > The condition needs to be dependent on the read.
+> > >
+> > > (Easy way to see it: if the read isn't related to the conditional or
+> > > write data/address, the read could just be delayed to after the
+> > > condition and the store had been done).
+> > 
+> > That entirely depends on how the hardware is specified to work.  And
+> > the hardware could recognize certain patterns as always producing the
+> > same condition codes, e.g., AND with zero.  Do such tests still count?
+> > It depends on what the specification says.
+> > 
+> > What I really dislike about this: Operators like & and < now have side
+> > effects, and is no longer possible to reason about arithmetic
+> > expressions in isolation.
 > 
-> When using -ffunction-sections to place each function in its own text
-> section (so it can be randomized at load time in the future FGKASLR
-> series), the linker will place most of the functions into separate .text.*
-> sections. SIZEOF(.text) won't work here for calculating the ORC lookup
-> table size, so the total text size must be calculated to include .text
-> AND all .text.* sections.
+> Is there a reasonable syntax that might help with these issues?
 > 
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Tested-by: Tony Luck <tony.luck@intel.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> [ alobakin: move it to vmlinux.lds.h and make arch-indep ]
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Yes, I know, we for sure have conflicting constraints on "reasonable"
+> on copy on this email.  What else is new?  ;-)
+> 
+> I could imagine a tag of some sort on the load and store, linking the
+> operations that needed to be ordered.  You would also want that same
+> tag on any conditional operators along the way?  Or would the presence
+> of the tags on the load and store suffice?
 
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Here's a easy cop-out.  Imagine a version of READ_ONCE that is 
+equivalent to:
 
--- 
-Josh
+	a normal READ_ONCE on TSO architectures,
 
+	a load-acquire on more weakly ordered architectures.
+
+Call it READ_ONCE_FOR_COND, for the sake of argument.  Then as long as 
+people are careful to use READ_ONCE_FOR_COND when loading the values 
+that a conditional expression depends on, and WRITE_ONCE for the 
+important stores in the branches of the "if" statement, all 
+architectures will have the desired ordering.  (In fact, if there are 
+multiple loads involved in the condition then only the last one has to 
+be READ_ONCE_FOR_COND; the others can just be READ_ONCE.)
+
+Of course, this is not optimal on non-TSO archictecture.  That's why I 
+called it a cop-out.  But at least it is simple and easy.
+
+Alan Stern
