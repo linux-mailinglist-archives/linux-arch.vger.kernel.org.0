@@ -2,135 +2,277 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A34242E97D
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Oct 2021 08:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CF442E995
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Oct 2021 09:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235801AbhJOG7f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Oct 2021 02:59:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22155 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235796AbhJOG7e (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 15 Oct 2021 02:59:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634281048;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XrPIV2fprNlCi1MFN3D9uad/uIU7Ev00FM5PU9k9D8g=;
-        b=GwGEbBaFXzzU9REDj1BMs3OjLs1HY0aJfHc/a+BJs6vuO0yix4OQclcAkiHiv1kYUhz722
-        xAFnGbVhG5my5OxhrPr3N3g1lTb8X+zidtpCKY67Q5trfQw/4cSbUyo/+jWUMFt9aJnieF
-        CKM+HW1fLTN7z2tsVptUIFJFqhBauno=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-187-g_a5Qgx3PwKStO2Oaqhd0Q-1; Fri, 15 Oct 2021 02:57:26 -0400
-X-MC-Unique: g_a5Qgx3PwKStO2Oaqhd0Q-1
-Received: by mail-ed1-f70.google.com with SMTP id cy14-20020a0564021c8e00b003db8c9a6e30so7379404edb.1
-        for <linux-arch@vger.kernel.org>; Thu, 14 Oct 2021 23:57:26 -0700 (PDT)
+        id S234407AbhJOHCW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Oct 2021 03:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234389AbhJOHCW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Oct 2021 03:02:22 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D372C061570;
+        Fri, 15 Oct 2021 00:00:16 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id oa12-20020a17090b1bcc00b0019f715462a8so6613510pjb.3;
+        Fri, 15 Oct 2021 00:00:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=DpMJMuOh31BW0TinR6HO0ohowzv9GzyWx4UJCZSiM/E=;
+        b=dawJA0plSvi8TVzJFAb5vNAFuFXMNEP6h+yuaSvTk5WkFqLekT1lieQvF2HAsP0WEt
+         9QG4m2e0PJrKkLTucfm9iLDGPhnVdXkoUygr8xZhqgZyNgZMS8x2+JJNSUFU+whvAQLF
+         JJUdu99bcNwgHbn9rZgSa7Z/xpXiXKpAzwL0j+I1UxO5S5/48isAqNMnRDnHl5y1DafR
+         LnArbLoVGQJuyFg4lexUV4bCmV8fOUN0tA+6Hg4ZLdbbpLzAt14hiDEm9AwMxgRIsCoz
+         svZ1tJlufDFI4dokEBZFWyEyDF6u1RfBhbUpNhCeytj6NyM2tosKujHuUPhZ7xdXfgwb
+         tHZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XrPIV2fprNlCi1MFN3D9uad/uIU7Ev00FM5PU9k9D8g=;
-        b=atyzy3CinY9W4Nozfq4oqQ4W80bxjWcKmFfuQ2Vels4xRcNlj1ZV/pKiuIBzLuh1na
-         4CkuN961YX7JYoOodF8a9D/34oJTBJnp6iJN14zHCVnoJwE+VhaLDJtOpTZsymKvOa7n
-         j21SXmCF2WCWHlXTYh5lE4nPPkH6bjBBzKR1SsFLXY0iGQm11yRVkG9kOrnoQDSzxbKT
-         vv+eK68LIwMzA/AT+RvBPQfvDPoQZP6XGIqwjm3ngIjxyS9zt5Er/EjHz/2rfe1y1upv
-         GwnFkUQAuYuqapT+Sa98asVsLxb29Ltk9yGVtVKKOHcqQNvWxrU2BkGhbeSHi7+/vG4y
-         zbyw==
-X-Gm-Message-State: AOAM533zxtLkeFOOGnmu5EBRr9PQq2NGjXT/M0IFO5YdTGKM02+dtDtP
-        1MMFEcpfT9FWb6T5LS2cCrVL3c4TqN9aDDSJS/c26hO3/Pc454QEaUYOx0Rno7UahyumrNw511V
-        KYP2WP8O6WKCzP4p3H+NoxA==
-X-Received: by 2002:a05:6402:447:: with SMTP id p7mr15322737edw.261.1634281045395;
-        Thu, 14 Oct 2021 23:57:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw3wsrR7axiFHmfph2bLnxYqxO8ciYC1BIDrnzojSmvwa6tk0pkkVI5pGdF1DtDsbmx8LCmYQ==
-X-Received: by 2002:a05:6402:447:: with SMTP id p7mr15322726edw.261.1634281045218;
-        Thu, 14 Oct 2021 23:57:25 -0700 (PDT)
-Received: from redhat.com ([2.55.1.196])
-        by smtp.gmail.com with ESMTPSA id e11sm4094212edl.70.2021.10.14.23.57.18
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=DpMJMuOh31BW0TinR6HO0ohowzv9GzyWx4UJCZSiM/E=;
+        b=EV3HqtPNjLRcQOaKhEg4iKciaFEwoWBrW+xWgoKHrJDlmNv+UQYgWlAWXhQIZKSg4I
+         RVKe4bGPAnpPVV16jY9ExwSambfafZzPNsN9rfL55CHe5wDJYcrZzbtg03c/WV2imrQ3
+         xHJ4EDmk/S0UwDGud6s2waslPjgddJed/kyRex3+fWvg8PS4O+eyqWRnVseU5yeTFrXu
+         SdYBu5OqllPlEK7FW+AyWxDQ+5o5DowWe8xdCIxHZleZTgMAk6F6G9k2+0+Tqo7/2oxp
+         Y9+ve1fAYPn4GmRlOLqugSZyHoe00X5lmv7VMeteBA82SK7KR2RHly2sILcv4zreEsjv
+         JHWw==
+X-Gm-Message-State: AOAM531q9h0FJ4aaFc811USPNwmnS2Dtvygbnqb6021LH1MQoSNga/eo
+        cI/ES5QWhIz/9mwRdGXU1Lw=
+X-Google-Smtp-Source: ABdhPJxztf44YE8ddyH3Qj/Lj8a78ir7rHdM6+mqT2YW9gHvSekb8o/P4AfBjE43O9k+nVgPDYSovA==
+X-Received: by 2002:a17:90b:3588:: with SMTP id mm8mr26098666pjb.238.1634281215876;
+        Fri, 15 Oct 2021 00:00:15 -0700 (PDT)
+Received: from localhost (14-203-144-177.static.tpgi.com.au. [14.203.144.177])
+        by smtp.gmail.com with ESMTPSA id c192sm4160615pfb.110.2021.10.15.00.00.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Oct 2021 23:57:24 -0700 (PDT)
-Date:   Fri, 15 Oct 2021 02:57:16 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
+        Fri, 15 Oct 2021 00:00:15 -0700 (PDT)
+Date:   Fri, 15 Oct 2021 17:00:10 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 08/13] asm-generic: Refactor
+ dereference_[kernel]_function_descriptor()
+To:     Andrew Morton <akpm@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v5 16/16] x86/tdx: Add cmdline option to force use of
- ioremap_host_shared
-Message-ID: <20211015024923-mutt-send-email-mst@kernel.org>
-References: <20211009070132-mutt-send-email-mst@kernel.org>
- <8c906de6-5efa-b87a-c800-6f07b98339d0@linux.intel.com>
- <20211011075945-mutt-send-email-mst@kernel.org>
- <9d0ac556-6a06-0f2e-c4ff-0c3ce742a382@linux.intel.com>
- <20211011142330-mutt-send-email-mst@kernel.org>
- <4fe8d60a-2522-f111-995c-dcbefd0d5e31@linux.intel.com>
- <20211012165705-mutt-send-email-mst@kernel.org>
- <c09c961d-f433-4a68-0b38-208ffe8b36c7@linux.intel.com>
- <20211012171846-mutt-send-email-mst@kernel.org>
- <c2ce5ad8-4df7-3a37-b235-8762a76b1fd3@linux.intel.com>
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <cover.1634190022.git.christophe.leroy@csgroup.eu>
+        <865b5c872814e3291fe7afabcc110f53b3457b56.1634190022.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <865b5c872814e3291fe7afabcc110f53b3457b56.1634190022.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2ce5ad8-4df7-3a37-b235-8762a76b1fd3@linux.intel.com>
+Message-Id: <1634279175.w0z6ck2mpb.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 14, 2021 at 10:50:59PM -0700, Andi Kleen wrote:
-> 
-> > I thought you basically create an OperationRegion of SystemMemory type,
-> > and off you go. Maybe the OSPM in Linux is clever and protects
-> > some memory, I wouldn't know.
-> 
-> 
-> I investigated this now, and it looks like acpi is using ioremap_cache(). We
-> can hook into that and force non sharing. It's probably safe to assume that
-> this is not used on real IO devices.
-> 
-> I think there are still some other BIOS mappings that use just plain
-> ioremap() though.
-> 
-> 
-> -Andi
+Excerpts from Christophe Leroy's message of October 14, 2021 3:49 pm:
+> dereference_function_descriptor() and
+> dereference_kernel_function_descriptor() are identical on the
+> three architectures implementing them.
+>=20
+> Make them common and put them out-of-line in kernel/extable.c
+> which is one of the users and has similar type of functions.
 
-Hmm don't you mean the reverse? If you make ioremap shared then OS is
-protected from malicious ACPI? If you don't make it shared then
-malicious ACPI can poke at arbitrary OS memory.  Looks like making
-ioremap non shared by default is actually less safe than shared.
-Interesting.
+We should be moving more stuff out of extable.c (including all the
+kernel address tests). lib/kimage.c or kelf.c or something.=20
 
-For BIOS I suspect there's no way around it, it needs to be
-audited since it's executable.
+It could be after your series though.
 
--- 
-MST
+>=20
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/ia64/include/asm/sections.h    | 19 -------------------
+>  arch/parisc/include/asm/sections.h  |  9 ---------
+>  arch/parisc/kernel/process.c        | 21 ---------------------
+>  arch/powerpc/include/asm/sections.h | 23 -----------------------
+>  include/asm-generic/sections.h      |  2 ++
+>  kernel/extable.c                    | 23 ++++++++++++++++++++++-
+>  6 files changed, 24 insertions(+), 73 deletions(-)
+>=20
+> diff --git a/arch/ia64/include/asm/sections.h b/arch/ia64/include/asm/sec=
+tions.h
+> index 1aaed8882294..96c9bb500c34 100644
+> --- a/arch/ia64/include/asm/sections.h
+> +++ b/arch/ia64/include/asm/sections.h
+> @@ -31,23 +31,4 @@ extern char __start_gate_brl_fsys_bubble_down_patchlis=
+t[], __end_gate_brl_fsys_b
+>  extern char __start_unwind[], __end_unwind[];
+>  extern char __start_ivt_text[], __end_ivt_text[];
+> =20
+> -#undef dereference_function_descriptor
+> -static inline void *dereference_function_descriptor(void *ptr)
+> -{
+> -	struct fdesc *desc =3D ptr;
+> -	void *p;
+> -
+> -	if (!get_kernel_nofault(p, (void *)&desc->addr))
+> -		ptr =3D p;
+> -	return ptr;
+> -}
+> -
+> -#undef dereference_kernel_function_descriptor
+> -static inline void *dereference_kernel_function_descriptor(void *ptr)
+> -{
+> -	if (ptr < (void *)__start_opd || ptr >=3D (void *)__end_opd)
+> -		return ptr;
+> -	return dereference_function_descriptor(ptr);
+> -}
+> -
+>  #endif /* _ASM_IA64_SECTIONS_H */
+> diff --git a/arch/parisc/include/asm/sections.h b/arch/parisc/include/asm=
+/sections.h
+> index 37b34b357cb5..6b1fe22baaf5 100644
+> --- a/arch/parisc/include/asm/sections.h
+> +++ b/arch/parisc/include/asm/sections.h
+> @@ -13,13 +13,4 @@ typedef Elf64_Fdesc func_desc_t;
+> =20
+>  extern char __alt_instructions[], __alt_instructions_end[];
+> =20
+> -#ifdef CONFIG_64BIT
+> -
+> -#undef dereference_function_descriptor
+> -void *dereference_function_descriptor(void *);
+> -
+> -#undef dereference_kernel_function_descriptor
+> -void *dereference_kernel_function_descriptor(void *);
+> -#endif
+> -
+>  #endif
+> diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
+> index 38ec4ae81239..7382576b52a8 100644
+> --- a/arch/parisc/kernel/process.c
+> +++ b/arch/parisc/kernel/process.c
+> @@ -266,27 +266,6 @@ get_wchan(struct task_struct *p)
+>  	return 0;
+>  }
+> =20
+> -#ifdef CONFIG_64BIT
+> -void *dereference_function_descriptor(void *ptr)
+> -{
+> -	Elf64_Fdesc *desc =3D ptr;
+> -	void *p;
+> -
+> -	if (!get_kernel_nofault(p, (void *)&desc->addr))
+> -		ptr =3D p;
+> -	return ptr;
+> -}
+> -
+> -void *dereference_kernel_function_descriptor(void *ptr)
+> -{
+> -	if (ptr < (void *)__start_opd ||
+> -			ptr >=3D (void *)__end_opd)
+> -		return ptr;
+> -
+> -	return dereference_function_descriptor(ptr);
+> -}
+> -#endif
+> -
+>  static inline unsigned long brk_rnd(void)
+>  {
+>  	return (get_random_int() & BRK_RND_MASK) << PAGE_SHIFT;
+> diff --git a/arch/powerpc/include/asm/sections.h b/arch/powerpc/include/a=
+sm/sections.h
+> index 1322d7b2f1a3..fbfe1957edbe 100644
+> --- a/arch/powerpc/include/asm/sections.h
+> +++ b/arch/powerpc/include/asm/sections.h
+> @@ -72,29 +72,6 @@ static inline int overlaps_kernel_text(unsigned long s=
+tart, unsigned long end)
+>  		(unsigned long)_stext < end;
+>  }
+> =20
+> -#ifdef PPC64_ELF_ABI_v1
+> -
+> -#undef dereference_function_descriptor
+> -static inline void *dereference_function_descriptor(void *ptr)
+> -{
+> -	struct ppc64_opd_entry *desc =3D ptr;
+> -	void *p;
+> -
+> -	if (!get_kernel_nofault(p, (void *)&desc->addr))
+> -		ptr =3D p;
+> -	return ptr;
+> -}
+> -
+> -#undef dereference_kernel_function_descriptor
+> -static inline void *dereference_kernel_function_descriptor(void *ptr)
+> -{
+> -	if (ptr < (void *)__start_opd || ptr >=3D (void *)__end_opd)
+> -		return ptr;
+> -
+> -	return dereference_function_descriptor(ptr);
+> -}
+> -#endif /* PPC64_ELF_ABI_v1 */
+> -
+>  #endif
+> =20
+>  #endif /* __KERNEL__ */
+> diff --git a/include/asm-generic/sections.h b/include/asm-generic/section=
+s.h
+> index cbec7d5f1678..76163883c6ff 100644
+> --- a/include/asm-generic/sections.h
+> +++ b/include/asm-generic/sections.h
+> @@ -60,6 +60,8 @@ extern __visible const void __nosave_begin, __nosave_en=
+d;
+> =20
+>  /* Function descriptor handling (if any).  Override in asm/sections.h */
+>  #ifdef HAVE_FUNCTION_DESCRIPTORS
+> +void *dereference_function_descriptor(void *ptr);
+> +void *dereference_kernel_function_descriptor(void *ptr);
+>  #else
+>  #define dereference_function_descriptor(p) ((void *)(p))
+>  #define dereference_kernel_function_descriptor(p) ((void *)(p))
+> diff --git a/kernel/extable.c b/kernel/extable.c
+> index b0ea5eb0c3b4..013ccffade11 100644
+> --- a/kernel/extable.c
+> +++ b/kernel/extable.c
+> @@ -3,6 +3,7 @@
+>     Copyright (C) 2001 Rusty Russell, 2002 Rusty Russell IBM.
+> =20
+>  */
+> +#include <linux/elf.h>
+>  #include <linux/ftrace.h>
+>  #include <linux/memory.h>
+>  #include <linux/extable.h>
+> @@ -159,12 +160,32 @@ int kernel_text_address(unsigned long addr)
+>  }
+> =20
+>  /*
+> - * On some architectures (PPC64, IA64) function pointers
+> + * On some architectures (PPC64, IA64, PARISC) function pointers
+>   * are actually only tokens to some data that then holds the
+>   * real function address. As a result, to find if a function
+>   * pointer is part of the kernel text, we need to do some
+>   * special dereferencing first.
+>   */
+> +#ifdef HAVE_FUNCTION_DESCRIPTORS
+> +void *dereference_function_descriptor(void *ptr)
+> +{
+> +	func_desc_t *desc =3D ptr;
+> +	void *p;
+> +
+> +	if (!get_kernel_nofault(p, (void *)&desc->addr))
+> +		ptr =3D p;
 
+I know you're just copying existing code. This seems a bit risky though.=20
+I don't think anything good could come of just treating the descriptor
+address like a function entry address if we failed to load from it for
+whatever reason.
+
+Existing callers might be benign but the API is not good. It should
+give a nice fail return or BUG. If we change that then we should also
+change the name and pass the correct type to it too.
+
+Thanks,
+Nick
