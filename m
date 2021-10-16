@@ -2,188 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D355443009D
-	for <lists+linux-arch@lfdr.de>; Sat, 16 Oct 2021 08:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0224303AA
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Oct 2021 18:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239934AbhJPGoU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 16 Oct 2021 02:44:20 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:50517 "EHLO pegase2.c-s.fr"
+        id S240704AbhJPQZa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 16 Oct 2021 12:25:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59454 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233802AbhJPGoU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 16 Oct 2021 02:44:20 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4HWYTZ2jPNz9sSL;
-        Sat, 16 Oct 2021 08:42:10 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id K3NXrTGrnHQ3; Sat, 16 Oct 2021 08:42:10 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4HWYTZ1gXQz9sSH;
-        Sat, 16 Oct 2021 08:42:10 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1E83F8B765;
-        Sat, 16 Oct 2021 08:42:10 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 09O0ACPW_BH4; Sat, 16 Oct 2021 08:42:10 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.36])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D7EA88B763;
-        Sat, 16 Oct 2021 08:42:08 +0200 (CEST)
-Subject: Re: [PATCH v2 12/13] lkdtm: Fix execute_[user]_location()
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-References: <cover.1634190022.git.christophe.leroy@csgroup.eu>
- <cbee30c66890994e116a8eae8094fa8c5336f90a.1634190022.git.christophe.leroy@csgroup.eu>
- <202110151428.187B1CF@keescook>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <9b4c39d4-1322-89af-585c-679a574576a2@csgroup.eu>
-Date:   Sat, 16 Oct 2021 08:42:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <202110151428.187B1CF@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr-FR
-Content-Transfer-Encoding: 8bit
+        id S240694AbhJPQZ3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 16 Oct 2021 12:25:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 583F2610D1;
+        Sat, 16 Oct 2021 16:23:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634401401;
+        bh=yRtHn1w9re0Zp9x/HnI3ySgmCs4w8DDs0ogGgg+lhGg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=O44rlF/X/Re9dNYuBQ/BewazF2+442d0yMq4GmhAMMgVgdqw7p8aXe5+WWhV3nqVJ
+         4Acv5lPaiUQBnKgwFfrCj1rFsC3kW/yDupi6+zjSx1+lYESnKyj/qSYv1MFXkTs/va
+         oHxILBYTHT0KumyrqP868k9rrX8PjAdE8TTKl15BEw2B9R7pnyNnMhvSjmCuWCxCMG
+         mGws7ioOCxhBkyB4AkGHWY2ZAR2bfGOxkrCuGye795Qivu+eXEeZ5fqmkrr8MxkIwH
+         85S/OHozeoknvW+OhIXHaImnPEG52DK1egiB0ZJ8KNib2pr0sPo9eLTVtvg5yzxvCb
+         AvyfzesvK4V8Q==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4CDA860A47;
+        Sat, 16 Oct 2021 16:23:21 +0000 (UTC)
+Subject: Re: [GIT PULL] csky fixes for v5.15-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211016010635.2860644-1-guoren@kernel.org>
+References: <20211016010635.2860644-1-guoren@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211016010635.2860644-1-guoren@kernel.org>
+X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.15-rc6
+X-PR-Tracked-Commit-Id: e21e52ad1e0126e2a5e2013084ac3f47cf1e887a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c13f946bf1ef0eef49748b1824a0bdfb3487fe8c
+Message-Id: <163440140130.26929.4641296646306632379.pr-tracker-bot@kernel.org>
+Date:   Sat, 16 Oct 2021 16:23:21 +0000
+To:     guoren@kernel.org
+Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+The pull request you sent on Sat, 16 Oct 2021 09:06:35 +0800:
 
+> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.15-rc6
 
-Le 15/10/2021 à 23:31, Kees Cook a écrit :
-> On Thu, Oct 14, 2021 at 07:50:01AM +0200, Christophe Leroy wrote:
->> execute_location() and execute_user_location() intent
->> to copy do_nothing() text and execute it at a new location.
->> However, at the time being it doesn't copy do_nothing() function
->> but do_nothing() function descriptor which still points to the
->> original text. So at the end it still executes do_nothing() at
->> its original location allthough using a copied function descriptor.
->>
->> So, fix that by really copying do_nothing() text and build a new
->> function descriptor by copying do_nothing() function descriptor and
->> updating the target address with the new location.
->>
->> Also fix the displayed addresses by dereferencing do_nothing()
->> function descriptor.
->>
->> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->> ---
->>   drivers/misc/lkdtm/perms.c     | 25 +++++++++++++++++++++----
->>   include/asm-generic/sections.h |  5 +++++
->>   2 files changed, 26 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
->> index 5266dc28df6e..96b3ebfcb8ed 100644
->> --- a/drivers/misc/lkdtm/perms.c
->> +++ b/drivers/misc/lkdtm/perms.c
->> @@ -44,19 +44,32 @@ static noinline void do_overwritten(void)
->>   	return;
->>   }
->>   
->> +static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
->> +{
->> +	memcpy(fdesc, do_nothing, sizeof(*fdesc));
->> +	fdesc->addr = (unsigned long)dst;
->> +	barrier();
->> +
->> +	return fdesc;
->> +}
-> 
-> How about collapsing the "have_function_descriptors()" check into
-> setup_function_descriptor()?
-> 
-> static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
-> {
-> 	if (__is_defined(HAVE_FUNCTION_DESCRIPTORS)) {
-> 		memcpy(fdesc, do_nothing, sizeof(*fdesc));
-> 		fdesc->addr = (unsigned long)dst;
-> 		barrier();
-> 		return fdesc;
-> 	} else {
-> 		return dst;
-> 	}
-> }
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c13f946bf1ef0eef49748b1824a0bdfb3487fe8c
 
-Ok
+Thank you!
 
-> 
->> +
->>   static noinline void execute_location(void *dst, bool write)
->>   {
->>   	void (*func)(void) = dst;
->> +	func_desc_t fdesc;
->> +	void *do_nothing_text = dereference_function_descriptor(do_nothing);
->>   
->> -	pr_info("attempting ok execution at %px\n", do_nothing);
->> +	pr_info("attempting ok execution at %px\n", do_nothing_text);
->>   	do_nothing();
->>   
->>   	if (write == CODE_WRITE) {
->> -		memcpy(dst, do_nothing, EXEC_SIZE);
->> +		memcpy(dst, do_nothing_text, EXEC_SIZE);
->>   		flush_icache_range((unsigned long)dst,
->>   				   (unsigned long)dst + EXEC_SIZE);
->>   	}
->>   	pr_info("attempting bad execution at %px\n", func);
->> +	if (have_function_descriptors())
->> +		func = setup_function_descriptor(&fdesc, dst);
->>   	func();
->>   	pr_err("FAIL: func returned\n");
->>   }
->> @@ -67,15 +80,19 @@ static void execute_user_location(void *dst)
->>   
->>   	/* Intentionally crossing kernel/user memory boundary. */
->>   	void (*func)(void) = dst;
->> +	func_desc_t fdesc;
->> +	void *do_nothing_text = dereference_function_descriptor(do_nothing);
->>   
->> -	pr_info("attempting ok execution at %px\n", do_nothing);
->> +	pr_info("attempting ok execution at %px\n", do_nothing_text);
->>   	do_nothing();
->>   
->> -	copied = access_process_vm(current, (unsigned long)dst, do_nothing,
->> +	copied = access_process_vm(current, (unsigned long)dst, do_nothing_text,
->>   				   EXEC_SIZE, FOLL_WRITE);
->>   	if (copied < EXEC_SIZE)
->>   		return;
->>   	pr_info("attempting bad execution at %px\n", func);
->> +	if (have_function_descriptors())
->> +		func = setup_function_descriptor(&fdesc, dst);
->>   	func();
->>   	pr_err("FAIL: func returned\n");
->>   }
-> 
-> 
->> diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
->> index 76163883c6ff..d225318538bd 100644
->> --- a/include/asm-generic/sections.h
->> +++ b/include/asm-generic/sections.h
->> @@ -70,6 +70,11 @@ typedef struct {
->>   } func_desc_t;
->>   #endif
->>   
->> +static inline bool have_function_descriptors(void)
->> +{
->> +	return __is_defined(HAVE_FUNCTION_DESCRIPTORS);
->> +}
->> +
->>   /* random extra sections (if any).  Override
->>    * in asm/sections.h */
->>   #ifndef arch_is_kernel_text
-> 
-> This hunk seems like it should live in a separate patch.
-> 
-
-Ok I move it in a previous patch.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
