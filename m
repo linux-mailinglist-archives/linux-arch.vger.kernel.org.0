@@ -2,72 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA29F430B4B
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Oct 2021 19:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0201430BAB
+	for <lists+linux-arch@lfdr.de>; Sun, 17 Oct 2021 21:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbhJQRvU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 17 Oct 2021 13:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbhJQRvT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 17 Oct 2021 13:51:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB73AC06161C;
-        Sun, 17 Oct 2021 10:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=KSSBKqPE3IR7lwQZjR+3a0AghrBfpGBz1s5IaeJer1M=; b=bVy3pr3xTSQHsfPAJrByY4p9Ok
-        645Hpz9DerbKwzp633yp1zVs6gJ4MQUDZ9m6nRMhpP76+XaKTXkIrUapoK9DzYDB0GQ+AcS3zRZmF
-        pWwQ7NMKsHBlMPUpEEvtiGH+7UGOrOnPAB9oTF9aF57DMMQ7GSePlJBpq5DqD74HJEOWt6NE5ysHQ
-        XfQVMBc6xI0P3PtaiHd5hOk1UxnpBH1GMYAp1v6aiCcTkdAAdCj8A3eSFAD3ZCg1srMj4089t/ruo
-        mZr8jtGemH7fWw192MW33qkRk0UgwOPhBoS+ob3RCd9ChA9mDlzyuY6KEBMeH7JrHwgu1vwDx/ue3
-        lBSATOzA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mcAHR-00D6Qz-Ro; Sun, 17 Oct 2021 17:49:05 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org
-Subject: [PATCH] asm-generic: bug.h: add unreachable() in BUG() for CONFIG_BUG not set
-Date:   Sun, 17 Oct 2021 10:49:05 -0700
-Message-Id: <20211017174905.18943-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        id S242417AbhJQTLe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 17 Oct 2021 15:11:34 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:51821 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233662AbhJQTLd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 17 Oct 2021 15:11:33 -0400
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MmU1H-1n2xhD1PLl-00iR2e; Sun, 17 Oct 2021 21:09:22 +0200
+Received: by mail-wr1-f44.google.com with SMTP id v17so37060051wrv.9;
+        Sun, 17 Oct 2021 12:09:22 -0700 (PDT)
+X-Gm-Message-State: AOAM531IY61lCtEEZ1bTsYBQCf3bZ3blcMIviTm78i3DpBeOtSIYXXbj
+        893BsAF/imR0W1XlZodN7vz9KCq8ZvquafYyw7g=
+X-Google-Smtp-Source: ABdhPJyDj5QI06EOMNONdAE5GwD/ut/fii1dX06b8JHCA0YPirHmFsCDgxXb4szkdoWo0z9BllmdVI49vaK35YUrk8s=
+X-Received: by 2002:adf:f481:: with SMTP id l1mr29223902wro.411.1634497761955;
+ Sun, 17 Oct 2021 12:09:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211017174905.18943-1-rdunlap@infradead.org>
+In-Reply-To: <20211017174905.18943-1-rdunlap@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sun, 17 Oct 2021 21:09:05 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3XDY5gMUA3h3tVmQuxSHn_J3qOw_rDurzBx-KFdGhCKA@mail.gmail.com>
+Message-ID: <CAK8P3a3XDY5gMUA3h3tVmQuxSHn_J3qOw_rDurzBx-KFdGhCKA@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic: bug.h: add unreachable() in BUG() for
+ CONFIG_BUG not set
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:zGN4sBC/1RH8EFAOfkdOdJQmT5npD9tEpTMumWQlb+0qxZqz3rh
+ Da037rsHRmqxPIsfS4pePB+LzDlhqCngZ+wScR/23OoFfu6/rIKE9+z7muiF50ji8aj6ubI
+ R3xlhBbADMwYR4LyPznoJaGQ2DMmFrvatRKVUyFrDZFnplA1nOh5EVgFxYzKJI/xVwhDEdw
+ tvGszfJgRO/w71tNFko4A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:09/jv+oewuU=:OdXyuaQoEPw5k0YXxrRtP6
+ S4E2JV2NOTvmLytInJ5rHL6mls/LvI0DiBc59ab/XxcAhcWtguDoz2CGh+lJCiZxgmOX0rG3b
+ Qj0uCrCZhvWBx3aBCko1GHkUozI+M9tYXCRoE4ZzAxE0X6uoog/BTHR3SwobFvKcHJdvh7RGG
+ EQ+N2PfwzeInIpQHs5/DoH4hWKiiGmj61taNPmob4u8j7JCA4yNaIQtuWwViZQjvGDcFz5oqy
+ MFSUg17PvZH8YsetgTvScAf7O//eHJh4ZP+e+W5fe2nHTtdHXcMqlg0coMSPsIV62y2NcU9vs
+ gvQrAXm6oraCAoM0zE5Ndvb7kxRx2OALogG8ExGrz/TwkMullm03j4PQCTmvcMz9qU+rfMeWj
+ iHLVTTMVNqjHCk0JJJU6qVn2CKDD1IuPCpCsDJpNBNLjPfldL3pfsCSXE9ZpABYFspm/hi3TY
+ K3XZTeGqw91r7VpnIRKYooOErf9WgiYFcoBRrZhWMxbamKP6BHbVdaSKemx8UyCGgCoWldgzd
+ YVFvz7PfVml+b/RAEfdeoDF51AY8+mOrq6bmm8tj7CmnkyYWQgOgVo6Pf1mo6qT+K2fGuzpcO
+ a53q34zmkwCteMJNqeo6SCnGmawRBiE6llyHGDYpZwmkkehfVbcgcS7OOKFpKWtQ07cEqIxfQ
+ 4dAVlo+kDU/lVvRH6t/6p4Wz13d4icJ/8jUyIHsVijWu8tp8QN2hzbRkDUrJudSgf6u0o41FP
+ xNgombAx9mNIdAq2J3s8AF6H6qLVYY0ithQSvw==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When CONFIG_BUG is not set/enabled, there is a warning
-on ARCH=m68k, gcc version 11.1.0-nolibc from Arnd's crosstools:
+On Sun, Oct 17, 2021 at 7:49 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> When CONFIG_BUG is not set/enabled, there is a warning
+> on ARCH=m68k, gcc version 11.1.0-nolibc from Arnd's crosstools:
+>
+> ../fs/afs/dir.c: In function 'afs_dir_set_page_dirty':
+> ../fs/afs/dir.c:51:1: error: no return statement in function returning non-void [-Werror=return-type]
+>
+> Adding "unreachable()" in the BUG() macro silences the warning.
 
-../fs/afs/dir.c: In function 'afs_dir_set_page_dirty':
-../fs/afs/dir.c:51:1: error: no return statement in function returning non-void [-Werror=return-type]
+No, I don't think this is the right solution:
 
-Adding "unreachable()" in the BUG() macro silences the warning.
+> -#define BUG() do {} while (1)
+> +#define BUG() do {unreachable();} while (1)
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-m68k@lists.linux-m68k.org
----
- include/asm-generic/bug.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Marking this code unreachable() means the compiler is free
+to assume any code path leading here will never be entered,
+which leads to additional undefined behavior and other warnings
+rather than just hanging reproducibly.
 
---- linux-next-20211015.orig/include/asm-generic/bug.h
-+++ linux-next-20211015/include/asm-generic/bug.h
-@@ -154,7 +154,7 @@ void __warn(const char *file, int line,
- 
- #else /* !CONFIG_BUG */
- #ifndef HAVE_ARCH_BUG
--#define BUG() do {} while (1)
-+#define BUG() do {unreachable();} while (1)
- #endif
- 
- #ifndef HAVE_ARCH_BUG_ON
+The endless loop here should normally be sufficient to tell the
+compiler that the function never returns, so it sounds like a
+problem in gcc for m68k.
+
+Did you see any other issues like this one on m68k, or the
+same one on another architecture?
+
+        Arnd
