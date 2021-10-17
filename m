@@ -2,60 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0224303AA
-	for <lists+linux-arch@lfdr.de>; Sat, 16 Oct 2021 18:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58746430717
+	for <lists+linux-arch@lfdr.de>; Sun, 17 Oct 2021 09:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240704AbhJPQZa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 16 Oct 2021 12:25:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59454 "EHLO mail.kernel.org"
+        id S234027AbhJQHwY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 17 Oct 2021 03:52:24 -0400
+Received: from pegase2.c-s.fr ([93.17.235.10]:60437 "EHLO pegase2.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240694AbhJPQZ3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 16 Oct 2021 12:25:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 583F2610D1;
-        Sat, 16 Oct 2021 16:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634401401;
-        bh=yRtHn1w9re0Zp9x/HnI3ySgmCs4w8DDs0ogGgg+lhGg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=O44rlF/X/Re9dNYuBQ/BewazF2+442d0yMq4GmhAMMgVgdqw7p8aXe5+WWhV3nqVJ
-         4Acv5lPaiUQBnKgwFfrCj1rFsC3kW/yDupi6+zjSx1+lYESnKyj/qSYv1MFXkTs/va
-         oHxILBYTHT0KumyrqP868k9rrX8PjAdE8TTKl15BEw2B9R7pnyNnMhvSjmCuWCxCMG
-         mGws7ioOCxhBkyB4AkGHWY2ZAR2bfGOxkrCuGye795Qivu+eXEeZ5fqmkrr8MxkIwH
-         85S/OHozeoknvW+OhIXHaImnPEG52DK1egiB0ZJ8KNib2pr0sPo9eLTVtvg5yzxvCb
-         AvyfzesvK4V8Q==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4CDA860A47;
-        Sat, 16 Oct 2021 16:23:21 +0000 (UTC)
-Subject: Re: [GIT PULL] csky fixes for v5.15-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211016010635.2860644-1-guoren@kernel.org>
-References: <20211016010635.2860644-1-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211016010635.2860644-1-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.15-rc6
-X-PR-Tracked-Commit-Id: e21e52ad1e0126e2a5e2013084ac3f47cf1e887a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c13f946bf1ef0eef49748b1824a0bdfb3487fe8c
-Message-Id: <163440140130.26929.4641296646306632379.pr-tracker-bot@kernel.org>
-Date:   Sat, 16 Oct 2021 16:23:21 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org
+        id S233966AbhJQHwY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 17 Oct 2021 03:52:24 -0400
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4HXBxd0Dp6z9sSg;
+        Sun, 17 Oct 2021 09:50:13 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id qE16lVPGMQXg; Sun, 17 Oct 2021 09:50:12 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4HXBxb1HWmz9sSf;
+        Sun, 17 Oct 2021 09:50:11 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1361A8B76C;
+        Sun, 17 Oct 2021 09:50:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id y2-boJOlu1zA; Sun, 17 Oct 2021 09:50:11 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.38])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E55898B763;
+        Sun, 17 Oct 2021 09:50:09 +0200 (CEST)
+Subject: Re: [PATCH v2 11/13] lkdtm: Fix lkdtm_EXEC_RODATA()
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1634190022.git.christophe.leroy@csgroup.eu>
+ <44946ed0340013a52f8acdee7d6d0781f145cd6b.1634190022.git.christophe.leroy@csgroup.eu>
+ <202110151432.D8203C19@keescook>
+ <61a3d2c4-4997-c221-3eef-d74aef5ba584@csgroup.eu>
+Message-ID: <87927aa3-6414-adaa-44f7-b3bf1f664317@csgroup.eu>
+Date:   Sun, 17 Oct 2021 09:50:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <61a3d2c4-4997-c221-3eef-d74aef5ba584@csgroup.eu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr-FR
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The pull request you sent on Sat, 16 Oct 2021 09:06:35 +0800:
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.15-rc6
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c13f946bf1ef0eef49748b1824a0bdfb3487fe8c
+Le 16/10/2021 à 08:41, Christophe Leroy a écrit :
+> 
+> 
+> Le 15/10/2021 à 23:32, Kees Cook a écrit :
+>> On Thu, Oct 14, 2021 at 07:50:00AM +0200, Christophe Leroy wrote:
+>>> Behind its location, lkdtm_EXEC_RODATA() executes
+>>> lkdtm_rodata_do_nothing() which is a real function,
+>>> not a copy of do_nothing().
+>>>
+>>> So executes it directly instead of using execute_location().
+>>>
+>>> This is necessary because following patch will fix execute_location()
+>>> to use a copy of the function descriptor of do_nothing() and
+>>> function descriptor of lkdtm_rodata_do_nothing() might be different.
+>>>
+>>> And fix displayed addresses by dereferencing the function descriptors.
+>>>
+>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>
+>> I still don't understand this -- it doesn't look needed at all given the
+>> changes in patch 12. (i.e. everything is using
+>> dereference_function_descriptor() now)
+> 
+> dereference_function_descriptor() only deals with the function address, 
+> not the function TOC.
+> 
+> do_nothing() is a function. It has a function descriptor with a given 
+> address (address of .do_nothing) and a given TOC, say TOC1.
+> 
+> lkdtm_rodata_do_nothing() is another function. It has its own function 
+> descriptor with a given address (address of .lkdtm_rodata_do_nothing) 
+> and a given TOC, say TOC2.
+> 
+> If we use execute_location(), it will copy do_nothing() function 
+> descriptor and change the function address to the address of 
+> lkdtm_rodata_do_nothing(). So it will call lkdtm_rodata_do_nothing() 
+> with TOC1 instead of calling it with TOC2.
+> 
+>>
+>> Can't this patch be dropped?
+> 
+> It is likely that the TOC will be the same for both functions, and 
+> anyway those functions are so simple that they don't use the TOC at all, 
+> so yes it would likely work without this patch but from my point of view 
+> it is incorrect to call one function with the TOC from the descriptor of 
+> another function.
+> 
+> If you thing we can take the risk, then I'm happy to drop the patch and 
+> replace it by
+> 
+>      execute_location(dereference_function_descriptor(lkdtm_rodata_do_nothing), CODE_AS_IS)
+> 
 
-Thank you!
+Once we have patch 12 EXEC_RODATA works well on powerpc without this 
+patch so I will drop this patch for now and will propose something else 
+as a follow-up to my series.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Christophe
