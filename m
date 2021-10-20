@@ -2,484 +2,280 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33947434F12
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Oct 2021 17:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BFA434F9A
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Oct 2021 18:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbhJTPce (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Oct 2021 11:32:34 -0400
-Received: from mail-mw2nam12on2097.outbound.protection.outlook.com ([40.107.244.97]:16352
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        id S230501AbhJTQFd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Oct 2021 12:05:33 -0400
+Received: from mail-mw2nam10on2055.outbound.protection.outlook.com ([40.107.94.55]:51296
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230192AbhJTPcd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 20 Oct 2021 11:32:33 -0400
+        id S229817AbhJTQFb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 20 Oct 2021 12:05:31 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YsElfGfJfJUHfzYe/1Bdj+iczxocvfYHtyIp4YwWC5QVi5Ug8Gq2TNR8v/sXIfDsOsBocj8m+rG4R14QYRfoKI5LPTaDurfR1V42KI+HiRKBODpfZ665+ID/SJIiwI6rFSq+MA5K+ufsEycUfEDsWzWMDTvEZZjIn3/eHXaYGqj7+HdUr3+KCD31FZb5Jlj7nh1Wu8MtvH1D5Jv9ScAgi03JzAlFOCkQpZUGCOdvR8xNaG3bIuem2pqmDUXSCV0w8eHfhapO9zrEUUPE6byC6f+tsjzZYwownZUDvIU24f+DqABM7Srj76yMyBzxZwcExdeWyeD7vxEhg8dkGNvXVQ==
+ b=Pfqx6ns9LbeXBH7ek8M3C2dSZnQLWzaWxS9YymrjUtKpCEB1oHlh//YPewQ4cLDmWaZYduwI0IIc9gp+LYYktx6LUjR6hGbFUgNYVfVVI/FNi0/qtFBF229HKvQmE4LTzSAxG16ldvUyIJfSio9MNwFpfG50S0UfzZ/Srbq1spAXK4bEAXepxSgOhOmAQV6gyyjK98tczdB0kV9bWHa1ZQToRBA5GbSr16h2XrWLHWYBNpfPOI0C6XgORY0q2ibke6VJQt20kOsrpgebPzmBdUS6Tf6EPBwVG8IHCWObkd91HVdv1gZek6xCZVokvY3c6cVSygurCXs37lt8tO1Qbw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/bmfmh5cxTnczRNgaxLufAYBXXS7U/cF7c6c8x+88sg=;
- b=lRFmfJQrQVO6V1X4I8M7Vvblbhp3OCIgaN0xUR5maNoqkhSsHdcXRfL43fh082cLOcEFBrnPkZqFAJoOPKrW0s7sICMIOy3vr0Ffu0sxpobxH4v9FRr+nIS6tgbqDvhSfU7AY88OaOClP0mJENRC5D2P4M73q77XpvghXNJGJKz8v5Oy6uByGRIxR/H8pz76v9VScIxG8b8MUnTZOXY2X+YsgN2Uqu1vZHAu5IZOMkHhm7yTNeZM3DrWYDQ4S4nMCijC5MO2D99jPeC6XTXbz6MlsHeLxr/44hRlw9ABDOiz1OATzONWOLPU7pPVA5q6tSbv2iOFwXhYNIZkmdjFRA==
+ bh=SUtCmAXJnjPw+60UgGY4uROjWBTe4BgjhJ9QXCIV9rE=;
+ b=P2kvW+Ie1YcGtdfCQ4lk+8bQJFYpo1TWymAx9K695HBeyQC0B2+ZtSKE3Edhfq7f4iVsrMdpMdM2Dwi1LO0Az2J5A24UR/kTLeD4SIvn29dBuDI2xTm/mwo45NPd3crE28FIfc0iSbnJOnITP56rRlkA9E1q7CwY8kG8A+tshPjWGLexVFkKXau6Sknp7ZFpLTcTQdx7d/a36vPXKVBGTTbQ6wlEuA/Pt5OssuDWPP/Tck2Fh9Ystn3Ny2Fy2+Vi2IK2xN8Yvh1u/HlRCFwVqcnqkXxkxbO6W/1rGzDcJ7B558wvFzrtdwL7PM1A3t52lMYeY0mr1mUHUG7/tiEXXw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/bmfmh5cxTnczRNgaxLufAYBXXS7U/cF7c6c8x+88sg=;
- b=VzrWecZEx2ZK21iYEG+q1oJDmafEAxF1WKVwwqRj0vvhp288KMqbDluzFRd/5ILVa1rsVf5xXibLJ0w6WMglRgCsn8pZNv4PGhZFsrIH6dnZd1ot0J/wWN9jLta2L4nTbA7j1JubjJbIZ5moSE+UjZUSITNx+ayaQ0nnoe+VmhM=
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
- by MWHPR21MB0862.namprd21.prod.outlook.com (2603:10b6:300:77::16) with
+ bh=SUtCmAXJnjPw+60UgGY4uROjWBTe4BgjhJ9QXCIV9rE=;
+ b=HcntIX1iZOk3VMd85HXB9B+cA54CQNXaf56eZG8gsPfRIKwx5qav4+flJeKSkCujdhwtwetE0IDHNgyHpw+q7YnP5h4/MX+pDQgMskoH9nov0zviSrml6GrtNxbHybJlV7He79QjR33BTctfJQ0VnS9cpDep9P3Ip872DGd2KH8=
+Authentication-Results: lists.linux-foundation.org; dkim=none (message not
+ signed) header.d=none;lists.linux-foundation.org; dmarc=none action=none
+ header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DM4PR12MB5085.namprd12.prod.outlook.com (2603:10b6:5:388::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.4; Wed, 20 Oct
- 2021 15:30:15 +0000
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::240b:d555:8c74:205c]) by MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::240b:d555:8c74:205c%4]) with mapi id 15.20.4649.004; Wed, 20 Oct 2021
- 15:30:15 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>
-Subject: RE: [PATCH v3 2/2] arm64: PCI: hv: Add support for Hyper-V vPCI
-Thread-Topic: [PATCH v3 2/2] arm64: PCI: hv: Add support for Hyper-V vPCI
-Thread-Index: AQHXwRPNGc6MFuj3UEWxVFUe+tFxpavcCqeQ
-Date:   Wed, 20 Oct 2021 15:30:15 +0000
-Message-ID: <MWHPR21MB15930056B36BAF44D5A52619D7BE9@MWHPR21MB1593.namprd21.prod.outlook.com>
-References: <1634226794-9540-1-git-send-email-sunilmut@linux.microsoft.com>
- <1634226794-9540-3-git-send-email-sunilmut@linux.microsoft.com>
-In-Reply-To: <1634226794-9540-3-git-send-email-sunilmut@linux.microsoft.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.17; Wed, 20 Oct
+ 2021 16:03:12 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::a87d:568d:994f:c5f9]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::a87d:568d:994f:c5f9%7]) with mapi id 15.20.4628.016; Wed, 20 Oct 2021
+ 16:03:12 +0000
+Subject: Re: [PATCH v5 04/16] x86/tdx: Make pages shared in ioremap()
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009003711.1390019-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+Message-ID: <8c5074f7-5456-e628-5a09-a3a4b4f381fb@amd.com>
+Date:   Wed, 20 Oct 2021 11:03:07 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+In-Reply-To: <20211009003711.1390019-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=0282d205-c102-46d7-b1c8-6d487a044076;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-10-20T15:23:16Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b7ef42c6-efc6-488d-02b2-08d993de8416
-x-ms-traffictypediagnostic: MWHPR21MB0862:
-x-microsoft-antispam-prvs: <MWHPR21MB086210BDF3749A0E5425377AD7BE9@MWHPR21MB0862.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2Wk65zK5j2Xb3jlqOvSwoqgwPwF3Y0mtdW+ezr8G2yOxavmZ04DUbIhfJqATnn7FfDPO0m8b03/HAxJQJRECvNrBRJ0r4LtQE/6TQULHOpF6DuE7lNTk6noRL4+flEY0oDB/7SUD0QvovQNLid5m2IykUQqeM4CFeV1hU/lEnrEtg2EPPjfTwOC+Prko6Rd/6MRp5+7sc0LmXV42Hh1Q1DpXVTx4TMZovfB/qbIspNJ9Xhj/KXBYYYKFiSG+6BfK+2f6howBeJQ6fTjkroHh1z66Zo+S3GboVR98KG9xOmdSc+TmsYo7u9F2VhcGmF3f7awKXlA868iXrUHdCNxXjRSqrHutwU/oRTYEeA2JA4TiGkOcJJ+Ss6ILFahBpJlh81rE9gMcIJ6Hi+iKJAu/nAQKbVwnKsw7OUnRi9qXYfMrt3mCzyYBV+J4On/OtP/0JKLhqyFCtvL7jAobiyl7xZl2sXgHLTDPY8f0dfcbFhxaG8baNrWs/HGTKgWNcthNWI+44uHf3Ro3SIOxNokFtGciNw2b+DPFsTPBRAjan5tEXim5GEUqYoKUMte2r9PpiibSdAEhrhHe/q2SS/xi46jAz2+RpUYZ8fqSxU+EnPtIe9j3+4pwnlXs+LEo5LgKFyswj2B2orhHDhSeiWTCtjNsK0YTgx4HN8E+8fwpxsQgLVtxai1xVP9G7idBKRLURvvbvk+sIdyek80sbh0i7RsVmZKYvJcANNFS+JWCaSQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(9686003)(122000001)(83380400001)(4326008)(7416002)(107886003)(2906002)(76116006)(8676002)(10290500003)(38100700002)(82960400001)(82950400001)(316002)(55016002)(508600001)(64756008)(66946007)(66446008)(186003)(66556008)(66476007)(52536014)(6506007)(71200400001)(7696005)(26005)(921005)(54906003)(8990500004)(8936002)(33656002)(38070700005)(5660300002)(110136005)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NcjErlzbv908q7t6LbLRdn0XxFbJvCbJgcUI+zb+yP9Ke4M+XqdGDUF5CoG7?=
- =?us-ascii?Q?DBB3SZ6Zaoix+d3dwammuSnjDwe2iUJ9Dpem53U7tYCF/8d9N3zGoygsX1pi?=
- =?us-ascii?Q?ejEtuNBzfE4tMENrCgJavp9IJ2nTArSbyilHPNiPXvl9IJxtsUbCg9wQe8UG?=
- =?us-ascii?Q?2hTDIomE4NBC4WmGbyFB+QajDcbwpg0hkKVCswYJb7fQhCV6PAG2YjXJzkap?=
- =?us-ascii?Q?6UIWrxJxHtyu2cDaGw+VwiCVD81cE8Omm+VXxf+B+xxmUNR+/hJ01iukv2W7?=
- =?us-ascii?Q?o7bVBcnOGwOrgY+OnJQ6OC4qAnWi5ke6wu2rwYTpHVgYfWW76KE7xa8+lmHx?=
- =?us-ascii?Q?VSJMbrj8lnmEb0SGuv39zCkZT/gxcGUyWDzAS7hIqW0fTg6PIAng9fP4UMRN?=
- =?us-ascii?Q?c49TDNAP29ebVb1YjEp5V55B2VgoMavbwmh6CsPL+H+9WwS3d16KfT/XxA8a?=
- =?us-ascii?Q?rsHTLuqfzEOmDUIS41V24G1Vp03WYz2saBiXBR8DeDDfiD5jp3p0rJD9R8Gm?=
- =?us-ascii?Q?1yOmdnaxmMhNNY0TFzBM7TB/mmU9oWxmyBUQy717t+V4a9vzT5wb2fulk4hm?=
- =?us-ascii?Q?zVKjdK2tl6XkAGq4ii54OiEaTCIl5mZf9dUzdAf2JkV7FgcjDnsHvMLY8BaQ?=
- =?us-ascii?Q?ig726/MIXWWUVl4pr5hPt/pOUGo1EPucaODIf01UeW0+hX6ISUE6KzRXt2uv?=
- =?us-ascii?Q?slR8lpt0Sk/jyVvX3hd1Xd8ZXth5+FoTg5grp3cZASt55lK9RYjBldVT7Pgx?=
- =?us-ascii?Q?4gfSmmXtaSrFTvgz4NEDX0JM7PPwmDuqJlBWPttqM1QkupNVqIpenYw69Gcd?=
- =?us-ascii?Q?xf1BbaX3j57Ul/hRUJCLrhLj8u8bSw8GXr3J7NpBz3O5FM0ImsAMMfQF288X?=
- =?us-ascii?Q?5UtBCqriaw81Nz2qgZQAp86i5BXJ+0fr6YRUebPmBIqH78SyRx7YZ5lTPOna?=
- =?us-ascii?Q?q8P62zW5aFLjYSgN870l7F92FBJi++t3Um33vpCSMGCN+iYYyr/XdK5ytWYb?=
- =?us-ascii?Q?ohW2qxccXqBiYwIxpUBooIYuANHK2gudJyHOfhCJg6wN4YKqo32Nt5PZUAdL?=
- =?us-ascii?Q?U9dsuKfrWKDT3nGoLlZai2mfiJ9dKBXMcUTUPyFaNRnAOwmML7z8by3uav6F?=
- =?us-ascii?Q?yjWndD6Uy8dwZ55TyZyx7qLpZwpsQH8KhKS2P5w575anPmDPhytdl3x3hV9Q?=
- =?us-ascii?Q?0kOjYKVfJhzondiblDgqUu7rBzRxO3M1UGaZsygHs4pWQxe2ZdorYplJzs0m?=
- =?us-ascii?Q?9UIezcN7+sKAtiIC2v9Odgcx4Vk7R3KZBRpJBb/Yh/nxOXVwIwrpTnWjH0zQ?=
- =?us-ascii?Q?/6mCjHnW+E4C5L69NYdfhwrekdJbEM+jx20UmW1EU6rLIrbAa3fhS/yEuim5?=
- =?us-ascii?Q?LMRwRkfDTxdUC5gNNr+H8RHAGjt3jAgi9P5QBKlQ28y07gWYUt6BbL63aquE?=
- =?us-ascii?Q?fbSOQgnJAi4pNp71vnDldSvaHUbf1zXb?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1P222CA0005.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c7::10) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
+Received: from [10.236.30.241] (165.204.77.1) by BL1P222CA0005.NAMP222.PROD.OUTLOOK.COM (2603:10b6:208:2c7::10) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.16 via Frontend Transport; Wed, 20 Oct 2021 16:03:09 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5ea36c98-d478-4428-cb26-08d993e31e12
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5085:
+X-Microsoft-Antispam-PRVS: <DM4PR12MB5085943AF6162327962A458FECBE9@DM4PR12MB5085.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0dy27w33vcRk5GnAGDYv02bwTsUGVHO4YmCd458EbMe+Up5GEDuGSNUw4pWo1X2SQwijgT9xk9z/tO+0qK4p7mNQbbv4hdf+FrNBv6ntDI7SGIqdbn0l3QQkKs6fXUuRuASth+0WlhgR9OfuorvIcOA4hN25+U6Ej/U1TLnEpYiaFTVgYUOKCBWXCPR04K4cPxLH9bSp5xpj6fwur8vEtrdOYVH+BsqH6B15hdymUNUJoknG8GGTLXD6nBN15m/Vt/AcjpQuD6PH5jKwda9XWJtajBKwTMAvFcPjDyjfQzMYwzr4Ize60KHdldx626/YjgNfDexgnh0eG+4QMBHRmFLR8TwbtH6wW+31R9nzmEb/MPWtMxUwHKgJ6gE08Icm/E7QK0jeVwX4RnTkVlPtjMSJiFzoXOTc3C1hFcmNiVAShay6eMma5qSoFWF7klrW1CtoMvuIt8NaNaeRrURbGl9kEXG3xluW7qmVIf0KoCKISujEMAwywo/i+jyupJJ7li6tbN5O06YfoJCktP3cm5vPuhY6bt8ym7srXNHafIBZD+9y0jxDK006Xg2shd8wuR7kAYQQQnnS3Bs1mF8N9V5kr3m8YtugRrTdHZ/PA4Q6Ju6hhnYc2siJXCvRqbqBgF4A98LSWZyzQdyEscVtOxl1b8LoDxLrkCT5dmeWJazhM89+C5q9+v+i/sm7vsA8JEu/uYTMgsANNQiqkYYDwQ7OdS6iNcJ5m107zy4MpaSvnDD/xIoVCxPDPqK6VVW+krhcTiCZhvB6VYuYAY42UaBQviCIBdup0sCwUSszByIrhXfJjrr02pFfrCuWChtVXRkxhdnzShwXvpRPUtBPo1NhcjU7ANFXl04odXKsntY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66556008)(66946007)(4326008)(921005)(53546011)(7416002)(26005)(7406005)(2906002)(66476007)(36756003)(508600001)(83380400001)(16576012)(5660300002)(316002)(8676002)(2616005)(31686004)(38100700002)(186003)(86362001)(6486002)(110136005)(54906003)(31696002)(8936002)(956004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UTMrT24yUGJwb0FDSXI0RjhwVjhMc3JQTm1PaUgyS3Z1bkNzSXREMi8yaUgv?=
+ =?utf-8?B?UmZiT0xpNStNUWtSSUZQb0pQTTBvakphWDJqQXRidVl3MWlNdkpFeVo3Rjhy?=
+ =?utf-8?B?SjlYQTNOU0FSL0dVN3l4VW5XN3ZNL3NLWVhKUElFL2FSMlR6UnVEME9lb1Vu?=
+ =?utf-8?B?enRET2k1MDBDZnU5cml2Mk9SdzFyNVFsbnl6aEw1YWhxVTJ6WnViQmlxOUlY?=
+ =?utf-8?B?VmFadU05d3dEYlNNYmljdmxwamdFTHZyTzZVMlV1NGdCeHRPRHNScDNoNlZL?=
+ =?utf-8?B?YmN0TEUwZjVyQWRNNEUwSisrMmdpZmVaUWJhditNTGd5dGdiQnFJVEROTmha?=
+ =?utf-8?B?dUIvL2IxeGs2cTlISEFMSStZZ2RaWmI2bEZKbWwxTDdPaThLeXlvTnF4ZG5p?=
+ =?utf-8?B?RklVa0pCbU5vMk54SmRvU3V2VHJCV2tEYytiNjhmaXFJYm1xMEFsUlVCMmNi?=
+ =?utf-8?B?V3RSTUJja2NUSnoyem9aYUJ1bDJoai9pYmlOejQySmRjZ0MvQUdtRmw0anc3?=
+ =?utf-8?B?OCtWRVcvWGNFQmcvTFdjdElPSk9ScEhZS0lCOHJLd0d2ZG1Vd0g1bzc4ZGRE?=
+ =?utf-8?B?ckxUbFg3TC8vVzlsZnJLdE4wSlZTYXlGVHRDM0Eyb2RVeHFmQitQazJoeFlI?=
+ =?utf-8?B?OVh0RFc1Y3ZiM3g1cGg0bDgvMjZJNDdPaEFiWk9uYmV1WkpyakYrTlBxdjlP?=
+ =?utf-8?B?THRQd21yOHBZdzhTL1N0dHRubnZQZWhFcFBRZGZROE9IQ2tNNzgzNzJZZzgr?=
+ =?utf-8?B?eWdNRTE2bEw0V2VWcnVoeDZHR1BVQWI5am5lcjQyR2FEQzRXeG41cHJQZ1V6?=
+ =?utf-8?B?NzlaaERvQTZLWGU5aE5Sc0h3VGY4Q0dQZStaVkl2MVYwS25tR0pGR3NCQnN6?=
+ =?utf-8?B?ZlIvRFdyMmRwcFdiZURjVXBFclZPdkVNVUFobmpqNjZ5M2FIN0F4Q2trbUs1?=
+ =?utf-8?B?elBwQUJ2dzJYSDdTdnJRZHA0UHcrWGhybGNtOG5ZZ0VPMUFzcy8xcU85YzNY?=
+ =?utf-8?B?NEZydXRUMzlUWlhPNStnbC96dDc1T2dwL2p3UFJram53cDlXSXZoUExZNVZM?=
+ =?utf-8?B?MENtaTFYelJZOFNiLzErZ2xZbkpnelJYNlVRZkhQNGdkbmRJSUxIVTVKZFRQ?=
+ =?utf-8?B?bHQzVGNmZEZnTWNyWHZEZHVwV2NGV3BNYjR5d0hDQlVXQW93Kzl6ZkJRSUxa?=
+ =?utf-8?B?UmZMV3RwSDVUaHFJSlBPR1lZY3hEK3ZhUVMybVBMQVJ6T3NpdlhPM2hCelJL?=
+ =?utf-8?B?cENDMVhvMERrSk9kQVRmSVU2M1hmeXAyWklOaFVOekFpOHI4VHJzRDdKV2ll?=
+ =?utf-8?B?UVcySFhtWnRuWGRTRGFsek9ZZTNGSkZNUG5yV0IyRnBRTWYvVzFtZDhWNElM?=
+ =?utf-8?B?WVkxOTR2NUtIVnkzUnVvYW5qZUQ4OTdWN2FZbWNiMm4wZUNhcmlra3ZDbUVQ?=
+ =?utf-8?B?eDJOVFgrSmtURmc0bE1UUHdoakt6Q0ZrT0I3TFZHQ0NPaXVBdFFjdXUzbnZB?=
+ =?utf-8?B?ZkFQNDFhVmZRN3duY0Y1MWYvbGU3dVRVOVljTFQwRGVHWU9uME9RVUFBL1hu?=
+ =?utf-8?B?L08rMFVxdE0yRW9OR09QcExCeWF0V1JQOU9ySjJjeVhxT0NTVmhqcEtJOFNR?=
+ =?utf-8?B?K2tvRVd6TUI1UXEzSmNNMWo2cUd2dGJMZHF6TFlBTk5KSnZ1RWpvcHdzdjB2?=
+ =?utf-8?B?S2hMb1g4cWZaaVdEeitoSDVoRjFMS0htT2xiUUpEUmYvYTFWZ0lWZnNxdHpj?=
+ =?utf-8?Q?NE7R8of7e+QKEoP2ByfT1wNgNMeHHODqzKL5iMv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ea36c98-d478-4428-cb26-08d993e31e12
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7ef42c6-efc6-488d-02b2-08d993de8416
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2021 15:30:15.6464
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2021 16:03:12.7723
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mikelley@ntdev.microsoft.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR21MB0862
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tlendack@amd.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5085
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Sunil Muthuswamy <sunilmut@linux.microsoft.com> Sent: Thursday, Octob=
-er 14, 2021 8:53 AM
->=20
-> Add support for Hyper-V vPCI for ARM64 by implementing the arch specific
-> interfaces. Introduce an IRQ domain and chip specific to Hyper-v vPCI tha=
-t
-> is based on SPIs. The IRQ domain parents itself to the arch GIC IRQ domai=
-n
-> for basic vector management.
->=20
-> Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+On 10/8/21 7:36 PM, Kuppuswamy Sathyanarayanan wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> 
+> All ioremap()ed pages that are not backed by normal memory (NONE or
+> RESERVED) have to be mapped as shared.
+> 
+> Reuse the infrastructure from AMD SEV code.
+> 
+> Note that DMA code doesn't use ioremap() to convert memory to shared as
+> DMA buffers backed by normal memory. DMA code make buffer shared with
+> set_memory_decrypted().
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 > ---
-> In v2 & v3:
->  Changes are described in the cover letter.
->=20
->  arch/arm64/include/asm/hyperv-tlfs.h        |   9 +
->  drivers/pci/Kconfig                         |   2 +-
->  drivers/pci/controller/Kconfig              |   2 +-
->  drivers/pci/controller/pci-hyperv-irqchip.c | 210 ++++++++++++++++++++
->  drivers/pci/controller/pci-hyperv.c         |   6 +
->  5 files changed, 227 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/arm64/include/asm/hyperv-tlfs.h b/arch/arm64/include/as=
-m/hyperv-tlfs.h
-> index 4d964a7f02ee..bc6c7ac934a1 100644
-> --- a/arch/arm64/include/asm/hyperv-tlfs.h
-> +++ b/arch/arm64/include/asm/hyperv-tlfs.h
-> @@ -64,6 +64,15 @@
->  #define HV_REGISTER_STIMER0_CONFIG	0x000B0000
->  #define HV_REGISTER_STIMER0_COUNT	0x000B0001
->=20
-> +union hv_msi_entry {
-> +	u64 as_uint64[2];
-> +	struct {
-> +		u64 address;
-> +		u32 data;
-> +		u32 reserved;
-> +	} __packed;
-> +};
-> +
->  #include <asm-generic/hyperv-tlfs.h>
->=20
->  #endif
-> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-> index 0c473d75e625..36dc94407510 100644
-> --- a/drivers/pci/Kconfig
-> +++ b/drivers/pci/Kconfig
-> @@ -184,7 +184,7 @@ config PCI_LABEL
->=20
->  config PCI_HYPERV
->  	tristate "Hyper-V PCI Frontend"
-> -	depends on X86_64 && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && SYSFS
-> +	depends on (X86_64 || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN=
- && SYSFS
->  	select PCI_HYPERV_INTERFACE
->  	help
->  	  The PCI device frontend driver allows the kernel to import arbitrary
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kcon=
-fig
-> index 326f7d13024f..15271f8a0dd1 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -280,7 +280,7 @@ config PCIE_BRCMSTB
->=20
->  config PCI_HYPERV_INTERFACE
->  	tristate "Hyper-V PCI Interface"
-> -	depends on X86 && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && X86_64
-> +	depends on (X86_64 || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN
->  	help
->  	  The Hyper-V PCI Interface is a helper driver allows other drivers to
->  	  have a common interface with the Hyper-V PCI frontend driver.
-> diff --git a/drivers/pci/controller/pci-hyperv-irqchip.c b/drivers/pci/co=
-ntroller/pci-hyperv-irqchip.c
-> index 36fa862f8bc5..ccecd14b6601 100644
-> --- a/drivers/pci/controller/pci-hyperv-irqchip.c
-> +++ b/drivers/pci/controller/pci-hyperv-irqchip.c
-> @@ -52,6 +52,216 @@ int hv_msi_prepare(struct irq_domain *domain, struct =
-device *dev,
->  }
->  EXPORT_SYMBOL(hv_msi_prepare);
->=20
-> +#elif CONFIG_ARM64
+> 
+> Changes since v4:
+>   * Renamed "protected_guest" to "cc_guest".
+>   * Replaced use of prot_guest_has() with cc_guest_has()
+>   * Modified the patch to adapt to latest version cc_guest_has()
+>     changes.
+> 
+> Changes since v3:
+>   * Rebased on top of Tom Lendacky's protected guest
+>     changes (https://lore.kernel.org/patchwork/cover/1468760/)
+> 
+> Changes since v1:
+>   * Fixed format issues in commit log.
+> 
+>   arch/x86/include/asm/pgtable.h |  4 ++++
+>   arch/x86/mm/ioremap.c          |  8 ++++++--
+>   include/linux/cc_platform.h    | 13 +++++++++++++
+>   3 files changed, 23 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index 448cd01eb3ec..ecefccbdf2e3 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -21,6 +21,10 @@
+>   #define pgprot_encrypted(prot)	__pgprot(__sme_set(pgprot_val(prot)))
+>   #define pgprot_decrypted(prot)	__pgprot(__sme_clr(pgprot_val(prot)))
+>   
+> +/* Make the page accesable by VMM for confidential guests */
+> +#define pgprot_cc_guest(prot) __pgprot(pgprot_val(prot) |	\
+> +					      tdx_shared_mask())
 
-This should be
+So this is only for TDX guests, so maybe a name that is less generic.
 
-#elif defined(CONFIG_ARM64)
+Alternatively, you could create pgprot_private()/pgprot_shared() functions 
+that check for SME/SEV or TDX and do the proper thing.
+
+Then you can redefine pgprot_encrypted()/pgprot_decrypted() to the new 
+functions?
 
 > +
-> +/*
-> + * SPI vectors to use for vPCI; arch SPIs range is [32, 1019], but leavi=
-ng a bit
-> + * of room at the start to allow for SPIs to be specified through ACPI a=
-nd
-> + * starting with a power of two to satisfy power of 2 multi-MSI requirem=
-ent.
-> + */
-> +#define HV_PCI_MSI_SPI_START	64
-> +#define HV_PCI_MSI_SPI_NR	(1020 - HV_PCI_MSI_SPI_START)
-> +
-> +struct hv_pci_chip_data {
-> +	DECLARE_BITMAP(spi_map, HV_PCI_MSI_SPI_NR);
-> +	struct mutex	map_lock;
-> +};
-> +
-> +/* Hyper-V vPCI MSI GIC IRQ domain */
-> +static struct irq_domain *hv_msi_gic_irq_domain;
-> +
-> +/* Hyper-V PCI MSI IRQ chip */
-> +static struct irq_chip hv_msi_irq_chip =3D {
-> +	.name =3D "MSI",
-> +	.irq_set_affinity =3D irq_chip_set_affinity_parent,
-> +	.irq_eoi =3D irq_chip_eoi_parent,
-> +	.irq_mask =3D irq_chip_mask_parent,
-> +	.irq_unmask =3D irq_chip_unmask_parent
-> +};
-> +
-> +unsigned int hv_msi_get_int_vector(struct irq_data *irqd)
-> +{
-> +	irqd =3D irq_domain_get_irq_data(hv_msi_gic_irq_domain, irqd->irq);
-> +
-> +	return irqd->hwirq;
-> +}
-> +EXPORT_SYMBOL(hv_msi_get_int_vector);
-> +
-> +void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
-> +				struct msi_desc *msi_desc)
-> +{
-> +	msi_entry->address =3D ((u64)msi_desc->msg.address_hi << 32) |
-> +			      msi_desc->msg.address_lo;
-> +	msi_entry->data =3D msi_desc->msg.data;
-> +}
-> +EXPORT_SYMBOL(hv_set_msi_entry_from_desc);
-> +
-> +int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
-> +		   int nvec, msi_alloc_info_t *info)
-> +{
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(hv_msi_prepare);
-> +
-> +static void hv_pci_vec_irq_domain_free(struct irq_domain *domain,
-> +				       unsigned int virq, unsigned int nr_irqs)
-> +{
-> +	struct hv_pci_chip_data *chip_data =3D domain->host_data;
-> +	struct irq_data *irqd =3D irq_domain_get_irq_data(domain, virq);
-> +	int first =3D irqd->hwirq - HV_PCI_MSI_SPI_START;
-> +
-> +	mutex_lock(&chip_data->map_lock);
-> +	bitmap_release_region(chip_data->spi_map,
-> +			      first,
-> +			      get_count_order(nr_irqs));
-> +	mutex_unlock(&chip_data->map_lock);
-> +	irq_domain_reset_irq_data(irqd);
-> +	irq_domain_free_irqs_parent(domain, virq, nr_irqs);
-> +}
-> +
-> +static int hv_pci_vec_alloc_device_irq(struct irq_domain *domain,
-> +				       unsigned int nr_irqs,
-> +				       irq_hw_number_t *hwirq)
-> +{
-> +	struct hv_pci_chip_data *chip_data =3D domain->host_data;
-> +	unsigned int index;
-> +
-> +	/* Find and allocate region from the SPI bitmap */
-> +	mutex_lock(&chip_data->map_lock);
-> +	index =3D bitmap_find_free_region(chip_data->spi_map,
-> +					HV_PCI_MSI_SPI_NR,
-> +					get_count_order(nr_irqs));
-> +	mutex_unlock(&chip_data->map_lock);
-> +	if (index < 0)
-> +		return -ENOSPC;
-> +
-> +	*hwirq =3D index + HV_PCI_MSI_SPI_START;
-> +
-> +	return 0;
-> +}
-> +
-> +static int hv_pci_vec_irq_gic_domain_alloc(struct irq_domain *domain,
-> +					   unsigned int virq,
-> +					   irq_hw_number_t hwirq)
-> +{
-> +	struct irq_fwspec fwspec;
-> +
-> +	fwspec.fwnode =3D domain->parent->fwnode;
-> +	fwspec.param_count =3D 2;
-> +	fwspec.param[0] =3D hwirq;
-> +	fwspec.param[1] =3D IRQ_TYPE_EDGE_RISING;
-> +
-> +	return irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
-> +}
-> +
-> +static int hv_pci_vec_irq_domain_alloc(struct irq_domain *domain,
-> +				       unsigned int virq, unsigned int nr_irqs,
-> +				       void *args)
-> +{
-> +	irq_hw_number_t hwirq;
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	ret =3D hv_pci_vec_alloc_device_irq(domain, nr_irqs, &hwirq);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i =3D 0; i < nr_irqs; i++) {
-> +		ret =3D hv_pci_vec_irq_gic_domain_alloc(domain, virq + i,
-> +						      hwirq + i);
-> +		if (ret)
-> +			goto free_irq;
-> +
-> +		ret =3D irq_domain_set_hwirq_and_chip(domain, virq + i,
-> +						    hwirq + i, &hv_msi_irq_chip,
-> +						    domain->host_data);
-> +		if (ret)
-> +			goto free_irq;
-> +
-> +		pr_debug("pID:%d vID:%u\n", (int)(hwirq + i), virq + i);
-> +	}
-> +
-> +	return 0;
-> +
-> +free_irq:
-> +	hv_pci_vec_irq_domain_free(domain, virq, nr_irqs);
-> +
-> +	return ret;
-> +}
-> +
-> +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
-> +					  struct irq_data *irqd, bool reserve)
-> +{
-> +	/* All available online CPUs are available for targeting */
-> +	irq_data_update_effective_affinity(irqd, cpu_online_mask);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct irq_domain_ops hv_pci_domain_ops =3D {
-> +	.alloc	=3D hv_pci_vec_irq_domain_alloc,
-> +	.free	=3D hv_pci_vec_irq_domain_free,
-> +	.activate =3D hv_pci_vec_irq_domain_activate,
-> +};
-> +
-> +int hv_pci_irqchip_init(struct irq_domain **parent_domain,
-> +			bool *fasteoi_handler,
-> +			u8 *delivery_mode)
-> +{
-> +	static struct hv_pci_chip_data *chip_data;
-> +	struct fwnode_handle *fn =3D NULL;
-> +	int ret =3D -ENOMEM;
-> +
-> +	chip_data =3D kzalloc(sizeof(*chip_data), GFP_KERNEL);
-> +	if (!chip_data)
-> +		return ret;
-> +
-> +	mutex_init(&chip_data->map_lock);
-> +	fn =3D irq_domain_alloc_named_fwnode("Hyper-V ARM64 vPCI");
-> +	if (!fn)
-> +		goto free_chip;
-> +
-> +	hv_msi_gic_irq_domain =3D acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_N=
-R,
-> +							  fn, &hv_pci_domain_ops,
-> +							  chip_data);
-> +
-> +	if (!hv_msi_gic_irq_domain) {
-> +		pr_err("Failed to create Hyper-V ARMV vPCI MSI IRQ domain\n");
-> +		goto free_chip;
-> +	}
-> +
-> +	*parent_domain =3D hv_msi_gic_irq_domain;
-> +	*fasteoi_handler =3D true;
-> +
-> +	/* Delivery mode: Fixed */
-> +	*delivery_mode =3D 0;
-> +
-> +	return 0;
-> +
-> +free_chip:
-> +	kfree(chip_data);
-> +	if (fn)
-> +		irq_domain_free_fwnode(fn);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(hv_pci_irqchip_init);
-> +
-> +void hv_pci_irqchip_free(void)
-> +{
-> +	static struct hv_pci_chip_data *chip_data;
-> +
-> +	if (!hv_msi_gic_irq_domain)
-> +		return;
-> +
-> +	/* Host data cannot be null if the domain was created successfully */
-> +	chip_data =3D hv_msi_gic_irq_domain->host_data;
-> +	irq_domain_remove(hv_msi_gic_irq_domain);
-> +	hv_msi_gic_irq_domain =3D NULL;
-> +	kfree(chip_data);
-> +}
-> +EXPORT_SYMBOL(hv_pci_irqchip_free);
-> +
->  #endif
+>   #ifndef __ASSEMBLY__
+>   #include <asm/x86_init.h>
+>   #include <asm/pkru.h>
+> diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
+> index 026031b3b782..83daa3f8f39c 100644
+> --- a/arch/x86/mm/ioremap.c
+> +++ b/arch/x86/mm/ioremap.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/cc_platform.h>
+>   #include <linux/efi.h>
+>   #include <linux/pgtable.h>
+> +#include <linux/cc_platform.h>
+>   
+>   #include <asm/set_memory.h>
+>   #include <asm/e820/api.h>
+> @@ -26,6 +27,7 @@
+>   #include <asm/pgalloc.h>
+>   #include <asm/memtype.h>
+>   #include <asm/setup.h>
+> +#include <asm/tdx.h>
+>   
+>   #include "physaddr.h"
+>   
+> @@ -87,8 +89,8 @@ static unsigned int __ioremap_check_ram(struct resource *res)
+>   }
+>   
+>   /*
+> - * In a SEV guest, NONE and RESERVED should not be mapped encrypted because
+> - * there the whole memory is already encrypted.
+> + * In a SEV or TDX guest, NONE and RESERVED should not be mapped encrypted (or
+> + * private in TDX case) because there the whole memory is already encrypted.
+>    */
+>   static unsigned int __ioremap_check_encrypted(struct resource *res)
+>   {
+> @@ -246,6 +248,8 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
+>   	prot = PAGE_KERNEL_IO;
+>   	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
+>   		prot = pgprot_encrypted(prot);
+> +	else if (cc_platform_has(CC_ATTR_GUEST_SHARED_MAPPING_INIT))
+> +		prot = pgprot_cc_guest(prot);
 
-Particularly for a large number of lines under an #ifdef, it's customary to=
- add
-a comment to clarify what test the #endif is closing.  So:
+And if you do the new functions this could be:
 
-#endif /* CONFIG_ARM64 */
+	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
+		prot = pgprot_private(prot);
+	else
+		prot = pgprot_shared(prot);
 
->=20
->  MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller=
-/pci-hyperv.c
-> index 2d3916206986..a77d0eaedac3 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -44,6 +44,7 @@
->  #include <linux/delay.h>
->  #include <linux/semaphore.h>
->  #include <linux/irq.h>
-> +#include <linux/irqdomain.h>
->  #include <linux/msi.h>
->  #include <linux/hyperv.h>
->  #include <linux/refcount.h>
-> @@ -1204,6 +1205,8 @@ static int hv_set_affinity(struct irq_data *data, c=
-onst struct cpumask *dest,
->  static void hv_irq_mask(struct irq_data *data)
->  {
->  	pci_msi_mask_irq(data);
-> +	if (data->parent_data->chip->irq_mask)
-> +		irq_chip_mask_parent(data);
->  }
->=20
->  /**
-> @@ -1321,6 +1324,8 @@ static void hv_irq_unmask(struct irq_data *data)
->  		dev_err(&hbus->hdev->device,
->  			"%s() failed: %#llx", __func__, res);
->=20
-> +	if (data->parent_data->chip->irq_unmask)
-> +		irq_chip_unmask_parent(data);
->  	pci_msi_unmask_irq(data);
->  }
->=20
-> @@ -1597,6 +1602,7 @@ static struct irq_chip hv_msi_irq_chip =3D {
->  	.irq_compose_msi_msg	=3D hv_compose_msi_msg,
->  	.irq_set_affinity	=3D hv_set_affinity,
->  	.irq_ack		=3D irq_chip_ack_parent,
-> +	.irq_eoi		=3D irq_chip_eoi_parent,
->  	.irq_mask		=3D hv_irq_mask,
->  	.irq_unmask		=3D hv_irq_unmask,
->  };
-> --
-> 2.25.1
+Thanks,
+Tom
 
-Modulo the minor #elif and #endif comments above, and the fact that I have
-limited expertise in IRQ domain hierarchies,
-
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+>   
+>   	switch (pcm) {
+>   	case _PAGE_CACHE_MODE_UC:
+> diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
+> index 7728574d7783..edb1d7a2f6af 100644
+> --- a/include/linux/cc_platform.h
+> +++ b/include/linux/cc_platform.h
+> @@ -81,6 +81,19 @@ enum cc_attr {
+>   	 * Examples include TDX Guest.
+>   	 */
+>   	CC_ATTR_GUEST_UNROLL_STRING_IO,
+> +
+> +	/**
+> +	 * @CC_ATTR_GUEST_SHARED_MAPPING_INIT: IO Remapped memory is marked
+> +	 *				       as shared.
+> +	 *
+> +	 * The platform/OS is running as a guest/virtual machine and
+> +	 * initializes all IO remapped memory as shared.
+> +	 *
+> +	 * Examples include TDX Guest (SEV marks all pages as shared by default
+> +	 * so this feature cannot be enabled for it).
+> +	 */
+> +	CC_ATTR_GUEST_SHARED_MAPPING_INIT,
+> +
+>   };
+>   
+>   #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+> 
