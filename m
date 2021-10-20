@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD3743502E
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Oct 2021 18:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAFA43505B
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Oct 2021 18:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbhJTQfi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Oct 2021 12:35:38 -0400
-Received: from mail-co1nam11on2061.outbound.protection.outlook.com ([40.107.220.61]:33312
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        id S230282AbhJTQlZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Oct 2021 12:41:25 -0400
+Received: from mail-bn7nam10on2040.outbound.protection.outlook.com ([40.107.92.40]:54657
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229817AbhJTQff (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 20 Oct 2021 12:35:35 -0400
+        id S230049AbhJTQlY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 20 Oct 2021 12:41:24 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cbVoSV0r8GDgdInozEEEMh76pEfAZ6yXQIFL43B9i7IgSIxyHWsCw+7bzbeIA11TB/wy1QLGefptoUNDAhb/ipaflZJTkIoubfScQGdLMKIM2kG5cbZnZFmmAUj6+dewJe22oY9aQo3Hp1oMuDKAUnV0lcs28om3OipjLEM2aynn9u3Wg5rySbucszVhxbVKHplX2pdTIaaCSFSO8dLJwHfoGgRufWh3v8TjAuPhqYKuaWUeP2+zQjap4Ix242SmT8PIFmwIYIpzKu8KFrsh6uL98fD6qr+kwF185LZIgjQOULG7e1f/xv2Shzee0/D8cfR4Xtbz5fVAcl5w8H8H1w==
+ b=CY6rzaFImNEYsybf5FNu8+QSQJSu4lL4yXVvSOkY9E1oDl8Vo1yh85VsWf83U0tbJ6eKhaf1zIZ6oSE1PFzdrY2yvBjPD/8d4LA6O423cKV9SUlPqwmgpCCT+YfOJA/F7ginlKojzNdRAky0a8o1IG8orotP5olQqNugqXapnYNJtMyuE3puciiNktPZHrFjEiDU3BEEgbRGdzGkfTVfWuOPO8yt1LB0mrsQJNFx32M9dS5AMBjLxhHk9u83aA6L+58cduLxMme4rWL1T2QxplbOiVnzW2bIvV/tLX7cvXs3O7LEDQkzLsDPXcMPvJ1QjDbabGeZF2+9n1ghrl6uxg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=le6PRjWVcNiZAv9Pe+YpzbK8xwwzgS0gBiPn3/Norso=;
- b=jqm66lEcG3tZcPs0TX6nf8pgJOjFBxg32KrlUhCGcUTxO9BjjgWgw7+4gXaaiGpfxdE9pnEjAIwe6ycjBUBhs+7FOJhty9PWB/mlqHtyVlstay08jG/AhFE98wgH+luQkddrB4Bqn7IkiMhiIGO5SQ4TjNl2MUHS75bD1831Ohal6UZ88N/9iETNjSpzvrpkOJCp5IGPNDFqKZaiAmAJnpNWtPAL8jP1pfTEkeSzj9SkjMP5jVBNqh7STBbs/F3sL2hMKBeocLBlfP2I3gcPwPPorUxB9WA9ztldbVhNrW2aEUQGFuS7jABVjR74udu+O0oGHVuqq/hv/KEM7COvFg==
+ bh=+r3FkA3+7/zIwxnpuEC09EorlnRS8FrHv5y1Pz5np4Q=;
+ b=cbCOI7rBvWpjFVla1LQ4sc/LrL/JLGmq3srf8kv4AdUFkm2Wnq91P7G8pL+PnP1rYBcLPh4VL2sbf20tuJOPzt3lHF3jnYKv8QlHVaJFi/q9fm1c0ae+MwvKP1i1uV8C+urfXr8mAJfu2VcnMj6tyHEPQ8o9+Q8EfW6jXuUSehFT8sTxzO6R8EyRt9hbEC2XkwdVA5CkGSTj37mmGIuqGQ8B7yZnwX0h+WZ84cwrpuMe21LnK+t0Mlb9hXCR8SneuRC8qG9w3MfvUtupXKbrPoWTBEfDu++dB+LgovBjuUj8H+J54nKqe3geDt0cEy+Ue7ipimqjNDiHZJlu7LBrlg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=le6PRjWVcNiZAv9Pe+YpzbK8xwwzgS0gBiPn3/Norso=;
- b=0Rhiw6/1NIcZi2e+wprcsE2gSatZNrHjh0j2ZnQmV877dL8kgEEDViIdtNKKg9B7vRlPCPS3U1qx6r/emBIDNMMUDtTSJWJu7wtKKEj5wwzb+fI7VjQFA6fDJyKkkaGHt8NydP9hwKNIylWtaCq7DiBouz1EfGF1hOMIsS1dVAA=
+ bh=+r3FkA3+7/zIwxnpuEC09EorlnRS8FrHv5y1Pz5np4Q=;
+ b=Lyzxh837H53C/AWKoOofcyVhJY6d2JIVssqeAOdO4lZEMRulJw1aNUJExOJ3cpSqhMi6UoazwwN6k1asctAm5oBY+ychm5WfFKjpqKmeKjLMgqSDE/vPk1tTOa+5S/Lv29IQ6G9rx7b8xKV/ZjNBidcziXcQzZdg9L6XMIz7agQ=
 Authentication-Results: lists.linux-foundation.org; dkim=none (message not
  signed) header.d=none;lists.linux-foundation.org; dmarc=none action=none
  header.from=amd.com;
 Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by DM4PR12MB5391.namprd12.prod.outlook.com (2603:10b6:5:39a::14) with
+ by DM4PR12MB5118.namprd12.prod.outlook.com (2603:10b6:5:391::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16; Wed, 20 Oct
- 2021 16:33:16 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.16; Wed, 20 Oct
+ 2021 16:39:05 +0000
 Received: from DM4PR12MB5229.namprd12.prod.outlook.com
  ([fe80::a87d:568d:994f:c5f9]) by DM4PR12MB5229.namprd12.prod.outlook.com
  ([fe80::a87d:568d:994f:c5f9%7]) with mapi id 15.20.4628.016; Wed, 20 Oct 2021
- 16:33:16 +0000
-Subject: Re: [PATCH v5 06/16] x86/tdx: Make DMA pages shared
+ 16:39:05 +0000
+Subject: Re: [PATCH v5 07/16] x86/kvm: Use bounce buffers for TD guest
 To:     Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -72,76 +72,73 @@ Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
         linux-doc@vger.kernel.org,
         virtualization@lists.linux-foundation.org
 References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009003711.1390019-7-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009003711.1390019-8-sathyanarayanan.kuppuswamy@linux.intel.com>
 From:   Tom Lendacky <thomas.lendacky@amd.com>
-Message-ID: <654455db-a605-5069-d652-fe822ae066b0@amd.com>
-Date:   Wed, 20 Oct 2021 11:33:12 -0500
+Message-ID: <42f17b60-9bd4-a8bc-5164-d960e54cd30b@amd.com>
+Date:   Wed, 20 Oct 2021 11:39:01 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
-In-Reply-To: <20211009003711.1390019-7-sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20211009003711.1390019-8-sathyanarayanan.kuppuswamy@linux.intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH0PR04CA0049.namprd04.prod.outlook.com
- (2603:10b6:610:77::24) To DM4PR12MB5229.namprd12.prod.outlook.com
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR20CA0010.namprd20.prod.outlook.com
+ (2603:10b6:208:e8::23) To DM4PR12MB5229.namprd12.prod.outlook.com
  (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Received: from [10.236.30.241] (165.204.77.1) by CH0PR04CA0049.namprd04.prod.outlook.com (2603:10b6:610:77::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.16 via Frontend Transport; Wed, 20 Oct 2021 16:33:13 +0000
+Received: from [10.236.30.241] (165.204.77.1) by MN2PR20CA0010.namprd20.prod.outlook.com (2603:10b6:208:e8::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16 via Frontend Transport; Wed, 20 Oct 2021 16:39:02 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 01b379fa-a0f5-41db-c9b6-08d993e75144
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5391:
-X-Microsoft-Antispam-PRVS: <DM4PR12MB539102C1498A742989959C0DECBE9@DM4PR12MB5391.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
+X-MS-Office365-Filtering-Correlation-Id: 099ea61d-b18f-4f31-07c0-08d993e8216f
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5118:
+X-Microsoft-Antispam-PRVS: <DM4PR12MB51182B348FE1553219696CF3ECBE9@DM4PR12MB5118.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /gMnQeN560BInQlUElAMbGPjgxuk3S6Ir8HDe22dyly5TXuQ1pn9S9RnXdOMWq3oVuTOvsaTTyA/T/Y+lB+SSq6ozlwafUMMoj6IEBWT+yex5GV8vmV285DPdlN2Z1aGxIIVzrnSaxtISkMio3yXkNBMprgigi+JaQipURaPNSlZDvgrf5s2JTM3cT+bG4MoO4RBUKpL4cWt/krmWfVHjdcu4dHIjh8UohXeGi9wLqHdeCuHg3wgEam+bJvD34Bw9KGMY7TTxxbJdxVIy8Q9ikBbnNWrlyNWwWDOJ8n5kB/W+lrQPXiFzmXzN09D+357PyS12vvHm9P+o1mGTpuAosTfFImWxiSzMdspGY1qDP/ADgkWlZX7NNurD8x7VdMqIxAyZrmeaWMdIOtcS5pcZS7xYhXH77heCj3MCC7lEwNDaafoyPHwXFtWgXTMAeNcPnHQSa/6bJnBSl4Tu4LjGUNMY14MQhaSsKwKCQjQGXCdvX+lXQN35mnI5pfruWFCAIbdZvP+FVoKEUM8ZahCBLAdfNn+jYVl0j+3pZKcIxbjphYxDeqUpHTPKgWK1vxLdaokUibEkChiSNrD5pu1Rdbn1Zbyan9k5Cik7hGG2ZgazP4cBjXrnZY5owgCQbk4OoXck6UdABZqOrfM+Yabe3gRD4T5ZYLape9X1PhjjY2+tldA0qUIeemd3jhA8pRs8VOirk+ldxxNKDTrDVMckc0UCLfoJ/75VIy9/k5UMmC1AEF/KugcsGrQexbJuLcRLg8AcHdQ3HNl5aaCkvi4x4RubollOHoZWbiLJUETnEBvOnSL/hguFtEomazqjR19Pt0HWFewU/SNXpArnnMRHwRlBn1xXFB0L1C3PGF4Ot4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(45080400002)(66476007)(86362001)(110136005)(53546011)(7406005)(26005)(316002)(2906002)(7416002)(16576012)(36756003)(31696002)(66946007)(921005)(186003)(54906003)(83380400001)(4326008)(508600001)(8936002)(8676002)(966005)(6486002)(31686004)(5660300002)(38100700002)(2616005)(956004)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: YnMaLp0nknk0GXDUemdk5qBXyq6HF6Gx3vh9eZi6i4PRDryuIQ1FPZrANQ9K/nTHuqxd83NdZRxKg6aBmXjsmVfy0y7eO8Mw4CzFizhvryEF0C0t9Xyp3VnjGBrsCkQiPubuuT1T75nsAXVfu7o7ora0oKrcNG/58lON0xDasbDG6F6NBb0FGrDJLXhzeJzNoir99GTqHvtW62Mq3P28JyjxosiQy6mT0AlH3FUO+lzyjfcQw956WbWAG/c2XFiUEnMI0fGQkYQCNzTWIR8AZlVtKQPeZNQYmJ5mMXmHqz96qhhCQFGDZvT4AV6k7i2JsPV9VS2azQFOCoiX/ZuUrVS0PNIeb7rMoGKykOFghE5CpV+Sya4LKNI83kiraEFzSoCTRSjJM3BgGkuZtB69CvA3qFX3TZ/q8KEAslm0IOmE6ZQc2SqS1oNxI07PjpGrBgqx0kNuj5gE4szYRyXcZL+2YAiw0F5iFspedqoWEx0s2L8kKMPdQgrXedHPb8rPSIuf1e3ytjiq/FFqb9/dv4W98POEePDP/CNlt5TDqWhIdC0RBVF9YuJ4bDldyx4K0pc5zfi6y2wGhkskFieJNbAesZJaBl6rEjHjXIZgh6JMCEqfoIIp7zT4zIChB8RrJX8NNSZLdPtis6OB577F0meARnyVgExezk7C+Aj+TXv9qNZWQwrotl+xu0GLsDiIxY3NY3ybfhmSIsNLDjbBko4VRlNCOqVa72JvI66UM7lLUtz1bCC0uDJLMKP8j+Q2/aCXi3TzRw32Pxk6WZQhnzf7vB0wXk3sjUFmSfJXdsz+2znIZdq2SvJzruYWiOzz/I9ai0BrHRF6qmR1scUpLY2IZscLQPAjPBy+KzU3Lzs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(31686004)(8936002)(86362001)(921005)(6486002)(26005)(38100700002)(186003)(2906002)(53546011)(4326008)(54906003)(110136005)(8676002)(508600001)(7406005)(7416002)(16576012)(316002)(2616005)(956004)(66946007)(31696002)(36756003)(83380400001)(66476007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Njd5eXIwME5tenhxaTlTNUlDRVI4ckw5Mmkvakwrb2pZUFFTV29tR3cyMUp6?=
- =?utf-8?B?SlFlOHpvOW9XN1JMcGhrLytJODQvQ2ZPalBzU3ptTnRYL3VOaXRQL1gvcEsx?=
- =?utf-8?B?YUlETjJLZ1ZHRWhhNTVxTWdMMWc2MURVdUVEWi9MbGNQMjY2bFIyVXBpVVJU?=
- =?utf-8?B?b0pEK1NnNnNMR3RmaEFqdmRwK0dsNVI5dHBNWGpIWVFTcDVacUpDcjhMRDg0?=
- =?utf-8?B?L0ROY1ZvSUpzbHlwRlhYZytsOC9wdHY3MFFIL2d6SS90MzgzZ3MrMUhBOTUz?=
- =?utf-8?B?Zkp6ZE9IakI5c2g3M0pyTENHTzhrb0V6bjNWU2h4MmU5QmFnQUQydFVZamNu?=
- =?utf-8?B?bVQ2ckpvTlI5aGxWYUVQb3pZL2d3NXg2YTZwRnMzaGJJNUJldlFrZFVHYkZ0?=
- =?utf-8?B?YVZwWGUyTTNEV0RlV3VFV3E5V2JBWDNmWUtHY3FleTcvSDBWczJESWNjVW5X?=
- =?utf-8?B?S1oycDZCcjZ0MElRWXMxSGE0czVuRFFSZFZDaVh2clFrZDZyN3FCRmRmWUUr?=
- =?utf-8?B?dm5TQUVEUUMrVlRhcWFKSW1HbDZxM05yNyszV25FZUk4SytqQmo0NTNDejNU?=
- =?utf-8?B?VEpxenFlVUgxZG11VlFwclVKblZMZEZRTTZ6YkNYa3N2aTNoMnZxd2hmbHB6?=
- =?utf-8?B?UDJPREFoRzNtRFRiTTFNZkF5SFJPYnIxQ2REQ3p5cjNWRSszN3BJV2hLZHp6?=
- =?utf-8?B?ZTYxTm1IbUNqNEJBSzg5eGM5akU2MW1LNkZPZ1ZmY3dHOFZuQ21jMEdURGdS?=
- =?utf-8?B?c2c2OGlIbFdvcDdpSXlUUmxPOFNKaUU1cDJBeFJVVzFDMWF6Nk9wUlJuY3M2?=
- =?utf-8?B?STZRUVVMdU9BZ0FNdlQ4QzFMQ3RHSWJKaENKR25JK05WM09kTVNyWU5CVnVW?=
- =?utf-8?B?M0hHUHZwdHUrNkRzZWFsNDhOUERJTnRSRzZSMFJVMnZ0VGR0VXgwRndmNm5Y?=
- =?utf-8?B?eTNYUTVVWmFQcUVhaERCTHdWVWFkMm1OeVJtZnNrMkFMRDZJUWFwNEsxZkwr?=
- =?utf-8?B?djNhYU9MTWRzMU9KNFYxdUFOV0FLUXdxTm0zbVRsTFFFN2s0K0lpNWtTNEFy?=
- =?utf-8?B?TTU2aEc1YUFYUTlCUXE3RW1pVFBOTWRxZ2FwS0t6UXNyNmdRYUpFcWFHaENZ?=
- =?utf-8?B?cmk2eGpDbk9mTjlvRGNLN054NUJDck9OMHh5S0VCQnZYSFdkQ0dmWmlqWWxp?=
- =?utf-8?B?STFjRXhLYTlXTHhiWlBoTnI4WFlVSkpvYWpubWFhUkwvODREcVh0V21nK2dM?=
- =?utf-8?B?STN1Q1NpVlBUa2lHSWR6Vnhza1grSGRvbjd0WlA0WEpwQTFhZU5uWEdBcXBm?=
- =?utf-8?B?cVBQUTE2TWp5NWM4M3lRNDZxbjlWRUNQWTU1a0JGZ1RyZTA1bXhYbzZZSS93?=
- =?utf-8?B?QlRvczkydG50VTJxQ0Z3cUtibFFtT2tRWitVakJUaVBmbkRjdnFzbGhvQWJD?=
- =?utf-8?B?bDZ2eFh4OS9HdWFmSzBxQ0syb1ROODU4US9tdTI5SkxuWUxrOVRWbGRCekJV?=
- =?utf-8?B?U2RKY2V0U29uMi9yRGI3NEZHdlFnTnBKcXB3NXV3c2xBVmE5VHpuWFA1Q2FQ?=
- =?utf-8?B?dW14MXRYc2NSdW52ZHlZTXdRWVQ3VHNJcDhiSW44aERteUhVUnFKbUovSmlk?=
- =?utf-8?B?T0lyTjVqdUU2MFZlVUkwZzFZZXV3Qm9CbHhpeEszNWhRRk1GOHZ5MmhEempv?=
- =?utf-8?B?VEZEYi9NY2xHVkFpalM4ZlQvWlRuUE51a2hGNW9NbGNZVXI2RlZaNWlSTmtK?=
- =?utf-8?B?SDJOeGNlN1RkVk5zcDRIeHV5MEtPNDZkaytsUEJGSlJZcnJ0QmZXbjA1Q1hF?=
- =?utf-8?B?eXA0R1ZrT0tnMUZ4MzV1QnZ3dmsvQzlpNXRnL21sWUcwREtuNWg0NjJGZ0lu?=
- =?utf-8?B?akovQUVRWTE3V2QybFoxNkJSN1R6QjFXa0YyWEZQTWowaGNDdTRXSzlnOFB0?=
- =?utf-8?Q?7n8cs8ypMao=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UldBZDZQNEdKWFI2Y0k0cHZRcUNwNVoyVjdMTGticmFUMkVGV0lEczN1QUxM?=
+ =?utf-8?B?bFh3dVlwdUplZVd1cUdYQTJqZ09iNmpNWUJiUVBvZFN1dmhvQVpVaXpqVUFO?=
+ =?utf-8?B?VDFFZnQ5eDJMdGxiUXc0d1VDUVhGcVNCWkhqYTltaVFmM2pJL0lGVEZ6aTIw?=
+ =?utf-8?B?ZVVTS2dGb3pqRllXM0RIbTVyYmt4am5Rbkl5a0hVVmVPQ0lMQ3hISmt2SkJ1?=
+ =?utf-8?B?YVNVRWVqVExzcFFMOE5XbDROQzlYeG45K3k4d1lwNW12aHBGVEJPNlJFcStx?=
+ =?utf-8?B?UlNCZHczeHNIRTdFVlArQS9jalpNSDFTZExvYUEzKzBaRGY0cjBOc2ZpbmFj?=
+ =?utf-8?B?WVNxeTJjd0Nkc2lGeVJ5ejFGWWt1REVYUjczUFQvTXgzZVArczg5UEl1aWVm?=
+ =?utf-8?B?djkxR0JxM1h2ZGtqQzllMjRQOWIxeHExa1EvUEF4T2drbWI5MkFkUUoyK3ZD?=
+ =?utf-8?B?a01NenRHeHFTRnBEQTdpellLVzdqbjZkWk5PZ3VOVXJNcHdaUnJjOGE1ekVL?=
+ =?utf-8?B?WXNTcW5DSCs2S2tCSGhhYmI2SjVMeUNJVjhkbm9GRThya1FRdjdmWndaUXRJ?=
+ =?utf-8?B?TGtaUGVuczVVVTR4NG4rb0tOS1cybGFZSE5HWEdPQ1FoellNc3dNWWdaeEtH?=
+ =?utf-8?B?ckZITFlOVW1pT3FWMFRMdlBHRUFybG1MOXVDbi9OMWlaVGZiSDMwMnVtL2o0?=
+ =?utf-8?B?ZGFjN1dlYVd6a0ZuMUJCQndXK2xQZVc4RWIrbUlyclV6VFNRZWFRRWVuanov?=
+ =?utf-8?B?MlJzdHFVek9KNVR1eUJKcUM3NlBEUVJ6N2l3VGRZVGdVWStVLzZ2cm04cGNF?=
+ =?utf-8?B?Y2NoS2tZMWszK3VMbVEralJaTG1xSjZzL3BlYzh3dks5M05POC9wU3BSeUVC?=
+ =?utf-8?B?ZlYydnIyVFRiMHFjZi9GSWpjdmJxZmZ3dGNzbWozZ2E0U1MxSHpnRHFMSTh3?=
+ =?utf-8?B?SllRTVU0dmY0REtWTW1tWG4wS1lOc3l4RGlxQVk1OXpZL1dJQlhFaG5wYTlj?=
+ =?utf-8?B?bU9wZE9QTlV2dFg1MTVrM0NTS25jVkFvQkxhaTU4MVZPdk80YktKZDdncmFr?=
+ =?utf-8?B?TWpqKzZHQ1d5RnczeXdjMVZFMFMyS3A4MXMvU3daVmJFdldtMnMxd3FiZSti?=
+ =?utf-8?B?Y3ZYWUFqZGdzMis5S25HUlpEeFM3V0RNeldCWnE4dFVydktDMXl2aCtnMVdZ?=
+ =?utf-8?B?SVJFNjhHbmhqUHd2NHZnSURYcmVyRzA2YjR1dkRRb2hMOStPa1ZpNzhJNnVw?=
+ =?utf-8?B?bU5sTjFWdWZKVUVOWDcrUGVjZ3h0bkJVN21ZZ3JMbG5yeXZsR1ZiK3pvTjRU?=
+ =?utf-8?B?ZlpvZTdmL3VUOE9rdXVaM3J2clkveVlsaDRqVWFLVERvWjBjRDZCaDVtK3N3?=
+ =?utf-8?B?VEgvLzFZVTNoMUUxMjdnYTQ4MEROelVwSngzVlRMOWFIbHlTUWZMSTdUdW0w?=
+ =?utf-8?B?a0VzRmZpSEhvUUFGV01vVXRnQlFTdkxSdUJidE4rZHdEQ1d6OUJKQzFSWFBp?=
+ =?utf-8?B?ZmdoWitRRGdDUTdhbFdxOUFJcFR5dCtLdVVlQTdLQ1BJNnY0d0RHZ2lOZVJl?=
+ =?utf-8?B?aUhOb0daS0lxSnFuQnFtUWo3M1F1NlUrOWFNRjRHaGhZcFM0YWVROW01eDV6?=
+ =?utf-8?B?RHlaMm0rZ29jalVld3hkdlQ4ZmM2MHptWFFTRW9yMitYMU5DSmhLMlo0S3py?=
+ =?utf-8?B?ekU5UnBNcVZ1dEZhd1BxQTJWVTNKZmxma096d3U0N1RINDA1N3dKQnlUZUQx?=
+ =?utf-8?Q?AqbbaEDkAi0YGUPIBTKLaO6OQNg6yT/lBreAHfI?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01b379fa-a0f5-41db-c9b6-08d993e75144
+X-MS-Exchange-CrossTenant-Network-Message-Id: 099ea61d-b18f-4f31-07c0-08d993e8216f
 X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2021 16:33:16.3879
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2021 16:39:05.4904
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
 X-MS-Exchange-CrossTenant-UserPrincipalName: tlendack@amd.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5391
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5118
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -149,171 +146,137 @@ X-Mailing-List: linux-arch@vger.kernel.org
 On 10/8/21 7:37 PM, Kuppuswamy Sathyanarayanan wrote:
 > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 > 
-> Just like MKTME, TDX reassigns bits of the physical address for
-> metadata.  MKTME used several bits for an encryption KeyID. TDX
-> uses a single bit in guests to communicate whether a physical page
-> should be protected by TDX as private memory (bit set to 0) or
-> unprotected and shared with the VMM (bit set to 1).
+> Intel TDX doesn't allow VMM to directly access guest private memory.
+> Any memory that is required for communication with VMM must be shared
+> explicitly. The same rule applies for any DMA to and from TDX guest.
+> All DMA pages had to marked as shared pages. A generic way to achieve
+> this without any changes to device drivers is to use the SWIOTLB
+> framework.
 > 
-> __set_memory_enc_dec() is now aware about TDX and sets Shared bit
-> accordingly following with relevant TDX hypercall.
+> This method of handling is similar to AMD SEV. So extend this support
+> for TDX guest as well. Also since there are some common code between
+> AMD SEV and TDX guest in mem_encrypt_init(), move it to
+> mem_encrypt_common.c and call AMD specific init function from it
 > 
-> Also, Do TDX_ACCEPT_PAGE on every 4k page after mapping the GPA range
-> when converting memory to private. Using 4k page size limit is due
-> to current TDX spec restriction. Also, If the GPA (range) was
-> already mapped as an active, private page, the host VMM may remove
-> the private page from the TD by following the “Removing TD Private
-> Pages” sequence in the Intel TDX-module specification [1] to safely
-> block the mapping(s), flush the TLB and cache, and remove the
-> mapping(s).
-> 
-> BUG() if TDX_ACCEPT_PAGE fails (except "previously accepted page" case)
-> , as the guest is completely hosed if it can't access memory.
-> 
-> [1] https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsoftware.intel.com%2Fcontent%2Fdam%2Fdevelop%2Fexternal%2Fus%2Fen%2Fdocuments%2Ftdx-module-1eas-v0.85.039.pdf&amp;data=04%7C01%7Cthomas.lendacky%40amd.com%7C0e667adf5a4042abce3908d98abd07a8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637693367201703893%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=UGxQ9xBjWsmev7PetX%2BuS0RChkAXyaH7q6JHO9ZiUtY%3D&amp;reserved=0
-> 
-> Tested-by: Kai Huang <kai.huang@linux.intel.com>
 > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 > Reviewed-by: Andi Kleen <ak@linux.intel.com>
 > Reviewed-by: Tony Luck <tony.luck@intel.com>
 > Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-
-...
-
+> ---
+> 
+> Changes since v4:
+>   * Replaced prot_guest_has() with cc_guest_has().
+> 
+> Changes since v3:
+>   * Rebased on top of Tom Lendacky's protected guest
+>     changes (https://lore.kernel.org/patchwork/cover/1468760/)
+> 
+> Changes since v1:
+>   * Removed sme_me_mask check for amd_mem_encrypt_init() in mem_encrypt_init().
+> 
+>   arch/x86/include/asm/mem_encrypt_common.h |  3 +++
+>   arch/x86/kernel/tdx.c                     |  2 ++
+>   arch/x86/mm/mem_encrypt.c                 |  5 +----
+>   arch/x86/mm/mem_encrypt_common.c          | 14 ++++++++++++++
+>   4 files changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/mem_encrypt_common.h b/arch/x86/include/asm/mem_encrypt_common.h
+> index 697bc40a4e3d..bc90e565bce4 100644
+> --- a/arch/x86/include/asm/mem_encrypt_common.h
+> +++ b/arch/x86/include/asm/mem_encrypt_common.h
+> @@ -8,11 +8,14 @@
+>   
+>   #ifdef CONFIG_AMD_MEM_ENCRYPT
+>   bool amd_force_dma_unencrypted(struct device *dev);
+> +void __init amd_mem_encrypt_init(void);
+>   #else /* CONFIG_AMD_MEM_ENCRYPT */
+>   static inline bool amd_force_dma_unencrypted(struct device *dev)
+>   {
+>   	return false;
+>   }
+> +
+> +static inline void amd_mem_encrypt_init(void) {}
+>   #endif /* CONFIG_AMD_MEM_ENCRYPT */
+>   
+>   #endif
+> diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
+> index 433f366ca25c..ce8e3019b812 100644
+> --- a/arch/x86/kernel/tdx.c
+> +++ b/arch/x86/kernel/tdx.c
+> @@ -12,6 +12,7 @@
+>   #include <asm/insn.h>
+>   #include <asm/insn-eval.h>
+>   #include <linux/sched/signal.h> /* force_sig_fault() */
+> +#include <linux/swiotlb.h>
+>   
+>   /* TDX Module call Leaf IDs */
+>   #define TDX_GET_INFO			1
+> @@ -577,6 +578,7 @@ void __init tdx_early_init(void)
+>   	pv_ops.irq.halt = tdx_halt;
+>   
+>   	legacy_pic = &null_legacy_pic;
+> +	swiotlb_force = SWIOTLB_FORCE;
+>   
+>   	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "tdx:cpu_hotplug",
+>   			  NULL, tdx_cpu_offline_prepare);
+> diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
+> index 5d7fbed73949..8385bc4565e9 100644
+> --- a/arch/x86/mm/mem_encrypt.c
+> +++ b/arch/x86/mm/mem_encrypt.c
+> @@ -438,14 +438,11 @@ static void print_mem_encrypt_feature_info(void)
+>   }
+>   
+>   /* Architecture __weak replacement functions */
+> -void __init mem_encrypt_init(void)
+> +void __init amd_mem_encrypt_init(void)
+>   {
+>   	if (!sme_me_mask)
+>   		return;
+>   
+> -	/* Call into SWIOTLB to update the SWIOTLB DMA buffers */
+> -	swiotlb_update_mem_attributes();
+> -
+>   	/*
+>   	 * With SEV, we need to unroll the rep string I/O instructions,
+>   	 * but SEV-ES supports them through the #VC handler.
 > diff --git a/arch/x86/mm/mem_encrypt_common.c b/arch/x86/mm/mem_encrypt_common.c
-> index f063c885b0a5..119a9056efbb 100644
+> index 119a9056efbb..6fe44c6cb753 100644
 > --- a/arch/x86/mm/mem_encrypt_common.c
 > +++ b/arch/x86/mm/mem_encrypt_common.c
-> @@ -9,9 +9,18 @@
->   
+> @@ -10,6 +10,7 @@
 >   #include <asm/mem_encrypt_common.h>
 >   #include <linux/dma-mapping.h>
-> +#include <linux/cc_platform.h>
+>   #include <linux/cc_platform.h>
+> +#include <linux/swiotlb.h>
 >   
 >   /* Override for DMA direct allocation check - ARCH_HAS_FORCE_DMA_UNENCRYPTED */
 >   bool force_dma_unencrypted(struct device *dev)
->   {
-> -	return amd_force_dma_unencrypted(dev);
-> +	if (cc_platform_has(CC_ATTR_GUEST_TDX) &&
-> +	    cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
-> +		return true;
-> +
-> +	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT) ||
-> +	    cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT))
-> +		return amd_force_dma_unencrypted(dev);
-> +
-> +	return false;
-
-Assuming the original force_dma_unencrypted() function was moved here or 
-cc_platform.c, then you shouldn't need any changes. Both SEV and TDX 
-require true be returned if CC_ATTR_GUEST_MEM_ENCRYPT returns true. And 
-then TDX should never return true for CC_ATTR_HOST_MEM_ENCRYPT.
-
+> @@ -24,3 +25,16 @@ bool force_dma_unencrypted(struct device *dev)
+>   
+>   	return false;
 >   }
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 527957586f3c..6c531d5cb5fd 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -30,6 +30,7 @@
->   #include <asm/proto.h>
->   #include <asm/memtype.h>
->   #include <asm/set_memory.h>
-> +#include <asm/tdx.h>
->   
->   #include "../mm_internal.h"
->   
-> @@ -1981,8 +1982,10 @@ int set_memory_global(unsigned long addr, int numpages)
->   				    __pgprot(_PAGE_GLOBAL), 0);
->   }
->   
-> -static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
-> +static int __set_memory_protect(unsigned long addr, int numpages, bool protect)
->   {
-> +	pgprot_t mem_protected_bits, mem_plain_bits;
-> +	enum tdx_map_type map_type;
->   	struct cpa_data cpa;
->   	int ret;
->   
-> @@ -1997,8 +2000,25 @@ static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
->   	memset(&cpa, 0, sizeof(cpa));
->   	cpa.vaddr = &addr;
->   	cpa.numpages = numpages;
-> -	cpa.mask_set = enc ? __pgprot(_PAGE_ENC) : __pgprot(0);
-> -	cpa.mask_clr = enc ? __pgprot(0) : __pgprot(_PAGE_ENC);
 > +
-> +	if (cc_platform_has(CC_ATTR_GUEST_SHARED_MAPPING_INIT)) {
-> +		mem_protected_bits = __pgprot(0);
-> +		mem_plain_bits = pgprot_cc_shared_mask();
+> +/* Architecture __weak replacement functions */
+> +void __init mem_encrypt_init(void)
+> +{
+> +	/*
+> +	 * For TDX guest or SEV/SME, call into SWIOTLB to update
+> +	 * the SWIOTLB DMA buffers
+> +	 */
+> +	if (sme_me_mask || cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
 
-How about having generic versions for both shared and private that return 
-the proper value for SEV or TDX. Then this remains looking similar to as 
-it does now, just replacing the __pgprot() calls with the appropriate 
-pgprot_cc_{shared,private}_mask().
+Can't you just make this:
+
+	if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
+
+SEV will return true if sme_me_mask is not zero and TDX should only return 
+true if it is TDX guest, right?
 
 Thanks,
 Tom
 
-> +	} else {
-> +		mem_protected_bits = __pgprot(_PAGE_ENC);
-> +		mem_plain_bits = __pgprot(0);
-> +	}
+> +		swiotlb_update_mem_attributes();
 > +
-> +	if (protect) {
-> +		cpa.mask_set = mem_protected_bits;
-> +		cpa.mask_clr = mem_plain_bits;
-> +		map_type = TDX_MAP_PRIVATE;
-> +	} else {
-> +		cpa.mask_set = mem_plain_bits;
-> +		cpa.mask_clr = mem_protected_bits;
-> +		map_type = TDX_MAP_SHARED;
-> +	}
-> +
->   	cpa.pgd = init_mm.pgd;
->   
->   	/* Must avoid aliasing mappings in the highmem code */
-> @@ -2006,9 +2026,17 @@ static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
->   	vm_unmap_aliases();
->   
->   	/*
-> -	 * Before changing the encryption attribute, we need to flush caches.
-> +	 * Before changing the encryption attribute, flush caches.
-> +	 *
-> +	 * For TDX, guest is responsible for flushing caches on private->shared
-> +	 * transition. VMM is responsible for flushing on shared->private.
->   	 */
-> -	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
-> +	if (cc_platform_has(CC_ATTR_GUEST_TDX)) {
-> +		if (map_type == TDX_MAP_SHARED)
-> +			cpa_flush(&cpa, 1);
-> +	} else {
-> +		cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
-> +	}
->   
->   	ret = __change_page_attr_set_clr(&cpa, 1);
->   
-> @@ -2021,18 +2049,21 @@ static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
->   	 */
->   	cpa_flush(&cpa, 0);
->   
-> +	if (!ret && cc_platform_has(CC_ATTR_GUEST_SHARED_MAPPING_INIT))
-> +		ret = tdx_hcall_gpa_intent(__pa(addr), numpages, map_type);
-> +
->   	return ret;
->   }
->   
->   int set_memory_encrypted(unsigned long addr, int numpages)
->   {
-> -	return __set_memory_enc_dec(addr, numpages, true);
-> +	return __set_memory_protect(addr, numpages, true);
->   }
->   EXPORT_SYMBOL_GPL(set_memory_encrypted);
->   
->   int set_memory_decrypted(unsigned long addr, int numpages)
->   {
-> -	return __set_memory_enc_dec(addr, numpages, false);
-> +	return __set_memory_protect(addr, numpages, false);
->   }
->   EXPORT_SYMBOL_GPL(set_memory_decrypted);
->   
+> +	amd_mem_encrypt_init();
+> +}
 > 
