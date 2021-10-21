@@ -2,119 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 996CA436C36
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 22:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89287436DF7
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Oct 2021 01:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbhJUUgG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 16:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbhJUUgF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 16:36:05 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8B6C0613B9
-        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 13:33:49 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id na16-20020a17090b4c1000b0019f5bb661f9so1473575pjb.0
-        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 13:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pMLkf+/6o2RZX2xU0IzxmAZB7uZ5BczdFmEVP2ncEuI=;
-        b=O+bc7OjF+a9de+Fmwriu2pbFTYm6Nd76WisEB6pxdtpMPCLsY2ID+U6EIkRIkgO5Xd
-         B2KxuOz95ROxOopHz4Hd+wIjBfEeqcCSmaP6KcVQ5gIT9MurdTvKlwBQPOmwIvXlSHcc
-         X5dV7XV+XlsD9lXye0yxmASvZlz4npVxd1CX0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pMLkf+/6o2RZX2xU0IzxmAZB7uZ5BczdFmEVP2ncEuI=;
-        b=q4TAJTvQ+dq7QnqTl0uiMxV7mbX7onQQwqB8xeQvmN9m98TZnNRYksvhORnrL6rT4V
-         J9g7OQmtps/4n77N4l82mx1qM//UbbTZo1ILbjwiIrRpbsNKiuMDm/Gxa4BDqTp9v5PJ
-         49jGUf6voUhTy9hDWb0nRpAKtIbcKFQEz0G2YUrOHJU3Fn4icHUACt19bBdvcVtPGj9Z
-         TmWnNWKtyCevyjVMOLayQxT16ML3gP2sSXHJKbjIXLJsjbWeRzjkwMlKjB3jkTZdQ1cs
-         6HJjA6SxbGdX/G82tVBc6huewz+0KR+QAQbOEBRTTqwNJmnRBzHsGGG+iimKkTssvSQN
-         XVuQ==
-X-Gm-Message-State: AOAM530j75xJydukJz57hgOc588PpB3gQBXk6gdItHMzuwoxwQ/qXiq4
-        myuSZmiG76BVNgS8v3vJxoQhEQ==
-X-Google-Smtp-Source: ABdhPJyjM5xwpcCQQ/v4wWtfPG0pXYOx25k0T2lL1xB4TvAQFm80Nj6V+yKGXizniv10MbKLyO1iUg==
-X-Received: by 2002:a17:903:248f:b029:128:d5ea:18a7 with SMTP id p15-20020a170903248fb0290128d5ea18a7mr7246792plw.83.1634848428858;
-        Thu, 21 Oct 2021 13:33:48 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b8sm7671106pfm.65.2021.10.21.13.33.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 13:33:48 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 13:33:47 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, H Peter Anvin <hpa@zytor.com>
-Subject: Re: [PATCH 10/20] signal/vm86_32: Properly send SIGSEGV when the
- vm86 state cannot be saved.
-Message-ID: <202110211327.F0D8DF3@keescook>
+        id S231183AbhJUXLl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 19:11:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45974 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230500AbhJUXLk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 Oct 2021 19:11:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 328976128E;
+        Thu, 21 Oct 2021 23:09:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634857763;
+        bh=xs401OyNs3MqjYVdTWFF8caYtEXqw/jnMQ34Ytv3WjQ=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=V+0oDB7ALCQhfqkMZ2i4dvrFQek30bkmM5P1H+6eAqIXInq4lWwkg4tPJOfBcj0UW
+         mXOWp/9dwvtjLS1CPvHxXzXjn+4z/+fqR7S2Qa3XY99CCzr4IUMmS70HGY0suG/cD7
+         or0/O6h0H1ahjdyMzRIFUj6Zbn7ntYhQJf12+t1pyxJODjuFrw/TJYlHBzU5+B0EC+
+         hfVuYnZxqJEOi/aNwGS/ez3y9ijb5A2aGWX9y1HRclpf2TGKAe3+npAFBGglK5lTgO
+         WYPBXRYSuHGvGvVSr5nsxpUdYDze+ldo9Q3MoC01iG8LpnWSq27NcWJsCHK4e4vnMc
+         xoNUlCjjNmiYQ==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 2F44F27C0054;
+        Thu, 21 Oct 2021 19:09:21 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute6.internal (MEProxy); Thu, 21 Oct 2021 19:09:21 -0400
+X-ME-Sender: <xms:IPNxYZxkgX3XhU6P3GQIShBZQw7sCfxoptDNLKRmnaIol2Qz3Qgnxw>
+    <xme:IPNxYZQaQgA-sqZEj_Kw0CBFDeGFZFfylCLcfVrR4brUF519Ji9svoi0aBpMQQAv3
+    oHFDs68nFL8tbu-41g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddvjedgudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpedthfehtedtvdetvdetudfgueeuhfdtudegvdelveelfedvteelfffg
+    fedvkeegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
+    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
+    drlhhuthhordhush
+X-ME-Proxy: <xmx:IPNxYTWh1k-FZhCgd9zAm6eHwPrZOAJuLyo6aY7FT0VXIs0RzBzqRg>
+    <xmx:IPNxYbit96pKQj-kg8hedSurtPzLRHhpYa3zr4Sa2KhmhNJZZ6vCUQ>
+    <xmx:IPNxYbALbEOgVeb2EXWIPzFkoHWxvPM4yY-z8YnXIGJn52Iee_NouQ>
+    <xmx:IfNxYXussyy7jeaQNG-hpt96_mdVXR1V7oM_rZzElGmYNYkiGThPecuIzKs>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2C17621E006E; Thu, 21 Oct 2021 19:09:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1369-gd055fb5e7c-fm-20211018.002-gd055fb5e
+Mime-Version: 1.0
+Message-Id: <b5d52d25-7bde-4030-a7b1-7c6f8ab90660@www.fastmail.com>
+In-Reply-To: <20211020174406.17889-10-ebiederm@xmission.com>
 References: <87y26nmwkb.fsf@disp2133>
  <20211020174406.17889-10-ebiederm@xmission.com>
- <202110210915.BF17C14980@keescook>
- <87r1ce8g5i.fsf@disp2133>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r1ce8g5i.fsf@disp2133>
+Date:   Thu, 21 Oct 2021 16:08:58 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Cc:     linux-arch@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Oleg Nesterov" <oleg@redhat.com>,
+        "Al Viro" <viro@ZenIV.linux.org.uk>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 10/20] signal/vm86_32: Properly send SIGSEGV when the vm86 state
+ cannot be saved.
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 12:02:49PM -0500, Eric W. Biederman wrote:
-> Kees Cook <keescook@chromium.org> writes:
+
+
+On Wed, Oct 20, 2021, at 10:43 AM, Eric W. Biederman wrote:
+> Instead of pretending to send SIGSEGV by calling do_exit(SIGSEGV)
+> call force_sigsegv(SIGSEGV) to force the process to take a SIGSEGV
+> and terminate.
+
+Why?  I realize it's more polite, but is this useful enough to justify the need for testing and potential security impacts?
+
+>
+> Update handle_signal to return immediately when save_v86_state fails
+> and kills the process.  Returning immediately without doing anything
+> except killing the process with SIGSEGV is also what signal_setup_done
+> does when setup_rt_frame fails.  Plus it is always ok to return
+> immediately without delivering a signal to a userspace handler when a
+> fatal signal has killed the current process.
+>
+
+I can mostly understand the individual sentences, but I don't understand what you're getting it.  If a fatal signal has killed the current process and we are guaranteed not to hit the exit-to-usermode path, then, sure, it's safe to return unless we're worried that the core dump code will explode.
+
+But, unless it's fixed elsewhere in your series, force_sigsegv() is itself quite racy, or at least looks racy -- it can race against another thread calling sigaction() and changing the action to something other than SIG_DFL.  So it does not appear to actually reliably kill the caller, especially if exposed to a malicious user program.
+
+
+
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: x86@kernel.org
+> Cc: H Peter Anvin <hpa@zytor.com>
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> ---
+>  arch/x86/kernel/signal.c  | 6 +++++-
+>  arch/x86/kernel/vm86_32.c | 2 +-
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+> index f4d21e470083..25a230f705c1 100644
+> --- a/arch/x86/kernel/signal.c
+> +++ b/arch/x86/kernel/signal.c
+> @@ -785,8 +785,12 @@ handle_signal(struct ksignal *ksig, struct pt_regs *regs)
+>  	bool stepping, failed;
+>  	struct fpu *fpu = &current->thread.fpu;
 > 
-> > On Wed, Oct 20, 2021 at 12:43:56PM -0500, Eric W. Biederman wrote:
-> >> Instead of pretending to send SIGSEGV by calling do_exit(SIGSEGV)
-> >> call force_sigsegv(SIGSEGV) to force the process to take a SIGSEGV
-> >> and terminate.
-> >> 
-> >> Update handle_signal to return immediately when save_v86_state fails
-> >> and kills the process.  Returning immediately without doing anything
-> >> except killing the process with SIGSEGV is also what signal_setup_done
-> >> does when setup_rt_frame fails.  Plus it is always ok to return
-> >> immediately without delivering a signal to a userspace handler when a
-> >> fatal signal has killed the current process.
-> >
-> > Do the tools/testing/selftests/x86 tests all pass after these changes? I
-> > know Andy has a bunch of weird corner cases in there.
+> -	if (v8086_mode(regs))
+> +	if (v8086_mode(regs)) {
+>  		save_v86_state((struct kernel_vm86_regs *) regs, VM86_SIGNAL);
+> +		/* Has save_v86_state failed and killed the process? */
+> +		if (fatal_signal_pending(current))
+> +			return;
+
+This might be an ABI break, or at least it could be if anyone cared about vm86.  Imagine this wasn't guarded by if (v8086_mode) and was just if (fatal_signal_pending(current)) return;  Then all the other processing gets skipped if a fatal signal is pending (e.g. from a concurrent kill), which could cause visible oddities in a core dump, I think.  Maybe it's minor.
+
+> +	}
 > 
-> That would require a 32bit userspace wouldn't it?
-> 
-> It is a good idea so I will see if I can dig such a box up, but I
-> unfortunately don't have an up-to-date 32bit box handy, or even
-> an up-to-date box with a 32bit userspace.
-> 
-> It has been about 20 years since I have done much with 32bit x86.
+>  	/* Are we from a system call? */
+>  	if (syscall_get_nr(current, regs) != -1) {
+> diff --git a/arch/x86/kernel/vm86_32.c b/arch/x86/kernel/vm86_32.c
+> index 63486da77272..040fd01be8b3 100644
+> --- a/arch/x86/kernel/vm86_32.c
+> +++ b/arch/x86/kernel/vm86_32.c
+> @@ -159,7 +159,7 @@ void save_v86_state(struct kernel_vm86_regs *regs, 
+> int retval)
+>  	user_access_end();
+>  Efault:
+>  	pr_alert("could not access userspace vm86 info\n");
+> -	do_exit(SIGSEGV);
+> +	force_sigsegv(SIGSEGV);
 
-I've done recent ia32 testing just under qemu with a 32bit x86 image.
-Since I've got this set up already, I'll give it a spin...
+This causes us to run unwitting kernel code with the vm86 garbage still loaded into the relevant architectural areas (see the chunk if save_v86_state that's inside preempt_disable()).  So NAK, especially since the aforementioned race might cause the exit-to-usermode path to actually run with who-knows-what consequences.
 
-> How hard is it to run the tests under tools/testing/selftests/...
-> Last time I tried it was a royal pain.  I am hoping it is better this
-> round.
+If you really want to make this change, please arrange for save_v86_state() to switch out of vm86 mode *before* anything that might fail so that it's guaranteed to at least put the task in a sane state.  And write an explicit test case that tests it.  I could help with the latter if you do the former.
 
-It _is_ a little weird. :P I do it like this, pulled from the larger docs[1]:
-
-# Build host
-$ make -C tools/testing/selftests gen_tar TARGETS="x86" FORMAT=.xz
-$ scp $(find tools/testing/selftests -name kselftests.tar.xz) target:
-
-# Target host
-$ mkdir kselftests && cd kselftests
-$ tar -xaf ../kselftests.tar.xz
-$ ./run_kselftest.sh
-
-
-[1] https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
-
--- 
-Kees Cook
+--Andy
