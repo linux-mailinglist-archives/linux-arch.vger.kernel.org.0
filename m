@@ -2,107 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 084A2436759
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 651C9436765
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbhJUQPG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 12:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S230072AbhJUQRY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 12:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbhJUQPF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 12:15:05 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627B9C061348
-        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:12:49 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id u6-20020a17090a3fc600b001a00250584aso3501970pjm.4
-        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:12:49 -0700 (PDT)
+        with ESMTP id S231819AbhJUQRY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 12:17:24 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6531EC0613B9
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:15:08 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id s1so738669plg.12
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:15:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=bVa0QlPsmk1S9582aT+D2KdhqOv4MmkayJnl6+1fImU=;
-        b=gvHs+h8DMR0QRBb8oh3QQwHgWfOrO5UCrxtOePcyiPBZKqHJrm5Z/7a83vkdagXqIV
-         CFuuVSDejwuj2p7SL6hMqv9tDwHI74DVztq2wtlB24DIPTAYPk0nBADf+OmdcZJGCMq5
-         nzxj3ujLkNSAVRjaFol9gJAib5ABohl1ARwms=
+        bh=BnP3QIjaR7JnabL4Ln7V26GIHfumLzivJQweHaSc0TY=;
+        b=UBKO7odzSPY8clMHdQmGPBJ+ZxoNV2g6Yb6uDXVIZfwmaI1U55bkabRNRsh+BmuTzy
+         Q/cP/XunCz/WKkEz6QDvY1kE8YqvVgF0YBumI3W/ovL+ELAwUf5lida08f566HsMG4GF
+         Ftg7LzdrVIvFSmkqKjhWVGXItAnkAA07iJIbc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=bVa0QlPsmk1S9582aT+D2KdhqOv4MmkayJnl6+1fImU=;
-        b=WGT5+cUJDX833tuWqGtQ8p73QVtxC/kuUY3AgzC+UN95Ru9RKM8EoUQ7ldk31UXWTe
-         8MRKBVW4GlyFa7X6of9FXqAIdZ6udX9LUA32sJeDWUIM5/LQXAipwaAqomx58TrDij81
-         m1/yhuVjDajTMHiyZgHGXfn4/6LcQZkwfbZQ2/w5quSKErox1Os7nJLmNfRCQ75YYrk/
-         dG7fi5/3e+fC1+3GhgWmqZ5i89Kqj1rN9f6YSBj/qwMNVdD+AautvdGKb0RnRC64EZ+l
-         2e0RQ6YUkwhkzO1nIGTiPgbz+ZXknhbg1YTXhuoQM/2j41v2RrpY8NegD5QK4YuVz6q+
-         miGA==
-X-Gm-Message-State: AOAM532MRMuYB915sQ6OMKAbB4PE+lBWFIOGHC+OsXdp8gjQACWER3zK
-        TBJ6rCfo+qHtMBtsje32U7tf9w==
-X-Google-Smtp-Source: ABdhPJzWO9ec41mfE8gVa7DoM1QkoyDBmwyjeVhaCmlSvxR4EETHixc4n+KE2dwyCxRE1rNUYITvSw==
-X-Received: by 2002:a17:902:db0a:b0:13e:e968:e144 with SMTP id m10-20020a170902db0a00b0013ee968e144mr6108237plx.43.1634832768420;
-        Thu, 21 Oct 2021 09:12:48 -0700 (PDT)
+        bh=BnP3QIjaR7JnabL4Ln7V26GIHfumLzivJQweHaSc0TY=;
+        b=7Woqc6lRGotWwgssD9/ClAfd+mx9vNix36G2C56YKmp17vdZxHcMdgFgSyk/gmgX+y
+         C5SrZ3s8sMporp4ZpTL90VXNTbhTmy7I8NrIu3qLi1/jU8aTYrqeZR1eip0//sVkdNA0
+         BZsEznZy+TbJ+7rLnJYklHiHYBYlevPXlOdx8CYZbGeOHkmVk3fCy9+yHnv9ivUL5MTq
+         m3GvLeFnm3JyddGv4pM/VtBSrzSNsklCyFO7H6EUg25Z2kmPKSeYoKmBYhb0tdxOaWmq
+         dVUD8MOv+PrEfFgqFu97jN/1l4mvrxxaVhPRJO3BBEB+7155gpbiJzV82RrLpws3lmZf
+         DIjQ==
+X-Gm-Message-State: AOAM5304iPapSP11v90fiV1tkbyVx1IGCZ9iH/uiQP5STkY3YL7hC/0S
+        dbso9DpoYtqIMzm2Eo+San1y9A==
+X-Google-Smtp-Source: ABdhPJykgSiYSFIaI8VWViajINK0UvEIyr8C/qc98WFBSnIZbY7yo5tECp223FmUgtnvEXPDO6U6rg==
+X-Received: by 2002:a17:902:8a97:b0:13e:6e77:af59 with SMTP id p23-20020a1709028a9700b0013e6e77af59mr6092858plo.4.1634832907872;
+        Thu, 21 Oct 2021 09:15:07 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d15sm7846927pfu.12.2021.10.21.09.12.48
+        by smtp.gmail.com with ESMTPSA id u24sm5865109pgo.73.2021.10.21.09.15.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 09:12:48 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 09:12:47 -0700
+        Thu, 21 Oct 2021 09:15:07 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 09:15:06 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        David Miller <davem@davemloft.net>, sparclinux@vger.kernel.org
-Subject: Re: [PATCH 08/20] signal/sparc: In setup_tsb_params convert open
- coded BUG into BUG
-Message-ID: <202110210910.7861F4041@keescook>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, H Peter Anvin <hpa@zytor.com>
+Subject: Re: [PATCH 09/20] signal/vm86_32: Replace open coded BUG_ON with an
+ actual BUG_ON
+Message-ID: <202110210914.59245E29CF@keescook>
 References: <87y26nmwkb.fsf@disp2133>
- <20211020174406.17889-8-ebiederm@xmission.com>
+ <20211020174406.17889-9-ebiederm@xmission.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211020174406.17889-8-ebiederm@xmission.com>
+In-Reply-To: <20211020174406.17889-9-ebiederm@xmission.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 12:43:54PM -0500, Eric W. Biederman wrote:
-> The function setup_tsb_params has exactly one caller tsb_grow.  The
-> function tsb_grow passes in a tsb_bytes value that is between 8192 and
-> 1048576 inclusive, and is guaranteed to be a power of 2.  The function
-> setup_tsb_params verifies this property with a switch statement and
-> then prints an error and causes the task to exit if this is not true.
-> 
-> In practice that print statement can never be reached because tsb_grow
-> never passes in a bad tsb_size.  So if tsb_size ever gets a bad value
-> that is a kernel bug.
-> 
-> So replace the do_exit which is effectively an open coded version of
-> BUG() with an actuall call to BUG().  Making it clearer that this
-> is a case that can never, and should never happen.
-> 
-> Cc: David Miller <davem@davemloft.net>
-> Cc: sparclinux@vger.kernel.org
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->  arch/sparc/mm/tsb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/sparc/mm/tsb.c b/arch/sparc/mm/tsb.c
-> index 0dce4b7ff73e..912205787161 100644
-> --- a/arch/sparc/mm/tsb.c
-> +++ b/arch/sparc/mm/tsb.c
-> @@ -266,7 +266,7 @@ static void setup_tsb_params(struct mm_struct *mm, unsigned long tsb_idx, unsign
->  	default:
->  		printk(KERN_ERR "TSB[%s:%d]: Impossible TSB size %lu, killing process.\n",
->  		       current->comm, current->pid, tsb_bytes);
-> -		do_exit(SIGSEGV);
-> +		BUG();
->  	}
->  	tte |= pte_sz_bits(page_sz);
+On Wed, Oct 20, 2021 at 12:43:55PM -0500, Eric W. Biederman wrote:
+> The function save_v86_state is only called when userspace was
+> operating in vm86 mode before entering the kernel.  Not having vm86
+> state in the task_struct should never happen.  So transform the hand
+> rolled BUG_ON into an actual BUG_ON to make it clear what is
+> happening.
 
-Given the other uses of BUG() here, this seems okay.
+If this is actually not a state userspace can put itself into:
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
+
+Otherwise, this should be a WARN+kill.
+
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: x86@kernel.org
+> Cc: H Peter Anvin <hpa@zytor.com>
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> ---
+>  arch/x86/kernel/vm86_32.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/vm86_32.c b/arch/x86/kernel/vm86_32.c
+> index e5a7a10a0164..63486da77272 100644
+> --- a/arch/x86/kernel/vm86_32.c
+> +++ b/arch/x86/kernel/vm86_32.c
+> @@ -106,10 +106,8 @@ void save_v86_state(struct kernel_vm86_regs *regs, int retval)
+>  	 */
+>  	local_irq_enable();
+>  
+> -	if (!vm86 || !vm86->user_vm86) {
+> -		pr_alert("no user_vm86: BAD\n");
+> -		do_exit(SIGSEGV);
+> -	}
+> +	BUG_ON(!vm86 || !vm86->user_vm86);
+> +
+>  	set_flags(regs->pt.flags, VEFLAGS, X86_EFLAGS_VIF | vm86->veflags_mask);
+>  	user = vm86->user_vm86;
+>  
+> -- 
+> 2.20.1
+> 
 
 -- 
 Kees Cook
