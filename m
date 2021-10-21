@@ -2,95 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF56436824
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B3443682B
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbhJUQmC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 12:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S232002AbhJUQnj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 12:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbhJUQmC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 12:42:02 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDE6C061764
-        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:39:46 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id c4so801918pgv.11
-        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:39:46 -0700 (PDT)
+        with ESMTP id S232103AbhJUQnM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 12:43:12 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE27C061220
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:40:54 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q5so819435pgr.7
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=pyAOi2FE05WhmGaZ/0cqvrOcBf/dkwT9gOUuxN9w9GA=;
-        b=jYgyXiqPumcD49shPwoXVmC/gIY7r+DYzq+Pma+iNOKYLaHngkv7+SYxYp2n3nSH2P
-         DIDhhwcfkb9T5UKEo1Qs6iZdCkpuKQjuSoBxFhzYj8gwxYjasWHJb/hDnisLJuk5PLP5
-         THE+AGwKaANrMi2Nc69l6W6iiv3hREppHuhDw=
+        bh=1yAbubDNqKerRe4y8n0JI5rsGyf/bW80kr1c+8k/81E=;
+        b=MTSHGYJn62+WzjKWUs0N8qnmPtyM9Aduew+ywV94ky56Xc0OO2DZlJM4ePaNxYSBt+
+         JizjjueLRQahHWgHGibtKHzD3LEZroL5qQO+NiCGgdskzPNmcrjU84TNP8cXFrEjgwjR
+         bL897TtegwfovNjAB4omVryquyxkl5ka6qrIg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=pyAOi2FE05WhmGaZ/0cqvrOcBf/dkwT9gOUuxN9w9GA=;
-        b=0ylrNO/1/0/MJJ8T5xmMHnHsHKwZeurXx/4533J8kPIOCYu3zEefVInwETQe8YN8Mv
-         wdxG/JlLNV4+avhIy9i6dfZiPxjReU5pYTk5a2ZO/NnXzS/NYOBSjEIh3vydRIUV/2GL
-         a3+vY/uqZ8UGYUd8yzcoMKqO/0zvE/HxNfuoWUB2JMuJ4AejRhSjcQDd5v6tMs39XG3G
-         dDQTC5VgwyzyDD8PQYDiF78syLRhCgoNOibTGQcbQH/yedPCyacvkYT1YYsZ5Y9Kj/Ja
-         q2KnhNhonexMzFXCcBEKp1q5duu7uREC5QGqqsO4uvxpewOj2CrNHVryvefq3EeWzQap
-         gqXg==
-X-Gm-Message-State: AOAM530XiTm6AMPtxHk8CXfZh7OjXxeepP6Qaa4lwfUNRJPixM722ZMw
-        8wedFpm9D3SAbif3SFf9yI85GZC+BKunLA==
-X-Google-Smtp-Source: ABdhPJyMuZZg1OBPksPOcZo6oRdHM9W27SIB5qzN2juk54rtqfSJWsgGqzMJmSRW+tA/Eu8p+UZtPg==
-X-Received: by 2002:a63:f155:: with SMTP id o21mr5240024pgk.218.1634834385909;
-        Thu, 21 Oct 2021 09:39:45 -0700 (PDT)
+        bh=1yAbubDNqKerRe4y8n0JI5rsGyf/bW80kr1c+8k/81E=;
+        b=MEajChXt0FmPN1MV1wUJ/sJp77iuXBkzRlWb9a+64L0FrLUqXvStrxtP/2iZu81Pou
+         yhURl88/MBmMTBhR8yaZcbhe7VQUVTR5zqlukuyU16+trePsF/O9WbVKVgx+Z5hYq6YD
+         2MVgIicT0qyeFW7PMN9+FW6EP/lqtdH3noLCIC9WczLGxb3sHBlHnHz/3LgyMPjqG6XJ
+         xA1lSHMS3w7mhCmpotfPTHsOgSHKd+2b/0KJiFKrdfGIAciECvekMlfpOT607b7DeJ9/
+         +u+UpspZqWahXOKilqDm99aHv6RA09h6LnG34N5yx4UX3AWr68fUVNlXPDbo8h73ptgb
+         IdWQ==
+X-Gm-Message-State: AOAM531BUBag25cwSGT0qpclfsZha0nvNKeG+2grTq2iSrl9vSoVdtSS
+        YAOObmqAkCith1ciDG4SWX+0LA==
+X-Google-Smtp-Source: ABdhPJxRAMcJ4IumOPIRoJHUAntSMMzpKJ28SMBh5ZhpCz83M1s0OlNbMcjlmbEMRRWNniwraaPyWQ==
+X-Received: by 2002:a05:6a00:cd6:b0:471:aded:3884 with SMTP id b22-20020a056a000cd600b00471aded3884mr3756534pfv.18.1634834454415;
+        Thu, 21 Oct 2021 09:40:54 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x129sm6861175pfc.140.2021.10.21.09.39.45
+        by smtp.gmail.com with ESMTPSA id k2sm6730143pfu.80.2021.10.21.09.40.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 09:39:45 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 09:39:44 -0700
+        Thu, 21 Oct 2021 09:40:54 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 09:40:53 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 13/20] signal: Implement force_fatal_sig
-Message-ID: <202110210938.FCB7CEB96F@keescook>
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH 14/20] exit/syscall_user_dispatch: Send ordinary signals
+ on failure
+Message-ID: <202110210940.3BBA18AA@keescook>
 References: <87y26nmwkb.fsf@disp2133>
- <20211020174406.17889-13-ebiederm@xmission.com>
- <202110210923.F5BE43C@keescook>
- <87ilxqbamw.fsf@disp2133>
+ <20211020174406.17889-14-ebiederm@xmission.com>
+ <202110210925.9DEAF27CA@keescook>
+ <878rymbags.fsf@disp2133>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87ilxqbamw.fsf@disp2133>
+In-Reply-To: <878rymbags.fsf@disp2133>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 11:33:43AM -0500, Eric W. Biederman wrote:
+On Thu, Oct 21, 2021 at 11:37:23AM -0500, Eric W. Biederman wrote:
 > Kees Cook <keescook@chromium.org> writes:
 > 
-> > On Wed, Oct 20, 2021 at 12:43:59PM -0500, Eric W. Biederman wrote:
-> >> This is interesting both because it makes force_sigsegv simpler and
-> >> because there are a couple of buggy places in the kernel that call
-> >> do_exit(SIGILL) or do_exit(SIGSYS) because there is no straight
-> >> forward way today for those places to simply force the exit of a
-> >> process with the chosen signal.  Creating force_fatal_sig allows
-> >> those places to be implemented with normal signal exits.
+> > On Wed, Oct 20, 2021 at 12:44:00PM -0500, Eric W. Biederman wrote:
+> >> Use force_fatal_sig instead of calling do_exit directly.  This ensures
+> >> the ordinary signal handling path gets invoked, core dumps as
+> >> appropriate get created, and for multi-threaded processes all of the
+> >> threads are terminated not just a single thread.
 > >
-> > I assume this is talking about seccomp()? :) Should a patch be included
-> > in this series to change those?
+> > Yeah, looks good. Should be no visible behavior change.
 > 
-> Actually it is not talking about seccomp.  As far as I can tell seccomp
-> is deliberately only killing a single thread when it calls do_exit.
+> It is observable in that an entire multi-threaded process gets
+> terminated instead of a single thread.  But since these events should
+> be handling of extra-ordinary events I don't expect there is anyone
+> who wants to have a thread of their process survive.
 
-Okay, I wasn't entirely sure, but yes, seccomp wants to keep the "kill
-only 1 thread" option, which is weird, but useful for the threaded
-seccomp monitor case.
-
-> I am thinking about places where we really want the entire process to
-> die and not just a single thread.  Please see the following changes
-> where I actually use force_fatal_sig.
-
-Yeah, I saw that now. Thanks!
+Right -- sorry, I should have said that more clearly: "Besides the
+single thread death now taking the whole process, there's not behavior
+change (i.e. the signal delivery)." Still looks good to me.
 
 -- 
 Kees Cook
