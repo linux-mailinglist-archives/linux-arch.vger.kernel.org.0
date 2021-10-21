@@ -2,98 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 048D0435CF0
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 10:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B3B436006
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 13:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbhJUIep convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 21 Oct 2021 04:34:45 -0400
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:45857 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbhJUIei (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 04:34:38 -0400
-Received: by mail-oi1-f180.google.com with SMTP id z126so12801547oiz.12;
-        Thu, 21 Oct 2021 01:32:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ceLayuoY70owN3NNsnQH6S+jy2K/HGM8B6O2q8i1GAk=;
-        b=YCr0yE2FgiqGaAqFS2CQf6iIuzKjkgSChItshZahMB8bH09SCBbqVTEhxPR2nEbABI
-         J28+vLs7F423PE22/SRg5MvHV82v84xUJa/lRuWT5cdmE+68risR3FGVG6u2tLx7bPVY
-         ts7UkiXatY3svnoOZRLY0diRcQmRaGh7sl0YshBJAyRT8RvTBjoAlrPscfL1H99z1Ah/
-         VL3dSpfxThB0tnTcpsHxCxuIKnoV0Z6WCttKGuhuirz3WC1IEz31OeNoQhQAKc5dZdy9
-         uZrcf0QPbThf2OkjtRXpD1rqKQRQXgu07R/l2c0Gmh4o9NgoBTZh48TYjfgUa6dMw5Hz
-         c/mA==
-X-Gm-Message-State: AOAM530LpmidWPEL43GrLudI1V3XbiGyrv6qsIjOtNmBnkhH4dtFbyS/
-        w+s5sA+bujyeZVNVWk8+iBtj1wQolWlmttu59Vg=
-X-Google-Smtp-Source: ABdhPJxII4gwyuuwZSE0+97ar6I7zWp2Jlu7LoTmQcOVpBv5Lkm+3ns6lcPNpIqYwJ3CoMM3pxGAXl0ujDP3wS4Hl9w=
-X-Received: by 2002:aca:eb82:: with SMTP id j124mr3578574oih.46.1634805141944;
- Thu, 21 Oct 2021 01:32:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <87y26nmwkb.fsf@disp2133> <877de7jrev.fsf@disp2133>
-In-Reply-To: <877de7jrev.fsf@disp2133>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Thu, 21 Oct 2021 10:32:10 +0200
-Message-ID: <CAAdtpL5+bjpy93DY5gf1ZM4k3BtP+JNJAUSSmvt8cq3shsJR4A@mail.gmail.com>
-Subject: Re: [PATCH 21/20] signal: Replace force_sigsegv(SIGSEGV) with force_fatal_sig(SIGSEGV)
+        id S230117AbhJULOi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 07:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229765AbhJULOh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 07:14:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D441C06161C;
+        Thu, 21 Oct 2021 04:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ot6BoOREJVsPeSpSVlitYEN/YRc+jriHmGG5NiWBxhk=; b=4pH7raY1P8DEgo9UWXVTxSKn2r
+        dCQ6xggO9wUyU30/QgWYxLSUScN0fc7KUhfPbKptPCZmPCKJBqcahrNcRz36GrlU8+2qlNmxVk6yn
+        gif0BU0JJehvSlypk45tomMwxOifUrInkbn7fUJ+HeMciMdM0ErxDFem+VoVMXJiQJTT1jtmZo5yA
+        +I9X6thSoHQAxnj8xLkMdVZrdYq/2RgS07kropx1qzAWPvI4Up6uIyzOiXCZ7E/sXgsdQvq/E4cQZ
+        ypbHMUTzgoqP/clVvTZP7ieLgkXfK2mLGCSYIFSA7o6YGVw1Bqp/9pNRsXu8hwRjHUeXiAZFm16Jo
+        INn1t8TA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mdVzh-007JwJ-5C; Thu, 21 Oct 2021 11:12:21 +0000
+Date:   Thu, 21 Oct 2021 04:12:21 -0700
+From:   Christoph Hellwig <hch@infradead.org>
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        openrisc@lists.librecores.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        David Miller <davem@davemloft.net>, sparclinux@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Maciej Rozycki <macro@orcam.me.uk>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 12/20] exit/kthread: Have kernel threads return instead
+ of calling do_exit
+Message-ID: <YXFLFUjGsvdK13Sa@infradead.org>
+References: <87y26nmwkb.fsf@disp2133>
+ <20211020174406.17889-12-ebiederm@xmission.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211020174406.17889-12-ebiederm@xmission.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 11:52 PM Eric W. Biederman
-<ebiederm@xmission.com> wrote:
->
->
-> Now that force_fatal_sig exists it is unnecessary and a bit confusing
-> to use force_sigsegv in cases where the simpler force_fatal_sig is
-> wanted.  So change every instance we can to make the code clearer.
->
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->  arch/arc/kernel/process.c       | 2 +-
->  arch/m68k/kernel/traps.c        | 2 +-
->  arch/powerpc/kernel/signal_32.c | 2 +-
->  arch/powerpc/kernel/signal_64.c | 4 ++--
->  arch/s390/kernel/traps.c        | 2 +-
->  arch/um/kernel/trap.c           | 2 +-
->  arch/x86/kernel/vm86_32.c       | 2 +-
->  fs/exec.c                       | 2 +-
->  8 files changed, 9 insertions(+), 9 deletions(-)
+On Wed, Oct 20, 2021 at 12:43:58PM -0500, Eric W. Biederman wrote:
+> In 2009 Oleg reworked[1] the kernel threads so that it is not
+> necessary to call do_exit if you are not using kthread_stop().  Remove
+> the explicit calls of do_exit and complete_and_exit (with a NULL
+> completion) that were previously necessary.
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+With this we should also be able to drop the export for do_exit.
