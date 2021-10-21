@@ -2,154 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F3B436291
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 15:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A22436298
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 15:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbhJUNRk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 09:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S231349AbhJUNSa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 09:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbhJUNRk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 09:17:40 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C76C12274B;
-        Thu, 21 Oct 2021 06:15:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8oC+9/7d65CDd50X9ejYe0EZ6JvFYMshxTkIPVHIbY0=; b=bxvnNifaB9+92fSCQJL0ZPvnlF
-        wGT2hT5DDng9WpFi0vuH6xH7nQ7TnR2GyKSBQTb6GGDD9CooVaLx/khTsdZXEp+T4Fh5OmQMgmUAt
-        GJ6OBZH+kLWzDUDK0Zv0eS58cPVdhkNdBUFxpUBlZ8hdrULXWBtgGPSVOUW0w3elHz/8Dp7K7wi4I
-        CeeN0jqtIr64QjBJEQGwbYwU/09/KtjbDdOUZ6TrrB0BwhkJOYM10ivNS0kYOfDx5PbxDjV7JIXUT
-        wpigHAczK8ggJr6JCgM8i9kimOVTxlVMJGfeJWvVaxwJdF70N9dDpuLcEtOHnajx18AaPtJvevCeG
-        myDeok7g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mdXru-00DHjS-R9; Thu, 21 Oct 2021 13:12:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E93FE3002BC;
-        Thu, 21 Oct 2021 15:12:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CE0FC2BD29975; Thu, 21 Oct 2021 15:12:25 +0200 (CEST)
-Date:   Thu, 21 Oct 2021 15:12:25 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Waiman Long <longman@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Christoph =?iso-8859-1?Q?M=FCllner?= <christophm30@gmail.com>,
-        Stafford Horne <shorne@gmail.com>
-Subject: Re: [PATCH] locking: Generic ticket lock
-Message-ID: <YXFnOWTyVoae6h5P@hirez.programming.kicks-ass.net>
-References: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
+        with ESMTP id S231282AbhJUNS3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 09:18:29 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8171C061349
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 06:16:13 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id w19so1260362edd.2
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 06:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=3b3lGjZ68BRQqgocgT1/AFvEYSNx2aYzB2UslzbgnvU=;
+        b=pOEffKNGOYMdqAlcgmtUQ0n262rKcqGhpmkzLx+Dazpfr0DcThiTDo3w2ogzmK/7s7
+         uPGr4QIs5Vp+bpP66qbZLq0SndIwiyYUpoCgCMlT0L/FWQQdJ+iLtytmdDXdyWCJfU2I
+         aLJohUkq2U44boKSn0h76B4VzAVZgDiVg1s5uGMLTuogN8QJtsMe7SmvBCtBdiwIslwi
+         nHKMeaGbIArJZIXJH1zfTjtm1SW64dV4Kalbjm+B4kDQlnUylufAZjsEiKWqw4saAchM
+         HTF0mr36OYPOsoRtAwzmfqHfOyfY+IVxejzvNB083+9UQEYffkmr1dPPL5OF/KoyyGiz
+         4mgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=3b3lGjZ68BRQqgocgT1/AFvEYSNx2aYzB2UslzbgnvU=;
+        b=v01sOfItCYizZ67ov4hcW2dH+LhCuau/KwlYStt4yxGPVtfMaC7KbymmOQQH0OvxEr
+         Ne2GqFpCeBiwD8iPBXdcAz80nLnV8hopM8vWw07sYZExttazVP1duJTJB4T2/Pmff3TP
+         eQ0ks9ZRooB2VbXN7D38bqqp2YP4SjzBw1HS704+j6ehpLgr8bkjX5f1AQNZtJdLfQIz
+         M6UFtqT0+Oig9YMOuiK+4uLOtLew0CnRTdZg+fxoW6L8GwEuHuVxGuEFKbvS3I8lrYyG
+         ZdEnacj2vn2q+mSapI444QoUIiQbxTcaViE8w5GEsVCkfRQxQEEhCbVFwd7b9CI0gsrR
+         tgYw==
+X-Gm-Message-State: AOAM533K/c3T266O/UhOy6iaYNLQTqgOxp68hQbnGP5yri9bsCVxUCgw
+        hCrxxPeYqs7sSbElO2rvK+qIpnk8qDKuM8Ak/rg=
+X-Google-Smtp-Source: ABdhPJyz26kBUtWJBWYKvQC0CSHz/lT2SmJJwyYqo8MbyuTriCkdImyTKQTvaUaXNtzHiJLrBtzgXBtWfKuMThaBeis=
+X-Received: by 2002:a17:906:3bca:: with SMTP id v10mr7445487ejf.9.1634822170546;
+ Thu, 21 Oct 2021 06:16:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
+Sender: elisabethjohn415@gmail.com
+Received: by 2002:a17:907:169f:0:0:0:0 with HTTP; Thu, 21 Oct 2021 06:16:10
+ -0700 (PDT)
+From:   Anderson Thereza <anderson.thereza24@gmail.com>
+Date:   Thu, 21 Oct 2021 06:16:10 -0700
+X-Google-Sender-Auth: XaC8qqVTwJvUuDrlX6yYrHV6a1M
+Message-ID: <CAOGA6VAjRg-3eEfv_ejEpUzWxiWd1svzxCfZk0=1kG6syewi5w@mail.gmail.com>
+Subject: Re: Greetings My Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 03:05:15PM +0200, Peter Zijlstra wrote:
-> 
-> There's currently a number of architectures that want/have graduated
-> from test-and-set locks and are looking at qspinlock.
-> 
-> *HOWEVER* qspinlock is very complicated and requires a lot of an
-> architecture to actually work correctly. Specifically it requires
-> forward progress between a fair number of atomic primitives, including
-> an xchg16 operation, which I've seen a fair number of fundamentally
-> broken implementations of in the tree (specifically for qspinlock no
-> less).
-> 
-> The benefit of qspinlock over ticket lock is also non-obvious, esp.
-> at low contention (the vast majority of cases in the kernel), and it
-> takes a fairly large number of CPUs (typically also NUMA) to make
-> qspinlock beat ticket locks.
-> 
-> Esp. things like ARM64's WFE can move the balance a lot in favour of
-> simpler locks by reducing the cacheline pressure due to waiters (see
-> their smp_cond_load_acquire() implementation for details).
-> 
-> Unless you've audited qspinlock for your architecture and found it
-> sound *and* can show actual benefit, simpler is better.
-> 
-> Therefore provide ticket locks, which depend on a single atomic
-> operation (fetch_add) while still providing fairness.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  include/asm-generic/qspinlock.h         |   30 +++++++++
->  include/asm-generic/ticket_lock_types.h |   11 +++
->  include/asm-generic/ticket_lock.h       |   97 ++++++++++++++++++++++++++++++++
->  3 files changed, 138 insertions(+)
+Greetings,
 
-A few notes...
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night without knowing if I may be alive to see the next day. I am
+mrs.Anderson Theresa, a widow suffering from a long time illness. I
+have some funds I inherited from my late husband, the sum of
+($11,000,000.00, Eleven Million Dollars) my Doctor told me recently
+that I have serious sickness which is a cancer problem. What disturbs
+me most is my stroke sickness. Having known my condition, I decided to
+donate this fund to a good person that will utilize it the way I am
+going to instruct herein. I need a very honest God.
 
-> + * It relies on smp_store_release() + atomic_*_acquire() to be RCsc (or no
-> + * weaker than RCtso if you're Power, also see smp_mb__after_unlock_lock()),
+fearing a person who can claim this money and use it for Charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how the
+fund will be transferred to your bank account. I am waiting for your
+reply.
 
-This should hold true to RISC-V in its current form, AFAICT
-atomic_fetch_add ends up using AMOADD, and therefore the argument made
-in the unlock+lock thread [1], gives that this results in RW,RW
-ordering.
-
-[1] https://lore.kernel.org/lkml/5412ab37-2979-5717-4951-6a61366df0f2@nvidia.com/
-
-
-I've compile tested on openrisc/simple_smp_defconfig using the below.
-
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -30,7 +30,6 @@ config OPENRISC
- 	select HAVE_DEBUG_STACKOVERFLOW
- 	select OR1K_PIC
- 	select CPU_NO_EFFICIENT_FFS if !OPENRISC_HAVE_INST_FF1
--	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select OMPIC if SMP
- 	select ARCH_WANT_FRAME_POINTERS
---- a/arch/openrisc/include/asm/Kbuild
-+++ b/arch/openrisc/include/asm/Kbuild
-@@ -1,9 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- generic-y += extable.h
- generic-y += kvm_para.h
--generic-y += mcs_spinlock.h
--generic-y += qspinlock_types.h
--generic-y += qspinlock.h
-+generic-y += ticket_lock_types.h
-+generic-y += ticket_lock.h
- generic-y += qrwlock_types.h
- generic-y += qrwlock.h
- generic-y += user.h
---- a/arch/openrisc/include/asm/spinlock.h
-+++ b/arch/openrisc/include/asm/spinlock.h
-@@ -15,7 +15,7 @@
- #ifndef __ASM_OPENRISC_SPINLOCK_H
- #define __ASM_OPENRISC_SPINLOCK_H
- 
--#include <asm/qspinlock.h>
-+#include <asm/ticket_lock.h>
- 
- #include <asm/qrwlock.h>
- 
---- a/arch/openrisc/include/asm/spinlock_types.h
-+++ b/arch/openrisc/include/asm/spinlock_types.h
-@@ -1,7 +1,7 @@
- #ifndef _ASM_OPENRISC_SPINLOCK_TYPES_H
- #define _ASM_OPENRISC_SPINLOCK_TYPES_H
- 
--#include <asm/qspinlock_types.h>
-+#include <asm/ticket_lock_types.h>
- #include <asm/qrwlock_types.h>
- 
- #endif /* _ASM_OPENRISC_SPINLOCK_TYPES_H */
+May God Bless you,
+mrs.Anderson Theresa.
