@@ -2,86 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCAD436B5E
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 21:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332F1436BB9
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 22:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbhJUTeS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 15:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbhJUTeR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 15:34:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B179C061764;
-        Thu, 21 Oct 2021 12:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=g9ZT/0FoZ5x3CiuBFCIM2YP2UyvqhoFmEIhEg8pmdwA=; b=t7VYyTyL+zzJmyk7lTrCVP0pez
-        49bdDOM1ylEshNaga0LR0NiqVO7TwU3sEtDIn8iK2BsMimXC8z3ingoHZw9TbC3P9atfQUE3vD1JO
-        OzKhqPsoPFgZobOqz2Vg9JVzeTuGQs69r8tDIMfdQnGVIIn6G8UvlEOB9NwDGC8W3OheCqjNmoBUE
-        AxAMo2LXC1Rt2IKCqtdPdzPFBBqnpkS8tnYWUDmJLQRN/CjIFW33GamDdQd6x8Xt6vSc99scNHzTP
-        HrYS7wfwBelOBZfNEn17LxVEmQhL1xJfsUcIkdLaUBWVb2tHQpIaA8GY7WAvyE9VN1Z/9v/Du5Rzm
-        wgeZO64A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mddlp-00DUnf-A3; Thu, 21 Oct 2021 19:31:02 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 82CFA986DD9; Thu, 21 Oct 2021 21:30:33 +0200 (CEST)
-Date:   Thu, 21 Oct 2021 21:30:33 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
+        id S231853AbhJUUGM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 16:06:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44782 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230020AbhJUUGM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 Oct 2021 16:06:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3980561251;
+        Thu, 21 Oct 2021 20:03:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634846635;
+        bh=6wcMAPIuLrajjhebGQXqdPC04sfh6LeM6s1G6IwbmDo=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=UF0Nep0XEdBF0LM9GoeKiRNKd/wpiEdDnvXUuZywx0P5uZ1fnDqYqdcYTQ0N5qeGJ
+         DHfkYAV/ch05bpxv5c+gmwzQqDLf0umodqdHJaXK4kmjFDGOau6dHF2dTS7jeUGKJb
+         5Txmj0ytHTJTJDLMqSmhhPskP/y6NI88ehRkLJdI7DG/NPfnqshhNnoEt/T4q3O+zh
+         mU5IX0kutJ0dQmTnys1NHJyp0Dy3EgWZOZa1kldziNr2ZmTapOWOQ30s4D8Odza2YY
+         0iotDf57X6QJHzwutdQS8As4whQZY3tg2dJWR8AN8E/LGZtceOFngpOc6FHn6Fwn7W
+         fQKtx9rDY0VgQ==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 4DC3E27C0054;
+        Thu, 21 Oct 2021 16:03:54 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute6.internal (MEProxy); Thu, 21 Oct 2021 16:03:54 -0400
+X-ME-Sender: <xms:qcdxYbiMTqQn4HSk6q_epceIccz0L_1UvyV87EFVaFIg785b2Z-LmQ>
+    <xme:qcdxYYBWdRlEyzGhHXXf8z9Cb1zFw42JqdF6muPVQewPJiCtAifTncLOH2BEbxueB
+    fepWttx6Wj_uhwf2TE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddviedgudegvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnheptdfhheettddvtedvtedugfeuuefhtddugedvleevleefvdetleff
+    gfefvdekgeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:qcdxYbEsDfgAjUDtMcxcGuoptY-lMRArMcBLC5kWtPoLYDEGlijgRQ>
+    <xmx:qcdxYYR50mlShwcXBJQJXp1adk2gxmrX8RbgfDnIRKyAlUajMw1-Qg>
+    <xmx:qcdxYYwZvuFcsCrbTdxHmayn3ov-cTMSTp_skfWC2EMQuAZbe0ErwA>
+    <xmx:qsdxYfmP2MMGkmr4dRhlEEwqeByj-8SOoeR3gSnxBw8_i69f_H64cQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D117521E006E; Thu, 21 Oct 2021 16:03:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1369-gd055fb5e7c-fm-20211018.002-gd055fb5e
+Mime-Version: 1.0
+Message-Id: <f4b83c21-4e73-45b6-ae3a-17659be512c0@www.fastmail.com>
+In-Reply-To: <20211008235504.2957528-1-keescook@chromium.org>
+References: <20211008235504.2957528-1-keescook@chromium.org>
+Date:   Thu, 21 Oct 2021 13:03:33 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Kees Cook" <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc:     "Mark Rutland" <mark.rutland@arm.com>,
+        "Shuah Khan" <shuah@kernel.org>,
+        "Alexey Dobriyan" <adobriyan@gmail.com>,
         linux-kselftest@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>, jannh@google.com,
-        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
+        "Josh Poimboeuf" <jpoimboe@redhat.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Alexey Gladkov" <gladkov.alexey@gmail.com>,
+        "Jann Horn" <jannh@google.com>,
+        "Vito Caputo" <vcaputo@pengaru.com>,
+        "Ingo Molnar" <mingo@redhat.com>, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, christian.brauner@ubuntu.com,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Ben Segall" <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com,
+        "Christian Brauner" <christian.brauner@ubuntu.com>,
         amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
-        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
-        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
-        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, ebiederm@xmission.com,
+        michael.weiss@aisec.fraunhofer.de,
+        "Michal Hocko" <mhocko@suse.com>, deller@gmx.de,
+        "Qi Zheng" <zhengqi.arch@bytedance.com>, me@tobin.cc,
+        tycho@tycho.pizza, "Thomas Gleixner" <tglx@linutronix.de>,
+        "Borislav Petkov" <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Jens Axboe" <axboe@kernel.dk>, metze@samba.org,
+        "Lai Jiangshan" <laijs@linux.alibaba.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
         ohoono.kwon@samsung.com, kaleshsingh@google.com,
         yifeifz2@illinois.edu, linux-arch@vger.kernel.org,
-        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
-        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
-        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
-        chris@zankel.net, linux-kernel@vger.kernel.org,
+        vgupta@kernel.org, "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "Will Deacon" <will@kernel.org>, guoren@kernel.org,
+        bcain@codeaurora.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        nickhu@andestech.com, jonas@southpole.se,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>, hca@linux.ibm.com,
+        ysato@users.sourceforge.jp, davem@davemloft.net, chris@zankel.net,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
         linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
 Subject: Re: [PATCH] selftests: proc: Make sure wchan works when it exists
-Message-ID: <20211021193033.GW174703@worktop.programming.kicks-ass.net>
-References: <20211008235504.2957528-1-keescook@chromium.org>
- <202110211008.CC8B26A@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202110211008.CC8B26A@keescook>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 10:09:33AM -0700, Kees Cook wrote:
 
-> > Hi Peter,
-> > 
-> > Can you add this to the wchan series, please? This should help wchan from
-> > regressing in the future, and allow us to notice if the depth accidentally
-> > changes, like Mark saw.
-> > ---
-> 
-> I'd like to make sure we have a regression test for this. Will you add
-> this to the wchan series please?
 
-I have it there, but it's in the part that didn't make it in yet. I'm
-currently in the progress of reworking that.
+On Fri, Oct 8, 2021, at 4:55 PM, Kees Cook wrote:
+> This makes sure that wchan contains a sensible symbol when a process is
+> blocked. Specifically this calls the sleep() syscall, and expects the
+> architecture to have called schedule() from a function that has "sleep"
+> somewhere in its name. For example, on the architectures I tested
+> (x86_64, arm64, arm, mips, and powerpc) this is "hrtimer_nanosleep":
 
-Do you want it it ahead of all that?
+Is this really better than admitting that the whole mechanism is nonsense and disabling it?
+
+We could have a fixed string for each task state and call it a day.
