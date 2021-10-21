@@ -2,140 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 815B1436315
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 15:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C301E436360
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 15:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbhJUNgo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 09:36:44 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:54244 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbhJUNgo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 09:36:44 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52]:40512)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mdYD5-005DQ9-NZ; Thu, 21 Oct 2021 07:34:19 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:46380 helo=email.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mdYD4-003epC-7e; Thu, 21 Oct 2021 07:34:19 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        "open list\:TENSILICA XTENSA PORT \(xtensa\)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "open list\:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Paul Mackerras <paulus@samba.org>,
-        H Peter Anvin <hpa@zytor.com>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Kees Cook <keescook@chromium.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maciej Rozycki <macro@orcam.me.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Miller <davem@davemloft.net>,
-        Greentime Hu <green.hu@gmail.com>
-References: <87y26nmwkb.fsf@disp2133> <877de7jrev.fsf@disp2133>
-        <CAMuHMdURxrdjsXq7+q-AWTwxVUdmddOj2vvNHv6M=WtsU5nRvg@mail.gmail.com>
-Date:   Thu, 21 Oct 2021 08:33:51 -0500
-In-Reply-To: <CAMuHMdURxrdjsXq7+q-AWTwxVUdmddOj2vvNHv6M=WtsU5nRvg@mail.gmail.com>
-        (Geert Uytterhoeven's message of "Thu, 21 Oct 2021 10:09:46 +0200")
-Message-ID: <87tuhaijsw.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S230372AbhJUNwZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 09:52:25 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:45341 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229878AbhJUNwY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 09:52:24 -0400
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MK3mS-1mPkh72WvG-00LZhi; Thu, 21 Oct 2021 15:50:07 +0200
+Received: by mail-wr1-f52.google.com with SMTP id r18so1226479wrg.6;
+        Thu, 21 Oct 2021 06:50:07 -0700 (PDT)
+X-Gm-Message-State: AOAM531XQ4qmZX/cdKyIo+x2yhiBXZAjDJHLwIev/Xn02DeZbZTtzNe1
+        iTlTEmqZOpad7CoNYsJJEtyxInXHMyDYZUi3bco=
+X-Google-Smtp-Source: ABdhPJzFgn79Ic6FqBqH1cvM4ZGB9Dra++hlNfhANl9ybgG+sQ8/6wYtZISF0tQPrg0FbbKYG8md6racZvoc4a5yYuU=
+X-Received: by 2002:a05:6000:18c7:: with SMTP id w7mr7104304wrq.411.1634824207284;
+ Thu, 21 Oct 2021 06:50:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mdYD4-003epC-7e;;;mid=<87tuhaijsw.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+Mpe2HbWR2YDGhZ3vVJNTbKaHiNpeOXoM=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa05.xmission.com
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,XMNoVowels,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4995]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.7 XMSubLong Long Subject
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa05 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.0 T_TooManySym_03 6+ unique symbols in subject
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Geert Uytterhoeven <geert@linux-m68k.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 897 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 12 (1.4%), b_tie_ro: 10 (1.2%), parse: 1.14
-        (0.1%), extract_message_metadata: 14 (1.6%), get_uri_detail_list: 1.00
-        (0.1%), tests_pri_-1000: 27 (3.0%), tests_pri_-950: 1.31 (0.1%),
-        tests_pri_-900: 1.10 (0.1%), tests_pri_-90: 286 (31.9%), check_bayes:
-        285 (31.7%), b_tokenize: 12 (1.3%), b_tok_get_all: 8 (0.9%),
-        b_comp_prob: 2.2 (0.3%), b_tok_touch_all: 260 (28.9%), b_finish: 0.94
-        (0.1%), tests_pri_0: 537 (59.9%), check_dkim_signature: 0.61 (0.1%),
-        check_dkim_adsp: 3.0 (0.3%), poll_dns_idle: 1.00 (0.1%), tests_pri_10:
-        3.2 (0.4%), tests_pri_500: 10 (1.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 21/20] signal: Replace force_sigsegv(SIGSEGV) with force_fatal_sig(SIGSEGV)
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+References: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
+In-Reply-To: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 21 Oct 2021 15:49:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2+=9jjyqN5dMOb4+bYJy=q5G3CxFaCW+=4xryz-S=zYA@mail.gmail.com>
+Message-ID: <CAK8P3a2+=9jjyqN5dMOb4+bYJy=q5G3CxFaCW+=4xryz-S=zYA@mail.gmail.com>
+Subject: Re: [PATCH] locking: Generic ticket lock
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        =?UTF-8?Q?Christoph_M=C3=BCllner?= <christophm30@gmail.com>,
+        Stafford Horne <shorne@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:oz2/dP5J5bv0MZ5b5PpkbfR/AHPVkMMXoayFbA+g+9/TZYgDQim
+ 599eBtzjZbI1PpL5vv/5JIMFEoDtxbIoRe5XU8Lt5U3hlp6hyeKhcLh86Ed07egMp66Gqs4
+ 2zaLVEF8lr2Gk3I/7Bh+JroOclDoMQ3V6do9+wmUf3SxvgMQXVAcosHoCCJOdD0yk8bmVgj
+ +M0300hmfe6u0Qfq93NMA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8pKS50lWB3A=:AbKj+0rqm3eAX3LNHG38Hf
+ PCiLyg8EA1uUI1n3wl5KfDu+b+ZdKxNM8v2ryQDCiitBWePuuG9ZOFIUrxC5CGn0PasAP+DGV
+ mC0WkkBkMT4kC4XHlsBk/W1136WsQEnk6SMBtBQ2tNQG5oS2x3ymiEx6nhgZm7f3kpKz3v+gh
+ uJXXou2bQzT3N0Kxr7uVcGktsw7k2IBB4HDltFLYG6pB8cQQZVO7YQxSR6PeBVF02chznZysj
+ WheCPJbGX2pY+Rpp33iQJdQXwFadgvlObpC6054a9RltHw/t9Kl9HOILeZ9+dJCwbZ4xlWlAT
+ LE+/D/5nKON5/qlUvtiGq/N3ZG7V9erIyuILvnNncoKvQ6tYSuJQSDJ8wFuw1sgOHMoNUf25H
+ qIop0lKmZol1M6drDEsGzqhGDCYPMSAC29VyNf8yYf/2JVURNajOvIV1ukMC2A+9IEHli+2Ef
+ /g2XE/XI4q7Ldo5M6FHkvNATxK7LrVMwNqCtC9eYulM7BLn+F3lXiBxUtJZ9FN/irVkHGosfD
+ qvFfiD8uU0u3tXEJf6N8a2L3LjSloiBvTXGZ1QbIFupRHsNBVwZi4uy7jxxMCllwoi1FZ1U69
+ 7jWtgQQ2nKsL6udnAg0Di0jlLq3IlrGz3UGOkz9zUvPQnH9KucX/62nN5/sNZAQBToHYHgQa+
+ +RGZak2WPRWmU/gXnXWgsj3rt6X8fAe/NjQK5XphEFxyaw7++bKsmT5JpUu2KPl44Yho=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Geert Uytterhoeven <geert@linux-m68k.org> writes:
-
-> Hi Eric,
+On Thu, Oct 21, 2021 at 3:05 PM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> Patch 21/20?
+> Therefore provide ticket locks, which depend on a single atomic
+> operation (fetch_add) while still providing fairness.
 
-In reviewing another part of the patchset Linus asked if force_sigsegv
-could go away.  It can't completely but I can get this far.
+Nice!
 
-Given that it is just a cleanup it makes most sense to me as an
-additional patch on top of what is already here.
+Aside from the qspinlock vs ticket-lock question, can you describe the
+tradeoffs between this generic ticket lock and a custom implementation
+in architecture code? Should we convert most architectures over
+to the generic code in the long run, or is there something they
+can usually do better with an inline asm based ticket lock or
+a trivial test-and-set?
 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  include/asm-generic/qspinlock.h         |   30 +++++++++
+>  include/asm-generic/ticket_lock_types.h |   11 +++
+>  include/asm-generic/ticket_lock.h       |   97 ++++++++++++++++++++++++++++++++
+>  3 files changed, 138 insertions(+)
 
-> On Wed, Oct 20, 2021 at 11:52 PM Eric W. Biederman
-> <ebiederm@xmission.com> wrote:
->> Now that force_fatal_sig exists it is unnecessary and a bit confusing
->> to use force_sigsegv in cases where the simpler force_fatal_sig is
->> wanted.  So change every instance we can to make the code clearer.
->>
->> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
->
->>  arch/m68k/kernel/traps.c        | 2 +-
->
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+If anyone wants to use this for their architecture, feel free to add
 
-Thank you.
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-Eric
+to merge it through the respective architecture git tree. If there is more
+than one architecture that wants it right now, I could also take them
+all through
+the asm-generic tree.
+
+          Arnd
