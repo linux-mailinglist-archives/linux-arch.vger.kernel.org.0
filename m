@@ -2,187 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFD2436367
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 15:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6530943650A
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 17:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbhJUNxD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 09:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbhJUNxD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 09:53:03 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1C2C0613B9;
-        Thu, 21 Oct 2021 06:50:47 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id c29so732310pfp.2;
-        Thu, 21 Oct 2021 06:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qytey+udWiVdufCAPeWRFbAbyJ7Ufn4LCZ4GQpnBXYw=;
-        b=mBRSny8EkO3D6gtauzlwde9EZRNIuHUKBgf6Bsr6Ufm1sdJi/Qy+xBTJgUX/aaQaYM
-         MvkQogp0AS981Zno8uEywNGhRDkjctnoOD4cPYT/a7I4nJShBFY0o7mYSMEckE1hr8qF
-         zsN2FBLL2lygA2ZND8ndZh83+Wdye8GezReqFot5UxwKSJquwrPwjN8kC2y+RBxL6W6d
-         JDxxcMnvXdy0De00DwhH+U4nU+4LCey7G0RQtnM3CmlqXO4Zsm1VMDlaBQ8G29ox5WtG
-         s//DvcdC6HoXI7gcpEmIN1NRhque4EQi2pRDFwrqc6t7obOGXVMg8TkM1rD2B17N6ff/
-         rhjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qytey+udWiVdufCAPeWRFbAbyJ7Ufn4LCZ4GQpnBXYw=;
-        b=CU7nIQWngt0zmmTyTwiE6OKrAcE5M3BkC5mrY4lfOicWMbHMzTIDEc7Tm/kj2i+QOR
-         qBPrGZfmxJiHEi+d0/tbfkYpl7gDe3LEpF8hDAxnzoM5Z0JNbjGanm00JrweJ8FbgCUg
-         nPF0e6pZYkx5fxTHrPhtYBbO5gQNDA4zhsQ3ZHfO1E2nmjX+kgqJys5G/ZB0JeHcRCxb
-         vUikAHYlgpfCWDOJYHOKlyCNlFV9nYx3yK9kC7lOcNL/kIyZh6USALtAQt7SroX5tMrx
-         ebbOEYHpskNiklbrnGgmRoDR6NB4Q0Krj45huUEU4xeuPBFJfgZ/FVgbXr8gpxCaG3H/
-         zadQ==
-X-Gm-Message-State: AOAM530sjiqsp4ERDLCGAKx5JJX5cUNvGXYVUIrkD/Fe9Ow3kY94XvzG
-        qHBW3WzyD3i3K9M7V1PxZmI=
-X-Google-Smtp-Source: ABdhPJz9dWOBj6dkGqRf3m2NMLz6LrJ/qXAuBE8GWTttrU0QU/cWUuyxKh5Uo/WvABgFQqryt+f0dA==
-X-Received: by 2002:a63:7a19:: with SMTP id v25mr4497388pgc.402.1634824247142;
-        Thu, 21 Oct 2021 06:50:47 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id fv9sm9846379pjb.26.2021.10.21.06.50.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 06:50:46 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 22:50:44 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Christoph =?iso-8859-1?Q?M=FCllner?= <christophm30@gmail.com>
-Subject: Re: [PATCH] locking: Generic ticket lock
-Message-ID: <YXFwNJHHBydbZYtM@antec>
-References: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
- <YXFnOWTyVoae6h5P@hirez.programming.kicks-ass.net>
+        id S230280AbhJUPIx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 11:08:53 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:55140 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231596AbhJUPIu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 11:08:50 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51]:47110)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mdZeI-00HRzW-LT; Thu, 21 Oct 2021 09:06:30 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:50622 helo=email.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mdZeH-00CWxY-Hi; Thu, 21 Oct 2021 09:06:30 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>
+References: <87y26nmwkb.fsf@disp2133>
+        <20211020174406.17889-18-ebiederm@xmission.com>
+        <YXERhzKOVzGJoNMN@kroah.com>
+Date:   Thu, 21 Oct 2021 10:06:22 -0500
+In-Reply-To: <YXERhzKOVzGJoNMN@kroah.com> (Greg KH's message of "Thu, 21 Oct
+        2021 09:06:47 +0200")
+Message-ID: <875ytqifip.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YXFnOWTyVoae6h5P@hirez.programming.kicks-ass.net>
+Content-Type: text/plain
+X-XM-SPF: eid=1mdZeH-00CWxY-Hi;;;mid=<875ytqifip.fsf@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/afZzUN9FSzTK9R8sFXt+HdCBvLvrywHY=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
+        XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4997]
+        *  0.7 XMSubLong Long Subject
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Greg KH <gregkh@linuxfoundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 433 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (2.6%), b_tie_ro: 10 (2.2%), parse: 0.82
+        (0.2%), extract_message_metadata: 14 (3.3%), get_uri_detail_list: 1.28
+        (0.3%), tests_pri_-1000: 23 (5.4%), tests_pri_-950: 1.30 (0.3%),
+        tests_pri_-900: 1.00 (0.2%), tests_pri_-90: 82 (18.8%), check_bayes:
+        79 (18.2%), b_tokenize: 7 (1.5%), b_tok_get_all: 7 (1.6%),
+        b_comp_prob: 2.4 (0.6%), b_tok_touch_all: 59 (13.7%), b_finish: 0.81
+        (0.2%), tests_pri_0: 287 (66.3%), check_dkim_signature: 0.78 (0.2%),
+        check_dkim_adsp: 3.7 (0.8%), poll_dns_idle: 1.09 (0.3%), tests_pri_10:
+        2.0 (0.5%), tests_pri_500: 7 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 18/20] exit/rtl8723bs: Replace the macro thread_exit with a simple return 0
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 03:12:25PM +0200, Peter Zijlstra wrote:
-> On Thu, Oct 21, 2021 at 03:05:15PM +0200, Peter Zijlstra wrote:
-> > 
-> > There's currently a number of architectures that want/have graduated
-> > from test-and-set locks and are looking at qspinlock.
-> > 
-> > *HOWEVER* qspinlock is very complicated and requires a lot of an
-> > architecture to actually work correctly. Specifically it requires
-> > forward progress between a fair number of atomic primitives, including
-> > an xchg16 operation, which I've seen a fair number of fundamentally
-> > broken implementations of in the tree (specifically for qspinlock no
-> > less).
-> > 
-> > The benefit of qspinlock over ticket lock is also non-obvious, esp.
-> > at low contention (the vast majority of cases in the kernel), and it
-> > takes a fairly large number of CPUs (typically also NUMA) to make
-> > qspinlock beat ticket locks.
-> > 
-> > Esp. things like ARM64's WFE can move the balance a lot in favour of
-> > simpler locks by reducing the cacheline pressure due to waiters (see
-> > their smp_cond_load_acquire() implementation for details).
-> > 
-> > Unless you've audited qspinlock for your architecture and found it
-> > sound *and* can show actual benefit, simpler is better.
+Greg KH <gregkh@linuxfoundation.org> writes:
 
-For OpenRISC originally we had a custom ticket locking mechanism, but it was
-suggested to use qspinlocks as the genric implementation meant less code.
+> On Wed, Oct 20, 2021 at 12:44:04PM -0500, Eric W. Biederman wrote:
+>> Every place thread_exit is called is at the end of a function started
+>> with kthread_run.  The code in kthread_run has arranged things so a
+>> kernel thread can just return and do_exit will be called.
+>> 
+>> So just have the threads return instead of calling complete_and_exit.
+>> 
+>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>> ---
+>>  drivers/staging/rtl8723bs/core/rtw_cmd.c                | 2 +-
+>>  drivers/staging/rtl8723bs/core/rtw_xmit.c               | 2 +-
+>>  drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c          | 2 +-
+>>  drivers/staging/rtl8723bs/include/osdep_service_linux.h | 2 --
+>>  4 files changed, 3 insertions(+), 5 deletions(-)
+>
+> You "forgot" to cc: the linux-staging and the staging driver maintainer
+> on these drivers/staging/ changes...
 
-Changed here:
+Yes I did.  Sorry about that.
 
-	https://yhbt.net/lore/all/86vaix5fmr.fsf@arm.com/T/
+> Anyway, they look fine to me, but you will get some conflicts with some
+> of these changes based on cleanups already in my staging-next tree (in
+> linux-next if you want to see them).  But feel free to take these all in
+> your tree if that makes it easier:
 
-I think moving to qspinlocks was suggested by you.  But now that we have this
-generic infrastructure, I am good to switch.
+I just did a test merge and there was one file that was completely
+removed and one file with had changes a line or two above where my code
+changed.  So nothing too difficult to result.
 
-> > Therefore provide ticket locks, which depend on a single atomic
-> > operation (fetch_add) while still providing fairness.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  include/asm-generic/qspinlock.h         |   30 +++++++++
-> >  include/asm-generic/ticket_lock_types.h |   11 +++
-> >  include/asm-generic/ticket_lock.h       |   97 ++++++++++++++++++++++++++++++++
-> >  3 files changed, 138 insertions(+)
-> 
-> A few notes...
-> 
-> > + * It relies on smp_store_release() + atomic_*_acquire() to be RCsc (or no
-> > + * weaker than RCtso if you're Power, also see smp_mb__after_unlock_lock()),
-> 
-> This should hold true to RISC-V in its current form, AFAICT
-> atomic_fetch_add ends up using AMOADD, and therefore the argument made
-> in the unlock+lock thread [1], gives that this results in RW,RW
-> ordering.
-> 
-> [1] https://lore.kernel.org/lkml/5412ab37-2979-5717-4951-6a61366df0f2@nvidia.com/
-> 
-> 
-> I've compile tested on openrisc/simple_smp_defconfig using the below.
-> 
-> --- a/arch/openrisc/Kconfig
-> +++ b/arch/openrisc/Kconfig
-> @@ -30,7 +30,6 @@ config OPENRISC
->  	select HAVE_DEBUG_STACKOVERFLOW
->  	select OR1K_PIC
->  	select CPU_NO_EFFICIENT_FFS if !OPENRISC_HAVE_INST_FF1
-> -	select ARCH_USE_QUEUED_SPINLOCKS
->  	select ARCH_USE_QUEUED_RWLOCKS
->  	select OMPIC if SMP
->  	select ARCH_WANT_FRAME_POINTERS
-> --- a/arch/openrisc/include/asm/Kbuild
-> +++ b/arch/openrisc/include/asm/Kbuild
-> @@ -1,9 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  generic-y += extable.h
->  generic-y += kvm_para.h
-> -generic-y += mcs_spinlock.h
-> -generic-y += qspinlock_types.h
-> -generic-y += qspinlock.h
-> +generic-y += ticket_lock_types.h
-> +generic-y += ticket_lock.h
->  generic-y += qrwlock_types.h
->  generic-y += qrwlock.h
->  generic-y += user.h
-> --- a/arch/openrisc/include/asm/spinlock.h
-> +++ b/arch/openrisc/include/asm/spinlock.h
-> @@ -15,7 +15,7 @@
->  #ifndef __ASM_OPENRISC_SPINLOCK_H
->  #define __ASM_OPENRISC_SPINLOCK_H
->  
-> -#include <asm/qspinlock.h>
-> +#include <asm/ticket_lock.h>
->  
->  #include <asm/qrwlock.h>
->  
-> --- a/arch/openrisc/include/asm/spinlock_types.h
-> +++ b/arch/openrisc/include/asm/spinlock_types.h
-> @@ -1,7 +1,7 @@
->  #ifndef _ASM_OPENRISC_SPINLOCK_TYPES_H
->  #define _ASM_OPENRISC_SPINLOCK_TYPES_H
->  
-> -#include <asm/qspinlock_types.h>
-> +#include <asm/ticket_lock_types.h>
->  #include <asm/qrwlock_types.h>
->  
->  #endif /* _ASM_OPENRISC_SPINLOCK_TYPES_H */
+I don't really mind either way.  But keeping them all in one tree makes
+them easier to keep track of, and allows me to do things like see if
+I can remove EXPORT_SYMBOL(do_exit) as Christoph suggested.
 
-This looks good to me.  Do you want to commit along with the
-generic ticket lock patch?  Otherwise I can queue it after it is
-upstreamed.  Another option is I can help merge the generic ticket
-lock code via the OpenRISC branch.
+Eric
 
-Let me know what works.
-
--Stafford
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
