@@ -2,118 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 508964367A9
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E60E4367BE
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbhJUQ1y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 12:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S231220AbhJUQay (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 12:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbhJUQ1x (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 12:27:53 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B916CC061764
-        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:25:37 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id oa4so884338pjb.2
-        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zLyHkZJxv9AuckTXl1aFGO1wqCnZzuTOb4ASGakK8zU=;
-        b=jdG0sXg+e5z7+9YUsZpsO8v14PCLj01j7Zd+6xMXVIcGrV2OizvK3wWHqqDcJrmxap
-         RLERx1HyuKSZmD5zmBcddvnYTudha9TyiDp5UoVDtRW3NSacwc1Cx3f21nLMIegaFu6X
-         ZSIS59bdZtXPUjbgVM3FbaHycvfaXmcZn6+hw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zLyHkZJxv9AuckTXl1aFGO1wqCnZzuTOb4ASGakK8zU=;
-        b=6pDawqOnZRUTC8S52jzjrrZBDpAPrvAau6d8a48eNtFGnhZSffNQ1C98hmXcgPiMxG
-         2Ob1HvEuz0LSr7p8Tc99jSBpLOinEYMn8XTrXfG7/YB9bKHNJZQNB3LjOhbwDgw3wWzp
-         hF+qqC/7ERSP3o/73zK761nQS2PkuuGI8fU88LvuTXn8I4AaBbA5ciL34yNN3HMl/Y0/
-         yGwmJ9YS/4BloF7GHdWptI597U1GJELx45cB34rOvTTLkjNNiK4d+Bdwk5GlVOpxABAd
-         GVDMKclEmCpQRvQTxAnea+4mTMKLINRpQ2/6NsK++Sv+WG31BjCLDjzIigQRo7DrgB3/
-         P/6w==
-X-Gm-Message-State: AOAM532c8HRLLaHJci3AjAsHfMqYliiDOiQMWBNQxqRAmF29oJxnJ1pI
-        7/yvOllqIesX9Zaa+fsn0n1FmA==
-X-Google-Smtp-Source: ABdhPJy0qiFIEXxxtmTn5++MkdPedI7wi1p1o7iOA0FoFON5kUhfAjCBUbZp9PpGAgo7A66DW1Oa0w==
-X-Received: by 2002:a17:90a:7893:: with SMTP id x19mr7765866pjk.197.1634833537254;
-        Thu, 21 Oct 2021 09:25:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b18sm7815177pfl.24.2021.10.21.09.25.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 09:25:37 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 09:25:36 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH 14/20] exit/syscall_user_dispatch: Send ordinary signals
- on failure
-Message-ID: <202110210925.9DEAF27CA@keescook>
-References: <87y26nmwkb.fsf@disp2133>
- <20211020174406.17889-14-ebiederm@xmission.com>
+        with ESMTP id S229597AbhJUQax (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 12:30:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1408C061764;
+        Thu, 21 Oct 2021 09:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=izKpVidBKcjnuLaiC7PERWVHstuq6Xy5Uk1RXaoEYd4=; b=ZW3xZCE93YXUSeTAcEhUjrHvHw
+        hFeyYDKiEVFap0+KcMXtDnAbFi7LkUuTEGhmT3j/jZUpMtvfvDI2lgUYR4ULyKLva7itVMXCVknie
+        +ng3U3WeyQ0nzO1qwkGpnjDLqb4TQjn/iYRS6XB305+9Uj+BNiokI2WB56S8y8k+SzidOyW0Xl2J5
+        wm3QMZt49rvCVE8eLXrd68VFkIYNB7A3kt/vCNqNjBzDtJlTkJ+cjPMO1qcIPPlqQZjp9WeaWN7DZ
+        y4wCsMKvn8FPNDIge/oHmXE+ehL+H6YBVxF9fQRLZy5DpGiZ/5npcgybpjDHvqrb/dpbz+3k1qYk4
+        wnvzD2DA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mdavY-00BMwz-1W; Thu, 21 Oct 2021 16:28:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ABD5030024D;
+        Thu, 21 Oct 2021 18:28:22 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 93CC92C2287A1; Thu, 21 Oct 2021 18:28:22 +0200 (CEST)
+Date:   Thu, 21 Oct 2021 18:28:22 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Christoph =?iso-8859-1?Q?M=FCllner?= <christophm30@gmail.com>,
+        Stafford Horne <shorne@gmail.com>
+Subject: Re: [PATCH] locking: Generic ticket lock
+Message-ID: <YXGVJinHk3cOVyOw@hirez.programming.kicks-ass.net>
+References: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
+ <CAK8P3a2+=9jjyqN5dMOb4+bYJy=q5G3CxFaCW+=4xryz-S=zYA@mail.gmail.com>
+ <YXGD5OFbI7TEDFTr@hirez.programming.kicks-ass.net>
+ <CAK8P3a14NUvo40GFY5DfQcF28OO22=BiHJO1TzBTEMK0RAwtHg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211020174406.17889-14-ebiederm@xmission.com>
+In-Reply-To: <CAK8P3a14NUvo40GFY5DfQcF28OO22=BiHJO1TzBTEMK0RAwtHg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 12:44:00PM -0500, Eric W. Biederman wrote:
-> Use force_fatal_sig instead of calling do_exit directly.  This ensures
-> the ordinary signal handling path gets invoked, core dumps as
-> appropriate get created, and for multi-threaded processes all of the
-> threads are terminated not just a single thread.
+On Thu, Oct 21, 2021 at 05:31:51PM +0200, Arnd Bergmann wrote:
+> On Thu, Oct 21, 2021 at 5:14 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > On Thu, Oct 21, 2021 at 03:49:51PM +0200, Arnd Bergmann wrote:
+> > I think for a load-store arch this thing should generate pretty close to
+> > optimal code. x86 can do ticket_unlock() slightly better using a single
+> > INCW (or ADDW 1) on the owner subword, where this implementation will to
+> > separate load-add-store instructions.
+> >
+> > If that is actually measurable is something else entirely.
 > 
-> When asked Gabriel Krisman Bertazi <krisman@collabora.com> said [1]:
-> > ebiederm@xmission.com (Eric W. Biederman) asked:
-> >
-> > > Why does do_syscal_user_dispatch call do_exit(SIGSEGV) and
-> > > do_exit(SIGSYS) instead of force_sig(SIGSEGV) and force_sig(SIGSYS)?
-> > >
-> > > Looking at the code these cases are not expected to happen, so I would
-> > > be surprised if userspace depends on any particular behaviour on the
-> > > failure path so I think we can change this.
-> >
-> > Hi Eric,
-> >
-> > There is not really a good reason, and the use case that originated the
-> > feature doesn't rely on it.
-> >
-> > Unless I'm missing yet another problem and others correct me, I think
-> > it makes sense to change it as you described.
-> >
-> > > Is using do_exit in this way something you copied from seccomp?
-> >
-> > I'm not sure, its been a while, but I think it might be just that.  The
-> > first prototype of SUD was implemented as a seccomp mode.
-> 
-> If at some point it becomes interesting we could relax
-> "force_fatal_sig(SIGSEGV)" to instead say
-> "force_sig_fault(SIGSEGV, SEGV_MAPERR, sd->selector)".
-> 
-> I avoid doing that in this patch to avoid making it possible
-> to catch currently uncatchable signals.
-> 
-> Cc: Gabriel Krisman Bertazi <krisman@collabora.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> [1] https://lkml.kernel.org/r/87mtr6gdvi.fsf@collabora.com
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> Ok, so I guess such an architecture could take the generic implementation
+> and override just arch_spin_unlock() or just arch_spin_lock(), if that
+> makes a difference for them.
 
-Yeah, looks good. Should be no visible behavior change.
+Also, Pre EV5 Dec Alpha might have issues since it can only do 32bit
+wide accesses, and it would need an ll/sc to unlock.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+But yes, if/when needed we could allow overrides.
 
--- 
-Kees Cook
+> Should we perhaps turn your modified openrisc asm/spinlock.h
+> and asm/spin_lock_types.h the fallback in asm-generic, and
+> remove the ones for the architectures that have no overrides
+> at all?
+
+Possibly, yes.
+
+> > If your SMP arch is halfway sane (no fwd progress issues etc..) then
+> > ticket should behave well and avoid the starvation/variablilty of TaS
+> > lock.
+> 
+> Ok, and I guess we still need to keep the parisc and sparc32 versions
+> anyway.
+
+Yes, both those only have an xchg() (like) instruction and can
+realistically only implement TaS locks and have to build everything else
+on top of that... if only we could get rid of all that :-)
+
+> > The big exception there is virtualized architectures, ticket is
+> > absolutely horrendous for 'guests' (any fair lock is for that matter).
+> 
+> This might be useful information to put into the header, at least
+> I had no idea about this distinction.
+
+Yes indeed, I'd not thought of it until you asked.
