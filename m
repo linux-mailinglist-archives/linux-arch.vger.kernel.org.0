@@ -2,96 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E0A4367E0
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591A74367E2
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhJUQgI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 12:36:08 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:42240 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbhJUQgI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 12:36:08 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52]:55016)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mdb0p-001JO8-F1; Thu, 21 Oct 2021 10:33:51 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:55474 helo=email.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mdb0o-0046Sd-Hn; Thu, 21 Oct 2021 10:33:51 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Kees Cook <keescook@chromium.org>
+        id S231907AbhJUQgu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 12:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231749AbhJUQgs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 12:36:48 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F86C0613B9
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:34:32 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id a15-20020a17090a688f00b001a132a1679bso3584606pjd.0
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qGPTNek+6NWWYDzAeqngJPEge0t+CkBjWVvJhkdvjR0=;
+        b=dF2s5YhhpTniB+xkm1SrsDfZS8oIz+muJ2oNJr2HTBlV0rFbjaD5JFlGpPuSi20as6
+         MRwOTFnvxuyG84H6wihc440P6TBkG4ZtP7ZeFbaCT8dE+LKO35ljO8LaikKKabWaX0G5
+         u2nrGF32jSZY8c7WAi+EfyvOyiG3JWrcCKiJ8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qGPTNek+6NWWYDzAeqngJPEge0t+CkBjWVvJhkdvjR0=;
+        b=KFTzJdyHKkLPLHq8QLbeyDQ7rG2W1voEi5uX04S6wDnojy3WZLOwvExlUDZIV569q5
+         TR+o7yny+7d3buSEQNVevd2bCBCrG5KkZVLuJyV/AQ5I/GkXKipcHLhp4J2dki4tWER8
+         gwO6/JEjtUGCclPuNcuYyinjrHxgyeLmn6ps5/uj1B3F+4smAKx8C2Hhov9Xwj92xPmT
+         v3Yj3Wcrd6iirlI/6pLScN0a/JPIbYbtrLMunRF79eVnrcPscE+qbHf171eRA6V0OyqG
+         3XvlPTMWzJi3Q9//pdl1Xj8KeYGVwvYC0FVxog9DkWz6X80LBbNR5vNnQ/I9goQdmGYT
+         RFCA==
+X-Gm-Message-State: AOAM531IF5nVqTqXv0uw9WelOGeMTxAABznugQKtcRCFHwyIv2/cdkoB
+        yJDBWmHUOLiU+U9+69nUieCjhA==
+X-Google-Smtp-Source: ABdhPJxJzlbLOUp/qTLnqyd+XrRHGcIFYf6vDxWlNuADk1BHVR4Rp0WpGOHOQ2f1pxaYLqHqfszezg==
+X-Received: by 2002:a17:902:b711:b029:11e:6480:258a with SMTP id d17-20020a170902b711b029011e6480258amr6095915pls.41.1634834072178;
+        Thu, 21 Oct 2021 09:34:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s21sm7088592pfg.70.2021.10.21.09.34.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 09:34:31 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 09:34:31 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
+        Al Viro <viro@zeniv.linux.org.uk>,
+        David Miller <davem@davemloft.net>, sparclinux@vger.kernel.org
+Subject: Re: [PATCH 15/20] signal/sparc32: Exit with a fatal signal when
+ try_to_clear_window_buffer fails
+Message-ID: <202110210927.D0B4B0342@keescook>
 References: <87y26nmwkb.fsf@disp2133>
-        <20211020174406.17889-13-ebiederm@xmission.com>
-        <202110210923.F5BE43C@keescook>
-Date:   Thu, 21 Oct 2021 11:33:43 -0500
-In-Reply-To: <202110210923.F5BE43C@keescook> (Kees Cook's message of "Thu, 21
-        Oct 2021 09:24:22 -0700")
-Message-ID: <87ilxqbamw.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+ <20211020174406.17889-15-ebiederm@xmission.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mdb0o-0046Sd-Hn;;;mid=<87ilxqbamw.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+xXdKU+id/xvXMlErdVtLQeZqNpQrNeoU=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4995]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 305 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 11 (3.6%), b_tie_ro: 10 (3.2%), parse: 0.85
-        (0.3%), extract_message_metadata: 12 (3.8%), get_uri_detail_list: 0.83
-        (0.3%), tests_pri_-1000: 15 (4.9%), tests_pri_-950: 1.94 (0.6%),
-        tests_pri_-900: 1.10 (0.4%), tests_pri_-90: 67 (22.0%), check_bayes:
-        65 (21.4%), b_tokenize: 4.7 (1.5%), b_tok_get_all: 5 (1.7%),
-        b_comp_prob: 1.81 (0.6%), b_tok_touch_all: 50 (16.5%), b_finish: 0.97
-        (0.3%), tests_pri_0: 179 (58.8%), check_dkim_signature: 1.05 (0.3%),
-        check_dkim_adsp: 3.8 (1.3%), poll_dns_idle: 0.45 (0.1%), tests_pri_10:
-        2.2 (0.7%), tests_pri_500: 12 (4.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 13/20] signal: Implement force_fatal_sig
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211020174406.17889-15-ebiederm@xmission.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+On Wed, Oct 20, 2021 at 12:44:01PM -0500, Eric W. Biederman wrote:
+> The function try_to_clear_window_buffer is only called from
+> rtrap_32.c.  After it is called the signal pending state is retested,
 
-> On Wed, Oct 20, 2021 at 12:43:59PM -0500, Eric W. Biederman wrote:
->> This is interesting both because it makes force_sigsegv simpler and
->> because there are a couple of buggy places in the kernel that call
->> do_exit(SIGILL) or do_exit(SIGSYS) because there is no straight
->> forward way today for those places to simply force the exit of a
->> process with the chosen signal.  Creating force_fatal_sig allows
->> those places to be implemented with normal signal exits.
->
-> I assume this is talking about seccomp()? :) Should a patch be included
-> in this series to change those?
+nit: rtrap_32.S
 
-Actually it is not talking about seccomp.  As far as I can tell seccomp
-is deliberately only killing a single thread when it calls do_exit.
+> and signals are handled if TIF_SIGPENDING is set.  This allows
+> try_to_clear_window_buffer to call force_fatal_signal and then rely on
+> the signal being delivered to kill the process, without any danger of
+> returning to userspace, or otherwise using possible corrupt state on
+> failure.
 
-I am thinking about places where we really want the entire process to
-die and not just a single thread.  Please see the following changes
-where I actually use force_fatal_sig.
+The TIF_SIGPENDING test happens in do_notify_resume(), though I see
+other code before that:
 
-Eric
+...
+        call    try_to_clear_window_buffer
+        add    %sp, STACKFRAME_SZ, %o0
+
+        b       signal_p
+...
+signal_p:
+        andcc   %g2, _TIF_DO_NOTIFY_RESUME_MASK, %g0
+        bz,a    ret_trap_continue
+        ld     [%sp + STACKFRAME_SZ + PT_PSR], %t_psr
+
+        mov     %g2, %o2
+        mov     %l6, %o1
+        call    do_notify_resume
+
+Will the ret_trap_continue always be skipped?
+
+Also I see the "tp->w_saved = 0" never happens due to the "return" in
+try_to_clear_window_buffer. Is that okay? Only synchronize_user_stack()
+uses it, and that could be called in do_sigreturn(). Should the "return"
+be removed?
+
+-- 
+Kees Cook
