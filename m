@@ -2,102 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81719436787
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC9B43679B
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 18:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhJUQYr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 12:24:47 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:45878 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230072AbhJUQYq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 21 Oct 2021 12:24:46 -0400
-Received: from zn.tnic (p200300ec2f191200ee5ad10a1c627015.dip0.t-ipconnect.de [IPv6:2003:ec:2f19:1200:ee5a:d10a:1c62:7015])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 229661EC011B;
-        Thu, 21 Oct 2021 18:22:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1634833349;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=s9B7TcJbpJamc03KXDCXQuXf1+/ogvmvN6UH47r0t44=;
-        b=ViCKbfkrxBNFBw9sV4dQEIRuYioGwgmaVA8GvvP+1GAYxiIAzKzmb9Rie6jAt9cV5OrGsU
-        HtSbyZJdONQ2tN3ELB2DRGPD/mr3vaOmS5XQoSlGJkpzXo49ujTlMTwkbgprJPAkI1yxSN
-        2b1jb3B/MwUtUKcSij1cujLYU/sAmlE=
-Date:   Thu, 21 Oct 2021 18:22:26 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        davem@davemloft.net, kuba@kernel.org, gregkh@linuxfoundation.org,
-        arnd@arndb.de, brijesh.singh@amd.com, jroedel@suse.de,
-        Tianyu.Lan@microsoft.com, thomas.lendacky@amd.com,
-        rientjes@google.com, pgonda@google.com, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org,
-        saravanand@fb.com, aneesh.kumar@linux.ibm.com, hannes@cmpxchg.org,
-        tj@kernel.org, michael.h.kelley@microsoft.com,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, konrad.wilk@oracle.com, hch@lst.de,
-        robin.murphy@arm.com, joro@8bytes.org, parri.andrea@gmail.com,
-        dave.hansen@intel.com
-Subject: Re: [PATCH V8 5/9] x86/sev-es: Expose sev_es_ghcb_hv_call() to call
- ghcb hv call out of sev code
-Message-ID: <YXGTwppQ8syUyJ72@zn.tnic>
-References: <20211021154110.3734294-1-ltykernel@gmail.com>
- <20211021154110.3734294-6-ltykernel@gmail.com>
+        id S230441AbhJUQ0k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 12:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230072AbhJUQ0k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 12:26:40 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9D4C061764
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:24:24 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w17so769578plg.9
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 09:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sicbfSoVA09vC/F2ygsvFebcU9ao+N436bsOlAERsb0=;
+        b=J7SHLOqBgGtyMBwfu6R2MQgPhsCmRrCwQurlKSFARfZtEcN03hk0m/I7C7yv7Rv5xO
+         zwC6ZgAR7Acy0JFIo2P2acD2hZYpScYEd+ghKPkRlk/rnVUNiyhgXEIq1BSA5BtSPyZ6
+         Cosuw68xSLwG89F8ygK32uEg4/ozQJvzzkLV0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sicbfSoVA09vC/F2ygsvFebcU9ao+N436bsOlAERsb0=;
+        b=dkr89/xHOQAZyOVMWF644JzK+wSyt9a32mH3aEUJqF0gzVG4p9MLBBJa1QWyL3tgcr
+         gpYlFOkyEzcijo7k05e5gSB3/VoB4nHYa7ZU3dNsAYrRNFoi466EQvEar2EtrgyFmpp5
+         rWxsWxfapLsycn/lTvXkmcnZs6OOlLRIyKJpv/vmPc9NpnTkMBONvizF62dnegujtGZL
+         n0HzFJZiieElMCJyVZfgPvK6riea8t5e61mvwipXwdOvo3Hl+M5cCa5Ugzh3QqGlDBNh
+         FTD8v4LOWEqzgMxpLaiLP/nuz/K0+cRdEWEiFNCwejiR5lDHuaCrQsSKyDX441sIUUc9
+         ByJA==
+X-Gm-Message-State: AOAM533eBRyz2hwbq8i6RMoMFZevqpC3kxw/p37lWiWdF3Qgh0atV9At
+        5bdvv19ddat4ZCOZpTgUJ7Sr7Q==
+X-Google-Smtp-Source: ABdhPJx2qkrlbfcZEtyzZwLuRL4U2JW0J2alIIZO9Gd3zy4tWSCeZlXmXCDgeDR/qz7B9+GwugC2QA==
+X-Received: by 2002:a17:902:c104:b0:13f:24db:8658 with SMTP id 4-20020a170902c10400b0013f24db8658mr6138071pli.7.1634833463732;
+        Thu, 21 Oct 2021 09:24:23 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x1sm6800991pfp.190.2021.10.21.09.24.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 09:24:23 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 09:24:22 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 13/20] signal: Implement force_fatal_sig
+Message-ID: <202110210923.F5BE43C@keescook>
+References: <87y26nmwkb.fsf@disp2133>
+ <20211020174406.17889-13-ebiederm@xmission.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211021154110.3734294-6-ltykernel@gmail.com>
+In-Reply-To: <20211020174406.17889-13-ebiederm@xmission.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 11:41:05AM -0400, Tianyu Lan wrote:
-> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-> index ea9abd69237e..368ed36971e3 100644
-> --- a/arch/x86/kernel/sev-shared.c
-> +++ b/arch/x86/kernel/sev-shared.c
-> @@ -124,10 +124,9 @@ static enum es_result verify_exception_info(struct ghcb *ghcb, struct es_em_ctxt
->  	return ES_VMM_ERROR;
->  }
->  
-> -static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
-> -					  struct es_em_ctxt *ctxt,
-> -					  u64 exit_code, u64 exit_info_1,
-> -					  u64 exit_info_2)
-> +enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb, bool set_ghcb_msr,
-> +				   struct es_em_ctxt *ctxt, u64 exit_code,
-> +				   u64 exit_info_1, u64 exit_info_2)
->  {
->  	/* Fill in protocol and format specifiers */
->  	ghcb->protocol_version = GHCB_PROTOCOL_MAX;
-> @@ -137,7 +136,15 @@ static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
->  	ghcb_set_sw_exit_info_1(ghcb, exit_info_1);
->  	ghcb_set_sw_exit_info_2(ghcb, exit_info_2);
->  
-> -	sev_es_wr_ghcb_msr(__pa(ghcb));
-> +	/*
-> +	 * Hyper-V unenlightened guests use a paravisor for communicating and
-> +	 * GHCB pages are being allocated and set up by that paravisor. Linux
-> +	 * should not change ghcb page pa in such case and so add set_ghcb_msr
+On Wed, Oct 20, 2021 at 12:43:59PM -0500, Eric W. Biederman wrote:
+> Add a simple helper force_fatal_sig that causes a signal to be
+> delivered to a process as if the signal handler was set to SIG_DFL.
+> 
+> Reimplement force_sigsegv based upon this new helper.  This fixes
+> force_sigsegv so that when it forces the default signal handler
+> to be used the code now forces the signal to be unblocked as well.
+> 
+> Reusing the tested logic in force_sig_info_to_task that was built for
+> force_sig_seccomp this makes the implementation trivial.
+> 
+> This is interesting both because it makes force_sigsegv simpler and
+> because there are a couple of buggy places in the kernel that call
+> do_exit(SIGILL) or do_exit(SIGSYS) because there is no straight
+> forward way today for those places to simply force the exit of a
+> process with the chosen signal.  Creating force_fatal_sig allows
+> those places to be implemented with normal signal exits.
 
-"... not change the GHCB page's physical address."
+I assume this is talking about seccomp()? :) Should a patch be included
+in this series to change those?
 
-Remove the "so add... " rest.
+> 
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-Otherwise, LGTM.
-
-Do you want me to take it through the tip tree?
-
-Thx.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Kees Cook
