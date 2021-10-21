@@ -2,109 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3D74368AC
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 19:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367C14368C2
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Oct 2021 19:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbhJURHc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 13:07:32 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:59620 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbhJURH0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 13:07:26 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51]:41572)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mdbV7-000916-Ck; Thu, 21 Oct 2021 11:05:09 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:57164 helo=email.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mdbV6-00CqKm-6W; Thu, 21 Oct 2021 11:05:08 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-References: <87y26nmwkb.fsf@disp2133>
-        <20211020174406.17889-14-ebiederm@xmission.com>
-        <202110210925.9DEAF27CA@keescook> <878rymbags.fsf@disp2133>
-        <202110210940.3BBA18AA@keescook>
-Date:   Thu, 21 Oct 2021 12:05:00 -0500
-In-Reply-To: <202110210940.3BBA18AA@keescook> (Kees Cook's message of "Thu, 21
-        Oct 2021 09:40:53 -0700")
-Message-ID: <87bl3i8g1v.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S231320AbhJURL5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 13:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231220AbhJURLv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 13:11:51 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5F2C061348
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 10:09:35 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id oa12-20020a17090b1bcc00b0019f715462a8so1022925pjb.3
+        for <linux-arch@vger.kernel.org>; Thu, 21 Oct 2021 10:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/h3z+ZI1NEezvcalKf2dOAyWJ+jaOF20N5IW04VxMnA=;
+        b=EDjRl+XfT9L+B0/Ui2ATB7qVPuwaM4acCWeRrcT+9g5GbxL0WJjmTq5c1ovmol2FJ0
+         1fskzEINTfsYw8g8nAAbg2ogfzpc+mC2cO++Uro/3Z17oY0UGCsaxq0L4FpQ5hTR0B+i
+         4F82TStCNcJSBnVJ6HHpuKiPMrmrBZjNNQaQ4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/h3z+ZI1NEezvcalKf2dOAyWJ+jaOF20N5IW04VxMnA=;
+        b=vuKoYS1JtQdkxqpaHc7luiVDzrY+OWcqnV3bPZUdkLgn+hoNHHaaIbQmPUiwrRrEfh
+         syGkxOJEYyYVyJVfoiWZNeWoMEli+t8Q2lk6KMFKPyy25Q15HGFYZu2lFMhHwk6ci2/j
+         7XP0mLaT0cZLSPhxFy9+fZP0kG16lZQYh7Zld9StACNEgxb6FJRAtD+wctieN0nWG+lL
+         7uOLn0WDTTjZvlQDXFuXjes1o5y3V31P6fOfJL6y/TJfuhFFGieJ6EPbXXKGjEC9Q0bU
+         LCnz9HMq1Ew1O0yvkDs6+mCFaVt29BxLHch3yyl+q3+vlt7UiNvIC9po4CEcncxeMHba
+         d60A==
+X-Gm-Message-State: AOAM532geO+Tls9knW9P0C0NbVfR+vy6aMxuKQENQRgDKQJSwJa75TpW
+        xIvGfctuUtmDVVK2/7r+dT1Ang==
+X-Google-Smtp-Source: ABdhPJx8xZPWUk8RdvIXPnnT/qf52D2k5QZILuisiCA7VHLuTMbbMXlu18CbRyoTtGgVOEZWXBbOqw==
+X-Received: by 2002:a17:90b:38c6:: with SMTP id nn6mr8039311pjb.246.1634836174380;
+        Thu, 21 Oct 2021 10:09:34 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y13sm6032193pgc.46.2021.10.21.10.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 10:09:34 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 10:09:33 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Gladkov <gladkov.alexey@gmail.com>, jannh@google.com,
+        vcaputo@pengaru.com, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, christian.brauner@ubuntu.com,
+        amistry@google.com, Kenta.Tada@sony.com, legion@kernel.org,
+        michael.weiss@aisec.fraunhofer.de, mhocko@suse.com, deller@gmx.de,
+        zhengqi.arch@bytedance.com, me@tobin.cc, tycho@tycho.pizza,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, axboe@kernel.dk,
+        metze@samba.org, laijs@linux.alibaba.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, ebiederm@xmission.com,
+        ohoono.kwon@samsung.com, kaleshsingh@google.com,
+        yifeifz2@illinois.edu, linux-arch@vger.kernel.org,
+        vgupta@kernel.org, linux@armlinux.org.uk, will@kernel.org,
+        guoren@kernel.org, bcain@codeaurora.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        jonas@southpole.se, mpe@ellerman.id.au, paul.walmsley@sifive.com,
+        hca@linux.ibm.com, ysato@users.sourceforge.jp, davem@davemloft.net,
+        chris@zankel.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] selftests: proc: Make sure wchan works when it exists
+Message-ID: <202110211008.CC8B26A@keescook>
+References: <20211008235504.2957528-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mdbV6-00CqKm-6W;;;mid=<87bl3i8g1v.fsf@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/abBs/x5uzNaMDoEejuqATALte68zrFec=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
-        XMSubLong autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        *  0.7 XMSubLong Long Subject
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 451 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 10 (2.3%), b_tie_ro: 9 (2.0%), parse: 1.48 (0.3%),
-         extract_message_metadata: 18 (4.0%), get_uri_detail_list: 1.55 (0.3%),
-         tests_pri_-1000: 23 (5.1%), tests_pri_-950: 1.92 (0.4%),
-        tests_pri_-900: 1.52 (0.3%), tests_pri_-90: 103 (22.9%), check_bayes:
-        101 (22.4%), b_tokenize: 9 (2.1%), b_tok_get_all: 7 (1.4%),
-        b_comp_prob: 2.1 (0.5%), b_tok_touch_all: 79 (17.6%), b_finish: 1.01
-        (0.2%), tests_pri_0: 276 (61.2%), check_dkim_signature: 0.73 (0.2%),
-        check_dkim_adsp: 3.3 (0.7%), poll_dns_idle: 0.81 (0.2%), tests_pri_10:
-        2.1 (0.5%), tests_pri_500: 8 (1.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 14/20] exit/syscall_user_dispatch: Send ordinary signals on failure
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211008235504.2957528-1-keescook@chromium.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+On Fri, Oct 08, 2021 at 04:55:04PM -0700, Kees Cook wrote:
+> This makes sure that wchan contains a sensible symbol when a process is
+> blocked. Specifically this calls the sleep() syscall, and expects the
+> architecture to have called schedule() from a function that has "sleep"
+> somewhere in its name. For example, on the architectures I tested
+> (x86_64, arm64, arm, mips, and powerpc) this is "hrtimer_nanosleep":
+> 
+> $ tools/testing/selftests/proc/proc-pid-wchan
+> ok: found 'sleep' in wchan 'hrtimer_nanosleep'
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Alexey Dobriyan <adobriyan@gmail.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-> On Thu, Oct 21, 2021 at 11:37:23AM -0500, Eric W. Biederman wrote:
->> Kees Cook <keescook@chromium.org> writes:
->> 
->> > On Wed, Oct 20, 2021 at 12:44:00PM -0500, Eric W. Biederman wrote:
->> >> Use force_fatal_sig instead of calling do_exit directly.  This ensures
->> >> the ordinary signal handling path gets invoked, core dumps as
->> >> appropriate get created, and for multi-threaded processes all of the
->> >> threads are terminated not just a single thread.
->> >
->> > Yeah, looks good. Should be no visible behavior change.
->> 
->> It is observable in that an entire multi-threaded process gets
->> terminated instead of a single thread.  But since these events should
->> be handling of extra-ordinary events I don't expect there is anyone
->> who wants to have a thread of their process survive.
->
-> Right -- sorry, I should have said that more clearly: "Besides the
-> single thread death now taking the whole process, there's not behavior
-> change (i.e. the signal delivery)." Still looks good to me.
+Friendly ping.
 
-Yes.  I just didn't want that single vs multi-thread case to sneak up on
-people.  Especially since that is part of the questionable behavior that
-I am sorting out.
+> ---
+> Hi Peter,
+> 
+> Can you add this to the wchan series, please? This should help wchan from
+> regressing in the future, and allow us to notice if the depth accidentally
+> changes, like Mark saw.
+> ---
 
-Eric
+I'd like to make sure we have a regression test for this. Will you add
+this to the wchan series please?
 
+-Kees
+
+-- 
+Kees Cook
