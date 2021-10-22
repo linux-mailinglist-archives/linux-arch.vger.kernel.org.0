@@ -2,89 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A94E4376D8
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Oct 2021 14:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D19A437726
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Oct 2021 14:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbhJVMYL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Oct 2021 08:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
+        id S230342AbhJVMf6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Oct 2021 08:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbhJVMYK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Oct 2021 08:24:10 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E83FC061226
-        for <linux-arch@vger.kernel.org>; Fri, 22 Oct 2021 05:21:52 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id r4so6135767edi.5
-        for <linux-arch@vger.kernel.org>; Fri, 22 Oct 2021 05:21:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=EabbjzyBCsHP1Pqryzjhoy0dM3xlyxLmmpO8ACgMTo8=;
-        b=opUIgqVWyZcHOIldu+LgQVfQLu2JLSm4eq0yRYoR8X3EkJ0jJdtgK1LJrEC4fAYG/u
-         x5QndCavFk6KrgrLKL2M04eWhmo9Ht5gsCUOTzm6BFmYlOhPKCnfQmAWRcGWJ3Kgd+Po
-         dxnzE1GzD0Fe/zdoRYGanqsnNZ7HZwcDd5jvb2P53Z7ySB2eUUW5eKcCwJjvHcLwQW3D
-         hmZMQ0WQ67mADARNZlQPTMDFACAa1pT2f55C5E+z5xU/0SGGI05AA1ys/nk/8Z7QRecx
-         rbFLK51ODld/urTp+hjZ3tCNNEiv03NL8R5n8H4ZVv1sIR3Pcfr4FSd/aUugOrtvCJBK
-         4QUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=EabbjzyBCsHP1Pqryzjhoy0dM3xlyxLmmpO8ACgMTo8=;
-        b=W8Iq55zHL3w8kiQFUI2MODEOjEvnHscr0560seK3dFbB+Dh4MBgijjxlsKoc63jwBF
-         fJTAm8oiW0sQtSio7W2I1sbjBaATgO1TVOl8UIIllRPPEfUfLNa36JFbA5mp5kLuxlXh
-         C2YaI2o2UB2zxxfUU+wJZWN/QFelO9vhhQvxrt5Sq75lcN8Jx1LdvpvgFQf5yEnZPUMO
-         n/Abrqjn8uvQBMVuY+tnTUuo1hiFNVCTWAhgEYQS1V9uX7Su8fLEIljlIaKABMmb+XtL
-         NnFW/Ljydi8S9RDCF1b65C3JN5p+D/mzsjDD8ODZf9oWTZxgQttep0kRGhH1pCwJPlC4
-         TEfw==
-X-Gm-Message-State: AOAM532fJLwzJ+bnsmCuv8S6LrV948uyqjqv3cWJANVszN2S9WFOiU/9
-        q6nAYm5V52hpeec7hhJO4dhyEsiudl78wEc0hH8=
-X-Google-Smtp-Source: ABdhPJy2Z+mCK6UsBedDHfuHLqHjOelryE6bx9xZ/OavTEghlxY+bPID2uQBe/oD5nVNF4jHf9BZTkpf3h9vpVXzB08=
-X-Received: by 2002:a17:907:1b0a:: with SMTP id mp10mr15488909ejc.29.1634905309828;
- Fri, 22 Oct 2021 05:21:49 -0700 (PDT)
+        with ESMTP id S231574AbhJVMf4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Oct 2021 08:35:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1177C061764;
+        Fri, 22 Oct 2021 05:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+iqfxl1bOnUqQBYQwxlUeaPnvsk9jRCJKtP69+WVQmw=; b=FaAS0eZKYrwXkNRSph0rdnR8sp
+        bVG0WLZEfA0LSIUeBcySJUff3gzVVTTxhIfH2fLLEKTjaH0Q9hm+Dh4mRpVo4RMPDXJp+IGH4JOEg
+        o41/AyGAW7u/Kn89THveZCo9FyHs5RCpX++HIy19BqU9vbWfoYtqFJ6ufYKSthFABy33u9FB1cuUp
+        GCks1N2qn2OS+OiEApHJNXU76IFnjAl+7WDW8lTSDaQ/NynIG0Sgf7Fs/ZDWWXR9u84N+23ztmbp2
+        ezhMOMzh7vjymWyloyJkmFgUCYk1q4G3jNkY+RkK7NIyz6bd88mBBU8ctCchAlvGBcV6VO+I2HQTp
+        B/8/oDIA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mdthN-00Dtq7-V5; Fri, 22 Oct 2021 12:31:16 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D67509812EB; Fri, 22 Oct 2021 14:31:00 +0200 (CEST)
+Date:   Fri, 22 Oct 2021 14:31:00 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Christoph =?iso-8859-1?Q?M=FCllner?= <christophm30@gmail.com>,
+        Stafford Horne <shorne@gmail.com>
+Subject: Re: [PATCH] locking: Generic ticket lock
+Message-ID: <20211022123100.GZ174703@worktop.programming.kicks-ass.net>
+References: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
+ <YXKC9qh+evVmUuLI@FVFF77S0Q05N>
 MIME-Version: 1.0
-Received: by 2002:a17:907:7fa7:0:0:0:0 with HTTP; Fri, 22 Oct 2021 05:21:48
- -0700 (PDT)
-Reply-To: bahadur.rayanby@gmail.com
-From:   Ryan Bahadur <dr.philposman7@gmail.com>
-Date:   Fri, 22 Oct 2021 05:21:48 -0700
-Message-ID: <CAMOT=VQ19xGMh1Soq8rNHNKaBCqZh03d0u+Nrf_Ou9bAtd-seQ@mail.gmail.com>
-Subject: CAN I TRUST YOU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YXKC9qh+evVmUuLI@FVFF77S0Q05N>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
--- 
-Greetings,
+On Fri, Oct 22, 2021 at 10:23:02AM +0100, Mark Rutland wrote:
+> Hi Peter,
+> 
+> On Thu, Oct 21, 2021 at 03:05:15PM +0200, Peter Zijlstra wrote:
+> > +static __always_inline void ticket_lock(arch_spinlock_t *lock)
+> > +{
+> > +	u32 val = atomic_fetch_add_acquire(ONE_TICKET, lock);
+> 
+> I wonder, should these atomics be arch_atomic_*(), in case an arch_ or raw_
+> lock is used in noinstr code? The plain atomic_*() forms can have explicit
+> inline instrumentation.
+> 
+> I haven't seen any issues with qspinlock so far, and that also uses the
+> (instrumented) atomics, so maybe that's not actually a problem, but I'm not
+> sure what we intend here w.r.t.  instrumentability.
 
-Firstly, I apologize for encroaching into your privacy in this manner
-as it may seem unethical though it is a matter of great importance.
+So far it's not been a problem, and as you say, if we want to change
+this, we need a larger audit/cleanup.
 
-I am Mr.Ryan Bahadur, I work with Cayman National Bank (Cayman Islands).
-
-I am contacting you because my status would not permit me to do this
-alone as it is concerning our customer and an investment placed under
-our bank's management over 5 years ago.
-
-I have a proposal I would love to discuss with you which will be very
-beneficial to both of us. It's regarding my late client who has a huge
-deposit with my bank.
-
-He is from your country and shares the same last name with you.
-
-I want to seek your consent to present you as the next of kin to my
-late client who died and left a huge deposit with my bank.
-
-I would respectfully request that you keep the contents of this mail
-confidential and respect the integrity of the information you come by
-as a result of this mail.
-
-Please kindly get back to me for more details if I can TRUST YOU.{
-bahadur.rayanby@gmail.com}
-
-Regards
-Mr.Ryan Bahadur
-Treasury and Deposit Management,
-Cayman National Bank Cayman Islands.
+IIRC there's a potential problem in the arm idle code (noinstr'ing the
+idle code is still on the TODO list somewhre, hampered by the need to
+create more tooling).
