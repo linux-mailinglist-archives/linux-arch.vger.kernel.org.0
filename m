@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92905437B2A
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Oct 2021 18:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F393437B35
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Oct 2021 18:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbhJVQ44 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Oct 2021 12:56:56 -0400
-Received: from foss.arm.com ([217.140.110.172]:56656 "EHLO foss.arm.com"
+        id S233590AbhJVRAI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Oct 2021 13:00:08 -0400
+Received: from foss.arm.com ([217.140.110.172]:56718 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233413AbhJVQ4z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 22 Oct 2021 12:56:55 -0400
+        id S233413AbhJVRAF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 22 Oct 2021 13:00:05 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD0E31063;
-        Fri, 22 Oct 2021 09:54:37 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C5501063;
+        Fri, 22 Oct 2021 09:57:47 -0700 (PDT)
 Received: from C02TD0UTHF1T.local (unknown [10.57.73.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40C843F73D;
-        Fri, 22 Oct 2021 09:54:34 -0700 (PDT)
-Date:   Fri, 22 Oct 2021 17:54:31 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F252E3F73D;
+        Fri, 22 Oct 2021 09:57:43 -0700 (PDT)
+Date:   Fri, 22 Oct 2021 17:57:41 +0100
 From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
@@ -32,228 +32,66 @@ Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
         linux-arch@vger.kernel.org, ardb@kernel.org
 Subject: Re: [PATCH 2/7] stacktrace,sched: Make stack_trace_save_tsk() more
  robust
-Message-ID: <20211022165431.GF86184@C02TD0UTHF1T.local>
+Message-ID: <20211022165741.GG86184@C02TD0UTHF1T.local>
 References: <20211022150933.883959987@infradead.org>
  <20211022152104.215612498@infradead.org>
  <202110220919.46F58199D@keescook>
+ <20211022164514.GE174703@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202110220919.46F58199D@keescook>
+In-Reply-To: <20211022164514.GE174703@worktop.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 09:25:02AM -0700, Kees Cook wrote:
-> On Fri, Oct 22, 2021 at 05:09:35PM +0200, Peter Zijlstra wrote:
-> > Recent patches to get_wchan() made it more robust by only doing the
-> > unwind when the task was blocked and serialized against wakeups.
+On Fri, Oct 22, 2021 at 06:45:14PM +0200, Peter Zijlstra wrote:
+> On Fri, Oct 22, 2021 at 09:25:02AM -0700, Kees Cook wrote:
+> > On Fri, Oct 22, 2021 at 05:09:35PM +0200, Peter Zijlstra wrote:
+> > >  /**
+> > >   * stack_trace_save_tsk - Save a task stack trace into a storage array
+> > >   * @task:	The task to examine
+> > > @@ -135,7 +142,6 @@ EXPORT_SYMBOL_GPL(stack_trace_save);
+> > >  unsigned int stack_trace_save_tsk(struct task_struct *tsk, unsigned long *store,
+> > >  				  unsigned int size, unsigned int skipnr)
+> > >  {
+> > > -	stack_trace_consume_fn consume_entry = stack_trace_consume_entry_nosched;
+> > >  	struct stacktrace_cookie c = {
+> > >  		.store	= store,
+> > >  		.size	= size,
+> > > @@ -143,11 +149,8 @@ unsigned int stack_trace_save_tsk(struct
+> > >  		.skip	= skipnr + (current == tsk),
+> > >  	};
+> > >  
+> > > -	if (!try_get_task_stack(tsk))
+> > > -		return 0;
+> > > +	task_try_func(tsk, try_arch_stack_walk_tsk, &c);
 > > 
-> > Extract this functionality as a simpler companion to task_call_func()
-> > named task_try_func() that really only cares about blocked tasks. Then
-> > employ this new function to implement the same robustness for
-> > ARCH_STACKWALK based stack_trace_save_tsk().
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  include/linux/wait.h |    1 
-> >  kernel/sched/core.c  |   62 ++++++++++++++++++++++++++++++++++++++++++++-------
-> >  kernel/stacktrace.c  |   13 ++++++----
-> >  3 files changed, 63 insertions(+), 13 deletions(-)
-> > 
-> > --- a/include/linux/wait.h
-> > +++ b/include/linux/wait.h
-> > @@ -1162,5 +1162,6 @@ int autoremove_wake_function(struct wait
-> >  
-> >  typedef int (*task_call_f)(struct task_struct *p, void *arg);
-> >  extern int task_call_func(struct task_struct *p, task_call_f func, void *arg);
-> > +extern int task_try_func(struct task_struct *p, task_call_f func, void *arg);
-> >  
-> >  #endif /* _LINUX_WAIT_H */
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -1966,21 +1966,21 @@ bool sched_task_on_rq(struct task_struct
-> >  	return task_on_rq_queued(p);
-> >  }
-> >  
-> > +static int try_get_wchan(struct task_struct *p, void *arg)
-> > +{
-> > +	unsigned long *wchan = arg;
-ke> > +	*wchan = __get_wchan(p);
-> > +	return 0;
-> > +}
-> > +
-> >  unsigned long get_wchan(struct task_struct *p)
-> >  {
-> >  	unsigned long ip = 0;
-> > -	unsigned int state;
-> >  
-> >  	if (!p || p == current)
-> >  		return 0;
-> >  
-> > -	/* Only get wchan if task is blocked and we can keep it that way. */
-> > -	raw_spin_lock_irq(&p->pi_lock);
-> > -	state = READ_ONCE(p->__state);
-> > -	smp_rmb(); /* see try_to_wake_up() */
-> > -	if (state != TASK_RUNNING && state != TASK_WAKING && !p->on_rq)
-> > -		ip = __get_wchan(p);
-> > -	raw_spin_unlock_irq(&p->pi_lock);
-> > +	task_try_func(p, try_get_wchan, &ip);
-> >  
-> >  	return ip;
-> >  }
-> > @@ -4184,6 +4184,52 @@ int task_call_func(struct task_struct *p
-> >  	return ret;
-> >  }
-> >  
-> > +/*
-> > + * task_try_func - Invoke a function on task in blocked state
-> > + * @p: Process for which the function is to be invoked
-> > + * @func: Function to invoke
-> > + * @arg: Argument to function
-> > + *
-> > + * Fix the task in a blocked state, when possible. And if so, invoke @func on it.
-> > + *
-> > + * Returns:
-> > + *  -EBUSY or whatever @func returns
-> > + */
-> > +int task_try_func(struct task_struct *p, task_call_f func, void *arg)
-> > +{
-> > +	unsigned long flags;
-> > +	unsigned int state;
-> > +	int ret = -EBUSY;
-> > +
-> > +	raw_spin_lock_irqsave(&p->pi_lock, flags);
-> > +
-> > +	state = READ_ONCE(p->__state);
-> > +
-> > +	/*
-> > +	 * Ensure we load p->on_rq after p->__state, otherwise it would be
-> > +	 * possible to, falsely, observe p->on_rq == 0.
-> > +	 *
-> > +	 * See try_to_wake_up() for a longer comment.
-> > +	 */
-> > +	smp_rmb();
-> > +
-> > +	/*
-> > +	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
-> > +	 * the task is blocked. Make sure to check @state since ttwu() can drop
-> > +	 * locks at the end, see ttwu_queue_wakelist().
-> > +	 */
-> > +	if (state != TASK_RUNNING && state != TASK_WAKING && !p->on_rq) {
-> > +		/*
-> > +		 * The task is blocked and we're holding off wakeupsr. For any
-> > +		 * of the other task states, see task_call_func().
-> > +		 */
-> > +		ret = func(p, arg);
-> > +	}
-> > +
-> > +	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-> > +	return ret;
-> > +}
-> > +
-> >  /**
-> >   * wake_up_process - Wake up a specific process
-> >   * @p: The process to be woken up.
-> > --- a/kernel/stacktrace.c
-> > +++ b/kernel/stacktrace.c
-> > @@ -123,6 +123,13 @@ unsigned int stack_trace_save(unsigned l
-> >  }
-> >  EXPORT_SYMBOL_GPL(stack_trace_save);
-> >  
-> > +static int try_arch_stack_walk_tsk(struct task_struct *tsk, void *arg)
-> > +{
-> > +	stack_trace_consume_fn consume_entry = stack_trace_consume_entry_nosched;
-> > +	arch_stack_walk(consume_entry, arg, tsk, NULL);
-> > +	return 0;
-> > +}
-> > +
-> >  /**
-> >   * stack_trace_save_tsk - Save a task stack trace into a storage array
-> >   * @task:	The task to examine
-> > @@ -135,7 +142,6 @@ EXPORT_SYMBOL_GPL(stack_trace_save);
-> >  unsigned int stack_trace_save_tsk(struct task_struct *tsk, unsigned long *store,
-> >  				  unsigned int size, unsigned int skipnr)
-> >  {
-> > -	stack_trace_consume_fn consume_entry = stack_trace_consume_entry_nosched;
-> >  	struct stacktrace_cookie c = {
-> >  		.store	= store,
-> >  		.size	= size,
-> > @@ -143,11 +149,8 @@ unsigned int stack_trace_save_tsk(struct
-> >  		.skip	= skipnr + (current == tsk),
-> >  	};
-> >  
-> > -	if (!try_get_task_stack(tsk))
-> > -		return 0;
-> > +	task_try_func(tsk, try_arch_stack_walk_tsk, &c);
+> > Pardon my thin understanding of the scheduler, but I assume this change
+> > doesn't mean stack_trace_save_tsk() stops working for "current", right?
+> > In trying to answer this for myself, I couldn't convince myself what value
+> > current->__state have here. Is it one of TASK_(UN)INTERRUPTIBLE ?
 > 
-> Pardon my thin understanding of the scheduler, but I assume this change
-> doesn't mean stack_trace_save_tsk() stops working for "current", right?
-> In trying to answer this for myself, I couldn't convince myself what value
-> current->__state have here. Is it one of TASK_(UN)INTERRUPTIBLE ?
+> current really shouldn't be using stack_trace_save_tsk(), and no you're
+> quite right, it will not work for current, irrespective of ->__state,
+> current will always be ->on_rq.
 
-Regardless of that, current->on_rq will be non-zero, so you're right that this
-causes stack_trace_save_tsk() to not work for current, e.g.
+Heh, we raced to say the same thing. :)
 
-| # cat /proc/self/stack 
-| # wc  /proc/self/stack 
-|         0         0         0 /proc/self/stack
+> I started auditing stack_trace_save_tsk() users a few days ago, but
+> didn't look for this particular issue. I suppose I'll have to start over
+> with that.
 
-TBH, I think that (taking a step back from this issue in particular)
-stack_trace_save_tsk() *shouldn't* work for current, and callers *should* be
-forced to explicitly handle current separately from blocked tasks.
+FWIW, this shape of thing was one of the reasons I wanted to split
+arch_stack_walk() into separate:
 
-So we could fix this in the stacktrace code with:
+* arch_stack_walk_current()
+* arch_stack_walk_current_regs()
+* arch_stack_walk_blocked_task()
 
-| diff --git a/kernel/stacktrace.c b/kernel/stacktrace.c
-| index a1cdbf8c3ef8..327af9ff2c55 100644
-| --- a/kernel/stacktrace.c
-| +++ b/kernel/stacktrace.c
-| @@ -149,7 +149,10 @@ unsigned int stack_trace_save_tsk(struct task_struct *tsk, unsigned long *store,
-|                 .skip   = skipnr + (current == tsk),
-|         };
-|  
-| -       task_try_func(tsk, try_arch_stack_walk_tsk, &c);
-| +       if (tsk == current)
-| +               try_arch_stack_walk_tsk(tsk, &c);
-| +       else
-| +               task_try_func(tsk, try_arch_stack_walk_tsk, &c);
-|  
-|         return c.len;
-|  }
-
-... and we could rename task_try_func() to blocked_task_try_func(), and
-later push the distinction into higher-level callers.
-
-Alternatively, we could do:
-
-| diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-| index a8be6e135c57..cef9e35ecf2f 100644
-| --- a/kernel/sched/core.c
-| +++ b/kernel/sched/core.c
-| @@ -4203,6 +4203,11 @@ int task_try_func(struct task_struct *p, task_call_f func, void *arg)
-|  
-|         raw_spin_lock_irqsave(&p->pi_lock, flags);
-|  
-| +       if (p == current) {
-| +               ret = func(p, arg);
-| +               goto out;
-| +       }
-| +
-|         state = READ_ONCE(p->__state);
-|  
-|         /*
-| @@ -4226,6 +4231,7 @@ int task_try_func(struct task_struct *p, task_call_f func, void *arg)
-|                 ret = func(p, arg);
-|         }
-|  
-| +out:
-|         raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-|         return ret;
-|  }
-
-... which perhaps is aligned with smp_call_function_single() and
-generic_exec_single().
+... with similar applying here, since otherwise people won't consider
+the distinction between current / !current at the caller level, leading
+to junk like this.
 
 Thanks,
 Mark.
