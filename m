@@ -2,256 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2CD436FC2
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Oct 2021 04:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6494F436FE6
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Oct 2021 04:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbhJVCHS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Oct 2021 22:07:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53370 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231996AbhJVCHS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 21 Oct 2021 22:07:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5FF12611C3;
-        Fri, 22 Oct 2021 02:05:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634868301;
-        bh=y3WecNbFeV0ytwz02XEpT0LlCwC4tZAbDX5MoNIUjAE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tKk6EDCa+P8WJL6nY8DF4NgZIIZ2BFOuwxuUWYQHJS/cKwHlpSIRzcVkga5VNCEQr
-         Yloczu74TOFdoo5eh8MAaDTAMP2UbnOVXoPewaKltEjpd4St33Oee4aT4NuPGJThSM
-         P9EHFHgXVmandXjpzFZwBG+zFnz3VvpWblTiXUXdgRMsAlPp/emYSL8Pcwa5i48DO7
-         HAtVmSslLxVVQ7ra8pC7YbhlBCv89bRue5QzzYcyACAXX8GJGFHqhxwyu/sNpVO0/q
-         uhXP0qed2ZvqBDSJoPGSFeyzOYg28dR7+HLWNIHEkem6RB13xgsjto24ZPlotbkPiv
-         40iGoFnHz2S0g==
-Received: by mail-ua1-f48.google.com with SMTP id e2so4890217uax.7;
-        Thu, 21 Oct 2021 19:05:01 -0700 (PDT)
-X-Gm-Message-State: AOAM532woC95nDEPg1spo9+ZuX4PDZdcc9OLTBG7PmLNW25Evsqu45Ne
-        jvbnf04FFb0IINdEJW+HNLjvSQ71/SRuLtFXtxE=
-X-Google-Smtp-Source: ABdhPJw6tqt7XtPD1oQtadfQ/HJNK5k8ey+Bn1x034g6Dm99vv/qEKLKo29ld1xI9ZJxtc/hBMZcVuA2aFPSmtM6MZg=
-X-Received: by 2002:ab0:5a93:: with SMTP id w19mr11133228uae.58.1634868300474;
- Thu, 21 Oct 2021 19:05:00 -0700 (PDT)
+        id S231334AbhJVCVT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Oct 2021 22:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230190AbhJVCVQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Oct 2021 22:21:16 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42FAC061764;
+        Thu, 21 Oct 2021 19:18:59 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id y4so1738859plb.0;
+        Thu, 21 Oct 2021 19:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FQKje0AqFwDCTyJBC38SZqAvyBp0gWUAwYNALedOFkw=;
+        b=ap0gm2cWG9NNBXcbcBd24LRTgN7sOth0eIAke7a/Xxrd1JdQrlsUm4xLoGRUO+EW6y
+         Ll5Vtfg8Q+PRwKVF5hL2noeAxBe6ceUwg7j1q+wGzrPHa85KWsfdF4Mw9yloCmNoOoG3
+         iDlnbuzDnTgB9aamZAOk24sxXdKADFQjn3wr3msV4agB/fK4lr/8OyILEppo0nqpq6hF
+         rKR07j+NuVCCM/wJlshcSyb2cMA9/gpNV5j33vcZFfWd0n26eqlii6ttoBQvqa/DR2Ug
+         Q3IlkAVVR4rOuvIETXbNqlUXPT1/jowHA0kNSaQBa/r+Rl8Hh+cnKZPynN6PaaYB3sQS
+         R2qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FQKje0AqFwDCTyJBC38SZqAvyBp0gWUAwYNALedOFkw=;
+        b=R9U+hzWtDXHskdPVkRltqS0/seYlbv+1CvCmERqLIPBsoLWbKEPlVqqHj94MYG4Krw
+         LgSNWEQQ8xvKTMr+bkXXrS4ejbhBSSbqipwsv81yEOxWqTzirmMb8uBb0i9DFShQFcNA
+         QC2Yew/x/5iUs7douwugXKKnNaXrzQ3qGHKsMWbU50zw+ob++9dOUt8abbXgn/ONg1zs
+         /1upepM4Ue74OroCQv7tJu+JX6mO/DeesLe3rMxD2Zvogd63pluiUpbRHvIDGL/9x/Pw
+         GIN1GsBhT0wj1EELeyJHlIY+pdDKcu4f4uiQ1o1rrSOI0JGief7HVVm1cFlFxUYcFQpF
+         1WpA==
+X-Gm-Message-State: AOAM531gnS/EUDsvij/AC3S4V01V1gRWGxkIJ5K60w0NPeMmOqsxxW7z
+        +BYkx21T5oEWBcM5Ac5mHx2A+Jp57JDROnR9eziukGtgEV8=
+X-Google-Smtp-Source: ABdhPJzH6gvYQwMelz8MkyZ6c5kphs8nR7/+XwTmfbc88coGLGQ33okMENsfTZ4yyC/cb8EOBn2vj4ZREbmbPoRP4nA=
+X-Received: by 2002:a17:902:ea0a:b0:13e:8b24:b94 with SMTP id
+ s10-20020a170902ea0a00b0013e8b240b94mr8661852plg.45.1634869139087; Thu, 21
+ Oct 2021 19:18:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
-In-Reply-To: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 22 Oct 2021 10:04:49 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTt85x66y+abT=czvqSNtbxKYneiO_ABffUg_AwOcon=Q@mail.gmail.com>
-Message-ID: <CAJF2gTTt85x66y+abT=czvqSNtbxKYneiO_ABffUg_AwOcon=Q@mail.gmail.com>
-Subject: Re: [PATCH] locking: Generic ticket lock
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        =?UTF-8?Q?Christoph_M=C3=BCllner?= <christophm30@gmail.com>,
-        Stafford Horne <shorne@gmail.com>
+References: <cover.1631583258.git.chenfeiyang@loongson.cn> <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
+ <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
+ <20210921155708.GA12237@alpha.franken.de> <ef429f0f-7cc9-2625-3700-47dc459ee681@wanyeetech.com>
+ <8a6f5c78-62c0-5d58-1386-dabfcacc112a@wanyeetech.com> <alpine.DEB.2.21.2110182128090.31442@angie.orcam.me.uk>
+ <CACWXhK=Au5qc96NBQObHnLAL+4wNMqo6apvK5-572Hohs8OrYQ@mail.gmail.com> <alpine.DEB.2.21.2110191004440.31442@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2110191004440.31442@angie.orcam.me.uk>
+From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
+Date:   Fri, 22 Oct 2021 10:19:20 +0800
+Message-ID: <CACWXhKnU2=eVxsAUYqaK9VN0ZG3=iZiZ_cf=w-7gBNt1pdZasA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, arnd@arndb.de,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        chenhuacai@kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-C-SKY would follow this, thx.
+On Tue, 19 Oct 2021 at 16:33, Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+>
+> On Tue, 19 Oct 2021, Feiyang Chen wrote:
+>
+> > > > Score Without Patches  Score With Patches  Performance Change SoC Model
+> > > >        105.9                102.1              -3.6%  JZ4775
+> > > >        132.4                124.1              -6.3%  JZ4780(SMP off)
+> > > >        170.2                155.7             -8.5%  JZ4780(SMP on)
+> > > >        101.3                 91.5              -9.7%  X1000E
+> > > >        187.1                179.4              -4.1%  X1830
+> > > >        324.9                314.3              -3.3%  X2000(SMT off)
+> > > >        394.6                373.9              -5.2%  X2000(SMT off)
+> > > >
+> > > >
+> > > > Compared with the V1 version, there are some improvements, but the performance
+> > > > loss is still a bit obvious
+> > >
+> > >  The MIPS port of Linux has always had the pride of having a particularly
+> > > low syscall overhead and I'd rather we didn't lose this quality.
+> >
+> > Hi, Maciej,
+> >
+> > 1. The current trend is to use generic code, so I think this work is
+> > worth it, even if there is some performance loss.
+>
+>  Well, a trend is not a proper justification on its own for existing code,
+> and mature one for that matter, that works.  Surely it might be for an
+> entirely new port, but the MIPS port is not exactly one.
+>
+> > 2. We tested the performance on 5.15-rc1~rc5 and the performance
+> > loss on JZ4780 (SMP off) is not so obvious (about -3%).
+>
+>  I've seen teams work hard to improve performance by less than 3%, so
+> depending on how you look at it the loss is not necessarily small, even if
+> not abysmal.  And I find the figure of almost 10% cited for another system
+> even more worrisome.  Also you've written the figures are from UnixBench,
+> which I suppose measures some kind of an average across various workloads.
+> Can you elaborate on the methodology used by that benchmark?
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Hi, Maciej,
 
-On Thu, Oct 21, 2021 at 9:05 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
->
-> There's currently a number of architectures that want/have graduated
-> from test-and-set locks and are looking at qspinlock.
->
-> *HOWEVER* qspinlock is very complicated and requires a lot of an
-> architecture to actually work correctly. Specifically it requires
-> forward progress between a fair number of atomic primitives, including
-> an xchg16 operation, which I've seen a fair number of fundamentally
-> broken implementations of in the tree (specifically for qspinlock no
-> less).
->
-> The benefit of qspinlock over ticket lock is also non-obvious, esp.
-> at low contention (the vast majority of cases in the kernel), and it
-> takes a fairly large number of CPUs (typically also NUMA) to make
-> qspinlock beat ticket locks.
->
-> Esp. things like ARM64's WFE can move the balance a lot in favour of
-> simpler locks by reducing the cacheline pressure due to waiters (see
-> their smp_cond_load_acquire() implementation for details).
->
-> Unless you've audited qspinlock for your architecture and found it
-> sound *and* can show actual benefit, simpler is better.
->
-> Therefore provide ticket locks, which depend on a single atomic
-> operation (fetch_add) while still providing fairness.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  include/asm-generic/qspinlock.h         |   30 +++++++++
->  include/asm-generic/ticket_lock_types.h |   11 +++
->  include/asm-generic/ticket_lock.h       |   97 ++++++++++++++++++++++++++++++++
->  3 files changed, 138 insertions(+)
->
-> --- a/include/asm-generic/qspinlock.h
-> +++ b/include/asm-generic/qspinlock.h
-> @@ -2,6 +2,36 @@
->  /*
->   * Queued spinlock
->   *
-> + * A 'generic' spinlock implementation that is based on MCS locks. An
-> + * architecture that's looking for a 'generic' spinlock, please first consider
-> + * ticket_lock.h and only come looking here when you've considered all the
-> + * constraints below and can show your hardware does actually perform better
-> + * with qspinlock.
-> + *
-> + *
-> + * It relies on smp_store_release() + atomic_*_acquire() to be RCsc (or no
-> + * weaker than RCtso if you're Power, also see smp_mb__after_unlock_lock()),
-> + *
-> + * It relies on a far greater (compared to ticket_lock.h) set of atomic
-> + * operations to behave well together, please audit them carefully to ensure
-> + * they all have forward progress. Many atomic operations may default to
-> + * cmpxchg() loops which will not have good forward progress properties on
-> + * LL/SC architectures.
-> + *
-> + * One notable example is atomic_fetch_or_acquire(), which x86 cannot (cheaply)
-> + * do. Carefully read the patches that introduced
-> + * queued_fetch_set_pending_acquire().
-> + *
-> + * It also heavily relies on mixed size atomic operations, in specific it
-> + * requires architectures to have xchg16; something which many LL/SC
-> + * architectures need to implement as a 32bit and+or in order to satisfy the
-> + * forward progress guarantees mentioned above.
-> + *
-> + * Further reading on mixed size atomics that might be relevant:
-> + *
-> + *   http://www.cl.cam.ac.uk/~pes20/popl17/mixed-size.pdf
-> + *
-> + *
->   * (C) Copyright 2013-2015 Hewlett-Packard Development Company, L.P.
->   * (C) Copyright 2015 Hewlett-Packard Enterprise Development LP
->   *
-> --- /dev/null
-> +++ b/include/asm-generic/ticket_lock_types.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef __ASM_GENERIC_TICKET_LOCK_TYPES_H
-> +#define __ASM_GENERIC_TICKET_LOCK_TYPES_H
-> +
-> +#include <linux/types.h>
-> +typedef atomic_t arch_spinlock_t;
-> +
-> +#define __ARCH_SPIN_LOCK_UNLOCKED      ATOMIC_INIT(0)
-> +
-> +#endif /* __ASM_GENERIC_TICKET_LOCK_TYPES_H */
-> --- /dev/null
-> +++ b/include/asm-generic/ticket_lock.h
-> @@ -0,0 +1,97 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +/*
-> + * 'Generic' ticket lock implementation.
-> + *
-> + * It relies on atomic_fetch_add() having well defined forward progress
-> + * guarantees under contention. If your architecture cannot provide this, stick
-> + * to a test-and-set lock.
-> + *
-> + * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
-> + * sub-word of the value. This is generally true for anything LL/SC although
-> + * you'd be hard pressed to find anything useful in architecture specifications
-> + * about this. If your architecture cannot do this you might be better off with
-> + * a test-and-set.
-> + *
-> + * It relies on smp_store_release() + atomic_*_acquire() to be RCsc (or no
-> + * weaker than RCtso if you're Power, also see smp_mb__after_unlock_lock()),
-> + *
-> + * The implementation uses smp_cond_load_acquire() to spin, so if the
-> + * architecture has WFE like instructions to sleep instead of poll for word
-> + * modifications be sure to implement that (see ARM64 for example).
-> + *
-> + */
-> +
-> +#ifndef __ASM_GENERIC_TICKET_LOCK_H
-> +#define __ASM_GENERIC_TICKET_LOCK_H
-> +
-> +#include <linux/atomic.h>
-> +#include <asm/ticket_lock_types.h>
-> +
-> +#define ONE_TICKET     (1 << 16)
-> +#define __ticket(val)  (u16)((val) >> 16)
-> +#define __owner(val)   (u16)((val) & 0xffff)
-> +
-> +static __always_inline bool __ticket_is_locked(u32 val)
-> +{
-> +       return __ticket(val) != __owner(val);
-> +}
-> +
-> +static __always_inline void ticket_lock(arch_spinlock_t *lock)
-> +{
-> +       u32 val = atomic_fetch_add_acquire(ONE_TICKET, lock);
-> +       u16 ticket = __ticket(val);
-> +
-> +       if (ticket == __owner(val))
-> +               return;
-> +
-> +       atomic_cond_read_acquire(lock, ticket == __owner(VAL));
-> +}
-> +
-> +static __always_inline bool ticket_trylock(arch_spinlock_t *lock)
-> +{
-> +       u32 old = atomic_read(lock);
-> +
-> +       if (__ticket_is_locked(old))
-> +               return false;
-> +
-> +       return atomic_try_cmpxchg_acquire(lock, &old, old + ONE_TICKET);
-> +}
-> +
-> +static __always_inline void ticket_unlock(arch_spinlock_t *lock)
-> +{
-> +       u16 *ptr = (u16 *)lock + __is_defined(__BIG_ENDIAN);
-> +       u32 val = atomic_read(lock);
-> +
-> +       smp_store_release(ptr, __owner(val) + 1);
-> +}
-> +
-> +static __always_inline int ticket_is_contended(arch_spinlock_t *lock)
-> +{
-> +       u32 val = atomic_read(lock);
-> +
-> +       return (__ticket(val) - __owner(val)) > 1;
-> +}
-> +
-> +static __always_inline int ticket_is_locked(arch_spinlock_t *lock)
-> +{
-> +       return __ticket_is_locked(atomic_read(lock));
-> +}
-> +
-> +static __always_inline int ticket_value_unlocked(arch_spinlock_t lock)
-> +{
-> +       return !__ticket_is_locked(lock.counter);
-> +}
-> +
-> +#undef __owner
-> +#undef __ticket
-> +#undef ONE_TICKET
-> +
-> +#define arch_spin_lock(l)              ticket_lock(l)
-> +#define arch_spin_trylock(l)           ticket_trylock(l)
-> +#define arch_spin_unlock(l)            ticket_unlock(l)
-> +#define arch_spin_is_locked(l)         ticket_is_locked(l)
-> +#define arch_spin_is_contended(l)      ticket_is_contended(l)
-> +#define arch_spin_value_unlocked(l)    ticket_value_unlocked(l)
-> +
-> +#endif /* __ASM_GENERIC_TICKET_LOCK_H */
+UnixBench uses multiple tests to test various aspects of the system's
+performance:
 
+- Dhrystone test measures the speed and efficiency of non-floating-point
+  operations.
+- Whetstone test measures the speed and efficiency of floating-point
+  operations.
+- execl Throughput test measures the number of execl() calls that can be
+  performed per second.
+- File Copy test measures the rate at which data can be transferred from one
+  file to another, using various buffer sizes.
+- Pipe Throughput test measures the number of times (per second) a process
+  can write 512 bytes to a pipe and read them back.
+- Pipe-based Context Switching test measures the number of times two
+  processes can exchange an increasing integer through a pipe.
+- Process Creation test measures the number of times a process can fork and
+  reap a child that immediately exits.
+- Shell Scripts test measures the number of times per minute a process can
+  start and reap a set of one, two, four and eight concurrent copies of a
+  shell script where the shell script applies a series of transformations
+  to a data file.
+- System Call Overhead test measures the cost of entering and leaving the
+  operating system kernel.
 
+In these tests above, the most affected is the System Call Overhead test,
+and I'll go into more detail about how it's measured.
 
--- 
-Best Regards
- Guo Ren
+The System Call Overhead test counts the sets of system calls that are
+completed within the specified time (usually 10 seconds). By default, a set
+of system calls contain close(), getpid(), getuid(), and umask(). We call
+the test score "index". Specifically, the score for this test is calculated
+as follows:
 
-ML: https://lore.kernel.org/linux-csky/
+product = log(count) - log(time / timebase)
+result = exp(product / iterations)
+index = result / baseline * 10
+
+"timebase" and "baseline" are fixed values that are different for each test.
+Scores for other tests are calculated in a similar way. The final total
+score is calculated as follows (The total number of tests is "N"):
+
+index = exp((log(result1) + log(result2) + ... + log(resultN)) / N) * 10
+
+>
+>  Can you tell me what the performance loss is for a cheap syscall such as
+> `getuid'?  That would indicate how much is actually lost in the invocation
+> overhead.
+
+We use perf to measure the sys time of the the following program on Loongson
+3A4000:
+
+int main(void)
+{
+    for (int i = 0; i < 10000000; i++)
+        getuid();
+    return 0;
+}
+
+The program will take about 1.2 seconds of sys time before the kernel is
+patched, and about 1.3 seconds after the kernel is patched.
+
+>
+>  With that amount known, would you be able to indicate where exactly the
+> performance is getting lost in generic code?  Can it be improved?
+
+Sorry, we tried to use perf to analyze the extra time, but have no idea at
+the moment, since most of the code is located in __noinstr_text_start.
+
+Thanks,
+Feiyang
+
+>
+>   Maciej
