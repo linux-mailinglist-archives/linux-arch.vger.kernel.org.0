@@ -2,74 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F284391E9
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Oct 2021 11:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A85E4394AB
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Oct 2021 13:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbhJYJEd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Oct 2021 05:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbhJYJEc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Oct 2021 05:04:32 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE258C061745
-        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 02:02:10 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id z5-20020a9d4685000000b005537cbe6e5aso7249769ote.1
-        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 02:02:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aSggL9zSx0ZM1dzLT5bonr4VkDI90dNyLYDXM7nhOpw=;
-        b=pwt8cwi57uK1zhUkMzqHJacFIsEQdB34YGLVFb7oCoO3qhxJJgEVqT4jCnk6V23xHv
-         J/+KNhOFgOjVR3EAXLexW3n5KVbt1XK3sxGdNmCv2sCFxsgZc+AxmkhTF6WCtg7hQAqC
-         fCYdpNXdtfLVpnwRgdwYrwMZj8qie1vpvpyXfakh4aVBIiNrd4BugDfdXtk1BEI7tERT
-         6GlO2vRtJKK/KEfrypWYlncbIkM7fNtlMQCRgwcEAFm+xfvv+C6wPc9xdQpfEVK/oqc0
-         4gqJiZkWUMKyTMq5nO6wUIOCc1J7tKqTOhx8ne+Gowyaac7TdJ8RynFkzFqL+ml5NgC4
-         48Lw==
+        id S231760AbhJYLYD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Oct 2021 07:24:03 -0400
+Received: from mail-wm1-f47.google.com ([209.85.128.47]:35623 "EHLO
+        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230126AbhJYLW7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Oct 2021 07:22:59 -0400
+Received: by mail-wm1-f47.google.com with SMTP id 84-20020a1c0457000000b003232b0f78f8so12778652wme.0;
+        Mon, 25 Oct 2021 04:20:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aSggL9zSx0ZM1dzLT5bonr4VkDI90dNyLYDXM7nhOpw=;
-        b=f0yv7tPgg9lt9GpuKC2Jbpd5oIr4XVSNl4rBBbLBwsgApFcrKGpujt8lgJDDyA4p/b
-         rht16Tqu+E6RanNLDSpFih/klE8T1ku7MJjHUnL7iaGV5iBOH7qG23A3OddMmhVoRznv
-         9dZdzO7Ia0SaBB6bES8mm3fhKe+l9hivRoJi5jTXC6QAIteusWcC45tAKEpE+b57SNaY
-         qkF2ztwxURvVdKIQU8r+/x7HOrA3gshwFSQWlXHLQGJPv3Z9VKye11JgsxhE+lHrEpa3
-         7sr/IAt45tavnGKy4x+tLD7NZWHkml734OjG93OzLrRo39M8Q0sPesLoJ32bIkwjbs1p
-         4iKQ==
-X-Gm-Message-State: AOAM531506HrMaYxslWWUefUruyJY51NNN/x+0pIKgkVjPbgVE2y9u+W
-        WqjWuvlrXbDhf/TrOzbnKmtkBr+3HmT0wQmGnMc=
-X-Google-Smtp-Source: ABdhPJyBi3lx3DQTDGitDYwo8/5X7jDsLkAr+Otw2TYiJADvzCOIp/65q/BMNu6cqWHYTITLWzDLcZqx+S1W2WPGGEM=
-X-Received: by 2002:a05:6830:1df4:: with SMTP id b20mr13045337otj.19.1635152529663;
- Mon, 25 Oct 2021 02:02:09 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jlGpSAspkabd1CBRf3wOMeuw9ekgHDwWbfgDd4L4Pmo=;
+        b=cJFGCF6wChm1PKA9EqaVvm62HO9Fg3zkPHTg43sLaqZ2FxKDLrSZkQyHZQa6TMX5mF
+         TXmhbB3POOqCdW8w4JBPSuQAelkDTfKqG5H5eQc6XSklPC7u3xYzWRk+/mxs6XexsxAM
+         HsY/T2hexvsjyFRUm4CWg0qelWrLh1XviqekPShWp97iF3yKNNK/OKmMaFlFJiBCbHa2
+         gJcYF3AeAlDCHN700iUlig2Ag+qx4ypW4gD0RmF/kPxlGKgVwCZYBRVGBN9SFwvfw4fv
+         p9o3Z8tHepf9UKm7PEAKD1WA5t01kC62yVkeEEBhw8+qcoLfGXJqI3iGuP88e//swxrG
+         lmsA==
+X-Gm-Message-State: AOAM530ZsWeR4rsSMIf5v7L1ByhFTO99lmhbX3QiDCGwSFwGfuATmVk+
+        hulbWBS8+SAmUEXXajGQ/eI=
+X-Google-Smtp-Source: ABdhPJxOD8l7t1pxirZMFfL27LzJZ/aVBiiSMiOCWM0OpPk22nL9FXAMtDtAGlRR7nqZiUAy7ovAzQ==
+X-Received: by 2002:a05:600c:3b82:: with SMTP id n2mr14465885wms.50.1635160835970;
+        Mon, 25 Oct 2021 04:20:35 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id o40sm10381489wms.10.2021.10.25.04.20.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Oct 2021 04:20:35 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 11:20:33 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     Borislav Petkov <bp@alien8.de>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        x86@kernel.org, hpa@zytor.com, dave.hansen@linux.intel.com,
+        luto@kernel.org, peterz@infradead.org, davem@davemloft.net,
+        kuba@kernel.org, gregkh@linuxfoundation.org, arnd@arndb.de,
+        brijesh.singh@amd.com, jroedel@suse.de, Tianyu.Lan@microsoft.com,
+        thomas.lendacky@amd.com, rientjes@google.com, pgonda@google.com,
+        akpm@linux-foundation.org, kirill.shutemov@linux.intel.com,
+        rppt@kernel.org, saravanand@fb.com, aneesh.kumar@linux.ibm.com,
+        hannes@cmpxchg.org, tj@kernel.org, michael.h.kelley@microsoft.com,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, konrad.wilk@oracle.com, hch@lst.de,
+        robin.murphy@arm.com, joro@8bytes.org, parri.andrea@gmail.com,
+        dave.hansen@intel.com
+Subject: Re: [PATCH V8 5/9] x86/sev-es: Expose sev_es_ghcb_hv_call() to call
+ ghcb hv call out of sev code
+Message-ID: <20211025112033.eqelx54p2dmlhykw@liuwe-devbox-debian-v2>
+References: <20211021154110.3734294-1-ltykernel@gmail.com>
+ <20211021154110.3734294-6-ltykernel@gmail.com>
+ <YXGTwppQ8syUyJ72@zn.tnic>
+ <00946764-7fe0-675f-7b3e-9fb3b8e3eb89@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6838:25d8:0:0:0:0 with HTTP; Mon, 25 Oct 2021 02:02:09
- -0700 (PDT)
-Reply-To: xiauchanyu@gmail.com
-From:   Mrs Xiau Chan Yu <rw9251392@gmail.com>
-Date:   Mon, 25 Oct 2021 02:02:09 -0700
-Message-ID: <CAHL0NO+tR0Pq0XSboYsX--2o9dsfSzoeud-RqK_fs5kN--oeUw@mail.gmail.com>
-Subject: =?UTF-8?Q?Sch=C3=B6nen_Tag=2E?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00946764-7fe0-675f-7b3e-9fb3b8e3eb89@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Sch=C3=B6ner Tag,
+On Fri, Oct 22, 2021 at 09:39:48PM +0800, Tianyu Lan wrote:
+> On 10/22/2021 12:22 AM, Borislav Petkov wrote:
+> > On Thu, Oct 21, 2021 at 11:41:05AM -0400, Tianyu Lan wrote:
+> > > diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+> > > index ea9abd69237e..368ed36971e3 100644
+> > > --- a/arch/x86/kernel/sev-shared.c
+> > > +++ b/arch/x86/kernel/sev-shared.c
+> > > @@ -124,10 +124,9 @@ static enum es_result verify_exception_info(struct ghcb *ghcb, struct es_em_ctxt
+> > >   	return ES_VMM_ERROR;
+> > >   }
+> > > -static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+> > > -					  struct es_em_ctxt *ctxt,
+> > > -					  u64 exit_code, u64 exit_info_1,
+> > > -					  u64 exit_info_2)
+> > > +enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb, bool set_ghcb_msr,
+> > > +				   struct es_em_ctxt *ctxt, u64 exit_code,
+> > > +				   u64 exit_info_1, u64 exit_info_2)
+> > >   {
+> > >   	/* Fill in protocol and format specifiers */
+> > >   	ghcb->protocol_version = GHCB_PROTOCOL_MAX;
+> > > @@ -137,7 +136,15 @@ static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+> > >   	ghcb_set_sw_exit_info_1(ghcb, exit_info_1);
+> > >   	ghcb_set_sw_exit_info_2(ghcb, exit_info_2);
+> > > -	sev_es_wr_ghcb_msr(__pa(ghcb));
+> > > +	/*
+> > > +	 * Hyper-V unenlightened guests use a paravisor for communicating and
+> > > +	 * GHCB pages are being allocated and set up by that paravisor. Linux
+> > > +	 * should not change ghcb page pa in such case and so add set_ghcb_msr
+> > 
+> > "... not change the GHCB page's physical address."
+> > 
+> > Remove the "so add... " rest.
+> > 
+> > Otherwise, LGTM.
+> > 
+> > Do you want me to take it through the tip tree?
+> 
+> Yes, please and this patch is based on the your clean up patch which is
+> already in the tip sev branch.
 
-Ich bin Xiu Chan Yu, Kredit- und Marketingdirektor von Chong Hin
-Bank, Hongkong, Chong Hing Bank Center, 24 Des Voeux Road Central,
-Hongkong. Ich habe einen Gesch=C3=A4ftsvorschlag f=C3=BCr 13.991.674 EURO
+Borislav, please take the whole series via the tip tree if possible.
+That's perhaps the easiest thing for both of us because the rest of the
+series depends on this patch. Or else I will have to base hyperv-next on
+the tip tree once you merge this patch.
 
-Alle best=C3=A4tigbaren Dokumente zur Sicherung der Anspr=C3=BCche werden I=
-hnen
-ausgeh=C3=A4ndigt
-vor Ihrer Annahme und sobald ich Ihre R=C3=BCcksendung erhalten habe
-Unter der Voraussetzung.
+Let me know what you think.
 
-Gr=C3=BC=C3=9Fe
-Xiau Chan Yu
+Thanks,
+Wei.
