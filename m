@@ -2,99 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7980943A80A
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 01:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6884743A873
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 01:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234430AbhJYXS1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Oct 2021 19:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
+        id S231536AbhJYXsn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Oct 2021 19:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234311AbhJYXS1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Oct 2021 19:18:27 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37882C061745
-        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 16:16:04 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id w23so11318299lje.7
-        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 16:16:04 -0700 (PDT)
+        with ESMTP id S234839AbhJYXsm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Oct 2021 19:48:42 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBE7C061745
+        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 16:46:19 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bi35so8447017lfb.9
+        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 16:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=N57vRJe+Hp19ptzSp75ybyre1XzyfFA16SmQOsxj3tA=;
-        b=UgKxLMhT870ySRwwioSjbGbqOTOBYQ47GNWCxDiXZMwTTJf9VDBTR8W+864dN8KcsO
-         Z6fdPCVuLRfJK898kYlNziu6kubhhOKZSFSL88QzpLnCMRPDxMXRPb5TuftXYw1AbTu/
-         dNmRTderTGCnZEoMbOtKWZ1IZbBj7mM1zoEus=
+        bh=VPDfwDoASh6gAt3dTueRf0PEqHtCNlU8x3H2SBa8PO4=;
+        b=VfI8DkON3Tp1Fy/ofZHy+9jJbXoEWslhCEpoyPUBV0DwrRu9leXOH8yO3qbMa8LdhO
+         eiUBtfuN+svqTIJpFzlFvTHE08JfxYnG5ajgah9TKaME07JJqGYzwD5d+WrXn3J/9Qbk
+         aJK7XBlwJWrID+d8Uo2ITEIDrOP5ddtY/6OVU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=N57vRJe+Hp19ptzSp75ybyre1XzyfFA16SmQOsxj3tA=;
-        b=Nj0y0fc8RrCdJHimLiU9b9G7R4jiiQNnyKWFbpbnr0NWEOxfauXRKARjs9RY7x3Oa8
-         o8MpcsBHFTttwOCNC5YBfey2uF/XUOdmCuV+oUZycUZuLaOPIGsPxLrG7HVZICYWawu5
-         YXbXPNNNvKopOO5xgcMbP655u3sq444WYM/puuf4qJbNkXX9fyef9o5Iew4GwhIcOii+
-         aujM1Ej26241GYP657DooekJp/KXOVOSDiwp2saYb5yanNlLoIATb2yh6cPV0QZZUCGD
-         zj8C5QKVRFzzHP5+OeqZyXJJMxLBx5AEzya1hHnU2ppHXlqS31wITWfhFvSsTO9VvPLj
-         vGqQ==
-X-Gm-Message-State: AOAM530AD7Ok5g4yhaHbQYT7eu2hc7Fw5onT1WUsqP1srb2l3n6Tq7PH
-        ip2parT0Yg3bBj1ocvBbsIXMKrUpKYnjykMp
-X-Google-Smtp-Source: ABdhPJyJolMiH/82pKdBm4WUCewbdoMWUWujNL2I1ycGyUKjAUIKII0iL+qCK/elrtxnzWwhN7tJVQ==
-X-Received: by 2002:a2e:87da:: with SMTP id v26mr21852871ljj.187.1635203762117;
-        Mon, 25 Oct 2021 16:16:02 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id w28sm1845275ljm.31.2021.10.25.16.16.00
+        bh=VPDfwDoASh6gAt3dTueRf0PEqHtCNlU8x3H2SBa8PO4=;
+        b=NJEozdVI39FlC8L5jOsZ8reksP1ihh3izyUVtDg1zVcd25M8zx7e+TT9a9prN5ivDF
+         Fu5SMcXb8AfbbJzTHKd9+dKvWL91b5Y7eS6gdJe15JX2g29cfVCNFaMQxLZCFyyuOw/K
+         D0GW8DpadbVOdNn67I6Jy41Cffwl4HCfnsjgix44N92hO4cXXcqw65EJHOoG34flpMUJ
+         wSRqWaOJA4RsXeCjPp43IMEYiwPic0+/isKYl6kEJ0WWo/Tm+EQVbAMEVGx93FZqUmvV
+         6WGrlTeUbfl0rDzoG4SIRozbwWBTlHJZZLbwMizVEhJj2pfXaQE6ztgdGvGvkz/L5sUr
+         GuNA==
+X-Gm-Message-State: AOAM531YXXOlqrvp64USjqMbNoxr8PlqVfnrPySqt5JWVRPnkZ+RLzkN
+        TxA2FoJGX/v5tQTJYheUu0pG4RYqvF0SPw==
+X-Google-Smtp-Source: ABdhPJwjvfSxuvJG/0LPJ9aWtfUG005KcXmNgQulRwguU8EbRHEv/vz9OY6/2mwDl8VsNoOyFv62kA==
+X-Received: by 2002:a05:6512:36d3:: with SMTP id e19mr19893395lfs.94.1635205577111;
+        Mon, 25 Oct 2021 16:46:17 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id o2sm16553lfq.41.2021.10.25.16.46.15
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Oct 2021 16:16:01 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id o26so16340083ljj.2
-        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 16:16:00 -0700 (PDT)
-X-Received: by 2002:a2e:bc24:: with SMTP id b36mr21991313ljf.95.1635203760541;
- Mon, 25 Oct 2021 16:16:00 -0700 (PDT)
+        Mon, 25 Oct 2021 16:46:15 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id l13so16805460lfg.6
+        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 16:46:15 -0700 (PDT)
+X-Received: by 2002:a05:6512:10d0:: with SMTP id k16mr20142390lfg.150.1635205574900;
+ Mon, 25 Oct 2021 16:46:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <87y26nmwkb.fsf@disp2133> <20211020174406.17889-13-ebiederm@xmission.com>
- <CAHk-=whe-ixeDp_OgSOsC4H+dWTLDSuNDU2a0sE3p8DapNeCuQ@mail.gmail.com> <9416e8d7-5545-4fc4-8ab0-68fddd35520b@kernel.org>
-In-Reply-To: <9416e8d7-5545-4fc4-8ab0-68fddd35520b@kernel.org>
+References: <87y26nmwkb.fsf@disp2133> <20211020174406.17889-10-ebiederm@xmission.com>
+ <875ytkygfj.fsf_-_@disp2133> <4b203254-a333-77b1-0fa9-75c11fabac36@kernel.org>
+In-Reply-To: <4b203254-a333-77b1-0fa9-75c11fabac36@kernel.org>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 25 Oct 2021 16:15:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whJETM0MHqWQKCVALBkJX-Th5471z5FW3gFJO5c73L6QA@mail.gmail.com>
-Message-ID: <CAHk-=whJETM0MHqWQKCVALBkJX-Th5471z5FW3gFJO5c73L6QA@mail.gmail.com>
-Subject: Re: [PATCH 13/20] signal: Implement force_fatal_sig
+Date:   Mon, 25 Oct 2021 16:45:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wioHUhqXU3_PR82VbfS8G=+zH+z8igeG-QAuCaWm5Cgqg@mail.gmail.com>
+Message-ID: <CAHk-=wioHUhqXU3_PR82VbfS8G=+zH+z8igeG-QAuCaWm5Cgqg@mail.gmail.com>
+Subject: Re: [PATCH v2 10/32] signal/vm86_32: Properly send SIGSEGV when the
+ vm86 state cannot be saved.
 To:     Andy Lutomirski <luto@kernel.org>
 Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Oleg Nesterov <oleg@redhat.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        H Peter Anvin <hpa@zytor.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 3:41 PM Andy Lutomirski <luto@kernel.org> wrote:
+On Mon, Oct 25, 2021 at 3:25 PM Andy Lutomirski <luto@kernel.org> wrote:
 >
-> I'm rather nervous about all this, and I'm also nervous about the
-> existing code.  A quick skim is finding plenty of code paths that assume
-> force_sigsegv (or a do_exit that this series touches) are genuinely
-> unrecoverable.
+> I think the result would be nicer if, instead of adding an extra goto,
+> you just literally moved all the cleanup under the unsafe_put_user()s
+> above them.  Unless I missed something, none of the put_user stuff reads
+> any state that is written by the cleanup code.
 
-I was going to say "what are you talking about", because clearly Eric
-kept it all fatal.
+Sure it does:
 
-But then looked at that patch a bit more before I claimed you were wrong.
+        memcpy(&regs->pt, &vm86->regs32, sizeof(struct pt_regs));
 
-And yeah, Eric's force_fatal_sig() is completely broken.
+is very much part of the cleanup code, and overwrites that regs->pt thing.
 
-It claims to force a fatal signal, but doesn't actually do that at
-all, and is completely misnamed.
+Which is exactly what we're writing back to user space in that
+unsafe_put_user() thing.
 
-It just uses "force_sig_info_to_task()", which still allows user space
-to catch signals - so it's not "fatal" in the least. It only punches
-through SIG_IGN and blocked signals.
+That said, thinking more about this, and looking at it again, I take
+back my statement that we could just make it a catchable SIGSEGV
+instead.
 
-So yeah, that's broken.
+If we can't write the vm86 state to user space, we will have
+fundamentally lost it, and while it's not fatal to the kernel, and
+while we've recovered the original 32-bit state, it's not something
+that user space can sanely recover from because the register state at
+the end of the vm86 work has now been irrecoverably thrown away.
 
-I do still think that that could the behavior we possibly want for
-that "can't write updated vm86 state back" situation, but for
-something that is called "fatal", it really needs to be fatal.
+So I think Eric's patch is fine.
 
-            Linus
+Except, as mentioned as part of the other patch, the "force_sigsegv()"
+conversion to use "force_fatal_sig()" was broken, because that
+function wasn't actually fatal at all.
+
+             Linus
