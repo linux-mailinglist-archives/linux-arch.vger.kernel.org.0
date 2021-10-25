@@ -2,114 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCBC43A69C
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 00:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89BD43A6BC
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 00:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbhJYWfR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Oct 2021 18:35:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45214 "EHLO mail.kernel.org"
+        id S234209AbhJYWn0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Oct 2021 18:43:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233933AbhJYWfQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 25 Oct 2021 18:35:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8765A6103C;
-        Mon, 25 Oct 2021 22:32:53 +0000 (UTC)
+        id S234204AbhJYWnZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 25 Oct 2021 18:43:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4205E6103C;
+        Mon, 25 Oct 2021 22:41:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635201174;
-        bh=0BzdB5d92X2i7ldftw0ekDl6iGfPoKqmLtnwLssAJDo=;
+        s=k20201202; t=1635201662;
+        bh=ex+zDaQP63Cn6bMQxc/uGRqILguHZWqLS9gEpm92DDU=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sbbiUXaPkbJ0VPl0NqHf8kSkjvjCer1JuUSIX/rs7xOUT6WXkCx5El+AmNuaM2Mg2
-         QqcfNv8hRFxEVlbVWVciWEtweYRiFgPoieo0FUBFvLZDx/5StICNIX6AR42H/J8ats
-         exXSpcVRAwVES+NeZM5SCLOKbAwCyAdgbHi84Z2vThJLXnhcETxhmYVYPpKzzHbo+w
-         bbsV8jm1VUB0kLl/kXa/pWYSFMAja2KY7skXEM4BZP35OLkaig3DOq+F/+hdGFu5M9
-         uzxXmJxAk4vlg3TU+99Z5qfcp2/BLKC2/a8xNKV7pmPZxglyI748qgNehJCqmR+Owb
-         vJGucCE3BaMhQ==
-Message-ID: <baf77664-596d-d679-261a-6a2a3b9b948a@kernel.org>
-Date:   Mon, 25 Oct 2021 15:32:52 -0700
+        b=PEHDxeNK/gqMFjw58J3tXy7BRkq+Yrg2AgrWIgVWwpTzkGhZl8HpMgJJ+nVMB3EBG
+         08VE8MbdRGn866NTwITZJjLQwSCtXwYX0dhgN51JNqKA4rWs+kBrVXLob2Jsnj5JiX
+         J/DDPX+VaJqglRJNT4NO/LiwPG7I/iXmd2mmwS672OilByu8oj2+qgfzvbXGu+kIaA
+         FRRGrWOcyfGaD7QNMJQ0Go0gBXrWhQEG3U8PwXuqDo7oziFU5Q/9IFOiAMaMAowymk
+         rrMo1/6ognvTAZIE2zAKiaElx39mOPw+mmwbCzTMcIk13s1REJTLUpNx8ZQMKZwsmV
+         XJIQNm3J8umig==
+Message-ID: <9416e8d7-5545-4fc4-8ab0-68fddd35520b@kernel.org>
+Date:   Mon, 25 Oct 2021 15:41:01 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
-Subject: Re: [PATCH 14/20] exit/syscall_user_dispatch: Send ordinary signals
- on failure
+Subject: Re: [PATCH 13/20] signal: Implement force_fatal_sig
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org
+Cc:     Oleg Nesterov <oleg@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>
 References: <87y26nmwkb.fsf@disp2133>
- <20211020174406.17889-14-ebiederm@xmission.com>
- <202110210925.9DEAF27CA@keescook>
+ <20211020174406.17889-13-ebiederm@xmission.com>
+ <CAHk-=whe-ixeDp_OgSOsC4H+dWTLDSuNDU2a0sE3p8DapNeCuQ@mail.gmail.com>
 From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <202110210925.9DEAF27CA@keescook>
+In-Reply-To: <CAHk-=whe-ixeDp_OgSOsC4H+dWTLDSuNDU2a0sE3p8DapNeCuQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/21/21 09:25, Kees Cook wrote:
-> On Wed, Oct 20, 2021 at 12:44:00PM -0500, Eric W. Biederman wrote:
->> Use force_fatal_sig instead of calling do_exit directly.  This ensures
->> the ordinary signal handling path gets invoked, core dumps as
->> appropriate get created, and for multi-threaded processes all of the
->> threads are terminated not just a single thread.
+On 10/20/21 13:05, Linus Torvalds wrote:
+> On Wed, Oct 20, 2021 at 7:45 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
 >>
->> When asked Gabriel Krisman Bertazi <krisman@collabora.com> said [1]:
->>> ebiederm@xmission.com (Eric W. Biederman) asked:
->>>
->>>> Why does do_syscal_user_dispatch call do_exit(SIGSEGV) and
->>>> do_exit(SIGSYS) instead of force_sig(SIGSEGV) and force_sig(SIGSYS)?
->>>>
->>>> Looking at the code these cases are not expected to happen, so I would
->>>> be surprised if userspace depends on any particular behaviour on the
->>>> failure path so I think we can change this.
->>>
->>> Hi Eric,
->>>
->>> There is not really a good reason, and the use case that originated the
->>> feature doesn't rely on it.
->>>
->>> Unless I'm missing yet another problem and others correct me, I think
->>> it makes sense to change it as you described.
->>>
->>>> Is using do_exit in this way something you copied from seccomp?
->>>
->>> I'm not sure, its been a while, but I think it might be just that.  The
->>> first prototype of SUD was implemented as a seccomp mode.
+>> Add a simple helper force_fatal_sig that causes a signal to be
+>> delivered to a process as if the signal handler was set to SIG_DFL.
 >>
->> If at some point it becomes interesting we could relax
->> "force_fatal_sig(SIGSEGV)" to instead say
->> "force_sig_fault(SIGSEGV, SEGV_MAPERR, sd->selector)".
->>
->> I avoid doing that in this patch to avoid making it possible
->> to catch currently uncatchable signals.
->>
->> Cc: Gabriel Krisman Bertazi <krisman@collabora.com>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Andy Lutomirski <luto@kernel.org>
->> [1] https://lkml.kernel.org/r/87mtr6gdvi.fsf@collabora.com
->> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>> Reimplement force_sigsegv based upon this new helper.
 > 
-> Yeah, looks good. Should be no visible behavior change.
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Can you just make the old force_sigsegv() go away? The odd special
+> casing of SIGSEGV was odd to begin with, I think everybody really just
+> wanted this new "force_fatal_sig()" and allow any signal - not making
+> SIGSEGV special.
 > 
 
-I'm confused.  Before this series, this error path would unconditionally 
-kill the task (other than the race condition in force_sigsegv(), but at 
-least a well-behaved task would get killed).  Now a signal handler might 
-be invoked, and it would be invoked after the syscall that triggered the 
-fault got processed as a no-op.  If the signal handler never returns, 
-that's fine, but if the signal handler *does* return, the process might 
-be in an odd state.  For SIGSYS, this behavior is probably fine, but 
-having SIGSEGV swallow a syscall seems like a mistake.
+I'm rather nervous about all this, and I'm also nervous about the 
+existing code.  A quick skim is finding plenty of code paths that assume 
+force_sigsegv (or a do_exit that this series touches) are genuinely 
+unrecoverable.  For example:
 
-Maybe rewind (approximately!) the syscall?  Or actually send SIGSYS?  Or 
-actually make the signal uncatchable?
+- rseq: the *kernel* will be fine if a signal is handled, but the 
+userspace process may be in a very strange state.
 
---Andy
+- bprm_execve: The comment says it best:
+
+         /*
+          * If past the point of no return ensure the code never
+          * returns to the userspace process.  Use an existing fatal
+          * signal if present otherwise terminate the process with
+          * SIGSEGV.
+          */
+         if (bprm->point_of_no_return && !fatal_signal_pending(current))
+                 force_sigsegv(SIGSEGV);
+
+- vm86: already discussed
+
+Now force_sigsegv() at least tries to kill the task, but not very well. 
+With the whole series applied and force_sigsegv() gone, these errors 
+become handleable, and that needs real care.
+
+(I don't think bprm_execve() is exploitable.  It looks like it's 
+attackable in the window between setting point_of_no_return and 
+unshare_sighand(), but I'm not seeing any useful way to attack it unless 
+a core dump is already in progress or a *different* fatal signal is 
+already pending, and in either of those cases we're fine.)
