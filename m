@@ -2,130 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D93543A682
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 00:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCBC43A69C
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 00:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbhJYW2V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Oct 2021 18:28:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41916 "EHLO mail.kernel.org"
+        id S232517AbhJYWfR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Oct 2021 18:35:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45214 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233780AbhJYW1v (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 25 Oct 2021 18:27:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC5DD61039;
-        Mon, 25 Oct 2021 22:25:27 +0000 (UTC)
+        id S233933AbhJYWfQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 25 Oct 2021 18:35:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8765A6103C;
+        Mon, 25 Oct 2021 22:32:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635200728;
-        bh=P5tlFsGtCPtUOWR1BRMJeM7BfDDHkMcNJV0LpkK2SbE=;
+        s=k20201202; t=1635201174;
+        bh=0BzdB5d92X2i7ldftw0ekDl6iGfPoKqmLtnwLssAJDo=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AsTyAg2M09vff6Gj3gBQf5TF2l1dygeTp0Yy626Wt1k8ZOb8bAxXW+/GLdFsBnuPS
-         Uj2FluXu+PtFicvWB36W+GW+kW/W/Pdb2hkEFZRHGCKwwA6ib7dnC7OIVSkuKwOb6D
-         /V2C1790g4GX8VsA/H2MWNrQcbWPNc5LC8UV2x/MpAJxnjFKPn/BWKSy/sx+NdLEk6
-         HEBZDeNCAUZuyQ8o8g1UiQwEn+FS5avdYvHlptFcGTr+mhY0sM0aOYgBsig1M53swJ
-         X3v3zzyUWkiJHofoe7vejy7weMqD8UmANf2d/uxphiLkrtcWi/hEUuJgOvTkLuO96L
-         71i50wkf2b6mw==
-Message-ID: <4b203254-a333-77b1-0fa9-75c11fabac36@kernel.org>
-Date:   Mon, 25 Oct 2021 15:25:26 -0700
+        b=sbbiUXaPkbJ0VPl0NqHf8kSkjvjCer1JuUSIX/rs7xOUT6WXkCx5El+AmNuaM2Mg2
+         QqcfNv8hRFxEVlbVWVciWEtweYRiFgPoieo0FUBFvLZDx/5StICNIX6AR42H/J8ats
+         exXSpcVRAwVES+NeZM5SCLOKbAwCyAdgbHi84Z2vThJLXnhcETxhmYVYPpKzzHbo+w
+         bbsV8jm1VUB0kLl/kXa/pWYSFMAja2KY7skXEM4BZP35OLkaig3DOq+F/+hdGFu5M9
+         uzxXmJxAk4vlg3TU+99Z5qfcp2/BLKC2/a8xNKV7pmPZxglyI748qgNehJCqmR+Owb
+         vJGucCE3BaMhQ==
+Message-ID: <baf77664-596d-d679-261a-6a2a3b9b948a@kernel.org>
+Date:   Mon, 25 Oct 2021 15:32:52 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
-Subject: Re: [PATCH v2 10/32] signal/vm86_32: Properly send SIGSEGV when the
- vm86 state cannot be saved.
+Subject: Re: [PATCH 14/20] exit/syscall_user_dispatch: Send ordinary signals
+ on failure
 Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, H Peter Anvin <hpa@zytor.com>
+        Peter Zijlstra <peterz@infradead.org>
 References: <87y26nmwkb.fsf@disp2133>
- <20211020174406.17889-10-ebiederm@xmission.com> <875ytkygfj.fsf_-_@disp2133>
+ <20211020174406.17889-14-ebiederm@xmission.com>
+ <202110210925.9DEAF27CA@keescook>
 From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <875ytkygfj.fsf_-_@disp2133>
+In-Reply-To: <202110210925.9DEAF27CA@keescook>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/25/21 13:53, Eric W. Biederman wrote:
+On 10/21/21 09:25, Kees Cook wrote:
+> On Wed, Oct 20, 2021 at 12:44:00PM -0500, Eric W. Biederman wrote:
+>> Use force_fatal_sig instead of calling do_exit directly.  This ensures
+>> the ordinary signal handling path gets invoked, core dumps as
+>> appropriate get created, and for multi-threaded processes all of the
+>> threads are terminated not just a single thread.
+>>
+>> When asked Gabriel Krisman Bertazi <krisman@collabora.com> said [1]:
+>>> ebiederm@xmission.com (Eric W. Biederman) asked:
+>>>
+>>>> Why does do_syscal_user_dispatch call do_exit(SIGSEGV) and
+>>>> do_exit(SIGSYS) instead of force_sig(SIGSEGV) and force_sig(SIGSYS)?
+>>>>
+>>>> Looking at the code these cases are not expected to happen, so I would
+>>>> be surprised if userspace depends on any particular behaviour on the
+>>>> failure path so I think we can change this.
+>>>
+>>> Hi Eric,
+>>>
+>>> There is not really a good reason, and the use case that originated the
+>>> feature doesn't rely on it.
+>>>
+>>> Unless I'm missing yet another problem and others correct me, I think
+>>> it makes sense to change it as you described.
+>>>
+>>>> Is using do_exit in this way something you copied from seccomp?
+>>>
+>>> I'm not sure, its been a while, but I think it might be just that.  The
+>>> first prototype of SUD was implemented as a seccomp mode.
+>>
+>> If at some point it becomes interesting we could relax
+>> "force_fatal_sig(SIGSEGV)" to instead say
+>> "force_sig_fault(SIGSEGV, SEGV_MAPERR, sd->selector)".
+>>
+>> I avoid doing that in this patch to avoid making it possible
+>> to catch currently uncatchable signals.
+>>
+>> Cc: Gabriel Krisman Bertazi <krisman@collabora.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Cc: Andy Lutomirski <luto@kernel.org>
+>> [1] https://lkml.kernel.org/r/87mtr6gdvi.fsf@collabora.com
+>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 > 
-> Update save_v86_state to always complete all of it's work except
-> possibly some of the copies to userspace even if save_v86_state takes
-> a fault.  This ensures that the kernel is always in a sane state, even
-> if userspace has done something silly.
+> Yeah, looks good. Should be no visible behavior change.
 > 
-> When save_v86_state takes a fault update it to force userspace to take
-> a SIGSEGV and terminate the userspace application.
-> 
-> As Andy pointed out in review of the first version of this change
-> there are races between sigaction and the application terinating.  Now
-> that the code has been modified to always perform all save_v86_state's
-> work (except possibly copying to userspace) those races do not matter
-> from a kernel perspective.
-> 
-> Forcing the userspace application to terminate (by resetting it's
-> handler to SIGDFL) is there to keep everything as close to the current
-> behavior as possible while removing the unique (and difficult to
-> maintain) use of do_exit.
-> 
-> If this new SIGSEGV happens during handle_signal the next time around
-> the exit_to_user_mode_loop, SIGSEGV will be delivered to userspace.
-> 
-> All of the callers of handle_vm86_trap and handle_vm86_fault run the
-> exit_to_user_mode_loop before they return to userspace any signal sent
-> to the current task during their execution will be delivered to the
-> current task before that tasks exits to usermode.
-> 
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: x86@kernel.org
-> Cc: H Peter Anvin <hpa@zytor.com>
-> v1: https://lkml.kernel.org/r/20211020174406.17889-10-ebiederm@xmission.com
-> Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
-> ---
->   arch/x86/kernel/vm86_32.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> Any does this look better?
-
-Conceptually yes, but:
-
-> 
-> I think by just completing all of the work that isn't copying to
-> userspace this makes save_v86_state much more robust.
-> 
-> diff --git a/arch/x86/kernel/vm86_32.c b/arch/x86/kernel/vm86_32.c
-> index 63486da77272..933cafab7832 100644
-> --- a/arch/x86/kernel/vm86_32.c
-> +++ b/arch/x86/kernel/vm86_32.c
-> @@ -140,6 +140,7 @@ void save_v86_state(struct kernel_vm86_regs *regs, int retval)
->   
->   	user_access_end();
->   
-> +exit_vm86:
->   	preempt_disable();
->   	tsk->thread.sp0 = vm86->saved_sp0;
->   	tsk->thread.sysenter_cs = __KERNEL_CS;
-> @@ -159,7 +160,8 @@ void save_v86_state(struct kernel_vm86_regs *regs, int retval)
->   	user_access_end();
->   Efault:
->   	pr_alert("could not access userspace vm86 info\n");
-> -	do_exit(SIGSEGV);
-> +	force_sigsegv(SIGSEGV);
-> +	goto exit_vm86;
->   }
->   
->   static int do_vm86_irq_handling(int subfunction, int irqnumber);
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 > 
 
-I think the result would be nicer if, instead of adding an extra goto, 
-you just literally moved all the cleanup under the unsafe_put_user()s 
-above them.  Unless I missed something, none of the put_user stuff reads 
-any state that is written by the cleanup code.
+I'm confused.  Before this series, this error path would unconditionally 
+kill the task (other than the race condition in force_sigsegv(), but at 
+least a well-behaved task would get killed).  Now a signal handler might 
+be invoked, and it would be invoked after the syscall that triggered the 
+fault got processed as a no-op.  If the signal handler never returns, 
+that's fine, but if the signal handler *does* return, the process might 
+be in an odd state.  For SIGSYS, this behavior is probably fine, but 
+having SIGSEGV swallow a syscall seems like a mistake.
+
+Maybe rewind (approximately!) the syscall?  Or actually send SIGSYS?  Or 
+actually make the signal uncatchable?
 
 --Andy
