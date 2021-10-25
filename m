@@ -2,98 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D359743A524
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Oct 2021 22:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6DA43A593
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Oct 2021 23:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234278AbhJYU61 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Oct 2021 16:58:27 -0400
-Received: from mail-wm1-f47.google.com ([209.85.128.47]:51873 "EHLO
-        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbhJYU6Z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Oct 2021 16:58:25 -0400
-Received: by mail-wm1-f47.google.com with SMTP id 5so2192525wmb.1;
-        Mon, 25 Oct 2021 13:56:02 -0700 (PDT)
+        id S230490AbhJYVOr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Oct 2021 17:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234601AbhJYVOr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Oct 2021 17:14:47 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C28DC061745
+        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 14:12:24 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id x192so14018853lff.12
+        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 14:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YVX+3lzLvWhUn4tentelh/747tIk4zl+rRWtSWpc9Yk=;
+        b=aQgz9Tv6mpoE3tF3MaUnqcoIZTzd9NM67EmB21HgN8ByNXIhPpJTwMQIdse+uBCvM/
+         F0wjX2GSLWEyTKdsledeQGcf3ALxbdkQjFpv24RgLL5kI9ONayzSXg0GiAruZkeL4Mv5
+         m+VLxE02J/Zxm8OQiM46Uvgda5b858wHUBZVI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q+yfKmb+onnS482Y6u9v2lkAP9a5r5WCNti0ot9YfMg=;
-        b=xUQTw3gvr5nrkxlziOUeMn9HfUMvaQL0F4JcaLJAgjzeVs0W0mOa0m7PSt93PQb83q
-         gRiekuo5cNPMtA6qRKzD1WipURbGmCZUKl2LAN5Egzp/k/bf3/wWkx/5s0qDb7sYEZG9
-         ifVYrat4wIIRGHCtTqy84F+tUcTKAl6eCVzyzmEJtirXi69lIo1HprJGxT0uRTqBWkS3
-         rxWj6ncPlD01FoBsXjFVSxWV1r5pxZyyxgwG2tabXdb+H7k9ss1P63Hyt3kmHRz6XtCT
-         NwDiobnFeTqNs1a2vYoLc9hY3gTbRXNBaLNmwhME66ZYPFnecdyXw/O2zbebEbUxWaJ8
-         /9qw==
-X-Gm-Message-State: AOAM530OSOJXyIEJboGJlhBYLnyQnkW4VLRm2bsNqe84GUVtWOvDE25X
-        yzqKuzYEBMdq8g3LHU8F1n4=
-X-Google-Smtp-Source: ABdhPJy41VdkQyppTBh4meZBX/lXaHxLgbKOGQTqOHHeONNOEpR5bufaWYH/gDxFiXuknpfmkXcMPg==
-X-Received: by 2002:a05:600c:3546:: with SMTP id i6mr51776416wmq.146.1635195361619;
-        Mon, 25 Oct 2021 13:56:01 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id m15sm17916917wmq.0.2021.10.25.13.56.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Oct 2021 13:56:00 -0700 (PDT)
-Date:   Mon, 25 Oct 2021 20:55:59 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        davem@davemloft.net, kuba@kernel.org, gregkh@linuxfoundation.org,
-        arnd@arndb.de, brijesh.singh@amd.com, jroedel@suse.de,
-        Tianyu.Lan@microsoft.com, thomas.lendacky@amd.com,
-        pgonda@google.com, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org, tj@kernel.org,
-        aneesh.kumar@linux.ibm.com, saravanand@fb.com,
-        sfr@canb.auug.org.au, michael.h.kelley@microsoft.com,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, konrad.wilk@oracle.com, hch@lst.de,
-        robin.murphy@arm.com, joro@8bytes.org, parri.andrea@gmail.com,
-        dave.hansen@intel.com
-Subject: Re: [PATCH V9 0/9] x86/Hyper-V: Add Hyper-V Isolation VM
- support(First part)
-Message-ID: <20211025205559.5wge6ohiktif5hwt@liuwe-devbox-debian-v2>
-References: <20211025122116.264793-1-ltykernel@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YVX+3lzLvWhUn4tentelh/747tIk4zl+rRWtSWpc9Yk=;
+        b=A2BUYwjn6iXS4B/EP0gEtWfA+qHJTIeN2EtDgPbHLWAx+6MDBYUm/a75/dVNKJPOIq
+         m4mXgkAqNqU9DsI7UgJJZNXBlP7QeTz7UtKA9x4ESrxuIBSxNuTligngyAjjTyv317SJ
+         XMvwgIX6xRu9f/DRvxjrW9zXRkGyWibm88e4rcPezY6gP0P1X8C297T4BICXbxPwZa2d
+         Us91PLtmBXF/L8z+Hevg9r0q5uZwijrbC/2Ifl21sVKDp8NtQBANH/q6i8vunOLbTOvH
+         Ynix1KjlGXe/wn5/ovfbnAQ22DayB2JTMG/vypv5bEYUjwUwImvpYJZmrWFJWu+gQE3i
+         ekPw==
+X-Gm-Message-State: AOAM530kWVC/EzALp27rZqLzE+lXH7SHmZde6xQTVzIdNZqbro89oEP0
+        EL9key9zH5JGPINgZwoXgGfAHNhJOknp7w==
+X-Google-Smtp-Source: ABdhPJyAPNDP0pL+srAiDCGd+P85ssN/QftV1X6WLuicrOLGH2pgIobRnUeBY7e1/mQhd1jTBeHrUw==
+X-Received: by 2002:a05:6512:22c5:: with SMTP id g5mr18885023lfu.646.1635196342465;
+        Mon, 25 Oct 2021 14:12:22 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id o10sm873843lfu.211.2021.10.25.14.12.20
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Oct 2021 14:12:20 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id u11so6615017lfs.1
+        for <linux-arch@vger.kernel.org>; Mon, 25 Oct 2021 14:12:20 -0700 (PDT)
+X-Received: by 2002:a05:6512:3983:: with SMTP id j3mr11474965lfu.402.1635196339690;
+ Mon, 25 Oct 2021 14:12:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211025122116.264793-1-ltykernel@gmail.com>
+References: <87y26nmwkb.fsf@disp2133> <20211020174406.17889-10-ebiederm@xmission.com>
+ <875ytkygfj.fsf_-_@disp2133>
+In-Reply-To: <875ytkygfj.fsf_-_@disp2133>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 25 Oct 2021 14:12:03 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whS0PL0NZrz2d8a3V+8=4szSZ6jqkg5fkjeaEjMN_NX8Q@mail.gmail.com>
+Message-ID: <CAHk-=whS0PL0NZrz2d8a3V+8=4szSZ6jqkg5fkjeaEjMN_NX8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 10/32] signal/vm86_32: Properly send SIGSEGV when the
+ vm86 state cannot be saved.
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        H Peter Anvin <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 08:21:05AM -0400, Tianyu Lan wrote:
-> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> 
-> Hyper-V provides two kinds of Isolation VMs. VBS(Virtualization-based
-> security) and AMD SEV-SNP unenlightened Isolation VMs. This patchset
-> is to add support for these Isolation VM support in Linux.
-> 
-> The memory of these vms are encrypted and host can't access guest
-> memory directly. Hyper-V provides new host visibility hvcall and
-> the guest needs to call new hvcall to mark memory visible to host
-> before sharing memory with host. For security, all network/storage
-> stack memory should not be shared with host and so there is bounce
-> buffer requests.
-> 
-> Vmbus channel ring buffer already plays bounce buffer role because
-> all data from/to host needs to copy from/to between the ring buffer
-> and IO stack memory. So mark vmbus channel ring buffer visible.
-> 
-> For SNP isolation VM, guest needs to access the shared memory via
-> extra address space which is specified by Hyper-V CPUID HYPERV_CPUID_
-> ISOLATION_CONFIG. The access physical address of the shared memory
-> should be bounce buffer memory GPA plus with shared_gpa_boundary
-> reported by CPUID.
-> 
-> This patchset is rebased on the commit d9abdee of Linux mainline tree
-> and plus clean up patch from Borislav Petkov(https://lore.kernel.org/r/
-> YWRwxImd9Qcls/Yy@zn.tnic)
-> 
-> 
+On Mon, Oct 25, 2021 at 1:54 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+> Update save_v86_state to always complete all of it's work except
+> possibly some of the copies to userspace even if save_v86_state takes
+> a fault.  This ensures that the kernel is always in a sane state, even
+> if userspace has done something silly.
 
-Applied to hyperv-next. Thanks.
+Well, honestly, with this change, you might as well replace the
+force_sigsegv() with just a plain "force_sig()", and make it something
+the process can catch.
 
-Wei.
+The only thing that "force_sigsgv()" does is to make SIGSEGV
+uncatchable. In contrast, a plain "force_sig()" just means that it
+can't be ignored - but it can be caught, and it is fatal only when not
+caught.
+
+And with the "always complete the non-vm86 state restore" part change,
+there's really no reason for it to not be caught.
+
+Of course, the other case (where we have no state information for the
+"enter vm86 mode" case) is still fatal, and is a "this should never
+happen". But the "cannot write to the vm86 save state" thing isn't
+technically fatal.
+
+It should even be possible to write a test for it: passing a read-only
+pointer to the vm86() system call. The vm86 entry will work (because
+it only reads the vm86 state from it), but then at vm86 exit, writing
+the state back will fail.
+
+Anybody?
+
+                 Linus
