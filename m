@@ -2,113 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8EE43B266
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 14:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AEB43B6B5
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 18:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235343AbhJZMcT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Oct 2021 08:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
+        id S237303AbhJZQSk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Oct 2021 12:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbhJZMcS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Oct 2021 08:32:18 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B15C061745;
-        Tue, 26 Oct 2021 05:29:54 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id w12so7130307edd.11;
-        Tue, 26 Oct 2021 05:29:54 -0700 (PDT)
+        with ESMTP id S232689AbhJZQSh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Oct 2021 12:18:37 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5373C061224
+        for <linux-arch@vger.kernel.org>; Tue, 26 Oct 2021 09:16:11 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id o11so24244430ljg.10
+        for <linux-arch@vger.kernel.org>; Tue, 26 Oct 2021 09:16:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=95w+JIBxdk96vFyS997ptIswrw8erLoiU2nFptHB2Z4=;
-        b=U3BhOWCO7EE9x/zhlbhUZ9GuWsusB7VPV8wreSMY23LIw9s0HFjFo3fgjKH24xoDc6
-         0lcAo+sm/9Hb1iRd3LKl8yzR6lX9csqO1YwpSbGE7c0nOpK1zbJsGc0c0qtAjxgxXCz9
-         sNWpfikrThv7UUE/wCnjeW2ZxUPKJKPoZQtESIGCgQqoR8XZN6sciTCXc/z3Ssx5zq12
-         Guj8ui8XE/CjempXrda83s/7O31q9fFTrmAmbd1/jaoGHkl8L8SMyqNXOHQoVJtJU9t5
-         QzXzsAXl4GeOjHjFgVG4KBG5+5VqOoLJPAEFLfL42lcFdk36E89Vy+q0ighoCrd8+ma9
-         RpuA==
+        bh=ZldZgKL/h4bHmv3Vt0CK9jGTP+iK5MWhoNbwyCa5+Pc=;
+        b=bS/cWlrHjTVpJlUnxukdjVNCfVfe+5pDzNPOwdtPNLW52XF4iZZRZmcx6/iOmA7oV3
+         yFDQyZsdldJNl/ooWZnuD3ptspucVPqtHeyygws3OGmokVdHB6e5SHJQYzEAeZR0F4wd
+         a+w8P8n/sClWhiKDj2DIvauNcOgAqT1ZkRnGc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=95w+JIBxdk96vFyS997ptIswrw8erLoiU2nFptHB2Z4=;
-        b=cyBcmRzgU3iW5o7AEKbHY1AfaIDAzQ774XWq2iAsKw9UdXOZeTXs1ZfcikXWiMUm07
-         RkkwqctOFLqbyLBK6h7EskRxGjYsGFCCUQjWbF7bwmCq2BLd8LUnNtndDVzzlikFPspl
-         AJ295sj7yBDHPOahXikg8lP+Br2Y5ZPanNwwkGYY0xnqrKyrdbeTj0MMQR1N2aaEwi2X
-         7RGtrkb8YGv4KYd4nvjXXPoVOLb3TmDYI7r4g4M7N/sGFabIDMKhfjiEYO8RqmSYsQ1K
-         R/XihmauOSYGtF5q3pBDbWhFWjpZGUVusuhYfFZPeR1s/+pyhR/r7vtjGMlduiyFHwlq
-         IDYg==
-X-Gm-Message-State: AOAM531EQzfWl+OgZt1A86xoTvPSE1003HVF9cVOC1j/gcWz0tPkShro
-        KqKMyEyQRtwDwUuOed0eMnDqTuELtWs5MyGXCpI=
-X-Google-Smtp-Source: ABdhPJzgzCatEBIyHH641b2+HxtvgsbEOOEdWaqIXEqWyDN3PlxYeazI2rGOOdImDvGopH6ZwTknOL9YLRd534JaPOk=
-X-Received: by 2002:a17:906:1601:: with SMTP id m1mr30164722ejd.117.1635251387825;
- Tue, 26 Oct 2021 05:29:47 -0700 (PDT)
+        bh=ZldZgKL/h4bHmv3Vt0CK9jGTP+iK5MWhoNbwyCa5+Pc=;
+        b=tnKxITmOB6w4uttR/M47i0FAvxPWbSVwRQNBKBpVfmKk/FjUo7FdPeCCjSrsUHvy0I
+         Bx3KOZ2fCaNSJsmJCMskEM0jJpJoWxigIax7wQZ40QZIcpRFyV1c6NwMxi244w1iKsH0
+         k/8SxS36q+jay+w27AWDze0XV2G97YEP5Sw9au/RcbnjDRwiPmD2dP78Fkuam5y2Fnj3
+         9/YlqhvdIefDMVbMW86DgwblDgJcXnLTkJE9mfpExVhwB4MgmBnqRHhOJ61V4/KWuvg6
+         yqVMwsWO8LoOat42WIiIXpDX/Z873aXgIXPJtjYfZpfOpAYG2BCLIpiT9isugSygkCtH
+         HZ7g==
+X-Gm-Message-State: AOAM533RzB8Rr2yiiUUWd3fTotgestAYsdcbbr8L1Bzod0gelnegIZhM
+        zFLNnDC2l5pEGIJr6jBsSQqHi+cVFBXB9UUv
+X-Google-Smtp-Source: ABdhPJxZV0GMOxN/Btxdh17UBKbI6Z7yNdNBpGpDKmdcGFLmfrlu/L5CZP7T5S9xsAgaAH+YkMMgXQ==
+X-Received: by 2002:a2e:a78f:: with SMTP id c15mr26418242ljf.119.1635264969714;
+        Tue, 26 Oct 2021 09:16:09 -0700 (PDT)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
+        by smtp.gmail.com with ESMTPSA id c1sm2055580ljr.111.2021.10.26.09.16.08
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Oct 2021 09:16:09 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id n7so17219211ljp.5
+        for <linux-arch@vger.kernel.org>; Tue, 26 Oct 2021 09:16:08 -0700 (PDT)
+X-Received: by 2002:a2e:89d4:: with SMTP id c20mr5213114ljk.191.1635264968138;
+ Tue, 26 Oct 2021 09:16:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211026100432.1730393-1-arnd@kernel.org>
-In-Reply-To: <20211026100432.1730393-1-arnd@kernel.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 26 Oct 2021 05:29:36 -0700
-Message-ID: <CAMo8BfLskHzSW5FJUajAEvr6NRfvYhRRxKG4CQOFAQwtZtrRLg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] futex: ensure futex_atomic_cmpxchg_inatomic() is present
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Chris Zankel <chris@zankel.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
+References: <87y26nmwkb.fsf@disp2133> <20211020174406.17889-13-ebiederm@xmission.com>
+ <CAHk-=whe-ixeDp_OgSOsC4H+dWTLDSuNDU2a0sE3p8DapNeCuQ@mail.gmail.com>
+ <9416e8d7-5545-4fc4-8ab0-68fddd35520b@kernel.org> <CAHk-=whJETM0MHqWQKCVALBkJX-Th5471z5FW3gFJO5c73L6QA@mail.gmail.com>
+ <87v91kqt6b.fsf@disp2133>
+In-Reply-To: <87v91kqt6b.fsf@disp2133>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 26 Oct 2021 09:15:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiph8wmVDJZiUETH3r_+fWhDvaEz64aA0XNimkSOHf+dw@mail.gmail.com>
+Message-ID: <CAHk-=wiph8wmVDJZiUETH3r_+fWhDvaEz64aA0XNimkSOHf+dw@mail.gmail.com>
+Subject: Re: [PATCH 13/20] signal: Implement force_fatal_sig
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 3:04 AM Arnd Bergmann <arnd@kernel.org> wrote:
+On Mon, Oct 25, 2021 at 9:58 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The boot-time detection of futex_atomic_cmpxchg_inatomic()
-> has a bug on some 32-bit arm builds, and Thomas Gleixner
-> suggested that setting CONFIG_HAVE_FUTEX_CMPXCHG would
-> avoid the problem, as it is always present anyway.
->
-> Looking into which other architectures could do the same
-> showed that almost all architectures have it, the exceptions
-> being:
->
->  - some old 32-bit MIPS uniprocessor cores without ll/sc
->  - one xtensa variant with no SMP
->  - 32-bit SPARC when built for SMP
->
-> Fix MIPS And Xtensa by rearranging the generic code to let it be used
-> as a fallback.
->
-> For SPARC, the SMP definition just ends up turning off futex anyway,
-> so this can be done at Kconfig time instead. Note that sparc32
-> glibc requires the CASA instruction for its mutexes anyway,
-> which is only available when running on SPARCv9 or LEON CPUs,
-> but needs to be implemented in the sparc32 kernel for those.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/mips/include/asm/futex.h   | 29 ++++++++++++++++++-----------
->  arch/xtensa/include/asm/futex.h |  8 ++++++--
->  include/asm-generic/futex.h     | 31 +++++++++++--------------------
->  init/Kconfig                    |  1 +
->  4 files changed, 36 insertions(+), 33 deletions(-)
+> Rereading this I think you might be misreading something.
 
-For xtensa:
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Gaah. Yes, indeed.
 
--- 
-Thanks.
--- Max
+> force_siginfo_to_task takes a sigdfl parameter which I am setting in
+> force_fatal_signal.
+
+.. and I realized that the first time I read through it, but then when
+I read through it due to Andy saying it worries him, I missed it and
+thought the handler didn't get reset.
+
+So the patch is fine.
+
+             Linus
