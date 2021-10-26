@@ -2,140 +2,282 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0629C43AF34
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 11:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A3C43AFAF
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 12:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbhJZJlR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Oct 2021 05:41:17 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48648 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230451AbhJZJlR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 26 Oct 2021 05:41:17 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19Q8Tt2u021400;
-        Tue, 26 Oct 2021 09:38:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=5OchYLqpnnEkWLBWyeS+I/bGHLZdRbYrebYSuBnZaao=;
- b=nxgIYv02YC7bc8AUu6d2nU0n+t/kqTP73+fSxQQSJNw/d8rMxITaiI8WWShMkpabou94
- iaqIcwXndpFMowYOgsMD4jE3fQjTkOIxJvCRBolgJrb+dpz/Nf/VcFNfwGqscyi/DZnN
- L86uyyilDWeBV6jWvYhWOyY4GZfu4N/+Q0qQcBZQT3G0bA39ppyN8vmCfsiv/uPGdfbw
- BOkiLftG/qTmidGyZkRFkiZOw/a3GwdRCnh/M1sfr4VRnBOXoauFEAPEd7Yt2/rS6D7S
- dr3CLtjzfXTYApHdsuL5BdsV7/gI7C+Q6qt+BiKb27n56NiZ0iwSqsNPqcSne+6HqUvQ bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bx4k87qr9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Oct 2021 09:38:52 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19Q9YBTR032624;
-        Tue, 26 Oct 2021 09:38:51 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bx4k87qqs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Oct 2021 09:38:51 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19Q9bB93024803;
-        Tue, 26 Oct 2021 09:38:50 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3bx4f5bnhb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Oct 2021 09:38:49 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19Q9WdaI59310504
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Oct 2021 09:32:39 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5ADB5A405E;
-        Tue, 26 Oct 2021 09:38:46 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DE160A4055;
-        Tue, 26 Oct 2021 09:38:45 +0000 (GMT)
-Received: from li-43c5434c-23b8-11b2-a85c-c4958fb47a68.ibm.com (unknown [9.171.51.215])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Oct 2021 09:38:45 +0000 (GMT)
-Subject: Re: [PATCH 11/20] signal/s390: Use force_sigsegv in
- default_trap_handler
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
+        id S234268AbhJZKHK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Oct 2021 06:07:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35996 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233868AbhJZKHJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 26 Oct 2021 06:07:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C94860551;
+        Tue, 26 Oct 2021 10:04:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635242686;
+        bh=mueXg1F3T64Z32N3VW1n8boTWbbmg7I1y/7PkQQVs6I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sXZIFRtmURYWbYpeH4TdmXwzXr4RZqqFMbiFASxsr06ZANE0pHmwOxAihUXQ638mG
+         EIC5Y/Yzawqfm3tXW84MGVHsrmgVcY1hVAE5f9DpogFzmVcimKX2752EjcCUa8nQ7k
+         YUm51TngJedNpMy3ew0vggnkNIsdQ0DU+TKLsooAiuVEF2/HpHWf2W7on5d6+Eo4mz
+         H6javFuFTUYRTHbzjfnRQ37vXaVsUqR+L0Sa588RxUFJIAyOm3BoREgil1t/i6lHkV
+         +Dv+0/qiiB9DpCNgHsFClLM7EDhnlaymt+DY2OnFv2gGBXuL/h+6AQsm7tYI9hIffU
+         Vglh1dzxS+D0A==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org
-References: <87y26nmwkb.fsf@disp2133>
- <20211020174406.17889-11-ebiederm@xmission.com>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-Message-ID: <7c99f791-4a87-ae52-bee7-cb794b0741d2@de.ibm.com>
-Date:   Tue, 26 Oct 2021 11:38:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <20211020174406.17889-11-ebiederm@xmission.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wOnCrEJWusXWZSSGrMyKIp26j2DdWA-4
-X-Proofpoint-ORIG-GUID: 3Yl_va_89ctxG_rGJ2F6ZiZfzsDC-bwO
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
+Subject: [PATCH 1/2] futex: ensure futex_atomic_cmpxchg_inatomic() is present
+Date:   Tue, 26 Oct 2021 12:03:47 +0200
+Message-Id: <20211026100432.1730393-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-26_02,2021-10-26_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 phishscore=0 impostorscore=0 malwarescore=0 spamscore=0
- mlxscore=0 adultscore=0 mlxlogscore=886 suspectscore=0 priorityscore=1501
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2110260053
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Am 20.10.21 um 19:43 schrieb Eric W. Biederman:
-> Reading the history it is unclear why default_trap_handler calls
-> do_exit.  It is not even menthioned in the commit where the change
-> happened.  My best guess is that because it is unknown why the
-> exception happened it was desired to guarantee the process never
-> returned to userspace.
-> 
-> Using do_exit(SIGSEGV) has the problem that it will only terminate one
-> thread of a process, leaving the process in an undefined state.
-> 
-> Use force_sigsegv(SIGSEGV) instead which effectively has the same
-> behavior except that is uses the ordinary signal mechanism and
-> terminates all threads of a process and is generally well defined.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Do I get that right, that programs can not block SIGSEGV from force_sigsegv
-with a signal handler? Thats how I read the code. If this is true
-then
+The boot-time detection of futex_atomic_cmpxchg_inatomic()
+has a bug on some 32-bit arm builds, and Thomas Gleixner
+suggested that setting CONFIG_HAVE_FUTEX_CMPXCHG would
+avoid the problem, as it is always present anyway.
 
-Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
-> 
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-> Fixes: ca2ab03237ec ("[PATCH] s390: core changes")
-> History Tree: https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->   arch/s390/kernel/traps.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/s390/kernel/traps.c b/arch/s390/kernel/traps.c
-> index bcefc2173de4..51729ea2cf8e 100644
-> --- a/arch/s390/kernel/traps.c
-> +++ b/arch/s390/kernel/traps.c
-> @@ -84,7 +84,7 @@ static void default_trap_handler(struct pt_regs *regs)
->   {
->   	if (user_mode(regs)) {
->   		report_user_fault(regs, SIGSEGV, 0);
-> -		do_exit(SIGSEGV);
-> +		force_sigsegv(SIGSEGV);
->   	} else
->   		die(regs, "Unknown program exception");
->   }
-> 
+Looking into which other architectures could do the same
+showed that almost all architectures have it, the exceptions
+being:
+
+ - some old 32-bit MIPS uniprocessor cores without ll/sc
+ - one xtensa variant with no SMP
+ - 32-bit SPARC when built for SMP
+
+Fix MIPS And Xtensa by rearranging the generic code to let it be used
+as a fallback.
+
+For SPARC, the SMP definition just ends up turning off futex anyway,
+so this can be done at Kconfig time instead. Note that sparc32
+glibc requires the CASA instruction for its mutexes anyway,
+which is only available when running on SPARCv9 or LEON CPUs,
+but needs to be implemented in the sparc32 kernel for those.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/mips/include/asm/futex.h   | 29 ++++++++++++++++++-----------
+ arch/xtensa/include/asm/futex.h |  8 ++++++--
+ include/asm-generic/futex.h     | 31 +++++++++++--------------------
+ init/Kconfig                    |  1 +
+ 4 files changed, 36 insertions(+), 33 deletions(-)
+
+diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.h
+index d85248404c52..9287110cb06d 100644
+--- a/arch/mips/include/asm/futex.h
++++ b/arch/mips/include/asm/futex.h
+@@ -19,7 +19,11 @@
+ #include <asm/sync.h>
+ #include <asm/war.h>
+ 
+-#define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)		\
++#define arch_futex_atomic_op_inuser arch_futex_atomic_op_inuser
++#define futex_atomic_cmpxchg_inatomic futex_atomic_cmpxchg_inatomic
++#include <asm-generic/futex.h>
++
++#define __futex_atomic_op(op, insn, ret, oldval, uaddr, oparg)		\
+ {									\
+ 	if (cpu_has_llsc && IS_ENABLED(CONFIG_WAR_R10000_LLSC)) {	\
+ 		__asm__ __volatile__(					\
+@@ -80,9 +84,11 @@
+ 		: "0" (0), GCC_OFF_SMALL_ASM() (*uaddr), "Jr" (oparg),	\
+ 		  "i" (-EFAULT)						\
+ 		: "memory");						\
+-	} else								\
+-		ret = -ENOSYS;						\
+-}
++	} else {							\
++		/* fallback for non-SMP */				\
++		ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
++							uaddr);	\
++	}
+ 
+ static inline int
+ arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+@@ -94,23 +100,23 @@ arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+ 
+ 	switch (op) {
+ 	case FUTEX_OP_SET:
+-		__futex_atomic_op("move $1, %z5", ret, oldval, uaddr, oparg);
++		__futex_atomic_op(op, "move $1, %z5", ret, oldval, uaddr, oparg);
+ 		break;
+ 
+ 	case FUTEX_OP_ADD:
+-		__futex_atomic_op("addu $1, %1, %z5",
++		__futex_atomic_op(op, "addu $1, %1, %z5",
+ 				  ret, oldval, uaddr, oparg);
+ 		break;
+ 	case FUTEX_OP_OR:
+-		__futex_atomic_op("or	$1, %1, %z5",
++		__futex_atomic_op(op, "or	$1, %1, %z5",
+ 				  ret, oldval, uaddr, oparg);
+ 		break;
+ 	case FUTEX_OP_ANDN:
+-		__futex_atomic_op("and	$1, %1, %z5",
++		__futex_atomic_op(op, "and	$1, %1, %z5",
+ 				  ret, oldval, uaddr, ~oparg);
+ 		break;
+ 	case FUTEX_OP_XOR:
+-		__futex_atomic_op("xor	$1, %1, %z5",
++		__futex_atomic_op(op, "xor	$1, %1, %z5",
+ 				  ret, oldval, uaddr, oparg);
+ 		break;
+ 	default:
+@@ -193,8 +199,9 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+ 		: GCC_OFF_SMALL_ASM() (*uaddr), "Jr" (oldval), "Jr" (newval),
+ 		  "i" (-EFAULT)
+ 		: "memory");
+-	} else
+-		return -ENOSYS;
++	} else {
++		return futex_atomic_cmpxchg_inatomic_local(uval, uaddr, oldval, newval);
++	}
+ 
+ 	*uval = val;
+ 	return ret;
+diff --git a/arch/xtensa/include/asm/futex.h b/arch/xtensa/include/asm/futex.h
+index a1a27b2ea460..fe8f31575ab1 100644
+--- a/arch/xtensa/include/asm/futex.h
++++ b/arch/xtensa/include/asm/futex.h
+@@ -16,6 +16,10 @@
+ #include <linux/uaccess.h>
+ #include <linux/errno.h>
+ 
++#define arch_futex_atomic_op_inuser arch_futex_atomic_op_inuser
++#define futex_atomic_cmpxchg_inatomic futex_atomic_cmpxchg_inatomic
++#include <asm-generic/futex.h>
++
+ #if XCHAL_HAVE_EXCLUSIVE
+ #define __futex_atomic_op(insn, ret, old, uaddr, arg)	\
+ 	__asm__ __volatile(				\
+@@ -105,7 +109,7 @@ static inline int arch_futex_atomic_op_inuser(int op, int oparg, int *oval,
+ 
+ 	return ret;
+ #else
+-	return -ENOSYS;
++	return arch_futex_atomic_op_inuser_local(op, oparg, oval, uaddr);
+ #endif
+ }
+ 
+@@ -156,7 +160,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+ 
+ 	return ret;
+ #else
+-	return -ENOSYS;
++	return futex_atomic_cmpxchg_inatomic_local(uval, uaddr, oldval, newval);
+ #endif
+ }
+ 
+diff --git a/include/asm-generic/futex.h b/include/asm-generic/futex.h
+index f4c3470480c7..30e7fa63b5df 100644
+--- a/include/asm-generic/futex.h
++++ b/include/asm-generic/futex.h
+@@ -6,15 +6,22 @@
+ #include <linux/uaccess.h>
+ #include <asm/errno.h>
+ 
++#ifndef futex_atomic_cmpxchg_inatomic
+ #ifndef CONFIG_SMP
+ /*
+  * The following implementation only for uniprocessor machines.
+  * It relies on preempt_disable() ensuring mutual exclusion.
+  *
+  */
++#define futex_atomic_cmpxchg_inatomic(uval, uaddr, oldval, newval) \
++	futex_atomic_cmpxchg_inatomic_local_generic(uval, uaddr, oldval, newval)
++#define arch_futex_atomic_op_inuser(op, oparg, oval, uaddr) \
++	arch_futex_atomic_op_inuser_local_generic(op, oparg, oval, uaddr)
++#endif /* CONFIG_SMP */
++#endif
+ 
+ /**
+- * arch_futex_atomic_op_inuser() - Atomic arithmetic operation with constant
++ * arch_futex_atomic_op_inuser_local() - Atomic arithmetic operation with constant
+  *			  argument and comparison of the previous
+  *			  futex value with another constant.
+  *
+@@ -28,7 +35,7 @@
+  * -ENOSYS - Operation not supported
+  */
+ static inline int
+-arch_futex_atomic_op_inuser(int op, u32 oparg, int *oval, u32 __user *uaddr)
++futex_atomic_op_inuser_local(int op, u32 oparg, int *oval, u32 __user *uaddr)
+ {
+ 	int oldval, ret;
+ 	u32 tmp;
+@@ -75,7 +82,7 @@ arch_futex_atomic_op_inuser(int op, u32 oparg, int *oval, u32 __user *uaddr)
+ }
+ 
+ /**
+- * futex_atomic_cmpxchg_inatomic() - Compare and exchange the content of the
++ * futex_atomic_cmpxchg_inatomic_local() - Compare and exchange the content of the
+  *				uaddr with newval if the current value is
+  *				oldval.
+  * @uval:	pointer to store content of @uaddr
+@@ -87,10 +94,9 @@ arch_futex_atomic_op_inuser(int op, u32 oparg, int *oval, u32 __user *uaddr)
+  * 0 - On success
+  * -EFAULT - User access resulted in a page fault
+  * -EAGAIN - Atomic operation was unable to complete due to contention
+- * -ENOSYS - Function not implemented (only if !HAVE_FUTEX_CMPXCHG)
+  */
+ static inline int
+-futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
++futex_atomic_cmpxchg_inatomic_local(u32 *uval, u32 __user *uaddr,
+ 			      u32 oldval, u32 newval)
+ {
+ 	u32 val;
+@@ -112,19 +118,4 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+ 	return 0;
+ }
+ 
+-#else
+-static inline int
+-arch_futex_atomic_op_inuser(int op, u32 oparg, int *oval, u32 __user *uaddr)
+-{
+-	return -ENOSYS;
+-}
+-
+-static inline int
+-futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+-			      u32 oldval, u32 newval)
+-{
+-	return -ENOSYS;
+-}
+-
+-#endif /* CONFIG_SMP */
+ #endif
+diff --git a/init/Kconfig b/init/Kconfig
+index edc0a0228f14..c0f55ea5a71f 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1584,6 +1584,7 @@ config BASE_FULL
+ 
+ config FUTEX
+ 	bool "Enable futex support" if EXPERT
++	depends on !(SPARC32 && SMP)
+ 	default y
+ 	imply RT_MUTEXES
+ 	help
+-- 
+2.29.2
+
