@@ -2,130 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D5243A92E
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 02:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FBD43AB6B
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 06:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbhJZAYY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Oct 2021 20:24:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44128 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234866AbhJZAYY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 25 Oct 2021 20:24:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C9FAD60F92;
-        Tue, 26 Oct 2021 00:21:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635207721;
-        bh=aByDMtm3gGKxScX4G2tD1RLvvDygFh/kqrDSV2GhxG0=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=lF213LU0mk7Ej8/XpvzNTo7z53XPnsopWYAHXbKFnbwpvROZfLC5ALRQIHTjqyCfp
-         2fs2vKSqKCVHSiTTBN+9NeiTp+v/GU97jH4UeMRJAS+vdcPNtQ7SipsutcEtG/jQfH
-         vygdAsuJ8+e8ggZFgmO7lY/+TS9ww7baF+UkkMlZECvjHE4x2jxa/T7f4Cu9YeopmH
-         SrGirG0vCOQglQMoOHdI/gvyBnAMQ6ZgnC/wLFcvYWwgRpquTSBBvlNbFkSssMP3oR
-         zpp2ztmtOK1XX4adk2LKPJhKCkutd0//wxRoXTo5NQLbN/IEYk21DzLhjIX2gfLqPA
-         oCXUh4V9N389A==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id A235027C005A;
-        Mon, 25 Oct 2021 20:21:58 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute6.internal (MEProxy); Mon, 25 Oct 2021 20:21:58 -0400
-X-ME-Sender: <xms:JUp3YR3gmh9TzzwohdqsjZAyvKPBpFVZ7a4yDC5oyXoQOU07cyU5fg>
-    <xme:JUp3YYGW_aK3uTWRhYYlqgYx0kqbzJwBqKc3yt3o8NLFhR5WpUrNXkzY7fCamYIFD
-    1sCfxUYIDZBwTz-xMc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdefiedgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdelheejjeevhfdutdeggefftdejtdffgeevteehvdfgjeeiveei
-    ueefveeuvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:JUp3YR5Tfc8UiwfOiFxDYUe9aKRgzrnR0PFxi61pMSg97nT0At1M0g>
-    <xmx:JUp3Ye3DlNlVjwGeNH6zauJb87p4t9oXByU0_hoNR8BvN-cclqVOTg>
-    <xmx:JUp3YUEeHq1dSlmF7QBWazCNYZzl-Z4Jfq-D_BXA8FaJR6JLCxcp7Q>
-    <xmx:Jkp3YfC5xiyn2S2VefUNdN4OI2rPslIoK3YUaWp39APxBw__KGUbby9Tr8U>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 48FCC21E0072; Mon, 25 Oct 2021 20:21:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1369-gd055fb5e7c-fm-20211018.002-gd055fb5e
-Mime-Version: 1.0
-Message-Id: <530952e5-27d7-40b8-ac9a-debc36bb4fdf@www.fastmail.com>
-In-Reply-To: <CAHk-=wioHUhqXU3_PR82VbfS8G=+zH+z8igeG-QAuCaWm5Cgqg@mail.gmail.com>
-References: <87y26nmwkb.fsf@disp2133>
- <20211020174406.17889-10-ebiederm@xmission.com> <875ytkygfj.fsf_-_@disp2133>
- <4b203254-a333-77b1-0fa9-75c11fabac36@kernel.org>
- <CAHk-=wioHUhqXU3_PR82VbfS8G=+zH+z8igeG-QAuCaWm5Cgqg@mail.gmail.com>
-Date:   Mon, 25 Oct 2021 17:21:36 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        id S233516AbhJZEs3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Oct 2021 00:48:29 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:47510 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233481AbhJZEs2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Oct 2021 00:48:28 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51]:35452)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mfELc-00ATX9-JC; Mon, 25 Oct 2021 22:46:04 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:34936 helo=email.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mfELb-004bCG-Is; Mon, 25 Oct 2021 22:46:04 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        "Oleg Nesterov" <oleg@redhat.com>,
-        "Al Viro" <viro@zeniv.linux.org.uk>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 10/32] signal/vm86_32: Properly send SIGSEGV when the vm86 state
- cannot be saved.
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>
+References: <87y26nmwkb.fsf@disp2133>
+        <20211020174406.17889-13-ebiederm@xmission.com>
+        <CAHk-=whe-ixeDp_OgSOsC4H+dWTLDSuNDU2a0sE3p8DapNeCuQ@mail.gmail.com>
+        <9416e8d7-5545-4fc4-8ab0-68fddd35520b@kernel.org>
+        <CAHk-=whJETM0MHqWQKCVALBkJX-Th5471z5FW3gFJO5c73L6QA@mail.gmail.com>
+Date:   Mon, 25 Oct 2021 23:45:23 -0500
+In-Reply-To: <CAHk-=whJETM0MHqWQKCVALBkJX-Th5471z5FW3gFJO5c73L6QA@mail.gmail.com>
+        (Linus Torvalds's message of "Mon, 25 Oct 2021 16:15:44 -0700")
+Message-ID: <87o87ctmvw.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1mfELb-004bCG-Is;;;mid=<87o87ctmvw.fsf@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18a6D5O+YrTECRKk40/H4Oj2815LtR98b0=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa03.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels
+        autolearn=disabled version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4920]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa03 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 382 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 5.0 (1.3%), b_tie_ro: 3.5 (0.9%), parse: 1.14
+        (0.3%), extract_message_metadata: 11 (2.9%), get_uri_detail_list: 2.6
+        (0.7%), tests_pri_-1000: 10 (2.6%), tests_pri_-950: 1.04 (0.3%),
+        tests_pri_-900: 0.81 (0.2%), tests_pri_-90: 56 (14.7%), check_bayes:
+        55 (14.3%), b_tokenize: 6 (1.6%), b_tok_get_all: 9 (2.4%),
+        b_comp_prob: 2.2 (0.6%), b_tok_touch_all: 34 (8.8%), b_finish: 0.79
+        (0.2%), tests_pri_0: 285 (74.6%), check_dkim_signature: 0.41 (0.1%),
+        check_dkim_adsp: 2.8 (0.7%), poll_dns_idle: 0.25 (0.1%), tests_pri_10:
+        2.2 (0.6%), tests_pri_500: 7 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 13/20] signal: Implement force_fatal_sig
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Linus Torvalds <torvalds@linux-foundation.org> writes:
 
-
-On Mon, Oct 25, 2021, at 4:45 PM, Linus Torvalds wrote:
-> On Mon, Oct 25, 2021 at 3:25 PM Andy Lutomirski <luto@kernel.org> wrot=
-e:
+> On Mon, Oct 25, 2021 at 3:41 PM Andy Lutomirski <luto@kernel.org> wrote:
 >>
->> I think the result would be nicer if, instead of adding an extra goto,
->> you just literally moved all the cleanup under the unsafe_put_user()s
->> above them.  Unless I missed something, none of the put_user stuff re=
-ads
->> any state that is written by the cleanup code.
+>> I'm rather nervous about all this, and I'm also nervous about the
+>> existing code.  A quick skim is finding plenty of code paths that assume
+>> force_sigsegv (or a do_exit that this series touches) are genuinely
+>> unrecoverable.
 >
-> Sure it does:
+> I was going to say "what are you talking about", because clearly Eric
+> kept it all fatal.
 >
->         memcpy(&regs->pt, &vm86->regs32, sizeof(struct pt_regs));
+> But then looked at that patch a bit more before I claimed you were wrong.
 >
-> is very much part of the cleanup code, and overwrites that regs->pt th=
-ing.
+> And yeah, Eric's force_fatal_sig() is completely broken.
 >
-> Which is exactly what we're writing back to user space in that
-> unsafe_put_user() thing.
+> It claims to force a fatal signal, but doesn't actually do that at
+> all, and is completely misnamed.
+>
+> It just uses "force_sig_info_to_task()", which still allows user space
+> to catch signals - so it's not "fatal" in the least. It only punches
+> through SIG_IGN and blocked signals.
+>
+> So yeah, that's broken.
+>
+> I do still think that that could the behavior we possibly want for
+> that "can't write updated vm86 state back" situation, but for
+> something that is called "fatal", it really needs to be fatal.
 
-D=E2=80=99oh, right.
+Once the code gets as far as force_sig_info_to_task the only
+bit that is really missing is to make the signals fatal is:
 
->
-> That said, thinking more about this, and looking at it again, I take
-> back my statement that we could just make it a catchable SIGSEGV
-> instead.
->
-> If we can't write the vm86 state to user space, we will have
-> fundamentally lost it, and while it's not fatal to the kernel, and
-> while we've recovered the original 32-bit state, it's not something
-> that user space can sanely recover from because the register state at
-> the end of the vm86 work has now been irrecoverably thrown away.
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 6a5e1802b9a2..fde043f1e59d 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1048,7 +1048,6 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
+                /*
+                 * This signal will be fatal to the whole group.
+                 */
+-               if (!sig_kernel_coredump(sig)) {
+                        /*
+                         * Start a group exit and wake everybody up.
+                         * This way we don't have other threads
+@@ -1065,7 +1064,6 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
+                                signal_wake_up(t, 1);
+                        } while_each_thread(p, t);
+                        return;
+-               }
+        }
+ 
+        /*
 
-There=E2=80=99s =E2=80=9Crecoverable=E2=80=9D and there=E2=80=99s =E2=80=
-=9Crecoverable=E2=80=9D.  Sure, the vm86 state is gone, but the process =
-is getting a signal that doesn=E2=80=99t indicate that one can freely re=
-turn and carry on as if nothing happened.  But one can catch the signal =
-and go on to do something else.
+AKA the only real bit missing is the interaction with the coredump code.
 
->
-> So I think Eric's patch is fine.
+Now we can't just delete sig_kernel_coredump a replacement has to be
+written.   And the easiest replacement depends on my other set of
+changes that are already in linux-next to make coredumps per
+signal_struct instead of per mm.
 
-Me too.
+Which means that in a release or two force_fatal_sig will reliably do
+what the name says.
 
->
-> Except, as mentioned as part of the other patch, the "force_sigsegv()"
-> conversion to use "force_fatal_sig()" was broken, because that
-> function wasn't actually fatal at all.
->
->              Linus
+
+
+
+So the question is: Should I name force_fatal_sig to something else in
+the meantime?  What should I name it?
+
+
+
+
+I do intend to fix that bit in complete_signal, as well as updating the
+code in force_siginfo_to_task so that it doesn't need to change the
+blocked state or the signal handler.
+
+These special cases have been annoying me for years and now Andy has
+found how they are actually hurting us.  So I do intend to fix that code
+as quickly as being careful and code review allows.  Which I think means
+one additional development cycle after this one.
+
+Eric
+
