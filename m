@@ -2,94 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7B243C363
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Oct 2021 08:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C1743C6A5
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Oct 2021 11:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240143AbhJ0HAe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Oct 2021 03:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S232387AbhJ0Jov (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Oct 2021 05:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbhJ0HAe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Oct 2021 03:00:34 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568CCC061570;
-        Tue, 26 Oct 2021 23:58:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=z7/2qUaV91Qyzvddr7HjK6pwrCY2x3jtBDB6z6rCMxE=; b=LJmlOv5apJrlQaOwWtgq3Af+3w
-        NW1vAkiztkLdB3NKV2+X7oCi7M2+vJuqc8K4kF/Wotsk+gIn0SFmdneX1F1CJYzy5+aUZiSBkKIuX
-        W4lcf/4IWGbfFtNBCq6dB4dlO3avaxs9dHrDQBIhmoucBNtLjrPX/xh5O9narKPD/FOxOzLPdWroO
-        XXoyMAwGxU7clnuZ47IQOjsiw5SWXVLbMissjJKbguZUMt3xoFlo/tIjFnYvQzMDPpunLYcUJ9wJT
-        4UxQrBSbO8wr2s8XsS76KbjsP0XyRqNOB5NIr0W6+6ASZJhUZ5aMlpYlULE4IXb4QKrFf5bFCIMNb
-        UYz9eVEw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mfcsP-00CVYp-Dr; Wed, 27 Oct 2021 06:57:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1FC6930031C;
-        Wed, 27 Oct 2021 08:57:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 04998200F77C3; Wed, 27 Oct 2021 08:57:29 +0200 (CEST)
-Date:   Wed, 27 Oct 2021 08:57:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Borislav Petkov <bp@suse.de>, Josh Poimboeuf <jpoimboe@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>, Joerg Roedel <jroedel@suse.de>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Jing Yangyang <jing.yangyang@zte.com.cn>,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 0/4] x86: Various clean-ups in support of FGKASLR
-Message-ID: <YXj4WbzoPfdOgBtQ@hirez.programming.kicks-ass.net>
-References: <20211013175742.1197608-1-keescook@chromium.org>
+        with ESMTP id S232006AbhJ0Jou (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Oct 2021 05:44:50 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BB5C061745
+        for <linux-arch@vger.kernel.org>; Wed, 27 Oct 2021 02:42:25 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id v2so1329360qve.11
+        for <linux-arch@vger.kernel.org>; Wed, 27 Oct 2021 02:42:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=VWxEs5WjHGJZV9rZ2I4DPQ44YOYFkrn8z8UBcYgDlP8=;
+        b=LLtYLqL1fqVuBxbDKjF+C2QckUpyc6ZkHFOvEXWAvybUAfbVEQuQkhIVVECWMDIbt4
+         OBFzC/n7q03wtKzYMeoHZwb3IfMfXKcNwWm1FWIlF1/iRjQDasl4hSwCDeeqV1U+zT6K
+         PbaJ80vAPnqx3oSJ3a289gEJ2qkF2MZCYwJVkKQ0r5wHhmttoWPmzjRuy979MHNl3UXL
+         yHEafwAJFlPmQFD4W6F+r9f1MvuHxd3VUPZ2QgWJRC33BeQ1XTnLyIQ9TlFPtz6DnixH
+         AF0IRknQPscD5P2+IFAxOZKGp5piL0FqJl4yYFJY3eg4ye3Xq4rcQbL/u1dxie8myTf3
+         Foqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=VWxEs5WjHGJZV9rZ2I4DPQ44YOYFkrn8z8UBcYgDlP8=;
+        b=sgjTcqdxYTRA/nlbBDi4KhrAR8SwKdetZWyTKD0vnsaG5FaendsDNL30+Uz3NEfpkr
+         V5LTKnfPEeAux18h1pj3VMZE2X5diFZ84/KUi8fa3olHyHjmL0jHq0PJmCqLekwoMzy5
+         128fW3Zrhfy8ZWm37ns0yHba4cd5Z7Ya3CMppWWNA/rhpRv0M7bU3JMOqVRsM3Ab1XGn
+         L1fFCSjwLOr4BucDocYOyJH/EVYAz2KfWUwc7/EGUg69Fsj7cPUZSAjfSLmSTh38DrRg
+         e7KuSyIQ4FAMTzcz0FctBBbEMHvkDrGv2DvARfwJ8DaCGFwMv+492aMzEy9+awDUTjLY
+         tqIg==
+X-Gm-Message-State: AOAM5324eOFR2fenKCPkja1fD70/vRZHFNCArnHHq2Aqk7YwdqxfGRX1
+        qh5vHvD2KrGFrRJLtocc9mu8/x4H3+ii68fZ+5o=
+X-Google-Smtp-Source: ABdhPJykO0w8ItQQ1vF1L+KU40GSxoptlME/JSAO8ZWMQukqUQID2ibN/CkrcviQOUT8WiE36y74cU3Bc/rxvnfn/2A=
+X-Received: by 2002:a05:6214:21a5:: with SMTP id t5mr20402545qvc.35.1635327744327;
+ Wed, 27 Oct 2021 02:42:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211013175742.1197608-1-keescook@chromium.org>
+Received: by 2002:a05:6214:27e5:0:0:0:0 with HTTP; Wed, 27 Oct 2021 02:42:24
+ -0700 (PDT)
+Reply-To: jackpotcharityclaims@gmail.com
+From:   Charles W Jackson Jr <jannetrobert12@gmail.com>
+Date:   Wed, 27 Oct 2021 10:42:24 +0100
+Message-ID: <CAEpoZdeTVJmZLPr8_sU101VJhfJPNyBS_ugvksGAtGkCJe9tVg@mail.gmail.com>
+Subject: =?UTF-8?Q?Gemeinn=C3=BCtzige_Anspr=C3=BCche?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 10:57:38AM -0700, Kees Cook wrote:
-> Kees Cook (2):
->   x86/boot: Allow a "silent" kaslr random byte fetch
->   x86/boot/compressed: Avoid duplicate malloc() implementations
-> 
-> Kristen Carlson Accardi (2):
->   x86/tools/relocs: Support >64K section headers
->   vmlinux.lds.h: Have ORC lookup cover entire _etext - _stext
-> 
->  arch/x86/boot/compressed/kaslr.c  |   4 --
->  arch/x86/boot/compressed/misc.c   |   3 +
->  arch/x86/boot/compressed/misc.h   |   2 +
->  arch/x86/lib/kaslr.c              |  18 ++++--
->  arch/x86/tools/relocs.c           | 103 ++++++++++++++++++++++--------
->  include/asm-generic/vmlinux.lds.h |   3 +-
->  include/linux/decompress/mm.h     |  12 +++-
->  7 files changed, 107 insertions(+), 38 deletions(-)
-
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-Boris, these are indeed all improvements to the status quo, irrespective
-of future FGKASLR work. Do you want to take them, or should I stick them
-in x86/core ?
+--=20
+Ich bin Charles W Jackson Jr., der Gewinner der Powerball-Lotterie von
+344 Millionen Dollar. Ich spende 3,5 Millionen US-Dollar im Namen
+meiner Familie, um 10 Menschen und kleinen Unternehmen zu helfen.
+Kontaktieren Sie mich =C3=BCber
+E-Mail: jackpotcharityclaims@gmail.com f=C3=BCr weitere Details.
