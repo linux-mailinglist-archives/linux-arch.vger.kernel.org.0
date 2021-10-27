@@ -2,89 +2,184 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AEB43B6B5
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Oct 2021 18:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF1A43BEEE
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Oct 2021 03:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237303AbhJZQSk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Oct 2021 12:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
+        id S237213AbhJ0BVo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Oct 2021 21:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232689AbhJZQSh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Oct 2021 12:18:37 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5373C061224
-        for <linux-arch@vger.kernel.org>; Tue, 26 Oct 2021 09:16:11 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id o11so24244430ljg.10
-        for <linux-arch@vger.kernel.org>; Tue, 26 Oct 2021 09:16:11 -0700 (PDT)
+        with ESMTP id S236342AbhJ0BVo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Oct 2021 21:21:44 -0400
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0997C061745
+        for <linux-arch@vger.kernel.org>; Tue, 26 Oct 2021 18:19:19 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id kk3-20020a056214508300b00382d8d1bd71so874005qvb.7
+        for <linux-arch@vger.kernel.org>; Tue, 26 Oct 2021 18:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZldZgKL/h4bHmv3Vt0CK9jGTP+iK5MWhoNbwyCa5+Pc=;
-        b=bS/cWlrHjTVpJlUnxukdjVNCfVfe+5pDzNPOwdtPNLW52XF4iZZRZmcx6/iOmA7oV3
-         yFDQyZsdldJNl/ooWZnuD3ptspucVPqtHeyygws3OGmokVdHB6e5SHJQYzEAeZR0F4wd
-         a+w8P8n/sClWhiKDj2DIvauNcOgAqT1ZkRnGc=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=tXBF8IPHrXnSIr0GZNWDZAEr0MXQPNCBVCwEca8TIMo=;
+        b=GU4Dsa3aUhwed3l5u1ByKWWvqupTtfJDlxC2YsdgHB6f0pBuk4ypKJa0/BG7tQ0RCc
+         E0E3RsmDa3L48jL0xzc+0JbNw8zOvjwzTu888jZOCDnw7DFG9987Ij5sYAtn4DoREO9V
+         w2EchOQ30pqD9rqHESWGMZWPSLKBP+0bkBZqBdY+y3qu4YzVKbfobOdI2CyvykQItDIs
+         sfgJK11oQeCuuSYxVDRzEjToiK5pO4E55kOvqaJLLinUGbHVTlxKmec6y1TqochwE9Cb
+         h1W6s1d8MBQRTQPHu6YmnrD1ZDhwylcziXIU4pwpvSoaSKzB0xZG4GXyxtsmzgbiGCwb
+         SyKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZldZgKL/h4bHmv3Vt0CK9jGTP+iK5MWhoNbwyCa5+Pc=;
-        b=tnKxITmOB6w4uttR/M47i0FAvxPWbSVwRQNBKBpVfmKk/FjUo7FdPeCCjSrsUHvy0I
-         Bx3KOZ2fCaNSJsmJCMskEM0jJpJoWxigIax7wQZ40QZIcpRFyV1c6NwMxi244w1iKsH0
-         k/8SxS36q+jay+w27AWDze0XV2G97YEP5Sw9au/RcbnjDRwiPmD2dP78Fkuam5y2Fnj3
-         9/YlqhvdIefDMVbMW86DgwblDgJcXnLTkJE9mfpExVhwB4MgmBnqRHhOJ61V4/KWuvg6
-         yqVMwsWO8LoOat42WIiIXpDX/Z873aXgIXPJtjYfZpfOpAYG2BCLIpiT9isugSygkCtH
-         HZ7g==
-X-Gm-Message-State: AOAM533RzB8Rr2yiiUUWd3fTotgestAYsdcbbr8L1Bzod0gelnegIZhM
-        zFLNnDC2l5pEGIJr6jBsSQqHi+cVFBXB9UUv
-X-Google-Smtp-Source: ABdhPJxZV0GMOxN/Btxdh17UBKbI6Z7yNdNBpGpDKmdcGFLmfrlu/L5CZP7T5S9xsAgaAH+YkMMgXQ==
-X-Received: by 2002:a2e:a78f:: with SMTP id c15mr26418242ljf.119.1635264969714;
-        Tue, 26 Oct 2021 09:16:09 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id c1sm2055580ljr.111.2021.10.26.09.16.08
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Oct 2021 09:16:09 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id n7so17219211ljp.5
-        for <linux-arch@vger.kernel.org>; Tue, 26 Oct 2021 09:16:08 -0700 (PDT)
-X-Received: by 2002:a2e:89d4:: with SMTP id c20mr5213114ljk.191.1635264968138;
- Tue, 26 Oct 2021 09:16:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <87y26nmwkb.fsf@disp2133> <20211020174406.17889-13-ebiederm@xmission.com>
- <CAHk-=whe-ixeDp_OgSOsC4H+dWTLDSuNDU2a0sE3p8DapNeCuQ@mail.gmail.com>
- <9416e8d7-5545-4fc4-8ab0-68fddd35520b@kernel.org> <CAHk-=whJETM0MHqWQKCVALBkJX-Th5471z5FW3gFJO5c73L6QA@mail.gmail.com>
- <87v91kqt6b.fsf@disp2133>
-In-Reply-To: <87v91kqt6b.fsf@disp2133>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 26 Oct 2021 09:15:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiph8wmVDJZiUETH3r_+fWhDvaEz64aA0XNimkSOHf+dw@mail.gmail.com>
-Message-ID: <CAHk-=wiph8wmVDJZiUETH3r_+fWhDvaEz64aA0XNimkSOHf+dw@mail.gmail.com>
-Subject: Re: [PATCH 13/20] signal: Implement force_fatal_sig
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=tXBF8IPHrXnSIr0GZNWDZAEr0MXQPNCBVCwEca8TIMo=;
+        b=xAa3YPzUTSkL/jDWYh5sRivld5AQsLJFMH0OF+a2ziAGNHIH1yRGNCH8iB2Dh9tBhN
+         I0zlkLewWrZxoiqrpF+GvcqQPdkKspucaowXrzFOrYv75hpGA1nt/Sc6I/2s4QVXrWhu
+         bYWF03mYAsTYDsu/2dVZgyuXwIi43V8w+fKuWVKAVl7/d96E+xZyHViSIoy5R9s5KS0B
+         g9z3MnP332KNzhEZYlIiwB+h6YYSIErBmIvDbZv5Y8ghNWJ1K86Fe1/gdFGOoiEtjsxW
+         4LlXuW5Vnr1kVr+S3P80zP0bJRWC8x3fiPHTMOzk62si5eHqH6rwLkWPlk1P+TecR8Gg
+         fmlA==
+X-Gm-Message-State: AOAM532RzPgVQMEa6mEZE42P3+FKbIksDBSDzagMkEaqV24G0Phu//Os
+        YM+OXuaTQ2IcWGT8zCYl22DL2RjskAWmXmE=
+X-Google-Smtp-Source: ABdhPJyzttHnj9zHmxZU6jm7klx3kEHjC4Jg/LsIuYnI614jmLZSGY9gei/2uiOZloZGh2hKapyF4uQoS76nWmM=
+X-Received: from ramjiyani.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2edd])
+ (user=ramjiyani job=sendgmr) by 2002:ac8:5b8e:: with SMTP id
+ a14mr28502874qta.391.1635297558699; Tue, 26 Oct 2021 18:19:18 -0700 (PDT)
+Date:   Wed, 27 Oct 2021 01:18:34 +0000
+Message-Id: <20211027011834.2497484-1-ramjiyani@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
+Subject: [PATCH v5] aio: Add support for the POLLFREE
+From:   Ramji Jiyani <ramjiyani@google.com>
+To:     arnd@arndb.de, viro@zeniv.linux.org.uk, bcrl@kvack.org
+Cc:     hch@lst.de, kernel-team@android.com, linux-aio@kvack.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oleg@redhat.com, ebiggers@kernel.org,
+        Ramji Jiyani <ramjiyani@google.com>,
+        Jeff Moyer <jmoyer@redhat.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 9:58 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> Rereading this I think you might be misreading something.
+Add support for the POLLFREE flag to force complete iocb inline in
+aio_poll_wake(). A thread may use it to signal it's exit and/or request
+to cleanup while pending poll request. In this case, aio_poll_wake()
+needs to make sure it doesn't keep any reference to the queue entry
+before returning from wake to avoid possible use after free via
+poll_cancel() path.
 
-Gaah. Yes, indeed.
+UAF issue was found during binder and aio interactions in certain
+sequence of events [1].
 
-> force_siginfo_to_task takes a sigdfl parameter which I am setting in
-> force_fatal_signal.
+The POLLFREE flag is no more exclusive to the epoll and is being
+shared with the aio. Remove comment from poll.h to avoid confusion.
 
-.. and I realized that the first time I read through it, but then when
-I read through it due to Andy saying it worries him, I missed it and
-thought the handler didn't get reset.
+[1] https://lore.kernel.org/r/CAKUd0B_TCXRY4h1hTztfwWbNSFQqsudDLn2S_28csgWZmZAG3Q@mail.gmail.com/
 
-So the patch is fine.
+Fixes: af5c72b1fc7a ("Fix aio_poll() races")
+Signed-off-by: Ramji Jiyani <ramjiyani@google.com>
+Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Cc: stable@vger.kernel.org # 4.19+
+---
+Changes since v1:
+- Removed parenthesis around POLLFREE macro definition as per review.
+- Updated description to refer UAF issue discussion this patch fixes.
+- Updated description to remove reference to parenthesis change.
+- Added Reviewed-by from Jeff Moyer
 
-             Linus
+Changes since v2:
+- Added Fixes tag.
+- Added stable tag for backporting on 4.19+ LTS releases
+
+Changes since v3:
+- Updated patch description
+- Updated Fixes tag to issue manifestation origin
+
+Changes since v4:
+- Added Reviewed-by from Christoph Hellwig
+---
+ fs/aio.c                        | 45 ++++++++++++++++++---------------
+ include/uapi/asm-generic/poll.h |  2 +-
+ 2 files changed, 26 insertions(+), 21 deletions(-)
+
+diff --git a/fs/aio.c b/fs/aio.c
+index 51b08ab01dff..5d539c05df42 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -1674,6 +1674,7 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
+ {
+ 	struct poll_iocb *req = container_of(wait, struct poll_iocb, wait);
+ 	struct aio_kiocb *iocb = container_of(req, struct aio_kiocb, poll);
++	struct kioctx *ctx = iocb->ki_ctx;
+ 	__poll_t mask = key_to_poll(key);
+ 	unsigned long flags;
+ 
+@@ -1683,29 +1684,33 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
+ 
+ 	list_del_init(&req->wait.entry);
+ 
+-	if (mask && spin_trylock_irqsave(&iocb->ki_ctx->ctx_lock, flags)) {
+-		struct kioctx *ctx = iocb->ki_ctx;
++	/*
++	 * Use irqsave/irqrestore because not all filesystems (e.g. fuse)
++	 * call this function with IRQs disabled and because IRQs have to
++	 * be disabled before ctx_lock is obtained.
++	 */
++	if (mask & POLLFREE) {
++		/* Force complete iocb inline to remove refs to deleted entry */
++		spin_lock_irqsave(&ctx->ctx_lock, flags);
++	} else if (!(mask && spin_trylock_irqsave(&ctx->ctx_lock, flags))) {
++		/* Can't complete iocb inline; schedule for later */
++		schedule_work(&req->work);
++		return 1;
++	}
+ 
+-		/*
+-		 * Try to complete the iocb inline if we can. Use
+-		 * irqsave/irqrestore because not all filesystems (e.g. fuse)
+-		 * call this function with IRQs disabled and because IRQs
+-		 * have to be disabled before ctx_lock is obtained.
+-		 */
+-		list_del(&iocb->ki_list);
+-		iocb->ki_res.res = mangle_poll(mask);
+-		req->done = true;
+-		if (iocb->ki_eventfd && eventfd_signal_allowed()) {
+-			iocb = NULL;
+-			INIT_WORK(&req->work, aio_poll_put_work);
+-			schedule_work(&req->work);
+-		}
+-		spin_unlock_irqrestore(&ctx->ctx_lock, flags);
+-		if (iocb)
+-			iocb_put(iocb);
+-	} else {
++	/* complete iocb inline */
++	list_del(&iocb->ki_list);
++	iocb->ki_res.res = mangle_poll(mask);
++	req->done = true;
++	if (iocb->ki_eventfd && eventfd_signal_allowed()) {
++		iocb = NULL;
++		INIT_WORK(&req->work, aio_poll_put_work);
+ 		schedule_work(&req->work);
+ 	}
++	spin_unlock_irqrestore(&ctx->ctx_lock, flags);
++	if (iocb)
++		iocb_put(iocb);
++
+ 	return 1;
+ }
+ 
+diff --git a/include/uapi/asm-generic/poll.h b/include/uapi/asm-generic/poll.h
+index 41b509f410bf..f9c520ce4bf4 100644
+--- a/include/uapi/asm-generic/poll.h
++++ b/include/uapi/asm-generic/poll.h
+@@ -29,7 +29,7 @@
+ #define POLLRDHUP       0x2000
+ #endif
+ 
+-#define POLLFREE	(__force __poll_t)0x4000	/* currently only for epoll */
++#define POLLFREE	(__force __poll_t)0x4000
+ 
+ #define POLL_BUSY_LOOP	(__force __poll_t)0x8000
+ 
+-- 
+2.33.0.1079.g6e70778dc9-goog
+
