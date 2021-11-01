@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A14D44418CD
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Nov 2021 10:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 670BB441922
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Nov 2021 10:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbhKAJvl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Nov 2021 05:51:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56447 "EHLO
+        id S233035AbhKAJ4n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Nov 2021 05:56:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31520 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232988AbhKAJta (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Nov 2021 05:49:30 -0400
+        by vger.kernel.org with ESMTP id S234248AbhKAJyq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Nov 2021 05:54:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635760017;
+        s=mimecast20190719; t=1635760332;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=GCQW+jtyc2XjG8UWnT8I+n1wYys3/xqxOYsbCwWgH3Y=;
-        b=dk1DvFndzErJUCR769Yc6TvwShnR479wsxx46vNtLArpUE4O/AtBTZD6QwkfQ3AU1+Z73e
-        em6fAjDtGxk0pscJZ3sTI5GAnmsOo5lHkOkv333E00V4pPw2Lt/rOouWtSQ2F7Zkm2WPQh
-        iXjzDx4nI49AMYZka/rnobXW/WmBmXU=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-183-LFvgtY_oPJyEv0l2b8lNNw-1; Mon, 01 Nov 2021 05:46:56 -0400
-X-MC-Unique: LFvgtY_oPJyEv0l2b8lNNw-1
-Received: by mail-ed1-f70.google.com with SMTP id m16-20020a056402431000b003dd2005af01so15022106edc.5
-        for <linux-arch@vger.kernel.org>; Mon, 01 Nov 2021 02:46:55 -0700 (PDT)
+        bh=hTNjHa1TMEqRPhvFHuXK6XSXRxTvytm/OlBhth0P8ak=;
+        b=aY103MsCGIYBOOcoX1Kq2nnlJXXCuYKl+0ldpriCphi+3hjjMPzK2sVSaLM8KyeNsjKhsk
+        TE+9sadGl7mtMTLME2EqjFPqihpr7+xrarqtGsNX2w0/K0kpTP2WKd9/SQPXKanOM13Npj
+        pQo2dHVhSLMIgiH47lMyxx/fXuVTW7Y=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-567-6E9uIm4cO4eyZs5jvLKYlQ-1; Mon, 01 Nov 2021 05:52:10 -0400
+X-MC-Unique: 6E9uIm4cO4eyZs5jvLKYlQ-1
+Received: by mail-ed1-f69.google.com with SMTP id r25-20020a05640216d900b003dca3501ab4so14979245edx.15
+        for <linux-arch@vger.kernel.org>; Mon, 01 Nov 2021 02:52:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=GCQW+jtyc2XjG8UWnT8I+n1wYys3/xqxOYsbCwWgH3Y=;
-        b=ed+m6WZQUehuUSrsVXUdEE7UqErW35o66MOpp+KQM5s4zOYy+YYg6/JoOnVCWrZlW+
-         79PWqwkRF4SB0TU8P9nao7klbfqgZvc70FcU7fLdM7LOhJDslZMv7RRWP2JRmHAMvcVc
-         AKxnopCcPgb6wABqJd9ZuT8JHWOhVgyex9UTfPCZES0jsorEn5uc/8OTw2d+MMElfVWe
-         EIznQb9zPlugw1t7rjhp+UO2LFSJNVaLwDhzPS/GxED8IEXGtrhRLB9Pl3T43tJ8fs2l
-         BT6eRqp33AI4h/SzIvd0v/9CSJfcJawlWID2ekCjfBuvlqiv2kLBktg4EIcTLdrF5XZ6
-         o6Tg==
-X-Gm-Message-State: AOAM533h+p7eoRxYRzTDPHW5z6Jo/63Yx+U9PHF/yBzUoAnQ3eiI8U5U
-        ylcLch8LAvZdx9DucjzCbv78wVIVBElEEC96qqUWgTqpSrH/mDCrjS+SbhlnEWGsQfsxFGSDXMx
-        CWQmRpb9Xj+CQICnVBVvFuw==
-X-Received: by 2002:a17:906:3ac6:: with SMTP id z6mr35445476ejd.196.1635760014520;
-        Mon, 01 Nov 2021 02:46:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxejlhpYXWU9PII72c+LiDvOdFySsKViVbsnUuc9wubsgDsL/nqusncIRxzQXqTz90uOamjhQ==
-X-Received: by 2002:a17:906:3ac6:: with SMTP id z6mr35445442ejd.196.1635760014308;
-        Mon, 01 Nov 2021 02:46:54 -0700 (PDT)
+        bh=hTNjHa1TMEqRPhvFHuXK6XSXRxTvytm/OlBhth0P8ak=;
+        b=5oN2xF+M0Djp5IH8AxEodeVH3Htae0qDWw8Jo+kpsQh/scqpdobRqX1o7OhKDRW0o6
+         88hUyL8Wgp8yYalux0mGIJrKV4s7Bsxa6kqTb7XzeeK6blT7XhhputNo1h9kTqyab1Eg
+         YcBsTOOF4r7zZL8PsTp2aLyXUYRwhEQRREccpPDUVrgimaMpmUrmo55YvWxRNqX5s4ow
+         g/hTe0YDL1bVNAtz/aQxtIJ5R//3zSXHIq+ip6JNDRKotEmMg8sQfMWyQj5bacgldgXr
+         FW0dPAySBOuTtFKwEWlkvijmhrfK1WXy9ZuFKTz34DWvBuKaZSeQl6N/rdVqvS0neCkK
+         /F/Q==
+X-Gm-Message-State: AOAM532Uo5fhROJLD8wG5gbYu2CqIZjCc81XeJXaW5R/Oj/jb/yTtHqD
+        jZQWt3zlNTtiL9Pm3OPtCpgydDqU4ytT83mVbR/YIv7lGCWW2FaiRfLH/FryP6gW0Po88dSdeOJ
+        t1mqBN347pPp+KZjBzu5qYg==
+X-Received: by 2002:a05:6402:17c6:: with SMTP id s6mr23826571edy.11.1635760329650;
+        Mon, 01 Nov 2021 02:52:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw+4wcfkcjbb+BJKXbX8UJhqQo0tsMPIRflgFbUhB0LTkA3bEecXam4YFslJKUNisDfYWgBOQ==
+X-Received: by 2002:a05:6402:17c6:: with SMTP id s6mr23826545edy.11.1635760329469;
+        Mon, 01 Nov 2021 02:52:09 -0700 (PDT)
 Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id me7sm3921028ejb.33.2021.11.01.02.46.53
+        by smtp.gmail.com with ESMTPSA id j11sm6624691ejt.114.2021.11.01.02.52.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Nov 2021 02:46:53 -0700 (PDT)
+        Mon, 01 Nov 2021 02:52:08 -0700 (PDT)
 From:   Vitaly Kuznetsov <vkuznets@redhat.com>
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Wanpeng Li <wanpengli@tencent.com>,
@@ -62,13 +62,13 @@ Cc:     Wanpeng Li <wanpengli@tencent.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
         Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
         Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v2 5/8] KVM: x86: Don't bother reading sparse banks that
- end up being ignored
-In-Reply-To: <20211030000800.3065132-6-seanjc@google.com>
+Subject: Re: [PATCH v2 2/8] KVM: x86: Get the number of Hyper-V sparse banks
+ from the VARHEAD field
+In-Reply-To: <20211030000800.3065132-3-seanjc@google.com>
 References: <20211030000800.3065132-1-seanjc@google.com>
- <20211030000800.3065132-6-seanjc@google.com>
-Date:   Mon, 01 Nov 2021 10:46:52 +0100
-Message-ID: <87bl34ky2b.fsf@vitty.brq.redhat.com>
+ <20211030000800.3065132-3-seanjc@google.com>
+Date:   Mon, 01 Nov 2021 10:52:07 +0100
+Message-ID: <87a6iokxtk.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -77,110 +77,200 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Sean Christopherson <seanjc@google.com> writes:
 
-> When handling "sparse" VP_SET requests, don't read sparse banks that
-> can't possibly contain a legal VP index instead of ignoring such banks
-> later on in sparse_set_to_vcpu_mask().  This allows KVM to cap the size
-> of its sparse_banks arrays for VP_SET at KVM_HV_MAX_SPARSE_VCPU_SET_BITS.
+> Get the number of sparse banks from the VARHEAD field, which the guest is
+> required to provide as "The size of a variable header, in QWORDS.", where
+> the variable header is:
 >
-> Reducing the size of sparse_banks fudges around a compilation warning
-> (that becomes error with KVM_WERROR=y) when CONFIG_KASAN_STACK=y, which
-> is selected (and can't be unselected) by CONFIG_KASAN=y when using gcc
-> (clang/LLVM is a stack hog in some cases so it's opt-in for clang).
-> KASAN_STACK adds a redzone around every stack variable, which pushes the
-> Hyper-V functions over the default limit of 1024.
+>   Variable Header Bytes = {Total Header Bytes - sizeof(Fixed Header)}
+>                           rounded up to nearest multiple of 8
+>   Variable HeaderSize = Variable Header Bytes / 8
 >
-> Ideally, KVM would flat out reject such impossibilities, but the TLFS
-> explicitly allows providing empty banks, even if a bank can't possibly
-> contain a valid VP index due to its position exceeding KVM's max.
+> In other words, the VARHEAD should match the number of sparse banks.
+> Keep the manual count as a sanity check, but otherwise rely on the field
+> so as to more closely align with the logic defined in the TLFS and to
+> allow for future cleanups.
 >
->   Furthermore, for a bit 1 in ValidBankMask, it is valid state for the
->   corresponding element in BanksContents can be all 0s, meaning no
->   processors are specified in this bank.
->
-> Arguably KVM should reject and not ignore the "extra" banks, but that can
-> be done independently and without bloating sparse_banks, e.g. by reading
-> each "extra" 8-byte chunk individually.
->
-> Reported-by: Ajay Garg <ajaygargnsit@gmail.com>
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  arch/x86/kvm/hyperv.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+>  arch/x86/kvm/hyperv.c             | 35 ++++++++++++++++++-------------
+>  arch/x86/kvm/trace.h              | 14 +++++++------
+>  include/asm-generic/hyperv-tlfs.h |  1 +
+>  3 files changed, 30 insertions(+), 20 deletions(-)
 >
 > diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 3d0981163eed..8832727d74d9 100644
+> index 814d1a1f2cb8..cf18aa1712bf 100644
 > --- a/arch/x86/kvm/hyperv.c
 > +++ b/arch/x86/kvm/hyperv.c
-> @@ -1753,11 +1753,16 @@ struct kvm_hv_hcall {
->  static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
->  				 u64 *sparse_banks, gpa_t offset)
->  {
+> @@ -1742,6 +1742,7 @@ struct kvm_hv_hcall {
+>  	u64 ingpa;
+>  	u64 outgpa;
+>  	u16 code;
 > +	u16 var_cnt;
-> +
->  	if (hc->var_cnt > 64)
->  		return -EINVAL;
->  
-> +	/* Ignore banks that cannot possibly contain a legal VP index. */
-> +	var_cnt = min_t(u16, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS);
-> +
-
-One may wonder why we're mixing up VP indices and VCPU ids (caped by
-KVM_MAX_VCPUS) here as these don't have to match. The following commit
-sheds some light:
-
-commit 9170200ec0ebad70e5b9902bc93e2b1b11456a3b
-Author: Vitaly Kuznetsov <vkuznets@redhat.com>
-Date:   Wed Aug 22 12:18:28 2018 +0200
-
-    KVM: x86: hyperv: enforce vp_index < KVM_MAX_VCPUS
-    
-    Hyper-V TLFS (5.0b) states:
-    
-    > Virtual processors are identified by using an index (VP index). The
-    > maximum number of virtual processors per partition supported by the
-    > current implementation of the hypervisor can be obtained through CPUID
-    > leaf 0x40000005. A virtual processor index must be less than the
-    > maximum number of virtual processors per partition.
-    
-    Forbid userspace to set VP_INDEX above KVM_MAX_VCPUS. get_vcpu_by_vpidx()
-    can now be optimized to bail early when supplied vpidx is >= KVM_MAX_VCPUS.
-
->  	return kvm_read_guest(kvm, hc->ingpa + offset, sparse_banks,
-> -			      hc->var_cnt * sizeof(*sparse_banks));
-> +			      var_cnt * sizeof(*sparse_banks));
->  }
->  
->  static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
-> @@ -1770,7 +1775,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->  	DECLARE_BITMAP(vcpu_bitmap, KVM_MAX_VCPUS);
+>  	u16 rep_cnt;
+>  	u16 rep_idx;
+>  	bool fast;
+> @@ -1761,7 +1762,6 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
 >  	unsigned long *vcpu_mask;
 >  	u64 valid_bank_mask;
-> -	u64 sparse_banks[64];
-> +	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+>  	u64 sparse_banks[64];
+> -	int sparse_banks_len;
 >  	bool all_cpus;
 >  
 >  	if (!ex) {
-> @@ -1894,7 +1899,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->  	DECLARE_BITMAP(vcpu_bitmap, KVM_MAX_VCPUS);
+> @@ -1811,24 +1811,28 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>  		all_cpus = flush_ex.hv_vp_set.format !=
+>  			HV_GENERIC_SET_SPARSE_4K;
+>  
+> -		sparse_banks_len = bitmap_weight((unsigned long *)&valid_bank_mask, 64);
+> +		if (hc->var_cnt != bitmap_weight((unsigned long *)&valid_bank_mask, 64))
+> +			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+
+Let's hope Windows doesn't break this ruls when vp_set.format != HV_GENERIC_SET_SPARSE_4K
+
+>  
+> -		if (!sparse_banks_len && !all_cpus)
+> +		if (!hc->var_cnt && !all_cpus)
+>  			goto ret_success;
+>  
+>  		if (!all_cpus) {
+>  			if (hc->fast) {
+> -				if (sparse_banks_len > HV_HYPERCALL_MAX_XMM_REGISTERS - 1)
+> +				if (hc->var_cnt > HV_HYPERCALL_MAX_XMM_REGISTERS - 1)
+>  					return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> -				for (i = 0; i < sparse_banks_len; i += 2) {
+> +				for (i = 0; i < hc->var_cnt; i += 2) {
+>  					sparse_banks[i] = sse128_lo(hc->xmm[i / 2 + 1]);
+>  					sparse_banks[i + 1] = sse128_hi(hc->xmm[i / 2 + 1]);
+>  				}
+>  			} else {
+> +				if (hc->var_cnt > 64)
+> +					return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +
+>  				gpa = hc->ingpa + offsetof(struct hv_tlb_flush_ex,
+>  							   hv_vp_set.bank_contents);
+>  				if (unlikely(kvm_read_guest(kvm, gpa, sparse_banks,
+> -							    sparse_banks_len *
+> +							    hc->var_cnt *
+>  							    sizeof(sparse_banks[0]))))
+>  					return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  			}
+> @@ -1884,7 +1888,6 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
 >  	unsigned long *vcpu_mask;
 >  	unsigned long valid_bank_mask;
-> -	u64 sparse_banks[64];
-> +	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+>  	u64 sparse_banks[64];
+> -	int sparse_banks_len;
 >  	u32 vector;
 >  	bool all_cpus;
+>  
+> @@ -1917,22 +1920,25 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>  
+>  		vector = send_ipi_ex.vector;
+>  		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
+> -		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64) *
+> -			sizeof(sparse_banks[0]);
+> -
+>  		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
+>  
+> +		if (hc->var_cnt != bitmap_weight(&valid_bank_mask, 64))
+> +			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +
+>  		if (all_cpus)
+>  			goto check_and_send_ipi;
+>  
+> -		if (!sparse_banks_len)
+> +		if (!hc->var_cnt)
+>  			goto ret_success;
+>  
+> +		if (hc->var_cnt > 64)
+> +			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> +
+>  		if (kvm_read_guest(kvm,
+>  				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
+>  							vp_set.bank_contents),
+>  				   sparse_banks,
+> -				   sparse_banks_len))
+> +				   hc->var_cnt * sizeof(sparse_banks[0])))
+>  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  	}
+>  
+> @@ -2190,13 +2196,14 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>  	}
+>  
+>  	hc.code = hc.param & 0xffff;
+> +	hc.var_cnt = (hc.param & HV_HYPERCALL_VARHEAD_MASK) >> HV_HYPERCALL_VARHEAD_OFFSET;
+>  	hc.fast = !!(hc.param & HV_HYPERCALL_FAST_BIT);
+>  	hc.rep_cnt = (hc.param >> HV_HYPERCALL_REP_COMP_OFFSET) & 0xfff;
+>  	hc.rep_idx = (hc.param >> HV_HYPERCALL_REP_START_OFFSET) & 0xfff;
+>  	hc.rep = !!(hc.rep_cnt || hc.rep_idx);
+>  
+> -	trace_kvm_hv_hypercall(hc.code, hc.fast, hc.rep_cnt, hc.rep_idx,
+> -			       hc.ingpa, hc.outgpa);
+> +	trace_kvm_hv_hypercall(hc.code, hc.fast, hc.var_cnt, hc.rep_cnt,
+> +			       hc.rep_idx, hc.ingpa, hc.outgpa);
+>  
+>  	if (unlikely(!hv_check_hypercall_access(hv_vcpu, hc.code))) {
+>  		ret = HV_STATUS_ACCESS_DENIED;
+> diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
+> index 953b0fcb21ee..f6625cfb686c 100644
+> --- a/arch/x86/kvm/trace.h
+> +++ b/arch/x86/kvm/trace.h
+> @@ -64,9 +64,9 @@ TRACE_EVENT(kvm_hypercall,
+>   * Tracepoint for hypercall.
+>   */
+>  TRACE_EVENT(kvm_hv_hypercall,
+> -	TP_PROTO(__u16 code, bool fast, __u16 rep_cnt, __u16 rep_idx,
+> -		 __u64 ingpa, __u64 outgpa),
+> -	TP_ARGS(code, fast, rep_cnt, rep_idx, ingpa, outgpa),
+> +	TP_PROTO(__u16 code, bool fast,  __u16 var_cnt, __u16 rep_cnt,
+> +		 __u16 rep_idx, __u64 ingpa, __u64 outgpa),
+> +	TP_ARGS(code, fast, var_cnt, rep_cnt, rep_idx, ingpa, outgpa),
+>  
+>  	TP_STRUCT__entry(
+>  		__field(	__u16,		rep_cnt		)
+> @@ -74,6 +74,7 @@ TRACE_EVENT(kvm_hv_hypercall,
+>  		__field(	__u64,		ingpa		)
+>  		__field(	__u64,		outgpa		)
+>  		__field(	__u16, 		code		)
+> +		__field(	__u16,		var_cnt		)
+>  		__field(	bool,		fast		)
+>  	),
+>  
+> @@ -83,13 +84,14 @@ TRACE_EVENT(kvm_hv_hypercall,
+>  		__entry->ingpa		= ingpa;
+>  		__entry->outgpa		= outgpa;
+>  		__entry->code		= code;
+> +		__entry->var_cnt	= var_cnt;
+>  		__entry->fast		= fast;
+>  	),
+>  
+> -	TP_printk("code 0x%x %s cnt 0x%x idx 0x%x in 0x%llx out 0x%llx",
+> +	TP_printk("code 0x%x %s var_cnt 0x%x cnt 0x%x idx 0x%x in 0x%llx out 0x%llx",
 
-Saves the day until KVM_MAX_VCPUS goes above 4096 (and when it does the
-problem strikes back even worse as KVM_HV_MAX_SPARSE_VCPU_SET_BITS is
-not caped at '64'). As we're good for now,
+Nit: 'cnt' is (and was) a bit ambiguous, I'd suggest to explicitly say
+'rep_cnt' (and probably 'rep_idx') instead.
+
+>  		  __entry->code, __entry->fast ? "fast" : "slow",
+> -		  __entry->rep_cnt, __entry->rep_idx,  __entry->ingpa,
+> -		  __entry->outgpa)
+> +		  __entry->var_cnt, __entry->rep_cnt, __entry->rep_idx,
+> +		  __entry->ingpa, __entry->outgpa)
+>  );
+>  
+>  TRACE_EVENT(kvm_hv_hypercall_done,
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index 56348a541c50..1ba8e6da4427 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -182,6 +182,7 @@ enum HV_GENERIC_SET_FORMAT {
+>  #define HV_HYPERCALL_RESULT_MASK	GENMASK_ULL(15, 0)
+>  #define HV_HYPERCALL_FAST_BIT		BIT(16)
+>  #define HV_HYPERCALL_VARHEAD_OFFSET	17
+> +#define HV_HYPERCALL_VARHEAD_MASK	GENMASK_ULL(26, 17)
+>  #define HV_HYPERCALL_REP_COMP_OFFSET	32
+>  #define HV_HYPERCALL_REP_COMP_1		BIT_ULL(32)
+>  #define HV_HYPERCALL_REP_COMP_MASK	GENMASK_ULL(43, 32)
 
 Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-
-(I'd even suggest we add BUILD_BUG_ON(KVM_HV_MAX_SPARSE_VCPU_SET_BITS > 64))
-
-Going forward, we can probably get rid of thes on-stack allocations
-completely by either allocating these 512 bytes dynamically (lazily)
-upon first usage or just adding a field to 'struct kvm_vcpu_hv' -- which
-is being allcated dynamically nowadays so non-Windows guests won't suffer.
 
 -- 
 Vitaly
