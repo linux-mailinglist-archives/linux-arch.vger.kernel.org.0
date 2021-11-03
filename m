@@ -2,140 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F39D4419F7
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Nov 2021 11:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE199444922
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Nov 2021 20:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbhKAKf4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Nov 2021 06:35:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35770 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232160AbhKAKfz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Nov 2021 06:35:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635762802;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mh/lXvO/DjLUSeyCpSgez/WyU/AXkpH1vth0jy9+/fg=;
-        b=Gp27gZu9UkN/rG3GB+E/NXITgjryz0CL3u2BQG8B3vkEtwW/IakfF23kp1fHjZvzT3Yuee
-        j+DuE9CsEvniqdIlYmOia/H3e9RrAZb/rdllG/xMBcSn1q3UhRsurLDGQxJ2Mst6I6qH18
-        ZJHFHDUm6JhacMpJbFtHThl36iH+QF0=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-147-YosF88SYPAGLXscOePN8yA-1; Mon, 01 Nov 2021 06:33:21 -0400
-X-MC-Unique: YosF88SYPAGLXscOePN8yA-1
-Received: by mail-ed1-f71.google.com with SMTP id s12-20020a50dacc000000b003dbf7a78e88so15158751edj.2
-        for <linux-arch@vger.kernel.org>; Mon, 01 Nov 2021 03:33:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=mh/lXvO/DjLUSeyCpSgez/WyU/AXkpH1vth0jy9+/fg=;
-        b=gSdZgwLGp2tDjc3gdiYrndaFF7JSJK9G2ARkrbmiRhMSkF5UcYPXSel979nljd5/fd
-         xv5KHj3TKvbqD+UUxiHA3oz+SCTe4xAdkl8cW/aj6BRcGi7O1o5Yu8yeaU+/a3xyhZc4
-         McFZ22q9flRuMzKw+BRX7xCU5DbAdijjZGthusu2THOwI/pcQTeQBCQxhwgtut9/Ssry
-         ZLYZ8vf8AjF3qsrnEE6HDsAWRZSshxB9SJEAyygTSGrjIcPDKMUk5z1Jgia+0Lmj+FuR
-         P/Ya7g4CQzXAzjE3RRD/ORyEVzkQO07LCUEEXFmW90xDiKRJn9ntDmoohF6jwP1MkbOR
-         inxA==
-X-Gm-Message-State: AOAM533p482575TOqUlxzVSEJYCsOymani6m7+hP1asA6seyDHrzmRKF
-        jWjAUBI4I60Om6TYw1fd9U8am1WL/gbFsNf+Upsl9YlyxVRHXba7jQT6U4si4JjSZyliJURKkPY
-        AHYkWZNYfwSswRx6DnvtqcA==
-X-Received: by 2002:a50:8e05:: with SMTP id 5mr39702746edw.76.1635762800379;
-        Mon, 01 Nov 2021 03:33:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw9gnk66lzzUHLALthwE3raOdlZGF410uhbCdfiSGqNONoUSpPMJi4RKxjukoAv0gSOLjBOOg==
-X-Received: by 2002:a50:8e05:: with SMTP id 5mr39702727edw.76.1635762800215;
-        Mon, 01 Nov 2021 03:33:20 -0700 (PDT)
-Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id q17sm6607866ejp.106.2021.11.01.03.33.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Nov 2021 03:33:19 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v2 8/8] KVM: x86: Add checks for reserved-to-zero
- Hyper-V hypercall fields
-In-Reply-To: <20211030000800.3065132-9-seanjc@google.com>
-References: <20211030000800.3065132-1-seanjc@google.com>
- <20211030000800.3065132-9-seanjc@google.com>
-Date:   Mon, 01 Nov 2021 11:33:18 +0100
-Message-ID: <87v91cjhch.fsf@vitty.brq.redhat.com>
+        id S230172AbhKCTrr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Nov 2021 15:47:47 -0400
+Received: from xvfrqvdb.outbound-mail.sendgrid.net ([168.245.72.219]:50580
+        "EHLO xvfrqvdb.outbound-mail.sendgrid.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229918AbhKCTrr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Nov 2021 15:47:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wasin.io;
+        h=from:subject:mime-version:to:cc:content-transfer-encoding:
+        content-type;
+        s=s1; bh=cwoMxqGWSt3BO2nOoSMa84BFuZND+djw3Sn79Yk2hEo=;
+        b=lpGdhdzfmqesyAC2vk/WLX7f3p1p0qBuuVRFUa2hKZwEfje/p461cQ/0HKHy7rIya3Z6
+        8CJBBFu3meGF7j2hdCfAL6Z2q0/z0b6BmX7Us10zbzc+fptgG18lE/JEEX4vn2NhUZm3Mi
+        AmkRzD7RUaFq3zgeaf79fJBx4XgQ9zZhPac/4WvE13kbEYnxXRTaHQPkF9+v5UvDWB4KHe
+        jD6vY5tDmthRG9DfIHI7Ktsgm4s1zXdO+YKb9pJPahs2IiZkCCRKBIddHpmBeAR/EyO3MF
+        f/9RuD4NmyLY1HCQaUiQVj7MYbLzxBgsT42IwmVQhNpPfvdlD/luDjrwm8mOWF3g==
+Received: by filterdrecv-canary-dcfc8db9-hnrtr with SMTP id filterdrecv-canary-dcfc8db9-hnrtr-1-6182E610-2B
+        2021-11-03 19:42:08.541570131 +0000 UTC m=+5515025.671036202
+Received: from mail.wasin.io (unknown)
+        by geopod-ismtpd-2-0 (SG) with ESMTP
+        id 335FfVOGSPmHtTshSBf2PQ
+        for <linux-arch@vger.kernel.org>;
+        Wed, 03 Nov 2021 19:42:08.045 +0000 (UTC)
+Received: from mail.wasin.io (localhost.localdomain [127.0.0.1])
+        by mail.wasin.io (Postfix) with ESMTP id 26D3AA79DA
+        for <linux-arch@vger.kernel.org>; Thu,  4 Nov 2021 02:46:21 +0800 (SGT)
+X-Virus-Scanned: Debian amavisd-new at mail.wasin.io
+Received: from mail.wasin.io ([127.0.0.1])
+        by mail.wasin.io (mail.wasin.io [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Tfir0j-Eo0rP for <linux-arch@vger.kernel.org>;
+        Thu,  4 Nov 2021 02:45:57 +0800 (SGT)
+Received: from haxpor-desktop.fritz.box (unknown [185.134.6.138])
+        by mail.wasin.io (Postfix) with ESMTPSA id C61F6A793B;
+        Thu,  4 Nov 2021 02:45:50 +0800 (SGT)
+From:   Wasin Thonkaew <wasin@wasin.io>
+Subject: [PATCH RESEND] include/asm-generic/error-injection.h: fix a spelling
+ mistake, and a coding style issue
+Date:   Wed, 03 Nov 2021 19:42:08 +0000 (UTC)
+Message-Id: <20211103194030.186361-1-wasin@wasin.io>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+X-SG-EID: =?us-ascii?Q?zTXXJmbXDq374aSgSvBccBfxYYlnkEq2csSLV7s2zvJ+VzBfif=2FVK=2F1r3dRlUa?=
+ =?us-ascii?Q?HKdShZ1bg6oUZY4XHrArWueRVE7jMGgZ1VYg0QD?=
+ =?us-ascii?Q?cSPDV1eRiJWkMBYN4de3aCS2+4KqVJ467DBpoSD?=
+ =?us-ascii?Q?cC3f4bAEIOkK6aGaLohT7rdqg8N=2F5GGNSvixb11?=
+ =?us-ascii?Q?M4n=2FRAnoGUA45y6hTfi+Ji0YX+S06f+ag+EHb3a?=
+ =?us-ascii?Q?dBjFNPjb1zbm9x8mihNb0K3+zWAQBwTxjazKJCo?=
+ =?us-ascii?Q?2=2FzFwcjA0=2FieqQGl+1B1w=3D=3D?=
+To:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     mhiramat@kernel.org, Wasin Thonkaew <wasin@wasin.io>
+X-Entity-ID: 9qDajD32UCSRojGE52wDxw==
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Fix a spelling mistake "ganerating" -> "generating".
+Remove trailing semicolon for a macro ALLOW_ERROR_INJECTION to fix a
+coding style issue.
 
-> Add checks for the three fields in Hyper-V's hypercall params that must
-> be zero.  Per the TLFS, HV_STATUS_INVALID_HYPERCALL_INPUT is returned if
-> "A reserved bit in the specified hypercall input value is non-zero."
->
-> Note, the TLFS has an off-by-one bug for the last reserved field, which
-> it defines as being bits 64:60.  The same section states "The input field
-> 64-bit value called a hypercall input value.", i.e. bit 64 doesn't
-> exist.
+Signed-off-by: Wasin Thonkaew <wasin@wasin.io>
+---
+ include/asm-generic/error-injection.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This version are you looking at? I can't see this issue in 6.0b
-
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/hyperv.c             | 5 +++++
->  include/asm-generic/hyperv-tlfs.h | 6 ++++++
->  2 files changed, 11 insertions(+)
->
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index ad455df850c9..1cdcf3ad5684 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -2228,6 +2228,11 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->  		goto hypercall_complete;
->  	}
->  
-> +	if (unlikely(hc.param & HV_HYPERCALL_RSVD_MASK)) {
-> +		ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		goto hypercall_complete;
-> +	}
-> +
->  	if (hc.fast && is_xmm_fast_hypercall(&hc)) {
->  		if (unlikely(hv_vcpu->enforce_cpuid &&
->  			     !(hv_vcpu->cpuid_cache.features_edx &
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-> index 1ba8e6da4427..92b9ce5882f8 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -183,11 +183,17 @@ enum HV_GENERIC_SET_FORMAT {
->  #define HV_HYPERCALL_FAST_BIT		BIT(16)
->  #define HV_HYPERCALL_VARHEAD_OFFSET	17
->  #define HV_HYPERCALL_VARHEAD_MASK	GENMASK_ULL(26, 17)
-> +#define HV_HYPERCALL_RSVD0_MASK		GENMASK_ULL(31, 27)
->  #define HV_HYPERCALL_REP_COMP_OFFSET	32
->  #define HV_HYPERCALL_REP_COMP_1		BIT_ULL(32)
->  #define HV_HYPERCALL_REP_COMP_MASK	GENMASK_ULL(43, 32)
-> +#define HV_HYPERCALL_RSVD1_MASK		GENMASK_ULL(47, 44)
->  #define HV_HYPERCALL_REP_START_OFFSET	48
->  #define HV_HYPERCALL_REP_START_MASK	GENMASK_ULL(59, 48)
-> +#define HV_HYPERCALL_RSVD2_MASK		GENMASK_ULL(63, 60)
-> +#define HV_HYPERCALL_RSVD_MASK		(HV_HYPERCALL_RSVD0_MASK | \
-> +					 HV_HYPERCALL_RSVD1_MASK | \
-> +					 HV_HYPERCALL_RSVD2_MASK)
->  
->  /* hypercall status code */
->  #define HV_STATUS_SUCCESS			0
-
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-
+diff --git a/include/asm-generic/error-injection.h b/include/asm-generic/error-injection.h
+index 7ddd9dc10ce9..fbca56bd9cbc 100644
+--- a/include/asm-generic/error-injection.h
++++ b/include/asm-generic/error-injection.h
+@@ -20,7 +20,7 @@ struct pt_regs;
+ 
+ #ifdef CONFIG_FUNCTION_ERROR_INJECTION
+ /*
+- * Whitelist ganerating macro. Specify functions which can be
++ * Whitelist generating macro. Specify functions which can be
+  * error-injectable using this macro.
+  */
+ #define ALLOW_ERROR_INJECTION(fname, _etype)				\
+@@ -29,7 +29,7 @@ static struct error_injection_entry __used				\
+ 	_eil_addr_##fname = {						\
+ 		.addr = (unsigned long)fname,				\
+ 		.etype = EI_ETYPE_##_etype,				\
+-	};
++	}
+ 
+ void override_function_with_return(struct pt_regs *regs);
+ #else
 -- 
-Vitaly
+2.25.1
 
