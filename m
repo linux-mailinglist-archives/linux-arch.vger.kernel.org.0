@@ -2,112 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEAE445944
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Nov 2021 19:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 551CD445987
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Nov 2021 19:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbhKDSH2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Nov 2021 14:07:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54762 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232102AbhKDSH2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 4 Nov 2021 14:07:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1366F610E7;
-        Thu,  4 Nov 2021 18:04:47 +0000 (UTC)
-Date:   Thu, 4 Nov 2021 18:04:45 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
+        id S234127AbhKDSXY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Nov 2021 14:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234101AbhKDSXY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Nov 2021 14:23:24 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417DCC061714;
+        Thu,  4 Nov 2021 11:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=CTMgu48D5xrqZkVRkHn0Ok/wYvOBUq4l67vNS1ppUJ0=; b=wOY07QEE2cjfGMszfimeZ58LkM
+        1I6fsH17SoGntuT+2pW1LYNpfvAHf9Odniy7Em5lz8tNlhapR7b4lWhb3f8Ejsn7WbjyiCUt9AJq7
+        lZBgIxLxO0HU91Ope1VmZ1etWszOc0KIjPAt2Cj6c55y4/iHbVJxYYTsD2IfUWPPux1bPS2Bc57pf
+        cJIF0nJezqfm2nQ7VbYyWleceN1fib/ju42YRHdpDA3XL4q/r7nswjIXhgrPyil/3TfC7ykXaef4h
+        hFAaQqiPpeLecazmT4xNltLizhR81mEUu6KEwQxGFkCSZlP5dVMjQtR7I7IMVQCj93r6FVpiSVlcg
+        XPfDVYow==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55488)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mihLs-0006Dz-Gt; Thu, 04 Nov 2021 18:20:40 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mihLp-0007Ws-JS; Thu, 04 Nov 2021 18:20:37 +0000
+Date:   Thu, 4 Nov 2021 18:20:37 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
         Christoph Hellwig <hch@lst.de>,
         linux-arch <linux-arch@vger.kernel.org>,
         Ira Weiny <ira.weiny@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Russell King <linux@armlinux.org.uk>
+        Thomas Gleixner <tglx@linutronix.de>
 Subject: Re: flush_dcache_page vs kunmap_local
-Message-ID: <YYQgvTn2NQdZK2Ku@arm.com>
+Message-ID: <YYQkdUcSLFPlzGFH@shell.armlinux.org.uk>
 References: <YYP1lAq46NWzhOf0@casper.infradead.org>
  <CAHk-=wiKac4t-fOP_3fAf7nETfFLhT3ShmRmBq2J96y6jAr56Q@mail.gmail.com>
  <YYQQPuhVUHqfldDg@arm.com>
  <CAHk-=wiDjjL50BBU=i8BFz3Rv5+-pGysEyCD+mcc_K_g0140oQ@mail.gmail.com>
+ <YYQgvTn2NQdZK2Ku@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wiDjjL50BBU=i8BFz3Rv5+-pGysEyCD+mcc_K_g0140oQ@mail.gmail.com>
+In-Reply-To: <YYQgvTn2NQdZK2Ku@arm.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+ rmk
-
-On Thu, Nov 04, 2021 at 10:08:40AM -0700, Linus Torvalds wrote:
-> On Thu, Nov 4, 2021 at 9:54 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > We do. flush_dcache_page() is not just about virtual caches. On arm32/64
-> > (and powerpc), even with PIPT-like caches, we use it to flag a page's
-> > D-cache as no longer clean. Subsequently in set_pte_at(), if the mapping
-> > is executable, we do the cache maintenance to ensure the I and D caches
-> > are coherent with each other.
+On Thu, Nov 04, 2021 at 06:04:45PM +0000, Catalin Marinas wrote:
+> The cachetlb.rst doc states the two cases where flush_dcache_page()
+> should be called:
 > 
-> Ugh,. ok, so we have two very different use-cases for that function.
+> 1. After writing to a page cache page (that's what we need on arm64 for
+>    the I-cache).
 > 
-> Perhaps more importantly, they have hugely different semantics. For
-> you, it's about pages that can be mapped executable, so it's only
-> relevant for mappable pages.
-> 
-> For the traditional broken pure virtual cache case, it's not about
-> user mappings at all, it's about any data structure that we might have
-> in highmem.
-> 
-> Of course, I think we got rid of most of the other uses of highmem,
-> and we no longer put any "normal" kernel data in highmem pages. There
-> used to be patches that did inodes and things like that in highmem,
-> and they actually depended on the "cache the virtual address so that
-> it's always the same" behavior.
+> 2. Before reading from a page cache page and user mappings potentially
+>    exist. I think arm32 ensures the D-cache user aliases are coherent
+>    with the kernel one (added rmk to confirm).
 
-We can still have ptes in highmem.
-
-> > I wouldn't add this call to kmap/kunmap_local(), it would be a slight
-> > unnecessary overhead (we had a customer complaining about kmap_atomic()
-> > breaking write-streaming, I think the new kmap_local() solved this
-> > problem, if in the right context).
-> 
-> kmap_local() ends up being (I think) fundamentally broken for virtual
-> cache coherency anyway, because two different CPU's can see two
-> different virtual addresses at the same time for the same page (in
-> ways that the old kmap interfaces could not).
-
-Luckily I don't think we have a (working) SMP system with VIVT caches.
-On UP, looking at arm, for VIVT caches it flushes the D-cache before
-kunmap_local() (arch_kmap_local_pre_unmap()). So any new kmap_local()
-would see the correct data even if it's in a different location.
-
-> So maybe the answer is "let's forget about the old virtual cache
-> coherence issue, and make it purely about the I$ mapping case".
-
-We still have VIVT processors supported in the kernel and a few where
-the VIPT cache is aliasing (some ARMv6 CPUs). On these,
-flush_dcache_page() is still used to ensure the user aliases are
-coherent with the kernel one, so it's not just about the I/D-cache
-coherency.
-
-> At that point, kmap is irrelevant from a virtual address standpoint
-> and so it doesn't make much sense to fliush on kunmap - but anybody
-> who writes to a page still needs that flush_dcache_page() thing.
-
-The cachetlb.rst doc states the two cases where flush_dcache_page()
-should be called:
-
-1. After writing to a page cache page (that's what we need on arm64 for
-   the I-cache).
-
-2. Before reading from a page cache page and user mappings potentially
-   exist. I think arm32 ensures the D-cache user aliases are coherent
-   with the kernel one (added rmk to confirm).
-
-Now, whether the kernel code does call flush_dcache_page() in the above
-scenarios is another matter. But if we are to remove the 2nd case, for
-VIVT/aliasing-VIPT hardware we'd need kmap() to perform some cache
-maintenance even if the page is not in highmem.
+Yes, where necessary, we flush the user aliases in flush_dcache_page().
 
 -- 
-Catalin
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
