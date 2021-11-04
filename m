@@ -2,90 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB1644556C
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Nov 2021 15:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6432C4455FB
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Nov 2021 16:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbhKDOkp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Nov 2021 10:40:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54108 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229505AbhKDOko (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 4 Nov 2021 10:40:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BE527611C1;
-        Thu,  4 Nov 2021 14:38:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636036686;
-        bh=rmBQFomXsrGJIILa2DpkQR/DR6Udwpk1v8Ga+r3mhRw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UdRsPlIzC3DXMGfaO49eYPa1kjF6w5MW46p2T5LprCRtloeAKcHgnbpmmcmPQMqLQ
-         24Sh9cXgFvZnzW1masrSatXL1dl5g7xCqqdaJ7ZjcIiW8ss3N+cZl6vOqSJTKED6lc
-         xprY8DN+sCYzUpXuP6InY2xY0G41jeJRT8MkPxiOpNj16gV4iZideY6As8r4x0cPAq
-         2AhNC8T8PjGEbBag69o1gl0g2IIlF6ACCSIW0VKy6+FRWLglS0RYsUffl8lYlSj0nI
-         khi5gInFQ46rAl8OHlC1oQ5jUFs1RDg0UmAtDnR/ShzTeEdVuV7EQ+xS5AgBEXTXSD
-         VZYdY5qSCyTfw==
-Date:   Thu, 4 Nov 2021 23:38:01 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Wasin Thonkaew <wasin@wasin.io>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mhiramat@kernel.org
-Subject: Re: [PATCH RESEND] include/asm-generic/error-injection.h: fix a
- spelling mistake, and a coding style issue
-Message-Id: <20211104233801.6704f27a856b06242da80cc6@kernel.org>
-In-Reply-To: <20211103194030.186361-1-wasin@wasin.io>
-References: <20211103194030.186361-1-wasin@wasin.io>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S231168AbhKDPGO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Nov 2021 11:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229920AbhKDPGN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Nov 2021 11:06:13 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8EFC061714;
+        Thu,  4 Nov 2021 08:03:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=ZTxXopUmkY1B4mLUzgPVJBNJwKWxxnzj2Sovw24wOoc=; b=kNcXKRBS3xPEMduGlZBk7OiC4l
+        UlIRsZ/HYitqc0YSiAfQiNxmg89EqIttpiT4eJHxAwffCnNTDbdaFkJGrikp/c3XYgyP6QljYld9i
+        ug6w9H7556vzkvMcfygGkzj7e/bu+NrZp3lAfE1+uYuu0Mvi9ufMbsIQinP27Eku2KLVso0p6iEyH
+        ePyJ/CBi62bJq+w0JafU4jyLi1dzE4Kq7meWAr/gJfozu9XcRfmP3N3Dxe1Jh3HtKbiTDz52XX/Ws
+        I5vinVxtKVg8mj/F7GpI9NncAd11fTK2HS3pF65G5TgeQBoAqwdmCJ5cpi1CIinZWC6n82yRSRz/M
+        SD0hvNyQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mieEG-005wYd-CL; Thu, 04 Nov 2021 15:01:40 +0000
+Date:   Thu, 4 Nov 2021 15:00:36 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-arch@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: flush_dcache_page vs kunmap_local
+Message-ID: <YYP1lAq46NWzhOf0@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 03 Nov 2021 19:42:36 +0000 (UTC)
-Wasin Thonkaew <wasin@wasin.io> wrote:
+In https://lore.kernel.org/lkml/CAHk-=wijdojzo56FzYqE5TOYw2Vws7ik3LEMGj9SPQaJJ+Z73Q@mail.gmail.com/
+Linus offers the opinion that kunmap calls should imply a
+flush_dcache_page().  Christoph added calls to flush_dcache_page()
+in commit 8dad53a11f8d.  Was this "voodoo programming", or was there
+a real problem being addressed?
 
-> Fix a spelling mistake "ganerating" -> "generating".
-> Remove trailing semicolon for a macro ALLOW_ERROR_INJECTION to fix a
-> coding style issue.
-
-This looks good to me.
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thanks!
-
-> 
-> Signed-off-by: Wasin Thonkaew <wasin@wasin.io>
-> ---
->  include/asm-generic/error-injection.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/asm-generic/error-injection.h b/include/asm-generic/error-injection.h
-> index 7ddd9dc10ce9..fbca56bd9cbc 100644
-> --- a/include/asm-generic/error-injection.h
-> +++ b/include/asm-generic/error-injection.h
-> @@ -20,7 +20,7 @@ struct pt_regs;
->  
->  #ifdef CONFIG_FUNCTION_ERROR_INJECTION
->  /*
-> - * Whitelist ganerating macro. Specify functions which can be
-> + * Whitelist generating macro. Specify functions which can be
->   * error-injectable using this macro.
->   */
->  #define ALLOW_ERROR_INJECTION(fname, _etype)				\
-> @@ -29,7 +29,7 @@ static struct error_injection_entry __used				\
->  	_eil_addr_##fname = {						\
->  		.addr = (unsigned long)fname,				\
->  		.etype = EI_ETYPE_##_etype,				\
-> -	};
-> +	}
->  
->  void override_function_with_return(struct pt_regs *regs);
->  #else
-> -- 
-> 2.25.1
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
