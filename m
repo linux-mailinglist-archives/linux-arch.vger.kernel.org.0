@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A3344B356
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Nov 2021 20:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCAB44B3A7
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Nov 2021 20:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242002AbhKITln (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Nov 2021 14:41:43 -0500
-Received: from mail-cusazon11021018.outbound.protection.outlook.com ([52.101.62.18]:26783
+        id S244087AbhKIUCa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Nov 2021 15:02:30 -0500
+Received: from mail-cusazon11021021.outbound.protection.outlook.com ([52.101.62.21]:50723
         "EHLO na01-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231249AbhKITlm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 9 Nov 2021 14:41:42 -0500
+        id S244043AbhKIUC3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 9 Nov 2021 15:02:29 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QoxTWKwgMEqR6xQDkbqalPFfWhBndAlAvzAS1idKXXFAXOBP5K93RoZkbFCe0fDwJnTpFSdgYbUi5wyOSePFEeoenprkUGYln/L2/RS6kKOXMVl5BL+wjSu/iy0IC0NSrWBKGZnkkU6KlYj0tesUWKLoC/L/Zfc4IAIYGhw1ShC+c+Y8ra1cTm1+NqEKVhsR7JCUxiEhYX1+RzmwrT60aopcBVPRVCeoW7hdKfnDPH4Tz240P5u3AwjXLfQraO57yAmMSCQuc9FVcfBErPtJNDK42DbdXDGtd+hoc42zgx37KvOeW1YZi8smz0IDXVyeNn0zMvRveMinEl2wUmQ6ZQ==
+ b=LcKp+F9L99yclt8DIfFfVlCczJJVrS7itaiZUPow0X8KErhG33nTKsLIO2eAY5nHSozhzOnCyAYz5lK1KDhGdDhSTUg6Kcd0yBCwvJhhKaD3whpYs9zwB6TqUdjE1X5TuX76u2mE6wrAghzEviL6T+aRe1EQJQP2HgficgwFwC2y31+1KuFtkn63tFQIyxTxPPCthQfIVT75TV7U6I4xF695+7/ei0aTYnE4E1JdgyorCr5dxSd8JeW9t6+DK8hYgbEomM+IHLakN0nYPzSA+9igQw/FxHnXoLMV+ZF9dwzJ2YEadxa/H8o0orVAtNCAiEpYa3mwnY8QDSn0Ru1FWA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9o+JExxJax92CQkzT6VOdtUJFCJb7mhds/1xyi5mL5I=;
- b=EGgs1rK2SQJzKx03XRMdE5rEVDp3wlGX7SDlGM11BkcqjYO9p8HaEi/FRpX+pw576wflUMtFjJhSeYEpxqgHMG7Sg3MTFV/L3xky55G5lmbbzaQp7S1iUk2XjAOZNbsAuAJmUE99/mUwUNf8O0KkCgcrb3saP82f7mfzhRD7dHWVZImWgqOWPmLwekGKbLdqdxlW19Fjj9PzzmOgTfH2RvdqjgxJ5XKViwx8l6mo7IjafSqPdRVPa7Pg3+7UrV6Wy2hrHXYrqt/AfHRCDyTUqrKgAzUR/n+/BULZjdHkoo2M84DaXDUJ2pLJXJvlPiRkKRPmRQr8HmQ59TMRwbtuCA==
+ bh=KkL0OrppIFlT/RAj7nncL1hMiQrBflJGXZYlpB1R9QY=;
+ b=FacvhrtJwDs5kpIGe8Ye62i6K0FtFAb9b3vB8FeHuLB3j/JvYQc/k2J96xsIPqJ9AGjI/jYK2MnJvlvdIcKU8KduzC+QQum5gq88BKm6aVjcSc1enWbJIrrQC5hqJFfvMlRqKqg3QNP/2ZkZVS74cNsRoI1AnwN+/fuyUQHxDP2GSpuGMnHAEhLMHG84W4I11hEDqGdCuRzDPUIXySP/tWcWkzZDp+aDGLjLlgDdCBhEmY/XWfn5OJehRWWl/o2CxkjNdC1ui8plXau+9nmNBk/vNrzfN8q9m9VnRTLskjVU9DaU38xZ/6ACzPyAuNDXa9Pc6i4HJrzeMqEv0+36pQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9o+JExxJax92CQkzT6VOdtUJFCJb7mhds/1xyi5mL5I=;
- b=gYIAGJmOBIvF/hJcTaPVJ8ri7tXP5+A91NwrF/x/28iz5AnVlPGn5PjI7qInr9dhhssAwDsQ+1rRHkOvPZ8gmmwvaiNJFS9Fjs91aUeG5WtInahF/vi2uH2yQf6sRRMk8rxGlroqsBXASC6D8WTptTXY55/4jT3/GSntGno4CCg=
+ bh=KkL0OrppIFlT/RAj7nncL1hMiQrBflJGXZYlpB1R9QY=;
+ b=B5nLsllwqPl5ccq0QrS52ePwYJpNL0GocDpAc+NUURcIe5qMN3O7b1n1NgUezeQoxYn819USeF2zk7K9YeDgPPbph3RQ6YOmS/CDPxf7vH6UjzqZonSDRLTZc4NZkv98GyUQOmvjHKqmTviuONtyNIY59XX64vMb3/K/H72TNp8=
 Received: from BN8PR21MB1140.namprd21.prod.outlook.com (2603:10b6:408:72::11)
- by BN8PR21MB1140.namprd21.prod.outlook.com (2603:10b6:408:72::11) with
+ by BN6PR21MB0739.namprd21.prod.outlook.com (2603:10b6:404:93::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.3; Tue, 9 Nov
- 2021 19:38:52 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.3; Tue, 9 Nov
+ 2021 19:59:39 +0000
 Received: from BN8PR21MB1140.namprd21.prod.outlook.com
  ([fe80::48fb:8577:ba03:23a5]) by BN8PR21MB1140.namprd21.prod.outlook.com
  ([fe80::48fb:8577:ba03:23a5%9]) with mapi id 15.20.4713.005; Tue, 9 Nov 2021
- 19:38:52 +0000
+ 19:59:39 +0000
 From:   Sunil Muthuswamy <sunilmut@microsoft.com>
 To:     Marc Zyngier <maz@kernel.org>,
         Sunil Muthuswamy <sunilmut@linux.microsoft.com>
@@ -55,346 +55,249 @@ CC:     KY Srinivasan <kys@microsoft.com>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [EXTERNAL] Re: [PATCH v3 1/2] PCI: hv: Make the code arch neutral
- by adding arch specific interfaces
-Thread-Topic: [EXTERNAL] Re: [PATCH v3 1/2] PCI: hv: Make the code arch
- neutral by adding arch specific interfaces
-Thread-Index: AQHXwRPKo1wIQ2n9aUePdw/5KVA2saviH+yAgBmZKqA=
-Date:   Tue, 9 Nov 2021 19:38:51 +0000
-Message-ID: <BN8PR21MB1140E751D4B23E6DED1149C3C0929@BN8PR21MB1140.namprd21.prod.outlook.com>
+Subject: RE: [EXTERNAL] Re: [PATCH v3 2/2] arm64: PCI: hv: Add support for
+ Hyper-V vPCI
+Thread-Topic: [EXTERNAL] Re: [PATCH v3 2/2] arm64: PCI: hv: Add support for
+ Hyper-V vPCI
+Thread-Index: AQHXwRPJfc88rRp3+kGAJBZn+crNwKviKogAgBmVX8A=
+Date:   Tue, 9 Nov 2021 19:59:39 +0000
+Message-ID: <BN8PR21MB1140993E5135043F2542EAB7C0929@BN8PR21MB1140.namprd21.prod.outlook.com>
 References: <1634226794-9540-1-git-send-email-sunilmut@linux.microsoft.com>
-        <1634226794-9540-2-git-send-email-sunilmut@linux.microsoft.com>
- <87mtmyty6e.wl-maz@kernel.org>
-In-Reply-To: <87mtmyty6e.wl-maz@kernel.org>
+        <1634226794-9540-3-git-send-email-sunilmut@linux.microsoft.com>
+ <87lf2itwf3.wl-maz@kernel.org>
+In-Reply-To: <87lf2itwf3.wl-maz@kernel.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=2bcd0c2e-1986-4920-9d58-78652846cec1;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-11-09T19:11:38Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8c328f50-0b81-4974-972f-aca7e119fb51;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-11-09T19:36:02Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4ea16ecc-bd81-4fec-9452-08d9a3b88f2b
-x-ms-traffictypediagnostic: BN8PR21MB1140:
-x-microsoft-antispam-prvs: <BN8PR21MB11405F77713FF76422DAE5EBC0929@BN8PR21MB1140.namprd21.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: ca15191c-c247-4d9f-ae73-08d9a3bb7688
+x-ms-traffictypediagnostic: BN6PR21MB0739:
+x-microsoft-antispam-prvs: <BN6PR21MB0739D5638E225E30DE7FBF61C0929@BN6PR21MB0739.namprd21.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GcH9KjpWaRdn+XgjnxlhqEulewxDfzbCsIVw5liWfbP0bCyHuRq3MaPROXNPX7mszDXKVXjZeF9d0MWBxwmRMfVU2r2/LQmBsOqP6Arla4f64wf+sWgHkaPdiUDSAkMOxc7aDn32uWoAPeJEpTjsJOHjD2JkHUEHfDlWh6R+vjaSk2dUBrhvZ2jUrZBtMDFBBWJ0TrWO0DvWFM01b0qCfMxofdk3JUqYalwJ1ED2miM01c3ZdItY0JZ24gIFh30phbBtqw/CYfH5egrgtU1LhxgWa/2qa4CepJyQmgeFT4R33OphDD5h1nSFKPF47iIySAfoaN394BwnJv4QCuq+EljgaI6IZ0MraCBTPosEPgusdiBUoQWwfns67HLN2TW4WQW2MkfNF6hFnDD3EwL+VhU6khplnlClrpSBgfJmd2XPM0unUQjJRAfmdDK37tzdbhHsBmJgcaxl6nzJ/GZH7QYycmbU6oi7E+sAEiFlMM9aE6Cgd3Kz0cMhhRzsAHPNhxxHXERqchhAbS8ELd7+KHN879FxUP0jh1uJXriMEq+c/qIGrElZGZlwgpqVQoFziRthEE2LI+YFv4W/zF8vaiidJnF/nd6TiYEBSR5eVwlNpgg74uNxStvcf8jP670/gZN0Y3mMXw/6PIxuZOqpdLJZvg9Bqaskzs9FlBZ9PW9ixe04/t2+L/sYl1ESgtaqW3xRcDxvcGKMoD9esSZHhw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR21MB1140.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(52536014)(71200400001)(4326008)(8936002)(508600001)(5660300002)(53546011)(66476007)(82960400001)(2906002)(9686003)(186003)(38070700005)(38100700002)(66446008)(82950400001)(7696005)(110136005)(54906003)(83380400001)(33656002)(122000001)(8676002)(10290500003)(66556008)(66946007)(316002)(8990500004)(64756008)(6506007)(7416002)(76116006);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: qW0z3FhZnCDOCkeD49r+2ngIwcV5Cww0CvbWoGZWLxI5nCvllifKUlK2ExmIsKYyU3cSg3WFtR831NCHu5bFwbNcsTckuYNf9S403yTmFVp5pH37ziCjyHnzEXkndVAYpQQkqyDFUJF5XWneHSPDKoR/OEMWBmtXIL/cMxM8k3I8jYqNfd3165yVSGOgBRcoqQ/R/IZ2hgvxP+Pl6PDklhU1QmlglhCVb93KEtk320hWlA8Q9uQmfhuAkso2b1Tt+BuV1oX5rdxbU3mkoAv9u2kC3eNxvEE71+gzi1T5bBxN1orrURUfXIilymXdTkhSitUv2ZpkI0gmdQlmwch4VyIqojFX2UPKBXnwuAzjWkkMw37UZrgD9LS5PJMi6ju7nH1LazzZ/oKfWZTDQfBVwNX/1F0beFTXZaPPgLcpm2TX/tS0u70DvHyLlL7StcfeYMOshtIy2k7We+C04u/CNSGfSWKKsU/zd7JNMRSgxO7ittBaUzIyf1iQCpBiI0eHz6bcwrOzTBHoARl6y5bO8WoRnyfHHwXDG1MIXh4ab/4DuENbmKE9dWSHa0IZ8OKUrJTEcjBdx74qrWAV9ySg3AET5xu3Tzr21/Fx0se/CajZUGpQbeumBzYeySX3cMcl48Ckcaq1Kbe/moFfiV+RAPsePT+YY86bojSC37Q+xkLJpDSZO46V0R3BvwHgIYyR1Q9kNZCrzWnejd2IoI6gcQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR21MB1140.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(64756008)(55016002)(66476007)(66556008)(7416002)(7696005)(66946007)(83380400001)(8936002)(71200400001)(8990500004)(66446008)(53546011)(86362001)(9686003)(52536014)(316002)(6506007)(186003)(8676002)(10290500003)(33656002)(82950400001)(110136005)(76116006)(38070700005)(82960400001)(54906003)(508600001)(5660300002)(4326008)(122000001)(38100700002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pcRDXs/07I0USwnaA+X624acMkLRjzSPpYqubqUx7JSxL2+F4aSk93Su9zch?=
- =?us-ascii?Q?RzEHX5jD/3UXB9s7UYKvGy3kiFGyZDCNRfHAdbYzs2vNyniZvoHLsM61hssj?=
- =?us-ascii?Q?/QlGpA50o2XzOXf+BXpunAoJpz16xzauGhL5BSZnuKFphiK+ubHV1x94Racn?=
- =?us-ascii?Q?gjSjWoj7+x2Ky84g1zFLBjU8f3HnNwqUkJniN+lqtNTqnMsMZrIjNdSBBMPE?=
- =?us-ascii?Q?ED4gQxWnOBU781DXE69/x95DyAvgNHyh4mz7fQh9+KRnLhrjHzSqIIO/6bM6?=
- =?us-ascii?Q?kc17FJa2esgfQl3Loul5ABzQ+mUiKO8QclyBrq4fMCnNcn80q0awiKDktjy0?=
- =?us-ascii?Q?MtiksxrBWcNHPiTRKCOGXn+ovl9v1fy/CVCXM6B4NHuZNXWkEyXQUP/WqMgX?=
- =?us-ascii?Q?TEarauwYRcypqlcgELpp/RdgsWUnzfZMBLTv8CDFK9FLsSE4m0RZ8FdgXq1e?=
- =?us-ascii?Q?rCrgh/fVcATWxSOxUtDF9Afk+i51FAvcl/tAeXr9NLE6HkzMxCbmNkNEbpkM?=
- =?us-ascii?Q?YQcZfNyddk+C+jIUio22hOtTZnzTsJRr2pFpsMtmE21AQuG1hrgmemGHTr70?=
- =?us-ascii?Q?93afUQ1pnI+rDgDHGVwLQewDq5SQnQKXZhwGQ1O1LIF7QOSLgplSkAJTYZYj?=
- =?us-ascii?Q?6iV+5QQRIQ1t5zBuLW6sfuWJi+mYsWnZSzuKDrZv0ub/2ItUsgAC4ywULgdn?=
- =?us-ascii?Q?n5FbCzlDZd7Lc4Ia9MCb6DsTj84Z73II/HCTPsVQT5Q7T8KHUT5oG1hnFriA?=
- =?us-ascii?Q?lkPn5JQEDw4/KJFxz15Fvd+qwo9HlWwRKa4DEPiVzDhlYUUMQiIyUeIbfRrJ?=
- =?us-ascii?Q?n+8HThdCO7BgdMYqCXv5k1Mwd6O2Jf3pMUjW83VoGraY+x7CGY+v2gcKo/t0?=
- =?us-ascii?Q?0SD1kQNEt2PIak1Rg5OZ+OXYIA7MguMJ5WpdVJzc477+mUL9bI8Z3nI7dCLu?=
- =?us-ascii?Q?XdxIikKnVb9d990H0dZP3hfFwNbPcD0ITXjaRYIOJ1NyfjAu0MzfT43896F3?=
- =?us-ascii?Q?X5dIkDTrsALJBlPpnltYCrJ7lakwzdzHJZGAQmJK7iYEkrxRIu1jOg/Q0dlk?=
- =?us-ascii?Q?fvz8qH0LfTC7RJFYjONlCO9oLgFJQSmwcX/7MmxPG1XQKQ8A4N4/0zU83nmt?=
- =?us-ascii?Q?n6T4oWARFWS7yMGDQsFrPOGTBG61tGap4tNkE63iStM4QVhuH4/+TDy6gQst?=
- =?us-ascii?Q?xUEYtcnFz2zpNLG8Dc0AWP6RM7ac5EvkR/1jCjHWsXj9YwGt4rNCj7teVfT9?=
- =?us-ascii?Q?7qk1qWctisgghk22cq1GUYCG4/fLBDqzAFLuQv5WEmpCRYUB6J6y6z6TbtIH?=
- =?us-ascii?Q?xfB/PWnHtXzJ9/gIxXywFO+yroTUfrtaKiR58qcRrLiBn9qSbuPLIx46so3B?=
- =?us-ascii?Q?Yb1cFBiYp0QF9NoshgakZHvn0zw3Ko0JG87j9q1liG2X8dx6dqICN9gDOt4K?=
- =?us-ascii?Q?bOgcY7bs01ikj+zyEfYznt+xWlIq3TSINDhrOOqNjHDVNCRXHWWQRqQzaIqt?=
- =?us-ascii?Q?7iXqP+qsxijltySK4cfJIH7K3565h0/TRadrDaVl5Tb4pu/BIOlYrYIN0gC+?=
- =?us-ascii?Q?Vr0gk4qZhdE8fBrlvWX50hR802LQoTSirwNxWTPeC1Eg5EC4OOLpNobY5DJf?=
- =?us-ascii?Q?kY71ObuYI93qIdcxWMLCuPTKFBNtsRItW2IcaXChDFn9BoEriEVUNRMYoDYF?=
- =?us-ascii?Q?ewEgPG8mSsaSJ2SBrWzIA+iSSfvCQcDP9SZgNnE1af/o9atftUsLwsWqSfcT?=
- =?us-ascii?Q?1+ccYgjPxg=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8EhWZ0B3sepaRrjyTAOyI9lq21ubSzlDU1COcpinTJJD+aerWA6XWVElBDHK?=
+ =?us-ascii?Q?+Bicgq+cxnQ3LWzuKXqV3lH0GuZvsLDJtXuwGfCalsl9HOY55wyCztiLB9HN?=
+ =?us-ascii?Q?tJTg5ALNt5XnRCqszlTw0nD7Z+xDczMPbkBVVZ0tVBweVWd4NF5WZ8pTtorn?=
+ =?us-ascii?Q?uuSYiV0JpAWmjaunGY38KUlD/RlObFqj9p1mdWMq5ursR+OOyHWZhQhlT1lB?=
+ =?us-ascii?Q?NmcUEFVqGhSPgOEljunyfFoADEKSfhfBgr6gcijKjftxdH/LJd/ZDTNouU6o?=
+ =?us-ascii?Q?A/TcNQ36q7BR7MeunnZVPl1hpemlGORstBusNPTJwB4Cp76ta0zNQk1MI+OV?=
+ =?us-ascii?Q?7JVL5M7PNhOfhF0KjYAIY6DhhpTP0xvt30lmedtqgU34XwBit23+i59pzurS?=
+ =?us-ascii?Q?kajvhfaHrAselETXGljgLaaQPHtCJNeADpMlGhMHroL863zVqgOJwF6tT4jl?=
+ =?us-ascii?Q?UI+avnZ3Q6iDZ8MfHC1Oto4E8/7eRFRsyg0I5pZs/VtlUErnBUreNAx26TW2?=
+ =?us-ascii?Q?cH+wSV1PoWdnVzuHWeOkubBX5cDpPJ4LNQjGUtlGEvitQYCAws8f4AOCQehp?=
+ =?us-ascii?Q?y+6vs8BhPSe51Ipni8In7Doql51Rjjeshg157+u4J0DXOq5gfQXjNjAXFoxN?=
+ =?us-ascii?Q?sLucXXuYbcyp/Gm3/1/EUNY8b3NKjKFgAMcOlaVWtmiKjVQ1VDnsXkdLr4JA?=
+ =?us-ascii?Q?mE1U2Amfe1yocSyb61ezqQUeRSweCCKpyJAI9aXi6sfjgMoDvwh32+so9fxE?=
+ =?us-ascii?Q?sY6SFeZ9ezRr10PYsxH/6U8otunBeQecOeKsOUEoViZ3JZq8QuYhdzyetHZc?=
+ =?us-ascii?Q?m8fDU9elRzdprwj6ru0thY88I4mu5PCqTPtkj8HCyrP7OS3X83UY61jKaqD+?=
+ =?us-ascii?Q?Vbhzj9vPQqQxaASmR6wCU3oYaOS2Ab+4CA/ZfDrr0x48+B4l6rjTNCPnqjj1?=
+ =?us-ascii?Q?Bw8jO1dz8JCuMtLjZ0hGc4ClDun5b2wvg8zxGcPO7lEPlFSFT3FIl35QFQIU?=
+ =?us-ascii?Q?LxQBQKmbBq2uwhxipAy0Hvc5tAmRAEGp7z5nsAUBRQ6ZBUQwmJgAsEjDNAUL?=
+ =?us-ascii?Q?PIJWYPGrH3lV8MmVtORty2BxLFMxZhJBg/04CmglMlkNI/mwupWx8KcpOrnm?=
+ =?us-ascii?Q?TWy9WAU3rKgZRzYLDnVKv8A8GFBGlwlc5O9JEllBq8hZui2qhRx51NKYb8FE?=
+ =?us-ascii?Q?lyeiYbjU068Xez46JhOM1lngzyti6QPQ66v3Z2XZazBfKyzFXuLfPdttQ4nD?=
+ =?us-ascii?Q?VAcOuQOGHlC7Jx18lFW87lsmL3cqw9/JoZBKV5gx7midsgENN8PIIAONgdnq?=
+ =?us-ascii?Q?KEINp5YkhNg08AnmrljFY+MOlrHGNyREo+0d+yuoZfS0h5eZGvDUaBDFF/o+?=
+ =?us-ascii?Q?54s7MCHDm/RPSqDhe10/Wi4E3hG36gA9zZBQFnsr8UT1LPkn9GI0mP1A3RlV?=
+ =?us-ascii?Q?iF/QRU3AcX48RNrS3pJXTgwzWP6OsjBUf25Ar0LPSF+IIf5HtoYIFny+3Ke/?=
+ =?us-ascii?Q?TiYYrN89a/mgh2yIdt7laJb7mlyoL2huRUzTPZ6deBPDcspO5Uc1wqV9vRwx?=
+ =?us-ascii?Q?Sg4Ufx2gH6H+0wtCuW27K9KsG1PqYq68WMg9AgS9B3RDsd/EtM01zRuKwVmG?=
+ =?us-ascii?Q?yFpOLQ2oEiD+WLJ5tnMgfDEtsBei21DOdb//CDRZheqLbfKKGPpHW2e27GFa?=
+ =?us-ascii?Q?DSW2+hX2a2T0LO+CLT4zXEJ8MMiF4eL7cJb7LQ7uXwM8JMitfVO0yy26iT92?=
+ =?us-ascii?Q?0u+g4UKfZg=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR21MB1140.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ea16ecc-bd81-4fec-9452-08d9a3b88f2b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2021 19:38:51.9444
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca15191c-c247-4d9f-ae73-08d9a3bb7688
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2021 19:59:39.0937
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: r0gxstcAw1OAbvav8Zt8Tl6+7IH87UW8VMMokX9nq3h1AKBS8Nita+sYRBstEwXE88hfeMqcEWV/lG3MMKFRv/ringasScrxk+u5YkIX1eY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR21MB1140
+X-MS-Exchange-CrossTenant-userprincipalname: WT6kld80Woftf71QEmomv6Bn4W8U/GKeU0Ioc/nq/MBYX3Fhoe1IzlJQEyul5yIYGMoXy3HRR239M9JrgQksMAZ/OU0lu8IdPAwOaSTUnvM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR21MB0739
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sunday, October 24, 2021 5:17 AM,
+On Sunday, October 24, 2021 5:55 AM,
 Marc Zyngier <maz@kernel.org> wrote:
 
 > > From: Sunil Muthuswamy <sunilmut@microsoft.com>
 > >
-> > Encapsulate arch dependencies in Hyper-V vPCI through a set of interfac=
-es,
-> > listed below. Adding these arch specific interfaces will allow for an
-> > implementation for other arch, such as ARM64.
+> > Add support for Hyper-V vPCI for ARM64 by implementing the arch specifi=
+c
+> > interfaces. Introduce an IRQ domain and chip specific to Hyper-v vPCI t=
+hat
+> > is based on SPIs. The IRQ domain parents itself to the arch GIC IRQ dom=
+ain
+> > for basic vector management.
 > >
-> > Implement the interfaces for X64, which is essentially just moving over=
- the
-> > current implementation.
+> > Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> > ---
+> > In v2 & v3:
+> >  Changes are described in the cover letter.
+> >
+> > +unsigned int hv_msi_get_int_vector(struct irq_data *irqd)
+> > +{
+> > +	irqd =3D irq_domain_get_irq_data(hv_msi_gic_irq_domain, irqd->irq);
+> > +
+> > +	return irqd->hwirq;
 >=20
-> Nit: use architecture names and capitalisation that match their use in
-> the kernel (arm64, x86) instead of the MS-specific lingo.
+> Really??? Why isn't this just:
+>=20
+> 	return irqd->parent_data->hwirq;
+>=20
+> instead of reparsing the whole hierarchy?
 
-Thanks, will fix in v4.
+Thanks, getting addressed in v4.
+
+> > +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
+> > +					  struct irq_data *irqd, bool reserve)
+> > +{
+> > +	/* All available online CPUs are available for targeting */
+> > +	irq_data_update_effective_affinity(irqd, cpu_online_mask);
+>=20
+> This looks odd. Linux doesn't use 1:N distribution with the GIC, so
+> the effective affinity of the interrupt never targets all CPUs.
+> Specially considering that the first irq_set_affinity() call is going
+> to reset it to something more realistic.
+>=20
+> I don't think you should have this at all, but I also suspect that you
+> are playing all sort of games behind the scenes.
+
+Thanks for the '1:N' comment. The reason for having this is that Hyper-V
+vPCI compose MSI msg code (i.e. 'hv_compose_msi_msg') needs to have
+some IRQ affinity to pass to the hypervisor. For x86, the 'x86_vector_domai=
+n'
+takes care of that in the 'x86_vector_activate' call. But, GIC v3 doesn't
+implement a '.activate' callback and so at the time of the MSI composition
+there is no affinity associated with the IRQ, which causes the Hyper-V
+MSI compose message to fail. The idea for doing the above was to have
+a temporary affinity in place to satisfy the MSI compose message until
+the GIC resets the affinity to something real. And, when the GIC will
+reset the affinity, the 'unmask' callback will cause the Hyper-V vPCI code
+to retarget the interrupt to the 'real' cpu.
+=20
+In v4, I am changing the ' hv_pci_vec_irq_domain_activate' callback to
+pick a cpu for affinity in a round-robin fashion. That will stay in affect
+until the GIC will set the right affinity and the vector will get retargete=
+d.
 
 > > +
-> > +#ifdef CONFIG_X86_64
+> > +	return 0;
+> > +}
+> > +
+> > +static const struct irq_domain_ops hv_pci_domain_ops =3D {
+> > +	.alloc	=3D hv_pci_vec_irq_domain_alloc,
+> > +	.free	=3D hv_pci_vec_irq_domain_free,
+> > +	.activate =3D hv_pci_vec_irq_domain_activate,
+> > +};
+> > +
 > > +int hv_pci_irqchip_init(struct irq_domain **parent_domain,
 > > +			bool *fasteoi_handler,
 > > +			u8 *delivery_mode)
 > > +{
-> > +	*parent_domain =3D x86_vector_domain;
-> > +	*fasteoi_handler =3D false;
-> > +	*delivery_mode =3D APIC_DELIVERY_MODE_FIXED;
+> > +	static struct hv_pci_chip_data *chip_data;
+> > +	struct fwnode_handle *fn =3D NULL;
+> > +	int ret =3D -ENOMEM;
+> > +
+> > +	chip_data =3D kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> > +	if (!chip_data)
+> > +		return ret;
+> > +
+> > +	mutex_init(&chip_data->map_lock);
+> > +	fn =3D irq_domain_alloc_named_fwnode("Hyper-V ARM64 vPCI");
+> > +	if (!fn)
+> > +		goto free_chip;
+> > +
+> > +	hv_msi_gic_irq_domain =3D acpi_irq_create_hierarchy(0,
+> HV_PCI_MSI_SPI_NR,
+> > +							  fn,
+> &hv_pci_domain_ops,
+> > +							  chip_data);
+> > +
+> > +	if (!hv_msi_gic_irq_domain) {
+> > +		pr_err("Failed to create Hyper-V ARMV vPCI MSI IRQ
+> domain\n");
+> > +		goto free_chip;
+> > +	}
+> > +
+> > +	*parent_domain =3D hv_msi_gic_irq_domain;
+> > +	*fasteoi_handler =3D true;
+> > +
+> > +	/* Delivery mode: Fixed */
+> > +	*delivery_mode =3D 0;
+>=20
+> I discussed this to death in the previous patch.
+
+Thanks, getting fixed in v4 as part of the move to pci-hyperv.c
+
 > > +
 > > +	return 0;
+> > +
+> > +free_chip:
+> > +	kfree(chip_data);
+> > +	if (fn)
+> > +		irq_domain_free_fwnode(fn);
+> > +
+> > +	return ret;
 > > +}
 > > +EXPORT_SYMBOL(hv_pci_irqchip_init);
->=20
-> Why do you need to export any of these symbols? Even if the two
-> objects are compiled separately, there is absolutely no need to make
-> them two separate modules.
->=20
-> Also, returning 3 values like this makes little sense. Pass a pointer
-> to the structure that requires them and populate it as required. Or
-> simply #define those that are constants.
-
-Thanks. In v4, I am moving everything back to pci-hyperv.c and this
-will get addressed as part of that.
-
 > > +
-> > +void hv_pci_irqchip_free(void) {}
-> > +EXPORT_SYMBOL(hv_pci_irqchip_free);
-> > +
-> > +unsigned int hv_msi_get_int_vector(struct irq_data *data)
+> > +void hv_pci_irqchip_free(void)
 > > +{
-> > +	struct irq_cfg *cfg =3D irqd_cfg(data);
+> > +	static struct hv_pci_chip_data *chip_data;
 > > +
-> > +	return cfg->vector;
-> > +}
-> > +EXPORT_SYMBOL(hv_msi_get_int_vector);
+> > +	if (!hv_msi_gic_irq_domain)
+> > +		return;
 > > +
-> > +void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
-> > +				struct msi_desc *msi_desc)
-> > +{
-> > +	msi_entry->address.as_uint32 =3D msi_desc->msg.address_lo;
-> > +	msi_entry->data.as_uint32 =3D msi_desc->msg.data;
-> > +}
-> > +EXPORT_SYMBOL(hv_set_msi_entry_from_desc);
-> > +
-> > +int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
-> > +		   int nvec, msi_alloc_info_t *info)
-> > +{
-> > +	return pci_msi_prepare(domain, dev, nvec, info);
-> > +}
-> > +EXPORT_SYMBOL(hv_msi_prepare);
+> > +	/* Host data cannot be null if the domain was created successfully */
+> > +	chip_data =3D hv_msi_gic_irq_domain->host_data;
+> > +	irq_domain_remove(hv_msi_gic_irq_domain);
 >=20
-> This looks like a very unnecessary level of indirection, given that
-> you end-up with an empty callback in the arm64 code. The following
-> works just as well and avoids useless callbacks:
+> No. Once an interrupt controller is enabled, it should never go away,
+> because we have no way to ensure that all the corresponding interrupts
+> are actually gone. Unless you can prove that at this stage, all
+> devices are gone and cannot possibly generate any interrupt, this is
+> actively harmful.
+
+Thanks for the comment. Getting fixed in v4.
+
+> >
+> > @@ -1597,6 +1602,7 @@ static struct irq_chip hv_msi_irq_chip =3D {
+> >  	.irq_compose_msi_msg	=3D hv_compose_msi_msg,
+> >  	.irq_set_affinity	=3D hv_set_affinity,
 >=20
-> #ifdef CONFIG_ARM64
-> #define pci_msi_prepare	NULL
-> #endif
+> This really is irq_chip_set_affinity_parent.
 
-Will get addressed in v4.
+Yes, but I didn't touch this because that is original code. But, I am updat=
+ing this
+in v4 now.
 
-> >
-> > +static struct irq_domain *parent_domain;
-> > +static bool fasteoi;
-> > +static u8 delivery_mode;
->=20
-> See my earlier comment about how clumsy this is.
-
-Thanks. Getting fixed in v4 as part of moving things back to pci-hyperv.c
-
-> >  	/*
-> > -	 * Honoring apic->delivery_mode set to APIC_DELIVERY_MODE_FIXED
-> by
-> > -	 * setting the HV_DEVICE_INTERRUPT_TARGET_MULTICAST flag results
-> in a
-> > +	 * For x64, honoring apic->delivery_mode set to
-> > +	 * APIC_DELIVERY_MODE_FIXED by setting the
-> > +	 * HV_DEVICE_INTERRUPT_TARGET_MULTICAST flag results in a
-> >  	 * spurious interrupt storm. Not doing so does not seem to have a
-> >  	 * negative effect (yet?).
->=20
-> And what does it mean on other architectures?
-
-The same applies to other architectures. Will address the comment update
-In v4.
-
-> >  	 */
-> > @@ -1347,7 +1349,7 @@ static u32 hv_compose_msi_req_v1(
-> >  	int_pkt->wslot.slot =3D slot;
-> >  	int_pkt->int_desc.vector =3D vector;
-> >  	int_pkt->int_desc.vector_count =3D 1;
-> > -	int_pkt->int_desc.delivery_mode =3D APIC_DELIVERY_MODE_FIXED;
-> > +	int_pkt->int_desc.delivery_mode =3D delivery_mode;
-> >
-> >  	/*
-> >  	 * Create MSI w/ dummy vCPU set, overwritten by subsequent retarget
-> in
-> > @@ -1377,7 +1379,7 @@ static u32 hv_compose_msi_req_v2(
-> >  	int_pkt->wslot.slot =3D slot;
-> >  	int_pkt->int_desc.vector =3D vector;
-> >  	int_pkt->int_desc.vector_count =3D 1;
-> > -	int_pkt->int_desc.delivery_mode =3D APIC_DELIVERY_MODE_FIXED;
-> > +	int_pkt->int_desc.delivery_mode =3D delivery_mode;
-> >  	cpu =3D hv_compose_msi_req_get_cpu(affinity);
-> >  	int_pkt->int_desc.processor_array[0] =3D
-> >  		hv_cpu_number_to_vp_number(cpu);
-> > @@ -1397,7 +1399,7 @@ static u32 hv_compose_msi_req_v3(
-> >  	int_pkt->int_desc.vector =3D vector;
-> >  	int_pkt->int_desc.reserved =3D 0;
-> >  	int_pkt->int_desc.vector_count =3D 1;
-> > -	int_pkt->int_desc.delivery_mode =3D APIC_DELIVERY_MODE_FIXED;
-> > +	int_pkt->int_desc.delivery_mode =3D delivery_mode;
-> >  	cpu =3D hv_compose_msi_req_get_cpu(affinity);
-> >  	int_pkt->int_desc.processor_array[0] =3D
-> >  		hv_cpu_number_to_vp_number(cpu);
-> > @@ -1419,7 +1421,6 @@ static u32 hv_compose_msi_req_v3(
-> >   */
-> >  static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *=
-msg)
-> >  {
-> > -	struct irq_cfg *cfg =3D irqd_cfg(data);
-> >  	struct hv_pcibus_device *hbus;
-> >  	struct vmbus_channel *channel;
-> >  	struct hv_pci_dev *hpdev;
-> > @@ -1470,7 +1471,7 @@ static void hv_compose_msi_msg(struct irq_data
-> *data, struct msi_msg *msg)
-> >  		size =3D hv_compose_msi_req_v1(&ctxt.int_pkts.v1,
-> >  					dest,
-> >  					hpdev->desc.win_slot.slot,
-> > -					cfg->vector);
-> > +					hv_msi_get_int_vector(data));
-> >  		break;
-> >
-> >  	case PCI_PROTOCOL_VERSION_1_2:
-> > @@ -1478,14 +1479,14 @@ static void hv_compose_msi_msg(struct irq_data
-> *data, struct msi_msg *msg)
-> >  		size =3D hv_compose_msi_req_v2(&ctxt.int_pkts.v2,
-> >  					dest,
-> >  					hpdev->desc.win_slot.slot,
-> > -					cfg->vector);
-> > +					hv_msi_get_int_vector(data));
-> >  		break;
-> >
-> >  	case PCI_PROTOCOL_VERSION_1_4:
-> >  		size =3D hv_compose_msi_req_v3(&ctxt.int_pkts.v3,
-> >  					dest,
-> >  					hpdev->desc.win_slot.slot,
-> > -					cfg->vector);
-> > +					hv_msi_get_int_vector(data));
-> >  		break;
-> >
-> >  	default:
-> > @@ -1601,7 +1602,7 @@ static struct irq_chip hv_msi_irq_chip =3D {
+> >  	.irq_ack		=3D irq_chip_ack_parent,
+> > +	.irq_eoi		=3D irq_chip_eoi_parent,
+> >  	.irq_mask		=3D hv_irq_mask,
+> >  	.irq_unmask		=3D hv_irq_unmask,
 > >  };
-> >
-> >  static struct msi_domain_ops hv_msi_ops =3D {
-> > -	.msi_prepare	=3D pci_msi_prepare,
-> > +	.msi_prepare	=3D hv_msi_prepare,
-> >  	.msi_free	=3D hv_msi_free,
-> >  };
-> >
-> > @@ -1625,12 +1626,13 @@ static int hv_pcie_init_irq_domain(struct
-> hv_pcibus_device *hbus)
-> >  	hbus->msi_info.flags =3D (MSI_FLAG_USE_DEF_DOM_OPS |
-> >  		MSI_FLAG_USE_DEF_CHIP_OPS | MSI_FLAG_MULTI_PCI_MSI |
-> >  		MSI_FLAG_PCI_MSIX);
-> > -	hbus->msi_info.handler =3D handle_edge_irq;
-> > -	hbus->msi_info.handler_name =3D "edge";
-> > +	hbus->msi_info.handler =3D
-> > +		fasteoi ? handle_fasteoi_irq : handle_edge_irq;
-> > +	hbus->msi_info.handler_name =3D fasteoi ? "fasteoi" : "edge";
 >=20
-> The fact that you somehow need to know what the GIC is using as a flow
-> handler is a sure sign that you are doing something wrong. In a
-> hierarchical setup, only the root of the hierarchy should ever know
-> about that. Having anything there is actively wrong.
+> Overall, please kill this extra module, move everything into
+> pci-hyperv.c and drop the useless abstractions. Once you do that, the
+> code will be far easier to reason about.
+>=20
 
-Thanks, comments below.
-
-> >  	hbus->msi_info.data =3D hbus;
-> >  	hbus->irq_domain =3D pci_msi_create_irq_domain(hbus->fwnode,
-> >  						     &hbus->msi_info,
-> > -						     x86_vector_domain);
-> > +						     parent_domain);
-> >  	if (!hbus->irq_domain) {
-> >  		dev_err(&hbus->hdev->device,
-> >  			"Failed to build an MSI IRQ domain\n");
-> > @@ -3531,13 +3533,21 @@ static void __exit exit_hv_pci_drv(void)
-> >  	hvpci_block_ops.read_block =3D NULL;
-> >  	hvpci_block_ops.write_block =3D NULL;
-> >  	hvpci_block_ops.reg_blk_invalidate =3D NULL;
-> > +
-> > +	hv_pci_irqchip_free();
-> >  }
-> >
-> >  static int __init init_hv_pci_drv(void)
-> >  {
-> > +	int ret;
-> > +
-> >  	if (!hv_is_hyperv_initialized())
-> >  		return -ENODEV;
-> >
-> > +	ret =3D hv_pci_irqchip_init(&parent_domain, &fasteoi, &delivery_mode)=
-;
-> > +	if (ret)
-> > +		return ret;
->=20
-> Having established that the fasteoi thing is nothing but a bug, that
-> the delivery_mode is a constant, and that all that matters is actually
-> the parent domain which is a global pointer on x86, and something that
-> gets allocated on arm64, you can greatly simplify the whole thing:
->=20
-> #ifdef CONFIG_X86
-> #define DELIVERY_MODE	APIC_DELIVERY_MODE_FIXED
-> #define FLOW_HANDLER	handle_edge_irq
-> #define FLOW_NAME	"edge"
->=20
-> static struct irq_domain *hv_pci_get_root_domain(void)
-> {
-> 	return x86_vector_domain;
-> }
-> #endif
->=20
-> #ifdef CONFIG_ARM64
-> #define DELIVERY_MODE	0
-> #define FLOW_HANDLER	NULL
-> #define FLOW_NAME	NULL
-> #define pci_msi_prepare	NULL
->=20
-> static struct irq_domain *hv_pci_get_root_domain(void)
-> {
-> 	[...]
-> }
-> #endif
-
-Thanks. I have followed the above suggestion in v4.
-
-> as once you look at it seriously, the whole "separate file for the IRQ
-> code" is totally unnecessary (as Michael pointed out earlier), because
-> the abstractions you are adding are for most of them unnecessary.
-
-V4 will get rid of the separate file for the IRQ chip and that's getting
-moved back to pci-hyperv.c and that should address this comment.
-Thanks.
+Thanks, yes, this is getting addressed in v4.
 
 - Sunil
