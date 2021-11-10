@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 519F544C204
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Nov 2021 14:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B868B44C20E
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Nov 2021 14:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbhKJNXW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Nov 2021 08:23:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46694 "EHLO mail.kernel.org"
+        id S231210AbhKJN3B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Nov 2021 08:29:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51284 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231162AbhKJNXW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 10 Nov 2021 08:23:22 -0500
+        id S231529AbhKJN3B (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 10 Nov 2021 08:29:01 -0500
 Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DAFEF6115A;
-        Wed, 10 Nov 2021 13:20:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A482961241;
+        Wed, 10 Nov 2021 13:26:13 +0000 (UTC)
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1mknWi-004cJz-PR; Wed, 10 Nov 2021 13:20:32 +0000
-Date:   Wed, 10 Nov 2021 13:20:32 +0000
-Message-ID: <87v91087vj.wl-maz@kernel.org>
+        id 1mkncB-004cLk-MV; Wed, 10 Nov 2021 13:26:11 +0000
+Date:   Wed, 10 Nov 2021 13:26:11 +0000
+Message-ID: <87tugk87m4.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
@@ -34,9 +34,10 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
         linux-arch@vger.kernel.org
 Subject: Re: [PATCH v4 2/2] arm64: PCI: hv: Add support for Hyper-V vPCI
-In-Reply-To: <1636496060-29424-3-git-send-email-sunilmut@linux.microsoft.com>
+In-Reply-To: <87v91087vj.wl-maz@kernel.org>
 References: <1636496060-29424-1-git-send-email-sunilmut@linux.microsoft.com>
         <1636496060-29424-3-git-send-email-sunilmut@linux.microsoft.com>
+        <87v91087vj.wl-maz@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -50,67 +51,78 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 09 Nov 2021 22:14:20 +0000,
-Sunil Muthuswamy <sunilmut@linux.microsoft.com> wrote:
+On Wed, 10 Nov 2021 13:20:32 +0000,
+Marc Zyngier <maz@kernel.org> wrote:
 > 
-> From: Sunil Muthuswamy <sunilmut@microsoft.com>
+> On Tue, 09 Nov 2021 22:14:20 +0000,
+> Sunil Muthuswamy <sunilmut@linux.microsoft.com> wrote:
+> > 
+> > From: Sunil Muthuswamy <sunilmut@microsoft.com>
+> > 
+> > Add support for Hyper-V vPCI for arm64 by implementing the arch specific
+> > interfaces. Introduce an IRQ domain and chip specific to Hyper-v vPCI that
+> > is based on SPIs. The IRQ domain parents itself to the arch GIC IRQ domain
+> > for basic vector management.
+> > 
+> > Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> > ---
+> > In v2, v3 & v4:
+> >  Changes are described in the cover letter.
+> > 
+> >  arch/arm64/include/asm/hyperv-tlfs.h |   9 ++
+> >  drivers/pci/Kconfig                  |   2 +-
+> >  drivers/pci/controller/Kconfig       |   2 +-
+> >  drivers/pci/controller/pci-hyperv.c  | 207 ++++++++++++++++++++++++++-
+> >  4 files changed, 217 insertions(+), 3 deletions(-)
 > 
-> Add support for Hyper-V vPCI for arm64 by implementing the arch specific
-> interfaces. Introduce an IRQ domain and chip specific to Hyper-v vPCI that
-> is based on SPIs. The IRQ domain parents itself to the arch GIC IRQ domain
-> for basic vector management.
+> [...]
 > 
-> Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
-> ---
-> In v2, v3 & v4:
->  Changes are described in the cover letter.
+> > +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
+> > +					  struct irq_data *irqd, bool reserve)
+> > +{
+> > +	static int cpu;
+> > +
+> > +	/*
+> > +	 * Pick a cpu using round-robin as the irq affinity that can be
+> > +	 * temporarily used for composing MSI from the hypervisor. GIC
+> > +	 * will eventually set the right affinity for the irq and the
+> > +	 * 'unmask' will retarget the interrupt to that cpu.
+> > +	 */
+> > +	if (cpu >= cpumask_last(cpu_online_mask))
+> > +		cpu = 0;
+> > +	cpu = cpumask_next(cpu, cpu_online_mask);
+> > +	irq_data_update_effective_affinity(irqd, cpumask_of(cpu));
 > 
->  arch/arm64/include/asm/hyperv-tlfs.h |   9 ++
->  drivers/pci/Kconfig                  |   2 +-
->  drivers/pci/controller/Kconfig       |   2 +-
->  drivers/pci/controller/pci-hyperv.c  | 207 ++++++++++++++++++++++++++-
->  4 files changed, 217 insertions(+), 3 deletions(-)
+> The mind boggles.
+> 
+> Let's imagine a single machine. cpu_online_mask only has bit 0 set,
 
-[...]
+single *CPU* machine
 
-> +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
-> +					  struct irq_data *irqd, bool reserve)
-> +{
-> +	static int cpu;
-> +
-> +	/*
-> +	 * Pick a cpu using round-robin as the irq affinity that can be
-> +	 * temporarily used for composing MSI from the hypervisor. GIC
-> +	 * will eventually set the right affinity for the irq and the
-> +	 * 'unmask' will retarget the interrupt to that cpu.
-> +	 */
-> +	if (cpu >= cpumask_last(cpu_online_mask))
-> +		cpu = 0;
-> +	cpu = cpumask_next(cpu, cpu_online_mask);
-> +	irq_data_update_effective_affinity(irqd, cpumask_of(cpu));
+> and nr_cpumask_bits is 1. This is the first run, and cpu is 1:
 
-The mind boggles.
+cpu is *obviously* 0:
 
-Let's imagine a single machine. cpu_online_mask only has bit 0 set,
-and nr_cpumask_bits is 1. This is the first run, and cpu is 1:
+>
+> 	cpu = cpumask_next(cpu, cpu_online_mask);
+> 
+> cpu is now set to 1. Which is not a valid CPU number, but a valid
+> return value indicating that there is no next CPU as it is equal to
+> nr_cpumask_bits. cpumask_of(cpu) will then diligently return crap,
+> which you carefully store into the irq descriptor. The IRQ subsystem
+> thanks you.
+> 
+> The same reasoning applies to any number of CPUs, and you obviously
+> never checked what any of this does :-(. As to what the behaviour is
+> when multiple CPUs run this function in parallel, let's not even
+> bother (locking is overrated).
+> 
+> Logic and concurrency issues aside, why do you even bother setting
+> some round-robin affinity if all you need is to set *something* so
+> that a hypervisor message can be composed? Why not use the first
+> online CPU? At least it will be correct.
 
-	cpu = cpumask_next(cpu, cpu_online_mask);
-
-cpu is now set to 1. Which is not a valid CPU number, but a valid
-return value indicating that there is no next CPU as it is equal to
-nr_cpumask_bits. cpumask_of(cpu) will then diligently return crap,
-which you carefully store into the irq descriptor. The IRQ subsystem
-thanks you.
-
-The same reasoning applies to any number of CPUs, and you obviously
-never checked what any of this does :-(. As to what the behaviour is
-when multiple CPUs run this function in parallel, let's not even
-bother (locking is overrated).
-
-Logic and concurrency issues aside, why do you even bother setting
-some round-robin affinity if all you need is to set *something* so
-that a hypervisor message can be composed? Why not use the first
-online CPU? At least it will be correct.
+Everything else holds.
 
 	M.
 
