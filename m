@@ -2,77 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDB544BBDA
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Nov 2021 07:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 519F544C204
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Nov 2021 14:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbhKJHAh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Nov 2021 02:00:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbhKJHAh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Nov 2021 02:00:37 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACF0C061764
-        for <linux-arch@vger.kernel.org>; Tue,  9 Nov 2021 22:57:50 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id j21so6365842edt.11
-        for <linux-arch@vger.kernel.org>; Tue, 09 Nov 2021 22:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ADBeHMZqTH62nFWWNT/x5IX/mdma2gIWEfeGe8rmz50=;
-        b=n77WjjZvJLdM9jQ7MIpfGYKxgs1YxANFbkKYflnyowzHae1GEKVrBWfSg9Fy+H6loD
-         34eoWrpjw5AIlxwI65eBNzR4egJcMLYxSGJc8UaeD+jZrAksnnbCDMUkEb+ySiqkPHLS
-         Gmh+iwgnBxmHLFQySXRZOKaqpRCooAmQoilvZaq9JdgYvX8ikDLXf8rVAJ3L46jproCy
-         spzdZdn5EQb4K51EfTaQmsUn48Iz0N5w0ot9v92GlwpWTMtXs1Zme1pjFGyNvS6MJud6
-         8nTG+CBWlUqZk7XlElbpdsptu0QOlJljkxyvI7Wxt3D5afoZ2JfiKunb9CRVEwizkT2r
-         y/qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=ADBeHMZqTH62nFWWNT/x5IX/mdma2gIWEfeGe8rmz50=;
-        b=yF1Qx7LyzPXGgh6aYb/tdQadUMaU81sMG8Ugs33CiGFND0AtlmKvPu5Gh4p5FQrUXL
-         CHYk829+LZTI7R8Xud2WtZ/vvh9WhMGHRyKvNPZmO7Ie9bjqApvE/p7BDeL7m/9dHfVl
-         Y8LKfGCL6dH+918WYOpUbgnt1eBW53AkMbm0bp7cnM61RoM4TkPVmONbho1dGvvllFZm
-         jpqgwYerdaNamPAfKJg86yAsGqgZfbMAp+qw93qDv2HoBwdwFQLjM+H14v4nvAMVY4wN
-         qa/gU9jaG6KKdput1SxpIpzfORBXRiswDSOW7ZJrGCDsYjKGvOFzKmOhDLyL/ysGIPnD
-         da8w==
-X-Gm-Message-State: AOAM5318DW1z0+Pq+5NbUPGn82NYcpL4CHJXx6sZp8hIAASPZGuP+yoI
-        QD/Mz+5wwBvZWqYgBrdZt1RIG5DO8S4deBJBTmw=
-X-Google-Smtp-Source: ABdhPJwF84+s4AGUvhDj0YhNuHNo30FlDoecm3MvYlMHrfH3K8I8cE3rDePACfkvj4IdSI+U7GnJ8lzQDu0y5X9cG5Y=
-X-Received: by 2002:a17:907:a426:: with SMTP id sg38mr17785378ejc.392.1636527468763;
- Tue, 09 Nov 2021 22:57:48 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a50:7e8d:0:0:0:0:0 with HTTP; Tue, 9 Nov 2021 22:57:48 -0800 (PST)
-Reply-To: stefaniekoren50@gmail.com
-From:   STEFANIE KOREN <shawndavidalbert2@gmail.com>
-Date:   Wed, 10 Nov 2021 07:57:48 +0100
-Message-ID: <CA+d+dpEBmSfsZ=Wg_N14QL-_W4u6bG+G=Ps-Cj-ZvKAmkiJ7yA@mail.gmail.com>
-Subject: Donation From Koren!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S231484AbhKJNXW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Nov 2021 08:23:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46694 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231162AbhKJNXW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 10 Nov 2021 08:23:22 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DAFEF6115A;
+        Wed, 10 Nov 2021 13:20:34 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mknWi-004cJz-PR; Wed, 10 Nov 2021 13:20:32 +0000
+Date:   Wed, 10 Nov 2021 13:20:32 +0000
+Message-ID: <87v91087vj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, sunilmut@microsoft.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] arm64: PCI: hv: Add support for Hyper-V vPCI
+In-Reply-To: <1636496060-29424-3-git-send-email-sunilmut@linux.microsoft.com>
+References: <1636496060-29424-1-git-send-email-sunilmut@linux.microsoft.com>
+        <1636496060-29424-3-git-send-email-sunilmut@linux.microsoft.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sunilmut@linux.microsoft.com, kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de, sunilmut@microsoft.com, x86@kernel.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Lieber E-Mail-Besitzer
+On Tue, 09 Nov 2021 22:14:20 +0000,
+Sunil Muthuswamy <sunilmut@linux.microsoft.com> wrote:
+> 
+> From: Sunil Muthuswamy <sunilmut@microsoft.com>
+> 
+> Add support for Hyper-V vPCI for arm64 by implementing the arch specific
+> interfaces. Introduce an IRQ domain and chip specific to Hyper-v vPCI that
+> is based on SPIs. The IRQ domain parents itself to the arch GIC IRQ domain
+> for basic vector management.
+> 
+> Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> ---
+> In v2, v3 & v4:
+>  Changes are described in the cover letter.
+> 
+>  arch/arm64/include/asm/hyperv-tlfs.h |   9 ++
+>  drivers/pci/Kconfig                  |   2 +-
+>  drivers/pci/controller/Kconfig       |   2 +-
+>  drivers/pci/controller/pci-hyperv.c  | 207 ++++++++++++++++++++++++++-
+>  4 files changed, 217 insertions(+), 3 deletions(-)
 
-  Ihre E-Mail-Adresse wurde am 22.09.2021 mit einem Computer-Spinball
-zuf=C3=A4llig ausgew=C3=A4hlt, um eine Geldspende ($1,000.000,00 USD) vom K=
-oren
-Charitable Trust zu erhalten. Kontaktieren Sie
-stefaniekoren50@gmail.com f=C3=BCr weitere Informationen.
+[...]
 
-Koren Trust
-_______________________________________________________________________
-Dear Email Owner
+> +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
+> +					  struct irq_data *irqd, bool reserve)
+> +{
+> +	static int cpu;
+> +
+> +	/*
+> +	 * Pick a cpu using round-robin as the irq affinity that can be
+> +	 * temporarily used for composing MSI from the hypervisor. GIC
+> +	 * will eventually set the right affinity for the irq and the
+> +	 * 'unmask' will retarget the interrupt to that cpu.
+> +	 */
+> +	if (cpu >= cpumask_last(cpu_online_mask))
+> +		cpu = 0;
+> +	cpu = cpumask_next(cpu, cpu_online_mask);
+> +	irq_data_update_effective_affinity(irqd, cpumask_of(cpu));
 
- Your email address was randomly selected with a computer spinball on
-22/09/2021 to receive a monetary donation ($1,000,000.00 USD) from
-Koren Charitable Trust. contact stefaniekoren50@gmail.com for more
-information.
+The mind boggles.
 
-Koren Trust
+Let's imagine a single machine. cpu_online_mask only has bit 0 set,
+and nr_cpumask_bits is 1. This is the first run, and cpu is 1:
+
+	cpu = cpumask_next(cpu, cpu_online_mask);
+
+cpu is now set to 1. Which is not a valid CPU number, but a valid
+return value indicating that there is no next CPU as it is equal to
+nr_cpumask_bits. cpumask_of(cpu) will then diligently return crap,
+which you carefully store into the irq descriptor. The IRQ subsystem
+thanks you.
+
+The same reasoning applies to any number of CPUs, and you obviously
+never checked what any of this does :-(. As to what the behaviour is
+when multiple CPUs run this function in parallel, let's not even
+bother (locking is overrated).
+
+Logic and concurrency issues aside, why do you even bother setting
+some round-robin affinity if all you need is to set *something* so
+that a hypervisor message can be composed? Why not use the first
+online CPU? At least it will be correct.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
