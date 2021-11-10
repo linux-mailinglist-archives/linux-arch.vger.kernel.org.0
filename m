@@ -2,89 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B9244B8FF
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Nov 2021 23:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDB544BBDA
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Nov 2021 07:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241537AbhKIWy2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Nov 2021 17:54:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345607AbhKIWyF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:54:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 99AB661037;
-        Tue,  9 Nov 2021 22:51:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636498276;
-        bh=MkQelUtPGxTk7CP+eGXpJiNBb67EtzdkLMHSuc0qB9w=;
-        h=From:Date:Subject:To:Cc:From;
-        b=N/qMtQ9ZzLxmhQ7iDPj0rvDOFfH6gDK0kJL07c3E53WnJ/4GtkHUgBnmMypjf4hYn
-         1AtglV02GzwTHeP4z3W0cAdaqsP62rm+TJYYg+l2PdccpNGNcorX9fDtI+61Nq3Qh2
-         sdl3HaQvpLsppulRBbvJo7L58MqxU7qud9b6Eo/WDWNnNUA/6U81uhDw2/TP1pdQDY
-         CEinaTcZ6+mt7iK9/onIzsa2bnPMkzzAj43ygPdn6DyqI8NCnvmzirDn/ubSujunjy
-         Gjc+hwLbQmFhPHZo/lvQVaKYPiWtYjzYOi5/PBYn7ha5CPec52TFpQfvXEljIQiYn1
-         c9jiZOprKt1Eg==
-Received: by mail-wr1-f42.google.com with SMTP id c4so568230wrd.9;
-        Tue, 09 Nov 2021 14:51:16 -0800 (PST)
-X-Gm-Message-State: AOAM532AHwaGgLhrAoiLrXY2AVTFRAd6rnT58nQ65K/E1QRxQZf2F56j
-        hzJZ2lZx0pDlKyVSnf7Y0IA69Bt/eQxl620YHQU=
-X-Google-Smtp-Source: ABdhPJyVTDedbofxrUet8EqsY0J9JI7QrXutZ1HLIU0wRv24nwwbxfEXM8/oIdKm1IwJahjuQ+NS6kEK3vu3d1MB+cg=
-X-Received: by 2002:a05:6000:18c7:: with SMTP id w7mr14052067wrq.411.1636498275112;
- Tue, 09 Nov 2021 14:51:15 -0800 (PST)
+        id S229551AbhKJHAh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Nov 2021 02:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229522AbhKJHAh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Nov 2021 02:00:37 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACF0C061764
+        for <linux-arch@vger.kernel.org>; Tue,  9 Nov 2021 22:57:50 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id j21so6365842edt.11
+        for <linux-arch@vger.kernel.org>; Tue, 09 Nov 2021 22:57:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ADBeHMZqTH62nFWWNT/x5IX/mdma2gIWEfeGe8rmz50=;
+        b=n77WjjZvJLdM9jQ7MIpfGYKxgs1YxANFbkKYflnyowzHae1GEKVrBWfSg9Fy+H6loD
+         34eoWrpjw5AIlxwI65eBNzR4egJcMLYxSGJc8UaeD+jZrAksnnbCDMUkEb+ySiqkPHLS
+         Gmh+iwgnBxmHLFQySXRZOKaqpRCooAmQoilvZaq9JdgYvX8ikDLXf8rVAJ3L46jproCy
+         spzdZdn5EQb4K51EfTaQmsUn48Iz0N5w0ot9v92GlwpWTMtXs1Zme1pjFGyNvS6MJud6
+         8nTG+CBWlUqZk7XlElbpdsptu0QOlJljkxyvI7Wxt3D5afoZ2JfiKunb9CRVEwizkT2r
+         y/qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=ADBeHMZqTH62nFWWNT/x5IX/mdma2gIWEfeGe8rmz50=;
+        b=yF1Qx7LyzPXGgh6aYb/tdQadUMaU81sMG8Ugs33CiGFND0AtlmKvPu5Gh4p5FQrUXL
+         CHYk829+LZTI7R8Xud2WtZ/vvh9WhMGHRyKvNPZmO7Ie9bjqApvE/p7BDeL7m/9dHfVl
+         Y8LKfGCL6dH+918WYOpUbgnt1eBW53AkMbm0bp7cnM61RoM4TkPVmONbho1dGvvllFZm
+         jpqgwYerdaNamPAfKJg86yAsGqgZfbMAp+qw93qDv2HoBwdwFQLjM+H14v4nvAMVY4wN
+         qa/gU9jaG6KKdput1SxpIpzfORBXRiswDSOW7ZJrGCDsYjKGvOFzKmOhDLyL/ysGIPnD
+         da8w==
+X-Gm-Message-State: AOAM5318DW1z0+Pq+5NbUPGn82NYcpL4CHJXx6sZp8hIAASPZGuP+yoI
+        QD/Mz+5wwBvZWqYgBrdZt1RIG5DO8S4deBJBTmw=
+X-Google-Smtp-Source: ABdhPJwF84+s4AGUvhDj0YhNuHNo30FlDoecm3MvYlMHrfH3K8I8cE3rDePACfkvj4IdSI+U7GnJ8lzQDu0y5X9cG5Y=
+X-Received: by 2002:a17:907:a426:: with SMTP id sg38mr17785378ejc.392.1636527468763;
+ Tue, 09 Nov 2021 22:57:48 -0800 (PST)
 MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 9 Nov 2021 23:50:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0G2BoQ5fa29SASLcYbY9Znwq9wCp4vXbcsZCX+Tios4w@mail.gmail.com>
-Message-ID: <CAK8P3a0G2BoQ5fa29SASLcYbY9Znwq9wCp4vXbcsZCX+Tios4w@mail.gmail.com>
-Subject: [GIT PULL] asm-generic: asm/syscall.h cleanup
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Collingbourne <pcc@google.com>
+Received: by 2002:a50:7e8d:0:0:0:0:0 with HTTP; Tue, 9 Nov 2021 22:57:48 -0800 (PST)
+Reply-To: stefaniekoren50@gmail.com
+From:   STEFANIE KOREN <shawndavidalbert2@gmail.com>
+Date:   Wed, 10 Nov 2021 07:57:48 +0100
+Message-ID: <CA+d+dpEBmSfsZ=Wg_N14QL-_W4u6bG+G=Ps-Cj-ZvKAmkiJ7yA@mail.gmail.com>
+Subject: Donation From Koren!!
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+--=20
+Lieber E-Mail-Besitzer
 
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+  Ihre E-Mail-Adresse wurde am 22.09.2021 mit einem Computer-Spinball
+zuf=C3=A4llig ausgew=C3=A4hlt, um eine Geldspende ($1,000.000,00 USD) vom K=
+oren
+Charitable Trust zu erhalten. Kontaktieren Sie
+stefaniekoren50@gmail.com f=C3=BCr weitere Informationen.
 
-are available in the Git repository at:
+Koren Trust
+_______________________________________________________________________
+Dear Email Owner
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-tags/asm-generic-5.16
+ Your email address was randomly selected with a computer spinball on
+22/09/2021 to receive a monetary donation ($1,000,000.00 USD) from
+Koren Charitable Trust. contact stefaniekoren50@gmail.com for more
+information.
 
-for you to fetch changes up to 7962c2eddbfe7cce879acb06f9b4f205789e57b7:
-
-  arch: remove unused function syscall_set_arguments() (2021-09-14
-16:06:20 +0200)
-
-----------------------------------------------------------------
-asm-generic: asm/syscall.h cleanup
-
-This is a single cleanup from Peter Collingbourne, removing
-some dead code.
-
-----------------------------------------------------------------
-Peter Collingbourne (1):
-      arch: remove unused function syscall_set_arguments()
-
- arch/arm/include/asm/syscall.h        | 10 ----------
- arch/arm64/include/asm/syscall.h      | 10 ----------
- arch/csky/include/asm/syscall.h       |  9 ---------
- arch/ia64/include/asm/syscall.h       | 17 ++---------------
- arch/ia64/kernel/ptrace.c             | 31 ++++++++++++-------------------
- arch/microblaze/include/asm/syscall.h | 33 ---------------------------------
- arch/nds32/include/asm/syscall.h      | 22 ----------------------
- arch/nios2/include/asm/syscall.h      | 11 -----------
- arch/openrisc/include/asm/syscall.h   |  7 -------
- arch/powerpc/include/asm/syscall.h    | 10 ----------
- arch/riscv/include/asm/syscall.h      |  9 ---------
- arch/s390/include/asm/syscall.h       | 12 ------------
- arch/sh/include/asm/syscall_32.h      | 12 ------------
- arch/sparc/include/asm/syscall.h      | 10 ----------
- arch/um/include/asm/syscall-generic.h | 14 --------------
- arch/x86/include/asm/syscall.h        | 33 ---------------------------------
- arch/xtensa/include/asm/syscall.h     | 11 -----------
- include/asm-generic/syscall.h         | 16 ----------------
- 18 files changed, 14 insertions(+), 263 deletions(-)
+Koren Trust
